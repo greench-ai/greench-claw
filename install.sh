@@ -353,9 +353,9 @@ setup_service() {
 setup_cron() {
   header "Cron Jobs"
 
-  EXISTING=$("$BIN_DIR/NexisClaw" cron list 2>/dev/null | grep -cE "evoclaw|memory-save|library-update" || echo 0)
+  EXISTING=$("$BIN_DIR/NexisClaw" cron list 2>/dev/null | grep -cE "evoclaw|memory-save|library-update" || echo 0 | xargs)
 
-  if [ "$EXISTING" -ge 3 ]; then
+  if [ "${EXISTING:-0}" -ge 3 ]; then
     success "Cron jobs already configured — skipped"
     return
   fi
