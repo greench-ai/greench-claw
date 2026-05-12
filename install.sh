@@ -192,7 +192,10 @@ install_deps() {
 
   cd "$INSTALL_DIR"
   info "Installing packages (this may take a minute)..."
-  pnpm install --no-frozen-lockfile --config.resolution-mode=highest 2>&1 | tail -3
+  if ! pnpm install --no-frozen-lockfile --force 2>&1; then
+    error "pnpm install failed"
+    exit 1
+  fi
   success "Node dependencies installed"
 }
 
@@ -203,7 +206,7 @@ build() {
   cd "$INSTALL_DIR"
 
   info "Building gateway..."
-  pnpm build 2>/dev/null
+  pnpm build
   success "Gateway built"
 
   info "Building UI..."
