@@ -192,7 +192,7 @@ install_deps() {
 
   cd "$INSTALL_DIR"
   info "Installing packages (this may take a minute)..."
-  pnpm install --no-frozen-lockfile 2>&1 | tail -3
+  pnpm install --no-frozen-lockfile --config.resolution-mode=highest 2>&1 | tail -3
   success "Node dependencies installed"
 }
 
