@@ -4,6 +4,8 @@ packages:
   - packages/*
   - extensions/*
 
+blockExoticSubdeps: false
+
 minimumReleaseAge: 0
 
 minimumReleaseAgeExclude:
