@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 # ============================================================
-# NexusClaw — One-shot installer
+# NexisClaw — One-shot installer
 # Usage: bash install.sh
 # ============================================================
 
 # Don't use set -e — commands fail gracefully and we handle exit codes
 # set -e removed: sudo without password in piped install fails silently instead of aborting
 
-REPO="https://github.com/greench-ai/nexusclaw.git"
+REPO="https://github.com/greench-ai/nexisclaw.git"
 INSTALL_DIR="$HOME/nexusclaw"
 BIN_DIR="$HOME/bin"
 CONFIG_DIR="$HOME/.nexusclaw"
-GATEWAY_PORT=19789
+GATEWAY_PORT=19500
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -223,7 +223,7 @@ install_binary() {
 
   cat > "$BIN_DIR/nexusclaw" << EOF
 #!/bin/bash
-exec node $INSTALL_DIR/nexusclaw.mjs "\$@"
+exec node $INSTALL_DIR/NexisClaw.mjs "\$@"
 EOF
   chmod +x "$BIN_DIR/nexusclaw"
   success "Binary installed at $BIN_DIR/nexusclaw"
@@ -384,9 +384,9 @@ print_summary() {
   header "Installation Complete"
 
   echo ""
-  echo -e "  ${GREEN}${BOLD}NexusClaw is ready!${NC}"
+  echo -e "  ${GREEN}${BOLD}NexisClaw is ready!${NC}"
   echo ""
-  echo -e "  ${BOLD}Version:${NC}  $("$BIN_DIR/nexusclaw" --version 2>/dev/null || echo 'NexusClaw 1.0.0')"
+  echo -e "  ${BOLD}Version:${NC}  $("$BIN_DIR/nexusclaw" --version 2>/dev/null || echo 'NexisClaw 1.0.0')"
   echo -e "  ${BOLD}Gateway:${NC}  http://localhost:$GATEWAY_PORT"
   echo -e "  ${BOLD}Config:${NC}   $CONFIG_DIR/nexusclaw.json"
   echo -e "  ${BOLD}Skills:${NC}   $(ls $CONFIG_DIR/workspace/skills/ 2>/dev/null | wc -l | tr -d ' ') installed"
@@ -411,7 +411,7 @@ print_summary() {
 # ── Main ──────────────────────────────────────────────────────
 main() {
   echo ""
-  echo -e "${BOLD}  ⚔  NexusClaw Installer${NC}"
+  echo -e "${BOLD}  ⚔  NexisClaw Installer${NC}"
   echo ""
 
   # Non-interactive flags
@@ -453,7 +453,7 @@ main() {
   echo ""
   if [ -t 0 ] && [ -t 1 ]; then
     # Real TTY — safe to run onboard interactively
-    info "Launching NexusClaw onboarding..."
+    info "Launching NexisClaw onboarding..."
     echo ""
     cd "$INSTALL_DIR"
     exec "$BIN_DIR/nexusclaw" onboard
