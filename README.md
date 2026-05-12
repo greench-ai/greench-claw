@@ -2,8 +2,8 @@
 
 <p align="center">
     <picture>
-        <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NexisClaw/NexisClaw/main/docs/assets/NexisClaw-logo-text-dark.svg">
-        <img src="https://raw.githubusercontent.com/NexisClaw/NexisClaw/main/docs/assets/NexisClaw-logo-text.svg" alt="NexisClaw" width="500">
+        <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NexisClaw/NexisClaw/main/docs/assets/NexisClaw-logo-horizontal.svg">
+        <img src="https://raw.githubusercontent.com/NexisClaw/NexisClaw/main/docs/assets/NexisClaw-logo-horizontal.svg" alt="NexisClaw" width="500">
     </picture>
 </p>
 

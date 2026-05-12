@@ -1,22 +1,40 @@
-<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
   <defs>
-    <linearGradient id="lobster-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ff4d4d"/>
-      <stop offset="100%" stop-color="#991b1b"/>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00ff88"/>
+      <stop offset="50%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#ff6b35"/>
     </linearGradient>
+    <linearGradient id="go" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#ff6b35"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-  <!-- Body -->
-  <path d="M60 10 C30 10 15 35 15 55 C15 75 30 95 45 100 L45 110 L55 110 L55 100 C55 100 60 102 65 100 L65 110 L75 110 L75 100 C90 95 105 75 105 55 C105 35 90 10 60 10Z" fill="url(#lobster-gradient)"/>
-  <!-- Left Claw -->
-  <path d="M20 45 C5 40 0 50 5 60 C10 70 20 65 25 55 C28 48 25 45 20 45Z" fill="url(#lobster-gradient)"/>
-  <!-- Right Claw -->
-  <path d="M100 45 C115 40 120 50 115 60 C110 70 100 65 95 55 C92 48 95 45 100 45Z" fill="url(#lobster-gradient)"/>
-  <!-- Antenna -->
-  <path d="M45 15 Q35 5 30 8" stroke="#ff4d4d" stroke-width="3" stroke-linecap="round"/>
-  <path d="M75 15 Q85 5 90 8" stroke="#ff4d4d" stroke-width="3" stroke-linecap="round"/>
-  <!-- Eyes -->
-  <circle cx="45" cy="35" r="6" fill="#050810"/>
-  <circle cx="75" cy="35" r="6" fill="#050810"/>
-  <circle cx="46" cy="34" r="2.5" fill="#00e5cc"/>
-  <circle cx="76" cy="34" r="2.5" fill="#00e5cc"/>
+
+  <!-- Dark background -->
+  <rect width="120" height="120" fill="#0a0a0f"/>
+
+  <!-- N shape: sharp angular, futuristic -->
+  <path d="M25 90 L25 30 L42 30 L58 70 L58 30 L75 30 L75 90 L58 90 L42 50 L58 90 L75 90 Z"
+        fill="none"
+        stroke="url(#g)"
+        stroke-width="6"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+        filter="url(#glow)"/>
+
+  <!-- Claw pincer: extends from right stroke, subtle -->
+  <path d="M78 72 Q90 65 98 52 Q104 42 100 36 Q96 30 88 36 Q82 40 86 50 Q88 58 82 66 Q80 70 78 72 Z"
+        fill="url(#go)"
+        opacity="0.9"/>
+
+  <!-- Small accent dot -->
+  <circle cx="104" cy="34" r="3" fill="#00ff88" opacity="0.7"/>
 </svg>
