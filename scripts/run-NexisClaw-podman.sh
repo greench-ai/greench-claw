@@ -236,7 +236,7 @@ WORKSPACE_DIR="${NEXISCLAW_WORKSPACE_DIR:-$CONFIG_DIR/workspace}"
 CONTAINER_NAME="${NEXISCLAW_PODMAN_CONTAINER:-NexisClaw}"
 NEXISCLAW_IMAGE="${NEXISCLAW_PODMAN_IMAGE:-${NEXISCLAW_IMAGE:-NexisClaw:local}}"
 PODMAN_PULL="${NEXISCLAW_PODMAN_PULL:-never}"
-HOST_GATEWAY_PORT="${NEXISCLAW_PODMAN_GATEWAY_HOST_PORT:-${NEXISCLAW_GATEWAY_PORT:-18789}}"
+HOST_GATEWAY_PORT="${NEXISCLAW_PODMAN_GATEWAY_HOST_PORT:-${NEXISCLAW_GATEWAY_PORT:-19500}}"
 HOST_BRIDGE_PORT="${NEXISCLAW_PODMAN_BRIDGE_HOST_PORT:-${NEXISCLAW_BRIDGE_PORT:-18790}}"
 PUBLISH_HOST="${NEXISCLAW_PODMAN_PUBLISH_HOST:-127.0.0.1}"
 validate_mount_source_path "config directory" "$CONFIG_DIR"
@@ -556,10 +556,10 @@ podman run --pull="$PODMAN_PULL" -d --replace \
   --env-file "$TOKEN_ENV_FILE" \
   -v "$CONFIG_DIR:/home/node/.NexisClaw:rw${SELINUX_MOUNT_OPTS}" \
   -v "$WORKSPACE_DIR:/home/node/.NexisClaw/workspace:rw${SELINUX_MOUNT_OPTS}" \
-  -p "${PUBLISH_HOST}:${HOST_GATEWAY_PORT}:18789" \
+  -p "${PUBLISH_HOST}:${HOST_GATEWAY_PORT}:19500" \
   -p "${PUBLISH_HOST}:${HOST_BRIDGE_PORT}:18790" \
   "$NEXISCLAW_IMAGE" \
-  node dist/index.js gateway --bind "$GATEWAY_BIND" --port 18789 >/dev/null
+  node dist/index.js gateway --bind "$GATEWAY_BIND" --port 19500 >/dev/null
 
 echo "Container $CONTAINER_NAME started: http://127.0.0.1:${HOST_GATEWAY_PORT}/"
 echo "podman exec -it $CONTAINER_NAME NexisClaw dashboard --no-open"

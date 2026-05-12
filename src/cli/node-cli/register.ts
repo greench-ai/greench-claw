@@ -54,7 +54,7 @@ export function registerNodeCli(program: Command) {
         normalizeOptionalString(opts.host as string | undefined) ||
         existing?.gateway?.host ||
         "127.0.0.1";
-      const port = parsePortWithFallback(opts.port, existing?.gateway?.port ?? 18789);
+      const port = parsePortWithFallback(opts.port, existing?.gateway?.port ?? 19500);
       await runNodeHost({
         gatewayHost: host,
         gatewayPort: port,
