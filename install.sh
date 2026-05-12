@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================
-# NexisClaw — One-shot installer
+# NexisClaw — One-shot installer — NexisClaw
 # Usage: bash install.sh
 # ============================================================
 
