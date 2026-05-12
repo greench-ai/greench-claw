@@ -28,6 +28,7 @@ minimumReleaseAgeExclude:
   - "@oxfmt/*"
   - "oxfmt"
   - "axios@1.15.0"
+  - "@vitest/coverage-v8"
   - "discord-api-types"
   - "rolldown"
   - "sqlite-vec"
