@@ -63,7 +63,7 @@ describe("Control UI mount fallback", () => {
 
   it("shows the static troubleshooting panel when the app element is never registered", async () => {
     const frameWindow = createIsolatedWindow();
-    expect(frameWindow.customElements.get("NexisClaw-app")).toBeUndefined();
+    expect(frameWindow.customElements.get("nexisclaw-app")).toBeUndefined();
     installFallbackShell(frameWindow, await readIndexHtmlWithDelay(1));
     await waitForWindowTimeout(frameWindow, 10);
 
@@ -97,10 +97,10 @@ describe("Control UI mount fallback", () => {
   it("keeps the fallback hidden when the app element registers before the timeout", async () => {
     const frameWindow = createIsolatedWindow();
     installFallbackShell(frameWindow, await readIndexHtmlWithDelay(25));
-    if (!frameWindow.customElements.get("NexisClaw-app")) {
-      frameWindow.customElements.define("NexisClaw-app", class extends frameWindow.HTMLElement {});
+    if (!frameWindow.customElements.get("nexisclaw-app")) {
+      frameWindow.customElements.define("nexisclaw-app", class extends frameWindow.HTMLElement {});
     }
-    await frameWindow.customElements.whenDefined("NexisClaw-app");
+    await frameWindow.customElements.whenDefined("nexisclaw-app");
     await waitForWindowTimeout(frameWindow, 35);
 
     const fallback = requireElementById(

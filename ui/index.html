@@ -78,7 +78,7 @@
           sans-serif;
       }
 
-      body.NexisClaw-mount-fallback-active NexisClaw-app {
+      body.NexisClaw-mount-fallback-active nexisclaw-app {
         display: none;
       }
 
@@ -197,7 +197,7 @@
     </style>
   </head>
   <body>
-    <NexisClaw-app></NexisClaw-app>
+    <nexisclaw-app></nexisclaw-app>
     <section
       id="NexisClaw-mount-fallback"
       class="mount-fallback"
@@ -211,7 +211,7 @@
         <h1 id="NexisClaw-mount-fallback-title">Control UI did not start</h1>
         <p>
           The browser loaded the static page, but the app bundle did not register the
-          <code>NexisClaw-app</code> web component. A browser extension or early content script may
+          <code>nexisclaw-app</code> web component. A browser extension or early content script may
           be blocking module execution.
         </p>
         <ul>
@@ -243,7 +243,7 @@
     </section>
     <script>
       (function () {
-        var tagName = "NexisClaw-app";
+        var tagName = "nexisclaw-app";
         var app = document.querySelector(tagName);
         var fallback = document.getElementById("NexisClaw-mount-fallback");
         if (!app || !fallback) return;

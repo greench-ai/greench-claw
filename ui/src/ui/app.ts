@@ -1290,6 +1290,6 @@ export class NexisClawApp extends LitElement {
   }
 }
 
-if (!customElements.get("NexisClaw-app")) {
-  customElements.define("NexisClaw-app", NexisClawApp);
+if (!customElements.get("nexisclaw-app")) {
+  customElements.define("nexisclaw-app", NexisClawApp);
 }

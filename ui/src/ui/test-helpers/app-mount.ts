@@ -47,7 +47,7 @@ const mountedApps = new Set<NexisClawApp>();
 function collectMountedApps() {
   return new Set<NexisClawApp>([
     ...mountedApps,
-    ...document.querySelectorAll<NexisClawApp>("NexisClaw-app"),
+    ...document.querySelectorAll<NexisClawApp>("nexisclaw-app"),
   ]);
 }
 
@@ -102,7 +102,7 @@ async function cleanupMountedApps() {
 
 export function mountApp(pathname: string) {
   window.history.replaceState({}, "", pathname);
-  const app = document.createElement("NexisClaw-app") as NexisClawApp;
+  const app = document.createElement("nexisclaw-app") as NexisClawApp;
   mountedApps.add(app);
   document.body.append(app);
   app.connected = true;

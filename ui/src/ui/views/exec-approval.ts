@@ -131,7 +131,7 @@ export function renderExecApprovalPrompt(state: AppViewState) {
     }
   };
   return html`
-    <NexisClaw-modal-dialog label=${title} description=${remaining} @modal-cancel=${handleCancel}>
+    <nexisclaw-modal-dialog label=${title} description=${remaining} @modal-cancel=${handleCancel}>
       <div class="exec-approval-card">
         <div class="exec-approval-header">
           <div>
@@ -172,6 +172,6 @@ export function renderExecApprovalPrompt(state: AppViewState) {
           </button>
         </div>
       </div>
-    </NexisClaw-modal-dialog>
+    </nexisclaw-modal-dialog>
   `;
 }

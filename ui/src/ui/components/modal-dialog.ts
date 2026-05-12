@@ -97,8 +97,8 @@ export class NexisClawModalDialog extends LitElement {
   }
 
   override render() {
-    const labelId = this.label ? "NexisClaw-modal-dialog-label" : "";
-    const descriptionId = this.description ? "NexisClaw-modal-dialog-description" : "";
+    const labelId = this.label ? "nexisclaw-modal-dialog-label" : "";
+    const descriptionId = this.description ? "nexisclaw-modal-dialog-description" : "";
     return html`
       <dialog
         role="dialog"
@@ -268,12 +268,12 @@ export class NexisClawModalDialog extends LitElement {
   }
 }
 
-if (!customElements.get("NexisClaw-modal-dialog")) {
-  customElements.define("NexisClaw-modal-dialog", NexisClawModalDialog);
+if (!customElements.get("nexisclaw-modal-dialog")) {
+  customElements.define("nexisclaw-modal-dialog", NexisClawModalDialog);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "NexisClaw-modal-dialog": NexisClawModalDialog;
+    "nexisclaw-modal-dialog": NexisClawModalDialog;
   }
 }
