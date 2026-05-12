@@ -5,4 +5,4 @@ export {
   resolveArchiveOutputPath,
   stripArchivePath,
   validateArchiveEntryPath,
-} from "@NexisClaw/fs-safe/archive";
+} from "@openclaw/fs-safe/archive";

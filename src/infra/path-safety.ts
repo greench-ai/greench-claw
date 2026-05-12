@@ -13,5 +13,5 @@ export {
   safeRealpathSync,
   safeStatSync,
   splitSafeRelativePath,
-} from "@NexisClaw/fs-safe/path";
-export { formatPosixMode } from "@NexisClaw/fs-safe/advanced";
+} from "@openclaw/fs-safe/path";
+export { formatPosixMode } from "@openclaw/fs-safe/advanced";

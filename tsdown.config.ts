@@ -179,7 +179,7 @@ function shouldNeverBundleDependency(id: string): boolean {
 }
 
 function shouldAlwaysBundleDependency(id: string): boolean {
-  return id === "@NexisClaw/fs-safe" || id.startsWith("@NexisClaw/fs-safe/");
+  return id === "@openclaw/fs-safe" || id.startsWith("@openclaw/fs-safe/");
 }
 
 function listBundledPluginEntrySources(

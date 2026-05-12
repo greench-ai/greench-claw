@@ -3,4 +3,4 @@ export {
   writeSiblingTempFile,
   type WriteSiblingTempFileOptions,
   type WriteSiblingTempFileResult,
-} from "@NexisClaw/fs-safe/advanced";
+} from "@openclaw/fs-safe/advanced";

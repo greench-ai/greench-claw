@@ -1,13 +1,13 @@
-import { configureFsSafePython } from "@NexisClaw/fs-safe/config";
-export { root } from "@NexisClaw/fs-safe/root";
-export { isPathInside, isPathInsideWithRealpath } from "@NexisClaw/fs-safe/path";
+import { configureFsSafePython } from "@openclaw/fs-safe/config";
+export { root } from "@openclaw/fs-safe/root";
+export { isPathInside, isPathInsideWithRealpath } from "@openclaw/fs-safe/path";
 export {
   assertNoSymlinkParents,
   readRegularFile,
   statRegularFile,
   type RegularFileStatResult,
-} from "@NexisClaw/fs-safe/advanced";
-export { walkDirectory, type WalkDirectoryEntry } from "@NexisClaw/fs-safe/walk";
+} from "@openclaw/fs-safe/advanced";
+export { walkDirectory, type WalkDirectoryEntry } from "@openclaw/fs-safe/walk";
 
 const hasPythonModeOverride =
   process.env.FS_SAFE_PYTHON_MODE != null || process.env.NEXISCLAW_FS_SAFE_PYTHON_MODE != null;

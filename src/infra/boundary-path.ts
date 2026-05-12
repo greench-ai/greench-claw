@@ -6,4 +6,4 @@ export {
   resolveRootPathSync,
   type ResolvedRootPath,
   type RootPathAliasPolicy,
-} from "@NexisClaw/fs-safe/advanced";
+} from "@openclaw/fs-safe/advanced";

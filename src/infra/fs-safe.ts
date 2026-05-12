@@ -5,10 +5,10 @@ import {
   ensureDirectoryWithinRoot,
   findExistingAncestor,
   writeViaSiblingTempPath,
-} from "@NexisClaw/fs-safe/advanced";
-import { root as fsSafeRoot, type ReadResult } from "@NexisClaw/fs-safe/root";
+} from "@openclaw/fs-safe/advanced";
+import { root as fsSafeRoot, type ReadResult } from "@openclaw/fs-safe/root";
 
-export { FsSafeError, type FsSafeErrorCode } from "@NexisClaw/fs-safe/errors";
+export { FsSafeError, type FsSafeErrorCode } from "@openclaw/fs-safe/errors";
 export {
   assertAbsolutePathInput,
   canonicalPathFromExistingAncestor,
@@ -20,10 +20,10 @@ export {
   type EnsureAbsoluteDirectoryResult,
   type ResolvedAbsolutePath,
   type ResolvedWritableAbsolutePath,
-} from "@NexisClaw/fs-safe/advanced";
-export { isPathInside } from "@NexisClaw/fs-safe/path";
-export { pathExists, pathExistsSync } from "@NexisClaw/fs-safe/advanced";
-export { readLocalFileFromRoots, resolveLocalPathFromRootsSync } from "@NexisClaw/fs-safe/advanced";
+} from "@openclaw/fs-safe/advanced";
+export { isPathInside } from "@openclaw/fs-safe/path";
+export { pathExists, pathExistsSync } from "@openclaw/fs-safe/advanced";
+export { readLocalFileFromRoots, resolveLocalPathFromRootsSync } from "@openclaw/fs-safe/advanced";
 export {
   appendRegularFile,
   appendRegularFileSync,
@@ -31,7 +31,7 @@ export {
   readRegularFileSync,
   resolveRegularFileAppendFlags,
   statRegularFileSync,
-} from "@NexisClaw/fs-safe/advanced";
+} from "@openclaw/fs-safe/advanced";
 export {
   openLocalFileSafely,
   readLocalFileSafely,
@@ -39,21 +39,21 @@ export {
   root,
   type OpenResult,
   type ReadResult,
-} from "@NexisClaw/fs-safe/root";
-export { sanitizeUntrustedFileName } from "@NexisClaw/fs-safe/advanced";
+} from "@openclaw/fs-safe/root";
+export { sanitizeUntrustedFileName } from "@openclaw/fs-safe/advanced";
 export {
   readSecureFile,
   type SecureFileReadOptions,
   type SecureFileReadResult,
-} from "@NexisClaw/fs-safe/secure-file";
+} from "@openclaw/fs-safe/secure-file";
 export {
   walkDirectory,
   walkDirectorySync,
   type WalkDirectoryEntry,
   type WalkDirectoryOptions,
   type WalkDirectoryResult,
-} from "@NexisClaw/fs-safe/walk";
-export { withTimeout } from "@NexisClaw/fs-safe/advanced";
+} from "@openclaw/fs-safe/walk";
+export { withTimeout } from "@openclaw/fs-safe/advanced";
 
 export type ExternalFileWriteOptions = {
   rootDir: string;
