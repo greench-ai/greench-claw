@@ -192,7 +192,7 @@ install_deps() {
 
   cd "$INSTALL_DIR"
   info "Installing packages (this may take a minute)..."
-  if ! pnpm install --no-frozen-lockfile --config.resolution-mode=highest 2>&1; then
+  if ! pnpm install --no-frozen-lockfile 2>&1; then
     error "pnpm install failed"
     exit 1
   fi
