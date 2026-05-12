@@ -1,15 +1,15 @@
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import { createHybridChannelConfigAdapter } from "openclaw/plugin-sdk/channel-config-helpers";
-import { createChatChannelPlugin, type ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createChannelMessageAdapterFromOutbound } from "openclaw/plugin-sdk/channel-message";
-import type { ChannelOutboundAdapter } from "openclaw/plugin-sdk/channel-send-result";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { createRuntimeOutboundDelegates } from "openclaw/plugin-sdk/outbound-runtime";
+import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
+import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
+import { createHybridChannelConfigAdapter } from "NexisClaw/plugin-sdk/channel-config-helpers";
+import { createChatChannelPlugin, type ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
+import { createChannelMessageAdapterFromOutbound } from "NexisClaw/plugin-sdk/channel-message";
+import type { ChannelOutboundAdapter } from "NexisClaw/plugin-sdk/channel-send-result";
+import { createLazyRuntimeModule } from "NexisClaw/plugin-sdk/lazy-runtime";
+import { createRuntimeOutboundDelegates } from "NexisClaw/plugin-sdk/outbound-runtime";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
+} from "NexisClaw/plugin-sdk/status-helpers";
 import { tlonChannelConfigSchema } from "./config-schema.js";
 import { tlonDoctor } from "./doctor.js";
 import { resolveTlonOutboundSessionRoute } from "./session-route.js";

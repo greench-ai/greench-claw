@@ -3,11 +3,11 @@ import os from "node:os";
 import path from "node:path";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CommandContext } from "../auto-reply/reply/commands-types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { extractCrestodianRescueMessage, runCrestodianRescueMessage } from "./rescue-message.js";
 
-const originalStateDir = process.env.OPENCLAW_STATE_DIR;
+const originalStateDir = process.env.NEXISCLAW_STATE_DIR;
 let tempRoot = "";
 let tempDirId = 0;
 
@@ -15,7 +15,7 @@ type TestConfig = Record<string, unknown>;
 
 const mockConfig = vi.hoisted(() => {
   const state = {
-    path: "/tmp/openclaw.json",
+    path: "/tmp/NexisClaw.json",
     config: {} as TestConfig,
     hash: "mock-hash-0" as string | undefined,
   };
@@ -40,7 +40,7 @@ const mockConfig = vi.hoisted(() => {
   };
   return {
     reset() {
-      state.path = "/tmp/openclaw.json";
+      state.path = "/tmp/NexisClaw.json";
       state.config = {};
       state.hash = "mock-hash-0";
     },
@@ -137,7 +137,7 @@ function requireFirstMockCall<T>(mock: { mock: { calls: T[][] } }, label: string
 
 async function runRescue(
   commandBody: string,
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   ctx = commandContext(),
   deps?: Parameters<typeof runCrestodianRescueMessage>[0]["deps"],
 ) {
@@ -161,9 +161,9 @@ describe("Crestodian rescue message", () => {
 
   afterEach(() => {
     if (originalStateDir === undefined) {
-      delete process.env.OPENCLAW_STATE_DIR;
+      delete process.env.NEXISCLAW_STATE_DIR;
     } else {
-      process.env.OPENCLAW_STATE_DIR = originalStateDir;
+      process.env.NEXISCLAW_STATE_DIR = originalStateDir;
     }
   });
 
@@ -189,7 +189,7 @@ describe("Crestodian rescue message", () => {
   });
 
   it("refuses TUI handoff from remote rescue", async () => {
-    const cfg: OpenClawConfig = { crestodian: { rescue: { enabled: true } } };
+    const cfg: NexisClawConfig = { crestodian: { rescue: { enabled: true } } };
     const deps = {
       runTui: vi.fn(async () => {
         throw new Error("remote rescue must not open the TUI");
@@ -206,7 +206,7 @@ describe("Crestodian rescue message", () => {
   });
 
   it("refuses plugin install from remote rescue", async () => {
-    const cfg: OpenClawConfig = { crestodian: { rescue: { enabled: true } } };
+    const cfg: NexisClawConfig = { crestodian: { rescue: { enabled: true } } };
     const deps = {
       runPluginInstall: vi.fn(async () => {
         throw new Error("remote rescue must not install plugins");
@@ -214,13 +214,13 @@ describe("Crestodian rescue message", () => {
     };
 
     await expect(
-      runRescue("/crestodian plugin install clawhub:openclaw-demo", cfg, commandContext(), deps),
+      runRescue("/crestodian plugin install clawhub:NexisClaw-demo", cfg, commandContext(), deps),
     ).resolves.toContain("cannot install plugins from a message channel");
     expect(deps.runPluginInstall).not.toHaveBeenCalled();
   });
 
   it("allows plugin list and search from remote rescue", async () => {
-    const cfg: OpenClawConfig = { crestodian: { rescue: { enabled: true } } };
+    const cfg: NexisClawConfig = { crestodian: { rescue: { enabled: true } } };
     const deps = {
       runPluginsList: vi.fn(async (runtime: RuntimeEnv) => {
         runtime.log("plugin rows");
@@ -248,9 +248,9 @@ describe("Crestodian rescue message", () => {
 
   it("queues and applies persistent writes through conversational approval", async () => {
     const tempDir = await makeStateDir("models-");
-    vi.stubEnv("OPENCLAW_STATE_DIR", tempDir);
+    vi.stubEnv("NEXISCLAW_STATE_DIR", tempDir);
 
-    const cfg: OpenClawConfig = { crestodian: { rescue: { enabled: true } } };
+    const cfg: NexisClawConfig = { crestodian: { rescue: { enabled: true } } };
     await expect(runRescue("/crestodian set default model openai/gpt-5.2", cfg)).resolves.toContain(
       "Reply /crestodian yes to apply",
     );
@@ -273,8 +273,8 @@ describe("Crestodian rescue message", () => {
 
   it("queues and applies gateway restart through conversational approval", async () => {
     const tempDir = await makeStateDir("gateway-");
-    vi.stubEnv("OPENCLAW_STATE_DIR", tempDir);
-    const cfg: OpenClawConfig = { crestodian: { rescue: { enabled: true } } };
+    vi.stubEnv("NEXISCLAW_STATE_DIR", tempDir);
+    const cfg: NexisClawConfig = { crestodian: { rescue: { enabled: true } } };
     const deps = { runGatewayRestart: vi.fn(async () => {}) };
 
     await expect(
@@ -298,8 +298,8 @@ describe("Crestodian rescue message", () => {
 
   it("queues and applies agent creation through conversational approval", async () => {
     const tempDir = await makeStateDir("agent-");
-    vi.stubEnv("OPENCLAW_STATE_DIR", tempDir);
-    const cfg: OpenClawConfig = { crestodian: { rescue: { enabled: true } } };
+    vi.stubEnv("NEXISCLAW_STATE_DIR", tempDir);
+    const cfg: NexisClawConfig = { crestodian: { rescue: { enabled: true } } };
     const deps = { runAgentsAdd: vi.fn(async () => {}) };
 
     await expect(

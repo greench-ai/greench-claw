@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/telegram",
+  "name": "@NexisClaw/telegram",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw Telegram channel plugin",
+  "description": "NexisClaw Telegram channel plugin",
   "type": "module",
   "dependencies": {
     "@grammyjs/runner": "2.0.3",
@@ -12,9 +12,9 @@
     "undici": "8.2.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -35,7 +35,7 @@
       "selectionDocsPrefix": "",
       "selectionDocsOmitLabel": true,
       "selectionExtras": [
-        "https://openclaw.ai"
+        "https://NexisClaw.ai"
       ],
       "markdownCapable": true,
       "commands": {

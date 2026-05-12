@@ -1,17 +1,17 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   applyResolvedAssignments,
   createResolverContext,
   resolveSecretRefValues,
-} from "openclaw/plugin-sdk/secret-ref-runtime";
+} from "NexisClaw/plugin-sdk/secret-ref-runtime";
 import { describe, expect, it } from "vitest";
 import { collectRuntimeConfigAssignments } from "./secret-contract.js";
 
 async function resolveQqbotSecretAssignments(
-  sourceConfig: OpenClawConfig,
+  sourceConfig: NexisClawConfig,
   env: NodeJS.ProcessEnv,
-): Promise<OpenClawConfig> {
-  const resolvedConfig: OpenClawConfig = structuredClone(sourceConfig);
+): Promise<NexisClawConfig> {
+  const resolvedConfig: NexisClawConfig = structuredClone(sourceConfig);
   const context = createResolverContext({ sourceConfig, env });
 
   collectRuntimeConfigAssignments({
@@ -46,7 +46,7 @@ describe("qqbot secret contract", () => {
             clientSecretFile: "/ignored/by/runtime",
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
       { QQBOT_CLIENT_SECRET: "resolved-top-level-secret" },
     );
 
@@ -69,7 +69,7 @@ describe("qqbot secret contract", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
       { QQBOT_BOT2_SECRET: "resolved-bot2-secret" },
     );
 
@@ -95,7 +95,7 @@ describe("qqbot secret contract", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
       {
         QQBOT_DEFAULT_SECRET: "resolved-default-secret",
         QQBOT_BOT2_SECRET: "resolved-bot2-secret",

@@ -1,12 +1,12 @@
 export type {
   DiagnosticEventMetadata,
   DiagnosticEventPayload,
-} from "openclaw/plugin-sdk/diagnostic-runtime";
+} from "NexisClaw/plugin-sdk/diagnostic-runtime";
 export {
   emptyPluginConfigSchema,
-  type OpenClawPluginApi,
-  type OpenClawPluginHttpRouteHandler,
-  type OpenClawPluginService,
-  type OpenClawPluginServiceContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-export { redactSensitiveText } from "openclaw/plugin-sdk/security-runtime";
+  type NexisClawPluginApi,
+  type NexisClawPluginHttpRouteHandler,
+  type NexisClawPluginService,
+  type NexisClawPluginServiceContext,
+} from "NexisClaw/plugin-sdk/plugin-entry";
+export { redactSensitiveText } from "NexisClaw/plugin-sdk/security-runtime";

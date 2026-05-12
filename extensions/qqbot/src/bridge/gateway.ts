@@ -6,8 +6,8 @@
  * All adapter dependencies are assembled here in one place.
  */
 
-import { resolveRuntimeServiceVersion } from "openclaw/plugin-sdk/cli-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { resolveRuntimeServiceVersion } from "NexisClaw/plugin-sdk/cli-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import type { EngineAdapters } from "../engine/adapter/index.js";
 import {
   startGateway as coreStartGateway,
@@ -36,7 +36,7 @@ import {
 const _pluginVersion = resolveQQBotPluginVersion(import.meta.url);
 initSender({
   pluginVersion: _pluginVersion,
-  openclawVersion: resolveRuntimeServiceVersion(),
+  NexisClawVersion: resolveRuntimeServiceVersion(),
 });
 
 // ============ Public types ============
@@ -44,7 +44,7 @@ initSender({
 export interface GatewayContext {
   account: ResolvedQQBotAccount;
   abortSignal: AbortSignal;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   onReady?: (data: unknown) => void;
   onResumed?: (data: unknown) => void;
   onError?: (error: Error) => void;

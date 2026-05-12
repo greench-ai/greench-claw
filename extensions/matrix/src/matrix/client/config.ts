@@ -1,11 +1,11 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { retryAsync } from "openclaw/plugin-sdk/retry-runtime";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { requireRuntimeConfig } from "NexisClaw/plugin-sdk/plugin-config-runtime";
+import { retryAsync } from "NexisClaw/plugin-sdk/retry-runtime";
 import {
   coerceSecretRef,
   normalizeResolvedSecretInputString,
-} from "openclaw/plugin-sdk/secret-input-runtime";
-import type { PinnedDispatcherPolicy } from "openclaw/plugin-sdk/ssrf-dispatcher";
+} from "NexisClaw/plugin-sdk/secret-input-runtime";
+import type { PinnedDispatcherPolicy } from "NexisClaw/plugin-sdk/ssrf-dispatcher";
 import {
   requiresExplicitMatrixDefaultAccount,
   resolveMatrixDefaultOrOnlyAccountId,
@@ -736,7 +736,7 @@ export async function resolveMatrixAuth(params?: {
       identifier: { type: "m.id.user", user: resolved.userId },
       password,
       device_id: resolved.deviceId,
-      initial_device_display_name: resolved.deviceName ?? "OpenClaw Gateway",
+      initial_device_display_name: resolved.deviceName ?? "NexisClaw Gateway",
     })) as {
       access_token?: string;
       user_id?: string;

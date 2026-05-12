@@ -5,7 +5,7 @@ import {
   keepHttpServerTaskAlive,
   mergeAllowlist,
   summarizeMapping,
-  type OpenClawConfig,
+  type NexisClawConfig,
   type RuntimeEnv,
 } from "../runtime-api.js";
 import { createMSTeamsConversationStoreFs } from "./conversation-store-fs.js";
@@ -31,7 +31,7 @@ import { resolveMSTeamsCredentials } from "./token.js";
 import { applyMSTeamsWebhookTimeouts } from "./webhook-timeouts.js";
 
 type MonitorMSTeamsOpts = {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   runtime?: RuntimeEnv;
   abortSignal?: AbortSignal;
   conversationStore?: MSTeamsConversationStore;

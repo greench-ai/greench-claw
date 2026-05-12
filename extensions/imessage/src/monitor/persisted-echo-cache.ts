@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { resolveStateDir } from "openclaw/plugin-sdk/state-paths";
+import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { resolveStateDir } from "NexisClaw/plugin-sdk/state-paths";
 
 type PersistedEchoEntry = {
   scope: string;

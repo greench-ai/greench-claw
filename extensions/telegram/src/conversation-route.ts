@@ -1,18 +1,18 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   resolveConfiguredBindingRoute,
   resolveRuntimeConversationBindingRoute,
   type ConfiguredBindingRouteResult,
-} from "openclaw/plugin-sdk/conversation-runtime";
+} from "NexisClaw/plugin-sdk/conversation-runtime";
 import {
   buildAgentSessionKey,
   deriveLastRoutePolicy,
   normalizeAccountId,
   resolveAgentRoute,
-} from "openclaw/plugin-sdk/routing";
-import { buildAgentMainSessionKey, sanitizeAgentId } from "openclaw/plugin-sdk/routing";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/routing";
+import { buildAgentMainSessionKey, sanitizeAgentId } from "NexisClaw/plugin-sdk/routing";
+import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { resolveDefaultTelegramAccountId } from "./accounts.js";
 import {
   buildTelegramGroupPeerId,
@@ -21,7 +21,7 @@ import {
 } from "./bot/helpers.js";
 
 export function resolveTelegramConversationRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId: string;
   chatId: number | string;
   isGroup: boolean;
@@ -136,7 +136,7 @@ export function resolveTelegramConversationRoute(params: {
 }
 
 export function resolveTelegramConversationBaseSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   route: Pick<
     ReturnType<typeof resolveTelegramConversationRoute>["route"],
     "agentId" | "accountId" | "matchedBy" | "sessionKey"

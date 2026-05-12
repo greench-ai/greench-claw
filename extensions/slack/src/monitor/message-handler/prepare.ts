@@ -2,7 +2,7 @@ import {
   resolveAckReaction,
   shouldAckReaction as shouldAckReactionGate,
   type AckReactionScope,
-} from "openclaw/plugin-sdk/channel-feedback";
+} from "NexisClaw/plugin-sdk/channel-feedback";
 import {
   buildMentionRegexes,
   formatInboundEnvelope,
@@ -10,26 +10,26 @@ import {
   logInboundDrop,
   matchesMentionWithExplicit,
   resolveEnvelopeFormatOptions,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { resolveChannelMessageSourceReplyDeliveryMode } from "openclaw/plugin-sdk/channel-message";
-import { hasControlCommand } from "openclaw/plugin-sdk/command-detection";
-import { shouldHandleTextCommands } from "openclaw/plugin-sdk/command-surface";
-import { ensureConfiguredBindingRouteReady } from "openclaw/plugin-sdk/conversation-runtime";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { finalizeInboundContext } from "openclaw/plugin-sdk/reply-dispatch-runtime";
+} from "NexisClaw/plugin-sdk/channel-inbound";
+import { resolveChannelMessageSourceReplyDeliveryMode } from "NexisClaw/plugin-sdk/channel-message";
+import { hasControlCommand } from "NexisClaw/plugin-sdk/command-detection";
+import { shouldHandleTextCommands } from "NexisClaw/plugin-sdk/command-surface";
+import { ensureConfiguredBindingRouteReady } from "NexisClaw/plugin-sdk/conversation-runtime";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { finalizeInboundContext } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
 import {
   buildPendingHistoryContextFromMap,
   recordPendingHistoryEntryIfEnabled,
-} from "openclaw/plugin-sdk/reply-history";
-import type { FinalizedMsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { resolveInboundLastRouteSessionKey } from "openclaw/plugin-sdk/routing";
-import { logVerbose, shouldLogVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
+} from "NexisClaw/plugin-sdk/reply-history";
+import type { FinalizedMsgContext } from "NexisClaw/plugin-sdk/reply-runtime";
+import { resolveInboundLastRouteSessionKey } from "NexisClaw/plugin-sdk/routing";
+import { logVerbose, shouldLogVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "NexisClaw/plugin-sdk/security-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { enqueueSystemEvent } from "openclaw/plugin-sdk/system-event-runtime";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { enqueueSystemEvent } from "NexisClaw/plugin-sdk/system-event-runtime";
 import { resolveSlackReplyToMode } from "../../account-reply-mode.js";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import { reactSlackMessage } from "../../actions.js";

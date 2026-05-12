@@ -2,7 +2,7 @@ import type { StreamFn } from "@earendil-works/pi-agent-core";
 import type { SimpleStreamOptions } from "@earendil-works/pi-ai";
 import { streamSimple } from "@earendil-works/pi-ai";
 import type { ThinkLevel } from "../../auto-reply/thinking.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { normalizeOptionalLowercaseString, readStringValue } from "../../shared/string-coerce.js";
 import {
   patchCodexNativeWebSearchPayload,
@@ -496,7 +496,7 @@ export function createOpenAITextVerbosityWrapper(
 /** @deprecated OpenAI Codex provider-owned stream helper; do not use from third-party plugins. */
 export function createCodexNativeWebSearchWrapper(
   baseStreamFn: StreamFn | undefined,
-  params: { config?: OpenClawConfig; agentDir?: string },
+  params: { config?: NexisClawConfig; agentDir?: string },
 ): StreamFn {
   const underlying = baseStreamFn ?? streamSimple;
   return (model, context, options) => {

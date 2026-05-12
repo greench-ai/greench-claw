@@ -1,39 +1,39 @@
 import fs from "node:fs/promises";
-import { resolveHumanDelayConfig } from "openclaw/plugin-sdk/agent-runtime";
-import { logTypingFailure } from "openclaw/plugin-sdk/channel-feedback";
+import { resolveHumanDelayConfig } from "NexisClaw/plugin-sdk/agent-runtime";
+import { logTypingFailure } from "NexisClaw/plugin-sdk/channel-feedback";
 import {
   createChannelInboundDebouncer,
   shouldDebounceTextInbound,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "NexisClaw/plugin-sdk/channel-inbound";
 import {
   deliverInboundReplyWithMessageSendContext,
   createChannelMessageReplyPipeline,
-} from "openclaw/plugin-sdk/channel-message";
-import { createChannelPairingChallengeIssuer } from "openclaw/plugin-sdk/channel-pairing";
+} from "NexisClaw/plugin-sdk/channel-message";
+import { createChannelPairingChallengeIssuer } from "NexisClaw/plugin-sdk/channel-pairing";
 import {
   readChannelAllowFromStore,
   upsertChannelPairingRequest,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { recordInboundSession } from "openclaw/plugin-sdk/conversation-runtime";
-import { normalizeScpRemoteHost } from "openclaw/plugin-sdk/host-runtime";
-import { runInboundReplyTurn } from "openclaw/plugin-sdk/inbound-reply-dispatch";
-import { isInboundPathAllowed, kindFromMime } from "openclaw/plugin-sdk/media-runtime";
-import { DEFAULT_GROUP_HISTORY_LIMIT, type HistoryEntry } from "openclaw/plugin-sdk/reply-history";
-import { resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-runtime";
-import { dispatchInboundMessage } from "openclaw/plugin-sdk/reply-runtime";
-import { createReplyDispatcherWithTyping } from "openclaw/plugin-sdk/reply-runtime";
-import { settleReplyDispatcher } from "openclaw/plugin-sdk/reply-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { danger, logVerbose, shouldLogVerbose, warn } from "openclaw/plugin-sdk/runtime-env";
+} from "NexisClaw/plugin-sdk/conversation-runtime";
+import { recordInboundSession } from "NexisClaw/plugin-sdk/conversation-runtime";
+import { normalizeScpRemoteHost } from "NexisClaw/plugin-sdk/host-runtime";
+import { runInboundReplyTurn } from "NexisClaw/plugin-sdk/inbound-reply-dispatch";
+import { isInboundPathAllowed, kindFromMime } from "NexisClaw/plugin-sdk/media-runtime";
+import { DEFAULT_GROUP_HISTORY_LIMIT, type HistoryEntry } from "NexisClaw/plugin-sdk/reply-history";
+import { resolveTextChunkLimit } from "NexisClaw/plugin-sdk/reply-runtime";
+import { dispatchInboundMessage } from "NexisClaw/plugin-sdk/reply-runtime";
+import { createReplyDispatcherWithTyping } from "NexisClaw/plugin-sdk/reply-runtime";
+import { settleReplyDispatcher } from "NexisClaw/plugin-sdk/reply-runtime";
+import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
+import { danger, logVerbose, shouldLogVerbose, warn } from "NexisClaw/plugin-sdk/runtime-env";
 import {
   resolveOpenProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
-import { readSessionUpdatedAt, resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
-import { waitForTransportReady } from "openclaw/plugin-sdk/transport-ready-runtime";
+} from "NexisClaw/plugin-sdk/runtime-group-policy";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "NexisClaw/plugin-sdk/security-runtime";
+import { readSessionUpdatedAt, resolveStorePath } from "NexisClaw/plugin-sdk/session-store-runtime";
+import { truncateUtf16Safe } from "NexisClaw/plugin-sdk/text-utility-runtime";
+import { waitForTransportReady } from "NexisClaw/plugin-sdk/transport-ready-runtime";
 import { resolveIMessageAccount } from "../accounts.js";
 import { markIMessageChatRead, sendIMessageTyping } from "../chat.js";
 import { createIMessageRpcClient, type IMessageRpcClient } from "../client.js";

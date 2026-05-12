@@ -1,8 +1,8 @@
 export type { Command } from "commander";
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-export { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
-export { callGatewayFromCli } from "openclaw/plugin-sdk/gateway-runtime";
-export type { PluginRuntime } from "openclaw/plugin-sdk/runtime-store";
+export type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+export { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
+export { callGatewayFromCli } from "NexisClaw/plugin-sdk/gateway-runtime";
+export type { PluginRuntime } from "NexisClaw/plugin-sdk/runtime-store";
 export { defaultQaRuntimeModelForMode } from "./model-selection.runtime.js";
 export {
   buildQaTarget,
@@ -20,7 +20,7 @@ export {
   searchQaBusMessages,
   sendQaBusMessage,
   setQaChannelRuntime,
-} from "openclaw/plugin-sdk/qa-channel";
+} from "NexisClaw/plugin-sdk/qa-channel";
 export type {
   QaBusAttachment,
   QaBusConversation,

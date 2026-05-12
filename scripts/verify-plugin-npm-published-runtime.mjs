@@ -74,13 +74,13 @@ export function collectPluginNpmPublishedRuntimeErrors(params) {
   const errors = [];
   const extensionsResult = readPackageStringList(
     packageLabel,
-    "openclaw.extensions",
-    packageJson.openclaw?.extensions,
+    "NexisClaw.extensions",
+    packageJson.NexisClaw?.extensions,
   );
   const runtimeExtensionsResult = readPackageStringList(
     packageLabel,
-    "openclaw.runtimeExtensions",
-    packageJson.openclaw?.runtimeExtensions,
+    "NexisClaw.runtimeExtensions",
+    packageJson.NexisClaw?.runtimeExtensions,
   );
   errors.push(...extensionsResult.errors, ...runtimeExtensionsResult.errors);
   if (errors.length > 0) {
@@ -95,7 +95,7 @@ export function collectPluginNpmPublishedRuntimeErrors(params) {
 
   if (runtimeExtensions.length > 0 && runtimeExtensions.length !== extensions.length) {
     errors.push(
-      `${packageLabel} package.json openclaw.runtimeExtensions length (${runtimeExtensions.length}) must match openclaw.extensions length (${extensions.length})`,
+      `${packageLabel} package.json NexisClaw.runtimeExtensions length (${runtimeExtensions.length}) must match NexisClaw.extensions length (${extensions.length})`,
     );
     return errors;
   }
@@ -148,8 +148,8 @@ function sleep(ms) {
 }
 
 async function packPublishedPackage(spec, destinationDir) {
-  const attempts = Number.parseInt(process.env.OPENCLAW_PLUGIN_NPM_VERIFY_ATTEMPTS ?? "90", 10);
-  const delayMs = Number.parseInt(process.env.OPENCLAW_PLUGIN_NPM_VERIFY_DELAY_MS ?? "10000", 10);
+  const attempts = Number.parseInt(process.env.NEXISCLAW_PLUGIN_NPM_VERIFY_ATTEMPTS ?? "90", 10);
+  const delayMs = Number.parseInt(process.env.NEXISCLAW_PLUGIN_NPM_VERIFY_DELAY_MS ?? "10000", 10);
   let lastError;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
@@ -191,7 +191,7 @@ function readPackedPackage(tarballPath, extractDir) {
 }
 
 export async function verifyPublishedPluginRuntime(spec) {
-  const workingDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-plugin-npm-runtime."));
+  const workingDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-plugin-npm-runtime."));
   try {
     const tarballPath = await packPublishedPackage(spec, workingDir);
     const extractDir = path.join(workingDir, "extract");

@@ -1,13 +1,13 @@
-import type { ImageGenerationProvider } from "openclaw/plugin-sdk/image-generation";
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+import type { ImageGenerationProvider } from "NexisClaw/plugin-sdk/image-generation";
+import { extensionForMime } from "NexisClaw/plugin-sdk/media-mime";
+import { isProviderApiKeyConfigured } from "NexisClaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   postJsonRequest,
   sanitizeConfiguredModelProviderRequest,
-} from "openclaw/plugin-sdk/provider-http";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/provider-http";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { normalizeGoogleModelId, resolveGoogleGenerativeAiHttpRequestConfig } from "./api.js";
 
 const DEFAULT_GOOGLE_IMAGE_MODEL = "gemini-3.1-flash-image-preview";

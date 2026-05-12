@@ -2,14 +2,14 @@ import {
   firstDefined,
   isSenderIdAllowed,
   mergeDmAllowFromSources,
-} from "openclaw/plugin-sdk/allow-from";
+} from "NexisClaw/plugin-sdk/allow-from";
 import type {
   DmPolicy,
   TelegramDirectConfig,
   TelegramGroupConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/config-contracts";
+import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 export type NormalizedAllowFrom = {
   entries: string[];

@@ -119,7 +119,7 @@ export function buildReplyPromptEnvelopeBase(
   const transcriptBody = params.isHeartbeat
     ? HEARTBEAT_TRANSCRIPT_PROMPT
     : params.isBareSessionReset
-      ? softResetTail || `[OpenClaw session ${params.startupAction}]`
+      ? softResetTail || `[NexisClaw session ${params.startupAction}]`
       : params.hasUserBody
         ? params.baseBody
         : "[User sent media without caption]";

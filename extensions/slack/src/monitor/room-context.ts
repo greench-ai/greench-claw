@@ -1,5 +1,5 @@
-import { buildUntrustedChannelMetadata } from "openclaw/plugin-sdk/security-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { buildUntrustedChannelMetadata } from "NexisClaw/plugin-sdk/security-runtime";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 export function resolveSlackRoomContextHints(params: {
   isRoomish: boolean;

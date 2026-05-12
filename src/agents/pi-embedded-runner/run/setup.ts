@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
 import type { ProviderRuntimeModel } from "../../../plugins/provider-runtime-model.types.js";
 import type {
   PluginHookBeforeAgentStartResult,
@@ -115,7 +115,7 @@ export function buildBeforeModelResolveAttachments(
 }
 
 export function resolveEffectiveRuntimeModel(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: NexisClawConfig | undefined;
   provider: string;
   contextConfigProvider?: string;
   modelId: string;

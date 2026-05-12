@@ -16,7 +16,7 @@ import {
   makeRegistry,
   resetPluginAutoEnableTestState,
 } from "./plugin-auto-enable.test-helpers.js";
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { NexisClawConfig } from "./types.NexisClaw.js";
 import { validateConfigObject } from "./validation.js";
 
 vi.mock("../channels/plugins/configured-state.js", async (importOriginal) => {
@@ -25,7 +25,7 @@ vi.mock("../channels/plugins/configured-state.js", async (importOriginal) => {
     ...actual,
     hasBundledChannelConfiguredState: (params: {
       channelId: string;
-      cfg: OpenClawConfig;
+      cfg: NexisClawConfig;
       env?: NodeJS.ProcessEnv;
     }) => {
       if (params.channelId === "irc") {
@@ -43,7 +43,7 @@ vi.mock("../channels/plugins/configured-state.js", async (importOriginal) => {
 
 const setupRegistryMock = vi.hoisted(() => ({
   resolvePluginSetupAutoEnableReasons: vi.fn(
-    (params: { config?: OpenClawConfig; pluginIds?: readonly string[] }) => {
+    (params: { config?: NexisClawConfig; pluginIds?: readonly string[] }) => {
       const pluginIds = new Set(params.pluginIds ?? []);
       const browserEntry = params.config?.plugins?.entries?.browser;
       const hasBrowserEntry =
@@ -63,7 +63,7 @@ vi.mock("../plugins/setup-registry.js", () => ({
 const env = makeIsolatedEnv();
 
 function createPluginMetadataSnapshot(params: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   manifestRegistry: PluginManifestRegistry;
   workspaceDir?: string;
 }): PluginMetadataSnapshot {
@@ -137,7 +137,7 @@ describe("applyPluginAutoEnable core", () => {
 
   it("reuses policy-compatible current manifest registry when runtime config differs", () => {
     const manifestRegistry = makeRegistry([{ id: "custom-chat", channels: ["custom-chat"] }]);
-    const snapshotConfig: OpenClawConfig = { plugins: { allow: ["existing"] } };
+    const snapshotConfig: NexisClawConfig = { plugins: { allow: ["existing"] } };
     setCurrentPluginMetadataSnapshot(
       createPluginMetadataSnapshot({
         config: snapshotConfig,
@@ -171,7 +171,7 @@ describe("applyPluginAutoEnable core", () => {
 
   it("does not reuse an unscoped current manifest registry when plugin load paths change", () => {
     const manifestRegistry = makeRegistry([{ id: "load-path-chat", channels: ["load-path-chat"] }]);
-    const snapshotConfig: OpenClawConfig = { plugins: { allow: ["existing"] } };
+    const snapshotConfig: NexisClawConfig = { plugins: { allow: ["existing"] } };
     setCurrentPluginMetadataSnapshot(
       createPluginMetadataSnapshot({
         config: snapshotConfig,
@@ -206,7 +206,7 @@ describe("applyPluginAutoEnable core", () => {
 
   it("does not reuse a load-path current manifest registry for a config with default load paths", () => {
     const manifestRegistry = makeRegistry([{ id: "load-path-chat", channels: ["load-path-chat"] }]);
-    const snapshotConfig: OpenClawConfig = {
+    const snapshotConfig: NexisClawConfig = {
       plugins: {
         allow: ["existing"],
         load: { paths: ["/tmp/custom-plugin-root"] },
@@ -393,7 +393,7 @@ describe("applyPluginAutoEnable core", () => {
     expect(result.changes).toStrictEqual([]);
     expect(
       readFileSync.mock.calls.some(
-        ([filePath]) => typeof filePath === "string" && filePath.endsWith("openclaw.plugin.json"),
+        ([filePath]) => typeof filePath === "string" && filePath.endsWith("NexisClaw.plugin.json"),
       ),
     ).toBe(false);
   });
@@ -421,7 +421,7 @@ describe("applyPluginAutoEnable core", () => {
     expect(result.changes).toStrictEqual([]);
     expect(
       readFileSync.mock.calls.some(
-        ([filePath]) => typeof filePath === "string" && filePath.endsWith("openclaw.plugin.json"),
+        ([filePath]) => typeof filePath === "string" && filePath.endsWith("NexisClaw.plugin.json"),
       ),
     ).toBe(false);
   });
@@ -774,7 +774,7 @@ describe("applyPluginAutoEnable core", () => {
   it("ignores agent harness runtime env when auto-enabling plugins", () => {
     const result = applyPluginAutoEnable({
       config: {},
-      env: makeIsolatedEnv({ OPENCLAW_AGENT_RUNTIME: "codex" }),
+      env: makeIsolatedEnv({ NEXISCLAW_AGENT_RUNTIME: "codex" }),
       manifestRegistry: makeRegistry([
         {
           id: "codex",
@@ -878,7 +878,7 @@ describe("applyPluginAutoEnable core", () => {
   it("does not auto-enable WhatsApp from persisted auth state alone", () => {
     const persistedEnv = makeIsolatedEnv();
     const authDir = path.join(
-      persistedEnv.OPENCLAW_STATE_DIR ?? "",
+      persistedEnv.NEXISCLAW_STATE_DIR ?? "",
       "credentials",
       "whatsapp",
       "default",
@@ -1016,7 +1016,7 @@ describe("applyPluginAutoEnable core", () => {
       env: {
         ...makeIsolatedEnv(),
         IRC_HOST: "irc.libera.chat",
-        IRC_NICK: "openclaw-bot",
+        IRC_NICK: "NexisClaw-bot",
       },
     });
 

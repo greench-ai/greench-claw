@@ -1,13 +1,13 @@
 ---
-summary: "CLI reference for `openclaw onboard` (interactive onboarding)"
+summary: "CLI reference for `NexisClaw onboard` (interactive onboarding)"
 read_when:
   - You want guided setup for gateway, workspace, auth, channels, and skills
 title: "Onboard"
 ---
 
-# `openclaw onboard`
+# `NexisClaw onboard`
 
-Full guided onboarding for local or remote Gateway setup. Use this when you want OpenClaw to walk through model auth, workspace, gateway, channels, skills, and health in one flow.
+Full guided onboarding for local or remote Gateway setup. Use this when you want NexisClaw to walk through model auth, workspace, gateway, channels, skills, and health in one flow.
 
 ## Related guides
 
@@ -16,7 +16,7 @@ Full guided onboarding for local or remote Gateway setup. Use this when you want
     Walkthrough of the interactive CLI flow.
   </Card>
   <Card title="Onboarding overview" href="/start/onboarding-overview" icon="map">
-    How OpenClaw onboarding fits together.
+    How NexisClaw onboarding fits together.
   </Card>
   <Card title="CLI setup reference" href="/start/wizard-cli-reference" icon="book">
     Outputs, internals, and per-step behavior.
@@ -32,30 +32,30 @@ Full guided onboarding for local or remote Gateway setup. Use this when you want
 ## Examples
 
 ```bash
-openclaw onboard
-openclaw onboard --modern
-openclaw onboard --flow quickstart
-openclaw onboard --flow manual
-openclaw onboard --flow import
-openclaw onboard --import-from hermes --import-source ~/.hermes
-openclaw onboard --skip-bootstrap
-openclaw onboard --mode remote --remote-url wss://gateway-host:18789
+NexisClaw onboard
+NexisClaw onboard --modern
+NexisClaw onboard --flow quickstart
+NexisClaw onboard --flow manual
+NexisClaw onboard --flow import
+NexisClaw onboard --import-from hermes --import-source ~/.hermes
+NexisClaw onboard --skip-bootstrap
+NexisClaw onboard --mode remote --remote-url wss://gateway-host:18789
 ```
 
-`--flow import` uses plugin-owned migration providers such as Hermes. It only runs against a fresh OpenClaw setup; if existing config, credentials, sessions, or workspace memory/identity files are present, reset or choose a fresh setup before importing.
+`--flow import` uses plugin-owned migration providers such as Hermes. It only runs against a fresh NexisClaw setup; if existing config, credentials, sessions, or workspace memory/identity files are present, reset or choose a fresh setup before importing.
 
 `--modern` starts the Crestodian conversational onboarding preview. Without
-`--modern`, `openclaw onboard` keeps the classic onboarding flow.
+`--modern`, `NexisClaw onboard` keeps the classic onboarding flow.
 
 For plaintext private-network `ws://` targets (trusted networks only), set
-`OPENCLAW_ALLOW_INSECURE_PRIVATE_WS=1` in the onboarding process environment.
-There is no `openclaw.json` equivalent for this client-side transport
+`NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1` in the onboarding process environment.
+There is no `NexisClaw.json` equivalent for this client-side transport
 break-glass.
 
 Non-interactive custom provider:
 
 ```bash
-openclaw onboard --non-interactive \
+NexisClaw onboard --non-interactive \
   --auth-choice custom-api-key \
   --custom-base-url "https://llm.example.com/v1" \
   --custom-model-id "foo-large" \
@@ -66,12 +66,12 @@ openclaw onboard --non-interactive \
 ```
 
 `--custom-api-key` is optional in non-interactive mode. If omitted, onboarding checks `CUSTOM_API_KEY`.
-OpenClaw marks common vision model IDs as image-capable automatically. Pass `--custom-image-input` for unknown custom vision IDs, or `--custom-text-input` to force text-only metadata.
+NexisClaw marks common vision model IDs as image-capable automatically. Pass `--custom-image-input` for unknown custom vision IDs, or `--custom-text-input` to force text-only metadata.
 
 LM Studio also supports a provider-specific key flag in non-interactive mode:
 
 ```bash
-openclaw onboard --non-interactive \
+NexisClaw onboard --non-interactive \
   --auth-choice lmstudio \
   --custom-base-url "http://localhost:1234/v1" \
   --custom-model-id "qwen/qwen3.5-9b" \
@@ -82,7 +82,7 @@ openclaw onboard --non-interactive \
 Non-interactive Ollama:
 
 ```bash
-openclaw onboard --non-interactive \
+NexisClaw onboard --non-interactive \
   --auth-choice ollama \
   --custom-base-url "http://ollama-host:11434" \
   --custom-model-id "qwen3.5:27b" \
@@ -94,7 +94,7 @@ openclaw onboard --non-interactive \
 Store provider keys as refs instead of plaintext:
 
 ```bash
-openclaw onboard --non-interactive \
+NexisClaw onboard --non-interactive \
   --auth-choice openai-api-key \
   --secret-input-mode ref \
   --accept-risk
@@ -126,19 +126,19 @@ Gateway token options in non-interactive mode:
 Example:
 
 ```bash
-export OPENCLAW_GATEWAY_TOKEN="your-token"
-openclaw onboard --non-interactive \
+export NEXISCLAW_GATEWAY_TOKEN="your-token"
+NexisClaw onboard --non-interactive \
   --mode local \
   --auth-choice skip \
   --gateway-auth token \
-  --gateway-token-ref-env OPENCLAW_GATEWAY_TOKEN \
+  --gateway-token-ref-env NEXISCLAW_GATEWAY_TOKEN \
   --accept-risk
 ```
 
 Non-interactive local gateway health:
 
 - Unless you pass `--skip-health`, onboarding waits for a reachable local gateway before it exits successfully.
-- `--install-daemon` starts the managed gateway install path first. Without it, you must already have a local gateway running, for example `openclaw gateway run`.
+- `--install-daemon` starts the managed gateway install path first. Without it, you must already have a local gateway running, for example `NexisClaw gateway run`.
 - If you only want config/workspace/bootstrap writes in automation, use `--skip-health`.
 - If you manage workspace files yourself, pass `--skip-bootstrap` to set `agents.defaults.skipBootstrap: true` and skip creating `AGENTS.md`, `SOUL.md`, `TOOLS.md`, `IDENTITY.md`, `USER.md`, `HEARTBEAT.md`, and `BOOTSTRAP.md`.
 - On native Windows, `--install-daemon` tries Scheduled Tasks first and falls back to a per-user Startup-folder login item if task creation is denied.
@@ -160,7 +160,7 @@ Interactive onboarding behavior with reference mode:
 
 ```bash
 # Promptless endpoint selection
-openclaw onboard --non-interactive \
+NexisClaw onboard --non-interactive \
   --auth-choice zai-coding-global \
   --zai-api-key "$ZAI_API_KEY"
 
@@ -173,7 +173,7 @@ openclaw onboard --non-interactive \
 Non-interactive Mistral example:
 
 ```bash
-openclaw onboard --non-interactive \
+NexisClaw onboard --non-interactive \
   --auth-choice mistral-api-key \
   --mistral-api-key "$MISTRAL_API_KEY"
 ```
@@ -202,7 +202,7 @@ openclaw onboard --non-interactive \
   </Accordion>
   <Accordion title="Other behaviors">
     - Local onboarding DM scope behavior: [CLI setup reference](/start/wizard-cli-reference#outputs-and-internals).
-    - Fastest first chat: `openclaw dashboard` (Control UI, no channel setup).
+    - Fastest first chat: `NexisClaw dashboard` (Control UI, no channel setup).
     - Custom provider: connect any OpenAI or Anthropic compatible endpoint, including hosted providers not listed. Use Unknown to auto-detect.
     - If Hermes state is detected, onboarding offers a migration flow. Use [Migrate](/cli/migrate) for dry-run plans, overwrite mode, reports, and exact mappings.
 
@@ -212,12 +212,12 @@ openclaw onboard --non-interactive \
 ## Common follow-up commands
 
 ```bash
-openclaw channels add
-openclaw configure
-openclaw agents add <name>
+NexisClaw channels add
+NexisClaw configure
+NexisClaw agents add <name>
 ```
 
-Use `openclaw setup` instead when you only need the baseline config/workspace. Use `openclaw configure` later for targeted changes and `openclaw channels add` for channel-only setup.
+Use `NexisClaw setup` instead when you only need the baseline config/workspace. Use `NexisClaw configure` later for targeted changes and `NexisClaw channels add` for channel-only setup.
 
 <Note>
 `--json` does not imply non-interactive mode. Use `--non-interactive` for scripts.

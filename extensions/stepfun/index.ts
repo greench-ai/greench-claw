@@ -1,10 +1,10 @@
 import {
   definePluginEntry,
-  type OpenClawConfig,
+  type NexisClawConfig,
   type ProviderCatalogContext,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createProviderApiKeyAuthMethod } from "openclaw/plugin-sdk/provider-auth-api-key";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "NexisClaw/plugin-sdk/provider-auth-api-key";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import {
   applyStepFunPlanConfig,
   applyStepFunPlanConfigCn,
@@ -131,7 +131,7 @@ function createStepFunApiKeyMethod(params: {
   choiceId: string;
   choiceLabel: string;
   choiceHint: string;
-  applyConfig: (cfg: OpenClawConfig) => OpenClawConfig;
+  applyConfig: (cfg: NexisClawConfig) => NexisClawConfig;
 }) {
   return createProviderApiKeyAuthMethod({
     providerId: params.providerId,

@@ -11,7 +11,7 @@ import {
   resolveEnvApiKey,
   resolveUsableCustomProviderApiKey,
 } from "../../agents/model-auth.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
@@ -62,7 +62,7 @@ function resolveProfileSourceAgentDir(params: {
 
 export function resolveProviderAuthOverview(params: {
   provider: string;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   store: AuthProfileStore;
   modelsPath: string;
   agentDir?: string;

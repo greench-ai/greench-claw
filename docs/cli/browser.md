@@ -1,15 +1,15 @@
 ---
-summary: "CLI reference for `openclaw browser` (lifecycle, profiles, tabs, actions, state, and debugging)"
+summary: "CLI reference for `NexisClaw browser` (lifecycle, profiles, tabs, actions, state, and debugging)"
 read_when:
-  - You use `openclaw browser` and want examples for common tasks
+  - You use `NexisClaw browser` and want examples for common tasks
   - You want to control a browser running on another machine via a node host
   - You want to attach to your local signed-in Chrome via Chrome MCP
 title: "Browser"
 ---
 
-# `openclaw browser`
+# `NexisClaw browser`
 
-Manage OpenClaw's browser control surface and run browser actions (lifecycle, profiles, tabs, snapshots, screenshots, navigation, input, state emulation, and debugging).
+Manage NexisClaw's browser control surface and run browser actions (lifecycle, profiles, tabs, snapshots, screenshots, navigation, input, state emulation, and debugging).
 
 Related:
 
@@ -27,10 +27,10 @@ Related:
 ## Quick start (local)
 
 ```bash
-openclaw browser profiles
-openclaw browser --browser-profile openclaw start
-openclaw browser --browser-profile openclaw open https://example.com
-openclaw browser --browser-profile openclaw snapshot
+NexisClaw browser profiles
+NexisClaw browser --browser-profile NexisClaw start
+NexisClaw browser --browser-profile NexisClaw open https://example.com
+NexisClaw browser --browser-profile NexisClaw snapshot
 ```
 
 Agents can run the same readiness check with `browser({ action: "doctor" })`.
@@ -42,10 +42,10 @@ If `start` fails with `not reachable after start`, troubleshoot CDP readiness fi
 Minimal sequence:
 
 ```bash
-openclaw browser --browser-profile openclaw doctor
-openclaw browser --browser-profile openclaw start
-openclaw browser --browser-profile openclaw tabs
-openclaw browser --browser-profile openclaw open https://example.com
+NexisClaw browser --browser-profile NexisClaw doctor
+NexisClaw browser --browser-profile NexisClaw start
+NexisClaw browser --browser-profile NexisClaw tabs
+NexisClaw browser --browser-profile NexisClaw open https://example.com
 ```
 
 Detailed guidance: [Browser troubleshooting](/tools/browser#cdp-startup-failure-vs-navigation-ssrf-block)
@@ -53,37 +53,37 @@ Detailed guidance: [Browser troubleshooting](/tools/browser#cdp-startup-failure-
 ## Lifecycle
 
 ```bash
-openclaw browser status
-openclaw browser doctor
-openclaw browser doctor --deep
-openclaw browser start
-openclaw browser start --headless
-openclaw browser stop
-openclaw browser --browser-profile openclaw reset-profile
+NexisClaw browser status
+NexisClaw browser doctor
+NexisClaw browser doctor --deep
+NexisClaw browser start
+NexisClaw browser start --headless
+NexisClaw browser stop
+NexisClaw browser --browser-profile NexisClaw reset-profile
 ```
 
 Notes:
 
 - `doctor --deep` adds a live snapshot probe. It is useful when basic CDP
   readiness is green but you want proof that the current tab can be inspected.
-- For `attachOnly` and remote CDP profiles, `openclaw browser stop` closes the
+- For `attachOnly` and remote CDP profiles, `NexisClaw browser stop` closes the
   active control session and clears temporary emulation overrides even when
-  OpenClaw did not launch the browser process itself.
-- For local managed profiles, `openclaw browser stop` stops the spawned browser
+  NexisClaw did not launch the browser process itself.
+- For local managed profiles, `NexisClaw browser stop` stops the spawned browser
   process.
-- `openclaw browser start --headless` applies only to that start request and
-  only when OpenClaw launches a local managed browser. It does not rewrite
+- `NexisClaw browser start --headless` applies only to that start request and
+  only when NexisClaw launches a local managed browser. It does not rewrite
   `browser.headless` or profile config, and it is a no-op for an already-running
   browser.
 - On Linux hosts without `DISPLAY` or `WAYLAND_DISPLAY`, local managed profiles
-  run headless automatically unless `OPENCLAW_BROWSER_HEADLESS=0`,
+  run headless automatically unless `NEXISCLAW_BROWSER_HEADLESS=0`,
   `browser.headless=false`, or `browser.profiles.<name>.headless=false`
   explicitly requests a visible browser.
 
 ## If the command is missing
 
-If `openclaw browser` is an unknown command, check `plugins.allow` in
-`~/.openclaw/openclaw.json`.
+If `NexisClaw browser` is an unknown command, check `plugins.allow` in
+`~/.NexisClaw/NexisClaw.json`.
 
 When `plugins.allow` is present, list the bundled browser plugin explicitly
 unless the config already has a root `browser` block:
@@ -106,35 +106,35 @@ Related: [Browser tool](/tools/browser#missing-browser-command-or-tool)
 
 Profiles are named browser routing configs. In practice:
 
-- `openclaw`: launches or attaches to a dedicated OpenClaw-managed Chrome instance (isolated user data dir).
+- `NexisClaw`: launches or attaches to a dedicated NexisClaw-managed Chrome instance (isolated user data dir).
 - `user`: controls your existing signed-in Chrome session via Chrome DevTools MCP.
 - custom CDP profiles: point at a local or remote CDP endpoint.
 
 ```bash
-openclaw browser profiles
-openclaw browser create-profile --name work --color "#FF5A36"
-openclaw browser create-profile --name chrome-live --driver existing-session
-openclaw browser create-profile --name remote --cdp-url https://browser-host.example.com
-openclaw browser delete-profile --name work
+NexisClaw browser profiles
+NexisClaw browser create-profile --name work --color "#FF5A36"
+NexisClaw browser create-profile --name chrome-live --driver existing-session
+NexisClaw browser create-profile --name remote --cdp-url https://browser-host.example.com
+NexisClaw browser delete-profile --name work
 ```
 
 Use a specific profile:
 
 ```bash
-openclaw browser --browser-profile work tabs
+NexisClaw browser --browser-profile work tabs
 ```
 
 ## Tabs
 
 ```bash
-openclaw browser tabs
-openclaw browser tab new --label docs
-openclaw browser tab label t1 docs
-openclaw browser tab select 2
-openclaw browser tab close 2
-openclaw browser open https://docs.openclaw.ai --label docs
-openclaw browser focus docs
-openclaw browser close t1
+NexisClaw browser tabs
+NexisClaw browser tab new --label docs
+NexisClaw browser tab label t1 docs
+NexisClaw browser tab select 2
+NexisClaw browser tab close 2
+NexisClaw browser open https://docs.NexisClaw.ai --label docs
+NexisClaw browser focus docs
+NexisClaw browser close t1
 ```
 
 `tabs` returns `suggestedTargetId` first, then the stable `tabId` such as `t1`,
@@ -143,7 +143,7 @@ the optional label, and the raw `targetId`. Agents should pass
 assign a label with `open --label`, `tab new --label`, or `tab label`; labels,
 tab ids, raw target ids, and unique target-id prefixes are all accepted.
 When Chromium replaces the underlying raw target during a navigation or form
-submit, OpenClaw keeps the stable `tabId`/label attached to the replacement tab
+submit, NexisClaw keeps the stable `tabId`/label attached to the replacement tab
 when it can prove the match. Raw target ids remain volatile; prefer
 `suggestedTargetId`.
 
@@ -152,17 +152,17 @@ when it can prove the match. Raw target ids remain volatile; prefer
 Snapshot:
 
 ```bash
-openclaw browser snapshot
-openclaw browser snapshot --urls
+NexisClaw browser snapshot
+NexisClaw browser snapshot --urls
 ```
 
 Screenshot:
 
 ```bash
-openclaw browser screenshot
-openclaw browser screenshot --full-page
-openclaw browser screenshot --ref e12
-openclaw browser screenshot --labels
+NexisClaw browser screenshot
+NexisClaw browser screenshot --full-page
+NexisClaw browser screenshot --ref e12
+NexisClaw browser screenshot --labels
 ```
 
 Notes:
@@ -179,35 +179,35 @@ Notes:
 Navigate/click/type (ref-based UI automation):
 
 ```bash
-openclaw browser navigate https://example.com
-openclaw browser click <ref>
-openclaw browser click-coords 120 340
-openclaw browser type <ref> "hello"
-openclaw browser press Enter
-openclaw browser hover <ref>
-openclaw browser scrollintoview <ref>
-openclaw browser drag <startRef> <endRef>
-openclaw browser select <ref> OptionA OptionB
-openclaw browser fill --fields '[{"ref":"1","value":"Ada"}]'
-openclaw browser wait --text "Done"
-openclaw browser evaluate --fn '(el) => el.textContent' --ref <ref>
+NexisClaw browser navigate https://example.com
+NexisClaw browser click <ref>
+NexisClaw browser click-coords 120 340
+NexisClaw browser type <ref> "hello"
+NexisClaw browser press Enter
+NexisClaw browser hover <ref>
+NexisClaw browser scrollintoview <ref>
+NexisClaw browser drag <startRef> <endRef>
+NexisClaw browser select <ref> OptionA OptionB
+NexisClaw browser fill --fields '[{"ref":"1","value":"Ada"}]'
+NexisClaw browser wait --text "Done"
+NexisClaw browser evaluate --fn '(el) => el.textContent' --ref <ref>
 ```
 
 Action responses return the current raw `targetId` after action-triggered page
-replacement when OpenClaw can prove the replacement tab. Scripts should still
+replacement when NexisClaw can prove the replacement tab. Scripts should still
 store and pass `suggestedTargetId`/labels for long-lived workflows.
 
 File + dialog helpers:
 
 ```bash
-openclaw browser upload /tmp/openclaw/uploads/file.pdf --ref <ref>
-openclaw browser waitfordownload
-openclaw browser download <ref> report.pdf
-openclaw browser dialog --accept
+NexisClaw browser upload /tmp/NexisClaw/uploads/file.pdf --ref <ref>
+NexisClaw browser waitfordownload
+NexisClaw browser download <ref> report.pdf
+NexisClaw browser dialog --accept
 ```
 
-Managed Chrome profiles save ordinary click-triggered downloads into the OpenClaw
-downloads directory (`/tmp/openclaw/downloads` by default, or the configured temp
+Managed Chrome profiles save ordinary click-triggered downloads into the NexisClaw
+downloads directory (`/tmp/NexisClaw/downloads` by default, or the configured temp
 root). Use `waitfordownload` or `download` when the agent needs to wait for a
 specific file and return its path; those explicit waiters own the next download.
 
@@ -216,40 +216,40 @@ specific file and return its path; those explicit waiters own the next download.
 Viewport + emulation:
 
 ```bash
-openclaw browser resize 1280 720
-openclaw browser set viewport 1280 720
-openclaw browser set offline on
-openclaw browser set media dark
-openclaw browser set timezone Europe/London
-openclaw browser set locale en-GB
-openclaw browser set geo 51.5074 -0.1278 --accuracy 25
-openclaw browser set device "iPhone 14"
-openclaw browser set headers '{"x-test":"1"}'
-openclaw browser set credentials myuser mypass
+NexisClaw browser resize 1280 720
+NexisClaw browser set viewport 1280 720
+NexisClaw browser set offline on
+NexisClaw browser set media dark
+NexisClaw browser set timezone Europe/London
+NexisClaw browser set locale en-GB
+NexisClaw browser set geo 51.5074 -0.1278 --accuracy 25
+NexisClaw browser set device "iPhone 14"
+NexisClaw browser set headers '{"x-test":"1"}'
+NexisClaw browser set credentials myuser mypass
 ```
 
 Cookies + storage:
 
 ```bash
-openclaw browser cookies
-openclaw browser cookies set session abc123 --url https://example.com
-openclaw browser cookies clear
-openclaw browser storage local get
-openclaw browser storage local set token abc123
-openclaw browser storage session clear
+NexisClaw browser cookies
+NexisClaw browser cookies set session abc123 --url https://example.com
+NexisClaw browser cookies clear
+NexisClaw browser storage local get
+NexisClaw browser storage local set token abc123
+NexisClaw browser storage session clear
 ```
 
 ## Debugging
 
 ```bash
-openclaw browser console --level error
-openclaw browser pdf
-openclaw browser responsebody "**/api"
-openclaw browser highlight <ref>
-openclaw browser errors --clear
-openclaw browser requests --filter api
-openclaw browser trace start
-openclaw browser trace stop --out trace.zip
+NexisClaw browser console --level error
+NexisClaw browser pdf
+NexisClaw browser responsebody "**/api"
+NexisClaw browser highlight <ref>
+NexisClaw browser errors --clear
+NexisClaw browser requests --filter api
+NexisClaw browser trace start
+NexisClaw browser trace stop --out trace.zip
 ```
 
 ## Existing Chrome via MCP
@@ -257,10 +257,10 @@ openclaw browser trace stop --out trace.zip
 Use the built-in `user` profile, or create your own `existing-session` profile:
 
 ```bash
-openclaw browser --browser-profile user tabs
-openclaw browser create-profile --name chrome-live --driver existing-session
-openclaw browser create-profile --name brave-live --driver existing-session --user-data-dir "~/Library/Application Support/BraveSoftware/Brave-Browser"
-openclaw browser --browser-profile chrome-live tabs
+NexisClaw browser --browser-profile user tabs
+NexisClaw browser create-profile --name chrome-live --driver existing-session
+NexisClaw browser create-profile --name brave-live --driver existing-session --user-data-dir "~/Library/Application Support/BraveSoftware/Brave-Browser"
+NexisClaw browser --browser-profile chrome-live tabs
 ```
 
 This path is host-only. For Docker, headless servers, Browserless, or other remote setups, use a CDP profile instead.

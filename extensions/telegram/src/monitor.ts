@@ -1,16 +1,16 @@
 import type { RunOptions } from "@grammyjs/runner";
-import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import { registerChannelRuntimeContext } from "openclaw/plugin-sdk/channel-runtime-context";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveAgentMaxConcurrent } from "openclaw/plugin-sdk/model-session-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
+import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "NexisClaw/plugin-sdk/approval-handler-adapter-runtime";
+import { registerChannelRuntimeContext } from "NexisClaw/plugin-sdk/channel-runtime-context";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveAgentMaxConcurrent } from "NexisClaw/plugin-sdk/model-session-runtime";
+import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
 import {
   registerUncaughtExceptionHandler,
   registerUnhandledRejectionHandler,
   waitForAbortSignal,
-} from "openclaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "NexisClaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/ssrf-runtime";
 import { resolveTelegramAccount } from "./accounts.js";
 import { resolveTelegramAllowedUpdates } from "./allowed-updates.js";
 import { isTelegramExecApprovalHandlerConfigured } from "./exec-approvals.js";
@@ -25,7 +25,7 @@ import { makeProxyFetch } from "./proxy.js";
 
 export type { MonitorTelegramOpts } from "./monitor.types.js";
 
-export function createTelegramRunnerOptions(cfg: OpenClawConfig): RunOptions<unknown> {
+export function createTelegramRunnerOptions(cfg: NexisClawConfig): RunOptions<unknown> {
   return {
     sink: {
       concurrency: resolveAgentMaxConcurrent(cfg),

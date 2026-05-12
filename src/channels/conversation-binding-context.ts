@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import {
   resolveCommandConversationResolution,
   type ResolveCommandConversationResolutionInput,
@@ -16,7 +16,7 @@ type ResolveConversationBindingContextInput = Omit<
   ResolveCommandConversationResolutionInput,
   "includePlacementHint"
 > & {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
 };
 
 export function resolveConversationBindingContext(

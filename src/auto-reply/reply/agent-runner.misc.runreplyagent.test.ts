@@ -125,7 +125,7 @@ const loadCronStoreMock = vi.fn();
 vi.mock("../../cron/store.js", () => {
   return {
     loadCronStore: (...args: unknown[]) => loadCronStoreMock(...args),
-    resolveCronStorePath: (storePath?: string) => storePath ?? "/tmp/openclaw-cron-store.json",
+    resolveCronStorePath: (storePath?: string) => storePath ?? "/tmp/NexisClaw-cron-store.json",
   };
 });
 
@@ -347,7 +347,7 @@ describe("runReplyAgent auto-compaction token update", () => {
 
   it("updates totalTokens from lastCallUsage even without compaction", async () => {
     const { sessionKey, stored } = await runBaseReplyWithAgentMeta({
-      tmpPrefix: "openclaw-usage-last-",
+      tmpPrefix: "NexisClaw-usage-last-",
       agentMeta: {
         // Tool-use loop: accumulated input is higher than last call's input
         usage: { input: 75_000, output: 5_000, total: 80_000 },
@@ -411,7 +411,7 @@ describe("runReplyAgent auto-compaction token update", () => {
 
   it("reports live diagnostic context from promptTokens, not provider usage totals", async () => {
     const { usageEvent } = await runBaseReplyWithAgentMeta({
-      tmpPrefix: "openclaw-usage-diagnostic-",
+      tmpPrefix: "NexisClaw-usage-diagnostic-",
       collectDiagnostics: true,
       agentMeta: {
         usage: { input: 75_000, output: 5_000, cacheRead: 25_000, total: 105_000 },
@@ -451,7 +451,7 @@ describe("runReplyAgent auto-compaction token update", () => {
 
   it("falls back to last-call prompt usage for live diagnostic context", async () => {
     const { usageEvent } = await runBaseReplyWithAgentMeta({
-      tmpPrefix: "openclaw-usage-diagnostic-last-",
+      tmpPrefix: "NexisClaw-usage-diagnostic-last-",
       collectDiagnostics: true,
       agentMeta: {
         usage: { input: 75_000, output: 5_000, cacheRead: 25_000, total: 105_000 },
@@ -495,9 +495,9 @@ describe("runReplyAgent auto-compaction token update", () => {
 
   it("reads post-compaction context from the queued workspace instead of process cwd", async () => {
     const workspaceDir = await fs.mkdtemp(
-      path.join(os.tmpdir(), "openclaw-post-compaction-workspace-"),
+      path.join(os.tmpdir(), "NexisClaw-post-compaction-workspace-"),
     );
-    const cwdDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-post-compaction-cwd-"));
+    const cwdDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-post-compaction-cwd-"));
     await fs.writeFile(
       path.join(workspaceDir, "AGENTS.md"),
       [
@@ -513,7 +513,7 @@ describe("runReplyAgent auto-compaction token update", () => {
     const cwdSpy = vi.spyOn(process, "cwd").mockReturnValue(cwdDir);
     try {
       const { sessionKey } = await runBaseReplyWithAgentMeta({
-        tmpPrefix: "openclaw-post-compaction-workspace-root-",
+        tmpPrefix: "NexisClaw-post-compaction-workspace-root-",
         workspaceDir,
         agentMeta: {
           compactionCount: 1,
@@ -730,7 +730,7 @@ describe("runReplyAgent block streaming", () => {
 
 describe("runReplyAgent Active Memory inline debug", () => {
   it("appends inline Active Memory status payload when verbose is enabled", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-active-memory-inline-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-active-memory-inline-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionKey = "main";
     const sessionEntry: SessionEntry = {
@@ -841,7 +841,7 @@ describe("runReplyAgent Active Memory inline debug", () => {
   });
 
   it("appends inline Active Memory status and trace payloads when verbose and trace are enabled", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-active-memory-inline-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-active-memory-inline-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionKey = "main";
     const sessionEntry: SessionEntry = {
@@ -953,7 +953,7 @@ describe("runReplyAgent Active Memory inline debug", () => {
   });
 
   it("appends inline Active Memory trace payload when only trace is enabled", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-active-memory-inline-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-active-memory-inline-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionKey = "main";
     const sessionEntry: SessionEntry = {
@@ -1064,7 +1064,7 @@ describe("runReplyAgent Active Memory inline debug", () => {
   });
 
   it("appends raw trace payloads when trace raw is enabled", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-trace-raw-usage-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-trace-raw-usage-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionFile = path.join(tmp, "session.jsonl");
     const sessionKey = "main";
@@ -1303,7 +1303,7 @@ describe("runReplyAgent Active Memory inline debug", () => {
   });
 
   it("does not emit persisted trace output to an unauthorized sender", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-trace-raw-unauthorized-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-trace-raw-unauthorized-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionFile = path.join(tmp, "session.jsonl");
     const sessionKey = "main";
@@ -1399,7 +1399,7 @@ describe("runReplyAgent Active Memory inline debug", () => {
   });
 
   it("shows session and last-turn usage totals without per-call usage blocks", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-trace-raw-usage-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-trace-raw-usage-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionFile = path.join(tmp, "session.jsonl");
     const sessionKey = "main";
@@ -1519,7 +1519,7 @@ describe("runReplyAgent Active Memory inline debug", () => {
   });
 
   it("escapes markdown fence delimiters inside raw trace blocks", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-trace-raw-fence-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-trace-raw-fence-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionFile = path.join(tmp, "session.jsonl");
     const sessionKey = "main";
@@ -1616,7 +1616,7 @@ describe("runReplyAgent Active Memory inline debug", () => {
   });
 
   it("does not reload the session store when verbose is disabled", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-active-memory-inline-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-active-memory-inline-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionKey = "main";
     const sessionEntry: SessionEntry = {

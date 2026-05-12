@@ -2,8 +2,8 @@ import path from "node:path";
 import type { ZodIssue } from "zod";
 import { CONFIG_PATH } from "../config/config.js";
 import { resolveAgentModelFallbackValues } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
-import { OpenClawSchema } from "../config/zod-schema.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import { NexisClawSchema } from "../config/zod-schema.js";
 import { resolvePrimaryStringValue } from "../shared/string-coerce.js";
 import { note } from "../terminal/note.js";
 import { isRecord } from "../utils.js";
@@ -61,11 +61,11 @@ export function resolveConfigPathTarget(root: unknown, path: Array<string | numb
   return current;
 }
 
-export function stripUnknownConfigKeys(config: OpenClawConfig): {
-  config: OpenClawConfig;
+export function stripUnknownConfigKeys(config: NexisClawConfig): {
+  config: NexisClawConfig;
   removed: string[];
 } {
-  const parsed = OpenClawSchema.safeParse(config);
+  const parsed = NexisClawSchema.safeParse(config);
   if (parsed.success) {
     return { config, removed: [] };
   }
@@ -94,7 +94,7 @@ export function stripUnknownConfigKeys(config: OpenClawConfig): {
   return { config: next, removed };
 }
 
-export function noteOpencodeProviderOverrides(cfg: OpenClawConfig): void {
+export function noteOpencodeProviderOverrides(cfg: NexisClawConfig): void {
   const providers = cfg.models?.providers;
   if (!providers) {
     return;
@@ -149,7 +149,7 @@ function isImplicitFallbackClobber(model: unknown): boolean {
   return false;
 }
 
-export function collectImplicitFallbackClobberWarnings(cfg: OpenClawConfig): string[] {
+export function collectImplicitFallbackClobberWarnings(cfg: NexisClawConfig): string[] {
   const defaultFallbacks = resolveAgentModelFallbackValues(cfg.agents?.defaults?.model);
   if (defaultFallbacks.length === 0) {
     return [];
@@ -179,7 +179,7 @@ export function collectImplicitFallbackClobberWarnings(cfg: OpenClawConfig): str
   return warnings;
 }
 
-export function noteImplicitFallbackClobberWarnings(cfg: OpenClawConfig): void {
+export function noteImplicitFallbackClobberWarnings(cfg: NexisClawConfig): void {
   const warnings = collectImplicitFallbackClobberWarnings(cfg);
   if (warnings.length === 0) {
     return;

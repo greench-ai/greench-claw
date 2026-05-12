@@ -2,14 +2,14 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.js";
+import type { NexisClawConfig } from "../config/types.js";
 import { resolveStatusTtsSnapshot } from "./status-config.js";
 
 let fixtureRoot = "";
 let fixtureId = 0;
 
 beforeAll(() => {
-  fixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-tts-status-"));
+  fixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-tts-status-"));
 });
 
 afterAll(() => {
@@ -22,20 +22,20 @@ async function withStatusTempHome(run: (home: string) => Promise<void>): Promise
   const home = path.join(fixtureRoot, `case-${fixtureId++}`);
   const previousHome = process.env.HOME;
   const previousUserProfile = process.env.USERPROFILE;
-  const previousOpenClawHome = process.env.OPENCLAW_HOME;
-  const previousStateDir = process.env.OPENCLAW_STATE_DIR;
+  const previousNexisClawHome = process.env.NEXISCLAW_HOME;
+  const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
   fs.mkdirSync(home, { recursive: true });
   process.env.HOME = home;
   process.env.USERPROFILE = home;
-  delete process.env.OPENCLAW_HOME;
-  process.env.OPENCLAW_STATE_DIR = path.join(home, ".openclaw");
+  delete process.env.NEXISCLAW_HOME;
+  process.env.NEXISCLAW_STATE_DIR = path.join(home, ".NexisClaw");
   try {
     await run(home);
   } finally {
     restoreEnv("HOME", previousHome);
     restoreEnv("USERPROFILE", previousUserProfile);
-    restoreEnv("OPENCLAW_HOME", previousOpenClawHome);
-    restoreEnv("OPENCLAW_STATE_DIR", previousStateDir);
+    restoreEnv("NEXISCLAW_HOME", previousNexisClawHome);
+    restoreEnv("NEXISCLAW_STATE_DIR", previousStateDir);
   }
 }
 
@@ -50,7 +50,7 @@ function restoreEnv(key: string, value: string | undefined): void {
 describe("resolveStatusTtsSnapshot", () => {
   it("uses prefs overrides without loading speech providers", async () => {
     await withStatusTempHome(async (home) => {
-      const prefsPath = path.join(home, ".openclaw", "settings", "tts.json");
+      const prefsPath = path.join(home, ".NexisClaw", "settings", "tts.json");
       fs.mkdirSync(path.dirname(prefsPath), { recursive: true });
       fs.writeFileSync(
         prefsPath,
@@ -72,7 +72,7 @@ describe("resolveStatusTtsSnapshot", () => {
                 prefsPath,
               },
             },
-          } as OpenClawConfig,
+          } as NexisClawConfig,
         }),
       ).toEqual({
         autoMode: "always",
@@ -93,7 +93,7 @@ describe("resolveStatusTtsSnapshot", () => {
                 auto: "always",
               },
             },
-          } as OpenClawConfig,
+          } as NexisClawConfig,
         }),
       ).toEqual({
         autoMode: "always",
@@ -126,7 +126,7 @@ describe("resolveStatusTtsSnapshot", () => {
                 },
               ],
             },
-          } as OpenClawConfig,
+          } as NexisClawConfig,
           agentId: "reader",
         }),
       ).toEqual({
@@ -163,7 +163,7 @@ describe("resolveStatusTtsSnapshot", () => {
                 },
               ],
             },
-          } as OpenClawConfig,
+          } as NexisClawConfig,
           agentId: "reader",
         }),
       ).toEqual({
@@ -195,7 +195,7 @@ describe("resolveStatusTtsSnapshot", () => {
                 },
               },
             },
-          } as OpenClawConfig,
+          } as NexisClawConfig,
         }),
       ).toEqual({
         autoMode: "always",
@@ -229,7 +229,7 @@ describe("resolveStatusTtsSnapshot", () => {
                 },
               },
             },
-          } as OpenClawConfig,
+          } as NexisClawConfig,
         }),
       ).toEqual({
         autoMode: "always",
@@ -274,7 +274,7 @@ describe("resolveStatusTtsSnapshot", () => {
                 },
               ],
             },
-          } as OpenClawConfig,
+          } as NexisClawConfig,
           agentId: "reader",
         }),
       ).toEqual({
@@ -290,7 +290,7 @@ describe("resolveStatusTtsSnapshot", () => {
 
   it("uses provider metadata for local provider prefs overrides", async () => {
     await withStatusTempHome(async (home) => {
-      const prefsPath = path.join(home, ".openclaw", "settings", "tts.json");
+      const prefsPath = path.join(home, ".NexisClaw", "settings", "tts.json");
       fs.mkdirSync(path.dirname(prefsPath), { recursive: true });
       fs.writeFileSync(
         prefsPath,
@@ -320,7 +320,7 @@ describe("resolveStatusTtsSnapshot", () => {
                 },
               },
             },
-          } as OpenClawConfig,
+          } as NexisClawConfig,
         }),
       ).toEqual({
         autoMode: "always",
@@ -332,9 +332,9 @@ describe("resolveStatusTtsSnapshot", () => {
     });
   });
 
-  it("derives the default prefs path from OPENCLAW_CONFIG_PATH when set", async () => {
+  it("derives the default prefs path from NEXISCLAW_CONFIG_PATH when set", async () => {
     await withStatusTempHome(async (home) => {
-      const stateDir = path.join(home, ".openclaw-dev");
+      const stateDir = path.join(home, ".NexisClaw-dev");
       const prefsPath = path.join(stateDir, "settings", "tts.json");
       fs.mkdirSync(path.dirname(prefsPath), { recursive: true });
       fs.writeFileSync(
@@ -347,8 +347,8 @@ describe("resolveStatusTtsSnapshot", () => {
         }),
       );
 
-      delete process.env.OPENCLAW_STATE_DIR;
-      vi.stubEnv("OPENCLAW_CONFIG_PATH", path.join(stateDir, "openclaw.json"));
+      delete process.env.NEXISCLAW_STATE_DIR;
+      vi.stubEnv("NEXISCLAW_CONFIG_PATH", path.join(stateDir, "NexisClaw.json"));
       try {
         expect(
           resolveStatusTtsSnapshot({
@@ -356,7 +356,7 @@ describe("resolveStatusTtsSnapshot", () => {
               messages: {
                 tts: {},
               },
-            } as OpenClawConfig,
+            } as NexisClawConfig,
           }),
         ).toEqual({
           autoMode: "always",

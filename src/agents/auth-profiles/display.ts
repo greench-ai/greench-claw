@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { resolveAuthProfileMetadata } from "./identity.js";
 import type { AuthProfileStore } from "./types.js";
 
 export function resolveAuthProfileDisplayLabel(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   store: AuthProfileStore;
   profileId: string;
 }): string {

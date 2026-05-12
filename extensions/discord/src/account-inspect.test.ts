@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { inspectDiscordAccount } from "./account-inspect.js";
 
-function asConfig(value: unknown): OpenClawConfig {
-  return value as OpenClawConfig;
+function asConfig(value: unknown): NexisClawConfig {
+  return value as NexisClawConfig;
 }
 
 describe("inspectDiscordAccount", () => {

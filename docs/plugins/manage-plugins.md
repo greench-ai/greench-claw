@@ -1,5 +1,5 @@
 ---
-summary: "Quick examples for installing, listing, uninstalling, updating, and publishing OpenClaw plugins"
+summary: "Quick examples for installing, listing, uninstalling, updating, and publishing NexisClaw plugins"
 read_when:
   - You want quick plugin install, list, update, or uninstall examples
   - You want to choose between ClawHub and npm plugin distribution
@@ -14,10 +14,10 @@ verify, and uninstall when you no longer need the plugin.
 ## List plugins
 
 ```bash
-openclaw plugins list
-openclaw plugins list --enabled
-openclaw plugins list --verbose
-openclaw plugins list --json
+NexisClaw plugins list
+NexisClaw plugins list --enabled
+NexisClaw plugins list --verbose
+NexisClaw plugins list --json
 ```
 
 Use `--json` for scripts. It includes registry diagnostics and each plugin's
@@ -25,11 +25,11 @@ static `dependencyStatus` when the plugin package declares `dependencies` or
 `optionalDependencies`.
 
 ```bash
-openclaw plugins list --json \
+NexisClaw plugins list --json \
   | jq '.plugins[] | {id, enabled, format, source, dependencyStatus}'
 ```
 
-`plugins list` is a cold inventory check. It shows what OpenClaw can discover
+`plugins list` is a cold inventory check. It shows what NexisClaw can discover
 from config, manifests, and the plugin registry; it does not prove that an
 already-running Gateway process imported the plugin runtime.
 
@@ -37,32 +37,32 @@ already-running Gateway process imported the plugin runtime.
 
 ```bash
 # Search ClawHub for plugin packages.
-openclaw plugins search "calendar"
+NexisClaw plugins search "calendar"
 
 # Bare package specs try ClawHub first, then npm fallback.
-openclaw plugins install <package>
+NexisClaw plugins install <package>
 
 # Force one source.
-openclaw plugins install clawhub:<package>
-openclaw plugins install npm:<package>
+NexisClaw plugins install clawhub:<package>
+NexisClaw plugins install npm:<package>
 
 # Install a specific version or dist-tag.
-openclaw plugins install clawhub:<package>@1.2.3
-openclaw plugins install clawhub:<package>@beta
-openclaw plugins install npm:@scope/openclaw-plugin@1.2.3
-openclaw plugins install npm:@openclaw/codex
+NexisClaw plugins install clawhub:<package>@1.2.3
+NexisClaw plugins install clawhub:<package>@beta
+NexisClaw plugins install npm:@scope/NexisClaw-plugin@1.2.3
+NexisClaw plugins install npm:@NexisClaw/codex
 
 # Install from git or a local development checkout.
-openclaw plugins install git:github.com/acme/openclaw-plugin@v1.0.0
-openclaw plugins install ./my-plugin
-openclaw plugins install --link ./my-plugin
+NexisClaw plugins install git:github.com/acme/NexisClaw-plugin@v1.0.0
+NexisClaw plugins install ./my-plugin
+NexisClaw plugins install --link ./my-plugin
 ```
 
 After installing plugin code, restart the Gateway that serves your channels:
 
 ```bash
-openclaw gateway restart
-openclaw plugins inspect <plugin-id> --runtime --json
+NexisClaw gateway restart
+NexisClaw plugins inspect <plugin-id> --runtime --json
 ```
 
 Use `inspect --runtime` when you need proof that the plugin registered runtime
@@ -72,9 +72,9 @@ commands.
 ## Update plugins
 
 ```bash
-openclaw plugins update <plugin-id>
-openclaw plugins update <npm-package-or-spec>
-openclaw plugins update --all
+NexisClaw plugins update <plugin-id>
+NexisClaw plugins update <npm-package-or-spec>
+NexisClaw plugins update --all
 ```
 
 If a plugin was installed from an npm dist-tag such as `@beta`, later
@@ -82,37 +82,37 @@ If a plugin was installed from an npm dist-tag such as `@beta`, later
 switches the tracked install to that spec for future updates.
 
 ```bash
-openclaw plugins update @scope/openclaw-plugin@beta
-openclaw plugins update @scope/openclaw-plugin
+NexisClaw plugins update @scope/NexisClaw-plugin@beta
+NexisClaw plugins update @scope/NexisClaw-plugin
 ```
 
 The second command moves a plugin back to the registry's default release line
 when it was previously pinned to an exact version or tag.
 
-When `openclaw update` runs on the beta channel, default-line npm and ClawHub
+When `NexisClaw update` runs on the beta channel, default-line npm and ClawHub
 plugin records try the matching plugin `@beta` release first. If that beta
-release does not exist, OpenClaw falls back to the recorded default/latest spec.
-For npm plugins, OpenClaw also falls back when the beta package exists but fails
+release does not exist, NexisClaw falls back to the recorded default/latest spec.
+For npm plugins, NexisClaw also falls back when the beta package exists but fails
 install validation. Exact versions and explicit tags such as `@rc` or `@beta`
 are preserved.
 
 ## Uninstall plugins
 
 ```bash
-openclaw plugins uninstall <plugin-id> --dry-run
-openclaw plugins uninstall <plugin-id>
-openclaw plugins uninstall <plugin-id> --keep-files
-openclaw gateway restart
+NexisClaw plugins uninstall <plugin-id> --dry-run
+NexisClaw plugins uninstall <plugin-id>
+NexisClaw plugins uninstall <plugin-id> --keep-files
+NexisClaw gateway restart
 ```
 
 Uninstall removes the plugin's config entry, plugin index record, allow/deny list
 entries, and linked load paths when applicable. Managed install directories are
 removed unless you pass `--keep-files`.
 
-In Nix mode (`OPENCLAW_NIX_MODE=1`), plugin install, update, uninstall, enable,
+In Nix mode (`NEXISCLAW_NIX_MODE=1`), plugin install, update, uninstall, enable,
 and disable commands are disabled. Manage those choices in the Nix source for
-the install instead; for nix-openclaw, use the agent-first
-[Quick Start](https://github.com/openclaw/nix-openclaw#quick-start).
+the install instead; for nix-NexisClaw, use the agent-first
+[Quick Start](https://github.com/NexisClaw/nix-NexisClaw#quick-start).
 
 ## Publish plugins
 
@@ -121,7 +121,7 @@ both.
 
 ### Publish to ClawHub
 
-ClawHub is the primary public discovery surface for OpenClaw plugins. It gives
+ClawHub is the primary public discovery surface for NexisClaw plugins. It gives
 users searchable metadata, version history, and registry scan results before
 install.
 
@@ -136,23 +136,23 @@ clawhub package publish your-org/your-plugin@v1.0.0
 Users install from ClawHub with:
 
 ```bash
-openclaw plugins install clawhub:<package>
-openclaw plugins install <package>
+NexisClaw plugins install clawhub:<package>
+NexisClaw plugins install <package>
 ```
 
 The bare form still checks ClawHub first.
 
 ### Publish to npmjs.com
 
-Native npm plugins must include a plugin manifest and `package.json` OpenClaw
+Native npm plugins must include a plugin manifest and `package.json` NexisClaw
 entrypoint metadata.
 
 ```json package.json
 {
-  "name": "@acme/openclaw-plugin",
+  "name": "@acme/NexisClaw-plugin",
   "version": "1.0.0",
   "type": "module",
-  "openclaw": {
+  "NexisClaw": {
     "extensions": ["./dist/index.js"]
   }
 }
@@ -165,9 +165,9 @@ npm publish --access public
 Users install npm-only with:
 
 ```bash
-openclaw plugins install npm:@acme/openclaw-plugin
-openclaw plugins install npm:@acme/openclaw-plugin@beta
-openclaw plugins install npm:@acme/openclaw-plugin@1.0.0
+NexisClaw plugins install npm:@acme/NexisClaw-plugin
+NexisClaw plugins install npm:@acme/NexisClaw-plugin@beta
+NexisClaw plugins install npm:@acme/NexisClaw-plugin@1.0.0
 ```
 
 If the same package is also available on ClawHub, `npm:` skips ClawHub lookup and
@@ -175,7 +175,7 @@ forces npm resolution.
 
 ## Source choice
 
-- **ClawHub**: use when you want OpenClaw-native discovery, scan summaries,
+- **ClawHub**: use when you want NexisClaw-native discovery, scan summaries,
   versions, and install hints.
 - **npmjs.com**: use when you already ship JavaScript packages or need npm
   dist-tags/private registry workflows.
@@ -186,7 +186,7 @@ forces npm resolution.
 ## Related
 
 - [Plugins](/tools/plugin) - overview and troubleshooting
-- [`openclaw plugins`](/cli/plugins) - full CLI reference
+- [`NexisClaw plugins`](/cli/plugins) - full CLI reference
 - [ClawHub](/clawhub/cli) - publish and registry operations
 - [Building plugins](/plugins/building-plugins) - create a plugin package
 - [Plugin manifest](/plugins/manifest) - manifest and package metadata

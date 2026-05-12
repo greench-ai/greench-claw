@@ -16,8 +16,8 @@ describe("scripts/test-live-cli-backend-docker.sh", () => {
   it("forwards both fresh and resume CLI arg overrides into the Docker container", () => {
     const forwardedVars = readForwardedDockerEnvVars();
 
-    expect(forwardedVars).toContain("OPENCLAW_LIVE_CLI_BACKEND_ARGS");
-    expect(forwardedVars).toContain("OPENCLAW_LIVE_CLI_BACKEND_RESUME_ARGS");
-    expect(forwardedVars).toContain("OPENCLAW_TEST_CONSOLE");
+    expect(forwardedVars).toContain("NEXISCLAW_LIVE_CLI_BACKEND_ARGS");
+    expect(forwardedVars).toContain("NEXISCLAW_LIVE_CLI_BACKEND_RESUME_ARGS");
+    expect(forwardedVars).toContain("NEXISCLAW_TEST_CONSOLE");
   });
 });

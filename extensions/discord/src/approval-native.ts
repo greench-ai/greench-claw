@@ -1,12 +1,12 @@
-import { createLazyChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-adapter-runtime";
-import type { ChannelApprovalNativeRuntimeAdapter } from "openclaw/plugin-sdk/approval-handler-runtime";
-import { resolveApprovalRequestSessionConversation } from "openclaw/plugin-sdk/approval-native-runtime";
-import type { ChannelApprovalCapability } from "openclaw/plugin-sdk/channel-contract";
-import type { DiscordExecApprovalConfig } from "openclaw/plugin-sdk/config-contracts";
+import { createLazyChannelApprovalNativeRuntimeAdapter } from "NexisClaw/plugin-sdk/approval-handler-adapter-runtime";
+import type { ChannelApprovalNativeRuntimeAdapter } from "NexisClaw/plugin-sdk/approval-handler-runtime";
+import { resolveApprovalRequestSessionConversation } from "NexisClaw/plugin-sdk/approval-native-runtime";
+import type { ChannelApprovalCapability } from "NexisClaw/plugin-sdk/channel-contract";
+import type { DiscordExecApprovalConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
 export { shouldHandleDiscordApprovalRequest } from "./approval-shared.js";
 import { listDiscordAccountIds, resolveDiscordAccount } from "./accounts.js";
 import {

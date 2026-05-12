@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 
-type AgentToolsConfig = NonNullable<NonNullable<OpenClawConfig["agents"]>["list"]>[number]["tools"];
+type AgentToolsConfig = NonNullable<NonNullable<NexisClawConfig["agents"]>["list"]>[number]["tools"];
 type SandboxToolsConfig = {
   allow?: string[];
   deny?: string[];
@@ -10,7 +10,7 @@ export function createRestrictedAgentSandboxConfig(params: {
   agentTools?: AgentToolsConfig;
   globalSandboxTools?: SandboxToolsConfig;
   workspace?: string;
-}): OpenClawConfig {
+}): NexisClawConfig {
   return {
     agents: {
       defaults: {
@@ -22,7 +22,7 @@ export function createRestrictedAgentSandboxConfig(params: {
       list: [
         {
           id: "restricted",
-          workspace: params.workspace ?? "~/openclaw-restricted",
+          workspace: params.workspace ?? "~/NexisClaw-restricted",
           sandbox: {
             mode: "all",
             scope: "agent",
@@ -40,5 +40,5 @@ export function createRestrictedAgentSandboxConfig(params: {
           },
         }
       : {}),
-  } as OpenClawConfig;
+  } as NexisClawConfig;
 }

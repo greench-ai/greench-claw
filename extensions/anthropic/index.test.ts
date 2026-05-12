@@ -1,11 +1,11 @@
 import type {
   ProviderResolveDynamicModelContext,
   ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "NexisClaw/plugin-sdk/plugin-entry";
 import {
   capturePluginRegistration,
   registerSingleProviderPlugin,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "NexisClaw/plugin-sdk/plugin-test-runtime";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const { readClaudeCliCredentialsForSetupMock, readClaudeCliCredentialsForRuntimeMock } = vi.hoisted(

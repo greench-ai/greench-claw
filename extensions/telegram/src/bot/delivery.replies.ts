@@ -1,33 +1,33 @@
 import { type Bot, GrammyError, InputFile } from "grammy";
-import type { ReplyToMode } from "openclaw/plugin-sdk/config-contracts";
-import type { MarkdownTableMode } from "openclaw/plugin-sdk/config-contracts";
-import { fireAndForgetHook } from "openclaw/plugin-sdk/hook-runtime";
-import { createInternalHookEvent, triggerInternalHook } from "openclaw/plugin-sdk/hook-runtime";
+import type { ReplyToMode } from "NexisClaw/plugin-sdk/config-contracts";
+import type { MarkdownTableMode } from "NexisClaw/plugin-sdk/config-contracts";
+import { fireAndForgetHook } from "NexisClaw/plugin-sdk/hook-runtime";
+import { createInternalHookEvent, triggerInternalHook } from "NexisClaw/plugin-sdk/hook-runtime";
 import {
   buildCanonicalSentMessageHookContext,
   toInternalMessageSentContext,
   toPluginMessageContext,
   toPluginMessageSentEvent,
-} from "openclaw/plugin-sdk/hook-runtime";
-import type { ReplyPayloadDelivery } from "openclaw/plugin-sdk/interactive-runtime";
+} from "NexisClaw/plugin-sdk/hook-runtime";
+import type { ReplyPayloadDelivery } from "NexisClaw/plugin-sdk/interactive-runtime";
 import {
   buildOutboundMediaLoadOptions,
   isGifMedia,
   kindFromMime,
   probeVideoDimensions,
-} from "openclaw/plugin-sdk/media-runtime";
+} from "NexisClaw/plugin-sdk/media-runtime";
 import {
   createOutboundPayloadPlan,
   projectOutboundPayloadPlanForDelivery,
-} from "openclaw/plugin-sdk/outbound-runtime";
-import { getGlobalHookRunner } from "openclaw/plugin-sdk/plugin-runtime";
-import { chunkMarkdownTextWithMode, type ChunkMode } from "openclaw/plugin-sdk/reply-chunking";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-payload";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
-import { loadWebMedia } from "openclaw/plugin-sdk/web-media";
+} from "NexisClaw/plugin-sdk/outbound-runtime";
+import { getGlobalHookRunner } from "NexisClaw/plugin-sdk/plugin-runtime";
+import { chunkMarkdownTextWithMode, type ChunkMode } from "NexisClaw/plugin-sdk/reply-chunking";
+import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-payload";
+import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import { danger, logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { loadWebMedia } from "NexisClaw/plugin-sdk/web-media";
 import { resolveTelegramInlineButtons, type TelegramInlineButtons } from "../button-types.js";
 import { splitTelegramCaption } from "../caption.js";
 import {
@@ -668,7 +668,7 @@ export function emitTelegramMessageSentHooks(params: EmitMessageSentHookParams):
 
 export async function deliverReplies(params: {
   replies: ReplyPayload[];
-  cfg?: import("openclaw/plugin-sdk/config-contracts").OpenClawConfig;
+  cfg?: import("NexisClaw/plugin-sdk/config-contracts").NexisClawConfig;
   chatId: string;
   accountId?: string;
   sessionKeyForInternalHooks?: string;

@@ -1,6 +1,6 @@
 import fsSync from "node:fs";
 import path from "node:path";
-import { readRootJsonObjectSync } from "@openclaw/fs-safe/json";
+import { readRootJsonObjectSync } from "@NexisClaw/fs-safe/json";
 
 export function expectedIntegrityForUpdate(
   spec: string | undefined,
@@ -53,14 +53,14 @@ export function readInstalledPackagePeerDependencies(dir: string): Record<string
   );
 }
 
-export function installedPackageNeedsOpenClawPeerLinkRepair(dir: string): boolean {
+export function installedPackageNeedsNexisClawPeerLinkRepair(dir: string): boolean {
   const peerDependencies = readInstalledPackagePeerDependencies(dir);
-  if (!Object.hasOwn(peerDependencies, "openclaw")) {
+  if (!Object.hasOwn(peerDependencies, "NexisClaw")) {
     return false;
   }
 
   try {
-    fsSync.statSync(path.join(dir, "node_modules", "openclaw"));
+    fsSync.statSync(path.join(dir, "node_modules", "NexisClaw"));
     return false;
   } catch (error) {
     const code = (error as NodeJS.ErrnoException | undefined)?.code;

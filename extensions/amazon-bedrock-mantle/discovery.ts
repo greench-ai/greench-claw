@@ -1,10 +1,10 @@
-import { createSubsystemLogger } from "openclaw/plugin-sdk/core";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { createSubsystemLogger } from "NexisClaw/plugin-sdk/core";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "openclaw/plugin-sdk/provider-model-shared";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/provider-model-shared";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 const log = createSubsystemLogger("bedrock-mantle-discovery");
 

@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { formatErrorMessage } from "../infra/errors.js";
 import { parseRoleRef } from "./pw-role-snapshot.js";
 

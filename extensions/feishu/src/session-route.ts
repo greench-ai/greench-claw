@@ -2,8 +2,8 @@ import {
   buildChannelOutboundSessionRoute,
   stripChannelTargetPrefix,
   type ChannelOutboundSessionRouteParams,
-} from "openclaw/plugin-sdk/channel-core";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/channel-core";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 export function resolveFeishuOutboundSessionRoute(params: ChannelOutboundSessionRouteParams) {
   let trimmed = stripChannelTargetPrefix(params.target, "feishu", "lark");

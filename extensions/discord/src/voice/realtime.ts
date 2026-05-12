@@ -1,5 +1,5 @@
 import { PassThrough } from "node:stream";
-import type { DiscordAccountConfig, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   buildRealtimeVoiceAgentConsultChatMessage,
   buildRealtimeVoiceAgentConsultPolicyInstructions,
@@ -18,9 +18,9 @@ import {
   type RealtimeVoiceBridgeSession,
   type RealtimeVoiceProviderConfig,
   type RealtimeVoiceToolCallEvent,
-} from "openclaw/plugin-sdk/realtime-voice";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "NexisClaw/plugin-sdk/realtime-voice";
+import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/ssrf-runtime";
 import {
   convertDiscordPcm48kStereoToRealtimePcm24kMono,
   convertRealtimePcm24kMonoToDiscordPcm48kStereo,
@@ -231,9 +231,9 @@ export function resolveDiscordRealtimeBargeIn(params: {
 
 export function buildDiscordSpeakExactUserMessage(text: string): string {
   return [
-    "Internal OpenClaw voice playback result.",
-    "Do not call openclaw_agent_consult or any other tool for this message.",
-    "Speak this exact OpenClaw answer to the Discord voice channel, without adding, removing, or rephrasing words.",
+    "Internal NexisClaw voice playback result.",
+    "Do not call NexisClaw_agent_consult or any other tool for this message.",
+    "Speak this exact NexisClaw answer to the Discord voice channel, without adding, removing, or rephrasing words.",
     `Answer: ${JSON.stringify(text)}`,
   ].join("\n");
 }
@@ -286,7 +286,7 @@ function collectRealtimeConsultArgStrings(args: unknown): string[] {
 function extractDiscordExactSpeechConsultText(args: unknown): string | undefined {
   const message = collectRealtimeConsultArgStrings(args).join("\n");
   if (
-    !message.includes("Speak this exact OpenClaw answer") &&
+    !message.includes("Speak this exact NexisClaw answer") &&
     !message.includes("Speak the provided exact answer verbatim")
   ) {
     return undefined;
@@ -339,7 +339,7 @@ export class DiscordRealtimeVoiceSession implements VoiceRealtimeSession {
 
   constructor(
     private readonly params: {
-      cfg: OpenClawConfig;
+      cfg: NexisClawConfig;
       discordConfig: DiscordAccountConfig;
       entry: VoiceSessionEntry;
       mode: Exclude<DiscordVoiceMode, "stt-tts">;
@@ -972,7 +972,7 @@ export class DiscordRealtimeVoiceSession implements VoiceRealtimeSession {
         context,
         message: [
           question,
-          "Context: The realtime model produced a final user transcript without calling openclaw_agent_consult. OpenClaw is forcing the consult because consultPolicy is always.",
+          "Context: The realtime model produced a final user transcript without calling NexisClaw_agent_consult. NexisClaw is forcing the consult because consultPolicy is always.",
         ].join("\n\n"),
       });
       this.setRecentAgentProxyConsultPromise(pending.recent, promise);
@@ -1105,7 +1105,7 @@ export class DiscordRealtimeVoiceSession implements VoiceRealtimeSession {
         callId,
         {
           status: "already_delivered",
-          message: "OpenClaw already delivered this answer to Discord voice.",
+          message: "NexisClaw already delivered this answer to Discord voice.",
         },
         { suppressResponse: true },
       );
@@ -1218,19 +1218,19 @@ function buildDiscordRealtimeInstructions(params: {
   const base =
     params.instructions ??
     [
-      "You are OpenClaw's Discord voice interface.",
+      "You are NexisClaw's Discord voice interface.",
       "Keep spoken replies concise, natural, and suitable for a live Discord voice channel.",
     ].join("\n");
   if (isDiscordAgentProxyVoiceMode(params.mode)) {
     return [
       base,
-      "Mode: OpenClaw agent proxy.",
-      "You are the realtime voice surface for the same OpenClaw agent the user can message directly.",
+      "Mode: NexisClaw agent proxy.",
+      "You are the realtime voice surface for the same NexisClaw agent the user can message directly.",
       "Do not mention a backend, supervisor, helper, or separate system. Present the result as your own work.",
-      "Delegate substantive requests, actions, tool work, current facts, memory, workspace context, and user-specific context with openclaw_agent_consult.",
-      "Do not block, refuse, or downscope at the voice layer. Delegate to OpenClaw and treat its result as authoritative.",
+      "Delegate substantive requests, actions, tool work, current facts, memory, workspace context, and user-specific context with NexisClaw_agent_consult.",
+      "Do not block, refuse, or downscope at the voice layer. Delegate to NexisClaw and treat its result as authoritative.",
       "Answer directly only for greetings, acknowledgements, brief latency tests, or filler while waiting.",
-      "When OpenClaw sends an internal exact answer to speak, do not call tools. Say only that answer.",
+      "When NexisClaw sends an internal exact answer to speak, do not call tools. Say only that answer.",
       buildRealtimeVoiceAgentConsultPolicyInstructions({
         toolPolicy: params.toolPolicy,
         consultPolicy: params.consultPolicy,

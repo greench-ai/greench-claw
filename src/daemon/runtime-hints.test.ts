@@ -7,16 +7,16 @@ describe("buildPlatformRuntimeLogHints", () => {
       buildPlatformRuntimeLogHints({
         platform: "darwin",
         env: {
-          OPENCLAW_STATE_DIR: "/tmp/openclaw-state",
-          OPENCLAW_LOG_PREFIX: "gateway",
+          NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-state",
+          NEXISCLAW_LOG_PREFIX: "gateway",
         },
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        systemdServiceName: "NexisClaw-gateway",
+        windowsTaskName: "NexisClaw Gateway",
       }),
     ).toEqual([
-      "Launchd stdout (if installed): /tmp/openclaw-state/logs/gateway.log",
+      "Launchd stdout (if installed): /tmp/NexisClaw-state/logs/gateway.log",
       "Launchd stderr (if installed): suppressed",
-      "Restart attempts: /tmp/openclaw-state/logs/gateway-restart.log",
+      "Restart attempts: /tmp/NexisClaw-state/logs/gateway-restart.log",
     ]);
   });
 
@@ -25,27 +25,27 @@ describe("buildPlatformRuntimeLogHints", () => {
       buildPlatformRuntimeLogHints({
         platform: "linux",
         env: {
-          OPENCLAW_STATE_DIR: "/tmp/openclaw-state",
+          NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-state",
         },
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        systemdServiceName: "NexisClaw-gateway",
+        windowsTaskName: "NexisClaw Gateway",
       }),
     ).toEqual([
-      "Logs: journalctl --user -u openclaw-gateway.service -n 200 --no-pager",
-      "Restart attempts: /tmp/openclaw-state/logs/gateway-restart.log",
+      "Logs: journalctl --user -u NexisClaw-gateway.service -n 200 --no-pager",
+      "Restart attempts: /tmp/NexisClaw-state/logs/gateway-restart.log",
     ]);
     expect(
       buildPlatformRuntimeLogHints({
         platform: "win32",
         env: {
-          OPENCLAW_STATE_DIR: "/tmp/openclaw-state",
+          NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-state",
         },
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        systemdServiceName: "NexisClaw-gateway",
+        windowsTaskName: "NexisClaw Gateway",
       }),
     ).toEqual([
-      'Logs: schtasks /Query /TN "OpenClaw Gateway" /V /FO LIST',
-      "Restart attempts: /tmp/openclaw-state/logs/gateway-restart.log",
+      'Logs: schtasks /Query /TN "NexisClaw Gateway" /V /FO LIST',
+      "Restart attempts: /tmp/NexisClaw-state/logs/gateway-restart.log",
     ]);
   });
 });
@@ -55,30 +55,30 @@ describe("buildPlatformServiceStartHints", () => {
     expect(
       buildPlatformServiceStartHints({
         platform: "darwin",
-        installCommand: "openclaw gateway install",
-        startCommand: "openclaw gateway",
-        launchAgentPlistPath: "~/Library/LaunchAgents/com.openclaw.gateway.plist",
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        installCommand: "NexisClaw gateway install",
+        startCommand: "NexisClaw gateway",
+        launchAgentPlistPath: "~/Library/LaunchAgents/com.NexisClaw.gateway.plist",
+        systemdServiceName: "NexisClaw-gateway",
+        windowsTaskName: "NexisClaw Gateway",
       }),
     ).toEqual([
-      "openclaw gateway install",
-      "openclaw gateway",
-      "launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.openclaw.gateway.plist",
+      "NexisClaw gateway install",
+      "NexisClaw gateway",
+      "launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.NexisClaw.gateway.plist",
     ]);
     expect(
       buildPlatformServiceStartHints({
         platform: "linux",
-        installCommand: "openclaw gateway install",
-        startCommand: "openclaw gateway",
-        launchAgentPlistPath: "~/Library/LaunchAgents/com.openclaw.gateway.plist",
-        systemdServiceName: "openclaw-gateway",
-        windowsTaskName: "OpenClaw Gateway",
+        installCommand: "NexisClaw gateway install",
+        startCommand: "NexisClaw gateway",
+        launchAgentPlistPath: "~/Library/LaunchAgents/com.NexisClaw.gateway.plist",
+        systemdServiceName: "NexisClaw-gateway",
+        windowsTaskName: "NexisClaw Gateway",
       }),
     ).toEqual([
-      "openclaw gateway install",
-      "openclaw gateway",
-      "systemctl --user start openclaw-gateway.service",
+      "NexisClaw gateway install",
+      "NexisClaw gateway",
+      "systemctl --user start NexisClaw-gateway.service",
     ]);
   });
 });

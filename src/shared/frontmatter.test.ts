@@ -1,19 +1,19 @@
 import { describe, expect, it, test } from "vitest";
 import {
-  applyOpenClawManifestInstallCommonFields,
+  applyNexisClawManifestInstallCommonFields,
   getFrontmatterString,
   normalizeStringList,
   parseFrontmatterBool,
-  parseOpenClawManifestInstallBase,
-  resolveOpenClawManifestBlock,
-  resolveOpenClawManifestInstall,
-  resolveOpenClawManifestOs,
-  resolveOpenClawManifestRequires,
+  parseNexisClawManifestInstallBase,
+  resolveNexisClawManifestBlock,
+  resolveNexisClawManifestInstall,
+  resolveNexisClawManifestOs,
+  resolveNexisClawManifestRequires,
 } from "./frontmatter.js";
 
 function expectInstallBase(
-  parsed: ReturnType<typeof parseOpenClawManifestInstallBase>,
-): NonNullable<ReturnType<typeof parseOpenClawManifestInstallBase>> {
+  parsed: ReturnType<typeof parseNexisClawManifestInstallBase>,
+): NonNullable<ReturnType<typeof parseNexisClawManifestInstallBase>> {
   if (parsed === undefined) {
     throw new Error("Expected manifest install base");
   }
@@ -39,28 +39,28 @@ describe("shared/frontmatter", () => {
     expect(parseFrontmatterBool("maybe", false)).toBe(false);
   });
 
-  test("resolveOpenClawManifestBlock reads current manifest keys and custom metadata fields", () => {
+  test("resolveNexisClawManifestBlock reads current manifest keys and custom metadata fields", () => {
     expect(
-      resolveOpenClawManifestBlock({
+      resolveNexisClawManifestBlock({
         frontmatter: {
-          metadata: "{ openclaw: { foo: 1, bar: 'baz' } }",
+          metadata: "{ NexisClaw: { foo: 1, bar: 'baz' } }",
         },
       }),
     ).toEqual({ foo: 1, bar: "baz" });
 
     expect(
-      resolveOpenClawManifestBlock({
+      resolveNexisClawManifestBlock({
         frontmatter: {
-          pluginMeta: "{ openclaw: { foo: 2 } }",
+          pluginMeta: "{ NexisClaw: { foo: 2 } }",
         },
         key: "pluginMeta",
       }),
     ).toEqual({ foo: 2 });
   });
 
-  test("resolveOpenClawManifestBlock reads legacy manifest keys", () => {
+  test("resolveNexisClawManifestBlock reads legacy manifest keys", () => {
     expect(
-      resolveOpenClawManifestBlock({
+      resolveNexisClawManifestBlock({
         frontmatter: {
           metadata: "{ clawdbot: { requires: { bins: ['op'] }, install: [] } }",
         },
@@ -68,54 +68,54 @@ describe("shared/frontmatter", () => {
     ).toEqual({ requires: { bins: ["op"] }, install: [] });
   });
 
-  test("resolveOpenClawManifestBlock prefers current manifest keys over legacy keys", () => {
+  test("resolveNexisClawManifestBlock prefers current manifest keys over legacy keys", () => {
     expect(
-      resolveOpenClawManifestBlock({
+      resolveNexisClawManifestBlock({
         frontmatter: {
           metadata:
-            "{ openclaw: { requires: { bins: ['current'] } }, clawdbot: { requires: { bins: ['legacy'] } } }",
+            "{ NexisClaw: { requires: { bins: ['current'] } }, clawdbot: { requires: { bins: ['legacy'] } } }",
         },
       }),
     ).toEqual({ requires: { bins: ["current"] } });
   });
 
-  test("resolveOpenClawManifestBlock returns undefined for invalid input", () => {
-    expect(resolveOpenClawManifestBlock({ frontmatter: {} })).toBeUndefined();
+  test("resolveNexisClawManifestBlock returns undefined for invalid input", () => {
+    expect(resolveNexisClawManifestBlock({ frontmatter: {} })).toBeUndefined();
     expect(
-      resolveOpenClawManifestBlock({ frontmatter: { metadata: "not-json5" } }),
+      resolveNexisClawManifestBlock({ frontmatter: { metadata: "not-json5" } }),
     ).toBeUndefined();
-    expect(resolveOpenClawManifestBlock({ frontmatter: { metadata: "123" } })).toBeUndefined();
-    expect(resolveOpenClawManifestBlock({ frontmatter: { metadata: "[]" } })).toBeUndefined();
+    expect(resolveNexisClawManifestBlock({ frontmatter: { metadata: "123" } })).toBeUndefined();
+    expect(resolveNexisClawManifestBlock({ frontmatter: { metadata: "[]" } })).toBeUndefined();
     expect(
-      resolveOpenClawManifestBlock({ frontmatter: { metadata: "{ nope: { a: 1 } }" } }),
+      resolveNexisClawManifestBlock({ frontmatter: { metadata: "{ nope: { a: 1 } }" } }),
     ).toBeUndefined();
   });
 
   it("normalizes manifest requirement and os lists", () => {
     expect(
-      resolveOpenClawManifestRequires({
+      resolveNexisClawManifestRequires({
         requires: {
           bins: "bun, node",
           anyBins: [" ffmpeg ", ""],
-          env: ["OPENCLAW_TOKEN", " OPENCLAW_URL "],
+          env: ["NEXISCLAW_TOKEN", " NEXISCLAW_URL "],
           config: null,
         },
       }),
     ).toEqual({
       bins: ["bun", "node"],
       anyBins: ["ffmpeg"],
-      env: ["OPENCLAW_TOKEN", "OPENCLAW_URL"],
+      env: ["NEXISCLAW_TOKEN", "NEXISCLAW_URL"],
       config: [],
     });
-    expect(resolveOpenClawManifestRequires({})).toBeUndefined();
-    expect(resolveOpenClawManifestOs({ os: [" darwin ", "linux", ""] })).toEqual([
+    expect(resolveNexisClawManifestRequires({})).toBeUndefined();
+    expect(resolveNexisClawManifestOs({ os: [" darwin ", "linux", ""] })).toEqual([
       "darwin",
       "linux",
     ]);
   });
 
   it("parses and applies install common fields", () => {
-    const parsed = parseOpenClawManifestInstallBase(
+    const parsed = parseNexisClawManifestInstallBase(
       {
         type: " Brew ",
         id: "brew.git",
@@ -137,9 +137,9 @@ describe("shared/frontmatter", () => {
       label: "Git",
       bins: ["git", "git"],
     });
-    expect(parseOpenClawManifestInstallBase({ kind: "bad" }, ["brew"])).toBeUndefined();
+    expect(parseNexisClawManifestInstallBase({ kind: "bad" }, ["brew"])).toBeUndefined();
     expect(
-      applyOpenClawManifestInstallCommonFields<{
+      applyNexisClawManifestInstallCommonFields<{
         extra: boolean;
         id?: string;
         label?: string;
@@ -154,7 +154,7 @@ describe("shared/frontmatter", () => {
   });
 
   it("prefers explicit kind, ignores invalid common fields, and leaves missing ones untouched", () => {
-    const parsed = parseOpenClawManifestInstallBase(
+    const parsed = parseNexisClawManifestInstallBase(
       {
         kind: " npm ",
         type: "brew",
@@ -176,7 +176,7 @@ describe("shared/frontmatter", () => {
       kind: "npm",
     });
     expect(
-      applyOpenClawManifestInstallCommonFields(
+      applyNexisClawManifestInstallCommonFields(
         { id: "keep", label: "Keep", bins: ["bun"] },
         parsed!,
       ),
@@ -189,7 +189,7 @@ describe("shared/frontmatter", () => {
 
   it("maps install entries through the parser and filters rejected specs", () => {
     expect(
-      resolveOpenClawManifestInstall(
+      resolveNexisClawManifestInstall(
         {
           install: [{ id: "keep" }, { id: "drop" }, "bad"],
         },

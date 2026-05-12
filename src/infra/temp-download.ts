@@ -3,11 +3,11 @@ import crypto from "node:crypto";
 import path from "node:path";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { tempWorkspace, type TempWorkspace } from "./private-temp-workspace.js";
-import { resolvePreferredOpenClawTmpDir } from "./tmp-openclaw-dir.js";
+import { resolvePreferredNexisClawTmpDir } from "./tmp-NexisClaw-dir.js";
 
 const logger = createSubsystemLogger("infra:temp-download");
 
-export { resolvePreferredOpenClawTmpDir } from "./tmp-openclaw-dir.js";
+export { resolvePreferredNexisClawTmpDir } from "./tmp-NexisClaw-dir.js";
 
 type TempDownloadTarget = {
   dir: string;
@@ -18,7 +18,7 @@ type TempDownloadTarget = {
 };
 
 function resolveTempRoot(tmpDir?: string): string {
-  return tmpDir ?? resolvePreferredOpenClawTmpDir();
+  return tmpDir ?? resolvePreferredNexisClawTmpDir();
 }
 
 function sanitizeTempPrefix(prefix: string): string {

@@ -1,29 +1,29 @@
 import type { SlackActionMiddlewareArgs, SlackCommandMiddlewareArgs } from "@slack/bolt";
-import { resolveDefaultModelForAgent } from "openclaw/plugin-sdk/agent-runtime";
-import { createChannelMessageReplyPipeline } from "openclaw/plugin-sdk/channel-message";
+import { resolveDefaultModelForAgent } from "NexisClaw/plugin-sdk/agent-runtime";
+import { createChannelMessageReplyPipeline } from "NexisClaw/plugin-sdk/channel-message";
 import {
   formatCommandArgMenuTitle,
   resolveStoredModelOverride,
   type ChatCommandDefinition,
-} from "openclaw/plugin-sdk/command-auth-native";
+} from "NexisClaw/plugin-sdk/command-auth-native";
 import {
   type CommandArgs,
   resolveNativeCommandSessionTargets,
-} from "openclaw/plugin-sdk/command-auth-native";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+} from "NexisClaw/plugin-sdk/command-auth-native";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
 import {
   resolveNativeCommandsEnabled,
   resolveNativeSkillsEnabled,
-} from "openclaw/plugin-sdk/native-command-config-runtime";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
-import type { ResolvedAgentRoute } from "openclaw/plugin-sdk/routing";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { loadSessionStore, resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
+} from "NexisClaw/plugin-sdk/native-command-config-runtime";
+import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
+import type { ResolvedAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import { danger, logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { loadSessionStore, resolveStorePath } from "NexisClaw/plugin-sdk/session-store-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
-import { chunkItems } from "openclaw/plugin-sdk/text-chunking";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { chunkItems } from "NexisClaw/plugin-sdk/text-chunking";
 import type { ResolvedSlackAccount } from "../accounts.js";
 import { SLACK_MAX_BLOCKS } from "../blocks-input.js";
 import { formatSlackError } from "../errors.js";
@@ -45,8 +45,8 @@ import { resolveSlackRoomContextHints } from "./room-context.js";
 
 type SlackBlock = { type: string; [key: string]: unknown };
 
-const SLACK_COMMAND_ARG_ACTION_ID = "openclaw_cmdarg";
-const SLACK_COMMAND_ARG_ACTION_LISTENER = /^openclaw_cmdarg/;
+const SLACK_COMMAND_ARG_ACTION_ID = "NexisClaw_cmdarg";
+const SLACK_COMMAND_ARG_ACTION_LISTENER = /^NexisClaw_cmdarg/;
 const SLACK_COMMAND_ARG_VALUE_PREFIX = "cmdarg";
 const SLACK_COMMAND_ARG_BUTTON_ROW_SIZE = 5;
 const SLACK_COMMAND_ARG_OVERFLOW_MIN = 3;

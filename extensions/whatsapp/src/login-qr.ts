@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
-import { logInfo } from "openclaw/plugin-sdk/logging-core";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { danger, info, success } from "openclaw/plugin-sdk/runtime-env";
-import { defaultRuntime, type RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+import { logInfo } from "NexisClaw/plugin-sdk/logging-core";
+import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
+import { danger, info, success } from "NexisClaw/plugin-sdk/runtime-env";
+import { defaultRuntime, type RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
 import { resolveWhatsAppAccount } from "./accounts.js";
 import {
   closeWaSocket,

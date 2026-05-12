@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/clickclack",
+  "name": "@NexisClaw/clickclack",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw ClickClack channel plugin",
+  "description": "NexisClaw ClickClack channel plugin",
   "type": "module",
   "exports": {
     ".": "./index.ts",
@@ -14,18 +14,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*",
+    "NexisClaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.5.12-beta.1"
+    "NexisClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "NexisClaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],

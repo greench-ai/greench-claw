@@ -1,11 +1,11 @@
 import fs from "node:fs/promises";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import path from "node:path";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
-import { createMockServerResponse } from "openclaw/plugin-sdk/test-env";
+import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import { createMockServerResponse } from "NexisClaw/plugin-sdk/test-env";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../api.js";
-import type { OpenClawPluginApi, OpenClawPluginToolContext } from "../api.js";
+import type { NexisClawConfig } from "../api.js";
+import type { NexisClawPluginApi, NexisClawPluginToolContext } from "../api.js";
 import { registerDiffsPlugin } from "./plugin.js";
 import { createTempDiffRoot } from "./test-helpers.js";
 
@@ -39,7 +39,7 @@ describe("PlaywrightDiffScreenshotter", () => {
 
   beforeEach(async () => {
     vi.useFakeTimers();
-    ({ rootDir, cleanup: cleanupRootDir } = await createTempDiffRoot("openclaw-diffs-browser-"));
+    ({ rootDir, cleanup: cleanupRootDir } = await createTempDiffRoot("NexisClaw-diffs-browser-"));
     outputPath = path.join(rootDir, "preview.png");
     launchMock.mockReset();
     await resetSharedBrowserStateForTests();
@@ -205,13 +205,13 @@ describe("diffs plugin registration", () => {
       req: IncomingMessage,
       res: ServerResponse,
     ) => boolean | Promise<boolean>;
-    type RegisteredHttpRouteParams = Parameters<OpenClawPluginApi["registerHttpRoute"]>[0];
+    type RegisteredHttpRouteParams = Parameters<NexisClawPluginApi["registerHttpRoute"]>[0];
 
     let registeredToolFactory:
-      | ((ctx: OpenClawPluginToolContext) => RegisteredTool | RegisteredTool[] | null | undefined)
+      | ((ctx: NexisClawPluginToolContext) => RegisteredTool | RegisteredTool[] | null | undefined)
       | undefined;
     let registeredHttpRouteHandler: HttpRouteHandler | undefined;
-    let configFile: OpenClawConfig = {
+    let configFile: NexisClawConfig = {
       gateway: {
         port: 18789,
         bind: "loopback",
@@ -220,7 +220,7 @@ describe("diffs plugin registration", () => {
         entries: {
           diffs: {
             config: {
-              viewerBaseUrl: "https://startup.example.com/openclaw",
+              viewerBaseUrl: "https://startup.example.com/NexisClaw",
               defaults: {
                 mode: "view",
                 theme: "light",
@@ -234,7 +234,7 @@ describe("diffs plugin registration", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const api = createTestPluginApi({
       id: "diffs",
@@ -248,7 +248,7 @@ describe("diffs plugin registration", () => {
         },
       },
       pluginConfig: {
-        viewerBaseUrl: "https://startup.example.com/openclaw",
+        viewerBaseUrl: "https://startup.example.com/NexisClaw",
         defaults: {
           mode: "view",
           theme: "light",
@@ -264,7 +264,7 @@ describe("diffs plugin registration", () => {
           current: () => configFile,
         },
       } as never,
-      registerTool(tool: Parameters<OpenClawPluginApi["registerTool"]>[0]) {
+      registerTool(tool: Parameters<NexisClawPluginApi["registerTool"]>[0]) {
         registeredToolFactory = typeof tool === "function" ? tool : () => tool;
       },
       registerHttpRoute(params: RegisteredHttpRouteParams) {
@@ -273,7 +273,7 @@ describe("diffs plugin registration", () => {
       on: vi.fn(),
     });
 
-    registerDiffsPlugin(api as unknown as OpenClawPluginApi);
+    registerDiffsPlugin(api as unknown as NexisClawPluginApi);
 
     configFile = {
       ...configFile,
@@ -295,7 +295,7 @@ describe("diffs plugin registration", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const registeredTool = registeredToolFactory?.({
       agentId: "main",
@@ -337,14 +337,14 @@ describe("diffs plugin registration", () => {
       req: IncomingMessage,
       res: ServerResponse,
     ) => boolean | Promise<boolean>;
-    type RegisteredHttpRouteParams = Parameters<OpenClawPluginApi["registerHttpRoute"]>[0];
+    type RegisteredHttpRouteParams = Parameters<NexisClawPluginApi["registerHttpRoute"]>[0];
 
     let registeredToolFactory:
-      | ((ctx: OpenClawPluginToolContext) => RegisteredTool | RegisteredTool[] | null | undefined)
+      | ((ctx: NexisClawPluginToolContext) => RegisteredTool | RegisteredTool[] | null | undefined)
       | undefined;
     let registeredHttpRouteHandler: HttpRouteHandler | undefined;
     const on = vi.fn();
-    let configFile: OpenClawConfig = {
+    let configFile: NexisClawConfig = {
       gateway: {
         port: 18789,
         bind: "loopback",
@@ -360,7 +360,7 @@ describe("diffs plugin registration", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const api = createTestPluginApi({
       id: "diffs",
@@ -392,7 +392,7 @@ describe("diffs plugin registration", () => {
           current: () => configFile,
         },
       } as never,
-      registerTool(tool: Parameters<OpenClawPluginApi["registerTool"]>[0]) {
+      registerTool(tool: Parameters<NexisClawPluginApi["registerTool"]>[0]) {
         registeredToolFactory = typeof tool === "function" ? tool : () => tool;
       },
       registerHttpRoute(params: RegisteredHttpRouteParams) {
@@ -401,7 +401,7 @@ describe("diffs plugin registration", () => {
       on,
     });
 
-    registerDiffsPlugin(api as unknown as OpenClawPluginApi);
+    registerDiffsPlugin(api as unknown as NexisClawPluginApi);
 
     expect(on).toHaveBeenCalledTimes(1);
     expect(on.mock.calls.at(0)?.[0]).toBe("before_prompt_build");
@@ -464,7 +464,7 @@ describe("diffs plugin registration", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const proxiedRes = createMockServerResponse();
     const proxiedHandled = await registeredHttpRouteHandler?.(
@@ -490,13 +490,13 @@ describe("diffs plugin registration", () => {
       req: IncomingMessage,
       res: ServerResponse,
     ) => boolean | Promise<boolean>;
-    type RegisteredHttpRouteParams = Parameters<OpenClawPluginApi["registerHttpRoute"]>[0];
+    type RegisteredHttpRouteParams = Parameters<NexisClawPluginApi["registerHttpRoute"]>[0];
 
     let registeredToolFactory:
-      | ((ctx: OpenClawPluginToolContext) => RegisteredTool | RegisteredTool[] | null | undefined)
+      | ((ctx: NexisClawPluginToolContext) => RegisteredTool | RegisteredTool[] | null | undefined)
       | undefined;
     let registeredHttpRouteHandler: HttpRouteHandler | undefined;
-    let configFile: OpenClawConfig = {
+    let configFile: NexisClawConfig = {
       gateway: {
         port: 18789,
         bind: "loopback",
@@ -512,7 +512,7 @@ describe("diffs plugin registration", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const api = createTestPluginApi({
       id: "diffs",
@@ -535,7 +535,7 @@ describe("diffs plugin registration", () => {
           current: () => configFile,
         },
       } as never,
-      registerTool(tool: Parameters<OpenClawPluginApi["registerTool"]>[0]) {
+      registerTool(tool: Parameters<NexisClawPluginApi["registerTool"]>[0]) {
         registeredToolFactory = typeof tool === "function" ? tool : () => tool;
       },
       registerHttpRoute(params: RegisteredHttpRouteParams) {
@@ -544,7 +544,7 @@ describe("diffs plugin registration", () => {
       on: vi.fn(),
     });
 
-    registerDiffsPlugin(api as unknown as OpenClawPluginApi);
+    registerDiffsPlugin(api as unknown as NexisClawPluginApi);
 
     const registeredTool = registeredToolFactory?.({
       agentId: "main",
@@ -565,7 +565,7 @@ describe("diffs plugin registration", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const proxiedRes = createMockServerResponse();
     const proxiedHandled = await registeredHttpRouteHandler?.(
@@ -584,12 +584,12 @@ describe("diffs plugin registration", () => {
   });
 });
 
-function createConfig(): OpenClawConfig {
+function createConfig(): NexisClawConfig {
   return {
     browser: {
       executablePath: process.execPath,
     },
-  } as OpenClawConfig;
+  } as NexisClawConfig;
 }
 
 function localReq(input: {

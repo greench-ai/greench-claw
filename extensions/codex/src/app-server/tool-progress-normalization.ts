@@ -2,8 +2,8 @@ import {
   inferToolMetaFromArgs,
   type EmbeddedRunAttemptParams,
   type ToolProgressDetailMode,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
-import { redactSensitiveFieldValue, redactToolPayloadText } from "openclaw/plugin-sdk/logging-core";
+} from "NexisClaw/plugin-sdk/agent-harness-runtime";
+import { redactSensitiveFieldValue, redactToolPayloadText } from "NexisClaw/plugin-sdk/logging-core";
 import {
   isJsonObject,
   type CodexDynamicToolCallParams,

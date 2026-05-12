@@ -9,7 +9,7 @@ import {
   resolveMainSessionKey,
   resolveStorePath,
 } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import {
   buildAgentMainSessionKey,
   normalizeAgentId,
@@ -32,10 +32,10 @@ type SandboxExplainOptions = {
   json: boolean;
 };
 
-const SANDBOX_DOCS_URL = "https://docs.openclaw.ai/sandbox";
+const SANDBOX_DOCS_URL = "https://docs.NexisClaw.ai/sandbox";
 
 function normalizeExplainSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   agentId: string;
   session?: string;
 }): string {
@@ -59,7 +59,7 @@ function normalizeExplainSessionKey(params: {
 }
 
 function inferProviderFromSessionKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   sessionKey: string;
 }): string | undefined {
   const parsed = parseAgentSessionKey(params.sessionKey);
@@ -89,7 +89,7 @@ function inferProviderFromSessionKey(params: {
 }
 
 function resolveActiveChannel(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   agentId: string;
   sessionKey: string;
 }): string | undefined {
@@ -339,7 +339,7 @@ export async function sandboxExplainCommand(
     lines.push(`  - ${key}`);
   }
   lines.push("");
-  lines.push(`${key("Docs:")} ${formatDocsLink("/sandbox", "docs.openclaw.ai/sandbox")}`);
+  lines.push(`${key("Docs:")} ${formatDocsLink("/sandbox", "docs.NexisClaw.ai/sandbox")}`);
 
   runtime.log(`${lines.join("\n")}\n`);
 }

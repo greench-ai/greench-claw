@@ -166,22 +166,22 @@ function mapManagerResolutionFailure(
 const DEFAULT_TIMEOUT_MS = 20 * 60_000;
 const MAX_LOG_CHARS = 8000;
 const PREFLIGHT_MAX_COMMITS = 10;
-const DEFAULT_PACKAGE_NAME = "openclaw";
+const DEFAULT_PACKAGE_NAME = "NexisClaw";
 const CORE_PACKAGE_NAMES = new Set([DEFAULT_PACKAGE_NAME]);
 const UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE_ENV =
-  "OPENCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE";
+  "NEXISCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE";
 const PREFLIGHT_TEMP_PREFIX =
-  process.platform === "win32" ? "ocu-pf-" : "openclaw-update-preflight-";
+  process.platform === "win32" ? "ocu-pf-" : "NexisClaw-update-preflight-";
 const PREFLIGHT_WORKTREE_DIRNAME = process.platform === "win32" ? "wt" : "worktree";
 const PREFLIGHT_CLEANUP_TIMEOUT_MS = 60_000;
 const WINDOWS_PREFLIGHT_BASE_DIR = "ocu";
 const BUILD_MAX_OLD_SPACE_MB = 8192;
 const DEV_PREFLIGHT_LINT_ENV: NodeJS.ProcessEnv = {
-  OPENCLAW_LOCAL_CHECK: "1",
-  OPENCLAW_LOCAL_CHECK_MODE: "throttled",
-  OPENCLAW_OXLINT_SHARDS_SERIAL: "1",
+  NEXISCLAW_LOCAL_CHECK: "1",
+  NEXISCLAW_LOCAL_CHECK_MODE: "throttled",
+  NEXISCLAW_OXLINT_SHARDS_SERIAL: "1",
 };
-const DEV_PREFLIGHT_LINT_OPT_IN_ENV = "OPENCLAW_UPDATE_PREFLIGHT_LINT";
+const DEV_PREFLIGHT_LINT_OPT_IN_ENV = "NEXISCLAW_UPDATE_PREFLIGHT_LINT";
 
 function normalizeDir(value?: string | null) {
   if (!value) {
@@ -422,7 +422,7 @@ async function runStep(opts: RunStepOptions): Promise<UpdateStepResult> {
 }
 
 function normalizeTag(tag?: string) {
-  return normalizePackageTagInput(tag, ["openclaw", DEFAULT_PACKAGE_NAME]) ?? "latest";
+  return normalizePackageTagInput(tag, ["NexisClaw", DEFAULT_PACKAGE_NAME]) ?? "latest";
 }
 
 function normalizeDevTargetRef(value?: string | null): string | null {
@@ -589,7 +589,7 @@ function normalizeFallbackFailureReason(stepName: string): NonNullable<UpdateRun
     case "global install verify":
     case "global install swap":
       return "global-install-failed";
-    case "openclaw doctor":
+    case "NexisClaw doctor":
       return "doctor-failed";
     case "ui:build (post-doctor repair)":
       return "ui-build-failed";
@@ -726,7 +726,7 @@ export async function runGatewayUpdate(opts: UpdateRunnerOptions = {}): Promise<
       status: "error",
       mode: "unknown",
       root: gitRoot,
-      reason: "not-openclaw-root",
+      reason: "not-NexisClaw-root",
       steps: [],
       durationMs: Date.now() - startedAt,
     };
@@ -1271,14 +1271,14 @@ export async function runGatewayUpdate(opts: UpdateRunnerOptions = {}): Promise<
         };
       }
 
-      const doctorEntry = path.join(gitRoot, "openclaw.mjs");
+      const doctorEntry = path.join(gitRoot, "NexisClaw.mjs");
       const doctorEntryExists = await fs
         .stat(doctorEntry)
         .then(() => true)
         .catch(() => false);
       if (!doctorEntryExists) {
         steps.push({
-          name: "openclaw doctor entry",
+          name: "NexisClaw doctor entry",
           command: `verify ${doctorEntry}`,
           cwd: gitRoot,
           durationMs: 0,
@@ -1301,8 +1301,8 @@ export async function runGatewayUpdate(opts: UpdateRunnerOptions = {}): Promise<
       const doctorNodePath = await resolveStableNodePath(process.execPath);
       const doctorArgv = [doctorNodePath, doctorEntry, "doctor", "--non-interactive", "--fix"];
       const doctorStep = await runStep(
-        step("openclaw doctor", doctorArgv, gitRoot, {
-          OPENCLAW_UPDATE_IN_PROGRESS: "1",
+        step("NexisClaw doctor", doctorArgv, gitRoot, {
+          NEXISCLAW_UPDATE_IN_PROGRESS: "1",
           [UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE_ENV]: "1",
         }),
       );
@@ -1404,7 +1404,7 @@ export async function runGatewayUpdate(opts: UpdateRunnerOptions = {}): Promise<
     return {
       status: "error",
       mode: "unknown",
-      reason: "not-openclaw-root",
+      reason: "not-NexisClaw-root",
       steps: [],
       durationMs: Date.now() - startedAt,
     };
@@ -1458,12 +1458,12 @@ export async function runGatewayUpdate(opts: UpdateRunnerOptions = {}): Promise<
         const doctorNodePath = await resolveStableNodePath(process.execPath);
         return await runStep({
           runCommand,
-          name: "openclaw doctor",
+          name: "NexisClaw doctor",
           argv: [doctorNodePath, doctorEntry, "doctor", "--non-interactive", "--fix"],
           cwd: verifiedPackageRoot,
           timeoutMs,
           env: {
-            OPENCLAW_UPDATE_IN_PROGRESS: "1",
+            NEXISCLAW_UPDATE_IN_PROGRESS: "1",
             [UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE_ENV]: "1",
           },
           progress,

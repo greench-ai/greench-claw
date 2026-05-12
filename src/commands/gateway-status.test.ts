@@ -450,7 +450,7 @@ describe("gateway-status command", () => {
       warnings?: Array<{ code?: string; message?: string }>;
     };
     const warning = parsed.warnings?.find((entry) => entry.code === "no_gateway_reachable");
-    expect(warning?.message).toContain("openclaw gateway status --deep --require-rpc");
+    expect(warning?.message).toContain("NexisClaw gateway status --deep --require-rpc");
     expect(warning?.message).toContain("ss -ltnp");
   });
 
@@ -551,7 +551,7 @@ describe("gateway-status command", () => {
   it("suppresses unresolved SecretRef auth warnings when probe is reachable", async () => {
     const { runtime, runtimeLogs, runtimeErrors } = createRuntimeCapture();
     await withEnvAsync(
-      { MISSING_GATEWAY_TOKEN: undefined, OPENCLAW_GATEWAY_TOKEN: undefined },
+      { MISSING_GATEWAY_TOKEN: undefined, NEXISCLAW_GATEWAY_TOKEN: undefined },
       async () => {
         mockLocalTokenEnvRefConfig();
 
@@ -570,7 +570,7 @@ describe("gateway-status command", () => {
     const defaultProbeGateway = probeGateway.getMockImplementation();
     try {
       await withEnvAsync(
-        { MISSING_GATEWAY_TOKEN: undefined, OPENCLAW_GATEWAY_TOKEN: undefined },
+        { MISSING_GATEWAY_TOKEN: undefined, NEXISCLAW_GATEWAY_TOKEN: undefined },
         async () => {
           readBestEffortConfig.mockReset();
           probeGateway.mockReset();
@@ -617,11 +617,11 @@ describe("gateway-status command", () => {
     expect(unresolvedWarning.message).not.toContain("missing or empty");
   });
 
-  it("does not resolve local token SecretRef when OPENCLAW_GATEWAY_TOKEN is set", async () => {
+  it("does not resolve local token SecretRef when NEXISCLAW_GATEWAY_TOKEN is set", async () => {
     const { runtime, runtimeLogs, runtimeErrors } = createRuntimeCapture();
     await withEnvAsync(
       {
-        OPENCLAW_GATEWAY_TOKEN: "env-token",
+        NEXISCLAW_GATEWAY_TOKEN: "env-token",
         MISSING_GATEWAY_TOKEN: undefined,
       },
       async () => {
@@ -649,7 +649,7 @@ describe("gateway-status command", () => {
     const { runtime, runtimeLogs, runtimeErrors } = createRuntimeCapture();
     await withEnvAsync(
       {
-        OPENCLAW_GATEWAY_TOKEN: "env-token",
+        NEXISCLAW_GATEWAY_TOKEN: "env-token",
         MISSING_GATEWAY_PASSWORD: undefined,
       },
       async () => {
@@ -690,7 +690,7 @@ describe("gateway-status command", () => {
     await withEnvAsync(
       {
         CUSTOM_GATEWAY_TOKEN: "resolved-gateway-token",
-        OPENCLAW_GATEWAY_TOKEN: undefined,
+        NEXISCLAW_GATEWAY_TOKEN: undefined,
       },
       async () => {
         readBestEffortConfig.mockResolvedValueOnce({

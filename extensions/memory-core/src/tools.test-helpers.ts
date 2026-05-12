@@ -1,17 +1,17 @@
 import { expect } from "vitest";
-import type { OpenClawConfig } from "../api.js";
+import type { NexisClawConfig } from "../api.js";
 import { createMemoryGetTool, createMemorySearchTool } from "./tools.js";
 
-export function asOpenClawConfig(config: Partial<OpenClawConfig>): OpenClawConfig {
+export function asNexisClawConfig(config: Partial<NexisClawConfig>): NexisClawConfig {
   return config;
 }
 
-export function createDefaultMemoryToolConfig(): OpenClawConfig {
-  return asOpenClawConfig({ agents: { list: [{ id: "main", default: true }] } });
+export function createDefaultMemoryToolConfig(): NexisClawConfig {
+  return asNexisClawConfig({ agents: { list: [{ id: "main", default: true }] } });
 }
 
 export function createMemorySearchToolOrThrow(params?: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   agentId?: string;
   agentSessionKey?: string;
 }) {
@@ -27,7 +27,7 @@ export function createMemorySearchToolOrThrow(params?: {
 }
 
 export function createMemoryGetToolOrThrow(
-  config: OpenClawConfig = createDefaultMemoryToolConfig(),
+  config: NexisClawConfig = createDefaultMemoryToolConfig(),
 ) {
   const tool = createMemoryGetTool({ config });
   if (!tool) {
@@ -38,7 +38,7 @@ export function createMemoryGetToolOrThrow(
 
 export function createAutoCitationsMemorySearchTool(agentSessionKey: string) {
   return createMemorySearchToolOrThrow({
-    config: asOpenClawConfig({
+    config: asNexisClawConfig({
       memory: { citations: "auto" },
       agents: { list: [{ id: "main", default: true }] },
     }),

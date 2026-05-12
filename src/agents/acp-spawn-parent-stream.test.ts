@@ -402,21 +402,21 @@ describe("startAcpSpawnParentStreamRelay", () => {
 
   it("resolves ACP spawn stream log path from session metadata", () => {
     readAcpSessionEntryMock.mockReturnValue({
-      storePath: "/tmp/openclaw/agents/codex/sessions/sessions.json",
+      storePath: "/tmp/NexisClaw/agents/codex/sessions/sessions.json",
       entry: {
         sessionId: "sess-123",
-        sessionFile: "/tmp/openclaw/agents/codex/sessions/sess-123.jsonl",
+        sessionFile: "/tmp/NexisClaw/agents/codex/sessions/sess-123.jsonl",
       },
     });
     resolveSessionFilePathMock.mockReturnValue(
-      "/tmp/openclaw/agents/codex/sessions/sess-123.jsonl",
+      "/tmp/NexisClaw/agents/codex/sessions/sess-123.jsonl",
     );
 
     const resolved = resolveAcpSpawnStreamLogPath({
       childSessionKey: "agent:codex:acp:child-1",
     });
 
-    expect(resolved).toBe("/tmp/openclaw/agents/codex/sessions/sess-123.acp-stream.jsonl");
+    expect(resolved).toBe("/tmp/NexisClaw/agents/codex/sessions/sess-123.acp-stream.jsonl");
     expect(readAcpSessionEntryMock).toHaveBeenCalledWith({
       sessionKey: "agent:codex:acp:child-1",
     });
@@ -428,6 +428,6 @@ describe("startAcpSpawnParentStreamRelay", () => {
     ];
     expect(sessionId).toBe("sess-123");
     expect(entry.sessionId).toBe("sess-123");
-    expect(options.storePath).toBe("/tmp/openclaw/agents/codex/sessions/sessions.json");
+    expect(options.storePath).toBe("/tmp/NexisClaw/agents/codex/sessions/sessions.json");
   });
 });

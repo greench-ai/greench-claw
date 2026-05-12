@@ -1,5 +1,5 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { ssrfPolicyFromPrivateNetworkOptIn } from "openclaw/plugin-sdk/ssrf-runtime";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { ssrfPolicyFromPrivateNetworkOptIn } from "NexisClaw/plugin-sdk/ssrf-runtime";
 import { fetchWithSsrFGuard, type RuntimeEnv } from "../runtime-api.js";
 import type { ResolvedNextcloudTalkAccount } from "./accounts.js";
 import { resolveNextcloudTalkApiCredentials } from "./api-credentials.js";

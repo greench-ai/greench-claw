@@ -12,8 +12,8 @@ const runGatewayUpdateMock = vi.fn<() => Promise<UpdateRunResult>>();
 const resolveUpdateInstallSurfaceMock = vi.fn<() => Promise<UpdateInstallSurface>>(async () => ({
   kind: "git",
   mode: "git",
-  root: "/tmp/openclaw",
-  packageRoot: "/tmp/openclaw",
+  root: "/tmp/NexisClaw",
+  packageRoot: "/tmp/NexisClaw",
 }));
 const getLatestUpdateRestartSentinelMock = vi.fn<() => RestartSentinelPayload | null>(() => null);
 const isRestartEnabledMock = vi.fn(() => true);
@@ -49,13 +49,13 @@ vi.mock("../../config/sessions.js", () => ({
   },
 }));
 
-vi.mock("../../infra/openclaw-root.js", async () => {
-  const actual = await vi.importActual<typeof import("../../infra/openclaw-root.js")>(
-    "../../infra/openclaw-root.js",
+vi.mock("../../infra/NexisClaw-root.js", async () => {
+  const actual = await vi.importActual<typeof import("../../infra/NexisClaw-root.js")>(
+    "../../infra/NexisClaw-root.js",
   );
   return {
     ...actual,
-    resolveOpenClawPackageRoot: async () => "/tmp/openclaw",
+    resolveNexisClawPackageRoot: async () => "/tmp/NexisClaw",
   };
 });
 
@@ -134,8 +134,8 @@ beforeEach(() => {
   resolveUpdateInstallSurfaceMock.mockResolvedValue({
     kind: "git",
     mode: "git",
-    root: "/tmp/openclaw",
-    packageRoot: "/tmp/openclaw",
+    root: "/tmp/NexisClaw",
+    packageRoot: "/tmp/NexisClaw",
   });
   getLatestUpdateRestartSentinelMock.mockClear();
   scheduleGatewaySigusr1RestartMock.mockClear();
@@ -314,8 +314,8 @@ describe("update.run restart scheduling", () => {
     resolveUpdateInstallSurfaceMock.mockResolvedValueOnce({
       kind: "global",
       mode: "npm",
-      root: "/tmp/openclaw-global",
-      packageRoot: "/tmp/openclaw-global",
+      root: "/tmp/NexisClaw-global",
+      packageRoot: "/tmp/NexisClaw-global",
     });
 
     let payload:
@@ -345,8 +345,8 @@ describe("update.run restart scheduling", () => {
     resolveUpdateInstallSurfaceMock.mockResolvedValueOnce({
       kind: "global",
       mode: "npm",
-      root: "/tmp/openclaw-global",
-      packageRoot: "/tmp/openclaw-global",
+      root: "/tmp/NexisClaw-global",
+      packageRoot: "/tmp/NexisClaw-global",
     });
 
     let payload:

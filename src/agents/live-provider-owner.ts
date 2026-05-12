@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { resolveOwningPluginIdsForProvider } from "../plugins/providers.js";
 import { normalizeProviderId } from "./provider-id.js";
 
 type LiveProviderOwnerContext = {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   ownerCache: Map<string, readonly string[]>;

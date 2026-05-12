@@ -1,5 +1,5 @@
-import { resolvePinnedHostnameWithPolicy, type SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { resolvePinnedHostnameWithPolicy, type SsrFPolicy } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 type LineOutboundMediaKind = "image" | "video" | "audio";
 

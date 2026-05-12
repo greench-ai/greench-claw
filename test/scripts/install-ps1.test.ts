@@ -79,11 +79,11 @@ describe("install.ps1 failure handling", () => {
     const completeInstallBody = extractFunctionBody(source, "Complete-Install");
     expect(completeInstallBody).toMatch(/\$PSCommandPath/);
     expect(completeInstallBody).toMatch(/\bexit \$script:InstallExitCode\b/);
-    expect(completeInstallBody).toMatch(/\bthrow "OpenClaw installation failed with exit code/);
+    expect(completeInstallBody).toMatch(/\bthrow "NexisClaw installation failed with exit code/);
   });
 
   it("runs npm install through the resolved command with quiet CI defaults", () => {
-    const npmInstallBody = extractFunctionBody(source, "Install-OpenClaw");
+    const npmInstallBody = extractFunctionBody(source, "Install-NexisClaw");
     expect(npmInstallBody).toContain("$npmOutput = & (Get-NpmCommandPath) install -g");
     expect(npmInstallBody).toContain('$env:NPM_CONFIG_LOGLEVEL = "error"');
     expect(npmInstallBody).toContain('$env:NPM_CONFIG_UPDATE_NOTIFIER = "false"');
@@ -98,14 +98,14 @@ describe("install.ps1 failure handling", () => {
   });
 
   it("cleans legacy git submodules only from the selected git checkout", () => {
-    const gitInstallBody = extractFunctionBody(source, "Install-OpenClawFromGit");
+    const gitInstallBody = extractFunctionBody(source, "Install-NexisClawFromGit");
     const mainBody = extractFunctionBody(source, "Main");
     expect(gitInstallBody).toContain("Remove-LegacySubmodule -RepoDir $RepoDir");
     expect(mainBody).not.toContain("Remove-LegacySubmodule");
   });
 
   runIfPowerShell("exits non-zero when run as a script file", () => {
-    const tempDir = harness.createTempDir("openclaw-install-ps1-");
+    const tempDir = harness.createTempDir("NexisClaw-install-ps1-");
     const scriptPath = join(tempDir, "install.ps1");
     writeFileSync(scriptPath, createFailingNodeFixture(source));
     chmodSync(scriptPath, 0o755);
@@ -123,7 +123,7 @@ describe("install.ps1 failure handling", () => {
   });
 
   runIfPowerShell("throws without killing the caller when run as a scriptblock", () => {
-    const tempDir = harness.createTempDir("openclaw-install-ps1-");
+    const tempDir = harness.createTempDir("NexisClaw-install-ps1-");
     const scriptPath = join(tempDir, "install.ps1");
     writeFileSync(scriptPath, createFailingNodeFixture(source));
     chmodSync(scriptPath, 0o755);
@@ -139,12 +139,12 @@ describe("install.ps1 failure handling", () => {
     const result = runPowerShell(["-NoLogo", "-NoProfile", "-Command", command]);
 
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("caught=OpenClaw installation failed with exit code 1.");
+    expect(result.stdout).toContain("caught=NexisClaw installation failed with exit code 1.");
     expect(result.stdout).toContain("alive-after-install");
   });
 
   runIfPowerShell("keeps npm chatter out of Main's success return value", () => {
-    const tempDir = harness.createTempDir("openclaw-install-ps1-");
+    const tempDir = harness.createTempDir("NexisClaw-install-ps1-");
     const scriptPath = join(tempDir, "install.ps1");
     const scriptWithoutEntryPoint = source.replace(ENTRYPOINT_RE, "");
     writeFileSync(
@@ -155,12 +155,12 @@ describe("install.ps1 failure handling", () => {
         "function Write-Banner { }",
         "function Ensure-ExecutionPolicy { return $true }",
         "function Check-Node { return $true }",
-        "function Check-ExistingOpenClaw { return $false }",
+        "function Check-ExistingNexisClaw { return $false }",
         "function Add-ToPath { param([string]$Path) }",
-        "function Install-OpenClaw { Write-Output 'npm stdout'; return $true }",
-        "function Ensure-OpenClawOnPath { return $true }",
+        "function Install-NexisClaw { Write-Output 'npm stdout'; return $true }",
+        "function Ensure-NexisClawOnPath { return $true }",
         "function Refresh-GatewayServiceIfLoaded { }",
-        "function Invoke-OpenClawCommand { return 'OpenClaw test-version' }",
+        "function Invoke-NexisClawCommand { return 'NexisClaw test-version' }",
         "$NoOnboard = $true",
         "$result = Main",
         "if ($result -is [array]) { throw 'Main returned an array' }",
@@ -184,7 +184,7 @@ describe("install.ps1 failure handling", () => {
   });
 
   runIfPowerShell("uses Main's final boolean result when helper output precedes success", () => {
-    const tempDir = harness.createTempDir("openclaw-install-ps1-");
+    const tempDir = harness.createTempDir("NexisClaw-install-ps1-");
     const scriptPath = join(tempDir, "install.ps1");
     const scriptWithoutEntryPoint = source.replace(ENTRYPOINT_RE, "");
     writeFileSync(
@@ -195,15 +195,15 @@ describe("install.ps1 failure handling", () => {
         "function Write-Banner { }",
         "function Ensure-ExecutionPolicy { return $true }",
         "function Check-Node { return $true }",
-        "function Check-ExistingOpenClaw { return $false }",
+        "function Check-ExistingNexisClaw { return $false }",
         "function Add-ToPath { param([string]$Path) }",
-        "function Install-OpenClaw {",
+        "function Install-NexisClaw {",
         "  Write-Output 'native chatter'",
         "  return $true",
         "}",
-        "function Ensure-OpenClawOnPath { return $true }",
+        "function Ensure-NexisClawOnPath { return $true }",
         "function Refresh-GatewayServiceIfLoaded { }",
-        "function Invoke-OpenClawCommand { return 'OpenClaw test-version' }",
+        "function Invoke-NexisClawCommand { return 'NexisClaw test-version' }",
         "$NoOnboard = $true",
         "$mainResults = @(Main)",
         "$installSucceeded = $mainResults.Count -gt 0 -and $mainResults[-1] -eq $true",

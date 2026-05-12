@@ -1,11 +1,11 @@
 ---
 name: crabbox
-description: Use Crabbox for OpenClaw remote Linux validation. Default to Blacksmith Testbox; includes direct Blacksmith and owned AWS/Hetzner fallback notes when Crabbox fails.
+description: Use Crabbox for NexisClaw remote Linux validation. Default to Blacksmith Testbox; includes direct Blacksmith and owned AWS/Hetzner fallback notes when Crabbox fails.
 ---
 
 # Crabbox
 
-Use Crabbox when OpenClaw needs remote Linux proof for broad tests, CI-parity
+Use Crabbox when NexisClaw needs remote Linux proof for broad tests, CI-parity
 checks, secrets, hosted services, Docker/E2E/package lanes, warmed reusable
 boxes, sync timing, logs/results, cache inspection, or lease cleanup.
 
@@ -26,7 +26,7 @@ pnpm crabbox:run -- --help | sed -n '1,120p'
 ../crabbox/bin/crabbox webvnc --help
 ```
 
-- OpenClaw scripts prefer `../crabbox/bin/crabbox` when present. The user PATH
+- NexisClaw scripts prefer `../crabbox/bin/crabbox` when present. The user PATH
   shim can be stale.
 - Check `.crabbox.yaml` for repo defaults, but override provider explicitly.
   Even if config still says AWS, maintainer validation should normally pass
@@ -40,17 +40,17 @@ pnpm crabbox:run -- --help | sed -n '1,120p'
   blocked instead of silently using a fake key.
 - Prefer local targeted tests for tight edit loops. Broad gates belong remote.
 - Do not treat inherited shell env as operator intent. In particular,
-  `OPENCLAW_LOCAL_CHECK_MODE=throttled` from the local shell is not permission
+  `NEXISCLAW_LOCAL_CHECK_MODE=throttled` from the local shell is not permission
   to move broad `pnpm check:changed`, `pnpm test:changed`, full `pnpm test`, or
   lint/typecheck fan-out onto the laptop.
-- Only use `OPENCLAW_LOCAL_CHECK_MODE=throttled|full` when the user explicitly
+- Only use `NEXISCLAW_LOCAL_CHECK_MODE=throttled|full` when the user explicitly
   asks for local proof in the current task. If Testbox is queued or capacity is
   constrained, report the blocker and keep only targeted local edit-loop checks
   running.
 
 ## macOS And Windows Targets
 
-Use these only when the task needs an existing non-Linux host. OpenClaw broad
+Use these only when the task needs an existing non-Linux host. NexisClaw broad
 validation still defaults to `blacksmith-testbox`.
 
 Crabbox supports static SSH targets:
@@ -81,7 +81,7 @@ Changed gate:
 
 ```sh
 pnpm crabbox:run -- --provider blacksmith-testbox \
-  --blacksmith-org openclaw \
+  --blacksmith-org NexisClaw \
   --blacksmith-workflow .github/workflows/ci-check-testbox.yml \
   --blacksmith-job check \
   --blacksmith-ref main \
@@ -89,14 +89,14 @@ pnpm crabbox:run -- --provider blacksmith-testbox \
   --ttl 240m \
   --timing-json \
   --shell -- \
-  "env CI=1 NODE_OPTIONS=--max-old-space-size=4096 OPENCLAW_TEST_PROJECTS_PARALLEL=6 OPENCLAW_VITEST_MAX_WORKERS=1 OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000 pnpm test:changed"
+  "env CI=1 NODE_OPTIONS=--max-old-space-size=4096 NEXISCLAW_TEST_PROJECTS_PARALLEL=6 NEXISCLAW_VITEST_MAX_WORKERS=1 NEXISCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000 pnpm test:changed"
 ```
 
 Full suite:
 
 ```sh
 pnpm crabbox:run -- --provider blacksmith-testbox \
-  --blacksmith-org openclaw \
+  --blacksmith-org NexisClaw \
   --blacksmith-workflow .github/workflows/ci-check-testbox.yml \
   --blacksmith-job check \
   --blacksmith-ref main \
@@ -104,14 +104,14 @@ pnpm crabbox:run -- --provider blacksmith-testbox \
   --ttl 240m \
   --timing-json \
   --shell -- \
-  "env CI=1 NODE_OPTIONS=--max-old-space-size=4096 OPENCLAW_TEST_PROJECTS_PARALLEL=6 OPENCLAW_VITEST_MAX_WORKERS=1 OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000 pnpm test"
+  "env CI=1 NODE_OPTIONS=--max-old-space-size=4096 NEXISCLAW_TEST_PROJECTS_PARALLEL=6 NEXISCLAW_VITEST_MAX_WORKERS=1 NEXISCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000 pnpm test"
 ```
 
 Focused rerun:
 
 ```sh
 pnpm crabbox:run -- --provider blacksmith-testbox \
-  --blacksmith-org openclaw \
+  --blacksmith-org NexisClaw \
   --blacksmith-workflow .github/workflows/ci-check-testbox.yml \
   --blacksmith-job check \
   --blacksmith-ref main \
@@ -119,7 +119,7 @@ pnpm crabbox:run -- --provider blacksmith-testbox \
   --ttl 240m \
   --timing-json \
   --shell -- \
-  "env CI=1 NODE_OPTIONS=--max-old-space-size=4096 OPENCLAW_VITEST_MAX_WORKERS=1 OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000 pnpm test <path-or-filter>"
+  "env CI=1 NODE_OPTIONS=--max-old-space-size=4096 NEXISCLAW_VITEST_MAX_WORKERS=1 NEXISCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000 pnpm test <path-or-filter>"
 ```
 
 Read the JSON summary. Useful fields:
@@ -243,7 +243,7 @@ Keep it efficient:
   top of that PR.
 - Use one-shot Crabbox for a single proof; use a reusable Testbox only when
   several commands must share built images, installed packages, or live state.
-- Prefer `OPENCLAW_CURRENT_PACKAGE_TGZ` with Docker/package lanes when testing a
+- Prefer `NEXISCLAW_CURRENT_PACKAGE_TGZ` with Docker/package lanes when testing a
   candidate tarball; prefer the repo's package helper instead of direct source
   execution when the bug might be packaging/install related.
 - Keep secrets redacted. It is fine to report key presence, source, and length;
@@ -285,18 +285,18 @@ Interactive CLI/onboarding:
   searchable selects. Raw `send-keys -l openai` may not trigger filtering in a
   tmux pane; inspect option order locally or on-box and send exact Down/Enter
   sequences.
-- Isolate mutable state with `OPENCLAW_STATE_DIR=$(mktemp -d)`. Plugin npm
+- Isolate mutable state with `NEXISCLAW_STATE_DIR=$(mktemp -d)`. Plugin npm
   installs live under that state dir (`npm/node_modules/...`), not under
-  `OPENCLAW_CONFIG_DIR`. Verify downloads by checking the state dir, package
+  `NEXISCLAW_CONFIG_DIR`. Verify downloads by checking the state dir, package
   lock, and installed package metadata.
 - To test automatic setup installs against local package artifacts, use
-  `OPENCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES=1` plus
-  `OPENCLAW_PLUGIN_INSTALL_OVERRIDES='{"plugin-id":"npm-pack:/tmp/plugin.tgz"}'`.
-  Pack with `npm pack`, set an isolated `OPENCLAW_STATE_DIR`, and verify the
+  `NEXISCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES=1` plus
+  `NEXISCLAW_PLUGIN_INSTALL_OVERRIDES='{"plugin-id":"npm-pack:/tmp/plugin.tgz"}'`.
+  Pack with `npm pack`, set an isolated `NEXISCLAW_STATE_DIR`, and verify the
   package under `npm/node_modules`. Overrides are test-only and must not be
   treated as official/trusted-source installs.
 - For OpenAI/Codex onboarding proof, the useful markers are the UI line
-  `Installed Codex plugin`, `npm/node_modules/@openclaw/codex`, and the
+  `Installed Codex plugin`, `npm/node_modules/@NexisClaw/codex`, and the
   package-lock entry showing the bundled `@openai/codex` dependency. A dummy
   OpenAI-shaped key can prove only UI/install behavior; it is not live auth.
 
@@ -378,7 +378,7 @@ Common Crabbox-only failures:
 - Cleanup uncertainty: run `blacksmith testbox list` and stop only boxes you
   created.
 - Testbox queued/capacity pressure: do not convert a broad changed gate or full
-  suite into local `OPENCLAW_LOCAL_CHECK_MODE=throttled pnpm ...`. Leave the
+  suite into local `NEXISCLAW_LOCAL_CHECK_MODE=throttled pnpm ...`. Leave the
   remote lane queued, switch to a narrower targeted local check, or stop and
   report the capacity blocker.
 
@@ -388,20 +388,20 @@ first try the same command through the repo wrapper with `--debug` and
 
 ```sh
 pnpm crabbox:run -- --provider blacksmith-testbox --debug --timing-json -- \
-  CI=1 NODE_OPTIONS=--max-old-space-size=4096 OPENCLAW_TEST_PROJECTS_PARALLEL=6 OPENCLAW_VITEST_MAX_WORKERS=1 OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000 pnpm test:changed
+  CI=1 NODE_OPTIONS=--max-old-space-size=4096 NEXISCLAW_TEST_PROJECTS_PARALLEL=6 NEXISCLAW_VITEST_MAX_WORKERS=1 NEXISCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000 pnpm test:changed
 ```
 
 Full suite:
 
 ```sh
 pnpm crabbox:run -- --provider blacksmith-testbox --debug --timing-json -- \
-  CI=1 NODE_OPTIONS=--max-old-space-size=4096 OPENCLAW_TEST_PROJECTS_PARALLEL=6 OPENCLAW_VITEST_MAX_WORKERS=1 OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000 pnpm test
+  CI=1 NODE_OPTIONS=--max-old-space-size=4096 NEXISCLAW_TEST_PROJECTS_PARALLEL=6 NEXISCLAW_VITEST_MAX_WORKERS=1 NEXISCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000 pnpm test
 ```
 
 Auth fallback, only when `blacksmith` says auth is missing:
 
 ```sh
-blacksmith auth login --non-interactive --organization openclaw
+blacksmith auth login --non-interactive --organization NexisClaw
 ```
 
 Raw Blacksmith footguns:
@@ -421,7 +421,7 @@ Owned Cloud Fallback section below.
 
 Crabbox Blacksmith backend delegates setup to:
 
-- org: `openclaw`
+- org: `NexisClaw`
 - workflow: `.github/workflows/ci-check-testbox.yml`
 - job: `check`
 - ref: `main` unless testing a branch/tag intentionally
@@ -434,7 +434,7 @@ Minimal Blacksmith-backed Crabbox run, from repo root:
 
 ```sh
 pnpm crabbox:run -- --provider blacksmith-testbox --timing-json -- \
-  CI=1 NODE_OPTIONS=--max-old-space-size=4096 OPENCLAW_TEST_PROJECTS_PARALLEL=6 OPENCLAW_VITEST_MAX_WORKERS=1 pnpm test:changed
+  CI=1 NODE_OPTIONS=--max-old-space-size=4096 NEXISCLAW_TEST_PROJECTS_PARALLEL=6 NEXISCLAW_VITEST_MAX_WORKERS=1 pnpm test:changed
 ```
 
 Use direct Blacksmith only when Crabbox is the broken layer and you are
@@ -448,7 +448,7 @@ Important Blacksmith footguns:
 - If auth is missing and browser auth is acceptable:
 
 ```sh
-blacksmith auth login --non-interactive --organization openclaw
+blacksmith auth login --non-interactive --organization NexisClaw
 ```
 
 ## Owned Cloud Fallback
@@ -459,15 +459,15 @@ environment, or owned capacity is explicitly the goal.
 ```sh
 pnpm crabbox:warmup -- --provider aws --class beast --market on-demand --idle-timeout 90m
 pnpm crabbox:hydrate -- --id <cbx_id-or-slug>
-pnpm crabbox:run -- --id <cbx_id-or-slug> --timing-json --shell -- "env NODE_OPTIONS=--max-old-space-size=4096 OPENCLAW_TEST_PROJECTS_PARALLEL=6 OPENCLAW_VITEST_MAX_WORKERS=1 OPENCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000 pnpm test:changed"
+pnpm crabbox:run -- --id <cbx_id-or-slug> --timing-json --shell -- "env NODE_OPTIONS=--max-old-space-size=4096 NEXISCLAW_TEST_PROJECTS_PARALLEL=6 NEXISCLAW_VITEST_MAX_WORKERS=1 NEXISCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000 pnpm test:changed"
 pnpm crabbox:stop -- <cbx_id-or-slug>
 ```
 
 Install/auth for owned Crabbox if needed:
 
 ```sh
-brew install openclaw/tap/crabbox
-crabbox login --url https://crabbox.openclaw.ai --provider aws
+brew install NexisClaw/tap/crabbox
+crabbox login --url https://crabbox.NexisClaw.ai --provider aws
 ```
 
 New users should self-resolve broker auth before anyone asks for AWS keys:
@@ -478,15 +478,15 @@ crabbox doctor
 crabbox whoami
 ```
 
-- If broker auth is missing, run `crabbox login --url https://crabbox.openclaw.ai --provider aws`.
+- If broker auth is missing, run `crabbox login --url https://crabbox.NexisClaw.ai --provider aws`.
 - If the CLI asks for `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, or AWS
-  profile setup during normal OpenClaw validation, assume the agent selected
+  profile setup during normal NexisClaw validation, assume the agent selected
   the wrong path. Use brokered `crabbox login`, `--provider blacksmith-testbox`,
   or an existing brokered lease before asking the user for cloud credentials.
 - Ask for AWS keys only for explicit direct-provider/account administration,
-  not for normal brokered OpenClaw proof.
+  not for normal brokered NexisClaw proof.
 - Trusted automation may still use
-  `printf '%s' "$CRABBOX_COORDINATOR_TOKEN" | crabbox login --url https://crabbox.openclaw.ai --provider aws --token-stdin`.
+  `printf '%s' "$CRABBOX_COORDINATOR_TOKEN" | crabbox login --url https://crabbox.NexisClaw.ai --provider aws --token-stdin`.
 
 macOS config lives at:
 
@@ -495,7 +495,7 @@ macOS config lives at:
 ```
 
 It should include `broker.url`, `broker.token`, and usually `provider: aws`
-for owned-cloud lanes. Do not let that config override the OpenClaw default
+for owned-cloud lanes. Do not let that config override the NexisClaw default
 when Blacksmith proof is requested; pass `--provider blacksmith-testbox`.
 
 ### Interactive Desktop / WebVNC
@@ -545,6 +545,6 @@ Use `--market spot|on-demand` only on AWS warmup/one-shot runs.
 
 ## Boundary
 
-Do not add OpenClaw-specific setup to Crabbox itself. Put repo setup in the
+Do not add NexisClaw-specific setup to Crabbox itself. Put repo setup in the
 hydration workflow and keep Crabbox generic around lease, sync, command
 execution, logs/results, timing, and cleanup.

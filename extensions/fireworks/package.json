@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/fireworks-provider",
+  "name": "@NexisClaw/fireworks-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw Fireworks provider plugin",
+  "description": "NexisClaw Fireworks provider plugin",
   "type": "module",
   "dependencies": {
     "@earendil-works/pi-ai": "0.74.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ]

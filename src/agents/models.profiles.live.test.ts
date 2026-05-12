@@ -48,7 +48,7 @@ import { createLiveTargetMatcher } from "./live-target-matcher.js";
 import { isLiveProfileKeyModeEnabled, isLiveTestEnabled } from "./live-test-helpers.js";
 import { getApiKeyForModel, requireApiKey } from "./model-auth.js";
 import { shouldSuppressBuiltInModel } from "./model-suppression.js";
-import { ensureOpenClawModelsJson } from "./models-config.js";
+import { ensureNexisClawModelsJson } from "./models-config.js";
 import {
   isCloudflareOrHtmlErrorPage,
   isRateLimitErrorMessage,
@@ -60,24 +60,24 @@ import {
 } from "./pi-model-discovery.js";
 
 const LIVE = isLiveTestEnabled();
-const DIRECT_ENABLED = Boolean(process.env.OPENCLAW_LIVE_MODELS?.trim());
+const DIRECT_ENABLED = Boolean(process.env.NEXISCLAW_LIVE_MODELS?.trim());
 const REQUIRE_PROFILE_KEYS = isLiveProfileKeyModeEnabled();
 const LIVE_CREDENTIAL_PRECEDENCE = REQUIRE_PROFILE_KEYS ? "profile-first" : "env-first";
-const LIVE_HEARTBEAT_MS = Math.max(1_000, toInt(process.env.OPENCLAW_LIVE_HEARTBEAT_MS, 30_000));
+const LIVE_HEARTBEAT_MS = Math.max(1_000, toInt(process.env.NEXISCLAW_LIVE_HEARTBEAT_MS, 30_000));
 const LIVE_SETUP_TIMEOUT_MS = Math.max(
   1_000,
-  toInt(process.env.OPENCLAW_LIVE_SETUP_TIMEOUT_MS, 45_000),
+  toInt(process.env.NEXISCLAW_LIVE_SETUP_TIMEOUT_MS, 45_000),
 );
 const LIVE_TEST_TIMEOUT_MS = Math.max(
   1_000,
-  toInt(process.env.OPENCLAW_LIVE_TEST_TIMEOUT_MS, 60 * 60 * 1000),
+  toInt(process.env.NEXISCLAW_LIVE_TEST_TIMEOUT_MS, 60 * 60 * 1000),
 );
 const DEFAULT_LIVE_MODEL_CONCURRENCY = 20;
 const LIVE_MODEL_CONCURRENCY = resolveLiveModelConcurrency(
-  process.env.OPENCLAW_LIVE_MODEL_CONCURRENCY,
+  process.env.NEXISCLAW_LIVE_MODEL_CONCURRENCY,
 );
 const LIVE_MODELS_JSON_TIMEOUT_MS = resolveLiveModelsJsonTimeoutMs(
-  process.env.OPENCLAW_LIVE_MODELS_JSON_TIMEOUT_MS,
+  process.env.NEXISCLAW_LIVE_MODELS_JSON_TIMEOUT_MS,
 );
 const LIVE_FILE_PROBE_ENABLED = isLiveModelProbeEnabled(process.env, LIVE_MODEL_FILE_PROBE_ENV);
 const LIVE_IMAGE_PROBE_ENABLED = isLiveModelProbeEnabled(process.env, LIVE_MODEL_IMAGE_PROBE_ENV);
@@ -787,13 +787,13 @@ describeLive("live models (profile keys)", () => {
       );
       logProgress("[live-models] preparing models.json");
       await withLiveStageTimeout(
-        ensureOpenClawModelsJson(cfg),
+        ensureNexisClawModelsJson(cfg),
         "[live-models] prepare models.json",
         LIVE_MODELS_JSON_TIMEOUT_MS,
       );
       if (!DIRECT_ENABLED) {
         logProgress(
-          "[live-models] skipping (set OPENCLAW_LIVE_MODELS=modern|all|<list>; all=modern)",
+          "[live-models] skipping (set NEXISCLAW_LIVE_MODELS=modern|all|<list>; all=modern)",
         );
         return;
       }
@@ -803,11 +803,11 @@ describeLive("live models (profile keys)", () => {
         logProgress(`[live-models] anthropic keys loaded: ${anthropicKeys.length}`);
       }
 
-      const providers = parseProviderFilter(process.env.OPENCLAW_LIVE_PROVIDERS);
+      const providers = parseProviderFilter(process.env.NEXISCLAW_LIVE_PROVIDERS);
       const providerList = providers ? [...providers] : null;
       logProgress("[live-models] resolving agent dir");
       const agentDir = resolveDefaultAgentDir(cfg);
-      const rawModels = process.env.OPENCLAW_LIVE_MODELS?.trim();
+      const rawModels = process.env.NEXISCLAW_LIVE_MODELS?.trim();
       const useModern = rawModels === "modern" || rawModels === "all";
       const useExplicit = Boolean(rawModels) && !useModern;
       const filter = useExplicit ? parseModelFilter(rawModels) : null;
@@ -843,9 +843,9 @@ describeLive("live models (profile keys)", () => {
           "[live-models] load model registry",
         );
       })();
-      const perModelTimeoutMs = toInt(process.env.OPENCLAW_LIVE_MODEL_TIMEOUT_MS, 30_000);
+      const perModelTimeoutMs = toInt(process.env.NEXISCLAW_LIVE_MODEL_TIMEOUT_MS, 30_000);
       const maxModels = resolveHighSignalLiveModelLimit({
-        rawMaxModels: process.env.OPENCLAW_LIVE_MAX_MODELS,
+        rawMaxModels: process.env.NEXISCLAW_LIVE_MAX_MODELS,
         useExplicitModels: useExplicit,
       });
       const targetMatcher = createLiveTargetMatcher({
@@ -931,7 +931,7 @@ describeLive("live models (profile keys)", () => {
       logProgress(`[live-models] selection=${useExplicit ? "explicit" : "high-signal"}`);
       if (selectedCandidates.length < candidates.length) {
         logProgress(
-          `[live-models] capped to ${selectedCandidates.length}/${candidates.length} via OPENCLAW_LIVE_MAX_MODELS=${maxModels}`,
+          `[live-models] capped to ${selectedCandidates.length}/${candidates.length} via NEXISCLAW_LIVE_MAX_MODELS=${maxModels}`,
         );
       }
       logProgress(`[live-models] running ${selectedCandidates.length} models`);

@@ -1,15 +1,15 @@
-import { resolveAccountWithDefaultFallback } from "openclaw/plugin-sdk/account-core";
-import { tryReadSecretFileSync } from "openclaw/plugin-sdk/channel-core";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { TelegramAccountConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveDefaultSecretProviderAlias } from "openclaw/plugin-sdk/provider-auth";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk/routing";
+import { resolveAccountWithDefaultFallback } from "NexisClaw/plugin-sdk/account-core";
+import { tryReadSecretFileSync } from "NexisClaw/plugin-sdk/channel-core";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { TelegramAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveDefaultSecretProviderAlias } from "NexisClaw/plugin-sdk/provider-auth";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/routing";
 import {
   hasConfiguredSecretInput,
   normalizeSecretInputString,
-} from "openclaw/plugin-sdk/secret-input";
-import { coerceSecretRef } from "openclaw/plugin-sdk/secret-input-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/secret-input";
+import { coerceSecretRef } from "NexisClaw/plugin-sdk/secret-input-runtime";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import {
   mergeTelegramAccountConfig,
   resolveDefaultTelegramAccountId,
@@ -49,7 +49,7 @@ function inspectTokenFile(pathValue: unknown): {
 }
 
 function canResolveEnvSecretRefInReadOnlyPath(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   provider: string;
   id: string;
 }): boolean {
@@ -64,7 +64,7 @@ function canResolveEnvSecretRefInReadOnlyPath(params: {
   return !allowlist || allowlist.includes(params.id);
 }
 
-function inspectTokenValue(params: { cfg: OpenClawConfig; value: unknown }): {
+function inspectTokenValue(params: { cfg: NexisClawConfig; value: unknown }): {
   token: string;
   tokenSource: "config" | "env" | "none";
   tokenStatus: TelegramCredentialStatus;
@@ -118,7 +118,7 @@ function inspectTokenValue(params: { cfg: OpenClawConfig; value: unknown }): {
 }
 
 function inspectTelegramAccountPrimary(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId: string;
   envToken?: string | null;
 }): InspectedTelegramAccount {
@@ -218,7 +218,7 @@ function inspectTelegramAccountPrimary(params: {
 }
 
 export function inspectTelegramAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId?: string | null;
   envToken?: string | null;
 }): InspectedTelegramAccount {

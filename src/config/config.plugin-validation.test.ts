@@ -38,7 +38,7 @@ async function writePluginFixture(params: {
     manifest.channels = params.channels;
   }
   await fs.writeFile(
-    path.join(params.dir, "openclaw.plugin.json"),
+    path.join(params.dir, "NexisClaw.plugin.json"),
     JSON.stringify(manifest, null, 2),
     "utf-8",
   );
@@ -129,10 +129,10 @@ describe("config plugin validation", () => {
   const suiteEnv = () =>
     ({
       HOME: suiteHome,
-      OPENCLAW_HOME: undefined,
-      OPENCLAW_STATE_DIR: path.join(suiteHome, ".openclaw"),
-      OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-      OPENCLAW_VERSION: undefined,
+      NEXISCLAW_HOME: undefined,
+      NEXISCLAW_STATE_DIR: path.join(suiteHome, ".NexisClaw"),
+      NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
+      NEXISCLAW_VERSION: undefined,
       VITEST: "true",
     }) satisfies NodeJS.ProcessEnv;
 
@@ -152,7 +152,7 @@ describe("config plugin validation", () => {
     });
 
   beforeAll(async () => {
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-config-plugin-validation-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-config-plugin-validation-"));
     await chmodSafeDir(fixtureRoot);
     suiteHome = path.join(fixtureRoot, "home");
     await mkdirSafe(suiteHome);
@@ -223,7 +223,7 @@ describe("config plugin validation", () => {
       process.cwd(),
       "extensions",
       "voice-call",
-      "openclaw.plugin.json",
+      "NexisClaw.plugin.json",
     );
     const voiceCallManifest = JSON.parse(await fs.readFile(voiceCallManifestPath, "utf-8")) as {
       configSchema?: Record<string, unknown>;
@@ -316,7 +316,7 @@ describe("config plugin validation", () => {
 
     expect(res.ok).toBe(true);
     const message =
-      "plugin not installed: brave — install the official external plugin with: openclaw plugins install @openclaw/brave-plugin";
+      "plugin not installed: brave — install the official external plugin with: NexisClaw plugins install @NexisClaw/brave-plugin";
     expectPathMessage(res.warnings, "plugins.entries.brave", message);
     expectPathMessage(res.warnings, "plugins.allow", message);
     expect(
@@ -494,7 +494,7 @@ describe("config plugin validation", () => {
     expect(res.warnings).toContainEqual({
       path: "channels.missing-chat",
       message:
-        "unknown channel id: missing-chat (stale channel plugin config ignored; run openclaw doctor --fix to remove stale config, or install the plugin)",
+        "unknown channel id: missing-chat (stale channel plugin config ignored; run NexisClaw doctor --fix to remove stale config, or install the plugin)",
     });
     expect(res.warnings).toContainEqual({
       path: "plugins.allow",
@@ -556,12 +556,12 @@ describe("config plugin validation", () => {
     expect(res.warnings ?? []).toContainEqual({
       path: "plugins.allow",
       message:
-        "plugin not installed: discord — install the official external plugin with: openclaw plugins install @openclaw/discord",
+        "plugin not installed: discord — install the official external plugin with: NexisClaw plugins install @NexisClaw/discord",
     });
   });
 
   it("uses persisted installed-plugin records as stale channel evidence", async () => {
-    const installedPluginIndexPath = path.join(suiteHome, ".openclaw", "plugins", "installs.json");
+    const installedPluginIndexPath = path.join(suiteHome, ".NexisClaw", "plugins", "installs.json");
     await mkdirSafe(path.dirname(installedPluginIndexPath));
     await fs.writeFile(
       installedPluginIndexPath,
@@ -596,7 +596,7 @@ describe("config plugin validation", () => {
       expect(res.warnings).toContainEqual({
         path: "channels.missing-sms",
         message:
-          "unknown channel id: missing-sms (stale channel plugin config ignored; run openclaw doctor --fix to remove stale config, or install the plugin)",
+          "unknown channel id: missing-sms (stale channel plugin config ignored; run NexisClaw doctor --fix to remove stale config, or install the plugin)",
       });
     } finally {
       await fs.rm(installedPluginIndexPath, { force: true });
@@ -643,7 +643,7 @@ describe("config plugin validation", () => {
       {
         env: {
           ...suiteEnv(),
-          OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(suiteHome, "missing-bundled-plugins"),
+          NEXISCLAW_BUNDLED_PLUGINS_DIR: path.join(suiteHome, "missing-bundled-plugins"),
         },
       },
     );
@@ -736,7 +736,7 @@ describe("config plugin validation", () => {
       {
         env: {
           ...suiteEnv(),
-          OPENCLAW_BUNDLED_PLUGINS_DIR: path.join(process.cwd(), "extensions"),
+          NEXISCLAW_BUNDLED_PLUGINS_DIR: path.join(process.cwd(), "extensions"),
         },
       },
     );

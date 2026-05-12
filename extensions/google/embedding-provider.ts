@@ -6,17 +6,17 @@ import {
   type EmbeddingInput,
   type MemoryEmbeddingProvider,
   type MemoryEmbeddingProviderCreateOptions,
-} from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { resolveMemorySecretInputString } from "openclaw/plugin-sdk/memory-core-host-secret";
+} from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { resolveMemorySecretInputString } from "NexisClaw/plugin-sdk/memory-core-host-secret";
 import {
   collectProviderApiKeysForExecution,
   executeWithApiKeyRotation,
   requireApiKey,
   resolveApiKeyForProvider,
-} from "openclaw/plugin-sdk/provider-auth-runtime";
-import { createProviderHttpError } from "openclaw/plugin-sdk/provider-http";
-import type { SsrFPolicy } from "openclaw/plugin-sdk/ssrf-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/provider-auth-runtime";
+import { createProviderHttpError } from "NexisClaw/plugin-sdk/provider-http";
+import type { SsrFPolicy } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 export type GeminiEmbeddingClient = {
   baseUrl: string;

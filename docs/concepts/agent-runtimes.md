@@ -1,5 +1,5 @@
 ---
-summary: "How OpenClaw separates model providers, models, channels, and agent runtimes"
+summary: "How NexisClaw separates model providers, models, channels, and agent runtimes"
 title: "Agent runtimes"
 read_when:
   - You are choosing between PI, Codex, ACP, or another native agent runtime
@@ -9,29 +9,29 @@ read_when:
 
 An **agent runtime** is the component that owns one prepared model loop: it
 receives the prompt, drives model output, handles native tool calls, and returns
-the finished turn to OpenClaw.
+the finished turn to NexisClaw.
 
 Runtimes are easy to confuse with providers because both show up near model
 configuration. They are different layers:
 
 | Layer         | Examples                              | What it means                                                       |
 | ------------- | ------------------------------------- | ------------------------------------------------------------------- |
-| Provider      | `openai`, `anthropic`, `openai-codex` | How OpenClaw authenticates, discovers models, and names model refs. |
+| Provider      | `openai`, `anthropic`, `openai-codex` | How NexisClaw authenticates, discovers models, and names model refs. |
 | Model         | `gpt-5.5`, `claude-opus-4-6`          | The model selected for the agent turn.                              |
 | Agent runtime | `pi`, `codex`, `claude-cli`           | The low level loop or backend that executes the prepared turn.      |
-| Channel       | Telegram, Discord, Slack, WhatsApp    | Where messages enter and leave OpenClaw.                            |
+| Channel       | Telegram, Discord, Slack, WhatsApp    | Where messages enter and leave NexisClaw.                            |
 
 You will also see the word **harness** in code. A harness is the implementation
 that provides an agent runtime. For example, the bundled Codex harness
 implements the `codex` runtime. Public config uses `agentRuntime.id` on
 provider or model entries; whole-agent runtime keys are legacy and ignored.
-`openclaw doctor --fix` removes old whole-agent runtime pins and rewrites
+`NexisClaw doctor --fix` removes old whole-agent runtime pins and rewrites
 legacy runtime model refs to canonical provider/model refs plus model-scoped
 runtime policy where needed.
 
 There are two runtime families:
 
-- **Embedded harnesses** run inside OpenClaw's prepared agent loop. Today this
+- **Embedded harnesses** run inside NexisClaw's prepared agent loop. Today this
   is the built-in `pi` runtime plus registered plugin harnesses such as
   `codex`.
 - **CLI backends** run a local CLI process while keeping the model ref
@@ -44,7 +44,7 @@ There are two runtime families:
 
 Most confusion comes from several different surfaces sharing the Codex name:
 
-| Surface                                          | OpenClaw name/config                 | What it does                                                                                                   |
+| Surface                                          | NexisClaw name/config                 | What it does                                                                                                   |
 | ------------------------------------------------ | ------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
 | Native Codex app-server runtime                  | `openai/*` model refs                | Runs OpenAI embedded agent turns through Codex app-server. This is the usual ChatGPT/Codex subscription setup. |
 | Codex OAuth auth profiles                        | `openai-codex` auth provider         | Stores ChatGPT/Codex subscription auth that the Codex app-server harness consumes.                             |
@@ -53,7 +53,7 @@ Most confusion comes from several different surfaces sharing the Codex name:
 | OpenAI Platform API route for non-agent surfaces | `openai/*` plus API-key auth         | Used for direct OpenAI APIs such as images, embeddings, speech, and realtime.                                  |
 
 Those surfaces are intentionally independent. Enabling the `codex` plugin makes
-the native app-server features available; `openclaw doctor --fix` owns legacy
+the native app-server features available; `NexisClaw doctor --fix` owns legacy
 `openai-codex/*` route repair and stale session pin cleanup. Selecting
 `openai/*` for an agent model now means "run this through Codex" unless a
 non-agent OpenAI API surface is being used.
@@ -71,9 +71,9 @@ the model ref as `openai/*` and selects the `codex` runtime:
 }
 ```
 
-That means OpenClaw selects an OpenAI model ref, then asks the Codex app-server
+That means NexisClaw selects an OpenAI model ref, then asks the Codex app-server
 runtime to run the embedded agent turn. It does not mean "use API billing," and
-it does not mean the channel, model provider catalog, or OpenClaw session store
+it does not mean the channel, model provider catalog, or NexisClaw session store
 becomes Codex.
 
 When the bundled `codex` plugin is enabled, natural-language Codex control
@@ -94,7 +94,7 @@ This is the agent-facing decision tree:
    `agentRuntime.id: "pi"`. A selected `openai-codex` auth profile is routed
    internally through PI's legacy Codex-auth transport.
 4. If legacy config still contains **`openai-codex/*` model refs**, repair it to
-   `openai/<model>` with `openclaw doctor --fix`; doctor keeps the Codex auth
+   `openai/<model>` with `NexisClaw doctor --fix`; doctor keeps the Codex auth
    route by adding provider/model-scoped `agentRuntime.id: "codex"` where the
    old model ref implied it.
 5. If the user explicitly says **ACP**, **acpx**, or **Codex ACP adapter**, use
@@ -117,25 +117,25 @@ contract, see [Codex harness runtime](/plugins/codex-harness-runtime#v1-support-
 
 Different runtimes own different amounts of the loop.
 
-| Surface                     | OpenClaw PI embedded                    | Codex app-server                                                            |
+| Surface                     | NexisClaw PI embedded                    | Codex app-server                                                            |
 | --------------------------- | --------------------------------------- | --------------------------------------------------------------------------- |
-| Model loop owner            | OpenClaw through the PI embedded runner | Codex app-server                                                            |
-| Canonical thread state      | OpenClaw transcript                     | Codex thread, plus OpenClaw transcript mirror                               |
-| OpenClaw dynamic tools      | Native OpenClaw tool loop               | Bridged through the Codex adapter                                           |
-| Native shell and file tools | PI/OpenClaw path                        | Codex-native tools, bridged through native hooks where supported            |
-| Context engine              | Native OpenClaw context assembly        | OpenClaw projects assembled context into the Codex turn                     |
-| Compaction                  | OpenClaw or selected context engine     | Codex-native compaction, with OpenClaw notifications and mirror maintenance |
-| Channel delivery            | OpenClaw                                | OpenClaw                                                                    |
+| Model loop owner            | NexisClaw through the PI embedded runner | Codex app-server                                                            |
+| Canonical thread state      | NexisClaw transcript                     | Codex thread, plus NexisClaw transcript mirror                               |
+| NexisClaw dynamic tools      | Native NexisClaw tool loop               | Bridged through the Codex adapter                                           |
+| Native shell and file tools | PI/NexisClaw path                        | Codex-native tools, bridged through native hooks where supported            |
+| Context engine              | Native NexisClaw context assembly        | NexisClaw projects assembled context into the Codex turn                     |
+| Compaction                  | NexisClaw or selected context engine     | Codex-native compaction, with NexisClaw notifications and mirror maintenance |
+| Channel delivery            | NexisClaw                                | NexisClaw                                                                    |
 
 This ownership split is the main design rule:
 
-- If OpenClaw owns the surface, OpenClaw can provide normal plugin hook behavior.
-- If the native runtime owns the surface, OpenClaw needs runtime events or native hooks.
-- If the native runtime owns canonical thread state, OpenClaw should mirror and project context, not rewrite unsupported internals.
+- If NexisClaw owns the surface, NexisClaw can provide normal plugin hook behavior.
+- If the native runtime owns the surface, NexisClaw needs runtime events or native hooks.
+- If the native runtime owns canonical thread state, NexisClaw should mirror and project context, not rewrite unsupported internals.
 
 ## Runtime selection
 
-OpenClaw chooses an embedded runtime after provider and model resolution:
+NexisClaw chooses an embedded runtime after provider and model resolution:
 
 1. Model-scoped runtime policy wins. This can live in a configured provider
    model entry or in `agents.defaults.models["provider/model"].agentRuntime` /
@@ -144,15 +144,15 @@ OpenClaw chooses an embedded runtime after provider and model resolution:
    `models.providers.<provider>.agentRuntime`.
 3. In `auto` mode, registered plugin runtimes can claim supported provider/model
    pairs.
-4. If no runtime claims a turn in `auto` mode, OpenClaw uses PI as the
+4. If no runtime claims a turn in `auto` mode, NexisClaw uses PI as the
    compatibility runtime. Use an explicit runtime id when the run must be
    strict.
 
 Whole-session and whole-agent runtime pins are ignored. That includes
-`OPENCLAW_AGENT_RUNTIME`, session `agentHarnessId`/`agentRuntimeOverride` state,
+`NEXISCLAW_AGENT_RUNTIME`, session `agentHarnessId`/`agentRuntimeOverride` state,
 `agents.defaults.agentRuntime`, and `agents.list[].agentRuntime`. Run
-`openclaw doctor --fix` to remove stale whole-agent runtime config and convert
-legacy runtime model refs where OpenClaw can preserve the intent.
+`NexisClaw doctor --fix` to remove stale whole-agent runtime config and convert
+legacy runtime model refs where NexisClaw can preserve the intent.
 
 Explicit provider/model plugin runtimes fail closed. For example,
 `agentRuntime.id: "codex"` on a provider or model means Codex or a clear
@@ -184,25 +184,25 @@ the execution backend in provider/model runtime policy.
 models are the exception: unset runtime and `auto` both resolve to the Codex
 harness. Explicit PI runtime config remains an opt-in compatibility route for
 `openai/*` agent turns; when paired with a selected `openai-codex` auth profile,
-OpenClaw routes PI internally through the legacy Codex-auth transport while
+NexisClaw routes PI internally through the legacy Codex-auth transport while
 keeping the public model ref as `openai/*`. Stale OpenAI PI session pins are
-ignored by runtime selection and can be cleaned with `openclaw doctor --fix`.
+ignored by runtime selection and can be cleaned with `NexisClaw doctor --fix`.
 
-If `openclaw doctor` warns that the `codex` plugin is enabled while
+If `NexisClaw doctor` warns that the `codex` plugin is enabled while
 `openai-codex/*` remains in config, treat that as legacy route state. Run
-`openclaw doctor --fix` to rewrite it to `openai/*` with the Codex runtime.
+`NexisClaw doctor --fix` to rewrite it to `openai/*` with the Codex runtime.
 
 ## Compatibility contract
 
-When a runtime is not PI, it should document what OpenClaw surfaces it supports.
+When a runtime is not PI, it should document what NexisClaw surfaces it supports.
 Use this shape for runtime docs:
 
 | Question                               | Why it matters                                                                                    |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | Who owns the model loop?               | Determines where retries, tool continuation, and final answer decisions happen.                   |
-| Who owns canonical thread history?     | Determines whether OpenClaw can edit history or only mirror it.                                   |
-| Do OpenClaw dynamic tools work?        | Messaging, sessions, cron, and OpenClaw-owned tools rely on this.                                 |
-| Do dynamic tool hooks work?            | Plugins expect `before_tool_call`, `after_tool_call`, and middleware around OpenClaw-owned tools. |
+| Who owns canonical thread history?     | Determines whether NexisClaw can edit history or only mirror it.                                   |
+| Do NexisClaw dynamic tools work?        | Messaging, sessions, cron, and NexisClaw-owned tools rely on this.                                 |
+| Do dynamic tool hooks work?            | Plugins expect `before_tool_call`, `after_tool_call`, and middleware around NexisClaw-owned tools. |
 | Do native tool hooks work?             | Shell, patch, and runtime-owned tools need native hook support for policy and observation.        |
 | Does the context engine lifecycle run? | Memory and context plugins depend on assemble, ingest, after-turn, and compaction lifecycle.      |
 | What compaction data is exposed?       | Some plugins only need notifications, while others need kept/dropped metadata.                    |

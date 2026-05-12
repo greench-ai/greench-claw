@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NexisClawConfig } from "../../config/config.js";
 import {
   resolveAgentDirMock,
   resolveSessionAgentIdMock,
@@ -26,7 +26,7 @@ const { handleCompactCommand } = await import("./commands-compact.js");
 
 function buildCompactParams(
   commandBodyNormalized: string,
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
 ): HandleCommandsParams {
   return {
     cfg,
@@ -61,7 +61,7 @@ function requireCompactEmbeddedPiSessionCall(index = 0) {
 function requireResolveSessionAgentIdCall(index = 0) {
   const call = (
     resolveSessionAgentIdMock.mock.calls[index] as unknown as [unknown] | undefined
-  )?.[0] as { sessionKey?: string; config?: OpenClawConfig } | undefined;
+  )?.[0] as { sessionKey?: string; config?: NexisClawConfig } | undefined;
   if (!call) {
     throw new Error(`resolveSessionAgentId call ${index} missing`);
   }
@@ -69,7 +69,7 @@ function requireResolveSessionAgentIdCall(index = 0) {
 }
 
 function requireResolveAgentDirCall(index = 0) {
-  const call = resolveAgentDirMock.mock.calls[index] as [OpenClawConfig, string] | undefined;
+  const call = resolveAgentDirMock.mock.calls[index] as [NexisClawConfig, string] | undefined;
   if (!call) {
     throw new Error(`resolveAgentDir call ${index} missing`);
   }
@@ -88,7 +88,7 @@ describe("handleCompactCommand", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     resolveAgentDirMock.mockImplementation(
-      (_cfg: unknown, agentId: string) => `/tmp/workspace/.openclaw/agents/${agentId}/agent`,
+      (_cfg: unknown, agentId: string) => `/tmp/workspace/.NexisClaw/agents/${agentId}/agent`,
     );
     resolveSessionAgentIdMock.mockReturnValue("main");
   });
@@ -98,7 +98,7 @@ describe("handleCompactCommand", () => {
       buildCompactParams("/status", {
         commands: { text: true },
         channels: { whatsapp: { allowFrom: ["*"] } },
-      } as OpenClawConfig),
+      } as NexisClawConfig),
       true,
     );
 
@@ -110,7 +110,7 @@ describe("handleCompactCommand", () => {
     const params = buildCompactParams("/compact", {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as OpenClawConfig);
+    } as NexisClawConfig);
 
     const result = await handleCompactCommand(
       {
@@ -139,8 +139,8 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-          session: { store: "/tmp/openclaw-session-store.json" },
-        } as OpenClawConfig),
+          session: { store: "/tmp/NexisClaw-session-store.json" },
+        } as NexisClawConfig),
         ctx: {
           Provider: "whatsapp",
           Surface: "whatsapp",
@@ -152,7 +152,7 @@ describe("handleCompactCommand", () => {
           SenderUsername: "alice_u",
           SenderE164: "+15551234567",
         },
-        agentDir: "/tmp/openclaw-agent-compact",
+        agentDir: "/tmp/NexisClaw-agent-compact",
         sessionEntry: {
           sessionId: "session-1",
           updatedAt: Date.now(),
@@ -183,7 +183,7 @@ describe("handleCompactCommand", () => {
     expect(call.senderName).toBe("Alice");
     expect(call.senderUsername).toBe("alice_u");
     expect(call.senderE164).toBe("+15551234567");
-    expect(call.agentDir).toBe("/tmp/openclaw-agent-compact");
+    expect(call.agentDir).toBe("/tmp/NexisClaw-agent-compact");
   });
 
   it("uses the canonical session agent when resolving the compaction session file", async () => {
@@ -195,8 +195,8 @@ describe("handleCompactCommand", () => {
     const cfg = {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-      session: { store: "/tmp/openclaw-session-store.json" },
-    } as OpenClawConfig;
+      session: { store: "/tmp/NexisClaw-session-store.json" },
+    } as NexisClawConfig;
 
     await handleCompactCommand(
       {
@@ -231,7 +231,7 @@ describe("handleCompactCommand", () => {
     const cfg = {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     await handleCompactCommand(
       {
@@ -265,7 +265,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NexisClawConfig),
         sessionKey: "agent:target:whatsapp:direct:12345",
         sessionEntry: {
           sessionId: "wrapper-session",
@@ -319,7 +319,7 @@ describe("handleCompactCommand", () => {
         ...buildCompactParams("/compact", {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as OpenClawConfig),
+        } as NexisClawConfig),
         sessionKey: "agent:target:whatsapp:direct:12345",
         sessionEntry: {
           sessionId: "wrapper-session",

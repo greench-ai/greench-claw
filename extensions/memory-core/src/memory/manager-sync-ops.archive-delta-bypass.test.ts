@@ -3,13 +3,13 @@ import os from "node:os";
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 import type {
-  OpenClawConfig,
+  NexisClawConfig,
   ResolvedMemorySearchConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+} from "NexisClaw/plugin-sdk/memory-core-host-engine-foundation";
 import type {
   MemorySource,
   MemorySyncProgressUpdate,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+} from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { MemoryManagerSyncOps } from "./manager-sync-ops.js";
 
@@ -31,9 +31,9 @@ type SyncParams = {
 };
 
 class SessionDeltaHarness extends MemoryManagerSyncOps {
-  protected readonly cfg = {} as OpenClawConfig;
+  protected readonly cfg = {} as NexisClawConfig;
   protected readonly agentId = "main";
-  protected readonly workspaceDir = "/tmp/openclaw-test-workspace";
+  protected readonly workspaceDir = "/tmp/NexisClaw-test-workspace";
   protected readonly settings = {
     sync: {
       sessions: {
@@ -108,7 +108,7 @@ describe("session archive delta bypass", () => {
   let tmpDir = "";
 
   beforeEach(async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-archive-delta-"));
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-archive-delta-"));
   });
 
   afterEach(async () => {

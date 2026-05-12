@@ -1,6 +1,6 @@
 import { type Context, complete } from "@earendil-works/pi-ai";
 import { Type } from "typebox";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import {
   classifyMediaReferenceSource,
   normalizeMediaReferenceSource,
@@ -39,7 +39,7 @@ import {
   createSandboxBridgeReadFile,
   discoverAuthStorage,
   discoverModels,
-  ensureOpenClawModelsJson,
+  ensureNexisClawModelsJson,
   resolveSandboxedBridgeMediaPath,
   runWithImageModelFallback,
   type AnyAgentTool,
@@ -79,7 +79,7 @@ export const PdfToolSchema = Type.Object({
 
 export { resolvePdfModelConfigForTool } from "./pdf-tool.model-config.js";
 
-function hasExplicitPdfToolModelConfig(config?: OpenClawConfig): boolean {
+function hasExplicitPdfToolModelConfig(config?: NexisClawConfig): boolean {
   return (
     hasToolModelConfig(coercePdfModelConfig(config)) ||
     hasToolModelConfig(coerceImageModelConfig(config))
@@ -135,7 +135,7 @@ type PdfSandboxConfig = {
 };
 
 async function runPdfPrompt(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   agentDir: string;
   workspaceDir?: string;
   pdfModelConfig: ImageModelConfig;
@@ -154,7 +154,7 @@ async function runPdfPrompt(params: {
   const effectiveCfg = applyImageModelConfigDefaults(params.cfg, params.pdfModelConfig);
 
   const modelsOptions = params.workspaceDir ? { workspaceDir: params.workspaceDir } : undefined;
-  await ensureOpenClawModelsJson(effectiveCfg, params.agentDir, modelsOptions);
+  await ensureNexisClawModelsJson(effectiveCfg, params.agentDir, modelsOptions);
   const authStorage = discoverAuthStorage(params.agentDir);
   const modelRegistry = discoverModels(authStorage, params.agentDir);
 
@@ -264,7 +264,7 @@ async function runPdfPrompt(params: {
 // ---------------------------------------------------------------------------
 
 export function createPdfTool(options?: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   agentDir?: string;
   authProfileStore?: AuthProfileStore;
   workspaceDir?: string;

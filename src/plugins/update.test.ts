@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { bundledPluginRootAt } from "openclaw/plugin-sdk/test-fixtures";
+import { bundledPluginRootAt } from "NexisClaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 import type { PluginNpmIntegrityDriftParams } from "./install.js";
 
 const APP_ROOT = "/app";
@@ -88,8 +88,8 @@ function createSuccessfulNpmUpdateResult(params?: {
 }) {
   return {
     ok: true,
-    pluginId: params?.pluginId ?? "opik-openclaw",
-    targetDir: params?.targetDir ?? "/tmp/opik-openclaw",
+    pluginId: params?.pluginId ?? "opik-NexisClaw",
+    targetDir: params?.targetDir ?? "/tmp/opik-NexisClaw",
     version: params?.version ?? "0.2.6",
     extensions: ["index.ts"],
     ...(params?.npmResolution ? { npmResolution: params.npmResolution } : {}),
@@ -105,7 +105,7 @@ function createSuccessfulClawHubUpdateResult(params?: {
   return {
     ok: true,
     pluginId: params?.pluginId ?? "legacy-chat",
-    targetDir: params?.targetDir ?? "/tmp/openclaw-plugins/legacy-chat",
+    targetDir: params?.targetDir ?? "/tmp/NexisClaw-plugins/legacy-chat",
     version: params?.version ?? "2026.5.1-beta.2",
     extensions: ["index.ts"],
     packageName: params?.clawhubPackage ?? "legacy-chat",
@@ -165,7 +165,7 @@ function createMarketplaceInstallConfig(params: {
   marketplaceSource: string;
   marketplacePlugin: string;
   marketplaceName?: string;
-}): OpenClawConfig {
+}): NexisClawConfig {
   return {
     plugins: {
       installs: {
@@ -189,7 +189,7 @@ function createClawHubInstallConfig(params: {
   clawhubFamily: "bundle-plugin" | "code-plugin";
   clawhubChannel: "community" | "official" | "private";
   spec?: string;
-}): OpenClawConfig {
+}): NexisClawConfig {
   return {
     plugins: {
       installs: {
@@ -212,7 +212,7 @@ function createGitInstallConfig(params: {
   spec: string;
   installPath: string;
   commit?: string;
-}): OpenClawConfig {
+}): NexisClawConfig {
   return {
     plugins: {
       installs: {
@@ -232,7 +232,7 @@ function createBundledPathInstallConfig(params: {
   installPath: string;
   sourcePath?: string;
   spec?: string;
-}): OpenClawConfig {
+}): NexisClawConfig {
   return {
     plugins: {
       load: { paths: params.loadPaths },
@@ -256,10 +256,10 @@ function createCodexAppServerInstallConfig(params: {
   return {
     plugins: {
       installs: {
-        "openclaw-codex-app-server": {
+        "NexisClaw-codex-app-server": {
           source: "npm" as const,
           spec: params.spec,
-          installPath: "/tmp/openclaw-codex-app-server",
+          installPath: "/tmp/NexisClaw-codex-app-server",
           ...(params.resolvedName ? { resolvedName: params.resolvedName } : {}),
           ...(params.resolvedSpec ? { resolvedSpec: params.resolvedSpec } : {}),
         },
@@ -273,7 +273,7 @@ function createInstalledPackageDir(params: {
   version: string;
   peerDependencies?: Record<string, string>;
 }): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-plugin-update-test-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-plugin-update-test-"));
   tempDirs.push(dir);
   fs.writeFileSync(
     path.join(dir, "package.json"),
@@ -290,8 +290,8 @@ function createInstalledPackageDir(params: {
   return dir;
 }
 
-function createOpenClawPeerLinkFixtures(plugins: Array<{ pluginId: string; packageName: string }>) {
-  const peerTarget = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-peer-target-"));
+function createNexisClawPeerLinkFixtures(plugins: Array<{ pluginId: string; packageName: string }>) {
+  const peerTarget = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-peer-target-"));
   tempDirs.push(peerTarget);
   const installPaths = Object.fromEntries(
     plugins.map(({ pluginId, packageName }) => [
@@ -299,12 +299,12 @@ function createOpenClawPeerLinkFixtures(plugins: Array<{ pluginId: string; packa
       createInstalledPackageDir({
         name: packageName,
         version: "2026.5.4",
-        peerDependencies: { openclaw: ">=2026.5.4" },
+        peerDependencies: { NexisClaw: ">=2026.5.4" },
       }),
     ]),
   );
   const peerLinkPath = (pluginId: string) =>
-    path.join(installPaths[pluginId], "node_modules", "openclaw");
+    path.join(installPaths[pluginId], "node_modules", "NexisClaw");
   const linkPeer = (pluginId: string) => {
     fs.mkdirSync(path.dirname(peerLinkPath(pluginId)), { recursive: true });
     fs.symlinkSync(peerTarget, peerLinkPath(pluginId), "junction");
@@ -396,7 +396,7 @@ function createBundledSource(params?: { pluginId?: string; localPath?: string; n
   return {
     pluginId,
     localPath: params?.localPath ?? appBundledPluginRoot(pluginId),
-    npmSpec: params?.npmSpec ?? `@openclaw/${pluginId}`,
+    npmSpec: params?.npmSpec ?? `@NexisClaw/${pluginId}`,
   };
 }
 
@@ -426,10 +426,10 @@ function expectCodexAppServerInstallState(params: {
   version: string;
   resolvedSpec?: string;
 }) {
-  const install = params.result.config.plugins?.installs?.["openclaw-codex-app-server"];
+  const install = params.result.config.plugins?.installs?.["NexisClaw-codex-app-server"];
   expect(install?.source).toBe("npm");
   expect(install?.spec).toBe(params.spec);
-  expect(install?.installPath).toBe("/tmp/openclaw-codex-app-server");
+  expect(install?.installPath).toBe("/tmp/NexisClaw-codex-app-server");
   expect(install?.version).toBe(params.version);
   if (params.resolvedSpec) {
     expect(install?.resolvedSpec).toBe(params.resolvedSpec);
@@ -458,52 +458,52 @@ describe("updateNpmInstalledPlugins", () => {
     {
       name: "skips integrity drift checks for unpinned npm specs during dry-run updates",
       config: createNpmInstallConfig({
-        pluginId: "opik-openclaw",
-        spec: "@opik/opik-openclaw",
+        pluginId: "opik-NexisClaw",
+        spec: "@opik/opik-NexisClaw",
         integrity: "sha512-old",
-        installPath: "/tmp/opik-openclaw",
+        installPath: "/tmp/opik-NexisClaw",
       }),
-      pluginIds: ["opik-openclaw"],
+      pluginIds: ["opik-NexisClaw"],
       dryRun: true,
       expectedCall: {
-        spec: "@opik/opik-openclaw",
+        spec: "@opik/opik-NexisClaw",
         expectedIntegrity: undefined,
       },
     },
     {
       name: "keeps integrity drift checks for exact-version npm specs during dry-run updates",
       config: createNpmInstallConfig({
-        pluginId: "opik-openclaw",
-        spec: "@opik/opik-openclaw@0.2.5",
+        pluginId: "opik-NexisClaw",
+        spec: "@opik/opik-NexisClaw@0.2.5",
         integrity: "sha512-old",
-        installPath: "/tmp/opik-openclaw",
+        installPath: "/tmp/opik-NexisClaw",
       }),
-      pluginIds: ["opik-openclaw"],
+      pluginIds: ["opik-NexisClaw"],
       dryRun: true,
       expectedCall: {
-        spec: "@opik/opik-openclaw@0.2.5",
+        spec: "@opik/opik-NexisClaw@0.2.5",
         expectedIntegrity: "sha512-old",
       },
     },
     {
       name: "skips recorded integrity checks when an explicit npm version override changes the spec",
       config: createNpmInstallConfig({
-        pluginId: "openclaw-codex-app-server",
-        spec: "openclaw-codex-app-server@0.2.0-beta.3",
+        pluginId: "NexisClaw-codex-app-server",
+        spec: "NexisClaw-codex-app-server@0.2.0-beta.3",
         integrity: "sha512-old",
-        installPath: "/tmp/openclaw-codex-app-server",
+        installPath: "/tmp/NexisClaw-codex-app-server",
       }),
-      pluginIds: ["openclaw-codex-app-server"],
+      pluginIds: ["NexisClaw-codex-app-server"],
       specOverrides: {
-        "openclaw-codex-app-server": "openclaw-codex-app-server@0.2.0-beta.4",
+        "NexisClaw-codex-app-server": "NexisClaw-codex-app-server@0.2.0-beta.4",
       },
       installerResult: createSuccessfulNpmUpdateResult({
-        pluginId: "openclaw-codex-app-server",
-        targetDir: "/tmp/openclaw-codex-app-server",
+        pluginId: "NexisClaw-codex-app-server",
+        targetDir: "/tmp/NexisClaw-codex-app-server",
         version: "0.2.0-beta.4",
       }),
       expectedCall: {
-        spec: "openclaw-codex-app-server@0.2.0-beta.4",
+        spec: "NexisClaw-codex-app-server@0.2.0-beta.4",
         expectedIntegrity: undefined,
       },
     },
@@ -566,11 +566,11 @@ describe("updateNpmInstalledPlugins", () => {
 
   it("trusts official catalog npm updates when the installed package matches the catalog", async () => {
     const installPath = createInstalledPackageDir({
-      name: "@openclaw/acpx",
+      name: "@NexisClaw/acpx",
       version: "2026.5.2-beta.1",
     });
     mockNpmViewMetadata({
-      name: "@openclaw/acpx",
+      name: "@NexisClaw/acpx",
       version: "2026.5.2-beta.2",
     });
     installPluginFromNpmSpecMock.mockResolvedValue(
@@ -584,27 +584,27 @@ describe("updateNpmInstalledPlugins", () => {
     await updateNpmInstalledPlugins({
       config: createNpmInstallConfig({
         pluginId: "acpx",
-        spec: "@openclaw/acpx",
+        spec: "@NexisClaw/acpx",
         installPath,
-        resolvedName: "@openclaw/acpx",
-        resolvedSpec: "@openclaw/acpx@2026.5.2-beta.1",
+        resolvedName: "@NexisClaw/acpx",
+        resolvedSpec: "@NexisClaw/acpx@2026.5.2-beta.1",
         resolvedVersion: "2026.5.2-beta.1",
       }),
       pluginIds: ["acpx"],
     });
 
-    expect(npmInstallCall()?.spec).toBe("@openclaw/acpx");
+    expect(npmInstallCall()?.spec).toBe("@NexisClaw/acpx");
     expect(npmInstallCall()?.expectedPluginId).toBe("acpx");
     expect(npmInstallCall()?.trustedSourceLinkedOfficialInstall).toBe(true);
   });
 
   it("does not skip trusted official default updates when latest resolves to the installed prerelease", async () => {
     const installPath = createInstalledPackageDir({
-      name: "@openclaw/acpx",
+      name: "@NexisClaw/acpx",
       version: "2026.5.2-beta.2",
     });
     mockNpmViewMetadata({
-      name: "@openclaw/acpx",
+      name: "@NexisClaw/acpx",
       version: "2026.5.2-beta.2",
       integrity: "sha512-beta",
       shasum: "beta",
@@ -615,9 +615,9 @@ describe("updateNpmInstalledPlugins", () => {
         targetDir: installPath,
         version: "2026.5.2",
         npmResolution: {
-          name: "@openclaw/acpx",
+          name: "@NexisClaw/acpx",
           version: "2026.5.2",
-          resolvedSpec: "@openclaw/acpx@2026.5.2",
+          resolvedSpec: "@NexisClaw/acpx@2026.5.2",
         },
       }),
     );
@@ -625,18 +625,18 @@ describe("updateNpmInstalledPlugins", () => {
     const result = await updateNpmInstalledPlugins({
       config: createNpmInstallConfig({
         pluginId: "acpx",
-        spec: "@openclaw/acpx",
+        spec: "@NexisClaw/acpx",
         installPath,
         integrity: "sha512-beta",
         shasum: "beta",
-        resolvedName: "@openclaw/acpx",
-        resolvedSpec: "@openclaw/acpx@2026.5.2-beta.2",
+        resolvedName: "@NexisClaw/acpx",
+        resolvedSpec: "@NexisClaw/acpx@2026.5.2-beta.2",
         resolvedVersion: "2026.5.2-beta.2",
       }),
       pluginIds: ["acpx"],
     });
 
-    expect(npmInstallCall()?.spec).toBe("@openclaw/acpx");
+    expect(npmInstallCall()?.spec).toBe("@NexisClaw/acpx");
     expect(npmInstallCall()?.expectedPluginId).toBe("acpx");
     expect(npmInstallCall()?.trustedSourceLinkedOfficialInstall).toBe(true);
     expect(result.outcomes[0]?.pluginId).toBe("acpx");
@@ -647,11 +647,11 @@ describe("updateNpmInstalledPlugins", () => {
 
   it("updates trusted official npm plugins when latest resolves to a stable correction release", async () => {
     const installPath = createInstalledPackageDir({
-      name: "@openclaw/acpx",
+      name: "@NexisClaw/acpx",
       version: "2026.5.3",
     });
     mockNpmViewMetadata({
-      name: "@openclaw/acpx",
+      name: "@NexisClaw/acpx",
       version: "2026.5.3-1",
       integrity: "sha512-correction",
       shasum: "correction",
@@ -662,9 +662,9 @@ describe("updateNpmInstalledPlugins", () => {
         targetDir: installPath,
         version: "2026.5.3-1",
         npmResolution: {
-          name: "@openclaw/acpx",
+          name: "@NexisClaw/acpx",
           version: "2026.5.3-1",
-          resolvedSpec: "@openclaw/acpx@2026.5.3-1",
+          resolvedSpec: "@NexisClaw/acpx@2026.5.3-1",
         },
       }),
     );
@@ -672,16 +672,16 @@ describe("updateNpmInstalledPlugins", () => {
     const result = await updateNpmInstalledPlugins({
       config: createNpmInstallConfig({
         pluginId: "acpx",
-        spec: "@openclaw/acpx",
+        spec: "@NexisClaw/acpx",
         installPath,
-        resolvedName: "@openclaw/acpx",
-        resolvedSpec: "@openclaw/acpx@2026.5.3",
+        resolvedName: "@NexisClaw/acpx",
+        resolvedSpec: "@NexisClaw/acpx@2026.5.3",
         resolvedVersion: "2026.5.3",
       }),
       pluginIds: ["acpx"],
     });
 
-    expect(npmInstallCall()?.spec).toBe("@openclaw/acpx");
+    expect(npmInstallCall()?.spec).toBe("@NexisClaw/acpx");
     expect(npmInstallCall()?.expectedPluginId).toBe("acpx");
     expect(npmInstallCall()?.trustedSourceLinkedOfficialInstall).toBe(true);
     expect(result.outcomes[0]?.pluginId).toBe("acpx");
@@ -734,7 +734,7 @@ describe("updateNpmInstalledPlugins", () => {
       shasum: "same",
     });
     installPluginFromNpmSpecMock.mockRejectedValue(new Error("installer should not run"));
-    const config: OpenClawConfig = {
+    const config: NexisClawConfig = {
       plugins: {
         installs: {
           "lossless-claw": {
@@ -783,14 +783,14 @@ describe("updateNpmInstalledPlugins", () => {
     ]);
   });
 
-  it("repairs missing openclaw peer links before skipping unchanged npm plugins", async () => {
+  it("repairs missing NexisClaw peer links before skipping unchanged npm plugins", async () => {
     const installPath = createInstalledPackageDir({
-      name: "@openclaw/codex",
+      name: "@NexisClaw/codex",
       version: "2026.5.3",
-      peerDependencies: { openclaw: ">=2026.5.3" },
+      peerDependencies: { NexisClaw: ">=2026.5.3" },
     });
     mockNpmViewMetadata({
-      name: "@openclaw/codex",
+      name: "@NexisClaw/codex",
       version: "2026.5.3",
       integrity: "sha512-same",
       shasum: "same",
@@ -801,22 +801,22 @@ describe("updateNpmInstalledPlugins", () => {
         targetDir: installPath,
         version: "2026.5.3",
         npmResolution: {
-          name: "@openclaw/codex",
+          name: "@NexisClaw/codex",
           version: "2026.5.3",
-          resolvedSpec: "@openclaw/codex@2026.5.3",
+          resolvedSpec: "@NexisClaw/codex@2026.5.3",
         },
       }),
     );
-    const config: OpenClawConfig = {
+    const config: NexisClawConfig = {
       plugins: {
         installs: {
           codex: {
             source: "npm",
-            spec: "@openclaw/codex",
+            spec: "@NexisClaw/codex",
             installPath,
-            resolvedName: "@openclaw/codex",
+            resolvedName: "@NexisClaw/codex",
             resolvedVersion: "2026.5.3",
-            resolvedSpec: "@openclaw/codex@2026.5.3",
+            resolvedSpec: "@NexisClaw/codex@2026.5.3",
             integrity: "sha512-same",
             shasum: "same",
           },
@@ -829,7 +829,7 @@ describe("updateNpmInstalledPlugins", () => {
       pluginIds: ["codex"],
     });
 
-    expect(npmInstallCall()?.spec).toBe("@openclaw/codex");
+    expect(npmInstallCall()?.spec).toBe("@NexisClaw/codex");
     expect(npmInstallCall()?.mode).toBe("update");
     expect(npmInstallCall()?.expectedPluginId).toBe("codex");
     expect(result.changed).toBe(true);
@@ -844,15 +844,15 @@ describe("updateNpmInstalledPlugins", () => {
     ]);
   });
 
-  it("skips unchanged npm plugins when the openclaw peer link already resolves", async () => {
+  it("skips unchanged npm plugins when the NexisClaw peer link already resolves", async () => {
     const installPath = createInstalledPackageDir({
-      name: "@openclaw/codex",
+      name: "@NexisClaw/codex",
       version: "2026.5.3",
-      peerDependencies: { openclaw: ">=2026.5.3" },
+      peerDependencies: { NexisClaw: ">=2026.5.3" },
     });
-    fs.mkdirSync(path.join(installPath, "node_modules", "openclaw"), { recursive: true });
+    fs.mkdirSync(path.join(installPath, "node_modules", "NexisClaw"), { recursive: true });
     mockNpmViewMetadata({
-      name: "@openclaw/codex",
+      name: "@NexisClaw/codex",
       version: "2026.5.3",
       integrity: "sha512-same",
       shasum: "same",
@@ -865,11 +865,11 @@ describe("updateNpmInstalledPlugins", () => {
           installs: {
             codex: {
               source: "npm",
-              spec: "@openclaw/codex",
+              spec: "@NexisClaw/codex",
               installPath,
-              resolvedName: "@openclaw/codex",
+              resolvedName: "@NexisClaw/codex",
               resolvedVersion: "2026.5.3",
-              resolvedSpec: "@openclaw/codex@2026.5.3",
+              resolvedSpec: "@NexisClaw/codex@2026.5.3",
               integrity: "sha512-same",
               shasum: "same",
             },
@@ -892,13 +892,13 @@ describe("updateNpmInstalledPlugins", () => {
     ]);
   });
 
-  it("repairs openclaw peer links after batch npm updates prune earlier plugin links", async () => {
+  it("repairs NexisClaw peer links after batch npm updates prune earlier plugin links", async () => {
     const plugins = [
-      { pluginId: "brave", packageName: "@openclaw/brave-plugin" },
-      { pluginId: "codex", packageName: "@openclaw/codex" },
-      { pluginId: "discord", packageName: "@openclaw/discord" },
+      { pluginId: "brave", packageName: "@NexisClaw/brave-plugin" },
+      { pluginId: "codex", packageName: "@NexisClaw/codex" },
+      { pluginId: "discord", packageName: "@NexisClaw/discord" },
     ];
-    const { installPaths, peerLinkPath, linkPeer } = createOpenClawPeerLinkFixtures(plugins);
+    const { installPaths, peerLinkPath, linkPeer } = createNexisClawPeerLinkFixtures(plugins);
     for (const { packageName } of plugins) {
       mockNpmViewMetadata({
         name: packageName,
@@ -968,17 +968,17 @@ describe("updateNpmInstalledPlugins", () => {
     );
   });
 
-  it("repairs sibling openclaw peer links after a targeted npm update prunes the shared install tree", async () => {
+  it("repairs sibling NexisClaw peer links after a targeted npm update prunes the shared install tree", async () => {
     const plugins = [
-      { pluginId: "brave", packageName: "@openclaw/brave-plugin" },
-      { pluginId: "codex", packageName: "@openclaw/codex" },
-      { pluginId: "discord", packageName: "@openclaw/discord" },
+      { pluginId: "brave", packageName: "@NexisClaw/brave-plugin" },
+      { pluginId: "codex", packageName: "@NexisClaw/codex" },
+      { pluginId: "discord", packageName: "@NexisClaw/discord" },
     ];
-    const { installPaths, peerLinkPath, linkPeer } = createOpenClawPeerLinkFixtures(plugins);
+    const { installPaths, peerLinkPath, linkPeer } = createNexisClawPeerLinkFixtures(plugins);
     linkPeer("brave");
     linkPeer("discord");
     mockNpmViewMetadata({
-      name: "@openclaw/codex",
+      name: "@NexisClaw/codex",
       version: "2026.5.4",
       integrity: "sha512-same",
       shasum: "same",
@@ -994,9 +994,9 @@ describe("updateNpmInstalledPlugins", () => {
           targetDir: installPaths.codex,
           version: "2026.5.4",
           npmResolution: {
-            name: "@openclaw/codex",
+            name: "@NexisClaw/codex",
             version: "2026.5.4",
-            resolvedSpec: "@openclaw/codex@2026.5.4",
+            resolvedSpec: "@NexisClaw/codex@2026.5.4",
           },
         }),
       );
@@ -1031,21 +1031,21 @@ describe("updateNpmInstalledPlugins", () => {
     }
   });
 
-  it("continues repairing sibling openclaw peer links after one recorded npm install cannot be relinked", async () => {
+  it("continues repairing sibling NexisClaw peer links after one recorded npm install cannot be relinked", async () => {
     const plugins = [
-      { pluginId: "brave", packageName: "@openclaw/brave-plugin" },
-      { pluginId: "codex", packageName: "@openclaw/codex" },
+      { pluginId: "brave", packageName: "@NexisClaw/brave-plugin" },
+      { pluginId: "codex", packageName: "@NexisClaw/codex" },
     ];
-    const { installPaths, peerLinkPath, linkPeer } = createOpenClawPeerLinkFixtures(plugins);
+    const { installPaths, peerLinkPath, linkPeer } = createNexisClawPeerLinkFixtures(plugins);
     const brokenInstallPath = createInstalledPackageDir({
-      name: "@openclaw/broken-plugin",
+      name: "@NexisClaw/broken-plugin",
       version: "2026.5.4",
-      peerDependencies: { openclaw: ">=2026.5.4" },
+      peerDependencies: { NexisClaw: ">=2026.5.4" },
     });
     fs.writeFileSync(path.join(brokenInstallPath, "node_modules"), "not a directory");
     linkPeer("brave");
     mockNpmViewMetadata({
-      name: "@openclaw/codex",
+      name: "@NexisClaw/codex",
       version: "2026.5.4",
       integrity: "sha512-same",
       shasum: "same",
@@ -1061,9 +1061,9 @@ describe("updateNpmInstalledPlugins", () => {
           targetDir: installPaths.codex,
           version: "2026.5.4",
           npmResolution: {
-            name: "@openclaw/codex",
+            name: "@NexisClaw/codex",
             version: "2026.5.4",
-            resolvedSpec: "@openclaw/codex@2026.5.4",
+            resolvedSpec: "@NexisClaw/codex@2026.5.4",
           },
         }),
       );
@@ -1076,11 +1076,11 @@ describe("updateNpmInstalledPlugins", () => {
           installs: {
             broken: {
               source: "npm",
-              spec: "@openclaw/broken-plugin",
+              spec: "@NexisClaw/broken-plugin",
               installPath: brokenInstallPath,
-              resolvedName: "@openclaw/broken-plugin",
+              resolvedName: "@NexisClaw/broken-plugin",
               resolvedVersion: "2026.5.4",
-              resolvedSpec: "@openclaw/broken-plugin@2026.5.4",
+              resolvedSpec: "@NexisClaw/broken-plugin@2026.5.4",
             },
             ...Object.fromEntries(
               plugins.map(({ pluginId, packageName }) => [
@@ -1108,7 +1108,7 @@ describe("updateNpmInstalledPlugins", () => {
     expect(fs.existsSync(peerLinkPath("brave"))).toBe(true);
     expect(fs.existsSync(peerLinkPath("codex"))).toBe(true);
     expect(warnMessages).toEqual([
-      `Could not repair openclaw peer link for "broken" at ${brokenInstallPath}: Skipping openclaw peerDependency link because ${path.join(brokenInstallPath, "node_modules")} is not a real directory.`,
+      `Could not repair NexisClaw peer link for "broken" at ${brokenInstallPath}: Skipping NexisClaw peerDependency link because ${path.join(brokenInstallPath, "node_modules")} is not a real directory.`,
     ]);
   });
 
@@ -1162,9 +1162,9 @@ describe("updateNpmInstalledPlugins", () => {
   });
 
   it("expands home-relative install paths before checking installed npm versions", async () => {
-    const home = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-plugin-update-home-"));
+    const home = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-plugin-update-home-"));
     tempDirs.push(home);
-    const installPath = path.join(home, ".openclaw", "extensions", "lossless-claw");
+    const installPath = path.join(home, ".NexisClaw", "extensions", "lossless-claw");
     fs.mkdirSync(installPath, { recursive: true });
     fs.writeFileSync(
       path.join(installPath, "package.json"),
@@ -1183,7 +1183,7 @@ describe("updateNpmInstalledPlugins", () => {
       config: createNpmInstallConfig({
         pluginId: "lossless-claw",
         spec: "@martian-engineering/lossless-claw",
-        installPath: "~/.openclaw/extensions/lossless-claw",
+        installPath: "~/.NexisClaw/extensions/lossless-claw",
         resolvedName: "@martian-engineering/lossless-claw",
         resolvedVersion: "0.9.0",
         resolvedSpec: "@martian-engineering/lossless-claw@0.9.0",
@@ -1310,7 +1310,7 @@ describe("updateNpmInstalledPlugins", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies NexisClawConfig,
     },
     {
       source: "ClawHub",
@@ -1334,7 +1334,7 @@ describe("updateNpmInstalledPlugins", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies NexisClawConfig,
     },
     {
       source: "marketplace",
@@ -1355,7 +1355,7 @@ describe("updateNpmInstalledPlugins", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies NexisClawConfig,
     },
   ])("skips disabled $source installs before update network calls", async ({ config }) => {
     installPluginFromNpmSpecMock.mockRejectedValue(new Error("npm installer should not run"));
@@ -1391,11 +1391,11 @@ describe("updateNpmInstalledPlugins", () => {
 
   it("updates disabled trusted official npm installs from the channel spec when requested", async () => {
     const installPath = createInstalledPackageDir({
-      name: "@openclaw/codex",
+      name: "@NexisClaw/codex",
       version: "2026.5.3",
     });
     mockNpmViewMetadata({
-      name: "@openclaw/codex",
+      name: "@NexisClaw/codex",
       version: "2026.5.4",
       integrity: "sha512-next",
       shasum: "next",
@@ -1406,9 +1406,9 @@ describe("updateNpmInstalledPlugins", () => {
         targetDir: installPath,
         version: "2026.5.4",
         npmResolution: {
-          name: "@openclaw/codex",
+          name: "@NexisClaw/codex",
           version: "2026.5.4",
-          resolvedSpec: "@openclaw/codex@2026.5.4",
+          resolvedSpec: "@NexisClaw/codex@2026.5.4",
         },
       }),
     );
@@ -1425,7 +1425,7 @@ describe("updateNpmInstalledPlugins", () => {
           installs: {
             codex: {
               source: "npm",
-              spec: "@openclaw/codex@2026.5.3",
+              spec: "@NexisClaw/codex@2026.5.3",
               installPath,
             },
           },
@@ -1435,7 +1435,7 @@ describe("updateNpmInstalledPlugins", () => {
       syncOfficialPluginInstalls: true,
     });
 
-    expect(npmInstallCall()?.spec).toBe("@openclaw/codex");
+    expect(npmInstallCall()?.spec).toBe("@NexisClaw/codex");
     expect(npmInstallCall()?.expectedPluginId).toBe("codex");
     expect(npmInstallCall()?.trustedSourceLinkedOfficialInstall).toBe(true);
     expect(result.changed).toBe(true);
@@ -1445,11 +1445,11 @@ describe("updateNpmInstalledPlugins", () => {
     });
     expectRecordFields(result.config.plugins?.installs?.codex, {
       source: "npm",
-      spec: "@openclaw/codex",
+      spec: "@NexisClaw/codex",
       version: "2026.5.4",
-      resolvedName: "@openclaw/codex",
+      resolvedName: "@NexisClaw/codex",
       resolvedVersion: "2026.5.4",
-      resolvedSpec: "@openclaw/codex@2026.5.4",
+      resolvedSpec: "@NexisClaw/codex@2026.5.4",
     });
     expectRecordFields(result.outcomes[0], {
       pluginId: "codex",
@@ -1555,7 +1555,7 @@ describe("updateNpmInstalledPlugins", () => {
         pluginId: "diagnostics-otel",
         targetDir: "/tmp/diagnostics-otel",
         version: "2026.5.4",
-        clawhubPackage: "@openclaw/diagnostics-otel",
+        clawhubPackage: "@NexisClaw/diagnostics-otel",
       }),
     );
 
@@ -1563,10 +1563,10 @@ describe("updateNpmInstalledPlugins", () => {
       pluginId: "diagnostics-otel",
       installPath: "/tmp/diagnostics-otel",
       clawhubUrl: "https://clawhub.ai",
-      clawhubPackage: "@openclaw/diagnostics-otel",
+      clawhubPackage: "@NexisClaw/diagnostics-otel",
       clawhubFamily: "code-plugin",
       clawhubChannel: "official",
-      spec: "clawhub:@openclaw/diagnostics-otel@2026.5.3",
+      spec: "clawhub:@NexisClaw/diagnostics-otel@2026.5.3",
     });
     const result = await updateNpmInstalledPlugins({
       config: {
@@ -1585,13 +1585,13 @@ describe("updateNpmInstalledPlugins", () => {
       syncOfficialPluginInstalls: true,
     });
 
-    expect(clawHubInstallCall()?.spec).toBe("clawhub:@openclaw/diagnostics-otel");
+    expect(clawHubInstallCall()?.spec).toBe("clawhub:@NexisClaw/diagnostics-otel");
     expect(clawHubInstallCall()?.expectedPluginId).toBe("diagnostics-otel");
     expectRecordFields(result.config.plugins?.installs?.["diagnostics-otel"], {
       source: "clawhub",
-      spec: "clawhub:@openclaw/diagnostics-otel",
+      spec: "clawhub:@NexisClaw/diagnostics-otel",
       version: "2026.5.4",
-      clawhubPackage: "@openclaw/diagnostics-otel",
+      clawhubPackage: "@NexisClaw/diagnostics-otel",
       clawhubChannel: "official",
     });
     expect(result.config.plugins?.entries?.["diagnostics-otel"]).toEqual({
@@ -1606,7 +1606,7 @@ describe("updateNpmInstalledPlugins", () => {
         pluginId: "diagnostics-prometheus",
         targetDir: "/tmp/diagnostics-prometheus",
         version: "2026.5.4",
-        clawhubPackage: "@openclaw/diagnostics-prometheus",
+        clawhubPackage: "@NexisClaw/diagnostics-prometheus",
       }),
     );
 
@@ -1616,7 +1616,7 @@ describe("updateNpmInstalledPlugins", () => {
           installs: {
             "diagnostics-prometheus": {
               source: "clawhub",
-              spec: "clawhub:@openclaw/diagnostics-prometheus@2026.5.3",
+              spec: "clawhub:@NexisClaw/diagnostics-prometheus@2026.5.3",
               installPath: "/tmp/diagnostics-prometheus",
             },
           },
@@ -1625,13 +1625,13 @@ describe("updateNpmInstalledPlugins", () => {
       syncOfficialPluginInstalls: true,
     });
 
-    expect(clawHubInstallCall()?.spec).toBe("clawhub:@openclaw/diagnostics-prometheus");
+    expect(clawHubInstallCall()?.spec).toBe("clawhub:@NexisClaw/diagnostics-prometheus");
     expect(clawHubInstallCall()?.expectedPluginId).toBe("diagnostics-prometheus");
     expectRecordFields(result.config.plugins?.installs?.["diagnostics-prometheus"], {
       source: "clawhub",
-      spec: "clawhub:@openclaw/diagnostics-prometheus",
+      spec: "clawhub:@NexisClaw/diagnostics-prometheus",
       version: "2026.5.4",
-      clawhubPackage: "@openclaw/diagnostics-prometheus",
+      clawhubPackage: "@NexisClaw/diagnostics-prometheus",
       clawhubChannel: "official",
     });
   });
@@ -1656,7 +1656,7 @@ describe("updateNpmInstalledPlugins", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NexisClawConfig;
 
     const result = await updateNpmInstalledPlugins({
       config,
@@ -1700,7 +1700,7 @@ describe("updateNpmInstalledPlugins", () => {
           },
         },
       },
-    } satisfies OpenClawConfig;
+    } satisfies NexisClawConfig;
 
     const result = await updateNpmInstalledPlugins({
       config,
@@ -1712,7 +1712,7 @@ describe("updateNpmInstalledPlugins", () => {
     expect(npmInstallCall()?.spec).toBe("@acme/demo");
     expect(npmInstallCall()?.expectedPluginId).toBe("demo");
     const message =
-      'Disabled "demo" after plugin update failure; OpenClaw will continue without it. Failed to update demo: registry timeout';
+      'Disabled "demo" after plugin update failure; NexisClaw will continue without it. Failed to update demo: registry timeout';
     expect(warn).toHaveBeenCalledWith(message);
     expect(result.changed).toBe(true);
     expect(result.config.plugins?.entries?.demo).toEqual({
@@ -1742,14 +1742,14 @@ describe("updateNpmInstalledPlugins", () => {
           actualIntegrity: "sha512-new",
           resolution: {
             integrity: "sha512-new",
-            resolvedSpec: "@opik/opik-openclaw@0.2.5",
+            resolvedSpec: "@opik/opik-NexisClaw@0.2.5",
             version: "0.2.5",
           },
         });
         if (proceed === false) {
           return {
             ok: false,
-            error: "aborted: npm package integrity drift detected for @opik/opik-openclaw@0.2.5",
+            error: "aborted: npm package integrity drift detected for @opik/opik-NexisClaw@0.2.5",
           };
         }
         return createSuccessfulNpmUpdateResult();
@@ -1757,28 +1757,28 @@ describe("updateNpmInstalledPlugins", () => {
     );
 
     const config = createNpmInstallConfig({
-      pluginId: "opik-openclaw",
-      spec: "@opik/opik-openclaw@0.2.5",
+      pluginId: "opik-NexisClaw",
+      spec: "@opik/opik-NexisClaw@0.2.5",
       integrity: "sha512-old",
-      installPath: "/tmp/opik-openclaw",
+      installPath: "/tmp/opik-NexisClaw",
     });
     const result = await updateNpmInstalledPlugins({
       config,
-      pluginIds: ["opik-openclaw"],
+      pluginIds: ["opik-NexisClaw"],
       logger: { warn },
     });
 
     expect(warn).toHaveBeenCalledWith(
-      'Integrity drift for "opik-openclaw" (@opik/opik-openclaw@0.2.5): expected sha512-old, got sha512-new',
+      'Integrity drift for "opik-NexisClaw" (@opik/opik-NexisClaw@0.2.5): expected sha512-old, got sha512-new',
     );
     expect(result.changed).toBe(false);
     expect(result.config).toBe(config);
     expect(result.outcomes).toEqual([
       {
-        pluginId: "opik-openclaw",
+        pluginId: "opik-NexisClaw",
         status: "error",
         message:
-          "Failed to update opik-openclaw: aborted: npm package integrity drift detected for @opik/opik-openclaw@0.2.5",
+          "Failed to update opik-NexisClaw: aborted: npm package integrity drift detected for @opik/opik-NexisClaw@0.2.5",
       },
     ]);
   });
@@ -1789,15 +1789,15 @@ describe("updateNpmInstalledPlugins", () => {
       installerResult: {
         ok: false,
         code: "npm_package_not_found",
-        error: "Package not found on npm: @openclaw/missing.",
+        error: "Package not found on npm: @NexisClaw/missing.",
       },
       config: createNpmInstallConfig({
         pluginId: "missing",
-        spec: "@openclaw/missing",
+        spec: "@NexisClaw/missing",
         installPath: "/tmp/missing",
       }),
       pluginId: "missing",
-      expectedMessage: "Failed to check missing: npm package not found for @openclaw/missing.",
+      expectedMessage: "Failed to check missing: npm package not found for @NexisClaw/missing.",
     },
     {
       name: "falls back to raw installer error for unknown error codes",
@@ -1837,42 +1837,42 @@ describe("updateNpmInstalledPlugins", () => {
       name: "reuses a recorded npm dist-tag spec for id-based updates",
       installerResult: {
         ok: true,
-        pluginId: "openclaw-codex-app-server",
-        targetDir: "/tmp/openclaw-codex-app-server",
+        pluginId: "NexisClaw-codex-app-server",
+        targetDir: "/tmp/NexisClaw-codex-app-server",
         version: "0.2.0-beta.4",
         extensions: ["index.ts"],
       },
       config: createCodexAppServerInstallConfig({
-        spec: "openclaw-codex-app-server@beta",
-        resolvedName: "openclaw-codex-app-server",
-        resolvedSpec: "openclaw-codex-app-server@0.2.0-beta.3",
+        spec: "NexisClaw-codex-app-server@beta",
+        resolvedName: "NexisClaw-codex-app-server",
+        resolvedSpec: "NexisClaw-codex-app-server@0.2.0-beta.3",
       }),
-      expectedSpec: "openclaw-codex-app-server@beta",
+      expectedSpec: "NexisClaw-codex-app-server@beta",
       expectedVersion: "0.2.0-beta.4",
     },
     {
       name: "uses and persists an explicit npm spec override during updates",
       installerResult: {
         ok: true,
-        pluginId: "openclaw-codex-app-server",
-        targetDir: "/tmp/openclaw-codex-app-server",
+        pluginId: "NexisClaw-codex-app-server",
+        targetDir: "/tmp/NexisClaw-codex-app-server",
         version: "0.2.0-beta.4",
         extensions: ["index.ts"],
         npmResolution: {
-          name: "openclaw-codex-app-server",
+          name: "NexisClaw-codex-app-server",
           version: "0.2.0-beta.4",
-          resolvedSpec: "openclaw-codex-app-server@0.2.0-beta.4",
+          resolvedSpec: "NexisClaw-codex-app-server@0.2.0-beta.4",
         },
       },
       config: createCodexAppServerInstallConfig({
-        spec: "openclaw-codex-app-server",
+        spec: "NexisClaw-codex-app-server",
       }),
       specOverrides: {
-        "openclaw-codex-app-server": "openclaw-codex-app-server@beta",
+        "NexisClaw-codex-app-server": "NexisClaw-codex-app-server@beta",
       },
-      expectedSpec: "openclaw-codex-app-server@beta",
+      expectedSpec: "NexisClaw-codex-app-server@beta",
       expectedVersion: "0.2.0-beta.4",
-      expectedResolvedSpec: "openclaw-codex-app-server@0.2.0-beta.4",
+      expectedResolvedSpec: "NexisClaw-codex-app-server@0.2.0-beta.4",
     },
   ] as const)(
     "$name",
@@ -1888,13 +1888,13 @@ describe("updateNpmInstalledPlugins", () => {
 
       const result = await updateNpmInstalledPlugins({
         config,
-        pluginIds: ["openclaw-codex-app-server"],
+        pluginIds: ["NexisClaw-codex-app-server"],
         ...(specOverrides ? { specOverrides } : {}),
       });
 
       expectNpmUpdateCall({
         spec: expectedSpec,
-        expectedPluginId: "openclaw-codex-app-server",
+        expectedPluginId: "NexisClaw-codex-app-server",
       });
       expectCodexAppServerInstallState({
         result,
@@ -1908,34 +1908,34 @@ describe("updateNpmInstalledPlugins", () => {
   it("tries npm beta for default npm specs on beta channel without persisting the beta tag", async () => {
     installPluginFromNpmSpecMock.mockResolvedValue(
       createSuccessfulNpmUpdateResult({
-        pluginId: "openclaw-codex-app-server",
-        targetDir: "/tmp/openclaw-codex-app-server",
+        pluginId: "NexisClaw-codex-app-server",
+        targetDir: "/tmp/NexisClaw-codex-app-server",
         version: "0.2.0-beta.4",
         npmResolution: {
-          name: "openclaw-codex-app-server",
+          name: "NexisClaw-codex-app-server",
           version: "0.2.0-beta.4",
-          resolvedSpec: "openclaw-codex-app-server@0.2.0-beta.4",
+          resolvedSpec: "NexisClaw-codex-app-server@0.2.0-beta.4",
         },
       }),
     );
 
     const result = await updateNpmInstalledPlugins({
       config: createCodexAppServerInstallConfig({
-        spec: "openclaw-codex-app-server",
+        spec: "NexisClaw-codex-app-server",
       }),
-      pluginIds: ["openclaw-codex-app-server"],
+      pluginIds: ["NexisClaw-codex-app-server"],
       updateChannel: "beta",
     });
 
     expectNpmUpdateCall({
-      spec: "openclaw-codex-app-server@beta",
-      expectedPluginId: "openclaw-codex-app-server",
+      spec: "NexisClaw-codex-app-server@beta",
+      expectedPluginId: "NexisClaw-codex-app-server",
     });
     expectCodexAppServerInstallState({
       result,
-      spec: "openclaw-codex-app-server",
+      spec: "NexisClaw-codex-app-server",
       version: "0.2.0-beta.4",
-      resolvedSpec: "openclaw-codex-app-server@0.2.0-beta.4",
+      resolvedSpec: "NexisClaw-codex-app-server@0.2.0-beta.4",
     });
   });
 
@@ -1944,17 +1944,17 @@ describe("updateNpmInstalledPlugins", () => {
       .mockResolvedValueOnce({
         ok: false,
         error:
-          "npm ERR! code ETARGET\nnpm ERR! No matching version found for openclaw-codex-app-server@beta.",
+          "npm ERR! code ETARGET\nnpm ERR! No matching version found for NexisClaw-codex-app-server@beta.",
       })
       .mockResolvedValueOnce(
         createSuccessfulNpmUpdateResult({
-          pluginId: "openclaw-codex-app-server",
-          targetDir: "/tmp/openclaw-codex-app-server",
+          pluginId: "NexisClaw-codex-app-server",
+          targetDir: "/tmp/NexisClaw-codex-app-server",
           version: "0.2.6",
           npmResolution: {
-            name: "openclaw-codex-app-server",
+            name: "NexisClaw-codex-app-server",
             version: "0.2.6",
-            resolvedSpec: "openclaw-codex-app-server@0.2.6",
+            resolvedSpec: "NexisClaw-codex-app-server@0.2.6",
           },
         }),
       );
@@ -1962,26 +1962,26 @@ describe("updateNpmInstalledPlugins", () => {
     const warnMessages: string[] = [];
     const result = await updateNpmInstalledPlugins({
       config: createCodexAppServerInstallConfig({
-        spec: "openclaw-codex-app-server",
+        spec: "NexisClaw-codex-app-server",
       }),
-      pluginIds: ["openclaw-codex-app-server"],
+      pluginIds: ["NexisClaw-codex-app-server"],
       updateChannel: "beta",
       logger: { warn: (msg) => warnMessages.push(msg) },
     });
 
-    expect(npmInstallCall(0)?.spec).toBe("openclaw-codex-app-server@beta");
-    expect(npmInstallCall(1)?.spec).toBe("openclaw-codex-app-server");
+    expect(npmInstallCall(0)?.spec).toBe("NexisClaw-codex-app-server@beta");
+    expect(npmInstallCall(1)?.spec).toBe("NexisClaw-codex-app-server");
     expect(warnMessages).toEqual([
-      'Plugin "openclaw-codex-app-server" has no beta npm release for openclaw-codex-app-server@beta; using openclaw-codex-app-server instead. Core update can still complete.',
+      'Plugin "NexisClaw-codex-app-server" has no beta npm release for NexisClaw-codex-app-server@beta; using NexisClaw-codex-app-server instead. Core update can still complete.',
     ]);
     expectCodexAppServerInstallState({
       result,
-      spec: "openclaw-codex-app-server",
+      spec: "NexisClaw-codex-app-server",
       version: "0.2.6",
-      resolvedSpec: "openclaw-codex-app-server@0.2.6",
+      resolvedSpec: "NexisClaw-codex-app-server@0.2.6",
     });
     expect(result.outcomes[0]?.message).toBe(
-      "Updated openclaw-codex-app-server: unknown -> 0.2.6. (warning: beta channel fallback used openclaw-codex-app-server because openclaw-codex-app-server@beta could not be used).",
+      "Updated NexisClaw-codex-app-server: unknown -> 0.2.6. (warning: beta channel fallback used NexisClaw-codex-app-server because NexisClaw-codex-app-server@beta could not be used).",
     );
   });
 
@@ -1993,13 +1993,13 @@ describe("updateNpmInstalledPlugins", () => {
       })
       .mockResolvedValueOnce(
         createSuccessfulNpmUpdateResult({
-          pluginId: "openclaw-codex-app-server",
-          targetDir: "/tmp/openclaw-codex-app-server",
+          pluginId: "NexisClaw-codex-app-server",
+          targetDir: "/tmp/NexisClaw-codex-app-server",
           version: "0.2.6",
           npmResolution: {
-            name: "openclaw-codex-app-server",
+            name: "NexisClaw-codex-app-server",
             version: "0.2.6",
-            resolvedSpec: "openclaw-codex-app-server@0.2.6",
+            resolvedSpec: "NexisClaw-codex-app-server@0.2.6",
           },
         }),
       );
@@ -2007,26 +2007,26 @@ describe("updateNpmInstalledPlugins", () => {
     const warnMessages: string[] = [];
     const result = await updateNpmInstalledPlugins({
       config: createCodexAppServerInstallConfig({
-        spec: "openclaw-codex-app-server",
+        spec: "NexisClaw-codex-app-server",
       }),
-      pluginIds: ["openclaw-codex-app-server"],
+      pluginIds: ["NexisClaw-codex-app-server"],
       updateChannel: "beta",
       logger: { warn: (msg) => warnMessages.push(msg) },
     });
 
-    expect(npmInstallCall(0)?.spec).toBe("openclaw-codex-app-server@beta");
-    expect(npmInstallCall(1)?.spec).toBe("openclaw-codex-app-server");
+    expect(npmInstallCall(0)?.spec).toBe("NexisClaw-codex-app-server@beta");
+    expect(npmInstallCall(1)?.spec).toBe("NexisClaw-codex-app-server");
     expect(warnMessages).toEqual([
-      'Plugin "openclaw-codex-app-server" failed beta npm update for openclaw-codex-app-server@beta; using openclaw-codex-app-server instead. Core update can still complete.',
+      'Plugin "NexisClaw-codex-app-server" failed beta npm update for NexisClaw-codex-app-server@beta; using NexisClaw-codex-app-server instead. Core update can still complete.',
     ]);
     expectCodexAppServerInstallState({
       result,
-      spec: "openclaw-codex-app-server",
+      spec: "NexisClaw-codex-app-server",
       version: "0.2.6",
-      resolvedSpec: "openclaw-codex-app-server@0.2.6",
+      resolvedSpec: "NexisClaw-codex-app-server@0.2.6",
     });
     expect(result.outcomes[0]?.message).toBe(
-      "Updated openclaw-codex-app-server: unknown -> 0.2.6. (warning: beta channel fallback used openclaw-codex-app-server because openclaw-codex-app-server@beta could not be used).",
+      "Updated NexisClaw-codex-app-server: unknown -> 0.2.6. (warning: beta channel fallback used NexisClaw-codex-app-server because NexisClaw-codex-app-server@beta could not be used).",
     );
   });
 
@@ -2044,19 +2044,19 @@ describe("updateNpmInstalledPlugins", () => {
 
     const result = await updateNpmInstalledPlugins({
       config: createCodexAppServerInstallConfig({
-        spec: "openclaw-codex-app-server",
+        spec: "NexisClaw-codex-app-server",
       }),
-      pluginIds: ["openclaw-codex-app-server"],
+      pluginIds: ["NexisClaw-codex-app-server"],
       updateChannel: "beta",
     });
 
     expect(installPluginFromNpmSpecMock).toHaveBeenCalledTimes(2);
     expect(result.outcomes).toEqual([
       {
-        pluginId: "openclaw-codex-app-server",
+        pluginId: "NexisClaw-codex-app-server",
         status: "error",
         message:
-          "Failed to update openclaw-codex-app-server: npm package not found for openclaw-codex-app-server.",
+          "Failed to update NexisClaw-codex-app-server: npm package not found for NexisClaw-codex-app-server.",
       },
     ]);
   });
@@ -2064,24 +2064,24 @@ describe("updateNpmInstalledPlugins", () => {
   it("preserves explicit npm tags when updating on the beta channel", async () => {
     installPluginFromNpmSpecMock.mockResolvedValue(
       createSuccessfulNpmUpdateResult({
-        pluginId: "openclaw-codex-app-server",
-        targetDir: "/tmp/openclaw-codex-app-server",
+        pluginId: "NexisClaw-codex-app-server",
+        targetDir: "/tmp/NexisClaw-codex-app-server",
         version: "0.2.0-rc.1",
       }),
     );
 
     await updateNpmInstalledPlugins({
       config: createCodexAppServerInstallConfig({
-        spec: "openclaw-codex-app-server@rc",
+        spec: "NexisClaw-codex-app-server@rc",
       }),
-      pluginIds: ["openclaw-codex-app-server"],
+      pluginIds: ["NexisClaw-codex-app-server"],
       updateChannel: "beta",
       dryRun: true,
     });
 
     expectNpmUpdateCall({
-      spec: "openclaw-codex-app-server@rc",
-      expectedPluginId: "openclaw-codex-app-server",
+      spec: "NexisClaw-codex-app-server@rc",
+      expectedPluginId: "NexisClaw-codex-app-server",
     });
   });
 
@@ -2400,8 +2400,8 @@ describe("updateNpmInstalledPlugins", () => {
   it("migrates legacy unscoped install keys when a scoped npm package updates", async () => {
     installPluginFromNpmSpecMock.mockResolvedValue({
       ok: true,
-      pluginId: "@openclaw/voice-call",
-      targetDir: "/tmp/openclaw-voice-call",
+      pluginId: "@NexisClaw/voice-call",
+      targetDir: "/tmp/NexisClaw-voice-call",
       version: "0.0.2",
       extensions: ["index.ts"],
     });
@@ -2421,7 +2421,7 @@ describe("updateNpmInstalledPlugins", () => {
           installs: {
             "voice-call": {
               source: "npm",
-              spec: "@openclaw/voice-call",
+              spec: "@NexisClaw/voice-call",
               installPath: "/tmp/voice-call",
             },
           },
@@ -2430,20 +2430,20 @@ describe("updateNpmInstalledPlugins", () => {
       pluginIds: ["voice-call"],
     });
 
-    expect(npmInstallCall()?.spec).toBe("@openclaw/voice-call");
+    expect(npmInstallCall()?.spec).toBe("@NexisClaw/voice-call");
     expect(npmInstallCall()?.expectedPluginId).toBe("voice-call");
-    expect(result.config.plugins?.allow).toEqual(["@openclaw/voice-call"]);
-    expect(result.config.plugins?.deny).toEqual(["@openclaw/voice-call"]);
-    expect(result.config.plugins?.slots?.memory).toBe("@openclaw/voice-call");
-    expect(result.config.plugins?.entries?.["@openclaw/voice-call"]).toEqual({
+    expect(result.config.plugins?.allow).toEqual(["@NexisClaw/voice-call"]);
+    expect(result.config.plugins?.deny).toEqual(["@NexisClaw/voice-call"]);
+    expect(result.config.plugins?.slots?.memory).toBe("@NexisClaw/voice-call");
+    expect(result.config.plugins?.entries?.["@NexisClaw/voice-call"]).toEqual({
       enabled: false,
       hooks: { allowPromptInjection: false },
     });
     expect(result.config.plugins?.entries?.["voice-call"]).toBeUndefined();
-    expectRecordFields(result.config.plugins?.installs?.["@openclaw/voice-call"], {
+    expectRecordFields(result.config.plugins?.installs?.["@NexisClaw/voice-call"], {
       source: "npm",
-      spec: "@openclaw/voice-call",
-      installPath: "/tmp/openclaw-voice-call",
+      spec: "@NexisClaw/voice-call",
+      installPath: "/tmp/NexisClaw-voice-call",
       version: "0.0.2",
     });
     expect(result.config.plugins?.installs?.["voice-call"]).toBeUndefined();
@@ -2452,8 +2452,8 @@ describe("updateNpmInstalledPlugins", () => {
   it("migrates context engine slot when a plugin id changes during update", async () => {
     installPluginFromNpmSpecMock.mockResolvedValue({
       ok: true,
-      pluginId: "@openclaw/context-engine",
-      targetDir: "/tmp/openclaw-context-engine",
+      pluginId: "@NexisClaw/context-engine",
+      targetDir: "/tmp/NexisClaw-context-engine",
       version: "0.0.2",
       extensions: ["index.ts"],
     });
@@ -2465,20 +2465,20 @@ describe("updateNpmInstalledPlugins", () => {
           installs: {
             "context-engine": {
               source: "npm",
-              spec: "@openclaw/context-engine",
+              spec: "@NexisClaw/context-engine",
               installPath: "/tmp/context-engine",
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
       pluginIds: ["context-engine"],
     });
 
-    expect(result.config.plugins?.slots?.contextEngine).toBe("@openclaw/context-engine");
-    expectRecordFields(result.config.plugins?.installs?.["@openclaw/context-engine"], {
+    expect(result.config.plugins?.slots?.contextEngine).toBe("@NexisClaw/context-engine");
+    expectRecordFields(result.config.plugins?.installs?.["@NexisClaw/context-engine"], {
       source: "npm",
-      spec: "@openclaw/context-engine",
-      installPath: "/tmp/openclaw-context-engine",
+      spec: "@NexisClaw/context-engine",
+      installPath: "/tmp/NexisClaw-context-engine",
       version: "0.0.2",
     });
     expect(result.config.plugins?.installs?.["context-engine"]).toBeUndefined();
@@ -2600,28 +2600,28 @@ describe("updateNpmInstalledPlugins", () => {
   it("forwards dangerous force unsafe install to plugin update installers", async () => {
     installPluginFromNpmSpecMock.mockResolvedValue(
       createSuccessfulNpmUpdateResult({
-        pluginId: "openclaw-codex-app-server",
-        targetDir: "/tmp/openclaw-codex-app-server",
+        pluginId: "NexisClaw-codex-app-server",
+        targetDir: "/tmp/NexisClaw-codex-app-server",
         version: "0.2.0-beta.4",
       }),
     );
 
     await updateNpmInstalledPlugins({
       config: createCodexAppServerInstallConfig({
-        spec: "openclaw-codex-app-server@beta",
+        spec: "NexisClaw-codex-app-server@beta",
       }),
-      pluginIds: ["openclaw-codex-app-server"],
+      pluginIds: ["NexisClaw-codex-app-server"],
       dangerouslyForceUnsafeInstall: true,
     });
 
-    expect(npmInstallCall()?.spec).toBe("openclaw-codex-app-server@beta");
+    expect(npmInstallCall()?.spec).toBe("NexisClaw-codex-app-server@beta");
     expect(npmInstallCall()?.dangerouslyForceUnsafeInstall).toBe(true);
-    expect(npmInstallCall()?.expectedPluginId).toBe("openclaw-codex-app-server");
+    expect(npmInstallCall()?.expectedPluginId).toBe("NexisClaw-codex-app-server");
   });
 
   it("reuses the recorded managed extensions root when updating external plugins", async () => {
-    const installPath = "/var/openclaw/extensions/demo";
-    const extensionsDir = "/var/openclaw/extensions";
+    const installPath = "/var/NexisClaw/extensions/demo";
+    const extensionsDir = "/var/NexisClaw/extensions";
     installPluginFromNpmSpecMock.mockResolvedValue(
       createSuccessfulNpmUpdateResult({
         pluginId: "demo",
@@ -2726,7 +2726,7 @@ describe("syncPluginsForUpdateChannel", () => {
       config: createBundledPathInstallConfig({
         loadPaths: [appBundledPluginRoot("feishu")],
         installPath: appBundledPluginRoot("feishu"),
-        spec: "@openclaw/feishu",
+        spec: "@NexisClaw/feishu",
       }),
       expectedChanged: false,
       expectedLoadPaths: [appBundledPluginRoot("feishu")],
@@ -2737,7 +2737,7 @@ describe("syncPluginsForUpdateChannel", () => {
       config: createBundledPathInstallConfig({
         loadPaths: [],
         installPath: "/tmp/old-feishu",
-        spec: "@openclaw/feishu",
+        spec: "@NexisClaw/feishu",
       }),
       expectedChanged: true,
       expectedLoadPaths: [appBundledPluginRoot("feishu")],
@@ -2761,14 +2761,14 @@ describe("syncPluginsForUpdateChannel", () => {
         install: result.config.plugins?.installs?.feishu,
         sourcePath: appBundledPluginRoot("feishu"),
         installPath: expectedInstallPath,
-        spec: "@openclaw/feishu",
+        spec: "@NexisClaw/feishu",
       });
     },
   );
 
   it("forwards an explicit env to bundled plugin source resolution", async () => {
     resolveBundledPluginSourcesMock.mockReturnValue(new Map());
-    const env = { OPENCLAW_HOME: "/srv/openclaw-home" } as NodeJS.ProcessEnv;
+    const env = { NEXISCLAW_HOME: "/srv/NexisClaw-home" } as NodeJS.ProcessEnv;
 
     await syncPluginsForUpdateChannel({
       channel: "beta",
@@ -2784,7 +2784,7 @@ describe("syncPluginsForUpdateChannel", () => {
   });
 
   it("uses the provided env when matching bundled load and install paths", async () => {
-    const bundledHome = "/tmp/openclaw-home";
+    const bundledHome = "/tmp/NexisClaw-home";
     mockBundledSources(
       createBundledSource({
         localPath: `${bundledHome}/plugins/feishu`,
@@ -2798,7 +2798,7 @@ describe("syncPluginsForUpdateChannel", () => {
         channel: "beta",
         env: {
           ...process.env,
-          OPENCLAW_HOME: bundledHome,
+          NEXISCLAW_HOME: bundledHome,
           HOME: "/tmp/ignored-home",
         },
         config: {
@@ -2809,7 +2809,7 @@ describe("syncPluginsForUpdateChannel", () => {
                 source: "path",
                 sourcePath: "~/plugins/feishu",
                 installPath: "~/plugins/feishu",
-                spec: "@openclaw/feishu",
+                spec: "@NexisClaw/feishu",
               },
             },
           },
@@ -2837,12 +2837,12 @@ describe("syncPluginsForUpdateChannel", () => {
     installPluginFromNpmSpecMock.mockResolvedValue(
       createSuccessfulNpmUpdateResult({
         pluginId: "legacy-chat",
-        targetDir: "/tmp/openclaw-plugins/legacy-chat",
+        targetDir: "/tmp/NexisClaw-plugins/legacy-chat",
         version: "2.0.0",
         npmResolution: {
-          name: "@openclaw/legacy-chat",
+          name: "@NexisClaw/legacy-chat",
           version: "2.0.0",
-          resolvedSpec: "@openclaw/legacy-chat@2.0.0",
+          resolvedSpec: "@NexisClaw/legacy-chat@2.0.0",
         },
       }),
     );
@@ -2852,7 +2852,7 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -2875,7 +2875,7 @@ describe("syncPluginsForUpdateChannel", () => {
       },
     });
 
-    expect(npmInstallCall()?.spec).toBe("@openclaw/legacy-chat");
+    expect(npmInstallCall()?.spec).toBe("@NexisClaw/legacy-chat");
     expect(npmInstallCall()?.mode).toBe("update");
     expect(npmInstallCall()?.expectedPluginId).toBe("legacy-chat");
     expect(npmInstallCall()?.trustedSourceLinkedOfficialInstall).not.toBe(true);
@@ -2885,12 +2885,12 @@ describe("syncPluginsForUpdateChannel", () => {
     expect(result.config.plugins?.load?.paths).toStrictEqual([]);
     expectRecordFields(result.config.plugins?.installs?.["legacy-chat"], {
       source: "npm",
-      spec: "@openclaw/legacy-chat",
-      installPath: "/tmp/openclaw-plugins/legacy-chat",
+      spec: "@NexisClaw/legacy-chat",
+      installPath: "/tmp/NexisClaw-plugins/legacy-chat",
       version: "2.0.0",
-      resolvedName: "@openclaw/legacy-chat",
+      resolvedName: "@NexisClaw/legacy-chat",
       resolvedVersion: "2.0.0",
-      resolvedSpec: "@openclaw/legacy-chat@2.0.0",
+      resolvedSpec: "@NexisClaw/legacy-chat@2.0.0",
     });
   });
 
@@ -2899,7 +2899,7 @@ describe("syncPluginsForUpdateChannel", () => {
     installPluginFromNpmSpecMock.mockResolvedValue(
       createSuccessfulNpmUpdateResult({
         pluginId: "voice-call",
-        targetDir: "/tmp/openclaw-plugins/voice-call",
+        targetDir: "/tmp/NexisClaw-plugins/voice-call",
         version: "0.0.2-beta.1",
       }),
     );
@@ -2909,7 +2909,7 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "voice-call",
-          npmSpec: "@openclaw/voice-call",
+          npmSpec: "@NexisClaw/voice-call",
           channelIds: ["voice-call"],
         },
       ],
@@ -2932,7 +2932,7 @@ describe("syncPluginsForUpdateChannel", () => {
       },
     });
 
-    expect(npmInstallCall()?.spec).toBe("@openclaw/voice-call");
+    expect(npmInstallCall()?.spec).toBe("@NexisClaw/voice-call");
     expect(npmInstallCall()?.expectedPluginId).toBe("voice-call");
     expect(npmInstallCall()?.trustedSourceLinkedOfficialInstall).toBe(true);
   });
@@ -2942,7 +2942,7 @@ describe("syncPluginsForUpdateChannel", () => {
     installPluginFromClawHubMock.mockResolvedValue(
       createSuccessfulClawHubUpdateResult({
         pluginId: "legacy-chat",
-        targetDir: "/tmp/openclaw-plugins/legacy-chat",
+        targetDir: "/tmp/NexisClaw-plugins/legacy-chat",
         version: "2026.5.1-beta.2",
         clawhubPackage: "legacy-chat",
       }),
@@ -2956,7 +2956,7 @@ describe("syncPluginsForUpdateChannel", () => {
           preferredSource: "clawhub",
           clawhubSpec: "clawhub:legacy-chat@2026.5.1-beta.2",
           clawhubUrl: "https://clawhub.ai",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -2992,7 +2992,7 @@ describe("syncPluginsForUpdateChannel", () => {
     expectRecordFields(result.config.plugins?.installs?.["legacy-chat"], {
       source: "clawhub",
       spec: "clawhub:legacy-chat@2026.5.1-beta.2",
-      installPath: "/tmp/openclaw-plugins/legacy-chat",
+      installPath: "/tmp/NexisClaw-plugins/legacy-chat",
       version: "2026.5.1-beta.2",
       integrity: "sha256-clawpack",
       clawhubUrl: "https://clawhub.ai",
@@ -3021,7 +3021,7 @@ describe("syncPluginsForUpdateChannel", () => {
     installPluginFromNpmSpecMock.mockResolvedValue(
       createSuccessfulNpmUpdateResult({
         pluginId: "legacy-chat",
-        targetDir: "/tmp/openclaw-plugins/legacy-chat",
+        targetDir: "/tmp/NexisClaw-plugins/legacy-chat",
         version: "2.0.0",
       }),
     );
@@ -3033,7 +3033,7 @@ describe("syncPluginsForUpdateChannel", () => {
           bundledPluginId: "legacy-chat",
           preferredSource: "clawhub",
           clawhubSpec: "clawhub:legacy-chat@2026.5.1-beta.2",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -3056,7 +3056,7 @@ describe("syncPluginsForUpdateChannel", () => {
       },
     });
 
-    expect(npmInstallCall()?.spec).toBe("@openclaw/legacy-chat");
+    expect(npmInstallCall()?.spec).toBe("@NexisClaw/legacy-chat");
     expect(npmInstallCall()?.mode).toBe("update");
     expect(npmInstallCall()?.expectedPluginId).toBe("legacy-chat");
     expect(npmInstallCall()?.trustedSourceLinkedOfficialInstall).not.toBe(true);
@@ -3064,13 +3064,13 @@ describe("syncPluginsForUpdateChannel", () => {
     expect(result.summary.switchedToClawHub).toStrictEqual([]);
     expect(result.summary.switchedToNpm).toEqual(["legacy-chat"]);
     expect(result.summary.warnings).toEqual([
-      "ClawHub clawhub:legacy-chat@2026.5.1-beta.2 unavailable for legacy-chat; falling back to npm @openclaw/legacy-chat.",
+      "ClawHub clawhub:legacy-chat@2026.5.1-beta.2 unavailable for legacy-chat; falling back to npm @NexisClaw/legacy-chat.",
     ]);
     expect(result.summary.errors).toStrictEqual([]);
     expectRecordFields(result.config.plugins?.installs?.["legacy-chat"], {
       source: "npm",
-      spec: "@openclaw/legacy-chat",
-      installPath: "/tmp/openclaw-plugins/legacy-chat",
+      spec: "@NexisClaw/legacy-chat",
+      installPath: "/tmp/NexisClaw-plugins/legacy-chat",
       version: "2.0.0",
     });
   });
@@ -3085,7 +3085,7 @@ describe("syncPluginsForUpdateChannel", () => {
     installPluginFromNpmSpecMock.mockResolvedValue(
       createSuccessfulNpmUpdateResult({
         pluginId: "voice-call",
-        targetDir: "/tmp/openclaw-plugins/voice-call",
+        targetDir: "/tmp/NexisClaw-plugins/voice-call",
         version: "0.0.2-beta.1",
       }),
     );
@@ -3096,8 +3096,8 @@ describe("syncPluginsForUpdateChannel", () => {
         {
           bundledPluginId: "voice-call",
           preferredSource: "clawhub",
-          clawhubSpec: "clawhub:@openclaw/voice-call",
-          npmSpec: "@openclaw/voice-call",
+          clawhubSpec: "clawhub:@NexisClaw/voice-call",
+          npmSpec: "@NexisClaw/voice-call",
           channelIds: ["voice-call"],
         },
       ],
@@ -3120,7 +3120,7 @@ describe("syncPluginsForUpdateChannel", () => {
       },
     });
 
-    expect(npmInstallCall()?.spec).toBe("@openclaw/voice-call");
+    expect(npmInstallCall()?.spec).toBe("@NexisClaw/voice-call");
     expect(npmInstallCall()?.expectedPluginId).toBe("voice-call");
     expect(npmInstallCall()?.trustedSourceLinkedOfficialInstall).toBe(true);
   });
@@ -3130,7 +3130,7 @@ describe("syncPluginsForUpdateChannel", () => {
     installPluginFromClawHubMock.mockResolvedValue(
       createSuccessfulClawHubUpdateResult({
         pluginId: "legacy-chat",
-        targetDir: "/tmp/openclaw-plugins/legacy-chat",
+        targetDir: "/tmp/NexisClaw-plugins/legacy-chat",
         version: "2026.5.1-beta.2",
         clawhubPackage: "legacy-chat",
       }),
@@ -3143,7 +3143,7 @@ describe("syncPluginsForUpdateChannel", () => {
           bundledPluginId: "legacy-chat",
           preferredSource: "clawhub",
           clawhubSpec: "clawhub:legacy-chat@2026.5.1-beta.2",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -3157,8 +3157,8 @@ describe("syncPluginsForUpdateChannel", () => {
           installs: {
             "legacy-chat": {
               source: "npm",
-              spec: "@openclaw/legacy-chat",
-              installPath: "/tmp/openclaw-plugins/legacy-chat",
+              spec: "@NexisClaw/legacy-chat",
+              installPath: "/tmp/NexisClaw-plugins/legacy-chat",
             },
           },
         },
@@ -3174,7 +3174,7 @@ describe("syncPluginsForUpdateChannel", () => {
     expectRecordFields(result.config.plugins?.installs?.["legacy-chat"], {
       source: "clawhub",
       spec: "clawhub:legacy-chat@2026.5.1-beta.2",
-      installPath: "/tmp/openclaw-plugins/legacy-chat",
+      installPath: "/tmp/NexisClaw-plugins/legacy-chat",
     });
   });
 
@@ -3185,7 +3185,7 @@ describe("syncPluginsForUpdateChannel", () => {
       code: "archive_integrity_mismatch",
       error: "ClawHub ClawPack integrity mismatch.",
     });
-    const config: OpenClawConfig = {
+    const config: NexisClawConfig = {
       channels: {
         "legacy-chat": {
           enabled: true,
@@ -3210,7 +3210,7 @@ describe("syncPluginsForUpdateChannel", () => {
           bundledPluginId: "legacy-chat",
           preferredSource: "clawhub",
           clawhubSpec: "clawhub:legacy-chat@2026.5.1-beta.2",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -3230,7 +3230,7 @@ describe("syncPluginsForUpdateChannel", () => {
     installPluginFromNpmSpecMock.mockResolvedValue(
       createSuccessfulNpmUpdateResult({
         pluginId: "default-chat",
-        targetDir: "/tmp/openclaw-plugins/default-chat",
+        targetDir: "/tmp/NexisClaw-plugins/default-chat",
         version: "2.0.0",
       }),
     );
@@ -3241,22 +3241,22 @@ describe("syncPluginsForUpdateChannel", () => {
         {
           bundledPluginId: "default-chat",
           enabledByDefault: true,
-          npmSpec: "@openclaw/default-chat",
+          npmSpec: "@NexisClaw/default-chat",
           channelIds: ["default-chat"],
         },
       ],
       config: {},
     });
 
-    expect(npmInstallCall()?.spec).toBe("@openclaw/default-chat");
+    expect(npmInstallCall()?.spec).toBe("@NexisClaw/default-chat");
     expect(npmInstallCall()?.mode).toBe("update");
     expect(npmInstallCall()?.expectedPluginId).toBe("default-chat");
     expect(result.changed).toBe(true);
     expect(result.summary.switchedToNpm).toEqual(["default-chat"]);
     expectRecordFields(result.config.plugins?.installs?.["default-chat"], {
       source: "npm",
-      spec: "@openclaw/default-chat",
-      installPath: "/tmp/openclaw-plugins/default-chat",
+      spec: "@NexisClaw/default-chat",
+      installPath: "/tmp/NexisClaw-plugins/default-chat",
       version: "2.0.0",
     });
   });
@@ -3269,7 +3269,7 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -3305,7 +3305,7 @@ describe("syncPluginsForUpdateChannel", () => {
       ok: false,
       error: "package unavailable",
     });
-    const config: OpenClawConfig = {
+    const config: NexisClawConfig = {
       channels: {
         "legacy-chat": {
           enabled: true,
@@ -3328,7 +3328,7 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -3348,7 +3348,7 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -3392,7 +3392,7 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -3430,7 +3430,7 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -3447,8 +3447,8 @@ describe("syncPluginsForUpdateChannel", () => {
           installs: {
             "legacy-chat": {
               source: "npm",
-              spec: "@openclaw/legacy-chat",
-              installPath: "/tmp/openclaw-plugins/legacy-chat",
+              spec: "@NexisClaw/legacy-chat",
+              installPath: "/tmp/NexisClaw-plugins/legacy-chat",
             },
           },
         },
@@ -3460,7 +3460,7 @@ describe("syncPluginsForUpdateChannel", () => {
     expect(result.config.plugins?.load?.paths).toEqual(["/workspace/plugins/other"]);
     expectRecordFields(result.config.plugins?.installs?.["legacy-chat"], {
       source: "npm",
-      spec: "@openclaw/legacy-chat",
+      spec: "@NexisClaw/legacy-chat",
     });
   });
 
@@ -3472,7 +3472,7 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -3489,8 +3489,8 @@ describe("syncPluginsForUpdateChannel", () => {
           installs: {
             "legacy-chat": {
               source: "npm",
-              resolvedName: "@openclaw/legacy-chat",
-              installPath: "/tmp/openclaw-plugins/legacy-chat",
+              resolvedName: "@NexisClaw/legacy-chat",
+              installPath: "/tmp/NexisClaw-plugins/legacy-chat",
             },
           },
         },
@@ -3502,7 +3502,7 @@ describe("syncPluginsForUpdateChannel", () => {
     expect(result.config.plugins?.load?.paths).toEqual(["/workspace/plugins/other"]);
     expectRecordFields(result.config.plugins?.installs?.["legacy-chat"], {
       source: "npm",
-      resolvedName: "@openclaw/legacy-chat",
+      resolvedName: "@NexisClaw/legacy-chat",
     });
   });
 
@@ -3514,7 +3514,7 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -3531,9 +3531,9 @@ describe("syncPluginsForUpdateChannel", () => {
           installs: {
             "legacy-chat": {
               source: "npm",
-              spec: "@openclaw/legacy-chat@1.2.3",
-              resolvedSpec: "@openclaw/legacy-chat@1.2.3",
-              installPath: "/tmp/openclaw-plugins/legacy-chat",
+              spec: "@NexisClaw/legacy-chat@1.2.3",
+              resolvedSpec: "@NexisClaw/legacy-chat@1.2.3",
+              installPath: "/tmp/NexisClaw-plugins/legacy-chat",
             },
           },
         },
@@ -3545,7 +3545,7 @@ describe("syncPluginsForUpdateChannel", () => {
     expect(result.config.plugins?.load?.paths).toEqual(["/workspace/plugins/other"]);
     expectRecordFields(result.config.plugins?.installs?.["legacy-chat"], {
       source: "npm",
-      spec: "@openclaw/legacy-chat@1.2.3",
+      spec: "@NexisClaw/legacy-chat@1.2.3",
     });
   });
 
@@ -3559,7 +3559,7 @@ describe("syncPluginsForUpdateChannel", () => {
           bundledPluginId: "legacy-chat",
           preferredSource: "clawhub",
           clawhubSpec: "clawhub:legacy-chat",
-          npmSpec: "@openclaw/legacy-chat",
+          npmSpec: "@NexisClaw/legacy-chat",
           channelIds: ["legacy-chat"],
         },
       ],
@@ -3578,7 +3578,7 @@ describe("syncPluginsForUpdateChannel", () => {
               source: "clawhub",
               spec: "clawhub:legacy-chat@2026.5.1",
               clawhubPackage: "legacy-chat",
-              installPath: "/tmp/openclaw-plugins/legacy-chat",
+              installPath: "/tmp/NexisClaw-plugins/legacy-chat",
             },
           },
         },

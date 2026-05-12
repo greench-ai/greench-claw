@@ -1,1 +1,1 @@
-export { resolveConfiguredSecretInputString } from "openclaw/plugin-sdk/secret-input-runtime";
+export { resolveConfiguredSecretInputString } from "NexisClaw/plugin-sdk/secret-input-runtime";

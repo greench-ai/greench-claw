@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 
-export type BuildMentionRegexes = (cfg: OpenClawConfig | undefined, agentId?: string) => RegExp[];
+export type BuildMentionRegexes = (cfg: NexisClawConfig | undefined, agentId?: string) => RegExp[];
 
 export type MatchesMentionPatterns = (text: string, mentionRegexes: RegExp[]) => boolean;
 

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 import {
   applyExclusiveSlotSelection,
   buildPluginDiagnosticsReport,
@@ -45,7 +45,7 @@ describe("persistPluginInstall", () => {
       plugins: {
         allow: ["memory-core"],
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const enabledConfig = {
       plugins: {
         allow: ["alpha", "memory-core"],
@@ -53,9 +53,9 @@ describe("persistPluginInstall", () => {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     enablePluginInConfig.mockImplementation((...args: unknown[]) => {
-      const [cfg, pluginId] = args as [OpenClawConfig, string];
+      const [cfg, pluginId] = args as [NexisClawConfig, string];
       expect(pluginId).toBe("alpha");
       expect(cfg.plugins?.allow).toEqual(["alpha", "memory-core"]);
       return { config: enabledConfig };
@@ -112,14 +112,14 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     enablePluginInConfig.mockReturnValue({ config: enabledConfig });
     clearPluginRegistryLoadCache.mockImplementation(() => {
       throw new Error("cache unavailable");
@@ -149,25 +149,25 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           codex: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     enablePluginInConfig.mockReturnValue({ config: enabledConfig });
     setInstalledPluginIndexInstallRecords({
       codex: {
         source: "clawhub",
-        spec: "clawhub:@openclaw/codex",
-        installPath: "/tmp/openclaw/extensions/codex",
+        spec: "clawhub:@NexisClaw/codex",
+        installPath: "/tmp/NexisClaw/extensions/codex",
       },
     });
     planPluginUninstall.mockReturnValueOnce({
       ok: true,
-      config: {} as OpenClawConfig,
+      config: {} as NexisClawConfig,
       pluginId: "codex",
       actions: {
         entry: false,
@@ -181,7 +181,7 @@ describe("persistPluginInstall", () => {
         directory: false,
       },
       directoryRemoval: {
-        target: "/tmp/openclaw/extensions/codex",
+        target: "/tmp/NexisClaw/extensions/codex",
       },
     });
     applyPluginUninstallDirectoryRemoval.mockResolvedValueOnce({
@@ -197,8 +197,8 @@ describe("persistPluginInstall", () => {
       pluginId: "codex",
       install: {
         source: "npm",
-        spec: "@openclaw/codex",
-        installPath: "/tmp/openclaw/npm/node_modules/@openclaw/codex",
+        spec: "@NexisClaw/codex",
+        installPath: "/tmp/NexisClaw/npm/node_modules/@NexisClaw/codex",
       },
     });
 
@@ -208,8 +208,8 @@ describe("persistPluginInstall", () => {
           installs: {
             codex: {
               source: "clawhub",
-              spec: "clawhub:@openclaw/codex",
-              installPath: "/tmp/openclaw/extensions/codex",
+              spec: "clawhub:@NexisClaw/codex",
+              installPath: "/tmp/NexisClaw/extensions/codex",
             },
           },
         },
@@ -218,14 +218,14 @@ describe("persistPluginInstall", () => {
       deleteFiles: true,
     });
     expect(applyPluginUninstallDirectoryRemoval).toHaveBeenCalledWith({
-      target: "/tmp/openclaw/extensions/codex",
+      target: "/tmp/NexisClaw/extensions/codex",
     });
     const cleanupOrder =
       applyPluginUninstallDirectoryRemoval.mock.invocationCallOrder[0] ?? Number.MAX_SAFE_INTEGER;
     const refreshOrder = refreshPluginRegistry.mock.invocationCallOrder[0] ?? 0;
     expect(cleanupOrder).toBeLessThan(refreshOrder);
     expect(runtimeLogs.join("\n")).toContain(
-      "Removed previous plugin install directory: /tmp/openclaw/extensions/codex",
+      "Removed previous plugin install directory: /tmp/NexisClaw/extensions/codex",
     );
   });
 
@@ -235,20 +235,20 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           codex: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     enablePluginInConfig.mockReturnValue({ config: enabledConfig });
     setInstalledPluginIndexInstallRecords({
       codex: {
         source: "npm",
-        spec: "@openclaw/codex",
-        installPath: "/tmp/openclaw/npm/node_modules/@openclaw/codex",
+        spec: "@NexisClaw/codex",
+        installPath: "/tmp/NexisClaw/npm/node_modules/@NexisClaw/codex",
       },
     });
 
@@ -260,8 +260,8 @@ describe("persistPluginInstall", () => {
       pluginId: "codex",
       install: {
         source: "npm",
-        spec: "@openclaw/codex@latest",
-        installPath: "/tmp/openclaw/npm/node_modules/@openclaw/codex",
+        spec: "@NexisClaw/codex@latest",
+        installPath: "/tmp/NexisClaw/npm/node_modules/@NexisClaw/codex",
       },
     });
 
@@ -275,21 +275,21 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           discord: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     enablePluginInConfig.mockReturnValue({ config: enabledConfig });
     buildPluginSnapshotReport.mockReturnValue({
       plugins: [
         {
           id: "discord",
           origin: "config",
-          source: "/tmp/openclaw-upstream/extensions/discord/index.ts",
+          source: "/tmp/NexisClaw-upstream/extensions/discord/index.ts",
           status: "error",
         },
       ],
@@ -304,8 +304,8 @@ describe("persistPluginInstall", () => {
       pluginId: "discord",
       install: {
         source: "npm",
-        spec: "@openclaw/discord",
-        installPath: "/tmp/openclaw/npm/node_modules/@openclaw/discord/index.ts",
+        spec: "@NexisClaw/discord",
+        installPath: "/tmp/NexisClaw/npm/node_modules/@NexisClaw/discord/index.ts",
       },
     });
 
@@ -319,12 +319,12 @@ describe("persistPluginInstall", () => {
       'Warning: installed plugin "discord" is not the active source',
     );
     expect(runtimeLogs.join("\n")).toContain(
-      "active config source: /tmp/openclaw-upstream/extensions/discord/index.ts",
+      "active config source: /tmp/NexisClaw-upstream/extensions/discord/index.ts",
     );
     expect(runtimeLogs.join("\n")).toContain(
-      "installed npm source: /tmp/openclaw/npm/node_modules/@openclaw/discord/index.ts",
+      "installed npm source: /tmp/NexisClaw/npm/node_modules/@NexisClaw/discord/index.ts",
     );
-    expect(runtimeLogs.join("\n")).toContain("openclaw plugins doctor");
+    expect(runtimeLogs.join("\n")).toContain("NexisClaw plugins doctor");
   });
 
   it("does not warn when the config-selected source is inside the npm install path", async () => {
@@ -333,21 +333,21 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           discord: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     enablePluginInConfig.mockReturnValue({ config: enabledConfig });
     buildPluginSnapshotReport.mockReturnValue({
       plugins: [
         {
           id: "discord",
           origin: "config",
-          source: "/tmp/openclaw/npm/node_modules/@openclaw/discord/dist/index.js",
+          source: "/tmp/NexisClaw/npm/node_modules/@NexisClaw/discord/dist/index.js",
           status: "loaded",
         },
       ],
@@ -362,8 +362,8 @@ describe("persistPluginInstall", () => {
       pluginId: "discord",
       install: {
         source: "npm",
-        spec: "@openclaw/discord",
-        installPath: "/tmp/openclaw/npm/node_modules/@openclaw/discord",
+        spec: "@NexisClaw/discord",
+        installPath: "/tmp/NexisClaw/npm/node_modules/@NexisClaw/discord",
       },
     });
 
@@ -376,14 +376,14 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     enablePluginInConfig.mockReturnValue({ config: enabledConfig });
     refreshPluginRegistry.mockRejectedValueOnce(new Error("registry unavailable"));
 
@@ -412,7 +412,7 @@ describe("persistPluginInstall", () => {
       plugins: {
         deny: ["alpha", "other"],
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const enabledConfig = {
       plugins: {
         deny: ["other"],
@@ -420,9 +420,9 @@ describe("persistPluginInstall", () => {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     enablePluginInConfig.mockImplementation((...args: unknown[]) => {
-      const [cfg, pluginId] = args as [OpenClawConfig, string];
+      const [cfg, pluginId] = args as [NexisClawConfig, string];
       expect(pluginId).toBe("alpha");
       expect(cfg.plugins?.deny).toEqual(["other"]);
       return { config: enabledConfig };
@@ -452,7 +452,7 @@ describe("persistPluginInstall", () => {
           "legacy-memory-a": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
@@ -460,7 +460,7 @@ describe("persistPluginInstall", () => {
           "legacy-memory": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     enablePluginInConfig.mockReturnValue({ config: enabledConfig });
     loadPluginManifestRegistry.mockReturnValue({
       plugins: [{ id: "legacy-memory" }],
@@ -471,7 +471,7 @@ describe("persistPluginInstall", () => {
       diagnostics: [],
     });
     applyExclusiveSlotSelection.mockImplementation(((params: {
-      config: OpenClawConfig;
+      config: NexisClawConfig;
       selectedId: string;
       selectedKind?: string;
       registry?: { plugins: Array<{ id: string; kind?: string }> };
@@ -528,7 +528,7 @@ describe("persistPluginInstall", () => {
           "legacy-memory-a": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
@@ -536,14 +536,14 @@ describe("persistPluginInstall", () => {
           "memory-b": { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     enablePluginInConfig.mockReturnValue({ config: enabledConfig });
     loadPluginManifestRegistry.mockReturnValue({
       plugins: [{ id: "memory-b", kind: "memory" }],
       diagnostics: [],
     });
     applyExclusiveSlotSelection.mockImplementation(((params: {
-      config: OpenClawConfig;
+      config: NexisClawConfig;
       selectedId: string;
       selectedKind?: string;
       registry?: { plugins: Array<{ id: string; kind?: string }> };
@@ -594,14 +594,14 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           plain: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     enablePluginInConfig.mockReturnValue({ config: enabledConfig });
     loadPluginManifestRegistry.mockReturnValue({
       plugins: [{ id: "plain" }],
@@ -647,7 +647,7 @@ describe("persistPluginInstall", () => {
       plugins: {
         entries: {},
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const next = await persistPluginInstall({
       snapshot: {
@@ -688,7 +688,7 @@ describe("persistPluginInstall", () => {
         allow: ["memory-core"],
         deny: ["memory-lancedb"],
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const next = await persistPluginInstall({
       snapshot: {

@@ -1,5 +1,5 @@
 import type { proto, WAMessage } from "baileys";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
 import type { createWaSocket } from "../session.js";
 import { extractContextInfo } from "./extract.js";
 import { downloadMediaMessage, normalizeMessageContent } from "./runtime-api.js";

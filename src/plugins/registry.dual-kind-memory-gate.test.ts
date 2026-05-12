@@ -2,7 +2,7 @@ import {
   createPluginRegistryFixture,
   registerTestPlugin,
   registerVirtualTestPlugin,
-} from "openclaw/plugin-sdk/plugin-test-contracts";
+} from "NexisClaw/plugin-sdk/plugin-test-contracts";
 import { afterEach, describe, expect, it } from "vitest";
 import { clearMemoryEmbeddingProviders } from "./memory-embedding-providers.js";
 import {

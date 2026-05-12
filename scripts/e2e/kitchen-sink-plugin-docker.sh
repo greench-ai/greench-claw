@@ -3,30 +3,30 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$ROOT_DIR/scripts/lib/docker-e2e-image.sh"
-IMAGE_NAME="$(docker_e2e_resolve_image "openclaw-kitchen-sink-plugin-e2e" OPENCLAW_KITCHEN_SINK_PLUGIN_E2E_IMAGE)"
+IMAGE_NAME="$(docker_e2e_resolve_image "NexisClaw-kitchen-sink-plugin-e2e" NEXISCLAW_KITCHEN_SINK_PLUGIN_E2E_IMAGE)"
 
 docker_e2e_build_or_reuse "$IMAGE_NAME" kitchen-sink-plugin
-OPENCLAW_TEST_STATE_SCRIPT_B64="$(docker_e2e_test_state_shell_b64 kitchen-sink-plugin empty)"
-KITCHEN_SINK_NPM_SPEC="${OPENCLAW_KITCHEN_SINK_NPM_SPEC:-npm:@openclaw/kitchen-sink@latest}"
-KITCHEN_SINK_NPM_MISSING_SPEC="${OPENCLAW_KITCHEN_SINK_NPM_MISSING_SPEC:-npm:@openclaw/kitchen-sink@beta}"
+NEXISCLAW_TEST_STATE_SCRIPT_B64="$(docker_e2e_test_state_shell_b64 kitchen-sink-plugin empty)"
+KITCHEN_SINK_NPM_SPEC="${NEXISCLAW_KITCHEN_SINK_NPM_SPEC:-npm:@NexisClaw/kitchen-sink@latest}"
+KITCHEN_SINK_NPM_MISSING_SPEC="${NEXISCLAW_KITCHEN_SINK_NPM_MISSING_SPEC:-npm:@NexisClaw/kitchen-sink@beta}"
 
 DEFAULT_KITCHEN_SINK_SCENARIOS="$(
   cat <<SCENARIOS
-npm-latest-full|${KITCHEN_SINK_NPM_SPEC}|openclaw-kitchen-sink-fixture|npm|success|full
-npm-latest-conformance|${KITCHEN_SINK_NPM_SPEC}|openclaw-kitchen-sink-fixture|npm|success|conformance|conformance
-npm-latest-adversarial|${KITCHEN_SINK_NPM_SPEC}|openclaw-kitchen-sink-fixture|npm|success|adversarial|adversarial
-npm-beta|${KITCHEN_SINK_NPM_MISSING_SPEC}|openclaw-kitchen-sink-fixture|npm|failure|none
-clawhub-latest|clawhub:@openclaw/kitchen-sink@latest|openclaw-kitchen-sink-fixture|clawhub|success|basic
-clawhub-beta|clawhub:@openclaw/kitchen-sink@beta|openclaw-kitchen-sink-fixture|clawhub|failure|none
-npm-to-clawhub|clawhub:@openclaw/kitchen-sink@latest|openclaw-kitchen-sink-fixture|clawhub|success|basic||${KITCHEN_SINK_NPM_SPEC}
+npm-latest-full|${KITCHEN_SINK_NPM_SPEC}|NexisClaw-kitchen-sink-fixture|npm|success|full
+npm-latest-conformance|${KITCHEN_SINK_NPM_SPEC}|NexisClaw-kitchen-sink-fixture|npm|success|conformance|conformance
+npm-latest-adversarial|${KITCHEN_SINK_NPM_SPEC}|NexisClaw-kitchen-sink-fixture|npm|success|adversarial|adversarial
+npm-beta|${KITCHEN_SINK_NPM_MISSING_SPEC}|NexisClaw-kitchen-sink-fixture|npm|failure|none
+clawhub-latest|clawhub:@NexisClaw/kitchen-sink@latest|NexisClaw-kitchen-sink-fixture|clawhub|success|basic
+clawhub-beta|clawhub:@NexisClaw/kitchen-sink@beta|NexisClaw-kitchen-sink-fixture|clawhub|failure|none
+npm-to-clawhub|clawhub:@NexisClaw/kitchen-sink@latest|NexisClaw-kitchen-sink-fixture|clawhub|success|basic||${KITCHEN_SINK_NPM_SPEC}
 SCENARIOS
 )"
-KITCHEN_SINK_SCENARIOS="${OPENCLAW_KITCHEN_SINK_PLUGIN_SCENARIOS:-$DEFAULT_KITCHEN_SINK_SCENARIOS}"
-MAX_MEMORY_MIB="${OPENCLAW_KITCHEN_SINK_MAX_MEMORY_MIB:-2048}"
-MAX_CPU_PERCENT="${OPENCLAW_KITCHEN_SINK_MAX_CPU_PERCENT:-1200}"
-CONTAINER_NAME="openclaw-kitchen-sink-plugin-e2e-$$"
-RUN_LOG="$(mktemp "${TMPDIR:-/tmp}/openclaw-kitchen-sink-plugin.XXXXXX")"
-STATS_LOG="$(mktemp "${TMPDIR:-/tmp}/openclaw-kitchen-sink-plugin-stats.XXXXXX")"
+KITCHEN_SINK_SCENARIOS="${NEXISCLAW_KITCHEN_SINK_PLUGIN_SCENARIOS:-$DEFAULT_KITCHEN_SINK_SCENARIOS}"
+MAX_MEMORY_MIB="${NEXISCLAW_KITCHEN_SINK_MAX_MEMORY_MIB:-2048}"
+MAX_CPU_PERCENT="${NEXISCLAW_KITCHEN_SINK_MAX_CPU_PERCENT:-1200}"
+CONTAINER_NAME="NexisClaw-kitchen-sink-plugin-e2e-$$"
+RUN_LOG="$(mktemp "${TMPDIR:-/tmp}/NexisClaw-kitchen-sink-plugin.XXXXXX")"
+STATS_LOG="$(mktemp "${TMPDIR:-/tmp}/NexisClaw-kitchen-sink-plugin-stats.XXXXXX")"
 
 cleanup() {
   docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
@@ -35,15 +35,15 @@ trap cleanup EXIT
 
 DOCKER_ENV_ARGS=(
   -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0
-  -e "OPENCLAW_TEST_STATE_SCRIPT_B64=$OPENCLAW_TEST_STATE_SCRIPT_B64"
+  -e "NEXISCLAW_TEST_STATE_SCRIPT_B64=$NEXISCLAW_TEST_STATE_SCRIPT_B64"
   -e "KITCHEN_SINK_SCENARIOS=$KITCHEN_SINK_SCENARIOS"
 )
-if [[ "${OPENCLAW_KITCHEN_SINK_LIVE_CLAWHUB:-0}" = "1" ]]; then
+if [[ "${NEXISCLAW_KITCHEN_SINK_LIVE_CLAWHUB:-0}" = "1" ]]; then
   for env_name in \
-    OPENCLAW_KITCHEN_SINK_LIVE_CLAWHUB \
-    OPENCLAW_CLAWHUB_URL \
+    NEXISCLAW_KITCHEN_SINK_LIVE_CLAWHUB \
+    NEXISCLAW_CLAWHUB_URL \
     CLAWHUB_URL \
-    OPENCLAW_CLAWHUB_TOKEN \
+    NEXISCLAW_CLAWHUB_TOKEN \
     CLAWHUB_TOKEN \
     CLAWHUB_AUTH_TOKEN; do
     env_value="${!env_name:-}"

@@ -9,7 +9,7 @@ import type { TlsOptions } from "node:tls";
 import type { WebSocketServer } from "ws";
 import { resolveBundledChannelGatewayAuthBypassPaths } from "../channels/plugins/gateway-auth-bypass.js";
 import { getRuntimeConfig } from "../config/io.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import {
   createDiagnosticTraceContext,
   runWithDiagnosticTraceContext,
@@ -161,12 +161,12 @@ const GATEWAY_PROBE_STATUS_BY_PATH = new Map<string, "live" | "ready">([
   ["/readyz", "ready"],
 ]);
 const pluginGatewayAuthBypassPathsCache = new WeakMap<
-  OpenClawConfig,
+  NexisClawConfig,
   Promise<ReadonlySet<string>>
 >();
 
 async function resolvePluginGatewayAuthBypassPaths(
-  configSnapshot: OpenClawConfig,
+  configSnapshot: NexisClawConfig,
 ): Promise<Set<string>> {
   const paths = new Set<string>();
   const configuredChannels = configSnapshot.channels;
@@ -185,7 +185,7 @@ async function resolvePluginGatewayAuthBypassPaths(
 }
 
 function getCachedPluginGatewayAuthBypassPaths(
-  configSnapshot: OpenClawConfig,
+  configSnapshot: NexisClawConfig,
 ): Promise<ReadonlySet<string>> {
   const cached = pluginGatewayAuthBypassPathsCache.get(configSnapshot);
   if (cached) {
@@ -482,7 +482,7 @@ export function createGatewayHttpServer(opts: {
   /** Optional rate limiter for auth brute-force protection. */
   rateLimiter?: AuthRateLimiter;
   getReadiness?: ReadinessChecker;
-  getRuntimeConfig?: () => OpenClawConfig;
+  getRuntimeConfig?: () => NexisClawConfig;
   tlsOptions?: TlsOptions;
 }): HttpServer {
   const {
@@ -933,17 +933,17 @@ export function attachGatewayUpgradeHandler(opts: {
         wss.handleUpgrade(req, socket, head, (ws) => {
           (
             ws as unknown as import("ws").WebSocket & {
-              __openclawPreauthBudgetClaimed?: boolean;
-              __openclawPreauthBudgetKey?: string;
+              __NexisClawPreauthBudgetClaimed?: boolean;
+              __NexisClawPreauthBudgetKey?: string;
             }
-          ).__openclawPreauthBudgetKey = preauthBudgetKey;
+          ).__NexisClawPreauthBudgetKey = preauthBudgetKey;
           wss.emit("connection", ws, req);
           const budgetClaimed = Boolean(
             (
               ws as unknown as import("ws").WebSocket & {
-                __openclawPreauthBudgetClaimed?: boolean;
+                __NexisClawPreauthBudgetClaimed?: boolean;
               }
-            ).__openclawPreauthBudgetClaimed,
+            ).__NexisClawPreauthBudgetClaimed,
           );
           if (budgetClaimed) {
             budgetTransferred = true;

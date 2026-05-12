@@ -1,11 +1,11 @@
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
+import { extensionForMime } from "NexisClaw/plugin-sdk/media-mime";
 import type {
   GeneratedMusicAsset,
   MusicGenerationProvider,
   MusicGenerationRequest,
-} from "openclaw/plugin-sdk/music-generation";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/music-generation";
+import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { resolveGoogleGenerativeAiApiOrigin } from "./api.js";
 import {
   createGoogleMusicGenerationProviderMetadata,

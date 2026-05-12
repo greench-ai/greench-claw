@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   __testing,
@@ -9,7 +9,7 @@ describe("buildElevenLabsRealtimeTranscriptionProvider", () => {
   it("normalizes nested provider config", () => {
     const provider = buildElevenLabsRealtimeTranscriptionProvider();
     const resolved = provider.resolveConfig?.({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NexisClawConfig,
       rawConfig: {
         providers: {
           elevenlabs: {

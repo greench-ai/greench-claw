@@ -1,6 +1,6 @@
 import { Type } from "typebox";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { textToSpeech } from "../../tts/tts.js";
 import type { GatewayMessageChannel } from "../../utils/message-channel.js";
 import type { AnyAgentTool } from "./common.js";
@@ -54,7 +54,7 @@ function sanitizeTranscriptForToolContent(text: string): string {
 }
 
 export function createTtsTool(opts?: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   agentChannel?: GatewayMessageChannel;
   agentId?: string;
   agentAccountId?: string;

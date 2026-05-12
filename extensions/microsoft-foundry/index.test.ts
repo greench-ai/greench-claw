@@ -1,5 +1,5 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getAccessTokenResultAsync } from "./cli.js";
 import plugin from "./index.js";
@@ -30,9 +30,9 @@ vi.mock("node:child_process", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/provider-auth", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/provider-auth")>(
-    "openclaw/plugin-sdk/provider-auth",
+vi.mock("NexisClaw/plugin-sdk/provider-auth", async () => {
+  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/provider-auth")>(
+    "NexisClaw/plugin-sdk/provider-auth",
   );
   return {
     ...actual,
@@ -155,7 +155,7 @@ function buildFoundryConfig(params?: {
         },
       },
     },
-  } satisfies OpenClawConfig;
+  } satisfies NexisClawConfig;
 }
 
 function buildEntraProfileStore(
@@ -445,7 +445,7 @@ describe("microsoft-foundry plugin", () => {
 
   it("keeps other configured Foundry models when switching the selected model", async () => {
     const provider = registerProvider();
-    const config: OpenClawConfig = {
+    const config: NexisClawConfig = {
       auth: {
         profiles: {
           "microsoft-foundry:default": {
@@ -624,7 +624,7 @@ describe("microsoft-foundry plugin", () => {
 
   it("keeps persisted response-mode routing for custom deployment aliases", async () => {
     const provider = registerProvider();
-    const config: OpenClawConfig = {
+    const config: NexisClawConfig = {
       auth: {
         profiles: {
           "microsoft-foundry:entra": {
@@ -769,7 +769,7 @@ describe("microsoft-foundry plugin", () => {
 
   it("keeps Foundry profile selection compatible with unrelated AWS SDK profile modes", async () => {
     const provider = registerProvider();
-    const config: OpenClawConfig = {
+    const config: NexisClawConfig = {
       ...buildFoundryConfig({
         profileIds: ["microsoft-foundry:entra"],
         orderedProfileIds: ["microsoft-foundry:entra"],

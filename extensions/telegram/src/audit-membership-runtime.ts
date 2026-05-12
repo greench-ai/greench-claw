@@ -1,6 +1,6 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { fetchWithTimeout } from "openclaw/plugin-sdk/text-utility-runtime";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { isRecord } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { fetchWithTimeout } from "NexisClaw/plugin-sdk/text-utility-runtime";
 import type {
   AuditTelegramGroupMembershipParams,
   TelegramGroupMembershipAudit,

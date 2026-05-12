@@ -17,7 +17,7 @@ describe("browser doctor readiness", () => {
       {
         browser: {
           profiles: {
-            openclaw: { color: "#FF4500" },
+            NexisClaw: { color: "#FF4500" },
           },
         },
       },
@@ -38,7 +38,7 @@ describe("browser doctor readiness", () => {
       {
         browser: {
           profiles: {
-            openclaw: { color: "#FF4500" },
+            NexisClaw: { color: "#FF4500" },
           },
         },
       },
@@ -53,8 +53,8 @@ describe("browser doctor readiness", () => {
 
     expect(noteFn).toHaveBeenCalledWith(
       [
-        "- OpenClaw-managed browser profile(s) are configured: openclaw.",
-        "- No Chromium-based browser executable was found on this host for OpenClaw-managed launch.",
+        "- NexisClaw-managed browser profile(s) are configured: NexisClaw.",
+        "- No Chromium-based browser executable was found on this host for NexisClaw-managed launch.",
         "- Install Chrome, Chromium, Brave, Edge, or set browser.executablePath explicitly.",
       ].join("\n"),
       "Browser",
@@ -69,7 +69,7 @@ describe("browser doctor readiness", () => {
           headless: false,
           noSandbox: false,
           profiles: {
-            openclaw: { color: "#FF4500" },
+            NexisClaw: { color: "#FF4500" },
           },
         },
       },
@@ -84,7 +84,7 @@ describe("browser doctor readiness", () => {
 
     expect(noteFn).toHaveBeenCalledWith(
       [
-        "- OpenClaw-managed browser profile(s) are configured: openclaw.",
+        "- NexisClaw-managed browser profile(s) are configured: NexisClaw.",
         "- No DISPLAY or WAYLAND_DISPLAY is set, and browser.headless is false. Managed browser launch needs a desktop session, Xvfb, or browser.headless: true.",
         "- The Gateway is running as root and browser.noSandbox is false. Chromium commonly requires browser.noSandbox: true in container/root runtimes.",
       ].join("\n"),

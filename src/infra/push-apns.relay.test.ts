@@ -60,15 +60,15 @@ describe("push-apns.relay", () => {
       expect(resolveApnsRelayConfigFromEnv({} as NodeJS.ProcessEnv)).toEqual({
         ok: false,
         error:
-          "APNs relay config missing: set gateway.push.apns.relay.baseUrl or OPENCLAW_APNS_RELAY_BASE_URL",
+          "APNs relay config missing: set gateway.push.apns.relay.baseUrl or NEXISCLAW_APNS_RELAY_BASE_URL",
       });
     });
 
     it("lets env overrides win and clamps tiny timeout values", () => {
       const resolved = resolveApnsRelayConfigFromEnv(
         {
-          OPENCLAW_APNS_RELAY_BASE_URL: " https://relay-override.example.com/base/ ",
-          OPENCLAW_APNS_RELAY_TIMEOUT_MS: "999",
+          NEXISCLAW_APNS_RELAY_BASE_URL: " https://relay-override.example.com/base/ ",
+          NEXISCLAW_APNS_RELAY_TIMEOUT_MS: "999",
         } as NodeJS.ProcessEnv,
         {
           push: {
@@ -90,9 +90,9 @@ describe("push-apns.relay", () => {
 
     it("allows loopback http URLs for alternate truthy env values", () => {
       const resolved = resolveApnsRelayConfigFromEnv({
-        OPENCLAW_APNS_RELAY_BASE_URL: "http://[::1]:8787",
-        OPENCLAW_APNS_RELAY_ALLOW_HTTP: "yes",
-        OPENCLAW_APNS_RELAY_TIMEOUT_MS: "nope",
+        NEXISCLAW_APNS_RELAY_BASE_URL: "http://[::1]:8787",
+        NEXISCLAW_APNS_RELAY_ALLOW_HTTP: "yes",
+        NEXISCLAW_APNS_RELAY_TIMEOUT_MS: "nope",
       } as NodeJS.ProcessEnv);
 
       expectRelayConfig(resolved, {
@@ -104,25 +104,25 @@ describe("push-apns.relay", () => {
     it.each([
       {
         name: "unsupported protocol",
-        env: { OPENCLAW_APNS_RELAY_BASE_URL: "ftp://relay.example.com" },
+        env: { NEXISCLAW_APNS_RELAY_BASE_URL: "ftp://relay.example.com" },
         expected: "unsupported protocol",
       },
       {
         name: "http non-loopback host",
         env: {
-          OPENCLAW_APNS_RELAY_BASE_URL: "http://relay.example.com",
-          OPENCLAW_APNS_RELAY_ALLOW_HTTP: "true",
+          NEXISCLAW_APNS_RELAY_BASE_URL: "http://relay.example.com",
+          NEXISCLAW_APNS_RELAY_ALLOW_HTTP: "true",
         },
         expected: "loopback hosts",
       },
       {
         name: "query string",
-        env: { OPENCLAW_APNS_RELAY_BASE_URL: "https://relay.example.com/path?debug=1" },
+        env: { NEXISCLAW_APNS_RELAY_BASE_URL: "https://relay.example.com/path?debug=1" },
         expected: "query and fragment are not allowed",
       },
       {
         name: "userinfo",
-        env: { OPENCLAW_APNS_RELAY_BASE_URL: "https://user:pass@relay.example.com/path" },
+        env: { NEXISCLAW_APNS_RELAY_BASE_URL: "https://user:pass@relay.example.com/path" },
         expected: "userinfo is not allowed",
       },
     ])("rejects invalid relay URL: $name", ({ env, expected }) => {
@@ -195,7 +195,7 @@ describe("push-apns.relay", () => {
         verifyDeviceSignature(
           relayGatewayIdentity.publicKey,
           [
-            "openclaw-relay-send-v1",
+            "NexisClaw-relay-send-v1",
             sent?.gatewayDeviceId,
             String(sent?.signedAtMs),
             sent?.bodyJson,

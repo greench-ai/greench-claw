@@ -1,6 +1,6 @@
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+import { extensionForMime } from "NexisClaw/plugin-sdk/media-mime";
+import { isProviderApiKeyConfigured } from "NexisClaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
@@ -9,13 +9,13 @@ import {
   resolveProviderOperationTimeoutMs,
   resolveProviderHttpRequestConfig,
   waitProviderOperationPollInterval,
-} from "openclaw/plugin-sdk/provider-http";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/provider-http";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import type {
   GeneratedVideoAsset,
   VideoGenerationProvider,
   VideoGenerationRequest,
-} from "openclaw/plugin-sdk/video-generation";
+} from "NexisClaw/plugin-sdk/video-generation";
 
 const DEFAULT_MINIMAX_VIDEO_BASE_URL = "https://api.minimax.io";
 const DEFAULT_MINIMAX_VIDEO_MODEL = "MiniMax-Hailuo-2.3";

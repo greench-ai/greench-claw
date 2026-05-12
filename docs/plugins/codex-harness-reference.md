@@ -42,14 +42,14 @@ Supported top-level fields:
 | -------------------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `discovery`                | enabled                  | Model discovery settings for Codex app-server `model/list`.                                                                               |
 | `appServer`                | managed stdio app-server | Transport, command, auth, approval, sandbox, and timeout settings.                                                                        |
-| `codexDynamicToolsLoading` | `"searchable"`           | Use `"direct"` to put OpenClaw dynamic tools directly in the initial Codex tool context.                                                  |
-| `codexDynamicToolsExclude` | `[]`                     | Additional OpenClaw dynamic tool names to omit from Codex app-server turns.                                                               |
+| `codexDynamicToolsLoading` | `"searchable"`           | Use `"direct"` to put NexisClaw dynamic tools directly in the initial Codex tool context.                                                  |
+| `codexDynamicToolsExclude` | `[]`                     | Additional NexisClaw dynamic tool names to omit from Codex app-server turns.                                                               |
 | `codexPlugins`             | disabled                 | Native Codex plugin/app support for migrated source-installed curated plugins. See [Native Codex plugins](/plugins/codex-native-plugins). |
 | `computerUse`              | disabled                 | Codex Computer Use setup. See [Codex Computer Use](/plugins/codex-computer-use).                                                          |
 
 ## App-server transport
 
-By default, OpenClaw starts the managed Codex binary shipped with the bundled
+By default, NexisClaw starts the managed Codex binary shipped with the bundled
 plugin:
 
 ```bash
@@ -93,9 +93,9 @@ Supported `appServer` fields:
 | `url`                         | unset                                                  | WebSocket app-server URL.                                                                                                                                                                       |
 | `authToken`                   | unset                                                  | Bearer token for WebSocket transport.                                                                                                                                                           |
 | `headers`                     | `{}`                                                   | Extra WebSocket headers.                                                                                                                                                                        |
-| `clearEnv`                    | `[]`                                                   | Extra environment variable names removed from the spawned stdio app-server process after OpenClaw builds its inherited environment.                                                             |
+| `clearEnv`                    | `[]`                                                   | Extra environment variable names removed from the spawned stdio app-server process after NexisClaw builds its inherited environment.                                                             |
 | `requestTimeoutMs`            | `60000`                                                | Timeout for app-server control-plane calls.                                                                                                                                                     |
-| `turnCompletionIdleTimeoutMs` | `60000`                                                | Quiet window after a turn-scoped app-server request while OpenClaw waits for `turn/completed`.                                                                                                  |
+| `turnCompletionIdleTimeoutMs` | `60000`                                                | Quiet window after a turn-scoped app-server request while NexisClaw waits for `turn/completed`.                                                                                                  |
 | `mode`                        | `"yolo"` unless local Codex requirements disallow YOLO | Preset for YOLO or guardian-reviewed execution.                                                                                                                                                 |
 | `approvalPolicy`              | `"never"` or an allowed guardian approval policy       | Native Codex approval policy sent to thread start, resume, and turn.                                                                                                                            |
 | `sandbox`                     | `"danger-full-access"` or an allowed guardian sandbox  | Native Codex sandbox mode sent to thread start and resume.                                                                                                                                      |
@@ -111,11 +111,11 @@ must report stable version `0.125.0` or newer.
 Local stdio app-server sessions default to YOLO mode:
 `approvalPolicy: "never"`, `approvalsReviewer: "user"`, and
 `sandbox: "danger-full-access"`. This trusted local operator posture lets
-unattended OpenClaw turns and heartbeats make progress without native approval
+unattended NexisClaw turns and heartbeats make progress without native approval
 prompts that nobody is around to answer.
 
 If Codex's local system requirements file disallows implicit YOLO approval,
-reviewer, or sandbox values, OpenClaw treats the implicit default as guardian
+reviewer, or sandbox values, NexisClaw treats the implicit default as guardian
 instead and selects allowed guardian permissions. Hostname-matching
 `[[remote_sandbox_config]]` entries in the same requirements file are honored
 for the sandbox default decision.
@@ -150,13 +150,13 @@ but new configs should use `auto_review`.
 
 Auth is selected in this order:
 
-1. An explicit OpenClaw Codex auth profile for the agent.
+1. An explicit NexisClaw Codex auth profile for the agent.
 2. The app-server's existing account in that agent's Codex home.
 3. For local stdio app-server launches only, `CODEX_API_KEY`, then
    `OPENAI_API_KEY`, when no app-server account is present and OpenAI auth is
    still required.
 
-When OpenClaw sees a ChatGPT subscription-style Codex auth profile, it removes
+When NexisClaw sees a ChatGPT subscription-style Codex auth profile, it removes
 `CODEX_API_KEY` and `OPENAI_API_KEY` from the spawned Codex child process. That
 keeps Gateway-level API keys available for embeddings or direct OpenAI models
 without making native Codex app-server turns bill through the API by accident.
@@ -166,22 +166,22 @@ login instead of inherited child-process env. WebSocket app-server connections
 do not receive Gateway env API-key fallback; use an explicit auth profile or the
 remote app-server's own account.
 
-Stdio app-server launches inherit OpenClaw's process environment by default, but
-OpenClaw owns the Codex app-server account bridge and sets both `CODEX_HOME` and
-`HOME` to per-agent directories under that agent's OpenClaw state. Codex's own
+Stdio app-server launches inherit NexisClaw's process environment by default, but
+NexisClaw owns the Codex app-server account bridge and sets both `CODEX_HOME` and
+`HOME` to per-agent directories under that agent's NexisClaw state. Codex's own
 skill loader reads `$CODEX_HOME/skills` and `$HOME/.agents/skills`, so both
 values are isolated for local app-server launches. That keeps Codex-native
-skills, plugins, config, accounts, and thread state scoped to the OpenClaw agent
+skills, plugins, config, accounts, and thread state scoped to the NexisClaw agent
 instead of leaking in from the operator's personal Codex CLI home.
 
-OpenClaw plugins and OpenClaw skill snapshots still flow through OpenClaw's own
+NexisClaw plugins and NexisClaw skill snapshots still flow through NexisClaw's own
 plugin registry and skill loader. Personal Codex CLI assets do not. If you have
-useful Codex CLI skills or plugins that should become part of an OpenClaw agent,
+useful Codex CLI skills or plugins that should become part of an NexisClaw agent,
 inventory them explicitly:
 
 ```bash
-openclaw migrate codex --dry-run
-openclaw migrate apply codex --yes
+NexisClaw migrate codex --dry-run
+NexisClaw migrate apply codex --yes
 ```
 
 If a deployment needs additional environment isolation, add those variables to
@@ -205,12 +205,12 @@ If a deployment needs additional environment isolation, add those variables to
 ```
 
 `appServer.clearEnv` only affects the spawned Codex app-server child process.
-`CODEX_HOME` and `HOME` remain reserved for OpenClaw's per-agent Codex
+`CODEX_HOME` and `HOME` remain reserved for NexisClaw's per-agent Codex
 isolation on local launches.
 
 ## Dynamic tools
 
-Codex dynamic tools default to `searchable` loading. OpenClaw does not expose
+Codex dynamic tools default to `searchable` loading. NexisClaw does not expose
 dynamic tools that duplicate Codex-native workspace operations:
 
 - `read`
@@ -221,9 +221,9 @@ dynamic tools that duplicate Codex-native workspace operations:
 - `process`
 - `update_plan`
 
-Remaining OpenClaw integration tools, such as messaging, sessions, media, cron,
+Remaining NexisClaw integration tools, such as messaging, sessions, media, cron,
 browser, nodes, gateway, `heartbeat_respond`, and `web_search`, are available
-through Codex tool search under the `openclaw` namespace. This keeps the initial
+through Codex tool search under the `NexisClaw` namespace. This keeps the initial
 model context smaller. `sessions_yield` and message-tool-only source replies
 stay direct because those are turn-control contracts.
 
@@ -233,7 +233,7 @@ tool payload.
 
 ## Timeouts
 
-OpenClaw-owned dynamic tool calls are bounded independently from
+NexisClaw-owned dynamic tool calls are bounded independently from
 `appServer.requestTimeoutMs`. Each Codex `item/tool/call` request uses the first
 available timeout in this order:
 
@@ -243,15 +243,15 @@ available timeout in this order:
   converted to milliseconds, or the 60 second media default.
 - The 30 second dynamic-tool default.
 
-Dynamic tool budgets are capped at 600000 ms. On timeout, OpenClaw aborts the
+Dynamic tool budgets are capped at 600000 ms. On timeout, NexisClaw aborts the
 tool signal where supported and returns a failed dynamic-tool response to Codex
 so the turn can continue instead of leaving the session in `processing`.
 
-After OpenClaw responds to a Codex turn-scoped app-server request, the harness
+After NexisClaw responds to a Codex turn-scoped app-server request, the harness
 also expects Codex to finish the native turn with `turn/completed`. If the
 app-server goes quiet for `appServer.turnCompletionIdleTimeoutMs` after that
-response, OpenClaw best-effort interrupts the Codex turn, records a diagnostic
-timeout, and releases the OpenClaw session lane so follow-up chat messages are
+response, NexisClaw best-effort interrupts the Codex turn, records a diagnostic
+timeout, and releases the NexisClaw session lane so follow-up chat messages are
 not queued behind a stale native turn.
 
 Any non-terminal notification for the same turn, including
@@ -264,13 +264,13 @@ id, and a bounded assistant text preview.
 ## Model discovery
 
 By default, the Codex plugin asks the app-server for available models. Model
-availability is owned by Codex app-server, so the list can change when OpenClaw
+availability is owned by Codex app-server, so the list can change when NexisClaw
 upgrades the bundled `@openai/codex` version or when a deployment points
 `appServer.command` at a different Codex binary. Availability can also be
 account-scoped. Use `/codex models` on a running gateway to see the live catalog
 for that harness and account.
 
-If discovery fails or times out, OpenClaw uses a bundled fallback catalog for:
+If discovery fails or times out, NexisClaw uses a bundled fallback catalog for:
 
 - GPT-5.5
 - GPT-5.4 mini
@@ -333,12 +333,12 @@ fallback catalog:
 
 ## Workspace bootstrap files
 
-Codex handles `AGENTS.md` itself through native project-doc discovery. OpenClaw
+Codex handles `AGENTS.md` itself through native project-doc discovery. NexisClaw
 does not write synthetic Codex project-doc files or depend on Codex fallback
 filenames for persona files, because Codex fallbacks only apply when
 `AGENTS.md` is missing.
 
-For OpenClaw workspace parity, the Codex harness resolves the other bootstrap
+For NexisClaw workspace parity, the Codex harness resolves the other bootstrap
 files, including `SOUL.md`, `TOOLS.md`, `IDENTITY.md`, `USER.md`,
 `HEARTBEAT.md`, `BOOTSTRAP.md`, and `MEMORY.md` when present, and forwards them
 through Codex developer instructions on `thread/start` and `thread/resume`.
@@ -349,18 +349,18 @@ behavior-shaping lane without duplicating `AGENTS.md`.
 
 Environment overrides remain available for local testing:
 
-- `OPENCLAW_CODEX_APP_SERVER_BIN`
-- `OPENCLAW_CODEX_APP_SERVER_ARGS`
-- `OPENCLAW_CODEX_APP_SERVER_MODE=yolo|guardian`
-- `OPENCLAW_CODEX_APP_SERVER_APPROVAL_POLICY`
-- `OPENCLAW_CODEX_APP_SERVER_SANDBOX`
+- `NEXISCLAW_CODEX_APP_SERVER_BIN`
+- `NEXISCLAW_CODEX_APP_SERVER_ARGS`
+- `NEXISCLAW_CODEX_APP_SERVER_MODE=yolo|guardian`
+- `NEXISCLAW_CODEX_APP_SERVER_APPROVAL_POLICY`
+- `NEXISCLAW_CODEX_APP_SERVER_SANDBOX`
 
-`OPENCLAW_CODEX_APP_SERVER_BIN` bypasses the managed binary when
+`NEXISCLAW_CODEX_APP_SERVER_BIN` bypasses the managed binary when
 `appServer.command` is unset.
 
-`OPENCLAW_CODEX_APP_SERVER_GUARDIAN=1` was removed. Use
+`NEXISCLAW_CODEX_APP_SERVER_GUARDIAN=1` was removed. Use
 `plugins.entries.codex.config.appServer.mode: "guardian"` instead, or
-`OPENCLAW_CODEX_APP_SERVER_MODE=guardian` for one-off local testing. Config is
+`NEXISCLAW_CODEX_APP_SERVER_MODE=guardian` for one-off local testing. Config is
 preferred for repeatable deployments because it keeps the plugin behavior in the
 same reviewed file as the rest of the Codex harness setup.
 

@@ -13,7 +13,7 @@ import {
   resolveMainVersion,
   resolvePublishedVersion,
   runHarness,
-  validateOpenClawPackageSpec,
+  validateNexisClawPackageSpec,
   writeJson,
   type RttProviderMode,
 } from "./lib/rtt-harness.ts";
@@ -26,13 +26,13 @@ const DEFAULT_SAMPLE_TIMEOUT_MS = 30_000;
 
 function usage() {
   return [
-    "Usage: pnpm rtt <openclaw@spec> [--package-tgz PATH] [--provider mock-openai|live-frontier] [--runs N] [--samples N] [--sample-timeout-ms N] [--timeout-ms N] [--harness-root PATH] [--output PATH]",
+    "Usage: pnpm rtt <NexisClaw@spec> [--package-tgz PATH] [--provider mock-openai|live-frontier] [--runs N] [--samples N] [--sample-timeout-ms N] [--timeout-ms N] [--harness-root PATH] [--output PATH]",
     "",
     "Examples:",
-    "  pnpm rtt openclaw@main --package-tgz .artifacts/package/openclaw.tgz",
-    "  pnpm rtt openclaw@beta",
-    "  pnpm rtt openclaw@2026.4.30",
-    "  pnpm rtt openclaw@latest --provider live-frontier",
+    "  pnpm rtt NexisClaw@main --package-tgz .artifacts/package/NexisClaw.tgz",
+    "  pnpm rtt NexisClaw@beta",
+    "  pnpm rtt NexisClaw@2026.4.30",
+    "  pnpm rtt NexisClaw@latest --provider live-frontier",
   ].join("\n");
 }
 
@@ -134,7 +134,7 @@ function parseArgs(argv: string[]) {
   }
 
   return {
-    spec: validateOpenClawPackageSpec(spec),
+    spec: validateNexisClawPackageSpec(spec),
     options: {
       packageTgz,
       providerMode,
@@ -218,11 +218,11 @@ async function main() {
   assertRequiredEnv(process.env);
   await assertHarnessRoot(options.harnessRoot);
   await assertDockerAvailable();
-  if (spec === "openclaw@main" && !options.packageTgz) {
-    throw new Error("openclaw@main requires --package-tgz.");
+  if (spec === "NexisClaw@main" && !options.packageTgz) {
+    throw new Error("NexisClaw@main requires --package-tgz.");
   }
   const version =
-    spec === "openclaw@main"
+    spec === "NexisClaw@main"
       ? await resolveMainVersion(options.harnessRoot)
       : await resolvePublishedVersion(spec);
   let failed = false;

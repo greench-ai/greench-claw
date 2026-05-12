@@ -113,7 +113,7 @@ async function yieldTranscriptScan(): Promise<void> {
   await new Promise<void>((resolve) => setImmediate(resolve));
 }
 
-export function attachOpenClawTranscriptMeta(
+export function attachNexisClawTranscriptMeta(
   message: unknown,
   meta: Record<string, unknown>,
 ): unknown {
@@ -122,12 +122,12 @@ export function attachOpenClawTranscriptMeta(
   }
   const record = message as Record<string, unknown>;
   const existing =
-    record.__openclaw && typeof record.__openclaw === "object" && !Array.isArray(record.__openclaw)
-      ? (record.__openclaw as Record<string, unknown>)
+    record.__NexisClaw && typeof record.__NexisClaw === "object" && !Array.isArray(record.__NexisClaw)
+      ? (record.__NexisClaw as Record<string, unknown>)
       : {};
   return {
     ...record,
-    __openclaw: {
+    __NexisClaw: {
       ...existing,
       ...meta,
     },
@@ -305,7 +305,7 @@ function buildOversizedTranscriptRecord(line: string): TailTranscriptRecord {
     message: {
       role,
       content: [{ type: "text", text: TRANSCRIPT_OVERSIZED_MESSAGE_PLACEHOLDER }],
-      __openclaw: { truncated: true, reason: "oversized" },
+      __NexisClaw: { truncated: true, reason: "oversized" },
     },
   };
   return {
@@ -623,7 +623,7 @@ export function readRecentSessionMessagesWithStats(
   const messages = readRecentSessionMessages(sessionId, storePath, sessionFile, opts);
   const firstSeq = Math.max(1, totalMessages - messages.length + 1);
   const messagesWithSeq = messages.map((message, index) =>
-    attachOpenClawTranscriptMeta(message, { seq: firstSeq + index }),
+    attachNexisClawTranscriptMeta(message, { seq: firstSeq + index }),
   );
   return { messages: messagesWithSeq, totalMessages };
 }
@@ -670,7 +670,7 @@ export async function readRecentSessionMessagesWithStatsAsync(
   const messages = await readRecentSessionMessagesAsync(sessionId, storePath, sessionFile, opts);
   const firstSeq = Math.max(1, totalMessages - messages.length + 1);
   const messagesWithSeq = messages.map((message, index) =>
-    attachOpenClawTranscriptMeta(message, { seq: firstSeq + index }),
+    attachNexisClawTranscriptMeta(message, { seq: firstSeq + index }),
   );
   return { messages: messagesWithSeq, totalMessages };
 }
@@ -717,7 +717,7 @@ function parsedSessionEntryToMessage(parsed: unknown, seq: number): unknown {
   }
   const entry = parsed as Record<string, unknown>;
   if (entry.message) {
-    return attachOpenClawTranscriptMeta(entry.message, {
+    return attachNexisClawTranscriptMeta(entry.message, {
       ...(typeof entry.id === "string" ? { id: entry.id } : {}),
       seq,
     });
@@ -732,7 +732,7 @@ function parsedSessionEntryToMessage(parsed: unknown, seq: number): unknown {
       role: "system",
       content: [{ type: "text", text: "Compaction" }],
       timestamp,
-      __openclaw: {
+      __NexisClaw: {
         kind: "compaction",
         id: typeof entry.id === "string" ? entry.id : undefined,
         seq,
@@ -1199,7 +1199,7 @@ function extractUsageSnapshotFromTranscriptLine(
         : typeof parsed.model === "string"
           ? parsed.model.trim()
           : undefined;
-    const isDeliveryMirror = modelProvider === "openclaw" && model === "delivery-mirror";
+    const isDeliveryMirror = modelProvider === "NexisClaw" && model === "delivery-mirror";
     const hasMeaningfulUsage =
       hasNonzeroUsage(usage) ||
       typeof totalTokens === "number" ||

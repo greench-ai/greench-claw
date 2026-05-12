@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 
-export function makeQqbotSecretRefConfig(): OpenClawConfig {
+export function makeQqbotSecretRefConfig(): NexisClawConfig {
   return {
     channels: {
       qqbot: {
@@ -12,10 +12,10 @@ export function makeQqbotSecretRefConfig(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NexisClawConfig;
 }
 
-export function makeQqbotDefaultAccountConfig(): OpenClawConfig {
+export function makeQqbotDefaultAccountConfig(): NexisClawConfig {
   return {
     channels: {
       qqbot: {
@@ -25,5 +25,5 @@ export function makeQqbotDefaultAccountConfig(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NexisClawConfig;
 }

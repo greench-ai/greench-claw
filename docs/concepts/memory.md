@@ -1,12 +1,12 @@
 ---
-summary: "How OpenClaw remembers things across sessions"
+summary: "How NexisClaw remembers things across sessions"
 title: "Memory overview"
 read_when:
   - You want to understand how memory works
   - You want to know what memory files to write
 ---
 
-OpenClaw remembers things by writing **plain Markdown files** in your agent's
+NexisClaw remembers things by writing **plain Markdown files** in your agent's
 workspace. The model only "remembers" what gets saved to disk — there is no
 hidden state.
 
@@ -21,7 +21,7 @@ Your agent has three memory-related files:
 - **`DREAMS.md`** (optional) — Dream Diary and dreaming sweep
   summaries for human review, including grounded historical backfill entries.
 
-These files live in the agent workspace (default `~/.openclaw/workspace`).
+These files live in the agent workspace (default `~/.NexisClaw/workspace`).
 
 ## What goes where
 
@@ -40,12 +40,12 @@ into `MEMORY.md` and remove stale long-term entries. The generated workspace
 instructions and heartbeat flow can do that periodically; you do not need to
 manually edit `MEMORY.md` for every remembered detail.
 
-If `MEMORY.md` grows past the bootstrap file budget, OpenClaw keeps the file on
+If `MEMORY.md` grows past the bootstrap file budget, NexisClaw keeps the file on
 disk intact but truncates the copy injected into the model context. Treat that as
 a signal to move detailed material back into `memory/*.md`, keep only the
 durable summary in `MEMORY.md`, or raise the bootstrap limits if you explicitly
 want to spend more prompt budget. Use `/context list`, `/context detail`, or
-`openclaw doctor` to see raw vs injected sizes and truncation status.
+`NexisClaw doctor` to see raw vs injected sizes and truncation status.
 
 <Tip>
 If you want your agent to remember something, just ask it: "Remember that I
@@ -59,7 +59,7 @@ tomorrow, the useful memory may be "check in after the interview," not "store
 this forever in `MEMORY.md`."
 
 [Commitments](/concepts/commitments) are opt-in, short-lived follow-up memories
-for that case. OpenClaw infers them in a hidden background pass, scopes them to
+for that case. NexisClaw infers them in a hidden background pass, scopes them to
 the same agent and channel, and delivers due check-ins through heartbeat.
 Explicit reminders still use [scheduled tasks](/automation/cron-jobs).
 
@@ -101,7 +101,7 @@ search** — combining vector similarity (semantic meaning) with keyword matchin
 an API key for any supported provider.
 
 <Info>
-OpenClaw auto-detects your embedding provider from available API keys. If you
+NexisClaw auto-detects your embedding provider from available API keys. If you
 have an OpenAI, Gemini, Voyage, or Mistral key configured, memory search is
 enabled automatically.
 </Info>
@@ -141,7 +141,7 @@ dashboards, bridge mode, and Obsidian-friendly workflows.
 
 ## Automatic memory flush
 
-Before [compaction](/concepts/compaction) summarizes your conversation, OpenClaw
+Before [compaction](/concepts/compaction) summarizes your conversation, NexisClaw
 runs a silent turn that reminds the agent to save important context to memory
 files. This is on by default — you do not need to configure anything.
 
@@ -206,7 +206,7 @@ the system thinks is durable without manually editing `MEMORY.md`.
 When you use:
 
 ```bash
-openclaw memory rem-backfill --path ./memory --stage-short-term
+NexisClaw memory rem-backfill --path ./memory --stage-short-term
 ```
 
 the grounded durable candidates are not promoted directly. They are staged into
@@ -221,16 +221,16 @@ If you decide the replay was not useful, you can remove the staged artifacts
 without touching ordinary diary entries or normal recall state:
 
 ```bash
-openclaw memory rem-backfill --rollback
-openclaw memory rem-backfill --rollback-short-term
+NexisClaw memory rem-backfill --rollback
+NexisClaw memory rem-backfill --rollback-short-term
 ```
 
 ## CLI
 
 ```bash
-openclaw memory status          # Check index status and provider
-openclaw memory search "query"  # Search from the command line
-openclaw memory index --force   # Rebuild the index
+NexisClaw memory status          # Check index status and provider
+NexisClaw memory search "query"  # Search from the command line
+NexisClaw memory index --force   # Rebuild the index
 ```
 
 ## Further reading

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it } from "vitest";
 import { _resetIMessageShortIdState } from "./monitor-reply-cache.js";
 import {
@@ -12,7 +12,7 @@ beforeEach(() => {
   _resetIMessageShortIdState();
 });
 
-function baseCfg(): OpenClawConfig {
+function baseCfg(): NexisClawConfig {
   return {
     channels: {
       imessage: {
@@ -24,13 +24,13 @@ function baseCfg(): OpenClawConfig {
     },
     session: { mainKey: "main" },
     messages: {
-      groupChat: { mentionPatterns: ["@openclaw"] },
+      groupChat: { mentionPatterns: ["@NexisClaw"] },
     },
-  } as unknown as OpenClawConfig;
+  } as unknown as NexisClawConfig;
 }
 
 async function resolve(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   message: IMessagePayload;
   storeAllowFrom?: string[];
 }) {
@@ -54,7 +54,7 @@ async function resolve(params: {
 }
 
 async function resolveDispatchDecision(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   message: IMessagePayload;
   groupHistories?: Parameters<typeof resolveIMessageInboundDecision>[0]["groupHistories"];
   allowFrom?: string[];
@@ -86,7 +86,7 @@ async function resolveDispatchDecision(params: {
 }
 
 async function buildDispatchContextPayload(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   message: IMessagePayload;
 }) {
   const { cfg, message } = params;
@@ -157,7 +157,7 @@ describe("imessage monitor gating + envelope builders", () => {
       chat_id: 42,
       sender: "+15550002222",
       is_from_me: false,
-      text: "@openclaw ping",
+      text: "@NexisClaw ping",
       is_group: true,
       chat_name: "Lobster Squad",
       participants: ["+1555", "+1556"],
@@ -181,7 +181,7 @@ describe("imessage monitor gating + envelope builders", () => {
       chat_identifier: "thread-42",
       sender: "+15550002222",
       is_from_me: false,
-      text: "@openclaw ping",
+      text: "@NexisClaw ping",
       is_group: true,
       chat_name: "Lobster Squad",
       participants: ["+1555", "+1556"],
@@ -226,7 +226,7 @@ describe("imessage monitor gating + envelope builders", () => {
       chat_id: 55,
       sender: "+15550001111",
       is_from_me: false,
-      text: "@openclaw replying now",
+      text: "@NexisClaw replying now",
       is_group: true,
       reply_to_id: 9001,
       reply_to_text: "blocked quote",
@@ -265,7 +265,7 @@ describe("imessage monitor gating + envelope builders", () => {
       chat_id: 55,
       sender: "+15550001111",
       is_from_me: false,
-      text: "@openclaw replying now",
+      text: "@NexisClaw replying now",
       is_group: true,
       reply_to_id: 9001,
       reply_to_text: "quoted context",
@@ -359,12 +359,12 @@ describe("imessage monitor gating + envelope builders", () => {
         chat_id: 123,
         sender: "+15550001111",
         is_from_me: false,
-        text: "@openclaw hello",
+        text: "@NexisClaw hello",
         is_group: true,
       },
       opts: {},
-      messageText: "@openclaw hello",
-      bodyText: "@openclaw hello",
+      messageText: "@NexisClaw hello",
+      bodyText: "@NexisClaw hello",
       allowFrom: ["*"],
       groupAllowFrom: [],
       groupPolicy: "open",
@@ -391,12 +391,12 @@ describe("imessage monitor gating + envelope builders", () => {
         chat_id: 202,
         sender: "+15550003333",
         is_from_me: false,
-        text: "@openclaw hi",
+        text: "@NexisClaw hi",
         is_group: true,
       },
       opts: {},
-      messageText: "@openclaw hi",
-      bodyText: "@openclaw hi",
+      messageText: "@NexisClaw hi",
+      bodyText: "@NexisClaw hi",
       allowFrom: ["*"],
       groupAllowFrom: ["chat_id:101"],
       groupPolicy: "allowlist",
@@ -415,12 +415,12 @@ describe("imessage monitor gating + envelope builders", () => {
         chat_id: 101,
         sender: "+15550003333",
         is_from_me: false,
-        text: "@openclaw ok",
+        text: "@NexisClaw ok",
         is_group: true,
       },
       opts: {},
-      messageText: "@openclaw ok",
-      bodyText: "@openclaw ok",
+      messageText: "@NexisClaw ok",
+      bodyText: "@NexisClaw ok",
       allowFrom: ["*"],
       groupAllowFrom: ["chat_id:101"],
       groupPolicy: "allowlist",
@@ -447,12 +447,12 @@ describe("imessage monitor gating + envelope builders", () => {
         chat_id: 303,
         sender: "+15550003333",
         is_from_me: false,
-        text: "@openclaw hi",
+        text: "@NexisClaw hi",
         is_group: true,
       },
       opts: {},
-      messageText: "@openclaw hi",
-      bodyText: "@openclaw hi",
+      messageText: "@NexisClaw hi",
+      bodyText: "@NexisClaw hi",
       allowFrom: ["*"],
       groupAllowFrom: [],
       groupPolicy: "disabled",

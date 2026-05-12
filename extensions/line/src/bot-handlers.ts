@@ -1,30 +1,30 @@
 import type { webhook } from "@line/bot-sdk";
-import { buildMentionRegexes, matchesMentionPatterns } from "openclaw/plugin-sdk/channel-inbound";
-import { resolveStableChannelMessageIngress } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { createChannelPairingChallengeIssuer } from "openclaw/plugin-sdk/channel-pairing";
-import { shouldComputeCommandAuthorized } from "openclaw/plugin-sdk/command-auth-native";
-import type { GroupPolicy, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { buildMentionRegexes, matchesMentionPatterns } from "NexisClaw/plugin-sdk/channel-inbound";
+import { resolveStableChannelMessageIngress } from "NexisClaw/plugin-sdk/channel-ingress-runtime";
+import { createChannelPairingChallengeIssuer } from "NexisClaw/plugin-sdk/channel-pairing";
+import { shouldComputeCommandAuthorized } from "NexisClaw/plugin-sdk/command-auth-native";
+import type { GroupPolicy, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   readChannelAllowFromStore,
   resolvePairingIdLabel,
   upsertChannelPairingRequest,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { createClaimableDedupe, type ClaimableDedupe } from "openclaw/plugin-sdk/persistent-dedupe";
+} from "NexisClaw/plugin-sdk/conversation-runtime";
+import { createClaimableDedupe, type ClaimableDedupe } from "NexisClaw/plugin-sdk/persistent-dedupe";
 import {
   DEFAULT_GROUP_HISTORY_LIMIT,
   clearHistoryEntriesIfEnabled,
   recordPendingHistoryEntryIfEnabled,
   type HistoryEntry,
-} from "openclaw/plugin-sdk/reply-history";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "NexisClaw/plugin-sdk/reply-history";
+import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
+import { danger, logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
 import {
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "openclaw/plugin-sdk/runtime-group-policy";
-import { normalizeStringEntries } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/runtime-group-policy";
+import { normalizeStringEntries } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { firstDefined, normalizeLineAllowEntry } from "./bot-access.js";
 import {
   buildLineMessageContext,
@@ -64,7 +64,7 @@ function isDownloadableLineMessageType(
 }
 
 export interface LineHandlerContext {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   account: ResolvedLineAccount;
   runtime: RuntimeEnv;
   mediaMaxBytes: number;

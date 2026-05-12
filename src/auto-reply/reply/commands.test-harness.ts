@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { configureTaskRegistryRuntime } from "../../tasks/task-registry.store.js";
 import type { MsgContext } from "../templating.js";
 import { buildCommandContext } from "./commands-context.js";
@@ -9,11 +9,11 @@ export const baseCommandTestConfig = {
   commands: { text: true },
   channels: { whatsapp: { allowFrom: ["*"] } },
   session: { mainKey: "main", scope: "per-sender" },
-} as OpenClawConfig;
+} as NexisClawConfig;
 
 export function buildCommandTestParams(
   commandBody: string,
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   ctxOverrides?: Partial<MsgContext>,
   options?: {
     workspaceDir?: string;
@@ -78,7 +78,7 @@ export function configureInMemoryTaskRegistryStoreForTests(): void {
 
 export function buildPluginsCommandParams(params: {
   commandBodyNormalized: string;
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   workspaceDir?: string;
   gatewayClientScopes?: string[];
 }): HandleCommandsParams {
@@ -92,7 +92,7 @@ export function buildPluginsCommandParams(params: {
           plugins: true,
         },
         plugins: { enabled: true },
-      } as OpenClawConfig),
+      } as NexisClawConfig),
     ctx: {
       Provider: "whatsapp",
       Surface: "whatsapp",

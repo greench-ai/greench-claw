@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/feishu",
+  "name": "@NexisClaw/feishu",
   "version": "2026.5.12-beta.1",
-  "description": "OpenClaw Feishu/Lark channel plugin (community maintained by @m1heng)",
+  "description": "NexisClaw Feishu/Lark channel plugin (community maintained by @m1heng)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/NexisClaw/NexisClaw"
   },
   "type": "module",
   "dependencies": {
@@ -13,18 +13,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*",
+    "NexisClaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.5.12-beta.1"
+    "NexisClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "NexisClaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -43,7 +43,7 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@openclaw/feishu",
+      "npmSpec": "@NexisClaw/feishu",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.25"
     },
@@ -51,7 +51,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "openclawVersion": "2026.5.12-beta.1"
+      "NexisClawVersion": "2026.5.12-beta.1"
     },
     "release": {
       "publishToClawHub": true,

@@ -69,8 +69,8 @@ type CliOptions = {
 const DEFAULT_RUNS = 5;
 const DEFAULT_WARMUP = 1;
 const DEFAULT_TIMEOUT_MS = 30_000;
-const DEFAULT_ENTRY = "openclaw.mjs";
-const MAX_RSS_MARKER = "__OPENCLAW_MAX_RSS_KB__=";
+const DEFAULT_ENTRY = "NexisClaw.mjs";
+const MAX_RSS_MARKER = "__NEXISCLAW_MAX_RSS_KB__=";
 
 const COMMAND_CASES: readonly CommandCase[] = [
   {
@@ -515,9 +515,9 @@ async function runSample(params: {
   heapProfDir?: string;
   rssHookPath: string;
 }): Promise<Sample> {
-  const runRoot = mkdtempSync(path.join(os.tmpdir(), "openclaw-cli-bench-home-"));
-  const stateDir = path.join(runRoot, ".openclaw");
-  const configPath = path.join(stateDir, "openclaw.json");
+  const runRoot = mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-bench-home-"));
+  const stateDir = path.join(runRoot, ".NexisClaw");
+  const configPath = path.join(stateDir, "NexisClaw.json");
   const nodeArgs = [
     "--import",
     params.rssHookPath,
@@ -543,10 +543,10 @@ async function runSample(params: {
           ...process.env,
           HOME: runRoot,
           USERPROFILE: runRoot,
-          OPENCLAW_HOME: runRoot,
-          OPENCLAW_STATE_DIR: stateDir,
-          OPENCLAW_CONFIG_PATH: configPath,
-          OPENCLAW_HIDE_BANNER: "1",
+          NEXISCLAW_HOME: runRoot,
+          NEXISCLAW_STATE_DIR: stateDir,
+          NEXISCLAW_CONFIG_PATH: configPath,
+          NEXISCLAW_HIDE_BANNER: "1",
           NO_COLOR: "1",
           FORCE_COLOR: "0",
         },
@@ -766,7 +766,7 @@ function parseOptions(): CliOptions {
 }
 
 function printUsage(): void {
-  console.log(`OpenClaw CLI benchmark
+  console.log(`NexisClaw CLI benchmark
 
 Usage:
   pnpm tsx scripts/bench-cli-startup.ts [options]
@@ -775,7 +775,7 @@ Options:
   --preset <startup|real|response|all>
                                Command preset to run (default: startup)
   --case <id>                  Specific case id to run; repeatable
-  --entry <path>               Primary entry file (default: openclaw.mjs)
+  --entry <path>               Primary entry file (default: NexisClaw.mjs)
   --entry-secondary <path>     Secondary entry file for avg delta comparison
   --runs <n>                   Measured runs per case (default: ${DEFAULT_RUNS})
   --warmup <n>                 Warmup runs per case (default: ${DEFAULT_WARMUP})
@@ -798,7 +798,7 @@ async function main(): Promise<void> {
   }
 
   const options = parseOptions();
-  const tmpDir = mkdtempSync(path.join(os.tmpdir(), "openclaw-cli-bench-"));
+  const tmpDir = mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-bench-"));
   const rssHookPath = buildRssHook(tmpDir);
   try {
     const primary = await buildSuiteResult({

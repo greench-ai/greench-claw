@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type { PluginManifestRegistry } from "../plugins/manifest-registry.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 
@@ -97,7 +97,7 @@ const loadPluginLookUpTable = vi.hoisted(() =>
     metrics: pluginLookUpTableMetrics,
   })),
 );
-const resolveOpenClawPackageRootSync = vi.hoisted(() => vi.fn((_params: unknown) => "/package"));
+const resolveNexisClawPackageRootSync = vi.hoisted(() => vi.fn((_params: unknown) => "/package"));
 const runChannelPluginStartupMaintenance = vi.hoisted(() =>
   vi.fn(async (_params: unknown) => undefined),
 );
@@ -120,8 +120,8 @@ vi.mock("../config/plugin-auto-enable.js", () => ({
   applyPluginAutoEnable: (params: { config: unknown }) => applyPluginAutoEnable(params),
 }));
 
-vi.mock("../infra/openclaw-root.js", () => ({
-  resolveOpenClawPackageRootSync: (params: unknown) => resolveOpenClawPackageRootSync(params),
+vi.mock("../infra/NexisClaw-root.js", () => ({
+  resolveNexisClawPackageRootSync: (params: unknown) => resolveNexisClawPackageRootSync(params),
 }));
 
 vi.mock("../plugins/plugin-lookup-table.js", () => ({
@@ -183,7 +183,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
       },
       metrics: pluginLookUpTableMetrics,
     });
-    resolveOpenClawPackageRootSync.mockClear().mockReturnValue("/package");
+    resolveNexisClawPackageRootSync.mockClear().mockReturnValue("/package");
     runChannelPluginStartupMaintenance.mockClear();
     runStartupSessionMigration.mockClear();
   });
@@ -197,7 +197,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
       plugins: {
         allow: ["bench-plugin"],
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const activationConfig = {
       channels: {
         telegram: {
@@ -213,7 +213,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const runtimeConfig = {
       channels: {
         telegram: {
@@ -239,7 +239,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     applyPluginAutoEnable.mockReturnValueOnce({
       config: activationConfig,
       changes: [],
@@ -263,9 +263,9 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
       manifestRegistry: pluginManifestRegistry,
     });
     const lookupInput = firstCallArg<{
-      activationSourceConfig?: OpenClawConfig;
+      activationSourceConfig?: NexisClawConfig;
       metadataSnapshot?: PluginMetadataSnapshot;
-      config?: OpenClawConfig;
+      config?: NexisClawConfig;
     }>(loadPluginLookUpTable);
     expect(lookupInput.activationSourceConfig).toBe(sourceConfig);
     expect(lookupInput.metadataSnapshot).toBe(pluginMetadataSnapshot);
@@ -282,8 +282,8 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
     });
 
     const startupInput = firstCallArg<{
-      activationSourceConfig?: OpenClawConfig;
-      cfg?: OpenClawConfig;
+      activationSourceConfig?: NexisClawConfig;
+      cfg?: NexisClawConfig;
     }>(loadGatewayStartupPlugins);
     expect(startupInput.activationSourceConfig).toBe(sourceConfig);
     expect(startupInput.cfg?.channels?.telegram?.enabled).toBe(true);
@@ -312,7 +312,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
           telegram: { enabled: true },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const log = createLog();
     const { prepareGatewayPluginBootstrap } = await import("./server-startup-plugins.js");
 
@@ -329,7 +329,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
 
     expect(loadPluginLookUpTable).not.toHaveBeenCalled();
     const startupInput = firstCallArg<{
-      cfg?: OpenClawConfig;
+      cfg?: NexisClawConfig;
       pluginIds?: string[];
       pluginLookUpTable?: unknown;
       preferSetupRuntimeForChannelPlugins?: boolean;

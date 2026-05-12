@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type { ResolvedTtsPersona, TtsAutoMode, TtsProvider } from "../config/types.tts.js";
 import type {
   SpeechProviderConfig,
@@ -63,7 +63,7 @@ export type ResolveTtsAutoModeParams = {
 };
 
 export type ResolveExplicitTtsOverridesParams = {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   prefsPath?: string;
   provider?: string;
   modelId?: string;
@@ -75,7 +75,7 @@ export type ResolveExplicitTtsOverridesParams = {
 
 export type TtsRequestParams = {
   text: string;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   prefsPath?: string;
   channel?: string;
   overrides?: TtsDirectiveOverrides;
@@ -87,14 +87,14 @@ export type TtsRequestParams = {
 
 export type TtsTelephonyRequestParams = {
   text: string;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   prefsPath?: string;
   overrides?: TtsDirectiveOverrides;
 };
 
 export type ListSpeechVoicesParams = {
   provider: string;
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   config?: ResolvedTtsConfig;
   apiKey?: string;
   baseUrl?: string;
@@ -102,7 +102,7 @@ export type ListSpeechVoicesParams = {
 
 export type MaybeApplyTtsToPayloadParams = {
   payload: ReplyPayload;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   channel?: string;
   kind?: "tool" | "block" | "final";
   inboundAudio?: boolean;
@@ -127,7 +127,7 @@ export type TtsTestFacade = {
   getResolvedSpeechProviderConfig: (
     config: ResolvedTtsConfig,
     providerId: string,
-    cfg?: OpenClawConfig,
+    cfg?: NexisClawConfig,
   ) => SpeechProviderConfig;
   formatTtsProviderError: (provider: TtsProvider, err: unknown) => string;
   sanitizeTtsErrorForLog: (err: unknown) => string;
@@ -211,12 +211,12 @@ export type ListSpeechVoices = (params: ListSpeechVoicesParams) => Promise<Speec
 
 export type TtsRuntimeFacade = {
   _test: TtsTestFacade;
-  buildTtsSystemPromptHint: (cfg: OpenClawConfig, agentId?: string) => string | undefined;
+  buildTtsSystemPromptHint: (cfg: NexisClawConfig, agentId?: string) => string | undefined;
   getLastTtsAttempt: () => TtsStatusEntry | undefined;
   getResolvedSpeechProviderConfig: (
     config: ResolvedTtsConfig,
     providerId: string,
-    cfg?: OpenClawConfig,
+    cfg?: NexisClawConfig,
   ) => SpeechProviderConfig;
   getTtsMaxLength: (prefsPath: string) => number;
   getTtsPersona: (config: ResolvedTtsConfig, prefsPath: string) => ResolvedTtsPersona | undefined;
@@ -226,7 +226,7 @@ export type TtsRuntimeFacade = {
   isTtsProviderConfigured: (
     config: ResolvedTtsConfig,
     provider: TtsProvider,
-    cfg?: OpenClawConfig,
+    cfg?: NexisClawConfig,
   ) => boolean;
   listSpeechVoices: ListSpeechVoices;
   listTtsPersonas: (config: ResolvedTtsConfig) => ResolvedTtsPersona[];
@@ -234,11 +234,11 @@ export type TtsRuntimeFacade = {
   resolveExplicitTtsOverrides: (params: ResolveExplicitTtsOverridesParams) => TtsDirectiveOverrides;
   resolveTtsAutoMode: (params: ResolveTtsAutoModeParams) => TtsAutoMode;
   resolveTtsConfig: (
-    cfg: OpenClawConfig,
+    cfg: NexisClawConfig,
     contextOrAgentId?: string | TtsConfigResolutionContext,
   ) => ResolvedTtsConfig;
   resolveTtsPrefsPath: (config: ResolvedTtsConfig) => string;
-  resolveTtsProviderOrder: (primary: TtsProvider, cfg?: OpenClawConfig) => TtsProvider[];
+  resolveTtsProviderOrder: (primary: TtsProvider, cfg?: NexisClawConfig) => TtsProvider[];
   setLastTtsAttempt: (entry: TtsStatusEntry | undefined) => void;
   setSummarizationEnabled: (prefsPath: string, enabled: boolean) => void;
   setTtsAutoMode: (prefsPath: string, mode: TtsAutoMode) => void;

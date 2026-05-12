@@ -1,12 +1,12 @@
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/routing";
-import { hasConfiguredSecretInput } from "openclaw/plugin-sdk/secret-input";
+import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/routing";
+import { hasConfiguredSecretInput } from "NexisClaw/plugin-sdk/secret-input";
 import {
   createStandardChannelSetupStatus,
   formatDocsLink,
   setSetupChannelEnabled,
   type ChannelSetupWizard,
-} from "openclaw/plugin-sdk/setup";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/setup";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { resolveNextcloudTalkAccount } from "./accounts.js";
 import {
   clearNextcloudTalkAccountFields,
@@ -40,7 +40,7 @@ export const nextcloudTalkSetupWizard: ChannelSetupWizard = {
     title: "Nextcloud Talk bot setup",
     lines: [
       "1) SSH into your Nextcloud server",
-      '2) Run: ./occ talk:bot:install "OpenClaw" "<shared-secret>" "<webhook-url>" --feature webhook --feature response --feature reaction',
+      '2) Run: ./occ talk:bot:install "NexisClaw" "<shared-secret>" "<webhook-url>" --feature webhook --feature response --feature reaction',
       "3) Copy the shared secret you used in the command",
       "4) Enable the bot in your Nextcloud Talk room settings",
       "Tip: you can also set NEXTCLOUD_TALK_BOT_SECRET in your env.",

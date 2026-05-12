@@ -1,9 +1,9 @@
 import type { AuthProfileStore, OAuthCredential } from "../agents/auth-profiles/types.js";
 import type { ModelProviderAuthMode, ModelProviderConfig } from "../config/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 
 export type ProviderResolveSyntheticAuthContext = {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   provider: string;
   providerConfig?: ModelProviderConfig;
 };
@@ -16,7 +16,7 @@ export type ProviderSyntheticAuthResult = {
 };
 
 export type ProviderResolveExternalOAuthProfilesContext = {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   agentDir?: string;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;

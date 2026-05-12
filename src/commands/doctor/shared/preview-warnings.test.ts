@@ -109,8 +109,8 @@ vi.mock("./stale-plugin-config.js", () => ({
     const hits = [...(cfg.plugins?.allow ?? []), ...Object.keys(cfg.plugins?.entries ?? {})]
       .filter((id) => !knownIds.has(id))
       .map((id) => ({ id, surface: "plugin" }));
-    if (cfg.channels?.["openclaw-weixin"]) {
-      hits.push({ id: "openclaw-weixin", surface: "channel" });
+    if (cfg.channels?.["NexisClaw-weixin"]) {
+      hits.push({ id: "NexisClaw-weixin", surface: "channel" });
     }
     return hits.filter(
       (hit, index) => hits.findIndex((candidate) => candidate.id === hit.id) === index,
@@ -217,7 +217,7 @@ describe("doctor preview warnings", () => {
           },
         },
       },
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "NexisClaw doctor --fix",
     });
 
     expect(
@@ -244,7 +244,7 @@ describe("doctor preview warnings", () => {
           },
         },
       },
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "NexisClaw doctor --fix",
     });
 
     const warning = expectSingleWarningContaining(
@@ -258,7 +258,7 @@ describe("doctor preview warnings", () => {
   it("includes stale plugin config warnings", async () => {
     const warnings = await collectDoctorPreviewWarnings({
       cfg: stalePluginConfig(),
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "NexisClaw doctor --fix",
     });
 
     const warning = expectSingleWarningContaining(
@@ -266,7 +266,7 @@ describe("doctor preview warnings", () => {
       'plugins.allow: stale plugin reference "acpx"',
     );
     expect(warning).toContain("plugins.entries.acpx");
-    expect(warning).toContain('Run "openclaw doctor --fix"');
+    expect(warning).toContain('Run "NexisClaw doctor --fix"');
     expect(warning).not.toContain("Auto-removal is paused");
   });
 
@@ -274,19 +274,19 @@ describe("doctor preview warnings", () => {
     const warnings = await collectDoctorPreviewWarnings({
       cfg: {
         channels: {
-          "openclaw-weixin": {
+          "NexisClaw-weixin": {
             enabled: true,
           },
         },
       },
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "NexisClaw doctor --fix",
     });
 
-    expectSingleWarningContaining(warnings, "channels.openclaw-weixin: dangling channel config");
+    expectSingleWarningContaining(warnings, "channels.NexisClaw-weixin: dangling channel config");
   });
 
   it("includes bundled plugin load path migration warnings", async () => {
-    const packageRoot = path.resolve("app-node-modules", "openclaw");
+    const packageRoot = path.resolve("app-node-modules", "NexisClaw");
     const legacyPath = path.join(packageRoot, "extensions", "feishu");
     manifestState.plugins = [manifest("feishu")];
 
@@ -298,14 +298,14 @@ describe("doctor preview warnings", () => {
           },
         },
       },
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "NexisClaw doctor --fix",
     });
 
     const warning = expectSingleWarningContaining(
       warnings,
       `plugins.load.paths: legacy bundled plugin path "${legacyPath}"`,
     );
-    expect(warning).toContain('Run "openclaw doctor --fix"');
+    expect(warning).toContain('Run "NexisClaw doctor --fix"');
   });
 
   it("warns but skips auto-removal when plugin discovery has errors", async () => {
@@ -316,7 +316,7 @@ describe("doctor preview warnings", () => {
 
     const warnings = await collectDoctorPreviewWarnings({
       cfg: stalePluginConfig(),
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "NexisClaw doctor --fix",
     });
 
     const warning = expectSingleWarningContaining(
@@ -324,7 +324,7 @@ describe("doctor preview warnings", () => {
       'plugins.allow: stale plugin reference "acpx"',
     );
     expect(warning).toContain("Auto-removal is paused");
-    expect(warning).toContain('rerun "openclaw doctor --fix"');
+    expect(warning).toContain('rerun "NexisClaw doctor --fix"');
   });
 
   it("warns when a configured channel plugin is disabled explicitly", async () => {
@@ -346,7 +346,7 @@ describe("doctor preview warnings", () => {
           },
         },
       },
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "NexisClaw doctor --fix",
     });
 
     const warning = expectSingleWarningContaining(
@@ -371,7 +371,7 @@ describe("doctor preview warnings", () => {
           enabled: false,
         },
       },
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "NexisClaw doctor --fix",
     });
 
     const warning = expectSingleWarningContaining(
@@ -400,7 +400,7 @@ describe("doctor preview warnings", () => {
           },
         },
       },
-      doctorFixCommand: "openclaw doctor --fix",
+      doctorFixCommand: "NexisClaw doctor --fix",
     });
 
     expectSingleWarningContaining(

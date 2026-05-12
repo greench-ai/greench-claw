@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import {
   hasBundledChannelPackageState,
   listBundledChannelIdsForPackageState,
@@ -10,7 +10,7 @@ export function listBundledChannelIdsWithConfiguredState(): string[] {
 
 export function hasBundledChannelConfiguredState(params: {
   channelId: string;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   env?: NodeJS.ProcessEnv;
 }): boolean {
   return hasBundledChannelPackageState({

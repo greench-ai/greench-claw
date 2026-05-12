@@ -1,6 +1,6 @@
 import type { StreamFn } from "@earendil-works/pi-agent-core";
 import type { Api, Model } from "@earendil-works/pi-ai";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { resolveProviderStreamFn } from "../plugins/provider-runtime.js";
 import { createAnthropicMessagesTransportStreamFn } from "./anthropic-transport-stream.js";
 import {
@@ -21,16 +21,16 @@ const SUPPORTED_TRANSPORT_APIS = new Set<Api>([
 ]);
 
 const SIMPLE_TRANSPORT_API_ALIAS: Record<string, Api> = {
-  "openai-responses": "openclaw-openai-responses-transport",
-  "openai-codex-responses": "openclaw-openai-responses-transport",
-  "openai-completions": "openclaw-openai-completions-transport",
-  "azure-openai-responses": "openclaw-azure-openai-responses-transport",
-  "anthropic-messages": "openclaw-anthropic-messages-transport",
-  "google-generative-ai": "openclaw-google-generative-ai-transport",
+  "openai-responses": "NexisClaw-openai-responses-transport",
+  "openai-codex-responses": "NexisClaw-openai-responses-transport",
+  "openai-completions": "NexisClaw-openai-completions-transport",
+  "azure-openai-responses": "NexisClaw-azure-openai-responses-transport",
+  "anthropic-messages": "NexisClaw-anthropic-messages-transport",
+  "google-generative-ai": "NexisClaw-google-generative-ai-transport",
 };
 
 type ProviderTransportStreamContext = {
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   agentDir?: string;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
@@ -94,7 +94,7 @@ function createSupportedTransportStreamFn(
   }
 }
 
-function hasOpenClawTransportRequirement(model: Model<Api>): boolean {
+function hasNexisClawTransportRequirement(model: Model<Api>): boolean {
   const request = getModelProviderRequestTransport(model);
   return Boolean(request?.proxy || request?.tls || getModelProviderLocalService(model));
 }
@@ -111,7 +111,7 @@ export function createTransportAwareStreamFnForModel(
   model: Model<Api>,
   ctx?: ProviderTransportStreamContext,
 ): StreamFn | undefined {
-  if (!hasOpenClawTransportRequirement(model)) {
+  if (!hasNexisClawTransportRequirement(model)) {
     return undefined;
   }
   if (!isTransportAwareApiSupported(model.api)) {
@@ -122,11 +122,11 @@ export function createTransportAwareStreamFnForModel(
   return createSupportedTransportStreamFn(model, ctx);
 }
 
-export function createOpenClawTransportStreamFnForModel(
+export function createNexisClawTransportStreamFnForModel(
   model: Model<Api>,
   ctx?: ProviderTransportStreamContext,
 ): StreamFn | undefined {
-  // Explicit fallback callers use this when they need OpenClaw's HTTP
+  // Explicit fallback callers use this when they need NexisClaw's HTTP
   // transport semantics regardless of the default embedded-runner strategy.
   // Native OpenAI HTTP still depends on this path for strict tool shaping,
   // attribution, cache-boundary stripping, and runtime credential injection.
@@ -141,7 +141,7 @@ export function createBoundaryAwareStreamFnForModel(
   ctx?: ProviderTransportStreamContext,
 ): StreamFn | undefined {
   // Default embedded-runner fallback. Keep OpenAI-family APIs here until PI's
-  // native HTTP streams preserve the same OpenClaw request contract.
+  // native HTTP streams preserve the same NexisClaw request contract.
   if (!isTransportAwareApiSupported(model.api)) {
     return undefined;
   }

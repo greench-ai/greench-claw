@@ -1,7 +1,7 @@
-import { bundledPluginRootAt, repoInstallSpec } from "openclaw/plugin-sdk/test-fixtures";
+import { bundledPluginRootAt, repoInstallSpec } from "NexisClaw/plugin-sdk/test-fixtures";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
-import type { ConfigFileSnapshot } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/config.js";
+import type { ConfigFileSnapshot } from "../config/types.NexisClaw.js";
 import {
   resolvePluginInstallRequestContext,
   type PluginInstallRequestContext,
@@ -22,7 +22,7 @@ vi.mock("../config/config.js", () => ({
 }));
 
 vi.mock("../commands/doctor/shared/channel-doctor.js", () => ({
-  collectChannelDoctorStaleConfigMutations: (cfg: OpenClawConfig) =>
+  collectChannelDoctorStaleConfigMutations: (cfg: NexisClawConfig) =>
     collectChannelDoctorStaleConfigMutationsMock(cfg),
 }));
 
@@ -35,10 +35,10 @@ function makeSnapshot(overrides: Partial<ConfigFileSnapshot> = {}): ConfigFileSn
     raw: '{ "plugins": {} }',
     parsed: { plugins: {} },
     sourceConfig: { plugins: {} } as ConfigFileSnapshot["sourceConfig"],
-    resolved: { plugins: {} } as OpenClawConfig,
+    resolved: { plugins: {} } as NexisClawConfig,
     valid: false,
     runtimeConfig: { plugins: {} } as ConfigFileSnapshot["runtimeConfig"],
-    config: { plugins: {} } as OpenClawConfig,
+    config: { plugins: {} } as NexisClawConfig,
     hash: "abc",
     issues: [{ path: "plugins.installs.discord", message: "stale path" }],
     warnings: [],
@@ -49,8 +49,8 @@ function makeSnapshot(overrides: Partial<ConfigFileSnapshot> = {}): ConfigFileSn
 
 describe("loadConfigForInstall", () => {
   const discordNpmRequest = {
-    rawSpec: "@openclaw/discord",
-    normalizedSpec: "@openclaw/discord",
+    rawSpec: "@NexisClaw/discord",
+    normalizedSpec: "@NexisClaw/discord",
     bundledPluginId: "discord",
     allowInvalidConfigRecovery: true,
   } satisfies PluginInstallRequestContext;
@@ -59,7 +59,7 @@ describe("loadConfigForInstall", () => {
     readConfigFileSnapshotMock.mockReset();
     collectChannelDoctorStaleConfigMutationsMock.mockReset();
 
-    collectChannelDoctorStaleConfigMutationsMock.mockImplementation(async (cfg: OpenClawConfig) => [
+    collectChannelDoctorStaleConfigMutationsMock.mockImplementation(async (cfg: NexisClawConfig) => [
       {
         config: cfg,
         changes: [],
@@ -68,7 +68,7 @@ describe("loadConfigForInstall", () => {
   });
 
   it("returns the source config and base hash when the snapshot is valid", async () => {
-    const cfg = { plugins: { entries: { discord: { enabled: true } } } } as OpenClawConfig;
+    const cfg = { plugins: { entries: { discord: { enabled: true } } } } as NexisClawConfig;
     readConfigFileSnapshotMock.mockResolvedValue(
       makeSnapshot({
         valid: true,
@@ -84,7 +84,7 @@ describe("loadConfigForInstall", () => {
   });
 
   it("does not run stale Discord cleanup on the happy path", async () => {
-    const cfg = { plugins: {} } as OpenClawConfig;
+    const cfg = { plugins: {} } as NexisClawConfig;
     readConfigFileSnapshotMock.mockResolvedValue(
       makeSnapshot({
         valid: true,
@@ -102,7 +102,7 @@ describe("loadConfigForInstall", () => {
   it("falls back to snapshot config for explicit bundled-plugin reinstall when issues match the known upgrade failure", async () => {
     const snapshotCfg = {
       plugins: { installs: { discord: { source: "path", installPath: "/gone" } } },
-    } as unknown as OpenClawConfig;
+    } as unknown as NexisClawConfig;
     readConfigFileSnapshotMock.mockResolvedValue(
       makeSnapshot({
         parsed: { plugins: { installs: { discord: {} } } },
@@ -123,7 +123,7 @@ describe("loadConfigForInstall", () => {
   it("allows npm:-prefixed bundled-plugin reinstall recovery", async () => {
     const snapshotCfg = {
       plugins: { installs: { discord: { source: "path", installPath: "/gone" } } },
-    } as unknown as OpenClawConfig;
+    } as unknown as NexisClawConfig;
     readConfigFileSnapshotMock.mockResolvedValue(
       makeSnapshot({
         parsed: { plugins: { installs: { discord: {} } } },
@@ -136,7 +136,7 @@ describe("loadConfigForInstall", () => {
     );
 
     const request = resolvePluginInstallRequestContext({
-      rawSpec: "npm:@openclaw/discord",
+      rawSpec: "npm:@NexisClaw/discord",
     });
     if (!request.ok) {
       throw new Error(request.error);
@@ -152,7 +152,7 @@ describe("loadConfigForInstall", () => {
   it("allows official plugin reinstall recovery from source-only runtime shadows", async () => {
     const snapshotCfg = {
       plugins: { installs: { discord: { source: "npm", installPath: "/bad/discord" } } },
-    } as unknown as OpenClawConfig;
+    } as unknown as NexisClawConfig;
     readConfigFileSnapshotMock.mockResolvedValue(
       makeSnapshot({
         parsed: { plugins: { installs: { discord: {} } } },
@@ -168,7 +168,7 @@ describe("loadConfigForInstall", () => {
     );
 
     const request = resolvePluginInstallRequestContext({
-      rawSpec: "npm:@openclaw/discord",
+      rawSpec: "npm:@NexisClaw/discord",
     });
     if (!request.ok) {
       throw new Error(request.error);
@@ -180,7 +180,7 @@ describe("loadConfigForInstall", () => {
   });
 
   it("allows explicit repo-checkout bundled-plugin reinstall recovery", async () => {
-    const snapshotCfg = { plugins: {} } as OpenClawConfig;
+    const snapshotCfg = { plugins: {} } as NexisClawConfig;
     readConfigFileSnapshotMock.mockResolvedValue(
       makeSnapshot({
         config: snapshotCfg,
@@ -222,19 +222,19 @@ describe("loadConfigForInstall", () => {
         rawSpec: "alpha",
         normalizedSpec: "alpha",
       }),
-    ).rejects.toThrow("Config invalid; run `openclaw doctor --fix` before installing plugins.");
+    ).rejects.toThrow("Config invalid; run `NexisClaw doctor --fix` before installing plugins.");
   });
 
   it("throws when invalid snapshot parsed is empty", async () => {
     readConfigFileSnapshotMock.mockResolvedValue(
       makeSnapshot({
         parsed: {},
-        config: {} as OpenClawConfig,
+        config: {} as NexisClawConfig,
       }),
     );
 
     await expect(loadConfigForInstall(discordNpmRequest)).rejects.toThrow(
-      "Config file could not be parsed; run `openclaw doctor` to repair it.",
+      "Config file could not be parsed; run `NexisClaw doctor` to repair it.",
     );
   });
 
@@ -242,7 +242,7 @@ describe("loadConfigForInstall", () => {
     readConfigFileSnapshotMock.mockResolvedValue(makeSnapshot({ exists: false, parsed: {} }));
 
     await expect(loadConfigForInstall(discordNpmRequest)).rejects.toThrow(
-      "Config file could not be parsed; run `openclaw doctor` to repair it.",
+      "Config file could not be parsed; run `NexisClaw doctor` to repair it.",
     );
   });
 });

@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
-import { stringEnum } from "openclaw/plugin-sdk/channel-actions";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { stringEnum } from "NexisClaw/plugin-sdk/channel-actions";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { Static, Type } from "typebox";
-import type { AnyAgentTool, OpenClawPluginApi, OpenClawPluginToolContext } from "../api.js";
+import type { AnyAgentTool, NexisClawPluginApi, NexisClawPluginToolContext } from "../api.js";
 import { PlaywrightDiffScreenshotter, type DiffScreenshotter } from "./browser.js";
 import { resolveDiffImageRenderOptions } from "./config.js";
 import { renderDiffDocument } from "./render.js";
@@ -154,12 +154,12 @@ type DiffsToolRawParams = DiffsToolParams & {
 };
 
 export function createDiffsTool(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   store: DiffArtifactStore;
   defaults: DiffToolDefaults;
   viewerBaseUrl?: string;
   screenshotter?: DiffScreenshotter;
-  context?: OpenClawPluginToolContext;
+  context?: NexisClawPluginToolContext;
 }): AnyAgentTool {
   return {
     name: "diffs",
@@ -434,7 +434,7 @@ async function renderDiffArtifactFile(params: {
 }
 
 function buildArtifactContext(
-  context: OpenClawPluginToolContext | undefined,
+  context: NexisClawPluginToolContext | undefined,
 ): DiffArtifactContext | undefined {
   if (!context) {
     return undefined;

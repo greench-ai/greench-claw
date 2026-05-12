@@ -9,7 +9,7 @@ import {
   buildReadOnlySourceChannelAccountSnapshot,
 } from "../../channels/plugins/status.js";
 import type { ChannelAccountSnapshot } from "../../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../../config/config.js";
+import type { NexisClawConfig } from "../../config/config.js";
 import { listExplicitConfiguredChannelIdsForConfig } from "../../plugins/channel-plugin-ids.js";
 import {
   type OfficialExternalPluginRepairHint,
@@ -32,9 +32,9 @@ type ChannelStatusPluginLabel = {
 };
 
 export async function formatConfigChannelsStatusLines(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   meta: { path?: string; mode?: "local" | "remote" },
-  opts?: { sourceConfig?: OpenClawConfig; channel?: string },
+  opts?: { sourceConfig?: NexisClawConfig; channel?: string },
 ): Promise<string[]> {
   const lines: string[] = [];
   lines.push(theme.warn("Gateway not reachable; showing config-only status."));

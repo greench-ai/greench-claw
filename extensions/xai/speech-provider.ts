@@ -1,4 +1,4 @@
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
+import { normalizeResolvedSecretInputString } from "NexisClaw/plugin-sdk/secret-input";
 import {
   asFiniteNumber,
   trimToUndefined,
@@ -7,8 +7,8 @@ import {
   type SpeechProviderOverrides,
   type SpeechProviderPlugin,
   type SpeechSynthesisTarget,
-} from "openclaw/plugin-sdk/speech";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/speech";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import {
   isValidXaiTtsVoice,
   normalizeXaiLanguageCode,

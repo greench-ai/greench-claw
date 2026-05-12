@@ -9,7 +9,7 @@ import {
 } from "../agents/model-selection.js";
 import { resolvePluginWebSearchConfig } from "../config/plugin-web-search-config.js";
 import type { ModelDefinitionConfig } from "../config/types.models.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { planManifestModelCatalogRows, type ModelCatalogCost } from "../model-catalog/index.js";
 import { isInstalledPluginEnabled } from "../plugins/installed-plugin-index.js";
@@ -54,7 +54,7 @@ type OpenRouterModelPayload = {
 };
 
 type GatewayModelPricingRefreshParams = {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   env?: NodeJS.ProcessEnv;
   fetchImpl?: typeof fetch;
   workspaceDir?: string;
@@ -104,7 +104,7 @@ function clearRefreshTimer(): void {
 }
 
 function getPricingModelNormalizationOptions(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   manifestRegistry?: PluginManifestRegistry;
 }): PricingModelNormalizationOptions {
   const allowPluginBackedNormalization = params.config.plugins?.enabled !== false;
@@ -412,7 +412,7 @@ function normalizeExternalPricingPolicy(
 function filterActiveManifestRegistry(params: {
   registry: PluginManifestRegistry;
   index: PluginRegistrySnapshot;
-  config: OpenClawConfig;
+  config: NexisClawConfig;
 }): PluginManifestRegistry {
   return {
     diagnostics: params.registry.diagnostics,
@@ -423,7 +423,7 @@ function filterActiveManifestRegistry(params: {
 }
 
 function resolveModelPricingManifestMetadata(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
   pluginMetadataSnapshot?: PluginMetadataRegistryView;
@@ -707,7 +707,7 @@ function addProviderModelPair(params: {
 }
 
 function addConfiguredWebSearchPluginModels(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   aliasIndex: ReturnType<typeof buildModelAliasIndex>;
   refs: Map<string, ModelRef>;
   manifestRegistry: PluginManifestRegistry;
@@ -767,7 +767,7 @@ function isPrivateOrLoopbackBaseUrl(baseUrl: string | undefined): boolean {
 }
 
 function findConfiguredProviderModel(
-  config: OpenClawConfig,
+  config: NexisClawConfig,
   ref: ModelRef,
   options: PricingModelNormalizationOptions = {
     allowManifestNormalization: true,
@@ -786,7 +786,7 @@ function findConfiguredProviderModel(
 }
 
 function getConfiguredModelPricing(
-  config: OpenClawConfig,
+  config: NexisClawConfig,
   ref: ModelRef,
   options: PricingModelNormalizationOptions = {
     allowManifestNormalization: true,
@@ -797,7 +797,7 @@ function getConfiguredModelPricing(
 }
 
 function hasPrivateOrLoopbackConfiguredEndpoint(
-  config: OpenClawConfig,
+  config: NexisClawConfig,
   ref: ModelRef,
   options: PricingModelNormalizationOptions = {
     allowManifestNormalization: true,
@@ -813,7 +813,7 @@ function hasPrivateOrLoopbackConfiguredEndpoint(
 }
 
 function shouldFetchExternalPricingForRef(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   ref: ModelRef;
   policies: ReadonlyMap<string, ExternalPricingPolicy>;
   seededPricing: ReadonlyMap<string, CachedModelPricing>;
@@ -840,7 +840,7 @@ function shouldFetchExternalPricingForRef(params: {
 }
 
 function filterExternalPricingRefs(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   refs: ModelRef[];
   policies: ReadonlyMap<string, ExternalPricingPolicy>;
   seededPricing: ReadonlyMap<string, CachedModelPricing>;
@@ -862,7 +862,7 @@ function filterExternalPricingRefs(params: {
 }
 
 export function collectConfiguredModelPricingRefs(
-  config: OpenClawConfig,
+  config: NexisClawConfig,
   options: { manifestRegistry?: PluginManifestRegistry } = {},
 ): ModelRef[] {
   const manifestRegistry =
@@ -1136,7 +1136,7 @@ function scheduleRefresh(
 }
 
 function collectSeededPricing(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   refs: readonly ModelRef[];
   catalogPricing: ReadonlyMap<string, CachedModelPricing>;
   allowManifestNormalization: boolean;

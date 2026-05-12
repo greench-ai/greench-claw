@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/diffs",
+  "name": "@NexisClaw/diffs",
   "version": "2026.5.12-beta.1",
-  "description": "OpenClaw diff viewer plugin",
+  "description": "NexisClaw diff viewer plugin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/NexisClaw/NexisClaw"
   },
   "type": "module",
   "scripts": {
@@ -18,14 +18,14 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@openclaw/diffs",
+      "npmSpec": "@NexisClaw/diffs",
       "localPath": "extensions/diffs",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.30"
@@ -34,7 +34,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "openclawVersion": "2026.5.12-beta.1",
+      "NexisClawVersion": "2026.5.12-beta.1",
       "staticAssets": [
         {
           "source": "./assets/viewer-runtime.js",

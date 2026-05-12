@@ -10,19 +10,19 @@ export {
   resolveGatewayAuth,
   resolveNodeCommandAllowlist,
   safeParseJson,
-} from "openclaw/plugin-sdk/gateway-runtime";
+} from "NexisClaw/plugin-sdk/gateway-runtime";
 export type {
   GatewayRequestHandlers,
   GatewayRpcOpts,
   NodeSession,
-} from "openclaw/plugin-sdk/gateway-runtime";
-export { runCommandWithRuntime } from "openclaw/plugin-sdk/cli-runtime";
-export type { OpenClawPluginService } from "openclaw/plugin-sdk/plugin-entry";
+} from "NexisClaw/plugin-sdk/gateway-runtime";
+export { runCommandWithRuntime } from "NexisClaw/plugin-sdk/cli-runtime";
+export type { NexisClawPluginService } from "NexisClaw/plugin-sdk/plugin-entry";
 export {
   startLazyPluginServiceModule,
   type LazyPluginServiceHandle,
-} from "openclaw/plugin-sdk/plugin-runtime";
-export { defaultRuntime } from "openclaw/plugin-sdk/runtime-env";
+} from "NexisClaw/plugin-sdk/plugin-runtime";
+export { defaultRuntime } from "NexisClaw/plugin-sdk/runtime-env";
 
 export async function withTimeout<T>(
   work: (signal: AbortSignal | undefined) => Promise<T>,

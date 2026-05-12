@@ -14,7 +14,7 @@ import {
   resolveVersionFromModuleUrl,
 } from "./version.js";
 
-const versionFixtureRoot = createSuiteTempRootTracker({ prefix: "openclaw-version-" });
+const versionFixtureRoot = createSuiteTempRootTracker({ prefix: "NexisClaw-version-" });
 
 beforeAll(async () => {
   await versionFixtureRoot.setup();
@@ -52,7 +52,7 @@ function expectVersionMetadataToBeMissing(moduleUrl: string) {
 describe("version resolution", () => {
   it("resolves package version from nested dist/plugin-sdk module URL", async () => {
     await withVersionFixtureDir(async (root) => {
-      await writeJsonFixture(root, "package.json", { name: "openclaw", version: "1.2.3" });
+      await writeJsonFixture(root, "package.json", { name: "NexisClaw", version: "1.2.3" });
       const moduleUrl = await ensureModuleFixture(root);
       expect(readVersionFromPackageJsonForModuleUrl(moduleUrl)).toBe("1.2.3");
       expect(resolveVersionFromModuleUrl(moduleUrl)).toBe("1.2.3");
@@ -61,7 +61,7 @@ describe("version resolution", () => {
 
   it("ignores unrelated nearby package.json files", async () => {
     await withVersionFixtureDir(async (root) => {
-      await writeJsonFixture(root, "package.json", { name: "openclaw", version: "2.3.4" });
+      await writeJsonFixture(root, "package.json", { name: "NexisClaw", version: "2.3.4" });
       await writeJsonFixture(root, "dist/package.json", {
         name: "other-package",
         version: "9.9.9",
@@ -88,7 +88,7 @@ describe("version resolution", () => {
     });
   });
 
-  it("ignores non-openclaw package and blank build-info versions", async () => {
+  it("ignores non-NexisClaw package and blank build-info versions", async () => {
     await withVersionFixtureDir(async (root) => {
       await writeJsonFixture(root, "package.json", { name: "other-package", version: "9.9.9" });
       await writeJsonFixture(root, "build-info.json", { version: "  " });
@@ -105,7 +105,7 @@ describe("version resolution", () => {
 
   it("resolves binary version with explicit precedence", async () => {
     await withVersionFixtureDir(async (root) => {
-      await writeJsonFixture(root, "package.json", { name: "openclaw", version: "2.3.4" });
+      await writeJsonFixture(root, "package.json", { name: "NexisClaw", version: "2.3.4" });
       const moduleUrl = await ensureModuleFixture(root);
       expect(
         resolveBinaryVersion({
@@ -139,11 +139,11 @@ describe("version resolution", () => {
     });
   });
 
-  it("prefers OPENCLAW_VERSION over service and package versions", () => {
+  it("prefers NEXISCLAW_VERSION over service and package versions", () => {
     expect(
       resolveRuntimeServiceVersion({
-        OPENCLAW_VERSION: "9.9.9",
-        OPENCLAW_SERVICE_VERSION: "2.2.2",
+        NEXISCLAW_VERSION: "9.9.9",
+        NEXISCLAW_SERVICE_VERSION: "2.2.2",
         npm_package_version: "1.1.1",
       }),
     ).toBe("9.9.9");
@@ -157,18 +157,18 @@ describe("version resolution", () => {
     process.env[key] = value;
   }
 
-  it("prefers runtime VERSION over stale OPENCLAW_VERSION for compatibility checks", () => {
-    const previous = process.env.OPENCLAW_VERSION;
-    const previousService = process.env.OPENCLAW_SERVICE_VERSION;
+  it("prefers runtime VERSION over stale NEXISCLAW_VERSION for compatibility checks", () => {
+    const previous = process.env.NEXISCLAW_VERSION;
+    const previousService = process.env.NEXISCLAW_SERVICE_VERSION;
     const previousPackage = process.env.npm_package_version;
     try {
-      process.env.OPENCLAW_VERSION = "2026.3.25";
-      process.env.OPENCLAW_SERVICE_VERSION = "2026.3.25-service";
+      process.env.NEXISCLAW_VERSION = "2026.3.25";
+      process.env.NEXISCLAW_SERVICE_VERSION = "2026.3.25-service";
       process.env.npm_package_version = "2026.3.25-package";
       expect(resolveCompatibilityHostVersion()).toBe(VERSION);
     } finally {
-      restoreEnvValue("OPENCLAW_VERSION", previous);
-      restoreEnvValue("OPENCLAW_SERVICE_VERSION", previousService);
+      restoreEnvValue("NEXISCLAW_VERSION", previous);
+      restoreEnvValue("NEXISCLAW_SERVICE_VERSION", previousService);
       restoreEnvValue("npm_package_version", previousPackage);
     }
   });
@@ -176,8 +176,8 @@ describe("version resolution", () => {
   it("keeps explicit env-object overrides for compatibility checks in tests", () => {
     expect(
       resolveCompatibilityHostVersion({
-        OPENCLAW_VERSION: "2026.3.99",
-        OPENCLAW_SERVICE_VERSION: "2026.3.98",
+        NEXISCLAW_VERSION: "2026.3.99",
+        NEXISCLAW_SERVICE_VERSION: "2026.3.98",
         npm_package_version: "2026.3.97",
       }),
     ).toBe("2026.3.99");
@@ -186,9 +186,9 @@ describe("version resolution", () => {
   it("prefers explicit compatibility host overrides over runtime and stale env versions", () => {
     expect(
       resolveCompatibilityHostVersion({
-        OPENCLAW_COMPATIBILITY_HOST_VERSION: "2026.4.8",
-        OPENCLAW_VERSION: "2026.3.99",
-        OPENCLAW_SERVICE_VERSION: "2026.3.98",
+        NEXISCLAW_COMPATIBILITY_HOST_VERSION: "2026.4.8",
+        NEXISCLAW_VERSION: "2026.3.99",
+        NEXISCLAW_SERVICE_VERSION: "2026.3.98",
         npm_package_version: "2026.3.97",
       }),
     ).toBe("2026.4.8");
@@ -207,16 +207,16 @@ describe("version resolution", () => {
   it("prefers runtime VERSION over service/package markers and ignores unusable env values", () => {
     expect(
       resolveRuntimeServiceVersion({
-        OPENCLAW_VERSION: "   ",
-        OPENCLAW_SERVICE_VERSION: "  2.0.0  ",
+        NEXISCLAW_VERSION: "   ",
+        NEXISCLAW_SERVICE_VERSION: "  2.0.0  ",
         npm_package_version: "1.0.0",
       }),
     ).toBe(VERSION);
 
     expect(
       resolveRuntimeServiceVersion({
-        OPENCLAW_VERSION: " ",
-        OPENCLAW_SERVICE_VERSION: "\t",
+        NEXISCLAW_VERSION: " ",
+        NEXISCLAW_SERVICE_VERSION: "\t",
         npm_package_version: " 1.0.0-package ",
       }),
     ).toBe(VERSION);
@@ -224,8 +224,8 @@ describe("version resolution", () => {
     expect(
       resolveRuntimeServiceVersion(
         {
-          OPENCLAW_VERSION: "",
-          OPENCLAW_SERVICE_VERSION: " ",
+          NEXISCLAW_VERSION: "",
+          NEXISCLAW_SERVICE_VERSION: " ",
           npm_package_version: "",
         },
         "fallback",
@@ -234,8 +234,8 @@ describe("version resolution", () => {
 
     expect(
       resolveRuntimeServiceVersion({
-        OPENCLAW_VERSION: "undefined",
-        OPENCLAW_SERVICE_VERSION: "null",
+        NEXISCLAW_VERSION: "undefined",
+        NEXISCLAW_SERVICE_VERSION: "null",
         npm_package_version: "1.0.0-package",
       }),
     ).toBe(VERSION);

@@ -1,19 +1,19 @@
 services:
   - type: web
-    name: openclaw
+    name: NexisClaw
     runtime: docker
     plan: starter
     healthCheckPath: /health
     envVars:
-      - key: OPENCLAW_GATEWAY_PORT
+      - key: NEXISCLAW_GATEWAY_PORT
         value: "8080"
-      - key: OPENCLAW_STATE_DIR
-        value: /data/.openclaw
-      - key: OPENCLAW_WORKSPACE_DIR
+      - key: NEXISCLAW_STATE_DIR
+        value: /data/.NexisClaw
+      - key: NEXISCLAW_WORKSPACE_DIR
         value: /data/workspace
-      - key: OPENCLAW_GATEWAY_TOKEN
+      - key: NEXISCLAW_GATEWAY_TOKEN
         generateValue: true
     disk:
-      name: openclaw-data
+      name: NexisClaw-data
       mountPath: /data
       sizeGB: 1

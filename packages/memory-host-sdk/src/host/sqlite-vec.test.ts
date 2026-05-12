@@ -56,11 +56,11 @@ describe("loadSqliteVecExtension", () => {
     await expect(
       loadSqliteVecExtension({
         db: db as never,
-        extensionPath: "/opt/openclaw/sqlite-vec.so",
+        extensionPath: "/opt/NexisClaw/sqlite-vec.so",
       }),
-    ).resolves.toEqual({ ok: true, extensionPath: "/opt/openclaw/sqlite-vec.so" });
+    ).resolves.toEqual({ ok: true, extensionPath: "/opt/NexisClaw/sqlite-vec.so" });
     expect(db.enableLoadExtension).toHaveBeenCalledWith(true);
-    expect(db.loadExtension).toHaveBeenCalledWith("/opt/openclaw/sqlite-vec.so");
+    expect(db.loadExtension).toHaveBeenCalledWith("/opt/NexisClaw/sqlite-vec.so");
   });
 
   it("returns a valid memorySearch extensionPath hint when sqlite-vec is absent", async () => {

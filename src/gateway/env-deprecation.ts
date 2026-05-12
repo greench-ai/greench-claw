@@ -5,7 +5,7 @@ type LegacyEnvPrefix = (typeof LEGACY_ENV_PREFIXES)[number];
 
 let warned = false;
 
-export function warnLegacyOpenClawEnvVars(env: NodeJS.ProcessEnv = process.env): void {
+export function warnLegacyNexisClawEnvVars(env: NodeJS.ProcessEnv = process.env): void {
   if (warned || isVitestRuntimeEnv(env)) {
     return;
   }
@@ -29,14 +29,14 @@ export function warnLegacyOpenClawEnvVars(env: NodeJS.ProcessEnv = process.env):
 
   process.emitWarning(
     [
-      `Legacy ${detectedPrefixes} environment variables were detected (${legacyVarCount} total), but OpenClaw only reads OPENCLAW_* names now.`,
-      "Rename them by replacing the legacy prefix with OPENCLAW_; the old names are ignored.",
+      `Legacy ${detectedPrefixes} environment variables were detected (${legacyVarCount} total), but NexisClaw only reads NEXISCLAW_* names now.`,
+      "Rename them by replacing the legacy prefix with NEXISCLAW_; the old names are ignored.",
     ].join("\n"),
-    { code: "OPENCLAW_LEGACY_ENV_VARS", type: "DeprecationWarning" },
+    { code: "NEXISCLAW_LEGACY_ENV_VARS", type: "DeprecationWarning" },
   );
   warned = true;
 }
 
-export function resetLegacyOpenClawEnvWarningForTest(): void {
+export function resetLegacyNexisClawEnvWarningForTest(): void {
   warned = false;
 }

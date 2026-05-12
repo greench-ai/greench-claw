@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import * as path from "node:path";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/security-runtime";
-import { asRecord, readStringValue } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/security-runtime";
+import { asRecord, readStringValue } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 type CanvasSnapshotPayload = {
   format: string;
@@ -20,11 +20,11 @@ export function parseCanvasSnapshotPayload(value: unknown): CanvasSnapshotPayloa
 }
 
 function resolveCliName(): string {
-  return "openclaw";
+  return "NexisClaw";
 }
 
 function resolveTempPathParts(opts: { ext: string; tmpDir?: string; id?: string }) {
-  const tmpDir = opts.tmpDir ?? resolvePreferredOpenClawTmpDir();
+  const tmpDir = opts.tmpDir ?? resolvePreferredNexisClawTmpDir();
   if (!opts.tmpDir) {
     fs.mkdirSync(tmpDir, { recursive: true, mode: 0o700 });
   }

@@ -1,1 +1,1 @@
-export { dispatchInboundDirectDmWithRuntime } from "openclaw/plugin-sdk/direct-dm";
+export { dispatchInboundDirectDmWithRuntime } from "NexisClaw/plugin-sdk/direct-dm";

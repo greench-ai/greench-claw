@@ -655,7 +655,7 @@ export type ToolsConfig = {
   fs?: FsToolsConfig;
   /** Runtime loop detection for repetitive/ stuck tool-call patterns. */
   loopDetection?: ToolLoopDetectionConfig;
-  /** Compact large OpenClaw, MCP, and client tool catalogs behind search/call tools. */
+  /** Compact large NexisClaw, MCP, and client tool catalogs behind search/call tools. */
   toolSearch?: ToolSearchConfig;
   /** Sub-agent tool policy defaults (deny wins). */
   subagents?: {

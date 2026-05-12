@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { callGatewayFromCli } from "openclaw/plugin-sdk/gateway-runtime";
-import type { PluginRuntime } from "openclaw/plugin-sdk/plugin-runtime";
-import type { RuntimeLogger } from "openclaw/plugin-sdk/plugin-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { callGatewayFromCli } from "NexisClaw/plugin-sdk/gateway-runtime";
+import type { PluginRuntime } from "NexisClaw/plugin-sdk/plugin-runtime";
+import type { RuntimeLogger } from "NexisClaw/plugin-sdk/plugin-runtime";
 import type { GoogleMeetConfig, GoogleMeetMode } from "../config.js";
 import {
   startNodeAgentAudioBridge,
@@ -78,7 +78,7 @@ export async function assertBlackHole2chAvailable(params: {
     throw new Error(
       [
         "BlackHole 2ch audio device not found.",
-        "Install BlackHole 2ch and route Chrome input/output through the OpenClaw audio bridge.",
+        "Install BlackHole 2ch and route Chrome input/output through the NexisClaw audio bridge.",
         hint,
       ]
         .filter(Boolean)
@@ -90,7 +90,7 @@ export async function assertBlackHole2chAvailable(params: {
 export async function launchChromeMeet(params: {
   runtime: PluginRuntime;
   config: GoogleMeetConfig;
-  fullConfig: OpenClawConfig;
+  fullConfig: NexisClawConfig;
   meetingSessionId: string;
   requesterSessionKey?: string;
   mode: GoogleMeetMode;
@@ -136,7 +136,7 @@ export async function launchChromeMeet(params: {
     if (params.config.chrome.audioBridgeCommand) {
       if (params.mode === "agent") {
         throw new Error(
-          "Chrome agent mode requires chrome.audioInputCommand and chrome.audioOutputCommand so OpenClaw can run STT and regular TTS directly.",
+          "Chrome agent mode requires chrome.audioInputCommand and chrome.audioOutputCommand so NexisClaw can run STT and regular TTS directly.",
         );
       }
       const bridge = await params.runtime.system.runCommandWithTimeout(
@@ -494,16 +494,16 @@ function meetStatusScript(params: {
   const captionState = (() => {
     if (!captureCaptions) return undefined;
     const w = window;
-    if (!inCall && !w.__openclawMeetCaptions) return undefined;
-    if (!w.__openclawMeetCaptions) {
-      w.__openclawMeetCaptions = {
+    if (!inCall && !w.__NexisClawMeetCaptions) return undefined;
+    if (!w.__NexisClawMeetCaptions) {
+      w.__NexisClawMeetCaptions = {
         enabledAttempted: false,
         observerInstalled: false,
         lines: [],
         seen: {}
       };
     }
-    return w.__openclawMeetCaptions;
+    return w.__NexisClawMeetCaptions;
   })();
   const recordCaption = (speaker, captionText) => {
     if (!captionState) return;
@@ -576,20 +576,20 @@ function meetStatusScript(params: {
   let manualActionMessage;
   if (!inCall && (host === "accounts.google.com" || /use your google account|to continue to google meet|choose an account|sign in to (join|continue)/i.test(pageText))) {
     manualActionReason = "google-login-required";
-    manualActionMessage = "Sign in to Google in the OpenClaw browser profile, then retry the Meet join.";
+    manualActionMessage = "Sign in to Google in the NexisClaw browser profile, then retry the Meet join.";
   } else if (!inCall && /asking to be let in|you.?ll join when someone lets you in|waiting to be let in|ask to join/i.test(pageText)) {
     manualActionReason = "meet-admission-required";
-    manualActionMessage = "Admit the OpenClaw browser participant in Google Meet, then retry speech.";
+    manualActionMessage = "Admit the NexisClaw browser participant in Google Meet, then retry speech.";
   } else if (permissionNeeded) {
     manualActionReason = "meet-permission-required";
     manualActionMessage = allowMicrophone
-      ? "Allow microphone/camera/speaker permissions for Meet in the OpenClaw browser profile, then retry."
-      : "Join without microphone/camera permissions in the OpenClaw browser profile, then retry.";
+      ? "Allow microphone/camera/speaker permissions for Meet in the NexisClaw browser profile, then retry."
+      : "Join without microphone/camera permissions in the NexisClaw browser profile, then retry.";
   } else if (!inCall && (allowMicrophone ? !microphoneChoice : !noMicrophoneChoice) && /do you want people to hear you in the meeting/i.test(pageText)) {
     manualActionReason = "meet-audio-choice-required";
     manualActionMessage = allowMicrophone
-      ? "Meet is showing the microphone choice. Click Use microphone in the OpenClaw browser profile, then retry."
-      : "Meet is showing the microphone choice. Choose the no-microphone option in the OpenClaw browser profile, then retry.";
+      ? "Meet is showing the microphone choice. Click Use microphone in the NexisClaw browser profile, then retry."
+      : "Meet is showing the microphone choice. Choose the no-microphone option in the NexisClaw browser profile, then retry.";
   }
   return JSON.stringify({
     clickedJoin: Boolean(join),
@@ -743,7 +743,7 @@ async function openMeetWithBrowserRequest(params: {
         manualActionRequired: true,
         manualActionReason: "browser-control-unavailable",
         manualActionMessage:
-          "Open the OpenClaw browser profile, finish Google Meet login, admission, or permission prompts, then retry.",
+          "Open the NexisClaw browser profile, finish Google Meet login, admission, or permission prompts, then retry.",
         notes: [
           ...permissionNotes,
           `Browser control could not inspect or auto-join Meet: ${
@@ -952,7 +952,7 @@ export async function recoverCurrentMeetTabOnNode(params: {
 export async function launchChromeMeetOnNode(params: {
   runtime: PluginRuntime;
   config: GoogleMeetConfig;
-  fullConfig: OpenClawConfig;
+  fullConfig: NexisClawConfig;
   meetingSessionId: string;
   requesterSessionKey?: string;
   mode: GoogleMeetMode;

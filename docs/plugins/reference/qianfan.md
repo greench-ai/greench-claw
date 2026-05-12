@@ -1,5 +1,5 @@
 ---
-summary: "Adds Qianfan model provider support to OpenClaw."
+summary: "Adds Qianfan model provider support to NexisClaw."
 read_when:
   - You are installing, configuring, or auditing the qianfan plugin
 title: "Qianfan plugin"
@@ -7,12 +7,12 @@ title: "Qianfan plugin"
 
 # Qianfan plugin
 
-Adds Qianfan model provider support to OpenClaw.
+Adds Qianfan model provider support to NexisClaw.
 
 ## Distribution
 
-- Package: `@openclaw/qianfan-provider`
-- Install route: included in OpenClaw
+- Package: `@NexisClaw/qianfan-provider`
+- Install route: included in NexisClaw
 
 ## Surface
 

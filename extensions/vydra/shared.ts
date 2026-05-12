@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { extensionForMime } from "NexisClaw/plugin-sdk/media-mime";
+import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
@@ -8,11 +8,11 @@ import {
   resolveProviderOperationTimeoutMs,
   resolveProviderHttpRequestConfig,
   waitProviderOperationPollInterval,
-} from "openclaw/plugin-sdk/provider-http";
+} from "NexisClaw/plugin-sdk/provider-http";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 export const DEFAULT_VYDRA_BASE_URL = "https://www.vydra.ai/api/v1";
 export const DEFAULT_VYDRA_IMAGE_MODEL = "grok-imagine";
@@ -88,7 +88,7 @@ function resolveVydraBaseUrlFromConfig(cfg: unknown): string {
 }
 
 export async function resolveVydraRequestContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   agentDir?: string;
   authStore?: VydraAuthStore;
   capability: "image" | "video";

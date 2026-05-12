@@ -5,16 +5,16 @@ import {
   callGatewayTool,
   listNodes,
   resolveNodeIdFromList,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "NexisClaw/plugin-sdk/agent-harness-runtime";
 import {
   imageResultFromFile,
   jsonResult,
   optionalStringEnum,
   readStringParam,
   stringEnum,
-} from "openclaw/plugin-sdk/channel-actions";
-import type { AnyAgentTool, OpenClawConfig } from "openclaw/plugin-sdk/plugin-entry";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "NexisClaw/plugin-sdk/channel-actions";
+import type { AnyAgentTool, NexisClawConfig } from "NexisClaw/plugin-sdk/plugin-entry";
+import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
 import { Type } from "typebox";
 
 const CANVAS_ACTIONS = [
@@ -30,7 +30,7 @@ const CANVAS_ACTIONS = [
 const CANVAS_SNAPSHOT_FORMATS = ["png", "jpg", "jpeg"] as const;
 
 type CanvasToolOptions = {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   workspaceDir?: string;
 };
 
@@ -73,10 +73,10 @@ function parseCanvasSnapshotPayload(value: unknown): CanvasSnapshotPayload {
 }
 
 async function writeBase64ToTempFile(params: { base64: string; ext: string }): Promise<string> {
-  const dir = resolvePreferredOpenClawTmpDir();
+  const dir = resolvePreferredNexisClawTmpDir();
   await fs.mkdir(dir, { recursive: true, mode: 0o700 });
   const ext = params.ext.startsWith(".") ? params.ext : `.${params.ext}`;
-  const filePath = path.join(dir, `openclaw-canvas-snapshot-${randomUUID()}${ext}`);
+  const filePath = path.join(dir, `NexisClaw-canvas-snapshot-${randomUUID()}${ext}`);
   await fs.writeFile(filePath, Buffer.from(params.base64, "base64"));
   return filePath;
 }
@@ -106,7 +106,7 @@ async function readJsonlFromPath(jsonlPath: string, workspaceDir?: string): Prom
 }
 
 function resolveCanvasImageSanitizationLimits(
-  config?: OpenClawConfig,
+  config?: NexisClawConfig,
 ): CanvasImageSanitizationLimits {
   const configured = config?.agents?.defaults?.imageMaxDimensionPx;
   if (typeof configured !== "number" || !Number.isFinite(configured)) {

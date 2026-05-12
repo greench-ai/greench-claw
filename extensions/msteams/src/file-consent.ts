@@ -9,8 +9,8 @@
  */
 
 import { lookup } from "node:dns/promises";
-import { isPrivateIpAddress } from "openclaw/plugin-sdk/ssrf-policy";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { isPrivateIpAddress } from "NexisClaw/plugin-sdk/ssrf-policy";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { buildUserAgent } from "./user-agent.js";
 
 /**

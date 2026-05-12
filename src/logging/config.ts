@@ -2,9 +2,9 @@ import fs from "node:fs";
 import JSON5 from "json5";
 import { getCommandPathWithRootOptions } from "../cli/argv.js";
 import { resolveConfigPath } from "../config/paths.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 
-type LoggingConfig = OpenClawConfig["logging"];
+type LoggingConfig = NexisClawConfig["logging"];
 
 let cachedLoggingConfig:
   | {

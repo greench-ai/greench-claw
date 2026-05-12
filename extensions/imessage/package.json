@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/imessage",
+  "name": "@NexisClaw/imessage",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw iMessage channel plugin using imsg on a signed-in Mac",
+  "description": "NexisClaw iMessage channel plugin using imsg on a signed-in Mac",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -43,7 +43,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "openclawVersion": "2026.5.12-beta.1"
+      "NexisClawVersion": "2026.5.12-beta.1"
     }
   },
   "pluginInspector": {

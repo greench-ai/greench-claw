@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/qa-channel",
+  "name": "@NexisClaw/qa-channel",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw QA synthetic channel plugin",
+  "description": "NexisClaw QA synthetic channel plugin",
   "type": "module",
   "exports": {
     ".": "./index.ts",
@@ -15,18 +15,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*",
+    "NexisClaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.5.12-beta.1"
+    "NexisClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "NexisClaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -38,7 +38,7 @@
       "detailLabel": "QA Channel",
       "docsPath": "/channels/qa-channel",
       "docsLabel": "qa-channel",
-      "blurb": "Synthetic Slack-class transport for automated OpenClaw QA scenarios.",
+      "blurb": "Synthetic Slack-class transport for automated NexisClaw QA scenarios.",
       "systemImage": "checklist",
       "order": 999,
       "exposure": {

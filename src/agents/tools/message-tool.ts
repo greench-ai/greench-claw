@@ -15,7 +15,7 @@ import { resolveCommandSecretRefsViaGateway } from "../../cli/command-secret-gat
 import { getScopedChannelsCommandSecretTargets } from "../../cli/command-secret-targets.js";
 import { resolveMessageSecretScope } from "../../cli/message-secret-scope.js";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { GATEWAY_CLIENT_IDS, GATEWAY_CLIENT_MODES } from "../../gateway/protocol/client-info.js";
 import { getToolResult, runMessageAction } from "../../infra/outbound/message-action-runner.js";
 import { resolveAllowedMessageActions } from "../../infra/outbound/outbound-policy.js";
@@ -529,8 +529,8 @@ type MessageToolOptions = {
   agentSessionKey?: string;
   sessionId?: string;
   agentId?: string;
-  config?: OpenClawConfig;
-  getRuntimeConfig?: () => OpenClawConfig;
+  config?: NexisClawConfig;
+  getRuntimeConfig?: () => NexisClawConfig;
   getScopedChannelsCommandSecretTargets?: typeof getScopedChannelsCommandSecretTargets;
   resolveCommandSecretRefsViaGateway?: typeof resolveCommandSecretRefsViaGateway;
   runMessageAction?: typeof runMessageAction;
@@ -549,7 +549,7 @@ type MessageToolOptions = {
 };
 
 type MessageToolDiscoveryParams = {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   currentChannelProvider?: string;
   currentChannelId?: string;
   currentThreadTs?: string;
@@ -563,7 +563,7 @@ type MessageToolDiscoveryParams = {
 };
 
 type MessageActionDiscoveryInput = Omit<ChannelMessageActionDiscoveryInput, "cfg" | "channel"> & {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   channel?: string;
 };
 
@@ -677,7 +677,7 @@ function resolveAgentAccountId(value?: string): string | undefined {
 }
 
 function buildMessageToolDescription(options?: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   currentChannel?: string;
   currentChannelId?: string;
   currentThreadTs?: string;

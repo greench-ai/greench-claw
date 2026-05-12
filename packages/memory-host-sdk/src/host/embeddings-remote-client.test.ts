@@ -7,7 +7,7 @@ describe("resolveRemoteEmbeddingBearerClient", () => {
       provider: "openai",
       defaultBaseUrl: "https://api.openai.com/v1",
       options: {
-        agentDir: "/tmp/openclaw-agent",
+        agentDir: "/tmp/NexisClaw-agent",
         config: {
           models: {
             providers: {
@@ -27,8 +27,8 @@ describe("resolveRemoteEmbeddingBearerClient", () => {
     expect(client.baseUrl).toBe("https://proxy.example.test/openai/v1");
   });
 
-  it("adds OpenClaw attribution to native OpenAI embedding requests", async () => {
-    vi.stubEnv("OPENCLAW_VERSION", "2026.3.22");
+  it("adds NexisClaw attribution to native OpenAI embedding requests", async () => {
+    vi.stubEnv("NEXISCLAW_VERSION", "2026.3.22");
     const client = await resolveRemoteEmbeddingBearerClient({
       provider: "openai",
       defaultBaseUrl: "https://api.openai.com/v1",
@@ -48,9 +48,9 @@ describe("resolveRemoteEmbeddingBearerClient", () => {
     expect(client.headers).toEqual({
       Authorization: "Bearer sk-test",
       "Content-Type": "application/json",
-      originator: "openclaw",
+      originator: "NexisClaw",
       version: "2026.3.22",
-      "User-Agent": "openclaw/2026.3.22",
+      "User-Agent": "NexisClaw/2026.3.22",
     });
   });
 });

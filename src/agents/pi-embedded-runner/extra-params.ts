@@ -3,7 +3,7 @@ import type { SimpleStreamOptions } from "@earendil-works/pi-ai";
 import { streamSimple } from "@earendil-works/pi-ai";
 import type { SettingsManager } from "@earendil-works/pi-coding-agent";
 import type { ThinkLevel } from "../../auto-reply/thinking.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { createDeepSeekV4OpenAICompatibleThinkingWrapper } from "../../plugin-sdk/provider-stream-shared.js";
 import {
   prepareProviderExtraParams as prepareProviderExtraParamsRuntime,
@@ -43,7 +43,7 @@ const providerRuntimeDeps = {
   ...defaultProviderRuntimeDeps,
 };
 
-let preparedExtraParamsCache = new WeakMap<OpenClawConfig, Map<string, Record<string, unknown>>>();
+let preparedExtraParamsCache = new WeakMap<NexisClawConfig, Map<string, Record<string, unknown>>>();
 
 export const __testing = {
   setProviderRuntimeDepsForTest(
@@ -74,7 +74,7 @@ export const __testing = {
  * @internal Exported for testing only
  */
 export function resolveExtraParams(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: NexisClawConfig | undefined;
   provider: string;
   modelId: string;
   agentId?: string;
@@ -199,7 +199,7 @@ function resolvePreparedExtraParamsCacheKey(params: {
 }
 
 export function resolvePreparedExtraParams(params: {
-  cfg: OpenClawConfig | undefined;
+  cfg: NexisClawConfig | undefined;
   provider: string;
   modelId: string;
   agentDir?: string;
@@ -644,7 +644,7 @@ function createOpenAICompletionsExtraBodyWrapper(
 
 type ApplyExtraParamsContext = {
   agent: { streamFn?: StreamFn };
-  cfg: OpenClawConfig | undefined;
+  cfg: NexisClawConfig | undefined;
   provider: string;
   modelId: string;
   agentDir?: string;
@@ -785,7 +785,7 @@ function isDeepSeekV4OpenAICompatibleModel(model: Parameters<StreamFn>[0]): bool
  */
 export function applyExtraParamsToAgent(
   agent: { streamFn?: StreamFn },
-  cfg: OpenClawConfig | undefined,
+  cfg: NexisClawConfig | undefined,
   provider: string,
   modelId: string,
   extraParamsOverride?: Record<string, unknown>,

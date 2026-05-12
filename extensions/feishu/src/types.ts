@@ -1,5 +1,5 @@
-import type { MessageReceipt } from "openclaw/plugin-sdk/channel-message";
-import type { BaseProbeResult } from "openclaw/plugin-sdk/core";
+import type { MessageReceipt } from "NexisClaw/plugin-sdk/channel-message";
+import type { BaseProbeResult } from "NexisClaw/plugin-sdk/core";
 import type { FeishuConfigSchema, FeishuAccountConfigSchema, z } from "./config-schema.js";
 import type { MentionTarget } from "./mention-target.types.js";
 

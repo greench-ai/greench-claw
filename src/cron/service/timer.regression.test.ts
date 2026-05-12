@@ -880,7 +880,7 @@ describe("cron service timer regressions", () => {
     };
     const state = createCronServiceState({
       cronEnabled: true,
-      storePath: "/tmp/openclaw-cron-abort-test/jobs.json",
+      storePath: "/tmp/NexisClaw-cron-abort-test/jobs.json",
       log: noopLogger,
       nowMs: () => Date.now(),
       enqueueSystemEvent,
@@ -932,7 +932,7 @@ describe("cron service timer regressions", () => {
     };
     const state = createCronServiceState({
       cronEnabled: true,
-      storePath: "/tmp/openclaw-cron-busy-main-test/jobs.json",
+      storePath: "/tmp/NexisClaw-cron-busy-main-test/jobs.json",
       log: noopLogger,
       nowMs,
       enqueueSystemEvent,

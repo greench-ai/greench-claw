@@ -1,12 +1,12 @@
-import type { OpenClawPluginApi } from "./types.js";
+import type { NexisClawPluginApi } from "./types.js";
 
 type PluginApiFacadeFields = Pick<
-  OpenClawPluginApi,
+  NexisClawPluginApi,
   "agent" | "lifecycle" | "runContext" | "session"
 >;
-export type OpenClawPluginApiWithoutFacades = Omit<OpenClawPluginApi, keyof PluginApiFacadeFields>;
+export type NexisClawPluginApiWithoutFacades = Omit<NexisClawPluginApi, keyof PluginApiFacadeFields>;
 type PluginApiFacadeSource = Pick<
-  OpenClawPluginApi,
+  NexisClawPluginApi,
   | "clearRunContext"
   | "emitAgentEvent"
   | "enqueueNextTurnInjection"

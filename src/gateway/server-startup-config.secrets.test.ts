@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { loadAuthProfileStoreWithoutExternalProfiles } from "../agents/auth-profiles.js";
-import type { ConfigFileSnapshot, OpenClawConfig } from "../config/types.js";
+import type { ConfigFileSnapshot, NexisClawConfig } from "../config/types.js";
 import type { PreparedSecretsRuntimeSnapshot, SecretResolverWarning } from "../secrets/runtime.js";
 import { KNOWN_WEAK_GATEWAY_TOKEN_PLACEHOLDERS } from "./known-weak-gateway-secrets.js";
 import {
@@ -9,7 +9,7 @@ import {
 } from "./server-startup-config.js";
 import { buildTestConfigSnapshot } from "./test-helpers.config-snapshots.js";
 
-function gatewayTokenConfig(config: OpenClawConfig): OpenClawConfig {
+function gatewayTokenConfig(config: NexisClawConfig): NexisClawConfig {
   return {
     ...config,
     gateway: {
@@ -23,14 +23,14 @@ function gatewayTokenConfig(config: OpenClawConfig): OpenClawConfig {
   };
 }
 
-function asConfig(value: unknown): OpenClawConfig {
-  return value as OpenClawConfig;
+function asConfig(value: unknown): NexisClawConfig {
+  return value as NexisClawConfig;
 }
 
-function buildSnapshot(config: OpenClawConfig): ConfigFileSnapshot {
+function buildSnapshot(config: NexisClawConfig): ConfigFileSnapshot {
   const raw = `${JSON.stringify(config, null, 2)}\n`;
   return buildTestConfigSnapshot({
-    path: "/tmp/openclaw-startup-secrets-test.json",
+    path: "/tmp/NexisClaw-startup-secrets-test.json",
     exists: true,
     raw,
     parsed: config,
@@ -41,7 +41,7 @@ function buildSnapshot(config: OpenClawConfig): ConfigFileSnapshot {
   });
 }
 
-function preparedSnapshot(config: OpenClawConfig): PreparedSecretsRuntimeSnapshot {
+function preparedSnapshot(config: NexisClawConfig): PreparedSecretsRuntimeSnapshot {
   return {
     sourceConfig: config,
     config,
@@ -70,19 +70,19 @@ function callArg<T>(mock: { mock: { calls: unknown[][] } }, index = 0, _type?: (
 }
 
 describe("gateway startup config secret preflight", () => {
-  const previousSkipChannels = process.env.OPENCLAW_SKIP_CHANNELS;
-  const previousSkipProviders = process.env.OPENCLAW_SKIP_PROVIDERS;
+  const previousSkipChannels = process.env.NEXISCLAW_SKIP_CHANNELS;
+  const previousSkipProviders = process.env.NEXISCLAW_SKIP_PROVIDERS;
 
   afterEach(() => {
     if (previousSkipChannels === undefined) {
-      delete process.env.OPENCLAW_SKIP_CHANNELS;
+      delete process.env.NEXISCLAW_SKIP_CHANNELS;
     } else {
-      process.env.OPENCLAW_SKIP_CHANNELS = previousSkipChannels;
+      process.env.NEXISCLAW_SKIP_CHANNELS = previousSkipChannels;
     }
     if (previousSkipProviders === undefined) {
-      delete process.env.OPENCLAW_SKIP_PROVIDERS;
+      delete process.env.NEXISCLAW_SKIP_PROVIDERS;
     } else {
-      process.env.OPENCLAW_SKIP_PROVIDERS = previousSkipProviders;
+      process.env.NEXISCLAW_SKIP_PROVIDERS = previousSkipProviders;
     }
   });
 
@@ -243,7 +243,7 @@ describe("gateway startup config secret preflight", () => {
   );
 
   it("prunes channel refs from startup secret preflight when channels are skipped", async () => {
-    process.env.OPENCLAW_SKIP_CHANNELS = "1";
+    process.env.NEXISCLAW_SKIP_CHANNELS = "1";
     const prepareRuntimeSecretsSnapshot = vi.fn(async ({ config }) => preparedSnapshot(config));
     const activateRuntimeSecrets = createRuntimeSecretsActivator({
       logSecrets: {
@@ -271,7 +271,7 @@ describe("gateway startup config secret preflight", () => {
     });
     expect(typeof result.config.gateway).toBe("object");
     const preflightInput = callArg<{
-      config?: OpenClawConfig;
+      config?: NexisClawConfig;
       loadAuthStore?: unknown;
     }>(prepareRuntimeSecretsSnapshot);
     expect(preflightInput.config?.channels).toBeUndefined();
@@ -314,7 +314,7 @@ describe("gateway startup config secret preflight", () => {
     expect(result.auth.mode).toBe("password");
     expect(result.auth.password).toBe("override-password");
     const preflightInput = callArg<{
-      config?: OpenClawConfig;
+      config?: NexisClawConfig;
       loadAuthStore?: unknown;
     }>(prepareRuntimeSecretsSnapshot);
     expect(preflightInput.config?.gateway?.auth?.mode).toBe("password");
@@ -343,7 +343,7 @@ describe("gateway startup config secret preflight", () => {
     expect(result.auth.token).toBe("startup-test-token");
     expect(prepareRuntimeSecretsSnapshot).toHaveBeenCalledTimes(1);
     const preflightInput = callArg<{
-      config?: OpenClawConfig;
+      config?: NexisClawConfig;
       loadAuthStore?: unknown;
     }>(prepareRuntimeSecretsSnapshot);
     expect(preflightInput.config?.gateway?.auth?.token).toBe("startup-test-token");

@@ -373,14 +373,14 @@ describe("channel-auth", () => {
     });
 
     await expect(runChannelLogin({ channel: "whatsapp" }, runtime)).rejects.toThrow(
-      'Channel "whatsapp" does not support login. Run `openclaw channels status --channel whatsapp` to inspect supported actions.',
+      'Channel "whatsapp" does not support login. Run `NexisClaw channels status --channel whatsapp` to inspect supported actions.',
     );
   });
 
   it("installs a catalog-backed channel plugin on demand for login", async () => {
     const catalogEntry = {
       id: "whatsapp",
-      pluginId: "@openclaw/whatsapp",
+      pluginId: "@NexisClaw/whatsapp",
       meta: {
         id: "whatsapp",
         label: "WhatsApp",
@@ -389,7 +389,7 @@ describe("channel-auth", () => {
         blurb: "wa",
       },
       install: {
-        npmSpec: "@openclaw/whatsapp",
+        npmSpec: "@NexisClaw/whatsapp",
       },
     };
     mocks.getChannelPlugin.mockReturnValueOnce(undefined);
@@ -432,7 +432,7 @@ describe("channel-auth", () => {
   it("strips pending install records before persisting install-on-demand login config", async () => {
     const catalogEntry = {
       id: "whatsapp",
-      pluginId: "@openclaw/whatsapp",
+      pluginId: "@NexisClaw/whatsapp",
       meta: {
         id: "whatsapp",
         label: "WhatsApp",
@@ -441,7 +441,7 @@ describe("channel-auth", () => {
         blurb: "wa",
       },
       install: {
-        npmSpec: "@openclaw/whatsapp",
+        npmSpec: "@NexisClaw/whatsapp",
       },
     };
     mocks.getChannelPlugin.mockReturnValueOnce(undefined);
@@ -454,7 +454,7 @@ describe("channel-auth", () => {
           installs: {
             whatsapp: {
               source: "npm",
-              spec: "@openclaw/whatsapp",
+              spec: "@NexisClaw/whatsapp",
             },
           },
         },
@@ -500,7 +500,7 @@ describe("channel-auth", () => {
     mocks.listChannelPluginCatalogEntries.mockReturnValueOnce([
       {
         id: "whatsapp",
-        pluginId: "@openclaw/whatsapp",
+        pluginId: "@NexisClaw/whatsapp",
         meta: {
           id: "whatsapp",
           label: "WhatsApp",
@@ -509,7 +509,7 @@ describe("channel-auth", () => {
           blurb: "wa",
         },
         install: {
-          npmSpec: "@openclaw/whatsapp",
+          npmSpec: "@NexisClaw/whatsapp",
         },
       },
     ]);
@@ -579,7 +579,7 @@ describe("channel-auth", () => {
     });
 
     await expect(runChannelLogout({ channel: "whatsapp" }, runtime)).rejects.toThrow(
-      'Channel "whatsapp" does not support logout. Run `openclaw channels status --channel whatsapp` to inspect supported actions.',
+      'Channel "whatsapp" does not support logout. Run `NexisClaw channels status --channel whatsapp` to inspect supported actions.',
     );
   });
 });

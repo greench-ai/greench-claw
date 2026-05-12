@@ -2,36 +2,36 @@ import {
   formatReasoningMessage,
   resolveAckReaction,
   resolveHumanDelayConfig,
-} from "openclaw/plugin-sdk/agent-runtime";
+} from "NexisClaw/plugin-sdk/agent-runtime";
 import {
   createStatusReactionController,
   DEFAULT_TIMING,
   logAckFailure,
   logTypingFailure,
   shouldAckReaction as shouldAckReactionGate,
-} from "openclaw/plugin-sdk/channel-feedback";
+} from "NexisClaw/plugin-sdk/channel-feedback";
 import {
   createChannelMessageReplyPipeline,
   defineFinalizableLivePreviewAdapter,
   deliverWithFinalizableLivePreviewAdapter,
   resolveChannelMessageSourceReplyDeliveryMode,
-} from "openclaw/plugin-sdk/channel-message";
+} from "NexisClaw/plugin-sdk/channel-message";
 import {
   buildChannelProgressDraftLine,
   buildChannelProgressDraftLineForEntry,
   resolveChannelStreamingBlockEnabled,
-} from "openclaw/plugin-sdk/channel-streaming";
-import { recordInboundSession } from "openclaw/plugin-sdk/conversation-runtime";
+} from "NexisClaw/plugin-sdk/channel-streaming";
+import { recordInboundSession } from "NexisClaw/plugin-sdk/conversation-runtime";
 import {
   hasFinalInboundReplyDispatch,
   runInboundReplyTurn,
-} from "openclaw/plugin-sdk/inbound-reply-dispatch";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
-import { resolveChunkMode } from "openclaw/plugin-sdk/reply-chunking";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-dispatch-runtime";
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
-import { danger, logVerbose, shouldLogVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "NexisClaw/plugin-sdk/inbound-reply-dispatch";
+import { resolveMarkdownTableMode } from "NexisClaw/plugin-sdk/markdown-table-runtime";
+import { getAgentScopedMediaLocalRoots } from "NexisClaw/plugin-sdk/media-runtime";
+import { resolveChunkMode } from "NexisClaw/plugin-sdk/reply-chunking";
+import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
+import { resolveSendableOutboundReplyParts } from "NexisClaw/plugin-sdk/reply-payload";
+import { danger, logVerbose, shouldLogVerbose } from "NexisClaw/plugin-sdk/runtime-env";
 import { resolveDiscordMaxLinesPerMessage } from "../accounts.js";
 import { createDiscordRestClient } from "../client.js";
 import { removeReactionDiscord } from "../send.js";
@@ -61,10 +61,10 @@ function sleep(ms: number): Promise<void> {
 }
 
 const DISCORD_TYPING_MAX_DURATION_MS = 20 * 60_000;
-let replyRuntimePromise: Promise<typeof import("openclaw/plugin-sdk/reply-runtime")> | undefined;
+let replyRuntimePromise: Promise<typeof import("NexisClaw/plugin-sdk/reply-runtime")> | undefined;
 
 async function loadReplyRuntime() {
-  replyRuntimePromise ??= import("openclaw/plugin-sdk/reply-runtime");
+  replyRuntimePromise ??= import("NexisClaw/plugin-sdk/reply-runtime");
   return await replyRuntimePromise;
 }
 

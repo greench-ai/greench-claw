@@ -182,7 +182,7 @@ describe("fetchWithSsrFGuard hardening", () => {
   const CROSS_ORIGIN_REDIRECT_PRESERVED_HEADERS = [
     ["accept", "application/json"],
     ["content-type", "application/json"],
-    ["user-agent", "OpenClaw-Test/1.0"],
+    ["user-agent", "NexisClaw-Test/1.0"],
   ] as const;
 
   const createPublicLookup = (): LookupFn =>
@@ -489,7 +489,7 @@ describe("fetchWithSsrFGuard hardening", () => {
         globalFetchCalls += 1;
         throw new Error("ambient global fetch should not be used when a dispatcher is attached");
       },
-      { __openclawAcceptsDispatcher: true as const },
+      { __NexisClawAcceptsDispatcher: true as const },
     );
 
     class MockAgent {
@@ -682,7 +682,7 @@ describe("fetchWithSsrFGuard hardening", () => {
           "X-Trace": "1",
           Accept: "application/json",
           "Content-Type": "application/json",
-          "User-Agent": "OpenClaw-Test/1.0",
+          "User-Agent": "NexisClaw-Test/1.0",
         },
       },
     });
@@ -1009,12 +1009,12 @@ describe("fetchWithSsrFGuard hardening", () => {
       Authorization: "Bearer secret",
       Cookie: "session=abc",
       Accept: "application/json",
-      "User-Agent": "OpenClaw-Test/1.0",
+      "User-Agent": "NexisClaw-Test/1.0",
     });
 
     expect(headers).toEqual({
       accept: "application/json",
-      "user-agent": "OpenClaw-Test/1.0",
+      "user-agent": "NexisClaw-Test/1.0",
     });
   });
 
@@ -1130,7 +1130,7 @@ describe("fetchWithSsrFGuard hardening", () => {
   });
 
   it("uses the env proxy in strict mode when the SSRF proxy lifecycle is active", async () => {
-    vi.stubEnv("OPENCLAW_PROXY_ACTIVE", "1");
+    vi.stubEnv("NEXISCLAW_PROXY_ACTIVE", "1");
 
     await runProxyModeDispatcherExpectation({
       mode: GUARDED_FETCH_MODE.STRICT,

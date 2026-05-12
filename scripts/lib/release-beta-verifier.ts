@@ -15,7 +15,7 @@ export type ReleaseVerifyBetaArgs = {
   skipPostpublish: boolean;
   rerunFailedClawHub: boolean;
   workflowRuns: {
-    openclawNpm?: string;
+    NexisClawNpm?: string;
     pluginNpm?: string;
     pluginClawHub?: string;
   };
@@ -34,7 +34,7 @@ type WorkflowRunSummary = {
   durationSeconds?: number;
 };
 
-const DEFAULT_REPO = "openclaw/openclaw";
+const DEFAULT_REPO = "NexisClaw/NexisClaw";
 const DEFAULT_CLAWHUB_REGISTRY = "https://clawhub.ai";
 
 function isRecord(value: unknown): value is JsonRecord {
@@ -105,7 +105,7 @@ export function parseReleaseVerifyBetaArgs(argv: string[]): ReleaseVerifyBetaArg
   const version = values.shift();
   if (!version || version.startsWith("-")) {
     throw new Error(
-      "Usage: pnpm release:verify-beta -- <version> [--openclaw-npm-run ID] [--plugin-npm-run ID] [--plugin-clawhub-run ID]",
+      "Usage: pnpm release:verify-beta -- <version> [--NexisClaw-npm-run ID] [--plugin-npm-run ID] [--plugin-clawhub-run ID]",
     );
   }
 
@@ -144,8 +144,8 @@ export function parseReleaseVerifyBetaArgs(argv: string[]): ReleaseVerifyBetaArg
       case "--registry":
         parsed.registry = next();
         break;
-      case "--openclaw-npm-run":
-        parsed.workflowRuns.openclawNpm = next();
+      case "--NexisClaw-npm-run":
+        parsed.workflowRuns.NexisClawNpm = next();
         break;
       case "--plugin-npm-run":
         parsed.workflowRuns.pluginNpm = next();
@@ -391,17 +391,17 @@ export async function verifyBetaRelease(
   const releaseUrl = verifyGitHubRelease(args);
   lines.push(`GitHub release OK: ${releaseUrl}`);
 
-  verifyNpmPackage("openclaw", args.version, args.distTag);
-  lines.push(`openclaw npm OK: ${args.version} (${args.distTag})`);
+  verifyNpmPackage("NexisClaw", args.version, args.distTag);
+  lines.push(`NexisClaw npm OK: ${args.version} (${args.distTag})`);
 
   if (!args.skipPostpublish) {
     runCommandInherited("node", [
       "--import",
       "tsx",
-      "scripts/openclaw-npm-postpublish-verify.ts",
+      "scripts/NexisClaw-npm-postpublish-verify.ts",
       args.version,
     ]);
-    lines.push("openclaw postpublish verifier OK");
+    lines.push("NexisClaw postpublish verifier OK");
   }
 
   const npmPlugins = collectPublishablePluginPackages(rootDir);
@@ -442,11 +442,11 @@ export async function verifyBetaRelease(
       }),
     );
   }
-  if (args.workflowRuns.openclawNpm !== undefined) {
+  if (args.workflowRuns.NexisClawNpm !== undefined) {
     workflowRuns.push(
       verifyWorkflowRun({
-        id: args.workflowRuns.openclawNpm,
-        label: "OpenClaw NPM Release",
+        id: args.workflowRuns.NexisClawNpm,
+        label: "NexisClaw NPM Release",
         repo: args.repo,
         rerunFailed: false,
       }),

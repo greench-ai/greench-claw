@@ -1,9 +1,9 @@
 import { ChannelType } from "discord-api-types/v10";
-import type { NativeCommandSpec } from "openclaw/plugin-sdk/command-auth";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { DiscordAccountConfig } from "openclaw/plugin-sdk/config-contracts";
-import * as pluginCommandsModule from "openclaw/plugin-sdk/plugin-runtime";
-import * as dispatcherModule from "openclaw/plugin-sdk/reply-dispatch-runtime";
+import type { NativeCommandSpec } from "NexisClaw/plugin-sdk/command-auth";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import * as pluginCommandsModule from "NexisClaw/plugin-sdk/plugin-runtime";
+import * as dispatcherModule from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { defineThrowingDiscordChannelGetter } from "../test-support/partial-channel.js";
 import { __testing as nativeCommandTesting, createDiscordNativeCommand } from "./native-command.js";
@@ -26,7 +26,7 @@ function createInteraction(params?: { userId?: string }): MockCommandInteraction
   });
 }
 
-function createConfig(): OpenClawConfig {
+function createConfig(): NexisClawConfig {
   return {
     commands: {
       allowFrom: {
@@ -48,10 +48,10 @@ function createConfig(): OpenClawConfig {
         },
       },
     },
-  } as OpenClawConfig;
+  } as NexisClawConfig;
 }
 
-function createCommand(cfg: OpenClawConfig, discordConfig?: DiscordAccountConfig) {
+function createCommand(cfg: NexisClawConfig, discordConfig?: DiscordAccountConfig) {
   const commandSpec: NativeCommandSpec = {
     name: "ping",
     description: "Ping",
@@ -92,7 +92,7 @@ function firstDispatchReplyCall(): Parameters<
 
 async function runGuildSlashCommand(params?: {
   userId?: string;
-  mutateConfig?: (cfg: OpenClawConfig) => void;
+  mutateConfig?: (cfg: NexisClawConfig) => void;
   runtimeDiscordConfig?: DiscordAccountConfig;
   mutateInteraction?: (interaction: MockCommandInteraction) => void;
 }) {

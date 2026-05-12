@@ -1,8 +1,8 @@
 import {
   tempWorkspace,
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNexisClawTmpDir,
   type TempWorkspace,
-} from "openclaw/plugin-sdk/temp-path";
+} from "NexisClaw/plugin-sdk/temp-path";
 
 export function createTempDirHarness() {
   const tempDirs: TempWorkspace[] = [];
@@ -13,7 +13,7 @@ export function createTempDirHarness() {
     },
     async makeTempDir(prefix: string) {
       const dir = await tempWorkspace({
-        rootDir: resolvePreferredOpenClawTmpDir(),
+        rootDir: resolvePreferredNexisClawTmpDir(),
         prefix,
       });
       tempDirs.push(dir);

@@ -5,8 +5,8 @@ import {
   getMemoryCapabilityRegistration,
   listActiveMemoryPublicArtifacts,
   type MemoryPluginPublicArtifact,
-} from "openclaw/plugin-sdk/memory-host-core";
-import type { OpenClawConfig } from "../api.js";
+} from "NexisClaw/plugin-sdk/memory-host-core";
+import type { NexisClawConfig } from "../api.js";
 import type { ResolvedMemoryWikiConfig } from "./config.js";
 import { appendMemoryWikiLog } from "./log.js";
 import {
@@ -191,8 +191,8 @@ async function writeBridgeSourcePage(params: {
           renderMarkdownFence(raw, contentLanguage),
           "",
           "## Notes",
-          "<!-- openclaw:human:start -->",
-          "<!-- openclaw:human:end -->",
+          "<!-- NexisClaw:human:start -->",
+          "<!-- NexisClaw:human:end -->",
           "",
         ].join("\n"),
       });
@@ -202,7 +202,7 @@ async function writeBridgeSourcePage(params: {
 
 export async function syncMemoryWikiBridgeSources(params: {
   config: ResolvedMemoryWikiConfig;
-  appConfig?: OpenClawConfig;
+  appConfig?: NexisClawConfig;
 }): Promise<BridgeMemoryWikiResult> {
   await initializeMemoryWikiVault(params.config);
   if (

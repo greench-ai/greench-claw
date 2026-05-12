@@ -1,10 +1,10 @@
 import {
   createProviderHttpError,
   resolveProviderRequestHeaders,
-} from "openclaw/plugin-sdk/provider-http";
-import { captureWsEvent } from "openclaw/plugin-sdk/proxy-capture";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/provider-http";
+import { captureWsEvent } from "NexisClaw/plugin-sdk/proxy-capture";
+import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 export const trimToUndefined = normalizeOptionalString;
 

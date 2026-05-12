@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   getPrimaryIdentityId,
   getReplyContext,
@@ -31,7 +31,7 @@ export type GroupHistoryEntry = {
 };
 
 type ApplyGroupGatingParams = {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   msg: WebInboundMsg;
   mentionText?: string;
   deferMissingMention?: boolean;

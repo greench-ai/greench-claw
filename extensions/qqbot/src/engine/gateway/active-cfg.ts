@@ -10,19 +10,19 @@
  * Issue #69546.
  */
 
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/core";
+import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
 
-export type GatewayCfg = OpenClawConfig;
+export type GatewayCfg = NexisClawConfig;
 
-export type GatewayCfgLoader = () => OpenClawConfig;
+export type GatewayCfgLoader = () => NexisClawConfig;
 
 export interface ActiveCfgProvider {
-  getActiveCfg(): OpenClawConfig;
+  getActiveCfg(): NexisClawConfig;
 }
 
 export interface ActiveCfgProviderOptions {
-  fallback: OpenClawConfig;
+  fallback: NexisClawConfig;
   load?: GatewayCfgLoader;
 }
 
@@ -30,7 +30,7 @@ export function createActiveCfgProvider(options: ActiveCfgProviderOptions): Acti
   const loader = options.load ?? defaultGatewayCfgLoader;
   const fallback = options.fallback;
   return {
-    getActiveCfg(): OpenClawConfig {
+    getActiveCfg(): NexisClawConfig {
       return resolveActiveCfg(loader, fallback);
     },
   };
@@ -38,8 +38,8 @@ export function createActiveCfgProvider(options: ActiveCfgProviderOptions): Acti
 
 export function resolveActiveCfg(
   loader: GatewayCfgLoader,
-  fallback: OpenClawConfig,
-): OpenClawConfig {
+  fallback: NexisClawConfig,
+): NexisClawConfig {
   try {
     return loader();
   } catch {
@@ -47,6 +47,6 @@ export function resolveActiveCfg(
   }
 }
 
-function defaultGatewayCfgLoader(): OpenClawConfig {
+function defaultGatewayCfgLoader(): NexisClawConfig {
   return getRuntimeConfig();
 }

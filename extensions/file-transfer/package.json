@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/file-transfer",
+  "name": "@NexisClaw/file-transfer",
   "version": "2026.5.12-beta.1",
-  "description": "OpenClaw file transfer plugin (file_fetch, dir_list, dir_fetch, file_write)",
+  "description": "NexisClaw file transfer plugin (file_fetch, dir_list, dir_fetch, file_write)",
   "type": "module",
   "dependencies": {
     "minimatch": "10.2.5",
     "typebox": "1.1.38"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ]

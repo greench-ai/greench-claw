@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import type { ThreadBindingManager } from "./thread-bindings.js";
 
-type DiscordConfig = NonNullable<OpenClawConfig["channels"]>["discord"];
+type DiscordConfig = NonNullable<NexisClawConfig["channels"]>["discord"];
 
 export type DiscordCommandArgContext = {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   discordConfig: DiscordConfig;
   accountId: string;
   sessionPrefix: string;

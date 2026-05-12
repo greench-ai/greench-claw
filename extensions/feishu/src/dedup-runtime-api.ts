@@ -1,1 +1,1 @@
-export { createPersistentDedupe } from "openclaw/plugin-sdk/persistent-dedupe";
+export { createPersistentDedupe } from "NexisClaw/plugin-sdk/persistent-dedupe";

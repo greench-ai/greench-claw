@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { getRuntimeConfig } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { planManifestModelCatalogRows } from "../model-catalog/manifest-planner.js";
 import { getCurrentPluginMetadataSnapshot } from "../plugins/current-plugin-metadata-snapshot.js";
@@ -18,7 +18,7 @@ import { modelSupportsInput as modelCatalogEntrySupportsInput } from "./model-ca
 import type { ModelCatalogEntry, ModelInputType } from "./model-catalog.types.js";
 import { normalizeConfiguredProviderCatalogModelId } from "./model-ref-shared.js";
 import { buildConfiguredModelCatalog } from "./model-selection-shared.js";
-import { ensureOpenClawModelsJson } from "./models-config.js";
+import { ensureNexisClawModelsJson } from "./models-config.js";
 import { normalizeProviderId } from "./provider-id.js";
 
 const log = createSubsystemLogger("model-catalog");
@@ -63,7 +63,7 @@ const modelSuppressionLoader = createLazyImportLoader(
 );
 
 function shouldLogModelCatalogTiming(): boolean {
-  return process.env.OPENCLAW_DEBUG_INGRESS_TIMING === "1";
+  return process.env.NEXISCLAW_DEBUG_INGRESS_TIMING === "1";
 }
 
 function loadModelSuppression() {
@@ -118,7 +118,7 @@ function appendCatalogEntriesIfAbsent(
 }
 
 export function loadManifestModelCatalog(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   fallbackToMetadataScan?: boolean;
@@ -243,7 +243,7 @@ function normalizePersistedModelCatalogEntry(
 }
 
 async function loadReadOnlyPersistedModelCatalog(params?: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
 }): Promise<ModelCatalogEntry[]> {
   const cfg = params?.config ?? getRuntimeConfig();
   const agentDir = resolveDefaultAgentDir(cfg);
@@ -288,7 +288,7 @@ async function loadReadOnlyPersistedModelCatalog(params?: {
   return sortModelCatalogEntries(models);
 }
 
-function loadReadOnlyStaticModelCatalog(params?: { config?: OpenClawConfig }): ModelCatalogEntry[] {
+function loadReadOnlyStaticModelCatalog(params?: { config?: NexisClawConfig }): ModelCatalogEntry[] {
   const cfg = params?.config ?? getRuntimeConfig();
   const models: ModelCatalogEntry[] = [];
   try {
@@ -315,7 +315,7 @@ function loadReadOnlyStaticModelCatalog(params?: { config?: OpenClawConfig }): M
 }
 
 export async function loadModelCatalog(params?: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   useCache?: boolean;
   readOnly?: boolean;
 }): Promise<ModelCatalogEntry[]> {
@@ -351,7 +351,7 @@ export async function loadModelCatalog(params?: {
     try {
       const cfg = params?.config ?? getRuntimeConfig();
       if (!readOnly) {
-        await ensureOpenClawModelsJson(cfg);
+        await ensureNexisClawModelsJson(cfg);
         logStage("models-json-ready");
       }
       // IMPORTANT: keep the dynamic import *inside* the try/catch.

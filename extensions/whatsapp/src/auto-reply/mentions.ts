@@ -1,8 +1,8 @@
 import {
   buildMentionRegexes,
   normalizeMentionText,
-} from "openclaw/plugin-sdk/channel-mention-gating";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "NexisClaw/plugin-sdk/channel-mention-gating";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   getComparableIdentityValues,
   getMentionIdentities,
@@ -25,7 +25,7 @@ export type MentionTargets = {
   self: WhatsAppIdentity;
 };
 
-export function buildMentionConfig(cfg: OpenClawConfig, agentId?: string): MentionConfig {
+export function buildMentionConfig(cfg: NexisClawConfig, agentId?: string): MentionConfig {
   const mentionRegexes = buildMentionRegexes(cfg, agentId);
   return { mentionRegexes, allowFrom: cfg.channels?.whatsapp?.allowFrom };
 }

@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolvePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolvePluginConfigObject } from "NexisClaw/plugin-sdk/plugin-config-runtime";
+import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
 import {
   mergeImplicitMantleProvider,
   resolveImplicitMantleProvider,
@@ -15,12 +15,12 @@ type BedrockMantlePluginConfig = {
   };
 };
 
-export function registerBedrockMantlePlugin(api: OpenClawPluginApi): void {
+export function registerBedrockMantlePlugin(api: NexisClawPluginApi): void {
   const providerId = "amazon-bedrock-mantle";
   const startupPluginConfig = (api.pluginConfig ?? {}) as BedrockMantlePluginConfig;
 
   function resolveCurrentPluginConfig(
-    config: OpenClawConfig | undefined,
+    config: NexisClawConfig | undefined,
   ): BedrockMantlePluginConfig | undefined {
     const runtimePluginConfig = resolvePluginConfigObject(config, providerId);
     return (

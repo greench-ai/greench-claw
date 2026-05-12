@@ -1,4 +1,4 @@
-import { sleep } from "openclaw/plugin-sdk/runtime-env";
+import { sleep } from "NexisClaw/plugin-sdk/runtime-env";
 
 type QaBrowserGateway = {
   call: (

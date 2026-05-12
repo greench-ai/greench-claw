@@ -1,11 +1,11 @@
-import type { OpenClawConfig, PluginRuntime } from "openclaw/plugin-sdk/core";
-import { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/media-runtime";
+import type { NexisClawConfig, PluginRuntime } from "NexisClaw/plugin-sdk/core";
+import { getAgentScopedMediaLocalRoots } from "NexisClaw/plugin-sdk/media-runtime";
 import {
   deliverTextOrMediaReply,
   isReasoningReplyPayload,
   resolveSendableOutboundReplyParts,
-} from "openclaw/plugin-sdk/reply-payload";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-runtime";
+} from "NexisClaw/plugin-sdk/reply-payload";
+import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
 
 type MarkdownTableMode = Parameters<PluginRuntime["channel"]["text"]["convertMarkdownTables"]>[1];
 
@@ -13,7 +13,7 @@ type SendMattermostMessage = (
   to: string,
   text: string,
   opts: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     accountId?: string;
     mediaUrl?: string;
     mediaLocalRoots?: readonly string[];
@@ -23,7 +23,7 @@ type SendMattermostMessage = (
 
 export async function deliverMattermostReplyPayload(params: {
   core: PluginRuntime;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   payload: ReplyPayload;
   to: string;
   accountId: string;

@@ -1,6 +1,6 @@
 import { Type } from "typebox";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import type { SsrFPolicy } from "../../infra/net/ssrf.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
@@ -130,13 +130,13 @@ const MusicGenerateToolSchema = Type.Object({
   filename: Type.Optional(
     Type.String({
       description:
-        "Optional output filename hint. OpenClaw preserves the basename and saves under its managed media directory.",
+        "Optional output filename hint. NexisClaw preserves the basename and saves under its managed media directory.",
     }),
   ),
 });
 
 function resolveMusicGenerationModelConfigForTool(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   agentDir?: string;
   authStore?: AuthProfileStore;
 }): ToolModelConfig | null {
@@ -149,12 +149,12 @@ function resolveMusicGenerationModelConfigForTool(params: {
   });
 }
 
-function hasExplicitMusicGenerationModelConfig(cfg?: OpenClawConfig): boolean {
+function hasExplicitMusicGenerationModelConfig(cfg?: NexisClawConfig): boolean {
   return hasToolModelConfig(coerceToolModelConfig(cfg?.agents?.defaults?.musicGenerationModel));
 }
 
 function resolveSelectedMusicGenerationProvider(params: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   musicGenerationModelConfig: ToolModelConfig;
   modelOverride?: string;
 }): MusicGenerationProvider | undefined {
@@ -407,7 +407,7 @@ type ExecutedMusicGeneration = {
 };
 
 async function executeMusicGenerationJob(params: {
-  effectiveCfg: OpenClawConfig;
+  effectiveCfg: NexisClawConfig;
   prompt: string;
   agentDir?: string;
   model?: string;
@@ -553,7 +553,7 @@ async function executeMusicGenerationJob(params: {
 }
 
 export function createMusicGenerateTool(options?: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   agentDir?: string;
   authProfileStore?: AuthProfileStore;
   agentSessionKey?: string;
@@ -563,7 +563,7 @@ export function createMusicGenerateTool(options?: {
   fsPolicy?: ToolFsPolicy;
   scheduleBackgroundWork?: MusicGenerateBackgroundScheduler;
 }): AnyAgentTool | null {
-  const cfg: OpenClawConfig = options?.config ?? getRuntimeConfig();
+  const cfg: NexisClawConfig = options?.config ?? getRuntimeConfig();
   if (
     !hasGenerationToolAvailability({
       cfg,
@@ -592,7 +592,7 @@ export function createMusicGenerateTool(options?: {
     name: "music_generate",
     displaySummary: "Generate music",
     description:
-      "Generate music using configured providers. Generated tracks are saved under OpenClaw-managed media storage and delivered automatically as attachments.",
+      "Generate music using configured providers. Generated tracks are saved under NexisClaw-managed media storage and delivered automatically as attachments.",
     parameters: MusicGenerateToolSchema,
     execute: async (_toolCallId, rawArgs) => {
       const args = rawArgs as Record<string, unknown>;

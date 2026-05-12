@@ -84,7 +84,7 @@ type BaseStreamOptions = {
   sessionId?: string;
   onPayload?: (payload: unknown, model: Model<Api>) => unknown;
   headers?: Record<string, string>;
-  openclawCodeModeToolSurface?: boolean;
+  NexisClawCodeModeToolSurface?: boolean;
 };
 
 type OpenAIResponsesOptions = BaseStreamOptions & {
@@ -1044,8 +1044,8 @@ export function createOpenAIResponsesTransportStreamFn(): StreamFn {
           params as Record<string, unknown>,
         ) as typeof params;
         if (
-          (options as { openclawCodeModeToolSurface?: unknown } | undefined)
-            ?.openclawCodeModeToolSurface === true
+          (options as { NexisClawCodeModeToolSurface?: unknown } | undefined)
+            ?.NexisClawCodeModeToolSurface === true
         ) {
           enforceCodeModeResponsesToolSurface(params);
           assertCodeModeResponsesToolSurface(params);
@@ -1397,8 +1397,8 @@ export function createAzureOpenAIResponsesTransportStreamFn(): StreamFn {
           params as Record<string, unknown>,
         ) as typeof params;
         if (
-          (options as { openclawCodeModeToolSurface?: unknown } | undefined)
-            ?.openclawCodeModeToolSurface === true
+          (options as { NexisClawCodeModeToolSurface?: unknown } | undefined)
+            ?.NexisClawCodeModeToolSurface === true
         ) {
           enforceCodeModeResponsesToolSurface(params);
           assertCodeModeResponsesToolSurface(params);
@@ -1610,8 +1610,8 @@ export function createOpenAICompletionsTransportStreamFn(): StreamFn {
           params = nextParams as typeof params;
         }
         if (
-          (options as { openclawCodeModeToolSurface?: unknown } | undefined)
-            ?.openclawCodeModeToolSurface === true
+          (options as { NexisClawCodeModeToolSurface?: unknown } | undefined)
+            ?.NexisClawCodeModeToolSurface === true
         ) {
           enforceCodeModeResponsesToolSurface(params);
           assertCodeModeResponsesToolSurface(params);
@@ -1969,7 +1969,7 @@ function getCompletionsContentDeltas(content: unknown): CompletionsReasoningDelt
   if (!text) {
     return [];
   }
-  // Preserve provider reasoning as OpenClaw thinking blocks so channel/UI
+  // Preserve provider reasoning as NexisClaw thinking blocks so channel/UI
   // surfaces can decide whether to show it instead of leaking it as answer text.
   if (type.includes("thinking") || type.includes("reasoning")) {
     return [{ kind: "thinking", signature: "content", text }];

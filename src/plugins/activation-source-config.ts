@@ -2,12 +2,12 @@ import {
   getRuntimeConfigSnapshot,
   getRuntimeConfigSourceSnapshot,
 } from "../config/runtime-snapshot.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 
 export function resolvePluginActivationSourceConfig(params: {
-  config?: OpenClawConfig;
-  activationSourceConfig?: OpenClawConfig;
-}): OpenClawConfig {
+  config?: NexisClawConfig;
+  activationSourceConfig?: NexisClawConfig;
+}): NexisClawConfig {
   if (params.activationSourceConfig !== undefined) {
     return params.activationSourceConfig;
   }

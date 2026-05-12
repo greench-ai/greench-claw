@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "OpenClaw",
+  "name": "NexisClaw",
   "description": "Self-hosted gateway that connects Discord, Google Chat, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, Zalo, and more to AI coding agents. Run one Gateway process on your own machine and message your AI assistant from anywhere.",
   "theme": "mint",
   "icons": {
@@ -36,12 +36,12 @@
     "links": [
       {
         "label": "GitHub",
-        "href": "https://github.com/openclaw/openclaw",
+        "href": "https://github.com/NexisClaw/NexisClaw",
         "icon": "github"
       },
       {
         "label": "Releases",
-        "href": "https://github.com/openclaw/openclaw/releases",
+        "href": "https://github.com/NexisClaw/NexisClaw/releases",
         "icon": "package"
       },
       {
@@ -378,15 +378,15 @@
     },
     {
       "source": "/clawd",
-      "destination": "/start/openclaw"
+      "destination": "/start/NexisClaw"
     },
     {
       "source": "/start/clawd",
-      "destination": "/start/openclaw"
+      "destination": "/start/NexisClaw"
     },
     {
       "source": "/start/clawd/",
-      "destination": "/start/openclaw"
+      "destination": "/start/NexisClaw"
     },
     {
       "source": "/start/pairing",
@@ -485,7 +485,7 @@
       "destination": "/channels/telegram"
     },
     {
-      "source": "/channels/openclaw-weixin",
+      "source": "/channels/NexisClaw-weixin",
       "destination": "/channels/wechat"
     },
     {
@@ -977,7 +977,7 @@
               {
                 "group": "Guides",
                 "pages": [
-                  "start/openclaw",
+                  "start/NexisClaw",
                   "start/wizard-cli-reference",
                   "start/wizard-cli-automation"
                 ]
@@ -1704,8 +1704,8 @@
                 "group": "RPC and API",
                 "pages": [
                   "reference/rpc",
-                  "concepts/openclaw-sdk",
-                  "reference/openclaw-sdk-api-design",
+                  "concepts/NexisClaw-sdk",
+                  "reference/NexisClaw-sdk-api-design",
                   "reference/device-models"
                 ]
               },

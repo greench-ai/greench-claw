@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/amazon-bedrock-mantle-provider",
+  "name": "@NexisClaw/amazon-bedrock-mantle-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw Amazon Bedrock Mantle (OpenAI-compatible) provider plugin",
+  "description": "NexisClaw Amazon Bedrock Mantle (OpenAI-compatible) provider plugin",
   "type": "module",
   "dependencies": {
     "@anthropic-ai/sdk": "0.95.2",
@@ -10,9 +10,9 @@
     "@earendil-works/pi-ai": "0.74.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ]

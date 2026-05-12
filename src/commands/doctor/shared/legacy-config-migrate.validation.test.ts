@@ -9,7 +9,7 @@ describe("legacy config migrate validation", () => {
         groupChat: {
           requireMention: false,
           historyLimit: 8,
-          mentionPatterns: ["@openclaw"],
+          mentionPatterns: ["@NexisClaw"],
         },
       },
       channels: {
@@ -30,7 +30,7 @@ describe("legacy config migrate validation", () => {
     });
     expect(res.config?.messages?.groupChat).toEqual({
       historyLimit: 8,
-      mentionPatterns: ["@openclaw"],
+      mentionPatterns: ["@NexisClaw"],
     });
     expect(res.changes).toStrictEqual([
       "Moved routing.allowFrom → channels.whatsapp.allowFrom.",

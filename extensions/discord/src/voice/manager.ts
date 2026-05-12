@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { DiscordAccountConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/ssrf-runtime";
 import { resolveDiscordAccountAllowFrom } from "../accounts.js";
 import {
   type APIVoiceState,
@@ -142,7 +142,7 @@ function startAutoJoin(manager: Pick<DiscordVoiceManager, "autoJoin">) {
 }
 
 function resolveDiscordVoiceAgentRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId: string;
   guildId: string;
   sessionChannelId: string;
@@ -202,7 +202,7 @@ export class DiscordVoiceManager {
   constructor(
     private params: {
       client: Client;
-      cfg: OpenClawConfig;
+      cfg: NexisClawConfig;
       discordConfig: DiscordAccountConfig;
       accountId: string;
       runtime: RuntimeEnv;

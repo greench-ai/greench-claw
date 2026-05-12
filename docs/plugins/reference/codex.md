@@ -11,7 +11,7 @@ Codex app-server harness and Codex-managed GPT model catalog.
 
 ## Distribution
 
-- Package: `@openclaw/codex`
+- Package: `@NexisClaw/codex`
 - Install route: npm; ClawHub
 
 ## Surface

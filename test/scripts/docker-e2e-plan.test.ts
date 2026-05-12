@@ -57,9 +57,9 @@ function publishedUpgradeSurvivorLane(
   scenario?: string,
 ): ReturnType<typeof summarizeLane> {
   return {
-    command: `OPENCLAW_UPGRADE_SURVIVOR_ARTIFACT_DIR="$PWD/.artifacts/upgrade-survivor/${name}" OPENCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC='${baselineSpec}' ${
-      scenario ? `OPENCLAW_UPGRADE_SURVIVOR_SCENARIO='${scenario}' ` : ""
-    }OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:published-upgrade-survivor`,
+    command: `NEXISCLAW_UPGRADE_SURVIVOR_ARTIFACT_DIR="$PWD/.artifacts/upgrade-survivor/${name}" NEXISCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC='${baselineSpec}' ${
+      scenario ? `NEXISCLAW_UPGRADE_SURVIVOR_SCENARIO='${scenario}' ` : ""
+    }NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:published-upgrade-survivor`,
     imageKind: "bare",
     live: false,
     name,
@@ -72,7 +72,7 @@ function publishedUpgradeSurvivorLane(
 
 function updateMigrationLane(name: string, baselineSpec: string): ReturnType<typeof summarizeLane> {
   return {
-    command: `OPENCLAW_UPGRADE_SURVIVOR_ARTIFACT_DIR="$PWD/.artifacts/upgrade-survivor/${name}" OPENCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC='${baselineSpec}' OPENCLAW_UPGRADE_SURVIVOR_SCENARIO='plugin-deps-cleanup' OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-migration`,
+    command: `NEXISCLAW_UPGRADE_SURVIVOR_ARTIFACT_DIR="$PWD/.artifacts/upgrade-survivor/${name}" NEXISCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC='${baselineSpec}' NEXISCLAW_UPGRADE_SURVIVOR_SCENARIO='plugin-deps-cleanup' NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-migration`,
     imageKind: "bare",
     live: false,
     name,
@@ -85,7 +85,7 @@ function updateMigrationLane(name: string, baselineSpec: string): ReturnType<typ
 
 function bundledPluginSweepLane(index: number): ReturnType<typeof summarizeLane> {
   return {
-    command: `OPENCLAW_BUNDLED_PLUGIN_SWEEP_TOTAL=24 OPENCLAW_BUNDLED_PLUGIN_SWEEP_INDEX=${index} OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:bundled-plugin-install-uninstall`,
+    command: `NEXISCLAW_BUNDLED_PLUGIN_SWEEP_TOTAL=24 NEXISCLAW_BUNDLED_PLUGIN_SWEEP_INDEX=${index} NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:bundled-plugin-install-uninstall`,
     imageKind: "functional",
     live: false,
     name: `bundled-plugin-install-uninstall-${index}`,
@@ -253,7 +253,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
     ]);
     expect(packageUpdateCore.lanes.map(summarizeLane)).toEqual([
       {
-        command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
+        command: "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
         imageKind: "bare",
         live: false,
         name: "npm-onboard-channel-agent",
@@ -263,7 +263,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
       },
       {
         command:
-          "OPENCLAW_NPM_ONBOARD_CHANNEL=discord OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
+          "NEXISCLAW_NPM_ONBOARD_CHANNEL=discord NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
         imageKind: "bare",
         live: false,
         name: "npm-onboard-discord-channel-agent",
@@ -273,7 +273,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
       },
       {
         command:
-          "OPENCLAW_NPM_ONBOARD_CHANNEL=slack OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
+          "NEXISCLAW_NPM_ONBOARD_CHANNEL=slack NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
         imageKind: "bare",
         live: false,
         name: "npm-onboard-slack-channel-agent",
@@ -282,7 +282,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
         weight: 3,
       },
       {
-        command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:doctor-switch",
+        command: "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:doctor-switch",
         imageKind: "bare",
         live: false,
         name: "doctor-switch",
@@ -291,7 +291,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
         weight: 3,
       },
       {
-        command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-channel-switch",
+        command: "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-channel-switch",
         imageKind: "bare",
         live: false,
         name: "update-channel-switch",
@@ -301,7 +301,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
         weight: 3,
       },
       {
-        command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:skill-install",
+        command: "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:skill-install",
         imageKind: "bare",
         live: false,
         name: "skill-install",
@@ -311,7 +311,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
         weight: 2,
       },
       {
-        command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:upgrade-survivor",
+        command: "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:upgrade-survivor",
         imageKind: "bare",
         live: false,
         name: "upgrade-survivor",
@@ -321,7 +321,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
         weight: 3,
       },
       {
-        command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:published-upgrade-survivor",
+        command: "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:published-upgrade-survivor",
         imageKind: "bare",
         live: false,
         name: "published-upgrade-survivor",
@@ -331,7 +331,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
         weight: 3,
       },
       {
-        command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-restart-auth",
+        command: "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-restart-auth",
         imageKind: "bare",
         live: false,
         name: "update-restart-auth",
@@ -344,7 +344,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
     expect(pluginsRuntimePlugins.lanes.map((lane) => lane.name)).toEqual(["plugins"]);
     expect(pluginsRuntimeServices.lanes.map(summarizeLane)).toEqual([
       {
-        command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
+        command: "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
         imageKind: "functional",
         live: false,
         name: "cron-mcp-cleanup",
@@ -353,7 +353,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
         weight: 3,
       },
       {
-        command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-web-search-minimal",
+        command: "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-web-search-minimal",
         imageKind: "functional",
         live: false,
         name: "openai-web-search-minimal",
@@ -364,7 +364,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
       },
       {
         command:
-          "OPENCLAW_LIVE_PLUGIN_TOOL_TIMEOUT_SECONDS=300 OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:live-plugin-tool",
+          "NEXISCLAW_LIVE_PLUGIN_TOOL_TIMEOUT_SECONDS=300 NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:live-plugin-tool",
         imageKind: "bare",
         live: true,
         name: "live-plugin-tool",
@@ -375,7 +375,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
       },
       {
         command:
-          "OPENCLAW_OPENWEBUI_MODEL=openai/gpt-5.4-mini OPENWEBUI_SMOKE_MODE=models OPENCLAW_OPENWEBUI_PROVIDER_TIMEOUT_SECONDS=300 OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openwebui",
+          "NEXISCLAW_OPENWEBUI_MODEL=openai/gpt-5.4-mini OPENWEBUI_SMOKE_MODE=models NEXISCLAW_OPENWEBUI_PROVIDER_TIMEOUT_SECONDS=300 NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openwebui",
         imageKind: "functional",
         live: true,
         name: "openwebui",
@@ -508,15 +508,15 @@ describe("scripts/lib/docker-e2e-plan", () => {
     const plan = planFor({
       selectedLaneNames: ["published-upgrade-survivor"],
       upgradeSurvivorBaselines:
-        "openclaw@2026.4.29 2026.4.23 openclaw@2026.4.23 openclaw@2026.3.13-1",
+        "NexisClaw@2026.4.29 2026.4.23 NexisClaw@2026.4.23 NexisClaw@2026.3.13-1",
     });
 
     expect(plan.lanes.map(summarizeLane)).toEqual([
-      publishedUpgradeSurvivorLane("published-upgrade-survivor-2026.4.29", "openclaw@2026.4.29"),
-      publishedUpgradeSurvivorLane("published-upgrade-survivor-2026.4.23", "openclaw@2026.4.23"),
+      publishedUpgradeSurvivorLane("published-upgrade-survivor-2026.4.29", "NexisClaw@2026.4.29"),
+      publishedUpgradeSurvivorLane("published-upgrade-survivor-2026.4.23", "NexisClaw@2026.4.23"),
       publishedUpgradeSurvivorLane(
         "published-upgrade-survivor-2026.3.13-1",
-        "openclaw@2026.3.13-1",
+        "NexisClaw@2026.3.13-1",
       ),
     ]);
   });
@@ -531,32 +531,32 @@ describe("scripts/lib/docker-e2e-plan", () => {
     expect(plan.lanes.map(summarizeLane)).toEqual([
       publishedUpgradeSurvivorLane(
         "published-upgrade-survivor-2026.4.29",
-        "openclaw@2026.4.29",
+        "NexisClaw@2026.4.29",
         "base",
       ),
       publishedUpgradeSurvivorLane(
         "published-upgrade-survivor-2026.4.29-feishu-channel",
-        "openclaw@2026.4.29",
+        "NexisClaw@2026.4.29",
         "feishu-channel",
       ),
       publishedUpgradeSurvivorLane(
         "published-upgrade-survivor-2026.4.29-tilde-log-path",
-        "openclaw@2026.4.29",
+        "NexisClaw@2026.4.29",
         "tilde-log-path",
       ),
       publishedUpgradeSurvivorLane(
         "published-upgrade-survivor-2026.4.23",
-        "openclaw@2026.4.23",
+        "NexisClaw@2026.4.23",
         "base",
       ),
       publishedUpgradeSurvivorLane(
         "published-upgrade-survivor-2026.4.23-feishu-channel",
-        "openclaw@2026.4.23",
+        "NexisClaw@2026.4.23",
         "feishu-channel",
       ),
       publishedUpgradeSurvivorLane(
         "published-upgrade-survivor-2026.4.23-tilde-log-path",
-        "openclaw@2026.4.23",
+        "NexisClaw@2026.4.23",
         "tilde-log-path",
       ),
     ]);
@@ -615,8 +615,8 @@ describe("scripts/lib/docker-e2e-plan", () => {
     });
 
     expect(plan.lanes.map(summarizeLane)).toEqual([
-      updateMigrationLane("update-migration-2026.4.29-plugin-deps-cleanup", "openclaw@2026.4.29"),
-      updateMigrationLane("update-migration-2026.4.23-plugin-deps-cleanup", "openclaw@2026.4.23"),
+      updateMigrationLane("update-migration-2026.4.29-plugin-deps-cleanup", "NexisClaw@2026.4.29"),
+      updateMigrationLane("update-migration-2026.4.23-plugin-deps-cleanup", "NexisClaw@2026.4.23"),
     ]);
   });
 
@@ -639,7 +639,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
     expect(plan.credentials).toEqual(["openai"]);
     expect(plan.lanes.map(summarizeLane)).toEqual([
       {
-        command: "OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:live-codex-npm-plugin",
+        command: "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:live-codex-npm-plugin",
         imageKind: "bare",
         live: true,
         name: "live-codex-npm-plugin",
@@ -663,7 +663,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
 
     expect(plan.lanes).toHaveLength(1);
     const lane = requireFirstLane(plan);
-    expect(lane.command).toBe("OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:codex-on-demand");
+    expect(lane.command).toBe("NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:codex-on-demand");
     expect(lane.imageKind).toBe("bare");
     expect(lane.live).toBe(false);
     expect(lane.name).toBe("codex-on-demand");
@@ -681,7 +681,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
     expect(plan.lanes).toHaveLength(1);
     const lane = requireFirstLane(plan);
     expect(lane.command).toBe(
-      "OPENCLAW_LIVE_PLUGIN_TOOL_TIMEOUT_SECONDS=300 OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:live-plugin-tool",
+      "NEXISCLAW_LIVE_PLUGIN_TOOL_TIMEOUT_SECONDS=300 NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:live-plugin-tool",
     );
     expect(lane.imageKind).toBe("bare");
     expect(lane.live).toBe(true);
@@ -703,7 +703,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
     expect(plan.lanes.map(summarizeLane)).toEqual([
       {
         command:
-          "OPENCLAW_OPENWEBUI_MODEL=openai/gpt-5.4-mini OPENWEBUI_SMOKE_MODE=models OPENCLAW_OPENWEBUI_PROVIDER_TIMEOUT_SECONDS=300 OPENCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openwebui",
+          "NEXISCLAW_OPENWEBUI_MODEL=openai/gpt-5.4-mini OPENWEBUI_SMOKE_MODE=models NEXISCLAW_OPENWEBUI_PROVIDER_TIMEOUT_SECONDS=300 NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openwebui",
         imageKind: "functional",
         live: true,
         name: "openwebui",
@@ -789,7 +789,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
     expect(plan.lanes.map(summarizeLane)).toEqual([
       {
         command:
-          "OPENCLAW_INSTALL_TAG=beta OPENCLAW_E2E_MODELS=openai OPENCLAW_INSTALL_E2E_IMAGE=openclaw-install-e2e-openai:local OPENCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE=0 OPENCLAW_INSTALL_E2E_OPENAI_MODEL=openai/gpt-5.4-mini OPENCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS=120 OPENCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS=120 pnpm test:install:e2e",
+          "NEXISCLAW_INSTALL_TAG=beta NEXISCLAW_E2E_MODELS=openai NEXISCLAW_INSTALL_E2E_IMAGE=NexisClaw-install-e2e-openai:local NEXISCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE=0 NEXISCLAW_INSTALL_E2E_OPENAI_MODEL=openai/gpt-5.4-mini NEXISCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS=120 NEXISCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS=120 pnpm test:install:e2e",
         imageKind: "bare",
         live: false,
         name: "install-e2e-openai",
@@ -799,7 +799,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
       },
       {
         command:
-          "OPENCLAW_INSTALL_TAG=beta OPENCLAW_E2E_MODELS=anthropic OPENCLAW_INSTALL_E2E_IMAGE=openclaw-install-e2e-anthropic:local pnpm test:install:e2e",
+          "NEXISCLAW_INSTALL_TAG=beta NEXISCLAW_E2E_MODELS=anthropic NEXISCLAW_INSTALL_E2E_IMAGE=NexisClaw-install-e2e-anthropic:local pnpm test:install:e2e",
         imageKind: "bare",
         live: false,
         name: "install-e2e-anthropic",
@@ -839,7 +839,7 @@ describe("scripts/lib/docker-e2e-plan", () => {
 
   it("rejects unknown selected lanes with the available lane names", () => {
     expect(() => planFor({ selectedLaneNames: ["missing-lane"] })).toThrow(
-      /OPENCLAW_DOCKER_ALL_LANES unknown lane\(s\): missing-lane/u,
+      /NEXISCLAW_DOCKER_ALL_LANES unknown lane\(s\): missing-lane/u,
     );
   });
 });

@@ -93,8 +93,8 @@ function createDeps(
     maybeRestoreLegacyMatrixBackup: vi.fn(async () => createLegacyCryptoRestoreResult()),
     summarizeMatrixDeviceHealth: vi.fn(() => ({
       currentDeviceId: null,
-      staleOpenClawDevices: [] as MatrixManagedDeviceInfo[],
-      currentOpenClawDevices: [] as MatrixManagedDeviceInfo[],
+      staleNexisClawDevices: [] as MatrixManagedDeviceInfo[],
+      currentNexisClawDevices: [] as MatrixManagedDeviceInfo[],
     })),
     syncMatrixOwnProfile: vi.fn(async () => createProfileSyncResult()),
     ensureMatrixStartupVerification: vi.fn(async () =>
@@ -212,10 +212,10 @@ describe("runMatrixStartupMaintenance", () => {
     params.auth.encryption = true;
     vi.mocked(deps.summarizeMatrixDeviceHealth).mockReturnValue({
       currentDeviceId: null,
-      staleOpenClawDevices: [
-        { deviceId: "DEV123", displayName: "OpenClaw Device", current: false },
+      staleNexisClawDevices: [
+        { deviceId: "DEV123", displayName: "NexisClaw Device", current: false },
       ],
-      currentOpenClawDevices: [],
+      currentNexisClawDevices: [],
     });
     vi.mocked(deps.ensureMatrixStartupVerification).mockResolvedValue(
       createStartupVerificationOutcome("pending"),
@@ -232,10 +232,10 @@ describe("runMatrixStartupMaintenance", () => {
     await runMatrixStartupMaintenance(params, deps);
 
     expect(params.logger.warn).toHaveBeenCalledWith(
-      "matrix: stale OpenClaw devices detected for @bot:example.org: DEV123. Run 'openclaw matrix devices prune-stale --account ops' to keep encrypted-room trust healthy.",
+      "matrix: stale NexisClaw devices detected for @bot:example.org: DEV123. Run 'NexisClaw matrix devices prune-stale --account ops' to keep encrypted-room trust healthy.",
     );
     expect(params.logger.info).toHaveBeenCalledWith(
-      "matrix: device not verified — run 'openclaw matrix verify device <key>' to enable E2EE",
+      "matrix: device not verified — run 'NexisClaw matrix verify device <key>' to enable E2EE",
     );
     expect(params.logger.info).toHaveBeenCalledWith(
       "matrix: startup verification request is already pending; finish it in another Matrix client",

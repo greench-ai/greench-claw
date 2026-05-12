@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
-vi.mock("openclaw/plugin-sdk/memory-host-events", () => ({
+vi.mock("NexisClaw/plugin-sdk/memory-host-events", () => ({
   appendMemoryHostEvent: vi.fn(async () => {}),
 }));
 
@@ -935,7 +935,7 @@ describe("short-term promotion", () => {
       expect(secondApply.reconciledExisting).toBe(1);
 
       const memoryText = await fs.readFile(path.join(workspaceDir, "MEMORY.md"), "utf-8");
-      expect(memoryText.match(/openclaw-memory-promotion:/g)?.length).toBe(1);
+      expect(memoryText.match(/NexisClaw-memory-promotion:/g)?.length).toBe(1);
       expect(
         memoryText.match(/The gateway should stay loopback-only on port 18789\./g)?.length,
       ).toBe(1);
@@ -1852,11 +1852,11 @@ describe("short-term promotion", () => {
           "# Long-Term Memory",
           "",
           "## Promoted From Short-Term Memory (2026-04-10)",
-          "<!-- openclaw-memory-promotion:legacy-old -->",
+          "<!-- NexisClaw-memory-promotion:legacy-old -->",
           `- ${filler}`,
           "",
           "## Promoted From Short-Term Memory (2026-04-20)",
-          "<!-- openclaw-memory-promotion:legacy-newer -->",
+          "<!-- NexisClaw-memory-promotion:legacy-newer -->",
           `- ${filler}`,
           "",
         ].join("\n");

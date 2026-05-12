@@ -1,3 +1,3 @@
-export { resolvePinnedMainDmOwnerFromAllowlist } from "openclaw/plugin-sdk/security-runtime";
-export { readChannelIngressStoreAllowFromForDmPolicy } from "openclaw/plugin-sdk/channel-ingress-runtime";
-export { upsertChannelPairingRequest } from "openclaw/plugin-sdk/conversation-runtime";
+export { resolvePinnedMainDmOwnerFromAllowlist } from "NexisClaw/plugin-sdk/security-runtime";
+export { readChannelIngressStoreAllowFromForDmPolicy } from "NexisClaw/plugin-sdk/channel-ingress-runtime";
+export { upsertChannelPairingRequest } from "NexisClaw/plugin-sdk/conversation-runtime";

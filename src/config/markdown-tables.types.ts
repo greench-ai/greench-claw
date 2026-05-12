@@ -1,8 +1,8 @@
 import type { MarkdownTableMode } from "./types.base.js";
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { NexisClawConfig } from "./types.NexisClaw.js";
 
 export type ResolveMarkdownTableModeParams = {
-  cfg?: Partial<OpenClawConfig>;
+  cfg?: Partial<NexisClawConfig>;
   channel?: string | null;
   accountId?: string | null;
 };

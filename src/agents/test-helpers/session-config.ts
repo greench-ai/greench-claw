@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 
 export function createPerSenderSessionConfig(
-  overrides: Partial<NonNullable<OpenClawConfig["session"]>> = {},
-): NonNullable<OpenClawConfig["session"]> {
+  overrides: Partial<NonNullable<NexisClawConfig["session"]>> = {},
+): NonNullable<NexisClawConfig["session"]> {
   return {
     mainKey: "main",
     scope: "per-sender",

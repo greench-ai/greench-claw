@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/plugin-entry";
-import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
+import { isRecord } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { migrateVoiceCallLegacyConfigInput } from "./config-api.js";
 
-function migrateVoiceCallPluginConfig(config: OpenClawConfig): {
-  config: OpenClawConfig;
+function migrateVoiceCallPluginConfig(config: NexisClawConfig): {
+  config: NexisClawConfig;
   changes: string[];
 } | null {
   const rawVoiceCallConfig = config.plugins?.entries?.["voice-call"]?.config;

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
 import { isRecord } from "../utils.js";
 import { resolveModelRuntimePolicy } from "./model-runtime-policy.js";
@@ -55,7 +55,7 @@ function parseConfiguredModelRef(
   };
 }
 
-function hasOpenAIModelRef(config: OpenClawConfig, value: unknown, agentId?: string): boolean {
+function hasOpenAIModelRef(config: NexisClawConfig, value: unknown, agentId?: string): boolean {
   return listAgentModelRefs(value).some((ref) => {
     if (!modelSelectionShouldEnsureCodexPlugin({ model: ref, config })) {
       return false;
@@ -72,7 +72,7 @@ function hasOpenAIModelRef(config: OpenClawConfig, value: unknown, agentId?: str
   });
 }
 
-function pushConfiguredModelRuntimeIds(config: OpenClawConfig, runtimes: Set<string>): void {
+function pushConfiguredModelRuntimeIds(config: NexisClawConfig, runtimes: Set<string>): void {
   for (const providerConfig of Object.values(config.models?.providers ?? {})) {
     const providerRuntime = normalizeRuntimeId(providerConfig?.agentRuntime?.id);
     if (providerRuntime && providerRuntime !== "auto" && providerRuntime !== "pi") {
@@ -108,7 +108,7 @@ function pushConfiguredModelRuntimeIds(config: OpenClawConfig, runtimes: Set<str
   }
 }
 
-function pushLegacyAgentRuntimeIds(config: OpenClawConfig, runtimes: Set<string>): void {
+function pushLegacyAgentRuntimeIds(config: NexisClawConfig, runtimes: Set<string>): void {
   const pushRuntimeId = (value: unknown) => {
     const runtime = normalizeRuntimeId(value);
     if (runtime && runtime !== "auto" && runtime !== "pi") {
@@ -129,7 +129,7 @@ export type ConfiguredAgentHarnessRuntimeOptions = {
 };
 
 export function collectConfiguredAgentHarnessRuntimes(
-  config: OpenClawConfig,
+  config: NexisClawConfig,
   env: NodeJS.ProcessEnv,
   options: ConfiguredAgentHarnessRuntimeOptions = {},
 ): string[] {
@@ -143,7 +143,7 @@ export function collectConfiguredAgentHarnessRuntimes(
   };
 
   if (includeEnvRuntime) {
-    const envRuntime = normalizeRuntimeId(env.OPENCLAW_AGENT_RUNTIME);
+    const envRuntime = normalizeRuntimeId(env.NEXISCLAW_AGENT_RUNTIME);
     if (envRuntime && envRuntime !== "auto" && envRuntime !== "pi") {
       runtimes.add(envRuntime);
     }

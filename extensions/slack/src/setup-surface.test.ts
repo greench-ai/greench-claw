@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   createTestWizardPrompter,
   runSetupWizardPrepare,
   runSetupWizardFinalize,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import type { WizardPrompter } from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import type { WizardPrompter } from "NexisClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it, vi } from "vitest";
 import { createSlackSetupWizardBase } from "./setup-core.js";
 import { buildSlackSetupLines } from "./setup-shared.js";
@@ -27,7 +27,7 @@ const baseCfg = {
       appToken: "xapp-test",
     },
   },
-} as OpenClawConfig;
+} as NexisClawConfig;
 
 function requireFirstStringArg(mock: ReturnType<typeof vi.fn>, label: string): string {
   const [call] = mock.mock.calls;
@@ -100,7 +100,7 @@ describe("slackSetupWizard.prepare", () => {
 
     await runSetupWizardPrepare({
       prepare: slackSetupWizard.prepare,
-      cfg: { channels: { slack: {} } } as OpenClawConfig,
+      cfg: { channels: { slack: {} } } as NexisClawConfig,
       prompter: createTestWizardPrompter({
         plain,
         note,
@@ -112,12 +112,12 @@ describe("slackSetupWizard.prepare", () => {
     const manifest = requireFirstStringArg(plain, "Slack manifest plain text");
     expect(JSON.parse(manifest)).toEqual({
       display_information: {
-        name: "OpenClaw",
-        description: "OpenClaw connector for OpenClaw",
+        name: "NexisClaw",
+        description: "NexisClaw connector for NexisClaw",
       },
       features: {
         bot_user: {
-          display_name: "OpenClaw",
+          display_name: "NexisClaw",
           always_online: true,
         },
         app_home: {
@@ -127,8 +127,8 @@ describe("slackSetupWizard.prepare", () => {
         },
         slash_commands: [
           {
-            command: "/openclaw",
-            description: "Send a message to OpenClaw",
+            command: "/NexisClaw",
+            description: "Send a message to NexisClaw",
             should_escape: false,
           },
         ],
@@ -217,7 +217,7 @@ describe("slackSetupWizard.dmPolicy", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NexisClawConfig,
         "alerts",
       ),
     ).toBe("allowlist");
@@ -244,7 +244,7 @@ describe("slackSetupWizard.dmPolicy", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
       "open",
       "alerts",
     );
@@ -276,7 +276,7 @@ describe("slackSetupWizard.status", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
     });
 
     expect(configured).toBe(false);

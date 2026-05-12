@@ -3,8 +3,8 @@ import {
   sanitizeAndNormalizeEmbedding,
   type MemoryEmbeddingProvider,
   type MemoryEmbeddingProviderCreateOptions,
-} from "openclaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { refreshAwsSharedConfigCacheForBedrock } from "./aws-credential-refresh.js";
 
 // ---------------------------------------------------------------------------

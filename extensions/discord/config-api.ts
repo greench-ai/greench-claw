@@ -1,4 +1,4 @@
 export {
   buildChannelConfigSchema,
   DiscordConfigSchema,
-} from "openclaw/plugin-sdk/bundled-channel-config-schema";
+} from "NexisClaw/plugin-sdk/bundled-channel-config-schema";

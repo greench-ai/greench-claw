@@ -29,10 +29,10 @@ let currentMockSocket:
     }
   | undefined;
 
-vi.mock("openclaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("NexisClaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/runtime-config-snapshot")
-  >("openclaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot")
+  >("NexisClaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: vi.fn().mockReturnValue({
@@ -49,9 +49,9 @@ vi.mock("openclaw/plugin-sdk/runtime-config-snapshot", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/conversation-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/conversation-runtime")>(
-    "openclaw/plugin-sdk/conversation-runtime",
+vi.mock("NexisClaw/plugin-sdk/conversation-runtime", async () => {
+  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/conversation-runtime")>(
+    "NexisClaw/plugin-sdk/conversation-runtime",
   );
   return {
     ...actual,
@@ -64,9 +64,9 @@ vi.mock("openclaw/plugin-sdk/conversation-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/channel-pairing", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/channel-pairing")>(
-    "openclaw/plugin-sdk/channel-pairing",
+vi.mock("NexisClaw/plugin-sdk/channel-pairing", async () => {
+  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/channel-pairing")>(
+    "NexisClaw/plugin-sdk/channel-pairing",
   );
   return {
     ...actual,
@@ -76,9 +76,9 @@ vi.mock("openclaw/plugin-sdk/channel-pairing", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/media-store", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/media-store")>(
-    "openclaw/plugin-sdk/media-store",
+vi.mock("NexisClaw/plugin-sdk/media-store", async () => {
+  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/media-store")>(
+    "NexisClaw/plugin-sdk/media-store",
   );
   return {
     ...actual,
@@ -89,7 +89,7 @@ vi.mock("openclaw/plugin-sdk/media-store", async () => {
   };
 });
 
-const HOME = path.join(os.tmpdir(), `openclaw-inbound-media-${crypto.randomUUID()}`);
+const HOME = path.join(os.tmpdir(), `NexisClaw-inbound-media-${crypto.randomUUID()}`);
 const ORIGINAL_HOME = process.env.HOME;
 process.env.HOME = HOME;
 

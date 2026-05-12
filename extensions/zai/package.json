@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/zai-provider",
+  "name": "@NexisClaw/zai-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw Z.AI provider plugin",
+  "description": "NexisClaw Z.AI provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ]

@@ -17,11 +17,11 @@ import {
 describe("exec approvals wildcard agent", () => {
   it("merges wildcard allowlist entries with agent entries", () => {
     const dir = makeTempDir();
-    const prevOpenClawHome = process.env.OPENCLAW_HOME;
+    const prevNexisClawHome = process.env.NEXISCLAW_HOME;
 
     try {
-      process.env.OPENCLAW_HOME = dir;
-      const approvalsPath = path.join(dir, ".openclaw", "exec-approvals.json");
+      process.env.NEXISCLAW_HOME = dir;
+      const approvalsPath = path.join(dir, ".NexisClaw", "exec-approvals.json");
       fs.mkdirSync(path.dirname(approvalsPath), { recursive: true });
       fs.writeFileSync(
         approvalsPath,
@@ -44,10 +44,10 @@ describe("exec approvals wildcard agent", () => {
         "/usr/bin/uname",
       ]);
     } finally {
-      if (prevOpenClawHome === undefined) {
-        delete process.env.OPENCLAW_HOME;
+      if (prevNexisClawHome === undefined) {
+        delete process.env.NEXISCLAW_HOME;
       } else {
-        process.env.OPENCLAW_HOME = prevOpenClawHome;
+        process.env.NEXISCLAW_HOME = prevNexisClawHome;
       }
     }
   });

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { isDeepStrictEqual } from "node:util";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { withFileLock } from "../../infra/file-lock.js";
 import { loadJsonFile, saveJsonFile } from "../../infra/json-file.js";
 import { cloneAuthProfileStore } from "./clone.js";
@@ -45,7 +45,7 @@ import type { AuthProfileStore } from "./types.js";
 
 type LoadAuthProfileStoreOptions = {
   allowKeychainPrompt?: boolean;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   externalCli?: ExternalCliAuthDiscovery;
   readOnly?: boolean;
   syncExternalCli?: boolean;
@@ -60,7 +60,7 @@ type SaveAuthProfileStoreOptions = {
 
 type ResolvedExternalCliOverlayOptions = {
   allowKeychainPrompt?: boolean;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   externalCliProviderIds?: Iterable<string>;
   externalCliProfileIds?: Iterable<string>;
 };
@@ -322,7 +322,7 @@ function maybeSyncPersistedExternalCliAuthProfiles(params: {
   if (
     params.options?.readOnly === true ||
     params.options?.syncExternalCli === false ||
-    process.env.OPENCLAW_AUTH_STORE_READONLY === "1"
+    process.env.NEXISCLAW_AUTH_STORE_READONLY === "1"
   ) {
     return { store: params.store, cacheable: true };
   }
@@ -480,7 +480,7 @@ export async function updateAuthProfileStoreWithLock(params: {
 
 export function loadAuthProfileStore(): AuthProfileStore {
   const asStore = loadPersistedAuthProfileStore(undefined, {
-    rewriteInlineOAuthSecrets: process.env.OPENCLAW_AUTH_STORE_READONLY !== "1",
+    rewriteInlineOAuthSecrets: process.env.NEXISCLAW_AUTH_STORE_READONLY !== "1",
   });
   if (asStore) {
     return overlayExternalAuthProfiles(asStore);
@@ -519,7 +519,7 @@ function loadAuthProfileStoreForAgent(
     }
   }
   const asStore = loadPersistedAuthProfileStore(agentDir, {
-    rewriteInlineOAuthSecrets: !readOnly && process.env.OPENCLAW_AUTH_STORE_READONLY !== "1",
+    rewriteInlineOAuthSecrets: !readOnly && process.env.NEXISCLAW_AUTH_STORE_READONLY !== "1",
   });
   if (asStore) {
     const synced = maybeSyncPersistedExternalCliAuthProfiles({
@@ -548,7 +548,7 @@ function loadAuthProfileStoreForAgent(
   }
 
   const mergedOAuth = mergeOAuthFileIntoStore(store);
-  const forceReadOnly = process.env.OPENCLAW_AUTH_STORE_READONLY === "1";
+  const forceReadOnly = process.env.NEXISCLAW_AUTH_STORE_READONLY === "1";
   const shouldWrite = !readOnly && !forceReadOnly && (legacy !== null || mergedOAuth);
   if (shouldWrite) {
     saveAuthProfileStore(store, agentDir);
@@ -631,7 +631,7 @@ export function ensureAuthProfileStore(
   agentDir?: string,
   options?: {
     allowKeychainPrompt?: boolean;
-    config?: OpenClawConfig;
+    config?: NexisClawConfig;
     externalCli?: ExternalCliAuthDiscovery;
     externalCliProviderIds?: Iterable<string>;
     externalCliProfileIds?: Iterable<string>;

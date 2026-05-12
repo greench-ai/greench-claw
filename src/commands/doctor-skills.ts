@@ -9,7 +9,7 @@ import {
   type GhConfigDiscoveryResult,
 } from "../agents/skills/gh-config-discovery.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { note } from "../terminal/note.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
 
@@ -93,17 +93,17 @@ export function formatUnavailableSkillDoctorLines(skills: SkillStatusEntry[]): s
     lines.push(`- ${skill.name}: ${formatMissingSummary(skill)}`);
     lines.push(...formatInstallHints(skill));
   }
-  lines.push(`Disable unused skills: ${formatCliCommand("openclaw doctor --fix")}`);
+  lines.push(`Disable unused skills: ${formatCliCommand("NexisClaw doctor --fix")}`);
   lines.push(
-    `Inspect details: ${formatCliCommand("openclaw skills check --agent <id>")} or ${formatCliCommand("openclaw skills info <name> --agent <id>")}`,
+    `Inspect details: ${formatCliCommand("NexisClaw skills check --agent <id>")} or ${formatCliCommand("NexisClaw skills info <name> --agent <id>")}`,
   );
   return lines;
 }
 
 export function disableUnavailableSkillsInConfig(
-  config: OpenClawConfig,
+  config: NexisClawConfig,
   skills: readonly SkillStatusEntry[],
-): OpenClawConfig {
+): NexisClawConfig {
   if (skills.length === 0) {
     return config;
   }
@@ -124,9 +124,9 @@ export function disableUnavailableSkillsInConfig(
 }
 
 export async function maybeRepairSkillReadiness(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   prompter: DoctorPrompter;
-}): Promise<OpenClawConfig> {
+}): Promise<NexisClawConfig> {
   const agentId = resolveDefaultAgentId(params.cfg);
   const workspaceDir = resolveAgentWorkspaceDir(params.cfg, agentId);
   const report = buildWorkspaceSkillStatus(workspaceDir, {

@@ -5,7 +5,7 @@ const { isWSL2SyncMock } = vi.hoisted(() => ({
   isWSL2SyncMock: vi.fn(() => false),
 }));
 
-vi.mock("openclaw/plugin-sdk/runtime-env", () => ({
+vi.mock("NexisClaw/plugin-sdk/runtime-env", () => ({
   isWSL2Sync: isWSL2SyncMock,
 }));
 

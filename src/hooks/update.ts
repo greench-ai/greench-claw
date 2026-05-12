@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import {
   expectedIntegrityForUpdate,
   readInstalledPackageVersion,
@@ -26,7 +26,7 @@ export type HookPackUpdateOutcome = {
 };
 
 export type HookPackUpdateSummary = {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   changed: boolean;
   outcomes: HookPackUpdateOutcome[];
 };
@@ -66,7 +66,7 @@ function createHookPackUpdateIntegrityDriftHandler(params: {
 }
 
 export async function updateNpmInstalledHookPacks(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   logger?: HookPackUpdateLogger;
   hookIds?: string[];
   dryRun?: boolean;

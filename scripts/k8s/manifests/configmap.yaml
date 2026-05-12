@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: openclaw-config
+  name: NexisClaw-config
   labels:
-    app: openclaw
+    app: NexisClaw
 data:
-  openclaw.json: |
+  NexisClaw.json: |
     {
       "gateway": {
         "mode": "local",
@@ -20,19 +20,19 @@ data:
       },
       "agents": {
         "defaults": {
-          "workspace": "~/.openclaw/workspace"
+          "workspace": "~/.NexisClaw/workspace"
         },
         "list": [
           {
             "id": "default",
-            "name": "OpenClaw Assistant",
-            "workspace": "~/.openclaw/workspace"
+            "name": "NexisClaw Assistant",
+            "workspace": "~/.NexisClaw/workspace"
           }
         ]
       },
       "cron": { "enabled": false }
     }
   AGENTS.md: |
-    # OpenClaw Assistant
+    # NexisClaw Assistant
 
     You are a helpful AI assistant running in Kubernetes.

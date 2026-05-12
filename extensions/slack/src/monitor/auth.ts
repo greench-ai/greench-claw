@@ -7,9 +7,9 @@ import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
   readChannelIngressStoreAllowFromForDmPolicy,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "NexisClaw/plugin-sdk/channel-ingress-runtime";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
 import {
   allowListMatches,
   normalizeAllowList,
@@ -233,7 +233,7 @@ async function resolveSlackChannelMemberIds(
   const cache = getChannelMembersCache(ctx);
   const key = `${ctx.accountId}:${channelId}`;
   const ttlMs = readSlackCacheTtlMs(
-    "OPENCLAW_SLACK_CHANNEL_MEMBERS_CACHE_TTL_MS",
+    "NEXISCLAW_SLACK_CHANNEL_MEMBERS_CACHE_TTL_MS",
     DEFAULT_CHANNEL_MEMBERS_CACHE_TTL_MS,
   );
   const nowMs = Date.now();

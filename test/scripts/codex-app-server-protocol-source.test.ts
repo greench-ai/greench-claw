@@ -5,22 +5,22 @@ import { resolveCodexAppServerProtocolSource } from "../../scripts/lib/codex-app
 import { createScriptTestHarness } from "./test-helpers.js";
 
 const { createTempDir } = createScriptTestHarness();
-const originalOpenClawCodexRepo = process.env.OPENCLAW_CODEX_REPO;
+const originalNexisClawCodexRepo = process.env.NEXISCLAW_CODEX_REPO;
 
 afterEach(() => {
-  if (originalOpenClawCodexRepo === undefined) {
-    delete process.env.OPENCLAW_CODEX_REPO;
+  if (originalNexisClawCodexRepo === undefined) {
+    delete process.env.NEXISCLAW_CODEX_REPO;
   } else {
-    process.env.OPENCLAW_CODEX_REPO = originalOpenClawCodexRepo;
+    process.env.NEXISCLAW_CODEX_REPO = originalNexisClawCodexRepo;
   }
 });
 
 describe("codex app-server protocol source resolver", () => {
-  it("uses OPENCLAW_CODEX_REPO when provided", async () => {
-    const root = createTempDir("openclaw-protocol-source-root-");
-    const codexRepo = createTempDir("openclaw-protocol-source-codex-");
+  it("uses NEXISCLAW_CODEX_REPO when provided", async () => {
+    const root = createTempDir("NexisClaw-protocol-source-root-");
+    const codexRepo = createTempDir("NexisClaw-protocol-source-codex-");
     createProtocolSchema(codexRepo);
-    process.env.OPENCLAW_CODEX_REPO = codexRepo;
+    process.env.NEXISCLAW_CODEX_REPO = codexRepo;
 
     await expect(resolveCodexAppServerProtocolSource(root)).resolves.toEqual({
       codexRepo,
@@ -29,20 +29,20 @@ describe("codex app-server protocol source resolver", () => {
   });
 
   it("finds the primary checkout sibling from a git worktree", async () => {
-    const parentDir = createTempDir("openclaw-protocol-source-parent-");
-    const primaryOpenClaw = path.join(parentDir, "openclaw");
+    const parentDir = createTempDir("NexisClaw-protocol-source-parent-");
+    const primaryNexisClaw = path.join(parentDir, "NexisClaw");
     const codexRepo = path.join(parentDir, "codex");
-    const worktreeRoot = createTempDir("openclaw-protocol-source-worktree-");
-    fs.mkdirSync(path.join(primaryOpenClaw, ".git", "worktrees", "codex-harness"), {
+    const worktreeRoot = createTempDir("NexisClaw-protocol-source-worktree-");
+    fs.mkdirSync(path.join(primaryNexisClaw, ".git", "worktrees", "codex-harness"), {
       recursive: true,
     });
     fs.mkdirSync(worktreeRoot, { recursive: true });
     fs.writeFileSync(
       path.join(worktreeRoot, ".git"),
-      `gitdir: ${path.join(primaryOpenClaw, ".git", "worktrees", "codex-harness")}\n`,
+      `gitdir: ${path.join(primaryNexisClaw, ".git", "worktrees", "codex-harness")}\n`,
     );
     createProtocolSchema(codexRepo);
-    delete process.env.OPENCLAW_CODEX_REPO;
+    delete process.env.NEXISCLAW_CODEX_REPO;
 
     await expect(resolveCodexAppServerProtocolSource(worktreeRoot)).resolves.toEqual({
       codexRepo,

@@ -1,13 +1,13 @@
-import type { ModelDefinitionConfig } from "openclaw/plugin-sdk/provider-model-shared";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/runtime-env";
+import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
+import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "NexisClaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { isChutesModelDiscoveryTestEnvironment } from "./model-discovery-env.js";
 
 const log = createSubsystemLogger("chutes-models");

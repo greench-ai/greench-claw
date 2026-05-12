@@ -1,11 +1,11 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { MemorySearchResult } from "openclaw/plugin-sdk/memory-core-host-runtime-files";
-import { formatMemoryDreamingDay } from "openclaw/plugin-sdk/memory-core-host-status";
-import { appendMemoryHostEvent } from "openclaw/plugin-sdk/memory-host-events";
-import { privateFileStore } from "openclaw/plugin-sdk/security-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { MemorySearchResult } from "NexisClaw/plugin-sdk/memory-core-host-runtime-files";
+import { formatMemoryDreamingDay } from "NexisClaw/plugin-sdk/memory-core-host-status";
+import { appendMemoryHostEvent } from "NexisClaw/plugin-sdk/memory-host-events";
+import { privateFileStore } from "NexisClaw/plugin-sdk/security-runtime";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import {
   deriveConceptTags,
   MAX_CONCEPT_TAGS,
@@ -25,7 +25,7 @@ const DEFAULT_RECENCY_HALF_LIFE_DAYS = 14;
 export const DEFAULT_PROMOTION_MIN_SCORE = 0.75;
 export const DEFAULT_PROMOTION_MIN_RECALL_COUNT = 3;
 export const DEFAULT_PROMOTION_MIN_UNIQUE_QUERIES = 2;
-const PROMOTION_MARKER_PREFIX = "openclaw-memory-promotion:";
+const PROMOTION_MARKER_PREFIX = "NexisClaw-memory-promotion:";
 const MAX_QUERY_HASHES = 32;
 const MAX_RECALL_DAYS = 16;
 const SHORT_TERM_STORE_RELATIVE_PATH = path.join("memory", ".dreams", "short-term-recall.json");
@@ -293,7 +293,7 @@ function isContaminatedDreamingSnippet(raw: string): boolean {
     return false;
   }
   if (
-    /<!--\s*openclaw-memory-promotion:/i.test(snippet) ||
+    /<!--\s*NexisClaw-memory-promotion:/i.test(snippet) ||
     DREAMING_TRANSCRIPT_PROMPT_LINE_RE.test(snippet)
   ) {
     return true;
@@ -1552,7 +1552,7 @@ function withTrailingNewline(content: string): string {
 
 function extractPromotionMarkers(memoryText: string): Set<string> {
   const markers = new Set<string>();
-  const matches = memoryText.matchAll(/<!--\s*openclaw-memory-promotion:([^\n]+?)\s*-->/gi);
+  const matches = memoryText.matchAll(/<!--\s*NexisClaw-memory-promotion:([^\n]+?)\s*-->/gi);
   for (const match of matches) {
     const key = match[1]?.trim();
     if (key) {

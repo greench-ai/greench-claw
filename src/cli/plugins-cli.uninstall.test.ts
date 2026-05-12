@@ -1,6 +1,6 @@
-import { installedPluginRoot } from "openclaw/plugin-sdk/test-fixtures";
+import { installedPluginRoot } from "NexisClaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 import {
   applyPluginUninstallDirectoryRemoval,
   buildPluginDiagnosticsReport,
@@ -20,9 +20,9 @@ import {
   writePersistedInstalledPluginIndexInstallRecords,
 } from "./plugins-cli-test-helpers.js";
 
-const CLI_STATE_ROOT = "/tmp/openclaw-state";
+const CLI_STATE_ROOT = "/tmp/NexisClaw-state";
 const ALPHA_INSTALL_PATH = installedPluginRoot(CLI_STATE_ROOT, "alpha");
-const ORIGINAL_OPENCLAW_NIX_MODE = process.env.OPENCLAW_NIX_MODE;
+const ORIGINAL_NEXISCLAW_NIX_MODE = process.env.NEXISCLAW_NIX_MODE;
 
 function expectRuntimeLogIncludes(fragment: string) {
   expect(runtimeLogs.some((message) => message.includes(fragment))).toBe(true);
@@ -50,25 +50,25 @@ describe("plugins cli uninstall", () => {
   });
 
   afterEach(() => {
-    if (ORIGINAL_OPENCLAW_NIX_MODE === undefined) {
-      delete process.env.OPENCLAW_NIX_MODE;
+    if (ORIGINAL_NEXISCLAW_NIX_MODE === undefined) {
+      delete process.env.NEXISCLAW_NIX_MODE;
     } else {
-      process.env.OPENCLAW_NIX_MODE = ORIGINAL_OPENCLAW_NIX_MODE;
+      process.env.NEXISCLAW_NIX_MODE = ORIGINAL_NEXISCLAW_NIX_MODE;
     }
   });
 
   it("refuses plugin uninstalls in Nix mode before planning file removal", async () => {
-    const previous = process.env.OPENCLAW_NIX_MODE;
-    process.env.OPENCLAW_NIX_MODE = "1";
+    const previous = process.env.NEXISCLAW_NIX_MODE;
+    process.env.NEXISCLAW_NIX_MODE = "1";
     try {
       await expect(runPluginsCommand(["plugins", "uninstall", "alpha", "--force"])).rejects.toThrow(
-        "OPENCLAW_NIX_MODE=1",
+        "NEXISCLAW_NIX_MODE=1",
       );
     } finally {
       if (previous === undefined) {
-        delete process.env.OPENCLAW_NIX_MODE;
+        delete process.env.NEXISCLAW_NIX_MODE;
       } else {
-        process.env.OPENCLAW_NIX_MODE = previous;
+        process.env.NEXISCLAW_NIX_MODE = previous;
       }
     }
 
@@ -96,14 +96,14 @@ describe("plugins cli uninstall", () => {
           contextEngine: "alpha",
         },
       },
-    } as OpenClawConfig);
+    } as NexisClawConfig);
     buildPluginSnapshotReport.mockReturnValue({
       plugins: [{ id: "alpha", name: "alpha" }],
       diagnostics: [],
     });
     planPluginUninstall.mockReturnValue({
       ok: true,
-      config: {} as OpenClawConfig,
+      config: {} as NexisClawConfig,
       actions: {
         entry: true,
         install: true,
@@ -142,13 +142,13 @@ describe("plugins cli uninstall", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const nextConfig = {
       plugins: {
         entries: {},
         installs: {},
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(baseConfig.plugins?.installs ?? {});
@@ -207,7 +207,7 @@ describe("plugins cli uninstall", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(baseConfig.plugins?.installs ?? {});
     buildPluginSnapshotReport.mockReturnValue({
@@ -216,7 +216,7 @@ describe("plugins cli uninstall", () => {
     });
     planPluginUninstall.mockReturnValue({
       ok: true,
-      config: { plugins: { entries: {}, installs: {} } } as OpenClawConfig,
+      config: { plugins: { entries: {}, installs: {} } } as NexisClawConfig,
       actions: {
         entry: true,
         install: true,
@@ -259,13 +259,13 @@ describe("plugins cli uninstall", () => {
         },
         installs: installRecords,
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const nextConfig = {
       plugins: {
         entries: {},
         installs: {},
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(installRecords);
@@ -318,13 +318,13 @@ describe("plugins cli uninstall", () => {
         },
         installs: installRecords,
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const nextConfig = {
       plugins: {
         entries: {},
         installs: {},
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(installRecords);
@@ -375,12 +375,12 @@ describe("plugins cli uninstall", () => {
         allow: ["alpha", "beta"],
         deny: ["alpha"],
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const nextConfig = {
       plugins: {
         allow: ["beta"],
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     buildPluginSnapshotReport.mockReturnValue({
@@ -418,8 +418,8 @@ describe("plugins cli uninstall", () => {
           alpha: { enabled: true },
         },
       },
-    } as OpenClawConfig;
-    const nextConfig = {} as OpenClawConfig;
+    } as NexisClawConfig;
+    const nextConfig = {} as NexisClawConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     buildPluginSnapshotReport.mockReturnValue({
@@ -479,14 +479,14 @@ describe("plugins cli uninstall", () => {
           enabled: true,
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const nextConfig = {
       channels: {
         discord: {
           enabled: true,
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(installRecords);
@@ -530,7 +530,7 @@ describe("plugins cli uninstall", () => {
         entries: {},
         installs: {},
       },
-    } as OpenClawConfig);
+    } as NexisClawConfig);
     buildPluginSnapshotReport.mockReturnValue({
       plugins: [{ id: "alpha", name: "alpha" }],
       diagnostics: [],

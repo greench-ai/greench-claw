@@ -5,7 +5,7 @@ import {
   validateGatewayPasswordInput,
 } from "../commands/onboard-helpers.js";
 import type { GatewayAuthChoice, SecretInputMode } from "../commands/onboard-types.js";
-import type { GatewayBindMode, GatewayTailscaleMode, OpenClawConfig } from "../config/config.js";
+import type { GatewayBindMode, GatewayTailscaleMode, NexisClawConfig } from "../config/config.js";
 import { ensureControlUiAllowedOriginsForNonLoopbackBind } from "../config/gateway-control-ui-origins.js";
 import {
   normalizeSecretInputString,
@@ -35,8 +35,8 @@ import type {
 
 type ConfigureGatewayOptions = {
   flow: WizardFlow;
-  baseConfig: OpenClawConfig;
-  nextConfig: OpenClawConfig;
+  baseConfig: NexisClawConfig;
+  nextConfig: NexisClawConfig;
   localPort: number;
   quickstartGateway: QuickstartGatewayDefaults;
   secretInputMode?: SecretInputMode;
@@ -45,7 +45,7 @@ type ConfigureGatewayOptions = {
 };
 
 type ConfigureGatewayResult = {
-  nextConfig: OpenClawConfig;
+  nextConfig: NexisClawConfig;
   settings: GatewayWizardSettings;
 };
 
@@ -210,10 +210,10 @@ export async function configureGatewayForSetup(
           provider: "gateway-auth-token",
           config: nextConfig,
           prompter,
-          preferredEnvVar: "OPENCLAW_GATEWAY_TOKEN",
+          preferredEnvVar: "NEXISCLAW_GATEWAY_TOKEN",
           copy: {
             sourceMessage: "Where is this gateway token stored?",
-            envVarPlaceholder: "OPENCLAW_GATEWAY_TOKEN",
+            envVarPlaceholder: "NEXISCLAW_GATEWAY_TOKEN",
           },
         });
         gatewayTokenInput = resolved.ref;
@@ -221,12 +221,12 @@ export async function configureGatewayForSetup(
       }
     } else if (flow === "quickstart") {
       gatewayToken =
-        (quickstartTokenString ?? normalizeGatewayTokenInput(process.env.OPENCLAW_GATEWAY_TOKEN)) ||
+        (quickstartTokenString ?? normalizeGatewayTokenInput(process.env.NEXISCLAW_GATEWAY_TOKEN)) ||
         randomToken();
       gatewayTokenInput = gatewayToken;
     } else {
       const existingToken =
-        quickstartTokenString ?? normalizeGatewayTokenInput(process.env.OPENCLAW_GATEWAY_TOKEN);
+        quickstartTokenString ?? normalizeGatewayTokenInput(process.env.NEXISCLAW_GATEWAY_TOKEN);
       let tokenInput: string | undefined;
       if (existingToken) {
         const keep = await prompter.confirm({
@@ -262,7 +262,7 @@ export async function configureGatewayForSetup(
         copy: {
           modeMessage: "How do you want to provide the gateway password?",
           plaintextLabel: "Enter password now",
-          plaintextHint: "Stores the password directly in OpenClaw config",
+          plaintextHint: "Stores the password directly in NexisClaw config",
         },
       });
       if (selectedMode === "ref") {
@@ -270,10 +270,10 @@ export async function configureGatewayForSetup(
           provider: "gateway-auth-password",
           config: nextConfig,
           prompter,
-          preferredEnvVar: "OPENCLAW_GATEWAY_PASSWORD",
+          preferredEnvVar: "NEXISCLAW_GATEWAY_PASSWORD",
           copy: {
             sourceMessage: "Where is this gateway password stored?",
-            envVarPlaceholder: "OPENCLAW_GATEWAY_PASSWORD",
+            envVarPlaceholder: "NEXISCLAW_GATEWAY_PASSWORD",
           },
         });
         password = resolved.ref;

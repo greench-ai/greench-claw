@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { getFreePort } from "../browser/test-port.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 
 const mocks = vi.hoisted(() => ({
-  runtimeConfig: {} as OpenClawConfig,
-  runtimeSourceConfig: null as OpenClawConfig | null,
+  runtimeConfig: {} as NexisClawConfig,
+  runtimeSourceConfig: null as NexisClawConfig | null,
   ensureBrowserControlAuth: vi.fn(async () => ({ auth: {} })),
   resolveBrowserControlAuth: vi.fn(() => ({})),
   shouldAutoGenerateBrowserAuth: vi.fn(() => false),
@@ -40,11 +40,11 @@ vi.mock("../browser/chrome.js", () => ({
   formatChromeCdpDiagnostic: vi.fn(() => "not reachable"),
   isChromeCdpReady: mocks.isChromeCdpReady,
   isChromeReachable: mocks.isChromeReachable,
-  launchOpenClawChrome: vi.fn(async () => {
+  launchNexisClawChrome: vi.fn(async () => {
     throw new Error("launch should not be needed for status");
   }),
-  resolveOpenClawUserDataDir: vi.fn(() => "/tmp/openclaw-browser"),
-  stopOpenClawChrome: vi.fn(async () => {}),
+  resolveNexisClawUserDataDir: vi.fn(() => "/tmp/NexisClaw-browser"),
+  stopNexisClawChrome: vi.fn(async () => {}),
 }));
 
 vi.mock("../browser/pw-ai-state.js", () => ({
@@ -61,19 +61,19 @@ function browserConfig(params: {
   executablePath?: string;
   headless?: boolean;
   noSandbox?: boolean;
-}): OpenClawConfig {
+}): NexisClawConfig {
   return {
     gateway: {
       port: params.gatewayPort,
     },
     browser: {
       enabled: true,
-      defaultProfile: "openclaw",
+      defaultProfile: "NexisClaw",
       ...(params.executablePath ? { executablePath: params.executablePath } : {}),
       ...(typeof params.headless === "boolean" ? { headless: params.headless } : {}),
       ...(typeof params.noSandbox === "boolean" ? { noSandbox: params.noSandbox } : {}),
       profiles: {
-        openclaw: {
+        NexisClaw: {
           cdpPort: params.gatewayPort + 11,
           color: "#FF4500",
         },
@@ -88,7 +88,7 @@ async function browserRequestStatus(): Promise<unknown> {
     params: {
       method: "GET",
       path: "/",
-      query: { profile: "openclaw" },
+      query: { profile: "NexisClaw" },
     },
     respond: respond as never,
     context: {

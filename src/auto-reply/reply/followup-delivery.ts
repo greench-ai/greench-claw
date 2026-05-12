@@ -1,5 +1,5 @@
 import type { MessagingToolSend } from "../../agents/pi-embedded-messaging.types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { stripHeartbeatToken } from "../heartbeat.js";
 import type { OriginatingChannelType } from "../templating.js";
 import type { ReplyPayload } from "../types.js";
@@ -24,7 +24,7 @@ function hasReplyPayloadMedia(payload: ReplyPayload): boolean {
 }
 
 export function resolveFollowupDeliveryPayloads(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   payloads: ReplyPayload[];
   messageProvider?: string;
   originatingAccountId?: string;

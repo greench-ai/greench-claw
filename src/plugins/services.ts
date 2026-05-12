@@ -1,5 +1,5 @@
 import { STATE_DIR } from "../config/paths.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import {
   emitTrustedDiagnosticEvent,
   onInternalDiagnosticEvent,
@@ -7,7 +7,7 @@ import {
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import type { PluginServiceRegistration } from "./registry-types.js";
 import type { PluginRegistry } from "./registry.js";
-import type { OpenClawPluginServiceContext, PluginLogger } from "./types.js";
+import type { NexisClawPluginServiceContext, PluginLogger } from "./types.js";
 
 const log = createSubsystemLogger("plugins");
 function createPluginLogger(): PluginLogger {
@@ -20,10 +20,10 @@ function createPluginLogger(): PluginLogger {
 }
 
 function createServiceContext(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   workspaceDir?: string;
   service?: PluginServiceRegistration;
-}): OpenClawPluginServiceContext {
+}): NexisClawPluginServiceContext {
   const isDiagnosticsExporter =
     params.service?.pluginId === params.service?.service.id &&
     (params.service?.service.id === "diagnostics-otel" ||
@@ -54,7 +54,7 @@ export type PluginServicesHandle = {
 
 export async function startPluginServices(params: {
   registry: PluginRegistry;
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   workspaceDir?: string;
 }): Promise<PluginServicesHandle> {
   const running: Array<{

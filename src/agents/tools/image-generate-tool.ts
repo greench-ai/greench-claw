@@ -1,6 +1,6 @@
 import { Type } from "typebox";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { parseImageGenerationModelRef } from "../../image-generation/model-ref.js";
 import {
   generateImage,
@@ -113,7 +113,7 @@ const ImageGenerateToolSchema = Type.Object({
   filename: Type.Optional(
     Type.String({
       description:
-        "Optional output filename hint. OpenClaw preserves the basename and saves under its managed media directory.",
+        "Optional output filename hint. NexisClaw preserves the basename and saves under its managed media directory.",
     }),
   ),
   size: Type.Optional(
@@ -148,7 +148,7 @@ const ImageGenerateToolSchema = Type.Object({
     Type.Object({
       background: optionalStringEnum(SUPPORTED_BACKGROUNDS, {
         description:
-          "OpenAI-only background hint: transparent, opaque, or auto. For transparent output use outputFormat png or webp; OpenClaw routes the default OpenAI image model to gpt-image-1.5 for this mode.",
+          "OpenAI-only background hint: transparent, opaque, or auto. For transparent output use outputFormat png or webp; NexisClaw routes the default OpenAI image model to gpt-image-1.5 for this mode.",
       }),
       moderation: optionalStringEnum(SUPPORTED_OPENAI_MODERATIONS, {
         description: "OpenAI-only moderation hint: low or auto.",
@@ -226,7 +226,7 @@ function summarizeImageGenerationCapabilities(provider: ImageGenerationProvider)
 }
 
 function createImageGenerateListActionResult(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   agentDir?: string;
   authStore?: AuthProfileStore;
 }): MediaGenerateActionResult {
@@ -245,7 +245,7 @@ function createImageGenerateListActionResult(params: {
 }
 
 export function resolveImageGenerationModelConfigForTool(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   agentDir?: string;
   authStore?: AuthProfileStore;
 }): ToolModelConfig | null {
@@ -258,7 +258,7 @@ export function resolveImageGenerationModelConfigForTool(params: {
   });
 }
 
-function hasExplicitImageGenerationModelConfig(cfg?: OpenClawConfig): boolean {
+function hasExplicitImageGenerationModelConfig(cfg?: NexisClawConfig): boolean {
   return hasToolModelConfig(coerceToolModelConfig(cfg?.agents?.defaults?.imageGenerationModel));
 }
 
@@ -406,7 +406,7 @@ function normalizeReferenceImages(args: Record<string, unknown>): string[] {
 }
 
 function resolveSelectedImageGenerationProvider(params: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   imageGenerationModelConfig: ToolModelConfig;
   modelOverride?: string;
 }): ImageGenerationProvider | undefined {
@@ -619,7 +619,7 @@ async function inferResolutionFromInputImages(
 }
 
 export function createImageGenerateTool(options?: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   agentDir?: string;
   authProfileStore?: AuthProfileStore;
   workspaceDir?: string;
@@ -652,7 +652,7 @@ export function createImageGenerateTool(options?: {
     label: "Image Generation",
     name: "image_generate",
     description:
-      'Generate new images or edit reference images with the configured or inferred image-generation model. For transparent backgrounds, use outputFormat="png" or "webp" and background="transparent"; OpenAI also accepts openai.background and OpenClaw routes the default OpenAI image model to gpt-image-1.5 for that mode. Set agents.defaults.imageGenerationModel.primary to pick a provider/model. Providers declare their own auth/readiness; use action="list" to inspect registered providers, models, readiness, and auth hints. Generated images are delivered automatically from the tool result as MEDIA paths.',
+      'Generate new images or edit reference images with the configured or inferred image-generation model. For transparent backgrounds, use outputFormat="png" or "webp" and background="transparent"; OpenAI also accepts openai.background and NexisClaw routes the default OpenAI image model to gpt-image-1.5 for that mode. Set agents.defaults.imageGenerationModel.primary to pick a provider/model. Providers declare their own auth/readiness; use action="list" to inspect registered providers, models, readiness, and auth hints. Generated images are delivered automatically from the tool result as MEDIA paths.',
     parameters: ImageGenerateToolSchema,
     execute: async (_toolCallId, args) => {
       const params = args as Record<string, unknown>;

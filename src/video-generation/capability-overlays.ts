@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { resolveVideoGenerationModeCapabilities } from "./capabilities.js";
 import type { GenerateVideoParams } from "./runtime-types.js";
 import type {
@@ -124,7 +124,7 @@ export async function resolveProviderWithModelCapabilities(params: {
   provider: VideoGenerationProvider;
   providerId: string;
   model: string;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   agentDir?: string;
   authStore?: GenerateVideoParams["authStore"];
   timeoutMs?: number;

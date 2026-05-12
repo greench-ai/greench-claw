@@ -2,12 +2,12 @@
  * Security module: token validation, rate limiting, input sanitization, user allowlist.
  */
 
-import { resolveStableChannelMessageIngress } from "openclaw/plugin-sdk/channel-ingress-runtime";
-import { safeEqualSecret } from "openclaw/plugin-sdk/security-runtime";
+import { resolveStableChannelMessageIngress } from "NexisClaw/plugin-sdk/channel-ingress-runtime";
+import { safeEqualSecret } from "NexisClaw/plugin-sdk/security-runtime";
 import {
   createFixedWindowRateLimiter,
   type FixedWindowRateLimiter,
-} from "openclaw/plugin-sdk/webhook-ingress";
+} from "NexisClaw/plugin-sdk/webhook-ingress";
 
 /**
  * Validate webhook token using constant-time comparison.

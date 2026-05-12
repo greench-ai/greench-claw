@@ -39,12 +39,12 @@ type RejectedCredentialEntry = { key: string; reason: CredentialRejectReason };
 
 const AUTH_PROFILE_TYPES = new Set<AuthProfileCredential["type"]>(["api_key", "oauth", "token"]);
 const REDACTED_OAUTH_TOKEN_PROVIDER_IDS = new Set(["openai-codex"]);
-const OAUTH_PROFILE_SECRET_REF_SOURCE = "openclaw-credentials" as const;
+const OAUTH_PROFILE_SECRET_REF_SOURCE = "NexisClaw-credentials" as const;
 const OAUTH_PROFILE_SECRET_DIRNAME = "auth-profiles";
 const OAUTH_PROFILE_SECRET_VERSION = 1;
 const OAUTH_PROFILE_SECRET_ALGORITHM = "aes-256-gcm" as const;
-const OAUTH_PROFILE_SECRET_KEY_ENV = "OPENCLAW_AUTH_PROFILE_SECRET_KEY";
-const OAUTH_PROFILE_SECRET_KEYCHAIN_SERVICE = "OpenClaw Auth Profile Secrets";
+const OAUTH_PROFILE_SECRET_KEY_ENV = "NEXISCLAW_AUTH_PROFILE_SECRET_KEY";
+const OAUTH_PROFILE_SECRET_KEYCHAIN_SERVICE = "NexisClaw Auth Profile Secrets";
 const OAUTH_PROFILE_SECRET_KEYCHAIN_ACCOUNT = "oauth-profile-master-key";
 const OAUTH_PROFILE_SECRET_KEY_FILE_NAME = "auth-profile-secret-key";
 
@@ -243,9 +243,9 @@ function resolveFallbackOAuthProfileSecretKeyFileCandidates(): string[] {
     const root =
       process.env.APPDATA?.trim() || (home ? path.join(home, "AppData", "Roaming") : undefined);
     return uniquePaths([
-      root ? path.join(root, "OpenClaw", OAUTH_PROFILE_SECRET_KEY_FILE_NAME) : undefined,
+      root ? path.join(root, "NexisClaw", OAUTH_PROFILE_SECRET_KEY_FILE_NAME) : undefined,
       home
-        ? path.join(home, ".openclaw-auth-profile-secrets", OAUTH_PROFILE_SECRET_KEY_FILE_NAME)
+        ? path.join(home, ".NexisClaw-auth-profile-secrets", OAUTH_PROFILE_SECRET_KEY_FILE_NAME)
         : undefined,
     ]);
   }
@@ -258,12 +258,12 @@ function resolveFallbackOAuthProfileSecretKeyFileCandidates(): string[] {
             home,
             "Library",
             "Application Support",
-            "OpenClaw",
+            "NexisClaw",
             OAUTH_PROFILE_SECRET_KEY_FILE_NAME,
           )
         : undefined,
       home
-        ? path.join(home, ".openclaw-auth-profile-secrets", OAUTH_PROFILE_SECRET_KEY_FILE_NAME)
+        ? path.join(home, ".NexisClaw-auth-profile-secrets", OAUTH_PROFILE_SECRET_KEY_FILE_NAME)
         : undefined,
     ]);
   }
@@ -272,9 +272,9 @@ function resolveFallbackOAuthProfileSecretKeyFileCandidates(): string[] {
   const root =
     process.env.XDG_CONFIG_HOME?.trim() || (home ? path.join(home, ".config") : undefined);
   return uniquePaths([
-    root ? path.join(root, "openclaw", OAUTH_PROFILE_SECRET_KEY_FILE_NAME) : undefined,
+    root ? path.join(root, "NexisClaw", OAUTH_PROFILE_SECRET_KEY_FILE_NAME) : undefined,
     home
-      ? path.join(home, ".openclaw-auth-profile-secrets", OAUTH_PROFILE_SECRET_KEY_FILE_NAME)
+      ? path.join(home, ".NexisClaw-auth-profile-secrets", OAUTH_PROFILE_SECRET_KEY_FILE_NAME)
       : undefined,
   ]);
 }
@@ -347,7 +347,7 @@ function resolveOAuthProfileSecretKeySeed(options?: { create?: boolean }): strin
     return externalKey;
   }
   if (process.env.NODE_ENV === "test" && process.env.VITEST === "true") {
-    return "openclaw-test-oauth-profile-secret-key";
+    return "NexisClaw-test-oauth-profile-secret-key";
   }
   if (shouldUseMacKeychainForOAuthProfileSecrets()) {
     const keychainKey =
@@ -371,7 +371,7 @@ function buildOAuthProfileSecretKey(options?: { create?: boolean }): Buffer | nu
   if (!externalKey) {
     return null;
   }
-  return createHash("sha256").update(`openclaw:auth-profile-oauth:${externalKey}`).digest();
+  return createHash("sha256").update(`NexisClaw:auth-profile-oauth:${externalKey}`).digest();
 }
 
 function encryptOAuthProfileSecretMaterial(params: {
@@ -1313,7 +1313,7 @@ export function loadPersistedAuthProfileStore(
     ...mergeAuthProfileState(coerceAuthProfileState(raw), loadPersistedAuthProfileState(agentDir)),
   };
   const canRepairPersistedSecrets =
-    options?.rewriteInlineOAuthSecrets === true && process.env.OPENCLAW_AUTH_STORE_READONLY !== "1";
+    options?.rewriteInlineOAuthSecrets === true && process.env.NEXISCLAW_AUTH_STORE_READONLY !== "1";
   if (
     canRepairPersistedSecrets &&
     Object.values(merged.profiles).some(hasInlinePersistableOAuthSecrets)

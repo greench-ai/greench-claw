@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AcpRuntimeError, type AcpRuntime } from "../runtime-api.js";
-import { OPENCLAW_ACPX_LEASE_ID_ARG, OPENCLAW_GATEWAY_INSTANCE_ID_ARG } from "./process-lease.js";
+import { NEXISCLAW_ACPX_LEASE_ID_ARG, NEXISCLAW_GATEWAY_INSTANCE_ID_ARG } from "./process-lease.js";
 import { AcpxRuntime, __testing } from "./runtime.js";
 
 type TestSessionStore = {
@@ -8,11 +8,11 @@ type TestSessionStore = {
   save(record: Record<string, unknown>): Promise<void>;
 };
 
-const DOCUMENTED_OPENCLAW_BRIDGE_COMMAND =
-  "env OPENCLAW_HIDE_BANNER=1 OPENCLAW_SUPPRESS_NOTES=1 openclaw acp --url ws://127.0.0.1:18789 --token-file ~/.openclaw/gateway.token --session agent:main:main";
+const DOCUMENTED_NEXISCLAW_BRIDGE_COMMAND =
+  "env NEXISCLAW_HIDE_BANNER=1 NEXISCLAW_SUPPRESS_NOTES=1 NexisClaw acp --url ws://127.0.0.1:18789 --token-file ~/.NexisClaw/gateway.token --session agent:main:main";
 const CODEX_ACP_COMMAND = "npx @zed-industries/codex-acp@0.13.0";
-const CODEX_ACP_WRAPPER_COMMAND = `node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"`;
-const CODEX_ACP_WRAPPER_COMMAND_WITH_LEASE = `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-close ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
+const CODEX_ACP_WRAPPER_COMMAND = `node "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs"`;
+const CODEX_ACP_WRAPPER_COMMAND_WITH_LEASE = `${CODEX_ACP_WRAPPER_COMMAND} ${NEXISCLAW_ACPX_LEASE_ID_ARG} lease-close ${NEXISCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`;
 
 function makeRuntime(
   baseStore: TestSessionStore,
@@ -44,8 +44,8 @@ function makeRuntime(
       cwd: "/tmp",
       sessionStore: baseStore,
       agentRegistry: {
-        resolve: (agentName: string) => (agentName === "openclaw" ? "openclaw acp" : agentName),
-        list: () => ["codex", "openclaw"],
+        resolve: (agentName: string) => (agentName === "NexisClaw" ? "NexisClaw acp" : agentName),
+        list: () => ["codex", "NexisClaw"],
       },
       permissionMode: "approve-reads",
       ...options,
@@ -171,7 +171,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     );
   });
 
-  it("normalizes OpenClaw Codex model ids for ACP startup", async () => {
+  it("normalizes NexisClaw Codex model ids for ACP startup", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -179,7 +179,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "NexisClaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -211,7 +211,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "NexisClaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -244,7 +244,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "main" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["main", "codex", "openclaw"],
+        list: () => ["main", "codex", "NexisClaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -279,7 +279,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     ).toBe(
       "npx @zed-industries/codex-acp@0.13.0 -c model=gpt-5.4 -c model_reasoning_effort=medium",
     );
-    expect(__testing.isCodexAcpCommand("openclaw acp")).toBe(false);
+    expect(__testing.isCodexAcpCommand("NexisClaw acp")).toBe(false);
   });
 
   it("passes gpt-5.5 Codex ACP startup through instead of blocking it", async () => {
@@ -290,7 +290,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "NexisClaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -322,7 +322,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(baseStore, {
       agentRegistry: {
         resolve: (agentName: string) => (agentName === "codex" ? CODEX_ACP_COMMAND : agentName),
-        list: () => ["codex", "openclaw"],
+        list: () => ["codex", "NexisClaw"],
       },
     });
     const ensure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -571,11 +571,11 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(baseStore.load).toHaveBeenCalledOnce();
   });
 
-  it("cleans up OpenClaw-owned ACPX process trees after close", async () => {
+  it("cleans up NexisClaw-owned ACPX process trees after close", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
+        agentCommand: 'node "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs"',
         pid: 900,
       })),
       save: vi.fn(async () => {}),
@@ -584,21 +584,21 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        NexisClawWrapperRoot: "/tmp/NexisClaw/acpx",
       },
       {
-        openclawProcessCleanup: {
+        NexisClawProcessCleanup: {
           listProcesses: vi.fn(async () => [
             {
               pid: 900,
               ppid: 1,
-              command: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
+              command: 'node "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs"',
             },
             {
               pid: 901,
               ppid: 900,
               command:
-                "node /tmp/openclaw/plugin-runtime-deps/node_modules/@zed-industries/codex-acp/bin/codex-acp.js",
+                "node /tmp/NexisClaw/plugin-runtime-deps/node_modules/@zed-industries/codex-acp/bin/codex-acp.js",
             },
           ]),
           killProcess: vi.fn((pid, signal) => {
@@ -636,9 +636,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate, wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      NexisClawGatewayInstanceId: "gateway-test",
+      NexisClawProcessLeaseStore: leaseStore.store,
+      NexisClawWrapperRoot: "/tmp/NexisClaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -676,12 +676,12 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(lease?.sessionKey).toBe("agent:codex:acp:binding:test");
     expect(lease?.rootPid).toBe(777);
     expect(lease?.state).toBe("open");
-    expect(lease?.wrapperPath).toBe("/tmp/openclaw/acpx/codex-acp-wrapper.mjs");
-    expect(launchCommands[0]).toContain("OPENCLAW_ACPX_LEASE_ID=");
-    expect(launchCommands[0]).toContain("OPENCLAW_GATEWAY_INSTANCE_ID=gateway-test");
+    expect(lease?.wrapperPath).toBe("/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs");
+    expect(launchCommands[0]).toContain("NEXISCLAW_ACPX_LEASE_ID=");
+    expect(launchCommands[0]).toContain("NEXISCLAW_GATEWAY_INSTANCE_ID=gateway-test");
     expect(savedRecords[0]?.agentCommand).toBe(CODEX_ACP_WRAPPER_COMMAND);
-    expect(savedRecords[0]?.openclawGatewayInstanceId).toBe("gateway-test");
-    expect(savedRecords[0]?.openclawLeaseId).toBe(lease?.leaseId);
+    expect(savedRecords[0]?.NexisClawGatewayInstanceId).toBe("gateway-test");
+    expect(savedRecords[0]?.NexisClawLeaseId).toBe(lease?.leaseId);
   });
 
   it("keeps reusable persistent ACP launch commands stable across ensures", async () => {
@@ -698,9 +698,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     };
     const leaseStore = makeLeaseStore();
     const { runtime, delegate } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      NexisClawGatewayInstanceId: "gateway-test",
+      NexisClawProcessLeaseStore: leaseStore.store,
+      NexisClawWrapperRoot: "/tmp/NexisClaw/acpx",
       agentRegistry: {
         resolve: (agentName: string) =>
           agentName === "codex" ? CODEX_ACP_WRAPPER_COMMAND : agentName,
@@ -737,8 +737,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-loaded",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/NexisClaw/acpx",
+      wrapperPath: "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 777,
       commandHash: "hash",
       startedAt: 1,
@@ -747,20 +747,20 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
+        agentCommand: 'node "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs"',
         pid: 777,
       })),
       save: vi.fn(async () => {}),
     };
     const { wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      NexisClawGatewayInstanceId: "gateway-test",
+      NexisClawProcessLeaseStore: leaseStore.store,
+      NexisClawWrapperRoot: "/tmp/NexisClaw/acpx",
     });
 
     const loadedRecord = await wrappedStore.load("agent:codex:acp:binding:test");
-    expect(loadedRecord?.openclawGatewayInstanceId).toBe("gateway-test");
-    expect(loadedRecord?.openclawLeaseId).toBe("lease-loaded");
+    expect(loadedRecord?.NexisClawGatewayInstanceId).toBe("gateway-test");
+    expect(loadedRecord?.NexisClawLeaseId).toBe("lease-loaded");
   });
 
   it("merges the lease for the current ACPX session process when old leases exist", async () => {
@@ -769,8 +769,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-old",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/NexisClaw/acpx",
+      wrapperPath: "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 700,
       commandHash: "hash",
       startedAt: 1,
@@ -780,8 +780,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-current",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/NexisClaw/acpx",
+      wrapperPath: "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 777,
       commandHash: "hash",
       startedAt: 2,
@@ -790,20 +790,20 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         name: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
+        agentCommand: 'node "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs"',
         pid: 777,
       })),
       save: vi.fn(async () => {}),
     };
     const { wrappedStore } = makeRuntime(baseStore, {
-      openclawGatewayInstanceId: "gateway-test",
-      openclawProcessLeaseStore: leaseStore.store,
-      openclawWrapperRoot: "/tmp/openclaw/acpx",
+      NexisClawGatewayInstanceId: "gateway-test",
+      NexisClawProcessLeaseStore: leaseStore.store,
+      NexisClawWrapperRoot: "/tmp/NexisClaw/acpx",
     });
 
     const loadedRecord = await wrappedStore.load("agent:codex:acp:binding:test");
-    expect(loadedRecord?.openclawGatewayInstanceId).toBe("gateway-test");
-    expect(loadedRecord?.openclawLeaseId).toBe("lease-current");
+    expect(loadedRecord?.NexisClawGatewayInstanceId).toBe("gateway-test");
+    expect(loadedRecord?.NexisClawLeaseId).toBe("lease-current");
   });
 
   it("uses matching leases before legacy pid cleanup on close", async () => {
@@ -812,8 +812,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-close",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/NexisClaw/acpx",
+      wrapperPath: "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 930,
       commandHash: "hash",
       startedAt: 1,
@@ -822,8 +822,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
-        openclawLeaseId: "lease-close",
+        agentCommand: 'node "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs"',
+        NexisClawLeaseId: "lease-close",
         pid: 930,
       })),
       save: vi.fn(async () => {}),
@@ -832,12 +832,12 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawProcessLeaseStore: leaseStore.store,
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        NexisClawGatewayInstanceId: "gateway-test",
+        NexisClawProcessLeaseStore: leaseStore.store,
+        NexisClawWrapperRoot: "/tmp/NexisClaw/acpx",
       },
       {
-        openclawProcessCleanup: {
+        NexisClawProcessCleanup: {
           listProcesses: vi.fn(async () => [
             {
               pid: 930,
@@ -878,8 +878,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-old",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/NexisClaw/acpx",
+      wrapperPath: "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 930,
       commandHash: "hash",
       startedAt: 1,
@@ -889,8 +889,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       leaseId: "lease-current",
       gatewayInstanceId: "gateway-test",
       sessionKey: "agent:codex:acp:binding:test",
-      wrapperRoot: "/tmp/openclaw/acpx",
-      wrapperPath: "/tmp/openclaw/acpx/codex-acp-wrapper.mjs",
+      wrapperRoot: "/tmp/NexisClaw/acpx",
+      wrapperPath: "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs",
       rootPid: 940,
       commandHash: "hash",
       startedAt: 2,
@@ -899,8 +899,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
-        openclawLeaseId: "lease-old",
+        agentCommand: 'node "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs"',
+        NexisClawLeaseId: "lease-old",
         pid: 940,
       })),
       save: vi.fn(async () => {}),
@@ -909,22 +909,22 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawGatewayInstanceId: "gateway-test",
-        openclawProcessLeaseStore: leaseStore.store,
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        NexisClawGatewayInstanceId: "gateway-test",
+        NexisClawProcessLeaseStore: leaseStore.store,
+        NexisClawWrapperRoot: "/tmp/NexisClaw/acpx",
       },
       {
-        openclawProcessCleanup: {
+        NexisClawProcessCleanup: {
           listProcesses: vi.fn(async () => [
             {
               pid: 930,
               ppid: 1,
-              command: `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-old ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`,
+              command: `${CODEX_ACP_WRAPPER_COMMAND} ${NEXISCLAW_ACPX_LEASE_ID_ARG} lease-old ${NEXISCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`,
             },
             {
               pid: 940,
               ppid: 1,
-              command: `${CODEX_ACP_WRAPPER_COMMAND} ${OPENCLAW_ACPX_LEASE_ID_ARG} lease-current ${OPENCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`,
+              command: `${CODEX_ACP_WRAPPER_COMMAND} ${NEXISCLAW_ACPX_LEASE_ID_ARG} lease-current ${NEXISCLAW_GATEWAY_INSTANCE_ID_ARG} gateway-test`,
             },
             { pid: 941, ppid: 940, command: "node child.js" },
           ]),
@@ -960,7 +960,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
+        agentCommand: 'node "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs"',
         pid: 920,
       })),
       save: vi.fn(async () => {}),
@@ -969,10 +969,10 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate } = makeRuntime(
       baseStore,
       {
-        openclawWrapperRoot: "/tmp/openclaw/acpx",
+        NexisClawWrapperRoot: "/tmp/NexisClaw/acpx",
       },
       {
-        openclawProcessCleanup: {
+        NexisClawProcessCleanup: {
           listProcesses: vi.fn(async () => [
             {
               pid: 920,
@@ -1005,7 +1005,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
         acpxRecordId: "agent:codex:acp:binding:test",
-        agentCommand: 'node "/tmp/openclaw/acpx/codex-acp-wrapper.mjs"',
+        agentCommand: 'node "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs"',
         processId: "910",
       })),
       save: vi.fn(async () => {}),
@@ -1018,7 +1018,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       baseStore,
       {},
       {
-        openclawProcessCleanup: {
+        NexisClawProcessCleanup: {
           listProcesses,
           killProcess: vi.fn((pid, signal) => {
             killed.push({ pid, signal });
@@ -1044,7 +1044,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(killed).toStrictEqual([]);
   });
 
-  it("routes openclaw ensureSession through the bridge-safe delegate when MCP servers are configured", async () => {
+  it("routes NexisClaw ensureSession through the bridge-safe delegate when MCP servers are configured", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -1059,14 +1059,14 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       runtimeSessionName: "default",
     });
     const bridgeEnsure = vi.spyOn(bridgeSafeDelegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:NexisClaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "bridge",
     });
 
     const result = await runtime.ensureSession({
-      sessionKey: "agent:openclaw:acp:test",
-      agent: "openclaw",
+      sessionKey: "agent:NexisClaw:acp:test",
+      agent: "NexisClaw",
       mode: "persistent",
     });
 
@@ -1075,7 +1075,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(defaultEnsure).not.toHaveBeenCalled();
   });
 
-  it("routes non-openclaw sessions through the default delegate", async () => {
+  it("routes non-NexisClaw sessions through the default delegate", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -1090,7 +1090,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       runtimeSessionName: "default",
     });
     const bridgeEnsure = vi.spyOn(bridgeSafeDelegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:NexisClaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "bridge",
     });
@@ -1106,7 +1106,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(bridgeEnsure).not.toHaveBeenCalled();
   });
 
-  it("routes handle-based follow-up calls for openclaw sessions through the bridge-safe delegate", async () => {
+  it("routes handle-based follow-up calls for NexisClaw sessions through the bridge-safe delegate", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -1122,9 +1122,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       summary: "bridge",
     });
     const handle: Parameters<NonNullable<AcpRuntime["getStatus"]>>[0]["handle"] = {
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:NexisClaw:acp:test",
       backend: "acpx",
-      runtimeSessionName: "openclaw-session-handle",
+      runtimeSessionName: "NexisClaw-session-handle",
     };
 
     const status = await runtime.getStatus({ handle });
@@ -1134,7 +1134,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(defaultStatus).not.toHaveBeenCalled();
   });
 
-  it("keeps MCP-enabled routing when the openclaw agent is overridden to a non-bridge adapter", async () => {
+  it("keeps MCP-enabled routing when the NexisClaw agent is overridden to a non-bridge adapter", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -1143,24 +1143,24 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate, bridgeSafeDelegate } = makeRuntime(baseStore, {
       mcpServers: [{ name: "tools", command: "mcp-tools" }] as never,
       agentRegistry: {
-        resolve: (agentName: string) => (agentName === "openclaw" ? "codex" : agentName),
-        list: () => ["codex", "openclaw"],
+        resolve: (agentName: string) => (agentName === "NexisClaw" ? "codex" : agentName),
+        list: () => ["codex", "NexisClaw"],
       },
     });
     const defaultEnsure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:NexisClaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "default",
     });
     const bridgeEnsure = vi.spyOn(bridgeSafeDelegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:NexisClaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "bridge",
     });
 
     const result = await runtime.ensureSession({
-      sessionKey: "agent:openclaw:acp:test",
-      agent: "openclaw",
+      sessionKey: "agent:NexisClaw:acp:test",
+      agent: "NexisClaw",
       mode: "persistent",
     });
 
@@ -1169,7 +1169,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(bridgeEnsure).not.toHaveBeenCalled();
   });
 
-  it("uses the bridge-safe delegate for any agent mapped to the openclaw bridge command", async () => {
+  it("uses the bridge-safe delegate for any agent mapped to the NexisClaw bridge command", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -1178,8 +1178,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate, bridgeSafeDelegate } = makeRuntime(baseStore, {
       mcpServers: [{ name: "tools", command: "mcp-tools" }] as never,
       agentRegistry: {
-        resolve: (agentName: string) => (agentName === "codex" ? "openclaw acp" : agentName),
-        list: () => ["codex", "openclaw"],
+        resolve: (agentName: string) => (agentName === "codex" ? "NexisClaw acp" : agentName),
+        list: () => ["codex", "NexisClaw"],
       },
     });
     const defaultEnsure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
@@ -1204,7 +1204,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(defaultEnsure).not.toHaveBeenCalled();
   });
 
-  it("uses the bridge-safe delegate for documented env-wrapped openclaw bridge commands", async () => {
+  it("uses the bridge-safe delegate for documented env-wrapped NexisClaw bridge commands", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -1214,24 +1214,24 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       mcpServers: [{ name: "tools", command: "mcp-tools" }] as never,
       agentRegistry: {
         resolve: (agentName: string) =>
-          agentName === "openclaw" ? DOCUMENTED_OPENCLAW_BRIDGE_COMMAND : agentName,
-        list: () => ["codex", "openclaw"],
+          agentName === "NexisClaw" ? DOCUMENTED_NEXISCLAW_BRIDGE_COMMAND : agentName,
+        list: () => ["codex", "NexisClaw"],
       },
     });
     const defaultEnsure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:NexisClaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "default",
     });
     const bridgeEnsure = vi.spyOn(bridgeSafeDelegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:NexisClaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "bridge",
     });
 
     const result = await runtime.ensureSession({
-      sessionKey: "agent:openclaw:acp:test",
-      agent: "openclaw",
+      sessionKey: "agent:NexisClaw:acp:test",
+      agent: "NexisClaw",
       mode: "persistent",
     });
 
@@ -1240,7 +1240,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(defaultEnsure).not.toHaveBeenCalled();
   });
 
-  it("uses the bridge-safe delegate for local node openclaw entrypoints", async () => {
+  it("uses the bridge-safe delegate for local node NexisClaw entrypoints", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -1250,24 +1250,24 @@ describe("AcpxRuntime fresh reset wrapper", () => {
       mcpServers: [{ name: "tools", command: "mcp-tools" }] as never,
       agentRegistry: {
         resolve: (agentName: string) =>
-          agentName === "openclaw" ? "env OPENCLAW_HIDE_BANNER=1 node openclaw.mjs acp" : agentName,
-        list: () => ["codex", "openclaw"],
+          agentName === "NexisClaw" ? "env NEXISCLAW_HIDE_BANNER=1 node NexisClaw.mjs acp" : agentName,
+        list: () => ["codex", "NexisClaw"],
       },
     });
     const defaultEnsure = vi.spyOn(delegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:NexisClaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "default",
     });
     const bridgeEnsure = vi.spyOn(bridgeSafeDelegate, "ensureSession").mockResolvedValue({
-      sessionKey: "agent:openclaw:acp:test",
+      sessionKey: "agent:NexisClaw:acp:test",
       backend: "acpx",
       runtimeSessionName: "bridge",
     });
 
     const result = await runtime.ensureSession({
-      sessionKey: "agent:openclaw:acp:test",
-      agent: "openclaw",
+      sessionKey: "agent:NexisClaw:acp:test",
+      agent: "NexisClaw",
       mode: "persistent",
     });
 
@@ -1279,8 +1279,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
   it("routes follow-up calls by persisted agent command before current config", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => ({
-        acpxRecordId: "agent:openclaw:acp:test",
-        agentCommand: DOCUMENTED_OPENCLAW_BRIDGE_COMMAND,
+        acpxRecordId: "agent:NexisClaw:acp:test",
+        agentCommand: DOCUMENTED_NEXISCLAW_BRIDGE_COMMAND,
       })),
       save: vi.fn(async () => {}),
     };
@@ -1288,8 +1288,8 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     const { runtime, delegate, bridgeSafeDelegate } = makeRuntime(baseStore, {
       mcpServers: [{ name: "tools", command: "mcp-tools" }] as never,
       agentRegistry: {
-        resolve: (agentName: string) => (agentName === "openclaw" ? "codex" : agentName),
-        list: () => ["codex", "openclaw"],
+        resolve: (agentName: string) => (agentName === "NexisClaw" ? "codex" : agentName),
+        list: () => ["codex", "NexisClaw"],
       },
     });
     const defaultStatus = vi.spyOn(delegate, "getStatus").mockResolvedValue({
@@ -1301,9 +1301,9 @@ describe("AcpxRuntime fresh reset wrapper", () => {
 
     const status = await runtime.getStatus({
       handle: {
-        sessionKey: "agent:openclaw:acp:test",
+        sessionKey: "agent:NexisClaw:acp:test",
         backend: "acpx",
-        runtimeSessionName: "agent:openclaw:acp:test",
+        runtimeSessionName: "agent:NexisClaw:acp:test",
       },
     });
 
@@ -1312,7 +1312,7 @@ describe("AcpxRuntime fresh reset wrapper", () => {
     expect(defaultStatus).not.toHaveBeenCalled();
   });
 
-  it("probes through the bridge-safe delegate when probeAgent resolves to openclaw bridge", async () => {
+  it("probes through the bridge-safe delegate when probeAgent resolves to NexisClaw bridge", async () => {
     const baseStore: TestSessionStore = {
       load: vi.fn(async () => undefined),
       save: vi.fn(async () => {}),
@@ -1320,11 +1320,11 @@ describe("AcpxRuntime fresh reset wrapper", () => {
 
     const { runtime, delegate, bridgeSafeDelegate } = makeRuntime(baseStore, {
       mcpServers: [{ name: "tools", command: "mcp-tools" }] as never,
-      probeAgent: "openclaw",
+      probeAgent: "NexisClaw",
       agentRegistry: {
         resolve: (agentName: string) =>
-          agentName === "openclaw" ? DOCUMENTED_OPENCLAW_BRIDGE_COMMAND : agentName,
-        list: () => ["codex", "openclaw"],
+          agentName === "NexisClaw" ? DOCUMENTED_NEXISCLAW_BRIDGE_COMMAND : agentName,
+        list: () => ["codex", "NexisClaw"],
       },
     });
     const defaultProbe = vi.spyOn(delegate, "probeAvailability").mockResolvedValue(undefined);

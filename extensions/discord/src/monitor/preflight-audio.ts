@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { getFileExtension } from "openclaw/plugin-sdk/media-mime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { getFileExtension } from "NexisClaw/plugin-sdk/media-mime";
+import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 type DiscordPreflightAudioRuntime = typeof import("./preflight-audio.runtime.js");
 
@@ -66,7 +66,7 @@ export async function resolveDiscordPreflightAudioMentionContext(params: {
   isDirectMessage: boolean;
   shouldRequireMention: boolean;
   mentionRegexes: RegExp[];
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   abortSignal?: AbortSignal;
 }): Promise<{
   hasAudioAttachment: boolean;

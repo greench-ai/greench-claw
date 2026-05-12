@@ -1,4 +1,4 @@
-import { importFreshModule } from "openclaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "NexisClaw/plugin-sdk/test-fixtures";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   clearActiveEmbeddedRun,
@@ -1222,8 +1222,8 @@ describe("runPreparedReply media-only handling", () => {
     const call = vi.mocked(runReplyAgent).mock.calls.at(-1)?.[0];
     expect(call?.commandBody).toContain(heartbeatPrompt);
     expect(call?.followupRun.prompt).toContain(heartbeatPrompt);
-    expect(call?.transcriptCommandBody).toBe("[OpenClaw heartbeat poll]");
-    expect(call?.followupRun.transcriptPrompt).toBe("[OpenClaw heartbeat poll]");
+    expect(call?.transcriptCommandBody).toBe("[NexisClaw heartbeat poll]");
+    expect(call?.followupRun.transcriptPrompt).toBe("[NexisClaw heartbeat poll]");
   });
 
   it("uses persisted Discord chat metadata for system-event CLI static prompt identity", async () => {
@@ -1341,8 +1341,8 @@ describe("runPreparedReply media-only handling", () => {
       expect(call?.commandBody).toContain("telegram-user-1");
       expect(call?.followupRun.prompt).toContain("A new session was started via /new or /reset.");
       expect(call?.followupRun.prompt).toContain("Sender (untrusted metadata):");
-      expect(call?.transcriptCommandBody).toBe(`[OpenClaw session ${startupAction}]`);
-      expect(call?.followupRun.transcriptPrompt).toBe(`[OpenClaw session ${startupAction}]`);
+      expect(call?.transcriptCommandBody).toBe(`[NexisClaw session ${startupAction}]`);
+      expect(call?.followupRun.transcriptPrompt).toBe(`[NexisClaw session ${startupAction}]`);
       expect(call?.followupRun.transcriptPrompt).not.toContain("Sender (untrusted metadata):");
     },
   );

@@ -6,11 +6,11 @@ import {
   DiscordApiError,
   handleDiscordMessageAction,
   requestDiscord,
-} from "@openclaw/discord/api.js";
-import { DEFAULT_EMOJIS } from "openclaw/plugin-sdk/channel-feedback";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { writeExternalFileWithinRoot } from "openclaw/plugin-sdk/security-runtime";
+} from "@NexisClaw/discord/api.js";
+import { DEFAULT_EMOJIS } from "NexisClaw/plugin-sdk/channel-feedback";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { writeExternalFileWithinRoot } from "NexisClaw/plugin-sdk/security-runtime";
 import { chromium } from "playwright-core";
 import { z } from "zod";
 import { startQaGatewayChild } from "../../gateway-child.js";
@@ -257,16 +257,16 @@ type DiscordThreadReplyAttachmentEvidence = {
   threadName: string;
 };
 
-const DISCORD_QA_CAPTURE_CONTENT_ENV = "OPENCLAW_QA_DISCORD_CAPTURE_CONTENT";
-const DISCORD_QA_CAPTURE_UI_METADATA_ENV = "OPENCLAW_QA_DISCORD_CAPTURE_UI_METADATA";
-const DISCORD_QA_KEEP_THREADS_ENV = "OPENCLAW_QA_DISCORD_KEEP_THREADS";
-const QA_REDACT_PUBLIC_METADATA_ENV = "OPENCLAW_QA_REDACT_PUBLIC_METADATA";
+const DISCORD_QA_CAPTURE_CONTENT_ENV = "NEXISCLAW_QA_DISCORD_CAPTURE_CONTENT";
+const DISCORD_QA_CAPTURE_UI_METADATA_ENV = "NEXISCLAW_QA_DISCORD_CAPTURE_UI_METADATA";
+const DISCORD_QA_KEEP_THREADS_ENV = "NEXISCLAW_QA_DISCORD_KEEP_THREADS";
+const QA_REDACT_PUBLIC_METADATA_ENV = "NEXISCLAW_QA_REDACT_PUBLIC_METADATA";
 const DISCORD_QA_ENV_KEYS = [
-  "OPENCLAW_QA_DISCORD_GUILD_ID",
-  "OPENCLAW_QA_DISCORD_CHANNEL_ID",
-  "OPENCLAW_QA_DISCORD_DRIVER_BOT_TOKEN",
-  "OPENCLAW_QA_DISCORD_SUT_BOT_TOKEN",
-  "OPENCLAW_QA_DISCORD_SUT_APPLICATION_ID",
+  "NEXISCLAW_QA_DISCORD_GUILD_ID",
+  "NEXISCLAW_QA_DISCORD_CHANNEL_ID",
+  "NEXISCLAW_QA_DISCORD_DRIVER_BOT_TOKEN",
+  "NEXISCLAW_QA_DISCORD_SUT_BOT_TOKEN",
+  "NEXISCLAW_QA_DISCORD_SUT_APPLICATION_ID",
 ] as const;
 
 const DISCORD_QA_SCENARIOS: DiscordQaScenarioDefinition[] = [
@@ -395,16 +395,16 @@ function isTruthyOptIn(value: string | undefined) {
 }
 
 function resolveDiscordQaRuntimeEnv(env: NodeJS.ProcessEnv = process.env): DiscordQaRuntimeEnv {
-  const voiceChannelId = env.OPENCLAW_QA_DISCORD_VOICE_CHANNEL_ID?.trim();
+  const voiceChannelId = env.NEXISCLAW_QA_DISCORD_VOICE_CHANNEL_ID?.trim();
   const runtimeEnv = {
-    guildId: resolveEnvValue(env, "OPENCLAW_QA_DISCORD_GUILD_ID"),
-    channelId: resolveEnvValue(env, "OPENCLAW_QA_DISCORD_CHANNEL_ID"),
-    driverBotToken: resolveEnvValue(env, "OPENCLAW_QA_DISCORD_DRIVER_BOT_TOKEN"),
-    sutBotToken: resolveEnvValue(env, "OPENCLAW_QA_DISCORD_SUT_BOT_TOKEN"),
-    sutApplicationId: resolveEnvValue(env, "OPENCLAW_QA_DISCORD_SUT_APPLICATION_ID"),
+    guildId: resolveEnvValue(env, "NEXISCLAW_QA_DISCORD_GUILD_ID"),
+    channelId: resolveEnvValue(env, "NEXISCLAW_QA_DISCORD_CHANNEL_ID"),
+    driverBotToken: resolveEnvValue(env, "NEXISCLAW_QA_DISCORD_DRIVER_BOT_TOKEN"),
+    sutBotToken: resolveEnvValue(env, "NEXISCLAW_QA_DISCORD_SUT_BOT_TOKEN"),
+    sutApplicationId: resolveEnvValue(env, "NEXISCLAW_QA_DISCORD_SUT_APPLICATION_ID"),
     ...(voiceChannelId ? { voiceChannelId } : {}),
   };
-  validateDiscordQaRuntimeEnv(runtimeEnv, "OPENCLAW_QA_DISCORD");
+  validateDiscordQaRuntimeEnv(runtimeEnv, "NEXISCLAW_QA_DISCORD");
   return runtimeEnv;
 }
 
@@ -432,7 +432,7 @@ function parseDiscordQaCredentialPayload(payload: unknown): DiscordQaRuntimeEnv 
 }
 
 function buildDiscordQaConfig(
-  baseCfg: OpenClawConfig,
+  baseCfg: NexisClawConfig,
   params: {
     guildId: string;
     channelId: string;
@@ -447,7 +447,7 @@ function buildDiscordQaConfig(
       guildId: string;
     };
   } = {},
-): OpenClawConfig {
+): NexisClawConfig {
   const pluginAllow = [...new Set([...(baseCfg.plugins?.allow ?? []), "discord"])];
   const pluginEntries = {
     ...baseCfg.plugins?.entries,
@@ -589,7 +589,7 @@ async function resolveDiscordQaVoiceChannel(params: {
   const first = voiceChannels[0];
   if (!first) {
     throw new Error(
-      "Discord voice auto-join scenario could not find a visible voice/stage channel for the SUT bot. Add voiceChannelId to the Convex discord credential payload or set OPENCLAW_QA_DISCORD_VOICE_CHANNEL_ID.",
+      "Discord voice auto-join scenario could not find a visible voice/stage channel for the SUT bot. Add voiceChannelId to the Convex discord credential payload or set NEXISCLAW_QA_DISCORD_VOICE_CHANNEL_ID.",
     );
   }
   return first;
@@ -941,7 +941,7 @@ function renderDiscordThreadReplyAttachmentHtml(params: {
     <h1>${escapeHtml(params.scenarioTitle)}</h1>
     <div class="sub">Thread: ${escapeHtml(params.threadName)}</div>
     <section class="message">
-      <div class="author">OpenClaw Discord SUT</div>
+      <div class="author">NexisClaw Discord SUT</div>
       <div class="badge">${params.status === "pass" ? "Attachment found" : "Attachment missing"}</div>
       <div class="content">${escapeHtml(params.messageContent ?? "No SUT reply content captured")}</div>
       <div class="attachments">${attachmentRows}</div>
@@ -1158,7 +1158,7 @@ async function pollThreadReplyMessage(params: {
 }
 
 async function runDiscordThreadReplyFilePathAttachmentScenario(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   driverBotId: string;
   outputDir: string;
   runtimeEnv: DiscordQaRuntimeEnv;
@@ -1806,7 +1806,7 @@ export async function runDiscordQaLive(params: {
 
   const finishedAt = new Date().toISOString();
   const publishedCleanupIssues = redactPublicMetadata
-    ? cleanupIssues.map(() => "details redacted (OPENCLAW_QA_REDACT_PUBLIC_METADATA=1)")
+    ? cleanupIssues.map(() => "details redacted (NEXISCLAW_QA_REDACT_PUBLIC_METADATA=1)")
     : cleanupIssues;
   const passedCount = scenarioResults.filter((entry) => entry.status === "pass").length;
   const failedCount = scenarioResults.filter((entry) => entry.status === "fail").length;

@@ -1,11 +1,11 @@
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
+import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
 import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
   formatTrimmedAllowFromEntries,
-} from "openclaw/plugin-sdk/channel-config-helpers";
-import { createRestrictSendersChannelSecurity } from "openclaw/plugin-sdk/channel-policy";
-import { createChannelPluginBase } from "openclaw/plugin-sdk/core";
+} from "NexisClaw/plugin-sdk/channel-config-helpers";
+import { createRestrictSendersChannelSecurity } from "NexisClaw/plugin-sdk/channel-policy";
+import { createChannelPluginBase } from "NexisClaw/plugin-sdk/core";
 import {
   listIMessageAccountIds,
   resolveDefaultIMessageAccountId,

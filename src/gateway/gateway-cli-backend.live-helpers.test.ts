@@ -25,14 +25,14 @@ vi.mock("./client.js", () => ({
 describe("gateway cli backend live helpers", () => {
   afterEach(() => {
     gatewayClientState.lastOptions = undefined;
-    delete process.env.OPENCLAW_SKIP_CHANNELS;
-    delete process.env.OPENCLAW_SKIP_PROVIDERS;
-    delete process.env.OPENCLAW_SKIP_GMAIL_WATCHER;
-    delete process.env.OPENCLAW_SKIP_CRON;
-    delete process.env.OPENCLAW_SKIP_CANVAS_HOST;
-    delete process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER;
-    delete process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
-    delete process.env.OPENCLAW_TEST_MINIMAL_GATEWAY;
+    delete process.env.NEXISCLAW_SKIP_CHANNELS;
+    delete process.env.NEXISCLAW_SKIP_PROVIDERS;
+    delete process.env.NEXISCLAW_SKIP_GMAIL_WATCHER;
+    delete process.env.NEXISCLAW_SKIP_CRON;
+    delete process.env.NEXISCLAW_SKIP_CANVAS_HOST;
+    delete process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER;
+    delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY;
     delete process.env.ANTHROPIC_API_KEY;
     delete process.env.ANTHROPIC_API_KEY_OLD;
   });
@@ -41,41 +41,41 @@ describe("gateway cli backend live helpers", () => {
     const { applyCliBackendLiveEnv, restoreCliBackendLiveEnv, snapshotCliBackendLiveEnv } =
       await import("./gateway-cli-backend.live-helpers.js");
 
-    process.env.OPENCLAW_SKIP_CHANNELS = "old-channels";
-    process.env.OPENCLAW_SKIP_PROVIDERS = "old-providers";
-    process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "old-gmail";
-    process.env.OPENCLAW_SKIP_CRON = "old-cron";
-    process.env.OPENCLAW_SKIP_CANVAS_HOST = "old-canvas";
-    process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER = "old-browser";
-    process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "old-bundled";
-    process.env.OPENCLAW_TEST_MINIMAL_GATEWAY = "old-minimal";
+    process.env.NEXISCLAW_SKIP_CHANNELS = "old-channels";
+    process.env.NEXISCLAW_SKIP_PROVIDERS = "old-providers";
+    process.env.NEXISCLAW_SKIP_GMAIL_WATCHER = "old-gmail";
+    process.env.NEXISCLAW_SKIP_CRON = "old-cron";
+    process.env.NEXISCLAW_SKIP_CANVAS_HOST = "old-canvas";
+    process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER = "old-browser";
+    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = "old-bundled";
+    process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY = "old-minimal";
     process.env.ANTHROPIC_API_KEY = "old-anthropic";
     process.env.ANTHROPIC_API_KEY_OLD = "old-anthropic-old";
 
     const snapshot = snapshotCliBackendLiveEnv();
     applyCliBackendLiveEnv(new Set<string>());
 
-    expect(process.env.OPENCLAW_SKIP_CHANNELS).toBe("1");
-    expect(process.env.OPENCLAW_SKIP_PROVIDERS).toBe("1");
-    expect(process.env.OPENCLAW_SKIP_GMAIL_WATCHER).toBe("1");
-    expect(process.env.OPENCLAW_SKIP_CRON).toBe("1");
-    expect(process.env.OPENCLAW_SKIP_CANVAS_HOST).toBe("1");
-    expect(process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER).toBe("1");
-    expect(process.env.OPENCLAW_BUNDLED_PLUGINS_DIR).toBe("old-bundled");
-    expect(process.env.OPENCLAW_TEST_MINIMAL_GATEWAY).toBe("1");
+    expect(process.env.NEXISCLAW_SKIP_CHANNELS).toBe("1");
+    expect(process.env.NEXISCLAW_SKIP_PROVIDERS).toBe("1");
+    expect(process.env.NEXISCLAW_SKIP_GMAIL_WATCHER).toBe("1");
+    expect(process.env.NEXISCLAW_SKIP_CRON).toBe("1");
+    expect(process.env.NEXISCLAW_SKIP_CANVAS_HOST).toBe("1");
+    expect(process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER).toBe("1");
+    expect(process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR).toBe("old-bundled");
+    expect(process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY).toBe("1");
     expect(process.env.ANTHROPIC_API_KEY).toBeUndefined();
     expect(process.env.ANTHROPIC_API_KEY_OLD).toBeUndefined();
 
     restoreCliBackendLiveEnv(snapshot);
 
-    expect(process.env.OPENCLAW_SKIP_CHANNELS).toBe("old-channels");
-    expect(process.env.OPENCLAW_SKIP_PROVIDERS).toBe("old-providers");
-    expect(process.env.OPENCLAW_SKIP_GMAIL_WATCHER).toBe("old-gmail");
-    expect(process.env.OPENCLAW_SKIP_CRON).toBe("old-cron");
-    expect(process.env.OPENCLAW_SKIP_CANVAS_HOST).toBe("old-canvas");
-    expect(process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER).toBe("old-browser");
-    expect(process.env.OPENCLAW_BUNDLED_PLUGINS_DIR).toBe("old-bundled");
-    expect(process.env.OPENCLAW_TEST_MINIMAL_GATEWAY).toBe("old-minimal");
+    expect(process.env.NEXISCLAW_SKIP_CHANNELS).toBe("old-channels");
+    expect(process.env.NEXISCLAW_SKIP_PROVIDERS).toBe("old-providers");
+    expect(process.env.NEXISCLAW_SKIP_GMAIL_WATCHER).toBe("old-gmail");
+    expect(process.env.NEXISCLAW_SKIP_CRON).toBe("old-cron");
+    expect(process.env.NEXISCLAW_SKIP_CANVAS_HOST).toBe("old-canvas");
+    expect(process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER).toBe("old-browser");
+    expect(process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR).toBe("old-bundled");
+    expect(process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY).toBe("old-minimal");
     expect(process.env.ANTHROPIC_API_KEY).toBe("old-anthropic");
     expect(process.env.ANTHROPIC_API_KEY_OLD).toBe("old-anthropic-old");
   });
@@ -104,7 +104,7 @@ describe("gateway cli backend live helpers", () => {
     const { resolveCliModelSwitchProbeTarget, shouldRunCliModelSwitchProbe } =
       await import("./gateway-cli-backend.live-helpers.js");
 
-    delete process.env.OPENCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE;
+    delete process.env.NEXISCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE;
 
     expect(resolveCliModelSwitchProbeTarget("claude-cli", "claude-cli/claude-sonnet-4-6")).toBe(
       "claude-cli/claude-opus-4-6",
@@ -149,7 +149,7 @@ describe("gateway cli backend live helpers", () => {
   it("lets env disable the model switch probe", async () => {
     const { shouldRunCliModelSwitchProbe } = await import("./gateway-cli-backend.live-helpers.js");
 
-    process.env.OPENCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE = "0";
+    process.env.NEXISCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE = "0";
 
     expect(shouldRunCliModelSwitchProbe("claude-cli", "claude-cli/claude-sonnet-4-6")).toBe(false);
   });
@@ -157,12 +157,12 @@ describe("gateway cli backend live helpers", () => {
   it("allows live env overrides for fresh and resume CLI args", async () => {
     const { resolveCliBackendLiveArgs } = await import("./gateway-cli-backend.live-helpers.js");
 
-    process.env.OPENCLAW_LIVE_CLI_BACKEND_ARGS = JSON.stringify([
+    process.env.NEXISCLAW_LIVE_CLI_BACKEND_ARGS = JSON.stringify([
       "exec",
       "--sandbox",
       "danger-full-access",
     ]);
-    process.env.OPENCLAW_LIVE_CLI_BACKEND_RESUME_ARGS = JSON.stringify([
+    process.env.NEXISCLAW_LIVE_CLI_BACKEND_RESUME_ARGS = JSON.stringify([
       "exec",
       "resume",
       "{sessionId}",

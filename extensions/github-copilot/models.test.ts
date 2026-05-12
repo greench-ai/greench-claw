@@ -1,4 +1,4 @@
-import { createProviderUsageFetch, makeResponse } from "openclaw/plugin-sdk/test-env";
+import { createProviderUsageFetch, makeResponse } from "NexisClaw/plugin-sdk/test-env";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { buildCopilotModelDefinition, getDefaultCopilotModelIds } from "./models-defaults.js";
 import { deriveCopilotApiBaseUrlFromToken, resolveCopilotApiToken } from "./token.js";
@@ -15,7 +15,7 @@ vi.mock("@earendil-works/pi-ai/oauth", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/provider-model-shared", () => ({
+vi.mock("NexisClaw/plugin-sdk/provider-model-shared", () => ({
   normalizeModelCompat: (model: Record<string, unknown>) => model,
   resolveProviderEndpoint: (baseUrl: string) => ({
     baseUrl,
@@ -29,16 +29,16 @@ const jsonStoreMocks = vi.hoisted(() => ({
   saveJsonFile: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/json-store", () => ({
+vi.mock("NexisClaw/plugin-sdk/json-store", () => ({
   loadJsonFile: jsonStoreMocks.loadJsonFile,
   saveJsonFile: jsonStoreMocks.saveJsonFile,
 }));
 
-vi.mock("openclaw/plugin-sdk/state-paths", () => ({
-  resolveStateDir: () => "/tmp/openclaw-state",
+vi.mock("NexisClaw/plugin-sdk/state-paths", () => ({
+  resolveStateDir: () => "/tmp/NexisClaw-state",
 }));
 
-import type { ProviderResolveDynamicModelContext } from "openclaw/plugin-sdk/core";
+import type { ProviderResolveDynamicModelContext } from "NexisClaw/plugin-sdk/core";
 import { fetchCopilotModelCatalog, resolveCopilotForwardCompatModel } from "./models.js";
 
 function createMockCtx(
@@ -328,7 +328,7 @@ describe("fetchCopilotUsage", () => {
 });
 
 describe("github-copilot token", () => {
-  const cachePath = "/tmp/openclaw-state/credentials/github-copilot.token.json";
+  const cachePath = "/tmp/NexisClaw-state/credentials/github-copilot.token.json";
 
   beforeEach(() => {
     jsonStoreMocks.loadJsonFile.mockClear();

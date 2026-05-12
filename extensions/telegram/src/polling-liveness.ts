@@ -1,5 +1,5 @@
-import { formatDurationPrecise } from "openclaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "openclaw/plugin-sdk/ssrf-runtime";
+import { formatDurationPrecise } from "NexisClaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/ssrf-runtime";
 
 type TelegramPollingLivenessTrackerOptions = {
   now?: () => number;

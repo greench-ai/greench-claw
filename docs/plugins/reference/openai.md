@@ -1,5 +1,5 @@
 ---
-summary: "Adds OpenAI, OpenAI Codex model provider support to OpenClaw."
+summary: "Adds OpenAI, OpenAI Codex model provider support to NexisClaw."
 read_when:
   - You are installing, configuring, or auditing the openai plugin
 title: "OpenAI plugin"
@@ -7,12 +7,12 @@ title: "OpenAI plugin"
 
 # OpenAI plugin
 
-Adds OpenAI, OpenAI Codex model provider support to OpenClaw.
+Adds OpenAI, OpenAI Codex model provider support to NexisClaw.
 
 ## Distribution
 
-- Package: `@openclaw/openai-provider`
-- Install route: included in OpenClaw
+- Package: `@NexisClaw/openai-provider`
+- Install route: included in NexisClaw
 
 ## Surface
 

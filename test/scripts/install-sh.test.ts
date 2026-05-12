@@ -11,7 +11,7 @@ function runInstallShell(script: string, env: NodeJS.ProcessEnv = {}) {
     encoding: "utf8",
     env: {
       ...process.env,
-      OPENCLAW_INSTALL_SH_NO_RUN: "1",
+      NEXISCLAW_INSTALL_SH_NO_RUN: "1",
       ...env,
     },
   });
@@ -48,7 +48,7 @@ describe("install.sh", () => {
       /# Step 2: Node\.js\s+load_nvm_for_node_detection\s+if ! check_node; then/,
     );
 
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-nvm-"));
+    const tmp = mkdtempSync(join(tmpdir(), "NexisClaw-install-nvm-"));
     const home = join(tmp, "home");
     const systemBin = join(tmp, "system-bin");
     const nvmBin = join(home, ".nvm/versions/node/v22.22.1/bin");
@@ -110,7 +110,7 @@ describe("install.sh", () => {
   });
 
   it("promotes a supported Linux Node binary over stale PATH entries", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-node-promote-"));
+    const tmp = mkdtempSync(join(tmpdir(), "NexisClaw-install-node-promote-"));
     const staleBin = join(tmp, "usr-local-bin");
     const supportedBin = join(tmp, "usr-bin");
     mkdirSync(staleBin, { recursive: true });
@@ -156,7 +156,7 @@ describe("install.sh", () => {
   });
 
   it("persists a supported Linux Node path before noninteractive shell guards", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-linux-node-path-"));
+    const tmp = mkdtempSync(join(tmpdir(), "NexisClaw-install-linux-node-path-"));
     const home = join(tmp, "home");
     const oldBin = join(tmp, "old/bin");
     const installedBin = join(tmp, "usr/bin");
@@ -221,7 +221,7 @@ describe("install.sh", () => {
   });
 
   it("warns before redirecting an unwritable npm prefix", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-npm-prefix-"));
+    const tmp = mkdtempSync(join(tmpdir(), "NexisClaw-install-npm-prefix-"));
     const home = join(tmp, "home");
     const events = join(tmp, "events.log");
     mkdirSync(home, { recursive: true });
@@ -268,13 +268,13 @@ describe("install.sh", () => {
     expect(noSudoWarningIndex).toBeGreaterThan(npmSetIndex);
     expect(result?.stdout).toContain("npm global prefix is not writable");
     expect(result?.stdout).toContain("npm normally writes that setting to ~/.npmrc");
-    expect(result?.stdout).toContain("npm i -g openclaw@latest");
+    expect(result?.stdout).toContain("npm i -g NexisClaw@latest");
     expect(result?.stdout).toContain("using this user prefix");
     expect(result?.stdout).not.toContain("has been saved");
   });
 
   it("persists npm prefix PATH before noninteractive shell guards", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-npm-prefix-shell-"));
+    const tmp = mkdtempSync(join(tmpdir(), "NexisClaw-install-npm-prefix-shell-"));
     const home = join(tmp, "home");
     mkdirSync(home, { recursive: true });
     writeFileSync(
@@ -324,15 +324,15 @@ describe("install.sh", () => {
     expect(result?.stdout).toContain(`path=${home}/.npm-global/bin`);
   });
 
-  it("uses a quoted absolute openclaw path in follow-up commands when npm bin is not on the original PATH", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "openclaw-install-command-"));
+  it("uses a quoted absolute NexisClaw path in follow-up commands when npm bin is not on the original PATH", () => {
+    const tmp = mkdtempSync(join(tmpdir(), "NexisClaw-install-command-"));
     const npmBin = join(tmp, "npm bin");
     const visibleBin = join(tmp, "visible-bin");
     mkdirSync(npmBin, { recursive: true });
     mkdirSync(visibleBin, { recursive: true });
-    const openclawBin = join(npmBin, "openclaw");
-    writeFileSync(openclawBin, "#!/bin/sh\nexit 0\n");
-    chmodSync(openclawBin, 0o755);
+    const NexisClawBin = join(npmBin, "NexisClaw");
+    writeFileSync(NexisClawBin, "#!/bin/sh\nexit 0\n");
+    chmodSync(NexisClawBin, 0o755);
 
     let result: ReturnType<typeof runInstallShell> | undefined;
     try {
@@ -340,17 +340,17 @@ describe("install.sh", () => {
         set -euo pipefail
         source "${SCRIPT_PATH}"
         ORIGINAL_PATH=${JSON.stringify(`${visibleBin}:/usr/bin:/bin`)}
-        printf 'missing=%s\\n' "$(openclaw_command_for_user "${openclawBin}")"
+        printf 'missing=%s\\n' "$(NexisClaw_command_for_user "${NexisClawBin}")"
         ORIGINAL_PATH=${JSON.stringify(`${npmBin}:${visibleBin}:/usr/bin:/bin`)}
-        printf 'present=%s\\n' "$(openclaw_command_for_user "${openclawBin}")"
+        printf 'present=%s\\n' "$(NexisClaw_command_for_user "${NexisClawBin}")"
       `);
     } finally {
       rmSync(tmp, { recursive: true, force: true });
     }
 
     expect(result?.status).toBe(0);
-    expect(result?.stdout).toContain(`missing=${openclawBin.replace(/ /g, "\\ ")}`);
-    expect(result?.stdout).toContain("present=openclaw");
+    expect(result?.stdout).toContain(`missing=${NexisClawBin.replace(/ /g, "\\ ")}`);
+    expect(result?.stdout).toContain("present=NexisClaw");
   });
 });
 
@@ -452,7 +452,7 @@ describe("install.sh macOS Homebrew Node behavior", () => {
   });
 
   it("reruns spinner-wrapped commands when gum reports ioctl failure", () => {
-    const dir = mkdtempSync(join(tmpdir(), "openclaw-install-sh-gum-"));
+    const dir = mkdtempSync(join(tmpdir(), "NexisClaw-install-sh-gum-"));
     try {
       const gumPath = join(dir, "gum");
       const commandPath = join(dir, "command");
@@ -486,46 +486,46 @@ describe("install.sh macOS Homebrew Node behavior", () => {
   });
 });
 
-describe("install.sh duplicate OpenClaw install detection", () => {
+describe("install.sh duplicate NexisClaw install detection", () => {
   it("warns with concrete package paths and versions for duplicate npm roots", () => {
     const result = runInstallShell(`
       set -euo pipefail
       source "${SCRIPT_PATH}"
       root="$(mktemp -d)"
       trap 'rm -rf "$root"' EXIT
-      mkdir -p "$root/brew/openclaw" "$root/fnm/openclaw"
-      printf '{"version":"2026.3.7"}\\n' > "$root/brew/openclaw/package.json"
-      printf '{"version":"2026.3.1"}\\n' > "$root/fnm/openclaw/package.json"
-      collect_openclaw_npm_root_candidates() { printf '%s\\n' "$root/brew" "$root/fnm"; }
-      OPENCLAW_BIN="$root/fnm/.bin/openclaw"
+      mkdir -p "$root/brew/NexisClaw" "$root/fnm/NexisClaw"
+      printf '{"version":"2026.3.7"}\\n' > "$root/brew/NexisClaw/package.json"
+      printf '{"version":"2026.3.1"}\\n' > "$root/fnm/NexisClaw/package.json"
+      collect_NexisClaw_npm_root_candidates() { printf '%s\\n' "$root/brew" "$root/fnm"; }
+      NEXISCLAW_BIN="$root/fnm/.bin/NexisClaw"
       ui_warn() { echo "WARN: $*"; }
-      warn_duplicate_openclaw_global_installs
+      warn_duplicate_NexisClaw_global_installs
     `);
 
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("Multiple OpenClaw global installs detected");
+    expect(result.stdout).toContain("Multiple NexisClaw global installs detected");
     expect(result.stdout).toContain("2026.3.7");
     expect(result.stdout).toContain("2026.3.1");
-    expect(result.stdout).toContain("/brew/openclaw");
-    expect(result.stdout).toContain("/fnm/openclaw");
-    expect(result.stdout).toContain("Active openclaw:");
-    expect(result.stdout).toContain("npm uninstall -g openclaw");
+    expect(result.stdout).toContain("/brew/NexisClaw");
+    expect(result.stdout).toContain("/fnm/NexisClaw");
+    expect(result.stdout).toContain("Active NexisClaw:");
+    expect(result.stdout).toContain("npm uninstall -g NexisClaw");
   });
 
-  it("stays quiet when only one OpenClaw npm root exists", () => {
+  it("stays quiet when only one NexisClaw npm root exists", () => {
     const result = runInstallShell(`
       set -euo pipefail
       source "${SCRIPT_PATH}"
       root="$(mktemp -d)"
       trap 'rm -rf "$root"' EXIT
-      mkdir -p "$root/only/openclaw"
-      printf '{"version":"2026.3.7"}\\n' > "$root/only/openclaw/package.json"
-      collect_openclaw_npm_root_candidates() { printf '%s\\n' "$root/only"; }
+      mkdir -p "$root/only/NexisClaw"
+      printf '{"version":"2026.3.7"}\\n' > "$root/only/NexisClaw/package.json"
+      collect_NexisClaw_npm_root_candidates() { printf '%s\\n' "$root/only"; }
       ui_warn() { echo "WARN: $*"; }
-      warn_duplicate_openclaw_global_installs
+      warn_duplicate_NexisClaw_global_installs
     `);
 
     expect(result.status).toBe(0);
-    expect(result.stdout).not.toContain("Multiple OpenClaw global installs detected");
+    expect(result.stdout).not.toContain("Multiple NexisClaw global installs detected");
   });
 });

@@ -11,7 +11,7 @@ import {
 } from "../agents/provider-request-config.js";
 import type { MsgContext } from "../auto-reply/templating.js";
 import { applyTemplate } from "../auto-reply/templating.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { NexisClawConfig } from "../config/types.js";
 import type {
   MediaUnderstandingConfig,
   MediaUnderstandingModelConfig,
@@ -19,7 +19,7 @@ import type {
 import { logVerbose, shouldLogVerbose } from "../globals.js";
 import { writeExternalFileWithinRoot } from "../infra/fs-safe.js";
 import { resolveProxyFetchFromEnv } from "../infra/net/proxy-fetch.js";
-import { resolvePreferredOpenClawTmpDir } from "../infra/tmp-openclaw-dir.js";
+import { resolvePreferredNexisClawTmpDir } from "../infra/tmp-NexisClaw-dir.js";
 import { runFfmpeg } from "../media/ffmpeg-exec.js";
 import { runExec } from "../process/exec.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
@@ -59,7 +59,7 @@ async function loadModelAuth() {
 }
 
 function resolveLiteralProviderApiKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   providerId: string;
 }): string | null {
   const value = params.cfg.models?.providers?.[params.providerId]?.apiKey;
@@ -380,7 +380,7 @@ export function buildModelDecision(params: {
 function resolveEntryRunOptions(params: {
   capability: MediaUnderstandingCapability;
   entry: MediaUnderstandingModelConfig;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   config?: MediaUnderstandingConfig;
 }): { maxBytes: number; maxChars?: number; timeoutMs: number; prompt: string } {
   const { capability, entry, cfg } = params;
@@ -416,7 +416,7 @@ function resolveMediaRequestOverrides(config: MediaUnderstandingConfig | undefin
 
 async function resolveProviderExecutionAuth(params: {
   providerId: string;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   entry: MediaUnderstandingModelConfig;
   agentDir?: string;
 }) {
@@ -452,7 +452,7 @@ async function resolveProviderExecutionAuth(params: {
 
 async function resolveProviderExecutionContext(params: {
   providerId: string;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   entry: MediaUnderstandingModelConfig;
   config?: MediaUnderstandingConfig;
   agentDir?: string;
@@ -544,7 +544,7 @@ function assertMinAudioSize(params: { size: number; attachmentIndex: number }): 
 export async function runProviderEntry(params: {
   capability: MediaUnderstandingCapability;
   entry: MediaUnderstandingModelConfig;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   ctx: MsgContext;
   attachmentIndex: number;
   cache: MediaAttachmentCache;
@@ -732,7 +732,7 @@ export async function runProviderEntry(params: {
 export async function runCliEntry(params: {
   capability: MediaUnderstandingCapability;
   entry: MediaUnderstandingModelConfig;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   ctx: MsgContext;
   attachmentIndex: number;
   cache: MediaAttachmentCache;
@@ -761,7 +761,7 @@ export async function runCliEntry(params: {
     assertMinAudioSize({ size: stat.size, attachmentIndex: params.attachmentIndex });
   }
   const outputDir = await fs.mkdtemp(
-    path.join(resolvePreferredOpenClawTmpDir(), "openclaw-media-cli-"),
+    path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-media-cli-"),
   );
   const mediaPath = await resolveCliMediaPath({
     capability,

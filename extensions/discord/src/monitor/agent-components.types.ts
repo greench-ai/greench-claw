@@ -1,4 +1,4 @@
-import type { DiscordAccountConfig, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import type {
   ButtonInteraction,
   ChannelSelectMenuInteraction,
@@ -35,10 +35,10 @@ export type DiscordChannelContext = {
 };
 
 export type AgentComponentContext = {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId: string;
   discordConfig?: DiscordAccountConfig;
-  runtime?: import("openclaw/plugin-sdk/runtime-env").RuntimeEnv;
+  runtime?: import("NexisClaw/plugin-sdk/runtime-env").RuntimeEnv;
   token?: string;
   guildEntries?: Record<string, DiscordGuildEntryResolved>;
   allowFrom?: string[];

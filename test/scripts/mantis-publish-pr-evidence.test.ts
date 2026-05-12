@@ -80,14 +80,14 @@ describe("scripts/mantis/publish-pr-evidence", () => {
     const manifest = loadEvidenceManifest(writeFixtureManifest());
     const body = renderEvidenceComment({
       artifactRoot: "mantis/discord/pr-1/run-1",
-      artifactUrl: "https://github.com/openclaw/openclaw/actions/runs/1/artifacts/2",
+      artifactUrl: "https://github.com/NexisClaw/NexisClaw/actions/runs/1/artifacts/2",
       manifest,
       marker: "<!-- mantis-discord-status-reactions -->",
       rawBase:
-        "https://raw.githubusercontent.com/openclaw/openclaw/qa-artifacts/mantis/discord/pr-1/run-1",
+        "https://raw.githubusercontent.com/NexisClaw/NexisClaw/qa-artifacts/mantis/discord/pr-1/run-1",
       requestSource: "workflow_dispatch",
-      runUrl: "https://github.com/openclaw/openclaw/actions/runs/1",
-      treeUrl: "https://github.com/openclaw/openclaw/tree/qa-artifacts/mantis/discord/pr-1/run-1",
+      runUrl: "https://github.com/NexisClaw/NexisClaw/actions/runs/1",
+      treeUrl: "https://github.com/NexisClaw/NexisClaw/tree/qa-artifacts/mantis/discord/pr-1/run-1",
     });
 
     expect(body).toContain("<!-- mantis-discord-status-reactions -->");
@@ -96,10 +96,10 @@ describe("scripts/mantis/publish-pr-evidence", () => {
     expect(body).toContain('<th width="50%">Baseline queued-only</th>');
     expect(body).toContain('<th width="50%">Candidate queued -> thinking -> done</th>');
     expect(body).toContain(
-      '<td width="50%" align="center"><img src="https://raw.githubusercontent.com/openclaw/openclaw/qa-artifacts/mantis/discord/pr-1/run-1/baseline.png" width="100%"',
+      '<td width="50%" align="center"><img src="https://raw.githubusercontent.com/NexisClaw/NexisClaw/qa-artifacts/mantis/discord/pr-1/run-1/baseline.png" width="100%"',
     );
     expect(body).toContain(
-      "[Baseline change MP4](https://raw.githubusercontent.com/openclaw/openclaw/qa-artifacts/mantis/discord/pr-1/run-1/baseline-change.mp4)",
+      "[Baseline change MP4](https://raw.githubusercontent.com/NexisClaw/NexisClaw/qa-artifacts/mantis/discord/pr-1/run-1/baseline-change.mp4)",
     );
     expect(body).toContain("- Overall: `true`");
   });
@@ -117,7 +117,7 @@ describe("scripts/mantis/publish-pr-evidence", () => {
         id: "slack-desktop-smoke",
         title: "Mantis Slack Desktop Smoke QA",
         summary: "Mantis could not finish VM setup.",
-        scenario: "slack-openclaw-desktop-smoke",
+        scenario: "slack-NexisClaw-desktop-smoke",
         comparison: {
           candidate: {
             expected: "Slack QA and VM gateway setup pass",
@@ -163,14 +163,14 @@ describe("scripts/mantis/publish-pr-evidence", () => {
     ]);
     const body = renderEvidenceComment({
       artifactRoot: "mantis/slack/pr-1/run-1",
-      artifactUrl: "https://github.com/openclaw/openclaw/actions/runs/1/artifacts/2",
+      artifactUrl: "https://github.com/NexisClaw/NexisClaw/actions/runs/1/artifacts/2",
       manifest,
       marker: "<!-- mantis-slack-desktop-smoke -->",
       rawBase:
-        "https://raw.githubusercontent.com/openclaw/openclaw/qa-artifacts/mantis/slack/pr-1/run-1",
+        "https://raw.githubusercontent.com/NexisClaw/NexisClaw/qa-artifacts/mantis/slack/pr-1/run-1",
       requestSource: "workflow_dispatch",
-      runUrl: "https://github.com/openclaw/openclaw/actions/runs/1",
-      treeUrl: "https://github.com/openclaw/openclaw/tree/qa-artifacts/mantis/slack/pr-1/run-1",
+      runUrl: "https://github.com/NexisClaw/NexisClaw/actions/runs/1",
+      treeUrl: "https://github.com/NexisClaw/NexisClaw/tree/qa-artifacts/mantis/slack/pr-1/run-1",
     });
 
     expect(body).toContain("Summary: Mantis could not finish VM setup.");

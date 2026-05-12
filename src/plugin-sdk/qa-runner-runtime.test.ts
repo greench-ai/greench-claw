@@ -12,14 +12,14 @@ import {
 const loadPluginManifestRegistry = vi.hoisted(() => vi.fn());
 const loadBundledPluginPublicSurfaceModuleSync = vi.hoisted(() => vi.fn());
 const tryLoadActivatedBundledPluginPublicSurfaceModuleSync = vi.hoisted(() => vi.fn());
-const resolveOpenClawPackageRootSync = vi.hoisted(() => vi.fn());
+const resolveNexisClawPackageRootSync = vi.hoisted(() => vi.fn());
 
 vi.mock("../plugins/manifest-registry.js", () => ({
   loadPluginManifestRegistry,
 }));
 
-vi.mock("../infra/openclaw-root.js", () => ({
-  resolveOpenClawPackageRootSync,
+vi.mock("../infra/NexisClaw-root.js", () => ({
+  resolveNexisClawPackageRootSync,
 }));
 
 vi.mock("./facade-runtime.js", () => ({
@@ -29,7 +29,7 @@ vi.mock("./facade-runtime.js", () => ({
 
 describe("plugin-sdk qa-runner-runtime", () => {
   const tempDirs: string[] = [];
-  const originalPrivateQaCli = process.env.OPENCLAW_ENABLE_PRIVATE_QA_CLI;
+  const originalPrivateQaCli = process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI;
 
   beforeEach(() => {
     loadPluginManifestRegistry.mockReset().mockReturnValue({
@@ -38,8 +38,8 @@ describe("plugin-sdk qa-runner-runtime", () => {
     });
     loadBundledPluginPublicSurfaceModuleSync.mockReset();
     tryLoadActivatedBundledPluginPublicSurfaceModuleSync.mockReset();
-    resolveOpenClawPackageRootSync.mockReset().mockReturnValue(null);
-    delete process.env.OPENCLAW_ENABLE_PRIVATE_QA_CLI;
+    resolveNexisClawPackageRootSync.mockReset().mockReturnValue(null);
+    delete process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI;
   });
 
   afterEach(() => {
@@ -67,13 +67,13 @@ describe("plugin-sdk qa-runner-runtime", () => {
       tempDirs,
       importRuntime: () => import("./qa-runner-runtime.js"),
       loadBundledPluginPublicSurfaceModuleSync,
-      resolveOpenClawPackageRootSync,
+      resolveNexisClawPackageRootSync,
     });
   });
 
   it("loads bundled plugin test APIs with the private QA source tree override", async () => {
-    const sourceRoot = makePrivateQaSourceRoot(tempDirs, "openclaw-qa-test-api-root-");
-    resolveOpenClawPackageRootSync.mockReturnValue(sourceRoot);
+    const sourceRoot = makePrivateQaSourceRoot(tempDirs, "NexisClaw-qa-test-api-root-");
+    resolveNexisClawPackageRootSync.mockReturnValue(sourceRoot);
 
     const testApi = { marker: "matrix-test-api" };
     loadBundledPluginPublicSurfaceModuleSync.mockReturnValue(testApi);
@@ -86,8 +86,8 @@ describe("plugin-sdk qa-runner-runtime", () => {
       | undefined;
     expect(testApiCall?.dirName).toBe("matrix");
     expect(testApiCall?.artifactBasename).toBe("test-api.js");
-    expect(testApiCall?.env?.OPENCLAW_ENABLE_PRIVATE_QA_CLI).toBe("1");
-    expect(testApiCall?.env?.OPENCLAW_BUNDLED_PLUGINS_DIR).toBe(
+    expect(testApiCall?.env?.NEXISCLAW_ENABLE_PRIVATE_QA_CLI).toBe("1");
+    expect(testApiCall?.env?.NEXISCLAW_BUNDLED_PLUGINS_DIR).toBe(
       path.join(sourceRoot, "extensions"),
     );
   });
@@ -170,8 +170,8 @@ describe("plugin-sdk qa-runner-runtime", () => {
   });
 
   it("prefers the source bundled tree for private qa discovery in repo checkouts", async () => {
-    const sourceRoot = makePrivateQaSourceRoot(tempDirs, "openclaw-qa-runner-root-");
-    resolveOpenClawPackageRootSync.mockReturnValue(sourceRoot);
+    const sourceRoot = makePrivateQaSourceRoot(tempDirs, "NexisClaw-qa-runner-root-");
+    resolveNexisClawPackageRootSync.mockReturnValue(sourceRoot);
 
     const register = vi.fn((qa: Command) => qa);
     loadPluginManifestRegistry.mockReturnValue({
@@ -205,8 +205,8 @@ describe("plugin-sdk qa-runner-runtime", () => {
     const manifestCall = loadPluginManifestRegistry.mock.calls.at(0)?.[0] as
       | { env?: NodeJS.ProcessEnv }
       | undefined;
-    expect(manifestCall?.env?.OPENCLAW_ENABLE_PRIVATE_QA_CLI).toBe("1");
-    expect(manifestCall?.env?.OPENCLAW_BUNDLED_PLUGINS_DIR).toBe(
+    expect(manifestCall?.env?.NEXISCLAW_ENABLE_PRIVATE_QA_CLI).toBe("1");
+    expect(manifestCall?.env?.NEXISCLAW_BUNDLED_PLUGINS_DIR).toBe(
       path.join(sourceRoot, "extensions"),
     );
 
@@ -215,8 +215,8 @@ describe("plugin-sdk qa-runner-runtime", () => {
       | undefined;
     expect(publicSurfaceCall?.dirName).toBe("qa-matrix");
     expect(publicSurfaceCall?.artifactBasename).toBe("runtime-api.js");
-    expect(publicSurfaceCall?.env?.OPENCLAW_ENABLE_PRIVATE_QA_CLI).toBe("1");
-    expect(publicSurfaceCall?.env?.OPENCLAW_BUNDLED_PLUGINS_DIR).toBe(
+    expect(publicSurfaceCall?.env?.NEXISCLAW_ENABLE_PRIVATE_QA_CLI).toBe("1");
+    expect(publicSurfaceCall?.env?.NEXISCLAW_BUNDLED_PLUGINS_DIR).toBe(
       path.join(sourceRoot, "extensions"),
     );
   });
@@ -270,7 +270,7 @@ describe("plugin-sdk qa-runner-runtime", () => {
     const module = await import("./qa-runner-runtime.js");
 
     expect(() => module.listQaRunnerCliContributions()).toThrow(
-      'QA runner plugin "qa-matrix" exported "extra" from runtime-api.js but did not declare it in openclaw.plugin.json',
+      'QA runner plugin "qa-matrix" exported "extra" from runtime-api.js but did not declare it in NexisClaw.plugin.json',
     );
   });
 });

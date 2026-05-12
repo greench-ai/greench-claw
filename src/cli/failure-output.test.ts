@@ -6,25 +6,25 @@ describe("formatCliFailureLines", () => {
     const lines = formatCliFailureLines({
       title: "Could not start the CLI.",
       error: new Error("config file is invalid"),
-      argv: ["node", "openclaw", "status"],
+      argv: ["node", "NexisClaw", "status"],
       env: {},
     });
 
-    expect(lines).toContain("[openclaw] Could not start the CLI.");
-    expect(lines).toContain("[openclaw] Reason: config file is invalid");
-    expect(lines).toContain("[openclaw] Debug: set OPENCLAW_DEBUG=1 to include the stack trace.");
-    expect(lines).toContain("[openclaw] Try: openclaw doctor");
-    expect(lines).toContain("[openclaw] Help: openclaw --help");
+    expect(lines).toContain("[NexisClaw] Could not start the CLI.");
+    expect(lines).toContain("[NexisClaw] Reason: config file is invalid");
+    expect(lines).toContain("[NexisClaw] Debug: set NEXISCLAW_DEBUG=1 to include the stack trace.");
+    expect(lines).toContain("[NexisClaw] Try: NexisClaw doctor");
+    expect(lines).toContain("[NexisClaw] Help: NexisClaw --help");
   });
 
   it("prints stack details when debug output is requested", () => {
     const lines = formatCliFailureLines({
       title: "The CLI command failed.",
       error: new Error("boom"),
-      env: { OPENCLAW_DEBUG: "1" },
+      env: { NEXISCLAW_DEBUG: "1" },
     });
 
-    expect(lines).toContain("[openclaw] Stack:");
+    expect(lines).toContain("[NexisClaw] Stack:");
     expect(lines.some((line) => line.includes("Error: boom"))).toBe(true);
   });
 });

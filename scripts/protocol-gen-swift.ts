@@ -28,9 +28,9 @@ const outPaths = [
     repoRoot,
     "apps",
     "shared",
-    "OpenClawKit",
+    "NexisClawKit",
     "Sources",
-    "OpenClawProtocol",
+    "NexisClawProtocol",
     "GatewayModels.swift",
   ),
 ];

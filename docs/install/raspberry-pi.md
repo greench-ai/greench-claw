@@ -1,13 +1,13 @@
 ---
-summary: "Host OpenClaw on a Raspberry Pi for always-on self-hosting"
+summary: "Host NexisClaw on a Raspberry Pi for always-on self-hosting"
 read_when:
-  - Setting up OpenClaw on a Raspberry Pi
-  - Running OpenClaw on ARM devices
+  - Setting up NexisClaw on a Raspberry Pi
+  - Running NexisClaw on ARM devices
   - Building a cheap always-on personal AI
 title: "Raspberry Pi"
 ---
 
-Run a persistent, always-on OpenClaw Gateway on a Raspberry Pi. Since the Pi is just the gateway (models run in the cloud via API), even a modest Pi handles the workload well — typical hardware cost is **$35–80 one-time**, no monthly fees.
+Run a persistent, always-on NexisClaw Gateway on a Raspberry Pi. Since the Pi is just the gateway (models run in the cloud via API), even a modest Pi handles the workload well — typical hardware cost is **$35–80 one-time**, no monthly fees.
 
 ## Hardware compatibility
 
@@ -89,15 +89,15 @@ Run a persistent, always-on OpenClaw Gateway on a Raspberry Pi. Since the Pi is 
 
   </Step>
 
-  <Step title="Install OpenClaw">
+  <Step title="Install NexisClaw">
     ```bash
-    curl -fsSL https://openclaw.ai/install.sh | bash
+    curl -fsSL https://NexisClaw.ai/install.sh | bash
     ```
   </Step>
 
   <Step title="Run onboarding">
     ```bash
-    openclaw onboard --install-daemon
+    NexisClaw onboard --install-daemon
     ```
 
     Follow the wizard. API keys are recommended over OAuth for headless devices. Telegram is the easiest channel to start with.
@@ -106,9 +106,9 @@ Run a persistent, always-on OpenClaw Gateway on a Raspberry Pi. Since the Pi is 
 
   <Step title="Verify">
     ```bash
-    openclaw status
-    systemctl --user status openclaw-gateway.service
-    journalctl --user -u openclaw-gateway.service -f
+    NexisClaw status
+    systemctl --user status NexisClaw-gateway.service
+    journalctl --user -u NexisClaw-gateway.service -f
     ```
   </Step>
 
@@ -116,7 +116,7 @@ Run a persistent, always-on OpenClaw Gateway on a Raspberry Pi. Since the Pi is 
     On your computer, get a dashboard URL from the Pi:
 
     ```bash
-    ssh user@gateway-host 'openclaw dashboard --no-open'
+    ssh user@gateway-host 'NexisClaw dashboard --no-open'
     ```
 
     Then create an SSH tunnel in another terminal:
@@ -137,10 +137,10 @@ Run a persistent, always-on OpenClaw Gateway on a Raspberry Pi. Since the Pi is 
 **Enable module compile cache** -- Speeds up repeated CLI invocations on lower-power Pi hosts:
 
 ```bash
-grep -q 'NODE_COMPILE_CACHE=/var/tmp/openclaw-compile-cache' ~/.bashrc || cat >> ~/.bashrc <<'EOF' # pragma: allowlist secret
-export NODE_COMPILE_CACHE=/var/tmp/openclaw-compile-cache
-mkdir -p /var/tmp/openclaw-compile-cache
-export OPENCLAW_NO_RESPAWN=1
+grep -q 'NODE_COMPILE_CACHE=/var/tmp/NexisClaw-compile-cache' ~/.bashrc || cat >> ~/.bashrc <<'EOF' # pragma: allowlist secret
+export NODE_COMPILE_CACHE=/var/tmp/NexisClaw-compile-cache
+mkdir -p /var/tmp/NexisClaw-compile-cache
+export NEXISCLAW_NO_RESPAWN=1
 EOF
 source ~/.bashrc
 ```
@@ -152,22 +152,22 @@ echo 'gpu_mem=16' | sudo tee -a /boot/config.txt
 sudo systemctl disable bluetooth
 ```
 
-**systemd drop-in for stable restarts** -- If this Pi is mostly running OpenClaw, add a service drop-in:
+**systemd drop-in for stable restarts** -- If this Pi is mostly running NexisClaw, add a service drop-in:
 
 ```bash
-systemctl --user edit openclaw-gateway.service
+systemctl --user edit NexisClaw-gateway.service
 ```
 
 ```ini
 [Service]
-Environment=OPENCLAW_NO_RESPAWN=1
-Environment=NODE_COMPILE_CACHE=/var/tmp/openclaw-compile-cache
+Environment=NEXISCLAW_NO_RESPAWN=1
+Environment=NODE_COMPILE_CACHE=/var/tmp/NexisClaw-compile-cache
 Restart=always
 RestartSec=2
 TimeoutStartSec=90
 ```
 
-Then `systemctl --user daemon-reload && systemctl --user restart openclaw-gateway.service`. On a headless Pi, also enable lingering once so the user service survives logout: `sudo loginctl enable-linger "$(whoami)"`.
+Then `systemctl --user daemon-reload && systemctl --user restart NexisClaw-gateway.service`. On a headless Pi, also enable lingering once so the user service survives logout: `sudo loginctl enable-linger "$(whoami)"`.
 
 ## Recommended model setup
 
@@ -190,19 +190,19 @@ Do not run local LLMs on a Pi — even small models are too slow to be useful. L
 
 ## ARM binary notes
 
-Most OpenClaw features work on ARM64 without changes (Node.js, Telegram, WhatsApp/Baileys, Chromium). The binaries that occasionally lack ARM builds are typically optional Go/Rust CLI tools shipped by skills. Verify a missing binary's release page for `linux-arm64` / `aarch64` artifacts before falling back to building from source.
+Most NexisClaw features work on ARM64 without changes (Node.js, Telegram, WhatsApp/Baileys, Chromium). The binaries that occasionally lack ARM builds are typically optional Go/Rust CLI tools shipped by skills. Verify a missing binary's release page for `linux-arm64` / `aarch64` artifacts before falling back to building from source.
 
 ## Persistence and backups
 
-OpenClaw state lives under:
+NexisClaw state lives under:
 
-- `~/.openclaw/` — `openclaw.json`, per-agent `auth-profiles.json`, channel/provider state, sessions.
-- `~/.openclaw/workspace/` — agent workspace (SOUL.md, memory, artifacts).
+- `~/.NexisClaw/` — `NexisClaw.json`, per-agent `auth-profiles.json`, channel/provider state, sessions.
+- `~/.NexisClaw/workspace/` — agent workspace (SOUL.md, memory, artifacts).
 
 These survive reboots. Take a portable snapshot with:
 
 ```bash
-openclaw backup create
+NexisClaw backup create
 ```
 
 If you keep these on an SSD, both performance and longevity improve over the SD card.
@@ -213,7 +213,7 @@ If you keep these on an SSD, both performance and longevity improve over the SD 
 
 **Slow performance** -- Use a USB SSD instead of an SD card. Check for CPU throttling with `vcgencmd get_throttled` (should return `0x0`).
 
-**Service will not start** -- Check logs with `journalctl --user -u openclaw-gateway.service --no-pager -n 100` and run `openclaw doctor --non-interactive`. If this is a headless Pi, also verify lingering is enabled: `sudo loginctl enable-linger "$(whoami)"`.
+**Service will not start** -- Check logs with `journalctl --user -u NexisClaw-gateway.service --no-pager -n 100` and run `NexisClaw doctor --non-interactive`. If this is a headless Pi, also verify lingering is enabled: `sudo loginctl enable-linger "$(whoami)"`.
 
 **ARM binary issues** -- If a skill fails with "exec format error", check whether the binary has an ARM64 build. Verify architecture with `uname -m` (should show `aarch64`).
 
@@ -223,7 +223,7 @@ If you keep these on an SSD, both performance and longevity improve over the SD 
 
 - [Channels](/channels) -- connect Telegram, WhatsApp, Discord, and more
 - [Gateway configuration](/gateway/configuration) -- all config options
-- [Updating](/install/updating) -- keep OpenClaw up to date
+- [Updating](/install/updating) -- keep NexisClaw up to date
 
 ## Related
 

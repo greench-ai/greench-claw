@@ -7,7 +7,7 @@ import { runPluginPayloadSmokeCheck } from "./plugin-payload-validation.js";
 describe("runPluginPayloadSmokeCheck", () => {
   let tmpRoot: string;
   beforeEach(async () => {
-    tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-payload-smoke-"));
+    tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-payload-smoke-"));
   });
   afterEach(async () => {
     await fs.rm(tmpRoot, { recursive: true, force: true });
@@ -32,7 +32,7 @@ describe("runPluginPayloadSmokeCheck", () => {
     const dir = path.join(tmpRoot, "discord");
     await writePackage(
       dir,
-      { name: "@openclaw/discord", main: "dist/index.js" },
+      { name: "@NexisClaw/discord", main: "dist/index.js" },
       "module.exports = {};",
     );
     const result = await runPluginPayloadSmokeCheck({
@@ -78,7 +78,7 @@ describe("runPluginPayloadSmokeCheck", () => {
 
   it("reports a failure when the main entry file is missing on disk", async () => {
     const dir = path.join(tmpRoot, "brave");
-    await writePackage(dir, { name: "@openclaw/brave", main: "dist/index.js" });
+    await writePackage(dir, { name: "@NexisClaw/brave", main: "dist/index.js" });
     const result = await runPluginPayloadSmokeCheck({
       records: { brave: { source: "npm", installPath: dir } },
       env: {},
@@ -93,9 +93,9 @@ describe("runPluginPayloadSmokeCheck", () => {
     ]);
   });
 
-  it("accepts a manifest with no main field (OpenClaw plugins commonly use `exports` or `openclaw.extensions`)", async () => {
+  it("accepts a manifest with no main field (NexisClaw plugins commonly use `exports` or `NexisClaw.extensions`)", async () => {
     const dir = path.join(tmpRoot, "matrix");
-    await writePackage(dir, { name: "@openclaw/plugin-matrix" });
+    await writePackage(dir, { name: "@NexisClaw/plugin-matrix" });
     const result = await runPluginPayloadSmokeCheck({
       records: { matrix: { source: "npm", installPath: dir } },
       env: {},
@@ -106,7 +106,7 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("accepts a manifest that declares only `exports` and no `main`", async () => {
     const dir = path.join(tmpRoot, "qa");
     await writePackage(dir, {
-      name: "@openclaw/qa-channel",
+      name: "@NexisClaw/qa-channel",
       exports: { ".": "./index.js", "./api.js": "./api.js" },
     });
     const result = await runPluginPayloadSmokeCheck({
@@ -116,11 +116,11 @@ describe("runPluginPayloadSmokeCheck", () => {
     expect(result.failures).toEqual([]);
   });
 
-  it("accepts a manifest that declares an existing `openclaw.extensions` entry and no `main`", async () => {
+  it("accepts a manifest that declares an existing `NexisClaw.extensions` entry and no `main`", async () => {
     const dir = path.join(tmpRoot, "brave");
     await writePackage(dir, {
-      name: "@openclaw/brave-plugin",
-      openclaw: { extensions: ["./index.js"] },
+      name: "@NexisClaw/brave-plugin",
+      NexisClaw: { extensions: ["./index.js"] },
     });
     await fs.writeFile(path.join(dir, "index.js"), "export default {};\n", "utf8");
     const result = await runPluginPayloadSmokeCheck({
@@ -133,8 +133,8 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("accepts a packaged TypeScript extension entry when compiled runtime output exists", async () => {
     const dir = path.join(tmpRoot, "codex");
     await writePackage(dir, {
-      name: "@openclaw/codex",
-      openclaw: { extensions: ["./index.ts"] },
+      name: "@NexisClaw/codex",
+      NexisClaw: { extensions: ["./index.ts"] },
     });
     await fs.mkdir(path.join(dir, "dist"), { recursive: true });
     await fs.writeFile(path.join(dir, "dist", "index.js"), "export default {};\n", "utf8");
@@ -145,11 +145,11 @@ describe("runPluginPayloadSmokeCheck", () => {
     expect(result.failures).toEqual([]);
   });
 
-  it("reports a failure when an `openclaw.extensions` entry file is missing", async () => {
+  it("reports a failure when an `NexisClaw.extensions` entry file is missing", async () => {
     const dir = path.join(tmpRoot, "brave");
     await writePackage(dir, {
-      name: "@openclaw/brave-plugin",
-      openclaw: { extensions: ["./dist/index.js"] },
+      name: "@NexisClaw/brave-plugin",
+      NexisClaw: { extensions: ["./dist/index.js"] },
     });
     const result = await runPluginPayloadSmokeCheck({
       records: { brave: { source: "npm", installPath: dir } },

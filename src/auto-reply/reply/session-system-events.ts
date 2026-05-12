@@ -1,5 +1,5 @@
 import { resolveUserTimezone } from "../../agents/date-time.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { buildChannelSummary } from "../../infra/channel-summary.js";
 import {
   formatUtcTimestamp,
@@ -29,7 +29,7 @@ const selectGenericSystemEvents = (events: readonly SystemEvent[]): SystemEvent[
 
 /** Drain queued system events, format as `System:` lines, return the block (or undefined). */
 export async function drainFormattedSystemEvents(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   sessionKey: string;
   isMainSession: boolean;
   isNewSession: boolean;
@@ -57,7 +57,7 @@ export async function drainFormattedSystemEvents(params: {
     return trimmed;
   };
 
-  const resolveSystemEventTimezone = (cfg: OpenClawConfig) => {
+  const resolveSystemEventTimezone = (cfg: NexisClawConfig) => {
     const raw = normalizeOptionalString(cfg.agents?.defaults?.envelopeTimezone);
     if (!raw) {
       return { mode: "local" as const };
@@ -79,7 +79,7 @@ export async function drainFormattedSystemEvents(params: {
     return explicit ? { mode: "iana" as const, timeZone: explicit } : { mode: "local" as const };
   };
 
-  const formatSystemEventTimestamp = (ts: number, cfg: OpenClawConfig) => {
+  const formatSystemEventTimestamp = (ts: number, cfg: NexisClawConfig) => {
     const date = new Date(ts);
     if (Number.isNaN(date.getTime())) {
       return "unknown-time";

@@ -1,6 +1,6 @@
 import type { AgentMessage } from "@earendil-works/pi-agent-core";
 import type { SessionManager } from "@earendil-works/pi-coding-agent";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { redactSensitiveText } from "../logging/redact.js";
 import { getGlobalHookRunner } from "../plugins/hook-runner-global.js";
 import {
@@ -17,7 +17,7 @@ type GuardedSessionManager = SessionManager & {
   clearPendingToolResults?: () => void;
 };
 
-function redactTranscriptText(value: string, cfg?: OpenClawConfig): string {
+function redactTranscriptText(value: string, cfg?: NexisClawConfig): string {
   if (cfg?.logging?.redactSensitive === "off") {
     return value;
   }
@@ -27,7 +27,7 @@ function redactTranscriptText(value: string, cfg?: OpenClawConfig): string {
   });
 }
 
-function redactTranscriptContentBlock(block: unknown, cfg?: OpenClawConfig): unknown {
+function redactTranscriptContentBlock(block: unknown, cfg?: NexisClawConfig): unknown {
   if (!block || typeof block !== "object" || Array.isArray(block)) {
     return block;
   }
@@ -54,7 +54,7 @@ function redactTranscriptContentBlock(block: unknown, cfg?: OpenClawConfig): unk
   return next ?? block;
 }
 
-function redactTranscriptContent(content: unknown, cfg?: OpenClawConfig): unknown {
+function redactTranscriptContent(content: unknown, cfg?: NexisClawConfig): unknown {
   if (typeof content === "string") {
     return redactTranscriptText(content, cfg);
   }
@@ -70,7 +70,7 @@ function redactTranscriptContent(content: unknown, cfg?: OpenClawConfig): unknow
   return changed ? redacted : content;
 }
 
-function redactTranscriptMessage(message: AgentMessage, cfg?: OpenClawConfig): AgentMessage {
+function redactTranscriptMessage(message: AgentMessage, cfg?: NexisClawConfig): AgentMessage {
   const source = message as unknown as Record<string, unknown>;
   const redactedContent = redactTranscriptContent(source.content, cfg);
   if (redactedContent === source.content) {
@@ -91,7 +91,7 @@ export function guardSessionManager(
   opts?: {
     agentId?: string;
     sessionKey?: string;
-    config?: OpenClawConfig;
+    config?: NexisClawConfig;
     contextWindowTokens?: number;
     inputProvenance?: InputProvenance;
     allowSyntheticToolResults?: boolean;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 import {
   collectGatewayHttpNoAuthFindings,
   collectGatewayHttpSessionKeyOverrideFindings,
@@ -26,7 +26,7 @@ describe("security audit gateway HTTP auth findings", () => {
           auth: { mode: "none" },
           http: { endpoints: { chatCompletions: { enabled: true } } },
         },
-      } satisfies OpenClawConfig,
+      } satisfies NexisClawConfig,
       expectedFinding: { checkId: "gateway.http.no_auth", severity: "warn" as const },
       detailIncludes: ["/tools/invoke", "/v1/chat/completions"],
       env: {} as NodeJS.ProcessEnv,
@@ -39,7 +39,7 @@ describe("security audit gateway HTTP auth findings", () => {
           auth: { mode: "none" },
           http: { endpoints: { responses: { enabled: true } } },
         },
-      } satisfies OpenClawConfig,
+      } satisfies NexisClawConfig,
       expectedFinding: { checkId: "gateway.http.no_auth", severity: "critical" as const },
       env: {} as NodeJS.ProcessEnv,
     },
@@ -56,7 +56,7 @@ describe("security audit gateway HTTP auth findings", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies NexisClawConfig,
       expectedNoFinding: "gateway.http.no_auth",
       env: {} as NodeJS.ProcessEnv,
     },
@@ -71,7 +71,7 @@ describe("security audit gateway HTTP auth findings", () => {
             },
           },
         },
-      } satisfies OpenClawConfig,
+      } satisfies NexisClawConfig,
       expectedFinding: {
         checkId: "gateway.http.session_key_override_enabled",
         severity: "info" as const,

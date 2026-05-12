@@ -1,6 +1,6 @@
 /**
  * @deprecated Legacy reply-pipeline subpath. New channel message code should
- * use `openclaw/plugin-sdk/channel-message`.
+ * use `NexisClaw/plugin-sdk/channel-message`.
  */
 
 export {

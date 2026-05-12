@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 import { resolveSimpleCompletionSelectionForAgent } from "./simple-completion-runtime.js";
 
 function requireSelection(selection: ReturnType<typeof resolveSimpleCompletionSelectionForAgent>) {
@@ -15,7 +15,7 @@ describe("resolveSimpleCompletionSelectionForAgent", () => {
       agents: {
         defaults: { model: "openrouter/anthropic/claude-sonnet-4-6" },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const selection = requireSelection(
       resolveSimpleCompletionSelectionForAgent({ cfg, agentId: "main" }),
@@ -30,7 +30,7 @@ describe("resolveSimpleCompletionSelectionForAgent", () => {
         defaults: { model: "anthropic/claude-opus-4-6" },
         list: [{ id: "ops", model: "openrouter/aurora-alpha" }],
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const selection = requireSelection(
       resolveSimpleCompletionSelectionForAgent({ cfg, agentId: "ops" }),
@@ -44,7 +44,7 @@ describe("resolveSimpleCompletionSelectionForAgent", () => {
       agents: {
         defaults: { model: "anthropic/claude-opus-4-6@work" },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const selection = requireSelection(
       resolveSimpleCompletionSelectionForAgent({ cfg, agentId: "main" }),
@@ -64,7 +64,7 @@ describe("resolveSimpleCompletionSelectionForAgent", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const selection = requireSelection(
       resolveSimpleCompletionSelectionForAgent({ cfg, agentId: "main" }),
@@ -75,7 +75,7 @@ describe("resolveSimpleCompletionSelectionForAgent", () => {
   });
 
   it("falls back to runtime default model when no explicit model is configured", () => {
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NexisClawConfig;
 
     const selection = requireSelection(
       resolveSimpleCompletionSelectionForAgent({ cfg, agentId: "main" }),
@@ -109,7 +109,7 @@ describe("resolveSimpleCompletionSelectionForAgent", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const selection = requireSelection(
       resolveSimpleCompletionSelectionForAgent({ cfg, agentId: "main" }),

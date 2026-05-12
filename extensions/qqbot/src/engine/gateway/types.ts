@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/core";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/core";
 import type { EngineLogger } from "../types.js";
 export type { EngineLogger };
 
@@ -211,7 +211,7 @@ interface GatewayGroupOptions {
 export interface CoreGatewayContext {
   account: GatewayAccount;
   abortSignal: AbortSignal;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   onReady?: (data: unknown) => void;
   /**
    * Invoked when a RESUMED event is received after reconnect.

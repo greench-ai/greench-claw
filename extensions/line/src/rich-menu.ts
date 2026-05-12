@@ -1,9 +1,9 @@
 import { messagingApi } from "@line/bot-sdk";
-import { getAgentScopedMediaLocalRoots } from "openclaw/plugin-sdk/agent-media-payload";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { mimeTypeFromFilePath } from "openclaw/plugin-sdk/media-mime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { loadWebMediaRaw } from "openclaw/plugin-sdk/web-media";
+import { getAgentScopedMediaLocalRoots } from "NexisClaw/plugin-sdk/agent-media-payload";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { mimeTypeFromFilePath } from "NexisClaw/plugin-sdk/media-mime";
+import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { loadWebMediaRaw } from "NexisClaw/plugin-sdk/web-media";
 import { resolveLineAccount } from "./accounts.js";
 import { datetimePickerAction, messageAction, postbackAction, uriAction } from "./actions.js";
 import { resolveLineChannelAccessToken } from "./channel-access-token.js";
@@ -38,7 +38,7 @@ export interface CreateRichMenuParams {
 }
 
 interface RichMenuOpts {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   channelAccessToken?: string;
   accountId?: string;
   verbose?: boolean;

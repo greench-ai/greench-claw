@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
@@ -28,8 +28,8 @@ export type PluginActivationState = PluginActivationStateLike;
 
 export type PluginActivationConfigSource = {
   plugins: NormalizedPluginsConfig;
-  rootConfig?: OpenClawConfig;
-} & PluginActivationConfigSourceLike<OpenClawConfig>;
+  rootConfig?: NexisClawConfig;
+} & PluginActivationConfigSourceLike<NexisClawConfig>;
 
 export type NormalizedPluginsConfig = SharedNormalizedPluginsConfig;
 
@@ -79,13 +79,13 @@ export function normalizePluginId(id: string): string {
 }
 
 export const normalizePluginsConfig = (
-  config?: OpenClawConfig["plugins"],
+  config?: NexisClawConfig["plugins"],
 ): NormalizedPluginsConfig => {
   return normalizePluginsConfigWithResolver(config, createScopedPluginIdNormalizer());
 };
 
 export function createPluginActivationSource(params: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   plugins?: NormalizedPluginsConfig;
 }): PluginActivationConfigSource {
   return {
@@ -94,22 +94,22 @@ export function createPluginActivationSource(params: {
   };
 }
 
-const hasExplicitMemorySlot = (plugins?: OpenClawConfig["plugins"]) =>
+const hasExplicitMemorySlot = (plugins?: NexisClawConfig["plugins"]) =>
   Boolean(plugins?.slots && Object.prototype.hasOwnProperty.call(plugins.slots, "memory"));
 
-const hasExplicitMemoryEntry = (plugins?: OpenClawConfig["plugins"]) =>
+const hasExplicitMemoryEntry = (plugins?: NexisClawConfig["plugins"]) =>
   Boolean(
     plugins?.entries &&
     Object.prototype.hasOwnProperty.call(plugins.entries, defaultSlotIdForKey("memory")),
   );
 
-export const hasExplicitPluginConfig = (plugins?: OpenClawConfig["plugins"]) =>
+export const hasExplicitPluginConfig = (plugins?: NexisClawConfig["plugins"]) =>
   hasExplicitPluginConfigShared(plugins);
 
 export function applyTestPluginDefaults(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   env: NodeJS.ProcessEnv = process.env,
-): OpenClawConfig {
+): NexisClawConfig {
   if (!env.VITEST) {
     return cfg;
   }
@@ -145,7 +145,7 @@ export function applyTestPluginDefaults(
 }
 
 export function isTestDefaultMemorySlotDisabled(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
   if (!env.VITEST) {
@@ -162,7 +162,7 @@ export function resolvePluginActivationState(params: {
   id: string;
   origin: PluginOrigin;
   config: NormalizedPluginsConfig;
-  rootConfig?: OpenClawConfig;
+  rootConfig?: NexisClawConfig;
   enabledByDefault?: boolean;
   activationSource?: PluginActivationConfigSource;
   autoEnabledReason?: string;
@@ -193,7 +193,7 @@ type EffectiveActivationParams = {
   id: string;
   origin: PluginOrigin;
   config: NormalizedPluginsConfig;
-  rootConfig?: OpenClawConfig;
+  rootConfig?: NexisClawConfig;
   enabledByDefault?: boolean;
   activationSource?: PluginActivationConfigSource;
 };

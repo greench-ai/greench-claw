@@ -2,29 +2,29 @@ import type {
   ChannelMessageActionAdapter,
   ChannelMessageActionName,
   ChannelMessageToolDiscovery,
-} from "openclaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createChannelMessageAdapterFromOutbound } from "openclaw/plugin-sdk/channel-message";
-import { createLoggedPairingApprovalNotifier } from "openclaw/plugin-sdk/channel-pairing";
-import { createRestrictSendersChannelSecurity } from "openclaw/plugin-sdk/channel-policy";
+} from "NexisClaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
+import { createChannelMessageAdapterFromOutbound } from "NexisClaw/plugin-sdk/channel-message";
+import { createLoggedPairingApprovalNotifier } from "NexisClaw/plugin-sdk/channel-pairing";
+import { createRestrictSendersChannelSecurity } from "NexisClaw/plugin-sdk/channel-policy";
 import {
   createAttachedChannelResultAdapter,
   type ChannelOutboundAdapter,
-} from "openclaw/plugin-sdk/channel-send-result";
-import { createChannelDirectoryAdapter } from "openclaw/plugin-sdk/directory-runtime";
-import { buildPassiveProbedChannelStatusSummary } from "openclaw/plugin-sdk/extension-shared";
+} from "NexisClaw/plugin-sdk/channel-send-result";
+import { createChannelDirectoryAdapter } from "NexisClaw/plugin-sdk/directory-runtime";
+import { buildPassiveProbedChannelStatusSummary } from "NexisClaw/plugin-sdk/extension-shared";
 import {
   normalizeMessagePresentation,
   presentationToInteractiveReply,
   renderMessagePresentationFallbackText,
-} from "openclaw/plugin-sdk/interactive-runtime";
-import { createLazyRuntimeModule } from "openclaw/plugin-sdk/lazy-runtime";
-import { isPrivateNetworkOptInEnabled } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "NexisClaw/plugin-sdk/interactive-runtime";
+import { createLazyRuntimeModule } from "NexisClaw/plugin-sdk/lazy-runtime";
+import { isPrivateNetworkOptInEnabled } from "NexisClaw/plugin-sdk/ssrf-runtime";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/status-helpers";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { mattermostApprovalAuth } from "./approval-auth.js";
 import {
   chunkTextForOutbound,
@@ -514,7 +514,7 @@ export const mattermostPlugin: ChannelPlugin<ResolvedMattermostAccount> = create
   pairing: {
     text: {
       idLabel: "mattermostUserId",
-      message: "OpenClaw: your access has been approved.",
+      message: "NexisClaw: your access has been approved.",
       normalizeAllowEntry: (entry) => normalizeAllowEntry(entry),
       notify: createLoggedPairingApprovalNotifier(
         ({ id }) => `[mattermost] User ${id} approved for pairing`,

@@ -4,15 +4,15 @@ import path from "node:path";
 import {
   clearRuntimeAuthProfileStoreSnapshots,
   ensureAuthProfileStore,
-} from "openclaw/plugin-sdk/agent-runtime";
+} from "NexisClaw/plugin-sdk/agent-runtime";
 import type {
-  OpenClawConfig,
-  OpenClawPluginApi,
+  NexisClawConfig,
+  NexisClawPluginApi,
   ProviderAuthResult,
   ProviderCatalogResult,
   UnifiedModelCatalogEntry,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "openclaw/plugin-sdk/plugin-test-api";
+} from "NexisClaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -31,12 +31,12 @@ import plugin from "./index.js";
 
 const tempDirs: string[] = [];
 type RegisteredMemoryEmbeddingProvider = Parameters<
-  OpenClawPluginApi["registerMemoryEmbeddingProvider"]
+  NexisClawPluginApi["registerMemoryEmbeddingProvider"]
 >[0];
 type GithubCopilotTestProvider = {
   auth: Array<{
     run: (ctx: unknown) => Promise<ProviderAuthResult | null>;
-    runNonInteractive: (ctx: unknown) => Promise<OpenClawConfig | null>;
+    runNonInteractive: (ctx: unknown) => Promise<NexisClawConfig | null>;
   }>;
   catalog: {
     run: (ctx: unknown) => Promise<ProviderCatalogResult>;
@@ -59,7 +59,7 @@ afterAll(() => {
 });
 
 async function createAgentDir() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-github-copilot-test-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-github-copilot-test-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -80,9 +80,9 @@ function requireFirstMockArg<T>(
 }
 
 function registerProviderAndCatalogWithPluginConfig(pluginConfig: Record<string, unknown>) {
-  const registerProviderMock = vi.fn<OpenClawPluginApi["registerProvider"]>();
+  const registerProviderMock = vi.fn<NexisClawPluginApi["registerProvider"]>();
   const registerModelCatalogProviderMock =
-    vi.fn<OpenClawPluginApi["registerModelCatalogProvider"]>();
+    vi.fn<NexisClawPluginApi["registerModelCatalogProvider"]>();
 
   plugin.register(
     createTestPluginApi({
@@ -118,7 +118,7 @@ function registerProviderWithPluginConfig(pluginConfig: Record<string, unknown>)
 describe("github-copilot plugin", () => {
   it("registers embedding provider", () => {
     const registerMemoryEmbeddingProviderMock =
-      vi.fn<OpenClawPluginApi["registerMemoryEmbeddingProvider"]>();
+      vi.fn<NexisClawPluginApi["registerMemoryEmbeddingProvider"]>();
 
     plugin.register(
       createTestPluginApi({

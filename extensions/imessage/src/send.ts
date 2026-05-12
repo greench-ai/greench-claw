@@ -3,14 +3,14 @@ import {
   type MessageReceipt,
   type MessageReceiptPartKind,
   type MessageReceiptSourceResult,
-} from "openclaw/plugin-sdk/channel-message";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { kindFromMime } from "openclaw/plugin-sdk/media-runtime";
-import { resolveOutboundAttachmentFromUrl } from "openclaw/plugin-sdk/media-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { convertMarkdownTables } from "openclaw/plugin-sdk/text-chunking";
-import { stripInlineDirectiveTagsForDelivery } from "openclaw/plugin-sdk/text-chunking";
+} from "NexisClaw/plugin-sdk/channel-message";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveMarkdownTableMode } from "NexisClaw/plugin-sdk/markdown-table-runtime";
+import { kindFromMime } from "NexisClaw/plugin-sdk/media-runtime";
+import { resolveOutboundAttachmentFromUrl } from "NexisClaw/plugin-sdk/media-runtime";
+import { requireRuntimeConfig } from "NexisClaw/plugin-sdk/plugin-config-runtime";
+import { convertMarkdownTables } from "NexisClaw/plugin-sdk/text-chunking";
+import { stripInlineDirectiveTagsForDelivery } from "NexisClaw/plugin-sdk/text-chunking";
 import { resolveIMessageAccount, type ResolvedIMessageAccount } from "./accounts.js";
 import { createIMessageRpcClient, type IMessageRpcClient } from "./client.js";
 import { extractMarkdownFormatRuns } from "./markdown-format.js";
@@ -32,7 +32,7 @@ type IMessageSendOpts = {
   timeoutMs?: number;
   chatId?: number;
   client?: IMessageRpcClient;
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   account?: ResolvedIMessageAccount;
   resolveAttachmentImpl?: (
     mediaUrl: string,

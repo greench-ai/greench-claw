@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import type { CommandsPort } from "../adapter/commands.port.js";
 import { initCommands } from "./slash-commands-impl.js";
 
@@ -12,8 +12,8 @@ export type WrittenQQBotConfig = {
 };
 
 export function installCommandRuntime(
-  currentConfig: OpenClawConfig,
-  writes: OpenClawConfig[],
+  currentConfig: NexisClawConfig,
+  writes: NexisClawConfig[],
 ): void {
   const replaceConfigFile: ReplaceConfigFile = async (params) => {
     writes.push(params.nextConfig);
@@ -33,7 +33,7 @@ export function installCommandRuntime(
 }
 
 export function getWrittenQQBotConfig(
-  write: OpenClawConfig | undefined,
+  write: NexisClawConfig | undefined,
 ): WrittenQQBotConfig | undefined {
   return write?.channels?.qqbot as WrittenQQBotConfig | undefined;
 }

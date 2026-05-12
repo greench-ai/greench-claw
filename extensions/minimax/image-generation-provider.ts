@@ -1,11 +1,11 @@
-import type { ImageGenerationProvider } from "openclaw/plugin-sdk/image-generation";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+import type { ImageGenerationProvider } from "NexisClaw/plugin-sdk/image-generation";
+import { isProviderApiKeyConfigured } from "NexisClaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   postJsonRequest,
   resolveProviderHttpRequestConfig,
-} from "openclaw/plugin-sdk/provider-http";
+} from "NexisClaw/plugin-sdk/provider-http";
 
 const DEFAULT_MINIMAX_IMAGE_BASE_URL = "https://api.minimax.io";
 const CN_MINIMAX_IMAGE_BASE_URL = "https://api.minimaxi.com";

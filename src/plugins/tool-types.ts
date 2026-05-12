@@ -1,22 +1,22 @@
 import type { ToolFsPolicy } from "../agents/tool-fs-policy.types.js";
 import type { AnyAgentTool } from "../agents/tools/common.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type { HookEntry } from "../hooks/types.js";
 import type { DeliveryContext } from "../utils/delivery-context.types.js";
 
-export type OpenClawPluginActiveModelContext = {
+export type NexisClawPluginActiveModelContext = {
   provider?: string;
   modelId?: string;
   modelRef?: string;
 };
 
 /** Trusted execution context passed to plugin-owned agent tool factories. */
-export type OpenClawPluginToolContext = {
-  config?: OpenClawConfig;
+export type NexisClawPluginToolContext = {
+  config?: NexisClawConfig;
   /** Active runtime-resolved config snapshot when one is available. */
-  runtimeConfig?: OpenClawConfig;
+  runtimeConfig?: NexisClawConfig;
   /** Returns the latest runtime-resolved config snapshot for long-lived tool definitions. */
-  getRuntimeConfig?: () => OpenClawConfig | undefined;
+  getRuntimeConfig?: () => NexisClawConfig | undefined;
   /** Effective filesystem policy for the active tool run. */
   fsPolicy?: ToolFsPolicy;
   workspaceDir?: string;
@@ -28,9 +28,9 @@ export type OpenClawPluginToolContext = {
   /**
    * Runtime-supplied active model metadata for informational use, diagnostics,
    * and plugin-owned policy decisions. This is not a security boundary against
-   * the local operator, installed plugin code, or a modified OpenClaw runtime.
+   * the local operator, installed plugin code, or a modified NexisClaw runtime.
    */
-  activeModel?: OpenClawPluginActiveModelContext;
+  activeModel?: NexisClawPluginActiveModelContext;
   browser?: {
     sandboxBridgeUrl?: string;
     allowHostControl?: boolean;
@@ -50,17 +50,17 @@ export type OpenClawPluginToolContext = {
   sandboxed?: boolean;
 };
 
-export type OpenClawPluginToolFactory = (
-  ctx: OpenClawPluginToolContext,
+export type NexisClawPluginToolFactory = (
+  ctx: NexisClawPluginToolContext,
 ) => AnyAgentTool | AnyAgentTool[] | null | undefined;
 
-export type OpenClawPluginToolOptions = {
+export type NexisClawPluginToolOptions = {
   name?: string;
   names?: string[];
   optional?: boolean;
 };
 
-export type OpenClawPluginHookOptions = {
+export type NexisClawPluginHookOptions = {
   entry?: HookEntry;
   name?: string;
   description?: string;

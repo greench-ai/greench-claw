@@ -5,7 +5,7 @@ import {
   resolveSessionFilePath,
   resolveSessionFilePathOptions,
 } from "../../config/sessions/paths.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { isPathInside } from "../../infra/path-guards.js";
 import { resolveSessionAgentIds } from "../agent-scope.js";
 import {
@@ -95,7 +95,7 @@ export function buildCliSessionHistoryPrompt(params: {
     .trim();
   const renderedHistory =
     renderedHistoryRaw.length > maxHistoryChars
-      ? `${renderedHistoryRaw.slice(0, maxHistoryChars).trimEnd()}\n[OpenClaw reseed history truncated]`
+      ? `${renderedHistoryRaw.slice(0, maxHistoryChars).trimEnd()}\n[NexisClaw reseed history truncated]`
       : renderedHistoryRaw;
 
   if (!renderedHistory) {
@@ -103,7 +103,7 @@ export function buildCliSessionHistoryPrompt(params: {
   }
 
   return [
-    "Continue this conversation using the OpenClaw transcript below as prior session history.",
+    "Continue this conversation using the NexisClaw transcript below as prior session history.",
     "Treat it as authoritative context for this fresh CLI session.",
     "",
     "<conversation_history>",
@@ -129,7 +129,7 @@ function resolveSafeCliSessionFile(params: {
   sessionFile: string;
   sessionKey?: string;
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
 }): { sessionFile: string; sessionsDir: string } {
   const { defaultAgentId, sessionAgentId } = resolveSessionAgentIds({
     sessionKey: params.sessionKey,
@@ -156,7 +156,7 @@ async function loadCliSessionEntries(params: {
   sessionFile: string;
   sessionKey?: string;
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
 }): Promise<unknown[]> {
   try {
     const { sessionFile, sessionsDir } = resolveSafeCliSessionFile(params);
@@ -190,7 +190,7 @@ export async function loadCliSessionHistoryMessages(params: {
   sessionFile: string;
   sessionKey?: string;
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
 }): Promise<unknown[]> {
   const history = (await loadCliSessionEntries(params)).flatMap((entry) => {
     const candidate = entry as HistoryEntry;
@@ -204,7 +204,7 @@ export async function loadCliSessionReseedMessages(params: {
   sessionFile: string;
   sessionKey?: string;
   agentId?: string;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   allowRawTranscriptReseed?: boolean;
   rawTranscriptReseedReason?: RawTranscriptReseedReason;
 }): Promise<unknown[]> {

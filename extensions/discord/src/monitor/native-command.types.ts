@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { CommandArgValues } from "openclaw/plugin-sdk/native-command-registry";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { CommandArgValues } from "NexisClaw/plugin-sdk/native-command-registry";
 
-export type DiscordConfig = NonNullable<OpenClawConfig["channels"]>["discord"];
+export type DiscordConfig = NonNullable<NexisClawConfig["channels"]>["discord"];
 
 export type DiscordCommandArgs = {
   raw?: string;

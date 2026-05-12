@@ -11,45 +11,45 @@ export type {
   ChannelOutboundAdapter,
   ChannelPlugin,
   HistoryEntry,
-  OpenClawConfig,
-  OpenClawPluginApi,
+  NexisClawConfig,
+  NexisClawPluginApi,
   OutboundIdentity,
   PluginRuntime,
   ReplyPayload,
-} from "openclaw/plugin-sdk/core";
-export type { OpenClawConfig as ClawdbotConfig } from "openclaw/plugin-sdk/core";
-export type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-export type { GroupToolPolicyConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "NexisClaw/plugin-sdk/core";
+export type { NexisClawConfig as ClawdbotConfig } from "NexisClaw/plugin-sdk/core";
+export type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
+export type { GroupToolPolicyConfig } from "NexisClaw/plugin-sdk/config-contracts";
 export {
   DEFAULT_ACCOUNT_ID,
   buildChannelConfigSchema,
   createActionGate,
   createDedupeCache,
-} from "openclaw/plugin-sdk/core";
+} from "NexisClaw/plugin-sdk/core";
 export {
   PAIRING_APPROVED_MESSAGE,
   buildProbeChannelStatusSummary,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/channel-status";
-export { buildAgentMediaPayload } from "openclaw/plugin-sdk/agent-media-payload";
-export { createChannelPairingController } from "openclaw/plugin-sdk/channel-pairing";
-export { createReplyPrefixContext } from "openclaw/plugin-sdk/channel-message";
+} from "NexisClaw/plugin-sdk/channel-status";
+export { buildAgentMediaPayload } from "NexisClaw/plugin-sdk/agent-media-payload";
+export { createChannelPairingController } from "NexisClaw/plugin-sdk/channel-pairing";
+export { createReplyPrefixContext } from "NexisClaw/plugin-sdk/channel-message";
 export {
   evaluateSupplementalContextVisibility,
   filterSupplementalContextItems,
   resolveChannelContextVisibilityMode,
-} from "openclaw/plugin-sdk/context-visibility-runtime";
+} from "NexisClaw/plugin-sdk/context-visibility-runtime";
 export {
   loadSessionStore,
   resolveSessionStoreEntry,
-} from "openclaw/plugin-sdk/session-store-runtime";
-export { readJsonFileWithFallback } from "openclaw/plugin-sdk/json-store";
-export { createPersistentDedupe } from "openclaw/plugin-sdk/persistent-dedupe";
-export { normalizeAgentId } from "openclaw/plugin-sdk/routing";
-export { chunkTextForOutbound } from "openclaw/plugin-sdk/text-chunking";
+} from "NexisClaw/plugin-sdk/session-store-runtime";
+export { readJsonFileWithFallback } from "NexisClaw/plugin-sdk/json-store";
+export { createPersistentDedupe } from "NexisClaw/plugin-sdk/persistent-dedupe";
+export { normalizeAgentId } from "NexisClaw/plugin-sdk/routing";
+export { chunkTextForOutbound } from "NexisClaw/plugin-sdk/text-chunking";
 export {
   isRequestBodyLimitError,
   readRequestBodyWithLimit,
   requestBodyErrorToText,
-} from "openclaw/plugin-sdk/webhook-ingress";
+} from "NexisClaw/plugin-sdk/webhook-ingress";
 export { setFeishuRuntime } from "./src/runtime.js";

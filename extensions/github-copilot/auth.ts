@@ -1,15 +1,15 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   coerceSecretRef,
   ensureAuthProfileStore,
   listProfilesForProvider,
-} from "openclaw/plugin-sdk/provider-auth";
-import { resolveRequiredConfiguredSecretRefInputString } from "openclaw/plugin-sdk/secret-input-runtime";
+} from "NexisClaw/plugin-sdk/provider-auth";
+import { resolveRequiredConfiguredSecretRefInputString } from "NexisClaw/plugin-sdk/secret-input-runtime";
 import { PROVIDER_ID } from "./models.js";
 
 export async function resolveFirstGithubToken(params: {
   agentDir?: string;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   env: NodeJS.ProcessEnv;
 }): Promise<{
   githubToken: string;

@@ -7,7 +7,7 @@ import { commitmentsListCommand } from "./commitments.js";
 const mocks = vi.hoisted(() => ({
   listCommitments: vi.fn(),
   markCommitmentsStatus: vi.fn(),
-  resolveCommitmentStorePath: vi.fn(() => "/tmp/openclaw-commitments.json"),
+  resolveCommitmentStorePath: vi.fn(() => "/tmp/NexisClaw-commitments.json"),
   getRuntimeConfig: vi.fn(() => ({
     commitments: {
       enabled: true,
@@ -77,7 +77,7 @@ describe("commitments command", () => {
 
     expect(logs.map(stripAnsi)).toEqual([
       "Commitments: 1",
-      "Store: /tmp/openclaw-commitments.json",
+      "Store: /tmp/NexisClaw-commitments.json",
       "Status filter: pending",
       "ID               Status     Kind             Due                      Scope                        Suggested text",
       "cm_escape        pending    event_check_in   2026-04-30T17:00:00.000Z main/telegram/+15551234567   How did it go?\\nspoofed",

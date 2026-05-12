@@ -206,8 +206,8 @@ describe("qa scenario catalog", () => {
     expect(scenario.sourcePath).toBe("qa/scenarios/plugins/kitchen-sink-live-openai.md");
     expect(config?.requiredProviderMode).toBe("live-frontier");
     expect(config?.requiredProvider).toBe("openai");
-    expect(config?.pluginSpec).toBe("npm:@openclaw/kitchen-sink@latest");
-    expect(config?.pluginId).toBe("openclaw-kitchen-sink-fixture");
+    expect(config?.pluginSpec).toBe("npm:@NexisClaw/kitchen-sink@latest");
+    expect(config?.pluginId).toBe("NexisClaw-kitchen-sink-fixture");
     expect(config?.pluginPersonality).toBe("conformance");
     expect(config?.adversarialPersonality).toBe("adversarial");
     expect(config?.expectedSurfaceIds?.webSearchProviderIds).toContain(

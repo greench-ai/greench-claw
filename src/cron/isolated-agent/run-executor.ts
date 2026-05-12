@@ -3,7 +3,7 @@ import type { SkillSnapshot } from "../../agents/skills.js";
 import { normalizeToolList } from "../../agents/tool-policy.js";
 import type { ThinkLevel, VerboseLevel } from "../../auto-reply/thinking.js";
 import type { AgentDefaultsConfig } from "../../config/types.agent-defaults.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 import type { CronAgentExecutionPhaseUpdate, CronJob } from "../types.js";
 import {
@@ -70,8 +70,8 @@ export type CronExecutionResult = {
 };
 
 export function createCronPromptExecutor(params: {
-  cfg: OpenClawConfig;
-  cfgWithAgentDefaults: OpenClawConfig;
+  cfg: NexisClawConfig;
+  cfgWithAgentDefaults: NexisClawConfig;
   job: CronJob;
   agentId: string;
   agentDir: string;
@@ -277,8 +277,8 @@ export function createCronPromptExecutor(params: {
 }
 
 export async function executeCronRun(params: {
-  cfg: OpenClawConfig;
-  cfgWithAgentDefaults: OpenClawConfig;
+  cfg: NexisClawConfig;
+  cfgWithAgentDefaults: NexisClawConfig;
   job: CronJob;
   agentId: string;
   agentDir: string;

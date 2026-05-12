@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { emptyPluginConfigSchema } from "../plugins/config-schema.js";
 import type {
   AnyAgentTool,
@@ -11,22 +11,22 @@ import type {
   MigrationProviderContext,
   MigrationProviderPlugin,
   MigrationSummary,
-  OpenClawPluginApi,
-  OpenClawPluginCommandDefinition,
-  OpenClawPluginConfigSchema,
-  OpenClawPluginDefinition,
-  OpenClawPluginHttpRouteHandler,
-  OpenClawPluginNodeHostCommand,
-  OpenClawPluginNodeInvokePolicy,
-  OpenClawPluginNodeInvokePolicyContext,
-  OpenClawPluginNodeInvokePolicyResult,
-  OpenClawPluginReloadRegistration,
-  OpenClawPluginSecurityAuditCollector,
-  OpenClawPluginSecurityAuditContext,
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
-  OpenClawPluginToolContext,
-  OpenClawPluginToolFactory,
+  NexisClawPluginApi,
+  NexisClawPluginCommandDefinition,
+  NexisClawPluginConfigSchema,
+  NexisClawPluginDefinition,
+  NexisClawPluginHttpRouteHandler,
+  NexisClawPluginNodeHostCommand,
+  NexisClawPluginNodeInvokePolicy,
+  NexisClawPluginNodeInvokePolicyContext,
+  NexisClawPluginNodeInvokePolicyResult,
+  NexisClawPluginReloadRegistration,
+  NexisClawPluginSecurityAuditCollector,
+  NexisClawPluginSecurityAuditContext,
+  NexisClawPluginService,
+  NexisClawPluginServiceContext,
+  NexisClawPluginToolContext,
+  NexisClawPluginToolFactory,
   PluginLogger,
   ProviderAugmentModelCatalogContext,
   ProviderAuthContext,
@@ -80,8 +80,8 @@ import type {
   ProviderWrapStreamFnContext,
   UnifiedModelCatalogProviderContext,
   UnifiedModelCatalogProviderPlugin,
-  OpenClawGatewayDiscoveryAdvertiseContext,
-  OpenClawGatewayDiscoveryService,
+  NexisClawGatewayDiscoveryAdvertiseContext,
+  NexisClawGatewayDiscoveryService,
   SpeechProviderPlugin,
   PluginCommandContext,
   PluginCommandResult,
@@ -128,16 +128,16 @@ export type {
   MigrationProviderContext,
   MigrationProviderPlugin,
   MigrationSummary,
-  OpenClawPluginApi,
-  OpenClawPluginNodeHostCommand,
-  OpenClawPluginNodeInvokePolicy,
-  OpenClawPluginNodeInvokePolicyContext,
-  OpenClawPluginNodeInvokePolicyResult,
-  OpenClawPluginReloadRegistration,
-  OpenClawPluginSecurityAuditCollector,
-  OpenClawPluginSecurityAuditContext,
-  OpenClawPluginToolContext,
-  OpenClawPluginToolFactory,
+  NexisClawPluginApi,
+  NexisClawPluginNodeHostCommand,
+  NexisClawPluginNodeInvokePolicy,
+  NexisClawPluginNodeInvokePolicyContext,
+  NexisClawPluginNodeInvokePolicyResult,
+  NexisClawPluginReloadRegistration,
+  NexisClawPluginSecurityAuditCollector,
+  NexisClawPluginSecurityAuditContext,
+  NexisClawPluginToolContext,
+  NexisClawPluginToolFactory,
   PluginCommandContext,
   PluginCommandResult,
   PluginAgentEventEmitParams,
@@ -169,8 +169,8 @@ export type {
   PluginSessionExtensionProjection,
   PluginToolMetadataRegistration,
   PluginTrustedToolPolicyRegistration,
-  OpenClawPluginConfigSchema,
-  OpenClawPluginHttpRouteHandler,
+  NexisClawPluginConfigSchema,
+  NexisClawPluginHttpRouteHandler,
   ProviderDiscoveryContext,
   ProviderCatalogContext,
   ProviderCatalogResult,
@@ -219,17 +219,17 @@ export type {
   ProviderWrapStreamFnContext,
   UnifiedModelCatalogProviderContext,
   UnifiedModelCatalogProviderPlugin,
-  OpenClawGatewayDiscoveryAdvertiseContext,
-  OpenClawGatewayDiscoveryService,
-  OpenClawPluginService,
-  OpenClawPluginServiceContext,
+  NexisClawGatewayDiscoveryAdvertiseContext,
+  NexisClawGatewayDiscoveryService,
+  NexisClawPluginService,
+  NexisClawPluginServiceContext,
   ProviderAuthContext,
   ProviderAuthDoctorHintContext,
   ProviderAuthMethodNonInteractiveContext,
   ProviderAuthMethod,
   ProviderAuthResult,
-  OpenClawPluginCommandDefinition,
-  OpenClawPluginDefinition,
+  NexisClawPluginCommandDefinition,
+  NexisClawPluginDefinition,
   PluginLogger,
 };
 export type {
@@ -249,7 +249,7 @@ export type {
   UnifiedModelCatalogKind,
   UnifiedModelCatalogSource,
 } from "../model-catalog/types.js";
-export type { OpenClawConfig };
+export type { NexisClawConfig };
 
 export {
   buildJsonPluginConfigSchema,
@@ -263,27 +263,27 @@ type DefinePluginEntryOptions = {
   name: string;
   description: string;
   /**
-   * @deprecated Declare exclusive plugin kind in `openclaw.plugin.json` via
+   * @deprecated Declare exclusive plugin kind in `NexisClaw.plugin.json` via
    * manifest `kind`. Runtime-entry `kind` remains only as a compatibility
    * fallback for older plugins.
    */
-  kind?: OpenClawPluginDefinition["kind"];
-  configSchema?: OpenClawPluginConfigSchema | (() => OpenClawPluginConfigSchema);
-  reload?: OpenClawPluginDefinition["reload"];
-  nodeHostCommands?: OpenClawPluginDefinition["nodeHostCommands"];
-  securityAuditCollectors?: OpenClawPluginDefinition["securityAuditCollectors"];
-  register: (api: OpenClawPluginApi) => void;
+  kind?: NexisClawPluginDefinition["kind"];
+  configSchema?: NexisClawPluginConfigSchema | (() => NexisClawPluginConfigSchema);
+  reload?: NexisClawPluginDefinition["reload"];
+  nodeHostCommands?: NexisClawPluginDefinition["nodeHostCommands"];
+  securityAuditCollectors?: NexisClawPluginDefinition["securityAuditCollectors"];
+  register: (api: NexisClawPluginApi) => void;
 };
 
-/** Normalized object shape that OpenClaw loads from a plugin entry module. */
+/** Normalized object shape that NexisClaw loads from a plugin entry module. */
 type DefinedPluginEntry = {
   id: string;
   name: string;
   description: string;
-  configSchema: OpenClawPluginConfigSchema;
-  register: NonNullable<OpenClawPluginDefinition["register"]>;
+  configSchema: NexisClawPluginConfigSchema;
+  register: NonNullable<NexisClawPluginDefinition["register"]>;
 } & Pick<
-  OpenClawPluginDefinition,
+  NexisClawPluginDefinition,
   "kind" | "reload" | "nodeHostCommands" | "securityAuditCollectors"
 >;
 
@@ -292,7 +292,7 @@ type DefinedPluginEntry = {
  *
  * Use this for provider, tool, command, service, memory, and context-engine
  * plugins. Channel plugins should use `defineChannelPluginEntry(...)` from
- * `openclaw/plugin-sdk/core` so they inherit the channel capability wiring.
+ * `NexisClaw/plugin-sdk/core` so they inherit the channel capability wiring.
  */
 export function definePluginEntry({
   id,

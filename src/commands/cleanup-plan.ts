@@ -4,11 +4,11 @@ import {
   resolveOAuthDir,
   resolveStateDir,
 } from "../config/config.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { buildCleanupPlan } from "./cleanup-utils.js";
 
 export function resolveCleanupPlanFromDisk(): {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   stateDir: string;
   configPath: string;
   oauthDir: string;

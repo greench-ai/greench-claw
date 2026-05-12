@@ -1,13 +1,13 @@
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
+import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
 import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
-} from "openclaw/plugin-sdk/channel-config-helpers";
-import { createRestrictSendersChannelSecurity } from "openclaw/plugin-sdk/channel-policy";
-import { createChannelPluginBase, getChatChannelMeta } from "openclaw/plugin-sdk/core";
-import type { ChannelPlugin } from "openclaw/plugin-sdk/core";
-import { normalizeStringifiedOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { normalizeE164 } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "NexisClaw/plugin-sdk/channel-config-helpers";
+import { createRestrictSendersChannelSecurity } from "NexisClaw/plugin-sdk/channel-policy";
+import { createChannelPluginBase, getChatChannelMeta } from "NexisClaw/plugin-sdk/core";
+import type { ChannelPlugin } from "NexisClaw/plugin-sdk/core";
+import { normalizeStringifiedOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeE164 } from "NexisClaw/plugin-sdk/text-utility-runtime";
 import {
   listSignalAccountIds,
   resolveDefaultSignalAccountId,

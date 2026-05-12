@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 import { noteMacLaunchctlGatewayEnvOverrides } from "./doctor-platform-notes.js";
 
 function requireNoteCall(noteFn: { mock: { calls: unknown[][] } }, index = 0): unknown[] {
@@ -14,7 +14,7 @@ describe("noteMacLaunchctlGatewayEnvOverrides", () => {
   it("prints clear unsetenv instructions for token override", async () => {
     const noteFn = vi.fn();
     const getenv = vi.fn(async (name: string) =>
-      name === "OPENCLAW_GATEWAY_TOKEN" ? "launchctl-token" : undefined,
+      name === "NEXISCLAW_GATEWAY_TOKEN" ? "launchctl-token" : undefined,
     );
     const cfg = {
       gateway: {
@@ -22,7 +22,7 @@ describe("noteMacLaunchctlGatewayEnvOverrides", () => {
           token: "config-token",
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     await noteMacLaunchctlGatewayEnvOverrides(cfg, { platform: "darwin", getenv, noteFn });
 
@@ -33,15 +33,15 @@ describe("noteMacLaunchctlGatewayEnvOverrides", () => {
     expect(title).toBe("Gateway (macOS)");
     expect(message).toContain("Host-wide launchctl gateway auth overrides detected");
     expect(message).toContain("Current managed Gateway installs do not need these values");
-    expect(message).toContain("OPENCLAW_GATEWAY_TOKEN");
-    expect(message).toContain("launchctl unsetenv OPENCLAW_GATEWAY_TOKEN");
-    expect(message).not.toContain("OPENCLAW_GATEWAY_PASSWORD");
+    expect(message).toContain("NEXISCLAW_GATEWAY_TOKEN");
+    expect(message).toContain("launchctl unsetenv NEXISCLAW_GATEWAY_TOKEN");
+    expect(message).not.toContain("NEXISCLAW_GATEWAY_PASSWORD");
   });
 
   it("does nothing when config has no gateway credentials", async () => {
     const noteFn = vi.fn();
     const getenv = vi.fn(async () => "launchctl-token");
-    const cfg = {} as OpenClawConfig;
+    const cfg = {} as NexisClawConfig;
 
     await noteMacLaunchctlGatewayEnvOverrides(cfg, { platform: "darwin", getenv, noteFn });
 
@@ -52,12 +52,12 @@ describe("noteMacLaunchctlGatewayEnvOverrides", () => {
   it("treats SecretRef-backed credentials as configured", async () => {
     const noteFn = vi.fn();
     const getenv = vi.fn(async (name: string) =>
-      name === "OPENCLAW_GATEWAY_PASSWORD" ? "launchctl-password" : undefined,
+      name === "NEXISCLAW_GATEWAY_PASSWORD" ? "launchctl-password" : undefined,
     );
     const cfg = {
       gateway: {
         auth: {
-          password: { source: "env", provider: "default", id: "OPENCLAW_GATEWAY_PASSWORD" },
+          password: { source: "env", provider: "default", id: "NEXISCLAW_GATEWAY_PASSWORD" },
         },
       },
       secrets: {
@@ -65,13 +65,13 @@ describe("noteMacLaunchctlGatewayEnvOverrides", () => {
           default: { source: "env" },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     await noteMacLaunchctlGatewayEnvOverrides(cfg, { platform: "darwin", getenv, noteFn });
 
     expect(noteFn).toHaveBeenCalledTimes(1);
     const [message] = requireNoteCall(noteFn);
-    expect(message).toContain("OPENCLAW_GATEWAY_PASSWORD");
+    expect(message).toContain("NEXISCLAW_GATEWAY_PASSWORD");
   });
 
   it("does nothing on non-darwin platforms", async () => {
@@ -83,7 +83,7 @@ describe("noteMacLaunchctlGatewayEnvOverrides", () => {
           token: "config-token",
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     await noteMacLaunchctlGatewayEnvOverrides(cfg, { platform: "linux", getenv, noteFn });
 

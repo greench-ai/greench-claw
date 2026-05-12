@@ -28,11 +28,11 @@ Use this page for day-1 startup and day-2 operations of the Gateway service.
   <Step title="Start the Gateway">
 
 ```bash
-openclaw gateway --port 18789
+NexisClaw gateway --port 18789
 # debug/trace mirrored to stdio
-openclaw gateway --port 18789 --verbose
+NexisClaw gateway --port 18789 --verbose
 # force-kill listener on selected port, then start
-openclaw gateway --force
+NexisClaw gateway --force
 ```
 
   </Step>
@@ -40,19 +40,19 @@ openclaw gateway --force
   <Step title="Verify service health">
 
 ```bash
-openclaw gateway status
-openclaw status
-openclaw logs --follow
+NexisClaw gateway status
+NexisClaw status
+NexisClaw logs --follow
 ```
 
-Healthy baseline: `Runtime: running`, `Connectivity probe: ok`, and `Capability: ...` that matches what you expect. Use `openclaw gateway status --require-rpc` when you need read-scope RPC proof, not just reachability.
+Healthy baseline: `Runtime: running`, `Connectivity probe: ok`, and `Capability: ...` that matches what you expect. Use `NexisClaw gateway status --require-rpc` when you need read-scope RPC proof, not just reachability.
 
   </Step>
 
   <Step title="Validate channel readiness">
 
 ```bash
-openclaw channels status --probe
+NexisClaw channels status --probe
 ```
 
 With a reachable gateway this runs live per-account channel probes and optional audits.
@@ -63,7 +63,7 @@ of live probe output.
 </Steps>
 
 <Note>
-Gateway config reload watches the active config file path (resolved from profile/state defaults, or `OPENCLAW_CONFIG_PATH` when set).
+Gateway config reload watches the active config file path (resolved from profile/state defaults, or `NEXISCLAW_CONFIG_PATH` when set).
 Default mode is `gateway.reload.mode="hybrid"`.
 After the first successful load, the running process serves the active in-memory config snapshot; successful reload swaps that snapshot atomically.
 </Note>
@@ -78,12 +78,12 @@ After the first successful load, the running process serves the active in-memory
 - Default bind mode: `loopback`.
 - Auth is required by default. Shared-secret setups use
   `gateway.auth.token` / `gateway.auth.password` (or
-  `OPENCLAW_GATEWAY_TOKEN` / `OPENCLAW_GATEWAY_PASSWORD`), and non-loopback
+  `NEXISCLAW_GATEWAY_TOKEN` / `NEXISCLAW_GATEWAY_PASSWORD`), and non-loopback
   reverse-proxy setups can use `gateway.auth.mode: "trusted-proxy"`.
 
 ## OpenAI-compatible endpoints
 
-OpenClaw's highest-leverage compatibility surface is now:
+NexisClaw's highest-leverage compatibility surface is now:
 
 - `GET /v1/models`
 - `GET /v1/models/{id}`
@@ -99,9 +99,9 @@ Why this set matters:
 
 Planning note:
 
-- `/v1/models` is agent-first: it returns `openclaw`, `openclaw/default`, and `openclaw/<agentId>`.
-- `openclaw/default` is the stable alias that always maps to the configured default agent.
-- Use `x-openclaw-model` when you want a backend provider/model override; otherwise the selected agent's normal model and embedding setup stays in control.
+- `/v1/models` is agent-first: it returns `NexisClaw`, `NexisClaw/default`, and `NexisClaw/<agentId>`.
+- `NexisClaw/default` is the stable alias that always maps to the configured default agent.
+- Use `x-NexisClaw-model` when you want a backend provider/model override; otherwise the selected agent's normal model and embedding setup stays in control.
 
 All of these run on the main Gateway port and use the same trusted operator auth boundary as the rest of the Gateway HTTP API.
 
@@ -109,10 +109,10 @@ All of these run on the main Gateway port and use the same trusted operator auth
 
 | Setting      | Resolution order                                              |
 | ------------ | ------------------------------------------------------------- |
-| Gateway port | `--port` → `OPENCLAW_GATEWAY_PORT` → `gateway.port` → `18789` |
+| Gateway port | `--port` → `NEXISCLAW_GATEWAY_PORT` → `gateway.port` → `18789` |
 | Bind mode    | CLI/override → `gateway.bind` → `loopback`                    |
 
-Installed gateway services record the resolved `--port` in supervisor metadata. After changing `gateway.port`, run `openclaw doctor --fix` or `openclaw gateway install --force` so launchd/systemd/schtasks starts the process on the new port.
+Installed gateway services record the resolved `--port` in supervisor metadata. After changing `gateway.port`, run `NexisClaw doctor --fix` or `NexisClaw gateway install --force` so launchd/systemd/schtasks starts the process on the new port.
 
 Gateway startup uses the same effective port and bind when it seeds local
 Control UI origins for non-loopback binds. For example, `--bind lan --port 3000`
@@ -132,15 +132,15 @@ validation runs. Add any remote browser origins, such as HTTPS proxy URLs, to
 ## Operator command set
 
 ```bash
-openclaw gateway status
-openclaw gateway status --deep   # adds a system-level service scan
-openclaw gateway status --json
-openclaw gateway install
-openclaw gateway restart
-openclaw gateway stop
-openclaw secrets reload
-openclaw logs --follow
-openclaw doctor
+NexisClaw gateway status
+NexisClaw gateway status --deep   # adds a system-level service scan
+NexisClaw gateway status --json
+NexisClaw gateway install
+NexisClaw gateway restart
+NexisClaw gateway stop
+NexisClaw secrets reload
+NexisClaw logs --follow
+NexisClaw doctor
 ```
 
 `gateway status --deep` is for extra service discovery (LaunchDaemons/systemd system
@@ -156,8 +156,8 @@ You only need multiple gateways when you intentionally want isolation or a rescu
 Useful checks:
 
 ```bash
-openclaw gateway status --deep
-openclaw gateway probe
+NexisClaw gateway status --deep
+NexisClaw gateway probe
 ```
 
 What to expect:
@@ -171,15 +171,15 @@ What to expect:
 Checklist per instance:
 
 - Unique `gateway.port`
-- Unique `OPENCLAW_CONFIG_PATH`
-- Unique `OPENCLAW_STATE_DIR`
+- Unique `NEXISCLAW_CONFIG_PATH`
+- Unique `NEXISCLAW_STATE_DIR`
 - Unique `agents.defaults.workspace`
 
 Example:
 
 ```bash
-OPENCLAW_CONFIG_PATH=~/.openclaw/a.json OPENCLAW_STATE_DIR=~/.openclaw-a openclaw gateway --port 19001
-OPENCLAW_CONFIG_PATH=~/.openclaw/b.json OPENCLAW_STATE_DIR=~/.openclaw-b openclaw gateway --port 19002
+NEXISCLAW_CONFIG_PATH=~/.NexisClaw/a.json NEXISCLAW_STATE_DIR=~/.NexisClaw-a NexisClaw gateway --port 19001
+NEXISCLAW_CONFIG_PATH=~/.NexisClaw/b.json NEXISCLAW_STATE_DIR=~/.NexisClaw-b NexisClaw gateway --port 19002
 ```
 
 Detailed setup: [/gateway/multiple-gateways](/gateway/multiple-gateways).
@@ -211,26 +211,26 @@ Use supervised runs for production-like reliability.
   <Tab title="macOS (launchd)">
 
 ```bash
-openclaw gateway install
-openclaw gateway status
-openclaw gateway restart
-openclaw gateway stop
+NexisClaw gateway install
+NexisClaw gateway status
+NexisClaw gateway restart
+NexisClaw gateway stop
 ```
 
-Use `openclaw gateway restart` for restarts. Do not chain `openclaw gateway stop` and `openclaw gateway start` as a restart substitute.
+Use `NexisClaw gateway restart` for restarts. Do not chain `NexisClaw gateway stop` and `NexisClaw gateway start` as a restart substitute.
 
-On macOS, `gateway stop` uses `launchctl bootout` by default — this removes the LaunchAgent from the current boot session without persisting a disable, so KeepAlive auto-recovery still works after unexpected crashes and `gateway start` re-enables cleanly. To persistently suppress auto-respawn across reboots, pass `--disable`: `openclaw gateway stop --disable`.
+On macOS, `gateway stop` uses `launchctl bootout` by default — this removes the LaunchAgent from the current boot session without persisting a disable, so KeepAlive auto-recovery still works after unexpected crashes and `gateway start` re-enables cleanly. To persistently suppress auto-respawn across reboots, pass `--disable`: `NexisClaw gateway stop --disable`.
 
-LaunchAgent labels are `ai.openclaw.gateway` (default) or `ai.openclaw.<profile>` (named profile). `openclaw doctor` audits and repairs service config drift.
+LaunchAgent labels are `ai.NexisClaw.gateway` (default) or `ai.NexisClaw.<profile>` (named profile). `NexisClaw doctor` audits and repairs service config drift.
 
   </Tab>
 
   <Tab title="Linux (systemd user)">
 
 ```bash
-openclaw gateway install
-systemctl --user enable --now openclaw-gateway[-<profile>].service
-openclaw gateway status
+NexisClaw gateway install
+systemctl --user enable --now NexisClaw-gateway[-<profile>].service
+NexisClaw gateway status
 ```
 
 For persistence after logout, enable lingering:
@@ -243,12 +243,12 @@ Manual user-unit example when you need a custom install path:
 
 ```ini
 [Unit]
-Description=OpenClaw Gateway
+Description=NexisClaw Gateway
 After=network-online.target
 Wants=network-online.target
 
 [Service]
-ExecStart=/usr/local/bin/openclaw gateway --port 18789
+ExecStart=/usr/local/bin/NexisClaw gateway --port 18789
 Restart=always
 RestartSec=5
 TimeoutStopSec=30
@@ -265,15 +265,15 @@ WantedBy=default.target
   <Tab title="Windows (native)">
 
 ```powershell
-openclaw gateway install
-openclaw gateway status --json
-openclaw gateway restart
-openclaw gateway stop
+NexisClaw gateway install
+NexisClaw gateway status --json
+NexisClaw gateway restart
+NexisClaw gateway stop
 ```
 
-Native Windows managed startup uses a Scheduled Task named `OpenClaw Gateway`
-(or `OpenClaw Gateway (<profile>)` for named profiles). If Scheduled Task
-creation is denied, OpenClaw falls back to a per-user Startup-folder launcher
+Native Windows managed startup uses a Scheduled Task named `NexisClaw Gateway`
+(or `NexisClaw Gateway (<profile>)` for named profiles). If Scheduled Task
+creation is denied, NexisClaw falls back to a per-user Startup-folder launcher
 that points at `gateway.cmd` inside the state directory.
 
   </Tab>
@@ -284,14 +284,14 @@ Use a system unit for multi-user/always-on hosts.
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable --now openclaw-gateway[-<profile>].service
+sudo systemctl enable --now NexisClaw-gateway[-<profile>].service
 ```
 
 Use the same service body as the user unit, but install it under
-`/etc/systemd/system/openclaw-gateway[-<profile>].service` and adjust
-`ExecStart=` if your `openclaw` binary lives elsewhere.
+`/etc/systemd/system/NexisClaw-gateway[-<profile>].service` and adjust
+`ExecStart=` if your `NexisClaw` binary lives elsewhere.
 
-Do not also let `openclaw doctor --fix` install a user-level gateway service for the same profile/port. Doctor refuses that automatic install when it finds a system-level OpenClaw gateway service; use `OPENCLAW_SERVICE_REPAIR_POLICY=external` when the system unit owns the lifecycle.
+Do not also let `NexisClaw doctor --fix` install a user-level gateway service for the same profile/port. Doctor refuses that automatic install when it finds a system-level NexisClaw gateway service; use `NEXISCLAW_SERVICE_REPAIR_POLICY=external` when the system unit owns the lifecycle.
 
   </Tab>
 </Tabs>
@@ -299,9 +299,9 @@ Do not also let `openclaw doctor --fix` install a user-level gateway service for
 ## Dev profile quick path
 
 ```bash
-openclaw --dev setup
-openclaw --dev gateway --allow-unconfigured
-openclaw --dev status
+NexisClaw --dev setup
+NexisClaw --dev gateway --allow-unconfigured
+NexisClaw --dev status
 ```
 
 Defaults include isolated state/config and base gateway port `19001`.
@@ -334,9 +334,9 @@ See full protocol docs: [Gateway Protocol](/gateway/protocol).
 ### Readiness
 
 ```bash
-openclaw gateway status
-openclaw channels status --probe
-openclaw health
+NexisClaw gateway status
+NexisClaw channels status --probe
+NexisClaw health
 ```
 
 ### Gap recovery

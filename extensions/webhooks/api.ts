@@ -1,6 +1,6 @@
 export {
   definePluginEntry,
-  type OpenClawPluginApi,
+  type NexisClawPluginApi,
   type PluginLogger,
   type PluginRuntime,
-} from "openclaw/plugin-sdk/core";
+} from "NexisClaw/plugin-sdk/core";

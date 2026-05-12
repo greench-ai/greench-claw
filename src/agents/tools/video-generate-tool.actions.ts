@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { listSupportedVideoGenerationModes } from "../../video-generation/capabilities.js";
 import { listRuntimeVideoGenerationProviders } from "../../video-generation/runtime.js";
 import type { AuthProfileStore } from "../auth-profiles/types.js";
@@ -79,7 +79,7 @@ function summarizeVideoGenerationCapabilities(
 }
 
 export function createVideoGenerateListActionResult(
-  config?: OpenClawConfig,
+  config?: NexisClawConfig,
   options?: { agentDir?: string; authStore?: AuthProfileStore },
 ): VideoGenerateActionResult {
   const providers = listRuntimeVideoGenerationProviders({ config });

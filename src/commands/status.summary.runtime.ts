@@ -5,7 +5,7 @@ import { parseModelRef, resolvePersistedSelectedModelRef } from "../agents/model
 import { normalizeProviderId } from "../agents/provider-id.js";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.js";
+import type { NexisClawConfig } from "../config/types.js";
 import { isCronSessionKey } from "../sessions/session-key-utils.js";
 import {
   normalizeLowercaseStringOrEmpty,
@@ -15,7 +15,7 @@ import {
 import { resolveAgentRuntimeLabel } from "../status/agent-runtime-label.js";
 
 function resolveStatusModelRefFromRaw(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   rawModel: string;
   defaultProvider: string;
 }): { provider: string; model: string } | null {
@@ -47,7 +47,7 @@ function resolveStatusModelRefFromRaw(params: {
 }
 
 function resolveConfiguredStatusModelRef(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   defaultProvider: string;
   defaultModel: string;
   agentId?: string;
@@ -92,7 +92,7 @@ function resolveConfiguredStatusModelRef(params: {
 }
 
 function resolveConfiguredProviderContextTokens(
-  cfg: OpenClawConfig | undefined,
+  cfg: NexisClawConfig | undefined,
   provider: string,
   model: string,
 ): number | undefined {
@@ -145,7 +145,7 @@ function classifySessionKey(key: string, entry?: SessionEntry) {
 }
 
 function resolveSessionModelRef(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   entry?:
     | SessionEntry
     | Pick<SessionEntry, "model" | "modelProvider" | "modelOverride" | "providerOverride">,
@@ -170,7 +170,7 @@ function resolveSessionModelRef(
 }
 
 function resolveSessionRuntimeLabel(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   entry?: SessionEntry;
   provider: string;
   model: string;
@@ -195,7 +195,7 @@ function resolveSessionRuntimeLabel(params: {
 }
 
 function resolveContextTokensForModel(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   provider?: string;
   model?: string;
   contextTokensOverride?: number;

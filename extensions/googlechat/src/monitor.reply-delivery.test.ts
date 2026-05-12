@@ -1,5 +1,5 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../runtime-api.js";
+import type { NexisClawConfig } from "../runtime-api.js";
 import type { ResolvedGoogleChatAccount } from "./accounts.js";
 import type { GoogleChatCoreRuntime, GoogleChatRuntimeEnv } from "./monitor-types.js";
 
@@ -24,7 +24,7 @@ const account = {
   config: {},
 } as ResolvedGoogleChatAccount;
 
-const config = {} as OpenClawConfig;
+const config = {} as NexisClawConfig;
 
 function createCore(params?: {
   chunks?: readonly string[];

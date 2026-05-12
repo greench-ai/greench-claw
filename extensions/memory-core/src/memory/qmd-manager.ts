@@ -5,8 +5,8 @@ import os from "node:os";
 import path from "node:path";
 import readline from "node:readline";
 import chokidar, { type FSWatcher } from "chokidar";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import { withFileLock } from "openclaw/plugin-sdk/file-lock";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { withFileLock } from "NexisClaw/plugin-sdk/file-lock";
 import {
   createSubsystemLogger,
   isPathInside,
@@ -16,8 +16,8 @@ import {
   resolveAgentWorkspaceDir,
   resolveGlobalSingleton,
   resolveStateDir,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+  type NexisClawConfig,
+} from "NexisClaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   buildSessionEntry,
   deriveQmdScopeChannel,
@@ -29,7 +29,7 @@ import {
   runCliCommand,
   type QmdQueryResult,
   type SessionFileEntry,
-} from "openclaw/plugin-sdk/memory-core-host-engine-qmd";
+} from "NexisClaw/plugin-sdk/memory-core-host-engine-qmd";
 import {
   buildMemoryReadResult,
   buildMemoryReadResultFromSlice,
@@ -48,11 +48,11 @@ import {
   type ResolvedMemoryBackendConfig,
   type ResolvedQmdConfig,
   type ResolvedQmdMcporterConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+} from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
 import {
   localeLowercasePreservingWhitespace,
   normalizeLowercaseStringOrEmpty,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { asRecord } from "../dreaming-shared.js";
 import { resolveQmdCollectionPatternFlags, type QmdCollectionPatternFlag } from "./qmd-compat.js";
 
@@ -74,9 +74,9 @@ const QMD_EMBED_LOCK_RETRY_TEMPLATE = {
   maxTimeout: 10_000,
   randomize: true,
 } as const;
-const MCPORTER_STATE_KEY = Symbol.for("openclaw.mcporterState");
-const QMD_EMBED_QUEUE_KEY = Symbol.for("openclaw.qmdEmbedQueueTail");
-const QMD_UPDATE_QUEUE_KEY = Symbol.for("openclaw.qmdUpdateQueueState");
+const MCPORTER_STATE_KEY = Symbol.for("NexisClaw.mcporterState");
+const QMD_EMBED_QUEUE_KEY = Symbol.for("NexisClaw.qmdEmbedQueueTail");
+const QMD_UPDATE_QUEUE_KEY = Symbol.for("NexisClaw.qmdUpdateQueueState");
 const IGNORED_MEMORY_WATCH_DIR_NAMES = new Set([
   ".git",
   ".cache",
@@ -149,7 +149,7 @@ function getQmdUpdateQueueState(): QmdUpdateQueueState {
 
 function normalizeHanBm25Query(query: string): string {
   const trimmed = query.trim();
-  // Keep Han/CJK BM25 queries intact so OpenClaw search semantics match direct qmd search.
+  // Keep Han/CJK BM25 queries intact so NexisClaw search semantics match direct qmd search.
   return trimmed;
 }
 
@@ -270,7 +270,7 @@ type QmdMcporterAcrossCollectionsParams =
 
 export class QmdMemoryManager implements MemorySearchManager {
   static async create(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     agentId: string;
     resolved: ResolvedMemoryBackendConfig;
     mode?: QmdManagerMode;
@@ -3123,7 +3123,7 @@ export class QmdMemoryManager implements MemorySearchManager {
 }
 
 function resolveQmdManagerRuntimeConfig(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   agentId: string,
 ): QmdManagerRuntimeConfig {
   return {

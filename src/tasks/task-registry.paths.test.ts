@@ -10,16 +10,16 @@ describe("task registry paths", () => {
         VITEST: "true",
         VITEST_POOL_ID: "7",
       } as NodeJS.ProcessEnv),
-    ).toBe(path.join(os.tmpdir(), "openclaw-test-state", `${process.pid}-7`));
+    ).toBe(path.join(os.tmpdir(), "NexisClaw-test-state", `${process.pid}-7`));
   });
 
   it("prefers explicit state dir overrides over Vitest sharding", () => {
     expect(
       resolveTaskStateDir({
-        OPENCLAW_STATE_DIR: "/tmp/openclaw-custom-state",
+        NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-custom-state",
         VITEST: "true",
         VITEST_POOL_ID: "7",
       } as NodeJS.ProcessEnv),
-    ).toBe("/tmp/openclaw-custom-state");
+    ).toBe("/tmp/NexisClaw-custom-state");
   });
 });

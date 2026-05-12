@@ -1,7 +1,7 @@
 import type {
-  OpenClawConfig,
+  NexisClawConfig,
   ResolvedMemorySearchConfig,
-} from "openclaw/plugin-sdk/memory-core-host-engine-foundation";
+} from "NexisClaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   resolveEmbeddingProviderFallbackModel,
   type EmbeddingProvider,
@@ -74,7 +74,7 @@ export function applyMemoryFallbackProviderState(params: {
 }
 
 export function resolveMemoryFallbackProviderRequest(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   settings: ResolvedMemorySearchConfig;
   currentProviderId: string | null;
 }): {

@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import type {
   CompiledConfiguredBinding,
   ConfiguredBindingRecordResolution,
@@ -16,7 +16,7 @@ export type ConfiguredBindingConsumer = {
   id: string;
   supports: (binding: ConfiguredBindingRuleConfig) => boolean;
   buildTargetFactory: (params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     binding: ConfiguredBindingRuleConfig;
     channel: string;
     agentId: string;

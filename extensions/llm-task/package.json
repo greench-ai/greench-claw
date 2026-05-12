@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/llm-task",
+  "name": "@NexisClaw/llm-task",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw JSON-only LLM task plugin",
+  "description": "NexisClaw JSON-only LLM task plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.1.38"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ]

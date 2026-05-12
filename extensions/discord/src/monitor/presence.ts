@@ -1,5 +1,5 @@
-import type { DiscordAccountConfig } from "openclaw/plugin-sdk/config-contracts";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { DiscordAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import type { Activity, UpdatePresenceData } from "../internal/gateway.js";
 
 const DEFAULT_CUSTOM_ACTIVITY_TYPE = 4;

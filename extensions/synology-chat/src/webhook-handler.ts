@@ -5,14 +5,14 @@
 
 import type { IncomingMessage, ServerResponse } from "node:http";
 import * as querystring from "node:querystring";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import {
   beginWebhookRequestPipelineOrReject,
   createWebhookInFlightLimiter,
   isRequestBodyLimitError,
   readRequestBodyWithLimit,
   requestBodyErrorToText,
-} from "openclaw/plugin-sdk/webhook-ingress";
+} from "NexisClaw/plugin-sdk/webhook-ingress";
 import * as synologyClient from "./client.js";
 import {
   validateToken,
@@ -239,7 +239,7 @@ function extractTokenFromHeaders(req: IncomingMessage): string | undefined {
   const explicit =
     headerValue(req.headers["x-synology-token"]) ??
     headerValue(req.headers["x-webhook-token"]) ??
-    headerValue(req.headers["x-openclaw-token"]);
+    headerValue(req.headers["x-NexisClaw-token"]);
   if (explicit) {
     return explicit;
   }

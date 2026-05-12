@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveStateDir } from "openclaw/plugin-sdk/state-paths";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveStateDir } from "NexisClaw/plugin-sdk/state-paths";
 import {
   resolveMatrixCredentialsDir,
   resolveMatrixCredentialsFilename,
@@ -10,13 +10,13 @@ import {
 
 type MatrixAuthPresenceParams =
   | {
-      cfg: OpenClawConfig;
+      cfg: NexisClawConfig;
       env?: NodeJS.ProcessEnv;
     }
-  | OpenClawConfig;
+  | NexisClawConfig;
 
 function listMatrixCredentialPaths(
-  _cfg: OpenClawConfig,
+  _cfg: NexisClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): readonly string[] {
   const credentialsDir = resolveMatrixCredentialsDir(resolveStateDir(env, os.homedir));

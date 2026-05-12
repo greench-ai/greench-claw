@@ -1,9 +1,9 @@
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
 import type {
-  OpenClawConfig,
+  NexisClawConfig,
   SecretInput,
   SecretInputMode,
-} from "openclaw/plugin-sdk/provider-auth";
+} from "NexisClaw/plugin-sdk/provider-auth";
 import {
   ensureApiKeyFromOptionEnvOrPrompt,
   isNonSecretApiKeyMarker,
@@ -11,15 +11,15 @@ import {
   normalizeOptionalSecretInput,
   upsertAuthProfileWithLock,
   validateApiKeyInput,
-} from "openclaw/plugin-sdk/provider-auth";
-import { applyAgentDefaultModelPrimary } from "openclaw/plugin-sdk/provider-onboard";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime";
-import { WizardCancelledError, type WizardPrompter } from "openclaw/plugin-sdk/setup";
-import { fetchWithSsrFGuard } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "NexisClaw/plugin-sdk/provider-auth";
+import { applyAgentDefaultModelPrimary } from "NexisClaw/plugin-sdk/provider-onboard";
+import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
+import { WizardCancelledError, type WizardPrompter } from "NexisClaw/plugin-sdk/setup";
+import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import {
   OLLAMA_CLOUD_BASE_URL,
   OLLAMA_DEFAULT_BASE_URL,
@@ -52,7 +52,7 @@ type OllamaSetupOptions = {
 };
 
 type OllamaSetupResult = {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   credential: SecretInput;
   credentialMode?: SecretInputMode;
 };
@@ -62,7 +62,7 @@ function isTruthyEnvValue(value: string | undefined): boolean {
 }
 
 function resolveOllamaSetupDefaultBaseUrl(env: NodeJS.ProcessEnv = process.env): string {
-  return isTruthyEnvValue(env.OPENCLAW_DOCKER_SETUP)
+  return isTruthyEnvValue(env.NEXISCLAW_DOCKER_SETUP)
     ? OLLAMA_DOCKER_HOST_BASE_URL
     : OLLAMA_DEFAULT_BASE_URL;
 }
@@ -362,7 +362,7 @@ async function pullOllamaModelNonInteractive(
 }
 
 async function promptForOllamaCloudCredential(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   env?: NodeJS.ProcessEnv;
   opts?: Record<string, unknown>;
   prompter: WizardPrompter;
@@ -464,12 +464,12 @@ function findAvailableOllamaModelName(modelName: string, availableModelNames: It
 }
 
 function applyOllamaProviderConfig(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   baseUrl: string,
   modelNames: string[],
   discoveredModelsByName?: Map<string, OllamaModelWithContext>,
   apiKey: SecretInput = "OLLAMA_API_KEY",
-): OpenClawConfig {
+): NexisClawConfig {
   return {
     ...cfg,
     models: {
@@ -533,7 +533,7 @@ async function resolveHostBackedSuggestedModelNames(params: {
 }
 
 async function promptAndConfigureHostBackedOllama(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   mode: HostBackedOllamaInteractiveMode;
   prompter: WizardPrompter;
   env?: NodeJS.ProcessEnv;
@@ -570,7 +570,7 @@ async function promptAndConfigureHostBackedOllama(params: {
 }
 
 export async function promptAndConfigureOllama(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   env?: NodeJS.ProcessEnv;
   opts?: Record<string, unknown>;
   prompter: WizardPrompter;
@@ -626,11 +626,11 @@ export async function promptAndConfigureOllama(params: {
 }
 
 export async function configureOllamaNonInteractive(params: {
-  nextConfig: OpenClawConfig;
+  nextConfig: NexisClawConfig;
   opts: OllamaSetupOptions;
   runtime: RuntimeEnv;
   agentDir?: string;
-}): Promise<OpenClawConfig> {
+}): Promise<NexisClawConfig> {
   const baseUrl = resolveOllamaApiBase(
     (params.opts.customBaseUrl?.trim() || resolveOllamaSetupDefaultBaseUrl()).replace(/\/+$/, ""),
   );
@@ -715,7 +715,7 @@ export async function configureOllamaNonInteractive(params: {
 }
 
 export async function ensureOllamaModelPulled(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   model: string;
   prompter: WizardPrompter;
 }): Promise<void> {

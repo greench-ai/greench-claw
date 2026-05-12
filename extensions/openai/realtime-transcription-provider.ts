@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   isProviderAuthProfileConfigured,
   resolveProviderAuthProfileApiKey,
-} from "openclaw/plugin-sdk/provider-auth";
-import { resolveProviderRequestHeaders } from "openclaw/plugin-sdk/provider-http";
+} from "NexisClaw/plugin-sdk/provider-auth";
+import { resolveProviderRequestHeaders } from "NexisClaw/plugin-sdk/provider-http";
 import {
   createRealtimeTranscriptionWebSocketSession,
   type RealtimeTranscriptionProviderConfig,
@@ -11,8 +11,8 @@ import {
   type RealtimeTranscriptionSession,
   type RealtimeTranscriptionSessionCreateRequest,
   type RealtimeTranscriptionWebSocketTransport,
-} from "openclaw/plugin-sdk/realtime-transcription";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
+} from "NexisClaw/plugin-sdk/realtime-transcription";
+import { normalizeResolvedSecretInputString } from "NexisClaw/plugin-sdk/secret-input";
 import {
   asFiniteNumber,
   createOpenAIRealtimeTranscriptionClientSecret,
@@ -32,7 +32,7 @@ type OpenAIRealtimeTranscriptionProviderConfig = {
 
 type OpenAIRealtimeTranscriptionSessionConfig = RealtimeTranscriptionSessionCreateRequest & {
   apiKey?: string;
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   language?: string;
   model: string;
   prompt?: string;

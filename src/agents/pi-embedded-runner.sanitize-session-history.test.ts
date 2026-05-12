@@ -1113,7 +1113,7 @@ describe("sanitizeSessionHistory", () => {
           text: [
             "Conversation info (untrusted metadata):",
             "```json",
-            '{"chat_id":"channel:123","sender":"OpenClaw"}',
+            '{"chat_id":"channel:123","sender":"NexisClaw"}',
             "```",
             "",
             "Pong",
@@ -1150,7 +1150,7 @@ describe("sanitizeSessionHistory", () => {
     const metadataOnlyText = [
       "Conversation info (untrusted metadata):",
       "```json",
-      '{"chat_id":"channel:123","sender":"OpenClaw"}',
+      '{"chat_id":"channel:123","sender":"NexisClaw"}',
       "```",
     ].join("\n");
     const messages = castAgentMessages([

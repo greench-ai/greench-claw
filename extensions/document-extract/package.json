@@ -1,14 +1,14 @@
 {
-  "name": "@openclaw/document-extract-plugin",
+  "name": "@NexisClaw/document-extract-plugin",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw local document extraction plugin",
+  "description": "NexisClaw local document extraction plugin",
   "type": "module",
   "dependencies": {
     "pdfjs-dist": "5.7.284"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
   "peerDependencies": {
     "@napi-rs/canvas": "^0.1.89"
@@ -18,7 +18,7 @@
       "optional": true
     }
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ]

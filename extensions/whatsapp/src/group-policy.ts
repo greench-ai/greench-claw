@@ -2,11 +2,11 @@ import {
   resolveChannelGroupRequireMention,
   resolveChannelGroupToolsPolicy,
   type GroupToolPolicyConfig,
-} from "openclaw/plugin-sdk/channel-policy";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "NexisClaw/plugin-sdk/channel-policy";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 
 type WhatsAppGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId?: string | null;
   groupId?: string | null;
   senderId?: string | null;

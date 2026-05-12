@@ -1,40 +1,40 @@
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
+import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
 import {
   buildDmGroupAccountAllowlistAdapter,
   createNestedAllowlistOverrideResolver,
-} from "openclaw/plugin-sdk/allowlist-config-edit";
-import type { ChannelMessageActionAdapter } from "openclaw/plugin-sdk/channel-contract";
+} from "NexisClaw/plugin-sdk/allowlist-config-edit";
+import type { ChannelMessageActionAdapter } from "NexisClaw/plugin-sdk/channel-contract";
 import {
   buildChannelOutboundSessionRoute,
   buildThreadAwareOutboundSessionRoute,
   clearAccountEntryFields,
   createChatChannelPlugin,
-} from "openclaw/plugin-sdk/channel-core";
-import { createAccountStatusSink } from "openclaw/plugin-sdk/channel-lifecycle";
-import { createChannelMessageAdapterFromOutbound } from "openclaw/plugin-sdk/channel-message";
-import { createPairingPrefixStripper } from "openclaw/plugin-sdk/channel-pairing";
+} from "NexisClaw/plugin-sdk/channel-core";
+import { createAccountStatusSink } from "NexisClaw/plugin-sdk/channel-lifecycle";
+import { createChannelMessageAdapterFromOutbound } from "NexisClaw/plugin-sdk/channel-message";
+import { createPairingPrefixStripper } from "NexisClaw/plugin-sdk/channel-pairing";
 import {
   PAIRING_APPROVED_MESSAGE,
   buildTokenChannelStatusSummary,
   projectCredentialSnapshotFields,
   resolveConfiguredFromCredentialStatuses,
-} from "openclaw/plugin-sdk/channel-status";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { createChannelDirectoryAdapter } from "openclaw/plugin-sdk/directory-runtime";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+} from "NexisClaw/plugin-sdk/channel-status";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { createChannelDirectoryAdapter } from "NexisClaw/plugin-sdk/directory-runtime";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
 import {
   resolveOutboundSendDep,
   type OutboundSendDeps,
-} from "openclaw/plugin-sdk/outbound-send-deps";
-import { type RoutePeer } from "openclaw/plugin-sdk/routing";
+} from "NexisClaw/plugin-sdk/outbound-send-deps";
+import { type RoutePeer } from "NexisClaw/plugin-sdk/routing";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
+} from "NexisClaw/plugin-sdk/status-helpers";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { resolveTelegramAccount, type ResolvedTelegramAccount } from "./accounts.js";
 import { resolveTelegramAutoThreadId } from "./action-threading.js";
 import { lookupTelegramChatId } from "./api-fetch.js";
@@ -191,7 +191,7 @@ const telegramChannelOutbound = createTelegramOutboundAdapter({
   preferFinalAssistantVisibleText: true,
 });
 
-const telegramMessageAdapter = createChannelMessageAdapterFromOutbound<OpenClawConfig>({
+const telegramMessageAdapter = createChannelMessageAdapterFromOutbound<NexisClawConfig>({
   id: "telegram",
   live: {
     capabilities: {
@@ -457,7 +457,7 @@ function shouldStripTelegramThreadFromAnnounceOrigin(params: {
 }
 
 function resolveTelegramOutboundSessionRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   agentId: string;
   accountId?: string | null;
   target: string;
@@ -519,7 +519,7 @@ function resolveTelegramOutboundSessionRoute(params: {
 }
 
 async function resolveTelegramTargets(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId?: string | null;
   inputs: string[];
   kind: "user" | "group";
@@ -949,7 +949,7 @@ export const telegramPlugin = createChatChannelPlugin({
       },
       logoutAccount: async ({ accountId, cfg }) => {
         const envToken = process.env.TELEGRAM_BOT_TOKEN?.trim() ?? "";
-        const nextCfg = { ...cfg } as OpenClawConfig;
+        const nextCfg = { ...cfg } as NexisClawConfig;
         const nextTelegram = cfg.channels?.telegram ? { ...cfg.channels.telegram } : undefined;
         let cleared = false;
         let changed = false;

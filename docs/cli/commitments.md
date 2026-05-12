@@ -1,10 +1,10 @@
 ---
-summary: "CLI reference for `openclaw commitments` (inspect and dismiss inferred follow-ups)"
+summary: "CLI reference for `NexisClaw commitments` (inspect and dismiss inferred follow-ups)"
 read_when:
   - You want to inspect inferred follow-up commitments
   - You want to dismiss pending check-ins
   - You are auditing what heartbeat may deliver
-title: "`openclaw commitments`"
+title: "`NexisClaw commitments`"
 ---
 
 List and manage inferred follow-up commitments.
@@ -13,14 +13,14 @@ Commitments are opt-in, short-lived follow-up memories created from
 conversation context. See [Inferred commitments](/concepts/commitments) for the
 conceptual guide.
 
-With no subcommand, `openclaw commitments` lists pending commitments.
+With no subcommand, `NexisClaw commitments` lists pending commitments.
 
 ## Usage
 
 ```bash
-openclaw commitments [--all] [--agent <id>] [--status <status>] [--json]
-openclaw commitments list [--all] [--agent <id>] [--status <status>] [--json]
-openclaw commitments dismiss <id...> [--json]
+NexisClaw commitments [--all] [--agent <id>] [--status <status>] [--json]
+NexisClaw commitments list [--all] [--agent <id>] [--status <status>] [--json]
+NexisClaw commitments dismiss <id...> [--json]
 ```
 
 ## Options
@@ -36,37 +36,37 @@ openclaw commitments dismiss <id...> [--json]
 List pending commitments:
 
 ```bash
-openclaw commitments
+NexisClaw commitments
 ```
 
 List every stored commitment:
 
 ```bash
-openclaw commitments --all
+NexisClaw commitments --all
 ```
 
 Filter to one agent:
 
 ```bash
-openclaw commitments --agent main
+NexisClaw commitments --agent main
 ```
 
 Find snoozed commitments:
 
 ```bash
-openclaw commitments --status snoozed
+NexisClaw commitments --status snoozed
 ```
 
 Dismiss one or more commitments:
 
 ```bash
-openclaw commitments dismiss cm_abc123 cm_def456
+NexisClaw commitments dismiss cm_abc123 cm_def456
 ```
 
 Export as JSON:
 
 ```bash
-openclaw commitments --all --json
+NexisClaw commitments --all --json
 ```
 
 ## Output

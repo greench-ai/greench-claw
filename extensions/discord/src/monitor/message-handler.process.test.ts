@@ -1,5 +1,5 @@
-import { DEFAULT_EMOJIS, DEFAULT_TIMING } from "openclaw/plugin-sdk/channel-feedback";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-dispatch-runtime";
+import { DEFAULT_EMOJIS, DEFAULT_TIMING } from "NexisClaw/plugin-sdk/channel-feedback";
+import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { DiscordMessagePreflightContext } from "./message-handler.preflight.js";
 
@@ -160,7 +160,7 @@ const recordInboundSession = vi.hoisted(() =>
 const configSessionsMocks = vi.hoisted(() => ({
   readSessionUpdatedAt: vi.fn<(params?: unknown) => number | undefined>(() => undefined),
   resolveStorePath: vi.fn<(path?: unknown, opts?: unknown) => string>(
-    () => "/tmp/openclaw-discord-process-test-sessions.json",
+    () => "/tmp/NexisClaw-discord-process-test-sessions.json",
   ),
 }));
 const readSessionUpdatedAt = configSessionsMocks.readSessionUpdatedAt;
@@ -184,7 +184,7 @@ let threadBindingTesting: typeof import("./thread-bindings.js").__testing;
 let createThreadBindingManager: typeof import("./thread-bindings.js").createThreadBindingManager;
 let processDiscordMessage: typeof import("./message-handler.process.js").processDiscordMessage;
 
-vi.mock("openclaw/plugin-sdk/reply-runtime", () => ({
+vi.mock("NexisClaw/plugin-sdk/reply-runtime", () => ({
   dispatchInboundMessage: (params: DispatchInboundParams) => dispatchInboundMessage(params),
   settleReplyDispatcher: async (params: {
     dispatcher: { markComplete: () => void; waitForIdle: () => Promise<void> };
@@ -223,7 +223,7 @@ vi.mock("openclaw/plugin-sdk/reply-runtime", () => ({
   }),
 }));
 
-vi.mock("openclaw/plugin-sdk/conversation-runtime", () => ({
+vi.mock("NexisClaw/plugin-sdk/conversation-runtime", () => ({
   recordInboundSession: (...args: unknown[]) => recordInboundSession(...args),
   resolvePinnedMainDmOwnerFromAllowlist: (params: {
     dmScope?: string | null;
@@ -252,7 +252,7 @@ vi.mock("openclaw/plugin-sdk/conversation-runtime", () => ({
     bindingId.split(":").at(-1) ?? bindingId,
 }));
 
-vi.mock("openclaw/plugin-sdk/session-store-runtime", () => ({
+vi.mock("NexisClaw/plugin-sdk/session-store-runtime", () => ({
   readSessionUpdatedAt: (...args: unknown[]) => configSessionsMocks.readSessionUpdatedAt(...args),
   resolveStorePath: (...args: unknown[]) => configSessionsMocks.resolveStorePath(...args),
 }));
@@ -350,7 +350,7 @@ beforeEach(() => {
   dispatchInboundMessage.mockResolvedValue(createNoQueuedDispatchResult());
   recordInboundSession.mockResolvedValue(undefined);
   readSessionUpdatedAt.mockReturnValue(undefined);
-  resolveStorePath.mockReturnValue("/tmp/openclaw-discord-process-test-sessions.json");
+  resolveStorePath.mockReturnValue("/tmp/NexisClaw-discord-process-test-sessions.json");
   threadBindingTesting.resetThreadBindingsForTests();
 });
 
@@ -829,7 +829,7 @@ describe("processDiscordMessage ack reactions", () => {
             timing: { debounceMs: 0 },
           },
         },
-        session: { store: "/tmp/openclaw-discord-process-test-sessions.json" },
+        session: { store: "/tmp/NexisClaw-discord-process-test-sessions.json" },
       },
     });
 
@@ -855,7 +855,7 @@ describe("processDiscordMessage ack reactions", () => {
             timing: { debounceMs: 0 },
           },
         },
-        session: { store: "/tmp/openclaw-discord-process-test-sessions.json" },
+        session: { store: "/tmp/NexisClaw-discord-process-test-sessions.json" },
       },
     });
 
@@ -882,7 +882,7 @@ describe("processDiscordMessage ack reactions", () => {
             timing: { debounceMs: 0 },
           },
         },
-        session: { store: "/tmp/openclaw-discord-process-test-sessions.json" },
+        session: { store: "/tmp/NexisClaw-discord-process-test-sessions.json" },
       },
     });
 
@@ -910,7 +910,7 @@ describe("processDiscordMessage ack reactions", () => {
           ackReaction: "👀",
           removeAckAfterReply: true,
         },
-        session: { store: "/tmp/openclaw-discord-process-test-sessions.json" },
+        session: { store: "/tmp/NexisClaw-discord-process-test-sessions.json" },
       },
     });
 
@@ -934,7 +934,7 @@ describe("processDiscordMessage ack reactions", () => {
             enabled: false,
           },
         },
-        session: { store: "/tmp/openclaw-discord-process-test-sessions.json" },
+        session: { store: "/tmp/NexisClaw-discord-process-test-sessions.json" },
       },
     });
 
@@ -1024,7 +1024,7 @@ describe("processDiscordMessage session routing", () => {
       cfg: {
         messages: { ackReaction: "👀" },
         session: {
-          store: "/tmp/openclaw-discord-process-test-sessions.json",
+          store: "/tmp/NexisClaw-discord-process-test-sessions.json",
           dmScope: "main",
         },
       },
@@ -1112,7 +1112,7 @@ describe("processDiscordMessage session routing", () => {
             timing: { debounceMs: 0 },
           },
         },
-        session: { store: "/tmp/openclaw-discord-process-test-sessions.json" },
+        session: { store: "/tmp/NexisClaw-discord-process-test-sessions.json" },
       },
       route: BASE_CHANNEL_ROUTE,
     });
@@ -1144,7 +1144,7 @@ describe("processDiscordMessage session routing", () => {
             timing: { debounceMs: 0 },
           },
         },
-        session: { store: "/tmp/openclaw-discord-process-test-sessions.json" },
+        session: { store: "/tmp/NexisClaw-discord-process-test-sessions.json" },
       },
       route: BASE_CHANNEL_ROUTE,
     });
@@ -1201,7 +1201,7 @@ describe("processDiscordMessage session routing", () => {
               visibleReplies: "automatic",
             },
           },
-          session: { store: "/tmp/openclaw-discord-process-test-sessions.json" },
+          session: { store: "/tmp/NexisClaw-discord-process-test-sessions.json" },
         },
         route: BASE_CHANNEL_ROUTE,
       }),
@@ -1219,7 +1219,7 @@ describe("processDiscordMessage session routing", () => {
 
   it("prefers bound session keys and sets MessageThreadId for bound thread messages", async () => {
     const threadBindings = createThreadBindingManager({
-      cfg: {} as import("openclaw/plugin-sdk/config-contracts").OpenClawConfig,
+      cfg: {} as import("NexisClaw/plugin-sdk/config-contracts").NexisClawConfig,
       accountId: "default",
       persist: false,
       enableSweeper: false,
@@ -1350,7 +1350,7 @@ describe("processDiscordMessage draft streaming", () => {
     return await createAutomaticSourceDeliveryContext({
       cfg: {
         messages: { ackReaction: "👀" },
-        session: { store: "/tmp/openclaw-discord-process-test-sessions.json" },
+        session: { store: "/tmp/NexisClaw-discord-process-test-sessions.json" },
         channels: {
           discord: {
             draftChunk: { minChars: 1, maxChars: 5, breakPreference: "newline" },
@@ -1424,7 +1424,7 @@ describe("processDiscordMessage draft streaming", () => {
     const ctx = await createAutomaticSourceDeliveryContext({
       cfg: {
         messages: { ackReaction: "👀" },
-        session: { store: "/tmp/openclaw-discord-process-test-sessions.json" },
+        session: { store: "/tmp/NexisClaw-discord-process-test-sessions.json" },
         channels: {
           discord: {
             maxLinesPerMessage: 120,

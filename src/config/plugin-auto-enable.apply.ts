@@ -8,10 +8,10 @@ import type {
   PluginAutoEnableCandidate,
   PluginAutoEnableResult,
 } from "./plugin-auto-enable.types.js";
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { NexisClawConfig } from "./types.NexisClaw.js";
 
 export function materializePluginAutoEnableCandidates(params: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   candidates: readonly PluginAutoEnableCandidate[];
   env?: NodeJS.ProcessEnv;
   manifestRegistry?: PluginManifestRegistry;
@@ -41,7 +41,7 @@ export function materializePluginAutoEnableCandidates(params: {
 }
 
 export function applyPluginAutoEnable(params: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   env?: NodeJS.ProcessEnv;
   manifestRegistry?: PluginManifestRegistry;
 }): PluginAutoEnableResult {

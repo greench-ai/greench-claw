@@ -1,5 +1,5 @@
-import { logDebug } from "openclaw/plugin-sdk/logging-core";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import { logDebug } from "NexisClaw/plugin-sdk/logging-core";
+import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
 import {
   isDiscordGroupAllowedByPolicy,
   resolveGroupDmAllow,

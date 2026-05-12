@@ -1,7 +1,7 @@
 export {
   buildRandomTempFilePath,
   createTempDownloadTarget,
-  resolvePreferredOpenClawTmpDir,
+  resolvePreferredNexisClawTmpDir,
   sanitizeTempFileName,
   withTempDownloadPath,
 } from "../infra/temp-download.js";

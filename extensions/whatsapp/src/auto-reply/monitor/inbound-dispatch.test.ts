@@ -25,8 +25,8 @@ const {
   ),
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-message", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/channel-message")>();
+vi.mock("NexisClaw/plugin-sdk/channel-message", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/channel-message")>();
   return {
     ...actual,
     deliverInboundReplyWithMessageSendContext: deliverInboundReplyWithMessageSendContextMock,

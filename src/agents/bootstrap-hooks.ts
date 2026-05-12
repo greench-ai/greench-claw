@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type { AgentBootstrapHookContext } from "../hooks/internal-hooks.js";
 import { createInternalHookEvent, triggerInternalHook } from "../hooks/internal-hooks.js";
 import { resolveAgentIdFromSessionKey } from "../routing/session-key.js";
@@ -7,7 +7,7 @@ import type { WorkspaceBootstrapFile } from "./workspace.js";
 export async function applyBootstrapHookOverrides(params: {
   files: WorkspaceBootstrapFile[];
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   sessionKey?: string;
   sessionId?: string;
   agentId?: string;

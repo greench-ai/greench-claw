@@ -5,23 +5,23 @@ import {
   resolveEnvelopeFormatOptions,
   toLocationContext,
   type NormalizedLocation,
-} from "openclaw/plugin-sdk/channel-inbound";
-import { normalizeCommandBody } from "openclaw/plugin-sdk/command-surface";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "NexisClaw/plugin-sdk/channel-inbound";
+import { normalizeCommandBody } from "NexisClaw/plugin-sdk/command-surface";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import type {
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import { resolveChannelContextVisibilityMode } from "openclaw/plugin-sdk/context-visibility-runtime";
+} from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveChannelContextVisibilityMode } from "NexisClaw/plugin-sdk/context-visibility-runtime";
 import {
   buildPendingHistoryContextFromMap,
   type HistoryEntry,
-} from "openclaw/plugin-sdk/reply-history";
-import type { ResolvedAgentRoute } from "openclaw/plugin-sdk/routing";
-import { logVerbose, shouldLogVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { evaluateSupplementalContextVisibility } from "openclaw/plugin-sdk/security-runtime";
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/reply-history";
+import type { ResolvedAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import { logVerbose, shouldLogVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { evaluateSupplementalContextVisibility } from "NexisClaw/plugin-sdk/security-runtime";
+import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import type { NormalizedAllowFrom } from "./bot-access.js";
 import { isSenderAllowed, normalizeAllowFrom } from "./bot-access.js";
 import type {
@@ -89,7 +89,7 @@ async function loadTelegramMessageContextSessionRuntime(
 }
 
 export async function resolveTelegramMessageContextStorePath(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   agentId: string;
   sessionRuntime?: TelegramMessageContextSessionRuntimeOverrides;
 }): Promise<string> {
@@ -153,7 +153,7 @@ function formatReplyChainEntry(entry: TelegramReplyChainEntry, index: number): s
 }
 
 export async function buildTelegramInboundContextPayload(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   primaryCtx: TelegramContext;
   msg: TelegramContext["message"];
   allMedia: TelegramMediaRef[];

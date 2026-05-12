@@ -1,8 +1,8 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { loadBundledPluginPublicArtifactModuleSync } from "../../plugins/public-surface-loader.js";
 
 type GatewayAuthBypassApi = {
-  resolveGatewayAuthBypassPaths?: (params: { cfg: OpenClawConfig }) => readonly unknown[];
+  resolveGatewayAuthBypassPaths?: (params: { cfg: NexisClawConfig }) => readonly unknown[];
 };
 
 const GATEWAY_AUTH_API_ARTIFACT_BASENAME = "gateway-auth-api.js";
@@ -24,7 +24,7 @@ function loadBundledChannelGatewayAuthApi(channelId: string): GatewayAuthBypassA
 
 export function resolveBundledChannelGatewayAuthBypassPaths(params: {
   channelId: string;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
 }): string[] {
   const api = loadBundledChannelGatewayAuthApi(params.channelId);
   const paths = api?.resolveGatewayAuthBypassPaths?.({ cfg: params.cfg }) ?? [];

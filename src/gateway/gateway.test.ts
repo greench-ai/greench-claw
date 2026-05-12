@@ -24,17 +24,17 @@ const GATEWAY_E2E_TIMEOUT_MS = 90_000;
 let gatewayTestSeq = 0;
 const GATEWAY_TEST_ENV_KEYS = [
   "HOME",
-  "OPENCLAW_STATE_DIR",
-  "OPENCLAW_CONFIG_PATH",
-  "OPENCLAW_GATEWAY_TOKEN",
-  "OPENCLAW_SKIP_CHANNELS",
-  "OPENCLAW_SKIP_GMAIL_WATCHER",
-  "OPENCLAW_SKIP_CRON",
-  "OPENCLAW_SKIP_CANVAS_HOST",
-  "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "OPENCLAW_SKIP_PROVIDERS",
-  "OPENCLAW_BUNDLED_PLUGINS_DIR",
-  "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
+  "NEXISCLAW_STATE_DIR",
+  "NEXISCLAW_CONFIG_PATH",
+  "NEXISCLAW_GATEWAY_TOKEN",
+  "NEXISCLAW_SKIP_CHANNELS",
+  "NEXISCLAW_SKIP_GMAIL_WATCHER",
+  "NEXISCLAW_SKIP_CRON",
+  "NEXISCLAW_SKIP_CANVAS_HOST",
+  "NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "NEXISCLAW_SKIP_PROVIDERS",
+  "NEXISCLAW_BUNDLED_PLUGINS_DIR",
+  "NEXISCLAW_DISABLE_BUNDLED_PLUGINS",
 ] as const;
 
 function nextGatewayId(prefix: string): string {
@@ -42,7 +42,7 @@ function nextGatewayId(prefix: string): string {
 }
 
 async function createEmptyBundledPluginsDir(tempHome: string): Promise<string> {
-  const bundledPluginsDir = path.join(tempHome, "openclaw-test-empty-bundled-plugins");
+  const bundledPluginsDir = path.join(tempHome, "NexisClaw-test-empty-bundled-plugins");
   await fs.mkdir(bundledPluginsDir, { recursive: true });
   return bundledPluginsDir;
 }
@@ -53,10 +53,10 @@ async function writeWorkspacePlugin(params: {
   body: string;
   activation?: { onStartup?: boolean };
 }): Promise<void> {
-  const pluginDir = path.join(params.workspaceDir, ".openclaw", "extensions", params.id);
+  const pluginDir = path.join(params.workspaceDir, ".NexisClaw", "extensions", params.id);
   await fs.mkdir(pluginDir, { recursive: true });
   await fs.writeFile(
-    path.join(pluginDir, "openclaw.plugin.json"),
+    path.join(pluginDir, "NexisClaw.plugin.json"),
     `${JSON.stringify(
       {
         id: params.id,
@@ -104,29 +104,29 @@ async function readCounterWithRetry(filePath: string): Promise<number> {
 async function setupGatewayTempHome(params: { prefix: string; minimalGateway?: boolean }) {
   const envSnapshot = captureEnv([
     ...GATEWAY_TEST_ENV_KEYS,
-    ...(params.minimalGateway ? (["OPENCLAW_TEST_MINIMAL_GATEWAY"] as const) : []),
+    ...(params.minimalGateway ? (["NEXISCLAW_TEST_MINIMAL_GATEWAY"] as const) : []),
   ]);
 
   const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), params.prefix));
   process.env.HOME = tempHome;
-  process.env.OPENCLAW_STATE_DIR = path.join(tempHome, ".openclaw");
-  delete process.env.OPENCLAW_CONFIG_PATH;
-  process.env.OPENCLAW_SKIP_CHANNELS = "1";
-  process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
-  process.env.OPENCLAW_SKIP_CRON = "1";
-  process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
-  process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-  process.env.OPENCLAW_SKIP_PROVIDERS = "1";
+  process.env.NEXISCLAW_STATE_DIR = path.join(tempHome, ".NexisClaw");
+  delete process.env.NEXISCLAW_CONFIG_PATH;
+  process.env.NEXISCLAW_SKIP_CHANNELS = "1";
+  process.env.NEXISCLAW_SKIP_GMAIL_WATCHER = "1";
+  process.env.NEXISCLAW_SKIP_CRON = "1";
+  process.env.NEXISCLAW_SKIP_CANVAS_HOST = "1";
+  process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+  process.env.NEXISCLAW_SKIP_PROVIDERS = "1";
   if (params.minimalGateway) {
-    process.env.OPENCLAW_TEST_MINIMAL_GATEWAY = "1";
+    process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY = "1";
   } else {
-    delete process.env.OPENCLAW_TEST_MINIMAL_GATEWAY;
+    delete process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY;
   }
 
-  const workspaceDir = path.join(tempHome, "openclaw");
+  const workspaceDir = path.join(tempHome, "NexisClaw");
   await fs.mkdir(workspaceDir, { recursive: true });
-  process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = await createEmptyBundledPluginsDir(tempHome);
-  process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+  process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = await createEmptyBundledPluginsDir(tempHome);
+  process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = "1";
   return { envSnapshot, tempHome, workspaceDir };
 }
 
@@ -159,16 +159,16 @@ describe("gateway e2e", () => {
     async () => {
       const { baseUrl: openaiBaseUrl, restore } = installOpenAiResponsesMock();
       const { envSnapshot, tempHome, workspaceDir } = await setupGatewayTempHome({
-        prefix: "openclaw-gw-mock-home-",
+        prefix: "NexisClaw-gw-mock-home-",
         minimalGateway: true,
       });
 
       const token = nextGatewayId("test-token");
-      process.env.OPENCLAW_GATEWAY_TOKEN = token;
+      process.env.NEXISCLAW_GATEWAY_TOKEN = token;
 
-      const configDir = path.join(tempHome, ".openclaw");
+      const configDir = path.join(tempHome, ".NexisClaw");
       await fs.mkdir(configDir, { recursive: true });
-      const configPath = path.join(configDir, "openclaw.json");
+      const configPath = path.join(configDir, "NexisClaw.json");
       const mockProvider = buildMockOpenAiResponsesProvider(openaiBaseUrl);
 
       const cfg = {
@@ -239,11 +239,11 @@ describe("gateway e2e", () => {
     { timeout: GATEWAY_E2E_TIMEOUT_MS },
     async () => {
       const { envSnapshot, tempHome, workspaceDir } = await setupGatewayTempHome({
-        prefix: "openclaw-gw-http-tools-home-",
+        prefix: "NexisClaw-gw-http-tools-home-",
       });
 
       const token = nextGatewayId("http-tools-token");
-      process.env.OPENCLAW_GATEWAY_TOKEN = token;
+      process.env.NEXISCLAW_GATEWAY_TOKEN = token;
       const registerCountPath = path.join(tempHome, "workspace-plugin-register-count.txt");
       await writeWorkspacePlugin({
         workspaceDir,
@@ -264,9 +264,9 @@ module.exports = {
 `.trimStart(),
       });
 
-      const configDir = path.join(tempHome, ".openclaw");
+      const configDir = path.join(tempHome, ".NexisClaw");
       await fs.mkdir(configDir, { recursive: true });
-      const configPath = path.join(configDir, "openclaw.json");
+      const configPath = path.join(configDir, "NexisClaw.json");
       const cfg = {
         agents: {
           defaults: { workspace: workspaceDir },
@@ -278,7 +278,7 @@ module.exports = {
         gateway: { auth: { token } },
       };
       await fs.writeFile(configPath, `${JSON.stringify(cfg, null, 2)}\n`);
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
+      process.env.NEXISCLAW_CONFIG_PATH = configPath;
 
       const port = await getFreeGatewayPort();
       const server = await startGatewayServer(port, {
@@ -331,36 +331,36 @@ module.exports = {
     async () => {
       const envSnapshot = captureEnv([
         "HOME",
-        "OPENCLAW_STATE_DIR",
-        "OPENCLAW_CONFIG_PATH",
-        "OPENCLAW_GATEWAY_TOKEN",
-        "OPENCLAW_SKIP_CHANNELS",
-        "OPENCLAW_SKIP_GMAIL_WATCHER",
-        "OPENCLAW_SKIP_CRON",
-        "OPENCLAW_SKIP_CANVAS_HOST",
-        "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-        "OPENCLAW_SKIP_PROVIDERS",
-        "OPENCLAW_BUNDLED_PLUGINS_DIR",
-        "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
-        "OPENCLAW_TEST_MINIMAL_GATEWAY",
+        "NEXISCLAW_STATE_DIR",
+        "NEXISCLAW_CONFIG_PATH",
+        "NEXISCLAW_GATEWAY_TOKEN",
+        "NEXISCLAW_SKIP_CHANNELS",
+        "NEXISCLAW_SKIP_GMAIL_WATCHER",
+        "NEXISCLAW_SKIP_CRON",
+        "NEXISCLAW_SKIP_CANVAS_HOST",
+        "NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER",
+        "NEXISCLAW_SKIP_PROVIDERS",
+        "NEXISCLAW_BUNDLED_PLUGINS_DIR",
+        "NEXISCLAW_DISABLE_BUNDLED_PLUGINS",
+        "NEXISCLAW_TEST_MINIMAL_GATEWAY",
       ]);
 
-      process.env.OPENCLAW_SKIP_CHANNELS = "1";
-      process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
-      process.env.OPENCLAW_SKIP_CRON = "1";
-      process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
-      process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-      process.env.OPENCLAW_SKIP_PROVIDERS = "1";
-      process.env.OPENCLAW_TEST_MINIMAL_GATEWAY = "1";
-      delete process.env.OPENCLAW_GATEWAY_TOKEN;
+      process.env.NEXISCLAW_SKIP_CHANNELS = "1";
+      process.env.NEXISCLAW_SKIP_GMAIL_WATCHER = "1";
+      process.env.NEXISCLAW_SKIP_CRON = "1";
+      process.env.NEXISCLAW_SKIP_CANVAS_HOST = "1";
+      process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+      process.env.NEXISCLAW_SKIP_PROVIDERS = "1";
+      process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY = "1";
+      delete process.env.NEXISCLAW_GATEWAY_TOKEN;
 
-      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-wizard-home-"));
-      const configPath = path.join(tempHome, ".openclaw", "openclaw.json");
+      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-wizard-home-"));
+      const configPath = path.join(tempHome, ".NexisClaw", "NexisClaw.json");
       process.env.HOME = tempHome;
-      process.env.OPENCLAW_STATE_DIR = path.join(tempHome, ".openclaw");
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
-      process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = await createEmptyBundledPluginsDir(tempHome);
-      process.env.OPENCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+      process.env.NEXISCLAW_STATE_DIR = path.join(tempHome, ".NexisClaw");
+      process.env.NEXISCLAW_CONFIG_PATH = configPath;
+      process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = await createEmptyBundledPluginsDir(tempHome);
+      process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = "1";
       clearRuntimeConfigSnapshot();
       clearConfigCache();
 
@@ -482,38 +482,38 @@ module.exports = {
     async () => {
       const envSnapshot = captureEnv([
         "HOME",
-        "OPENCLAW_STATE_DIR",
-        "OPENCLAW_CONFIG_PATH",
-        "OPENCLAW_GATEWAY_TOKEN",
-        "OPENCLAW_SKIP_CHANNELS",
-        "OPENCLAW_SKIP_GMAIL_WATCHER",
-        "OPENCLAW_SKIP_CRON",
-        "OPENCLAW_SKIP_CANVAS_HOST",
-        "OPENCLAW_SKIP_BROWSER_CONTROL_SERVER",
-        "OPENCLAW_SKIP_PROVIDERS",
-        "OPENCLAW_BUNDLED_PLUGINS_DIR",
-        "OPENCLAW_TEST_MINIMAL_GATEWAY",
+        "NEXISCLAW_STATE_DIR",
+        "NEXISCLAW_CONFIG_PATH",
+        "NEXISCLAW_GATEWAY_TOKEN",
+        "NEXISCLAW_SKIP_CHANNELS",
+        "NEXISCLAW_SKIP_GMAIL_WATCHER",
+        "NEXISCLAW_SKIP_CRON",
+        "NEXISCLAW_SKIP_CANVAS_HOST",
+        "NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER",
+        "NEXISCLAW_SKIP_PROVIDERS",
+        "NEXISCLAW_BUNDLED_PLUGINS_DIR",
+        "NEXISCLAW_TEST_MINIMAL_GATEWAY",
         "DISCORD_BOT_TOKEN",
       ]);
 
-      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-minimal-gateway-home-"));
-      const configPath = path.join(tempHome, ".openclaw", "openclaw.json");
-      const bundledPluginsDir = path.join(tempHome, "openclaw-test-no-bundled-extensions");
+      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-minimal-gateway-home-"));
+      const configPath = path.join(tempHome, ".NexisClaw", "NexisClaw.json");
+      const bundledPluginsDir = path.join(tempHome, "NexisClaw-test-no-bundled-extensions");
       process.env.HOME = tempHome;
-      process.env.OPENCLAW_STATE_DIR = path.join(tempHome, ".openclaw");
-      process.env.OPENCLAW_CONFIG_PATH = configPath;
-      process.env.OPENCLAW_SKIP_CHANNELS = "1";
-      process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
-      process.env.OPENCLAW_SKIP_CRON = "1";
-      process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
-      process.env.OPENCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-      process.env.OPENCLAW_SKIP_PROVIDERS = "1";
-      process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
-      process.env.OPENCLAW_TEST_MINIMAL_GATEWAY = "1";
+      process.env.NEXISCLAW_STATE_DIR = path.join(tempHome, ".NexisClaw");
+      process.env.NEXISCLAW_CONFIG_PATH = configPath;
+      process.env.NEXISCLAW_SKIP_CHANNELS = "1";
+      process.env.NEXISCLAW_SKIP_GMAIL_WATCHER = "1";
+      process.env.NEXISCLAW_SKIP_CRON = "1";
+      process.env.NEXISCLAW_SKIP_CANVAS_HOST = "1";
+      process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+      process.env.NEXISCLAW_SKIP_PROVIDERS = "1";
+      process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
+      process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY = "1";
       process.env.DISCORD_BOT_TOKEN = "discord-test-token";
 
       const token = nextGatewayId("minimal-token");
-      process.env.OPENCLAW_GATEWAY_TOKEN = token;
+      process.env.NEXISCLAW_GATEWAY_TOKEN = token;
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.mkdir(bundledPluginsDir, { recursive: true });
       await fs.writeFile(

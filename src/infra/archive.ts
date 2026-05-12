@@ -24,4 +24,4 @@ export {
   type ArchiveLogger,
   type ArchiveSecurityErrorCode,
   type TarEntryInfo,
-} from "@openclaw/fs-safe/archive";
+} from "@NexisClaw/fs-safe/archive";

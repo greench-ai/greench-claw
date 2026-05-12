@@ -1,7 +1,7 @@
 import type { AgentToolResult } from "@earendil-works/pi-agent-core";
-import { readBooleanParam } from "openclaw/plugin-sdk/boolean-param";
-import { isSingleUseReplyToMode } from "openclaw/plugin-sdk/reply-reference";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { readBooleanParam } from "NexisClaw/plugin-sdk/boolean-param";
+import { isSingleUseReplyToMode } from "NexisClaw/plugin-sdk/reply-reference";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { parseSlackBlocksInput } from "./blocks-input.js";
 import {
   createActionGate,
@@ -10,7 +10,7 @@ import {
   readNumberParam,
   readReactionParams,
   readStringParam,
-  type OpenClawConfig,
+  type NexisClawConfig,
   withNormalizedTimestamp,
 } from "./runtime-api.js";
 import { parseSlackTarget, resolveSlackChannelId } from "./targets.js";
@@ -152,7 +152,7 @@ function isImageContentType(value: string | undefined): boolean {
 
 export async function handleSlackAction(
   params: Record<string, unknown>,
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   context?: SlackActionContext,
 ): Promise<AgentToolResult<unknown>> {
   const resolveChannelId = () =>

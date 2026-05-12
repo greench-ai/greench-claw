@@ -2,14 +2,14 @@ import {
   buildExecApprovalPendingReplyPayload,
   resolveExecApprovalRequestAllowedDecisions,
   resolveExecApprovalCommandDisplay,
-} from "openclaw/plugin-sdk/approval-reply-runtime";
-import type { ExecApprovalRequest } from "openclaw/plugin-sdk/approval-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { normalizeMessageChannel } from "openclaw/plugin-sdk/routing";
+} from "NexisClaw/plugin-sdk/approval-reply-runtime";
+import type { ExecApprovalRequest } from "NexisClaw/plugin-sdk/approval-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { normalizeMessageChannel } from "NexisClaw/plugin-sdk/routing";
 import { isTelegramExecApprovalClientEnabled } from "./exec-approvals.js";
 
 export function shouldSuppressTelegramExecApprovalForwardingFallback(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   target: { channel: string; accountId?: string | null };
   request: ExecApprovalRequest;
 }): boolean {

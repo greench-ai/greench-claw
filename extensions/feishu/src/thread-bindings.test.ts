@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { getSessionBindingService } from "openclaw/plugin-sdk/conversation-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { getSessionBindingService } from "NexisClaw/plugin-sdk/conversation-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { __testing, createFeishuThreadBindingManager } from "./thread-bindings.js";
 
 const baseCfg = {
   session: { mainKey: "main", scope: "per-sender" },
-} satisfies OpenClawConfig;
+} satisfies NexisClawConfig;
 
 describe("Feishu thread bindings", () => {
   beforeEach(() => {

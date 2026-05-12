@@ -1,26 +1,26 @@
 {
-  "name": "@openclaw/qa-matrix",
+  "name": "@NexisClaw/qa-matrix",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw Matrix QA runner plugin",
+  "description": "NexisClaw Matrix QA runner plugin",
   "type": "module",
   "dependencies": {
     "undici": "8.2.0"
   },
   "devDependencies": {
-    "@openclaw/matrix": "workspace:*",
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@NexisClaw/matrix": "workspace:*",
+    "@NexisClaw/plugin-sdk": "workspace:*",
+    "NexisClaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.5.12-beta.1"
+    "NexisClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "NexisClaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],

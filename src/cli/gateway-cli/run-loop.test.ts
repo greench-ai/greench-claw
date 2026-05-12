@@ -60,7 +60,7 @@ const respawnGatewayProcessForUpdate = vi.fn<
     detail?: string;
     child?: { kill: () => void };
   }
->(() => ({ mode: "disabled", detail: "OPENCLAW_NO_RESPAWN" }));
+>(() => ({ mode: "disabled", detail: "NEXISCLAW_NO_RESPAWN" }));
 const markUpdateRestartSentinelFailure = vi.fn<(reason: string) => Promise<null>>(
   async (_reason: string) => null,
 );
@@ -453,7 +453,7 @@ describe("runGatewayLoop", () => {
     peekGatewaySigusr1RestartReason.mockReturnValue(undefined);
     respawnGatewayProcessForUpdate.mockReturnValue({
       mode: "disabled",
-      detail: "OPENCLAW_NO_RESPAWN",
+      detail: "NEXISCLAW_NO_RESPAWN",
     });
     markUpdateRestartSentinelFailure.mockClear();
 
@@ -563,7 +563,7 @@ describe("runGatewayLoop", () => {
     peekGatewaySigusr1RestartReason.mockReturnValue(undefined);
     respawnGatewayProcessForUpdate.mockReturnValue({
       mode: "disabled",
-      detail: "OPENCLAW_NO_RESPAWN",
+      detail: "NEXISCLAW_NO_RESPAWN",
     });
 
     await withIsolatedSignals(async ({ captureSignal }) => {
@@ -667,7 +667,7 @@ describe("runGatewayLoop", () => {
     peekGatewaySigusr1RestartReason.mockReturnValue(undefined);
     try {
       setPlatform("darwin");
-      process.env.LAUNCH_JOB_LABEL = "ai.openclaw.gateway";
+      process.env.LAUNCH_JOB_LABEL = "ai.NexisClaw.gateway";
       restartGatewayProcessWithFreshPid.mockReturnValueOnce({
         mode: "supervised",
       });

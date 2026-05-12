@@ -2,8 +2,8 @@ import {
   logAckFailure,
   removeAckReactionHandleAfterReply,
   type AckReactionHandle,
-} from "openclaw/plugin-sdk/channel-feedback";
-import { recordInboundSession } from "openclaw/plugin-sdk/conversation-runtime";
+} from "NexisClaw/plugin-sdk/channel-feedback";
+import { recordInboundSession } from "NexisClaw/plugin-sdk/conversation-runtime";
 import {
   createInternalHookEvent,
   deriveInboundMessageHookContext,
@@ -12,10 +12,10 @@ import {
   toPluginMessageContext,
   toPluginMessageReceivedEvent,
   triggerInternalHook,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { runInboundReplyTurn } from "openclaw/plugin-sdk/inbound-reply-dispatch";
-import { getGlobalHookRunner } from "openclaw/plugin-sdk/plugin-runtime";
-import { resolveBatchedReplyThreadingPolicy } from "openclaw/plugin-sdk/reply-reference";
+} from "NexisClaw/plugin-sdk/hook-runtime";
+import { runInboundReplyTurn } from "NexisClaw/plugin-sdk/inbound-reply-dispatch";
+import { getGlobalHookRunner } from "NexisClaw/plugin-sdk/plugin-runtime";
+import { resolveBatchedReplyThreadingPolicy } from "NexisClaw/plugin-sdk/reply-reference";
 import { getPrimaryIdentityId, getSelfIdentity, getSenderIdentity } from "../../identity.js";
 import {
   resolveWhatsAppCommandAuthorized,

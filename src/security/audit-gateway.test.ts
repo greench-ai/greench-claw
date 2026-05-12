@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import { collectGatewayConfigFindings } from "./audit-gateway-config.js";
 
@@ -20,8 +20,8 @@ describe("security audit gateway config findings", () => {
     await Promise.all([
       withEnvAsync(
         {
-          OPENCLAW_GATEWAY_TOKEN: undefined,
-          OPENCLAW_GATEWAY_PASSWORD: undefined,
+          NEXISCLAW_GATEWAY_TOKEN: undefined,
+          NEXISCLAW_GATEWAY_PASSWORD: undefined,
         },
         async () => {
           const findings = collectGatewayConfigFindings(
@@ -43,14 +43,14 @@ describe("security audit gateway config findings", () => {
         },
       ),
       (async () => {
-        const cfg: OpenClawConfig = {
+        const cfg: NexisClawConfig = {
           gateway: {
             bind: "lan",
             auth: {
               password: {
                 source: "env",
                 provider: "default",
-                id: "OPENCLAW_GATEWAY_PASSWORD",
+                id: "NEXISCLAW_GATEWAY_PASSWORD",
               },
             },
           },
@@ -59,14 +59,14 @@ describe("security audit gateway config findings", () => {
         expect(hasFinding("gateway.bind_no_auth", findings)).toBe(false);
       })(),
       (async () => {
-        const sourceConfig: OpenClawConfig = {
+        const sourceConfig: NexisClawConfig = {
           gateway: {
             bind: "lan",
             auth: {
               token: {
                 source: "env",
                 provider: "default",
-                id: "OPENCLAW_GATEWAY_TOKEN",
+                id: "NEXISCLAW_GATEWAY_TOKEN",
               },
             },
           },
@@ -76,7 +76,7 @@ describe("security audit gateway config findings", () => {
             },
           },
         };
-        const resolvedConfig: OpenClawConfig = {
+        const resolvedConfig: NexisClawConfig = {
           gateway: {
             bind: "lan",
             auth: {},
@@ -87,7 +87,7 @@ describe("security audit gateway config findings", () => {
         expect(hasFinding("gateway.bind_no_auth", findings)).toBe(false);
       })(),
       (async () => {
-        const cfg: OpenClawConfig = {
+        const cfg: NexisClawConfig = {
           gateway: {
             bind: "lan",
             auth: { token: "secret" },
@@ -97,7 +97,7 @@ describe("security audit gateway config findings", () => {
         expect(hasFindingWithSeverity("gateway.auth_no_rate_limit", "warn", findings)).toBe(true);
       })(),
       (async () => {
-        const cfg: OpenClawConfig = {
+        const cfg: NexisClawConfig = {
           gateway: {
             bind: "lan",
             auth: {
@@ -112,43 +112,43 @@ describe("security audit gateway config findings", () => {
     ]);
   });
 
-  it("warns when OPENCLAW_GATEWAY_TOKEN shadows a different configured token source", () => {
-    const cfg: OpenClawConfig = {
+  it("warns when NEXISCLAW_GATEWAY_TOKEN shadows a different configured token source", () => {
+    const cfg: NexisClawConfig = {
       gateway: { auth: { token: "config-token" } },
     };
     const findings = collectGatewayConfigFindings(cfg, cfg, {
-      OPENCLAW_GATEWAY_TOKEN: "env-token",
+      NEXISCLAW_GATEWAY_TOKEN: "env-token",
     });
 
     expect(hasFinding("gateway.env_token_overrides_config", findings)).toBe(true);
   });
 
   it("does not warn inside the managed gateway service credential context", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NexisClawConfig = {
       gateway: { auth: { token: "config-token" } },
     };
     const findings = collectGatewayConfigFindings(cfg, cfg, {
-      OPENCLAW_GATEWAY_TOKEN: "env-token",
-      OPENCLAW_SERVICE_KIND: "gateway",
+      NEXISCLAW_GATEWAY_TOKEN: "env-token",
+      NEXISCLAW_SERVICE_KIND: "gateway",
     });
 
     expect(hasFinding("gateway.env_token_overrides_config", findings)).toBe(false);
   });
 
-  it("does not warn when gateway.auth.token resolves from OPENCLAW_GATEWAY_TOKEN", () => {
-    const cfg: OpenClawConfig = {
-      gateway: { auth: { token: "${OPENCLAW_GATEWAY_TOKEN}" } },
+  it("does not warn when gateway.auth.token resolves from NEXISCLAW_GATEWAY_TOKEN", () => {
+    const cfg: NexisClawConfig = {
+      gateway: { auth: { token: "${NEXISCLAW_GATEWAY_TOKEN}" } },
       secrets: { providers: { default: { source: "env" } } },
     };
     const findings = collectGatewayConfigFindings(cfg, cfg, {
-      OPENCLAW_GATEWAY_TOKEN: "env-token",
+      NEXISCLAW_GATEWAY_TOKEN: "env-token",
     });
 
     expect(hasFinding("gateway.env_token_overrides_config", findings)).toBe(false);
   });
 
   it("does not warn about local gateway auth token precedence in remote mode", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NexisClawConfig = {
       gateway: {
         mode: "remote",
         remote: { token: "remote-token" },
@@ -156,7 +156,7 @@ describe("security audit gateway config findings", () => {
       },
     };
     const findings = collectGatewayConfigFindings(cfg, cfg, {
-      OPENCLAW_GATEWAY_TOKEN: "env-token",
+      NEXISCLAW_GATEWAY_TOKEN: "env-token",
     });
 
     expect(hasFinding("gateway.env_token_overrides_config", findings)).toBe(false);

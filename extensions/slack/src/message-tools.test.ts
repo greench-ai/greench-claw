@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { listSlackMessageActions } from "./message-actions.js";
 import { describeSlackMessageTool } from "./message-tool-api.js";
@@ -87,7 +87,7 @@ describe("Slack message tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     expect(listSlackMessageActions(cfg)).toEqual([
       "send",
@@ -142,7 +142,7 @@ describe("Slack message tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     expect(listSlackMessageActions(cfg, "default")).toEqual(["send"]);
     expect(listSlackMessageActions(cfg, "work")).toEqual([
@@ -251,7 +251,7 @@ describe("Slack message tools", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
     });
 
     expect(discovery.actions).toEqual(["send"]);

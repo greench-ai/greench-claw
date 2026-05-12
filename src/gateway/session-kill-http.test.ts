@@ -138,7 +138,7 @@ describe("POST /sessions/:sessionKey/kill", () => {
       "/sessions/agent%3Amain%3Asubagent%3Aworker/kill",
       TEST_GATEWAY_TOKEN,
       {
-        "x-openclaw-scopes": "operator.admin",
+        "x-NexisClaw-scopes": "operator.admin",
       },
     );
     expect(response.status).toBe(404);
@@ -174,7 +174,7 @@ describe("POST /sessions/:sessionKey/kill", () => {
       "/sessions/agent%3AMain%3ASubagent%3AWorker/kill",
       TEST_GATEWAY_TOKEN,
       {
-        "x-openclaw-scopes": "operator.admin",
+        "x-NexisClaw-scopes": "operator.admin",
       },
     );
     expect(response.status).toBe(200);
@@ -197,7 +197,7 @@ describe("POST /sessions/:sessionKey/kill", () => {
       "/sessions/agent%3Amain%3Asubagent%3Aworker/kill",
       TEST_GATEWAY_TOKEN,
       {
-        "x-openclaw-scopes": "operator.admin",
+        "x-NexisClaw-scopes": "operator.admin",
       },
     );
     expect(response.status).toBe(200);
@@ -215,12 +215,12 @@ describe("POST /sessions/:sessionKey/kill", () => {
     expect(killSubagentRunAdminMock).not.toHaveBeenCalled();
   });
 
-  it("does not trust x-openclaw-scopes on shared-secret bearer auth", async () => {
+  it("does not trust x-NexisClaw-scopes on shared-secret bearer auth", async () => {
     const response = await post(
       "/sessions/agent%3Amain%3Asubagent%3Aworker/kill",
       TEST_GATEWAY_TOKEN,
       {
-        "x-openclaw-scopes": "operator.admin",
+        "x-NexisClaw-scopes": "operator.admin",
       },
     );
     expect(response.status).toBe(403);
@@ -274,8 +274,8 @@ describe("POST /sessions/:sessionKey/kill", () => {
     killControlledSubagentRunMock.mockResolvedValue({ status: "ok" });
 
     const response = await post("/sessions/agent%3Amain%3Asubagent%3Aworker/kill", "", {
-      "x-openclaw-scopes": "operator.write",
-      "x-openclaw-requester-session-key": "agent:main:main",
+      "x-NexisClaw-scopes": "operator.write",
+      "x-NexisClaw-requester-session-key": "agent:main:main",
     });
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual({ ok: true, killed: true });
@@ -304,8 +304,8 @@ describe("POST /sessions/:sessionKey/kill", () => {
     killControlledSubagentRunMock.mockResolvedValue({ status: "done" });
 
     const response = await post("/sessions/agent%3Amain%3Asubagent%3Aworker/kill", "", {
-      "x-openclaw-scopes": "operator.write",
-      "x-openclaw-requester-session-key": "agent:main:main",
+      "x-NexisClaw-scopes": "operator.write",
+      "x-NexisClaw-requester-session-key": "agent:main:main",
     });
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual({ ok: true, killed: false });
@@ -328,7 +328,7 @@ describe("POST /sessions/:sessionKey/kill", () => {
     const response = await post(
       "/sessions/agent%3Amain%3Asubagent%3Aworker/kill",
       TEST_GATEWAY_TOKEN,
-      { "x-openclaw-requester-session-key": "agent:other:main" },
+      { "x-NexisClaw-requester-session-key": "agent:other:main" },
     );
     expect(response.status).toBe(403);
     expectErrorResponse(await response.json(), {

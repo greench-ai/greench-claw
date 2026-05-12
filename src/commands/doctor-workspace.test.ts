@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
 
 const note = vi.hoisted(() => vi.fn());
@@ -34,7 +34,7 @@ describe("root memory repair", () => {
   let tmpDir = "";
 
   beforeEach(async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-root-memory-"));
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-root-memory-"));
     note.mockClear();
   });
 
@@ -92,7 +92,7 @@ describe("root memory repair", () => {
     if (!entries.has("MEMORY.md") || !entries.has("memory.md")) {
       return;
     }
-    const cfg = { agents: { defaults: { workspace: tmpDir } } } as OpenClawConfig;
+    const cfg = { agents: { defaults: { workspace: tmpDir } } } as NexisClawConfig;
     const prompter = {
       confirmRuntimeRepair: vi.fn(async () => true),
     } as unknown as DoctorPrompter;

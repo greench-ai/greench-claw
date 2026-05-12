@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type {
   NodePairingPairedNode,
   NodePairingRequestInput,
@@ -134,7 +134,7 @@ function buildNodePairingRequestInput(params: {
 }
 
 export async function reconcileNodePairingOnConnect(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   connectParams: ConnectParams;
   pairedNode: NodePairingPairedNode | null;
   reportedClientIp?: string;

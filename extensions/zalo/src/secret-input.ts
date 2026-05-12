@@ -2,4 +2,4 @@ export {
   buildSecretInputSchema,
   normalizeResolvedSecretInputString,
   normalizeSecretInputString,
-} from "openclaw/plugin-sdk/secret-input";
+} from "NexisClaw/plugin-sdk/secret-input";

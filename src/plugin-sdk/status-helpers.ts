@@ -1,7 +1,7 @@
 import type { ChannelStatusAdapter } from "../channels/plugins/types.adapters.js";
 import type { ChannelAccountSnapshot } from "../channels/plugins/types.core.js";
 import type { ChannelStatusIssue } from "../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
 export type { ChannelAccountSnapshot } from "../channels/plugins/types.core.js";
 export type { ChannelStatusIssue } from "../channels/plugins/types.public.js";
@@ -55,7 +55,7 @@ type ComputedAccountStatusBase = {
 
 type ComputedAccountStatusAdapterParams<ResolvedAccount, Probe, Audit> = {
   account: ResolvedAccount;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   runtime?: ChannelAccountSnapshot;
   probe?: Probe;
   audit?: Audit;

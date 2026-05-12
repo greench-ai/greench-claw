@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 import type { PluginOrigin } from "../plugins/types.js";
 import { collectPluginConfigAssignments } from "./runtime-config-collectors-plugins.js";
 import {
@@ -21,11 +21,11 @@ vi.mock("../plugins/bundled-plugin-metadata.js", () => ({
   listBundledPluginMetadata: () => [],
 }));
 
-function asConfig(value: unknown): OpenClawConfig {
-  return value as OpenClawConfig;
+function asConfig(value: unknown): NexisClawConfig {
+  return value as NexisClawConfig;
 }
 
-function makeContext(sourceConfig: OpenClawConfig): ResolverContext {
+function makeContext(sourceConfig: NexisClawConfig): ResolverContext {
   return createResolverContext({
     sourceConfig,
     env: {},
@@ -53,7 +53,7 @@ function requireAssignment(context: ResolverContext, index: number): RuntimeConf
 function createAcpxMcpSecretConfig(params: {
   plugins?: Record<string, unknown>;
   entry?: Record<string, unknown>;
-}): OpenClawConfig {
+}): NexisClawConfig {
   return asConfig({
     plugins: {
       ...params.plugins,
@@ -71,7 +71,7 @@ function createAcpxMcpSecretConfig(params: {
   });
 }
 
-function collectAcpxConfigAssignments(config: OpenClawConfig): ResolverContext {
+function collectAcpxConfigAssignments(config: NexisClawConfig): ResolverContext {
   const context = makeContext(config);
   collectPluginConfigAssignments({
     config,
@@ -82,7 +82,7 @@ function collectAcpxConfigAssignments(config: OpenClawConfig): ResolverContext {
   return context;
 }
 
-function expectInactiveAcpxConfig(config: OpenClawConfig): void {
+function expectInactiveAcpxConfig(config: NexisClawConfig): void {
   const context = collectAcpxConfigAssignments(config);
   expect(context.assignments).toHaveLength(0);
   expect(context.warnings.map((warning) => warning.code)).toContain(

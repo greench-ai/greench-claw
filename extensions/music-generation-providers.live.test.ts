@@ -1,13 +1,13 @@
 import {
   resolveApiKeyForProvider,
   resolveDefaultAgentDir,
-} from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "NexisClaw/plugin-sdk/agent-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   registerProviderPlugin,
   requireRegisteredProvider,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
+} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
 import {
   DEFAULT_LIVE_MUSIC_MODELS,
   collectProviderApiKeys,
@@ -28,7 +28,7 @@ import {
   redactLiveApiKey,
   resolveConfiguredLiveMusicModels,
   resolveLiveMusicAuthStore,
-} from "openclaw/plugin-sdk/test-env";
+} from "NexisClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import googlePlugin from "./google/index.js";
 import minimaxPlugin from "./minimax/index.js";
@@ -36,10 +36,10 @@ import { maybeLoadShellEnvForGenerationProviders } from "./test-support/generati
 
 const LIVE = isLiveTestEnabled();
 const REQUIRE_PROFILE_KEYS =
-  isLiveProfileKeyModeEnabled() || isTruthyEnvValue(process.env.OPENCLAW_LIVE_REQUIRE_PROFILE_KEYS);
+  isLiveProfileKeyModeEnabled() || isTruthyEnvValue(process.env.NEXISCLAW_LIVE_REQUIRE_PROFILE_KEYS);
 const describeLive = LIVE ? describe : describe.skip;
-const providerFilter = parseCsvFilter(process.env.OPENCLAW_LIVE_MUSIC_GENERATION_PROVIDERS);
-const envModelMap = parseProviderModelMap(process.env.OPENCLAW_LIVE_MUSIC_GENERATION_MODELS);
+const providerFilter = parseCsvFilter(process.env.NEXISCLAW_LIVE_MUSIC_GENERATION_PROVIDERS);
+const envModelMap = parseProviderModelMap(process.env.NEXISCLAW_LIVE_MUSIC_GENERATION_MODELS);
 
 type LiveProviderCase = {
   plugin: Parameters<typeof registerProviderPlugin>[0]["plugin"];
@@ -65,7 +65,7 @@ const CASES: LiveProviderCase[] = [
   .filter((entry) => (providerFilter ? providerFilter.has(entry.providerId) : true))
   .toSorted((left, right) => left.providerId.localeCompare(right.providerId));
 
-function withPluginsEnabled(cfg: OpenClawConfig): OpenClawConfig {
+function withPluginsEnabled(cfg: NexisClawConfig): NexisClawConfig {
   return {
     ...cfg,
     plugins: {

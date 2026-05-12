@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/opencode-provider",
+  "name": "@NexisClaw/opencode-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw OpenCode Zen provider plugin",
+  "description": "NexisClaw OpenCode Zen provider plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ]

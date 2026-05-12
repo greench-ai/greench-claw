@@ -22,7 +22,7 @@ import { createModelsProviderData } from "./model-picker.test-utils.js";
 
 const buildModelsProviderDataMock = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/models-provider-runtime", () => ({
+vi.mock("NexisClaw/plugin-sdk/models-provider-runtime", () => ({
   buildModelsProviderData: buildModelsProviderDataMock,
 }));
 

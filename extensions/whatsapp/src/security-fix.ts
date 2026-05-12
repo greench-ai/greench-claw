@@ -1,13 +1,13 @@
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import type { ChannelDoctorConfigMutation } from "openclaw/plugin-sdk/channel-contract";
-import { readChannelAllowFromStore } from "openclaw/plugin-sdk/channel-pairing";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
+import type { ChannelDoctorConfigMutation } from "NexisClaw/plugin-sdk/channel-contract";
+import { readChannelAllowFromStore } from "NexisClaw/plugin-sdk/channel-pairing";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 
 function applyGroupAllowFromFromStore(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   storeAllowFrom: string[];
   changes: string[];
-}): OpenClawConfig {
+}): NexisClawConfig {
   const next = structuredClone(params.cfg ?? {});
   const section = next.channels?.whatsapp as Record<string, unknown> | undefined;
   if (!section || typeof section !== "object" || params.storeAllowFrom.length === 0) {
@@ -48,7 +48,7 @@ function applyGroupAllowFromFromStore(params: {
 }
 
 export async function applyWhatsAppSecurityConfigFixes(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   env: NodeJS.ProcessEnv;
 }): Promise<ChannelDoctorConfigMutation> {
   const fromStore = await readChannelAllowFromStore(

@@ -7,13 +7,13 @@ import {
   resolveAgentModelFallbackValues,
   resolveAgentModelPrimaryValue,
 } from "../../config/model-input.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import type { ConfiguredEntry } from "./list.types.js";
 import { DEFAULT_MODEL, DEFAULT_PROVIDER, modelKey } from "./shared.js";
 
 const DISPLAY_MODEL_PARSE_OPTIONS = { allowPluginNormalization: false } as const;
 
-export function resolveConfiguredEntries(cfg: OpenClawConfig) {
+export function resolveConfiguredEntries(cfg: NexisClawConfig) {
   const resolvedDefault = resolveConfiguredModelRef({
     cfg,
     defaultProvider: DEFAULT_PROVIDER,

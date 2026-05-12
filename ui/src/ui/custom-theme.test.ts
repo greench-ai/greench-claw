@@ -327,7 +327,7 @@ describe("custom theme import helpers", () => {
     syncCustomThemeStyleTag(theme);
 
     expect(appendChild).toHaveBeenCalledWith(style);
-    expect(style.id).toBe("openclaw-custom-theme");
+    expect(style.id).toBe("NexisClaw-custom-theme");
     expect(style.textContent).toBe(buildCustomThemeStyles(theme));
 
     vi.stubGlobal("document", {

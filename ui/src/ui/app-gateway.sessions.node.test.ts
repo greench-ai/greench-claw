@@ -118,7 +118,7 @@ function createHost() {
     toolsCatalogError: null,
     toolsCatalogResult: null,
     debugHealth: null,
-    assistantName: "OpenClaw",
+    assistantName: "NexisClaw",
     assistantAvatar: null,
     assistantAgentId: null,
     serverVersion: null,

@@ -1,10 +1,10 @@
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-dispatch-runtime";
+import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
 import {
   resolveSendableOutboundReplyParts,
   resolveTextChunksWithFallback,
-} from "openclaw/plugin-sdk/reply-payload";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { loadWebMedia } from "openclaw/plugin-sdk/web-media";
+} from "NexisClaw/plugin-sdk/reply-payload";
+import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { loadWebMedia } from "NexisClaw/plugin-sdk/web-media";
 import { chunkDiscordTextWithMode } from "../chunk.js";
 import type {
   ButtonInteraction,

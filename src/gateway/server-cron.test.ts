@@ -2,7 +2,7 @@ import os from "node:os";
 import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { CliDeps } from "../cli/deps.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 import { SsrFBlockedError } from "../infra/net/ssrf.js";
 
 const {
@@ -96,7 +96,7 @@ vi.mock("../plugins/hook-runner-global.js", () => ({
 
 import { buildGatewayCronService } from "./server-cron.js";
 
-function createCronConfig(name: string): OpenClawConfig {
+function createCronConfig(name: string): NexisClawConfig {
   const tmpDir = path.join(os.tmpdir(), `${name}-${Date.now()}`);
   return {
     session: {
@@ -105,7 +105,7 @@ function createCronConfig(name: string): OpenClawConfig {
     cron: {
       store: path.join(tmpDir, "cron.json"),
     },
-  } as OpenClawConfig;
+  } as NexisClawConfig;
 }
 
 function requireRecord(value: unknown, label: string): Record<string, unknown> {
@@ -432,7 +432,7 @@ describe("buildGatewayCronService", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     loadConfigMock.mockReturnValue(cfg);
 
     const state = buildGatewayCronService({
@@ -495,7 +495,7 @@ describe("buildGatewayCronService", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     loadConfigMock.mockReturnValue(cfg);
 
     const state = buildGatewayCronService({
@@ -541,7 +541,7 @@ describe("buildGatewayCronService", () => {
           { id: "ops", model: "test/ops" },
         ],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NexisClawConfig;
     loadConfigMock.mockReturnValue(cfg);
 
     const state = buildGatewayCronService({
@@ -600,7 +600,7 @@ describe("buildGatewayCronService", () => {
           { id: "ops", model: "test/ops" },
         ],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NexisClawConfig;
     loadConfigMock.mockReturnValue(cfg);
 
     const state = buildGatewayCronService({
@@ -675,7 +675,7 @@ describe("buildGatewayCronService", () => {
           { id: "main", model: "test/main" },
         ],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NexisClawConfig;
     loadConfigMock.mockReturnValue(cfg);
 
     const state = buildGatewayCronService({
@@ -735,7 +735,7 @@ describe("buildGatewayCronService", () => {
           { id: "ops", model: "test/ops" },
         ],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NexisClawConfig;
     loadConfigMock.mockReturnValue(cfg);
 
     const state = buildGatewayCronService({
@@ -795,7 +795,7 @@ describe("buildGatewayCronService", () => {
           { id: "ops", model: "test/ops" },
         ],
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NexisClawConfig;
     loadConfigMock.mockReturnValue(cfg);
 
     const state = buildGatewayCronService({
@@ -935,7 +935,7 @@ describe("buildGatewayCronService", () => {
       cron: {
         store: path.join(tmpDir, "cron.json"),
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     loadConfigMock.mockReturnValue(cfg);
 
     const state = buildGatewayCronService({
@@ -1022,7 +1022,7 @@ describe("buildGatewayCronService", () => {
           { id: "yinze", workspace: path.join(tmpDir, "workspace-yinze") },
         ],
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const reloadedCfg = {
       session: {
         mainKey: "main",
@@ -1036,7 +1036,7 @@ describe("buildGatewayCronService", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     loadConfigMock.mockReturnValue(reloadedCfg);
 
     const state = buildGatewayCronService({
@@ -1100,7 +1100,7 @@ describe("buildGatewayCronService", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     const reloadedCfg = {
       session: {
         mainKey: "main",
@@ -1118,7 +1118,7 @@ describe("buildGatewayCronService", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
     loadConfigMock.mockReturnValue(reloadedCfg);
 
     const state = buildGatewayCronService({

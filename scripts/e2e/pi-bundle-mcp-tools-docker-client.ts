@@ -13,7 +13,7 @@ import {
 } from "../../dist/agents/pi-bundle-mcp-runtime.js";
 import { applyFinalEffectiveToolPolicy } from "../../dist/agents/pi-embedded-runner/effective-tool-policy.js";
 import { splitSdkTools } from "../../dist/agents/pi-embedded-runner/tool-split.js";
-import type { OpenClawConfig } from "../../dist/config/types.openclaw.js";
+import type { NexisClawConfig } from "../../dist/config/types.NexisClaw.js";
 import { getPluginToolMeta } from "../../dist/plugins/tools.js";
 
 const require = createRequire(import.meta.url);
@@ -46,7 +46,7 @@ await server.connect(new StdioServerTransport());
 
 function applyPolicy(params: {
   tools: Awaited<ReturnType<typeof materializeBundleMcpToolsForRun>>["tools"];
-  config: OpenClawConfig;
+  config: NexisClawConfig;
 }) {
   const warnings: string[] = [];
   return {
@@ -66,14 +66,14 @@ function applyPolicy(params: {
 
 async function main() {
   const stateDir =
-    process.env.OPENCLAW_STATE_DIR?.trim() ||
-    path.join(os.tmpdir(), `openclaw-pi-bundle-mcp-${process.pid}`);
+    process.env.NEXISCLAW_STATE_DIR?.trim() ||
+    path.join(os.tmpdir(), `NexisClaw-pi-bundle-mcp-${process.pid}`);
   const probeDir = path.join(stateDir, "pi-bundle-mcp-tools");
   const serverPath = path.join(probeDir, "probe-server.mjs");
   await fs.mkdir(probeDir, { recursive: true });
   await writeProbeServer(serverPath);
 
-  const cfg: OpenClawConfig = {
+  const cfg: NexisClawConfig = {
     tools: {
       profile: "coding",
     },

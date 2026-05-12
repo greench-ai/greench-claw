@@ -182,8 +182,8 @@ function formatDiagnosticsExportSuccess(aggregated: string): string {
     if (typeof manifest.generatedAt === "string") {
       lines.push(`Generated at: ${manifest.generatedAt}`);
     }
-    if (typeof manifest.openclawVersion === "string") {
-      lines.push(`OpenClaw version: ${manifest.openclawVersion}`);
+    if (typeof manifest.NexisClawVersion === "string") {
+      lines.push(`NexisClaw version: ${manifest.NexisClawVersion}`);
     }
     const contents = formatDiagnosticsContents(manifest);
     if (contents.length > 0) {

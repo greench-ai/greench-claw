@@ -1,13 +1,13 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { OPENCLAW_ACPX_LEASE_ID_ARG, OPENCLAW_GATEWAY_INSTANCE_ID_ARG } from "./process-lease.js";
+import { NEXISCLAW_ACPX_LEASE_ID_ARG, NEXISCLAW_GATEWAY_INSTANCE_ID_ARG } from "./process-lease.js";
 
 const execFileAsync = promisify(execFile);
 const GENERATED_WRAPPER_BASENAMES = new Set([
   "codex-acp-wrapper.mjs",
   "claude-agent-acp-wrapper.mjs",
 ]);
-const OPENCLAW_PLUGIN_DEPS_MARKER = "/plugin-runtime-deps/";
+const NEXISCLAW_PLUGIN_DEPS_MARKER = "/plugin-runtime-deps/";
 const ACP_PACKAGE_MARKERS = [
   "/@zed-industries/codex-acp/",
   "/@agentclientprotocol/claude-agent-acp/",
@@ -29,7 +29,7 @@ export type AcpxProcessCleanupDeps = {
 export type AcpxProcessCleanupResult = {
   inspectedPids: number[];
   terminatedPids: number[];
-  skippedReason?: "missing-root" | "not-openclaw-owned" | "unverified-root";
+  skippedReason?: "missing-root" | "not-NexisClaw-owned" | "unverified-root";
 };
 
 export type AcpxStartupReapResult = {
@@ -133,12 +133,12 @@ function liveCommandMatchesLeaseIdentity(params: {
   }
   const parts = splitCommandParts(params.command ?? "");
   return (
-    commandOptionEquals(parts, OPENCLAW_ACPX_LEASE_ID_ARG, params.expectedLeaseId) &&
-    commandOptionEquals(parts, OPENCLAW_GATEWAY_INSTANCE_ID_ARG, params.expectedGatewayInstanceId)
+    commandOptionEquals(parts, NEXISCLAW_ACPX_LEASE_ID_ARG, params.expectedLeaseId) &&
+    commandOptionEquals(parts, NEXISCLAW_GATEWAY_INSTANCE_ID_ARG, params.expectedGatewayInstanceId)
   );
 }
 
-export function isOpenClawOwnedAcpxProcessCommand(params: {
+export function isNexisClawOwnedAcpxProcessCommand(params: {
   command: string | undefined;
   wrapperRoot?: string;
 }): boolean {
@@ -150,7 +150,7 @@ export function isOpenClawOwnedAcpxProcessCommand(params: {
   if (commandMentionsGeneratedWrapper(normalized)) {
     return commandWrapperBelongsToRoot(normalized, params.wrapperRoot);
   }
-  if (!normalized.includes(OPENCLAW_PLUGIN_DEPS_MARKER)) {
+  if (!normalized.includes(NEXISCLAW_PLUGIN_DEPS_MARKER)) {
     return false;
   }
   return ACP_PACKAGE_MARKERS.some((marker) => normalized.includes(marker));
@@ -261,7 +261,7 @@ async function terminatePids(
   return terminated;
 }
 
-export async function cleanupOpenClawOwnedAcpxProcessTree(params: {
+export async function cleanupNexisClawOwnedAcpxProcessTree(params: {
   rootPid?: number;
   rootCommand?: string;
   expectedLeaseId?: string;
@@ -283,7 +283,7 @@ export async function cleanupOpenClawOwnedAcpxProcessTree(params: {
 
   const listedTree = collectProcessTree(processes, rootPid);
   // Session-store PIDs are stale data. If the live process table cannot prove
-  // that this PID still belongs to an OpenClaw-owned wrapper, fail closed to
+  // that this PID still belongs to an NexisClaw-owned wrapper, fail closed to
   // avoid killing an unrelated process after PID reuse.
   if (listedTree.length === 0) {
     return { inspectedPids: [], terminatedPids: [], skippedReason: "unverified-root" };
@@ -299,7 +299,7 @@ export async function cleanupOpenClawOwnedAcpxProcessTree(params: {
     return {
       inspectedPids: listedTree.map((processInfo) => processInfo.pid),
       terminatedPids: [],
-      skippedReason: "not-openclaw-owned",
+      skippedReason: "not-NexisClaw-owned",
     };
   }
   if (
@@ -309,11 +309,11 @@ export async function cleanupOpenClawOwnedAcpxProcessTree(params: {
     return {
       inspectedPids: listedTree.map((processInfo) => processInfo.pid),
       terminatedPids: [],
-      skippedReason: "not-openclaw-owned",
+      skippedReason: "not-NexisClaw-owned",
     };
   }
   if (
-    !isOpenClawOwnedAcpxProcessCommand({
+    !isNexisClawOwnedAcpxProcessCommand({
       command: rootCommand,
       wrapperRoot: params.wrapperRoot,
     })
@@ -321,7 +321,7 @@ export async function cleanupOpenClawOwnedAcpxProcessTree(params: {
     return {
       inspectedPids: listedTree.map((processInfo) => processInfo.pid),
       terminatedPids: [],
-      skippedReason: "not-openclaw-owned",
+      skippedReason: "not-NexisClaw-owned",
     };
   }
   if (
@@ -334,7 +334,7 @@ export async function cleanupOpenClawOwnedAcpxProcessTree(params: {
     return {
       inspectedPids: listedTree.map((processInfo) => processInfo.pid),
       terminatedPids: [],
-      skippedReason: "not-openclaw-owned",
+      skippedReason: "not-NexisClaw-owned",
     };
   }
 
@@ -345,7 +345,7 @@ export async function cleanupOpenClawOwnedAcpxProcessTree(params: {
   };
 }
 
-export async function reapStaleOpenClawOwnedAcpxOrphans(params: {
+export async function reapStaleNexisClawOwnedAcpxOrphans(params: {
   wrapperRoot: string;
   deps?: AcpxProcessCleanupDeps;
 }): Promise<AcpxStartupReapResult> {
@@ -363,7 +363,7 @@ export async function reapStaleOpenClawOwnedAcpxOrphans(params: {
   const orphans = processes.filter(
     (processInfo) =>
       processInfo.ppid === 1 &&
-      isOpenClawOwnedAcpxProcessCommand({
+      isNexisClawOwnedAcpxProcessCommand({
         command: processInfo.command,
         wrapperRoot: params.wrapperRoot,
       }),

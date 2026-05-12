@@ -1,6 +1,6 @@
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
-import { isProviderApiKeyConfigured } from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+import { extensionForMime } from "NexisClaw/plugin-sdk/media-mime";
+import { isProviderApiKeyConfigured } from "NexisClaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
@@ -9,14 +9,14 @@ import {
   resolveProviderOperationTimeoutMs,
   sanitizeConfiguredModelProviderRequest,
   waitProviderOperationPollInterval,
-} from "openclaw/plugin-sdk/provider-http";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/provider-http";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import type {
   GeneratedVideoAsset,
   VideoGenerationProvider,
   VideoGenerationRequest,
   VideoGenerationSourceAsset,
-} from "openclaw/plugin-sdk/video-generation";
+} from "NexisClaw/plugin-sdk/video-generation";
 import { OPENROUTER_BASE_URL } from "./provider-catalog.js";
 import {
   fetchOpenRouterVideoGet,
@@ -35,7 +35,7 @@ const MAX_POLL_ATTEMPTS = 120;
 const SUPPORTED_ASPECT_RATIOS = ["16:9", "9:16"] as const;
 const SUPPORTED_DURATION_SECONDS = [4, 6, 8] as const;
 // Runtime sets this after normalizing against live model capabilities.
-const SUPPORTED_DURATIONS_HINT = Symbol.for("openclaw.videoGeneration.supportedDurations");
+const SUPPORTED_DURATIONS_HINT = Symbol.for("NexisClaw.videoGeneration.supportedDurations");
 const SUPPORTED_RESOLUTIONS = ["720P", "1080P"] as const;
 
 type OpenRouterVideoResponse = {
@@ -371,8 +371,8 @@ export function buildOpenRouterVideoGenerationProvider(): VideoGenerationProvide
           defaultHeaders: {
             Authorization: `Bearer ${auth.apiKey}`,
             "Content-Type": "application/json",
-            "HTTP-Referer": "https://openclaw.ai",
-            "X-OpenRouter-Title": "OpenClaw",
+            "HTTP-Referer": "https://NexisClaw.ai",
+            "X-OpenRouter-Title": "NexisClaw",
           },
           request: sanitizeConfiguredModelProviderRequest(
             req.cfg?.models?.providers?.openrouter?.request,

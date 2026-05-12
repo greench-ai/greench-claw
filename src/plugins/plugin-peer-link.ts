@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolveOpenClawPackageRootSync } from "../infra/openclaw-root.js";
+import { resolveNexisClawPackageRootSync } from "../infra/NexisClaw-root.js";
 
 type PluginPeerLinkLogger = {
   info?: (message: string) => void;
@@ -14,7 +14,7 @@ type RelinkManagedNpmRootResult = {
   skipped: number;
 };
 
-type OpenClawPeerLinkAuditIssue = {
+type NexisClawPeerLinkAuditIssue = {
   packageName: string;
   packageDir: string;
   reason: string;
@@ -23,10 +23,10 @@ type OpenClawPeerLinkAuditIssue = {
 type AuditManagedNpmRootResult = {
   checked: number;
   broken: number;
-  issues: OpenClawPeerLinkAuditIssue[];
+  issues: NexisClawPeerLinkAuditIssue[];
 };
 
-type OpenClawPeerLinkResult = "linked" | "skipped" | "unchanged";
+type NexisClawPeerLinkResult = "linked" | "skipped" | "unchanged";
 
 function readStringRecord(value: unknown): Record<string, string> {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
@@ -108,11 +108,11 @@ function managedPackageNameFromDir(params: { npmRoot: string; packageDir: string
     .join("/");
 }
 
-async function auditOpenClawPeerDependency(params: {
+async function auditNexisClawPeerDependency(params: {
   hostRoot: string;
   npmRoot: string;
   packageDir: string;
-}): Promise<OpenClawPeerLinkAuditIssue | null> {
+}): Promise<NexisClawPeerLinkAuditIssue | null> {
   const packageName = managedPackageNameFromDir({
     npmRoot: params.npmRoot,
     packageDir: params.packageDir,
@@ -132,13 +132,13 @@ async function auditOpenClawPeerDependency(params: {
       return {
         packageName,
         packageDir: params.packageDir,
-        reason: `missing ${path.join(nodeModulesDir, "openclaw")}`,
+        reason: `missing ${path.join(nodeModulesDir, "NexisClaw")}`,
       };
     }
     throw error;
   }
 
-  const linkPath = path.join(nodeModulesDir, "openclaw");
+  const linkPath = path.join(nodeModulesDir, "NexisClaw");
   const currentTarget = await safeRealpath(linkPath);
   if (!currentTarget) {
     return {
@@ -167,7 +167,7 @@ async function ensureRealNodeModulesDir(params: {
     const existing = await fs.lstat(nodeModulesDir);
     if (!existing.isDirectory() || existing.isSymbolicLink()) {
       params.logger.warn?.(
-        `Skipping openclaw peerDependency link because ${nodeModulesDir} is not a real directory.`,
+        `Skipping NexisClaw peerDependency link because ${nodeModulesDir} is not a real directory.`,
       );
       return null;
     }
@@ -182,19 +182,19 @@ async function ensureRealNodeModulesDir(params: {
   const created = await fs.lstat(nodeModulesDir);
   if (!created.isDirectory() || created.isSymbolicLink()) {
     params.logger.warn?.(
-      `Skipping openclaw peerDependency link because ${nodeModulesDir} is not a real directory.`,
+      `Skipping NexisClaw peerDependency link because ${nodeModulesDir} is not a real directory.`,
     );
     return null;
   }
   return nodeModulesDir;
 }
 
-async function linkOpenClawPeerDependency(params: {
+async function linkNexisClawPeerDependency(params: {
   hostRoot: string;
   installedDir: string;
   peerName: string;
   logger: PluginPeerLinkLogger;
-}): Promise<OpenClawPeerLinkResult> {
+}): Promise<NexisClawPeerLinkResult> {
   const nodeModulesDir = await ensureRealNodeModulesDir({
     installedDir: params.installedDir,
     logger: params.logger,
@@ -222,28 +222,28 @@ async function linkOpenClawPeerDependency(params: {
 }
 
 /**
- * Symlink the host openclaw package for plugins that declare it as a peer.
+ * Symlink the host NexisClaw package for plugins that declare it as a peer.
  * Plugin package managers still own third-party dependencies; this only wires
  * the host SDK package into the plugin-local Node graph.
  */
-export async function linkOpenClawPeerDependencies(params: {
+export async function linkNexisClawPeerDependencies(params: {
   installedDir: string;
   peerDependencies: Record<string, string>;
   logger: PluginPeerLinkLogger;
 }): Promise<{ repaired: number; skipped: number }> {
-  const peers = Object.keys(params.peerDependencies).filter((name) => name === "openclaw");
+  const peers = Object.keys(params.peerDependencies).filter((name) => name === "NexisClaw");
   if (peers.length === 0) {
     return { repaired: 0, skipped: 0 };
   }
 
-  const hostRoot = resolveOpenClawPackageRootSync({
+  const hostRoot = resolveNexisClawPackageRootSync({
     argv1: process.argv[1],
     moduleUrl: import.meta.url,
     cwd: process.cwd(),
   });
   if (!hostRoot) {
     params.logger.warn?.(
-      "Could not locate openclaw package root to symlink peerDependencies; plugin may fail to resolve openclaw at runtime.",
+      "Could not locate NexisClaw package root to symlink peerDependencies; plugin may fail to resolve NexisClaw at runtime.",
     );
     return { repaired: 0, skipped: peers.length };
   }
@@ -251,7 +251,7 @@ export async function linkOpenClawPeerDependencies(params: {
   let repaired = 0;
   let skipped = 0;
   for (const peerName of peers) {
-    const result = await linkOpenClawPeerDependency({
+    const result = await linkNexisClawPeerDependency({
       hostRoot,
       installedDir: params.installedDir,
       peerName,
@@ -266,7 +266,7 @@ export async function linkOpenClawPeerDependencies(params: {
   return { repaired, skipped };
 }
 
-export async function relinkOpenClawPeerDependenciesInManagedNpmRoot(params: {
+export async function relinkNexisClawPeerDependenciesInManagedNpmRoot(params: {
   npmRoot: string;
   logger: PluginPeerLinkLogger;
 }): Promise<RelinkManagedNpmRootResult> {
@@ -276,11 +276,11 @@ export async function relinkOpenClawPeerDependenciesInManagedNpmRoot(params: {
   let skipped = 0;
   for (const packageDir of await listManagedNpmRootPackageDirs(params.npmRoot)) {
     const peerDependencies = await readPackagePeerDependencies(packageDir);
-    if (!Object.hasOwn(peerDependencies, "openclaw")) {
+    if (!Object.hasOwn(peerDependencies, "NexisClaw")) {
       continue;
     }
     checked += 1;
-    const result = await linkOpenClawPeerDependencies({
+    const result = await linkNexisClawPeerDependencies({
       installedDir: packageDir,
       peerDependencies,
       logger: params.logger,
@@ -292,10 +292,10 @@ export async function relinkOpenClawPeerDependenciesInManagedNpmRoot(params: {
   return { checked, attempted, repaired, skipped };
 }
 
-export async function auditOpenClawPeerDependenciesInManagedNpmRoot(params: {
+export async function auditNexisClawPeerDependenciesInManagedNpmRoot(params: {
   npmRoot: string;
 }): Promise<AuditManagedNpmRootResult> {
-  const hostRoot = resolveOpenClawPackageRootSync({
+  const hostRoot = resolveNexisClawPackageRootSync({
     argv1: process.argv[1],
     moduleUrl: import.meta.url,
     cwd: process.cwd(),
@@ -305,14 +305,14 @@ export async function auditOpenClawPeerDependenciesInManagedNpmRoot(params: {
   }
 
   let checked = 0;
-  const issues: OpenClawPeerLinkAuditIssue[] = [];
+  const issues: NexisClawPeerLinkAuditIssue[] = [];
   for (const packageDir of await listManagedNpmRootPackageDirs(params.npmRoot)) {
     const peerDependencies = await readPackagePeerDependencies(packageDir);
-    if (!Object.hasOwn(peerDependencies, "openclaw")) {
+    if (!Object.hasOwn(peerDependencies, "NexisClaw")) {
       continue;
     }
     checked += 1;
-    const issue = await auditOpenClawPeerDependency({
+    const issue = await auditNexisClawPeerDependency({
       hostRoot,
       npmRoot: params.npmRoot,
       packageDir,

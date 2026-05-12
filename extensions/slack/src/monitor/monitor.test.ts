@@ -1,6 +1,6 @@
 import type { App } from "@slack/bolt";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
 import { describe, expect, it } from "vitest";
 import { resolveSlackChannelConfig } from "./channel-config.js";
 import { createSlackMonitorContext, normalizeSlackChannelType } from "./context.js";
@@ -163,7 +163,7 @@ describe("resolveSlackChannelConfig", () => {
 });
 
 const baseParams = () => ({
-  cfg: {} as OpenClawConfig,
+  cfg: {} as NexisClawConfig,
   accountId: "default",
   botToken: "token",
   app: { client: {} } as App,
@@ -189,7 +189,7 @@ const baseParams = () => ({
   replyToMode: "off" as const,
   slashCommand: {
     enabled: false,
-    name: "openclaw",
+    name: "NexisClaw",
     sessionPrefix: "slack:slash",
     ephemeral: true,
   },

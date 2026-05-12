@@ -1,5 +1,5 @@
-import { normalizeE164 } from "openclaw/plugin-sdk/account-resolution";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { normalizeE164 } from "NexisClaw/plugin-sdk/account-resolution";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import {
   createAllowedChatSenderMatcher,
   type ChatSenderAllowParams,

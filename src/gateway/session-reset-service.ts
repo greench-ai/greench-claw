@@ -24,7 +24,7 @@ import {
 import { resolveSessionFilePath, resolveSessionFilePathOptions } from "../config/sessions/paths.js";
 import { resolveResetPreservedSelection } from "../config/sessions/reset-preserved-selection.js";
 import type { SessionAcpMeta } from "../config/sessions/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { logVerbose } from "../globals.js";
 import { createInternalHookEvent, triggerInternalHook } from "../hooks/internal-hooks.js";
 import { getSessionBindingService } from "../infra/outbound/session-binding-service.js";
@@ -101,7 +101,7 @@ export function archiveSessionTranscriptsForSessionDetailed(params: {
 }
 
 export function emitGatewaySessionEndPluginHook(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   sessionKey: string;
   sessionId?: string;
   storePath: string;
@@ -155,7 +155,7 @@ export function emitGatewaySessionEndPluginHook(params: {
 }
 
 export function emitGatewaySessionStartPluginHook(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   sessionKey: string;
   sessionId?: string;
   resumedFrom?: string;
@@ -319,7 +319,7 @@ export async function emitSessionUnboundLifecycleEvent(params: {
 }
 
 async function ensureSessionRuntimeCleanup(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   key: string;
   target: ReturnType<typeof resolveGatewaySessionStoreTarget>;
   sessionId?: string;
@@ -390,7 +390,7 @@ async function runAcpCleanupStep(params: {
 }
 
 async function closeAcpRuntimeForSession(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   sessionKey: string;
   entry?: SessionEntry;
   reason: "session-reset" | "session-delete";
@@ -476,7 +476,7 @@ function buildPendingAcpMeta(base: SessionAcpMeta, now: number): SessionAcpMeta 
 }
 
 async function ensureFreshAcpResetState(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   sessionKey: string;
   reason: "session-reset" | "session-delete";
   entry?: SessionEntry;
@@ -522,7 +522,7 @@ async function ensureFreshAcpResetState(params: {
 }
 
 export async function cleanupSessionBeforeMutation(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   key: string;
   target: ReturnType<typeof resolveGatewaySessionStoreTarget>;
   entry: SessionEntry | undefined;
@@ -559,7 +559,7 @@ export async function cleanupSessionBeforeMutation(params: {
 }
 
 export async function emitGatewayBeforeResetPluginHook(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   key: string;
   target: ReturnType<typeof resolveGatewaySessionStoreTarget>;
   storePath: string;

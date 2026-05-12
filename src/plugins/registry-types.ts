@@ -37,21 +37,21 @@ import type {
   ImageGenerationProviderPlugin,
   MediaUnderstandingProviderPlugin,
   MusicGenerationProviderPlugin,
-  OpenClawPluginChannelRegistration,
-  OpenClawPluginCliCommandDescriptor,
-  OpenClawPluginCliRegistrar,
-  OpenClawPluginCommandDefinition,
-  OpenClawPluginGatewayRuntimeScopeSurface,
-  OpenClawGatewayDiscoveryService,
-  OpenClawPluginHttpRouteAuth,
-  OpenClawPluginHttpRouteHandler,
-  OpenClawPluginHttpRouteUpgradeHandler,
-  OpenClawPluginHttpRouteMatch,
-  OpenClawPluginHostedMediaResolver,
-  OpenClawPluginReloadRegistration,
-  OpenClawPluginSecurityAuditCollector,
-  OpenClawPluginService,
-  OpenClawPluginToolFactory,
+  NexisClawPluginChannelRegistration,
+  NexisClawPluginCliCommandDescriptor,
+  NexisClawPluginCliRegistrar,
+  NexisClawPluginCommandDefinition,
+  NexisClawPluginGatewayRuntimeScopeSurface,
+  NexisClawGatewayDiscoveryService,
+  NexisClawPluginHttpRouteAuth,
+  NexisClawPluginHttpRouteHandler,
+  NexisClawPluginHttpRouteUpgradeHandler,
+  NexisClawPluginHttpRouteMatch,
+  NexisClawPluginHostedMediaResolver,
+  NexisClawPluginReloadRegistration,
+  NexisClawPluginSecurityAuditCollector,
+  NexisClawPluginService,
+  NexisClawPluginToolFactory,
   PluginConversationBindingResolvedEvent,
   PluginHookRegistration as TypedPluginHookRegistration,
   PluginLogger,
@@ -71,7 +71,7 @@ import type {
 export type PluginToolRegistration = {
   pluginId: string;
   pluginName?: string;
-  factory: OpenClawPluginToolFactory;
+  factory: NexisClawPluginToolFactory;
   names: string[];
   declaredNames?: string[];
   optional: boolean;
@@ -82,10 +82,10 @@ export type PluginToolRegistration = {
 export type PluginCliRegistration = {
   pluginId: string;
   pluginName?: string;
-  register: OpenClawPluginCliRegistrar;
+  register: NexisClawPluginCliRegistrar;
   parentPath: string[];
   commands: string[];
-  descriptors: OpenClawPluginCliCommandDescriptor[];
+  descriptors: NexisClawPluginCliCommandDescriptor[];
   source: string;
   rootDir?: string;
 };
@@ -93,11 +93,11 @@ export type PluginCliRegistration = {
 export type PluginHttpRouteRegistration = {
   pluginId?: string;
   path: string;
-  handler: OpenClawPluginHttpRouteHandler;
-  handleUpgrade?: OpenClawPluginHttpRouteUpgradeHandler;
-  auth: OpenClawPluginHttpRouteAuth;
-  match: OpenClawPluginHttpRouteMatch;
-  gatewayRuntimeScopeSurface?: OpenClawPluginGatewayRuntimeScopeSurface;
+  handler: NexisClawPluginHttpRouteHandler;
+  handleUpgrade?: NexisClawPluginHttpRouteUpgradeHandler;
+  auth: NexisClawPluginHttpRouteAuth;
+  match: NexisClawPluginHttpRouteMatch;
+  gatewayRuntimeScopeSurface?: NexisClawPluginGatewayRuntimeScopeSurface;
   nodeCapability?: {
     surface: string;
     ttlMs?: number;
@@ -108,7 +108,7 @@ export type PluginHttpRouteRegistration = {
 export type PluginHostedMediaResolverRegistration = {
   pluginId: string;
   pluginName?: string;
-  resolver: OpenClawPluginHostedMediaResolver;
+  resolver: NexisClawPluginHostedMediaResolver;
   source: string;
   rootDir?: string;
 };
@@ -228,7 +228,7 @@ export type PluginHookRegistration = {
 export type PluginServiceRegistration = {
   pluginId: string;
   pluginName?: string;
-  service: OpenClawPluginService;
+  service: NexisClawPluginService;
   source: string;
   origin: PluginOrigin;
   trustedOfficialInstall?: boolean;
@@ -238,7 +238,7 @@ export type PluginServiceRegistration = {
 export type PluginGatewayDiscoveryServiceRegistration = {
   pluginId: string;
   pluginName?: string;
-  service: OpenClawGatewayDiscoveryService;
+  service: NexisClawGatewayDiscoveryService;
   source: string;
   rootDir?: string;
 };
@@ -246,7 +246,7 @@ export type PluginGatewayDiscoveryServiceRegistration = {
 export type PluginReloadRegistration = {
   pluginId: string;
   pluginName?: string;
-  registration: OpenClawPluginReloadRegistration;
+  registration: NexisClawPluginReloadRegistration;
   source: string;
   rootDir?: string;
 };
@@ -254,7 +254,7 @@ export type PluginReloadRegistration = {
 export type PluginNodeHostCommandRegistration = {
   pluginId: string;
   pluginName?: string;
-  command: import("./types.js").OpenClawPluginNodeHostCommand;
+  command: import("./types.js").NexisClawPluginNodeHostCommand;
   source: string;
   rootDir?: string;
 };
@@ -262,7 +262,7 @@ export type PluginNodeHostCommandRegistration = {
 export type PluginNodeInvokePolicyRegistration = {
   pluginId: string;
   pluginName?: string;
-  policy: import("./types.js").OpenClawPluginNodeInvokePolicy;
+  policy: import("./types.js").NexisClawPluginNodeInvokePolicy;
   pluginConfig?: Record<string, unknown>;
   source: string;
   rootDir?: string;
@@ -271,7 +271,7 @@ export type PluginNodeInvokePolicyRegistration = {
 export type PluginSecurityAuditCollectorRegistration = {
   pluginId: string;
   pluginName?: string;
-  collector: OpenClawPluginSecurityAuditCollector;
+  collector: NexisClawPluginSecurityAuditCollector;
   source: string;
   rootDir?: string;
 };
@@ -279,7 +279,7 @@ export type PluginSecurityAuditCollectorRegistration = {
 export type PluginCommandRegistration = {
   pluginId: string;
   pluginName?: string;
-  command: OpenClawPluginCommandDefinition;
+  command: NexisClawPluginCommandDefinition;
   source: string;
   rootDir?: string;
 };
@@ -481,11 +481,11 @@ export type PluginRegistryParams = {
 };
 
 export type PluginRegistrationMode = import("./types.js").PluginRegistrationMode;
-export type OpenClawPluginNodeHostCommand = import("./types.js").OpenClawPluginNodeHostCommand;
-export type OpenClawPluginToolContext = import("./types.js").OpenClawPluginToolContext;
-export type OpenClawPluginHttpRouteParams = import("./types.js").OpenClawPluginHttpRouteParams;
-export type OpenClawPluginHookOptions = import("./types.js").OpenClawPluginHookOptions;
+export type NexisClawPluginNodeHostCommand = import("./types.js").NexisClawPluginNodeHostCommand;
+export type NexisClawPluginToolContext = import("./types.js").NexisClawPluginToolContext;
+export type NexisClawPluginHttpRouteParams = import("./types.js").NexisClawPluginHttpRouteParams;
+export type NexisClawPluginHookOptions = import("./types.js").NexisClawPluginHookOptions;
 export type PluginHookHandlerMap = import("./types.js").PluginHookHandlerMap;
-export type OpenClawPluginApi = import("./types.js").OpenClawPluginApi;
+export type NexisClawPluginApi = import("./types.js").NexisClawPluginApi;
 export type TypedPluginHook = TypedPluginHookRegistration;
-export type OpenClawPluginChannelReg = OpenClawPluginChannelRegistration;
+export type NexisClawPluginChannelReg = NexisClawPluginChannelRegistration;

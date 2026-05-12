@@ -1,6 +1,6 @@
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-export { definePluginEntry, type OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+export type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+export { definePluginEntry, type NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
 export {
   fetchWithSsrFGuard,
   ssrfPolicyFromDangerouslyAllowPrivateNetwork,
-} from "openclaw/plugin-sdk/ssrf-runtime";
+} from "NexisClaw/plugin-sdk/ssrf-runtime";

@@ -1,11 +1,11 @@
-import type { ChannelGroupContext } from "openclaw/plugin-sdk/channel-contract";
+import type { ChannelGroupContext } from "NexisClaw/plugin-sdk/channel-contract";
 import {
   resolveToolsBySender,
   type GroupToolPolicyBySenderConfig,
   type GroupToolPolicyConfig,
-} from "openclaw/plugin-sdk/channel-policy";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { normalizeAtHashSlug } from "openclaw/plugin-sdk/string-normalization-runtime";
+} from "NexisClaw/plugin-sdk/channel-policy";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeAtHashSlug } from "NexisClaw/plugin-sdk/string-normalization-runtime";
 import type { DiscordConfig } from "./runtime-api.js";
 
 function normalizeDiscordSlug(value?: string | null) {

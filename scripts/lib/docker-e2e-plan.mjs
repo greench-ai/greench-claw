@@ -14,8 +14,8 @@ import {
 export { DEFAULT_LIVE_RETRIES };
 export { normalizeReleaseProfile };
 
-export const DEFAULT_E2E_BARE_IMAGE = "openclaw-docker-e2e-bare:local";
-export const DEFAULT_E2E_FUNCTIONAL_IMAGE = "openclaw-docker-e2e-functional:local";
+export const DEFAULT_E2E_BARE_IMAGE = "NexisClaw-docker-e2e-bare:local";
+export const DEFAULT_E2E_FUNCTIONAL_IMAGE = "NexisClaw-docker-e2e-functional:local";
 export const DEFAULT_E2E_IMAGE = DEFAULT_E2E_FUNCTIONAL_IMAGE;
 export const DEFAULT_PARALLELISM = 10;
 export const DEFAULT_PROFILE = "all";
@@ -66,7 +66,7 @@ function shellQuote(value) {
 function sanitizeLaneNameSuffix(value) {
   return (
     String(value)
-      .replace(/^openclaw@/u, "")
+      .replace(/^NexisClaw@/u, "")
       .replace(/[^A-Za-z0-9._-]+/g, "-")
       .replace(/^-+|-+$/g, "") || "baseline"
   );
@@ -93,16 +93,16 @@ export function normalizeUpgradeSurvivorBaselineSpec(raw) {
   if (!value) {
     return undefined;
   }
-  const spec = value.startsWith("openclaw@") ? value : `openclaw@${value}`;
+  const spec = value.startsWith("NexisClaw@") ? value : `NexisClaw@${value}`;
   if (
-    !/^openclaw@(?:alpha|beta|latest|[0-9]{4}\.[0-9]+\.[0-9]+(?:-(?:[0-9]+|alpha\.[0-9]+|beta\.[0-9]+))?)$/u.test(
+    !/^NexisClaw@(?:alpha|beta|latest|[0-9]{4}\.[0-9]+\.[0-9]+(?:-(?:[0-9]+|alpha\.[0-9]+|beta\.[0-9]+))?)$/u.test(
       spec,
     )
   ) {
     throw new Error(
       `invalid published upgrade survivor baseline: ${JSON.stringify(
         value,
-      )}. Expected openclaw@latest, openclaw@beta, openclaw@alpha, or openclaw@YYYY.M.D.`,
+      )}. Expected NexisClaw@latest, NexisClaw@beta, NexisClaw@alpha, or NexisClaw@YYYY.M.D.`,
     );
   }
   return spec;
@@ -155,7 +155,7 @@ function parseUpgradeSurvivorScenarios(raw) {
 }
 
 function parsePublishedReleaseVersion(spec) {
-  const match = /^openclaw@([0-9]{4})\.([0-9]+)\.([0-9]+)/u.exec(String(spec ?? ""));
+  const match = /^NexisClaw@([0-9]{4})\.([0-9]+)\.([0-9]+)/u.exec(String(spec ?? ""));
   if (!match) {
     return null;
   }
@@ -208,11 +208,11 @@ function expandUpgradeSurvivorBaselineLanes(poolLanes, rawBaselineSpecs, rawScen
           const suffix = suffixParts.join("-");
           const name = suffix ? `${poolLane.name}-${suffix}` : poolLane.name;
           const commandPrefix = [
-            `OPENCLAW_UPGRADE_SURVIVOR_ARTIFACT_DIR="$PWD/.artifacts/upgrade-survivor/${name}"`,
+            `NEXISCLAW_UPGRADE_SURVIVOR_ARTIFACT_DIR="$PWD/.artifacts/upgrade-survivor/${name}"`,
             baselineSpec
-              ? `OPENCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC=${shellQuote(baselineSpec)}`
+              ? `NEXISCLAW_UPGRADE_SURVIVOR_BASELINE_SPEC=${shellQuote(baselineSpec)}`
               : "",
-            scenario ? `OPENCLAW_UPGRADE_SURVIVOR_SCENARIO=${shellQuote(scenario)}` : "",
+            scenario ? `NEXISCLAW_UPGRADE_SURVIVOR_SCENARIO=${shellQuote(scenario)}` : "",
           ]
             .filter(Boolean)
             .join(" ");
@@ -259,7 +259,7 @@ export function parseLiveMode(raw) {
     return mode;
   }
   throw new Error(
-    `OPENCLAW_DOCKER_ALL_LIVE_MODE must be one of: all, skip, only. Got: ${JSON.stringify(raw)}`,
+    `NEXISCLAW_DOCKER_ALL_LIVE_MODE must be one of: all, skip, only. Got: ${JSON.stringify(raw)}`,
   );
 }
 
@@ -269,7 +269,7 @@ export function parseProfile(raw) {
     return profile;
   }
   throw new Error(
-    `OPENCLAW_DOCKER_ALL_PROFILE must be one of: ${DEFAULT_PROFILE}, ${RELEASE_PATH_PROFILE}. Got: ${JSON.stringify(raw)}`,
+    `NEXISCLAW_DOCKER_ALL_PROFILE must be one of: ${DEFAULT_PROFILE}, ${RELEASE_PATH_PROFILE}. Got: ${JSON.stringify(raw)}`,
   );
 }
 
@@ -309,7 +309,7 @@ export function lanesNeedE2eImageKind(poolLanes, kind) {
   return poolLanes.some((poolLane) => poolLane.e2eImageKind === kind);
 }
 
-export function lanesNeedOpenClawPackage(poolLanes) {
+export function lanesNeedNexisClawPackage(poolLanes) {
   return poolLanes.some((poolLane) => poolLane.e2eImageKind);
 }
 
@@ -317,8 +317,8 @@ export function findLaneByName(name) {
   return dedupeLanes(
     expandUpgradeSurvivorBaselineLanes(
       [...allReleasePathLanes({ includeOpenWebUI: true }), ...mainLanes, ...tailLanes],
-      process.env.OPENCLAW_UPGRADE_SURVIVOR_BASELINE_SPECS,
-      process.env.OPENCLAW_UPGRADE_SURVIVOR_SCENARIOS,
+      process.env.NEXISCLAW_UPGRADE_SURVIVOR_BASELINE_SPECS,
+      process.env.NEXISCLAW_UPGRADE_SURVIVOR_SCENARIOS,
     ),
   ).find((poolLane) => poolLane.name === name);
 }
@@ -376,7 +376,7 @@ function buildPlanJson(params) {
       e2eImage: imageKinds.length > 0,
       functionalImage: imageKinds.includes("functional"),
       liveImage: scheduledLanes.some((poolLane) => poolLane.needsLiveImage),
-      package: lanesNeedOpenClawPackage(scheduledLanes),
+      package: lanesNeedNexisClawPackage(scheduledLanes),
     },
     profile: params.profile,
     releaseProfile: params.releaseProfile,
@@ -441,7 +441,7 @@ export function resolveDockerE2ePlan(options) {
               upgradeSurvivorScenarios,
             );
           }
-          selectNamedLanes(selectableLanes, [selectedName], "OPENCLAW_DOCKER_ALL_LANES");
+          selectNamedLanes(selectableLanes, [selectedName], "NEXISCLAW_DOCKER_ALL_LANES");
           return [];
         })
       : undefined;

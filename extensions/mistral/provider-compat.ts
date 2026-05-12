@@ -1,8 +1,8 @@
-import { resolveProviderRequestCapabilities } from "openclaw/plugin-sdk/provider-http";
+import { resolveProviderRequestCapabilities } from "NexisClaw/plugin-sdk/provider-http";
 import {
   normalizeLowercaseStringOrEmpty,
   readStringValue,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { MISTRAL_MODEL_TRANSPORT_PATCH } from "./api.js";
 
 const MISTRAL_MODEL_HINTS = [

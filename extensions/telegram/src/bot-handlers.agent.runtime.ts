@@ -2,4 +2,4 @@ export {
   resolveAgentDir,
   resolveDefaultAgentId,
   resolveDefaultModelForAgent,
-} from "openclaw/plugin-sdk/agent-runtime";
+} from "NexisClaw/plugin-sdk/agent-runtime";

@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { TelegramInlineButtonsScope } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { TelegramInlineButtonsScope } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { listTelegramAccountIds, resolveTelegramAccount } from "./accounts.js";
 
 const DEFAULT_INLINE_BUTTONS_SCOPE: TelegramInlineButtonsScope = "allowlist";
@@ -57,7 +57,7 @@ export function resolveTelegramInlineButtonsScopeFromCapabilities(
 }
 
 export function resolveTelegramInlineButtonsScope(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId?: string | null;
 }): TelegramInlineButtonsScope {
   const account = resolveTelegramAccount({ cfg: params.cfg, accountId: params.accountId });
@@ -65,7 +65,7 @@ export function resolveTelegramInlineButtonsScope(params: {
 }
 
 export function isTelegramInlineButtonsEnabled(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId?: string | null;
 }): boolean {
   if (params.accountId) {

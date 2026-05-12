@@ -1,17 +1,17 @@
 import { rmSync } from "node:fs";
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-payload";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-payload";
 import {
   clearRuntimeConfigSnapshot,
   setRuntimeConfigSnapshot,
-} from "openclaw/plugin-sdk/runtime-config-snapshot";
+} from "NexisClaw/plugin-sdk/runtime-config-snapshot";
 import type {
   SpeechProviderPlugin,
   SpeechProviderPrepareSynthesisContext,
   SpeechSynthesisRequest,
   SpeechTelephonySynthesisRequest,
-} from "openclaw/plugin-sdk/speech-core";
+} from "NexisClaw/plugin-sdk/speech-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 type MockSpeechSynthesisResult = Awaited<ReturnType<SpeechProviderPlugin["synthesize"]>>;
@@ -59,7 +59,7 @@ vi.mock("./audio-transcode.js", () => ({
   transcodeAudioBuffer: transcodeAudioBufferMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-targets", () => ({
+vi.mock("NexisClaw/plugin-sdk/channel-targets", () => ({
   normalizeChannelId: (channel: string | undefined) => channel?.trim().toLowerCase() ?? null,
   resolveChannelTtsVoiceDelivery: (channel: string | undefined) => {
     const normalized = channel?.trim().toLowerCase();
@@ -140,7 +140,7 @@ function installSpeechProviders(providers: SpeechProviderPlugin[]): void {
   );
 }
 
-function createTtsConfig(prefsName: string): OpenClawConfig {
+function createTtsConfig(prefsName: string): NexisClawConfig {
   return {
     messages: {
       tts: {
@@ -239,7 +239,7 @@ describe("speech-core native voice-note routing", () => {
   it("marks Discord auto TTS replies as native voice messages", async () => {
     await expectTtsPayloadResult({
       channel: "discord",
-      prefsName: "openclaw-speech-core-tts-test",
+      prefsName: "NexisClaw-speech-core-tts-test",
       text: "This Discord reply should be delivered as a native voice note.",
       target: "voice-note",
       audioAsVoice: true,
@@ -249,7 +249,7 @@ describe("speech-core native voice-note routing", () => {
   it("keeps compatible audio-file synthesis deliverable as a voice memo", async () => {
     await expectTtsPayloadResult({
       channel: "voice-memo-chat",
-      prefsName: "openclaw-speech-core-tts-voice-memo-mp3-test",
+      prefsName: "NexisClaw-speech-core-tts-voice-memo-mp3-test",
       text: "This reply should be delivered as a native voice memo.",
       target: "audio-file",
       audioAsVoice: true,
@@ -266,7 +266,7 @@ describe("speech-core native voice-note routing", () => {
   it("does not mark unsupported audio-file output as a voice memo", async () => {
     await expectTtsPayloadResult({
       channel: "voice-memo-chat",
-      prefsName: "openclaw-speech-core-tts-voice-memo-ogg-test",
+      prefsName: "NexisClaw-speech-core-tts-voice-memo-ogg-test",
       text: "This reply should stay a regular audio attachment.",
       target: "audio-file",
       audioAsVoice: undefined,
@@ -280,7 +280,7 @@ describe("speech-core native voice-note routing", () => {
     });
     await expectTtsPayloadResult({
       channel: "voice-memo-chat",
-      prefsName: "openclaw-speech-core-tts-voice-memo-caf-transcode-test",
+      prefsName: "NexisClaw-speech-core-tts-voice-memo-caf-transcode-test",
       text: "This reply should be pre-transcoded to a native voice-memo CAF.",
       target: "audio-file",
       audioAsVoice: true,
@@ -313,7 +313,7 @@ describe("speech-core native voice-note routing", () => {
     // of a regression. The failure is logged via the call site in tts.ts.
     await expectTtsPayloadResult({
       channel: "voice-memo-chat",
-      prefsName: "openclaw-speech-core-tts-voice-memo-caf-fallback-test",
+      prefsName: "NexisClaw-speech-core-tts-voice-memo-caf-fallback-test",
       text: "This reply should fall back to the original mp3.",
       target: "audio-file",
       audioAsVoice: true,
@@ -340,7 +340,7 @@ describe("speech-core native voice-note routing", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NexisClawConfig;
     const runtimeConfig = {
       messages: {
         tts: {
@@ -353,7 +353,7 @@ describe("speech-core native voice-note routing", () => {
           },
         },
       },
-    } as unknown as OpenClawConfig;
+    } as unknown as NexisClawConfig;
     installSpeechProviders([
       createMockSpeechProvider("mock", {
         isConfigured: ({ providerConfig }) => providerConfig.apiKey === "resolved-minimax-key",
@@ -387,7 +387,7 @@ describe("speech-core native voice-note routing", () => {
       expect(_test.supportsTranscodedVoiceNoteTts(channel)).toBe(true);
       await expectTtsPayloadResult({
         channel,
-        prefsName: `openclaw-speech-core-tts-${channel}-mp3-test`,
+        prefsName: `NexisClaw-speech-core-tts-${channel}-mp3-test`,
         text: `This ${channel} reply should be transcoded by the channel.`,
         target: "voice-note",
         audioAsVoice: true,
@@ -405,7 +405,7 @@ describe("speech-core native voice-note routing", () => {
   it("keeps non-native voice-note channels as regular audio files", async () => {
     await expectTtsPayloadResult({
       channel: "slack",
-      prefsName: "openclaw-speech-core-tts-slack-test",
+      prefsName: "NexisClaw-speech-core-tts-slack-test",
       text: "Slack replies should be delivered as regular audio attachments.",
       target: "audio-file",
       audioAsVoice: undefined,
@@ -413,7 +413,7 @@ describe("speech-core native voice-note routing", () => {
   });
 
   it("synthesizes explicitly tagged short hidden TTS text", async () => {
-    const cfg = createTtsConfig("openclaw-speech-core-short-hidden-tts-test");
+    const cfg = createTtsConfig("NexisClaw-speech-core-short-hidden-tts-test");
     let mediaDir: string | undefined;
     try {
       const result = await maybeApplyTtsToPayload({
@@ -441,7 +441,7 @@ describe("speech-core native voice-note routing", () => {
   });
 
   it("keeps skipping untagged short TTS text", async () => {
-    const cfg = createTtsConfig("openclaw-speech-core-short-plain-tts-test");
+    const cfg = createTtsConfig("NexisClaw-speech-core-short-plain-tts-test");
     const result = await maybeApplyTtsToPayload({
       payload: {
         text: "hello",
@@ -460,7 +460,7 @@ describe("speech-core native voice-note routing", () => {
   });
 
   it("keeps skipping explicit tagged TTS text that strips to empty markdown", async () => {
-    const cfg = createTtsConfig("openclaw-speech-core-empty-hidden-tts-test");
+    const cfg = createTtsConfig("NexisClaw-speech-core-empty-hidden-tts-test");
     const result = await maybeApplyTtsToPayload({
       payload: {
         text: "[[tts:text]]***[[/tts:text]]",
@@ -478,7 +478,7 @@ describe("speech-core native voice-note routing", () => {
   });
 
   it("selects persona preferred provider before config fallback", () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NexisClawConfig = {
       messages: {
         tts: {
           enabled: true,
@@ -499,19 +499,19 @@ describe("speech-core native voice-note routing", () => {
       },
     };
     const config = resolveTtsConfig(cfg);
-    const prefsPath = "/tmp/openclaw-speech-core-persona-provider.json";
+    const prefsPath = "/tmp/NexisClaw-speech-core-persona-provider.json";
 
     expect(getTtsPersona(config, prefsPath)?.id).toBe("alfred");
     expect(getTtsProvider(config, prefsPath)).toBe("mock");
   });
 
   it("merges active persona provider binding into synthesis config", async () => {
-    const cfg: OpenClawConfig = {
+    const cfg: NexisClawConfig = {
       messages: {
         tts: {
           enabled: true,
           provider: "mock",
-          prefsPath: "/tmp/openclaw-speech-core-persona-merge.json",
+          prefsPath: "/tmp/NexisClaw-speech-core-persona-merge.json",
           providers: {
             mock: {
               model: "base-model",
@@ -815,7 +815,7 @@ describe("speech-core per-agent TTS config", () => {
           },
         ],
       },
-    } satisfies OpenClawConfig;
+    } satisfies NexisClawConfig;
 
     const resolved = resolveTtsConfig(cfg, "reader");
 
@@ -877,7 +877,7 @@ describe("speech-core per-agent TTS config", () => {
           },
         ],
       },
-    } satisfies OpenClawConfig;
+    } satisfies NexisClawConfig;
 
     let mediaDir: string | undefined;
     try {
@@ -926,7 +926,7 @@ describe("speech-core per-agent TTS config", () => {
           },
         ],
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const resolved = resolveTtsConfig(cfg, "reader");
 

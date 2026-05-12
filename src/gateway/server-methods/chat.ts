@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { AgentMessage } from "@earendil-works/pi-agent-core";
 import { CURRENT_SESSION_VERSION } from "@earendil-works/pi-coding-agent";
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
+import { resolveSendableOutboundReplyParts } from "NexisClaw/plugin-sdk/reply-payload";
 import { resolveAgentWorkspaceDir, resolveSessionAgentId } from "../../agents/agent-scope.js";
 import { rewriteTranscriptEntriesInSessionFile } from "../../agents/pi-embedded-runner/transcript-rewrite.js";
 import { ensureSandboxWorkspaceForSession } from "../../agents/sandbox/context.js";
@@ -16,7 +16,7 @@ import type { MsgContext, TemplateContext } from "../../auto-reply/templating.js
 import { extractCanvasFromText } from "../../chat/canvas-render.js";
 import { resolveSessionFilePath } from "../../config/sessions.js";
 import { streamSessionTranscriptLines } from "../../config/sessions/transcript-stream.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import {
   measureDiagnosticsTimelineSpan,
   measureDiagnosticsTimelineSpanSync,
@@ -894,7 +894,7 @@ function stripTrailingOffloadedMediaMarkers(message: string, refs: OffloadedRef[
 async function prestageMediaPathOffloads(params: {
   offloadedRefs: OffloadedRef[];
   includeImageRefs?: boolean;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   sessionKey: string;
   agentId: string;
 }): Promise<{ paths: string[]; types: string[]; workspaceDir?: string }> {
@@ -1023,7 +1023,7 @@ async function rewriteChatSendUserTurnMediaPaths(params: {
   sessionKey: string;
   message: string;
   savedImages: SavedMedia[];
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
 }) {
   const mediaFields = resolveChatSendTranscriptMediaFields(params.savedImages);
   if (!("MediaPath" in mediaFields)) {
@@ -1259,7 +1259,7 @@ export function buildOversizedHistoryPlaceholder(message?: unknown): Record<stri
     role,
     timestamp,
     content: [{ type: "text", text: CHAT_HISTORY_OVERSIZED_PLACEHOLDER }],
-    __openclaw: { truncated: true, reason: "oversized" },
+    __NexisClaw: { truncated: true, reason: "oversized" },
   };
 }
 
@@ -1388,7 +1388,7 @@ async function appendAssistantTranscriptMessage(params: {
     origin: AbortOrigin;
     runId: string;
   };
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
 }): Promise<TranscriptAppendResult> {
   const transcriptPath = resolveTranscriptPath({
     sessionId: params.sessionId,
@@ -2117,7 +2117,7 @@ export const chatHandlers: GatewayRequestHandlers = {
               model: modelRef.model,
             });
             // Bound plugin sessions own the real recipient model, so keep image
-            // attachments even when the parent OpenClaw session model is text-only.
+            // attachments even when the parent NexisClaw session model is text-only.
             const supportsImages =
               supportsSessionModelImages ||
               explicitOriginTargetsAcpSession(explicitOriginResult.value) ||

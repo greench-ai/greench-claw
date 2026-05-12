@@ -4,7 +4,7 @@ import {
   listChatCommands,
   type ChatCommandDefinition,
   type CommandArgs,
-} from "openclaw/plugin-sdk/command-auth-native";
+} from "NexisClaw/plugin-sdk/command-auth-native";
 import {
   Button,
   StringSelectMenu,

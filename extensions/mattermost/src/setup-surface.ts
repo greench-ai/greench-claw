@@ -1,11 +1,11 @@
-import { DEFAULT_ACCOUNT_ID } from "openclaw/plugin-sdk/account-id";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   applySetupAccountConfigPatch,
   createStandardChannelSetupStatus,
   formatDocsLink,
   type ChannelSetupWizard,
-} from "openclaw/plugin-sdk/setup";
+} from "NexisClaw/plugin-sdk/setup";
 import {
   applyMattermostSetupConfigPatch,
   isMattermostConfigured,
@@ -124,7 +124,7 @@ export const mattermostSetupWizard: ChannelSetupWizard = {
         }),
     },
   ],
-  disable: (cfg: OpenClawConfig) => ({
+  disable: (cfg: NexisClawConfig) => ({
     ...cfg,
     channels: {
       ...cfg.channels,

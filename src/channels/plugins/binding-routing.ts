@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { logVerbose } from "../../globals.js";
 import {
   getSessionBindingService,
@@ -68,7 +68,7 @@ function isPluginOwnedRuntimeBindingRecord(record: SessionBindingRecord | null):
 
 export function resolveConfiguredBindingRoute(
   params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     route: ResolvedAgentRoute;
   } & ConfiguredBindingRouteConversationInput,
 ): ConfiguredBindingRouteResult {
@@ -163,7 +163,7 @@ export function resolveRuntimeConversationBindingRoute(
 }
 
 export async function ensureConfiguredBindingRouteReady(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   bindingResolution: ConfiguredBindingResolution | null;
 }): Promise<{ ok: true } | { ok: false; error: string }> {
   const readyPromise = ensureConfiguredBindingTargetReady(params);

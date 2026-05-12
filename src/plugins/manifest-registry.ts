@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/types.js";
+import type { NexisClawConfig } from "../config/types.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { isBlockedObjectKey } from "../infra/prototype-keys.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
@@ -10,7 +10,7 @@ import { resolveUserPath } from "../utils.js";
 import { resolveCompatibilityHostVersion } from "../version.js";
 import { loadBundleManifest } from "./bundle-manifest.js";
 import { normalizePluginsConfigWithResolver } from "./config-policy.js";
-import { discoverOpenClawPlugins, type PluginCandidate } from "./discovery.js";
+import { discoverNexisClawPlugins, type PluginCandidate } from "./discovery.js";
 import { shouldRejectHardlinkedPluginFiles } from "./hardlink-policy.js";
 import { loadInstalledPluginIndexInstallRecordsSync } from "./installed-plugin-index-record-reader.js";
 import type { PluginManifestCommandAlias } from "./manifest-command-aliases.js";
@@ -22,7 +22,7 @@ import type {
 } from "./manifest-types.js";
 import {
   loadPluginManifest,
-  type OpenClawPackageManifest,
+  type NexisClawPackageManifest,
   type PluginManifestActivation,
   type PluginManifestConfigContracts,
   type PluginManifest,
@@ -138,7 +138,7 @@ export type PluginManifestRecord = {
   providerAuthChoices?: PluginManifest["providerAuthChoices"];
   activation?: PluginManifestActivation;
   setup?: PluginManifestSetup;
-  packageManifest?: OpenClawPackageManifest;
+  packageManifest?: NexisClawPackageManifest;
   packageDependencies?: PluginDependencySpecMap;
   packageOptionalDependencies?: PluginDependencySpecMap;
   packageChannel?: PluginPackageChannel;
@@ -186,7 +186,7 @@ export type PluginManifestRegistry = {
 export type BundledChannelConfigCollector = (params: {
   pluginDir: string;
   manifest: PluginManifest;
-  packageManifest?: OpenClawPackageManifest;
+  packageManifest?: NexisClawPackageManifest;
 }) => Record<string, PluginManifestChannelConfig> | undefined;
 
 function safeStatMtimeMs(filePath: string): number | null {
@@ -226,7 +226,7 @@ function normalizePackageChannelCommands(
 
 function mergePackageChannelMetaIntoChannelConfigs(params: {
   channelConfigs?: Record<string, PluginManifestChannelConfig>;
-  packageChannel?: OpenClawPackageManifest["channel"];
+  packageChannel?: NexisClawPackageManifest["channel"];
 }): Record<string, PluginManifestChannelConfig> | undefined {
   const channelId = params.packageChannel?.id?.trim();
   if (
@@ -408,7 +408,7 @@ function buildRecord(params: {
     enabledByDefaultOnPlatforms: params.manifest.enabledByDefaultOnPlatforms,
     autoEnableWhenConfiguredProviders: params.manifest.autoEnableWhenConfiguredProviders,
     legacyPluginIds: params.manifest.legacyPluginIds,
-    format: params.candidate.format ?? "openclaw",
+    format: params.candidate.format ?? "NexisClaw",
     bundleFormat: params.candidate.bundleFormat,
     kind: params.manifest.kind,
     channels: params.manifest.channels ?? [],
@@ -610,7 +610,7 @@ function pushNonBundledChannelConfigDescriptorDiagnostic(params: {
     level: "warn",
     pluginId: sanitizeForLog(params.record.id),
     source: sanitizeForLog(params.record.manifestPath),
-    message: `channel plugin manifest declares ${safeMissingChannels.join(", ")} without channelConfigs metadata; add openclaw.plugin.json#channelConfigs so config schema and setup surfaces work before runtime loads`,
+    message: `channel plugin manifest declares ${safeMissingChannels.join(", ")} without channelConfigs metadata; add NexisClaw.plugin.json#channelConfigs so config schema and setup surfaces work before runtime loads`,
   });
 }
 
@@ -640,7 +640,7 @@ function dedupePluginDiagnostics(diagnostics: PluginDiagnostic[]): PluginDiagnos
 function matchesInstalledPluginRecord(params: {
   pluginId: string;
   candidate: PluginCandidate;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   env: NodeJS.ProcessEnv;
   installRecords: Record<string, PluginInstallRecord>;
 }): boolean {
@@ -732,7 +732,7 @@ function isTrustedOfficialPluginInstall(params: {
 function resolveDuplicatePrecedenceRank(params: {
   pluginId: string;
   candidate: PluginCandidate;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   env: NodeJS.ProcessEnv;
   installRecords: Record<string, PluginInstallRecord>;
 }): number {
@@ -765,7 +765,7 @@ function isIntentionalInstalledBundledDuplicate(params: {
   pluginId: string;
   left: PluginCandidate;
   right: PluginCandidate;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   env: NodeJS.ProcessEnv;
   installRecords: Record<string, PluginInstallRecord>;
 }): boolean {
@@ -807,7 +807,7 @@ function isSameGlobalPackageDuplicate(left: PluginCandidate, right: PluginCandid
 
 export function loadPluginManifestRegistry(
   params: {
-    config?: OpenClawConfig;
+    config?: NexisClawConfig;
     workspaceDir?: string;
     env?: NodeJS.ProcessEnv;
     candidates?: PluginCandidate[];
@@ -834,7 +834,7 @@ export function loadPluginManifestRegistry(
         candidates: params.candidates,
         diagnostics: params.diagnostics ?? [],
       }
-    : discoverOpenClawPlugins({
+    : discoverNexisClawPlugins({
         workspaceDir: params.workspaceDir,
         extraPaths: normalized.loadPaths,
         env,
@@ -854,7 +854,7 @@ export function loadPluginManifestRegistry(
       env,
       realpathCache,
     });
-    const isBundleRecord = (candidate.format ?? "openclaw") === "bundle";
+    const isBundleRecord = (candidate.format ?? "NexisClaw") === "bundle";
     const manifestRes:
       | ReturnType<typeof loadPluginManifest>
       | ReturnType<typeof loadBundleManifest>
@@ -909,8 +909,8 @@ export function loadPluginManifestRegistry(
             minHostVersionCheck.kind === "invalid"
               ? `plugin manifest invalid | ${minHostVersionCheck.error}`
               : minHostVersionCheck.kind === "unknown_host_version"
-                ? `plugin requires OpenClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host version could not be determined; skipping load`
-                : `plugin requires OpenClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host is ${minHostVersionCheck.currentVersion}; skipping load`,
+                ? `plugin requires NexisClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host version could not be determined; skipping load`
+                : `plugin requires NexisClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host is ${minHostVersionCheck.currentVersion}; skipping load`,
         });
         continue;
       }

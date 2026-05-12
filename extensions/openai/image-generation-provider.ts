@@ -1,32 +1,32 @@
 import path from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import type {
   ImageGenerationOutputFormat,
   ImageGenerationProvider,
   ImageGenerationResult,
-} from "openclaw/plugin-sdk/image-generation";
+} from "NexisClaw/plugin-sdk/image-generation";
 import {
   parseOpenAiCompatibleImageResponse,
   toImageDataUrl,
-} from "openclaw/plugin-sdk/image-generation";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/logging-core";
-import { resolveClosestSize } from "openclaw/plugin-sdk/media-generation-runtime";
-import { extensionForMime } from "openclaw/plugin-sdk/media-mime";
+} from "NexisClaw/plugin-sdk/image-generation";
+import { createSubsystemLogger } from "NexisClaw/plugin-sdk/logging-core";
+import { resolveClosestSize } from "NexisClaw/plugin-sdk/media-generation-runtime";
+import { extensionForMime } from "NexisClaw/plugin-sdk/media-mime";
 import {
   ensureAuthProfileStore,
   isProviderApiKeyConfigured,
   listProfilesForProvider,
   type AuthProfileStore,
-} from "openclaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "openclaw/plugin-sdk/provider-auth-runtime";
+} from "NexisClaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   postJsonRequest,
   postMultipartRequest,
   resolveProviderHttpRequestConfig,
   sanitizeConfiguredModelProviderRequest,
-} from "openclaw/plugin-sdk/provider-http";
-import { isPrivateNetworkOptInEnabled } from "openclaw/plugin-sdk/ssrf-runtime";
+} from "NexisClaw/plugin-sdk/provider-http";
+import { isPrivateNetworkOptInEnabled } from "NexisClaw/plugin-sdk/ssrf-runtime";
 import { canonicalizeCodexResponsesBaseUrl, OPENAI_CODEX_RESPONSES_BASE_URL } from "./base-url.js";
 import { OPENAI_DEFAULT_IMAGE_MODEL as DEFAULT_OPENAI_IMAGE_MODEL } from "./default-models.js";
 import { resolveConfiguredOpenAIBaseUrl } from "./shared.js";
@@ -265,7 +265,7 @@ function resolveOpenAIImageRequestSize(params: {
 
 function shouldAllowPrivateImageEndpoint(req: {
   provider: string;
-  cfg: OpenClawConfig | undefined;
+  cfg: NexisClawConfig | undefined;
 }) {
   if (req.provider === MOCK_OPENAI_PROVIDER_ID) {
     return true;
@@ -277,14 +277,14 @@ function shouldAllowPrivateImageEndpoint(req: {
   if (!baseUrl.startsWith("http://127.0.0.1:") && !baseUrl.startsWith("http://localhost:")) {
     return false;
   }
-  return process.env.OPENCLAW_QA_ALLOW_LOCAL_IMAGE_PROVIDER === "1";
+  return process.env.NEXISCLAW_QA_ALLOW_LOCAL_IMAGE_PROVIDER === "1";
 }
 
 function normalizeProviderId(value: string | undefined): string {
   return value?.trim().toLowerCase() ?? "";
 }
 
-function hasExplicitOpenAIDirectAuthConfig(cfg: OpenClawConfig | undefined): boolean {
+function hasExplicitOpenAIDirectAuthConfig(cfg: NexisClawConfig | undefined): boolean {
   const profiles = cfg?.auth?.profiles;
   if (!profiles) {
     return false;
@@ -294,7 +294,7 @@ function hasExplicitOpenAIDirectAuthConfig(cfg: OpenClawConfig | undefined): boo
   );
 }
 
-function hasExplicitOpenAIDirectProviderConfig(cfg: OpenClawConfig | undefined): boolean {
+function hasExplicitOpenAIDirectProviderConfig(cfg: NexisClawConfig | undefined): boolean {
   if (hasExplicitOpenAIDirectAuthConfig(cfg)) {
     return true;
   }

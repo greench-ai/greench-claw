@@ -1,17 +1,17 @@
 import {
   createChannelMessageReplyPipeline,
   deliverInboundReplyWithMessageSendContext,
-} from "openclaw/plugin-sdk/channel-message";
-import { readChannelAllowFromStore } from "openclaw/plugin-sdk/conversation-runtime";
-import { upsertChannelPairingRequest } from "openclaw/plugin-sdk/conversation-runtime";
-import { buildModelsProviderData } from "openclaw/plugin-sdk/models-provider-runtime";
-import { dispatchReplyWithBufferedBlockDispatcher } from "openclaw/plugin-sdk/reply-dispatch-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { resolveStorePath } from "openclaw/plugin-sdk/session-store-runtime";
-import { loadSessionStore } from "openclaw/plugin-sdk/session-store-runtime";
-import { listSkillCommandsForAgents } from "openclaw/plugin-sdk/skill-commands-runtime";
-import { enqueueSystemEvent } from "openclaw/plugin-sdk/system-event-runtime";
-import { loadWebMedia } from "openclaw/plugin-sdk/web-media";
+} from "NexisClaw/plugin-sdk/channel-message";
+import { readChannelAllowFromStore } from "NexisClaw/plugin-sdk/conversation-runtime";
+import { upsertChannelPairingRequest } from "NexisClaw/plugin-sdk/conversation-runtime";
+import { buildModelsProviderData } from "NexisClaw/plugin-sdk/models-provider-runtime";
+import { dispatchReplyWithBufferedBlockDispatcher } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
+import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
+import { resolveStorePath } from "NexisClaw/plugin-sdk/session-store-runtime";
+import { loadSessionStore } from "NexisClaw/plugin-sdk/session-store-runtime";
+import { listSkillCommandsForAgents } from "NexisClaw/plugin-sdk/skill-commands-runtime";
+import { enqueueSystemEvent } from "NexisClaw/plugin-sdk/system-event-runtime";
+import { loadWebMedia } from "NexisClaw/plugin-sdk/web-media";
 import { syncTelegramMenuCommands } from "./bot-native-command-menu.js";
 import { deliverReplies, emitInternalMessageSentHook } from "./bot/delivery.js";
 import { createTelegramDraftStream } from "./draft-stream.js";

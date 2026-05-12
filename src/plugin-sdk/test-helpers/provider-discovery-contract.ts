@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { AuthProfileStore, OpenClawConfig } from "../provider-auth.js";
+import type { AuthProfileStore, NexisClawConfig } from "../provider-auth.js";
 import {
   registerProviderPlugins as registerProviders,
   requireRegisteredProvider as requireProvider,
@@ -81,7 +81,7 @@ function runCatalog(
   state: DiscoveryState,
   params: {
     provider: ProviderHandle;
-    config?: OpenClawConfig;
+    config?: NexisClawConfig;
     env?: NodeJS.ProcessEnv;
     resolveProviderApiKey?: () => { apiKey: string | undefined };
     resolveProviderAuth?: (
@@ -135,17 +135,17 @@ function providerModelIds(provider: Record<string, unknown>): Array<unknown> {
 function installDiscoveryHooks(state: DiscoveryState, options: DiscoveryContractOptions) {
   beforeAll(async () => {
     vi.resetModules();
-    vi.doMock("openclaw/plugin-sdk/agent-runtime", () => {
+    vi.doMock("NexisClaw/plugin-sdk/agent-runtime", () => {
       return {
         ensureAuthProfileStore: ensureAuthProfileStoreMock,
         listProfilesForProvider: listProfilesForProviderMock,
       };
     });
-    vi.doMock("openclaw/plugin-sdk/provider-auth", () => {
+    vi.doMock("NexisClaw/plugin-sdk/provider-auth", () => {
       return {
         DEFAULT_COPILOT_API_BASE_URL: "https://api.individual.githubcopilot.com",
         MINIMAX_OAUTH_MARKER: "minimax-oauth",
-        applyAuthProfileConfig: (config: OpenClawConfig) => config,
+        applyAuthProfileConfig: (config: NexisClawConfig) => config,
         buildApiKeyCredential: (
           provider: string,
           key: unknown,

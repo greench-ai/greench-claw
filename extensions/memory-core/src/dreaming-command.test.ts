@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import type {
-  OpenClawPluginCommandDefinition,
+  NexisClawPluginCommandDefinition,
   PluginCommandContext,
-} from "openclaw/plugin-sdk/core";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
+} from "NexisClaw/plugin-sdk/core";
+import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
 import { describe, expect, it, vi } from "vitest";
 import { registerDreamingCommand } from "./dreaming-command.js";
 
@@ -14,35 +14,35 @@ function asRecord(value: unknown): Record<string, unknown> | null {
   return value as Record<string, unknown>;
 }
 
-function resolveStoredDreaming(config: OpenClawConfig): Record<string, unknown> {
+function resolveStoredDreaming(config: NexisClawConfig): Record<string, unknown> {
   const entry = asRecord(config.plugins?.entries?.["memory-core"]);
   const pluginConfig = asRecord(entry?.config);
   return asRecord(pluginConfig?.dreaming) ?? {};
 }
 
-function createHarness(initialConfig: OpenClawConfig = {}) {
-  const registered: { command?: OpenClawPluginCommandDefinition } = {};
-  let runtimeConfig: OpenClawConfig = initialConfig;
+function createHarness(initialConfig: NexisClawConfig = {}) {
+  const registered: { command?: NexisClawPluginCommandDefinition } = {};
+  let runtimeConfig: NexisClawConfig = initialConfig;
 
   const runtime = {
     config: {
       current: vi.fn(() => runtimeConfig),
       loadConfig: vi.fn(() => runtimeConfig),
-      replaceConfigFile: vi.fn(async ({ nextConfig }: { nextConfig: OpenClawConfig }) => {
+      replaceConfigFile: vi.fn(async ({ nextConfig }: { nextConfig: NexisClawConfig }) => {
         runtimeConfig = nextConfig;
       }),
-      writeConfigFile: vi.fn(async (nextConfig: OpenClawConfig) => {
+      writeConfigFile: vi.fn(async (nextConfig: NexisClawConfig) => {
         runtimeConfig = nextConfig;
       }),
     },
-  } as unknown as OpenClawPluginApi["runtime"];
+  } as unknown as NexisClawPluginApi["runtime"];
 
   const api = {
     runtime,
-    registerCommand: vi.fn((definition: OpenClawPluginCommandDefinition) => {
+    registerCommand: vi.fn((definition: NexisClawPluginCommandDefinition) => {
       registered.command = definition;
     }),
-  } as unknown as OpenClawPluginApi;
+  } as unknown as NexisClawPluginApi;
 
   registerDreamingCommand(api);
 

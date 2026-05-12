@@ -7,7 +7,7 @@ import {
 import { normalizeProviderConfigForConfigDefaults } from "../config/provider-policy.js";
 import type { AgentModelConfig } from "../config/types.agents-shared.js";
 import type { ModelProviderConfig } from "../config/types.models.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
@@ -153,7 +153,7 @@ function normalizeProviderCatalogModelIdsForWrite(
   return mutated ? { ...providerConfig, models: nextModels } : providerConfig;
 }
 
-function normalizeModelProviderConfigsForWrite(cfg: OpenClawConfig): OpenClawConfig {
+function normalizeModelProviderConfigsForWrite(cfg: NexisClawConfig): NexisClawConfig {
   const providers = cfg.models?.providers;
   if (!providers) {
     return cfg;
@@ -189,14 +189,14 @@ function normalizeModelProviderConfigsForWrite(cfg: OpenClawConfig): OpenClawCon
   };
 }
 
-function normalizeConfigModelRefsForWrite(cfg: OpenClawConfig): OpenClawConfig {
+function normalizeConfigModelRefsForWrite(cfg: NexisClawConfig): NexisClawConfig {
   const providerNormalized = normalizeModelProviderConfigsForWrite(cfg);
   const defaults = providerNormalized.agents?.defaults;
   if (!defaults) {
     return providerNormalized;
   }
 
-  const nextDefaults: NonNullable<NonNullable<OpenClawConfig["agents"]>["defaults"]> = {
+  const nextDefaults: NonNullable<NonNullable<NexisClawConfig["agents"]>["defaults"]> = {
     ...defaults,
   };
   if (defaults.model !== undefined) {
@@ -216,10 +216,10 @@ function normalizeConfigModelRefsForWrite(cfg: OpenClawConfig): OpenClawConfig {
 }
 
 export function applyProviderAuthConfigPatch(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   patch: unknown,
   options?: { replaceDefaultModels?: boolean },
-): OpenClawConfig {
+): NexisClawConfig {
   const merged = normalizeConfigModelRefsForWrite(mergeConfigPatch(cfg, patch));
   if (!options?.replaceDefaultModels || !isPlainRecord(patch)) {
     return merged;
@@ -239,7 +239,7 @@ export function applyProviderAuthConfigPatch(
         ...merged.agents?.defaults,
         // Opt-in replacement for migrations that rename/remove model keys.
         models: sanitizeConfigPatchValue(patchModels) as NonNullable<
-          NonNullable<OpenClawConfig["agents"]>["defaults"]
+          NonNullable<NexisClawConfig["agents"]>["defaults"]
         >["models"],
       },
     },
@@ -251,10 +251,10 @@ export function applyProviderAuthConfigPatch(
  * `--set-default`, so `applyConfig` patches cannot replace the primary without an explicit opt-in.
  */
 export function restorePriorAgentsDefaultsModelUnlessOptIn(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   priorAgentsDefaultsModel?: AgentModelConfig;
   setDefault?: boolean;
-}): OpenClawConfig {
+}): NexisClawConfig {
   if (params.setDefault || params.priorAgentsDefaultsModel === undefined) {
     return params.cfg;
   }
@@ -271,10 +271,10 @@ export function restorePriorAgentsDefaultsModelUnlessOptIn(params: {
 }
 
 export function applyDefaultModel(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   model: string,
   opts?: { preserveExistingPrimary?: boolean },
-): OpenClawConfig {
+): NexisClawConfig {
   const normalizedModel = normalizeAgentModelRefForConfig(model);
   const models = {
     ...normalizeAgentModelMapForConfig(cfg.agents?.defaults?.models ?? {}),

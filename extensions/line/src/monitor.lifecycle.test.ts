@@ -1,10 +1,10 @@
 import crypto from "node:crypto";
 import { EventEmitter } from "node:events";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { createMockIncomingRequest } from "openclaw/plugin-sdk/test-env";
-import { WEBHOOK_IN_FLIGHT_DEFAULTS } from "openclaw/plugin-sdk/webhook-request-guards";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import { createMockIncomingRequest } from "NexisClaw/plugin-sdk/test-env";
+import { WEBHOOK_IN_FLIGHT_DEFAULTS } from "NexisClaw/plugin-sdk/webhook-request-guards";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 type LineNodeWebhookHandler = (req: IncomingMessage, res: ServerResponse) => Promise<void>;
@@ -72,14 +72,14 @@ vi.mock("./bot.js", () => ({
   createLineBot: createLineBotMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/reply-runtime", () => ({
+vi.mock("NexisClaw/plugin-sdk/reply-runtime", () => ({
   chunkMarkdownText: vi.fn(),
   dispatchReplyWithBufferedBlockDispatcher: vi.fn(),
 }));
 
-vi.mock("openclaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/runtime-env")>(
-    "openclaw/plugin-sdk/runtime-env",
+vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/runtime-env")>(
+    "NexisClaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -89,14 +89,14 @@ vi.mock("openclaw/plugin-sdk/runtime-env", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/channel-message", () => ({
+vi.mock("NexisClaw/plugin-sdk/channel-message", () => ({
   createChannelMessageReplyPipeline: vi.fn(() => ({})),
   hasFinalChannelTurnDispatch: vi.fn(() => false),
 }));
 
-vi.mock("openclaw/plugin-sdk/webhook-ingress", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/webhook-ingress")>(
-    "openclaw/plugin-sdk/webhook-ingress",
+vi.mock("NexisClaw/plugin-sdk/webhook-ingress", async () => {
+  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/webhook-ingress")>(
+    "NexisClaw/plugin-sdk/webhook-ingress",
   );
   return {
     ...actual,
@@ -151,10 +151,10 @@ describe("monitorLineProvider lifecycle", () => {
 
   afterAll(() => {
     vi.doUnmock("./bot.js");
-    vi.doUnmock("openclaw/plugin-sdk/reply-runtime");
-    vi.doUnmock("openclaw/plugin-sdk/runtime-env");
-    vi.doUnmock("openclaw/plugin-sdk/channel-message");
-    vi.doUnmock("openclaw/plugin-sdk/webhook-ingress");
+    vi.doUnmock("NexisClaw/plugin-sdk/reply-runtime");
+    vi.doUnmock("NexisClaw/plugin-sdk/runtime-env");
+    vi.doUnmock("NexisClaw/plugin-sdk/channel-message");
+    vi.doUnmock("NexisClaw/plugin-sdk/webhook-ingress");
     vi.doUnmock("./webhook-node.js");
     vi.doUnmock("./auto-reply-delivery.js");
     vi.doUnmock("./markdown-to-line.js");
@@ -223,7 +223,7 @@ describe("monitorLineProvider lifecycle", () => {
     const task = monitorLineProvider({
       channelAccessToken: "token",
       channelSecret: "secret", // pragma: allowlist secret
-      config: {} as OpenClawConfig,
+      config: {} as NexisClawConfig,
       runtime: {} as RuntimeEnv,
       abortSignal: abort.signal,
     }).then((monitor) => {
@@ -245,7 +245,7 @@ describe("monitorLineProvider lifecycle", () => {
       channelAccessToken: "token",
       channelSecret: "secret", // pragma: allowlist secret
       accountId: "work",
-      config: {} as OpenClawConfig,
+      config: {} as NexisClawConfig,
       runtime: {} as RuntimeEnv,
     });
 
@@ -267,7 +267,7 @@ describe("monitorLineProvider lifecycle", () => {
     await monitorLineProvider({
       channelAccessToken: "token",
       channelSecret: "secret", // pragma: allowlist secret
-      config: {} as OpenClawConfig,
+      config: {} as NexisClawConfig,
       runtime: {} as RuntimeEnv,
       abortSignal: abort.signal,
     });
@@ -279,7 +279,7 @@ describe("monitorLineProvider lifecycle", () => {
     const monitor = await monitorLineProvider({
       channelAccessToken: "token",
       channelSecret: "secret", // pragma: allowlist secret
-      config: {} as OpenClawConfig,
+      config: {} as NexisClawConfig,
       runtime: {} as RuntimeEnv,
     });
 
@@ -305,7 +305,7 @@ describe("monitorLineProvider lifecycle", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
       runtime: {} as RuntimeEnv,
     });
 
@@ -320,14 +320,14 @@ describe("monitorLineProvider lifecycle", () => {
       channelAccessToken: "first-token",
       channelSecret: "first-secret", // pragma: allowlist secret
       accountId: "first",
-      config: {} as OpenClawConfig,
+      config: {} as NexisClawConfig,
       runtime: {} as RuntimeEnv,
     });
     const secondMonitor = await monitorLineProvider({
       channelAccessToken: "second-token",
       channelSecret: "second-secret", // pragma: allowlist secret
       accountId: "second",
-      config: {} as OpenClawConfig,
+      config: {} as NexisClawConfig,
       runtime: {} as RuntimeEnv,
     });
 
@@ -362,14 +362,14 @@ describe("monitorLineProvider lifecycle", () => {
       channelAccessToken: "first-token",
       channelSecret: "shared-secret", // pragma: allowlist secret
       accountId: "first",
-      config: {} as OpenClawConfig,
+      config: {} as NexisClawConfig,
       runtime: {} as RuntimeEnv,
     });
     const secondMonitor = await monitorLineProvider({
       channelAccessToken: "second-token",
       channelSecret: "shared-secret", // pragma: allowlist secret
       accountId: "second",
-      config: {} as OpenClawConfig,
+      config: {} as NexisClawConfig,
       runtime: {} as RuntimeEnv,
     });
 
@@ -407,7 +407,7 @@ describe("monitorLineProvider lifecycle", () => {
     const monitor = await monitorLineProvider({
       channelAccessToken: "token",
       channelSecret: "secret", // pragma: allowlist secret
-      config: {} as OpenClawConfig,
+      config: {} as NexisClawConfig,
       runtime: {} as RuntimeEnv,
     });
 

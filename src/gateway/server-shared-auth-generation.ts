@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { resolveGatewayReloadSettings } from "./config-reload-settings.js";
 
 export type SharedGatewayAuthClient = {
@@ -69,7 +69,7 @@ export function setCurrentSharedGatewaySessionGeneration(
 
 export function enforceSharedGatewaySessionGenerationForConfigWrite(params: {
   state: SharedGatewaySessionGenerationState;
-  nextConfig: OpenClawConfig;
+  nextConfig: NexisClawConfig;
   resolveRuntimeSnapshotGeneration: () => string | undefined;
   clients: Iterable<SharedGatewayAuthClient>;
 }): void {

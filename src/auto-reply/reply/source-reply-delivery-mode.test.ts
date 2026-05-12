@@ -1,23 +1,23 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import {
   resolveSourceReplyDeliveryMode,
   resolveSourceReplyVisibilityPolicy,
 } from "./source-reply-delivery-mode.js";
 
-const emptyConfig = {} as OpenClawConfig;
+const emptyConfig = {} as NexisClawConfig;
 const automaticGroupReplyConfig = {
   messages: {
     groupChat: {
       visibleReplies: "automatic",
     },
   },
-} as const satisfies OpenClawConfig;
+} as const satisfies NexisClawConfig;
 const globalToolOnlyReplyConfig = {
   messages: {
     visibleReplies: "message_tool",
   },
-} as const satisfies OpenClawConfig;
+} as const satisfies NexisClawConfig;
 
 function expectPolicyFields(
   policy: ReturnType<typeof resolveSourceReplyVisibilityPolicy>,

@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/synology-chat",
+  "name": "@NexisClaw/synology-chat",
   "version": "2026.5.12-beta.1",
-  "description": "Synology Chat channel plugin for OpenClaw",
+  "description": "Synology Chat channel plugin for NexisClaw",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/NexisClaw/NexisClaw"
   },
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -21,11 +21,11 @@
       "selectionLabel": "Synology Chat (Webhook)",
       "docsPath": "/channels/synology-chat",
       "docsLabel": "synology-chat",
-      "blurb": "Connect your Synology NAS Chat to OpenClaw with full agent capabilities.",
+      "blurb": "Connect your Synology NAS Chat to NexisClaw with full agent capabilities.",
       "order": 90
     },
     "install": {
-      "npmSpec": "@openclaw/synology-chat",
+      "npmSpec": "@NexisClaw/synology-chat",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },
@@ -33,7 +33,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "openclawVersion": "2026.5.12-beta.1"
+      "NexisClawVersion": "2026.5.12-beta.1"
     },
     "release": {
       "publishToClawHub": true,

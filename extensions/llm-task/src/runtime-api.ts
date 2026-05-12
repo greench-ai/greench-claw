@@ -1,1 +1,1 @@
-export { resolvePreferredOpenClawTmpDir, withTempWorkspace } from "openclaw/plugin-sdk/temp-path";
+export { resolvePreferredNexisClawTmpDir, withTempWorkspace } from "NexisClaw/plugin-sdk/temp-path";

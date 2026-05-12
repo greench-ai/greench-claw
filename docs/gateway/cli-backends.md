@@ -7,10 +7,10 @@ read_when:
 title: "CLI backends"
 ---
 
-OpenClaw can run **local AI CLIs** as a **text-only fallback** when API providers are down,
+NexisClaw can run **local AI CLIs** as a **text-only fallback** when API providers are down,
 rate-limited, or temporarily misbehaving. This is intentionally conservative:
 
-- **OpenClaw tools are not injected directly**, but backends with `bundleMcp: true`
+- **NexisClaw tools are not injected directly**, but backends with `bundleMcp: true`
   can receive gateway tools via a loopback MCP bridge.
 - **JSONL streaming** for CLIs that support it.
 - **Sessions are supported** (so follow-up turns stay coherent).
@@ -35,7 +35,7 @@ You can use Codex CLI **without any config** (the bundled OpenAI plugin
 registers a default backend):
 
 ```bash
-openclaw agent --message "hi" --model codex-cli/gpt-5.5
+NexisClaw agent --message "hi" --model codex-cli/gpt-5.5
 ```
 
 If your gateway runs under launchd/systemd and PATH is minimal, add just the
@@ -58,7 +58,7 @@ command path:
 That's it. No keys, no extra auth config needed beyond the CLI itself.
 
 If you use a bundled CLI backend as the **primary message provider** on a
-gateway host, OpenClaw now auto-loads the owning bundled plugin when your config
+gateway host, NexisClaw now auto-loads the owning bundled plugin when your config
 explicitly references that backend in a model ref or under
 `agents.defaults.cliBackends`.
 
@@ -86,7 +86,7 @@ Add a CLI backend to your fallback list so it only runs when primary models fail
 Notes:
 
 - If you use `agents.defaults.models` (allowlist), you must include your CLI backend models there too.
-- If the primary provider fails (auth, rate limits, timeouts), OpenClaw will
+- If the primary provider fails (auth, rate limits, timeouts), NexisClaw will
   try the CLI backend next.
 
 ## Configuration overview
@@ -137,7 +137,7 @@ The provider id becomes the left side of your model ref:
           imageArg: "--image",
           imageMode: "repeat",
           // Opt in only if this backend may reseed safe invalidated sessions
-          // from bounded raw OpenClaw transcript history before compaction.
+          // from bounded raw NexisClaw transcript history before compaction.
           reseedFromRawTranscriptWhenUncompacted: true,
           serialize: true,
         },
@@ -150,56 +150,56 @@ The provider id becomes the left side of your model ref:
 ## How it works
 
 1. **Selects a backend** based on the provider prefix (`codex-cli/...`).
-2. **Builds a system prompt** using the same OpenClaw prompt + workspace context.
+2. **Builds a system prompt** using the same NexisClaw prompt + workspace context.
 3. **Executes the CLI** with a session id (if supported) so history stays consistent.
    The bundled `claude-cli` backend keeps a Claude stdio process alive per
-   OpenClaw session and sends follow-up turns over stream-json stdin.
+   NexisClaw session and sends follow-up turns over stream-json stdin.
 4. **Parses output** (JSON or plain text) and returns the final text.
 5. **Persists session ids** per backend, so follow-ups reuse the same CLI session.
 
 <Note>
 The bundled Anthropic `claude-cli` backend is supported again. Anthropic staff
-told us OpenClaw-style Claude CLI usage is allowed again, so OpenClaw treats
+told us NexisClaw-style Claude CLI usage is allowed again, so NexisClaw treats
 `claude -p` usage as sanctioned for this integration unless Anthropic publishes
 a new policy.
 </Note>
 
-The bundled OpenAI `codex-cli` backend passes OpenClaw's system prompt through
+The bundled OpenAI `codex-cli` backend passes NexisClaw's system prompt through
 Codex's `model_instructions_file` config override (`-c
 model_instructions_file="..."`). Codex does not expose a Claude-style
-`--append-system-prompt` flag, so OpenClaw writes the assembled prompt to a
+`--append-system-prompt` flag, so NexisClaw writes the assembled prompt to a
 temporary file for each fresh Codex CLI session.
 
-The bundled Anthropic `claude-cli` backend receives the OpenClaw skills snapshot
-two ways: the compact OpenClaw skills catalog in the appended system prompt, and
+The bundled Anthropic `claude-cli` backend receives the NexisClaw skills snapshot
+two ways: the compact NexisClaw skills catalog in the appended system prompt, and
 a temporary Claude Code plugin passed with `--plugin-dir`. The plugin contains
 only the eligible skills for that agent/session, so Claude Code's native skill
-resolver sees the same filtered set that OpenClaw would otherwise advertise in
-the prompt. Skill env/API key overrides are still applied by OpenClaw to the
+resolver sees the same filtered set that NexisClaw would otherwise advertise in
+the prompt. Skill env/API key overrides are still applied by NexisClaw to the
 child process environment for the run.
 
-Claude CLI also has its own noninteractive permission mode. OpenClaw maps that
+Claude CLI also has its own noninteractive permission mode. NexisClaw maps that
 to the existing exec policy instead of adding Claude-specific config: when the
 effective requested exec policy is YOLO (`tools.exec.security: "full"` and
-`tools.exec.ask: "off"`), OpenClaw adds `--permission-mode bypassPermissions`.
+`tools.exec.ask: "off"`), NexisClaw adds `--permission-mode bypassPermissions`.
 Per-agent `agents.list[].tools.exec` settings override global `tools.exec` for
 that agent. To force a different Claude mode, set explicit raw backend args
 such as `--permission-mode default` or `--permission-mode acceptEdits` under
 `agents.defaults.cliBackends.claude-cli.args` and matching `resumeArgs`.
 
-The bundled Anthropic `claude-cli` backend also maps OpenClaw `/think` levels
+The bundled Anthropic `claude-cli` backend also maps NexisClaw `/think` levels
 to Claude Code's native `--effort` flag for non-off levels. `minimal` and
 `low` map to `low`, `adaptive` and `medium` map to `medium`, and `high`,
 `xhigh`, and `max` map directly. Other CLI backends need their owning plugin to
 declare an equivalent argv mapper before `/think` can affect the spawned CLI.
 
-Before OpenClaw can use the bundled `claude-cli` backend, Claude Code itself
+Before NexisClaw can use the bundled `claude-cli` backend, Claude Code itself
 must already be logged in on the same host:
 
 ```bash
 claude auth login
 claude auth status --text
-openclaw models auth login --provider anthropic --method cli --set-default
+NexisClaw models auth login --provider anthropic --method cli --set-default
 ```
 
 Use `agents.defaults.cliBackends.claude-cli.command` only when the `claude`
@@ -221,7 +221,7 @@ binary is not already on `PATH`.
   and `input: "stdin"` so follow-up turns reuse the live Claude process while
   it is active. Warm stdio is the default now, including for custom configs
   that omit transport fields. If the Gateway restarts or the idle process
-  exits, OpenClaw resumes from the stored Claude session id. Stored session
+  exits, NexisClaw resumes from the stored Claude session id. Stored session
   ids are verified against an existing readable project transcript before
   resume, so phantom bindings are cleared with `reason=transcript-missing`
   instead of silently starting a fresh Claude CLI session under `--resume`.
@@ -229,15 +229,15 @@ binary is not already on `PATH`.
   8 MiB and 20,000 raw JSONL lines per turn. Tool-heavy Claude turns can raise
   them per backend with
   `agents.defaults.cliBackends.claude-cli.reliability.outputLimits.maxTurnRawChars`
-  and `maxTurnLines`; OpenClaw clamps those settings to 64 MiB and 100,000
+  and `maxTurnLines`; NexisClaw clamps those settings to 64 MiB and 100,000
   lines.
 - Stored CLI sessions are provider-owned continuity. The implicit daily session
   reset does not cut them; `/reset` and explicit `session.reset` policies still
   do.
-- Fresh CLI sessions normally reseed only from OpenClaw's compaction summary
+- Fresh CLI sessions normally reseed only from NexisClaw's compaction summary
   plus post-compaction tail. To recover short sessions that are invalidated
   before compaction, a backend can opt in with
-  `reseedFromRawTranscriptWhenUncompacted: true`. OpenClaw still keeps raw
+  `reseedFromRawTranscriptWhenUncompacted: true`. NexisClaw still keeps raw
   transcript reseed bounded and limits it to safe invalidations such as missing
   CLI transcripts, system-prompt/MCP changes, or session-expired retry; auth
   profile or credential-epoch changes never reseed raw transcript history.
@@ -246,19 +246,19 @@ Serialization notes:
 
 - `serialize: true` keeps same-lane runs ordered.
 - Most CLIs serialize on one provider lane.
-- OpenClaw drops stored CLI session reuse when the selected auth identity changes,
+- NexisClaw drops stored CLI session reuse when the selected auth identity changes,
   including a changed auth profile id, static API key, static token, or OAuth
   account identity when the CLI exposes one. OAuth access and refresh token
   rotation does not cut the stored CLI session. If a CLI does not expose a
-  stable OAuth account id, OpenClaw lets that CLI enforce resume permissions.
+  stable OAuth account id, NexisClaw lets that CLI enforce resume permissions.
 
 ## Fallback prelude from claude-cli sessions
 
 When a `claude-cli` attempt fails over to a non-CLI candidate in
-[`agents.defaults.model.fallbacks`](/concepts/model-failover), OpenClaw seeds
+[`agents.defaults.model.fallbacks`](/concepts/model-failover), NexisClaw seeds
 the next attempt with a context prelude harvested from Claude Code's local
 JSONL transcript at `~/.claude/projects/`. Without this seed, the fallback
-provider would start cold because OpenClaw's own session transcript is empty
+provider would start cold because NexisClaw's own session transcript is empty
 for `claude-cli` runs.
 
 - The prelude prefers the latest `/compact` summary or `compact_boundary`
@@ -282,15 +282,15 @@ imageArg: "--image",
 imageMode: "repeat"
 ```
 
-OpenClaw will write base64 images to temp files. If `imageArg` is set, those
-paths are passed as CLI args. If `imageArg` is missing, OpenClaw appends the
+NexisClaw will write base64 images to temp files. If `imageArg` is set, those
+paths are passed as CLI args. If `imageArg` is missing, NexisClaw appends the
 file paths to the prompt (path injection), which is enough for CLIs that auto-
 load local files from plain paths.
 
 ## Inputs / outputs
 
 - `output: "json"` (default) tries to parse JSON and extract text + session id.
-- For Gemini CLI JSON output, OpenClaw reads reply text from `response` and
+- For Gemini CLI JSON output, NexisClaw reads reply text from `response` and
   usage from `stats` when `usage` is missing or empty.
 - `output: "jsonl"` parses JSONL streams (for example Codex CLI `--json`) and extracts the final agent message plus session
   identifiers when present.
@@ -334,8 +334,8 @@ Gemini CLI JSON notes:
 
 - Reply text is read from the JSON `response` field.
 - Usage falls back to `stats` when `usage` is absent or empty.
-- `stats.cached` is normalized into OpenClaw `cacheRead`.
-- If `stats.input` is missing, OpenClaw derives input tokens from
+- `stats.cached` is normalized into NexisClaw `cacheRead`.
+- If `stats.input` is missing, NexisClaw derives input tokens from
   `stats.input_tokens - stats.cached`.
 
 Override only if needed (common: absolute `command` path).
@@ -369,7 +369,7 @@ api.registerTextTransforms({
 ```
 
 `input` rewrites the system prompt and user prompt passed to the CLI. `output`
-rewrites streamed assistant deltas and parsed final text before OpenClaw handles
+rewrites streamed assistant deltas and parsed final text before NexisClaw handles
 its own control markers and channel delivery.
 
 For CLIs that emit Claude Code stream-json compatible JSONL, set
@@ -377,27 +377,27 @@ For CLIs that emit Claude Code stream-json compatible JSONL, set
 
 ## Bundle MCP overlays
 
-CLI backends do **not** receive OpenClaw tool calls directly, but a backend can
+CLI backends do **not** receive NexisClaw tool calls directly, but a backend can
 opt into a generated MCP config overlay with `bundleMcp: true`.
 
 Current bundled behavior:
 
 - `claude-cli`: generated strict MCP config file
 - `codex-cli`: inline config overrides for `mcp_servers`; the generated
-  OpenClaw loopback server is marked with Codex's per-server tool approval mode
+  NexisClaw loopback server is marked with Codex's per-server tool approval mode
   so MCP calls cannot stall on local approval prompts
 - `google-gemini-cli`: generated Gemini system settings file
 
-When bundle MCP is enabled, OpenClaw:
+When bundle MCP is enabled, NexisClaw:
 
 - spawns a loopback HTTP MCP server that exposes gateway tools to the CLI process
-- authenticates the bridge with a per-session token (`OPENCLAW_MCP_TOKEN`)
+- authenticates the bridge with a per-session token (`NEXISCLAW_MCP_TOKEN`)
 - scopes tool access to the current session, account, and channel context
 - loads enabled bundle-MCP servers for the current workspace
 - merges them with any existing backend MCP config/settings shape
 - rewrites the launch config using the backend-owned integration mode from the owning extension
 
-If no MCP servers are enabled, OpenClaw still injects a strict config when a
+If no MCP servers are enabled, NexisClaw still injects a strict config when a
 backend opts into bundle MCP so background runs stay isolated.
 
 Session-scoped bundled MCP runtimes are cached for reuse within a session, then
@@ -408,14 +408,14 @@ children and Streamable HTTP/SSE streams do not outlive the run.
 
 ## Limitations
 
-- **No direct OpenClaw tool calls.** OpenClaw does not inject tool calls into
+- **No direct NexisClaw tool calls.** NexisClaw does not inject tool calls into
   the CLI backend protocol. Backends only see gateway tools when they opt into
   `bundleMcp: true`.
 - **Streaming is backend-specific.** Some backends stream JSONL; others buffer
   until exit.
 - **Structured outputs** depend on the CLI's JSON format.
 - **Codex CLI sessions** resume via text output (no JSONL), which is less
-  structured than the initial `--json` run. OpenClaw sessions still work
+  structured than the initial `--json` run. NexisClaw sessions still work
   normally.
 
 ## Troubleshooting

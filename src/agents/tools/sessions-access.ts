@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { resolveSandboxSessionToolsVisibility } from "../../plugin-sdk/session-visibility.js";
 import { isSubagentSessionKey } from "../../routing/session-key.js";
 import { normalizeOptionalString } from "../../shared/string-coerce.js";
@@ -14,7 +14,7 @@ export {
 } from "../../plugin-sdk/session-visibility.js";
 
 export function resolveSandboxedSessionToolContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   agentSessionKey?: string;
   sandboxed?: boolean;
 }): {

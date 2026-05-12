@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { saveJsonFile } from "../infra/json-file.js";
 import { tryReadJsonSync } from "../infra/json-files.js";
 import { resolveDefaultPluginNpmDir } from "../plugins/install-paths.js";
@@ -11,8 +11,8 @@ import {
 } from "../plugins/installed-plugin-index-records.js";
 import { loadInstalledPluginIndex } from "../plugins/installed-plugin-index.js";
 import {
-  auditOpenClawPeerDependenciesInManagedNpmRoot,
-  relinkOpenClawPeerDependenciesInManagedNpmRoot,
+  auditNexisClawPeerDependenciesInManagedNpmRoot,
+  relinkNexisClawPeerDependenciesInManagedNpmRoot,
 } from "../plugins/plugin-peer-link.js";
 import { refreshPluginRegistry } from "../plugins/plugin-registry.js";
 import { note } from "../terminal/note.js";
@@ -27,7 +27,7 @@ import {
 
 type PluginRegistryDoctorRepairParams = Omit<PluginRegistryInstallMigrationParams, "config"> &
   InstalledPluginIndexRecordStoreOptions & {
-    config: OpenClawConfig;
+    config: NexisClawConfig;
     prompter: Pick<DoctorPrompter, "shouldRepair">;
   };
 
@@ -87,7 +87,7 @@ function readPackageVersion(packageDir: string): string | undefined {
 }
 
 function readPluginManifestId(packageDir: string): string | undefined {
-  const manifest = readJsonObject(path.join(packageDir, "openclaw.plugin.json"));
+  const manifest = readJsonObject(path.join(packageDir, "NexisClaw.plugin.json"));
   const id = manifest?.id;
   return typeof id === "string" && id.trim() ? id.trim() : undefined;
 }
@@ -108,7 +108,7 @@ function listStaleManagedNpmBundledPlugins(
   const stale: StaleManagedNpmBundledPlugin[] = [];
 
   for (const packageName of Object.keys(dependencies).toSorted()) {
-    if (!packageName.startsWith("@openclaw/")) {
+    if (!packageName.startsWith("@NexisClaw/")) {
       continue;
     }
     const bundled = bundledByPackage.get(packageName);
@@ -218,7 +218,7 @@ export function maybeRepairStaleManagedNpmBundledPlugins(
           (plugin) =>
             `- ${plugin.pluginId}: ${plugin.packageName}${plugin.version ? `@${plugin.version}` : ""}`,
         ),
-        `Repair with ${formatCliCommand("openclaw doctor --fix")} to remove stale managed npm packages and rebuild the plugin registry.`,
+        `Repair with ${formatCliCommand("NexisClaw doctor --fix")} to remove stale managed npm packages and rebuild the plugin registry.`,
       ].join("\n"),
       "Plugin registry",
     );
@@ -241,18 +241,18 @@ export function maybeRepairStaleManagedNpmBundledPlugins(
   return true;
 }
 
-export async function maybeRepairManagedNpmOpenClawPeerLinks(
+export async function maybeRepairManagedNpmNexisClawPeerLinks(
   params: PluginRegistryDoctorRepairParams,
 ): Promise<boolean> {
   const npmRoot = resolveManagedPluginNpmRoot(params);
   if (!params.prompter.shouldRepair) {
-    const audit = await auditOpenClawPeerDependenciesInManagedNpmRoot({ npmRoot });
+    const audit = await auditNexisClawPeerDependenciesInManagedNpmRoot({ npmRoot });
     if (audit.broken > 0) {
       note(
         [
-          "Managed npm OpenClaw host peer links need repair:",
+          "Managed npm NexisClaw host peer links need repair:",
           ...audit.issues.map((issue) => `- ${issue.packageName}: ${issue.reason}`),
-          `Repair with ${formatCliCommand("openclaw doctor --fix")} to relink managed npm plugin packages.`,
+          `Repair with ${formatCliCommand("NexisClaw doctor --fix")} to relink managed npm plugin packages.`,
         ].join("\n"),
         "Plugin registry",
       );
@@ -265,14 +265,14 @@ export async function maybeRepairManagedNpmOpenClawPeerLinks(
     info: (message) => messages.push({ level: "info", message }),
     warn: (message) => messages.push({ level: "warn", message }),
   };
-  const result = await relinkOpenClawPeerDependenciesInManagedNpmRoot({
+  const result = await relinkNexisClawPeerDependenciesInManagedNpmRoot({
     npmRoot,
     logger,
   });
 
   if (result.repaired > 0) {
     note(
-      `Repaired OpenClaw host peer link(s) for ${result.repaired} managed npm plugin package(s).`,
+      `Repaired NexisClaw host peer link(s) for ${result.repaired} managed npm plugin package(s).`,
       "Plugin registry",
     );
   }
@@ -281,7 +281,7 @@ export async function maybeRepairManagedNpmOpenClawPeerLinks(
     .map((message) => `- ${message.message}`);
   if (warnings.length > 0) {
     note(
-      ["Could not repair all managed npm OpenClaw host peer links:", ...warnings].join("\n"),
+      ["Could not repair all managed npm NexisClaw host peer links:", ...warnings].join("\n"),
       "Plugin registry",
     );
   }
@@ -302,7 +302,7 @@ async function loadInstallRecordsWithoutPluginIds(
 
 export async function maybeRepairPluginRegistryState(
   params: PluginRegistryDoctorRepairParams,
-): Promise<OpenClawConfig> {
+): Promise<NexisClawConfig> {
   const preflight = preflightPluginRegistryInstallMigration(params);
   for (const warning of preflight.deprecationWarnings) {
     note(warning, "Plugin registry");
@@ -323,13 +323,13 @@ export async function maybeRepairPluginRegistryState(
     (plugin) => plugin.pluginId,
   );
   const removedStaleManagedNpmBundledPlugins = maybeRepairStaleManagedNpmBundledPlugins(params);
-  const repairedManagedNpmOpenClawPeerLinks = await maybeRepairManagedNpmOpenClawPeerLinks(params);
+  const repairedManagedNpmNexisClawPeerLinks = await maybeRepairManagedNpmNexisClawPeerLinks(params);
   if (!params.prompter.shouldRepair) {
     if (preflight.action === "migrate") {
       note(
         [
           "Persisted plugin registry is missing or stale.",
-          `Repair with ${formatCliCommand("openclaw doctor --fix")} to rebuild ${shortenHomePath(preflight.filePath)} from enabled plugins.`,
+          `Repair with ${formatCliCommand("NexisClaw doctor --fix")} to rebuild ${shortenHomePath(preflight.filePath)} from enabled plugins.`,
         ].join("\n"),
         "Plugin registry",
       );
@@ -353,7 +353,7 @@ export async function maybeRepairPluginRegistryState(
   if (
     preflight.action === "skip-existing" ||
     removedStaleManagedNpmBundledPlugins ||
-    repairedManagedNpmOpenClawPeerLinks
+    repairedManagedNpmNexisClawPeerLinks
   ) {
     const index = await refreshPluginRegistry({
       ...migrationParams,

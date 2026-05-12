@@ -16,7 +16,7 @@ import {
   type HeartbeatToolResponse,
   type MessagingToolSend,
   wrapToolWithBeforeToolCallHook,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "NexisClaw/plugin-sdk/agent-harness-runtime";
 import type { CodexDynamicToolsLoading } from "./config.js";
 import {
   type CodexDynamicToolCallOutputContentItem,
@@ -54,7 +54,7 @@ export type CodexDynamicToolBridge = {
   };
 };
 
-export const CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE = "openclaw";
+export const CODEX_NEXISCLAW_DYNAMIC_TOOL_NAMESPACE = "NexisClaw";
 
 const ALWAYS_DIRECT_DYNAMIC_TOOL_NAMES = new Set(["sessions_yield"]);
 
@@ -104,7 +104,7 @@ export function createCodexDynamicToolBridge(params: {
       const tool = toolMap.get(call.tool);
       if (!tool) {
         return {
-          contentItems: [{ type: "inputText", text: `Unknown OpenClaw tool: ${call.tool}` }],
+          contentItems: [{ type: "inputText", text: `Unknown NexisClaw tool: ${call.tool}` }],
           success: false,
         };
       }
@@ -204,7 +204,7 @@ function createCodexDynamicToolSpec(params: {
   }
   return {
     ...base,
-    namespace: CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE,
+    namespace: CODEX_NEXISCLAW_DYNAMIC_TOOL_NAMESPACE,
     deferLoading: true,
   };
 }

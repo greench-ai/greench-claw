@@ -3,20 +3,20 @@ import fs from "node:fs/promises";
 import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
-import { readJsonFileWithFallback } from "openclaw/plugin-sdk/json-store";
+import { readJsonFileWithFallback } from "NexisClaw/plugin-sdk/json-store";
 import {
   extractTrustedCodexProjectPaths,
   renderIsolatedCodexProjectTrustConfig,
 } from "./codex-trust-config.js";
 import { resolveAcpxPluginRoot } from "./config.js";
 import type { ResolvedAcpxPluginConfig } from "./config.js";
-import { OPENCLAW_ACPX_LEASE_ID_ARG, OPENCLAW_GATEWAY_INSTANCE_ID_ARG } from "./process-lease.js";
+import { NEXISCLAW_ACPX_LEASE_ID_ARG, NEXISCLAW_GATEWAY_INSTANCE_ID_ARG } from "./process-lease.js";
 
 const CODEX_ACP_PACKAGE = "@zed-industries/codex-acp";
 const CODEX_ACP_BIN = "codex-acp";
 const CLAUDE_ACP_PACKAGE = "@agentclientprotocol/claude-agent-acp";
 const CLAUDE_ACP_BIN = "claude-agent-acp";
-const RUN_CONFIGURED_COMMAND_SENTINEL = "--openclaw-run-configured";
+const RUN_CONFIGURED_COMMAND_SENTINEL = "--NexisClaw-run-configured";
 const requireFromHere = createRequire(import.meta.url);
 
 type PackageManifest = {
@@ -33,7 +33,7 @@ function readSelfManifest(): PackageManifest {
 function readManifestDependencyVersion(packageName: string): string {
   const version = readSelfManifest().dependencies?.[packageName];
   if (typeof version !== "string" || version.trim() === "") {
-    throw new Error(`Missing ${packageName} dependency version in @openclaw/acpx manifest`);
+    throw new Error(`Missing ${packageName} dependency version in @NexisClaw/acpx manifest`);
   }
   return version;
 }
@@ -139,7 +139,7 @@ async function resolveInstalledAcpPackageBinPath(
 }
 
 async function resolveInstalledCodexAcpBinPath(): Promise<string | undefined> {
-  // Keep OpenClaw's isolated CODEX_HOME wrapper, but launch the plugin-local
+  // Keep NexisClaw's isolated CODEX_HOME wrapper, but launch the plugin-local
   // Codex ACP adapter when the package dependency is available.
   return await resolveInstalledAcpPackageBinPath(CODEX_ACP_PACKAGE, CODEX_ACP_BIN);
 }
@@ -163,11 +163,11 @@ import { fileURLToPath } from "node:url";
 
 ${params.envSetup}
 const openClawWrapperArgs = new Set([
-  ${quoteCommandPart(OPENCLAW_ACPX_LEASE_ID_ARG)},
-  ${quoteCommandPart(OPENCLAW_GATEWAY_INSTANCE_ID_ARG)},
+  ${quoteCommandPart(NEXISCLAW_ACPX_LEASE_ID_ARG)},
+  ${quoteCommandPart(NEXISCLAW_GATEWAY_INSTANCE_ID_ARG)},
 ]);
 
-function stripOpenClawWrapperArgs(args) {
+function stripNexisClawWrapperArgs(args) {
   const stripped = [];
   for (let index = 0; index < args.length; index += 1) {
     const value = args[index];
@@ -180,7 +180,7 @@ function stripOpenClawWrapperArgs(args) {
   return stripped;
 }
 
-const configuredArgs = stripOpenClawWrapperArgs(process.argv.slice(2));
+const configuredArgs = stripNexisClawWrapperArgs(process.argv.slice(2));
 
 function resolveNpmCliPath() {
   const candidate = path.resolve(
@@ -217,7 +217,7 @@ const args =
     : [...defaultArgs, ...configuredArgs];
 
 if (!command) {
-  console.error("[openclaw] missing configured ${params.displayName} ACP command");
+  console.error("[NexisClaw] missing configured ${params.displayName} ACP command");
   process.exit(1);
 }
 
@@ -280,7 +280,7 @@ const parentWatcher =
 parentWatcher?.unref?.();
 
 child.on("error", (error) => {
-  console.error(\`[openclaw] failed to launch ${params.displayName} ACP wrapper: \${error.message}\`);
+  console.error(\`[NexisClaw] failed to launch ${params.displayName} ACP wrapper: \${error.message}\`);
   process.exit(1);
 });
 
@@ -319,7 +319,7 @@ const env = {
 function buildClaudeAcpWrapperScript(installedBinPath?: string): string {
   return buildAdapterWrapperScript({
     displayName: "Claude",
-    // This package is patched in OpenClaw; fallback must not float to an unpatched newer release.
+    // This package is patched in NexisClaw; fallback must not float to an unpatched newer release.
     packageSpec: `${CLAUDE_ACP_PACKAGE}@${CLAUDE_ACP_PACKAGE_VERSION}`,
     binName: CLAUDE_ACP_BIN,
     installedBinPath,

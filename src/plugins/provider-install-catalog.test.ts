@@ -1,15 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-type LoadOpenClawProviderIndex =
-  typeof import("../model-catalog/index.js").loadOpenClawProviderIndex;
+type LoadNexisClawProviderIndex =
+  typeof import("../model-catalog/index.js").loadNexisClawProviderIndex;
 type LoadPluginRegistrySnapshot = typeof import("./plugin-registry.js").loadPluginRegistrySnapshot;
 type ResolveManifestProviderAuthChoices =
   typeof import("./provider-auth-choices.js").resolveManifestProviderAuthChoices;
 type ListOfficialExternalProviderCatalogEntries =
   typeof import("./official-external-plugin-catalog.js").listOfficialExternalProviderCatalogEntries;
 
-const loadOpenClawProviderIndex = vi.hoisted(() =>
-  vi.fn<LoadOpenClawProviderIndex>(() => ({ version: 1, providers: {} })),
+const loadNexisClawProviderIndex = vi.hoisted(() =>
+  vi.fn<LoadNexisClawProviderIndex>(() => ({ version: 1, providers: {} })),
 );
 vi.mock("../model-catalog/index.js", async () => {
   const actual = await vi.importActual<typeof import("../model-catalog/index.js")>(
@@ -17,7 +17,7 @@ vi.mock("../model-catalog/index.js", async () => {
   );
   return {
     ...actual,
-    loadOpenClawProviderIndex,
+    loadNexisClawProviderIndex,
   };
 });
 
@@ -66,7 +66,7 @@ import {
 describe("provider install catalog", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    loadOpenClawProviderIndex.mockReturnValue({ version: 1, providers: {} });
+    loadNexisClawProviderIndex.mockReturnValue({ version: 1, providers: {} });
     loadPluginRegistrySnapshot.mockReturnValue({
       version: 1,
       hostContractVersion: "test",
@@ -95,7 +95,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "openai",
           origin: "bundled",
-          manifestPath: "/repo/extensions/openai/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/openai/NexisClaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/openai",
           enabled: true,
@@ -106,12 +106,12 @@ describe("provider install catalog", () => {
             agentHarnesses: [],
           },
           compat: [],
-          packageName: "@openclaw/openai",
+          packageName: "@NexisClaw/openai",
           packageInstall: {
             defaultChoice: "npm",
             npm: {
-              spec: "@openclaw/openai@1.2.3",
-              packageName: "@openclaw/openai",
+              spec: "@NexisClaw/openai@1.2.3",
+              packageName: "@NexisClaw/openai",
               selector: "1.2.3",
               selectorKind: "exact-version",
               exactVersion: true,
@@ -151,7 +151,7 @@ describe("provider install catalog", () => {
         label: "OpenAI",
         origin: "bundled",
         install: {
-          npmSpec: "@openclaw/openai@1.2.3",
+          npmSpec: "@NexisClaw/openai@1.2.3",
           localPath: "extensions/openai",
           defaultChoice: "npm",
           expectedIntegrity: "sha512-openai",
@@ -159,8 +159,8 @@ describe("provider install catalog", () => {
         installSource: {
           defaultChoice: "npm",
           npm: {
-            spec: "@openclaw/openai@1.2.3",
-            packageName: "@openclaw/openai",
+            spec: "@NexisClaw/openai@1.2.3",
+            packageName: "@NexisClaw/openai",
             selector: "1.2.3",
             selectorKind: "exact-version",
             exactVersion: true,
@@ -187,8 +187,8 @@ describe("provider install catalog", () => {
       installRecords: {
         vllm: {
           source: "npm",
-          spec: "@openclaw/vllm",
-          resolvedSpec: "@openclaw/vllm@2.0.0",
+          spec: "@NexisClaw/vllm",
+          resolvedSpec: "@NexisClaw/vllm@2.0.0",
           integrity: "sha512-vllm",
         },
       },
@@ -196,9 +196,9 @@ describe("provider install catalog", () => {
         {
           pluginId: "vllm",
           origin: "global",
-          manifestPath: "/Users/test/.openclaw/plugins/vllm/openclaw.plugin.json",
+          manifestPath: "/Users/test/.NexisClaw/plugins/vllm/NexisClaw.plugin.json",
           manifestHash: "hash",
-          rootDir: "/Users/test/.openclaw/plugins/vllm",
+          rootDir: "/Users/test/.NexisClaw/plugins/vllm",
           enabled: true,
           startup: {
             sidecar: false,
@@ -207,11 +207,11 @@ describe("provider install catalog", () => {
             agentHarnesses: [],
           },
           compat: [],
-          packageName: "@openclaw/vllm",
+          packageName: "@NexisClaw/vllm",
           packageInstall: {
             npm: {
-              spec: "@openclaw/vllm-fork@1.0.0",
-              packageName: "@openclaw/vllm-fork",
+              spec: "@NexisClaw/vllm-fork@1.0.0",
+              packageName: "@NexisClaw/vllm-fork",
               selector: "1.0.0",
               selectorKind: "exact-version",
               exactVersion: true,
@@ -245,15 +245,15 @@ describe("provider install catalog", () => {
       label: "vLLM",
       origin: "global",
       install: {
-        npmSpec: "@openclaw/vllm@2.0.0",
+        npmSpec: "@NexisClaw/vllm@2.0.0",
         expectedIntegrity: "sha512-vllm",
         defaultChoice: "npm",
       },
       installSource: {
         defaultChoice: "npm",
         npm: {
-          spec: "@openclaw/vllm@2.0.0",
-          packageName: "@openclaw/vllm",
+          spec: "@NexisClaw/vllm@2.0.0",
+          packageName: "@NexisClaw/vllm",
           selector: "2.0.0",
           selectorKind: "exact-version",
           exactVersion: true,
@@ -276,18 +276,18 @@ describe("provider install catalog", () => {
       installRecords: {
         vllm: {
           source: "clawhub",
-          spec: "clawhub:openclaw/vllm@2026.5.2",
+          spec: "clawhub:NexisClaw/vllm@2026.5.2",
           integrity: "sha256-clawpack",
-          clawhubPackage: "openclaw/vllm",
+          clawhubPackage: "NexisClaw/vllm",
         },
       },
       plugins: [
         {
           pluginId: "vllm",
           origin: "global",
-          manifestPath: "/Users/test/.openclaw/plugins/vllm/openclaw.plugin.json",
+          manifestPath: "/Users/test/.NexisClaw/plugins/vllm/NexisClaw.plugin.json",
           manifestHash: "hash",
-          rootDir: "/Users/test/.openclaw/plugins/vllm",
+          rootDir: "/Users/test/.NexisClaw/plugins/vllm",
           enabled: true,
           startup: {
             sidecar: false,
@@ -296,11 +296,11 @@ describe("provider install catalog", () => {
             agentHarnesses: [],
           },
           compat: [],
-          packageName: "@openclaw/vllm",
+          packageName: "@NexisClaw/vllm",
           packageInstall: {
             npm: {
-              spec: "@openclaw/vllm-fork@1.0.0",
-              packageName: "@openclaw/vllm-fork",
+              spec: "@NexisClaw/vllm-fork@1.0.0",
+              packageName: "@NexisClaw/vllm-fork",
               selector: "1.0.0",
               selectorKind: "exact-version",
               exactVersion: true,
@@ -334,14 +334,14 @@ describe("provider install catalog", () => {
       label: "vLLM",
       origin: "global",
       install: {
-        clawhubSpec: "clawhub:openclaw/vllm@2026.5.2",
+        clawhubSpec: "clawhub:NexisClaw/vllm@2026.5.2",
         defaultChoice: "clawhub",
       },
       installSource: {
         defaultChoice: "clawhub",
         clawhub: {
-          spec: "clawhub:openclaw/vllm@2026.5.2",
-          packageName: "openclaw/vllm",
+          spec: "clawhub:NexisClaw/vllm@2026.5.2",
+          packageName: "NexisClaw/vllm",
           version: "2026.5.2",
           exactVersion: true,
         },
@@ -363,9 +363,9 @@ describe("provider install catalog", () => {
         {
           pluginId: "demo-provider",
           origin: "global",
-          manifestPath: "/Users/test/.openclaw/plugins/demo-provider/openclaw.plugin.json",
+          manifestPath: "/Users/test/.NexisClaw/plugins/demo-provider/NexisClaw.plugin.json",
           manifestHash: "hash",
-          rootDir: "/Users/test/.openclaw/plugins/demo-provider",
+          rootDir: "/Users/test/.NexisClaw/plugins/demo-provider",
           enabled: true,
           startup: {
             sidecar: false,
@@ -417,7 +417,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "demo-provider",
           origin: "workspace",
-          manifestPath: "/repo/extensions/demo-provider/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/demo-provider/NexisClaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/demo-provider",
           enabled: false,
@@ -461,7 +461,7 @@ describe("provider install catalog", () => {
   });
 
   it("surfaces provider-index install metadata when the provider plugin is not installed", () => {
-    loadOpenClawProviderIndex.mockReturnValue({
+    loadNexisClawProviderIndex.mockReturnValue({
       version: 1,
       providers: {
         moonshot: {
@@ -469,9 +469,9 @@ describe("provider install catalog", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@openclaw/plugin-moonshot",
+            package: "@NexisClaw/plugin-moonshot",
             install: {
-              npmSpec: "@openclaw/plugin-moonshot@1.2.3",
+              npmSpec: "@NexisClaw/plugin-moonshot@1.2.3",
               defaultChoice: "npm",
               expectedIntegrity: "sha512-moonshot",
             },
@@ -502,15 +502,15 @@ describe("provider install catalog", () => {
       label: "Moonshot AI",
       origin: "bundled",
       install: {
-        npmSpec: "@openclaw/plugin-moonshot@1.2.3",
+        npmSpec: "@NexisClaw/plugin-moonshot@1.2.3",
         defaultChoice: "npm",
         expectedIntegrity: "sha512-moonshot",
       },
       installSource: {
         defaultChoice: "npm",
         npm: {
-          spec: "@openclaw/plugin-moonshot@1.2.3",
-          packageName: "@openclaw/plugin-moonshot",
+          spec: "@NexisClaw/plugin-moonshot@1.2.3",
+          packageName: "@NexisClaw/plugin-moonshot",
           selector: "1.2.3",
           selectorKind: "exact-version",
           exactVersion: true,
@@ -525,10 +525,10 @@ describe("provider install catalog", () => {
   it("surfaces official external provider install metadata when the provider plugin is not installed", () => {
     listOfficialExternalProviderCatalogEntries.mockReturnValue([
       {
-        name: "@openclaw/codex",
+        name: "@NexisClaw/codex",
         source: "official",
         kind: "provider",
-        openclaw: {
+        NexisClaw: {
           plugin: { id: "codex", label: "Codex" },
           providers: [
             {
@@ -548,7 +548,7 @@ describe("provider install catalog", () => {
             },
           ],
           install: {
-            npmSpec: "@openclaw/codex",
+            npmSpec: "@NexisClaw/codex",
             defaultChoice: "npm",
           },
         },
@@ -568,14 +568,14 @@ describe("provider install catalog", () => {
       label: "Codex",
       origin: "bundled",
       install: {
-        npmSpec: "@openclaw/codex",
+        npmSpec: "@NexisClaw/codex",
         defaultChoice: "npm",
       },
       installSource: {
         defaultChoice: "npm",
         npm: {
-          spec: "@openclaw/codex",
-          packageName: "@openclaw/codex",
+          spec: "@NexisClaw/codex",
+          packageName: "@NexisClaw/codex",
           selectorKind: "none",
           exactVersion: false,
           pinState: "floating-without-integrity",
@@ -586,7 +586,7 @@ describe("provider install catalog", () => {
   });
 
   it("surfaces provider-index ClawHub install metadata as the preferred source", () => {
-    loadOpenClawProviderIndex.mockReturnValue({
+    loadNexisClawProviderIndex.mockReturnValue({
       version: 1,
       providers: {
         moonshot: {
@@ -594,10 +594,10 @@ describe("provider install catalog", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@openclaw/plugin-moonshot",
+            package: "@NexisClaw/plugin-moonshot",
             install: {
-              clawhubSpec: "clawhub:openclaw/moonshot@2026.5.2",
-              npmSpec: "@openclaw/plugin-moonshot@2026.5.2",
+              clawhubSpec: "clawhub:NexisClaw/moonshot@2026.5.2",
+              npmSpec: "@NexisClaw/plugin-moonshot@2026.5.2",
               defaultChoice: "clawhub",
               expectedIntegrity: "sha512-moonshot",
             },
@@ -626,22 +626,22 @@ describe("provider install catalog", () => {
       label: "Moonshot AI",
       origin: "bundled",
       install: {
-        clawhubSpec: "clawhub:openclaw/moonshot@2026.5.2",
-        npmSpec: "@openclaw/plugin-moonshot@2026.5.2",
+        clawhubSpec: "clawhub:NexisClaw/moonshot@2026.5.2",
+        npmSpec: "@NexisClaw/plugin-moonshot@2026.5.2",
         defaultChoice: "clawhub",
         expectedIntegrity: "sha512-moonshot",
       },
       installSource: {
         defaultChoice: "clawhub",
         clawhub: {
-          spec: "clawhub:openclaw/moonshot@2026.5.2",
-          packageName: "openclaw/moonshot",
+          spec: "clawhub:NexisClaw/moonshot@2026.5.2",
+          packageName: "NexisClaw/moonshot",
           version: "2026.5.2",
           exactVersion: true,
         },
         npm: {
-          spec: "@openclaw/plugin-moonshot@2026.5.2",
-          packageName: "@openclaw/plugin-moonshot",
+          spec: "@NexisClaw/plugin-moonshot@2026.5.2",
+          packageName: "@NexisClaw/plugin-moonshot",
           selector: "2026.5.2",
           selectorKind: "exact-version",
           exactVersion: true,
@@ -666,7 +666,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "moonshot",
           origin: "bundled",
-          manifestPath: "/repo/extensions/moonshot/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/moonshot/NexisClaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/moonshot",
           enabled: true,
@@ -681,7 +681,7 @@ describe("provider install catalog", () => {
       ],
       diagnostics: [],
     });
-    loadOpenClawProviderIndex.mockReturnValue({
+    loadNexisClawProviderIndex.mockReturnValue({
       version: 1,
       providers: {
         moonshot: {
@@ -689,9 +689,9 @@ describe("provider install catalog", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@openclaw/plugin-moonshot",
+            package: "@NexisClaw/plugin-moonshot",
             install: {
-              npmSpec: "@openclaw/plugin-moonshot@1.2.3",
+              npmSpec: "@NexisClaw/plugin-moonshot@1.2.3",
               expectedIntegrity: "sha512-moonshot",
             },
           },
@@ -722,7 +722,7 @@ describe("provider install catalog", () => {
         {
           pluginId: "moonshot",
           origin: "bundled",
-          manifestPath: "/repo/extensions/moonshot/openclaw.plugin.json",
+          manifestPath: "/repo/extensions/moonshot/NexisClaw.plugin.json",
           manifestHash: "hash",
           rootDir: "/repo/extensions/moonshot",
           enabled: true,
@@ -737,7 +737,7 @@ describe("provider install catalog", () => {
       ],
       diagnostics: [],
     });
-    loadOpenClawProviderIndex.mockReturnValue({
+    loadNexisClawProviderIndex.mockReturnValue({
       version: 1,
       providers: {
         groq: {
@@ -745,9 +745,9 @@ describe("provider install catalog", () => {
           name: "Groq",
           plugin: {
             id: "groq",
-            package: "@openclaw/plugin-groq",
+            package: "@NexisClaw/plugin-groq",
             install: {
-              npmSpec: "@openclaw/plugin-groq@1.0.0",
+              npmSpec: "@NexisClaw/plugin-groq@1.0.0",
               defaultChoice: "npm",
             },
           },
@@ -764,10 +764,10 @@ describe("provider install catalog", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@openclaw/plugin-moonshot",
+            package: "@NexisClaw/plugin-moonshot",
             install: {
-              clawhubSpec: "clawhub:openclaw/moonshot@2026.5.2",
-              npmSpec: "@openclaw/plugin-moonshot@2026.5.2",
+              clawhubSpec: "clawhub:NexisClaw/moonshot@2026.5.2",
+              npmSpec: "@NexisClaw/plugin-moonshot@2026.5.2",
               defaultChoice: "clawhub",
             },
           },
@@ -784,10 +784,10 @@ describe("provider install catalog", () => {
           name: "vLLM",
           plugin: {
             id: "vllm",
-            package: "@openclaw/plugin-vllm",
+            package: "@NexisClaw/plugin-vllm",
             install: {
-              clawhubSpec: "clawhub:openclaw/vllm@2026.5.2",
-              npmSpec: "@openclaw/plugin-vllm@2026.5.2",
+              clawhubSpec: "clawhub:NexisClaw/vllm@2026.5.2",
+              npmSpec: "@NexisClaw/plugin-vllm@2026.5.2",
               defaultChoice: "clawhub",
             },
           },
@@ -815,21 +815,21 @@ describe("provider install catalog", () => {
       label: "vLLM",
       origin: "bundled",
       install: {
-        clawhubSpec: "clawhub:openclaw/vllm@2026.5.2",
-        npmSpec: "@openclaw/plugin-vllm@2026.5.2",
+        clawhubSpec: "clawhub:NexisClaw/vllm@2026.5.2",
+        npmSpec: "@NexisClaw/plugin-vllm@2026.5.2",
         defaultChoice: "clawhub",
       },
       installSource: {
         defaultChoice: "clawhub",
         clawhub: {
-          spec: "clawhub:openclaw/vllm@2026.5.2",
-          packageName: "openclaw/vllm",
+          spec: "clawhub:NexisClaw/vllm@2026.5.2",
+          packageName: "NexisClaw/vllm",
           version: "2026.5.2",
           exactVersion: true,
         },
         npm: {
-          spec: "@openclaw/plugin-vllm@2026.5.2",
-          packageName: "@openclaw/plugin-vllm",
+          spec: "@NexisClaw/plugin-vllm@2026.5.2",
+          packageName: "@NexisClaw/plugin-vllm",
           selector: "2026.5.2",
           selectorKind: "exact-version",
           exactVersion: true,

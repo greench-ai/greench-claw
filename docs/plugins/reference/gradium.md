@@ -11,8 +11,8 @@ Adds text-to-speech provider support.
 
 ## Distribution
 
-- Package: `@openclaw/gradium-speech`
-- Install route: included in OpenClaw
+- Package: `@NexisClaw/gradium-speech`
+- Install route: included in NexisClaw
 
 ## Surface
 

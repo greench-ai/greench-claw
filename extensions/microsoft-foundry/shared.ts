@@ -1,15 +1,15 @@
-import type { AuthConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { AuthConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   applyAuthProfileConfig,
   buildApiKeyCredential,
   type ProviderAuthResult,
   type SecretInput,
-} from "openclaw/plugin-sdk/provider-auth";
-import type { ModelApi, ModelProviderConfig } from "openclaw/plugin-sdk/provider-model-shared";
+} from "NexisClaw/plugin-sdk/provider-auth";
+import type { ModelApi, ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 export const PROVIDER_ID = "microsoft-foundry";
 export const DEFAULT_API = "openai-completions";

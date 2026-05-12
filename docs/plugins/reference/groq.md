@@ -1,5 +1,5 @@
 ---
-summary: "Adds Groq model provider support to OpenClaw."
+summary: "Adds Groq model provider support to NexisClaw."
 read_when:
   - You are installing, configuring, or auditing the groq plugin
 title: "Groq plugin"
@@ -7,12 +7,12 @@ title: "Groq plugin"
 
 # Groq plugin
 
-Adds Groq model provider support to OpenClaw.
+Adds Groq model provider support to NexisClaw.
 
 ## Distribution
 
-- Package: `@openclaw/groq-provider`
-- Install route: included in OpenClaw
+- Package: `@NexisClaw/groq-provider`
+- Install route: included in NexisClaw
 
 ## Surface
 

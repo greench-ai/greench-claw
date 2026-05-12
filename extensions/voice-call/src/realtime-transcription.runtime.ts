@@ -1,4 +1,4 @@
 export {
   getRealtimeTranscriptionProvider,
   listRealtimeTranscriptionProviders,
-} from "openclaw/plugin-sdk/realtime-transcription";
+} from "NexisClaw/plugin-sdk/realtime-transcription";

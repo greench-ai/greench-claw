@@ -1,5 +1,5 @@
 ---
-summary: "Adds OpenCode model provider support to OpenClaw."
+summary: "Adds OpenCode model provider support to NexisClaw."
 read_when:
   - You are installing, configuring, or auditing the opencode plugin
 title: "OpenCode plugin"
@@ -7,12 +7,12 @@ title: "OpenCode plugin"
 
 # OpenCode plugin
 
-Adds OpenCode model provider support to OpenClaw.
+Adds OpenCode model provider support to NexisClaw.
 
 ## Distribution
 
-- Package: `@openclaw/opencode-provider`
-- Install route: included in OpenClaw
+- Package: `@NexisClaw/opencode-provider`
+- Install route: included in NexisClaw
 
 ## Surface
 

@@ -1,8 +1,8 @@
 import crypto from "node:crypto";
-import type { ChannelAccountSnapshot } from "openclaw/plugin-sdk/channel-contract";
-import type { ChannelOutboundAdapter } from "openclaw/plugin-sdk/channel-send-result";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ChannelPlugin } from "openclaw/plugin-sdk/core";
+import type { ChannelAccountSnapshot } from "NexisClaw/plugin-sdk/channel-contract";
+import type { ChannelOutboundAdapter } from "NexisClaw/plugin-sdk/channel-send-result";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { ChannelPlugin } from "NexisClaw/plugin-sdk/core";
 import { monitorTlonProvider } from "./monitor/index.js";
 import { tlonSetupWizard } from "./setup-surface.js";
 import {
@@ -91,7 +91,7 @@ async function createHttpPokeApi(params: {
 }
 
 function resolveOutboundContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId?: string | null;
   to: string;
 }) {

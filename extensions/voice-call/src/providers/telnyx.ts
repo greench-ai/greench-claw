@@ -288,7 +288,7 @@ export class TelnyxProvider implements VoiceCallProvider {
 
   async answerCall(input: AnswerCallInput): Promise<void> {
     const body: Record<string, unknown> = {
-      command_id: `openclaw-answer-${input.callId}`,
+      command_id: `NexisClaw-answer-${input.callId}`,
       ...(input.streamUrl
         ? buildTelnyxStreamingFields(input.streamUrl, input.streamAuthToken)
         : {}),

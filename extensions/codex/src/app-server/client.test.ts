@@ -1,6 +1,6 @@
 import { EventEmitter } from "node:events";
 import { PassThrough } from "node:stream";
-import { embeddedAgentLog, OPENCLAW_VERSION } from "openclaw/plugin-sdk/agent-harness-runtime";
+import { embeddedAgentLog, NEXISCLAW_VERSION } from "NexisClaw/plugin-sdk/agent-harness-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   __testing,
@@ -161,7 +161,7 @@ describe("CodexAppServerClient", () => {
     const { harness, initializing, outbound } = startInitialize();
     harness.send({
       id: outbound.id,
-      result: { userAgent: "openclaw/0.125.0 (macOS; test)" },
+      result: { userAgent: "NexisClaw/0.125.0 (macOS; test)" },
     });
 
     await expect(initializing).resolves.toBeUndefined();
@@ -170,9 +170,9 @@ describe("CodexAppServerClient", () => {
       method: "initialize",
       params: {
         clientInfo: {
-          name: "openclaw",
-          title: "OpenClaw",
-          version: OPENCLAW_VERSION,
+          name: "NexisClaw",
+          title: "NexisClaw",
+          version: NEXISCLAW_VERSION,
         },
         capabilities: {
           experimentalApi: true,
@@ -187,7 +187,7 @@ describe("CodexAppServerClient", () => {
     const { harness, initializing, outbound } = startInitialize();
     harness.send({
       id: outbound.id,
-      result: { userAgent: "openclaw/0.124.9 (macOS; test)" },
+      result: { userAgent: "NexisClaw/0.124.9 (macOS; test)" },
     });
 
     await expect(initializing).rejects.toThrow(
@@ -200,7 +200,7 @@ describe("CodexAppServerClient", () => {
     const { harness, initializing, outbound } = startInitialize();
     harness.send({
       id: outbound.id,
-      result: { userAgent: "openclaw/0.125.0-alpha.2 (macOS; test)" },
+      result: { userAgent: "NexisClaw/0.125.0-alpha.2 (macOS; test)" },
     });
 
     await expect(initializing).rejects.toThrow(
@@ -213,7 +213,7 @@ describe("CodexAppServerClient", () => {
     const { harness, initializing, outbound } = startInitialize();
     harness.send({
       id: outbound.id,
-      result: { userAgent: "openclaw/0.125.0+alpha.2 (macOS; test)" },
+      result: { userAgent: "NexisClaw/0.125.0+alpha.2 (macOS; test)" },
     });
 
     await expect(initializing).rejects.toThrow(
@@ -226,7 +226,7 @@ describe("CodexAppServerClient", () => {
     const { harness, initializing, outbound } = startInitialize();
     harness.send({
       id: outbound.id,
-      result: { userAgent: "openclaw/0.126.0-alpha.1 (macOS; test)" },
+      result: { userAgent: "NexisClaw/0.126.0-alpha.1 (macOS; test)" },
     });
 
     await expect(initializing).resolves.toBeUndefined();
@@ -237,7 +237,7 @@ describe("CodexAppServerClient", () => {
     const { harness, initializing, outbound } = startInitialize();
     harness.send({
       id: outbound.id,
-      result: { userAgent: "openclaw/0.126.0+custom (macOS; test)" },
+      result: { userAgent: "NexisClaw/0.126.0+custom (macOS; test)" },
     });
 
     await expect(initializing).resolves.toBeUndefined();
@@ -388,13 +388,13 @@ describe("CodexAppServerClient", () => {
 
   it("reads the Codex version from the app-server user agent", () => {
     expect(readCodexVersionFromUserAgent("Codex Desktop/0.125.0")).toBe("0.125.0");
-    expect(readCodexVersionFromUserAgent("openclaw/0.125.0 (macOS; test)")).toBe("0.125.0");
+    expect(readCodexVersionFromUserAgent("NexisClaw/0.125.0 (macOS; test)")).toBe("0.125.0");
     expect(readCodexVersionFromUserAgent("codex_cli_rs/0.125.0-dev (linux; test)")).toBe(
       "0.125.0-dev",
     );
     expect(readCodexVersionFromUserAgent("Codex Desktop/not-a-version")).toBeUndefined();
     expect(readCodexVersionFromUserAgent("Codex Desktop/0.124")).toBeUndefined();
-    expect(readCodexVersionFromUserAgent("openclaw/0.125.0abc")).toBeUndefined();
+    expect(readCodexVersionFromUserAgent("NexisClaw/0.125.0abc")).toBeUndefined();
     expect(readCodexVersionFromUserAgent("missing-version")).toBeUndefined();
   });
 
@@ -440,7 +440,7 @@ describe("CodexAppServerClient", () => {
         contentItems: [
           {
             type: "inputText",
-            text: `OpenClaw dynamic tool call timed out after ${__testing.CODEX_DYNAMIC_TOOL_SERVER_REQUEST_TIMEOUT_MS}ms before sending a response to Codex.`,
+            text: `NexisClaw dynamic tool call timed out after ${__testing.CODEX_DYNAMIC_TOOL_SERVER_REQUEST_TIMEOUT_MS}ms before sending a response to Codex.`,
           },
         ],
       },

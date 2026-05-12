@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { SlackChannelConfig } from "openclaw/plugin-sdk/config-contracts";
-import { normalizeAccountId } from "openclaw/plugin-sdk/routing";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { SlackChannelConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { normalizeAccountId } from "NexisClaw/plugin-sdk/routing";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 type SlackChannels = Record<string, SlackChannelConfig>;
 
@@ -14,7 +14,7 @@ type SlackChannelMigrationResult = {
 };
 
 function resolveAccountChannels(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   accountId?: string | null,
 ): { channels?: SlackChannels } {
   if (!accountId) {
@@ -58,7 +58,7 @@ export function migrateSlackChannelsInPlace(
 }
 
 export function migrateSlackChannelConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId?: string | null;
   oldChannelId: string;
   newChannelId: string;

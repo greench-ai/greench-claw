@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/matrix",
+  "name": "@NexisClaw/matrix",
   "version": "2026.5.12-beta.1",
-  "description": "OpenClaw Matrix channel plugin",
+  "description": "NexisClaw Matrix channel plugin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/NexisClaw/NexisClaw"
   },
   "type": "module",
   "dependencies": {
@@ -18,18 +18,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*",
+    "NexisClaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.5.12-beta.1"
+    "NexisClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "NexisClaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -80,8 +80,8 @@
       }
     },
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/matrix",
-      "npmSpec": "@openclaw/matrix",
+      "clawhubSpec": "clawhub:@NexisClaw/matrix",
+      "npmSpec": "@NexisClaw/matrix",
       "defaultChoice": "clawhub",
       "minHostVersion": ">=2026.4.10",
       "allowInvalidConfigRecovery": true
@@ -90,7 +90,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "openclawVersion": "2026.5.12-beta.1"
+      "NexisClawVersion": "2026.5.12-beta.1"
     },
     "release": {
       "publishToClawHub": true,

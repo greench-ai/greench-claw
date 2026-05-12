@@ -1,4 +1,4 @@
-import type { OpenClawConfig, HookConfig } from "../config/config.js";
+import type { NexisClawConfig, HookConfig } from "../config/config.js";
 import { resolveHookKey } from "./frontmatter.js";
 import type { HookEntry, HookSource } from "./types.js";
 
@@ -24,33 +24,33 @@ type HookResolutionCollision = {
 };
 
 const HOOK_SOURCE_POLICIES: Record<HookSource, HookSourcePolicy> = {
-  "openclaw-bundled": {
+  "NexisClaw-bundled": {
     precedence: 10,
     trustedLocalCode: true,
     defaultEnableMode: "default-on",
-    canOverride: ["openclaw-bundled"],
-    canBeOverriddenBy: ["openclaw-managed", "openclaw-plugin"],
+    canOverride: ["NexisClaw-bundled"],
+    canBeOverriddenBy: ["NexisClaw-managed", "NexisClaw-plugin"],
   },
-  "openclaw-plugin": {
+  "NexisClaw-plugin": {
     precedence: 20,
     trustedLocalCode: true,
     defaultEnableMode: "default-on",
-    canOverride: ["openclaw-bundled", "openclaw-plugin"],
-    canBeOverriddenBy: ["openclaw-managed"],
+    canOverride: ["NexisClaw-bundled", "NexisClaw-plugin"],
+    canBeOverriddenBy: ["NexisClaw-managed"],
   },
-  "openclaw-managed": {
+  "NexisClaw-managed": {
     precedence: 30,
     trustedLocalCode: true,
     defaultEnableMode: "default-on",
-    canOverride: ["openclaw-bundled", "openclaw-managed", "openclaw-plugin"],
-    canBeOverriddenBy: ["openclaw-managed"],
+    canOverride: ["NexisClaw-bundled", "NexisClaw-managed", "NexisClaw-plugin"],
+    canBeOverriddenBy: ["NexisClaw-managed"],
   },
-  "openclaw-workspace": {
+  "NexisClaw-workspace": {
     precedence: 40,
     trustedLocalCode: true,
     defaultEnableMode: "explicit-opt-in",
-    canOverride: ["openclaw-workspace"],
-    canBeOverriddenBy: ["openclaw-workspace"],
+    canOverride: ["NexisClaw-workspace"],
+    canBeOverriddenBy: ["NexisClaw-workspace"],
   },
 };
 
@@ -59,7 +59,7 @@ function getHookSourcePolicy(source: HookSource): HookSourcePolicy {
 }
 
 export function resolveHookConfig(
-  config: OpenClawConfig | undefined,
+  config: NexisClawConfig | undefined,
   hookKey: string,
 ): HookConfig | undefined {
   const hooks = config?.hooks?.internal?.entries;
@@ -75,14 +75,14 @@ export function resolveHookConfig(
 
 export function resolveHookEnableState(params: {
   entry: HookEntry;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   hookConfig?: HookConfig;
 }): HookEnableState {
   const { entry, config } = params;
   const hookKey = resolveHookKey(entry.hook.name, entry);
   const hookConfig = params.hookConfig ?? resolveHookConfig(config, hookKey);
 
-  if (entry.hook.source === "openclaw-plugin") {
+  if (entry.hook.source === "NexisClaw-plugin") {
     return { enabled: true };
   }
   if (hookConfig?.enabled === false) {

@@ -1,14 +1,14 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   resolveConfiguredBindingRoute,
   resolveRuntimeConversationBindingRoute,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+} from "NexisClaw/plugin-sdk/conversation-runtime";
+import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
 import { resolveIMessageInboundConversationId } from "./conversation-id.js";
 
 export function resolveIMessageConversationRoute(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId: string;
   isGroup: boolean;
   peerId: string;

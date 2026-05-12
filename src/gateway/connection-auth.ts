@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { resolveGatewayCredentialsWithSecretInputs } from "./credentials-secret-inputs.js";
 import type {
   ExplicitGatewayAuth,
@@ -10,7 +10,7 @@ import type {
 import { resolveGatewayCredentialsFromConfig } from "./credentials.js";
 
 export type GatewayConnectionAuthOptions = {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   env?: NodeJS.ProcessEnv;
   explicitAuth?: ExplicitGatewayAuth;
   urlOverride?: string;
@@ -25,7 +25,7 @@ export type GatewayConnectionAuthOptions = {
 };
 
 function toGatewayCredentialOptions(
-  params: Omit<GatewayConnectionAuthOptions, "config"> & { cfg: OpenClawConfig },
+  params: Omit<GatewayConnectionAuthOptions, "config"> & { cfg: NexisClawConfig },
 ) {
   return {
     cfg: params.cfg,
@@ -53,7 +53,7 @@ export async function resolveGatewayConnectionAuth(
 }
 
 export function resolveGatewayConnectionAuthFromConfig(
-  params: Omit<GatewayConnectionAuthOptions, "config"> & { cfg: OpenClawConfig },
+  params: Omit<GatewayConnectionAuthOptions, "config"> & { cfg: NexisClawConfig },
 ): { token?: string; password?: string } {
   return resolveGatewayCredentialsFromConfig(toGatewayCredentialOptions(params));
 }

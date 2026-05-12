@@ -1,6 +1,6 @@
-import type { MemorySearchResult } from "openclaw/plugin-sdk/memory-core-host-runtime-files";
+import type { MemorySearchResult } from "NexisClaw/plugin-sdk/memory-core-host-runtime-files";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../api.js";
+import type { NexisClawConfig } from "../api.js";
 import {
   resetMemoryToolMockState,
   setMemoryBackend,
@@ -24,11 +24,11 @@ vi.mock("./short-term-promotion.js", () => ({
   recordShortTermRecalls: recallTrackingMock.recordShortTermRecalls,
 }));
 
-function asOpenClawConfig(config: Partial<OpenClawConfig>): OpenClawConfig {
+function asNexisClawConfig(config: Partial<NexisClawConfig>): NexisClawConfig {
   return config;
 }
 
-function createSearchTool(config: OpenClawConfig) {
+function createSearchTool(config: NexisClawConfig) {
   const tool = createMemorySearchTool({ config });
   if (!tool) {
     throw new Error("memory_search tool missing");
@@ -65,7 +65,7 @@ describe("memory_search recall tracking", () => {
     ]);
 
     const tool = createSearchTool(
-      asOpenClawConfig({
+      asNexisClawConfig({
         agents: { list: [{ id: "main", default: true }] },
         memory: {
           backend: "qmd",
@@ -101,7 +101,7 @@ describe("memory_search recall tracking", () => {
     );
 
     const tool = createSearchTool(
-      asOpenClawConfig({
+      asNexisClawConfig({
         agents: { list: [{ id: "main", default: true }] },
       }),
     );
@@ -152,7 +152,7 @@ describe("memory_search recall tracking", () => {
     ]);
 
     const tool = createSearchTool(
-      asOpenClawConfig({
+      asNexisClawConfig({
         agents: {
           defaults: {
             userTimezone: "America/Los_Angeles",

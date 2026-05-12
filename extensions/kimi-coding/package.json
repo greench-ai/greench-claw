@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/kimi-provider",
+  "name": "@NexisClaw/kimi-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw Kimi provider plugin",
+  "description": "NexisClaw Kimi provider plugin",
   "type": "module",
   "dependencies": {
     "@earendil-works/pi-ai": "0.74.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ]

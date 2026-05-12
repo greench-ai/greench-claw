@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 
-export function makeModelFallbackCfg(overrides: Partial<OpenClawConfig> = {}): OpenClawConfig {
+export function makeModelFallbackCfg(overrides: Partial<NexisClawConfig> = {}): NexisClawConfig {
   return {
     agents: {
       defaults: {
@@ -11,5 +11,5 @@ export function makeModelFallbackCfg(overrides: Partial<OpenClawConfig> = {}): O
       },
     },
     ...overrides,
-  } as OpenClawConfig;
+  } as NexisClawConfig;
 }

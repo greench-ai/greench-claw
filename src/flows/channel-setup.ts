@@ -29,7 +29,7 @@ import type {
 } from "../commands/channel-setup/types.js";
 import type { ChannelChoice } from "../commands/onboard-types.js";
 import { isChannelConfigured } from "../config/channel-configured.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { resolveBundledPluginSources } from "../plugins/bundled-sources.js";
 import { enablePluginInConfig } from "../plugins/enable.js";
@@ -69,7 +69,7 @@ export function createChannelOnboardingPostWriteHookCollector() {
 
 export async function runCollectedChannelOnboardingPostWriteHooks(params: {
   hooks: ChannelOnboardingPostWriteHook[];
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   runtime: RuntimeEnv;
 }): Promise<void> {
   for (const hook of params.hooks) {
@@ -88,7 +88,7 @@ export function createChannelOnboardingPostWriteHook(params: {
   accountId?: string;
   adapter?: Pick<ChannelSetupWizardAdapter, "afterConfigWritten">;
   channel: ChannelChoice;
-  previousCfg: OpenClawConfig;
+  previousCfg: NexisClawConfig;
 }): ChannelOnboardingPostWriteHook | undefined {
   if (!params.accountId || !params.adapter?.afterConfigWritten) {
     return undefined;
@@ -109,11 +109,11 @@ export function createChannelOnboardingPostWriteHook(params: {
 // Channel-specific prompts moved into setup flow adapters.
 
 export async function setupChannels(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   runtime: RuntimeEnv,
   prompter: WizardPrompter,
   options?: SetupChannelsOptions,
-): Promise<OpenClawConfig> {
+): Promise<NexisClawConfig> {
   let next = cfg;
   const deferStatusUntilSelection = options?.deferStatusUntilSelection === true;
   const forceAllowFromChannels = new Set(options?.forceAllowFromChannels ?? []);
@@ -374,7 +374,7 @@ export async function setupChannels(
     if (disabledHint) {
       await prompter.note(
         `${channel} cannot be configured while ${disabledHint}. Enable it, then run ${formatCliCommand(
-          "openclaw channels add",
+          "NexisClaw channels add",
         )} again.`,
         "Channel setup",
       );
@@ -385,7 +385,7 @@ export async function setupChannels(
     if (!result.enabled) {
       await prompter.note(
         `Cannot enable ${channel}: ${result.reason ?? "plugin disabled"}. Run ${formatCliCommand(
-          "openclaw plugins list",
+          "NexisClaw plugins list",
         )} to inspect plugin state.`,
         "Channel setup",
       );
@@ -397,8 +397,8 @@ export async function setupChannels(
       if (adapter) {
         await prompter.note(
           `${channel} plugin not available (continuing with setup). If the channel still doesn't work after setup, run \`${formatCliCommand(
-            "openclaw plugins list",
-          )}\` and \`${formatCliCommand("openclaw plugins enable " + channel)}\`, then restart the gateway.`,
+            "NexisClaw plugins list",
+          )}\` and \`${formatCliCommand("NexisClaw plugins enable " + channel)}\`, then restart the gateway.`,
           "Channel setup",
         );
         await refreshStatus(channel);
@@ -453,7 +453,7 @@ export async function setupChannels(
     if (!adapter) {
       await prompter.note(
         `${channel} does not have an interactive setup screen yet. Run ${formatCliCommand(
-          `openclaw channels add --channel ${channel} --help`,
+          `NexisClaw channels add --channel ${channel} --help`,
         )} for supported flags.`,
         "Channel setup",
       );
@@ -736,7 +736,7 @@ export async function setupChannels(
           {
             value: "__skip__",
             label: "Skip for now",
-            hint: `You can add channels later via \`${formatCliCommand("openclaw channels add")}\``,
+            hint: `You can add channels later via \`${formatCliCommand("NexisClaw channels add")}\``,
           },
         ],
         initialValue: quickstartDefault,

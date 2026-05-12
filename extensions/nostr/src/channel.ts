@@ -1,15 +1,15 @@
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
+import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
 import {
   createScopedDmSecurityResolver,
   createTopLevelChannelConfigAdapter,
-} from "openclaw/plugin-sdk/channel-config-helpers";
-import { createChatChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { createChannelMessageAdapterFromOutbound } from "openclaw/plugin-sdk/channel-message";
+} from "NexisClaw/plugin-sdk/channel-config-helpers";
+import { createChatChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
+import { createChannelMessageAdapterFromOutbound } from "NexisClaw/plugin-sdk/channel-message";
 import {
   buildPassiveChannelStatusSummary,
   buildTrafficStatusSummary,
-} from "openclaw/plugin-sdk/extension-shared";
-import { createComputedAccountStatusAdapter } from "openclaw/plugin-sdk/status-helpers";
+} from "NexisClaw/plugin-sdk/extension-shared";
+import { createComputedAccountStatusAdapter } from "NexisClaw/plugin-sdk/status-helpers";
 import {
   buildChannelConfigSchema,
   collectStatusIssuesFromLastError,

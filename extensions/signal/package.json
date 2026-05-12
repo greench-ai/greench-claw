@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/signal",
+  "name": "@NexisClaw/signal",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw Signal channel plugin",
+  "description": "NexisClaw Signal channel plugin",
   "type": "module",
   "dependencies": {
     "ws": "8.20.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],

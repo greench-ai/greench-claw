@@ -1,12 +1,12 @@
-export { definePluginEntry } from "openclaw/plugin-sdk/core";
+export { definePluginEntry } from "NexisClaw/plugin-sdk/core";
 export type {
   AnyAgentTool,
-  OpenClawPluginApi,
-  OpenClawPluginToolContext,
-  OpenClawPluginToolFactory,
-} from "openclaw/plugin-sdk/core";
+  NexisClawPluginApi,
+  NexisClawPluginToolContext,
+  NexisClawPluginToolFactory,
+} from "NexisClaw/plugin-sdk/core";
 export {
   applyWindowsSpawnProgramPolicy,
   materializeWindowsSpawnProgram,
   resolveWindowsSpawnProgramCandidate,
-} from "openclaw/plugin-sdk/windows-spawn";
+} from "NexisClaw/plugin-sdk/windows-spawn";

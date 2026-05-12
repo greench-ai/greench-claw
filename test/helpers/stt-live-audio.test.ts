@@ -1,22 +1,22 @@
 import {
-  expectOpenClawLiveTranscriptMarker,
+  expectNexisClawLiveTranscriptMarker,
   normalizeTranscriptForMatch,
-  OPENCLAW_LIVE_TRANSCRIPT_MARKER_RE,
-} from "openclaw/plugin-sdk/provider-test-contracts";
+  NEXISCLAW_LIVE_TRANSCRIPT_MARKER_RE,
+} from "NexisClaw/plugin-sdk/provider-test-contracts";
 import { describe, expect, it } from "vitest";
 
 describe("normalizeTranscriptForMatch", () => {
-  it("normalizes punctuation and common OpenClaw live transcription variants", () => {
-    expect(normalizeTranscriptForMatch("Open-Claw integration OK")).toBe("openclawintegrationok");
+  it("normalizes punctuation and common NexisClaw live transcription variants", () => {
+    expect(normalizeTranscriptForMatch("Open-Claw integration OK")).toBe("NexisClawintegrationok");
     expect(normalizeTranscriptForMatch("Testing OpenFlaw realtime transcription")).toMatch(
       /open(?:claw|flaw)/,
     );
     expect(normalizeTranscriptForMatch("OpenCore xAI realtime transcription")).toMatch(
-      OPENCLAW_LIVE_TRANSCRIPT_MARKER_RE,
+      NEXISCLAW_LIVE_TRANSCRIPT_MARKER_RE,
     );
     expect(normalizeTranscriptForMatch("OpenCL xAI realtime transcription")).toMatch(
-      OPENCLAW_LIVE_TRANSCRIPT_MARKER_RE,
+      NEXISCLAW_LIVE_TRANSCRIPT_MARKER_RE,
     );
-    expectOpenClawLiveTranscriptMarker("OpenClar integration OK");
+    expectNexisClawLiveTranscriptMarker("OpenClar integration OK");
   });
 });

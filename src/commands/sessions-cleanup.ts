@@ -7,7 +7,7 @@ import {
   type SessionsCleanupOptions,
   type SessionsCleanupResult,
 } from "../config/sessions.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { callGateway, isGatewayTransportError } from "../gateway/call.js";
 import { type RuntimeEnv, writeRuntimeJson } from "../runtime.js";
 import { isRich, theme } from "../terminal/theme.js";
@@ -80,7 +80,7 @@ function buildActionRows(params: {
 }
 
 function renderStoreDryRunPlan(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   summary: SessionCleanupSummary;
   actionRows: SessionCleanupActionRow[];
   runtime: RuntimeEnv;

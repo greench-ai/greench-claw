@@ -2,17 +2,17 @@ import {
   buildChannelOutboundSessionRoute,
   buildThreadAwareOutboundSessionRoute,
   createChatChannelPlugin,
-} from "openclaw/plugin-sdk/channel-core";
-import type { ChannelPlugin } from "openclaw/plugin-sdk/channel-core";
+} from "NexisClaw/plugin-sdk/channel-core";
+import type { ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
 import {
   createMessageReceiptFromOutboundResults,
   defineChannelMessageAdapter,
-} from "openclaw/plugin-sdk/channel-message";
-import { getChatChannelMeta } from "openclaw/plugin-sdk/channel-plugin-common";
+} from "NexisClaw/plugin-sdk/channel-message";
+import { getChatChannelMeta } from "NexisClaw/plugin-sdk/channel-plugin-common";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
+} from "NexisClaw/plugin-sdk/status-helpers";
 import {
   DEFAULT_ACCOUNT_ID,
   listClickClackAccountIds,

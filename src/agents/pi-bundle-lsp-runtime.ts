@@ -1,6 +1,6 @@
 import { spawn, type ChildProcess } from "node:child_process";
 import type { AgentToolResult } from "@earendil-works/pi-agent-core";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { sanitizeHostExecEnv } from "../infra/host-env-security.js";
 import { logDebug, logWarn } from "../logger.js";
 import {
@@ -392,7 +392,7 @@ function formatLspResult(
 
 export async function createBundleLspToolRuntime(params: {
   workspaceDir: string;
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   reservedToolNames?: Iterable<string>;
 }): Promise<BundleLspToolRuntime> {
   const loaded = loadEmbeddedPiLspConfig({

@@ -1,9 +1,9 @@
-export { loadOpenClawProviderIndex } from "./load.js";
-export { normalizeOpenClawProviderIndex } from "./normalize.js";
+export { loadNexisClawProviderIndex } from "./load.js";
+export { normalizeNexisClawProviderIndex } from "./normalize.js";
 export type {
-  OpenClawProviderIndex,
-  OpenClawProviderIndexPluginInstall,
-  OpenClawProviderIndexPlugin,
-  OpenClawProviderIndexProviderAuthChoice,
-  OpenClawProviderIndexProvider,
+  NexisClawProviderIndex,
+  NexisClawProviderIndexPluginInstall,
+  NexisClawProviderIndexPlugin,
+  NexisClawProviderIndexProviderAuthChoice,
+  NexisClawProviderIndexProvider,
 } from "./types.js";

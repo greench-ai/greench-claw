@@ -1,13 +1,13 @@
 {
-  "name": "@openclaw/perplexity-plugin",
+  "name": "@NexisClaw/perplexity-plugin",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw Perplexity plugin",
+  "description": "NexisClaw Perplexity plugin",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ]

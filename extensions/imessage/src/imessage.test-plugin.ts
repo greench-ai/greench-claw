@@ -2,11 +2,11 @@ import type {
   ChannelMessageActionAdapter,
   ChannelMessageActionName,
   ChannelOutboundAdapter,
-} from "openclaw/plugin-sdk/channel-contract";
-import type { ChannelPlugin } from "openclaw/plugin-sdk/core";
-import { resolveOutboundSendDep } from "openclaw/plugin-sdk/outbound-send-deps";
-import { collectStatusIssuesFromLastError } from "openclaw/plugin-sdk/status-helpers";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/channel-contract";
+import type { ChannelPlugin } from "NexisClaw/plugin-sdk/core";
+import { resolveOutboundSendDep } from "NexisClaw/plugin-sdk/outbound-send-deps";
+import { collectStatusIssuesFromLastError } from "NexisClaw/plugin-sdk/status-helpers";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 function normalizeIMessageTestHandle(raw: string): string {
   let trimmed = raw.trim();

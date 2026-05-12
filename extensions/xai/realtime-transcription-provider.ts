@@ -5,9 +5,9 @@ import {
   type RealtimeTranscriptionSession,
   type RealtimeTranscriptionSessionCreateRequest,
   type RealtimeTranscriptionWebSocketTransport,
-} from "openclaw/plugin-sdk/realtime-transcription";
-import { normalizeResolvedSecretInputString } from "openclaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/realtime-transcription";
+import { normalizeResolvedSecretInputString } from "NexisClaw/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { XAI_BASE_URL } from "./model-definitions.js";
 
 type XaiRealtimeTranscriptionEncoding = "pcm" | "mulaw" | "alaw";

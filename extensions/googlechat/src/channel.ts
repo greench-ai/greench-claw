@@ -1,18 +1,18 @@
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
-import { formatNormalizedAllowFromEntries } from "openclaw/plugin-sdk/allow-from";
+import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
+import { formatNormalizedAllowFromEntries } from "NexisClaw/plugin-sdk/allow-from";
 import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
-} from "openclaw/plugin-sdk/channel-config-helpers";
-import type { ChannelMessageActionName } from "openclaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin } from "openclaw/plugin-sdk/channel-core";
-import { buildPassiveProbedChannelStatusSummary } from "openclaw/plugin-sdk/extension-shared";
-import { createLazyRuntimeNamedExport } from "openclaw/plugin-sdk/lazy-runtime";
+} from "NexisClaw/plugin-sdk/channel-config-helpers";
+import type { ChannelMessageActionName } from "NexisClaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
+import { buildPassiveProbedChannelStatusSummary } from "NexisClaw/plugin-sdk/extension-shared";
+import { createLazyRuntimeNamedExport } from "NexisClaw/plugin-sdk/lazy-runtime";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
-import { extractToolSend } from "openclaw/plugin-sdk/tool-send";
+} from "NexisClaw/plugin-sdk/status-helpers";
+import { extractToolSend } from "NexisClaw/plugin-sdk/tool-send";
 import { googleChatApprovalAuth } from "./approval-auth.js";
 import {
   formatAllowFromEntry,

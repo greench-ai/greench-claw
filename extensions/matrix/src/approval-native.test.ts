@@ -1,10 +1,10 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { matrixApprovalCapability } from "./approval-native.js";
 
 function buildConfig(
-  overrides?: Partial<NonNullable<NonNullable<OpenClawConfig["channels"]>["matrix"]>>,
-): OpenClawConfig {
+  overrides?: Partial<NonNullable<NonNullable<NexisClawConfig["channels"]>["matrix"]>>,
+): NexisClawConfig {
   return {
     channels: {
       matrix: {
@@ -19,7 +19,7 @@ function buildConfig(
         ...overrides,
       },
     },
-  } as OpenClawConfig;
+  } as NexisClawConfig;
 }
 
 describe("matrix approval capability", () => {

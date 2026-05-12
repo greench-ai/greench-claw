@@ -11,12 +11,12 @@ import {
   resetAgentEventsForTest,
   type AgentEventPayload,
   type EmbeddedRunAttemptParams,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "NexisClaw/plugin-sdk/agent-harness-runtime";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
-} from "openclaw/plugin-sdk/hook-runtime";
-import { createMockPluginRegistry } from "openclaw/plugin-sdk/plugin-test-runtime";
+} from "NexisClaw/plugin-sdk/hook-runtime";
+import { createMockPluginRegistry } from "NexisClaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 function queueActiveRunMessageForTest(
@@ -35,7 +35,7 @@ import {
 } from "./auth-bridge.js";
 import { readCodexPluginConfig, resolveCodexAppServerRuntimeOptions } from "./config.js";
 import {
-  CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE,
+  CODEX_NEXISCLAW_DYNAMIC_TOOL_NAMESPACE,
   createCodexDynamicToolBridge,
 } from "./dynamic-tools.js";
 import * as elicitationBridge from "./elicitation-bridge.js";
@@ -105,7 +105,7 @@ function threadStartResult(threadId = "thread-1") {
       updatedAt: 1,
       status: { type: "idle" },
       path: null,
-      cwd: tempDir || "/tmp/openclaw-codex-test",
+      cwd: tempDir || "/tmp/NexisClaw-codex-test",
       cliVersion: "0.125.0",
       source: "unknown",
       agentNickname: null,
@@ -117,7 +117,7 @@ function threadStartResult(threadId = "thread-1") {
     model: "gpt-5.4-codex",
     modelProvider: "openai",
     serviceTier: null,
-    cwd: tempDir || "/tmp/openclaw-codex-test",
+    cwd: tempDir || "/tmp/NexisClaw-codex-test",
     instructionSources: [],
     approvalPolicy: "never",
     approvalsReviewer: "user",
@@ -544,15 +544,15 @@ function extractRelayIdFromThreadRequest(params: unknown): string {
 describe("runCodexAppServerAttempt", () => {
   beforeEach(async () => {
     resetAgentEventsForTest();
-    vi.stubEnv("OPENCLAW_TRAJECTORY", "0");
+    vi.stubEnv("NEXISCLAW_TRAJECTORY", "0");
     vi.stubEnv("CODEX_API_KEY", "");
     vi.stubEnv("OPENAI_API_KEY", "");
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-run-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-codex-run-"));
   });
 
   afterEach(async () => {
     __testing.resetCodexAppServerClientFactoryForTests();
-    __testing.resetOpenClawCodingToolsFactoryForTests();
+    __testing.resetNexisClawCodingToolsFactoryForTests();
     resetCodexRateLimitCacheForTests();
     nativeHookRelayTesting.clearNativeHookRelaysForTests();
     resetAgentEventsForTest();
@@ -599,7 +599,7 @@ describe("runCodexAppServerAttempt", () => {
     ).toEqual(["message"]);
   });
 
-  it("starts Codex threads without duplicate OpenClaw workspace tools by default", async () => {
+  it("starts Codex threads without duplicate NexisClaw workspace tools by default", async () => {
     const sessionFile = path.join(tempDir, "session.jsonl");
     const workspaceDir = path.join(tempDir, "workspace");
     const appServer = createThreadLifecycleAppServerOptions();
@@ -653,7 +653,7 @@ describe("runCodexAppServerAttempt", () => {
     }
   });
 
-  it("does not expose OpenClaw Tool Search controls through Codex dynamic tools", async () => {
+  it("does not expose NexisClaw Tool Search controls through Codex dynamic tools", async () => {
     const sessionFile = path.join(tempDir, "session.jsonl");
     const workspaceDir = path.join(tempDir, "workspace");
     const params = createParams(sessionFile, workspaceDir);
@@ -712,8 +712,8 @@ describe("runCodexAppServerAttempt", () => {
     expect(__testing.shouldForceMessageTool(params)).toBe(false);
   });
 
-  it("starts Codex threads with searchable OpenClaw dynamic tools by default", async () => {
-    __testing.setOpenClawCodingToolsFactoryForTests(() => [
+  it("starts Codex threads with searchable NexisClaw dynamic tools by default", async () => {
+    __testing.setNexisClawCodingToolsFactoryForTests(() => [
       createRuntimeDynamicTool("message"),
       createRuntimeDynamicTool("web_search"),
       createRuntimeDynamicTool("heartbeat_respond"),
@@ -745,14 +745,14 @@ describe("runCodexAppServerAttempt", () => {
 
     expect(message).not.toHaveProperty("namespace");
     expect(message).not.toHaveProperty("deferLoading");
-    expect(webSearch?.namespace).toBe(CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE);
+    expect(webSearch?.namespace).toBe(CODEX_NEXISCLAW_DYNAMIC_TOOL_NAMESPACE);
     expect(webSearch?.deferLoading).toBe(true);
-    expect(heartbeat?.namespace).toBe(CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE);
+    expect(heartbeat?.namespace).toBe(CODEX_NEXISCLAW_DYNAMIC_TOOL_NAMESPACE);
     expect(heartbeat?.deferLoading).toBe(true);
   });
 
   it("returns a run context report without deferred Codex dynamic tool schemas", async () => {
-    __testing.setOpenClawCodingToolsFactoryForTests(() => [
+    __testing.setNexisClawCodingToolsFactoryForTests(() => [
       createRuntimeDynamicTool("message"),
       createRuntimeDynamicTool("web_search"),
     ]);
@@ -787,7 +787,7 @@ describe("runCodexAppServerAttempt", () => {
   });
 
   it("keeps searchable Codex dynamic tools canonical in mirrored transcript snapshots", async () => {
-    __testing.setOpenClawCodingToolsFactoryForTests(() => [
+    __testing.setNexisClawCodingToolsFactoryForTests(() => [
       createRuntimeDynamicTool("wiki_status"),
     ]);
     const harness = createStartedThreadHarness();
@@ -814,7 +814,7 @@ describe("runCodexAppServerAttempt", () => {
         threadId: "thread-1",
         turnId: "turn-1",
         callId: "call-wiki-status-1",
-        namespace: CODEX_OPENCLAW_DYNAMIC_TOOL_NAMESPACE,
+        namespace: CODEX_NEXISCLAW_DYNAMIC_TOOL_NAMESPACE,
         tool: "wiki_status",
         arguments: { topic: "README.md" },
       },
@@ -878,7 +878,7 @@ describe("runCodexAppServerAttempt", () => {
     params.sessionKey = "agent:main:main";
 
     expect(
-      __testing.resolveOpenClawCodingToolsSessionKeys(
+      __testing.resolveNexisClawCodingToolsSessionKeys(
         params,
         "agent:main:telegram:default:direct:1234",
       ),
@@ -887,7 +887,7 @@ describe("runCodexAppServerAttempt", () => {
       runSessionKey: "agent:main:main",
     });
 
-    expect(__testing.resolveOpenClawCodingToolsSessionKeys(params, "agent:main:main")).toEqual({
+    expect(__testing.resolveNexisClawCodingToolsSessionKeys(params, "agent:main:main")).toEqual({
       sessionKey: "agent:main:main",
       runSessionKey: undefined,
     });
@@ -1026,7 +1026,7 @@ describe("runCodexAppServerAttempt", () => {
       contentItems: [
         {
           type: "inputText",
-          text: "OpenClaw dynamic tool call timed out after 1ms while running tool message.",
+          text: "NexisClaw dynamic tool call timed out after 1ms while running tool message.",
         },
       ],
     });
@@ -1060,7 +1060,7 @@ describe("runCodexAppServerAttempt", () => {
       contentItems: [
         {
           type: "inputText",
-          text: "OpenClaw dynamic tool call timed out after 1ms while waiting for process action=poll sessionId=rapid-crustacean. This is a tool RPC timeout, not a session idle timeout.",
+          text: "NexisClaw dynamic tool call timed out after 1ms while waiting for process action=poll sessionId=rapid-crustacean. This is a tool RPC timeout, not a session idle timeout.",
         },
       ],
     });
@@ -1117,7 +1117,7 @@ describe("runCodexAppServerAttempt", () => {
     expect(toolResult.success).toBe(false);
     expect(toolResult.contentItems?.[0]?.type).toBe("inputText");
     expect(toolResult.contentItems?.[0]?.text).toMatch(
-      /^(Unknown OpenClaw tool: message|Action send requires a target\.)$/u,
+      /^(Unknown NexisClaw tool: message|Action send requires a target\.)$/u,
     );
 
     await harness.completeTurn({ threadId: "thread-1", turnId: "turn-1" });
@@ -1231,7 +1231,7 @@ describe("runCodexAppServerAttempt", () => {
     expect(toolResult.success).toBe(false);
     expect(toolResult.contentItems?.[0]?.type).toBe("inputText");
     expect(toolResult.contentItems?.[0]?.text).toMatch(
-      /^(Unknown OpenClaw tool: message|Action send requires a target\.)$/u,
+      /^(Unknown NexisClaw tool: message|Action send requires a target\.)$/u,
     );
 
     const result = await run;
@@ -2140,7 +2140,7 @@ describe("runCodexAppServerAttempt", () => {
     sessionManager.appendMessage(assistantMessage("Opik default project context", Date.now() + 1));
     const harness = createStartedThreadHarness();
     const params = createParams(sessionFile, workspaceDir);
-    params.prompt = "make the default webpage openclaw";
+    params.prompt = "make the default webpage NexisClaw";
 
     const run = runCodexAppServerAttempt(params);
     await harness.waitForMethod("turn/start");
@@ -2153,14 +2153,14 @@ describe("runCodexAppServerAttempt", () => {
       (turnStart?.params as { input?: Array<{ text?: string }> } | undefined)?.input?.[0]?.text ??
       "";
 
-    expect(inputText).toContain("OpenClaw assembled context for this turn:");
+    expect(inputText).toContain("NexisClaw assembled context for this turn:");
     expect(inputText).toContain("we are fixing the Opik default project");
     expect(inputText).toContain("Opik default project context");
     expect(inputText).toContain("Current user request:");
-    expect(inputText).toContain("make the default webpage openclaw");
+    expect(inputText).toContain("make the default webpage NexisClaw");
   });
 
-  it("passes OpenClaw bootstrap files through Codex developer instructions", async () => {
+  it("passes NexisClaw bootstrap files through Codex developer instructions", async () => {
     const sessionFile = path.join(tempDir, "session.jsonl");
     const workspaceDir = path.join(tempDir, "workspace");
     await fs.mkdir(workspaceDir, { recursive: true });
@@ -3541,7 +3541,7 @@ describe("runCodexAppServerAttempt", () => {
   });
 
   it("releases completion when a projector callback throws during turn/completed", async () => {
-    // Regression for openclaw/openclaw#67996: a throw inside the projector's
+    // Regression for NexisClaw/NexisClaw#67996: a throw inside the projector's
     // turn/completed handler must not strand resolveCompletion, otherwise the
     // gateway session lane stays locked and every follow-up message queues
     // behind a run that will never resolve.
@@ -5150,7 +5150,7 @@ describe("runCodexAppServerAttempt", () => {
     expect(turnRequestParams?.model).toBe("gpt-5.4-codex");
   });
 
-  it("clamps Codex danger-full-access when OpenClaw sandboxing is active", () => {
+  it("clamps Codex danger-full-access when NexisClaw sandboxing is active", () => {
     const appServer = resolveCodexAppServerRuntimeOptions({
       pluginConfig: {
         appServer: {
@@ -5160,18 +5160,18 @@ describe("runCodexAppServerAttempt", () => {
       },
     });
 
-    const sandboxed = __testing.restrictCodexAppServerSandboxForOpenClawSandbox(appServer, {
+    const sandboxed = __testing.restrictCodexAppServerSandboxForNexisClawSandbox(appServer, {
       enabled: true,
     } as never);
     expect(sandboxed).not.toBe(appServer);
     expect(sandboxed.approvalPolicy).toBe("never");
     expect(sandboxed.sandbox).toBe("workspace-write");
 
-    expect(__testing.restrictCodexAppServerSandboxForOpenClawSandbox(appServer, null)).toBe(
+    expect(__testing.restrictCodexAppServerSandboxForNexisClawSandbox(appServer, null)).toBe(
       appServer,
     );
     expect(
-      __testing.restrictCodexAppServerSandboxForOpenClawSandbox(
+      __testing.restrictCodexAppServerSandboxForNexisClawSandbox(
         { ...appServer, sandbox: "read-only" },
         { enabled: true } as never,
       ).sandbox,
@@ -5244,7 +5244,7 @@ describe("runCodexAppServerAttempt", () => {
     expect(second).not.toContain("Bearer second");
   });
 
-  it("builds resume and turn params from the currently selected OpenClaw model", () => {
+  it("builds resume and turn params from the currently selected NexisClaw model", () => {
     const params = createParams("/tmp/session.jsonl", "/tmp/workspace");
     const appServer = {
       start: {
@@ -5308,7 +5308,7 @@ describe("runCodexAppServerAttempt", () => {
     expect(heartbeatCollaborationMode.settings.model).toBe("gpt-5.4-codex");
     expect(heartbeatCollaborationMode.settings.reasoning_effort).toBe("medium");
     expect(heartbeatCollaborationMode.settings.developer_instructions).toContain(
-      "This is an OpenClaw heartbeat turn. Apply these instructions only to this heartbeat wake",
+      "This is an NexisClaw heartbeat turn. Apply these instructions only to this heartbeat wake",
     );
     expect(heartbeatCollaborationMode.settings.developer_instructions).toContain(
       "Use heartbeats to create useful proactive progress",

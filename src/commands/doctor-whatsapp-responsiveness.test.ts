@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 
 const noteMock = vi.hoisted(() => vi.fn());
 const spawnSyncMock = vi.hoisted(() => vi.fn());
 
 vi.mock("node:child_process", async () => {
-  const { mockNodeChildProcessSpawnSync } = await import("openclaw/plugin-sdk/test-node-mocks");
+  const { mockNodeChildProcessSpawnSync } = await import("NexisClaw/plugin-sdk/test-node-mocks");
   return mockNodeChildProcessSpawnSync(spawnSyncMock);
 });
 
@@ -25,16 +25,16 @@ describe("doctor WhatsApp responsiveness", () => {
     spawnSyncMock.mockReturnValue({
       status: 0,
       stdout: [
-        " 101 openclaw-tui",
-        " 102 /usr/bin/node /usr/lib/node_modules/openclaw/dist/index.js gateway --port 18789",
-        " 103 openclaw channels",
-        " 104 openclaw tui --local",
+        " 101 NexisClaw-tui",
+        " 102 /usr/bin/node /usr/lib/node_modules/NexisClaw/dist/index.js gateway --port 18789",
+        " 103 NexisClaw channels",
+        " 104 NexisClaw tui --local",
       ].join("\n"),
     });
 
     expect(listLocalTuiProcesses()).toEqual([
-      { pid: 101, command: "openclaw-tui" },
-      { pid: 104, command: "openclaw tui --local" },
+      { pid: 101, command: "NexisClaw-tui" },
+      { pid: 104, command: "NexisClaw tui --local" },
     ]);
   });
 
@@ -60,7 +60,7 @@ describe("doctor WhatsApp responsiveness", () => {
 
     await expect(
       terminateLocalTuiProcesses({
-        processes: [{ pid: 101, command: "openclaw-tui" }],
+        processes: [{ pid: 101, command: "NexisClaw-tui" }],
         controller,
         graceMs: 0,
       }),
@@ -75,7 +75,7 @@ describe("doctor WhatsApp responsiveness", () => {
 
   it("warns and repairs local TUI pressure when WhatsApp is enabled and the gateway is degraded", async () => {
     const terminate = vi.fn().mockResolvedValue({ stopped: [101], failed: [] });
-    const cfg = { channels: { whatsapp: { enabled: true } } } as OpenClawConfig;
+    const cfg = { channels: { whatsapp: { enabled: true } } } as NexisClawConfig;
 
     await noteWhatsappResponsivenessHealth({
       cfg,
@@ -91,12 +91,12 @@ describe("doctor WhatsApp responsiveness", () => {
         },
       },
       shouldRepair: true,
-      listLocalTuiProcesses: () => [{ pid: 101, command: "openclaw-tui" }],
+      listLocalTuiProcesses: () => [{ pid: 101, command: "NexisClaw-tui" }],
       terminateLocalTuiProcesses: terminate,
     });
 
     expect(terminate).toHaveBeenCalledWith({
-      processes: [{ pid: 101, command: "openclaw-tui" }],
+      processes: [{ pid: 101, command: "NexisClaw-tui" }],
     });
     expect(noteMock).toHaveBeenCalledWith(
       [
@@ -114,7 +114,7 @@ describe("doctor WhatsApp responsiveness", () => {
     const cfg = {
       channels: { whatsapp: { enabled: true } },
       agents: { defaults: { model: { primary: "openai-codex/gpt-5.5" } } },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     await noteWhatsappResponsivenessHealth({
       cfg,

@@ -1,8 +1,8 @@
 import {
   coerceSecretRef,
   resolveNonEnvSecretRefApiKeyMarker,
-} from "openclaw/plugin-sdk/provider-auth";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/provider-auth";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import {
   buildCloudflareAiGatewayModelDefinition,
   resolveCloudflareAiGatewayBaseUrl,

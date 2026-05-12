@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { TelegramGroupConfig } from "openclaw/plugin-sdk/config-contracts";
-import { normalizeAccountId } from "openclaw/plugin-sdk/routing";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { TelegramGroupConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { normalizeAccountId } from "NexisClaw/plugin-sdk/routing";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 type TelegramGroups = Record<string, TelegramGroupConfig>;
 
@@ -14,7 +14,7 @@ type TelegramGroupMigrationResult = {
 };
 
 function resolveAccountGroups(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   accountId?: string | null,
 ): { groups?: TelegramGroups } {
   if (!accountId) {
@@ -58,7 +58,7 @@ export function migrateTelegramGroupsInPlace(
 }
 
 export function migrateTelegramGroupConfig(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId?: string | null;
   oldChatId: string;
   newChatId: string;

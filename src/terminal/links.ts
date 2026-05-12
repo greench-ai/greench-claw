@@ -1,7 +1,7 @@
 import { formatTerminalLink } from "./terminal-link.js";
 
 function resolveDocsRoot(): string {
-  return "https://docs.openclaw.ai";
+  return "https://docs.NexisClaw.ai";
 }
 
 export function formatDocsLink(

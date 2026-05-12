@@ -1,7 +1,7 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 
 export function buildEmbeddedMessageActionDiscoveryInput(params: {
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   channel: string;
   currentChannelId?: string | null;
   currentThreadTs?: string | null;

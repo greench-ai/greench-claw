@@ -267,11 +267,11 @@ function createPreparedSlackMessage(params?: {
   } as never;
 }
 
-vi.mock("openclaw/plugin-sdk/agent-runtime", () => ({
+vi.mock("NexisClaw/plugin-sdk/agent-runtime", () => ({
   resolveHumanDelayConfig: () => undefined,
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-feedback", () => ({
+vi.mock("NexisClaw/plugin-sdk/channel-feedback", () => ({
   DEFAULT_TIMING: {
     doneHoldMs: 0,
     errorHoldMs: 0,
@@ -289,8 +289,8 @@ vi.mock("../conversation.runtime.js", () => ({
   recordInboundSession: vi.fn(async () => undefined),
 }));
 
-vi.mock("openclaw/plugin-sdk/channel-message", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/channel-message")>();
+vi.mock("NexisClaw/plugin-sdk/channel-message", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/channel-message")>();
   return {
     ...actual,
     createChannelMessageReplyPipeline: (params: {
@@ -335,7 +335,7 @@ vi.mock("openclaw/plugin-sdk/channel-message", async (importOriginal) => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/channel-streaming", () => ({
+vi.mock("NexisClaw/plugin-sdk/channel-streaming", () => ({
   buildChannelProgressDraftLine: (params: {
     progressText?: string;
     summary?: string;
@@ -494,15 +494,15 @@ vi.mock("openclaw/plugin-sdk/channel-streaming", () => ({
     Boolean(name && !["message", "react", "reaction"].includes(name.toLowerCase())),
 }));
 
-vi.mock("openclaw/plugin-sdk/outbound-runtime", () => ({
+vi.mock("NexisClaw/plugin-sdk/outbound-runtime", () => ({
   resolveAgentOutboundIdentity: () => undefined,
 }));
 
-vi.mock("openclaw/plugin-sdk/reply-history", () => ({
+vi.mock("NexisClaw/plugin-sdk/reply-history", () => ({
   clearHistoryEntriesIfEnabled: () => {},
 }));
 
-vi.mock("openclaw/plugin-sdk/reply-payload", () => ({
+vi.mock("NexisClaw/plugin-sdk/reply-payload", () => ({
   resolveSendableOutboundReplyParts: (
     payload: { text?: string; mediaUrl?: string; mediaUrls?: string[] },
     opts?: { text?: string },
@@ -520,17 +520,17 @@ vi.mock("openclaw/plugin-sdk/reply-payload", () => ({
   },
 }));
 
-vi.mock("openclaw/plugin-sdk/runtime-env", () => ({
+vi.mock("NexisClaw/plugin-sdk/runtime-env", () => ({
   danger: (message: string) => message,
   logVerbose: () => {},
   shouldLogVerbose: () => false,
 }));
 
-vi.mock("openclaw/plugin-sdk/security-runtime", () => ({
+vi.mock("NexisClaw/plugin-sdk/security-runtime", () => ({
   resolvePinnedMainDmOwnerFromAllowlist: () => undefined,
 }));
 
-vi.mock("openclaw/plugin-sdk/string-coerce-runtime", () => ({
+vi.mock("NexisClaw/plugin-sdk/string-coerce-runtime", () => ({
   normalizeOptionalLowercaseString: (value?: string) => value?.toLowerCase(),
 }));
 
@@ -600,7 +600,7 @@ vi.mock("../allow-list.js", () => ({
 }));
 
 vi.mock("../config.runtime.js", () => ({
-  resolveStorePath: () => "/tmp/openclaw-store.json",
+  resolveStorePath: () => "/tmp/NexisClaw-store.json",
   updateLastRoute: updateLastRouteMock,
 }));
 
@@ -780,7 +780,7 @@ describe("dispatchPreparedSlackMessage preview fallback", () => {
     );
 
     expect(updateLastRouteMock).toHaveBeenCalledWith({
-      storePath: "/tmp/openclaw-store.json",
+      storePath: "/tmp/NexisClaw-store.json",
       sessionKey: "agent:main:slack:direct:u1:thread:500.000",
       deliveryContext: {
         channel: "slack",
@@ -819,7 +819,7 @@ describe("dispatchPreparedSlackMessage preview fallback", () => {
     );
 
     expect(updateLastRouteMock).toHaveBeenCalledWith({
-      storePath: "/tmp/openclaw-store.json",
+      storePath: "/tmp/NexisClaw-store.json",
       sessionKey: "agent:main:main",
       deliveryContext: {
         channel: "slack",

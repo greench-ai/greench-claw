@@ -69,7 +69,7 @@ async function withGatewayChatHarness(
   const tempDirs: string[] = [];
   const ws = await harness.openWs();
   const createSessionDir = async () => {
-    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
+    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-gw-"));
     tempDirs.push(sessionDir);
     testState.sessionStorePath = path.join(sessionDir, "sessions.json");
     return sessionDir;
@@ -99,9 +99,9 @@ async function writeMainSessionStore() {
 }
 
 async function writeGatewayConfig(config: Record<string, unknown>) {
-  const configPath = process.env.OPENCLAW_CONFIG_PATH;
+  const configPath = process.env.NEXISCLAW_CONFIG_PATH;
   if (!configPath) {
-    throw new Error("OPENCLAW_CONFIG_PATH missing in gateway test environment");
+    throw new Error("NEXISCLAW_CONFIG_PATH missing in gateway test environment");
   }
   await fs.mkdir(path.dirname(configPath), { recursive: true });
   await fs.writeFile(configPath, JSON.stringify(config, null, 2), "utf-8");
@@ -144,7 +144,7 @@ async function prepareMainHistoryHarness(params: {
 
 describe("gateway server chat", () => {
   test("chat.history does not wait for model catalog discovery to return history", async () => {
-    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
+    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-gw-"));
     try {
       testState.sessionStorePath = path.join(sessionDir, "sessions.json");
       testState.agentConfig = {
@@ -210,7 +210,7 @@ describe("gateway server chat", () => {
   });
 
   test("chat.send returns in_flight when duplicate attachment send wins parsing race", async () => {
-    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
+    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-gw-"));
     const dispatchRelease = createDeferred<void>();
     try {
       testState.sessionStorePath = path.join(sessionDir, "sessions.json");
@@ -334,7 +334,7 @@ describe("gateway server chat", () => {
   });
 
   test("chat.send reuses an active internal run for duplicate WebChat text sends", async () => {
-    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
+    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-gw-"));
     const dispatchRelease = createDeferred<void>();
     try {
       testState.sessionStorePath = path.join(sessionDir, "sessions.json");
@@ -441,7 +441,7 @@ describe("gateway server chat", () => {
   });
 
   test("chat.send starts the next WebChat turn after the prior internal run finishes", async () => {
-    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-"));
+    const sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-gw-"));
     try {
       testState.sessionStorePath = path.join(sessionDir, "sessions.json");
       await writeSessionStore({
@@ -569,7 +569,7 @@ describe("gateway server chat", () => {
             message: {
               role: "user",
               content:
-                'Sender (untrusted metadata):\n```json\n{"label":"openclaw-control-ui"}\n```\n\n[Thu 2026-03-26 16:29 GMT] hi',
+                'Sender (untrusted metadata):\n```json\n{"label":"NexisClaw-control-ui"}\n```\n\n[Thu 2026-03-26 16:29 GMT] hi',
             },
           }),
           JSON.stringify({

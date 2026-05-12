@@ -1,5 +1,5 @@
-import type { CliBackendPlugin } from "openclaw/plugin-sdk/cli-backend";
-import type { ProviderPlugin } from "openclaw/plugin-sdk/provider-model-shared";
+import type { CliBackendPlugin } from "NexisClaw/plugin-sdk/cli-backend";
+import type { ProviderPlugin } from "NexisClaw/plugin-sdk/provider-model-shared";
 import { describe, expect, it } from "vitest";
 import setupEntry from "./setup-api.js";
 

@@ -1,5 +1,5 @@
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { escapeRegExp } from "openclaw/plugin-sdk/text-utility-runtime";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { escapeRegExp } from "NexisClaw/plugin-sdk/text-utility-runtime";
 import { getMatrixRuntime } from "../../runtime.js";
 import type { RoomMessageEventContent } from "./types.js";
 

@@ -56,7 +56,7 @@ export async function runLegacyCliEntry(
   // this path always calls runCli() which runs startup work (dotenv loading,
   // debug capture init) before rendering help/version output.  Block
   // unconditionally — the assertNotRoot error message already shows the
-  // OPENCLAW_ALLOW_ROOT=1 escape hatch.
+  // NEXISCLAW_ALLOW_ROOT=1 escape hatch.
   assertNotRoot();
 
   const { runCli } = deps ?? (await loadLegacyCliDeps());
@@ -105,20 +105,20 @@ if (isMain) {
     }
     if (isBenignUncaughtExceptionError(error)) {
       console.warn(
-        "[openclaw] Non-fatal uncaught exception (continuing):",
+        "[NexisClaw] Non-fatal uncaught exception (continuing):",
         formatUncaughtError(error),
       );
       return;
     }
     for (const line of formatCliFailureLines({
-      title: "OpenClaw hit an unexpected runtime error.",
+      title: "NexisClaw hit an unexpected runtime error.",
       error,
       argv: process.argv,
     })) {
       console.error(line);
     }
     for (const message of runFatalErrorHooks({ reason: "uncaught_exception", error })) {
-      console.error("[openclaw]", message);
+      console.error("[NexisClaw]", message);
     }
     restoreTerminalState("uncaught exception", { resumeStdinIfPaused: false });
     process.exit(1);
@@ -133,7 +133,7 @@ if (isMain) {
       console.error(line);
     }
     for (const message of runFatalErrorHooks({ reason: "legacy_cli_failure", error: err })) {
-      console.error("[openclaw]", message);
+      console.error("[NexisClaw]", message);
     }
     restoreTerminalState("legacy cli failure", { resumeStdinIfPaused: false });
     process.exit(1);

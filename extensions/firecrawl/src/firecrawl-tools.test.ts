@@ -1,5 +1,5 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { mockPinnedHostnameResolution } from "openclaw/plugin-sdk/test-env";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { mockPinnedHostnameResolution } from "NexisClaw/plugin-sdk/test-env";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_FIRECRAWL_BASE_URL,
@@ -184,7 +184,7 @@ describe("firecrawl tools", () => {
           url: "https://api.firecrawl.dev/v2/search",
           timeoutSeconds: 5,
           apiKey: "firecrawl-key",
-          body: { query: "openclaw" },
+          body: { query: "NexisClaw" },
           errorLabel: "Firecrawl search",
         },
         async () => "ok",
@@ -208,7 +208,7 @@ describe("firecrawl tools", () => {
         url: "https://api.firecrawl.dev/v2/search",
         timeoutSeconds: 5,
         apiKey: "firecrawl-test-\r\nkey",
-        body: { query: "openclaw" },
+        body: { query: "NexisClaw" },
         errorLabel: "Firecrawl search",
       },
       async () => "ok",
@@ -264,7 +264,7 @@ describe("firecrawl tools", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NexisClawConfig,
         url: "http://169.254.169.254/latest/meta-data/",
         extractMode: "markdown",
       }),
@@ -283,25 +283,25 @@ describe("firecrawl tools", () => {
     }
 
     const result = await tool.execute({
-      query: "openclaw docs",
+      query: "NexisClaw docs",
       count: 4,
     });
 
     expect(runFirecrawlSearch).toHaveBeenCalledWith({
       cfg: { test: true },
-      query: "openclaw docs",
+      query: "NexisClaw docs",
       count: 4,
     });
     expect(result).toEqual({
       cfg: { test: true },
-      query: "openclaw docs",
+      query: "NexisClaw docs",
       count: 4,
     });
   });
 
   it("keeps the compare-helper fetch facade owned by the Firecrawl extension", async () => {
     await fetchFirecrawlContent({
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.NexisClaw.ai",
       extractMode: "markdown",
       apiKey: "firecrawl-key",
       baseUrl: "https://api.firecrawl.dev",
@@ -332,7 +332,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.NexisClaw.ai",
       extractMode: "markdown",
       maxChars: 1500,
       proxy: "stealth",
@@ -369,7 +369,7 @@ describe("firecrawl tools", () => {
     }
 
     await tool.execute({
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.NexisClaw.ai",
       extractMode: "markdown",
       maxChars: 1500,
       proxy: "stealth",
@@ -378,7 +378,7 @@ describe("firecrawl tools", () => {
 
     expect(runFirecrawlScrape).toHaveBeenCalledWith({
       cfg: { test: true },
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.NexisClaw.ai",
       extractMode: "markdown",
       maxChars: 1500,
       proxy: "stealth",
@@ -432,7 +432,7 @@ describe("firecrawl tools", () => {
     } as never);
 
     const result = await tool.execute("call-1", {
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.NexisClaw.ai",
       maxChars: 1500,
       onlyMainContent: false,
       maxAgeMs: 5000,
@@ -443,7 +443,7 @@ describe("firecrawl tools", () => {
 
     expect(runFirecrawlScrape).toHaveBeenCalledWith({
       cfg: { env: "test" },
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.NexisClaw.ai",
       extractMode: "markdown",
       maxChars: 1500,
       onlyMainContent: false,
@@ -456,7 +456,7 @@ describe("firecrawl tools", () => {
     expect(details.ok).toBe(true);
     expect(details.params).toEqual({
       cfg: { env: "test" },
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.NexisClaw.ai",
       extractMode: "markdown",
       maxChars: 1500,
       onlyMainContent: false,
@@ -473,14 +473,14 @@ describe("firecrawl tools", () => {
     } as never);
 
     await tool.execute("call-2", {
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.NexisClaw.ai",
       extractMode: "text",
       proxy: "invalid",
     });
 
     expect(runFirecrawlScrape).toHaveBeenCalledWith({
       cfg: { env: "test" },
-      url: "https://docs.openclaw.ai",
+      url: "https://docs.NexisClaw.ai",
       extractMode: "text",
       maxChars: undefined,
       onlyMainContent: undefined,
@@ -515,7 +515,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     expect(resolveFirecrawlSearchConfig(cfg)).toEqual({
       apiKey: "plugin-key",
@@ -535,7 +535,7 @@ describe("firecrawl tools", () => {
     expect(resolveFirecrawlMaxAgeMs()).toBe(DEFAULT_FIRECRAWL_MAX_AGE_MS);
     expect(resolveFirecrawlScrapeTimeoutSeconds()).toBe(DEFAULT_FIRECRAWL_SCRAPE_TIMEOUT_SECONDS);
     expect(resolveFirecrawlSearchTimeoutSeconds()).toBe(DEFAULT_FIRECRAWL_SEARCH_TIMEOUT_SECONDS);
-    expect(resolveFirecrawlBaseUrl({} as OpenClawConfig)).not.toBe(DEFAULT_FIRECRAWL_BASE_URL);
+    expect(resolveFirecrawlBaseUrl({} as NexisClawConfig)).not.toBe(DEFAULT_FIRECRAWL_BASE_URL);
   });
 
   it("resolves env SecretRefs for Firecrawl API key without requiring a runtime snapshot", () => {
@@ -556,7 +556,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     expect(resolveFirecrawlApiKey(cfg)).toBe("firecrawl-env-ref-key");
   });
@@ -579,7 +579,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     expect(resolveFirecrawlApiKey(cfg)).toBeUndefined();
   });
@@ -602,7 +602,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     expect(resolveFirecrawlApiKey(cfg)).toBeUndefined();
   });
@@ -633,7 +633,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     expect(resolveFirecrawlApiKey(cfg)).toBeUndefined();
   });
@@ -664,7 +664,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     expect(resolveFirecrawlApiKey(cfg)).toBeUndefined();
   });
@@ -719,7 +719,7 @@ describe("firecrawl tools", () => {
         url: "http://127.0.0.1:8787/v2/search",
         timeoutSeconds: 5,
         apiKey: "firecrawl-key",
-        body: { query: "openclaw" },
+        body: { query: "NexisClaw" },
         errorLabel: "Firecrawl Search",
       },
       async (response) => (await response.json()) as Record<string, unknown>,
@@ -742,7 +742,7 @@ describe("firecrawl tools", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     expect(resolveFirecrawlOnlyMainContent(cfg)).toBe(false);
     expect(resolveFirecrawlMaxAgeMs(cfg)).toBe(1234);

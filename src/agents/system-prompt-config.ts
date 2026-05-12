@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { buildTtsSystemPromptHint } from "../tts/tts.js";
 import { resolveAgentConfig } from "./agent-scope.js";
 import { buildModelAliasLines } from "./model-alias-lines.js";
@@ -18,12 +18,12 @@ export type ResolvedAgentSystemPromptConfig = Pick<
 >;
 
 export type ConfiguredAgentSystemPromptParams = AgentSystemPromptRenderParams & {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   agentId?: string;
 };
 
 export function resolveAgentSystemPromptConfig(params: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   agentId?: string;
 }): ResolvedAgentSystemPromptConfig {
   const { config, agentId } = params;

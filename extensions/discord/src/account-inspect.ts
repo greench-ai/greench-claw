@@ -1,15 +1,15 @@
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk/account-id";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
 import {
   hasConfiguredSecretInput,
   normalizeSecretInputString,
-} from "openclaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import {
   mergeDiscordAccountConfig,
   resolveDefaultDiscordAccountId,
   resolveDiscordAccountConfig,
 } from "./accounts.js";
-import type { DiscordAccountConfig, OpenClawConfig } from "./runtime-api.js";
+import type { DiscordAccountConfig, NexisClawConfig } from "./runtime-api.js";
 import type { DiscordCredentialStatus } from "./token.js";
 
 export type InspectedDiscordAccount = {
@@ -47,7 +47,7 @@ function inspectDiscordTokenValue(value: unknown): {
 }
 
 export function inspectDiscordAccount(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId?: string | null;
   envToken?: string | null;
 }): InspectedDiscordAccount {

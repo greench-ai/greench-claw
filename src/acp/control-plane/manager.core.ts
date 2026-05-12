@@ -1,5 +1,5 @@
 import { resolveAgentTimeoutMs } from "../../agents/timeout.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { logVerbose } from "../../globals.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { normalizeAgentId } from "../../routing/session-key.js";
@@ -175,7 +175,7 @@ export class AcpSessionManager {
 
   constructor(private readonly deps: AcpSessionManagerDeps = DEFAULT_DEPS) {}
 
-  resolveSession(params: { cfg: OpenClawConfig; sessionKey: string }): AcpSessionResolution {
+  resolveSession(params: { cfg: NexisClawConfig; sessionKey: string }): AcpSessionResolution {
     const sessionKey = canonicalizeAcpSessionKey(params);
     if (!sessionKey) {
       return {
@@ -207,7 +207,7 @@ export class AcpSessionManager {
     };
   }
 
-  getObservabilitySnapshot(cfg: OpenClawConfig): AcpManagerObservabilitySnapshot {
+  getObservabilitySnapshot(cfg: NexisClawConfig): AcpManagerObservabilitySnapshot {
     const completedTurns = this.turnLatencyStats.completed + this.turnLatencyStats.failed;
     const averageLatencyMs =
       completedTurns > 0 ? Math.round(this.turnLatencyStats.totalMs / completedTurns) : 0;
@@ -233,7 +233,7 @@ export class AcpSessionManager {
   }
 
   async reconcilePendingSessionIdentities(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
   }): Promise<AcpStartupIdentityReconcileResult> {
     let checked = 0;
     let resolved = 0;
@@ -433,7 +433,7 @@ export class AcpSessionManager {
   }
 
   async getSessionStatus(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
     signal?: AbortSignal;
   }): Promise<AcpSessionStatus> {
@@ -509,7 +509,7 @@ export class AcpSessionManager {
   }
 
   async setSessionRuntimeMode(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
     runtimeMode: string;
   }): Promise<AcpSessionRuntimeOptions> {
@@ -563,7 +563,7 @@ export class AcpSessionManager {
   }
 
   async setSessionConfigOption(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
     key: string;
     value: string;
@@ -645,7 +645,7 @@ export class AcpSessionManager {
   }
 
   async updateSessionRuntimeOptions(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
     patch: Partial<AcpSessionRuntimeOptions>;
   }): Promise<AcpSessionRuntimeOptions> {
@@ -676,7 +676,7 @@ export class AcpSessionManager {
   }
 
   async resetSessionRuntimeOptions(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
   }): Promise<AcpSessionRuntimeOptions> {
     const sessionKey = canonicalizeAcpSessionKey(params);
@@ -974,7 +974,7 @@ export class AcpSessionManager {
     );
   }
 
-  private resolveTurnTimeoutMs(params: { cfg: OpenClawConfig; meta: SessionAcpMeta }): number {
+  private resolveTurnTimeoutMs(params: { cfg: NexisClawConfig; meta: SessionAcpMeta }): number {
     const runtimeTimeoutSeconds = resolveRuntimeOptionsFromMeta(params.meta).timeoutSeconds;
     if (
       typeof runtimeTimeoutSeconds === "number" &&
@@ -1160,7 +1160,7 @@ export class AcpSessionManager {
   }
 
   async cancelSession(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
     reason?: string;
   }): Promise<void> {
@@ -1372,7 +1372,7 @@ export class AcpSessionManager {
   }
 
   private async ensureRuntimeHandle(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
     meta: SessionAcpMeta;
   }): Promise<{ runtime: AcpRuntime; handle: AcpRuntimeHandle; meta: SessionAcpMeta }> {
@@ -1602,7 +1602,7 @@ export class AcpSessionManager {
   }
 
   private async persistRuntimeOptions(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
     options: AcpSessionRuntimeOptions;
   }): Promise<void> {
@@ -1648,7 +1648,7 @@ export class AcpSessionManager {
     cached.appliedControlSignature = undefined;
   }
 
-  private enforceConcurrentSessionLimit(params: { cfg: OpenClawConfig; sessionKey: string }): void {
+  private enforceConcurrentSessionLimit(params: { cfg: NexisClawConfig; sessionKey: string }): void {
     const configuredLimit = params.cfg.acp?.maxConcurrentSessions;
     if (typeof configuredLimit !== "number" || !Number.isFinite(configuredLimit)) {
       return;
@@ -1686,7 +1686,7 @@ export class AcpSessionManager {
 
   private async prepareFreshHandleRetry(params: {
     attempt: number;
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
     error: AcpRuntimeError;
     sawTurnOutput: boolean;
@@ -1750,7 +1750,7 @@ export class AcpSessionManager {
   }
 
   private async clearPersistedRuntimeResumeState(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
   }): Promise<boolean> {
     const now = Date.now();
@@ -1799,7 +1799,7 @@ export class AcpSessionManager {
   }
 
   private async discardPersistedRuntimeState(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
   }): Promise<void> {
     const now = Date.now();
@@ -1841,7 +1841,7 @@ export class AcpSessionManager {
     });
   }
 
-  private async evictIdleRuntimeHandles(params: { cfg: OpenClawConfig }): Promise<void> {
+  private async evictIdleRuntimeHandles(params: { cfg: NexisClawConfig }): Promise<void> {
     const idleTtlMs = resolveRuntimeIdleTtlMs(params.cfg);
     if (idleTtlMs <= 0 || this.runtimeCache.size() === 0) {
       return;
@@ -1906,7 +1906,7 @@ export class AcpSessionManager {
   }
 
   private async setSessionState(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
     state: SessionAcpMeta["state"];
     lastError?: string;
@@ -1947,7 +1947,7 @@ export class AcpSessionManager {
   }
 
   private async reconcileRuntimeSessionIdentifiers(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
     runtime: AcpRuntime;
     handle: AcpRuntimeHandle;
@@ -1972,7 +1972,7 @@ export class AcpSessionManager {
   }
 
   private async writeSessionMeta(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
     mutate: (
       current: SessionAcpMeta | undefined,
@@ -2117,7 +2117,7 @@ export class AcpSessionManager {
   }
 
   private resolveBackgroundTaskContext(params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     sessionKey: string;
     requestId: string;
     text: string;

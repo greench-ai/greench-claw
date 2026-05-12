@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { tryReadJson } from "../infra/json-files.js";
-import { resolveOpenClawPackageRootSync } from "../infra/openclaw-root.js";
+import { resolveNexisClawPackageRootSync } from "../infra/NexisClaw-root.js";
 import { extensionUsesSkippedScannerPath, isPathInside } from "../security/scan-paths.js";
 import { scanDirectoryWithSummary } from "../security/skill-scanner.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
@@ -123,7 +123,7 @@ function buildCriticalBlockReason(params: {
 }
 
 function buildScanFailureBlockReason(params: { error: string; targetLabel: string }) {
-  return `${params.targetLabel} blocked: code safety scan failed (${params.error}). Run "openclaw security audit --deep" for details.`;
+  return `${params.targetLabel} blocked: code safety scan failed (${params.error}). Run "NexisClaw security audit --deep" for details.`;
 }
 
 function buildBlockedDependencyManifestLabel(params: {
@@ -186,13 +186,13 @@ function pathContainsNodeModulesSegment(relativePath: string): boolean {
     .includes("node_modules");
 }
 
-function isPackageRootOpenClawPeerSymlink(segments: string[]): boolean {
+function isPackageRootNexisClawPeerSymlink(segments: string[]): boolean {
   return (
-    (segments.length === 2 && segments[0] === "node_modules" && segments[1] === "openclaw") ||
+    (segments.length === 2 && segments[0] === "node_modules" && segments[1] === "NexisClaw") ||
     (segments.length === 3 &&
       segments[0] === "node_modules" &&
       segments[1] === ".bin" &&
-      segments[2] === "openclaw")
+      segments[2] === "NexisClaw")
   );
 }
 
@@ -208,23 +208,23 @@ function isManagedNpmRootPackagePeerSymlink(segments: string[]): boolean {
   ) {
     return false;
   }
-  return isPackageRootOpenClawPeerSymlink(segments.slice(packageEndIndex));
+  return isPackageRootNexisClawPeerSymlink(segments.slice(packageEndIndex));
 }
 
-function isTrustedOpenClawPeerSymlink(params: {
+function isTrustedNexisClawPeerSymlink(params: {
   allowManagedNpmRootPackagePeerSymlinks?: boolean;
   relativePath: string;
 }): boolean {
   const segments = params.relativePath.split(/[\\/]+/);
   return (
-    isPackageRootOpenClawPeerSymlink(segments) ||
+    isPackageRootNexisClawPeerSymlink(segments) ||
     (params.allowManagedNpmRootPackagePeerSymlinks === true &&
       isManagedNpmRootPackagePeerSymlink(segments))
   );
 }
 
-async function resolveTrustedHostOpenClawRootRealPath(): Promise<string | null> {
-  const hostRoot = resolveOpenClawPackageRootSync({
+async function resolveTrustedHostNexisClawRootRealPath(): Promise<string | null> {
+  const hostRoot = resolveNexisClawPackageRootSync({
     argv1: process.argv[1],
     cwd: process.cwd(),
     moduleUrl: import.meta.url,
@@ -235,13 +235,13 @@ async function resolveTrustedHostOpenClawRootRealPath(): Promise<string | null> 
   return await fs.realpath(hostRoot).catch(() => path.resolve(hostRoot));
 }
 
-function isTrustedHostOpenClawPath(params: {
+function isTrustedHostNexisClawPath(params: {
   resolvedTargetPath: string;
-  trustedHostOpenClawRootRealPath: string | null;
+  trustedHostNexisClawRootRealPath: string | null;
 }): boolean {
   return (
-    params.trustedHostOpenClawRootRealPath !== null &&
-    isPathInside(params.trustedHostOpenClawRootRealPath, params.resolvedTargetPath)
+    params.trustedHostNexisClawRootRealPath !== null &&
+    isPathInside(params.trustedHostNexisClawRootRealPath, params.resolvedTargetPath)
   );
 }
 
@@ -250,7 +250,7 @@ async function inspectNodeModulesSymlinkTarget(params: {
   rootRealPath: string;
   symlinkPath: string;
   symlinkRelativePath: string;
-  trustedHostOpenClawRootRealPath: string | null;
+  trustedHostNexisClawRootRealPath: string | null;
 }): Promise<
   Pick<PackageManifestTraversalResult, "blockedDirectoryFinding" | "blockedFileFinding">
 > {
@@ -267,17 +267,17 @@ async function inspectNodeModulesSymlinkTarget(params: {
   }
 
   if (!isPathInside(params.rootRealPath, resolvedTargetPath)) {
-    // Workspace package managers can leave peer links back to the OpenClaw host
+    // Workspace package managers can leave peer links back to the NexisClaw host
     // package. Trust only the exact peer-link shapes and only when the resolved
     // target stays inside the host package root.
     if (
-      isTrustedOpenClawPeerSymlink({
+      isTrustedNexisClawPeerSymlink({
         allowManagedNpmRootPackagePeerSymlinks: params.allowManagedNpmRootPackagePeerSymlinks,
         relativePath: params.symlinkRelativePath,
       }) &&
-      isTrustedHostOpenClawPath({
+      isTrustedHostNexisClawPath({
         resolvedTargetPath,
-        trustedHostOpenClawRootRealPath: params.trustedHostOpenClawRootRealPath,
+        trustedHostNexisClawRootRealPath: params.trustedHostNexisClawRootRealPath,
       })
     ) {
       return {};
@@ -354,15 +354,15 @@ function readPositiveIntegerEnv(name: string, fallback: number): number {
 function resolvePackageManifestTraversalLimits(): PackageManifestTraversalLimits {
   return {
     maxDepth: readPositiveIntegerEnv(
-      "OPENCLAW_INSTALL_SCAN_MAX_DEPTH",
+      "NEXISCLAW_INSTALL_SCAN_MAX_DEPTH",
       DEFAULT_PACKAGE_MANIFEST_TRAVERSAL_LIMITS.maxDepth,
     ),
     maxDirectories: readPositiveIntegerEnv(
-      "OPENCLAW_INSTALL_SCAN_MAX_DIRECTORIES",
+      "NEXISCLAW_INSTALL_SCAN_MAX_DIRECTORIES",
       DEFAULT_PACKAGE_MANIFEST_TRAVERSAL_LIMITS.maxDirectories,
     ),
     maxManifests: readPositiveIntegerEnv(
-      "OPENCLAW_INSTALL_SCAN_MAX_MANIFESTS",
+      "NEXISCLAW_INSTALL_SCAN_MAX_MANIFESTS",
       DEFAULT_PACKAGE_MANIFEST_TRAVERSAL_LIMITS.maxManifests,
     ),
   };
@@ -375,7 +375,7 @@ async function collectPackageManifestPaths(params: {
   const limits = resolvePackageManifestTraversalLimits();
   const rootDir = params.rootDir;
   const rootRealPath = await fs.realpath(rootDir).catch(() => rootDir);
-  const trustedHostOpenClawRootRealPath = await resolveTrustedHostOpenClawRootRealPath();
+  const trustedHostNexisClawRootRealPath = await resolveTrustedHostNexisClawRootRealPath();
   const queue: Array<{ depth: number; dir: string }> = [{ depth: 0, dir: rootDir }];
   const packageManifestPaths: string[] = [];
   const visitedDirectories = new Set<string>();
@@ -446,7 +446,7 @@ async function collectPackageManifestPaths(params: {
             rootRealPath,
             symlinkPath: nextPath,
             symlinkRelativePath: relativeNextPath,
-            trustedHostOpenClawRootRealPath,
+            trustedHostNexisClawRootRealPath,
           });
           if (symlinkTargetInspection.blockedDirectoryFinding) {
             firstBlockedDirectoryFinding ??= symlinkTargetInspection.blockedDirectoryFinding;
@@ -814,7 +814,7 @@ export async function scanBundleInstallSourceRuntime(
   const builtinScan = await scanDirectoryTarget({
     logger: params.logger,
     path: params.sourceDir,
-    suspiciousMessage: `Bundle "{target}" has {count} suspicious code pattern(s). Run "openclaw security audit --deep" for details.`,
+    suspiciousMessage: `Bundle "{target}" has {count} suspicious code pattern(s). Run "NexisClaw security audit --deep" for details.`,
     targetName: params.pluginId,
     warningMessage: `WARNING: Bundle "${params.pluginId}" contains dangerous code patterns`,
   });
@@ -897,7 +897,7 @@ export async function scanPackageInstallSourceRuntime(
     logger: params.logger,
     path: params.packageDir,
     suppressBuiltinWarnings: params.trustedSourceLinkedOfficialInstall === true,
-    suspiciousMessage: `Plugin "{target}" has {count} suspicious code pattern(s). Run "openclaw security audit --deep" for details.`,
+    suspiciousMessage: `Plugin "{target}" has {count} suspicious code pattern(s). Run "NexisClaw security audit --deep" for details.`,
     targetName: params.pluginId,
     warningMessage: `WARNING: Plugin "${params.pluginId}" contains dangerous code patterns`,
   });
@@ -959,7 +959,7 @@ export async function scanFileInstallSourceRuntime(
   const builtinScan = await scanFileTarget({
     logger: params.logger,
     path: params.filePath,
-    suspiciousMessage: `Plugin file "{target}" has {count} suspicious code pattern(s). Run "openclaw security audit --deep" for details.`,
+    suspiciousMessage: `Plugin file "{target}" has {count} suspicious code pattern(s). Run "NexisClaw security audit --deep" for details.`,
     targetName: params.pluginId,
     warningMessage: `WARNING: Plugin file "${params.pluginId}" contains dangerous code patterns`,
   });
@@ -1004,7 +1004,7 @@ export async function scanSkillInstallSourceRuntime(params: {
     logger: params.logger,
     path: params.sourceDir,
     suspiciousMessage:
-      'Skill "{target}" has {count} suspicious code pattern(s). Run "openclaw security audit --deep" for details.',
+      'Skill "{target}" has {count} suspicious code pattern(s). Run "NexisClaw security audit --deep" for details.',
     targetName: params.skillName,
     warningMessage: `WARNING: Skill "${params.skillName}" contains dangerous code patterns`,
   });

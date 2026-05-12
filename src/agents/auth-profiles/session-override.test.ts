@@ -1,11 +1,11 @@
 import fs from "node:fs/promises";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import {
-  type OpenClawTestState,
-  withOpenClawTestState,
-} from "../../test-utils/openclaw-test-state.js";
+  type NexisClawTestState,
+  withNexisClawTestState,
+} from "../../test-utils/NexisClaw-test-state.js";
 import { resolveSessionAuthProfileOverride } from "./session-override.js";
 import type { AuthProfileStore } from "./types.js";
 
@@ -30,7 +30,7 @@ const authStoreMocks = vi.hoisted(() => {
         store,
         provider,
       }: {
-        cfg?: OpenClawConfig;
+        cfg?: NexisClawConfig;
         store: AuthProfileStore;
         provider: string;
       }) => {
@@ -72,7 +72,7 @@ vi.mock("./order.js", () => ({
     provider,
     credential,
   }: {
-    cfg?: OpenClawConfig;
+    cfg?: NexisClawConfig;
     provider: string;
     credential: { type: string; provider: string };
   }) => {
@@ -91,7 +91,7 @@ vi.mock("./order.js", () => ({
     provider,
     profileId,
   }: {
-    cfg?: OpenClawConfig;
+    cfg?: NexisClawConfig;
     provider: string;
     profileId: string;
   }) => {
@@ -109,11 +109,11 @@ vi.mock("./usage.js", () => ({
   isProfileInCooldown: authStoreMocks.isProfileInCooldown,
 }));
 
-async function withAuthState<T>(run: (state: OpenClawTestState) => Promise<T>): Promise<T> {
-  return await withOpenClawTestState(
+async function withAuthState<T>(run: (state: NexisClawTestState) => Promise<T>): Promise<T> {
+  return await withNexisClawTestState(
     {
       layout: "state-only",
-      prefix: "openclaw-auth-",
+      prefix: "NexisClaw-auth-",
     },
     run,
   );
@@ -163,7 +163,7 @@ describe("resolveSessionAuthProfileOverride", () => {
       const sessionStore = { "agent:main:main": sessionEntry };
 
       const resolved = await resolveSessionAuthProfileOverride({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NexisClawConfig,
         provider: "openrouter",
         agentDir,
         sessionEntry,
@@ -201,7 +201,7 @@ describe("resolveSessionAuthProfileOverride", () => {
       const sessionStore = { "agent:main:main": sessionEntry };
 
       const resolved = await resolveSessionAuthProfileOverride({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NexisClawConfig,
         provider: "z.ai",
         agentDir,
         sessionEntry,
@@ -251,7 +251,7 @@ describe("resolveSessionAuthProfileOverride", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NexisClawConfig,
         provider: "amazon-bedrock",
         agentDir,
         sessionEntry,
@@ -309,7 +309,7 @@ describe("resolveSessionAuthProfileOverride", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NexisClawConfig,
         provider: "amazon-bedrock",
         agentDir,
         sessionEntry,
@@ -357,7 +357,7 @@ describe("resolveSessionAuthProfileOverride", () => {
       const sessionStore = { "agent:main:main": sessionEntry };
 
       const resolved = await resolveSessionAuthProfileOverride({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NexisClawConfig,
         provider: "openai-codex",
         agentDir,
         sessionEntry,
@@ -400,7 +400,7 @@ describe("resolveSessionAuthProfileOverride", () => {
       const sessionStore = { "agent:main:main": sessionEntry };
 
       const resolved = await resolveSessionAuthProfileOverride({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NexisClawConfig,
         provider: "codex-cli",
         agentDir,
         sessionEntry,
@@ -442,7 +442,7 @@ describe("resolveSessionAuthProfileOverride", () => {
       const sessionStore = { "agent:main:main": sessionEntry };
 
       const resolved = await resolveSessionAuthProfileOverride({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NexisClawConfig,
         provider: "openai",
         acceptedProviderIds: ["openai-codex"],
         agentDir,
@@ -490,7 +490,7 @@ describe("resolveSessionAuthProfileOverride", () => {
       const sessionStore = { "agent:main:main": sessionEntry };
 
       const resolved = await resolveSessionAuthProfileOverride({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NexisClawConfig,
         provider: "openai",
         acceptedProviderIds: ["openai-codex"],
         agentDir,
@@ -542,7 +542,7 @@ describe("resolveSessionAuthProfileOverride", () => {
       const sessionStore = { "agent:main:main": sessionEntry };
 
       const resolved = await resolveSessionAuthProfileOverride({
-        cfg: {} as OpenClawConfig,
+        cfg: {} as NexisClawConfig,
         provider: "openai-codex",
         agentDir,
         sessionEntry,

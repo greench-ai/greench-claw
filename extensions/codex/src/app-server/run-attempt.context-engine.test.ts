@@ -3,11 +3,11 @@ import os from "node:os";
 import path from "node:path";
 import type { AgentMessage } from "@earendil-works/pi-agent-core";
 import { SessionManager } from "@earendil-works/pi-coding-agent";
-import type { EmbeddedRunAttemptParams } from "openclaw/plugin-sdk/agent-harness";
+import type { EmbeddedRunAttemptParams } from "NexisClaw/plugin-sdk/agent-harness";
 import {
   embeddedAgentLog,
   type HarnessContextEngine as ContextEngine,
-} from "openclaw/plugin-sdk/agent-harness-runtime";
+} from "NexisClaw/plugin-sdk/agent-harness-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CodexServerNotification } from "./protocol.js";
 import { runCodexAppServerAttempt, __testing } from "./run-attempt.js";
@@ -76,7 +76,7 @@ function threadStartResult(threadId = "thread-1") {
       updatedAt: 1,
       status: { type: "idle" },
       path: null,
-      cwd: tempDir || "/tmp/openclaw-codex-test",
+      cwd: tempDir || "/tmp/NexisClaw-codex-test",
       cliVersion: "0.125.0",
       source: "unknown",
       agentNickname: null,
@@ -88,7 +88,7 @@ function threadStartResult(threadId = "thread-1") {
     model: "gpt-5.4-codex",
     modelProvider: "openai",
     serviceTier: null,
-    cwd: tempDir || "/tmp/openclaw-codex-test",
+    cwd: tempDir || "/tmp/NexisClaw-codex-test",
     instructionSources: [],
     approvalPolicy: "never",
     approvalsReviewer: "user",
@@ -253,7 +253,7 @@ function getRequestInputText(harness: ReturnType<typeof createStartedThreadHarne
 
 describe("runCodexAppServerAttempt context-engine lifecycle", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-codex-context-engine-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-codex-context-engine-"));
   });
 
   afterEach(async () => {
@@ -307,7 +307,7 @@ describe("runCodexAppServerAttempt context-engine lifecycle", () => {
     expect(optionalString(threadStartParams.developerInstructions)).toContain(
       "context-engine system",
     );
-    expectRequestInputTextContains(harness, "OpenClaw assembled context for this turn:");
+    expectRequestInputTextContains(harness, "NexisClaw assembled context for this turn:");
 
     await harness.completeTurn();
     await run;
@@ -386,8 +386,8 @@ describe("runCodexAppServerAttempt context-engine lifecycle", () => {
     params.currentTurnContext = {
       text: [
         "Conversation context (untrusted, chronological, selected for current message):",
-        "#6474 Sun 2026-05-10 22:22 GMT+5:30 [reply target] OpenClaw: anchor REPLYCTX this is the old message",
-        "#6498 Sun 2026-05-10 22:22 GMT+5:30 OpenClaw: filler REPLYCTX 23",
+        "#6474 Sun 2026-05-10 22:22 GMT+5:30 [reply target] NexisClaw: anchor REPLYCTX this is the old message",
+        "#6498 Sun 2026-05-10 22:22 GMT+5:30 NexisClaw: filler REPLYCTX 23",
       ].join("\n"),
     };
 
@@ -395,9 +395,9 @@ describe("runCodexAppServerAttempt context-engine lifecycle", () => {
     await harness.waitForMethod("turn/start");
 
     const inputText = getRequestInputText(harness);
-    expect(inputText).toContain("OpenClaw assembled context for this turn:");
+    expect(inputText).toContain("NexisClaw assembled context for this turn:");
     expect(inputText).toContain("Current user request:\nhello");
-    expect(inputText).toContain("[reply target] OpenClaw: anchor REPLYCTX");
+    expect(inputText).toContain("[reply target] NexisClaw: anchor REPLYCTX");
     expect(inputText.trim().startsWith("Conversation context (untrusted")).toBe(true);
 
     await harness.completeTurn();

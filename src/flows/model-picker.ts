@@ -26,7 +26,7 @@ import {
   resolveAgentModelFallbackValues,
   resolveAgentModelPrimaryValue,
 } from "../config/model-input.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { resolveOwningPluginIdsForProvider } from "../plugins/providers.js";
 import type { ProviderPlugin } from "../plugins/types.js";
 import type { RuntimeEnv } from "../runtime.js";
@@ -46,7 +46,7 @@ const EMPTY_LITERAL_PREFIX_PROVIDERS = new Set<string>();
 const HIDDEN_ROUTER_MODELS = new Set(["openrouter/auto"]);
 
 export type PromptDefaultModelParams = {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   prompter: WizardPrompter;
   allowKeep?: boolean;
   includeManual?: boolean;
@@ -62,7 +62,7 @@ export type PromptDefaultModelParams = {
   message?: string;
 };
 
-export type PromptDefaultModelResult = { model?: string; config?: OpenClawConfig };
+export type PromptDefaultModelResult = { model?: string; config?: NexisClawConfig };
 export type PromptModelAllowlistResult = { models?: string[]; scopeKeys?: string[] };
 
 async function loadModelPickerRuntime() {
@@ -74,11 +74,11 @@ const loadResolvedModelPickerRuntime = createLazyRuntimeSurface(
   ({ modelPickerRuntime }) => modelPickerRuntime,
 );
 
-function resolveConfiguredModelRaw(cfg: OpenClawConfig): string {
+function resolveConfiguredModelRaw(cfg: NexisClawConfig): string {
   return resolveAgentModelPrimaryValue(cfg.agents?.defaults?.model) ?? "";
 }
 
-function resolveConfiguredModelKeys(cfg: OpenClawConfig): string[] {
+function resolveConfiguredModelKeys(cfg: NexisClawConfig): string[] {
   const models = cfg.agents?.defaults?.models ?? {};
   return Object.keys(models)
     .map((key) => key.trim())
@@ -99,7 +99,7 @@ function toPickerCatalogEntry(
 }
 
 function loadPickerModelCatalog(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   opts: { preferredProvider?: string } = {},
 ): ReturnType<typeof loadModelCatalog> {
   if (cfg.models?.mode === "replace") {
@@ -134,7 +134,7 @@ function normalizeModelKeys(values: string[]): string[] {
 }
 
 function resolveFallbackModelKey(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   raw: string;
   defaultProvider: string;
   aliasIndex: ModelAliasIndex;
@@ -156,7 +156,7 @@ function resolveFallbackModelKey(params: {
 }
 
 function resolveFallbackModelKeys(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   rawFallbacks: string[];
   defaultProvider: string;
   aliasIndex: ModelAliasIndex;
@@ -187,7 +187,7 @@ function resolveModelRouteHint(provider: string): string | undefined {
 }
 
 async function resolveLiteralPrefixProviderIds(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<Set<string>> {
@@ -317,7 +317,7 @@ function addModelKeySelectOption(params: {
 
 function createPreferredProviderMatcher(params: {
   preferredProvider: string;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): (entryProvider: string) => boolean {
@@ -400,7 +400,7 @@ async function maybeFilterModelsByProvider(params: {
   }>;
   preferredProvider?: string;
   prompter: WizardPrompter;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<typeof params.models> {
@@ -439,7 +439,7 @@ async function maybeFilterModelsByProvider(params: {
 }
 
 async function resolveProviderPluginSetupOptions(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<WizardSelectOption[]> {
@@ -469,7 +469,7 @@ async function resolveProviderPluginSetupOptions(params: {
 
 async function maybeHandleProviderPluginSelection(params: {
   selection: string;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   prompter: WizardPrompter;
   agentDir?: string;
   workspaceDir?: string;
@@ -867,7 +867,7 @@ export async function promptDefaultModel(
 }
 
 export async function promptModelAllowlist(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   prompter: WizardPrompter;
   message?: string;
   agentDir?: string;
@@ -1121,10 +1121,10 @@ export async function promptModelAllowlist(params: {
 }
 
 export function applyModelAllowlist(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   models: string[],
   opts: { scopeKeys?: string[] } = {},
-): OpenClawConfig {
+): NexisClawConfig {
   const defaults = cfg.agents?.defaults;
   const normalized = normalizeModelKeys(models);
   const scopeKeys = opts.scopeKeys ? normalizeModelKeys(opts.scopeKeys) : [];
@@ -1197,10 +1197,10 @@ export function applyModelAllowlist(
 }
 
 export function applyModelFallbacksFromSelection(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   selection: string[],
   opts: { scopeKeys?: string[] } = {},
-): OpenClawConfig {
+): NexisClawConfig {
   const normalized = normalizeModelKeys(selection);
   const scopeKeys = opts.scopeKeys ? normalizeModelKeys(opts.scopeKeys) : [];
   const scopeKeySet = scopeKeys.length > 0 ? new Set(scopeKeys) : null;

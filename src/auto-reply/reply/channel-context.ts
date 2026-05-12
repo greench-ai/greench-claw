@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { getActivePluginChannelRegistry } from "../../plugins/runtime.js";
 import {
   normalizeOptionalLowercaseString,
@@ -18,7 +18,7 @@ type CommandSurfaceParams = {
 };
 
 type ChannelAccountParams = {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   ctx: {
     OriginatingChannel?: string;
     Surface?: string;

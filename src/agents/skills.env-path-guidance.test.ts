@@ -13,44 +13,44 @@ type GuidanceCase = {
 const CASES: GuidanceCase[] = [
   {
     file: "skills/session-logs/SKILL.md",
-    required: ["OPENCLAW_STATE_DIR"],
+    required: ["NEXISCLAW_STATE_DIR"],
     forbidden: [
-      "for f in ~/.openclaw/agents/<agentId>/sessions/*.jsonl",
-      'rg -l "phrase" ~/.openclaw/agents/<agentId>/sessions/*.jsonl',
-      "~/.openclaw/agents/<agentId>/sessions/<id>.jsonl",
+      "for f in ~/.NexisClaw/agents/<agentId>/sessions/*.jsonl",
+      'rg -l "phrase" ~/.NexisClaw/agents/<agentId>/sessions/*.jsonl',
+      "~/.NexisClaw/agents/<agentId>/sessions/<id>.jsonl",
     ],
   },
   {
     file: "skills/gh-issues/SKILL.md",
-    required: ["OPENCLAW_CONFIG_PATH"],
-    forbidden: ["cat ~/.openclaw/openclaw.json"],
+    required: ["NEXISCLAW_CONFIG_PATH"],
+    forbidden: ["cat ~/.NexisClaw/NexisClaw.json"],
   },
   {
     file: "skills/canvas/SKILL.md",
-    required: ["OPENCLAW_CONFIG_PATH"],
-    forbidden: ["cat ~/.openclaw/openclaw.json"],
+    required: ["NEXISCLAW_CONFIG_PATH"],
+    forbidden: ["cat ~/.NexisClaw/NexisClaw.json"],
   },
   {
     file: "skills/openai-whisper-api/SKILL.md",
-    required: ["OPENCLAW_CONFIG_PATH"],
+    required: ["NEXISCLAW_CONFIG_PATH"],
   },
   {
     file: "skills/sherpa-onnx-tts/SKILL.md",
     required: [
-      "OPENCLAW_STATE_DIR",
-      "OPENCLAW_CONFIG_PATH",
-      'STATE_DIR="${OPENCLAW_STATE_DIR:-$HOME/.openclaw}"',
+      "NEXISCLAW_STATE_DIR",
+      "NEXISCLAW_CONFIG_PATH",
+      'STATE_DIR="${NEXISCLAW_STATE_DIR:-$HOME/.NexisClaw}"',
     ],
     forbidden: [
-      'SHERPA_ONNX_RUNTIME_DIR: "~/.openclaw/tools/sherpa-onnx-tts/runtime"',
-      'SHERPA_ONNX_MODEL_DIR: "~/.openclaw/tools/sherpa-onnx-tts/models/vits-piper-en_US-lessac-high"',
+      'SHERPA_ONNX_RUNTIME_DIR: "~/.NexisClaw/tools/sherpa-onnx-tts/runtime"',
+      'SHERPA_ONNX_MODEL_DIR: "~/.NexisClaw/tools/sherpa-onnx-tts/models/vits-piper-en_US-lessac-high"',
       "<state-dir>",
     ],
   },
   {
     file: "skills/coding-agent/SKILL.md",
-    required: ["OPENCLAW_STATE_DIR"],
-    forbidden: ["NEVER start Codex in ~/.openclaw/"],
+    required: ["NEXISCLAW_STATE_DIR"],
+    forbidden: ["NEVER start Codex in ~/.NexisClaw/"],
   },
 ];
 

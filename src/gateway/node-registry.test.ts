@@ -14,7 +14,7 @@ function makeClient(connId: string, nodeId: string, sent: string[] = []): Gatewa
       },
     } as unknown as GatewayWsClient["socket"],
     connect: {
-      client: { id: "openclaw-macos", version: "1.0.0", platform: "darwin", mode: "node" },
+      client: { id: "NexisClaw-macos", version: "1.0.0", platform: "darwin", mode: "node" },
       device: {
         id: nodeId,
         publicKey: "public-key",

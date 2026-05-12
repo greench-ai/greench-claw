@@ -1,5 +1,5 @@
-import { normalizeOptionalLowercaseString } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { loadWebMediaRaw } from "openclaw/plugin-sdk/web-media";
+import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { loadWebMediaRaw } from "NexisClaw/plugin-sdk/web-media";
 import { createGuildEmoji, createGuildSticker, listGuildEmojis } from "./internal/discord.js";
 import { normalizeEmojiName, resolveDiscordRest } from "./send.shared.js";
 import type { DiscordEmojiUpload, DiscordReactOpts, DiscordStickerUpload } from "./send.types.js";

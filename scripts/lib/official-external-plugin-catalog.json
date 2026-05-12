@@ -1,28 +1,28 @@
 {
   "entries": [
     {
-      "name": "@openclaw/acpx",
-      "description": "OpenClaw ACP runtime backend",
+      "name": "@NexisClaw/acpx",
+      "description": "NexisClaw ACP runtime backend",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "NexisClaw": {
         "plugin": {
           "id": "acpx",
           "label": "ACPX Runtime"
         },
         "install": {
-          "npmSpec": "@openclaw/acpx",
+          "npmSpec": "@NexisClaw/acpx",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@openclaw/brave-plugin",
-      "description": "OpenClaw Brave plugin",
+      "name": "@NexisClaw/brave-plugin",
+      "description": "NexisClaw Brave plugin",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "NexisClaw": {
         "plugin": {
           "id": "brave",
           "label": "Brave"
@@ -37,134 +37,134 @@
             "envVars": ["BRAVE_API_KEY"],
             "placeholder": "BSA...",
             "signupUrl": "https://api-dashboard.search.brave.com/app/keys",
-            "docsUrl": "https://docs.openclaw.ai/tools/brave-search",
+            "docsUrl": "https://docs.NexisClaw.ai/tools/brave-search",
             "credentialPath": "plugins.entries.brave.config.webSearch.apiKey",
             "autoDetectOrder": 10
           }
         ],
         "install": {
-          "npmSpec": "@openclaw/brave-plugin",
+          "npmSpec": "@NexisClaw/brave-plugin",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@openclaw/diagnostics-otel",
-      "description": "OpenClaw diagnostics OpenTelemetry exporter",
+      "name": "@NexisClaw/diagnostics-otel",
+      "description": "NexisClaw diagnostics OpenTelemetry exporter",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "NexisClaw": {
         "plugin": {
           "id": "diagnostics-otel",
           "label": "Diagnostics OpenTelemetry"
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/diagnostics-otel",
-          "npmSpec": "@openclaw/diagnostics-otel",
+          "clawhubSpec": "clawhub:@NexisClaw/diagnostics-otel",
+          "npmSpec": "@NexisClaw/diagnostics-otel",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@openclaw/diagnostics-prometheus",
-      "description": "OpenClaw diagnostics Prometheus exporter",
+      "name": "@NexisClaw/diagnostics-prometheus",
+      "description": "NexisClaw diagnostics Prometheus exporter",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "NexisClaw": {
         "plugin": {
           "id": "diagnostics-prometheus",
           "label": "Diagnostics Prometheus"
         },
         "install": {
-          "clawhubSpec": "clawhub:@openclaw/diagnostics-prometheus",
-          "npmSpec": "@openclaw/diagnostics-prometheus",
+          "clawhubSpec": "clawhub:@NexisClaw/diagnostics-prometheus",
+          "npmSpec": "@NexisClaw/diagnostics-prometheus",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@openclaw/diffs",
-      "description": "OpenClaw diff viewer plugin",
+      "name": "@NexisClaw/diffs",
+      "description": "NexisClaw diff viewer plugin",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "NexisClaw": {
         "plugin": {
           "id": "diffs",
           "label": "Diffs"
         },
         "install": {
-          "npmSpec": "@openclaw/diffs",
+          "npmSpec": "@NexisClaw/diffs",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.30"
         }
       }
     },
     {
-      "name": "@openclaw/google-meet",
-      "description": "OpenClaw Google Meet participant plugin",
+      "name": "@NexisClaw/google-meet",
+      "description": "NexisClaw Google Meet participant plugin",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "NexisClaw": {
         "plugin": {
           "id": "google-meet",
           "label": "Google Meet"
         },
         "install": {
-          "npmSpec": "@openclaw/google-meet",
+          "npmSpec": "@NexisClaw/google-meet",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.20"
         }
       }
     },
     {
-      "name": "@openclaw/lobster",
+      "name": "@NexisClaw/lobster",
       "description": "Lobster workflow tool plugin (typed pipelines + resumable approvals)",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "NexisClaw": {
         "plugin": {
           "id": "lobster",
           "label": "Lobster"
         },
         "install": {
-          "npmSpec": "@openclaw/lobster",
+          "npmSpec": "@NexisClaw/lobster",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@openclaw/memory-lancedb",
-      "description": "OpenClaw LanceDB-backed long-term memory plugin with auto-recall/capture",
+      "name": "@NexisClaw/memory-lancedb",
+      "description": "NexisClaw LanceDB-backed long-term memory plugin with auto-recall/capture",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "NexisClaw": {
         "plugin": {
           "id": "memory-lancedb",
           "label": "Memory LanceDB"
         },
         "install": {
-          "npmSpec": "@openclaw/memory-lancedb",
+          "npmSpec": "@NexisClaw/memory-lancedb",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@openclaw/voice-call",
-      "description": "OpenClaw voice-call plugin",
+      "name": "@NexisClaw/voice-call",
+      "description": "NexisClaw voice-call plugin",
       "source": "official",
       "kind": "plugin",
-      "openclaw": {
+      "NexisClaw": {
         "plugin": {
           "id": "voice-call",
           "label": "Voice Call"
         },
         "install": {
-          "npmSpec": "@openclaw/voice-call",
+          "npmSpec": "@NexisClaw/voice-call",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }

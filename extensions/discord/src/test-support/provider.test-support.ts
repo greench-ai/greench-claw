@@ -1,5 +1,5 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
 import type { Mock } from "vitest";
 import { expect, vi } from "vitest";
 
@@ -23,7 +23,7 @@ type ProviderMonitorTestMocks = {
   createDiscordAutoPresenceControllerMock: Mock<() => unknown>;
   createDiscordExecApprovalButtonContextMock: Mock<
     (params?: {
-      cfg?: OpenClawConfig;
+      cfg?: NexisClawConfig;
       accountId?: string;
       config?: unknown;
       gatewayUrl?: string;
@@ -38,7 +38,7 @@ type ProviderMonitorTestMocks = {
   createdBindingManagers: Array<{ stop: ReturnType<typeof vi.fn> }>;
   getAcpSessionStatusMock: Mock<
     (params: {
-      cfg: OpenClawConfig;
+      cfg: NexisClawConfig;
       sessionKey: string;
       signal?: AbortSignal;
     }) => Promise<{ state: string }>
@@ -125,7 +125,7 @@ const providerMonitorTestMocks: ProviderMonitorTestMocks = vi.hoisted(() => {
     })),
     createdBindingManagers,
     getAcpSessionStatusMock: vi.fn(
-      async (_params: { cfg: OpenClawConfig; sessionKey: string; signal?: AbortSignal }) => ({
+      async (_params: { cfg: NexisClawConfig; sessionKey: string; signal?: AbortSignal }) => ({
         state: "idle",
       }),
     ),
@@ -276,7 +276,7 @@ export const baseRuntime = (): RuntimeEnv => ({
   exit: vi.fn(),
 });
 
-export const baseConfig = (): OpenClawConfig =>
+export const baseConfig = (): NexisClawConfig =>
   ({
     channels: {
       discord: {
@@ -287,7 +287,7 @@ export const baseConfig = (): OpenClawConfig =>
         },
       },
     },
-  }) as OpenClawConfig;
+  }) as NexisClawConfig;
 
 vi.mock("../internal/discord.js", async () => {
   const actual =
@@ -351,9 +351,9 @@ vi.mock("../internal/voice.js", () => ({
   VoicePlugin: function VoicePlugin() {},
 }));
 
-vi.mock("openclaw/plugin-sdk/acp-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/acp-runtime")>(
-    "openclaw/plugin-sdk/acp-runtime",
+vi.mock("NexisClaw/plugin-sdk/acp-runtime", async () => {
+  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/acp-runtime")>(
+    "NexisClaw/plugin-sdk/acp-runtime",
   );
   return {
     ...actual,
@@ -365,9 +365,9 @@ vi.mock("openclaw/plugin-sdk/acp-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/command-auth", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/command-auth")>(
-    "openclaw/plugin-sdk/command-auth",
+vi.mock("NexisClaw/plugin-sdk/command-auth", async () => {
+  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/command-auth")>(
+    "NexisClaw/plugin-sdk/command-auth",
   );
   return {
     ...actual,
@@ -375,9 +375,9 @@ vi.mock("openclaw/plugin-sdk/command-auth", async () => {
     listSkillCommandsForAgents: listSkillCommandsForAgentsMock,
   };
 });
-vi.mock("openclaw/plugin-sdk/reply-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/reply-runtime")>(
-    "openclaw/plugin-sdk/reply-runtime",
+vi.mock("NexisClaw/plugin-sdk/reply-runtime", async () => {
+  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/reply-runtime")>(
+    "NexisClaw/plugin-sdk/reply-runtime",
   );
   return {
     ...actual,
@@ -385,10 +385,10 @@ vi.mock("openclaw/plugin-sdk/reply-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/native-command-config-runtime", async () => {
+vi.mock("NexisClaw/plugin-sdk/native-command-config-runtime", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/native-command-config-runtime")
-  >("openclaw/plugin-sdk/native-command-config-runtime");
+    typeof import("NexisClaw/plugin-sdk/native-command-config-runtime")
+  >("NexisClaw/plugin-sdk/native-command-config-runtime");
   return {
     ...actual,
     isNativeCommandsExplicitlyDisabled: isNativeCommandsExplicitlyDisabledMock,
@@ -397,19 +397,19 @@ vi.mock("openclaw/plugin-sdk/native-command-config-runtime", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("NexisClaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/runtime-config-snapshot")
-  >("openclaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot")
+  >("NexisClaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: () => ({}),
   };
 });
 
-vi.mock("openclaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/runtime-env")>(
-    "openclaw/plugin-sdk/runtime-env",
+vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/runtime-env")>(
+    "NexisClaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -432,9 +432,9 @@ vi.mock("openclaw/plugin-sdk/runtime-env", async () => {
   };
 });
 
-vi.mock("openclaw/plugin-sdk/error-runtime", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk/error-runtime")>(
-    "openclaw/plugin-sdk/error-runtime",
+vi.mock("NexisClaw/plugin-sdk/error-runtime", async () => {
+  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/error-runtime")>(
+    "NexisClaw/plugin-sdk/error-runtime",
   );
   return {
     ...actual,

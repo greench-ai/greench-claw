@@ -1,8 +1,8 @@
 import {
   registerProviderPlugin,
   requireRegisteredProvider,
-} from "openclaw/plugin-sdk/plugin-test-runtime";
-import { expectPassthroughReplayPolicy } from "openclaw/plugin-sdk/provider-test-contracts";
+} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import { expectPassthroughReplayPolicy } from "NexisClaw/plugin-sdk/provider-test-contracts";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 

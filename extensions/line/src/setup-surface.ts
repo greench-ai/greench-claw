@@ -2,8 +2,8 @@ import {
   createAllowFromSection,
   createStandardChannelSetupStatus,
   mergeAllowFromEntries,
-} from "openclaw/plugin-sdk/setup";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/setup";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { resolveDefaultLineAccountId } from "./accounts.js";
 import {
   isLineConfigured,

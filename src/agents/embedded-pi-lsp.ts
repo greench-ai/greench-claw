@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type { BundleLspServerConfig } from "../plugins/bundle-lsp.js";
 import { loadEnabledBundleLspConfig } from "../plugins/bundle-lsp.js";
 
@@ -9,7 +9,7 @@ type EmbeddedPiLspConfig = {
 
 export function loadEmbeddedPiLspConfig(params: {
   workspaceDir: string;
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
 }): EmbeddedPiLspConfig {
   const bundleLsp = loadEnabledBundleLspConfig({
     workspaceDir: params.workspaceDir,

@@ -1,11 +1,11 @@
 import type { AgentToolResult } from "@earendil-works/pi-agent-core";
-import { readBooleanParam } from "openclaw/plugin-sdk/boolean-param";
-import type { ChannelMessageActionContext } from "openclaw/plugin-sdk/channel-contract";
+import { readBooleanParam } from "NexisClaw/plugin-sdk/boolean-param";
+import type { ChannelMessageActionContext } from "NexisClaw/plugin-sdk/channel-contract";
 import {
   normalizeInteractiveReply,
   normalizeMessagePresentation,
-} from "openclaw/plugin-sdk/interactive-runtime";
-import { readNumberParam, readStringParam } from "openclaw/plugin-sdk/param-readers";
+} from "NexisClaw/plugin-sdk/interactive-runtime";
+import { readNumberParam, readStringParam } from "NexisClaw/plugin-sdk/param-readers";
 import {
   buildSlackInteractiveBlocks,
   buildSlackPresentationBlocks,

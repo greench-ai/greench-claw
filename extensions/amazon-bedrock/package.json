@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/amazon-bedrock-provider",
+  "name": "@NexisClaw/amazon-bedrock-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw Amazon Bedrock provider plugin",
+  "description": "NexisClaw Amazon Bedrock provider plugin",
   "type": "module",
   "dependencies": {
     "@aws-sdk/client-bedrock": "3.1045.0",
@@ -12,9 +12,9 @@
     "@smithy/shared-ini-file-loader": "4.5.1"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ]

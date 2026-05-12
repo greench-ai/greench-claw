@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 
 const {
   collectChannelSecurityFindingsMock,
@@ -15,13 +15,13 @@ const {
       title: "Telegram setup fallback audited",
     },
   ]),
-  collectEnabledInsecureOrDangerousFlagsMock: vi.fn((_config: OpenClawConfig): string[] => []),
+  collectEnabledInsecureOrDangerousFlagsMock: vi.fn((_config: NexisClawConfig): string[] => []),
   listReadOnlyChannelPluginsForConfigMock: vi.fn(),
   hasConfiguredChannelsForReadOnlyScopeMock: vi.fn(),
 }));
 
 vi.mock("./dangerous-config-flags.js", () => ({
-  collectEnabledInsecureOrDangerousFlags: (config: OpenClawConfig) =>
+  collectEnabledInsecureOrDangerousFlags: (config: NexisClawConfig) =>
     collectEnabledInsecureOrDangerousFlagsMock(config),
 }));
 
@@ -95,7 +95,7 @@ describe("security audit channel read-only setup fallback", () => {
     const cfg = {
       session: { dmScope: "main" },
       channels: { telegram: { enabled: true } },
-    } satisfies OpenClawConfig;
+    } satisfies NexisClawConfig;
 
     hasConfiguredChannelsForReadOnlyScopeMock.mockReturnValue(true);
     listReadOnlyChannelPluginsForConfigMock.mockReturnValue([plugin]);
@@ -111,7 +111,7 @@ describe("security audit channel read-only setup fallback", () => {
     const readOnlyPluginCalls = listReadOnlyChannelPluginsForConfigMock.mock
       .calls as unknown as Array<
       [
-        OpenClawConfig,
+        NexisClawConfig,
         {
           includePersistedAuthState?: boolean;
           includeSetupFallbackPlugins?: boolean;
@@ -126,8 +126,8 @@ describe("security audit channel read-only setup fallback", () => {
     const collectCalls = collectChannelSecurityFindingsMock.mock.calls as unknown as Array<
       [
         {
-          cfg?: OpenClawConfig;
-          sourceConfig?: OpenClawConfig;
+          cfg?: NexisClawConfig;
+          sourceConfig?: NexisClawConfig;
           plugins?: ChannelPlugin[];
         },
       ]

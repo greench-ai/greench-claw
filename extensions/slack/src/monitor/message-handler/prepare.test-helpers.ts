@@ -1,15 +1,15 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { App } from "@slack/bolt";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import type { SlackChannelConfigEntries } from "../channel-config.js";
 import { createSlackMonitorContext } from "../context.js";
 
 export function createInboundSlackTestContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   appClient?: App["client"];
   defaultRequireMention?: boolean;
   replyToMode?: "off" | "all" | "first" | "batched";
@@ -49,7 +49,7 @@ export function createInboundSlackTestContext(params: {
     threadRequireExplicitMention: params.threadRequireExplicitMention ?? false,
     slashCommand: {
       enabled: false,
-      name: "openclaw",
+      name: "NexisClaw",
       sessionPrefix: "slack:slash",
       ephemeral: true,
     },
@@ -83,7 +83,7 @@ export function createSlackSessionStoreFixture(prefix: string) {
 
   return {
     setup() {
-      fixtureRoot = fs.mkdtempSync(path.join(resolvePreferredOpenClawTmpDir(), prefix));
+      fixtureRoot = fs.mkdtempSync(path.join(resolvePreferredNexisClawTmpDir(), prefix));
     },
     cleanup() {
       if (!fixtureRoot) {

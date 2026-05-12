@@ -1,5 +1,5 @@
-import type { ProviderCatalogContext } from "openclaw/plugin-sdk/provider-catalog-shared";
-import type { ProviderPlugin } from "openclaw/plugin-sdk/provider-model-shared";
+import type { ProviderCatalogContext } from "NexisClaw/plugin-sdk/provider-catalog-shared";
+import type { ProviderPlugin } from "NexisClaw/plugin-sdk/provider-model-shared";
 import {
   buildCodexProviderConfig,
   CODEX_APP_SERVER_AUTH_MARKER,

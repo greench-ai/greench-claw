@@ -10,20 +10,20 @@ import {
   resolveAgentEffectiveModelPrimary,
   resolveAgentWorkspaceDir,
   resolveDefaultModelForAgent,
-} from "openclaw/plugin-sdk/agent-runtime";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+} from "NexisClaw/plugin-sdk/agent-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   resolveLivePluginConfigObject,
   resolvePluginConfigObject,
-} from "openclaw/plugin-sdk/plugin-config-runtime";
-import { definePluginEntry, type OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { parseAgentSessionKey, parseThreadSessionSuffix } from "openclaw/plugin-sdk/routing";
-import { isPathInside, replaceFileAtomic } from "openclaw/plugin-sdk/security-runtime";
+} from "NexisClaw/plugin-sdk/plugin-config-runtime";
+import { definePluginEntry, type NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
+import { parseAgentSessionKey, parseThreadSessionSuffix } from "NexisClaw/plugin-sdk/routing";
+import { isPathInside, replaceFileAtomic } from "NexisClaw/plugin-sdk/security-runtime";
 import {
   resolveSessionStoreEntry,
   updateSessionStore,
-} from "openclaw/plugin-sdk/session-store-runtime";
-import { tempWorkspace, resolvePreferredOpenClawTmpDir } from "openclaw/plugin-sdk/temp-path";
+} from "NexisClaw/plugin-sdk/session-store-runtime";
+import { tempWorkspace, resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
 
 const DEFAULT_TIMEOUT_MS = 15_000;
 const DEFAULT_AGENT_ID = "main";
@@ -466,13 +466,13 @@ function isReservedActiveMemoryToolsAllowEntry(value: string): boolean {
   return normalized.startsWith("group:") || ACTIVE_MEMORY_RESERVED_TOOLS_ALLOW.has(normalized);
 }
 
-function resolveDefaultToolsAllow(cfg: OpenClawConfig | undefined): string[] {
+function resolveDefaultToolsAllow(cfg: NexisClawConfig | undefined): string[] {
   return cfg?.plugins?.slots?.memory === "memory-lancedb"
     ? [...LANCEDB_ACTIVE_MEMORY_TOOLS_ALLOW]
     : [...DEFAULT_ACTIVE_MEMORY_TOOLS_ALLOW];
 }
 
-function resolveToolsAllow(params: { pluginToolsAllow: unknown; cfg?: OpenClawConfig }): string[] {
+function resolveToolsAllow(params: { pluginToolsAllow: unknown; cfg?: NexisClawConfig }): string[] {
   return (
     normalizeConfiguredToolsAllow(params.pluginToolsAllow) ?? resolveDefaultToolsAllow(params.cfg)
   );
@@ -513,7 +513,7 @@ function toSafeTranscriptAgentDirName(agentId: string): string {
   return encoded ? encoded : "unknown-agent";
 }
 
-function resolvePersistentTranscriptBaseDir(api: OpenClawPluginApi, agentId: string): string {
+function resolvePersistentTranscriptBaseDir(api: NexisClawPluginApi, agentId: string): string {
   return path.join(
     api.runtime.state.resolveStateDir(),
     "plugins",
@@ -532,7 +532,7 @@ function requireTransientWorkspaceDir(tempDir: string | undefined): string {
 }
 
 function resolveCanonicalSessionKeyFromSessionId(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   agentId: string;
   sessionId?: string;
 }): string | undefined {
@@ -611,7 +611,7 @@ function isMissingRegisteredMemoryToolsError(
 }
 
 function resolveRecallRunChannelContext(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   agentId: string;
   sessionKey?: string;
   sessionId?: string;
@@ -704,7 +704,7 @@ function resolveRecallRunChannelContext(params: {
   }
 }
 
-function resolveToggleStatePath(api: OpenClawPluginApi): string {
+function resolveToggleStatePath(api: NexisClawPluginApi): string {
   return path.join(
     api.runtime.state.resolveStateDir(),
     "plugins",
@@ -756,7 +756,7 @@ async function writeToggleStore(statePath: string, store: ActiveMemoryToggleStor
 }
 
 async function isSessionActiveMemoryDisabled(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   sessionKey?: string;
 }): Promise<boolean> {
   const sessionKey = params.sessionKey?.trim();
@@ -775,7 +775,7 @@ async function isSessionActiveMemoryDisabled(params: {
 }
 
 async function setSessionActiveMemoryDisabled(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   sessionKey: string;
   disabled: boolean;
 }): Promise<void> {
@@ -793,7 +793,7 @@ async function setSessionActiveMemoryDisabled(params: {
 }
 
 function resolveCommandSessionKey(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   config: ResolvedActiveRecallPluginConfig;
   sessionKey?: string;
   sessionId?: string;
@@ -831,7 +831,7 @@ function formatActiveMemoryCommandHelp(): string {
   ].join("\n");
 }
 
-function isActiveMemoryGloballyEnabled(cfg: OpenClawConfig): boolean {
+function isActiveMemoryGloballyEnabled(cfg: NexisClawConfig): boolean {
   const entry = asRecord(cfg.plugins?.entries?.["active-memory"]);
   if (entry?.enabled === false) {
     return false;
@@ -841,9 +841,9 @@ function isActiveMemoryGloballyEnabled(cfg: OpenClawConfig): boolean {
 }
 
 function updateActiveMemoryGlobalEnabledInConfig(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   enabled: boolean,
-): OpenClawConfig {
+): NexisClawConfig {
   const entries = { ...cfg.plugins?.entries };
   const existingEntry = asRecord(entries["active-memory"]) ?? {};
   const existingConfig = asRecord(existingEntry.config) ?? {};
@@ -874,7 +874,7 @@ const ACTIVE_MEMORY_GLOBAL_MUTATION_ADMIN_REQUIRED_TEXT =
 
 function normalizePluginConfig(
   pluginConfig: unknown,
-  cfg?: OpenClawConfig,
+  cfg?: NexisClawConfig,
 ): ResolvedActiveRecallPluginConfig {
   const raw = (
     pluginConfig && typeof pluginConfig === "object" ? pluginConfig : {}
@@ -950,9 +950,9 @@ function normalizePluginConfig(
 }
 
 function applyActiveMemoryRuntimeConfigSnapshot(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   pluginConfig: ResolvedActiveRecallPluginConfig,
-): OpenClawConfig {
+): NexisClawConfig {
   const existingEntry = asRecord(cfg.plugins?.entries?.["active-memory"]);
   const existingPluginConfig = asRecord(existingEntry?.config);
   return {
@@ -1536,7 +1536,7 @@ function sanitizeDebugText(text: string): string {
 }
 
 async function persistPluginStatusLines(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   agentId: string;
   sessionKey?: string;
   statusLine?: string;
@@ -2398,7 +2398,7 @@ function parseModelCandidate(modelRef: string | undefined, defaultProvider = DEF
 }
 
 function getModelRef(
-  api: OpenClawPluginApi,
+  api: NexisClawPluginApi,
   agentId: string,
   config: ResolvedActiveRecallPluginConfig,
   ctx?: {
@@ -2430,7 +2430,7 @@ function getModelRef(
 }
 
 async function runRecallSubagent(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   config: ResolvedActiveRecallPluginConfig;
   agentId: string;
   sessionKey?: string;
@@ -2476,8 +2476,8 @@ async function runRecallSubagent(params: {
   const transientWorkspace = params.config.persistTranscripts
     ? undefined
     : await tempWorkspace({
-        rootDir: resolvePreferredOpenClawTmpDir(),
-        prefix: "openclaw-active-memory-",
+        rootDir: resolvePreferredNexisClawTmpDir(),
+        prefix: "NexisClaw-active-memory-",
       });
   const tempDir = transientWorkspace?.dir;
   const persistedDir = params.config.persistTranscripts
@@ -2594,7 +2594,7 @@ async function runRecallSubagent(params: {
 }
 
 async function maybeResolveActiveRecall(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   config: ResolvedActiveRecallPluginConfig;
   agentId: string;
   sessionKey?: string;
@@ -2889,15 +2889,15 @@ export default definePluginEntry({
   id: "active-memory",
   name: "Active Memory",
   description: "Proactively surfaces relevant memory before eligible conversational replies.",
-  register(api: OpenClawPluginApi) {
-    const readCurrentConfig = (): OpenClawConfig | undefined => {
+  register(api: NexisClawPluginApi) {
+    const readCurrentConfig = (): NexisClawConfig | undefined => {
       try {
         return (
-          (api.runtime.config?.current?.() as OpenClawConfig | undefined) ??
-          (api.config as OpenClawConfig | undefined)
+          (api.runtime.config?.current?.() as NexisClawConfig | undefined) ??
+          (api.config as NexisClawConfig | undefined)
         );
       } catch {
-        return api.config as OpenClawConfig | undefined;
+        return api.config as NexisClawConfig | undefined;
       }
     };
     let config = normalizePluginConfig(api.pluginConfig, readCurrentConfig());
@@ -2923,7 +2923,7 @@ export default definePluginEntry({
     const refreshLiveConfigFromRuntime = () => {
       const livePluginConfig = resolveLivePluginConfigObject(
         api.runtime.config?.current
-          ? () => api.runtime.config.current() as OpenClawConfig
+          ? () => api.runtime.config.current() as NexisClawConfig
           : undefined,
         "active-memory",
         api.pluginConfig as Record<string, unknown>,
@@ -2945,7 +2945,7 @@ export default definePluginEntry({
           return { text: formatActiveMemoryCommandHelp() };
         }
         if (isGlobal) {
-          const currentConfig = api.runtime.config.current() as OpenClawConfig;
+          const currentConfig = api.runtime.config.current() as NexisClawConfig;
           if (action === "status") {
             return {
               text: `Active Memory: ${isActiveMemoryGloballyEnabled(currentConfig) ? "on" : "off"} globally.`,

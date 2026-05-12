@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { isInternalMessageChannel } from "../../utils/message-channel.js";
 import { resolveCommandAuthorization } from "../command-auth.js";
 import type { MsgContext } from "../templating.js";
 
 export function isResetAuthorizedForContext(params: {
   ctx: MsgContext;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   commandAuthorized: boolean;
 }): boolean {
   const auth = resolveCommandAuthorization(params);

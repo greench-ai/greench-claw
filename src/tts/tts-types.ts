@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type {
   ResolvedTtsPersona,
   TtsAutoMode,
@@ -24,5 +24,5 @@ export type ResolvedTtsConfig = {
   maxTextLength: number;
   timeoutMs: number;
   rawConfig?: TtsConfig;
-  sourceConfig?: OpenClawConfig;
+  sourceConfig?: NexisClawConfig;
 };

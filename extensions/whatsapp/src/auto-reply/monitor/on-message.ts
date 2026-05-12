@@ -1,10 +1,10 @@
-import type { AckReactionHandle } from "openclaw/plugin-sdk/channel-feedback";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { getReplyFromConfig } from "openclaw/plugin-sdk/reply-runtime";
-import type { MsgContext } from "openclaw/plugin-sdk/reply-runtime";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { buildGroupHistoryKey } from "openclaw/plugin-sdk/routing";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import type { AckReactionHandle } from "NexisClaw/plugin-sdk/channel-feedback";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { getReplyFromConfig } from "NexisClaw/plugin-sdk/reply-runtime";
+import type { MsgContext } from "NexisClaw/plugin-sdk/reply-runtime";
+import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import { buildGroupHistoryKey } from "NexisClaw/plugin-sdk/routing";
+import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
 import { resolveWhatsAppAccount } from "../../accounts.js";
 import { resolveWhatsAppGroupSessionRoute } from "../../group-session-key.js";
 import { getPrimaryIdentityId, getSenderIdentity } from "../../identity.js";
@@ -22,8 +22,8 @@ import { resolvePeerId } from "./peer.js";
 import { processMessage } from "./process-message.js";
 
 export function createWebOnMessageHandler(params: {
-  cfg: OpenClawConfig;
-  loadConfig?: () => OpenClawConfig;
+  cfg: NexisClawConfig;
+  loadConfig?: () => NexisClawConfig;
   verbose: boolean;
   connectionId: string;
   maxMediaBytes: number;
@@ -33,12 +33,12 @@ export function createWebOnMessageHandler(params: {
   echoTracker: EchoTracker;
   backgroundTasks: Set<Promise<unknown>>;
   replyResolver: typeof getReplyFromConfig;
-  replyLogger: ReturnType<(typeof import("openclaw/plugin-sdk/runtime-env"))["getChildLogger"]>;
+  replyLogger: ReturnType<(typeof import("NexisClaw/plugin-sdk/runtime-env"))["getChildLogger"]>;
   baseMentionConfig: MentionConfig;
   account: { authDir?: string; accountId?: string; selfChatMode?: boolean };
 }) {
   const processForRoute = async (
-    cfg: OpenClawConfig,
+    cfg: NexisClawConfig,
     msg: WebInboundMsg,
     route: ReturnType<typeof resolveAgentRoute>,
     groupHistoryKey: string,

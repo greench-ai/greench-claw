@@ -1,21 +1,21 @@
-import { resolveAgentAvatar } from "openclaw/plugin-sdk/agent-runtime";
-import { sendDurableMessageBatch } from "openclaw/plugin-sdk/channel-message";
+import { resolveAgentAvatar } from "NexisClaw/plugin-sdk/agent-runtime";
+import { sendDurableMessageBatch } from "NexisClaw/plugin-sdk/channel-message";
 import type {
   MarkdownTableMode,
-  OpenClawConfig,
+  NexisClawConfig,
   ReplyToMode,
-} from "openclaw/plugin-sdk/config-contracts";
-import type { OutboundMediaAccess } from "openclaw/plugin-sdk/media-runtime";
+} from "NexisClaw/plugin-sdk/config-contracts";
+import type { OutboundMediaAccess } from "NexisClaw/plugin-sdk/media-runtime";
 import {
   buildOutboundSessionContext,
   type OutboundDeliveryFormattingOptions,
   type OutboundIdentity,
   type OutboundSendDeps,
-} from "openclaw/plugin-sdk/outbound-runtime";
-import type { ChunkMode } from "openclaw/plugin-sdk/reply-chunking";
-import type { ReplyPayload } from "openclaw/plugin-sdk/reply-dispatch-runtime";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/outbound-runtime";
+import type { ChunkMode } from "NexisClaw/plugin-sdk/reply-chunking";
+import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
+import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import type { RequestClient } from "../internal/discord.js";
 import { sendMessageDiscord, sendVoiceMessageDiscord } from "../send.js";
 import { sanitizeDiscordFrontChannelReplyPayloads } from "./reply-safety.js";
@@ -62,7 +62,7 @@ function resolveBoundThreadBinding(params: {
 }
 
 function resolveBindingIdentity(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   binding: DiscordThreadBindingLookupRecord | undefined,
 ): OutboundIdentity | undefined {
   if (!binding) {
@@ -84,7 +84,7 @@ function resolveBindingIdentity(
 }
 
 function createDiscordDeliveryDeps(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   token: string;
   rest?: RequestClient;
 }): OutboundSendDeps {
@@ -121,7 +121,7 @@ type DiscordDeliveryOptions = {
 };
 
 function resolveDiscordDeliveryOptions(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   target: string;
   sessionKey?: string;
   threadBindings?: DiscordThreadBindingLookup;
@@ -156,7 +156,7 @@ function resolveDiscordDeliveryOptions(params: {
 }
 
 export async function deliverDiscordReply(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   replies: ReplyPayload[];
   target: string;
   token: string;

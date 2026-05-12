@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { applyPrimaryModel } from "./provider-model-primary.js";
 
 describe("applyPrimaryModel", () => {
@@ -19,7 +19,7 @@ describe("applyPrimaryModel", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const next = applyPrimaryModel(cfg, "google/gemini-3-pro-preview");
 

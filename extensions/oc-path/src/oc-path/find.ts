@@ -4,7 +4,7 @@
  * preserving the input pattern's slot shape, so each result is
  * pipeable into `resolveOcPath` / `setOcPath`.
  *
- * @module @openclaw/oc-path/find
+ * @module @NexisClaw/oc-path/find
  */
 
 import type { MdAst } from "./ast.js";

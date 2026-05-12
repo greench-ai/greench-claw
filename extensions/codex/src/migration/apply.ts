@@ -7,19 +7,19 @@ import {
   MIGRATION_REASON_TARGET_EXISTS,
   summarizeMigrationItems,
   writeMigrationConfigPath,
-} from "openclaw/plugin-sdk/migration";
+} from "NexisClaw/plugin-sdk/migration";
 import {
   archiveMigrationItem,
   copyMigrationFileItem,
   withCachedMigrationConfigRuntime,
   writeMigrationReport,
-} from "openclaw/plugin-sdk/migration-runtime";
+} from "NexisClaw/plugin-sdk/migration-runtime";
 import type {
   MigrationApplyResult,
   MigrationItem,
   MigrationPlan,
   MigrationProviderContext,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "NexisClaw/plugin-sdk/plugin-entry";
 import { defaultCodexAppInventoryCache } from "../app-server/app-inventory-cache.js";
 import {
   CODEX_PLUGINS_MARKETPLACE_NAME,

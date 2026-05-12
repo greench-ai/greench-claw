@@ -8,7 +8,7 @@ read_when:
 title: "QA overview"
 ---
 
-The private QA stack is meant to exercise OpenClaw in a more realistic,
+The private QA stack is meant to exercise NexisClaw in a more realistic,
 channel-shaped way than a single unit test can.
 
 Current pieces:
@@ -26,13 +26,13 @@ Current pieces:
 
 ## Command surface
 
-Every QA flow runs under `pnpm openclaw qa <subcommand>`. Many have `pnpm qa:*`
+Every QA flow runs under `pnpm NexisClaw qa <subcommand>`. Many have `pnpm qa:*`
 script aliases; both forms are supported.
 
 | Command                                             | Purpose                                                                                                                                                                                                                                                                 |
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `qa run`                                            | Bundled QA self-check; writes a Markdown report.                                                                                                                                                                                                                        |
-| `qa suite`                                          | Run repo-backed scenarios against the QA gateway lane. Aliases: `pnpm openclaw qa suite --runner multipass` for a disposable Linux VM.                                                                                                                                  |
+| `qa suite`                                          | Run repo-backed scenarios against the QA gateway lane. Aliases: `pnpm NexisClaw qa suite --runner multipass` for a disposable Linux VM.                                                                                                                                  |
 | `qa coverage`                                       | Print the markdown scenario-coverage inventory (`--json` for machine output).                                                                                                                                                                                           |
 | `qa parity-report`                                  | Compare two `qa-suite-summary.json` files and write the agentic parity report.                                                                                                                                                                                          |
 | `qa character-eval`                                 | Run the character QA scenario across multiple live models with a judged report. See [Reporting](#reporting).                                                                                                                                                            |
@@ -72,7 +72,7 @@ For faster QA Lab UI iteration without rebuilding the Docker image each time,
 start the stack with a bind-mounted QA Lab bundle:
 
 ```bash
-pnpm openclaw qa docker-build-image
+pnpm NexisClaw qa docker-build-image
 pnpm qa:lab:build
 pnpm qa:lab:up:fast
 pnpm qa:lab:watch
@@ -92,10 +92,10 @@ pnpm qa:otel:smoke
 That script starts a local OTLP/HTTP trace receiver, runs the
 `otel-trace-smoke` QA scenario with the `diagnostics-otel` plugin enabled, then
 decodes the exported protobuf spans and asserts the release-critical shape:
-`openclaw.run`, `openclaw.harness.run`, `openclaw.model.call`,
-`openclaw.context.assembled`, and `openclaw.message.delivery` must be present;
+`NexisClaw.run`, `NexisClaw.harness.run`, `NexisClaw.model.call`,
+`NexisClaw.context.assembled`, and `NexisClaw.message.delivery` must be present;
 model calls must not export `StreamAbandoned` on successful turns; raw diagnostic IDs and
-`openclaw.content.*` attributes must stay out of the trace. It writes
+`NexisClaw.content.*` attributes must stay out of the trace. It writes
 `otel-smoke-summary.json` next to the QA suite artifacts.
 
 Observability QA stays source-checkout only. The npm tarball intentionally omits
@@ -106,12 +106,12 @@ instrumentation.
 For a transport-real Matrix smoke lane, run:
 
 ```bash
-pnpm openclaw qa matrix --profile fast --fail-fast
+pnpm NexisClaw qa matrix --profile fast --fail-fast
 ```
 
 The full CLI reference, profile/scenario catalog, env vars, and artifact layout for this lane live in [Matrix QA](/concepts/qa-matrix). At a glance: it provisions a disposable Tuwunel homeserver in Docker, registers temporary driver/SUT/observer users, runs the real Matrix plugin inside a child QA gateway scoped to that transport (no `qa-channel`), then writes a Markdown report, JSON summary, observed-events artifact, and combined output log under `.artifacts/qa-e2e/matrix-<timestamp>/`.
 
-The scenarios cover transport behavior that unit tests cannot prove end to end: mention gating, allow-bot policies, allowlists, top-level and threaded replies, DM routing, reaction handling, inbound edit suppression, restart replay dedupe, homeserver interruption recovery, approval metadata delivery, media handling, and Matrix E2EE bootstrap/recovery/verification flows. The E2EE CLI profile also drives `openclaw matrix encryption setup` and verification commands through the same disposable homeserver before checking gateway replies.
+The scenarios cover transport behavior that unit tests cannot prove end to end: mention gating, allow-bot policies, allowlists, top-level and threaded replies, DM routing, reaction handling, inbound edit suppression, restart replay dedupe, homeserver interruption recovery, approval metadata delivery, media handling, and Matrix E2EE bootstrap/recovery/verification flows. The E2EE CLI profile also drives `NexisClaw matrix encryption setup` and verification commands through the same disposable homeserver before checking gateway replies.
 
 Discord also has Mantis-only opt-in scenarios for bug reproduction. Use
 `--scenario discord-status-reactions-tool-only` for the explicit status reaction
@@ -125,14 +125,14 @@ witness video when `MANTIS_DISCORD_VIEWER_CHROME_PROFILE_DIR` or
 environment. That viewer profile is only for visual capture; the pass/fail
 decision still comes from the Discord REST oracle.
 
-CI uses the same command surface in `.github/workflows/qa-live-transports-convex.yml`. Scheduled and default manual runs execute the fast Matrix profile with live frontier credentials, `--fast`, and `OPENCLAW_QA_MATRIX_NO_REPLY_WINDOW_MS=3000`. Manual `matrix_profile=all` fans out into the five profile shards so the exhaustive catalog can run in parallel while keeping one artifact directory per shard.
+CI uses the same command surface in `.github/workflows/qa-live-transports-convex.yml`. Scheduled and default manual runs execute the fast Matrix profile with live frontier credentials, `--fast`, and `NEXISCLAW_QA_MATRIX_NO_REPLY_WINDOW_MS=3000`. Manual `matrix_profile=all` fans out into the five profile shards so the exhaustive catalog can run in parallel while keeping one artifact directory per shard.
 
 For transport-real Telegram, Discord, and Slack smoke lanes:
 
 ```bash
-pnpm openclaw qa telegram
-pnpm openclaw qa discord
-pnpm openclaw qa slack
+pnpm NexisClaw qa telegram
+pnpm NexisClaw qa discord
+pnpm NexisClaw qa slack
 ```
 
 They target a pre-existing real channel with two bots (driver + SUT). Required env vars, scenario lists, output artifacts, and the Convex credential pool are documented in [Telegram, Discord, and Slack QA reference](#telegram-discord-and-slack-qa-reference) below.
@@ -140,7 +140,7 @@ They target a pre-existing real channel with two bots (driver + SUT). Required e
 For a full Slack desktop VM run with VNC rescue, run:
 
 ```bash
-pnpm openclaw qa mantis slack-desktop-smoke \
+pnpm NexisClaw qa mantis slack-desktop-smoke \
   --gateway-setup \
   --scenario slack-canary \
   --keep-lease
@@ -161,7 +161,7 @@ reused leases also keep Crabbox's pnpm store cache warm. The default
 inside the VM. Use `--hydrate-mode prehydrated` only when the reused remote
 workspace already has `node_modules` and a built `dist/`; that mode skips the
 expensive install/build step and fails closed when the workspace is not ready.
-With `--gateway-setup`, Mantis leaves a persistent OpenClaw Slack gateway
+With `--gateway-setup`, Mantis leaves a persistent NexisClaw Slack gateway
 running inside the VM on port `38973`; without it, the command runs the normal
 bot-to-bot Slack QA lane and exits after artifact capture.
 
@@ -172,7 +172,7 @@ handling steps live in [Mantis Slack Desktop Runbook](/concepts/mantis-slack-des
 For an agent/CV style desktop task, run:
 
 ```bash
-pnpm openclaw qa mantis visual-task \
+pnpm NexisClaw qa mantis visual-task \
   --browser-url https://example.net \
   --expect-text "Example Domain" \
   --vision-model openai/gpt-5.4
@@ -180,7 +180,7 @@ pnpm openclaw qa mantis visual-task \
 
 `visual-task` leases or reuses a Crabbox desktop/browser machine, starts
 `crabbox record --while`, drives the visible browser through a nested
-`visual-driver`, captures `visual-task.png`, runs `openclaw infer image describe`
+`visual-driver`, captures `visual-task.png`, runs `NexisClaw infer image describe`
 against the screenshot when `--vision-mode image-describe` is selected, and
 writes `visual-task.mp4`, `mantis-visual-task-summary.json`,
 `mantis-visual-task-driver-result.json`, and `mantis-visual-task-report.md`.
@@ -197,7 +197,7 @@ passed and `--keep-lease` was not set.
 Before using pooled live credentials, run:
 
 ```bash
-pnpm openclaw qa credentials doctor
+pnpm NexisClaw qa credentials doctor
 ```
 
 The doctor checks Convex broker env, validates endpoint settings, and verifies admin/list reachability when the maintainer secret is present. It reports only set/missing status for secrets.
@@ -220,10 +220,10 @@ checklist.
 For a disposable Linux VM lane without bringing Docker into the QA path, run:
 
 ```bash
-pnpm openclaw qa suite --runner multipass --scenario channel-chat-baseline
+pnpm NexisClaw qa suite --runner multipass --scenario channel-chat-baseline
 ```
 
-This boots a fresh Multipass guest, installs dependencies, builds OpenClaw
+This boots a fresh Multipass guest, installs dependencies, builds NexisClaw
 inside the guest, runs `qa suite`, then copies the normal QA report and
 summary back into `.artifacts/qa-e2e/...` on the host.
 It reuses the same scenario-selection behavior as `qa suite` on the host.
@@ -263,20 +263,20 @@ Each lane exits non-zero on any failed scenario. `--allow-failures` writes artif
 ### Telegram QA
 
 ```bash
-pnpm openclaw qa telegram
+pnpm NexisClaw qa telegram
 ```
 
 Targets one real private Telegram group with two distinct bots (driver + SUT). The SUT bot must have a Telegram username; bot-to-bot observation works best when both bots have **Bot-to-Bot Communication Mode** enabled in `@BotFather`.
 
 Required env when `--credential-source env`:
 
-- `OPENCLAW_QA_TELEGRAM_GROUP_ID` - numeric chat id (string).
-- `OPENCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN`
-- `OPENCLAW_QA_TELEGRAM_SUT_BOT_TOKEN`
+- `NEXISCLAW_QA_TELEGRAM_GROUP_ID` - numeric chat id (string).
+- `NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN`
+- `NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN`
 
 Optional:
 
-- `OPENCLAW_QA_TELEGRAM_CAPTURE_CONTENT=1` keeps message bodies in observed-message artifacts (default redacts).
+- `NEXISCLAW_QA_TELEGRAM_CAPTURE_CONTENT=1` keeps message bodies in observed-message artifacts (default redacts).
 
 Scenarios (`extensions/qa-lab/src/live-transports/telegram/telegram-live.runtime.ts`):
 
@@ -297,34 +297,34 @@ Scenarios (`extensions/qa-lab/src/live-transports/telegram/telegram-live.runtime
 - `telegram-long-final-reuses-preview`
 - `telegram-long-final-three-chunks`
 
-The implicit default set always covers canary, mention gating, native command replies, command addressing, and bot-to-bot group replies. `mock-openai` defaults also include deterministic reply-chain and final-message streaming checks. `telegram-current-session-status-tool` remains opt-in because it is only stable when threaded directly after canary, not after arbitrary native command replies. Use `pnpm openclaw qa telegram --list-scenarios --provider-mode mock-openai` to print the current default/optional split with regression refs.
+The implicit default set always covers canary, mention gating, native command replies, command addressing, and bot-to-bot group replies. `mock-openai` defaults also include deterministic reply-chain and final-message streaming checks. `telegram-current-session-status-tool` remains opt-in because it is only stable when threaded directly after canary, not after arbitrary native command replies. Use `pnpm NexisClaw qa telegram --list-scenarios --provider-mode mock-openai` to print the current default/optional split with regression refs.
 
 Output artifacts:
 
 - `telegram-qa-report.md`
 - `telegram-qa-summary.json` - includes per-reply RTT (driver send → observed SUT reply) starting with the canary.
-- `telegram-qa-observed-messages.json` - bodies redacted unless `OPENCLAW_QA_TELEGRAM_CAPTURE_CONTENT=1`.
+- `telegram-qa-observed-messages.json` - bodies redacted unless `NEXISCLAW_QA_TELEGRAM_CAPTURE_CONTENT=1`.
 
 ### Discord QA
 
 ```bash
-pnpm openclaw qa discord
+pnpm NexisClaw qa discord
 ```
 
-Targets one real private Discord guild channel with two bots: a driver bot controlled by the harness and a SUT bot started by the child OpenClaw gateway through the bundled Discord plugin. Verifies channel mention handling, that the SUT bot has registered the native `/help` command with Discord, and opt-in Mantis evidence scenarios.
+Targets one real private Discord guild channel with two bots: a driver bot controlled by the harness and a SUT bot started by the child NexisClaw gateway through the bundled Discord plugin. Verifies channel mention handling, that the SUT bot has registered the native `/help` command with Discord, and opt-in Mantis evidence scenarios.
 
 Required env when `--credential-source env`:
 
-- `OPENCLAW_QA_DISCORD_GUILD_ID`
-- `OPENCLAW_QA_DISCORD_CHANNEL_ID`
-- `OPENCLAW_QA_DISCORD_DRIVER_BOT_TOKEN`
-- `OPENCLAW_QA_DISCORD_SUT_BOT_TOKEN`
-- `OPENCLAW_QA_DISCORD_SUT_APPLICATION_ID` - must match the SUT bot user id returned by Discord (the lane fails fast otherwise).
+- `NEXISCLAW_QA_DISCORD_GUILD_ID`
+- `NEXISCLAW_QA_DISCORD_CHANNEL_ID`
+- `NEXISCLAW_QA_DISCORD_DRIVER_BOT_TOKEN`
+- `NEXISCLAW_QA_DISCORD_SUT_BOT_TOKEN`
+- `NEXISCLAW_QA_DISCORD_SUT_APPLICATION_ID` - must match the SUT bot user id returned by Discord (the lane fails fast otherwise).
 
 Optional:
 
-- `OPENCLAW_QA_DISCORD_CAPTURE_CONTENT=1` keeps message bodies in observed-message artifacts.
-- `OPENCLAW_QA_DISCORD_VOICE_CHANNEL_ID` selects the voice/stage channel for `discord-voice-autojoin`; without it, the scenario picks the first visible voice/stage channel for the SUT bot.
+- `NEXISCLAW_QA_DISCORD_CAPTURE_CONTENT=1` keeps message bodies in observed-message artifacts.
+- `NEXISCLAW_QA_DISCORD_VOICE_CHANNEL_ID` selects the voice/stage channel for `discord-voice-autojoin`; without it, the scenario picks the first visible voice/stage channel for the SUT bot.
 
 Scenarios (`extensions/qa-lab/src/live-transports/discord/discord-live.runtime.ts:36`):
 
@@ -337,7 +337,7 @@ Scenarios (`extensions/qa-lab/src/live-transports/discord/discord-live.runtime.t
 Run the Discord voice auto-join scenario explicitly:
 
 ```bash
-pnpm openclaw qa discord \
+pnpm NexisClaw qa discord \
   --scenario discord-voice-autojoin \
   --provider-mode mock-openai
 ```
@@ -345,7 +345,7 @@ pnpm openclaw qa discord \
 Run the Mantis status-reaction scenario explicitly:
 
 ```bash
-pnpm openclaw qa discord \
+pnpm NexisClaw qa discord \
   --scenario discord-status-reactions-tool-only \
   --provider-mode live-frontier \
   --model openai/gpt-5.4 \
@@ -357,27 +357,27 @@ Output artifacts:
 
 - `discord-qa-report.md`
 - `discord-qa-summary.json`
-- `discord-qa-observed-messages.json` - bodies redacted unless `OPENCLAW_QA_DISCORD_CAPTURE_CONTENT=1`.
+- `discord-qa-observed-messages.json` - bodies redacted unless `NEXISCLAW_QA_DISCORD_CAPTURE_CONTENT=1`.
 - `discord-qa-reaction-timelines.json` and `discord-status-reactions-tool-only-timeline.png` when the status-reaction scenario runs.
 
 ### Slack QA
 
 ```bash
-pnpm openclaw qa slack
+pnpm NexisClaw qa slack
 ```
 
-Targets one real private Slack channel with two distinct bots: a driver bot controlled by the harness and a SUT bot started by the child OpenClaw gateway through the bundled Slack plugin.
+Targets one real private Slack channel with two distinct bots: a driver bot controlled by the harness and a SUT bot started by the child NexisClaw gateway through the bundled Slack plugin.
 
 Required env when `--credential-source env`:
 
-- `OPENCLAW_QA_SLACK_CHANNEL_ID`
-- `OPENCLAW_QA_SLACK_DRIVER_BOT_TOKEN`
-- `OPENCLAW_QA_SLACK_SUT_BOT_TOKEN`
-- `OPENCLAW_QA_SLACK_SUT_APP_TOKEN`
+- `NEXISCLAW_QA_SLACK_CHANNEL_ID`
+- `NEXISCLAW_QA_SLACK_DRIVER_BOT_TOKEN`
+- `NEXISCLAW_QA_SLACK_SUT_BOT_TOKEN`
+- `NEXISCLAW_QA_SLACK_SUT_APP_TOKEN`
 
 Optional:
 
-- `OPENCLAW_QA_SLACK_CAPTURE_CONTENT=1` keeps message bodies in observed-message artifacts.
+- `NEXISCLAW_QA_SLACK_CAPTURE_CONTENT=1` keeps message bodies in observed-message artifacts.
 
 Scenarios (`extensions/qa-lab/src/live-transports/slack/slack-live.runtime.ts:39`):
 
@@ -393,7 +393,7 @@ Output artifacts:
 
 - `slack-qa-report.md`
 - `slack-qa-summary.json`
-- `slack-qa-observed-messages.json` - bodies redacted unless `OPENCLAW_QA_SLACK_CAPTURE_CONTENT=1`.
+- `slack-qa-observed-messages.json` - bodies redacted unless `NEXISCLAW_QA_SLACK_CAPTURE_CONTENT=1`.
 
 #### Setting up the Slack workspace
 
@@ -415,12 +415,12 @@ Go to [api.slack.com/apps](https://api.slack.com/apps) → _Create New App_ → 
 ```json
 {
   "display_information": {
-    "name": "OpenClaw QA Driver",
-    "description": "Test driver bot for OpenClaw QA Slack live lane"
+    "name": "NexisClaw QA Driver",
+    "description": "Test driver bot for NexisClaw QA Slack live lane"
   },
   "features": {
     "bot_user": {
-      "display_name": "OpenClaw QA Driver",
+      "display_name": "NexisClaw QA Driver",
       "always_online": true
     }
   },
@@ -444,12 +444,12 @@ Repeat _Create New App → From a manifest_ in the same workspace. This QA app i
 ```json
 {
   "display_information": {
-    "name": "OpenClaw QA SUT",
-    "description": "OpenClaw QA SUT connector for OpenClaw"
+    "name": "NexisClaw QA SUT",
+    "description": "NexisClaw QA SUT connector for NexisClaw"
   },
   "features": {
     "bot_user": {
-      "display_name": "OpenClaw QA SUT",
+      "display_name": "NexisClaw QA SUT",
       "always_online": true
     },
     "app_home": {
@@ -515,18 +515,18 @@ Verify the two bots have distinct user ids by calling `auth.test` on each token.
 
 **3. Create the channel**
 
-In the QA workspace, create a channel (e.g. `#openclaw-qa`) and invite both bots from inside the channel:
+In the QA workspace, create a channel (e.g. `#NexisClaw-qa`) and invite both bots from inside the channel:
 
 ```
-/invite @OpenClaw QA Driver
-/invite @OpenClaw QA SUT
+/invite @NexisClaw QA Driver
+/invite @NexisClaw QA SUT
 ```
 
 Copy the `Cxxxxxxxxxx` id from _channel info → About → Channel ID_ - that becomes `channelId`. A public channel works; if you use a private channel both apps already have `groups:history` so the harness's history reads will still succeed.
 
 **4. Register the credentials**
 
-Two options. Use env vars for single-machine debugging (set the four `OPENCLAW_QA_SLACK_*` variables and pass `--credential-source env`), or seed the shared Convex pool so CI and other maintainers can lease them.
+Two options. Use env vars for single-machine debugging (set the four `NEXISCLAW_QA_SLACK_*` variables and pass `--credential-source env`), or seed the shared Convex pool so CI and other maintainers can lease them.
 
 For the Convex pool, write the four fields to a JSON file:
 
@@ -539,15 +539,15 @@ For the Convex pool, write the four fields to a JSON file:
 }
 ```
 
-With `OPENCLAW_QA_CONVEX_SITE_URL` and `OPENCLAW_QA_CONVEX_SECRET_MAINTAINER` exported in your shell, register and verify:
+With `NEXISCLAW_QA_CONVEX_SITE_URL` and `NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER` exported in your shell, register and verify:
 
 ```bash
-pnpm openclaw qa credentials add \
+pnpm NexisClaw qa credentials add \
   --kind slack \
   --payload-file slack-creds.json \
   --note "QA Slack pool seed"
 
-pnpm openclaw qa credentials list --kind slack --status all --json
+pnpm NexisClaw qa credentials list --kind slack --status all --json
 ```
 
 Expect `count: 1`, `status: "active"`, no `lease` field.
@@ -557,7 +557,7 @@ Expect `count: 1`, `status: "active"`, no `lease` field.
 Run the lane locally to confirm both bots can talk to each other through the broker:
 
 ```bash
-pnpm openclaw qa slack \
+pnpm NexisClaw qa slack \
   --credential-source convex \
   --credential-role maintainer \
   --output-dir .artifacts/qa-e2e/slack-local
@@ -567,7 +567,7 @@ A green run completes in well under 30 seconds and `slack-qa-report.md` shows bo
 
 ### Convex credential pool
 
-Telegram, Discord, Slack, and WhatsApp lanes can lease credentials from a shared Convex pool instead of reading the env vars above. Pass `--credential-source convex` (or set `OPENCLAW_QA_CREDENTIAL_SOURCE=convex`); QA Lab acquires an exclusive lease, heartbeats it for the duration of the run, and releases it on shutdown. Pool kinds are `"telegram"`, `"discord"`, `"slack"`, and `"whatsapp"`.
+Telegram, Discord, Slack, and WhatsApp lanes can lease credentials from a shared Convex pool instead of reading the env vars above. Pass `--credential-source convex` (or set `NEXISCLAW_QA_CREDENTIAL_SOURCE=convex`); QA Lab acquires an exclusive lease, heartbeats it for the duration of the run, and releases it on shutdown. Pool kinds are `"telegram"`, `"discord"`, `"slack"`, and `"whatsapp"`.
 
 Payload shapes the broker validates on `admin/add`:
 
@@ -579,7 +579,7 @@ Payload shapes the broker validates on `admin/add`:
 For visual real-user Telegram proof, prefer a held Crabbox session:
 
 ```bash
-pnpm qa:telegram-user:crabbox -- start --tdlib-url http://artifacts.openclaw.ai/tdlib-v1.8.0-linux-x64.tgz --output-dir .artifacts/qa-e2e/telegram-user-crabbox/pr-review
+pnpm qa:telegram-user:crabbox -- start --tdlib-url http://artifacts.NexisClaw.ai/tdlib-v1.8.0-linux-x64.tgz --output-dir .artifacts/qa-e2e/telegram-user-crabbox/pr-review
 pnpm qa:telegram-user:crabbox -- send --session .artifacts/qa-e2e/telegram-user-crabbox/pr-review/session.json --text /status
 pnpm qa:telegram-user:crabbox -- finish --session .artifacts/qa-e2e/telegram-user-crabbox/pr-review/session.json
 ```
@@ -650,7 +650,7 @@ The baseline list should stay broad enough to cover:
 
 `qa suite` has two local provider mock lanes:
 
-- `mock-openai` is the scenario-aware OpenClaw mock. It remains the default
+- `mock-openai` is the scenario-aware NexisClaw mock. It remains the default
   deterministic mock lane for repo-backed QA and parity gates.
 - `aimock` starts an AIMock-backed provider server for experimental protocol,
   fixture, record/replay, and chaos coverage. It is additive and does not
@@ -683,7 +683,7 @@ Do not add a new top-level QA command root when the shared `qa-lab` host can own
 
 `qa-lab` owns the shared host mechanics:
 
-- the `openclaw qa` command root
+- the `NexisClaw qa` command root
 - suite startup and teardown
 - worker concurrency
 - artifact writing
@@ -693,7 +693,7 @@ Do not add a new top-level QA command root when the shared `qa-lab` host can own
 
 Runner plugins own the transport contract:
 
-- how `openclaw qa <runner>` is mounted beneath the shared `qa` root
+- how `NexisClaw qa <runner>` is mounted beneath the shared `qa` root
 - how the gateway is configured for that transport
 - how readiness is checked
 - how inbound events are injected
@@ -707,7 +707,7 @@ The minimum adoption bar for a new channel:
 1. Keep `qa-lab` as the owner of the shared `qa` root.
 2. Implement the transport runner on the shared `qa-lab` host seam.
 3. Keep transport-specific mechanics inside the runner plugin or channel harness.
-4. Mount the runner as `openclaw qa <runner>` instead of registering a competing root command. Runner plugins should declare `qaRunners` in `openclaw.plugin.json` and export a matching `qaRunnerCliRegistrations` array from `runtime-api.ts`. Keep `runtime-api.ts` light; lazy CLI and runner execution should stay behind separate entrypoints.
+4. Mount the runner as `NexisClaw qa <runner>` instead of registering a competing root command. Runner plugins should declare `qaRunners` in `NexisClaw.plugin.json` and export a matching `qaRunnerCliRegistrations` array from `runtime-api.ts`. Keep `runtime-api.ts` light; lazy CLI and runner execution should stay behind separate entrypoints.
 5. Author or adapt markdown scenarios under the themed `qa/scenarios/` directories.
 6. Use the generic scenario helpers for new scenarios.
 7. Keep existing compatibility aliases working unless the repo is doing an intentional migration.
@@ -748,13 +748,13 @@ The report should answer:
 - What stayed blocked
 - What follow-up scenarios are worth adding
 
-For the inventory of available scenarios - useful when sizing follow-up work or wiring a new transport - run `pnpm openclaw qa coverage` (add `--json` for machine-readable output).
+For the inventory of available scenarios - useful when sizing follow-up work or wiring a new transport - run `pnpm NexisClaw qa coverage` (add `--json` for machine-readable output).
 
 For character and style checks, run the same scenario across multiple live model
 refs and write a judged Markdown report:
 
 ```bash
-pnpm openclaw qa character-eval \
+pnpm NexisClaw qa character-eval \
   --model openai/gpt-5.5,thinking=medium,fast \
   --model openai/gpt-5.2,thinking=xhigh \
   --model openai/gpt-5,thinking=xhigh \

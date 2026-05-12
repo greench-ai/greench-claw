@@ -6,5 +6,5 @@ export {
   resolvePathWithinRoot,
   resolveStrictExistingPathsWithinRoot,
   resolveWritablePathWithinRoot,
-} from "@openclaw/fs-safe/advanced";
-export { pathScope } from "@openclaw/fs-safe/advanced";
+} from "@NexisClaw/fs-safe/advanced";
+export { pathScope } from "@NexisClaw/fs-safe/advanced";

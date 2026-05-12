@@ -1,14 +1,14 @@
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
 
 export type DoctorConfigMutationState = {
-  cfg: OpenClawConfig;
-  candidate: OpenClawConfig;
+  cfg: NexisClawConfig;
+  candidate: NexisClawConfig;
   pendingChanges: boolean;
   fixHints: string[];
 };
 
 export type DoctorConfigMutationResult = {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   changes: string[];
 };
 

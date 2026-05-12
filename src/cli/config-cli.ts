@@ -11,7 +11,7 @@ import { CONFIG_PATH } from "../config/paths.js";
 import { isBlockedObjectKey } from "../config/prototype-keys.js";
 import { redactConfigObject } from "../config/redact-snapshot.js";
 import { readBestEffortRuntimeConfigSchema } from "../config/runtime-schema.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import {
   coerceSecretRef,
   isValidEnvSecretRefId,
@@ -115,7 +115,7 @@ function normalizeAgentDefaultModelValueForConfigMutation(value: unknown): unkno
   return next;
 }
 
-function normalizeConfigMutationModelRefs(cfg: OpenClawConfig): OpenClawConfig {
+function normalizeConfigMutationModelRefs(cfg: NexisClawConfig): NexisClawConfig {
   const defaults = cfg.agents?.defaults;
   if (!defaults) {
     return cfg;
@@ -156,21 +156,21 @@ const GATEWAY_AUTH_MODE_PATH: PathSegment[] = ["gateway", "auth", "mode"];
 const SECRET_PROVIDER_PATH_PREFIX: PathSegment[] = ["secrets", "providers"];
 const PLUGIN_INSTALL_RECORD_PATH_PREFIX: PathSegment[] = ["plugins", "installs"];
 const CONFIG_SET_EXAMPLE_VALUE = formatCliCommand(
-  "openclaw config set gateway.port 19001 --strict-json",
+  "NexisClaw config set gateway.port 19001 --strict-json",
 );
 const CONFIG_SET_EXAMPLE_REF = formatCliCommand(
-  "openclaw config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN",
+  "NexisClaw config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN",
 );
 const CONFIG_SET_EXAMPLE_PROVIDER = formatCliCommand(
-  "openclaw config set secrets.providers.vault --provider-source file --provider-path /etc/openclaw/secrets.json --provider-mode json",
+  "NexisClaw config set secrets.providers.vault --provider-source file --provider-path /etc/NexisClaw/secrets.json --provider-mode json",
 );
 const CONFIG_SET_EXAMPLE_BATCH = formatCliCommand(
-  "openclaw config set --batch-file ./config-set.batch.json --dry-run",
+  "NexisClaw config set --batch-file ./config-set.batch.json --dry-run",
 );
 const CONFIG_PATCH_EXAMPLE_FILE = formatCliCommand(
-  "openclaw config patch --file ./openclaw.patch.json5 --dry-run",
+  "NexisClaw config patch --file ./NexisClaw.patch.json5 --dry-run",
 );
-const CONFIG_PATCH_EXAMPLE_STDIN = formatCliCommand("openclaw config patch --stdin");
+const CONFIG_PATCH_EXAMPLE_STDIN = formatCliCommand("NexisClaw config patch --stdin");
 const CONFIG_SET_DESCRIPTION = [
   "Set config values by path (value mode, ref/provider builder mode, or batch JSON mode).",
   "Examples:",
@@ -297,7 +297,7 @@ function isPlainRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function formatDoctorHint(message: string): string {
-  return `Run \`${formatCliCommand("openclaw doctor --fix")}\` ${message}`;
+  return `Run \`${formatCliCommand("NexisClaw doctor --fix")}\` ${message}`;
 }
 
 function formatUnsupportedSecretRefPolicyFailureMessage(issues: string[]): string {
@@ -587,7 +587,7 @@ async function loadValidConfig(runtime: RuntimeEnv = defaultRuntime) {
   if (snapshot.valid) {
     return snapshot;
   }
-  runtime.error(`OpenClaw config is invalid: ${shortenHomePath(snapshot.path)}`);
+  runtime.error(`NexisClaw config is invalid: ${shortenHomePath(snapshot.path)}`);
   for (const line of formatConfigIssueLines(snapshot.issues, "-", { normalizeRoot: true })) {
     runtime.error(line);
   }
@@ -1231,7 +1231,7 @@ function buildSingleSetOperations(params: {
 }
 
 function collectDryRunRefs(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   operations: ConfigSetOperation[];
 }): SecretRef[] {
   const refsByKey = new Map<string, SecretRef>();
@@ -1276,7 +1276,7 @@ function collectDryRunRefs(params: {
 
 async function collectDryRunResolvabilityErrors(params: {
   refs: SecretRef[];
-  config: OpenClawConfig;
+  config: NexisClawConfig;
 }): Promise<ConfigSetDryRunError[]> {
   const failures: ConfigSetDryRunError[] = [];
   for (const ref of params.refs) {
@@ -1298,7 +1298,7 @@ async function collectDryRunResolvabilityErrors(params: {
 
 function collectDryRunStaticErrorsForSkippedExecRefs(params: {
   refs: SecretRef[];
-  config: OpenClawConfig;
+  config: NexisClawConfig;
 }): ConfigSetDryRunError[] {
   const failures: ConfigSetDryRunError[] = [];
   for (const ref of params.refs) {
@@ -1365,14 +1365,14 @@ function formatPluginInstallConfigSetError(): string {
     "plugins.installs is managed by the plugin index and cannot be edited with config set.",
     "",
     "Use plugin commands instead:",
-    `  ${formatCliCommand("openclaw plugins install <spec>")}`,
-    `  ${formatCliCommand("openclaw plugins update <plugin-id>")}`,
-    `  ${formatCliCommand("openclaw plugins uninstall <plugin-id>")}`,
+    `  ${formatCliCommand("NexisClaw plugins install <spec>")}`,
+    `  ${formatCliCommand("NexisClaw plugins update <plugin-id>")}`,
+    `  ${formatCliCommand("NexisClaw plugins uninstall <plugin-id>")}`,
   ].join("\n");
 }
 
 function collectDryRunSchemaErrors(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   operations: ReadonlyArray<ConfigSetOperation>;
 }): ConfigSetDryRunError[] {
   const validated = validateConfigObjectRaw(params.config, {
@@ -1482,7 +1482,7 @@ async function runConfigOperations(params: {
     root: next,
     operations,
   });
-  const nextConfig = normalizeConfigMutationModelRefs(next as OpenClawConfig);
+  const nextConfig = normalizeConfigMutationModelRefs(next as NexisClawConfig);
   const normalizedExplicitSetPaths = explicitSetPaths.map(normalizeConfigMutationExplicitSetPath);
   const policyIssues = collectUnsupportedSecretRefPolicyIssues(nextConfig);
   const policyIssueLines = formatConfigIssueLines(policyIssues, "", { normalizeRoot: true }).map(
@@ -1738,7 +1738,7 @@ export async function runConfigGet(opts: { path: string; json?: boolean; runtime
     if (!res.found) {
       runtime.error(
         danger(
-          `Config path not found: ${opts.path}. Run ${formatCliCommand("openclaw config validate")} to inspect config shape.`,
+          `Config path not found: ${opts.path}. Run ${formatCliCommand("NexisClaw config validate")} to inspect config shape.`,
         ),
       );
       runtime.exit(1);
@@ -1776,7 +1776,7 @@ export async function runConfigUnset(opts: { path: string; runtime?: RuntimeEnv 
     if (!unsetResult.removed) {
       runtime.error(
         danger(
-          `Config path not found: ${opts.path}. Nothing was changed. Run ${formatCliCommand("openclaw config get <path>")} first if you are unsure of the path.`,
+          `Config path not found: ${opts.path}. Nothing was changed. Run ${formatCliCommand("NexisClaw config get <path>")} first if you are unsure of the path.`,
         ),
       );
       runtime.exit(1);
@@ -1833,7 +1833,7 @@ export async function runConfigSchema(opts: { runtime?: RuntimeEnv } = {}) {
 
 export async function runConfigValidate(opts: { json?: boolean; runtime?: RuntimeEnv } = {}) {
   const runtime = opts.runtime ?? defaultRuntime;
-  let outputPath = CONFIG_PATH ?? "openclaw.json";
+  let outputPath = CONFIG_PATH ?? "NexisClaw.json";
 
   try {
     const snapshot = await readConfigFileSnapshot();
@@ -1846,7 +1846,7 @@ export async function runConfigValidate(opts: { json?: boolean; runtime?: Runtim
       } else {
         runtime.error(danger(`Config file not found: ${shortPath}`));
         runtime.error(
-          `Create one with ${formatCliCommand("openclaw onboard")} or run ${formatCliCommand("openclaw doctor --fix")}.`,
+          `Create one with ${formatCliCommand("NexisClaw onboard")} or run ${formatCliCommand("NexisClaw doctor --fix")}.`,
         );
       }
       runtime.exit(1);
@@ -1859,13 +1859,13 @@ export async function runConfigValidate(opts: { json?: boolean; runtime?: Runtim
       if (opts.json) {
         writeRuntimeJson(runtime, { valid: false, path: outputPath, issues });
       } else {
-        runtime.error(danger(`OpenClaw config is invalid: ${shortPath}`));
+        runtime.error(danger(`NexisClaw config is invalid: ${shortPath}`));
         for (const line of formatConfigIssueLines(issues, danger("×"), { normalizeRoot: true })) {
           runtime.error(`  ${line}`);
         }
         runtime.error("");
         runtime.error(formatDoctorHint("to repair, or fix the keys above manually."));
-        runtime.error(`Inspect with ${formatCliCommand("openclaw config validate")}.`);
+        runtime.error(`Inspect with ${formatCliCommand("NexisClaw config validate")}.`);
       }
       runtime.exit(1);
       return;
@@ -1895,7 +1895,7 @@ export function registerConfigCli(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/config", "docs.openclaw.ai/cli/config")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/config", "docs.NexisClaw.ai/cli/config")}\n`,
     )
     .option(
       "--section <section>",
@@ -1925,7 +1925,7 @@ export function registerConfigCli(program: Command) {
     .option("--json", "Legacy alias for --strict-json", false)
     .option(
       "--dry-run",
-      "Validate changes without writing openclaw.json (checks run in builder/json/batch modes; exec SecretRefs are skipped unless --allow-exec is set)",
+      "Validate changes without writing NexisClaw.json (checks run in builder/json/batch modes; exec SecretRefs are skipped unless --allow-exec is set)",
       false,
     )
     .option(
@@ -2008,7 +2008,7 @@ export function registerConfigCli(program: Command) {
     .option("--stdin", "Read a JSON5 config patch object from stdin", false)
     .option(
       "--dry-run",
-      "Validate changes without writing openclaw.json (checks schema and SecretRef resolvability; exec SecretRefs are skipped unless --allow-exec is set)",
+      "Validate changes without writing NexisClaw.json (checks schema and SecretRef resolvability; exec SecretRefs are skipped unless --allow-exec is set)",
       false,
     )
     .option(
@@ -2044,7 +2044,7 @@ export function registerConfigCli(program: Command) {
 
   cmd
     .command("schema")
-    .description("Print the JSON schema for openclaw.json")
+    .description("Print the JSON schema for NexisClaw.json")
     .action(async () => {
       await runConfigSchema({});
     });

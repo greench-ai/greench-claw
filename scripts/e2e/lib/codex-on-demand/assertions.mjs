@@ -4,11 +4,11 @@ import path from "node:path";
 const readJson = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
 
 function stateDir() {
-  return process.env.OPENCLAW_STATE_DIR || path.join(process.env.HOME, ".openclaw");
+  return process.env.NEXISCLAW_STATE_DIR || path.join(process.env.HOME, ".NexisClaw");
 }
 
 function configPath() {
-  return process.env.OPENCLAW_CONFIG_PATH || path.join(stateDir(), "openclaw.json");
+  return process.env.NEXISCLAW_CONFIG_PATH || path.join(stateDir(), "NexisClaw.json");
 }
 
 function realPathMaybe(filePath) {
@@ -43,7 +43,7 @@ function findPackageJson(packageName, roots) {
 }
 
 const cfg = readJson(configPath());
-const inspect = readJson("/tmp/openclaw-codex-inspect.json");
+const inspect = readJson("/tmp/NexisClaw-codex-inspect.json");
 const records = installRecords();
 const codexRecord = records.codex || inspect.install;
 if (!codexRecord) {
@@ -52,8 +52,8 @@ if (!codexRecord) {
 if (codexRecord.source !== "npm") {
   throw new Error(`expected npm codex install record, got ${codexRecord.source}`);
 }
-if (!String(codexRecord.spec || "").includes("@openclaw/codex")) {
-  throw new Error(`expected @openclaw/codex install spec, got ${codexRecord.spec}`);
+if (!String(codexRecord.spec || "").includes("@NexisClaw/codex")) {
+  throw new Error(`expected @NexisClaw/codex install spec, got ${codexRecord.spec}`);
 }
 
 const npmRoot = path.join(stateDir(), "npm");
@@ -65,10 +65,10 @@ assertPathInside(npmRoot, installPath, "codex install path");
 
 const codexPackageJson = path.join(installPath, "package.json");
 if (!fs.existsSync(codexPackageJson)) {
-  throw new Error(`missing npm-installed @openclaw/codex package: ${codexPackageJson}`);
+  throw new Error(`missing npm-installed @NexisClaw/codex package: ${codexPackageJson}`);
 }
 const codexPackage = readJson(codexPackageJson);
-if (codexPackage.name !== "@openclaw/codex") {
+if (codexPackage.name !== "@NexisClaw/codex") {
   throw new Error(`unexpected codex package name: ${codexPackage.name}`);
 }
 
@@ -78,7 +78,7 @@ if (!openAiCodexPackageJson) {
 }
 assertPathInside(npmRoot, openAiCodexPackageJson, "@openai/codex dependency");
 
-const list = readJson("/tmp/openclaw-plugins-list.json");
+const list = readJson("/tmp/NexisClaw-plugins-list.json");
 const plugin = (list.plugins || []).find((entry) => entry.id === "codex");
 if (!plugin || plugin.enabled !== true || plugin.status !== "loaded") {
   throw new Error(`codex plugin was not enabled+loaded: ${JSON.stringify(plugin)}`);
@@ -112,6 +112,6 @@ const authRaw = fs.readFileSync(authPath, "utf8");
 if (!authRaw.includes("OPENAI_API_KEY")) {
   throw new Error("auth profile did not persist OPENAI_API_KEY env ref");
 }
-if (authRaw.includes("sk-openclaw-codex-on-demand-e2e")) {
+if (authRaw.includes("sk-NexisClaw-codex-on-demand-e2e")) {
   throw new Error("auth profile persisted the raw OpenAI test key");
 }

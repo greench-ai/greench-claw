@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { createDiscordSetupWizardBase } from "./setup-core.js";
 
@@ -33,7 +33,7 @@ describe("discordSetupWizard.dmPolicy", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NexisClawConfig,
         "alerts",
       ),
     ).toBe("allowlist");
@@ -59,7 +59,7 @@ describe("discordSetupWizard.dmPolicy", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
       "open",
       "alerts",
     );
@@ -88,7 +88,7 @@ describe("discordSetupWizard.status", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
     });
 
     expect(configured).toBe(false);
@@ -110,11 +110,11 @@ describe("discordSetupWizard.groupAccess", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
       accountId: "default",
       resolved: [
         {
-          input: "OpenClaw/#triage",
+          input: "NexisClaw/#triage",
           resolved: true,
           guildId: "guild-1",
           channelId: "channel-1",

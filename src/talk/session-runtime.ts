@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type { RealtimeVoiceProviderPlugin } from "../plugins/types.js";
 import type {
   RealtimeVoiceBridge,
@@ -37,7 +37,7 @@ export type RealtimeVoiceBridgeSession = {
 
 export type RealtimeVoiceBridgeSessionParams = {
   provider: RealtimeVoiceProviderPlugin;
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
   audioFormat?: RealtimeVoiceAudioFormat;
   audioSink: RealtimeVoiceAudioSink;

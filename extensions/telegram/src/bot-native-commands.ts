@@ -6,9 +6,9 @@ import {
   resolveAgentConfig,
   resolveDefaultModelForAgent,
   resolveThinkingDefaultWithRuntimeCatalog,
-} from "openclaw/plugin-sdk/agent-runtime";
-import { resolveChannelStreamingBlockEnabled } from "openclaw/plugin-sdk/channel-streaming";
-import { resolveNativeCommandSessionTargets } from "openclaw/plugin-sdk/command-auth-native";
+} from "NexisClaw/plugin-sdk/agent-runtime";
+import { resolveChannelStreamingBlockEnabled } from "NexisClaw/plugin-sdk/channel-streaming";
+import { resolveNativeCommandSessionTargets } from "NexisClaw/plugin-sdk/command-auth-native";
 import {
   buildCommandTextFromArgs,
   findCommandByNativeName,
@@ -19,34 +19,34 @@ import {
   resolveCommandArgMenu,
   resolveStoredModelOverride,
   type CommandArgs,
-} from "openclaw/plugin-sdk/command-auth-native";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import type { ChannelGroupPolicy } from "openclaw/plugin-sdk/config-contracts";
+} from "NexisClaw/plugin-sdk/command-auth-native";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { ChannelGroupPolicy } from "NexisClaw/plugin-sdk/config-contracts";
 import type {
   ReplyToMode,
   TelegramAccountConfig,
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "openclaw/plugin-sdk/config-contracts";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { resolveSendableOutboundReplyParts } from "openclaw/plugin-sdk/reply-payload";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { getRuntimeConfigSnapshot } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { danger, logVerbose } from "openclaw/plugin-sdk/runtime-env";
-import { getChildLogger } from "openclaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "openclaw/plugin-sdk/runtime-env";
+} from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveMarkdownTableMode } from "NexisClaw/plugin-sdk/markdown-table-runtime";
+import { resolveSendableOutboundReplyParts } from "NexisClaw/plugin-sdk/reply-payload";
+import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import { getRuntimeConfigSnapshot } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
+import { danger, logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { getChildLogger } from "NexisClaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
 import {
   loadSessionStore,
   resolveAndPersistSessionFile,
   resolveSessionStoreEntry,
   resolveSessionTranscriptPathInDir,
   resolveStorePath,
-} from "openclaw/plugin-sdk/session-store-runtime";
+} from "NexisClaw/plugin-sdk/session-store-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { expandTelegramAllowFromWithAccessGroups } from "./access-groups.js";
 import { resolveTelegramAccount } from "./accounts.js";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
@@ -105,9 +105,9 @@ const TELEGRAM_NATIVE_COMMAND_CALLBACK_PREFIX = "tgcmd:";
 
 type TelegramNativeCommandContext = Context & { match?: string };
 type TelegramChunkMode = ReturnType<
-  typeof import("openclaw/plugin-sdk/reply-dispatch-runtime").resolveChunkMode
+  typeof import("NexisClaw/plugin-sdk/reply-dispatch-runtime").resolveChunkMode
 >;
-type TelegramNativeReplyPayload = import("openclaw/plugin-sdk/reply-dispatch-runtime").ReplyPayload;
+type TelegramNativeReplyPayload = import("NexisClaw/plugin-sdk/reply-dispatch-runtime").ReplyPayload;
 type TelegramNativeReplyChannelData = {
   buttons?: TelegramInlineButtons;
   pin?: boolean;
@@ -168,7 +168,7 @@ function resolveTelegramProgressPlaceholder(command: {
 }
 
 async function resolveTelegramCommandSessionFile(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   agentId: string;
   sessionKey: string;
   threadId?: string | number;
@@ -205,7 +205,7 @@ async function resolveTelegramCommandSessionFile(params: {
 }
 
 function resolveTelegramCommandMenuModelContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   agentId: string;
   sessionKey: string;
 }): { provider?: string; model?: string; thinkingLevel?: string } {
@@ -257,7 +257,7 @@ function resolveTelegramCommandMenuModelContext(params: {
 }
 
 async function resolveTelegramDefaultThinkingLevel(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   provider: string;
   model: string;
 }): Promise<string> {
@@ -270,7 +270,7 @@ async function resolveTelegramDefaultThinkingLevel(params: {
 }
 
 async function resolveTelegramThinkMenuCurrentLevel(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   agentId: string;
   provider?: string;
   model?: string;
@@ -394,7 +394,7 @@ async function resolveTelegramNativeCommandThreadContext(params: {
 }
 
 export type RegisterTelegramHandlerParams = {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId: string;
   bot: Bot;
   mediaMaxBytes: number;
@@ -448,7 +448,7 @@ export function resolveTelegramNativeCommandDisableBlockStreaming(
 
 export type RegisterTelegramNativeCommandsParams = {
   bot: Bot;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   runtime: RuntimeEnv;
   accountId: string;
   telegramCfg: TelegramAccountConfig;
@@ -473,7 +473,7 @@ export type RegisterTelegramNativeCommandsParams = {
 async function resolveTelegramCommandAuth(params: {
   msg: NonNullable<TelegramNativeCommandContext["message"]>;
   bot: Bot;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId: string;
   telegramCfg: TelegramAccountConfig;
   readChannelAllowFromStore: TelegramBotDeps["readChannelAllowFromStore"];
@@ -745,8 +745,8 @@ export const registerTelegramNativeCommands = ({
   for (const issue of pluginCatalog.issues) {
     runtime.error?.(danger(issue));
   }
-  const loadFreshRuntimeConfig = (): OpenClawConfig => telegramDeps.getRuntimeConfig();
-  const resolveFreshTelegramConfig = (runtimeCfg: OpenClawConfig): TelegramAccountConfig => {
+  const loadFreshRuntimeConfig = (): NexisClawConfig => telegramDeps.getRuntimeConfig();
+  const resolveFreshTelegramConfig = (runtimeCfg: NexisClawConfig): TelegramAccountConfig => {
     try {
       return resolveTelegramAccount({
         cfg: runtimeCfg,
@@ -822,7 +822,7 @@ export const registerTelegramNativeCommands = ({
 
   const resolveCommandRuntimeContext = async (params: {
     msg: NonNullable<TelegramNativeCommandContext["message"]>;
-    runtimeCfg: OpenClawConfig;
+    runtimeCfg: NexisClawConfig;
     isGroup: boolean;
     isForum: boolean;
     resolvedThreadId?: number;
@@ -894,7 +894,7 @@ export const registerTelegramNativeCommands = ({
     return { chatId, threadSpec, route, mediaLocalRoots, tableMode, chunkMode };
   };
   const buildCommandDeliveryBaseOptions = (params: {
-    cfg: OpenClawConfig;
+    cfg: NexisClawConfig;
     chatId: string | number;
     accountId: string;
     sessionKeyForInternalHooks?: string;

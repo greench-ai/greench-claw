@@ -3,4 +3,4 @@ export {
   resolveThreadBindingIntroText,
   resolveThreadBindingThreadName,
   formatThreadBindingDurationLabel,
-} from "openclaw/plugin-sdk/conversation-runtime";
+} from "NexisClaw/plugin-sdk/conversation-runtime";

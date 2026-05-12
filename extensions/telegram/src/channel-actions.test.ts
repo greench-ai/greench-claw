@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { telegramMessageActions, telegramMessageActionRuntime } from "./channel-actions.js";
 
@@ -72,7 +72,7 @@ describe("telegramMessageActions", () => {
     const cases = [
       {
         name: "configured telegram enables poll",
-        cfg: { channels: { telegram: { botToken: "tok" } } } as OpenClawConfig,
+        cfg: { channels: { telegram: { botToken: "tok" } } } as NexisClawConfig,
         expectPoll: true,
         expectTopicEdit: true,
       },
@@ -85,7 +85,7 @@ describe("telegramMessageActions", () => {
               actions: { sendMessage: false },
             },
           },
-        } as OpenClawConfig,
+        } as NexisClawConfig,
         expectPoll: false,
         expectTopicEdit: true,
       },
@@ -98,7 +98,7 @@ describe("telegramMessageActions", () => {
               actions: { poll: false },
             },
           },
-        } as OpenClawConfig,
+        } as NexisClawConfig,
         expectPoll: false,
         expectTopicEdit: true,
       },
@@ -125,7 +125,7 @@ describe("telegramMessageActions", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NexisClawConfig,
         expectPoll: false,
         expectTopicEdit: true,
       },
@@ -153,7 +153,7 @@ describe("telegramMessageActions", () => {
     const cases = [
       {
         name: "default config",
-        cfg: { channels: { telegram: { botToken: "tok" } } } as OpenClawConfig,
+        cfg: { channels: { telegram: { botToken: "tok" } } } as NexisClawConfig,
         expectSticker: false,
       },
       {
@@ -166,7 +166,7 @@ describe("telegramMessageActions", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NexisClawConfig,
         expectSticker: true,
       },
       {
@@ -180,7 +180,7 @@ describe("telegramMessageActions", () => {
               },
             },
           },
-        } as OpenClawConfig,
+        } as NexisClawConfig,
         expectSticker: false,
       },
     ] as const;
@@ -220,7 +220,7 @@ describe("telegramMessageActions", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     const defaultActions =
       telegramMessageActions.describeMessageTool?.({
@@ -240,7 +240,7 @@ describe("telegramMessageActions", () => {
   });
 
   it("normalizes reaction message identifiers before dispatch", async () => {
-    const cfg = { channels: { telegram: { botToken: "tok" } } } as OpenClawConfig;
+    const cfg = { channels: { telegram: { botToken: "tok" } } } as NexisClawConfig;
     const cases = [
       {
         name: "numeric channelId/messageId",

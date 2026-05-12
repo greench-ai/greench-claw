@@ -11,16 +11,16 @@ export {
   withManager,
   withProgress,
   withProgressTotals,
-} from "openclaw/plugin-sdk/memory-core-host-runtime-cli";
+} from "NexisClaw/plugin-sdk/memory-core-host-runtime-cli";
 export {
   getRuntimeConfig,
   resolveDefaultAgentId,
   resolveSessionTranscriptsDirForAgent,
   resolveStateDir,
-  type OpenClawConfig,
-} from "openclaw/plugin-sdk/memory-core-host-runtime-core";
+  type NexisClawConfig,
+} from "NexisClaw/plugin-sdk/memory-core-host-runtime-core";
 export {
   listMemoryFiles,
   normalizeExtraMemoryPaths,
-} from "openclaw/plugin-sdk/memory-core-host-runtime-files";
+} from "NexisClaw/plugin-sdk/memory-core-host-runtime-files";
 export { getMemorySearchManager } from "./memory/index.js";

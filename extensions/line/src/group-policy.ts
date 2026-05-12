@@ -1,8 +1,8 @@
-import { resolveChannelGroupRequireMention } from "openclaw/plugin-sdk/channel-policy";
-import { resolveExactLineGroupConfigKey, type OpenClawConfig } from "./channel-api.js";
+import { resolveChannelGroupRequireMention } from "NexisClaw/plugin-sdk/channel-policy";
+import { resolveExactLineGroupConfigKey, type NexisClawConfig } from "./channel-api.js";
 
 type LineGroupContext = {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId?: string | null;
   groupId?: string | null;
 };

@@ -1,5 +1,5 @@
-import type { BaseProbeResult } from "openclaw/plugin-sdk/channel-contract";
-import { withTimeout } from "openclaw/plugin-sdk/text-utility-runtime";
+import type { BaseProbeResult } from "NexisClaw/plugin-sdk/channel-contract";
+import { withTimeout } from "NexisClaw/plugin-sdk/text-utility-runtime";
 import { createSlackWebClient } from "./client.js";
 import { formatSlackError } from "./errors.js";
 

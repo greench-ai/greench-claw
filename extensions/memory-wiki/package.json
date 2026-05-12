@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/memory-wiki",
+  "name": "@NexisClaw/memory-wiki",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw persistent wiki plugin",
+  "description": "NexisClaw persistent wiki plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.1.38",
@@ -10,18 +10,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*",
+    "NexisClaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.5.12-beta.1"
+    "NexisClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "NexisClaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ]

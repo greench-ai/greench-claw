@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/diagnostics-otel",
+  "name": "@NexisClaw/diagnostics-otel",
   "version": "2026.5.12-beta.1",
-  "description": "OpenClaw diagnostics OpenTelemetry exporter",
+  "description": "NexisClaw diagnostics OpenTelemetry exporter",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/NexisClaw/NexisClaw"
   },
   "type": "module",
   "dependencies": {
@@ -21,15 +21,15 @@
     "@opentelemetry/semantic-conventions": "1.40.0"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@openclaw/diagnostics-otel",
-      "npmSpec": "@openclaw/diagnostics-otel",
+      "clawhubSpec": "clawhub:@NexisClaw/diagnostics-otel",
+      "npmSpec": "@NexisClaw/diagnostics-otel",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.25"
     },
@@ -37,7 +37,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "openclawVersion": "2026.5.12-beta.1"
+      "NexisClawVersion": "2026.5.12-beta.1"
     },
     "release": {
       "publishToClawHub": true,

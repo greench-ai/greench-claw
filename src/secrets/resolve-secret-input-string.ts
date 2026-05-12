@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import {
   normalizeSecretInputString,
   resolveSecretInputRef,
@@ -6,10 +6,10 @@ import {
 } from "../config/types.secrets.js";
 import { resolveSecretRefString } from "./resolve.js";
 
-type SecretDefaults = NonNullable<OpenClawConfig["secrets"]>["defaults"];
+type SecretDefaults = NonNullable<NexisClawConfig["secrets"]>["defaults"];
 
 export async function resolveSecretInputString(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   value: unknown;
   env: NodeJS.ProcessEnv;
   defaults?: SecretDefaults;

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { buildProviderStatusIndex } from "./agents.providers.js";
 
 const mocks = vi.hoisted(() => ({
@@ -62,7 +62,7 @@ describe("buildProviderStatusIndex", () => {
     mocks.listReadOnlyChannelPluginsForConfig.mockReturnValue([plugin]);
     mocks.getChannelPlugin.mockReturnValue(plugin);
 
-    const map = await buildProviderStatusIndex({} as OpenClawConfig);
+    const map = await buildProviderStatusIndex({} as NexisClawConfig);
 
     expect(mocks.listReadOnlyChannelPluginsForConfig).toHaveBeenCalledWith(
       {},
@@ -95,7 +95,7 @@ describe("buildProviderStatusIndex", () => {
     mocks.listReadOnlyChannelPluginsForConfig.mockReturnValue([plugin]);
     mocks.getChannelPlugin.mockReturnValue(plugin);
 
-    await expect(buildProviderStatusIndex({} as OpenClawConfig)).resolves.toEqual(
+    await expect(buildProviderStatusIndex({} as NexisClawConfig)).resolves.toEqual(
       new Map([
         [
           "quietchat:default",
@@ -126,6 +126,6 @@ describe("buildProviderStatusIndex", () => {
     mocks.listReadOnlyChannelPluginsForConfig.mockReturnValue([plugin]);
     mocks.getChannelPlugin.mockReturnValue(plugin);
 
-    await expect(buildProviderStatusIndex({} as OpenClawConfig)).rejects.toThrow("plugin crash");
+    await expect(buildProviderStatusIndex({} as NexisClawConfig)).rejects.toThrow("plugin crash");
   });
 });

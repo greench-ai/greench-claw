@@ -8,12 +8,12 @@ import * as installSource from "./install-source-utils.js";
 
 async function runExtractedArchiveFailureCase(configureArchive: () => void) {
   vi.spyOn(installSource, "withTempDir").mockImplementation(
-    async (_prefix, fn) => await fn("/tmp/openclaw-install-flow"),
+    async (_prefix, fn) => await fn("/tmp/NexisClaw-install-flow"),
   );
   configureArchive();
   return await withExtractedArchiveRoot({
     archivePath: "/tmp/plugin.tgz",
-    tempDirPrefix: "openclaw-plugin-",
+    tempDirPrefix: "NexisClaw-plugin-",
     timeoutMs: 1000,
     onExtracted: async () => ({ ok: true as const }),
   });
@@ -21,7 +21,7 @@ async function runExtractedArchiveFailureCase(configureArchive: () => void) {
 
 describe("resolveExistingInstallPath", () => {
   it("returns resolved path and stat for existing files", async () => {
-    await withTempDir({ prefix: "openclaw-install-flow-" }, async (fixtureRoot) => {
+    await withTempDir({ prefix: "NexisClaw-install-flow-" }, async (fixtureRoot) => {
       const filePath = path.join(fixtureRoot, "plugin.tgz");
       await fs.writeFile(filePath, "archive");
 
@@ -37,7 +37,7 @@ describe("resolveExistingInstallPath", () => {
   });
 
   it("returns a path-not-found error for missing paths", async () => {
-    await withTempDir({ prefix: "openclaw-install-flow-" }, async (fixtureRoot) => {
+    await withTempDir({ prefix: "NexisClaw-install-flow-" }, async (fixtureRoot) => {
       const missing = path.join(fixtureRoot, "missing.tgz");
 
       const result = await resolveExistingInstallPath(missing);
@@ -56,7 +56,7 @@ describe("withExtractedArchiveRoot", () => {
   });
 
   it("extracts archive and passes root directory to callback", async () => {
-    const tmpRoot = path.join(path.sep, "tmp", "openclaw-install-flow");
+    const tmpRoot = path.join(path.sep, "tmp", "NexisClaw-install-flow");
     const archivePath = path.join(path.sep, "tmp", "plugin.tgz");
     const extractDir = path.join(tmpRoot, "extract");
     const packageRoot = path.join(extractDir, "package");
@@ -69,7 +69,7 @@ describe("withExtractedArchiveRoot", () => {
     const onExtracted = vi.fn(async (rootDir: string) => ({ ok: true as const, rootDir }));
     const result = await withExtractedArchiveRoot({
       archivePath,
-      tempDirPrefix: "openclaw-plugin-",
+      tempDirPrefix: "NexisClaw-plugin-",
       timeoutMs: 1000,
       rootMarkers: ["package.json"],
       onExtracted,
@@ -77,7 +77,7 @@ describe("withExtractedArchiveRoot", () => {
 
     expect(withTempDirSpy).toHaveBeenCalledTimes(1);
     const withTempDirCall = withTempDirSpy.mock.calls.at(0);
-    expect(withTempDirCall?.[0]).toBe("openclaw-plugin-");
+    expect(withTempDirCall?.[0]).toBe("NexisClaw-plugin-");
     expect(typeof withTempDirCall?.[1]).toBe("function");
     expect(extractSpy).toHaveBeenCalledOnce();
     expect(extractSpy.mock.calls.at(0)?.[0]?.archivePath).toBe(archivePath);

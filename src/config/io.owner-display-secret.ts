@@ -1,15 +1,15 @@
-import type { OpenClawConfig } from "./types.openclaw.js";
+import type { NexisClawConfig } from "./types.NexisClaw.js";
 
 export type OwnerDisplaySecretRuntimeState = {
   pendingByPath: Map<string, string>;
 };
 
 export function retainGeneratedOwnerDisplaySecret(params: {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   configPath: string;
   generatedSecret?: string;
   state: OwnerDisplaySecretRuntimeState;
-}): OpenClawConfig {
+}): NexisClawConfig {
   const { config, configPath, generatedSecret, state } = params;
   if (!generatedSecret) {
     state.pendingByPath.delete(configPath);

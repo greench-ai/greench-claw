@@ -22,23 +22,23 @@ const resolveApprovalOverGatewayMock = vi.hoisted(() =>
 
 let registerSlackInteractionEvents: typeof import("./interactions.js").registerSlackInteractionEvents;
 
-vi.mock("openclaw/plugin-sdk/system-event-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/system-event-runtime")>();
+vi.mock("NexisClaw/plugin-sdk/system-event-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/system-event-runtime")>();
   return {
     ...actual,
     enqueueSystemEvent: (...args: unknown[]) => enqueueSystemEventMock(...args),
   };
 });
 
-vi.mock("openclaw/plugin-sdk/heartbeat-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("openclaw/plugin-sdk/heartbeat-runtime")>();
+vi.mock("NexisClaw/plugin-sdk/heartbeat-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/heartbeat-runtime")>();
   return {
     ...actual,
     requestHeartbeat: (...args: unknown[]) => requestHeartbeatMock(...args),
   };
 });
 
-vi.mock("openclaw/plugin-sdk/approval-gateway-runtime", () => ({
+vi.mock("NexisClaw/plugin-sdk/approval-gateway-runtime", () => ({
   resolveApprovalOverGateway: (arg: unknown) => resolveApprovalOverGatewayMock(arg),
 }));
 
@@ -419,14 +419,14 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "verify_block",
-              elements: [{ type: "button", action_id: "openclaw:verify" }],
+              elements: [{ type: "button", action_id: "NexisClaw:verify" }],
             },
           ],
         },
       },
       action: {
         type: "button",
-        action_id: "openclaw:verify",
+        action_id: "NexisClaw:verify",
         block_id: "verify_block",
         value: "approved",
         text: { type: "plain_text", text: "Approve" },
@@ -439,7 +439,7 @@ describe("registerSlackInteractionEvents", () => {
     expect(typeof eventText === "string" && eventText.startsWith("Slack interaction: ")).toBe(true);
     const payload = slackInteractionPayload();
     expectRecordFields(payload, {
-      actionId: "openclaw:verify",
+      actionId: "NexisClaw:verify",
       actionType: "button",
       value: "approved",
       userId: "U123",
@@ -460,12 +460,12 @@ describe("registerSlackInteractionEvents", () => {
     expect(app.client.chat.update).toHaveBeenCalledTimes(1);
   });
 
-  it("registers a matcher that accepts plugin action ids beyond the OpenClaw prefix", () => {
+  it("registers a matcher that accepts plugin action ids beyond the NexisClaw prefix", () => {
     const { ctx, getActionMatcher } = createContext();
     registerSlackInteractionEvents({ ctx: ctx as never });
 
     const matcher = getActionMatcher();
-    expect(matcher.test("openclaw:verify")).toBe(true);
+    expect(matcher.test("NexisClaw:verify")).toBe(true);
     expect(matcher.test("codex")).toBe(true);
   });
 
@@ -729,14 +729,14 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "reply_actions",
-              elements: [{ type: "button", action_id: "openclaw:reply_button" }],
+              elements: [{ type: "button", action_id: "NexisClaw:reply_button" }],
             },
           ],
         },
       },
       action: {
         type: "button",
-        action_id: "openclaw:reply_button",
+        action_id: "NexisClaw:reply_button",
         block_id: "reply_actions",
         value: "codex",
         text: { type: "plain_text", text: "codex" },
@@ -746,14 +746,14 @@ describe("registerSlackInteractionEvents", () => {
     expect(ack).toHaveBeenCalled();
     expect(dispatchPluginInteractiveHandlerMock).not.toHaveBeenCalled();
     const eventText = mockCallArg(enqueueSystemEventMock, 0, "enqueueSystemEvent");
-    expect(eventText).toContain('"actionId":"openclaw:reply_button"');
+    expect(eventText).toContain('"actionId":"NexisClaw:reply_button"');
     expectRecordFields(
       requireRecord(
         mockCallArg(enqueueSystemEventMock, 0, "enqueueSystemEvent", 1),
         "event options",
       ),
       {
-        contextKey: "slack:interaction:C1:100.200:openclaw:reply_button",
+        contextKey: "slack:interaction:C1:100.200:NexisClaw:reply_button",
         deliveryContext: {
           accountId: "default",
           channel: "slack",
@@ -895,14 +895,14 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "bind_actions",
-              elements: [{ type: "button", action_id: "openclaw:reply_button" }],
+              elements: [{ type: "button", action_id: "NexisClaw:reply_button" }],
             },
           ],
         },
       },
       action: {
         type: "button",
-        action_id: "openclaw:reply_button",
+        action_id: "NexisClaw:reply_button",
         block_id: "bind_actions",
         value: "pluginbind:approval-123:o",
         text: { type: "plain_text", text: "Allow once" },
@@ -951,14 +951,14 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "exec_actions",
-              elements: [{ type: "button", action_id: "openclaw:reply_button" }],
+              elements: [{ type: "button", action_id: "NexisClaw:reply_button" }],
             },
           ],
         },
       },
       action: {
         type: "button",
-        action_id: "openclaw:reply_button",
+        action_id: "NexisClaw:reply_button",
         block_id: "exec_actions",
         value: "/approve req-123 allow-once",
         text: { type: "plain_text", text: "Allow once" },
@@ -1025,14 +1025,14 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "plugin_actions",
-              elements: [{ type: "button", action_id: "openclaw:reply_button" }],
+              elements: [{ type: "button", action_id: "NexisClaw:reply_button" }],
             },
           ],
         },
       },
       action: {
         type: "button",
-        action_id: "openclaw:reply_button",
+        action_id: "NexisClaw:reply_button",
         block_id: "plugin_actions",
         value: "/approve plugin:req-123 allow-always",
         text: { type: "plain_text", text: "Always allow" },
@@ -1099,14 +1099,14 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "plugin_actions",
-              elements: [{ type: "button", action_id: "openclaw:reply_button" }],
+              elements: [{ type: "button", action_id: "NexisClaw:reply_button" }],
             },
           ],
         },
       },
       action: {
         type: "button",
-        action_id: "openclaw:reply_button",
+        action_id: "NexisClaw:reply_button",
         block_id: "plugin_actions",
         value: "/approve req-legacy allow-once",
         text: { type: "plain_text", text: "Allow once" },
@@ -1174,14 +1174,14 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "plugin_actions",
-              elements: [{ type: "button", action_id: "openclaw:reply_button" }],
+              elements: [{ type: "button", action_id: "NexisClaw:reply_button" }],
             },
           ],
         },
       },
       action: {
         type: "button",
-        action_id: "openclaw:reply_button",
+        action_id: "NexisClaw:reply_button",
         block_id: "plugin_actions",
         value: "/approve plugin:req-123 allow-always",
         text: { type: "plain_text", text: "Always allow" },
@@ -1222,14 +1222,14 @@ describe("registerSlackInteractionEvents", () => {
               {
                 type: "actions",
                 block_id: "exec_actions",
-                elements: [{ type: "button", action_id: "openclaw:reply_button" }],
+                elements: [{ type: "button", action_id: "NexisClaw:reply_button" }],
               },
             ],
           },
         },
         action: {
           type: "button",
-          action_id: "openclaw:reply_button",
+          action_id: "NexisClaw:reply_button",
           block_id: "exec_actions",
           value: "/approve req-123 allow-once",
           text: { type: "plain_text", text: "Allow once" },
@@ -1277,14 +1277,14 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "exec_actions",
-              elements: [{ type: "button", action_id: "openclaw:reply_button" }],
+              elements: [{ type: "button", action_id: "NexisClaw:reply_button" }],
             },
           ],
         },
       },
       action: {
         type: "button",
-        action_id: "openclaw:reply_button",
+        action_id: "NexisClaw:reply_button",
         block_id: "exec_actions",
         value: "/approve req-123 allow-once",
         text: { type: "plain_text", text: "Allow once" },
@@ -1327,7 +1327,7 @@ describe("registerSlackInteractionEvents", () => {
       },
       action: {
         type: "button",
-        action_id: "openclaw:verify",
+        action_id: "NexisClaw:verify",
       },
     });
 
@@ -1355,7 +1355,7 @@ describe("registerSlackInteractionEvents", () => {
         team: { id: "T9" },
         view: {
           id: "V123",
-          callback_id: "openclaw:deploy_form",
+          callback_id: "NexisClaw:deploy_form",
           private_metadata: JSON.stringify({ userId: "U123" }),
         },
       },
@@ -1370,7 +1370,7 @@ describe("registerSlackInteractionEvents", () => {
         team: { id: "T9" },
         view: {
           id: "V123",
-          callback_id: "openclaw:deploy_form",
+          callback_id: "NexisClaw:deploy_form",
           private_metadata: JSON.stringify({ userId: "U123" }),
         },
       },
@@ -1398,7 +1398,7 @@ describe("registerSlackInteractionEvents", () => {
       },
       action: {
         type: "static_select",
-        action_id: "openclaw:pick",
+        action_id: "NexisClaw:pick",
         block_id: "select_block",
         selected_option: {
           text: { type: "plain_text", text: "Canary" },
@@ -1456,7 +1456,7 @@ describe("registerSlackInteractionEvents", () => {
       },
       action: {
         type: "button",
-        action_id: "openclaw:verify",
+        action_id: "NexisClaw:verify",
         block_id: "verify_block",
       },
     });
@@ -1493,7 +1493,7 @@ describe("registerSlackInteractionEvents", () => {
       },
       action: {
         type: "button",
-        action_id: "openclaw:verify",
+        action_id: "NexisClaw:verify",
         block_id: "verify_block",
       },
     });
@@ -1533,7 +1533,7 @@ describe("registerSlackInteractionEvents", () => {
       },
       action: {
         type: "button",
-        action_id: "openclaw:verify",
+        action_id: "NexisClaw:verify",
         block_id: "verify_block",
       },
     });
@@ -1570,7 +1570,7 @@ describe("registerSlackInteractionEvents", () => {
       },
       action: {
         type: "button",
-        action_id: "openclaw:verify",
+        action_id: "NexisClaw:verify",
         block_id: "verify_block",
       },
     });
@@ -1605,7 +1605,7 @@ describe("registerSlackInteractionEvents", () => {
       },
       action: {
         type: "button",
-        action_id: "openclaw:verify",
+        action_id: "NexisClaw:verify",
         block_id: "verify_block",
       },
     });
@@ -1640,7 +1640,7 @@ describe("registerSlackInteractionEvents", () => {
       },
       action: {
         type: "button",
-        action_id: "openclaw:verify",
+        action_id: "NexisClaw:verify",
         block_id: "verify_block",
       },
     });
@@ -1673,7 +1673,7 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "verify_block",
-              elements: [{ type: "button", action_id: "openclaw:verify" }],
+              elements: [{ type: "button", action_id: "NexisClaw:verify" }],
             },
           ],
         },
@@ -1708,7 +1708,7 @@ describe("registerSlackInteractionEvents", () => {
       },
       action: {
         type: "static_select",
-        action_id: "openclaw:pick",
+        action_id: "NexisClaw:pick",
         block_id: "select_block",
         selected_option: {
           text: { type: "plain_text", text: "Canary_*`~<&>" },
@@ -1751,7 +1751,7 @@ describe("registerSlackInteractionEvents", () => {
       },
       action: {
         type: "button",
-        action_id: "openclaw:container",
+        action_id: "NexisClaw:container",
         block_id: "container_block",
         value: "ok",
         text: { type: "plain_text", text: "Container" },
@@ -1801,14 +1801,14 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "multi_block",
-              elements: [{ type: "multi_static_select", action_id: "openclaw:multi" }],
+              elements: [{ type: "multi_static_select", action_id: "NexisClaw:multi" }],
             },
           ],
         },
       },
       action: {
         type: "multi_static_select",
-        action_id: "openclaw:multi",
+        action_id: "NexisClaw:multi",
         block_id: "multi_block",
         selected_options: [
           { text: { type: "plain_text", text: "Alpha" }, value: "alpha" },
@@ -1857,24 +1857,24 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "date_block",
-              elements: [{ type: "datepicker", action_id: "openclaw:date" }],
+              elements: [{ type: "datepicker", action_id: "NexisClaw:date" }],
             },
             {
               type: "actions",
               block_id: "time_block",
-              elements: [{ type: "timepicker", action_id: "openclaw:time" }],
+              elements: [{ type: "timepicker", action_id: "NexisClaw:time" }],
             },
             {
               type: "actions",
               block_id: "datetime_block",
-              elements: [{ type: "datetimepicker", action_id: "openclaw:datetime" }],
+              elements: [{ type: "datetimepicker", action_id: "NexisClaw:datetime" }],
             },
           ],
         },
       },
       action: {
         type: "datepicker",
-        action_id: "openclaw:date",
+        action_id: "NexisClaw:date",
         block_id: "date_block",
         selected_date: "2026-02-16",
       },
@@ -1892,14 +1892,14 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "time_block",
-              elements: [{ type: "timepicker", action_id: "openclaw:time" }],
+              elements: [{ type: "timepicker", action_id: "NexisClaw:time" }],
             },
           ],
         },
       },
       action: {
         type: "timepicker",
-        action_id: "openclaw:time",
+        action_id: "NexisClaw:time",
         block_id: "time_block",
         selected_time: "14:30",
       },
@@ -1917,14 +1917,14 @@ describe("registerSlackInteractionEvents", () => {
             {
               type: "actions",
               block_id: "datetime_block",
-              elements: [{ type: "datetimepicker", action_id: "openclaw:datetime" }],
+              elements: [{ type: "datetimepicker", action_id: "NexisClaw:datetime" }],
             },
           ],
         },
       },
       action: {
         type: "datetimepicker",
-        action_id: "openclaw:datetime",
+        action_id: "NexisClaw:datetime",
         block_id: "datetime_block",
         selected_date_time: selectedDateTimeEpoch,
       },
@@ -1984,7 +1984,7 @@ describe("registerSlackInteractionEvents", () => {
       },
       action: {
         type: "multi_conversations_select",
-        action_id: "openclaw:route",
+        action_id: "NexisClaw:route",
         selected_user: "U777",
         selected_users: ["U777", "U888"],
         selected_channel: "C777",
@@ -2053,7 +2053,7 @@ describe("registerSlackInteractionEvents", () => {
       },
       action: {
         type: "workflow_button",
-        action_id: "openclaw:workflow",
+        action_id: "NexisClaw:workflow",
         block_id: "workflow_block",
         text: { type: "plain_text", text: "Launch workflow" },
         workflow: {
@@ -2097,7 +2097,7 @@ describe("registerSlackInteractionEvents", () => {
         team: { id: "T1" },
         view: {
           id: "V123",
-          callback_id: "openclaw:deploy_form",
+          callback_id: "NexisClaw:deploy_form",
           root_view_id: "VROOT",
           previous_view_id: "VPREV",
           external_id: "deploy-ext-1",
@@ -2162,8 +2162,8 @@ describe("registerSlackInteractionEvents", () => {
     };
     expectRecordFields(payload as unknown as Record<string, unknown>, {
       interactionType: "view_submission",
-      actionId: "view:openclaw:deploy_form",
-      callbackId: "openclaw:deploy_form",
+      actionId: "view:NexisClaw:deploy_form",
+      callbackId: "NexisClaw:deploy_form",
       viewId: "V123",
       userId: "U777",
       routedChannelId: "D123",
@@ -2192,7 +2192,7 @@ describe("registerSlackInteractionEvents", () => {
       body: {
         user: { id: "U222" },
         view: {
-          callback_id: "openclaw:deploy_form",
+          callback_id: "NexisClaw:deploy_form",
           private_metadata: JSON.stringify({
             channelId: "D123",
             channelType: "im",
@@ -2218,7 +2218,7 @@ describe("registerSlackInteractionEvents", () => {
       body: {
         user: { id: "U222" },
         view: {
-          callback_id: "openclaw:deploy_form",
+          callback_id: "NexisClaw:deploy_form",
           private_metadata: JSON.stringify({
             channelId: "D123",
             channelType: "im",
@@ -2244,7 +2244,7 @@ describe("registerSlackInteractionEvents", () => {
         user: { id: "U444" },
         view: {
           id: "V444",
-          callback_id: "openclaw:routing_form",
+          callback_id: "NexisClaw:routing_form",
           private_metadata: JSON.stringify({ userId: "U444" }),
           state: {
             values: {},
@@ -2270,7 +2270,7 @@ describe("registerSlackInteractionEvents", () => {
         user: { id: "U444" },
         view: {
           id: "V400",
-          callback_id: "openclaw:routing_form",
+          callback_id: "NexisClaw:routing_form",
           private_metadata: JSON.stringify({ userId: "U444" }),
           state: {
             values: {
@@ -2346,13 +2346,13 @@ describe("registerSlackInteractionEvents", () => {
               email_block: {
                 email_input: {
                   type: "email_text_input",
-                  value: "team@openclaw.ai",
+                  value: "team@NexisClaw.ai",
                 },
               },
               url_block: {
                 url_input: {
                   type: "url_text_input",
-                  value: "https://docs.openclaw.ai",
+                  value: "https://docs.NexisClaw.ai",
                 },
               },
               richtext_block: {
@@ -2434,11 +2434,11 @@ describe("registerSlackInteractionEvents", () => {
     });
     expectRecordFields(inputByActionId(inputs, "email_input"), {
       inputKind: "email",
-      inputEmail: "team@openclaw.ai",
+      inputEmail: "team@NexisClaw.ai",
     });
     expectRecordFields(inputByActionId(inputs, "url_input"), {
       inputKind: "url",
-      inputUrl: "https://docs.openclaw.ai/",
+      inputUrl: "https://docs.NexisClaw.ai/",
     });
     expectRecordFields(inputByActionId(inputs, "richtext_input"), {
       inputKind: "rich_text",
@@ -2472,7 +2472,7 @@ describe("registerSlackInteractionEvents", () => {
         user: { id: "U555" },
         view: {
           id: "V555",
-          callback_id: "openclaw:long_richtext",
+          callback_id: "NexisClaw:long_richtext",
           private_metadata: JSON.stringify({ userId: "U555" }),
           state: {
             values: {
@@ -2524,7 +2524,7 @@ describe("registerSlackInteractionEvents", () => {
         is_cleared: true,
         view: {
           id: "V900",
-          callback_id: "openclaw:deploy_form",
+          callback_id: "NexisClaw:deploy_form",
           root_view_id: "VROOT900",
           previous_view_id: "VPREV900",
           external_id: "deploy-ext-900",
@@ -2575,8 +2575,8 @@ describe("registerSlackInteractionEvents", () => {
     };
     expectRecordFields(payload as unknown as Record<string, unknown>, {
       interactionType: "view_closed",
-      actionId: "view:openclaw:deploy_form",
-      callbackId: "openclaw:deploy_form",
+      actionId: "view:NexisClaw:deploy_form",
+      callbackId: "NexisClaw:deploy_form",
       viewId: "V900",
       userId: "U900",
       isCleared: true,
@@ -2608,7 +2608,7 @@ describe("registerSlackInteractionEvents", () => {
         user: { id: "U901" },
         view: {
           id: "V901",
-          callback_id: "openclaw:deploy_form",
+          callback_id: "NexisClaw:deploy_form",
           private_metadata: JSON.stringify({ userId: "U901" }),
         },
       },
@@ -2656,7 +2656,7 @@ describe("registerSlackInteractionEvents", () => {
         team: { id: "T1" },
         view: {
           id: "V915",
-          callback_id: "openclaw:oversize",
+          callback_id: "NexisClaw:oversize",
           private_metadata: JSON.stringify({
             channelId: "D915",
             channelType: "im",

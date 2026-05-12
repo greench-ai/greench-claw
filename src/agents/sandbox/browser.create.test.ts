@@ -56,8 +56,8 @@ vi.mock("../../plugin-sdk/browser-bridge.js", () => ({
 vi.mock("../../plugin-sdk/browser-profiles.js", () => ({
   DEFAULT_BROWSER_ACTION_TIMEOUT_MS: 60_000,
   DEFAULT_BROWSER_EVALUATE_ENABLED: true,
-  DEFAULT_OPENCLAW_BROWSER_COLOR: "#FF4500",
-  DEFAULT_OPENCLAW_BROWSER_PROFILE_NAME: "openclaw",
+  DEFAULT_NEXISCLAW_BROWSER_COLOR: "#FF4500",
+  DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME: "NexisClaw",
   resolveProfile: (
     resolved: { cdpHost: string; cdpIsLoopback: boolean; profiles?: Record<string, unknown> },
     profileName: string,
@@ -77,7 +77,7 @@ vi.mock("../../plugin-sdk/browser-profiles.js", () => ({
       cdpHost: resolved.cdpHost,
       cdpIsLoopback: resolved.cdpIsLoopback,
       color: profile.color ?? "#FF4500",
-      driver: "openclaw",
+      driver: "NexisClaw",
       attachOnly: true,
     };
   },
@@ -96,10 +96,10 @@ function buildConfig(enableNoVnc: boolean): SandboxConfig {
     backend: "docker",
     scope: "session",
     workspaceAccess: "none",
-    workspaceRoot: "/tmp/openclaw-sandboxes",
+    workspaceRoot: "/tmp/NexisClaw-sandboxes",
     docker: {
-      image: "openclaw-sandbox:bookworm-slim",
-      containerPrefix: "openclaw-sbx-",
+      image: "NexisClaw-sandbox:bookworm-slim",
+      containerPrefix: "NexisClaw-sbx-",
       workdir: "/workspace",
       readOnlyRoot: true,
       tmpfs: ["/tmp", "/var/tmp", "/run"],
@@ -109,15 +109,15 @@ function buildConfig(enableNoVnc: boolean): SandboxConfig {
     },
     ssh: {
       command: "ssh",
-      workspaceRoot: "/tmp/openclaw-sandboxes",
+      workspaceRoot: "/tmp/NexisClaw-sandboxes",
       strictHostKeyChecking: true,
       updateHostKeys: true,
     },
     browser: {
       enabled: true,
-      image: "openclaw-sandbox-browser:bookworm-slim",
-      containerPrefix: "openclaw-sbx-browser-",
-      network: "openclaw-sandbox-browser",
+      image: "NexisClaw-sandbox-browser:bookworm-slim",
+      containerPrefix: "NexisClaw-sbx-browser-",
+      network: "NexisClaw-sandbox-browser",
       cdpPort: 9222,
       vncPort: 5900,
       noVncPort: 6080,
@@ -247,7 +247,7 @@ describe("ensureSandboxBrowser create args", () => {
         cfg: buildConfig(false),
       }),
     ).rejects.toThrow(
-      "Sandbox browser image openclaw-sandbox-browser:bookworm-slim is stale or incompatible",
+      "Sandbox browser image NexisClaw-sandbox-browser:bookworm-slim is stale or incompatible",
     );
 
     expect(findDockerArgsCall(dockerMocks.execDocker.mock.calls, "create")).toBeUndefined();
@@ -259,7 +259,7 @@ describe("ensureSandboxBrowser create args", () => {
       "utf8",
     );
     const label = dockerfile.match(
-      /^LABEL org\.openclaw\.sandbox-browser\.contract="([^"]+)"$/m,
+      /^LABEL org\.NexisClaw\.sandbox-browser\.contract="([^"]+)"$/m,
     )?.[1];
 
     expect(label).toBe(SANDBOX_BROWSER_IMAGE_CONTRACT_EPOCH);
@@ -277,11 +277,11 @@ describe("ensureSandboxBrowser create args", () => {
 
     expect(createArgs).toContain("127.0.0.1::6080");
     const envEntries = collectDockerFlagValues(createArgs, "-e");
-    expect(envEntries).toContain("OPENCLAW_BROWSER_NO_SANDBOX=1");
+    expect(envEntries).toContain("NEXISCLAW_BROWSER_NO_SANDBOX=1");
     const passwordEntry = envEntries.find((entry) =>
-      entry.startsWith("OPENCLAW_BROWSER_NOVNC_PASSWORD="),
+      entry.startsWith("NEXISCLAW_BROWSER_NOVNC_PASSWORD="),
     );
-    expect(passwordEntry).toMatch(/^OPENCLAW_BROWSER_NOVNC_PASSWORD=[A-Za-z0-9]{8}$/);
+    expect(passwordEntry).toMatch(/^NEXISCLAW_BROWSER_NOVNC_PASSWORD=[A-Za-z0-9]{8}$/);
     expect(result?.noVncUrl).toMatch(/^http:\/\/127\.0\.0\.1:\d+\/sandbox\/novnc\?token=/);
     expect(result?.noVncUrl).not.toContain("password=");
   });
@@ -297,7 +297,7 @@ describe("ensureSandboxBrowser create args", () => {
     const createArgs = findDockerArgsCall(dockerMocks.execDocker.mock.calls, "create");
     const envEntries = collectDockerFlagValues(createArgs ?? [], "-e");
     expect(
-      envEntries.filter((entry) => entry.startsWith("OPENCLAW_BROWSER_NOVNC_PASSWORD=")),
+      envEntries.filter((entry) => entry.startsWith("NEXISCLAW_BROWSER_NOVNC_PASSWORD=")),
     ).toStrictEqual([]);
     expect(result?.noVncUrl).toBeUndefined();
   });
@@ -367,7 +367,7 @@ describe("ensureSandboxBrowser create args", () => {
           headless: false,
           noSandbox: false,
           attachOnly: true,
-          defaultProfile: "openclaw",
+          defaultProfile: "NexisClaw",
           extraArgs: [],
           tabCleanup: {
             enabled: true,
@@ -376,7 +376,7 @@ describe("ensureSandboxBrowser create args", () => {
             sweepMinutes: 5,
           },
           profiles: {
-            openclaw: {
+            NexisClaw: {
               cdpPort: 49100,
               color: "#FF4500",
             },
@@ -387,7 +387,7 @@ describe("ensureSandboxBrowser create args", () => {
     };
     BROWSER_BRIDGES.set("session:test", {
       bridge: existingBridge,
-      containerName: "openclaw-sbx-browser-session-test-0661d10a",
+      containerName: "NexisClaw-sbx-browser-session-test-0661d10a",
       authToken: "test-bridge-token",
     });
     dockerMocks.dockerContainerState.mockResolvedValue({ exists: true, running: true });
@@ -429,7 +429,7 @@ describe("ensureSandboxBrowser create args", () => {
           headless: false,
           noSandbox: false,
           attachOnly: true,
-          defaultProfile: "openclaw",
+          defaultProfile: "NexisClaw",
           extraArgs: [],
           tabCleanup: {
             enabled: true,
@@ -438,7 +438,7 @@ describe("ensureSandboxBrowser create args", () => {
             sweepMinutes: 5,
           },
           profiles: {
-            openclaw: {
+            NexisClaw: {
               cdpPort: 49100,
               color: "#FF4500",
             },
@@ -448,7 +448,7 @@ describe("ensureSandboxBrowser create args", () => {
     };
     BROWSER_BRIDGES.set("session:test", {
       bridge: existingBridge,
-      containerName: "openclaw-sbx-browser-session-test-0661d10a",
+      containerName: "NexisClaw-sbx-browser-session-test-0661d10a",
       authToken: "test-bridge-token",
     });
     dockerMocks.dockerContainerState.mockResolvedValue({ exists: true, running: true });
@@ -508,7 +508,7 @@ describe("ensureSandboxBrowser create args", () => {
 
     const createArgs = findDockerArgsCall(dockerMocks.execDocker.mock.calls, "create");
     const labels = collectDockerFlagValues(createArgs ?? [], "--label");
-    expect(labels).toContain(`openclaw.mountFormatVersion=${SANDBOX_MOUNT_FORMAT_VERSION}`);
+    expect(labels).toContain(`NexisClaw.mountFormatVersion=${SANDBOX_MOUNT_FORMAT_VERSION}`);
   });
 
   it("force-removes the browser container when CDP never becomes reachable", async () => {
@@ -541,7 +541,7 @@ describe("ensureSandboxBrowser create args", () => {
     ).rejects.toThrow("hung container has been forcefully removed");
 
     expect(dockerMocks.execDocker).toHaveBeenCalledWith(
-      ["rm", "-f", "openclaw-sbx-browser-session-test-0661d10a"],
+      ["rm", "-f", "NexisClaw-sbx-browser-session-test-0661d10a"],
       { allowFailure: true },
     );
   });
@@ -559,22 +559,22 @@ describe("ensureSandboxBrowser create args", () => {
     const createArgs = findDockerArgsCall(dockerMocks.execDocker.mock.calls, "create");
     const envEntries = collectDockerFlagValues(createArgs ?? [], "-e");
     const authEntry = envEntries.find((entry) =>
-      entry.startsWith("OPENCLAW_BROWSER_CDP_AUTH_TOKEN="),
+      entry.startsWith("NEXISCLAW_BROWSER_CDP_AUTH_TOKEN="),
     );
-    expect(authEntry).toMatch(/^OPENCLAW_BROWSER_CDP_AUTH_TOKEN=[0-9a-f]{48}$/);
-    expect(envEntries).not.toContain("OPENCLAW_BROWSER_CDP_SOURCE_RANGE=172.21.0.1/32");
+    expect(authEntry).toMatch(/^NEXISCLAW_BROWSER_CDP_AUTH_TOKEN=[0-9a-f]{48}$/);
+    expect(envEntries).not.toContain("NEXISCLAW_BROWSER_CDP_SOURCE_RANGE=172.21.0.1/32");
     expect(dockerMocks.readDockerNetworkDriver).not.toHaveBeenCalled();
     expect(dockerMocks.readDockerNetworkGateway).not.toHaveBeenCalled();
 
     const token = requireValue(authEntry, "CDP auth env").slice(
-      "OPENCLAW_BROWSER_CDP_AUTH_TOKEN=".length,
+      "NEXISCLAW_BROWSER_CDP_AUTH_TOKEN=".length,
     );
     const profiles = latestBridgeResolved().profiles as Record<
       string,
       { cdpPort?: number; cdpUrl?: string }
     >;
-    expect(profiles.openclaw?.cdpPort).toBe(49100);
-    expect(profiles.openclaw?.cdpUrl).toBe(`http://openclaw:${token}@127.0.0.1:49100`);
+    expect(profiles.NexisClaw?.cdpPort).toBe(49100);
+    expect(profiles.NexisClaw?.cdpUrl).toBe(`http://NexisClaw:${token}@127.0.0.1:49100`);
   });
 
   it("passes explicit cdpSourceRange as an additional relay filter", async () => {
@@ -591,7 +591,7 @@ describe("ensureSandboxBrowser create args", () => {
 
     const createArgs = findDockerArgsCall(dockerMocks.execDocker.mock.calls, "create");
     const envEntries = collectDockerFlagValues(createArgs ?? [], "-e");
-    expect(envEntries).toContain("OPENCLAW_BROWSER_CDP_SOURCE_RANGE=10.0.0.0/24");
+    expect(envEntries).toContain("NEXISCLAW_BROWSER_CDP_SOURCE_RANGE=10.0.0.0/24");
     expect(dockerMocks.readDockerNetworkGateway).not.toHaveBeenCalled();
   });
 
@@ -607,7 +607,7 @@ describe("ensureSandboxBrowser create args", () => {
     });
 
     expect(dockerMocks.execDocker).toHaveBeenCalledWith(
-      ["rm", "-f", "openclaw-sbx-browser-session-test-0661d10a"],
+      ["rm", "-f", "NexisClaw-sbx-browser-session-test-0661d10a"],
       { allowFailure: true },
     );
     expect(findDockerArgsCall(dockerMocks.execDocker.mock.calls, "create")).toBeDefined();
@@ -628,7 +628,7 @@ describe("ensureSandboxBrowser create args", () => {
     requireValue(result, "sandbox browser result");
     const createArgs = requireDockerCreateArgs();
     const envEntries = collectDockerFlagValues(createArgs, "-e");
-    expect(envEntries.some((entry) => entry.startsWith("OPENCLAW_BROWSER_CDP_SOURCE_RANGE="))).toBe(
+    expect(envEntries.some((entry) => entry.startsWith("NEXISCLAW_BROWSER_CDP_SOURCE_RANGE="))).toBe(
       false,
     );
   });

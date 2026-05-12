@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type {
   AgentToolResultMiddleware,
   AgentToolResultMiddlewareOptions,
@@ -23,13 +23,13 @@ import type {
   AnyAgentTool,
   AgentHarness,
   CliBackendPlugin,
-  OpenClawPluginApi,
+  NexisClawPluginApi,
   ImageGenerationProviderPlugin,
   MediaUnderstandingProviderPlugin,
   MigrationProviderPlugin,
   MusicGenerationProviderPlugin,
-  OpenClawPluginCliCommandDescriptor,
-  OpenClawPluginCliRegistrar,
+  NexisClawPluginCliCommandDescriptor,
+  NexisClawPluginCliRegistrar,
   PluginTextTransformRegistration,
   ProviderPlugin,
   RealtimeTranscriptionProviderPlugin,
@@ -42,14 +42,14 @@ import type {
 } from "./types.js";
 
 type CapturedPluginCliRegistration = {
-  register: OpenClawPluginCliRegistrar;
+  register: NexisClawPluginCliRegistrar;
   parentPath: string[];
   commands: string[];
-  descriptors: OpenClawPluginCliCommandDescriptor[];
+  descriptors: NexisClawPluginCliCommandDescriptor[];
 };
 
 export type CapturedPluginRegistration = {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   providers: ProviderPlugin[];
   agentHarnesses: AgentHarness[];
   cliRegistrars: CapturedPluginCliRegistration[];
@@ -81,10 +81,10 @@ export type CapturedPluginRegistration = {
 };
 
 export function createCapturedPluginRegistration(params?: {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   id?: string;
   name?: string;
-  registrationMode?: OpenClawPluginApi["registrationMode"];
+  registrationMode?: NexisClawPluginApi["registrationMode"];
   source?: string;
 }): CapturedPluginRegistration {
   const providers: ProviderPlugin[] = [];
@@ -160,7 +160,7 @@ export function createCapturedPluginRegistration(params?: {
       name: pluginName,
       source: pluginSource,
       registrationMode: params?.registrationMode ?? "full",
-      config: params?.config ?? ({} as OpenClawConfig),
+      config: params?.config ?? ({} as NexisClawConfig),
       runtime: {} as PluginRuntime,
       logger: noopLogger,
       resolvePath: (input) => input,
@@ -311,7 +311,7 @@ export function createCapturedPluginRegistration(params?: {
 
 export function capturePluginRegistration(
   params: NonNullable<Parameters<typeof createCapturedPluginRegistration>[0]> & {
-    register(api: OpenClawPluginApi): void;
+    register(api: NexisClawPluginApi): void;
   },
 ): CapturedPluginRegistration {
   const captured = createCapturedPluginRegistration(params);

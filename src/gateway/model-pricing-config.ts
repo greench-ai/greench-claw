@@ -1,5 +1,5 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 
-export function isGatewayModelPricingEnabled(config: OpenClawConfig): boolean {
+export function isGatewayModelPricingEnabled(config: NexisClawConfig): boolean {
   return config.models?.pricing?.enabled !== false;
 }

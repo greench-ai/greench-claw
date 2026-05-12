@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type {
   TaskDeliveryState,
   TaskDeliveryStatus,
@@ -100,7 +100,7 @@ export type DetachedTaskDeliveryStatusParams = {
 };
 
 export type DetachedTaskCancelParams = {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   taskId: string;
   reason?: string;
 };

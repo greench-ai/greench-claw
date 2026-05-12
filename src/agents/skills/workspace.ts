@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { walkDirectorySync } from "../../infra/fs-safe.js";
 import { resolveOsHomeDir } from "../../infra/home-dir.js";
 import { isPathInside } from "../../infra/path-guards.js";
@@ -16,7 +16,7 @@ import {
 import { resolveBundledSkillsDir } from "./bundled-dir.js";
 import { shouldIncludeSkill } from "./config.js";
 import { normalizeSkillFilter } from "./filter.js";
-import { resolveOpenClawMetadata, resolveSkillInvocationPolicy } from "./frontmatter.js";
+import { resolveNexisClawMetadata, resolveSkillInvocationPolicy } from "./frontmatter.js";
 import { loadSkillsFromDirSafe, readSkillFrontmatterSafe } from "./local-loader.js";
 import { resolvePluginSkillDirs } from "./plugin-skills.js";
 import { serializeByKey } from "./serialize.js";
@@ -114,7 +114,7 @@ function isSkillVisibleInAvailableSkillsPrompt(entry: SkillEntry): boolean {
 
 function filterSkillEntries(
   entries: SkillEntry[],
-  config?: OpenClawConfig,
+  config?: NexisClawConfig,
   skillFilter?: string[],
   eligibility?: SkillEligibilityContext,
 ): SkillEntry[] {
@@ -168,7 +168,7 @@ type ChildDirectoryScan = {
   truncated: boolean;
 };
 
-function resolveSkillsLimits(config?: OpenClawConfig, agentId?: string): ResolvedSkillsLimits {
+function resolveSkillsLimits(config?: NexisClawConfig, agentId?: string): ResolvedSkillsLimits {
   const limits = config?.skills?.limits;
   const agentSkillsLimits = resolveEffectiveAgentSkillsLimits(config, agentId);
   return {
@@ -247,7 +247,7 @@ function buildEscapedSkillPathReason(params: { source: string; candidatePath: st
   consoleHint: string;
 } {
   const candidateIsSymlink = isSymlinkPath(params.candidatePath);
-  if (params.source === "openclaw-bundled" && candidateIsSymlink) {
+  if (params.source === "NexisClaw-bundled" && candidateIsSymlink) {
     return {
       reason: "bundled-symlink-escape",
       consoleHint:
@@ -260,7 +260,7 @@ function buildEscapedSkillPathReason(params: { source: string; candidatePath: st
       consoleHint: "reason=symlink-escape",
     };
   }
-  if (params.source === "openclaw-bundled") {
+  if (params.source === "NexisClaw-bundled") {
     return {
       reason: "bundled-root-escape",
       consoleHint:
@@ -411,7 +411,7 @@ function resolvePluginSkillRootRealPaths(pluginSkillDirs: readonly string[]): st
     .filter((dir, index, all) => all.indexOf(dir) === index);
 }
 
-function resolveAllowedSymlinkTargetRealPaths(config?: OpenClawConfig): string[] {
+function resolveAllowedSymlinkTargetRealPaths(config?: NexisClawConfig): string[] {
   const rawTargets = config?.skills?.load?.allowSymlinkTargets ?? [];
   return rawTargets
     .map((dir) => normalizeOptionalString(dir) ?? "")
@@ -515,7 +515,7 @@ function loadGeneratedPluginSkillRecords(params: {
 function loadSkillEntries(
   workspaceDir: string,
   opts?: {
-    config?: OpenClawConfig;
+    config?: NexisClawConfig;
     agentId?: string;
     managedSkillsDir?: string;
     bundledSkillsDir?: string;
@@ -639,7 +639,7 @@ function loadSkillEntries(
 
     // Consider immediate subfolders that look like skills (have SKILL.md) and are under size cap.
     // When an immediate subfolder does NOT have a SKILL.md, check one level deeper for grouped
-    // skill directories (e.g. ~/.openclaw/skills/coze/koze-retrieval/SKILL.md).
+    // skill directories (e.g. ~/.NexisClaw/skills/coze/koze-retrieval/SKILL.md).
     for (const name of limitedChildren) {
       const skillDir = path.join(baseDir, name);
       const skillDirRealPath = resolveContainedSkillPath({
@@ -759,7 +759,7 @@ function loadSkillEntries(
   const bundledSkills = bundledSkillsDir
     ? loadSkills({
         dir: bundledSkillsDir,
-        source: "openclaw-bundled",
+        source: "NexisClaw-bundled",
       })
     : [];
   const extraSkills = [
@@ -767,19 +767,19 @@ function loadSkillEntries(
       const resolved = resolveUserPath(dir);
       return loadSkills({
         dir: resolved,
-        source: "openclaw-extra",
+        source: "NexisClaw-extra",
       });
     }),
     ...loadGeneratedPluginSkillRecords({
       pluginSkillsDir,
       pluginSkillDirs,
-      source: "openclaw-extra",
+      source: "NexisClaw-extra",
       limits,
     }),
   ];
   const managedSkills = loadSkills({
     dir: managedSkillsDir,
-    source: "openclaw-managed",
+    source: "NexisClaw-managed",
   });
   const osHomeDir = resolveUserHomeDir();
   const personalAgentsSkillsDir = osHomeDir
@@ -796,7 +796,7 @@ function loadSkillEntries(
   });
   const workspaceSkills = loadSkills({
     dir: workspaceSkillsDir,
-    source: "openclaw-workspace",
+    source: "NexisClaw-workspace",
   });
 
   const merged = new Map<string, LoadedSkillRecord>();
@@ -836,7 +836,7 @@ function loadSkillEntries(
       return {
         skill,
         frontmatter,
-        metadata: resolveOpenClawMetadata(frontmatter),
+        metadata: resolveNexisClawMetadata(frontmatter),
         invocation,
         exposure: {
           includeInRuntimeRegistry: true,
@@ -889,7 +889,7 @@ const COMPACT_WARNING_OVERHEAD = 150;
 
 function applySkillsPromptLimits(params: {
   skills: Skill[];
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   agentId?: string;
 }): {
   skillsForPrompt: Skill[];
@@ -970,7 +970,7 @@ export const __testing = {
 };
 
 type WorkspaceSkillBuildOptions = {
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   managedSkillsDir?: string;
   bundledSkillsDir?: string;
   entries?: SkillEntry[];
@@ -1024,9 +1024,9 @@ function resolveWorkspaceSkillPromptState(
     agentId: opts?.agentId,
   });
   const truncationNote = truncated
-    ? `⚠️ Skills truncated: included ${skillsForPrompt.length} of ${resolvedSkills.length}${compact ? " (compact format, descriptions omitted)" : ""}. Run \`openclaw skills check\` to audit.`
+    ? `⚠️ Skills truncated: included ${skillsForPrompt.length} of ${resolvedSkills.length}${compact ? " (compact format, descriptions omitted)" : ""}. Run \`NexisClaw skills check\` to audit.`
     : compact
-      ? `⚠️ Skills catalog using compact format (descriptions omitted). Run \`openclaw skills check\` to audit.`
+      ? `⚠️ Skills catalog using compact format (descriptions omitted). Run \`NexisClaw skills check\` to audit.`
       : "";
   const prompt = [
     remoteNote,
@@ -1041,7 +1041,7 @@ function resolveWorkspaceSkillPromptState(
 export function resolveSkillsPromptForRun(params: {
   skillsSnapshot?: SkillSnapshot;
   entries?: SkillEntry[];
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   workspaceDir: string;
   agentId?: string;
 }): string {
@@ -1063,7 +1063,7 @@ export function resolveSkillsPromptForRun(params: {
 export function loadWorkspaceSkillEntries(
   workspaceDir: string,
   opts?: {
-    config?: OpenClawConfig;
+    config?: NexisClawConfig;
     managedSkillsDir?: string;
     bundledSkillsDir?: string;
     pluginSkillsDir?: string;
@@ -1083,7 +1083,7 @@ export function loadWorkspaceSkillEntries(
 export function loadVisibleWorkspaceSkillEntries(
   workspaceDir: string,
   opts?: {
-    config?: OpenClawConfig;
+    config?: NexisClawConfig;
     managedSkillsDir?: string;
     bundledSkillsDir?: string;
     skillFilter?: string[];
@@ -1138,7 +1138,7 @@ function resolveSyncedSkillDestinationPath(params: {
 export async function syncSkillsToWorkspace(params: {
   sourceWorkspaceDir: string;
   targetWorkspaceDir: string;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   skillFilter?: string[];
   agentId?: string;
   eligibility?: SkillEligibilityContext;
@@ -1205,7 +1205,7 @@ export async function syncSkillsToWorkspace(params: {
 
 export function filterWorkspaceSkillEntries(
   entries: SkillEntry[],
-  config?: OpenClawConfig,
+  config?: NexisClawConfig,
 ): SkillEntry[] {
   return filterSkillEntries(entries, config);
 }
@@ -1213,7 +1213,7 @@ export function filterWorkspaceSkillEntries(
 export function filterWorkspaceSkillEntriesWithOptions(
   entries: SkillEntry[],
   opts?: {
-    config?: OpenClawConfig;
+    config?: NexisClawConfig;
     skillFilter?: string[];
     eligibility?: SkillEligibilityContext;
   },

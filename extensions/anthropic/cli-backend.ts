@@ -1,8 +1,8 @@
-import type { CliBackendPlugin } from "openclaw/plugin-sdk/cli-backend";
+import type { CliBackendPlugin } from "NexisClaw/plugin-sdk/cli-backend";
 import {
   CLI_FRESH_WATCHDOG_DEFAULTS,
   CLI_RESUME_WATCHDOG_DEFAULTS,
-} from "openclaw/plugin-sdk/cli-backend";
+} from "NexisClaw/plugin-sdk/cli-backend";
 import {
   CLAUDE_CLI_BACKEND_ID,
   CLAUDE_CLI_DEFAULT_MODEL_REF,
@@ -39,7 +39,7 @@ export function buildAnthropicCliBackend(): CliBackendPlugin {
         "--setting-sources",
         "user",
         "--allowedTools",
-        "mcp__openclaw__*",
+        "mcp__NexisClaw__*",
       ],
       resumeArgs: [
         "-p",
@@ -50,7 +50,7 @@ export function buildAnthropicCliBackend(): CliBackendPlugin {
         "--setting-sources",
         "user",
         "--allowedTools",
-        "mcp__openclaw__*",
+        "mcp__NexisClaw__*",
         "--resume",
         "{sessionId}",
       ],

@@ -1,10 +1,10 @@
 run_plugins_clawhub_scenario() {
-  if [ "${OPENCLAW_PLUGINS_E2E_CLAWHUB:-1}" = "0" ]; then
-    echo "Skipping ClawHub plugin install and uninstall (OPENCLAW_PLUGINS_E2E_CLAWHUB=0)."
+  if [ "${NEXISCLAW_PLUGINS_E2E_CLAWHUB:-1}" = "0" ]; then
+    echo "Skipping ClawHub plugin install and uninstall (NEXISCLAW_PLUGINS_E2E_CLAWHUB=0)."
   else
     echo "Testing ClawHub plugin install and uninstall..."
-    CLAWHUB_PLUGIN_SPEC="${OPENCLAW_PLUGINS_E2E_CLAWHUB_SPEC:-clawhub:@openclaw/kitchen-sink}"
-    CLAWHUB_PLUGIN_ID="${OPENCLAW_PLUGINS_E2E_CLAWHUB_ID:-openclaw-kitchen-sink-fixture}"
+    CLAWHUB_PLUGIN_SPEC="${NEXISCLAW_PLUGINS_E2E_CLAWHUB_SPEC:-clawhub:@NexisClaw/kitchen-sink}"
+    CLAWHUB_PLUGIN_ID="${NEXISCLAW_PLUGINS_E2E_CLAWHUB_ID:-NexisClaw-kitchen-sink-fixture}"
     export CLAWHUB_PLUGIN_SPEC CLAWHUB_PLUGIN_ID
 
     start_clawhub_fixture_server() {
@@ -19,7 +19,7 @@ run_plugins_clawhub_scenario() {
 
       for _ in $(seq 1 100); do
         if [[ -s "$server_port_file" ]]; then
-          export OPENCLAW_CLAWHUB_URL="http://127.0.0.1:$(cat "$server_port_file")"
+          export NEXISCLAW_CLAWHUB_URL="http://127.0.0.1:$(cat "$server_port_file")"
           trap 'if [[ -f "'"$server_pid_file"'" ]]; then kill "$(cat "'"$server_pid_file"'")" 2>/dev/null || true; fi' EXIT
           return 0
         fi
@@ -35,35 +35,35 @@ run_plugins_clawhub_scenario() {
       return 1
     }
 
-    if [[ "${OPENCLAW_PLUGINS_E2E_LIVE_CLAWHUB:-0}" = "1" ]]; then
-      export OPENCLAW_CLAWHUB_URL="${OPENCLAW_CLAWHUB_URL:-${CLAWHUB_URL:-https://clawhub.ai}}"
-      export NPM_CONFIG_REGISTRY="${OPENCLAW_PLUGINS_E2E_LIVE_NPM_REGISTRY:-https://registry.npmjs.org/}"
+    if [[ "${NEXISCLAW_PLUGINS_E2E_LIVE_CLAWHUB:-0}" = "1" ]]; then
+      export NEXISCLAW_CLAWHUB_URL="${NEXISCLAW_CLAWHUB_URL:-${CLAWHUB_URL:-https://clawhub.ai}}"
+      export NPM_CONFIG_REGISTRY="${NEXISCLAW_PLUGINS_E2E_LIVE_NPM_REGISTRY:-https://registry.npmjs.org/}"
     else
       # Keep the release-path smoke hermetic; live ClawHub can rate-limit CI.
-      if [[ -n "${OPENCLAW_CLAWHUB_URL:-}" || -n "${CLAWHUB_URL:-}" ]]; then
-        echo "Ignoring ambient ClawHub URL for fixture-mode plugin E2E; set OPENCLAW_PLUGINS_E2E_LIVE_CLAWHUB=1 for live ClawHub."
+      if [[ -n "${NEXISCLAW_CLAWHUB_URL:-}" || -n "${CLAWHUB_URL:-}" ]]; then
+        echo "Ignoring ambient ClawHub URL for fixture-mode plugin E2E; set NEXISCLAW_PLUGINS_E2E_LIVE_CLAWHUB=1 for live ClawHub."
       fi
-      unset OPENCLAW_CLAWHUB_URL CLAWHUB_URL
-      clawhub_fixture_dir="$(mktemp -d "/tmp/openclaw-clawhub-fixture.XXXXXX")"
+      unset NEXISCLAW_CLAWHUB_URL CLAWHUB_URL
+      clawhub_fixture_dir="$(mktemp -d "/tmp/NexisClaw-clawhub-fixture.XXXXXX")"
       start_clawhub_fixture_server "$clawhub_fixture_dir"
     fi
 
     node scripts/e2e/lib/plugins/assertions.mjs clawhub-preflight
 
-    run_logged install-clawhub node "$OPENCLAW_ENTRY" plugins install "$CLAWHUB_PLUGIN_SPEC"
-    node "$OPENCLAW_ENTRY" plugins list --json >/tmp/plugins-clawhub-installed.json
-    node "$OPENCLAW_ENTRY" plugins inspect "$CLAWHUB_PLUGIN_ID" --json >/tmp/plugins-clawhub-inspect.json
+    run_logged install-clawhub node "$NEXISCLAW_ENTRY" plugins install "$CLAWHUB_PLUGIN_SPEC"
+    node "$NEXISCLAW_ENTRY" plugins list --json >/tmp/plugins-clawhub-installed.json
+    node "$NEXISCLAW_ENTRY" plugins inspect "$CLAWHUB_PLUGIN_ID" --json >/tmp/plugins-clawhub-inspect.json
 
     node scripts/e2e/lib/plugins/assertions.mjs clawhub-installed
 
-    node "$OPENCLAW_ENTRY" plugins update "$CLAWHUB_PLUGIN_ID" >/tmp/plugins-clawhub-update.log 2>&1
-    node "$OPENCLAW_ENTRY" plugins list --json >/tmp/plugins-clawhub-updated.json
-    node "$OPENCLAW_ENTRY" plugins inspect "$CLAWHUB_PLUGIN_ID" --json >/tmp/plugins-clawhub-updated-inspect.json
+    node "$NEXISCLAW_ENTRY" plugins update "$CLAWHUB_PLUGIN_ID" >/tmp/plugins-clawhub-update.log 2>&1
+    node "$NEXISCLAW_ENTRY" plugins list --json >/tmp/plugins-clawhub-updated.json
+    node "$NEXISCLAW_ENTRY" plugins inspect "$CLAWHUB_PLUGIN_ID" --json >/tmp/plugins-clawhub-updated-inspect.json
 
     node scripts/e2e/lib/plugins/assertions.mjs clawhub-updated
 
-    run_logged uninstall-clawhub node "$OPENCLAW_ENTRY" plugins uninstall "$CLAWHUB_PLUGIN_SPEC" --force
-    node "$OPENCLAW_ENTRY" plugins list --json >/tmp/plugins-clawhub-uninstalled.json
+    run_logged uninstall-clawhub node "$NEXISCLAW_ENTRY" plugins uninstall "$CLAWHUB_PLUGIN_SPEC" --force
+    node "$NEXISCLAW_ENTRY" plugins list --json >/tmp/plugins-clawhub-uninstalled.json
 
     node scripts/e2e/lib/plugins/assertions.mjs clawhub-removed
   fi

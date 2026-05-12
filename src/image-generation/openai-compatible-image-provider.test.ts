@@ -42,15 +42,15 @@ const {
   sanitizeConfiguredModelProviderRequestMock: vi.fn((request) => request),
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-auth", () => ({
+vi.mock("NexisClaw/plugin-sdk/provider-auth", () => ({
   isProviderApiKeyConfigured: isProviderApiKeyConfiguredMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-auth-runtime", () => ({
+vi.mock("NexisClaw/plugin-sdk/provider-auth-runtime", () => ({
   resolveApiKeyForProvider: resolveApiKeyForProviderMock,
 }));
 
-vi.mock("openclaw/plugin-sdk/provider-http", () => ({
+vi.mock("NexisClaw/plugin-sdk/provider-http", () => ({
   assertOkOrThrowHttpError: assertOkOrThrowHttpErrorMock,
   createProviderOperationDeadline: createProviderOperationDeadlineMock,
   postJsonRequest: postJsonRequestMock,

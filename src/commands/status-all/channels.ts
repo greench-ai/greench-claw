@@ -13,7 +13,7 @@ import type {
   ChannelId,
   ChannelPlugin,
 } from "../../channels/plugins/types.public.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { listExplicitConfiguredChannelIdsForConfig } from "../../plugins/channel-plugin-ids.js";
 import { resolveMissingOfficialExternalChannelPluginRepairHint } from "../../plugins/official-external-plugin-repair-hints.js";
 import { asRecord } from "../../shared/record-coerce.js";
@@ -39,8 +39,8 @@ type ChannelAccountRow = ChannelAccountTokenSummaryRow & {
 
 type ResolvedChannelAccountRowParams = {
   plugin: ChannelPlugin;
-  cfg: OpenClawConfig;
-  sourceConfig: OpenClawConfig;
+  cfg: NexisClawConfig;
+  sourceConfig: NexisClawConfig;
   accountId: string;
 };
 
@@ -144,7 +144,7 @@ const formatAccountLabel = (params: { accountId: string; name?: string }) => {
 
 const buildAccountNotes = (params: {
   plugin: ChannelPlugin;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   entry: ChannelAccountRow;
   liveCredentialAvailable?: boolean;
 }) => {
@@ -249,10 +249,10 @@ function collectMissingPaths(accounts: ChannelAccountRow[]): string[] {
 // `status --all` channels table.
 // Keep this generic: channel-specific rules belong in the channel plugin.
 export async function buildChannelsTable(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   opts?: {
     showSecrets?: boolean;
-    sourceConfig?: OpenClawConfig;
+    sourceConfig?: NexisClawConfig;
     includeSetupFallbackPlugins?: boolean;
     liveChannelStatus?: unknown;
   },

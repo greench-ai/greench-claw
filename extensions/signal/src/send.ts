@@ -3,20 +3,20 @@ import {
   type MessageReceipt,
   type MessageReceiptPartKind,
   type MessageReceiptSourceResult,
-} from "openclaw/plugin-sdk/channel-message";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveMarkdownTableMode } from "openclaw/plugin-sdk/markdown-table-runtime";
-import { kindFromMime } from "openclaw/plugin-sdk/media-runtime";
-import { resolveOutboundAttachmentFromUrl } from "openclaw/plugin-sdk/media-runtime";
-import { requireRuntimeConfig } from "openclaw/plugin-sdk/plugin-config-runtime";
-import { normalizeLowercaseStringOrEmpty } from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/channel-message";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveMarkdownTableMode } from "NexisClaw/plugin-sdk/markdown-table-runtime";
+import { kindFromMime } from "NexisClaw/plugin-sdk/media-runtime";
+import { resolveOutboundAttachmentFromUrl } from "NexisClaw/plugin-sdk/media-runtime";
+import { requireRuntimeConfig } from "NexisClaw/plugin-sdk/plugin-config-runtime";
+import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { resolveSignalAccount } from "./accounts.js";
 import { signalRpcRequest } from "./client-adapter.js";
 import { markdownToSignalText, type SignalTextStyleRange } from "./format.js";
 import { resolveSignalRpcContext } from "./rpc-context.js";
 
 export type SignalSendOpts = {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   baseUrl?: string;
   account?: string;
   accountId?: string;

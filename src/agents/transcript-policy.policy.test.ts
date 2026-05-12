@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 import { resolveTranscriptPolicy } from "./transcript-policy.js";
 
 vi.mock("../plugins/provider-hook-runtime.js", () => ({
@@ -21,19 +21,19 @@ const MISTRAL_PLUGIN_CONFIG = {
       mistral: { enabled: true },
     },
   },
-} as OpenClawConfig;
+} as NexisClawConfig;
 
 function createProviderRuntimeSmokeContext(): {
-  config: OpenClawConfig;
+  config: NexisClawConfig;
   env: NodeJS.ProcessEnv;
   workspaceDir: string;
 } {
   const env = { ...process.env };
-  delete env.OPENCLAW_BUNDLED_PLUGINS_DIR;
-  delete env.OPENCLAW_SKIP_PROVIDERS;
-  delete env.OPENCLAW_SKIP_CHANNELS;
-  delete env.OPENCLAW_SKIP_CRON;
-  delete env.OPENCLAW_TEST_MINIMAL_GATEWAY;
+  delete env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+  delete env.NEXISCLAW_SKIP_PROVIDERS;
+  delete env.NEXISCLAW_SKIP_CHANNELS;
+  delete env.NEXISCLAW_SKIP_CRON;
+  delete env.NEXISCLAW_TEST_MINIMAL_GATEWAY;
   return {
     config: {},
     env,

@@ -72,7 +72,7 @@ function truncatePersistedDetailString(
   if (value.length <= maxChars) {
     return value;
   }
-  return `${value.slice(0, maxChars)}\n\n[OpenClaw persisted detail truncated: ${
+  return `${value.slice(0, maxChars)}\n\n[NexisClaw persisted detail truncated: ${
     value.length - maxChars
   } chars omitted]`;
 }
@@ -269,13 +269,13 @@ function normalizePersistedToolResultName(
   return toolResult;
 }
 
-function isTranscriptOnlyOpenClawAssistantMessage(message: AgentMessage): boolean {
+function isTranscriptOnlyNexisClawAssistantMessage(message: AgentMessage): boolean {
   if (!message || message.role !== "assistant") {
     return false;
   }
   const provider = normalizeOptionalString((message as { provider?: unknown }).provider) ?? "";
   const model = normalizeOptionalString((message as { model?: unknown }).model) ?? "";
-  return provider === "openclaw" && (model === "delivery-mirror" || model === "gateway-injected");
+  return provider === "NexisClaw" && (model === "delivery-mirror" || model === "gateway-injected");
 }
 
 export { getRawSessionAppendMessage };
@@ -461,7 +461,7 @@ export function installSessionToolResultGuard(
     const transcriptOnlyAssistant =
       nextRole === "assistant" &&
       toolCalls.length === 0 &&
-      isTranscriptOnlyOpenClawAssistantMessage(nextMessage);
+      isTranscriptOnlyNexisClawAssistantMessage(nextMessage);
     if (
       !transcriptOnlyAssistant &&
       pendingState.shouldFlushBeforeNonToolResult(nextRole, toolCalls.length)

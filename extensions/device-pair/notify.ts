@@ -1,11 +1,11 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import type { OpenClawPluginService } from "openclaw/plugin-sdk/core";
-import { listDevicePairing } from "openclaw/plugin-sdk/device-bootstrap";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
-import { replaceFileAtomic } from "openclaw/plugin-sdk/security-runtime";
-import { normalizeOptionalString } from "openclaw/plugin-sdk/string-coerce-runtime";
+import type { NexisClawPluginService } from "NexisClaw/plugin-sdk/core";
+import { listDevicePairing } from "NexisClaw/plugin-sdk/device-bootstrap";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
+import { replaceFileAtomic } from "NexisClaw/plugin-sdk/security-runtime";
+import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 const NOTIFY_STATE_FILE = "device-pair-notify.json";
 const NOTIFY_POLL_INTERVAL_MS = 10_000;
@@ -284,7 +284,7 @@ function shouldNotifySubscriberForRequest(
 }
 
 async function notifySubscriber(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   subscriber: NotifySubscription;
   text: string;
 }): Promise<boolean> {
@@ -317,7 +317,7 @@ async function notifySubscriber(params: {
 }
 
 async function notifyPendingPairingRequests(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   statePath: string;
 }): Promise<void> {
   const state = await readNotifyState(params.statePath);
@@ -380,7 +380,7 @@ async function notifyPendingPairingRequests(params: {
 }
 
 export async function armPairNotifyOnce(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   ctx: {
     channel: string;
     senderId?: string;
@@ -414,7 +414,7 @@ export async function armPairNotifyOnce(params: {
 }
 
 export async function handleNotifyCommand(params: {
-  api: OpenClawPluginApi;
+  api: NexisClawPluginApi;
   ctx: {
     channel: string;
     senderId?: string;
@@ -493,7 +493,7 @@ export async function handleNotifyCommand(params: {
   return { text: "Usage: /pair notify on|off|once|status" };
 }
 
-export function createPairingNotifierService(api: OpenClawPluginApi): OpenClawPluginService {
+export function createPairingNotifierService(api: NexisClawPluginApi): NexisClawPluginService {
   let notifyInterval: ReturnType<typeof setInterval> | null = null;
 
   return {
@@ -523,6 +523,6 @@ export function createPairingNotifierService(api: OpenClawPluginApi): OpenClawPl
   };
 }
 
-export function registerPairingNotifierService(api: OpenClawPluginApi): void {
+export function registerPairingNotifierService(api: NexisClawPluginApi): void {
   api.registerService(createPairingNotifierService(api));
 }

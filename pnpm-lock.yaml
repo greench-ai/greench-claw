@@ -101,7 +101,7 @@ importers:
       '@mozilla/readability':
         specifier: 0.6.0
         version: 0.6.0
-      '@openclaw/fs-safe':
+      '@NexisClaw/fs-safe':
         specifier: 0.2.2
         version: 0.2.2
       '@slack/bolt':
@@ -320,13 +320,13 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/alibaba:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -348,7 +348,7 @@ importers:
         specifier: 4.5.1
         version: 4.5.1
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -364,7 +364,7 @@ importers:
         specifier: 0.74.0
         version: 0.74.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))(ws@8.20.0)(zod@4.4.3)
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -374,7 +374,7 @@ importers:
         specifier: 0.74.0
         version: 0.74.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))(ws@8.20.0)(zod@4.4.3)
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -390,19 +390,19 @@ importers:
         specifier: 0.74.0
         version: 0.74.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))(ws@8.20.0)(zod@4.4.3)
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/arcee:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/azure-speech:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -412,13 +412,13 @@ importers:
         specifier: 1.3.8
         version: 1.3.8
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/brave:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -443,7 +443,7 @@ importers:
         specifier: 8.20.0
         version: 8.20.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       undici:
@@ -452,7 +452,7 @@ importers:
 
   extensions/byteplus:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -477,19 +477,19 @@ importers:
         specifier: 8.20.0
         version: 8.20.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/cerebras:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/chutes:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -502,16 +502,16 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
   extensions/cloudflare-ai-gateway:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -533,37 +533,37 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/comfy:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/copilot-proxy:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/deepgram:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/deepinfra:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/deepseek:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -603,13 +603,13 @@ importers:
         specifier: 1.40.0
         version: 1.40.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/diagnostics-prometheus:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -631,7 +631,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -659,10 +659,10 @@ importers:
         specifier: 8.20.0
         version: 8.20.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -675,31 +675,31 @@ importers:
         specifier: 5.7.284
         version: 5.7.284
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/duckduckgo:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/elevenlabs:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/exa:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/fal:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -715,10 +715,10 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -731,7 +731,7 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -741,7 +741,7 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -751,7 +751,7 @@ importers:
         specifier: 0.74.0
         version: 0.74.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))(ws@8.20.0)(zod@4.4.3)
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -764,7 +764,7 @@ importers:
       '@earendil-works/pi-ai':
         specifier: 0.74.0
         version: 0.74.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))(ws@8.20.0)(zod@4.4.3)
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -777,7 +777,7 @@ importers:
         specifier: 2.0.1
         version: 2.0.1(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -790,10 +790,10 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -809,46 +809,46 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
   extensions/gradium:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/groq:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/huggingface:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/image-generation-core:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/imessage:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/inworld:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -858,13 +858,13 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/kilocode:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -874,7 +874,7 @@ importers:
         specifier: 0.74.0
         version: 0.74.0(@modelcontextprotocol/sdk@1.29.0(zod@4.4.3))(ws@8.20.0)(zod@4.4.3)
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -887,16 +887,16 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
   extensions/litellm:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -906,7 +906,7 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -928,7 +928,7 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -959,10 +959,10 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -975,10 +975,10 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -988,7 +988,7 @@ importers:
         specifier: 0.34.5
         version: 0.34.5
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1004,10 +1004,10 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -1026,7 +1026,7 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1042,10 +1042,10 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -1055,22 +1055,22 @@ importers:
         specifier: 1.2.10
         version: 1.2.10
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/microsoft-foundry:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/migrate-claude:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -1080,28 +1080,28 @@ importers:
         specifier: 2.9.0
         version: 2.9.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
   extensions/minimax:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/mistral:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/moonshot:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1129,13 +1129,13 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       '@types/jsonwebtoken':
         specifier: 9.0.10
         version: 9.0.10
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -1145,10 +1145,10 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -1161,16 +1161,16 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
   extensions/nvidia:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1186,10 +1186,10 @@ importers:
         specifier: 14.1.1
         version: 14.1.1
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -1202,13 +1202,13 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/open-prose:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1221,25 +1221,25 @@ importers:
         specifier: 8.20.0
         version: 8.20.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/opencode:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/opencode-go:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/openrouter:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1252,13 +1252,13 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/perplexity:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1271,10 +1271,10 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -1296,19 +1296,19 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/discord':
+      '@NexisClaw/discord':
         specifier: workspace:*
         version: link:../discord
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      '@openclaw/slack':
+      '@NexisClaw/slack':
         specifier: workspace:*
         version: link:../slack
-      '@openclaw/whatsapp':
+      '@NexisClaw/whatsapp':
         specifier: workspace:*
         version: link:../whatsapp
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -1318,19 +1318,19 @@ importers:
         specifier: 8.2.0
         version: 8.2.0
     devDependencies:
-      '@openclaw/matrix':
+      '@NexisClaw/matrix':
         specifier: workspace:*
         version: link:../matrix
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
   extensions/qianfan:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1352,43 +1352,43 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       '@types/ws':
         specifier: 8.18.1
         version: 8.18.1
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
   extensions/qwen:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/runway:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/searxng:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/senseaudio:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/sglang:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1398,7 +1398,7 @@ importers:
         specifier: 8.20.0
         version: 8.20.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1408,7 +1408,7 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1430,19 +1430,19 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/speech-core:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/stepfun:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1452,13 +1452,13 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/synthetic:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1468,7 +1468,7 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1490,13 +1490,13 @@ importers:
         specifier: 8.2.0
         version: 8.2.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/tencent:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1518,16 +1518,16 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
   extensions/together:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1537,13 +1537,13 @@ importers:
         specifier: 0.7.0
         version: 0.7.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/tts-local-cli:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1562,31 +1562,31 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/venice:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/vercel-ai-gateway:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/video-generation-core:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/vllm:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1605,28 +1605,28 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
   extensions/volcengine:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/voyage:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/vydra:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1639,7 +1639,7 @@ importers:
         specifier: 0.18.12
         version: 0.18.12
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1649,7 +1649,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1671,10 +1671,10 @@ importers:
         specifier: 8.2.0
         version: 8.2.0
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -1687,7 +1687,7 @@ importers:
         specifier: 1.1.38
         version: 1.1.38
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       ws:
@@ -1696,13 +1696,13 @@ importers:
 
   extensions/xiaomi:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/zai:
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1712,10 +1712,10 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -1731,10 +1731,10 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@openclaw/plugin-sdk':
+      '@NexisClaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      openclaw:
+      NexisClaw:
         specifier: workspace:*
         version: link:../..
 
@@ -3349,7 +3349,7 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@openclaw/fs-safe@0.2.2':
+  '@NexisClaw/fs-safe@0.2.2':
     resolution: {integrity: sha512-rQIqgVjuI8MONThAuOsGp1x1nK5UUvBYI8BW5OZtZw/0d8MbSfl27DNdkxzNF2FwHb8yKG8VBnmTlPHI269KTw==}
     engines: {node: '>=20.11'}
 
@@ -10029,7 +10029,7 @@ snapshots:
   '@openai/codex@0.130.0-win32-x64':
     optional: true
 
-  '@openclaw/fs-safe@0.2.2':
+  '@NexisClaw/fs-safe@0.2.2':
     optionalDependencies:
       jszip: 3.10.1
       tar: 7.5.15

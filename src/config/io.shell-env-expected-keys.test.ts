@@ -33,6 +33,6 @@ describe("config io shell env expected keys", () => {
     expect(expectedKeys).toContain("FIREWORKS_ALT_API_KEY");
     expect(expectedKeys).toContain("DISCORD_BOT_TOKEN");
     expect(expectedKeys).toContain("SLACK_BOT_TOKEN");
-    expect(expectedKeys).toContain("OPENCLAW_GATEWAY_TOKEN");
+    expect(expectedKeys).toContain("NEXISCLAW_GATEWAY_TOKEN");
   });
 });

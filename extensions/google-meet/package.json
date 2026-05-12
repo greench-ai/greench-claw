@@ -1,10 +1,10 @@
 {
-  "name": "@openclaw/google-meet",
+  "name": "@NexisClaw/google-meet",
   "version": "2026.5.12-beta.1",
-  "description": "OpenClaw Google Meet participant plugin",
+  "description": "NexisClaw Google Meet participant plugin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw"
+    "url": "https://github.com/NexisClaw/NexisClaw"
   },
   "type": "module",
   "dependencies": {
@@ -12,23 +12,23 @@
     "typebox": "1.1.38"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*",
+    "NexisClaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.5.12-beta.1"
+    "NexisClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "NexisClaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@openclaw/google-meet",
+      "npmSpec": "@NexisClaw/google-meet",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.20"
     },
@@ -36,7 +36,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "openclawVersion": "2026.5.12-beta.1"
+      "NexisClawVersion": "2026.5.12-beta.1"
     },
     "release": {
       "publishToClawHub": true,

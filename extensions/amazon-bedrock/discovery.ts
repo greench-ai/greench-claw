@@ -3,17 +3,17 @@ import {
   type ListFoundationModelsCommandOutput,
   type ListInferenceProfilesCommandOutput,
 } from "@aws-sdk/client-bedrock";
-import { createSubsystemLogger } from "openclaw/plugin-sdk/core";
-import { formatErrorMessage } from "openclaw/plugin-sdk/error-runtime";
+import { createSubsystemLogger } from "NexisClaw/plugin-sdk/core";
+import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
 import type {
   BedrockDiscoveryConfig,
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "NexisClaw/plugin-sdk/provider-model-shared";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "openclaw/plugin-sdk/string-coerce-runtime";
+} from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import { refreshAwsSharedConfigCacheForBedrock } from "./aws-credential-refresh.js";
 import { resolveBedrockConfigApiKey } from "./discovery-shared.js";
 

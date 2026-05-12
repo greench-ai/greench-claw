@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { updatePairedDeviceMetadata } from "../infra/device-pairing.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { updatePairedNodeMetadata } from "../infra/node-pairing.js";
@@ -236,7 +236,7 @@ function compactNotificationEventText(raw: string) {
 type LoadedSessionEntry = ReturnType<typeof loadSessionEntry>;
 
 async function touchSessionStore(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   sessionKey: string;
   storePath: LoadedSessionEntry["storePath"];
   canonicalKey: LoadedSessionEntry["canonicalKey"];
@@ -274,7 +274,7 @@ async function touchSessionStore(params: {
 
 function queueSessionStoreTouch(params: {
   ctx: NodeEventContext;
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   sessionKey: string;
   storePath: LoadedSessionEntry["storePath"];
   canonicalKey: LoadedSessionEntry["canonicalKey"];
@@ -326,7 +326,7 @@ function parsePayloadObject(payloadJSON?: string | null): Record<string, unknown
 }
 
 async function sendReceiptAck(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   deps: NodeEventContext["deps"];
   sessionKey: string;
   channel: string;

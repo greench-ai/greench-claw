@@ -2,16 +2,16 @@ import {
   createUnionActionGate,
   listTokenSourcedAccounts,
   resolveReactionMessageId,
-} from "openclaw/plugin-sdk/channel-actions";
+} from "NexisClaw/plugin-sdk/channel-actions";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageActionName,
   ChannelMessageToolDiscovery,
   ChannelMessageToolSchemaContribution,
-} from "openclaw/plugin-sdk/channel-contract";
-import type { TelegramActionConfig } from "openclaw/plugin-sdk/config-contracts";
-import { readStringValue } from "openclaw/plugin-sdk/string-coerce-runtime";
-import { extractToolSend } from "openclaw/plugin-sdk/tool-send";
+} from "NexisClaw/plugin-sdk/channel-contract";
+import type { TelegramActionConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { readStringValue } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { extractToolSend } from "NexisClaw/plugin-sdk/tool-send";
 import {
   createTelegramActionGate,
   listEnabledTelegramAccounts,

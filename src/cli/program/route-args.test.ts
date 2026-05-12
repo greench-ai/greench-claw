@@ -14,7 +14,7 @@ import {
 describe("route-args", () => {
   it("parses health and status route args", () => {
     expect(
-      parseHealthRouteArgs(["node", "openclaw", "health", "--json", "--timeout", "5000"]),
+      parseHealthRouteArgs(["node", "NexisClaw", "health", "--json", "--timeout", "5000"]),
     ).toEqual({
       json: true,
       verbose: false,
@@ -23,7 +23,7 @@ describe("route-args", () => {
     expect(
       parseStatusRouteArgs([
         "node",
-        "openclaw",
+        "NexisClaw",
         "status",
         "--json",
         "--deep",
@@ -40,14 +40,14 @@ describe("route-args", () => {
       verbose: false,
       timeoutMs: 5000,
     });
-    expect(parseStatusRouteArgs(["node", "openclaw", "status", "--timeout"])).toBeNull();
+    expect(parseStatusRouteArgs(["node", "NexisClaw", "status", "--timeout"])).toBeNull();
   });
 
   it("parses gateway status route args and rejects probe-only ssh flags", () => {
     expect(
       parseGatewayStatusRouteArgs([
         "node",
-        "openclaw",
+        "NexisClaw",
         "gateway",
         "status",
         "--url",
@@ -75,10 +75,10 @@ describe("route-args", () => {
       json: true,
     });
     expect(
-      parseGatewayStatusRouteArgs(["node", "openclaw", "gateway", "status", "--ssh", "host"]),
+      parseGatewayStatusRouteArgs(["node", "NexisClaw", "gateway", "status", "--ssh", "host"]),
     ).toBeNull();
     expect(
-      parseGatewayStatusRouteArgs(["node", "openclaw", "gateway", "status", "--ssh-auto"]),
+      parseGatewayStatusRouteArgs(["node", "NexisClaw", "gateway", "status", "--ssh-auto"]),
     ).toBeNull();
   });
 
@@ -86,7 +86,7 @@ describe("route-args", () => {
     expect(
       parseSessionsRouteArgs([
         "node",
-        "openclaw",
+        "NexisClaw",
         "sessions",
         "--json",
         "--all-agents",
@@ -107,15 +107,15 @@ describe("route-args", () => {
       active: "true",
       limit: "25",
     });
-    expect(parseSessionsRouteArgs(["node", "openclaw", "sessions", "--agent"])).toBeNull();
-    expect(parseSessionsRouteArgs(["node", "openclaw", "sessions", "--limit"])).toBeNull();
+    expect(parseSessionsRouteArgs(["node", "NexisClaw", "sessions", "--agent"])).toBeNull();
+    expect(parseSessionsRouteArgs(["node", "NexisClaw", "sessions", "--limit"])).toBeNull();
     expect(
-      parseAgentsListRouteArgs(["node", "openclaw", "agents", "list", "--json", "--bindings"]),
+      parseAgentsListRouteArgs(["node", "NexisClaw", "agents", "list", "--json", "--bindings"]),
     ).toEqual({
       json: true,
       bindings: true,
     });
-    expect(parseAgentsListRouteArgs(["node", "openclaw", "agents"])).toEqual({
+    expect(parseAgentsListRouteArgs(["node", "NexisClaw", "agents"])).toEqual({
       json: false,
       bindings: false,
     });
@@ -125,7 +125,7 @@ describe("route-args", () => {
     expect(
       parseConfigGetRouteArgs([
         "node",
-        "openclaw",
+        "NexisClaw",
         "--log-level",
         "debug",
         "config",
@@ -140,7 +140,7 @@ describe("route-args", () => {
     expect(
       parseConfigUnsetRouteArgs([
         "node",
-        "openclaw",
+        "NexisClaw",
         "config",
         "unset",
         "--profile",
@@ -150,14 +150,14 @@ describe("route-args", () => {
     ).toEqual({
       path: "update.channel",
     });
-    expect(parseConfigGetRouteArgs(["node", "openclaw", "config", "get", "--json"])).toBeNull();
+    expect(parseConfigGetRouteArgs(["node", "NexisClaw", "config", "get", "--json"])).toBeNull();
   });
 
   it("parses models list and models status route args", () => {
     expect(
       parseModelsListRouteArgs([
         "node",
-        "openclaw",
+        "NexisClaw",
         "models",
         "list",
         "--provider",
@@ -177,7 +177,7 @@ describe("route-args", () => {
     expect(
       parseModelsStatusRouteArgs([
         "node",
-        "openclaw",
+        "NexisClaw",
         "models",
         "status",
         "--probe-provider",
@@ -212,7 +212,7 @@ describe("route-args", () => {
       probe: true,
     });
     expect(
-      parseModelsStatusRouteArgs(["node", "openclaw", "models", "status", "--probe-profile"]),
+      parseModelsStatusRouteArgs(["node", "NexisClaw", "models", "status", "--probe-profile"]),
     ).toBeNull();
   });
 });

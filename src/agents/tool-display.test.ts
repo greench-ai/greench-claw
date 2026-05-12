@@ -6,10 +6,10 @@ describe("tool display details", () => {
   it("summarizes tool-search code targets from described tool ids", () => {
     expect(
       resolveToolSearchCodeDisplayTarget({
-        code: "const tool = await openclaw.tools.describe('openclaw:core:exec'); return await openclaw.tools.call(tool.id, { command: 'echo hi' });",
+        code: "const tool = await NexisClaw.tools.describe('NexisClaw:core:exec'); return await NexisClaw.tools.call(tool.id, { command: 'echo hi' });",
       }),
     ).toEqual({
-      toolName: "openclaw:core:exec",
+      toolName: "NexisClaw:core:exec",
       displayToolName: "exec",
       displayArgs: { command: "echo hi" },
       detail: "echo hi",
@@ -20,10 +20,10 @@ describe("tool display details", () => {
   it("normalizes direct tool-search catalog ids to native display names and args", () => {
     expect(
       resolveToolSearchCodeDisplayTarget({
-        code: 'return await openclaw.tools.call("openclaw:core:exec", { command: "echo hi" });',
+        code: 'return await NexisClaw.tools.call("NexisClaw:core:exec", { command: "echo hi" });',
       }),
     ).toEqual({
-      toolName: "openclaw:core:exec",
+      toolName: "NexisClaw:core:exec",
       displayToolName: "exec",
       displayArgs: { command: "echo hi" },
       detail: "echo hi",
@@ -110,11 +110,11 @@ describe("tool display details", () => {
     const detail = formatToolDetail(
       resolveToolDisplay({
         name: "web_search",
-        args: { query: "OpenClaw docs", count: 3 },
+        args: { query: "NexisClaw docs", count: 3 },
       }),
     );
 
-    expect(detail).toBe('for "OpenClaw docs" (top 3)');
+    expect(detail).toBe('for "NexisClaw docs" (top 3)');
   });
 
   it("formats web_search provider query shapes", () => {
@@ -150,8 +150,8 @@ describe("tool display details", () => {
         name: "exec",
         args: {
           command:
-            "set -euo pipefail\ngit -C /Users/adityasingh/.openclaw/workspace status --short | head -n 3",
-          workdir: "/Users/adityasingh/.openclaw/workspace",
+            "set -euo pipefail\ngit -C /Users/adityasingh/.NexisClaw/workspace status --short | head -n 3",
+          workdir: "/Users/adityasingh/.NexisClaw/workspace",
         },
       }),
     );
@@ -200,7 +200,7 @@ describe("tool display details", () => {
       formatToolDetail(
         resolveToolDisplay({
           name: "bash",
-          args: { command: "git fetch", workdir: "/Users/peter/mantis-workspace/openclaw" },
+          args: { command: "git fetch", workdir: "/Users/peter/mantis-workspace/NexisClaw" },
           detailMode: "explain",
         }),
       ),
@@ -210,7 +210,7 @@ describe("tool display details", () => {
       formatToolDetail(
         resolveToolDisplay({
           name: "bash",
-          args: { command: "git status", workdir: "/Users/peter/Projects/openclaw" },
+          args: { command: "git status", workdir: "/Users/peter/Projects/NexisClaw" },
           detailMode: "explain",
         }),
       ),
@@ -222,7 +222,7 @@ describe("tool display details", () => {
           name: "bash",
           args: {
             command: "command -v discrawl",
-            workdir: "/root/.openclaw/sandboxes/agent-clawsweeper-sandbox-discor-766423d0",
+            workdir: "/root/.NexisClaw/sandboxes/agent-clawsweeper-sandbox-discor-766423d0",
           },
           detailMode: "explain",
         }),
@@ -235,7 +235,7 @@ describe("tool display details", () => {
       formatToolSummary(
         resolveToolDisplay({
           name: "bash",
-          args: { command: "git fetch", workdir: "/Users/peter/mantis-workspace/openclaw" },
+          args: { command: "git fetch", workdir: "/Users/peter/mantis-workspace/NexisClaw" },
           detailMode: "explain",
         }),
       ),
@@ -245,10 +245,10 @@ describe("tool display details", () => {
       formatToolSummary(
         resolveToolDisplay({
           name: "web_search",
-          args: { query: "OpenClaw docs" },
+          args: { query: "NexisClaw docs" },
         }),
       ),
-    ).toBe('🔎 Web Search: for "OpenClaw docs"');
+    ).toBe('🔎 Web Search: for "NexisClaw docs"');
   });
 
   it("moves cd path to context suffix with multiple stages and raw command", () => {
@@ -401,7 +401,7 @@ describe("tool display details", () => {
         name: "exec",
         args: {
           command: "python3 <<PY\nprint('x')\nPY",
-          workdir: "/Users/adityasingh/.openclaw/workspace",
+          workdir: "/Users/adityasingh/.NexisClaw/workspace",
         },
       }),
     );
@@ -410,7 +410,7 @@ describe("tool display details", () => {
         name: "exec",
         args: {
           command: "node --check /tmp/test.js",
-          workdir: "/Users/adityasingh/.openclaw/workspace",
+          workdir: "/Users/adityasingh/.NexisClaw/workspace",
         },
       }),
     );
@@ -419,7 +419,7 @@ describe("tool display details", () => {
         name: "exec",
         args: {
           command: "node -c /tmp/test.js",
-          workdir: "/Users/adityasingh/.openclaw/workspace",
+          workdir: "/Users/adityasingh/.NexisClaw/workspace",
         },
       }),
     );

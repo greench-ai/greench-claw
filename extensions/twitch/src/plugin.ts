@@ -1,23 +1,23 @@
 /**
- * Twitch channel plugin for OpenClaw.
+ * Twitch channel plugin for NexisClaw.
  *
  * Main plugin export combining all adapters (outbound, actions, status, gateway).
  * This is the primary entry point for the Twitch channel integration.
  */
 
-import { describeAccountSnapshot } from "openclaw/plugin-sdk/account-helpers";
-import { buildChannelConfigSchema } from "openclaw/plugin-sdk/channel-config-schema";
-import { createChatChannelPlugin } from "openclaw/plugin-sdk/channel-core";
+import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
+import { buildChannelConfigSchema } from "NexisClaw/plugin-sdk/channel-config-schema";
+import { createChatChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
 import {
   createLoggedPairingApprovalNotifier,
   createPairingPrefixStripper,
-} from "openclaw/plugin-sdk/channel-pairing";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { buildPassiveProbedChannelStatusSummary } from "openclaw/plugin-sdk/extension-shared";
+} from "NexisClaw/plugin-sdk/channel-pairing";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { buildPassiveProbedChannelStatusSummary } from "NexisClaw/plugin-sdk/extension-shared";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "openclaw/plugin-sdk/status-helpers";
+} from "NexisClaw/plugin-sdk/status-helpers";
 import { twitchMessageActions } from "./actions.js";
 import { removeClientManager } from "./client-manager-registry.js";
 import { TwitchConfigSchema } from "./config-schema.js";
@@ -49,7 +49,7 @@ type ResolvedTwitchAccount = TwitchAccountConfig & { accountId?: string | null }
  * Twitch channel plugin.
  *
  * Implements the ChannelPlugin interface to provide Twitch chat integration
- * for OpenClaw. Supports message sending, receiving, access control, and
+ * for NexisClaw. Supports message sending, receiving, access control, and
  * status monitoring.
  */
 export const twitchPlugin: ChannelPlugin<ResolvedTwitchAccount> =
@@ -81,8 +81,8 @@ export const twitchPlugin: ChannelPlugin<ResolvedTwitchAccount> =
       message: twitchMessageAdapter,
       configSchema: buildChannelConfigSchema(TwitchConfigSchema),
       config: {
-        listAccountIds: (cfg: OpenClawConfig): string[] => listAccountIds(cfg),
-        resolveAccount: (cfg: OpenClawConfig, accountId?: string | null): ResolvedTwitchAccount => {
+        listAccountIds: (cfg: NexisClawConfig): string[] => listAccountIds(cfg),
+        resolveAccount: (cfg: NexisClawConfig, accountId?: string | null): ResolvedTwitchAccount => {
           const resolvedAccountId = accountId ?? resolveDefaultTwitchAccountId(cfg);
           const account = getAccountConfig(cfg, resolvedAccountId);
           if (!account) {
@@ -100,8 +100,8 @@ export const twitchPlugin: ChannelPlugin<ResolvedTwitchAccount> =
             ...account,
           };
         },
-        defaultAccountId: (cfg: OpenClawConfig): string => resolveDefaultTwitchAccountId(cfg),
-        isConfigured: (_account: unknown, cfg: OpenClawConfig): boolean =>
+        defaultAccountId: (cfg: NexisClawConfig): string => resolveDefaultTwitchAccountId(cfg),
+        isConfigured: (_account: unknown, cfg: NexisClawConfig): boolean =>
           resolveTwitchAccountContext(cfg).configured,
         isEnabled: (account: ResolvedTwitchAccount | undefined): boolean =>
           account?.enabled !== false,
@@ -126,11 +126,11 @@ export const twitchPlugin: ChannelPlugin<ResolvedTwitchAccount> =
           kind,
           runtime,
         }: {
-          cfg: OpenClawConfig;
+          cfg: NexisClawConfig;
           accountId?: string | null;
           inputs: string[];
           kind: ChannelResolveKind;
-          runtime: import("openclaw/plugin-sdk/runtime-env").RuntimeEnv;
+          runtime: import("NexisClaw/plugin-sdk/runtime-env").RuntimeEnv;
         }): Promise<ChannelResolveResult[]> => {
           const account = getAccountConfig(cfg, accountId ?? resolveDefaultTwitchAccountId(cfg));
           if (!account) {

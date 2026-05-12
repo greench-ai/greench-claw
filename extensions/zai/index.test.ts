@@ -1,7 +1,7 @@
 import type { StreamFn } from "@earendil-works/pi-agent-core";
 import type { Context, Model } from "@earendil-works/pi-ai";
-import { registerSingleProviderPlugin } from "openclaw/plugin-sdk/plugin-test-runtime";
-import { buildOpenAICompletionsParams } from "openclaw/plugin-sdk/provider-transport-runtime";
+import { registerSingleProviderPlugin } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import { buildOpenAICompletionsParams } from "NexisClaw/plugin-sdk/provider-transport-runtime";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 

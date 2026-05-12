@@ -166,7 +166,7 @@ export async function appendStatusAllDiagnosis(params: {
         `  ${muted("Detected dual-stack loopback listeners (127.0.0.1 + ::1) for one gateway process.")}`,
       );
     } else if (expectedGatewayListeners) {
-      lines.push(`  ${muted("Detected OpenClaw Gateway listener on the configured port.")}`);
+      lines.push(`  ${muted("Detected NexisClaw Gateway listener on the configured port.")}`);
     }
   }
 
@@ -311,6 +311,6 @@ export async function appendStatusAllDiagnosis(params: {
 
   lines.push("");
   lines.push(muted("Pasteable debug report. Auth tokens redacted."));
-  lines.push("Troubleshooting: https://docs.openclaw.ai/troubleshooting");
+  lines.push("Troubleshooting: https://docs.NexisClaw.ai/troubleshooting");
   lines.push("");
 }

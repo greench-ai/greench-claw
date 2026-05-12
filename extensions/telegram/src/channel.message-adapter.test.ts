@@ -3,7 +3,7 @@ import {
   verifyChannelMessageLiveCapabilityAdapterProofs,
   verifyChannelMessageLiveFinalizerProofs,
   verifyChannelMessageReceiveAckPolicyAdapterProofs,
-} from "openclaw/plugin-sdk/channel-message";
+} from "NexisClaw/plugin-sdk/channel-message";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const sendMessageTelegramMock = vi.fn();

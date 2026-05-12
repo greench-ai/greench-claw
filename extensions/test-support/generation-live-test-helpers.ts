@@ -1,1 +1,1 @@
-export { maybeLoadShellEnvForGenerationProviders } from "openclaw/plugin-sdk/test-env";
+export { maybeLoadShellEnvForGenerationProviders } from "NexisClaw/plugin-sdk/test-env";

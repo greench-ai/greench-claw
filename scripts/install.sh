@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-# OpenClaw Installer for macOS and Linux
-# Usage: curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash
+# NexisClaw Installer for macOS and Linux
+# Usage: curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash
 
 BOLD='\033[1m'
 ACCENT='\033[38;2;255;77;77m'       # coral-bright  #ff4d4d
@@ -15,7 +15,7 @@ ERROR='\033[38;2;230;57;70m'        # coral-mid     #e63946
 MUTED='\033[38;2;90;100;128m'       # text-muted    #5a6480
 NC='\033[0m' # No Color
 
-DEFAULT_TAGLINE="All your chats, one OpenClaw."
+DEFAULT_TAGLINE="All your chats, one NexisClaw."
 NODE_DEFAULT_MAJOR=24
 NODE_MIN_MAJOR=22
 NODE_MIN_MINOR=14
@@ -74,7 +74,7 @@ run_remote_bash() {
     /bin/bash "$tmp"
 }
 
-GUM_VERSION="${OPENCLAW_GUM_VERSION:-0.17.0}"
+GUM_VERSION="${NEXISCLAW_GUM_VERSION:-0.17.0}"
 GUM=""
 GUM_STATUS="skipped"
 GUM_REASON=""
@@ -238,7 +238,7 @@ print_gum_status() {
 print_installer_banner() {
     if [[ -n "$GUM" ]]; then
         local title tagline hint card
-        title="$("$GUM" style --foreground "#ff4d4d" --bold "🦞 OpenClaw Installer")"
+        title="$("$GUM" style --foreground "#ff4d4d" --bold "🦞 NexisClaw Installer")"
         tagline="$("$GUM" style --foreground "#8892b0" "$TAGLINE")"
         hint="$("$GUM" style --foreground "#5a6480" "modern installer mode")"
         card="$(printf '%s\n%s\n%s' "$title" "$tagline" "$hint")"
@@ -248,7 +248,7 @@ print_installer_banner() {
     fi
 
     echo -e "${ACCENT}${BOLD}"
-    echo "  🦞 OpenClaw Installer"
+    echo "  🦞 NexisClaw Installer"
     echo -e "${NC}${INFO}  ${TAGLINE}${NC}"
     echo ""
 }
@@ -264,7 +264,7 @@ detect_os_or_die() {
     if [[ "$OS" == "unknown" ]]; then
         ui_error "Unsupported operating system"
         echo "This installer supports macOS and Linux (including WSL)."
-        echo "For Windows, use: iwr -useb https://openclaw.ai/install.ps1 | iex"
+        echo "For Windows, use: iwr -useb https://NexisClaw.ai/install.ps1 | iex"
         exit 1
     fi
 
@@ -356,7 +356,7 @@ show_install_plan() {
     ui_section "Install plan"
     ui_kv "OS" "$OS"
     ui_kv "Install method" "$INSTALL_METHOD"
-    ui_kv "Requested version" "$OPENCLAW_VERSION"
+    ui_kv "Requested version" "$NEXISCLAW_VERSION"
     if [[ "$USE_BETA" == "1" ]]; then
         ui_kv "Beta channel" "enabled"
     fi
@@ -376,7 +376,7 @@ show_install_plan() {
 }
 
 show_footer_links() {
-    local faq_url="https://docs.openclaw.ai/start/faq"
+    local faq_url="https://docs.NexisClaw.ai/start/faq"
     if [[ -n "$GUM" ]]; then
         local content
         content="$(printf '%s\n%s' "Need help?" "FAQ: ${faq_url}")"
@@ -498,16 +498,16 @@ cleanup_legacy_submodules() {
     fi
 }
 
-cleanup_npm_openclaw_paths() {
+cleanup_npm_NexisClaw_paths() {
     local npm_root=""
     npm_root="$(npm root -g 2>/dev/null || true)"
     if [[ -z "$npm_root" || "$npm_root" != *node_modules* ]]; then
         return 1
     fi
-    rm -rf "$npm_root"/.openclaw-* "$npm_root"/openclaw 2>/dev/null || true
+    rm -rf "$npm_root"/.NexisClaw-* "$npm_root"/NexisClaw 2>/dev/null || true
 }
 
-extract_openclaw_conflict_path() {
+extract_NexisClaw_conflict_path() {
     local log="$1"
     local path=""
     path="$(sed -n 's/.*File exists: //p' "$log" | head -n1)"
@@ -521,16 +521,16 @@ extract_openclaw_conflict_path() {
     return 1
 }
 
-cleanup_openclaw_bin_conflict() {
+cleanup_NexisClaw_bin_conflict() {
     local bin_path="$1"
     if [[ -z "$bin_path" || ( ! -e "$bin_path" && ! -L "$bin_path" ) ]]; then
         return 1
     fi
     local npm_bin=""
     npm_bin="$(npm_global_bin_dir 2>/dev/null || true)"
-    if [[ -n "$npm_bin" && "$bin_path" != "$npm_bin/openclaw" ]]; then
+    if [[ -n "$npm_bin" && "$bin_path" != "$npm_bin/NexisClaw" ]]; then
         case "$bin_path" in
-            "/opt/homebrew/bin/openclaw"|"/usr/local/bin/openclaw")
+            "/opt/homebrew/bin/NexisClaw"|"/usr/local/bin/NexisClaw")
                 ;;
             *)
                 return 1
@@ -540,9 +540,9 @@ cleanup_openclaw_bin_conflict() {
     if [[ -L "$bin_path" ]]; then
         local target=""
         target="$(readlink "$bin_path" 2>/dev/null || true)"
-        if [[ "$target" == *"/node_modules/openclaw/"* ]]; then
+        if [[ "$target" == *"/node_modules/NexisClaw/"* ]]; then
             rm -f "$bin_path"
-            ui_info "Removed stale openclaw symlink at ${bin_path}"
+            ui_info "Removed stale NexisClaw symlink at ${bin_path}"
             return 0
         fi
         return 1
@@ -550,7 +550,7 @@ cleanup_openclaw_bin_conflict() {
     local backup=""
     backup="${bin_path}.bak-$(date +%Y%m%d-%H%M%S)"
     if mv "$bin_path" "$backup"; then
-        ui_info "Moved existing openclaw binary to ${backup}"
+        ui_info "Moved existing NexisClaw binary to ${backup}"
         return 0
     fi
     return 1
@@ -733,7 +733,7 @@ run_npm_global_install() {
         local log_quoted=""
         printf -v cmd_quoted '%q ' "${cmd[@]}"
         printf -v log_quoted '%q' "$log"
-        run_with_spinner "Installing OpenClaw package" bash -c "${cmd_quoted}>${log_quoted} 2>&1"
+        run_with_spinner "Installing NexisClaw package" bash -c "${cmd_quoted}>${log_quoted} 2>&1"
         return $?
     fi
 
@@ -819,7 +819,7 @@ print_npm_failure_diagnostics() {
     fi
 }
 
-install_openclaw_npm() {
+install_NexisClaw_npm() {
     local spec="$1"
     local log
     log="$(mktempfile)"
@@ -829,7 +829,7 @@ install_openclaw_npm() {
             attempted_build_tool_fix=true
             ui_info "Retrying npm install after build tools setup"
             if run_npm_global_install "$spec" "$log"; then
-                ui_success "OpenClaw npm package installed"
+                ui_success "NexisClaw npm package installed"
                 return 0
             fi
         fi
@@ -845,26 +845,26 @@ install_openclaw_npm() {
             tail -n 80 "$log" >&2 || true
         fi
 
-        if grep -q "ENOTEMPTY: directory not empty, rename .*openclaw" "$log"; then
+        if grep -q "ENOTEMPTY: directory not empty, rename .*NexisClaw" "$log"; then
             ui_warn "npm left stale directory; cleaning and retrying"
-            cleanup_npm_openclaw_paths
+            cleanup_npm_NexisClaw_paths
             if run_npm_global_install "$spec" "$log"; then
-                ui_success "OpenClaw npm package installed"
+                ui_success "NexisClaw npm package installed"
                 return 0
             fi
             return 1
         fi
         if grep -q "EEXIST" "$log"; then
             local conflict=""
-            conflict="$(extract_openclaw_conflict_path "$log" || true)"
-            if [[ -n "$conflict" ]] && cleanup_openclaw_bin_conflict "$conflict"; then
+            conflict="$(extract_NexisClaw_conflict_path "$log" || true)"
+            if [[ -n "$conflict" ]] && cleanup_NexisClaw_bin_conflict "$conflict"; then
                 if run_npm_global_install "$spec" "$log"; then
-                    ui_success "OpenClaw npm package installed"
+                    ui_success "NexisClaw npm package installed"
                     return 0
                 fi
                 return 1
             fi
-            ui_error "npm failed because an openclaw binary already exists"
+            ui_error "npm failed because an NexisClaw binary already exists"
             if [[ -n "$conflict" ]]; then
                 ui_info "Remove or move ${conflict}, then retry"
             fi
@@ -872,7 +872,7 @@ install_openclaw_npm() {
         fi
         return 1
     fi
-    ui_success "OpenClaw npm package installed"
+    ui_success "NexisClaw npm package installed"
     return 0
 }
 
@@ -984,9 +984,9 @@ pick_tagline() {
         echo "$DEFAULT_TAGLINE"
         return
     fi
-    if [[ -n "${OPENCLAW_TAGLINE_INDEX:-}" ]]; then
-        if [[ "${OPENCLAW_TAGLINE_INDEX}" =~ ^[0-9]+$ ]]; then
-            local idx=$((OPENCLAW_TAGLINE_INDEX % count))
+    if [[ -n "${NEXISCLAW_TAGLINE_INDEX:-}" ]]; then
+        if [[ "${NEXISCLAW_TAGLINE_INDEX}" =~ ^[0-9]+$ ]]; then
+            local idx=$((NEXISCLAW_TAGLINE_INDEX % count))
             echo "${TAGLINES[$idx]}"
             return
         fi
@@ -997,30 +997,30 @@ pick_tagline() {
 
 TAGLINE=$(pick_tagline)
 
-NO_ONBOARD=${OPENCLAW_NO_ONBOARD:-0}
-NO_PROMPT=${OPENCLAW_NO_PROMPT:-0}
-DRY_RUN=${OPENCLAW_DRY_RUN:-0}
-INSTALL_METHOD=${OPENCLAW_INSTALL_METHOD:-}
-OPENCLAW_VERSION=${OPENCLAW_VERSION:-latest}
-USE_BETA=${OPENCLAW_BETA:-0}
-GIT_DIR_DEFAULT="${HOME}/openclaw"
-GIT_DIR=${OPENCLAW_GIT_DIR:-$GIT_DIR_DEFAULT}
-GIT_UPDATE=${OPENCLAW_GIT_UPDATE:-1}
+NO_ONBOARD=${NEXISCLAW_NO_ONBOARD:-0}
+NO_PROMPT=${NEXISCLAW_NO_PROMPT:-0}
+DRY_RUN=${NEXISCLAW_DRY_RUN:-0}
+INSTALL_METHOD=${NEXISCLAW_INSTALL_METHOD:-}
+NEXISCLAW_VERSION=${NEXISCLAW_VERSION:-latest}
+USE_BETA=${NEXISCLAW_BETA:-0}
+GIT_DIR_DEFAULT="${HOME}/NexisClaw"
+GIT_DIR=${NEXISCLAW_GIT_DIR:-$GIT_DIR_DEFAULT}
+GIT_UPDATE=${NEXISCLAW_GIT_UPDATE:-1}
 SHARP_IGNORE_GLOBAL_LIBVIPS="${SHARP_IGNORE_GLOBAL_LIBVIPS:-1}"
-NPM_LOGLEVEL="${OPENCLAW_NPM_LOGLEVEL:-error}"
+NPM_LOGLEVEL="${NEXISCLAW_NPM_LOGLEVEL:-error}"
 NPM_SILENT_FLAG="--silent"
-VERBOSE="${OPENCLAW_VERBOSE:-0}"
-VERIFY_INSTALL="${OPENCLAW_VERIFY_INSTALL:-0}"
-OPENCLAW_BIN=""
+VERBOSE="${NEXISCLAW_VERBOSE:-0}"
+VERIFY_INSTALL="${NEXISCLAW_VERIFY_INSTALL:-0}"
+NEXISCLAW_BIN=""
 PNPM_CMD=()
 HELP=0
 
 print_usage() {
     cat <<EOF
-OpenClaw installer (macOS + Linux)
+NexisClaw installer (macOS + Linux)
 
 Usage:
-  curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- [options]
+  curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- [options]
 
 Options:
   --install-method, --method npm|git   Install via npm (default) or from a git checkout
@@ -1028,7 +1028,7 @@ Options:
   --git, --github                     Shortcut for --install-method git
   --version <version|dist-tag|spec>    npm install target (default: latest; use "main" for GitHub main)
   --beta                               Use beta if available, else latest
-  --git-dir, --dir <path>             Checkout directory (default: ~/openclaw)
+  --git-dir, --dir <path>             Checkout directory (default: ~/NexisClaw)
   --no-git-update                      Skip git pull for existing checkout
   --no-onboard                          Skip onboarding (non-interactive)
   --no-prompt                           Disable prompts (required in CI/automation)
@@ -1038,25 +1038,25 @@ Options:
   --help, -h                            Show this help
 
 Environment variables:
-  OPENCLAW_INSTALL_METHOD=git|npm
-  OPENCLAW_VERSION=latest|next|main|<semver>|<spec>
-  OPENCLAW_BETA=0|1
-  OPENCLAW_GIT_DIR=...
-  OPENCLAW_GIT_UPDATE=0|1
-  OPENCLAW_NO_PROMPT=1
-  OPENCLAW_VERIFY_INSTALL=1
-  OPENCLAW_DRY_RUN=1
-  OPENCLAW_NO_ONBOARD=1
-  OPENCLAW_VERBOSE=1
-  OPENCLAW_NPM_LOGLEVEL=error|warn|notice  Default: error (hide npm deprecation noise)
+  NEXISCLAW_INSTALL_METHOD=git|npm
+  NEXISCLAW_VERSION=latest|next|main|<semver>|<spec>
+  NEXISCLAW_BETA=0|1
+  NEXISCLAW_GIT_DIR=...
+  NEXISCLAW_GIT_UPDATE=0|1
+  NEXISCLAW_NO_PROMPT=1
+  NEXISCLAW_VERIFY_INSTALL=1
+  NEXISCLAW_DRY_RUN=1
+  NEXISCLAW_NO_ONBOARD=1
+  NEXISCLAW_VERBOSE=1
+  NEXISCLAW_NPM_LOGLEVEL=error|warn|notice  Default: error (hide npm deprecation noise)
   SHARP_IGNORE_GLOBAL_LIBVIPS=0|1    Default: 1 (avoid sharp building against global libvips)
 
 Examples:
-  curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash
-  curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --no-onboard
-  curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --no-onboard --verify
-  curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --version main
-  curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method git --no-onboard
+  curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash
+  curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --no-onboard
+  curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --no-onboard --verify
+  curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --version main
+  curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --install-method git --no-onboard
 EOF
 }
 
@@ -1096,7 +1096,7 @@ parse_args() {
                 shift 2
                 ;;
             --version)
-                OPENCLAW_VERSION="$2"
+                NEXISCLAW_VERSION="$2"
                 shift 2
                 ;;
             --beta)
@@ -1167,7 +1167,7 @@ choose_install_method_interactive() {
 
     if [[ -n "$GUM" ]] && gum_is_tty; then
         local header selection
-        header="Detected OpenClaw checkout in: ${detected_checkout}
+        header="Detected NexisClaw checkout in: ${detected_checkout}
 Choose install method"
         selection="$("$GUM" choose \
             --header "$header" \
@@ -1190,7 +1190,7 @@ Choose install method"
 
     local choice=""
     choice="$(prompt_choice "$(cat <<EOF
-${WARN}→${NC} Detected a OpenClaw source checkout in: ${INFO}${detected_checkout}${NC}
+${WARN}→${NC} Detected a NexisClaw source checkout in: ${INFO}${detected_checkout}${NC}
 Choose install method:
   1) Update this checkout (git) and use it
   2) Install global via npm (migrate away from git)
@@ -1212,7 +1212,7 @@ EOF
     return 1
 }
 
-detect_openclaw_checkout() {
+detect_NexisClaw_checkout() {
     local dir="$1"
     if [[ ! -f "$dir/package.json" ]]; then
         return 1
@@ -1220,7 +1220,7 @@ detect_openclaw_checkout() {
     if [[ ! -f "$dir/pnpm-workspace.yaml" ]]; then
         return 1
     fi
-    if ! grep -q '"name"[[:space:]]*:[[:space:]]*"openclaw"' "$dir/package.json" 2>/dev/null; then
+    if ! grep -q '"name"[[:space:]]*:[[:space:]]*"NexisClaw"' "$dir/package.json" 2>/dev/null; then
         return 1
     fi
     echo "$dir"
@@ -1248,7 +1248,7 @@ print_homebrew_admin_fix() {
     echo "  2) Ask an Administrator to grant admin rights, then sign out/in:"
     echo "     sudo dseditgroup -o edit -a ${current_user} -t user admin"
     echo "Then retry:"
-    echo "  curl -fsSL https://openclaw.ai/install.sh | bash"
+    echo "  curl -fsSL https://NexisClaw.ai/install.sh | bash"
 }
 
 install_homebrew() {
@@ -1378,7 +1378,7 @@ persist_shell_path_prepend() {
     for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
         if [[ -f "$rc" ]]; then
             if [[ "$(sed -n '1p' "$rc")" != "$path_line" ]]; then
-                local tmp_rc="${rc}.openclaw-tmp"
+                local tmp_rc="${rc}.NexisClaw-tmp"
                 {
                     printf '%s\n' "$path_line"
                     grep -Fvx "$path_line" "$rc" || true
@@ -1525,7 +1525,7 @@ ensure_default_node_active_shell() {
         echo "  nvm use ${NODE_DEFAULT_MAJOR}"
         echo "  nvm alias default ${NODE_DEFAULT_MAJOR}"
         echo "Then open a new shell and rerun:"
-        echo "  curl -fsSL https://openclaw.ai/install.sh | bash"
+        echo "  curl -fsSL https://NexisClaw.ai/install.sh | bash"
     else
         echo "Install/select Node.js ${NODE_DEFAULT_MAJOR} (or Node ${NODE_MIN_VERSION}+ minimum) and ensure it is first on PATH, then rerun installer."
     fi
@@ -1760,7 +1760,7 @@ fix_npm_permissions() {
     ui_info "Configuring npm for user-local installs"
     mkdir -p "$HOME/.npm-global"
     npm config set prefix "$HOME/.npm-global"
-    ui_warn "Avoid sudo npm i -g for future OpenClaw updates; use npm i -g openclaw@latest so npm keeps using this user prefix instead of a different global prefix."
+    ui_warn "Avoid sudo npm i -g for future NexisClaw updates; use npm i -g NexisClaw@latest so npm keeps using this user prefix instead of a different global prefix."
 
     persist_shell_path_prepend "$HOME/.npm-global/bin" "\$HOME/.npm-global/bin" || true
 
@@ -1768,10 +1768,10 @@ fix_npm_permissions() {
     ui_success "npm configured for user installs"
 }
 
-ensure_openclaw_bin_link() {
+ensure_NexisClaw_bin_link() {
     local npm_root=""
     npm_root="$(npm root -g 2>/dev/null || true)"
-    if [[ -z "$npm_root" || ! -d "$npm_root/openclaw" ]]; then
+    if [[ -z "$npm_root" || ! -d "$npm_root/NexisClaw" ]]; then
         return 1
     fi
     local npm_bin=""
@@ -1780,17 +1780,17 @@ ensure_openclaw_bin_link() {
         return 1
     fi
     mkdir -p "$npm_bin"
-    if [[ ! -x "${npm_bin}/openclaw" ]]; then
-        ln -sf "$npm_root/openclaw/dist/entry.js" "${npm_bin}/openclaw"
-        ui_info "Created openclaw bin link at ${npm_bin}/openclaw"
+    if [[ ! -x "${npm_bin}/NexisClaw" ]]; then
+        ln -sf "$npm_root/NexisClaw/dist/entry.js" "${npm_bin}/NexisClaw"
+        ui_info "Created NexisClaw bin link at ${npm_bin}/NexisClaw"
     fi
     return 0
 }
 
-# Check for existing OpenClaw installation
-check_existing_openclaw() {
-    if [[ -n "$(type -P openclaw 2>/dev/null || true)" ]]; then
-        ui_info "Existing OpenClaw installation detected, upgrading"
+# Check for existing NexisClaw installation
+check_existing_NexisClaw() {
+    if [[ -n "$(type -P NexisClaw 2>/dev/null || true)" ]]; then
+        ui_info "Existing NexisClaw installation detected, upgrading"
         return 0
     fi
     return 1
@@ -1954,7 +1954,7 @@ canonicalize_dir() {
     (cd "$dir" 2>/dev/null && pwd -P) || return 1
 }
 
-openclaw_package_version() {
+NexisClaw_package_version() {
     local package_json="$1"
     if [[ ! -f "$package_json" ]]; then
         echo "unknown"
@@ -1978,7 +1978,7 @@ emit_npm_root_candidate() {
     fi
 }
 
-collect_openclaw_npm_root_candidates() {
+collect_NexisClaw_npm_root_candidates() {
     local root=""
     root="$(npm root -g 2>/dev/null || true)"
     emit_npm_root_candidate "$root"
@@ -1993,7 +1993,7 @@ collect_openclaw_npm_root_candidates() {
     local extra_root=""
     local old_ifs="$IFS"
     IFS=":"
-    for extra_root in ${OPENCLAW_INSTALL_EXTRA_NPM_ROOTS:-}; do
+    for extra_root in ${NEXISCLAW_INSTALL_EXTRA_NPM_ROOTS:-}; do
         emit_npm_root_candidate "$extra_root"
     done
     IFS="$old_ifs"
@@ -2026,12 +2026,12 @@ collect_openclaw_npm_root_candidates() {
     done
 }
 
-find_openclaw_global_installs() {
+find_NexisClaw_global_installs() {
     local seen="|"
     local npm_root=""
     while IFS= read -r npm_root; do
         [[ -n "$npm_root" ]] || continue
-        local package_dir="${npm_root%/}/openclaw"
+        local package_dir="${npm_root%/}/NexisClaw"
         local package_json="${package_dir}/package.json"
         [[ -f "$package_json" ]] || continue
 
@@ -2044,35 +2044,35 @@ find_openclaw_global_installs() {
         seen="${seen}${real_package_dir}|"
 
         local version=""
-        version="$(openclaw_package_version "$package_json")"
+        version="$(NexisClaw_package_version "$package_json")"
         printf '%s\t%s\t%s\n' "$version" "$real_package_dir" "$npm_root"
-    done < <(collect_openclaw_npm_root_candidates)
+    done < <(collect_NexisClaw_npm_root_candidates)
 }
 
-warn_duplicate_openclaw_global_installs() {
+warn_duplicate_NexisClaw_global_installs() {
     local installs=()
     local line=""
     while IFS= read -r line; do
         [[ -n "$line" ]] && installs+=("$line")
-    done < <(find_openclaw_global_installs)
+    done < <(find_NexisClaw_global_installs)
 
     if [[ "${#installs[@]}" -le 1 ]]; then
         return 0
     fi
 
-    ui_warn "Multiple OpenClaw global installs detected"
-    echo "  Different Node/npm environments can run different OpenClaw versions."
+    ui_warn "Multiple NexisClaw global installs detected"
+    echo "  Different Node/npm environments can run different NexisClaw versions."
 
-    local active_node active_npm active_openclaw
+    local active_node active_npm active_NexisClaw
     active_node="$(command -v node 2>/dev/null || true)"
     active_npm="$(command -v npm 2>/dev/null || true)"
-    active_openclaw="${OPENCLAW_BIN:-}"
-    if [[ -z "$active_openclaw" ]]; then
-        active_openclaw="$(type -P openclaw 2>/dev/null || true)"
+    active_NexisClaw="${NEXISCLAW_BIN:-}"
+    if [[ -z "$active_NexisClaw" ]]; then
+        active_NexisClaw="$(type -P NexisClaw 2>/dev/null || true)"
     fi
     echo -e "  Active node: ${INFO}${active_node:-none}${NC}"
     echo -e "  Active npm: ${INFO}${active_npm:-none}${NC}"
-    echo -e "  Active openclaw: ${INFO}${active_openclaw:-none}${NC}"
+    echo -e "  Active NexisClaw: ${INFO}${active_NexisClaw:-none}${NC}"
     echo ""
     echo "  Found installs:"
 
@@ -2085,7 +2085,7 @@ warn_duplicate_openclaw_global_installs() {
 
     echo ""
     echo "  Keep one install source, then remove stale installs with that environment's npm:"
-    echo "    npm uninstall -g openclaw"
+    echo "    npm uninstall -g NexisClaw"
 }
 
 refresh_shell_command_cache() {
@@ -2116,21 +2116,21 @@ warn_shell_path_missing_dir() {
 
     echo ""
     ui_warn "PATH missing ${label}: ${dir}"
-    echo "  This can make openclaw show as \"command not found\" in new terminals."
+    echo "  This can make NexisClaw show as \"command not found\" in new terminals."
     echo "  Fix (zsh: ~/.zshrc, bash: ~/.bashrc):"
     echo "    export PATH=\"${dir}:\$PATH\""
 }
 
-openclaw_command_for_user() {
+NexisClaw_command_for_user() {
     local claw="${1:-}"
     if [[ -z "$claw" ]]; then
-        echo "openclaw"
+        echo "NexisClaw"
         return 0
     fi
 
     local claw_dir="${claw%/*}"
     if [[ "$claw_dir" != "$claw" ]] && path_has_dir "$ORIGINAL_PATH" "$claw_dir"; then
-        echo "openclaw"
+        echo "NexisClaw"
         return 0
     fi
 
@@ -2153,13 +2153,13 @@ maybe_nodenv_rehash() {
     fi
 }
 
-warn_openclaw_not_found() {
-    ui_warn "Installed, but openclaw is not discoverable on PATH in this shell"
+warn_NexisClaw_not_found() {
+    ui_warn "Installed, but NexisClaw is not discoverable on PATH in this shell"
     echo "  Try: hash -r (bash) or rehash (zsh), then retry."
     local t=""
-    t="$(type -t openclaw 2>/dev/null || true)"
+    t="$(type -t NexisClaw 2>/dev/null || true)"
     if [[ "$t" == "alias" || "$t" == "function" ]]; then
-        ui_warn "Found a shell ${t} named openclaw; it may shadow the real binary"
+        ui_warn "Found a shell ${t} named NexisClaw; it may shadow the real binary"
     fi
     if command -v nodenv &> /dev/null; then
         echo -e "Using nodenv? Run: ${INFO}nodenv rehash${NC}"
@@ -2178,10 +2178,10 @@ warn_openclaw_not_found() {
     fi
 }
 
-resolve_openclaw_bin() {
+resolve_NexisClaw_bin() {
     refresh_shell_command_cache
     local resolved=""
-    resolved="$(type -P openclaw 2>/dev/null || true)"
+    resolved="$(type -P NexisClaw 2>/dev/null || true)"
     if [[ -n "$resolved" && -x "$resolved" ]]; then
         echo "$resolved"
         return 0
@@ -2189,7 +2189,7 @@ resolve_openclaw_bin() {
 
     ensure_npm_global_bin_on_path
     refresh_shell_command_cache
-    resolved="$(type -P openclaw 2>/dev/null || true)"
+    resolved="$(type -P NexisClaw 2>/dev/null || true)"
     if [[ -n "$resolved" && -x "$resolved" ]]; then
         echo "$resolved"
         return 0
@@ -2197,21 +2197,21 @@ resolve_openclaw_bin() {
 
     local npm_bin=""
     npm_bin="$(npm_global_bin_dir || true)"
-    if [[ -n "$npm_bin" && -x "${npm_bin}/openclaw" ]]; then
-        echo "${npm_bin}/openclaw"
+    if [[ -n "$npm_bin" && -x "${npm_bin}/NexisClaw" ]]; then
+        echo "${npm_bin}/NexisClaw"
         return 0
     fi
 
     maybe_nodenv_rehash
     refresh_shell_command_cache
-    resolved="$(type -P openclaw 2>/dev/null || true)"
+    resolved="$(type -P NexisClaw 2>/dev/null || true)"
     if [[ -n "$resolved" && -x "$resolved" ]]; then
         echo "$resolved"
         return 0
     fi
 
-    if [[ -n "$npm_bin" && -x "${npm_bin}/openclaw" ]]; then
-        echo "${npm_bin}/openclaw"
+    if [[ -n "$npm_bin" && -x "${npm_bin}/NexisClaw" ]]; then
+        echo "${npm_bin}/NexisClaw"
         return 0
     fi
 
@@ -2219,14 +2219,14 @@ resolve_openclaw_bin() {
     return 1
 }
 
-install_openclaw_from_git() {
+install_NexisClaw_from_git() {
     local repo_dir="$1"
-    local repo_url="https://github.com/openclaw/openclaw.git"
+    local repo_url="https://github.com/NexisClaw/NexisClaw.git"
 
     if [[ -d "$repo_dir/.git" ]]; then
-        ui_info "Installing OpenClaw from git checkout: ${repo_dir}"
+        ui_info "Installing NexisClaw from git checkout: ${repo_dir}"
     else
-        ui_info "Installing OpenClaw from GitHub (${repo_url})"
+        ui_info "Installing NexisClaw from GitHub (${repo_url})"
     fi
 
     if ! check_git; then
@@ -2237,7 +2237,7 @@ install_openclaw_from_git() {
     ensure_pnpm_binary_for_scripts
 
     if [[ ! -d "$repo_dir" ]]; then
-        run_quiet_step "Cloning OpenClaw" git clone "$repo_url" "$repo_dir"
+        run_quiet_step "Cloning NexisClaw" git clone "$repo_url" "$repo_dir"
     fi
 
     if [[ "$GIT_UPDATE" == "1" ]]; then
@@ -2255,24 +2255,24 @@ install_openclaw_from_git() {
     if ! run_quiet_step "Building UI" run_pnpm -C "$repo_dir" ui:build; then
         ui_warn "UI build failed; continuing (CLI may still work)"
     fi
-    run_quiet_step "Building OpenClaw" run_pnpm -C "$repo_dir" build
+    run_quiet_step "Building NexisClaw" run_pnpm -C "$repo_dir" build
 
     ensure_user_local_bin_on_path
 
-    cat > "$HOME/.local/bin/openclaw" <<EOF
+    cat > "$HOME/.local/bin/NexisClaw" <<EOF
 #!/usr/bin/env bash
 set -euo pipefail
 exec node "${repo_dir}/dist/entry.js" "\$@"
 EOF
-    chmod +x "$HOME/.local/bin/openclaw"
-    ui_success "OpenClaw wrapper installed to \$HOME/.local/bin/openclaw"
+    chmod +x "$HOME/.local/bin/NexisClaw"
+    ui_success "NexisClaw wrapper installed to \$HOME/.local/bin/NexisClaw"
     ui_info "This checkout uses pnpm — run pnpm install (or corepack pnpm install) for deps"
 }
 
-# Install OpenClaw
+# Install NexisClaw
 resolve_beta_version() {
     local beta=""
-    beta="$(npm view openclaw dist-tags.beta 2>/dev/null || true)"
+    beta="$(npm view NexisClaw dist-tags.beta 2>/dev/null || true)"
     if [[ -z "$beta" || "$beta" == "undefined" || "$beta" == "null" ]]; then
         return 1
     fi
@@ -2311,7 +2311,7 @@ resolve_package_install_spec() {
     local normalized_value=""
     normalized_value="$(to_lowercase_ascii "$value")"
     if [[ "$normalized_value" == "main" ]]; then
-        echo "github:openclaw/openclaw#main"
+        echo "github:NexisClaw/NexisClaw#main"
         return 0
     fi
     if is_explicit_package_install_spec "$value"; then
@@ -2325,66 +2325,66 @@ resolve_package_install_spec() {
     echo "${package_name}@${value}"
 }
 
-install_openclaw() {
-    local package_name="openclaw"
+install_NexisClaw() {
+    local package_name="NexisClaw"
     if [[ "$USE_BETA" == "1" ]]; then
         local beta_version=""
         beta_version="$(resolve_beta_version || true)"
         if [[ -n "$beta_version" ]]; then
-            OPENCLAW_VERSION="$beta_version"
+            NEXISCLAW_VERSION="$beta_version"
             ui_info "Beta tag detected (${beta_version})"
-            package_name="openclaw"
+            package_name="NexisClaw"
         else
-            OPENCLAW_VERSION="latest"
+            NEXISCLAW_VERSION="latest"
             ui_info "No beta tag found; using latest"
         fi
     fi
 
-    if [[ -z "${OPENCLAW_VERSION}" ]]; then
-        OPENCLAW_VERSION="latest"
+    if [[ -z "${NEXISCLAW_VERSION}" ]]; then
+        NEXISCLAW_VERSION="latest"
     fi
 
     local resolved_version=""
-    if can_resolve_registry_package_version "${OPENCLAW_VERSION}"; then
-        resolved_version="$(npm view "${package_name}@${OPENCLAW_VERSION}" version 2>/dev/null || true)"
+    if can_resolve_registry_package_version "${NEXISCLAW_VERSION}"; then
+        resolved_version="$(npm view "${package_name}@${NEXISCLAW_VERSION}" version 2>/dev/null || true)"
     fi
     if [[ -n "$resolved_version" ]]; then
-        ui_info "Installing OpenClaw v${resolved_version}"
+        ui_info "Installing NexisClaw v${resolved_version}"
     else
-        ui_info "Installing OpenClaw (${OPENCLAW_VERSION})"
+        ui_info "Installing NexisClaw (${NEXISCLAW_VERSION})"
     fi
     local install_spec=""
-    install_spec="$(resolve_package_install_spec "${package_name}" "${OPENCLAW_VERSION}")"
+    install_spec="$(resolve_package_install_spec "${package_name}" "${NEXISCLAW_VERSION}")"
 
-    if ! install_openclaw_npm "${install_spec}"; then
+    if ! install_NexisClaw_npm "${install_spec}"; then
         ui_warn "npm install failed; retrying"
-        cleanup_npm_openclaw_paths
-        install_openclaw_npm "${install_spec}"
+        cleanup_npm_NexisClaw_paths
+        install_NexisClaw_npm "${install_spec}"
     fi
 
-    if [[ "${OPENCLAW_VERSION}" == "latest" && "${package_name}" == "openclaw" ]]; then
-        if ! resolve_openclaw_bin &> /dev/null; then
-            ui_warn "npm install openclaw@latest failed; retrying openclaw@next"
-            cleanup_npm_openclaw_paths
-            install_openclaw_npm "openclaw@next"
+    if [[ "${NEXISCLAW_VERSION}" == "latest" && "${package_name}" == "NexisClaw" ]]; then
+        if ! resolve_NexisClaw_bin &> /dev/null; then
+            ui_warn "npm install NexisClaw@latest failed; retrying NexisClaw@next"
+            cleanup_npm_NexisClaw_paths
+            install_NexisClaw_npm "NexisClaw@next"
         fi
     fi
 
-    ensure_openclaw_bin_link || true
+    ensure_NexisClaw_bin_link || true
 
-    ui_success "OpenClaw installed"
+    ui_success "NexisClaw installed"
 }
 
 # Run doctor for migrations (safe, non-interactive)
 run_doctor() {
     ui_info "Running doctor to migrate settings"
-    local claw="${OPENCLAW_BIN:-}"
+    local claw="${NEXISCLAW_BIN:-}"
     if [[ -z "$claw" ]]; then
-        claw="$(resolve_openclaw_bin || true)"
+        claw="$(resolve_NexisClaw_bin || true)"
     fi
     if [[ -z "$claw" ]]; then
-        ui_info "Skipping doctor (openclaw not on PATH yet)"
-        warn_openclaw_not_found
+        ui_info "Skipping doctor (NexisClaw not on PATH yet)"
+        warn_NexisClaw_not_found
         return 0
     fi
     run_quiet_step "Running doctor" "$claw" doctor --non-interactive || true
@@ -2392,9 +2392,9 @@ run_doctor() {
 }
 
 maybe_open_dashboard() {
-    local claw="${OPENCLAW_BIN:-}"
+    local claw="${NEXISCLAW_BIN:-}"
     if [[ -z "$claw" ]]; then
-        claw="$(resolve_openclaw_bin || true)"
+        claw="$(resolve_NexisClaw_bin || true)"
     fi
     if [[ -z "$claw" ]]; then
         return 0
@@ -2406,11 +2406,11 @@ maybe_open_dashboard() {
 }
 
 resolve_workspace_dir() {
-    local profile="${OPENCLAW_PROFILE:-default}"
+    local profile="${NEXISCLAW_PROFILE:-default}"
     if [[ "${profile}" != "default" ]]; then
-        echo "${HOME}/.openclaw/workspace-${profile}"
+        echo "${HOME}/.NexisClaw/workspace-${profile}"
     else
-        echo "${HOME}/.openclaw/workspace"
+        echo "${HOME}/.NexisClaw/workspace"
     fi
 }
 
@@ -2419,7 +2419,7 @@ run_bootstrap_onboarding_if_needed() {
         return
     fi
 
-    local config_path="${OPENCLAW_CONFIG_PATH:-$HOME/.openclaw/openclaw.json}"
+    local config_path="${NEXISCLAW_CONFIG_PATH:-$HOME/.NexisClaw/NexisClaw.json}"
     if [[ -f "${config_path}" || -f "$HOME/.clawdbot/clawdbot.json" ]]; then
         return
     fi
@@ -2434,25 +2434,25 @@ run_bootstrap_onboarding_if_needed() {
 
     if [[ ! -r /dev/tty || ! -w /dev/tty ]]; then
         local user_claw
-        user_claw="$(openclaw_command_for_user "${OPENCLAW_BIN:-}")"
+        user_claw="$(NexisClaw_command_for_user "${NEXISCLAW_BIN:-}")"
         ui_info "BOOTSTRAP.md found but no TTY; run ${user_claw} onboard to finish setup"
         return
     fi
 
     ui_info "BOOTSTRAP.md found; starting onboarding"
-    local claw="${OPENCLAW_BIN:-}"
+    local claw="${NEXISCLAW_BIN:-}"
     if [[ -z "$claw" ]]; then
-        claw="$(resolve_openclaw_bin || true)"
+        claw="$(resolve_NexisClaw_bin || true)"
     fi
     if [[ -z "$claw" ]]; then
-        ui_info "BOOTSTRAP.md found but openclaw not on PATH; skipping onboarding"
-        warn_openclaw_not_found
+        ui_info "BOOTSTRAP.md found but NexisClaw not on PATH; skipping onboarding"
+        warn_NexisClaw_not_found
         return
     fi
 
     "$claw" onboard || {
         local user_claw
-        user_claw="$(openclaw_command_for_user "$claw")"
+        user_claw="$(NexisClaw_command_for_user "$claw")"
         ui_error "Onboarding failed; run ${user_claw} onboard to retry"
         return
     }
@@ -2480,9 +2480,9 @@ load_install_version_helpers() {
 
 load_install_version_helpers
 
-if ! declare -F extract_openclaw_semver >/dev/null 2>&1; then
+if ! declare -F extract_NexisClaw_semver >/dev/null 2>&1; then
 # Inline fallback when version-parse.sh could not be sourced (for example, stdin install).
-extract_openclaw_semver() {
+extract_NexisClaw_semver() {
     local raw="${1:-}"
     raw="${raw//$'\r'/}"
     if [[ "$raw" =~ v?([0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?(\+[0-9A-Za-z.-]+)?) ]]; then
@@ -2491,18 +2491,18 @@ extract_openclaw_semver() {
 }
 fi
 
-resolve_openclaw_version() {
+resolve_NexisClaw_version() {
     local version=""
     local raw_version_output=""
-    local claw="${OPENCLAW_BIN:-}"
-    if [[ -z "$claw" ]] && command -v openclaw &> /dev/null; then
-        claw="$(command -v openclaw)"
+    local claw="${NEXISCLAW_BIN:-}"
+    if [[ -z "$claw" ]] && command -v NexisClaw &> /dev/null; then
+        claw="$(command -v NexisClaw)"
     fi
     if [[ -n "$claw" ]]; then
         raw_version_output=$("$claw" --version 2>/dev/null || true)
         raw_version_output="${raw_version_output%%$'\n'*}"
         raw_version_output="${raw_version_output//$'\r'/}"
-        version="$(extract_openclaw_semver "$raw_version_output")"
+        version="$(extract_NexisClaw_semver "$raw_version_output")"
         if [[ -z "$version" ]]; then
             version="$raw_version_output"
         fi
@@ -2510,8 +2510,8 @@ resolve_openclaw_version() {
     if [[ -z "$version" ]]; then
         local npm_root=""
         npm_root=$(npm root -g 2>/dev/null || true)
-        if [[ -n "$npm_root" && -f "$npm_root/openclaw/package.json" ]]; then
-            version=$(node -e "console.log(require('${npm_root}/openclaw/package.json').version)" 2>/dev/null || true)
+        if [[ -n "$npm_root" && -f "$npm_root/NexisClaw/package.json" ]]; then
+            version=$(node -e "console.log(require('${npm_root}/NexisClaw/package.json').version)" 2>/dev/null || true)
         fi
     fi
     echo "$version"
@@ -2543,9 +2543,9 @@ try {
 }
 
 refresh_gateway_service_if_loaded() {
-    local claw="${OPENCLAW_BIN:-}"
+    local claw="${NEXISCLAW_BIN:-}"
     if [[ -z "$claw" ]]; then
-        claw="$(resolve_openclaw_bin || true)"
+        claw="$(resolve_NexisClaw_bin || true)"
     fi
     if [[ -z "$claw" ]]; then
         return 0
@@ -2579,22 +2579,22 @@ verify_installation() {
     fi
 
     ui_stage "Verifying installation"
-    local claw="${OPENCLAW_BIN:-}"
+    local claw="${NEXISCLAW_BIN:-}"
     if [[ -z "$claw" ]]; then
-        claw="$(resolve_openclaw_bin || true)"
+        claw="$(resolve_NexisClaw_bin || true)"
     fi
     if [[ -z "$claw" ]]; then
-        ui_error "Install verify failed: openclaw not on PATH yet"
-        warn_openclaw_not_found
+        ui_error "Install verify failed: NexisClaw not on PATH yet"
+        warn_NexisClaw_not_found
         return 1
     fi
 
-    run_quiet_step "Checking OpenClaw version" "$claw" --version || return 1
+    run_quiet_step "Checking NexisClaw version" "$claw" --version || return 1
 
     if is_gateway_daemon_loaded "$claw"; then
         run_quiet_step "Checking gateway service" "$claw" gateway status --deep || {
             ui_error "Install verify failed: gateway service unhealthy"
-            ui_info "Run: openclaw gateway status --deep"
+            ui_info "Run: NexisClaw gateway status --deep"
             return 1
         }
     else
@@ -2624,11 +2624,11 @@ main() {
     fi
 
     local detected_checkout=""
-    detected_checkout="$(detect_openclaw_checkout "$PWD" || true)"
+    detected_checkout="$(detect_NexisClaw_checkout "$PWD" || true)"
 
     if [[ -z "$INSTALL_METHOD" && -n "$detected_checkout" ]]; then
         if ! is_promptable; then
-            ui_info "Found OpenClaw checkout but no TTY; defaulting to npm install"
+            ui_info "Found NexisClaw checkout but no TTY; defaulting to npm install"
             INSTALL_METHOD="npm"
         else
             local selected_method=""
@@ -2639,7 +2639,7 @@ main() {
                     ;;
                 *)
                     ui_error "no install method selected"
-                    echo "Re-run with: --install-method git|npm (or set OPENCLAW_INSTALL_METHOD)."
+                    echo "Re-run with: --install-method git|npm (or set NEXISCLAW_INSTALL_METHOD)."
                     exit 2
                     ;;
             esac
@@ -2665,7 +2665,7 @@ main() {
 
     # Check for existing installation
     local is_upgrade=false
-    if check_existing_openclaw; then
+    if check_existing_NexisClaw; then
         is_upgrade=true
     fi
     local should_open_dashboard=false
@@ -2686,14 +2686,14 @@ main() {
         exit 1
     fi
 
-    ui_stage "Installing OpenClaw"
+    ui_stage "Installing NexisClaw"
 
     local final_git_dir=""
     if [[ "$INSTALL_METHOD" == "git" ]]; then
         # Clean up npm global install if switching to git
-        if npm list -g openclaw &>/dev/null; then
+        if npm list -g NexisClaw &>/dev/null; then
             ui_info "Removing npm global install (switching to git)"
-            npm uninstall -g openclaw 2>/dev/null || true
+            npm uninstall -g NexisClaw 2>/dev/null || true
             ui_success "npm global install removed"
         fi
 
@@ -2702,12 +2702,12 @@ main() {
             repo_dir="$detected_checkout"
         fi
         final_git_dir="$repo_dir"
-        install_openclaw_from_git "$repo_dir"
+        install_NexisClaw_from_git "$repo_dir"
     else
         # Clean up git wrapper if switching to npm
-        if [[ -x "$HOME/.local/bin/openclaw" ]]; then
+        if [[ -x "$HOME/.local/bin/NexisClaw" ]]; then
             ui_info "Removing git wrapper (switching to npm)"
-            rm -f "$HOME/.local/bin/openclaw"
+            rm -f "$HOME/.local/bin/NexisClaw"
             ui_success "git wrapper removed"
         fi
 
@@ -2719,14 +2719,14 @@ main() {
         # Step 4: npm permissions (Linux)
         fix_npm_permissions
 
-        # Step 5: OpenClaw
-        install_openclaw
+        # Step 5: NexisClaw
+        install_NexisClaw
     fi
 
     ui_stage "Finalizing setup"
 
-    OPENCLAW_BIN="$(resolve_openclaw_bin || true)"
-    warn_duplicate_openclaw_global_installs || true
+    NEXISCLAW_BIN="$(resolve_NexisClaw_bin || true)"
+    warn_duplicate_NexisClaw_global_installs || true
 
     # PATH warning: installs can succeed while the user's login shell still lacks npm's global bin dir.
     local npm_bin=""
@@ -2735,7 +2735,7 @@ main() {
         warn_shell_path_missing_dir "$npm_bin" "npm global bin dir"
     fi
     if [[ "$INSTALL_METHOD" == "git" ]]; then
-        if [[ -x "$HOME/.local/bin/openclaw" ]]; then
+        if [[ -x "$HOME/.local/bin/NexisClaw" ]]; then
             warn_shell_path_missing_dir "$HOME/.local/bin" "user-local bin dir (~/.local/bin)"
         fi
     fi
@@ -2756,13 +2756,13 @@ main() {
     run_bootstrap_onboarding_if_needed
 
     local installed_version
-    installed_version=$(resolve_openclaw_version)
+    installed_version=$(resolve_NexisClaw_version)
 
     echo ""
     if [[ -n "$installed_version" ]]; then
-        ui_celebrate "🦞 OpenClaw installed successfully (${installed_version})!"
+        ui_celebrate "🦞 NexisClaw installed successfully (${installed_version})!"
     else
-        ui_celebrate "🦞 OpenClaw installed successfully!"
+        ui_celebrate "🦞 NexisClaw installed successfully!"
     fi
     if [[ "$is_upgrade" == "true" ]]; then
         local update_messages=(
@@ -2812,50 +2812,50 @@ main() {
     if [[ "$INSTALL_METHOD" == "git" && -n "$final_git_dir" ]]; then
         ui_section "Source install details"
         ui_kv "Checkout" "$final_git_dir"
-        ui_kv "Wrapper" "$HOME/.local/bin/openclaw"
-        ui_kv "Update command" "openclaw update"
-        ui_kv "Switch to npm" "curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method npm"
+        ui_kv "Wrapper" "$HOME/.local/bin/NexisClaw"
+        ui_kv "Update command" "NexisClaw update"
+        ui_kv "Switch to npm" "curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --install-method npm"
     elif [[ "$is_upgrade" == "true" ]]; then
         ui_info "Upgrade complete"
         if [[ -r /dev/tty && -w /dev/tty ]]; then
-            local claw="${OPENCLAW_BIN:-}"
+            local claw="${NEXISCLAW_BIN:-}"
             if [[ -z "$claw" ]]; then
-                claw="$(resolve_openclaw_bin || true)"
+                claw="$(resolve_NexisClaw_bin || true)"
             fi
             if [[ -z "$claw" ]]; then
-                ui_info "Skipping doctor (openclaw not on PATH yet)"
-                warn_openclaw_not_found
+                ui_info "Skipping doctor (NexisClaw not on PATH yet)"
+                warn_NexisClaw_not_found
                 return 0
             fi
             local -a doctor_args=()
             if [[ "$NO_ONBOARD" == "1" || "$NO_PROMPT" == "1" ]]; then
                 doctor_args+=("--non-interactive")
             fi
-            ui_info "Running openclaw doctor"
+            ui_info "Running NexisClaw doctor"
             local doctor_ok=0
             if (( ${#doctor_args[@]} )); then
-                OPENCLAW_UPDATE_IN_PROGRESS=1 "$claw" doctor "${doctor_args[@]}" </dev/null && doctor_ok=1
+                NEXISCLAW_UPDATE_IN_PROGRESS=1 "$claw" doctor "${doctor_args[@]}" </dev/null && doctor_ok=1
             else
-                OPENCLAW_UPDATE_IN_PROGRESS=1 "$claw" doctor </dev/tty && doctor_ok=1
+                NEXISCLAW_UPDATE_IN_PROGRESS=1 "$claw" doctor </dev/tty && doctor_ok=1
             fi
             if (( doctor_ok )); then
                 ui_info "Updating plugins"
-                OPENCLAW_UPDATE_IN_PROGRESS=1 "$claw" plugins update --all || true
+                NEXISCLAW_UPDATE_IN_PROGRESS=1 "$claw" plugins update --all || true
             else
                 ui_warn "Doctor failed; skipping plugin updates"
             fi
         else
             local user_claw
-            user_claw="$(openclaw_command_for_user "${OPENCLAW_BIN:-}")"
+            user_claw="$(NexisClaw_command_for_user "${NEXISCLAW_BIN:-}")"
             ui_info "No TTY; run ${user_claw} doctor and ${user_claw} plugins update --all manually"
         fi
     else
         if [[ "$NO_ONBOARD" == "1" || "$skip_onboard" == "true" ]]; then
             local user_claw
-            user_claw="$(openclaw_command_for_user "${OPENCLAW_BIN:-}")"
+            user_claw="$(NexisClaw_command_for_user "${NEXISCLAW_BIN:-}")"
             ui_info "Skipping onboard (requested); run ${user_claw} onboard later"
         else
-            local config_path="${OPENCLAW_CONFIG_PATH:-$HOME/.openclaw/openclaw.json}"
+            local config_path="${NEXISCLAW_CONFIG_PATH:-$HOME/.NexisClaw/NexisClaw.json}"
             if [[ -f "${config_path}" || -f "$HOME/.clawdbot/clawdbot.json" ]]; then
                 ui_info "Config already present; running doctor"
                 run_doctor
@@ -2866,39 +2866,39 @@ main() {
             ui_info "Starting setup"
             echo ""
             if [[ -r /dev/tty && -w /dev/tty ]]; then
-                local claw="${OPENCLAW_BIN:-}"
+                local claw="${NEXISCLAW_BIN:-}"
                 if [[ -z "$claw" ]]; then
-                    claw="$(resolve_openclaw_bin || true)"
+                    claw="$(resolve_NexisClaw_bin || true)"
                 fi
                 if [[ -z "$claw" ]]; then
-                    ui_info "Skipping onboarding (openclaw not on PATH yet)"
-                    warn_openclaw_not_found
+                    ui_info "Skipping onboarding (NexisClaw not on PATH yet)"
+                    warn_NexisClaw_not_found
                     return 0
                 fi
                 exec </dev/tty
                 exec "$claw" onboard
             fi
             local user_claw
-            user_claw="$(openclaw_command_for_user "${OPENCLAW_BIN:-}")"
+            user_claw="$(NexisClaw_command_for_user "${NEXISCLAW_BIN:-}")"
             ui_info "No TTY; run ${user_claw} onboard to finish setup"
             return 0
         fi
     fi
 
-    if command -v openclaw &> /dev/null; then
-        local claw="${OPENCLAW_BIN:-}"
+    if command -v NexisClaw &> /dev/null; then
+        local claw="${NEXISCLAW_BIN:-}"
         if [[ -z "$claw" ]]; then
-            claw="$(resolve_openclaw_bin || true)"
+            claw="$(resolve_NexisClaw_bin || true)"
         fi
         if [[ -n "$claw" ]] && is_gateway_daemon_loaded "$claw"; then
             if [[ "$DRY_RUN" == "1" ]]; then
-                ui_info "Gateway daemon detected; would restart (openclaw daemon restart)"
+                ui_info "Gateway daemon detected; would restart (NexisClaw daemon restart)"
             else
                 ui_info "Gateway daemon detected; restarting"
-                if OPENCLAW_UPDATE_IN_PROGRESS=1 "$claw" daemon restart >/dev/null 2>&1; then
+                if NEXISCLAW_UPDATE_IN_PROGRESS=1 "$claw" daemon restart >/dev/null 2>&1; then
                     ui_success "Gateway restarted"
                 else
-                    ui_warn "Gateway restart failed; try: openclaw daemon restart"
+                    ui_warn "Gateway restart failed; try: NexisClaw daemon restart"
                 fi
             fi
         fi
@@ -2915,7 +2915,7 @@ main() {
     show_footer_links
 }
 
-if [[ "${OPENCLAW_INSTALL_SH_NO_RUN:-0}" != "1" ]]; then
+if [[ "${NEXISCLAW_INSTALL_SH_NO_RUN:-0}" != "1" ]]; then
     parse_args "$@"
     configure_verbose
     main

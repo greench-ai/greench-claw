@@ -9,8 +9,8 @@ import {
   type CommandArgDefinition,
   type CommandArgValues,
   type CommandArgs,
-} from "openclaw/plugin-sdk/command-auth-native";
-import { chunkItems } from "openclaw/plugin-sdk/text-chunking";
+} from "NexisClaw/plugin-sdk/command-auth-native";
+import { chunkItems } from "NexisClaw/plugin-sdk/text-chunking";
 import {
   Button,
   Row,

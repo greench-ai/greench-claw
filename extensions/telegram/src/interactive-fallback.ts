@@ -3,7 +3,7 @@ import {
   normalizeInteractiveReply,
   renderMessagePresentationFallbackText,
   resolveInteractiveTextFallback,
-} from "openclaw/plugin-sdk/interactive-runtime";
+} from "NexisClaw/plugin-sdk/interactive-runtime";
 
 export function resolveTelegramInteractiveTextFallback(params: {
   text?: string | null;

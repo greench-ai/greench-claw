@@ -1,6 +1,6 @@
-import { createChannelPairingChallengeIssuer } from "openclaw/plugin-sdk/channel-pairing";
-import { isDangerousNameMatchingEnabled } from "openclaw/plugin-sdk/dangerous-name-runtime";
-import { logVerbose } from "openclaw/plugin-sdk/runtime-env";
+import { createChannelPairingChallengeIssuer } from "NexisClaw/plugin-sdk/channel-pairing";
+import { isDangerousNameMatchingEnabled } from "NexisClaw/plugin-sdk/dangerous-name-runtime";
+import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
 import {
   resolveComponentInteractionContext,
   resolveDiscordChannelContext,

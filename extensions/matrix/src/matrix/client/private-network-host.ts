@@ -1,1 +1,1 @@
-export { isPrivateOrLoopbackHost } from "openclaw/plugin-sdk/ssrf-runtime";
+export { isPrivateOrLoopbackHost } from "NexisClaw/plugin-sdk/ssrf-runtime";

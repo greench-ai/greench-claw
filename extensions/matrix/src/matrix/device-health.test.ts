@@ -1,29 +1,29 @@
 import { describe, expect, it } from "vitest";
-import { isOpenClawManagedMatrixDevice, summarizeMatrixDeviceHealth } from "./device-health.js";
+import { isNexisClawManagedMatrixDevice, summarizeMatrixDeviceHealth } from "./device-health.js";
 
 describe("matrix device health", () => {
-  it("detects OpenClaw-managed device names", () => {
-    expect(isOpenClawManagedMatrixDevice("OpenClaw Gateway")).toBe(true);
-    expect(isOpenClawManagedMatrixDevice("OpenClaw Debug")).toBe(true);
-    expect(isOpenClawManagedMatrixDevice("Element iPhone")).toBe(false);
-    expect(isOpenClawManagedMatrixDevice(null)).toBe(false);
+  it("detects NexisClaw-managed device names", () => {
+    expect(isNexisClawManagedMatrixDevice("NexisClaw Gateway")).toBe(true);
+    expect(isNexisClawManagedMatrixDevice("NexisClaw Debug")).toBe(true);
+    expect(isNexisClawManagedMatrixDevice("Element iPhone")).toBe(false);
+    expect(isNexisClawManagedMatrixDevice(null)).toBe(false);
   });
 
-  it("summarizes stale OpenClaw-managed devices separately from the current device", () => {
+  it("summarizes stale NexisClaw-managed devices separately from the current device", () => {
     const summary = summarizeMatrixDeviceHealth([
       {
         deviceId: "du314Zpw3A",
-        displayName: "OpenClaw Gateway",
+        displayName: "NexisClaw Gateway",
         current: true,
       },
       {
         deviceId: "BritdXC6iL",
-        displayName: "OpenClaw Gateway",
+        displayName: "NexisClaw Gateway",
         current: false,
       },
       {
         deviceId: "G6NJU9cTgs",
-        displayName: "OpenClaw Debug",
+        displayName: "NexisClaw Debug",
         current: false,
       },
       {
@@ -35,22 +35,22 @@ describe("matrix device health", () => {
 
     expect(summary).toEqual({
       currentDeviceId: "du314Zpw3A",
-      currentOpenClawDevices: [
+      currentNexisClawDevices: [
         {
           deviceId: "du314Zpw3A",
-          displayName: "OpenClaw Gateway",
+          displayName: "NexisClaw Gateway",
           current: true,
         },
       ],
-      staleOpenClawDevices: [
+      staleNexisClawDevices: [
         {
           deviceId: "BritdXC6iL",
-          displayName: "OpenClaw Gateway",
+          displayName: "NexisClaw Gateway",
           current: false,
         },
         {
           deviceId: "G6NJU9cTgs",
-          displayName: "OpenClaw Debug",
+          displayName: "NexisClaw Debug",
           current: false,
         },
       ],

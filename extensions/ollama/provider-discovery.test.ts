@@ -1,10 +1,10 @@
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { clearLiveCatalogCacheForTests } from "openclaw/plugin-sdk/provider-catalog-shared";
-import type { ModelDefinitionConfig } from "openclaw/plugin-sdk/provider-onboard";
-import { withFetchPreconnect } from "openclaw/plugin-sdk/test-env";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { clearLiveCatalogCacheForTests } from "NexisClaw/plugin-sdk/provider-catalog-shared";
+import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-onboard";
+import { withFetchPreconnect } from "NexisClaw/plugin-sdk/test-env";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ollamaProviderDiscovery } from "./provider-discovery.js";
 
@@ -17,7 +17,7 @@ afterEach(() => {
 });
 
 describe("Ollama provider", () => {
-  const createAgentDir = () => mkdtempSync(join(tmpdir(), "openclaw-test-"));
+  const createAgentDir = () => mkdtempSync(join(tmpdir(), "NexisClaw-test-"));
 
   const enableDiscoveryEnv = () => {
     vi.stubEnv("VITEST", "");
@@ -57,7 +57,7 @@ describe("Ollama provider", () => {
     }
   }
 
-  async function runOllamaCatalog(params: { config?: OpenClawConfig; env?: NodeJS.ProcessEnv }) {
+  async function runOllamaCatalog(params: { config?: NexisClawConfig; env?: NodeJS.ProcessEnv }) {
     const env: NodeJS.ProcessEnv = {
       ...process.env,
       VITEST: "1",

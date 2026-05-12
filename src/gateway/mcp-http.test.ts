@@ -167,8 +167,8 @@ describe("mcp loopback server", () => {
       headers: {
         "content-type": "application/json",
         "x-session-key": "agent:main:telegram:group:chat123",
-        "x-openclaw-account-id": "work",
-        "x-openclaw-message-channel": "telegram",
+        "x-NexisClaw-account-id": "work",
+        "x-NexisClaw-message-channel": "telegram",
       },
       body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" }),
     });
@@ -233,7 +233,7 @@ describe("mcp loopback server", () => {
         headers: {
           "content-type": "application/json",
           "x-session-key": "agent:main:matrix:dm:test",
-          "x-openclaw-message-channel": "matrix",
+          "x-NexisClaw-message-channel": "matrix",
         },
         body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" }),
       });
@@ -265,8 +265,8 @@ describe("mcp loopback server", () => {
       headers: {
         "content-type": "application/json",
         "x-session-key": "agent:main:matrix:dm:test",
-        "x-openclaw-message-channel": "matrix",
-        "x-openclaw-sender-is-owner": "true",
+        "x-NexisClaw-message-channel": "matrix",
+        "x-NexisClaw-sender-is-owner": "true",
       },
       body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" }),
     });
@@ -663,13 +663,13 @@ describe("createMcpLoopbackServerConfig", () => {
     const config = createMcpLoopbackServerConfig(23119) as {
       mcpServers?: Record<string, { url?: string; headers?: Record<string, string> }>;
     };
-    expect(config.mcpServers?.openclaw?.url).toBe("http://127.0.0.1:23119/mcp");
-    expect(config.mcpServers?.openclaw?.headers?.Authorization).toBe(
-      "Bearer ${OPENCLAW_MCP_TOKEN}",
+    expect(config.mcpServers?.NexisClaw?.url).toBe("http://127.0.0.1:23119/mcp");
+    expect(config.mcpServers?.NexisClaw?.headers?.Authorization).toBe(
+      "Bearer ${NEXISCLAW_MCP_TOKEN}",
     );
-    expect(config.mcpServers?.openclaw?.headers?.["x-openclaw-message-channel"]).toBe(
-      "${OPENCLAW_MCP_MESSAGE_CHANNEL}",
+    expect(config.mcpServers?.NexisClaw?.headers?.["x-NexisClaw-message-channel"]).toBe(
+      "${NEXISCLAW_MCP_MESSAGE_CHANNEL}",
     );
-    expect(config.mcpServers?.openclaw?.headers?.["x-openclaw-sender-is-owner"]).toBeUndefined();
+    expect(config.mcpServers?.NexisClaw?.headers?.["x-NexisClaw-sender-is-owner"]).toBeUndefined();
   });
 });

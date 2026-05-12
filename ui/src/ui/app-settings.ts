@@ -226,7 +226,7 @@ export function applySettingsFromUrl(host: SettingsHost) {
     if (queryToken != null) {
       warnQueryToken = true;
       console.warn(
-        "[openclaw] Auth token passed as query parameter (?token=). Use URL fragment instead: #token=<token>. Query parameters may appear in server logs.",
+        "[NexisClaw] Auth token passed as query parameter (?token=). Use URL fragment instead: #token=<token>. Query parameters may appear in server logs.",
       );
     }
     if (token && gatewayUrlChanged) {
@@ -428,7 +428,7 @@ export function inferBasePath() {
   if (typeof window === "undefined") {
     return "";
   }
-  const configured = window.__OPENCLAW_CONTROL_UI_BASE_PATH__;
+  const configured = window.__NEXISCLAW_CONTROL_UI_BASE_PATH__;
   const normalizedConfigured = normalizeOptionalString(configured);
   if (normalizedConfigured) {
     return normalizeBasePath(normalizedConfigured);
@@ -758,7 +758,7 @@ function buildAttentionItems(host: SettingsAppHost) {
       title: "Missing operator.read scope",
       description:
         "This connection does not have the operator.read scope. Some features may be unavailable.",
-      href: "https://docs.openclaw.ai/web/dashboard",
+      href: "https://docs.NexisClaw.ai/web/dashboard",
       external: true,
     });
   }

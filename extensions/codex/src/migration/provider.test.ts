@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { MigrationProviderContext } from "openclaw/plugin-sdk/plugin-entry";
+import type { MigrationProviderContext } from "NexisClaw/plugin-sdk/plugin-entry";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CODEX_PLUGINS_MARKETPLACE_NAME } from "../app-server/config.js";
 import type { v2 } from "../app-server/protocol.js";
@@ -23,7 +23,7 @@ const logger = {
 };
 
 async function makeTempRoot(): Promise<string> {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-migrate-codex-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-migrate-codex-"));
   tempRoots.add(root);
   return root;
 }
@@ -749,7 +749,7 @@ function createConfigRuntime(
           previousHash: null,
         });
         return {
-          path: "/tmp/openclaw.json",
+          path: "/tmp/NexisClaw.json",
           previousHash: null,
           snapshot: {} as never,
           nextConfig: configState,

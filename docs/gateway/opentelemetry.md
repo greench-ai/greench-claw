@@ -1,13 +1,13 @@
 ---
-summary: "Export OpenClaw diagnostics to any OpenTelemetry collector via the diagnostics-otel plugin (OTLP/HTTP)"
+summary: "Export NexisClaw diagnostics to any OpenTelemetry collector via the diagnostics-otel plugin (OTLP/HTTP)"
 title: "OpenTelemetry export"
 read_when:
-  - You want to send OpenClaw model usage, message flow, or session metrics to an OpenTelemetry collector
+  - You want to send NexisClaw model usage, message flow, or session metrics to an OpenTelemetry collector
   - You are wiring traces, metrics, or logs into Grafana, Datadog, Honeycomb, New Relic, Tempo, or another OTLP backend
   - You need the exact metric names, span names, or attribute shapes to build dashboards or alerts
 ---
 
-OpenClaw exports diagnostics through the official `diagnostics-otel` plugin
+NexisClaw exports diagnostics through the official `diagnostics-otel` plugin
 using **OTLP/HTTP (protobuf)**. Any collector or backend that accepts OTLP/HTTP
 works without code changes. For local file logs and how to read them, see
 [Logging](/logging).
@@ -19,7 +19,7 @@ works without code changes. For local file logs and how to read them, see
   and exec.
 - **`diagnostics-otel` plugin** subscribes to those events and exports them as
   OpenTelemetry **metrics**, **traces**, and **logs** over OTLP/HTTP.
-- **Provider calls** receive a W3C `traceparent` header from OpenClaw's
+- **Provider calls** receive a W3C `traceparent` header from NexisClaw's
   trusted model-call span context when the provider transport accepts custom
   headers. Plugin-emitted trace context is not propagated.
 - Exporters only attach when both the diagnostics surface and the plugin are
@@ -30,7 +30,7 @@ works without code changes. For local file logs and how to read them, see
 For packaged installs, install the plugin first:
 
 ```bash
-openclaw plugins install clawhub:@openclaw/diagnostics-otel
+NexisClaw plugins install clawhub:@NexisClaw/diagnostics-otel
 ```
 
 ```json5
@@ -47,7 +47,7 @@ openclaw plugins install clawhub:@openclaw/diagnostics-otel
       enabled: true,
       endpoint: "http://otel-collector:4318",
       protocol: "http/protobuf",
-      serviceName: "openclaw-gateway",
+      serviceName: "NexisClaw-gateway",
       traces: true,
       metrics: true,
       logs: true,
@@ -61,7 +61,7 @@ openclaw plugins install clawhub:@openclaw/diagnostics-otel
 You can also enable the plugin from the CLI:
 
 ```bash
-openclaw plugins enable diagnostics-otel
+NexisClaw plugins enable diagnostics-otel
 ```
 
 <Note>
@@ -92,7 +92,7 @@ when `diagnostics.otel.enabled` is true.
       metricsEndpoint: "http://otel-collector:4318/v1/metrics",
       logsEndpoint: "http://otel-collector:4318/v1/logs",
       protocol: "http/protobuf", // grpc is ignored
-      serviceName: "openclaw-gateway",
+      serviceName: "NexisClaw-gateway",
       headers: { "x-collector-token": "..." },
       traces: true,
       metrics: true,
@@ -121,7 +121,7 @@ when `diagnostics.otel.enabled` is true.
 | `OTEL_SERVICE_NAME`                                                                                               | Override `diagnostics.otel.serviceName`.                                                                                                                                                                                                   |
 | `OTEL_EXPORTER_OTLP_PROTOCOL`                                                                                     | Override the wire protocol (only `http/protobuf` is honored today).                                                                                                                                                                        |
 | `OTEL_SEMCONV_STABILITY_OPT_IN`                                                                                   | Set to `gen_ai_latest_experimental` to emit the latest experimental GenAI span attribute (`gen_ai.provider.name`) instead of the legacy `gen_ai.system`. GenAI metrics always use bounded, low-cardinality semantic attributes regardless. |
-| `OPENCLAW_OTEL_PRELOADED`                                                                                         | Set to `1` when another preload or host process already registered the global OpenTelemetry SDK. The plugin then skips its own NodeSDK lifecycle but still wires diagnostic listeners and honors `traces`/`metrics`/`logs`.                |
+| `NEXISCLAW_OTEL_PRELOADED`                                                                                         | Set to `1` when another preload or host process already registered the global OpenTelemetry SDK. The plugin then skips its own NodeSDK lifecycle but still wires diagnostic listeners and honors `traces`/`metrics`/`logs`.                |
 
 ## Privacy and content capture
 
@@ -134,7 +134,7 @@ provider, and event type. They do not include transcripts, audio payloads,
 session ids, turn ids, call ids, room ids, or handoff tokens.
 
 Outbound model requests may include a W3C `traceparent` header. That header is
-generated only from OpenClaw-owned diagnostic trace context for the active model
+generated only from NexisClaw-owned diagnostic trace context for the active model
 call. Existing caller-supplied `traceparent` headers are replaced, so plugins or
 custom provider options cannot spoof cross-service trace ancestry.
 
@@ -149,7 +149,7 @@ text. Each subkey is opt-in independently:
 - `systemPrompt` - assembled system/developer prompt.
 
 When any subkey is enabled, model and tool spans get bounded, redacted
-`openclaw.content.*` attributes for that class only.
+`NexisClaw.content.*` attributes for that class only.
 
 ## Sampling and flushing
 
@@ -172,57 +172,57 @@ When any subkey is enabled, model and tool spans get bounded, redacted
 
 ### Model usage
 
-- `openclaw.tokens` (counter, attrs: `openclaw.token`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`, `openclaw.agent`)
-- `openclaw.cost.usd` (counter, attrs: `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
-- `openclaw.run.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
-- `openclaw.context.tokens` (histogram, attrs: `openclaw.context`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
+- `NexisClaw.tokens` (counter, attrs: `NexisClaw.token`, `NexisClaw.channel`, `NexisClaw.provider`, `NexisClaw.model`, `NexisClaw.agent`)
+- `NexisClaw.cost.usd` (counter, attrs: `NexisClaw.channel`, `NexisClaw.provider`, `NexisClaw.model`)
+- `NexisClaw.run.duration_ms` (histogram, attrs: `NexisClaw.channel`, `NexisClaw.provider`, `NexisClaw.model`)
+- `NexisClaw.context.tokens` (histogram, attrs: `NexisClaw.context`, `NexisClaw.channel`, `NexisClaw.provider`, `NexisClaw.model`)
 - `gen_ai.client.token.usage` (histogram, GenAI semantic-conventions metric, attrs: `gen_ai.token.type` = `input`/`output`, `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.request.model`)
 - `gen_ai.client.operation.duration` (histogram, seconds, GenAI semantic-conventions metric, attrs: `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.request.model`, optional `error.type`)
-- `openclaw.model_call.duration_ms` (histogram, attrs: `openclaw.provider`, `openclaw.model`, `openclaw.api`, `openclaw.transport`, plus `openclaw.errorCategory` and `openclaw.failureKind` on classified errors)
-- `openclaw.model_call.request_bytes` (histogram, UTF-8 byte size of the final model request payload; no raw payload content)
-- `openclaw.model_call.response_bytes` (histogram, UTF-8 byte size of streamed model response events; no raw response content)
-- `openclaw.model_call.time_to_first_byte_ms` (histogram, elapsed time before the first streamed response event)
+- `NexisClaw.model_call.duration_ms` (histogram, attrs: `NexisClaw.provider`, `NexisClaw.model`, `NexisClaw.api`, `NexisClaw.transport`, plus `NexisClaw.errorCategory` and `NexisClaw.failureKind` on classified errors)
+- `NexisClaw.model_call.request_bytes` (histogram, UTF-8 byte size of the final model request payload; no raw payload content)
+- `NexisClaw.model_call.response_bytes` (histogram, UTF-8 byte size of streamed model response events; no raw response content)
+- `NexisClaw.model_call.time_to_first_byte_ms` (histogram, elapsed time before the first streamed response event)
 
 ### Message flow
 
-- `openclaw.webhook.received` (counter, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.webhook.error` (counter, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.webhook.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.webhook`)
-- `openclaw.message.queued` (counter, attrs: `openclaw.channel`, `openclaw.source`)
-- `openclaw.message.processed` (counter, attrs: `openclaw.channel`, `openclaw.outcome`)
-- `openclaw.message.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.outcome`)
-- `openclaw.message.delivery.started` (counter, attrs: `openclaw.channel`, `openclaw.delivery.kind`)
-- `openclaw.message.delivery.duration_ms` (histogram, attrs: `openclaw.channel`, `openclaw.delivery.kind`, `openclaw.outcome`, `openclaw.errorCategory`)
+- `NexisClaw.webhook.received` (counter, attrs: `NexisClaw.channel`, `NexisClaw.webhook`)
+- `NexisClaw.webhook.error` (counter, attrs: `NexisClaw.channel`, `NexisClaw.webhook`)
+- `NexisClaw.webhook.duration_ms` (histogram, attrs: `NexisClaw.channel`, `NexisClaw.webhook`)
+- `NexisClaw.message.queued` (counter, attrs: `NexisClaw.channel`, `NexisClaw.source`)
+- `NexisClaw.message.processed` (counter, attrs: `NexisClaw.channel`, `NexisClaw.outcome`)
+- `NexisClaw.message.duration_ms` (histogram, attrs: `NexisClaw.channel`, `NexisClaw.outcome`)
+- `NexisClaw.message.delivery.started` (counter, attrs: `NexisClaw.channel`, `NexisClaw.delivery.kind`)
+- `NexisClaw.message.delivery.duration_ms` (histogram, attrs: `NexisClaw.channel`, `NexisClaw.delivery.kind`, `NexisClaw.outcome`, `NexisClaw.errorCategory`)
 
 ### Talk
 
-- `openclaw.talk.event` (counter, attrs: `openclaw.talk.event_type`, `openclaw.talk.mode`, `openclaw.talk.transport`, `openclaw.talk.brain`, `openclaw.talk.provider`)
-- `openclaw.talk.event.duration_ms` (histogram, attrs: same as `openclaw.talk.event`; emitted when a Talk event reports duration)
-- `openclaw.talk.audio.bytes` (histogram, attrs: same as `openclaw.talk.event`; emitted for Talk audio frame events that report byte length)
+- `NexisClaw.talk.event` (counter, attrs: `NexisClaw.talk.event_type`, `NexisClaw.talk.mode`, `NexisClaw.talk.transport`, `NexisClaw.talk.brain`, `NexisClaw.talk.provider`)
+- `NexisClaw.talk.event.duration_ms` (histogram, attrs: same as `NexisClaw.talk.event`; emitted when a Talk event reports duration)
+- `NexisClaw.talk.audio.bytes` (histogram, attrs: same as `NexisClaw.talk.event`; emitted for Talk audio frame events that report byte length)
 
 ### Queues and sessions
 
-- `openclaw.queue.lane.enqueue` (counter, attrs: `openclaw.lane`)
-- `openclaw.queue.lane.dequeue` (counter, attrs: `openclaw.lane`)
-- `openclaw.queue.depth` (histogram, attrs: `openclaw.lane` or `openclaw.channel=heartbeat`)
-- `openclaw.queue.wait_ms` (histogram, attrs: `openclaw.lane`)
-- `openclaw.session.state` (counter, attrs: `openclaw.state`, `openclaw.reason`)
-- `openclaw.session.stuck` (counter, attrs: `openclaw.state`; emitted only for stale session bookkeeping with no active work)
-- `openclaw.session.stuck_age_ms` (histogram, attrs: `openclaw.state`; emitted only for stale session bookkeeping with no active work)
-- `openclaw.session.recovery.requested` (counter, attrs: `openclaw.state`, `openclaw.action`, `openclaw.active_work_kind`, `openclaw.reason`)
-- `openclaw.session.recovery.completed` (counter, attrs: `openclaw.state`, `openclaw.action`, `openclaw.status`, `openclaw.active_work_kind`, `openclaw.reason`)
-- `openclaw.session.recovery.age_ms` (histogram, attrs: same as the matching recovery counter)
-- `openclaw.run.attempt` (counter, attrs: `openclaw.attempt`)
+- `NexisClaw.queue.lane.enqueue` (counter, attrs: `NexisClaw.lane`)
+- `NexisClaw.queue.lane.dequeue` (counter, attrs: `NexisClaw.lane`)
+- `NexisClaw.queue.depth` (histogram, attrs: `NexisClaw.lane` or `NexisClaw.channel=heartbeat`)
+- `NexisClaw.queue.wait_ms` (histogram, attrs: `NexisClaw.lane`)
+- `NexisClaw.session.state` (counter, attrs: `NexisClaw.state`, `NexisClaw.reason`)
+- `NexisClaw.session.stuck` (counter, attrs: `NexisClaw.state`; emitted only for stale session bookkeeping with no active work)
+- `NexisClaw.session.stuck_age_ms` (histogram, attrs: `NexisClaw.state`; emitted only for stale session bookkeeping with no active work)
+- `NexisClaw.session.recovery.requested` (counter, attrs: `NexisClaw.state`, `NexisClaw.action`, `NexisClaw.active_work_kind`, `NexisClaw.reason`)
+- `NexisClaw.session.recovery.completed` (counter, attrs: `NexisClaw.state`, `NexisClaw.action`, `NexisClaw.status`, `NexisClaw.active_work_kind`, `NexisClaw.reason`)
+- `NexisClaw.session.recovery.age_ms` (histogram, attrs: same as the matching recovery counter)
+- `NexisClaw.run.attempt` (counter, attrs: `NexisClaw.attempt`)
 
 ### Session liveness telemetry
 
 `diagnostics.stuckSessionWarnMs` is the no-progress age threshold for session
 liveness diagnostics. A `processing` session does not age toward this threshold
-while OpenClaw observes reply, tool, status, block, or ACP runtime progress.
+while NexisClaw observes reply, tool, status, block, or ACP runtime progress.
 Typing keepalives are not counted as progress, so a silent model or harness can
 still be detected.
 
-OpenClaw classifies sessions by the work it can still observe:
+NexisClaw classifies sessions by the work it can still observe:
 
 - `session.long_running`: active embedded work, model calls, or tool calls are
   still making progress.
@@ -240,8 +240,8 @@ Recovery emits structured `session.recovery.requested` and
 only after a mutating recovery outcome (`aborted` or `released`) and only if the
 same processing generation is still current.
 
-Only `session.stuck` emits the `openclaw.session.stuck` counter, the
-`openclaw.session.stuck_age_ms` histogram, and the `openclaw.session.stuck`
+Only `session.stuck` emits the `NexisClaw.session.stuck` counter, the
+`NexisClaw.session.stuck_age_ms` histogram, and the `NexisClaw.session.stuck`
 span. Repeated `session.stuck` diagnostics back off while the session remains
 unchanged, so dashboards should alert on sustained increases rather than every
 heartbeat tick. For the config knob and defaults, see
@@ -249,62 +249,62 @@ heartbeat tick. For the config knob and defaults, see
 
 ### Harness lifecycle
 
-- `openclaw.harness.duration_ms` (histogram, attrs: `openclaw.harness.id`, `openclaw.harness.plugin`, `openclaw.outcome`, `openclaw.harness.phase` on errors)
+- `NexisClaw.harness.duration_ms` (histogram, attrs: `NexisClaw.harness.id`, `NexisClaw.harness.plugin`, `NexisClaw.outcome`, `NexisClaw.harness.phase` on errors)
 
 ### Exec
 
-- `openclaw.exec.duration_ms` (histogram, attrs: `openclaw.exec.target`, `openclaw.exec.mode`, `openclaw.outcome`, `openclaw.failureKind`)
+- `NexisClaw.exec.duration_ms` (histogram, attrs: `NexisClaw.exec.target`, `NexisClaw.exec.mode`, `NexisClaw.outcome`, `NexisClaw.failureKind`)
 
 ### Diagnostics internals (memory and tool loop)
 
-- `openclaw.memory.heap_used_bytes` (histogram, attrs: `openclaw.memory.kind`)
-- `openclaw.memory.rss_bytes` (histogram)
-- `openclaw.memory.pressure` (counter, attrs: `openclaw.memory.level`)
-- `openclaw.tool.loop.iterations` (counter, attrs: `openclaw.toolName`, `openclaw.outcome`)
-- `openclaw.tool.loop.duration_ms` (histogram, attrs: `openclaw.toolName`, `openclaw.outcome`)
+- `NexisClaw.memory.heap_used_bytes` (histogram, attrs: `NexisClaw.memory.kind`)
+- `NexisClaw.memory.rss_bytes` (histogram)
+- `NexisClaw.memory.pressure` (counter, attrs: `NexisClaw.memory.level`)
+- `NexisClaw.tool.loop.iterations` (counter, attrs: `NexisClaw.toolName`, `NexisClaw.outcome`)
+- `NexisClaw.tool.loop.duration_ms` (histogram, attrs: `NexisClaw.toolName`, `NexisClaw.outcome`)
 
 ## Exported spans
 
-- `openclaw.model.usage`
-  - `openclaw.channel`, `openclaw.provider`, `openclaw.model`
-  - `openclaw.tokens.*` (input/output/cache_read/cache_write/total)
+- `NexisClaw.model.usage`
+  - `NexisClaw.channel`, `NexisClaw.provider`, `NexisClaw.model`
+  - `NexisClaw.tokens.*` (input/output/cache_read/cache_write/total)
   - `gen_ai.system` by default, or `gen_ai.provider.name` when the latest GenAI semantic conventions are opted in
   - `gen_ai.request.model`, `gen_ai.operation.name`, `gen_ai.usage.*`
-- `openclaw.run`
-  - `openclaw.outcome`, `openclaw.channel`, `openclaw.provider`, `openclaw.model`, `openclaw.errorCategory`
-- `openclaw.model.call`
+- `NexisClaw.run`
+  - `NexisClaw.outcome`, `NexisClaw.channel`, `NexisClaw.provider`, `NexisClaw.model`, `NexisClaw.errorCategory`
+- `NexisClaw.model.call`
   - `gen_ai.system` by default, or `gen_ai.provider.name` when the latest GenAI semantic conventions are opted in
-  - `gen_ai.request.model`, `gen_ai.operation.name`, `openclaw.provider`, `openclaw.model`, `openclaw.api`, `openclaw.transport`
-  - `openclaw.errorCategory` and optional `openclaw.failureKind` on errors
-  - `openclaw.model_call.request_bytes`, `openclaw.model_call.response_bytes`, `openclaw.model_call.time_to_first_byte_ms`
-  - `openclaw.provider.request_id_hash` (bounded SHA-based hash of the upstream provider request id; raw ids are not exported)
-- `openclaw.harness.run`
-  - `openclaw.harness.id`, `openclaw.harness.plugin`, `openclaw.outcome`, `openclaw.provider`, `openclaw.model`, `openclaw.channel`
-  - On completion: `openclaw.harness.result_classification`, `openclaw.harness.yield_detected`, `openclaw.harness.items.started`, `openclaw.harness.items.completed`, `openclaw.harness.items.active`
-  - On error: `openclaw.harness.phase`, `openclaw.errorCategory`, optional `openclaw.harness.cleanup_failed`
-- `openclaw.tool.execution`
-  - `gen_ai.tool.name`, `openclaw.toolName`, `openclaw.errorCategory`, `openclaw.tool.params.*`
-- `openclaw.exec`
-  - `openclaw.exec.target`, `openclaw.exec.mode`, `openclaw.outcome`, `openclaw.failureKind`, `openclaw.exec.command_length`, `openclaw.exec.exit_code`, `openclaw.exec.timed_out`
-- `openclaw.webhook.processed`
-  - `openclaw.channel`, `openclaw.webhook`
-- `openclaw.webhook.error`
-  - `openclaw.channel`, `openclaw.webhook`, `openclaw.error`
-- `openclaw.message.processed`
-  - `openclaw.channel`, `openclaw.outcome`, `openclaw.reason`
-- `openclaw.message.delivery`
-  - `openclaw.channel`, `openclaw.delivery.kind`, `openclaw.outcome`, `openclaw.errorCategory`, `openclaw.delivery.result_count`
-- `openclaw.session.stuck`
-  - `openclaw.state`, `openclaw.ageMs`, `openclaw.queueDepth`
-- `openclaw.context.assembled`
-  - `openclaw.prompt.size`, `openclaw.history.size`, `openclaw.context.tokens`, `openclaw.errorCategory` (no prompt, history, response, or session-key content)
-- `openclaw.tool.loop`
-  - `openclaw.toolName`, `openclaw.outcome`, `openclaw.iterations`, `openclaw.errorCategory` (no loop messages, params, or tool output)
-- `openclaw.memory.pressure`
-  - `openclaw.memory.level`, `openclaw.memory.heap_used_bytes`, `openclaw.memory.rss_bytes`
+  - `gen_ai.request.model`, `gen_ai.operation.name`, `NexisClaw.provider`, `NexisClaw.model`, `NexisClaw.api`, `NexisClaw.transport`
+  - `NexisClaw.errorCategory` and optional `NexisClaw.failureKind` on errors
+  - `NexisClaw.model_call.request_bytes`, `NexisClaw.model_call.response_bytes`, `NexisClaw.model_call.time_to_first_byte_ms`
+  - `NexisClaw.provider.request_id_hash` (bounded SHA-based hash of the upstream provider request id; raw ids are not exported)
+- `NexisClaw.harness.run`
+  - `NexisClaw.harness.id`, `NexisClaw.harness.plugin`, `NexisClaw.outcome`, `NexisClaw.provider`, `NexisClaw.model`, `NexisClaw.channel`
+  - On completion: `NexisClaw.harness.result_classification`, `NexisClaw.harness.yield_detected`, `NexisClaw.harness.items.started`, `NexisClaw.harness.items.completed`, `NexisClaw.harness.items.active`
+  - On error: `NexisClaw.harness.phase`, `NexisClaw.errorCategory`, optional `NexisClaw.harness.cleanup_failed`
+- `NexisClaw.tool.execution`
+  - `gen_ai.tool.name`, `NexisClaw.toolName`, `NexisClaw.errorCategory`, `NexisClaw.tool.params.*`
+- `NexisClaw.exec`
+  - `NexisClaw.exec.target`, `NexisClaw.exec.mode`, `NexisClaw.outcome`, `NexisClaw.failureKind`, `NexisClaw.exec.command_length`, `NexisClaw.exec.exit_code`, `NexisClaw.exec.timed_out`
+- `NexisClaw.webhook.processed`
+  - `NexisClaw.channel`, `NexisClaw.webhook`
+- `NexisClaw.webhook.error`
+  - `NexisClaw.channel`, `NexisClaw.webhook`, `NexisClaw.error`
+- `NexisClaw.message.processed`
+  - `NexisClaw.channel`, `NexisClaw.outcome`, `NexisClaw.reason`
+- `NexisClaw.message.delivery`
+  - `NexisClaw.channel`, `NexisClaw.delivery.kind`, `NexisClaw.outcome`, `NexisClaw.errorCategory`, `NexisClaw.delivery.result_count`
+- `NexisClaw.session.stuck`
+  - `NexisClaw.state`, `NexisClaw.ageMs`, `NexisClaw.queueDepth`
+- `NexisClaw.context.assembled`
+  - `NexisClaw.prompt.size`, `NexisClaw.history.size`, `NexisClaw.context.tokens`, `NexisClaw.errorCategory` (no prompt, history, response, or session-key content)
+- `NexisClaw.tool.loop`
+  - `NexisClaw.toolName`, `NexisClaw.outcome`, `NexisClaw.iterations`, `NexisClaw.errorCategory` (no loop messages, params, or tool output)
+- `NexisClaw.memory.pressure`
+  - `NexisClaw.memory.level`, `NexisClaw.memory.heap_used_bytes`, `NexisClaw.memory.rss_bytes`
 
 When content capture is explicitly enabled, model and tool spans can also
-include bounded, redacted `openclaw.content.*` attributes for the specific
+include bounded, redacted `NexisClaw.content.*` attributes for the specific
 content classes you opted into.
 
 ## Diagnostic event catalog
@@ -372,7 +372,7 @@ flags. Flags are case-insensitive and support wildcards (e.g. `telegram.*` or
 Or as a one-off env override:
 
 ```bash
-OPENCLAW_DIAGNOSTICS=telegram.http,telegram.payload openclaw gateway
+NEXISCLAW_DIAGNOSTICS=telegram.http,telegram.payload NexisClaw gateway
 ```
 
 Flag output goes to the standard log file (`logging.file`) and is still
@@ -388,7 +388,7 @@ redacted by `logging.redactSensitive`. Full guide:
 ```
 
 You can also leave `diagnostics-otel` out of `plugins.allow`, or run
-`openclaw plugins disable diagnostics-otel`.
+`NexisClaw plugins disable diagnostics-otel`.
 
 ## Related
 

@@ -7,28 +7,28 @@ import {
   matchesMentionPatterns,
   resolveEnvelopeFormatOptions,
   resolveInboundMentionDecision,
-} from "openclaw/plugin-sdk/channel-inbound";
+} from "NexisClaw/plugin-sdk/channel-inbound";
 import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
-} from "openclaw/plugin-sdk/channel-ingress-runtime";
+} from "NexisClaw/plugin-sdk/channel-ingress-runtime";
 import {
   resolveChannelGroupPolicy,
   resolveChannelGroupRequireMention,
-} from "openclaw/plugin-sdk/channel-policy";
-import { hasControlCommand } from "openclaw/plugin-sdk/command-auth-native";
-import type { DmPolicy, GroupPolicy, OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveChannelContextVisibilityMode } from "openclaw/plugin-sdk/context-visibility-runtime";
+} from "NexisClaw/plugin-sdk/channel-policy";
+import { hasControlCommand } from "NexisClaw/plugin-sdk/command-auth-native";
+import type { DmPolicy, GroupPolicy, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveChannelContextVisibilityMode } from "NexisClaw/plugin-sdk/context-visibility-runtime";
 import {
   buildPendingHistoryContextFromMap,
   recordPendingHistoryEntryIfEnabled,
   type HistoryEntry,
-} from "openclaw/plugin-sdk/reply-history";
-import { finalizeInboundContext } from "openclaw/plugin-sdk/reply-runtime";
-import { resolveAgentRoute } from "openclaw/plugin-sdk/routing";
-import { evaluateSupplementalContextVisibility } from "openclaw/plugin-sdk/security-runtime";
-import { sanitizeTerminalText } from "openclaw/plugin-sdk/text-chunking";
-import { truncateUtf16Safe } from "openclaw/plugin-sdk/text-utility-runtime";
+} from "NexisClaw/plugin-sdk/reply-history";
+import { finalizeInboundContext } from "NexisClaw/plugin-sdk/reply-runtime";
+import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import { evaluateSupplementalContextVisibility } from "NexisClaw/plugin-sdk/security-runtime";
+import { sanitizeTerminalText } from "NexisClaw/plugin-sdk/text-chunking";
+import { truncateUtf16Safe } from "NexisClaw/plugin-sdk/text-utility-runtime";
 import { resolveIMessageConversationRoute } from "../conversation-route.js";
 import {
   isKnownFromMeIMessageMessageId,
@@ -384,7 +384,7 @@ type IMessageInboundDecision =
   | IMessageInboundDispatchDecision;
 
 export async function resolveIMessageInboundDecision(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId: string;
   message: IMessagePayload;
   opts?: Pick<MonitorIMessageOpts, "requireMention">;
@@ -839,7 +839,7 @@ export async function resolveIMessageInboundDecision(params: {
 }
 
 export function buildIMessageInboundContext(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   decision: IMessageInboundDispatchDecision;
   message: IMessagePayload;
   envelopeOptions?: EnvelopeFormatOptions;

@@ -14,29 +14,29 @@ const mocks = vi.hoisted(() => {
     }) satisfies AnyAgentTool;
 
   return {
-    createOpenClawToolsOptions: vi.fn(),
+    createNexisClawToolsOptions: vi.fn(),
     stubTool,
   };
 });
 
-vi.mock("./openclaw-tools.js", () => ({
-  createOpenClawTools: (options: unknown) => {
-    mocks.createOpenClawToolsOptions(options);
+vi.mock("./NexisClaw-tools.js", () => ({
+  createNexisClawTools: (options: unknown) => {
+    mocks.createNexisClawToolsOptions(options);
     return [mocks.stubTool("cron", true)];
   },
 }));
 
 import "./test-helpers/fast-bash-tools.js";
 import "./test-helpers/fast-coding-tools.js";
-import { createOpenClawCodingTools } from "./pi-tools.js";
+import { createNexisClawCodingTools } from "./pi-tools.js";
 
-describe("createOpenClawCodingTools cron scope", () => {
+describe("createNexisClawCodingTools cron scope", () => {
   beforeEach(() => {
-    mocks.createOpenClawToolsOptions.mockClear();
+    mocks.createNexisClawToolsOptions.mockClear();
   });
 
   it("scopes the cron owner-only runtime grant to self-removal", () => {
-    const tools = createOpenClawCodingTools({
+    const tools = createNexisClawCodingTools({
       trigger: "cron",
       jobId: "job-current",
       senderIsOwner: false,
@@ -44,18 +44,18 @@ describe("createOpenClawCodingTools cron scope", () => {
     });
 
     expect(tools.map((tool) => tool.name)).toContain("cron");
-    const [options] = mocks.createOpenClawToolsOptions.mock.calls.at(0) ?? [];
+    const [options] = mocks.createNexisClawToolsOptions.mock.calls.at(0) ?? [];
     expect(options?.cronSelfRemoveOnlyJobId).toBe("job-current");
   });
 
   it("does not scope ordinary owner cron sessions", () => {
-    createOpenClawCodingTools({
+    createNexisClawCodingTools({
       trigger: "cron",
       jobId: "job-current",
       senderIsOwner: true,
     });
 
-    const [options] = mocks.createOpenClawToolsOptions.mock.calls.at(0) ?? [];
+    const [options] = mocks.createNexisClawToolsOptions.mock.calls.at(0) ?? [];
     expect(options?.cronSelfRemoveOnlyJobId).toBeUndefined();
   });
 });

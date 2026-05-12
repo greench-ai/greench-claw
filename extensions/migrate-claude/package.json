@@ -1,22 +1,22 @@
 {
-  "name": "@openclaw/migrate-claude",
+  "name": "@NexisClaw/migrate-claude",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "Claude to OpenClaw migration provider",
+  "description": "Claude to NexisClaw migration provider",
   "type": "module",
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*",
-    "openclaw": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*",
+    "NexisClaw": "workspace:*"
   },
   "peerDependencies": {
-    "openclaw": ">=2026.5.12-beta.1"
+    "NexisClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "openclaw": {
+    "NexisClaw": {
       "optional": true
     }
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ]

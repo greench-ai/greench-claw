@@ -1,9 +1,9 @@
 import { normalizeProviderId } from "../agents/provider-id.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 
 export function resolveProviderConfigApiOwnerHint(params: {
   provider: string;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
 }): string | undefined {
   const providers = params.config?.models?.providers;
   if (!providers) {

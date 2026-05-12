@@ -2,7 +2,7 @@ import type {
   MigrationPlan,
   MigrationProviderContext,
   MigrationProviderPlugin,
-} from "openclaw/plugin-sdk/plugin-entry";
+} from "NexisClaw/plugin-sdk/plugin-entry";
 import { applyCodexMigrationPlan } from "./apply.js";
 import { buildCodexMigrationPlan } from "./plan.js";
 import { discoverCodexSource, hasCodexSource } from "./source.js";

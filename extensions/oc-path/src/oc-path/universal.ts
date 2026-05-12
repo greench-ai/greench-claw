@@ -12,7 +12,7 @@
  *   oc://FILE/section/+0           → indexed insertion
  *   oc://FILE/+                    → file-root insertion
  *
- * @module @openclaw/oc-path/universal
+ * @module @NexisClaw/oc-path/universal
  */
 
 import type { MdAst } from "./ast.js";

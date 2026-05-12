@@ -1,7 +1,7 @@
 import type { SessionAcpMeta } from "../../../config/sessions/types.js";
-import type { OpenClawConfig } from "../../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
 
-export function createAcpTestConfig(overrides?: Partial<OpenClawConfig>): OpenClawConfig {
+export function createAcpTestConfig(overrides?: Partial<NexisClawConfig>): NexisClawConfig {
   return {
     acp: {
       enabled: true,
@@ -11,7 +11,7 @@ export function createAcpTestConfig(overrides?: Partial<OpenClawConfig>): OpenCl
       },
     },
     ...overrides,
-  } as OpenClawConfig;
+  } as NexisClawConfig;
 }
 
 export function createAcpSessionMeta(overrides?: Partial<SessionAcpMeta>): SessionAcpMeta {

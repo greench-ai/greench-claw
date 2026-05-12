@@ -1,8 +1,8 @@
 {
-  "name": "@openclaw/slack",
+  "name": "@NexisClaw/slack",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "OpenClaw Slack channel plugin",
+  "description": "NexisClaw Slack channel plugin",
   "type": "module",
   "dependencies": {
     "@slack/bolt": "4.7.2",
@@ -12,9 +12,9 @@
     "typebox": "1.1.38"
   },
   "devDependencies": {
-    "@openclaw/plugin-sdk": "workspace:*"
+    "@NexisClaw/plugin-sdk": "workspace:*"
   },
-  "openclaw": {
+  "NexisClaw": {
     "extensions": [
       "./index.ts"
     ],

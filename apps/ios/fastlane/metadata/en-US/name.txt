@@ -1,1 +1,1 @@
-OpenClaw - iOS Client
+NexisClaw - iOS Client

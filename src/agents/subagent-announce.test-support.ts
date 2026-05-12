@@ -1,11 +1,11 @@
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type { callGateway } from "../gateway/call.js";
 import type { EmbeddedPiQueueMessageOptions } from "./pi-embedded-runner/run-state.js";
 import type { EmbeddedPiQueueMessageOutcome } from "./pi-embedded-runner/runs.js";
 
 type DeliveryRuntimeMockOptions = {
   callGateway: (request: unknown) => Promise<unknown>;
-  getRuntimeConfig: () => OpenClawConfig;
+  getRuntimeConfig: () => NexisClawConfig;
   loadSessionStore: (storePath: string) => unknown;
   resolveAgentIdFromSessionKey: (sessionKey: string) => string;
   resolveMainSessionKey: (cfg: unknown) => string;

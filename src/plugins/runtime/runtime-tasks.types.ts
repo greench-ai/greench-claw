@@ -1,6 +1,6 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import type { TaskDeliveryState } from "../../tasks/task-registry.types.js";
-import type { OpenClawPluginToolContext } from "../tool-types.js";
+import type { NexisClawPluginToolContext } from "../tool-types.js";
 import type { PluginRuntimeTaskFlow } from "./runtime-taskflow.types.js";
 import type {
   TaskFlowDetail,
@@ -27,7 +27,7 @@ export type BoundTaskRunsRuntime = {
   list: () => TaskRunView[];
   findLatest: () => TaskRunDetail | undefined;
   resolve: (token: string) => TaskRunDetail | undefined;
-  cancel: (params: { taskId: string; cfg: OpenClawConfig }) => Promise<TaskRunCancelResult>;
+  cancel: (params: { taskId: string; cfg: NexisClawConfig }) => Promise<TaskRunCancelResult>;
 };
 
 export type PluginRuntimeTaskRuns = {
@@ -36,7 +36,7 @@ export type PluginRuntimeTaskRuns = {
     requesterOrigin?: TaskDeliveryState["requesterOrigin"];
   }) => BoundTaskRunsRuntime;
   fromToolContext: (
-    ctx: Pick<OpenClawPluginToolContext, "sessionKey" | "deliveryContext">,
+    ctx: Pick<NexisClawPluginToolContext, "sessionKey" | "deliveryContext">,
   ) => BoundTaskRunsRuntime;
 };
 
@@ -56,7 +56,7 @@ export type PluginRuntimeTaskFlows = {
     requesterOrigin?: TaskDeliveryState["requesterOrigin"];
   }) => BoundTaskFlowsRuntime;
   fromToolContext: (
-    ctx: Pick<OpenClawPluginToolContext, "sessionKey" | "deliveryContext">,
+    ctx: Pick<NexisClawPluginToolContext, "sessionKey" | "deliveryContext">,
   ) => BoundTaskFlowsRuntime;
 };
 

@@ -1,23 +1,23 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolvePluginConfigObject } from "openclaw/plugin-sdk/plugin-config-runtime";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolvePluginConfigObject } from "NexisClaw/plugin-sdk/plugin-config-runtime";
 import {
   definePluginEntry,
-  type OpenClawPluginApi,
+  type NexisClawPluginApi,
   type ProviderAuthContext,
   type ProviderAuthMethodNonInteractiveContext,
   type ProviderAuthResult,
   type ProviderCatalogContext,
   type ProviderRuntimeModel,
-} from "openclaw/plugin-sdk/plugin-entry";
-import { buildApiKeyCredential } from "openclaw/plugin-sdk/provider-auth";
+} from "NexisClaw/plugin-sdk/plugin-entry";
+import { buildApiKeyCredential } from "NexisClaw/plugin-sdk/provider-auth";
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "NexisClaw/plugin-sdk/provider-model-shared";
 import {
   buildOpenAICompatibleReplayPolicy,
   OPENAI_COMPATIBLE_REPLAY_HOOKS,
-} from "openclaw/plugin-sdk/provider-model-shared";
+} from "NexisClaw/plugin-sdk/provider-model-shared";
 import {
   OLLAMA_DEFAULT_BASE_URL,
   buildOllamaModelDefinition,
@@ -131,14 +131,14 @@ export default definePluginEntry({
   id: "ollama",
   name: "Ollama Provider",
   description: "Bundled Ollama provider plugin",
-  register(api: OpenClawPluginApi) {
+  register(api: NexisClawPluginApi) {
     if (api.registrationMode === "full") {
       void checkWsl2CrashLoopRisk(api.logger);
     }
     api.registerMemoryEmbeddingProvider(ollamaMemoryEmbeddingProviderAdapter);
     api.registerMediaUnderstandingProvider(ollamaMediaUnderstandingProvider);
     const startupPluginConfig = (api.pluginConfig ?? {}) as OllamaPluginConfig;
-    const resolveCurrentPluginConfig = (config?: OpenClawConfig): OllamaPluginConfig => {
+    const resolveCurrentPluginConfig = (config?: NexisClawConfig): OllamaPluginConfig => {
       const runtimePluginConfig = resolvePluginConfigObject(config, "ollama");
       if (runtimePluginConfig) {
         return runtimePluginConfig as OllamaPluginConfig;
@@ -319,8 +319,8 @@ export default definePluginEntry({
       },
       buildUnknownModelHint: () =>
         "Ollama requires authentication to be registered as a provider. " +
-        'Set OLLAMA_API_KEY="ollama-local" (any value works) or run "openclaw configure". ' +
-        "See: https://docs.openclaw.ai/providers/ollama",
+        'Set OLLAMA_API_KEY="ollama-local" (any value works) or run "NexisClaw configure". ' +
+        "See: https://docs.NexisClaw.ai/providers/ollama",
     });
   },
 });

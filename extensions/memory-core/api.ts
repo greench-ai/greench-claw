@@ -1,9 +1,9 @@
-export type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+export type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 export type {
   MemoryEmbeddingProbeResult,
   MemoryProviderStatus,
   MemorySyncProgressUpdate,
-} from "openclaw/plugin-sdk/memory-core-host-engine-storage";
+} from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
 export {
   dedupeDreamDiaryEntries,
   removeBackfillDiaryEntries,

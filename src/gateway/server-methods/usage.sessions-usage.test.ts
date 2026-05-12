@@ -169,10 +169,10 @@ describe("sessions.usage", () => {
 
   it("resolves store entries by sessionId when queried via discovered agent-prefixed key", async () => {
     const storeKey = "agent:opus:slack:dm:u123";
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-usage-test-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-usage-test-"));
 
     try {
-      await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+      await withEnvAsync({ NEXISCLAW_STATE_DIR: stateDir }, async () => {
         const agentSessionsDir = path.join(stateDir, "agents", "opus", "sessions");
         fs.mkdirSync(agentSessionsDir, { recursive: true });
         const sessionFile = path.join(agentSessionsDir, "s-opus.jsonl");
@@ -216,10 +216,10 @@ describe("sessions.usage", () => {
 
   it("rolls up known session family ids when historical usage is requested", async () => {
     const storeKey = "agent:opus:main";
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-usage-test-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-usage-test-"));
 
     try {
-      await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+      await withEnvAsync({ NEXISCLAW_STATE_DIR: stateDir }, async () => {
         const agentSessionsDir = path.join(stateDir, "agents", "opus", "sessions");
         fs.mkdirSync(agentSessionsDir, { recursive: true });
         fs.writeFileSync(path.join(agentSessionsDir, "current.jsonl"), "", "utf-8");
@@ -306,10 +306,10 @@ describe("sessions.usage", () => {
 
   it("prefers the deterministic store key when duplicate sessionIds exist", async () => {
     const preferredKey = "agent:opus:acp:run-dup";
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-usage-test-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-usage-test-"));
 
     try {
-      await withEnvAsync({ OPENCLAW_STATE_DIR: stateDir }, async () => {
+      await withEnvAsync({ NEXISCLAW_STATE_DIR: stateDir }, async () => {
         const agentSessionsDir = path.join(stateDir, "agents", "opus", "sessions");
         fs.mkdirSync(agentSessionsDir, { recursive: true });
         const sessionFile = path.join(agentSessionsDir, "run-dup.jsonl");

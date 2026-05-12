@@ -1,8 +1,8 @@
-import { readChannelAllowFromStore } from "openclaw/plugin-sdk/conversation-runtime";
-import { getPluginCommandSpecs } from "openclaw/plugin-sdk/plugin-runtime";
-import { dispatchReplyWithBufferedBlockDispatcher } from "openclaw/plugin-sdk/reply-dispatch-runtime";
-import { getRuntimeConfig } from "openclaw/plugin-sdk/runtime-config-snapshot";
-import { listSkillCommandsForAgents } from "openclaw/plugin-sdk/skill-commands-runtime";
+import { readChannelAllowFromStore } from "NexisClaw/plugin-sdk/conversation-runtime";
+import { getPluginCommandSpecs } from "NexisClaw/plugin-sdk/plugin-runtime";
+import { dispatchReplyWithBufferedBlockDispatcher } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
+import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
+import { listSkillCommandsForAgents } from "NexisClaw/plugin-sdk/skill-commands-runtime";
 import type { TelegramBotDeps } from "./bot-deps.js";
 import { syncTelegramMenuCommands } from "./bot-native-command-menu.js";
 

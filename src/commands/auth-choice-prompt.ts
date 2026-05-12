@@ -1,5 +1,5 @@
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type { WizardPrompter, WizardSelectOption } from "../wizard/prompts.js";
 import { buildAuthChoiceGroups } from "./auth-choice-options.js";
 import type { AuthChoiceGroup } from "./auth-choice-options.static.js";
@@ -30,7 +30,7 @@ export async function promptAuthChoiceGrouped(params: {
   prompter: WizardPrompter;
   store: AuthProfileStore;
   includeSkip: boolean;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<AuthChoice> {

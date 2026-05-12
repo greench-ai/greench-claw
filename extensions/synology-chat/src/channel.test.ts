@@ -1,5 +1,5 @@
-import { verifyChannelMessageAdapterCapabilityProofs } from "openclaw/plugin-sdk/channel-message";
-import { createPluginSetupWizardStatus } from "openclaw/plugin-sdk/plugin-test-runtime";
+import { verifyChannelMessageAdapterCapabilityProofs } from "NexisClaw/plugin-sdk/channel-message";
+import { createPluginSetupWizardStatus } from "NexisClaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ResolvedSynologyChatAccount } from "./types.js";
 
@@ -233,7 +233,7 @@ describe("createSynologyChatPlugin", () => {
 
       expect(mockSendMessage).toHaveBeenCalledWith(
         "https://nas/incoming",
-        "OpenClaw: your access has been approved.",
+        "NexisClaw: your access has been approved.",
         "USER1",
         true,
       );

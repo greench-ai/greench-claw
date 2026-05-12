@@ -1,9 +1,9 @@
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   resolveReactionLevel,
   type ReactionLevel,
   type ResolvedReactionLevel as BaseResolvedReactionLevel,
-} from "openclaw/plugin-sdk/status-helpers";
+} from "NexisClaw/plugin-sdk/status-helpers";
 import { resolveTelegramAccount } from "./accounts.js";
 
 export type TelegramReactionLevel = ReactionLevel;
@@ -13,7 +13,7 @@ export type ResolvedReactionLevel = BaseResolvedReactionLevel;
  * Resolve the effective reaction level and its implications.
  */
 export function resolveTelegramReactionLevel(params: {
-  cfg: OpenClawConfig;
+  cfg: NexisClawConfig;
   accountId?: string;
 }): ResolvedReactionLevel {
   const account = resolveTelegramAccount({

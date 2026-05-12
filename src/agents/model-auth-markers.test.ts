@@ -2,22 +2,22 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import { captureEnv, withEnvAsync } from "../test-utils/env.js";
 
 const PLUGIN_MANIFEST_ENV_KEYS = [
-  "OPENCLAW_BUNDLED_PLUGINS_DIR",
-  "OPENCLAW_DISABLE_BUNDLED_PLUGINS",
-  "OPENCLAW_SKIP_PROVIDERS",
-  "OPENCLAW_SKIP_CHANNELS",
-  "OPENCLAW_SKIP_CRON",
-  "OPENCLAW_TEST_MINIMAL_GATEWAY",
+  "NEXISCLAW_BUNDLED_PLUGINS_DIR",
+  "NEXISCLAW_DISABLE_BUNDLED_PLUGINS",
+  "NEXISCLAW_SKIP_PROVIDERS",
+  "NEXISCLAW_SKIP_CHANNELS",
+  "NEXISCLAW_SKIP_CRON",
+  "NEXISCLAW_TEST_MINIMAL_GATEWAY",
 ] as const;
 
 function cleanPluginManifestEnv(): Record<(typeof PLUGIN_MANIFEST_ENV_KEYS)[number], undefined> {
   return {
-    OPENCLAW_BUNDLED_PLUGINS_DIR: undefined,
-    OPENCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-    OPENCLAW_SKIP_PROVIDERS: undefined,
-    OPENCLAW_SKIP_CHANNELS: undefined,
-    OPENCLAW_SKIP_CRON: undefined,
-    OPENCLAW_TEST_MINIMAL_GATEWAY: undefined,
+    NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
+    NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+    NEXISCLAW_SKIP_PROVIDERS: undefined,
+    NEXISCLAW_SKIP_CHANNELS: undefined,
+    NEXISCLAW_SKIP_CRON: undefined,
+    NEXISCLAW_TEST_MINIMAL_GATEWAY: undefined,
   };
 }
 

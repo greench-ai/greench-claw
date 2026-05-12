@@ -1,6 +1,6 @@
-export { resolvePreferredOpenClawTmpDir, withTempWorkspace } from "./src/runtime-api.js";
+export { resolvePreferredNexisClawTmpDir, withTempWorkspace } from "./src/runtime-api.js";
 export {
   definePluginEntry,
   type AnyAgentTool,
-  type OpenClawPluginApi,
-} from "openclaw/plugin-sdk/plugin-entry";
+  type NexisClawPluginApi,
+} from "NexisClaw/plugin-sdk/plugin-entry";

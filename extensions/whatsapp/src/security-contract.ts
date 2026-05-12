@@ -1,4 +1,4 @@
-import { isRecord } from "openclaw/plugin-sdk/string-coerce-runtime";
+import { isRecord } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 
 type UnsupportedSecretRefConfigCandidate = {
   path: string;

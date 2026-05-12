@@ -10,9 +10,9 @@ import type {
 } from "../plugins/types.js";
 import { definePluginEntry } from "./plugin-entry.js";
 import type {
-  OpenClawPluginApi,
-  OpenClawPluginConfigSchema,
-  OpenClawPluginDefinition,
+  NexisClawPluginApi,
+  NexisClawPluginConfigSchema,
+  NexisClawPluginDefinition,
 } from "./plugin-entry.js";
 import { buildSingleProviderApiKeyCatalog } from "./provider-catalog-shared.js";
 
@@ -49,12 +49,12 @@ export type SingleProviderPluginOptions = {
   name: string;
   description: string;
   /**
-   * @deprecated Declare exclusive plugin kind in `openclaw.plugin.json` via
+   * @deprecated Declare exclusive plugin kind in `NexisClaw.plugin.json` via
    * manifest `kind`. Runtime-entry `kind` remains only as a compatibility
    * fallback for older plugins.
    */
-  kind?: OpenClawPluginDefinition["kind"];
-  configSchema?: OpenClawPluginConfigSchema | (() => OpenClawPluginConfigSchema);
+  kind?: NexisClawPluginDefinition["kind"];
+  configSchema?: NexisClawPluginConfigSchema | (() => NexisClawPluginConfigSchema);
   provider?: {
     id?: string;
     label: string;
@@ -67,7 +67,7 @@ export type SingleProviderPluginOptions = {
     ProviderPlugin,
     "id" | "label" | "docsPath" | "aliases" | "envVars" | "auth" | "catalog" | "staticCatalog"
   >;
-  register?: (api: OpenClawPluginApi) => void;
+  register?: (api: NexisClawPluginApi) => void;
 };
 
 function resolveWizardSetup(params: {

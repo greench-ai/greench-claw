@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: openclaw
+  name: NexisClaw
   labels:
-    app: openclaw
+    app: NexisClaw
 spec:
   type: ClusterIP
   selector:
-    app: openclaw
+    app: NexisClaw
   ports:
     - name: gateway
       port: 18789

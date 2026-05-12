@@ -131,7 +131,7 @@ describe("loginOpenAICodexOAuth", () => {
 
     expect(result).toEqual(creds);
     expect(mocks.loginOpenAICodex).toHaveBeenCalledOnce();
-    expectMockFirstArgFields(mocks.loginOpenAICodex, { originator: "openclaw" });
+    expectMockFirstArgFields(mocks.loginOpenAICodex, { originator: "NexisClaw" });
     expect(spin.stop).toHaveBeenCalledWith("OpenAI OAuth complete");
     expect(runtime.error).not.toHaveBeenCalled();
   });
@@ -207,7 +207,7 @@ describe("loginOpenAICodexOAuth", () => {
     expect(spin.stop).toHaveBeenCalledWith("OpenAI OAuth failed");
     expectRuntimeErrorContains(runtime, "oauth failed");
     expect(prompter.note).toHaveBeenCalledWith(
-      "Trouble with OAuth? See https://docs.openclaw.ai/start/faq",
+      "Trouble with OAuth? See https://docs.NexisClaw.ai/start/faq",
       "OAuth help",
     );
   });
@@ -229,7 +229,7 @@ describe("loginOpenAICodexOAuth", () => {
     expect(spin.stop).toHaveBeenCalledWith("OpenAI OAuth failed");
     expectRuntimeErrorContains(runtime, "HTTPS_PROXY");
     expect(prompter.note).toHaveBeenCalledWith(
-      "Trouble with OAuth? See https://docs.openclaw.ai/start/faq",
+      "Trouble with OAuth? See https://docs.NexisClaw.ai/start/faq",
       "OAuth help",
     );
   });

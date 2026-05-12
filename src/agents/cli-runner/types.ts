@@ -5,7 +5,7 @@ import type { ThinkLevel } from "../../auto-reply/thinking.js";
 import type { CliSessionBinding } from "../../config/sessions.js";
 import type { SessionSystemPromptReport } from "../../config/sessions/types.js";
 import type { CliBackendConfig } from "../../config/types.js";
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import type { PromptImageOrderEntry } from "../../media/prompt-image-order.js";
 import type { InputProvenance } from "../../sessions/input-provenance.js";
 import type { ResolvedCliBackend } from "../cli-backends.js";
@@ -23,7 +23,7 @@ export type RunCliAgentParams = {
   trigger?: EmbeddedRunTrigger;
   sessionFile: string;
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: NexisClawConfig;
   prompt: string;
   transcriptPrompt?: string;
   /** Runtime-only current-turn context visible to the model but excluded from transcript text. */

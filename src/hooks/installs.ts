@@ -1,9 +1,9 @@
 import type { HookInstallRecord } from "../config/types.hooks.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 
 export type HookInstallUpdate = HookInstallRecord & { hookId: string };
 
-export function recordHookInstall(cfg: OpenClawConfig, update: HookInstallUpdate): OpenClawConfig {
+export function recordHookInstall(cfg: NexisClawConfig, update: HookInstallUpdate): NexisClawConfig {
   const { hookId, ...record } = update;
   const installs = {
     ...cfg.hooks?.internal?.installs,

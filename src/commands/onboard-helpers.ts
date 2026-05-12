@@ -7,7 +7,7 @@ import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
 import { resolveConfigPath } from "../config/paths.js";
 import { resolveSessionTranscriptsDirForAgent } from "../config/sessions/paths.js";
 import type { OptionalBootstrapFileName } from "../config/types.agent-defaults.js";
-import type { OpenClawConfig } from "../config/types.openclaw.js";
+import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { resolveControlUiLinks } from "../gateway/control-ui-links.js";
 import { normalizeControlUiBasePath } from "../gateway/control-ui-shared.js";
 import { probeGateway } from "../gateway/probe.js";
@@ -39,7 +39,7 @@ export function guardCancel<T>(value: T | symbol, runtime: RuntimeEnv): T {
   return value;
 }
 
-export function summarizeExistingConfig(config: OpenClawConfig): string {
+export function summarizeExistingConfig(config: NexisClawConfig): string {
   const rows: string[] = [];
   const defaults = config.agents?.defaults;
   if (defaults?.workspace) {
@@ -110,9 +110,9 @@ export function printWizardHeader(runtime: RuntimeEnv) {
 }
 
 export function applyWizardMetadata(
-  cfg: OpenClawConfig,
+  cfg: NexisClawConfig,
   params: { command: string; mode: OnboardMode },
-): OpenClawConfig {
+): NexisClawConfig {
   const commit =
     normalizeOptionalString(process.env.GIT_COMMIT) ?? normalizeOptionalString(process.env.GIT_SHA);
   return {
@@ -147,8 +147,8 @@ export function formatControlUiSshHint(params: {
     localUrl,
     authedUrl,
     "Docs:",
-    "https://docs.openclaw.ai/gateway/remote",
-    "https://docs.openclaw.ai/web/control-ui",
+    "https://docs.NexisClaw.ai/gateway/remote",
+    "https://docs.NexisClaw.ai/web/control-ui",
   ]
     .filter(Boolean)
     .join("\n");

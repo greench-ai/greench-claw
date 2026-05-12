@@ -1,14 +1,14 @@
-import type { OpenClawConfig } from "../../config/types.openclaw.js";
+import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 
 export async function finalizeDoctorConfigFlow(params: {
-  cfg: OpenClawConfig;
-  candidate: OpenClawConfig;
+  cfg: NexisClawConfig;
+  candidate: NexisClawConfig;
   pendingChanges: boolean;
   shouldRepair: boolean;
   fixHints: string[];
   confirm: (p: { message: string; initialValue: boolean }) => Promise<boolean>;
   note: (message: string, title?: string) => void;
-}): Promise<{ cfg: OpenClawConfig; shouldWriteConfig: boolean }> {
+}): Promise<{ cfg: NexisClawConfig; shouldWriteConfig: boolean }> {
   if (!params.shouldRepair && params.pendingChanges) {
     const shouldApply = await params.confirm({
       message: "Apply recommended config repairs now?",

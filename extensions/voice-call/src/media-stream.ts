@@ -9,19 +9,19 @@
 
 import type { IncomingMessage } from "node:http";
 import type { Duplex } from "node:stream";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import type {
   RealtimeTranscriptionProviderConfig,
   RealtimeTranscriptionProviderPlugin,
   RealtimeTranscriptionSession,
-} from "openclaw/plugin-sdk/realtime-transcription";
+} from "NexisClaw/plugin-sdk/realtime-transcription";
 import {
   createTalkSessionController,
   recordTalkObservabilityEvent,
   type TalkEvent,
   type TalkEventInput,
   type TalkSessionController,
-} from "openclaw/plugin-sdk/realtime-voice";
+} from "NexisClaw/plugin-sdk/realtime-voice";
 import { type RawData, WebSocket, WebSocketServer } from "ws";
 
 /**
@@ -33,7 +33,7 @@ export interface MediaStreamConfig {
   /** Provider-owned config blob passed into the transcription session. */
   providerConfig: RealtimeTranscriptionProviderConfig;
   /** Full runtime config, used by providers that can resolve OAuth profiles. */
-  cfg?: OpenClawConfig;
+  cfg?: NexisClawConfig;
   /** Close sockets that never send a valid `start` frame within this window. */
   preStartTimeoutMs?: number;
   /** Max concurrent pre-start sockets. */

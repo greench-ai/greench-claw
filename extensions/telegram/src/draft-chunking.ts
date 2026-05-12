@@ -1,15 +1,15 @@
-import { resolveChannelStreamingPreviewChunk } from "openclaw/plugin-sdk/channel-streaming";
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
-import { resolveTextChunkLimit } from "openclaw/plugin-sdk/reply-chunking";
-import { resolveAccountEntry } from "openclaw/plugin-sdk/routing";
-import { normalizeAccountId } from "openclaw/plugin-sdk/routing";
+import { resolveChannelStreamingPreviewChunk } from "NexisClaw/plugin-sdk/channel-streaming";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveTextChunkLimit } from "NexisClaw/plugin-sdk/reply-chunking";
+import { resolveAccountEntry } from "NexisClaw/plugin-sdk/routing";
+import { normalizeAccountId } from "NexisClaw/plugin-sdk/routing";
 import { TELEGRAM_TEXT_CHUNK_LIMIT } from "./outbound-adapter.js";
 
 const DEFAULT_TELEGRAM_DRAFT_STREAM_MIN = 200;
 const DEFAULT_TELEGRAM_DRAFT_STREAM_MAX = 800;
 
 export function resolveTelegramDraftStreamingChunking(
-  cfg: OpenClawConfig | undefined,
+  cfg: NexisClawConfig | undefined,
   accountId?: string | null,
 ): {
   minChars: number;

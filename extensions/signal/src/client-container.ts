@@ -8,8 +8,8 @@
 
 import fs from "node:fs/promises";
 import nodePath from "node:path";
-import { resolveFetch } from "openclaw/plugin-sdk/fetch-runtime";
-import { detectMime } from "openclaw/plugin-sdk/media-runtime";
+import { resolveFetch } from "NexisClaw/plugin-sdk/fetch-runtime";
+import { detectMime } from "NexisClaw/plugin-sdk/media-runtime";
 import WebSocket from "ws";
 
 export type ContainerRpcOptions = {

@@ -1,7 +1,7 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { NexisClawConfig } from "../config/config.js";
 
-const ensureOpenClawModelsJsonMock = vi.fn<
+const ensureNexisClawModelsJsonMock = vi.fn<
   (
     config: unknown,
     agentDir: unknown,
@@ -18,8 +18,8 @@ vi.mock("../agents/agent-scope.js", () => ({
 }));
 
 vi.mock("../agents/models-config.js", () => ({
-  ensureOpenClawModelsJson: (config: unknown, agentDir: unknown, options?: unknown) =>
-    ensureOpenClawModelsJsonMock(config, agentDir, options),
+  ensureNexisClawModelsJson: (config: unknown, agentDir: unknown, options?: unknown) =>
+    ensureNexisClawModelsJsonMock(config, agentDir, options),
 }));
 
 vi.mock("../agents/pi-embedded-runner/model.js", () => {
@@ -36,9 +36,9 @@ vi.mock("../agents/pi-embedded-runner/runtime.js", () => ({
 let prewarmConfiguredPrimaryModel: typeof import("./server-startup-post-attach.js").__testing.prewarmConfiguredPrimaryModel;
 let shouldSkipStartupModelPrewarm: typeof import("./server-startup-post-attach.js").__testing.shouldSkipStartupModelPrewarm;
 
-function expectModelsJsonPrewarmCall(cfg: OpenClawConfig) {
-  expect(ensureOpenClawModelsJsonMock).toHaveBeenCalledTimes(1);
-  const [calledConfig, agentDir, options] = ensureOpenClawModelsJsonMock.mock.calls.at(0) ?? [];
+function expectModelsJsonPrewarmCall(cfg: NexisClawConfig) {
+  expect(ensureNexisClawModelsJsonMock).toHaveBeenCalledTimes(1);
+  const [calledConfig, agentDir, options] = ensureNexisClawModelsJsonMock.mock.calls.at(0) ?? [];
   expect(calledConfig).toBe(cfg);
   expect(agentDir).toBe("/tmp/agent");
   expect(options).toEqual({
@@ -57,7 +57,7 @@ describe("gateway startup primary model warmup", () => {
   });
 
   beforeEach(() => {
-    ensureOpenClawModelsJsonMock.mockClear();
+    ensureNexisClawModelsJsonMock.mockClear();
     piModelModuleLoadedMock.mockClear();
     resolveEmbeddedAgentRuntimeMock.mockClear();
     resolveEmbeddedAgentRuntimeMock.mockReturnValue("auto");
@@ -72,7 +72,7 @@ describe("gateway startup primary model warmup", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     await prewarmConfiguredPrimaryModel({
       cfg,
@@ -85,11 +85,11 @@ describe("gateway startup primary model warmup", () => {
 
   it("skips warmup when no explicit primary model is configured", async () => {
     await prewarmConfiguredPrimaryModel({
-      cfg: {} as OpenClawConfig,
+      cfg: {} as NexisClawConfig,
       log: { warn: vi.fn() },
     });
 
-    expect(ensureOpenClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureNexisClawModelsJsonMock).not.toHaveBeenCalled();
     expect(piModelModuleLoadedMock).not.toHaveBeenCalled();
   });
 
@@ -97,12 +97,12 @@ describe("gateway startup primary model warmup", () => {
     expect(shouldSkipStartupModelPrewarm({})).toBe(false);
     expect(
       shouldSkipStartupModelPrewarm({
-        OPENCLAW_SKIP_STARTUP_MODEL_PREWARM: "1",
+        NEXISCLAW_SKIP_STARTUP_MODEL_PREWARM: "1",
       }),
     ).toBe(true);
     expect(
       shouldSkipStartupModelPrewarm({
-        OPENCLAW_SKIP_STARTUP_MODEL_PREWARM: "true",
+        NEXISCLAW_SKIP_STARTUP_MODEL_PREWARM: "true",
       }),
     ).toBe(true);
   });
@@ -123,11 +123,11 @@ describe("gateway startup primary model warmup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
       log: { warn: vi.fn() },
     });
 
-    expect(ensureOpenClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureNexisClawModelsJsonMock).not.toHaveBeenCalled();
     expect(piModelModuleLoadedMock).not.toHaveBeenCalled();
   });
 
@@ -142,11 +142,11 @@ describe("gateway startup primary model warmup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
       log: { warn: vi.fn() },
     });
 
-    expect(ensureOpenClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureNexisClawModelsJsonMock).not.toHaveBeenCalled();
     expect(piModelModuleLoadedMock).not.toHaveBeenCalled();
   });
 
@@ -160,7 +160,7 @@ describe("gateway startup primary model warmup", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as NexisClawConfig;
 
     await prewarmConfiguredPrimaryModel({
       cfg,
@@ -172,7 +172,7 @@ describe("gateway startup primary model warmup", () => {
   });
 
   it("warns when scoped models.json preparation fails", async () => {
-    ensureOpenClawModelsJsonMock.mockRejectedValueOnce(new Error("models write failed"));
+    ensureNexisClawModelsJsonMock.mockRejectedValueOnce(new Error("models write failed"));
     const warn = vi.fn();
 
     await prewarmConfiguredPrimaryModel({
@@ -184,7 +184,7 @@ describe("gateway startup primary model warmup", () => {
             },
           },
         },
-      } as OpenClawConfig,
+      } as NexisClawConfig,
       log: { warn },
     });
 

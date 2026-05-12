@@ -1,6 +1,6 @@
-import { createChannelRunQueue } from "openclaw/plugin-sdk/channel-lifecycle";
-import type { ClaimableDedupe } from "openclaw/plugin-sdk/persistent-dedupe";
-import { danger } from "openclaw/plugin-sdk/runtime-env";
+import { createChannelRunQueue } from "NexisClaw/plugin-sdk/channel-lifecycle";
+import type { ClaimableDedupe } from "NexisClaw/plugin-sdk/persistent-dedupe";
+import { danger } from "NexisClaw/plugin-sdk/runtime-env";
 import {
   commitDiscordInboundReplay,
   createDiscordInboundReplayGuard,

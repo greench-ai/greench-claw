@@ -10,7 +10,7 @@ describe("parseReleaseVerifyBetaArgs", () => {
       version: "2026.5.10-beta.3",
       tag: "v2026.5.10-beta.3",
       distTag: "beta",
-      repo: "openclaw/openclaw",
+      repo: "NexisClaw/NexisClaw",
       registry: "https://clawhub.ai",
       skipPostpublish: false,
       rerunFailedClawHub: false,
@@ -23,7 +23,7 @@ describe("parseReleaseVerifyBetaArgs", () => {
       parseReleaseVerifyBetaArgs([
         "--",
         "2026.5.10-beta.3",
-        "--openclaw-npm-run",
+        "--NexisClaw-npm-run",
         "11",
         "--plugin-npm-run",
         "22",
@@ -36,7 +36,7 @@ describe("parseReleaseVerifyBetaArgs", () => {
       skipPostpublish: true,
       rerunFailedClawHub: true,
       workflowRuns: {
-        openclawNpm: "11",
+        NexisClawNpm: "11",
         pluginNpm: "22",
         pluginClawHub: "33",
       },

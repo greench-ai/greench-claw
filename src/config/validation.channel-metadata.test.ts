@@ -101,7 +101,7 @@ function createPluginManifestRecord(
     channels: [],
     cliBackends: [],
     hooks: [],
-    manifestPath: `/tmp/${overrides.id}/openclaw.plugin.json`,
+    manifestPath: `/tmp/${overrides.id}/NexisClaw.plugin.json`,
     origin: "bundled",
     providers: [],
     rootDir: `/tmp/${overrides.id}`,
@@ -142,7 +142,7 @@ vi.mock("../channels/plugins/legacy-config.js", () => ({
 }));
 
 vi.mock("./zod-schema.js", () => ({
-  OpenClawSchema: {
+  NexisClawSchema: {
     safeParse: (raw: unknown) => ({ success: true, data: raw }),
   },
 }));

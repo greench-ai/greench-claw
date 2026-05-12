@@ -27,7 +27,7 @@ const resolveStoredSessionKeyForSessionIdMock = vi.fn();
 const resolveModelAsyncMock = vi.fn(async (provider: string, modelId: string) =>
   createResolvedEmbeddedRunnerModel(provider, modelId),
 );
-const ensureOpenClawModelsJsonMock = vi.fn(async () => ({ wrote: false }));
+const ensureNexisClawModelsJsonMock = vi.fn(async () => ({ wrote: false }));
 const loggerWarnMock = vi.fn();
 let refreshRuntimeAuthOnFirstPromptError = false;
 
@@ -147,8 +147,8 @@ const installRunEmbeddedMocks = () => {
     const mod = await vi.importActual<typeof import("./models-config.js")>("./models-config.js");
     return {
       ...mod,
-      ensureOpenClawModelsJson: (...args: Parameters<typeof ensureOpenClawModelsJsonMock>) =>
-        ensureOpenClawModelsJsonMock(...args),
+      ensureNexisClawModelsJson: (...args: Parameters<typeof ensureNexisClawModelsJsonMock>) =>
+        ensureNexisClawModelsJsonMock(...args),
     };
   });
 };
@@ -167,7 +167,7 @@ beforeAll(async () => {
   installRunEmbeddedMocks();
   ({ runEmbeddedPiAgent } = await import("./pi-embedded-runner/run.js"));
   ({ SessionManager } = await import("@earendil-works/pi-coding-agent"));
-  e2eWorkspace = await createEmbeddedPiRunnerTestWorkspace("openclaw-embedded-agent-");
+  e2eWorkspace = await createEmbeddedPiRunnerTestWorkspace("NexisClaw-embedded-agent-");
   ({ agentDir, workspaceDir } = e2eWorkspace);
 }, 180_000);
 
@@ -186,8 +186,8 @@ beforeEach(() => {
   resolveModelAsyncMock.mockImplementation(async (provider: string, modelId: string) =>
     createResolvedEmbeddedRunnerModel(provider, modelId),
   );
-  ensureOpenClawModelsJsonMock.mockReset();
-  ensureOpenClawModelsJsonMock.mockResolvedValue({ wrote: false });
+  ensureNexisClawModelsJsonMock.mockReset();
+  ensureNexisClawModelsJsonMock.mockResolvedValue({ wrote: false });
   loggerWarnMock.mockReset();
   refreshRuntimeAuthOnFirstPromptError = false;
   runEmbeddedAttemptMock.mockImplementation(async () => {
@@ -330,7 +330,7 @@ describe("runEmbeddedPiAgent", () => {
     expect(
       (resolveModelCall?.[4] as { skipPiDiscovery?: boolean } | undefined)?.skipPiDiscovery,
     ).toBe(true);
-    expect(ensureOpenClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureNexisClawModelsJsonMock).not.toHaveBeenCalled();
   });
 
   it("backfills a trimmed session key from sessionId when the embedded run omits it", async () => {

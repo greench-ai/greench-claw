@@ -1,17 +1,17 @@
 ---
-summary: "Use OpenAI via API keys or Codex subscription in OpenClaw"
+summary: "Use OpenAI via API keys or Codex subscription in NexisClaw"
 read_when:
-  - You want to use OpenAI models in OpenClaw
+  - You want to use OpenAI models in NexisClaw
   - You want Codex subscription auth instead of API keys
   - You need stricter GPT-5 agent execution behavior
 title: "OpenAI"
 ---
 
 OpenAI provides developer APIs for GPT models, and Codex is also available as a
-ChatGPT-plan coding agent through OpenAI's Codex clients. OpenClaw keeps those
+ChatGPT-plan coding agent through OpenAI's Codex clients. NexisClaw keeps those
 surfaces separate so config stays predictable.
 
-OpenClaw uses `openai/*` as the canonical OpenAI model route. Embedded agent
+NexisClaw uses `openai/*` as the canonical OpenAI model route. Embedded agent
 turns on OpenAI models run through the native Codex app-server runtime by
 default; direct OpenAI API-key auth remains available for non-agent OpenAI
 surfaces such as images, embeddings, speech, and realtime.
@@ -22,9 +22,9 @@ surfaces such as images, embeddings, speech, and realtime.
 - **Non-agent OpenAI APIs** - direct OpenAI Platform access with usage-based
   billing through `OPENAI_API_KEY` or OpenAI API-key onboarding.
 - **Legacy config** - `openai-codex/*` model refs are repaired by
-  `openclaw doctor --fix` to `openai/*` plus the Codex runtime.
+  `NexisClaw doctor --fix` to `openai/*` plus the Codex runtime.
 
-OpenAI explicitly supports subscription OAuth usage in external tools and workflows like OpenClaw.
+OpenAI explicitly supports subscription OAuth usage in external tools and workflows like NexisClaw.
 
 Provider, model, runtime, and channel are separate layers. If those labels are
 getting mixed together, read [Agent runtimes](/concepts/agent-runtimes) before
@@ -50,7 +50,7 @@ The names are similar but not interchangeable:
 | --------------------------------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `openai`                                | Provider prefix            | Canonical OpenAI model route; agent turns use the Codex runtime.                                                     |
 | `openai-codex`                          | Legacy auth/profile prefix | Older OpenAI Codex OAuth/subscription profile namespace. Existing profiles and `auth.order.openai-codex` still work. |
-| `codex` plugin                          | Plugin                     | Bundled OpenClaw plugin that provides native Codex app-server runtime and `/codex` chat controls.                    |
+| `codex` plugin                          | Plugin                     | Bundled NexisClaw plugin that provides native Codex app-server runtime and `/codex` chat controls.                    |
 | provider/model `agentRuntime.id: codex` | Agent runtime              | Force the native Codex app-server harness for matching embedded turns.                                               |
 | `/codex ...`                            | Chat command set           | Bind/control Codex app-server threads from a conversation.                                                           |
 | `runtime: "acp", agentId: "codex"`      | ACP session route          | Explicit fallback path that runs Codex through ACP/acpx.                                                             |
@@ -58,7 +58,7 @@ The names are similar but not interchangeable:
 This means a config can intentionally contain `openai/*` model refs while auth
 profiles still point at Codex-compatible credentials. Prefer `auth.order.openai`
 for new config; existing `openai-codex:*` profiles and `auth.order.openai-codex`
-remain supported. `openclaw doctor --fix` rewrites legacy `openai-codex/*` model
+remain supported. `NexisClaw doctor --fix` rewrites legacy `openai-codex/*` model
 refs to the canonical OpenAI model route.
 
 <Note>
@@ -72,16 +72,16 @@ direct API-key auth for an OpenAI agent model.
 <Note>
 OpenAI agent model turns require the bundled Codex app-server plugin. Explicit
 PI runtime config remains available as an opt-in compatibility route. When PI is
-explicitly selected with an `openai-codex` auth profile, OpenClaw keeps the
+explicitly selected with an `openai-codex` auth profile, NexisClaw keeps the
 public model ref as `openai/*` and routes PI internally through the legacy
-Codex-auth transport. Run `openclaw doctor --fix` to repair stale
+Codex-auth transport. Run `NexisClaw doctor --fix` to repair stale
 `openai-codex/*` model refs or old PI session pins that do not come from
 explicit runtime config.
 </Note>
 
-## OpenClaw feature coverage
+## NexisClaw feature coverage
 
-| OpenAI capability         | OpenClaw surface                                                                 | Status                                                 |
+| OpenAI capability         | NexisClaw surface                                                                 | Status                                                 |
 | ------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------ |
 | Chat / Responses          | `openai/<model>` model provider                                                  | Yes                                                    |
 | Codex subscription models | `openai/<model>` with `openai-codex` OAuth                                       | Yes                                                    |
@@ -98,7 +98,7 @@ explicit runtime config.
 
 ## Memory embeddings
 
-OpenClaw can use OpenAI, or an OpenAI-compatible embedding endpoint, for
+NexisClaw can use OpenAI, or an OpenAI-compatible embedding endpoint, for
 `memory_search` indexing and query embeddings:
 
 ```json5
@@ -115,7 +115,7 @@ OpenClaw can use OpenAI, or an OpenAI-compatible embedding endpoint, for
 ```
 
 For OpenAI-compatible endpoints that require asymmetric embedding labels, set
-`queryInputType` and `documentInputType` under `memorySearch`. OpenClaw forwards
+`queryInputType` and `documentInputType` under `memorySearch`. NexisClaw forwards
 those as provider-specific `input_type` request fields: query embeddings use
 `queryInputType`; indexed memory chunks and batch indexing use
 `documentInputType`. See the [Memory configuration reference](/reference/memory-config#provider-specific-config) for the full example.
@@ -134,18 +134,18 @@ Choose your preferred auth method and follow the setup steps.
       </Step>
       <Step title="Run onboarding">
         ```bash
-        openclaw onboard --auth-choice openai-api-key
+        NexisClaw onboard --auth-choice openai-api-key
         ```
 
         Or pass the key directly:
 
         ```bash
-        openclaw onboard --openai-api-key "$OPENAI_API_KEY"
+        NexisClaw onboard --openai-api-key "$OPENAI_API_KEY"
         ```
       </Step>
       <Step title="Verify the model is available">
         ```bash
-        openclaw models list --provider openai
+        NexisClaw models list --provider openai
         ```
       </Step>
     </Steps>
@@ -189,11 +189,11 @@ Choose your preferred auth method and follow the setup steps.
     model used in ChatGPT and recommends `gpt-5.5` for production API usage, so
     keep `openai/gpt-5.5` as the stable default unless you explicitly want that
     alias behavior. The alias currently accepts only `medium` text verbosity, so
-    OpenClaw normalizes incompatible OpenAI text-verbosity overrides for this
+    NexisClaw normalizes incompatible OpenAI text-verbosity overrides for this
     model.
 
     <Warning>
-    OpenClaw does **not** expose `openai/gpt-5.3-codex-spark`. Live OpenAI API requests reject that model, and the current Codex catalog does not expose it either.
+    NexisClaw does **not** expose `openai/gpt-5.3-codex-spark`. Live OpenAI API requests reject that model, and the current Codex catalog does not expose it either.
     </Warning>
 
   </Tab>
@@ -204,33 +204,33 @@ Choose your preferred auth method and follow the setup steps.
     <Steps>
       <Step title="Run Codex OAuth">
         ```bash
-        openclaw onboard --auth-choice openai-codex
+        NexisClaw onboard --auth-choice openai-codex
         ```
 
         Or run OAuth directly:
 
         ```bash
-        openclaw models auth login --provider openai-codex
+        NexisClaw models auth login --provider openai-codex
         ```
 
         For headless or callback-hostile setups, add `--device-code` to sign in with a ChatGPT device-code flow instead of the localhost browser callback:
 
         ```bash
-        openclaw models auth login --provider openai-codex --device-code
+        NexisClaw models auth login --provider openai-codex --device-code
         ```
       </Step>
       <Step title="Use the canonical OpenAI model route">
         ```bash
-        openclaw config set agents.defaults.model.primary openai/gpt-5.5
+        NexisClaw config set agents.defaults.model.primary openai/gpt-5.5
         ```
 
         No runtime config is required for the default path. OpenAI agent turns
-        select the native Codex app-server runtime automatically, and OpenClaw
+        select the native Codex app-server runtime automatically, and NexisClaw
         installs or repairs the bundled Codex plugin when this route is chosen.
       </Step>
       <Step title="Verify Codex auth is available">
         ```bash
-        openclaw models list --provider openai-codex
+        NexisClaw models list --provider openai-codex
         ```
 
         After the gateway is running, send `/codex status` or `/codex models`
@@ -275,7 +275,7 @@ Choose your preferred auth method and follow the setup steps.
     ```
 
     With an API-key backup, keep the model on `openai/gpt-5.5` and put the
-    auth order under `openai`. OpenClaw will try the subscription first, then
+    auth order under `openai`. NexisClaw will try the subscription first, then
     the API key, while staying on the Codex harness:
 
     ```json5
@@ -298,7 +298,7 @@ Choose your preferred auth method and follow the setup steps.
     ```
 
     <Note>
-    Onboarding no longer imports OAuth material from `~/.codex`. Sign in with browser OAuth (default) or the device-code flow above — OpenClaw manages the resulting credentials in its own agent auth store.
+    Onboarding no longer imports OAuth material from `~/.codex`. Sign in with browser OAuth (default) or the device-code flow above — NexisClaw manages the resulting credentials in its own agent auth store.
     </Note>
 
     ### Check and recover Codex OAuth routing
@@ -307,33 +307,33 @@ Choose your preferred auth method and follow the setup steps.
     agent is using:
 
     ```bash
-    openclaw models status
-    openclaw models auth list --provider openai-codex
-    openclaw config get agents.defaults.model --json
-    openclaw config get models.providers.openai.agentRuntime --json
+    NexisClaw models status
+    NexisClaw models auth list --provider openai-codex
+    NexisClaw config get agents.defaults.model --json
+    NexisClaw config get models.providers.openai.agentRuntime --json
     ```
 
     For a specific agent, add `--agent <id>`:
 
     ```bash
-    openclaw models status --agent <id>
-    openclaw models auth list --agent <id> --provider openai-codex
+    NexisClaw models status --agent <id>
+    NexisClaw models auth list --agent <id> --provider openai-codex
     ```
 
     If an older config still has `openai-codex/gpt-*` or a stale OpenAI PI
     session pin without explicit runtime config, repair it:
 
     ```bash
-    openclaw doctor --fix
-    openclaw config validate
+    NexisClaw doctor --fix
+    NexisClaw config validate
     ```
 
     If `models auth list --provider openai-codex` shows no usable profile, sign
     in again:
 
     ```bash
-    openclaw models auth login --provider openai-codex
-    openclaw models status --probe --probe-provider openai-codex
+    NexisClaw models auth login --provider openai-codex
+    NexisClaw models status --probe --probe-provider openai-codex
     ```
 
     `openai/*` is the model route for OpenAI agent turns through Codex. The
@@ -350,12 +350,12 @@ Choose your preferred auth method and follow the setup steps.
     ### Doctor warning
 
     If `openai-codex/*` routes or stale OpenAI PI pins remain in config or
-    session state, `openclaw doctor --fix` rewrites them to `openai/*` with the
+    session state, `NexisClaw doctor --fix` rewrites them to `openai/*` with the
     Codex runtime unless PI is explicitly configured.
 
     ### Context window cap
 
-    OpenClaw treats model metadata and the runtime context cap as separate values.
+    NexisClaw treats model metadata and the runtime context cap as separate values.
 
     For `openai/gpt-5.5` through the Codex OAuth catalog:
 
@@ -382,9 +382,9 @@ Choose your preferred auth method and follow the setup steps.
 
     ### Catalog recovery
 
-    OpenClaw uses upstream Codex catalog metadata for `gpt-5.5` when it is
+    NexisClaw uses upstream Codex catalog metadata for `gpt-5.5` when it is
     present. If live Codex discovery omits the `gpt-5.5` row while
-    the account is authenticated, OpenClaw synthesizes that OAuth model row so
+    the account is authenticated, NexisClaw synthesizes that OAuth model row so
     cron, sub-agent, and configured default-model runs do not fail with
     `Unknown model`.
 
@@ -395,7 +395,7 @@ Choose your preferred auth method and follow the setup steps.
 
 The native Codex app-server harness uses `openai/*` model refs plus omitted
 runtime config or provider/model `agentRuntime.id: "codex"`, but its auth is
-still account-based. OpenClaw selects auth in this order:
+still account-based. NexisClaw selects auth in this order:
 
 1. Ordered OpenAI auth profiles for the agent, preferably under
    `auth.order.openai`. Existing `openai-codex:*` profiles and
@@ -409,10 +409,10 @@ That means a local ChatGPT/Codex subscription sign-in is not replaced just
 because the gateway process also has `OPENAI_API_KEY` for direct OpenAI models
 or embeddings. Env API-key fallback is only the local stdio no-account path; it
 is not sent to WebSocket app-server connections. When a subscription-style Codex
-profile is selected, OpenClaw also keeps `CODEX_API_KEY` and `OPENAI_API_KEY`
+profile is selected, NexisClaw also keeps `CODEX_API_KEY` and `OPENAI_API_KEY`
 out of the spawned stdio app-server child and sends the selected credentials
 through the app-server login RPC. When that subscription profile is blocked by a
-Codex usage limit, OpenClaw can rotate to the next ordered `openai:*` API-key
+Codex usage limit, NexisClaw can rotate to the next ordered `openai:*` API-key
 profile without changing the selected model or dropping out of the Codex
 harness. Once the subscription reset time passes, the subscription profile is
 eligible again.
@@ -456,7 +456,7 @@ PNG/WebP output; the current `gpt-image-2` API rejects
 For a transparent-background request, agents should call `image_generate` with
 `model: "openai/gpt-image-1.5"`, `outputFormat: "png"` or `"webp"`, and
 `background: "transparent"`; the older `openai.background` provider option is
-still accepted. OpenClaw also protects the public OpenAI and
+still accepted. NexisClaw also protects the public OpenAI and
 OpenAI Codex OAuth routes by rewriting default `openai/gpt-image-2` transparent
 requests to `gpt-image-1.5`; Azure and custom OpenAI-compatible endpoints keep
 their configured deployment/model names.
@@ -464,7 +464,7 @@ their configured deployment/model names.
 The same setting is exposed for headless CLI runs:
 
 ```bash
-openclaw infer image generate \
+NexisClaw infer image generate \
   --model openai/gpt-image-1.5 \
   --output-format png \
   --background transparent \
@@ -473,25 +473,25 @@ openclaw infer image generate \
 ```
 
 Use the same `--output-format` and `--background` flags with
-`openclaw infer image edit` when starting from an input file.
+`NexisClaw infer image edit` when starting from an input file.
 `--openai-background` remains available as an OpenAI-specific alias.
 
 For Codex OAuth installs, keep the same `openai/gpt-image-2` ref. When an
-`openai-codex` OAuth profile is configured, OpenClaw resolves that stored OAuth
+`openai-codex` OAuth profile is configured, NexisClaw resolves that stored OAuth
 access token and sends image requests through the Codex Responses backend. It
 does not first try `OPENAI_API_KEY` or silently fall back to an API key for that
 request. Configure `models.providers.openai` explicitly with an API key,
 custom base URL, or Azure endpoint when you want the direct OpenAI Images API
 route instead.
 If that custom image endpoint is on a trusted LAN/private address, also set
-`browser.ssrfPolicy.dangerouslyAllowPrivateNetwork: true`; OpenClaw keeps
+`browser.ssrfPolicy.dangerouslyAllowPrivateNetwork: true`; NexisClaw keeps
 private/internal OpenAI-compatible image endpoints blocked unless this opt-in is
 present.
 
 Generate:
 
 ```
-/tool image_generate model=openai/gpt-image-2 prompt="A polished launch poster for OpenClaw on macOS" size=3840x2160 count=1
+/tool image_generate model=openai/gpt-image-2 prompt="A polished launch poster for NexisClaw on macOS" size=3840x2160 count=1
 ```
 
 Generate a transparent PNG:
@@ -534,11 +534,11 @@ See [Video Generation](/tools/video-generation) for shared tool parameters, prov
 
 ## GPT-5 prompt contribution
 
-OpenClaw adds a shared GPT-5 prompt contribution for GPT-5-family runs across providers. It applies by model id, so `openai/gpt-5.5`, legacy pre-repair refs such as `openai-codex/gpt-5.5`, `openrouter/openai/gpt-5.5`, `opencode/gpt-5.5`, and other compatible GPT-5 refs receive the same overlay. Older GPT-4.x models do not.
+NexisClaw adds a shared GPT-5 prompt contribution for GPT-5-family runs across providers. It applies by model id, so `openai/gpt-5.5`, legacy pre-repair refs such as `openai-codex/gpt-5.5`, `openrouter/openai/gpt-5.5`, `opencode/gpt-5.5`, and other compatible GPT-5 refs receive the same overlay. Older GPT-4.x models do not.
 
 The bundled native Codex harness uses the same GPT-5 behavior and heartbeat overlay through Codex app-server developer instructions, so `openai/gpt-5.x` sessions routed through Codex keep the same follow-through and proactive heartbeat guidance even though Codex owns the rest of the harness prompt.
 
-The GPT-5 contribution adds a tagged behavior contract for persona persistence, execution safety, tool discipline, output shape, completion checks, and verification. Channel-specific reply and silent-message behavior stays in the shared OpenClaw system prompt and outbound delivery policy. The GPT-5 guidance is always enabled for matching models. The friendly interaction-style layer is separate and configurable.
+The GPT-5 contribution adds a tagged behavior contract for persona persistence, execution safety, tool discipline, output shape, completion checks, and verification. Channel-specific reply and silent-message behavior stays in the shared NexisClaw system prompt and outbound delivery policy. The GPT-5 guidance is always enabled for matching models. The friendly interaction-style layer is separate and configurable.
 
 | Value                  | Effect                                      |
 | ---------------------- | ------------------------------------------- |
@@ -562,7 +562,7 @@ The GPT-5 contribution adds a tagged behavior contract for persona persistence, 
   </Tab>
   <Tab title="CLI">
     ```bash
-    openclaw config set agents.defaults.promptOverlays.gpt5.personality off
+    NexisClaw config set agents.defaults.promptOverlays.gpt5.personality off
     ```
   </Tab>
 </Tabs>
@@ -594,7 +594,7 @@ Legacy `plugins.entries.openai.config.personality` is still read as a compatibil
 
     Available models: `gpt-4o-mini-tts`, `tts-1`, `tts-1-hd`. Available voices: `alloy`, `ash`, `ballad`, `cedar`, `coral`, `echo`, `fable`, `juniper`, `marin`, `onyx`, `nova`, `sage`, `shimmer`, `verse`.
 
-    `extraBody` is merged into `/audio/speech` request JSON after OpenClaw's generated fields, so use it for OpenAI-compatible endpoints that require additional keys such as `lang`. Prototype keys are ignored.
+    `extraBody` is merged into `/audio/speech` request JSON after NexisClaw's generated fields, so use it for OpenAI-compatible endpoints that require additional keys such as `lang`. Prototype keys are ignored.
 
     ```json5
     {
@@ -616,12 +616,12 @@ Legacy `plugins.entries.openai.config.personality` is still read as a compatibil
 
   <Accordion title="Speech-to-text">
     The bundled `openai` plugin registers batch speech-to-text through
-    OpenClaw's media-understanding transcription surface.
+    NexisClaw's media-understanding transcription surface.
 
     - Default model: `gpt-4o-transcribe`
     - Endpoint: OpenAI REST `/v1/audio/transcriptions`
     - Input path: multipart audio file upload
-    - Supported by OpenClaw wherever inbound audio transcription uses
+    - Supported by NexisClaw wherever inbound audio transcription uses
       `tools.media.audio`, including Discord voice-channel segments and channel
       audio attachments
 
@@ -695,7 +695,7 @@ Legacy `plugins.entries.openai.config.personality` is still read as a compatibil
     <Note>
     Realtime voice is selected when the session is created. OpenAI allows most
     session fields to change later, but the voice cannot be changed after the
-    model has emitted audio in that session. OpenClaw currently exposes the
+    model has emitted audio in that session. NexisClaw currently exposes the
     built-in Realtime voice ids as strings.
     </Note>
 
@@ -718,7 +718,7 @@ Legacy `plugins.entries.openai.config.personality` is still read as a compatibil
 ## Azure OpenAI endpoints
 
 The bundled `openai` provider can target an Azure OpenAI resource for image
-generation by overriding the base URL. On the image-generation path, OpenClaw
+generation by overriding the base URL. On the image-generation path, NexisClaw
 detects Azure hostnames on `models.providers.openai.baseUrl` and switches to
 Azure's request shape automatically.
 
@@ -755,14 +755,14 @@ the Azure OpenAI key (not an OpenAI Platform key):
 }
 ```
 
-OpenClaw recognizes these Azure host suffixes for the Azure image-generation
+NexisClaw recognizes these Azure host suffixes for the Azure image-generation
 route:
 
 - `*.openai.azure.com`
 - `*.services.ai.azure.com`
 - `*.cognitiveservices.azure.com`
 
-For image-generation requests on a recognized Azure host, OpenClaw:
+For image-generation requests on a recognized Azure host, NexisClaw:
 
 - Sends the `api-key` header instead of `Authorization: Bearer`
 - Uses deployment-scoped paths (`/openai/deployments/{deployment}/...`)
@@ -775,7 +775,7 @@ OpenAI image request shape.
 
 <Note>
 Azure routing for the `openai` provider's image-generation path requires
-OpenClaw 2026.4.22 or later. Earlier versions treat any custom
+NexisClaw 2026.4.22 or later. Earlier versions treat any custom
 `openai.baseUrl` like the public OpenAI endpoint and will fail against Azure
 image deployments.
 </Note>
@@ -794,7 +794,7 @@ The default is `2024-12-01-preview` when the variable is unset.
 ### Model names are deployment names
 
 Azure OpenAI binds models to deployments. For Azure image-generation requests
-routed through the bundled `openai` provider, the `model` field in OpenClaw
+routed through the bundled `openai` provider, the `model` field in NexisClaw
 must be the **Azure deployment name** you configured in the Azure portal, not
 the public OpenAI model id.
 
@@ -820,13 +820,13 @@ Azure OpenAI and public OpenAI do not always accept the same image parameters.
 Azure may reject options that public OpenAI allows (for example certain
 `background` values on `gpt-image-2`) or expose them only on specific model
 versions. These differences come from Azure and the underlying model, not
-OpenClaw. If an Azure request fails with a validation error, check the
+NexisClaw. If an Azure request fails with a validation error, check the
 parameter set supported by your specific deployment and API version in the
 Azure portal.
 
 <Note>
 Azure OpenAI uses native transport and compat behavior but does not receive
-OpenClaw's hidden attribution headers — see the **Native vs OpenAI-compatible
+NexisClaw's hidden attribution headers — see the **Native vs OpenAI-compatible
 routes** accordion under [Advanced configuration](#advanced-configuration).
 
 For chat or Responses traffic on Azure (beyond image generation), use the
@@ -840,9 +840,9 @@ the Server-side compaction accordion below.
 
 <AccordionGroup>
   <Accordion title="Transport (WebSocket vs SSE)">
-    OpenClaw uses WebSocket-first with SSE fallback (`"auto"`) for `openai/*`.
+    NexisClaw uses WebSocket-first with SSE fallback (`"auto"`) for `openai/*`.
 
-    In `"auto"` mode, OpenClaw:
+    In `"auto"` mode, NexisClaw:
     - Retries one early WebSocket failure before falling back to SSE
     - After a failure, marks WebSocket as degraded for ~60 seconds and uses SSE during cool-down
     - Attaches stable session and turn identity headers for retries and reconnects
@@ -875,12 +875,12 @@ the Server-side compaction accordion below.
   </Accordion>
 
   <Accordion title="Fast mode">
-    OpenClaw exposes a shared fast-mode toggle for `openai/*`:
+    NexisClaw exposes a shared fast-mode toggle for `openai/*`:
 
     - **Chat/UI:** `/fast status|on|off`
     - **Config:** `agents.defaults.models["<provider>/<model>"].params.fastMode`
 
-    When enabled, OpenClaw maps fast mode to OpenAI priority processing (`service_tier = "priority"`). Existing `service_tier` values are preserved, and fast mode does not rewrite `reasoning` or `text.verbosity`.
+    When enabled, NexisClaw maps fast mode to OpenAI priority processing (`service_tier = "priority"`). Existing `service_tier` values are preserved, and fast mode does not rewrite `reasoning` or `text.verbosity`.
 
     ```json5
     {
@@ -901,7 +901,7 @@ the Server-side compaction accordion below.
   </Accordion>
 
   <Accordion title="Priority processing (service_tier)">
-    OpenAI's API exposes priority processing via `service_tier`. Set it per model in OpenClaw:
+    OpenAI's API exposes priority processing via `service_tier`. Set it per model in NexisClaw:
 
     ```json5
     {
@@ -918,7 +918,7 @@ the Server-side compaction accordion below.
     Supported values: `auto`, `default`, `flex`, `priority`.
 
     <Warning>
-    `serviceTier` is only forwarded to native OpenAI endpoints (`api.openai.com`) and native Codex endpoints (`chatgpt.com/backend-api`). If you route either provider through a proxy, OpenClaw leaves `service_tier` untouched.
+    `serviceTier` is only forwarded to native OpenAI endpoints (`api.openai.com`) and native Codex endpoints (`chatgpt.com/backend-api`). If you route either provider through a proxy, NexisClaw leaves `service_tier` untouched.
     </Warning>
 
   </Accordion>
@@ -992,7 +992,7 @@ the Server-side compaction accordion below.
   </Accordion>
 
   <Accordion title="Strict-agentic GPT mode">
-    For GPT-5-family runs on `openai/*`, OpenClaw can use a stricter embedded execution contract:
+    For GPT-5-family runs on `openai/*`, NexisClaw can use a stricter embedded execution contract:
 
     ```json5
     {
@@ -1004,7 +1004,7 @@ the Server-side compaction accordion below.
     }
     ```
 
-    With `strict-agentic`, OpenClaw:
+    With `strict-agentic`, NexisClaw:
     - No longer treats a plan-only turn as successful progress when a tool action is available
     - Retries the turn with an act-now steer
     - Auto-enables `update_plan` for substantial work
@@ -1017,7 +1017,7 @@ the Server-side compaction accordion below.
   </Accordion>
 
   <Accordion title="Native vs OpenAI-compatible routes">
-    OpenClaw treats direct OpenAI, Codex, and Azure OpenAI endpoints differently from generic OpenAI-compatible `/v1` proxies:
+    NexisClaw treats direct OpenAI, Codex, and Azure OpenAI endpoints differently from generic OpenAI-compatible `/v1` proxies:
 
     **Native routes** (`openai/*`, Azure OpenAI):
     - Keep `reasoning: { effort: "none" }` only for models that support the OpenAI `none` effort

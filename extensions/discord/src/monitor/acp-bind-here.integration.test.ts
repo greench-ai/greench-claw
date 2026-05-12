@@ -3,24 +3,24 @@ import { ChannelType } from "../internal/discord.js";
 
 const loadConfigMock = vi.hoisted(() => vi.fn());
 
-vi.mock("openclaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("NexisClaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("openclaw/plugin-sdk/runtime-config-snapshot")
-  >("openclaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot")
+  >("NexisClaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: () => loadConfigMock(),
   };
 });
 
-import type { OpenClawConfig } from "openclaw/plugin-sdk/config-contracts";
+import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
 import {
   getSessionBindingService,
   registerSessionBindingAdapter,
   type SessionBindingBindInput,
   type SessionBindingRecord,
-} from "openclaw/plugin-sdk/conversation-runtime";
-import { __testing as sessionBindingTesting } from "openclaw/plugin-sdk/conversation-runtime";
+} from "NexisClaw/plugin-sdk/conversation-runtime";
+import { __testing as sessionBindingTesting } from "NexisClaw/plugin-sdk/conversation-runtime";
 import { preflightDiscordMessage } from "./message-handler.preflight.js";
 import {
   createDiscordMessage,
@@ -49,7 +49,7 @@ const baseCfg = {
       },
     },
   },
-} satisfies OpenClawConfig;
+} satisfies NexisClawConfig;
 
 function createDmClient(channelId: string): DiscordClient {
   return {
