@@ -1,4 +1,4 @@
-name: NexisClaw-codeql-actions-critical-security
+name: GreenchClaw-codeql-actions-critical-security
 
 disable-default-queries: true
 

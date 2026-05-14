@@ -52,9 +52,9 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
   NODE_VERSION: "24.x"
   PNPM_VERSION: "11.0.8"
-  NEXISCLAW_CI_OPENAI_MODEL: ${{ vars.NEXISCLAW_CI_OPENAI_MODEL || 'openai/gpt-5.5' }}
-  NEXISCLAW_BUILD_PRIVATE_QA: "1"
-  NEXISCLAW_ENABLE_PRIVATE_QA_CLI: "1"
+  GREENCHCLAW_CI_OPENAI_MODEL: ${{ vars.GREENCHCLAW_CI_OPENAI_MODEL || 'openai/gpt-5.5' }}
+  GREENCHCLAW_BUILD_PRIVATE_QA: "1"
+  GREENCHCLAW_ENABLE_PRIVATE_QA_CLI: "1"
 
 jobs:
   authorize_actor:
@@ -155,13 +155,13 @@ jobs:
     timeout-minutes: 30
     env:
       QA_PARITY_CONCURRENCY: "1"
-      NEXISCLAW_QA_TRANSPORT_READY_TIMEOUT_MS: "180000"
+      GREENCHCLAW_QA_TRANSPORT_READY_TIMEOUT_MS: "180000"
       OPENAI_API_KEY: ""
       ANTHROPIC_API_KEY: ""
-      NEXISCLAW_LIVE_OPENAI_KEY: ""
-      NEXISCLAW_LIVE_ANTHROPIC_KEY: ""
-      NEXISCLAW_LIVE_GEMINI_KEY: ""
-      NEXISCLAW_LIVE_SETUP_TOKEN_VALUE: ""
+      GREENCHCLAW_LIVE_OPENAI_KEY: ""
+      GREENCHCLAW_LIVE_ANTHROPIC_KEY: ""
+      GREENCHCLAW_LIVE_GEMINI_KEY: ""
+      GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE: ""
     steps:
       - name: Checkout selected ref
         uses: actions/checkout@v6
@@ -182,17 +182,17 @@ jobs:
 
       - name: Run OpenAI candidate lane
         run: |
-          pnpm NexisClaw qa suite \
+          pnpm GreenchClaw qa suite \
             --provider-mode mock-openai \
             --parity-pack agentic \
             --concurrency "${QA_PARITY_CONCURRENCY}" \
-            --model "${NEXISCLAW_CI_OPENAI_MODEL}" \
+            --model "${GREENCHCLAW_CI_OPENAI_MODEL}" \
             --alt-model openai/gpt-5.5-alt \
             --output-dir .artifacts/qa-e2e/gpt54
 
       - name: Run Opus 4.7 lane
         run: |
-          pnpm NexisClaw qa suite \
+          pnpm GreenchClaw qa suite \
             --provider-mode mock-openai \
             --parity-pack agentic \
             --concurrency "${QA_PARITY_CONCURRENCY}" \
@@ -202,11 +202,11 @@ jobs:
 
       - name: Generate parity report
         run: |
-          pnpm NexisClaw qa parity-report \
+          pnpm GreenchClaw qa parity-report \
             --repo-root . \
             --candidate-summary .artifacts/qa-e2e/gpt54/qa-suite-summary.json \
             --baseline-summary .artifacts/qa-e2e/opus46/qa-suite-summary.json \
-            --candidate-label "${NEXISCLAW_CI_OPENAI_MODEL}" \
+            --candidate-label "${GREENCHCLAW_CI_OPENAI_MODEL}" \
             --baseline-label anthropic/claude-opus-4-7 \
             --output-dir .artifacts/qa-e2e/parity
 
@@ -262,8 +262,8 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           INPUT_MATRIX_PROFILE: ${{ github.event_name == 'workflow_dispatch' && inputs.matrix_profile || 'fast' }}
-          NEXISCLAW_QA_REDACT_PUBLIC_METADATA: "1"
-          NEXISCLAW_QA_MATRIX_NO_REPLY_WINDOW_MS: "3000"
+          GREENCHCLAW_QA_REDACT_PUBLIC_METADATA: "1"
+          GREENCHCLAW_QA_MATRIX_NO_REPLY_WINDOW_MS: "3000"
         run: |
           set -euo pipefail
 
@@ -274,16 +274,16 @@ jobs:
             --repo-root . \
             --output-dir "${output_dir}" \
             --provider-mode live-frontier \
-            --model "${NEXISCLAW_CI_OPENAI_MODEL}" \
-            --alt-model "${NEXISCLAW_CI_OPENAI_MODEL}" \
+            --model "${GREENCHCLAW_CI_OPENAI_MODEL}" \
+            --alt-model "${GREENCHCLAW_CI_OPENAI_MODEL}" \
             --profile "${INPUT_MATRIX_PROFILE}" \
             --fast
           )
-          if pnpm NexisClaw qa matrix --help 2>/dev/null | grep -F -q -- "--fail-fast"; then
+          if pnpm GreenchClaw qa matrix --help 2>/dev/null | grep -F -q -- "--fail-fast"; then
             matrix_args+=(--fail-fast)
           fi
 
-          pnpm NexisClaw qa matrix "${matrix_args[@]}"
+          pnpm GreenchClaw qa matrix "${matrix_args[@]}"
 
       - name: Upload Matrix QA artifacts
         if: always()
@@ -345,8 +345,8 @@ jobs:
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          NEXISCLAW_QA_REDACT_PUBLIC_METADATA: "1"
-          NEXISCLAW_QA_MATRIX_NO_REPLY_WINDOW_MS: "3000"
+          GREENCHCLAW_QA_REDACT_PUBLIC_METADATA: "1"
+          GREENCHCLAW_QA_MATRIX_NO_REPLY_WINDOW_MS: "3000"
         run: |
           set -euo pipefail
 
@@ -357,16 +357,16 @@ jobs:
             --repo-root . \
             --output-dir "${output_dir}" \
             --provider-mode live-frontier \
-            --model "${NEXISCLAW_CI_OPENAI_MODEL}" \
-            --alt-model "${NEXISCLAW_CI_OPENAI_MODEL}" \
+            --model "${GREENCHCLAW_CI_OPENAI_MODEL}" \
+            --alt-model "${GREENCHCLAW_CI_OPENAI_MODEL}" \
             --profile "${{ matrix.profile }}" \
             --fast
           )
-          if pnpm NexisClaw qa matrix --help 2>/dev/null | grep -F -q -- "--fail-fast"; then
+          if pnpm GreenchClaw qa matrix --help 2>/dev/null | grep -F -q -- "--fail-fast"; then
             matrix_args+=(--fail-fast)
           fi
 
-          pnpm NexisClaw qa matrix "${matrix_args[@]}"
+          pnpm GreenchClaw qa matrix "${matrix_args[@]}"
 
       - name: Upload Matrix QA shard artifacts
         if: always()
@@ -401,8 +401,8 @@ jobs:
       - name: Validate required QA credential env
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          NEXISCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NEXISCLAW_QA_CONVEX_SITE_URL }}
-          NEXISCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NEXISCLAW_QA_CONVEX_SECRET_CI }}
+          GREENCHCLAW_QA_CONVEX_SITE_URL: ${{ secrets.GREENCHCLAW_QA_CONVEX_SITE_URL }}
+          GREENCHCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.GREENCHCLAW_QA_CONVEX_SECRET_CI }}
         shell: bash
         run: |
           set -euo pipefail
@@ -416,8 +416,8 @@ jobs:
           }
 
           require_var OPENAI_API_KEY
-          require_var NEXISCLAW_QA_CONVEX_SITE_URL
-          require_var NEXISCLAW_QA_CONVEX_SECRET_CI
+          require_var GREENCHCLAW_QA_CONVEX_SITE_URL
+          require_var GREENCHCLAW_QA_CONVEX_SECRET_CI
 
       - name: Build private QA runtime
         run: pnpm build
@@ -427,10 +427,10 @@ jobs:
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          NEXISCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NEXISCLAW_QA_CONVEX_SITE_URL }}
-          NEXISCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NEXISCLAW_QA_CONVEX_SECRET_CI }}
-          NEXISCLAW_QA_REDACT_PUBLIC_METADATA: "1"
-          NEXISCLAW_QA_TELEGRAM_CAPTURE_CONTENT: "1"
+          GREENCHCLAW_QA_CONVEX_SITE_URL: ${{ secrets.GREENCHCLAW_QA_CONVEX_SITE_URL }}
+          GREENCHCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.GREENCHCLAW_QA_CONVEX_SECRET_CI }}
+          GREENCHCLAW_QA_REDACT_PUBLIC_METADATA: "1"
+          GREENCHCLAW_QA_TELEGRAM_CAPTURE_CONTENT: "1"
           INPUT_SCENARIO: ${{ github.event_name == 'workflow_dispatch' && inputs.scenario || '' }}
         run: |
           set -euo pipefail
@@ -450,12 +450,12 @@ jobs:
 
           echo "output_dir=${output_dir}" >> "$GITHUB_OUTPUT"
 
-          pnpm NexisClaw qa telegram \
+          pnpm GreenchClaw qa telegram \
             --repo-root . \
             --output-dir "${output_dir}" \
             --provider-mode live-frontier \
-            --model "${NEXISCLAW_CI_OPENAI_MODEL}" \
-            --alt-model "${NEXISCLAW_CI_OPENAI_MODEL}" \
+            --model "${GREENCHCLAW_CI_OPENAI_MODEL}" \
+            --alt-model "${GREENCHCLAW_CI_OPENAI_MODEL}" \
             --fast \
             --credential-source convex \
             --credential-role ci \
@@ -494,8 +494,8 @@ jobs:
       - name: Validate required QA credential env
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          NEXISCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NEXISCLAW_QA_CONVEX_SITE_URL }}
-          NEXISCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NEXISCLAW_QA_CONVEX_SECRET_CI }}
+          GREENCHCLAW_QA_CONVEX_SITE_URL: ${{ secrets.GREENCHCLAW_QA_CONVEX_SITE_URL }}
+          GREENCHCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.GREENCHCLAW_QA_CONVEX_SECRET_CI }}
         shell: bash
         run: |
           set -euo pipefail
@@ -509,8 +509,8 @@ jobs:
           }
 
           require_var OPENAI_API_KEY
-          require_var NEXISCLAW_QA_CONVEX_SITE_URL
-          require_var NEXISCLAW_QA_CONVEX_SECRET_CI
+          require_var GREENCHCLAW_QA_CONVEX_SITE_URL
+          require_var GREENCHCLAW_QA_CONVEX_SECRET_CI
 
       - name: Build private QA runtime
         run: pnpm build
@@ -520,10 +520,10 @@ jobs:
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          NEXISCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NEXISCLAW_QA_CONVEX_SITE_URL }}
-          NEXISCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NEXISCLAW_QA_CONVEX_SECRET_CI }}
-          NEXISCLAW_QA_REDACT_PUBLIC_METADATA: "1"
-          NEXISCLAW_QA_DISCORD_CAPTURE_CONTENT: "1"
+          GREENCHCLAW_QA_CONVEX_SITE_URL: ${{ secrets.GREENCHCLAW_QA_CONVEX_SITE_URL }}
+          GREENCHCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.GREENCHCLAW_QA_CONVEX_SECRET_CI }}
+          GREENCHCLAW_QA_REDACT_PUBLIC_METADATA: "1"
+          GREENCHCLAW_QA_DISCORD_CAPTURE_CONTENT: "1"
           INPUT_SCENARIO: ${{ github.event_name == 'workflow_dispatch' && inputs.discord_scenario || '' }}
         run: |
           set -euo pipefail
@@ -543,7 +543,7 @@ jobs:
 
           echo "output_dir=${output_dir}" >> "$GITHUB_OUTPUT"
 
-          pnpm NexisClaw qa discord \
+          pnpm GreenchClaw qa discord \
             --repo-root . \
             --output-dir "${output_dir}" \
             --provider-mode live-frontier \
@@ -587,8 +587,8 @@ jobs:
       - name: Validate required QA credential env
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          NEXISCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NEXISCLAW_QA_CONVEX_SITE_URL }}
-          NEXISCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NEXISCLAW_QA_CONVEX_SECRET_CI }}
+          GREENCHCLAW_QA_CONVEX_SITE_URL: ${{ secrets.GREENCHCLAW_QA_CONVEX_SITE_URL }}
+          GREENCHCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.GREENCHCLAW_QA_CONVEX_SECRET_CI }}
         shell: bash
         run: |
           set -euo pipefail
@@ -602,8 +602,8 @@ jobs:
           }
 
           require_var OPENAI_API_KEY
-          require_var NEXISCLAW_QA_CONVEX_SITE_URL
-          require_var NEXISCLAW_QA_CONVEX_SECRET_CI
+          require_var GREENCHCLAW_QA_CONVEX_SITE_URL
+          require_var GREENCHCLAW_QA_CONVEX_SECRET_CI
 
       - name: Build private QA runtime
         run: pnpm build
@@ -613,10 +613,10 @@ jobs:
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          NEXISCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NEXISCLAW_QA_CONVEX_SITE_URL }}
-          NEXISCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NEXISCLAW_QA_CONVEX_SECRET_CI }}
-          NEXISCLAW_QA_REDACT_PUBLIC_METADATA: "1"
-          NEXISCLAW_QA_WHATSAPP_CAPTURE_CONTENT: "1"
+          GREENCHCLAW_QA_CONVEX_SITE_URL: ${{ secrets.GREENCHCLAW_QA_CONVEX_SITE_URL }}
+          GREENCHCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.GREENCHCLAW_QA_CONVEX_SECRET_CI }}
+          GREENCHCLAW_QA_REDACT_PUBLIC_METADATA: "1"
+          GREENCHCLAW_QA_WHATSAPP_CAPTURE_CONTENT: "1"
           INPUT_SCENARIO: ${{ github.event_name == 'workflow_dispatch' && inputs.whatsapp_scenario || '' }}
         run: |
           set -euo pipefail
@@ -636,12 +636,12 @@ jobs:
 
           echo "output_dir=${output_dir}" >> "$GITHUB_OUTPUT"
 
-          pnpm NexisClaw qa whatsapp \
+          pnpm GreenchClaw qa whatsapp \
             --repo-root . \
             --output-dir "${output_dir}" \
             --provider-mode live-frontier \
-            --model "${NEXISCLAW_CI_OPENAI_MODEL}" \
-            --alt-model "${NEXISCLAW_CI_OPENAI_MODEL}" \
+            --model "${GREENCHCLAW_CI_OPENAI_MODEL}" \
+            --alt-model "${GREENCHCLAW_CI_OPENAI_MODEL}" \
             --fast \
             --credential-source convex \
             --credential-role ci \
@@ -680,8 +680,8 @@ jobs:
       - name: Validate required QA credential env
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          NEXISCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NEXISCLAW_QA_CONVEX_SITE_URL }}
-          NEXISCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NEXISCLAW_QA_CONVEX_SECRET_CI }}
+          GREENCHCLAW_QA_CONVEX_SITE_URL: ${{ secrets.GREENCHCLAW_QA_CONVEX_SITE_URL }}
+          GREENCHCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.GREENCHCLAW_QA_CONVEX_SECRET_CI }}
         shell: bash
         run: |
           set -euo pipefail
@@ -695,8 +695,8 @@ jobs:
           }
 
           require_var OPENAI_API_KEY
-          require_var NEXISCLAW_QA_CONVEX_SITE_URL
-          require_var NEXISCLAW_QA_CONVEX_SECRET_CI
+          require_var GREENCHCLAW_QA_CONVEX_SITE_URL
+          require_var GREENCHCLAW_QA_CONVEX_SECRET_CI
 
       - name: Build private QA runtime
         run: pnpm build
@@ -706,10 +706,10 @@ jobs:
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          NEXISCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NEXISCLAW_QA_CONVEX_SITE_URL }}
-          NEXISCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NEXISCLAW_QA_CONVEX_SECRET_CI }}
-          NEXISCLAW_QA_REDACT_PUBLIC_METADATA: "1"
-          NEXISCLAW_QA_SLACK_CAPTURE_CONTENT: "1"
+          GREENCHCLAW_QA_CONVEX_SITE_URL: ${{ secrets.GREENCHCLAW_QA_CONVEX_SITE_URL }}
+          GREENCHCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.GREENCHCLAW_QA_CONVEX_SECRET_CI }}
+          GREENCHCLAW_QA_REDACT_PUBLIC_METADATA: "1"
+          GREENCHCLAW_QA_SLACK_CAPTURE_CONTENT: "1"
           INPUT_SCENARIO: ${{ github.event_name == 'workflow_dispatch' && inputs.slack_scenario || '' }}
         run: |
           set -euo pipefail
@@ -729,12 +729,12 @@ jobs:
 
           echo "output_dir=${output_dir}" >> "$GITHUB_OUTPUT"
 
-          pnpm NexisClaw qa slack \
+          pnpm GreenchClaw qa slack \
             --repo-root . \
             --output-dir "${output_dir}" \
             --provider-mode live-frontier \
-            --model "${NEXISCLAW_CI_OPENAI_MODEL}" \
-            --alt-model "${NEXISCLAW_CI_OPENAI_MODEL}" \
+            --model "${GREENCHCLAW_CI_OPENAI_MODEL}" \
+            --alt-model "${GREENCHCLAW_CI_OPENAI_MODEL}" \
             --fast \
             --credential-source convex \
             --credential-role ci \

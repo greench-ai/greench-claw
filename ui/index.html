@@ -78,7 +78,7 @@
           sans-serif;
       }
 
-      body.GreenchClaw-mount-fallback-active nexisclaw-app {
+      body.GreenchClaw-mount-fallback-active greench-claw-app {
         display: none;
       }
 
@@ -197,7 +197,7 @@
     </style>
   </head>
   <body>
-    <nexisclaw-app></nexisclaw-app>
+    <greench-claw-app></greench-claw-app>
     <section
       id="GreenchClaw-mount-fallback"
       class="mount-fallback"
@@ -211,7 +211,7 @@
         <h1 id="GreenchClaw-mount-fallback-title">Control UI did not start</h1>
         <p>
           The browser loaded the static page, but the app bundle did not register the
-          <code>nexisclaw-app</code> web component. A browser extension or early content script may
+          <code>greench-claw-app</code> web component. A browser extension or early content script may
           be blocking module execution.
         </p>
         <ul>
@@ -243,7 +243,7 @@
     </section>
     <script>
       (function () {
-        var tagName = "nexisclaw-app";
+        var tagName = "greench-claw-app";
         var app = document.querySelector(tagName);
         var fallback = document.getElementById("GreenchClaw-mount-fallback");
         if (!app || !fallback) return;

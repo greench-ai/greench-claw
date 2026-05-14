@@ -3,4 +3,4 @@ export {
   deriveCopilotApiBaseUrlFromToken,
   resolveCopilotApiToken,
   type CachedCopilotToken,
-} from "NexisClaw/plugin-sdk/provider-auth";
+} from "GreenchClaw/plugin-sdk/provider-auth";

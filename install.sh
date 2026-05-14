@@ -7,7 +7,7 @@
 # Don't use set -e — commands fail gracefully and we handle exit codes
 # set -e removed: sudo without password in piped install fails silently instead of aborting
 
-REPO="https://github.com/greench-ai/nexisclaw.git"
+REPO="https://github.com/greench-ai/greench-claw.git"
 INSTALL_DIR="$HOME/GreenchClaw"
 BIN_DIR="$HOME/bin"
 CONFIG_DIR="$HOME/.GreenchClaw"

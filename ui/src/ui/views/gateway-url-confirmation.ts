@@ -14,7 +14,7 @@ export function renderGatewayUrlConfirmation(state: AppViewState) {
   const description = t("channels.gatewayUrlConfirmation.subtitle");
 
   return html`
-    <nexisclaw-modal-dialog
+    <greench-claw-modal-dialog
       label=${title}
       description=${description}
       @modal-cancel=${() => state.handleGatewayUrlCancel()}
@@ -39,6 +39,6 @@ export function renderGatewayUrlConfirmation(state: AppViewState) {
           </button>
         </div>
       </div>
-    </nexisclaw-modal-dialog>
+    </greench-claw-modal-dialog>
   `;
 }

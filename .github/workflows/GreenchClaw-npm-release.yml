@@ -1,4 +1,4 @@
-name: NexisClaw NPM Release
+name: GreenchClaw NPM Release
 
 on:
   workflow_dispatch:
@@ -27,7 +27,7 @@ on:
           - latest
 
 concurrency:
-  group: NexisClaw-npm-release-${{ github.event_name == 'workflow_dispatch' && format('{0}-{1}', inputs.tag, inputs.npm_dist_tag) || github.ref }}
+  group: GreenchClaw-npm-release-${{ github.event_name == 'workflow_dispatch' && format('{0}-{1}', inputs.tag, inputs.npm_dist_tag) || github.ref }}
   cancel-in-progress: false
 
 env:
@@ -38,11 +38,11 @@ env:
 jobs:
   # PLEASE DON'T ADD LONG-RUNNING OR FLAKY CHECKS TO THE npm RELEASE PATH.
   # KEEP THIS WORKFLOW SHORT AND DETERMINISTIC OR IT CAN GET STUCK AND JEOPARDIZE THE RELEASE.
-  # RELEASE-TIME LIVE OR END-TO-END VALIDATION BELONGS IN NexisClaw-release-checks.yml.
+  # RELEASE-TIME LIVE OR END-TO-END VALIDATION BELONGS IN GreenchClaw-release-checks.yml.
   # SECURITY NOTE: TOKEN-BASED npm dist-tag mutation moved to
-  # NexisClaw/releases-private/.github/workflows/NexisClaw-npm-dist-tags.yml
+  # GreenchClaw/releases-private/.github/workflows/GreenchClaw-npm-dist-tags.yml
   # so this public workflow can stay focused on OIDC publish only.
-  preflight_NexisClaw_npm:
+  preflight_GreenchClaw_npm:
     if: ${{ inputs.preflight_only }}
     runs-on: ubuntu-latest
     permissions:
@@ -98,30 +98,30 @@ jobs:
           set -euo pipefail
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
 
-          if npm view "NexisClaw@${PACKAGE_VERSION}" version >/dev/null 2>&1; then
+          if npm view "GreenchClaw@${PACKAGE_VERSION}" version >/dev/null 2>&1; then
             if [[ "${PREFLIGHT_ONLY}" == "true" ]]; then
-              echo "NexisClaw@${PACKAGE_VERSION} is already published on npm; continuing because preflight_only=true."
+              echo "GreenchClaw@${PACKAGE_VERSION} is already published on npm; continuing because preflight_only=true."
               exit 0
             fi
-            echo "NexisClaw@${PACKAGE_VERSION} is already published on npm."
+            echo "GreenchClaw@${PACKAGE_VERSION} is already published on npm."
             exit 1
           fi
 
-          echo "Publishing NexisClaw@${PACKAGE_VERSION}"
+          echo "Publishing GreenchClaw@${PACKAGE_VERSION}"
 
       - name: Check
         env:
-          NEXISCLAW_LOCAL_CHECK: "0"
+          GREENCHCLAW_LOCAL_CHECK: "0"
         run: pnpm check
 
       - name: Check test types
         env:
-          NEXISCLAW_LOCAL_CHECK: "0"
+          GREENCHCLAW_LOCAL_CHECK: "0"
         run: pnpm check:test-types
 
       - name: Check architecture
         env:
-          NEXISCLAW_LOCAL_CHECK: "0"
+          GREENCHCLAW_LOCAL_CHECK: "0"
         run: pnpm check:architecture
 
       - name: Build
@@ -133,11 +133,11 @@ jobs:
       - name: Validate release metadata
         if: ${{ inputs.preflight_run_id == '' }}
         env:
-          NEXISCLAW_NPM_RELEASE_SKIP_PACK_CHECK: "1"
+          GREENCHCLAW_NPM_RELEASE_SKIP_PACK_CHECK: "1"
           RELEASE_REF: ${{ inputs.tag }}
           PREFLIGHT_ONLY: ${{ inputs.preflight_only }}
           WORKFLOW_REF_NAME: ${{ github.ref_name }}
-          NEXISCLAW_NPM_PUBLISH_TAG: ${{ inputs.npm_dist_tag }}
+          GREENCHCLAW_NPM_PUBLISH_TAG: ${{ inputs.npm_dist_tag }}
         run: |
           set -euo pipefail
           RELEASE_SHA=$(git rev-parse HEAD)
@@ -161,18 +161,18 @@ jobs:
           fi
           RELEASE_MAIN_REF="${RELEASE_BRANCH_REF}"
           export RELEASE_MAIN_REF
-          pnpm release:NexisClaw:npm:check
+          pnpm release:GreenchClaw:npm:check
 
       # KEEP THIS LANE LIMITED TO FAST, REPEATABLE RELEASE READINESS CHECKS.
       # IF A CHECK CAN TAKE A LONG TIME, NEEDS LIVE CREDENTIALS, OR IS KNOWN TO BE FLAKY,
-      # IT BELONGS IN NexisClaw-release-checks.yml INSTEAD OF BLOCKING npm PUBLISH.
+      # IT BELONGS IN GreenchClaw-release-checks.yml INSTEAD OF BLOCKING npm PUBLISH.
       - name: Verify release contents
         run: pnpm release:check
 
       - name: Pack prepared npm tarball
         id: packed_tarball
         env:
-          NEXISCLAW_PREPACK_PREPARED: "1"
+          GREENCHCLAW_PREPACK_PREPARED: "1"
           RELEASE_TAG: ${{ inputs.tag }}
           RELEASE_NPM_DIST_TAG: ${{ inputs.npm_dist_tag }}
         run: |
@@ -242,7 +242,7 @@ jobs:
           PACKAGE_VERSION="$(node -p "require('./package.json').version")"
           TARBALL_NAME="$(basename "$PACK_PATH")"
           TARBALL_SHA256="$(sha256sum "$PACK_PATH" | awk '{print $1}')"
-          ARTIFACT_DIR="$RUNNER_TEMP/NexisClaw-npm-preflight"
+          ARTIFACT_DIR="$RUNNER_TEMP/GreenchClaw-npm-preflight"
           rm -rf "$ARTIFACT_DIR"
           mkdir -p "$ARTIFACT_DIR"
           cp "$PACK_PATH" "$ARTIFACT_DIR/"
@@ -257,7 +257,7 @@ jobs:
             releaseTag: process.env.RELEASE_TAG,
             releaseSha: process.env.RELEASE_SHA,
             npmDistTag: process.env.RELEASE_NPM_DIST_TAG,
-            packageName: "NexisClaw",
+            packageName: "GreenchClaw",
             packageVersion: process.env.PACKAGE_VERSION,
             tarballName: process.env.TARBALL_NAME,
             tarballSha256: process.env.TARBALL_SHA256,
@@ -272,7 +272,7 @@ jobs:
       - name: Upload prepared npm publish bundle
         uses: actions/upload-artifact@v7
         with:
-          name: NexisClaw-npm-preflight-${{ inputs.tag }}
+          name: GreenchClaw-npm-preflight-${{ inputs.tag }}
           path: ${{ steps.packed_tarball.outputs.dir }}
           if-no-files-found: error
 
@@ -302,7 +302,7 @@ jobs:
             exit 1
           fi
 
-  publish_NexisClaw_npm:
+  publish_GreenchClaw_npm:
     # KEEP THE REAL RELEASE/PUBLISH PATH ON A GITHUB-HOSTED RUNNER.
     # npm trusted publishing + provenance requires this to stay on ubuntu-latest.
     needs: [validate_publish_request]
@@ -351,12 +351,12 @@ jobs:
           set -euo pipefail
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
 
-          if npm view "NexisClaw@${PACKAGE_VERSION}" version >/dev/null 2>&1; then
-            echo "NexisClaw@${PACKAGE_VERSION} is already published on npm."
+          if npm view "GreenchClaw@${PACKAGE_VERSION}" version >/dev/null 2>&1; then
+            echo "GreenchClaw@${PACKAGE_VERSION} is already published on npm."
             exit 1
           fi
 
-          echo "Publishing NexisClaw@${PACKAGE_VERSION}"
+          echo "Publishing GreenchClaw@${PACKAGE_VERSION}"
 
       - name: Verify preflight run metadata
         env:
@@ -366,12 +366,12 @@ jobs:
         run: |
           set -euo pipefail
           RUN_JSON="$(gh run view "$PREFLIGHT_RUN_ID" --repo "$GITHUB_REPOSITORY" --json workflowName,headBranch,event,conclusion,url)"
-          printf '%s' "$RUN_JSON" | node -e 'const fs = require("node:fs"); const run = JSON.parse(fs.readFileSync(0, "utf8")); const checks = [["workflowName", "NexisClaw NPM Release"], ["headBranch", process.env.EXPECTED_PREFLIGHT_BRANCH], ["event", "workflow_dispatch"], ["conclusion", "success"]]; for (const [key, expected] of checks) { if (run[key] !== expected) { console.error(`Referenced npm preflight run ${process.env.PREFLIGHT_RUN_ID} must have ${key}=${expected}, got ${run[key] ?? "<missing>"}.`); process.exit(1); } } console.log(`Using npm preflight run ${process.env.PREFLIGHT_RUN_ID}: ${run.url}`);'
+          printf '%s' "$RUN_JSON" | node -e 'const fs = require("node:fs"); const run = JSON.parse(fs.readFileSync(0, "utf8")); const checks = [["workflowName", "GreenchClaw NPM Release"], ["headBranch", process.env.EXPECTED_PREFLIGHT_BRANCH], ["event", "workflow_dispatch"], ["conclusion", "success"]]; for (const [key, expected] of checks) { if (run[key] !== expected) { console.error(`Referenced npm preflight run ${process.env.PREFLIGHT_RUN_ID} must have ${key}=${expected}, got ${run[key] ?? "<missing>"}.`); process.exit(1); } } console.log(`Using npm preflight run ${process.env.PREFLIGHT_RUN_ID}: ${run.url}`);'
 
       - name: Download prepared npm tarball
         uses: actions/download-artifact@v8
         with:
-          name: NexisClaw-npm-preflight-${{ inputs.tag }}
+          name: GreenchClaw-npm-preflight-${{ inputs.tag }}
           path: preflight-tarball
           repository: ${{ github.repository }}
           run-id: ${{ inputs.preflight_run_id }}
@@ -380,7 +380,7 @@ jobs:
       - name: Validate release tag and package metadata
         if: ${{ inputs.preflight_run_id == '' }}
         env:
-          NEXISCLAW_NPM_RELEASE_SKIP_PACK_CHECK: "1"
+          GREENCHCLAW_NPM_RELEASE_SKIP_PACK_CHECK: "1"
           RELEASE_TAG: ${{ inputs.tag }}
           WORKFLOW_REF_NAME: ${{ github.ref_name }}
         run: |
@@ -391,7 +391,7 @@ jobs:
           # Fetch the workflow branch so merge-base ancestry checks keep working
           # for older tagged commits contained in a release branch.
           git fetch --no-tags origin "+refs/heads/${WORKFLOW_REF_NAME}:refs/remotes/origin/${WORKFLOW_REF_NAME}"
-          pnpm release:NexisClaw:npm:check
+          pnpm release:GreenchClaw:npm:check
 
       - name: Verify prepared tarball provenance
         env:
@@ -447,8 +447,8 @@ jobs:
 
       - name: Publish
         env:
-          NEXISCLAW_PREPACK_PREPARED: "1"
-          NEXISCLAW_NPM_PUBLISH_TAG: ${{ inputs.npm_dist_tag }}
+          GREENCHCLAW_PREPACK_PREPARED: "1"
+          GREENCHCLAW_NPM_PUBLISH_TAG: ${{ inputs.npm_dist_tag }}
           PUBLISH_TARBALL_PATH: ${{ steps.publish_tarball.outputs.path }}
         run: |
           set -euo pipefail
@@ -456,4 +456,4 @@ jobs:
           if [[ -n "${publish_target}" ]]; then
             publish_target="./${publish_target}"
           fi
-          bash scripts/NexisClaw-npm-publish.sh --publish "${publish_target}"
+          bash scripts/GreenchClaw-npm-publish.sh --publish "${publish_target}"

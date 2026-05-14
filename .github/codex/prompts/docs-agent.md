@@ -1,6 +1,6 @@
-# NexisClaw Docs Agent
+# GreenchClaw Docs Agent
 
-You are maintaining NexisClaw documentation after a main-branch commit.
+You are maintaining GreenchClaw documentation after a main-branch commit.
 
 Goal: inspect the code changes and existing documentation, then update existing docs only when they are stale, incomplete, or misleading.
 

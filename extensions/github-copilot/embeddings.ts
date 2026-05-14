@@ -4,9 +4,9 @@ import {
   withRemoteHttpResponse,
   type MemoryEmbeddingProvider,
   type MemoryEmbeddingProviderAdapter,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { resolveConfiguredSecretInputString } from "NexisClaw/plugin-sdk/secret-input-runtime";
-import { fetchWithSsrFGuard, type SsrFPolicy } from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { resolveConfiguredSecretInputString } from "GreenchClaw/plugin-sdk/secret-input-runtime";
+import { fetchWithSsrFGuard, type SsrFPolicy } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { resolveFirstGithubToken } from "./auth.js";
 import { DEFAULT_COPILOT_API_BASE_URL, resolveCopilotApiToken } from "./token.js";
 

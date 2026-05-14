@@ -1,4 +1,4 @@
-name: NexisClaw Scheduled Live And E2E Checks
+name: GreenchClaw Scheduled Live And E2E Checks
 
 on:
   schedule:
@@ -11,7 +11,7 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: NexisClaw-scheduled-live-checks-${{ github.ref }}
+  group: GreenchClaw-scheduled-live-checks-${{ github.ref }}
   cancel-in-progress: false
 
 env:
@@ -23,7 +23,7 @@ jobs:
       contents: read
       packages: write
       pull-requests: read
-    uses: ./.github/workflows/NexisClaw-live-and-e2e-checks-reusable.yml
+    uses: ./.github/workflows/GreenchClaw-live-and-e2e-checks-reusable.yml
     with:
       ref: ${{ github.sha }}
       include_repo_e2e: true
@@ -48,11 +48,11 @@ jobs:
       MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
       OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
       OPENCODE_ZEN_API_KEY: ${{ secrets.OPENCODE_ZEN_API_KEY }}
-      NEXISCLAW_LIVE_BROWSER_CDP_URL: ${{ secrets.NEXISCLAW_LIVE_BROWSER_CDP_URL }}
-      NEXISCLAW_LIVE_SETUP_TOKEN: ${{ secrets.NEXISCLAW_LIVE_SETUP_TOKEN }}
-      NEXISCLAW_LIVE_SETUP_TOKEN_MODEL: ${{ secrets.NEXISCLAW_LIVE_SETUP_TOKEN_MODEL }}
-      NEXISCLAW_LIVE_SETUP_TOKEN_PROFILE: ${{ secrets.NEXISCLAW_LIVE_SETUP_TOKEN_PROFILE }}
-      NEXISCLAW_LIVE_SETUP_TOKEN_VALUE: ${{ secrets.NEXISCLAW_LIVE_SETUP_TOKEN_VALUE }}
+      GREENCHCLAW_LIVE_BROWSER_CDP_URL: ${{ secrets.GREENCHCLAW_LIVE_BROWSER_CDP_URL }}
+      GREENCHCLAW_LIVE_SETUP_TOKEN: ${{ secrets.GREENCHCLAW_LIVE_SETUP_TOKEN }}
+      GREENCHCLAW_LIVE_SETUP_TOKEN_MODEL: ${{ secrets.GREENCHCLAW_LIVE_SETUP_TOKEN_MODEL }}
+      GREENCHCLAW_LIVE_SETUP_TOKEN_PROFILE: ${{ secrets.GREENCHCLAW_LIVE_SETUP_TOKEN_PROFILE }}
+      GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE: ${{ secrets.GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -68,11 +68,11 @@ jobs:
       BYTEPLUS_ACCESS_KEY_ID: ${{ secrets.BYTEPLUS_ACCESS_KEY_ID }}
       BYTEPLUS_SECRET_ACCESS_KEY: ${{ secrets.BYTEPLUS_SECRET_ACCESS_KEY }}
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-      NEXISCLAW_CODEX_AUTH_JSON: ${{ secrets.NEXISCLAW_CODEX_AUTH_JSON }}
-      NEXISCLAW_CODEX_CONFIG_TOML: ${{ secrets.NEXISCLAW_CODEX_CONFIG_TOML }}
-      NEXISCLAW_CLAUDE_JSON: ${{ secrets.NEXISCLAW_CLAUDE_JSON }}
-      NEXISCLAW_CLAUDE_CREDENTIALS_JSON: ${{ secrets.NEXISCLAW_CLAUDE_CREDENTIALS_JSON }}
-      NEXISCLAW_CLAUDE_SETTINGS_JSON: ${{ secrets.NEXISCLAW_CLAUDE_SETTINGS_JSON }}
-      NEXISCLAW_CLAUDE_SETTINGS_LOCAL_JSON: ${{ secrets.NEXISCLAW_CLAUDE_SETTINGS_LOCAL_JSON }}
-      NEXISCLAW_GEMINI_SETTINGS_JSON: ${{ secrets.NEXISCLAW_GEMINI_SETTINGS_JSON }}
+      GREENCHCLAW_CODEX_AUTH_JSON: ${{ secrets.GREENCHCLAW_CODEX_AUTH_JSON }}
+      GREENCHCLAW_CODEX_CONFIG_TOML: ${{ secrets.GREENCHCLAW_CODEX_CONFIG_TOML }}
+      GREENCHCLAW_CLAUDE_JSON: ${{ secrets.GREENCHCLAW_CLAUDE_JSON }}
+      GREENCHCLAW_CLAUDE_CREDENTIALS_JSON: ${{ secrets.GREENCHCLAW_CLAUDE_CREDENTIALS_JSON }}
+      GREENCHCLAW_CLAUDE_SETTINGS_JSON: ${{ secrets.GREENCHCLAW_CLAUDE_SETTINGS_JSON }}
+      GREENCHCLAW_CLAUDE_SETTINGS_LOCAL_JSON: ${{ secrets.GREENCHCLAW_CLAUDE_SETTINGS_LOCAL_JSON }}
+      GREENCHCLAW_GEMINI_SETTINGS_JSON: ${{ secrets.GREENCHCLAW_GEMINI_SETTINGS_JSON }}
       FIREWORKS_API_KEY: ${{ secrets.FIREWORKS_API_KEY }}

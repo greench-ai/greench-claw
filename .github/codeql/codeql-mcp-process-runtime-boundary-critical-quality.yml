@@ -1,4 +1,4 @@
-name: NexisClaw-codeql-mcp-process-runtime-boundary-critical-quality
+name: GreenchClaw-codeql-mcp-process-runtime-boundary-critical-quality
 
 disable-default-queries: true
 

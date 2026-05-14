@@ -1,4 +1,4 @@
-name: NexisClaw-codeql-network-ssrf-boundary-critical-security
+name: GreenchClaw-codeql-network-ssrf-boundary-critical-security
 
 disable-default-queries: true
 

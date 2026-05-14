@@ -1,10 +1,10 @@
 import type {
   ProviderResolveDynamicModelContext,
   ProviderRuntimeModel,
-} from "NexisClaw/plugin-sdk/core";
-import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { normalizeModelCompat } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/core";
+import type { ModelDefinitionConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { normalizeModelCompat } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { normalizeOptionalLowercaseString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveCopilotTransportApi, resolveStaticCopilotModelOverride } from "./model-metadata.js";
 
 export const PROVIDER_ID = "github-copilot";
@@ -74,7 +74,7 @@ export function resolveCopilotForwardCompatModel(
   // Catch-all: create a synthetic model definition for any unknown model ID.
   // The Copilot API is OpenAI-compatible and will return its own error if the
   // model isn't available on the user's plan. This lets new models be used
-  // by simply adding them to agents.defaults.models in NexisClaw.json — no
+  // by simply adding them to agents.defaults.models in GreenchClaw.json — no
   // code change required.
   const reasoning = /^o[13](\b|$)/.test(lowerModelId) || isCopilotCodexModelId(lowerModelId);
   return normalizeModelCompat({

@@ -25,7 +25,7 @@ try:
     req = urllib.request.Request(
         "https://api.github.com/repos/git-for-windows/git/releases/latest",
         headers={
-            "User-Agent": "NexisClaw-parallels-smoke",
+            "User-Agent": "GreenchClaw-parallels-smoke",
             "Accept": "application/vnd.github+json",
         },
     )
@@ -117,7 +117,7 @@ export function ensureGuestGit(input: {
   const minGitName = path.basename(input.minGitZipPath);
   input.guest.powershell(
     `$ErrorActionPreference = 'Stop'
-$depsRoot = Join-Path $env:LOCALAPPDATA 'NexisClaw\\deps'
+$depsRoot = Join-Path $env:LOCALAPPDATA 'GreenchClaw\\deps'
 $portableGit = Join-Path $depsRoot 'portable-git'
 $archive = Join-Path $env:TEMP ${psSingleQuote(minGitName)}
 if (Test-Path $portableGit) {

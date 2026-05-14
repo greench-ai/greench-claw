@@ -1290,6 +1290,6 @@ export class GreenchClawApp extends LitElement {
   }
 }
 
-if (!customElements.get("nexisclaw-app")) {
-  customElements.define("nexisclaw-app", GreenchClawApp);
+if (!customElements.get("greench-claw-app")) {
+  customElements.define("greench-claw-app", GreenchClawApp);
 }

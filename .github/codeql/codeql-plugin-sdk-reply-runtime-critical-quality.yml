@@ -1,4 +1,4 @@
-name: NexisClaw-codeql-plugin-sdk-reply-runtime-critical-quality
+name: GreenchClaw-codeql-plugin-sdk-reply-runtime-critical-quality
 
 disable-default-queries: true
 

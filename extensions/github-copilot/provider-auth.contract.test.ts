@@ -1,3 +1,3 @@
-import { describeGithubCopilotProviderAuthContract } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { describeGithubCopilotProviderAuthContract } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 
 describeGithubCopilotProviderAuthContract(() => import("./index.js"));

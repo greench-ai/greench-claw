@@ -97,8 +97,8 @@ export class GreenchClawModalDialog extends LitElement {
   }
 
   override render() {
-    const labelId = this.label ? "nexisclaw-modal-dialog-label" : "";
-    const descriptionId = this.description ? "nexisclaw-modal-dialog-description" : "";
+    const labelId = this.label ? "greench-claw-modal-dialog-label" : "";
+    const descriptionId = this.description ? "greench-claw-modal-dialog-description" : "";
     return html`
       <dialog
         role="dialog"
@@ -268,12 +268,12 @@ export class GreenchClawModalDialog extends LitElement {
   }
 }
 
-if (!customElements.get("nexisclaw-modal-dialog")) {
-  customElements.define("nexisclaw-modal-dialog", GreenchClawModalDialog);
+if (!customElements.get("greench-claw-modal-dialog")) {
+  customElements.define("greench-claw-modal-dialog", GreenchClawModalDialog);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "nexisclaw-modal-dialog": GreenchClawModalDialog;
+    "greench-claw-modal-dialog": GreenchClawModalDialog;
   }
 }

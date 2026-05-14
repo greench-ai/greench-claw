@@ -26,7 +26,7 @@ on:
       package_spec:
         description: Published package spec when source=npm
         required: false
-        default: NexisClaw@beta
+        default: GreenchClaw@beta
         type: string
       package_url:
         description: HTTPS .tgz URL when source=url
@@ -65,9 +65,9 @@ on:
         default: ""
         type: string
       published_upgrade_survivor_baseline:
-        description: Published NexisClaw package baseline for the published-upgrade-survivor Docker lane
+        description: Published GreenchClaw package baseline for the published-upgrade-survivor Docker lane
         required: false
-        default: NexisClaw@latest
+        default: GreenchClaw@latest
         type: string
       published_upgrade_survivor_baselines:
         description: Optional baseline list for published-upgrade-survivor/update-migration; use last-stable-4, all-since-2026.4.23, release-history, or exact versions
@@ -112,7 +112,7 @@ on:
       package_spec:
         description: Published package spec when source=npm
         required: false
-        default: NexisClaw@beta
+        default: GreenchClaw@beta
         type: string
       package_url:
         description: HTTPS .tgz URL when source=url
@@ -145,9 +145,9 @@ on:
         default: ""
         type: string
       published_upgrade_survivor_baseline:
-        description: Published NexisClaw package baseline for the published-upgrade-survivor Docker lane
+        description: Published GreenchClaw package baseline for the published-upgrade-survivor Docker lane
         required: false
-        default: NexisClaw@latest
+        default: GreenchClaw@latest
         type: string
       published_upgrade_survivor_baselines:
         description: Optional baseline list for published-upgrade-survivor/update-migration; use last-stable-4, all-since-2026.4.23, release-history, or exact versions
@@ -204,15 +204,15 @@ on:
         required: false
       OPENCODE_ZEN_API_KEY:
         required: false
-      NEXISCLAW_LIVE_BROWSER_CDP_URL:
+      GREENCHCLAW_LIVE_BROWSER_CDP_URL:
         required: false
-      NEXISCLAW_LIVE_SETUP_TOKEN:
+      GREENCHCLAW_LIVE_SETUP_TOKEN:
         required: false
-      NEXISCLAW_LIVE_SETUP_TOKEN_MODEL:
+      GREENCHCLAW_LIVE_SETUP_TOKEN_MODEL:
         required: false
-      NEXISCLAW_LIVE_SETUP_TOKEN_PROFILE:
+      GREENCHCLAW_LIVE_SETUP_TOKEN_PROFILE:
         required: false
-      NEXISCLAW_LIVE_SETUP_TOKEN_VALUE:
+      GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE:
         required: false
       GEMINI_API_KEY:
         required: false
@@ -244,25 +244,25 @@ on:
         required: false
       CLAUDE_CODE_OAUTH_TOKEN:
         required: false
-      NEXISCLAW_CODEX_AUTH_JSON:
+      GREENCHCLAW_CODEX_AUTH_JSON:
         required: false
-      NEXISCLAW_CODEX_CONFIG_TOML:
+      GREENCHCLAW_CODEX_CONFIG_TOML:
         required: false
-      NEXISCLAW_CLAUDE_JSON:
+      GREENCHCLAW_CLAUDE_JSON:
         required: false
-      NEXISCLAW_CLAUDE_CREDENTIALS_JSON:
+      GREENCHCLAW_CLAUDE_CREDENTIALS_JSON:
         required: false
-      NEXISCLAW_CLAUDE_SETTINGS_JSON:
+      GREENCHCLAW_CLAUDE_SETTINGS_JSON:
         required: false
-      NEXISCLAW_CLAUDE_SETTINGS_LOCAL_JSON:
+      GREENCHCLAW_CLAUDE_SETTINGS_LOCAL_JSON:
         required: false
-      NEXISCLAW_GEMINI_SETTINGS_JSON:
+      GREENCHCLAW_GEMINI_SETTINGS_JSON:
         required: false
       FIREWORKS_API_KEY:
         required: false
-      NEXISCLAW_QA_CONVEX_SITE_URL:
+      GREENCHCLAW_QA_CONVEX_SITE_URL:
         required: false
-      NEXISCLAW_QA_CONVEX_SECRET_CI:
+      GREENCHCLAW_QA_CONVEX_SECRET_CI:
         required: false
 
 permissions:
@@ -353,7 +353,7 @@ jobs:
             artifact_dir=".artifacts/package-candidate-input"
           fi
 
-          node scripts/resolve-NexisClaw-package-candidate.mjs \
+          node scripts/resolve-GreenchClaw-package-candidate.mjs \
             --source "$SOURCE" \
             --package-ref "$PACKAGE_REF" \
             --package-spec "$PACKAGE_SPEC" \
@@ -361,7 +361,7 @@ jobs:
             --package-sha256 "$PACKAGE_SHA256" \
             --artifact-dir "${artifact_dir:-.}" \
             --output-dir .artifacts/docker-e2e-package \
-            --output-name NexisClaw-current.tgz \
+            --output-name GreenchClaw-current.tgz \
             --metadata .artifacts/docker-e2e-package/package-candidate.json \
             --github-output "$GITHUB_OUTPUT"
 
@@ -443,11 +443,11 @@ jobs:
           releases_json=""
           npm_versions_json=""
           if [[ "$REQUESTED_BASELINES" == *"release-history"* || "$REQUESTED_BASELINES" == *"all-since-"* || "$REQUESTED_BASELINES" == *"last-stable-"* ]]; then
-            releases_json=".artifacts/package-candidate-input/NexisClaw-releases.json"
-            npm_versions_json=".artifacts/package-candidate-input/NexisClaw-npm-versions.json"
+            releases_json=".artifacts/package-candidate-input/GreenchClaw-releases.json"
+            npm_versions_json=".artifacts/package-candidate-input/GreenchClaw-npm-versions.json"
             mkdir -p "$(dirname "$releases_json")"
             gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName,publishedAt,isPrerelease > "$releases_json"
-            npm view NexisClaw versions --json > "$npm_versions_json"
+            npm view GreenchClaw versions --json > "$npm_versions_json"
           fi
           args=(
             --requested "$REQUESTED_BASELINES"
@@ -470,7 +470,7 @@ jobs:
         with:
           name: ${{ env.PACKAGE_ARTIFACT_NAME }}
           path: |
-            .artifacts/docker-e2e-package/NexisClaw-current.tgz
+            .artifacts/docker-e2e-package/GreenchClaw-current.tgz
             .artifacts/docker-e2e-package/package-candidate.json
           retention-days: 14
           if-no-files-found: error
@@ -507,7 +507,7 @@ jobs:
   docker_acceptance:
     name: Docker product acceptance
     needs: resolve_package
-    uses: ./.github/workflows/NexisClaw-live-and-e2e-checks-reusable.yml
+    uses: ./.github/workflows/GreenchClaw-live-and-e2e-checks-reusable.yml
     with:
       ref: ${{ needs.resolve_package.outputs.package_source_sha || inputs.workflow_ref }}
       include_repo_e2e: false
@@ -538,11 +538,11 @@ jobs:
       MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
       OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
       OPENCODE_ZEN_API_KEY: ${{ secrets.OPENCODE_ZEN_API_KEY }}
-      NEXISCLAW_LIVE_BROWSER_CDP_URL: ${{ secrets.NEXISCLAW_LIVE_BROWSER_CDP_URL }}
-      NEXISCLAW_LIVE_SETUP_TOKEN: ${{ secrets.NEXISCLAW_LIVE_SETUP_TOKEN }}
-      NEXISCLAW_LIVE_SETUP_TOKEN_MODEL: ${{ secrets.NEXISCLAW_LIVE_SETUP_TOKEN_MODEL }}
-      NEXISCLAW_LIVE_SETUP_TOKEN_PROFILE: ${{ secrets.NEXISCLAW_LIVE_SETUP_TOKEN_PROFILE }}
-      NEXISCLAW_LIVE_SETUP_TOKEN_VALUE: ${{ secrets.NEXISCLAW_LIVE_SETUP_TOKEN_VALUE }}
+      GREENCHCLAW_LIVE_BROWSER_CDP_URL: ${{ secrets.GREENCHCLAW_LIVE_BROWSER_CDP_URL }}
+      GREENCHCLAW_LIVE_SETUP_TOKEN: ${{ secrets.GREENCHCLAW_LIVE_SETUP_TOKEN }}
+      GREENCHCLAW_LIVE_SETUP_TOKEN_MODEL: ${{ secrets.GREENCHCLAW_LIVE_SETUP_TOKEN_MODEL }}
+      GREENCHCLAW_LIVE_SETUP_TOKEN_PROFILE: ${{ secrets.GREENCHCLAW_LIVE_SETUP_TOKEN_PROFILE }}
+      GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE: ${{ secrets.GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -558,13 +558,13 @@ jobs:
       BYTEPLUS_ACCESS_KEY_ID: ${{ secrets.BYTEPLUS_ACCESS_KEY_ID }}
       BYTEPLUS_SECRET_ACCESS_KEY: ${{ secrets.BYTEPLUS_SECRET_ACCESS_KEY }}
       CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-      NEXISCLAW_CODEX_AUTH_JSON: ${{ secrets.NEXISCLAW_CODEX_AUTH_JSON }}
-      NEXISCLAW_CODEX_CONFIG_TOML: ${{ secrets.NEXISCLAW_CODEX_CONFIG_TOML }}
-      NEXISCLAW_CLAUDE_JSON: ${{ secrets.NEXISCLAW_CLAUDE_JSON }}
-      NEXISCLAW_CLAUDE_CREDENTIALS_JSON: ${{ secrets.NEXISCLAW_CLAUDE_CREDENTIALS_JSON }}
-      NEXISCLAW_CLAUDE_SETTINGS_JSON: ${{ secrets.NEXISCLAW_CLAUDE_SETTINGS_JSON }}
-      NEXISCLAW_CLAUDE_SETTINGS_LOCAL_JSON: ${{ secrets.NEXISCLAW_CLAUDE_SETTINGS_LOCAL_JSON }}
-      NEXISCLAW_GEMINI_SETTINGS_JSON: ${{ secrets.NEXISCLAW_GEMINI_SETTINGS_JSON }}
+      GREENCHCLAW_CODEX_AUTH_JSON: ${{ secrets.GREENCHCLAW_CODEX_AUTH_JSON }}
+      GREENCHCLAW_CODEX_CONFIG_TOML: ${{ secrets.GREENCHCLAW_CODEX_CONFIG_TOML }}
+      GREENCHCLAW_CLAUDE_JSON: ${{ secrets.GREENCHCLAW_CLAUDE_JSON }}
+      GREENCHCLAW_CLAUDE_CREDENTIALS_JSON: ${{ secrets.GREENCHCLAW_CLAUDE_CREDENTIALS_JSON }}
+      GREENCHCLAW_CLAUDE_SETTINGS_JSON: ${{ secrets.GREENCHCLAW_CLAUDE_SETTINGS_JSON }}
+      GREENCHCLAW_CLAUDE_SETTINGS_LOCAL_JSON: ${{ secrets.GREENCHCLAW_CLAUDE_SETTINGS_LOCAL_JSON }}
+      GREENCHCLAW_GEMINI_SETTINGS_JSON: ${{ secrets.GREENCHCLAW_GEMINI_SETTINGS_JSON }}
       FIREWORKS_API_KEY: ${{ secrets.FIREWORKS_API_KEY }}
 
   package_telegram:
@@ -575,14 +575,14 @@ jobs:
     with:
       package_spec: ${{ inputs.package_spec }}
       package_artifact_name: ${{ needs.resolve_package.outputs.package_artifact_name }}
-      package_label: NexisClaw@${{ needs.resolve_package.outputs.package_version }}
+      package_label: GreenchClaw@${{ needs.resolve_package.outputs.package_version }}
       harness_ref: ${{ needs.resolve_package.outputs.package_source_sha || inputs.workflow_ref }}
       provider_mode: ${{ needs.resolve_package.outputs.telegram_mode }}
       scenario: ${{ inputs.telegram_scenarios }}
     secrets:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      NEXISCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NEXISCLAW_QA_CONVEX_SITE_URL }}
-      NEXISCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NEXISCLAW_QA_CONVEX_SECRET_CI }}
+      GREENCHCLAW_QA_CONVEX_SITE_URL: ${{ secrets.GREENCHCLAW_QA_CONVEX_SITE_URL }}
+      GREENCHCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.GREENCHCLAW_QA_CONVEX_SECRET_CI }}
 
   summary:
     name: Verify package acceptance

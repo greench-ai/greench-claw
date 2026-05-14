@@ -1,12 +1,12 @@
 ---
-summary: "Host NexisClaw on a DigitalOcean Droplet"
+summary: "Host GreenchClaw on a DigitalOcean Droplet"
 read_when:
-  - Setting up NexisClaw on DigitalOcean
-  - Looking for a simple paid VPS for NexisClaw
+  - Setting up GreenchClaw on DigitalOcean
+  - Looking for a simple paid VPS for GreenchClaw
 title: "DigitalOcean"
 ---
 
-Run a persistent NexisClaw Gateway on a DigitalOcean Droplet (~$6/month for the 1 GB Basic plan).
+Run a persistent GreenchClaw Gateway on a DigitalOcean Droplet (~$6/month for the 1 GB Basic plan).
 
 DigitalOcean is the simplest paid VPS path. If you prefer cheaper or free options:
 
@@ -48,25 +48,25 @@ DigitalOcean is the simplest paid VPS path. If you prefer cheaper or free option
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash -
     apt install -y nodejs
 
-    # Install NexisClaw
-    curl -fsSL https://NexisClaw.ai/install.sh | bash
+    # Install GreenchClaw
+    curl -fsSL https://GreenchClaw.ai/install.sh | bash
 
-    # Create the non-root user that will own NexisClaw state and services.
-    adduser NexisClaw
-    usermod -aG sudo NexisClaw
-    loginctl enable-linger NexisClaw
+    # Create the non-root user that will own GreenchClaw state and services.
+    adduser GreenchClaw
+    usermod -aG sudo GreenchClaw
+    loginctl enable-linger GreenchClaw
 
-    su - NexisClaw
-    NexisClaw --version
+    su - GreenchClaw
+    GreenchClaw --version
     ```
 
-    Use the root shell only for system bootstrap. Run NexisClaw commands as the non-root `NexisClaw` user so state lives under `/home/NexisClaw/.NexisClaw/` and the Gateway installs as that user's systemd service.
+    Use the root shell only for system bootstrap. Run GreenchClaw commands as the non-root `GreenchClaw` user so state lives under `/home/GreenchClaw/.GreenchClaw/` and the Gateway installs as that user's systemd service.
 
   </Step>
 
   <Step title="Run onboarding">
     ```bash
-    NexisClaw onboard --install-daemon
+    GreenchClaw onboard --install-daemon
     ```
 
     The wizard walks you through model auth, channel setup, gateway token generation, and daemon installation (systemd).
@@ -85,9 +85,9 @@ DigitalOcean is the simplest paid VPS path. If you prefer cheaper or free option
 
   <Step title="Verify the gateway">
     ```bash
-    NexisClaw status
-    systemctl --user status NexisClaw-gateway.service
-    journalctl --user -u NexisClaw-gateway.service -f
+    GreenchClaw status
+    systemctl --user status GreenchClaw-gateway.service
+    journalctl --user -u GreenchClaw-gateway.service -f
     ```
   </Step>
 
@@ -108,8 +108,8 @@ DigitalOcean is the simplest paid VPS path. If you prefer cheaper or free option
     ```bash
     curl -fsSL https://tailscale.com/install.sh | sudo sh
     sudo tailscale up
-    NexisClaw config set gateway.tailscale.mode serve
-    NexisClaw gateway restart
+    GreenchClaw config set gateway.tailscale.mode serve
+    GreenchClaw gateway restart
     ```
 
     Then open `https://<magicdns>/` from any device on your tailnet.
@@ -119,8 +119,8 @@ DigitalOcean is the simplest paid VPS path. If you prefer cheaper or free option
     **Option C: Tailnet bind (no Serve)**
 
     ```bash
-    NexisClaw config set gateway.bind tailnet
-    NexisClaw gateway restart
+    GreenchClaw config set gateway.bind tailnet
+    GreenchClaw gateway restart
     ```
 
     Then open `http://<tailscale-ip>:18789` (token required).
@@ -130,18 +130,18 @@ DigitalOcean is the simplest paid VPS path. If you prefer cheaper or free option
 
 ## Persistence and backups
 
-NexisClaw state lives under:
+GreenchClaw state lives under:
 
-- `~/.NexisClaw/` — `NexisClaw.json`, per-agent `auth-profiles.json`, channel/provider state, and session data.
-- `~/.NexisClaw/workspace/` — the agent workspace (SOUL.md, memory, artifacts).
+- `~/.GreenchClaw/` — `GreenchClaw.json`, per-agent `auth-profiles.json`, channel/provider state, and session data.
+- `~/.GreenchClaw/workspace/` — the agent workspace (SOUL.md, memory, artifacts).
 
 These survive Droplet reboots. To take a portable snapshot:
 
 ```bash
-NexisClaw backup create
+GreenchClaw backup create
 ```
 
-DigitalOcean snapshots back the whole Droplet up; `NexisClaw backup create` is portable across hosts.
+DigitalOcean snapshots back the whole Droplet up; `GreenchClaw backup create` is portable across hosts.
 
 ## 1 GB RAM tips
 
@@ -154,7 +154,7 @@ The $6 Droplet only has 1 GB RAM. To keep things smooth:
 
 ## Troubleshooting
 
-**Gateway will not start** -- Run `NexisClaw doctor --non-interactive` and check logs with `journalctl --user -u NexisClaw-gateway.service -n 50`.
+**Gateway will not start** -- Run `GreenchClaw doctor --non-interactive` and check logs with `journalctl --user -u GreenchClaw-gateway.service -n 50`.
 
 **Port already in use** -- Run `lsof -i :18789` to find the process, then stop it.
 
@@ -164,7 +164,7 @@ The $6 Droplet only has 1 GB RAM. To keep things smooth:
 
 - [Channels](/channels) -- connect Telegram, WhatsApp, Discord, and more
 - [Gateway configuration](/gateway/configuration) -- all config options
-- [Updating](/install/updating) -- keep NexisClaw up to date
+- [Updating](/install/updating) -- keep GreenchClaw up to date
 
 ## Related
 

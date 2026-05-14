@@ -25,7 +25,11 @@ export function renderDreamingRestartConfirmation(props: DreamingRestartConfirma
   };
 
   return html`
-    <nexisclaw-modal-dialog label=${title} description=${description} @modal-cancel=${handleCancel}>
+    <greench-claw-modal-dialog
+      label=${title}
+      description=${description}
+      @modal-cancel=${handleCancel}
+    >
       <div class="exec-approval-card">
         <div class="exec-approval-header">
           <div>
@@ -50,6 +54,6 @@ export function renderDreamingRestartConfirmation(props: DreamingRestartConfirma
           </button>
         </div>
       </div>
-    </nexisclaw-modal-dialog>
+    </greench-claw-modal-dialog>
   `;
 }

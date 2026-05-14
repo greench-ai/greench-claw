@@ -1,4 +1,4 @@
-name: NexisClaw-codeql-memory-runtime-boundary-critical-quality
+name: GreenchClaw-codeql-memory-runtime-boundary-critical-quality
 
 disable-default-queries: true
 

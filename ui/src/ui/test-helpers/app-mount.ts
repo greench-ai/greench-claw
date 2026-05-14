@@ -47,7 +47,7 @@ const mountedApps = new Set<GreenchClawApp>();
 function collectMountedApps() {
   return new Set<GreenchClawApp>([
     ...mountedApps,
-    ...document.querySelectorAll<GreenchClawApp>("nexisclaw-app"),
+    ...document.querySelectorAll<GreenchClawApp>("greench-claw-app"),
   ]);
 }
 
@@ -102,7 +102,7 @@ async function cleanupMountedApps() {
 
 export function mountApp(pathname: string) {
   window.history.replaceState({}, "", pathname);
-  const app = document.createElement("nexisclaw-app") as GreenchClawApp;
+  const app = document.createElement("greench-claw-app") as GreenchClawApp;
   mountedApps.add(app);
   document.body.append(app);
   app.connected = true;

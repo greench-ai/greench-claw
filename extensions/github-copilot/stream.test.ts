@@ -226,7 +226,7 @@ describe("wrapCopilotAnthropicStream", () => {
     expect(baseStreamFn).toHaveBeenCalledOnce();
   });
 
-  it("does not claim provider transport before NexisClaw chooses one", () => {
+  it("does not claim provider transport before GreenchClaw chooses one", () => {
     expect(
       wrapCopilotProviderStream({
         streamFn: undefined,

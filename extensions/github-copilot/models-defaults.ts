@@ -1,4 +1,4 @@
-import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { ModelDefinitionConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import { resolveCopilotTransportApi, resolveStaticCopilotModelOverride } from "./model-metadata.js";
 
 const DEFAULT_CONTEXT_WINDOW = 128_000;

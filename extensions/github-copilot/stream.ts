@@ -1,11 +1,14 @@
 import type { StreamFn } from "@earendil-works/pi-agent-core";
 import type { Context } from "@earendil-works/pi-ai";
-import type { ProviderWrapStreamFnContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import { buildCopilotIdeHeaders, COPILOT_INTEGRATION_ID } from "NexisClaw/plugin-sdk/provider-auth";
+import type { ProviderWrapStreamFnContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import {
+  buildCopilotIdeHeaders,
+  COPILOT_INTEGRATION_ID,
+} from "GreenchClaw/plugin-sdk/provider-auth";
 import {
   applyAnthropicEphemeralCacheControlMarkers,
   streamWithPayloadPatch,
-} from "NexisClaw/plugin-sdk/provider-stream-shared";
+} from "GreenchClaw/plugin-sdk/provider-stream-shared";
 import { rewriteCopilotResponsePayloadConnectionBoundIds } from "./connection-bound-ids.js";
 
 type StreamOptions = Parameters<StreamFn>[2];

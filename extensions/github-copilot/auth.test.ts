@@ -5,21 +5,21 @@ const listProfilesForProviderMock = vi.hoisted(() => vi.fn());
 const coerceSecretRefMock = vi.hoisted(() => vi.fn());
 const resolveRequiredConfiguredSecretRefInputStringMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/provider-auth", () => ({
+vi.mock("GreenchClaw/plugin-sdk/provider-auth", () => ({
   coerceSecretRef: coerceSecretRefMock,
   ensureAuthProfileStore: ensureAuthProfileStoreMock,
   listProfilesForProvider: listProfilesForProviderMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/secret-input-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/secret-input-runtime", () => ({
   resolveRequiredConfiguredSecretRefInputString: resolveRequiredConfiguredSecretRefInputStringMock,
 }));
 
 import { resolveFirstGithubToken } from "./auth.js";
 
 afterAll(() => {
-  vi.doUnmock("NexisClaw/plugin-sdk/provider-auth");
-  vi.doUnmock("NexisClaw/plugin-sdk/secret-input-runtime");
+  vi.doUnmock("GreenchClaw/plugin-sdk/provider-auth");
+  vi.doUnmock("GreenchClaw/plugin-sdk/secret-input-runtime");
   vi.resetModules();
 });
 

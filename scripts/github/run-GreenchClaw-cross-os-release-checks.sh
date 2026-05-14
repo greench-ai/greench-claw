@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-tsx_version="${NEXISCLAW_RELEASE_TSX_VERSION:-${TSX_VERSION:-4.21.0}}"
-script_path="${NEXISCLAW_RELEASE_CHECKS_SCRIPT:-workflow/scripts/NexisClaw-cross-os-release-checks.ts}"
+tsx_version="${GREENCHCLAW_RELEASE_TSX_VERSION:-${TSX_VERSION:-4.21.0}}"
+script_path="${GREENCHCLAW_RELEASE_CHECKS_SCRIPT:-workflow/scripts/GreenchClaw-cross-os-release-checks.ts}"
 
 if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
   if command -v cygpath >/dev/null 2>&1; then
@@ -34,12 +34,12 @@ if command -v cygpath >/dev/null 2>&1; then
   fi
 fi
 
-temp_root="${NEXISCLAW_RELEASE_TSX_TOOL_ROOT:-${RUNNER_TEMP:-${TMPDIR:-/tmp}}}"
+temp_root="${GREENCHCLAW_RELEASE_TSX_TOOL_ROOT:-${RUNNER_TEMP:-${TMPDIR:-/tmp}}}"
 if command -v cygpath >/dev/null 2>&1; then
   temp_root="$(cygpath -u "${temp_root}")"
 fi
 
-tool_dir="${NEXISCLAW_RELEASE_TSX_TOOL_DIR:-${temp_root}/NexisClaw-release-tsx-${tsx_version}}"
+tool_dir="${GREENCHCLAW_RELEASE_TSX_TOOL_DIR:-${temp_root}/GreenchClaw-release-tsx-${tsx_version}}"
 loader_path="${tool_dir}/node_modules/tsx/dist/loader.mjs"
 npm_tool_dir="${tool_dir}"
 npm_cli_arg="${npm_cli_js}"

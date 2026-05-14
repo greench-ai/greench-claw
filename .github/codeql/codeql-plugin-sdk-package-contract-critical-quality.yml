@@ -1,4 +1,4 @@
-name: NexisClaw-codeql-plugin-sdk-package-contract-critical-quality
+name: GreenchClaw-codeql-plugin-sdk-package-contract-critical-quality
 
 disable-default-queries: true
 

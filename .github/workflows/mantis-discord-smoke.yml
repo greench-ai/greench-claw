@@ -26,8 +26,8 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
   NODE_VERSION: "24.x"
   PNPM_VERSION: "11.0.8"
-  NEXISCLAW_BUILD_PRIVATE_QA: "1"
-  NEXISCLAW_ENABLE_PRIVATE_QA_CLI: "1"
+  GREENCHCLAW_BUILD_PRIVATE_QA: "1"
+  GREENCHCLAW_ENABLE_PRIVATE_QA_CLI: "1"
 
 jobs:
   authorize_actor:
@@ -144,17 +144,17 @@ jobs:
       - name: Run Mantis Discord smoke
         shell: bash
         env:
-          NEXISCLAW_QA_DISCORD_MANTIS_BOT_TOKEN: ${{ secrets.NEXISCLAW_QA_DISCORD_MANTIS_BOT_TOKEN }}
-          NEXISCLAW_QA_DISCORD_GUILD_ID: ${{ secrets.NEXISCLAW_QA_DISCORD_GUILD_ID }}
-          NEXISCLAW_QA_DISCORD_CHANNEL_ID: ${{ secrets.NEXISCLAW_QA_DISCORD_CHANNEL_ID }}
-          NEXISCLAW_QA_REDACT_PUBLIC_METADATA: "1"
+          GREENCHCLAW_QA_DISCORD_MANTIS_BOT_TOKEN: ${{ secrets.GREENCHCLAW_QA_DISCORD_MANTIS_BOT_TOKEN }}
+          GREENCHCLAW_QA_DISCORD_GUILD_ID: ${{ secrets.GREENCHCLAW_QA_DISCORD_GUILD_ID }}
+          GREENCHCLAW_QA_DISCORD_CHANNEL_ID: ${{ secrets.GREENCHCLAW_QA_DISCORD_CHANNEL_ID }}
+          GREENCHCLAW_QA_REDACT_PUBLIC_METADATA: "1"
         run: |
           set -euo pipefail
           args=()
           if [[ "${{ inputs.post_message }}" != "true" ]]; then
             args+=(--skip-post)
           fi
-          pnpm NexisClaw qa mantis discord-smoke \
+          pnpm GreenchClaw qa mantis discord-smoke \
             --repo-root . \
             --output-dir .artifacts/qa-e2e/mantis/discord-smoke \
             "${args[@]}"

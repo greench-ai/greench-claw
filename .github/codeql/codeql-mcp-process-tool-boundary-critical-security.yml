@@ -1,4 +1,4 @@
-name: NexisClaw-codeql-mcp-process-tool-boundary-critical-security
+name: GreenchClaw-codeql-mcp-process-tool-boundary-critical-security
 
 disable-default-queries: true
 
@@ -21,9 +21,9 @@ paths:
   - src/agents/bash-tools.process*.ts
   - src/agents/exec-*.ts
   - src/agents/execution-contract.ts
-  - src/agents/NexisClaw-plugin-tools.ts
-  - src/agents/NexisClaw-tools.runtime.ts
-  - src/agents/NexisClaw-tools.registration.ts
+  - src/agents/GreenchClaw-plugin-tools.ts
+  - src/agents/GreenchClaw-tools.runtime.ts
+  - src/agents/GreenchClaw-tools.registration.ts
   - src/agents/pi-tool-definition-adapter.ts
   - src/agents/pi-tools.abort.ts
   - src/agents/pi-tools.before-tool-call*.ts

@@ -1,4 +1,4 @@
-name: NexisClaw-codeql-macos-critical-security
+name: GreenchClaw-codeql-macos-critical-security
 
 disable-default-queries: true
 

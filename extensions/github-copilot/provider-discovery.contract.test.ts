@@ -1,5 +1,5 @@
 import { fileURLToPath } from "node:url";
-import { describeGithubCopilotProviderDiscoveryContract } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { describeGithubCopilotProviderDiscoveryContract } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 
 describeGithubCopilotProviderDiscoveryContract({
   load: () => import("./index.js"),

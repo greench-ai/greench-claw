@@ -1,3 +1,3 @@
-import { describeGithubCopilotProviderRuntimeContract } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { describeGithubCopilotProviderRuntimeContract } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 
 describeGithubCopilotProviderRuntimeContract(() => import("./index.js"));

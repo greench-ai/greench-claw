@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REMOTE_URL="${NEXISCLAW_REF_REMOTE:-https://github.com/NexisClaw/NexisClaw.git}"
+REMOTE_URL="${GREENCHCLAW_REF_REMOTE:-https://github.com/GreenchClaw/GreenchClaw.git}"
 REF=""
 EXPECTED_SHA=""
 FALLBACK_OK=0
@@ -9,9 +9,9 @@ GITHUB_OUTPUT_FILE="${GITHUB_OUTPUT:-}"
 
 usage() {
   cat >&2 <<'EOF'
-Usage: resolve-NexisClaw-ref.sh --ref <ref> [--expected-sha <sha>] [--fallback-ok] [--github-output <file>]
+Usage: resolve-GreenchClaw-ref.sh --ref <ref> [--expected-sha <sha>] [--fallback-ok] [--github-output <file>]
 
-Fast-resolves NexisClaw branch and tag refs with git ls-remote. Full commit SHAs
+Fast-resolves GreenchClaw branch and tag refs with git ls-remote. Full commit SHAs
 are returned as fallback refs so callers can decide whether to run deeper
 reachability validation.
 EOF
@@ -162,5 +162,5 @@ if [[ "$FALLBACK_OK" -eq 1 ]]; then
   exit 0
 fi
 
-echo "Failed to resolve NexisClaw ref: ${REF}" >&2
+echo "Failed to resolve GreenchClaw ref: ${REF}" >&2
 exit 1

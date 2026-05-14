@@ -1,4 +1,4 @@
-name: NexisClaw-codeql-channel-runtime-boundary-critical-quality
+name: GreenchClaw-codeql-channel-runtime-boundary-critical-quality
 
 disable-default-queries: true
 

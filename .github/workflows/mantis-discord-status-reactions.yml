@@ -33,8 +33,8 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
   NODE_VERSION: "24.x"
   PNPM_VERSION: "11.0.8"
-  NEXISCLAW_BUILD_PRIVATE_QA: "1"
-  NEXISCLAW_ENABLE_PRIVATE_QA_CLI: "1"
+  GREENCHCLAW_BUILD_PRIVATE_QA: "1"
+  GREENCHCLAW_ENABLE_PRIVATE_QA_CLI: "1"
 
 jobs:
   authorize_actor:
@@ -267,7 +267,7 @@ jobs:
           set -euo pipefail
           install_dir="${RUNNER_TEMP}/crabbox"
           mkdir -p "$install_dir" "$HOME/.local/bin"
-          git clone --depth 1 https://github.com/NexisClaw/crabbox.git "$install_dir/src"
+          git clone --depth 1 https://github.com/GreenchClaw/crabbox.git "$install_dir/src"
           go build -C "$install_dir/src" -o "$HOME/.local/bin/crabbox" ./cmd/crabbox
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           "$HOME/.local/bin/crabbox" --version
@@ -299,14 +299,14 @@ jobs:
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          NEXISCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NEXISCLAW_QA_CONVEX_SITE_URL }}
-          NEXISCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NEXISCLAW_QA_CONVEX_SECRET_CI }}
-          NEXISCLAW_QA_REDACT_PUBLIC_METADATA: "1"
-          NEXISCLAW_QA_DISCORD_CAPTURE_CONTENT: "1"
+          GREENCHCLAW_QA_CONVEX_SITE_URL: ${{ secrets.GREENCHCLAW_QA_CONVEX_SITE_URL }}
+          GREENCHCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.GREENCHCLAW_QA_CONVEX_SECRET_CI }}
+          GREENCHCLAW_QA_REDACT_PUBLIC_METADATA: "1"
+          GREENCHCLAW_QA_DISCORD_CAPTURE_CONTENT: "1"
           CRABBOX_COORDINATOR: ${{ secrets.CRABBOX_COORDINATOR }}
           CRABBOX_COORDINATOR_TOKEN: ${{ secrets.CRABBOX_COORDINATOR_TOKEN }}
-          NEXISCLAW_QA_MANTIS_CRABBOX_COORDINATOR: ${{ secrets.NEXISCLAW_QA_MANTIS_CRABBOX_COORDINATOR }}
-          NEXISCLAW_QA_MANTIS_CRABBOX_COORDINATOR_TOKEN: ${{ secrets.NEXISCLAW_QA_MANTIS_CRABBOX_COORDINATOR_TOKEN }}
+          GREENCHCLAW_QA_MANTIS_CRABBOX_COORDINATOR: ${{ secrets.GREENCHCLAW_QA_MANTIS_CRABBOX_COORDINATOR }}
+          GREENCHCLAW_QA_MANTIS_CRABBOX_COORDINATOR_TOKEN: ${{ secrets.GREENCHCLAW_QA_MANTIS_CRABBOX_COORDINATOR_TOKEN }}
           CRABBOX_ACCESS_CLIENT_ID: ${{ secrets.CRABBOX_ACCESS_CLIENT_ID }}
           CRABBOX_ACCESS_CLIENT_SECRET: ${{ secrets.CRABBOX_ACCESS_CLIENT_SECRET }}
         run: |
@@ -320,13 +320,13 @@ jobs:
             fi
           }
 
-          CRABBOX_COORDINATOR="${CRABBOX_COORDINATOR:-${NEXISCLAW_QA_MANTIS_CRABBOX_COORDINATOR:-}}"
-          CRABBOX_COORDINATOR_TOKEN="${CRABBOX_COORDINATOR_TOKEN:-${NEXISCLAW_QA_MANTIS_CRABBOX_COORDINATOR_TOKEN:-}}"
+          CRABBOX_COORDINATOR="${CRABBOX_COORDINATOR:-${GREENCHCLAW_QA_MANTIS_CRABBOX_COORDINATOR:-}}"
+          CRABBOX_COORDINATOR_TOKEN="${CRABBOX_COORDINATOR_TOKEN:-${GREENCHCLAW_QA_MANTIS_CRABBOX_COORDINATOR_TOKEN:-}}"
           export CRABBOX_COORDINATOR CRABBOX_COORDINATOR_TOKEN
 
           require_var OPENAI_API_KEY
-          require_var NEXISCLAW_QA_CONVEX_SITE_URL
-          require_var NEXISCLAW_QA_CONVEX_SECRET_CI
+          require_var GREENCHCLAW_QA_CONVEX_SITE_URL
+          require_var GREENCHCLAW_QA_CONVEX_SECRET_CI
           require_var CRABBOX_COORDINATOR_TOKEN
 
           root=".artifacts/qa-e2e/mantis/discord-status-reactions"
@@ -338,7 +338,7 @@ jobs:
             local lane="$1"
             local repo_root="$worktree_root/$lane"
             local output_dir=".artifacts/qa-e2e/mantis/discord-status-reactions/$lane"
-            pnpm NexisClaw qa discord \
+            pnpm GreenchClaw qa discord \
               --repo-root "$repo_root" \
               --output-dir "$output_dir" \
               --provider-mode live-frontier \
@@ -390,7 +390,7 @@ jobs:
               exit 1
             fi
             local args=(
-              NexisClaw qa mantis desktop-browser-smoke
+              GreenchClaw qa mantis desktop-browser-smoke
               --html-file "$html_file"
               --output-dir "$desktop_dir"
               --provider hetzner

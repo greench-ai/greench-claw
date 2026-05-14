@@ -1,4 +1,4 @@
-name: NexisClaw-codeql-ui-control-plane-critical-quality
+name: GreenchClaw-codeql-ui-control-plane-critical-quality
 
 disable-default-queries: true
 

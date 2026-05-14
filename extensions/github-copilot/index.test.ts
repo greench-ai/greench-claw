@@ -4,15 +4,15 @@ import path from "node:path";
 import {
   clearRuntimeAuthProfileStoreSnapshots,
   ensureAuthProfileStore,
-} from "NexisClaw/plugin-sdk/agent-runtime";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
 import type {
-  NexisClawConfig,
-  NexisClawPluginApi,
+  GreenchClawConfig,
+  GreenchClawPluginApi,
   ProviderAuthResult,
   ProviderCatalogResult,
   UnifiedModelCatalogEntry,
-} from "NexisClaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -31,12 +31,12 @@ import plugin from "./index.js";
 
 const tempDirs: string[] = [];
 type RegisteredMemoryEmbeddingProvider = Parameters<
-  NexisClawPluginApi["registerMemoryEmbeddingProvider"]
+  GreenchClawPluginApi["registerMemoryEmbeddingProvider"]
 >[0];
 type GithubCopilotTestProvider = {
   auth: Array<{
     run: (ctx: unknown) => Promise<ProviderAuthResult | null>;
-    runNonInteractive: (ctx: unknown) => Promise<NexisClawConfig | null>;
+    runNonInteractive: (ctx: unknown) => Promise<GreenchClawConfig | null>;
   }>;
   catalog: {
     run: (ctx: unknown) => Promise<ProviderCatalogResult>;
@@ -59,7 +59,7 @@ afterAll(() => {
 });
 
 async function createAgentDir() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-github-copilot-test-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-github-copilot-test-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -80,9 +80,9 @@ function requireFirstMockArg<T>(
 }
 
 function registerProviderAndCatalogWithPluginConfig(pluginConfig: Record<string, unknown>) {
-  const registerProviderMock = vi.fn<NexisClawPluginApi["registerProvider"]>();
+  const registerProviderMock = vi.fn<GreenchClawPluginApi["registerProvider"]>();
   const registerModelCatalogProviderMock =
-    vi.fn<NexisClawPluginApi["registerModelCatalogProvider"]>();
+    vi.fn<GreenchClawPluginApi["registerModelCatalogProvider"]>();
 
   plugin.register(
     createTestPluginApi({
@@ -118,7 +118,7 @@ function registerProviderWithPluginConfig(pluginConfig: Record<string, unknown>)
 describe("github-copilot plugin", () => {
   it("registers embedding provider", () => {
     const registerMemoryEmbeddingProviderMock =
-      vi.fn<NexisClawPluginApi["registerMemoryEmbeddingProvider"]>();
+      vi.fn<GreenchClawPluginApi["registerMemoryEmbeddingProvider"]>();
 
     plugin.register(
       createTestPluginApi({

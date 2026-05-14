@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       package_spec:
-        description: Published NexisClaw package spec to test when no artifact is supplied
+        description: Published GreenchClaw package spec to test when no artifact is supplied
         required: true
-        default: NexisClaw@beta
+        default: GreenchClaw@beta
         type: string
       package_label:
         description: Optional display label for an artifact-backed package candidate
@@ -43,7 +43,7 @@ on:
   workflow_call:
     inputs:
       package_spec:
-        description: Published NexisClaw package spec to test when no artifact is supplied
+        description: Published GreenchClaw package spec to test when no artifact is supplied
         required: true
         type: string
       package_artifact_name:
@@ -79,9 +79,9 @@ on:
     secrets:
       OPENAI_API_KEY:
         required: false
-      NEXISCLAW_QA_CONVEX_SITE_URL:
+      GREENCHCLAW_QA_CONVEX_SITE_URL:
         required: false
-      NEXISCLAW_QA_CONVEX_SECRET_CI:
+      GREENCHCLAW_QA_CONVEX_SECRET_CI:
         required: false
 
 permissions:
@@ -127,7 +127,7 @@ jobs:
           file: ./scripts/e2e/Dockerfile
           target: build
           platforms: linux/amd64
-          tags: NexisClaw-docker-e2e:local
+          tags: GreenchClaw-docker-e2e:local
           load: true
           push: false
           provenance: false
@@ -145,15 +145,15 @@ jobs:
           PACKAGE_ARTIFACT_NAME: ${{ inputs.package_artifact_name || '' }}
           PROVIDER_MODE: ${{ inputs.provider_mode }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          NEXISCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NEXISCLAW_QA_CONVEX_SITE_URL }}
-          NEXISCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NEXISCLAW_QA_CONVEX_SECRET_CI }}
+          GREENCHCLAW_QA_CONVEX_SITE_URL: ${{ secrets.GREENCHCLAW_QA_CONVEX_SITE_URL }}
+          GREENCHCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.GREENCHCLAW_QA_CONVEX_SECRET_CI }}
         shell: bash
         run: |
           set -euo pipefail
 
           if [[ -z "${PACKAGE_ARTIFACT_NAME// }" ]]; then
-            if [[ ! "${PACKAGE_SPEC}" =~ ^NexisClaw@(alpha|beta|latest|[0-9]{4}\.[1-9][0-9]*\.[1-9][0-9]*(-[1-9][0-9]*|-(alpha|beta)\.[1-9][0-9]*)?)$ ]]; then
-              echo "package_spec must be NexisClaw@alpha, NexisClaw@beta, NexisClaw@latest, or an exact NexisClaw release version; got: ${PACKAGE_SPEC}" >&2
+            if [[ ! "${PACKAGE_SPEC}" =~ ^GreenchClaw@(alpha|beta|latest|[0-9]{4}\.[1-9][0-9]*\.[1-9][0-9]*(-[1-9][0-9]*|-(alpha|beta)\.[1-9][0-9]*)?)$ ]]; then
+              echo "package_spec must be GreenchClaw@alpha, GreenchClaw@beta, GreenchClaw@latest, or an exact GreenchClaw release version; got: ${PACKAGE_SPEC}" >&2
               exit 1
             fi
           fi
@@ -173,8 +173,8 @@ jobs:
             fi
           }
 
-          require_var NEXISCLAW_QA_CONVEX_SITE_URL
-          require_var NEXISCLAW_QA_CONVEX_SECRET_CI
+          require_var GREENCHCLAW_QA_CONVEX_SITE_URL
+          require_var GREENCHCLAW_QA_CONVEX_SECRET_CI
           if [[ "${PROVIDER_MODE}" == "live-frontier" ]]; then
             require_var OPENAI_API_KEY
           fi
@@ -200,17 +200,17 @@ jobs:
         shell: bash
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          NEXISCLAW_SKIP_DOCKER_BUILD: "1"
-          NEXISCLAW_DOCKER_E2E_IMAGE: NexisClaw-docker-e2e:local
-          NEXISCLAW_NPM_TELEGRAM_PACKAGE_SPEC: ${{ inputs.package_spec }}
-          NEXISCLAW_NPM_TELEGRAM_PACKAGE_LABEL: ${{ inputs.package_label }}
-          NEXISCLAW_NPM_TELEGRAM_PROVIDER_MODE: ${{ inputs.provider_mode }}
-          NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE: convex
-          NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE: ci
-          NEXISCLAW_QA_CONVEX_SITE_URL: ${{ secrets.NEXISCLAW_QA_CONVEX_SITE_URL }}
-          NEXISCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.NEXISCLAW_QA_CONVEX_SECRET_CI }}
-          NEXISCLAW_QA_REDACT_PUBLIC_METADATA: "1"
-          NEXISCLAW_QA_TELEGRAM_CAPTURE_CONTENT: "1"
+          GREENCHCLAW_SKIP_DOCKER_BUILD: "1"
+          GREENCHCLAW_DOCKER_E2E_IMAGE: GreenchClaw-docker-e2e:local
+          GREENCHCLAW_NPM_TELEGRAM_PACKAGE_SPEC: ${{ inputs.package_spec }}
+          GREENCHCLAW_NPM_TELEGRAM_PACKAGE_LABEL: ${{ inputs.package_label }}
+          GREENCHCLAW_NPM_TELEGRAM_PROVIDER_MODE: ${{ inputs.provider_mode }}
+          GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE: convex
+          GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE: ci
+          GREENCHCLAW_QA_CONVEX_SITE_URL: ${{ secrets.GREENCHCLAW_QA_CONVEX_SITE_URL }}
+          GREENCHCLAW_QA_CONVEX_SECRET_CI: ${{ secrets.GREENCHCLAW_QA_CONVEX_SECRET_CI }}
+          GREENCHCLAW_QA_REDACT_PUBLIC_METADATA: "1"
+          GREENCHCLAW_QA_TELEGRAM_CAPTURE_CONTENT: "1"
           INPUT_SCENARIO: ${{ inputs.scenario }}
           PACKAGE_ARTIFACT_NAME: ${{ inputs.package_artifact_name || '' }}
         run: |
@@ -218,7 +218,7 @@ jobs:
 
           output_dir=".artifacts/qa-e2e/npm-telegram-beta-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           echo "output_dir=${output_dir}" >> "$GITHUB_OUTPUT"
-          export NEXISCLAW_NPM_TELEGRAM_OUTPUT_DIR="${output_dir}"
+          export GREENCHCLAW_NPM_TELEGRAM_OUTPUT_DIR="${output_dir}"
 
           append_telegram_summary() {
             local status=$?
@@ -227,8 +227,8 @@ jobs:
               {
                 echo "## Package Telegram E2E"
                 echo
-                echo "- Package: ${NEXISCLAW_NPM_TELEGRAM_PACKAGE_LABEL:-${NEXISCLAW_NPM_TELEGRAM_PACKAGE_SPEC}}"
-                echo "- Provider mode: ${NEXISCLAW_NPM_TELEGRAM_PROVIDER_MODE}"
+                echo "- Package: ${GREENCHCLAW_NPM_TELEGRAM_PACKAGE_LABEL:-${GREENCHCLAW_NPM_TELEGRAM_PACKAGE_SPEC}}"
+                echo "- Provider mode: ${GREENCHCLAW_NPM_TELEGRAM_PROVIDER_MODE}"
                 echo
                 cat "${report}"
               } >> "${GITHUB_STEP_SUMMARY}"
@@ -243,16 +243,16 @@ jobs:
               echo "package artifact ${PACKAGE_ARTIFACT_NAME} must contain exactly one .tgz; found ${#package_tgzs[@]}" >&2
               exit 1
             fi
-            export NEXISCLAW_NPM_TELEGRAM_PACKAGE_TGZ="${package_tgzs[0]}"
-            if [[ -z "${NEXISCLAW_NPM_TELEGRAM_PACKAGE_LABEL// }" ]]; then
-              export NEXISCLAW_NPM_TELEGRAM_PACKAGE_LABEL="$(basename "${package_tgzs[0]}")"
+            export GREENCHCLAW_NPM_TELEGRAM_PACKAGE_TGZ="${package_tgzs[0]}"
+            if [[ -z "${GREENCHCLAW_NPM_TELEGRAM_PACKAGE_LABEL// }" ]]; then
+              export GREENCHCLAW_NPM_TELEGRAM_PACKAGE_LABEL="$(basename "${package_tgzs[0]}")"
             fi
-          elif [[ -z "${NEXISCLAW_NPM_TELEGRAM_PACKAGE_LABEL// }" ]]; then
-            export NEXISCLAW_NPM_TELEGRAM_PACKAGE_LABEL="${NEXISCLAW_NPM_TELEGRAM_PACKAGE_SPEC}"
+          elif [[ -z "${GREENCHCLAW_NPM_TELEGRAM_PACKAGE_LABEL// }" ]]; then
+            export GREENCHCLAW_NPM_TELEGRAM_PACKAGE_LABEL="${GREENCHCLAW_NPM_TELEGRAM_PACKAGE_SPEC}"
           fi
 
           if [[ -n "${INPUT_SCENARIO// }" ]]; then
-            export NEXISCLAW_NPM_TELEGRAM_SCENARIOS="${INPUT_SCENARIO}"
+            export GREENCHCLAW_NPM_TELEGRAM_SCENARIOS="${INPUT_SCENARIO}"
           fi
 
           pnpm test:docker:npm-telegram-live

@@ -1,4 +1,4 @@
-name: NexisClaw Release Publish
+name: GreenchClaw Release Publish
 
 on:
   workflow_dispatch:
@@ -8,11 +8,11 @@ on:
         required: true
         type: string
       preflight_run_id:
-        description: Successful NexisClaw NPM Release preflight run id, required when publish_NexisClaw_npm=true
+        description: Successful GreenchClaw NPM Release preflight run id, required when publish_GreenchClaw_npm=true
         required: false
         type: string
       npm_dist_tag:
-        description: npm dist-tag for the NexisClaw package
+        description: npm dist-tag for the GreenchClaw package
         required: true
         default: beta
         type: choice
@@ -21,7 +21,7 @@ on:
           - beta
           - latest
       plugin_publish_scope:
-        description: Plugin publish scope to run before NexisClaw publish
+        description: Plugin publish scope to run before GreenchClaw publish
         required: true
         default: all-publishable
         type: choice
@@ -32,8 +32,8 @@ on:
         description: Comma-separated plugin package names when plugin_publish_scope=selected
         required: false
         type: string
-      publish_NexisClaw_npm:
-        description: Publish the NexisClaw npm package after plugin npm succeeds; ClawHub may still run
+      publish_GreenchClaw_npm:
+        description: Publish the GreenchClaw npm package after plugin npm succeeds; ClawHub may still run
         required: true
         default: true
         type: boolean
@@ -57,7 +57,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: NexisClaw-release-publish-${{ inputs.tag }}
+  group: GreenchClaw-release-publish-${{ inputs.tag }}
   cancel-in-progress: false
 
 env:
@@ -77,7 +77,7 @@ jobs:
         env:
           RELEASE_TAG: ${{ inputs.tag }}
           PREFLIGHT_RUN_ID: ${{ inputs.preflight_run_id }}
-          PUBLISH_NEXISCLAW_NPM: ${{ inputs.publish_NexisClaw_npm && 'true' || 'false' }}
+          PUBLISH_GREENCHCLAW_NPM: ${{ inputs.publish_GreenchClaw_npm && 'true' || 'false' }}
           PLUGIN_PUBLISH_SCOPE: ${{ inputs.plugin_publish_scope }}
           PLUGINS: ${{ inputs.plugins }}
           RELEASE_NPM_DIST_TAG: ${{ inputs.npm_dist_tag }}
@@ -90,19 +90,19 @@ jobs:
             exit 1
           fi
           if [[ "${RELEASE_TAG}" == *"-alpha."* && "${RELEASE_NPM_DIST_TAG}" != "alpha" ]]; then
-            echo "Alpha prerelease tags must publish NexisClaw to npm dist-tag alpha." >&2
+            echo "Alpha prerelease tags must publish GreenchClaw to npm dist-tag alpha." >&2
             exit 1
           fi
           if [[ "${RELEASE_TAG}" == *"-beta."* && "${RELEASE_NPM_DIST_TAG}" != "beta" ]]; then
-            echo "Beta prerelease tags must publish NexisClaw to npm dist-tag beta." >&2
+            echo "Beta prerelease tags must publish GreenchClaw to npm dist-tag beta." >&2
             exit 1
           fi
-          if [[ "${PUBLISH_NEXISCLAW_NPM}" == "true" && -z "${PREFLIGHT_RUN_ID}" ]]; then
-            echo "publish_NexisClaw_npm=true requires preflight_run_id." >&2
+          if [[ "${PUBLISH_GREENCHCLAW_NPM}" == "true" && -z "${PREFLIGHT_RUN_ID}" ]]; then
+            echo "publish_GreenchClaw_npm=true requires preflight_run_id." >&2
             exit 1
           fi
-          if [[ "${PUBLISH_NEXISCLAW_NPM}" == "true" && "${WORKFLOW_REF}" != "refs/heads/main" && ! "${WORKFLOW_REF}" =~ ^refs/heads/release/[0-9]{4}\.[1-9][0-9]*\.[1-9][0-9]*$ ]]; then
-            echo "publish_NexisClaw_npm=true requires dispatching this workflow from main or release/YYYY.M.D." >&2
+          if [[ "${PUBLISH_GREENCHCLAW_NPM}" == "true" && "${WORKFLOW_REF}" != "refs/heads/main" && ! "${WORKFLOW_REF}" =~ ^refs/heads/release/[0-9]{4}\.[1-9][0-9]*\.[1-9][0-9]*$ ]]; then
+            echo "publish_GreenchClaw_npm=true requires dispatching this workflow from main or release/YYYY.M.D." >&2
             exit 1
           fi
           if [[ "${PLUGIN_PUBLISH_SCOPE}" == "selected" && -z "${PLUGINS}" ]]; then
@@ -121,12 +121,12 @@ jobs:
               ;;
           esac
 
-      - name: Download NexisClaw npm preflight manifest
-        if: ${{ inputs.publish_NexisClaw_npm }}
+      - name: Download GreenchClaw npm preflight manifest
+        if: ${{ inputs.publish_GreenchClaw_npm }}
         uses: actions/download-artifact@v8
         with:
-          name: NexisClaw-npm-preflight-${{ inputs.tag }}
-          path: ${{ runner.temp }}/NexisClaw-npm-preflight-manifest
+          name: GreenchClaw-npm-preflight-${{ inputs.tag }}
+          path: ${{ runner.temp }}/GreenchClaw-npm-preflight-manifest
           repository: ${{ github.repository }}
           run-id: ${{ inputs.preflight_run_id }}
           github-token: ${{ github.token }}
@@ -142,19 +142,19 @@ jobs:
         id: ref
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
-      - name: Validate NexisClaw npm preflight manifest
+      - name: Validate GreenchClaw npm preflight manifest
         id: manifest
-        if: ${{ inputs.publish_NexisClaw_npm }}
+        if: ${{ inputs.publish_GreenchClaw_npm }}
         env:
           RELEASE_TAG: ${{ inputs.tag }}
           RELEASE_NPM_DIST_TAG: ${{ inputs.npm_dist_tag }}
           EXPECTED_SHA: ${{ steps.ref.outputs.sha }}
         run: |
           set -euo pipefail
-          preflight_dir="${RUNNER_TEMP}/NexisClaw-npm-preflight-manifest"
+          preflight_dir="${RUNNER_TEMP}/GreenchClaw-npm-preflight-manifest"
           manifest="${preflight_dir}/preflight-manifest.json"
           if [[ ! -f "$manifest" ]]; then
-            echo "NexisClaw npm preflight manifest is missing." >&2
+            echo "GreenchClaw npm preflight manifest is missing." >&2
             ls -la "$preflight_dir" >&2 || true
             exit 1
           fi
@@ -218,7 +218,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
   publish:
-    name: Publish plugins, then NexisClaw
+    name: Publish plugins, then GreenchClaw
     needs: [resolve_release_target]
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -240,7 +240,7 @@ jobs:
           RELEASE_NPM_DIST_TAG: ${{ inputs.npm_dist_tag }}
           PLUGIN_PUBLISH_SCOPE: ${{ inputs.plugin_publish_scope }}
           PLUGINS: ${{ inputs.plugins }}
-          PUBLISH_NEXISCLAW_NPM: ${{ inputs.publish_NexisClaw_npm && 'true' || 'false' }}
+          PUBLISH_GREENCHCLAW_NPM: ${{ inputs.publish_GreenchClaw_npm && 'true' || 'false' }}
           WAIT_FOR_CLAWHUB: ${{ inputs.wait_for_clawhub && 'true' || 'false' }}
         run: |
           set -euo pipefail
@@ -355,7 +355,7 @@ jobs:
             if [[ "${notes_version}" =~ ^([0-9]{4}\.[1-9][0-9]*\.[1-9][0-9]*)-(alpha|beta)\.[1-9][0-9]*$ ]]; then
               notes_version="${BASH_REMATCH[1]}"
             fi
-            title="NexisClaw ${release_version}"
+            title="GreenchClaw ${release_version}"
             changelog_file="${RUNNER_TEMP}/CHANGELOG.md"
             notes_file="${RUNNER_TEMP}/release-notes.md"
 
@@ -408,10 +408,10 @@ jobs:
             echo "- Release tag: \`${RELEASE_TAG}\`"
             echo "- Release SHA: \`${TARGET_SHA}\`"
             echo "- Plugin npm and ClawHub publish: dispatched in parallel"
-            if [[ "${PUBLISH_NEXISCLAW_NPM}" == "true" ]]; then
-              echo "- NexisClaw npm publish: starts after plugin npm succeeds; ClawHub may still be running"
+            if [[ "${PUBLISH_GREENCHCLAW_NPM}" == "true" ]]; then
+              echo "- GreenchClaw npm publish: starts after plugin npm succeeds; ClawHub may still be running"
             else
-              echo "- NexisClaw npm publish: skipped by input"
+              echo "- GreenchClaw npm publish: skipped by input"
             fi
             if [[ "${WAIT_FOR_CLAWHUB}" == "true" ]]; then
               echo "- Workflow completion waits for ClawHub"
@@ -440,16 +440,16 @@ jobs:
             exit 1
           fi
 
-          NexisClaw_npm_run_id=""
-          if [[ "${PUBLISH_NEXISCLAW_NPM}" == "true" ]]; then
-            NexisClaw_npm_run_id="$(dispatch_workflow NexisClaw-npm-release.yml \
+          GreenchClaw_npm_run_id=""
+          if [[ "${PUBLISH_GREENCHCLAW_NPM}" == "true" ]]; then
+            GreenchClaw_npm_run_id="$(dispatch_workflow GreenchClaw-npm-release.yml \
               -f tag="${RELEASE_TAG}" \
               -f preflight_only=false \
               -f preflight_run_id="${PREFLIGHT_RUN_ID}" \
               -f npm_dist_tag="${RELEASE_NPM_DIST_TAG}")"
-            echo "- NexisClaw npm run ID: \`${NexisClaw_npm_run_id}\`" >> "$GITHUB_STEP_SUMMARY"
+            echo "- GreenchClaw npm run ID: \`${GreenchClaw_npm_run_id}\`" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "- NexisClaw npm publish: skipped by input" >> "$GITHUB_STEP_SUMMARY"
+            echo "- GreenchClaw npm publish: skipped by input" >> "$GITHUB_STEP_SUMMARY"
           fi
 
           clawhub_result=""
@@ -463,32 +463,32 @@ jobs:
             echo "- plugin-clawhub-release.yml: not awaited (${plugin_clawhub_run_id})" >> "$GITHUB_STEP_SUMMARY"
           fi
 
-          NexisClaw_result=""
-          NexisClaw_pid=""
-          if [[ -n "${NexisClaw_npm_run_id}" ]]; then
-            NexisClaw_result="$RUNNER_TEMP/NexisClaw-npm-result.txt"
+          GreenchClaw_result=""
+          GreenchClaw_pid=""
+          if [[ -n "${GreenchClaw_npm_run_id}" ]]; then
+            GreenchClaw_result="$RUNNER_TEMP/GreenchClaw-npm-result.txt"
             wait_run_pid=""
-            wait_for_run_background NexisClaw-npm-release.yml "${NexisClaw_npm_run_id}" "${NexisClaw_result}"
-            NexisClaw_pid="${wait_run_pid}"
+            wait_for_run_background GreenchClaw-npm-release.yml "${GreenchClaw_npm_run_id}" "${GreenchClaw_result}"
+            GreenchClaw_pid="${wait_run_pid}"
           fi
 
           failed=0
           if [[ -n "${clawhub_pid}" ]] && ! wait "${clawhub_pid}"; then
             failed=1
           fi
-          if [[ -n "${NexisClaw_pid}" ]] && ! wait "${NexisClaw_pid}"; then
+          if [[ -n "${GreenchClaw_pid}" ]] && ! wait "${GreenchClaw_pid}"; then
             failed=1
           fi
           if [[ -f "${clawhub_result}" && "$(cat "${clawhub_result}")" != "success" ]]; then
             failed=1
           fi
-          if [[ -n "${NexisClaw_result}" && -f "${NexisClaw_result}" && "$(cat "${NexisClaw_result}")" != "success" ]]; then
+          if [[ -n "${GreenchClaw_result}" && -f "${GreenchClaw_result}" && "$(cat "${GreenchClaw_result}")" != "success" ]]; then
             failed=1
           fi
           if [[ "${failed}" != "0" ]]; then
             exit 1
           fi
 
-          if [[ -n "${NexisClaw_npm_run_id}" ]]; then
+          if [[ -n "${GreenchClaw_npm_run_id}" ]]; then
             create_or_update_github_release
           fi

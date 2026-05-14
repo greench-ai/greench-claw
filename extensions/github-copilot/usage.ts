@@ -5,7 +5,7 @@ import {
   PROVIDER_LABELS,
   type ProviderUsageSnapshot,
   type UsageWindow,
-} from "NexisClaw/plugin-sdk/provider-usage";
+} from "GreenchClaw/plugin-sdk/provider-usage";
 
 type CopilotUsageResponse = {
   quota_snapshots?: {
