@@ -1,0 +1,17 @@
+{
+  "name": "@GreenchClaw/greench-prompts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GreenchClaw prompt templates — SQLite-backed CRUD for named prompt templates with variable interpolation",
+  "type": "module",
+  "exports": {
+    "./index": "./index.ts",
+    "./package.json": "./package.json"
+  },
+  "GreenchClaw": {
+    "extensions": ["./index.ts"]
+  },
+  "dependencies": {
+    "sql.js": "^1.10.3"
+  }
+}
