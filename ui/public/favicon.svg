@@ -1,40 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
     <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00ff88"/>
-      <stop offset="50%" stop-color="#a855f7"/>
-      <stop offset="100%" stop-color="#ff6b35"/>
+      <stop offset="0%" style="stop-color:#00D9C0"/>
+      <stop offset="100%" style="stop-color:#00A86B"/>
     </linearGradient>
-    <linearGradient id="go" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#a855f7"/>
-      <stop offset="100%" stop-color="#ff6b35"/>
-    </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
-
-  <!-- Dark background -->
-  <rect width="120" height="120" fill="#0a0a0f"/>
-
-  <!-- N shape: sharp angular, futuristic -->
-  <path d="M25 90 L25 30 L42 30 L58 70 L58 30 L75 30 L75 90 L58 90 L42 50 L58 90 L75 90 Z"
-        fill="none"
-        stroke="url(#g)"
-        stroke-width="6"
-        stroke-linejoin="round"
-        stroke-linecap="round"
-        filter="url(#glow)"/>
-
-  <!-- Claw pincer: extends from right stroke, subtle -->
-  <path d="M78 72 Q90 65 98 52 Q104 42 100 36 Q96 30 88 36 Q82 40 86 50 Q88 58 82 66 Q80 70 78 72 Z"
-        fill="url(#go)"
-        opacity="0.9"/>
-
-  <!-- Small accent dot -->
-  <circle cx="104" cy="34" r="3" fill="#00ff88" opacity="0.7"/>
+  <rect width="512" height="512" rx="80" fill="#1A1A2E"/>
+  <!-- Cannabis leaf shape -->
+  <path d="M256 80 C220 120 180 160 180 220 C140 220 100 260 100 320 C140 320 180 360 180 400 C180 440 220 480 256 480 C292 480 332 440 332 400 C332 360 372 320 412 320 C412 260 372 220 332 220 C332 160 292 120 256 80Z" fill="url(#g)" opacity="0.9"/>
+  <!-- Circuit traces -->
+  <circle cx="256" cy="280" r="30" fill="none" stroke="#00D9C0" stroke-width="4"/>
+  <line x1="256" y1="250" x2="256" y2="160" stroke="#00D9C0" stroke-width="3"/>
+  <line x1="286" y1="280" x2="370" y2="280" stroke="#00D9C0" stroke-width="3"/>
+  <line x1="226" y1="280" x2="142" y2="280" stroke="#00D9C0" stroke-width="3"/>
+  <line x1="275" y1="261" x2="330" y2="206" stroke="#00D9C0" stroke-width="2"/>
+  <line x1="237" y1="299" x2="182" y2="354" stroke="#00D9C0" stroke-width="2"/>
+  <!-- Neural dots -->
+  <circle cx="256" cy="160" r="8" fill="#00D9C0"/>
+  <circle cx="370" cy="280" r="8" fill="#00D9C0"/>
+  <circle cx="142" cy="280" r="8" fill="#00D9C0"/>
+  <circle cx="330" cy="206" r="6" fill="#00D9C0"/>
+  <circle cx="182" cy="354" r="6" fill="#00D9C0"/>
+  <circle cx="256" cy="280" r="12" fill="#00D9C0"/>
 </svg>
