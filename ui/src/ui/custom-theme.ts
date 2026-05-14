@@ -215,6 +215,154 @@ function normalizeThemeIdFromUrl(parsed: URL): string {
   throw new Error("Unsupported tweakcn link. Expected a theme share URL.");
 }
 
+function isGreenchThemeQueryUrl(parsed: URL): boolean {
+  return TWEAKCN_HOSTS.has(parsed.hostname) && parsed.searchParams.has("bg");
+}
+
+function parseGreenchThemeQueryUrl(parsed: URL): ImportedCustomTheme {
+  const raw = (key: string) =>
+    decodeURIComponent(parsed.searchParams.get(key) ?? "").replace(/^#/, "");
+  const hex = (key: string) => {
+    const v = raw(key);
+    return v ? `#${v}` : "";
+  };
+  const c = hex("p") || "#00ff25";
+  const background = hex("bg") || "#120028";
+  const foreground = raw("txt") ? `#${raw("txt")}` : "#02ff00";
+  const card = hex("s1") || "#432600";
+  const cardForeground = raw("txt2") ? `#${raw("txt2")}` : "#02ff00";
+  const muted = hex("s2") || "#c19704";
+  const mutedForeground = raw("txt3") ? `#${raw("txt3")}` : "#02ff00";
+  const accent = hex("b") || "#710cea";
+  const border = hex("b") || "#710cea";
+  const input = hex("b") || "#710cea";
+  const ring = c;
+  const primary = c;
+  const primaryForeground = background;
+  const secondary = hex("s1") || "#432600";
+  const secondaryForeground = raw("txt2") ? `#${raw("txt2")}` : "#02ff00";
+  const destructive = "#ff4444";
+  const destructiveForeground = "#ffffff";
+  const fontBody = decodeURIComponent(raw("mo")) || DEFAULT_FONT_BODY;
+  const mono = decodeURIComponent(raw("fm")) || DEFAULT_MONO;
+
+  const id = `greench-${Date.now().toString(36)}`;
+  const light = makeTokenMap([
+    ["bg", background],
+    ["bg-accent", background],
+    ["bg-elevated", background],
+    ["bg-hover", background],
+    ["bg-muted", background],
+    ["bg-content", background],
+    ["card", background],
+    ["card-foreground", foreground],
+    ["card-highlight", foreground],
+    ["popover", background],
+    ["popover-foreground", foreground],
+    ["panel", background],
+    ["panel-strong", card],
+    ["panel-hover", card],
+    ["chrome", background],
+    ["chrome-strong", card],
+    ["text", foreground],
+    ["text-strong", foreground],
+    ["chat-text", foreground],
+    ["muted", muted],
+    ["muted-strong", muted],
+    ["muted-foreground", mutedForeground],
+    ["border", border],
+    ["border-strong", border],
+    ["border-hover", accent],
+    ["input", input],
+    ["ring", ring],
+    ["accent", accent],
+    ["accent-hover", accent],
+    ["accent-muted", accent],
+    ["accent-foreground", background],
+    ["accent-glow", `${accent}44`],
+    ["primary", primary],
+    ["primary-foreground", background],
+    ["secondary", secondary],
+    ["secondary-foreground", secondaryForeground],
+    ["accent-2", card],
+    ["accent-2-muted", muted],
+    ["accent-2-subtle", muted],
+    ["destructive", destructive],
+    ["destructive-foreground", destructiveForeground],
+    ["danger", destructive],
+    ["danger-muted", destructive],
+    ["danger-subtle", destructive],
+    ["focus", ring],
+    ["focus-ring", ring],
+    ["focus-glow", `${ring}44`],
+    ["font-body", fontBody],
+    ["font-display", fontBody],
+    ["mono", mono],
+    ["grid-line", `${border}33`],
+  ]);
+  const dark = makeTokenMap([
+    ["bg", background],
+    ["bg-accent", background],
+    ["bg-elevated", card],
+    ["bg-hover", card],
+    ["bg-muted", muted],
+    ["bg-content", background],
+    ["card", card],
+    ["card-foreground", cardForeground],
+    ["card-highlight", cardForeground],
+    ["popover", card],
+    ["popover-foreground", cardForeground],
+    ["panel", background],
+    ["panel-strong", card],
+    ["panel-hover", card],
+    ["chrome", background],
+    ["chrome-strong", card],
+    ["text", foreground],
+    ["text-strong", foreground],
+    ["chat-text", foreground],
+    ["muted", muted],
+    ["muted-strong", muted],
+    ["muted-foreground", mutedForeground],
+    ["border", border],
+    ["border-strong", border],
+    ["border-hover", accent],
+    ["input", input],
+    ["ring", ring],
+    ["accent", accent],
+    ["accent-hover", accent],
+    ["accent-muted", accent],
+    ["accent-foreground", foreground],
+    ["accent-glow", `${accent}44`],
+    ["primary", primary],
+    ["primary-foreground", background],
+    ["secondary", secondary],
+    ["secondary-foreground", secondaryForeground],
+    ["accent-2", card],
+    ["accent-2-muted", muted],
+    ["accent-2-subtle", muted],
+    ["destructive", destructive],
+    ["destructive-foreground", destructiveForeground],
+    ["danger", destructive],
+    ["danger-muted", destructive],
+    ["danger-subtle", destructive],
+    ["focus", ring],
+    ["focus-ring", ring],
+    ["focus-glow", `${ring}44`],
+    ["font-body", fontBody],
+    ["font-display", fontBody],
+    ["mono", mono],
+    ["grid-line", `${border}33`],
+  ]);
+  return {
+    sourceUrl: parsed.href,
+    themeId: id,
+    label: "Greench Theme",
+    importedAt: new Date().toISOString(),
+    light,
+    dark,
+  };
+}
+
 function requireSafeCssValue(value: unknown, label: string) {
   const normalized = normalizeOptionalString(value);
   if (!normalized) {
@@ -567,6 +715,15 @@ export async function importCustomThemeFromUrl(
   input: string,
   fetchImpl: typeof fetch = fetch,
 ): Promise<ImportedCustomTheme> {
+  // Handle greench query-string theme URLs directly without fetching
+  try {
+    const parsed = new URL(input);
+    if (isGreenchThemeQueryUrl(parsed)) {
+      return parseGreenchThemeQueryUrl(parsed);
+    }
+  } catch {
+    // fall through to normal flow
+  }
   const resolution = normalizeTweakcnThemeUrl(input);
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), TWEAKCN_FETCH_TIMEOUT_MS);
