@@ -1,6 +1,6 @@
 import path from "node:path";
 import { describe, expect, test } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { runPluginSetupConfigMigrations } from "./setup-registry.js";
 
 describe("Canvas setup config migration", () => {
@@ -8,7 +8,7 @@ describe("Canvas setup config migration", () => {
     const result = runPluginSetupConfigMigrations({
       env: {
         ...process.env,
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: path.resolve("extensions"),
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: path.resolve("extensions"),
       },
       config: {
         canvasHost: {
@@ -16,7 +16,7 @@ describe("Canvas setup config migration", () => {
           root: "~/legacy-canvas",
           liveReload: false,
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     expect(result.changes).toEqual(["migrated canvasHost to plugins.entries.canvas.config.host"]);

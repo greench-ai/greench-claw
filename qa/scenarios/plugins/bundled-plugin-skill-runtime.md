@@ -11,7 +11,7 @@ coverage:
     - plugins.runtime
 objective: Verify packaged bundled plugin skills load from dist-runtime instead of being skipped by path-containment checks.
 successCriteria:
-  - The runtime-packaged bundled plugin tree is used as NEXISCLAW_BUNDLED_PLUGINS_DIR.
+  - The runtime-packaged bundled plugin tree is used as GREENCHCLAW_BUNDLED_PLUGINS_DIR.
   - The enabled bundled plugin skill is reported as eligible by the skills CLI.
   - The check fails on SKILL.md symlink escapes and passes when runtime staging copies SKILL.md as a real file.
 docsRefs:
@@ -59,7 +59,7 @@ steps:
                   fs.mkdir(dir, { recursive: true }),
                 ),
               );
-              const configPath = path.join(tempRoot, "NexisClaw.json");
+              const configPath = path.join(tempRoot, "GreenchClaw.json");
               await fs.writeFile(
                 configPath,
                 `${JSON.stringify(
@@ -78,11 +78,11 @@ steps:
               const cliEnv = {
                 ...env.gateway.runtimeEnv,
                 HOME: homeDir,
-                NEXISCLAW_HOME: homeDir,
-                NEXISCLAW_CONFIG_PATH: configPath,
-                NEXISCLAW_STATE_DIR: stateDir,
-                NEXISCLAW_OAUTH_DIR: path.join(stateDir, "credentials"),
-                NEXISCLAW_BUNDLED_PLUGINS_DIR: distRuntimeExtensions,
+                GREENCHCLAW_HOME: homeDir,
+                GREENCHCLAW_CONFIG_PATH: configPath,
+                GREENCHCLAW_STATE_DIR: stateDir,
+                GREENCHCLAW_OAUTH_DIR: path.join(stateDir, "credentials"),
+                GREENCHCLAW_BUNDLED_PLUGINS_DIR: distRuntimeExtensions,
                 XDG_CONFIG_HOME: xdgConfigHome,
                 XDG_DATA_HOME: xdgDataHome,
                 XDG_CACHE_HOME: xdgCacheHome,

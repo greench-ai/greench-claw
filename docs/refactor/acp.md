@@ -24,7 +24,7 @@ surface; it is a safer internal contract for the existing ACP and ACPX behavior.
 ## Goals
 
 - Cleanup never signals a process unless current live evidence matches an
-  NexisClaw-owned lease.
+  GreenchClaw-owned lease.
 - `cancel`, `close`, and startup reaping have distinct lifecycle intents.
 - `sessions_list`, `sessions_history`, `sessions_send`, and status checks use
   the same requester-owned session model.
@@ -109,8 +109,8 @@ The wrapper process should receive the lease id and gateway instance id in its
 environment:
 
 ```sh
-NEXISCLAW_ACPX_LEASE_ID=...
-NEXISCLAW_GATEWAY_INSTANCE_ID=...
+GREENCHCLAW_ACPX_LEASE_ID=...
+GREENCHCLAW_GATEWAY_INSTANCE_ID=...
 ```
 
 When the platform allows it, verification should prefer live process metadata

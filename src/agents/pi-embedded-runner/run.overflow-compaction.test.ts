@@ -262,7 +262,7 @@ describe("runEmbeddedPiAgent overflow compaction trigger routing", () => {
       | undefined;
     expect(typeof authStoreCall?.[0]).toBe("string");
     expect(
-      String(authStoreCall?.[0]).replaceAll("\\", "/").endsWith("/.NexisClaw/agents/main/agent"),
+      String(authStoreCall?.[0]).replaceAll("\\", "/").endsWith("/.GreenchClaw/agents/main/agent"),
     ).toBe(true);
     expect(authStoreCall?.[1]).toEqual({ allowKeychainPrompt: false });
   });

@@ -2,20 +2,23 @@ import process from "node:process";
 import type {
   AgentToolResultMiddleware,
   AgentToolResultMiddlewareEvent,
-  NexisClawAgentToolResult,
-} from "NexisClaw/plugin-sdk/agent-harness";
-import { createTokenjuiceNexisClawEmbeddedExtension } from "./runtime-api.js";
+  GreenchClawAgentToolResult,
+} from "GreenchClaw/plugin-sdk/agent-harness";
+import { createTokenjuiceGreenchClawEmbeddedExtension } from "./runtime-api.js";
 
 type TokenjuiceToolResultHandler = (
   event: {
     toolName: string;
     input: Record<string, unknown>;
-    content: NexisClawAgentToolResult["content"];
+    content: GreenchClawAgentToolResult["content"];
     details: unknown;
     isError?: boolean;
   },
   ctx: { cwd: string },
-) => Promise<Partial<NexisClawAgentToolResult> | void> | Partial<NexisClawAgentToolResult> | void;
+) =>
+  | Promise<Partial<GreenchClawAgentToolResult> | void>
+  | Partial<GreenchClawAgentToolResult>
+  | void;
 
 function readCwd(event: AgentToolResultMiddlewareEvent): string {
   if (event.cwd?.trim()) {
@@ -30,7 +33,7 @@ function readCwd(event: AgentToolResultMiddlewareEvent): string {
 
 export function createTokenjuiceAgentToolResultMiddleware(): AgentToolResultMiddleware {
   const handlers: TokenjuiceToolResultHandler[] = [];
-  createTokenjuiceNexisClawEmbeddedExtension()({
+  createTokenjuiceGreenchClawEmbeddedExtension()({
     on(event, handler) {
       if (event === "tool_result") {
         handlers.push(handler as TokenjuiceToolResultHandler);

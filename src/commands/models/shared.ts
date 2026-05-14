@@ -9,7 +9,7 @@ import {
 } from "../../agents/model-selection.js";
 import { formatCliCommand } from "../../cli/command-format.js";
 import {
-  type NexisClawConfig,
+  type GreenchClawConfig,
   readConfigFileSnapshot,
   replaceConfigFile,
 } from "../../config/config.js";
@@ -50,7 +50,7 @@ export const formatMs = (value?: number | null) => {
   return `${Math.round(value / 100) / 10}s`;
 };
 
-export async function loadValidConfigOrThrow(): Promise<NexisClawConfig> {
+export async function loadValidConfigOrThrow(): Promise<GreenchClawConfig> {
   const snapshot = await readConfigFileSnapshot();
   if (!snapshot.valid) {
     const issues = formatConfigIssueLines(snapshot.issues, "-").join("\n");
@@ -60,8 +60,8 @@ export async function loadValidConfigOrThrow(): Promise<NexisClawConfig> {
 }
 
 export async function updateConfig(
-  mutator: (cfg: NexisClawConfig) => NexisClawConfig,
-): Promise<NexisClawConfig> {
+  mutator: (cfg: GreenchClawConfig) => GreenchClawConfig,
+): Promise<GreenchClawConfig> {
   const snapshot = await readConfigFileSnapshot();
   if (!snapshot.valid) {
     const issues = formatConfigIssueLines(snapshot.issues, "-").join("\n");
@@ -75,7 +75,7 @@ export async function updateConfig(
   return next;
 }
 
-export function resolveModelTarget(params: { raw: string; cfg: NexisClawConfig }): {
+export function resolveModelTarget(params: { raw: string; cfg: GreenchClawConfig }): {
   provider: string;
   model: string;
 } {
@@ -95,7 +95,7 @@ export function resolveModelTarget(params: { raw: string; cfg: NexisClawConfig }
 }
 
 export function resolveModelKeysFromEntries(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   entries: readonly string[];
 }): string[] {
   const aliasIndex = buildModelAliasIndex({
@@ -114,7 +114,7 @@ export function resolveModelKeysFromEntries(params: {
     .map((entry) => modelKey(entry.ref.provider, entry.ref.model));
 }
 
-export function buildAllowlistSet(cfg: NexisClawConfig): Set<string> {
+export function buildAllowlistSet(cfg: GreenchClawConfig): Set<string> {
   const allowed = new Set<string>();
   const models = cfg.agents?.defaults?.models ?? {};
   for (const raw of Object.keys(models)) {
@@ -128,7 +128,7 @@ export function buildAllowlistSet(cfg: NexisClawConfig): Set<string> {
 }
 
 export function resolveKnownAgentId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   rawAgentId?: string | null;
 }): string | undefined {
   const raw = params.rawAgentId?.trim();
@@ -139,7 +139,7 @@ export function resolveKnownAgentId(params: {
   const knownAgents = listAgentIds(params.cfg);
   if (!knownAgents.includes(agentId)) {
     throw new Error(
-      `Unknown agent id "${raw}". Use "${formatCliCommand("NexisClaw agents list")}" to see configured agents.`,
+      `Unknown agent id "${raw}". Use "${formatCliCommand("GreenchClaw agents list")}" to see configured agents.`,
     );
   }
   return agentId;
@@ -208,10 +208,10 @@ export function mergePrimaryFallbackConfig(
 }
 
 export function applyDefaultModelPrimaryUpdate(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   modelRaw: string;
   field: "model" | "imageModel";
-}): NexisClawConfig {
+}): GreenchClawConfig {
   const resolved = resolveModelTarget({ raw: params.modelRaw, cfg: params.cfg });
   const nextModels = {
     ...params.cfg.agents?.defaults?.models,

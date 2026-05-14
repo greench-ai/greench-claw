@@ -1,6 +1,6 @@
 ---
 title: "Codex Harness Context Engine Port"
-summary: "Specification for making the bundled Codex app-server harness honor NexisClaw context-engine plugins"
+summary: "Specification for making the bundled Codex app-server harness honor GreenchClaw context-engine plugins"
 read_when:
   - You are wiring context-engine lifecycle behavior into the Codex harness
   - You need lossless-claw or another context-engine plugin to work with codex/* embedded harness sessions
@@ -13,13 +13,13 @@ Draft implementation specification.
 
 ## Goal
 
-Make the bundled Codex app-server harness honor the same NexisClaw context-engine
+Make the bundled Codex app-server harness honor the same GreenchClaw context-engine
 lifecycle contract that embedded PI turns already honor.
 
 A session using `agents.defaults.embeddedHarness.runtime: "codex"` or a
 `codex/*` model should still let the selected context-engine plugin, such as
 `lossless-claw`, control context assembly, post-turn ingest, maintenance, and
-NexisClaw-level compaction policy as far as the Codex app-server boundary allows.
+GreenchClaw-level compaction policy as far as the Codex app-server boundary allows.
 
 ## Non-goals
 
@@ -57,8 +57,8 @@ as PI-backed attempts:
 
 - `extensions/codex/src/app-server/run-attempt.ts`
 
-That means the required hook point is in NexisClaw-controlled code. The external
-boundary is the Codex app-server protocol itself: NexisClaw can control what it
+That means the required hook point is in GreenchClaw-controlled code. The external
+boundary is the Codex app-server protocol itself: GreenchClaw can control what it
 sends to `thread/start`, `thread/resume`, and `turn/start`, and can observe
 notifications, but it cannot change Codex's internal thread store or native
 compactor.
@@ -94,9 +94,9 @@ Relevant Codex code:
 
 ## Desired behavior
 
-For Codex harness turns, NexisClaw should preserve this lifecycle:
+For Codex harness turns, GreenchClaw should preserve this lifecycle:
 
-1. Read the mirrored NexisClaw session transcript.
+1. Read the mirrored GreenchClaw session transcript.
 2. Bootstrap the active context engine when a previous session file exists.
 3. Run bootstrap maintenance when available.
 4. Assemble context using the active context engine.
@@ -104,21 +104,21 @@ For Codex harness turns, NexisClaw should preserve this lifecycle:
 6. Start or resume the Codex thread with developer instructions that include any
    context-engine `systemPromptAddition`.
 7. Start the Codex turn with the assembled user-facing prompt.
-8. Mirror the Codex result back into the NexisClaw transcript.
+8. Mirror the Codex result back into the GreenchClaw transcript.
 9. Call `afterTurn` if implemented, otherwise `ingestBatch`/`ingest`, using the
    mirrored transcript snapshot.
 10. Run turn maintenance after successful non-aborted turns.
-11. Preserve Codex native compaction signals and NexisClaw compaction hooks.
+11. Preserve Codex native compaction signals and GreenchClaw compaction hooks.
 
 ## Design constraints
 
 ### Codex app-server remains canonical for native thread state
 
-Codex owns its native thread and any internal extended history. NexisClaw should
+Codex owns its native thread and any internal extended history. GreenchClaw should
 not try to mutate the app-server's internal history except through supported
 protocol calls.
 
-NexisClaw's transcript mirror remains the source for NexisClaw features:
+GreenchClaw's transcript mirror remains the source for GreenchClaw features:
 
 - chat history
 - search
@@ -128,7 +128,7 @@ NexisClaw's transcript mirror remains the source for NexisClaw features:
 
 ### Context engine assembly must be projected into Codex inputs
 
-The context-engine interface returns NexisClaw `AgentMessage[]`, not a Codex
+The context-engine interface returns GreenchClaw `AgentMessage[]`, not a Codex
 thread patch. Codex app-server `turn/start` accepts a current user input, while
 `thread/start` and `thread/resume` accept developer instructions.
 
@@ -231,14 +231,14 @@ Recommended first projection:
 
 - Put `systemPromptAddition` into developer instructions.
 - Put the assembled transcript context before the current prompt in `promptText`.
-- Label it clearly as NexisClaw assembled context.
+- Label it clearly as GreenchClaw assembled context.
 - Keep current prompt last.
 - Exclude duplicate current user prompt if it already appears at the tail.
 
 Example prompt shape:
 
 ```text
-NexisClaw assembled context for this turn:
+GreenchClaw assembled context for this turn:
 
 <conversation_context>
 [user]
@@ -253,7 +253,7 @@ Current user request:
 ```
 
 This is less elegant than native Codex history surgery, but it is implementable
-inside NexisClaw and preserves context-engine semantics.
+inside GreenchClaw and preserves context-engine semantics.
 
 Future improvement: if Codex app-server exposes a protocol for replacing or
 supplementing thread history, swap this projection layer to use that API.
@@ -359,7 +359,7 @@ Use fixed delimiters and explicit sections.
 
 Codex's `CodexAppServerEventProjector` builds a local `messagesSnapshot` for the
 current turn. `mirrorTranscriptBestEffort(...)` writes that snapshot into the
-NexisClaw transcript mirror.
+GreenchClaw transcript mirror.
 
 After mirroring succeeds or fails, call the context-engine finalizer with the
 best available message snapshot:
@@ -418,16 +418,16 @@ inventing zeros.
 
 There are two compaction systems:
 
-1. NexisClaw context-engine `compact()`
+1. GreenchClaw context-engine `compact()`
 2. Codex app-server native `thread/compact/start`
 
 Do not silently conflate them.
 
-#### `/compact` and explicit NexisClaw compaction
+#### `/compact` and explicit GreenchClaw compaction
 
 When the selected context engine has `info.ownsCompaction === true`, explicit
-NexisClaw compaction should prefer the context engine's `compact()` result for
-the NexisClaw transcript mirror and plugin state.
+GreenchClaw compaction should prefer the context engine's `compact()` result for
+the GreenchClaw transcript mirror and plugin state.
 
 When the selected Codex harness has a native thread binding, we may additionally
 request Codex native compaction to keep the app-server thread healthy, but this
@@ -464,10 +464,10 @@ This makes the split auditable.
 ### 9. Session reset and binding behavior
 
 The existing Codex harness `reset(...)` clears the Codex app-server binding from
-the NexisClaw session file. Preserve that behavior.
+the GreenchClaw session file. Preserve that behavior.
 
 Also ensure context-engine state cleanup continues to happen through existing
-NexisClaw session lifecycle paths. Do not add Codex-specific cleanup unless the
+GreenchClaw session lifecycle paths. Do not add Codex-specific cleanup unless the
 context-engine lifecycle currently misses reset/delete events for all harnesses.
 
 ### 10. Error handling
@@ -486,7 +486,7 @@ Codex-specific additions:
 - If transcript mirror fails, still attempt context-engine finalization with
   fallback messages.
 - If Codex native compaction fails after context-engine compaction succeeds,
-  do not fail the whole NexisClaw compaction when the context engine is primary.
+  do not fail the whole GreenchClaw compaction when the context engine is primary.
 
 ## Test plan
 
@@ -541,7 +541,7 @@ Add or extend live Codex harness smoke tests:
   - afterTurn or ingest
   - maintenance
 
-Avoid requiring lossless-claw in NexisClaw core tests. Use a small in-repo fake
+Avoid requiring lossless-claw in GreenchClaw core tests. Use a small in-repo fake
 context engine plugin.
 
 ## Observability
@@ -617,7 +617,7 @@ This should be backward-compatible:
 - Successful Codex turns call `afterTurn` or ingest fallback.
 - Successful Codex turns run context-engine turn maintenance.
 - Failed/aborted/yield-aborted turns do not run turn maintenance.
-- Context-engine-owned compaction remains primary for NexisClaw/plugin state.
+- Context-engine-owned compaction remains primary for GreenchClaw/plugin state.
 - Codex native compaction remains auditable as native Codex behavior.
 - Existing PI context-engine behavior is unchanged.
 - Existing Codex harness behavior is unchanged when no non-legacy context engine

@@ -80,20 +80,20 @@ type CapturedSpan = {
 
 const DEFAULT_SCENARIO_ID = "otel-trace-smoke";
 const REQUIRED_SPAN_NAMES = [
-  "NexisClaw.run",
-  "NexisClaw.harness.run",
-  "NexisClaw.model.call",
-  "NexisClaw.context.assembled",
-  "NexisClaw.message.delivery",
+  "GreenchClaw.run",
+  "GreenchClaw.harness.run",
+  "GreenchClaw.model.call",
+  "GreenchClaw.context.assembled",
+  "GreenchClaw.message.delivery",
 ] as const;
 const DISALLOWED_ATTRIBUTE_KEYS = new Set([
-  "NexisClaw.runId",
-  "NexisClaw.chatId",
-  "NexisClaw.messageId",
-  "NexisClaw.sessionKey",
-  "NexisClaw.sessionId",
-  "NexisClaw.callId",
-  "NexisClaw.toolCallId",
+  "GreenchClaw.runId",
+  "GreenchClaw.chatId",
+  "GreenchClaw.messageId",
+  "GreenchClaw.sessionKey",
+  "GreenchClaw.sessionId",
+  "GreenchClaw.callId",
+  "GreenchClaw.toolCallId",
 ]);
 
 let traceRequestDecoder:
@@ -292,10 +292,10 @@ function openClawEntryArgs(): string[] {
   if (existsSync(path.join(process.cwd(), "scripts", "run-node.mjs"))) {
     return ["scripts/run-node.mjs"];
   }
-  return ["NexisClaw.mjs"];
+  return ["GreenchClaw.mjs"];
 }
 
-function spawnNexisClaw(args: string[], env: NodeJS.ProcessEnv): ChildProcess {
+function spawnGreenchClaw(args: string[], env: NodeJS.ProcessEnv): ChildProcess {
   return spawn(process.execPath, [...openClawEntryArgs(), ...args], {
     env,
     stdio: ["ignore", "pipe", "pipe"],
@@ -316,9 +316,9 @@ function buildQaEnv(port: number): NodeJS.ProcessEnv {
   delete env.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT;
   delete env.OTEL_EXPORTER_OTLP_LOGS_ENDPOINT;
   env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = `http://127.0.0.1:${port}/v1/traces`;
-  env.OTEL_SERVICE_NAME = "NexisClaw-qa-lab-otel-smoke";
+  env.OTEL_SERVICE_NAME = "GreenchClaw-qa-lab-otel-smoke";
   env.OTEL_SEMCONV_STABILITY_OPT_IN = "gen_ai_latest_experimental";
-  env.NEXISCLAW_QA_SUITE_PROGRESS = env.NEXISCLAW_QA_SUITE_PROGRESS ?? "1";
+  env.GREENCHCLAW_QA_SUITE_PROGRESS = env.GREENCHCLAW_QA_SUITE_PROGRESS ?? "1";
   return env;
 }
 
@@ -380,7 +380,7 @@ function assertSmoke(params: {
 
   const attributeKeys = collectAttributeKeys(params.spans);
   const disallowed = [...DISALLOWED_ATTRIBUTE_KEYS].filter((key) => attributeKeys.has(key));
-  const contentKeys = [...attributeKeys].filter((key) => key.startsWith("NexisClaw.content."));
+  const contentKeys = [...attributeKeys].filter((key) => key.startsWith("GreenchClaw.content."));
   if (disallowed.length > 0) {
     failures.push(`raw diagnostic id attributes exported: ${disallowed.join(", ")}`);
   }
@@ -388,17 +388,17 @@ function assertSmoke(params: {
     failures.push(`content attributes exported with capture disabled: ${contentKeys.join(", ")}`);
   }
 
-  const modelSpans = params.spans.filter((span) => span.name === "NexisClaw.model.call");
+  const modelSpans = params.spans.filter((span) => span.name === "GreenchClaw.model.call");
   const modelErrorSpans = modelSpans.filter((span) => {
     const serialized = JSON.stringify(span.attributes);
     return (
       Object.hasOwn(span.attributes, "error.type") ||
-      Object.hasOwn(span.attributes, "NexisClaw.errorCategory") ||
+      Object.hasOwn(span.attributes, "GreenchClaw.errorCategory") ||
       serialized.includes("StreamAbandoned")
     );
   });
   if (modelSpans.length === 0) {
-    failures.push("no NexisClaw.model.call span was exported");
+    failures.push("no GreenchClaw.model.call span was exported");
   }
   if (modelErrorSpans.length > 0) {
     failures.push("successful QA run exported model-call error attributes");
@@ -436,7 +436,7 @@ async function main() {
 
   let childExitCode = 1;
   try {
-    const child = spawnNexisClaw(buildQaArgs(options), buildQaEnv(port));
+    const child = spawnGreenchClaw(buildQaArgs(options), buildQaEnv(port));
     child.stdout?.on("data", (chunk) => process.stdout.write(chunk));
     child.stderr?.on("data", (chunk) => process.stderr.write(chunk));
     childExitCode = await waitForChild(child);

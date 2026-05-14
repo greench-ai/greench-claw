@@ -1,5 +1,5 @@
 ---
-summary: "Advertise the local NexisClaw gateway over Bonjour/mDNS."
+summary: "Advertise the local GreenchClaw gateway over Bonjour/mDNS."
 read_when:
   - You are installing, configuring, or auditing the bonjour plugin
 title: "Bonjour plugin"
@@ -7,12 +7,12 @@ title: "Bonjour plugin"
 
 # Bonjour plugin
 
-Advertise the local NexisClaw gateway over Bonjour/mDNS.
+Advertise the local GreenchClaw gateway over Bonjour/mDNS.
 
 ## Distribution
 
-- Package: `@NexisClaw/bonjour`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/bonjour`
+- Install route: included in GreenchClaw
 
 ## Surface
 

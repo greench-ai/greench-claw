@@ -1,28 +1,28 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ChannelSetupWizard } from "NexisClaw/plugin-sdk/setup";
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/setup";
-import { formatDocsLink } from "NexisClaw/plugin-sdk/setup-tools";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ChannelSetupWizard } from "GreenchClaw/plugin-sdk/setup";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/setup";
+import { formatDocsLink } from "GreenchClaw/plugin-sdk/setup-tools";
 import { applyQQBotAccountConfig, resolveQQBotAccount } from "../config.js";
 
 type SetupPrompter = Parameters<NonNullable<ChannelSetupWizard["finalize"]>>[0]["prompter"];
 type SetupRuntime = Parameters<NonNullable<ChannelSetupWizard["finalize"]>>[0]["runtime"];
 
-function isQQBotAccountConfigured(cfg: NexisClawConfig, accountId: string): boolean {
+function isQQBotAccountConfigured(cfg: GreenchClawConfig, accountId: string): boolean {
   const account = resolveQQBotAccount(cfg, accountId, { allowUnresolvedSecretRef: true });
   return Boolean(account.appId && account.clientSecret);
 }
 
 async function linkViaQrCode(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   prompter: SetupPrompter;
   runtime: SetupRuntime;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   try {
     const { qrConnect } = await import("@tencent-connect/qqbot-connector");
 
     const accounts: { appId: string; appSecret: string }[] = await qrConnect({
-      source: "NexisClaw",
+      source: "GreenchClaw",
     });
 
     if (accounts.length === 0) {
@@ -65,10 +65,10 @@ async function linkViaQrCode(params: {
 }
 
 async function linkViaManualInput(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   prompter: SetupPrompter;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   const appId = await params.prompter.text({
     message: "请输入 QQ Bot AppID",
     validate: (value: string) => (value.trim() ? undefined : "AppID 不能为空"),
@@ -89,12 +89,12 @@ async function linkViaManualInput(params: {
 }
 
 export async function finalizeQQBotSetup(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   forceAllowFrom: boolean;
   prompter: SetupPrompter;
   runtime: SetupRuntime;
-}): Promise<{ cfg: NexisClawConfig }> {
+}): Promise<{ cfg: GreenchClawConfig }> {
   const accountId = params.accountId.trim() || DEFAULT_ACCOUNT_ID;
   let next = params.cfg;
 
@@ -135,7 +135,7 @@ export async function finalizeQQBotSetup(params: {
     });
   } else if (!configured) {
     await params.prompter.note(
-      ["您可以稍后运行以下命令重新选择 QQ Bot 进行配置：", "  NexisClaw channels add"].join("\n"),
+      ["您可以稍后运行以下命令重新选择 QQ Bot 进行配置：", "  GreenchClaw channels add"].join("\n"),
       "QQ Bot",
     );
   }

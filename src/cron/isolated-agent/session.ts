@@ -8,7 +8,7 @@ import {
 } from "../../config/sessions/reset-policy.js";
 import { loadSessionStore } from "../../config/sessions/store-load.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 
 const FRESH_CRON_CARRIED_PREFERENCE_FIELDS = [
   "heartbeatTaskState",
@@ -101,7 +101,7 @@ function sanitizeFreshCronSessionEntry(
 }
 
 export function resolveCronSession(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   nowMs: number;
   agentId: string;

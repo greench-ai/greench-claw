@@ -1,6 +1,6 @@
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import { expect, vi, type Mock } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import type { TelegramNativeCommandDeps } from "./bot-native-command-deps.runtime.js";
 import {
   createNativeCommandTestParams as createBaseNativeCommandTestParams,
@@ -90,7 +90,7 @@ export function createCommandBot(params: CreateCommandBotParams = {}): CreateCom
 }
 
 export function createNativeCommandTestParams(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params: Partial<RegisterTelegramNativeCommandsParams> = {},
 ): RegisterTelegramNativeCommandsParams {
   const dispatchResult: Awaited<

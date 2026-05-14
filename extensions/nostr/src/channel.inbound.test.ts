@@ -1,4 +1,4 @@
-import { createStartAccountContext } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { createStartAccountContext } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PluginRuntime } from "../runtime-api.js";
 import { startNostrGatewayAccount } from "./gateway.js";

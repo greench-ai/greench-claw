@@ -1,4 +1,4 @@
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import { buildCerebrasCatalogModels, CEREBRAS_BASE_URL } from "./models.js";
 
 export function buildCerebrasProvider(): ModelProviderConfig {

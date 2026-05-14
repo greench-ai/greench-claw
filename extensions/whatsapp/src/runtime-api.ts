@@ -1,6 +1,6 @@
-export { getChatChannelMeta, type ChannelPlugin } from "NexisClaw/plugin-sdk/core";
+export { getChatChannelMeta, type ChannelPlugin } from "GreenchClaw/plugin-sdk/core";
 export { buildChannelConfigSchema, WhatsAppConfigSchema } from "../config-api.js";
-export { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
+export { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
 export {
   formatWhatsAppConfigAllowFromEntries,
   resolveWhatsAppConfigAllowFrom,
@@ -12,12 +12,12 @@ export {
   readReactionParams,
   readStringParam,
   ToolAuthorizationError,
-} from "NexisClaw/plugin-sdk/channel-actions";
-export { normalizeE164 } from "NexisClaw/plugin-sdk/account-resolution";
-export type { DmPolicy, GroupPolicy } from "NexisClaw/plugin-sdk/config-contracts";
-import type { NexisClawConfig as RuntimeNexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-actions";
+export { normalizeE164 } from "GreenchClaw/plugin-sdk/account-resolution";
+export type { DmPolicy, GroupPolicy } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig as RuntimeGreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
-export { type ChannelMessageActionName } from "NexisClaw/plugin-sdk/channel-contract";
+export { type ChannelMessageActionName } from "GreenchClaw/plugin-sdk/channel-contract";
 export { loadOutboundMediaFromUrl } from "./outbound-media.runtime.js";
 export {
   resolveWhatsAppGroupRequireMention,
@@ -39,7 +39,7 @@ export {
 export { resolveWhatsAppOutboundTarget } from "./resolve-outbound-target.js";
 export { resolveWhatsAppReactionLevel } from "./reaction-level.js";
 
-export type NexisClawConfig = RuntimeNexisClawConfig;
+export type GreenchClawConfig = RuntimeGreenchClawConfig;
 export type { WhatsAppAccountConfig } from "./account-types.js";
 
 type MonitorWebChannel = typeof import("./channel.runtime.js").monitorWebChannel;

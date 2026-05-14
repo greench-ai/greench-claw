@@ -5,7 +5,11 @@ import {
   normalizeChannelId,
 } from "../channels/plugins/index.js";
 import { resolveInstallableChannelPlugin } from "../commands/channel-setup/channel-plugin-resolution.js";
-import { getRuntimeConfig, readConfigFileSnapshot, type NexisClawConfig } from "../config/config.js";
+import {
+  getRuntimeConfig,
+  readConfigFileSnapshot,
+  type GreenchClawConfig,
+} from "../config/config.js";
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
 import { callGateway } from "../gateway/call.js";
 import { setVerbose } from "../globals.js";
@@ -32,7 +36,7 @@ function supportsChannelAuthMode(plugin: ChannelPlugin, mode: ChannelAuthMode): 
   return mode === "login" ? Boolean(plugin.auth?.login) : Boolean(plugin.gateway?.logoutAccount);
 }
 
-function isConfiguredAuthPlugin(plugin: ChannelPlugin, cfg: NexisClawConfig): boolean {
+function isConfiguredAuthPlugin(plugin: ChannelPlugin, cfg: GreenchClawConfig): boolean {
   const key = plugin.id;
   if (isBlockedObjectKey(key)) {
     return false;
@@ -66,7 +70,7 @@ function isConfiguredAuthPlugin(plugin: ChannelPlugin, cfg: NexisClawConfig): bo
   return false;
 }
 
-function resolveConfiguredAuthChannelInput(cfg: NexisClawConfig, mode: ChannelAuthMode): string {
+function resolveConfiguredAuthChannelInput(cfg: GreenchClawConfig, mode: ChannelAuthMode): string {
   const configured = listChannelPlugins()
     .filter((plugin): plugin is ChannelPlugin => supportsChannelAuthMode(plugin, mode))
     .filter((plugin) => isConfiguredAuthPlugin(plugin, cfg))
@@ -77,7 +81,7 @@ function resolveConfiguredAuthChannelInput(cfg: NexisClawConfig, mode: ChannelAu
   }
   if (configured.length === 0) {
     throw new Error(
-      `No configured channel supports ${mode}. Run ${formatCliCommand("NexisClaw channels status")} to inspect channels or ${formatCliCommand("NexisClaw channels add --channel <channel>")} to add one.`,
+      `No configured channel supports ${mode}. Run ${formatCliCommand("GreenchClaw channels status")} to inspect channels or ${formatCliCommand("GreenchClaw channels add --channel <channel>")} to add one.`,
     );
   }
   const safeIds = configured.map(sanitizeForLog);
@@ -89,10 +93,10 @@ function resolveConfiguredAuthChannelInput(cfg: NexisClawConfig, mode: ChannelAu
 async function resolveChannelPluginForMode(
   opts: ChannelAuthOptions,
   mode: ChannelAuthMode,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   runtime: RuntimeEnv,
 ): Promise<{
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   configChanged: boolean;
   channelInput: string;
   channelId: string;
@@ -113,7 +117,7 @@ async function resolveChannelPluginForMode(
   const channelId = resolved.channelId ?? normalizedChannelId;
   if (!channelId) {
     throw new Error(
-      `Unsupported channel "${channelInput}". Run ${formatCliCommand("NexisClaw channels list")} to see available channels.`,
+      `Unsupported channel "${channelInput}". Run ${formatCliCommand("GreenchClaw channels list")} to see available channels.`,
     );
   }
   const plugin = resolved.plugin;
@@ -122,7 +126,7 @@ async function resolveChannelPluginForMode(
       formatUnsupportedChannelActionMessage({
         channel: channelId,
         action: mode,
-        inspectCommand: "NexisClaw channels status --channel " + channelId,
+        inspectCommand: "GreenchClaw channels status --channel " + channelId,
       }),
     );
   }
@@ -138,7 +142,7 @@ async function resolveChannelPluginForMode(
 function resolveAccountContext(
   plugin: ChannelPlugin,
   opts: ChannelAuthOptions,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ) {
   const accountId =
     normalizeOptionalString(opts.account) || resolveChannelDefaultAccountId({ plugin, cfg });
@@ -146,7 +150,7 @@ function resolveAccountContext(
 }
 
 async function reconcileGatewayRuntimeAfterLocalLogin(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   plugin: ChannelPlugin;
   channelId: string;
   accountId: string;
@@ -181,7 +185,7 @@ async function reconcileGatewayRuntimeAfterLocalLogin(params: {
 }
 
 async function logoutViaGatewayRuntime(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channelId: string;
   accountId: string;
   runtime: RuntimeEnv;
@@ -236,7 +240,7 @@ export async function runChannelLogin(
       formatUnsupportedChannelActionMessage({
         channel: channelInput,
         action: "login",
-        inspectCommand: "NexisClaw channels status --channel " + channelInput,
+        inspectCommand: "GreenchClaw channels status --channel " + channelInput,
       }),
     );
   }
@@ -285,7 +289,7 @@ export async function runChannelLogout(
       formatUnsupportedChannelActionMessage({
         channel: channelInput,
         action: "logout",
-        inspectCommand: "NexisClaw channels status --channel " + channelInput,
+        inspectCommand: "GreenchClaw channels status --channel " + channelInput,
       }),
     );
   }

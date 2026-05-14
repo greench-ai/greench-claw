@@ -1,5 +1,5 @@
 ---
-summary: "Adds OpenCode Go model provider support to NexisClaw."
+summary: "Adds OpenCode Go model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the opencode-go plugin
 title: "OpenCode Go plugin"
@@ -7,12 +7,12 @@ title: "OpenCode Go plugin"
 
 # OpenCode Go plugin
 
-Adds OpenCode Go model provider support to NexisClaw.
+Adds OpenCode Go model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/opencode-go-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/opencode-go-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

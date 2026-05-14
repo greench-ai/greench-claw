@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type {
   ExecSecretProviderConfig,
   FileSecretProviderConfig,
@@ -39,7 +39,7 @@ const WINDOWS_UNC_PATH_PATTERN = /^\\\\[^\\]+\\[^\\]+/;
 export type { SecretRefResolveCache } from "./resolve-types.js";
 
 type ResolveSecretRefOptions = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   cache?: SecretRefResolveCache;
 };
@@ -159,7 +159,7 @@ function isAbsolutePathname(value: string): boolean {
   );
 }
 
-function resolveResolutionLimits(config: NexisClawConfig): ResolutionLimits {
+function resolveResolutionLimits(config: GreenchClawConfig): ResolutionLimits {
   const resolution = config.secrets?.resolution;
   return {
     maxProviderConcurrency: normalizePositiveInt(
@@ -178,7 +178,10 @@ function toProviderKey(source: SecretRefSource, provider: string): string {
   return `${source}:${provider}`;
 }
 
-function resolveConfiguredProvider(ref: SecretRef, config: NexisClawConfig): SecretProviderConfig {
+function resolveConfiguredProvider(
+  ref: SecretRef,
+  config: GreenchClawConfig,
+): SecretProviderConfig {
   const providerConfig = config.secrets?.providers?.[ref.provider];
   if (!providerConfig) {
     if (ref.source === "env" && ref.provider === resolveDefaultSecretProviderAlias(config, "env")) {

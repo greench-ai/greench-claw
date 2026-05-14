@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { buildNpmResolutionFields, type NpmSpecResolution } from "../infra/install-source-utils.js";
 
@@ -14,9 +14,9 @@ export function buildNpmResolutionInstallFields(
 }
 
 export function recordPluginInstall(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   update: PluginInstallUpdate,
-): NexisClawConfig {
+): GreenchClawConfig {
   const { pluginId, ...record } = update;
   const installs = {
     ...cfg.plugins?.installs,

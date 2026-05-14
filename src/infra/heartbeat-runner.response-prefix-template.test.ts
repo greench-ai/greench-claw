@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { runHeartbeatOnce, type HeartbeatDeps } from "./heartbeat-runner.js";
 import { installHeartbeatRunnerTestRuntime } from "./heartbeat-runner.test-harness.js";
 import {
@@ -16,7 +16,7 @@ describe("runHeartbeatOnce responsePrefix templates", () => {
     tmpDir: string;
     storePath: string;
     responsePrefix: string;
-  }): NexisClawConfig {
+  }): GreenchClawConfig {
     return {
       agents: {
         defaults: {

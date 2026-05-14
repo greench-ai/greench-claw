@@ -105,7 +105,7 @@ export type {
   MSTeamsConfig,
   MSTeamsReplyStyle,
   MSTeamsTeamConfig,
-  NexisClawConfig,
+  GreenchClawConfig,
   ReplyToMode,
   SignalReactionNotificationMode,
   SlackAccountConfig,

@@ -8,7 +8,7 @@ import {
 import {
   applyAnthropicPayloadPolicyToParams,
   resolveAnthropicPayloadPolicy,
-} from "NexisClaw/plugin-sdk/provider-stream-shared";
+} from "GreenchClaw/plugin-sdk/provider-stream-shared";
 import { resolveAnthropicVertexClientRegion, resolveAnthropicVertexProjectId } from "./region.js";
 
 type AnthropicVertexEffort = NonNullable<AnthropicOptions["effort"]>;

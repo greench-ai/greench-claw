@@ -1,10 +1,10 @@
 import type { AgentTool } from "@earendil-works/pi-agent-core";
-import { resolveSendableOutboundReplyParts } from "NexisClaw/plugin-sdk/reply-payload";
+import { resolveSendableOutboundReplyParts } from "GreenchClaw/plugin-sdk/reply-payload";
 import type { TSchema } from "typebox";
 import type { ThinkLevel } from "../../auto-reply/thinking.js";
 import { isSilentReplyPayloadText, SILENT_REPLY_TOKEN } from "../../auto-reply/tokens.js";
 import { projectConfigOntoRuntimeSourceSnapshot } from "../../config/config.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { loadManifestMetadataSnapshot } from "../../plugins/manifest-contract-eligibility.js";
 import type { PluginMetadataSnapshot } from "../../plugins/plugin-metadata-snapshot.types.js";
 import {
@@ -42,9 +42,9 @@ function hasMedia(payload: { mediaUrl?: string; mediaUrls?: string[] }): boolean
   return resolveSendableOutboundReplyParts(payload).hasMedia;
 }
 
-function asNexisClawConfig(value: unknown): NexisClawConfig | undefined {
+function asGreenchClawConfig(value: unknown): GreenchClawConfig | undefined {
   return value !== null && typeof value === "object" && !Array.isArray(value)
-    ? (value as NexisClawConfig)
+    ? (value as GreenchClawConfig)
     : undefined;
 }
 
@@ -66,7 +66,7 @@ function isProviderRuntimePluginHandle(
 
 function resolveProviderRuntimeHandleForPlugins(params: {
   provider: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   runtimeHandle?: BuildAgentRuntimePlanParams["providerRuntimeHandle"];
   resolveWhenMissing?: boolean;
@@ -79,7 +79,7 @@ function resolveProviderRuntimeHandleForPlugins(params: {
   }
   return resolveProviderRuntimePluginHandle({
     provider: params.runtimeHandle?.provider ?? params.provider,
-    config: asNexisClawConfig(params.runtimeHandle?.config) ?? params.config,
+    config: asGreenchClawConfig(params.runtimeHandle?.config) ?? params.config,
     workspaceDir: params.runtimeHandle?.workspaceDir ?? params.workspaceDir,
     env: params.runtimeHandle?.env ?? process.env,
     applyAutoEnable: params.runtimeHandle?.applyAutoEnable,
@@ -91,7 +91,7 @@ function resolveProviderRuntimeHandleForPlugins(params: {
 export function buildAgentRuntimeDeliveryPlan(
   params: BuildAgentRuntimeDeliveryPlanParams,
 ): AgentRuntimeDeliveryPlan {
-  const config = asNexisClawConfig(params.config);
+  const config = asGreenchClawConfig(params.config);
   const providerRuntimeHandle = resolveProviderRuntimeHandleForPlugins({
     provider: params.provider,
     config,
@@ -132,7 +132,7 @@ export function buildAgentRuntimeOutcomePlan(): AgentRuntimeOutcomePlan {
 }
 
 export function buildAgentRuntimePlan(params: BuildAgentRuntimePlanParams): AgentRuntimePlan {
-  const config = asNexisClawConfig(params.config);
+  const config = asGreenchClawConfig(params.config);
   const model = asProviderRuntimeModel(params.model);
   const modelApi = params.modelApi ?? params.model?.api ?? undefined;
   const transport = params.resolvedTransport;
@@ -257,7 +257,7 @@ export function buildAgentRuntimePlan(params: BuildAgentRuntimePlanParams): Agen
           runtimeHandle: providerRuntimeHandleForPlugins,
           context: {
             ...context,
-            config: asNexisClawConfig(context.config),
+            config: asGreenchClawConfig(context.config),
           },
         });
       },
@@ -269,7 +269,7 @@ export function buildAgentRuntimePlan(params: BuildAgentRuntimePlanParams): Agen
           runtimeHandle: providerRuntimeHandleForPlugins,
           context: {
             ...context,
-            config: asNexisClawConfig(context.config),
+            config: asGreenchClawConfig(context.config),
           },
         });
       },

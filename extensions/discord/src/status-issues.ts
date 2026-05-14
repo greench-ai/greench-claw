@@ -1,13 +1,13 @@
 import type {
   ChannelAccountSnapshot,
   ChannelStatusIssue,
-} from "NexisClaw/plugin-sdk/channel-contract";
+} from "GreenchClaw/plugin-sdk/channel-contract";
 import {
   appendMatchMetadata,
   asString,
   isRecord,
   resolveEnabledConfiguredAccountId,
-} from "NexisClaw/plugin-sdk/status-helpers";
+} from "GreenchClaw/plugin-sdk/status-helpers";
 
 type DiscordIntentSummary = {
   messageContent?: "enabled" | "limited" | "disabled";

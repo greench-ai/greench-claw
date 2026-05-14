@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import type { PluginCompatCode } from "./compat/registry.js";
 import { normalizePluginsConfig, resolveEffectiveEnableState } from "./config-state.js";
 import { isPluginEnabledByDefaultForPlatform } from "./default-enablement.js";
@@ -198,7 +198,7 @@ function buildCandidateLookup(
 export function buildInstalledPluginIndexRecords(params: {
   candidates: readonly PluginCandidate[];
   registry: PluginManifestRegistry;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   diagnostics: PluginDiagnostic[];
   installRecords: Record<string, InstalledPluginInstallRecordInfo>;
 }): InstalledPluginIndexRecord[] {
@@ -241,7 +241,7 @@ export function buildInstalledPluginIndexRecords(params: {
       startup: buildStartupInfo(record),
       compat: collectPluginManifestCompatCodes(record),
     };
-    if (record.format && record.format !== "NexisClaw") {
+    if (record.format && record.format !== "GreenchClaw") {
       indexRecord.format = record.format;
     }
     if (record.bundleFormat) {

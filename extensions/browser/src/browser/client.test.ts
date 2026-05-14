@@ -234,7 +234,7 @@ describe("browser client", () => {
             ok: true,
             json: async () => ({
               ok: true,
-              profile: "NexisClaw",
+              profile: "GreenchClaw",
               transport: "cdp",
               checks: [],
               status: {
@@ -271,14 +271,14 @@ describe("browser client", () => {
 
     const doctorResult = await browserDoctor("http://127.0.0.1:18791");
     expect(doctorResult.ok).toBe(true);
-    expect(doctorResult.profile).toBe("NexisClaw");
+    expect(doctorResult.profile).toBe("GreenchClaw");
 
     const deepDoctorResult = await browserDoctor("http://127.0.0.1:18791", {
-      profile: "NexisClaw",
+      profile: "GreenchClaw",
       deep: true,
     });
     expect(deepDoctorResult.ok).toBe(true);
-    expect(deepDoctorResult.profile).toBe("NexisClaw");
+    expect(deepDoctorResult.profile).toBe("GreenchClaw");
 
     await expect(browserTabs("http://127.0.0.1:18791")).resolves.toHaveLength(1);
     const openedTab = await browserOpenTab("http://127.0.0.1:18791", "https://example.com");
@@ -336,12 +336,12 @@ describe("browser client", () => {
     const urls = calls.map((call) => call.url);
     expect(urls.some((url) => url.endsWith("/tabs"))).toBe(true);
     expect(urls.some((url) => url.endsWith("/doctor"))).toBe(true);
-    expect(urls.some((url) => url.endsWith("/doctor?profile=NexisClaw&deep=true"))).toBe(true);
+    expect(urls.some((url) => url.endsWith("/doctor?profile=GreenchClaw&deep=true"))).toBe(true);
     const status = calls.find((c) => c.url.endsWith("/"));
     expect(status?.init?.timeoutMs).toBe(7_500);
     const doctor = calls.find((c) => c.url.endsWith("/doctor"));
     expect(doctor?.init?.timeoutMs).toBe(7_500);
-    const deepDoctor = calls.find((c) => c.url.endsWith("/doctor?profile=NexisClaw&deep=true"));
+    const deepDoctor = calls.find((c) => c.url.endsWith("/doctor?profile=GreenchClaw&deep=true"));
     expect(deepDoctor?.init?.timeoutMs).toBe(10_000);
     const open = calls.find((c) => c.url.endsWith("/tabs/open"));
     expect(open?.init?.method).toBe("POST");

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import type { ResolvedTelegramAccount } from "./accounts.js";
 import { collectTelegramSecurityAuditFindings } from "./security-audit.js";
 
@@ -7,12 +7,12 @@ const { readChannelAllowFromStoreMock } = vi.hoisted(() => ({
   readChannelAllowFromStoreMock: vi.fn(async () => [] as string[]),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/conversation-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/conversation-runtime", () => ({
   readChannelAllowFromStore: readChannelAllowFromStoreMock,
 }));
 
 function createTelegramAccount(
-  config: NonNullable<NonNullable<NexisClawConfig["channels"]>["telegram"]>,
+  config: NonNullable<NonNullable<GreenchClawConfig["channels"]>["telegram"]>,
 ): ResolvedTelegramAccount {
   return {
     accountId: "default",
@@ -23,7 +23,7 @@ function createTelegramAccount(
   };
 }
 
-function getTelegramConfig(cfg: NexisClawConfig) {
+function getTelegramConfig(cfg: GreenchClawConfig) {
   const config = cfg.channels?.telegram;
   if (!config) {
     throw new Error("expected telegram config");
@@ -47,7 +47,7 @@ describe("Telegram security audit findings", () => {
   });
 
   it("flags group commands without a sender allowlist", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         telegram: {
           enabled: true,
@@ -68,7 +68,7 @@ describe("Telegram security audit findings", () => {
   });
 
   it("warns when allowFrom entries are non-numeric legacy @username configs", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         telegram: {
           enabled: true,
@@ -90,7 +90,7 @@ describe("Telegram security audit findings", () => {
   });
 
   it("warns about invalid DM allowFrom entries even when groups are not enabled", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         telegram: {
           enabled: true,
@@ -114,7 +114,7 @@ describe("Telegram security audit findings", () => {
   });
 
   it("warns about invalid DM allowFrom entries when text commands are disabled", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       commands: { text: false },
       channels: {
         telegram: {

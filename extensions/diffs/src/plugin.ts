@@ -1,9 +1,9 @@
 import path from "node:path";
-import { resolveLivePluginConfigObject } from "NexisClaw/plugin-sdk/plugin-config-runtime";
+import { resolveLivePluginConfigObject } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
 import {
-  resolvePreferredNexisClawTmpDir,
-  type NexisClawConfig,
-  type NexisClawPluginApi,
+  resolvePreferredGreenchClawTmpDir,
+  type GreenchClawConfig,
+  type GreenchClawPluginApi,
 } from "../api.js";
 import {
   resolveDiffsPluginDefaults,
@@ -15,21 +15,21 @@ import { DIFFS_AGENT_GUIDANCE } from "./prompt-guidance.js";
 import { DiffArtifactStore } from "./store.js";
 import { createDiffsTool } from "./tool.js";
 
-export function registerDiffsPlugin(api: NexisClawPluginApi): void {
+export function registerDiffsPlugin(api: GreenchClawPluginApi): void {
   const store = new DiffArtifactStore({
-    rootDir: path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-diffs"),
+    rootDir: path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-diffs"),
     logger: api.logger,
   });
   const resolveCurrentPluginConfig = () =>
     resolveLivePluginConfigObject(
       api.runtime.config?.current
-        ? () => api.runtime.config.current() as NexisClawConfig
+        ? () => api.runtime.config.current() as GreenchClawConfig
         : undefined,
       "diffs",
       api.pluginConfig as Record<string, unknown>,
     ) ?? {};
   const resolveCurrentAccessConfig = () => {
-    const currentConfig = (api.runtime.config?.current?.() ?? api.config) as NexisClawConfig;
+    const currentConfig = (api.runtime.config?.current?.() ?? api.config) as GreenchClawConfig;
     const pluginConfig = resolveCurrentPluginConfig();
     return {
       allowRemoteViewer: resolveDiffsPluginSecurity(pluginConfig).allowRemoteViewer,

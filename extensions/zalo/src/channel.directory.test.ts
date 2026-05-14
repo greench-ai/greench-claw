@@ -1,9 +1,9 @@
 import {
   createDirectoryTestRuntime,
   expectDirectorySurface,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig, RuntimeEnv } from "../runtime-api.js";
+import type { GreenchClawConfig, RuntimeEnv } from "../runtime-api.js";
 import { zaloPlugin } from "./channel.js";
 
 describe("zalo directory", () => {
@@ -17,7 +17,7 @@ describe("zalo directory", () => {
           allowFrom,
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const peers = await directory.listPeers({
       cfg,

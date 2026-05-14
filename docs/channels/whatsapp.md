@@ -9,18 +9,18 @@ Status: production-ready via WhatsApp Web (Baileys). Gateway owns linked session
 
 ## Install (on demand)
 
-- Onboarding (`NexisClaw onboard`) and `NexisClaw channels add --channel whatsapp`
+- Onboarding (`GreenchClaw onboard`) and `GreenchClaw channels add --channel whatsapp`
   prompt to install the WhatsApp plugin the first time you select it.
-- `NexisClaw channels login --channel whatsapp` also offers the install flow when
+- `GreenchClaw channels login --channel whatsapp` also offers the install flow when
   the plugin is not present yet.
 - Dev channel + git checkout: defaults to the local plugin path.
-- Stable/Beta: uses the npm package `@NexisClaw/whatsapp` on the current official
+- Stable/Beta: uses the npm package `@GreenchClaw/whatsapp` on the current official
   release tag.
 
 Manual install stays available:
 
 ```bash
-NexisClaw plugins install @NexisClaw/whatsapp
+GreenchClaw plugins install @GreenchClaw/whatsapp
 ```
 
 Use the bare package to follow the current official release tag. Pin an exact
@@ -71,20 +71,20 @@ Portable Git also works if its `bin` directory is on `PATH`.
   <Step title="Link WhatsApp (QR)">
 
 ```bash
-NexisClaw channels login --channel whatsapp
+GreenchClaw channels login --channel whatsapp
 ```
 
     For a specific account:
 
 ```bash
-NexisClaw channels login --channel whatsapp --account work
+GreenchClaw channels login --channel whatsapp --account work
 ```
 
     To attach an existing/custom WhatsApp Web auth directory before login:
 
 ```bash
-NexisClaw channels add --channel whatsapp --account work --auth-dir /path/to/wa-auth
-NexisClaw channels login --channel whatsapp --account work
+GreenchClaw channels add --channel whatsapp --account work --auth-dir /path/to/wa-auth
+GreenchClaw channels login --channel whatsapp --account work
 ```
 
   </Step>
@@ -92,7 +92,7 @@ NexisClaw channels login --channel whatsapp --account work
   <Step title="Start the gateway">
 
 ```bash
-NexisClaw gateway
+GreenchClaw gateway
 ```
 
   </Step>
@@ -100,8 +100,8 @@ NexisClaw gateway
   <Step title="Approve first pairing request (if using pairing mode)">
 
 ```bash
-NexisClaw pairing list whatsapp
-NexisClaw pairing approve whatsapp <CODE>
+GreenchClaw pairing list whatsapp
+GreenchClaw pairing approve whatsapp <CODE>
 ```
 
     Pairing requests expire after 1 hour. Pending requests are capped at 3 per channel.
@@ -110,7 +110,7 @@ NexisClaw pairing approve whatsapp <CODE>
 </Steps>
 
 <Note>
-NexisClaw recommends running WhatsApp on a separate number when possible. (The channel metadata and setup flow are optimized for that setup, but personal-number setups are also supported.)
+GreenchClaw recommends running WhatsApp on a separate number when possible. (The channel metadata and setup flow are optimized for that setup, but personal-number setups are also supported.)
 </Note>
 
 ## Deployment patterns
@@ -119,7 +119,7 @@ NexisClaw recommends running WhatsApp on a separate number when possible. (The c
   <Accordion title="Dedicated number (recommended)">
     This is the cleanest operational mode:
 
-    - separate WhatsApp identity for NexisClaw
+    - separate WhatsApp identity for GreenchClaw
     - clearer DM allowlists and routing boundaries
     - lower chance of self-chat confusion
 
@@ -150,7 +150,7 @@ NexisClaw recommends running WhatsApp on a separate number when possible. (The c
   </Accordion>
 
   <Accordion title="WhatsApp Web-only channel scope">
-    The messaging platform channel is WhatsApp Web-based (`Baileys`) in current NexisClaw channel architecture.
+    The messaging platform channel is WhatsApp Web-based (`Baileys`) in current GreenchClaw channel architecture.
 
     There is no separate Twilio WhatsApp messaging channel in the built-in chat-channel registry.
 
@@ -170,7 +170,7 @@ NexisClaw recommends running WhatsApp on a separate number when possible. (The c
 - Group sessions are isolated (`agent:<agentId>:whatsapp:group:<jid>`).
 - WhatsApp Channels/Newsletters can be explicit outbound targets with their native `@newsletter` JID. Outbound newsletter sends use channel session metadata (`agent:<agentId>:whatsapp:channel:<jid>`) rather than DM session semantics.
 - WhatsApp Web transport honors standard proxy environment variables on the gateway host (`HTTPS_PROXY`, `HTTP_PROXY`, `NO_PROXY` / lowercase variants). Prefer host-level proxy config over channel-specific WhatsApp proxy settings.
-- When `messages.removeAckAfterReply` is enabled, NexisClaw clears the WhatsApp ack reaction after a visible reply is delivered.
+- When `messages.removeAckAfterReply` is enabled, GreenchClaw clears the WhatsApp ack reaction after a visible reply is delivered.
 
 ## Plugin hooks and privacy
 
@@ -234,7 +234,7 @@ content and identifiers.
     - pairings are persisted in channel allow-store and merged with configured `allowFrom`
     - scheduled automation and heartbeat recipient fallback use explicit delivery targets or configured `allowFrom`; DM pairing approvals are not implicit cron or heartbeat recipients
     - if no allowlist is configured, the linked self number is allowed by default
-    - NexisClaw never auto-pairs outbound `fromMe` DMs (messages you send to yourself from the linked device)
+    - GreenchClaw never auto-pairs outbound `fromMe` DMs (messages you send to yourself from the linked device)
 
   </Tab>
 
@@ -290,7 +290,7 @@ When the linked self number is also present in `allowFrom`, WhatsApp self-chat s
 
 - skip read receipts for self-chat turns
 - ignore mention-JID auto-trigger behavior that would otherwise ping yourself
-- if `messages.responsePrefix` is unset, self-chat replies default to `[{identity.name}]` or `[NexisClaw]`
+- if `messages.responsePrefix` is unset, self-chat replies default to `[{identity.name}]` or `[GreenchClaw]`
 
 ## Message normalization and context
 
@@ -307,7 +307,7 @@ When the linked self number is also present in `allowFrom`, WhatsApp self-chat s
     ```
 
     Reply metadata fields are also populated when available (`ReplyToId`, `ReplyToBody`, `ReplyToSender`, sender JID/E.164).
-    When the quoted reply target is downloadable media, NexisClaw saves it through
+    When the quoted reply target is downloadable media, GreenchClaw saves it through
     the normal inbound media store and exposes it as `MediaPath`/`MediaType` so
     the agent can inspect the referenced image instead of only seeing
     `<media:image>`.
@@ -501,16 +501,16 @@ Behavior notes:
   </Accordion>
 
   <Accordion title="Credential paths and legacy compatibility">
-    - current auth path: `~/.NexisClaw/credentials/whatsapp/<accountId>/creds.json`
+    - current auth path: `~/.GreenchClaw/credentials/whatsapp/<accountId>/creds.json`
     - backup file: `creds.json.bak`
-    - legacy default auth in `~/.NexisClaw/credentials/` is still recognized/migrated for default-account flows
+    - legacy default auth in `~/.GreenchClaw/credentials/` is still recognized/migrated for default-account flows
 
   </Accordion>
 
   <Accordion title="Logout behavior">
-    `NexisClaw channels logout --channel whatsapp [--account <id>]` clears WhatsApp auth state for that account.
+    `GreenchClaw channels logout --channel whatsapp [--account <id>]` clears WhatsApp auth state for that account.
 
-    When a Gateway is reachable, logout first stops the live WhatsApp listener for the selected account so the linked session does not keep receiving messages until the next restart. `NexisClaw channels remove --channel whatsapp` also stops the live listener before disabling or deleting account config.
+    When a Gateway is reachable, logout first stops the live WhatsApp listener for the selected account so the linked session does not keep receiving messages until the next restart. `GreenchClaw channels remove --channel whatsapp` also stops the live listener before disabling or deleting account config.
 
     In legacy auth directories, `oauth.json` is preserved while Baileys auth files are removed.
 
@@ -534,8 +534,8 @@ Behavior notes:
     Fix:
 
     ```bash
-    NexisClaw channels login --channel whatsapp
-    NexisClaw channels status
+    GreenchClaw channels login --channel whatsapp
+    GreenchClaw channels status
     ```
 
   </Accordion>
@@ -567,15 +567,15 @@ Behavior notes:
     Fix:
 
     ```bash
-    NexisClaw doctor
-    NexisClaw logs --follow
+    GreenchClaw doctor
+    GreenchClaw logs --follow
     ```
 
-    If `~/.NexisClaw/logs/whatsapp-health.log` says `Gateway inactive` but
-    `NexisClaw gateway status` and `NexisClaw channels status --probe` show the
-    gateway and WhatsApp are healthy, run `NexisClaw doctor`. On Linux, doctor
+    If `~/.GreenchClaw/logs/whatsapp-health.log` says `Gateway inactive` but
+    `GreenchClaw gateway status` and `GreenchClaw channels status --probe` show the
+    gateway and WhatsApp are healthy, run `GreenchClaw doctor`. On Linux, doctor
     warns about legacy crontab entries that still invoke
-    `~/.NexisClaw/bin/ensure-whatsapp.sh`; remove those stale entries with
+    `~/.GreenchClaw/bin/ensure-whatsapp.sh`; remove those stale entries with
     `crontab -e` because cron can lack the systemd user-bus environment and
     make that old script misreport gateway health.
 
@@ -584,7 +584,7 @@ Behavior notes:
   </Accordion>
 
   <Accordion title="QR login times out behind a proxy">
-    Symptom: `NexisClaw channels login --channel whatsapp` fails before showing a usable QR code with `status=408 Request Time-out` or a TLS socket disconnect.
+    Symptom: `GreenchClaw channels login --channel whatsapp` fails before showing a usable QR code with `status=408 Request Time-out` or a TLS socket disconnect.
 
     WhatsApp Web login uses the gateway host's standard proxy environment (`HTTPS_PROXY`, `HTTP_PROXY`, lowercase variants, and `NO_PROXY`). Verify the gateway process inherits the proxy env and that `NO_PROXY` does not match `mmg.whatsapp.net`.
 
@@ -598,7 +598,7 @@ Behavior notes:
   </Accordion>
 
   <Accordion title="Reply appears in transcript but not in WhatsApp">
-    Transcript rows record what the agent generated. WhatsApp delivery is checked separately: NexisClaw only treats an auto-reply as sent after Baileys returns an outbound message id for at least one visible text or media send.
+    Transcript rows record what the agent generated. WhatsApp delivery is checked separately: GreenchClaw only treats an auto-reply as sent after Baileys returns an outbound message id for at least one visible text or media send.
 
     Ack reactions are independent pre-reply receipts. A successful reaction does not prove that the later text or media reply was accepted by WhatsApp.
 
@@ -613,7 +613,7 @@ Behavior notes:
     - `groupAllowFrom` / `allowFrom`
     - `groups` allowlist entries
     - mention gating (`requireMention` + mention patterns)
-    - duplicate keys in `NexisClaw.json` (JSON5): later entries override earlier ones, so keep a single `groupPolicy` per scope
+    - duplicate keys in `GreenchClaw.json` (JSON5): later entries override earlier ones, so keep a single `groupPolicy` per scope
 
   </Accordion>
 

@@ -1,12 +1,12 @@
-import { sleep } from "NexisClaw/plugin-sdk/runtime-env";
+import { sleep } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromPrivateNetworkOptIn,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { z } from "zod";
 
 export type MattermostFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;

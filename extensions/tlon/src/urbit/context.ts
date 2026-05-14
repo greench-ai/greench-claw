@@ -1,4 +1,4 @@
-export { ssrfPolicyFromDangerouslyAllowPrivateNetwork } from "NexisClaw/plugin-sdk/ssrf-runtime";
+export { ssrfPolicyFromDangerouslyAllowPrivateNetwork } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { normalizeUrbitHostname, validateUrbitBaseUrl } from "./base-url.js";
 import { UrbitUrlError } from "./errors.js";
 

@@ -1,11 +1,11 @@
 import {
   applyAgentDefaultModelPrimary,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 
 export const OPENROUTER_DEFAULT_MODEL_REF = "openrouter/auto";
 
-export function applyOpenrouterProviderConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyOpenrouterProviderConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[OPENROUTER_DEFAULT_MODEL_REF] = {
     ...models[OPENROUTER_DEFAULT_MODEL_REF],
@@ -24,7 +24,7 @@ export function applyOpenrouterProviderConfig(cfg: NexisClawConfig): NexisClawCo
   };
 }
 
-export function applyOpenrouterConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyOpenrouterConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return applyAgentDefaultModelPrimary(
     applyOpenrouterProviderConfig(cfg),
     OPENROUTER_DEFAULT_MODEL_REF,

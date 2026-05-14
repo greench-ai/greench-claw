@@ -2,10 +2,10 @@ import {
   createMessageReceiptFromOutboundResults,
   type MessageReceipt,
   type MessageReceiptPartKind,
-} from "NexisClaw/plugin-sdk/channel-message";
-import { resolveMarkdownTableMode } from "NexisClaw/plugin-sdk/markdown-table-runtime";
-import { convertMarkdownTables } from "NexisClaw/plugin-sdk/text-chunking";
-import { loadOutboundMediaFromUrl, type NexisClawConfig } from "../runtime-api.js";
+} from "GreenchClaw/plugin-sdk/channel-message";
+import { resolveMarkdownTableMode } from "GreenchClaw/plugin-sdk/markdown-table-runtime";
+import { convertMarkdownTables } from "GreenchClaw/plugin-sdk/text-chunking";
+import { loadOutboundMediaFromUrl, type GreenchClawConfig } from "../runtime-api.js";
 import {
   classifyMSTeamsSendError,
   formatMSTeamsSendErrorHint,
@@ -27,7 +27,7 @@ import { resolveMSTeamsSendContext, type MSTeamsProactiveContext } from "./send-
 
 type SendMSTeamsMessageParams = {
   /** Full config (for credentials) */
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   /** Conversation ID or user ID to send to */
   to: string;
   /** Message text */
@@ -98,7 +98,7 @@ function createMSTeamsSendResult(params: {
 
 type SendMSTeamsPollParams = {
   /** Full config (for credentials) */
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   /** Conversation ID or user ID to send to */
   to: string;
   /** Poll question */
@@ -117,7 +117,7 @@ type SendMSTeamsPollResult = {
 
 type SendMSTeamsCardParams = {
   /** Full config (for credentials) */
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   /** Conversation ID or user ID to send to */
   to: string;
   /** Adaptive Card JSON object */
@@ -588,7 +588,7 @@ export async function sendAdaptiveCardMSTeams(
 
 type EditMSTeamsMessageParams = {
   /** Full config (for credentials) */
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   /** Conversation ID or user ID */
   to: string;
   /** Activity ID of the message to edit */
@@ -603,7 +603,7 @@ type EditMSTeamsMessageResult = {
 
 type DeleteMSTeamsMessageParams = {
   /** Full config (for credentials) */
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   /** Conversation ID or user ID */
   to: string;
   /** Activity ID of the message to delete */

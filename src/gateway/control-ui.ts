@@ -3,7 +3,7 @@ import fs from "node:fs";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import path from "node:path";
 import { resolveAgentAvatar, resolvePublicAgentAvatarSource } from "../agents/identity-avatar.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { matchRootFileOpenFailure, openRootFileSync } from "../infra/boundary-file-read.js";
 import {
   isPackageProvenControlUiRootSync,
@@ -55,7 +55,7 @@ import { authorizeOperatorScopesForMethod } from "./method-scopes.js";
 import { resolveRequestClientIp } from "./net.js";
 
 const ROOT_PREFIX = "/";
-const CONTROL_UI_ASSISTANT_MEDIA_PREFIX = "/__NexisClaw__/assistant-media";
+const CONTROL_UI_ASSISTANT_MEDIA_PREFIX = "/__GreenchClaw__/assistant-media";
 const CONTROL_UI_ASSISTANT_MEDIA_TICKET_SCOPE = "assistant-media";
 const CONTROL_UI_ASSISTANT_MEDIA_TICKET_TTL_MS = 5 * 60 * 1000;
 const CONTROL_UI_ASSETS_MISSING_MESSAGE =
@@ -66,7 +66,7 @@ const controlUiAssistantMediaTicketSecret = randomBytes(32);
 
 export type ControlUiRequestOptions = {
   basePath?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   root?: ControlUiRootState;
   auth?: ResolvedGatewayAuth;
@@ -137,7 +137,7 @@ const STATIC_ASSET_EXTENSIONS = new Set([
   ".webmanifest",
 ]);
 
-const CONTROL_UI_NAMESPACE_PREFIX = "/__NexisClaw__/";
+const CONTROL_UI_NAMESPACE_PREFIX = "/__GreenchClaw__/";
 const CONTROL_UI_ROOT_PUBLIC_ASSETS = new Set([
   "apple-touch-icon.png",
   "favicon-32.png",
@@ -508,7 +508,7 @@ export async function handleControlUiAssistantMediaRequest(
   res: ServerResponse,
   opts?: {
     basePath?: string;
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     agentId?: string;
     auth?: ResolvedGatewayAuth;
     trustedProxies?: string[];

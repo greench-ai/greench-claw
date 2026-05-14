@@ -1,11 +1,11 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
 export {
   formatInboundEnvelope,
   type EnvelopeFormatOptions,
-} from "NexisClaw/plugin-sdk/channel-envelope";
+} from "GreenchClaw/plugin-sdk/channel-envelope";
 
-type WhatsAppMessagePrefixConfig = NexisClawConfig;
+type WhatsAppMessagePrefixConfig = GreenchClawConfig;
 
 function normalizeAgentId(agentId: string): string {
   return agentId.trim().toLowerCase() || "main";
@@ -34,5 +34,5 @@ export function resolveMessagePrefix(
   if (opts?.hasAllowFrom === true) {
     return "";
   }
-  return resolveIdentityNamePrefix(cfg, agentId) ?? opts?.fallback ?? "[NexisClaw]";
+  return resolveIdentityNamePrefix(cfg, agentId) ?? opts?.fallback ?? "[GreenchClaw]";
 }

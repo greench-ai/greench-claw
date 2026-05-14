@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { readAcpSessionEntry } from "NexisClaw/plugin-sdk/acp-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { readAcpSessionEntry } from "GreenchClaw/plugin-sdk/acp-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   formatThreadBindingDurationLabel,
   registerSessionBindingAdapter,
@@ -12,13 +12,13 @@ import {
   type BindingTargetKind,
   type SessionBindingAdapter,
   type SessionBindingRecord,
-} from "NexisClaw/plugin-sdk/conversation-runtime";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { writeJsonFileAtomically } from "NexisClaw/plugin-sdk/json-store";
-import { normalizeAccountId, isAcpSessionKey } from "NexisClaw/plugin-sdk/routing";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { resolveStateDir } from "NexisClaw/plugin-sdk/state-paths";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { writeJsonFileAtomically } from "GreenchClaw/plugin-sdk/json-store";
+import { normalizeAccountId, isAcpSessionKey } from "GreenchClaw/plugin-sdk/routing";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { resolveStateDir } from "GreenchClaw/plugin-sdk/state-paths";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveTelegramToken } from "./token.js";
 
 const DEFAULT_THREAD_BINDING_IDLE_TIMEOUT_MS = 24 * 60 * 60 * 1000;
@@ -87,7 +87,7 @@ type TelegramThreadBindingsState = {
  * Keep Telegram thread binding state shared across bundled chunks so routing,
  * binding lookups, and binding mutations all observe the same live registry.
  */
-const TELEGRAM_THREAD_BINDINGS_STATE_KEY = Symbol.for("NexisClaw.telegramThreadBindingsState");
+const TELEGRAM_THREAD_BINDINGS_STATE_KEY = Symbol.for("GreenchClaw.telegramThreadBindingsState");
 let threadBindingsState: TelegramThreadBindingsState | undefined;
 
 function getThreadBindingsState(): TelegramThreadBindingsState {
@@ -408,7 +408,7 @@ function shouldExpireByMaxAge(params: {
 }
 
 export function createTelegramThreadBindingManager(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string;
   persist?: boolean;
   idleTimeoutMs?: number;

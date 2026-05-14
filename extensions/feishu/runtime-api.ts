@@ -11,45 +11,45 @@ export type {
   ChannelOutboundAdapter,
   ChannelPlugin,
   HistoryEntry,
-  NexisClawConfig,
-  NexisClawPluginApi,
+  GreenchClawConfig,
+  GreenchClawPluginApi,
   OutboundIdentity,
   PluginRuntime,
   ReplyPayload,
-} from "NexisClaw/plugin-sdk/core";
-export type { NexisClawConfig as ClawdbotConfig } from "NexisClaw/plugin-sdk/core";
-export type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
-export type { GroupToolPolicyConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/core";
+export type { GreenchClawConfig as ClawdbotConfig } from "GreenchClaw/plugin-sdk/core";
+export type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime";
+export type { GroupToolPolicyConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 export {
   DEFAULT_ACCOUNT_ID,
   buildChannelConfigSchema,
   createActionGate,
   createDedupeCache,
-} from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/core";
 export {
   PAIRING_APPROVED_MESSAGE,
   buildProbeChannelStatusSummary,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/channel-status";
-export { buildAgentMediaPayload } from "NexisClaw/plugin-sdk/agent-media-payload";
-export { createChannelPairingController } from "NexisClaw/plugin-sdk/channel-pairing";
-export { createReplyPrefixContext } from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-status";
+export { buildAgentMediaPayload } from "GreenchClaw/plugin-sdk/agent-media-payload";
+export { createChannelPairingController } from "GreenchClaw/plugin-sdk/channel-pairing";
+export { createReplyPrefixContext } from "GreenchClaw/plugin-sdk/channel-message";
 export {
   evaluateSupplementalContextVisibility,
   filterSupplementalContextItems,
   resolveChannelContextVisibilityMode,
-} from "NexisClaw/plugin-sdk/context-visibility-runtime";
+} from "GreenchClaw/plugin-sdk/context-visibility-runtime";
 export {
   loadSessionStore,
   resolveSessionStoreEntry,
-} from "NexisClaw/plugin-sdk/session-store-runtime";
-export { readJsonFileWithFallback } from "NexisClaw/plugin-sdk/json-store";
-export { createPersistentDedupe } from "NexisClaw/plugin-sdk/persistent-dedupe";
-export { normalizeAgentId } from "NexisClaw/plugin-sdk/routing";
-export { chunkTextForOutbound } from "NexisClaw/plugin-sdk/text-chunking";
+} from "GreenchClaw/plugin-sdk/session-store-runtime";
+export { readJsonFileWithFallback } from "GreenchClaw/plugin-sdk/json-store";
+export { createPersistentDedupe } from "GreenchClaw/plugin-sdk/persistent-dedupe";
+export { normalizeAgentId } from "GreenchClaw/plugin-sdk/routing";
+export { chunkTextForOutbound } from "GreenchClaw/plugin-sdk/text-chunking";
 export {
   isRequestBodyLimitError,
   readRequestBodyWithLimit,
   requestBodyErrorToText,
-} from "NexisClaw/plugin-sdk/webhook-ingress";
+} from "GreenchClaw/plugin-sdk/webhook-ingress";
 export { setFeishuRuntime } from "./src/runtime.js";

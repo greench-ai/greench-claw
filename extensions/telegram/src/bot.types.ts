@@ -1,5 +1,5 @@
-import type { NexisClawConfig, ReplyToMode } from "NexisClaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import type { GreenchClawConfig, ReplyToMode } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import type { TelegramBotDeps } from "./bot-deps.js";
 import type { TelegramBotInfo } from "./bot-info.js";
 import type { TelegramTransport } from "./fetch.js";
@@ -14,7 +14,7 @@ export type TelegramBotOptions = {
   mediaMaxMb?: number;
   replyToMode?: ReplyToMode;
   proxyFetch?: typeof fetch;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   /** Bot identity returned by the startup getMe probe. Avoids a duplicate grammY init getMe before polling. */
   botInfo?: TelegramBotInfo;
   /** Signal to abort in-flight Telegram API fetch requests (e.g. getUpdates) on shutdown. */

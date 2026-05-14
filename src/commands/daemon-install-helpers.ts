@@ -4,14 +4,14 @@ import path from "node:path";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import { collectDurableServiceEnvVarSources } from "../config/state-dir-dotenv.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { resolveSecretInputRef } from "../config/types.secrets.js";
 import { resolveGatewayLaunchAgentLabel } from "../daemon/constants.js";
 import { resolveGatewayStateDir } from "../daemon/paths.js";
 import {
-  NEXISCLAW_WRAPPER_ENV_KEY,
+  GREENCHCLAW_WRAPPER_ENV_KEY,
   resolveGatewayProgramArguments,
-  resolveNexisClawWrapperPath,
+  resolveGreenchClawWrapperPath,
 } from "../daemon/program-args.js";
 import {
   addServiceEnvPlanEntries,
@@ -138,7 +138,7 @@ async function collectAuthProfileServiceEnvVars(params: {
 
 function collectConfigSecretRefServiceEnvVars(params: {
   env: Record<string, string | undefined>;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   durableEnvironment: Record<string, string | undefined>;
   warn?: DaemonInstallWarnFn;
 }): Record<string, string> {
@@ -190,7 +190,7 @@ function collectConfigSecretRefServiceEnvVars(params: {
 
 function collectExecSecretRefPassEnvServiceEnvVars(params: {
   env: Record<string, string | undefined>;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   durableEnvironment: Record<string, string | undefined>;
   warn?: DaemonInstallWarnFn;
 }): Record<string, string> {
@@ -359,7 +359,7 @@ function collectPreservedExistingServiceEnvVars(
       upper === "HOME" ||
       upper === "PATH" ||
       upper === "TMPDIR" ||
-      upper.startsWith("NEXISCLAW_")
+      upper.startsWith("GREENCHCLAW_")
     ) {
       continue;
     }
@@ -410,7 +410,7 @@ function resolveGatewayInstallWorkingDirectory(params: {
 
 async function buildGatewayInstallEnvironment(params: {
   env: Record<string, string | undefined>;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   authStore?: AuthProfileStore;
   warn?: DaemonInstallWarnFn;
   serviceEnvironment: Record<string, string | undefined>;
@@ -505,7 +505,7 @@ export async function buildGatewayInstallPlan(params: {
   platform?: NodeJS.Platform;
   warn?: DaemonInstallWarnFn;
   /** Full config to extract env vars from (env vars + inline env keys). */
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   authStore?: AuthProfileStore;
   existingEnvironmentValueSources?: Record<
     string,
@@ -519,11 +519,11 @@ export async function buildGatewayInstallPlan(params: {
     devMode: params.devMode,
     nodePath: params.nodePath,
   });
-  const wrapperPath = await resolveNexisClawWrapperPath(
-    params.wrapperPath ?? params.env[NEXISCLAW_WRAPPER_ENV_KEY],
+  const wrapperPath = await resolveGreenchClawWrapperPath(
+    params.wrapperPath ?? params.env[GREENCHCLAW_WRAPPER_ENV_KEY],
   );
   const serviceInputEnv: Record<string, string | undefined> = wrapperPath
-    ? { ...params.env, [NEXISCLAW_WRAPPER_ENV_KEY]: wrapperPath }
+    ? { ...params.env, [GREENCHCLAW_WRAPPER_ENV_KEY]: wrapperPath }
     : params.env;
   const { programArguments, workingDirectory } = await resolveGatewayProgramArguments({
     port: params.port,
@@ -544,7 +544,7 @@ export async function buildGatewayInstallPlan(params: {
     port: params.port,
     launchdLabel:
       platform === "darwin"
-        ? resolveGatewayLaunchAgentLabel(serviceInputEnv.NEXISCLAW_PROFILE)
+        ? resolveGatewayLaunchAgentLabel(serviceInputEnv.GREENCHCLAW_PROFILE)
         : undefined,
     platform,
     extraPathDirs: resolveDaemonNodeBinDir(nodePath),
@@ -577,5 +577,5 @@ export async function buildGatewayInstallPlan(params: {
 export function gatewayInstallErrorHint(platform = process.platform): string {
   return platform === "win32"
     ? "Tip: native Windows now falls back to a per-user Startup-folder login item when Scheduled Task creation is denied; if install still fails, rerun from an elevated PowerShell or skip service install."
-    : `Tip: rerun \`${formatCliCommand("NexisClaw gateway install")}\` after fixing the error.`;
+    : `Tip: rerun \`${formatCliCommand("GreenchClaw gateway install")}\` after fixing the error.`;
 }

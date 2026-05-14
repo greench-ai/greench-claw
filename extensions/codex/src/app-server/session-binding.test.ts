@@ -43,7 +43,7 @@ async function writeCodexCliAuthFile(codexHome: string): Promise<void> {
 
 describe("codex app-server session binding", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-codex-binding-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-codex-binding-"));
   });
 
   afterEach(async () => {

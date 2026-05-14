@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { createSlackPluginBase, setSlackChannelAllowlist, slackConfigAdapter } from "./shared.js";
 
@@ -65,12 +65,12 @@ describe("slackConfigAdapter", () => {
         providers: {
           slack_bot: {
             source: "file",
-            path: "/tmp/NexisClaw-missing-slack-bot-token",
+            path: "/tmp/GreenchClaw-missing-slack-bot-token",
             mode: "singleValue",
           },
           slack_app: {
             source: "file",
-            path: "/tmp/NexisClaw-missing-slack-app-token",
+            path: "/tmp/GreenchClaw-missing-slack-app-token",
             mode: "singleValue",
           },
         },
@@ -83,7 +83,7 @@ describe("slackConfigAdapter", () => {
           defaultTo: "C123",
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     expect(slackConfigAdapter.resolveAllowFrom?.({ cfg, accountId: "default" })).toEqual(["U123"]);
     expect(slackConfigAdapter.resolveDefaultTo?.({ cfg, accountId: "default" })).toBe("C123");

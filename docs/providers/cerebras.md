@@ -2,11 +2,11 @@
 summary: "Cerebras setup (auth + model selection)"
 title: "Cerebras"
 read_when:
-  - You want to use Cerebras with NexisClaw
+  - You want to use Cerebras with GreenchClaw
   - You need the Cerebras API key env var or CLI auth choice
 ---
 
-[Cerebras](https://www.cerebras.ai) provides high-speed OpenAI-compatible inference on custom inference hardware. NexisClaw includes a bundled Cerebras provider plugin with a static four-model catalog.
+[Cerebras](https://www.cerebras.ai) provides high-speed OpenAI-compatible inference on custom inference hardware. GreenchClaw includes a bundled Cerebras provider plugin with a static four-model catalog.
 
 | Property        | Value                                    |
 | --------------- | ---------------------------------------- |
@@ -29,11 +29,11 @@ read_when:
     <CodeGroup>
 
 ```bash Onboarding
-NexisClaw onboard --auth-choice cerebras-api-key
+GreenchClaw onboard --auth-choice cerebras-api-key
 ```
 
 ```bash Direct flag
-NexisClaw onboard --non-interactive \
+GreenchClaw onboard --non-interactive \
   --auth-choice cerebras-api-key \
   --cerebras-api-key "$CEREBRAS_API_KEY"
 ```
@@ -47,10 +47,10 @@ export CEREBRAS_API_KEY=csk-...
   </Step>
   <Step title="Verify models are available">
     ```bash
-    NexisClaw models list --provider cerebras
+    GreenchClaw models list --provider cerebras
     ```
 
-    The list should include all four bundled models. If `CEREBRAS_API_KEY` is unresolved, `NexisClaw models status --json` reports the missing credential under `auth.unusableProfiles`.
+    The list should include all four bundled models. If `CEREBRAS_API_KEY` is unresolved, `GreenchClaw models status --json` reports the missing credential under `auth.unusableProfiles`.
 
   </Step>
 </Steps>
@@ -58,7 +58,7 @@ export CEREBRAS_API_KEY=csk-...
 ## Non-interactive setup
 
 ```bash
-NexisClaw onboard --non-interactive \
+GreenchClaw onboard --non-interactive \
   --mode local \
   --auth-choice cerebras-api-key \
   --cerebras-api-key "$CEREBRAS_API_KEY"
@@ -66,7 +66,7 @@ NexisClaw onboard --non-interactive \
 
 ## Built-in catalog
 
-NexisClaw ships a static Cerebras catalog that mirrors the public OpenAI-compatible endpoint. All four models share a 128k context and 8,192 max-output tokens.
+GreenchClaw ships a static Cerebras catalog that mirrors the public OpenAI-compatible endpoint. All four models share a 128k context and 8,192 max-output tokens.
 
 | Model ref                                 | Name                 | Reasoning | Notes                                  |
 | ----------------------------------------- | -------------------- | --------- | -------------------------------------- |
@@ -109,7 +109,7 @@ The bundled plugin usually means you only need the API key. Use explicit `models
 ```
 
 <Note>
-  If the Gateway runs as a daemon (launchd, systemd, Docker), make sure `CEREBRAS_API_KEY` is available to that process — for example in `~/.NexisClaw/.env` or through `env.shellEnv`. A key sitting only in `~/.profile` will not help a managed service unless the env is imported separately.
+  If the Gateway runs as a daemon (launchd, systemd, Docker), make sure `CEREBRAS_API_KEY` is available to that process — for example in `~/.GreenchClaw/.env` or through `env.shellEnv`. A key sitting only in `~/.profile` will not help a managed service unless the env is imported separately.
 </Note>
 
 ## Related

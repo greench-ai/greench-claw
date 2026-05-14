@@ -1,15 +1,15 @@
 ---
 name: session-memory
 description: "Save session context to memory when /new or /reset command is issued"
-homepage: https://docs.NexisClaw.ai/automation/hooks#session-memory
+homepage: https://docs.GreenchClaw.ai/automation/hooks#session-memory
 metadata:
   {
-    "NexisClaw":
+    "GreenchClaw":
       {
         "emoji": "💾",
         "events": ["command:new", "command:reset"],
         "requires": { "config": ["workspace.dir"] },
-        "install": [{ "id": "bundled", "kind": "bundled", "label": "Bundled with NexisClaw" }],
+        "install": [{ "id": "bundled", "kind": "bundled", "label": "Bundled with GreenchClaw" }],
       },
   }
 ---
@@ -86,7 +86,7 @@ Example configuration:
 
 The hook automatically:
 
-- Uses your workspace directory (`~/.NexisClaw/workspace` by default)
+- Uses your workspace directory (`~/.GreenchClaw/workspace` by default)
 - Uses timestamp slugs by default so `/new` and `/reset` stay fast on message channels
 - Runs memory capture in the background so reset acknowledgements can return immediately
 - Uses your configured LLM for slug generation only when `llmSlug` is `true`
@@ -97,7 +97,7 @@ The hook automatically:
 To disable this hook:
 
 ```bash
-NexisClaw hooks disable session-memory
+GreenchClaw hooks disable session-memory
 ```
 
 Or remove it from your config:

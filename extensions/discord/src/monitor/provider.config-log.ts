@@ -1,5 +1,5 @@
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { summarizeStringEntries } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { summarizeStringEntries } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { formatThreadBindingDurationLabel } from "./thread-bindings.messages.js";
 
 function formatThreadBindingDurationForConfigLabel(durationMs: number): string {

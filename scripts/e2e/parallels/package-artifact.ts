@@ -24,27 +24,29 @@ export async function packageBuildCommitFromTgz(tgzPath: string): Promise<string
   return info.commit ?? "";
 }
 
-export function resolveNexisClawRegistryVersion(specOrAlias: string): string {
+export function resolveGreenchClawRegistryVersion(specOrAlias: string): string {
   const rawValue = specOrAlias.trim();
-  const value = rawValue.startsWith("NexisClaw@") ? rawValue.slice("NexisClaw@".length) : rawValue;
+  const value = rawValue.startsWith("GreenchClaw@")
+    ? rawValue.slice("GreenchClaw@".length)
+    : rawValue;
   if (!value) {
     return "";
   }
   if (value === "latest" || value === "beta" || /^\d/.test(value)) {
-    return npmViewVersion(`NexisClaw@${value}`);
+    return npmViewVersion(`GreenchClaw@${value}`);
   }
   const betaMatch = /^beta(\d+)$/u.exec(value);
   if (betaMatch) {
     const betaSuffix = `-beta.${betaMatch[1]}`;
     const versions = JSON.parse(
-      run("npm", ["view", "NexisClaw", "versions", "--json"], { quiet: true }).stdout,
+      run("npm", ["view", "GreenchClaw", "versions", "--json"], { quiet: true }).stdout,
     ) as string[];
     const match = versions
       .filter((version) => version.endsWith(betaSuffix))
       .toSorted((a, b) => a.localeCompare(b, undefined, { numeric: true }))
       .at(-1);
     if (!match) {
-      die(`no NexisClaw registry version found for alias ${value}`);
+      die(`no GreenchClaw registry version found for alias ${value}`);
     }
     return match;
   }
@@ -117,7 +119,7 @@ async function ensureCurrentBuildUnlocked(input: {
   }
 }
 
-export async function packNexisClaw(input: {
+export async function packGreenchClaw(input: {
   destination: string;
   packageSpec?: string;
   requireControlUi?: boolean;
@@ -148,39 +150,42 @@ export async function packNexisClaw(input: {
     return { path: tgzPath, version };
   }
 
-  return await withPackageLock(path.join(tmpdir(), "NexisClaw-parallels-build.lock"), async () => {
-    await ensureCurrentBuildUnlocked({
-      checkDirty: true,
-      requireControlUi: input.requireControlUi,
-    });
-    run("node", [
-      "--import",
-      "tsx",
-      "--input-type=module",
-      "--eval",
-      "import { writePackageDistInventory } from './src/infra/package-dist-inventory.ts'; await writePackageDistInventory(process.cwd());",
-    ]);
-    const shortHead = run("git", ["rev-parse", "--short", "HEAD"], { quiet: true }).stdout.trim();
-    const output = run(
-      "npm",
-      ["pack", "--ignore-scripts", "--json", "--pack-destination", input.destination],
-      {
-        quiet: true,
-      },
-    ).stdout;
-    const packed = JSON.parse(output).at(-1)?.filename as string | undefined;
-    if (!packed) {
-      die("npm pack did not report a filename");
-    }
-    const tgzPath = path.join(input.destination, `NexisClaw-main-${shortHead}.tgz`);
-    await copyFile(path.join(input.destination, packed), tgzPath);
-    const buildCommit = await packageBuildCommitFromTgz(tgzPath);
-    if (!buildCommit) {
-      die(`failed to read packed build commit from ${tgzPath}`);
-    }
-    say(`Packed ${tgzPath}`);
-    return { buildCommit, buildCommitShort: buildCommit.slice(0, 7), path: tgzPath };
-  });
+  return await withPackageLock(
+    path.join(tmpdir(), "GreenchClaw-parallels-build.lock"),
+    async () => {
+      await ensureCurrentBuildUnlocked({
+        checkDirty: true,
+        requireControlUi: input.requireControlUi,
+      });
+      run("node", [
+        "--import",
+        "tsx",
+        "--input-type=module",
+        "--eval",
+        "import { writePackageDistInventory } from './src/infra/package-dist-inventory.ts'; await writePackageDistInventory(process.cwd());",
+      ]);
+      const shortHead = run("git", ["rev-parse", "--short", "HEAD"], { quiet: true }).stdout.trim();
+      const output = run(
+        "npm",
+        ["pack", "--ignore-scripts", "--json", "--pack-destination", input.destination],
+        {
+          quiet: true,
+        },
+      ).stdout;
+      const packed = JSON.parse(output).at(-1)?.filename as string | undefined;
+      if (!packed) {
+        die("npm pack did not report a filename");
+      }
+      const tgzPath = path.join(input.destination, `GreenchClaw-main-${shortHead}.tgz`);
+      await copyFile(path.join(input.destination, packed), tgzPath);
+      const buildCommit = await packageBuildCommitFromTgz(tgzPath);
+      if (!buildCommit) {
+        die(`failed to read packed build commit from ${tgzPath}`);
+      }
+      say(`Packed ${tgzPath}`);
+      return { buildCommit, buildCommitShort: buildCommit.slice(0, 7), path: tgzPath };
+    },
+  );
 }
 
 async function withPackageLock<T>(lockDir: string, fn: () => Promise<T>): Promise<T> {
@@ -194,8 +199,12 @@ async function withPackageLock<T>(lockDir: string, fn: () => Promise<T>): Promis
 }
 
 async function acquirePackageLock(lockDir: string, ownerToken: string): Promise<void> {
-  const timeoutMs = Number(process.env.NEXISCLAW_PARALLELS_PACKAGE_LOCK_TIMEOUT_MS || 30 * 60_000);
-  const staleMs = Number(process.env.NEXISCLAW_PARALLELS_PACKAGE_LOCK_STALE_MS || 2 * 60 * 60_000);
+  const timeoutMs = Number(
+    process.env.GREENCHCLAW_PARALLELS_PACKAGE_LOCK_TIMEOUT_MS || 30 * 60_000,
+  );
+  const staleMs = Number(
+    process.env.GREENCHCLAW_PARALLELS_PACKAGE_LOCK_STALE_MS || 2 * 60 * 60_000,
+  );
   const startedAt = Date.now();
   let announcedWait = false;
   while (Date.now() - startedAt < timeoutMs) {

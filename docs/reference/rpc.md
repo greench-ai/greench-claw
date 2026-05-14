@@ -6,20 +6,20 @@ read_when:
 title: "RPC adapters"
 ---
 
-NexisClaw integrates external CLIs via JSON-RPC. Two patterns are used today.
+GreenchClaw integrates external CLIs via JSON-RPC. Two patterns are used today.
 
 ## Pattern A: HTTP daemon (signal-cli)
 
 - `signal-cli` runs as a daemon with JSON-RPC over HTTP.
 - Event stream is SSE (`/api/v1/events`).
 - Health probe: `/api/v1/check`.
-- NexisClaw owns lifecycle when `channels.signal.autoStart=true`.
+- GreenchClaw owns lifecycle when `channels.signal.autoStart=true`.
 
 See [Signal](/channels/signal) for setup and endpoints.
 
 ## Pattern B: stdio child process (imsg)
 
-- NexisClaw spawns `imsg rpc` as a child process for [iMessage](/channels/imessage).
+- GreenchClaw spawns `imsg rpc` as a child process for [iMessage](/channels/imessage).
 - JSON-RPC is line-delimited over stdin/stdout (one JSON object per line).
 - No TCP port, no daemon required.
 

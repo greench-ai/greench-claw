@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isVitestRuntimeEnv } from "../infra/env.js";
 import { startHeartbeatRunner, type HeartbeatRunner } from "../infra/heartbeat-runner.js";
 import type { PluginMetadataRegistryView } from "../plugins/plugin-metadata-snapshot.types.js";
@@ -29,12 +29,12 @@ export type GatewayChannelManager = Parameters<
 function createNoopHeartbeatRunner(): HeartbeatRunner {
   return {
     stop: () => {},
-    updateConfig: (_cfg: NexisClawConfig) => {},
+    updateConfig: (_cfg: GreenchClawConfig) => {},
   };
 }
 
 export function startGatewayChannelHealthMonitor(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channelManager: GatewayChannelManager;
 }): ChannelHealthMonitor | null {
   const healthCheckMinutes = params.cfg.gateway?.channelHealthCheckMinutes;
@@ -154,7 +154,7 @@ export function scheduleGatewayPostReadyMaintenance(params: {
 }
 
 function recoverPendingOutboundDeliveries(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   log: GatewayRuntimeServiceLogger;
 }): void {
   void (async () => {
@@ -190,7 +190,7 @@ function recoverPendingSessionDeliveries(params: {
 }
 
 function startGatewayModelPricingRefreshOnDemand(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   pluginLookUpTable?: PluginMetadataRegistryView;
   log: GatewayRuntimeServiceLogger;
 }): () => void {
@@ -222,7 +222,7 @@ function startGatewayModelPricingRefreshOnDemand(params: {
 
 export function startGatewayRuntimeServices(params: {
   minimalTestGateway: boolean;
-  cfgAtStart: NexisClawConfig;
+  cfgAtStart: GreenchClawConfig;
   channelManager: GatewayChannelManager;
   log: GatewayRuntimeServiceLogger;
 }): {
@@ -244,7 +244,7 @@ export function startGatewayRuntimeServices(params: {
 
 export function activateGatewayScheduledServices(params: {
   minimalTestGateway: boolean;
-  cfgAtStart: NexisClawConfig;
+  cfgAtStart: GreenchClawConfig;
   deps: import("../cli/deps.types.js").CliDeps;
   sessionDeliveryRecoveryMaxEnqueuedAt: number;
   cron: { start: () => Promise<void> };

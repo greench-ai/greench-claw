@@ -538,7 +538,7 @@ export async function loadRunOverflowCompactionHarness(): Promise<{
   }));
 
   vi.doMock("../models-config.js", () => ({
-    ensureNexisClawModelsJson: vi.fn(async () => {}),
+    ensureGreenchClawModelsJson: vi.fn(async () => {}),
   }));
 
   vi.doMock("../context-window-guard.js", () => ({

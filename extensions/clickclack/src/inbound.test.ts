@@ -1,5 +1,5 @@
-import { createPluginRuntimeMock } from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { PluginRuntime } from "NexisClaw/plugin-sdk/core";
+import { createPluginRuntimeMock } from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { PluginRuntime } from "GreenchClaw/plugin-sdk/core";
 import { describe, expect, it, vi } from "vitest";
 import { handleClickClackInbound } from "./inbound.js";
 import { setClickClackRuntime } from "./runtime.js";

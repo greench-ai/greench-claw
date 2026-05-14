@@ -37,7 +37,7 @@ export function createWizardPrompter(
 }
 
 export async function setupAuthTestEnv(
-  prefix = "NexisClaw-auth-",
+  prefix = "GreenchClaw-auth-",
   options?: { agentSubdir?: string },
 ): Promise<{
   stateDir: string;
@@ -45,8 +45,8 @@ export async function setupAuthTestEnv(
 }> {
   const stateDir = await makeTempWorkspace(prefix);
   const agentDir = path.join(stateDir, options?.agentSubdir ?? "agent");
-  process.env.NEXISCLAW_STATE_DIR = stateDir;
-  process.env.NEXISCLAW_AGENT_DIR = agentDir;
+  process.env.GREENCHCLAW_STATE_DIR = stateDir;
+  process.env.GREENCHCLAW_AGENT_DIR = agentDir;
   process.env.PI_CODING_AGENT_DIR = agentDir;
   await fs.mkdir(agentDir, { recursive: true });
   return { stateDir, agentDir };
@@ -74,10 +74,10 @@ export function createAuthTestLifecycle(envKeys: string[]): AuthTestLifecycle {
   };
 }
 
-export function requireNexisClawAgentDir(): string {
-  const agentDir = process.env.NEXISCLAW_AGENT_DIR;
+export function requireGreenchClawAgentDir(): string {
+  const agentDir = process.env.GREENCHCLAW_AGENT_DIR;
   if (!agentDir) {
-    throw new Error("NEXISCLAW_AGENT_DIR not set");
+    throw new Error("GREENCHCLAW_AGENT_DIR not set");
   }
   return agentDir;
 }

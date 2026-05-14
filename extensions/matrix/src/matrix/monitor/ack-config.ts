@@ -1,12 +1,12 @@
-import { resolveAckReaction } from "NexisClaw/plugin-sdk/channel-feedback";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveAckReaction } from "GreenchClaw/plugin-sdk/channel-feedback";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import type { CoreConfig } from "../../types.js";
 import { resolveMatrixAccountConfig } from "../account-config.js";
 
 type MatrixAckReactionScope = "group-mentions" | "group-all" | "direct" | "all" | "none" | "off";
 
 export function resolveMatrixAckReactionConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   accountId?: string | null;
 }): { ackReaction: string; ackReactionScope: MatrixAckReactionScope } {

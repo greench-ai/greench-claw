@@ -104,9 +104,9 @@ describe("ensureAuthProfileStore", () => {
     previousPiAgentDir: string | undefined;
   }): void {
     if ("previousStateDir" in params) {
-      restoreEnvValue("NEXISCLAW_STATE_DIR", params.previousStateDir);
+      restoreEnvValue("GREENCHCLAW_STATE_DIR", params.previousStateDir);
     }
-    restoreEnvValue("NEXISCLAW_AGENT_DIR", params.previousAgentDir);
+    restoreEnvValue("GREENCHCLAW_AGENT_DIR", params.previousAgentDir);
     restoreEnvValue("PI_CODING_AGENT_DIR", params.previousPiAgentDir);
   }
 
@@ -117,16 +117,16 @@ describe("ensureAuthProfileStore", () => {
     previousAgentDir: string | undefined;
     previousPiAgentDir: string | undefined;
   } {
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    const previousAgentDir = process.env.NEXISCLAW_AGENT_DIR;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    const previousAgentDir = process.env.GREENCHCLAW_AGENT_DIR;
     const previousPiAgentDir = process.env.PI_CODING_AGENT_DIR;
     const mainDir = path.join(root, "agents", "main", "agent");
     const agentDir = path.join(root, "agents", "agent-x", "agent");
     fs.mkdirSync(mainDir, { recursive: true });
     fs.mkdirSync(agentDir, { recursive: true });
 
-    process.env.NEXISCLAW_STATE_DIR = root;
-    process.env.NEXISCLAW_AGENT_DIR = mainDir;
+    process.env.GREENCHCLAW_STATE_DIR = root;
+    process.env.GREENCHCLAW_AGENT_DIR = mainDir;
     process.env.PI_CODING_AGENT_DIR = mainDir;
     clearRuntimeAuthProfileStoreSnapshots();
     return { mainDir, agentDir, previousStateDir, previousAgentDir, previousPiAgentDir };
@@ -164,7 +164,7 @@ describe("ensureAuthProfileStore", () => {
   }
 
   it("migrates legacy auth.json and deletes it (PR #368)", () => {
-    const agentDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profiles-"));
+    const agentDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-profiles-"));
     try {
       const legacyPath = path.join(agentDir, "auth.json");
       fs.writeFileSync(
@@ -205,7 +205,7 @@ describe("ensureAuthProfileStore", () => {
   });
 
   it("merges main auth profiles into agent store and keeps agent overrides", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-merge-"));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-merge-"));
     const { mainDir, agentDir, previousStateDir, previousAgentDir, previousPiAgentDir } =
       configureMainAuthTestDirs(root);
     try {
@@ -264,7 +264,7 @@ describe("ensureAuthProfileStore", () => {
   });
 
   it("uses the main agent's newer OAuth profile when an agent still has a stale default profile", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-drift-"));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-drift-"));
     const { mainDir, agentDir, previousStateDir, previousAgentDir, previousPiAgentDir } =
       configureMainAuthTestDirs(root);
     try {
@@ -354,7 +354,7 @@ describe("ensureAuthProfileStore", () => {
   });
 
   it("keeps a newer agent replacement credential while repairing stale default references", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-drift-newer-agent-"));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-drift-newer-agent-"));
     const { mainDir, agentDir, previousStateDir, previousAgentDir, previousPiAgentDir } =
       configureMainAuthTestDirs(root);
     try {
@@ -429,7 +429,7 @@ describe("ensureAuthProfileStore", () => {
   });
 
   it("preserves a valid main default OAuth profile while replacing a stale agent override", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-drift-base-default-"));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-drift-base-default-"));
     const { mainDir, agentDir, previousStateDir, previousAgentDir, previousPiAgentDir } =
       configureMainAuthTestDirs(root);
     try {
@@ -510,7 +510,7 @@ describe("ensureAuthProfileStore", () => {
   });
 
   it("keeps a stale default OAuth profile when the main profile belongs to a different identity", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-drift-mismatch-"));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-drift-mismatch-"));
     const { mainDir, agentDir, previousStateDir, previousAgentDir, previousPiAgentDir } =
       configureMainAuthTestDirs(root);
     try {
@@ -573,7 +573,7 @@ describe("ensureAuthProfileStore", () => {
   });
 
   it("rewrites invalidated per-agent Codex order to the main agent's healthy relogin profile", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-codex-relogin-"));
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-codex-relogin-"));
     const { mainDir, agentDir, previousStateDir, previousAgentDir, previousPiAgentDir } =
       configureMainAuthTestDirs(root);
     try {
@@ -706,7 +706,7 @@ describe("ensureAuthProfileStore", () => {
   ] as const)(
     "normalizes auth-profiles credential aliases with canonical-field precedence: $name",
     ({ name, profile, expected }) => {
-      withTempAgentDir("NexisClaw-auth-alias-", (agentDir) => {
+      withTempAgentDir("GreenchClaw-auth-alias-", (agentDir) => {
         const storeData = {
           version: AUTH_STORE_VERSION,
           profiles: {
@@ -726,7 +726,7 @@ describe("ensureAuthProfileStore", () => {
   );
 
   it("normalizes mode/apiKey aliases while migrating legacy auth.json", () => {
-    withTempAgentDir("NexisClaw-auth-legacy-alias-", (agentDir) => {
+    withTempAgentDir("GreenchClaw-auth-legacy-alias-", (agentDir) => {
       fs.writeFileSync(
         path.join(agentDir, "auth.json"),
         `${JSON.stringify(
@@ -753,7 +753,7 @@ describe("ensureAuthProfileStore", () => {
   });
 
   it("does not load legacy flat auth-profiles.json entries at runtime", () => {
-    const agentDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-flat-profiles-"));
+    const agentDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-flat-profiles-"));
     try {
       const authPath = path.join(agentDir, "auth-profiles.json");
       const legacyFlatStore = {
@@ -774,9 +774,9 @@ describe("ensureAuthProfileStore", () => {
   });
 
   it("merges legacy oauth.json into auth-profiles.json", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-oauth-migrate-"));
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    const previousAgentDir = process.env.NEXISCLAW_AGENT_DIR;
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-oauth-migrate-"));
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    const previousAgentDir = process.env.GREENCHCLAW_AGENT_DIR;
     const previousPiAgentDir = process.env.PI_CODING_AGENT_DIR;
     try {
       const agentDir = path.join(root, "agent");
@@ -800,8 +800,8 @@ describe("ensureAuthProfileStore", () => {
         "utf8",
       );
 
-      process.env.NEXISCLAW_STATE_DIR = root;
-      process.env.NEXISCLAW_AGENT_DIR = agentDir;
+      process.env.GREENCHCLAW_STATE_DIR = root;
+      process.env.GREENCHCLAW_AGENT_DIR = agentDir;
       process.env.PI_CODING_AGENT_DIR = agentDir;
       clearRuntimeAuthProfileStoreSnapshots();
 
@@ -824,7 +824,7 @@ describe("ensureAuthProfileStore", () => {
       const oauthRef = persistedProfile?.oauthRef as
         | { source?: string; provider?: string; id?: unknown }
         | undefined;
-      expect(oauthRef?.source).toBe("NexisClaw-credentials");
+      expect(oauthRef?.source).toBe("GreenchClaw-credentials");
       expect(oauthRef?.provider).toBe("openai-codex");
       expect(typeof oauthRef?.id).toBe("string");
       expect(persistedProfile).not.toHaveProperty("access");
@@ -834,15 +834,15 @@ describe("ensureAuthProfileStore", () => {
       expect(JSON.stringify(persisted)).not.toContain("refresh-token");
     } finally {
       clearRuntimeAuthProfileStoreSnapshots();
-      restoreEnvValue("NEXISCLAW_STATE_DIR", previousStateDir);
+      restoreEnvValue("GREENCHCLAW_STATE_DIR", previousStateDir);
       restoreAgentDirEnv({ previousAgentDir, previousPiAgentDir });
       fs.rmSync(root, { recursive: true, force: true });
     }
   });
 
   it("exposes provider-managed runtime auth without persisting copied tokens", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-external-auth-"));
-    const previousAgentDir = process.env.NEXISCLAW_AGENT_DIR;
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-external-auth-"));
+    const previousAgentDir = process.env.GREENCHCLAW_AGENT_DIR;
     const previousPiAgentDir = process.env.PI_CODING_AGENT_DIR;
     try {
       const agentDir = path.join(root, "agent");
@@ -862,7 +862,7 @@ describe("ensureAuthProfileStore", () => {
         },
       ]);
 
-      process.env.NEXISCLAW_AGENT_DIR = agentDir;
+      process.env.GREENCHCLAW_AGENT_DIR = agentDir;
       process.env.PI_CODING_AGENT_DIR = agentDir;
       clearRuntimeAuthProfileStoreSnapshots();
 
@@ -883,10 +883,10 @@ describe("ensureAuthProfileStore", () => {
   });
 
   it("does not write inherited auth stores during secrets runtime reads", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-secrets-runtime-"));
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-secrets-runtime-"));
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
     try {
-      const stateDir = path.join(root, ".NexisClaw");
+      const stateDir = path.join(root, ".GreenchClaw");
       const mainAgentDir = path.join(stateDir, "agents", "main", "agent");
       const workerAgentDir = path.join(stateDir, "agents", "worker", "agent");
       const workerStorePath = path.join(workerAgentDir, "auth-profiles.json");
@@ -909,7 +909,7 @@ describe("ensureAuthProfileStore", () => {
         )}\n`,
         "utf8",
       );
-      process.env.NEXISCLAW_STATE_DIR = stateDir;
+      process.env.GREENCHCLAW_STATE_DIR = stateDir;
       clearRuntimeAuthProfileStoreSnapshots();
 
       const store = loadAuthProfileStoreForRuntime(workerAgentDir, { readOnly: true });
@@ -921,16 +921,16 @@ describe("ensureAuthProfileStore", () => {
       expect(fs.existsSync(workerStorePath)).toBe(false);
     } finally {
       clearRuntimeAuthProfileStoreSnapshots();
-      restoreEnvValue("NEXISCLAW_STATE_DIR", previousStateDir);
+      restoreEnvValue("GREENCHCLAW_STATE_DIR", previousStateDir);
       fs.rmSync(root, { recursive: true, force: true });
     }
   });
 
   it("does not clone inherited auth stores during normal agent reads", () => {
-    const root = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-read-through-"));
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-read-through-"));
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
     try {
-      const stateDir = path.join(root, ".NexisClaw");
+      const stateDir = path.join(root, ".GreenchClaw");
       const mainAgentDir = path.join(stateDir, "agents", "main", "agent");
       const workerAgentDir = path.join(stateDir, "agents", "worker", "agent");
       const workerStorePath = path.join(workerAgentDir, "auth-profiles.json");
@@ -955,7 +955,7 @@ describe("ensureAuthProfileStore", () => {
         )}\n`,
         "utf8",
       );
-      process.env.NEXISCLAW_STATE_DIR = stateDir;
+      process.env.GREENCHCLAW_STATE_DIR = stateDir;
       clearRuntimeAuthProfileStoreSnapshots();
 
       const store = ensureAuthProfileStore(workerAgentDir);
@@ -968,7 +968,7 @@ describe("ensureAuthProfileStore", () => {
       expect(fs.existsSync(workerStorePath)).toBe(false);
     } finally {
       clearRuntimeAuthProfileStoreSnapshots();
-      restoreEnvValue("NEXISCLAW_STATE_DIR", previousStateDir);
+      restoreEnvValue("GREENCHCLAW_STATE_DIR", previousStateDir);
       fs.rmSync(root, { recursive: true, force: true });
     }
   });
@@ -976,7 +976,7 @@ describe("ensureAuthProfileStore", () => {
   it("logs one warning with aggregated reasons for rejected auth-profiles entries", () => {
     const warnSpy = vi.spyOn(log, "warn").mockImplementation(() => undefined);
     try {
-      withTempAgentDir("NexisClaw-auth-invalid-", (agentDir) => {
+      withTempAgentDir("GreenchClaw-auth-invalid-", (agentDir) => {
         const invalidStore = {
           version: AUTH_STORE_VERSION,
           profiles: {
@@ -1020,7 +1020,7 @@ describe("ensureAuthProfileStore", () => {
   it.each([
     {
       name: "migrates SecretRef object in `key` to `keyRef` and clears `key`",
-      prefix: "NexisClaw-nonstr-key-ref-",
+      prefix: "GreenchClaw-nonstr-key-ref-",
       profileId: "openai:default",
       profile: {
         type: "api_key",
@@ -1039,7 +1039,7 @@ describe("ensureAuthProfileStore", () => {
     },
     {
       name: "deletes non-string non-SecretRef `key` without setting keyRef",
-      prefix: "NexisClaw-nonstr-key-num-",
+      prefix: "GreenchClaw-nonstr-key-num-",
       profileId: "openai:default",
       profile: {
         type: "api_key",
@@ -1054,7 +1054,7 @@ describe("ensureAuthProfileStore", () => {
     },
     {
       name: "does not overwrite existing `keyRef` when `key` contains a SecretRef",
-      prefix: "NexisClaw-nonstr-key-dup-",
+      prefix: "GreenchClaw-nonstr-key-dup-",
       profileId: "openai:default",
       profile: {
         type: "api_key",
@@ -1074,7 +1074,7 @@ describe("ensureAuthProfileStore", () => {
     },
     {
       name: "overwrites malformed `keyRef` with migrated ref from `key`",
-      prefix: "NexisClaw-nonstr-key-malformed-ref-",
+      prefix: "GreenchClaw-nonstr-key-malformed-ref-",
       profileId: "openai:default",
       profile: {
         type: "api_key",
@@ -1094,7 +1094,7 @@ describe("ensureAuthProfileStore", () => {
     },
     {
       name: "preserves valid string `key` values unchanged",
-      prefix: "NexisClaw-str-key-",
+      prefix: "GreenchClaw-str-key-",
       profileId: "openai:default",
       profile: {
         type: "api_key",
@@ -1108,7 +1108,7 @@ describe("ensureAuthProfileStore", () => {
     },
     {
       name: "migrates SecretRef object in `token` to `tokenRef` and clears `token`",
-      prefix: "NexisClaw-nonstr-token-ref-",
+      prefix: "GreenchClaw-nonstr-token-ref-",
       profileId: "anthropic:default",
       profile: {
         type: "token",
@@ -1127,7 +1127,7 @@ describe("ensureAuthProfileStore", () => {
     },
     {
       name: "deletes non-string non-SecretRef `token` without setting tokenRef",
-      prefix: "NexisClaw-nonstr-token-num-",
+      prefix: "GreenchClaw-nonstr-token-num-",
       profileId: "anthropic:default",
       profile: {
         type: "token",
@@ -1142,7 +1142,7 @@ describe("ensureAuthProfileStore", () => {
     },
     {
       name: "preserves valid string `token` values unchanged",
-      prefix: "NexisClaw-str-token-",
+      prefix: "GreenchClaw-str-token-",
       profileId: "anthropic:default",
       profile: {
         type: "token",

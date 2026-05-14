@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { setPluginEnabledInConfig } from "./plugins-config.js";
 
 describe("setPluginEnabledInConfig", () => {
@@ -10,7 +10,7 @@ describe("setPluginEnabledInConfig", () => {
           alpha: { enabled: false, custom: "x" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const next = setPluginEnabledInConfig(config, "alpha", true);
 
@@ -21,7 +21,7 @@ describe("setPluginEnabledInConfig", () => {
   });
 
   it("creates a plugin entry when it does not exist", () => {
-    const config = {} as NexisClawConfig;
+    const config = {} as GreenchClawConfig;
 
     const next = setPluginEnabledInConfig(config, "beta", false);
 
@@ -45,7 +45,7 @@ describe("setPluginEnabledInConfig", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const disabled = setPluginEnabledInConfig(config, "telegram", false);
     expect(disabled.channels?.telegram).toEqual({

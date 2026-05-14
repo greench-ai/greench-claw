@@ -13,14 +13,14 @@ const { assertOkOrThrowHttpErrorMock, postJsonRequestMock, resolveProviderHttpRe
     })),
   }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-http", () => ({
+vi.mock("GreenchClaw/plugin-sdk/provider-http", () => ({
   assertOkOrThrowHttpError: assertOkOrThrowHttpErrorMock,
   postJsonRequest: postJsonRequestMock,
   resolveProviderHttpRequestConfig: resolveProviderHttpRequestConfigMock,
 }));
 
 afterAll(() => {
-  vi.doUnmock("NexisClaw/plugin-sdk/provider-http");
+  vi.doUnmock("GreenchClaw/plugin-sdk/provider-http");
   vi.resetModules();
 });
 

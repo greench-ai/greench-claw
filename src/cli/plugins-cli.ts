@@ -5,7 +5,7 @@ import {
   readConfigFileSnapshot,
   replaceConfigFile,
 } from "../config/config.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { tracePluginLifecyclePhaseAsync } from "../plugins/plugin-lifecycle-trace.js";
 import { defaultRuntime } from "../runtime.js";
 import { formatDocsLink } from "../terminal/links.js";
@@ -93,11 +93,11 @@ function isErroredConfigSelectedShadowDiagnostic(params: {
 export function registerPluginsCli(program: Command) {
   const plugins = program
     .command("plugins")
-    .description("Manage NexisClaw plugins and extensions")
+    .description("Manage GreenchClaw plugins and extensions")
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/plugins", "docs.NexisClaw.ai/cli/plugins")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/plugins", "docs.GreenchClaw.ai/cli/plugins")}\n`,
     );
 
   plugins
@@ -150,7 +150,7 @@ export function registerPluginsCli(program: Command) {
       const { refreshPluginRegistryAfterConfigMutation } =
         await import("./plugins-registry-refresh.js");
       const snapshot = await readConfigFileSnapshot();
-      const cfg = (snapshot.sourceConfig ?? snapshot.config) as NexisClawConfig;
+      const cfg = (snapshot.sourceConfig ?? snapshot.config) as GreenchClawConfig;
       const report = buildPluginRegistrySnapshotReport({ config: cfg });
       id = normalizePluginId(id);
       if (!report.plugins.some((plugin) => matchesPluginId(plugin, id))) {
@@ -159,7 +159,7 @@ export function registerPluginsCli(program: Command) {
       const enableResult = enablePluginInConfig(cfg, id, {
         updateChannelConfig: false,
       });
-      let next: NexisClawConfig = enableResult.config;
+      let next: GreenchClawConfig = enableResult.config;
       const slotResult = applySlotSelectionForPlugin(next, id);
       next = slotResult.config;
       await replaceConfigFile({
@@ -199,7 +199,7 @@ export function registerPluginsCli(program: Command) {
       const { refreshPluginRegistryAfterConfigMutation } =
         await import("./plugins-registry-refresh.js");
       const snapshot = await readConfigFileSnapshot();
-      const cfg = (snapshot.sourceConfig ?? snapshot.config) as NexisClawConfig;
+      const cfg = (snapshot.sourceConfig ?? snapshot.config) as GreenchClawConfig;
       const report = buildPluginRegistrySnapshotReport({ config: cfg });
       id = normalizePluginId(id);
       if (!report.plugins.some((plugin) => matchesPluginId(plugin, id))) {
@@ -350,7 +350,7 @@ export function registerPluginsCli(program: Command) {
       if (inspection.refreshReasons.length > 0) {
         lines.push(`${theme.muted("Refresh reasons:")} ${inspection.refreshReasons.join(", ")}`);
         lines.push(
-          `${theme.muted("Repair:")} ${theme.command("NexisClaw plugins registry --refresh")}`,
+          `${theme.muted("Repair:")} ${theme.command("GreenchClaw plugins registry --refresh")}`,
         );
       }
       defaultRuntime.log(lines.join("\n"));
@@ -420,10 +420,10 @@ export function registerPluginsCli(program: Command) {
             lines.push(`  shadowed: ${shortenHomeInString(diag.source)}`);
           }
           lines.push("  repair:");
-          lines.push("    NexisClaw plugins inspect " + (diag.pluginId ?? "<plugin-id>"));
+          lines.push("    GreenchClaw plugins inspect " + (diag.pluginId ?? "<plugin-id>"));
           lines.push("    edit or remove the config-selected plugin source");
-          lines.push("    NexisClaw plugins registry --refresh");
-          lines.push("    NexisClaw gateway restart --force");
+          lines.push("    GreenchClaw plugins registry --refresh");
+          lines.push("    GreenchClaw gateway restart --force");
         }
       }
       if (compatibility.length > 0) {
@@ -436,7 +436,7 @@ export function registerPluginsCli(program: Command) {
           lines.push(`- ${formatPluginCompatibilityNotice(notice)} [${marker}]`);
         }
       }
-      const docs = formatDocsLink("/plugin", "docs.NexisClaw.ai/plugin");
+      const docs = formatDocsLink("/plugin", "docs.GreenchClaw.ai/plugin");
       lines.push("");
       lines.push(`${theme.muted("Docs:")} ${docs}`);
       defaultRuntime.log(lines.join("\n"));

@@ -16,10 +16,10 @@ vi.mock("../../runtime.js", () => ({
   }),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/plugin-config-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/plugin-config-runtime")>(
-    "NexisClaw/plugin-sdk/plugin-config-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/plugin-config-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/plugin-config-runtime")
+  >("GreenchClaw/plugin-sdk/plugin-config-runtime");
   return {
     ...actual,
     requireRuntimeConfig: vi.fn((cfg: unknown) => cfg ?? loadConfigMock()),
@@ -497,7 +497,7 @@ describe("matrix verification actions", () => {
     expect(getOwnDeviceVerificationStatus).toHaveBeenCalledTimes(1);
   });
 
-  it("does not complete self-verification until the NexisClaw device has full Matrix identity trust", async () => {
+  it("does not complete self-verification until the GreenchClaw device has full Matrix identity trust", async () => {
     const requested = {
       completed: false,
       hasSas: false,
@@ -778,7 +778,7 @@ describe("matrix verification actions", () => {
     expect(crypto.startVerification).not.toHaveBeenCalled();
     expect(crypto.cancelVerification).toHaveBeenCalledWith("verification-1", {
       code: "m.user",
-      reason: "NexisClaw self-verification did not complete",
+      reason: "GreenchClaw self-verification did not complete",
     });
   });
 
@@ -952,7 +952,7 @@ describe("matrix verification actions", () => {
 
     expect(crypto.cancelVerification).toHaveBeenCalledWith("verification-1", {
       code: "m.user",
-      reason: "NexisClaw self-verification did not complete",
+      reason: "GreenchClaw self-verification did not complete",
     });
   });
 
@@ -986,7 +986,7 @@ describe("matrix verification actions", () => {
     expect(crypto.listVerifications).toHaveBeenCalledTimes(1);
     expect(crypto.cancelVerification).toHaveBeenCalledWith("verification-1", {
       code: "m.user",
-      reason: "NexisClaw self-verification did not complete",
+      reason: "GreenchClaw self-verification did not complete",
     });
   });
 
@@ -1019,7 +1019,7 @@ describe("matrix verification actions", () => {
 
     expect(crypto.cancelVerification).toHaveBeenCalledWith("verification-1", {
       code: "m.user",
-      reason: "NexisClaw self-verification did not complete",
+      reason: "GreenchClaw self-verification did not complete",
     });
   });
 

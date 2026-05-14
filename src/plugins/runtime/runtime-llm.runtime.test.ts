@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveContextEngineCapabilities } from "../../agents/pi-embedded-runner/context-engine-capabilities.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { withPluginRuntimePluginIdScope } from "./gateway-request-scope.js";
 import { createRuntimeLlm } from "./runtime-llm.runtime.js";
 import type { RuntimeLogger } from "./types-core.js";
@@ -23,14 +23,14 @@ const cfg = {
       model: "openai/gpt-5.5",
     },
   },
-} satisfies NexisClawConfig;
+} satisfies GreenchClawConfig;
 
 function createPreparedModel(modelId = "gpt-5.5") {
   return {
     selection: {
       provider: "openai",
       modelId,
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
     },
     model: {
       provider: "openai",

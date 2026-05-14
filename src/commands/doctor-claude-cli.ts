@@ -17,7 +17,7 @@ import type {
 } from "../agents/auth-profiles/types.js";
 import { readClaudeCliCredentialsCached } from "../agents/cli-credentials.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveExecutablePath } from "../infra/executable-path.js";
 import {
   normalizeOptionalLowercaseString,
@@ -37,7 +37,7 @@ type ClaudeCliReadableCredential =
 
 type ClaudeCliDirHealth = "present" | "missing" | "not_directory" | "unreadable" | "readonly";
 
-function usesClaudeCliModelSelection(cfg: NexisClawConfig): boolean {
+function usesClaudeCliModelSelection(cfg: GreenchClawConfig): boolean {
   const primary = resolvePrimaryStringValue(
     cfg.agents?.defaults?.model as string | { primary?: string; fallbacks?: string[] } | undefined,
   );
@@ -49,7 +49,7 @@ function usesClaudeCliModelSelection(cfg: NexisClawConfig): boolean {
   );
 }
 
-function resolveClaudeCliCommand(cfg: NexisClawConfig): string {
+function resolveClaudeCliCommand(cfg: GreenchClawConfig): string {
   const configured = cfg.agents?.defaults?.cliBackends ?? {};
   for (const [key, entry] of Object.entries(configured)) {
     if (normalizeOptionalLowercaseString(key) !== CLAUDE_CLI_PROVIDER) {
@@ -141,7 +141,7 @@ function formatWorkspaceHealthLine(
     return `- ${label}: ${display} (writable).`;
   }
   if (health === "missing") {
-    return `- ${label}: ${display} (missing; NexisClaw will create it on first run).`;
+    return `- ${label}: ${display} (missing; GreenchClaw will create it on first run).`;
   }
   if (health === "not_directory") {
     return `- ${label}: ${display} exists but is not a directory.`;
@@ -174,7 +174,7 @@ function formatProjectDirHealthLine(
   return `- ${label}: ${display} is not writable by this user.`;
 }
 
-function resolveClaudeCliAgentIds(cfg: NexisClawConfig): string[] {
+function resolveClaudeCliAgentIds(cfg: GreenchClawConfig): string[] {
   const agentIds = listAgentIds(cfg);
   const runtimeAgentIds = agentIds.filter(
     (agentId) => resolveModelAgentRuntimeMetadata({ cfg, agentId }).id === CLAUDE_CLI_PROVIDER,
@@ -197,7 +197,7 @@ type ClaudeCliWorkspaceTarget = {
 };
 
 function resolveClaudeCliWorkspaceTargets(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   homeDir?: string;
   workspaceDir?: string;
@@ -233,7 +233,7 @@ function resolveClaudeCliWorkspaceTargets(params: {
 }
 
 export function noteClaudeCliHealth(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   deps?: {
     noteFn?: typeof note;
     env?: NodeJS.ProcessEnv;
@@ -291,30 +291,32 @@ export function noteClaudeCliHealth(
     lines.push("- Headless Claude auth: unavailable without interactive prompting.");
     fixHints.push(
       `- Fix: run ${formatCliCommand("claude auth login")}, then ${formatCliCommand(
-        "NexisClaw models auth login --provider anthropic --method cli --set-default",
+        "GreenchClaw models auth login --provider anthropic --method cli --set-default",
       )}.`,
     );
   }
 
   if (!storedProfile) {
-    lines.push(`- NexisClaw auth profile: missing (${CLAUDE_CLI_PROFILE_ID}) in ${authStorePath}.`);
+    lines.push(
+      `- GreenchClaw auth profile: missing (${CLAUDE_CLI_PROFILE_ID}) in ${authStorePath}.`,
+    );
     fixHints.push(
       `- Fix: run ${formatCliCommand(
-        "NexisClaw models auth login --provider anthropic --method cli --set-default",
+        "GreenchClaw models auth login --provider anthropic --method cli --set-default",
       )}.`,
     );
   } else if (storedProfile.provider !== CLAUDE_CLI_PROVIDER) {
     lines.push(
-      `- NexisClaw auth profile: ${CLAUDE_CLI_PROFILE_ID} is wired to provider "${storedProfile.provider}" instead of "${CLAUDE_CLI_PROVIDER}".`,
+      `- GreenchClaw auth profile: ${CLAUDE_CLI_PROFILE_ID} is wired to provider "${storedProfile.provider}" instead of "${CLAUDE_CLI_PROVIDER}".`,
     );
     fixHints.push(
       `- Fix: rerun ${formatCliCommand(
-        "NexisClaw models auth login --provider anthropic --method cli --set-default",
+        "GreenchClaw models auth login --provider anthropic --method cli --set-default",
       )} to rewrite the profile cleanly.`,
     );
   } else {
     lines.push(
-      `- NexisClaw auth profile: ${CLAUDE_CLI_PROFILE_ID} (provider ${CLAUDE_CLI_PROVIDER}).`,
+      `- GreenchClaw auth profile: ${CLAUDE_CLI_PROFILE_ID} (provider ${CLAUDE_CLI_PROVIDER}).`,
     );
   }
 

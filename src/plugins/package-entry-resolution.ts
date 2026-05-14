@@ -28,8 +28,8 @@ function runtimeExtensionsLengthMismatchMessage(params: {
   extensionsLength: number;
 }): string {
   return (
-    `package.json NexisClaw.runtimeExtensions length (${params.runtimeExtensionsLength}) ` +
-    `must match NexisClaw.extensions length (${params.extensionsLength})`
+    `package.json GreenchClaw.runtimeExtensions length (${params.runtimeExtensionsLength}) ` +
+    `must match GreenchClaw.extensions length (${params.extensionsLength})`
   );
 }
 
@@ -60,7 +60,7 @@ function resolvePackageRuntimeExtensionEntries(params: {
 }): RuntimeExtensionsResolution {
   const packageManifest = getPackageManifestMetadata(params.manifest ?? undefined);
   const runtimeExtensionsResult = readPackageManifestStringList({
-    fieldName: "NexisClaw.runtimeExtensions",
+    fieldName: "GreenchClaw.runtimeExtensions",
     value: packageManifest?.runtimeExtensions,
   });
   if (!runtimeExtensionsResult.ok) {
@@ -233,7 +233,7 @@ export async function validatePackageExtensionEntriesForInstall(params: {
   if (runtimeSetupEntry && !setupEntry) {
     return {
       ok: false,
-      error: "package.json NexisClaw.runtimeSetupEntry requires NexisClaw.setupEntry",
+      error: "package.json GreenchClaw.runtimeSetupEntry requires GreenchClaw.setupEntry",
     };
   }
   if (setupEntry) {

@@ -10,7 +10,7 @@ import {
 } from "../agents/subagent-recovery-state.js";
 import { loadSessionStore, resolveStorePath } from "../config/sessions.js";
 import type { SessionEntry } from "../config/sessions.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isCronJobActive } from "../cron/active-jobs.js";
 import { readCronRunLogEntriesSync, resolveCronRunLogPath } from "../cron/run-log.js";
 import type { CronRunLogEntry } from "../cron/run-log.js";
@@ -78,7 +78,7 @@ type TaskRegistryMaintenanceRuntime = {
   listAcpSessionEntries: typeof listAcpSessionEntries;
   readAcpSessionEntry: typeof readAcpSessionEntry;
   closeAcpSession?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     sessionKey: string;
     reason: string;
   }) => Promise<void>;

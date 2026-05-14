@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { getCurrentPluginMetadataSnapshot } from "../plugins/current-plugin-metadata-snapshot.js";
 import { getActivePluginRuntimeSubagentMode } from "../plugins/runtime.js";
 import { ensureStandaloneRuntimePluginRegistryLoaded } from "../plugins/runtime/standalone-runtime-registry-loader.js";
@@ -13,7 +13,7 @@ type StartupScopedPluginSnapshot = NonNullable<
 };
 
 function resolveStartupPluginIdsFromCurrentSnapshot(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
 }): string[] | undefined {
   const snapshot = getCurrentPluginMetadataSnapshot({
@@ -28,7 +28,7 @@ function resolveStartupPluginIdsFromCurrentSnapshot(params: {
 }
 
 export function ensureRuntimePluginsLoaded(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string | null;
   allowGatewaySubagentBinding?: boolean;
 }): void {

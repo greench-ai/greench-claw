@@ -1,5 +1,5 @@
 import type { LegacyConfigRule } from "../../config/legacy.shared.js";
-import type { NexisClawConfig } from "../../config/types.js";
+import type { GreenchClawConfig } from "../../config/types.js";
 import { listPluginDoctorLegacyConfigRules } from "../../plugins/doctor-contract-registry.js";
 import { getBootstrapChannelPlugin } from "./bootstrap-registry.js";
 import { loadBundledChannelDoctorContractApi } from "./doctor-contract-api.js";
@@ -104,7 +104,7 @@ export function collectChannelLegacyConfigRules(
   if (unresolvedChannelIds.length > 0) {
     rules.push(
       ...listPluginDoctorLegacyConfigRules({
-        config: raw as NexisClawConfig,
+        config: raw as GreenchClawConfig,
         pluginIds: unresolvedChannelIds,
       }),
     );

@@ -1,3 +1,3 @@
-export { resolveMarkdownTableMode } from "NexisClaw/plugin-sdk/markdown-table-runtime";
-export { chunkTextWithMode, resolveChunkMode } from "NexisClaw/plugin-sdk/reply-runtime";
-export { convertMarkdownTables } from "NexisClaw/plugin-sdk/text-chunking";
+export { resolveMarkdownTableMode } from "GreenchClaw/plugin-sdk/markdown-table-runtime";
+export { chunkTextWithMode, resolveChunkMode } from "GreenchClaw/plugin-sdk/reply-runtime";
+export { convertMarkdownTables } from "GreenchClaw/plugin-sdk/text-chunking";

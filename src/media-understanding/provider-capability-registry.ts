@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { resolvePluginCapabilityProviders } from "../plugins/capability-provider-runtime.js";
 import { resolveImageCapableConfigProviderIds } from "./config-provider-models.js";
 import { normalizeMediaProviderId } from "./provider-id.js";
@@ -16,7 +16,7 @@ function mergeProviderCapabilities(
 }
 
 export function buildMediaUnderstandingCapabilityRegistry(
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
 ): MediaUnderstandingCapabilityRegistry {
   const registry: MediaUnderstandingCapabilityRegistry = new Map();
 

@@ -1131,21 +1131,21 @@ function normalizeCommandBaseName(token: string | undefined): string {
   return base.replace(/\.(?:cmd|exe)$/u, "");
 }
 
-function stripNexisClawPackageRunner(argv: string[]): string[] {
+function stripGreenchClawPackageRunner(argv: string[]): string[] {
   const commandName = normalizeCommandBaseName(argv[0]);
-  if (commandName === "NexisClaw") {
+  if (commandName === "GreenchClaw") {
     return argv;
   }
   if (
     (commandName === "pnpm" || commandName === "npm" || commandName === "yarn") &&
-    normalizeCommandBaseName(argv[1]) === "NexisClaw"
+    normalizeCommandBaseName(argv[1]) === "GreenchClaw"
   ) {
     return argv.slice(1);
   }
   if (
     (commandName === "pnpm" || commandName === "npm" || commandName === "yarn") &&
     (argv[1] === "exec" || argv[1] === "dlx" || argv[1] === "run") &&
-    normalizeCommandBaseName(argv[2]) === "NexisClaw"
+    normalizeCommandBaseName(argv[2]) === "GreenchClaw"
   ) {
     return argv.slice(2);
   }
@@ -1165,23 +1165,23 @@ function stripNexisClawPackageRunner(argv: string[]): string[] {
         idx += 1;
       }
     }
-    if (normalizeCommandBaseName(argv[idx]) === "NexisClaw") {
+    if (normalizeCommandBaseName(argv[idx]) === "GreenchClaw") {
       return argv.slice(idx);
     }
   }
   return argv;
 }
 
-function parseNexisClawChannelsLoginShellCommand(raw: string): boolean {
+function parseGreenchClawChannelsLoginShellCommand(raw: string): boolean {
   const argv = splitShellArgs(raw);
   if (!argv) {
     return false;
   }
-  const NexisClawArgv = stripNexisClawPackageRunner(argv);
+  const GreenchClawArgv = stripGreenchClawPackageRunner(argv);
   return (
-    normalizeCommandBaseName(NexisClawArgv[0]) === "NexisClaw" &&
-    (NexisClawArgv[1] === "channels" || NexisClawArgv[1] === "channel") &&
-    NexisClawArgv[2] === "login"
+    normalizeCommandBaseName(GreenchClawArgv[0]) === "GreenchClaw" &&
+    (GreenchClawArgv[1] === "channels" || GreenchClawArgv[1] === "channel") &&
+    GreenchClawArgv[2] === "login"
   );
 }
 
@@ -1207,11 +1207,11 @@ function rejectUnsafeControlShellCommand(command: string): void {
         ].join(" "),
       );
     }
-    if (parseNexisClawChannelsLoginShellCommand(candidate)) {
+    if (parseGreenchClawChannelsLoginShellCommand(candidate)) {
       throw new Error(
         [
-          "exec cannot run interactive NexisClaw channel login commands.",
-          "Run `NexisClaw channels login` in a terminal on the gateway host, or use the channel-specific login agent tool when available (for WhatsApp: `whatsapp_login`).",
+          "exec cannot run interactive GreenchClaw channel login commands.",
+          "Run `GreenchClaw channels login` in a terminal on the gateway host, or use the channel-specific login agent tool when available (for WhatsApp: `whatsapp_login`).",
         ].join(" "),
       );
     }
@@ -1737,6 +1737,6 @@ export function createExecTool(
 export const execTool = createExecTool();
 
 export const __testing = {
-  parseNexisClawChannelsLoginShellCommand,
+  parseGreenchClawChannelsLoginShellCommand,
   validateScriptFileForShellBleed,
 };

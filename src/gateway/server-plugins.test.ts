@@ -6,7 +6,7 @@ import type { PluginRuntime } from "../plugins/runtime/types.js";
 import type { PluginDiagnostic } from "../plugins/types.js";
 import type { GatewayRequestContext, GatewayRequestOptions } from "./server-methods/types.js";
 
-const loadNexisClawPlugins = vi.hoisted(() => vi.fn());
+const loadGreenchClawPlugins = vi.hoisted(() => vi.fn());
 const clearActivatedPluginRuntimeState = vi.hoisted(() => vi.fn());
 const loadPluginLookUpTable = vi.hoisted(() =>
   vi.fn(() => ({
@@ -36,7 +36,7 @@ const handleGatewayRequest = vi.hoisted(() =>
 
 vi.mock("../plugins/loader.js", () => ({
   clearActivatedPluginRuntimeState,
-  loadNexisClawPlugins,
+  loadGreenchClawPlugins,
 }));
 
 vi.mock("../plugins/runtime/load-context.js", () => ({
@@ -214,7 +214,7 @@ function readRecordField(record: Record<string, unknown>, key: string, label: st
 }
 
 function getLastPluginLoadOptions(): Record<string, unknown> {
-  return requireRecord(loadNexisClawPlugins.mock.calls.at(-1)?.[0], "plugin load options");
+  return requireRecord(loadGreenchClawPlugins.mock.calls.at(-1)?.[0], "plugin load options");
 }
 
 function getLastPluginLoadOption(key: string) {
@@ -252,7 +252,7 @@ function getLastPluginLoadLogger(): {
   error: (message: string) => void;
   debug?: (message: string) => void;
 } {
-  const call = loadNexisClawPlugins.mock.calls.at(-1)?.[0] as
+  const call = loadGreenchClawPlugins.mock.calls.at(-1)?.[0] as
     | {
         logger?: {
           info: (message: string) => void;
@@ -284,7 +284,7 @@ async function createSubagentRuntime(
   cfg: Record<string, unknown> = {},
 ): Promise<PluginRuntime["subagent"]> {
   const log = createTestLog();
-  loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+  loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
   serverPluginBootstrapModule.loadGatewayStartupPlugins({
     cfg,
     workspaceDir: "/tmp",
@@ -292,7 +292,7 @@ async function createSubagentRuntime(
     coreGatewayHandlers: {},
     baseMethods: [],
   });
-  const call = loadNexisClawPlugins.mock.calls.at(-1)?.[0] as
+  const call = loadGreenchClawPlugins.mock.calls.at(-1)?.[0] as
     | { runtimeOptions?: { allowGatewaySubagentBinding?: boolean } }
     | undefined;
   if (call?.runtimeOptions?.allowGatewaySubagentBinding !== true) {
@@ -342,7 +342,7 @@ beforeAll(async () => {
 
 beforeEach(() => {
   clearActivatedPluginRuntimeState.mockClear();
-  loadNexisClawPlugins.mockReset();
+  loadGreenchClawPlugins.mockReset();
   loadPluginLookUpTable.mockReset().mockReturnValue({
     startup: {
       pluginIds: ["discord", "telegram"],
@@ -394,7 +394,7 @@ describe("loadGatewayPlugins", () => {
         message: "failed to load plugin: boom",
       },
     ];
-    loadNexisClawPlugins.mockReturnValue(createRegistry(diagnostics));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry(diagnostics));
     const log = loadGatewayStartupPluginsForTest();
 
     expect(log.error).toHaveBeenCalledWith(
@@ -404,7 +404,7 @@ describe("loadGatewayPlugins", () => {
   });
 
   test("loads only gateway startup plugin ids", () => {
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
     loadGatewayPluginsForTest();
 
     expect(applyPluginAutoEnable).toHaveBeenCalledWith({
@@ -422,7 +422,7 @@ describe("loadGatewayPlugins", () => {
   });
 
   test("routes plugin registration logs through the plugin logger", () => {
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
     const log = loadGatewayPluginsForTest();
 
     const logger = getLastPluginLoadLogger();
@@ -436,7 +436,7 @@ describe("loadGatewayPlugins", () => {
   });
 
   test("can suppress provisional plugin info logs while preserving warnings", () => {
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
     loadGatewayPluginsForTest({
       suppressPluginInfoLogs: true,
     });
@@ -450,7 +450,7 @@ describe("loadGatewayPlugins", () => {
   });
 
   test("reuses the provided startup plugin scope without recomputing it", () => {
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
 
     loadGatewayPluginsForTest({
       pluginIds: ["browser"],
@@ -461,7 +461,7 @@ describe("loadGatewayPlugins", () => {
   });
 
   test("reuses a provided lookup table for startup scope and auto-enable manifests", () => {
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
     const manifestRegistry = { plugins: [], diagnostics: [] };
 
     loadGatewayPluginsForTest({
@@ -483,7 +483,7 @@ describe("loadGatewayPlugins", () => {
 
   test("pins the initial startup channel registry against later active-registry churn", () => {
     const startupRegistry = createRegistry([]);
-    loadNexisClawPlugins.mockReturnValue(startupRegistry);
+    loadGreenchClawPlugins.mockReturnValue(startupRegistry);
 
     loadGatewayStartupPluginsForTest({
       pluginIds: ["slack"],
@@ -508,7 +508,7 @@ describe("loadGatewayPlugins", () => {
         slack: ["slack configured"],
       },
     });
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
 
     loadGatewayStartupPluginsForTest({
       cfg: resolvedConfig,
@@ -589,7 +589,7 @@ describe("loadGatewayPlugins", () => {
         telegram: ["telegram configured"],
       },
     });
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
 
     loadGatewayStartupPluginsForTest({
       cfg: runtimeConfig,
@@ -640,7 +640,7 @@ describe("loadGatewayPlugins", () => {
     });
 
     expect(clearActivatedPluginRuntimeState).toHaveBeenCalledTimes(1);
-    expect(loadNexisClawPlugins).not.toHaveBeenCalled();
+    expect(loadGreenchClawPlugins).not.toHaveBeenCalled();
     expect(result.pluginRegistry.plugins).toStrictEqual([]);
     expect(result.gatewayMethods).toEqual(["sessions.get"]);
   });
@@ -672,7 +672,7 @@ describe("loadGatewayPlugins", () => {
         slack: ["slack configured"],
       },
     });
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
 
     loadGatewayPluginsForTest();
 
@@ -699,7 +699,7 @@ describe("loadGatewayPlugins", () => {
         slack: ["slack configured"],
       },
     });
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
 
     loadGatewayPluginsForTest({
       cfg: resolvedConfig,
@@ -747,7 +747,7 @@ describe("loadGatewayPlugins", () => {
   });
 
   test("filters connected plugin nodes locally without sending unsupported node.list params", async () => {
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
     loadGatewayStartupPluginsForTest();
     serverPluginsModule.setFallbackGatewayContext(createTestContext("nodes-list-filter"));
     handleGatewayRequest.mockImplementationOnce(async (opts: HandleGatewayRequestOptions) => {
@@ -943,7 +943,7 @@ describe("loadGatewayPlugins", () => {
         }),
       ),
     ).rejects.toThrow(
-      'plugin "voice-call" is not trusted for fallback provider/model override requests. See https://docs.NexisClaw.ai/tools/plugin#runtime-helpers and search for: plugins.entries.<id>.subagent.allowModelOverride',
+      'plugin "voice-call" is not trusted for fallback provider/model override requests. See https://docs.GreenchClaw.ai/tools/plugin#runtime-helpers and search for: plugins.entries.<id>.subagent.allowModelOverride',
     );
   });
 
@@ -1168,7 +1168,7 @@ describe("loadGatewayPlugins", () => {
   });
 
   test("can prefer setup-runtime channel plugins during startup loads", () => {
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
     loadGatewayPluginsForTest({
       preferSetupRuntimeForChannelPlugins: true,
     });
@@ -1177,7 +1177,7 @@ describe("loadGatewayPlugins", () => {
   });
 
   test("primes configured bindings during gateway startup", () => {
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
     const cfg = {};
     const autoEnabledConfig = { channels: { slack: { enabled: true } }, autoEnabled: true };
     applyPluginAutoEnable.mockReturnValue({
@@ -1235,7 +1235,7 @@ describe("loadGatewayPlugins", () => {
         message: "failed to load plugin: boom",
       },
     ];
-    loadNexisClawPlugins.mockReturnValue(createRegistry(diagnostics));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry(diagnostics));
     const log = createTestLog();
 
     reloadDeferredGatewayPlugins({
@@ -1253,7 +1253,7 @@ describe("loadGatewayPlugins", () => {
 
   test("reuses the initial startup plugin scope during deferred reloads", () => {
     const { reloadDeferredGatewayPlugins } = serverPluginBootstrapModule;
-    loadNexisClawPlugins.mockReturnValue(createRegistry([]));
+    loadGreenchClawPlugins.mockReturnValue(createRegistry([]));
     const manifestRegistry = { plugins: [], diagnostics: [] };
 
     reloadDeferredGatewayPlugins({
@@ -1284,7 +1284,7 @@ describe("loadGatewayPlugins", () => {
     const { prepareGatewayPluginLoad } = serverPluginBootstrapModule;
     const order: string[] = [];
     const pluginRegistry = createRegistry([]);
-    loadNexisClawPlugins.mockReturnValue(pluginRegistry);
+    loadGreenchClawPlugins.mockReturnValue(pluginRegistry);
     primeConfiguredBindingRegistry.mockImplementation(() => {
       order.push("prime");
       return { bindingCount: 0, channelCount: 0 };

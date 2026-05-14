@@ -6,7 +6,7 @@ import {
   isSecretRefHeaderValueMarker,
 } from "../agents/model-auth-markers.js";
 import { normalizeProviderId } from "../agents/model-selection.js";
-import { resolveStateDir, type NexisClawConfig } from "../config/config.js";
+import { resolveStateDir, type GreenchClawConfig } from "../config/config.js";
 import { coerceSecretRef } from "../config/types.secrets.js";
 import { resolveSecretInputRef, type SecretRef } from "../config/types.secrets.js";
 import { formatErrorMessage } from "../infra/errors.js";
@@ -208,7 +208,7 @@ function collectEnvPlaintext(params: { envPath: string; collector: AuditCollecto
 }
 
 function collectConfigSecrets(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   configPath: string;
   collector: AuditCollector;
 }): void {
@@ -461,7 +461,7 @@ function collectModelsJsonSecrets(params: {
 
 async function collectUnresolvedRefFindings(params: {
   collector: AuditCollector;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   allowExec: boolean;
 }): Promise<{ refsChecked: number; skippedExecRefs: number }> {
@@ -619,7 +619,7 @@ function collectShadowingFindings(collector: AuditCollector): void {
       addFinding(collector, {
         code: "REF_SHADOWED",
         severity: "warn",
-        file: "NexisClaw.json",
+        file: "GreenchClaw.json",
         jsonPath: configPath,
         message: `Auth profile credentials (${modeText}) take precedence for provider "${provider}", so this config ref may never be used.`,
         provider,
@@ -660,7 +660,7 @@ export async function runSecretsAudit(
 
   const stateDir = resolveStateDir(env, os.homedir);
   const envPath = path.join(resolveConfigDir(env, os.homedir), ".env");
-  const config = snapshot.valid ? snapshot.config : ({} as NexisClawConfig);
+  const config = snapshot.valid ? snapshot.config : ({} as GreenchClawConfig);
   let resolution = {
     refsChecked: 0,
     skippedExecRefs: 0,

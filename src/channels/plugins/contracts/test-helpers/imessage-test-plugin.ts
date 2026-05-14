@@ -1,5 +1,5 @@
-import type { ChannelOutboundAdapter } from "NexisClaw/plugin-sdk/channel-contract";
-import type { ChannelPlugin } from "NexisClaw/plugin-sdk/channel-plugin-common";
+import type { ChannelOutboundAdapter } from "GreenchClaw/plugin-sdk/channel-contract";
+import type { ChannelPlugin } from "GreenchClaw/plugin-sdk/channel-plugin-common";
 import { loadBundledPluginTestApiSync } from "../../../../test-utils/bundled-plugin-public-surface.js";
 
 type CreateIMessageTestPlugin = (params?: { outbound?: ChannelOutboundAdapter }) => ChannelPlugin;

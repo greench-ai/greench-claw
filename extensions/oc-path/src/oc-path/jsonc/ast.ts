@@ -9,9 +9,9 @@
  * **Byte-fidelity**: `raw` is preserved on the root for round-trip
  * emit. The minimal prototype parser doesn't preserve every formatting
  * detail in the structural tree — for production, a fuller
- * comment-preserving parser ports from `NexisClaw-workspace`.
+ * comment-preserving parser ports from `GreenchClaw-workspace`.
  *
- * @module @NexisClaw/oc-path/jsonc/ast
+ * @module @GreenchClaw/oc-path/jsonc/ast
  */
 
 /** The root JSONC AST. `raw` round-trips byte-identical via emit. */

@@ -1,24 +1,24 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { NexisClawPluginToolContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { GreenchClawPluginToolContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-runtime";
 import {
   jsonResult,
   readNumberParam,
   readStringParam,
-} from "NexisClaw/plugin-sdk/provider-web-search";
+} from "GreenchClaw/plugin-sdk/provider-web-search";
 import { Type } from "typebox";
 import { runTavilyExtract } from "./tavily-client.js";
 import { optionalStringEnum } from "./tavily-tool-schema.js";
 
 type TavilyToolConfigContext = Pick<
-  NexisClawPluginToolContext,
+  GreenchClawPluginToolContext,
   "config" | "runtimeConfig" | "getRuntimeConfig"
 >;
 
 function resolveTavilyToolConfig(
-  api: NexisClawPluginApi,
+  api: GreenchClawPluginApi,
   ctx?: TavilyToolConfigContext,
-): NexisClawConfig {
+): GreenchClawConfig {
   return ctx?.getRuntimeConfig?.() ?? ctx?.runtimeConfig ?? ctx?.config ?? api.config;
 }
 
@@ -53,7 +53,7 @@ const TavilyExtractToolSchema = Type.Object(
   { additionalProperties: false },
 );
 
-export function createTavilyExtractTool(api: NexisClawPluginApi, ctx?: TavilyToolConfigContext) {
+export function createTavilyExtractTool(api: GreenchClawPluginApi, ctx?: TavilyToolConfigContext) {
   return {
     name: "tavily_extract",
     label: "Tavily Extract",

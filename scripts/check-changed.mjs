@@ -27,9 +27,9 @@ export function createChangedCheckChildEnv(baseEnv = process.env) {
   const resolvedBaseEnv = resolveLocalHeavyCheckEnv(baseEnv);
   return {
     ...resolvedBaseEnv,
-    NEXISCLAW_OXLINT_SKIP_LOCK: "1",
-    NEXISCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-    NEXISCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+    GREENCHCLAW_OXLINT_SKIP_LOCK: "1",
+    GREENCHCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+    GREENCHCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
   };
 }
 
@@ -41,10 +41,10 @@ function isTruthyEnvFlag(value) {
 }
 
 export function shouldDelegateChangedCheckToCrabbox(argv = [], env = process.env) {
-  if (!isTruthyEnvFlag(env.NEXISCLAW_TESTBOX)) {
+  if (!isTruthyEnvFlag(env.GREENCHCLAW_TESTBOX)) {
     return false;
   }
-  if (isTruthyEnvFlag(env.NEXISCLAW_TESTBOX_REMOTE_RUN)) {
+  if (isTruthyEnvFlag(env.GREENCHCLAW_TESTBOX_REMOTE_RUN)) {
     return false;
   }
   if (isTruthyEnvFlag(env.CI) || isTruthyEnvFlag(env.GITHUB_ACTIONS)) {
@@ -63,7 +63,7 @@ export function buildChangedCheckCrabboxArgs(argv = []) {
     "--provider",
     "blacksmith-testbox",
     "--blacksmith-org",
-    "NexisClaw",
+    "GreenchClaw",
     "--blacksmith-workflow",
     ".github/workflows/ci-check-testbox.yml",
     "--blacksmith-job",
@@ -78,11 +78,11 @@ export function buildChangedCheckCrabboxArgs(argv = []) {
     "--",
     "CI=1",
     "NODE_OPTIONS=--max-old-space-size=4096",
-    "NEXISCLAW_TEST_PROJECTS_PARALLEL=6",
-    "NEXISCLAW_VITEST_MAX_WORKERS=1",
-    "NEXISCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000",
-    "NEXISCLAW_TESTBOX=1",
-    "NEXISCLAW_TESTBOX_REMOTE_RUN=1",
+    "GREENCHCLAW_TEST_PROJECTS_PARALLEL=6",
+    "GREENCHCLAW_VITEST_MAX_WORKERS=1",
+    "GREENCHCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000",
+    "GREENCHCLAW_TESTBOX=1",
+    "GREENCHCLAW_TESTBOX_REMOTE_RUN=1",
     "pnpm",
     "check:changed",
     ...argv,
@@ -91,7 +91,7 @@ export function buildChangedCheckCrabboxArgs(argv = []) {
 
 export async function runChangedCheckViaCrabbox(argv = [], env = process.env) {
   console.error(
-    "[check:changed] NEXISCLAW_TESTBOX=1 set; delegating to Blacksmith Testbox via `pnpm crabbox:run`.",
+    "[check:changed] GREENCHCLAW_TESTBOX=1 set; delegating to Blacksmith Testbox via `pnpm crabbox:run`.",
   );
   return await runManagedCommand({
     bin: "pnpm",
@@ -213,8 +213,8 @@ export function createChangedCheckPlan(result, options = {}) {
     addCommand("live Docker shell syntax", "bash", ["-n", ...LIVE_DOCKER_AUTH_SHELL_TARGETS]);
     addCommand("live Docker scheduler dry run", "node", ["scripts/test-docker-all.mjs"], {
       ...baseEnv,
-      NEXISCLAW_DOCKER_ALL_DRY_RUN: "1",
-      NEXISCLAW_DOCKER_ALL_LIVE_MODE: "only",
+      GREENCHCLAW_DOCKER_ALL_DRY_RUN: "1",
+      GREENCHCLAW_DOCKER_ALL_LIVE_MODE: "only",
     });
   }
 

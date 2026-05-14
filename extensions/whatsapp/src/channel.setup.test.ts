@@ -1,11 +1,11 @@
-import { createQueuedWizardPrompter } from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/routing";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import { createQueuedWizardPrompter } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/routing";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { WHATSAPP_AUTH_UNSTABLE_CODE } from "./auth-store.js";
 import { whatsappSetupPlugin } from "./channel.setup.js";
 import { checkWhatsAppHeartbeatReady } from "./heartbeat.js";
-import type { NexisClawConfig } from "./runtime-api.js";
+import type { GreenchClawConfig } from "./runtime-api.js";
 import { finalizeWhatsAppSetup } from "./setup-finalize.js";
 import {
   createWhatsAppAllowlistModeInput,
@@ -34,7 +34,7 @@ const hoisted = vi.hoisted(() => ({
     }),
   ),
   resolveWhatsAppAuthDir: vi.fn(() => ({
-    authDir: "/tmp/NexisClaw-whatsapp-test",
+    authDir: "/tmp/GreenchClaw-whatsapp-test",
   })),
 }));
 
@@ -53,9 +53,9 @@ vi.mock("./login.js", () => ({
   loginWeb: hoisted.loginWeb,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/setup", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/setup")>(
-    "NexisClaw/plugin-sdk/setup",
+vi.mock("GreenchClaw/plugin-sdk/setup", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/setup")>(
+    "GreenchClaw/plugin-sdk/setup",
   );
   const normalizeE164 = (value?: string | null) => {
     const raw = (value ?? "").trim();
@@ -82,12 +82,14 @@ vi.mock("NexisClaw/plugin-sdk/setup", async () => {
     normalizeE164,
     pathExists: hoisted.pathExists,
     splitSetupEntries: splitSetupEntriesForMock,
-    setSetupChannelEnabled: (cfg: NexisClawConfig, channel: string, enabled: boolean) => ({
+    setSetupChannelEnabled: (cfg: GreenchClawConfig, channel: string, enabled: boolean) => ({
       ...cfg,
       channels: {
         ...cfg.channels,
         [channel]: {
-          ...(cfg.channels?.[channel as keyof NonNullable<NexisClawConfig["channels"]>] as object),
+          ...(cfg.channels?.[
+            channel as keyof NonNullable<GreenchClawConfig["channels"]>
+          ] as object),
           enabled,
         },
       },
@@ -120,12 +122,12 @@ function createRuntime(): RuntimeEnv {
 
 async function runConfigureWithHarness(params: {
   harness: ReturnType<typeof createQueuedWizardPrompter>;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   runtime?: RuntimeEnv;
   forceAllowFrom?: boolean;
 }) {
   const result = await finalizeWhatsAppSetup({
-    cfg: params.cfg ?? ({} as NexisClawConfig),
+    cfg: params.cfg ?? ({} as GreenchClawConfig),
     accountId: DEFAULT_ACCOUNT_ID,
     forceAllowFrom: params.forceAllowFrom ?? false,
     prompter: params.harness.prompter,
@@ -170,7 +172,7 @@ describe("whatsapp setup wizard", () => {
       exists: false,
     });
     hoisted.resolveWhatsAppAuthDir.mockReset();
-    hoisted.resolveWhatsAppAuthDir.mockReturnValue({ authDir: "/tmp/NexisClaw-whatsapp-test" });
+    hoisted.resolveWhatsAppAuthDir.mockReturnValue({ authDir: "/tmp/GreenchClaw-whatsapp-test" });
   });
 
   it("applies owner allowlist when forceAllowFrom is enabled", async () => {
@@ -263,7 +265,7 @@ describe("whatsapp setup wizard", () => {
 
     const result = await runConfigureWithHarness({
       harness,
-      cfg: createWhatsAppRootAllowFromConfig() as NexisClawConfig,
+      cfg: createWhatsAppRootAllowFromConfig() as GreenchClawConfig,
     });
 
     expectWhatsAppOpenPolicySetup(result.cfg, harness);
@@ -284,7 +286,7 @@ describe("whatsapp setup wizard", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       accountId: "work",
       account: {
         accountId: "work",
@@ -316,7 +318,7 @@ describe("whatsapp setup wizard", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       accountId: "work",
       account: {
         accountId: "work",
@@ -351,7 +353,7 @@ describe("whatsapp setup wizard", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     expect(result.cfg.channels?.whatsapp?.dmPolicy).toBeUndefined();
@@ -382,7 +384,7 @@ describe("whatsapp setup wizard", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     expect(result.cfg.channels?.whatsapp?.accounts?.Default?.authDir).toBe("/tmp/default-auth");
@@ -444,7 +446,7 @@ describe("whatsapp setup wizard", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       deps: {
         readWebAuthExistsForDecision: async () => ({
           outcome: "stable" as const,
@@ -469,7 +471,7 @@ describe("whatsapp setup wizard", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       deps: {
         readWebAuthExistsForDecision: async () => ({ outcome: "unstable" as const }),
         hasActiveWebListener: () => true,

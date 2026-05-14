@@ -25,14 +25,14 @@ const fetchWithSsrFGuard = vi.fn(
     }) as const,
 );
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard: (...args: unknown[]) =>
     fetchWithSsrFGuard(...(args as [params: { url: string; init?: RequestInit }])),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/fetch-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/fetch-runtime")>(
-    "NexisClaw/plugin-sdk/fetch-runtime",
+vi.mock("GreenchClaw/plugin-sdk/fetch-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/fetch-runtime")>(
+    "GreenchClaw/plugin-sdk/fetch-runtime",
   );
   return {
     ...actual,

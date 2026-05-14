@@ -8,7 +8,7 @@ import {
   resolveAgentModelFallbackValues,
   resolveAgentModelPrimaryValue,
 } from "../config/model-input.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import type {
   MediaUnderstandingConfig,
   MediaUnderstandingModelConfig,
@@ -70,7 +70,7 @@ async function loadModelCatalogApi(): Promise<ModelCatalogApi> {
 }
 
 function resolveLiteralProviderApiKey(
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
   providerId: string,
 ): string | null {
   const value = cfg?.models?.providers?.[providerId]?.apiKey;
@@ -79,7 +79,7 @@ function resolveLiteralProviderApiKey(
 
 async function hasProviderAuthAvailable(params: {
   provider: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentDir?: string;
 }): Promise<boolean> {
   if (resolveLiteralProviderApiKey(params.cfg, params.provider)) {
@@ -91,7 +91,7 @@ async function hasProviderAuthAvailable(params: {
 }
 
 function resolveConfiguredKeyProviderOrder(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   providerRegistry: ProviderRegistry;
   capability: MediaUnderstandingCapability;
   fallbackProviders: readonly string[];
@@ -108,7 +108,7 @@ function resolveConfiguredKeyProviderOrder(params: {
 }
 
 function resolveConfiguredImageModelId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   providerId: string;
 }): string | undefined {
   const configured = resolveConfiguredImageModel(params);
@@ -117,7 +117,7 @@ function resolveConfiguredImageModelId(params: {
 }
 
 function resolveConfiguredImageModel(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   providerId: string;
 }): { id?: string; input?: string[] } | undefined {
   const providerCfg = findNormalizedProviderValue(
@@ -195,7 +195,7 @@ function resolveAutoMediaKeyProvidersFromRegistry(params: {
 }
 
 async function explicitImageModelVisionStatus(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   providerId: string;
   model: string;
 }): Promise<"supported" | "unsupported" | "unknown"> {
@@ -213,7 +213,7 @@ async function explicitImageModelVisionStatus(params: {
 }
 
 async function resolveAutoImageModelId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   providerId: string;
   providerRegistry: ProviderRegistry;
   explicitModel?: string;
@@ -261,13 +261,13 @@ async function resolveAutoImageModelId(params: {
 
 export function buildProviderRegistry(
   overrides?: Record<string, MediaUnderstandingProvider>,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
 ): ProviderRegistry {
   return buildMediaUnderstandingRegistry(overrides, cfg);
 }
 
 export function resolveMediaAttachmentLocalRoots(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   ctx: MsgContext;
 }): readonly string[] {
   // ctx.MediaWorkspaceDir is set by chat.send's prestageNonImageOffloads when
@@ -520,7 +520,7 @@ async function resolveGeminiCliEntry(
 }
 
 async function resolveKeyEntry(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir?: string;
   providerRegistry: ProviderRegistry;
   capability: MediaUnderstandingCapability;
@@ -592,7 +592,9 @@ async function resolveKeyEntry(params: {
   return null;
 }
 
-function resolveImageModelFromAgentDefaults(cfg: NexisClawConfig): MediaUnderstandingModelConfig[] {
+function resolveImageModelFromAgentDefaults(
+  cfg: GreenchClawConfig,
+): MediaUnderstandingModelConfig[] {
   const refs: string[] = [];
   const primary = resolveAgentModelPrimaryValue(cfg.agents?.defaults?.imageModel);
   if (primary?.trim()) {
@@ -622,7 +624,7 @@ function resolveImageModelFromAgentDefaults(cfg: NexisClawConfig): MediaUndersta
 }
 
 function hasExplicitImageUnderstandingConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   config?: MediaUnderstandingConfig;
 }): boolean {
   return (
@@ -632,7 +634,7 @@ function hasExplicitImageUnderstandingConfig(params: {
 }
 
 async function resolveAutoEntries(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir?: string;
   providerRegistry: ProviderRegistry;
   capability: MediaUnderstandingCapability;
@@ -670,7 +672,7 @@ async function resolveAutoEntries(params: {
 }
 
 export async function resolveAutoImageModel(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir?: string;
   activeModel?: ActiveMediaModel;
 }): Promise<ActiveMediaModel | null> {
@@ -714,7 +716,7 @@ export async function resolveAutoImageModel(params: {
 }
 
 async function resolveActiveModelEntry(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir?: string;
   providerRegistry: ProviderRegistry;
   capability: MediaUnderstandingCapability;
@@ -778,7 +780,7 @@ async function resolveActiveModelEntry(params: {
 
 async function runAttachmentEntries(params: {
   capability: MediaUnderstandingCapability;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   ctx: MsgContext;
   attachmentIndex: number;
   agentDir?: string;
@@ -871,7 +873,7 @@ function hasFailedMediaAttempt(attachments: MediaUnderstandingDecision["attachme
 
 export async function runCapability(params: {
   capability: MediaUnderstandingCapability;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   ctx: MsgContext;
   attachments: MediaAttachmentCache;
   media: MediaAttachment[];

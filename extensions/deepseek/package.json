@@ -1,13 +1,13 @@
 {
-  "name": "@NexisClaw/deepseek-provider",
+  "name": "@GreenchClaw/deepseek-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw DeepSeek provider plugin",
+  "description": "GreenchClaw DeepSeek provider plugin",
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

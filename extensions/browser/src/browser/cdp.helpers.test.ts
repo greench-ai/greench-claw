@@ -11,8 +11,8 @@ import { assertBrowserNavigationAllowed } from "./navigation-guard.js";
 
 const fetchWithSsrFGuardMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/ssrf-runtime")>();
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("GreenchClaw/plugin-sdk/ssrf-runtime")>();
   return {
     ...actual,
     fetchWithSsrFGuard: (...args: unknown[]) => fetchWithSsrFGuardMock(...args),
@@ -134,7 +134,7 @@ describe("cdp helpers", () => {
     });
 
     await expect(
-      fetchOk("http://NexisClaw:relay-token@127.0.0.1:9222/json/version", 250),
+      fetchOk("http://GreenchClaw:relay-token@127.0.0.1:9222/json/version", 250),
     ).resolves.toBeUndefined();
 
     const request = requireGuardedFetchRequest();
@@ -181,7 +181,7 @@ function createProfile(overrides: Partial<ResolvedBrowserProfile>): ResolvedBrow
     cdpHost: "172.29.128.1",
     cdpIsLoopback: false,
     color: "#123456",
-    driver: "NexisClaw",
+    driver: "GreenchClaw",
     attachOnly: false,
     ...overrides,
     headless: overrides.headless ?? false,

@@ -1,13 +1,13 @@
 import http from "node:http";
 import { URL } from "node:url";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveConfiguredCapabilityProvider } from "NexisClaw/plugin-sdk/provider-selection-runtime";
-import type { TalkEvent } from "NexisClaw/plugin-sdk/realtime-voice";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveConfiguredCapabilityProvider } from "GreenchClaw/plugin-sdk/provider-selection-runtime";
+import type { TalkEvent } from "GreenchClaw/plugin-sdk/realtime-voice";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   createWebhookInFlightLimiter,
   WEBHOOK_BODY_READ_DEFAULTS,
-} from "NexisClaw/plugin-sdk/webhook-ingress";
+} from "GreenchClaw/plugin-sdk/webhook-ingress";
 import {
   isRequestBodyLimitError,
   readRequestBodyWithLimit,
@@ -189,7 +189,7 @@ export class VoiceCallWebhookServer {
   private manager: CallManager;
   private provider: VoiceCallProvider;
   private coreConfig: CoreConfig | null;
-  private fullConfig: NexisClawConfig | null;
+  private fullConfig: GreenchClawConfig | null;
   private agentRuntime: CoreAgentDeps | null;
   private logger: Logger;
   private stopStaleCallReaper: (() => void) | null = null;
@@ -207,7 +207,7 @@ export class VoiceCallWebhookServer {
     manager: CallManager,
     provider: VoiceCallProvider,
     coreConfig?: CoreConfig,
-    fullConfig?: NexisClawConfig,
+    fullConfig?: GreenchClawConfig,
     agentRuntime?: CoreAgentDeps,
     logger?: Logger,
   ) {
@@ -306,14 +306,14 @@ export class VoiceCallWebhookServer {
   private async initializeMediaStreaming(): Promise<void> {
     const streaming = this.config.streaming;
     const pluginConfig =
-      this.fullConfig ?? (this.coreConfig as unknown as NexisClawConfig | undefined);
+      this.fullConfig ?? (this.coreConfig as unknown as GreenchClawConfig | undefined);
     const { getRealtimeTranscriptionProvider, listRealtimeTranscriptionProviders } =
       await loadRealtimeTranscriptionRuntime();
     const resolution = resolveConfiguredCapabilityProvider({
       configuredProviderId: streaming.provider,
       providerConfigs: streaming.providers,
       cfg: pluginConfig,
-      cfgForResolve: pluginConfig ?? ({} as NexisClawConfig),
+      cfgForResolve: pluginConfig ?? ({} as GreenchClawConfig),
       getConfiguredProvider: (providerId) =>
         getRealtimeTranscriptionProvider(providerId, pluginConfig),
       listProviders: () => listRealtimeTranscriptionProviders(pluginConfig),
@@ -346,7 +346,7 @@ export class VoiceCallWebhookServer {
     const streamConfig: MediaStreamConfig = {
       transcriptionProvider: provider,
       providerConfig,
-      cfg: this.fullConfig ?? (this.coreConfig as NexisClawConfig | null) ?? undefined,
+      cfg: this.fullConfig ?? (this.coreConfig as GreenchClawConfig | null) ?? undefined,
       preStartTimeoutMs: streaming.preStartTimeoutMs,
       maxPendingConnections: streaming.maxPendingConnections,
       maxPendingConnectionsPerIp: streaming.maxPendingConnectionsPerIp,

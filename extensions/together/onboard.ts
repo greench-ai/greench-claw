@@ -1,7 +1,7 @@
 import {
   createModelCatalogPresetAppliers,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildTogetherModelDefinition,
   TOGETHER_BASE_URL,
@@ -12,7 +12,7 @@ export const TOGETHER_DEFAULT_MODEL_REF = "together/moonshotai/Kimi-K2.5";
 
 const togetherPresetAppliers = createModelCatalogPresetAppliers({
   primaryModelRef: TOGETHER_DEFAULT_MODEL_REF,
-  resolveParams: (_cfg: NexisClawConfig) => ({
+  resolveParams: (_cfg: GreenchClawConfig) => ({
     providerId: "together",
     api: "openai-completions",
     baseUrl: TOGETHER_BASE_URL,
@@ -21,6 +21,6 @@ const togetherPresetAppliers = createModelCatalogPresetAppliers({
   }),
 });
 
-export function applyTogetherConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyTogetherConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return togetherPresetAppliers.applyConfig(cfg);
 }

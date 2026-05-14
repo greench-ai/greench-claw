@@ -14,17 +14,17 @@ import {
 
 const ROOT_DIR = path.parse(process.cwd()).root;
 const CONFIG_DIR = path.join(ROOT_DIR, "config");
-const ETC_NEXISCLAW_DIR = path.join(ROOT_DIR, "etc", "NexisClaw");
+const ETC_GREENCHCLAW_DIR = path.join(ROOT_DIR, "etc", "GreenchClaw");
 const SHARED_DIR = path.join(ROOT_DIR, "shared");
 
-const DEFAULT_BASE_PATH = path.join(CONFIG_DIR, "NexisClaw.json");
+const DEFAULT_BASE_PATH = path.join(CONFIG_DIR, "GreenchClaw.json");
 
 function configPath(...parts: string[]) {
   return path.join(CONFIG_DIR, ...parts);
 }
 
-function etcNexisClawPath(...parts: string[]) {
-  return path.join(ETC_NEXISCLAW_DIR, ...parts);
+function etcGreenchClawPath(...parts: string[]) {
+  return path.join(ETC_GREENCHCLAW_DIR, ...parts);
 }
 
 function sharedPath(...parts: string[]) {
@@ -81,7 +81,7 @@ describe("resolveConfigIncludes", () => {
   });
 
   it("rejects absolute path outside config directory (CWE-22)", () => {
-    const absolute = etcNexisClawPath("agents.json");
+    const absolute = etcGreenchClawPath("agents.json");
     const files = { [absolute]: { list: [{ id: "main" }] } };
     const obj = { agents: { $include: absolute } };
     expectResolveIncludeError(() => resolve(obj, files), /escapes config directory/);
@@ -317,7 +317,7 @@ describe("resolveConfigIncludes", () => {
         resolve(
           { $include: "../../shared/common.json" },
           { [sharedPath("common.json")]: { shared: true } },
-          configPath("sub", "NexisClaw.json"),
+          configPath("sub", "GreenchClaw.json"),
         ),
       /escapes config directory/,
     );
@@ -598,7 +598,7 @@ describe("security: path traversal protection (CWE-22)", () => {
     });
 
     it("allows include files when the config root path is a symlink", async () => {
-      await withTempDir({ prefix: "NexisClaw-includes-symlink-" }, async (tempRoot) => {
+      await withTempDir({ prefix: "GreenchClaw-includes-symlink-" }, async (tempRoot) => {
         const realRoot = path.join(tempRoot, "real");
         const linkRoot = path.join(tempRoot, "link");
         await fs.mkdir(path.join(realRoot, "includes"), { recursive: true });
@@ -611,7 +611,7 @@ describe("security: path traversal protection (CWE-22)", () => {
 
         const result = resolveConfigIncludes(
           { $include: "./includes/extra.json5" },
-          path.join(linkRoot, "NexisClaw.json"),
+          path.join(linkRoot, "GreenchClaw.json"),
         );
         expect(result).toEqual({ logging: { redactSensitive: "tools" } });
       });
@@ -648,7 +648,7 @@ describe("security: path traversal protection (CWE-22)", () => {
       if (process.platform === "win32") {
         return;
       }
-      await withTempDir({ prefix: "NexisClaw-includes-hardlink-" }, async (tempRoot) => {
+      await withTempDir({ prefix: "GreenchClaw-includes-hardlink-" }, async (tempRoot) => {
         const configDir = path.join(tempRoot, "config");
         const outsideDir = path.join(tempRoot, "outside");
         await fs.mkdir(configDir, { recursive: true });
@@ -668,14 +668,14 @@ describe("security: path traversal protection (CWE-22)", () => {
         expect(() =>
           resolveConfigIncludes(
             { $include: "./extra.json5" },
-            path.join(configDir, "NexisClaw.json"),
+            path.join(configDir, "GreenchClaw.json"),
           ),
         ).toThrow(/security checks|hardlink/i);
       });
     });
 
     it("rejects oversized include files", async () => {
-      await withTempDir({ prefix: "NexisClaw-includes-big-" }, async (tempRoot) => {
+      await withTempDir({ prefix: "GreenchClaw-includes-big-" }, async (tempRoot) => {
         const configDir = path.join(tempRoot, "config");
         await fs.mkdir(configDir, { recursive: true });
         const includePath = path.join(configDir, "big.json5");
@@ -683,14 +683,17 @@ describe("security: path traversal protection (CWE-22)", () => {
         await fs.writeFile(includePath, `{"blob":"${payload}"}`, "utf-8");
 
         expect(() =>
-          resolveConfigIncludes({ $include: "./big.json5" }, path.join(configDir, "NexisClaw.json")),
+          resolveConfigIncludes(
+            { $include: "./big.json5" },
+            path.join(configDir, "GreenchClaw.json"),
+          ),
         ).toThrow(/security checks|max/i);
       });
     });
   });
 });
 
-describe("NEXISCLAW_INCLUDE_ROOTS allowlist", () => {
+describe("GREENCHCLAW_INCLUDE_ROOTS allowlist", () => {
   it("permits an include outside the config directory when its root is allowed", () => {
     const sharedFile = sharedPath("common.json");
     const files = { [sharedFile]: { shared: true } };
@@ -705,7 +708,7 @@ describe("NEXISCLAW_INCLUDE_ROOTS allowlist", () => {
   });
 
   it("still rejects include paths that fall outside every allowed root", () => {
-    const obj = { $include: etcNexisClawPath("agents.json") };
+    const obj = { $include: etcGreenchClawPath("agents.json") };
     expect(() =>
       resolveConfigIncludes(obj, DEFAULT_BASE_PATH, createMockResolver({}), {
         allowedRoots: [SHARED_DIR],
@@ -740,7 +743,7 @@ describe("NEXISCLAW_INCLUDE_ROOTS allowlist", () => {
   });
 
   it("resolves a symlinked include whose realpath lands inside an allowed root", async () => {
-    await withTempDir({ prefix: "NexisClaw-includes-allowed-symlink-" }, async (tempRoot) => {
+    await withTempDir({ prefix: "GreenchClaw-includes-allowed-symlink-" }, async (tempRoot) => {
       const configDir = path.join(tempRoot, "config");
       const sharedDir = path.join(tempRoot, "shared");
       await fs.mkdir(configDir, { recursive: true });
@@ -756,7 +759,7 @@ describe("NEXISCLAW_INCLUDE_ROOTS allowlist", () => {
 
       const result = resolveConfigIncludes(
         { $include: "./extra.json5" },
-        path.join(configDir, "NexisClaw.json"),
+        path.join(configDir, "GreenchClaw.json"),
         undefined,
         { allowedRoots: [sharedDir] },
       );
@@ -765,7 +768,7 @@ describe("NEXISCLAW_INCLUDE_ROOTS allowlist", () => {
   });
 
   it("rejects a symlinked include that escapes both the config directory and every allowed root", async () => {
-    await withTempDir({ prefix: "NexisClaw-includes-allowed-escape-" }, async (tempRoot) => {
+    await withTempDir({ prefix: "GreenchClaw-includes-allowed-escape-" }, async (tempRoot) => {
       const configDir = path.join(tempRoot, "config");
       const allowedDir = path.join(tempRoot, "allowed");
       const offRootDir = path.join(tempRoot, "off-limits");
@@ -791,7 +794,7 @@ describe("NEXISCLAW_INCLUDE_ROOTS allowlist", () => {
       expect(() =>
         resolveConfigIncludes(
           { $include: "./secret.json5" },
-          path.join(configDir, "NexisClaw.json"),
+          path.join(configDir, "GreenchClaw.json"),
           undefined,
           { allowedRoots: [allowedDir] },
         ),

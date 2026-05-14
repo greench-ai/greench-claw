@@ -21,7 +21,7 @@ type VitestHostInfo = {
   totalMemoryBytes?: number;
 };
 
-export type NexisClawVitestPool = "forks" | "threads";
+export type GreenchClawVitestPool = "forks" | "threads";
 
 export type LocalVitestScheduling = {
   maxWorkers: number;
@@ -45,7 +45,7 @@ function detectVitestHostInfo(): Required<VitestHostInfo> {
 export function resolveLocalVitestMaxWorkers(
   env: Record<string, string | undefined> = process.env,
   system: VitestHostInfo = detectVitestHostInfo(),
-  pool: NexisClawVitestPool = resolveDefaultVitestPool(env),
+  pool: GreenchClawVitestPool = resolveDefaultVitestPool(env),
 ): number {
   return resolveLocalVitestMaxWorkersImpl(env, system, pool);
 }
@@ -53,14 +53,14 @@ export function resolveLocalVitestMaxWorkers(
 export function resolveLocalVitestScheduling(
   env: Record<string, string | undefined> = process.env,
   system: VitestHostInfo = detectVitestHostInfo(),
-  pool: NexisClawVitestPool = resolveDefaultVitestPool(env),
+  pool: GreenchClawVitestPool = resolveDefaultVitestPool(env),
 ): LocalVitestScheduling {
   return resolveLocalVitestSchedulingImpl(env, system, pool) as LocalVitestScheduling;
 }
 
 export function resolveDefaultVitestPool(
   _env: Record<string, string | undefined> = process.env,
-): NexisClawVitestPool {
+): GreenchClawVitestPool {
   return "threads";
 }
 
@@ -79,7 +79,7 @@ const localScheduling = resolveLocalVitestScheduling(
 );
 
 function hasWorkerOverride(env: Record<string, string | undefined>): boolean {
-  return Boolean((env.NEXISCLAW_VITEST_MAX_WORKERS ?? env.NEXISCLAW_TEST_WORKERS)?.trim());
+  return Boolean((env.GREENCHCLAW_VITEST_MAX_WORKERS ?? env.GREENCHCLAW_TEST_WORKERS)?.trim());
 }
 
 export function resolveSharedVitestWorkerConfig(params: {
@@ -132,35 +132,35 @@ export const sharedVitestConfig = {
   resolve: {
     alias: [
       {
-        find: "NexisClaw/extension-api",
+        find: "GreenchClaw/extension-api",
         replacement: path.join(repoRoot, "src", "extensionAPI.ts"),
       },
       {
-        find: "@NexisClaw/qa-channel/api.js",
+        find: "@GreenchClaw/qa-channel/api.js",
         replacement: path.join(repoRoot, "extensions", "qa-channel", "api.ts"),
       },
       {
-        find: "@NexisClaw/discord/api.js",
+        find: "@GreenchClaw/discord/api.js",
         replacement: path.join(repoRoot, "extensions", "discord", "api.ts"),
       },
       {
-        find: "@NexisClaw/slack/api.js",
+        find: "@GreenchClaw/slack/api.js",
         replacement: path.join(repoRoot, "extensions", "slack", "api.ts"),
       },
       {
-        find: "@NexisClaw/whatsapp/api.js",
+        find: "@GreenchClaw/whatsapp/api.js",
         replacement: path.join(repoRoot, "extensions", "whatsapp", "api.ts"),
       },
       ...sourcePluginSdkSubpaths.map((subpath) => ({
-        find: `NexisClaw/plugin-sdk/${subpath}`,
+        find: `GreenchClaw/plugin-sdk/${subpath}`,
         replacement: path.join(repoRoot, "src", "plugin-sdk", `${subpath}.ts`),
       })),
       ...pluginSdkSubpaths.map((subpath) => ({
-        find: `@NexisClaw/plugin-sdk/${subpath}`,
+        find: `@GreenchClaw/plugin-sdk/${subpath}`,
         replacement: path.join(repoRoot, "packages", "plugin-sdk", "src", `${subpath}.ts`),
       })),
       {
-        find: "NexisClaw/plugin-sdk",
+        find: "GreenchClaw/plugin-sdk",
         replacement: path.join(repoRoot, "src", "plugin-sdk", "index.ts"),
       },
     ],
@@ -182,7 +182,7 @@ export const sharedVitestConfig = {
       "test/setup.ts",
       "test/setup.shared.ts",
       "test/setup.extensions.ts",
-      "test/setup-NexisClaw-runtime.ts",
+      "test/setup-GreenchClaw-runtime.ts",
       "test/vitest/vitest.channel-paths.mjs",
       "test/vitest/vitest.agents-paths.mjs",
       "test/vitest/vitest.agents-core.config.ts",
@@ -304,7 +304,7 @@ export const sharedVitestConfig = {
       "apps/macos/.build/**",
       "**/node_modules/**",
       "**/vendor/**",
-      "dist/NexisClaw.app/**",
+      "dist/GreenchClaw.app/**",
       "**/._*",
       "**/*.live.test.ts",
       "**/*.e2e.test.ts",

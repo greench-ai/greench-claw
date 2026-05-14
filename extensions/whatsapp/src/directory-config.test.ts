@@ -1,10 +1,10 @@
-import { createDirectoryTestRuntime } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { createDirectoryTestRuntime } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { describe, expect, it } from "vitest";
 import {
   listWhatsAppDirectoryGroupsFromConfig,
   listWhatsAppDirectoryPeersFromConfig,
 } from "./directory-config.js";
-import type { NexisClawConfig } from "./runtime-api.js";
+import type { GreenchClawConfig } from "./runtime-api.js";
 
 describe("whatsapp directory", () => {
   const runtimeEnv = createDirectoryTestRuntime() as never;
@@ -25,7 +25,7 @@ describe("whatsapp directory", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     await expect(
       listWhatsAppDirectoryPeersFromConfig({

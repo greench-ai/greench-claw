@@ -1,7 +1,7 @@
-export type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
+export type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime";
 export {
   createFixedWindowRateLimiter,
   createWebhookAnomalyTracker,
   WEBHOOK_ANOMALY_COUNTER_DEFAULTS,
   WEBHOOK_RATE_LIMIT_DEFAULTS,
-} from "NexisClaw/plugin-sdk/webhook-ingress";
+} from "GreenchClaw/plugin-sdk/webhook-ingress";

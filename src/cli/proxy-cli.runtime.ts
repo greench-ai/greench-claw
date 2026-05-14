@@ -28,8 +28,8 @@ export async function runDebugProxyStartCommand(opts: { host?: string; port?: nu
     id: settings.sessionId,
     startedAt: Date.now(),
     mode: "proxy-start",
-    sourceScope: "NexisClaw",
-    sourceProcess: "NexisClaw",
+    sourceScope: "GreenchClaw",
+    sourceProcess: "GreenchClaw",
     proxyUrl: settings.proxyUrl,
     dbPath: settings.dbPath,
     blobDir: settings.blobDir,
@@ -83,8 +83,8 @@ export async function runDebugProxyRunCommand(opts: {
     id: sessionId,
     startedAt: Date.now(),
     mode: "proxy-run",
-    sourceScope: "NexisClaw",
-    sourceProcess: "NexisClaw",
+    sourceScope: "GreenchClaw",
+    sourceProcess: "GreenchClaw",
     proxyUrl: undefined,
     dbPath: settings.dbPath,
     blobDir: settings.blobDir,
@@ -192,12 +192,12 @@ function formatProxyValidationNextSteps(result: ProxyValidationResult): string[]
   }
   if (result.config.errors.some((error) => error.includes("proxy.enabled"))) {
     return [
-      "Enable proxy.enabled with proxy.proxyUrl or NEXISCLAW_PROXY_URL, or pass --proxy-url for an explicit one-off validation.",
+      "Enable proxy.enabled with proxy.proxyUrl or GREENCHCLAW_PROXY_URL, or pass --proxy-url for an explicit one-off validation.",
     ];
   }
   if (result.config.errors.length > 0) {
     return [
-      "Fix proxy.proxyUrl, NEXISCLAW_PROXY_URL, or --proxy-url so it uses a reachable http:// proxy.",
+      "Fix proxy.proxyUrl, GREENCHCLAW_PROXY_URL, or --proxy-url so it uses a reachable http:// proxy.",
     ];
   }
   if (result.checks.some((check) => !check.ok && check.kind === "allowed")) {

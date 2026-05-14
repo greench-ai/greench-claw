@@ -1,7 +1,7 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import * as conversationRuntime from "NexisClaw/plugin-sdk/conversation-binding-runtime";
-import type { ResolvedAgentRoute } from "NexisClaw/plugin-sdk/routing";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import * as conversationRuntime from "GreenchClaw/plugin-sdk/conversation-binding-runtime";
+import type { ResolvedAgentRoute } from "GreenchClaw/plugin-sdk/routing";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   resolveDiscordBoundConversationRoute,
   resolveDiscordEffectiveRoute,
@@ -27,7 +27,7 @@ type DiscordNativeInteractionRouteState = {
 };
 
 export async function resolveDiscordNativeInteractionRouteState(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   guildId?: string;
   memberRoleIds?: string[];

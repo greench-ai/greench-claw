@@ -1,7 +1,7 @@
 import { vi } from "vitest";
 import { installChromeUserDataDirHooks } from "./chrome-user-data-dir.test-harness.js";
 
-const chromeUserDataDir = { dir: "/tmp/NexisClaw" };
+const chromeUserDataDir = { dir: "/tmp/GreenchClaw" };
 installChromeUserDataDirHooks(chromeUserDataDir);
 
 vi.mock("./chrome.js", () => ({
@@ -19,9 +19,9 @@ vi.mock("./chrome.js", () => ({
   ),
   isChromeCdpReady: vi.fn(async () => true),
   isChromeReachable: vi.fn(async () => true),
-  launchNexisClawChrome: vi.fn(async () => {
+  launchGreenchClawChrome: vi.fn(async () => {
     throw new Error("unexpected launch");
   }),
-  resolveNexisClawUserDataDir: vi.fn(() => chromeUserDataDir.dir),
-  stopNexisClawChrome: vi.fn(async () => {}),
+  resolveGreenchClawUserDataDir: vi.fn(() => chromeUserDataDir.dir),
+  stopGreenchClawChrome: vi.fn(async () => {}),
 }));

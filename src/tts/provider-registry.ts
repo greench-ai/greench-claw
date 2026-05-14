@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { getActiveRuntimePluginRegistry } from "../plugins/active-runtime-registry.js";
 import {
   resolvePluginCapabilityProvider,
@@ -11,7 +11,7 @@ import {
   type SpeechProviderRegistryResolver,
 } from "./provider-registry-core.js";
 
-function resolveSpeechProviderPluginEntries(cfg?: NexisClawConfig): SpeechProviderPlugin[] {
+function resolveSpeechProviderPluginEntries(cfg?: GreenchClawConfig): SpeechProviderPlugin[] {
   return resolvePluginCapabilityProviders({
     key: "speechProviders",
     cfg,

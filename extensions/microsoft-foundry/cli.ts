@@ -2,7 +2,7 @@ import { execFile, execFileSync, spawn } from "node:child_process";
 import {
   normalizeOptionalString,
   normalizeStringifiedOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { AzAccessToken, AzAccount } from "./shared.js";
 import { COGNITIVE_SERVICES_RESOURCE } from "./shared.js";
 

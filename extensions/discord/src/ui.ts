@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { Container } from "./internal/discord.js";
 import { normalizeDiscordAccentColor, resolveDiscordAccentColor } from "./ui-colors.js";
 
@@ -6,7 +6,7 @@ type DiscordContainerComponents = ConstructorParameters<typeof Container>[0];
 
 export class DiscordUiContainer extends Container {
   constructor(params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string | null;
     components?: DiscordContainerComponents;
     accentColor?: string;

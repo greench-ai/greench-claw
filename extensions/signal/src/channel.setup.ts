@@ -1,4 +1,4 @@
-import type { ChannelPlugin } from "NexisClaw/plugin-sdk/core";
+import type { ChannelPlugin } from "GreenchClaw/plugin-sdk/core";
 import { type ResolvedSignalAccount } from "./accounts.js";
 import { signalSetupAdapter } from "./setup-core.js";
 import { createSignalPluginBase, signalSetupWizard } from "./shared.js";

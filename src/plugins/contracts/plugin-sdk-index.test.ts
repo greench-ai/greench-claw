@@ -3,7 +3,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, expectTypeOf, it } from "vitest";
 import { buildPluginSdkPackageExports } from "../../plugin-sdk/entrypoints.js";
-import type { ClawdbotConfig, NexisClawConfig, NexisClawSchemaType } from "../../plugin-sdk/index.js";
+import type {
+  ClawdbotConfig,
+  GreenchClawConfig,
+  GreenchClawSchemaType,
+} from "../../plugin-sdk/index.js";
 
 const pluginSdkIndexPath = fileURLToPath(new URL("../../plugin-sdk/index.ts", import.meta.url));
 
@@ -108,8 +112,8 @@ describe("plugin-sdk exports", () => {
   });
 
   it("keeps deprecated root config type aliases aligned", () => {
-    expectTypeOf<ClawdbotConfig>().toEqualTypeOf<NexisClawConfig>();
-    expectTypeOf<NexisClawSchemaType>().toEqualTypeOf<NexisClawConfig>();
+    expectTypeOf<ClawdbotConfig>().toEqualTypeOf<GreenchClawConfig>();
+    expectTypeOf<GreenchClawSchemaType>().toEqualTypeOf<GreenchClawConfig>();
   });
 
   it("keeps package.json plugin-sdk exports synced with the manifest", async () => {

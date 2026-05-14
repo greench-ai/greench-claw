@@ -17,7 +17,7 @@ export function readEmbeddedGatewayTokenForTest(
     environmentValueSources?: Record<string, GatewayServiceEnvironmentValueSource>;
   } | null,
 ) {
-  return isEnvironmentFileOnlySource(command?.environmentValueSources?.NEXISCLAW_GATEWAY_TOKEN)
+  return isEnvironmentFileOnlySource(command?.environmentValueSources?.GREENCHCLAW_GATEWAY_TOKEN)
     ? undefined
-    : normalizeOptionalString(command?.environment?.NEXISCLAW_GATEWAY_TOKEN);
+    : normalizeOptionalString(command?.environment?.GREENCHCLAW_GATEWAY_TOKEN);
 }

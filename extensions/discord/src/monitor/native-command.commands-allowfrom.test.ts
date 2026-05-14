@@ -1,9 +1,9 @@
 import { ChannelType } from "discord-api-types/v10";
-import type { NativeCommandSpec } from "NexisClaw/plugin-sdk/command-auth";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { DiscordAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import * as pluginCommandsModule from "NexisClaw/plugin-sdk/plugin-runtime";
-import * as dispatcherModule from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
+import type { NativeCommandSpec } from "GreenchClaw/plugin-sdk/command-auth";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import * as pluginCommandsModule from "GreenchClaw/plugin-sdk/plugin-runtime";
+import * as dispatcherModule from "GreenchClaw/plugin-sdk/reply-dispatch-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { defineThrowingDiscordChannelGetter } from "../test-support/partial-channel.js";
 import { __testing as nativeCommandTesting, createDiscordNativeCommand } from "./native-command.js";
@@ -26,7 +26,7 @@ function createInteraction(params?: { userId?: string }): MockCommandInteraction
   });
 }
 
-function createConfig(): NexisClawConfig {
+function createConfig(): GreenchClawConfig {
   return {
     commands: {
       allowFrom: {
@@ -48,10 +48,10 @@ function createConfig(): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-function createCommand(cfg: NexisClawConfig, discordConfig?: DiscordAccountConfig) {
+function createCommand(cfg: GreenchClawConfig, discordConfig?: DiscordAccountConfig) {
   const commandSpec: NativeCommandSpec = {
     name: "ping",
     description: "Ping",
@@ -92,7 +92,7 @@ function firstDispatchReplyCall(): Parameters<
 
 async function runGuildSlashCommand(params?: {
   userId?: string;
-  mutateConfig?: (cfg: NexisClawConfig) => void;
+  mutateConfig?: (cfg: GreenchClawConfig) => void;
   runtimeDiscordConfig?: DiscordAccountConfig;
   mutateInteraction?: (interaction: MockCommandInteraction) => void;
 }) {

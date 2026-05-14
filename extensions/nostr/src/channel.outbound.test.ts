@@ -1,6 +1,6 @@
-import { verifyChannelMessageAdapterCapabilityProofs } from "NexisClaw/plugin-sdk/channel-message";
-import { createStartAccountContext } from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { verifyChannelMessageAdapterCapabilityProofs } from "GreenchClaw/plugin-sdk/channel-message";
+import { createStartAccountContext } from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PluginRuntime } from "../runtime-api.js";
 import { nostrPlugin } from "./channel.js";
@@ -81,7 +81,7 @@ describe("nostr outbound cfg threading", () => {
 
     const cfg = createCfg();
     await nostrOutboundAdapter.sendText({
-      cfg: cfg as NexisClawConfig,
+      cfg: cfg as GreenchClawConfig,
       to: "NPUB123",
       text: "|a|b|",
       accountId: "default",
@@ -113,7 +113,7 @@ describe("nostr outbound cfg threading", () => {
     };
 
     await nostrOutboundAdapter.sendText({
-      cfg: cfg as NexisClawConfig,
+      cfg: cfg as GreenchClawConfig,
       to: "NPUB123",
       text: "hello",
     });
@@ -144,7 +144,7 @@ describe("nostr outbound cfg threading", () => {
       proofs: {
         text: async () => {
           const result = await sendText({
-            cfg: createCfg() as NexisClawConfig,
+            cfg: createCfg() as GreenchClawConfig,
             to: "NPUB123",
             text: "hello",
             accountId: "default",

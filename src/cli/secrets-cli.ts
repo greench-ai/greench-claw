@@ -42,7 +42,7 @@ function readPlanFile(pathname: string): SecretsApplyPlan {
   const parsed = JSON.parse(raw) as unknown;
   if (!isSecretsApplyPlan(parsed)) {
     throw new Error(
-      `Invalid secrets plan file: ${pathname}. Generate a fresh plan with ${formatCliCommand("NexisClaw secrets configure --plan-out <path>")}.`,
+      `Invalid secrets plan file: ${pathname}. Generate a fresh plan with ${formatCliCommand("GreenchClaw secrets configure --plan-out <path>")}.`,
     );
   }
   return parsed;
@@ -55,7 +55,7 @@ export function registerSecretsCli(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/gateway/security", "docs.NexisClaw.ai/gateway/security")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/gateway/security", "docs.GreenchClaw.ai/gateway/security")}\n`,
     );
 
   addGatewayClientOptions(
@@ -86,7 +86,7 @@ export function registerSecretsCli(program: Command) {
           formatGatewayCommandFailure({
             action: "reload secrets",
             error: err,
-            inspectCommand: "NexisClaw gateway status --deep",
+            inspectCommand: "GreenchClaw gateway status --deep",
           }),
         ),
       );
@@ -138,7 +138,7 @@ export function registerSecretsCli(program: Command) {
       } catch (err) {
         defaultRuntime.error(
           danger(
-            `Secrets audit failed: ${formatErrorMessage(err)}. Run ${formatCliCommand("NexisClaw doctor")} to inspect config and credential state.`,
+            `Secrets audit failed: ${formatErrorMessage(err)}. Run ${formatCliCommand("GreenchClaw doctor")} to inspect config and credential state.`,
           ),
         );
         defaultRuntime.exit(2);
@@ -251,7 +251,7 @@ export function registerSecretsCli(program: Command) {
       } catch (err) {
         defaultRuntime.error(
           danger(
-            `Secrets configure failed: ${formatErrorMessage(err)}. Re-run ${formatCliCommand("NexisClaw secrets audit")} before applying changes.`,
+            `Secrets configure failed: ${formatErrorMessage(err)}. Re-run ${formatCliCommand("GreenchClaw secrets audit")} before applying changes.`,
           ),
         );
         defaultRuntime.exit(1);
@@ -298,7 +298,7 @@ export function registerSecretsCli(program: Command) {
       } catch (err) {
         defaultRuntime.error(
           danger(
-            `Secrets apply failed: ${formatErrorMessage(err)}. Re-run ${formatCliCommand("NexisClaw secrets apply --from <path> --dry-run")} to inspect the plan without writing.`,
+            `Secrets apply failed: ${formatErrorMessage(err)}. Re-run ${formatCliCommand("GreenchClaw secrets apply --from <path> --dry-run")} to inspect the plan without writing.`,
           ),
         );
         defaultRuntime.exit(1);

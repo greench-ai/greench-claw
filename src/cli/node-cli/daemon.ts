@@ -58,8 +58,8 @@ type NodeDaemonStatusOptions = {
 
 function renderNodeServiceStartHints(): string[] {
   return buildPlatformServiceStartHints({
-    installCommand: formatCliCommand("NexisClaw node install"),
-    startCommand: formatCliCommand("NexisClaw node start"),
+    installCommand: formatCliCommand("GreenchClaw node install"),
+    startCommand: formatCliCommand("GreenchClaw node start"),
     launchAgentPlistPath: `~/Library/LaunchAgents/${resolveNodeLaunchAgentLabel()}.plist`,
     systemdServiceName: resolveNodeSystemdServiceName(),
     windowsTaskName: resolveNodeWindowsTaskName(),
@@ -83,7 +83,7 @@ function resolveNodeDefaults(
   if (opts.port !== undefined && portOverride === null) {
     return { host, port: null };
   }
-  const port = portOverride ?? config?.gateway?.port ?? 19500;
+  const port = portOverride ?? config?.gateway?.port ?? 18420;
   return { host, port };
 }
 
@@ -128,7 +128,7 @@ export async function runNodeDaemonInstall(opts: NodeDaemonInstallOptions) {
     });
     if (!json) {
       defaultRuntime.log(`Node service already ${service.loadedText}.`);
-      defaultRuntime.log(`Reinstall with: ${formatCliCommand("NexisClaw node install --force")}`);
+      defaultRuntime.log(`Reinstall with: ${formatCliCommand("GreenchClaw node install --force")}`);
     }
     return;
   }
@@ -140,7 +140,7 @@ export async function runNodeDaemonInstall(opts: NodeDaemonInstallOptions) {
     await buildNodeInstallPlan({
       env: process.env,
       host,
-      port: port ?? 19500,
+      port: port ?? 18420,
       tls,
       tlsFingerprint: tlsFingerprint || undefined,
       nodeId: opts.nodeId,
@@ -270,7 +270,7 @@ export async function runNodeDaemonStatus(opts: NodeDaemonStatusOptions = {}) {
   };
   const hintEnv = {
     ...baseEnv,
-    NEXISCLAW_LOG_PREFIX: baseEnv.NEXISCLAW_LOG_PREFIX ?? "node",
+    GREENCHCLAW_LOG_PREFIX: baseEnv.GREENCHCLAW_LOG_PREFIX ?? "node",
   } as NodeJS.ProcessEnv;
 
   if (runtime?.missingUnit) {

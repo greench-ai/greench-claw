@@ -32,7 +32,7 @@ import {
   resolveSessionTranscriptsDirForAgent,
 } from "../../config/sessions.js";
 import type { IdentityConfig } from "../../config/types.base.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { root, FsSafeError, type ReadResult } from "../../infra/fs-safe.js";
 import { movePathToTrash } from "../../plugin-sdk/browser-maintenance.js";
 import { DEFAULT_AGENT_ID, normalizeAgentId } from "../../routing/session-key.js";
@@ -97,9 +97,9 @@ const ALLOWED_FILE_NAMES = new Set<string>([...BOOTSTRAP_FILE_NAMES, ...MEMORY_F
 function resolveAgentWorkspaceFileOrRespondError(
   params: Record<string, unknown>,
   respond: RespondFn,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ): {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   workspaceDir: string;
   name: string;
@@ -251,7 +251,7 @@ async function listAgentFiles(workspaceDir: string, options?: { hideBootstrap?: 
   return files;
 }
 
-function resolveAgentIdOrError(agentIdRaw: string, cfg: NexisClawConfig) {
+function resolveAgentIdOrError(agentIdRaw: string, cfg: GreenchClawConfig) {
   const agentId = normalizeAgentId(agentIdRaw);
   const allowed = new Set(listAgentIds(cfg));
   if (!allowed.has(agentId)) {
@@ -283,7 +283,7 @@ function respondInvalidMethodParams(
   );
 }
 
-function isConfiguredAgent(cfg: NexisClawConfig, agentId: string): boolean {
+function isConfiguredAgent(cfg: GreenchClawConfig, agentId: string): boolean {
   return findAgentEntryIndex(listAgentEntries(cfg), agentId) >= 0;
 }
 

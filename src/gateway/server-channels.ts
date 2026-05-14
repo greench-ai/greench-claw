@@ -7,7 +7,7 @@ import {
   listChannelPlugins,
 } from "../channels/plugins/index.js";
 import type { ChannelAccountSnapshot } from "../channels/plugins/types.public.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { startChannelApprovalHandlerBootstrap } from "../infra/approval-handler-bootstrap.js";
 import { type BackoffPolicy, computeBackoff, sleepWithAbort } from "../infra/backoff.js";
 import { createTaskScopedChannelRuntime } from "../infra/channel-runtime-context.js";
@@ -131,7 +131,7 @@ function applyDescribedAccountFields(
 }
 
 type ChannelManagerOptions = {
-  getRuntimeConfig: () => NexisClawConfig;
+  getRuntimeConfig: () => GreenchClawConfig;
   channelLogs: Partial<Record<ChannelId, SubsystemLogger>>;
   channelRuntimeEnvs: Partial<Record<ChannelId, RuntimeEnv>>;
   /**

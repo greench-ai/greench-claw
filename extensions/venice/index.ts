@@ -1,9 +1,9 @@
-import { defineSingleProviderPluginEntry } from "NexisClaw/plugin-sdk/provider-entry";
+import { defineSingleProviderPluginEntry } from "GreenchClaw/plugin-sdk/provider-entry";
 import {
   applyModelCompatPatch,
   type ModelCompatConfig,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { applyVeniceConfig, VENICE_DEFAULT_MODEL_REF } from "./onboard.js";
 import { buildVeniceProvider } from "./provider-catalog.js";
 import { createVeniceDeepSeekV4Wrapper } from "./stream.js";

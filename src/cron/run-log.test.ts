@@ -69,7 +69,7 @@ describe("cron run log", () => {
   });
 
   it("appends JSONL and prunes by line count", async () => {
-    await withRunLogDir("NexisClaw-cron-log-", async (dir) => {
+    await withRunLogDir("GreenchClaw-cron-log-", async (dir) => {
       const logPath = path.join(dir, "runs", "job-1.jsonl");
 
       for (let i = 0; i < 10; i++) {
@@ -101,7 +101,7 @@ describe("cron run log", () => {
   });
 
   it("reads run-log entries synchronously for task reconciliation", async () => {
-    await withRunLogDir("NexisClaw-cron-log-sync-", async (dir) => {
+    await withRunLogDir("GreenchClaw-cron-log-sync-", async (dir) => {
       const logPath = path.join(dir, "runs", "job-1.jsonl");
       await appendCronRunLog(logPath, {
         ts: 1000,
@@ -131,7 +131,7 @@ describe("cron run log", () => {
   it.skipIf(process.platform === "win32")(
     "writes run log files with secure permissions",
     async () => {
-      await withRunLogDir("NexisClaw-cron-log-perms-", async (dir) => {
+      await withRunLogDir("GreenchClaw-cron-log-perms-", async (dir) => {
         const logPath = path.join(dir, "runs", "job-1.jsonl");
 
         await appendCronRunLog(logPath, {
@@ -150,7 +150,7 @@ describe("cron run log", () => {
   it.skipIf(process.platform === "win32")(
     "hardens an existing run-log directory to owner-only permissions",
     async () => {
-      await withRunLogDir("NexisClaw-cron-log-dir-perms-", async (dir) => {
+      await withRunLogDir("GreenchClaw-cron-log-dir-perms-", async (dir) => {
         const runDir = path.join(dir, "runs");
         const logPath = path.join(runDir, "job-1.jsonl");
         await fs.mkdir(runDir, { recursive: true, mode: 0o755 });
@@ -170,7 +170,7 @@ describe("cron run log", () => {
   );
 
   it("reads newest entries and filters by jobId", async () => {
-    await withRunLogDir("NexisClaw-cron-log-read-", async (dir) => {
+    await withRunLogDir("GreenchClaw-cron-log-read-", async (dir) => {
       const logPathA = path.join(dir, "runs", "a.jsonl");
       const logPathB = path.join(dir, "runs", "b.jsonl");
 
@@ -226,7 +226,7 @@ describe("cron run log", () => {
   });
 
   it("ignores invalid and non-finished lines while preserving delivery fields", async () => {
-    await withRunLogDir("NexisClaw-cron-log-filter-", async (dir) => {
+    await withRunLogDir("GreenchClaw-cron-log-filter-", async (dir) => {
       const logPath = path.join(dir, "runs", "job-1.jsonl");
       await fs.mkdir(path.dirname(logPath), { recursive: true });
       await fs.writeFile(
@@ -271,7 +271,7 @@ describe("cron run log", () => {
   });
 
   it("does not include raw delivery targets in run-log search", async () => {
-    await withRunLogDir("NexisClaw-cron-log-target-query-", async (dir) => {
+    await withRunLogDir("GreenchClaw-cron-log-target-query-", async (dir) => {
       const logPath = path.join(dir, "runs", "job-1.jsonl");
       await fs.mkdir(path.dirname(logPath), { recursive: true });
       await fs.writeFile(
@@ -313,7 +313,7 @@ describe("cron run log", () => {
   });
 
   it("reads and searches run diagnostics", async () => {
-    await withRunLogDir("NexisClaw-cron-log-diagnostics-", async (dir) => {
+    await withRunLogDir("GreenchClaw-cron-log-diagnostics-", async (dir) => {
       const logPath = path.join(dir, "runs", "job-1.jsonl");
 
       await appendCronRunLog(logPath, {
@@ -355,7 +355,7 @@ describe("cron run log", () => {
   });
 
   it("reads telemetry fields", async () => {
-    await withRunLogDir("NexisClaw-cron-log-telemetry-", async (dir) => {
+    await withRunLogDir("GreenchClaw-cron-log-telemetry-", async (dir) => {
       const logPath = path.join(dir, "runs", "job-1.jsonl");
 
       await appendCronRunLog(logPath, {
@@ -405,7 +405,7 @@ describe("cron run log", () => {
   });
 
   it("cleans up pending-write bookkeeping after appends complete", async () => {
-    await withRunLogDir("NexisClaw-cron-log-pending-", async (dir) => {
+    await withRunLogDir("GreenchClaw-cron-log-pending-", async (dir) => {
       const logPath = path.join(dir, "runs", "job-cleanup.jsonl");
       await appendCronRunLog(logPath, {
         ts: 1,
@@ -419,7 +419,7 @@ describe("cron run log", () => {
   });
 
   it("read drains pending fire-and-forget writes", async () => {
-    await withRunLogDir("NexisClaw-cron-log-drain-", async (dir) => {
+    await withRunLogDir("GreenchClaw-cron-log-drain-", async (dir) => {
       const logPath = path.join(dir, "runs", "job-drain.jsonl");
 
       // Fire-and-forget write (simulates the `void appendCronRunLog(...)` pattern

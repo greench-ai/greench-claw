@@ -43,7 +43,7 @@ describe("resolveOfficialPluginOnboardingInstallEntries", () => {
           installs: {
             "diagnostics-otel": {
               source: "npm",
-              spec: "@NexisClaw/diagnostics-otel",
+              spec: "@GreenchClaw/diagnostics-otel",
               installPath: "/tmp/diagnostics-otel",
             },
           },
@@ -62,8 +62,8 @@ describe("formatInstallHint", () => {
   it("describes dual-source npm-default installs as npm first", () => {
     expect(
       __testing.formatInstallHint({
-        clawhubSpec: "clawhub:@NexisClaw/diagnostics-otel",
-        npmSpec: "@NexisClaw/diagnostics-otel",
+        clawhubSpec: "clawhub:@GreenchClaw/diagnostics-otel",
+        npmSpec: "@GreenchClaw/diagnostics-otel",
         defaultChoice: "npm",
       }),
     ).toBe("npm, with ClawHub fallback");
@@ -72,8 +72,8 @@ describe("formatInstallHint", () => {
   it("keeps dual-source clawhub-default installs ClawHub first", () => {
     expect(
       __testing.formatInstallHint({
-        clawhubSpec: "clawhub:@NexisClaw/diagnostics-otel",
-        npmSpec: "@NexisClaw/diagnostics-otel",
+        clawhubSpec: "clawhub:@GreenchClaw/diagnostics-otel",
+        npmSpec: "@GreenchClaw/diagnostics-otel",
         defaultChoice: "clawhub",
       }),
     ).toBe("ClawHub, with npm fallback");
@@ -115,27 +115,27 @@ describe("setupOfficialPluginInstalls", () => {
         {
           value: "acpx",
           label: "ACPX Runtime",
-          hint: "NexisClaw ACP runtime backend",
+          hint: "GreenchClaw ACP runtime backend",
         },
         {
           value: "diagnostics-otel",
           label: "Diagnostics OpenTelemetry",
-          hint: "NexisClaw diagnostics OpenTelemetry exporter",
+          hint: "GreenchClaw diagnostics OpenTelemetry exporter",
         },
         {
           value: "diagnostics-prometheus",
           label: "Diagnostics Prometheus",
-          hint: "NexisClaw diagnostics Prometheus exporter",
+          hint: "GreenchClaw diagnostics Prometheus exporter",
         },
         {
           value: "diffs",
           label: "Diffs",
-          hint: "NexisClaw diff viewer plugin",
+          hint: "GreenchClaw diff viewer plugin",
         },
         {
           value: "google-meet",
           label: "Google Meet",
-          hint: "NexisClaw Google Meet participant plugin",
+          hint: "GreenchClaw Google Meet participant plugin",
         },
         {
           value: "lobster",
@@ -145,12 +145,12 @@ describe("setupOfficialPluginInstalls", () => {
         {
           value: "memory-lancedb",
           label: "Memory LanceDB",
-          hint: "NexisClaw LanceDB-backed long-term memory plugin with auto-recall/capture",
+          hint: "GreenchClaw LanceDB-backed long-term memory plugin with auto-recall/capture",
         },
         {
           value: "voice-call",
           label: "Voice Call",
-          hint: "NexisClaw voice-call plugin",
+          hint: "GreenchClaw voice-call plugin",
         },
       ],
     });
@@ -159,10 +159,10 @@ describe("setupOfficialPluginInstalls", () => {
       entry: {
         pluginId: "diagnostics-otel",
         label: "Diagnostics OpenTelemetry",
-        description: "NexisClaw diagnostics OpenTelemetry exporter",
+        description: "GreenchClaw diagnostics OpenTelemetry exporter",
         install: {
-          clawhubSpec: "clawhub:@NexisClaw/diagnostics-otel",
-          npmSpec: "@NexisClaw/diagnostics-otel",
+          clawhubSpec: "clawhub:@GreenchClaw/diagnostics-otel",
+          npmSpec: "@GreenchClaw/diagnostics-otel",
           defaultChoice: "npm",
           minHostVersion: ">=2026.4.25",
         },

@@ -1,12 +1,12 @@
 ---
 summary: "Zalo Personal plugin: QR login + messaging via native zca-js (plugin install + channel config + tool)"
 read_when:
-  - You want Zalo Personal (unofficial) support in NexisClaw
+  - You want Zalo Personal (unofficial) support in GreenchClaw
   - You are configuring or developing the zalouser plugin
 title: "Zalo personal plugin"
 ---
 
-Zalo Personal support for NexisClaw via a plugin, using native `zca-js` to automate a normal Zalo user account.
+Zalo Personal support for GreenchClaw via a plugin, using native `zca-js` to automate a normal Zalo user account.
 
 <Warning>
 Unofficial automation may lead to account suspension or ban. Use at your own risk.
@@ -29,7 +29,7 @@ No external `zca`/`openzca` CLI binary is required.
 ### Option A: install from npm
 
 ```bash
-NexisClaw plugins install @NexisClaw/zalouser
+GreenchClaw plugins install @GreenchClaw/zalouser
 ```
 
 Use the bare package to follow the current official release tag. Pin an exact
@@ -41,7 +41,7 @@ Restart the Gateway afterwards.
 
 ```bash
 PLUGIN_SRC=./path/to/local/zalouser-plugin
-NexisClaw plugins install "$PLUGIN_SRC"
+GreenchClaw plugins install "$PLUGIN_SRC"
 cd "$PLUGIN_SRC" && pnpm install
 ```
 
@@ -65,11 +65,11 @@ Channel config lives under `channels.zalouser` (not `plugins.entries.*`):
 ## CLI
 
 ```bash
-NexisClaw channels login --channel zalouser
-NexisClaw channels logout --channel zalouser
-NexisClaw channels status --probe
-NexisClaw message send --channel zalouser --target <threadId> --message "Hello from NexisClaw"
-NexisClaw directory peers list --channel zalouser --query "name"
+GreenchClaw channels login --channel zalouser
+GreenchClaw channels logout --channel zalouser
+GreenchClaw channels status --probe
+GreenchClaw message send --channel zalouser --target <threadId> --message "Hello from GreenchClaw"
+GreenchClaw directory peers list --channel zalouser --query "name"
 ```
 
 ## Agent tool

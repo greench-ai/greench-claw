@@ -6,7 +6,7 @@ const mocks = vi.hoisted(() => ({
   listRuntimeVideoGenerationProviders: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/video-generation-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/video-generation-runtime", () => ({
   generateVideo: mocks.generateVideo,
   listRuntimeVideoGenerationProviders: mocks.listRuntimeVideoGenerationProviders,
 }));

@@ -1,6 +1,6 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import type { PluginRuntime, RuntimeLogger } from "NexisClaw/plugin-sdk/plugin-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import type { PluginRuntime, RuntimeLogger } from "GreenchClaw/plugin-sdk/plugin-runtime";
 import {
   buildRealtimeVoiceAgentConsultWorkingResponse,
   consultRealtimeVoiceAgent,
@@ -11,9 +11,9 @@ import {
   type RealtimeVoiceToolCallEvent,
   type RealtimeVoiceTool,
   type TalkEventInput,
-} from "NexisClaw/plugin-sdk/realtime-voice";
-import { normalizeAgentId } from "NexisClaw/plugin-sdk/routing";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/realtime-voice";
+import { normalizeAgentId } from "GreenchClaw/plugin-sdk/routing";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { GoogleMeetConfig, GoogleMeetToolPolicy } from "./config.js";
 
 export const GOOGLE_MEET_AGENT_CONSULT_TOOL_NAME = REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME;
@@ -42,9 +42,9 @@ export function submitGoogleMeetConsultWorkingResponse(
   });
 }
 
-export async function consultNexisClawAgentForGoogleMeet(params: {
+export async function consultGreenchClawAgentForGoogleMeet(params: {
   config: GoogleMeetConfig;
-  fullConfig: NexisClawConfig;
+  fullConfig: GreenchClawConfig;
   runtime: PluginRuntime;
   logger: RuntimeLogger;
   meetingSessionId: string;
@@ -83,7 +83,7 @@ export function handleGoogleMeetRealtimeConsultToolCall(params: {
   session: RealtimeVoiceBridgeSession;
   event: RealtimeVoiceToolCallEvent;
   config: GoogleMeetConfig;
-  fullConfig: NexisClawConfig;
+  fullConfig: GreenchClawConfig;
   runtime: PluginRuntime;
   logger: RuntimeLogger;
   meetingSessionId: string;
@@ -125,7 +125,7 @@ export function handleGoogleMeetRealtimeConsultToolCall(params: {
     payload: { name: params.event.name, status: "working" },
   });
   submitGoogleMeetConsultWorkingResponse(params.session, callId);
-  void consultNexisClawAgentForGoogleMeet({
+  void consultGreenchClawAgentForGoogleMeet({
     config: params.config,
     fullConfig: params.fullConfig,
     runtime: params.runtime,

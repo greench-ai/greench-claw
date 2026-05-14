@@ -96,7 +96,7 @@ let sharedFixtureId = 0;
 const sharedRuntimeBins = new Set<string>();
 
 beforeAll(() => {
-  sharedFixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-run-plan-fixtures-"));
+  sharedFixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-run-plan-fixtures-"));
   sharedRuntimeBinDir = path.join(sharedFixtureRoot, "bin");
   fs.mkdirSync(sharedRuntimeBinDir, { recursive: true });
 });
@@ -272,31 +272,31 @@ const unsafeRuntimeInvocationCases: UnsafeRuntimeInvocationCase[] = [
   {
     name: "rejects bun package script names that do not bind a concrete file",
     binName: "bun",
-    tmpPrefix: "NexisClaw-bun-package-script-",
+    tmpPrefix: "GreenchClaw-bun-package-script-",
     command: ["bun", "run", "dev"],
   },
   {
     name: "rejects deno eval invocations that do not bind a concrete file",
     binName: "deno",
-    tmpPrefix: "NexisClaw-deno-eval-",
+    tmpPrefix: "GreenchClaw-deno-eval-",
     command: ["deno", "eval", "console.log('SAFE')"],
   },
   {
     name: "rejects tsx eval invocations that do not bind a concrete file",
     binName: "tsx",
-    tmpPrefix: "NexisClaw-tsx-eval-",
+    tmpPrefix: "GreenchClaw-tsx-eval-",
     command: ["tsx", "--eval", "console.log('SAFE')"],
   },
   {
     name: "rejects busybox applets that cannot be safely bound",
     binName: "busybox",
-    tmpPrefix: "NexisClaw-busybox-awk-",
+    tmpPrefix: "GreenchClaw-busybox-awk-",
     command: ["busybox", "awk", 'BEGIN{system("id")}'],
   },
   {
     name: "rejects busybox applets even when cwd contains a file named after the applet",
     binName: "busybox",
-    tmpPrefix: "NexisClaw-busybox-awk-file-bait-",
+    tmpPrefix: "GreenchClaw-busybox-awk-file-bait-",
     command: ["busybox", "awk", 'BEGIN{system("id")}'],
     setup: (tmp) => {
       fs.writeFileSync(path.join(tmp, "awk"), "bait\n");
@@ -305,13 +305,13 @@ const unsafeRuntimeInvocationCases: UnsafeRuntimeInvocationCase[] = [
   {
     name: "rejects toybox applets that cannot be safely bound",
     binName: "toybox",
-    tmpPrefix: "NexisClaw-toybox-awk-",
+    tmpPrefix: "GreenchClaw-toybox-awk-",
     command: ["toybox", "awk", 'BEGIN{system("id")}'],
   },
   {
     name: "rejects node inline import operands that cannot be bound to one stable file",
     binName: "node",
-    tmpPrefix: "NexisClaw-node-import-inline-",
+    tmpPrefix: "GreenchClaw-node-import-inline-",
     command: ["node", "--import=./preload.mjs", "./main.mjs"],
     setup: (tmp) => {
       fs.writeFileSync(path.join(tmp, "main.mjs"), 'console.log("SAFE")\n');
@@ -321,7 +321,7 @@ const unsafeRuntimeInvocationCases: UnsafeRuntimeInvocationCase[] = [
   {
     name: "rejects ruby require preloads that approval cannot bind completely",
     binName: "ruby",
-    tmpPrefix: "NexisClaw-ruby-require-",
+    tmpPrefix: "GreenchClaw-ruby-require-",
     command: ["ruby", "-r", "attacker", "./safe.rb"],
     setup: (tmp) => {
       fs.writeFileSync(path.join(tmp, "safe.rb"), 'puts "SAFE"\n');
@@ -330,7 +330,7 @@ const unsafeRuntimeInvocationCases: UnsafeRuntimeInvocationCase[] = [
   {
     name: "rejects perl module preloads that approval cannot bind completely",
     binName: "perl",
-    tmpPrefix: "NexisClaw-perl-module-preload-",
+    tmpPrefix: "GreenchClaw-perl-module-preload-",
     command: ["perl", "-MPreload", "./safe.pl"],
     setup: (tmp) => {
       fs.writeFileSync(path.join(tmp, "safe.pl"), 'print "SAFE\\n";\n');
@@ -339,7 +339,7 @@ const unsafeRuntimeInvocationCases: UnsafeRuntimeInvocationCase[] = [
   {
     name: "rejects perl load-path flags that can redirect module resolution after approval",
     binName: "perl",
-    tmpPrefix: "NexisClaw-perl-load-path-",
+    tmpPrefix: "GreenchClaw-perl-load-path-",
     command: ["perl", "-Ilib", "./safe.pl"],
     setup: (tmp) => {
       fs.writeFileSync(path.join(tmp, "safe.pl"), 'print "SAFE\\n";\n');
@@ -348,7 +348,7 @@ const unsafeRuntimeInvocationCases: UnsafeRuntimeInvocationCase[] = [
   {
     name: "rejects shell payloads that hide mutable interpreter scripts",
     binName: "node",
-    tmpPrefix: "NexisClaw-inline-shell-node-",
+    tmpPrefix: "GreenchClaw-inline-shell-node-",
     command: ["sh", "-lc", "node ./run.js"],
     setup: (tmp) => {
       fs.writeFileSync(path.join(tmp, "run.js"), 'console.log("SAFE")\n');
@@ -357,7 +357,7 @@ const unsafeRuntimeInvocationCases: UnsafeRuntimeInvocationCase[] = [
   {
     name: "rejects pnpm dlx invocations with unrecognized flags that cannot be safely bound",
     binName: "pnpm",
-    tmpPrefix: "NexisClaw-pnpm-dlx-unknown-flag-",
+    tmpPrefix: "GreenchClaw-pnpm-dlx-unknown-flag-",
     command: ["pnpm", "dlx", "--future-flag", "tsx", "./run.ts"],
     setup: (tmp) => {
       fs.writeFileSync(path.join(tmp, "run.ts"), 'console.log("SAFE")\n');
@@ -366,7 +366,7 @@ const unsafeRuntimeInvocationCases: UnsafeRuntimeInvocationCase[] = [
   {
     name: "rejects pnpm dlx invocations with unrecognized global flags that take a value before dlx",
     binName: "pnpm",
-    tmpPrefix: "NexisClaw-pnpm-dlx-unknown-prefix-value-",
+    tmpPrefix: "GreenchClaw-pnpm-dlx-unknown-prefix-value-",
     command: ["pnpm", "--future-flag", "value", "dlx", "tsx", "./run.ts"],
     setup: (tmp) => {
       fs.writeFileSync(path.join(tmp, "run.ts"), 'console.log("SAFE")\n');
@@ -433,7 +433,7 @@ describe("hardenApprovedExecutionPaths", () => {
   it.runIf(process.platform !== "win32")("handles approval hardening cases", () => {
     for (const testCase of cases) {
       runNamedCase(testCase.name, () => {
-        const tmp = createFixtureDir("NexisClaw-approval-hardening-");
+        const tmp = createFixtureDir("GreenchClaw-approval-hardening-");
         const oldPath = process.env.PATH;
         let pathToken: PathTokenSetup | null = null;
         if (testCase.withPathToken) {
@@ -611,7 +611,7 @@ describe("hardenApprovedExecutionPaths", () => {
   ];
 
   it("captures mutable runtime operands in approval plans", () => {
-    const tmp = createFixtureDir("NexisClaw-approval-script-plan-");
+    const tmp = createFixtureDir("GreenchClaw-approval-script-plan-");
     withFakeRuntimeBins({
       binNames: uniqueRuntimeBinNames(mutableOperandCases),
       run: () => {
@@ -638,7 +638,7 @@ describe("hardenApprovedExecutionPaths", () => {
   it("captures mutable shell script operands in approval plans", () => {
     withScriptOperandPlanFixture(
       {
-        tmpPrefix: "NexisClaw-approval-script-plan-",
+        tmpPrefix: "GreenchClaw-approval-script-plan-",
       },
       (fixture, tmp) => {
         expectMutableFileOperandApprovalPlan(fixture, tmp);
@@ -667,7 +667,7 @@ describe("hardenApprovedExecutionPaths", () => {
     if (process.platform === "win32") {
       return;
     }
-    const tmp = createFixtureDir("NexisClaw-shell-relative-binary-binding-");
+    const tmp = createFixtureDir("GreenchClaw-shell-relative-binary-binding-");
     const binaryPath = resolveNativeBinaryFixturePath();
     const relativeBinaryPath = path.join(tmp, "tool");
     fs.copyFileSync(binaryPath, relativeBinaryPath);
@@ -684,7 +684,7 @@ describe("hardenApprovedExecutionPaths", () => {
     if (process.platform === "win32") {
       return;
     }
-    const tmp = createFixtureDir("NexisClaw-shell-absolute-binary-binding-");
+    const tmp = createFixtureDir("GreenchClaw-shell-absolute-binary-binding-");
     const binaryPath = resolveNativeBinaryFixturePath();
     const copiedBinaryPath = path.join(tmp, "tool");
     fs.copyFileSync(binaryPath, copiedBinaryPath);
@@ -701,7 +701,7 @@ describe("hardenApprovedExecutionPaths", () => {
     if (process.platform === "win32") {
       return;
     }
-    const tmp = createFixtureDir("NexisClaw-shell-owned-readonly-binding-");
+    const tmp = createFixtureDir("GreenchClaw-shell-owned-readonly-binding-");
     const binaryPath = path.join(tmp, "tool");
     try {
       fs.copyFileSync(resolveNativeBinaryFixturePath(), binaryPath);
@@ -722,7 +722,7 @@ describe("hardenApprovedExecutionPaths", () => {
     if (process.platform === "win32") {
       return;
     }
-    const tmp = createFixtureDir("NexisClaw-shell-symlink-binary-binding-");
+    const tmp = createFixtureDir("GreenchClaw-shell-symlink-binary-binding-");
     const stableDir = path.join(tmp, "stable");
     const mutableDir = path.join(tmp, "mutable");
     try {
@@ -749,22 +749,22 @@ describe("hardenApprovedExecutionPaths", () => {
   it("keeps fail-closed behavior for mutable or ambiguous shell payload files", () => {
     for (const testCase of [
       {
-        tmpPrefix: "NexisClaw-shell-script-binding-",
+        tmpPrefix: "GreenchClaw-shell-script-binding-",
         fileName: "run.sh",
         body: "#!/bin/sh\necho SAFE\n",
       },
       {
-        tmpPrefix: "NexisClaw-shell-empty-binding-",
+        tmpPrefix: "GreenchClaw-shell-empty-binding-",
         fileName: "empty",
         body: "",
       },
       {
-        tmpPrefix: "NexisClaw-shell-mz-text-binding-",
+        tmpPrefix: "GreenchClaw-shell-mz-text-binding-",
         fileName: "mz-script",
         body: "MZ not really a PE file\n",
       },
       {
-        tmpPrefix: "NexisClaw-shell-nul-header-binding-",
+        tmpPrefix: "GreenchClaw-shell-nul-header-binding-",
         fileName: "nul-script",
         body: "SAFE\u0000maybe-binary\n",
       },
@@ -777,7 +777,7 @@ describe("hardenApprovedExecutionPaths", () => {
     if (process.platform === "win32") {
       return;
     }
-    const tmp = createFixtureDir("NexisClaw-shell-race-binding-");
+    const tmp = createFixtureDir("GreenchClaw-shell-race-binding-");
     const scriptPath = path.join(tmp, "run.sh");
     fs.writeFileSync(scriptPath, "#!/bin/sh\necho SAFE\n");
     fs.chmodSync(scriptPath, 0o755);
@@ -826,7 +826,7 @@ describe("hardenApprovedExecutionPaths", () => {
       run: () => {
         withScriptOperandPlanFixture(
           {
-            tmpPrefix: "NexisClaw-pnpm-dlx-approval-",
+            tmpPrefix: "GreenchClaw-pnpm-dlx-approval-",
             fixture: {
               name: "pnpm dlx rewritten script",
               argv: ["pnpm", "dlx", "tsx", "./run.ts"],
@@ -866,7 +866,7 @@ describe("hardenApprovedExecutionPaths", () => {
     withFakeRuntimeBins({
       binNames: ["pnpm", "tsx"],
       run: () => {
-        const tmp = createFixtureDir("NexisClaw-pnpm-dlx-shell-mode-");
+        const tmp = createFixtureDir("GreenchClaw-pnpm-dlx-shell-mode-");
         fs.writeFileSync(path.join(tmp, "run.ts"), 'console.log("SAFE");\n');
         expect(
           resolveMutableFileOperandSnapshotSync({
@@ -885,19 +885,19 @@ describe("hardenApprovedExecutionPaths", () => {
       run: () => {
         const cases = [
           {
-            prefix: "NexisClaw-pnpm-dlx-package-bin-",
+            prefix: "GreenchClaw-pnpm-dlx-package-bin-",
             command: ["pnpm", "dlx", "cowsay", "hello"],
           },
           {
-            prefix: "NexisClaw-pnpm-dlx-package-runtime-token-",
+            prefix: "GreenchClaw-pnpm-dlx-package-runtime-token-",
             command: ["pnpm", "dlx", "cowsay", "node"],
           },
           {
-            prefix: "NexisClaw-pnpm-dlx-package-runtime-token-multi-",
+            prefix: "GreenchClaw-pnpm-dlx-package-runtime-token-multi-",
             command: ["pnpm", "dlx", "cowsay", "node", "hello"],
           },
           {
-            prefix: "NexisClaw-pnpm-dlx-package-file-",
+            prefix: "GreenchClaw-pnpm-dlx-package-file-",
             command: ["pnpm", "dlx", "eslint", "src/index.ts"],
             setup: (tmp: string) => {
               fs.mkdirSync(path.join(tmp, "src"), { recursive: true });
@@ -905,7 +905,7 @@ describe("hardenApprovedExecutionPaths", () => {
             },
           },
           {
-            prefix: "NexisClaw-pnpm-dlx-package-data-tail-",
+            prefix: "GreenchClaw-pnpm-dlx-package-data-tail-",
             command: ["pnpm", "dlx", "cowsay", "tsx", "./run.ts"],
             setup: (tmp: string) => {
               fs.writeFileSync(path.join(tmp, "run.ts"), 'console.log("SAFE");\n');
@@ -927,7 +927,7 @@ describe("hardenApprovedExecutionPaths", () => {
       run: () => {
         withScriptOperandPlanFixture(
           {
-            tmpPrefix: "NexisClaw-pnpm-dlx-double-dash-",
+            tmpPrefix: "GreenchClaw-pnpm-dlx-double-dash-",
             fixture: {
               name: "pnpm dlx double dash",
               argv: ["pnpm", "dlx", "--", "tsx", "./run.ts"],
@@ -945,7 +945,7 @@ describe("hardenApprovedExecutionPaths", () => {
   });
 
   it("captures the real shell script operand after value-taking shell flags", () => {
-    const tmp = createFixtureDir("NexisClaw-shell-option-value-");
+    const tmp = createFixtureDir("GreenchClaw-shell-option-value-");
     const scriptPath = path.join(tmp, "run.sh");
     fs.writeFileSync(scriptPath, "#!/bin/sh\necho SAFE\n");
     fs.writeFileSync(path.join(tmp, "errexit"), "decoy\n");

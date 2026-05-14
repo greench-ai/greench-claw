@@ -1,3 +1,3 @@
-import { describeGoogleProviderRuntimeContract } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { describeGoogleProviderRuntimeContract } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 
 describeGoogleProviderRuntimeContract(() => import("./index.js"));

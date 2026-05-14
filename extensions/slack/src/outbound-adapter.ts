@@ -2,20 +2,20 @@ import {
   attachChannelToResult,
   type ChannelOutboundAdapter,
   createAttachedChannelResultAdapter,
-} from "NexisClaw/plugin-sdk/channel-send-result";
+} from "GreenchClaw/plugin-sdk/channel-send-result";
 import {
   resolveInteractiveTextFallback,
   type InteractiveReply,
   type MessagePresentation,
-} from "NexisClaw/plugin-sdk/interactive-runtime";
-import type { OutboundIdentity } from "NexisClaw/plugin-sdk/outbound-runtime";
-import { resolveOutboundSendDep } from "NexisClaw/plugin-sdk/outbound-send-deps";
+} from "GreenchClaw/plugin-sdk/interactive-runtime";
+import type { OutboundIdentity } from "GreenchClaw/plugin-sdk/outbound-runtime";
+import { resolveOutboundSendDep } from "GreenchClaw/plugin-sdk/outbound-send-deps";
 import {
   resolvePayloadMediaUrls,
   sendPayloadMediaSequenceAndFinalize,
   sendTextMediaPayload,
-} from "NexisClaw/plugin-sdk/reply-payload";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/reply-payload";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { parseSlackBlocksInput } from "./blocks-input.js";
 import {
   buildSlackInteractiveBlocks,

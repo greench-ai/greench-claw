@@ -1,5 +1,5 @@
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   withBundledPluginAllowlistCompat,
   withBundledPluginEnablementCompat,
@@ -26,10 +26,10 @@ export type PluginActivationBundledCompatMode = {
 };
 
 export type PluginActivationInputs = {
-  rawConfig?: NexisClawConfig;
-  config?: NexisClawConfig;
+  rawConfig?: GreenchClawConfig;
+  config?: GreenchClawConfig;
   normalized: NormalizedPluginsConfig;
-  activationSourceConfig?: NexisClawConfig;
+  activationSourceConfig?: GreenchClawConfig;
   activationSource: PluginActivationConfigSource;
   autoEnabledReasons: Record<string, string[]>;
 };
@@ -54,8 +54,8 @@ export type BundledPluginCompatibleLoadValues = Pick<
 >;
 
 type BundledPluginCompatibleActivationParams = {
-  rawConfig?: NexisClawConfig;
-  resolvedConfig?: NexisClawConfig;
+  rawConfig?: GreenchClawConfig;
+  resolvedConfig?: GreenchClawConfig;
   autoEnabledReasons?: Record<string, string[]>;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
@@ -63,7 +63,7 @@ type BundledPluginCompatibleActivationParams = {
   applyAutoEnable?: boolean;
   compatMode: PluginActivationBundledCompatMode;
   resolveCompatPluginIds: (params: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     workspaceDir?: string;
     env?: NodeJS.ProcessEnv;
     onlyPluginIds?: readonly string[];
@@ -71,11 +71,11 @@ type BundledPluginCompatibleActivationParams = {
 };
 
 export function withActivatedPluginIds(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   pluginIds: readonly string[];
   overrideGlobalDisable?: boolean;
   overrideExplicitDisable?: boolean;
-}): NexisClawConfig | undefined {
+}): GreenchClawConfig | undefined {
   if (params.pluginIds.length === 0) {
     return params.config;
   }
@@ -117,10 +117,10 @@ export function withActivatedPluginIds(params: {
 }
 
 export function applyPluginCompatibilityOverrides(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   compat?: PluginActivationCompatConfig;
   env: NodeJS.ProcessEnv;
-}): NexisClawConfig | undefined {
+}): GreenchClawConfig | undefined {
   const allowlistCompat = params.compat?.allowlistPluginIds?.length
     ? withBundledPluginAllowlistCompat({
         config: params.config,
@@ -172,7 +172,7 @@ function createBundledPluginCompatConfig(params: {
 }
 
 function applyPluginAutoEnableForActivation(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   workspaceDir?: string;
 }) {
@@ -201,8 +201,8 @@ function applyPluginAutoEnableForActivation(params: {
 }
 
 export function resolvePluginActivationSnapshot(params: {
-  rawConfig?: NexisClawConfig;
-  resolvedConfig?: NexisClawConfig;
+  rawConfig?: GreenchClawConfig;
+  resolvedConfig?: GreenchClawConfig;
   autoEnabledReasons?: Record<string, string[]>;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
@@ -236,8 +236,8 @@ export function resolvePluginActivationSnapshot(params: {
 }
 
 export function resolvePluginActivationInputs(params: {
-  rawConfig?: NexisClawConfig;
-  resolvedConfig?: NexisClawConfig;
+  rawConfig?: GreenchClawConfig;
+  resolvedConfig?: GreenchClawConfig;
   autoEnabledReasons?: Record<string, string[]>;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;

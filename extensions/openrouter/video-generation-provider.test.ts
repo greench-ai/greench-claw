@@ -1,15 +1,15 @@
-import { clearLiveCatalogCacheForTests } from "NexisClaw/plugin-sdk/provider-catalog-shared";
+import { clearLiveCatalogCacheForTests } from "GreenchClaw/plugin-sdk/provider-catalog-shared";
 import {
   expectExplicitVideoGenerationCapabilities,
   expectUnifiedModelCatalogEntries,
-} from "NexisClaw/plugin-sdk/provider-test-contracts";
+} from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   buildOpenRouterVideoGenerationProvider,
   listOpenRouterVideoModelCatalog,
 } from "./video-generation-provider.js";
 
-const SUPPORTED_DURATIONS_HINT = Symbol.for("NexisClaw.videoGeneration.supportedDurations");
+const SUPPORTED_DURATIONS_HINT = Symbol.for("GreenchClaw.videoGeneration.supportedDurations");
 
 const {
   assertOkOrThrowHttpErrorMock,
@@ -33,13 +33,13 @@ const {
   waitProviderOperationPollIntervalMock: vi.fn(async () => {}),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-auth-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/provider-auth-runtime", () => ({
   resolveApiKeyForProvider: resolveApiKeyForProviderMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-http", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/provider-http")>(
-    "NexisClaw/plugin-sdk/provider-http",
+vi.mock("GreenchClaw/plugin-sdk/provider-http", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/provider-http")>(
+    "GreenchClaw/plugin-sdk/provider-http",
   );
   return {
     ...actual,

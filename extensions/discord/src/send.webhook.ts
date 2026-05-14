@@ -1,6 +1,6 @@
-import { recordChannelActivity } from "NexisClaw/plugin-sdk/channel-activity-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { recordChannelActivity } from "GreenchClaw/plugin-sdk/channel-activity-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveDiscordClientAccountContext } from "./client.js";
 import {
   DiscordError,
@@ -14,7 +14,7 @@ import { createDiscordSendResult } from "./send.receipt.js";
 import type { DiscordSendResult } from "./send.types.js";
 
 type DiscordWebhookSendOpts = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   webhookId: string;
   webhookToken: string;
   accountId?: string;

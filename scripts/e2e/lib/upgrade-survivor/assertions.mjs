@@ -66,17 +66,17 @@ function assert(condition, message) {
 }
 
 function getScenario() {
-  const scenario = process.env.NEXISCLAW_UPGRADE_SURVIVOR_SCENARIO || "base";
+  const scenario = process.env.GREENCHCLAW_UPGRADE_SURVIVOR_SCENARIO || "base";
   assert(SCENARIOS.has(scenario), `unknown upgrade survivor scenario: ${scenario}`);
   return scenario;
 }
 
 function getConfig() {
-  return readJson(requireEnv("NEXISCLAW_CONFIG_PATH"));
+  return readJson(requireEnv("GREENCHCLAW_CONFIG_PATH"));
 }
 
 function getCoverage() {
-  const file = process.env.NEXISCLAW_UPGRADE_SURVIVOR_CONFIG_COVERAGE_JSON;
+  const file = process.env.GREENCHCLAW_UPGRADE_SURVIVOR_CONFIG_COVERAGE_JSON;
   if (!file || !fs.existsSync(file)) {
     return null;
   }
@@ -99,8 +99,8 @@ function hasCoverage(coverage) {
 }
 
 function seedState() {
-  const stateDir = requireEnv("NEXISCLAW_STATE_DIR");
-  const workspace = requireEnv("NEXISCLAW_TEST_WORKSPACE_DIR");
+  const stateDir = requireEnv("GREENCHCLAW_STATE_DIR");
+  const workspace = requireEnv("GREENCHCLAW_TEST_WORKSPACE_DIR");
   const scenario = getScenario();
 
   write(
@@ -112,7 +112,7 @@ function seedState() {
       write(path.join(workspace, fileName), contents);
     }
   }
-  writeJson(path.join(workspace, ".NexisClaw", "workspace-state.json"), {
+  writeJson(path.join(workspace, ".GreenchClaw", "workspace-state.json"), {
     version: 1,
     setupCompletedAt: "2026-04-01T00:00:00.000Z",
   });
@@ -124,7 +124,7 @@ function seedState() {
 
   const runtimeRoot = path.join(stateDir, "plugin-runtime-deps");
   for (const plugin of ["discord", "telegram", "whatsapp"]) {
-    writeJson(path.join(runtimeRoot, plugin, ".NexisClaw-runtime-deps-stamp.json"), {
+    writeJson(path.join(runtimeRoot, plugin, ".GreenchClaw-runtime-deps-stamp.json"), {
       version: 0,
       plugin,
       stale: true,
@@ -133,7 +133,7 @@ function seedState() {
       path.join(
         runtimeRoot,
         plugin,
-        ".NexisClaw-runtime-deps-copy-stale",
+        ".GreenchClaw-runtime-deps-copy-stale",
         "node_modules",
         "stale-sentinel",
         "package.json",
@@ -142,13 +142,13 @@ function seedState() {
     );
   }
   if (scenario === "versioned-runtime-deps") {
-    const version = process.env.NEXISCLAW_UPGRADE_SURVIVOR_BASELINE_VERSION || "2026.4.24";
+    const version = process.env.GREENCHCLAW_UPGRADE_SURVIVOR_BASELINE_VERSION || "2026.4.24";
     for (const plugin of ["discord", "feishu", "telegram", "whatsapp"]) {
       writeJson(
         path.join(
           runtimeRoot,
-          `NexisClaw-${version}-${plugin}`,
-          ".NexisClaw-runtime-deps-stamp.json",
+          `GreenchClaw-${version}-${plugin}`,
+          ".GreenchClaw-runtime-deps-stamp.json",
         ),
         {
           packageVersion: version,
@@ -159,7 +159,7 @@ function seedState() {
       write(
         path.join(
           runtimeRoot,
-          `NexisClaw-${version}-${plugin}`,
+          `GreenchClaw-${version}-${plugin}`,
           "node_modules",
           "stale-sentinel",
           "package.json",
@@ -320,22 +320,22 @@ function assertConfigSurvived() {
 
   if (hasCoverage(coverage) && acceptsIntent(coverage, "logging")) {
     assert(
-      config.logging?.file === "~/NexisClaw-upgrade-survivor/gateway.jsonl",
+      config.logging?.file === "~/GreenchClaw-upgrade-survivor/gateway.jsonl",
       "logging.file tilde path changed",
     );
   }
 }
 
 function assertStateSurvived() {
-  const stateDir = requireEnv("NEXISCLAW_STATE_DIR");
-  const workspace = requireEnv("NEXISCLAW_TEST_WORKSPACE_DIR");
+  const stateDir = requireEnv("GREENCHCLAW_STATE_DIR");
+  const workspace = requireEnv("GREENCHCLAW_TEST_WORKSPACE_DIR");
   const scenario = getScenario();
   assert(fs.existsSync(path.join(workspace, "IDENTITY.md")), "workspace identity file missing");
   assert(
     fs.existsSync(path.join(stateDir, "agents", "main", "sessions", "legacy-session.json")),
     "legacy session file missing",
   );
-  const stage = process.env.NEXISCLAW_UPGRADE_SURVIVOR_ASSERT_STAGE || "survival";
+  const stage = process.env.GREENCHCLAW_UPGRADE_SURVIVOR_ASSERT_STAGE || "survival";
   const legacyRuntimeRoot = path.join(stateDir, "plugin-runtime-deps");
   if (stage === "baseline") {
     if (fs.existsSync(legacyRuntimeRoot)) {
@@ -357,7 +357,7 @@ function assertStateSurvived() {
     }
   }
   if (scenario === "stale-source-plugin-shadow") {
-    const staleRoot = path.join(stateDir, "extensions", "opik-NexisClaw");
+    const staleRoot = path.join(stateDir, "extensions", "opik-GreenchClaw");
     assert(
       fs.existsSync(path.join(staleRoot, "src", "index.ts")),
       "source-only plugin shadow fixture missing",
@@ -367,10 +367,10 @@ function assertStateSurvived() {
     if (stage === "baseline") {
       return;
     }
-    const version = process.env.NEXISCLAW_UPGRADE_SURVIVOR_BASELINE_VERSION || "2026.4.24";
+    const version = process.env.GREENCHCLAW_UPGRADE_SURVIVOR_BASELINE_VERSION || "2026.4.24";
     const runtimeRoot = path.join(stateDir, "plugin-runtime-deps");
     const staleVersionedRoots = fs.existsSync(runtimeRoot)
-      ? fs.readdirSync(runtimeRoot).filter((entry) => entry.startsWith(`NexisClaw-${version}-`))
+      ? fs.readdirSync(runtimeRoot).filter((entry) => entry.startsWith(`GreenchClaw-${version}-`))
       : [];
     assert(
       staleVersionedRoots.length === 0,
@@ -380,7 +380,7 @@ function assertStateSurvived() {
 }
 
 function readInstalledPluginIndex() {
-  const stateDir = requireEnv("NEXISCLAW_STATE_DIR");
+  const stateDir = requireEnv("GREENCHCLAW_STATE_DIR");
   const file = path.join(stateDir, "plugins", "installs.json");
   assert(fs.existsSync(file), `installed plugin index missing: ${file}`);
   return readJson(file);
@@ -411,7 +411,7 @@ function assertExternalPluginInstall(records, pluginId, packageName) {
     packageJson.name === packageName,
     `configured external ${pluginId} package name changed: ${packageJson.name}`,
   );
-  const npmRoot = path.join(requireEnv("NEXISCLAW_STATE_DIR"), "npm", "node_modules");
+  const npmRoot = path.join(requireEnv("GREENCHCLAW_STATE_DIR"), "npm", "node_modules");
   assert(
     isPathInside(npmRoot, installPath),
     `configured external ${pluginId} npm install path outside managed npm root: ${installPath}`,
@@ -424,7 +424,7 @@ function assertExternalPluginInstall(records, pluginId, packageName) {
 
 function assertConfiguredPluginInstalls() {
   const coverage = getCoverage();
-  const stage = process.env.NEXISCLAW_UPGRADE_SURVIVOR_ASSERT_STAGE || "survival";
+  const stage = process.env.GREENCHCLAW_UPGRADE_SURVIVOR_ASSERT_STAGE || "survival";
   if (!hasCoverage(coverage) || !acceptsIntent(coverage, "configured-plugin-installs")) {
     return;
   }
@@ -435,11 +435,11 @@ function assertConfiguredPluginInstalls() {
   const records = index.installRecords ?? {};
   assertOptionalConfiguredPluginIndex(records, index.plugins ?? [], {
     bundled: true,
-    packageName: "@NexisClaw/matrix",
+    packageName: "@GreenchClaw/matrix",
     pluginId: "matrix",
   });
   assertOptionalConfiguredPluginIndex(records, index.plugins ?? [], {
-    packageName: "@NexisClaw/brave-plugin",
+    packageName: "@GreenchClaw/brave-plugin",
     pluginId: "brave",
   });
   assert(!records.telegram, "internal telegram plugin should not be installed externally");

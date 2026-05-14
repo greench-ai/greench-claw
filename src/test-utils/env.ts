@@ -34,10 +34,10 @@ const PATH_RESOLUTION_ENV_KEYS = [
   "USERPROFILE",
   "HOMEDRIVE",
   "HOMEPATH",
-  "NEXISCLAW_HOME",
-  "NEXISCLAW_STATE_DIR",
-  "NEXISCLAW_BUNDLED_PLUGINS_DIR",
-  "NEXISCLAW_DISABLE_BUNDLED_PLUGINS",
+  "GREENCHCLAW_HOME",
+  "GREENCHCLAW_STATE_DIR",
+  "GREENCHCLAW_BUNDLED_PLUGINS_DIR",
+  "GREENCHCLAW_DISABLE_BUNDLED_PLUGINS",
 ] as const;
 
 function resolveWindowsHomeParts(homeDir: string): { homeDrive?: string; homePath?: string } {
@@ -63,10 +63,10 @@ export function createPathResolutionEnv(
     ...process.env,
     HOME: resolvedHome,
     USERPROFILE: resolvedHome,
-    NEXISCLAW_HOME: undefined,
-    NEXISCLAW_STATE_DIR: undefined,
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-    NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+    GREENCHCLAW_HOME: undefined,
+    GREENCHCLAW_STATE_DIR: undefined,
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+    GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
   };
 
   const windowsHome = resolveWindowsHomeParts(resolvedHome);

@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
 
@@ -26,7 +26,7 @@ describe("hasConfiguredWebSearchCredential", () => {
   it("keeps empty config and env on the manifest-only path", () => {
     expect(
       hasConfiguredWebSearchCredential({
-        config: {} as NexisClawConfig,
+        config: {} as GreenchClawConfig,
         env: {},
         origin: "bundled",
         bundledAllowlistCompat: true,
@@ -39,7 +39,7 @@ describe("hasConfiguredWebSearchCredential", () => {
       hasConfiguredWebSearchCredential({
         config: {
           tools: { web: { search: { apiKey: "brave-key" } } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         env: {},
         origin: "bundled",
         bundledAllowlistCompat: true,

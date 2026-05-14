@@ -53,7 +53,7 @@ vi.mock("../../config/plugin-auto-enable.js", () => ({
   applyPluginAutoEnable: (a: unknown) => applyPluginAutoEnable(a as { config: unknown }),
 }));
 vi.mock("../../plugins/loader.js", () => ({
-  loadNexisClawPlugins: vi.fn(),
+  loadGreenchClawPlugins: vi.fn(),
 }));
 
 import { resolveChannelSetupEntries } from "./discovery.js";
@@ -111,9 +111,9 @@ function createManifestChannelPlugin(id: string, channels: string[]): PluginMani
     skills: [],
     hooks: [],
     origin: "workspace",
-    rootDir: `/tmp/NexisClaw-test/${id}`,
-    source: `/tmp/NexisClaw-test/${id}/index.ts`,
-    manifestPath: `/tmp/NexisClaw-test/${id}/NexisClaw.plugin.json`,
+    rootDir: `/tmp/GreenchClaw-test/${id}`,
+    source: `/tmp/GreenchClaw-test/${id}/index.ts`,
+    manifestPath: `/tmp/GreenchClaw-test/${id}/GreenchClaw.plugin.json`,
   };
 }
 
@@ -145,10 +145,10 @@ describe("resolveChannelSetupEntries workspace shadow exclusion (GHSA-2qrv-rc5x-
     };
     const bundledEntry = {
       id: "telegram",
-      pluginId: "@NexisClaw/telegram",
+      pluginId: "@GreenchClaw/telegram",
       origin: "bundled",
       meta: workspaceEntry.meta,
-      install: { npmSpec: "@NexisClaw/telegram" },
+      install: { npmSpec: "@GreenchClaw/telegram" },
     };
     listChannelPluginCatalogEntries.mockImplementation((opts?: unknown) =>
       (opts as { excludeWorkspace?: boolean } | undefined)?.excludeWorkspace
@@ -173,7 +173,7 @@ describe("resolveChannelSetupEntries workspace shadow exclusion (GHSA-2qrv-rc5x-
   it("still returns bundled-origin entries", () => {
     const bundledEntry = {
       id: "telegram",
-      pluginId: "@NexisClaw/telegram",
+      pluginId: "@GreenchClaw/telegram",
       origin: "bundled",
       meta: {
         id: "telegram",
@@ -183,7 +183,7 @@ describe("resolveChannelSetupEntries workspace shadow exclusion (GHSA-2qrv-rc5x-
         blurb: "t",
         order: 1,
       },
-      install: { npmSpec: "@NexisClaw/telegram" },
+      install: { npmSpec: "@GreenchClaw/telegram" },
     };
     listChannelPluginCatalogEntries.mockReturnValue([bundledEntry]);
 

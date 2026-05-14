@@ -1,11 +1,11 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { writeJsonFileAtomically } from "NexisClaw/plugin-sdk/json-store";
+import { writeJsonFileAtomically } from "GreenchClaw/plugin-sdk/json-store";
 import {
   replaceManagedMarkdownBlock,
   withTrailingNewline,
-} from "NexisClaw/plugin-sdk/memory-host-markdown";
+} from "GreenchClaw/plugin-sdk/memory-host-markdown";
 import { compileMemoryWikiVault } from "./compile.js";
 import type { ResolvedMemoryWikiConfig } from "./config.js";
 import { appendMemoryWikiLog } from "./log.js";
@@ -19,8 +19,8 @@ import { initializeMemoryWikiVault } from "./vault.js";
 
 const CHATGPT_PREFERENCE_SIGNAL_RE =
   /\b(prefer|prefers|preference|want|wants|need|needs|avoid|avoids|hate|hates|love|loves|default to|should default to|always use|don't want|does not want|likes|dislikes)\b/i;
-const HUMAN_START_MARKER = "<!-- NexisClaw:human:start -->";
-const HUMAN_END_MARKER = "<!-- NexisClaw:human:end -->";
+const HUMAN_START_MARKER = "<!-- GreenchClaw:human:start -->";
+const HUMAN_END_MARKER = "<!-- GreenchClaw:human:end -->";
 
 const CHATGPT_RISK_RULES: Array<{ label: string; pattern: RegExp }> = [
   {
@@ -651,7 +651,7 @@ function buildRunId(exportPath: string, nowIso: string): string {
 }
 
 function resolveImportRunsDir(vaultRoot: string): string {
-  return path.join(vaultRoot, ".NexisClaw-wiki", "import-runs");
+  return path.join(vaultRoot, ".GreenchClaw-wiki", "import-runs");
 }
 
 function resolveImportRunPath(vaultRoot: string, runId: string): string {

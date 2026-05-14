@@ -1,7 +1,7 @@
 import {
   createWebSearchProviderContractFields,
   type WebSearchProviderPlugin,
-} from "NexisClaw/plugin-sdk/provider-web-search-contract";
+} from "GreenchClaw/plugin-sdk/provider-web-search-contract";
 
 export function createTavilyWebSearchProvider(): WebSearchProviderPlugin {
   const credentialPath = "plugins.entries.tavily.config.webSearch.apiKey";
@@ -15,7 +15,7 @@ export function createTavilyWebSearchProvider(): WebSearchProviderPlugin {
     envVars: ["TAVILY_API_KEY"],
     placeholder: "tvly-...",
     signupUrl: "https://tavily.com/",
-    docsUrl: "https://docs.NexisClaw.ai/tools/tavily",
+    docsUrl: "https://docs.GreenchClaw.ai/tools/tavily",
     autoDetectOrder: 70,
     credentialPath,
     ...createWebSearchProviderContractFields({

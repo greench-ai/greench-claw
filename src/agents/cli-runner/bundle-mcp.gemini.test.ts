@@ -11,26 +11,26 @@ describe("prepareCliBundleMcpConfig gemini", () => {
         command: "gemini",
         args: ["--prompt", "{prompt}"],
       },
-      workspaceDir: "/tmp/NexisClaw-bundle-mcp-gemini",
+      workspaceDir: "/tmp/GreenchClaw-bundle-mcp-gemini",
       config: { plugins: { enabled: false } },
       additionalConfig: {
         mcpServers: {
-          NexisClaw: {
+          GreenchClaw: {
             type: "http",
             url: "http://127.0.0.1:23119/mcp",
             headers: {
-              Authorization: "Bearer ${NEXISCLAW_MCP_TOKEN}",
+              Authorization: "Bearer ${GREENCHCLAW_MCP_TOKEN}",
             },
           },
         },
       },
       env: {
-        NEXISCLAW_MCP_TOKEN: "loopback-token-123",
+        GREENCHCLAW_MCP_TOKEN: "loopback-token-123",
       },
     });
 
     expect(prepared.backend.args).toEqual(["--prompt", "{prompt}"]);
-    expect(prepared.env?.NEXISCLAW_MCP_TOKEN).toBe("loopback-token-123");
+    expect(prepared.env?.GREENCHCLAW_MCP_TOKEN).toBe("loopback-token-123");
     expect(typeof prepared.env?.GEMINI_CLI_SYSTEM_SETTINGS_PATH).toBe("string");
     const raw = JSON.parse(
       await fs.readFile(prepared.env?.GEMINI_CLI_SYSTEM_SETTINGS_PATH as string, "utf-8"),
@@ -38,9 +38,9 @@ describe("prepareCliBundleMcpConfig gemini", () => {
       mcp?: { allowed?: string[] };
       mcpServers?: Record<string, { url?: string; headers?: Record<string, string> }>;
     };
-    expect(raw.mcp?.allowed).toEqual(["NexisClaw"]);
-    expect(raw.mcpServers?.NexisClaw?.url).toBe("http://127.0.0.1:23119/mcp");
-    expect(raw.mcpServers?.NexisClaw?.headers?.Authorization).toBe("Bearer loopback-token-123");
+    expect(raw.mcp?.allowed).toEqual(["GreenchClaw"]);
+    expect(raw.mcpServers?.GreenchClaw?.url).toBe("http://127.0.0.1:23119/mcp");
+    expect(raw.mcpServers?.GreenchClaw?.headers?.Authorization).toBe("Bearer loopback-token-123");
 
     await prepared.cleanup?.();
   });
@@ -53,7 +53,7 @@ describe("prepareCliBundleMcpConfig gemini", () => {
         command: "gemini",
         args: ["--prompt", "{prompt}"],
       },
-      workspaceDir: "/tmp/NexisClaw-bundle-mcp-gemini",
+      workspaceDir: "/tmp/GreenchClaw-bundle-mcp-gemini",
       config: {
         plugins: { enabled: false },
         mcp: {

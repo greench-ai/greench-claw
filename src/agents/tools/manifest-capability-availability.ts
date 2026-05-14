@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { getCurrentPluginMetadataSnapshot } from "../../plugins/current-plugin-metadata-snapshot.js";
 import {
   isManifestPluginAvailableForControlPlane,
@@ -63,7 +63,7 @@ function listCapabilityAuthSignals(params: {
 }
 
 export function getCurrentCapabilityMetadataSnapshot(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
 }): PluginMetadataSnapshot | undefined {
   return getCurrentPluginMetadataSnapshot({
@@ -73,7 +73,7 @@ export function getCurrentCapabilityMetadataSnapshot(params: {
 }
 
 export function loadCapabilityMetadataSnapshot(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Pick<PluginMetadataSnapshot, "index" | "plugins"> {
@@ -93,7 +93,7 @@ export function loadCapabilityMetadataSnapshot(params: {
 export function hasSnapshotCapabilityAvailability(params: {
   snapshot: Pick<PluginMetadataSnapshot, "index" | "plugins">;
   key: CapabilityContractKey;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   authStore?: AuthProfileStore;
 }): boolean {
   if (params.config?.plugins?.enabled === false) {
@@ -159,7 +159,7 @@ export function hasSnapshotCapabilityAvailability(params: {
 export function hasSnapshotProviderEnvAvailability(params: {
   snapshot: Pick<PluginMetadataSnapshot, "index" | "plugins">;
   providerId: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): boolean {
   if (params.config?.plugins?.enabled === false) {
     return false;

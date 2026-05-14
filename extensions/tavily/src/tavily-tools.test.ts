@@ -1,6 +1,6 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-runtime";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-runtime";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_TAVILY_BASE_URL,
@@ -38,10 +38,10 @@ function requireFirstMockArg(mock: ReturnType<typeof vi.fn>, label: string): unk
   return call[0];
 }
 
-function fakeApi(): NexisClawPluginApi {
+function fakeApi(): GreenchClawPluginApi {
   return {
     config: {},
-  } as NexisClawPluginApi;
+  } as GreenchClawPluginApi;
 }
 
 describe("tavily tools", () => {
@@ -125,7 +125,7 @@ describe("tavily tools", () => {
       max_results: 5,
       include_answer: true,
       time_range: "week",
-      include_domains: ["docs.NexisClaw.ai", "", "NexisClaw.ai"],
+      include_domains: ["docs.GreenchClaw.ai", "", "GreenchClaw.ai"],
       exclude_domains: ["bad.example", ""],
     });
 
@@ -137,7 +137,7 @@ describe("tavily tools", () => {
       maxResults: 5,
       includeAnswer: true,
       timeRange: "week",
-      includeDomains: ["docs.NexisClaw.ai", "NexisClaw.ai"],
+      includeDomains: ["docs.GreenchClaw.ai", "GreenchClaw.ai"],
       excludeDomains: ["bad.example"],
     });
     const expectedResult = {
@@ -150,7 +150,7 @@ describe("tavily tools", () => {
         maxResults: 5,
         includeAnswer: true,
         timeRange: "week",
-        includeDomains: ["docs.NexisClaw.ai", "NexisClaw.ai"],
+        includeDomains: ["docs.GreenchClaw.ai", "GreenchClaw.ai"],
         excludeDomains: ["bad.example"],
       },
     };
@@ -173,7 +173,7 @@ describe("tavily tools", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const runtimeConfig = {
       plugins: {
         entries: {
@@ -186,9 +186,9 @@ describe("tavily tools", () => {
           },
         },
       },
-    } as NexisClawConfig;
-    const registeredTools: Array<Parameters<NexisClawPluginApi["registerTool"]>[0]> = [];
-    const registeredOptions: Array<Parameters<NexisClawPluginApi["registerTool"]>[1]> = [];
+    } as GreenchClawConfig;
+    const registeredTools: Array<Parameters<GreenchClawPluginApi["registerTool"]>[0]> = [];
+    const registeredOptions: Array<Parameters<GreenchClawPluginApi["registerTool"]>[1]> = [];
     const api = createTestPluginApi({
       config: rawConfig,
       registerTool(tool, opts) {
@@ -222,7 +222,7 @@ describe("tavily tools", () => {
       throw new Error("Expected single Tavily tool definitions");
     }
 
-    await searchTool.execute("search-call", { query: "NexisClaw" });
+    await searchTool.execute("search-call", { query: "GreenchClaw" });
     await extractTool.execute("extract-call", { urls: ["https://example.com"] });
 
     const searchParams = requireFirstMockArg(runTavilySearch, "Tavily search params") as Record<
@@ -230,7 +230,7 @@ describe("tavily tools", () => {
       unknown
     >;
     expect(searchParams.cfg).toBe(runtimeConfig);
-    expect(searchParams.query).toBe("NexisClaw");
+    expect(searchParams.query).toBe("GreenchClaw");
     const extractParams = requireFirstMockArg(
       runTavilyExtract,
       "Tavily extract params",
@@ -314,7 +314,7 @@ describe("tavily tools", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveTavilySearchConfig(cfg)).toEqual({
       apiKey: "plugin-key",
@@ -330,7 +330,7 @@ describe("tavily tools", () => {
 
     expect(resolveTavilyApiKey()).toBe("env-key");
     expect(resolveTavilyBaseUrl()).toBe("https://env.tavily.test");
-    expect(resolveTavilyBaseUrl({} as NexisClawConfig)).not.toBe(DEFAULT_TAVILY_BASE_URL);
+    expect(resolveTavilyBaseUrl({} as GreenchClawConfig)).not.toBe(DEFAULT_TAVILY_BASE_URL);
     expect(resolveTavilySearchTimeoutSeconds()).toBe(DEFAULT_TAVILY_SEARCH_TIMEOUT_SECONDS);
     expect(resolveTavilyExtractTimeoutSeconds()).toBe(DEFAULT_TAVILY_EXTRACT_TIMEOUT_SECONDS);
   });

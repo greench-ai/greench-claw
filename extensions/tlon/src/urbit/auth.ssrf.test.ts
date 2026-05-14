@@ -1,5 +1,5 @@
-import { SsrFBlockedError } from "NexisClaw/plugin-sdk/ssrf-runtime";
-import type { LookupFn } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { SsrFBlockedError } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import type { LookupFn } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { authenticate } from "./auth.js";
 

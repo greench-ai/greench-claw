@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { tryResolveLoadedOutboundTarget } from "./targets-loaded.js";
 
 const mocks = vi.hoisted(() => ({
@@ -22,7 +22,7 @@ describe("tryResolveLoadedOutboundTarget", () => {
   });
 
   it("uses loaded plugin config defaultTo fallback", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: { alpha: { defaultTo: "room-one" } },
     };
     mocks.getLoadedChannelPlugin.mockReturnValue({
@@ -30,7 +30,7 @@ describe("tryResolveLoadedOutboundTarget", () => {
       meta: { label: "Alpha" },
       capabilities: {},
       config: {
-        resolveDefaultTo: ({ cfg }: { cfg: NexisClawConfig }) =>
+        resolveDefaultTo: ({ cfg }: { cfg: GreenchClawConfig }) =>
           (cfg.channels?.alpha as { defaultTo?: string } | undefined)?.defaultTo,
       },
       outbound: {},

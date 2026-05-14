@@ -1,4 +1,4 @@
-import { createRuntimeEnv } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import { createRuntimeEnv } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import {
   createImageLifecycleCore,

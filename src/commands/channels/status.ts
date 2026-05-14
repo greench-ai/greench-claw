@@ -193,7 +193,7 @@ export function formatGatewayChannelsStatusLines(payload: Record<string, unknown
         `- ${issue.channel} ${issue.accountId}: ${issue.message}${issue.fix ? ` (${issue.fix})` : ""}`,
       );
     }
-    lines.push(`- Run: ${formatCliCommand("NexisClaw doctor")}`);
+    lines.push(`- Run: ${formatCliCommand("GreenchClaw doctor")}`);
     lines.push("");
   }
   lines.push(

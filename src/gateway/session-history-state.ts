@@ -3,7 +3,7 @@ import {
   projectChatDisplayMessages,
 } from "./chat-display-projection.js";
 import {
-  attachNexisClawTranscriptMeta,
+  attachGreenchClawTranscriptMeta,
   readRecentSessionMessagesWithStatsAsync,
   readSessionMessagesAsync,
 } from "./session-utils.js";
@@ -13,7 +13,7 @@ type SessionHistoryTranscriptMeta = {
 };
 
 type SessionHistoryMessage = Record<string, unknown> & {
-  __NexisClaw?: SessionHistoryTranscriptMeta;
+  __GreenchClaw?: SessionHistoryTranscriptMeta;
 };
 
 type PaginatedSessionHistory = {
@@ -82,7 +82,7 @@ function buildPaginatedSessionHistory(params: {
 }
 
 function resolveMessageSeq(message: SessionHistoryMessage | undefined): number | undefined {
-  const seq = message?.__NexisClaw?.seq;
+  const seq = message?.__GreenchClaw?.seq;
   return typeof seq === "number" && Number.isFinite(seq) && seq > 0 ? seq : undefined;
 }
 
@@ -229,7 +229,7 @@ export class SessionHistorySseState {
       return null;
     }
     this.rawTranscriptSeq += 1;
-    const nextMessage = attachNexisClawTranscriptMeta(update.message, {
+    const nextMessage = attachGreenchClawTranscriptMeta(update.message, {
       ...(typeof update.messageId === "string" ? { id: update.messageId } : {}),
       seq: this.rawTranscriptSeq,
     });

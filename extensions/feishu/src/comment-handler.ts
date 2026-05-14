@@ -1,5 +1,5 @@
-import { resolveChannelConfigWrites } from "NexisClaw/plugin-sdk/channel-config-writes";
-import type { ResolvedAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import { resolveChannelConfigWrites } from "GreenchClaw/plugin-sdk/channel-config-writes";
+import type { ResolvedAgentRoute } from "GreenchClaw/plugin-sdk/routing";
 import { resolveFeishuRuntimeAccount } from "./accounts.js";
 import { createFeishuClient } from "./client.js";
 import { createFeishuCommentReplyDispatcher } from "./comment-dispatcher.js";

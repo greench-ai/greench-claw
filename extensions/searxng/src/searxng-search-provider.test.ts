@@ -70,7 +70,7 @@ describe("searxng web search provider", () => {
     }
 
     const result = await tool.execute({
-      query: "NexisClaw docs",
+      query: "GreenchClaw docs",
       count: 4,
       categories: "general,news",
       language: "en",
@@ -78,14 +78,14 @@ describe("searxng web search provider", () => {
 
     expect(runSearxngSearch).toHaveBeenCalledWith({
       config: { test: true },
-      query: "NexisClaw docs",
+      query: "GreenchClaw docs",
       count: 4,
       categories: "general,news",
       language: "en",
     });
     expect(result).toEqual({
       config: { test: true },
-      query: "NexisClaw docs",
+      query: "GreenchClaw docs",
       count: 4,
       categories: "general,news",
       language: "en",

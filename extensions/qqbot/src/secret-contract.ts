@@ -5,7 +5,7 @@ import {
   type ResolverContext,
   type SecretDefaults,
   type SecretTargetRegistryEntry,
-} from "NexisClaw/plugin-sdk/channel-secret-basic-runtime";
+} from "GreenchClaw/plugin-sdk/channel-secret-basic-runtime";
 
 const DEFAULT_ACCOUNT_ID = "default";
 
@@ -13,7 +13,7 @@ export const secretTargetRegistryEntries = [
   {
     id: "channels.qqbot.accounts.*.clientSecret",
     targetType: "channels.qqbot.accounts.*.clientSecret",
-    configFile: "NexisClaw.json",
+    configFile: "GreenchClaw.json",
     pathPattern: "channels.qqbot.accounts.*.clientSecret",
     secretShape: "secret_input",
     expectedResolvedValue: "string",
@@ -24,7 +24,7 @@ export const secretTargetRegistryEntries = [
   {
     id: "channels.qqbot.clientSecret",
     targetType: "channels.qqbot.clientSecret",
-    configFile: "NexisClaw.json",
+    configFile: "GreenchClaw.json",
     pathPattern: "channels.qqbot.clientSecret",
     secretShape: "secret_input",
     expectedResolvedValue: "string",

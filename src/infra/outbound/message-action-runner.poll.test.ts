@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChannelPlugin } from "../../channels/plugins/types.js";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { getActivePluginRegistry, setActivePluginRegistry } from "../../plugins/runtime.js";
 import { createTestRegistry } from "../../test-utils/channel-plugins.js";
 import { runMessageAction } from "./message-action-runner.js";
@@ -53,7 +53,7 @@ const pollerConfig = {
       botToken: "poller-test",
     },
   },
-} as NexisClawConfig;
+} as GreenchClawConfig;
 
 const pollerTestPlugin: ChannelPlugin = {
   id: "poller",
@@ -100,7 +100,7 @@ const pollerTestPlugin: ChannelPlugin = {
 };
 
 async function runPollAction(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   actionParams: Record<string, unknown>;
   toolContext?: Record<string, unknown>;
 }) {

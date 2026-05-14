@@ -1,9 +1,9 @@
 import type {
   ProviderResolveDynamicModelContext,
   ProviderRuntimeModel,
-} from "NexisClaw/plugin-sdk/plugin-entry";
-import { normalizeModelCompat } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
+import { normalizeModelCompat } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { normalizeOptionalLowercaseString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveXaiCatalogEntry, XAI_BASE_URL } from "./model-definitions.js";
 import { applyXaiRuntimeModelCompat } from "./runtime-model-compat.js";
 

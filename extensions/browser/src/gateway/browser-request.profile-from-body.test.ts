@@ -8,10 +8,10 @@ const { loadConfigMock, isNodeCommandAllowedMock, resolveNodeCommandAllowlistMoc
   }),
 );
 
-vi.mock("NexisClaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("GreenchClaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot")
-  >("NexisClaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("GreenchClaw/plugin-sdk/runtime-config-snapshot")
+  >("GreenchClaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     loadConfig: loadConfigMock,

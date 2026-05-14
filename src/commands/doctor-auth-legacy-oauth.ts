@@ -1,6 +1,6 @@
 import { repairOAuthProfileIdMismatch } from "../agents/auth-profiles/repair.js";
 import { ensureAuthProfileStore } from "../agents/auth-profiles/store.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { sanitizeForLog } from "../terminal/ansi.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
 
@@ -12,7 +12,7 @@ async function loadNoteRuntime() {
   return import("../terminal/note.js");
 }
 
-function hasConfigOAuthProfiles(cfg: NexisClawConfig): boolean {
+function hasConfigOAuthProfiles(cfg: GreenchClawConfig): boolean {
   return Object.values(cfg.auth?.profiles ?? {}).some((profile) => profile?.mode === "oauth");
 }
 
@@ -22,9 +22,9 @@ function sanitizePromptLabel(label: string | undefined): string | undefined {
 }
 
 export async function maybeRepairLegacyOAuthProfileIds(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   prompter: DoctorPrompter,
-): Promise<NexisClawConfig> {
+): Promise<GreenchClawConfig> {
   if (!hasConfigOAuthProfiles(cfg)) {
     return cfg;
   }

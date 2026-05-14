@@ -1,6 +1,6 @@
-import { createPluginSetupWizardStatus } from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import * as processRuntime from "NexisClaw/plugin-sdk/process-runtime";
-import * as setupRuntime from "NexisClaw/plugin-sdk/setup";
+import { createPluginSetupWizardStatus } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import * as processRuntime from "GreenchClaw/plugin-sdk/process-runtime";
+import * as setupRuntime from "GreenchClaw/plugin-sdk/setup";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveIMessageAccount } from "./accounts.js";
 import * as channelRuntimeModule from "./channel.runtime.js";

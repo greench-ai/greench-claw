@@ -1,4 +1,4 @@
-import type { ChannelAccountSnapshot } from "NexisClaw/plugin-sdk/channel-contract";
+import type { ChannelAccountSnapshot } from "GreenchClaw/plugin-sdk/channel-contract";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const runMock = vi.hoisted(() => vi.fn());
@@ -23,7 +23,7 @@ vi.mock("./api-logging.js", () => ({
   withTelegramApiErrorLogging: async ({ fn }: { fn: () => Promise<unknown> }) => await fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", () => ({
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", () => ({
   computeBackoff: computeBackoffMock,
   formatDurationPrecise: vi.fn((ms: number) => `${ms}ms`),
   sleepWithAbort: sleepWithAbortMock,
@@ -360,7 +360,7 @@ describe("TelegramPollingSession", () => {
     await session.runUntilAbort();
 
     // Offset confirmation was removed because it could self-conflict with the runner.
-    // NexisClaw middleware still skips duplicates using the persisted update offset.
+    // GreenchClaw middleware still skips duplicates using the persisted update offset.
     expect(bot.api.getUpdates).not.toHaveBeenCalled();
   });
 
@@ -1086,7 +1086,7 @@ describe("TelegramPollingSession", () => {
 
     await session.runUntilAbort();
 
-    expectLogIncludes(log, "Another NexisClaw gateway, script, or Telegram poller");
+    expectLogIncludes(log, "Another GreenchClaw gateway, script, or Telegram poller");
   });
 
   it("closes the transport once when runUntilAbort exits normally", async () => {

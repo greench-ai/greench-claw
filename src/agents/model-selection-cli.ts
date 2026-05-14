@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveRuntimeCliBackends } from "../plugins/cli-backends.runtime.js";
 import { resolvePluginSetupCliBackendRuntime } from "../plugins/setup-registry.runtime.js";
 import { normalizeProviderId } from "./model-selection-normalize.js";
 
-export function isCliProvider(provider: string, cfg?: NexisClawConfig): boolean {
+export function isCliProvider(provider: string, cfg?: GreenchClawConfig): boolean {
   const normalized = normalizeProviderId(provider);
   const backends = cfg?.agents?.defaults?.cliBackends ?? {};
   if (Object.keys(backends).some((key) => normalizeProviderId(key) === normalized)) {

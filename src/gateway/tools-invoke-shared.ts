@@ -5,7 +5,7 @@ import { isKnownCoreToolId } from "../agents/tool-catalog.js";
 import { applyOwnerOnlyToolPolicy } from "../agents/tool-policy.js";
 import { ToolInputError, type AnyAgentTool } from "../agents/tools/common.js";
 import { resolveMainSessionKey } from "../config/sessions.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { logWarn } from "../logger.js";
 import { isTestDefaultMemorySlotDisabled } from "../plugins/config-state.js";
 import { defaultSlotIdForKey } from "../plugins/slots.js";
@@ -51,7 +51,7 @@ type ToolsInvokeOutcome =
       };
     };
 
-function resolveSessionKey(params: { cfg: NexisClawConfig; input: ToolsInvokeInput }): string {
+function resolveSessionKey(params: { cfg: GreenchClawConfig; input: ToolsInvokeInput }): string {
   const rawSessionKey = normalizeOptionalString(params.input.sessionKey);
   if (rawSessionKey && rawSessionKey !== "main") {
     return rawSessionKey;
@@ -63,7 +63,7 @@ function resolveSessionKey(params: { cfg: NexisClawConfig; input: ToolsInvokeInp
   return resolveMainSessionKey(params.cfg);
 }
 
-function resolveMemoryToolDisableReasons(cfg: NexisClawConfig): string[] {
+function resolveMemoryToolDisableReasons(cfg: GreenchClawConfig): string[] {
   if (!process.env.VITEST) {
     return [];
   }
@@ -145,7 +145,7 @@ function resolveToolSource(tool: AnyAgentTool): "core" | "plugin" | "channel" {
 }
 
 export async function invokeGatewayTool(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   input: ToolsInvokeInput;
   senderIsOwner: boolean;
   messageChannel?: string;

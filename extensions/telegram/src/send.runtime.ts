@@ -1,7 +1,7 @@
-export { requireRuntimeConfig } from "NexisClaw/plugin-sdk/plugin-config-runtime";
-export { resolveMarkdownTableMode } from "NexisClaw/plugin-sdk/markdown-table-runtime";
-export type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-export type { PollInput, MediaKind } from "NexisClaw/plugin-sdk/media-runtime";
+export { requireRuntimeConfig } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
+export { resolveMarkdownTableMode } from "GreenchClaw/plugin-sdk/markdown-table-runtime";
+export type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+export type { PollInput, MediaKind } from "GreenchClaw/plugin-sdk/media-runtime";
 export {
   buildOutboundMediaLoadOptions,
   getImageMetadata,
@@ -9,5 +9,5 @@ export {
   kindFromMime,
   normalizePollInput,
   probeVideoDimensions,
-} from "NexisClaw/plugin-sdk/media-runtime";
-export { loadWebMedia } from "NexisClaw/plugin-sdk/web-media";
+} from "GreenchClaw/plugin-sdk/media-runtime";
+export { loadWebMedia } from "GreenchClaw/plugin-sdk/web-media";

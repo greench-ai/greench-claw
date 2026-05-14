@@ -1,4 +1,4 @@
-import { importFreshModule } from "NexisClaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import type { PluginCandidate, PluginDiscoveryResult } from "./discovery.js";
@@ -10,15 +10,15 @@ afterEach(() => {
   vi.doUnmock("./installed-plugin-index-record-reader.js");
 });
 
-const ENV: NodeJS.ProcessEnv = { HOME: "/tmp/NexisClaw-test-home" };
+const ENV: NodeJS.ProcessEnv = { HOME: "/tmp/GreenchClaw-test-home" };
 let loadCase = 0;
 
 const RECORDS: Record<string, PluginInstallRecord> = {
   weixin: {
     source: "npm",
-    spec: "@tencent-weixin/NexisClaw-weixin@2.3.7",
+    spec: "@tencent-weixin/GreenchClaw-weixin@2.3.7",
     installPath:
-      "/tmp/NexisClaw-test-home/.NexisClaw/npm/node_modules/@tencent-weixin/NexisClaw-weixin",
+      "/tmp/GreenchClaw-test-home/.GreenchClaw/npm/node_modules/@tencent-weixin/GreenchClaw-weixin",
   } as PluginInstallRecord,
 };
 
@@ -41,7 +41,7 @@ async function loadWithMocks(params: {
     return params.loadRecords ? params.loadRecords(opts.env) : RECORDS;
   });
 
-  vi.doMock("./discovery.js", () => ({ discoverNexisClawPlugins: discoverSpy }));
+  vi.doMock("./discovery.js", () => ({ discoverGreenchClawPlugins: discoverSpy }));
   vi.doMock("./installed-plugin-index-record-reader.js", () => ({
     loadInstalledPluginIndexInstallRecordsSync: loadRecordsSpy,
   }));
@@ -84,7 +84,7 @@ describe("listChannelCatalogEntries", () => {
     const supplied: Record<string, PluginInstallRecord> = {
       slack: {
         source: "npm",
-        spec: "@NexisClaw/slack@1.0.0",
+        spec: "@GreenchClaw/slack@1.0.0",
       } as PluginInstallRecord,
     };
 

@@ -1,17 +1,17 @@
-import { resolveDefaultModelForAgent } from "NexisClaw/plugin-sdk/agent-runtime";
+import { resolveDefaultModelForAgent } from "GreenchClaw/plugin-sdk/agent-runtime";
 import {
   resolveStoredModelOverride,
   serializeCommandArgs,
   type ChatCommandDefinition,
   type CommandArgs,
-} from "NexisClaw/plugin-sdk/command-auth-native";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ResolvedAgentRoute } from "NexisClaw/plugin-sdk/routing";
-import { loadSessionStore, resolveStorePath } from "NexisClaw/plugin-sdk/session-store-runtime";
+} from "GreenchClaw/plugin-sdk/command-auth-native";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ResolvedAgentRoute } from "GreenchClaw/plugin-sdk/routing";
+import { loadSessionStore, resolveStorePath } from "GreenchClaw/plugin-sdk/session-store-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   Container,
   TextDisplay,
@@ -125,7 +125,7 @@ async function resolveDiscordModelPickerRouteState(params: {
     | ButtonInteraction
     | StringSelectMenuInteraction
     | AutocompleteInteraction;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   threadBindings: ThreadBindingManager;
   enforceConfiguredBindingReadiness?: boolean;
@@ -166,7 +166,7 @@ export async function resolveDiscordModelPickerRoute(params: {
     | ButtonInteraction
     | StringSelectMenuInteraction
     | AutocompleteInteraction;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   threadBindings: ThreadBindingManager;
 }) {
@@ -176,7 +176,7 @@ export async function resolveDiscordModelPickerRoute(params: {
 
 export async function resolveDiscordNativeChoiceContext(params: {
   interaction: DiscordNativeChoiceInteraction;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   threadBindings: ThreadBindingManager;
 }): Promise<{ provider?: string; model?: string } | null> {
@@ -223,7 +223,7 @@ export async function resolveDiscordNativeChoiceContext(params: {
 }
 
 export function resolveDiscordModelPickerCurrentModel(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   route: ResolvedAgentRoute;
   data: Awaited<ReturnType<typeof loadDiscordModelPickerData>>;
 }): string {
@@ -258,7 +258,7 @@ export function resolveDiscordModelPickerCurrentModel(params: {
 
 export async function replyWithDiscordModelPickerProviders(params: {
   interaction: CommandInteraction | ButtonInteraction | StringSelectMenuInteraction;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   command: DiscordModelPickerCommandContext;
   userId: string;
   accountId: string;

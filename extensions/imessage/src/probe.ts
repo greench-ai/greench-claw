@@ -1,10 +1,10 @@
 import path from "node:path";
-import type { BaseProbeResult } from "NexisClaw/plugin-sdk/channel-contract";
-import { runCommandWithTimeout } from "NexisClaw/plugin-sdk/process-runtime";
-import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
-import { detectBinary } from "NexisClaw/plugin-sdk/setup";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { BaseProbeResult } from "GreenchClaw/plugin-sdk/channel-contract";
+import { runCommandWithTimeout } from "GreenchClaw/plugin-sdk/process-runtime";
+import { getRuntimeConfig } from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
+import { detectBinary } from "GreenchClaw/plugin-sdk/setup";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { createIMessageRpcClient } from "./client.js";
 import { DEFAULT_IMESSAGE_PROBE_TIMEOUT_MS } from "./constants.js";
 import {
@@ -62,7 +62,7 @@ export function resolveIMessageNonMacHostError(
   if (platform === "darwin" || !isDefaultLocalIMessageCliPath(cliPath)) {
     return undefined;
   }
-  return "iMessage via the default imsg CLI must run on macOS. Run NexisClaw on the signed-in Messages Mac, or set channels.imessage.cliPath to an SSH wrapper that runs imsg on that Mac.";
+  return "iMessage via the default imsg CLI must run on macOS. Run GreenchClaw on the signed-in Messages Mac, or set channels.imessage.cliPath to an SSH wrapper that runs imsg on that Mac.";
 }
 
 async function probeRpcSupport(cliPath: string, timeoutMs: number): Promise<RpcSupportResult> {
@@ -151,7 +151,7 @@ function rpcMethodsFromPayload(payload: Record<string, unknown>): string[] {
 }
 
 // Probe whether the installed imsg CLI accepts `--file` on the `send-rich`
-// subcommand (added by NexisClaw/imsg#114, which lets a single bridge call
+// subcommand (added by GreenchClaw/imsg#114, which lets a single bridge call
 // combine `--reply-to` and an attachment). We grep the help output rather
 // than trying a real send so the probe is side-effect-free, and we resolve
 // to `false` on any failure (timeout, non-zero exit, missing binary) so
@@ -204,7 +204,7 @@ export async function probeIMessagePrivateApi(
     const advancedFeatures = payload?.advanced_features === true;
     const v2Ready = payload?.v2_ready === true;
     // Probe `imsg send-rich --help` for the `--file` flag added by
-    // NexisClaw/imsg#114. We do this even when the bridge is unavailable
+    // GreenchClaw/imsg#114. We do this even when the bridge is unavailable
     // because the help output ships with the CLI binary itself, and the
     // result is what gates whether reply-with-attachment can route through
     // the threaded send path. Treat any failure as "not supported" so

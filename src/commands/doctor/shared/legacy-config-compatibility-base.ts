@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import {
   normalizeLegacyBrowserConfig,
   normalizeLegacyCrossContextMessageConfig,
@@ -16,10 +16,10 @@ import { migrateLegacyWebSearchConfig } from "./legacy-web-search-migrate.js";
 import { migrateLegacyXSearchConfig } from "./legacy-x-search-migrate.js";
 
 export function normalizeBaseCompatibilityConfigValues(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   changes: string[],
-  afterBrowser?: (config: NexisClawConfig) => NexisClawConfig,
-): NexisClawConfig {
+  afterBrowser?: (config: GreenchClawConfig) => GreenchClawConfig,
+): GreenchClawConfig {
   let next = seedMissingDefaultAccountsFromSingleAccountBase(cfg, changes);
   next = normalizeLegacyBrowserConfig(next, changes);
   next = afterBrowser ? afterBrowser(next) : next;

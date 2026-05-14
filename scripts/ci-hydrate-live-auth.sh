@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-profile_path="${1:-${RUNNER_TEMP:-/tmp}/NexisClaw-live.profile}"
+profile_path="${1:-${RUNNER_TEMP:-/tmp}/GreenchClaw-live.profile}"
 
 mkdir -p "$(dirname "$profile_path")"
 : >"$profile_path"
@@ -46,11 +46,11 @@ for env_key in \
   MINIMAX_API_KEY \
   OPENCODE_API_KEY \
   OPENCODE_ZEN_API_KEY \
-  NEXISCLAW_LIVE_BROWSER_CDP_URL \
-  NEXISCLAW_LIVE_SETUP_TOKEN \
-  NEXISCLAW_LIVE_SETUP_TOKEN_MODEL \
-  NEXISCLAW_LIVE_SETUP_TOKEN_PROFILE \
-  NEXISCLAW_LIVE_SETUP_TOKEN_VALUE \
+  GREENCHCLAW_LIVE_BROWSER_CDP_URL \
+  GREENCHCLAW_LIVE_SETUP_TOKEN \
+  GREENCHCLAW_LIVE_SETUP_TOKEN_MODEL \
+  GREENCHCLAW_LIVE_SETUP_TOKEN_PROFILE \
+  GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE \
   GEMINI_API_KEY \
   GOOGLE_API_KEY \
   OPENROUTER_API_KEY \
@@ -71,16 +71,16 @@ do
   append_profile_env "$env_key"
 done
 
-write_secret_file "$HOME/.codex/auth.json" NEXISCLAW_CODEX_AUTH_JSON
-write_secret_file "$HOME/.codex/config.toml" NEXISCLAW_CODEX_CONFIG_TOML
-write_secret_file "$HOME/.claude.json" NEXISCLAW_CLAUDE_JSON
-write_secret_file "$HOME/.claude/.credentials.json" NEXISCLAW_CLAUDE_CREDENTIALS_JSON
-write_secret_file "$HOME/.claude/settings.json" NEXISCLAW_CLAUDE_SETTINGS_JSON
-write_secret_file "$HOME/.claude/settings.local.json" NEXISCLAW_CLAUDE_SETTINGS_LOCAL_JSON
-write_secret_file "$HOME/.gemini/settings.json" NEXISCLAW_GEMINI_SETTINGS_JSON
+write_secret_file "$HOME/.codex/auth.json" GREENCHCLAW_CODEX_AUTH_JSON
+write_secret_file "$HOME/.codex/config.toml" GREENCHCLAW_CODEX_CONFIG_TOML
+write_secret_file "$HOME/.claude.json" GREENCHCLAW_CLAUDE_JSON
+write_secret_file "$HOME/.claude/.credentials.json" GREENCHCLAW_CLAUDE_CREDENTIALS_JSON
+write_secret_file "$HOME/.claude/settings.json" GREENCHCLAW_CLAUDE_SETTINGS_JSON
+write_secret_file "$HOME/.claude/settings.local.json" GREENCHCLAW_CLAUDE_SETTINGS_LOCAL_JSON
+write_secret_file "$HOME/.gemini/settings.json" GREENCHCLAW_GEMINI_SETTINGS_JSON
 
 if [[ -n "${GITHUB_ENV:-}" ]]; then
   {
-    echo "NEXISCLAW_PROFILE_FILE=$profile_path"
+    echo "GREENCHCLAW_PROFILE_FILE=$profile_path"
   } >>"$GITHUB_ENV"
 fi

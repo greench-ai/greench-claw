@@ -1,12 +1,12 @@
 import {
   DEFAULT_ACCOUNT_ID,
-  type NexisClawConfig as ClawdbotConfig,
+  type GreenchClawConfig as ClawdbotConfig,
   createAccountListHelpers,
   normalizeAccountId,
   normalizeOptionalAccountId,
   resolveMergedAccountConfig,
-} from "NexisClaw/plugin-sdk/account-resolution";
-import { coerceSecretRef } from "NexisClaw/plugin-sdk/provider-auth";
+} from "GreenchClaw/plugin-sdk/account-resolution";
+import { coerceSecretRef } from "GreenchClaw/plugin-sdk/provider-auth";
 import { normalizeString } from "./comment-shared.js";
 import type {
   FeishuConfig,

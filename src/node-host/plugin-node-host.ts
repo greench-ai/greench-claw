@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { getActivePluginRegistry } from "../plugins/runtime.js";
 
 let pluginRegistryLoaderModulePromise:
@@ -11,7 +11,7 @@ async function loadPluginRegistryLoaderModule() {
 }
 
 export async function ensureNodeHostPluginRegistry(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): Promise<void> {
   (await loadPluginRegistryLoaderModule()).ensurePluginRegistryLoaded({

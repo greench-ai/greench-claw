@@ -13,7 +13,7 @@ import {
   TUI,
 } from "@earendil-works/pi-tui";
 import { resolveAgentIdByWorkspacePath, resolveDefaultAgentId } from "../agents/agent-scope.js";
-import { getRuntimeConfig, type NexisClawConfig } from "../config/config.js";
+import { getRuntimeConfig, type GreenchClawConfig } from "../config/config.js";
 import { registerUncaughtExceptionHandler } from "../infra/unhandled-rejections.js";
 import { setConsoleSubsystemFilter } from "../logging/console.js";
 import { loggingState } from "../logging/state.js";
@@ -67,12 +67,16 @@ export {
   shouldEnableWindowsGitBashPasteFallback,
 } from "./tui-submit.js";
 
-const NEXISCLAW_CLI_WRAPPER_PATH = fileURLToPath(new URL("../../NexisClaw.mjs", import.meta.url));
-const NEXISCLAW_RUN_NODE_SCRIPT_PATH = fileURLToPath(
+const GREENCHCLAW_CLI_WRAPPER_PATH = fileURLToPath(
+  new URL("../../GreenchClaw.mjs", import.meta.url),
+);
+const GREENCHCLAW_RUN_NODE_SCRIPT_PATH = fileURLToPath(
   new URL("../../scripts/run-node.mjs", import.meta.url),
 );
-const NEXISCLAW_DIST_ENTRY_JS_PATH = fileURLToPath(new URL("../../dist/entry.js", import.meta.url));
-const NEXISCLAW_DIST_ENTRY_MJS_PATH = fileURLToPath(
+const GREENCHCLAW_DIST_ENTRY_JS_PATH = fileURLToPath(
+  new URL("../../dist/entry.js", import.meta.url),
+);
+const GREENCHCLAW_DIST_ENTRY_MJS_PATH = fileURLToPath(
   new URL("../../dist/entry.mjs", import.meta.url),
 );
 
@@ -80,7 +84,7 @@ const OPENAI_CODEX_PROVIDER = "openai-codex";
 
 type RunTuiOptions = TuiOptions & {
   backend?: TuiBackend;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   title?: string;
 };
 
@@ -105,11 +109,11 @@ export function resolveLocalAuthCliInvocation(params?: {
 }): { command: string; args: string[] } {
   const hasDistEntry =
     params?.hasDistEntry ??
-    (existsSync(NEXISCLAW_DIST_ENTRY_JS_PATH) || existsSync(NEXISCLAW_DIST_ENTRY_MJS_PATH));
-  const hasRunNodeScript = params?.hasRunNodeScript ?? existsSync(NEXISCLAW_RUN_NODE_SCRIPT_PATH);
+    (existsSync(GREENCHCLAW_DIST_ENTRY_JS_PATH) || existsSync(GREENCHCLAW_DIST_ENTRY_MJS_PATH));
+  const hasRunNodeScript = params?.hasRunNodeScript ?? existsSync(GREENCHCLAW_RUN_NODE_SCRIPT_PATH);
   const command = params?.execPath ?? process.execPath;
-  const wrapperPath = params?.wrapperPath ?? NEXISCLAW_CLI_WRAPPER_PATH;
-  const runNodePath = params?.runNodePath ?? NEXISCLAW_RUN_NODE_SCRIPT_PATH;
+  const wrapperPath = params?.wrapperPath ?? GREENCHCLAW_CLI_WRAPPER_PATH;
+  const runNodePath = params?.runNodePath ?? GREENCHCLAW_RUN_NODE_SCRIPT_PATH;
 
   // Prefer the packaged wrapper when build output exists, but keep source-tree
   // auth working in unbuilt checkouts that only have scripts/run-node.mjs.
@@ -135,7 +139,7 @@ export function resolveLocalAuthSpawnCwd(params: { args: string[]; defaultCwd?: 
     return defaultCwd;
   }
   const entryBase = path.basename(entryArg).toLowerCase();
-  if (entryBase === "NexisClaw.mjs") {
+  if (entryBase === "GreenchClaw.mjs") {
     return path.dirname(entryArg);
   }
   if (entryBase === "run-node.mjs") {
@@ -170,7 +174,7 @@ export function resolveTuiSessionKey(params: {
 }
 
 export function resolveInitialTuiAgentId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   fallbackAgentId: string;
   initialSessionInput?: string;
   cwd?: string;
@@ -200,9 +204,9 @@ export function resolveGatewayDisconnectState(reason?: string): {
   if (/pairing required/i.test(reasonLabel)) {
     return {
       connectionStatus: `gateway disconnected: ${reasonLabel}`,
-      activityStatus: "pairing required: run NexisClaw devices list",
+      activityStatus: "pairing required: run GreenchClaw devices list",
       pairingHint:
-        "Pairing required. Run `NexisClaw devices list`, approve your request ID, then reconnect.",
+        "Pairing required. Run `GreenchClaw devices list`, approve your request ID, then reconnect.",
     };
   }
   return {
@@ -638,7 +642,7 @@ export async function runTui(opts: RunTuiOptions): Promise<TuiResult> {
       : null
     : null;
   if (isLocalMode) {
-    setConsoleSubsystemFilter(["__NexisClaw_tui_quiet__"]);
+    setConsoleSubsystemFilter(["__GreenchClaw_tui_quiet__"]);
   }
 
   const tui = new TUI(new ProcessTerminal());
@@ -768,7 +772,7 @@ export async function runTui(opts: RunTuiOptions): Promise<TuiResult> {
   const updateHeader = () => {
     const sessionLabel = formatSessionKey(currentSessionKey);
     const agentLabel = formatAgentLabel(currentAgentId);
-    const title = opts.title ?? "NexisClaw tui";
+    const title = opts.title ?? "GreenchClaw tui";
     header.setText(
       theme.header(
         `${title} - ${client.connection.url} - agent ${agentLabel} - session ${sessionLabel}`,
@@ -955,7 +959,7 @@ export async function runTui(opts: RunTuiOptions): Promise<TuiResult> {
       return await work();
     } finally {
       if (isLocalMode) {
-        setConsoleSubsystemFilter(["__NexisClaw_tui_quiet__"]);
+        setConsoleSubsystemFilter(["__GreenchClaw_tui_quiet__"]);
       }
       tui.start();
       tui.setFocus(editor);
@@ -1110,7 +1114,7 @@ export async function runTui(opts: RunTuiOptions): Promise<TuiResult> {
   const deferredFinish = createDeferredTuiFinish();
   const forceExit = () => {
     try {
-      process.stderr.write("NexisClaw tui forcing exit\n");
+      process.stderr.write("GreenchClaw tui forcing exit\n");
     } catch {
       // Best effort only; force exit must not depend on stderr.
     }
@@ -1133,7 +1137,7 @@ export async function runTui(opts: RunTuiOptions): Promise<TuiResult> {
       .catch((err) => {
         if (!isTuiTerminalLossError(err)) {
           try {
-            process.stderr.write(`NexisClaw tui shutdown failed: ${String(err)}\n`);
+            process.stderr.write(`GreenchClaw tui shutdown failed: ${String(err)}\n`);
           } catch {
             // Best effort only; exit must still complete.
           }

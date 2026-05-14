@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { resolveHookEnableState, resolveHookEntries } from "./policy.js";
 import type { HookEntry, HookSource } from "./types.js";
 
@@ -28,7 +28,7 @@ function makeHookEntry(name: string, source: HookSource): HookEntry {
 describe("hook policy", () => {
   describe("resolveHookEnableState", () => {
     it("keeps workspace hooks disabled by default", () => {
-      const entry = makeHookEntry("workspace-hook", "NexisClaw-workspace");
+      const entry = makeHookEntry("workspace-hook", "GreenchClaw-workspace");
       expect(resolveHookEnableState({ entry })).toEqual({
         enabled: false,
         reason: "workspace hook (disabled by default)",
@@ -36,8 +36,8 @@ describe("hook policy", () => {
     });
 
     it("allows workspace hooks when explicitly enabled", () => {
-      const entry = makeHookEntry("workspace-hook", "NexisClaw-workspace");
-      const config: NexisClawConfig = {
+      const entry = makeHookEntry("workspace-hook", "GreenchClaw-workspace");
+      const config: GreenchClawConfig = {
         hooks: {
           internal: {
             entries: {
@@ -52,35 +52,35 @@ describe("hook policy", () => {
     });
 
     it("keeps plugin hooks enabled without local hook toggles", () => {
-      const entry = makeHookEntry("plugin-hook", "NexisClaw-plugin");
+      const entry = makeHookEntry("plugin-hook", "GreenchClaw-plugin");
       expect(resolveHookEnableState({ entry })).toEqual({ enabled: true });
     });
   });
 
   describe("resolveHookEntries", () => {
     it("lets managed hooks override bundled and plugin hooks", () => {
-      const bundled = makeHookEntry("shared", "NexisClaw-bundled");
-      const plugin = makeHookEntry("shared", "NexisClaw-plugin");
-      const managed = makeHookEntry("shared", "NexisClaw-managed");
+      const bundled = makeHookEntry("shared", "GreenchClaw-bundled");
+      const plugin = makeHookEntry("shared", "GreenchClaw-plugin");
+      const managed = makeHookEntry("shared", "GreenchClaw-managed");
 
       const resolved = resolveHookEntries([bundled, plugin, managed]);
       expect(resolved).toHaveLength(1);
-      expect(resolved[0]?.hook.source).toBe("NexisClaw-managed");
+      expect(resolved[0]?.hook.source).toBe("GreenchClaw-managed");
     });
 
     it("prevents workspace hooks from overriding non-workspace hooks", () => {
-      const managed = makeHookEntry("shared", "NexisClaw-managed");
-      const workspace = makeHookEntry("shared", "NexisClaw-workspace");
+      const managed = makeHookEntry("shared", "GreenchClaw-managed");
+      const workspace = makeHookEntry("shared", "GreenchClaw-workspace");
 
       const resolved = resolveHookEntries([managed, workspace]);
       expect(resolved).toHaveLength(1);
-      expect(resolved[0]?.hook.source).toBe("NexisClaw-managed");
+      expect(resolved[0]?.hook.source).toBe("GreenchClaw-managed");
     });
 
     it("keeps later workspace entries for the same source/name", () => {
-      const first = makeHookEntry("shared", "NexisClaw-workspace");
-      const second = makeHookEntry("shared", "NexisClaw-workspace");
-      second.hook.handlerPath = "/tmp/NexisClaw-workspace/shared/handler-2.js";
+      const first = makeHookEntry("shared", "GreenchClaw-workspace");
+      const second = makeHookEntry("shared", "GreenchClaw-workspace");
+      second.hook.handlerPath = "/tmp/GreenchClaw-workspace/shared/handler-2.js";
 
       const resolved = resolveHookEntries([first, second]);
       expect(resolved).toHaveLength(1);

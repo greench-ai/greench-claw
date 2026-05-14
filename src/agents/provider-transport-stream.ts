@@ -1,6 +1,6 @@
 import type { StreamFn } from "@earendil-works/pi-agent-core";
 import type { Api, Model } from "@earendil-works/pi-ai";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveProviderStreamFn } from "../plugins/provider-runtime.js";
 import { createAnthropicMessagesTransportStreamFn } from "./anthropic-transport-stream.js";
 import {
@@ -21,16 +21,16 @@ const SUPPORTED_TRANSPORT_APIS = new Set<Api>([
 ]);
 
 const SIMPLE_TRANSPORT_API_ALIAS: Record<string, Api> = {
-  "openai-responses": "NexisClaw-openai-responses-transport",
-  "openai-codex-responses": "NexisClaw-openai-responses-transport",
-  "openai-completions": "NexisClaw-openai-completions-transport",
-  "azure-openai-responses": "NexisClaw-azure-openai-responses-transport",
-  "anthropic-messages": "NexisClaw-anthropic-messages-transport",
-  "google-generative-ai": "NexisClaw-google-generative-ai-transport",
+  "openai-responses": "GreenchClaw-openai-responses-transport",
+  "openai-codex-responses": "GreenchClaw-openai-responses-transport",
+  "openai-completions": "GreenchClaw-openai-completions-transport",
+  "azure-openai-responses": "GreenchClaw-azure-openai-responses-transport",
+  "anthropic-messages": "GreenchClaw-anthropic-messages-transport",
+  "google-generative-ai": "GreenchClaw-google-generative-ai-transport",
 };
 
 type ProviderTransportStreamContext = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentDir?: string;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
@@ -94,7 +94,7 @@ function createSupportedTransportStreamFn(
   }
 }
 
-function hasNexisClawTransportRequirement(model: Model<Api>): boolean {
+function hasGreenchClawTransportRequirement(model: Model<Api>): boolean {
   const request = getModelProviderRequestTransport(model);
   return Boolean(request?.proxy || request?.tls || getModelProviderLocalService(model));
 }
@@ -111,7 +111,7 @@ export function createTransportAwareStreamFnForModel(
   model: Model<Api>,
   ctx?: ProviderTransportStreamContext,
 ): StreamFn | undefined {
-  if (!hasNexisClawTransportRequirement(model)) {
+  if (!hasGreenchClawTransportRequirement(model)) {
     return undefined;
   }
   if (!isTransportAwareApiSupported(model.api)) {
@@ -122,11 +122,11 @@ export function createTransportAwareStreamFnForModel(
   return createSupportedTransportStreamFn(model, ctx);
 }
 
-export function createNexisClawTransportStreamFnForModel(
+export function createGreenchClawTransportStreamFnForModel(
   model: Model<Api>,
   ctx?: ProviderTransportStreamContext,
 ): StreamFn | undefined {
-  // Explicit fallback callers use this when they need NexisClaw's HTTP
+  // Explicit fallback callers use this when they need GreenchClaw's HTTP
   // transport semantics regardless of the default embedded-runner strategy.
   // Native OpenAI HTTP still depends on this path for strict tool shaping,
   // attribution, cache-boundary stripping, and runtime credential injection.
@@ -141,7 +141,7 @@ export function createBoundaryAwareStreamFnForModel(
   ctx?: ProviderTransportStreamContext,
 ): StreamFn | undefined {
   // Default embedded-runner fallback. Keep OpenAI-family APIs here until PI's
-  // native HTTP streams preserve the same NexisClaw request contract.
+  // native HTTP streams preserve the same GreenchClaw request contract.
   if (!isTransportAwareApiSupported(model.api)) {
     return undefined;
   }

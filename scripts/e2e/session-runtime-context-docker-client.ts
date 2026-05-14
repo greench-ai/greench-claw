@@ -53,15 +53,22 @@ function messageText(content: unknown): string {
 }
 
 async function verifyRuntimeContextTranscriptShape(root: string) {
-  const sessionFile = path.join(root, ".NexisClaw", "agents", "main", "sessions", "runtime.jsonl");
+  const sessionFile = path.join(
+    root,
+    ".GreenchClaw",
+    "agents",
+    "main",
+    "sessions",
+    "runtime.jsonl",
+  );
   await fs.mkdir(path.dirname(sessionFile), { recursive: true });
   const sessionManager = SessionManager.open(sessionFile);
   const effectivePrompt = [
     "visible ask",
     "",
-    "<<<BEGIN_NEXISCLAW_INTERNAL_CONTEXT>>>",
+    "<<<BEGIN_GREENCHCLAW_INTERNAL_CONTEXT>>>",
     "secret docker context",
-    "<<<END_NEXISCLAW_INTERNAL_CONTEXT>>>",
+    "<<<END_GREENCHCLAW_INTERNAL_CONTEXT>>>",
   ].join("\n");
   const promptSubmission = resolveRuntimeContextPromptParts({
     effectivePrompt,
@@ -102,7 +109,10 @@ async function verifyRuntimeContextTranscriptShape(root: string) {
   const entries = await readJsonl(sessionFile);
   const customEntry = entries.find((entry) => entry.type === "custom_message");
   assert(customEntry, "hidden runtime custom message was not persisted");
-  assert(customEntry.customType === "NexisClaw.runtime-context", "unexpected custom message type");
+  assert(
+    customEntry.customType === "GreenchClaw.runtime-context",
+    "unexpected custom message type",
+  );
   assert(customEntry.display === false, "runtime custom message should be hidden");
   assert(
     customEntry.content?.includes("secret docker context"),
@@ -114,7 +124,8 @@ async function verifyRuntimeContextTranscriptShape(root: string) {
   const userText = messageText(userEntries[0]?.message?.content);
   assert(userText === "visible ask", `unexpected visible user text: ${JSON.stringify(userText)}`);
   assert(
-    !userText.includes("NEXISCLAW_INTERNAL_CONTEXT") && !userText.includes("secret docker context"),
+    !userText.includes("GREENCHCLAW_INTERNAL_CONTEXT") &&
+      !userText.includes("secret docker context"),
     "visible user transcript leaked runtime context",
   );
 }
@@ -140,9 +151,9 @@ async function seedBrokenSession(stateDir: string): Promise<string> {
         content: [
           "visible ask",
           "",
-          "<<<BEGIN_NEXISCLAW_INTERNAL_CONTEXT>>>",
+          "<<<BEGIN_GREENCHCLAW_INTERNAL_CONTEXT>>>",
           "secret doctor context",
-          "<<<END_NEXISCLAW_INTERNAL_CONTEXT>>>",
+          "<<<END_GREENCHCLAW_INTERNAL_CONTEXT>>>",
         ].join("\n"),
       },
     },
@@ -190,8 +201,8 @@ async function seedBrokenSession(stateDir: string): Promise<string> {
 }
 
 async function verifyDoctorRepair(root: string) {
-  const stateDir = path.join(root, ".NexisClaw");
-  const configPath = path.join(stateDir, "NexisClaw.json");
+  const stateDir = path.join(root, ".GreenchClaw");
+  const configPath = path.join(stateDir, "GreenchClaw.json");
   const sessionFile = await seedBrokenSession(stateDir);
   await fs.mkdir(path.dirname(configPath), { recursive: true });
   await fs.writeFile(configPath, JSON.stringify({ plugins: { enabled: false } }, null, 2));
@@ -205,15 +216,15 @@ async function verifyDoctorRepair(root: string) {
     env: {
       ...process.env,
       HOME: root,
-      NEXISCLAW_CONFIG_PATH: configPath,
-      NEXISCLAW_DISABLE_BONJOUR: "1",
-      NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-      NEXISCLAW_NO_ONBOARD: "1",
-      NEXISCLAW_STATE_DIR: stateDir,
-      NEXISCLAW_SKIP_CANVAS_HOST: "1",
-      NEXISCLAW_SKIP_CHANNELS: "1",
-      NEXISCLAW_SKIP_CRON: "1",
-      NEXISCLAW_SKIP_GMAIL_WATCHER: "1",
+      GREENCHCLAW_CONFIG_PATH: configPath,
+      GREENCHCLAW_DISABLE_BONJOUR: "1",
+      GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      GREENCHCLAW_NO_ONBOARD: "1",
+      GREENCHCLAW_STATE_DIR: stateDir,
+      GREENCHCLAW_SKIP_CANVAS_HOST: "1",
+      GREENCHCLAW_SKIP_CHANNELS: "1",
+      GREENCHCLAW_SKIP_CRON: "1",
+      GREENCHCLAW_SKIP_GMAIL_WATCHER: "1",
     },
     encoding: "utf-8",
     timeout: 120_000,
@@ -243,16 +254,19 @@ async function verifyDoctorRepair(root: string) {
 }
 
 async function main() {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-session-runtime-context-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-session-runtime-context-"));
   process.env.HOME = root;
-  process.env.NEXISCLAW_STATE_DIR = path.join(root, ".NexisClaw");
-  process.env.NEXISCLAW_CONFIG_PATH = path.join(process.env.NEXISCLAW_STATE_DIR, "NexisClaw.json");
+  process.env.GREENCHCLAW_STATE_DIR = path.join(root, ".GreenchClaw");
+  process.env.GREENCHCLAW_CONFIG_PATH = path.join(
+    process.env.GREENCHCLAW_STATE_DIR,
+    "GreenchClaw.json",
+  );
   try {
     await verifyRuntimeContextTranscriptShape(root);
     await verifyDoctorRepair(root);
     console.log("session runtime context Docker E2E passed");
   } finally {
-    if (process.env.NEXISCLAW_SESSION_RUNTIME_CONTEXT_KEEP_ARTIFACTS !== "1") {
+    if (process.env.GREENCHCLAW_SESSION_RUNTIME_CONTEXT_KEEP_ARTIFACTS !== "1") {
       await fs.rm(root, { recursive: true, force: true });
     } else {
       console.error(`kept artifacts: ${root}`);

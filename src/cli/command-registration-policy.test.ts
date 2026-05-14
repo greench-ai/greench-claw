@@ -8,72 +8,74 @@ import {
 
 describe("command-registration-policy", () => {
   it("matches primary command registration policy", () => {
-    expect(shouldRegisterPrimaryCommandOnly(["node", "NexisClaw", "status"])).toBe(true);
-    expect(shouldRegisterPrimaryCommandOnly(["node", "NexisClaw", "status", "--help"])).toBe(true);
-    expect(shouldRegisterPrimaryCommandOnly(["node", "NexisClaw", "-V"])).toBe(false);
-    expect(shouldRegisterPrimaryCommandOnly(["node", "NexisClaw", "acp", "-v"])).toBe(true);
+    expect(shouldRegisterPrimaryCommandOnly(["node", "GreenchClaw", "status"])).toBe(true);
+    expect(shouldRegisterPrimaryCommandOnly(["node", "GreenchClaw", "status", "--help"])).toBe(
+      true,
+    );
+    expect(shouldRegisterPrimaryCommandOnly(["node", "GreenchClaw", "-V"])).toBe(false);
+    expect(shouldRegisterPrimaryCommandOnly(["node", "GreenchClaw", "acp", "-v"])).toBe(true);
   });
 
   it("matches plugin registration skip policy", () => {
     expect(
       shouldSkipPluginCommandRegistration({
-        argv: ["node", "NexisClaw", "--help"],
+        argv: ["node", "GreenchClaw", "--help"],
         primary: null,
         hasBuiltinPrimary: false,
       }),
     ).toBe(true);
     expect(
       shouldSkipPluginCommandRegistration({
-        argv: ["node", "NexisClaw", "config", "--help"],
+        argv: ["node", "GreenchClaw", "config", "--help"],
         primary: "config",
         hasBuiltinPrimary: true,
       }),
     ).toBe(true);
     expect(
       shouldSkipPluginCommandRegistration({
-        argv: ["node", "NexisClaw", "voicecall", "--help"],
+        argv: ["node", "GreenchClaw", "voicecall", "--help"],
         primary: "voicecall",
         hasBuiltinPrimary: false,
       }),
     ).toBe(true);
     expect(
       shouldSkipPluginCommandRegistration({
-        argv: ["node", "NexisClaw", "help", "--help"],
+        argv: ["node", "GreenchClaw", "help", "--help"],
         primary: "help",
         hasBuiltinPrimary: false,
       }),
     ).toBe(true);
     expect(
       shouldSkipPluginCommandRegistration({
-        argv: ["node", "NexisClaw", "help", "voicecall"],
+        argv: ["node", "GreenchClaw", "help", "voicecall"],
         primary: "help",
         hasBuiltinPrimary: false,
       }),
     ).toBe(false);
     expect(
       shouldSkipPluginCommandRegistration({
-        argv: ["node", "NexisClaw", "auth", "login"],
+        argv: ["node", "GreenchClaw", "auth", "login"],
         primary: "auth",
         hasBuiltinPrimary: false,
       }),
     ).toBe(true);
     expect(
       shouldSkipPluginCommandRegistration({
-        argv: ["node", "NexisClaw", "tool", "image_generate"],
+        argv: ["node", "GreenchClaw", "tool", "image_generate"],
         primary: "tool",
         hasBuiltinPrimary: false,
       }),
     ).toBe(true);
     expect(
       shouldSkipPluginCommandRegistration({
-        argv: ["node", "NexisClaw", "tools", "effective"],
+        argv: ["node", "GreenchClaw", "tools", "effective"],
         primary: "tools",
         hasBuiltinPrimary: false,
       }),
     ).toBe(true);
     expect(
       shouldSkipPluginCommandRegistration({
-        argv: ["node", "NexisClaw", "googlemeet", "login"],
+        argv: ["node", "GreenchClaw", "googlemeet", "login"],
         primary: "googlemeet",
         hasBuiltinPrimary: false,
       }),
@@ -81,15 +83,19 @@ describe("command-registration-policy", () => {
   });
 
   it("matches lazy subcommand registration policy", () => {
-    expect(shouldEagerRegisterSubcommands({ NEXISCLAW_DISABLE_LAZY_SUBCOMMANDS: "1" })).toBe(true);
-    expect(shouldEagerRegisterSubcommands({ NEXISCLAW_DISABLE_LAZY_SUBCOMMANDS: "0" })).toBe(false);
-    expect(shouldRegisterPrimarySubcommandOnly(["node", "NexisClaw", "acp"], {})).toBe(true);
-    expect(shouldRegisterPrimarySubcommandOnly(["node", "NexisClaw", "acp", "--help"], {})).toBe(
+    expect(shouldEagerRegisterSubcommands({ GREENCHCLAW_DISABLE_LAZY_SUBCOMMANDS: "1" })).toBe(
+      true,
+    );
+    expect(shouldEagerRegisterSubcommands({ GREENCHCLAW_DISABLE_LAZY_SUBCOMMANDS: "0" })).toBe(
+      false,
+    );
+    expect(shouldRegisterPrimarySubcommandOnly(["node", "GreenchClaw", "acp"], {})).toBe(true);
+    expect(shouldRegisterPrimarySubcommandOnly(["node", "GreenchClaw", "acp", "--help"], {})).toBe(
       true,
     );
     expect(
-      shouldRegisterPrimarySubcommandOnly(["node", "NexisClaw", "acp"], {
-        NEXISCLAW_DISABLE_LAZY_SUBCOMMANDS: "1",
+      shouldRegisterPrimarySubcommandOnly(["node", "GreenchClaw", "acp"], {
+        GREENCHCLAW_DISABLE_LAZY_SUBCOMMANDS: "1",
       }),
     ).toBe(false);
   });

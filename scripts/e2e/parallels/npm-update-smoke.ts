@@ -6,13 +6,13 @@ import {
   die,
   ensureValue,
   makeTempDir,
-  packNexisClaw,
+  packGreenchClaw,
   parsePlatformList,
   parseProvider,
   repoRoot,
   resolveHostIp,
   resolveLatestVersion,
-  resolveNexisClawRegistryVersion,
+  resolveGreenchClawRegistryVersion,
   resolveProviderAuth,
   resolveWindowsProviderAuth,
   run,
@@ -94,14 +94,14 @@ interface NpmUpdateSummary {
 const macosVm = "macOS Tahoe";
 const windowsVm = "Windows 11";
 const linuxVmDefault = "Ubuntu 24.04.3 ARM64";
-const updateTimeoutSeconds = Number(process.env.NEXISCLAW_PARALLELS_NPM_UPDATE_TIMEOUT_S || 1200);
+const updateTimeoutSeconds = Number(process.env.GREENCHCLAW_PARALLELS_NPM_UPDATE_TIMEOUT_S || 1200);
 
 function usage(): string {
   return `Usage: bash scripts/e2e/parallels-npm-update-smoke.sh [options]
 
 Options:
-  --package-spec <npm-spec>  Baseline npm package spec. Default: NexisClaw@latest
-  --update-target <target>    Target passed to guest 'NexisClaw update --tag'.
+  --package-spec <npm-spec>  Baseline npm package spec. Default: GreenchClaw@latest
+  --update-target <target>    Target passed to guest 'GreenchClaw update --tag'.
                              Default: host-served tgz packed from current checkout.
   --fresh-target <npm-spec>   Also run fresh install smoke for this package after update lanes.
   --beta-validation [target]  Resolve a beta tag/alias/version, then run latest->target update
@@ -242,11 +242,11 @@ class NpmUpdateSmoke {
 
   async run(): Promise<void> {
     this.startedAt = Date.now();
-    this.runDir = await makeTempDir("NexisClaw-parallels-npm-update.");
-    this.tgzDir = await makeTempDir("NexisClaw-parallels-npm-update-tgz.");
+    this.runDir = await makeTempDir("GreenchClaw-parallels-npm-update.");
+    this.tgzDir = await makeTempDir("GreenchClaw-parallels-npm-update-tgz.");
     try {
       this.latestVersion = resolveLatestVersion();
-      this.packageSpec = this.options.packageSpec || `NexisClaw@${this.latestVersion}`;
+      this.packageSpec = this.options.packageSpec || `GreenchClaw@${this.latestVersion}`;
       this.currentHead = run("git", ["rev-parse", "HEAD"], { quiet: true }).stdout.trim();
       this.currentHeadShort = run("git", ["rev-parse", "--short=7", "HEAD"], {
         quiet: true,
@@ -265,7 +265,7 @@ class NpmUpdateSmoke {
       await this.runFreshBaselines();
 
       await this.prepareUpdateTarget();
-      say(`Run same-guest NexisClaw update to ${this.updateTargetEffective}`);
+      say(`Run same-guest GreenchClaw update to ${this.updateTargetEffective}`);
       await this.runSameGuestUpdates();
 
       if (this.freshTargetSpec) {
@@ -297,7 +297,7 @@ class NpmUpdateSmoke {
     if (this.options.platforms.has("linux")) {
       jobs.push(
         this.spawnFresh("Linux", "linux", ["--vm", this.linuxVm], {
-          NEXISCLAW_PARALLELS_LINUX_DISABLE_BONJOUR: "1",
+          GREENCHCLAW_PARALLELS_LINUX_DISABLE_BONJOUR: "1",
         }),
       );
     }
@@ -331,7 +331,7 @@ class NpmUpdateSmoke {
           "linux",
           ["--vm", this.linuxVm],
           {
-            NEXISCLAW_PARALLELS_LINUX_DISABLE_BONJOUR: "1",
+            GREENCHCLAW_PARALLELS_LINUX_DISABLE_BONJOUR: "1",
           },
           this.freshTargetSpec,
           "fresh-target",
@@ -402,7 +402,7 @@ class NpmUpdateSmoke {
 
   private async prepareUpdateTarget(): Promise<void> {
     if (!this.options.updateTarget || this.options.updateTarget === "local-main") {
-      this.artifact = await packNexisClaw({
+      this.artifact = await packGreenchClaw({
         destination: this.tgzDir,
         requireControlUi: true,
       });
@@ -424,7 +424,7 @@ class NpmUpdateSmoke {
     this.updateTargetEffective = this.options.updateTarget;
     this.updateExpectedNeedle = this.isExplicitPackageTarget(this.updateTargetEffective)
       ? ""
-      : resolveNexisClawRegistryVersion(this.updateTargetEffective) || this.updateTargetEffective;
+      : resolveGreenchClawRegistryVersion(this.updateTargetEffective) || this.updateTargetEffective;
     const metadata = this.resolveRegistryPackageMetadata(this.updateTargetEffective);
     this.updateTargetPackageVersion = metadata.version;
     this.updateTargetBuildCommit =
@@ -463,7 +463,7 @@ class NpmUpdateSmoke {
     if (this.isExplicitPackageTarget(target)) {
       return { gitHead: "", tarball: "", version: "" };
     }
-    const spec = target.startsWith("NexisClaw@") ? target : `NexisClaw@${target}`;
+    const spec = target.startsWith("GreenchClaw@") ? target : `GreenchClaw@${target}`;
     const output = run("npm", ["view", spec, "version", "dist.tarball", "gitHead", "--json"], {
       check: false,
       quiet: true,
@@ -661,7 +661,7 @@ class NpmUpdateSmoke {
     const scriptPath = this.writeGuestScript(
       macosVm,
       script,
-      "NexisClaw-parallels-npm-update-macos",
+      "GreenchClaw-parallels-npm-update-macos",
     );
     const macosExecArgs = this.resolveMacosUpdateExecArgs(ctx);
     const sudoUserArgIndex = macosExecArgs.indexOf("-u");
@@ -795,7 +795,7 @@ class NpmUpdateSmoke {
     const scriptPath = this.writeGuestScript(
       this.linuxVm,
       script,
-      "NexisClaw-parallels-npm-update-linux",
+      "GreenchClaw-parallels-npm-update-linux",
     );
     try {
       const status = await this.runStreamingToJobLog(
@@ -805,7 +805,7 @@ class NpmUpdateSmoke {
           this.linuxVm,
           "/usr/bin/env",
           "HOME=/root",
-          "NEXISCLAW_ALLOW_ROOT=1",
+          "GREENCHCLAW_ALLOW_ROOT=1",
           "PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/snap/bin",
           "bash",
           scriptPath,
@@ -902,11 +902,11 @@ class NpmUpdateSmoke {
     ) {
       return;
     }
-    const baseline = resolveNexisClawRegistryVersion(this.packageSpec);
-    const target = resolveNexisClawRegistryVersion(this.options.updateTarget);
+    const baseline = resolveGreenchClawRegistryVersion(this.packageSpec);
+    const target = resolveGreenchClawRegistryVersion(this.options.updateTarget);
     if (baseline && target && baseline === target) {
       die(
-        `--update-target ${this.options.updateTarget} resolves to NexisClaw@${target}, same as baseline ${this.packageSpec}; publish or choose a newer --update-target before running VM update coverage`,
+        `--update-target ${this.options.updateTarget} resolves to GreenchClaw@${target}, same as baseline ${this.packageSpec}; publish or choose a newer --update-target before running VM update coverage`,
       );
     }
   }
@@ -920,7 +920,7 @@ class NpmUpdateSmoke {
 
   private async extractLastVersion(logPath: string): Promise<string> {
     const log = await readFile(logPath, "utf8").catch(() => "");
-    const matches = [...log.matchAll(/NexisClaw\s+([0-9][^\s]*)/gi)];
+    const matches = [...log.matchAll(/GreenchClaw\s+([0-9][^\s]*)/gi)];
     return matches.at(-1)?.[1] ?? "";
   }
 
@@ -944,27 +944,27 @@ class NpmUpdateSmoke {
 
   private configurePublishedTargets(): void {
     if (this.options.betaValidation) {
-      const version = resolveNexisClawRegistryVersion(this.options.betaValidation);
+      const version = resolveGreenchClawRegistryVersion(this.options.betaValidation);
       if (!version) {
         die(`could not resolve beta validation target: ${this.options.betaValidation}`);
       }
       this.options.updateTarget = version;
-      this.options.freshTargetSpec = `NexisClaw@${version}`;
-      say(`Beta validation target: NexisClaw@${version}`);
+      this.options.freshTargetSpec = `GreenchClaw@${version}`;
+      say(`Beta validation target: GreenchClaw@${version}`);
     } else if (
       this.options.updateTarget &&
       this.options.updateTarget !== "local-main" &&
       !this.isExplicitPackageTarget(this.options.updateTarget)
     ) {
-      const version = resolveNexisClawRegistryVersion(this.options.updateTarget);
+      const version = resolveGreenchClawRegistryVersion(this.options.updateTarget);
       if (version) {
         this.options.updateTarget = version;
       }
     }
 
     if (this.options.freshTargetSpec) {
-      const version = resolveNexisClawRegistryVersion(this.options.freshTargetSpec);
-      this.freshTargetSpec = version ? `NexisClaw@${version}` : this.options.freshTargetSpec;
+      const version = resolveGreenchClawRegistryVersion(this.options.freshTargetSpec);
+      this.freshTargetSpec = version ? `GreenchClaw@${version}` : this.options.freshTargetSpec;
     }
   }
 

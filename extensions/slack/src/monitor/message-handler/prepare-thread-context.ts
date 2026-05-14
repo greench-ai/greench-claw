@@ -1,11 +1,11 @@
-import { formatInboundEnvelope } from "NexisClaw/plugin-sdk/channel-inbound";
-import { runTasksWithConcurrency } from "NexisClaw/plugin-sdk/concurrency-runtime";
-import type { ContextVisibilityMode } from "NexisClaw/plugin-sdk/config-contracts";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { formatInboundEnvelope } from "GreenchClaw/plugin-sdk/channel-inbound";
+import { runTasksWithConcurrency } from "GreenchClaw/plugin-sdk/concurrency-runtime";
+import type { ContextVisibilityMode } from "GreenchClaw/plugin-sdk/config-contracts";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   filterSupplementalContextItems,
   shouldIncludeSupplementalContext,
-} from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/security-runtime";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import type { SlackMessageEvent } from "../../types.js";
 import { resolveSlackAllowListMatch } from "../allow-list.js";
@@ -107,7 +107,7 @@ export async function resolveSlackThreadContextData(params: {
   allowNameMatching: boolean;
   contextVisibilityMode: ContextVisibilityMode;
   envelopeOptions: ReturnType<
-    typeof import("NexisClaw/plugin-sdk/channel-inbound").resolveEnvelopeFormatOptions
+    typeof import("GreenchClaw/plugin-sdk/channel-inbound").resolveEnvelopeFormatOptions
   >;
   effectiveDirectMedia: SlackMediaResult[] | null;
 }): Promise<SlackThreadContextData> {

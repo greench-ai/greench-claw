@@ -1,9 +1,9 @@
-import { resolveFetch } from "NexisClaw/plugin-sdk/fetch-runtime";
+import { resolveFetch } from "GreenchClaw/plugin-sdk/fetch-runtime";
 import {
   resolveRetryConfig,
   retryAsync,
   type RetryConfig,
-} from "NexisClaw/plugin-sdk/retry-runtime";
+} from "GreenchClaw/plugin-sdk/retry-runtime";
 import { isDiscordHtmlResponseBody, summarizeDiscordResponseBody } from "./error-body.js";
 
 const DISCORD_API_BASE = "https://discord.com/api/v10";

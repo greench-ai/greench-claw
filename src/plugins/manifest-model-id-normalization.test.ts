@@ -9,23 +9,23 @@ import {
 } from "./current-plugin-metadata-snapshot.js";
 import { resolveInstalledPluginIndexPolicyHash } from "./installed-plugin-index-policy.js";
 import type { InstalledPluginIndex } from "./installed-plugin-index.js";
-import { listNexisClawPluginManifestMetadata } from "./manifest-metadata-scan.js";
+import { listGreenchClawPluginManifestMetadata } from "./manifest-metadata-scan.js";
 import { normalizeProviderModelIdWithManifest } from "./manifest-model-id-normalization.js";
 import type { PluginMetadataSnapshot } from "./plugin-metadata-snapshot.js";
 import { createEmptyPluginRegistry } from "./registry-empty.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "./runtime.js";
 
 const ORIGINAL_ENV = {
-  NEXISCLAW_STATE_DIR: process.env.NEXISCLAW_STATE_DIR,
-  NEXISCLAW_HOME: process.env.NEXISCLAW_HOME,
-  NEXISCLAW_DISABLE_BUNDLED_PLUGINS: process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS,
-  NEXISCLAW_BUNDLED_PLUGINS_DIR: process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR,
+  GREENCHCLAW_STATE_DIR: process.env.GREENCHCLAW_STATE_DIR,
+  GREENCHCLAW_HOME: process.env.GREENCHCLAW_HOME,
+  GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS,
+  GREENCHCLAW_BUNDLED_PLUGINS_DIR: process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR,
 } as const;
 
 const tempDirs: string[] = [];
 
 function makeTempDir(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-model-id-normalization-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-model-id-normalization-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -66,7 +66,7 @@ function writeNormalizerManifest(params: { pluginDir: string; prefix: string }):
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(params.pluginDir, "NexisClaw.plugin.json"),
+    path.join(params.pluginDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: "normalizer",
       configSchema: { type: "object" },
@@ -100,7 +100,7 @@ function createCurrentSnapshot(params: {
     plugins: [
       {
         pluginId: "normalizer",
-        manifestPath: `/tmp/normalizer-${params.manifestHash}/NexisClaw.plugin.json`,
+        manifestPath: `/tmp/normalizer-${params.manifestHash}/GreenchClaw.plugin.json`,
         manifestHash: params.manifestHash,
         source: `/tmp/normalizer-${params.manifestHash}/index.ts`,
         rootDir: `/tmp/normalizer-${params.manifestHash}`,
@@ -226,10 +226,10 @@ describe("manifest model id normalization", () => {
     writeInstallIndex({ stateDir: stateDirA, pluginDir: pluginDirA });
     writeNormalizerManifest({ pluginDir: pluginDirA, prefix: "alpha" });
 
-    process.env.NEXISCLAW_STATE_DIR = stateDirA;
-    process.env.NEXISCLAW_HOME = undefined;
-    process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = "1";
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = undefined;
+    process.env.GREENCHCLAW_STATE_DIR = stateDirA;
+    process.env.GREENCHCLAW_HOME = undefined;
+    process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = undefined;
 
     expect(normalizeDemoModel()).toBe("alpha/demo-model");
 
@@ -241,26 +241,26 @@ describe("manifest model id normalization", () => {
     writeInstallIndex({ stateDir: stateDirB, pluginDir: pluginDirB });
     writeNormalizerManifest({ pluginDir: pluginDirB, prefix: "charlie" });
 
-    process.env.NEXISCLAW_STATE_DIR = stateDirB;
+    process.env.GREENCHCLAW_STATE_DIR = stateDirB;
     expect(normalizeDemoModel()).toBe("charlie/demo-model");
   });
 
   it("reuses manifest metadata while file fingerprints are unchanged", () => {
     const stateDir = makeTempDir();
     const pluginDir = path.join(stateDir, "extensions", "normalizer");
-    const manifestPath = path.join(pluginDir, "NexisClaw.plugin.json");
+    const manifestPath = path.join(pluginDir, "GreenchClaw.plugin.json");
     writeInstallIndex({ stateDir, pluginDir });
     writeNormalizerManifest({ pluginDir, prefix: "alpha" });
 
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
-    process.env.NEXISCLAW_HOME = undefined;
-    process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = "1";
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = undefined;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
+    process.env.GREENCHCLAW_HOME = undefined;
+    process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = undefined;
 
     const readFileSyncSpy = vi.spyOn(fs, "readFileSync");
 
-    expect(listNexisClawPluginManifestMetadata(process.env)).toHaveLength(1);
-    expect(listNexisClawPluginManifestMetadata(process.env)).toHaveLength(1);
+    expect(listGreenchClawPluginManifestMetadata(process.env)).toHaveLength(1);
+    expect(listGreenchClawPluginManifestMetadata(process.env)).toHaveLength(1);
 
     const manifestReads = readFileSyncSpy.mock.calls.filter(
       ([filePath]) => String(filePath) === manifestPath,

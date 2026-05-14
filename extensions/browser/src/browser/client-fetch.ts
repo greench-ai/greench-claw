@@ -1,6 +1,6 @@
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { formatCliCommand } from "../cli/command-format.js";
 import { getRuntimeConfig } from "../config/config.js";
 import { isLoopbackHost } from "../gateway/net.js";
@@ -42,7 +42,7 @@ function withLoopbackBrowserAuthImpl(
   deps: LoopbackBrowserAuthDeps,
 ): RequestInit & { timeoutMs?: number } {
   const headers = new Headers(init?.headers ?? {});
-  if (headers.has("authorization") || headers.has("x-NexisClaw-password")) {
+  if (headers.has("authorization") || headers.has("x-GreenchClaw-password")) {
     return { ...init, headers };
   }
   if (!isLoopbackHttpUrl(url)) {
@@ -57,7 +57,7 @@ function withLoopbackBrowserAuthImpl(
       return { ...init, headers };
     }
     if (auth.password) {
-      headers.set("x-NexisClaw-password", auth.password);
+      headers.set("x-GreenchClaw-password", auth.password);
       return { ...init, headers };
     }
   } catch {
@@ -78,7 +78,7 @@ function withLoopbackBrowserAuthImpl(
     if (bridgeAuth?.token) {
       headers.set("Authorization", `Bearer ${bridgeAuth.token}`);
     } else if (bridgeAuth?.password) {
-      headers.set("x-NexisClaw-password", bridgeAuth.password);
+      headers.set("x-GreenchClaw-password", bridgeAuth.password);
     }
   } catch {
     // ignore
@@ -121,7 +121,7 @@ function resolveDispatcherBrowserControlOwnership(url: string): BrowserControlOw
     if (!profile) {
       return "unknown";
     }
-    return profile.driver === "NexisClaw" && profile.cdpIsLoopback && !profile.attachOnly
+    return profile.driver === "GreenchClaw" && profile.cdpIsLoopback && !profile.attachOnly
       ? "local-managed"
       : "external-browser";
   } catch {
@@ -135,13 +135,13 @@ function resolveBrowserFetchOperatorHint(
 ): string {
   if (opts?.ownership === "external-browser") {
     return (
-      "The browser profile is external to NexisClaw; make sure its browser/CDP endpoint " +
-      "is running and reachable. Restarting the NexisClaw gateway will not launch it."
+      "The browser profile is external to GreenchClaw; make sure its browser/CDP endpoint " +
+      "is running and reachable. Restarting the GreenchClaw gateway will not launch it."
     );
   }
   const isLocal = !isAbsoluteHttp(url);
   return isLocal
-    ? `Restart the NexisClaw gateway (NexisClaw.app menubar, or \`${formatCliCommand("NexisClaw gateway")}\`).`
+    ? `Restart the GreenchClaw gateway (GreenchClaw.app menubar, or \`${formatCliCommand("GreenchClaw gateway")}\`).`
     : "If this is a sandboxed session, ensure the sandbox browser is running.";
 }
 
@@ -206,7 +206,7 @@ function enhanceBrowserFetchError(url: string, err: unknown, timeoutMs: number):
   const kind = classifyBrowserFetchFailure(err);
   if (kind === "timeout") {
     return new Error(
-      `Can't reach the NexisClaw browser control service (timed out after ${timeoutMs}ms). ${operatorHint}`,
+      `Can't reach the GreenchClaw browser control service (timed out after ${timeoutMs}ms). ${operatorHint}`,
       err instanceof Error ? { cause: err } : undefined,
     );
   }
@@ -218,7 +218,7 @@ function enhanceBrowserFetchError(url: string, err: unknown, timeoutMs: number):
   }
   return new Error(
     appendBrowserToolModelHint(
-      `Can't reach the NexisClaw browser control service. ${operatorHint} (${msg})`,
+      `Can't reach the GreenchClaw browser control service. ${operatorHint} (${msg})`,
     ),
     err instanceof Error ? { cause: err } : undefined,
   );

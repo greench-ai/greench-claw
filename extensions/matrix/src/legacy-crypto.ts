@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   loadJsonFile,
   writeJsonFileAtomically as writeJsonFileAtomicallyImpl,
-} from "NexisClaw/plugin-sdk/json-store";
-import { resolveStateDir } from "NexisClaw/plugin-sdk/state-paths";
+} from "GreenchClaw/plugin-sdk/json-store";
+import { resolveStateDir } from "GreenchClaw/plugin-sdk/state-paths";
 import { resolveConfiguredMatrixAccountIds } from "./account-selection.js";
 import { isMatrixLegacyCryptoInspectorAvailable } from "./legacy-crypto-inspector-availability.js";
 import { formatMatrixErrorMessage } from "./matrix/errors.js";
@@ -129,7 +129,7 @@ function detectLegacyBotSdkCryptoStore(cryptoRootDir: string): {
         detected: false,
         warning:
           `Legacy Matrix encrypted state path exists but is not a directory: ${cryptoRootDir}. ` +
-          "NexisClaw skipped automatic crypto migration for that path.",
+          "GreenchClaw skipped automatic crypto migration for that path.",
       };
     }
   } catch (err) {
@@ -137,7 +137,7 @@ function detectLegacyBotSdkCryptoStore(cryptoRootDir: string): {
       detected: false,
       warning:
         `Failed reading legacy Matrix encrypted state path (${cryptoRootDir}): ${String(err)}. ` +
-        "NexisClaw skipped automatic crypto migration for that path.",
+        "GreenchClaw skipped automatic crypto migration for that path.",
     };
   }
 
@@ -159,17 +159,17 @@ function detectLegacyBotSdkCryptoStore(cryptoRootDir: string): {
       detected: false,
       warning:
         `Failed scanning legacy Matrix encrypted state path (${cryptoRootDir}): ${String(err)}. ` +
-        "NexisClaw skipped automatic crypto migration for that path.",
+        "GreenchClaw skipped automatic crypto migration for that path.",
     };
   }
 }
 
-function resolveMatrixAccountIds(cfg: NexisClawConfig): string[] {
+function resolveMatrixAccountIds(cfg: GreenchClawConfig): string[] {
   return resolveConfiguredMatrixAccountIds(cfg);
 }
 
 function resolveLegacyMatrixFlatStorePlan(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
 }): MatrixLegacyCryptoPlan | { warning: string } | null {
   const legacy = resolveMatrixLegacyFlatStoragePaths(resolveStateDir(params.env, os.homedir));
@@ -221,7 +221,7 @@ function loadLegacyBotSdkMetadata(cryptoRootDir: string): MatrixLegacyBotSdkMeta
 }
 
 function resolveMatrixLegacyCryptoPlans(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
 }): Omit<MatrixLegacyCryptoDetection, "inspectorAvailable"> {
   const warnings: string[] = [];
@@ -300,7 +300,7 @@ async function persistLegacyMigrationState(params: {
 }
 
 export function detectLegacyMatrixCrypto(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): MatrixLegacyCryptoDetection {
   const detection = resolveMatrixLegacyCryptoPlans({
@@ -324,7 +324,7 @@ export function detectLegacyMatrixCrypto(params: {
 }
 
 export async function autoPrepareLegacyMatrixCrypto(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   log?: { info?: (message: string) => void; warn?: (message: string) => void };
   deps?: Partial<MatrixLegacyCryptoPrepareDeps>;
@@ -401,7 +401,7 @@ export async function autoPrepareLegacyMatrixCrypto(params: {
     if (!plan.deviceId) {
       warnings.push(
         `Legacy Matrix encrypted state detected at ${plan.legacyCryptoPath}, but no device ID was found for account "${plan.accountId}". ` +
-          `NexisClaw will continue, but old encrypted history cannot be recovered automatically.`,
+          `GreenchClaw will continue, but old encrypted history cannot be recovered automatically.`,
       );
       continue;
     }
@@ -467,7 +467,7 @@ export async function autoPrepareLegacyMatrixCrypto(params: {
     if (!summary.decryptionKeyBase64 && (summary.roomKeyCounts?.backedUp ?? 0) > 0) {
       warnings.push(
         `Legacy Matrix encrypted state for account "${plan.accountId}" has backed-up room keys, but no local backup decryption key was found. ` +
-          `Ask the operator to run "NexisClaw matrix verify backup restore --recovery-key <key>" after upgrade if they have the recovery key.`,
+          `Ask the operator to run "GreenchClaw matrix verify backup restore --recovery-key <key>" after upgrade if they have the recovery key.`,
       );
     }
     if (!summary.decryptionKeyBase64 && (summary.roomKeyCounts?.total ?? 0) > 0) {

@@ -1,6 +1,6 @@
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
 
-export function registerOcPathCli(api: NexisClawPluginApi): void {
+export function registerOcPathCli(api: GreenchClawPluginApi): void {
   api.registerCli(
     async ({ program }) => {
       const { registerPathCli } = await import("./src/cli.js");

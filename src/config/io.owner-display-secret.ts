@@ -1,15 +1,15 @@
-import type { NexisClawConfig } from "./types.NexisClaw.js";
+import type { GreenchClawConfig } from "./types.GreenchClaw.js";
 
 export type OwnerDisplaySecretRuntimeState = {
   pendingByPath: Map<string, string>;
 };
 
 export function retainGeneratedOwnerDisplaySecret(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   configPath: string;
   generatedSecret?: string;
   state: OwnerDisplaySecretRuntimeState;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   const { config, configPath, generatedSecret, state } = params;
   if (!generatedSecret) {
     state.pendingByPath.delete(configPath);

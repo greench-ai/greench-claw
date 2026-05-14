@@ -2,7 +2,7 @@ import { getLoadedChannelPlugin } from "../channels/plugins/index.js";
 import { resolveSessionConversation } from "../channels/plugins/session-conversation.js";
 import { DEFAULT_SUBAGENT_MAX_SPAWN_DEPTH } from "../config/agent-limits.js";
 import { resolveChannelGroupToolsPolicy } from "../config/group-policy.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { AgentToolsConfig } from "../config/types.tools.js";
 import { logWarn } from "../logger.js";
 import { normalizeAgentId } from "../routing/session-key.js";
@@ -84,7 +84,10 @@ function resolveSubagentDenyListForRole(role: SubagentSessionRole): string[] {
   return [...SUBAGENT_TOOL_DENY_ALWAYS];
 }
 
-export function resolveSubagentToolPolicy(cfg?: NexisClawConfig, depth?: number): SandboxToolPolicy {
+export function resolveSubagentToolPolicy(
+  cfg?: GreenchClawConfig,
+  depth?: number,
+): SandboxToolPolicy {
   const configured = cfg?.tools?.subagents?.tools;
   const maxSpawnDepth =
     cfg?.agents?.defaults?.subagents?.maxSpawnDepth ?? DEFAULT_SUBAGENT_MAX_SPAWN_DEPTH;
@@ -104,7 +107,7 @@ export function resolveSubagentToolPolicy(cfg?: NexisClawConfig, depth?: number)
 }
 
 export function resolveSubagentToolPolicyForSession(
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
   sessionKey: string,
   opts?: {
     store?: SessionCapabilityStore;
@@ -362,7 +365,7 @@ export function resolveProviderToolPolicy(params: {
   return undefined;
 }
 
-function resolveExplicitProfileAlsoAllow(tools?: NexisClawConfig["tools"]): string[] | undefined {
+function resolveExplicitProfileAlsoAllow(tools?: GreenchClawConfig["tools"]): string[] | undefined {
   return Array.isArray(tools?.alsoAllow) ? tools.alsoAllow : undefined;
 }
 
@@ -377,7 +380,7 @@ type ImplicitProfileGrantDetection = {
 };
 
 function detectImplicitProfileGrants(params: {
-  globalTools?: NexisClawConfig["tools"];
+  globalTools?: GreenchClawConfig["tools"];
   agentTools?: AgentToolsConfig;
   includeGlobalSections: boolean;
 }): ImplicitProfileGrantDetection | undefined {
@@ -409,7 +412,7 @@ function formatToolListForWarning(toolNames: string[]): string {
 }
 
 export function resolveEffectiveToolPolicy(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sessionKey?: string;
   agentId?: string;
   modelProvider?: string;
@@ -497,7 +500,7 @@ export function resolveEffectiveToolPolicy(params: {
 }
 
 export function resolveGroupToolPolicy(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sessionKey?: string;
   spawnedBy?: string | null;
   messageProvider?: string;

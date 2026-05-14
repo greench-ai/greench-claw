@@ -1,11 +1,11 @@
-import { jsonResult, readStringParam } from "NexisClaw/plugin-sdk/channel-actions";
+import { jsonResult, readStringParam } from "GreenchClaw/plugin-sdk/channel-actions";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageActionName,
-} from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { createLazyRuntimeNamedExport } from "NexisClaw/plugin-sdk/lazy-runtime";
-import { extractToolSend } from "NexisClaw/plugin-sdk/tool-send";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { createLazyRuntimeNamedExport } from "GreenchClaw/plugin-sdk/lazy-runtime";
+import { extractToolSend } from "GreenchClaw/plugin-sdk/tool-send";
 import { listEnabledZaloAccounts, resolveZaloAccount } from "./accounts.js";
 
 const loadZaloActionsRuntime = createLazyRuntimeNamedExport(
@@ -15,7 +15,7 @@ const loadZaloActionsRuntime = createLazyRuntimeNamedExport(
 
 const providerId = "zalo";
 
-function listEnabledAccounts(cfg: NexisClawConfig, accountId?: string | null) {
+function listEnabledAccounts(cfg: GreenchClawConfig, accountId?: string | null) {
   return (
     accountId ? [resolveZaloAccount({ cfg, accountId })] : listEnabledZaloAccounts(cfg)
   ).filter((account) => account.enabled && account.tokenSource !== "none");

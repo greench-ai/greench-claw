@@ -2,9 +2,9 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  createNexisClawTestState,
-  type NexisClawTestState,
-} from "../test-utils/NexisClaw-test-state.js";
+  createGreenchClawTestState,
+  type GreenchClawTestState,
+} from "../test-utils/GreenchClaw-test-state.js";
 
 const note = vi.hoisted(() => vi.fn());
 
@@ -24,13 +24,13 @@ async function expectPathMissing(targetPath: string): Promise<void> {
 }
 
 describe("noteSessionLockHealth", () => {
-  let state: NexisClawTestState;
+  let state: GreenchClawTestState;
 
   beforeEach(async () => {
     note.mockClear();
-    state = await createNexisClawTestState({
+    state = await createGreenchClawTestState({
       layout: "state-only",
-      prefix: "NexisClaw-doctor-locks-",
+      prefix: "GreenchClaw-doctor-locks-",
     });
   });
 
@@ -51,7 +51,7 @@ describe("noteSessionLockHealth", () => {
     await noteSessionLockHealth({
       shouldRepair: false,
       staleMs: 60_000,
-      readOwnerProcessArgs: () => ["node", "/opt/NexisClaw/NexisClaw.mjs", "doctor"],
+      readOwnerProcessArgs: () => ["node", "/opt/GreenchClaw/GreenchClaw.mjs", "doctor"],
     });
 
     expect(note).toHaveBeenCalledTimes(1);
@@ -84,7 +84,7 @@ describe("noteSessionLockHealth", () => {
     await noteSessionLockHealth({
       shouldRepair: true,
       staleMs: 30_000,
-      readOwnerProcessArgs: () => ["node", "/opt/NexisClaw/NexisClaw.mjs", "doctor"],
+      readOwnerProcessArgs: () => ["node", "/opt/GreenchClaw/GreenchClaw.mjs", "doctor"],
     });
 
     expect(note).toHaveBeenCalledTimes(1);
@@ -96,7 +96,7 @@ describe("noteSessionLockHealth", () => {
     await expect(fs.access(freshLock)).resolves.toBeUndefined();
   });
 
-  it("removes fresh live locks when the owner is not an NexisClaw process", async () => {
+  it("removes fresh live locks when the owner is not an GreenchClaw process", async () => {
     const sessionsDir = state.sessionsDir();
     await fs.mkdir(sessionsDir, { recursive: true });
 
@@ -115,7 +115,7 @@ describe("noteSessionLockHealth", () => {
 
     expect(note).toHaveBeenCalledTimes(1);
     const [message] = note.mock.calls.at(0) as [string, string];
-    expect(message).toContain("stale=yes (non-NexisClaw-owner)");
+    expect(message).toContain("stale=yes (non-GreenchClaw-owner)");
     expect(message).toContain("[removed]");
     expect(message).toContain("Removed 1 stale session lock file");
     await expect(fs.access(falseLiveLock)).rejects.toThrow();

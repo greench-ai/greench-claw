@@ -35,8 +35,8 @@ function parseArgs(argv) {
       new Date().toISOString().replace(/[:.]/g, "-"),
     ),
     pluginIds: [],
-    shardTotal: readOptionalPositiveIntEnv("NEXISCLAW_PLUGIN_GATEWAY_GAUNTLET_TOTAL") ?? 1,
-    shardIndex: readOptionalNonNegativeIntEnv("NEXISCLAW_PLUGIN_GATEWAY_GAUNTLET_INDEX") ?? 0,
+    shardTotal: readOptionalPositiveIntEnv("GREENCHCLAW_PLUGIN_GATEWAY_GAUNTLET_TOTAL") ?? 1,
+    shardIndex: readOptionalNonNegativeIntEnv("GREENCHCLAW_PLUGIN_GATEWAY_GAUNTLET_INDEX") ?? 0,
     limit: undefined,
     skipPrebuild: false,
     skipLifecycle: false,
@@ -56,7 +56,7 @@ function parseArgs(argv) {
     buildTimeoutMs: 600_000,
     qaTimeoutMs: 900_000,
   };
-  const envIds = normalizeCsv(process.env.NEXISCLAW_PLUGIN_GATEWAY_GAUNTLET_IDS);
+  const envIds = normalizeCsv(process.env.GREENCHCLAW_PLUGIN_GATEWAY_GAUNTLET_IDS);
   options.pluginIds.push(...envIds);
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
@@ -234,7 +234,7 @@ function pnpmCommand() {
   return process.platform === "win32" ? "pnpm.cmd" : "pnpm";
 }
 
-function NexisClawCommand(repoRoot, args) {
+function GreenchClawCommand(repoRoot, args) {
   return {
     command: process.execPath,
     args: [path.join(repoRoot, "dist", "entry.js"), ...args],
@@ -275,10 +275,10 @@ function createIsolatedEnv(repoRoot, runRoot) {
     XDG_CONFIG_HOME: path.join(home, ".config"),
     XDG_CACHE_HOME: path.join(home, ".cache"),
     XDG_DATA_HOME: path.join(home, ".local", "share"),
-    NEXISCLAW_STATE_DIR: stateDir,
-    NEXISCLAW_CONFIG_PATH: path.join(stateDir, "NexisClaw.json"),
-    NEXISCLAW_LOG_DIR: path.join(runRoot, "logs"),
-    NEXISCLAW_QA_SUITE_PROGRESS: process.env.NEXISCLAW_QA_SUITE_PROGRESS ?? "1",
+    GREENCHCLAW_STATE_DIR: stateDir,
+    GREENCHCLAW_CONFIG_PATH: path.join(stateDir, "GreenchClaw.json"),
+    GREENCHCLAW_LOG_DIR: path.join(runRoot, "logs"),
+    GREENCHCLAW_QA_SUITE_PROGRESS: process.env.GREENCHCLAW_QA_SUITE_PROGRESS ?? "1",
     PATH: process.env.PATH,
     PWD: repoRoot,
   };
@@ -404,7 +404,7 @@ function runPluginLifecycle(params) {
           cwd: params.repoRoot,
           env: params.env,
           logDir: path.join(params.outputDir, "logs", "lifecycle"),
-          ...NexisClawCommand(params.repoRoot, ["plugins", ...args]),
+          ...GreenchClawCommand(params.repoRoot, ["plugins", ...args]),
           label: `${plugin.id}-${phase}`,
           phase: `lifecycle:${phase}`,
           pluginId: plugin.id,
@@ -425,7 +425,7 @@ function runSlashHelpProbes(params) {
           cwd: params.repoRoot,
           env: params.env,
           logDir: path.join(params.outputDir, "logs", "slash-help"),
-          ...NexisClawCommand(params.repoRoot, [command, "--help"]),
+          ...GreenchClawCommand(params.repoRoot, [command, "--help"]),
           label: `${plugin.id}-slash-${alias.name}`,
           phase: "slash:help",
           pluginId: plugin.id,
@@ -494,7 +494,7 @@ async function main() {
   const options = parseArgs(process.argv.slice(2));
   const repoRoot = path.resolve(options.repoRoot);
   fs.mkdirSync(options.outputDir, { recursive: true });
-  const runRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-plugin-gauntlet-"));
+  const runRoot = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-plugin-gauntlet-"));
   const env = createIsolatedEnv(repoRoot, runRoot);
   const matrix = discoverBundledPluginManifests(repoRoot);
   const selectedPlugins = selectPluginEntries(matrix, {

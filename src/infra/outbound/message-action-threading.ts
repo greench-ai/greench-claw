@@ -4,7 +4,7 @@ import type {
   ChannelThreadingAdapter,
   ChannelThreadingToolContext,
 } from "../../channels/plugins/types.public.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type {
   OutboundSessionRoute,
   ResolveOutboundSessionRouteParams,
@@ -20,7 +20,7 @@ function suppressesImplicitThreading(actionParams: Record<string, unknown>): boo
 export function resolveAndApplyOutboundThreadId(
   actionParams: Record<string, unknown>,
   context: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     to: string;
     accountId?: string | null;
     toolContext?: ChannelThreadingToolContext;
@@ -123,7 +123,7 @@ export function resolveAndApplyOutboundReplyToId(
 }
 
 export async function prepareOutboundMirrorRoute(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: ChannelId;
   to: string;
   actionParams: Record<string, unknown>;
@@ -138,7 +138,7 @@ export async function prepareOutboundMirrorRoute(params: {
     params: ResolveOutboundSessionRouteParams,
   ) => Promise<OutboundSessionRoute | null>;
   ensureOutboundSessionEntry: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     channel: ChannelId;
     accountId?: string | null;
     route: OutboundSessionRoute;

@@ -47,8 +47,8 @@ describe("image input pixel guard", () => {
   });
 
   it("fails closed when sips cannot determine image dimensions", async () => {
-    const previousBackend = process.env.NEXISCLAW_IMAGE_BACKEND;
-    process.env.NEXISCLAW_IMAGE_BACKEND = "sips";
+    const previousBackend = process.env.GREENCHCLAW_IMAGE_BACKEND;
+    process.env.GREENCHCLAW_IMAGE_BACKEND = "sips";
     try {
       await expect(
         resizeToJpeg({
@@ -59,9 +59,9 @@ describe("image input pixel guard", () => {
       ).rejects.toThrow(/unable to determine image dimensions/i);
     } finally {
       if (previousBackend === undefined) {
-        delete process.env.NEXISCLAW_IMAGE_BACKEND;
+        delete process.env.GREENCHCLAW_IMAGE_BACKEND;
       } else {
-        process.env.NEXISCLAW_IMAGE_BACKEND = previousBackend;
+        process.env.GREENCHCLAW_IMAGE_BACKEND = previousBackend;
       }
     }
   });
@@ -69,7 +69,7 @@ describe("image input pixel guard", () => {
   const itIfMac = process.platform === "darwin" ? it : it.skip;
 
   itIfMac("converts macOS-generated HEIC images to JPEG", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-heic-convert-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-heic-convert-"));
     try {
       const pngPath = path.join(tempDir, "input.png");
       const heicPath = path.join(tempDir, "input.heic");

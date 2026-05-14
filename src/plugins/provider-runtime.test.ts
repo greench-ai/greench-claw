@@ -1,6 +1,6 @@
 import type { AgentMessage } from "@earendil-works/pi-agent-core";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ModelProviderConfig, NexisClawConfig } from "../config/types.js";
+import type { ModelProviderConfig, GreenchClawConfig } from "../config/types.js";
 import type { ProviderRuntimeModel } from "./provider-runtime-model.types.js";
 import {
   expectAugmentedCodexCatalog,
@@ -486,14 +486,14 @@ describe("provider-runtime", () => {
           demo: { enabled: true, config: { endpoint: "https://one.example" } },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const secondConfig = {
       plugins: {
         entries: {
           demo: { enabled: true, config: { endpoint: "https://two.example" } },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveProviderRuntimePlugin({ provider: DEMO_PROVIDER_ID, config: firstConfig })).toBe(
       provider,
@@ -520,7 +520,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const secondConfig = {
       plugins: {
         entries: {
@@ -528,7 +528,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true, config: { qmd: { searchMode: "fast" } } },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveProviderRuntimePlugin({ provider: DEMO_PROVIDER_ID, config: firstConfig })).toBe(
       provider,
@@ -551,12 +551,12 @@ describe("provider-runtime", () => {
       label: "Demo two",
       auth: [],
     };
-    const config = {} as NexisClawConfig;
+    const config = {} as GreenchClawConfig;
     const originalHome = process.env.HOME;
-    const originalNexisClawHome = process.env.NEXISCLAW_HOME;
+    const originalGreenchClawHome = process.env.GREENCHCLAW_HOME;
     try {
       process.env.HOME = "/home/one";
-      delete process.env.NEXISCLAW_HOME;
+      delete process.env.GREENCHCLAW_HOME;
       resolvePluginProvidersMock.mockReturnValueOnce([firstProvider]);
       expect(resolveProviderRuntimePlugin({ provider: DEMO_PROVIDER_ID, config })).toBe(
         firstProvider,
@@ -573,10 +573,10 @@ describe("provider-runtime", () => {
       } else {
         process.env.HOME = originalHome;
       }
-      if (originalNexisClawHome === undefined) {
-        delete process.env.NEXISCLAW_HOME;
+      if (originalGreenchClawHome === undefined) {
+        delete process.env.GREENCHCLAW_HOME;
       } else {
-        process.env.NEXISCLAW_HOME = originalNexisClawHome;
+        process.env.GREENCHCLAW_HOME = originalGreenchClawHome;
       }
     }
 
@@ -724,15 +724,15 @@ describe("provider-runtime", () => {
           demo: { enabled: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const firstConfig = {
       ...baseConfig,
       agents: { defaults: { model: "openai/gpt-5.4" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const secondConfig = {
       ...baseConfig,
       agents: { defaults: { model: "anthropic/claude-sonnet-4-5" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(
       await augmentModelCatalogWithProviderPlugins({
@@ -769,7 +769,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const secondConfig = {
       plugins: {
         entries: {
@@ -777,7 +777,7 @@ describe("provider-runtime", () => {
           "active-memory": { enabled: true, config: { qmd: { searchMode: "fast" } } },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     for (const config of [firstConfig, secondConfig]) {
       expect(

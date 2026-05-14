@@ -2,8 +2,8 @@ export {
   buildPluginConfigSchema,
   definePluginEntry,
   type AnyAgentTool,
-  type NexisClawConfig,
-  type NexisClawPluginApi,
-  type NexisClawPluginConfigSchema,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+  type GreenchClawConfig,
+  type GreenchClawPluginApi,
+  type GreenchClawPluginConfigSchema,
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 export { z } from "zod";

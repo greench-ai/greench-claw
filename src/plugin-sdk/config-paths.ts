@@ -1,8 +1,8 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 /** Resolve the config path prefix for a channel account, falling back to the root channel section. */
 export function resolveChannelAccountConfigBasePath(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channelKey: string;
   accountId: string;
 }): string {

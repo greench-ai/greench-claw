@@ -1,22 +1,22 @@
 ---
-summary: "CLI reference for `NexisClaw sessions` (list stored sessions + usage)"
+summary: "CLI reference for `GreenchClaw sessions` (list stored sessions + usage)"
 read_when:
   - You want to list stored sessions and see recent activity
 title: "Sessions"
 ---
 
-# `NexisClaw sessions`
+# `GreenchClaw sessions`
 
 List stored conversation sessions.
 
 Session lists are not channel/provider liveness checks. They show persisted
 conversation rows from session stores. A quiet Discord, Slack, Telegram, or
 other channel can reconnect successfully without creating a new session row
-until a message is processed. Use `NexisClaw channels status --probe`,
-`NexisClaw status --deep`, or `NexisClaw health --verbose` when you need live
+until a message is processed. Use `GreenchClaw channels status --probe`,
+`GreenchClaw status --deep`, or `GreenchClaw health --verbose` when you need live
 channel connectivity.
 
-`NexisClaw sessions` and Gateway `sessions.list` responses are bounded by
+`GreenchClaw sessions` and Gateway `sessions.list` responses are bounded by
 default so large long-lived stores cannot monopolize the CLI process or Gateway
 event loop. The CLI returns the newest 100 sessions by default; pass
 `--limit <n>` for a smaller/larger window or `--limit all` when you intentionally
@@ -29,13 +29,13 @@ Control UI uses that mode by default so deleted or disk-only agent stores do
 not reappear in the Sessions view.
 
 ```bash
-NexisClaw sessions
-NexisClaw sessions --agent work
-NexisClaw sessions --all-agents
-NexisClaw sessions --active 120
-NexisClaw sessions --limit 25
-NexisClaw sessions --verbose
-NexisClaw sessions --json
+GreenchClaw sessions
+GreenchClaw sessions --agent work
+GreenchClaw sessions --all-agents
+GreenchClaw sessions --active 120
+GreenchClaw sessions --limit 25
+GreenchClaw sessions --verbose
+GreenchClaw sessions --json
 ```
 
 Scope selection:
@@ -50,15 +50,15 @@ Scope selection:
 Export a trajectory bundle for a stored session:
 
 ```bash
-NexisClaw sessions export-trajectory --session-key "agent:main:telegram:direct:123" --workspace .
-NexisClaw sessions export-trajectory --session-key "agent:main:telegram:direct:123" --output bug-123 --json
+GreenchClaw sessions export-trajectory --session-key "agent:main:telegram:direct:123" --workspace .
+GreenchClaw sessions export-trajectory --session-key "agent:main:telegram:direct:123" --output bug-123 --json
 ```
 
 This is the command path used by the `/export-trajectory` slash command after
 the owner approves the exec request. The output directory is always resolved
-inside `.NexisClaw/trajectory-exports/` under the selected workspace.
+inside `.GreenchClaw/trajectory-exports/` under the selected workspace.
 
-`NexisClaw sessions --all-agents` reads configured agent stores. Gateway and ACP
+`GreenchClaw sessions --all-agents` reads configured agent stores. Gateway and ACP
 session discovery are broader: they also include disk-only stores found under
 the default `agents/` root or a templated `session.store` root. Those
 discovered stores must resolve to regular `sessions.json` files inside the
@@ -66,14 +66,14 @@ agent root; symlinks and out-of-root paths are skipped.
 
 JSON examples:
 
-`NexisClaw sessions --all-agents --json`:
+`GreenchClaw sessions --all-agents --json`:
 
 ```json
 {
   "path": null,
   "stores": [
-    { "agentId": "main", "path": "/home/user/.NexisClaw/agents/main/sessions/sessions.json" },
-    { "agentId": "work", "path": "/home/user/.NexisClaw/agents/work/sessions/sessions.json" }
+    { "agentId": "main", "path": "/home/user/.GreenchClaw/agents/main/sessions/sessions.json" },
+    { "agentId": "work", "path": "/home/user/.GreenchClaw/agents/work/sessions/sessions.json" }
   ],
   "allAgents": true,
   "count": 2,
@@ -93,18 +93,18 @@ JSON examples:
 Run maintenance now (instead of waiting for the next write cycle):
 
 ```bash
-NexisClaw sessions cleanup --dry-run
-NexisClaw sessions cleanup --agent work --dry-run
-NexisClaw sessions cleanup --all-agents --dry-run
-NexisClaw sessions cleanup --enforce
-NexisClaw sessions cleanup --enforce --active-key "agent:main:telegram:direct:123"
-NexisClaw sessions cleanup --dry-run --fix-dm-scope
-NexisClaw sessions cleanup --json
+GreenchClaw sessions cleanup --dry-run
+GreenchClaw sessions cleanup --agent work --dry-run
+GreenchClaw sessions cleanup --all-agents --dry-run
+GreenchClaw sessions cleanup --enforce
+GreenchClaw sessions cleanup --enforce --active-key "agent:main:telegram:direct:123"
+GreenchClaw sessions cleanup --dry-run --fix-dm-scope
+GreenchClaw sessions cleanup --json
 ```
 
-`NexisClaw sessions cleanup` uses `session.maintenance` settings from config:
+`GreenchClaw sessions cleanup` uses `session.maintenance` settings from config:
 
-- Scope note: `NexisClaw sessions cleanup` maintains session stores, transcripts, and trajectory sidecars. It does not prune cron run logs (`cron/runs/<jobId>.jsonl`), which are managed by `cron.runLog.maxBytes` and `cron.runLog.keepLines` in [Cron configuration](/automation/cron-jobs#configuration) and explained in [Cron maintenance](/automation/cron-jobs#maintenance).
+- Scope note: `GreenchClaw sessions cleanup` maintains session stores, transcripts, and trajectory sidecars. It does not prune cron run logs (`cron/runs/<jobId>.jsonl`), which are managed by `cron.runLog.maxBytes` and `cron.runLog.keepLines` in [Cron configuration](/automation/cron-jobs#configuration) and explained in [Cron maintenance](/automation/cron-jobs#maintenance).
 - Cleanup also prunes unreferenced primary transcripts, compaction checkpoints, and trajectory sidecars older than `session.maintenance.pruneAfter`; files still referenced by `sessions.json` are preserved.
 
 - `--dry-run`: preview how many entries would be pruned/capped without writing.
@@ -122,7 +122,7 @@ When a Gateway is reachable, non-dry-run cleanup for configured agent stores is
 sent through the Gateway so it shares the same session-store writer as runtime
 traffic. Use `--store <path>` for explicit offline repair of a store file.
 
-`NexisClaw sessions cleanup --all-agents --dry-run --json`:
+`GreenchClaw sessions cleanup --all-agents --dry-run --json`:
 
 ```json
 {
@@ -132,7 +132,7 @@ traffic. Use `--store <path>` for explicit offline repair of a store file.
   "stores": [
     {
       "agentId": "main",
-      "storePath": "/home/user/.NexisClaw/agents/main/sessions/sessions.json",
+      "storePath": "/home/user/.GreenchClaw/agents/main/sessions/sessions.json",
       "beforeCount": 120,
       "afterCount": 80,
       "missing": 0,
@@ -142,7 +142,7 @@ traffic. Use `--store <path>` for explicit offline repair of a store file.
     },
     {
       "agentId": "work",
-      "storePath": "/home/user/.NexisClaw/agents/work/sessions/sessions.json",
+      "storePath": "/home/user/.GreenchClaw/agents/work/sessions/sessions.json",
       "beforeCount": 18,
       "afterCount": 18,
       "missing": 0,

@@ -1,5 +1,5 @@
 import type { AgentMessage } from "@earendil-works/pi-agent-core";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { createInternalHookEvent, triggerInternalHook } from "../../hooks/internal-hooks.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { getGlobalHookRunner } from "../../plugins/hook-runner-global.js";
@@ -9,7 +9,7 @@ import { resolveSessionAgentId } from "../agent-scope.js";
 import { resolveMemorySearchConfig } from "../memory-search.js";
 import { log } from "./logger.js";
 
-function resolvePostCompactionIndexSyncMode(config?: NexisClawConfig): "off" | "async" | "await" {
+function resolvePostCompactionIndexSyncMode(config?: GreenchClawConfig): "off" | "async" | "await" {
   const mode = config?.agents?.defaults?.compaction?.postIndexSync;
   if (mode === "off" || mode === "async" || mode === "await") {
     return mode;
@@ -18,7 +18,7 @@ function resolvePostCompactionIndexSyncMode(config?: NexisClawConfig): "off" | "
 }
 
 async function runPostCompactionSessionMemorySync(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sessionKey?: string;
   sessionFile: string;
 }): Promise<void> {
@@ -58,7 +58,7 @@ async function runPostCompactionSessionMemorySync(params: {
 }
 
 function syncPostCompactionSessionMemory(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sessionKey?: string;
   sessionFile: string;
   mode: "off" | "async" | "await";
@@ -80,7 +80,7 @@ function syncPostCompactionSessionMemory(params: {
 }
 
 export async function runPostCompactionSideEffects(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sessionKey?: string;
   sessionFile: string;
 }): Promise<void> {

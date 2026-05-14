@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { ChunkMode } from "NexisClaw/plugin-sdk/reply-runtime";
+import type { ChunkMode } from "GreenchClaw/plugin-sdk/reply-runtime";
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig, PluginRuntime } from "../../runtime-api.js";
+import type { GreenchClawConfig, PluginRuntime } from "../../runtime-api.js";
 import { deliverMattermostReplyPayload } from "./reply-delivery.js";
 
 type DeliverMattermostReplyPayloadParams = Parameters<typeof deliverMattermostReplyPayload>[0];
@@ -24,7 +24,7 @@ function createReplyDeliveryCore(): DeliverMattermostReplyPayloadParams["core"] 
         resolveChunkMode: vi.fn<() => ChunkMode>(() => "length"),
         resolveTextChunkLimit: vi.fn(
           (
-            _cfg?: NexisClawConfig,
+            _cfg?: GreenchClawConfig,
             _provider?: string,
             _accountId?: string | null,
             opts?: { fallbackLimit?: number },
@@ -40,7 +40,7 @@ function createReplyDeliveryCore(): DeliverMattermostReplyPayloadParams["core"] 
 describe("deliverMattermostReplyPayload", () => {
   it("suppresses payloads flagged as reasoning", async () => {
     const sendMessage = vi.fn(async () => undefined);
-    const cfg = {} satisfies NexisClawConfig;
+    const cfg = {} satisfies GreenchClawConfig;
     const core = createReplyDeliveryCore();
 
     await deliverMattermostReplyPayload({
@@ -61,7 +61,7 @@ describe("deliverMattermostReplyPayload", () => {
 
   it("suppresses reasoning-prefixed payloads even without an explicit flag", async () => {
     const sendMessage = vi.fn(async () => undefined);
-    const cfg = {} satisfies NexisClawConfig;
+    const cfg = {} satisfies GreenchClawConfig;
     const core = createReplyDeliveryCore();
 
     await deliverMattermostReplyPayload({
@@ -82,7 +82,7 @@ describe("deliverMattermostReplyPayload", () => {
 
   it("suppresses reasoning payloads formatted as a Mattermost blockquote", async () => {
     const sendMessage = vi.fn(async () => undefined);
-    const cfg = {} satisfies NexisClawConfig;
+    const cfg = {} satisfies GreenchClawConfig;
     const core = createReplyDeliveryCore();
 
     await deliverMattermostReplyPayload({
@@ -103,7 +103,7 @@ describe("deliverMattermostReplyPayload", () => {
 
   it("does not suppress messages that mention Reasoning: mid-text", async () => {
     const sendMessage = vi.fn(async () => undefined);
-    const cfg = {} satisfies NexisClawConfig;
+    const cfg = {} satisfies GreenchClawConfig;
     const core = createReplyDeliveryCore();
 
     await deliverMattermostReplyPayload({
@@ -132,9 +132,9 @@ describe("deliverMattermostReplyPayload", () => {
   });
 
   it("passes agent-scoped mediaLocalRoots when sending media paths", async () => {
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-mm-state-"));
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-mm-state-"));
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
 
     try {
       const sendMessage = vi.fn(async () => undefined);
@@ -142,7 +142,7 @@ describe("deliverMattermostReplyPayload", () => {
 
       const agentId = "agent-1";
       const mediaUrl = `file://${path.join(stateDir, `workspace-${agentId}`, "photo.png")}`;
-      const cfg = {} satisfies NexisClawConfig;
+      const cfg = {} satisfies GreenchClawConfig;
 
       await deliverMattermostReplyPayload({
         core,
@@ -164,7 +164,7 @@ describe("deliverMattermostReplyPayload", () => {
         mediaUrl,
         replyToId: "root-post",
         mediaLocalRoots: [
-          path.join(os.tmpdir(), "NexisClaw"),
+          path.join(os.tmpdir(), "GreenchClaw"),
           path.join(stateDir, "media"),
           path.join(stateDir, "canvas"),
           path.join(stateDir, "workspace"),
@@ -174,9 +174,9 @@ describe("deliverMattermostReplyPayload", () => {
       });
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       await fs.rm(stateDir, { recursive: true, force: true });
     }
@@ -184,7 +184,7 @@ describe("deliverMattermostReplyPayload", () => {
 
   it("forwards replyToId for text-only chunked replies", async () => {
     const sendMessage = vi.fn(async () => undefined);
-    const cfg = {} satisfies NexisClawConfig;
+    const cfg = {} satisfies GreenchClawConfig;
     const core = createReplyDeliveryCore();
     core.channel.text.chunkMarkdownTextWithMode = vi.fn(() => ["hello"]);
 

@@ -15,20 +15,22 @@ describe("package Telegram live Docker E2E", () => {
   it("supports npm-specific Convex credential aliases", () => {
     const script = readFileSync(DOCKER_SCRIPT_PATH, "utf8");
 
-    expect(script).toContain("NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE");
-    expect(script).toContain("NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE");
-    expect(script).toContain('docker_env+=(-e NEXISCLAW_QA_CREDENTIAL_SOURCE="$credential_source")');
-    expect(script).toContain('docker_env+=(-e NEXISCLAW_QA_CREDENTIAL_ROLE="$credential_role")');
+    expect(script).toContain("GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE");
+    expect(script).toContain("GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE");
+    expect(script).toContain(
+      'docker_env+=(-e GREENCHCLAW_QA_CREDENTIAL_SOURCE="$credential_source")',
+    );
+    expect(script).toContain('docker_env+=(-e GREENCHCLAW_QA_CREDENTIAL_ROLE="$credential_role")');
   });
 
   it("defaults CI runs to Convex when broker credentials are present", () => {
     const script = readFileSync(DOCKER_SCRIPT_PATH, "utf8");
 
     expect(script).toContain(
-      'if [ -n "${CI:-}" ] && [ -n "${NEXISCLAW_QA_CONVEX_SITE_URL:-}" ]; then',
+      'if [ -n "${CI:-}" ] && [ -n "${GREENCHCLAW_QA_CONVEX_SITE_URL:-}" ]; then',
     );
-    expect(script).toContain("NEXISCLAW_QA_CONVEX_SECRET_CI");
-    expect(script).toContain("NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER");
+    expect(script).toContain("GREENCHCLAW_QA_CONVEX_SECRET_CI");
+    expect(script).toContain("GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER");
     expect(script).toContain('printf "convex"');
   });
 
@@ -52,14 +54,14 @@ describe("package Telegram live Docker E2E", () => {
   it("can install a resolved package tarball instead of a registry spec", () => {
     const script = readFileSync(DOCKER_SCRIPT_PATH, "utf8");
 
-    expect(script).toContain("NEXISCLAW_NPM_TELEGRAM_PACKAGE_TGZ");
-    expect(script).toContain("NEXISCLAW_CURRENT_PACKAGE_TGZ");
+    expect(script).toContain("GREENCHCLAW_NPM_TELEGRAM_PACKAGE_TGZ");
+    expect(script).toContain("GREENCHCLAW_CURRENT_PACKAGE_TGZ");
     expect(script).toContain(
       'package_mount_args=(-v "$resolved_package_tgz:$package_install_source:ro")',
     );
-    expect(script).toContain('validate_NexisClaw_package_spec "$PACKAGE_SPEC"');
+    expect(script).toContain('validate_GreenchClaw_package_spec "$PACKAGE_SPEC"');
     expect(script.indexOf('if [ -n "$resolved_package_tgz" ]; then')).toBeLessThan(
-      script.indexOf('validate_NexisClaw_package_spec "$PACKAGE_SPEC"'),
+      script.indexOf('validate_GreenchClaw_package_spec "$PACKAGE_SPEC"'),
     );
   });
 
@@ -75,16 +77,16 @@ describe("package Telegram live Docker E2E", () => {
       "utf8",
     );
 
-    expect(script).toContain('ln -sfnT "$NexisClaw_package_dir/dist" /app/dist');
-    expect(script).toContain('cp "$NexisClaw_package_dir/package.json" /app/package.json');
+    expect(script).toContain('ln -sfnT "$GreenchClaw_package_dir/dist" /app/dist');
+    expect(script).toContain('cp "$GreenchClaw_package_dir/package.json" /app/package.json');
     expect(script).toContain('-v "$ROOT_DIR/extensions/qa-lab:/app/extensions/qa-lab:ro"');
-    expect(script).not.toContain('ln -sfnT /app/extensions "$NexisClaw_package_dir/extensions"');
+    expect(script).not.toContain('ln -sfnT /app/extensions "$GreenchClaw_package_dir/extensions"');
     expect(script).toContain("node scripts/e2e/lib/npm-telegram-live/prepare-package.mjs");
-    expect(script).toContain("/app/node_modules/NexisClaw/package.json");
+    expect(script).toContain("/app/node_modules/GreenchClaw/package.json");
     expect(preparePackage).toContain('pkg.exports["./plugin-sdk/gateway-runtime"]');
     expect(preparePackage).toContain('"./dist/plugin-sdk/gateway-runtime.js"');
-    expect(gatewayRpcClient).toContain('from "NexisClaw/plugin-sdk/gateway-runtime"');
-    expect(qaRuntimeApi).toContain('from "NexisClaw/plugin-sdk/gateway-runtime"');
+    expect(gatewayRpcClient).toContain('from "GreenchClaw/plugin-sdk/gateway-runtime"');
+    expect(qaRuntimeApi).toContain('from "GreenchClaw/plugin-sdk/gateway-runtime"');
   });
 
   it("exposes installed package dependencies to the mounted QA harness", () => {
@@ -92,7 +94,7 @@ describe("package Telegram live Docker E2E", () => {
 
     expect(script).toContain("link_installed_package_dependency()");
     expect(script).toContain(
-      'local source="/npm-global/lib/node_modules/NexisClaw/node_modules/$name"',
+      'local source="/npm-global/lib/node_modules/GreenchClaw/node_modules/$name"',
     );
     expect(script).toContain('ln -sfn "$source" "$target"');
     expect(script).toContain('link_installed_package_dependency "$dependency"');
@@ -104,14 +106,14 @@ describe("package Telegram live Docker E2E", () => {
   it("lets npm-specific credential aliases override shared QA env", () => {
     expect(
       __testing.resolveCredentialSource({
-        NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE: "convex",
-        NEXISCLAW_QA_CREDENTIAL_SOURCE: "env",
+        GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE: "convex",
+        GREENCHCLAW_QA_CREDENTIAL_SOURCE: "env",
       }),
     ).toBe("convex");
     expect(
       __testing.resolveCredentialRole({
-        NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE: "ci",
-        NEXISCLAW_QA_CREDENTIAL_ROLE: "maintainer",
+        GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE: "ci",
+        GREENCHCLAW_QA_CREDENTIAL_ROLE: "maintainer",
       }),
     ).toBe("ci");
   });

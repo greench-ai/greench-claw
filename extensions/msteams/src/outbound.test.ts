@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 
 const mocks = vi.hoisted(() => ({
   sendMessageMSTeams: vi.fn(),
@@ -89,7 +89,7 @@ describe("msteamsOutbound cfg threading", () => {
           appId: "resolved-app-id",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await requireSendText()({
       cfg,
@@ -111,7 +111,7 @@ describe("msteamsOutbound cfg threading", () => {
           appId: "resolved-app-id",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await requireSendMedia()({
       cfg,
@@ -137,7 +137,7 @@ describe("msteamsOutbound cfg threading", () => {
           appId: "resolved-app-id",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await requireSendPoll()({
       cfg,

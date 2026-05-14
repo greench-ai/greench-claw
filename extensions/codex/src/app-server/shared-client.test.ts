@@ -13,7 +13,7 @@ const mocks = vi.hoisted(() => ({
   ),
   resolveManagedCodexAppServerStartOptions: vi.fn(async (startOptions) => startOptions),
   embeddedAgentLog: { debug: vi.fn(), warn: vi.fn() },
-  resolveDefaultAgentDir: vi.fn(() => "/tmp/NexisClaw-agent"),
+  resolveDefaultAgentDir: vi.fn(() => "/tmp/GreenchClaw-agent"),
 }));
 
 vi.mock("./auth-bridge.js", () => ({
@@ -26,12 +26,12 @@ vi.mock("./managed-binary.js", () => ({
   resolveManagedCodexAppServerStartOptions: mocks.resolveManagedCodexAppServerStartOptions,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/agent-harness-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/agent-harness-runtime", () => ({
   embeddedAgentLog: mocks.embeddedAgentLog,
-  NEXISCLAW_VERSION: "test",
+  GREENCHCLAW_VERSION: "test",
 }));
 
-vi.mock("NexisClaw/plugin-sdk/agent-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/agent-runtime", () => ({
   resolveDefaultAgentDir: mocks.resolveDefaultAgentDir,
 }));
 
@@ -140,7 +140,7 @@ describe("shared Codex app-server client", () => {
     // Model discovery uses the shared-client path, which owns child teardown
     // when initialize discovers an unsupported app-server.
     const listPromise = listCodexAppServerModels({ timeoutMs: 1000 });
-    await sendInitializeResult(harness, "NexisClaw/0.117.9 (macOS; test)");
+    await sendInitializeResult(harness, "GreenchClaw/0.117.9 (macOS; test)");
 
     await expect(listPromise).rejects.toThrow(
       `Codex app-server ${MIN_CODEX_APP_SERVER_VERSION} or newer is required`,
@@ -163,7 +163,7 @@ describe("shared Codex app-server client", () => {
     expect(first.process.stdin.destroyed).toBe(true);
 
     const secondList = listCodexAppServerModels({ timeoutMs: 1000 });
-    await sendInitializeResult(second, "NexisClaw/0.125.0 (macOS; test)");
+    await sendInitializeResult(second, "GreenchClaw/0.125.0 (macOS; test)");
     await sendEmptyModelList(second);
 
     await expect(secondList).resolves.toEqual({ models: [] });
@@ -188,7 +188,7 @@ describe("shared Codex app-server client", () => {
       timeoutMs: 1000,
       authProfileId: "openai-codex:work",
     });
-    await sendInitializeResult(harness, "NexisClaw/0.125.0 (macOS; test)");
+    await sendInitializeResult(harness, "GreenchClaw/0.125.0 (macOS; test)");
     await sendEmptyModelList(harness);
 
     await expect(listPromise).resolves.toEqual({ models: [] });
@@ -208,14 +208,14 @@ describe("shared Codex app-server client", () => {
       timeoutMs: 1000,
       config,
     });
-    await sendInitializeResult(harness, "NexisClaw/0.125.0 (macOS; test)");
+    await sendInitializeResult(harness, "GreenchClaw/0.125.0 (macOS; test)");
     await sendEmptyModelList(harness);
 
     await expect(listPromise).resolves.toEqual({ models: [] });
     const resolveCall = resolveAuthProfileCall();
     expect(resolveCall).toStrictEqual({
       authProfileId: undefined,
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
       config,
     });
     const bridgeCall = bridgeStartOptionsCall();
@@ -233,17 +233,17 @@ describe("shared Codex app-server client", () => {
     const listPromise = listCodexAppServerModels({
       timeoutMs: 1000,
       authProfileId: "openai-codex:work",
-      agentDir: "/tmp/NexisClaw-agent-nova",
+      agentDir: "/tmp/GreenchClaw-agent-nova",
     });
-    await sendInitializeResult(harness, "NexisClaw/0.125.0 (macOS; test)");
+    await sendInitializeResult(harness, "GreenchClaw/0.125.0 (macOS; test)");
     await sendEmptyModelList(harness);
 
     await expect(listPromise).resolves.toEqual({ models: [] });
     const bridgeCall = bridgeStartOptionsCall();
-    expect(bridgeCall?.agentDir).toBe("/tmp/NexisClaw-agent-nova");
+    expect(bridgeCall?.agentDir).toBe("/tmp/GreenchClaw-agent-nova");
     expect(bridgeCall?.authProfileId).toBe("openai-codex:work");
     const applyCall = applyAuthProfileCall();
-    expect(applyCall?.agentDir).toBe("/tmp/NexisClaw-agent-nova");
+    expect(applyCall?.agentDir).toBe("/tmp/GreenchClaw-agent-nova");
     expect(applyCall?.authProfileId).toBe("openai-codex:work");
   });
 
@@ -252,12 +252,12 @@ describe("shared Codex app-server client", () => {
     const startSpy = vi.spyOn(CodexAppServerClient, "start").mockReturnValue(harness.client);
     mocks.resolveManagedCodexAppServerStartOptions.mockImplementationOnce(async (startOptions) => ({
       ...startOptions,
-      command: "/cache/NexisClaw/codex",
+      command: "/cache/GreenchClaw/codex",
       commandSource: "resolved-managed",
     }));
 
     const listPromise = listCodexAppServerModels({ timeoutMs: 1000 });
-    await sendInitializeResult(harness, "NexisClaw/0.125.0 (macOS; test)");
+    await sendInitializeResult(harness, "GreenchClaw/0.125.0 (macOS; test)");
     await sendEmptyModelList(harness);
 
     await expect(listPromise).resolves.toEqual({ models: [] });
@@ -265,10 +265,10 @@ describe("shared Codex app-server client", () => {
     expect(managedCall?.command).toBe("codex");
     expect(managedCall?.commandSource).toBe("managed");
     const bridgeCall = bridgeStartOptionsCall();
-    expect(bridgeCall?.startOptions.command).toBe("/cache/NexisClaw/codex");
+    expect(bridgeCall?.startOptions.command).toBe("/cache/GreenchClaw/codex");
     expect(bridgeCall?.startOptions.commandSource).toBe("resolved-managed");
     const startCall = clientStartCall(startSpy);
-    expect(startCall?.command).toBe("/cache/NexisClaw/codex");
+    expect(startCall?.command).toBe("/cache/GreenchClaw/codex");
     expect(startCall?.commandSource).toBe("resolved-managed");
   });
 
@@ -291,7 +291,7 @@ describe("shared Codex app-server client", () => {
         headers: {},
       },
     });
-    await sendInitializeResult(first, "NexisClaw/0.125.0 (macOS; test)");
+    await sendInitializeResult(first, "GreenchClaw/0.125.0 (macOS; test)");
     await sendEmptyModelList(first);
     await expect(firstList).resolves.toEqual({ models: [] });
 
@@ -306,7 +306,7 @@ describe("shared Codex app-server client", () => {
         headers: {},
       },
     });
-    await sendInitializeResult(second, "NexisClaw/0.125.0 (macOS; test)");
+    await sendInitializeResult(second, "GreenchClaw/0.125.0 (macOS; test)");
     await sendEmptyModelList(second);
     await expect(secondList).resolves.toEqual({ models: [] });
 
@@ -350,7 +350,7 @@ describe("shared Codex app-server client", () => {
 
     await expect(firstFailure).resolves.toBeInstanceOf(Error);
 
-    await sendInitializeResult(second, "NexisClaw/0.125.0 (macOS; test)");
+    await sendInitializeResult(second, "GreenchClaw/0.125.0 (macOS; test)");
     await sendEmptyModelList(second);
     await expect(secondList).resolves.toEqual({ models: [] });
 
@@ -365,7 +365,7 @@ describe("shared Codex app-server client", () => {
       .mockReturnValueOnce(second.client);
 
     const firstList = listCodexAppServerModels({ timeoutMs: 1000 });
-    await sendInitializeResult(first, "NexisClaw/0.125.0 (macOS; test)");
+    await sendInitializeResult(first, "GreenchClaw/0.125.0 (macOS; test)");
     await sendEmptyModelList(first);
     await expect(firstList).resolves.toEqual({ models: [] });
 
@@ -373,7 +373,7 @@ describe("shared Codex app-server client", () => {
     expect(first.process.stdin.destroyed).toBe(true);
 
     const secondList = listCodexAppServerModels({ timeoutMs: 1000 });
-    await sendInitializeResult(second, "NexisClaw/0.125.0 (macOS; test)");
+    await sendInitializeResult(second, "GreenchClaw/0.125.0 (macOS; test)");
     await sendEmptyModelList(second);
     await expect(secondList).resolves.toEqual({ models: [] });
 
@@ -392,7 +392,7 @@ describe("shared Codex app-server client", () => {
         const message = JSON.parse(rawDataToText(data)) as { id?: number; method?: string };
         if (message.method === "initialize") {
           socket.send(
-            JSON.stringify({ id: message.id, result: { userAgent: "NexisClaw/0.125.0" } }),
+            JSON.stringify({ id: message.id, result: { userAgent: "GreenchClaw/0.125.0" } }),
           );
           return;
         }

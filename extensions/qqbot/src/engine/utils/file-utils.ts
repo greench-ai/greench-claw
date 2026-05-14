@@ -1,12 +1,12 @@
 import crypto from "node:crypto";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { mimeTypeFromFilePath } from "NexisClaw/plugin-sdk/media-mime";
+import { mimeTypeFromFilePath } from "GreenchClaw/plugin-sdk/media-mime";
 import {
   openLocalFileSafely,
   readRegularFile,
   statRegularFileSync,
-} from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/security-runtime";
 import { getPlatformAdapter } from "../adapter/index.js";
 import type { SsrfPolicyConfig } from "../adapter/types.js";
 import { MediaFileType } from "../types.js";

@@ -6,26 +6,26 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$ROOT_DIR/scripts/lib/docker-e2e-image.sh"
 
-IMAGE_NAME="$(docker_e2e_resolve_image "NexisClaw-openai-image-auth-e2e" NEXISCLAW_OPENAI_IMAGE_AUTH_E2E_IMAGE)"
-SKIP_BUILD="${NEXISCLAW_OPENAI_IMAGE_AUTH_E2E_SKIP_BUILD:-0}"
+IMAGE_NAME="$(docker_e2e_resolve_image "GreenchClaw-openai-image-auth-e2e" GREENCHCLAW_OPENAI_IMAGE_AUTH_E2E_IMAGE)"
+SKIP_BUILD="${GREENCHCLAW_OPENAI_IMAGE_AUTH_E2E_SKIP_BUILD:-0}"
 
 docker_e2e_build_or_reuse "$IMAGE_NAME" openai-image-auth "$ROOT_DIR/scripts/e2e/Dockerfile" "$ROOT_DIR" "" "$SKIP_BUILD"
-NEXISCLAW_TEST_STATE_SCRIPT_B64="$(docker_e2e_test_state_shell_b64 openai-image-auth empty)"
+GREENCHCLAW_TEST_STATE_SCRIPT_B64="$(docker_e2e_test_state_shell_b64 openai-image-auth empty)"
 
 echo "Running OpenAI image auth Docker E2E..."
 # Harness files are mounted read-only; the app under test comes from /app/dist.
 docker_e2e_run_logged_with_harness openai-image-auth \
-  -e "OPENAI_API_KEY=sk-NexisClaw-image-auth-e2e" \
-  -e "NEXISCLAW_QA_ALLOW_LOCAL_IMAGE_PROVIDER=1" \
-  -e "NEXISCLAW_TEST_STATE_SCRIPT_B64=$NEXISCLAW_TEST_STATE_SCRIPT_B64" \
+  -e "OPENAI_API_KEY=sk-GreenchClaw-image-auth-e2e" \
+  -e "GREENCHCLAW_QA_ALLOW_LOCAL_IMAGE_PROVIDER=1" \
+  -e "GREENCHCLAW_TEST_STATE_SCRIPT_B64=$GREENCHCLAW_TEST_STATE_SCRIPT_B64" \
   -i "$IMAGE_NAME" bash -lc '
 set -euo pipefail
-source scripts/lib/NexisClaw-e2e-instance.sh
-NexisClaw_e2e_eval_test_state_from_b64 "${NEXISCLAW_TEST_STATE_SCRIPT_B64:?missing NEXISCLAW_TEST_STATE_SCRIPT_B64}"
-export NEXISCLAW_SKIP_CHANNELS=1
-export NEXISCLAW_SKIP_GMAIL_WATCHER=1
-export NEXISCLAW_SKIP_CRON=1
-export NEXISCLAW_SKIP_CANVAS_HOST=1
+source scripts/lib/GreenchClaw-e2e-instance.sh
+GreenchClaw_e2e_eval_test_state_from_b64 "${GREENCHCLAW_TEST_STATE_SCRIPT_B64:?missing GREENCHCLAW_TEST_STATE_SCRIPT_B64}"
+export GREENCHCLAW_SKIP_CHANNELS=1
+export GREENCHCLAW_SKIP_GMAIL_WATCHER=1
+export GREENCHCLAW_SKIP_CRON=1
+export GREENCHCLAW_SKIP_CANVAS_HOST=1
 
 tsx scripts/e2e/openai-image-auth-docker-client.ts
 '

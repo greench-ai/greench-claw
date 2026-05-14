@@ -11,4 +11,4 @@ export {
   stripInvalidGoogleThinkingBudget,
   type GoogleThinkingInputLevel,
   type GoogleThinkingLevel,
-} from "NexisClaw/plugin-sdk/provider-stream-shared";
+} from "GreenchClaw/plugin-sdk/provider-stream-shared";

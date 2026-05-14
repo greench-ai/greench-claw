@@ -1,7 +1,7 @@
 import {
   expectProviderOnboardMergedLegacyConfig,
   expectProviderOnboardPrimaryAndFallbacks,
-} from "NexisClaw/plugin-sdk/provider-test-contracts";
+} from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { describe, expect, it } from "vitest";
 import { buildMistralModelDefinition as buildBundledMistralModelDefinition } from "./model-definitions.js";
 import {

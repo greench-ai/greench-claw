@@ -1,5 +1,5 @@
 ---
-summary: "Adds the Tlon channel surface for sending and receiving NexisClaw messages."
+summary: "Adds the Tlon channel surface for sending and receiving GreenchClaw messages."
 read_when:
   - You are installing, configuring, or auditing the tlon plugin
 title: "Tlon plugin"
@@ -7,11 +7,11 @@ title: "Tlon plugin"
 
 # Tlon plugin
 
-Adds the Tlon channel surface for sending and receiving NexisClaw messages.
+Adds the Tlon channel surface for sending and receiving GreenchClaw messages.
 
 ## Distribution
 
-- Package: `@NexisClaw/tlon`
+- Package: `@GreenchClaw/tlon`
 - Install route: npm; ClawHub
 
 ## Surface

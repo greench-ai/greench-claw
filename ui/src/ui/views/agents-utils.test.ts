@@ -108,7 +108,7 @@ describe("sortLocaleStrings", () => {
 describe("agentLogoUrl", () => {
   it("keeps base-mounted control UI logo paths absolute to the mount", () => {
     expect(agentLogoUrl("/ui")).toBe("/ui/favicon.svg");
-    expect(agentLogoUrl("/apps/NexisClaw/")).toBe("/apps/NexisClaw/favicon.svg");
+    expect(agentLogoUrl("/apps/GreenchClaw/")).toBe("/apps/GreenchClaw/favicon.svg");
   });
 
   it("uses a route-relative fallback before basePath bootstrap finishes", () => {

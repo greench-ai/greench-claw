@@ -1,5 +1,5 @@
 import type { EffectiveToolInventoryResult } from "../../agents/tools-effective-inventory.types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { logDebug, logWarn } from "../../logger.js";
 import { stringifyRouteThreadId } from "../../plugin-sdk/channel-route.js";
 import { normalizeOptionalString } from "../../shared/string-coerce.js";
@@ -32,7 +32,7 @@ const TOOLS_EFFECTIVE_CACHE_LIMIT = 128;
 let nowForToolsEffectiveCache = () => Date.now();
 
 type TrustedToolsEffectiveContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   sessionKey: string;
   senderIsOwner: boolean;
@@ -58,7 +58,7 @@ const toolsEffectiveInflight = new Map<string, Promise<EffectiveToolInventoryRes
 
 function resolveRequestedAgentIdOrRespondError(params: {
   rawAgentId: unknown;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   respond: RespondFn;
 }) {
   const knownAgents = listAgentIds(params.cfg);

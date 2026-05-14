@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const hoisted = vi.hoisted(() => ({
@@ -6,9 +6,9 @@ const hoisted = vi.hoisted(() => ({
   sendReactionWhatsApp: vi.fn(async () => undefined),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/runtime-env")>(
-    "NexisClaw/plugin-sdk/runtime-env",
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/runtime-env")>(
+    "GreenchClaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -34,7 +34,7 @@ describe("whatsappOutbound sendPoll", () => {
   });
 
   it("threads cfg through poll send options", async () => {
-    const cfg = { marker: "resolved-cfg" } as NexisClawConfig;
+    const cfg = { marker: "resolved-cfg" } as GreenchClawConfig;
     const poll = {
       question: "Lunch?",
       options: ["Pizza", "Sushi"],

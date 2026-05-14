@@ -1,4 +1,4 @@
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import type { ClawdbotConfig } from "../runtime-api.js";
 import { raceWithTimeoutAndAbort } from "./async.js";
 import { createFeishuClient } from "./client.js";

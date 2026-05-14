@@ -1,6 +1,6 @@
 export {
   getPluginRuntimeGatewayRequestScope,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   type PluginRuntime,
 } from "./runtime-api.js";
 export { nostrPlugin } from "./src/channel.js";

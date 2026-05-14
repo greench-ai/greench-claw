@@ -49,10 +49,10 @@ describe("tryRouteCli", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    originalDisableRouteFirst = process.env.NEXISCLAW_DISABLE_ROUTE_FIRST;
-    originalHideBanner = process.env.NEXISCLAW_HIDE_BANNER;
-    delete process.env.NEXISCLAW_DISABLE_ROUTE_FIRST;
-    delete process.env.NEXISCLAW_HIDE_BANNER;
+    originalDisableRouteFirst = process.env.GREENCHCLAW_DISABLE_ROUTE_FIRST;
+    originalHideBanner = process.env.GREENCHCLAW_HIDE_BANNER;
+    delete process.env.GREENCHCLAW_DISABLE_ROUTE_FIRST;
+    delete process.env.GREENCHCLAW_HIDE_BANNER;
     originalForceStderr = loggingState.forceConsoleToStderr;
     loggingState.forceConsoleToStderr = false;
     findRoutedCommandMock.mockReturnValue({
@@ -66,26 +66,26 @@ describe("tryRouteCli", () => {
       loggingState.forceConsoleToStderr = originalForceStderr;
     }
     if (originalDisableRouteFirst === undefined) {
-      delete process.env.NEXISCLAW_DISABLE_ROUTE_FIRST;
+      delete process.env.GREENCHCLAW_DISABLE_ROUTE_FIRST;
     } else {
-      process.env.NEXISCLAW_DISABLE_ROUTE_FIRST = originalDisableRouteFirst;
+      process.env.GREENCHCLAW_DISABLE_ROUTE_FIRST = originalDisableRouteFirst;
     }
     if (originalHideBanner === undefined) {
-      delete process.env.NEXISCLAW_HIDE_BANNER;
+      delete process.env.GREENCHCLAW_HIDE_BANNER;
     } else {
-      process.env.NEXISCLAW_HIDE_BANNER = originalHideBanner;
+      process.env.GREENCHCLAW_HIDE_BANNER = originalHideBanner;
     }
   });
 
   it("skips config guard for routed status --json commands", async () => {
-    await expect(tryRouteCli(["node", "NexisClaw", "status", "--json"])).resolves.toBe(true);
+    await expect(tryRouteCli(["node", "GreenchClaw", "status", "--json"])).resolves.toBe(true);
 
     expect(ensureConfigReadyMock).not.toHaveBeenCalled();
     expect(ensurePluginRegistryLoadedMock).not.toHaveBeenCalled();
   });
 
   it("does not pass suppressDoctorStdout for routed non-json commands", async () => {
-    await expect(tryRouteCli(["node", "NexisClaw", "status"])).resolves.toBe(true);
+    await expect(tryRouteCli(["node", "GreenchClaw", "status"])).resolves.toBe(true);
 
     expect(ensureConfigReadyMock).toHaveBeenCalledTimes(1);
     const configReadyCall = ensureConfigReadyMock.mock.calls.at(0)?.[0] as
@@ -111,7 +111,7 @@ describe("tryRouteCli", () => {
       captured.push(loggingState.forceConsoleToStderr);
     });
 
-    await tryRouteCli(["node", "NexisClaw", "agents", "--json"]);
+    await tryRouteCli(["node", "GreenchClaw", "agents", "--json"]);
 
     expect(ensurePluginRegistryLoadedMock).toHaveBeenCalledTimes(1);
     expect(captured[0]).toBe(true);
@@ -125,7 +125,7 @@ describe("tryRouteCli", () => {
       return true;
     });
 
-    await expect(tryRouteCli(["node", "NexisClaw", "models", "status", "--json"])).resolves.toBe(
+    await expect(tryRouteCli(["node", "GreenchClaw", "models", "status", "--json"])).resolves.toBe(
       true,
     );
 
@@ -144,7 +144,7 @@ describe("tryRouteCli", () => {
       captured.push(loggingState.forceConsoleToStderr);
     });
 
-    await tryRouteCli(["node", "NexisClaw", "agents"]);
+    await tryRouteCli(["node", "GreenchClaw", "agents"]);
 
     expect(ensurePluginRegistryLoadedMock).toHaveBeenCalledTimes(1);
     expect(captured[0]).toBe(false);
@@ -152,13 +152,13 @@ describe("tryRouteCli", () => {
   });
 
   it("routes status when root options precede the command", async () => {
-    await expect(tryRouteCli(["node", "NexisClaw", "--log-level", "debug", "status"])).resolves.toBe(
-      true,
-    );
+    await expect(
+      tryRouteCli(["node", "GreenchClaw", "--log-level", "debug", "status"]),
+    ).resolves.toBe(true);
 
     expect(findRoutedCommandMock).toHaveBeenCalledWith(
       ["status"],
-      ["node", "NexisClaw", "--log-level", "debug", "status"],
+      ["node", "GreenchClaw", "--log-level", "debug", "status"],
     );
     expect(ensureConfigReadyMock).toHaveBeenCalledTimes(1);
     const configReadyCall = ensureConfigReadyMock.mock.calls.at(0)?.[0] as
@@ -171,10 +171,10 @@ describe("tryRouteCli", () => {
     });
   });
 
-  it("respects NEXISCLAW_HIDE_BANNER for routed commands", async () => {
-    process.env.NEXISCLAW_HIDE_BANNER = "1";
+  it("respects GREENCHCLAW_HIDE_BANNER for routed commands", async () => {
+    process.env.GREENCHCLAW_HIDE_BANNER = "1";
 
-    await expect(tryRouteCli(["node", "NexisClaw", "status"])).resolves.toBe(true);
+    await expect(tryRouteCli(["node", "GreenchClaw", "status"])).resolves.toBe(true);
 
     expect(emitCliBannerMock).not.toHaveBeenCalled();
   });
@@ -186,7 +186,7 @@ describe("tryRouteCli", () => {
       run: runRouteMock,
     });
 
-    await expect(tryRouteCli(["node", "NexisClaw", "tasks", "list"])).resolves.toBe(false);
+    await expect(tryRouteCli(["node", "GreenchClaw", "tasks", "list"])).resolves.toBe(false);
 
     expect(ensureConfigReadyMock).not.toHaveBeenCalled();
     expect(ensurePluginRegistryLoadedMock).not.toHaveBeenCalled();

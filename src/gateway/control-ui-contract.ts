@@ -1,4 +1,4 @@
-export const CONTROL_UI_BOOTSTRAP_CONFIG_PATH = "/__NexisClaw/control-ui-config.json";
+export const CONTROL_UI_BOOTSTRAP_CONFIG_PATH = "/__GreenchClaw/control-ui-config.json";
 
 export type ControlUiEmbedSandboxMode = "strict" | "scripts" | "trusted";
 

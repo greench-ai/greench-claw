@@ -14,7 +14,7 @@ describe("loadVitestExperimentalConfig", () => {
     expect(
       loadVitestExperimentalConfig(
         {
-          NEXISCLAW_VITEST_FS_MODULE_CACHE: "1",
+          GREENCHCLAW_VITEST_FS_MODULE_CACHE: "1",
         },
         "linux",
       ),
@@ -29,14 +29,14 @@ describe("loadVitestExperimentalConfig", () => {
     expect(
       loadVitestExperimentalConfig(
         {
-          NEXISCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/NexisClaw-vitest-cache",
+          GREENCHCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/GreenchClaw-vitest-cache",
         },
         "linux",
       ),
     ).toEqual({
       experimental: {
         fsModuleCache: true,
-        fsModuleCachePath: "/tmp/NexisClaw-vitest-cache",
+        fsModuleCachePath: "/tmp/GreenchClaw-vitest-cache",
       },
     });
   });
@@ -49,7 +49,7 @@ describe("loadVitestExperimentalConfig", () => {
     expect(
       loadVitestExperimentalConfig(
         {
-          NEXISCLAW_VITEST_FS_MODULE_CACHE: "1",
+          GREENCHCLAW_VITEST_FS_MODULE_CACHE: "1",
         },
         "win32",
       ),
@@ -64,7 +64,7 @@ describe("loadVitestExperimentalConfig", () => {
     expect(
       loadVitestExperimentalConfig(
         {
-          NEXISCLAW_VITEST_FS_MODULE_CACHE: "0",
+          GREENCHCLAW_VITEST_FS_MODULE_CACHE: "0",
         },
         "linux",
       ),
@@ -75,8 +75,8 @@ describe("loadVitestExperimentalConfig", () => {
     expect(
       loadVitestExperimentalConfig(
         {
-          NEXISCLAW_VITEST_IMPORT_DURATIONS: "true",
-          NEXISCLAW_VITEST_PRINT_IMPORT_BREAKDOWN: "1",
+          GREENCHCLAW_VITEST_IMPORT_DURATIONS: "true",
+          GREENCHCLAW_VITEST_PRINT_IMPORT_BREAKDOWN: "1",
         },
         "linux",
       ),

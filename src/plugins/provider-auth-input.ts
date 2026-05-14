@@ -1,5 +1,5 @@
 import { resolveEnvApiKey } from "../agents/model-auth-env.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import type { SecretInput } from "../config/types.secrets.js";
 import {
   normalizeOptionalLowercaseString,
@@ -113,7 +113,7 @@ export async function ensureApiKeyFromOptionEnvOrPrompt(params: {
   token: string | undefined;
   tokenProvider: string | undefined;
   secretInputMode?: SecretInputMode;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   expectedProviders: string[];
   provider: string;
@@ -157,7 +157,7 @@ export async function ensureApiKeyFromOptionEnvOrPrompt(params: {
 }
 
 export async function ensureApiKeyFromEnvOrPrompt(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   provider: string;
   envLabel: string;

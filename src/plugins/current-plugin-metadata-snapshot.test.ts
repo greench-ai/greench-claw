@@ -144,11 +144,11 @@ describe("current plugin metadata snapshot", () => {
     const snapshot = createSnapshot({ config });
     const snapshotEnv = {
       HOME: "/home/snapshot",
-      NEXISCLAW_HOME: undefined,
+      GREENCHCLAW_HOME: undefined,
     } as NodeJS.ProcessEnv;
     const requestedEnv = {
       HOME: "/home/requested",
-      NEXISCLAW_HOME: undefined,
+      GREENCHCLAW_HOME: undefined,
     } as NodeJS.ProcessEnv;
     setCurrentPluginMetadataSnapshot(snapshot, { config, env: snapshotEnv });
 
@@ -161,11 +161,11 @@ describe("current plugin metadata snapshot", () => {
     const snapshot = createSnapshot({ config });
     const snapshotEnv = {
       HOME: "/home/snapshot",
-      NEXISCLAW_HOME: undefined,
+      GREENCHCLAW_HOME: undefined,
     } as NodeJS.ProcessEnv;
     const requestedEnv = {
       HOME: "/home/requested",
-      NEXISCLAW_HOME: undefined,
+      GREENCHCLAW_HOME: undefined,
     } as NodeJS.ProcessEnv;
     setCurrentPluginMetadataSnapshot(snapshot, { config, env: snapshotEnv });
 
@@ -215,7 +215,7 @@ describe("current plugin metadata snapshot", () => {
   });
 
   it("clears the current snapshot when the persisted installed index changes", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-plugin-metadata-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-plugin-metadata-"));
     try {
       setCurrentPluginMetadataSnapshot(createSnapshot());
 

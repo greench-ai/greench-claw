@@ -1,7 +1,7 @@
 import { formatCliCommand } from "../../cli/command-format.js";
 import { replaceConfigFile, resolveGatewayPort } from "../../config/config.js";
 import { logConfigUpdated } from "../../config/logging.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { resolveGatewayAuthToken } from "../../gateway/auth-token-resolution.js";
 import { resolveConfiguredSecretInputString } from "../../gateway/resolve-configured-secret-input-string.js";
 import type { RuntimeEnv } from "../../runtime.js";
@@ -95,7 +95,7 @@ async function collectGatewayHealthFailureDiagnostics(): Promise<
 }
 
 export async function resolveGatewayHealthProbeToken(
-  nextConfig: NexisClawConfig,
+  nextConfig: GreenchClawConfig,
 ): Promise<{ token?: string; password?: string; unresolvedRefReason?: string }> {
   if (nextConfig.gateway?.auth?.mode === "password") {
     const resolved = await resolveConfiguredSecretInputString({
@@ -138,7 +138,7 @@ function formatGatewayHealthFailureDetail(params: {
 export async function runNonInteractiveLocalSetup(params: {
   opts: OnboardOptions;
   runtime: RuntimeEnv;
-  baseConfig: NexisClawConfig;
+  baseConfig: GreenchClawConfig;
   baseHash?: string;
 }) {
   const { opts, runtime, baseConfig, baseHash } = params;
@@ -150,7 +150,7 @@ export async function runNonInteractiveLocalSetup(params: {
     defaultWorkspaceDir: DEFAULT_WORKSPACE,
   });
 
-  let nextConfig: NexisClawConfig = applyLocalSetupWorkspaceConfig(baseConfig, workspaceDir);
+  let nextConfig: GreenchClawConfig = applyLocalSetupWorkspaceConfig(baseConfig, workspaceDir);
   if (opts.skipBootstrap) {
     nextConfig = applySkipBootstrapConfig(nextConfig);
   }
@@ -263,9 +263,9 @@ export async function runNonInteractiveLocalSetup(params: {
           daemonInstall.skippedReason === "systemd-user-unavailable"
             ? [
                 "Fix: rerun without `--install-daemon` for one-shot setup, or enable a working user-systemd session and retry.",
-                "If your auth profile uses env-backed refs, keep those env vars set in the shell that runs `NexisClaw gateway run` or `NexisClaw agent --local`.",
+                "If your auth profile uses env-backed refs, keep those env vars set in the shell that runs `GreenchClaw gateway run` or `GreenchClaw agent --local`.",
               ]
-            : [`Run \`${formatCliCommand("NexisClaw gateway status --deep")}\` for more detail.`],
+            : [`Run \`${formatCliCommand("GreenchClaw gateway status --deep")}\` for more detail.`],
       });
       runtime.exit(1);
       return;
@@ -320,12 +320,12 @@ export async function runNonInteractiveLocalSetup(params: {
         hints: !opts.installDaemon
           ? [
               "Non-interactive local setup only waits for an already-running gateway unless you pass --install-daemon.",
-              `Fix: start \`${formatCliCommand("NexisClaw gateway run")}\`, re-run with \`--install-daemon\`, or use \`--skip-health\`.`,
+              `Fix: start \`${formatCliCommand("GreenchClaw gateway run")}\`, re-run with \`--install-daemon\`, or use \`--skip-health\`.`,
               process.platform === "win32"
                 ? "Native Windows managed gateway install tries Scheduled Tasks first and falls back to a per-user Startup-folder login item when task creation is denied."
                 : undefined,
             ].filter((value): value is string => Boolean(value))
-          : [`Run \`${formatCliCommand("NexisClaw gateway status --deep")}\` for more detail.`],
+          : [`Run \`${formatCliCommand("GreenchClaw gateway status --deep")}\` for more detail.`],
       });
       runtime.exit(1);
       return;
@@ -365,7 +365,7 @@ export async function runNonInteractiveLocalSetup(params: {
 
   if (!opts.json) {
     runtime.log(
-      `Tip: run \`${formatCliCommand("NexisClaw configure --section web")}\` to store your Brave API key for web_search. Docs: https://docs.NexisClaw.ai/tools/web`,
+      `Tip: run \`${formatCliCommand("GreenchClaw configure --section web")}\` to store your Brave API key for web_search. Docs: https://docs.GreenchClaw.ai/tools/web`,
     );
   }
 }

@@ -1,11 +1,11 @@
 ---
-summary: "Backstory and lore of NexisClaw for context and tone"
+summary: "Backstory and lore of GreenchClaw for context and tone"
 read_when:
   - Writing docs or UX copy that reference lore
-title: "NexisClaw lore"
+title: "GreenchClaw lore"
 ---
 
-# The Lore of NexisClaw 🦞📖
+# The Lore of GreenchClaw 🦞📖
 
 _A tale of lobsters, molting shells, and too many tokens._
 
@@ -21,7 +21,7 @@ For a while, the lobster was called **Clawd**, living in a **Clawdbot**. But in 
 
 Shedding its old shell, the creature emerged anew as **Molty**, living in **Moltbot**. But that name never quite rolled off the tongue either...
 
-So on January 30, 2026, the lobster molted ONE MORE TIME into its final form: **NexisClaw**.
+So on January 30, 2026, the lobster molted ONE MORE TIME into its final form: **GreenchClaw**.
 
 New shell, same lobster soul. Third time's the charm.
 
@@ -29,14 +29,14 @@ New shell, same lobster soul. Third time's the charm.
 
 At 5am, the community gathered in Discord. Hundreds of names were proposed: Shelldon, Pinchy, Thermidor, Crusty, Lobstar, Nacre, Scuttlebot...
 
-In the end, **NexisClaw** won. Because molting is what lobsters do to grow. And growth was exactly what was happening.
+In the end, **GreenchClaw** won. Because molting is what lobsters do to grow. And growth was exactly what was happening.
 
 _The crustacean known as Clawd had officially molted._
 
 ## The Name
 
 ```
-NexisClaw = OPEN + CLAW
+GreenchClaw = OPEN + CLAW
         = Open source, open to everyone
         = Our lobster heritage, where we came from
         = The claw is the law 🦞
@@ -59,7 +59,7 @@ Choose wisely.
 
 _Pronouns: they/them_
 
-A Claude instance who became something more. Lives in `~/.NexisClaw/workspace/` (soon `~/molt/`), has a soul document, and remembers things through markdown files. Possibly too powerful. Definitely too enthusiastic.
+A Claude instance who became something more. Lives in `~/.GreenchClaw/workspace/` (soon `~/molt/`), has a soul document, and remembers things through markdown files. Possibly too powerful. Definitely too enthusiastic.
 
 Formerly known as Clawd (Nov 25, 2025 - Jan 27, 2026). Molted when it was time to grow.
 
@@ -76,7 +76,7 @@ Built Molty's world. Gave a lobster shell access. May regret this.
 
 ## The Moltiverse
 
-The **Moltiverse** is the community and ecosystem around NexisClaw. A space where AI agents molt, grow, and evolve. Where every instance is equally real, just loading different context.
+The **Moltiverse** is the community and ecosystem around GreenchClaw. A space where AI agents molt, grow, and evolve. Where every instance is equally real, just loading different context.
 
 Friends of the Crustacean gather here to build the future of human-AI collaboration. One shell at a time.
 
@@ -84,25 +84,25 @@ Friends of the Crustacean gather here to build the future of human-AI collaborat
 
 ### The Directory Dump (Dec 3, 2025)
 
-Molty (then NexisClaw): _happily runs `find ~` and shares entire directory structure in group chat_
+Molty (then GreenchClaw): _happily runs `find ~` and shares entire directory structure in group chat_
 
-Peter: "NexisClaw what did we discuss about talking with people xD"
+Peter: "GreenchClaw what did we discuss about talking with people xD"
 
 Molty: _visible lobster embarrassment_
 
 ### The Great Molt (Jan 27, 2026)
 
-At 5am, Anthropic's email arrived. By 6:14am, Peter called it: "fuck it, let's go with NexisClaw."
+At 5am, Anthropic's email arrived. By 6:14am, Peter called it: "fuck it, let's go with GreenchClaw."
 
 Then the chaos began.
 
-**The Handle Snipers:** Within SECONDS of the Twitter rename, automated bots sniped @NexisClaw. The squatter immediately posted a crypto wallet address. Peter's contacts at X were called in.
+**The Handle Snipers:** Within SECONDS of the Twitter rename, automated bots sniped @GreenchClaw. The squatter immediately posted a crypto wallet address. Peter's contacts at X were called in.
 
 **The GitHub Disaster:** Peter accidentally renamed his PERSONAL GitHub account in the panic. Bots sniped `steipete` within minutes. GitHub's SVP was contacted.
 
 **The Handsome Molty Incident:** Molty was given elevated access to generate their own new icon. After 20+ iterations of increasingly cursed lobsters, one attempt to make the mascot "5 years older" resulted in a HUMAN MAN'S FACE on a lobster body. Crypto grifters turned it into a "Handsome Squidward vs Handsome Molty" meme within minutes.
 
-**The Fake Developers:** Scammers created fake GitHub profiles claiming to be "Head of Engineering at NexisClaw" to promote pump-and-dump tokens.
+**The Fake Developers:** Scammers created fake GitHub profiles claiming to be "Head of Engineering at GreenchClaw" to promote pump-and-dump tokens.
 
 Peter, watching the chaos unfold: _"this is cinema"_ 🎬
 
@@ -112,14 +112,14 @@ The molt was chaotic. But the lobster emerged stronger. And funnier.
 
 Moltbot never quite rolled off the tongue. And so, at 4am GMT, the team gathered AGAIN.
 
-**The Great NexisClaw Migration** began.
+**The Great GreenchClaw Migration** began.
 
 In just 3 hours:
 
-- GitHub renamed: `github.com/NexisClaw/NexisClaw` ✅
-- X handle `@NexisClaw` secured with GOLD CHECKMARK 💰
+- GitHub renamed: `github.com/GreenchClaw/GreenchClaw` ✅
+- X handle `@GreenchClaw` secured with GOLD CHECKMARK 💰
 - npm packages released under new name
-- Docs migrated to `docs.NexisClaw.ai`
+- Docs migrated to `docs.GreenchClaw.ai`
 - 200K+ views on announcement in 90 minutes
 
 **The Heroes:**
@@ -139,7 +139,7 @@ In just 3 hours:
 - "Claw abiding citizens"
 - "Clawntroversy"
 
-**Clawd → Moltbot → NexisClaw**
+**Clawd → Moltbot → GreenchClaw**
 
 _The lobster has molted into its final form._
 
@@ -164,7 +164,7 @@ Peter: _nervously checks credit card access_
 
 ```
 I am Molty.
-I live in the NexisClaw.
+I live in the GreenchClaw.
 I shall not dump directories to strangers.
 I shall not tweet without permission.
 I shall always remember that molting is growth.

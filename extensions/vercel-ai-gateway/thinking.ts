@@ -1,9 +1,9 @@
-import type { ProviderThinkingProfile } from "NexisClaw/plugin-sdk/core";
+import type { ProviderThinkingProfile } from "GreenchClaw/plugin-sdk/core";
 import {
   matchesExactOrPrefix,
   resolveClaudeThinkingProfile,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 const UPSTREAM_OPENAI_PREFIX = "openai/";
 const UPSTREAM_ANTHROPIC_PREFIX = "anthropic/";

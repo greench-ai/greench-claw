@@ -1,11 +1,11 @@
-import { createActionGate } from "NexisClaw/plugin-sdk/channel-actions";
-import type { ChannelMessageActionName } from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { extractToolSend, type ChannelToolSend } from "NexisClaw/plugin-sdk/tool-send";
+import { createActionGate } from "GreenchClaw/plugin-sdk/channel-actions";
+import type { ChannelMessageActionName } from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { extractToolSend, type ChannelToolSend } from "GreenchClaw/plugin-sdk/tool-send";
 import { listEnabledSlackAccounts, resolveSlackAccount } from "./accounts.js";
 
 export function listSlackMessageActions(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId?: string | null,
 ): ChannelMessageActionName[] {
   const accounts = (

@@ -1,5 +1,5 @@
 import { resolveDefaultAgentId } from "../agents/agent-scope-config.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveCronDeliveryPlan } from "./delivery-plan.js";
 import { resolveDeliveryTarget } from "./isolated-agent/delivery-target.js";
 import { resolveCronDeliverySessionKey } from "./session-target.js";
@@ -35,7 +35,7 @@ function formatDeliveryDetail(params: {
 }
 
 export async function resolveCronDeliveryPreview(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   defaultAgentId?: string;
   job: CronJob;
 }): Promise<CronDeliveryPreview> {
@@ -86,7 +86,7 @@ export async function resolveCronDeliveryPreview(params: {
 }
 
 export async function resolveCronDeliveryPreviews(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   defaultAgentId?: string;
   jobs: CronJob[];
 }): Promise<Record<string, CronDeliveryPreview>> {

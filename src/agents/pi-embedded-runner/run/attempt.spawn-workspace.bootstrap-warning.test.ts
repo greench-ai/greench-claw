@@ -14,7 +14,7 @@ describe("runEmbeddedAttempt bootstrap warning prompt assembly", () => {
         bootstrapFiles: [
           {
             name: "AGENTS.md",
-            path: "/tmp/NexisClaw-warning-workspace/AGENTS.md",
+            path: "/tmp/GreenchClaw-warning-workspace/AGENTS.md",
             content: "A".repeat(200),
             missing: false,
           },

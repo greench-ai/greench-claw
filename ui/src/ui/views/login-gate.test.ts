@@ -59,8 +59,8 @@ describe("resolveLoginFailureFeedback", () => {
       "The Gateway is reachable, but it needs a matching token or password before this browser can connect.",
     );
     expect(feedback?.steps).toEqual([
-      "Paste the token from NexisClaw dashboard --no-open or enter the configured password.",
-      "If no token is configured, run NexisClaw doctor --generate-gateway-token on the gateway host.",
+      "Paste the token from GreenchClaw dashboard --no-open or enter the configured password.",
+      "If no token is configured, run GreenchClaw doctor --generate-gateway-token on the gateway host.",
       "Click Connect again after updating the credential.",
     ]);
   });
@@ -79,7 +79,7 @@ describe("resolveLoginFailureFeedback", () => {
       "The supplied credential was rejected. The most common cause is a stale token or a token copied from another Gateway URL.",
     );
     expect(feedback?.steps).toEqual([
-      "Run NexisClaw dashboard --no-open and open the fresh URL or paste its token.",
+      "Run GreenchClaw dashboard --no-open and open the fresh URL or paste its token.",
       "Replace stale token/password values; do not reuse a token from another Gateway URL.",
       "Use one matching auth mode at a time: gateway token for token mode, password for password mode.",
     ]);
@@ -118,8 +118,8 @@ describe("resolveLoginFailureFeedback", () => {
       "This browser is already known, but the requested access changed and needs a fresh approval.",
     );
     expect(feedback?.steps).toEqual([
-      "Run NexisClaw devices list on the Gateway host.",
-      "Approve this request: NexisClaw devices approve req-123.",
+      "Run GreenchClaw devices list on the Gateway host.",
+      "Approve this request: GreenchClaw devices approve req-123.",
       "Reconnect after the approval completes.",
     ]);
   });
@@ -173,9 +173,9 @@ describe("resolveLoginFailureFeedback", () => {
 
     expect(feedback?.kind).toBe("network");
     expect(feedback?.steps).toEqual([
-      "Confirm the Gateway is running with NexisClaw status or NexisClaw gateway run.",
+      "Confirm the Gateway is running with GreenchClaw status or GreenchClaw gateway run.",
       "Check the WebSocket URL and use wss:// when the Gateway is behind HTTPS/Tailscale Serve.",
-      "Reopen the dashboard with NexisClaw dashboard --no-open to recopy the current URL and auth details.",
+      "Reopen the dashboard with GreenchClaw dashboard --no-open to recopy the current URL and auth details.",
     ]);
   });
 
@@ -210,9 +210,9 @@ describe("resolveLoginFailureFeedback", () => {
       "The served Control UI and the running Gateway do not agree on the supported connection protocol.",
     );
     expect(feedback?.steps).toEqual([
-      "Reopen the served dashboard with NexisClaw dashboard so the UI and Gateway come from the same install.",
+      "Reopen the served dashboard with GreenchClaw dashboard so the UI and Gateway come from the same install.",
       "If using pnpm ui:dev, rebuild or restart the dev UI against the current checkout.",
-      "Restart the Gateway after updating NexisClaw so it serves the current protocol.",
+      "Restart the Gateway after updating GreenchClaw so it serves the current protocol.",
     ]);
   });
 
@@ -227,9 +227,9 @@ describe("resolveLoginFailureFeedback", () => {
 
     expect(feedback?.kind).toBe("network");
     expect(feedback?.steps).toEqual([
-      "Confirm the Gateway is running with NexisClaw status or NexisClaw gateway run.",
+      "Confirm the Gateway is running with GreenchClaw status or GreenchClaw gateway run.",
       "Check the WebSocket URL and use wss:// when the Gateway is behind HTTPS/Tailscale Serve.",
-      "Reopen the dashboard with NexisClaw dashboard --no-open to recopy the current URL and auth details.",
+      "Reopen the dashboard with GreenchClaw dashboard --no-open to recopy the current URL and auth details.",
     ]);
   });
 
@@ -237,14 +237,14 @@ describe("resolveLoginFailureFeedback", () => {
     const feedback = resolveLoginFailureFeedback({
       connected: false,
       lastError:
-        "failed ws://host/NexisClaw#token=secret-token Authorization: Bearer secret-bearer token=inline-secret",
+        "failed ws://host/GreenchClaw#token=secret-token Authorization: Bearer secret-bearer token=inline-secret",
       lastErrorCode: null,
       hasToken: false,
       hasPassword: false,
     });
 
     expect(feedback?.rawError).toBe(
-      "failed ws://host/NexisClaw#[redacted-credential] Authorization: Bearer [redacted] token=[redacted]",
+      "failed ws://host/GreenchClaw#[redacted-credential] Authorization: Bearer [redacted] token=[redacted]",
     );
   });
 });
@@ -280,9 +280,9 @@ describe("renderLoginGate", () => {
         step.textContent?.trim(),
       ),
     ).toEqual([
-      "Reopen the served dashboard with NexisClaw dashboard so the UI and Gateway come from the same install.",
+      "Reopen the served dashboard with GreenchClaw dashboard so the UI and Gateway come from the same install.",
       "If using pnpm ui:dev, rebuild or restart the dev UI against the current checkout.",
-      "Restart the Gateway after updating NexisClaw so it serves the current protocol.",
+      "Restart the Gateway after updating GreenchClaw so it serves the current protocol.",
     ]);
     expect(alert?.querySelector("details summary")?.textContent?.trim()).toBe("Raw error");
     expect(alert?.querySelector(".login-gate__failure-raw")?.textContent?.trim()).toBe(
@@ -292,7 +292,7 @@ describe("renderLoginGate", () => {
     const docsLink = alert?.querySelector<HTMLAnchorElement>(".login-gate__failure-docs");
     expect(docsLink?.textContent?.trim()).toBe("Control UI auth docs");
     expect(docsLink?.getAttribute("href")).toBe(
-      "https://docs.NexisClaw.ai/web/control-ui#debuggingtesting-dev-server--remote-gateway",
+      "https://docs.GreenchClaw.ai/web/control-ui#debuggingtesting-dev-server--remote-gateway",
     );
   });
 });

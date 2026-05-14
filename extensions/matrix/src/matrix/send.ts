@@ -1,9 +1,9 @@
 import {
   createMessageReceiptFromOutboundResults,
   type MessageReceiptPartKind,
-} from "NexisClaw/plugin-sdk/channel-message";
-import type { MarkdownTableMode } from "NexisClaw/plugin-sdk/markdown-table-runtime";
-import { requireRuntimeConfig } from "NexisClaw/plugin-sdk/plugin-config-runtime";
+} from "GreenchClaw/plugin-sdk/channel-message";
+import type { MarkdownTableMode } from "GreenchClaw/plugin-sdk/markdown-table-runtime";
+import { requireRuntimeConfig } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
 import type { PollInput } from "../runtime-api.js";
 import { getMatrixRuntime } from "../runtime.js";
 import type { CoreConfig } from "../types.js";

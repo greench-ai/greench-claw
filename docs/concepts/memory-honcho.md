@@ -6,7 +6,7 @@ read_when:
   - You want AI-powered recall and user modeling
 ---
 
-[Honcho](https://honcho.dev) adds AI-native memory to NexisClaw. It persists
+[Honcho](https://honcho.dev) adds AI-native memory to GreenchClaw. It persists
 conversations to a dedicated service and builds user and agent models over time,
 giving your agent cross-session context that goes beyond workspace Markdown
 files.
@@ -47,9 +47,9 @@ Honcho registers tools that the agent can use during conversation:
 Install the plugin and run setup:
 
 ```bash
-NexisClaw plugins install @honcho-ai/NexisClaw-honcho
-NexisClaw honcho setup
-NexisClaw gateway --force
+GreenchClaw plugins install @honcho-ai/GreenchClaw-honcho
+GreenchClaw honcho setup
+GreenchClaw gateway --force
 ```
 
 The setup command prompts for your API credentials, writes the config, and
@@ -63,16 +63,16 @@ option.
 
 ## Configuration
 
-Settings live under `plugins.entries["NexisClaw-honcho"].config`:
+Settings live under `plugins.entries["GreenchClaw-honcho"].config`:
 
 ```json5
 {
   plugins: {
     entries: {
-      "NexisClaw-honcho": {
+      "GreenchClaw-honcho": {
         config: {
           apiKey: "your-api-key", // omit for self-hosted
-          workspaceId: "NexisClaw", // memory isolation
+          workspaceId: "GreenchClaw", // memory isolation
           baseUrl: "https://api.honcho.dev",
         },
       },
@@ -87,7 +87,7 @@ For self-hosted instances, point `baseUrl` to your local server (for example
 ## Migrating existing memory
 
 If you have existing workspace memory files (`USER.md`, `MEMORY.md`,
-`IDENTITY.md`, `memory/`, `canvas/`), `NexisClaw honcho setup` detects and
+`IDENTITY.md`, `memory/`, `canvas/`), `GreenchClaw honcho setup` detects and
 offers to migrate them.
 
 <Info>
@@ -123,18 +123,18 @@ Honcho's cross-session memory.
 ## CLI commands
 
 ```bash
-NexisClaw honcho setup                        # Configure API key and migrate files
-NexisClaw honcho status                       # Check connection status
-NexisClaw honcho ask <question>               # Query Honcho about the user
-NexisClaw honcho search <query> [-k N] [-d D] # Semantic search over memory
+GreenchClaw honcho setup                        # Configure API key and migrate files
+GreenchClaw honcho status                       # Check connection status
+GreenchClaw honcho ask <question>               # Query Honcho about the user
+GreenchClaw honcho search <query> [-k N] [-d D] # Semantic search over memory
 ```
 
 ## Further reading
 
-- [Plugin source code](https://github.com/plastic-labs/NexisClaw-honcho)
+- [Plugin source code](https://github.com/plastic-labs/GreenchClaw-honcho)
 - [Honcho documentation](https://docs.honcho.dev)
-- [Honcho NexisClaw integration guide](https://docs.honcho.dev/v3/guides/integrations/NexisClaw)
-- [Memory](/concepts/memory) -- NexisClaw memory overview
+- [Honcho GreenchClaw integration guide](https://docs.honcho.dev/v3/guides/integrations/GreenchClaw)
+- [Memory](/concepts/memory) -- GreenchClaw memory overview
 - [Context Engines](/concepts/context-engine) -- how plugin context engines work
 
 ## Related

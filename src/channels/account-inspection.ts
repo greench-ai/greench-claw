@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   hasConfiguredUnavailableCredentialStatus,
   hasResolvedCredentialValue,
@@ -17,7 +17,7 @@ type AccountInspectionFields = {
 
 export async function inspectChannelAccount(params: {
   plugin: ChannelPlugin;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
 }): Promise<unknown> {
   return (
@@ -32,8 +32,8 @@ export async function inspectChannelAccount(params: {
 
 export async function resolveInspectedChannelAccount(params: {
   plugin: ChannelPlugin;
-  cfg: NexisClawConfig;
-  sourceConfig: NexisClawConfig;
+  cfg: GreenchClawConfig;
+  sourceConfig: GreenchClawConfig;
   accountId: string;
 }): Promise<{
   account: unknown;

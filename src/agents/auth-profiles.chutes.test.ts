@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { withNexisClawTestState } from "../test-utils/NexisClaw-test-state.js";
+import { withGreenchClawTestState } from "../test-utils/GreenchClaw-test-state.js";
 import type { AuthProfileStore } from "./auth-profiles.js";
 import { CHUTES_TOKEN_ENDPOINT } from "./chutes-oauth.js";
 
@@ -42,10 +42,10 @@ describe("auth-profiles (chutes)", () => {
   });
 
   it("refreshes expired Chutes OAuth credentials", async () => {
-    await withNexisClawTestState(
+    await withGreenchClawTestState(
       {
         layout: "state-only",
-        prefix: "NexisClaw-chutes-",
+        prefix: "GreenchClaw-chutes-",
         agentEnv: "main",
         env: {
           CHUTES_CLIENT_ID: undefined,

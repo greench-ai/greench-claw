@@ -10,19 +10,19 @@
  * Issue #69546.
  */
 
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/core";
-import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/core";
+import { getRuntimeConfig } from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
 
-export type GatewayCfg = NexisClawConfig;
+export type GatewayCfg = GreenchClawConfig;
 
-export type GatewayCfgLoader = () => NexisClawConfig;
+export type GatewayCfgLoader = () => GreenchClawConfig;
 
 export interface ActiveCfgProvider {
-  getActiveCfg(): NexisClawConfig;
+  getActiveCfg(): GreenchClawConfig;
 }
 
 export interface ActiveCfgProviderOptions {
-  fallback: NexisClawConfig;
+  fallback: GreenchClawConfig;
   load?: GatewayCfgLoader;
 }
 
@@ -30,7 +30,7 @@ export function createActiveCfgProvider(options: ActiveCfgProviderOptions): Acti
   const loader = options.load ?? defaultGatewayCfgLoader;
   const fallback = options.fallback;
   return {
-    getActiveCfg(): NexisClawConfig {
+    getActiveCfg(): GreenchClawConfig {
       return resolveActiveCfg(loader, fallback);
     },
   };
@@ -38,8 +38,8 @@ export function createActiveCfgProvider(options: ActiveCfgProviderOptions): Acti
 
 export function resolveActiveCfg(
   loader: GatewayCfgLoader,
-  fallback: NexisClawConfig,
-): NexisClawConfig {
+  fallback: GreenchClawConfig,
+): GreenchClawConfig {
   try {
     return loader();
   } catch {
@@ -47,6 +47,6 @@ export function resolveActiveCfg(
   }
 }
 
-function defaultGatewayCfgLoader(): NexisClawConfig {
+function defaultGatewayCfgLoader(): GreenchClawConfig {
   return getRuntimeConfig();
 }

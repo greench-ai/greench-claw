@@ -8,7 +8,7 @@ vi.mock("./preflight-audio.runtime.js", () => ({
 
 import { resolveDiscordPreflightAudioMentionContext } from "./preflight-audio.js";
 
-const cfg = {} as import("NexisClaw/plugin-sdk/config-contracts").NexisClawConfig;
+const cfg = {} as import("GreenchClaw/plugin-sdk/config-contracts").GreenchClawConfig;
 
 describe("resolveDiscordPreflightAudioMentionContext", () => {
   beforeEach(() => {

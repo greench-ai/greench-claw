@@ -10,7 +10,7 @@ import {
   resolveCoreToolProfiles,
 } from "../../agents/tool-catalog.js";
 import { summarizeToolDescriptionText } from "../../agents/tool-description-summary.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { getActivePluginRegistry } from "../../plugins/runtime.js";
 import {
   buildPluginToolMetadataKey,
@@ -51,7 +51,7 @@ type ToolCatalogGroup = {
 function resolveAgentIdOrRespondError(
   rawAgentId: unknown,
   respond: RespondFn,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ) {
   const knownAgents = listAgentIds(cfg);
   const requestedAgentId = normalizeOptionalString(rawAgentId) ?? "";
@@ -83,7 +83,7 @@ function buildCoreGroups(): ToolCatalogGroup[] {
 }
 
 function buildPluginGroups(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   existingToolNames: Set<string>;
 }): ToolCatalogGroup[] {
@@ -203,7 +203,7 @@ function buildPluginGroups(params: {
 }
 
 export function buildToolsCatalogResult(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
   includePlugins?: boolean;
 }): ToolsCatalogResult {

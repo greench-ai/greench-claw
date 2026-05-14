@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { readStringValue } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { readStringValue } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { runFirecrawlScrape } from "./src/firecrawl-client.js";
 
 export type FetchFirecrawlContentParams = {
@@ -26,7 +26,7 @@ export type FetchFirecrawlContentResult = {
 export async function fetchFirecrawlContent(
   params: FetchFirecrawlContentParams,
 ): Promise<FetchFirecrawlContentResult> {
-  const cfg: NexisClawConfig = {
+  const cfg: GreenchClawConfig = {
     plugins: {
       entries: {
         firecrawl: {

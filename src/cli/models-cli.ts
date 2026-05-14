@@ -15,7 +15,7 @@ function rejectAgentScopedModelWrite(command: Command, commandName: "set" | "set
     return;
   }
   throw new Error(
-    `NexisClaw models ${commandName} does not support --agent; it only updates global model defaults. Remove --agent, or run ${formatCliCommand("NexisClaw agents list")} and set the per-agent model in agent config.`,
+    `GreenchClaw models ${commandName} does not support --agent; it only updates global model defaults. Remove --agent, or run ${formatCliCommand("GreenchClaw agents list")} and set the per-agent model in agent config.`,
   );
 }
 
@@ -27,12 +27,12 @@ export function registerModelsCli(program: Command) {
     .option("--status-plain", "Plain output (alias for `models status --plain`)", false)
     .option(
       "--agent <id>",
-      "Agent id to inspect (overrides NEXISCLAW_AGENT_DIR/PI_CODING_AGENT_DIR)",
+      "Agent id to inspect (overrides GREENCHCLAW_AGENT_DIR/PI_CODING_AGENT_DIR)",
     )
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/models", "docs.NexisClaw.ai/cli/models")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/models", "docs.GreenchClaw.ai/cli/models")}\n`,
     );
 
   models
@@ -76,7 +76,7 @@ export function registerModelsCli(program: Command) {
     .option("--probe-max-tokens <n>", "Probe max tokens (best-effort)")
     .option(
       "--agent <id>",
-      "Agent id to inspect (overrides NEXISCLAW_AGENT_DIR/PI_CODING_AGENT_DIR)",
+      "Agent id to inspect (overrides GREENCHCLAW_AGENT_DIR/PI_CODING_AGENT_DIR)",
     )
     .action(async (opts, command) => {
       const agent =

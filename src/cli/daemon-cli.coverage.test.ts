@@ -54,9 +54,9 @@ const buildGatewayInstallPlan = vi.fn(
     programArguments: ["/bin/node", "cli", "gateway", "--port", String(params.port)],
     workingDirectory: process.cwd(),
     environment: {
-      NEXISCLAW_GATEWAY_PORT: String(params.port),
-      ...(params.wrapperPath ? { NEXISCLAW_WRAPPER: params.wrapperPath } : {}),
-      ...(params.token ? { NEXISCLAW_GATEWAY_TOKEN: params.token } : {}),
+      GREENCHCLAW_GATEWAY_PORT: String(params.port),
+      ...(params.wrapperPath ? { GREENCHCLAW_WRAPPER: params.wrapperPath } : {}),
+      ...(params.token ? { GREENCHCLAW_GATEWAY_TOKEN: params.token } : {}),
     },
   }),
 );
@@ -78,9 +78,9 @@ vi.mock("../gateway/probe-auth.js", () => ({
 }));
 
 vi.mock("../daemon/program-args.js", () => ({
-  NEXISCLAW_WRAPPER_ENV_KEY: "NEXISCLAW_WRAPPER",
+  GREENCHCLAW_WRAPPER_ENV_KEY: "GREENCHCLAW_WRAPPER",
   resolveGatewayProgramArguments: (opts: unknown) => resolveGatewayProgramArguments(opts),
-  resolveNexisClawWrapperPath: async (value: string | undefined) => value?.trim() || undefined,
+  resolveGreenchClawWrapperPath: async (value: string | undefined) => value?.trim() || undefined,
 }));
 
 vi.mock("../daemon/service.js", async () => {
@@ -178,17 +178,17 @@ describe("daemon-cli coverage", () => {
 
   beforeEach(() => {
     daemonProgram = createDaemonProgram();
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-daemon-cli-"));
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-daemon-cli-"));
     envSnapshot = captureEnv([
-      "NEXISCLAW_STATE_DIR",
-      "NEXISCLAW_CONFIG_PATH",
-      "NEXISCLAW_GATEWAY_PORT",
-      "NEXISCLAW_PROFILE",
+      "GREENCHCLAW_STATE_DIR",
+      "GREENCHCLAW_CONFIG_PATH",
+      "GREENCHCLAW_GATEWAY_PORT",
+      "GREENCHCLAW_PROFILE",
     ]);
-    process.env.NEXISCLAW_STATE_DIR = tmpDir;
-    process.env.NEXISCLAW_CONFIG_PATH = path.join(tmpDir, "NexisClaw.json");
-    delete process.env.NEXISCLAW_GATEWAY_PORT;
-    delete process.env.NEXISCLAW_PROFILE;
+    process.env.GREENCHCLAW_STATE_DIR = tmpDir;
+    process.env.GREENCHCLAW_CONFIG_PATH = path.join(tmpDir, "GreenchClaw.json");
+    delete process.env.GREENCHCLAW_GATEWAY_PORT;
+    delete process.env.GREENCHCLAW_PROFILE;
     serviceReadCommand.mockResolvedValue(null);
     resolveGatewayProbeAuthSafeWithSecretInputs.mockClear();
     findExtraGatewayServices.mockClear();
@@ -222,12 +222,12 @@ describe("daemon-cli coverage", () => {
     serviceReadCommand.mockResolvedValueOnce({
       programArguments: ["/bin/node", "cli", "gateway", "--port", "19001"],
       environment: {
-        NEXISCLAW_PROFILE: "dev",
-        NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-daemon-state",
-        NEXISCLAW_CONFIG_PATH: "/tmp/NexisClaw-daemon-state/NexisClaw.json",
-        NEXISCLAW_GATEWAY_PORT: "19001",
+        GREENCHCLAW_PROFILE: "dev",
+        GREENCHCLAW_STATE_DIR: "/tmp/GreenchClaw-daemon-state",
+        GREENCHCLAW_CONFIG_PATH: "/tmp/GreenchClaw-daemon-state/GreenchClaw.json",
+        GREENCHCLAW_GATEWAY_PORT: "19001",
       },
-      sourcePath: "/tmp/ai.NexisClaw.gateway.plist",
+      sourcePath: "/tmp/ai.GreenchClaw.gateway.plist",
     });
 
     await runDaemonCommand(["daemon", "status", "--json"]);
@@ -295,12 +295,12 @@ describe("daemon-cli coverage", () => {
     serviceReadCommand.mockResolvedValueOnce({
       programArguments: ["/bin/node", "cli", "gateway", "--port", "18789"],
       environment: {
-        NEXISCLAW_WRAPPER: "/usr/local/bin/NexisClaw-doppler",
+        GREENCHCLAW_WRAPPER: "/usr/local/bin/GreenchClaw-doppler",
         PATH: "/custom/go/bin:/usr/bin",
         GOPATH: "/Users/test/.local/gopath",
         GOBIN: "/Users/test/.local/gopath/bin",
       },
-      sourcePath: "/tmp/ai.NexisClaw.gateway.plist",
+      sourcePath: "/tmp/ai.GreenchClaw.gateway.plist",
     });
 
     await runDaemonCommand(["daemon", "install", "--force", "--json"]);
@@ -311,12 +311,12 @@ describe("daemon-cli coverage", () => {
     );
     expect(installPlanParams.existingEnvironment).toEqual({
       PATH: "/custom/go/bin:/usr/bin",
-      NEXISCLAW_WRAPPER: "/usr/local/bin/NexisClaw-doppler",
+      GREENCHCLAW_WRAPPER: "/usr/local/bin/GreenchClaw-doppler",
       GOPATH: "/Users/test/.local/gopath",
       GOBIN: "/Users/test/.local/gopath/bin",
     });
-    expect((installPlanParams.env as NodeJS.ProcessEnv).NEXISCLAW_WRAPPER).toBe(
-      "/usr/local/bin/NexisClaw-doppler",
+    expect((installPlanParams.env as NodeJS.ProcessEnv).GREENCHCLAW_WRAPPER).toBe(
+      "/usr/local/bin/GreenchClaw-doppler",
     );
   });
 
@@ -328,12 +328,12 @@ describe("daemon-cli coverage", () => {
       "daemon",
       "install",
       "--wrapper",
-      "/usr/local/bin/NexisClaw-doppler",
+      "/usr/local/bin/GreenchClaw-doppler",
       "--json",
     ]);
 
     expect(requireMockCallArg(buildGatewayInstallPlan, "buildGatewayInstallPlan").wrapperPath).toBe(
-      "/usr/local/bin/NexisClaw-doppler",
+      "/usr/local/bin/GreenchClaw-doppler",
     );
   });
 

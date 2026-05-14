@@ -2,7 +2,7 @@ import fs from "node:fs";
 import {
   registerSingleProviderPlugin,
   resolveProviderPluginChoice,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 
@@ -12,7 +12,7 @@ type ComfyManifest = {
 
 function readManifest(): ComfyManifest {
   return JSON.parse(
-    fs.readFileSync(new URL("./NexisClaw.plugin.json", import.meta.url), "utf8"),
+    fs.readFileSync(new URL("./GreenchClaw.plugin.json", import.meta.url), "utf8"),
   ) as ComfyManifest;
 }
 

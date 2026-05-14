@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { isLoopbackHost } from "../gateway/net.js";
 
 function firstHeader(value: string | string[] | undefined): string {

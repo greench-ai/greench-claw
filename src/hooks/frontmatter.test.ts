@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   parseFrontmatter,
-  resolveNexisClawMetadata,
+  resolveGreenchClawMetadata,
   resolveHookInvocationPolicy,
 } from "./frontmatter.js";
-import type { NexisClawHookMetadata } from "./types.js";
+import type { GreenchClawHookMetadata } from "./types.js";
 
 function requireString(value: string | undefined, label: string): string {
   if (typeof value !== "string") {
@@ -13,9 +13,11 @@ function requireString(value: string | undefined, label: string): string {
   return value;
 }
 
-function requireNexisClawMetadata(metadata: NexisClawHookMetadata | undefined): NexisClawHookMetadata {
+function requireGreenchClawMetadata(
+  metadata: GreenchClawHookMetadata | undefined,
+): GreenchClawHookMetadata {
   if (!metadata) {
-    throw new Error("expected NexisClaw metadata");
+    throw new Error("expected GreenchClaw metadata");
   }
   return metadata;
 }
@@ -56,7 +58,7 @@ name: session-memory
 description: "Save session context"
 metadata:
   {
-    "NexisClaw": {
+    "GreenchClaw": {
       "emoji": "💾",
       "events": ["command:new"]
     }
@@ -72,8 +74,8 @@ metadata:
 
     // Verify the metadata is valid JSON
     const parsed = JSON.parse(metadata);
-    expect(parsed.NexisClaw.emoji).toBe("💾");
-    expect(parsed.NexisClaw.events).toEqual(["command:new"]);
+    expect(parsed.GreenchClaw.emoji).toBe("💾");
+    expect(parsed.GreenchClaw.events).toEqual(["command:new"]);
   });
 
   it("parses multi-line metadata with complex nested structure", () => {
@@ -82,7 +84,7 @@ name: command-logger
 description: "Log all command events"
 metadata:
   {
-    "NexisClaw":
+    "GreenchClaw":
       {
         "emoji": "📝",
         "events": ["command"],
@@ -96,21 +98,21 @@ metadata:
     expect(result.name).toBe("command-logger");
 
     const parsed = JSON.parse(requireString(result.metadata, "command-logger metadata"));
-    expect(parsed.NexisClaw.emoji).toBe("📝");
-    expect(parsed.NexisClaw.events).toEqual(["command"]);
-    expect(parsed.NexisClaw.requires.config).toEqual(["workspace.dir"]);
-    expect(parsed.NexisClaw.install[0].kind).toBe("bundled");
+    expect(parsed.GreenchClaw.emoji).toBe("📝");
+    expect(parsed.GreenchClaw.events).toEqual(["command"]);
+    expect(parsed.GreenchClaw.requires.config).toEqual(["workspace.dir"]);
+    expect(parsed.GreenchClaw.install[0].kind).toBe("bundled");
   });
 
   it("handles single-line metadata (inline JSON)", () => {
     const content = `---
 name: simple-hook
-metadata: {"NexisClaw": {"events": ["test"]}}
+metadata: {"GreenchClaw": {"events": ["test"]}}
 ---
 `;
     const result = parseFrontmatter(content);
     expect(result.name).toBe("simple-hook");
-    expect(result.metadata).toBe('{"NexisClaw": {"events": ["test"]}}');
+    expect(result.metadata).toBe('{"GreenchClaw": {"events": ["test"]}}');
   });
 
   it("handles mixed single-line and multi-line values", () => {
@@ -120,7 +122,7 @@ description: "A hook with mixed values"
 homepage: https://example.com
 metadata:
   {
-    "NexisClaw": {
+    "GreenchClaw": {
       "events": ["command:new"]
     }
   }
@@ -161,12 +163,12 @@ description: 'single-quoted'
   });
 });
 
-describe("resolveNexisClawMetadata", () => {
-  it("extracts NexisClaw metadata from parsed frontmatter", () => {
+describe("resolveGreenchClawMetadata", () => {
+  it("extracts GreenchClaw metadata from parsed frontmatter", () => {
     const frontmatter = {
       name: "test-hook",
       metadata: JSON.stringify({
-        NexisClaw: {
+        GreenchClaw: {
           emoji: "🔥",
           events: ["command:new", "command:reset"],
           requires: {
@@ -177,25 +179,25 @@ describe("resolveNexisClawMetadata", () => {
       }),
     };
 
-    const result = resolveNexisClawMetadata(frontmatter);
-    const NexisClaw = requireNexisClawMetadata(result);
-    expect(NexisClaw.emoji).toBe("🔥");
-    expect(NexisClaw.events).toEqual(["command:new", "command:reset"]);
-    expect(NexisClaw.requires?.config).toEqual(["workspace.dir"]);
-    expect(NexisClaw.requires?.bins).toEqual(["git"]);
+    const result = resolveGreenchClawMetadata(frontmatter);
+    const GreenchClaw = requireGreenchClawMetadata(result);
+    expect(GreenchClaw.emoji).toBe("🔥");
+    expect(GreenchClaw.events).toEqual(["command:new", "command:reset"]);
+    expect(GreenchClaw.requires?.config).toEqual(["workspace.dir"]);
+    expect(GreenchClaw.requires?.bins).toEqual(["git"]);
   });
 
   it("returns undefined when metadata is missing", () => {
     const frontmatter = { name: "no-metadata" };
-    const result = resolveNexisClawMetadata(frontmatter);
+    const result = resolveGreenchClawMetadata(frontmatter);
     expect(result).toBeUndefined();
   });
 
-  it("returns undefined when NexisClaw key is missing", () => {
+  it("returns undefined when GreenchClaw key is missing", () => {
     const frontmatter = {
       metadata: JSON.stringify({ other: "data" }),
     };
-    const result = resolveNexisClawMetadata(frontmatter);
+    const result = resolveGreenchClawMetadata(frontmatter);
     expect(result).toBeUndefined();
   });
 
@@ -203,41 +205,41 @@ describe("resolveNexisClawMetadata", () => {
     const frontmatter = {
       metadata: "not valid json {",
     };
-    const result = resolveNexisClawMetadata(frontmatter);
+    const result = resolveGreenchClawMetadata(frontmatter);
     expect(result).toBeUndefined();
   });
 
   it("handles install specs", () => {
     const frontmatter = {
       metadata: JSON.stringify({
-        NexisClaw: {
+        GreenchClaw: {
           events: ["command"],
           install: [
-            { id: "bundled", kind: "bundled", label: "Bundled with NexisClaw" },
-            { id: "npm", kind: "npm", package: "@NexisClaw/hook" },
+            { id: "bundled", kind: "bundled", label: "Bundled with GreenchClaw" },
+            { id: "npm", kind: "npm", package: "@GreenchClaw/hook" },
           ],
         },
       }),
     };
 
-    const result = resolveNexisClawMetadata(frontmatter);
+    const result = resolveGreenchClawMetadata(frontmatter);
     expect(result?.install).toHaveLength(2);
     expect(result?.install?.[0].kind).toBe("bundled");
     expect(result?.install?.[1].kind).toBe("npm");
-    expect(result?.install?.[1].package).toBe("@NexisClaw/hook");
+    expect(result?.install?.[1].package).toBe("@GreenchClaw/hook");
   });
 
   it("handles os restrictions", () => {
     const frontmatter = {
       metadata: JSON.stringify({
-        NexisClaw: {
+        GreenchClaw: {
           events: ["command"],
           os: ["darwin", "linux"],
         },
       }),
     };
 
-    const result = resolveNexisClawMetadata(frontmatter);
+    const result = resolveGreenchClawMetadata(frontmatter);
     expect(result?.os).toEqual(["darwin", "linux"]);
   });
 
@@ -246,15 +248,15 @@ describe("resolveNexisClawMetadata", () => {
     const content = `---
 name: session-memory
 description: "Save session context to memory when /new or /reset command is issued"
-homepage: https://docs.NexisClaw.ai/automation/hooks#session-memory
+homepage: https://docs.GreenchClaw.ai/automation/hooks#session-memory
 metadata:
   {
-    "NexisClaw":
+    "GreenchClaw":
       {
         "emoji": "💾",
         "events": ["command:new", "command:reset"],
         "requires": { "config": ["workspace.dir"] },
-        "install": [{ "id": "bundled", "kind": "bundled", "label": "Bundled with NexisClaw" }],
+        "install": [{ "id": "bundled", "kind": "bundled", "label": "Bundled with GreenchClaw" }],
       },
   }
 ---
@@ -268,27 +270,27 @@ metadata:
       '"command:reset"',
     );
 
-    const NexisClaw = requireNexisClawMetadata(resolveNexisClawMetadata(frontmatter));
-    expect(NexisClaw.emoji).toBe("💾");
-    expect(NexisClaw.events).toEqual(["command:new", "command:reset"]);
-    expect(NexisClaw.requires?.config).toEqual(["workspace.dir"]);
-    expect(NexisClaw.install?.[0].kind).toBe("bundled");
+    const GreenchClaw = requireGreenchClawMetadata(resolveGreenchClawMetadata(frontmatter));
+    expect(GreenchClaw.emoji).toBe("💾");
+    expect(GreenchClaw.events).toEqual(["command:new", "command:reset"]);
+    expect(GreenchClaw.requires?.config).toEqual(["workspace.dir"]);
+    expect(GreenchClaw.install?.[0].kind).toBe("bundled");
   });
 
   it("parses YAML metadata map", () => {
     const content = `---
 name: yaml-metadata
 metadata:
-  NexisClaw:
+  GreenchClaw:
     emoji: disk
     events:
       - command:new
 ---
 `;
     const frontmatter = parseFrontmatter(content);
-    const NexisClaw = resolveNexisClawMetadata(frontmatter);
-    expect(NexisClaw?.emoji).toBe("disk");
-    expect(NexisClaw?.events).toEqual(["command:new"]);
+    const GreenchClaw = resolveGreenchClawMetadata(frontmatter);
+    expect(GreenchClaw?.emoji).toBe("disk");
+    expect(GreenchClaw?.events).toEqual(["command:new"]);
   });
 });
 

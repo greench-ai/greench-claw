@@ -1,7 +1,7 @@
 import type {
   AnyAgentTool,
   EmbeddedRunAttemptParams,
-} from "NexisClaw/plugin-sdk/agent-harness-runtime";
+} from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import {
   type CodexAppServerRuntimeOptions,
   resolveCodexAppServerRuntimeOptions,

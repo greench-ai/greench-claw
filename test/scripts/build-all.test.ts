@@ -34,7 +34,7 @@ function withBuildCacheFixture(
     };
   }) => void,
 ) {
-  const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-build-cache-"));
+  const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-build-cache-"));
   try {
     const inputPath = path.join(rootDir, "src/input.ts");
     const outputPath = path.join(rootDir, "dist/output.js");

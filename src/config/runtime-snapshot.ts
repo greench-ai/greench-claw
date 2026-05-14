@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
-import type { NexisClawConfig } from "./types.js";
+import type { GreenchClawConfig } from "./types.js";
 
 export type RuntimeConfigSnapshotRefreshParams = {
-  sourceConfig: NexisClawConfig;
+  sourceConfig: GreenchClawConfig;
 };
 
 export type ConfigWriteAfterWrite =
@@ -63,8 +63,8 @@ export type RuntimeConfigSnapshotRefreshHandler = {
 
 export type RuntimeConfigWriteNotification = {
   configPath: string;
-  sourceConfig: NexisClawConfig;
-  runtimeConfig: NexisClawConfig;
+  sourceConfig: GreenchClawConfig;
+  runtimeConfig: GreenchClawConfig;
   persistedHash: string;
   revision: number;
   fingerprint: string;
@@ -80,8 +80,8 @@ export type RuntimeConfigSnapshotMetadata = {
   updatedAtMs: number;
 };
 
-let runtimeConfigSnapshot: NexisClawConfig | null = null;
-let runtimeConfigSourceSnapshot: NexisClawConfig | null = null;
+let runtimeConfigSnapshot: GreenchClawConfig | null = null;
+let runtimeConfigSourceSnapshot: GreenchClawConfig | null = null;
 let runtimeConfigSnapshotMetadata: RuntimeConfigSnapshotMetadata | null = null;
 let runtimeConfigSnapshotRevision = 0;
 let runtimeConfigSnapshotRefreshHandler: RuntimeConfigSnapshotRefreshHandler | null = null;
@@ -101,7 +101,7 @@ function stableConfigStringify(value: unknown): string {
     .join(",")}}`;
 }
 
-function configSnapshotsMatch(left: NexisClawConfig, right: NexisClawConfig): boolean {
+function configSnapshotsMatch(left: GreenchClawConfig, right: GreenchClawConfig): boolean {
   if (left === right) {
     return true;
   }
@@ -112,13 +112,13 @@ function configSnapshotsMatch(left: NexisClawConfig, right: NexisClawConfig): bo
   }
 }
 
-export function hashRuntimeConfigValue(value: NexisClawConfig): string {
+export function hashRuntimeConfigValue(value: GreenchClawConfig): string {
   return createHash("sha256").update(stableConfigStringify(value)).digest("base64url");
 }
 
 function createRuntimeConfigSnapshotMetadata(
-  config: NexisClawConfig,
-  sourceConfig?: NexisClawConfig,
+  config: GreenchClawConfig,
+  sourceConfig?: GreenchClawConfig,
 ): RuntimeConfigSnapshotMetadata {
   runtimeConfigSnapshotRevision += 1;
   return {
@@ -130,8 +130,8 @@ function createRuntimeConfigSnapshotMetadata(
 }
 
 export function setRuntimeConfigSnapshot(
-  config: NexisClawConfig,
-  sourceConfig?: NexisClawConfig,
+  config: GreenchClawConfig,
+  sourceConfig?: GreenchClawConfig,
 ): void {
   runtimeConfigSnapshot = config;
   runtimeConfigSourceSnapshot = sourceConfig ?? null;
@@ -149,11 +149,11 @@ export function clearRuntimeConfigSnapshot(): void {
   resetConfigRuntimeState();
 }
 
-export function getRuntimeConfigSnapshot(): NexisClawConfig | null {
+export function getRuntimeConfigSnapshot(): GreenchClawConfig | null {
   return runtimeConfigSnapshot;
 }
 
-export function getRuntimeConfigSourceSnapshot(): NexisClawConfig | null {
+export function getRuntimeConfigSourceSnapshot(): GreenchClawConfig | null {
   return runtimeConfigSourceSnapshot;
 }
 
@@ -161,7 +161,7 @@ export function getRuntimeConfigSnapshotMetadata(): RuntimeConfigSnapshotMetadat
   return runtimeConfigSnapshotMetadata;
 }
 
-export function resolveRuntimeConfigCacheKey(config: NexisClawConfig): string {
+export function resolveRuntimeConfigCacheKey(config: GreenchClawConfig): string {
   const metadata = runtimeConfigSnapshotMetadata;
   if (metadata && config === runtimeConfigSnapshot) {
     return `runtime:${metadata.revision}:${metadata.fingerprint}`;
@@ -171,8 +171,8 @@ export function resolveRuntimeConfigCacheKey(config: NexisClawConfig): string {
 
 export function createRuntimeConfigWriteNotification(params: {
   configPath: string;
-  sourceConfig: NexisClawConfig;
-  runtimeConfig: NexisClawConfig;
+  sourceConfig: GreenchClawConfig;
+  runtimeConfig: GreenchClawConfig;
   persistedHash: string;
   writtenAtMs?: number;
   afterWrite?: ConfigWriteAfterWrite;
@@ -200,10 +200,10 @@ export function createRuntimeConfigWriteNotification(params: {
 }
 
 export function selectApplicableRuntimeConfig(params: {
-  inputConfig?: NexisClawConfig;
-  runtimeConfig?: NexisClawConfig | null;
-  runtimeSourceConfig?: NexisClawConfig | null;
-}): NexisClawConfig | undefined {
+  inputConfig?: GreenchClawConfig;
+  runtimeConfig?: GreenchClawConfig | null;
+  runtimeSourceConfig?: GreenchClawConfig | null;
+}): GreenchClawConfig | undefined {
   const runtimeConfig = params.runtimeConfig ?? null;
   if (!runtimeConfig) {
     return params.inputConfig;
@@ -254,7 +254,7 @@ export function notifyRuntimeConfigWriteListeners(event: RuntimeConfigWriteNotif
   }
 }
 
-export function loadPinnedRuntimeConfig(loadFresh: () => NexisClawConfig): NexisClawConfig {
+export function loadPinnedRuntimeConfig(loadFresh: () => GreenchClawConfig): GreenchClawConfig {
   if (runtimeConfigSnapshot) {
     return runtimeConfigSnapshot;
   }
@@ -264,10 +264,10 @@ export function loadPinnedRuntimeConfig(loadFresh: () => NexisClawConfig): Nexis
 }
 
 export async function finalizeRuntimeSnapshotWrite(params: {
-  nextSourceConfig: NexisClawConfig;
+  nextSourceConfig: GreenchClawConfig;
   hadRuntimeSnapshot: boolean;
   hadBothSnapshots: boolean;
-  loadFreshConfig: () => NexisClawConfig;
+  loadFreshConfig: () => GreenchClawConfig;
   notifyCommittedWrite: () => void;
   createRefreshError: (detail: string, cause: unknown) => Error;
   formatRefreshError: (error: unknown) => string;

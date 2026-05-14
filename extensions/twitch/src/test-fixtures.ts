@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 
 export const BASE_TWITCH_TEST_ACCOUNT = {
   username: "testbot",
@@ -7,7 +7,7 @@ export const BASE_TWITCH_TEST_ACCOUNT = {
   channel: "#testchannel",
 };
 
-export function makeTwitchTestConfig(account: Record<string, unknown>): NexisClawConfig {
+export function makeTwitchTestConfig(account: Record<string, unknown>): GreenchClawConfig {
   return {
     channels: {
       twitch: {
@@ -16,7 +16,7 @@ export function makeTwitchTestConfig(account: Record<string, unknown>): NexisCla
         },
       },
     },
-  } as unknown as NexisClawConfig;
+  } as unknown as GreenchClawConfig;
 }
 
 export function installTwitchTestHooks() {

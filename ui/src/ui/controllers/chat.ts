@@ -20,7 +20,7 @@ import {
 
 const SILENT_REPLY_PATTERN = /^\s*NO_REPLY\s*$/;
 const SYNTHETIC_TRANSCRIPT_REPAIR_RESULT =
-  "[NexisClaw] missing tool result in session history; inserted synthetic error result for transcript repair.";
+  "[GreenchClaw] missing tool result in session history; inserted synthetic error result for transcript repair.";
 const CHAT_HISTORY_REQUEST_LIMIT = 100;
 const CHAT_HISTORY_REQUEST_MAX_CHARS = 4_000;
 const STARTUP_CHAT_HISTORY_RETRY_TIMEOUT_MS = 60_000;
@@ -143,8 +143,8 @@ function hasTranscriptMeta(message: unknown): boolean {
   return Boolean(
     message &&
     typeof message === "object" &&
-    (message as { __NexisClaw?: unknown }).__NexisClaw &&
-    typeof (message as { __NexisClaw?: unknown }).__NexisClaw === "object",
+    (message as { __GreenchClaw?: unknown }).__GreenchClaw &&
+    typeof (message as { __GreenchClaw?: unknown }).__GreenchClaw === "object",
   );
 }
 
@@ -643,7 +643,7 @@ export function handleChatEvent(state: ChatState, payload?: ChatEventPayload) {
 
   // Terminal events for the active client run carry runId; missing-runId events are unowned.
   // Final from another run (e.g. sub-agent announce): refresh history to show new message.
-  // See https://github.com/NexisClaw/NexisClaw/issues/1909
+  // See https://github.com/GreenchClaw/GreenchClaw/issues/1909
   if (state.chatRunId && payload.runId !== state.chatRunId) {
     if (payload.state === "final") {
       const finalMessage = normalizeFinalAssistantMessage(payload.message);

@@ -20,7 +20,7 @@ import { createModelVisibilityPolicy } from "../../agents/model-visibility-polic
 import { resolveDefaultAgentWorkspaceDir } from "../../agents/workspace.js";
 import { getChannelPlugin } from "../../channels/plugins/index.js";
 import type { SessionEntry } from "../../config/sessions.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
@@ -68,7 +68,7 @@ type ParsedModelsCommand =
     };
 
 export async function buildModelsProviderData(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId?: string,
   options: { view?: "default" | "all"; workspaceDir?: string } = {},
 ): Promise<ModelsProviderData> {
@@ -191,8 +191,8 @@ export async function buildModelsProviderData(
     const choices = runtimeChoicesByProvider.get(provider) ?? [
       {
         id: "pi",
-        label: "NexisClaw Pi Default",
-        description: "Use the built-in NexisClaw Pi runtime.",
+        label: "GreenchClaw Pi Default",
+        description: "Use the built-in GreenchClaw Pi runtime.",
       },
     ];
     choices.push({
@@ -285,7 +285,7 @@ function parseModelsArgs(raw: string): ParsedModelsCommand {
 
 function resolveProviderLabel(params: {
   provider: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir?: string;
   workspaceDir?: string;
   sessionEntry?: ModelsCommandSessionEntry;
@@ -306,7 +306,7 @@ function resolveProviderLabel(params: {
 export function formatModelsAvailableHeader(params: {
   provider: string;
   total: number;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir?: string;
   workspaceDir?: string;
   sessionEntry?: ModelsCommandSessionEntry;
@@ -350,7 +350,7 @@ function buildProviderInfos(params: {
 }
 
 export async function resolveModelsCommandReply(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   commandBodyNormalized: string;
   surface?: string;
   currentModel?: string;

@@ -29,7 +29,7 @@ const LEGACY_STATE_DIRS: string[] = [];
 
 function resolveDefaultDbPath(): string {
   const home = homedir();
-  const preferred = join(home, ".NexisClaw", "memory", "lancedb");
+  const preferred = join(home, ".GreenchClaw", "memory", "lancedb");
   try {
     if (fs.existsSync(preferred)) {
       return preferred;
@@ -219,7 +219,7 @@ export const memoryConfigSchema = {
     },
     dbPath: {
       label: "Database Path",
-      placeholder: "~/.NexisClaw/memory/lancedb",
+      placeholder: "~/.GreenchClaw/memory/lancedb",
       advanced: true,
       help: "Local filesystem path or cloud storage URI (s3://, gs://) for LanceDB database",
     },

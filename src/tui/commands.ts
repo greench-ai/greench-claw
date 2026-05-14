@@ -1,7 +1,7 @@
 import type { SlashCommand } from "@earendil-works/pi-tui";
 import { listChatCommands, listChatCommandsForConfig } from "../auto-reply/commands-registry.js";
 import { formatThinkingLevels, listThinkingLevelLabels } from "../auto-reply/thinking.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 
 const VERBOSE_LEVELS = ["on", "off"];
@@ -18,7 +18,7 @@ export type ParsedCommand = {
 };
 
 export type SlashCommandOptions = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   provider?: string;
   model?: string;
   thinkingLevels?: Array<{ id: string; label: string }>;

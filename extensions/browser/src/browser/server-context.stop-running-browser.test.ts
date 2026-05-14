@@ -10,11 +10,11 @@ vi.mock("./pw-ai.js", () => pwAiMocks);
 vi.mock("./chrome.js", () => ({
   isChromeCdpReady: vi.fn(async () => true),
   isChromeReachable: vi.fn(async () => true),
-  launchNexisClawChrome: vi.fn(async () => {
+  launchGreenchClawChrome: vi.fn(async () => {
     throw new Error("unexpected launch");
   }),
-  resolveNexisClawUserDataDir: vi.fn(() => "/tmp/NexisClaw-test"),
-  stopNexisClawChrome: vi.fn(async () => {}),
+  resolveGreenchClawUserDataDir: vi.fn(() => "/tmp/GreenchClaw-test"),
+  stopGreenchClawChrome: vi.fn(async () => {}),
 }));
 vi.mock("./chrome-mcp.js", () => ({
   closeChromeMcpSession: vi.fn(async () => false),

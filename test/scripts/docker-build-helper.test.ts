@@ -63,7 +63,7 @@ describe("docker build helper", () => {
     expect(helper).toContain("docker_build_run()");
     expect(helper).toContain("docker buildx build --load");
     expect(helper).toContain("docker_build_transient_failure()");
-    expect(helper).toContain("NEXISCLAW_DOCKER_BUILD_RETRIES");
+    expect(helper).toContain("GREENCHCLAW_DOCKER_BUILD_RETRIES");
     expect(helper).toContain("frontend grpc server closed unexpectedly");
   });
 
@@ -84,20 +84,22 @@ describe("docker build helper", () => {
     const liveCliBackend = readFileSync(LIVE_CLI_BACKEND_DOCKER_PATH, "utf8");
 
     expect(helper).toContain("docker_build_on_missing_enabled()");
-    expect(helper).toContain("NEXISCLAW_DOCKER_BUILD_ON_MISSING");
-    expect(helper).toContain("NEXISCLAW_TESTBOX");
+    expect(helper).toContain("GREENCHCLAW_DOCKER_BUILD_ON_MISSING");
+    expect(helper).toContain("GREENCHCLAW_TESTBOX");
     expect(e2eImageHelper).toContain("docker_build_on_missing_enabled");
     expect(e2eImageHelper).toContain("Docker image not available; building");
     expect(liveBuild).toContain("docker image inspect");
     expect(liveBuild).toContain("docker pull");
     expect(liveBuild).toContain("Live-test image not available; building");
     expect(liveCliBackend).toContain(
-      'NEXISCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"',
+      'GREENCHCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"',
     );
-    expect(liveCliBackend).toContain("direct Codex CLI probe failed before NexisClaw gateway smoke");
+    expect(liveCliBackend).toContain(
+      "direct Codex CLI probe failed before GreenchClaw gateway smoke",
+    );
     expect(liveCliBackend).toContain("==> Direct Codex CLI probe ok");
     expect(liveCliBackend).not.toContain(
-      'echo "==> Reuse live-test image: $LIVE_IMAGE_NAME (NEXISCLAW_SKIP_DOCKER_BUILD=1)"',
+      'echo "==> Reuse live-test image: $LIVE_IMAGE_NAME (GREENCHCLAW_SKIP_DOCKER_BUILD=1)"',
     );
   });
 
@@ -115,7 +117,7 @@ describe("docker build helper", () => {
     expect(scheduler).toContain("path.dirname(process.execPath)");
     expect(scheduler).toContain("env.PATH = [...new Set(pathEntries)].join(path.delimiter)");
     expect(scheduler).toContain("withResolvedPnpmCommand");
-    expect(scheduler).toContain("NEXISCLAW_DOCKER_ALL_PNPM_COMMAND");
+    expect(scheduler).toContain("GREENCHCLAW_DOCKER_ALL_PNPM_COMMAND");
   });
 
   it("runs release installer E2E against the npm beta tag", () => {
@@ -123,16 +125,16 @@ describe("docker build helper", () => {
     const openWebUiRunner = readFileSync(OPENWEBUI_DOCKER_E2E_PATH, "utf8");
 
     expect(scenarios).toContain(
-      '"NEXISCLAW_INSTALL_TAG=beta NEXISCLAW_E2E_MODELS=openai NEXISCLAW_INSTALL_E2E_IMAGE=NexisClaw-install-e2e-openai:local NEXISCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE=0 NEXISCLAW_INSTALL_E2E_OPENAI_MODEL=openai/gpt-5.4-mini NEXISCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS=120 NEXISCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS=120 pnpm test:install:e2e"',
+      '"GREENCHCLAW_INSTALL_TAG=beta GREENCHCLAW_E2E_MODELS=openai GREENCHCLAW_INSTALL_E2E_IMAGE=GreenchClaw-install-e2e-openai:local GREENCHCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE=0 GREENCHCLAW_INSTALL_E2E_OPENAI_MODEL=openai/gpt-5.4-mini GREENCHCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS=120 GREENCHCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS=120 pnpm test:install:e2e"',
     );
     expect(scenarios).toContain(
-      '"NEXISCLAW_INSTALL_TAG=beta NEXISCLAW_E2E_MODELS=anthropic NEXISCLAW_INSTALL_E2E_IMAGE=NexisClaw-install-e2e-anthropic:local pnpm test:install:e2e"',
+      '"GREENCHCLAW_INSTALL_TAG=beta GREENCHCLAW_E2E_MODELS=anthropic GREENCHCLAW_INSTALL_E2E_IMAGE=GreenchClaw-install-e2e-anthropic:local pnpm test:install:e2e"',
     );
     expect(scenarios).toContain(
-      '"NEXISCLAW_OPENWEBUI_MODEL=openai/gpt-5.4-mini OPENWEBUI_SMOKE_MODE=models NEXISCLAW_OPENWEBUI_PROVIDER_TIMEOUT_SECONDS=300 NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openwebui"',
+      '"GREENCHCLAW_OPENWEBUI_MODEL=openai/gpt-5.4-mini OPENWEBUI_SMOKE_MODE=models GREENCHCLAW_OPENWEBUI_PROVIDER_TIMEOUT_SECONDS=300 GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openwebui"',
     );
     expect(openWebUiRunner).toContain(
-      'SMOKE_MODE="${OPENWEBUI_SMOKE_MODE:-${NEXISCLAW_OPENWEBUI_SMOKE_MODE:-chat}}"',
+      'SMOKE_MODE="${OPENWEBUI_SMOKE_MODE:-${GREENCHCLAW_OPENWEBUI_SMOKE_MODE:-chat}}"',
     );
     expect(openWebUiRunner).toContain('-e "OPENWEBUI_SMOKE_MODE=$SMOKE_MODE"');
   });
@@ -142,7 +144,7 @@ describe("docker build helper", () => {
     const wrapper = readFileSync("scripts/test-install-sh-e2e-docker.sh", "utf8");
 
     expect(runner).toContain(
-      'AGENT_TURNS_PARALLEL="${NEXISCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL:-1}"',
+      'AGENT_TURNS_PARALLEL="${GREENCHCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL:-1}"',
     );
     expect(runner).toContain("time_phase");
     expect(runner).toContain("phase_mark_start");
@@ -151,15 +153,15 @@ describe("docker build helper", () => {
     expect(runner).not.toContain('run_agent_turn_bg "read proof"');
     expect(runner).toContain('run_agent_turn_bg "image write"');
     expect(runner).toContain('run_agent_turn_logged "read proof copy"');
-    expect(wrapper).toContain("NEXISCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL");
-    expect(wrapper).toContain("NEXISCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE");
-    expect(wrapper).toContain("NEXISCLAW_INSTALL_E2E_OPENAI_MODEL");
-    expect(wrapper).toContain("NEXISCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS");
-    expect(wrapper).toContain("NEXISCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS:-300");
-    expect(runner).toContain("NEXISCLAW_INSTALL_E2E_OPENAI_MODEL");
-    expect(runner).toContain("NEXISCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS");
+    expect(wrapper).toContain("GREENCHCLAW_INSTALL_E2E_AGENT_TURNS_PARALLEL");
+    expect(wrapper).toContain("GREENCHCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE");
+    expect(wrapper).toContain("GREENCHCLAW_INSTALL_E2E_OPENAI_MODEL");
+    expect(wrapper).toContain("GREENCHCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS");
+    expect(wrapper).toContain("GREENCHCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS:-300");
+    expect(runner).toContain("GREENCHCLAW_INSTALL_E2E_OPENAI_MODEL");
+    expect(runner).toContain("GREENCHCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS");
     expect(runner).toContain(
-      'AGENT_TURN_TIMEOUT_SECONDS="${NEXISCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS:-300}"',
+      'AGENT_TURN_TIMEOUT_SECONDS="${GREENCHCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS:-300}"',
     );
   });
 
@@ -169,7 +171,7 @@ describe("docker build helper", () => {
     expect(scenarios).toContain('"plugins-offline"');
     expect(scenarios).toContain("`bundled-plugin-install-uninstall-${index}`");
     expect(scenarios).toContain("pnpm test:docker:bundled-plugin-install-uninstall");
-    expect(scenarios).toContain("NEXISCLAW_PLUGINS_E2E_CLAWHUB=0");
+    expect(scenarios).toContain("GREENCHCLAW_PLUGINS_E2E_CLAWHUB=0");
   });
 
   it("allows plugin update smoke to tolerate config metadata migrations", () => {
@@ -220,7 +222,7 @@ describe("docker build helper", () => {
     expect(doctorScenario).toContain("scripts/e2e/lib/package-compat.mjs");
     expect(pluginsSweep).toContain("scripts/e2e/lib/package-compat.mjs");
     expect(pluginUpdateProbe).toContain("../package-compat.mjs");
-    expect(scripts.join("\n")).toContain("NEXISCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT");
+    expect(scripts.join("\n")).toContain("GREENCHCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT");
     expect(scripts.join("\n")).toContain(
       "Package $package_version must support gateway install --wrapper.",
     );
@@ -230,12 +232,12 @@ describe("docker build helper", () => {
   });
 
   it("prepares pnpm workspace package fixtures without package dependencies", () => {
-    const root = mkdtempSync(join(tmpdir(), "NexisClaw-update-channel-fixture-"));
+    const root = mkdtempSync(join(tmpdir(), "GreenchClaw-update-channel-fixture-"));
     try {
       mkdirSync(join(root, "patches"));
       writeFileSync(
         join(root, "package.json"),
-        `${JSON.stringify({ name: "NexisClaw", version: "2026.5.6", scripts: {} }, null, 2)}\n`,
+        `${JSON.stringify({ name: "GreenchClaw", version: "2026.5.6", scripts: {} }, null, 2)}\n`,
         "utf8",
       );
       writeFileSync(
@@ -279,16 +281,16 @@ describe("docker build helper", () => {
     const probe = readFileSync(BUNDLED_PLUGIN_INSTALL_UNINSTALL_PROBE_PATH, "utf8");
     const runtimeSmoke = readFileSync(BUNDLED_PLUGIN_INSTALL_UNINSTALL_RUNTIME_SMOKE_PATH, "utf8");
 
-    expect(runner).toContain("NEXISCLAW_BUNDLED_PLUGIN_SWEEP_TOTAL");
-    expect(runner).toContain("NEXISCLAW_BUNDLED_PLUGIN_SWEEP_INDEX");
-    expect(runner).toContain("NEXISCLAW_BUNDLED_PLUGIN_RUNTIME_READY_MS");
+    expect(runner).toContain("GREENCHCLAW_BUNDLED_PLUGIN_SWEEP_TOTAL");
+    expect(runner).toContain("GREENCHCLAW_BUNDLED_PLUGIN_SWEEP_INDEX");
+    expect(runner).toContain("GREENCHCLAW_BUNDLED_PLUGIN_RUNTIME_READY_MS");
     expect(runner).toContain("scripts/e2e/lib/bundled-plugin-install-uninstall/sweep.sh");
-    expect(probe).toContain('"NexisClaw.plugin.json"');
-    expect(runtimeSmoke).toContain("process.env.NEXISCLAW_BUNDLED_PLUGIN_RUNTIME_READY_MS");
+    expect(probe).toContain('"GreenchClaw.plugin.json"');
+    expect(runtimeSmoke).toContain("process.env.GREENCHCLAW_BUNDLED_PLUGIN_RUNTIME_READY_MS");
     expect(runtimeSmoke).toContain("900000");
     expect(sweep).toContain("read -r plugin_id plugin_dir requires_config");
-    expect(sweep).toContain('node "$NEXISCLAW_ENTRY" plugins install "$plugin_id"');
-    expect(sweep).toContain('node "$NEXISCLAW_ENTRY" plugins uninstall "$plugin_id" --force');
+    expect(sweep).toContain('node "$GREENCHCLAW_ENTRY" plugins install "$plugin_id"');
+    expect(sweep).toContain('node "$GREENCHCLAW_ENTRY" plugins uninstall "$plugin_id" --force');
     expect(sweep).toContain("assert-installed");
     expect(sweep).toContain("assert-uninstalled");
   });
@@ -296,11 +298,11 @@ describe("docker build helper", () => {
   it("passes installer tag env to bash, not curl", () => {
     const runner = readFileSync(INSTALL_E2E_RUNNER_PATH, "utf8");
 
-    expect(runner).toContain('curl -fsSL "$INSTALL_URL" | NEXISCLAW_BETA=1 bash');
-    expect(runner).toContain('curl -fsSL "$INSTALL_URL" | NEXISCLAW_VERSION="$INSTALL_TAG" bash');
-    expect(runner).not.toContain('NEXISCLAW_BETA=1 curl -fsSL "$INSTALL_URL" | bash');
+    expect(runner).toContain('curl -fsSL "$INSTALL_URL" | GREENCHCLAW_BETA=1 bash');
+    expect(runner).toContain('curl -fsSL "$INSTALL_URL" | GREENCHCLAW_VERSION="$INSTALL_TAG" bash');
+    expect(runner).not.toContain('GREENCHCLAW_BETA=1 curl -fsSL "$INSTALL_URL" | bash');
     expect(runner).not.toContain(
-      'NEXISCLAW_VERSION="$INSTALL_TAG" curl -fsSL "$INSTALL_URL" | bash',
+      'GREENCHCLAW_VERSION="$INSTALL_TAG" curl -fsSL "$INSTALL_URL" | bash',
     );
   });
 
@@ -342,16 +344,16 @@ describe("docker build helper", () => {
     const clawhub = readFileSync(PLUGINS_DOCKER_CLAWHUB_PATH, "utf8");
 
     expect(runner).toContain("scripts/e2e/lib/plugins/sweep.sh");
-    expect(runner).toContain("NEXISCLAW_PLUGINS_E2E_LIVE_CLAWHUB");
+    expect(runner).toContain("GREENCHCLAW_PLUGINS_E2E_LIVE_CLAWHUB");
     expect(sweep).toContain("scripts/e2e/lib/plugins/clawhub.sh");
     expect(clawhub).toContain("start_clawhub_fixture_server()");
-    expect(clawhub).toContain('NEXISCLAW_CLAWHUB_URL="http://127.0.0.1:');
-    expect(clawhub).toContain("NEXISCLAW_PLUGINS_E2E_LIVE_CLAWHUB");
-    expect(clawhub).toContain("NEXISCLAW_PLUGINS_E2E_LIVE_NPM_REGISTRY");
+    expect(clawhub).toContain('GREENCHCLAW_CLAWHUB_URL="http://127.0.0.1:');
+    expect(clawhub).toContain("GREENCHCLAW_PLUGINS_E2E_LIVE_CLAWHUB");
+    expect(clawhub).toContain("GREENCHCLAW_PLUGINS_E2E_LIVE_NPM_REGISTRY");
     expect(clawhub).toContain("live ClawHub can rate-limit CI");
-    expect(clawhub).toContain('[[ -n "${NEXISCLAW_CLAWHUB_URL:-}" || -n "${CLAWHUB_URL:-}" ]]');
+    expect(clawhub).toContain('[[ -n "${GREENCHCLAW_CLAWHUB_URL:-}" || -n "${CLAWHUB_URL:-}" ]]');
     expect(clawhub).toContain("Ignoring ambient ClawHub URL for fixture-mode plugin E2E");
-    expect(clawhub).toContain("unset NEXISCLAW_CLAWHUB_URL CLAWHUB_URL");
+    expect(clawhub).toContain("unset GREENCHCLAW_CLAWHUB_URL CLAWHUB_URL");
   });
 
   it("covers plugin install/update sources in the Docker plugin sweep", () => {
@@ -365,7 +367,7 @@ describe("docker build helper", () => {
     expect(assertions).toContain('Skipping "demo-plugin-dir" (source: path).');
 
     expect(sweep).toContain("start_npm_fixture_registry");
-    expect(sweep).toContain('plugins install "npm:@NexisClaw/demo-plugin-npm@0.0.1"');
+    expect(sweep).toContain('plugins install "npm:@GreenchClaw/demo-plugin-npm@0.0.1"');
     expect(sweep).toContain("plugins update demo-plugin-npm");
     expect(assertions).toContain("demo-plugin-npm is up to date (0.0.1).");
     expect(npmRegistry).toContain('"dist-tags": { latest: entry.latestVersion }');
@@ -378,7 +380,7 @@ describe("docker build helper", () => {
 
     expect(clawhub).toContain('plugins install "$CLAWHUB_PLUGIN_SPEC"');
     expect(clawhub).toContain('plugins update "$CLAWHUB_PLUGIN_ID"');
-    expect(clawhub).toContain("clawhub:@NexisClaw/kitchen-sink");
+    expect(clawhub).toContain("clawhub:@GreenchClaw/kitchen-sink");
     expect(assertions).toContain("clawhub-updated");
     expect(assertions).toContain("record.clawpackSha256");
     expect(assertions).toContain("record.artifactKind");

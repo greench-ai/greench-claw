@@ -1,10 +1,10 @@
-import type { MigrationItem } from "NexisClaw/plugin-sdk/migration";
+import type { MigrationItem } from "GreenchClaw/plugin-sdk/migration";
 import {
   createMigrationItem,
   markMigrationItemConflict,
   markMigrationItemError,
   markMigrationItemSkipped,
-} from "NexisClaw/plugin-sdk/migration";
+} from "GreenchClaw/plugin-sdk/migration";
 import { readString } from "./helpers.js";
 
 export const HERMES_REASON_ALREADY_CONFIGURED = "already configured";

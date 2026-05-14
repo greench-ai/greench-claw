@@ -1,5 +1,5 @@
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { CliBackendConfig } from "../config/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { resolveRuntimeCliBackends } from "../plugins/cli-backends.runtime.js";
 import { resolvePluginSetupCliBackend } from "../plugins/setup-registry.js";
 import { resolveRuntimeTextTransforms } from "../plugins/text-transforms.runtime.js";
@@ -204,7 +204,7 @@ export function resolveCliBackendLiveTest(provider: string): ResolvedCliBackendL
 
 export function resolveCliBackendConfig(
   provider: string,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
   options: { agentId?: string } = {},
 ): ResolvedCliBackend | null {
   const normalized = normalizeBackendKey(provider);

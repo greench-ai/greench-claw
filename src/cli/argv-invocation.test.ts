@@ -3,8 +3,8 @@ import { resolveCliArgvInvocation } from "./argv-invocation.js";
 
 describe("argv-invocation", () => {
   it("resolves root help and empty command path", () => {
-    expect(resolveCliArgvInvocation(["node", "NexisClaw", "--help"])).toEqual({
-      argv: ["node", "NexisClaw", "--help"],
+    expect(resolveCliArgvInvocation(["node", "GreenchClaw", "--help"])).toEqual({
+      argv: ["node", "GreenchClaw", "--help"],
       commandPath: [],
       primary: null,
       hasHelpOrVersion: true,
@@ -14,9 +14,9 @@ describe("argv-invocation", () => {
 
   it("resolves command path and primary with root options", () => {
     expect(
-      resolveCliArgvInvocation(["node", "NexisClaw", "--profile", "work", "gateway", "status"]),
+      resolveCliArgvInvocation(["node", "GreenchClaw", "--profile", "work", "gateway", "status"]),
     ).toEqual({
-      argv: ["node", "NexisClaw", "--profile", "work", "gateway", "status"],
+      argv: ["node", "GreenchClaw", "--profile", "work", "gateway", "status"],
       commandPath: ["gateway", "status"],
       primary: "gateway",
       hasHelpOrVersion: false,

@@ -1,21 +1,21 @@
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-core";
-import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
-import { normalizeE164 } from "NexisClaw/plugin-sdk/account-resolution";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-core";
+import { describeAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
+import { normalizeE164 } from "GreenchClaw/plugin-sdk/account-resolution";
 import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
   createScopedDmSecurityResolver,
-} from "NexisClaw/plugin-sdk/channel-config-helpers";
+} from "GreenchClaw/plugin-sdk/channel-config-helpers";
 import {
   collectOpenGroupPolicyRouteAllowlistWarnings,
   createAllowlistProviderGroupPolicyWarningCollector,
-} from "NexisClaw/plugin-sdk/channel-policy";
-import type { ChannelPlugin } from "NexisClaw/plugin-sdk/core";
-import { createChannelPluginBase, getChatChannelMeta } from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/channel-policy";
+import type { ChannelPlugin } from "GreenchClaw/plugin-sdk/core";
+import { createChannelPluginBase, getChatChannelMeta } from "GreenchClaw/plugin-sdk/core";
 import {
   createDelegatedSetupWizardProxy,
   type ChannelSetupWizard,
-} from "NexisClaw/plugin-sdk/setup-runtime";
+} from "GreenchClaw/plugin-sdk/setup-runtime";
 import {
   hasAnyWhatsAppAuth,
   listWhatsAppAccountIds,

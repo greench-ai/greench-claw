@@ -1,9 +1,9 @@
 ---
-summary: "Schema-accurate configuration examples for common NexisClaw setups"
+summary: "Schema-accurate configuration examples for common GreenchClaw setups"
 read_when:
-  - Learning how to configure NexisClaw
+  - Learning how to configure GreenchClaw
   - Looking for configuration examples
-  - Setting up NexisClaw for the first time
+  - Setting up GreenchClaw for the first time
 title: "Configuration examples"
 ---
 
@@ -15,12 +15,12 @@ Examples below are aligned with the current config schema. For the exhaustive re
 
 ```json5
 {
-  agents: { defaults: { workspace: "~/.NexisClaw/workspace" } },
+  agents: { defaults: { workspace: "~/.GreenchClaw/workspace" } },
   channels: { whatsapp: { allowFrom: ["+15555550123"] } },
 }
 ```
 
-Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
+Save to `~/.GreenchClaw/GreenchClaw.json` and you can DM the bot from that number.
 
 ### Recommended starter
 
@@ -28,7 +28,7 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
 {
   agents: {
     defaults: {
-      workspace: "~/.NexisClaw/workspace",
+      workspace: "~/.GreenchClaw/workspace",
       model: { primary: "anthropic/claude-sonnet-4-6" },
     },
     list: [
@@ -95,7 +95,7 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
   // Logging
   logging: {
     level: "info",
-    file: "/tmp/NexisClaw/NexisClaw.log",
+    file: "/tmp/GreenchClaw/GreenchClaw.log",
     consoleLevel: "info",
     consoleStyle: "pretty",
     redactSensitive: "tools",
@@ -103,7 +103,7 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
 
   // Message formatting
   messages: {
-    messagePrefix: "[NexisClaw]",
+    messagePrefix: "[GreenchClaw]",
     visibleReplies: "automatic",
     responsePrefix: ">",
     ackReaction: "👀",
@@ -163,7 +163,7 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
       discord: { mode: "idle", idleMinutes: 10080 },
     },
     resetTriggers: ["/new", "/reset"],
-    store: "~/.NexisClaw/agents/default/sessions/sessions.json",
+    store: "~/.GreenchClaw/agents/default/sessions/sessions.json",
     maintenance: {
       mode: "warn",
       pruneAfter: "30d",
@@ -204,7 +204,7 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
       dm: { enabled: true, allowFrom: ["123456789012345678"] },
       guilds: {
         "123456789012345678": {
-          slug: "friends-of-NexisClaw",
+          slug: "friends-of-GreenchClaw",
           requireMention: false,
           channels: {
             general: { allow: true },
@@ -224,7 +224,7 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
       dm: { enabled: true, allowFrom: ["U123"] },
       slashCommand: {
         enabled: true,
-        name: "NexisClaw",
+        name: "GreenchClaw",
         sessionPrefix: "slack:slash",
         ephemeral: true,
       },
@@ -234,7 +234,7 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
   // Agent runtime
   agents: {
     defaults: {
-      workspace: "~/.NexisClaw/workspace",
+      workspace: "~/.GreenchClaw/workspace",
       userTimezone: "America/Chicago",
       model: {
         primary: "anthropic/claude-sonnet-4-6",
@@ -291,9 +291,9 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
       sandbox: {
         mode: "non-main",
         scope: "session", // preferred over legacy perSession: true
-        workspaceRoot: "~/.NexisClaw/sandboxes",
+        workspaceRoot: "~/.GreenchClaw/sandboxes",
         docker: {
-          image: "NexisClaw-sandbox:bookworm-slim",
+          image: "GreenchClaw-sandbox:bookworm-slim",
           workdir: "/workspace",
           readOnlyRoot: true,
           tmpfs: ["/tmp", "/var/tmp", "/run"],
@@ -316,7 +316,7 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
         },
         // inherits defaults.skills -> github, weather
         groupChat: {
-          mentionPatterns: ["@NexisClaw", "NexisClaw"],
+          mentionPatterns: ["@GreenchClaw", "GreenchClaw"],
         },
         thinkingDefault: "high", // per-agent thinking override
         reasoningDefault: "on", // per-agent reasoning visibility
@@ -382,7 +382,7 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
   // Cron jobs
   cron: {
     enabled: true,
-    store: "~/.NexisClaw/cron/cron.json",
+    store: "~/.GreenchClaw/cron/cron.json",
     maxConcurrentRuns: 2, // cron dispatch + isolated cron agent-turn execution
     sessionRetention: "24h",
     runLog: {
@@ -397,7 +397,7 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
     path: "/hooks",
     token: "shared-secret",
     presets: ["gmail"],
-    transformsDir: "~/.NexisClaw/hooks/transforms",
+    transformsDir: "~/.GreenchClaw/hooks/transforms",
     mappings: [
       {
         id: "gmail-hook",
@@ -420,7 +420,7 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
       },
     ],
     gmail: {
-      account: "NexisClaw@gmail.com",
+      account: "GreenchClaw@gmail.com",
       label: "INBOX",
       topic: "projects/<project-id>/topics/gog-gmail-watch",
       subscription: "gog-gmail-watch-push",
@@ -439,7 +439,7 @@ Save to `~/.NexisClaw/NexisClaw.json` and you can DM the bot from that number.
     mode: "local",
     port: 18789,
     bind: "loopback",
-    controlUi: { enabled: true, basePath: "/NexisClaw" },
+    controlUi: { enabled: true, basePath: "/GreenchClaw" },
     auth: {
       mode: "token",
       token: "gateway-token",
@@ -501,12 +501,12 @@ example `~/.agents/skills/manager -> ~/Projects/manager/skills`.
 {
   agents: {
     defaults: {
-      workspace: "~/.NexisClaw/workspace",
+      workspace: "~/.GreenchClaw/workspace",
       skills: ["github", "weather"],
     },
     list: [
       { id: "main", default: true },
-      { id: "docs", workspace: "~/.NexisClaw/workspace-docs", skills: ["docs-search"] },
+      { id: "docs", workspace: "~/.GreenchClaw/workspace-docs", skills: ["docs-search"] },
     ],
   },
 }
@@ -520,7 +520,7 @@ example `~/.agents/skills/manager -> ~/Projects/manager/skills`.
 
 ```json5
 {
-  agents: { defaults: { workspace: "~/.NexisClaw/workspace" } },
+  agents: { defaults: { workspace: "~/.GreenchClaw/workspace" } },
   channels: {
     whatsapp: { allowFrom: ["+15555550123"] },
     telegram: {
@@ -614,7 +614,7 @@ Only enable direct mutable name/email/nick matching with each channel's `dangero
   },
   agents: {
     defaults: {
-      workspace: "~/.NexisClaw/workspace",
+      workspace: "~/.GreenchClaw/workspace",
       model: {
         primary: "anthropic/claude-opus-4-6",
         fallbacks: ["minimax/MiniMax-M2.7"],
@@ -630,7 +630,7 @@ Only enable direct mutable name/email/nick matching with each channel's `dangero
 {
   agents: {
     defaults: {
-      workspace: "~/work-NexisClaw",
+      workspace: "~/work-GreenchClaw",
       elevatedDefault: "off",
     },
     list: [
@@ -662,7 +662,7 @@ Only enable direct mutable name/email/nick matching with each channel's `dangero
 {
   agents: {
     defaults: {
-      workspace: "~/.NexisClaw/workspace",
+      workspace: "~/.GreenchClaw/workspace",
       model: { primary: "lmstudio/my-local-model" },
     },
   },

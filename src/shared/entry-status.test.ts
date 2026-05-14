@@ -26,18 +26,18 @@ describe("shared/entry-status", () => {
       always: false,
       metadata: {
         emoji: "🦀",
-        homepage: "https://NexisClaw.ai",
+        homepage: "https://GreenchClaw.ai",
         requires: {
           bins: ["bun"],
           anyBins: ["ffmpeg", "sox"],
-          env: ["NEXISCLAW_TOKEN"],
+          env: ["GREENCHCLAW_TOKEN"],
           config: ["gateway.bind"],
         },
         os: ["darwin"],
       },
       frontmatter: {
         emoji: "🙂",
-        homepage: "https://docs.NexisClaw.ai",
+        homepage: "https://docs.GreenchClaw.ai",
       },
       hasLocalBin: (bin) => bin === "bun",
       localPlatform: "linux",
@@ -50,18 +50,18 @@ describe("shared/entry-status", () => {
 
     expect(result).toEqual({
       emoji: "🦀",
-      homepage: "https://NexisClaw.ai",
+      homepage: "https://GreenchClaw.ai",
       required: {
         bins: ["bun"],
         anyBins: ["ffmpeg", "sox"],
-        env: ["NEXISCLAW_TOKEN"],
+        env: ["GREENCHCLAW_TOKEN"],
         config: ["gateway.bind"],
         os: ["darwin"],
       },
       missing: {
         bins: [],
         anyBins: [],
-        env: ["NEXISCLAW_TOKEN"],
+        env: ["GREENCHCLAW_TOKEN"],
         config: [],
         os: ["darwin"],
       },
@@ -99,7 +99,7 @@ describe("shared/entry-status", () => {
           },
         },
         frontmatter: {
-          website: " https://docs.NexisClaw.ai ",
+          website: " https://docs.GreenchClaw.ai ",
           emoji: "🙂",
         },
       },
@@ -110,7 +110,7 @@ describe("shared/entry-status", () => {
 
     expect(result).toEqual({
       emoji: "🙂",
-      homepage: "https://docs.NexisClaw.ai",
+      homepage: "https://docs.GreenchClaw.ai",
       required: {
         bins: ["missing-bin"],
         anyBins: [],

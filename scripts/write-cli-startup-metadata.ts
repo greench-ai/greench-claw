@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import type { RootHelpRenderOptions } from "../src/cli/program/root-help.js";
-import type { NexisClawConfig } from "../src/config/config.js";
+import type { GreenchClawConfig } from "../src/config/config.js";
 
 function dedupe(values: string[]): string[] {
   const seen = new Set<string>();
@@ -108,7 +108,7 @@ export function readBundledChannelCatalog(
       const raw = readFileSync(packageJsonPath, "utf8");
       signature.update(`${dirEntry.name}\0${raw}\0`);
       const parsed = JSON.parse(raw) as {
-        NexisClaw?: {
+        GreenchClaw?: {
           channel?: {
             id?: unknown;
             order?: unknown;
@@ -116,12 +116,12 @@ export function readBundledChannelCatalog(
           };
         };
       };
-      const id = parsed.NexisClaw?.channel?.id;
+      const id = parsed.GreenchClaw?.channel?.id;
       if (typeof id !== "string" || !id.trim()) {
         continue;
       }
-      const orderRaw = parsed.NexisClaw?.channel?.order;
-      const labelRaw = parsed.NexisClaw?.channel?.label;
+      const orderRaw = parsed.GreenchClaw?.channel?.order;
+      const labelRaw = parsed.GreenchClaw?.channel?.label;
       entries.push({
         id: id.trim(),
         order: typeof orderRaw === "number" ? orderRaw : 999,
@@ -150,24 +150,24 @@ export function readBundledChannelCatalogIds(
 function createIsolatedRootHelpRenderContext(
   bundledPluginsDir: string = extensionsDir,
 ): RootHelpRenderContext {
-  const stateDir = path.join(rootDir, ".NexisClaw-build-root-help");
+  const stateDir = path.join(rootDir, ".GreenchClaw-build-root-help");
   const workspaceDir = path.join(stateDir, "workspace");
   const homeDir = path.join(stateDir, "home");
   const env: NodeJS.ProcessEnv = {
     HOME: homeDir,
-    LOGNAME: process.env.LOGNAME ?? process.env.USER ?? "NexisClaw-build",
-    USER: process.env.USER ?? process.env.LOGNAME ?? "NexisClaw-build",
+    LOGNAME: process.env.LOGNAME ?? process.env.USER ?? "GreenchClaw-build",
+    USER: process.env.USER ?? process.env.LOGNAME ?? "GreenchClaw-build",
     PATH: process.env.PATH ?? "",
     TMPDIR: process.env.TMPDIR ?? "/tmp",
     LANG: process.env.LANG ?? "C.UTF-8",
     LC_ALL: process.env.LC_ALL ?? "C.UTF-8",
     TERM: process.env.TERM ?? "dumb",
     NO_COLOR: "1",
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
-    NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "",
-    NEXISCLAW_STATE_DIR: stateDir,
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
+    GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "",
+    GREENCHCLAW_STATE_DIR: stateDir,
   };
-  const config: NexisClawConfig = {
+  const config: GreenchClawConfig = {
     agents: {
       defaults: {
         workspace: workspaceDir,
@@ -280,7 +280,7 @@ function renderSourceBrowserHelpText(
     `const { createProgramContext } = await import(${JSON.stringify(contextUrl)});`,
     `const program = new Command();`,
     `configureProgramHelp(program, createProgramContext());`,
-    `registerBrowserCli(program, ["node", "NexisClaw", "browser", "--help"]);`,
+    `registerBrowserCli(program, ["node", "GreenchClaw", "browser", "--help"]);`,
     `const browser = program.commands.find((cmd) => cmd.name() === "browser");`,
     `if (!browser) throw new Error("Browser command was not registered.");`,
     `browser.outputHelp();`,
@@ -294,7 +294,7 @@ function renderSourceBrowserHelpText(
       encoding: "utf8",
       env: {
         ...renderContext.env,
-        NEXISCLAW_DISABLE_CLI_STARTUP_HELP_FAST_PATH: "1",
+        GREENCHCLAW_DISABLE_CLI_STARTUP_HELP_FAST_PATH: "1",
       },
       timeout: BROWSER_HELP_RENDER_TIMEOUT_MS,
     },

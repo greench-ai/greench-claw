@@ -1,19 +1,19 @@
 import {
   type UnifiedModelCatalogEntry,
   type UnifiedModelCatalogProviderContext,
-} from "NexisClaw/plugin-sdk/plugin-entry";
-import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
-import { getCachedLiveCatalogValue } from "NexisClaw/plugin-sdk/provider-catalog-shared";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
+import { resolveApiKeyForProvider } from "GreenchClaw/plugin-sdk/provider-auth-runtime";
+import { getCachedLiveCatalogValue } from "GreenchClaw/plugin-sdk/provider-catalog-shared";
 import {
   assertOkOrThrowHttpError,
   resolveProviderHttpRequestConfig,
-} from "NexisClaw/plugin-sdk/provider-http";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/provider-http";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type {
   VideoGenerationModelCapabilitiesContext,
   VideoGenerationProviderCapabilities,
   VideoGenerationResolution,
-} from "NexisClaw/plugin-sdk/video-generation";
+} from "GreenchClaw/plugin-sdk/video-generation";
 import { OPENROUTER_BASE_URL } from "./provider-catalog.js";
 import { fetchOpenRouterVideoGet, type OpenRouterVideoDispatcherPolicy } from "./video-http.js";
 
@@ -223,8 +223,8 @@ async function fetchOpenRouterVideoModels(params: {
     load: async () => {
       const headers = new Headers({
         Authorization: `Bearer ${params.apiKey}`,
-        "HTTP-Referer": "https://NexisClaw.ai",
-        "X-OpenRouter-Title": "NexisClaw",
+        "HTTP-Referer": "https://GreenchClaw.ai",
+        "X-OpenRouter-Title": "GreenchClaw",
       });
       const { response, release } = await fetchOpenRouterVideoGet({
         url: "videos/models",

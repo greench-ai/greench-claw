@@ -1,7 +1,7 @@
-import { createTestWizardPrompter } from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { NON_ENV_SECRETREF_MARKER } from "NexisClaw/plugin-sdk/provider-auth-runtime";
-import { createNonExitingRuntime } from "NexisClaw/plugin-sdk/runtime-env";
-import { withEnv, withEnvAsync, withFetchPreconnect } from "NexisClaw/plugin-sdk/test-env";
+import { createTestWizardPrompter } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { NON_ENV_SECRETREF_MARKER } from "GreenchClaw/plugin-sdk/provider-auth-runtime";
+import { createNonExitingRuntime } from "GreenchClaw/plugin-sdk/runtime-env";
+import { withEnv, withEnvAsync, withFetchPreconnect } from "GreenchClaw/plugin-sdk/test-env";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { resolveXaiCatalogEntry } from "./model-definitions.js";
 import { isModernXaiModel, resolveXaiForwardCompatModel } from "./provider-models.js";
@@ -169,7 +169,7 @@ describe("xai web search config resolution", () => {
         throw new Error("expected xai web search tool");
       }
 
-      const result = await maybeTool.execute({ query: "NexisClaw" });
+      const result = await maybeTool.execute({ query: "GreenchClaw" });
       expect(result.error).toBe("missing_xai_api_key");
       expect(result.message).toContain("use web_fetch for a specific URL or the browser tool");
     });
@@ -350,7 +350,7 @@ describe("xai web search config resolution", () => {
       searchConfig: { provider: "grok" },
     });
 
-    await tool?.execute({ query: "NexisClaw Grok proxy test" });
+    await tool?.execute({ query: "GreenchClaw Grok proxy test" });
 
     expect(firstFetchUrl(mockFetch)).toBe("https://api.x.ai/proxy/v1/responses");
   });

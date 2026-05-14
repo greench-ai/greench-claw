@@ -34,7 +34,7 @@ export type FileLockTimeoutError = Error & {
   lockPath: string;
 };
 
-const FILE_LOCK_MANAGER_KEY = "NexisClaw.plugin-sdk.file-lock";
+const FILE_LOCK_MANAGER_KEY = "GreenchClaw.plugin-sdk.file-lock";
 
 function readLockPayload(value: Record<string, unknown> | null): LockFilePayload | null {
   if (!value) {

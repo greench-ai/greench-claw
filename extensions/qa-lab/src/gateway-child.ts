@@ -6,11 +6,11 @@ import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 import {
   createQaBundledPluginsDir,
   resolveQaBundledPluginSourceDir,
@@ -47,8 +47,8 @@ const QA_GATEWAY_CHILD_STARTUP_MAX_ATTEMPTS = 5;
 const QA_GATEWAY_CHILD_RPC_RETRY_HEALTH_TIMEOUT_MS = 60_000;
 const QA_GATEWAY_CHILD_RESTART_BOUNDARY_TIMEOUT_MS = 90_000;
 const QA_GATEWAY_CHILD_BLOCKED_SECRET_ENV_VARS = Object.freeze([
-  "NEXISCLAW_QA_CONVEX_SECRET_CI",
-  "NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER",
+  "GREENCHCLAW_QA_CONVEX_SECRET_CI",
+  "GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER",
 ]);
 
 export type QaGatewayChildStateMutationContext = {
@@ -207,28 +207,30 @@ export function buildQaRuntimeEnv(params: {
           claudeCliAuthMode: params.claudeCliAuthMode,
         })
       : {}),
-    NEXISCLAW_HOME: params.homeDir,
-    NEXISCLAW_CONFIG_PATH: params.configPath,
-    NEXISCLAW_STATE_DIR: params.stateDir,
-    NEXISCLAW_OAUTH_DIR: path.join(params.stateDir, "credentials"),
-    NEXISCLAW_GATEWAY_TOKEN: params.gatewayToken,
-    NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
-    NEXISCLAW_SKIP_GMAIL_WATCHER: "1",
-    NEXISCLAW_SKIP_CANVAS_HOST: "1",
-    NEXISCLAW_SKIP_STARTUP_MODEL_PREWARM: "1",
-    NEXISCLAW_NO_RESPAWN: "1",
-    NEXISCLAW_TEST_FAST: "1",
-    NEXISCLAW_QA_PARENT_PID: String(process.pid),
-    NEXISCLAW_QA_ALLOW_LOCAL_IMAGE_PROVIDER: "1",
+    GREENCHCLAW_HOME: params.homeDir,
+    GREENCHCLAW_CONFIG_PATH: params.configPath,
+    GREENCHCLAW_STATE_DIR: params.stateDir,
+    GREENCHCLAW_OAUTH_DIR: path.join(params.stateDir, "credentials"),
+    GREENCHCLAW_GATEWAY_TOKEN: params.gatewayToken,
+    GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
+    GREENCHCLAW_SKIP_GMAIL_WATCHER: "1",
+    GREENCHCLAW_SKIP_CANVAS_HOST: "1",
+    GREENCHCLAW_SKIP_STARTUP_MODEL_PREWARM: "1",
+    GREENCHCLAW_NO_RESPAWN: "1",
+    GREENCHCLAW_TEST_FAST: "1",
+    GREENCHCLAW_QA_PARENT_PID: String(process.pid),
+    GREENCHCLAW_QA_ALLOW_LOCAL_IMAGE_PROVIDER: "1",
     // QA uses the fast runtime envelope for speed, but it still exercises
     // normal config-driven heartbeats and runtime config writes.
-    NEXISCLAW_ALLOW_SLOW_REPLY_TESTS: "1",
+    GREENCHCLAW_ALLOW_SLOW_REPLY_TESTS: "1",
     XDG_CONFIG_HOME: params.xdgConfigHome,
     XDG_DATA_HOME: params.xdgDataHome,
     XDG_CACHE_HOME: params.xdgCacheHome,
-    ...(params.bundledPluginsDir ? { NEXISCLAW_BUNDLED_PLUGINS_DIR: params.bundledPluginsDir } : {}),
+    ...(params.bundledPluginsDir
+      ? { GREENCHCLAW_BUNDLED_PLUGINS_DIR: params.bundledPluginsDir }
+      : {}),
     ...(params.compatibilityHostVersion
-      ? { NEXISCLAW_COMPATIBILITY_HOST_VERSION: params.compatibilityHostVersion }
+      ? { GREENCHCLAW_COMPATIBILITY_HOST_VERSION: params.compatibilityHostVersion }
       : {}),
   };
   const normalizedEnv = normalizeQaProviderModeEnv(env, params.providerMode);
@@ -496,10 +498,10 @@ export async function startQaGatewayChild(params: {
   controlUiEnabled?: boolean;
   enabledPluginIds?: string[];
   forwardHostHome?: boolean;
-  mutateConfig?: (cfg: NexisClawConfig) => NexisClawConfig;
+  mutateConfig?: (cfg: GreenchClawConfig) => GreenchClawConfig;
 }) {
   const tempRoot = await fs.mkdtemp(
-    path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-qa-suite-"),
+    path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-qa-suite-"),
   );
   const runtimeCwd = tempRoot;
   const distEntryPath = path.join(params.repoRoot, "dist", "index.js");
@@ -514,7 +516,7 @@ export async function startQaGatewayChild(params: {
   const xdgConfigHome = path.join(tempRoot, "xdg-config");
   const xdgDataHome = path.join(tempRoot, "xdg-data");
   const xdgCacheHome = path.join(tempRoot, "xdg-cache");
-  const configPath = path.join(tempRoot, "NexisClaw.json");
+  const configPath = path.join(tempRoot, "GreenchClaw.json");
   const gatewayToken = `qa-suite-${randomUUID()}`;
   await seedQaAgentWorkspace({
     workspaceDir,
@@ -605,12 +607,12 @@ export async function startQaGatewayChild(params: {
   const stderrLog = createWriteStream(stderrLogPath, { flags: "a" });
 
   const logs = () => output.text();
-  const keepTemp = process.env.NEXISCLAW_QA_KEEP_TEMP === "1";
+  const keepTemp = process.env.GREENCHCLAW_QA_KEEP_TEMP === "1";
   let gatewayPort = 0;
   let baseUrl = "";
   let wsUrl = "";
   let child: ReturnType<typeof spawn> | null = null;
-  let cfg!: NexisClawConfig;
+  let cfg!: GreenchClawConfig;
   let rpcClient: Awaited<ReturnType<typeof startQaGatewayRpcClient>> | null = null;
   let stagedBundledPluginsRoot: string | null = null;
   let env: NodeJS.ProcessEnv | null = null;

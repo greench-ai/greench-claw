@@ -1,10 +1,10 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   createTestWizardPrompter,
   runSetupWizardPrepare,
   runSetupWizardFinalize,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import type { WizardPrompter } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import type { WizardPrompter } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it, vi } from "vitest";
 import { createSlackSetupWizardBase } from "./setup-core.js";
 import { buildSlackSetupLines } from "./setup-shared.js";
@@ -27,7 +27,7 @@ const baseCfg = {
       appToken: "xapp-test",
     },
   },
-} as NexisClawConfig;
+} as GreenchClawConfig;
 
 function requireFirstStringArg(mock: ReturnType<typeof vi.fn>, label: string): string {
   const [call] = mock.mock.calls;
@@ -100,7 +100,7 @@ describe("slackSetupWizard.prepare", () => {
 
     await runSetupWizardPrepare({
       prepare: slackSetupWizard.prepare,
-      cfg: { channels: { slack: {} } } as NexisClawConfig,
+      cfg: { channels: { slack: {} } } as GreenchClawConfig,
       prompter: createTestWizardPrompter({
         plain,
         note,
@@ -112,12 +112,12 @@ describe("slackSetupWizard.prepare", () => {
     const manifest = requireFirstStringArg(plain, "Slack manifest plain text");
     expect(JSON.parse(manifest)).toEqual({
       display_information: {
-        name: "NexisClaw",
-        description: "NexisClaw connector for NexisClaw",
+        name: "GreenchClaw",
+        description: "GreenchClaw connector for GreenchClaw",
       },
       features: {
         bot_user: {
-          display_name: "NexisClaw",
+          display_name: "GreenchClaw",
           always_online: true,
         },
         app_home: {
@@ -127,8 +127,8 @@ describe("slackSetupWizard.prepare", () => {
         },
         slash_commands: [
           {
-            command: "/NexisClaw",
-            description: "Send a message to NexisClaw",
+            command: "/GreenchClaw",
+            description: "Send a message to GreenchClaw",
             should_escape: false,
           },
         ],
@@ -217,7 +217,7 @@ describe("slackSetupWizard.dmPolicy", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         "alerts",
       ),
     ).toBe("allowlist");
@@ -244,7 +244,7 @@ describe("slackSetupWizard.dmPolicy", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       "open",
       "alerts",
     );
@@ -276,7 +276,7 @@ describe("slackSetupWizard.status", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     expect(configured).toBe(false);

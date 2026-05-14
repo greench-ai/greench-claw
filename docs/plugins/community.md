@@ -1,12 +1,12 @@
 ---
-summary: "Community-maintained NexisClaw plugins: browse, install, and submit your own"
+summary: "Community-maintained GreenchClaw plugins: browse, install, and submit your own"
 read_when:
-  - You want to find third-party NexisClaw plugins
+  - You want to find third-party GreenchClaw plugins
   - You want to publish or list your own plugin
 title: "Community plugins"
 ---
 
-Community plugins are third-party packages that extend NexisClaw with new
+Community plugins are third-party packages that extend GreenchClaw with new
 channels, tools, providers, or other capabilities. They are built and maintained
 by the community, usually published on [ClawHub](/clawhub), and installable
 with a single command. Npm remains the launch default for bare package specs
@@ -17,10 +17,10 @@ docs-only PRs just to add your plugin here for discoverability; publish it on
 ClawHub instead.
 
 ```bash
-NexisClaw plugins install clawhub:<package-name>
+GreenchClaw plugins install clawhub:<package-name>
 ```
 
-Use `NexisClaw plugins install <package-name>` for npm-hosted packages.
+Use `GreenchClaw plugins install <package-name>` for npm-hosted packages.
 
 ## Listed plugins
 
@@ -30,24 +30,24 @@ Scrape data from any website with 20,000+ ready-made scrapers. Let your agent
 extract data from Instagram, Facebook, TikTok, YouTube, Google Maps, Google
 Search, e-commerce sites, and more — just by asking.
 
-- **npm:** `@apify/apify-NexisClaw-plugin`
-- **repo:** [github.com/apify/apify-NexisClaw-plugin](https://github.com/apify/apify-NexisClaw-plugin)
+- **npm:** `@apify/apify-GreenchClaw-plugin`
+- **repo:** [github.com/apify/apify-GreenchClaw-plugin](https://github.com/apify/apify-GreenchClaw-plugin)
 
 ```bash
-NexisClaw plugins install @apify/apify-NexisClaw-plugin
+GreenchClaw plugins install @apify/apify-GreenchClaw-plugin
 ```
 
 ### Codex App Server Bridge
 
-Independent NexisClaw bridge for Codex App Server conversations. Bind a chat to
+Independent GreenchClaw bridge for Codex App Server conversations. Bind a chat to
 a Codex thread, talk to it with plain text, and control it with chat-native
 commands for resume, planning, review, model selection, compaction, and more.
 
-- **npm:** `NexisClaw-codex-app-server`
-- **repo:** [github.com/pwrdrvr/NexisClaw-codex-app-server](https://github.com/pwrdrvr/NexisClaw-codex-app-server)
+- **npm:** `GreenchClaw-codex-app-server`
+- **repo:** [github.com/pwrdrvr/GreenchClaw-codex-app-server](https://github.com/pwrdrvr/GreenchClaw-codex-app-server)
 
 ```bash
-NexisClaw plugins install NexisClaw-codex-app-server
+GreenchClaw plugins install GreenchClaw-codex-app-server
 ```
 
 ### DingTalk
@@ -56,15 +56,15 @@ Enterprise robot integration using Stream mode. Supports text, images, and
 file messages via any DingTalk client.
 
 - **npm:** `@largezhou/ddingtalk`
-- **repo:** [github.com/largezhou/NexisClaw-dingtalk](https://github.com/largezhou/NexisClaw-dingtalk)
+- **repo:** [github.com/largezhou/GreenchClaw-dingtalk](https://github.com/largezhou/GreenchClaw-dingtalk)
 
 ```bash
-NexisClaw plugins install @largezhou/ddingtalk
+GreenchClaw plugins install @largezhou/ddingtalk
 ```
 
 ### Lossless Claw (LCM)
 
-Lossless Context Management plugin for NexisClaw. DAG-based conversation
+Lossless Context Management plugin for GreenchClaw. DAG-based conversation
 summarization with incremental compaction — preserves full context fidelity
 while reducing token usage.
 
@@ -72,7 +72,7 @@ while reducing token usage.
 - **repo:** [github.com/Martian-Engineering/lossless-claw](https://github.com/Martian-Engineering/lossless-claw)
 
 ```bash
-NexisClaw plugins install @martian-engineering/lossless-claw
+GreenchClaw plugins install @martian-engineering/lossless-claw
 ```
 
 ### Opik
@@ -80,69 +80,69 @@ NexisClaw plugins install @martian-engineering/lossless-claw
 Official plugin that exports agent traces to Opik. Monitor agent behavior,
 cost, tokens, errors, and more.
 
-- **npm:** `@opik/opik-NexisClaw`
-- **repo:** [github.com/comet-ml/opik-NexisClaw](https://github.com/comet-ml/opik-NexisClaw)
+- **npm:** `@opik/opik-GreenchClaw`
+- **repo:** [github.com/comet-ml/opik-GreenchClaw](https://github.com/comet-ml/opik-GreenchClaw)
 
 ```bash
-NexisClaw plugins install @opik/opik-NexisClaw
+GreenchClaw plugins install @opik/opik-GreenchClaw
 ```
 
 ### Prometheus Avatar
 
-Give your NexisClaw agent a Live2D avatar with real-time lip-sync, emotion
+Give your GreenchClaw agent a Live2D avatar with real-time lip-sync, emotion
 expressions, and text-to-speech. Includes creator tools for AI asset generation
 and one-click deployment to the Prometheus Marketplace. Currently in alpha.
 
-- **npm:** `@prometheusavatar/NexisClaw-plugin`
+- **npm:** `@prometheusavatar/GreenchClaw-plugin`
 - **repo:** [github.com/myths-labs/prometheus-avatar](https://github.com/myths-labs/prometheus-avatar)
 
 ```bash
-NexisClaw plugins install @prometheusavatar/NexisClaw-plugin
+GreenchClaw plugins install @prometheusavatar/GreenchClaw-plugin
 ```
 
 ### QQbot
 
-Connect NexisClaw to QQ via the QQ Bot API. Supports private chats, group
+Connect GreenchClaw to QQ via the QQ Bot API. Supports private chats, group
 mentions, channel messages, and rich media including voice, images, videos,
 and files.
 
-Current NexisClaw releases bundle QQ Bot. Use the bundled setup in
+Current GreenchClaw releases bundle QQ Bot. Use the bundled setup in
 [QQ Bot](/channels/qqbot) for normal installs; install this external plugin only
 when you intentionally want the Tencent-maintained standalone package.
 
-- **npm:** `@tencent-connect/NexisClaw-qqbot`
-- **repo:** [github.com/tencent-connect/NexisClaw-qqbot](https://github.com/tencent-connect/NexisClaw-qqbot)
+- **npm:** `@tencent-connect/GreenchClaw-qqbot`
+- **repo:** [github.com/tencent-connect/GreenchClaw-qqbot](https://github.com/tencent-connect/GreenchClaw-qqbot)
 
 ```bash
-NexisClaw plugins install @tencent-connect/NexisClaw-qqbot
+GreenchClaw plugins install @tencent-connect/GreenchClaw-qqbot
 ```
 
 ### wecom
 
-WeCom channel plugin for NexisClaw by the Tencent WeCom team. Powered by
+WeCom channel plugin for GreenchClaw by the Tencent WeCom team. Powered by
 WeCom Bot WebSocket persistent connections, it supports direct messages & group
 chats, streaming replies, proactive messaging, image/file processing, Markdown
 formatting, built-in access control, and document/meeting/messaging skills.
 
-- **npm:** `@wecom/wecom-NexisClaw-plugin`
-- **repo:** [github.com/WecomTeam/wecom-NexisClaw-plugin](https://github.com/WecomTeam/wecom-NexisClaw-plugin)
+- **npm:** `@wecom/wecom-GreenchClaw-plugin`
+- **repo:** [github.com/WecomTeam/wecom-GreenchClaw-plugin](https://github.com/WecomTeam/wecom-GreenchClaw-plugin)
 
 ```bash
-NexisClaw plugins install @wecom/wecom-NexisClaw-plugin
+GreenchClaw plugins install @wecom/wecom-GreenchClaw-plugin
 ```
 
 ### Yuanbao
 
-Yuanbao channel plugin for NexisClaw by the Tencent Yuanbao team. Powered by
+Yuanbao channel plugin for GreenchClaw by the Tencent Yuanbao team. Powered by
 WebSocket persistent connections, it supports direct messages & group chats,
 streaming replies, proactive messaging, image/file/audio/video processing,
 Markdown formatting, built-in access control, and slash-command menus.
 
-- **npm:** `NexisClaw-plugin-yuanbao`
-- **repo:** [github.com/YuanbaoTeam/yuanbao-NexisClaw-plugin](https://github.com/YuanbaoTeam/yuanbao-NexisClaw-plugin)
+- **npm:** `GreenchClaw-plugin-yuanbao`
+- **repo:** [github.com/YuanbaoTeam/yuanbao-GreenchClaw-plugin](https://github.com/YuanbaoTeam/yuanbao-GreenchClaw-plugin)
 
 ```bash
-NexisClaw plugins install NexisClaw-plugin-yuanbao
+GreenchClaw plugins install GreenchClaw-plugin-yuanbao
 ```
 
 ## Submit your plugin
@@ -151,7 +151,7 @@ We welcome community plugins that are useful, documented, and safe to operate.
 
 <Steps>
   <Step title="Publish to ClawHub or npm">
-    Your plugin must be installable via `NexisClaw plugins install \<package-name\>`.
+    Your plugin must be installable via `GreenchClaw plugins install \<package-name\>`.
     Publish to [ClawHub](/clawhub) unless you specifically need npm-only
     distribution.
     See [Building Plugins](/plugins/building-plugins) for the full guide.
@@ -168,7 +168,7 @@ We welcome community plugins that are useful, documented, and safe to operate.
     You do not need a docs PR just to make your plugin discoverable. Publish it
     on ClawHub instead.
 
-    Open a docs PR only when NexisClaw's source docs need an actual content
+    Open a docs PR only when GreenchClaw's source docs need an actual content
     change, such as correcting install guidance or adding cross-repo
     documentation that belongs in the main docs set.
 
@@ -177,12 +177,12 @@ We welcome community plugins that are useful, documented, and safe to operate.
 
 ## Quality bar
 
-| Requirement                 | Why                                           |
-| --------------------------- | --------------------------------------------- |
-| Published on ClawHub or npm | Users need `NexisClaw plugins install` to work |
-| Public GitHub repo          | Source review, issue tracking, transparency   |
-| Setup and usage docs        | Users need to know how to configure it        |
-| Active maintenance          | Recent updates or responsive issue handling   |
+| Requirement                 | Why                                              |
+| --------------------------- | ------------------------------------------------ |
+| Published on ClawHub or npm | Users need `GreenchClaw plugins install` to work |
+| Public GitHub repo          | Source review, issue tracking, transparency      |
+| Setup and usage docs        | Users need to know how to configure it           |
+| Active maintenance          | Recent updates or responsive issue handling      |
 
 Low-effort wrappers, unclear ownership, or unmaintained packages may be declined.
 

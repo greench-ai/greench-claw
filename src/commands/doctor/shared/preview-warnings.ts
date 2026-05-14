@@ -2,7 +2,7 @@ import { resolveAgentConfig } from "../../../agents/agent-scope-config.js";
 import { pickSandboxToolPolicy } from "../../../agents/sandbox-tool-policy.js";
 import { isToolAllowedByPolicies } from "../../../agents/tool-policy-match.js";
 import { mergeAlsoAllowPolicy, resolveToolProfilePolicy } from "../../../agents/tool-policy.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import type { AgentToolsConfig, ToolsConfig } from "../../../config/types.tools.js";
 import { collectChannelRouteTargets } from "../../../routing/channel-route-targets.js";
 import { createLazyImportLoader } from "../../../shared/lazy-promise.js";
@@ -21,19 +21,19 @@ function hasRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value && typeof value === "object" && !Array.isArray(value));
 }
 
-function listAgentRecords(cfg: NexisClawConfig): Record<string, unknown>[] {
+function listAgentRecords(cfg: GreenchClawConfig): Record<string, unknown>[] {
   return Array.isArray(cfg.agents?.list) ? cfg.agents.list.filter(hasRecord) : [];
 }
 
-function hasChannels(cfg: NexisClawConfig): boolean {
+function hasChannels(cfg: GreenchClawConfig): boolean {
   return hasRecord(cfg.channels);
 }
 
-function hasPlugins(cfg: NexisClawConfig): boolean {
+function hasPlugins(cfg: GreenchClawConfig): boolean {
   return hasRecord(cfg.plugins);
 }
 
-function hasPluginLoadPaths(cfg: NexisClawConfig): boolean {
+function hasPluginLoadPaths(cfg: GreenchClawConfig): boolean {
   const plugins = cfg.plugins;
   if (!hasRecord(plugins)) {
     return false;
@@ -42,7 +42,7 @@ function hasPluginLoadPaths(cfg: NexisClawConfig): boolean {
   return hasRecord(load) && Array.isArray(load.paths) && load.paths.length > 0;
 }
 
-function hasExplicitChannelPluginBlockerConfig(cfg: NexisClawConfig): boolean {
+function hasExplicitChannelPluginBlockerConfig(cfg: GreenchClawConfig): boolean {
   if (cfg.plugins?.enabled === false) {
     return true;
   }
@@ -70,7 +70,7 @@ function hasToolsBySenderKey(value: unknown): boolean {
   );
 }
 
-function hasConfiguredSafeBins(cfg: NexisClawConfig): boolean {
+function hasConfiguredSafeBins(cfg: GreenchClawConfig): boolean {
   const globalExec = cfg.tools?.exec;
   if (
     hasRecord(globalExec) &&
@@ -107,7 +107,7 @@ function resolveMessageToolAvailability(params: {
   ]);
 }
 
-function collectMessageToolUnavailableTargets(cfg: NexisClawConfig): string[] {
+function collectMessageToolUnavailableTargets(cfg: GreenchClawConfig): string[] {
   const agents = listAgentRecords(cfg);
   if (agents.length === 0) {
     return resolveMessageToolAvailability({ globalTools: cfg.tools })
@@ -124,7 +124,7 @@ function collectMessageToolUnavailableTargets(cfg: NexisClawConfig): string[] {
   );
 }
 
-function resolveGroupVisibleReplyProvenance(cfg: NexisClawConfig): {
+function resolveGroupVisibleReplyProvenance(cfg: GreenchClawConfig): {
   path: "messages.groupChat.visibleReplies" | "messages.visibleReplies";
   provenance: VisibleReplyPolicyProvenance;
   value: "automatic" | "message_tool";
@@ -159,7 +159,7 @@ function formatTargets(targets: string[]): string {
   return `${targets.slice(0, 2).join(", ")}, and ${targets.length - 2} more`;
 }
 
-export function collectVisibleReplyToolPolicyWarnings(cfg: NexisClawConfig): string[] {
+export function collectVisibleReplyToolPolicyWarnings(cfg: GreenchClawConfig): string[] {
   const targets = collectMessageToolUnavailableTargets(cfg);
   if (targets.length === 0) {
     return [];
@@ -173,11 +173,11 @@ export function collectVisibleReplyToolPolicyWarnings(cfg: NexisClawConfig): str
     const targetSummary = formatTargets(targets);
     if (groupPolicy.provenance === "default") {
       warnings.push(
-        `- messages.groupChat.visibleReplies defaults to "message_tool", but the message tool is unavailable for ${targetSummary}; NexisClaw falls back to automatic group/channel replies to avoid silent responses. Enable the message tool or set messages.groupChat.visibleReplies explicitly.`,
+        `- messages.groupChat.visibleReplies defaults to "message_tool", but the message tool is unavailable for ${targetSummary}; GreenchClaw falls back to automatic group/channel replies to avoid silent responses. Enable the message tool or set messages.groupChat.visibleReplies explicitly.`,
       );
     } else {
       warnings.push(
-        `- ${groupPolicy.path} is set to "message_tool", but the message tool is unavailable for ${targetSummary}; NexisClaw falls back to automatic visible replies, so normal replies may post to the source chat. Enable the message tool or set ${groupPolicy.path} to "automatic".`,
+        `- ${groupPolicy.path} is set to "message_tool", but the message tool is unavailable for ${targetSummary}; GreenchClaw falls back to automatic visible replies, so normal replies may post to the source chat. Enable the message tool or set ${groupPolicy.path} to "automatic".`,
       );
     }
   }
@@ -187,7 +187,7 @@ export function collectVisibleReplyToolPolicyWarnings(cfg: NexisClawConfig): str
     warnings.push(
       `- messages.visibleReplies is set to "message_tool", but the message tool is unavailable for ${formatTargets(
         targets,
-      )}; NexisClaw falls back to automatic direct-chat replies, so normal replies may post to the source chat. Enable the message tool or set messages.visibleReplies to "automatic".`,
+      )}; GreenchClaw falls back to automatic direct-chat replies, so normal replies may post to the source chat. Enable the message tool or set messages.visibleReplies to "automatic".`,
     );
   }
   return warnings;
@@ -203,7 +203,7 @@ function formatChannelList(channels: string[]): string {
     .join(", ")}, and ${channels.length - 2} more`;
 }
 
-export function collectChannelBoundMessageToolPolicyWarnings(cfg: NexisClawConfig): string[] {
+export function collectChannelBoundMessageToolPolicyWarnings(cfg: GreenchClawConfig): string[] {
   return collectChannelRouteTargets(cfg).flatMap((target) => {
     const agentTools = resolveAgentConfig(cfg, target.agentId)?.tools;
     if (resolveMessageToolAvailability({ globalTools: cfg.tools, agentTools })) {
@@ -218,7 +218,7 @@ export function collectChannelBoundMessageToolPolicyWarnings(cfg: NexisClawConfi
 }
 
 export async function collectDoctorPreviewWarnings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   doctorFixCommand: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<string[]> {

@@ -1,6 +1,6 @@
 import type { SourceReplyDeliveryMode } from "../../auto-reply/get-reply-options.types.js";
 import type { ReasoningLevel, ThinkLevel } from "../../auto-reply/thinking.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { ContextEngine, ContextEngineRuntimeContext } from "../../context-engine/types.js";
 import type { CommandQueueEnqueueFn } from "../../process/command-queue.types.js";
 import type { ExecElevatedDefaults } from "../bash-tools.exec-types.js";
@@ -40,7 +40,7 @@ export type CompactEmbeddedPiSessionParams = {
   currentTokenCount?: number;
   workspaceDir: string;
   agentDir?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   skillsSnapshot?: SkillSnapshot;
   provider?: string;
   model?: string;
@@ -54,7 +54,7 @@ export type CompactEmbeddedPiSessionParams = {
   contextEngineRuntimeContext?: ContextEngineRuntimeContext;
   /** Session-pinned embedded harness id. Prevents compaction hot-switching. */
   agentHarnessId?: string;
-  /** NexisClaw-owned runtime policy prepared for this compaction path. */
+  /** GreenchClaw-owned runtime policy prepared for this compaction path. */
   runtimePlan?: AgentRuntimePlan;
   thinkLevel?: ThinkLevel;
   reasoningLevel?: ReasoningLevel;

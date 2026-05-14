@@ -106,11 +106,11 @@ export function pickProbeHostForBind(
 }
 
 const SAFE_DAEMON_ENV_KEYS = [
-  "NEXISCLAW_PROFILE",
-  "NEXISCLAW_STATE_DIR",
-  "NEXISCLAW_CONFIG_PATH",
-  "NEXISCLAW_GATEWAY_PORT",
-  "NEXISCLAW_NIX_MODE",
+  "GREENCHCLAW_PROFILE",
+  "GREENCHCLAW_STATE_DIR",
+  "GREENCHCLAW_CONFIG_PATH",
+  "GREENCHCLAW_GATEWAY_PORT",
+  "GREENCHCLAW_NIX_MODE",
 ];
 
 export function filterDaemonEnv(env: Record<string, string> | undefined): Record<string, string> {
@@ -154,7 +154,9 @@ export function renderRuntimeHints(
   const hints: string[] = [];
   const fileLog = logFile ?? null;
   if (runtime.missingUnit) {
-    hints.push(`Service not installed. Run: ${formatCliCommand("NexisClaw gateway install", env)}`);
+    hints.push(
+      `Service not installed. Run: ${formatCliCommand("GreenchClaw gateway install", env)}`,
+    );
     if (fileLog) {
       hints.push(`File logs: ${fileLog}`);
     }
@@ -162,7 +164,7 @@ export function renderRuntimeHints(
   }
   if (runtime.missingSupervision) {
     hints.push(
-      `LaunchAgent installed but not loaded. Run: ${formatCliCommand("NexisClaw gateway restart", env)}`,
+      `LaunchAgent installed but not loaded. Run: ${formatCliCommand("GreenchClaw gateway restart", env)}`,
     );
     if (fileLog) {
       hints.push(`File logs: ${fileLog}`);
@@ -176,8 +178,8 @@ export function renderRuntimeHints(
     hints.push(
       ...buildPlatformRuntimeLogHints({
         env,
-        systemdServiceName: resolveGatewaySystemdServiceName(env.NEXISCLAW_PROFILE),
-        windowsTaskName: resolveGatewayWindowsTaskName(env.NEXISCLAW_PROFILE),
+        systemdServiceName: resolveGatewaySystemdServiceName(env.GREENCHCLAW_PROFILE),
+        windowsTaskName: resolveGatewayWindowsTaskName(env.GREENCHCLAW_PROFILE),
       }),
     );
   }
@@ -185,11 +187,11 @@ export function renderRuntimeHints(
 }
 
 export function renderGatewayServiceStartHints(env: NodeJS.ProcessEnv = process.env): string[] {
-  const profile = env.NEXISCLAW_PROFILE;
+  const profile = env.GREENCHCLAW_PROFILE;
   const container = resolveDaemonContainerContext(env);
   const hints = buildPlatformServiceStartHints({
-    installCommand: formatCliCommand("NexisClaw gateway install", env),
-    startCommand: formatCliCommand("NexisClaw gateway", env),
+    installCommand: formatCliCommand("GreenchClaw gateway install", env),
+    startCommand: formatCliCommand("GreenchClaw gateway", env),
     launchAgentPlistPath: `~/Library/LaunchAgents/${resolveGatewayLaunchAgentLabel(profile)}.plist`,
     systemdServiceName: resolveGatewaySystemdServiceName(profile),
     windowsTaskName: resolveGatewayWindowsTaskName(profile),

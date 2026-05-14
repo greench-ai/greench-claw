@@ -1,4 +1,4 @@
-import type { MemoryEmbeddingProvider } from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
+import type { MemoryEmbeddingProvider } from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({

@@ -1,5 +1,5 @@
 import path from "node:path";
-import { withTempHome } from "NexisClaw/plugin-sdk/test-env";
+import { withTempHome } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import { normalizeConfigPaths } from "./normalize-paths.js";
 
@@ -9,23 +9,23 @@ describe("normalizeConfigPaths", () => {
       const cfg = normalizeConfigPaths({
         tools: { exec: { pathPrepend: ["~/bin"] } },
         plugins: { load: { paths: ["~/plugins/a"] } },
-        logging: { file: "~/.NexisClaw/logs/NexisClaw.log" },
+        logging: { file: "~/.GreenchClaw/logs/GreenchClaw.log" },
         hooks: {
-          path: "~/.NexisClaw/hooks.json5",
+          path: "~/.GreenchClaw/hooks.json5",
           transformsDir: "~/hooks-xform",
         },
         channels: {
           telegram: {
             accounts: {
               personal: {
-                tokenFile: "~/.NexisClaw/telegram.token",
+                tokenFile: "~/.GreenchClaw/telegram.token",
               },
             },
           },
           whatsapp: {
             accounts: {
               personal: {
-                authDir: "~/.NexisClaw/credentials/wa-personal",
+                authDir: "~/.GreenchClaw/credentials/wa-personal",
               },
             },
           },
@@ -39,7 +39,7 @@ describe("normalizeConfigPaths", () => {
             {
               id: "main",
               workspace: "~/ws-agent",
-              agentDir: "~/.NexisClaw/agents/main",
+              agentDir: "~/.GreenchClaw/agents/main",
               identity: {
                 name: "~not-a-path",
               },
@@ -50,22 +50,24 @@ describe("normalizeConfigPaths", () => {
       });
 
       expect(cfg.plugins?.load?.paths?.[0]).toBe(path.join(home, "plugins", "a"));
-      expect(cfg.logging?.file).toBe(path.join(home, ".NexisClaw", "logs", "NexisClaw.log"));
-      expect(cfg.hooks?.path).toBe(path.join(home, ".NexisClaw", "hooks.json5"));
+      expect(cfg.logging?.file).toBe(path.join(home, ".GreenchClaw", "logs", "GreenchClaw.log"));
+      expect(cfg.hooks?.path).toBe(path.join(home, ".GreenchClaw", "hooks.json5"));
       expect(cfg.hooks?.transformsDir).toBe(path.join(home, "hooks-xform"));
       expect(cfg.tools?.exec?.pathPrepend?.[0]).toBe(path.join(home, "bin"));
       expect(cfg.channels?.telegram?.accounts?.personal?.tokenFile).toBe(
-        path.join(home, ".NexisClaw", "telegram.token"),
+        path.join(home, ".GreenchClaw", "telegram.token"),
       );
       expect(cfg.channels?.whatsapp?.accounts?.personal?.authDir).toBe(
-        path.join(home, ".NexisClaw", "credentials", "wa-personal"),
+        path.join(home, ".GreenchClaw", "credentials", "wa-personal"),
       );
       expect(cfg.channels?.imessage?.accounts?.personal?.dbPath).toBe(
         path.join(home, "Library", "Messages", "chat.db"),
       );
       expect(cfg.agents?.defaults?.workspace).toBe(path.join(home, "ws-default"));
       expect(cfg.agents?.list?.[0]?.workspace).toBe(path.join(home, "ws-agent"));
-      expect(cfg.agents?.list?.[0]?.agentDir).toBe(path.join(home, ".NexisClaw", "agents", "main"));
+      expect(cfg.agents?.list?.[0]?.agentDir).toBe(
+        path.join(home, ".GreenchClaw", "agents", "main"),
+      );
       expect(cfg.agents?.list?.[0]?.sandbox?.workspaceRoot).toBe(path.join(home, "sandbox-root"));
 
       // Non-path key => do not treat "~" as home expansion.

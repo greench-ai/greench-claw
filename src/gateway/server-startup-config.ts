@@ -8,7 +8,7 @@ import { isNixMode } from "../config/paths.js";
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
 import { applyConfigOverrides } from "../config/runtime-overrides.js";
 import type { GatewayAuthConfig, GatewayTailscaleConfig } from "../config/types.gateway.js";
-import type { ConfigFileSnapshot, NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { ConfigFileSnapshot, GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import {
@@ -32,7 +32,7 @@ type GatewayStartupLog = {
 type GatewaySecretsStateEventCode = "SECRETS_RELOADER_DEGRADED" | "SECRETS_RELOADER_RECOVERED";
 
 export type ActivateRuntimeSecrets = (
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   params: { reason: "startup" | "reload" | "restart-check"; activate: boolean },
 ) => Promise<
   Awaited<ReturnType<typeof import("../secrets/runtime.js").prepareSecretsRuntimeSnapshot>>
@@ -111,7 +111,7 @@ export async function loadGatewayStartupConfigSnapshot(params: {
 
 function withRuntimeConfig(
   snapshot: ConfigFileSnapshot,
-  runtimeConfig: NexisClawConfig,
+  runtimeConfig: GreenchClawConfig,
 ): ConfigFileSnapshot {
   return {
     ...snapshot,
@@ -125,7 +125,7 @@ export function createRuntimeSecretsActivator(params: {
   emitStateEvent: (
     code: GatewaySecretsStateEventCode,
     message: string,
-    cfg: NexisClawConfig,
+    cfg: GreenchClawConfig,
   ) => void;
   prepareRuntimeSecretsSnapshot?: PrepareRuntimeSecretsSnapshot;
   activateRuntimeSecretsSnapshot?: ActivateRuntimeSecretsSnapshot;
@@ -225,7 +225,7 @@ export function assertValidGatewayStartupConfigSnapshot(
       ? formatConfigIssueLines(snapshot.issues, "", { normalizeRoot: true }).join("\n")
       : "Unknown validation issue.";
   const doctorHint = options.includeDoctorHint
-    ? `\nRun "${formatCliCommand("NexisClaw doctor --fix")}" to repair, then retry.`
+    ? `\nRun "${formatCliCommand("GreenchClaw doctor --fix")}" to repair, then retry.`
     : "";
   throw new Error(`Invalid config at ${snapshot.path}.\n${issues}${doctorHint}`);
 }
@@ -291,7 +291,7 @@ export async function prepareGatewayStartupConfig(params: {
   };
 }
 
-function hasActiveGatewayAuthSecretRef(config: NexisClawConfig): boolean {
+function hasActiveGatewayAuthSecretRef(config: GreenchClawConfig): boolean {
   const states = evaluateGatewayAuthSurfaceStates({
     config,
     defaults: config.secrets?.defaults,
@@ -303,10 +303,10 @@ function hasActiveGatewayAuthSecretRef(config: NexisClawConfig): boolean {
   });
 }
 
-function pruneSkippedStartupSecretSurfaces(config: NexisClawConfig): NexisClawConfig {
+function pruneSkippedStartupSecretSurfaces(config: GreenchClawConfig): GreenchClawConfig {
   const skipChannels =
-    isTruthyEnvValue(process.env.NEXISCLAW_SKIP_CHANNELS) ||
-    isTruthyEnvValue(process.env.NEXISCLAW_SKIP_PROVIDERS);
+    isTruthyEnvValue(process.env.GREENCHCLAW_SKIP_CHANNELS) ||
+    isTruthyEnvValue(process.env.GREENCHCLAW_SKIP_PROVIDERS);
   if (!skipChannels || !config.channels) {
     return config;
   }
@@ -316,7 +316,7 @@ function pruneSkippedStartupSecretSurfaces(config: NexisClawConfig): NexisClawCo
   };
 }
 
-function assertRuntimeGatewayAuthNotKnownWeak(config: NexisClawConfig): void {
+function assertRuntimeGatewayAuthNotKnownWeak(config: GreenchClawConfig): void {
   assertGatewayAuthNotKnownWeak(
     resolveGatewayAuth({
       authConfig: config.gateway?.auth,
@@ -328,7 +328,7 @@ function assertRuntimeGatewayAuthNotKnownWeak(config: NexisClawConfig): void {
 
 function logGatewayAuthSurfaceDiagnostics(
   prepared: {
-    sourceConfig: NexisClawConfig;
+    sourceConfig: GreenchClawConfig;
     warnings: Array<{ code: string; path: string; message: string }>;
   },
   logSecrets: GatewayStartupLog,
@@ -359,9 +359,9 @@ function logGatewayAuthSurfaceDiagnostics(
 }
 
 function applyGatewayAuthOverridesForStartupPreflight(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   overrides: GatewayStartupConfigOverrides,
-): NexisClawConfig {
+): GreenchClawConfig {
   if (!overrides.auth && !overrides.tailscale) {
     return config;
   }

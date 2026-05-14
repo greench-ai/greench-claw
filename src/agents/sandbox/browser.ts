@@ -8,8 +8,8 @@ import {
 import {
   DEFAULT_BROWSER_ACTION_TIMEOUT_MS,
   DEFAULT_BROWSER_EVALUATE_ENABLED,
-  DEFAULT_NEXISCLAW_BROWSER_COLOR,
-  DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME,
+  DEFAULT_GREENCHCLAW_BROWSER_COLOR,
+  DEFAULT_GREENCHCLAW_BROWSER_PROFILE_NAME,
   resolveProfile,
   type ResolvedBrowserConfig,
 } from "../../plugin-sdk/browser-profiles.js";
@@ -52,17 +52,17 @@ import { validateNetworkMode } from "./validate-sandbox-security.js";
 import { appendWorkspaceMountArgs, SANDBOX_MOUNT_FORMAT_VERSION } from "./workspace-mounts.js";
 
 const HOT_BROWSER_WINDOW_MS = 5 * 60 * 1000;
-const CDP_SOURCE_RANGE_ENV_KEY = "NEXISCLAW_BROWSER_CDP_SOURCE_RANGE";
-const CDP_AUTH_TOKEN_ENV_KEY = "NEXISCLAW_BROWSER_CDP_AUTH_TOKEN";
-const SANDBOX_BROWSER_IMAGE_CONTRACT_LABEL = "org.NexisClaw.sandbox-browser.contract";
+const CDP_SOURCE_RANGE_ENV_KEY = "GREENCHCLAW_BROWSER_CDP_SOURCE_RANGE";
+const CDP_AUTH_TOKEN_ENV_KEY = "GREENCHCLAW_BROWSER_CDP_AUTH_TOKEN";
+const SANDBOX_BROWSER_IMAGE_CONTRACT_LABEL = "org.GreenchClaw.sandbox-browser.contract";
 
 function buildSandboxCdpAuthHeader(token: string): string {
-  return `Basic ${Buffer.from(`NexisClaw:${token}`).toString("base64")}`;
+  return `Basic ${Buffer.from(`GreenchClaw:${token}`).toString("base64")}`;
 }
 
 function buildSandboxCdpUrl(params: { cdpPort: number; authToken: string }): string {
   const url = new URL(`http://127.0.0.1:${params.cdpPort}`);
-  url.username = "NexisClaw";
+  url.username = "GreenchClaw";
   url.password = params.authToken;
   return url.toString().replace(/\/$/, "");
 }
@@ -125,12 +125,12 @@ function buildSandboxBrowserResolvedConfig(params: {
     localLaunchTimeoutMs: 15_000,
     localCdpReadyTimeoutMs: 8_000,
     actionTimeoutMs: DEFAULT_BROWSER_ACTION_TIMEOUT_MS,
-    color: DEFAULT_NEXISCLAW_BROWSER_COLOR,
+    color: DEFAULT_GREENCHCLAW_BROWSER_COLOR,
     executablePath: undefined,
     headless: params.headless,
     noSandbox: false,
     attachOnly: true,
-    defaultProfile: DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME,
+    defaultProfile: DEFAULT_GREENCHCLAW_BROWSER_PROFILE_NAME,
     extraArgs: [],
     tabCleanup: {
       enabled: true,
@@ -139,13 +139,13 @@ function buildSandboxBrowserResolvedConfig(params: {
       sweepMinutes: 5,
     },
     profiles: {
-      [DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME]: {
+      [DEFAULT_GREENCHCLAW_BROWSER_PROFILE_NAME]: {
         cdpPort: params.cdpPort,
         cdpUrl: buildSandboxCdpUrl({
           cdpPort: params.cdpPort,
           authToken: params.cdpAuthToken,
         }),
-        color: DEFAULT_NEXISCLAW_BROWSER_COLOR,
+        color: DEFAULT_GREENCHCLAW_BROWSER_COLOR,
       },
     },
     ssrfPolicy: params.ssrfPolicy,
@@ -273,7 +273,7 @@ export async function ensureSandboxBrowser(params: {
   if (hasContainer) {
     const registry = await readBrowserRegistry();
     const registryEntry = registry.entries.find((entry) => entry.containerName === containerName);
-    currentHash = await readDockerContainerLabel(containerName, "NexisClaw.configHash");
+    currentHash = await readDockerContainerLabel(containerName, "GreenchClaw.configHash");
     hashMismatch = !currentHash || currentHash !== expectedHash;
     if (!currentHash) {
       currentHash = registryEntry?.configHash ?? null;
@@ -286,13 +286,13 @@ export async function ensureSandboxBrowser(params: {
       if (isHot) {
         const hint = (() => {
           if (params.cfg.scope === "session") {
-            return `NexisClaw sandbox recreate --browser --session ${params.scopeKey}`;
+            return `GreenchClaw sandbox recreate --browser --session ${params.scopeKey}`;
           }
           if (params.cfg.scope === "agent") {
             const agentId = resolveSandboxAgentId(params.scopeKey) ?? "main";
-            return `NexisClaw sandbox recreate --browser --agent ${agentId}`;
+            return `GreenchClaw sandbox recreate --browser --agent ${agentId}`;
           }
-          return "NexisClaw sandbox recreate --browser --all";
+          return "GreenchClaw sandbox recreate --browser --all";
         })();
         defaultRuntime.log(
           `Sandbox browser config changed for ${containerName} (recently used). Recreate to apply: ${hint}`,
@@ -319,8 +319,8 @@ export async function ensureSandboxBrowser(params: {
       cfg: browserDockerCfg,
       scopeKey: params.scopeKey,
       labels: {
-        "NexisClaw.sandboxBrowser": "1",
-        "NexisClaw.browserConfigEpoch": SANDBOX_BROWSER_SECURITY_HASH_EPOCH,
+        "GreenchClaw.sandboxBrowser": "1",
+        "GreenchClaw.browserConfigEpoch": SANDBOX_BROWSER_SECURITY_HASH_EPOCH,
       },
       configHash: expectedHash,
       includeBinds: false,
@@ -342,20 +342,23 @@ export async function ensureSandboxBrowser(params: {
     if (noVncEnabled) {
       args.push("-p", `127.0.0.1::${params.cfg.browser.noVncPort}`);
     }
-    args.push("-e", `NEXISCLAW_BROWSER_HEADLESS=${params.cfg.browser.headless ? "1" : "0"}`);
-    args.push("-e", `NEXISCLAW_BROWSER_ENABLE_NOVNC=${params.cfg.browser.enableNoVnc ? "1" : "0"}`);
-    args.push("-e", `NEXISCLAW_BROWSER_CDP_PORT=${params.cfg.browser.cdpPort}`);
+    args.push("-e", `GREENCHCLAW_BROWSER_HEADLESS=${params.cfg.browser.headless ? "1" : "0"}`);
+    args.push(
+      "-e",
+      `GREENCHCLAW_BROWSER_ENABLE_NOVNC=${params.cfg.browser.enableNoVnc ? "1" : "0"}`,
+    );
+    args.push("-e", `GREENCHCLAW_BROWSER_CDP_PORT=${params.cfg.browser.cdpPort}`);
     args.push("-e", `${CDP_AUTH_TOKEN_ENV_KEY}=${cdpAuthToken}`);
     args.push(
       "-e",
-      `NEXISCLAW_BROWSER_AUTO_START_TIMEOUT_MS=${params.cfg.browser.autoStartTimeoutMs}`,
+      `GREENCHCLAW_BROWSER_AUTO_START_TIMEOUT_MS=${params.cfg.browser.autoStartTimeoutMs}`,
     );
     if (cdpSourceRange) {
       args.push("-e", `${CDP_SOURCE_RANGE_ENV_KEY}=${cdpSourceRange}`);
     }
-    args.push("-e", `NEXISCLAW_BROWSER_VNC_PORT=${params.cfg.browser.vncPort}`);
-    args.push("-e", `NEXISCLAW_BROWSER_NOVNC_PORT=${params.cfg.browser.noVncPort}`);
-    args.push("-e", "NEXISCLAW_BROWSER_NO_SANDBOX=1");
+    args.push("-e", `GREENCHCLAW_BROWSER_VNC_PORT=${params.cfg.browser.vncPort}`);
+    args.push("-e", `GREENCHCLAW_BROWSER_NOVNC_PORT=${params.cfg.browser.noVncPort}`);
+    args.push("-e", "GREENCHCLAW_BROWSER_NO_SANDBOX=1");
     if (noVncEnabled && noVncPassword) {
       args.push("-e", `${NOVNC_PASSWORD_ENV_KEY}=${noVncPassword}`);
     }
@@ -385,7 +388,7 @@ export async function ensureSandboxBrowser(params: {
 
   const existing = BROWSER_BRIDGES.get(params.scopeKey);
   const existingProfile = existing
-    ? resolveProfile(existing.bridge.state.resolved, DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME)
+    ? resolveProfile(existing.bridge.state.resolved, DEFAULT_GREENCHCLAW_BROWSER_PROFILE_NAME)
     : null;
   const desiredEvaluateEnabled = params.evaluateEnabled ?? DEFAULT_BROWSER_EVALUATE_ENABLED;
 

@@ -1,8 +1,8 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   __testing as sessionBindingTesting,
   registerSessionBindingAdapter,
-} from "NexisClaw/plugin-sdk/conversation-runtime";
+} from "GreenchClaw/plugin-sdk/conversation-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveIMessageConversationRoute } from "./conversation-route.js";
 
@@ -11,7 +11,7 @@ const baseCfg = {
   agents: {
     list: [{ id: "main" }, { id: "codex" }],
   },
-} satisfies NexisClawConfig;
+} satisfies GreenchClawConfig;
 
 describe("resolveIMessageConversationRoute", () => {
   beforeEach(() => {

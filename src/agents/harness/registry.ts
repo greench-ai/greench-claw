@@ -1,7 +1,7 @@
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import type { AgentHarness, AgentHarnessResetParams, RegisteredAgentHarness } from "./types.js";
 
-const AGENT_HARNESS_REGISTRY_STATE = Symbol.for("NexisClaw.agentHarnessRegistryState");
+const AGENT_HARNESS_REGISTRY_STATE = Symbol.for("GreenchClaw.agentHarnessRegistryState");
 const log = createSubsystemLogger("agents/harness");
 
 type AgentHarnessRegistryState = {

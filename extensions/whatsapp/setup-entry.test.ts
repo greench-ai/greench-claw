@@ -28,8 +28,8 @@ describe("whatsapp setup entry", () => {
       detectLegacyStateMigrations({
         cfg: {},
         env: {},
-        oauthDir: "/tmp/NexisClaw-whatsapp-empty",
-        stateDir: "/tmp/NexisClaw-state",
+        oauthDir: "/tmp/GreenchClaw-whatsapp-empty",
+        stateDir: "/tmp/GreenchClaw-state",
       }),
     ).toStrictEqual([]);
     const legacySessionSurface = setupEntry.loadLegacySessionSurface?.();

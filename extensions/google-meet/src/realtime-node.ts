@@ -1,10 +1,10 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import type { PluginRuntime, RuntimeLogger } from "NexisClaw/plugin-sdk/plugin-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import type { PluginRuntime, RuntimeLogger } from "GreenchClaw/plugin-sdk/plugin-runtime";
 import type {
   RealtimeTranscriptionProviderPlugin,
   RealtimeTranscriptionSession,
-} from "NexisClaw/plugin-sdk/realtime-transcription";
+} from "GreenchClaw/plugin-sdk/realtime-transcription";
 import {
   createRealtimeVoiceAgentTalkbackQueue,
   createTalkSessionController,
@@ -16,9 +16,9 @@ import {
   type TalkEvent,
   type TalkEventInput,
   type TalkSessionController,
-} from "NexisClaw/plugin-sdk/realtime-voice";
+} from "GreenchClaw/plugin-sdk/realtime-voice";
 import {
-  consultNexisClawAgentForGoogleMeet,
+  consultGreenchClawAgentForGoogleMeet,
   handleGoogleMeetRealtimeConsultToolCall,
   resolveGoogleMeetRealtimeTools,
 } from "./agent-consult.js";
@@ -82,7 +82,7 @@ function normalizeGoogleMeetTtsPromptText(text: string | undefined): string | un
 
 export async function startNodeAgentAudioBridge(params: {
   config: GoogleMeetConfig;
-  fullConfig: NexisClawConfig;
+  fullConfig: GreenchClawConfig;
   runtime: PluginRuntime;
   meetingSessionId: string;
   requesterSessionKey?: string;
@@ -215,7 +215,7 @@ export async function startNodeAgentAudioBridge(params: {
     responseStyle: "Brief, natural spoken answer for a live meeting.",
     fallbackText: "I hit an error while checking that. Please try again.",
     consult: ({ question, responseStyle }) =>
-      consultNexisClawAgentForGoogleMeet({
+      consultGreenchClawAgentForGoogleMeet({
         config: params.config,
         fullConfig: params.fullConfig,
         runtime: params.runtime,
@@ -335,7 +335,7 @@ export async function startNodeAgentAudioBridge(params: {
 
 export async function startNodeRealtimeAudioBridge(params: {
   config: GoogleMeetConfig;
-  fullConfig: NexisClawConfig;
+  fullConfig: GreenchClawConfig;
   runtime: PluginRuntime;
   meetingSessionId: string;
   requesterSessionKey?: string;
@@ -436,7 +436,7 @@ export async function startNodeRealtimeAudioBridge(params: {
     responseStyle: "Brief, natural spoken answer for a live meeting.",
     fallbackText: "I hit an error while checking that. Please try again.",
     consult: ({ question, responseStyle }) =>
-      consultNexisClawAgentForGoogleMeet({
+      consultGreenchClawAgentForGoogleMeet({
         config: params.config,
         fullConfig: params.fullConfig,
         runtime: params.runtime,

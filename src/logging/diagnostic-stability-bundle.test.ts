@@ -31,7 +31,7 @@ describe("diagnostic stability bundles", () => {
   }
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-stability-bundle-"));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-stability-bundle-"));
     resetStabilityBundleTestState();
   });
 

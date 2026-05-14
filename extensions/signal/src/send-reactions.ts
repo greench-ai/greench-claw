@@ -2,15 +2,15 @@
  * Signal reactions via signal-cli JSON-RPC API
  */
 
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { requireRuntimeConfig } from "NexisClaw/plugin-sdk/plugin-config-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { requireRuntimeConfig } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveSignalAccount } from "./accounts.js";
 import { signalRpcRequest } from "./client-adapter.js";
 import { resolveSignalRpcContext } from "./rpc-context.js";
 
 export type SignalReactionOpts = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   baseUrl?: string;
   account?: string;
   accountId?: string;

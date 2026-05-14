@@ -5,7 +5,7 @@ import {
   type MemoryEmbeddingProviderAdapter,
   type MemoryEmbeddingProviderCreateOptions,
   type MemoryEmbeddingProviderRuntime,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
 import { formatErrorMessage } from "../dreaming-shared.js";
 import { canAutoSelectLocal } from "./provider-adapters.js";
 

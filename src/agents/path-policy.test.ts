@@ -17,8 +17,8 @@ describe("toRelativeWorkspacePath (windows semantics)", () => {
   it("accepts windows paths with mixed separators and case", () => {
     const platformSpy = vi.spyOn(process, "platform", "get").mockReturnValue("win32");
     try {
-      const root = "C:\\Users\\User\\NexisClaw";
-      const candidate = "c:/users/user/NexisClaw/memory/log.txt";
+      const root = "C:\\Users\\User\\GreenchClaw";
+      const candidate = "c:/users/user/GreenchClaw/memory/log.txt";
       expect(toRelativeWorkspacePath(root, candidate)).toBe("memory\\log.txt");
     } finally {
       platformSpy.mockRestore();
@@ -28,7 +28,7 @@ describe("toRelativeWorkspacePath (windows semantics)", () => {
   it("rejects windows paths outside workspace root", () => {
     const platformSpy = vi.spyOn(process, "platform", "get").mockReturnValue("win32");
     try {
-      const root = "C:\\Users\\User\\NexisClaw";
+      const root = "C:\\Users\\User\\GreenchClaw";
       const candidate = "C:\\Users\\User\\Other\\log.txt";
       expect(() => toRelativeWorkspacePath(root, candidate)).toThrow("Path escapes workspace root");
     } finally {

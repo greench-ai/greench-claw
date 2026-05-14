@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import type { OnboardOptions } from "../../onboard-types.js";
 import { applyNonInteractiveGatewayConfig } from "./gateway-config.js";
 
@@ -30,21 +30,21 @@ const baseOpts = {} as OnboardOptions;
 const SAMPLE_SECRET_REF = {
   source: "env" as const,
   provider: "default",
-  id: "NEXISCLAW_GATEWAY_TOKEN_REF",
+  id: "GREENCHCLAW_GATEWAY_TOKEN_REF",
 };
 
-function createTokenConfig(token: unknown): NexisClawConfig {
+function createTokenConfig(token: unknown): GreenchClawConfig {
   return {
     gateway: { auth: { mode: "token", token } },
-  } as unknown as NexisClawConfig;
+  } as unknown as GreenchClawConfig;
 }
 
 function applyGatewayConfig({
-  nextConfig = {} as NexisClawConfig,
+  nextConfig = {} as GreenchClawConfig,
   opts = baseOpts,
   runtime = createRuntime(),
 }: {
-  nextConfig?: NexisClawConfig;
+  nextConfig?: GreenchClawConfig;
   opts?: OnboardOptions;
   runtime?: ReturnType<typeof createRuntime>;
 } = {}) {
@@ -57,20 +57,20 @@ function applyGatewayConfig({
 }
 
 describe("applyNonInteractiveGatewayConfig token resolution chain", () => {
-  const originalEnvToken = process.env.NEXISCLAW_GATEWAY_TOKEN;
+  const originalEnvToken = process.env.GREENCHCLAW_GATEWAY_TOKEN;
   const originalRefValue = process.env[SAMPLE_SECRET_REF.id];
 
   beforeEach(() => {
     vi.clearAllMocks();
-    delete process.env.NEXISCLAW_GATEWAY_TOKEN;
+    delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
     delete process.env[SAMPLE_SECRET_REF.id];
   });
 
   afterEach(() => {
     if (originalEnvToken === undefined) {
-      delete process.env.NEXISCLAW_GATEWAY_TOKEN;
+      delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
     } else {
-      process.env.NEXISCLAW_GATEWAY_TOKEN = originalEnvToken;
+      process.env.GREENCHCLAW_GATEWAY_TOKEN = originalEnvToken;
     }
     if (originalRefValue === undefined) {
       delete process.env[SAMPLE_SECRET_REF.id];
@@ -90,10 +90,10 @@ describe("applyNonInteractiveGatewayConfig token resolution chain", () => {
     expect(randomToken).not.toHaveBeenCalled();
   });
 
-  it("prefers existing plaintext token over ambient NEXISCLAW_GATEWAY_TOKEN on re-onboard", () => {
-    // A stale shell/launchd NEXISCLAW_GATEWAY_TOKEN must not rotate a
+  it("prefers existing plaintext token over ambient GREENCHCLAW_GATEWAY_TOKEN on re-onboard", () => {
+    // A stale shell/launchd GREENCHCLAW_GATEWAY_TOKEN must not rotate a
     // persisted token — that would break already-paired clients.
-    process.env.NEXISCLAW_GATEWAY_TOKEN = "stale-env-token";
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = "stale-env-token";
     const nextConfig = createTokenConfig("existing-user-token");
 
     const result = applyGatewayConfig({ nextConfig });
@@ -114,8 +114,8 @@ describe("applyNonInteractiveGatewayConfig token resolution chain", () => {
     expect(randomToken).not.toHaveBeenCalled();
   });
 
-  it("uses NEXISCLAW_GATEWAY_TOKEN to fill an empty config on first-run", () => {
-    process.env.NEXISCLAW_GATEWAY_TOKEN = "env-token";
+  it("uses GREENCHCLAW_GATEWAY_TOKEN to fill an empty config on first-run", () => {
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = "env-token";
 
     const result = applyGatewayConfig();
 
@@ -141,9 +141,9 @@ describe("applyNonInteractiveGatewayConfig token resolution chain", () => {
     expect(randomToken).not.toHaveBeenCalled();
   });
 
-  it("preserves an existing SecretRef even when ambient NEXISCLAW_GATEWAY_TOKEN is set", () => {
+  it("preserves an existing SecretRef even when ambient GREENCHCLAW_GATEWAY_TOKEN is set", () => {
     // A stale ambient env must not declassify a configured SecretRef.
-    process.env.NEXISCLAW_GATEWAY_TOKEN = "stale-env-token";
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = "stale-env-token";
     const nextConfig = createTokenConfig(SAMPLE_SECRET_REF);
 
     const result = applyGatewayConfig({ nextConfig });
@@ -175,7 +175,7 @@ describe("applyNonInteractiveGatewayConfig token resolution chain", () => {
   });
 
   it("overrides an existing SecretRef when --gateway-token-ref-env is provided", () => {
-    const newRefId = "NEXISCLAW_GATEWAY_TOKEN_NEW_REF";
+    const newRefId = "GREENCHCLAW_GATEWAY_TOKEN_NEW_REF";
     process.env[newRefId] = "resolved-new-ref-value";
     try {
       const nextConfig = createTokenConfig(SAMPLE_SECRET_REF);
@@ -207,7 +207,7 @@ describe("applyNonInteractiveGatewayConfig token resolution chain", () => {
 
     expect(result).toBeNull();
     expect(runtime.error).toHaveBeenCalledWith(
-      'Environment variable "MISSING_GATEWAY_TOKEN_ENV" is missing or empty. Export it first, then rerun NexisClaw onboard --non-interactive.',
+      'Environment variable "MISSING_GATEWAY_TOKEN_ENV" is missing or empty. Export it first, then rerun GreenchClaw onboard --non-interactive.',
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(randomToken).not.toHaveBeenCalled();

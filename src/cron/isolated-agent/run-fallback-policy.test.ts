@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { CronJob } from "../types.js";
 import { resolveCronFallbacksOverride } from "./run-fallback-policy.js";
 
@@ -14,7 +14,7 @@ function makeJob(payload: CronJob["payload"]): CronJob {
   } as CronJob;
 }
 
-function makeConfig(fallbacks?: string[]): NexisClawConfig {
+function makeConfig(fallbacks?: string[]): GreenchClawConfig {
   return {
     agents: {
       defaults: {

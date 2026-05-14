@@ -21,8 +21,8 @@ export async function withWindowsEnv(
   const env = {
     USERPROFILE: tmpDir,
     APPDATA: path.join(tmpDir, "AppData", "Roaming"),
-    NEXISCLAW_PROFILE: "default",
-    NEXISCLAW_GATEWAY_PORT: "18789",
+    GREENCHCLAW_PROFILE: "default",
+    GREENCHCLAW_GATEWAY_PORT: "18789",
   };
   try {
     await run({ tmpDir, env });
@@ -40,7 +40,7 @@ export function resetSchtasksBaseMocks() {
 
 export async function writeGatewayScript(
   env: Record<string, string>,
-  port = Number(env.NEXISCLAW_GATEWAY_PORT || "18789"),
+  port = Number(env.GREENCHCLAW_GATEWAY_PORT || "18789"),
 ) {
   const scriptPath = resolveTaskScriptPath(env);
   await fs.mkdir(path.dirname(scriptPath), { recursive: true });
@@ -48,8 +48,8 @@ export async function writeGatewayScript(
     scriptPath,
     [
       "@echo off",
-      `set "NEXISCLAW_GATEWAY_PORT=${port}"`,
-      `"C:\\Program Files\\nodejs\\node.exe" "C:\\Users\\steipete\\AppData\\Roaming\\npm\\node_modules\\NexisClaw\\dist\\index.js" gateway --port ${port}`,
+      `set "GREENCHCLAW_GATEWAY_PORT=${port}"`,
+      `"C:\\Program Files\\nodejs\\node.exe" "C:\\Users\\steipete\\AppData\\Roaming\\npm\\node_modules\\GreenchClaw\\dist\\index.js" gateway --port ${port}`,
       "",
     ].join("\r\n"),
     "utf8",

@@ -1,16 +1,16 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   normalizeWebhookPath,
   resolveRequestClientIp,
   type FixedWindowRateLimiter,
-} from "NexisClaw/plugin-sdk/webhook-ingress";
-import type { WebhookInFlightLimiter } from "NexisClaw/plugin-sdk/webhook-request-guards";
-import { readJsonWebhookBodyOrReject } from "NexisClaw/plugin-sdk/webhook-request-guards";
+} from "GreenchClaw/plugin-sdk/webhook-ingress";
+import type { WebhookInFlightLimiter } from "GreenchClaw/plugin-sdk/webhook-request-guards";
+import { readJsonWebhookBodyOrReject } from "GreenchClaw/plugin-sdk/webhook-request-guards";
 import {
   resolveWebhookTargetWithAuthOrReject,
   withResolvedWebhookRequestPipeline,
-} from "NexisClaw/plugin-sdk/webhook-targets";
+} from "GreenchClaw/plugin-sdk/webhook-targets";
 import { verifyGoogleChatRequest } from "./auth.js";
 import type { WebhookTarget } from "./monitor-types.js";
 import type {

@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveGreenchClawPackageRootSync } from "../infra/GreenchClaw-root.js";
 import { tryReadJsonSync } from "../infra/json-files.js";
-import { resolveNexisClawPackageRootSync } from "../infra/NexisClaw-root.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 import { PluginLruCache } from "./plugin-cache-primitives.js";
 
@@ -59,7 +59,7 @@ function listPluginSdkSubpathsFromPackageJson(pkg: PluginSdkPackageJson): string
     .toSorted();
 }
 
-function hasTrustedNexisClawRootIndicator(params: {
+function hasTrustedGreenchClawRootIndicator(params: {
   packageRoot: string;
   packageJson: PluginSdkPackageJson;
 }): boolean {
@@ -72,14 +72,14 @@ function hasTrustedNexisClawRootIndicator(params: {
     return false;
   }
   const hasCliEntryExport = Object.prototype.hasOwnProperty.call(packageExports, "./cli-entry");
-  const hasNexisClawBin =
+  const hasGreenchClawBin =
     (typeof params.packageJson.bin === "string" &&
-      normalizeLowercaseStringOrEmpty(params.packageJson.bin).includes("NexisClaw")) ||
+      normalizeLowercaseStringOrEmpty(params.packageJson.bin).includes("GreenchClaw")) ||
     (typeof params.packageJson.bin === "object" &&
       params.packageJson.bin !== null &&
-      typeof params.packageJson.bin.NexisClaw === "string");
-  const hasNexisClawEntrypoint = fs.existsSync(path.join(params.packageRoot, "NexisClaw.mjs"));
-  return hasCliEntryExport || hasNexisClawBin || hasNexisClawEntrypoint;
+      typeof params.packageJson.bin.GreenchClaw === "string");
+  const hasGreenchClawEntrypoint = fs.existsSync(path.join(params.packageRoot, "GreenchClaw.mjs"));
+  return hasCliEntryExport || hasGreenchClawBin || hasGreenchClawEntrypoint;
 }
 
 function readPluginSdkSubpathsFromPackageRoot(packageRoot: string): string[] | null {
@@ -87,21 +87,21 @@ function readPluginSdkSubpathsFromPackageRoot(packageRoot: string): string[] | n
   if (!pkg) {
     return null;
   }
-  if (!hasTrustedNexisClawRootIndicator({ packageRoot, packageJson: pkg })) {
+  if (!hasTrustedGreenchClawRootIndicator({ packageRoot, packageJson: pkg })) {
     return null;
   }
   const subpaths = listPluginSdkSubpathsFromPackageJson(pkg);
   return subpaths.length > 0 ? subpaths : null;
 }
 
-function resolveTrustedNexisClawRootFromArgvHint(params: {
+function resolveTrustedGreenchClawRootFromArgvHint(params: {
   argv1?: string;
   cwd: string;
 }): string | null {
   if (!params.argv1) {
     return null;
   }
-  const packageRoot = resolveNexisClawPackageRootSync({
+  const packageRoot = resolveGreenchClawPackageRootSync({
     cwd: params.cwd,
     argv1: params.argv1,
   });
@@ -112,7 +112,7 @@ function resolveTrustedNexisClawRootFromArgvHint(params: {
   if (!packageJson) {
     return null;
   }
-  return hasTrustedNexisClawRootIndicator({ packageRoot, packageJson }) ? packageRoot : null;
+  return hasTrustedGreenchClawRootIndicator({ packageRoot, packageJson }) ? packageRoot : null;
 }
 
 function findNearestPluginSdkPackageRoot(startDir: string, maxDepth = 12): string | null {
@@ -135,13 +135,13 @@ export function resolveLoaderPackageRoot(
   params: LoaderModuleResolveParams & { modulePath: string },
 ): string | null {
   const cwd = params.cwd ?? path.dirname(params.modulePath);
-  const fromModulePath = resolveNexisClawPackageRootSync({ cwd });
+  const fromModulePath = resolveGreenchClawPackageRootSync({ cwd });
   if (fromModulePath) {
     return fromModulePath;
   }
   const argv1 = params.argv1 ?? process.argv[1];
   const moduleUrl = params.moduleUrl ?? (params.modulePath ? undefined : import.meta.url);
-  return resolveNexisClawPackageRootSync({
+  return resolveGreenchClawPackageRootSync({
     cwd,
     ...(argv1 ? { argv1 } : {}),
     ...(moduleUrl ? { moduleUrl } : {}),
@@ -152,11 +152,11 @@ function resolveLoaderPluginSdkPackageRoot(
   params: LoaderModuleResolveParams & { modulePath: string },
 ): string | null {
   const cwd = params.cwd ?? path.dirname(params.modulePath);
-  const fromCwd = resolveNexisClawPackageRootSync({ cwd });
+  const fromCwd = resolveGreenchClawPackageRootSync({ cwd });
   const fromExplicitHints =
-    resolveTrustedNexisClawRootFromArgvHint({ cwd, argv1: params.argv1 }) ??
+    resolveTrustedGreenchClawRootFromArgvHint({ cwd, argv1: params.argv1 }) ??
     (params.moduleUrl
-      ? resolveNexisClawPackageRootSync({
+      ? resolveGreenchClawPackageRootSync({
           cwd,
           moduleUrl: params.moduleUrl,
         })
@@ -264,7 +264,7 @@ const cachedPluginSdkExportedSubpaths = new PluginLruCache<string[]>(
 const cachedPluginSdkScopedAliasMaps = new PluginLruCache<Record<string, string>>(
   MAX_PLUGIN_LOADER_ALIAS_CACHE_ENTRIES,
 );
-const PLUGIN_SDK_PACKAGE_NAMES = ["NexisClaw/plugin-sdk", "@NexisClaw/plugin-sdk"] as const;
+const PLUGIN_SDK_PACKAGE_NAMES = ["GreenchClaw/plugin-sdk", "@GreenchClaw/plugin-sdk"] as const;
 const CODEX_NATIVE_TASK_RUNTIME_PLUGIN_SDK_SUBPATH = "codex-native-task-runtime";
 const PLUGIN_SDK_SOURCE_CANDIDATE_EXTENSIONS = [
   ".ts",
@@ -318,7 +318,7 @@ function readPrivateLocalOnlyPluginSdkSubpaths(packageRoot: string): string[] {
 function readBundledPluginPackageName(packageJsonPath: string): string | null {
   const parsed = tryReadJsonSync<{ name?: unknown }>(packageJsonPath);
   const name = typeof parsed?.name === "string" ? parsed.name.trim() : "";
-  return name.startsWith("@NexisClaw/") ? name : null;
+  return name.startsWith("@GreenchClaw/") ? name : null;
 }
 
 function isBundledPluginPublicSurfaceSourceBasename(params: {
@@ -451,7 +451,7 @@ function resolveBundledPluginPackagePublicSurfaceAliasMap(params: {
 }
 
 function shouldIncludePrivateLocalOnlyPluginSdkSubpaths() {
-  return process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI === "1";
+  return process.env.GREENCHCLAW_ENABLE_PRIVATE_QA_CLI === "1";
 }
 
 function isBundledCodexPluginModulePath(params: { packageRoot: string; modulePath: string }) {
@@ -613,7 +613,7 @@ export function resolvePluginSdkScopedAliasMap(
         }
         break;
       }
-      if (Object.prototype.hasOwnProperty.call(aliasMap, `NexisClaw/plugin-sdk/${subpath}`)) {
+      if (Object.prototype.hasOwnProperty.call(aliasMap, `GreenchClaw/plugin-sdk/${subpath}`)) {
         break;
       }
     }
@@ -786,7 +786,7 @@ export function buildPluginLoaderAliasMap(
   const extensionApiAlias = resolveExtensionApiAlias({ modulePath, pluginSdkResolution });
   const result: Record<string, string> = {
     ...(extensionApiAlias
-      ? { "NexisClaw/extension-api": normalizeJitiAliasTargetPath(extensionApiAlias) }
+      ? { "GreenchClaw/extension-api": normalizeJitiAliasTargetPath(extensionApiAlias) }
       : {}),
     ...resolveBundledPluginPackagePublicSurfaceAliasMap({
       modulePath,

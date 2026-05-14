@@ -1,6 +1,6 @@
 import type { CliDeps } from "../cli/deps.types.js";
 import type { CronFailureDestinationConfig } from "../config/types.cron.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   resolveCronDeliveryPlan,
   resolveFailureDestination,
@@ -27,7 +27,7 @@ type CronLogger = {
 
 type CronAgentResolver = (requested?: string | null) => {
   agentId: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 };
 
 type CronWebhookTarget = {

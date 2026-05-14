@@ -14,7 +14,7 @@ describe("acquireFileLock", () => {
 
   beforeEach(async () => {
     resetFileLockStateForTest();
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-file-lock-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-file-lock-"));
   });
 
   afterEach(async () => {

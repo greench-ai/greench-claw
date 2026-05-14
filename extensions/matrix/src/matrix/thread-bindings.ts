@@ -1,14 +1,17 @@
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { readJsonFileWithFallback, writeJsonFileAtomically } from "NexisClaw/plugin-sdk/json-store";
-import { resolveAgentIdFromSessionKey } from "NexisClaw/plugin-sdk/session-key-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import {
+  readJsonFileWithFallback,
+  writeJsonFileAtomically,
+} from "GreenchClaw/plugin-sdk/json-store";
+import { resolveAgentIdFromSessionKey } from "GreenchClaw/plugin-sdk/session-key-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   registerSessionBindingAdapter,
   resolveThreadBindingFarewellText,
   type SessionBindingAdapter,
   unregisterSessionBindingAdapter,
-} from "NexisClaw/plugin-sdk/thread-bindings-session-runtime";
+} from "GreenchClaw/plugin-sdk/thread-bindings-session-runtime";
 import { claimCurrentTokenStorageState, resolveMatrixStateFilePath } from "./client/storage.js";
 import type { MatrixAuth } from "./client/types.js";
 import type { MatrixClient } from "./sdk.js";
@@ -140,7 +143,7 @@ function buildMatrixBindingIntroText(params: {
 }
 
 async function sendBindingMessage(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   client: MatrixClient;
   accountId: string;
   roomId: string;
@@ -161,7 +164,7 @@ async function sendBindingMessage(params: {
 }
 
 async function sendFarewellMessage(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   client: MatrixClient;
   accountId: string;
   record: MatrixThreadBindingRecord;
@@ -196,7 +199,7 @@ async function sendFarewellMessage(params: {
 }
 
 export async function createMatrixThreadBindingManager(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   auth: MatrixAuth;
   client: MatrixClient;

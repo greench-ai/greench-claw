@@ -3,7 +3,7 @@ import {
   currentPromptHistoryMessage,
   mediaOnlyHistoryMessage,
   structuredHistoryMessage,
-} from "NexisClaw/plugin-sdk/agent-runtime-test-contracts";
+} from "GreenchClaw/plugin-sdk/agent-runtime-test-contracts";
 import { describe, expect, it } from "vitest";
 import { projectContextEngineAssemblyForCodex } from "./context-engine-projection.js";
 

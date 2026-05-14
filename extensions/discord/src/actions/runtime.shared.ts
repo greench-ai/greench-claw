@@ -1,5 +1,5 @@
 import { parseAvailableTags, readNumberParam, readStringParam } from "../runtime-api.js";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import type {
   DiscordChannelCreate,
   DiscordChannelEdit,
@@ -28,10 +28,10 @@ function readDiscordBooleanParam(
 export function createDiscordActionOptions<
   T extends Record<string, unknown> = Record<string, never>,
 >(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string;
   extra?: T;
-}): { cfg: NexisClawConfig; accountId?: string } & T {
+}): { cfg: GreenchClawConfig; accountId?: string } & T {
   return {
     cfg: params.cfg,
     ...(params.accountId ? { accountId: params.accountId } : {}),

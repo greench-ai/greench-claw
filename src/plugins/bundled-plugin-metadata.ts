@@ -15,13 +15,13 @@ import {
 import {
   getPackageManifestMetadata,
   loadPluginManifest,
-  type NexisClawPackageManifest,
+  type GreenchClawPackageManifest,
   type PackageManifest,
   type PluginManifest,
 } from "./manifest.js";
 import { resolveLoaderPackageRoot } from "./sdk-alias.js";
 
-const NEXISCLAW_PACKAGE_ROOT =
+const GREENCHCLAW_PACKAGE_ROOT =
   resolveLoaderPackageRoot({
     modulePath: fileURLToPath(import.meta.url),
     moduleUrl: import.meta.url,
@@ -46,7 +46,7 @@ export type BundledPluginMetadata = {
   packageName?: string;
   packageVersion?: string;
   packageDescription?: string;
-  packageManifest?: NexisClawPackageManifest;
+  packageManifest?: GreenchClawPackageManifest;
   manifest: PluginManifest;
 };
 
@@ -173,7 +173,7 @@ export function listBundledPluginMetadata(params?: {
   includeChannelConfigs?: boolean;
   includeSyntheticChannelConfigs?: boolean;
 }): readonly BundledPluginMetadata[] {
-  const rootDir = path.resolve(params?.rootDir ?? NEXISCLAW_PACKAGE_ROOT);
+  const rootDir = path.resolve(params?.rootDir ?? GREENCHCLAW_PACKAGE_ROOT);
   const scanDir = params?.scanDir ? path.resolve(params.scanDir) : undefined;
   const resolvedScanDir = resolveBundledPluginMetadataScanDir(rootDir, scanDir);
   const includeChannelConfigs = params?.includeChannelConfigs ?? !RUNNING_FROM_BUILT_ARTIFACT;

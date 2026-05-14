@@ -21,7 +21,9 @@ export function resolvePluginSourceRoots(params: {
   const workspaceRoot = params.workspaceDir ? resolveUserPath(params.workspaceDir, env) : undefined;
   const stock = resolveBundledPluginsDir(env);
   const global = path.join(resolveConfigDir(env), "extensions");
-  const workspace = workspaceRoot ? path.join(workspaceRoot, ".NexisClaw", "extensions") : undefined;
+  const workspace = workspaceRoot
+    ? path.join(workspaceRoot, ".GreenchClaw", "extensions")
+    : undefined;
   return { stock, global, workspace };
 }
 

@@ -30,7 +30,7 @@ vi.mock("./config.js", () => ({
   resolveBrowserConfig: vi.fn(() => ({
     enabled: true,
     controlPort: 18791,
-    profiles: { NexisClaw: { cdpPort: 18800 } },
+    profiles: { GreenchClaw: { cdpPort: 18800 } },
   })),
 }));
 

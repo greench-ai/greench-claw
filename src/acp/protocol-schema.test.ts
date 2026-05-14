@@ -40,7 +40,7 @@ const fixtures: SchemaFixture[] = [
     name: "session/new",
     schema: zNewSessionRequest,
     valid: {
-      cwd: "/tmp/NexisClaw",
+      cwd: "/tmp/GreenchClaw",
       mcpServers: [],
     },
     invalid: {
@@ -81,11 +81,11 @@ const fixtures: SchemaFixture[] = [
     name: "session/list",
     schema: zListSessionsRequest,
     valid: {
-      cwd: "/tmp/NexisClaw",
+      cwd: "/tmp/GreenchClaw",
       cursor: null,
     },
     invalid: {
-      cwd: "/tmp/NexisClaw",
+      cwd: "/tmp/GreenchClaw",
       cursor: 123,
     },
   },
@@ -94,7 +94,7 @@ const fixtures: SchemaFixture[] = [
     schema: zLoadSessionRequest,
     valid: {
       sessionId: "agent:main:work",
-      cwd: "/tmp/NexisClaw",
+      cwd: "/tmp/GreenchClaw",
       mcpServers: [],
     },
     invalid: {
@@ -107,7 +107,7 @@ const fixtures: SchemaFixture[] = [
     schema: zResumeSessionRequest,
     valid: {
       sessionId: "agent:main:work",
-      cwd: "/tmp/NexisClaw",
+      cwd: "/tmp/GreenchClaw",
       mcpServers: [],
     },
     invalid: {

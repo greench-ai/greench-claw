@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 const runEmbeddedPiAgentMock = vi.fn();
 
 vi.mock("../agents/agent-scope.js", () => ({
   resolveDefaultAgentId: vi.fn(() => "main"),
-  resolveAgentWorkspaceDir: vi.fn(() => "/tmp/NexisClaw-agent"),
-  resolveAgentDir: vi.fn(() => "/tmp/NexisClaw-agent/.NexisClaw-agent"),
-  resolveAgentEffectiveModelPrimary: vi.fn((cfg: NexisClawConfig) => {
+  resolveAgentWorkspaceDir: vi.fn(() => "/tmp/GreenchClaw-agent"),
+  resolveAgentDir: vi.fn(() => "/tmp/GreenchClaw-agent/.GreenchClaw-agent"),
+  resolveAgentEffectiveModelPrimary: vi.fn((cfg: GreenchClawConfig) => {
     const model = cfg.agents?.defaults?.model;
     if (typeof model === "string") {
       return model;
@@ -45,7 +45,7 @@ describe("generateSlugViaLLM", () => {
   it("keeps the helper default timeout when no agent timeout is configured", async () => {
     await generateSlugViaLLM({
       sessionContent: "hello",
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
     });
 
     expect(runEmbeddedPiAgentMock).toHaveBeenCalledOnce();
@@ -63,7 +63,7 @@ describe("generateSlugViaLLM", () => {
             timeoutSeconds: 500,
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     expect(runEmbeddedPiAgentMock).toHaveBeenCalledOnce();
@@ -97,7 +97,7 @@ describe("generateSlugViaLLM", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     expect(runEmbeddedPiAgentMock).toHaveBeenCalledOnce();

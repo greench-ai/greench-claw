@@ -174,9 +174,9 @@ describe("pairing setup code", () => {
   }
 
   beforeEach(() => {
-    vi.stubEnv("NEXISCLAW_GATEWAY_TOKEN", "");
-    vi.stubEnv("NEXISCLAW_GATEWAY_PASSWORD", "");
-    vi.stubEnv("NEXISCLAW_GATEWAY_PORT", "");
+    vi.stubEnv("GREENCHCLAW_GATEWAY_TOKEN", "");
+    vi.stubEnv("GREENCHCLAW_GATEWAY_PASSWORD", "");
+    vi.stubEnv("GREENCHCLAW_GATEWAY_PORT", "");
   });
 
   beforeEach(() => {
@@ -281,13 +281,13 @@ describe("pairing setup code", () => {
       expectedAuthLabel: "password",
     },
     {
-      name: "uses NEXISCLAW_GATEWAY_PASSWORD without resolving configured password SecretRef",
+      name: "uses GREENCHCLAW_GATEWAY_PASSWORD without resolving configured password SecretRef",
       auth: {
         mode: "password",
         password: { source: "env", provider: "default", id: "MISSING_GW_PASSWORD" },
       } as const,
       env: {
-        NEXISCLAW_GATEWAY_PASSWORD: "password-from-env", // pragma: allowlist secret
+        GREENCHCLAW_GATEWAY_PASSWORD: "password-from-env", // pragma: allowlist secret
       },
       expectedAuthLabel: "password",
     },
@@ -350,7 +350,7 @@ describe("pairing setup code", () => {
       },
       {
         env: {
-          NEXISCLAW_GATEWAY_PASSWORD: "password-from-env", // pragma: allowlist secret
+          GREENCHCLAW_GATEWAY_PASSWORD: "password-from-env", // pragma: allowlist secret
         },
       },
     );
@@ -437,7 +437,7 @@ describe("pairing setup code", () => {
       } satisfies ResolveSetupConfig,
       options: {
         env: {
-          NEXISCLAW_GATEWAY_TOKEN: "new-token",
+          GREENCHCLAW_GATEWAY_TOKEN: "new-token",
         },
       } satisfies ResolveSetupOptions,
       expected: {

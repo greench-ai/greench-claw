@@ -1,20 +1,20 @@
 ---
-summary: "Run NexisClaw Gateway 24/7 on an Azure Linux VM with durable state"
+summary: "Run GreenchClaw Gateway 24/7 on an Azure Linux VM with durable state"
 read_when:
-  - You want NexisClaw running 24/7 on Azure with Network Security Group hardening
-  - You want a production-grade, always-on NexisClaw Gateway on your own Azure Linux VM
+  - You want GreenchClaw running 24/7 on Azure with Network Security Group hardening
+  - You want a production-grade, always-on GreenchClaw Gateway on your own Azure Linux VM
   - You want secure administration with Azure Bastion SSH
 title: "Azure"
 ---
 
-This guide sets up an Azure Linux VM with the Azure CLI, applies Network Security Group (NSG) hardening, configures Azure Bastion for SSH access, and installs NexisClaw.
+This guide sets up an Azure Linux VM with the Azure CLI, applies Network Security Group (NSG) hardening, configures Azure Bastion for SSH access, and installs GreenchClaw.
 
 ## What you will do
 
 - Create Azure networking (VNet, subnets, NSG) and compute resources with the Azure CLI
 - Apply Network Security Group rules so VM SSH is allowed only from Azure Bastion
 - Use Azure Bastion for SSH access (no public IP on the VM)
-- Install NexisClaw with the installer script
+- Install GreenchClaw with the installer script
 - Verify the Gateway
 
 ## What you need
@@ -54,18 +54,18 @@ This guide sets up an Azure Linux VM with the Azure CLI, applies Network Securit
 
   <Step title="Set deployment variables">
     ```bash
-    RG="rg-NexisClaw"
+    RG="rg-GreenchClaw"
     LOCATION="westus2"
-    VNET_NAME="vnet-NexisClaw"
+    VNET_NAME="vnet-GreenchClaw"
     VNET_PREFIX="10.40.0.0/16"
-    VM_SUBNET_NAME="snet-NexisClaw-vm"
+    VM_SUBNET_NAME="snet-GreenchClaw-vm"
     VM_SUBNET_PREFIX="10.40.2.0/24"
     BASTION_SUBNET_PREFIX="10.40.1.0/26"
-    NSG_NAME="nsg-NexisClaw-vm"
-    VM_NAME="vm-NexisClaw"
-    ADMIN_USERNAME="NexisClaw"
-    BASTION_NAME="bas-NexisClaw"
-    BASTION_PIP_NAME="pip-NexisClaw-bastion"
+    NSG_NAME="nsg-GreenchClaw-vm"
+    VM_NAME="vm-GreenchClaw"
+    ADMIN_USERNAME="GreenchClaw"
+    BASTION_NAME="bas-GreenchClaw"
+    BASTION_PIP_NAME="pip-GreenchClaw-bastion"
     ```
 
     Adjust names and CIDR ranges to fit your environment. The Bastion subnet must be at least `/26`.
@@ -234,7 +234,7 @@ This guide sets up an Azure Linux VM with the Azure CLI, applies Network Securit
   </Step>
 </Steps>
 
-## Install NexisClaw
+## Install GreenchClaw
 
 <Steps>
   <Step title="SSH into the VM through Azure Bastion">
@@ -252,14 +252,14 @@ This guide sets up an Azure Linux VM with the Azure CLI, applies Network Securit
 
   </Step>
 
-  <Step title="Install NexisClaw (in the VM shell)">
+  <Step title="Install GreenchClaw (in the VM shell)">
     ```bash
-    curl -fsSL https://NexisClaw.ai/install.sh -o /tmp/install.sh
+    curl -fsSL https://GreenchClaw.ai/install.sh -o /tmp/install.sh
     bash /tmp/install.sh
     rm -f /tmp/install.sh
     ```
 
-    The installer installs Node LTS and dependencies if not already present, installs NexisClaw, and launches the onboarding wizard. See [Install](/install) for details.
+    The installer installs Node LTS and dependencies if not already present, installs GreenchClaw, and launches the onboarding wizard. See [Install](/install) for details.
 
   </Step>
 
@@ -267,10 +267,10 @@ This guide sets up an Azure Linux VM with the Azure CLI, applies Network Securit
     After onboarding completes:
 
     ```bash
-    NexisClaw gateway status
+    GreenchClaw gateway status
     ```
 
-    Most enterprise Azure teams already have GitHub Copilot licenses. If that is your case, we recommend choosing the GitHub Copilot provider in the NexisClaw onboarding wizard. See [GitHub Copilot provider](/providers/github-copilot).
+    Most enterprise Azure teams already have GitHub Copilot licenses. If that is your case, we recommend choosing the GitHub Copilot provider in the GreenchClaw onboarding wizard. See [GitHub Copilot provider](/providers/github-copilot).
 
   </Step>
 </Steps>
@@ -281,7 +281,7 @@ Azure Bastion Standard SKU runs approximately **\$140/month** and the VM (Standa
 
 To reduce costs:
 
-- **Deallocate the VM** when not in use (stops compute billing; disk charges remain). The NexisClaw Gateway will not be reachable while the VM is deallocated — restart it when you need it live again:
+- **Deallocate the VM** when not in use (stops compute billing; disk charges remain). The GreenchClaw Gateway will not be reachable while the VM is deallocated — restart it when you need it live again:
 
   ```bash
   az vm deallocate -g "${RG}" -n "${VM_NAME}"
@@ -306,7 +306,7 @@ This removes the resource group and everything inside it (VM, VNet, NSG, Bastion
 - Set up messaging channels: [Channels](/channels)
 - Pair local devices as nodes: [Nodes](/nodes)
 - Configure the Gateway: [Gateway configuration](/gateway/configuration)
-- For more details on NexisClaw Azure deployment with the GitHub Copilot model provider: [NexisClaw on Azure with GitHub Copilot](https://github.com/johnsonshi/NexisClaw-azure-github-copilot)
+- For more details on GreenchClaw Azure deployment with the GitHub Copilot model provider: [GreenchClaw on Azure with GitHub Copilot](https://github.com/johnsonshi/GreenchClaw-azure-github-copilot)
 
 ## Related
 

@@ -3,8 +3,8 @@ import {
   defineStableChannelIngressIdentity,
   type ChannelIngressIdentitySubjectInput,
   type IngressReasonCode,
-} from "NexisClaw/plugin-sdk/channel-ingress-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { TwitchAccountConfig, TwitchChatMessage } from "./types.js";
 
 type TwitchAccessControlResult = {

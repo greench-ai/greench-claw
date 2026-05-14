@@ -29,7 +29,7 @@ if (mode === "run-with-timeout") {
 }
 
 if (mode === "assert-image-providers") {
-  const raw = process.env.NEXISCLAW_IMAGE_PROVIDERS_JSON ?? "";
+  const raw = process.env.GREENCHCLAW_IMAGE_PROVIDERS_JSON ?? "";
   let parsed;
   try {
     parsed = JSON.parse(raw);

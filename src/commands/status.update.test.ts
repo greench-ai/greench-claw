@@ -205,7 +205,7 @@ describe("formatUpdateAvailableHint", () => {
     });
 
     expect(formatUpdateAvailableHint(update)).toBe(
-      `Update available (git behind 2 · npm ${latestVersion}). Run: NexisClaw update`,
+      `Update available (git behind 2 · npm ${latestVersion}). Run: GreenchClaw update`,
     );
   });
 });

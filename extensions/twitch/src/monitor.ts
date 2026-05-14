@@ -5,10 +5,10 @@
  * resolves agent routes, and handles replies.
  */
 
-import type { MarkdownTableMode, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { MarkdownTableMode, GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { checkTwitchAccessControl } from "./access-control.js";
 import { getOrCreateClientManager } from "./client-manager-registry.js";
 import { getTwitchRuntime } from "./runtime.js";
@@ -23,7 +23,7 @@ export type TwitchRuntimeEnv = {
 export type TwitchMonitorOptions = {
   account: TwitchAccountConfig;
   accountId: string;
-  config: unknown; // NexisClawConfig
+  config: unknown; // GreenchClawConfig
   runtime: TwitchRuntimeEnv;
   abortSignal: AbortSignal;
   statusSink?: (patch: { lastInboundAt?: number; lastOutboundAt?: number }) => void;
@@ -48,7 +48,7 @@ async function processTwitchMessage(params: {
   statusSink?: (patch: { lastInboundAt?: number; lastOutboundAt?: number }) => void;
 }): Promise<void> {
   const { message, account, accountId, config, runtime, core, statusSink } = params;
-  const cfg = config as NexisClawConfig;
+  const cfg = config as GreenchClawConfig;
 
   await core.channel.turn.run({
     channel: "twitch",

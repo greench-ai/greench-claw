@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `NexisClaw dns` (wide-area discovery helpers)"
+summary: "CLI reference for `GreenchClaw dns` (wide-area discovery helpers)"
 read_when:
   - You want wide-area discovery (DNS-SD) via Tailscale + CoreDNS
-  - You're setting up split DNS for a custom discovery domain (example: NexisClaw.internal)
+  - You're setting up split DNS for a custom discovery domain (example: GreenchClaw.internal)
 title: "DNS"
 ---
 
-# `NexisClaw dns`
+# `GreenchClaw dns`
 
 DNS helpers for wide-area discovery (Tailscale + CoreDNS). Currently focused on macOS + Homebrew CoreDNS.
 
@@ -18,9 +18,9 @@ Related:
 ## Setup
 
 ```bash
-NexisClaw dns setup
-NexisClaw dns setup --domain NexisClaw.internal
-NexisClaw dns setup --apply
+GreenchClaw dns setup
+GreenchClaw dns setup --domain GreenchClaw.internal
+GreenchClaw dns setup --apply
 ```
 
 ## `dns setup`
@@ -29,7 +29,7 @@ Plan or apply CoreDNS setup for unicast DNS-SD discovery.
 
 Options:
 
-- `--domain <domain>`: wide-area discovery domain (for example `NexisClaw.internal`)
+- `--domain <domain>`: wide-area discovery domain (for example `GreenchClaw.internal`)
 - `--apply`: install or update CoreDNS config and restart the service (requires sudo; macOS only)
 
 What it shows:
@@ -37,13 +37,13 @@ What it shows:
 - resolved discovery domain
 - zone file path
 - current tailnet IPs
-- recommended `NexisClaw.json` discovery config
+- recommended `GreenchClaw.json` discovery config
 - the Tailscale Split DNS nameserver/domain values to set
 
 Notes:
 
 - Without `--apply`, the command is a planning helper only and prints the recommended setup.
-- If `--domain` is omitted, NexisClaw uses `discovery.wideArea.domain` from config.
+- If `--domain` is omitted, GreenchClaw uses `discovery.wideArea.domain` from config.
 - `--apply` currently supports macOS only and expects Homebrew CoreDNS.
 - `--apply` bootstraps the zone file if needed, ensures the CoreDNS import stanza exists, and restarts the `coredns` brew service.
 

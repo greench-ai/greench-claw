@@ -668,13 +668,13 @@ function coerceRequest(val: unknown): OpenAiChatCompletionRequest {
 function resolveAgentResponseText(result: unknown): string {
   const payloads = (result as { payloads?: Array<{ text?: string }> } | null)?.payloads;
   if (!Array.isArray(payloads) || payloads.length === 0) {
-    return "No response from NexisClaw.";
+    return "No response from GreenchClaw.";
   }
   const content = payloads
     .map((p) => (typeof p.text === "string" ? p.text : ""))
     .filter(Boolean)
     .join("\n\n");
-  return content || "No response from NexisClaw.";
+  return content || "No response from GreenchClaw.";
 }
 
 function resolveAgentResponseCommentary(result: unknown): string {
@@ -815,7 +815,7 @@ export async function handleOpenAiHttpRequest(
   const payload = coerceRequest(handled.body);
   const stream = Boolean(payload.stream);
   const streamIncludeUsage = stream && resolveIncludeUsageForStreaming(payload);
-  const model = typeof payload.model === "string" ? payload.model : "NexisClaw";
+  const model = typeof payload.model === "string" ? payload.model : "GreenchClaw";
   const user = typeof payload.user === "string" ? payload.user : undefined;
   const maxTokens =
     typeof payload.max_completion_tokens === "number"

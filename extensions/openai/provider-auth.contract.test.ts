@@ -1,4 +1,4 @@
-import { describeOpenAICodexProviderAuthContract } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { describeOpenAICodexProviderAuthContract } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { vi } from "vitest";
 
 const loginOpenAICodexOAuthMock = vi.hoisted(() => vi.fn());

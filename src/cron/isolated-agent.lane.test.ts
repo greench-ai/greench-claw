@@ -47,8 +47,8 @@ const envSnapshot = {
   USERPROFILE: process.env.USERPROFILE,
   HOMEDRIVE: process.env.HOMEDRIVE,
   HOMEPATH: process.env.HOMEPATH,
-  NEXISCLAW_HOME: process.env.NEXISCLAW_HOME,
-  NEXISCLAW_STATE_DIR: process.env.NEXISCLAW_STATE_DIR,
+  GREENCHCLAW_HOME: process.env.GREENCHCLAW_HOME,
+  GREENCHCLAW_STATE_DIR: process.env.GREENCHCLAW_STATE_DIR,
 } as const;
 
 function restoreSnapshotEnv() {

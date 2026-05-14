@@ -133,8 +133,8 @@ export async function probeApnsHttp2ReachabilityViaProxy(
       const request = session.request({
         ":method": "POST",
         ":path": `/3/device/${"0".repeat(64)}`,
-        authorization: "bearer intentionally.invalid.NexisClaw.proxy.validation",
-        "apns-topic": "ai.NexisClaw.ios",
+        authorization: "bearer intentionally.invalid.GreenchClaw.proxy.validation",
+        "apns-topic": "ai.GreenchClaw.ios",
         "apns-push-type": "alert",
         "apns-priority": "10",
       });
@@ -166,7 +166,7 @@ export async function probeApnsHttp2ReachabilityViaProxy(
         }
         resolve({ status, body, responseHeaders });
       });
-      request.end(JSON.stringify({ aps: { alert: "NexisClaw APNs proxy validation" } }));
+      request.end(JSON.stringify({ aps: { alert: "GreenchClaw APNs proxy validation" } }));
     });
   } finally {
     if (!session.closed && !session.destroyed) {

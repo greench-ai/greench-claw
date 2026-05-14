@@ -7,10 +7,10 @@ let clearSlackAllowFromCacheForTest: typeof import("./auth.js").clearSlackAllowF
 let resolveSlackEffectiveAllowFrom: typeof import("./auth.js").resolveSlackEffectiveAllowFrom;
 let resolveSlackCommandIngress: typeof import("./auth.js").resolveSlackCommandIngress;
 
-vi.mock("NexisClaw/plugin-sdk/channel-ingress-runtime", async () => {
+vi.mock("GreenchClaw/plugin-sdk/channel-ingress-runtime", async () => {
   const actual = await vi.importActual<
-    typeof import("NexisClaw/plugin-sdk/channel-ingress-runtime")
-  >("NexisClaw/plugin-sdk/channel-ingress-runtime");
+    typeof import("GreenchClaw/plugin-sdk/channel-ingress-runtime")
+  >("GreenchClaw/plugin-sdk/channel-ingress-runtime");
   return {
     ...actual,
     readChannelIngressStoreAllowFromForDmPolicy: (...args: unknown[]) =>

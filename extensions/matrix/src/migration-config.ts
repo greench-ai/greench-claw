@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import os from "node:os";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveStateDir } from "NexisClaw/plugin-sdk/state-paths";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveStateDir } from "GreenchClaw/plugin-sdk/state-paths";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   findMatrixAccountEntry,
   requiresExplicitMatrixDefaultAccount,
@@ -45,14 +45,14 @@ function clean(value: unknown): string {
 }
 
 function resolveMatrixAccountConfigEntry(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
 ): Record<string, unknown> | null {
   return findMatrixAccountEntry(cfg, accountId);
 }
 
 function resolveMatrixFlatStoreSelectionNote(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
 ): string | undefined {
   if (resolveConfiguredMatrixAccountIds(cfg).length <= 1) {
@@ -65,7 +65,7 @@ function resolveMatrixFlatStoreSelectionNote(
 }
 
 function resolveMatrixMigrationConfigFields(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   accountId: string;
 }): {
@@ -156,7 +156,7 @@ function credentialsMatchResolvedIdentity(
 }
 
 export function resolveMatrixMigrationAccountTarget(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   accountId: string;
 }): MatrixMigrationAccountTarget | null {
@@ -196,7 +196,7 @@ export function resolveMatrixMigrationAccountTarget(params: {
 }
 
 export function resolveLegacyMatrixFlatStoreTarget(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   detectedPath: string;
   detectedKind: MatrixLegacyFlatStoreKind;
@@ -206,14 +206,14 @@ export function resolveLegacyMatrixFlatStoreTarget(params: {
     return {
       warning:
         `Legacy Matrix ${params.detectedKind} detected at ${params.detectedPath}, but channels.matrix is not configured yet. ` +
-        'Configure Matrix, then rerun "NexisClaw doctor --fix" or restart the gateway.',
+        'Configure Matrix, then rerun "GreenchClaw doctor --fix" or restart the gateway.',
     };
   }
   if (requiresExplicitMatrixDefaultAccount(params.cfg)) {
     return {
       warning:
         `Legacy Matrix ${params.detectedKind} detected at ${params.detectedPath}, but multiple Matrix accounts are configured and channels.matrix.defaultAccount is not set. ` +
-        'Set "channels.matrix.defaultAccount" to the intended target account before rerunning "NexisClaw doctor --fix" or restarting the gateway.',
+        'Set "channels.matrix.defaultAccount" to the intended target account before rerunning "GreenchClaw doctor --fix" or restarting the gateway.',
     };
   }
 
@@ -232,7 +232,7 @@ export function resolveLegacyMatrixFlatStoreTarget(params: {
       warning:
         `Legacy Matrix ${params.detectedKind} detected at ${params.detectedPath}, but ${targetDescription} could not be resolved yet ` +
         `(need homeserver, userId, and access token for channels.matrix${accountId === DEFAULT_ACCOUNT_ID ? "" : `.accounts.${accountId}`}). ` +
-        'Start the gateway once with a working Matrix login, or rerun "NexisClaw doctor --fix" after cached credentials are available.',
+        'Start the gateway once with a working Matrix login, or rerun "GreenchClaw doctor --fix" after cached credentials are available.',
     };
   }
 

@@ -90,7 +90,7 @@ export async function deleteStalePromptSnapshotFiles(
 
 export async function createFormattedPromptSnapshotFiles(): Promise<PromptSnapshotFile[]> {
   const files = createHappyPathPromptSnapshotFiles();
-  const tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-prompt-snapshots-"));
+  const tmpRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-prompt-snapshots-"));
   try {
     await writeSnapshotFiles(tmpRoot, files);
     await formatSnapshotFiles(tmpRoot, files);

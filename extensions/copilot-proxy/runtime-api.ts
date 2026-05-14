@@ -1,6 +1,6 @@
-export { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
+export { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
 export type {
-  NexisClawPluginApi,
+  GreenchClawPluginApi,
   ProviderAuthContext,
   ProviderAuthResult,
-} from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/core";

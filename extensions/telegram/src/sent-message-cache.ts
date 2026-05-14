@@ -1,11 +1,11 @@
 import fs from "node:fs";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { replaceFileAtomicSync } from "NexisClaw/plugin-sdk/security-runtime";
-import { resolveStorePath } from "NexisClaw/plugin-sdk/session-store-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { replaceFileAtomicSync } from "GreenchClaw/plugin-sdk/security-runtime";
+import { resolveStorePath } from "GreenchClaw/plugin-sdk/session-store-runtime";
 
 const TTL_MS = 24 * 60 * 60 * 1000;
-const TELEGRAM_SENT_MESSAGES_STATE_KEY = Symbol.for("NexisClaw.telegramSentMessagesState");
+const TELEGRAM_SENT_MESSAGES_STATE_KEY = Symbol.for("GreenchClaw.telegramSentMessagesState");
 
 type SentMessageStore = Map<string, Map<string, number>>;
 
@@ -35,7 +35,7 @@ function createSentMessageStore(): SentMessageStore {
   return new Map<string, Map<string, number>>();
 }
 
-function resolveSentMessageStorePath(cfg?: Pick<NexisClawConfig, "session">): string {
+function resolveSentMessageStorePath(cfg?: Pick<GreenchClawConfig, "session">): string {
   return `${resolveStorePath(cfg?.session?.store)}.telegram-sent-messages.json`;
 }
 
@@ -86,7 +86,7 @@ function readPersistedSentMessages(filePath: string): SentMessageStore {
   }
 }
 
-function getSentMessageBucket(cfg?: Pick<NexisClawConfig, "session">): SentMessageBucket {
+function getSentMessageBucket(cfg?: Pick<GreenchClawConfig, "session">): SentMessageBucket {
   const state = getSentMessageState();
   const persistedPath = resolveSentMessageStorePath(cfg);
   const existing = state.bucketsByPath.get(persistedPath);
@@ -101,7 +101,7 @@ function getSentMessageBucket(cfg?: Pick<NexisClawConfig, "session">): SentMessa
   return bucket;
 }
 
-function getSentMessages(cfg?: Pick<NexisClawConfig, "session">): SentMessageStore {
+function getSentMessages(cfg?: Pick<GreenchClawConfig, "session">): SentMessageStore {
   return getSentMessageBucket(cfg).store;
 }
 
@@ -129,7 +129,7 @@ function persistSentMessages(bucket: SentMessageBucket): void {
 export function recordSentMessage(
   chatId: number | string,
   messageId: number,
-  cfg?: Pick<NexisClawConfig, "session">,
+  cfg?: Pick<GreenchClawConfig, "session">,
 ): void {
   const scopeKey = String(chatId);
   const idKey = String(messageId);
@@ -155,7 +155,7 @@ export function recordSentMessage(
 export function wasSentByBot(
   chatId: number | string,
   messageId: number,
-  cfg?: Pick<NexisClawConfig, "session">,
+  cfg?: Pick<GreenchClawConfig, "session">,
 ): boolean {
   const scopeKey = String(chatId);
   const idKey = String(messageId);

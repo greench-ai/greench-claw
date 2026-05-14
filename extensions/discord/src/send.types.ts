@@ -1,6 +1,6 @@
-import type { MessageReceipt } from "NexisClaw/plugin-sdk/channel-message";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { RetryConfig } from "NexisClaw/plugin-sdk/retry-runtime";
+import type { MessageReceipt } from "GreenchClaw/plugin-sdk/channel-message";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { RetryConfig } from "GreenchClaw/plugin-sdk/retry-runtime";
 import type { RequestClient } from "./internal/discord.js";
 
 export class DiscordSendError extends Error {
@@ -34,12 +34,12 @@ export type DiscordSendResult = {
 };
 
 export type DiscordRuntimeAccountContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
 };
 
 export type DiscordReactOpts = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string;
   token?: string;
   rest?: RequestClient;

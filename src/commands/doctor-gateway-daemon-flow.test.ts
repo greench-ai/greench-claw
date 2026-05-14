@@ -41,8 +41,8 @@ vi.mock("../config/config.js", async () => {
 });
 
 vi.mock("../daemon/constants.js", () => ({
-  resolveGatewayLaunchAgentLabel: vi.fn(() => "ai.NexisClaw.gateway"),
-  resolveNodeLaunchAgentLabel: vi.fn(() => "ai.NexisClaw.node"),
+  resolveGatewayLaunchAgentLabel: vi.fn(() => "ai.GreenchClaw.gateway"),
+  resolveNodeLaunchAgentLabel: vi.fn(() => "ai.GreenchClaw.node"),
 }));
 
 vi.mock("../daemon/diagnostics.js", () => ({
@@ -144,7 +144,7 @@ vi.mock("./health.js", () => ({
 describe("maybeRepairGatewayDaemon", () => {
   let maybeRepairGatewayDaemon: typeof import("./doctor-gateway-daemon-flow.js").maybeRepairGatewayDaemon;
   const originalPlatformDescriptor = Object.getOwnPropertyDescriptor(process, "platform");
-  const originalUpdateInProgress = process.env.NEXISCLAW_UPDATE_IN_PROGRESS;
+  const originalUpdateInProgress = process.env.GREENCHCLAW_UPDATE_IN_PROGRESS;
 
   beforeAll(async () => {
     ({ maybeRepairGatewayDaemon } = await import("./doctor-gateway-daemon-flow.js"));
@@ -173,9 +173,9 @@ describe("maybeRepairGatewayDaemon", () => {
       Object.defineProperty(process, "platform", originalPlatformDescriptor);
     }
     if (originalUpdateInProgress === undefined) {
-      delete process.env.NEXISCLAW_UPDATE_IN_PROGRESS;
+      delete process.env.GREENCHCLAW_UPDATE_IN_PROGRESS;
     } else {
-      process.env.NEXISCLAW_UPDATE_IN_PROGRESS = originalUpdateInProgress;
+      process.env.GREENCHCLAW_UPDATE_IN_PROGRESS = originalUpdateInProgress;
     }
   });
 
@@ -209,7 +209,7 @@ describe("maybeRepairGatewayDaemon", () => {
   }
 
   async function runNonInteractiveUpdateRepair() {
-    process.env.NEXISCLAW_UPDATE_IN_PROGRESS = "1";
+    process.env.GREENCHCLAW_UPDATE_IN_PROGRESS = "1";
     await runNonInteractiveRepair();
   }
 
@@ -277,8 +277,8 @@ describe("maybeRepairGatewayDaemon", () => {
     service.readCommand.mockResolvedValueOnce({
       programArguments: ["/bin/node", "cli", "gateway"],
       environment: {
-        NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-service",
-        NEXISCLAW_CONFIG_PATH: "/tmp/NexisClaw-service/NexisClaw.json",
+        GREENCHCLAW_STATE_DIR: "/tmp/GreenchClaw-service",
+        GREENCHCLAW_CONFIG_PATH: "/tmp/GreenchClaw-service/GreenchClaw.json",
       },
     });
     readGatewayRestartHandoffSync.mockReturnValueOnce({
@@ -308,10 +308,10 @@ describe("maybeRepairGatewayDaemon", () => {
 
     expect(readGatewayRestartHandoffSync).toHaveBeenCalledOnce();
     const [handoffEnv] = readGatewayRestartHandoffSync.mock.calls.at(0) as unknown as [
-      { NEXISCLAW_STATE_DIR?: string; NEXISCLAW_CONFIG_PATH?: string },
+      { GREENCHCLAW_STATE_DIR?: string; GREENCHCLAW_CONFIG_PATH?: string },
     ];
-    expect(handoffEnv?.NEXISCLAW_STATE_DIR).toBe("/tmp/NexisClaw-service");
-    expect(handoffEnv?.NEXISCLAW_CONFIG_PATH).toBe("/tmp/NexisClaw-service/NexisClaw.json");
+    expect(handoffEnv?.GREENCHCLAW_STATE_DIR).toBe("/tmp/GreenchClaw-service");
+    expect(handoffEnv?.GREENCHCLAW_CONFIG_PATH).toBe("/tmp/GreenchClaw-service/GreenchClaw.json");
     expect(note).toHaveBeenCalledWith(
       "Recent restart handoff: full-process via systemd; source=plugin-change; reason=plugin source changed; pid=12345; age=30s; expiresIn=30s",
       "Gateway",
@@ -328,7 +328,7 @@ describe("maybeRepairGatewayDaemon", () => {
 
   it("suppresses busy-port note for expected Gateway listeners", async () => {
     setPlatform("linux");
-    const listeners = [{ pid: 5001, commandLine: "NexisClaw-gateway", address: "0.0.0.0:18789" }];
+    const listeners = [{ pid: 5001, commandLine: "GreenchClaw-gateway", address: "0.0.0.0:18789" }];
     inspectPortUsage.mockResolvedValue({
       port: 18789,
       status: "busy",
@@ -350,8 +350,8 @@ describe("maybeRepairGatewayDaemon", () => {
       port: 18789,
       status: "busy",
       listeners: [
-        { pid: 5001, commandLine: "NexisClaw-gateway", address: "0.0.0.0:18789" },
-        { pid: 5002, commandLine: "NexisClaw-gateway", address: "127.0.0.1:18789" },
+        { pid: 5001, commandLine: "GreenchClaw-gateway", address: "0.0.0.0:18789" },
+        { pid: 5002, commandLine: "GreenchClaw-gateway", address: "127.0.0.1:18789" },
       ],
       hints: ["Multiple listeners detected"],
     });
@@ -385,7 +385,7 @@ describe("maybeRepairGatewayDaemon", () => {
     expect(service.install).not.toHaveBeenCalled();
     expect(service.restart).not.toHaveBeenCalled();
     expect(note).toHaveBeenCalledWith(
-      `Run ${formatCliCommand("NexisClaw gateway install")} when you want to install the gateway service.`,
+      `Run ${formatCliCommand("GreenchClaw gateway install")} when you want to install the gateway service.`,
       "Gateway",
     );
   });
@@ -402,7 +402,7 @@ describe("maybeRepairGatewayDaemon", () => {
     setPlatform("linux");
     service.isLoaded.mockResolvedValue(false);
 
-    await withEnvAsync({ NEXISCLAW_SERVICE_REPAIR_POLICY: "external" }, async () => {
+    await withEnvAsync({ GREENCHCLAW_SERVICE_REPAIR_POLICY: "external" }, async () => {
       await runAutoRepair();
     });
 
@@ -411,16 +411,16 @@ describe("maybeRepairGatewayDaemon", () => {
     expect(note).toHaveBeenCalledWith(EXTERNAL_SERVICE_REPAIR_NOTE, "Gateway");
   });
 
-  it("skips gateway service install when a system NexisClaw gateway service exists", async () => {
+  it("skips gateway service install when a system GreenchClaw gateway service exists", async () => {
     setPlatform("linux");
     service.isLoaded.mockResolvedValue(false);
     findSystemGatewayServices.mockResolvedValue([
       {
         platform: "linux",
-        label: "NexisClaw-gateway.service",
-        detail: "unit: /etc/systemd/system/NexisClaw-gateway.service",
+        label: "GreenchClaw-gateway.service",
+        detail: "unit: /etc/systemd/system/GreenchClaw-gateway.service",
         scope: "system",
-        marker: "NexisClaw",
+        marker: "GreenchClaw",
         legacy: false,
       },
     ]);
@@ -432,10 +432,10 @@ describe("maybeRepairGatewayDaemon", () => {
     expect(service.restart).not.toHaveBeenCalled();
     expect(note).toHaveBeenCalledWith(
       [
-        "System-level NexisClaw gateway service detected while the user gateway service is not installed.",
-        "- NexisClaw-gateway.service (unit: /etc/systemd/system/NexisClaw-gateway.service)",
-        "NexisClaw will not install a second user-level gateway service automatically.",
-        "Run `NexisClaw gateway status --deep` or `NexisClaw doctor --deep` to inspect duplicate services.",
+        "System-level GreenchClaw gateway service detected while the user gateway service is not installed.",
+        "- GreenchClaw-gateway.service (unit: /etc/systemd/system/GreenchClaw-gateway.service)",
+        "GreenchClaw will not install a second user-level gateway service automatically.",
+        "Run `GreenchClaw gateway status --deep` or `GreenchClaw doctor --deep` to inspect duplicate services.",
         `Set ${SERVICE_REPAIR_POLICY_ENV}=external if a system supervisor owns the gateway lifecycle.`,
       ].join("\n"),
       "Gateway",
@@ -446,7 +446,7 @@ describe("maybeRepairGatewayDaemon", () => {
     setPlatform("linux");
     service.readRuntime.mockResolvedValue({ status: "stopped" });
 
-    await withEnvAsync({ NEXISCLAW_SERVICE_REPAIR_POLICY: "external" }, async () => {
+    await withEnvAsync({ GREENCHCLAW_SERVICE_REPAIR_POLICY: "external" }, async () => {
       await runAutoRepair();
     });
 
@@ -457,7 +457,7 @@ describe("maybeRepairGatewayDaemon", () => {
   it("skips gateway service restart when service repair policy is external", async () => {
     setPlatform("linux");
 
-    await withEnvAsync({ NEXISCLAW_SERVICE_REPAIR_POLICY: "external" }, async () => {
+    await withEnvAsync({ GREENCHCLAW_SERVICE_REPAIR_POLICY: "external" }, async () => {
       await runAutoRepair();
     });
 
@@ -471,7 +471,7 @@ describe("maybeRepairGatewayDaemon", () => {
     vi.mocked(launchd.isLaunchAgentLoaded).mockResolvedValue(false);
     vi.mocked(launchd.launchAgentPlistExists).mockResolvedValue(true);
 
-    await withEnvAsync({ NEXISCLAW_SERVICE_REPAIR_POLICY: "external" }, async () => {
+    await withEnvAsync({ GREENCHCLAW_SERVICE_REPAIR_POLICY: "external" }, async () => {
       await runAutoRepair();
     });
 

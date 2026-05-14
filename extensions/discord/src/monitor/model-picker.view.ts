@@ -1,7 +1,7 @@
 import type { APISelectMenuOption } from "discord-api-types/v10";
 import { ButtonStyle } from "discord-api-types/v10";
-import type { ModelsProviderData } from "NexisClaw/plugin-sdk/models-provider-runtime";
-import { normalizeProviderId } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { ModelsProviderData } from "GreenchClaw/plugin-sdk/models-provider-runtime";
+import { normalizeProviderId } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import {
   Button,
   Container,

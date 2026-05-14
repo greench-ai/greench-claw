@@ -166,9 +166,9 @@ vi.mock("./sdk-runtime.js", () => ({
   }),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/routing", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/routing")>(
-    "NexisClaw/plugin-sdk/routing",
+vi.mock("GreenchClaw/plugin-sdk/routing", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/routing")>(
+    "GreenchClaw/plugin-sdk/routing",
   );
   return {
     ...actual,
@@ -176,9 +176,9 @@ vi.mock("NexisClaw/plugin-sdk/routing", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/agent-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/agent-runtime")>(
-    "NexisClaw/plugin-sdk/agent-runtime",
+vi.mock("GreenchClaw/plugin-sdk/agent-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/agent-runtime")>(
+    "GreenchClaw/plugin-sdk/agent-runtime",
   );
   return {
     ...actual,
@@ -186,9 +186,9 @@ vi.mock("NexisClaw/plugin-sdk/agent-runtime", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/runtime-env")>(
-    "NexisClaw/plugin-sdk/runtime-env",
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/runtime-env")>(
+    "GreenchClaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -196,9 +196,9 @@ vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/realtime-voice", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/realtime-voice")>(
-    "NexisClaw/plugin-sdk/realtime-voice",
+vi.mock("GreenchClaw/plugin-sdk/realtime-voice", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/realtime-voice")>(
+    "GreenchClaw/plugin-sdk/realtime-voice",
   );
   return {
     ...actual,
@@ -1076,14 +1076,14 @@ describe("DiscordVoiceManager", () => {
         }
       | undefined;
     expect(bridgeParams?.autoRespondToAudio).toBe(false);
-    expect(bridgeParams?.instructions).toContain("same NexisClaw agent");
-    expect(bridgeParams?.tools?.map((tool) => tool.name)).toContain("NexisClaw_agent_consult");
+    expect(bridgeParams?.instructions).toContain("same GreenchClaw agent");
+    expect(bridgeParams?.tools?.map((tool) => tool.name)).toContain("GreenchClaw_agent_consult");
 
     bridgeParams?.onToolCall?.(
       {
         itemId: "item-1",
         callId: "call-1",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: { question: "what did I ask?" },
       },
       realtimeSessionMock,
@@ -1139,7 +1139,7 @@ describe("DiscordVoiceManager", () => {
       {
         itemId: "item-exact",
         callId: "call-exact",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: {
           question: "Speak the provided exact answer verbatim to the Discord voice channel.",
           context: 'Provided answer text: "already answered"\\nSpoken style: verbatim only',
@@ -1151,10 +1151,10 @@ describe("DiscordVoiceManager", () => {
       {
         itemId: "item-internal",
         callId: "call-internal",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: {
           question: [
-            "Speak this exact NexisClaw answer to the Discord voice channel, without adding, removing, or rephrasing words.",
+            "Speak this exact GreenchClaw answer to the Discord voice channel, without adding, removing, or rephrasing words.",
             'Answer: "direct internal answer"',
           ].join("\n"),
         },
@@ -1650,7 +1650,7 @@ describe("DiscordVoiceManager", () => {
       {
         itemId: "item-owner",
         callId: "call-owner",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: { question: "owner question" },
       },
       realtimeSessionMock,
@@ -1720,7 +1720,7 @@ describe("DiscordVoiceManager", () => {
       {
         itemId: "item-late",
         callId: "call-late",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: { question: "late question" },
       },
       realtimeSessionMock,
@@ -1734,7 +1734,7 @@ describe("DiscordVoiceManager", () => {
       "call-late",
       {
         status: "already_delivered",
-        message: "NexisClaw already delivered this answer to Discord voice.",
+        message: "GreenchClaw already delivered this answer to Discord voice.",
       },
       { suppressResponse: true },
     );
@@ -1794,7 +1794,7 @@ describe("DiscordVoiceManager", () => {
       {
         itemId: "item-late",
         callId: "call-late",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: { question: "late question" },
       },
       realtimeSessionMock,
@@ -1805,7 +1805,7 @@ describe("DiscordVoiceManager", () => {
         "call-late",
         {
           status: "already_delivered",
-          message: "NexisClaw already delivered this answer to Discord voice.",
+          message: "GreenchClaw already delivered this answer to Discord voice.",
         },
         { suppressResponse: true },
       ),
@@ -1872,7 +1872,7 @@ describe("DiscordVoiceManager", () => {
       {
         itemId: "item-late",
         callId: "call-late",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: { question: "late question" },
       },
       realtimeSessionMock,
@@ -1943,7 +1943,7 @@ describe("DiscordVoiceManager", () => {
       {
         itemId: "item-old",
         callId: "call-old",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: { question: "repeat question" },
       },
       realtimeSessionMock,
@@ -1966,7 +1966,7 @@ describe("DiscordVoiceManager", () => {
       {
         itemId: "item-new",
         callId: "call-new",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: { question: "repeat question" },
       },
       realtimeSessionMock,
@@ -1980,7 +1980,7 @@ describe("DiscordVoiceManager", () => {
       "call-new",
       {
         status: "already_delivered",
-        message: "NexisClaw already delivered this answer to Discord voice.",
+        message: "GreenchClaw already delivered this answer to Discord voice.",
       },
       { suppressResponse: true },
     );
@@ -2092,14 +2092,14 @@ describe("DiscordVoiceManager", () => {
       | undefined;
     expect(bridgeParams?.autoRespondToAudio).toBe(true);
     expect(bridgeParams?.interruptResponseOnInputAudio).toBe(false);
-    expect(bridgeParams?.instructions).toContain("Call NexisClaw_agent_consult");
-    expect(bridgeParams?.tools?.map((tool) => tool.name)).toContain("NexisClaw_agent_consult");
+    expect(bridgeParams?.instructions).toContain("Call GreenchClaw_agent_consult");
+    expect(bridgeParams?.tools?.map((tool) => tool.name)).toContain("GreenchClaw_agent_consult");
 
     bridgeParams?.onToolCall?.(
       {
         itemId: "item-1",
         callId: "call-1",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: { question: "check my Discord" },
       },
       realtimeSessionMock,
@@ -2199,7 +2199,7 @@ describe("DiscordVoiceManager", () => {
       {
         itemId: "item-1",
         callId: "call-1",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: { question: "check the maintainer channel context" },
       },
       realtimeSessionMock,
@@ -2267,7 +2267,7 @@ describe("DiscordVoiceManager", () => {
       {
         itemId: "item-guest",
         callId: "call-guest",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: { question: "guest question" },
       },
       realtimeSessionMock,
@@ -2340,7 +2340,7 @@ describe("DiscordVoiceManager", () => {
       {
         itemId: "item-guest",
         callId: "call-guest",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: { question: "guest question" },
       },
       realtimeSessionMock,

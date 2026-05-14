@@ -4,12 +4,12 @@ import {
   formatMemoryDreamingDay,
   type MemoryDreamingPhaseName,
   type MemoryDreamingStorageConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-status";
-import { appendMemoryHostEvent } from "NexisClaw/plugin-sdk/memory-host-events";
+} from "GreenchClaw/plugin-sdk/memory-core-host-status";
+import { appendMemoryHostEvent } from "GreenchClaw/plugin-sdk/memory-host-events";
 import {
   replaceManagedMarkdownBlock,
   withTrailingNewline,
-} from "NexisClaw/plugin-sdk/memory-host-markdown";
+} from "GreenchClaw/plugin-sdk/memory-host-markdown";
 
 const DAILY_PHASE_HEADINGS: Record<Exclude<MemoryDreamingPhaseName, "deep">, string> = {
   light: "## Light Sleep",
@@ -27,8 +27,8 @@ function resolvePhaseMarkers(phase: Exclude<MemoryDreamingPhaseName, "deep">): {
 } {
   const label = DAILY_PHASE_LABELS[phase];
   return {
-    start: `<!-- NexisClaw:dreaming:${label}:start -->`,
-    end: `<!-- NexisClaw:dreaming:${label}:end -->`,
+    start: `<!-- GreenchClaw:dreaming:${label}:start -->`,
+    end: `<!-- GreenchClaw:dreaming:${label}:end -->`,
   };
 }
 

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
 type ReasoningDefault = "on" | "stream" | "off";
 
@@ -10,7 +10,7 @@ function normalizeAgentId(value: string | undefined | null): string {
 }
 
 export function resolveTelegramConfigReasoningDefault(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
 ): ReasoningDefault {
   const id = normalizeAgentId(agentId);

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 
 vi.mock("../../config/sessions/store-load.js", () => ({
   loadSessionStore: vi.fn(),
@@ -50,7 +50,7 @@ function resolveWithStoredEntry(params?: {
   vi.mocked(evaluateSessionFreshness).mockReturnValue({ fresh: params?.fresh ?? true });
 
   return resolveCronSession({
-    cfg: {} as NexisClawConfig,
+    cfg: {} as GreenchClawConfig,
     sessionKey,
     agentId: "main",
     nowMs: NOW_MS,

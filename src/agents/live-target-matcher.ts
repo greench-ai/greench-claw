@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeGooglePreviewModelId } from "../plugin-sdk/provider-model-id-normalize.js";
 import {
   normalizeLowercaseStringOrEmpty,
@@ -66,7 +66,7 @@ function parseModelTarget(raw: string): ModelTarget | null {
 export function createLiveTargetMatcher(params: {
   providerFilter: Set<string> | null;
   modelFilter: Set<string> | null;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }) {

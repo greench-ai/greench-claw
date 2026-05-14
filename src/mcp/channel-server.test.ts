@@ -3,7 +3,7 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { describe, expect, test, vi } from "vitest";
 import { z } from "zod";
 import { shouldRetryInitialMcpGatewayConnect } from "./channel-bridge.js";
-import { createNexisClawChannelMcpServer, NexisClawChannelBridge } from "./channel-server.js";
+import { createGreenchClawChannelMcpServer, GreenchClawChannelBridge } from "./channel-server.js";
 import { extractAttachmentsFromMessage } from "./channel-shared.js";
 
 const ClaudeChannelNotificationSchema = z.object({
@@ -23,7 +23,7 @@ const ClaudePermissionNotificationSchema = z.object({
 });
 
 async function connectMcpWithoutGateway(params?: { claudeChannelMode?: "auto" | "on" | "off" }) {
-  const serverHarness = await createNexisClawChannelMcpServer({
+  const serverHarness = await createGreenchClawChannelMcpServer({
     claudeChannelMode: params?.claudeChannelMode ?? "auto",
     config: {} as never,
     verbose: false,
@@ -43,7 +43,7 @@ async function connectMcpWithoutGateway(params?: { claudeChannelMode?: "auto" | 
 }
 
 function attachReadyGateway(
-  bridge: NexisClawChannelBridge,
+  bridge: GreenchClawChannelBridge,
   gatewayRequest: ReturnType<typeof vi.fn>,
 ) {
   (
@@ -89,7 +89,7 @@ function gatewayRequestError(retryable: boolean): Error {
   });
 }
 
-describe("NexisClaw channel mcp server", () => {
+describe("GreenchClaw channel mcp server", () => {
   test("keeps initial MCP gateway connection alive through transient connect errors", () => {
     expect(
       shouldRetryInitialMcpGatewayConnect(new Error("gateway request timeout for connect")),
@@ -169,7 +169,7 @@ describe("NexisClaw channel mcp server", () => {
                   content: [{ type: "text", text: "hello from transcript" }],
                 },
                 {
-                  __NexisClaw: {
+                  __GreenchClaw: {
                     id: "msg-attachment",
                   },
                   role: "assistant",
@@ -190,7 +190,7 @@ describe("NexisClaw channel mcp server", () => {
           }
           throw new Error(`unexpected gateway method ${method}`);
         });
-        const bridge = new NexisClawChannelBridge({} as never, {
+        const bridge = new GreenchClawChannelBridge({} as never, {
           claudeChannelMode: "off",
           verbose: false,
         });
@@ -207,7 +207,9 @@ describe("NexisClaw channel mcp server", () => {
         const messages = await bridge.readMessages(sessionKey, 5);
         expect(messages[0]?.role).toBe("assistant");
         expect(messages[0]?.content).toEqual([{ type: "text", text: "hello from transcript" }]);
-        expect((messages[1]?.__NexisClaw as { id?: string } | undefined)?.id).toBe("msg-attachment");
+        expect((messages[1]?.__GreenchClaw as { id?: string } | undefined)?.id).toBe(
+          "msg-attachment",
+        );
         expect(
           extractAttachmentsFromMessage(messages[1]).some(
             (entry) => (entry as { type?: unknown }).type === "image",
@@ -369,7 +371,7 @@ describe("NexisClaw channel mcp server", () => {
     });
 
     test("sendMessage normalizes route metadata for gateway send", async () => {
-      const bridge = new NexisClawChannelBridge({} as never, {
+      const bridge = new GreenchClawChannelBridge({} as never, {
         claudeChannelMode: "off",
         verbose: false,
       });
@@ -403,7 +405,7 @@ describe("NexisClaw channel mcp server", () => {
     });
 
     test("gets one conversation through sessions.describe without broad listing", async () => {
-      const bridge = new NexisClawChannelBridge({} as never, {
+      const bridge = new GreenchClawChannelBridge({} as never, {
         claudeChannelMode: "off",
         verbose: false,
       });
@@ -440,7 +442,7 @@ describe("NexisClaw channel mcp server", () => {
     });
 
     test("lists routed sessions from deliveryContext without mirrored route fields", async () => {
-      const bridge = new NexisClawChannelBridge({} as never, {
+      const bridge = new GreenchClawChannelBridge({} as never, {
         claudeChannelMode: "off",
         verbose: false,
       });
@@ -480,7 +482,7 @@ describe("NexisClaw channel mcp server", () => {
     });
 
     test("swallows notification send errors after channel replies are matched", async () => {
-      const bridge = new NexisClawChannelBridge({} as never, {
+      const bridge = new GreenchClawChannelBridge({} as never, {
         claudeChannelMode: "on",
         verbose: false,
       });

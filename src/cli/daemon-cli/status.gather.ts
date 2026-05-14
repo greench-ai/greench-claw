@@ -7,7 +7,7 @@ import {
   resolveStateDir,
 } from "../../config/config.js";
 import type {
-  NexisClawConfig,
+  GreenchClawConfig,
   ConfigFileSnapshot,
   GatewayBindMode,
   GatewayControlUiConfig,
@@ -68,8 +68,8 @@ type PortStatusSummary = {
 
 type DaemonConfigContext = {
   mergedDaemonEnv: Record<string, string | undefined>;
-  cliCfg: NexisClawConfig;
-  daemonCfg: NexisClawConfig;
+  cliCfg: GreenchClawConfig;
+  daemonCfg: GreenchClawConfig;
   cliConfigSummary: ConfigSummary;
   daemonConfigSummary: ConfigSummary;
   configMismatch: boolean;
@@ -77,7 +77,7 @@ type DaemonConfigContext = {
 
 type StatusConfigRead = {
   summary: ConfigSummary;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   mode: "fast" | "full";
 };
 
@@ -128,18 +128,20 @@ function loadRestartHealthModule() {
   return restartHealthModuleLoader.load();
 }
 
-function resolveSnapshotRuntimeConfig(snapshot: ConfigFileSnapshot | null): NexisClawConfig | null {
+function resolveSnapshotRuntimeConfig(
+  snapshot: ConfigFileSnapshot | null,
+): GreenchClawConfig | null {
   if (!snapshot?.valid || !snapshot.runtimeConfig) {
     return null;
   }
   return snapshot.runtimeConfig;
 }
 
-function coerceStatusConfig(value: unknown): NexisClawConfig {
+function coerceStatusConfig(value: unknown): GreenchClawConfig {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return {};
   }
-  return value as NexisClawConfig;
+  return value as GreenchClawConfig;
 }
 
 function hasOwnKey(value: unknown, key: string): boolean {
@@ -371,8 +373,8 @@ async function loadDaemonConfigContext(
 }
 
 async function resolveGatewayStatusSummary(params: {
-  daemonCfg: NexisClawConfig;
-  cliCfg: NexisClawConfig;
+  daemonCfg: GreenchClawConfig;
+  cliCfg: GreenchClawConfig;
   mergedDaemonEnv: Record<string, string | undefined>;
   commandProgramArguments?: string[];
   rpcUrlOverride?: string;

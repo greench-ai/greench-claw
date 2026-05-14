@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { runHeartbeatOnce } from "../infra/heartbeat-runner.js";
 import { installHeartbeatRunnerTestRuntime } from "../infra/heartbeat-runner.test-harness.js";
 import {
@@ -51,8 +51,8 @@ describe("commitments heartbeat delivery policy e2e", () => {
 
   it("does not send externally when heartbeat target is none", async () => {
     await withTempHeartbeatSandbox(async ({ tmpDir, storePath, replySpy }) => {
-      vi.stubEnv("NEXISCLAW_STATE_DIR", tmpDir);
-      const cfg: NexisClawConfig = {
+      vi.stubEnv("GREENCHCLAW_STATE_DIR", tmpDir);
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             workspace: tmpDir,

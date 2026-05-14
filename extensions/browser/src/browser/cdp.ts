@@ -623,7 +623,7 @@ async function findCursorInteractiveElements(
   send: CdpSendFn,
   sessionId?: string,
 ): Promise<Map<number, CursorInteractiveInfo>> {
-  const attr = "data-NexisClaw-cdp-ci";
+  const attr = "data-GreenchClaw-cdp-ci";
   const evaluated = (await send(
     "Runtime.evaluate",
     {

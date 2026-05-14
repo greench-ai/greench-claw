@@ -1,6 +1,6 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { EffectiveToolInventoryResult } from "../../agents/tools-effective-inventory.types.js";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
 import {
   createChannelTestPluginBase,
@@ -113,7 +113,7 @@ function buildConfig() {
   return {
     commands: { text: true },
     channels: { whatsapp: { allowFrom: ["*"] } },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function resolveToolsArg(resolveToolsMock: { mock: { calls: unknown[][] } }, index = 0) {
@@ -322,7 +322,7 @@ describe("handleToolsCommand", () => {
       {
         commands: { text: true },
         channels: { telegram: { defaultAccount: "work" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       undefined,
       { workspaceDir: "/tmp" },
     );

@@ -14,9 +14,9 @@ export type {
   ChannelResolveKind,
   ChannelResolveResult,
   ChannelStatusAdapter,
-} from "NexisClaw/plugin-sdk/channel-contract";
-export type { ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-export type { OutboundDeliveryResult } from "NexisClaw/plugin-sdk/channel-send-result";
-export type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-export type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
-export type { WizardPrompter } from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+export type { ChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+export type { OutboundDeliveryResult } from "GreenchClaw/plugin-sdk/channel-send-result";
+export type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+export type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime";
+export type { WizardPrompter } from "GreenchClaw/plugin-sdk/setup";

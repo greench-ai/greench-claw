@@ -2,7 +2,7 @@ import {
   createRequestCaptureJsonFetch,
   installPinnedHostnameTestHooks,
   withFetchPreconnect,
-} from "NexisClaw/plugin-sdk/test-env";
+} from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import { describeGeminiVideo, transcribeGeminiAudio } from "./media-understanding-provider.js";
 import { resolveGoogleGenerativeAiHttpRequestConfig } from "./runtime-api.js";

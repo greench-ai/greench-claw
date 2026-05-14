@@ -7,7 +7,7 @@ export type PluginConfigUiHint = {
   placeholder?: string;
 };
 
-export type PluginFormat = "NexisClaw" | "bundle";
+export type PluginFormat = "GreenchClaw" | "bundle";
 
 export type PluginBundleFormat = "codex" | "claude" | "cursor";
 

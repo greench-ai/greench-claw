@@ -1,28 +1,28 @@
 import {
   recordInboundSessionMetaSafe as recordInboundSessionMetaSafeImpl,
   resolveConversationLabel as resolveConversationLabelImpl,
-} from "NexisClaw/plugin-sdk/conversation-runtime";
-import { resolveMarkdownTableMode as resolveMarkdownTableModeImpl } from "NexisClaw/plugin-sdk/markdown-table-runtime";
+} from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { resolveMarkdownTableMode as resolveMarkdownTableModeImpl } from "GreenchClaw/plugin-sdk/markdown-table-runtime";
 import {
   dispatchReplyWithDispatcher as dispatchReplyWithDispatcherImpl,
   finalizeInboundContext as finalizeInboundContextImpl,
   resolveChunkMode as resolveChunkModeImpl,
-} from "NexisClaw/plugin-sdk/reply-runtime";
-import { resolveAgentRoute as resolveAgentRouteImpl } from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/reply-runtime";
+import { resolveAgentRoute as resolveAgentRouteImpl } from "GreenchClaw/plugin-sdk/routing";
 import { deliverSlackSlashReplies as deliverSlackSlashRepliesImpl } from "./replies.js";
 
-type ResolveChunkMode = typeof import("NexisClaw/plugin-sdk/reply-runtime").resolveChunkMode;
+type ResolveChunkMode = typeof import("GreenchClaw/plugin-sdk/reply-runtime").resolveChunkMode;
 type FinalizeInboundContext =
-  typeof import("NexisClaw/plugin-sdk/reply-runtime").finalizeInboundContext;
+  typeof import("GreenchClaw/plugin-sdk/reply-runtime").finalizeInboundContext;
 type DispatchReplyWithDispatcher =
-  typeof import("NexisClaw/plugin-sdk/reply-runtime").dispatchReplyWithDispatcher;
+  typeof import("GreenchClaw/plugin-sdk/reply-runtime").dispatchReplyWithDispatcher;
 type ResolveConversationLabel =
-  typeof import("NexisClaw/plugin-sdk/conversation-runtime").resolveConversationLabel;
+  typeof import("GreenchClaw/plugin-sdk/conversation-runtime").resolveConversationLabel;
 type RecordInboundSessionMetaSafe =
-  typeof import("NexisClaw/plugin-sdk/conversation-runtime").recordInboundSessionMetaSafe;
+  typeof import("GreenchClaw/plugin-sdk/conversation-runtime").recordInboundSessionMetaSafe;
 type ResolveMarkdownTableMode =
-  typeof import("NexisClaw/plugin-sdk/markdown-table-runtime").resolveMarkdownTableMode;
-type ResolveAgentRoute = typeof import("NexisClaw/plugin-sdk/routing").resolveAgentRoute;
+  typeof import("GreenchClaw/plugin-sdk/markdown-table-runtime").resolveMarkdownTableMode;
+type ResolveAgentRoute = typeof import("GreenchClaw/plugin-sdk/routing").resolveAgentRoute;
 type DeliverSlackSlashReplies = typeof import("./replies.js").deliverSlackSlashReplies;
 
 export function resolveChunkMode(

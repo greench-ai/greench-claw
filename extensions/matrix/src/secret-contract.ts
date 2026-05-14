@@ -1,4 +1,4 @@
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
 import {
   collectSecretInputAssignment,
   getChannelSurface,
@@ -7,15 +7,15 @@ import {
   normalizeSecretStringValue,
   type ResolverContext,
   type SecretDefaults,
-} from "NexisClaw/plugin-sdk/channel-secret-basic-runtime";
+} from "GreenchClaw/plugin-sdk/channel-secret-basic-runtime";
 import { getMatrixScopedEnvVarNames } from "./env-vars.js";
 
-export const secretTargetRegistryEntries: import("NexisClaw/plugin-sdk/channel-secret-basic-runtime").SecretTargetRegistryEntry[] =
+export const secretTargetRegistryEntries: import("GreenchClaw/plugin-sdk/channel-secret-basic-runtime").SecretTargetRegistryEntry[] =
   [
     {
       id: "channels.matrix.accounts.*.accessToken",
       targetType: "channels.matrix.accounts.*.accessToken",
-      configFile: "NexisClaw.json",
+      configFile: "GreenchClaw.json",
       pathPattern: "channels.matrix.accounts.*.accessToken",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -26,7 +26,7 @@ export const secretTargetRegistryEntries: import("NexisClaw/plugin-sdk/channel-s
     {
       id: "channels.matrix.accounts.*.password",
       targetType: "channels.matrix.accounts.*.password",
-      configFile: "NexisClaw.json",
+      configFile: "GreenchClaw.json",
       pathPattern: "channels.matrix.accounts.*.password",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -37,7 +37,7 @@ export const secretTargetRegistryEntries: import("NexisClaw/plugin-sdk/channel-s
     {
       id: "channels.matrix.accessToken",
       targetType: "channels.matrix.accessToken",
-      configFile: "NexisClaw.json",
+      configFile: "GreenchClaw.json",
       pathPattern: "channels.matrix.accessToken",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -48,7 +48,7 @@ export const secretTargetRegistryEntries: import("NexisClaw/plugin-sdk/channel-s
     {
       id: "channels.matrix.password",
       targetType: "channels.matrix.password",
-      configFile: "NexisClaw.json",
+      configFile: "GreenchClaw.json",
       pathPattern: "channels.matrix.password",
       secretShape: "secret_input",
       expectedResolvedValue: "string",

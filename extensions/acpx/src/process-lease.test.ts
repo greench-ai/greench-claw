@@ -9,8 +9,8 @@ function makeLease(index: number): AcpxProcessLease {
     leaseId: `lease-${index}`,
     gatewayInstanceId: "gateway-test",
     sessionKey: `agent:codex:acp:${index}`,
-    wrapperRoot: "/tmp/NexisClaw/acpx",
-    wrapperPath: "/tmp/NexisClaw/acpx/codex-acp-wrapper.mjs",
+    wrapperRoot: "/tmp/GreenchClaw/acpx",
+    wrapperPath: "/tmp/GreenchClaw/acpx/codex-acp-wrapper.mjs",
     rootPid: 1000 + index,
     commandHash: `hash-${index}`,
     startedAt: index,
@@ -20,7 +20,7 @@ function makeLease(index: number): AcpxProcessLease {
 
 describe("createAcpxProcessLeaseStore", () => {
   it("serializes concurrent lease saves without dropping records", async () => {
-    const stateDir = await mkdtemp(path.join(tmpdir(), "NexisClaw-acpx-leases-"));
+    const stateDir = await mkdtemp(path.join(tmpdir(), "GreenchClaw-acpx-leases-"));
     try {
       const store = createAcpxProcessLeaseStore({ stateDir });
       await Promise.all(Array.from({ length: 25 }, (_, index) => store.save(makeLease(index))));

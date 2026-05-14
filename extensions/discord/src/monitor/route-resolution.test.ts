@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ResolvedAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ResolvedAgentRoute } from "GreenchClaw/plugin-sdk/routing";
 import { describe, expect, it } from "vitest";
 import {
   buildDiscordRoutePeer,
@@ -12,7 +12,7 @@ import {
 function buildWorkerBindingConfig(peer: {
   kind: "channel" | "direct";
   id: string;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   return {
     agents: {
       list: [{ id: "worker" }],

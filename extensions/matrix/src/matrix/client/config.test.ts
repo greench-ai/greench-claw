@@ -291,7 +291,7 @@ describe("Matrix auth/config live surfaces", () => {
               homeserver: "https://matrix.gumadeiras.com",
               userId: "@pinguini:matrix.gumadeiras.com",
               password: "cfg-pass", // pragma: allowlist secret
-              deviceName: "NexisClaw Gateway Pinguini",
+              deviceName: "GreenchClaw Gateway Pinguini",
               encryption: true,
             },
           },
@@ -313,7 +313,7 @@ describe("Matrix auth/config live surfaces", () => {
       accessToken: undefined,
       password: "cfg-pass",
       deviceId: undefined,
-      deviceName: "NexisClaw Gateway Pinguini",
+      deviceName: "GreenchClaw Gateway Pinguini",
       initialSyncLimit: undefined,
       encryption: true,
       allowPrivateNetwork: undefined,

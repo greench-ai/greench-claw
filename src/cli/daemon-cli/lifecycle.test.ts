@@ -178,8 +178,8 @@ describe("runDaemonRestart health checks", () => {
   });
 
   beforeEach(() => {
-    envSnapshot = captureEnv(["NEXISCLAW_CONTAINER_HINT", "NEXISCLAW_PROFILE"]);
-    delete process.env.NEXISCLAW_CONTAINER_HINT;
+    envSnapshot = captureEnv(["GREENCHCLAW_CONTAINER_HINT", "GREENCHCLAW_PROFILE"]);
+    delete process.env.GREENCHCLAW_CONTAINER_HINT;
     service.readCommand.mockReset();
     service.restart.mockReset();
     runServiceStart.mockReset();
@@ -202,7 +202,7 @@ describe("runDaemonRestart health checks", () => {
     repairLoadedGatewayServiceForStart.mockReset();
 
     service.readCommand.mockResolvedValue({
-      programArguments: ["NexisClaw", "gateway", "--port", "18789"],
+      programArguments: ["GreenchClaw", "gateway", "--port", "18789"],
       environment: {},
     });
     service.restart.mockResolvedValue({ outcome: "completed" });
@@ -344,7 +344,7 @@ describe("runDaemonRestart health checks", () => {
         await params.repairLoadedService?.({
           json: true,
           stdout: process.stdout,
-          state: { command: { environment: { NEXISCLAW_SERVICE_VERSION: "2026.4.24" } } },
+          state: { command: { environment: { GREENCHCLAW_SERVICE_VERSION: "2026.4.24" } } },
           issues: [{ code: "version-mismatch", message: "old service" }],
         });
       },
@@ -364,7 +364,7 @@ describe("runDaemonRestart health checks", () => {
     expect(repairParams.service).toBe(service);
     expect(repairParams.json).toBe(true);
     expect(repairParams.state?.command?.environment).toEqual({
-      NEXISCLAW_SERVICE_VERSION: "2026.4.24",
+      GREENCHCLAW_SERVICE_VERSION: "2026.4.24",
     });
     expect(repairParams.issues).toHaveLength(1);
     expect(repairParams.issues?.[0]?.code).toBe("version-mismatch");
@@ -428,8 +428,8 @@ describe("runDaemonRestart health checks", () => {
     const error = await expectRestartError(runDaemonRestart({ json: true }));
     expect(error.message).toBe("Gateway restart timed out after 60s waiting for health checks.");
     expect(error.hints).toEqual([
-      formatCliCommand("NexisClaw gateway status --deep"),
-      formatCliCommand("NexisClaw doctor"),
+      formatCliCommand("GreenchClaw gateway status --deep"),
+      formatCliCommand("GreenchClaw doctor"),
     ]);
     expect(terminateStaleGatewayPids).not.toHaveBeenCalled();
     expect(renderRestartDiagnostics).toHaveBeenCalledTimes(1);
@@ -478,8 +478,8 @@ describe("runDaemonRestart health checks", () => {
       "Gateway restart failed after 13s: service stayed stopped and health checks never came up.",
     );
     expect(error.hints).toEqual([
-      formatCliCommand("NexisClaw gateway status --deep"),
-      formatCliCommand("NexisClaw doctor"),
+      formatCliCommand("GreenchClaw gateway status --deep"),
+      formatCliCommand("GreenchClaw doctor"),
     ]);
     expect(terminateStaleGatewayPids).not.toHaveBeenCalled();
     expect(renderRestartDiagnostics).toHaveBeenCalledTimes(1);

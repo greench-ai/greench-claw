@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { resolvePdfModelConfigForTool } from "./pdf-tool.model-config.js";
 import { resetPdfToolAuthEnv } from "./pdf-tool.test-support.js";
 
 const ANTHROPIC_PDF_MODEL = "anthropic/claude-opus-4-7";
-const TEST_AGENT_DIR = "/tmp/NexisClaw-pdf-model-config";
+const TEST_AGENT_DIR = "/tmp/GreenchClaw-pdf-model-config";
 
 vi.mock("./model-config.helpers.js", () => ({
   coerceToolModelConfig: (model?: unknown) => {
@@ -30,7 +30,7 @@ vi.mock("./model-config.helpers.js", () => ({
     }
     return false;
   },
-  resolveDefaultModelRef: (cfg?: NexisClawConfig) => {
+  resolveDefaultModelRef: (cfg?: GreenchClawConfig) => {
     const modelCfg = cfg?.agents?.defaults?.model;
     const primary =
       (typeof modelCfg === "string"
@@ -41,10 +41,10 @@ vi.mock("./model-config.helpers.js", () => ({
   },
 }));
 
-function withDefaultModel(primary: string): NexisClawConfig {
+function withDefaultModel(primary: string): GreenchClawConfig {
   return {
     agents: { defaults: { model: { primary } } },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 describe("resolvePdfModelConfigForTool", () => {
@@ -69,7 +69,7 @@ describe("resolvePdfModelConfigForTool", () => {
           pdfModel: { primary: ANTHROPIC_PDF_MODEL },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     expect(resolvePdfModelConfigForTool({ cfg, agentDir: TEST_AGENT_DIR })).toEqual({
       primary: ANTHROPIC_PDF_MODEL,
     });
@@ -83,7 +83,7 @@ describe("resolvePdfModelConfigForTool", () => {
           imageModel: { primary: "openai/gpt-5.4-mini" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     expect(resolvePdfModelConfigForTool({ cfg, agentDir: TEST_AGENT_DIR })).toEqual({
       primary: "openai/gpt-5.4-mini",
     });

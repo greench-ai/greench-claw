@@ -3,10 +3,10 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 BUN_BIN="${BUN_BIN:-bun}"
-HOST_BUILD="${NEXISCLAW_BUN_GLOBAL_SMOKE_HOST_BUILD:-1}"
-DIST_IMAGE="${NEXISCLAW_BUN_GLOBAL_SMOKE_DIST_IMAGE:-}"
-PACKAGE_TGZ="${NEXISCLAW_BUN_GLOBAL_SMOKE_PACKAGE_TGZ:-}"
-COMMAND_TIMEOUT_MS="${NEXISCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_MS:-180000}"
+HOST_BUILD="${GREENCHCLAW_BUN_GLOBAL_SMOKE_HOST_BUILD:-1}"
+DIST_IMAGE="${GREENCHCLAW_BUN_GLOBAL_SMOKE_DIST_IMAGE:-}"
+PACKAGE_TGZ="${GREENCHCLAW_BUN_GLOBAL_SMOKE_PACKAGE_TGZ:-}"
+COMMAND_TIMEOUT_MS="${GREENCHCLAW_BUN_GLOBAL_SMOKE_TIMEOUT_MS:-180000}"
 SMOKE_DIR=""
 PACK_DIR=""
 
@@ -44,7 +44,7 @@ restore_dist_from_image() {
 resolve_package_tgz() {
   if [ -n "$PACKAGE_TGZ" ]; then
     if [ ! -f "$PACKAGE_TGZ" ]; then
-      echo "NEXISCLAW_BUN_GLOBAL_SMOKE_PACKAGE_TGZ does not exist: $PACKAGE_TGZ" >&2
+      echo "GREENCHCLAW_BUN_GLOBAL_SMOKE_PACKAGE_TGZ does not exist: $PACKAGE_TGZ" >&2
       exit 1
     fi
     PACKAGE_TGZ="$(cd "$(dirname "$PACKAGE_TGZ")" && pwd)/$(basename "$PACKAGE_TGZ")"
@@ -57,11 +57,11 @@ resolve_package_tgz() {
     echo "==> Build host package artifacts"
     pnpm build
   else
-    echo "==> Skipping host build (NEXISCLAW_BUN_GLOBAL_SMOKE_HOST_BUILD=0)"
+    echo "==> Skipping host build (GREENCHCLAW_BUN_GLOBAL_SMOKE_HOST_BUILD=0)"
   fi
 
   if [ ! -d "$ROOT_DIR/dist" ]; then
-    echo "dist/ is missing; run pnpm build or set NEXISCLAW_BUN_GLOBAL_SMOKE_DIST_IMAGE" >&2
+    echo "dist/ is missing; run pnpm build or set GREENCHCLAW_BUN_GLOBAL_SMOKE_DIST_IMAGE" >&2
     exit 1
   fi
 
@@ -69,10 +69,10 @@ resolve_package_tgz() {
   node --import tsx scripts/write-package-dist-inventory.ts
 
   local pack_json_file
-  PACK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/NexisClaw-bun-pack.XXXXXX")"
+  PACK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/GreenchClaw-bun-pack.XXXXXX")"
   pack_json_file="$PACK_DIR/pack.json"
 
-  echo "==> Pack NexisClaw tarball"
+  echo "==> Pack GreenchClaw tarball"
   npm pack --ignore-scripts --json --pack-destination "$PACK_DIR" >"$pack_json_file"
   PACKAGE_TGZ="$(
     node -e '
@@ -86,7 +86,7 @@ process.stdout.write(require("node:path").resolve(process.argv[2], last.filename
 ' "$pack_json_file" "$PACK_DIR"
   )"
   if [ -z "$PACKAGE_TGZ" ] || [ ! -f "$PACKAGE_TGZ" ]; then
-    echo "missing packed NexisClaw tarball" >&2
+    echo "missing packed GreenchClaw tarball" >&2
     exit 1
   fi
 }
@@ -102,15 +102,15 @@ main() {
   resolve_package_tgz
 
   local bun_path
-  local NexisClaw_bin
+  local GreenchClaw_bin
   bun_path="$(command -v "$BUN_BIN")"
-  SMOKE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/NexisClaw-bun-global.XXXXXX")"
+  SMOKE_DIR="$(mktemp -d "${TMPDIR:-/tmp}/GreenchClaw-bun-global.XXXXXX")"
 
   export HOME="$SMOKE_DIR/home"
   export BUN_INSTALL="$HOME/.bun"
   export XDG_CACHE_HOME="$SMOKE_DIR/cache"
-  export NEXISCLAW_NO_ONBOARD=1
-  export NEXISCLAW_DISABLE_UPDATE_CHECK=1
+  export GREENCHCLAW_NO_ONBOARD=1
+  export GREENCHCLAW_DISABLE_UPDATE_CHECK=1
   export NO_COLOR=1
   mkdir -p "$HOME" "$BUN_INSTALL/bin" "$XDG_CACHE_HOME"
   export PATH="$BUN_INSTALL/bin:$(dirname "$(command -v node)"):$PATH"
@@ -118,25 +118,25 @@ main() {
   echo "==> Bun version"
   "$bun_path" --version
 
-  echo "==> Bun global install packed NexisClaw"
+  echo "==> Bun global install packed GreenchClaw"
   "$bun_path" install -g "$PACKAGE_TGZ" --no-progress
 
-  NexisClaw_bin="$BUN_INSTALL/bin/NexisClaw"
-  if [ ! -x "$NexisClaw_bin" ]; then
-    NexisClaw_bin="$(command -v NexisClaw || true)"
+  GreenchClaw_bin="$BUN_INSTALL/bin/GreenchClaw"
+  if [ ! -x "$GreenchClaw_bin" ]; then
+    GreenchClaw_bin="$(command -v GreenchClaw || true)"
   fi
-  if [ -z "$NexisClaw_bin" ] || [ ! -x "$NexisClaw_bin" ]; then
-    echo "Bun global install did not create an executable NexisClaw binary" >&2
+  if [ -z "$GreenchClaw_bin" ] || [ ! -x "$GreenchClaw_bin" ]; then
+    echo "Bun global install did not create an executable GreenchClaw binary" >&2
     exit 1
   fi
 
-  echo "==> NexisClaw version through Bun global install"
-  run_with_timeout "$COMMAND_TIMEOUT_MS" "$NexisClaw_bin" --version
+  echo "==> GreenchClaw version through Bun global install"
+  run_with_timeout "$COMMAND_TIMEOUT_MS" "$GreenchClaw_bin" --version
 
-  echo "==> NexisClaw image providers through Bun global install"
+  echo "==> GreenchClaw image providers through Bun global install"
   local providers_json
-  providers_json="$(run_with_timeout "$COMMAND_TIMEOUT_MS" "$NexisClaw_bin" infer image providers --json)"
-  NEXISCLAW_IMAGE_PROVIDERS_JSON="$providers_json" node scripts/e2e/lib/bun-global-install/assertions.mjs assert-image-providers
+  providers_json="$(run_with_timeout "$COMMAND_TIMEOUT_MS" "$GreenchClaw_bin" infer image providers --json)"
+  GREENCHCLAW_IMAGE_PROVIDERS_JSON="$providers_json" node scripts/e2e/lib/bun-global-install/assertions.mjs assert-image-providers
 }
 
 main "$@"

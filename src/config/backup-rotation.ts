@@ -64,7 +64,7 @@ export async function hardenBackupPermissions(
 /**
  * Remove orphan .bak files that fall outside the managed rotation ring.
  * These can accumulate from interrupted writes, manual copies, or PID-stamped
- * backups (e.g. NexisClaw.json.bak.1772352289, NexisClaw.json.bak.before-marketing).
+ * backups (e.g. GreenchClaw.json.bak.1772352289, GreenchClaw.json.bak.before-marketing).
  *
  * Only files matching `<configBasename>.bak.*` are considered; the primary
  * `.bak` and numbered `.bak.1` through `.bak.{N-1}` are preserved.

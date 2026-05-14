@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   collectExposureMatrixFindings,
   collectLikelyMultiUserSetupFindings,
 } from "./audit-extra.sync.js";
 
-function audit(cfg: NexisClawConfig) {
+function audit(cfg: GreenchClawConfig) {
   return [...collectExposureMatrixFindings(cfg), ...collectLikelyMultiUserSetupFindings(cfg)];
 }
 
@@ -27,7 +27,7 @@ describe("security audit trust model findings", () => {
         cfg: {
           tools: { elevated: { enabled: true, allowFrom: { whatsapp: ["+1"] } } },
           channels: { whatsapp: { groupPolicy: "open" } },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
         assert: () => {
           const findings = audit(cases[0].cfg);
           expect(
@@ -44,7 +44,7 @@ describe("security audit trust model findings", () => {
         cfg: {
           channels: { whatsapp: { groupPolicy: "open" } },
           tools: { elevated: { enabled: false } },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
         assert: () => {
           const findings = audit(cases[1].cfg);
           expect(
@@ -69,7 +69,7 @@ describe("security audit trust model findings", () => {
               sandbox: { mode: "all" },
             },
           },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
         assert: () => {
           const findings = audit(cases[2].cfg);
           expect(
@@ -89,7 +89,7 @@ describe("security audit trust model findings", () => {
             deny: ["group:runtime"],
             fs: { workspaceOnly: true },
           },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
         assert: () => {
           const findings = audit(cases[3].cfg);
           expect(
@@ -115,7 +115,7 @@ describe("security audit trust model findings", () => {
             },
           },
           tools: { elevated: { enabled: false } },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
         assert: () => {
           const findings = audit(cases[4].cfg);
           const finding = requireMultiUserHeuristicFinding(findings);
@@ -136,7 +136,7 @@ describe("security audit trust model findings", () => {
             },
           },
           tools: { elevated: { enabled: false } },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
         assert: () => {
           const findings = audit(cases[5].cfg);
           expect(

@@ -6,7 +6,7 @@ import {
   type MessagingTarget,
   type MessagingTargetKind,
   type MessagingTargetParseOptions,
-} from "NexisClaw/plugin-sdk/messaging-targets";
+} from "GreenchClaw/plugin-sdk/messaging-targets";
 
 export type SlackTargetKind = MessagingTargetKind;
 

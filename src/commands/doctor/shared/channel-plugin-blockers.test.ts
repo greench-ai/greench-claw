@@ -117,7 +117,7 @@ describe("channel plugin blockers", () => {
           enabledByDefault: true,
         },
         {
-          id: "NexisClaw-lark",
+          id: "GreenchClaw-lark",
           origin: "config",
           channels: ["feishu"],
           enabledByDefault: false,
@@ -139,7 +139,7 @@ describe("channel plugin blockers", () => {
           feishu: {
             enabled: false,
           },
-          "NexisClaw-lark": {
+          "GreenchClaw-lark": {
             enabled: true,
           },
         },
@@ -166,7 +166,7 @@ describe("channel plugin blockers", () => {
           enabledByDefault: true,
         },
         {
-          id: "NexisClaw-lark",
+          id: "GreenchClaw-lark",
           origin: "config",
           channels: ["feishu"],
           enabledByDefault: false,

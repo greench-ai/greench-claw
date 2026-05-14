@@ -5,19 +5,19 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { appendCrestodianAuditEntry, resolveCrestodianAuditPath } from "./audit.js";
 
 describe("Crestodian audit log", () => {
-  const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
+  const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
 
   afterEach(() => {
     if (previousStateDir === undefined) {
-      delete process.env.NEXISCLAW_STATE_DIR;
+      delete process.env.GREENCHCLAW_STATE_DIR;
     } else {
-      process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+      process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
     }
   });
 
-  it("writes jsonl records under the NexisClaw audit dir", async () => {
+  it("writes jsonl records under the GreenchClaw audit dir", async () => {
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "crestodian-audit-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", tempDir);
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", tempDir);
 
     const auditPath = await appendCrestodianAuditEntry({
       operation: "config.setDefaultModel",

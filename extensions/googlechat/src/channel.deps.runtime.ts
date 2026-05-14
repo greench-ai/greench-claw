@@ -11,7 +11,7 @@ export {
   type ChannelMessageActionAdapter,
   type ChannelMessageActionName,
   type ChannelStatusIssue,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "../runtime-api.js";
 export {
   type GoogleChatConfigAccessorAccount,

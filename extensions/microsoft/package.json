@@ -1,16 +1,16 @@
 {
-  "name": "@NexisClaw/microsoft-speech",
+  "name": "@GreenchClaw/microsoft-speech",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw Microsoft speech plugin",
+  "description": "GreenchClaw Microsoft speech plugin",
   "type": "module",
   "dependencies": {
     "node-edge-tts": "1.2.10"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

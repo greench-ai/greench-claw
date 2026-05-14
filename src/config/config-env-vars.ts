@@ -4,13 +4,13 @@ import {
   normalizeEnvVarKey,
 } from "../infra/host-env-security.js";
 import { containsEnvVarReference } from "./env-substitution.js";
-import type { NexisClawConfig } from "./types.js";
+import type { GreenchClawConfig } from "./types.js";
 
 function isBlockedConfigEnvVar(key: string): boolean {
   return isDangerousHostEnvVarName(key) || isDangerousHostEnvOverrideVarName(key);
 }
 
-function collectConfigEnvVarsByTarget(cfg?: NexisClawConfig): Record<string, string> {
+function collectConfigEnvVarsByTarget(cfg?: GreenchClawConfig): Record<string, string> {
   const envConfig = cfg?.env;
   if (!envConfig) {
     return {};
@@ -54,16 +54,16 @@ function collectConfigEnvVarsByTarget(cfg?: NexisClawConfig): Record<string, str
   return entries;
 }
 
-export function collectConfigRuntimeEnvVars(cfg?: NexisClawConfig): Record<string, string> {
+export function collectConfigRuntimeEnvVars(cfg?: GreenchClawConfig): Record<string, string> {
   return collectConfigEnvVarsByTarget(cfg);
 }
 
-export function collectConfigServiceEnvVars(cfg?: NexisClawConfig): Record<string, string> {
+export function collectConfigServiceEnvVars(cfg?: GreenchClawConfig): Record<string, string> {
   return collectConfigEnvVarsByTarget(cfg);
 }
 
 export function createConfigRuntimeEnv(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   baseEnv: NodeJS.ProcessEnv = process.env,
 ): NodeJS.ProcessEnv {
   const env = { ...baseEnv };
@@ -72,7 +72,7 @@ export function createConfigRuntimeEnv(
 }
 
 export function applyConfigEnvVars(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): void {
   const entries = collectConfigRuntimeEnvVars(cfg);
@@ -82,7 +82,7 @@ export function applyConfigEnvVars(
     }
     // Skip values containing unresolved ${VAR} references — applyConfigEnvVars runs
     // before env substitution, so these would pollute process.env with literal placeholders
-    // (e.g. process.env.NEXISCLAW_GATEWAY_TOKEN = "${VAULT_TOKEN}") which downstream auth
+    // (e.g. process.env.GREENCHCLAW_GATEWAY_TOKEN = "${VAULT_TOKEN}") which downstream auth
     // resolution would accept as valid credentials.
     if (containsEnvVarReference(value)) {
       continue;

@@ -1,4 +1,4 @@
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 
 type MemoryEmbeddingTextPart = {
   type: "text";

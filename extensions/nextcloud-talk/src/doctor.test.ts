@@ -62,7 +62,7 @@ describe("nextcloud-talk doctor", () => {
       ok: false,
       code: "missing_response_feature",
       message:
-        'Nextcloud Talk bot "NexisClaw" (1) is missing the response feature (features=9); outbound replies will fail.',
+        'Nextcloud Talk bot "GreenchClaw" (1) is missing the response feature (features=9); outbound replies will fail.',
     });
 
     await expect(
@@ -78,10 +78,10 @@ describe("nextcloud-talk doctor", () => {
             },
           },
         } as never,
-        doctorFixCommand: "NexisClaw doctor --fix",
+        doctorFixCommand: "GreenchClaw doctor --fix",
       }),
     ).resolves.toEqual([
-      '- channels.nextcloud-talk.default: Nextcloud Talk bot "NexisClaw" (1) is missing the response feature (features=9); outbound replies will fail.',
+      '- channels.nextcloud-talk.default: Nextcloud Talk bot "GreenchClaw" (1) is missing the response feature (features=9); outbound replies will fail.',
     ]);
   });
 });

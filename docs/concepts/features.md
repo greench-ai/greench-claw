@@ -1,7 +1,7 @@
 ---
-summary: "NexisClaw capabilities across channels, routing, media, and UX."
+summary: "GreenchClaw capabilities across channels, routing, media, and UX."
 read_when:
-  - You want a full list of what NexisClaw supports
+  - You want a full list of what GreenchClaw supports
 title: "Features"
 ---
 
@@ -86,6 +86,6 @@ title: "Features"
     Connect Telegram, WhatsApp, Discord, Slack, and more from one Gateway.
   </Card>
   <Card title="Plugins" href="/tools/plugin" icon="plug">
-    Bundled and third-party plugins that extend NexisClaw.
+    Bundled and third-party plugins that extend GreenchClaw.
   </Card>
 </CardGroup>

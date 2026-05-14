@@ -1,6 +1,6 @@
 import path from "node:path";
 import { describe, expect, it, test, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { applyAgentDefaultPrimaryModel } from "../plugins/provider-model-primary.js";
 import type { RuntimeEnv } from "../runtime.js";
 import {
@@ -14,23 +14,23 @@ describe("buildCleanupPlan", () => {
     const tmpRoot = path.join(path.parse(process.cwd()).root, "tmp");
     const cfg = {
       agents: {
-        defaults: { workspace: path.join(tmpRoot, "NexisClaw-workspace-1") },
-        list: [{ workspace: path.join(tmpRoot, "NexisClaw-workspace-2") }],
+        defaults: { workspace: path.join(tmpRoot, "GreenchClaw-workspace-1") },
+        list: [{ workspace: path.join(tmpRoot, "GreenchClaw-workspace-2") }],
       },
     };
     const plan = buildCleanupPlan({
-      cfg: cfg as unknown as NexisClawConfig,
-      stateDir: path.join(tmpRoot, "NexisClaw-state"),
-      configPath: path.join(tmpRoot, "NexisClaw-state", "NexisClaw.json"),
-      oauthDir: path.join(tmpRoot, "NexisClaw-oauth"),
+      cfg: cfg as unknown as GreenchClawConfig,
+      stateDir: path.join(tmpRoot, "GreenchClaw-state"),
+      configPath: path.join(tmpRoot, "GreenchClaw-state", "GreenchClaw.json"),
+      oauthDir: path.join(tmpRoot, "GreenchClaw-oauth"),
     });
 
     expect(plan.configInsideState).toBe(true);
     expect(plan.oauthInsideState).toBe(false);
     expect(new Set(plan.workspaceDirs)).toEqual(
       new Set([
-        path.join(tmpRoot, "NexisClaw-workspace-1"),
-        path.join(tmpRoot, "NexisClaw-workspace-2"),
+        path.join(tmpRoot, "GreenchClaw-workspace-1"),
+        path.join(tmpRoot, "GreenchClaw-workspace-2"),
       ]),
     );
   });
@@ -38,14 +38,14 @@ describe("buildCleanupPlan", () => {
 
 describe("applyAgentDefaultPrimaryModel", () => {
   it("does not mutate when already set", () => {
-    const cfg = { agents: { defaults: { model: { primary: "a/b" } } } } as NexisClawConfig;
+    const cfg = { agents: { defaults: { model: { primary: "a/b" } } } } as GreenchClawConfig;
     const result = applyAgentDefaultPrimaryModel({ cfg, model: "a/b" });
     expect(result.changed).toBe(false);
     expect(result.next).toBe(cfg);
   });
 
   it("normalizes legacy models", () => {
-    const cfg = { agents: { defaults: { model: { primary: "legacy" } } } } as NexisClawConfig;
+    const cfg = { agents: { defaults: { model: { primary: "legacy" } } } } as GreenchClawConfig;
     const result = applyAgentDefaultPrimaryModel({
       cfg,
       model: "a/b",
@@ -56,7 +56,7 @@ describe("applyAgentDefaultPrimaryModel", () => {
   });
 
   it("normalizes retired Google Gemini primary models before writing config", () => {
-    const cfg = { agents: { defaults: {} } } as NexisClawConfig;
+    const cfg = { agents: { defaults: {} } } as GreenchClawConfig;
     const result = applyAgentDefaultPrimaryModel({
       cfg,
       model: "google/gemini-3-pro-preview",
@@ -81,11 +81,11 @@ describe("cleanup path removals", () => {
 
   it("removes state and only linked paths outside state", async () => {
     const runtime = createRuntimeMock();
-    const tmpRoot = path.join(path.parse(process.cwd()).root, "tmp", "NexisClaw-cleanup");
+    const tmpRoot = path.join(path.parse(process.cwd()).root, "tmp", "GreenchClaw-cleanup");
     await removeStateAndLinkedPaths(
       {
         stateDir: path.join(tmpRoot, "state"),
-        configPath: path.join(tmpRoot, "state", "NexisClaw.json"),
+        configPath: path.join(tmpRoot, "state", "GreenchClaw.json"),
         oauthDir: path.join(tmpRoot, "oauth"),
         configInsideState: true,
         oauthInsideState: false,
@@ -95,21 +95,21 @@ describe("cleanup path removals", () => {
     );
 
     expect(runtime.log.mock.calls.map(([line]) => line.replaceAll("\\", "/"))).toEqual([
-      "[dry-run] remove /tmp/NexisClaw-cleanup/state",
-      "[dry-run] remove /tmp/NexisClaw-cleanup/oauth",
+      "[dry-run] remove /tmp/GreenchClaw-cleanup/state",
+      "[dry-run] remove /tmp/GreenchClaw-cleanup/oauth",
     ]);
   });
 
   it("removes every workspace directory", async () => {
     const runtime = createRuntimeMock();
-    const workspaces = ["/tmp/NexisClaw-workspace-1", "/tmp/NexisClaw-workspace-2"];
+    const workspaces = ["/tmp/GreenchClaw-workspace-1", "/tmp/GreenchClaw-workspace-2"];
 
     await removeWorkspaceDirs(workspaces, runtime, { dryRun: true });
 
     const logs = runtime.log.mock.calls.map(([line]) => line);
     expect(logs).toEqual([
-      "[dry-run] remove /tmp/NexisClaw-workspace-1",
-      "[dry-run] remove /tmp/NexisClaw-workspace-2",
+      "[dry-run] remove /tmp/GreenchClaw-workspace-1",
+      "[dry-run] remove /tmp/GreenchClaw-workspace-2",
     ]);
   });
 });

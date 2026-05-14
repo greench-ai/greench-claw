@@ -1,11 +1,11 @@
 import fs from "node:fs";
 import { createServer } from "node:http";
 import path from "node:path";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import {
   acquireDebugProxyCaptureStore,
   resolveDebugProxySettings,
-} from "NexisClaw/plugin-sdk/proxy-capture";
+} from "GreenchClaw/plugin-sdk/proxy-capture";
 import {
   closeQaHttpServer,
   handleQaBusRequest,
@@ -45,7 +45,7 @@ import {
   createQaRunOutputDir,
   normalizeQaRunSelection,
 } from "./run-config.js";
-import { qaChannelPlugin, setQaChannelRuntime, type NexisClawConfig } from "./runtime-api.js";
+import { qaChannelPlugin, setQaChannelRuntime, type GreenchClawConfig } from "./runtime-api.js";
 import { readQaBootstrapScenarioCatalog } from "./scenario-catalog.js";
 import { runQaSelfCheckAgainstState, type QaSelfCheckResult } from "./self-check.js";
 
@@ -125,7 +125,7 @@ function createBootstrapDefaults(autoKickoffTarget?: string): QaLabBootstrapDefa
   };
 }
 
-function createQaLabConfig(baseUrl: string): NexisClawConfig {
+function createQaLabConfig(baseUrl: string): GreenchClawConfig {
   return createQaChannelGatewayConfig({ baseUrl });
 }
 
@@ -197,7 +197,7 @@ export async function startQaLabServer(
   let controlUiToken = params?.controlUiToken?.trim() || null;
   let gateway:
     | {
-        cfg: NexisClawConfig;
+        cfg: GreenchClawConfig;
         stop: () => Promise<void>;
       }
     | undefined;

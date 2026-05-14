@@ -1,6 +1,6 @@
-import type { ModelCatalogEntry } from "NexisClaw/plugin-sdk/agent-runtime";
-import type { ProviderRuntimeModel } from "NexisClaw/plugin-sdk/plugin-entry";
-import { normalizeModelCompat } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { ModelCatalogEntry } from "GreenchClaw/plugin-sdk/agent-runtime";
+import type { ProviderRuntimeModel } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { normalizeModelCompat } from "GreenchClaw/plugin-sdk/provider-model-shared";
 
 const PROVIDER_ID = "opencode-go";
 

@@ -1,17 +1,17 @@
 ---
-summary: "Delegate architecture: running NexisClaw as a named agent on behalf of an organization"
+summary: "Delegate architecture: running GreenchClaw as a named agent on behalf of an organization"
 title: Delegate architecture
 read_when: "You want an agent with its own identity that acts on behalf of humans in an organization."
 status: active
 ---
 
-Goal: run NexisClaw as a **named delegate** - an agent with its own identity that acts "on behalf of" people in an organization. The agent never impersonates a human. It sends, reads, and schedules under its own account with explicit delegation permissions.
+Goal: run GreenchClaw as a **named delegate** - an agent with its own identity that acts "on behalf of" people in an organization. The agent never impersonates a human. It sends, reads, and schedules under its own account with explicit delegation permissions.
 
 This extends [Multi-Agent Routing](/concepts/multi-agent) from personal use into organizational deployments.
 
 ## What is a delegate?
 
-A **delegate** is an NexisClaw agent that:
+A **delegate** is an GreenchClaw agent that:
 
 - Has its **own identity** (email address, display name, calendar).
 - Acts **on behalf of** one or more humans - never pretends to be them.
@@ -22,7 +22,7 @@ The delegate model maps directly to how executive assistants work: they have the
 
 ## Why delegates?
 
-NexisClaw's default mode is a **personal assistant** - one human, one agent. Delegates extend this to organizations:
+GreenchClaw's default mode is a **personal assistant** - one human, one agent. Delegates extend this to organizations:
 
 | Personal mode               | Delegate mode                                  |
 | --------------------------- | ---------------------------------------------- |
@@ -34,7 +34,7 @@ NexisClaw's default mode is a **personal assistant** - one human, one agent. Del
 Delegates solve two problems:
 
 1. **Accountability**: messages sent by the agent are clearly from the agent, not a human.
-2. **Scope control**: the identity provider enforces what the delegate can access, independent of NexisClaw's own tool policy.
+2. **Scope control**: the identity provider enforces what the delegate can access, independent of GreenchClaw's own tool policy.
 
 ## Capability tiers
 
@@ -98,7 +98,7 @@ Use per-agent tool policy (v2026.1.6+) to enforce boundaries at the Gateway leve
 ```json5
 {
   id: "delegate",
-  workspace: "~/.NexisClaw/workspace-delegate",
+  workspace: "~/.GreenchClaw/workspace-delegate",
   tools: {
     allow: ["read", "exec", "message", "cron"],
     deny: ["write", "edit", "apply_patch", "browser", "canvas"],
@@ -113,7 +113,7 @@ For high-security deployments, sandbox the delegate agent so it cannot access th
 ```json5
 {
   id: "delegate",
-  workspace: "~/.NexisClaw/workspace-delegate",
+  workspace: "~/.GreenchClaw/workspace-delegate",
   sandbox: {
     mode: "all",
     scope: "agent",
@@ -127,11 +127,11 @@ See [Sandboxing](/gateway/sandboxing) and [Multi-Agent Sandbox & Tools](/tools/m
 
 Configure logging before the delegate handles any real data:
 
-- Cron run history: `~/.NexisClaw/cron/runs/<jobId>.jsonl`
-- Session transcripts: `~/.NexisClaw/agents/delegate/sessions`
+- Cron run history: `~/.GreenchClaw/cron/runs/<jobId>.jsonl`
+- Session transcripts: `~/.GreenchClaw/agents/delegate/sessions`
 - Identity provider audit logs (Exchange, Google Workspace)
 
-All delegate actions flow through NexisClaw's session store. For compliance, ensure these logs are retained and reviewed.
+All delegate actions flow through GreenchClaw's session store. For compliance, ensure these logs are retained and reviewed.
 
 ## Setting up a delegate
 
@@ -142,14 +142,14 @@ With hardening in place, proceed to grant the delegate its identity and permissi
 Use the multi-agent wizard to create an isolated agent for the delegate:
 
 ```bash
-NexisClaw agents add delegate
+GreenchClaw agents add delegate
 ```
 
 This creates:
 
-- Workspace: `~/.NexisClaw/workspace-delegate`
-- State: `~/.NexisClaw/agents/delegate/agent`
-- Sessions: `~/.NexisClaw/agents/delegate/sessions`
+- Workspace: `~/.GreenchClaw/workspace-delegate`
+- State: `~/.GreenchClaw/agents/delegate/agent`
+- Sessions: `~/.GreenchClaw/agents/delegate/sessions`
 
 Configure the delegate's personality in its workspace files:
 
@@ -214,10 +214,10 @@ Route inbound messages to the delegate agent using [Multi-Agent Routing](/concep
 {
   agents: {
     list: [
-      { id: "main", workspace: "~/.NexisClaw/workspace" },
+      { id: "main", workspace: "~/.GreenchClaw/workspace" },
       {
         id: "delegate",
-        workspace: "~/.NexisClaw/workspace-delegate",
+        workspace: "~/.GreenchClaw/workspace-delegate",
         tools: {
           deny: ["browser", "canvas"],
         },
@@ -247,7 +247,7 @@ Copy or create auth profiles for the delegate's `agentDir`:
 
 ```bash
 # Delegate reads from its own auth store
-~/.NexisClaw/agents/delegate/agent/auth-profiles.json
+~/.GreenchClaw/agents/delegate/agent/auth-profiles.json
 ```
 
 Never share the main agent's `agentDir` with the delegate. See [Multi-Agent Routing](/concepts/multi-agent) for auth isolation details.
@@ -260,12 +260,12 @@ A complete delegate configuration for an organizational assistant that handles e
 {
   agents: {
     list: [
-      { id: "main", default: true, workspace: "~/.NexisClaw/workspace" },
+      { id: "main", default: true, workspace: "~/.GreenchClaw/workspace" },
       {
         id: "org-assistant",
         name: "[Organization] Assistant",
-        workspace: "~/.NexisClaw/workspace-org",
-        agentDir: "~/.NexisClaw/agents/org-assistant/agent",
+        workspace: "~/.GreenchClaw/workspace-org",
+        agentDir: "~/.GreenchClaw/agents/org-assistant/agent",
         identity: { name: "[Organization] Assistant" },
         tools: {
           allow: ["read", "exec", "message", "cron", "sessions_list", "sessions_history"],
@@ -289,7 +289,7 @@ A complete delegate configuration for an organizational assistant that handles e
 The delegate's `AGENTS.md` defines its autonomous authority - what it may do without asking, what requires approval, and what is forbidden. [Cron Jobs](/automation/cron-jobs) drive its daily schedule.
 
 If you grant `sessions_history`, remember it is a bounded, safety-filtered
-recall view. NexisClaw redacts credential/token-like text, truncates long
+recall view. GreenchClaw redacts credential/token-like text, truncates long
 content, strips thinking tags / `<relevant-memories>` scaffolding / plain-text
 tool-call XML payloads (including `<tool_call>...</tool_call>`,
 `<function_call>...</function_call>`, `<tool_calls>...</tool_calls>`,

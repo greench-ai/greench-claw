@@ -1,5 +1,5 @@
-import { createProviderHttpError } from "NexisClaw/plugin-sdk/provider-http";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/provider-onboard";
+import { createProviderHttpError } from "GreenchClaw/plugin-sdk/provider-http";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildSearchCacheKey,
   buildUnsupportedSearchFilterResponse,
@@ -20,8 +20,8 @@ import {
   withTrustedWebSearchEndpoint,
   wrapWebContent,
   writeCachedSearchPayload,
-} from "NexisClaw/plugin-sdk/provider-web-search";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/provider-web-search";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   isNativeMoonshotBaseUrl,
   MOONSHOT_BASE_URL,
@@ -102,7 +102,7 @@ function trimTrailingSlashes(url: string): string {
   return url.replace(/\/+$/, "");
 }
 
-function resolveKimiBaseUrl(kimi?: KimiConfig, openClawConfig?: NexisClawConfig): string {
+function resolveKimiBaseUrl(kimi?: KimiConfig, openClawConfig?: GreenchClawConfig): string {
   const explicitBaseUrl = normalizeOptionalString(kimi?.baseUrl) ?? "";
   if (explicitBaseUrl) {
     return trimTrailingSlashes(explicitBaseUrl) || DEFAULT_KIMI_BASE_URL;
@@ -289,7 +289,7 @@ async function runKimiSearch(params: {
 }
 
 export async function executeKimiWebSearchProviderTool(
-  ctx: { config?: NexisClawConfig; searchConfig?: SearchConfigRecord },
+  ctx: { config?: GreenchClawConfig; searchConfig?: SearchConfigRecord },
   args: Record<string, unknown>,
 ): Promise<Record<string, unknown>> {
   const searchConfig = mergeScopedSearchConfig(
@@ -309,7 +309,7 @@ export async function executeKimiWebSearchProviderTool(
       error: "missing_kimi_api_key",
       message:
         "web_search (kimi) needs a Moonshot API key. Set KIMI_API_KEY or MOONSHOT_API_KEY in the Gateway environment, or configure tools.web.search.kimi.apiKey. If you do not want to configure a search API key, use web_fetch for a specific URL or the browser tool for interactive pages.",
-      docs: "https://docs.NexisClaw.ai/tools/web",
+      docs: "https://docs.GreenchClaw.ai/tools/web",
     };
   }
 
@@ -346,7 +346,7 @@ export async function executeKimiWebSearchProviderTool(
       query,
       provider: "kimi",
       model,
-      docs: "https://docs.NexisClaw.ai/tools/kimi-search",
+      docs: "https://docs.GreenchClaw.ai/tools/kimi-search",
       tookMs: Date.now() - start,
     };
   }

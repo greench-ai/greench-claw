@@ -2,7 +2,7 @@
  * Test script for shell completion installation feature.
  *
  * This script simulates the shell completion prompt that appears during
- * `NexisClaw update`. Use it to verify the completion installation flow
+ * `GreenchClaw update`. Use it to verify the completion installation flow
  * without running a full update.
  *
  * Run from repo root:
@@ -34,7 +34,7 @@ import {
 import { stylePromptMessage } from "../src/terminal/prompt-style.js";
 import { theme } from "../src/terminal/theme.js";
 
-const CLI_NAME = "NexisClaw";
+const CLI_NAME = "GreenchClaw";
 
 interface Options {
   checkOnly: boolean;
@@ -67,7 +67,7 @@ function printHelp(): void {
 ${theme.heading("Shell Completion Test Script")}
 
 This script simulates the shell completion checks that run during
-\`NexisClaw update\`, \`NexisClaw doctor\`, and \`NexisClaw onboard\`.
+\`GreenchClaw update\`, \`GreenchClaw doctor\`, and \`GreenchClaw onboard\`.
 
 ${theme.heading("Usage (run from repo root):")}
   node --import tsx scripts/test-shell-completion.ts [options]
@@ -181,7 +181,7 @@ async function main() {
   if (status.profileInstalled && status.cacheExists && !options.force) {
     console.log(theme.muted("Shell completion is fully configured. To test the prompt:"));
     console.log(
-      theme.muted("  1. Remove the '# NexisClaw Completion' block from your shell profile"),
+      theme.muted("  1. Remove the '# GreenchClaw Completion' block from your shell profile"),
     );
     console.log(theme.muted("  2. Re-run this script"));
     console.log(theme.muted("  Or use --force to prompt anyway"));
@@ -198,7 +198,7 @@ async function main() {
   });
 
   if (isCancel(shouldInstall) || !shouldInstall) {
-    console.log(theme.muted(`Skipped. Run \`NexisClaw completion --install\` later to enable.`));
+    console.log(theme.muted(`Skipped. Run \`GreenchClaw completion --install\` later to enable.`));
     return;
   }
 

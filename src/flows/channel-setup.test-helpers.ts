@@ -29,7 +29,7 @@ export function makeCatalogEntry(
     id,
     pluginId: overrides.pluginId ?? id,
     meta: makeMeta(id, label, overrides.meta),
-    install: overrides.install ?? { npmSpec: `@NexisClaw/${id}` },
+    install: overrides.install ?? { npmSpec: `@GreenchClaw/${id}` },
     ...overrides,
   };
 }

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { resolveDefaultWhatsAppAccountId } from "./account-ids.js";
 import { getRegisteredWhatsAppConnectionController } from "./connection-controller-registry.js";
 import type { ActiveWebListener } from "./inbound/types.js";
@@ -6,7 +6,7 @@ import type { ActiveWebListener } from "./inbound/types.js";
 export type { ActiveWebListener, ActiveWebSendOptions } from "./inbound/types.js";
 
 export function resolveWebAccountId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): string {
   return (params.accountId ?? "").trim() || resolveDefaultWhatsAppAccountId(params.cfg);

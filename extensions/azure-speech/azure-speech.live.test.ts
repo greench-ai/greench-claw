@@ -1,8 +1,8 @@
 import {
   registerProviderPlugin,
   requireRegisteredProvider,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { isLiveTestEnabled } from "NexisClaw/plugin-sdk/test-env";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { isLiveTestEnabled } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 
@@ -50,7 +50,7 @@ describeLive("azure speech plugin live", () => {
     };
 
     const audioFile = await provider.synthesize({
-      text: "NexisClaw Azure Speech text to speech integration test OK.",
+      text: "GreenchClaw Azure Speech text to speech integration test OK.",
       cfg: { plugins: { enabled: true } } as never,
       providerConfig,
       target: "audio-file",
@@ -63,7 +63,7 @@ describeLive("azure speech plugin live", () => {
     expect(audioFile.audioBuffer.byteLength).toBeGreaterThan(512);
 
     const voiceNote = await provider.synthesize({
-      text: "NexisClaw Azure Speech voice note integration test OK.",
+      text: "GreenchClaw Azure Speech voice note integration test OK.",
       cfg: { plugins: { enabled: true } } as never,
       providerConfig,
       target: "voice-note",
@@ -77,7 +77,7 @@ describeLive("azure speech plugin live", () => {
     expect(voiceNote.audioBuffer.subarray(0, 4).toString("ascii")).toBe("OggS");
 
     const telephony = await provider.synthesizeTelephony?.({
-      text: "NexisClaw Azure Speech telephony check OK.",
+      text: "GreenchClaw Azure Speech telephony check OK.",
       cfg: { plugins: { enabled: true } } as never,
       providerConfig,
       timeoutMs: 90_000,

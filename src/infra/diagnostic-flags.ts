@@ -1,7 +1,7 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 
-const DIAGNOSTICS_ENV = "NEXISCLAW_DIAGNOSTICS";
+const DIAGNOSTICS_ENV = "GREENCHCLAW_DIAGNOSTICS";
 
 type ParsedEnvFlags = {
   flags: string[];
@@ -47,7 +47,7 @@ function uniqueFlags(flags: string[]): string[] {
 }
 
 export function resolveDiagnosticFlags(
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): string[] {
   const configFlags = Array.isArray(cfg?.diagnostics?.flags) ? cfg?.diagnostics?.flags : [];
@@ -92,7 +92,7 @@ export function matchesDiagnosticFlag(flag: string, enabledFlags: string[]): boo
 
 export function isDiagnosticFlagEnabled(
   flag: string,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
   const flags = resolveDiagnosticFlags(cfg, env);

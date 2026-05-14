@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   loadConfig,
   refreshPluginRegistry,
@@ -16,13 +16,13 @@ import {
   writePersistedInstalledPluginIndexInstallRecords,
 } from "./plugins-cli-test-helpers.js";
 
-const ORIGINAL_NEXISCLAW_NIX_MODE = process.env.NEXISCLAW_NIX_MODE;
+const ORIGINAL_GREENCHCLAW_NIX_MODE = process.env.GREENCHCLAW_NIX_MODE;
 
 function createTrackedPluginConfig(params: {
   pluginId: string;
   spec: string;
   resolvedName?: string;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   return {
     plugins: {
       installs: {
@@ -34,7 +34,7 @@ function createTrackedPluginConfig(params: {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function expectRestartNoticeLogged() {
@@ -60,10 +60,10 @@ describe("plugins cli update", () => {
   });
 
   afterEach(() => {
-    if (ORIGINAL_NEXISCLAW_NIX_MODE === undefined) {
-      delete process.env.NEXISCLAW_NIX_MODE;
+    if (ORIGINAL_GREENCHCLAW_NIX_MODE === undefined) {
+      delete process.env.GREENCHCLAW_NIX_MODE;
     } else {
-      process.env.NEXISCLAW_NIX_MODE = ORIGINAL_NEXISCLAW_NIX_MODE;
+      process.env.GREENCHCLAW_NIX_MODE = ORIGINAL_GREENCHCLAW_NIX_MODE;
     }
   });
 
@@ -81,17 +81,17 @@ describe("plugins cli update", () => {
   });
 
   it("refuses plugin updates in Nix mode before package-manager work", async () => {
-    const previous = process.env.NEXISCLAW_NIX_MODE;
-    process.env.NEXISCLAW_NIX_MODE = "1";
+    const previous = process.env.GREENCHCLAW_NIX_MODE;
+    process.env.GREENCHCLAW_NIX_MODE = "1";
     try {
       await expect(runPluginsCommand(["plugins", "update", "--all"])).rejects.toThrow(
-        "NEXISCLAW_NIX_MODE=1",
+        "GREENCHCLAW_NIX_MODE=1",
       );
     } finally {
       if (previous === undefined) {
-        delete process.env.NEXISCLAW_NIX_MODE;
+        delete process.env.GREENCHCLAW_NIX_MODE;
       } else {
-        process.env.NEXISCLAW_NIX_MODE = previous;
+        process.env.GREENCHCLAW_NIX_MODE = previous;
       }
     }
 
@@ -114,7 +114,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const nextConfig = {
       hooks: {
         internal: {
@@ -127,7 +127,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     loadConfig.mockReturnValue(cfg);
     updateNpmInstalledPlugins.mockResolvedValue({
@@ -162,7 +162,7 @@ describe("plugins cli update", () => {
       plugins: {
         installs: {},
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
 
     await expect(runPluginsCommand(["plugins", "update"])).rejects.toThrow("__exit__:1");
 
@@ -175,7 +175,7 @@ describe("plugins cli update", () => {
       plugins: {
         installs: {},
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
 
     await runPluginsCommand(["plugins", "update", "--all"]);
 
@@ -186,8 +186,8 @@ describe("plugins cli update", () => {
 
   it("passes dangerous force unsafe install to plugin updates", async () => {
     const config = createTrackedPluginConfig({
-      pluginId: "NexisClaw-codex-app-server",
-      spec: "NexisClaw-codex-app-server@beta",
+      pluginId: "GreenchClaw-codex-app-server",
+      spec: "GreenchClaw-codex-app-server@beta",
     });
     loadConfig.mockReturnValue(config);
     setInstalledPluginIndexInstallRecords(config.plugins?.installs ?? {});
@@ -200,13 +200,13 @@ describe("plugins cli update", () => {
     await runPluginsCommand([
       "plugins",
       "update",
-      "NexisClaw-codex-app-server",
+      "GreenchClaw-codex-app-server",
       "--dangerously-force-unsafe-install",
     ]);
 
     const updateParams = expectSingleCallParams(updateNpmInstalledPlugins);
     expect(updateParams.config).toEqual(config);
-    expect(updateParams.pluginIds).toEqual(["NexisClaw-codex-app-server"]);
+    expect(updateParams.pluginIds).toEqual(["GreenchClaw-codex-app-server"]);
     expect(updateParams.dangerouslyForceUnsafeInstall).toBe(true);
   });
 
@@ -216,21 +216,21 @@ describe("plugins cli update", () => {
         installs: {
           alpha: {
             source: "npm",
-            spec: "@NexisClaw/alpha@1.0.0",
+            spec: "@GreenchClaw/alpha@1.0.0",
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const nextConfig = {
       plugins: {
         installs: {
           alpha: {
             source: "npm",
-            spec: "@NexisClaw/alpha@1.1.0",
+            spec: "@GreenchClaw/alpha@1.1.0",
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     loadConfig.mockReturnValue(cfg);
     setInstalledPluginIndexInstallRecords(cfg.plugins?.installs ?? {});
     updateNpmInstalledPlugins.mockResolvedValue({
@@ -268,29 +268,29 @@ describe("plugins cli update", () => {
         installs: {
           alpha: {
             source: "npm",
-            spec: "@NexisClaw/alpha@1.0.0",
+            spec: "@GreenchClaw/alpha@1.0.0",
           },
           beta: {
             source: "npm",
-            spec: "@NexisClaw/beta@1.0.0",
+            spec: "@GreenchClaw/beta@1.0.0",
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const nextConfig = {
       plugins: {
         installs: {
           alpha: {
             source: "npm",
-            spec: "@NexisClaw/alpha@1.1.0",
+            spec: "@GreenchClaw/alpha@1.1.0",
           },
           beta: {
             source: "npm",
-            spec: "@NexisClaw/beta@1.0.0",
+            spec: "@GreenchClaw/beta@1.0.0",
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     loadConfig.mockReturnValue(cfg);
     setInstalledPluginIndexInstallRecords(cfg.plugins?.installs ?? {});
     updateNpmInstalledPlugins.mockResolvedValue({
@@ -334,7 +334,7 @@ describe("plugins cli update", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     loadConfig.mockReturnValue(cfg);
     updateNpmInstalledPlugins.mockResolvedValue({
       config: cfg,

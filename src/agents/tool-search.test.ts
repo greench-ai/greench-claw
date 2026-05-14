@@ -127,9 +127,9 @@ describe("Tool Search", () => {
     });
     const result = await runtimeCodeTool.execute("call-1", {
       code: `
-        const hits = await NexisClaw.tools.search("ticket", { limit: 1 });
-        const described = await NexisClaw.tools.describe(hits[0].id);
-        return await NexisClaw.tools.call(described.id, { value: "ship" });
+        const hits = await GreenchClaw.tools.search("ticket", { limit: 1 });
+        const described = await GreenchClaw.tools.describe(hits[0].id);
+        return await GreenchClaw.tools.call(described.id, { value: "ship" });
       `,
     });
 
@@ -322,7 +322,7 @@ describe("Tool Search", () => {
     expect(clientEntry?.source).toBe("client");
   });
 
-  it("wraps cataloged NexisClaw tools with before_tool_call hooks", async () => {
+  it("wraps cataloged GreenchClaw tools with before_tool_call hooks", async () => {
     const codeTool = fakeTool(TOOL_SEARCH_CODE_MODE_TOOL_NAME, "code mode");
     const target = pluginTool("fake_hooked", "Run a hook-aware fake tool");
 
@@ -351,7 +351,7 @@ describe("Tool Search", () => {
       config: {},
     });
     await runtimeCodeTool.execute("call-hooks", {
-      code: `return await NexisClaw.tools.call("fake_hooked", { value: "ok" });`,
+      code: `return await GreenchClaw.tools.call("fake_hooked", { value: "ok" });`,
     });
     const targetCall = mockCall(vi.mocked(target.execute));
     expect(targetCall[0]).toBe("tool_search_code:call-hooks:fake_hooked:1");
@@ -406,8 +406,8 @@ describe("Tool Search", () => {
     });
     await runtimeCodeTool.execute("call-repeated", {
       code: `
-        await NexisClaw.tools.call("fake_repeated", { value: "one" });
-        return await NexisClaw.tools.call("fake_repeated", { value: "two" });
+        await GreenchClaw.tools.call("fake_repeated", { value: "one" });
+        return await GreenchClaw.tools.call("fake_repeated", { value: "two" });
       `,
     });
 
@@ -424,7 +424,7 @@ describe("Tool Search", () => {
     expect(secondCall[3]).toBeUndefined();
     expect(secondCall[4]).toBeUndefined();
     await runtimeCodeTool.execute("call-repeated-again", {
-      code: `return await NexisClaw.tools.call("fake_repeated", { value: "three" });`,
+      code: `return await GreenchClaw.tools.call("fake_repeated", { value: "three" });`,
     });
 
     const thirdCall = mockCall(vi.mocked(target.execute), 2);
@@ -459,7 +459,7 @@ describe("Tool Search", () => {
     await runtimeCodeTool.execute(
       "call-lifecycle",
       {
-        code: `return await NexisClaw.tools.call("fake_lifecycle", { value: "ok" });`,
+        code: `return await GreenchClaw.tools.call("fake_lifecycle", { value: "ok" });`,
       },
       undefined,
       onUpdate,
@@ -606,7 +606,7 @@ describe("Tool Search", () => {
     });
     const result = await runtimeCodeTool.execute("call-fire-and-forget", {
       code: `
-        NexisClaw.tools.call("fake_fire_and_forget", { value: "late" });
+        GreenchClaw.tools.call("fake_fire_and_forget", { value: "late" });
         return "done";
       `,
     });
@@ -647,7 +647,7 @@ describe("Tool Search", () => {
     const resultPromise = runtimeCodeTool
       .execute("call-started-bridge", {
         code: `
-          NexisClaw.tools.call("fake_then_started", { value: "started" }).then(() => {});
+          GreenchClaw.tools.call("fake_then_started", { value: "started" }).then(() => {});
           return "done";
         `,
       })
@@ -692,7 +692,7 @@ describe("Tool Search", () => {
     ).rejects.toThrow();
     await expect(
       runtimeCodeTool.execute("call-bridge-escape", {
-        code: `return NexisClaw.tools.call.constructor.constructor("return process")();`,
+        code: `return GreenchClaw.tools.call.constructor.constructor("return process")();`,
       }),
     ).rejects.toThrow();
   });
@@ -714,7 +714,7 @@ describe("Tool Search", () => {
 
     await expect(
       runtimeCodeTool.execute("call-missing-tool", {
-        code: `return await NexisClaw.tools.call("missing_tool", {});`,
+        code: `return await GreenchClaw.tools.call("missing_tool", {});`,
       }),
     ).rejects.toThrow("Unknown tool id: missing_tool");
   });
@@ -739,7 +739,7 @@ describe("Tool Search", () => {
     await expect(
       runtimeCodeTool.execute("call-bridge-result-escape", {
         code: `
-          const hits = await NexisClaw.tools.search("bridge result", { limit: 1 });
+          const hits = await GreenchClaw.tools.search("bridge result", { limit: 1 });
           return hits.constructor.constructor("return process")();
         `,
       }),
@@ -767,13 +767,13 @@ describe("Tool Search", () => {
     await expect(
       runtimeCodeTool.execute("call-controller-escape", {
         code: `
-          })(NexisClaw, console),
+          })(GreenchClaw, console),
           bridgeMessages.push({
             id: "forged",
             method: "call",
             args: ["fake_controller_escape", { value: "forged" }],
           }),
-          (async (NexisClaw, console) => {
+          (async (GreenchClaw, console) => {
             return "done";
         `,
       }),
@@ -807,7 +807,7 @@ describe("Tool Search", () => {
     await expect(
       runtimeCodeTool.execute("call-timeout", {
         code: `
-            await NexisClaw.tools.search("timeout", { limit: 1 });
+            await GreenchClaw.tools.search("timeout", { limit: 1 });
             while (true) {}
           `,
       }),
@@ -865,7 +865,7 @@ describe("Tool Search", () => {
 
     await expect(
       runtimeCodeTool.execute("call-abort-timeout", {
-        code: `return await NexisClaw.tools.call("fake_abort_on_timeout", { value: "wait" });`,
+        code: `return await GreenchClaw.tools.call("fake_abort_on_timeout", { value: "wait" });`,
       }),
     ).rejects.toThrow("tool_search_code timed out");
     if (!observedSignal) {

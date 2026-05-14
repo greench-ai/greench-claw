@@ -1,5 +1,5 @@
 import type { ModelApi } from "../provider-model-shared.js";
-import type { NexisClawConfig } from "../testing.js";
+import type { GreenchClawConfig } from "../testing.js";
 
 export const EXPECTED_FALLBACKS = ["anthropic/claude-opus-4-5"] as const;
 
@@ -10,7 +10,7 @@ export function createLegacyProviderConfig(params: {
   modelName?: string;
   baseUrl?: string;
   apiKey?: string;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   return {
     models: {
       providers: {
@@ -32,10 +32,10 @@ export function createLegacyProviderConfig(params: {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-export function createConfigWithFallbacks(): NexisClawConfig {
+export function createConfigWithFallbacks(): GreenchClawConfig {
   return {
     agents: {
       defaults: {

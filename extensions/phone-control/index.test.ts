@@ -1,24 +1,24 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { describe, expect, it, vi } from "vitest";
 import registerPhoneControl from "./index.js";
 import type {
-  NexisClawPluginApi,
-  NexisClawPluginCommandDefinition,
+  GreenchClawPluginApi,
+  GreenchClawPluginCommandDefinition,
   PluginCommandContext,
 } from "./runtime-api.js";
 
-const PHONE_CONTROL_STATE_PREFIX = "NexisClaw-phone-control-test-";
+const PHONE_CONTROL_STATE_PREFIX = "GreenchClaw-phone-control-test-";
 const WRITE_COMMANDS = ["calendar.add", "contacts.add", "reminders.add", "sms.send"] as const;
 
 function createApi(params: {
   stateDir: string;
   getConfig: () => Record<string, unknown>;
   writeConfig: (next: Record<string, unknown>) => Promise<void>;
-  registerCommand: (command: NexisClawPluginCommandDefinition) => void;
-}): NexisClawPluginApi {
+  registerCommand: (command: GreenchClawPluginCommandDefinition) => void;
+}): GreenchClawPluginApi {
   return createTestPluginApi({
     id: "phone-control",
     name: "phone-control",
@@ -34,7 +34,7 @@ function createApi(params: {
         replaceConfigFile: ({ nextConfig }: { nextConfig: unknown }) =>
           params.writeConfig(nextConfig as Record<string, unknown>),
       },
-    } as unknown as NexisClawPluginApi["runtime"],
+    } as unknown as GreenchClawPluginApi["runtime"],
     registerCommand: params.registerCommand,
   });
 }
@@ -68,7 +68,7 @@ function createPhoneControlConfig(): Record<string, unknown> {
 
 async function withRegisteredPhoneControl(
   run: (params: {
-    command: NexisClawPluginCommandDefinition;
+    command: GreenchClawPluginCommandDefinition;
     writeConfigFile: ReturnType<typeof vi.fn>;
     getConfig: () => Record<string, unknown>;
   }) => Promise<void>,
@@ -80,7 +80,7 @@ async function withRegisteredPhoneControl(
       config = next;
     });
 
-    let command: NexisClawPluginCommandDefinition | undefined;
+    let command: GreenchClawPluginCommandDefinition | undefined;
     registerPhoneControl.register(
       createApi({
         stateDir,

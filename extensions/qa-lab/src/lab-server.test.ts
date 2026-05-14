@@ -11,7 +11,7 @@ import {
   type QaLabServerStartParams,
 } from "./lab-server.js";
 
-vi.mock("@NexisClaw/qa-channel/api.js", async () => await import("../../qa-channel/api.js"));
+vi.mock("@GreenchClaw/qa-channel/api.js", async () => await import("../../qa-channel/api.js"));
 
 const captureMock = vi.hoisted(() => {
   const sessions: Array<Record<string, unknown>> = [];
@@ -126,16 +126,16 @@ const captureMock = vi.hoisted(() => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/proxy-capture", () => ({
+vi.mock("GreenchClaw/plugin-sdk/proxy-capture", () => ({
   acquireDebugProxyCaptureStore: () => ({
     store: captureMock.store,
     release: captureMock.store.close,
   }),
   getDebugProxyCaptureStore: () => captureMock.store,
   resolveDebugProxySettings: () => ({
-    dbPath: process.env.NEXISCLAW_DEBUG_PROXY_DB_PATH ?? "",
-    blobDir: process.env.NEXISCLAW_DEBUG_PROXY_BLOB_DIR ?? "",
-    proxyUrl: process.env.NEXISCLAW_DEBUG_PROXY_URL ?? "",
+    dbPath: process.env.GREENCHCLAW_DEBUG_PROXY_DB_PATH ?? "",
+    blobDir: process.env.GREENCHCLAW_DEBUG_PROXY_BLOB_DIR ?? "",
+    proxyUrl: process.env.GREENCHCLAW_DEBUG_PROXY_URL ?? "",
     sessionId: "qa-lab-test",
   }),
 }));
@@ -641,7 +641,7 @@ describe("qa-lab server", () => {
         `  fs.writeFileSync(${JSON.stringify(stoppedPath)}, "terminated", "utf8");`,
         "  process.exit(0);",
         "});",
-        `fs.writeFileSync(${JSON.stringify(markerPath)}, process.env.NEXISCLAW_CODEX_DISCOVERY_LIVE || "", "utf8");`,
+        `fs.writeFileSync(${JSON.stringify(markerPath)}, process.env.GREENCHCLAW_CODEX_DISCOVERY_LIVE || "", "utf8");`,
         "setInterval(() => {}, 1000);",
       ].join("\n"),
       "utf8",
@@ -778,23 +778,23 @@ describe("qa-lab server", () => {
     cleanups.push(async () => {
       await rm(tempDir, { recursive: true, force: true });
     });
-    process.env.NEXISCLAW_DEBUG_PROXY_DB_PATH = path.join(tempDir, "capture.sqlite");
-    process.env.NEXISCLAW_DEBUG_PROXY_BLOB_DIR = path.join(tempDir, "blobs");
+    process.env.GREENCHCLAW_DEBUG_PROXY_DB_PATH = path.join(tempDir, "capture.sqlite");
+    process.env.GREENCHCLAW_DEBUG_PROXY_BLOB_DIR = path.join(tempDir, "blobs");
     const store = captureMock.store;
     store.upsertSession({
       id: "qa-capture-session",
       startedAt: Date.now(),
       mode: "proxy-run",
-      sourceScope: "NexisClaw",
-      sourceProcess: "NexisClaw",
-      dbPath: process.env.NEXISCLAW_DEBUG_PROXY_DB_PATH,
-      blobDir: process.env.NEXISCLAW_DEBUG_PROXY_BLOB_DIR,
+      sourceScope: "GreenchClaw",
+      sourceProcess: "GreenchClaw",
+      dbPath: process.env.GREENCHCLAW_DEBUG_PROXY_DB_PATH,
+      blobDir: process.env.GREENCHCLAW_DEBUG_PROXY_BLOB_DIR,
     });
     store.recordEvent({
       sessionId: "qa-capture-session",
       ts: Date.now(),
-      sourceScope: "NexisClaw",
-      sourceProcess: "NexisClaw",
+      sourceScope: "GreenchClaw",
+      sourceProcess: "GreenchClaw",
       protocol: "https",
       direction: "outbound",
       kind: "request",
@@ -814,8 +814,8 @@ describe("qa-lab server", () => {
     store.recordEvent({
       sessionId: "qa-capture-session",
       ts: Date.now() + 1,
-      sourceScope: "NexisClaw",
-      sourceProcess: "NexisClaw",
+      sourceScope: "GreenchClaw",
+      sourceProcess: "GreenchClaw",
       protocol: "https",
       direction: "outbound",
       kind: "request",
@@ -835,8 +835,8 @@ describe("qa-lab server", () => {
     store.recordEvent({
       sessionId: "qa-capture-session",
       ts: Date.now() + 2,
-      sourceScope: "NexisClaw",
-      sourceProcess: "NexisClaw",
+      sourceScope: "GreenchClaw",
+      sourceProcess: "GreenchClaw",
       protocol: "https",
       direction: "outbound",
       kind: "request",
@@ -856,8 +856,8 @@ describe("qa-lab server", () => {
       port: 0,
     });
     cleanups.push(async () => {
-      delete process.env.NEXISCLAW_DEBUG_PROXY_DB_PATH;
-      delete process.env.NEXISCLAW_DEBUG_PROXY_BLOB_DIR;
+      delete process.env.GREENCHCLAW_DEBUG_PROXY_DB_PATH;
+      delete process.env.GREENCHCLAW_DEBUG_PROXY_BLOB_DIR;
       await lab.stop();
     });
 

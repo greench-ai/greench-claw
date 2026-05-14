@@ -1,6 +1,6 @@
-import { formatInboundFromLabel as formatInboundFromLabelShared } from "NexisClaw/plugin-sdk/channel-inbound";
-import { resolveThreadSessionKeys as resolveThreadSessionKeysShared } from "NexisClaw/plugin-sdk/routing";
-import { rawDataToString } from "NexisClaw/plugin-sdk/webhook-ingress";
+import { formatInboundFromLabel as formatInboundFromLabelShared } from "GreenchClaw/plugin-sdk/channel-inbound";
+import { resolveThreadSessionKeys as resolveThreadSessionKeysShared } from "GreenchClaw/plugin-sdk/routing";
+import { rawDataToString } from "GreenchClaw/plugin-sdk/webhook-ingress";
 
 export { rawDataToString };
 

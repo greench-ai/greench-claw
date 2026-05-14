@@ -8,7 +8,7 @@ import type {
   TalkProviderConfig,
   TalkRealtimeConfig,
 } from "./types.gateway.js";
-import type { NexisClawConfig } from "./types.NexisClaw.js";
+import type { GreenchClawConfig } from "./types.GreenchClaw.js";
 import { coerceSecretRef } from "./types.secrets.js";
 
 function normalizeTalkSecretInput(value: unknown): TalkProviderConfig["apiKey"] | undefined {
@@ -196,7 +196,7 @@ export function normalizeTalkSection(value: TalkConfig | undefined): TalkConfig 
   return Object.keys(normalized).length > 0 ? normalized : undefined;
 }
 
-export function normalizeTalkConfig(config: NexisClawConfig): NexisClawConfig {
+export function normalizeTalkConfig(config: GreenchClawConfig): GreenchClawConfig {
   if (!config.talk) {
     return config;
   }

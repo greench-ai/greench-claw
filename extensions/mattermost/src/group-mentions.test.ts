@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import { resolveMattermostGroupRequireMention } from "./group-mentions.js";
 
 describe("resolveMattermostGroupRequireMention", () => {
   it("defaults to requiring mention when no override is configured", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         mattermost: {},
       },
@@ -15,7 +15,7 @@ describe("resolveMattermostGroupRequireMention", () => {
   });
 
   it("respects chatmode-derived account override", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         mattermost: {
           chatmode: "onmessage",
@@ -28,7 +28,7 @@ describe("resolveMattermostGroupRequireMention", () => {
   });
 
   it("prefers an explicit runtime override when provided", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         mattermost: {
           chatmode: "oncall",

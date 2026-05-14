@@ -242,7 +242,7 @@ describe("cron tool", () => {
   it("allows scoped isolated cron runs to read cron scheduler status", async () => {
     callGatewayMock.mockResolvedValueOnce({
       enabled: true,
-      storePath: "/home/user/.NexisClaw/cron/jobs.json",
+      storePath: "/home/user/.GreenchClaw/cron/jobs.json",
       jobs: 37,
       nextWakeAtMs: 1_234,
     });

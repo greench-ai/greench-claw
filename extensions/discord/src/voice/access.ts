@@ -1,7 +1,7 @@
-import { resolveCommandAuthorizedFromAuthorizers } from "NexisClaw/plugin-sdk/command-auth-native";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { DiscordAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveOpenProviderRuntimeGroupPolicy } from "NexisClaw/plugin-sdk/runtime-group-policy";
+import { resolveCommandAuthorizedFromAuthorizers } from "GreenchClaw/plugin-sdk/command-auth-native";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveOpenProviderRuntimeGroupPolicy } from "GreenchClaw/plugin-sdk/runtime-group-policy";
 import type { Guild } from "../internal/discord.js";
 import {
   isDiscordGroupAllowedByPolicy,
@@ -13,7 +13,7 @@ import {
 } from "../monitor/allow-list.js";
 
 export async function authorizeDiscordVoiceIngress(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   discordConfig: DiscordAccountConfig;
   accountId?: string;
   groupPolicy?: "open" | "disabled" | "allowlist";

@@ -8,7 +8,7 @@ const resolveDefaultAccountId = () => DEFAULT_ACCOUNT_ID;
 const mocks = vi.hoisted(() => ({
   callGateway: vi.fn(),
   resolveCommandConfigWithSecrets: vi.fn(),
-  readConfigFileSnapshot: vi.fn(async () => ({ path: "/tmp/NexisClaw.json" })),
+  readConfigFileSnapshot: vi.fn(async () => ({ path: "/tmp/GreenchClaw.json" })),
   requireValidConfigSnapshot: vi.fn(),
   listChannelPlugins: vi.fn(),
   listConfiguredChannelIdsForReadOnlyScope: vi.fn((_params: unknown) => ["discord"]),
@@ -50,11 +50,11 @@ vi.mock("../plugins/official-external-plugin-repair-hints.js", () => ({
           pluginId: channelId,
           channelId,
           label: "Feishu",
-          installSpec: "@NexisClaw/feishu",
-          installCommand: "NexisClaw plugins install @NexisClaw/feishu",
-          doctorFixCommand: "NexisClaw doctor --fix",
+          installSpec: "@GreenchClaw/feishu",
+          installCommand: "GreenchClaw plugins install @GreenchClaw/feishu",
+          doctorFixCommand: "GreenchClaw doctor --fix",
           repairHint:
-            "Install the official external plugin with: NexisClaw plugins install @NexisClaw/feishu, or run: NexisClaw doctor --fix.",
+            "Install the official external plugin with: GreenchClaw plugins install @GreenchClaw/feishu, or run: GreenchClaw doctor --fix.",
         }
       : null,
 }));
@@ -294,7 +294,7 @@ describe("channelsStatusCommand SecretRef fallback flow", () => {
     const joined = logs.join("\n");
     expect(joined).toContain("Missing official external plugins:");
     expect(joined).toContain(
-      "Feishu: Install the official external plugin with: NexisClaw plugins install @NexisClaw/feishu, or run: NexisClaw doctor --fix.",
+      "Feishu: Install the official external plugin with: GreenchClaw plugins install @GreenchClaw/feishu, or run: GreenchClaw doctor --fix.",
     );
   });
 
@@ -305,7 +305,7 @@ describe("channelsStatusCommand SecretRef fallback flow", () => {
           "gateway timeout after 3000ms",
           "Gateway target: wss://user:pass@gateway.example.com/socket?token=secret-token&keep=visible",
           "Gateway fallback: (wss://fallback-user:fallback-pass@[bad-host/socket?token=fallback-secret&keep=visible)",
-          "Source: env NEXISCLAW_GATEWAY_URL",
+          "Source: env GREENCHCLAW_GATEWAY_URL",
         ].join("\n"),
       ),
     );

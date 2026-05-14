@@ -29,13 +29,13 @@ export {
   type GatewayHttpRequestAuthCheckResult,
 } from "./http-auth-utils.js";
 
-export const NEXISCLAW_MODEL_ID = "NexisClaw";
-export const NEXISCLAW_DEFAULT_MODEL_ID = "NexisClaw/default";
+export const GREENCHCLAW_MODEL_ID = "GreenchClaw";
+export const GREENCHCLAW_DEFAULT_MODEL_ID = "GreenchClaw/default";
 
 function resolveAgentIdFromHeader(req: IncomingMessage): string | undefined {
   const raw =
-    normalizeOptionalString(getHeader(req, "x-NexisClaw-agent-id")) ||
-    normalizeOptionalString(getHeader(req, "x-NexisClaw-agent")) ||
+    normalizeOptionalString(getHeader(req, "x-GreenchClaw-agent-id")) ||
+    normalizeOptionalString(getHeader(req, "x-GreenchClaw-agent")) ||
     "";
   if (!raw) {
     return undefined;
@@ -52,12 +52,12 @@ export function resolveAgentIdFromModel(
     return undefined;
   }
   const lowered = normalizeLowercaseStringOrEmpty(raw);
-  if (lowered === NEXISCLAW_MODEL_ID || lowered === NEXISCLAW_DEFAULT_MODEL_ID) {
+  if (lowered === GREENCHCLAW_MODEL_ID || lowered === GREENCHCLAW_DEFAULT_MODEL_ID) {
     return resolveDefaultAgentId(cfg);
   }
 
   const m =
-    raw.match(/^NexisClaw[:/](?<agentId>[a-z0-9][a-z0-9_-]{0,63})$/i) ??
+    raw.match(/^GreenchClaw[:/](?<agentId>[a-z0-9][a-z0-9_-]{0,63})$/i) ??
     raw.match(/^agent:(?<agentId>[a-z0-9][a-z0-9_-]{0,63})$/i);
   const agentId = m?.groups?.agentId;
   if (!agentId) {
@@ -74,11 +74,11 @@ export async function resolveOpenAiCompatModelOverride(params: {
   const requestModel = params.model?.trim();
   if (requestModel && !resolveAgentIdFromModel(requestModel)) {
     return {
-      errorMessage: "Invalid `model`. Use `NexisClaw` or `NexisClaw/<agentId>`.",
+      errorMessage: "Invalid `model`. Use `GreenchClaw` or `GreenchClaw/<agentId>`.",
     };
   }
 
-  const raw = getHeader(params.req, "x-NexisClaw-model")?.trim();
+  const raw = getHeader(params.req, "x-GreenchClaw-model")?.trim();
   if (!raw) {
     return {};
   }
@@ -88,7 +88,7 @@ export async function resolveOpenAiCompatModelOverride(params: {
   const defaultProvider = defaultModelRef.provider;
   const parsed = parseModelRef(raw, defaultProvider);
   if (!parsed) {
-    return { errorMessage: "Invalid `x-NexisClaw-model`." };
+    return { errorMessage: "Invalid `x-GreenchClaw-model`." };
   }
 
   const catalog = await loadGatewayModelCatalog();
@@ -128,7 +128,7 @@ function resolveSessionKey(params: {
   user?: string | undefined;
   prefix: string;
 }): string {
-  const explicit = getHeader(params.req, "x-NexisClaw-session-key")?.trim();
+  const explicit = getHeader(params.req, "x-GreenchClaw-session-key")?.trim();
   if (explicit) {
     return explicit;
   }
@@ -155,7 +155,7 @@ export function resolveGatewayRequestContext(params: {
   });
 
   const messageChannel = params.useMessageChannelHeader
-    ? (normalizeMessageChannel(getHeader(params.req, "x-NexisClaw-message-channel")) ??
+    ? (normalizeMessageChannel(getHeader(params.req, "x-GreenchClaw-message-channel")) ??
       params.defaultMessageChannel)
     : params.defaultMessageChannel;
 

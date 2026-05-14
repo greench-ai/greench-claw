@@ -18,7 +18,7 @@ import { createMemoryWikiTestHarness } from "./test-helpers.js";
 
 const callGatewayFromCliMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/gateway-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/gateway-runtime", () => ({
   callGatewayFromCli: callGatewayFromCliMock,
 }));
 
@@ -189,9 +189,9 @@ describe("memory-wiki cli", () => {
         body: `# Alpha
 
 ## Notes
-<!-- NexisClaw:human:start -->
+<!-- GreenchClaw:human:start -->
 cli note
-<!-- NexisClaw:human:end -->
+<!-- GreenchClaw:human:end -->
 `,
       }),
       "utf8",

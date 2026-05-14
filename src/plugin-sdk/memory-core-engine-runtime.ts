@@ -2,7 +2,7 @@
  * @deprecated Public SDK subpath has no bundled extension production imports.
  * Prefer vendor-neutral memory-host SDK subpaths for new plugin code.
  */
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import {
   createLazyFacadeObjectValue,
   loadActivatedBundledPluginPublicSurfaceModuleSync,
@@ -94,7 +94,7 @@ export type RepairShortTermPromotionArtifactsResult = {
 
 type MemoryIndexManagerFacade = {
   get(params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     agentId: string;
     purpose?: "default" | "status";
   }): Promise<MemorySearchManager | null>;
@@ -115,7 +115,7 @@ type FacadeModule = {
     providerId: string,
   ) => BuiltinMemoryEmbeddingProviderDoctorMetadata | null;
   getMemorySearchManager: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     agentId: string;
     purpose?: "default" | "status";
   }) => Promise<{

@@ -7,7 +7,7 @@ if ! declare -F run_logged >/dev/null 2>&1; then
 fi
 
 docker_build_on_missing_enabled() {
-  case "${NEXISCLAW_DOCKER_BUILD_ON_MISSING:-}" in
+  case "${GREENCHCLAW_DOCKER_BUILD_ON_MISSING:-}" in
     1 | true | TRUE | yes | YES)
       return 0
       ;;
@@ -16,18 +16,18 @@ docker_build_on_missing_enabled() {
       ;;
   esac
 
-  [ "${NEXISCLAW_TESTBOX:-0}" = "1" ]
+  [ "${GREENCHCLAW_TESTBOX:-0}" = "1" ]
 }
 
 docker_build_command() {
   local build_cmd=(docker build)
-  if [ "${NEXISCLAW_DOCKER_BUILD_USE_BUILDX:-0}" = "1" ]; then
+  if [ "${GREENCHCLAW_DOCKER_BUILD_USE_BUILDX:-0}" = "1" ]; then
     build_cmd=(docker buildx build --load)
-    if [ -n "${NEXISCLAW_DOCKER_BUILD_CACHE_FROM:-}" ]; then
-      build_cmd+=(--cache-from "${NEXISCLAW_DOCKER_BUILD_CACHE_FROM}")
+    if [ -n "${GREENCHCLAW_DOCKER_BUILD_CACHE_FROM:-}" ]; then
+      build_cmd+=(--cache-from "${GREENCHCLAW_DOCKER_BUILD_CACHE_FROM}")
     fi
-    if [ -n "${NEXISCLAW_DOCKER_BUILD_CACHE_TO:-}" ]; then
-      build_cmd+=(--cache-to "${NEXISCLAW_DOCKER_BUILD_CACHE_TO}")
+    if [ -n "${GREENCHCLAW_DOCKER_BUILD_CACHE_TO:-}" ]; then
+      build_cmd+=(--cache-to "${GREENCHCLAW_DOCKER_BUILD_CACHE_TO}")
     fi
   fi
 
@@ -42,7 +42,7 @@ docker_build_transient_failure() {
 }
 
 docker_build_retry_count() {
-  local configured="${NEXISCLAW_DOCKER_BUILD_RETRIES:-2}"
+  local configured="${GREENCHCLAW_DOCKER_BUILD_RETRIES:-2}"
   if [[ "$configured" =~ ^[0-9]+$ ]]; then
     echo "$configured"
     return 0

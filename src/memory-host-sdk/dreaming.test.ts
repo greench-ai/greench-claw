@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   formatMemoryDreamingDay,
   isSameMemoryDreamingDay,
@@ -90,7 +90,7 @@ describe("memory dreaming host helpers", () => {
           userTimezone: "America/Los_Angeles",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const resolved = resolveMemoryDreamingConfig({
       pluginConfig: {},
@@ -157,7 +157,7 @@ describe("memory dreaming host helpers", () => {
           { id: "gamma", workspace: "/workspace/shared" },
         ],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveMemoryDreamingWorkspaces(cfg)).toEqual([
       {
@@ -179,7 +179,7 @@ describe("memory dreaming host helpers", () => {
           { id: "agi-cdo", workspace: "/workspace/agi-cdo" },
         ],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(
       resolveMemoryDreamingWorkspaces(cfg, {
@@ -209,7 +209,7 @@ describe("memory dreaming host helpers", () => {
           workspace: "/workspace",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveMemoryDreamingWorkspaces(cfg)).toEqual([
       {
@@ -235,11 +235,11 @@ describe("memory dreaming host helpers", () => {
       resolveMemoryDreamingPluginId({
         plugins: {
           slots: {
-            memory: "memos-local-NexisClaw-plugin",
+            memory: "memos-local-GreenchClaw-plugin",
           },
         },
-      } as NexisClawConfig),
-    ).toBe("memos-local-NexisClaw-plugin");
+      } as GreenchClawConfig),
+    ).toBe("memos-local-GreenchClaw-plugin");
   });
 
   it("reads dreaming config from the configured memory-slot owner", () => {
@@ -247,10 +247,10 @@ describe("memory dreaming host helpers", () => {
       resolveMemoryDreamingPluginConfig({
         plugins: {
           slots: {
-            memory: "memos-local-NexisClaw-plugin",
+            memory: "memos-local-GreenchClaw-plugin",
           },
           entries: {
-            "memos-local-NexisClaw-plugin": {
+            "memos-local-GreenchClaw-plugin": {
               config: {
                 dreaming: {
                   enabled: true,
@@ -259,7 +259,7 @@ describe("memory dreaming host helpers", () => {
             },
           },
         },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
     ).toEqual({
       dreaming: {
         enabled: true,
@@ -285,7 +285,7 @@ describe("memory dreaming host helpers", () => {
             },
           },
         },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
     ).toEqual({
       dreaming: {
         enabled: true,
@@ -308,7 +308,7 @@ describe("memory dreaming host helpers", () => {
             },
           },
         },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
     ).toEqual({
       dreaming: {
         enabled: true,
@@ -324,7 +324,7 @@ describe("memory dreaming host helpers", () => {
             memory: "none",
           },
         },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
     ).toBe("memory-core");
 
     expect(
@@ -343,7 +343,7 @@ describe("memory dreaming host helpers", () => {
             },
           },
         },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
     ).toEqual({
       dreaming: {
         enabled: true,

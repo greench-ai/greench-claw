@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import type { IncomingMessage } from "node:http";
 import path from "node:path";
-import { createMockServerResponse } from "NexisClaw/plugin-sdk/test-env";
+import { createMockServerResponse } from "GreenchClaw/plugin-sdk/test-env";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createDiffsHttpHandler } from "./http.js";
 import { DiffArtifactStore } from "./store.js";
@@ -17,7 +17,7 @@ describe("DiffArtifactStore", () => {
       rootDir,
       store,
       cleanup: cleanupRootDir,
-    } = await createDiffStoreHarness("NexisClaw-diffs-store-"));
+    } = await createDiffStoreHarness("GreenchClaw-diffs-store-"));
   });
 
   afterEach(async () => {
@@ -236,7 +236,7 @@ describe("createDiffsHttpHandler", () => {
   }
 
   beforeEach(async () => {
-    ({ store, cleanup: cleanupRootDir } = await createDiffStoreHarness("NexisClaw-diffs-http-"));
+    ({ store, cleanup: cleanupRootDir } = await createDiffStoreHarness("GreenchClaw-diffs-http-"));
   });
 
   afterEach(async () => {
@@ -307,7 +307,7 @@ describe("createDiffsHttpHandler", () => {
 
     expect(handled).toBe(true);
     expect(res.statusCode).toBe(200);
-    expect(String(res.body)).toContain("NexisClawDiffsReady");
+    expect(String(res.body)).toContain("GreenchClawDiffsReady");
   });
 
   it.each([

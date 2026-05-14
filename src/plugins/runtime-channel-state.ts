@@ -1,6 +1,6 @@
 import type { ActivePluginChannelRegistry } from "./channel-registry-state.types.js";
 
-export const PLUGIN_REGISTRY_STATE = Symbol.for("NexisClaw.pluginRegistryState");
+export const PLUGIN_REGISTRY_STATE = Symbol.for("GreenchClaw.pluginRegistryState");
 
 type GlobalChannelRegistryState = typeof globalThis & {
   [PLUGIN_REGISTRY_STATE]?: {

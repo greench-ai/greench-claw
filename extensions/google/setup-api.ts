@@ -1,4 +1,4 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { buildGoogleGeminiCliBackend } from "./cli-backend.js";
 import { createGoogleVertexProvider } from "./provider-contract-api.js";
 

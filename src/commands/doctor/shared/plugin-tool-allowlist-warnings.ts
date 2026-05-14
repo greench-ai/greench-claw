@@ -1,5 +1,5 @@
 import { normalizeToolName } from "../../../agents/tool-policy-shared.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { normalizePluginId } from "../../../plugins/config-state.js";
 import { loadManifestMetadataSnapshot } from "../../../plugins/manifest-contract-eligibility.js";
 import type { PluginManifestRegistry } from "../../../plugins/manifest-registry.js";
@@ -50,7 +50,7 @@ function collectToolPolicySources(policy: unknown, label: string, out: ToolAllow
   collectToolPolicySources(subagentTools, `${label}.subagents.tools`, out);
 }
 
-function collectToolAllowlistSources(cfg: NexisClawConfig): ToolAllowlistSource[] {
+function collectToolAllowlistSources(cfg: GreenchClawConfig): ToolAllowlistSource[] {
   const sources: ToolAllowlistSource[] = [];
   collectToolPolicySources(cfg.tools, "tools", sources);
   const agentList = cfg.agents?.list;
@@ -106,7 +106,7 @@ function addIssue(issues: Map<string, Set<string>>, key: string, sourceLabel: st
 }
 
 export function collectPluginToolAllowlistWarnings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   manifestRegistry?: PluginManifestRegistry;
 }): string[] {
@@ -195,7 +195,7 @@ export function collectPluginToolAllowlistWarnings(params: {
 }
 
 export function collectBundledProviderAllowlistPolicyWarnings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): string[] {
   if (params.cfg.plugins?.enabled === false) {
     return [];

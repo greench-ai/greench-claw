@@ -61,7 +61,7 @@ async function expectCurrentPidOwnsLock(params: {
 async function withTempSessionLockFile(
   run: (params: { root: string; sessionFile: string; lockPath: string }) => Promise<void>,
 ) {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-lock-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-lock-"));
   try {
     const sessionFile = path.join(root, "sessions.json");
     await run({ root, sessionFile, lockPath: `${sessionFile}.lock` });
@@ -94,7 +94,7 @@ async function withSymlinkedSessionPaths(
     return;
   }
 
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-lock-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-lock-"));
   try {
     const realDir = path.join(root, "real");
     const linkDir = path.join(root, "link");
@@ -246,7 +246,7 @@ describe("acquireSessionWriteLock", () => {
   });
 
   it("reclaims stale lock files", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-lock-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-lock-"));
     try {
       const sessionFile = path.join(root, "sessions.json");
       const lockPath = `${sessionFile}.lock`;
@@ -263,7 +263,7 @@ describe("acquireSessionWriteLock", () => {
   });
 
   it("does not reclaim fresh malformed lock files during contention", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-lock-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-lock-"));
     try {
       const sessionFile = path.join(root, "sessions.json");
       const lockPath = `${sessionFile}.lock`;
@@ -309,7 +309,7 @@ describe("acquireSessionWriteLock", () => {
   });
 
   it("watchdog releases stale in-process locks", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-lock-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-lock-"));
     const stderrSpy = vi.spyOn(process.stderr, "write").mockImplementation(() => true);
     try {
       const sessionFile = path.join(root, "session.jsonl");
@@ -378,7 +378,7 @@ describe("acquireSessionWriteLock", () => {
   });
 
   it("cleans stale .jsonl lock files in sessions directories", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-lock-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-lock-"));
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir, { recursive: true });
 
@@ -418,7 +418,7 @@ describe("acquireSessionWriteLock", () => {
         staleMs: 30_000,
         nowMs,
         removeStale: true,
-        readOwnerProcessArgs: () => ["node", "/opt/NexisClaw/NexisClaw.mjs", "agent"],
+        readOwnerProcessArgs: () => ["node", "/opt/GreenchClaw/GreenchClaw.mjs", "agent"],
       });
 
       expect(result.locks).toHaveLength(3);
@@ -465,8 +465,8 @@ describe("acquireSessionWriteLock", () => {
     }
   });
 
-  it("cleans fresh live .jsonl lock files owned by a non-NexisClaw process", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-lock-"));
+  it("cleans fresh live .jsonl lock files owned by a non-GreenchClaw process", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-lock-"));
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir, { recursive: true });
 
@@ -496,7 +496,7 @@ describe("acquireSessionWriteLock", () => {
           name: "false-live.jsonl.lock",
           removed: true,
           stale: true,
-          staleReasons: ["non-NexisClaw-owner"],
+          staleReasons: ["non-GreenchClaw-owner"],
         },
       ]);
       expect(lockCleanupRecords(result.cleaned)).toEqual([
@@ -504,7 +504,7 @@ describe("acquireSessionWriteLock", () => {
           name: "false-live.jsonl.lock",
           removed: true,
           stale: true,
-          staleReasons: ["non-NexisClaw-owner"],
+          staleReasons: ["non-GreenchClaw-owner"],
         },
       ]);
       await expect(fs.access(falseLiveLock)).rejects.toThrow();
@@ -513,8 +513,8 @@ describe("acquireSessionWriteLock", () => {
     }
   });
 
-  it("cleans fresh live .jsonl lock files owned by generic non-NexisClaw entrypoints", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-lock-"));
+  it("cleans fresh live .jsonl lock files owned by generic non-GreenchClaw entrypoints", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-lock-"));
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir, { recursive: true });
 
@@ -544,7 +544,7 @@ describe("acquireSessionWriteLock", () => {
           name: "false-live-generic-entry.jsonl.lock",
           removed: true,
           stale: true,
-          staleReasons: ["non-NexisClaw-owner"],
+          staleReasons: ["non-GreenchClaw-owner"],
         },
       ]);
       await expect(fs.access(falseLiveLock)).rejects.toThrow();
@@ -553,37 +553,37 @@ describe("acquireSessionWriteLock", () => {
     }
   });
 
-  it("keeps fresh live .jsonl lock files with NexisClaw or unknown owners", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-lock-"));
+  it("keeps fresh live .jsonl lock files with GreenchClaw or unknown owners", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-lock-"));
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir, { recursive: true });
 
     const nowMs = Date.now();
-    const NexisClawLock = path.join(sessionsDir, "NexisClaw-live.jsonl.lock");
+    const GreenchClawLock = path.join(sessionsDir, "GreenchClaw-live.jsonl.lock");
     const gatewayLock = path.join(sessionsDir, "gateway-live.jsonl.lock");
     const unknownLock = path.join(sessionsDir, "unknown-live.jsonl.lock");
 
     try {
       await fs.writeFile(
-        NexisClawLock,
+        GreenchClawLock,
         JSON.stringify({
           pid: process.pid,
           createdAt: new Date(nowMs).toISOString(),
         }),
         "utf8",
       );
-      const NexisClawResult = await cleanStaleLockFiles({
+      const GreenchClawResult = await cleanStaleLockFiles({
         sessionsDir,
         staleMs: 30_000,
         nowMs,
         removeStale: true,
-        readOwnerProcessArgs: () => ["node", "/opt/NexisClaw/NexisClaw.mjs", "agent"],
+        readOwnerProcessArgs: () => ["node", "/opt/GreenchClaw/GreenchClaw.mjs", "agent"],
       });
 
-      expect(NexisClawResult.cleaned).toEqual([]);
-      await expect(fs.access(NexisClawLock)).resolves.toBeUndefined();
+      expect(GreenchClawResult.cleaned).toEqual([]);
+      await expect(fs.access(GreenchClawLock)).resolves.toBeUndefined();
 
-      await fs.rm(NexisClawLock, { force: true });
+      await fs.rm(GreenchClawLock, { force: true });
       await fs.writeFile(
         gatewayLock,
         JSON.stringify({
@@ -629,7 +629,7 @@ describe("acquireSessionWriteLock", () => {
 
   it("cleans untracked current-process .jsonl lock files with matching starttime", async () => {
     pinCurrentProcessStartTimeForTest();
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-lock-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-lock-"));
     const sessionsDir = path.join(root, "sessions");
     await fs.mkdir(sessionsDir, { recursive: true });
 
@@ -682,7 +682,7 @@ describe("acquireSessionWriteLock", () => {
     process.kill = ((_pid: number, _signal?: NodeJS.Signals) => true) as typeof process.kill;
     try {
       for (const signal of signals) {
-        const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-lock-cleanup-"));
+        const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-lock-cleanup-"));
         try {
           const sessionFile = path.join(root, "sessions.json");
           const lockPath = `${sessionFile}.lock`;
@@ -759,7 +759,7 @@ describe("acquireSessionWriteLock", () => {
     expect(__testing.cleanupSignals).toContain("SIGABRT");
   });
   it("cleans up locks on SIGINT without removing other handlers", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-lock-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-lock-"));
     const originalKill = process.kill.bind(process);
     const killCalls: Array<NodeJS.Signals | undefined> = [];
     let otherHandlerCalled = false;

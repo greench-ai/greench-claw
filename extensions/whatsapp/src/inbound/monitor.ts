@@ -6,17 +6,17 @@ import type {
   WAMessage,
   WASocket,
 } from "baileys";
-import { recordChannelActivity } from "NexisClaw/plugin-sdk/channel-activity-runtime";
-import { formatLocationText } from "NexisClaw/plugin-sdk/channel-inbound";
-import { createInboundDebouncer } from "NexisClaw/plugin-sdk/channel-inbound-debounce";
-import { getChildLogger } from "NexisClaw/plugin-sdk/logging-core";
-import { defaultRuntime } from "NexisClaw/plugin-sdk/runtime-env";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
+import { recordChannelActivity } from "GreenchClaw/plugin-sdk/channel-activity-runtime";
+import { formatLocationText } from "GreenchClaw/plugin-sdk/channel-inbound";
+import { createInboundDebouncer } from "GreenchClaw/plugin-sdk/channel-inbound-debounce";
+import { getChildLogger } from "GreenchClaw/plugin-sdk/logging-core";
+import { defaultRuntime } from "GreenchClaw/plugin-sdk/runtime-env";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
 import { readWebSelfIdentityForDecision, WhatsAppAuthUnstableError } from "../auth-store.js";
 import { getPrimaryIdentityId, resolveComparableIdentity } from "../identity.js";
 import { cacheInboundMessageMeta } from "../quoted-message.js";
 import { DEFAULT_RECONNECT_POLICY, computeBackoff, sleepWithAbort } from "../reconnect.js";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import { createWaSocket, formatError, getStatusCode, waitForWaConnection } from "../session.js";
 import { resolveWhatsAppSocketTiming } from "../socket-timing.js";
 import { resolveJidToE164 } from "../text-runtime.js";
@@ -134,8 +134,8 @@ function isNonEmptyString(value: string | undefined): value is string {
 }
 
 type MonitorWebInboxOptions = {
-  cfg: NexisClawConfig;
-  loadConfig?: () => NexisClawConfig;
+  cfg: GreenchClawConfig;
+  loadConfig?: () => GreenchClawConfig;
   verbose: boolean;
   accountId: string;
   authDir: string;

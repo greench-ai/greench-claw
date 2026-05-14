@@ -1,4 +1,4 @@
-import { describePackageManifestContract } from "NexisClaw/plugin-sdk/plugin-test-contracts";
+import { describePackageManifestContract } from "GreenchClaw/plugin-sdk/plugin-test-contracts";
 
 type PackageManifestContractParams = Parameters<typeof describePackageManifestContract>[0];
 

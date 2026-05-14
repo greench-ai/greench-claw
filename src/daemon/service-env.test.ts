@@ -594,28 +594,28 @@ describe("buildServiceEnvironment", () => {
     } else {
       expect(env.PATH).toContain("/usr/bin");
     }
-    expect(env.NEXISCLAW_GATEWAY_PORT).toBe("18789");
-    expect(env.NEXISCLAW_GATEWAY_TOKEN).toBeUndefined();
-    expect(env.NEXISCLAW_SERVICE_MARKER).toBe("NexisClaw");
-    expect(env.NEXISCLAW_SERVICE_KIND).toBe("gateway");
-    expect(typeof env.NEXISCLAW_SERVICE_VERSION).toBe("string");
-    expect(env.NEXISCLAW_SYSTEMD_UNIT).toBe("NexisClaw-gateway.service");
-    expect(env.NEXISCLAW_WINDOWS_TASK_NAME).toBe("NexisClaw Gateway");
+    expect(env.GREENCHCLAW_GATEWAY_PORT).toBe("18789");
+    expect(env.GREENCHCLAW_GATEWAY_TOKEN).toBeUndefined();
+    expect(env.GREENCHCLAW_SERVICE_MARKER).toBe("GreenchClaw");
+    expect(env.GREENCHCLAW_SERVICE_KIND).toBe("gateway");
+    expect(typeof env.GREENCHCLAW_SERVICE_VERSION).toBe("string");
+    expect(env.GREENCHCLAW_SYSTEMD_UNIT).toBe("GreenchClaw-gateway.service");
+    expect(env.GREENCHCLAW_WINDOWS_TASK_NAME).toBe("GreenchClaw Gateway");
     if (process.platform === "darwin") {
-      expect(env.NEXISCLAW_LAUNCHD_LABEL).toBe("ai.NexisClaw.gateway");
+      expect(env.GREENCHCLAW_LAUNCHD_LABEL).toBe("ai.GreenchClaw.gateway");
     }
   });
 
-  it("passes through NEXISCLAW_WRAPPER for gateway services", () => {
+  it("passes through GREENCHCLAW_WRAPPER for gateway services", () => {
     const env = buildServiceEnvironment({
       env: {
         HOME: "/home/user",
-        NEXISCLAW_WRAPPER: " /usr/local/bin/NexisClaw-doppler ",
+        GREENCHCLAW_WRAPPER: " /usr/local/bin/GreenchClaw-doppler ",
       },
       port: 18789,
     });
 
-    expect(env.NEXISCLAW_WRAPPER).toBe("/usr/local/bin/NexisClaw-doppler");
+    expect(env.GREENCHCLAW_WRAPPER).toBe("/usr/local/bin/GreenchClaw-doppler");
   });
 
   it("forwards TMPDIR from the host environment on Linux", () => {
@@ -633,7 +633,7 @@ describe("buildServiceEnvironment", () => {
       port: 18789,
       platform: "darwin",
     });
-    expect(env.TMPDIR).toBe(path.join("/Users/user", ".NexisClaw", "tmp"));
+    expect(env.TMPDIR).toBe(path.join("/Users/user", ".GreenchClaw", "tmp"));
   });
 
   it("uses a canonical system PATH for macOS LaunchAgents", () => {
@@ -665,13 +665,13 @@ describe("buildServiceEnvironment", () => {
 
   it("uses profile-specific unit and label", () => {
     const env = buildServiceEnvironment({
-      env: { HOME: "/home/user", NEXISCLAW_PROFILE: "work" },
+      env: { HOME: "/home/user", GREENCHCLAW_PROFILE: "work" },
       port: 18789,
     });
-    expect(env.NEXISCLAW_SYSTEMD_UNIT).toBe("NexisClaw-gateway-work.service");
-    expect(env.NEXISCLAW_WINDOWS_TASK_NAME).toBe("NexisClaw Gateway (work)");
+    expect(env.GREENCHCLAW_SYSTEMD_UNIT).toBe("GreenchClaw-gateway-work.service");
+    expect(env.GREENCHCLAW_WINDOWS_TASK_NAME).toBe("GreenchClaw Gateway (work)");
     if (process.platform === "darwin") {
-      expect(env.NEXISCLAW_LAUNCHD_LABEL).toBe("ai.NexisClaw.work");
+      expect(env.GREENCHCLAW_LAUNCHD_LABEL).toBe("ai.GreenchClaw.work");
     }
   });
 
@@ -699,12 +699,12 @@ describe("buildServiceEnvironment", () => {
     const env = buildServiceEnvironment({
       env: {
         HOME: "/home/user",
-        NEXISCLAW_PROXY_URL: " http://127.0.0.1:3128 ",
+        GREENCHCLAW_PROXY_URL: " http://127.0.0.1:3128 ",
       },
       port: 18789,
     });
 
-    expect(env.NEXISCLAW_PROXY_URL).toBe("http://127.0.0.1:3128");
+    expect(env.GREENCHCLAW_PROXY_URL).toBe("http://127.0.0.1:3128");
   });
 
   it("omits PATH on Windows so Scheduled Tasks can inherit the current shell path", () => {
@@ -718,7 +718,7 @@ describe("buildServiceEnvironment", () => {
     });
 
     expect(env).not.toHaveProperty("PATH");
-    expect(env.NEXISCLAW_WINDOWS_TASK_NAME).toBe("NexisClaw Gateway");
+    expect(env.GREENCHCLAW_WINDOWS_TASK_NAME).toBe("GreenchClaw Gateway");
   });
 
   it("prepends extra runtime directories to the gateway service PATH", () => {
@@ -756,28 +756,28 @@ describe("buildNodeServiceEnvironment", () => {
     expect(env.HOME).toBe("/home/user");
   });
 
-  it("passes through NEXISCLAW_GATEWAY_TOKEN for node services", () => {
+  it("passes through GREENCHCLAW_GATEWAY_TOKEN for node services", () => {
     const env = buildNodeServiceEnvironment({
-      env: { HOME: "/home/user", NEXISCLAW_GATEWAY_TOKEN: " node-token " },
+      env: { HOME: "/home/user", GREENCHCLAW_GATEWAY_TOKEN: " node-token " },
     });
-    expect(env.NEXISCLAW_GATEWAY_TOKEN).toBe("node-token");
+    expect(env.GREENCHCLAW_GATEWAY_TOKEN).toBe("node-token");
   });
 
-  it("passes through NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS for node services", () => {
+  it("passes through GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS for node services", () => {
     const env = buildNodeServiceEnvironment({
-      env: { HOME: "/home/user", NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS: " 1 " },
+      env: { HOME: "/home/user", GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS: " 1 " },
     });
-    expect(env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS).toBe("1");
+    expect(env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS).toBe("1");
   });
 
-  it("omits NEXISCLAW_GATEWAY_TOKEN when the env var is empty", () => {
+  it("omits GREENCHCLAW_GATEWAY_TOKEN when the env var is empty", () => {
     const env = buildNodeServiceEnvironment({
       env: {
         HOME: "/home/user",
-        NEXISCLAW_GATEWAY_TOKEN: "   ",
+        GREENCHCLAW_GATEWAY_TOKEN: "   ",
       },
     });
-    expect(env.NEXISCLAW_GATEWAY_TOKEN).toBeUndefined();
+    expect(env.GREENCHCLAW_GATEWAY_TOKEN).toBeUndefined();
   });
 
   it("does not persist ambient proxy environment variables for node services", () => {
@@ -797,11 +797,11 @@ describe("buildNodeServiceEnvironment", () => {
     const env = buildNodeServiceEnvironment({
       env: {
         HOME: "/home/user",
-        NEXISCLAW_PROXY_URL: " http://127.0.0.1:3128 ",
+        GREENCHCLAW_PROXY_URL: " http://127.0.0.1:3128 ",
       },
     });
 
-    expect(env.NEXISCLAW_PROXY_URL).toBe("http://127.0.0.1:3128");
+    expect(env.GREENCHCLAW_PROXY_URL).toBe("http://127.0.0.1:3128");
   });
 
   it("forwards TMPDIR for node services on Linux", () => {
@@ -817,7 +817,7 @@ describe("buildNodeServiceEnvironment", () => {
       env: { HOME: "/Users/user", TMPDIR: "/var/folders/xw/abc123/T/" },
       platform: "darwin",
     });
-    expect(env.TMPDIR).toBe(path.join("/Users/user", ".NexisClaw", "tmp"));
+    expect(env.TMPDIR).toBe(path.join("/Users/user", ".GreenchClaw", "tmp"));
   });
 
   it("falls back to os.tmpdir for node services when TMPDIR is not set on Linux", () => {
@@ -889,32 +889,32 @@ describe("shared Node TLS env defaults matrix", () => {
 describe("resolveGatewayStateDir", () => {
   it("uses the default state dir when no overrides are set", () => {
     const env = { HOME: "/Users/test" };
-    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".NexisClaw"));
+    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".GreenchClaw"));
   });
 
   it("appends the profile suffix when set", () => {
-    const env = { HOME: "/Users/test", NEXISCLAW_PROFILE: "rescue" };
-    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".NexisClaw-rescue"));
+    const env = { HOME: "/Users/test", GREENCHCLAW_PROFILE: "rescue" };
+    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".GreenchClaw-rescue"));
   });
 
   it("treats default profiles as the base state dir", () => {
-    const env = { HOME: "/Users/test", NEXISCLAW_PROFILE: "Default" };
-    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".NexisClaw"));
+    const env = { HOME: "/Users/test", GREENCHCLAW_PROFILE: "Default" };
+    expect(resolveGatewayStateDir(env)).toBe(path.join("/Users/test", ".GreenchClaw"));
   });
 
-  it("uses NEXISCLAW_STATE_DIR when provided", () => {
-    const env = { HOME: "/Users/test", NEXISCLAW_STATE_DIR: "/var/lib/NexisClaw" };
-    expect(resolveGatewayStateDir(env)).toBe(path.resolve("/var/lib/NexisClaw"));
+  it("uses GREENCHCLAW_STATE_DIR when provided", () => {
+    const env = { HOME: "/Users/test", GREENCHCLAW_STATE_DIR: "/var/lib/GreenchClaw" };
+    expect(resolveGatewayStateDir(env)).toBe(path.resolve("/var/lib/GreenchClaw"));
   });
 
-  it("expands ~ in NEXISCLAW_STATE_DIR", () => {
-    const env = { HOME: "/Users/test", NEXISCLAW_STATE_DIR: "~/NexisClaw-state" };
-    expect(resolveGatewayStateDir(env)).toBe(path.resolve("/Users/test/NexisClaw-state"));
+  it("expands ~ in GREENCHCLAW_STATE_DIR", () => {
+    const env = { HOME: "/Users/test", GREENCHCLAW_STATE_DIR: "~/GreenchClaw-state" };
+    expect(resolveGatewayStateDir(env)).toBe(path.resolve("/Users/test/GreenchClaw-state"));
   });
 
   it("preserves Windows absolute paths without HOME", () => {
-    const env = { NEXISCLAW_STATE_DIR: "C:\\State\\NexisClaw" };
-    expect(resolveGatewayStateDir(env)).toBe("C:\\State\\NexisClaw");
+    const env = { GREENCHCLAW_STATE_DIR: "C:\\State\\GreenchClaw" };
+    expect(resolveGatewayStateDir(env)).toBe("C:\\State\\GreenchClaw");
   });
 });
 

@@ -1,18 +1,18 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/memory-core-host-runtime-core";
-import type { MemorySearchResult } from "NexisClaw/plugin-sdk/memory-core-host-runtime-files";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/memory-core-host-runtime-core";
+import type { MemorySearchResult } from "GreenchClaw/plugin-sdk/memory-core-host-runtime-files";
 import {
   extractTranscriptIdentityFromSessionsMemoryHit,
   loadCombinedSessionStoreForGateway,
   resolveTranscriptStemToSessionKeys,
-} from "NexisClaw/plugin-sdk/session-transcript-hit";
+} from "GreenchClaw/plugin-sdk/session-transcript-hit";
 import {
   createAgentToAgentPolicy,
   createSessionVisibilityGuard,
   resolveEffectiveSessionToolsVisibility,
-} from "NexisClaw/plugin-sdk/session-visibility";
+} from "GreenchClaw/plugin-sdk/session-visibility";
 
 export async function filterMemorySearchHitsBySessionVisibility(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   requesterSessionKey: string | undefined;
   sandboxed: boolean;
   hits: MemorySearchResult[];

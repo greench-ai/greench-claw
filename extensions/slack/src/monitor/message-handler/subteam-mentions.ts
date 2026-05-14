@@ -1,6 +1,6 @@
 import type { WebClient } from "@slack/web-api";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 const SUBTEAM_MENTION_RE = /<!subteam\^([A-Z0-9]+)(?:\|[^>]*)?>/gi;
 const SUBTEAM_MEMBER_CACHE_TTL_MS = 5 * 60 * 1000;

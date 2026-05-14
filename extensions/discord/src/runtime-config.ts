@@ -2,10 +2,10 @@ import {
   getRuntimeConfigSnapshot,
   getRuntimeConfigSourceSnapshot,
   selectApplicableRuntimeConfig,
-} from "NexisClaw/plugin-sdk/runtime-config-snapshot";
-import type { NexisClawConfig } from "./runtime-api.js";
+} from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
+import type { GreenchClawConfig } from "./runtime-api.js";
 
-export function selectDiscordRuntimeConfig(inputConfig: NexisClawConfig): NexisClawConfig {
+export function selectDiscordRuntimeConfig(inputConfig: GreenchClawConfig): GreenchClawConfig {
   return (
     selectApplicableRuntimeConfig({
       inputConfig,

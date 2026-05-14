@@ -9,15 +9,15 @@ export const SECURITY_CONFIRM_MESSAGE =
 const heading = (text: string) => chalk.bold(text);
 
 export const SECURITY_NOTE_MESSAGE = [
-  "NexisClaw is a hobby project and still in beta. Expect sharp edges.",
-  "By default, NexisClaw is a personal agent: one trusted operator boundary.",
+  "GreenchClaw is a hobby project and still in beta. Expect sharp edges.",
+  "By default, GreenchClaw is a personal agent: one trusted operator boundary.",
   "This bot can read files and run actions if tools are enabled.",
   "A bad prompt can trick it into doing unsafe things.",
   "",
-  "NexisClaw is not a hostile multi-tenant boundary by default.",
+  "GreenchClaw is not a hostile multi-tenant boundary by default.",
   "If multiple users can message one tool-enabled agent, they share that delegated tool authority.",
   "",
-  "If you’re not comfortable with security hardening and access control, don’t run NexisClaw.",
+  "If you’re not comfortable with security hardening and access control, don’t run GreenchClaw.",
   "Ask someone experienced to help before enabling tools or exposing it to the internet.",
   "",
   heading("Recommended baseline"),
@@ -29,9 +29,9 @@ export const SECURITY_NOTE_MESSAGE = [
   "- Use the strongest available model for any bot with tools or untrusted inboxes.",
   "",
   heading("Run regularly"),
-  formatCliCommand("NexisClaw security audit --deep"),
-  formatCliCommand("NexisClaw security audit --fix"),
+  formatCliCommand("GreenchClaw security audit --deep"),
+  formatCliCommand("GreenchClaw security audit --fix"),
   "",
   heading("Learn more"),
-  "- https://docs.NexisClaw.ai/gateway/security",
+  "- https://docs.GreenchClaw.ai/gateway/security",
 ].join("\n");

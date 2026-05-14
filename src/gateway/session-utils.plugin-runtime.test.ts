@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { SessionEntry } from "../config/sessions.js";
 
 const normalizeProviderModelIdWithPluginMock = vi.fn();
@@ -29,7 +29,7 @@ describe("gateway session list plugin runtime normalization", () => {
       agents: {
         defaults: { model: { primary: "custom-provider/custom-legacy-model" } },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const store = Object.fromEntries(
       Array.from({ length: 3 }, (_value, index) => [
         `session-${index}`,
@@ -67,7 +67,7 @@ describe("gateway session list plugin runtime normalization", () => {
       agents: {
         defaults: { model: { primary: "custom-provider/custom-legacy-model" } },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const row = buildGatewaySessionRow({
       cfg,

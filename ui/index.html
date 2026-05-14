@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>NexisClaw Control</title>
+    <title>GreenchClaw Control</title>
     <meta name="color-scheme" content="dark light" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
@@ -25,7 +25,7 @@
           var keys = Object.keys(localStorage);
           var raw;
           for (var i = 0; i < keys.length; i++) {
-            if (keys[i].indexOf("NexisClaw.control.settings.v1") === 0) {
+            if (keys[i].indexOf("GreenchClaw.control.settings.v1") === 0) {
               raw = localStorage.getItem(keys[i]);
               if (raw) break;
             }
@@ -63,7 +63,7 @@
       })();
     </script>
     <style>
-      body.NexisClaw-mount-fallback-active {
+      body.GreenchClaw-mount-fallback-active {
         margin: 0;
         min-width: 320px;
         color: #eef4f8;
@@ -78,7 +78,7 @@
           sans-serif;
       }
 
-      body.NexisClaw-mount-fallback-active nexisclaw-app {
+      body.GreenchClaw-mount-fallback-active nexisclaw-app {
         display: none;
       }
 
@@ -174,7 +174,7 @@
         outline-offset: 3px;
       }
 
-      html[data-theme-mode="light"] body.NexisClaw-mount-fallback-active {
+      html[data-theme-mode="light"] body.GreenchClaw-mount-fallback-active {
         color: #151b21;
         background: #f5f7fa;
       }
@@ -199,16 +199,16 @@
   <body>
     <nexisclaw-app></nexisclaw-app>
     <section
-      id="NexisClaw-mount-fallback"
+      id="GreenchClaw-mount-fallback"
       class="mount-fallback"
-      data-NexisClaw-mount-timeout-ms="12000"
+      data-GreenchClaw-mount-timeout-ms="12000"
       role="alert"
-      aria-labelledby="NexisClaw-mount-fallback-title"
+      aria-labelledby="GreenchClaw-mount-fallback-title"
       hidden
     >
       <div class="mount-fallback__panel" tabindex="-1">
-        <p class="mount-fallback__eyebrow">NexisClaw Control UI</p>
-        <h1 id="NexisClaw-mount-fallback-title">Control UI did not start</h1>
+        <p class="mount-fallback__eyebrow">GreenchClaw Control UI</p>
+        <h1 id="GreenchClaw-mount-fallback-title">Control UI did not start</h1>
         <p>
           The browser loaded the static page, but the app bundle did not register the
           <code>nexisclaw-app</code> web component. A browser extension or early content script may
@@ -220,7 +220,7 @@
           <li>
             See
             <a
-              href="https://docs.NexisClaw.ai/web/control-ui#blank-control-ui-page"
+              href="https://docs.GreenchClaw.ai/web/control-ui#blank-control-ui-page"
               target="_blank"
               rel="noopener noreferrer"
               >Control UI troubleshooting</a
@@ -230,12 +230,12 @@
         <div class="mount-fallback__actions">
           <button
             type="button"
-            id="NexisClaw-mount-retry"
+            id="GreenchClaw-mount-retry"
             class="mount-fallback__button mount-fallback__button--primary"
           >
             Try again
           </button>
-          <button type="button" id="NexisClaw-mount-wait" class="mount-fallback__button">
+          <button type="button" id="GreenchClaw-mount-wait" class="mount-fallback__button">
             Keep waiting
           </button>
         </div>
@@ -245,13 +245,13 @@
       (function () {
         var tagName = "nexisclaw-app";
         var app = document.querySelector(tagName);
-        var fallback = document.getElementById("NexisClaw-mount-fallback");
+        var fallback = document.getElementById("GreenchClaw-mount-fallback");
         if (!app || !fallback) return;
 
         var panel = fallback.querySelector(".mount-fallback__panel");
-        var retry = document.getElementById("NexisClaw-mount-retry");
-        var wait = document.getElementById("NexisClaw-mount-wait");
-        var rawDelay = Number(fallback.getAttribute("data-NexisClaw-mount-timeout-ms"));
+        var retry = document.getElementById("GreenchClaw-mount-retry");
+        var wait = document.getElementById("GreenchClaw-mount-wait");
+        var rawDelay = Number(fallback.getAttribute("data-GreenchClaw-mount-timeout-ms"));
         var delay = Number.isFinite(rawDelay) && rawDelay > 0 ? rawDelay : 12000;
         var timer;
 
@@ -270,13 +270,13 @@
 
         function hideFallback() {
           fallback.hidden = true;
-          document.body.classList.remove("NexisClaw-mount-fallback-active");
+          document.body.classList.remove("GreenchClaw-mount-fallback-active");
         }
 
         function showFallback() {
           if (appMounted()) return;
           fallback.hidden = false;
-          document.body.classList.add("NexisClaw-mount-fallback-active");
+          document.body.classList.add("GreenchClaw-mount-fallback-active");
           if (panel && typeof panel.focus === "function") {
             try {
               panel.focus({ preventScroll: true });

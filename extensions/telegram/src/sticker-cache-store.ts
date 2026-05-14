@@ -1,6 +1,6 @@
 import path from "node:path";
-import { loadJsonFile, saveJsonFile } from "NexisClaw/plugin-sdk/json-store";
-import { resolveStateDir } from "NexisClaw/plugin-sdk/state-paths";
+import { loadJsonFile, saveJsonFile } from "GreenchClaw/plugin-sdk/json-store";
+import { resolveStateDir } from "GreenchClaw/plugin-sdk/state-paths";
 
 const CACHE_VERSION = 1;
 

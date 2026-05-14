@@ -1,6 +1,6 @@
 import { getSafeLocalStorage } from "../../local-storage.ts";
 
-const PREFIX = "NexisClaw:deleted:";
+const PREFIX = "GreenchClaw:deleted:";
 
 export class DeletedMessages {
   private key: string;

@@ -1,12 +1,12 @@
 ---
-summary: "Use Amazon Bedrock Mantle (OpenAI-compatible) models with NexisClaw"
+summary: "Use Amazon Bedrock Mantle (OpenAI-compatible) models with GreenchClaw"
 read_when:
-  - You want to use Bedrock Mantle hosted OSS models with NexisClaw
+  - You want to use Bedrock Mantle hosted OSS models with GreenchClaw
   - You need the Mantle OpenAI-compatible endpoint for GPT-OSS, Qwen, Kimi, or GLM
 title: "Amazon Bedrock Mantle"
 ---
 
-NexisClaw includes a bundled **Amazon Bedrock Mantle** provider that connects to
+GreenchClaw includes a bundled **Amazon Bedrock Mantle** provider that connects to
 the Mantle OpenAI-compatible endpoint. Mantle hosts open-source and
 third-party models (GPT-OSS, Qwen, Kimi, GLM, and similar) through a standard
 `/v1/chat/completions` surface backed by Bedrock infrastructure.
@@ -40,7 +40,7 @@ Choose your preferred auth method and follow the setup steps.
       </Step>
       <Step title="Verify models are discovered">
         ```bash
-        NexisClaw models list
+        GreenchClaw models list
         ```
 
         Discovered models appear under the `amazon-bedrock-mantle` provider. No
@@ -64,15 +64,15 @@ Choose your preferred auth method and follow the setup steps.
       </Step>
       <Step title="Verify models are discovered">
         ```bash
-        NexisClaw models list
+        GreenchClaw models list
         ```
 
-        NexisClaw generates a Mantle bearer token from the credential chain automatically.
+        GreenchClaw generates a Mantle bearer token from the credential chain automatically.
       </Step>
     </Steps>
 
     <Tip>
-    When `AWS_BEARER_TOKEN_BEDROCK` is not set, NexisClaw mints the bearer token for you from the AWS default credential chain, including shared credentials/config profiles, SSO, web identity, and instance or task roles.
+    When `AWS_BEARER_TOKEN_BEDROCK` is not set, GreenchClaw mints the bearer token for you from the AWS default credential chain, including shared credentials/config profiles, SSO, web identity, and instance or task roles.
     </Tip>
 
   </Tab>
@@ -80,8 +80,8 @@ Choose your preferred auth method and follow the setup steps.
 
 ## Automatic model discovery
 
-When `AWS_BEARER_TOKEN_BEDROCK` is set, NexisClaw uses it directly. Otherwise,
-NexisClaw attempts to generate a Mantle bearer token from the AWS default
+When `AWS_BEARER_TOKEN_BEDROCK` is set, GreenchClaw uses it directly. Otherwise,
+GreenchClaw attempts to generate a Mantle bearer token from the AWS default
 credential chain. It then discovers available Mantle models by querying the
 region's `/v1/models` endpoint.
 
@@ -94,7 +94,7 @@ To keep the Mantle plugin enabled but suppress automatic discovery and IAM
 bearer-token generation, disable the plugin-owned discovery toggle:
 
 ```bash
-NexisClaw config set plugins.entries.amazon-bedrock-mantle.config.discovery.enabled false
+GreenchClaw config set plugins.entries.amazon-bedrock-mantle.config.discovery.enabled false
 ```
 
 <Note>
@@ -142,20 +142,20 @@ If you prefer explicit config instead of auto-discovery:
 <AccordionGroup>
   <Accordion title="Reasoning support">
     Reasoning support is inferred from model IDs containing patterns like
-    `thinking`, `reasoner`, or `gpt-oss-120b`. NexisClaw sets `reasoning: true`
+    `thinking`, `reasoner`, or `gpt-oss-120b`. GreenchClaw sets `reasoning: true`
     automatically for matching models during discovery.
   </Accordion>
 
   <Accordion title="Endpoint unavailability">
     If the Mantle endpoint is unavailable or returns no models, the provider is
-    silently skipped. NexisClaw does not error; other configured providers
+    silently skipped. GreenchClaw does not error; other configured providers
     continue to work normally.
   </Accordion>
 
   <Accordion title="Claude Opus 4.7 via the Anthropic Messages route">
     Mantle also exposes an Anthropic Messages route that carries Claude models through the same bearer-authenticated streaming path. Claude Opus 4.7 (`amazon-bedrock-mantle/claude-opus-4.7`) is callable through this route with provider-owned streaming, so AWS bearer tokens are not treated like Anthropic API keys.
 
-    When you pin an Anthropic Messages model on the Mantle provider, NexisClaw uses the `anthropic-messages` API surface instead of `openai-completions` for that model. Auth still comes from `AWS_BEARER_TOKEN_BEDROCK` (or the minted IAM bearer token).
+    When you pin an Anthropic Messages model on the Mantle provider, GreenchClaw uses the `anthropic-messages` API surface instead of `openai-completions` for that model. Auth still comes from `AWS_BEARER_TOKEN_BEDROCK` (or the minted IAM bearer token).
 
     ```json5
     {

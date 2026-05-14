@@ -25,12 +25,12 @@ describe("wrapArgvForChildOomScoreRaise", () => {
     }
   });
 
-  it("respects the NEXISCLAW_CHILD_OOM_SCORE_ADJ opt-out", () => {
+  it("respects the GREENCHCLAW_CHILD_OOM_SCORE_ADJ opt-out", () => {
     for (const value of ["0", "false", "FALSE", "no", "off"]) {
       expect(
         wrapArgvForChildOomScoreRaise(argv, {
           ...linux,
-          env: { NEXISCLAW_CHILD_OOM_SCORE_ADJ: value },
+          env: { GREENCHCLAW_CHILD_OOM_SCORE_ADJ: value },
         }),
       ).toEqual(argv);
     }
@@ -99,7 +99,10 @@ describe("hardenedEnvForChildOomWrap", () => {
       hardenedEnvForChildOomWrap(undefined, { platform: "darwin", shellAvailable: () => true }),
     ).toBeUndefined();
     expect(
-      hardenedEnvForChildOomWrap(tainted, { ...linux, env: { NEXISCLAW_CHILD_OOM_SCORE_ADJ: "0" } }),
+      hardenedEnvForChildOomWrap(tainted, {
+        ...linux,
+        env: { GREENCHCLAW_CHILD_OOM_SCORE_ADJ: "0" },
+      }),
     ).toBe(tainted);
   });
 });

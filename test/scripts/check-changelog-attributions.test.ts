@@ -6,16 +6,20 @@ describe("check-changelog-attributions", () => {
   it("flags forbidden bot, org, and maintainer thanks attributions", () => {
     const content = [
       "- Internal cleanup. Thanks @codex.",
-      "- Org-owned fix. Thanks @NexisClaw.",
+      "- Org-owned fix. Thanks @GreenchClaw.",
       "- Maintainer-owned fix. Thanks @steipete.",
-      "- Mixed credit. Thanks @contributor and @NexisClaw.",
+      "- Mixed credit. Thanks @contributor and @GreenchClaw.",
     ].join("\n");
 
     expect(findForbiddenChangelogThanks(content)).toEqual([
       { line: 1, handle: "codex", text: "- Internal cleanup. Thanks @codex." },
-      { line: 2, handle: "NexisClaw", text: "- Org-owned fix. Thanks @NexisClaw." },
+      { line: 2, handle: "GreenchClaw", text: "- Org-owned fix. Thanks @GreenchClaw." },
       { line: 3, handle: "steipete", text: "- Maintainer-owned fix. Thanks @steipete." },
-      { line: 4, handle: "NexisClaw", text: "- Mixed credit. Thanks @contributor and @NexisClaw." },
+      {
+        line: 4,
+        handle: "GreenchClaw",
+        text: "- Mixed credit. Thanks @contributor and @GreenchClaw.",
+      },
     ]);
   });
 

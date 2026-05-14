@@ -1,13 +1,13 @@
 import type { StreamFn } from "@earendil-works/pi-agent-core";
-import type { ProviderWrapStreamFnContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import { OPENROUTER_THINKING_STREAM_HOOKS } from "NexisClaw/plugin-sdk/provider-stream-family";
+import type { ProviderWrapStreamFnContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { OPENROUTER_THINKING_STREAM_HOOKS } from "GreenchClaw/plugin-sdk/provider-stream-family";
 import {
   createDeepSeekV4OpenAICompatibleThinkingWrapper,
   type DeepSeekV4ReasoningEffort,
   type DeepSeekV4ThinkingLevel,
   createPayloadPatchStreamWrapper,
-} from "NexisClaw/plugin-sdk/provider-stream-shared";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/provider-stream-shared";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
 import { isOpenRouterDeepSeekV4ModelId } from "./models.js";
 import {
   isOpenRouterProxyReasoningUnsupportedModel,

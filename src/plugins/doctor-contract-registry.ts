@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { LegacyConfigRule } from "../config/legacy.shared.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { asNullableRecord } from "../shared/record-coerce.js";
 import type { DoctorSessionRouteStateOwner } from "./doctor-session-route-state-owner-types.js";
 import type { PluginManifestRegistry } from "./manifest-registry.js";
@@ -27,12 +27,12 @@ type PluginDoctorContractModule = {
 };
 
 type PluginDoctorCompatibilityMutation = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   changes: string[];
 };
 
 type PluginDoctorCompatibilityNormalizer = (params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }) => PluginDoctorCompatibilityMutation;
 
 type PluginDoctorContractEntry = {
@@ -258,7 +258,7 @@ function loadPluginDoctorContractEntry(
 }
 
 function resolvePluginDoctorContracts(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   pluginIds?: readonly string[];
@@ -307,7 +307,7 @@ export function setPluginDoctorContractRegistryModuleLoaderFactoryForTest(
 }
 
 export function listPluginDoctorLegacyConfigRules(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   pluginIds?: readonly string[];
@@ -316,7 +316,7 @@ export function listPluginDoctorLegacyConfigRules(params?: {
 }
 
 export function listPluginDoctorSessionRouteStateOwners(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   pluginIds?: readonly string[];
@@ -333,15 +333,15 @@ export function listPluginDoctorSessionRouteStateOwners(params?: {
 }
 
 export function applyPluginDoctorCompatibilityMigrations(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params?: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     workspaceDir?: string;
     env?: NodeJS.ProcessEnv;
     pluginIds?: readonly string[];
   },
 ): {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   changes: string[];
 } {
   let nextCfg = cfg;

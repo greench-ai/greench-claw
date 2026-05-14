@@ -1,24 +1,24 @@
 import { rmSync } from "node:fs";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { MockFn } from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import type { GetReplyOptions, MsgContext } from "NexisClaw/plugin-sdk/reply-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { MockFn } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import type { GetReplyOptions, MsgContext } from "GreenchClaw/plugin-sdk/reply-runtime";
 import { beforeEach, vi } from "vitest";
 import type { TelegramBotDeps } from "./bot-deps.js";
 
 type AnyMock = ReturnType<typeof vi.fn>;
 type AnyAsyncMock = ReturnType<typeof vi.fn>;
 type GetRuntimeConfigFn =
-  typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot").getRuntimeConfig;
+  typeof import("GreenchClaw/plugin-sdk/runtime-config-snapshot").getRuntimeConfig;
 type LoadSessionStoreFn =
-  typeof import("NexisClaw/plugin-sdk/session-store-runtime").loadSessionStore;
+  typeof import("GreenchClaw/plugin-sdk/session-store-runtime").loadSessionStore;
 type ResolveStorePathFn =
-  typeof import("NexisClaw/plugin-sdk/session-store-runtime").resolveStorePath;
+  typeof import("GreenchClaw/plugin-sdk/session-store-runtime").resolveStorePath;
 type SessionStore = ReturnType<LoadSessionStoreFn>;
 type TelegramBotRuntimeForTest = NonNullable<
   Parameters<typeof import("./bot.js").setTelegramBotRuntimeForTest>[0]
 >;
 type DispatchReplyWithBufferedBlockDispatcherFn =
-  typeof import("NexisClaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithBufferedBlockDispatcher;
+  typeof import("GreenchClaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithBufferedBlockDispatcher;
 type DispatchReplyWithBufferedBlockDispatcherResult = Awaited<
   ReturnType<DispatchReplyWithBufferedBlockDispatcherFn>
 >;
@@ -31,7 +31,7 @@ type ReplyPayloadLike = {
 };
 
 const { sessionStorePath } = vi.hoisted(() => ({
-  sessionStorePath: `/tmp/NexisClaw-telegram-${process.pid}-${process.env.VITEST_POOL_ID ?? "0"}.json`,
+  sessionStorePath: `/tmp/GreenchClaw-telegram-${process.pid}-${process.env.VITEST_POOL_ID ?? "0"}.json`,
 }));
 
 const { loadWebMedia } = vi.hoisted((): { loadWebMedia: AnyMock } => ({
@@ -42,7 +42,7 @@ export function getLoadWebMediaMock(): AnyMock {
   return loadWebMedia;
 }
 
-vi.mock("NexisClaw/plugin-sdk/web-media", () => ({
+vi.mock("GreenchClaw/plugin-sdk/web-media", () => ({
   loadWebMedia,
 }));
 
@@ -112,7 +112,7 @@ const replySpyHoisted = vi.hoisted(() => ({
     (
       ctx: MsgContext,
       opts?: GetReplyOptions,
-      configOverride?: NexisClawConfig,
+      configOverride?: GreenchClawConfig,
     ) => Promise<ReplyPayloadLike | ReplyPayloadLike[] | undefined>
   >,
 }));
@@ -192,7 +192,7 @@ function normalizeLowercaseStringOrEmptyForTest(value: string | undefined): stri
   return value?.trim().toLowerCase() ?? "";
 }
 
-function resolveDefaultModelForAgentForTest(params: { cfg: NexisClawConfig }): {
+function resolveDefaultModelForAgentForTest(params: { cfg: GreenchClawConfig }): {
   provider: string;
   model: string;
 } {
@@ -207,7 +207,7 @@ function resolveDefaultModelForAgentForTest(params: { cfg: NexisClawConfig }): {
   };
 }
 
-function createModelsProviderDataFromConfig(cfg: NexisClawConfig): {
+function createModelsProviderDataFromConfig(cfg: GreenchClawConfig): {
   byProvider: Map<string, Set<string>>;
   providers: string[];
   resolvedDefault: { provider: string; model: string };
@@ -277,7 +277,7 @@ const grammySpies = vi.hoisted(() => ({
   setMessageReactionSpy: vi.fn(async () => undefined) as AnyAsyncMock,
   setMyCommandsSpy: vi.fn(async () => undefined) as AnyAsyncMock,
   getMeSpy: vi.fn(async () => ({
-    username: "NexisClaw_bot",
+    username: "GreenchClaw_bot",
     has_topics_enabled: true,
   })) as AnyAsyncMock,
   getChatSpy: vi.fn(async () => undefined) as AnyAsyncMock,
@@ -396,7 +396,7 @@ export const getOnHandler = (event: string) => {
   return handler as (ctx: Record<string, unknown>) => Promise<void>;
 };
 
-const DEFAULT_TELEGRAM_TEST_CONFIG: NexisClawConfig = {
+const DEFAULT_TELEGRAM_TEST_CONFIG: GreenchClawConfig = {
   agents: {
     defaults: {
       envelopeTimezone: "utc",
@@ -431,7 +431,7 @@ export function makeTelegramMessageCtx(params: {
         ? {}
         : { message_thread_id: params.messageThreadId }),
     },
-    me: { username: "NexisClaw_bot" },
+    me: { username: "GreenchClaw_bot" },
     getFile: async () => ({ download: async () => new Uint8Array() }),
   };
 }
@@ -515,7 +515,7 @@ beforeEach(() => {
   getChatSpy.mockResolvedValue(undefined);
   getMeSpy.mockReset();
   getMeSpy.mockResolvedValue({
-    username: "NexisClaw_bot",
+    username: "GreenchClaw_bot",
     has_topics_enabled: true,
   });
   editMessageTextSpy.mockReset();
@@ -528,7 +528,7 @@ beforeEach(() => {
   listSkillCommandsForAgents.mockReset();
   listSkillCommandsForAgents.mockReturnValue([]);
   buildModelsProviderData.mockReset();
-  buildModelsProviderData.mockImplementation(async (cfg: NexisClawConfig) => {
+  buildModelsProviderData.mockImplementation(async (cfg: GreenchClawConfig) => {
     return createModelsProviderDataFromConfig(cfg);
   });
   middlewareUseSpy.mockReset();

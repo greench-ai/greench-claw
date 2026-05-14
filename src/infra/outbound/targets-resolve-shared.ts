@@ -1,8 +1,8 @@
-import { mapAllowFromEntries } from "NexisClaw/plugin-sdk/channel-config-helpers";
+import { mapAllowFromEntries } from "GreenchClaw/plugin-sdk/channel-config-helpers";
 import type { ChannelPlugin } from "../../channels/plugins/types.plugin.js";
 import type { ChannelOutboundTargetMode } from "../../channels/plugins/types.public.js";
 import { formatCliCommand } from "../../cli/command-format.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { INTERNAL_MESSAGE_CHANNEL } from "../../utils/message-channel-constants.js";
 import type { GatewayMessageChannel } from "../../utils/message-channel.js";
 import { validateTargetProviderPrefix } from "./channel-target-prefix.js";
@@ -14,14 +14,14 @@ export type ResolveOutboundTargetParams = {
   channel: GatewayMessageChannel;
   to?: string;
   allowFrom?: string[];
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   accountId?: string | null;
   mode?: ChannelOutboundTargetMode;
 };
 
 function buildWebChatDeliveryError(): Error {
   return new Error(
-    `Delivering to WebChat is not supported via \`${formatCliCommand("NexisClaw agent")}\`; use WhatsApp/Telegram or run with --deliver=false.`,
+    `Delivering to WebChat is not supported via \`${formatCliCommand("GreenchClaw agent")}\`; use WhatsApp/Telegram or run with --deliver=false.`,
   );
 }
 

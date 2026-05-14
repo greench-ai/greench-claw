@@ -9,7 +9,7 @@ Status: bundled plugin (webhook bot). Direct messages, rooms, reactions, and mar
 
 ## Bundled plugin
 
-Nextcloud Talk ships as a bundled plugin in current NexisClaw releases, so
+Nextcloud Talk ships as a bundled plugin in current GreenchClaw releases, so
 normal packaged builds do not need a separate install.
 
 If you are on an older build or a custom install that excludes Nextcloud Talk,
@@ -18,7 +18,7 @@ install the npm package directly:
 Install via CLI (npm registry):
 
 ```bash
-NexisClaw plugins install @NexisClaw/nextcloud-talk
+GreenchClaw plugins install @GreenchClaw/nextcloud-talk
 ```
 
 Use the bare package to follow the current official release tag. Pin an exact
@@ -27,7 +27,7 @@ version only when you need a reproducible install.
 Local checkout (when running from a git repo):
 
 ```bash
-NexisClaw plugins install ./path/to/local/nextcloud-talk-plugin
+GreenchClaw plugins install ./path/to/local/nextcloud-talk-plugin
 ```
 
 Details: [Plugins](/tools/plugin)
@@ -35,23 +35,23 @@ Details: [Plugins](/tools/plugin)
 ## Quick setup (beginner)
 
 1. Ensure the Nextcloud Talk plugin is available.
-   - Current packaged NexisClaw releases already bundle it.
+   - Current packaged GreenchClaw releases already bundle it.
    - Older/custom installs can add it manually with the commands above.
 2. On your Nextcloud server, create a bot:
 
    ```bash
-   ./occ talk:bot:install "NexisClaw" "<shared-secret>" "<webhook-url>" --feature webhook --feature response --feature reaction
+   ./occ talk:bot:install "GreenchClaw" "<shared-secret>" "<webhook-url>" --feature webhook --feature response --feature reaction
    ```
 
 3. Enable the bot in the target room settings.
-4. Configure NexisClaw:
+4. Configure GreenchClaw:
    - Config: `channels.nextcloud-talk.baseUrl` + `channels.nextcloud-talk.botSecret`
    - Or env: `NEXTCLOUD_TALK_BOT_SECRET` (default account only)
 
    CLI setup:
 
    ```bash
-   NexisClaw channels add --channel nextcloud-talk \
+   GreenchClaw channels add --channel nextcloud-talk \
      --url https://cloud.example.com \
      --token "<shared-secret>"
    ```
@@ -59,7 +59,7 @@ Details: [Plugins](/tools/plugin)
    Equivalent explicit fields:
 
    ```bash
-   NexisClaw channels add --channel nextcloud-talk \
+   GreenchClaw channels add --channel nextcloud-talk \
      --base-url https://cloud.example.com \
      --secret "<shared-secret>"
    ```
@@ -67,7 +67,7 @@ Details: [Plugins](/tools/plugin)
    File-backed secret:
 
    ```bash
-   NexisClaw channels add --channel nextcloud-talk \
+   GreenchClaw channels add --channel nextcloud-talk \
      --base-url https://cloud.example.com \
      --secret-file /path/to/nextcloud-talk-secret
    ```
@@ -100,8 +100,8 @@ Minimal config:
 
 - Default: `channels.nextcloud-talk.dmPolicy = "pairing"`. Unknown senders get a pairing code.
 - Approve via:
-  - `NexisClaw pairing list nextcloud-talk`
-  - `NexisClaw pairing approve nextcloud-talk <CODE>`
+  - `GreenchClaw pairing list nextcloud-talk`
+  - `GreenchClaw pairing approve nextcloud-talk <CODE>`
 - Public DMs: `channels.nextcloud-talk.dmPolicy="open"` plus `channels.nextcloud-talk.allowFrom=["*"]`.
 - `allowFrom` matches Nextcloud user IDs only; display names are ignored.
 

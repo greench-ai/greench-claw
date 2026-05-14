@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { withTempHome } from "NexisClaw/plugin-sdk/test-env";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { withTempHome } from "GreenchClaw/plugin-sdk/test-env";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const legacyCryptoInspectorAvailability = vi.hoisted(() => ({
@@ -27,7 +27,7 @@ import {
   writeMatrixCredentials,
 } from "./test-helpers.js";
 
-function createDefaultMatrixConfig(): NexisClawConfig {
+function createDefaultMatrixConfig(): GreenchClawConfig {
   return {
     channels: {
       matrix: {
@@ -40,7 +40,7 @@ function createDefaultMatrixConfig(): NexisClawConfig {
 }
 
 function writeDefaultLegacyCryptoFixture(home: string) {
-  const stateDir = path.join(home, ".NexisClaw");
+  const stateDir = path.join(home, ".GreenchClaw");
   const cfg = createDefaultMatrixConfig();
   const { rootDir } = resolveMatrixAccountStorageRoot({
     stateDir,
@@ -60,7 +60,7 @@ function createOpsLegacyCryptoFixture(params: {
   accessToken?: string;
   includeStoredCredentials?: boolean;
 }) {
-  const stateDir = path.join(params.home, ".NexisClaw");
+  const stateDir = path.join(params.home, ".GreenchClaw");
   writeFile(
     path.join(stateDir, "matrix", "crypto", "bot-sdk.json"),
     JSON.stringify({ deviceId: MATRIX_OPS_DEVICE_ID }),
@@ -173,7 +173,7 @@ describe("matrix legacy encrypted-state migration", () => {
         home,
         includeStoredCredentials: true,
       });
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         channels: {
           matrix: {
             accounts: {

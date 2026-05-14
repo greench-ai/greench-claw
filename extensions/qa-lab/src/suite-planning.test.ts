@@ -18,8 +18,8 @@ import { makeQaSuiteTestScenario } from "./suite-test-helpers.js";
 
 describe("qa suite planning helpers", () => {
   it("normalizes suite concurrency to a bounded integer", () => {
-    const previous = process.env.NEXISCLAW_QA_SUITE_CONCURRENCY;
-    delete process.env.NEXISCLAW_QA_SUITE_CONCURRENCY;
+    const previous = process.env.GREENCHCLAW_QA_SUITE_CONCURRENCY;
+    delete process.env.GREENCHCLAW_QA_SUITE_CONCURRENCY;
     try {
       expect(normalizeQaSuiteConcurrency(undefined, 10)).toBe(10);
       expect(normalizeQaSuiteConcurrency(undefined, 80)).toBe(64);
@@ -35,9 +35,9 @@ describe("qa suite planning helpers", () => {
       expect(normalizeQaSuiteConcurrency(0, 3)).toBe(1);
     } finally {
       if (previous === undefined) {
-        delete process.env.NEXISCLAW_QA_SUITE_CONCURRENCY;
+        delete process.env.GREENCHCLAW_QA_SUITE_CONCURRENCY;
       } else {
-        process.env.NEXISCLAW_QA_SUITE_CONCURRENCY = previous;
+        process.env.GREENCHCLAW_QA_SUITE_CONCURRENCY = previous;
       }
     }
   });
@@ -163,7 +163,7 @@ describe("qa suite planning helpers", () => {
     expect(resolveQaSuiteWorkerStartStaggerMs(4, {})).toBe(1500);
     expect(
       resolveQaSuiteWorkerStartStaggerMs(4, {
-        NEXISCLAW_QA_SUITE_WORKER_START_STAGGER_MS: "0",
+        GREENCHCLAW_QA_SUITE_WORKER_START_STAGGER_MS: "0",
       }),
     ).toBe(0);
   });

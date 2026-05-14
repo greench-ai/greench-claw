@@ -1,5 +1,5 @@
 ---
-summary: "Adds Amazon Bedrock model provider support to NexisClaw."
+summary: "Adds Amazon Bedrock model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the amazon-bedrock plugin
 title: "Amazon Bedrock plugin"
@@ -7,12 +7,12 @@ title: "Amazon Bedrock plugin"
 
 # Amazon Bedrock plugin
 
-Adds Amazon Bedrock model provider support to NexisClaw.
+Adds Amazon Bedrock model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/amazon-bedrock-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/amazon-bedrock-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

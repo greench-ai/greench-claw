@@ -2,7 +2,7 @@ import {
   createMessageReceiptFromOutboundResults,
   type MessageReceipt,
   type MessageReceiptPartKind,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 
 export function createLineSendReceipt(params: {
   messageId: string;

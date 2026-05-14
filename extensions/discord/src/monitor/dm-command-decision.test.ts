@@ -1,4 +1,4 @@
-import type { ResolvedChannelMessageIngress } from "NexisClaw/plugin-sdk/channel-ingress-runtime";
+import type { ResolvedChannelMessageIngress } from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
 import { describe, expect, it, vi } from "vitest";
 import { handleDiscordDmCommandDecision } from "./dm-command-decision.js";
 

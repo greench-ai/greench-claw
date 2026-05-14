@@ -6,7 +6,7 @@ import {
   listRegisteredAgentHarnesses,
   restoreRegisteredAgentHarnesses,
 } from "../agents/harness/registry.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import type { GatewayRequestHandler } from "../gateway/server-methods/types.js";
 import { openRootFileSync } from "../infra/boundary-file-read.js";
@@ -50,7 +50,7 @@ import {
   type NormalizedPluginsConfig,
 } from "./config-state.js";
 import { isPluginEnabledByDefaultForPlatform } from "./default-enablement.js";
-import { discoverNexisClawPlugins, type PluginCandidate } from "./discovery.js";
+import { discoverGreenchClawPlugins, type PluginCandidate } from "./discovery.js";
 import { shouldRejectHardlinkedPluginFiles } from "./hardlink-policy.js";
 import { getGlobalHookRunner, initializeGlobalHookRunner } from "./hook-runner-global.js";
 import { toSafeImportPath } from "./import-specifier.js";
@@ -120,7 +120,7 @@ import {
   normalizePluginIdScope,
   serializePluginIdScope,
 } from "./plugin-scope.js";
-import { ensureNexisClawPluginSdkAlias } from "./plugin-sdk-dist-alias.js";
+import { ensureGreenchClawPluginSdkAlias } from "./plugin-sdk-dist-alias.js";
 import { createEmptyPluginRegistry } from "./registry-empty.js";
 import type { PluginRegistryParams } from "./registry-types.js";
 import { createPluginRegistry, type PluginRecord, type PluginRegistry } from "./registry.js";
@@ -149,9 +149,9 @@ import {
 } from "./sdk-alias.js";
 import { hasKind, kindsEqual } from "./slots.js";
 import type {
-  NexisClawPluginApi,
-  NexisClawPluginDefinition,
-  NexisClawPluginModule,
+  GreenchClawPluginApi,
+  GreenchClawPluginDefinition,
+  GreenchClawPluginModule,
   PluginLogger,
   PluginRegistrationMode,
 } from "./types.js";
@@ -160,8 +160,8 @@ export type PluginLoadResult = PluginRegistry;
 export { PluginLoadReentryError } from "./loader-cache-state.js";
 
 export type PluginLoadOptions = {
-  config?: NexisClawConfig;
-  activationSourceConfig?: NexisClawConfig;
+  config?: GreenchClawConfig;
+  activationSourceConfig?: GreenchClawConfig;
   autoEnabledReasons?: Readonly<Record<string, string[]>>;
   workspaceDir?: string;
   // Allows callers to resolve plugin roots and load paths against an explicit env
@@ -204,7 +204,7 @@ const CLI_METADATA_ENTRY_BASENAMES = [
 ] as const;
 
 function resolveDreamingSidecarEngineId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   memorySlot: string | null | undefined;
 }): string | null {
   const normalizedMemorySlot = normalizeLowercaseStringOrEmpty(params.memorySlot);
@@ -447,8 +447,8 @@ function restorePluginRegistry(registry: PluginRegistry, snapshot: PluginRegistr
   registry.coreGatewayMethodNames = snapshot.coreGatewayMethodNames;
 }
 
-function createGuardedPluginRegistrationApi(api: NexisClawPluginApi): {
-  api: NexisClawPluginApi;
+function createGuardedPluginRegistrationApi(api: GreenchClawPluginApi): {
+  api: GreenchClawPluginApi;
   close: () => void;
 } {
   let closed = false;
@@ -482,8 +482,8 @@ function createGuardedPluginRegistrationApi(api: NexisClawPluginApi): {
 }
 
 function runPluginRegisterSync(
-  register: NonNullable<NexisClawPluginDefinition["register"]>,
-  api: Parameters<NonNullable<NexisClawPluginDefinition["register"]>>[0],
+  register: NonNullable<GreenchClawPluginDefinition["register"]>,
+  api: Parameters<NonNullable<GreenchClawPluginDefinition["register"]>>[0],
 ): void {
   const guarded = createGuardedPluginRegistrationApi(api);
   try {
@@ -584,7 +584,7 @@ export const __testing = {
   resolvePluginSdkAliasCandidateOrder,
   resolvePluginSdkAliasFile,
   resolvePluginRuntimeModulePath,
-  ensureNexisClawPluginSdkAlias,
+  ensureGreenchClawPluginSdkAlias,
   shouldLoadChannelPluginInSetupRuntime,
   shouldPreferNativeModuleLoad,
   toSafeImportPath,
@@ -996,7 +996,7 @@ function resolvePluginRegistrationPlan(params: {
   validateOnly: boolean;
   shouldActivate: boolean;
   manifestRecord: PluginManifestRecord;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   preferSetupRuntimeForChannelPlugins: boolean;
   toolDiscovery: boolean;
@@ -1302,12 +1302,12 @@ export function resolveRuntimePluginRegistry(
     return compatible;
   }
   // Helper/runtime callers should not recurse into the same snapshot load while
-  // plugin registration is still in flight. Let direct loadNexisClawPlugins(...)
+  // plugin registration is still in flight. Let direct loadGreenchClawPlugins(...)
   // callers surface the hard error instead.
   if (isPluginRegistryLoadInFlight(options)) {
     return undefined;
   }
-  return loadNexisClawPlugins(options);
+  return loadGreenchClawPlugins(options);
 }
 
 export function getRuntimePluginRegistryForLoadOptions(
@@ -1396,8 +1396,8 @@ function isEmptyPluginConfigJsonSchema(schema: Record<string, unknown>): boolean
 }
 
 function resolvePluginModuleExport(moduleExport: unknown): {
-  definition?: NexisClawPluginDefinition;
-  register?: NexisClawPluginDefinition["register"];
+  definition?: GreenchClawPluginDefinition;
+  register?: GreenchClawPluginDefinition["register"];
 } {
   const seen = new Set<unknown>();
   const candidates: unknown[] = [unwrapDefaultModuleExport(moduleExport), moduleExport];
@@ -1409,11 +1409,11 @@ function resolvePluginModuleExport(moduleExport: unknown): {
     seen.add(resolved);
     if (typeof resolved === "function") {
       return {
-        register: resolved as NexisClawPluginDefinition["register"],
+        register: resolved as GreenchClawPluginDefinition["register"],
       };
     }
     if (resolved && typeof resolved === "object") {
-      const def = resolved as NexisClawPluginDefinition;
+      const def = resolved as GreenchClawPluginDefinition;
       const register = def.register ?? def.activate;
       if (typeof register === "function") {
         return { definition: def, register };
@@ -1428,11 +1428,11 @@ function resolvePluginModuleExport(moduleExport: unknown): {
   const resolved = candidates[0];
   if (typeof resolved === "function") {
     return {
-      register: resolved as NexisClawPluginDefinition["register"],
+      register: resolved as GreenchClawPluginDefinition["register"],
     };
   }
   if (resolved && typeof resolved === "object") {
-    const def = resolved as NexisClawPluginDefinition;
+    const def = resolved as GreenchClawPluginDefinition;
     const register = def.register ?? def.activate;
     return { definition: def, register };
   }
@@ -1486,7 +1486,7 @@ function activatePluginRegistry(
   }
 }
 
-export function loadNexisClawPlugins(options: PluginLoadOptions = {}): PluginRegistry {
+export function loadGreenchClawPlugins(options: PluginLoadOptions = {}): PluginRegistry {
   const requestedOnlyPluginIds = normalizePluginIdScope(options.onlyPluginIds);
   const requestedOnlyPluginIdSet = createPluginIdScopeSet(requestedOnlyPluginIds);
   if (requestedOnlyPluginIdSet && requestedOnlyPluginIdSet.size === 0) {
@@ -1675,7 +1675,7 @@ export function loadNexisClawPlugins(options: PluginLoadOptions = {}): PluginReg
           candidates: createPluginCandidatesFromManifestRegistry(suppliedManifestRegistry),
           diagnostics: [] as PluginDiagnostic[],
         }
-      : discoverNexisClawPlugins({
+      : discoverGreenchClawPlugins({
           workspaceDir: options.workspaceDir,
           extraPaths: normalized.loadPaths,
           env,
@@ -1918,7 +1918,7 @@ export function loadNexisClawPlugins(options: PluginLoadOptions = {}): PluginReg
             level: "warn",
             pluginId: record.id,
             source: record.source,
-            message: `bundle capability detected but not wired into NexisClaw yet: ${capability}`,
+            message: `bundle capability detected but not wired into GreenchClaw yet: ${capability}`,
           });
         }
         if (
@@ -2059,7 +2059,7 @@ export function loadNexisClawPlugins(options: PluginLoadOptions = {}): PluginReg
       const safeSource = opened.path;
       fs.closeSync(opened.fd);
 
-      let mod: NexisClawPluginModule | null = null;
+      let mod: GreenchClawPluginModule | null = null;
       try {
         // Track the plugin as imported once module evaluation begins. Top-level
         // code may have already executed even if evaluation later throws.
@@ -2069,7 +2069,7 @@ export function loadNexisClawPlugins(options: PluginLoadOptions = {}): PluginReg
         mod = withProfile(
           { pluginId: record.id, source: safeSource },
           registrationMode,
-          () => loadPluginModule(safeSource) as NexisClawPluginModule,
+          () => loadPluginModule(safeSource) as GreenchClawPluginModule,
         );
       } catch (err) {
         recordPluginError({
@@ -2149,12 +2149,12 @@ export function loadNexisClawPlugins(options: PluginLoadOptions = {}): PluginReg
             }
             const safeRuntimeSource = runtimeOpened.path;
             fs.closeSync(runtimeOpened.fd);
-            let runtimeMod: NexisClawPluginModule | null = null;
+            let runtimeMod: GreenchClawPluginModule | null = null;
             try {
               runtimeMod = withProfile(
                 { pluginId: record.id, source: safeRuntimeSource },
                 "load-setup-runtime-entry",
-                () => loadPluginModule(safeRuntimeSource) as NexisClawPluginModule,
+                () => loadPluginModule(safeRuntimeSource) as GreenchClawPluginModule,
               );
             } catch (err) {
               recordPluginError({
@@ -2462,7 +2462,7 @@ export function loadNexisClawPlugins(options: PluginLoadOptions = {}): PluginReg
         logger.warn(
           `[plugins] ${failedPlugins.length} plugin(s) failed to initialize (${formatPluginFailureSummary(
             failedPlugins,
-          )}). Run 'NexisClaw plugins list' for details.`,
+          )}). Run 'GreenchClaw plugins list' for details.`,
         );
       }
     }
@@ -2494,7 +2494,7 @@ export function loadNexisClawPlugins(options: PluginLoadOptions = {}): PluginReg
   }
 }
 
-export async function loadNexisClawPluginCliRegistry(
+export async function loadGreenchClawPluginCliRegistry(
   options: PluginLoadOptions = {},
 ): Promise<PluginRegistry> {
   const {
@@ -2523,7 +2523,7 @@ export async function loadNexisClawPluginCliRegistry(
     activateGlobalSideEffects: false,
   });
 
-  const discovery = discoverNexisClawPlugins({
+  const discovery = discoverGreenchClawPlugins({
     workspaceDir: options.workspaceDir,
     extraPaths: normalized.loadPaths,
     env,
@@ -2743,12 +2743,12 @@ export async function loadNexisClawPluginCliRegistry(
     const safeSource = opened.path;
     fs.closeSync(opened.fd);
 
-    let mod: NexisClawPluginModule | null = null;
+    let mod: GreenchClawPluginModule | null = null;
     try {
       mod = withProfile(
         { pluginId: record.id, source: safeSource },
         "cli-metadata",
-        () => loadPluginModule(safeSource) as NexisClawPluginModule,
+        () => loadPluginModule(safeSource) as GreenchClawPluginModule,
       );
     } catch (err) {
       recordPluginError({

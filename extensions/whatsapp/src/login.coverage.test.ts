@@ -1,9 +1,9 @@
 import { rmSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { stripAnsi } from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
-import { sanitizeTerminalText } from "NexisClaw/plugin-sdk/test-fixtures";
+import { stripAnsi } from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
+import { sanitizeTerminalText } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { loginWeb } from "./login.js";
 import { renderQrTerminal } from "./qr-terminal.js";
@@ -11,17 +11,17 @@ import { createWaSocket, formatError, waitForWaConnection } from "./session.js";
 
 const rmMock = vi.spyOn(fs, "rm");
 const testState = vi.hoisted(() => ({
-  authDir: `${(process.env.TMPDIR ?? "/tmp").replace(/\/+$/, "")}/NexisClaw-wa-creds-${process.pid}-${Math.random().toString(16).slice(2)}`,
+  authDir: `${(process.env.TMPDIR ?? "/tmp").replace(/\/+$/, "")}/GreenchClaw-wa-creds-${process.pid}-${Math.random().toString(16).slice(2)}`,
 }));
 
 function resolveTestAuthDir() {
   return testState.authDir;
 }
 
-vi.mock("NexisClaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("GreenchClaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot")
-  >("NexisClaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("GreenchClaw/plugin-sdk/runtime-config-snapshot")
+  >("GreenchClaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: () =>
@@ -168,7 +168,7 @@ describe("loginWeb coverage", () => {
       /cache cleared/i,
     );
     expect(runtimeMessageCalls(runtime.error)).toEqual([
-      "WhatsApp reported the session is logged out. Cleared cached web session; please rerun NexisClaw channels login and scan the QR again.",
+      "WhatsApp reported the session is logged out. Cleared cached web session; please rerun GreenchClaw channels login and scan the QR again.",
     ]);
     expect(rmMock).toHaveBeenCalledWith(path.resolve(testState.authDir), {
       recursive: true,

@@ -32,7 +32,7 @@ case "$AUTH_STATUS" in
         "$SCRIPT_DIR/claude-auth-status.sh" full
         exit 0
         ;;
-    CLAUDE_EXPIRING|NEXISCLAW_EXPIRING)
+    CLAUDE_EXPIRING|GREENCHCLAW_EXPIRING)
         echo -e "${YELLOW}Auth is expiring soon.${NC}"
         echo ""
         ;;
@@ -69,11 +69,11 @@ if claude setup-token; then
     echo ""
     "$SCRIPT_DIR/claude-auth-status.sh" full
 
-    # Restart NexisClaw service if running
-    if systemctl --user is-active NexisClaw >/dev/null 2>&1; then
+    # Restart GreenchClaw service if running
+    if systemctl --user is-active GreenchClaw >/dev/null 2>&1; then
         echo ""
-        echo "Restarting NexisClaw service..."
-        systemctl --user restart NexisClaw
+        echo "Restarting GreenchClaw service..."
+        systemctl --user restart GreenchClaw
         echo -e "${GREEN}Service restarted.${NC}"
     fi
 else

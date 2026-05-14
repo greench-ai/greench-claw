@@ -9,7 +9,7 @@ import {
   updateLastRoute,
   updateSessionStore,
 } from "../config/sessions.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { createSuiteTempRootTracker } from "../test-helpers/temp-dir.js";
 import { listSessionsFromStore } from "./session-utils.js";
 
@@ -19,13 +19,13 @@ const cfg = {
   agents: {
     defaults: {
       model: "openai/gpt-5.4",
-      workspace: "/tmp/NexisClaw",
+      workspace: "/tmp/GreenchClaw",
     },
   },
   session: {
     dmScope: "per-channel-peer",
   },
-} satisfies Partial<NexisClawConfig> as NexisClawConfig;
+} satisfies Partial<GreenchClawConfig> as GreenchClawConfig;
 
 function createTelegramDirectContext(): MsgContext {
   return {
@@ -46,7 +46,7 @@ function createTelegramDirectContext(): MsgContext {
 
 describe("Telegram direct session recreation after delete", () => {
   const suiteRootTracker = createSuiteTempRootTracker({
-    prefix: "NexisClaw-telegram-session-recreate-",
+    prefix: "GreenchClaw-telegram-session-recreate-",
   });
   let tempDir = "";
   let storePath = "";

@@ -3,39 +3,39 @@ summary: "Tool Search: compact large PI tool catalogs behind search, describe, a
 title: "Tool Search"
 read_when:
   - You want PI agents to use a large tool catalog without adding every tool schema to the prompt
-  - You want NexisClaw tools, MCP tools, and client tools exposed through one compact PI surface
+  - You want GreenchClaw tools, MCP tools, and client tools exposed through one compact PI surface
   - You are implementing or debugging tool discovery for PI runs
 ---
 
-Tool Search is an experimental NexisClaw PI-agent feature. It gives PI agents one
+Tool Search is an experimental GreenchClaw PI-agent feature. It gives PI agents one
 compact way to discover and call large tool catalogs. It is useful when the run
 has many available tools but the model is likely to need only a few of them.
 
-This page documents NexisClaw PI Tool Search. It is not the Codex-native tool
+This page documents GreenchClaw PI Tool Search. It is not the Codex-native tool
 search or dynamic-tools surface. Codex-native code mode, tool search, deferred
 dynamic tools, and nested tool calls are stable Codex harness surfaces and do
 not depend on `tools.toolSearch`.
 
 When enabled for PI, the model receives one `tool_search_code` tool by default.
 That tool runs a short JavaScript body in an isolated Node subprocess with an
-`NexisClaw.tools` bridge:
+`GreenchClaw.tools` bridge:
 
 ```js
-const hits = await NexisClaw.tools.search("create a GitHub issue");
-const tool = await NexisClaw.tools.describe(hits[0].id);
-return await NexisClaw.tools.call(tool.id, {
+const hits = await GreenchClaw.tools.search("create a GitHub issue");
+const tool = await GreenchClaw.tools.describe(hits[0].id);
+return await GreenchClaw.tools.call(tool.id, {
   title: "Crash on startup",
   body: "Steps to reproduce...",
 });
 ```
 
-The catalog can include NexisClaw tools, plugin tools, MCP tools, and
+The catalog can include GreenchClaw tools, plugin tools, MCP tools, and
 client-provided tools. The model does not see every full schema up front.
 Instead, it searches compact descriptors, describes one selected tool when it
-needs the exact schema, and calls that tool through NexisClaw.
+needs the exact schema, and calls that tool through GreenchClaw.
 
-Codex harness runs do not receive these experimental NexisClaw Tool Search
-controls. NexisClaw passes product capabilities to Codex as dynamic tools, and
+Codex harness runs do not receive these experimental GreenchClaw Tool Search
+controls. GreenchClaw passes product capabilities to Codex as dynamic tools, and
 Codex owns the stable native code mode, native tool search, deferred dynamic
 tools, and nested tool calls.
 
@@ -45,16 +45,16 @@ At planning time the PI embedded runner builds the effective catalog for the
 run:
 
 1. Resolve the active tool policy for the agent, profile, sandbox, and session.
-2. List eligible NexisClaw and plugin tools.
+2. List eligible GreenchClaw and plugin tools.
 3. List eligible MCP tools through the session MCP runtime.
 4. Add eligible client tools supplied for the current run.
 5. Index compact descriptors for search.
 6. Expose either the PI code bridge or the structured fallback tools to the
    model.
 
-At execution time every real tool call returns to NexisClaw. The isolated Node
+At execution time every real tool call returns to GreenchClaw. The isolated Node
 runtime does not hold plugin implementations, MCP client objects, or secrets.
-`NexisClaw.tools.call(...)` crosses the bridge back into the Gateway, where the
+`GreenchClaw.tools.call(...)` crosses the bridge back into the Gateway, where the
 normal policy, approval, hook, logging, and result handling still apply.
 
 ## Modes
@@ -74,7 +74,7 @@ Both modes are experimental. Prefer direct tool exposure for small PI tool
 catalogs, and prefer the Codex-native stable surfaces for Codex harness runs.
 
 There is no separate source-selection config. When Tool Search is enabled, the
-catalog includes eligible NexisClaw, MCP, and client tools after normal policy
+catalog includes eligible GreenchClaw, MCP, and client tools after normal policy
 filtering.
 
 ## Why this exists
@@ -98,29 +98,29 @@ client-provided app tools.
 
 ## API
 
-`NexisClaw.tools.search(query, options?)`
+`GreenchClaw.tools.search(query, options?)`
 
 Searches the effective catalog for the current run. Results are compact and safe
 to put back into prompt context.
 
 ```js
-const hits = await NexisClaw.tools.search("calendar event", { limit: 5 });
+const hits = await GreenchClaw.tools.search("calendar event", { limit: 5 });
 ```
 
-`NexisClaw.tools.describe(id)`
+`GreenchClaw.tools.describe(id)`
 
 Loads full metadata for one search result, including the exact input schema.
 
 ```js
-const calendarCreate = await NexisClaw.tools.describe("mcp:calendar:create_event");
+const calendarCreate = await GreenchClaw.tools.describe("mcp:calendar:create_event");
 ```
 
-`NexisClaw.tools.call(id, args)`
+`GreenchClaw.tools.call(id, args)`
 
-Calls a selected tool through NexisClaw.
+Calls a selected tool through GreenchClaw.
 
 ```js
-await NexisClaw.tools.call(calendarCreate.id, {
+await GreenchClaw.tools.call(calendarCreate.id, {
   summary: "Planning",
   start: "2026-05-09T14:00:00Z",
 });
@@ -136,18 +136,18 @@ The structured fallback mode exposes the same operations as tools:
 
 The code bridge runs in a short-lived Node subprocess. The subprocess starts
 with Node permission mode enabled, an empty environment, no filesystem or
-network grants, and no child-process or worker grants. NexisClaw enforces a
+network grants, and no child-process or worker grants. GreenchClaw enforces a
 parent-process wall-clock timeout and kills the subprocess on timeout, including
 after async continuations.
 
 The runtime exposes only:
 
 - `console.log`, `console.warn`, and `console.error`
-- `NexisClaw.tools.search`
-- `NexisClaw.tools.describe`
-- `NexisClaw.tools.call`
+- `GreenchClaw.tools.search`
+- `GreenchClaw.tools.describe`
+- `GreenchClaw.tools.call`
 
-Normal NexisClaw behavior still applies to final calls:
+Normal GreenchClaw behavior still applies to final calls:
 
 - tool allow and deny policies
 - per-agent and per-sandbox tool restrictions
@@ -161,7 +161,7 @@ Normal NexisClaw behavior still applies to final calls:
 Enable Tool Search for PI runs with the default code bridge:
 
 ```bash
-NexisClaw config set tools.toolSearch true
+GreenchClaw config set tools.toolSearch true
 ```
 
 Equivalent JSON:
@@ -218,7 +218,7 @@ Tool Search records enough telemetry to compare it with direct tool exposure:
 - total serialized tool and prompt bytes sent to the harness
 - catalog size and source breakdown
 - search, describe, and call counts
-- final tool calls executed through NexisClaw
+- final tool calls executed through GreenchClaw
 - selected tool ids and sources
 
 Session logs should make it possible to answer:
@@ -226,7 +226,7 @@ Session logs should make it possible to answer:
 - how many tool schemas the model saw up front
 - how many search and describe operations it performed
 - which final tool was called
-- whether the result came from NexisClaw, MCP, or a client tool
+- whether the result came from GreenchClaw, MCP, or a client tool
 
 ## E2E validation
 

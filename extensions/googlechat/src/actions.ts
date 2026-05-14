@@ -4,14 +4,14 @@ import {
   readNumberParam,
   readReactionParams,
   readStringParam,
-} from "NexisClaw/plugin-sdk/channel-actions";
+} from "GreenchClaw/plugin-sdk/channel-actions";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageActionName,
-} from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { loadOutboundMediaFromUrl } from "NexisClaw/plugin-sdk/outbound-media";
-import { extractToolSend } from "NexisClaw/plugin-sdk/tool-send";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { loadOutboundMediaFromUrl } from "GreenchClaw/plugin-sdk/outbound-media";
+import { extractToolSend } from "GreenchClaw/plugin-sdk/tool-send";
 import { listEnabledGoogleChatAccounts, resolveGoogleChatAccount } from "./accounts.js";
 import {
   createGoogleChatReaction,
@@ -25,7 +25,7 @@ import { resolveGoogleChatOutboundSpace } from "./targets.js";
 
 const providerId = "googlechat";
 
-function listEnabledAccounts(cfg: NexisClawConfig) {
+function listEnabledAccounts(cfg: GreenchClawConfig) {
   return listEnabledGoogleChatAccounts(cfg).filter(
     (account) => account.enabled && account.credentialSource !== "none",
   );

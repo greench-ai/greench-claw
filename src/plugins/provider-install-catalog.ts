@@ -1,6 +1,6 @@
 import {
-  loadNexisClawProviderIndex,
-  type NexisClawProviderIndexProvider,
+  loadGreenchClawProviderIndex,
+  type GreenchClawProviderIndexProvider,
 } from "../model-catalog/index.js";
 import { normalizePluginsConfig, resolveEffectiveEnableState } from "./config-state.js";
 import {
@@ -30,7 +30,7 @@ export type ProviderInstallCatalogEntry = ProviderAuthChoiceMetadata & {
 };
 
 type ProviderInstallCatalogParams = {
-  config?: import("../config/types.NexisClaw.js").NexisClawConfig;
+  config?: import("../config/types.GreenchClaw.js").GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   includeUntrustedWorkspacePlugins?: boolean;
@@ -139,7 +139,7 @@ function resolveInstallInfoFromRegistryRecord(params: {
 }
 
 function resolveInstallInfoFromProviderIndex(
-  provider: NexisClawProviderIndexProvider,
+  provider: GreenchClawProviderIndexProvider,
 ): PluginPackageInstall | null {
   const install = provider.plugin.install;
   if (!install) {
@@ -210,7 +210,7 @@ function resolveProviderIndexInstallCatalogEntries(params: {
   seenChoiceIds: ReadonlySet<string>;
 }): ProviderInstallCatalogEntry[] {
   const entries: ProviderInstallCatalogEntry[] = [];
-  const index = loadNexisClawProviderIndex();
+  const index = loadGreenchClawProviderIndex();
   for (const provider of Object.values(index.providers)) {
     if (params.installedPluginIds.has(provider.plugin.id)) {
       continue;

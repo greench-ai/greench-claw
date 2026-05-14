@@ -22,7 +22,7 @@ const hookMocks = vi.hoisted(() => ({
 }));
 
 let cfg: Record<string, unknown> = {};
-let lastCreateNexisClawToolsContext: Record<string, unknown> | undefined;
+let lastCreateGreenchClawToolsContext: Record<string, unknown> | undefined;
 
 // Perf: keep this suite pure unit. Mock heavyweight config/session modules.
 vi.mock("../config/config.js", () => ({
@@ -73,7 +73,7 @@ vi.mock("../plugins/tools.js", () => ({
 
 // Perf: the real tool factory instantiates many tools per request; for these HTTP
 // routing/policy tests we only need a small set of tool names.
-vi.mock("../agents/NexisClaw-tools.js", () => {
+vi.mock("../agents/GreenchClaw-tools.js", () => {
   const toolInputError = (message: string) => {
     const err = new Error(message);
     err.name = "ToolInputError";
@@ -103,8 +103,8 @@ vi.mock("../agents/NexisClaw-tools.js", () => {
       execute: async () => ({
         ok: true,
         route: {
-          agentTo: lastCreateNexisClawToolsContext?.agentTo,
-          agentThreadId: lastCreateNexisClawToolsContext?.agentThreadId,
+          agentTo: lastCreateGreenchClawToolsContext?.agentTo,
+          agentThreadId: lastCreateGreenchClawToolsContext?.agentThreadId,
         },
       }),
     },
@@ -198,8 +198,8 @@ vi.mock("../agents/NexisClaw-tools.js", () => {
   ];
 
   return {
-    createNexisClawTools: (ctx: Record<string, unknown>) => {
-      lastCreateNexisClawToolsContext = ctx;
+    createGreenchClawTools: (ctx: Record<string, unknown>) => {
+      lastCreateGreenchClawToolsContext = ctx;
       return ctx.disablePluginTools ? tools.filter((tool) => tool.name !== "browser") : tools;
     },
   };
@@ -264,11 +264,11 @@ afterAll(async () => {
 });
 
 beforeEach(() => {
-  delete process.env.NEXISCLAW_GATEWAY_TOKEN;
-  delete process.env.NEXISCLAW_GATEWAY_PASSWORD;
+  delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
+  delete process.env.GREENCHCLAW_GATEWAY_PASSWORD;
   pluginHttpHandlers = [];
   cfg = {};
-  lastCreateNexisClawToolsContext = undefined;
+  lastCreateGreenchClawToolsContext = undefined;
   pluginToolMetaState.clear();
   pluginToolMetaState.set("plugin_doctor", { pluginId: "test-plugin", optional: true });
   hookMocks.resolveToolLoopDetectionConfig.mockClear();
@@ -283,8 +283,8 @@ beforeEach(() => {
   vi.mocked(authorizeHttpGatewayConnect).mockResolvedValue({ ok: true });
 });
 
-const gatewayAuthHeaders = () => ({ "x-NexisClaw-scopes": "operator.write" });
-const gatewayAdminHeaders = () => ({ "x-NexisClaw-scopes": "operator.admin" });
+const gatewayAuthHeaders = () => ({ "x-GreenchClaw-scopes": "operator.write" });
+const gatewayAdminHeaders = () => ({ "x-GreenchClaw-scopes": "operator.admin" });
 
 const allowAgentsListForMain = () => {
   cfg = {
@@ -448,8 +448,8 @@ describe("POST /tools/invoke", () => {
     const body = await res.json();
     expect(body.ok).toBe(true);
     expect(body).toHaveProperty("result");
-    expect(lastCreateNexisClawToolsContext?.allowMediaInvokeCommands).toBe(true);
-    expect(lastCreateNexisClawToolsContext?.disablePluginTools).toBe(true);
+    expect(lastCreateGreenchClawToolsContext?.allowMediaInvokeCommands).toBe(true);
+    expect(lastCreateGreenchClawToolsContext?.disablePluginTools).toBe(true);
     const hookArg = firstHookCallArg();
     expect(hookArg.toolName).toBe("agents_list");
     const hookCtx = hookArg.ctx;
@@ -467,7 +467,7 @@ describe("POST /tools/invoke", () => {
     const res = await invokeAgentsListAuthed({ sessionKey: "main" });
 
     expect(res.status).toBe(200);
-    expect(lastCreateNexisClawToolsContext?.allowGatewaySubagentBinding).toBe(true);
+    expect(lastCreateGreenchClawToolsContext?.allowGatewaySubagentBinding).toBe(true);
   });
 
   it("keeps plugin tools enabled for non-core tool invokes", async () => {
@@ -480,7 +480,7 @@ describe("POST /tools/invoke", () => {
     });
 
     expect(res.status).toBe(200);
-    expect(lastCreateNexisClawToolsContext?.disablePluginTools).toBe(false);
+    expect(lastCreateGreenchClawToolsContext?.disablePluginTools).toBe(false);
   });
 
   it("allows the requested plugin tool through Gateway profile filtering", async () => {
@@ -498,7 +498,7 @@ describe("POST /tools/invoke", () => {
     const body = await expectOkInvokeResponse(res);
     expect(body.result?.ok).toBe(true);
     expect(body.result?.permissionFlow).toBe(true);
-    expect(lastCreateNexisClawToolsContext?.pluginToolAllowlist).toContain("plugin_doctor");
+    expect(lastCreateGreenchClawToolsContext?.pluginToolAllowlist).toContain("plugin_doctor");
   });
 
   it("uses tools.alsoAllow for optional plugin discovery without loading every plugin tool", async () => {
@@ -516,8 +516,8 @@ describe("POST /tools/invoke", () => {
     const body = await expectOkInvokeResponse(res);
     expect(body.result?.ok).toBe(true);
     expect(body.result?.permissionFlow).toBe(true);
-    expect(lastCreateNexisClawToolsContext?.pluginToolAllowlist).toContain("plugin_doctor");
-    expect(lastCreateNexisClawToolsContext?.pluginToolAllowlist).not.toContain("*");
+    expect(lastCreateGreenchClawToolsContext?.pluginToolAllowlist).toContain("plugin_doctor");
+    expect(lastCreateGreenchClawToolsContext?.pluginToolAllowlist).not.toContain("*");
   });
 
   it("blocks tool execution when before_tool_call rejects the invoke", async () => {
@@ -563,7 +563,7 @@ describe("POST /tools/invoke", () => {
       sessionKey: "main",
     });
     expect(writeRes.status).toBe(200);
-    expect(lastCreateNexisClawToolsContext?.senderIsOwner).toBe(false);
+    expect(lastCreateGreenchClawToolsContext?.senderIsOwner).toBe(false);
 
     const adminRes = await invokeTool({
       port: sharedPort,
@@ -572,7 +572,7 @@ describe("POST /tools/invoke", () => {
       sessionKey: "main",
     });
     expect(adminRes.status).toBe(200);
-    expect(lastCreateNexisClawToolsContext?.senderIsOwner).toBe(true);
+    expect(lastCreateGreenchClawToolsContext?.senderIsOwner).toBe(true);
   });
 
   it("uses before_tool_call adjusted params for HTTP tool execution", async () => {
@@ -698,8 +698,8 @@ describe("POST /tools/invoke", () => {
       port: sharedPort,
       headers: {
         ...gatewayAuthHeaders(),
-        "x-NexisClaw-message-to": "channel:24514",
-        "x-NexisClaw-thread-id": "thread-24514",
+        "x-GreenchClaw-message-to": "channel:24514",
+        "x-GreenchClaw-thread-id": "thread-24514",
       },
       tool: "sessions_spawn",
       sessionKey: "main",
@@ -861,7 +861,7 @@ describe("POST /tools/invoke", () => {
     const res = await invokeTool({
       port: sharedPort,
       headers: {
-        "x-NexisClaw-scopes": "",
+        "x-GreenchClaw-scopes": "",
       },
       tool: "agents_list",
       sessionKey: "main",
@@ -917,7 +917,7 @@ describe("POST /tools/invoke", () => {
       port: sharedPort,
       headers: {
         authorization: "Bearer secret",
-        "x-NexisClaw-scopes": "operator.approvals",
+        "x-GreenchClaw-scopes": "operator.approvals",
       },
       tool: "owner_only_test",
       sessionKey: "main",
@@ -965,7 +965,7 @@ describe("POST /tools/invoke", () => {
 
     const body = await expectOkInvokeResponse(res);
     expect(body.result).toEqual({ ok: true, result: "browser" });
-    expect(lastCreateNexisClawToolsContext?.disablePluginTools).toBe(false);
+    expect(lastCreateGreenchClawToolsContext?.disablePluginTools).toBe(false);
   });
 });
 
@@ -985,7 +985,7 @@ describe("tools.invoke Gateway RPC", () => {
     expect(call?.[1]?.toolName).toBe("agents_list");
     expect(call?.[1]?.output).toEqual({ ok: true, result: [] });
     expect((call?.[1] as { source?: unknown } | undefined)?.source).toBe("core");
-    expect(lastCreateNexisClawToolsContext?.allowGatewaySubagentBinding).toBe(true);
+    expect(lastCreateGreenchClawToolsContext?.allowGatewaySubagentBinding).toBe(true);
     const hookArg = firstHookCallArg();
     expect(hookArg.approvalMode).toBe("report");
     expect(hookArg.toolName).toBe("agents_list");

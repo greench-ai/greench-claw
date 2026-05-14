@@ -17,7 +17,7 @@ export type ExtraGatewayService = {
   label: string;
   detail: string;
   scope: "user" | "system";
-  marker?: "NexisClaw" | "clawdbot";
+  marker?: "GreenchClaw" | "clawdbot";
   legacy?: boolean;
 };
 
@@ -25,7 +25,7 @@ export type FindExtraGatewayServicesOptions = {
   deep?: boolean;
 };
 
-const EXTRA_MARKERS = ["NexisClaw", "clawdbot"] as const;
+const EXTRA_MARKERS = ["GreenchClaw", "clawdbot"] as const;
 const SYSTEMD_REFERENCE_ONLY_KEYS = new Set([
   "after",
   "before",
@@ -43,7 +43,7 @@ const SYSTEMD_REFERENCE_ONLY_KEYS = new Set([
 export function renderGatewayServiceCleanupHints(
   env: Record<string, string | undefined> = process.env as Record<string, string | undefined>,
 ): string[] {
-  const profile = env.NEXISCLAW_PROFILE;
+  const profile = env.GREENCHCLAW_PROFILE;
   switch (process.platform) {
     case "darwin": {
       const label = resolveGatewayLaunchAgentLabel(profile);
@@ -122,8 +122,8 @@ export function detectMarkerLineWithGateway(contents: string): Marker | null {
 
 function hasGatewayServiceMarker(content: string): boolean {
   const lower = normalizeLowercaseStringOrEmpty(content);
-  const markerKeys = ["NexisClaw_service_marker"];
-  const kindKeys = ["NexisClaw_service_kind"];
+  const markerKeys = ["GreenchClaw_service_marker"];
+  const kindKeys = ["GreenchClaw_service_kind"];
   const markerValues = [normalizeLowercaseStringOrEmpty(GATEWAY_SERVICE_MARKER)];
   const hasMarkerKey = markerKeys.some((key) => lower.includes(key));
   const hasKindKey = kindKeys.some((key) => lower.includes(key));
@@ -184,33 +184,33 @@ function detectLaunchdGatewayExecutionMarker(contents: string): Marker | null {
   return null;
 }
 
-function isNexisClawGatewayLaunchdService(label: string, contents: string): boolean {
+function isGreenchClawGatewayLaunchdService(label: string, contents: string): boolean {
   if (hasGatewayServiceMarker(contents)) {
     return true;
   }
-  if (detectLaunchdGatewayExecutionMarker(contents) !== "NexisClaw") {
+  if (detectLaunchdGatewayExecutionMarker(contents) !== "GreenchClaw") {
     return false;
   }
-  return label.startsWith("ai.NexisClaw.");
+  return label.startsWith("ai.GreenchClaw.");
 }
 
-function isNexisClawGatewaySystemdService(name: string, contents: string): boolean {
+function isGreenchClawGatewaySystemdService(name: string, contents: string): boolean {
   if (hasGatewayServiceMarker(contents)) {
     return true;
   }
-  if (!name.startsWith("NexisClaw-gateway")) {
+  if (!name.startsWith("GreenchClaw-gateway")) {
     return false;
   }
   return normalizeLowercaseStringOrEmpty(contents).includes("gateway");
 }
 
-function isNexisClawGatewayTaskName(name: string): boolean {
+function isGreenchClawGatewayTaskName(name: string): boolean {
   const normalized = normalizeLowercaseStringOrEmpty(name);
   if (!normalized) {
     return false;
   }
   const defaultName = normalizeLowercaseStringOrEmpty(resolveGatewayWindowsTaskName());
-  return normalized === defaultName || normalized.startsWith("NexisClaw gateway");
+  return normalized === defaultName || normalized.startsWith("GreenchClaw gateway");
 }
 
 function tryExtractPlistLabel(contents: string): string | null {
@@ -298,8 +298,8 @@ async function scanLaunchdDir(params: {
     const legacyLabel = isLegacyLabel(labelFromName) || isLegacyLabel(label);
     const executionMarker = detectLaunchdGatewayExecutionMarker(contents);
     const marker =
-      hasGatewayServiceMarker(contents) || executionMarker === "NexisClaw"
-        ? "NexisClaw"
+      hasGatewayServiceMarker(contents) || executionMarker === "GreenchClaw"
+        ? "GreenchClaw"
         : executionMarker === "clawdbot" || legacyLabel || detectMarker(contents) === "clawdbot"
           ? "clawdbot"
           : null;
@@ -309,7 +309,7 @@ async function scanLaunchdDir(params: {
     if (isIgnoredLaunchdLabel(label)) {
       continue;
     }
-    if (marker === "NexisClaw" && isNexisClawGatewayLaunchdService(label, contents)) {
+    if (marker === "GreenchClaw" && isGreenchClawGatewayLaunchdService(label, contents)) {
       continue;
     }
     results.push({
@@ -318,7 +318,7 @@ async function scanLaunchdDir(params: {
       detail: `plist: ${fullPath}`,
       scope: params.scope,
       marker,
-      legacy: marker !== "NexisClaw" || isLegacyLabel(label),
+      legacy: marker !== "GreenchClaw" || isLegacyLabel(label),
     });
   }
 
@@ -328,26 +328,26 @@ async function scanLaunchdDir(params: {
 async function scanSystemdDir(params: {
   dir: string;
   scope: "user" | "system";
-  includeManagedNexisClaw?: boolean;
+  includeManagedGreenchClaw?: boolean;
 }): Promise<ExtraGatewayService[]> {
   const results: ExtraGatewayService[] = [];
   const candidates = await collectServiceFiles({
     dir: params.dir,
     extension: ".service",
-    isIgnoredName: params.includeManagedNexisClaw ? () => false : isIgnoredSystemdName,
+    isIgnoredName: params.includeManagedGreenchClaw ? () => false : isIgnoredSystemdName,
   });
 
   for (const { entry, name, fullPath, contents } of candidates) {
     const marker = hasGatewayServiceMarker(contents)
-      ? "NexisClaw"
+      ? "GreenchClaw"
       : detectMarkerLineWithGateway(contents);
     if (!marker) {
       continue;
     }
     if (
-      !params.includeManagedNexisClaw &&
-      marker === "NexisClaw" &&
-      isNexisClawGatewaySystemdService(name, contents)
+      !params.includeManagedGreenchClaw &&
+      marker === "GreenchClaw" &&
+      isGreenchClawGatewaySystemdService(name, contents)
     ) {
       continue;
     }
@@ -357,7 +357,7 @@ async function scanSystemdDir(params: {
       detail: `unit: ${fullPath}`,
       scope: params.scope,
       marker,
-      legacy: marker !== "NexisClaw",
+      legacy: marker !== "GreenchClaw",
     });
   }
 
@@ -376,7 +376,7 @@ export async function findSystemGatewayServices(): Promise<ExtraGatewayService[]
         ...(await scanSystemdDir({
           dir,
           scope: "system",
-          includeManagedNexisClaw: true,
+          includeManagedGreenchClaw: true,
         })),
       );
     }
@@ -524,7 +524,7 @@ export async function findExtraGatewayServices(
       if (!name) {
         continue;
       }
-      if (isNexisClawGatewayTaskName(name)) {
+      if (isGreenchClawGatewayTaskName(name)) {
         continue;
       }
       const lowerName = normalizeLowercaseStringOrEmpty(name);
@@ -545,7 +545,7 @@ export async function findExtraGatewayServices(
         detail: task.taskToRun ? `task: ${name}, run: ${task.taskToRun}` : name,
         scope: "system",
         marker,
-        legacy: marker !== "NexisClaw",
+        legacy: marker !== "GreenchClaw",
       });
     }
     return results;

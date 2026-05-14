@@ -1,6 +1,6 @@
 import { isDeepStrictEqual } from "node:util";
 import { normalizeTalkSection } from "../../../config/talk.js";
-import type { NexisClawConfig } from "../../../config/types.js";
+import type { GreenchClawConfig } from "../../../config/types.js";
 
 function buildLegacyTalkProviderCompat(
   talk: Record<string, unknown>,
@@ -16,7 +16,7 @@ function buildLegacyTalkProviderCompat(
 
 function buildLegacyRealtimeTalkCompat(
   talk: Record<string, unknown>,
-  normalizedTalk: NonNullable<NexisClawConfig["talk"]>,
+  normalizedTalk: NonNullable<GreenchClawConfig["talk"]>,
 ): Record<string, unknown> | undefined {
   if (talk.realtime !== undefined) {
     return undefined;
@@ -36,20 +36,23 @@ function buildLegacyRealtimeTalkCompat(
   if (normalizedTalk.providers !== undefined) {
     compat.providers = normalizedTalk.providers;
   }
-  return normalizeTalkSection({ realtime: compat } as NexisClawConfig["talk"])?.realtime;
+  return normalizeTalkSection({ realtime: compat } as GreenchClawConfig["talk"])?.realtime;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value && typeof value === "object" && !Array.isArray(value));
 }
 
-export function normalizeLegacyTalkConfig(cfg: NexisClawConfig, changes: string[]): NexisClawConfig {
+export function normalizeLegacyTalkConfig(
+  cfg: GreenchClawConfig,
+  changes: string[],
+): GreenchClawConfig {
   const rawTalk = cfg.talk;
   if (!isRecord(rawTalk)) {
     return cfg;
   }
 
-  const normalizedTalk = normalizeTalkSection(rawTalk as NexisClawConfig["talk"]) ?? {};
+  const normalizedTalk = normalizeTalkSection(rawTalk as GreenchClawConfig["talk"]) ?? {};
   const legacyProviderCompat = buildLegacyTalkProviderCompat(rawTalk);
   if (legacyProviderCompat) {
     normalizedTalk.providers = {

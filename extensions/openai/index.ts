@@ -1,6 +1,6 @@
-import { resolvePluginConfigObject } from "NexisClaw/plugin-sdk/plugin-config-runtime";
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
-import { buildProviderToolCompatFamilyHooks } from "NexisClaw/plugin-sdk/provider-tools";
+import { resolvePluginConfigObject } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { buildProviderToolCompatFamilyHooks } from "GreenchClaw/plugin-sdk/provider-tools";
 import { buildOpenAICodexCliBackend } from "./cli-backend.js";
 import { buildOpenAIImageGenerationProvider } from "./image-generation-provider.js";
 import {

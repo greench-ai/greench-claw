@@ -6,11 +6,11 @@ const fetchWithTimeoutMock = vi.hoisted(() => vi.fn());
 const resolveTelegramFetchMock = vi.hoisted(() => vi.fn(() => fetchWithTimeoutMock));
 const resolveTelegramApiBaseMock = vi.hoisted(() => vi.fn(() => "https://api.telegram.org"));
 
-vi.mock("NexisClaw/plugin-sdk/text-utility-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/text-utility-runtime", () => ({
   fetchWithTimeout: fetchWithTimeoutMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/string-coerce-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/string-coerce-runtime", () => ({
   isRecord: (value: unknown): value is Record<string, unknown> =>
     typeof value === "object" && value !== null,
   normalizeOptionalString: (value: unknown) => {

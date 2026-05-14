@@ -1,14 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
-import { resolveNexisClawPackageRootSync } from "../infra/NexisClaw-root.js";
+import { resolveGreenchClawPackageRootSync } from "../infra/GreenchClaw-root.js";
 
 export function resolvePrivateQaBundledPluginsEnv(
   env: NodeJS.ProcessEnv = process.env,
 ): NodeJS.ProcessEnv | undefined {
-  if (env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI !== "1") {
+  if (env.GREENCHCLAW_ENABLE_PRIVATE_QA_CLI !== "1") {
     return undefined;
   }
-  const packageRoot = resolveNexisClawPackageRootSync({
+  const packageRoot = resolveGreenchClawPackageRootSync({
     argv1: process.argv[1],
     cwd: process.cwd(),
     moduleUrl: import.meta.url,
@@ -26,6 +26,6 @@ export function resolvePrivateQaBundledPluginsEnv(
   }
   return {
     ...env,
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: sourceExtensionsDir,
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: sourceExtensionsDir,
   };
 }

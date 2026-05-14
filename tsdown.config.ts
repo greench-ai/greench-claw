@@ -69,7 +69,7 @@ function matchesExternalOption(
 }
 
 function buildInputOptions(options: InputOptionsArg): InputOptionsReturn {
-  if (process.env.NEXISCLAW_BUILD_VERBOSE === "1") {
+  if (process.env.GREENCHCLAW_BUILD_VERBOSE === "1") {
     return undefined;
   }
 
@@ -129,7 +129,7 @@ function nodeBuildConfig(config: UserConfig): UserConfig {
 }
 
 const bundledPluginBuildEntries = collectBundledPluginBuildEntries();
-const shouldBuildPrivateQaEntries = process.env.NEXISCLAW_BUILD_PRIVATE_QA === "1";
+const shouldBuildPrivateQaEntries = process.env.GREENCHCLAW_BUILD_PRIVATE_QA === "1";
 
 function buildBundledHookEntries(): Record<string, string> {
   const hooksRoot = path.join(process.cwd(), "src", "hooks", "bundled");

@@ -6,10 +6,10 @@ import {
   collectPluginSchemaMetadata,
 } from "./channel-config-metadata.js";
 import { getRuntimeConfig, readConfigFileSnapshot } from "./config.js";
-import type { NexisClawConfig } from "./config.js";
+import type { GreenchClawConfig } from "./config.js";
 import { buildConfigSchema, type ConfigSchemaResponse } from "./schema.js";
 
-function loadManifestRegistry(config: NexisClawConfig, env?: NodeJS.ProcessEnv) {
+function loadManifestRegistry(config: GreenchClawConfig, env?: NodeJS.ProcessEnv) {
   const workspaceDir = resolveAgentWorkspaceDir(config, resolveDefaultAgentId(config));
   const currentSnapshot = getCurrentPluginMetadataSnapshot({ config, env, workspaceDir });
   if (currentSnapshot) {

@@ -1,6 +1,6 @@
 import type * as Lark from "@larksuiteoapi/node-sdk";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawPluginApi } from "../runtime-api.js";
+import type { GreenchClawPluginApi } from "../runtime-api.js";
 import { createToolFactoryHarness } from "./tool-factory-test-harness.js";
 
 const createFeishuClientMock = vi.hoisted(() => vi.fn());
@@ -16,7 +16,7 @@ type MockRecord = {
   fields?: Record<string, unknown>;
 };
 
-function createConfig(): NexisClawPluginApi["config"] {
+function createConfig(): GreenchClawPluginApi["config"] {
   return {
     channels: {
       feishu: {
@@ -29,7 +29,7 @@ function createConfig(): NexisClawPluginApi["config"] {
         },
       },
     },
-  } as NexisClawPluginApi["config"];
+  } as GreenchClawPluginApi["config"];
 }
 
 function createBitableClient(records: MockRecord[]) {

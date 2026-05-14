@@ -12,7 +12,7 @@ describe("buildStatusScanResult", () => {
       label: "linux 6.8.0 (x64)",
     };
     const update = {
-      root: "/tmp/NexisClaw",
+      root: "/tmp/GreenchClaw",
       installKind: "package" as const,
       packageManager: "npm" as const,
     };

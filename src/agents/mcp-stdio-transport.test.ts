@@ -2,7 +2,7 @@ import type { SpawnOptions } from "node:child_process";
 import { EventEmitter } from "node:events";
 import { PassThrough } from "node:stream";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { NexisClawStdioClientTransport } from "./mcp-stdio-transport.js";
+import { GreenchClawStdioClientTransport } from "./mcp-stdio-transport.js";
 
 const spawnMock = vi.hoisted(() => vi.fn());
 const killProcessTreeMock = vi.hoisted(() => vi.fn());
@@ -24,7 +24,7 @@ class MockChildProcess extends EventEmitter {
   stderr = new PassThrough();
 }
 
-describe("NexisClawStdioClientTransport", () => {
+describe("GreenchClawStdioClientTransport", () => {
   afterEach(() => {
     vi.useRealTimers();
     spawnMock.mockReset();
@@ -35,7 +35,7 @@ describe("NexisClawStdioClientTransport", () => {
     const child = new MockChildProcess();
     spawnMock.mockReturnValue(child);
 
-    const transport = new NexisClawStdioClientTransport({
+    const transport = new GreenchClawStdioClientTransport({
       command: "npx",
       args: ["-y", "example-mcp"],
       env: { EXAMPLE: "1" },
@@ -74,7 +74,7 @@ describe("NexisClawStdioClientTransport", () => {
     const child = new MockChildProcess();
     spawnMock.mockReturnValue(child);
 
-    const transport = new NexisClawStdioClientTransport({ command: "npx" });
+    const transport = new GreenchClawStdioClientTransport({ command: "npx" });
     const started = transport.start();
     child.emit("spawn");
     await started;
@@ -93,7 +93,7 @@ describe("NexisClawStdioClientTransport", () => {
     const child = new MockChildProcess();
     spawnMock.mockReturnValue(child);
 
-    const transport = new NexisClawStdioClientTransport({ command: "npx" });
+    const transport = new GreenchClawStdioClientTransport({ command: "npx" });
     const started = transport.start();
     child.emit("spawn");
     await started;
@@ -110,7 +110,7 @@ describe("NexisClawStdioClientTransport", () => {
     const child = new MockChildProcess();
     spawnMock.mockReturnValue(child);
 
-    const transport = new NexisClawStdioClientTransport({ command: "npx" });
+    const transport = new GreenchClawStdioClientTransport({ command: "npx" });
     const onmessage = vi.fn();
     Object.assign(transport, { onmessage });
     const started = transport.start();
@@ -143,7 +143,7 @@ describe("NexisClawStdioClientTransport", () => {
     child.stdin = brokenStdin;
     spawnMock.mockReturnValue(child);
 
-    const transport = new NexisClawStdioClientTransport({ command: "npx" });
+    const transport = new GreenchClawStdioClientTransport({ command: "npx" });
     const started = transport.start();
     child.emit("spawn");
     await started;
@@ -162,7 +162,7 @@ describe("NexisClawStdioClientTransport", () => {
     child.stdin = brokenStdin;
     spawnMock.mockReturnValue(child);
 
-    const transport = new NexisClawStdioClientTransport({ command: "npx" });
+    const transport = new GreenchClawStdioClientTransport({ command: "npx" });
     const started = transport.start();
     child.emit("spawn");
     await started;

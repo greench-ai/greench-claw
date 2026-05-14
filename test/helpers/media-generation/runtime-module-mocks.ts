@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import type { NexisClawConfig } from "../../../src/config/config.js";
+import type { GreenchClawConfig } from "../../../src/config/config.js";
 import type { ImageGenerationProvider } from "../../../src/image-generation/types.js";
 import type { MusicGenerationProvider } from "../../../src/music-generation/types.js";
 import type { VideoGenerationProvider } from "../../../src/video-generation/types.js";
@@ -28,23 +28,23 @@ const mediaRuntimeMocks = vi.hoisted(() => {
     createSubsystemLogger: vi.fn(() => ({ debug, warn })),
     describeFailoverError: vi.fn(),
     getImageGenerationProvider: vi.fn<
-      (providerId: string, config?: NexisClawConfig) => ImageGenerationProvider | undefined
+      (providerId: string, config?: GreenchClawConfig) => ImageGenerationProvider | undefined
     >(() => undefined),
     getMusicGenerationProvider: vi.fn<
-      (providerId: string, config?: NexisClawConfig) => MusicGenerationProvider | undefined
+      (providerId: string, config?: GreenchClawConfig) => MusicGenerationProvider | undefined
     >(() => undefined),
     getProviderEnvVars: vi.fn<(providerId: string) => string[]>(() => []),
     getVideoGenerationProvider: vi.fn<
-      (providerId: string, config?: NexisClawConfig) => VideoGenerationProvider | undefined
+      (providerId: string, config?: GreenchClawConfig) => VideoGenerationProvider | undefined
     >(() => undefined),
     isFailoverError: vi.fn<(err: unknown) => boolean>(() => false),
-    listImageGenerationProviders: vi.fn<(config?: NexisClawConfig) => ImageGenerationProvider[]>(
+    listImageGenerationProviders: vi.fn<(config?: GreenchClawConfig) => ImageGenerationProvider[]>(
       () => [],
     ),
-    listMusicGenerationProviders: vi.fn<(config?: NexisClawConfig) => MusicGenerationProvider[]>(
+    listMusicGenerationProviders: vi.fn<(config?: GreenchClawConfig) => MusicGenerationProvider[]>(
       () => [],
     ),
-    listVideoGenerationProviders: vi.fn<(config?: NexisClawConfig) => VideoGenerationProvider[]>(
+    listVideoGenerationProviders: vi.fn<(config?: GreenchClawConfig) => VideoGenerationProvider[]>(
       () => [],
     ),
     parseImageGenerationModelRef:

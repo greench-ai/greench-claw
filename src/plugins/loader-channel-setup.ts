@@ -1,6 +1,6 @@
 import type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
 import { isChannelConfigured } from "../config/channel-configured.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { unwrapDefaultModuleExport } from "./module-export.js";
 import type { PluginRuntime } from "./runtime/types.js";
 
@@ -193,7 +193,7 @@ export function shouldLoadChannelPluginInSetupRuntime(params: {
   manifestChannels: string[];
   setupSource?: string;
   startupDeferConfiguredChannelFullLoadUntilAfterListen?: boolean;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   preferSetupRuntimeForChannelPlugins?: boolean;
 }): boolean {

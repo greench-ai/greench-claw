@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { parseInlineDirectives } from "./directive-handling.parse.js";
 import {
   reserveSkillCommandNames,
   resolveConfiguredDirectiveAliases,
 } from "./get-reply-directive-aliases.js";
 
-function configWithModelAlias(alias: string): NexisClawConfig {
+function configWithModelAlias(alias: string): GreenchClawConfig {
   return {
     agents: {
       defaults: {
@@ -15,7 +15,7 @@ function configWithModelAlias(alias: string): NexisClawConfig {
         },
       },
     },
-  } as unknown as NexisClawConfig;
+  } as unknown as GreenchClawConfig;
 }
 
 describe("reply directive aliases", () => {

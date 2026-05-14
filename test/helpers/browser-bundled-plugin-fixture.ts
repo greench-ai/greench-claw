@@ -53,11 +53,11 @@ const BROWSER_FIXTURE_ENTRY = `module.exports = {
 };`;
 
 export function createBundledBrowserPluginFixture(): { rootDir: string; cleanup: () => void } {
-  const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-browser-bundled-"));
+  const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-browser-bundled-"));
   const pluginDir = path.join(rootDir, "browser");
   fs.mkdirSync(pluginDir, { recursive: true });
   fs.writeFileSync(
-    path.join(pluginDir, "NexisClaw.plugin.json"),
+    path.join(pluginDir, "GreenchClaw.plugin.json"),
     JSON.stringify(BROWSER_FIXTURE_MANIFEST, null, 2),
     "utf8",
   );

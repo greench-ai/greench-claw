@@ -1,4 +1,4 @@
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
 
 export type MatrixResolvedStringField =
   | "homeserver"

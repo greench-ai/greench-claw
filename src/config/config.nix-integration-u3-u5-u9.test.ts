@@ -22,103 +22,110 @@ describe("Nix integration (U3, U5, U9)", () => {
   });
 
   describe("U3: isNixMode env var detection", () => {
-    it("isNixMode is false when NEXISCLAW_NIX_MODE is not set", () => {
-      expect(resolveIsNixMode(envWith({ NEXISCLAW_NIX_MODE: undefined }))).toBe(false);
+    it("isNixMode is false when GREENCHCLAW_NIX_MODE is not set", () => {
+      expect(resolveIsNixMode(envWith({ GREENCHCLAW_NIX_MODE: undefined }))).toBe(false);
     });
 
-    it("isNixMode is false when NEXISCLAW_NIX_MODE is empty", () => {
-      expect(resolveIsNixMode(envWith({ NEXISCLAW_NIX_MODE: "" }))).toBe(false);
+    it("isNixMode is false when GREENCHCLAW_NIX_MODE is empty", () => {
+      expect(resolveIsNixMode(envWith({ GREENCHCLAW_NIX_MODE: "" }))).toBe(false);
     });
 
-    it("isNixMode is false when NEXISCLAW_NIX_MODE is not '1'", () => {
-      expect(resolveIsNixMode(envWith({ NEXISCLAW_NIX_MODE: "true" }))).toBe(false);
+    it("isNixMode is false when GREENCHCLAW_NIX_MODE is not '1'", () => {
+      expect(resolveIsNixMode(envWith({ GREENCHCLAW_NIX_MODE: "true" }))).toBe(false);
     });
 
-    it("isNixMode is true when NEXISCLAW_NIX_MODE=1", () => {
-      expect(resolveIsNixMode(envWith({ NEXISCLAW_NIX_MODE: "1" }))).toBe(true);
+    it("isNixMode is true when GREENCHCLAW_NIX_MODE=1", () => {
+      expect(resolveIsNixMode(envWith({ GREENCHCLAW_NIX_MODE: "1" }))).toBe(true);
     });
   });
 
   describe("U5: CONFIG_PATH and STATE_DIR env var overrides", () => {
-    it("STATE_DIR defaults to ~/.NexisClaw when env not set", () => {
-      expect(resolveStateDir(envWith({ NEXISCLAW_STATE_DIR: undefined }))).toMatch(/\.NexisClaw$/);
+    it("STATE_DIR defaults to ~/.GreenchClaw when env not set", () => {
+      expect(resolveStateDir(envWith({ GREENCHCLAW_STATE_DIR: undefined }))).toMatch(
+        /\.GreenchClaw$/,
+      );
     });
 
-    it("STATE_DIR respects NEXISCLAW_STATE_DIR override", () => {
-      expect(resolveStateDir(envWith({ NEXISCLAW_STATE_DIR: "/custom/state/dir" }))).toBe(
+    it("STATE_DIR respects GREENCHCLAW_STATE_DIR override", () => {
+      expect(resolveStateDir(envWith({ GREENCHCLAW_STATE_DIR: "/custom/state/dir" }))).toBe(
         path.resolve("/custom/state/dir"),
       );
     });
 
-    it("STATE_DIR respects NEXISCLAW_HOME when state override is unset", () => {
+    it("STATE_DIR respects GREENCHCLAW_HOME when state override is unset", () => {
       const customHome = path.join(path.sep, "custom", "home");
       expect(
-        resolveStateDir(envWith({ NEXISCLAW_HOME: customHome, NEXISCLAW_STATE_DIR: undefined })),
-      ).toBe(path.join(path.resolve(customHome), ".NexisClaw"));
+        resolveStateDir(
+          envWith({ GREENCHCLAW_HOME: customHome, GREENCHCLAW_STATE_DIR: undefined }),
+        ),
+      ).toBe(path.join(path.resolve(customHome), ".GreenchClaw"));
     });
 
-    it("CONFIG_PATH defaults to NEXISCLAW_HOME/.NexisClaw/NexisClaw.json", () => {
+    it("CONFIG_PATH defaults to GREENCHCLAW_HOME/.GreenchClaw/GreenchClaw.json", () => {
       const customHome = path.join(path.sep, "custom", "home");
       expect(
         resolveConfigPathCandidate(
           envWith({
-            NEXISCLAW_HOME: customHome,
-            NEXISCLAW_CONFIG_PATH: undefined,
-            NEXISCLAW_STATE_DIR: undefined,
+            GREENCHCLAW_HOME: customHome,
+            GREENCHCLAW_CONFIG_PATH: undefined,
+            GREENCHCLAW_STATE_DIR: undefined,
           }),
         ),
-      ).toBe(path.join(path.resolve(customHome), ".NexisClaw", "NexisClaw.json"));
+      ).toBe(path.join(path.resolve(customHome), ".GreenchClaw", "GreenchClaw.json"));
     });
 
-    it("CONFIG_PATH defaults to ~/.NexisClaw/NexisClaw.json when env not set", () => {
+    it("CONFIG_PATH defaults to ~/.GreenchClaw/GreenchClaw.json when env not set", () => {
       expect(
         resolveConfigPathCandidate(
-          envWith({ NEXISCLAW_CONFIG_PATH: undefined, NEXISCLAW_STATE_DIR: undefined }),
+          envWith({ GREENCHCLAW_CONFIG_PATH: undefined, GREENCHCLAW_STATE_DIR: undefined }),
         ),
-      ).toMatch(/\.NexisClaw[\\/]NexisClaw\.json$/);
+      ).toMatch(/\.GreenchClaw[\\/]GreenchClaw\.json$/);
     });
 
-    it("CONFIG_PATH respects NEXISCLAW_CONFIG_PATH override", () => {
+    it("CONFIG_PATH respects GREENCHCLAW_CONFIG_PATH override", () => {
       expect(
         resolveConfigPathCandidate(
-          envWith({ NEXISCLAW_CONFIG_PATH: "/nix/store/abc/NexisClaw.json" }),
+          envWith({ GREENCHCLAW_CONFIG_PATH: "/nix/store/abc/GreenchClaw.json" }),
         ),
-      ).toBe(path.resolve("/nix/store/abc/NexisClaw.json"));
+      ).toBe(path.resolve("/nix/store/abc/GreenchClaw.json"));
     });
 
-    it("CONFIG_PATH expands ~ in NEXISCLAW_CONFIG_PATH override", async () => {
+    it("CONFIG_PATH expands ~ in GREENCHCLAW_CONFIG_PATH override", async () => {
       await withTempHome(async (home) => {
         expect(
           resolveConfigPathCandidate(
-            envWith({ NEXISCLAW_HOME: home, NEXISCLAW_CONFIG_PATH: "~/.NexisClaw/custom.json" }),
+            envWith({
+              GREENCHCLAW_HOME: home,
+              GREENCHCLAW_CONFIG_PATH: "~/.GreenchClaw/custom.json",
+            }),
             () => home,
           ),
-        ).toBe(path.join(home, ".NexisClaw", "custom.json"));
+        ).toBe(path.join(home, ".GreenchClaw", "custom.json"));
       });
     });
 
     it("CONFIG_PATH uses STATE_DIR when only state dir is overridden", () => {
       expect(
         resolveConfigPathCandidate(
-          envWith({ NEXISCLAW_STATE_DIR: "/custom/state", NEXISCLAW_TEST_FAST: "1" }),
-          () => path.join(path.sep, "tmp", "NexisClaw-config-home"),
+          envWith({ GREENCHCLAW_STATE_DIR: "/custom/state", GREENCHCLAW_TEST_FAST: "1" }),
+          () => path.join(path.sep, "tmp", "GreenchClaw-config-home"),
         ),
-      ).toBe(path.join(path.resolve("/custom/state"), "NexisClaw.json"));
+      ).toBe(path.join(path.resolve("/custom/state"), "GreenchClaw.json"));
     });
   });
 
   describe("U6: gateway port resolution", () => {
     it("uses default when env and config are unset", () => {
-      expect(resolveGatewayPort({}, envWith({ NEXISCLAW_GATEWAY_PORT: undefined }))).toBe(
+      expect(resolveGatewayPort({}, envWith({ GREENCHCLAW_GATEWAY_PORT: undefined }))).toBe(
         DEFAULT_GATEWAY_PORT,
       );
     });
 
-    it("prefers NEXISCLAW_GATEWAY_PORT over config", () => {
+    it("prefers GREENCHCLAW_GATEWAY_PORT over config", () => {
       expect(
         resolveGatewayPort(
           { gateway: { port: 19002 } },
-          envWith({ NEXISCLAW_GATEWAY_PORT: "19001" }),
+          envWith({ GREENCHCLAW_GATEWAY_PORT: "19001" }),
         ),
       ).toBe(19001);
     });
@@ -127,7 +134,7 @@ describe("Nix integration (U3, U5, U9)", () => {
       expect(
         resolveGatewayPort(
           { gateway: { port: 19003 } },
-          envWith({ NEXISCLAW_GATEWAY_PORT: "nope" }),
+          envWith({ GREENCHCLAW_GATEWAY_PORT: "nope" }),
         ),
       ).toBe(19003);
     });

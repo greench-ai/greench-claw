@@ -22,17 +22,17 @@ describe("gateway handshake timeouts", () => {
     expect(clampConnectChallengeTimeoutMs(30_000, 30_000)).toBe(30_000);
   });
 
-  test("prefers NEXISCLAW_HANDSHAKE_TIMEOUT_MS and falls back on the test-only env", () => {
+  test("prefers GREENCHCLAW_HANDSHAKE_TIMEOUT_MS and falls back on the test-only env", () => {
     expect(
       getPreauthHandshakeTimeoutMsFromEnv({
-        NEXISCLAW_HANDSHAKE_TIMEOUT_MS: "75",
-        NEXISCLAW_TEST_HANDSHAKE_TIMEOUT_MS: "20",
+        GREENCHCLAW_HANDSHAKE_TIMEOUT_MS: "75",
+        GREENCHCLAW_TEST_HANDSHAKE_TIMEOUT_MS: "20",
       }),
     ).toBe(75);
     expect(
       getPreauthHandshakeTimeoutMsFromEnv({
-        NEXISCLAW_HANDSHAKE_TIMEOUT_MS: "",
-        NEXISCLAW_TEST_HANDSHAKE_TIMEOUT_MS: "20",
+        GREENCHCLAW_HANDSHAKE_TIMEOUT_MS: "",
+        GREENCHCLAW_TEST_HANDSHAKE_TIMEOUT_MS: "20",
         VITEST: "1",
       }),
     ).toBe(20);
@@ -41,7 +41,7 @@ describe("gateway handshake timeouts", () => {
   test("resolves preauth handshake timeout with env over config over default", () => {
     expect(
       resolvePreauthHandshakeTimeoutMs({
-        env: { NEXISCLAW_HANDSHAKE_TIMEOUT_MS: "75000" },
+        env: { GREENCHCLAW_HANDSHAKE_TIMEOUT_MS: "75000" },
         configuredTimeoutMs: 30_000,
       }),
     ).toBe(75_000);
@@ -53,7 +53,7 @@ describe("gateway handshake timeouts", () => {
     ).toBe(30_000);
     expect(
       resolvePreauthHandshakeTimeoutMs({
-        env: { NEXISCLAW_HANDSHAKE_TIMEOUT_MS: "garbage" },
+        env: { GREENCHCLAW_HANDSHAKE_TIMEOUT_MS: "garbage" },
         configuredTimeoutMs: 30_000,
       }),
     ).toBe(30_000);
@@ -65,7 +65,7 @@ describe("gateway handshake timeouts", () => {
   test("resolves preauth handshake timeout from the test-only env before config", () => {
     expect(
       resolvePreauthHandshakeTimeoutMs({
-        env: { VITEST: "1", NEXISCLAW_TEST_HANDSHAKE_TIMEOUT_MS: "50" },
+        env: { VITEST: "1", GREENCHCLAW_TEST_HANDSHAKE_TIMEOUT_MS: "50" },
         configuredTimeoutMs: 30_000,
       }),
     ).toBe(50);
@@ -74,59 +74,59 @@ describe("gateway handshake timeouts", () => {
   test("ignores invalid handshake timeout overrides and falls back safely", () => {
     expect(
       getPreauthHandshakeTimeoutMsFromEnv({
-        NEXISCLAW_HANDSHAKE_TIMEOUT_MS: "abc",
+        GREENCHCLAW_HANDSHAKE_TIMEOUT_MS: "abc",
       }),
     ).toBe(DEFAULT_PREAUTH_HANDSHAKE_TIMEOUT_MS);
     expect(
       getPreauthHandshakeTimeoutMsFromEnv({
-        NEXISCLAW_HANDSHAKE_TIMEOUT_MS: "-1",
+        GREENCHCLAW_HANDSHAKE_TIMEOUT_MS: "-1",
       }),
     ).toBe(DEFAULT_PREAUTH_HANDSHAKE_TIMEOUT_MS);
     expect(
       getPreauthHandshakeTimeoutMsFromEnv({
-        NEXISCLAW_HANDSHAKE_TIMEOUT_MS: "0",
+        GREENCHCLAW_HANDSHAKE_TIMEOUT_MS: "0",
       }),
     ).toBe(DEFAULT_PREAUTH_HANDSHAKE_TIMEOUT_MS);
     expect(
       getPreauthHandshakeTimeoutMsFromEnv({
-        NEXISCLAW_HANDSHAKE_TIMEOUT_MS: " ",
-        NEXISCLAW_TEST_HANDSHAKE_TIMEOUT_MS: "20",
+        GREENCHCLAW_HANDSHAKE_TIMEOUT_MS: " ",
+        GREENCHCLAW_TEST_HANDSHAKE_TIMEOUT_MS: "20",
         VITEST: "1",
       }),
     ).toBe(DEFAULT_PREAUTH_HANDSHAKE_TIMEOUT_MS);
   });
 
-  test("getConnectChallengeTimeoutMsFromEnv reads NEXISCLAW_CONNECT_CHALLENGE_TIMEOUT_MS", () => {
+  test("getConnectChallengeTimeoutMsFromEnv reads GREENCHCLAW_CONNECT_CHALLENGE_TIMEOUT_MS", () => {
     expect(getConnectChallengeTimeoutMsFromEnv({})).toBeUndefined();
     expect(
-      getConnectChallengeTimeoutMsFromEnv({ NEXISCLAW_CONNECT_CHALLENGE_TIMEOUT_MS: "15000" }),
+      getConnectChallengeTimeoutMsFromEnv({ GREENCHCLAW_CONNECT_CHALLENGE_TIMEOUT_MS: "15000" }),
     ).toBe(15_000);
     expect(
-      getConnectChallengeTimeoutMsFromEnv({ NEXISCLAW_CONNECT_CHALLENGE_TIMEOUT_MS: "garbage" }),
+      getConnectChallengeTimeoutMsFromEnv({ GREENCHCLAW_CONNECT_CHALLENGE_TIMEOUT_MS: "garbage" }),
     ).toBeUndefined();
   });
 
   test("resolveConnectChallengeTimeoutMs falls back to env override", () => {
-    const original = process.env.NEXISCLAW_CONNECT_CHALLENGE_TIMEOUT_MS;
-    const originalHandshake = process.env.NEXISCLAW_HANDSHAKE_TIMEOUT_MS;
+    const original = process.env.GREENCHCLAW_CONNECT_CHALLENGE_TIMEOUT_MS;
+    const originalHandshake = process.env.GREENCHCLAW_HANDSHAKE_TIMEOUT_MS;
     try {
-      process.env.NEXISCLAW_CONNECT_CHALLENGE_TIMEOUT_MS = "5000";
+      process.env.GREENCHCLAW_CONNECT_CHALLENGE_TIMEOUT_MS = "5000";
       expect(resolveConnectChallengeTimeoutMs()).toBe(5_000);
       // Explicit value still takes precedence over env
       expect(resolveConnectChallengeTimeoutMs(3_000)).toBe(3_000);
-      process.env.NEXISCLAW_CONNECT_CHALLENGE_TIMEOUT_MS = "";
-      process.env.NEXISCLAW_HANDSHAKE_TIMEOUT_MS = "30000";
+      process.env.GREENCHCLAW_CONNECT_CHALLENGE_TIMEOUT_MS = "";
+      process.env.GREENCHCLAW_HANDSHAKE_TIMEOUT_MS = "30000";
       expect(resolveConnectChallengeTimeoutMs()).toBe(30_000);
     } finally {
       if (original === undefined) {
-        delete process.env.NEXISCLAW_CONNECT_CHALLENGE_TIMEOUT_MS;
+        delete process.env.GREENCHCLAW_CONNECT_CHALLENGE_TIMEOUT_MS;
       } else {
-        process.env.NEXISCLAW_CONNECT_CHALLENGE_TIMEOUT_MS = original;
+        process.env.GREENCHCLAW_CONNECT_CHALLENGE_TIMEOUT_MS = original;
       }
       if (originalHandshake === undefined) {
-        delete process.env.NEXISCLAW_HANDSHAKE_TIMEOUT_MS;
+        delete process.env.GREENCHCLAW_HANDSHAKE_TIMEOUT_MS;
       } else {
-        process.env.NEXISCLAW_HANDSHAKE_TIMEOUT_MS = originalHandshake;
+        process.env.GREENCHCLAW_HANDSHAKE_TIMEOUT_MS = originalHandshake;
       }
     }
   });

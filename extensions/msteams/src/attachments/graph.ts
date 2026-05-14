@@ -1,9 +1,9 @@
-import { fetchWithSsrFGuard, type SsrFPolicy } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { fetchWithSsrFGuard, type SsrFPolicy } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { getMSTeamsRuntime } from "../runtime.js";
 import { ensureUserAgentHeader } from "../user-agent.js";
 import { downloadMSTeamsAttachments } from "./download.js";

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { TalkTransport } from "./talk-events.js";
 
 export type RealtimeVoiceProviderId = string;
@@ -90,17 +90,17 @@ export type RealtimeVoiceProviderCapabilities = {
 };
 
 export type RealtimeVoiceProviderResolveConfigContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   rawConfig: RealtimeVoiceProviderConfig;
 };
 
 export type RealtimeVoiceProviderConfiguredContext = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
 };
 
 export type RealtimeVoiceBridgeCreateRequest = RealtimeVoiceBridgeCallbacks & {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
   audioFormat?: RealtimeVoiceAudioFormat;
   instructions?: string;
@@ -110,7 +110,7 @@ export type RealtimeVoiceBridgeCreateRequest = RealtimeVoiceBridgeCallbacks & {
 };
 
 export type RealtimeVoiceBrowserSessionCreateRequest = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   providerConfig: RealtimeVoiceProviderConfig;
   instructions?: string;
   tools?: RealtimeVoiceTool[];

@@ -1,8 +1,8 @@
 import { normalizeAgentId } from "../routing/session-key.js";
-import type { NexisClawConfig } from "./types.NexisClaw.js";
+import type { GreenchClawConfig } from "./types.GreenchClaw.js";
 
 export function resolveExecCommandHighlighting(params: {
-  config?: NexisClawConfig | null;
+  config?: GreenchClawConfig | null;
   agentId?: string | null;
 }): boolean {
   const config = params.config ?? {};

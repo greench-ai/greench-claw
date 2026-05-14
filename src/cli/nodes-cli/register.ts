@@ -19,15 +19,15 @@ export async function registerNodesCli(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["NexisClaw nodes status", "List known nodes with live status."],
-          ["NexisClaw nodes pairing pending", "Show pending node pairing requests."],
-          ["NexisClaw nodes remove --node <id|name|ip>", "Remove a stale paired node entry."],
+          ["GreenchClaw nodes status", "List known nodes with live status."],
+          ["GreenchClaw nodes pairing pending", "Show pending node pairing requests."],
+          ["GreenchClaw nodes remove --node <id|name|ip>", "Remove a stale paired node entry."],
           [
-            'NexisClaw nodes invoke --node <id> --command system.which --params \'{"name":"uname"}\'',
+            'GreenchClaw nodes invoke --node <id> --command system.which --params \'{"name":"uname"}\'',
             "Invoke a node command directly.",
           ],
-          ["NexisClaw nodes camera snap --node <id>", "Capture a photo from a node camera."],
-        ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/nodes", "docs.NexisClaw.ai/cli/nodes")}\n`,
+          ["GreenchClaw nodes camera snap --node <id>", "Capture a photo from a node camera."],
+        ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/nodes", "docs.GreenchClaw.ai/cli/nodes")}\n`,
     );
 
   registerNodesStatusCommands(nodes);

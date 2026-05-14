@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { createAgentsListTool } from "./agents-list-tool.js";
 
-const loadConfigMock = vi.fn<() => NexisClawConfig>();
+const loadConfigMock = vi.fn<() => GreenchClawConfig>();
 
 type AgentListDetails = {
   requester?: string;
@@ -52,7 +52,7 @@ describe("agents_list tool", () => {
           },
         ],
       },
-    } satisfies NexisClawConfig);
+    } satisfies GreenchClawConfig);
 
     const result = await createAgentsListTool({ agentSessionKey: "agent:main:main" }).execute(
       "call",
@@ -80,7 +80,7 @@ describe("agents_list tool", () => {
       agents: {
         list: [{ id: "main", default: true }, { id: "codex" }],
       },
-    } satisfies NexisClawConfig);
+    } satisfies GreenchClawConfig);
 
     const result = await createAgentsListTool({ agentSessionKey: "agent:main:main" }).execute(
       "call",
@@ -104,7 +104,7 @@ describe("agents_list tool", () => {
   });
 
   it("ignores legacy env-forced plugin runtime selections", async () => {
-    vi.stubEnv("NEXISCLAW_AGENT_RUNTIME", "codex");
+    vi.stubEnv("GREENCHCLAW_AGENT_RUNTIME", "codex");
     loadConfigMock.mockReturnValue({
       agents: {
         defaults: {
@@ -112,7 +112,7 @@ describe("agents_list tool", () => {
         },
         list: [{ id: "main", default: true }],
       },
-    } satisfies NexisClawConfig);
+    } satisfies GreenchClawConfig);
 
     const result = await createAgentsListTool({ agentSessionKey: "agent:main:main" }).execute(
       "call",
@@ -147,7 +147,7 @@ describe("agents_list tool", () => {
           { id: "strict", agentRuntime: { id: "codex" } },
         ],
       },
-    } satisfies NexisClawConfig);
+    } satisfies GreenchClawConfig);
 
     const result = await createAgentsListTool({ agentSessionKey: "agent:main:main" }).execute(
       "call",

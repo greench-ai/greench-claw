@@ -1,6 +1,6 @@
 import { afterEach, beforeEach } from "vitest";
 import { clearConfigCache, clearRuntimeConfigSnapshot } from "../config/config.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { withTempHome as withTempHomeBase } from "../plugin-sdk/test-helpers/temp-home.js";
 import { resetPluginLoaderTestStateForTest } from "../plugins/loader.test-fixtures.js";
 import { resetModelsJsonReadyCacheForTest } from "./models-config-state.js";
@@ -9,7 +9,7 @@ export function withModelsTempHome<T>(fn: (home: string) => Promise<T>): Promise
   // Models-config tests do not exercise session persistence; skip draining
   // unrelated session lock state during temp-home teardown.
   return withTempHomeBase(fn, {
-    prefix: "NexisClaw-models-",
+    prefix: "GreenchClaw-models-",
     skipSessionCleanup: true,
   });
 }
@@ -19,16 +19,16 @@ export function installModelsConfigTestHooks(opts?: {
   resetPluginLoaderState?: boolean;
 }) {
   let previousHome: string | undefined;
-  let previousNexisClawAgentDir: string | undefined;
+  let previousGreenchClawAgentDir: string | undefined;
   let previousPiCodingAgentDir: string | undefined;
   const originalFetch = globalThis.fetch;
   const shouldResetPluginLoaderState = opts?.resetPluginLoaderState !== false;
 
   beforeEach(() => {
     previousHome = process.env.HOME;
-    previousNexisClawAgentDir = process.env.NEXISCLAW_AGENT_DIR;
+    previousGreenchClawAgentDir = process.env.GREENCHCLAW_AGENT_DIR;
     previousPiCodingAgentDir = process.env.PI_CODING_AGENT_DIR;
-    delete process.env.NEXISCLAW_AGENT_DIR;
+    delete process.env.GREENCHCLAW_AGENT_DIR;
     delete process.env.PI_CODING_AGENT_DIR;
     clearRuntimeConfigSnapshot();
     clearConfigCache();
@@ -40,10 +40,10 @@ export function installModelsConfigTestHooks(opts?: {
 
   afterEach(() => {
     process.env.HOME = previousHome;
-    if (previousNexisClawAgentDir === undefined) {
-      delete process.env.NEXISCLAW_AGENT_DIR;
+    if (previousGreenchClawAgentDir === undefined) {
+      delete process.env.GREENCHCLAW_AGENT_DIR;
     } else {
-      process.env.NEXISCLAW_AGENT_DIR = previousNexisClawAgentDir;
+      process.env.GREENCHCLAW_AGENT_DIR = previousGreenchClawAgentDir;
     }
     if (previousPiCodingAgentDir === undefined) {
       delete process.env.PI_CODING_AGENT_DIR;
@@ -89,7 +89,7 @@ export function unsetEnv(vars: string[]) {
 }
 
 export const MODELS_CONFIG_IMPLICIT_ENV_VARS = [
-  "NEXISCLAW_TEST_ONLY_PROVIDER_PLUGIN_IDS",
+  "GREENCHCLAW_TEST_ONLY_PROVIDER_PLUGIN_IDS",
   "VITEST",
   "NODE_ENV",
   "AI_GATEWAY_API_KEY",
@@ -105,7 +105,7 @@ export const MODELS_CONFIG_IMPLICIT_ENV_VARS = [
   "MOONSHOT_API_KEY",
   "NVIDIA_API_KEY",
   "OLLAMA_API_KEY",
-  "NEXISCLAW_AGENT_DIR",
+  "GREENCHCLAW_AGENT_DIR",
   "OPENAI_API_KEY",
   "OPENROUTER_API_KEY",
   "PI_CODING_AGENT_DIR",
@@ -123,7 +123,7 @@ export const MODELS_CONFIG_IMPLICIT_ENV_VARS = [
   "KIMI_API_KEY",
   "KIMICODE_API_KEY",
   "GEMINI_API_KEY",
-  "NEXISCLAW_BUNDLED_PLUGINS_DIR",
+  "GREENCHCLAW_BUNDLED_PLUGINS_DIR",
   "GOOGLE_APPLICATION_CREDENTIALS",
   "GOOGLE_CLOUD_LOCATION",
   "GOOGLE_CLOUD_PROJECT",
@@ -146,7 +146,7 @@ export const MODELS_CONFIG_IMPLICIT_ENV_VARS = [
   "AWS_SHARED_CREDENTIALS_FILE",
 ];
 
-export const CUSTOM_PROXY_MODELS_CONFIG: NexisClawConfig = {
+export const CUSTOM_PROXY_MODELS_CONFIG: GreenchClawConfig = {
   models: {
     providers: {
       "custom-proxy": {

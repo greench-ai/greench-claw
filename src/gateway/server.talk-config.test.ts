@@ -60,7 +60,10 @@ afterAll(async () => {
 
 async function createFreshOperatorDevice(scopes: string[], nonce: string) {
   const identity = loadOrCreateDeviceIdentity(
-    path.join(os.tmpdir(), `NexisClaw-talk-config-device-${process.pid}-${talkConfigDeviceSeq++}`),
+    path.join(
+      os.tmpdir(),
+      `GreenchClaw-talk-config-device-${process.pid}-${talkConfigDeviceSeq++}`,
+    ),
   );
   const signedAtMs = Date.now();
   const payload = buildDeviceAuthPayload({
@@ -203,7 +206,7 @@ describe("gateway talk.config", () => {
       expectTalkConfig(res.payload?.config?.talk, {
         provider: GENERIC_TALK_PROVIDER_ID,
         voiceId: "voice-123",
-        apiKey: "__NEXISCLAW_REDACTED__",
+        apiKey: "__GREENCHCLAW_REDACTED__",
         speechLocale: "ru-RU",
         silenceTimeoutMs: 1500,
       });
@@ -384,9 +387,9 @@ describe("gateway talk.config", () => {
             // sentinel so no credential material leaks to read-scope callers.
             const redactedApiKey = talk?.providers?.[GENERIC_TALK_PROVIDER_ID]?.apiKey;
             expect(redactedApiKey).toEqual({
-              id: "__NEXISCLAW_REDACTED__",
-              provider: "__NEXISCLAW_REDACTED__",
-              source: "__NEXISCLAW_REDACTED__",
+              id: "__GREENCHCLAW_REDACTED__",
+              provider: "__GREENCHCLAW_REDACTED__",
+              source: "__GREENCHCLAW_REDACTED__",
             });
             expect(talk?.resolved?.config?.apiKey).toEqual(redactedApiKey);
           });

@@ -1,4 +1,4 @@
-import type { ImageMetadata } from "NexisClaw/plugin-sdk/media-runtime";
+import type { ImageMetadata } from "GreenchClaw/plugin-sdk/media-runtime";
 import type sharpImport from "sharp";
 
 type SharpFactory = typeof sharpImport;

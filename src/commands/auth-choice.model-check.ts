@@ -4,12 +4,12 @@ import { hasUsableCustomProviderApiKey, resolveEnvApiKey } from "../agents/model
 import { loadModelCatalog } from "../agents/model-catalog.js";
 import { resolveDefaultModelForAgent } from "../agents/model-selection.js";
 import { listOpenAIAuthProfileProvidersForAgentRuntime } from "../agents/openai-codex-routing.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { WizardPrompter } from "../wizard/prompts.js";
 import { buildProviderAuthRecoveryHint } from "./provider-auth-guidance.js";
 
 function resolveAuthProviderCandidates(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   provider: string;
   modelId: string;
   agentId?: string;
@@ -32,7 +32,7 @@ function resolveAuthProviderCandidates(params: {
 }
 
 export async function warnIfModelConfigLooksOff(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   prompter: WizardPrompter,
   options?: { agentId?: string; agentDir?: string; validateCatalog?: boolean },
 ) {

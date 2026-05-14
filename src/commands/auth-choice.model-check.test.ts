@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AuthProfileStore } from "../agents/auth-profiles.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { warnIfModelConfigLooksOff } from "./auth-choice.model-check.js";
 import { makePrompter } from "./setup/__tests__/test-utils.js";
 
@@ -40,7 +40,7 @@ describe("warnIfModelConfigLooksOff", () => {
           model: "openai-codex/gpt-5.5",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await warnIfModelConfigLooksOff(config, prompter, { validateCatalog: false });
 
@@ -52,7 +52,7 @@ describe("warnIfModelConfigLooksOff", () => {
       "openai-codex",
     );
     expect(note).toHaveBeenCalledWith(
-      'No auth configured for provider "openai-codex". The agent may fail until credentials are added. Run `NexisClaw models auth login --provider openai-codex`, `NexisClaw configure`, or set an API key env var.',
+      'No auth configured for provider "openai-codex". The agent may fail until credentials are added. Run `GreenchClaw models auth login --provider openai-codex`, `GreenchClaw configure`, or set an API key env var.',
       "Model check",
     );
   });
@@ -84,7 +84,7 @@ describe("warnIfModelConfigLooksOff", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await warnIfModelConfigLooksOff(config, prompter, { validateCatalog: false });
 
@@ -117,13 +117,13 @@ describe("warnIfModelConfigLooksOff", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await warnIfModelConfigLooksOff(config, prompter, { validateCatalog: false });
 
     expect(listProfilesForProvider.mock.calls.map(([, provider]) => provider)).toEqual(["openai"]);
     expect(note).toHaveBeenCalledWith(
-      'No auth configured for provider "openai". The agent may fail until credentials are added. Run `NexisClaw models auth login --provider openai`, `NexisClaw configure`, or set an API key env var.',
+      'No auth configured for provider "openai". The agent may fail until credentials are added. Run `GreenchClaw models auth login --provider openai`, `GreenchClaw configure`, or set an API key env var.',
       "Model check",
     );
   });
@@ -137,7 +137,7 @@ describe("warnIfModelConfigLooksOff", () => {
           model: "openai-codex/gpt-5.5",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await warnIfModelConfigLooksOff(config, prompter);
 

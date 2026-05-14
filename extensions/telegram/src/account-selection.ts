@@ -2,8 +2,8 @@ import {
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId,
   normalizeOptionalAccountId,
-} from "NexisClaw/plugin-sdk/account-id";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/account-id";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
 const DEFAULT_AGENT_ID = "main";
 
@@ -21,13 +21,13 @@ function normalizeChannelId(value: unknown): string {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
 }
 
-function resolveDefaultAgentId(cfg: NexisClawConfig): string {
+function resolveDefaultAgentId(cfg: GreenchClawConfig): string {
   const agents = Array.isArray(cfg.agents?.list) ? cfg.agents.list : [];
   const chosen = (agents.find((agent) => agent?.default) ?? agents[0])?.id;
   return normalizeAgentId(chosen);
 }
 
-function listConfiguredAccountIds(cfg: NexisClawConfig): string[] {
+function listConfiguredAccountIds(cfg: GreenchClawConfig): string[] {
   const ids = new Set<string>();
   for (const key of Object.keys(cfg.channels?.telegram?.accounts ?? {})) {
     if (key) {
@@ -61,7 +61,7 @@ function resolveBindingAccount(params: {
   };
 }
 
-function listBoundAccountIds(cfg: NexisClawConfig, channelId: string): string[] {
+function listBoundAccountIds(cfg: GreenchClawConfig, channelId: string): string[] {
   const ids = new Set<string>();
   for (const binding of cfg.bindings ?? []) {
     const resolved = resolveBindingAccount({ binding, channelId });
@@ -72,7 +72,10 @@ function listBoundAccountIds(cfg: NexisClawConfig, channelId: string): string[] 
   return [...ids].toSorted((left, right) => left.localeCompare(right));
 }
 
-function resolveDefaultAgentBoundAccountId(cfg: NexisClawConfig, channelId: string): string | null {
+function resolveDefaultAgentBoundAccountId(
+  cfg: GreenchClawConfig,
+  channelId: string,
+): string | null {
   const defaultAgentId = resolveDefaultAgentId(cfg);
   for (const binding of cfg.bindings ?? []) {
     const resolved = resolveBindingAccount({ binding, channelId });
@@ -111,14 +114,14 @@ function resolveListedDefaultAccountId(params: {
   return params.accountIds[0] ?? DEFAULT_ACCOUNT_ID;
 }
 
-export function listTelegramAccountIds(cfg: NexisClawConfig): string[] {
+export function listTelegramAccountIds(cfg: GreenchClawConfig): string[] {
   return combineAccountIds({
     configuredAccountIds: listConfiguredAccountIds(cfg),
     additionalAccountIds: listBoundAccountIds(cfg, "telegram"),
   });
 }
 
-export function resolveDefaultTelegramAccountSelection(cfg: NexisClawConfig): {
+export function resolveDefaultTelegramAccountSelection(cfg: GreenchClawConfig): {
   accountId: string;
   accountIds: string[];
   shouldWarnMissingDefault: boolean;
@@ -146,6 +149,6 @@ export function resolveDefaultTelegramAccountSelection(cfg: NexisClawConfig): {
   };
 }
 
-export function resolveDefaultTelegramAccountId(cfg: NexisClawConfig): string {
+export function resolveDefaultTelegramAccountId(cfg: GreenchClawConfig): string {
   return resolveDefaultTelegramAccountSelection(cfg).accountId;
 }

@@ -1,4 +1,4 @@
-import type { SlackAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { SlackAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
 export type SlackAccountSurfaceFields = {
   groupPolicy?: SlackAccountConfig["groupPolicy"];

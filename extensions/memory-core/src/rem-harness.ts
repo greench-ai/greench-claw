@@ -1,10 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   resolveMemoryDeepDreamingConfig,
   resolveMemoryRemDreamingConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-status";
+} from "GreenchClaw/plugin-sdk/memory-core-host-status";
 import {
   filterRecallEntriesWithinLookback,
   previewRemDreaming,
@@ -24,7 +24,7 @@ type MemoryRemHarnessDeepConfig = ReturnType<typeof resolveMemoryDeepDreamingCon
 
 export type PreviewRemHarnessOptions = {
   workspaceDir: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   pluginConfig?: Record<string, unknown>;
   grounded?: boolean;
   groundedInputPaths?: string[];

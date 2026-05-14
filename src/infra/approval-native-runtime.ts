@@ -1,5 +1,5 @@
 import type { ChannelApprovalNativeAdapter } from "../channels/plugins/approval-native.types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   resolveChannelNativeApprovalDeliveryPlan,
   type ChannelApprovalNativePlannedTarget,
@@ -39,7 +39,7 @@ export async function deliverApprovalRequestViaChannelNativePlan<
   TPendingEntry,
   TRequest extends ApprovalRequest = ApprovalRequest,
 >(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   approvalKind: ChannelApprovalKind;
   request: TRequest;

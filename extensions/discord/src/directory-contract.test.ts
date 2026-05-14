@@ -1,6 +1,6 @@
-import type { BaseProbeResult, BaseTokenResolution } from "NexisClaw/plugin-sdk/channel-contract";
-import { expectDirectoryIds } from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { BaseProbeResult, BaseTokenResolution } from "GreenchClaw/plugin-sdk/channel-contract";
+import { expectDirectoryIds } from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, expectTypeOf, it } from "vitest";
 import {
   listDiscordDirectoryGroupsFromConfig,
@@ -35,7 +35,7 @@ describe("Discord directory contract", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     await expectDirectoryIds(
       listDiscordDirectoryPeersFromConfig,
@@ -71,7 +71,7 @@ describe("Discord directory contract", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     await expectDirectoryIds(listDiscordDirectoryPeersFromConfig, cfg, ["user:111"]);
     await expectDirectoryIds(listDiscordDirectoryGroupsFromConfig, cfg, ["channel:555"]);
@@ -89,7 +89,7 @@ describe("Discord directory contract", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const entries = await listDiscordDirectoryPeersFromConfig({
       cfg,
@@ -116,7 +116,7 @@ describe("Discord directory contract", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const groups = await listDiscordDirectoryGroupsFromConfig({
       cfg,

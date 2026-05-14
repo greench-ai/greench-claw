@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { stubAuditChannelPlugin } from "./audit-channel-test-helpers.js";
 import { collectChannelSecurityFindings } from "./audit-channel.js";
 
 function stubDiscordPlugin(params: {
-  resolveAccount: (cfg: NexisClawConfig, accountId: string | null | undefined) => unknown;
-  inspectAccount?: (cfg: NexisClawConfig, accountId: string | null | undefined) => unknown;
-  isConfigured?: (account: unknown, cfg: NexisClawConfig) => boolean;
+  resolveAccount: (cfg: GreenchClawConfig, accountId: string | null | undefined) => unknown;
+  inspectAccount?: (cfg: GreenchClawConfig, accountId: string | null | undefined) => unknown;
+  isConfigured?: (account: unknown, cfg: GreenchClawConfig) => boolean;
 }) {
   return stubAuditChannelPlugin({
     id: "discord",
@@ -39,7 +39,7 @@ function stubDiscordPlugin(params: {
 
 describe("security audit channel source-config fallback discord", () => {
   it("keeps source-configured channel security findings when resolved inspection is incomplete", async () => {
-    const sourceConfig: NexisClawConfig = {
+    const sourceConfig: GreenchClawConfig = {
       commands: { native: true },
       channels: {
         discord: {
@@ -56,7 +56,7 @@ describe("security audit channel source-config fallback discord", () => {
         },
       },
     };
-    const resolvedConfig: NexisClawConfig = {
+    const resolvedConfig: GreenchClawConfig = {
       commands: { native: true },
       channels: {
         discord: {

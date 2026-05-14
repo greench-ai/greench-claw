@@ -1,4 +1,4 @@
-import type { AuthProfileStore } from "NexisClaw/plugin-sdk/provider-auth";
+import type { AuthProfileStore } from "GreenchClaw/plugin-sdk/provider-auth";
 import { describe, expect, it, vi } from "vitest";
 import {
   createDiscordAutoPresenceController,

@@ -10,7 +10,7 @@
  * Separated from gateway.ts for testability and to keep handleMessage thin.
  */
 
-import type { FinalizedMsgContext } from "NexisClaw/plugin-sdk/reply-runtime";
+import type { FinalizedMsgContext } from "GreenchClaw/plugin-sdk/reply-runtime";
 import {
   parseAndSendMediaTags,
   sendPlainReply,

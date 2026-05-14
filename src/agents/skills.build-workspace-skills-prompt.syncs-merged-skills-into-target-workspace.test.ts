@@ -55,7 +55,7 @@ async function expectSyncedSkillConfinement(params: {
 }
 
 beforeAll(async () => {
-  fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-skills-sync-suite-"));
+  fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-skills-sync-suite-"));
   syncSourceTemplateDir = await createCaseDir("source-template");
   await writeSkill({
     dir: path.join(syncSourceTemplateDir, ".extra", "demo-skill"),
@@ -272,7 +272,7 @@ describe("buildWorkspaceSkillsPrompt", () => {
       name: "image-lab",
       description: "Generates images",
       metadata:
-        '{"NexisClaw":{"requires":{"env":["GEMINI_API_KEY"]},"primaryEnv":"GEMINI_API_KEY"}}',
+        '{"GreenchClaw":{"requires":{"env":["GEMINI_API_KEY"]},"primaryEnv":"GEMINI_API_KEY"}}',
       body: "# Image Lab\n",
     });
 
@@ -326,7 +326,7 @@ describe("buildWorkspaceSkillsPrompt", () => {
       dir: path.join(sourceWorkspace, "skills", "remote-only"),
       name: "remote-only",
       description: "Sandbox-only bin",
-      metadata: '{"NexisClaw":{"requires":{"anyBins":["missingbin","sandboxbin"]}}}',
+      metadata: '{"GreenchClaw":{"requires":{"anyBins":["missingbin","sandboxbin"]}}}',
     });
 
     await syncSkillsToWorkspace({

@@ -1,5 +1,5 @@
-import { expectChannelInboundContextContract } from "NexisClaw/plugin-sdk/channel-contract-testing";
-import { finalizeInboundContext } from "NexisClaw/plugin-sdk/reply-runtime";
+import { expectChannelInboundContextContract } from "GreenchClaw/plugin-sdk/channel-contract-testing";
+import { finalizeInboundContext } from "GreenchClaw/plugin-sdk/reply-runtime";
 import { describe, it } from "vitest";
 
 describe("Signal inbound context contract", () => {

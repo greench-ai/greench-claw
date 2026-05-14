@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginKind } from "../plugins/plugin-kind.types.js";
 import { loadPluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import { applyExclusiveSlotSelection } from "../plugins/slots.js";
@@ -46,7 +46,7 @@ function mergeRuntimeKinds(
   };
 }
 
-function loadRuntimeKindReportForPlugins(config: NexisClawConfig, pluginIds: readonly string[]) {
+function loadRuntimeKindReportForPlugins(config: GreenchClawConfig, pluginIds: readonly string[]) {
   return buildPluginDiagnosticsReport({
     config,
     onlyPluginIds: [...pluginIds],
@@ -54,7 +54,7 @@ function loadRuntimeKindReportForPlugins(config: NexisClawConfig, pluginIds: rea
 }
 
 function buildSlotSelectionRegistry(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   pluginId: string,
 ): SlotSelectionRegistry {
   const plugins = loadPluginMetadataSnapshot({
@@ -96,9 +96,9 @@ export function resolveFileNpmSpecToLocalPath(
 }
 
 export function applySlotSelectionForPlugin(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   pluginId: string,
-): { config: NexisClawConfig; warnings: string[] } {
+): { config: GreenchClawConfig; warnings: string[] } {
   const report = buildSlotSelectionRegistry(config, pluginId);
   const plugin = report.plugins.find((entry) => entry.id === pluginId);
   if (!plugin) {
@@ -147,9 +147,9 @@ export function createHookPackInstallLogger(runtime: RuntimeEnv = defaultRuntime
 }
 
 export function enableInternalHookEntries(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   hookNames: string[],
-): NexisClawConfig {
+): GreenchClawConfig {
   const entries = { ...config.hooks?.internal?.entries } as Record<string, HookInternalEntryLike>;
 
   for (const hookName of hookNames) {
@@ -179,7 +179,7 @@ export function formatPluginInstallWithHookFallbackError(
   const formattedPluginError = formatPluginInstallAttemptError(pluginError);
   const formattedHookError = formatPluginInstallAttemptError(hookError);
   if (/plugin already exists: .+ \(delete it first\)/.test(pluginError)) {
-    return `${formattedPluginError}\nUse \`NexisClaw plugins update <id-or-npm-spec>\` to upgrade the tracked plugin, or rerun install with \`--force\` to replace it.`;
+    return `${formattedPluginError}\nUse \`GreenchClaw plugins update <id-or-npm-spec>\` to upgrade the tracked plugin, or rerun install with \`--force\` to replace it.`;
   }
   if (
     pluginError.startsWith("Invalid extensions directory:") ||

@@ -16,7 +16,7 @@ vi.mock("./skills/plugin-skills.js", () => ({
   resolvePluginSkillDirs: () => [],
 }));
 
-const fixtureSuite = createFixtureSuite("NexisClaw-skills-snapshot-suite-");
+const fixtureSuite = createFixtureSuite("GreenchClaw-skills-snapshot-suite-");
 let truncationWorkspaceTemplateDir = "";
 let nestedRepoTemplateDir = "";
 let tempHome: TempHomeEnv | null = null;
@@ -24,7 +24,7 @@ let skillsHomeEnv: SkillsHomeEnvSnapshot | null = null;
 
 beforeAll(async () => {
   await fixtureSuite.setup();
-  tempHome = await createTempHomeEnv("NexisClaw-skills-snapshot-home-");
+  tempHome = await createTempHomeEnv("GreenchClaw-skills-snapshot-home-");
   skillsHomeEnv = setMockSkillsHomeEnv(tempHome.home);
   truncationWorkspaceTemplateDir = await fixtureSuite.createCaseDir(
     "template-truncation-workspace",

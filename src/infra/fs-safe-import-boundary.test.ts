@@ -35,7 +35,7 @@ function toRepoPath(filePath: string): string {
 }
 
 describe("fs-safe import boundary", () => {
-  it("keeps direct fs-safe imports behind NexisClaw policy wrappers", () => {
+  it("keeps direct fs-safe imports behind GreenchClaw policy wrappers", () => {
     const violations = SCAN_ROOTS.flatMap((root) => walk(path.join(REPO_ROOT, root)))
       .map(toRepoPath)
       .filter((filePath) => {

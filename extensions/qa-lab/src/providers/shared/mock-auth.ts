@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { applyAuthProfileConfig } from "NexisClaw/plugin-sdk/provider-auth-api-key";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { applyAuthProfileConfig } from "GreenchClaw/plugin-sdk/provider-auth-api-key";
 import { resolveQaAgentAuthDir, writeQaAuthProfiles } from "./auth-store.js";
 
 /** Providers the mock harness stages placeholder credentials for by default. */
@@ -32,11 +32,11 @@ function buildQaMockProfileId(provider: string): string {
  * serializer; anything beyond that is ignored by the mock.
  */
 export async function stageQaMockAuthProfiles(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   stateDir: string;
   agentIds?: readonly string[];
   providers?: readonly string[];
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   const agentIds = [...new Set(params.agentIds ?? QA_MOCK_AUTH_AGENT_IDS)];
   const providers = [...new Set(params.providers ?? QA_MOCK_AUTH_PROVIDERS)];
   let next = params.cfg;

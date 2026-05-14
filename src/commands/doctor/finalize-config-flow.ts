@@ -1,14 +1,14 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 
 export async function finalizeDoctorConfigFlow(params: {
-  cfg: NexisClawConfig;
-  candidate: NexisClawConfig;
+  cfg: GreenchClawConfig;
+  candidate: GreenchClawConfig;
   pendingChanges: boolean;
   shouldRepair: boolean;
   fixHints: string[];
   confirm: (p: { message: string; initialValue: boolean }) => Promise<boolean>;
   note: (message: string, title?: string) => void;
-}): Promise<{ cfg: NexisClawConfig; shouldWriteConfig: boolean }> {
+}): Promise<{ cfg: GreenchClawConfig; shouldWriteConfig: boolean }> {
   if (!params.shouldRepair && params.pendingChanges) {
     const shouldApply = await params.confirm({
       message: "Apply recommended config repairs now?",

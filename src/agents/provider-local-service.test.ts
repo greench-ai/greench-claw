@@ -141,7 +141,7 @@ describe("provider local service", () => {
   it("serializes concurrent cold starts for the same local service", async () => {
     const port = await freePort();
     const healthUrl = `http://127.0.0.1:${port}/v1/models`;
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-local-service-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-local-service-"));
     const startsPath = path.join(tempDir, "starts.txt");
     const model = attachModelProviderLocalService(
       {
@@ -188,7 +188,7 @@ describe("provider local service", () => {
     const secondPort = await freePort();
     const firstHealthUrl = `http://127.0.0.1:${firstPort}/v1/models`;
     const secondHealthUrl = `http://127.0.0.1:${secondPort}/v1/models`;
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-local-service-key-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-local-service-key-"));
     const startsPath = path.join(tempDir, "starts.txt");
     const args = [
       "-e",
@@ -247,10 +247,10 @@ describe("provider local service", () => {
     }
   });
 
-  it("restarts an NexisClaw-managed local service when its health endpoint is down", async () => {
+  it("restarts an GreenchClaw-managed local service when its health endpoint is down", async () => {
     const port = await freePort();
     const healthUrl = `http://127.0.0.1:${port}/v1/models`;
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-local-service-restart-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-local-service-restart-"));
     const startsPath = path.join(tempDir, "starts.txt");
     const statusPath = path.join(tempDir, "status.txt");
     const model = attachModelProviderLocalService(

@@ -16,7 +16,7 @@ afterEach(async () => {
 });
 
 async function createTempWorkspaceDir() {
-  const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-skill-status-"));
+  const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-skill-status-"));
   tempDirs.push(workspaceDir);
   return workspaceDir;
 }
@@ -44,7 +44,7 @@ function makeEntry(params: {
       description: `desc:${params.name}`,
       filePath,
       baseDir,
-      source: params.source ?? "NexisClaw-workspace",
+      source: params.source ?? "GreenchClaw-workspace",
     }),
     frontmatter: {},
     metadata: {
@@ -167,7 +167,7 @@ describe("buildWorkspaceSkillStatus", () => {
   it("marks bundled skills blocked by allowlist", () => {
     const entry = makeEntry({
       name: "peekaboo",
-      source: "NexisClaw-bundled",
+      source: "GreenchClaw-bundled",
     });
 
     const report = buildWorkspaceSkillStatus("/tmp/ws", {
@@ -241,7 +241,7 @@ describe("buildWorkspaceSkillStatus", () => {
   });
 
   it("does not mark an overridden workspace skill as bundled by bundled name alone", async () => {
-    const bundledDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-bundled-"));
+    const bundledDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-bundled-"));
     tempDirs.push(bundledDir);
     await writeSkill({
       dir: path.join(bundledDir, "peekaboo"),
@@ -249,19 +249,19 @@ describe("buildWorkspaceSkillStatus", () => {
       description: "Bundled peekaboo",
     });
 
-    await withEnvAsync({ NEXISCLAW_BUNDLED_SKILLS_DIR: bundledDir }, async () => {
+    await withEnvAsync({ GREENCHCLAW_BUNDLED_SKILLS_DIR: bundledDir }, async () => {
       const report = buildWorkspaceSkillStatus("/tmp/ws", {
         entries: [
           makeEntry({
             name: "peekaboo",
-            source: "NexisClaw-workspace",
+            source: "GreenchClaw-workspace",
           }),
         ],
         config: { skills: { allowBundled: ["other-skill"] } },
       });
       const skill = requireReportedSkill(report, "peekaboo");
 
-      expect(skill.source).toBe("NexisClaw-workspace");
+      expect(skill.source).toBe("GreenchClaw-workspace");
       expect(skill.bundled).toBe(false);
       expect(skill.blockedByAllowlist).toBe(false);
       expect(skill.eligible).toBe(true);

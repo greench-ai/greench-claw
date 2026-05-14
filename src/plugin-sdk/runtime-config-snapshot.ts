@@ -9,4 +9,4 @@ export {
   getRuntimeConfig,
   getRuntimeConfigSourceSnapshot,
 } from "../config/io.js";
-export type { NexisClawConfig } from "../config/types.js";
+export type { GreenchClawConfig } from "../config/types.js";

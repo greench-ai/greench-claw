@@ -1,8 +1,8 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeSecretInputString, resolveSecretInputRef } from "../config/types.secrets.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
 
-const GATEWAY_ENV_TOKEN = "NEXISCLAW_GATEWAY_TOKEN";
+const GATEWAY_ENV_TOKEN = "GREENCHCLAW_GATEWAY_TOKEN";
 const GATEWAY_SERVICE_KIND = "gateway";
 
 export type GatewayAuthTokenSourceConflict = {
@@ -15,15 +15,15 @@ export type GatewayAuthTokenSourceConflict = {
 };
 
 export function resolveGatewayAuthTokenSourceConflict(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
 }): GatewayAuthTokenSourceConflict | null {
-  const envToken = normalizeOptionalString(params.env.NEXISCLAW_GATEWAY_TOKEN);
+  const envToken = normalizeOptionalString(params.env.GREENCHCLAW_GATEWAY_TOKEN);
   if (!envToken) {
     return null;
   }
 
-  if (params.env.NEXISCLAW_SERVICE_KIND?.trim() === GATEWAY_SERVICE_KIND) {
+  if (params.env.GREENCHCLAW_SERVICE_KIND?.trim() === GATEWAY_SERVICE_KIND) {
     return null;
   }
 
@@ -60,7 +60,7 @@ export function resolveGatewayAuthTokenSourceConflict(params: {
     "prefers gateway.auth.token. If the values differ, CLI/RPC calls can fail to authenticate " +
     "with the running gateway.";
   const remediation =
-    `Remove ${GATEWAY_ENV_TOKEN} from the shell, ~/.NexisClaw/.env, or launchctl env if gateway.auth.token is intended, ` +
+    `Remove ${GATEWAY_ENV_TOKEN} from the shell, ~/.GreenchClaw/.env, or launchctl env if gateway.auth.token is intended, ` +
     `or point gateway.auth.token at \${${GATEWAY_ENV_TOKEN}} if the env var should be canonical.`;
 
   return {

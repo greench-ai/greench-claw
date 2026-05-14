@@ -1,16 +1,16 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { createStartAccountContext } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { createStartAccountContext } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import {
   createPluginSetupWizardConfigure,
   createTestWizardPrompter,
   runSetupWizardConfigure,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import type { WizardPrompter } from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { bundledPluginRoot } from "NexisClaw/plugin-sdk/test-fixtures";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import type { WizardPrompter } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { bundledPluginRoot } from "GreenchClaw/plugin-sdk/test-fixtures";
 import ts from "typescript";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig, PluginRuntime, ResolvedLineAccount } from "../api.js";
+import type { GreenchClawConfig, PluginRuntime, ResolvedLineAccount } from "../api.js";
 import { linePlugin } from "./channel.js";
 import { lineGatewayAdapter } from "./gateway.js";
 import { probeLineBot } from "./probe.js";
@@ -107,7 +107,7 @@ function collectRuntimeApiPreExports(runtimeApiPath: string): string[] {
   );
   const preExports = new Set<string>();
   let pluginSdkLineRuntimeSeen = false;
-  const removedLineRuntimeSpecifier = ["NexisClaw", "plugin-sdk", "line-runtime"].join("/");
+  const removedLineRuntimeSpecifier = ["GreenchClaw", "plugin-sdk", "line-runtime"].join("/");
 
   for (const statement of runtimeApiFile.statements) {
     if (!ts.isExportDeclaration(statement)) {
@@ -172,7 +172,7 @@ describe("line setup wizard", () => {
 
     const result = await runSetupWizardConfigure({
       configure: lineConfigure,
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       prompter,
       options: {},
     });
@@ -199,14 +199,14 @@ describe("line setup wizard", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         "work",
       ),
     ).toBe("allowlist");
   });
 
   it("reports account-scoped config keys for named accounts", () => {
-    expect(lineSetupWizard.dmPolicy?.resolveConfigKeys?.({} as NexisClawConfig, "work")).toEqual({
+    expect(lineSetupWizard.dmPolicy?.resolveConfigKeys?.({} as GreenchClawConfig, "work")).toEqual({
       policyKey: "channels.line.accounts.work.dmPolicy",
       allowFromKey: "channels.line.accounts.work.allowFrom",
     });
@@ -228,7 +228,7 @@ describe("line setup wizard", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(lineSetupWizard.dmPolicy?.getCurrent(cfg)).toBe("allowlist");
     expect(lineSetupWizard.dmPolicy?.resolveConfigKeys?.(cfg)).toEqual({
@@ -260,7 +260,7 @@ describe("line setup wizard", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       "open",
       "work",
     );
@@ -297,7 +297,7 @@ describe("line setup wizard", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     expect(configured).toBe(false);
@@ -333,9 +333,9 @@ describe("probeLineBot", () => {
 
   it("returns bot info when available", async () => {
     getBotInfoMock.mockResolvedValue({
-      displayName: "NexisClaw",
+      displayName: "GreenchClaw",
       userId: "U123",
-      basicId: "@NexisClaw",
+      basicId: "@GreenchClaw",
       pictureUrl: "https://example.com/bot.png",
     });
 
@@ -353,14 +353,14 @@ describe("linePlugin status.probeAccount", () => {
       return { getBotInfo: getBotInfoMock };
     });
     getBotInfoMock.mockResolvedValue({
-      displayName: "NexisClaw",
+      displayName: "GreenchClaw",
       userId: "U123",
-      basicId: "@NexisClaw",
+      basicId: "@GreenchClaw",
       pictureUrl: "https://example.com/bot.png",
     });
 
     const params = {
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       account: {
         accountId: "default",
         enabled: true,

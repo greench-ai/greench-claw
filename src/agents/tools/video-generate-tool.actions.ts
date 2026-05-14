@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { listSupportedVideoGenerationModes } from "../../video-generation/capabilities.js";
 import { listRuntimeVideoGenerationProviders } from "../../video-generation/runtime.js";
 import type { AuthProfileStore } from "../auth-profiles/types.js";
@@ -79,7 +79,7 @@ function summarizeVideoGenerationCapabilities(
 }
 
 export function createVideoGenerateListActionResult(
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
   options?: { agentDir?: string; authStore?: AuthProfileStore },
 ): VideoGenerateActionResult {
   const providers = listRuntimeVideoGenerationProviders({ config });

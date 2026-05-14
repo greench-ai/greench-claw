@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { resolveBundledPluginGeneratedPath } from "./bundled-plugin-metadata.js";
 import type { PluginManifestRecord } from "./manifest-registry.js";
-import type { NexisClawPackageManifest } from "./manifest.js";
+import type { GreenchClawPackageManifest } from "./manifest.js";
 import { loadPluginManifestRegistryForPluginRegistry } from "./plugin-registry.js";
 
 type BundledChannelEntryPathPair = {
@@ -23,7 +23,7 @@ export type BundledChannelPluginMetadata = {
     id: string;
     channels?: readonly string[];
   };
-  packageManifest?: NexisClawPackageManifest;
+  packageManifest?: GreenchClawPackageManifest;
   rootDir: string;
 };
 
@@ -46,8 +46,8 @@ function resolveBundledMetadataScope(params?: {
     kind: "env",
     env: {
       ...process.env,
-      NEXISCLAW_BUNDLED_PLUGINS_DIR: overrideDir,
-      NEXISCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
+      GREENCHCLAW_BUNDLED_PLUGINS_DIR: overrideDir,
+      GREENCHCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
     },
   };
 }

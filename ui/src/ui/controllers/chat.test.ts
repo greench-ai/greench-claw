@@ -792,7 +792,7 @@ describe("loadChatHistory filtering", () => {
         content: [
           {
             type: "text",
-            text: "[NexisClaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
+            text: "[GreenchClaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
           },
         ],
       },
@@ -823,7 +823,7 @@ describe("loadChatHistory filtering", () => {
         content: [
           {
             type: "text",
-            text: "[NexisClaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
+            text: "[GreenchClaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
           },
         ],
       },
@@ -1112,9 +1112,9 @@ describe("loadChatHistory retry handling", () => {
             {
               type: "text",
               text: [
-                "<<<BEGIN_NEXISCLAW_INTERNAL_CONTEXT>>>",
+                "<<<BEGIN_GREENCHCLAW_INTERNAL_CONTEXT>>>",
                 "subagent completion payload",
-                "<<<END_NEXISCLAW_INTERNAL_CONTEXT>>>",
+                "<<<END_GREENCHCLAW_INTERNAL_CONTEXT>>>",
               ].join("\n"),
             },
           ],
@@ -1139,7 +1139,7 @@ describe("loadChatHistory retry handling", () => {
     const persistedUser = {
       role: "user",
       content: [{ type: "text", text: "first" }],
-      __NexisClaw: { seq: 1 },
+      __GreenchClaw: { seq: 1 },
     };
     const optimisticUser = {
       role: "user",
@@ -1203,12 +1203,12 @@ describe("loadChatHistory retry handling", () => {
     const historyUser = {
       role: "user",
       content: [{ type: "text", text: "latest ask" }],
-      __NexisClaw: { seq: 1 },
+      __GreenchClaw: { seq: 1 },
     };
     const historyAssistant = {
       role: "assistant",
       content: [{ type: "text", text: "latest answer" }],
-      __NexisClaw: { seq: 2 },
+      __GreenchClaw: { seq: 2 },
     };
     const request = vi.fn().mockResolvedValue({
       messages: [historyUser, historyAssistant],

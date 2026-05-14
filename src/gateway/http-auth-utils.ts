@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { getRuntimeConfig } from "../config/io.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
@@ -106,7 +106,7 @@ export async function checkGatewayHttpRequestAuth(params: {
   trustedProxies?: string[];
   allowRealIpFallback?: boolean;
   rateLimiter?: AuthRateLimiter;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): Promise<GatewayHttpRequestAuthCheckResult> {
   const token = getBearerToken(params.req);
   const browserOriginPolicy = resolveHttpBrowserOriginPolicy(params.req, params.cfg);
@@ -150,7 +150,7 @@ export async function authorizeScopedGatewayHttpRequestOrReply(params: {
     req: IncomingMessage,
     requestAuth: AuthorizedGatewayHttpRequest,
   ) => string[];
-}): Promise<{ cfg: NexisClawConfig; requestAuth: AuthorizedGatewayHttpRequest } | null> {
+}): Promise<{ cfg: GreenchClawConfig; requestAuth: AuthorizedGatewayHttpRequest } | null> {
   const cfg = getRuntimeConfig();
   const requestAuth = await authorizeGatewayHttpRequestOrReply({
     req: params.req,
@@ -193,7 +193,7 @@ export function resolveTrustedHttpOperatorScopes(
     return [];
   }
 
-  const headerValue = getHeader(req, "x-NexisClaw-scopes");
+  const headerValue = getHeader(req, "x-GreenchClaw-scopes");
   if (headerValue === undefined) {
     // No scope header present - trusted clients without an explicit header
     // get the default operator scopes (matching pre-#57783 behavior).

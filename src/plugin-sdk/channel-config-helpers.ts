@@ -13,7 +13,7 @@ import {
 } from "../channels/plugins/config-write-policy-shared.js";
 import { buildAccountScopedDmSecurityPolicy } from "../channels/plugins/helpers.js";
 import type { ChannelConfigAdapter } from "../channels/plugins/types.adapters.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "../routing/session-key.js";
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
 import { normalizeStringEntries } from "../shared/string-normalization.js";
@@ -62,7 +62,7 @@ type ChannelConfigAdapterWithAccessors<ResolvedAccount> = Pick<
 >;
 
 export function resolveChannelConfigWrites(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channelId?: string | null;
   accountId?: string | null;
 }): boolean {
@@ -70,7 +70,7 @@ export function resolveChannelConfigWrites(params: {
 }
 
 export function authorizeConfigWrite(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   origin?: ConfigWriteScope;
   target?: ConfigWriteTarget;
   allowBypass?: boolean;
@@ -96,7 +96,7 @@ export function formatConfigWriteDeniedMessage(params: {
   return formatConfigWriteDeniedMessageShared(params);
 }
 
-type ChannelConfigAccessorParams<Config extends NexisClawConfig = NexisClawConfig> = {
+type ChannelConfigAccessorParams<Config extends GreenchClawConfig = GreenchClawConfig> = {
   cfg: Config;
   accountId?: string | null;
 };
@@ -104,7 +104,7 @@ type ChannelConfigAccessorParams<Config extends NexisClawConfig = NexisClawConfi
 type MultiAccountChannelConfigAdapterParams<
   ResolvedAccount,
   AccessorAccount = ResolvedAccount,
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 > = {
   sectionKey: string;
   listAccountIds: (cfg: Config) => string[];
@@ -120,7 +120,7 @@ type MultiAccountChannelConfigAdapterParams<
 
 type NamedAccountChannelConfigBaseParams<
   ResolvedAccount,
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 > = {
   sectionKey: string;
   listAccountIds: (cfg: Config) => string[];
@@ -154,7 +154,10 @@ export function resolveOptionalConfigString(
 }
 
 /** Adapt `{ cfg, accountId }` accessors to callback sites that pass positional args. */
-export function adaptScopedAccountAccessor<Result, Config extends NexisClawConfig = NexisClawConfig>(
+export function adaptScopedAccountAccessor<
+  Result,
+  Config extends GreenchClawConfig = GreenchClawConfig,
+>(
   accessor: (params: { cfg: Config; accountId?: string | null }) => Result,
 ): (cfg: Config, accountId?: string | null) => Result {
   return (cfg, accountId) => accessor({ cfg, accountId });
@@ -164,7 +167,7 @@ export function adaptScopedAccountAccessor<Result, Config extends NexisClawConfi
 export function createScopedAccountConfigAccessors<
   ResolvedAccount,
   // oxlint-disable-next-line typescript/no-unnecessary-type-parameters -- Config preserves caller-specific config subtype for account resolvers.
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 >(params: {
   resolveAccount: (params: { cfg: Config; accountId?: string | null }) => ResolvedAccount;
   resolveAllowFrom: (account: ResolvedAccount) => Array<string | number> | null | undefined;
@@ -175,7 +178,7 @@ export function createScopedAccountConfigAccessors<
   "resolveAllowFrom" | "formatAllowFrom" | "resolveDefaultTo"
 > {
   const base = {
-    resolveAllowFrom({ cfg, accountId }: { cfg: NexisClawConfig; accountId?: string | null }) {
+    resolveAllowFrom({ cfg, accountId }: { cfg: GreenchClawConfig; accountId?: string | null }) {
       return mapAllowFromEntries(
         params.resolveAllowFrom(params.resolveAccount({ cfg: cfg as Config, accountId })),
       );
@@ -201,18 +204,18 @@ export function createScopedAccountConfigAccessors<
 
 function createNamedAccountConfigBase<
   ResolvedAccount,
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 >(params: {
   listAccountIds: (cfg: Config) => string[];
   resolveAccount: (cfg: Config, accountId?: string | null) => ResolvedAccount;
   inspectAccount?: (cfg: Config, accountId?: string | null) => unknown;
   defaultAccountId: (cfg: Config) => string;
   setAccountEnabled: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     enabled: boolean;
-  }) => NexisClawConfig;
-  deleteAccount: (params: { cfg: NexisClawConfig; accountId: string }) => NexisClawConfig;
+  }) => GreenchClawConfig;
+  deleteAccount: (params: { cfg: GreenchClawConfig; accountId: string }) => GreenchClawConfig;
 }): ChannelCrudConfigAdapter<ResolvedAccount> {
   return {
     listAccountIds(cfg) {
@@ -245,7 +248,7 @@ function createNamedAccountConfigBase<
 
 function resolveAccessorAccountWithFallback<
   AccessorAccount,
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 >(
   resolveAccessorAccount:
     | ((params: ChannelConfigAccessorParams<Config>) => AccessorAccount)
@@ -258,7 +261,7 @@ function resolveAccessorAccountWithFallback<
 function createChannelConfigAdapterWithAccessors<
   ResolvedAccount,
   AccessorAccount,
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 >(params: {
   base: ChannelCrudConfigAdapter<ResolvedAccount>;
   resolveAccessorAccount?: (params: ChannelConfigAccessorParams<Config>) => AccessorAccount;
@@ -284,7 +287,7 @@ function createChannelConfigAdapterWithAccessors<
 function createChannelConfigAdapterFromBase<
   ResolvedAccount,
   AccessorAccount,
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 >(params: {
   base: ChannelCrudConfigAdapter<ResolvedAccount>;
   resolveAccessorAccount?: (params: ChannelConfigAccessorParams<Config>) => AccessorAccount;
@@ -306,7 +309,7 @@ function createChannelConfigAdapterFromBase<
 /** Build the common CRUD/config helpers for channels that store multiple named accounts. */
 export function createScopedChannelConfigBase<
   ResolvedAccount,
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 >(
   params: NamedAccountChannelConfigBaseParams<ResolvedAccount, Config> & {
     allowTopLevel?: boolean;
@@ -341,7 +344,7 @@ export function createScopedChannelConfigBase<
 export function createScopedChannelConfigAdapter<
   ResolvedAccount,
   AccessorAccount = ResolvedAccount,
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 >(
   params: MultiAccountChannelConfigAdapterParams<ResolvedAccount, AccessorAccount, Config> & {
     allowTopLevel?: boolean;
@@ -367,7 +370,7 @@ export function createScopedChannelConfigAdapter<
   });
 }
 
-function setTopLevelChannelEnabledInConfigSection<Config extends NexisClawConfig>(params: {
+function setTopLevelChannelEnabledInConfigSection<Config extends GreenchClawConfig>(params: {
   cfg: Config;
   sectionKey: string;
   enabled: boolean;
@@ -385,7 +388,7 @@ function setTopLevelChannelEnabledInConfigSection<Config extends NexisClawConfig
   } as Config;
 }
 
-function removeTopLevelChannelConfigSection<Config extends NexisClawConfig>(params: {
+function removeTopLevelChannelConfigSection<Config extends GreenchClawConfig>(params: {
   cfg: Config;
   sectionKey: string;
 }): Config {
@@ -400,7 +403,7 @@ function removeTopLevelChannelConfigSection<Config extends NexisClawConfig>(para
   return nextCfg;
 }
 
-function clearTopLevelChannelConfigFields<Config extends NexisClawConfig>(params: {
+function clearTopLevelChannelConfigFields<Config extends GreenchClawConfig>(params: {
   cfg: Config;
   sectionKey: string;
   clearBaseFields: string[];
@@ -425,7 +428,7 @@ function clearTopLevelChannelConfigFields<Config extends NexisClawConfig>(params
 /** Build CRUD/config helpers for top-level single-account channels. */
 export function createTopLevelChannelConfigBase<
   ResolvedAccount,
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 >(params: {
   sectionKey: string;
   resolveAccount: (cfg: Config) => ResolvedAccount;
@@ -482,7 +485,7 @@ export function createTopLevelChannelConfigBase<
 export function createTopLevelChannelConfigAdapter<
   ResolvedAccount,
   AccessorAccount = ResolvedAccount,
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 >(params: {
   sectionKey: string;
   resolveAccount: (cfg: Config) => ResolvedAccount;
@@ -519,7 +522,7 @@ export function createTopLevelChannelConfigAdapter<
 /** Build CRUD/config helpers for channels where the default account lives at channel root and named accounts live under `accounts`. */
 export function createHybridChannelConfigBase<
   ResolvedAccount,
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 >(
   params: NamedAccountChannelConfigBaseParams<ResolvedAccount, Config> & {
     preserveSectionOnDefaultDelete?: boolean;
@@ -575,7 +578,7 @@ export function createHybridChannelConfigBase<
 export function createHybridChannelConfigAdapter<
   ResolvedAccount,
   AccessorAccount = ResolvedAccount,
-  Config extends NexisClawConfig = NexisClawConfig,
+  Config extends GreenchClawConfig = GreenchClawConfig,
 >(
   params: MultiAccountChannelConfigAdapterParams<ResolvedAccount, AccessorAccount, Config> & {
     preserveSectionOnDefaultDelete?: boolean;
@@ -609,7 +612,7 @@ export function createScopedDmSecurityResolver<
   resolvePolicy: (account: ResolvedAccount) => string | null | undefined;
   resolveAllowFrom: (account: ResolvedAccount) => Array<string | number> | null | undefined;
   resolveAccess?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string | null;
     account: ResolvedAccount;
   }) => {
@@ -630,7 +633,7 @@ export function createScopedDmSecurityResolver<
     accountId,
     account,
   }: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string | null;
     account: ResolvedAccount;
   }) => {

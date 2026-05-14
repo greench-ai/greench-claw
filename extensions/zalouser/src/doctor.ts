@@ -1,5 +1,5 @@
-import type { ChannelDoctorAdapter } from "NexisClaw/plugin-sdk/channel-contract";
-import { createDangerousNameMatchingMutableAllowlistWarningCollector } from "NexisClaw/plugin-sdk/channel-policy";
+import type { ChannelDoctorAdapter } from "GreenchClaw/plugin-sdk/channel-contract";
+import { createDangerousNameMatchingMutableAllowlistWarningCollector } from "GreenchClaw/plugin-sdk/channel-policy";
 import { legacyConfigRules, normalizeCompatibilityConfig } from "./doctor-contract.js";
 import { isZalouserMutableGroupEntry } from "./security-audit.js";
 

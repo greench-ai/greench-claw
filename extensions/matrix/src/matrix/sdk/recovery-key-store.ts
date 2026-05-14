@@ -1,5 +1,5 @@
+import { loadJsonFile, saveJsonFile } from "GreenchClaw/plugin-sdk/json-store";
 import { decodeRecoveryKey } from "matrix-js-sdk/lib/crypto-api/recovery-key.js";
-import { loadJsonFile, saveJsonFile } from "NexisClaw/plugin-sdk/json-store";
 import { formatMatrixErrorMessage, formatMatrixErrorReason } from "../errors.js";
 import { LogService } from "./logger.js";
 import type {

@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { GroupKeyResolution } from "../config/sessions.js";
 import { channelRouteDedupeKey } from "../plugin-sdk/channel-route.js";
 import { resetPluginRuntimeStateForTest } from "../plugins/runtime.js";
@@ -733,9 +733,9 @@ describe("createInboundDebouncer", () => {
 
 describe("initSessionState BodyStripped", () => {
   it("prefers BodyForAgent over Body for group chats", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-sender-meta-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-sender-meta-"));
     const storePath = path.join(root, "sessions.json");
-    const cfg = { session: { store: storePath } } as NexisClawConfig;
+    const cfg = { session: { store: storePath } } as GreenchClawConfig;
 
     const result = await initSessionState({
       ctx: {
@@ -755,9 +755,9 @@ describe("initSessionState BodyStripped", () => {
   });
 
   it("prefers BodyForAgent over Body for direct chats", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-sender-meta-direct-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-sender-meta-direct-"));
     const storePath = path.join(root, "sessions.json");
-    const cfg = { session: { store: storePath } } as NexisClawConfig;
+    const cfg = { session: { store: storePath } } as GreenchClawConfig;
 
     const result = await initSessionState({
       ctx: {
@@ -780,20 +780,20 @@ describe("mention helpers", () => {
   it("builds regexes and skips invalid or unsafe patterns", () => {
     const regexes = buildMentionRegexes({
       messages: {
-        groupChat: { mentionPatterns: ["\\bNexisClaw\\b", "(invalid", "(a+)+$"] },
+        groupChat: { mentionPatterns: ["\\bGreenchClaw\\b", "(invalid", "(a+)+$"] },
       },
     });
     expect(regexes).toHaveLength(1);
-    expect(regexes[0]?.test("NexisClaw")).toBe(true);
+    expect(regexes[0]?.test("GreenchClaw")).toBe(true);
   });
 
   it("normalizes zero-width characters", () => {
-    expect(normalizeMentionText("open\u200bclaw")).toBe("NexisClaw");
+    expect(normalizeMentionText("open\u200bclaw")).toBe("GreenchClaw");
   });
 
   it("matches patterns case-insensitively", () => {
     const regexes = buildMentionRegexes({
-      messages: { groupChat: { mentionPatterns: ["\\bNexisClaw\\b"] } },
+      messages: { groupChat: { mentionPatterns: ["\\bGreenchClaw\\b"] } },
     });
     expect(matchesMentionPatterns("OPENCLAW: hi", regexes)).toBe(true);
   });
@@ -820,9 +820,9 @@ describe("mention helpers", () => {
   });
 
   it("strips safe mention patterns and ignores unsafe ones", () => {
-    const stripped = stripMentions("NexisClaw " + "a".repeat(28) + "!", {} as MsgContext, {
+    const stripped = stripMentions("GreenchClaw " + "a".repeat(28) + "!", {} as MsgContext, {
       messages: {
-        groupChat: { mentionPatterns: ["\\bNexisClaw\\b", "(a+)+$"] },
+        groupChat: { mentionPatterns: ["\\bGreenchClaw\\b", "(a+)+$"] },
       },
     });
     expect(stripped).toBe(`${"a".repeat(28)}!`);
@@ -841,7 +841,7 @@ describe("resolveGroupRequireMention", () => {
   });
 
   it("respects Discord guild/channel requireMention settings", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         discord: {
           guilds: {
@@ -871,7 +871,7 @@ describe("resolveGroupRequireMention", () => {
   });
 
   it("respects Slack channel requireMention settings", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         slack: {
           channels: {
@@ -896,7 +896,7 @@ describe("resolveGroupRequireMention", () => {
   });
 
   it("uses Slack fallback resolver semantics for default-account wildcard channels", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         slack: {
           defaultAccount: "work",
@@ -926,7 +926,7 @@ describe("resolveGroupRequireMention", () => {
   });
 
   it("keeps core reply-stage resolution aligned for Slack default-account wildcard fallbacks", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         slack: {
           defaultAccount: "work",
@@ -956,7 +956,7 @@ describe("resolveGroupRequireMention", () => {
   });
 
   it("uses Discord fallback resolver semantics for guild slug matches", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         discord: {
           guilds: {
@@ -985,7 +985,7 @@ describe("resolveGroupRequireMention", () => {
   });
 
   it("keeps core reply-stage resolution aligned for Discord slug + wildcard guild fallbacks", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         discord: {
           guilds: {
@@ -1016,7 +1016,7 @@ describe("resolveGroupRequireMention", () => {
   });
 
   it("respects LINE prefixed group keys in reply-stage requireMention resolution", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         line: {
           groups: {
@@ -1040,7 +1040,7 @@ describe("resolveGroupRequireMention", () => {
   });
 
   it("preserves plugin-backed channel requireMention resolution", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         imessage: {
           groups: {

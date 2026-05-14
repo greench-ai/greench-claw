@@ -41,9 +41,9 @@ import { GENERATED_BUNDLED_CHANNEL_CONFIG_METADATA } from "./bundled-channel-con
 import { collectChannelSchemaMetadata } from "./channel-config-metadata.js";
 import { materializeRuntimeConfig } from "./materialize.js";
 import { collectConfiguredModelRefs } from "./model-refs.js";
-import type { NexisClawConfig, ConfigValidationIssue } from "./types.js";
+import type { GreenchClawConfig, ConfigValidationIssue } from "./types.js";
 import { coerceSecretRef } from "./types.secrets.js";
-import { NexisClawSchema } from "./zod-schema.js";
+import { GreenchClawSchema } from "./zod-schema.js";
 
 const LEGACY_REMOVED_PLUGIN_IDS = new Set(["google-antigravity-auth", "google-gemini-cli-auth"]);
 const BLOCKED_PLUGIN_CANDIDATE_PREFIX = "blocked plugin candidate:";
@@ -70,7 +70,8 @@ function stripDeprecatedValidationKeys(raw: unknown): unknown {
 }
 
 const CUSTOM_EXPECTED_ONE_OF_RE = /expected one of ((?:"[^"]+"(?:\|"?[^"]+"?)*)+)/i;
-const SECRETREF_POLICY_DOC_URL = "https://docs.NexisClaw.ai/reference/secretref-credential-surface";
+const SECRETREF_POLICY_DOC_URL =
+  "https://docs.GreenchClaw.ai/reference/secretref-credential-surface";
 const bundledChannelSchemaById = new Map<string, unknown>(
   GENERATED_BUNDLED_CHANNEL_CONFIG_METADATA.map(
     (entry) => [entry.channelId, entry.schema] as const,
@@ -111,7 +112,7 @@ function formatMissingOfficialExternalPluginWarning(pluginId: string): string | 
   if (!installSpec) {
     return null;
   }
-  return `plugin not installed: ${pluginId} — install the official external plugin with: NexisClaw plugins install ${installSpec}`;
+  return `plugin not installed: ${pluginId} — install the official external plugin with: GreenchClaw plugins install ${installSpec}`;
 }
 
 function asJsonSchemaLike(value: unknown): JsonSchemaLike | null {
@@ -205,7 +206,7 @@ function collectAllowedValuesFromBundledChannelSchemaPath(
   return collectAllowedValuesFromJsonSchemaNode(targetNode);
 }
 
-function collectRawBundledChannelConfigIssues(config: NexisClawConfig): ConfigValidationIssue[] {
+function collectRawBundledChannelConfigIssues(config: GreenchClawConfig): ConfigValidationIssue[] {
   if (!config.channels || !isRecord(config.channels)) {
     return [];
   }
@@ -557,7 +558,7 @@ function isWorkspaceAvatarPath(value: string, workspaceDir: string): boolean {
   return isPathWithinRoot(workspaceRoot, resolved);
 }
 
-function validateIdentityAvatar(config: NexisClawConfig): ConfigValidationIssue[] {
+function validateIdentityAvatar(config: GreenchClawConfig): ConfigValidationIssue[] {
   const agents = config.agents?.list;
   if (!Array.isArray(agents) || agents.length === 0) {
     return [];
@@ -607,7 +608,7 @@ function validateIdentityAvatar(config: NexisClawConfig): ConfigValidationIssue[
   return issues;
 }
 
-function validateGatewayTailscaleBind(config: NexisClawConfig): ConfigValidationIssue[] {
+function validateGatewayTailscaleBind(config: GreenchClawConfig): ConfigValidationIssue[] {
   const tailscaleMode = config.gateway?.tailscale?.mode ?? "off";
   if (tailscaleMode !== "serve" && tailscaleMode !== "funnel") {
     return [];
@@ -645,10 +646,10 @@ export function validateConfigObjectRaw(
     touchedPaths?: ReadonlyArray<ReadonlyArray<string>>;
     validateBundledChannels?: boolean;
   },
-): { ok: true; config: NexisClawConfig } | { ok: false; issues: ConfigValidationIssue[] } {
+): { ok: true; config: GreenchClawConfig } | { ok: false; issues: ConfigValidationIssue[] } {
   const normalizedRaw = stripDeprecatedValidationKeys(raw);
   const policyIssues = collectUnsupportedSecretRefPolicyIssues(normalizedRaw);
-  const validated = NexisClawSchema.safeParse(normalizedRaw);
+  const validated = GreenchClawSchema.safeParse(normalizedRaw);
   if (!validated.success) {
     const schemaIssues = validated.error.issues.map((issue) => mapZodIssueToConfigIssue(issue));
     return {
@@ -656,7 +657,7 @@ export function validateConfigObjectRaw(
       issues: mergeUnsupportedMutableSecretRefIssues(policyIssues, schemaIssues),
     };
   }
-  const validatedConfig = validated.data as NexisClawConfig;
+  const validatedConfig = validated.data as GreenchClawConfig;
   const channelIssues =
     policyIssues.length > 0 || opts?.validateBundledChannels
       ? collectRawBundledChannelConfigIssues(validatedConfig)
@@ -702,7 +703,7 @@ export function validateConfigObject(
     manifestRegistry?: Pick<PluginMetadataSnapshot, "manifestRegistry">["manifestRegistry"];
     sourceRaw?: unknown;
   },
-): { ok: true; config: NexisClawConfig } | { ok: false; issues: ConfigValidationIssue[] } {
+): { ok: true; config: GreenchClawConfig } | { ok: false; issues: ConfigValidationIssue[] } {
   const result = validateConfigObjectRaw(raw, opts);
   if (!result.ok) {
     return result;
@@ -718,7 +719,7 @@ export function validateConfigObject(
 type ValidateConfigWithPluginsResult =
   | {
       ok: true;
-      config: NexisClawConfig;
+      config: GreenchClawConfig;
       warnings: ConfigValidationIssue[];
     }
   | {
@@ -732,7 +733,7 @@ type ValidateConfigWithPluginsParams = {
   pluginValidation?: "full" | "skip";
   pluginMetadataSnapshot?: Pick<PluginMetadataSnapshot, "manifestRegistry">;
   loadPluginMetadataSnapshot?: (
-    config: NexisClawConfig,
+    config: GreenchClawConfig,
   ) => Pick<PluginMetadataSnapshot, "manifestRegistry">;
   sourceRaw?: unknown;
 };
@@ -822,7 +823,7 @@ function validateConfigObjectWithPluginsBase(
     >;
   };
 
-  let compatConfig: NexisClawConfig | null | undefined;
+  let compatConfig: GreenchClawConfig | null | undefined;
   let compatPluginIds: ReadonlySet<string> | null = null;
   let compatPluginIdsResolved = false;
   let registryDiagnosticsPushed = false;
@@ -893,7 +894,7 @@ function validateConfigObjectWithPluginsBase(
     return compatPluginIds;
   };
 
-  const ensureCompatConfig = (): NexisClawConfig => {
+  const ensureCompatConfig = (): GreenchClawConfig => {
     if (compatConfig !== undefined) {
       return compatConfig ?? config;
     }
@@ -1104,7 +1105,7 @@ function validateConfigObjectWithPluginsBase(
     if (installCatalogEntry) {
       issues.push({
         path,
-        message: `web_search provider is not available: ${trimmed} (install or enable plugin "${installCatalogEntry.pluginId}", then run NexisClaw doctor --fix)`,
+        message: `web_search provider is not available: ${trimmed} (install or enable plugin "${installCatalogEntry.pluginId}", then run GreenchClaw doctor --fix)`,
         allowedValues: collectKnownWebSearchProviderIds(),
       });
       return;
@@ -1121,7 +1122,7 @@ function validateConfigObjectWithPluginsBase(
     if (hasStalePluginEvidenceForUnknownWebSearchProvider(trimmed)) {
       warnings.push({
         ...issue,
-        message: `${issue.message} (stale web search plugin config ignored; run NexisClaw doctor --fix to remove stale config, or install the plugin)`,
+        message: `${issue.message} (stale web search plugin config ignored; run GreenchClaw doctor --fix to remove stale config, or install the plugin)`,
       });
       return;
     }
@@ -1252,7 +1253,7 @@ function validateConfigObjectWithPluginsBase(
         if (hasStalePluginEvidenceForUnknownChannel(trimmed)) {
           warnings.push({
             ...issue,
-            message: `${issue.message} (stale channel plugin config ignored; run NexisClaw doctor --fix to remove stale config, or install the plugin)`,
+            message: `${issue.message} (stale channel plugin config ignored; run GreenchClaw doctor --fix to remove stale config, or install the plugin)`,
           });
         } else {
           issues.push(issue);
@@ -1607,7 +1608,7 @@ function validateConfigObjectWithPluginsBase(
           replacePluginEntryConfig(pluginId, res.value as Record<string, unknown>);
         }
       } else if (record.format === "bundle") {
-        // Compatible bundles currently expose no native NexisClaw config schema.
+        // Compatible bundles currently expose no native GreenchClaw config schema.
         // Treat them as schema-less capability packs rather than failing validation.
       } else {
         issues.push({

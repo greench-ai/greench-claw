@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 import { afterAll, beforeAll } from "vitest";
 
 export function createMemoryCoreTestHarness() {
@@ -9,7 +9,7 @@ export function createMemoryCoreTestHarness() {
 
   beforeAll(async () => {
     fixtureRoot = await fs.mkdtemp(
-      path.join(resolvePreferredNexisClawTmpDir(), "memory-core-test-fixtures-"),
+      path.join(resolvePreferredGreenchClawTmpDir(), "memory-core-test-fixtures-"),
     );
   });
 

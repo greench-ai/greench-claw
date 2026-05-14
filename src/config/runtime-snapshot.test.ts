@@ -13,7 +13,7 @@ import {
   setRuntimeConfigSnapshot,
   setRuntimeConfigSnapshotRefreshHandler,
 } from "./runtime-snapshot.js";
-import type { NexisClawConfig } from "./types.js";
+import type { GreenchClawConfig } from "./types.js";
 
 function resetRuntimeConfigState(): void {
   setRuntimeConfigSnapshotRefreshHandler(null);
@@ -28,7 +28,7 @@ describe("runtime snapshot state", () => {
   it("pins the first successful load in memory until the snapshot is cleared", () => {
     let freshPort = 18789;
     let loadCount = 0;
-    const loadFresh = (): NexisClawConfig => {
+    const loadFresh = (): GreenchClawConfig => {
       loadCount += 1;
       return { gateway: { port: freshPort } };
     };
@@ -46,7 +46,7 @@ describe("runtime snapshot state", () => {
   });
 
   it("returns the source snapshot when runtime snapshot is active", () => {
-    const sourceConfig: NexisClawConfig = {
+    const sourceConfig: GreenchClawConfig = {
       models: {
         providers: {
           openai: {
@@ -57,7 +57,7 @@ describe("runtime snapshot state", () => {
         },
       },
     };
-    const runtimeConfig: NexisClawConfig = {
+    const runtimeConfig: GreenchClawConfig = {
       models: {
         providers: {
           openai: {
@@ -74,8 +74,8 @@ describe("runtime snapshot state", () => {
   });
 
   it("tracks snapshot metadata and cache keys across runtime refreshes", () => {
-    const firstConfig: NexisClawConfig = { gateway: { port: 18789 } };
-    const secondConfig: NexisClawConfig = { gateway: { port: 19001 } };
+    const firstConfig: GreenchClawConfig = { gateway: { port: 18789 } };
+    const secondConfig: GreenchClawConfig = { gateway: { port: 19001 } };
 
     setRuntimeConfigSnapshot(firstConfig);
     const firstMetadata = getRuntimeConfigSnapshotMetadata();
@@ -94,7 +94,7 @@ describe("runtime snapshot state", () => {
   });
 
   it("selects runtime config only when input still matches the runtime source", () => {
-    const sourceConfig: NexisClawConfig = {
+    const sourceConfig: GreenchClawConfig = {
       models: {
         providers: {
           openai: {
@@ -105,7 +105,7 @@ describe("runtime snapshot state", () => {
         },
       },
     };
-    const runtimeConfig: NexisClawConfig = {
+    const runtimeConfig: GreenchClawConfig = {
       models: {
         providers: {
           openai: {
@@ -116,7 +116,7 @@ describe("runtime snapshot state", () => {
         },
       },
     };
-    const scopedResolvedConfig: NexisClawConfig = {
+    const scopedResolvedConfig: GreenchClawConfig = {
       ...runtimeConfig,
       tools: {
         experimental: {
@@ -151,10 +151,10 @@ describe("runtime snapshot state", () => {
 
   it("refreshes both snapshots from disk after a write when source + runtime snapshots exist", async () => {
     const notifyCommittedWrite = vi.fn();
-    const loadFreshConfig = vi.fn<() => NexisClawConfig>(() => ({
+    const loadFreshConfig = vi.fn<() => GreenchClawConfig>(() => ({
       gateway: { auth: { mode: "token" } },
     }));
-    const nextSourceConfig: NexisClawConfig = {
+    const nextSourceConfig: GreenchClawConfig = {
       gateway: { auth: { mode: "token" } },
       models: {
         providers: {
@@ -222,7 +222,7 @@ describe("runtime snapshot state", () => {
 
   it("keeps the last-known-good runtime snapshot active while specialized refresh is pending", async () => {
     const notifyCommittedWrite = vi.fn();
-    const loadFreshConfig = vi.fn<() => NexisClawConfig>(() => ({
+    const loadFreshConfig = vi.fn<() => GreenchClawConfig>(() => ({
       gateway: { auth: { mode: "token" } },
     }));
     let releaseRefresh: (() => void) | undefined;
@@ -297,7 +297,7 @@ describe("runtime snapshot state", () => {
   });
 
   it("notifies registered write listeners with committed runtime snapshots", () => {
-    const seen: Array<{ configPath: string; runtimeConfig: NexisClawConfig }> = [];
+    const seen: Array<{ configPath: string; runtimeConfig: GreenchClawConfig }> = [];
     const unsubscribe = registerRuntimeConfigWriteListener((event) => {
       seen.push({
         configPath: event.configPath,
@@ -307,7 +307,7 @@ describe("runtime snapshot state", () => {
 
     try {
       notifyRuntimeConfigWriteListeners({
-        configPath: "/tmp/NexisClaw.json",
+        configPath: "/tmp/GreenchClaw.json",
         sourceConfig: { gateway: { port: 18789 } },
         runtimeConfig: { gateway: { port: 19003 } },
         persistedHash: "abc123",
@@ -322,7 +322,7 @@ describe("runtime snapshot state", () => {
 
     expect(seen).toEqual([
       {
-        configPath: "/tmp/NexisClaw.json",
+        configPath: "/tmp/GreenchClaw.json",
         runtimeConfig: { gateway: { port: 19003 } },
       },
     ]);

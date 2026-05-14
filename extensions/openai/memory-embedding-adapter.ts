@@ -3,7 +3,7 @@ import {
   mapBatchEmbeddingsByIndex,
   sanitizeEmbeddingCacheHeaders,
   type MemoryEmbeddingProviderAdapter,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
 import { OPENAI_BATCH_ENDPOINT, runOpenAiEmbeddingBatches } from "./embedding-batch.js";
 import {
   createOpenAiEmbeddingProvider,

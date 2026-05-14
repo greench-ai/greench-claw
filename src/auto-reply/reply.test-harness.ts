@@ -125,8 +125,8 @@ type HomeEnvSnapshot = {
   USERPROFILE: string | undefined;
   HOMEDRIVE: string | undefined;
   HOMEPATH: string | undefined;
-  NEXISCLAW_STATE_DIR: string | undefined;
-  NEXISCLAW_AGENT_DIR: string | undefined;
+  GREENCHCLAW_STATE_DIR: string | undefined;
+  GREENCHCLAW_AGENT_DIR: string | undefined;
   PI_CODING_AGENT_DIR: string | undefined;
 };
 
@@ -136,8 +136,8 @@ function snapshotHomeEnv(): HomeEnvSnapshot {
     USERPROFILE: process.env.USERPROFILE,
     HOMEDRIVE: process.env.HOMEDRIVE,
     HOMEPATH: process.env.HOMEPATH,
-    NEXISCLAW_STATE_DIR: process.env.NEXISCLAW_STATE_DIR,
-    NEXISCLAW_AGENT_DIR: process.env.NEXISCLAW_AGENT_DIR,
+    GREENCHCLAW_STATE_DIR: process.env.GREENCHCLAW_STATE_DIR,
+    GREENCHCLAW_AGENT_DIR: process.env.GREENCHCLAW_AGENT_DIR,
     PI_CODING_AGENT_DIR: process.env.PI_CODING_AGENT_DIR,
   };
 }
@@ -169,13 +169,15 @@ export function createTempHomeHarness(options: { prefix: string; beforeEachCase?
 
   async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
     const home = path.join(fixtureRoot, `case-${++caseId}`);
-    await fs.mkdir(path.join(home, ".NexisClaw", "agents", "main", "sessions"), { recursive: true });
+    await fs.mkdir(path.join(home, ".GreenchClaw", "agents", "main", "sessions"), {
+      recursive: true,
+    });
     const envSnapshot = snapshotHomeEnv();
     process.env.HOME = home;
     process.env.USERPROFILE = home;
-    process.env.NEXISCLAW_STATE_DIR = path.join(home, ".NexisClaw");
-    process.env.NEXISCLAW_AGENT_DIR = path.join(home, ".NexisClaw", "agent");
-    process.env.PI_CODING_AGENT_DIR = path.join(home, ".NexisClaw", "agent");
+    process.env.GREENCHCLAW_STATE_DIR = path.join(home, ".GreenchClaw");
+    process.env.GREENCHCLAW_AGENT_DIR = path.join(home, ".GreenchClaw", "agent");
+    process.env.PI_CODING_AGENT_DIR = path.join(home, ".GreenchClaw", "agent");
 
     if (process.platform === "win32") {
       const match = home.match(/^([A-Za-z]:)(.*)$/);
@@ -201,7 +203,7 @@ export function makeReplyConfig(home: string) {
     agents: {
       defaults: {
         model: "anthropic/claude-opus-4-6",
-        workspace: path.join(home, "NexisClaw"),
+        workspace: path.join(home, "GreenchClaw"),
       },
     },
     channels: {

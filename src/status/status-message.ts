@@ -32,7 +32,7 @@ import {
   type SessionEntry,
   type SessionScope,
 } from "../config/sessions.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { readRecentSessionUsageFromTranscript } from "../gateway/session-utils.fs.js";
 import { formatTimeAgo } from "../infra/format-time/format-relative.ts";
 import { resolveCommitHash } from "../infra/git-commit.js";
@@ -59,7 +59,7 @@ import { resolveAgentRuntimeLabel } from "./agent-runtime-label.js";
 import { resolveActiveFallbackState } from "./fallback-notice-state.js";
 import { formatFastModeLabel } from "./status-labels.js";
 
-type AgentDefaults = NonNullable<NonNullable<NexisClawConfig["agents"]>["defaults"]>;
+type AgentDefaults = NonNullable<NonNullable<GreenchClawConfig["agents"]>["defaults"]>;
 type AgentConfig = Partial<AgentDefaults> & {
   model?: AgentDefaults["model"] | string;
 };
@@ -76,7 +76,7 @@ type QueueStatus = {
 };
 
 export type StatusArgs = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agent: AgentConfig;
   agentId?: string;
   runtimeContextTokens?: number;
@@ -135,7 +135,7 @@ function normalizeAuthMode(value?: string): NormalizedAuthMode | undefined {
 }
 
 function resolveConfiguredTextVerbosity(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   provider?: string | null;
   model?: string | null;
@@ -260,7 +260,7 @@ const readUsageFromSessionLog = (
       model?: string;
     }
   | undefined => {
-  // Transcripts are stored at the session file path (fallback: ~/.NexisClaw/sessions/<SessionId>.jsonl)
+  // Transcripts are stored at the session file path (fallback: ~/.GreenchClaw/sessions/<SessionId>.jsonl)
   if (!sessionId) {
     return undefined;
   }
@@ -407,7 +407,7 @@ const formatMediaUnderstandingLine = (decisions?: ReadonlyArray<MediaUnderstandi
 };
 
 const formatVoiceModeLine = (
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
   sessionEntry?: SessionEntry,
   agentId?: string,
 ): string | null => {
@@ -447,7 +447,7 @@ const formatVoiceModeLine = (
 };
 
 function resolveChannelModelNote(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   entry?: SessionEntry;
   selectedProvider: string;
   selectedModel: string;
@@ -504,7 +504,7 @@ export function buildStatusMessage(args: StatusArgs): string {
     agents: {
       defaults: args.agent ?? {},
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
   const contextConfig = args.config
     ? ({
         ...args.config,
@@ -515,12 +515,12 @@ export function buildStatusMessage(args: StatusArgs): string {
             ...args.agent,
           },
         },
-      } as NexisClawConfig)
+      } as GreenchClawConfig)
     : ({
         agents: {
           defaults: args.agent ?? {},
         },
-      } as NexisClawConfig);
+      } as GreenchClawConfig);
   const resolved = resolveConfiguredModelRef({
     cfg: selectionConfig,
     defaultProvider: DEFAULT_PROVIDER,
@@ -923,7 +923,7 @@ export function buildStatusMessage(args: StatusArgs): string {
       } (${fallbackState.reason ?? "selected model unavailable"})`
     : null;
   const commit = resolveCommitHash({ moduleUrl: import.meta.url });
-  const versionLine = `🦞 NexisClaw ${VERSION}${commit ? ` (${commit})` : ""}`;
+  const versionLine = `🦞 GreenchClaw ${VERSION}${commit ? ` (${commit})` : ""}`;
   const usagePair = formatUsagePair(inputTokens, outputTokens);
   const cacheLine = formatCacheLine(inputTokens, cacheRead, cacheWrite);
   const costLine = costLabel ? `💵 Cost: ${costLabel}` : null;

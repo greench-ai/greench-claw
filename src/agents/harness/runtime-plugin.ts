@@ -1,11 +1,11 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { withActivatedPluginIds } from "../../plugins/activation-context.js";
 import { resolveAgentHarnessPolicy } from "./selection.js";
 
 export async function ensureSelectedAgentHarnessPlugin(params: {
   provider: string;
   modelId: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   sessionKey?: string;
   workspaceDir: string;

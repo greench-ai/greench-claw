@@ -2,13 +2,13 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { ExecApprovalsResolved } from "../infra/exec-approvals.js";
 import type { SafeBinProfileFixture } from "../infra/exec-safe-bin-policy.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import { resetProcessRegistryForTests } from "./bash-process-registry.js";
 
-let createNexisClawCodingTools: typeof import("./pi-tools.js").createNexisClawCodingTools;
+let createGreenchClawCodingTools: typeof import("./pi-tools.js").createGreenchClawCodingTools;
 
 const { mockExecApprovals, supervisorSpawnMock } = vi.hoisted(() => {
   const execApprovals = {
@@ -75,10 +75,13 @@ const { mockExecApprovals, supervisorSpawnMock } = vi.hoisted(() => {
 beforeAll(async () => {
   await withEnvAsync(
     {
-      NEXISCLAW_BUNDLED_PLUGINS_DIR: path.join(os.tmpdir(), "NexisClaw-test-no-bundled-extensions"),
+      GREENCHCLAW_BUNDLED_PLUGINS_DIR: path.join(
+        os.tmpdir(),
+        "GreenchClaw-test-no-bundled-extensions",
+      ),
     },
     async () => {
-      ({ createNexisClawCodingTools } = await import("./pi-tools.js"));
+      ({ createGreenchClawCodingTools } = await import("./pi-tools.js"));
     },
   );
 });
@@ -112,8 +115,8 @@ vi.mock("./channel-tools.js", () => ({
   listChannelAgentTools: () => [],
 }));
 
-vi.mock("./NexisClaw-tools.js", () => ({
-  createNexisClawTools: () => [],
+vi.mock("./GreenchClaw-tools.js", () => ({
+  createGreenchClawTools: () => [],
 }));
 
 vi.mock("./bash-tools.exec-host-shared.js", async () => {
@@ -190,7 +193,7 @@ async function createSafeBinsExecTool(params: {
     fs.writeFileSync(path.join(tmpDir, file.name), file.contents, "utf8");
   }
 
-  const cfg: NexisClawConfig = {
+  const cfg: GreenchClawConfig = {
     tools: {
       exec: {
         host: "gateway",
@@ -202,7 +205,7 @@ async function createSafeBinsExecTool(params: {
     },
   };
 
-  const tools = createNexisClawCodingTools({
+  const tools = createGreenchClawCodingTools({
     config: cfg,
     exec: {
       notifyOnExit: false,
@@ -229,7 +232,7 @@ async function withSafeBinsExecTool(
   try {
     await withEnvAsync(
       {
-        NEXISCLAW_SHELL_ENV_TIMEOUT_MS: "1",
+        GREENCHCLAW_SHELL_ENV_TIMEOUT_MS: "1",
         PATH: "/usr/bin:/bin",
         SHELL: "/bin/sh",
       },
@@ -243,11 +246,11 @@ async function withSafeBinsExecTool(
   }
 }
 
-describe("createNexisClawCodingTools safeBins", () => {
+describe("createGreenchClawCodingTools safeBins", () => {
   it("threads tools.exec.safeBins into exec allowlist checks", async () => {
     await withSafeBinsExecTool(
       {
-        tmpPrefix: "NexisClaw-safe-bins-",
+        tmpPrefix: "GreenchClaw-safe-bins-",
         safeBins: ["echo"],
         safeBinProfiles: {
           echo: { maxPositional: 1 },
@@ -272,7 +275,7 @@ describe("createNexisClawCodingTools safeBins", () => {
   it("rejects unprofiled custom safe-bin entries", async () => {
     await withSafeBinsExecTool(
       {
-        tmpPrefix: "NexisClaw-safe-bins-unprofiled-",
+        tmpPrefix: "GreenchClaw-safe-bins-unprofiled-",
         safeBins: ["echo"],
       },
       async ({ tmpDir, execTool }) => {
@@ -289,7 +292,7 @@ describe("createNexisClawCodingTools safeBins", () => {
   it("does not allow env var expansion to smuggle file args via safeBins", async () => {
     await withSafeBinsExecTool(
       {
-        tmpPrefix: "NexisClaw-safe-bins-expand-",
+        tmpPrefix: "GreenchClaw-safe-bins-expand-",
         safeBins: ["head", "wc"],
         files: [{ name: "secret.txt", contents: "TOP_SECRET\n" }],
       },
@@ -308,7 +311,7 @@ describe("createNexisClawCodingTools safeBins", () => {
   it("blocks sort output/compress bypass attempts in safeBins mode", async () => {
     await withSafeBinsExecTool(
       {
-        tmpPrefix: "NexisClaw-safe-bins-sort-",
+        tmpPrefix: "GreenchClaw-safe-bins-sort-",
         safeBins: ["sort"],
         files: [{ name: "existing.txt", contents: "x\n" }],
       },
@@ -355,7 +358,7 @@ describe("createNexisClawCodingTools safeBins", () => {
   it("blocks shell redirection metacharacters in safeBins mode", async () => {
     await withSafeBinsExecTool(
       {
-        tmpPrefix: "NexisClaw-safe-bins-redirect-",
+        tmpPrefix: "GreenchClaw-safe-bins-redirect-",
         safeBins: ["head"],
         files: [{ name: "source.txt", contents: "line1\nline2\n" }],
       },
@@ -374,7 +377,7 @@ describe("createNexisClawCodingTools safeBins", () => {
   it("blocks grep recursive flags from reading cwd via safeBins", async () => {
     await withSafeBinsExecTool(
       {
-        tmpPrefix: "NexisClaw-safe-bins-grep-",
+        tmpPrefix: "GreenchClaw-safe-bins-grep-",
         safeBins: ["grep"],
         files: [{ name: "secret.txt", contents: "SAFE_BINS_RECURSIVE_SHOULD_NOT_LEAK\n" }],
       },

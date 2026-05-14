@@ -1,4 +1,4 @@
-import type { LookupFn, SsrFPolicy } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import type { LookupFn, SsrFPolicy } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { UrbitHttpError } from "./errors.js";
 import { urbitFetch } from "./fetch.js";
 

@@ -1,4 +1,4 @@
-import { stripAssistantInternalScaffolding } from "NexisClaw/plugin-sdk/text-chunking";
+import { stripAssistantInternalScaffolding } from "GreenchClaw/plugin-sdk/text-chunking";
 
 /**
  * Patterns that indicate assistant-internal metadata leaked into text.

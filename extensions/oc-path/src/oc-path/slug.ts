@@ -2,7 +2,7 @@
  * Slug derivation: kebab-case lowercase, deterministic, idempotent.
  * Used by parse + resolve for section/item addressing.
  *
- * @module @NexisClaw/oc-path/slug
+ * @module @GreenchClaw/oc-path/slug
  */
 
 const NON_SLUG_CHARS = /[^a-z0-9-]+/g;

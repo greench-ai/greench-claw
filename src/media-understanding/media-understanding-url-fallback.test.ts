@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { resolvePreferredNexisClawTmpDir } from "../infra/tmp-NexisClaw-dir.js";
+import { resolvePreferredGreenchClawTmpDir } from "../infra/tmp-GreenchClaw-dir.js";
 import { withTempDir } from "../test-helpers/temp-dir.js";
 import { MediaAttachmentCache } from "./attachments.js";
 
@@ -69,7 +69,7 @@ describe("media understanding attachment URL fallback", () => {
 
   it("getPath falls back to URL fetch when local path is blocked", async () => {
     await withBlockedLocalAttachmentFallback(
-      "NexisClaw-media-cache-getpath-url-fallback-",
+      "GreenchClaw-media-cache-getpath-url-fallback-",
       async ({ cache, fallbackUrl }) => {
         const result = await cache.getPath({
           attachmentIndex: 0,
@@ -78,8 +78,8 @@ describe("media understanding attachment URL fallback", () => {
         });
         // getPath should fall through to getBuffer URL fetch, write a temp file,
         // and return a path to that temp file instead of throwing.
-        expect(path.dirname(result.path)).toBe(resolvePreferredNexisClawTmpDir());
-        expect(path.basename(result.path).startsWith("NexisClaw-media-")).toBe(true);
+        expect(path.dirname(result.path)).toBe(resolvePreferredGreenchClawTmpDir());
+        expect(path.basename(result.path).startsWith("GreenchClaw-media-")).toBe(true);
         expect(path.extname(result.path)).toBe(".jpg");
         expect(fetchRemoteMediaMock).toHaveBeenCalledTimes(1);
         const fetchInput = requireFetchRemoteMediaInput();
@@ -101,7 +101,7 @@ describe("media understanding attachment URL fallback", () => {
 
   it("falls back to URL fetch when local attachment canonicalization fails", async () => {
     await withBlockedLocalAttachmentFallback(
-      "NexisClaw-media-cache-url-fallback-",
+      "GreenchClaw-media-cache-url-fallback-",
       async ({ cache, fallbackUrl }) => {
         const result = await cache.getBuffer({
           attachmentIndex: 0,

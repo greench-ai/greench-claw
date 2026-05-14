@@ -1,11 +1,11 @@
-import { formatAllowFromLowercase } from "NexisClaw/plugin-sdk/allow-from";
+import { formatAllowFromLowercase } from "GreenchClaw/plugin-sdk/allow-from";
 import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
   createScopedDmSecurityResolver,
-} from "NexisClaw/plugin-sdk/channel-config-helpers";
-import { createPairingPrefixStripper } from "NexisClaw/plugin-sdk/channel-pairing";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import { createPairingPrefixStripper } from "GreenchClaw/plugin-sdk/channel-pairing";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   listNextcloudTalkAccountIds,
   resolveDefaultNextcloudTalkAccountId,
@@ -45,7 +45,7 @@ export const nextcloudTalkSecurityAdapter = {
 
 export const nextcloudTalkPairingTextAdapter = {
   idLabel: "nextcloudUserId",
-  message: "NexisClaw: your access has been approved.",
+  message: "GreenchClaw: your access has been approved.",
   normalizeAllowEntry: createPairingPrefixStripper(/^(nextcloud-talk|nc-talk|nc):/i, (entry) =>
     normalizeLowercaseStringOrEmpty(entry),
   ),

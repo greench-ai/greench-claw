@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import type {
   DetachedRunningTaskCreateParams,
@@ -577,7 +577,7 @@ export function runTaskInFlowForOwner(
 }
 
 export async function cancelFlowById(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   flowId: string;
 }): Promise<CancelFlowResult> {
   const flow = getTaskFlowById(params.flowId);
@@ -659,7 +659,7 @@ export async function cancelFlowById(params: {
 }
 
 export async function cancelFlowByIdForOwner(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   flowId: string;
   callerOwnerKey: string;
 }): Promise<CancelFlowResult> {
@@ -680,7 +680,10 @@ export async function cancelFlowByIdForOwner(params: {
   });
 }
 
-export async function cancelDetachedTaskRunById(params: { cfg: NexisClawConfig; taskId: string }) {
+export async function cancelDetachedTaskRunById(params: {
+  cfg: GreenchClawConfig;
+  taskId: string;
+}) {
   const task = getTaskById(params.taskId);
   if (!task) {
     return cancelTaskById(params);

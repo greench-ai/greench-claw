@@ -1,13 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
-import { loadJsonFile, saveJsonFile } from "NexisClaw/plugin-sdk/json-store";
-import { normalizeAccountId, resolveAgentIdFromSessionKey } from "NexisClaw/plugin-sdk/routing";
-import { resolveStateDir } from "NexisClaw/plugin-sdk/state-paths";
+import { loadJsonFile, saveJsonFile } from "GreenchClaw/plugin-sdk/json-store";
+import { normalizeAccountId, resolveAgentIdFromSessionKey } from "GreenchClaw/plugin-sdk/routing";
+import { resolveStateDir } from "GreenchClaw/plugin-sdk/state-paths";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   normalizeOptionalStringifiedId,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   DEFAULT_THREAD_BINDING_IDLE_TIMEOUT_MS,
   DEFAULT_THREAD_BINDING_MAX_AGE_MS,
@@ -35,7 +35,7 @@ type ThreadBindingsGlobalState = {
 // Plugin hooks can load this module through a separate runtime path while core
 // imports it via ESM. Store mutable state on globalThis so both paths share one
 // registry.
-const THREAD_BINDINGS_STATE_KEY = Symbol.for("NexisClaw.discordThreadBindingsState");
+const THREAD_BINDINGS_STATE_KEY = Symbol.for("GreenchClaw.discordThreadBindingsState");
 let threadBindingsState: ThreadBindingsGlobalState | undefined;
 
 function createThreadBindingsGlobalState(): ThreadBindingsGlobalState {

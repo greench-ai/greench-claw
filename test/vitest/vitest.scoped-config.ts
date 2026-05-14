@@ -148,7 +148,7 @@ export function createScopedVitestConfig(
     environment?: string;
     exclude?: string[];
     argv?: string[];
-    includeNexisClawRuntimeSetup?: boolean;
+    includeGreenchClawRuntimeSetup?: boolean;
     isolate?: boolean;
     name?: string;
     fileParallelism?: boolean;
@@ -164,7 +164,7 @@ export function createScopedVitestConfig(
   const scopedDir = options?.dir;
   const resolvedScopedDir = scopedDir ? path.join(repoRoot, scopedDir) : undefined;
   const env = options?.env;
-  const includeFromEnv = loadPatternListFromEnv("NEXISCLAW_VITEST_INCLUDE_FILE", env);
+  const includeFromEnv = loadPatternListFromEnv("GREENCHCLAW_VITEST_INCLUDE_FILE", env);
   const cliInclude = narrowIncludePatternsForCli(include, options?.argv);
   const unitFastExcludePatterns =
     options?.excludeUnitFastTests === false ? [] : getUnitFastTestFiles();
@@ -177,7 +177,9 @@ export function createScopedVitestConfig(
     ...new Set([
       ...(baseTest.setupFiles ?? []),
       ...(options?.setupFiles ?? []),
-      ...(options?.includeNexisClawRuntimeSetup === false ? [] : ["test/setup-NexisClaw-runtime.ts"]),
+      ...(options?.includeGreenchClawRuntimeSetup === false
+        ? []
+        : ["test/setup-GreenchClaw-runtime.ts"]),
     ]),
   ].map(resolveRepoRootPath);
   const useNonIsolatedRunner = options?.useNonIsolatedRunner ?? !isolate;

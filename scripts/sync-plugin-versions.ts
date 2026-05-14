@@ -6,7 +6,7 @@ type PackageJson = {
   version?: string;
   devDependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
-  NexisClaw?: {
+  GreenchClaw?: {
     install?: {
       minHostVersion?: string;
     };
@@ -14,7 +14,7 @@ type PackageJson = {
       pluginApi?: string;
     };
     build?: {
-      NexisClawVersion?: string;
+      GreenchClawVersion?: string;
     };
   };
 };
@@ -23,28 +23,28 @@ type SyncPluginVersionsOptions = {
   write?: boolean;
 };
 
-const NEXISCLAW_VERSION_RANGE_RE = /^>=\d{4}\.\d{1,2}\.\d{1,2}(?:[-.][^"\s]+)?$/u;
+const GREENCHCLAW_VERSION_RANGE_RE = /^>=\d{4}\.\d{1,2}\.\d{1,2}(?:[-.][^"\s]+)?$/u;
 
-function syncNexisClawDependencyRange(
+function syncGreenchClawDependencyRange(
   deps: Record<string, string> | undefined,
   targetVersion: string,
 ): boolean {
-  const current = deps?.NexisClaw;
-  if (!current || current === "workspace:*" || !NEXISCLAW_VERSION_RANGE_RE.test(current)) {
+  const current = deps?.GreenchClaw;
+  if (!current || current === "workspace:*" || !GREENCHCLAW_VERSION_RANGE_RE.test(current)) {
     return false;
   }
   const next = `>=${targetVersion}`;
   if (current === next) {
     return false;
   }
-  deps.NexisClaw = next;
+  deps.GreenchClaw = next;
   return true;
 }
 
 function syncPluginApiVersion(pkg: PackageJson, targetVersion: string): boolean {
-  const compat = pkg.NexisClaw?.compat;
+  const compat = pkg.GreenchClaw?.compat;
   const current = compat?.pluginApi;
-  if (!current || !NEXISCLAW_VERSION_RANGE_RE.test(current)) {
+  if (!current || !GREENCHCLAW_VERSION_RANGE_RE.test(current)) {
     return false;
   }
   const next = `>=${targetVersion}`;
@@ -55,16 +55,16 @@ function syncPluginApiVersion(pkg: PackageJson, targetVersion: string): boolean 
   return true;
 }
 
-function syncBuildNexisClawVersion(pkg: PackageJson, targetVersion: string): boolean {
-  const build = pkg.NexisClaw?.build;
-  const current = build?.NexisClawVersion;
+function syncBuildGreenchClawVersion(pkg: PackageJson, targetVersion: string): boolean {
+  const build = pkg.GreenchClaw?.build;
+  const current = build?.GreenchClawVersion;
   if (!current) {
     return false;
   }
   if (current === targetVersion) {
     return false;
   }
-  build.NexisClawVersion = targetVersion;
+  build.GreenchClawVersion = targetVersion;
   return true;
 }
 
@@ -80,7 +80,7 @@ function ensureChangelogEntry(changelogPath: string, version: string, write: boo
   if (content.includes(`## ${version}`)) {
     return false;
   }
-  const entry = `## ${version}\n\n### Changes\n- Version alignment with core NexisClaw release numbers.\n\n`;
+  const entry = `## ${version}\n\n### Changes\n- Version alignment with core GreenchClaw release numbers.\n\n`;
   if (content.startsWith("# Changelog\n\n")) {
     const next = content.replace("# Changelog\n\n", `# Changelog\n\n${entry}`);
     if (write) {
@@ -137,18 +137,21 @@ export function syncPluginVersions(
     }
 
     const versionChanged = pkg.version !== targetVersion;
-    const devDependencyChanged = syncNexisClawDependencyRange(pkg.devDependencies, targetVersion);
-    const peerDependencyChanged = syncNexisClawDependencyRange(pkg.peerDependencies, targetVersion);
+    const devDependencyChanged = syncGreenchClawDependencyRange(pkg.devDependencies, targetVersion);
+    const peerDependencyChanged = syncGreenchClawDependencyRange(
+      pkg.peerDependencies,
+      targetVersion,
+    );
     // minHostVersion is a compatibility floor, not release alignment metadata.
     // Keep it stable unless the owning plugin intentionally raises it.
     const pluginApiChanged = syncPluginApiVersion(pkg, targetVersion);
-    const buildNexisClawVersionChanged = syncBuildNexisClawVersion(pkg, targetVersion);
+    const buildGreenchClawVersionChanged = syncBuildGreenchClawVersion(pkg, targetVersion);
     const packageChanged =
       versionChanged ||
       devDependencyChanged ||
       peerDependencyChanged ||
       pluginApiChanged ||
-      buildNexisClawVersionChanged;
+      buildGreenchClawVersionChanged;
     if (!packageChanged) {
       skipped.push(pkg.name);
       continue;

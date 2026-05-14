@@ -1,24 +1,24 @@
 import type { App } from "@slack/bolt";
-import { resolveDefaultAgentId } from "NexisClaw/plugin-sdk/agent-runtime";
-import { formatAllowlistMatchMeta } from "NexisClaw/plugin-sdk/allow-from";
+import { resolveDefaultAgentId } from "GreenchClaw/plugin-sdk/agent-runtime";
+import { formatAllowlistMatchMeta } from "GreenchClaw/plugin-sdk/allow-from";
 import type {
-  NexisClawConfig,
+  GreenchClawConfig,
   SlackReactionNotificationMode,
-} from "NexisClaw/plugin-sdk/config-contracts";
-import type { SessionScope } from "NexisClaw/plugin-sdk/config-contracts";
-import type { DmPolicy, GroupPolicy } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveRuntimeConversationBindingRoute } from "NexisClaw/plugin-sdk/conversation-runtime";
-import { createDedupeCache } from "NexisClaw/plugin-sdk/dedupe-runtime";
-import type { HistoryEntry } from "NexisClaw/plugin-sdk/reply-history";
-import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
-import { resolveThreadSessionKeys } from "NexisClaw/plugin-sdk/routing";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { getChildLogger } from "NexisClaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import type { SessionScope } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { DmPolicy, GroupPolicy } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveRuntimeConversationBindingRoute } from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { createDedupeCache } from "GreenchClaw/plugin-sdk/dedupe-runtime";
+import type { HistoryEntry } from "GreenchClaw/plugin-sdk/reply-history";
+import { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
+import { resolveThreadSessionKeys } from "GreenchClaw/plugin-sdk/routing";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { getChildLogger } from "GreenchClaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { formatSlackError } from "../errors.js";
 import type { SlackMessageEvent } from "../types.js";
 import { normalizeAllowList, normalizeAllowListLower, normalizeSlackSlug } from "./allow-list.js";
@@ -31,7 +31,7 @@ import { isSlackChannelAllowedByPolicy } from "./policy.js";
 export { normalizeSlackChannelType, resolveSlackChatType } from "./channel-type.js";
 
 export type SlackMonitorContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   botToken: string;
   app: App;
@@ -65,7 +65,7 @@ export type SlackMonitorContext = {
   threadHistoryScope: "thread" | "channel";
   threadInheritParent: boolean;
   threadRequireExplicitMention: boolean;
-  slashCommand: Required<import("NexisClaw/plugin-sdk/config-contracts").SlackSlashCommandConfig>;
+  slashCommand: Required<import("GreenchClaw/plugin-sdk/config-contracts").SlackSlashCommandConfig>;
   textLimit: number;
   ackReactionScope: string;
   typingReaction: string;
@@ -102,7 +102,7 @@ export type SlackMonitorContext = {
 };
 
 export function createSlackMonitorContext(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   botToken: string;
   app: App;

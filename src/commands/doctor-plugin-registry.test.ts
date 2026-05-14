@@ -24,7 +24,7 @@ afterEach(() => {
 });
 
 function makeTempDir() {
-  return makeTrackedTempDir("NexisClaw-doctor-plugin-registry", tempDirs);
+  return makeTrackedTempDir("GreenchClaw-doctor-plugin-registry", tempDirs);
 }
 
 async function readRequiredPersistedInstalledPluginIndex(
@@ -39,8 +39,8 @@ async function readRequiredPersistedInstalledPluginIndex(
 
 function hermeticEnv(overrides: NodeJS.ProcessEnv = {}): NodeJS.ProcessEnv {
   return {
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-    NEXISCLAW_VERSION: "2026.4.25",
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+    GREENCHCLAW_VERSION: "2026.4.25",
     VITEST: "true",
     ...overrides,
   };
@@ -53,7 +53,7 @@ function createCandidate(rootDir: string, id = "demo"): PluginCandidate {
     "utf8",
   );
   fs.writeFileSync(
-    path.join(rootDir, "NexisClaw.plugin.json"),
+    path.join(rootDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id,
       name: id,
@@ -82,7 +82,7 @@ function createBundledCandidate(params: {
     "utf8",
   );
   fs.writeFileSync(
-    path.join(params.rootDir, "NexisClaw.plugin.json"),
+    path.join(params.rootDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: params.id,
       name: params.id,
@@ -166,14 +166,14 @@ function createManagedNpmPlugin(params: {
       name: params.packageName,
       version: params.version,
       ...(params.peerDependencies ? { peerDependencies: params.peerDependencies } : {}),
-      NexisClaw: {
+      GreenchClaw: {
         extensions: ["."],
       },
     }),
     "utf8",
   );
   fs.writeFileSync(
-    path.join(packageDir, "NexisClaw.plugin.json"),
+    path.join(packageDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: params.id,
       name: params.id,
@@ -233,7 +233,7 @@ function expectedPluginIndexRecord(params: {
     pluginId: params.pluginId,
     ...(params.packageName ? { packageName: params.packageName } : {}),
     ...(params.packageVersion ? { packageVersion: params.packageVersion } : {}),
-    manifestPath: path.join(params.rootDir, "NexisClaw.plugin.json"),
+    manifestPath: path.join(params.rootDir, "GreenchClaw.plugin.json"),
     manifestHash: expect.any(String),
     manifestFile: {
       size: expect.any(Number),
@@ -304,7 +304,7 @@ describe("maybeRepairPluginRegistryState", () => {
     createManagedNpmPlugin({
       stateDir,
       id: "google-meet",
-      packageName: "@NexisClaw/google-meet",
+      packageName: "@GreenchClaw/google-meet",
       version: "2026.5.2",
     });
     await writePersistedInstalledPluginIndex(createCurrentIndex(), { stateDir });
@@ -315,7 +315,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "google-meet",
-          packageName: "@NexisClaw/google-meet",
+          packageName: "@GreenchClaw/google-meet",
           version: "2026.5.3",
         }),
       ],
@@ -337,9 +337,9 @@ describe("maybeRepairPluginRegistryState", () => {
     expect(vi.mocked(note).mock.calls.join("\n")).toContain(
       "Managed npm plugin packages shadow bundled plugins",
     );
-    expect(vi.mocked(note).mock.calls.join("\n")).toContain("@NexisClaw/google-meet@2026.5.2");
+    expect(vi.mocked(note).mock.calls.join("\n")).toContain("@GreenchClaw/google-meet@2026.5.2");
     expect(
-      fs.existsSync(path.join(stateDir, "npm", "node_modules", "@NexisClaw", "google-meet")),
+      fs.existsSync(path.join(stateDir, "npm", "node_modules", "@GreenchClaw", "google-meet")),
     ).toBe(true);
   });
 
@@ -350,7 +350,7 @@ describe("maybeRepairPluginRegistryState", () => {
     createManagedNpmPlugin({
       stateDir,
       id: "google-meet",
-      packageName: "@NexisClaw/google-meet",
+      packageName: "@GreenchClaw/google-meet",
       version: "2026.5.2",
     });
     await writePersistedInstalledPluginIndex(createCurrentIndex(), { stateDir });
@@ -361,7 +361,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "google-meet",
-          packageName: "@NexisClaw/google-meet",
+          packageName: "@GreenchClaw/google-meet",
           version: "2026.5.3",
         }),
       ],
@@ -381,7 +381,7 @@ describe("maybeRepairPluginRegistryState", () => {
     });
 
     expect(
-      fs.existsSync(path.join(stateDir, "npm", "node_modules", "@NexisClaw", "google-meet")),
+      fs.existsSync(path.join(stateDir, "npm", "node_modules", "@GreenchClaw", "google-meet")),
     ).toBe(false);
     expect(
       JSON.parse(fs.readFileSync(path.join(stateDir, "npm", "package.json"), "utf8")),
@@ -393,7 +393,7 @@ describe("maybeRepairPluginRegistryState", () => {
         pluginId: "google-meet",
         rootDir: bundledDir,
         origin: "bundled",
-        packageName: "@NexisClaw/google-meet",
+        packageName: "@GreenchClaw/google-meet",
         packageVersion: "2026.5.3",
       }),
     ]);
@@ -409,13 +409,13 @@ describe("maybeRepairPluginRegistryState", () => {
     const managed = createManagedNpmPlugin({
       stateDir,
       id: "google-meet",
-      packageName: "@NexisClaw/google-meet",
+      packageName: "@GreenchClaw/google-meet",
       version: "2026.5.3",
     });
     await writePersistedInstalledPluginIndex(
       createCurrentIndexWithNpmRecord({
         pluginId: "google-meet",
-        packageName: "@NexisClaw/google-meet",
+        packageName: "@GreenchClaw/google-meet",
         packageDir: managed.packageDir,
         version: "2026.5.3",
       }),
@@ -428,7 +428,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "google-meet",
-          packageName: "@NexisClaw/google-meet",
+          packageName: "@GreenchClaw/google-meet",
           version: "2026.5.3",
         }),
       ],
@@ -456,7 +456,7 @@ describe("maybeRepairPluginRegistryState", () => {
         pluginId: "google-meet",
         rootDir: bundledDir,
         origin: "bundled",
-        packageName: "@NexisClaw/google-meet",
+        packageName: "@GreenchClaw/google-meet",
         packageVersion: "2026.5.3",
       }),
     ]);
@@ -469,7 +469,7 @@ describe("maybeRepairPluginRegistryState", () => {
     createManagedNpmPlugin({
       stateDir,
       id: "google-meet",
-      packageName: "@NexisClaw/google-meet",
+      packageName: "@GreenchClaw/google-meet",
       version: "2026.5.2",
       packageLock: true,
     });
@@ -481,7 +481,7 @@ describe("maybeRepairPluginRegistryState", () => {
         createBundledCandidate({
           rootDir: bundledDir,
           id: "google-meet",
-          packageName: "@NexisClaw/google-meet",
+          packageName: "@GreenchClaw/google-meet",
           version: "2026.5.3",
         }),
       ],
@@ -504,12 +504,12 @@ describe("maybeRepairPluginRegistryState", () => {
       fs.readFileSync(path.join(stateDir, "npm", "package-lock.json"), "utf8"),
     );
     expect(packageLock.packages[""].dependencies).toEqual({ "other-plugin": "1.0.0" });
-    expect(packageLock.packages).not.toHaveProperty("node_modules/@NexisClaw/google-meet");
-    expect(packageLock.dependencies).not.toHaveProperty("@NexisClaw/google-meet");
+    expect(packageLock.packages).not.toHaveProperty("node_modules/@GreenchClaw/google-meet");
+    expect(packageLock.dependencies).not.toHaveProperty("@GreenchClaw/google-meet");
     expect(packageLock.dependencies).toHaveProperty("other-plugin");
   });
 
-  it("repairs managed npm NexisClaw peer links during registry repair", async () => {
+  it("repairs managed npm GreenchClaw peer links during registry repair", async () => {
     const stateDir = makeTempDir();
     const managed = createManagedNpmPlugin({
       stateDir,
@@ -517,7 +517,7 @@ describe("maybeRepairPluginRegistryState", () => {
       packageName: "codex-plugin",
       version: "2026.5.3",
       peerDependencies: {
-        NexisClaw: ">=2026.5.3",
+        GreenchClaw: ">=2026.5.3",
       },
     });
     await writePersistedInstalledPluginIndex(
@@ -537,13 +537,13 @@ describe("maybeRepairPluginRegistryState", () => {
       prompter: { shouldRepair: true },
     });
 
-    const linkPath = path.join(managed.packageDir, "node_modules", "NexisClaw");
+    const linkPath = path.join(managed.packageDir, "node_modules", "GreenchClaw");
     expect(fs.lstatSync(linkPath).isSymbolicLink()).toBe(true);
     expect(fs.realpathSync(linkPath)).toBe(fs.realpathSync(process.cwd()));
-    expect(vi.mocked(note).mock.calls.join("\n")).toContain("Repaired NexisClaw host peer link");
+    expect(vi.mocked(note).mock.calls.join("\n")).toContain("Repaired GreenchClaw host peer link");
   });
 
-  it("warns about broken managed npm NexisClaw peer links without repairing them", async () => {
+  it("warns about broken managed npm GreenchClaw peer links without repairing them", async () => {
     const stateDir = makeTempDir();
     const managed = createManagedNpmPlugin({
       stateDir,
@@ -551,7 +551,7 @@ describe("maybeRepairPluginRegistryState", () => {
       packageName: "codex-plugin",
       version: "2026.5.3",
       peerDependencies: {
-        NexisClaw: ">=2026.5.3",
+        GreenchClaw: ">=2026.5.3",
       },
     });
     await writePersistedInstalledPluginIndex(
@@ -571,11 +571,11 @@ describe("maybeRepairPluginRegistryState", () => {
       prompter: { shouldRepair: false },
     });
 
-    const linkPath = path.join(managed.packageDir, "node_modules", "NexisClaw");
+    const linkPath = path.join(managed.packageDir, "node_modules", "GreenchClaw");
     const notes = vi.mocked(note).mock.calls.join("\n");
-    expect(notes).toContain("Managed npm NexisClaw host peer links need repair");
+    expect(notes).toContain("Managed npm GreenchClaw host peer links need repair");
     expect(notes).toContain("codex-plugin");
-    expect(notes).toContain("NexisClaw doctor --fix");
+    expect(notes).toContain("GreenchClaw doctor --fix");
     expect(fs.existsSync(linkPath)).toBe(false);
   });
 });

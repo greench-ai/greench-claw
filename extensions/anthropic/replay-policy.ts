@@ -1,4 +1,4 @@
-import { NATIVE_ANTHROPIC_REPLAY_HOOKS } from "NexisClaw/plugin-sdk/provider-model-shared";
+import { NATIVE_ANTHROPIC_REPLAY_HOOKS } from "GreenchClaw/plugin-sdk/provider-model-shared";
 
 const { buildReplayPolicy } = NATIVE_ANTHROPIC_REPLAY_HOOKS;
 

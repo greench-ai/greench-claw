@@ -1,5 +1,5 @@
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeOptionalStringifiedId } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeOptionalStringifiedId } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { ChannelType, Message } from "../internal/discord.js";
 import { resolveDiscordChannelInfoSafe } from "./channel-access.js";
 

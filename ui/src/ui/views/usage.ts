@@ -489,7 +489,7 @@ export function renderUsage(props: UsageProps) {
                     class="usage-export-item"
                     @click=${() =>
                       downloadTextFile(
-                        `NexisClaw-usage-sessions-${exportStamp}.csv`,
+                        `GreenchClaw-usage-sessions-${exportStamp}.csv`,
                         buildSessionsCsv(filteredSessions),
                         "text/csv",
                       )}
@@ -501,7 +501,7 @@ export function renderUsage(props: UsageProps) {
                     class="usage-export-item"
                     @click=${() =>
                       downloadTextFile(
-                        `NexisClaw-usage-daily-${exportStamp}.csv`,
+                        `GreenchClaw-usage-daily-${exportStamp}.csv`,
                         buildDailyCsv(filteredDaily),
                         "text/csv",
                       )}
@@ -513,7 +513,7 @@ export function renderUsage(props: UsageProps) {
                     class="usage-export-item"
                     @click=${() =>
                       downloadTextFile(
-                        `NexisClaw-usage-${exportStamp}.json`,
+                        `GreenchClaw-usage-${exportStamp}.json`,
                         JSON.stringify(
                           {
                             totals: displayTotals,

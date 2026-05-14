@@ -1,7 +1,7 @@
 import {
   resolveChannelPreviewStreamMode,
   type StreamingMode,
-} from "NexisClaw/plugin-sdk/channel-streaming";
+} from "GreenchClaw/plugin-sdk/channel-streaming";
 
 type TelegramPreviewStreamMode = StreamingMode;
 

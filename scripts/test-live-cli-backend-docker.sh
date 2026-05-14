@@ -2,28 +2,28 @@
 set -euo pipefail
 
 SCRIPT_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ROOT_DIR="${NEXISCLAW_LIVE_DOCKER_REPO_ROOT:-$SCRIPT_ROOT_DIR}"
+ROOT_DIR="${GREENCHCLAW_LIVE_DOCKER_REPO_ROOT:-$SCRIPT_ROOT_DIR}"
 ROOT_DIR="$(cd "$ROOT_DIR" && pwd)"
-TRUSTED_HARNESS_DIR="${NEXISCLAW_LIVE_DOCKER_TRUSTED_HARNESS_DIR:-$SCRIPT_ROOT_DIR}"
+TRUSTED_HARNESS_DIR="${GREENCHCLAW_LIVE_DOCKER_TRUSTED_HARNESS_DIR:-$SCRIPT_ROOT_DIR}"
 if [[ -z "$TRUSTED_HARNESS_DIR" || ! -d "$TRUSTED_HARNESS_DIR" ]]; then
   echo "ERROR: trusted live Docker harness directory not found: ${TRUSTED_HARNESS_DIR:-<empty>}." >&2
   exit 1
 fi
 TRUSTED_HARNESS_DIR="$(cd "$TRUSTED_HARNESS_DIR" && pwd)"
 source "$TRUSTED_HARNESS_DIR/scripts/lib/live-docker-auth.sh"
-IMAGE_NAME="${NEXISCLAW_IMAGE:-NexisClaw:local}"
-LIVE_IMAGE_NAME="${NEXISCLAW_LIVE_IMAGE:-${IMAGE_NAME}-live}"
-CONFIG_DIR="${NEXISCLAW_CONFIG_DIR:-$HOME/.NexisClaw}"
-WORKSPACE_DIR="${NEXISCLAW_WORKSPACE_DIR:-$HOME/.NexisClaw/workspace}"
-PROFILE_FILE="$(NexisClaw_live_default_profile_file)"
-DEFAULT_PROVIDER="${NEXISCLAW_DOCKER_CLI_BACKEND_PROVIDER:-claude-cli}"
-CLI_MODEL="${NEXISCLAW_LIVE_CLI_BACKEND_MODEL:-}"
+IMAGE_NAME="${GREENCHCLAW_IMAGE:-GreenchClaw:local}"
+LIVE_IMAGE_NAME="${GREENCHCLAW_LIVE_IMAGE:-${IMAGE_NAME}-live}"
+CONFIG_DIR="${GREENCHCLAW_CONFIG_DIR:-$HOME/.GreenchClaw}"
+WORKSPACE_DIR="${GREENCHCLAW_WORKSPACE_DIR:-$HOME/.GreenchClaw/workspace}"
+PROFILE_FILE="$(GreenchClaw_live_default_profile_file)"
+DEFAULT_PROVIDER="${GREENCHCLAW_DOCKER_CLI_BACKEND_PROVIDER:-claude-cli}"
+CLI_MODEL="${GREENCHCLAW_LIVE_CLI_BACKEND_MODEL:-}"
 CLI_PROVIDER="${CLI_MODEL%%/*}"
-CLI_DISABLE_MCP_CONFIG="${NEXISCLAW_LIVE_CLI_BACKEND_DISABLE_MCP_CONFIG:-}"
-CLI_AUTH_MODE="${NEXISCLAW_LIVE_CLI_BACKEND_AUTH:-auto}"
-CLI_SETUP_TIMEOUT_SECONDS="${NEXISCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS:-180}"
+CLI_DISABLE_MCP_CONFIG="${GREENCHCLAW_LIVE_CLI_BACKEND_DISABLE_MCP_CONFIG:-}"
+CLI_AUTH_MODE="${GREENCHCLAW_LIVE_CLI_BACKEND_AUTH:-auto}"
+CLI_SETUP_TIMEOUT_SECONDS="${GREENCHCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS:-180}"
 TEMP_DIRS=()
-DOCKER_USER="${NEXISCLAW_DOCKER_USER:-node}"
+DOCKER_USER="${GREENCHCLAW_DOCKER_USER:-node}"
 DOCKER_HOME_MOUNT=()
 DOCKER_EXTRA_ENV_FILES=()
 DOCKER_AUTH_PRESTAGED=0
@@ -33,7 +33,7 @@ DOCKER_TRUSTED_HARNESS_MOUNT=(-v "$TRUSTED_HARNESS_DIR":"$DOCKER_TRUSTED_HARNESS
 if [[ -z "$CLI_PROVIDER" || "$CLI_PROVIDER" == "$CLI_MODEL" ]]; then
   CLI_PROVIDER="$DEFAULT_PROVIDER"
 fi
-CLI_USE_CI_SAFE_CODEX_CONFIG="${NEXISCLAW_LIVE_CLI_BACKEND_USE_CI_SAFE_CODEX_CONFIG:-}"
+CLI_USE_CI_SAFE_CODEX_CONFIG="${GREENCHCLAW_LIVE_CLI_BACKEND_USE_CI_SAFE_CODEX_CONFIG:-}"
 if [[ -z "$CLI_USE_CI_SAFE_CODEX_CONFIG" ]]; then
   if [[ "$CLI_PROVIDER" == "codex-cli" ]]; then
     CLI_USE_CI_SAFE_CODEX_CONFIG="1"
@@ -53,19 +53,19 @@ case "$CLI_AUTH_MODE" in
   auto | api-key | subscription)
     ;;
   *)
-    echo "ERROR: NEXISCLAW_LIVE_CLI_BACKEND_AUTH must be one of: auto, api-key, subscription." >&2
+    echo "ERROR: GREENCHCLAW_LIVE_CLI_BACKEND_AUTH must be one of: auto, api-key, subscription." >&2
     exit 1
     ;;
 esac
 
 if [[ "$CLI_AUTH_MODE" == "subscription" && "$CLI_PROVIDER" != "claude-cli" ]]; then
-  echo "ERROR: NEXISCLAW_LIVE_CLI_BACKEND_AUTH=subscription is only supported for claude-cli." >&2
+  echo "ERROR: GREENCHCLAW_LIVE_CLI_BACKEND_AUTH=subscription is only supported for claude-cli." >&2
   exit 1
 fi
 
 if [[ "$CLI_AUTH_MODE" == "api-key" && "$CLI_PROVIDER" == "codex-cli" ]]; then
   if [[ -z "${OPENAI_API_KEY:-}" ]]; then
-    echo "ERROR: NEXISCLAW_LIVE_CLI_BACKEND_AUTH=api-key for codex-cli requires OPENAI_API_KEY." >&2
+    echo "ERROR: GREENCHCLAW_LIVE_CLI_BACKEND_AUTH=api-key for codex-cli requires OPENAI_API_KEY." >&2
     exit 1
   fi
 fi
@@ -91,9 +91,9 @@ if [[ "$CLI_PROVIDER" == "claude-cli" && -z "$CLI_DISABLE_MCP_CONFIG" ]]; then
     CLI_DISABLE_MCP_CONFIG="0"
   fi
 fi
-export NEXISCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE="${NEXISCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE:-0}"
-export NEXISCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE="${NEXISCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE:-0}"
-export NEXISCLAW_LIVE_CLI_BACKEND_MCP_PROBE="${NEXISCLAW_LIVE_CLI_BACKEND_MCP_PROBE:-0}"
+export GREENCHCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE="${GREENCHCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE:-0}"
+export GREENCHCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE="${GREENCHCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE:-0}"
+export GREENCHCLAW_LIVE_CLI_BACKEND_MCP_PROBE="${GREENCHCLAW_LIVE_CLI_BACKEND_MCP_PROBE:-0}"
 
 cleanup_temp_dirs() {
   if ((${#TEMP_DIRS[@]} > 0)); then
@@ -102,28 +102,28 @@ cleanup_temp_dirs() {
 }
 trap cleanup_temp_dirs EXIT
 
-if [[ -n "${NEXISCLAW_DOCKER_CLI_TOOLS_DIR:-}" ]]; then
-  CLI_TOOLS_DIR="${NEXISCLAW_DOCKER_CLI_TOOLS_DIR}"
-elif NexisClaw_live_is_ci; then
-  CLI_TOOLS_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/NexisClaw-docker-cli-tools.XXXXXX")"
+if [[ -n "${GREENCHCLAW_DOCKER_CLI_TOOLS_DIR:-}" ]]; then
+  CLI_TOOLS_DIR="${GREENCHCLAW_DOCKER_CLI_TOOLS_DIR}"
+elif GreenchClaw_live_is_ci; then
+  CLI_TOOLS_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/GreenchClaw-docker-cli-tools.XXXXXX")"
   TEMP_DIRS+=("$CLI_TOOLS_DIR")
 else
-  CLI_TOOLS_DIR="$HOME/.cache/NexisClaw/docker-cli-tools"
+  CLI_TOOLS_DIR="$HOME/.cache/GreenchClaw/docker-cli-tools"
 fi
-if [[ -n "${NEXISCLAW_DOCKER_CACHE_HOME_DIR:-}" ]]; then
-  CACHE_HOME_DIR="${NEXISCLAW_DOCKER_CACHE_HOME_DIR}"
-elif NexisClaw_live_is_ci; then
-  CACHE_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/NexisClaw-docker-cache.XXXXXX")"
+if [[ -n "${GREENCHCLAW_DOCKER_CACHE_HOME_DIR:-}" ]]; then
+  CACHE_HOME_DIR="${GREENCHCLAW_DOCKER_CACHE_HOME_DIR}"
+elif GreenchClaw_live_is_ci; then
+  CACHE_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/GreenchClaw-docker-cache.XXXXXX")"
   TEMP_DIRS+=("$CACHE_HOME_DIR")
 else
-  CACHE_HOME_DIR="$HOME/.cache/NexisClaw/docker-cache"
+  CACHE_HOME_DIR="$HOME/.cache/GreenchClaw/docker-cache"
 fi
 
 mkdir -p "$CLI_TOOLS_DIR"
 mkdir -p "$CACHE_HOME_DIR"
-if NexisClaw_live_is_ci; then
+if GreenchClaw_live_is_ci; then
   DOCKER_USER="$(id -u):$(id -g)"
-  DOCKER_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/NexisClaw-docker-home.XXXXXX")"
+  DOCKER_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/GreenchClaw-docker-home.XXXXXX")"
   TEMP_DIRS+=("$DOCKER_HOME_DIR")
   DOCKER_HOME_MOUNT=(-v "$DOCKER_HOME_DIR":/home/node)
 fi
@@ -157,25 +157,25 @@ if [[ "$CLI_PROVIDER" == "claude-cli" && "$CLI_AUTH_MODE" == "subscription" ]]; 
     echo "  - CLAUDE_CODE_OAUTH_TOKEN from 'claude setup-token'." >&2
     exit 1
   fi
-  if [[ -z "${NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV:-}" ]]; then
+  if [[ -z "${GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV:-}" ]]; then
     if [[ "$CLAUDE_SUBSCRIPTION_AUTH_SOURCE" == "env-token" ]]; then
-      export NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV='["CLAUDE_CODE_OAUTH_TOKEN"]'
+      export GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV='["CLAUDE_CODE_OAUTH_TOKEN"]'
     else
-      export NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV="[]"
+      export GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV="[]"
     fi
   fi
-  if [[ "$NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV" == *ANTHROPIC_API_KEY* ]]; then
+  if [[ "$GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV" == *ANTHROPIC_API_KEY* ]]; then
     echo "ERROR: subscription auth smoke must not preserve Anthropic API-key env vars." >&2
     exit 1
   fi
-  if [[ "$CLAUDE_SUBSCRIPTION_AUTH_SOURCE" == "env-token" && "$NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV" != *CLAUDE_CODE_OAUTH_TOKEN* ]]; then
+  if [[ "$CLAUDE_SUBSCRIPTION_AUTH_SOURCE" == "env-token" && "$GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV" != *CLAUDE_CODE_OAUTH_TOKEN* ]]; then
     echo "ERROR: CLAUDE_CODE_OAUTH_TOKEN subscription smoke must preserve CLAUDE_CODE_OAUTH_TOKEN for the Gateway child process." >&2
     exit 1
   fi
-  export NEXISCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE="${NEXISCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE:-0}"
-  export NEXISCLAW_LIVE_CLI_BACKEND_RESUME_PROBE="${NEXISCLAW_LIVE_CLI_BACKEND_RESUME_PROBE:-1}"
-  export NEXISCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE="${NEXISCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE:-0}"
-  export NEXISCLAW_LIVE_CLI_BACKEND_MCP_PROBE="${NEXISCLAW_LIVE_CLI_BACKEND_MCP_PROBE:-0}"
+  export GREENCHCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE="${GREENCHCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE:-0}"
+  export GREENCHCLAW_LIVE_CLI_BACKEND_RESUME_PROBE="${GREENCHCLAW_LIVE_CLI_BACKEND_RESUME_PROBE:-1}"
+  export GREENCHCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE="${GREENCHCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE:-0}"
+  export GREENCHCLAW_LIVE_CLI_BACKEND_MCP_PROBE="${GREENCHCLAW_LIVE_CLI_BACKEND_MCP_PROBE:-0}"
 fi
 
 PROFILE_MOUNT=()
@@ -189,43 +189,43 @@ AUTH_DIRS=()
 AUTH_FILES=()
 if [[ "$CLI_AUTH_MODE" == "api-key" && "$CLI_PROVIDER" == "codex-cli" ]]; then
   AUTH_FILES+=(".codex/config.toml")
-elif [[ -n "${NEXISCLAW_DOCKER_AUTH_DIRS:-}" ]]; then
+elif [[ -n "${GREENCHCLAW_DOCKER_AUTH_DIRS:-}" ]]; then
   while IFS= read -r auth_dir; do
     [[ -n "$auth_dir" ]] || continue
     AUTH_DIRS+=("$auth_dir")
-  done < <(NexisClaw_live_collect_auth_dirs)
+  done < <(GreenchClaw_live_collect_auth_dirs)
   while IFS= read -r auth_file; do
     [[ -n "$auth_file" ]] || continue
     AUTH_FILES+=("$auth_file")
-  done < <(NexisClaw_live_collect_auth_files)
+  done < <(GreenchClaw_live_collect_auth_files)
 else
   while IFS= read -r auth_dir; do
     [[ -n "$auth_dir" ]] || continue
     AUTH_DIRS+=("$auth_dir")
-  done < <(NexisClaw_live_collect_auth_dirs_from_csv "$CLI_PROVIDER")
+  done < <(GreenchClaw_live_collect_auth_dirs_from_csv "$CLI_PROVIDER")
   while IFS= read -r auth_file; do
     [[ -n "$auth_file" ]] || continue
     AUTH_FILES+=("$auth_file")
-  done < <(NexisClaw_live_collect_auth_files_from_csv "$CLI_PROVIDER")
+  done < <(GreenchClaw_live_collect_auth_files_from_csv "$CLI_PROVIDER")
 fi
 AUTH_DIRS_CSV=""
 if ((${#AUTH_DIRS[@]} > 0)); then
-  AUTH_DIRS_CSV="$(NexisClaw_live_join_csv "${AUTH_DIRS[@]}")"
+  AUTH_DIRS_CSV="$(GreenchClaw_live_join_csv "${AUTH_DIRS[@]}")"
 fi
 AUTH_FILES_CSV=""
 if ((${#AUTH_FILES[@]} > 0)); then
-  AUTH_FILES_CSV="$(NexisClaw_live_join_csv "${AUTH_FILES[@]}")"
+  AUTH_FILES_CSV="$(GreenchClaw_live_join_csv "${AUTH_FILES[@]}")"
 fi
 
 if [[ -n "${DOCKER_HOME_DIR:-}" ]]; then
-  NexisClaw_live_stage_auth_into_home "$DOCKER_HOME_DIR" "${AUTH_DIRS[@]}" --files "${AUTH_FILES[@]}"
+  GreenchClaw_live_stage_auth_into_home "$DOCKER_HOME_DIR" "${AUTH_DIRS[@]}" --files "${AUTH_FILES[@]}"
   DOCKER_AUTH_PRESTAGED=1
 fi
 
 EXTERNAL_AUTH_MOUNTS=()
 if ((${#AUTH_DIRS[@]} > 0)); then
   for auth_dir in "${AUTH_DIRS[@]}"; do
-    auth_dir="$(NexisClaw_live_validate_relative_home_path "$auth_dir")"
+    auth_dir="$(GreenchClaw_live_validate_relative_home_path "$auth_dir")"
     host_path="$HOME/$auth_dir"
     if [[ -d "$host_path" ]]; then
       EXTERNAL_AUTH_MOUNTS+=(-v "$host_path":/host-auth/"$auth_dir":ro)
@@ -234,7 +234,7 @@ if ((${#AUTH_DIRS[@]} > 0)); then
 fi
 if ((${#AUTH_FILES[@]} > 0)); then
   for auth_file in "${AUTH_FILES[@]}"; do
-    auth_file="$(NexisClaw_live_validate_relative_home_path "$auth_file")"
+    auth_file="$(GreenchClaw_live_validate_relative_home_path "$auth_file")"
     host_path="$HOME/$auth_file"
     if [[ -f "$host_path" ]]; then
       EXTERNAL_AUTH_MOUNTS+=(-v "$host_path":/host-auth-files/"$auth_file":ro)
@@ -255,11 +255,11 @@ mkdir -p "$NPM_CONFIG_PREFIX" "$XDG_CACHE_HOME" "$COREPACK_HOME" "$NPM_CONFIG_CA
 chmod 700 "$XDG_CACHE_HOME" "$COREPACK_HOME" "$NPM_CONFIG_CACHE" || true
 export PATH="$NPM_CONFIG_PREFIX/bin:$PATH"
 run_setup_command() {
-  timeout --foreground "${NEXISCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS:-180}s" "$@"
+  timeout --foreground "${GREENCHCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS:-180}s" "$@"
 }
-if [ "${NEXISCLAW_DOCKER_AUTH_PRESTAGED:-0}" != "1" ]; then
-  IFS=',' read -r -a auth_dirs <<<"${NEXISCLAW_DOCKER_AUTH_DIRS_RESOLVED:-}"
-  IFS=',' read -r -a auth_files <<<"${NEXISCLAW_DOCKER_AUTH_FILES_RESOLVED:-}"
+if [ "${GREENCHCLAW_DOCKER_AUTH_PRESTAGED:-0}" != "1" ]; then
+  IFS=',' read -r -a auth_dirs <<<"${GREENCHCLAW_DOCKER_AUTH_DIRS_RESOLVED:-}"
+  IFS=',' read -r -a auth_files <<<"${GREENCHCLAW_DOCKER_AUTH_FILES_RESOLVED:-}"
   if ((${#auth_dirs[@]} > 0)); then
     for auth_dir in "${auth_dirs[@]}"; do
       [ -n "$auth_dir" ] || continue
@@ -281,19 +281,19 @@ if [ "${NEXISCLAW_DOCKER_AUTH_PRESTAGED:-0}" != "1" ]; then
     done
   fi
 fi
-provider="${NEXISCLAW_DOCKER_CLI_BACKEND_PROVIDER:-claude-cli}"
-default_command="${NEXISCLAW_DOCKER_CLI_BACKEND_COMMAND_DEFAULT:-}"
-docker_package="${NEXISCLAW_DOCKER_CLI_BACKEND_NPM_PACKAGE:-}"
-binary_name="${NEXISCLAW_DOCKER_CLI_BACKEND_BINARY_NAME:-}"
-if [ "$provider" = "codex-cli" ] && [ "${NEXISCLAW_LIVE_CLI_BACKEND_AUTH:-auto}" != "api-key" ]; then
+provider="${GREENCHCLAW_DOCKER_CLI_BACKEND_PROVIDER:-claude-cli}"
+default_command="${GREENCHCLAW_DOCKER_CLI_BACKEND_COMMAND_DEFAULT:-}"
+docker_package="${GREENCHCLAW_DOCKER_CLI_BACKEND_NPM_PACKAGE:-}"
+binary_name="${GREENCHCLAW_DOCKER_CLI_BACKEND_BINARY_NAME:-}"
+if [ "$provider" = "codex-cli" ] && [ "${GREENCHCLAW_LIVE_CLI_BACKEND_AUTH:-auto}" != "api-key" ]; then
   unset OPENAI_API_KEY
   unset OPENAI_BASE_URL
 fi
 if [ -z "$binary_name" ] && [ -n "$default_command" ]; then
   binary_name="$(basename "$default_command")"
 fi
-if [ -z "${NEXISCLAW_LIVE_CLI_BACKEND_COMMAND:-}" ] && [ -n "$binary_name" ]; then
-  export NEXISCLAW_LIVE_CLI_BACKEND_COMMAND="$NPM_CONFIG_PREFIX/bin/$binary_name"
+if [ -z "${GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND:-}" ] && [ -n "$binary_name" ]; then
+  export GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND="$NPM_CONFIG_PREFIX/bin/$binary_name"
 fi
 package_has_explicit_version() {
   case "$1" in
@@ -305,24 +305,24 @@ package_has_explicit_version() {
     *) return 1 ;;
   esac
 }
-if [ -n "${NEXISCLAW_LIVE_CLI_BACKEND_COMMAND:-}" ] && [ ! -x "${NEXISCLAW_LIVE_CLI_BACKEND_COMMAND}" ] && [ -n "$docker_package" ]; then
+if [ -n "${GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND:-}" ] && [ ! -x "${GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND}" ] && [ -n "$docker_package" ]; then
   run_setup_command npm install -g "$docker_package"
 elif [ -n "$docker_package" ] && package_has_explicit_version "$docker_package"; then
   run_setup_command npm install -g "$docker_package"
 fi
-if [ "$provider" = "codex-cli" ] && [ "${NEXISCLAW_LIVE_CLI_BACKEND_AUTH:-auto}" = "api-key" ]; then
-  codex_login_command="${NEXISCLAW_LIVE_CLI_BACKEND_COMMAND:-$NPM_CONFIG_PREFIX/bin/codex}"
+if [ "$provider" = "codex-cli" ] && [ "${GREENCHCLAW_LIVE_CLI_BACKEND_AUTH:-auto}" = "api-key" ]; then
+  codex_login_command="${GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND:-$NPM_CONFIG_PREFIX/bin/codex}"
   if [ ! -x "$codex_login_command" ] && [ -x "$NPM_CONFIG_PREFIX/bin/codex" ]; then
     codex_login_command="$NPM_CONFIG_PREFIX/bin/codex"
   fi
   printf '%s\n' "$OPENAI_API_KEY" | "$codex_login_command" login --with-api-key >/dev/null
 fi
-if [ -n "${NEXISCLAW_LIVE_CLI_BACKEND_COMMAND:-}" ] && [ -x "${NEXISCLAW_LIVE_CLI_BACKEND_COMMAND}" ]; then
-  echo "==> CLI backend binary: ${NEXISCLAW_LIVE_CLI_BACKEND_COMMAND}"
-  "${NEXISCLAW_LIVE_CLI_BACKEND_COMMAND}" -V || "${NEXISCLAW_LIVE_CLI_BACKEND_COMMAND}" --version || true
+if [ -n "${GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND:-}" ] && [ -x "${GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND}" ]; then
+  echo "==> CLI backend binary: ${GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND}"
+  "${GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND}" -V || "${GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND}" --version || true
 fi
 if [ "$provider" = "claude-cli" ]; then
-  auth_mode="${NEXISCLAW_LIVE_CLI_BACKEND_AUTH:-auto}"
+  auth_mode="${GREENCHCLAW_LIVE_CLI_BACKEND_AUTH:-auto}"
   if [ "$auth_mode" = "subscription" ]; then
     unset ANTHROPIC_API_KEY
     unset ANTHROPIC_API_KEY_OLD
@@ -354,18 +354,18 @@ NODE
     cat > "$NPM_CONFIG_PREFIX/bin/claude" <<WRAP
 #!/usr/bin/env bash
 script_dir="\$(CDPATH= cd -- "\$(dirname -- "\$0")" && pwd)"
-if [ -n "\${NEXISCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY:-}" ]; then
-  export ANTHROPIC_API_KEY="\${NEXISCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY}"
+if [ -n "\${GREENCHCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY:-}" ]; then
+  export ANTHROPIC_API_KEY="\${GREENCHCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY}"
 fi
-if [ -n "\${NEXISCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY_OLD:-}" ]; then
-  export ANTHROPIC_API_KEY_OLD="\${NEXISCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY_OLD}"
+if [ -n "\${GREENCHCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY_OLD:-}" ]; then
+  export ANTHROPIC_API_KEY_OLD="\${GREENCHCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY_OLD}"
 fi
 exec "\$script_dir/claude-real" "\$@"
 WRAP
     chmod +x "$NPM_CONFIG_PREFIX/bin/claude"
   fi
-  if [ -z "${NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV:-}" ]; then
-    export NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV='["ANTHROPIC_API_KEY","ANTHROPIC_API_KEY_OLD"]'
+  if [ -z "${GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV:-}" ]; then
+    export GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV='["ANTHROPIC_API_KEY","ANTHROPIC_API_KEY_OLD"]'
   fi
   if [ "$auth_mode" = "subscription" ]; then
     claude --version
@@ -392,27 +392,27 @@ WRAP
   fi
 fi
 tmp_dir="$(mktemp -d)"
-trusted_scripts_dir="${NEXISCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
+trusted_scripts_dir="${GREENCHCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
 source "$trusted_scripts_dir/lib/live-docker-stage.sh"
-NexisClaw_live_stage_source_tree "$tmp_dir"
+GreenchClaw_live_stage_source_tree "$tmp_dir"
 # Use a writable node_modules overlay in the temp repo. Vite writes bundled
 # config artifacts under the nearest node_modules/.vite-temp path, and the
 # build-stage /app/node_modules tree is root-owned in this Docker lane.
-NexisClaw_live_stage_node_modules "$tmp_dir"
-NexisClaw_live_link_runtime_tree "$tmp_dir"
-NexisClaw_live_stage_state_dir "$tmp_dir/.NexisClaw-state"
-NexisClaw_live_prepare_staged_config
+GreenchClaw_live_stage_node_modules "$tmp_dir"
+GreenchClaw_live_link_runtime_tree "$tmp_dir"
+GreenchClaw_live_stage_state_dir "$tmp_dir/.GreenchClaw-state"
+GreenchClaw_live_prepare_staged_config
 cd "$tmp_dir"
-if [ "${NEXISCLAW_LIVE_CLI_BACKEND_USE_CI_SAFE_CODEX_CONFIG:-0}" = "1" ]; then
+if [ "${GREENCHCLAW_LIVE_CLI_BACKEND_USE_CI_SAFE_CODEX_CONFIG:-0}" = "1" ]; then
   node --import tsx "$trusted_scripts_dir/prepare-codex-ci-config.ts" "$HOME/.codex/config.toml" "$tmp_dir"
 fi
-if [ "$provider" = "codex-cli" ] && [ "${NEXISCLAW_LIVE_CLI_BACKEND_AUTH:-auto}" = "api-key" ]; then
-  codex_probe_model="${NEXISCLAW_LIVE_CLI_BACKEND_MODEL#*/}"
+if [ "$provider" = "codex-cli" ] && [ "${GREENCHCLAW_LIVE_CLI_BACKEND_AUTH:-auto}" = "api-key" ]; then
+  codex_probe_model="${GREENCHCLAW_LIVE_CLI_BACKEND_MODEL#*/}"
   codex_probe_token="OPENCLAW-CODEX-DIRECT-PROBE"
   codex_probe_stdout="$tmp_dir/codex-direct-probe.stdout"
   codex_probe_stderr="$tmp_dir/codex-direct-probe.stderr"
   if ! timeout --foreground --kill-after=10s 180s \
-    "${NEXISCLAW_LIVE_CLI_BACKEND_COMMAND:-codex}" \
+    "${GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND:-codex}" \
     exec \
     --json \
     --color \
@@ -426,7 +426,7 @@ if [ "$provider" = "codex-cli" ] && [ "${NEXISCLAW_LIVE_CLI_BACKEND_AUTH:-auto}"
     "$codex_probe_model" \
     "Reply exactly: $codex_probe_token" \
     >"$codex_probe_stdout" 2>"$codex_probe_stderr" </dev/null; then
-    echo "ERROR: direct Codex CLI probe failed before NexisClaw gateway smoke." >&2
+    echo "ERROR: direct Codex CLI probe failed before GreenchClaw gateway smoke." >&2
     sed -n '1,120p' "$codex_probe_stdout" >&2 || true
     sed -n '1,120p' "$codex_probe_stderr" >&2 || true
     exit 1
@@ -442,7 +442,7 @@ fi
 pnpm test:live src/gateway/gateway-cli-backend.live.test.ts
 EOF
 
-NEXISCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"
+GREENCHCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"
 
 echo "==> Run CLI backend live test in Docker"
 echo "==> Model: $CLI_MODEL"
@@ -460,10 +460,10 @@ fi
 echo "==> External auth dirs: ${AUTH_DIRS_CSV:-none}"
 echo "==> External auth files: ${AUTH_FILES_CSV:-none}"
 DOCKER_AUTH_ENV=(
-  -e NEXISCLAW_LIVE_CLI_BACKEND_AUTH="$CLI_AUTH_MODE"
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_AUTH="$CLI_AUTH_MODE"
 )
 if [[ "$CLI_PROVIDER" == "codex-cli" && "$CLI_AUTH_MODE" == "api-key" ]]; then
-  docker_env_dir="$(mktemp -d "${RUNNER_TEMP:-/tmp}/NexisClaw-cli-backend-env.XXXXXX")"
+  docker_env_dir="$(mktemp -d "${RUNNER_TEMP:-/tmp}/GreenchClaw-cli-backend-env.XXXXXX")"
   TEMP_DIRS+=("$docker_env_dir")
   docker_env_file="$docker_env_dir/openai.env"
   {
@@ -476,15 +476,15 @@ if [[ "$CLI_PROVIDER" == "codex-cli" && "$CLI_AUTH_MODE" == "api-key" ]]; then
 elif [[ "$CLI_PROVIDER" == "claude-cli" && "$CLI_AUTH_MODE" == "subscription" ]]; then
   DOCKER_AUTH_ENV+=(
     -e CLAUDE_CODE_OAUTH_TOKEN="${CLAUDE_CODE_OAUTH_TOKEN:-}"
-    -e NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV="$NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV"
+    -e GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV="$GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV"
   )
 else
   DOCKER_AUTH_ENV+=(
     -e ANTHROPIC_API_KEY
     -e ANTHROPIC_API_KEY_OLD
-    -e NEXISCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}"
-    -e NEXISCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY_OLD="${ANTHROPIC_API_KEY_OLD:-}"
-    -e NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV="${NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV:-}"
+    -e GREENCHCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}"
+    -e GREENCHCLAW_LIVE_CLI_BACKEND_ANTHROPIC_API_KEY_OLD="${ANTHROPIC_API_KEY_OLD:-}"
+    -e GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV="${GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV:-}"
   )
 fi
 
@@ -494,49 +494,49 @@ DOCKER_RUN_ARGS=(docker run --rm -t \
   -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
   -e HOME=/home/node \
   -e NODE_OPTIONS=--disable-warning=ExperimentalWarning \
-  -e NEXISCLAW_SKIP_CHANNELS=1 \
-  -e NEXISCLAW_VITEST_FS_MODULE_CACHE=0 \
-  -e NEXISCLAW_DOCKER_AUTH_PRESTAGED="$DOCKER_AUTH_PRESTAGED" \
-  -e NEXISCLAW_DOCKER_AUTH_DIRS_RESOLVED="$AUTH_DIRS_CSV" \
-  -e NEXISCLAW_DOCKER_AUTH_FILES_RESOLVED="$AUTH_FILES_CSV" \
-  -e NEXISCLAW_LIVE_DOCKER_SCRIPTS_DIR="${DOCKER_TRUSTED_HARNESS_CONTAINER_DIR}/scripts" \
-  -e NEXISCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE="${NEXISCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_USE_CI_SAFE_CODEX_CONFIG="$CLI_USE_CI_SAFE_CODEX_CONFIG" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS="$CLI_SETUP_TIMEOUT_SECONDS" \
-  -e NEXISCLAW_DOCKER_CLI_BACKEND_PROVIDER="$CLI_PROVIDER" \
-  -e NEXISCLAW_DOCKER_CLI_BACKEND_COMMAND_DEFAULT="$CLI_DEFAULT_COMMAND" \
-  -e NEXISCLAW_DOCKER_CLI_BACKEND_NPM_PACKAGE="$CLI_DOCKER_NPM_PACKAGE" \
-  -e NEXISCLAW_DOCKER_CLI_BACKEND_BINARY_NAME="$CLI_DOCKER_BINARY_NAME" \
-  -e NEXISCLAW_LIVE_TEST=1 \
-  -e NEXISCLAW_LIVE_CLI_BACKEND=1 \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_DEBUG="${NEXISCLAW_LIVE_CLI_BACKEND_DEBUG:-}" \
-  -e NEXISCLAW_CLI_BACKEND_LOG_OUTPUT="${NEXISCLAW_CLI_BACKEND_LOG_OUTPUT:-}" \
-  -e NEXISCLAW_TEST_CONSOLE="${NEXISCLAW_TEST_CONSOLE:-}" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_MODEL="$CLI_MODEL" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_COMMAND="${NEXISCLAW_LIVE_CLI_BACKEND_COMMAND:-}" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_ARGS="${NEXISCLAW_LIVE_CLI_BACKEND_ARGS:-}" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_RESUME_ARGS="${NEXISCLAW_LIVE_CLI_BACKEND_RESUME_ARGS:-}" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_CLEAR_ENV="${NEXISCLAW_LIVE_CLI_BACKEND_CLEAR_ENV:-}" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_DISABLE_MCP_CONFIG="$CLI_DISABLE_MCP_CONFIG" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_RESUME_PROBE="${NEXISCLAW_LIVE_CLI_BACKEND_RESUME_PROBE:-}" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE="${NEXISCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE:-}" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE="${NEXISCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE:-}" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_MCP_PROBE="${NEXISCLAW_LIVE_CLI_BACKEND_MCP_PROBE:-}" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_MCP_SCHEMA_PROBE="${NEXISCLAW_LIVE_CLI_BACKEND_MCP_SCHEMA_PROBE:-}" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_IMAGE_ARG="${NEXISCLAW_LIVE_CLI_BACKEND_IMAGE_ARG:-}" \
-  -e NEXISCLAW_LIVE_CLI_BACKEND_IMAGE_MODE="${NEXISCLAW_LIVE_CLI_BACKEND_IMAGE_MODE:-}")
-NexisClaw_live_append_array DOCKER_RUN_ARGS DOCKER_HOME_MOUNT
-NexisClaw_live_append_array DOCKER_RUN_ARGS DOCKER_EXTRA_ENV_FILES
-NexisClaw_live_append_array DOCKER_RUN_ARGS DOCKER_TRUSTED_HARNESS_MOUNT
+  -e GREENCHCLAW_SKIP_CHANNELS=1 \
+  -e GREENCHCLAW_VITEST_FS_MODULE_CACHE=0 \
+  -e GREENCHCLAW_DOCKER_AUTH_PRESTAGED="$DOCKER_AUTH_PRESTAGED" \
+  -e GREENCHCLAW_DOCKER_AUTH_DIRS_RESOLVED="$AUTH_DIRS_CSV" \
+  -e GREENCHCLAW_DOCKER_AUTH_FILES_RESOLVED="$AUTH_FILES_CSV" \
+  -e GREENCHCLAW_LIVE_DOCKER_SCRIPTS_DIR="${DOCKER_TRUSTED_HARNESS_CONTAINER_DIR}/scripts" \
+  -e GREENCHCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE="${GREENCHCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_USE_CI_SAFE_CODEX_CONFIG="$CLI_USE_CI_SAFE_CODEX_CONFIG" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_SETUP_TIMEOUT_SECONDS="$CLI_SETUP_TIMEOUT_SECONDS" \
+  -e GREENCHCLAW_DOCKER_CLI_BACKEND_PROVIDER="$CLI_PROVIDER" \
+  -e GREENCHCLAW_DOCKER_CLI_BACKEND_COMMAND_DEFAULT="$CLI_DEFAULT_COMMAND" \
+  -e GREENCHCLAW_DOCKER_CLI_BACKEND_NPM_PACKAGE="$CLI_DOCKER_NPM_PACKAGE" \
+  -e GREENCHCLAW_DOCKER_CLI_BACKEND_BINARY_NAME="$CLI_DOCKER_BINARY_NAME" \
+  -e GREENCHCLAW_LIVE_TEST=1 \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND=1 \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_DEBUG="${GREENCHCLAW_LIVE_CLI_BACKEND_DEBUG:-}" \
+  -e GREENCHCLAW_CLI_BACKEND_LOG_OUTPUT="${GREENCHCLAW_CLI_BACKEND_LOG_OUTPUT:-}" \
+  -e GREENCHCLAW_TEST_CONSOLE="${GREENCHCLAW_TEST_CONSOLE:-}" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_MODEL="$CLI_MODEL" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND="${GREENCHCLAW_LIVE_CLI_BACKEND_COMMAND:-}" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_ARGS="${GREENCHCLAW_LIVE_CLI_BACKEND_ARGS:-}" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_RESUME_ARGS="${GREENCHCLAW_LIVE_CLI_BACKEND_RESUME_ARGS:-}" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_CLEAR_ENV="${GREENCHCLAW_LIVE_CLI_BACKEND_CLEAR_ENV:-}" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_DISABLE_MCP_CONFIG="$CLI_DISABLE_MCP_CONFIG" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_RESUME_PROBE="${GREENCHCLAW_LIVE_CLI_BACKEND_RESUME_PROBE:-}" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE="${GREENCHCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE:-}" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE="${GREENCHCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE:-}" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_MCP_PROBE="${GREENCHCLAW_LIVE_CLI_BACKEND_MCP_PROBE:-}" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_MCP_SCHEMA_PROBE="${GREENCHCLAW_LIVE_CLI_BACKEND_MCP_SCHEMA_PROBE:-}" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_IMAGE_ARG="${GREENCHCLAW_LIVE_CLI_BACKEND_IMAGE_ARG:-}" \
+  -e GREENCHCLAW_LIVE_CLI_BACKEND_IMAGE_MODE="${GREENCHCLAW_LIVE_CLI_BACKEND_IMAGE_MODE:-}")
+GreenchClaw_live_append_array DOCKER_RUN_ARGS DOCKER_HOME_MOUNT
+GreenchClaw_live_append_array DOCKER_RUN_ARGS DOCKER_EXTRA_ENV_FILES
+GreenchClaw_live_append_array DOCKER_RUN_ARGS DOCKER_TRUSTED_HARNESS_MOUNT
 DOCKER_RUN_ARGS+=(\
   -v "$CACHE_HOME_DIR":/home/node/.cache \
   -v "$ROOT_DIR":/src:ro \
-  -v "$CONFIG_DIR":/home/node/.NexisClaw \
-  -v "$WORKSPACE_DIR":/home/node/.NexisClaw/workspace \
+  -v "$CONFIG_DIR":/home/node/.GreenchClaw \
+  -v "$WORKSPACE_DIR":/home/node/.GreenchClaw/workspace \
   -v "$CLI_TOOLS_DIR":/home/node/.npm-global)
-NexisClaw_live_append_array DOCKER_RUN_ARGS EXTERNAL_AUTH_MOUNTS
-NexisClaw_live_append_array DOCKER_RUN_ARGS DOCKER_AUTH_ENV
-NexisClaw_live_append_array DOCKER_RUN_ARGS PROFILE_MOUNT
+GreenchClaw_live_append_array DOCKER_RUN_ARGS EXTERNAL_AUTH_MOUNTS
+GreenchClaw_live_append_array DOCKER_RUN_ARGS DOCKER_AUTH_ENV
+GreenchClaw_live_append_array DOCKER_RUN_ARGS PROFILE_MOUNT
 DOCKER_RUN_ARGS+=(\
   "$LIVE_IMAGE_NAME" \
   -lc "$LIVE_TEST_CMD")

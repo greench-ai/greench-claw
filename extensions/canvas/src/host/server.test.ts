@@ -3,7 +3,7 @@ import type { IncomingMessage } from "node:http";
 import os from "node:os";
 import path from "node:path";
 import type { Duplex } from "node:stream";
-import { defaultRuntime } from "NexisClaw/plugin-sdk/runtime-env";
+import { defaultRuntime } from "GreenchClaw/plugin-sdk/runtime-env";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   A2UI_PATH,
@@ -161,7 +161,7 @@ describe("canvas host", () => {
     ({ createCanvasHostHandler, startCanvasHost } = await import("./server.js"));
     const wsModule = await vi.importActual<typeof import("ws")>("ws");
     WebSocketServerClass = wsModule.WebSocketServer;
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-canvas-fixtures-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-canvas-fixtures-"));
   });
 
   beforeEach(() => {
@@ -178,8 +178,8 @@ describe("canvas host", () => {
     const out = injectCanvasLiveReload("<html><body>Hello</body></html>");
     expect(out).toContain(CANVAS_WS_PATH);
     expect(out).toContain("location.reload");
-    expect(out).toContain("NexisClawCanvasA2UIAction");
-    expect(out).toContain("NexisClawSendUserAction");
+    expect(out).toContain("GreenchClawCanvasA2UIAction");
+    expect(out).toContain("GreenchClawSendUserAction");
   });
 
   it("creates a default index.html when missing", async () => {
@@ -190,7 +190,7 @@ describe("canvas host", () => {
       const response = await captureHandlerResponse(handler, `${CANVAS_HOST_PATH}/`);
       expect(response.status).toBe(200);
       expect(response.body).toContain("Interactive test page");
-      expect(response.body).toContain("NexisClawSendUserAction");
+      expect(response.body).toContain("GreenchClawSendUserAction");
       expect(response.body).toContain(CANVAS_WS_PATH);
       expect(response.body).toContain('document.createElement("span")');
       expect(response.body).not.toContain("statusEl.innerHTML");
@@ -375,7 +375,7 @@ describe("canvas host", () => {
     try {
       await fs.stat(bundlePath);
     } catch {
-      await fs.writeFile(bundlePath, "window.NexisClawA2UI = {};", "utf8");
+      await fs.writeFile(bundlePath, "window.GreenchClawA2UI = {};", "utf8");
       createdBundle = true;
     }
 
@@ -386,13 +386,13 @@ describe("canvas host", () => {
       const res = await captureA2uiResponse(`${A2UI_PATH}/`);
       const html = res.body;
       expect(res.status).toBe(200);
-      expect(html).toContain("NexisClaw-a2ui-host");
-      expect(html).toContain("NexisClawCanvasA2UIAction");
+      expect(html).toContain("GreenchClaw-a2ui-host");
+      expect(html).toContain("GreenchClawCanvasA2UIAction");
 
       const bundleRes = await captureA2uiResponse(`${A2UI_PATH}/a2ui.bundle.js`);
       const js = bundleRes.body;
       expect(bundleRes.status).toBe(200);
-      expect(js).toContain("NexisClawA2UI");
+      expect(js).toContain("GreenchClawA2UI");
       const traversalRes = await captureA2uiResponse(`${A2UI_PATH}/%2e%2e%2fpackage.json`);
       expect(traversalRes.status).toBe(404);
       expect(traversalRes.body).toBe("not found");

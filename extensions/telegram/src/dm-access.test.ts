@@ -1,4 +1,4 @@
-import type { createChannelPairingChallengeIssuer } from "NexisClaw/plugin-sdk/channel-pairing";
+import type { createChannelPairingChallengeIssuer } from "GreenchClaw/plugin-sdk/channel-pairing";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const createChannelPairingChallengeIssuerMock = vi.hoisted(() => vi.fn());
@@ -11,7 +11,7 @@ const createPairingPrefixStripperMock = vi.hoisted(
     normalize(value.replace(prefix, "")),
 );
 
-vi.mock("NexisClaw/plugin-sdk/channel-pairing", () => ({
+vi.mock("GreenchClaw/plugin-sdk/channel-pairing", () => ({
   createChannelPairingChallengeIssuer: createChannelPairingChallengeIssuerMock,
   createPairingPrefixStripper: createPairingPrefixStripperMock,
   createLoggedPairingApprovalNotifier: () => undefined,
@@ -19,7 +19,7 @@ vi.mock("NexisClaw/plugin-sdk/channel-pairing", () => ({
   createChannelPairingController: () => ({}),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/conversation-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/conversation-runtime", () => ({
   upsertChannelPairingRequest: upsertChannelPairingRequestMock,
   createStaticReplyToModeResolver: (mode: string) => () => mode,
   createTopLevelChannelReplyToModeResolver: () => () => "off",

@@ -1,6 +1,9 @@
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
 
-const IGNORED_INSTALLED_PLUGIN_DIR_NAMES = new Set(["node_modules", ".NexisClaw-install-backups"]);
+const IGNORED_INSTALLED_PLUGIN_DIR_NAMES = new Set([
+  "node_modules",
+  ".GreenchClaw-install-backups",
+]);
 
 export function shouldIgnoreInstalledPluginDirName(name: string): boolean {
   const normalized = normalizeOptionalLowercaseString(name);

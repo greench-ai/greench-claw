@@ -2,22 +2,22 @@ export type {
   ChannelMessageActionAdapter,
   ChannelMessageActionName,
   ChannelGatewayContext,
-} from "NexisClaw/plugin-sdk/channel-contract";
-export type { ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-export type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-export type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
-export type { PluginRuntime } from "NexisClaw/plugin-sdk/runtime-store";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+export type { ChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+export type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+export type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime";
+export type { PluginRuntime } from "GreenchClaw/plugin-sdk/runtime-store";
 export {
   buildChannelConfigSchema,
   buildChannelOutboundSessionRoute,
   createChatChannelPlugin,
   defineChannelPluginEntry,
-} from "NexisClaw/plugin-sdk/channel-core";
-export { jsonResult, readStringParam } from "NexisClaw/plugin-sdk/channel-actions";
-export { getChatChannelMeta } from "NexisClaw/plugin-sdk/channel-plugin-common";
+} from "GreenchClaw/plugin-sdk/channel-core";
+export { jsonResult, readStringParam } from "GreenchClaw/plugin-sdk/channel-actions";
+export { getChatChannelMeta } from "GreenchClaw/plugin-sdk/channel-plugin-common";
 export {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
-export { createPluginRuntimeStore } from "NexisClaw/plugin-sdk/runtime-store";
-export { createChannelMessageReplyPipeline } from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/status-helpers";
+export { createPluginRuntimeStore } from "GreenchClaw/plugin-sdk/runtime-store";
+export { createChannelMessageReplyPipeline } from "GreenchClaw/plugin-sdk/channel-message";

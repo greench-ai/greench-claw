@@ -50,7 +50,7 @@ vi.mock("@line/bot-sdk", () => ({
   messagingApi: { MessagingApiClient: MessagingApiClientMock },
 }));
 
-vi.mock("NexisClaw/plugin-sdk/plugin-config-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/plugin-config-runtime", () => ({
   requireRuntimeConfig: requireRuntimeConfigMock,
 }));
 
@@ -62,13 +62,13 @@ vi.mock("./channel-access-token.js", () => ({
   resolveLineChannelAccessToken: resolveLineChannelAccessTokenMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/channel-activity-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/channel-activity-runtime", () => ({
   recordChannelActivity: recordChannelActivityMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/runtime-env")>(
-    "NexisClaw/plugin-sdk/runtime-env",
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/runtime-env")>(
+    "GreenchClaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -76,7 +76,7 @@ vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", () => ({
   resolvePinnedHostnameWithPolicy: resolvePinnedHostnameWithPolicyMock,
 }));
 
@@ -101,12 +101,12 @@ describe("LINE send helpers", () => {
 
   afterAll(() => {
     vi.doUnmock("@line/bot-sdk");
-    vi.doUnmock("NexisClaw/plugin-sdk/plugin-config-runtime");
+    vi.doUnmock("GreenchClaw/plugin-sdk/plugin-config-runtime");
     vi.doUnmock("./accounts.js");
     vi.doUnmock("./channel-access-token.js");
-    vi.doUnmock("NexisClaw/plugin-sdk/channel-activity-runtime");
-    vi.doUnmock("NexisClaw/plugin-sdk/runtime-env");
-    vi.doUnmock("NexisClaw/plugin-sdk/ssrf-runtime");
+    vi.doUnmock("GreenchClaw/plugin-sdk/channel-activity-runtime");
+    vi.doUnmock("GreenchClaw/plugin-sdk/runtime-env");
+    vi.doUnmock("GreenchClaw/plugin-sdk/ssrf-runtime");
     vi.resetModules();
   });
 

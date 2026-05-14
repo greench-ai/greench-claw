@@ -50,9 +50,15 @@ function createRemoteStageParams(home: string): {
   ]);
   return {
     cfg: createSandboxMediaStageConfig(home),
-    workspaceDir: join(home, "NexisClaw"),
+    workspaceDir: join(home, "GreenchClaw"),
     sessionKey,
-    remoteCacheDir: join(home, ".NexisClaw", "media", "remote-cache", slugifySessionKey(sessionKey)),
+    remoteCacheDir: join(
+      home,
+      ".GreenchClaw",
+      "media",
+      "remote-cache",
+      slugifySessionKey(sessionKey),
+    ),
   };
 }
 
@@ -85,7 +91,7 @@ function requireFirstMockCall(mock: { mock: { calls: unknown[][] } }, label: str
 
 describe("stageSandboxMedia scp remote paths", () => {
   it("rejects remote attachment filenames with shell metacharacters before spawning scp", async () => {
-    await withSandboxMediaTempHome("NexisClaw-triggers-", async (home) => {
+    await withSandboxMediaTempHome("GreenchClaw-triggers-", async (home) => {
       const { cfg, workspaceDir, sessionKey, remoteCacheDir } = createRemoteStageParams(home);
       const remotePath = "/Users/demo/Library/Messages/Attachments/ab/cd/evil$(touch pwned).jpg";
       const { ctx, sessionCtx } = createRemoteContexts(remotePath);
@@ -108,7 +114,7 @@ describe("stageSandboxMedia scp remote paths", () => {
   });
 
   it("uses a slugged remote cache directory for session keys with path separators", async () => {
-    await withSandboxMediaTempHome("NexisClaw-triggers-", async (home) => {
+    await withSandboxMediaTempHome("GreenchClaw-triggers-", async (home) => {
       const { cfg, workspaceDir } = createRemoteStageParams(home);
       const sessionKey = "agent:main:explicit:../../escape";
       const remotePath = "/Users/demo/Library/Messages/Attachments/ab/cd/photo.jpg";

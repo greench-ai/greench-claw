@@ -1,11 +1,14 @@
 import { randomBytes } from "node:crypto";
 import type { OAuthCredentials } from "@earendil-works/pi-ai";
-import { generatePkceVerifierChallenge, toFormUrlEncoded } from "NexisClaw/plugin-sdk/provider-auth";
+import {
+  generatePkceVerifierChallenge,
+  toFormUrlEncoded,
+} from "GreenchClaw/plugin-sdk/provider-auth";
 import {
   parseOAuthCallbackInput,
   waitForLocalOAuthCallback,
-} from "NexisClaw/plugin-sdk/provider-auth-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/provider-auth-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 const CHUTES_AUTHORIZE_ENDPOINT = "https://api.chutes.ai/idp/authorize";
 const CHUTES_TOKEN_ENDPOINT = "https://api.chutes.ai/idp/token";

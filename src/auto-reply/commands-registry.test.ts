@@ -530,21 +530,21 @@ describe("commands registry", () => {
   });
 
   it("normalizes telegram-style command mentions for the current bot", () => {
-    expect(normalizeCommandBody("/help@NexisClaw", { botUsername: "NexisClaw" })).toBe("/help");
+    expect(normalizeCommandBody("/help@GreenchClaw", { botUsername: "GreenchClaw" })).toBe("/help");
     expect(
-      normalizeCommandBody("/help@NexisClaw args", {
-        botUsername: "NexisClaw",
+      normalizeCommandBody("/help@GreenchClaw args", {
+        botUsername: "GreenchClaw",
       }),
     ).toBe("/help args");
     expect(
-      normalizeCommandBody("/help@NexisClaw: args", {
-        botUsername: "NexisClaw",
+      normalizeCommandBody("/help@GreenchClaw: args", {
+        botUsername: "GreenchClaw",
       }),
     ).toBe("/help args");
   });
 
   it("keeps telegram-style command mentions for other bots", () => {
-    expect(normalizeCommandBody("/help@otherbot", { botUsername: "NexisClaw" })).toBe(
+    expect(normalizeCommandBody("/help@otherbot", { botUsername: "GreenchClaw" })).toBe(
       "/help@otherbot",
     );
   });

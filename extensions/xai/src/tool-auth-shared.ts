@@ -1,17 +1,17 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { canResolveEnvSecretRefInReadOnlyPath } from "NexisClaw/plugin-sdk/extension-shared";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { canResolveEnvSecretRefInReadOnlyPath } from "GreenchClaw/plugin-sdk/extension-shared";
 import {
   coerceSecretRef,
   resolveNonEnvSecretRefApiKeyMarker,
-} from "NexisClaw/plugin-sdk/provider-auth";
+} from "GreenchClaw/plugin-sdk/provider-auth";
 import {
   readProviderEnvValue,
   resolveProviderWebSearchPluginConfig,
-} from "NexisClaw/plugin-sdk/provider-web-search";
+} from "GreenchClaw/plugin-sdk/provider-web-search";
 import {
   normalizeSecretInputString,
   resolveSecretInputString,
-} from "NexisClaw/plugin-sdk/secret-input";
+} from "GreenchClaw/plugin-sdk/secret-input";
 
 type XaiFallbackAuth = {
   apiKey: string;
@@ -39,7 +39,7 @@ function readConfiguredOrManagedApiKey(value: unknown): string | undefined {
   return ref ? resolveNonEnvSecretRefApiKeyMarker(ref.source) : undefined;
 }
 
-function readLegacyGrokFallbackAuth(cfg?: NexisClawConfig): XaiFallbackAuth | undefined {
+function readLegacyGrokFallbackAuth(cfg?: GreenchClawConfig): XaiFallbackAuth | undefined {
   const search = cfg?.tools?.web?.search;
   if (!search || typeof search !== "object") {
     return undefined;
@@ -54,7 +54,7 @@ function readLegacyGrokFallbackAuth(cfg?: NexisClawConfig): XaiFallbackAuth | un
 function readConfiguredRuntimeApiKey(
   value: unknown,
   path: string,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
 ): ConfiguredRuntimeApiKeyResolution {
   const resolved = resolveSecretInputString({
     value,
@@ -88,7 +88,7 @@ function readConfiguredRuntimeApiKey(
   return envValue ? { status: "available", value: envValue } : { status: "missing" };
 }
 
-function readLegacyGrokApiKeyResult(cfg?: NexisClawConfig): ConfiguredRuntimeApiKeyResolution {
+function readLegacyGrokApiKeyResult(cfg?: GreenchClawConfig): ConfiguredRuntimeApiKeyResolution {
   const search = cfg?.tools?.web?.search;
   if (!search || typeof search !== "object") {
     return { status: "missing" };
@@ -102,7 +102,7 @@ function readLegacyGrokApiKeyResult(cfg?: NexisClawConfig): ConfiguredRuntimeApi
 }
 
 function readPluginXaiWebSearchApiKeyResult(
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
 ): ConfiguredRuntimeApiKeyResolution {
   return readConfiguredRuntimeApiKey(
     resolveProviderWebSearchPluginConfig(cfg as Record<string, unknown> | undefined, "xai")?.apiKey,
@@ -112,8 +112,8 @@ function readPluginXaiWebSearchApiKeyResult(
 }
 
 function resolveConfiguredXaiToolApiKeyResult(params: {
-  runtimeConfig?: NexisClawConfig;
-  sourceConfig?: NexisClawConfig;
+  runtimeConfig?: GreenchClawConfig;
+  sourceConfig?: GreenchClawConfig;
 }): ConfiguredRuntimeApiKeyResolution {
   const runtimePlugin = readPluginXaiWebSearchApiKeyResult(params.runtimeConfig);
   if (runtimePlugin.status === "available" || runtimePlugin.status === "blocked") {
@@ -143,7 +143,7 @@ async function resolveXaiAuthProfileApiKey(auth?: XaiToolAuthContext): Promise<s
   return normalizeSecretInputString(value);
 }
 
-export function resolveFallbackXaiAuth(cfg?: NexisClawConfig): XaiFallbackAuth | undefined {
+export function resolveFallbackXaiAuth(cfg?: GreenchClawConfig): XaiFallbackAuth | undefined {
   const pluginApiKey = readConfiguredOrManagedApiKey(
     resolveProviderWebSearchPluginConfig(cfg as Record<string, unknown> | undefined, "xai")?.apiKey,
   );
@@ -156,7 +156,7 @@ export function resolveFallbackXaiAuth(cfg?: NexisClawConfig): XaiFallbackAuth |
   return readLegacyGrokFallbackAuth(cfg);
 }
 
-export function resolveFallbackXaiApiKey(cfg?: NexisClawConfig): string | undefined {
+export function resolveFallbackXaiApiKey(cfg?: GreenchClawConfig): string | undefined {
   const plugin = readPluginXaiWebSearchApiKeyResult(cfg);
   if (plugin.status === "available") {
     return plugin.value;
@@ -169,8 +169,8 @@ export function resolveFallbackXaiApiKey(cfg?: NexisClawConfig): string | undefi
 }
 
 export function resolveXaiToolApiKey(params: {
-  runtimeConfig?: NexisClawConfig;
-  sourceConfig?: NexisClawConfig;
+  runtimeConfig?: GreenchClawConfig;
+  sourceConfig?: GreenchClawConfig;
 }): string | undefined {
   const configured = resolveConfiguredXaiToolApiKeyResult(params);
   if (configured.status === "available") {
@@ -183,8 +183,8 @@ export function resolveXaiToolApiKey(params: {
 }
 
 export async function resolveXaiToolApiKeyWithAuth(params: {
-  runtimeConfig?: NexisClawConfig;
-  sourceConfig?: NexisClawConfig;
+  runtimeConfig?: GreenchClawConfig;
+  sourceConfig?: GreenchClawConfig;
   auth?: XaiToolAuthContext;
 }): Promise<string | undefined> {
   const configured = resolveConfiguredXaiToolApiKeyResult(params);
@@ -201,8 +201,8 @@ export async function resolveXaiToolApiKeyWithAuth(params: {
 
 export function isXaiToolEnabled(params: {
   enabled?: boolean;
-  runtimeConfig?: NexisClawConfig;
-  sourceConfig?: NexisClawConfig;
+  runtimeConfig?: GreenchClawConfig;
+  sourceConfig?: GreenchClawConfig;
   auth?: XaiToolAuthContext;
 }): boolean {
   if (params.enabled === false) {

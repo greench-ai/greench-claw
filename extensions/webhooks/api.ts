@@ -1,6 +1,6 @@
 export {
   definePluginEntry,
-  type NexisClawPluginApi,
+  type GreenchClawPluginApi,
   type PluginLogger,
   type PluginRuntime,
-} from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/core";

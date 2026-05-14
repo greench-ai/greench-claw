@@ -11,8 +11,8 @@ Azure AI Speech text-to-speech (MP3, native Ogg/Opus voice notes, PCM telephony)
 
 ## Distribution
 
-- Package: `@NexisClaw/azure-speech`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/azure-speech`
+- Install route: included in GreenchClaw
 
 ## Surface
 

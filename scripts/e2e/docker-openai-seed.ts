@@ -3,14 +3,14 @@
 import {
   applyProviderConfigWithDefaultModelPreset,
   type ModelDefinitionConfig,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "../../dist/plugin-sdk/provider-onboard.js";
 
-export type { NexisClawConfig };
+export type { GreenchClawConfig };
 
 const DOCKER_OPENAI_MODEL_REF = "openai/gpt-5.5";
 const DOCKER_OPENAI_BASE_URL =
-  process.env.NEXISCLAW_DOCKER_OPENAI_BASE_URL?.trim() || "http://127.0.0.1:9/v1";
+  process.env.GREENCHCLAW_DOCKER_OPENAI_BASE_URL?.trim() || "http://127.0.0.1:9/v1";
 const DOCKER_OPENAI_MODEL: ModelDefinitionConfig = {
   id: "gpt-5.5",
   name: "gpt-5.5",
@@ -28,9 +28,9 @@ const DOCKER_OPENAI_MODEL: ModelDefinitionConfig = {
 };
 
 export function applyDockerOpenAiProviderConfig(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   apiKey: string,
-): NexisClawConfig {
+): GreenchClawConfig {
   const seededConfig = applyProviderConfigWithDefaultModelPreset(config, {
     providerId: "openai",
     api: "openai-responses",

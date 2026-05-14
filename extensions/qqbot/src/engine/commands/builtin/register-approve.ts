@@ -34,12 +34,12 @@ export function registerApproveCommands(registry: SlashCommandRegistry): void {
           ``,
           `\`\`\`shell`,
           `# 开启审批（白名单模式）`,
-          `NexisClaw config set tools.exec.security allowlist`,
-          `NexisClaw config set tools.exec.ask on-miss`,
+          `GreenchClaw config set tools.exec.security allowlist`,
+          `GreenchClaw config set tools.exec.ask on-miss`,
           ``,
           `# 关闭审批`,
-          `NexisClaw config set tools.exec.security full`,
-          `NexisClaw config set tools.exec.ask off`,
+          `GreenchClaw config set tools.exec.security full`,
+          `GreenchClaw config set tools.exec.ask off`,
           `\`\`\``,
         ].join("\n");
       }

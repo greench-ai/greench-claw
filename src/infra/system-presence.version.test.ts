@@ -1,5 +1,5 @@
 import os from "node:os";
-import { importFreshModule } from "NexisClaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { withEnvAsync } from "../test-utils/env.js";
 import { VERSION as runtimeVersion } from "../version.js";
@@ -12,8 +12,8 @@ async function withPresenceModule<T>(
 ): Promise<T> {
   return withEnvAsync(
     {
-      NEXISCLAW_VERSION: undefined,
-      NEXISCLAW_SERVICE_VERSION: undefined,
+      GREENCHCLAW_VERSION: undefined,
+      GREENCHCLAW_SERVICE_VERSION: undefined,
       npm_package_version: undefined,
       ...env,
     },
@@ -44,32 +44,32 @@ describe("system-presence version fallback", () => {
     });
   }
 
-  it("uses runtime VERSION when NEXISCLAW_VERSION is not set", async () => {
+  it("uses runtime VERSION when GREENCHCLAW_VERSION is not set", async () => {
     await expectSelfVersion(
       {
-        NEXISCLAW_SERVICE_VERSION: "2.4.6-service",
+        GREENCHCLAW_SERVICE_VERSION: "2.4.6-service",
         npm_package_version: "1.0.0-package",
       },
       runtimeVersion,
     );
   });
 
-  it("prefers NEXISCLAW_VERSION over runtime VERSION", async () => {
+  it("prefers GREENCHCLAW_VERSION over runtime VERSION", async () => {
     await expectSelfVersion(
       {
-        NEXISCLAW_VERSION: "9.9.9-cli",
-        NEXISCLAW_SERVICE_VERSION: "2.4.6-service",
+        GREENCHCLAW_VERSION: "9.9.9-cli",
+        GREENCHCLAW_SERVICE_VERSION: "2.4.6-service",
         npm_package_version: "1.0.0-package",
       },
       "9.9.9-cli",
     );
   });
 
-  it("still prefers runtime VERSION over NEXISCLAW_SERVICE_VERSION when NEXISCLAW_VERSION is blank", async () => {
+  it("still prefers runtime VERSION over GREENCHCLAW_SERVICE_VERSION when GREENCHCLAW_VERSION is blank", async () => {
     await expectSelfVersion(
       {
-        NEXISCLAW_VERSION: " ",
-        NEXISCLAW_SERVICE_VERSION: "2.4.6-service",
+        GREENCHCLAW_VERSION: " ",
+        GREENCHCLAW_SERVICE_VERSION: "2.4.6-service",
         npm_package_version: "1.0.0-package",
       },
       runtimeVersion,
@@ -79,19 +79,19 @@ describe("system-presence version fallback", () => {
   it("still prefers runtime VERSION over npm_package_version when service markers are blank", async () => {
     await expectSelfVersion(
       {
-        NEXISCLAW_VERSION: " ",
-        NEXISCLAW_SERVICE_VERSION: "\t",
+        GREENCHCLAW_VERSION: " ",
+        GREENCHCLAW_SERVICE_VERSION: "\t",
         npm_package_version: "1.0.0-package",
       },
       runtimeVersion,
     );
   });
 
-  it("uses runtime VERSION when NEXISCLAW_VERSION and NEXISCLAW_SERVICE_VERSION are blank", async () => {
+  it("uses runtime VERSION when GREENCHCLAW_VERSION and GREENCHCLAW_SERVICE_VERSION are blank", async () => {
     await expectSelfVersion(
       {
-        NEXISCLAW_VERSION: " ",
-        NEXISCLAW_SERVICE_VERSION: "\t",
+        GREENCHCLAW_VERSION: " ",
+        GREENCHCLAW_SERVICE_VERSION: "\t",
         npm_package_version: "1.0.0-package",
       },
       runtimeVersion,

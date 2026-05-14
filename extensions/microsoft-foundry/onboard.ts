@@ -1,10 +1,10 @@
-import type { ProviderAuthContext } from "NexisClaw/plugin-sdk/core";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import type { ProviderAuthContext } from "GreenchClaw/plugin-sdk/core";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeOptionalString,
   normalizeStringifiedOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   azLoginDeviceCode,
   azLoginDeviceCodeWithOptions,

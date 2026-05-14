@@ -1,5 +1,5 @@
 import { getChannelPlugin, resolveChannelApprovalCapability } from "../channels/plugins/index.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isImplicitSameChatApprovalAuthorization } from "../plugin-sdk/approval-auth-helpers.js";
 import { normalizeMessageChannel } from "../utils/message-channel.js";
 
@@ -10,7 +10,7 @@ type ApprovalCommandAuthorization = {
 };
 
 export function resolveApprovalCommandAuthorization(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel?: string | null;
   accountId?: string | null;
   senderId?: string | null;

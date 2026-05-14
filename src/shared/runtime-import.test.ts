@@ -28,30 +28,32 @@ describe("runtime-import", () => {
     vi.spyOn(process, "platform", "get").mockReturnValue("win32");
 
     expect(
-      resolveRuntimeImportSpecifier("C:\\Users\\alice\\NexisClaw\\dist\\subagent-registry.js", [
+      resolveRuntimeImportSpecifier("C:\\Users\\alice\\GreenchClaw\\dist\\subagent-registry.js", [
         "./subagent-registry.runtime.js",
       ]),
-    ).toBe("file:///C:/Users/alice/NexisClaw/dist/subagent-registry.runtime.js");
+    ).toBe("file:///C:/Users/alice/GreenchClaw/dist/subagent-registry.runtime.js");
   });
 
   it("resolves runtime imports from file URL base paths", () => {
     vi.spyOn(process, "platform", "get").mockReturnValue("win32");
 
     expect(
-      resolveRuntimeImportSpecifier("file:///C:/Users/alice/NexisClaw/dist/subagent-registry.js", [
-        "./subagent-registry.runtime.js",
-      ]),
-    ).toBe("file:///C:/Users/alice/NexisClaw/dist/subagent-registry.runtime.js");
+      resolveRuntimeImportSpecifier(
+        "file:///C:/Users/alice/GreenchClaw/dist/subagent-registry.js",
+        ["./subagent-registry.runtime.js"],
+      ),
+    ).toBe("file:///C:/Users/alice/GreenchClaw/dist/subagent-registry.runtime.js");
   });
 
   it("resolves absolute Windows runtime import parts directly", () => {
     vi.spyOn(process, "platform", "get").mockReturnValue("win32");
 
     expect(
-      resolveRuntimeImportSpecifier("file:///C:/Users/alice/NexisClaw/dist/subagent-registry.js", [
-        "D:\\NexisClaw\\dist\\subagent-registry.runtime.js",
-      ]),
-    ).toBe("file:///D:/NexisClaw/dist/subagent-registry.runtime.js");
+      resolveRuntimeImportSpecifier(
+        "file:///C:/Users/alice/GreenchClaw/dist/subagent-registry.js",
+        ["D:\\GreenchClaw\\dist\\subagent-registry.runtime.js"],
+      ),
+    ).toBe("file:///D:/GreenchClaw/dist/subagent-registry.runtime.js");
   });
 
   it("keeps non-Windows import paths unchanged", () => {
@@ -67,16 +69,16 @@ describe("runtime-import", () => {
     const importModule = vi.fn(async (specifier: string) => ({ specifier }));
 
     const result = await importRuntimeModule(
-      "C:\\Users\\alice\\NexisClaw\\dist\\subagent-registry.js",
+      "C:\\Users\\alice\\GreenchClaw\\dist\\subagent-registry.js",
       ["./subagent-registry.runtime.js"],
       importModule,
     );
 
     expect(importModule).toHaveBeenCalledWith(
-      "file:///C:/Users/alice/NexisClaw/dist/subagent-registry.runtime.js",
+      "file:///C:/Users/alice/GreenchClaw/dist/subagent-registry.runtime.js",
     );
     expect(result).toEqual({
-      specifier: "file:///C:/Users/alice/NexisClaw/dist/subagent-registry.runtime.js",
+      specifier: "file:///C:/Users/alice/GreenchClaw/dist/subagent-registry.runtime.js",
     });
   });
 });

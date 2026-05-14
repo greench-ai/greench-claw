@@ -111,11 +111,11 @@ export function assertSupportedRuntime(
 
   runtime.error(
     [
-      "NexisClaw requires Node >=22.16.0.",
+      "GreenchClaw requires Node >=22.16.0.",
       `Detected: ${runtimeLabel} (exec: ${execLabel}).`,
       `PATH searched: ${details.pathEnv}`,
       "Install Node: https://nodejs.org/en/download",
-      "Upgrade Node and re-run NexisClaw.",
+      "Upgrade Node and re-run GreenchClaw.",
     ].join("\n"),
   );
   runtime.exit(1);

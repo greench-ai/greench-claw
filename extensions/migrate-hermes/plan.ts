@@ -3,12 +3,12 @@ import {
   createMigrationItem,
   MIGRATION_REASON_TARGET_EXISTS,
   summarizeMigrationItems,
-} from "NexisClaw/plugin-sdk/migration";
+} from "GreenchClaw/plugin-sdk/migration";
 import type {
   MigrationItem,
   MigrationPlan,
   MigrationProviderContext,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import { buildConfigItems } from "./config.js";
 import { exists, parseHermesConfig, readText } from "./helpers.js";
 import { createHermesModelItem } from "./items.js";
@@ -142,7 +142,7 @@ export async function buildHermesPlan(ctx: MigrationProviderContext): Promise<Mi
       : []),
     ...(source.archivePaths.length > 0
       ? [
-          "Some Hermes files are archive-only. They will be copied into the migration report for manual review, not loaded into NexisClaw.",
+          "Some Hermes files are archive-only. They will be copied into the migration report for manual review, not loaded into GreenchClaw.",
         ]
       : []),
     ...(items.some((item) => item.kind === "manual")
@@ -156,7 +156,7 @@ export async function buildHermesPlan(ctx: MigrationProviderContext): Promise<Mi
     summary: summarizeMigrationItems(items),
     items,
     warnings,
-    nextSteps: ["Run NexisClaw doctor after applying the migration."],
+    nextSteps: ["Run GreenchClaw doctor after applying the migration."],
     metadata: { agentDir: targets.agentDir },
   };
 }

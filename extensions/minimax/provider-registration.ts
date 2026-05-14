@@ -1,22 +1,22 @@
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import type {
-  NexisClawPluginApi,
-  NexisClawConfig,
+  GreenchClawPluginApi,
+  GreenchClawConfig,
   ProviderAuthContext,
   ProviderAuthResult,
   ProviderCatalogContext,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import {
   MINIMAX_OAUTH_MARKER,
   ensureAuthProfileStore,
   listProfilesForProvider,
-} from "NexisClaw/plugin-sdk/provider-auth";
-import { buildOauthProviderAuthResult } from "NexisClaw/plugin-sdk/provider-auth";
-import { createProviderApiKeyAuthMethod } from "NexisClaw/plugin-sdk/provider-auth-api-key";
-import { buildProviderReplayFamilyHooks } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { MINIMAX_FAST_MODE_STREAM_HOOKS } from "NexisClaw/plugin-sdk/provider-stream-family";
-import { fetchMinimaxUsage } from "NexisClaw/plugin-sdk/provider-usage";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/provider-auth";
+import { buildOauthProviderAuthResult } from "GreenchClaw/plugin-sdk/provider-auth";
+import { createProviderApiKeyAuthMethod } from "GreenchClaw/plugin-sdk/provider-auth-api-key";
+import { buildProviderReplayFamilyHooks } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { MINIMAX_FAST_MODE_STREAM_HOOKS } from "GreenchClaw/plugin-sdk/provider-stream-family";
+import { fetchMinimaxUsage } from "GreenchClaw/plugin-sdk/provider-usage";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { isMiniMaxModernModelId, MINIMAX_DEFAULT_MODEL_ID } from "./api.js";
 import type { MiniMaxRegion } from "./oauth.js";
 import { applyMinimaxApiConfig, applyMinimaxApiConfigCn } from "./onboard.js";
@@ -69,11 +69,11 @@ function portalModelRef(modelId: string): string {
   return `${PORTAL_PROVIDER_ID}/${modelId}`;
 }
 
-function getProviderBaseUrl(cfg: NexisClawConfig, providerId: string): string | undefined {
+function getProviderBaseUrl(cfg: GreenchClawConfig, providerId: string): string | undefined {
   return normalizeOptionalString(cfg.models?.providers?.[providerId]?.baseUrl);
 }
 
-function resolveMinimaxUsageBaseUrl(cfg: NexisClawConfig): string | undefined {
+function resolveMinimaxUsageBaseUrl(cfg: GreenchClawConfig): string | undefined {
   return getProviderBaseUrl(cfg, PORTAL_PROVIDER_ID) ?? getProviderBaseUrl(cfg, API_PROVIDER_ID);
 }
 
@@ -238,7 +238,7 @@ function createMinimaxOAuthMethod(region: MiniMaxRegion) {
   };
 }
 
-export function registerMinimaxProviders(api: NexisClawPluginApi) {
+export function registerMinimaxProviders(api: GreenchClawPluginApi) {
   api.registerProvider({
     id: API_PROVIDER_ID,
     label: PROVIDER_LABEL,

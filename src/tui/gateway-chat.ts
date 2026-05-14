@@ -59,7 +59,7 @@ function throwGatewayAuthResolutionError(reason: string): never {
   throw new Error(
     [
       reason,
-      "Fix: set NEXISCLAW_GATEWAY_TOKEN/NEXISCLAW_GATEWAY_PASSWORD, pass --token/--password,",
+      "Fix: set GREENCHCLAW_GATEWAY_TOKEN/GREENCHCLAW_GATEWAY_PASSWORD, pass --token/--password,",
       "or resolve the configured secret provider for this credential.",
     ].join("\n"),
   );
@@ -122,7 +122,7 @@ export class GatewayChatClient implements TuiBackend {
       password: connection.password,
       preauthHandshakeTimeoutMs: connection.preauthHandshakeTimeoutMs,
       clientName: GATEWAY_CLIENT_NAMES.TUI,
-      clientDisplayName: "NexisClaw-tui",
+      clientDisplayName: "GreenchClaw-tui",
       clientVersion: VERSION,
       platform: process.platform,
       mode: GATEWAY_CLIENT_MODES.UI,

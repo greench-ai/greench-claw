@@ -1,10 +1,10 @@
 import {
   createAccountListHelpers,
   resolveMergedAccountConfig,
-} from "NexisClaw/plugin-sdk/account-helpers";
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/account-helpers";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveZaloToken } from "./token.js";
 import type { ResolvedZaloAccount, ZaloAccountConfig, ZaloConfig } from "./types.js";
 
@@ -14,7 +14,7 @@ const { listAccountIds: listZaloAccountIds, resolveDefaultAccountId: resolveDefa
   createAccountListHelpers("zalo");
 export { listZaloAccountIds, resolveDefaultZaloAccountId };
 
-function mergeZaloAccountConfig(cfg: NexisClawConfig, accountId: string): ZaloAccountConfig {
+function mergeZaloAccountConfig(cfg: GreenchClawConfig, accountId: string): ZaloAccountConfig {
   return resolveMergedAccountConfig<ZaloAccountConfig>({
     channelConfig: cfg.channels?.zalo as ZaloAccountConfig | undefined,
     accounts: (cfg.channels?.zalo as ZaloConfig | undefined)?.accounts as
@@ -26,7 +26,7 @@ function mergeZaloAccountConfig(cfg: NexisClawConfig, accountId: string): ZaloAc
 }
 
 export function resolveZaloAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   allowUnresolvedSecretRef?: boolean;
 }): ResolvedZaloAccount {
@@ -53,7 +53,7 @@ export function resolveZaloAccount(params: {
   };
 }
 
-export function listEnabledZaloAccounts(cfg: NexisClawConfig): ResolvedZaloAccount[] {
+export function listEnabledZaloAccounts(cfg: GreenchClawConfig): ResolvedZaloAccount[] {
   return listZaloAccountIds(cfg)
     .map((accountId) => resolveZaloAccount({ cfg, accountId }))
     .filter((account) => account.enabled);

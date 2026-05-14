@@ -5,14 +5,14 @@ import { Type } from "typebox";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { jsonResult } from "../../agents/tools/common.js";
 import type { ChannelPlugin } from "../../channels/plugins/types.js";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { loadWebMedia } from "../../media/web-media.js";
 import { getActivePluginRegistry, setActivePluginRegistry } from "../../plugins/runtime.js";
 import {
   createChannelTestPluginBase,
   createTestRegistry,
 } from "../../test-utils/channel-plugins.js";
-import { resolvePreferredNexisClawTmpDir } from "../tmp-NexisClaw-dir.js";
+import { resolvePreferredGreenchClawTmpDir } from "../tmp-GreenchClaw-dir.js";
 import { runMessageAction } from "./message-action-runner.js";
 
 const onePixelPng = Buffer.from(
@@ -64,7 +64,7 @@ const workspaceConfig = {
       appToken: "xapp-test",
     },
   },
-} as NexisClawConfig;
+} as GreenchClawConfig;
 
 function firstMockArg(
   mock: { mock: { calls: readonly unknown[][] } },
@@ -88,7 +88,7 @@ async function withSandbox(test: (sandboxDir: string) => Promise<void>) {
 }
 
 const runDrySend = (params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   actionParams: Record<string, unknown>;
   sandboxRoot?: string;
 }) =>
@@ -162,7 +162,7 @@ async function expectSandboxMediaRewrite(params: {
 }
 
 async function runAttachmentRemoteMediaAction(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   action: "sendAttachment" | "upload-file";
 }) {
   return runMessageAction({
@@ -307,7 +307,7 @@ describe("runMessageAction media behavior", () => {
           password: "test-password",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const attachmentPlugin: ChannelPlugin = {
       id: "attachmentchat",
       meta: {
@@ -369,7 +369,7 @@ describe("runMessageAction media behavior", () => {
     }
 
     async function expectRejectsLocalAbsolutePathWithoutSandbox(params: {
-      cfg?: NexisClawConfig;
+      cfg?: GreenchClawConfig;
       action: "sendAttachment" | "setGroupIcon";
       target: string;
       mediaField?: "media" | "mediaUrl" | "fileUrl";
@@ -573,7 +573,7 @@ describe("runMessageAction media behavior", () => {
 
   describe("reply hydration", () => {
     // The reply action accepts attachments via the same media/path/filePath
-    // params as send. Before NexisClaw#79864 the runner only hydrated
+    // params as send. Before GreenchClaw#79864 the runner only hydrated
     // sendAttachment/setGroupIcon/upload-file, so a channel plugin's reply
     // handler saw the raw path and could forward it directly to its CLI —
     // bypassing localRoots, sandbox, and size checks. These tests pin the
@@ -588,7 +588,7 @@ describe("runMessageAction media behavior", () => {
           enabled: true,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const handleActionMock = vi.fn();
     const replyPlugin: ChannelPlugin = {
       id: "replychat",
@@ -786,7 +786,7 @@ describe("runMessageAction media behavior", () => {
     it("rewrites plugin-owned sandbox media params and preserves mxc URLs", async () => {
       await withSandbox(async (sandboxDir) => {
         const result = await runMessageAction({
-          cfg: {} as NexisClawConfig,
+          cfg: {} as GreenchClawConfig,
           action: "set-profile",
           params: {
             channel: "profile-demo",
@@ -812,7 +812,7 @@ describe("runMessageAction media behavior", () => {
         const result = await runMessageAction({
           cfg: {
             tools: { fs: { workspaceOnly: false } },
-          } as NexisClawConfig,
+          } as GreenchClawConfig,
           action: "set-profile",
           params: {
             channel: "profile-demo",
@@ -833,7 +833,7 @@ describe("runMessageAction media behavior", () => {
       await withSandbox(async (sandboxDir) => {
         const avatarUrl = "data:text/plain;base64,SGVsbG8=";
         const result = await runMessageAction({
-          cfg: {} as NexisClawConfig,
+          cfg: {} as GreenchClawConfig,
           action: "send",
           dryRun: true,
           params: {
@@ -1028,8 +1028,8 @@ describe("runMessageAction media behavior", () => {
       },
     );
 
-    it("allows media paths under preferred NexisClaw tmp root", async () => {
-      const tmpRoot = resolvePreferredNexisClawTmpDir();
+    it("allows media paths under preferred GreenchClaw tmp root", async () => {
+      const tmpRoot = resolvePreferredGreenchClawTmpDir();
       await fs.mkdir(tmpRoot, { recursive: true });
       const sandboxDir = await fs.mkdtemp(path.join(os.tmpdir(), "msg-sandbox-"));
       try {
@@ -1052,7 +1052,11 @@ describe("runMessageAction media behavior", () => {
           throw new Error("expected send result");
         }
         expect(result.sendResult?.mediaUrl).toBe(path.resolve(tmpFile));
-        const hostTmpOutsideNexisClaw = path.join(os.tmpdir(), "outside-NexisClaw", "test-media.png");
+        const hostTmpOutsideGreenchClaw = path.join(
+          os.tmpdir(),
+          "outside-GreenchClaw",
+          "test-media.png",
+        );
         await expect(
           runMessageAction({
             cfg: workspaceConfig,
@@ -1060,7 +1064,7 @@ describe("runMessageAction media behavior", () => {
             params: {
               channel: "workspace",
               target: "12345678",
-              media: hostTmpOutsideNexisClaw,
+              media: hostTmpOutsideGreenchClaw,
               message: "",
             },
             sandboxRoot: sandboxDir,

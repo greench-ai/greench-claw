@@ -1,6 +1,6 @@
 import { v0_8 } from "@a2ui/lit";
+import { themeContext } from "@GreenchClaw/a2ui-theme-context";
 import { ContextProvider } from "@lit/context";
-import { themeContext } from "@NexisClaw/a2ui-theme-context";
 import { html, css, LitElement, unsafeCSS } from "lit";
 import "@a2ui/lit/ui";
 import { repeat } from "lit/directives/repeat.js";
@@ -108,7 +108,7 @@ const postNativeMessage = (handler, payload) => {
   Reflect.apply(handler.postMessage, handler, [payload]);
 };
 
-const NexisClawTheme = {
+const GreenchClawTheme = {
   components: {
     AudioPlayer: emptyClasses(),
     Button: emptyClasses(),
@@ -222,7 +222,7 @@ const NexisClawTheme = {
   },
 };
 
-class NexisClawA2UIHost extends LitElement {
+class GreenchClawA2UIHost extends LitElement {
   static properties = {
     surfaces: { state: true },
     pendingAction: { state: true },
@@ -232,7 +232,7 @@ class NexisClawA2UIHost extends LitElement {
   #processor = v0_8.Data.createSignalA2uiMessageProcessor();
   themeProvider = new ContextProvider(this, {
     context: themeContext,
-    initialValue: NexisClawTheme,
+    initialValue: GreenchClawTheme,
   });
 
   surfaces = [];
@@ -246,8 +246,8 @@ class NexisClawA2UIHost extends LitElement {
       height: 100%;
       position: relative;
       box-sizing: border-box;
-      padding: var(--NexisClaw-a2ui-inset-top, 0px) var(--NexisClaw-a2ui-inset-right, 0px)
-        var(--NexisClaw-a2ui-inset-bottom, 0px) var(--NexisClaw-a2ui-inset-left, 0px);
+      padding: var(--GreenchClaw-a2ui-inset-top, 0px) var(--GreenchClaw-a2ui-inset-right, 0px)
+        var(--GreenchClaw-a2ui-inset-bottom, 0px) var(--GreenchClaw-a2ui-inset-left, 0px);
     }
 
     #surfaces {
@@ -256,14 +256,14 @@ class NexisClawA2UIHost extends LitElement {
       gap: 12px;
       height: 100%;
       overflow: auto;
-      padding-bottom: var(--NexisClaw-a2ui-scroll-pad-bottom, 0px);
+      padding-bottom: var(--GreenchClaw-a2ui-scroll-pad-bottom, 0px);
     }
 
     .status {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      top: var(--NexisClaw-a2ui-status-top, 12px);
+      top: var(--GreenchClaw-a2ui-status-top, 12px);
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -289,7 +289,7 @@ class NexisClawA2UIHost extends LitElement {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      bottom: var(--NexisClaw-a2ui-toast-bottom, 12px);
+      bottom: var(--GreenchClaw-a2ui-toast-bottom, 12px);
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -320,7 +320,7 @@ class NexisClawA2UIHost extends LitElement {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      top: var(--NexisClaw-a2ui-empty-top, var(--NexisClaw-a2ui-status-top, 12px));
+      top: var(--GreenchClaw-a2ui-empty-top, var(--GreenchClaw-a2ui-status-top, 12px));
       text-align: center;
       opacity: 0.8;
       padding: 10px 12px;
@@ -358,10 +358,10 @@ class NexisClawA2UIHost extends LitElement {
       reset: () => this.reset(),
       getSurfaces: () => Array.from(this.#processor.getSurfaces().keys()),
     };
-    globalThis.NexisClawA2UI = api;
+    globalThis.GreenchClawA2UI = api;
     this.addEventListener("a2uiaction", (evt) => this.#handleA2UIAction(evt));
     this.#statusListener = (evt) => this.#handleActionStatus(evt);
-    for (const eventName of ["NexisClaw:a2ui-action-status"]) {
+    for (const eventName of ["GreenchClaw:a2ui-action-status"]) {
       globalThis.addEventListener(eventName, this.#statusListener);
     }
     this.#syncSurfaces();
@@ -370,7 +370,7 @@ class NexisClawA2UIHost extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     if (this.#statusListener) {
-      for (const eventName of ["NexisClaw:a2ui-action-status"]) {
+      for (const eventName of ["GreenchClaw:a2ui-action-status"]) {
         globalThis.removeEventListener(eventName, this.#statusListener);
       }
       this.#statusListener = null;
@@ -484,15 +484,15 @@ class NexisClawA2UIHost extends LitElement {
       ...(Object.keys(context).length ? { context } : {}),
     };
 
-    globalThis.__NexisClawLastA2UIAction = userAction;
+    globalThis.__GreenchClawLastA2UIAction = userAction;
 
     const handler =
-      globalThis.webkit?.messageHandlers?.NexisClawCanvasA2UIAction ??
-      globalThis.NexisClawCanvasA2UIAction;
+      globalThis.webkit?.messageHandlers?.GreenchClawCanvasA2UIAction ??
+      globalThis.GreenchClawCanvasA2UIAction;
     if (handler?.postMessage) {
       try {
         // WebKit message handlers support structured objects; Android's JS interface expects strings.
-        if (handler === globalThis.NexisClawCanvasA2UIAction) {
+        if (handler === globalThis.GreenchClawCanvasA2UIAction) {
           postNativeMessage(handler, JSON.stringify({ userAction }));
         } else {
           postNativeMessage(handler, { userAction });
@@ -587,6 +587,6 @@ class NexisClawA2UIHost extends LitElement {
   }
 }
 
-if (!customElements.get("NexisClaw-a2ui-host")) {
-  customElements.define("NexisClaw-a2ui-host", NexisClawA2UIHost);
+if (!customElements.get("GreenchClaw-a2ui-host")) {
+  customElements.define("GreenchClaw-a2ui-host", GreenchClawA2UIHost);
 }

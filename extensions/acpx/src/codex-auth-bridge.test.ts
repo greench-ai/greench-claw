@@ -11,12 +11,12 @@ const execFileAsync = promisify(execFile);
 const tempDirs: string[] = [];
 const previousEnv = {
   CODEX_HOME: process.env.CODEX_HOME,
-  NEXISCLAW_AGENT_DIR: process.env.NEXISCLAW_AGENT_DIR,
+  GREENCHCLAW_AGENT_DIR: process.env.GREENCHCLAW_AGENT_DIR,
   PI_CODING_AGENT_DIR: process.env.PI_CODING_AGENT_DIR,
 };
 
 async function makeTempDir(): Promise<string> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-acpx-codex-auth-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-acpx-codex-auth-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -90,7 +90,7 @@ async function expectPathMissing(targetPath: string): Promise<void> {
 afterEach(async () => {
   vi.restoreAllMocks();
   restoreEnv("CODEX_HOME");
-  restoreEnv("NEXISCLAW_AGENT_DIR");
+  restoreEnv("GREENCHCLAW_AGENT_DIR");
   restoreEnv("PI_CODING_AGENT_DIR");
   for (const dir of tempDirs.splice(0)) {
     await fs.rm(dir, { recursive: true, force: true });
@@ -98,7 +98,7 @@ afterEach(async () => {
 });
 
 describe("prepareAcpxCodexAuthConfig", () => {
-  it("installs an isolated Codex ACP wrapper without synthesizing auth from canonical NexisClaw OAuth", async () => {
+  it("installs an isolated Codex ACP wrapper without synthesizing auth from canonical GreenchClaw OAuth", async () => {
     const root = await makeTempDir();
     const agentDir = path.join(root, "agent");
     const stateDir = path.join(root, "state");
@@ -112,7 +112,7 @@ describe("prepareAcpxCodexAuthConfig", () => {
       "bin",
       "codex-acp.js",
     );
-    process.env.NEXISCLAW_AGENT_DIR = agentDir;
+    process.env.GREENCHCLAW_AGENT_DIR = agentDir;
     delete process.env.PI_CODING_AGENT_DIR;
 
     const pluginConfig = resolveAcpxPluginConfig({
@@ -296,9 +296,9 @@ describe("prepareAcpxCodexAuthConfig", () => {
       process.execPath,
       [
         generated.wrapperPath,
-        "--NexisClaw-acpx-lease-id",
+        "--GreenchClaw-acpx-lease-id",
         "lease-1",
-        "--NexisClaw-gateway-instance-id",
+        "--GreenchClaw-gateway-instance-id",
         "gateway-1",
       ],
       {
@@ -360,7 +360,7 @@ describe("prepareAcpxCodexAuthConfig", () => {
       'notify = ["SkyComputerUseClient", "turn-ended"]\n',
     );
     process.env.CODEX_HOME = sourceCodexHome;
-    process.env.NEXISCLAW_AGENT_DIR = agentDir;
+    process.env.GREENCHCLAW_AGENT_DIR = agentDir;
     delete process.env.PI_CODING_AGENT_DIR;
 
     const pluginConfig = resolveAcpxPluginConfig({

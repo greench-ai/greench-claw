@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import type { MsgContext } from "../templating.js";
 
 const { getSessionMock, getFinishedSessionMock, killProcessTreeMock } = vi.hoisted(() => ({
@@ -23,7 +23,7 @@ const { handleBashChatCommand } = await import("./bash-command.js");
 function buildParams(commandBody: string) {
   const cfg = {
     commands: { bash: true },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 
   const ctx = {
     CommandBody: commandBody,
@@ -163,10 +163,10 @@ describe("handleBashChatCommand stop", () => {
       sessionKey: "agent:target:telegram:direct:target-session",
     });
     expect(result.text).toContain(
-      "NexisClaw sandbox explain --session agent:target:telegram:direct:target-session",
+      "GreenchClaw sandbox explain --session agent:target:telegram:direct:target-session",
     );
     expect(result.text).not.toContain(
-      "NexisClaw sandbox explain --session agent:main:telegram:slash-session",
+      "GreenchClaw sandbox explain --session agent:main:telegram:slash-session",
     );
   });
 });

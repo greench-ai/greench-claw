@@ -167,7 +167,7 @@ describe("inspectGatewayRestart", () => {
       portUsage: {
         port: 18789,
         status: "busy",
-        listeners: [{ pid: 7001, ppid: 7000, commandLine: "NexisClaw-gateway" }],
+        listeners: [{ pid: 7001, ppid: 7000, commandLine: "GreenchClaw-gateway" }],
         hints: [],
       },
     });
@@ -182,7 +182,7 @@ describe("inspectGatewayRestart", () => {
       portUsage: {
         port: 18789,
         status: "busy",
-        listeners: [{ pid: 9000, ppid: 8999, commandLine: "NexisClaw-gateway" }],
+        listeners: [{ pid: 9000, ppid: 8999, commandLine: "GreenchClaw-gateway" }],
         hints: [],
       },
     });
@@ -259,7 +259,7 @@ describe("inspectGatewayRestart", () => {
       portUsage: {
         port: 18789,
         status: "busy",
-        listeners: [{ pid: 9100, commandLine: "NexisClaw-gateway" }],
+        listeners: [{ pid: 9100, commandLine: "GreenchClaw-gateway" }],
         hints: [],
       },
     });
@@ -336,7 +336,7 @@ describe("inspectGatewayRestart", () => {
       portUsage: {
         port: 18789,
         status: "busy",
-        listeners: [{ pid: 8000, commandLine: "NexisClaw-gateway" }],
+        listeners: [{ pid: 8000, commandLine: "GreenchClaw-gateway" }],
         hints: [],
       },
     });
@@ -361,7 +361,7 @@ describe("inspectGatewayRestart", () => {
       portUsage: {
         port: 18789,
         status: "busy",
-        listeners: [{ pid: 8000, commandLine: "NexisClaw-gateway" }],
+        listeners: [{ pid: 8000, commandLine: "GreenchClaw-gateway" }],
         hints: [],
       },
     });
@@ -388,7 +388,7 @@ describe("inspectGatewayRestart", () => {
       portUsage: {
         port: 18789,
         status: "busy",
-        listeners: [{ pid: 8000, commandLine: "NexisClaw-gateway" }],
+        listeners: [{ pid: 8000, commandLine: "GreenchClaw-gateway" }],
         hints: [],
       },
     });
@@ -414,12 +414,12 @@ describe("inspectGatewayRestart", () => {
     const service = makeGatewayService({ status: "running", pid: 8000 });
     const serviceEnv = {
       ...process.env,
-      NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-restart-service-state",
+      GREENCHCLAW_STATE_DIR: "/tmp/GreenchClaw-restart-service-state",
     } as NodeJS.ProcessEnv;
     inspectPortUsage.mockResolvedValue({
       port: 18789,
       status: "busy",
-      listeners: [{ pid: 8000, commandLine: "NexisClaw-gateway" }],
+      listeners: [{ pid: 8000, commandLine: "GreenchClaw-gateway" }],
       hints: [],
     });
 
@@ -460,7 +460,7 @@ describe("inspectGatewayRestart", () => {
     inspectPortUsage.mockResolvedValue({
       port: 18789,
       status: "busy",
-      listeners: [{ pid: 8000, commandLine: "NexisClaw-gateway" }],
+      listeners: [{ pid: 8000, commandLine: "GreenchClaw-gateway" }],
       hints: [],
     });
 
@@ -511,7 +511,7 @@ describe("inspectGatewayRestart", () => {
       portUsage: {
         port: 18789,
         status: "busy",
-        listeners: [{ pid: 8000, commandLine: "NexisClaw-gateway" }],
+        listeners: [{ pid: 8000, commandLine: "GreenchClaw-gateway" }],
         hints: [],
       },
     });
@@ -558,7 +558,7 @@ describe("inspectGatewayRestart", () => {
     inspectPortUsage.mockResolvedValue({
       port: 18789,
       status: "busy",
-      listeners: [{ pid: 8000, commandLine: "NexisClaw-gateway" }],
+      listeners: [{ pid: 8000, commandLine: "GreenchClaw-gateway" }],
       hints: [],
     });
 
@@ -594,7 +594,7 @@ describe("inspectGatewayRestart", () => {
     inspectPortUsage.mockResolvedValue({
       port: 18789,
       status: "busy",
-      listeners: [{ pid: 8000, commandLine: "NexisClaw-gateway" }],
+      listeners: [{ pid: 8000, commandLine: "GreenchClaw-gateway" }],
       hints: [],
     });
 
@@ -672,7 +672,7 @@ describe("inspectGatewayRestart", () => {
       .mockResolvedValueOnce({
         port: 18789,
         status: "busy",
-        listeners: [{ pid: 8000, commandLine: "NexisClaw-gateway" }],
+        listeners: [{ pid: 8000, commandLine: "GreenchClaw-gateway" }],
         hints: [],
       });
     probeGateway.mockResolvedValue({

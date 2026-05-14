@@ -1,7 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { createMigrationItem, MIGRATION_REASON_TARGET_EXISTS } from "NexisClaw/plugin-sdk/migration";
-import type { MigrationItem } from "NexisClaw/plugin-sdk/plugin-entry";
+import {
+  createMigrationItem,
+  MIGRATION_REASON_TARGET_EXISTS,
+} from "GreenchClaw/plugin-sdk/migration";
+import type { MigrationItem } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { exists, sanitizeName } from "./helpers.js";
 import type { HermesSource } from "./source.js";
 import type { PlannedTargets } from "./targets.js";

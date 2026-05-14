@@ -1,5 +1,5 @@
 import type { MsgContext } from "../auto-reply/templating.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import type { ActiveMediaModel } from "./active-model.types.js";
 import {
   buildProviderRegistry,
@@ -11,7 +11,7 @@ import type { MediaAttachment, MediaUnderstandingProvider } from "./types.js";
 
 export async function runAudioTranscription(params: {
   ctx: MsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   attachments?: MediaAttachment[];
   agentDir?: string;
   providers?: Record<string, MediaUnderstandingProvider>;

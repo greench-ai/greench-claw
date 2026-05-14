@@ -1,5 +1,5 @@
 ---
-summary: "NexisClaw logging: rolling diagnostics file log + unified log privacy flags"
+summary: "GreenchClaw logging: rolling diagnostics file log + unified log privacy flags"
 read_when:
   - Capturing macOS logs or investigating private data logging
   - Debugging voice wake/session lifecycle issues
@@ -10,11 +10,11 @@ title: "macOS logging"
 
 ## Rolling diagnostics file log (Debug pane)
 
-NexisClaw routes macOS app logs through swift-log (unified logging by default) and can write a local, rotating file log to disk when you need a durable capture.
+GreenchClaw routes macOS app logs through swift-log (unified logging by default) and can write a local, rotating file log to disk when you need a durable capture.
 
 - Verbosity: **Debug pane → Logs → App logging → Verbosity**
 - Enable: **Debug pane → Logs → App logging → "Write rolling diagnostics log (JSONL)"**
-- Location: `~/Library/Logs/NexisClaw/diagnostics.jsonl` (rotates automatically; old files are suffixed with `.1`, `.2`, …)
+- Location: `~/Library/Logs/GreenchClaw/diagnostics.jsonl` (rotates automatically; old files are suffixed with `.1`, `.2`, …)
 - Clear: **Debug pane → Logs → App logging → "Clear"**
 
 Notes:
@@ -26,12 +26,12 @@ Notes:
 
 Unified logging redacts most payloads unless a subsystem opts into `privacy -off`. Per Peter's write-up on macOS [logging privacy shenanigans](https://steipete.me/posts/2025/logging-privacy-shenanigans) (2025) this is controlled by a plist in `/Library/Preferences/Logging/Subsystems/` keyed by the subsystem name. Only new log entries pick up the flag, so enable it before reproducing an issue.
 
-## Enable for NexisClaw (`ai.NexisClaw`)
+## Enable for GreenchClaw (`ai.GreenchClaw`)
 
 - Write the plist to a temp file first, then install it atomically as root:
 
 ```bash
-cat <<'EOF' >/tmp/ai.NexisClaw.plist
+cat <<'EOF' >/tmp/ai.GreenchClaw.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -44,7 +44,7 @@ cat <<'EOF' >/tmp/ai.NexisClaw.plist
 </dict>
 </plist>
 EOF
-sudo install -m 644 -o root -g wheel /tmp/ai.NexisClaw.plist /Library/Preferences/Logging/Subsystems/ai.NexisClaw.plist
+sudo install -m 644 -o root -g wheel /tmp/ai.GreenchClaw.plist /Library/Preferences/Logging/Subsystems/ai.GreenchClaw.plist
 ```
 
 - No reboot is required; logd notices the file quickly, but only new log lines will include private payloads.
@@ -52,7 +52,7 @@ sudo install -m 644 -o root -g wheel /tmp/ai.NexisClaw.plist /Library/Preference
 
 ## Disable after debugging
 
-- Remove the override: `sudo rm /Library/Preferences/Logging/Subsystems/ai.NexisClaw.plist`.
+- Remove the override: `sudo rm /Library/Preferences/Logging/Subsystems/ai.GreenchClaw.plist`.
 - Optionally run `sudo log config --reload` to force logd to drop the override immediately.
 - Remember this surface can include phone numbers and message bodies; keep the plist in place only while you actively need the extra detail.
 

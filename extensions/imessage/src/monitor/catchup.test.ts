@@ -17,16 +17,16 @@ let tempStateDir: string;
 let priorStateDir: string | undefined;
 
 beforeAll(() => {
-  tempStateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-imsg-catchup-"));
-  priorStateDir = process.env.NEXISCLAW_STATE_DIR;
-  process.env.NEXISCLAW_STATE_DIR = tempStateDir;
+  tempStateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-imsg-catchup-"));
+  priorStateDir = process.env.GREENCHCLAW_STATE_DIR;
+  process.env.GREENCHCLAW_STATE_DIR = tempStateDir;
 });
 
 afterAll(() => {
   if (priorStateDir === undefined) {
-    delete process.env.NEXISCLAW_STATE_DIR;
+    delete process.env.GREENCHCLAW_STATE_DIR;
   } else {
-    process.env.NEXISCLAW_STATE_DIR = priorStateDir;
+    process.env.GREENCHCLAW_STATE_DIR = priorStateDir;
   }
   fs.rmSync(tempStateDir, { recursive: true, force: true });
 });

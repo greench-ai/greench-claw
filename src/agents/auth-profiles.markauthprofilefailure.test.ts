@@ -25,7 +25,7 @@ let tempRoot = "";
 let tempCaseIndex = 0;
 
 beforeAll(() => {
-  tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-"));
+  tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-"));
 });
 
 afterAll(() => {

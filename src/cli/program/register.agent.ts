@@ -58,24 +58,24 @@ export function registerAgentCommands(program: Command, args: { agentChannelOpti
         `
 ${theme.heading("Examples:")}
 ${formatHelpExamples([
-  ['NexisClaw agent --to +15555550123 --message "status update"', "Start a new session."],
-  ['NexisClaw agent --agent ops --message "Summarize logs"', "Use a specific agent."],
+  ['GreenchClaw agent --to +15555550123 --message "status update"', "Start a new session."],
+  ['GreenchClaw agent --agent ops --message "Summarize logs"', "Use a specific agent."],
   [
-    'NexisClaw agent --session-id 1234 --message "Summarize inbox" --thinking medium',
+    'GreenchClaw agent --session-id 1234 --message "Summarize inbox" --thinking medium',
     "Target a session with explicit thinking level.",
   ],
   [
-    'NexisClaw agent --to +15555550123 --message "Trace logs" --verbose on --json',
+    'GreenchClaw agent --to +15555550123 --message "Trace logs" --verbose on --json',
     "Enable verbose logging and JSON output.",
   ],
-  ['NexisClaw agent --to +15555550123 --message "Summon reply" --deliver', "Deliver reply."],
+  ['GreenchClaw agent --to +15555550123 --message "Summon reply" --deliver', "Deliver reply."],
   [
-    'NexisClaw agent --agent ops --message "Generate report" --deliver --reply-channel slack --reply-to "#reports"',
+    'GreenchClaw agent --agent ops --message "Generate report" --deliver --reply-channel slack --reply-to "#reports"',
     "Send reply to a different channel/target.",
   ],
 ])}
 
-${theme.muted("Docs:")} ${formatDocsLink("/cli/agent", "docs.NexisClaw.ai/cli/agent")}`,
+${theme.muted("Docs:")} ${formatDocsLink("/cli/agent", "docs.GreenchClaw.ai/cli/agent")}`,
     )
     .action(async (opts) => {
       const verboseLevel =
@@ -94,7 +94,7 @@ ${theme.muted("Docs:")} ${formatDocsLink("/cli/agent", "docs.NexisClaw.ai/cli/ag
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/agents", "docs.NexisClaw.ai/cli/agents")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/agents", "docs.GreenchClaw.ai/cli/agents")}\n`,
     );
 
   agents
@@ -225,14 +225,20 @@ ${theme.muted("Docs:")} ${formatDocsLink("/cli/agent", "docs.NexisClaw.ai/cli/ag
         `
 ${theme.heading("Examples:")}
 ${formatHelpExamples([
-  ['NexisClaw agents set-identity --agent main --name "NexisClaw" --emoji "🦞"', "Set name + emoji."],
-  ["NexisClaw agents set-identity --agent main --avatar avatars/NexisClaw.png", "Set avatar path."],
   [
-    "NexisClaw agents set-identity --workspace ~/.NexisClaw/workspace --from-identity",
+    'GreenchClaw agents set-identity --agent main --name "GreenchClaw" --emoji "🦞"',
+    "Set name + emoji.",
+  ],
+  [
+    "GreenchClaw agents set-identity --agent main --avatar avatars/GreenchClaw.png",
+    "Set avatar path.",
+  ],
+  [
+    "GreenchClaw agents set-identity --workspace ~/.GreenchClaw/workspace --from-identity",
     "Load from IDENTITY.md.",
   ],
   [
-    "NexisClaw agents set-identity --identity-file ~/.NexisClaw/workspace/IDENTITY.md --agent main",
+    "GreenchClaw agents set-identity --identity-file ~/.GreenchClaw/workspace/IDENTITY.md --agent main",
     "Use a specific IDENTITY.md.",
   ],
 ])}

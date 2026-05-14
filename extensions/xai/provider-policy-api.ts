@@ -1,7 +1,7 @@
 import type {
   ProviderDefaultThinkingPolicyContext,
   ProviderThinkingProfile,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import { resolveXaiCatalogEntry } from "./model-definitions.js";
 
 export function resolveThinkingProfile(

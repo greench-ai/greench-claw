@@ -1,7 +1,7 @@
 import {
   buildUntrustedChannelMetadata,
   wrapExternalContent,
-} from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/security-runtime";
 import {
   resolveDiscordMemberAllowed,
   resolveDiscordOwnerAllowFrom,

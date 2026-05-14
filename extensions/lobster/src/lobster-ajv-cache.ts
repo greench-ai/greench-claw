@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
 import AjvPkg, { type AnySchema, type ValidateFunction } from "ajv";
 
-const installedSymbol = Symbol.for("NexisClaw.lobster.ajv-compile-cache.installed");
-const cacheSymbol = Symbol.for("NexisClaw.lobster.ajv-compile-cache.entries");
+const installedSymbol = Symbol.for("GreenchClaw.lobster.ajv-compile-cache.installed");
+const cacheSymbol = Symbol.for("GreenchClaw.lobster.ajv-compile-cache.entries");
 const maxEntries = 512;
 
 type AjvInstance = import("ajv").default;

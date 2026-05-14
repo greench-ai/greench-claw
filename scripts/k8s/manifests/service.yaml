@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: NexisClaw
+  name: GreenchClaw
   labels:
-    app: NexisClaw
+    app: GreenchClaw
 spec:
   type: ClusterIP
   selector:
-    app: NexisClaw
+    app: GreenchClaw
   ports:
     - name: gateway
       port: 18789

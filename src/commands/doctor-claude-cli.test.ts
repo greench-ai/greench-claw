@@ -19,7 +19,7 @@ function createStore(profiles: AuthProfileStore["profiles"] = {}): AuthProfileSt
 async function withTempHome<T>(
   run: (params: { homeDir: string; workspaceDir: string }) => Promise<T> | T,
 ): Promise<T> {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-doctor-claude-cli-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-doctor-claude-cli-"));
   const homeDir = path.join(root, "home");
   const workspaceDir = path.join(root, "workspace");
   fs.mkdirSync(homeDir, { recursive: true });
@@ -59,11 +59,11 @@ describe("resolveClaudeCliProjectDirForWorkspace", () => {
   it("matches Claude's sanitized workspace project dir shape", () => {
     expect(
       resolveClaudeCliProjectDirForWorkspace({
-        workspaceDir: "/Users/vincentkoc/GIT/_Perso/NexisClaw/.NexisClaw/workspace",
+        workspaceDir: "/Users/vincentkoc/GIT/_Perso/GreenchClaw/.GreenchClaw/workspace",
         homeDir: "/Users/vincentkoc",
       }),
     ).toBe(
-      "/Users/vincentkoc/.claude/projects/-Users-vincentkoc-GIT--Perso-NexisClaw--NexisClaw-workspace",
+      "/Users/vincentkoc/.claude/projects/-Users-vincentkoc-GIT--Perso-GreenchClaw--GreenchClaw-workspace",
     );
   });
 });
@@ -127,7 +127,7 @@ describe("noteClaudeCliHealth", () => {
       expect(body).toContain("Binary: /opt/homebrew/bin/claude.");
       expect(body).toContain("Headless Claude auth: OK (oauth).");
       expect(body).toContain(
-        `NexisClaw auth profile: ${CLAUDE_CLI_PROFILE_ID} (provider claude-cli).`,
+        `GreenchClaw auth profile: ${CLAUDE_CLI_PROFILE_ID} (provider claude-cli).`,
       );
       expect(body).toContain("Workspace:");
       expect(body).toContain("(writable).");
@@ -227,9 +227,9 @@ describe("noteClaudeCliHealth", () => {
 
       const body = noteBody(noteFn);
       expect(body).toContain("Headless Claude auth: OK (oauth).");
-      expect(body).toContain(`NexisClaw auth profile: missing (${CLAUDE_CLI_PROFILE_ID})`);
+      expect(body).toContain(`GreenchClaw auth profile: missing (${CLAUDE_CLI_PROFILE_ID})`);
       expect(body).toContain(
-        "NexisClaw models auth login --provider anthropic --method cli --set-default",
+        "GreenchClaw models auth login --provider anthropic --method cli --set-default",
       );
       expect(body).toContain(
         "not created yet; it appears after the first Claude CLI turn in this workspace",

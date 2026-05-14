@@ -1,12 +1,12 @@
-export { definePluginEntry } from "NexisClaw/plugin-sdk/core";
+export { definePluginEntry } from "GreenchClaw/plugin-sdk/core";
 export type {
   AnyAgentTool,
-  NexisClawPluginApi,
-  NexisClawPluginToolContext,
-  NexisClawPluginToolFactory,
-} from "NexisClaw/plugin-sdk/core";
+  GreenchClawPluginApi,
+  GreenchClawPluginToolContext,
+  GreenchClawPluginToolFactory,
+} from "GreenchClaw/plugin-sdk/core";
 export {
   applyWindowsSpawnProgramPolicy,
   materializeWindowsSpawnProgram,
   resolveWindowsSpawnProgramCandidate,
-} from "NexisClaw/plugin-sdk/windows-spawn";
+} from "GreenchClaw/plugin-sdk/windows-spawn";

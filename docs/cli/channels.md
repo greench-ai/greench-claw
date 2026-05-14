@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `NexisClaw channels` (accounts, status, login/logout, logs)"
+summary: "CLI reference for `GreenchClaw channels` (accounts, status, login/logout, logs)"
 read_when:
   - You want to add/remove channel accounts (WhatsApp/Telegram/Discord/Google Chat/Slack/Mattermost (plugin)/Signal/iMessage/Matrix)
   - You want to check channel status or tail channel logs
 title: "Channels"
 ---
 
-# `NexisClaw channels`
+# `GreenchClaw channels`
 
 Manage chat channel accounts and their runtime status on the Gateway.
 
@@ -18,17 +18,17 @@ Related docs:
 ## Common commands
 
 ```bash
-NexisClaw channels list
-NexisClaw channels list --all
-NexisClaw channels status
-NexisClaw channels capabilities
-NexisClaw channels capabilities --channel discord --target channel:123
-NexisClaw channels capabilities --channel discord --target channel:<voice-channel-id>
-NexisClaw channels resolve --channel slack "#general" "@jane"
-NexisClaw channels logs --channel all
+GreenchClaw channels list
+GreenchClaw channels list --all
+GreenchClaw channels status
+GreenchClaw channels capabilities
+GreenchClaw channels capabilities --channel discord --target channel:123
+GreenchClaw channels capabilities --channel discord --target channel:<voice-channel-id>
+GreenchClaw channels resolve --channel slack "#general" "@jane"
+GreenchClaw channels logs --channel all
 ```
 
-`channels list` shows chat channels only: configured accounts by default, with `installed`, `configured`, and `enabled` status tags per account. Pass `--all` to also surface bundled channels that have no configured account yet and installable catalog channels that are not yet on disk. Auth providers (OAuth + API keys) and model-provider usage/quota snapshots are no longer printed here; use `NexisClaw models auth list` for provider auth profiles and `NexisClaw status` or `NexisClaw models list` for usage.
+`channels list` shows chat channels only: configured accounts by default, with `installed`, `configured`, and `enabled` status tags per account. Pass `--all` to also surface bundled channels that have no configured account yet and installable catalog channels that are not yet on disk. Auth providers (OAuth + API keys) and model-provider usage/quota snapshots are no longer printed here; use `GreenchClaw models auth list` for provider auth profiles and `GreenchClaw status` or `GreenchClaw models list` for usage.
 
 ## Status / capabilities / resolve / logs
 
@@ -43,7 +43,7 @@ state plus probe results such as `works`, `probe failed`, `audit ok`, or `audit 
 If the gateway is unreachable, `channels status` falls back to config-only summaries
 instead of live probe output.
 
-Do not use `NexisClaw sessions`, Gateway `sessions.list`, or the agent
+Do not use `GreenchClaw sessions`, Gateway `sessions.list`, or the agent
 `sessions_list` tool as a channel socket-health signal. Those surfaces report
 stored conversation rows, not provider runtime state. After a Discord provider
 restart, a connected but quiet account may be healthy while no Discord session
@@ -52,13 +52,13 @@ row appears until the next inbound or outbound conversation event.
 ## Add / remove accounts
 
 ```bash
-NexisClaw channels add --channel telegram --token <bot-token>
-NexisClaw channels add --channel nostr --private-key "$NOSTR_PRIVATE_KEY"
-NexisClaw channels remove --channel telegram --delete
+GreenchClaw channels add --channel telegram --token <bot-token>
+GreenchClaw channels add --channel nostr --private-key "$NOSTR_PRIVATE_KEY"
+GreenchClaw channels remove --channel telegram --delete
 ```
 
 <Tip>
-`NexisClaw channels add --help` shows per-channel flags (token, private key, app token, signal-cli paths, etc).
+`GreenchClaw channels add --help` shows per-channel flags (token, private key, app token, signal-cli paths, etc).
 </Tip>
 
 `channels remove` only operates on installed/configured channel plugins. Use `channels add` first for installable catalog channels.
@@ -74,9 +74,9 @@ Common non-interactive add surfaces include:
 - Tlon fields: `--ship`, `--url`, `--code`, `--group-channels`, `--dm-allowlist`, `--auto-discover-channels`
 - `--use-env` for default-account env-backed auth where supported
 
-If a channel plugin needs to be installed during a flag-driven add command, NexisClaw uses the channel's default install source without opening the interactive plugin install prompt.
+If a channel plugin needs to be installed during a flag-driven add command, GreenchClaw uses the channel's default install source without opening the interactive plugin install prompt.
 
-When you run `NexisClaw channels add` without flags, the interactive wizard can prompt:
+When you run `GreenchClaw channels add` without flags, the interactive wizard can prompt:
 
 - account ids per selected channel
 - optional display names for those accounts
@@ -84,9 +84,9 @@ When you run `NexisClaw channels add` without flags, the interactive wizard can 
 
 If you confirm bind now, the wizard asks which agent should own each configured channel account and writes account-scoped routing bindings.
 
-You can also manage the same routing rules later with `NexisClaw agents bindings`, `NexisClaw agents bind`, and `NexisClaw agents unbind` (see [agents](/cli/agents)).
+You can also manage the same routing rules later with `GreenchClaw agents bindings`, `GreenchClaw agents bind`, and `GreenchClaw agents unbind` (see [agents](/cli/agents)).
 
-When you add a non-default account to a channel that is still using single-account top-level settings, NexisClaw promotes account-scoped top-level values into the channel's account map before writing the new account. Most channels land those values in `channels.<channel>.accounts.default`, but bundled channels can preserve an existing matching promoted account instead. Matrix is the current example: if one named account already exists, or `defaultAccount` points at an existing named account, promotion preserves that account instead of creating a new `accounts.default`.
+When you add a non-default account to a channel that is still using single-account top-level settings, GreenchClaw promotes account-scoped top-level values into the channel's account map before writing the new account. Most channels land those values in `channels.<channel>.accounts.default`, but bundled channels can preserve an existing matching promoted account instead. Matrix is the current example: if one named account already exists, or `defaultAccount` points at an existing named account, promotion preserves that account instead of creating a new `accounts.default`.
 
 Routing behavior stays consistent:
 
@@ -94,13 +94,13 @@ Routing behavior stays consistent:
 - `channels add` does not auto-create or rewrite bindings in non-interactive mode.
 - Interactive setup can optionally add account-scoped bindings.
 
-If your config was already in a mixed state (named accounts present and top-level single-account values still set), run `NexisClaw doctor --fix` to move account-scoped values into the promoted account chosen for that channel. Most channels promote into `accounts.default`; Matrix can preserve an existing named/default target instead.
+If your config was already in a mixed state (named accounts present and top-level single-account values still set), run `GreenchClaw doctor --fix` to move account-scoped values into the promoted account chosen for that channel. Most channels promote into `accounts.default`; Matrix can preserve an existing named/default target instead.
 
 ## Login and logout (interactive)
 
 ```bash
-NexisClaw channels login --channel whatsapp
-NexisClaw channels logout --channel whatsapp
+GreenchClaw channels login --channel whatsapp
+GreenchClaw channels logout --channel whatsapp
 ```
 
 - `channels login` supports `--verbose`.
@@ -110,18 +110,18 @@ NexisClaw channels logout --channel whatsapp
 
 ## Troubleshooting
 
-- Run `NexisClaw status --deep` for a broad probe.
-- Use `NexisClaw doctor` for guided fixes.
-- `NexisClaw channels list` no longer prints model provider usage/quota snapshots. For those, use `NexisClaw status` (overview) or `NexisClaw models list` (per-provider).
-- `NexisClaw channels status` falls back to config-only summaries when the gateway is unreachable. If a supported channel credential is configured via SecretRef but unavailable in the current command path, it reports that account as configured with degraded notes instead of showing it as not configured.
+- Run `GreenchClaw status --deep` for a broad probe.
+- Use `GreenchClaw doctor` for guided fixes.
+- `GreenchClaw channels list` no longer prints model provider usage/quota snapshots. For those, use `GreenchClaw status` (overview) or `GreenchClaw models list` (per-provider).
+- `GreenchClaw channels status` falls back to config-only summaries when the gateway is unreachable. If a supported channel credential is configured via SecretRef but unavailable in the current command path, it reports that account as configured with degraded notes instead of showing it as not configured.
 
 ## Capabilities probe
 
 Fetch provider capability hints (intents/scopes where available) plus static feature support:
 
 ```bash
-NexisClaw channels capabilities
-NexisClaw channels capabilities --channel discord --target channel:123
+GreenchClaw channels capabilities
+GreenchClaw channels capabilities --channel discord --target channel:123
 ```
 
 Notes:
@@ -136,9 +136,9 @@ Notes:
 Resolve channel/user names to IDs using the provider directory:
 
 ```bash
-NexisClaw channels resolve --channel slack "#general" "@jane"
-NexisClaw channels resolve --channel discord "My Server/#support" "@someone"
-NexisClaw channels resolve --channel matrix "Project Room"
+GreenchClaw channels resolve --channel slack "#general" "@jane"
+GreenchClaw channels resolve --channel discord "My Server/#support" "@someone"
+GreenchClaw channels resolve --channel matrix "Project Room"
 ```
 
 Notes:

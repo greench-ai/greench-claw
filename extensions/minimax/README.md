@@ -1,4 +1,4 @@
-# MiniMax (NexisClaw plugin)
+# MiniMax (GreenchClaw plugin)
 
 Bundled MiniMax plugin for both:
 
@@ -8,13 +8,13 @@ Bundled MiniMax plugin for both:
 ## Enable
 
 ```bash
-NexisClaw plugins enable minimax
+GreenchClaw plugins enable minimax
 ```
 
 Restart the Gateway after enabling.
 
 ```bash
-NexisClaw gateway restart
+GreenchClaw gateway restart
 ```
 
 ## Authenticate
@@ -22,13 +22,13 @@ NexisClaw gateway restart
 OAuth:
 
 ```bash
-NexisClaw models auth login --provider minimax-portal --set-default
+GreenchClaw models auth login --provider minimax-portal --set-default
 ```
 
 API key:
 
 ```bash
-NexisClaw setup --wizard --auth-choice minimax-global-api
+GreenchClaw setup --wizard --auth-choice minimax-global-api
 ```
 
 ## Notes

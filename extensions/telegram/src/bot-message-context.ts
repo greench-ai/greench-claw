@@ -2,15 +2,15 @@ import type { ReactionTypeEmoji } from "@grammyjs/types";
 import {
   resolveAckReaction,
   shouldAckReaction as shouldAckReactionGate,
-} from "NexisClaw/plugin-sdk/channel-feedback";
-import { logInboundDrop } from "NexisClaw/plugin-sdk/channel-inbound";
+} from "GreenchClaw/plugin-sdk/channel-feedback";
+import { logInboundDrop } from "GreenchClaw/plugin-sdk/channel-inbound";
 import type {
   TelegramDirectConfig,
   TelegramGroupConfig,
-} from "NexisClaw/plugin-sdk/config-contracts";
-import { deriveLastRoutePolicy } from "NexisClaw/plugin-sdk/routing";
-import { normalizeAccountId, resolveThreadSessionKeys } from "NexisClaw/plugin-sdk/routing";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { deriveLastRoutePolicy } from "GreenchClaw/plugin-sdk/routing";
+import { normalizeAccountId, resolveThreadSessionKeys } from "GreenchClaw/plugin-sdk/routing";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   expandTelegramAllowFromWithAccessGroups,
   resolveTelegramDmAllow,

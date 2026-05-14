@@ -7,8 +7,8 @@
 
 import { ApiClient } from "@twurple/api";
 import { StaticAuthProvider } from "@twurple/auth";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { ChannelResolveKind, ChannelResolveResult } from "./types.js";
 import type { ChannelLogSink, TwitchAccountConfig } from "./types.js";
 import { normalizeToken } from "./utils/twitch.js";

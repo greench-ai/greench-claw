@@ -1,5 +1,5 @@
 import { SettingsManager } from "@earendil-works/pi-coding-agent";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import {
   buildEmbeddedPiSettingsSnapshot,
@@ -11,7 +11,7 @@ import { applyPiCompactionSettingsFromConfig } from "./pi-settings.js";
 function createEmbeddedPiSettingsManager(params: {
   cwd: string;
   agentDir: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   pluginMetadataSnapshot?: PluginMetadataSnapshot;
 }): SettingsManager {
   const fileSettingsManager = SettingsManager.create(params.cwd, params.agentDir);
@@ -48,7 +48,7 @@ function createRuntimeEmbeddedPiSettingsManager(settingsManager: SettingsManager
 export function createPreparedEmbeddedPiSettingsManager(params: {
   cwd: string;
   agentDir: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   pluginMetadataSnapshot?: PluginMetadataSnapshot;
   /** Resolved context window budget so reserve-token floor can be capped for small models. */
   contextTokenBudget?: number;

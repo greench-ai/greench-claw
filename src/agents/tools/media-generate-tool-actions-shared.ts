@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   listMediaGenerationProviderModels,
   synthesizeMediaGenerationCatalogEntries,
@@ -21,7 +21,7 @@ type MediaGenerateProvider = {
   defaultModel?: string;
   models?: readonly string[];
   capabilities: unknown;
-  isConfigured?: (ctx: { cfg?: NexisClawConfig; agentDir?: string }) => boolean;
+  isConfigured?: (ctx: { cfg?: GreenchClawConfig; agentDir?: string }) => boolean;
 };
 
 type MediaGenerateListProviderDetails<TProvider extends MediaGenerateProvider> = {
@@ -44,7 +44,7 @@ export function createMediaGenerateProviderListActionResult<
   kind: MediaGenerationCatalogKind;
   providers: TProvider[];
   emptyText: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentDir?: string;
   authStore?: AuthProfileStore;
   listModes: (provider: TProvider) => string[];

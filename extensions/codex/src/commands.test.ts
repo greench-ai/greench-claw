@@ -6,8 +6,11 @@ import {
   replaceRuntimeAuthProfileStoreSnapshots,
   resolveDefaultAgentDir,
   type AuthProfileStore,
-} from "NexisClaw/plugin-sdk/agent-runtime";
-import type { PluginCommandContext, PluginCommandResult } from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
+import type {
+  PluginCommandContext,
+  PluginCommandResult,
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CODEX_CONTROL_METHODS } from "./app-server/capabilities.js";
 import type { CodexComputerUseStatus } from "./app-server/computer-use.js";
@@ -160,8 +163,8 @@ function expectedDiagnosticsTargetBlock(params: {
   return [
     `Session ${params.index ?? 1}`,
     ...(params.channel ? [`Channel: ${params.channel}`] : []),
-    ...(params.sessionKey ? [`NexisClaw session key: \`${params.sessionKey}\``] : []),
-    ...(params.sessionId ? [`NexisClaw session id: \`${params.sessionId}\``] : []),
+    ...(params.sessionKey ? [`GreenchClaw session key: \`${params.sessionKey}\``] : []),
+    ...(params.sessionId ? [`GreenchClaw session id: \`${params.sessionId}\``] : []),
     `Codex thread id: \`${params.threadId}\``,
     `Inspect locally: \`codex resume ${params.threadId}\``,
   ];
@@ -169,8 +172,8 @@ function expectedDiagnosticsTargetBlock(params: {
 
 describe("codex command", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-codex-command-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", tempDir);
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-codex-command-"));
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", tempDir);
   });
 
   afterEach(async () => {
@@ -219,7 +222,7 @@ describe("codex command", () => {
     await expect(
       handleCodexCommand(createContext("resume thread-123", sessionFile), { deps }),
     ).resolves.toEqual({
-      text: "Attached this NexisClaw session to Codex thread thread-123.",
+      text: "Attached this GreenchClaw session to Codex thread thread-123.",
     });
 
     expect(requests).toEqual([
@@ -1309,7 +1312,7 @@ describe("codex command", () => {
     await expect(
       handleCodexCommand(createContext("compact", sessionFile), { deps: createDeps() }),
     ).resolves.toEqual({
-      text: "No Codex thread is attached to this NexisClaw session yet.",
+      text: "No Codex thread is attached to this GreenchClaw session yet.",
     });
   });
 
@@ -1404,7 +1407,7 @@ describe("codex command", () => {
         threadId: "thread-123",
         includeLogs: true,
         tags: {
-          source: "NexisClaw-diagnostics",
+          source: "GreenchClaw-diagnostics",
           channel: "test",
         },
       },
@@ -1483,7 +1486,7 @@ describe("codex command", () => {
       [
         "Codex runtime thread detected.",
         "Approving diagnostics will also send this thread's feedback bundle to OpenAI servers.",
-        "The completed diagnostics reply will list the NexisClaw session ids and Codex thread ids that were sent.",
+        "The completed diagnostics reply will list the GreenchClaw session ids and Codex thread ids that were sent.",
         "Note: flaky tool call",
         "Included: Codex logs and spawned Codex subthreads when available.",
       ].join("\n"),
@@ -1540,7 +1543,7 @@ describe("codex command", () => {
         threadId: "thread-approved",
         includeLogs: true,
         tags: {
-          source: "NexisClaw-diagnostics",
+          source: "GreenchClaw-diagnostics",
           channel: "test",
         },
       },
@@ -1595,11 +1598,11 @@ describe("codex command", () => {
     );
     const token = readDiagnosticsConfirmationToken(request);
     expect(request.text).toContain("Codex runtime threads detected.");
-    expect(request.text).toContain("NexisClaw session key: `agent:main:whatsapp:one`");
-    expect(request.text).toContain("NexisClaw session id: `session-one`");
+    expect(request.text).toContain("GreenchClaw session key: `agent:main:whatsapp:one`");
+    expect(request.text).toContain("GreenchClaw session id: `session-one`");
     expect(request.text).toContain("Codex thread id: `thread-111`");
-    expect(request.text).toContain("NexisClaw session key: `agent:main:discord:two`");
-    expect(request.text).toContain("NexisClaw session id: `session-two`");
+    expect(request.text).toContain("GreenchClaw session key: `agent:main:discord:two`");
+    expect(request.text).toContain("GreenchClaw session id: `session-two`");
     expect(request.text).toContain("Codex thread id: `thread-222`");
     expect(safeCodexControlRequest).not.toHaveBeenCalled();
 
@@ -2313,7 +2316,7 @@ describe("codex command", () => {
       handleCodexCommand(createContext("diagnostics", sessionFile), { deps: createDeps() }),
     ).resolves.toEqual({
       text: [
-        "No Codex thread is attached to this NexisClaw session yet.",
+        "No Codex thread is attached to this GreenchClaw session yet.",
         "Use /codex threads to find a thread, then /codex resume <thread-id> before sending diagnostics.",
       ].join("\n"),
     });

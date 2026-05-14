@@ -1,17 +1,17 @@
 ---
-summary: "Model providers (LLMs) supported by NexisClaw"
+summary: "Model providers (LLMs) supported by GreenchClaw"
 read_when:
   - You want to choose a model provider
   - You want quick setup examples for LLM auth + model selection
 title: "Model provider quickstart"
 ---
 
-NexisClaw can use many LLM providers. Pick one, authenticate, then set the default
+GreenchClaw can use many LLM providers. Pick one, authenticate, then set the default
 model as `provider/model`.
 
 ## Quick start (two steps)
 
-1. Authenticate with the provider (usually via `NexisClaw onboard`).
+1. Authenticate with the provider (usually via `GreenchClaw onboard`).
 2. Set the default model:
 
 ```json5
@@ -52,8 +52,8 @@ model as `provider/model`.
 ## Additional bundled provider variants
 
 - `anthropic-vertex` - implicit Anthropic on Google Vertex support when Vertex credentials are available; no separate onboarding auth choice
-- `copilot-proxy` - local VS Code Copilot Proxy bridge; use `NexisClaw onboard --auth-choice copilot-proxy`
-- `google-gemini-cli` - unofficial Gemini CLI OAuth flow; requires a local `gemini` install (`brew install gemini-cli` or `npm install -g @google/gemini-cli`); default model `google-gemini-cli/gemini-3-flash-preview`; use `NexisClaw onboard --auth-choice google-gemini-cli` or `NexisClaw models auth login --provider google-gemini-cli --set-default`
+- `copilot-proxy` - local VS Code Copilot Proxy bridge; use `GreenchClaw onboard --auth-choice copilot-proxy`
+- `google-gemini-cli` - unofficial Gemini CLI OAuth flow; requires a local `gemini` install (`brew install gemini-cli` or `npm install -g @google/gemini-cli`); default model `google-gemini-cli/gemini-3-flash-preview`; use `GreenchClaw onboard --auth-choice google-gemini-cli` or `GreenchClaw models auth login --provider google-gemini-cli --set-default`
 
 For the full provider catalog (xAI, Groq, Mistral, etc.) and advanced configuration,
 see [Model providers](/concepts/model-providers).

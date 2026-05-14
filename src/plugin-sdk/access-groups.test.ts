@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   expandAllowFromWithAccessGroups,
   resolveAccessGroupAllowFromState,
@@ -12,7 +12,7 @@ describe("access group allowlists", () => {
         admins: { type: "message.senders", members: { "*": ["global"], test: ["local"] } },
         audience: { type: "discord.channelAudience", guildId: "guild-1", channelId: "channel-1" },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const staticState = await resolveAccessGroupAllowFromState({
       accessGroups: cfg.accessGroups,

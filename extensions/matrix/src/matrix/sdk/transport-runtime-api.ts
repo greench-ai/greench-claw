@@ -1,11 +1,11 @@
-import { fetchWithRuntimeDispatcherOrMockedGlobal } from "NexisClaw/plugin-sdk/runtime-fetch";
+import { fetchWithRuntimeDispatcherOrMockedGlobal } from "GreenchClaw/plugin-sdk/runtime-fetch";
 import {
   closeDispatcher,
   createPinnedDispatcher,
   resolvePinnedHostnameWithPolicy,
   type PinnedDispatcherPolicy,
   type SsrFPolicy,
-} from "NexisClaw/plugin-sdk/ssrf-dispatcher";
+} from "GreenchClaw/plugin-sdk/ssrf-dispatcher";
 export { buildTimeoutAbortSignal } from "./timeout-abort-signal.js";
 
 export {

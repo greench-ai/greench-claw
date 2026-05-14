@@ -1,6 +1,6 @@
 import type { WebClient as SlackWebClient } from "@slack/web-api";
-import { pruneMapToMaxSize } from "NexisClaw/plugin-sdk/collection-runtime";
-import { logVerbose, shouldLogVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { pruneMapToMaxSize } from "GreenchClaw/plugin-sdk/collection-runtime";
+import { logVerbose, shouldLogVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import { formatSlackError } from "../errors.js";
 import type { SlackMessageEvent } from "../types.js";
 

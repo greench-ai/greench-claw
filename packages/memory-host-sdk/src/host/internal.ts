@@ -13,21 +13,21 @@ import {
   type WalkDirectoryEntry,
 } from "./fs-utils.js";
 import {
+  CHARS_PER_TOKEN_ESTIMATE,
+  detectMime,
+  estimateStringChars,
+  runTasksWithConcurrency,
+} from "./GreenchClaw-runtime-io.js";
+import {
+  resolveCanonicalRootMemoryFile,
+  shouldSkipRootMemoryAuxiliaryPath,
+} from "./GreenchClaw-runtime-memory.js";
+import {
   buildMemoryMultimodalLabel,
   classifyMemoryMultimodalPath,
   type MemoryMultimodalModality,
   type MemoryMultimodalSettings,
 } from "./multimodal.js";
-import {
-  CHARS_PER_TOKEN_ESTIMATE,
-  detectMime,
-  estimateStringChars,
-  runTasksWithConcurrency,
-} from "./NexisClaw-runtime-io.js";
-import {
-  resolveCanonicalRootMemoryFile,
-  shouldSkipRootMemoryAuxiliaryPath,
-} from "./NexisClaw-runtime-memory.js";
 
 export { hashText } from "./hash.js";
 import { hashText } from "./hash.js";
@@ -116,7 +116,7 @@ function shouldDescendMemoryEntry(
   if (shouldSkipPath?.(entry.path)) {
     return false;
   }
-  return entry.kind === "directory" && entry.name !== ".NexisClaw-repair";
+  return entry.kind === "directory" && entry.name !== ".GreenchClaw-repair";
 }
 
 async function collectMemoryFilesFromDir(

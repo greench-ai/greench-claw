@@ -1,7 +1,7 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/plugin-entry";
-import { capturePluginRegistration } from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { CUSTOM_LOCAL_AUTH_MARKER } from "NexisClaw/plugin-sdk/provider-auth";
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { capturePluginRegistration } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { CUSTOM_LOCAL_AUTH_MARKER } from "GreenchClaw/plugin-sdk/provider-auth";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 import { LMSTUDIO_LOCAL_API_KEY_PLACEHOLDER } from "./src/defaults.js";
@@ -167,12 +167,12 @@ describe("lmstudio plugin", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     expect(
       provider?.augmentModelCatalog?.({
         config,
-        agentDir: "/tmp/NexisClaw",
+        agentDir: "/tmp/GreenchClaw",
         env: {},
         entries: [],
       }),

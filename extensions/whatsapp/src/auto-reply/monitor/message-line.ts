@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { getPrimaryIdentityId, getReplyContext, getSenderIdentity } from "../../identity.js";
 import type { WebInboundMsg } from "../types.js";
 import {
@@ -18,7 +18,7 @@ export function formatReplyContext(msg: WebInboundMsg) {
 }
 
 export function buildInboundLine(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   msg: WebInboundMsg;
   agentId: string;
   previousTimestamp?: number;

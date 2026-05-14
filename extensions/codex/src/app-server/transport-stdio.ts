@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import {
   materializeWindowsSpawnProgram,
   resolveWindowsSpawnProgram,
-} from "NexisClaw/plugin-sdk/windows-spawn";
+} from "GreenchClaw/plugin-sdk/windows-spawn";
 import type { CodexAppServerStartOptions } from "./config.js";
 import type { CodexAppServerTransport } from "./transport.js";
 

@@ -1,10 +1,10 @@
 /**
  * JSONL parser — splits on `\n`, parses each non-empty line as JSONC
  * (allowing comments/trailing-comma is harmless and matches what
- * NexisClaw session logs actually emit). Soft-error policy: malformed
+ * GreenchClaw session logs actually emit). Soft-error policy: malformed
  * lines surface as `kind: 'malformed'` AST entries plus a diagnostic.
  *
- * @module @NexisClaw/oc-path/jsonl/parse
+ * @module @GreenchClaw/oc-path/jsonl/parse
  */
 
 import type { Diagnostic } from "../ast.js";

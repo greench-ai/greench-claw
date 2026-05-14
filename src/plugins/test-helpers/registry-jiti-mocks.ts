@@ -2,15 +2,15 @@ import { vi } from "vitest";
 
 const registryJitiMocks = vi.hoisted(() => ({
   createJiti: vi.fn(),
-  discoverNexisClawPlugins: vi.fn(),
+  discoverGreenchClawPlugins: vi.fn(),
   loadPluginManifestRegistry: vi.fn(),
   loadPluginRegistrySnapshot: vi.fn(),
 }));
 
 vi.mock("../discovery.js", () => ({
-  discoverNexisClawPlugins: (
-    ...args: Parameters<typeof registryJitiMocks.discoverNexisClawPlugins>
-  ) => registryJitiMocks.discoverNexisClawPlugins(...args),
+  discoverGreenchClawPlugins: (
+    ...args: Parameters<typeof registryJitiMocks.discoverGreenchClawPlugins>
+  ) => registryJitiMocks.discoverGreenchClawPlugins(...args),
 }));
 
 vi.mock("../manifest-registry.js", () => ({
@@ -39,10 +39,10 @@ vi.mock("../plugin-registry.js", async (importOriginal) => {
 });
 export function resetRegistryJitiMocks(): void {
   registryJitiMocks.createJiti.mockReset();
-  registryJitiMocks.discoverNexisClawPlugins.mockReset();
+  registryJitiMocks.discoverGreenchClawPlugins.mockReset();
   registryJitiMocks.loadPluginManifestRegistry.mockReset();
   registryJitiMocks.loadPluginRegistrySnapshot.mockReset();
-  registryJitiMocks.discoverNexisClawPlugins.mockReturnValue({
+  registryJitiMocks.discoverGreenchClawPlugins.mockReturnValue({
     candidates: [],
     diagnostics: [],
   });

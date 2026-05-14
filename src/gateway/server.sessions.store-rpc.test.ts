@@ -457,9 +457,9 @@ test("lists and patches session store via sessions.* RPC", async () => {
 });
 
 test("sessions.list configuredAgentsOnly hides disk-discovered unregistered agent stores", async () => {
-  const stateDir = process.env.NEXISCLAW_STATE_DIR;
+  const stateDir = process.env.GREENCHCLAW_STATE_DIR;
   if (!stateDir) {
-    throw new Error("NEXISCLAW_STATE_DIR is required for gateway session tests");
+    throw new Error("GREENCHCLAW_STATE_DIR is required for gateway session tests");
   }
   testState.agentsConfig = { list: [{ id: "main", default: true }] };
   testState.sessionConfig = {

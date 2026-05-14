@@ -17,7 +17,7 @@ const targets = [
   "qa",
   "security",
   "test",
-  "NexisClaw.mjs",
+  "GreenchClaw.mjs",
   "config/knip.config.ts",
   "tsdown.config.ts",
   "vitest.config.ts",

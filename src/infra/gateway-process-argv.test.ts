@@ -44,30 +44,30 @@ describe("isGatewayArgv", () => {
   });
 
   it("matches known entrypoints across slash and case variants", () => {
-    expect(isGatewayArgv(["NODE", "C:\\NexisClaw\\DIST\\ENTRY.JS", "gateway"])).toBe(true);
-    expect(isGatewayArgv(["bun", "/srv/NexisClaw/scripts/run-node.mjs", "gateway"])).toBe(true);
-    expect(isGatewayArgv(["node", "/srv/NexisClaw/NexisClaw.mjs", "gateway"])).toBe(true);
-    expect(isGatewayArgv(["tsx", "/srv/NexisClaw/src/entry.ts", "gateway"])).toBe(true);
-    expect(isGatewayArgv(["tsx", "/srv/NexisClaw/src/index.ts", "gateway"])).toBe(true);
+    expect(isGatewayArgv(["NODE", "C:\\GreenchClaw\\DIST\\ENTRY.JS", "gateway"])).toBe(true);
+    expect(isGatewayArgv(["bun", "/srv/GreenchClaw/scripts/run-node.mjs", "gateway"])).toBe(true);
+    expect(isGatewayArgv(["node", "/srv/GreenchClaw/GreenchClaw.mjs", "gateway"])).toBe(true);
+    expect(isGatewayArgv(["tsx", "/srv/GreenchClaw/src/entry.ts", "gateway"])).toBe(true);
+    expect(isGatewayArgv(["tsx", "/srv/GreenchClaw/src/index.ts", "gateway"])).toBe(true);
   });
 
-  it("matches the NexisClaw executable but gates the gateway binary behind the opt-in flag", () => {
-    expect(isGatewayArgv(["C:\\bin\\NexisClaw.cmd", "gateway"])).toBe(true);
-    expect(isGatewayArgv(["/usr/local/bin/NexisClaw-gateway", "gateway"])).toBe(false);
+  it("matches the GreenchClaw executable but gates the gateway binary behind the opt-in flag", () => {
+    expect(isGatewayArgv(["C:\\bin\\GreenchClaw.cmd", "gateway"])).toBe(true);
+    expect(isGatewayArgv(["/usr/local/bin/GreenchClaw-gateway", "gateway"])).toBe(false);
     expect(
-      isGatewayArgv(["/usr/local/bin/NexisClaw-gateway", "gateway"], {
+      isGatewayArgv(["/usr/local/bin/GreenchClaw-gateway", "gateway"], {
         allowGatewayBinary: true,
       }),
     ).toBe(true);
     expect(
-      isGatewayArgv(["C:\\bin\\NexisClaw-gateway.EXE", "gateway"], {
+      isGatewayArgv(["C:\\bin\\GreenchClaw-gateway.EXE", "gateway"], {
         allowGatewayBinary: true,
       }),
     ).toBe(true);
   });
 
   it("rejects unknown gateway argv even when the token is present", () => {
-    expect(isGatewayArgv(["node", "/srv/NexisClaw/custom.js", "gateway"])).toBe(false);
+    expect(isGatewayArgv(["node", "/srv/GreenchClaw/custom.js", "gateway"])).toBe(false);
     expect(isGatewayArgv(["python", "gateway", "script.py"])).toBe(false);
   });
 });

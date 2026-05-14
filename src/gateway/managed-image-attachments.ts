@@ -697,7 +697,7 @@ async function getSessionManagedOutgoingAttachmentIndex(
   });
   const index: SessionManagedOutgoingAttachmentIndex = new Set();
   for (const message of messages) {
-    const meta = (message as { __NexisClaw?: { id?: string } } | null)?.__NexisClaw;
+    const meta = (message as { __GreenchClaw?: { id?: string } } | null)?.__GreenchClaw;
     const messageId = meta?.id;
     if (typeof messageId !== "string" || !messageId) {
       continue;

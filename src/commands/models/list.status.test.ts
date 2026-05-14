@@ -36,8 +36,8 @@ const mocks = vi.hoisted(() => {
 
   return {
     store,
-    resolveAgentDir: vi.fn().mockReturnValue("/tmp/NexisClaw-agent"),
-    resolveAgentWorkspaceDir: vi.fn().mockReturnValue("/tmp/NexisClaw-agent/workspace"),
+    resolveAgentDir: vi.fn().mockReturnValue("/tmp/GreenchClaw-agent"),
+    resolveAgentWorkspaceDir: vi.fn().mockReturnValue("/tmp/GreenchClaw-agent/workspace"),
     resolveDefaultAgentId: vi.fn().mockReturnValue("main"),
     resolveAgentExplicitModelPrimary: vi.fn().mockReturnValue(undefined),
     resolveAgentEffectiveModelPrimary: vi.fn().mockReturnValue(undefined),
@@ -52,7 +52,7 @@ const mocks = vi.hoisted(() => {
     loadPersistedAuthProfileStore: vi.fn().mockReturnValue(store),
     resolveAuthProfileDisplayLabel: vi.fn(({ profileId }: { profileId: string }) => profileId),
     resolveAuthStorePathForDisplay: vi.fn(
-      (agentDir?: string) => `${agentDir ?? "/tmp/NexisClaw-agent"}/auth-profiles.json`,
+      (agentDir?: string) => `${agentDir ?? "/tmp/GreenchClaw-agent"}/auth-profiles.json`,
     ),
     resolveProfileUnusableUntilForDisplay: vi.fn().mockReturnValue(undefined),
     resolveEnvApiKey: vi.fn((provider: string) => {
@@ -121,7 +121,7 @@ const mocks = vi.hoisted(() => {
     getShellEnvAppliedKeys: vi.fn().mockReturnValue(["OPENAI_API_KEY", "ANTHROPIC_OAUTH_TOKEN"]),
     shouldEnableShellEnvFallback: vi.fn().mockReturnValue(true),
     createConfigIO: vi.fn().mockReturnValue({
-      configPath: "/tmp/NexisClaw-dev/NexisClaw.json",
+      configPath: "/tmp/GreenchClaw-dev/GreenchClaw.json",
     }),
     loadConfig: vi.fn().mockReturnValue({
       agents: {
@@ -149,7 +149,7 @@ vi.mock("../../agents/agent-scope.js", () => ({
   listAgentIds: mocks.listAgentIds,
 }));
 vi.mock("../../agents/workspace.js", () => ({
-  resolveDefaultAgentWorkspaceDir: vi.fn().mockReturnValue("/tmp/NexisClaw-agent/workspace"),
+  resolveDefaultAgentWorkspaceDir: vi.fn().mockReturnValue("/tmp/GreenchClaw-agent/workspace"),
 }));
 vi.mock("../../agents/auth-profiles/display.js", () => ({
   resolveAuthProfileDisplayLabel: mocks.resolveAuthProfileDisplayLabel,
@@ -354,7 +354,7 @@ async function withAgentScopeOverrides<T>(
     if (originalAgentDir) {
       mocks.resolveAgentDir.mockImplementation(originalAgentDir);
     } else {
-      mocks.resolveAgentDir.mockReturnValue("/tmp/NexisClaw-agent");
+      mocks.resolveAgentDir.mockReturnValue("/tmp/GreenchClaw-agent");
     }
   }
 }
@@ -367,8 +367,8 @@ describe("modelsStatusCommand auth overview", () => {
     expectResolveAgentDirCalledFor("main");
     expect(mocks.ensureAuthProfileStore).toHaveBeenCalled();
     expect(payload.defaultModel).toBe("anthropic/claude-opus-4-6");
-    expect(payload.configPath).toBe("/tmp/NexisClaw-dev/NexisClaw.json");
-    expect(payload.auth.storePath).toBe("/tmp/NexisClaw-agent/auth-profiles.json");
+    expect(payload.configPath).toBe("/tmp/GreenchClaw-dev/GreenchClaw.json");
+    expect(payload.auth.storePath).toBe("/tmp/GreenchClaw-agent/auth-profiles.json");
     expect(payload.auth.shellEnvFallback.enabled).toBe(true);
     expect(payload.auth.shellEnvFallback.appliedKeys).toContain("OPENAI_API_KEY");
     expect(payload.auth.missingProvidersInUse).toStrictEqual([]);
@@ -412,26 +412,26 @@ describe("modelsStatusCommand auth overview", () => {
     ).toBe(true);
   });
 
-  it("honors NEXISCLAW_AGENT_DIR when no --agent override is provided", async () => {
+  it("honors GREENCHCLAW_AGENT_DIR when no --agent override is provided", async () => {
     const localRuntime = createRuntime();
-    const previous = process.env.NEXISCLAW_AGENT_DIR;
-    process.env.NEXISCLAW_AGENT_DIR = "/tmp/NexisClaw-isolated-agent";
+    const previous = process.env.GREENCHCLAW_AGENT_DIR;
+    process.env.GREENCHCLAW_AGENT_DIR = "/tmp/GreenchClaw-isolated-agent";
     mocks.resolveAgentDir.mockClear();
     try {
       await modelsStatusCommand({ json: true }, localRuntime as never);
     } finally {
       if (previous === undefined) {
-        delete process.env.NEXISCLAW_AGENT_DIR;
+        delete process.env.GREENCHCLAW_AGENT_DIR;
       } else {
-        process.env.NEXISCLAW_AGENT_DIR = previous;
+        process.env.GREENCHCLAW_AGENT_DIR = previous;
       }
     }
 
     expect(mocks.resolveAgentDir).not.toHaveBeenCalled();
-    expect(mocks.ensureAuthProfileStore).toHaveBeenCalledWith("/tmp/NexisClaw-isolated-agent");
+    expect(mocks.ensureAuthProfileStore).toHaveBeenCalledWith("/tmp/GreenchClaw-isolated-agent");
     const payload = parseFirstJsonLog(localRuntime);
-    expect(payload.agentDir).toBe("/tmp/NexisClaw-isolated-agent");
-    expect(payload.auth.storePath).toBe("/tmp/NexisClaw-isolated-agent/auth-profiles.json");
+    expect(payload.agentDir).toBe("/tmp/GreenchClaw-isolated-agent");
+    expect(payload.auth.storePath).toBe("/tmp/GreenchClaw-isolated-agent/auth-profiles.json");
   });
 
   it("uses agent overrides and reports sources", async () => {
@@ -440,14 +440,14 @@ describe("modelsStatusCommand auth overview", () => {
       {
         primary: "openai/gpt-4",
         fallbacks: ["openai/gpt-3.5"],
-        agentDir: "/tmp/NexisClaw-agent-custom",
+        agentDir: "/tmp/GreenchClaw-agent-custom",
       },
       async () => {
         await modelsStatusCommand({ json: true, agent: "Jeremiah" }, localRuntime as never);
         expectResolveAgentDirCalledFor("jeremiah");
         const payload = parseFirstJsonLog(localRuntime);
         expect(payload.agentId).toBe("jeremiah");
-        expect(payload.agentDir).toBe("/tmp/NexisClaw-agent-custom");
+        expect(payload.agentDir).toBe("/tmp/GreenchClaw-agent-custom");
         expect(payload.defaultModel).toBe("openai/gpt-4");
         expect(payload.fallbacks).toEqual(["openai/gpt-3.5"]);
         expect(payload.modelConfig).toEqual({
@@ -462,7 +462,7 @@ describe("modelsStatusCommand auth overview", () => {
         ).find((provider) => provider.provider === "openai-codex");
         expect(openAiCodex?.effective).toEqual({
           kind: "profiles",
-          detail: "/tmp/NexisClaw-agent-custom/auth-profiles.json",
+          detail: "/tmp/GreenchClaw-agent-custom/auth-profiles.json",
         });
       },
     );
@@ -1255,7 +1255,8 @@ describe("modelsStatusCommand auth overview", () => {
     });
     mocks.resolveEnvApiKey.mockImplementation(
       (provider: string, _env?: NodeJS.ProcessEnv, options?: { workspaceDir?: string }) =>
-        provider === "workspace-cloud" && options?.workspaceDir === "/tmp/NexisClaw-agent/workspace"
+        provider === "workspace-cloud" &&
+        options?.workspaceDir === "/tmp/GreenchClaw-agent/workspace"
           ? {
               apiKey: "workspace-cloud-local-credentials",
               source: "workspace cloud credentials",

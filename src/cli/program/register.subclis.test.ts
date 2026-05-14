@@ -84,8 +84,8 @@ vi.mock("./private-qa-cli.js", async () => {
 
 describe("registerSubCliCommands", () => {
   const originalArgv = process.argv;
-  const originalDisableLazySubcommands = process.env.NEXISCLAW_DISABLE_LAZY_SUBCOMMANDS;
-  const originalEnablePrivateQaCli = process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI;
+  const originalDisableLazySubcommands = process.env.GREENCHCLAW_DISABLE_LAZY_SUBCOMMANDS;
+  const originalEnablePrivateQaCli = process.env.GREENCHCLAW_ENABLE_PRIVATE_QA_CLI;
 
   const createRegisteredProgram = (argv: string[], name?: string) => {
     process.argv = argv;
@@ -99,11 +99,11 @@ describe("registerSubCliCommands", () => {
 
   beforeEach(() => {
     if (originalDisableLazySubcommands === undefined) {
-      delete process.env.NEXISCLAW_DISABLE_LAZY_SUBCOMMANDS;
+      delete process.env.GREENCHCLAW_DISABLE_LAZY_SUBCOMMANDS;
     } else {
-      process.env.NEXISCLAW_DISABLE_LAZY_SUBCOMMANDS = originalDisableLazySubcommands;
+      process.env.GREENCHCLAW_DISABLE_LAZY_SUBCOMMANDS = originalDisableLazySubcommands;
     }
-    process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI = "1";
+    process.env.GREENCHCLAW_ENABLE_PRIVATE_QA_CLI = "1";
     registerAcpCli.mockClear();
     acpAction.mockClear();
     registerNodesCli.mockClear();
@@ -123,19 +123,19 @@ describe("registerSubCliCommands", () => {
   afterEach(() => {
     process.argv = originalArgv;
     if (originalDisableLazySubcommands === undefined) {
-      delete process.env.NEXISCLAW_DISABLE_LAZY_SUBCOMMANDS;
+      delete process.env.GREENCHCLAW_DISABLE_LAZY_SUBCOMMANDS;
     } else {
-      process.env.NEXISCLAW_DISABLE_LAZY_SUBCOMMANDS = originalDisableLazySubcommands;
+      process.env.GREENCHCLAW_DISABLE_LAZY_SUBCOMMANDS = originalDisableLazySubcommands;
     }
     if (originalEnablePrivateQaCli === undefined) {
-      delete process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI;
+      delete process.env.GREENCHCLAW_ENABLE_PRIVATE_QA_CLI;
     } else {
-      process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI = originalEnablePrivateQaCli;
+      process.env.GREENCHCLAW_ENABLE_PRIVATE_QA_CLI = originalEnablePrivateQaCli;
     }
   });
 
   it("registers the primary placeholder plus completion and dispatches", async () => {
-    const program = createRegisteredProgram(["node", "NexisClaw", "acp"]);
+    const program = createRegisteredProgram(["node", "GreenchClaw", "acp"]);
 
     expect(program.commands.map((cmd) => cmd.name())).toEqual(["acp", "completion"]);
 
@@ -146,7 +146,7 @@ describe("registerSubCliCommands", () => {
   });
 
   it("registers placeholders for all subcommands when no primary", () => {
-    const program = createRegisteredProgram(["node", "NexisClaw"]);
+    const program = createRegisteredProgram(["node", "GreenchClaw"]);
 
     const names = program.commands.map((cmd) => cmd.name());
     expect(names).toContain("acp");
@@ -157,15 +157,18 @@ describe("registerSubCliCommands", () => {
   });
 
   it("omits the qa placeholder when the private qa cli is disabled", () => {
-    delete process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI;
+    delete process.env.GREENCHCLAW_ENABLE_PRIVATE_QA_CLI;
 
-    const program = createRegisteredProgram(["node", "NexisClaw"]);
+    const program = createRegisteredProgram(["node", "GreenchClaw"]);
 
     expect(program.commands.map((cmd) => cmd.name())).not.toContain("qa");
   });
 
   it("re-parses argv for lazy subcommands", async () => {
-    const program = createRegisteredProgram(["node", "NexisClaw", "nodes", "list"], "NexisClaw");
+    const program = createRegisteredProgram(
+      ["node", "GreenchClaw", "nodes", "list"],
+      "GreenchClaw",
+    );
 
     expect(program.commands.map((cmd) => cmd.name())).toEqual(["nodes", "completion"]);
 
@@ -176,7 +179,7 @@ describe("registerSubCliCommands", () => {
   });
 
   it("registers the infer placeholder and dispatches through the capability registrar", async () => {
-    const program = createRegisteredProgram(["node", "NexisClaw", "infer"], "NexisClaw");
+    const program = createRegisteredProgram(["node", "GreenchClaw", "infer"], "GreenchClaw");
 
     expect(program.commands.map((cmd) => cmd.name())).toEqual(["infer", "completion"]);
 
@@ -187,7 +190,10 @@ describe("registerSubCliCommands", () => {
   });
 
   it("replaces placeholder when registering a subcommand by name", async () => {
-    const program = createRegisteredProgram(["node", "NexisClaw", "acp", "--help"], "NexisClaw");
+    const program = createRegisteredProgram(
+      ["node", "GreenchClaw", "acp", "--help"],
+      "GreenchClaw",
+    );
 
     await registerSubCliByName(program, "acp");
 
@@ -200,9 +206,9 @@ describe("registerSubCliCommands", () => {
   });
 
   it("registers only the gateway run surface for gateway startup", async () => {
-    const argv = ["node", "NexisClaw", "gateway", "--force"];
+    const argv = ["node", "GreenchClaw", "gateway", "--force"];
     process.argv = argv;
-    const program = new Command().name("NexisClaw");
+    const program = new Command().name("GreenchClaw");
 
     await registerSubCliByName(program, "gateway", argv);
 
@@ -213,9 +219,9 @@ describe("registerSubCliCommands", () => {
   });
 
   it("keeps the full gateway CLI for non-run gateway subcommands", async () => {
-    const argv = ["node", "NexisClaw", "gateway", "call", "health"];
+    const argv = ["node", "GreenchClaw", "gateway", "call", "health"];
     process.argv = argv;
-    const program = new Command().name("NexisClaw");
+    const program = new Command().name("GreenchClaw");
 
     await registerSubCliByName(program, "gateway", argv);
 
@@ -224,8 +230,8 @@ describe("registerSubCliCommands", () => {
   });
 
   it("passes completion context to channel registration", async () => {
-    const argv = ["node", "NexisClaw", "completion", "--write-state"];
-    const program = new Command().name("NexisClaw");
+    const argv = ["node", "GreenchClaw", "completion", "--write-state"];
+    const program = new Command().name("GreenchClaw");
 
     await registerSubCliByName(program, "channels", argv, { purpose: "completion" });
 
@@ -244,8 +250,8 @@ describe("registerSubCliCommands", () => {
     ["plugins doctor", ["plugins", "doctor"]],
     ["plugins --help", ["plugins", "--help"]],
   ])("does not preload plugin CLI registrations for builtin %s", async (_label, args) => {
-    process.argv = ["node", "NexisClaw", ...args];
-    const program = new Command().name("NexisClaw");
+    process.argv = ["node", "GreenchClaw", ...args];
+    const program = new Command().name("GreenchClaw");
 
     await registerSubCliByName(program, "plugins");
 
@@ -254,8 +260,8 @@ describe("registerSubCliCommands", () => {
   });
 
   it("keeps plugin CLI registrations available for the plugins command root", async () => {
-    process.argv = ["node", "NexisClaw", "plugins"];
-    const program = new Command().name("NexisClaw");
+    process.argv = ["node", "GreenchClaw", "plugins"];
+    const program = new Command().name("GreenchClaw");
 
     await registerSubCliByName(program, "plugins");
 

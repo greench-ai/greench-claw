@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { captureEnv } from "NexisClaw/plugin-sdk/test-env";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { captureEnv } from "GreenchClaw/plugin-sdk/test-env";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { handleTelegramAction, telegramActionRuntime } from "./action-runtime.js";
 import { beginTelegramInboundTurnDeliveryCorrelation } from "./inbound-turn-delivery.js";
@@ -76,13 +76,15 @@ describe("handleTelegramAction", () => {
     emoji: "✅",
   } as const;
 
-  function reactionConfig(reactionLevel: "minimal" | "extensive" | "off" | "ack"): NexisClawConfig {
+  function reactionConfig(
+    reactionLevel: "minimal" | "extensive" | "off" | "ack",
+  ): GreenchClawConfig {
     return {
       channels: { telegram: { botToken: "tok", reactionLevel } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
   }
 
-  function telegramConfig(overrides?: Record<string, unknown>): NexisClawConfig {
+  function telegramConfig(overrides?: Record<string, unknown>): GreenchClawConfig {
     return {
       channels: {
         telegram: {
@@ -90,7 +92,7 @@ describe("handleTelegramAction", () => {
           ...overrides,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
   }
 
   async function sendInlineButtonsMessage(params: {
@@ -206,7 +208,7 @@ describe("handleTelegramAction", () => {
   it("soft-fails when messageId is missing", async () => {
     const cfg = {
       channels: { telegram: { botToken: "tok", reactionLevel: "minimal" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const result = await handleTelegramAction(
       {
         action: "react",
@@ -241,7 +243,7 @@ describe("handleTelegramAction", () => {
   });
 
   it("rejects sticker actions when disabled by default", async () => {
-    const cfg = { channels: { telegram: { botToken: "tok" } } } as NexisClawConfig;
+    const cfg = { channels: { telegram: { botToken: "tok" } } } as GreenchClawConfig;
     await expect(
       handleTelegramAction(
         {
@@ -258,7 +260,7 @@ describe("handleTelegramAction", () => {
   it("sends stickers when enabled", async () => {
     const cfg = {
       channels: { telegram: { botToken: "tok", actions: { sticker: true } } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     await handleTelegramAction(
       {
         action: "sendSticker",
@@ -276,7 +278,7 @@ describe("handleTelegramAction", () => {
   it("accepts shared sticker action aliases", async () => {
     const cfg = {
       channels: { telegram: { botToken: "tok", actions: { sticker: true } } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     await handleTelegramAction(
       {
         action: "sticker",
@@ -344,7 +346,7 @@ describe("handleTelegramAction", () => {
           actions: { reactions: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const result = await handleTelegramAction(
       {
         action: "react",
@@ -790,7 +792,7 @@ describe("handleTelegramAction", () => {
       channels: {
         telegram: { botToken: "tok", actions: { sendMessage: false } },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     await expect(
       handleTelegramAction(
         {
@@ -808,7 +810,7 @@ describe("handleTelegramAction", () => {
       channels: {
         telegram: { botToken: "tok", actions: { poll: false } },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     await expect(
       handleTelegramAction(
         {
@@ -825,7 +827,7 @@ describe("handleTelegramAction", () => {
   it("deletes a message", async () => {
     const cfg = {
       channels: { telegram: { botToken: "tok" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     await handleTelegramAction(
       {
         action: "deleteMessage",
@@ -847,7 +849,7 @@ describe("handleTelegramAction", () => {
     } as unknown as Awaited<ReturnType<typeof deleteMessageTelegram>>);
     const cfg = {
       channels: { telegram: { botToken: "tok" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const result = await handleTelegramAction(
       {
@@ -877,7 +879,7 @@ describe("handleTelegramAction", () => {
       channels: {
         telegram: { botToken: "tok", actions: { deleteMessage: false } },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     await expect(
       handleTelegramAction(
         {
@@ -892,7 +894,7 @@ describe("handleTelegramAction", () => {
 
   it("throws on missing bot token for sendMessage", async () => {
     delete process.env.TELEGRAM_BOT_TOKEN;
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
     await expect(
       handleTelegramAction(
         {
@@ -908,7 +910,7 @@ describe("handleTelegramAction", () => {
   it("allows inline buttons by default (allowlist)", async () => {
     const cfg = {
       channels: { telegram: { botToken: "tok" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     await handleTelegramAction(
       {
         action: "sendMessage",
@@ -1040,7 +1042,7 @@ describe("handleTelegramAction per-account gating", () => {
     >;
     topLevelBotToken?: string;
     topLevelActions?: { reactions?: boolean };
-  }): NexisClawConfig {
+  }): GreenchClawConfig {
     return {
       channels: {
         telegram: {
@@ -1049,10 +1051,10 @@ describe("handleTelegramAction per-account gating", () => {
           accounts: params.accounts,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
   }
 
-  async function expectAccountStickerSend(cfg: NexisClawConfig, accountId = "media") {
+  async function expectAccountStickerSend(cfg: GreenchClawConfig, accountId = "media") {
     await handleTelegramAction(
       { action: "sendSticker", to: "123", fileId: "sticker-id", accountId },
       cfg,
@@ -1081,7 +1083,7 @@ describe("handleTelegramAction per-account gating", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await expect(
       handleTelegramAction(

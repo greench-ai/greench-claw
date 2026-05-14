@@ -71,7 +71,7 @@ export function resolveNpmRunner(params = {}) {
     throw new Error(
       `failed to resolve a toolchain-local npm next to ${execPath}. ` +
         `Checked: ${expectedPaths.join(", ")}. ` +
-        "NexisClaw refuses to shell out to bare npm on Windows; install a Node.js toolchain that bundles npm or run with a matching Node installation.",
+        "GreenchClaw refuses to shell out to bare npm on Windows; install a Node.js toolchain that bundles npm or run with a matching Node installation.",
     );
   }
   const pathKey = resolvePathEnvKey(env);

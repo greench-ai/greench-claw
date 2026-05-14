@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../api.js";
+import type { GreenchClawConfig } from "../api.js";
 import { compileMemoryWikiVault } from "./compile.js";
 import type { MemoryWikiPluginConfig } from "./config.js";
 import { renderWikiMarkdown } from "./markdown.js";
@@ -23,18 +23,18 @@ const {
   ),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/memory-host-search", () => ({
+vi.mock("GreenchClaw/plugin-sdk/memory-host-search", () => ({
   getActiveMemorySearchManager: getActiveMemorySearchManagerMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/memory-host-core", () => ({
+vi.mock("GreenchClaw/plugin-sdk/memory-host-core", () => ({
   resolveDefaultAgentId: resolveDefaultAgentIdMock,
   resolveSessionAgentId: resolveSessionAgentIdMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/session-transcript-hit", async (importOriginal) => {
+vi.mock("GreenchClaw/plugin-sdk/session-transcript-hit", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("NexisClaw/plugin-sdk/session-transcript-hit")>();
+    await importOriginal<typeof import("GreenchClaw/plugin-sdk/session-transcript-hit")>();
   return {
     ...actual,
     loadCombinedSessionStoreForGateway: loadCombinedSessionStoreForGatewayMock,
@@ -97,15 +97,15 @@ async function createQueryVault(options?: {
   });
 }
 
-function createAppConfig(): NexisClawConfig {
+function createAppConfig(): GreenchClawConfig {
   return {
     agents: {
       list: [{ id: "main", default: true }],
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-function createSessionVisibilityAppConfig(): NexisClawConfig {
+function createSessionVisibilityAppConfig(): GreenchClawConfig {
   return {
     agents: {
       defaults: { sandbox: { sessionToolsVisibility: "all" } },
@@ -114,7 +114,7 @@ function createSessionVisibilityAppConfig(): NexisClawConfig {
     tools: {
       sessions: { visibility: "self" },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function mockSessionTranscriptStore() {
@@ -124,12 +124,12 @@ function mockSessionTranscriptStore() {
       "agent:main:child-session": {
         sessionId: "child-session",
         updatedAt: 1,
-        sessionFile: "/tmp/NexisClaw/child-session.jsonl",
+        sessionFile: "/tmp/GreenchClaw/child-session.jsonl",
       },
       "agent:main:sibling-session": {
         sessionId: "sibling-session",
         updatedAt: 2,
-        sessionFile: "/tmp/NexisClaw/sibling-session.jsonl",
+        sessionFile: "/tmp/GreenchClaw/sibling-session.jsonl",
       },
     },
   });
@@ -226,10 +226,10 @@ describe("searchMemoryWiki", () => {
           "Alpha body.",
           "",
           "## Related",
-          "<!-- NexisClaw:wiki:related:start -->",
+          "<!-- GreenchClaw:wiki:related:start -->",
           "### Related Pages",
           "- [Needle Person](entities/needle-person.md)",
-          "<!-- NexisClaw:wiki:related:end -->",
+          "<!-- GreenchClaw:wiki:related:end -->",
           "",
         ].join("\n"),
       }),
@@ -275,7 +275,7 @@ describe("searchMemoryWiki", () => {
           "# Maintainer: Brad Groux",
           "",
           "## Agent Card",
-          "- Maintainer lane: CEO; Microsoft-facing NexisClaw maintainer",
+          "- Maintainer lane: CEO; Microsoft-facing GreenchClaw maintainer",
           "",
           "## AI Notes",
           "- Main sample theme is Microsoft ecosystem adoption: Teams, M365, Azure, Foundry, tenants, and pilots.",

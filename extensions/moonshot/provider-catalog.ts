@@ -2,9 +2,9 @@ import {
   buildManifestModelProviderConfig,
   applyProviderNativeStreamingUsageCompat,
   supportsNativeStreamingUsageCompat,
-} from "NexisClaw/plugin-sdk/provider-catalog-shared";
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
-import manifest from "./NexisClaw.plugin.json" with { type: "json" };
+} from "GreenchClaw/plugin-sdk/provider-catalog-shared";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import manifest from "./GreenchClaw.plugin.json" with { type: "json" };
 
 export const MOONSHOT_BASE_URL = "https://api.moonshot.ai/v1";
 export const MOONSHOT_CN_BASE_URL = "https://api.moonshot.cn/v1";

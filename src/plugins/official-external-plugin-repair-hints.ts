@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveConfiguredChannelPresencePolicy } from "./channel-plugin-ids.js";
 import {
   getOfficialExternalPluginCatalogEntry,
@@ -37,8 +37,8 @@ export function resolveOfficialExternalPluginRepairHint(
   const pluginId = resolveOfficialExternalPluginId(entry) ?? pluginIdOrChannelId.trim();
   const channelId = manifest?.channel?.id?.trim();
   const label = resolveOfficialExternalPluginLabel(entry);
-  const installCommand = `NexisClaw plugins install ${installSpec}`;
-  const doctorFixCommand = "NexisClaw doctor --fix";
+  const installCommand = `GreenchClaw plugins install ${installSpec}`;
+  const doctorFixCommand = "GreenchClaw doctor --fix";
   return {
     pluginId,
     ...(channelId ? { channelId } : {}),
@@ -51,8 +51,8 @@ export function resolveOfficialExternalPluginRepairHint(
 }
 
 export function resolveMissingOfficialExternalChannelPluginRepairHint(params: {
-  config: NexisClawConfig;
-  activationSourceConfig?: NexisClawConfig;
+  config: GreenchClawConfig;
+  activationSourceConfig?: GreenchClawConfig;
   channelId: string;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;

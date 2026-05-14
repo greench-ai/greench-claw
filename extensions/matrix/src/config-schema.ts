@@ -1,4 +1,4 @@
-import { buildChannelConfigSchema } from "NexisClaw/plugin-sdk/channel-config-primitives";
+import { buildChannelConfigSchema } from "GreenchClaw/plugin-sdk/channel-config-primitives";
 import {
   AllowFromListSchema,
   buildNestedDmConfigSchema,
@@ -6,8 +6,8 @@ import {
   GroupPolicySchema,
   MarkdownConfigSchema,
   ToolPolicySchema,
-} from "NexisClaw/plugin-sdk/channel-config-schema";
-import { buildSecretInputSchema } from "NexisClaw/plugin-sdk/secret-input";
+} from "GreenchClaw/plugin-sdk/channel-config-schema";
+import { buildSecretInputSchema } from "GreenchClaw/plugin-sdk/secret-input";
 import { z } from "zod";
 import { matrixChannelConfigUiHints } from "./config-ui-hints.js";
 

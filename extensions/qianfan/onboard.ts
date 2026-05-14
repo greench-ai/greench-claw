@@ -1,8 +1,8 @@
 import {
   createDefaultModelsPresetAppliers,
   type ModelApi,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildQianfanProvider,
   QIANFAN_BASE_URL,
@@ -11,7 +11,7 @@ import {
 
 export const QIANFAN_DEFAULT_MODEL_REF = `qianfan/${QIANFAN_DEFAULT_MODEL_ID}`;
 
-function resolveQianfanPreset(cfg: NexisClawConfig): {
+function resolveQianfanPreset(cfg: GreenchClawConfig): {
   api: ModelApi;
   baseUrl: string;
   defaultModels: NonNullable<ReturnType<typeof buildQianfanProvider>["models"]>;
@@ -39,7 +39,7 @@ function resolveQianfanPreset(cfg: NexisClawConfig): {
 
 const qianfanPresetAppliers = createDefaultModelsPresetAppliers({
   primaryModelRef: QIANFAN_DEFAULT_MODEL_REF,
-  resolveParams: (cfg: NexisClawConfig) => {
+  resolveParams: (cfg: GreenchClawConfig) => {
     const preset = resolveQianfanPreset(cfg);
     return {
       providerId: "qianfan",
@@ -52,10 +52,10 @@ const qianfanPresetAppliers = createDefaultModelsPresetAppliers({
   },
 });
 
-export function applyQianfanProviderConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyQianfanProviderConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return qianfanPresetAppliers.applyProviderConfig(cfg);
 }
 
-export function applyQianfanConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyQianfanConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return qianfanPresetAppliers.applyConfig(cfg);
 }

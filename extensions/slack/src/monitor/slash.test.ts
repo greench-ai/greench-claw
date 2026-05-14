@@ -335,7 +335,7 @@ function createArgMenusHarness() {
     channelsConfig: undefined,
     slashCommand: {
       enabled: true,
-      name: "NexisClaw",
+      name: "GreenchClaw",
       ephemeral: true,
       sessionPrefix: "slack:slash",
     },
@@ -543,8 +543,12 @@ describe("Slack native command argument menus", () => {
     unsafeConfirmHandler = requireHandler(harness.commands, "/unsafeconfirm", "/unsafeconfirm");
     longConfirmHandler = requireHandler(harness.commands, "/longconfirm", "/longconfirm");
     agentStatusHandler = requireHandler(harness.commands, "/agentstatus", "/agentstatus");
-    argMenuHandler = requireHandler(harness.actions, /^NexisClaw_cmdarg/, "arg-menu action");
-    argMenuOptionsHandler = requireHandler(harness.options, "NexisClaw_cmdarg", "arg-menu options");
+    argMenuHandler = requireHandler(harness.actions, /^GreenchClaw_cmdarg/, "arg-menu action");
+    argMenuOptionsHandler = requireHandler(
+      harness.options,
+      "GreenchClaw_cmdarg",
+      "arg-menu options",
+    );
   });
 
   beforeEach(() => {
@@ -557,10 +561,10 @@ describe("Slack native command argument menus", () => {
     expect(testHarness.commands.size).toBeGreaterThan(0);
     expect(
       Array.from(testHarness.actions.keys()).some(
-        (key) => key instanceof RegExp && String(key) === String(/^NexisClaw_cmdarg/),
+        (key) => key instanceof RegExp && String(key) === String(/^GreenchClaw_cmdarg/),
       ),
     ).toBe(true);
-    expect(testHarness.options.has("NexisClaw_cmdarg")).toBe(true);
+    expect(testHarness.options.has("GreenchClaw_cmdarg")).toBe(true);
     expect(testHarness.optionsReceiverContexts[0]).toBe(testHarness.app);
   });
 
@@ -598,7 +602,7 @@ describe("Slack native command argument menus", () => {
       channelsConfig: undefined,
       slashCommand: {
         enabled: true,
-        name: "NexisClaw",
+        name: "GreenchClaw",
         ephemeral: true,
         sessionPrefix: "slack:slash",
       },
@@ -618,7 +622,7 @@ describe("Slack native command argument menus", () => {
     expect(commands.size).toBeGreaterThan(0);
     expect(
       Array.from(actions.keys()).some(
-        (key) => key instanceof RegExp && String(key) === String(/^NexisClaw_cmdarg/),
+        (key) => key instanceof RegExp && String(key) === String(/^GreenchClaw_cmdarg/),
       ),
     ).toBe(true);
 
@@ -644,8 +648,8 @@ describe("Slack native command argument menus", () => {
     const actions = expectArgMenuLayout(respond);
     const elementType = actions?.elements?.[0]?.type;
     expect(elementType).toBe("button");
-    expect(actions?.elements?.[0]?.action_id).toBe("NexisClaw_cmdarg_0_0");
-    expect(actions?.elements?.[1]?.action_id).toBe("NexisClaw_cmdarg_0_1");
+    expect(actions?.elements?.[0]?.action_id).toBe("GreenchClaw_cmdarg_0_0");
+    expect(actions?.elements?.[1]?.action_id).toBe("GreenchClaw_cmdarg_0_1");
     expect(actions?.elements?.[0]).toHaveProperty("confirm");
   });
 
@@ -654,7 +658,7 @@ describe("Slack native command argument menus", () => {
     const actions = expectArgMenuLayout(respond);
     const element = actions?.elements?.[0];
     expect(element?.type).toBe("static_select");
-    expect(element?.action_id).toBe("NexisClaw_cmdarg");
+    expect(element?.action_id).toBe("GreenchClaw_cmdarg");
     expect(element).toHaveProperty("confirm");
   });
 
@@ -716,7 +720,7 @@ describe("Slack native command argument menus", () => {
   it("shows an overflow menu when choices fit compact range", async () => {
     const element = await getFirstActionElementFromCommand(reportCompactHandler);
     expect(element?.type).toBe("overflow");
-    expect(element?.action_id).toBe("NexisClaw_cmdarg");
+    expect(element?.action_id).toBe("GreenchClaw_cmdarg");
     expect(element).toHaveProperty("confirm");
   });
 
@@ -804,15 +808,15 @@ describe("Slack native command argument menus", () => {
     const actions = findFirstActionsBlock(payload);
     const element = actions?.elements?.[0];
     expect(element?.type).toBe("external_select");
-    expect(element?.action_id).toBe("NexisClaw_cmdarg");
-    expect(blockId).toContain("NexisClaw_cmdarg_ext:");
-    const token = (blockId ?? "").slice("NexisClaw_cmdarg_ext:".length);
+    expect(element?.action_id).toBe("GreenchClaw_cmdarg");
+    expect(blockId).toContain("GreenchClaw_cmdarg_ext:");
+    const token = (blockId ?? "").slice("GreenchClaw_cmdarg_ext:".length);
     expect(token).toMatch(/^[A-Za-z0-9_-]{24}$/);
   });
 
   it("serves filtered options for external_select menus", async () => {
     const { blockId } = await runCommandAndResolveActionsBlock(reportExternalHandler);
-    expect(blockId).toContain("NexisClaw_cmdarg_ext:");
+    expect(blockId).toContain("GreenchClaw_cmdarg_ext:");
 
     const ackOptions = vi.fn().mockResolvedValue(undefined);
     await argMenuOptionsHandler({
@@ -843,7 +847,7 @@ describe("Slack native command argument menus", () => {
     );
     const argMenuOptionsTrackingHandler = requireHandler(
       trackingHarness.options,
-      "NexisClaw_cmdarg",
+      "GreenchClaw_cmdarg",
       "arg-menu options",
     );
     const { blockId } = await runCommandAndResolveActionsBlock(reportExternalTrackingHandler);
@@ -864,7 +868,7 @@ describe("Slack native command argument menus", () => {
 
   it("rejects external_select option requests without user identity", async () => {
     const { blockId } = await runCommandAndResolveActionsBlock(reportExternalHandler);
-    expect(blockId).toContain("NexisClaw_cmdarg_ext:");
+    expect(blockId).toContain("GreenchClaw_cmdarg_ext:");
 
     const ackOptions = vi.fn().mockResolvedValue(undefined);
     await argMenuOptionsHandler({
@@ -901,7 +905,7 @@ describe("Slack native command argument menus", () => {
     await registerCommands(trackingHarness.ctx, trackingHarness.account, trackEvent);
     const argMenuTrackingHandler = requireHandler(
       trackingHarness.actions,
-      /^NexisClaw_cmdarg/,
+      /^GreenchClaw_cmdarg/,
       "arg-menu action",
     );
 
@@ -979,7 +983,7 @@ function createPolicyHarness(overrides?: {
     channelsConfig: overrides?.channelsConfig,
     slashCommand: {
       enabled: true,
-      name: "NexisClaw",
+      name: "GreenchClaw",
       ephemeral: true,
       sessionPrefix: "slack:slash",
     },

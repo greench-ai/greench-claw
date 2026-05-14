@@ -1,9 +1,9 @@
 import {
   describeImageWithModel,
   describeImagesWithModel,
-} from "NexisClaw/plugin-sdk/media-understanding";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
-import { clearLiveCatalogCacheForTests } from "NexisClaw/plugin-sdk/provider-catalog-shared";
+} from "GreenchClaw/plugin-sdk/media-understanding";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
+import { clearLiveCatalogCacheForTests } from "GreenchClaw/plugin-sdk/provider-catalog-shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import plugin from "./index.js";
 

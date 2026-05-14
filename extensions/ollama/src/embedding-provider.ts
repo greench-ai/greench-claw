@@ -1,21 +1,21 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/provider-auth";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/provider-auth";
 import {
   isKnownEnvApiKeyMarker,
   isNonSecretApiKeyMarker,
   normalizeOptionalSecretInput,
-} from "NexisClaw/plugin-sdk/provider-auth";
-import { resolveEnvApiKey } from "NexisClaw/plugin-sdk/provider-auth-runtime";
-import { normalizeProviderId } from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/provider-auth";
+import { resolveEnvApiKey } from "GreenchClaw/plugin-sdk/provider-auth-runtime";
+import { normalizeProviderId } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import {
   hasConfiguredSecretInput,
   normalizeResolvedSecretInputString,
-} from "NexisClaw/plugin-sdk/secret-input";
+} from "GreenchClaw/plugin-sdk/secret-input";
 import {
   fetchWithSsrFGuard,
   formatErrorMessage,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
   type SsrFPolicy,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { OLLAMA_CLOUD_BASE_URL } from "./defaults.js";
 import { normalizeOllamaWireModelId } from "./model-id.js";
 import { readProviderBaseUrl } from "./provider-base-url.js";
@@ -30,7 +30,7 @@ export type OllamaEmbeddingProvider = {
 };
 
 type OllamaEmbeddingOptions = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   agentDir?: string;
   provider?: string;
   remote?: {

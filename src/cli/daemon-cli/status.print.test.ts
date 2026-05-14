@@ -93,7 +93,7 @@ describe("printDaemonStatus", () => {
           notLoadedText: "not loaded",
           runtime: { status: "running", pid: 8000 },
         },
-        logFile: "/tmp/NexisClaw.log",
+        logFile: "/tmp/GreenchClaw.log",
         gateway: {
           bindMode: "loopback",
           bindHost: "127.0.0.1",
@@ -122,7 +122,7 @@ describe("printDaemonStatus", () => {
     );
 
     expectMockLineContains(runtime.error, "Gateway runtime PID does not own the listening port");
-    expectMockLineContains(runtime.error, formatCliCommand("NexisClaw gateway restart"));
+    expectMockLineContains(runtime.error, formatCliCommand("GreenchClaw gateway restart"));
   });
 
   it("prints probe kind and capability separately", () => {
@@ -162,7 +162,7 @@ describe("printDaemonStatus", () => {
       {
         cli: {
           version: "2026.4.23",
-          entrypoint: "/usr/local/bin/NexisClaw",
+          entrypoint: "/usr/local/bin/GreenchClaw",
         },
         service: {
           label: "LaunchAgent",
@@ -190,12 +190,12 @@ describe("printDaemonStatus", () => {
       { json: false },
     );
 
-    expectMockLineContains(runtime.log, "CLI version: 2026.4.23 (/usr/local/bin/NexisClaw)");
+    expectMockLineContains(runtime.log, "CLI version: 2026.4.23 (/usr/local/bin/GreenchClaw)");
     expectMockLineContains(runtime.log, "Gateway version: 2026.5.6");
-    expectMockLineContains(runtime.error, "this NexisClaw command is version 2026.4.23");
+    expectMockLineContains(runtime.error, "this GreenchClaw command is version 2026.4.23");
     expectMockLineContains(
       runtime.error,
-      "if this mismatch is unexpected, update PATH so `NexisClaw` points to the version you want",
+      "if this mismatch is unexpected, update PATH so `GreenchClaw` points to the version you want",
     );
   });
 
@@ -242,12 +242,12 @@ describe("printDaemonStatus", () => {
         },
         config: {
           cli: {
-            path: "/tmp/NexisClaw-cli/NexisClaw.json",
+            path: "/tmp/GreenchClaw-cli/GreenchClaw.json",
             exists: true,
             valid: true,
           },
           daemon: {
-            path: "/tmp/NexisClaw-daemon/NexisClaw.json",
+            path: "/tmp/GreenchClaw-daemon/GreenchClaw.json",
             exists: true,
             valid: true,
             controlUi: { basePath: "/ui" },
@@ -294,7 +294,7 @@ describe("printDaemonStatus", () => {
         },
         config: {
           cli: {
-            path: "/tmp/NexisClaw-cli/NexisClaw.json",
+            path: "/tmp/GreenchClaw-cli/GreenchClaw.json",
             exists: true,
             valid: true,
             warnings: [

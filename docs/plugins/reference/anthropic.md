@@ -1,5 +1,5 @@
 ---
-summary: "Adds Anthropic model provider support to NexisClaw."
+summary: "Adds Anthropic model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the anthropic plugin
 title: "Anthropic plugin"
@@ -7,12 +7,12 @@ title: "Anthropic plugin"
 
 # Anthropic plugin
 
-Adds Anthropic model provider support to NexisClaw.
+Adds Anthropic model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/anthropic-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/anthropic-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

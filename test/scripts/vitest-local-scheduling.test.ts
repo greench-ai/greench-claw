@@ -8,12 +8,12 @@ import {
 
 describe("vitest local full-suite profile", () => {
   it("forces local Vitest runs back onto local-check policy", () => {
-    expect(resolveLocalVitestEnv({ NEXISCLAW_LOCAL_CHECK: "0", PATH: "/usr/bin" })).toEqual({
-      NEXISCLAW_LOCAL_CHECK: "1",
+    expect(resolveLocalVitestEnv({ GREENCHCLAW_LOCAL_CHECK: "0", PATH: "/usr/bin" })).toEqual({
+      GREENCHCLAW_LOCAL_CHECK: "1",
       PATH: "/usr/bin",
     });
-    expect(resolveLocalVitestEnv({ NEXISCLAW_LOCAL_CHECK: "false", PATH: "/usr/bin" })).toEqual({
-      NEXISCLAW_LOCAL_CHECK: "1",
+    expect(resolveLocalVitestEnv({ GREENCHCLAW_LOCAL_CHECK: "false", PATH: "/usr/bin" })).toEqual({
+      GREENCHCLAW_LOCAL_CHECK: "1",
       PATH: "/usr/bin",
     });
   });
@@ -22,12 +22,12 @@ describe("vitest local full-suite profile", () => {
     expect(
       resolveLocalVitestEnv({
         CI: "true",
-        NEXISCLAW_LOCAL_CHECK: "0",
+        GREENCHCLAW_LOCAL_CHECK: "0",
         PATH: "/usr/bin",
       }),
     ).toEqual({
       CI: "true",
-      NEXISCLAW_LOCAL_CHECK: "0",
+      GREENCHCLAW_LOCAL_CHECK: "0",
       PATH: "/usr/bin",
     });
   });
@@ -120,7 +120,7 @@ describe("vitest local full-suite profile", () => {
   });
 
   it("lets explicit system throttle opt-out ignore memory pressure", () => {
-    const env = { NEXISCLAW_VITEST_DISABLE_SYSTEM_THROTTLE: "1" };
+    const env = { GREENCHCLAW_VITEST_DISABLE_SYSTEM_THROTTLE: "1" };
     const hostInfo = {
       cpuCount: 10,
       loadAverage1m: 0,

@@ -1,35 +1,35 @@
-import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
+import { describeAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
 import {
   adaptScopedAccountAccessor,
   createScopedDmSecurityResolver,
-} from "NexisClaw/plugin-sdk/channel-config-helpers";
-import type { ChannelDoctorAdapter } from "NexisClaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin, type ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import { createChannelMessageAdapterFromOutbound } from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import type { ChannelDoctorAdapter } from "GreenchClaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin, type ChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import { createChannelMessageAdapterFromOutbound } from "GreenchClaw/plugin-sdk/channel-message";
 import {
   createAllowlistProviderOpenWarningCollector,
   projectAccountConfigWarningCollector,
-} from "NexisClaw/plugin-sdk/channel-policy";
-import type { ChannelOutboundAdapter } from "NexisClaw/plugin-sdk/channel-send-result";
-import { createScopedAccountReplyToModeResolver } from "NexisClaw/plugin-sdk/conversation-runtime";
+} from "GreenchClaw/plugin-sdk/channel-policy";
+import type { ChannelOutboundAdapter } from "GreenchClaw/plugin-sdk/channel-send-result";
+import { createScopedAccountReplyToModeResolver } from "GreenchClaw/plugin-sdk/conversation-runtime";
 import {
   createChannelDirectoryAdapter,
   createResolvedDirectoryEntriesLister,
   createRuntimeDirectoryLiveAdapter,
-} from "NexisClaw/plugin-sdk/directory-runtime";
-import { createLazyRuntimeNamedExport } from "NexisClaw/plugin-sdk/lazy-runtime";
-import { createRuntimeOutboundDelegates } from "NexisClaw/plugin-sdk/outbound-runtime";
+} from "GreenchClaw/plugin-sdk/directory-runtime";
+import { createLazyRuntimeNamedExport } from "GreenchClaw/plugin-sdk/lazy-runtime";
+import { createRuntimeOutboundDelegates } from "GreenchClaw/plugin-sdk/outbound-runtime";
 import {
   buildProbeChannelStatusSummary,
   collectStatusIssuesFromLastError,
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
+} from "GreenchClaw/plugin-sdk/status-helpers";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { chunkTextForOutbound } from "NexisClaw/plugin-sdk/text-chunking";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { chunkTextForOutbound } from "GreenchClaw/plugin-sdk/text-chunking";
 import { matrixMessageActions } from "./actions.js";
 import { matrixApprovalCapability } from "./approval-native.js";
 import { createMatrixPairingText, createMatrixProbeAccount } from "./channel-account-paths.js";

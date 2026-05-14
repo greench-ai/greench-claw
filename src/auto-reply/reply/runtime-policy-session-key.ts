@@ -1,5 +1,5 @@
 import { normalizeChatType } from "../../channels/chat-type.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   buildAgentMainSessionKey,
   buildAgentPeerSessionKey,
@@ -54,7 +54,7 @@ function resolvePolicyDirectPeerId(ctx?: RuntimePolicyContext): string | undefin
 }
 
 function isMainSessionAlias(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentId: string;
   sessionKey: string;
 }): boolean {
@@ -84,7 +84,7 @@ function isMainSessionAlias(params: {
 }
 
 export function resolveRuntimePolicySessionKey(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   ctx?: RuntimePolicyContext;
   sessionKey?: string | null;
 }): string | undefined {

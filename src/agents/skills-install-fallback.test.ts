@@ -45,7 +45,7 @@ function makeSkillEntry(
       description: "test skill",
       filePath: path.join(skillDir, "SKILL.md"),
       baseDir: skillDir,
-      source: "NexisClaw-workspace",
+      source: "GreenchClaw-workspace",
     } as SkillEntry["skill"],
     frontmatter: {},
     metadata: {
@@ -70,7 +70,7 @@ describe("skills-install fallback edge cases", () => {
   let workspaceDir: string;
 
   beforeAll(async () => {
-    workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-fallback-test-"));
+    workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-fallback-test-"));
     skillsMocks.loadWorkspaceSkillEntries.mockReturnValue([
       makeSkillEntry(workspaceDir, "go-tool-single", {
         kind: "go",

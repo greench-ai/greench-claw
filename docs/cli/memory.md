@@ -1,5 +1,5 @@
 ---
-summary: "CLI reference for `NexisClaw memory` (status/index/search/promote/promote-explain/rem-harness)"
+summary: "CLI reference for `GreenchClaw memory` (status/index/search/promote/promote-explain/rem-harness)"
 read_when:
   - You want to index or search semantic memory
   - You're debugging memory availability or indexing
@@ -7,7 +7,7 @@ read_when:
 title: "Memory"
 ---
 
-# `NexisClaw memory`
+# `GreenchClaw memory`
 
 Manage semantic memory indexing and search.
 Provided by the active memory plugin (default: `memory-core`; set `plugins.slots.memory = "none"` to disable).
@@ -22,24 +22,24 @@ Related:
 ## Examples
 
 ```bash
-NexisClaw memory status
-NexisClaw memory status --deep
-NexisClaw memory status --fix
-NexisClaw memory index --force
-NexisClaw memory search "meeting notes"
-NexisClaw memory search --query "deployment" --max-results 20
-NexisClaw memory promote --limit 10 --min-score 0.75
-NexisClaw memory promote --apply
-NexisClaw memory promote --json --min-recall-count 0 --min-unique-queries 0
-NexisClaw memory promote-explain "router vlan"
-NexisClaw memory promote-explain "router vlan" --json
-NexisClaw memory rem-harness
-NexisClaw memory rem-harness --json
-NexisClaw memory status --json
-NexisClaw memory status --deep --index
-NexisClaw memory status --deep --index --verbose
-NexisClaw memory status --agent main
-NexisClaw memory index --agent main --verbose
+GreenchClaw memory status
+GreenchClaw memory status --deep
+GreenchClaw memory status --fix
+GreenchClaw memory index --force
+GreenchClaw memory search "meeting notes"
+GreenchClaw memory search --query "deployment" --max-results 20
+GreenchClaw memory promote --limit 10 --min-score 0.75
+GreenchClaw memory promote --apply
+GreenchClaw memory promote --json --min-recall-count 0 --min-unique-queries 0
+GreenchClaw memory promote-explain "router vlan"
+GreenchClaw memory promote-explain "router vlan" --json
+GreenchClaw memory rem-harness
+GreenchClaw memory rem-harness --json
+GreenchClaw memory status --json
+GreenchClaw memory status --deep --index
+GreenchClaw memory status --deep --index --verbose
+GreenchClaw memory status --agent main
+GreenchClaw memory index --agent main --verbose
 ```
 
 ## Options
@@ -77,7 +77,7 @@ If `memory status` shows `Dreaming status: blocked`, the managed dreaming cron i
 Preview and apply short-term memory promotions.
 
 ```bash
-NexisClaw memory promote [--apply] [--limit <n>] [--include-promoted]
+GreenchClaw memory promote [--apply] [--limit <n>] [--include-promoted]
 ```
 
 - `--apply` -- write promotions to `MEMORY.md` (default: preview only).
@@ -88,7 +88,7 @@ Full options:
 
 - Ranks short-term candidates from `memory/YYYY-MM-DD.md` using weighted promotion signals (`frequency`, `relevance`, `query diversity`, `recency`, `consolidation`, `conceptual richness`).
 - Uses short-term signals from both memory recalls and daily-ingestion passes, plus light/REM phase reinforcement signals.
-- When dreaming is enabled, `memory-core` auto-manages one cron job that runs a full sweep (`light -> REM -> deep`) in the background (no manual `NexisClaw cron add` required).
+- When dreaming is enabled, `memory-core` auto-manages one cron job that runs a full sweep (`light -> REM -> deep`) in the background (no manual `GreenchClaw cron add` required).
 - `--agent <id>`: scope to a single agent (default: the default agent).
 - `--limit <n>`: max candidates to return/apply.
 - `--min-score <n>`: minimum weighted promotion score.
@@ -103,7 +103,7 @@ Full options:
 Explain a specific promotion candidate and its score breakdown.
 
 ```bash
-NexisClaw memory promote-explain <selector> [--agent <id>] [--include-promoted] [--json]
+GreenchClaw memory promote-explain <selector> [--agent <id>] [--include-promoted] [--json]
 ```
 
 - `<selector>`: candidate key, path fragment, or snippet fragment to look up.
@@ -116,7 +116,7 @@ NexisClaw memory promote-explain <selector> [--agent <id>] [--include-promoted] 
 Preview REM reflections, candidate truths, and deep promotion output without writing anything.
 
 ```bash
-NexisClaw memory rem-harness [--agent <id>] [--include-promoted] [--json]
+GreenchClaw memory rem-harness [--agent <id>] [--include-promoted] [--json]
 ```
 
 - `--agent <id>`: scope to a single agent (default: the default agent).

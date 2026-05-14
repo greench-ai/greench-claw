@@ -1,4 +1,4 @@
-import { expectProviderOnboardPrimaryAndFallbacks } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { expectProviderOnboardPrimaryAndFallbacks } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { describe, expect, it } from "vitest";
 import { applyOpencodeGoConfig, applyOpencodeGoProviderConfig } from "./onboard.js";
 

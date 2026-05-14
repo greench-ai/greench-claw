@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { privateFileStore } from "../infra/private-file-store.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
 import { resolveAgentWorkspaceDir } from "./agent-scope.js";
@@ -68,7 +68,7 @@ type MaterializeSubagentAttachmentsResult =
   | { status: "forbidden"; error: string }
   | { status: "error"; error: string };
 
-function resolveAttachmentLimits(config: NexisClawConfig): AttachmentLimits {
+function resolveAttachmentLimits(config: GreenchClawConfig): AttachmentLimits {
   const attachmentsCfg = (
     config as unknown as {
       tools?: { sessions_spawn?: { attachments?: Record<string, unknown> } };
@@ -95,7 +95,7 @@ function resolveAttachmentLimits(config: NexisClawConfig): AttachmentLimits {
 }
 
 export async function materializeSubagentAttachments(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   targetAgentId: string;
   attachments?: SubagentInlineAttachment[];
   mountPathHint?: string;
@@ -122,8 +122,8 @@ export async function materializeSubagentAttachments(params: {
 
   const attachmentId = crypto.randomUUID();
   const childWorkspaceDir = resolveAgentWorkspaceDir(params.config, params.targetAgentId);
-  const absRootDir = path.join(childWorkspaceDir, ".NexisClaw", "attachments");
-  const relDir = path.posix.join(".NexisClaw", "attachments", attachmentId);
+  const absRootDir = path.join(childWorkspaceDir, ".GreenchClaw", "attachments");
+  const relDir = path.posix.join(".GreenchClaw", "attachments", attachmentId);
   const absDir = path.join(absRootDir, attachmentId);
 
   const fail = (error: string): never => {

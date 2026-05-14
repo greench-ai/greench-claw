@@ -1,10 +1,10 @@
 import {
   resolveStableChannelMessageIngress,
   type StableChannelIngressIdentityParams,
-} from "NexisClaw/plugin-sdk/channel-ingress-runtime";
-import { createChannelPairingController } from "NexisClaw/plugin-sdk/channel-pairing";
-import { attachChannelToResult } from "NexisClaw/plugin-sdk/channel-send-result";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
+import { createChannelPairingController } from "GreenchClaw/plugin-sdk/channel-pairing";
+import { attachChannelToResult } from "GreenchClaw/plugin-sdk/channel-send-result";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { type ChannelOutboundAdapter, type ChannelPlugin } from "./channel-api.js";
 import type { MetricEvent, MetricsSnapshot } from "./metrics.js";
 import { startNostrBus, type NostrBusHandle } from "./nostr-bus.js";
@@ -273,7 +273,7 @@ export const nostrPairingTextAdapter = {
     message,
     accountId,
   }: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     id: string;
     message: string;
     accountId?: string;

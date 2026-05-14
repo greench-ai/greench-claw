@@ -24,11 +24,11 @@ function parseActiveManagedProxyLoopbackMode(
 }
 
 function readInheritedActiveManagedProxyLoopbackMode(): ActiveManagedProxyLoopbackMode | undefined {
-  if (process.env["NEXISCLAW_PROXY_ACTIVE"] !== "1") {
+  if (process.env["GREENCHCLAW_PROXY_ACTIVE"] !== "1") {
     return undefined;
   }
   return (
-    parseActiveManagedProxyLoopbackMode(process.env["NEXISCLAW_PROXY_LOOPBACK_MODE"]) ??
+    parseActiveManagedProxyLoopbackMode(process.env["GREENCHCLAW_PROXY_LOOPBACK_MODE"]) ??
     "gateway-only"
   );
 }

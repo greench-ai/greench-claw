@@ -1,6 +1,7 @@
-import { transcribeFirstAudio as transcribeFirstAudioImpl } from "NexisClaw/plugin-sdk/media-runtime";
+import { transcribeFirstAudio as transcribeFirstAudioImpl } from "GreenchClaw/plugin-sdk/media-runtime";
 
-type TranscribeFirstAudio = typeof import("NexisClaw/plugin-sdk/media-runtime").transcribeFirstAudio;
+type TranscribeFirstAudio =
+  typeof import("GreenchClaw/plugin-sdk/media-runtime").transcribeFirstAudio;
 
 export async function transcribeFirstAudio(
   ...args: Parameters<TranscribeFirstAudio>

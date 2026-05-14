@@ -1,5 +1,5 @@
 import type { EmbeddingProviderOptions } from "./embeddings.types.js";
-import { requireApiKey, resolveApiKeyForProvider } from "./NexisClaw-runtime-auth.js";
+import { requireApiKey, resolveApiKeyForProvider } from "./GreenchClaw-runtime-auth.js";
 import { buildRemoteBaseUrlPolicy } from "./remote-http.js";
 import { resolveMemorySecretInputString } from "./secret-input.js";
 import type { SsrFPolicy } from "./ssrf-policy.js";
@@ -7,12 +7,13 @@ import { normalizeOptionalString } from "./string-utils.js";
 
 export type RemoteEmbeddingProviderId = string;
 
-function resolveNexisClawAttributionHeaders(): Record<string, string> {
-  const version = typeof process !== "undefined" ? process.env.NEXISCLAW_VERSION?.trim() : undefined;
+function resolveGreenchClawAttributionHeaders(): Record<string, string> {
+  const version =
+    typeof process !== "undefined" ? process.env.GREENCHCLAW_VERSION?.trim() : undefined;
   return {
-    originator: "NexisClaw",
+    originator: "GreenchClaw",
     ...(version ? { version } : {}),
-    "User-Agent": version ? `NexisClaw/${version}` : "NexisClaw",
+    "User-Agent": version ? `GreenchClaw/${version}` : "GreenchClaw",
   };
 }
 
@@ -58,7 +59,7 @@ export async function resolveRemoteEmbeddingBearerClient(params: {
     ...headerOverrides,
   };
   if (isNativeOpenAIEmbeddingRoute(params.provider, baseUrl)) {
-    Object.assign(headers, resolveNexisClawAttributionHeaders());
+    Object.assign(headers, resolveGreenchClawAttributionHeaders());
   }
   return { baseUrl, headers, ssrfPolicy: buildRemoteBaseUrlPolicy(baseUrl) };
 }

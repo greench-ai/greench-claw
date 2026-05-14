@@ -4,7 +4,7 @@ import {
   resolveAgentContextLimits,
   resolveAgentWorkspaceDir,
   resolveMemorySearchConfig,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "./config-utils.js";
 import {
   assertNoSymlinkParents,
@@ -133,7 +133,7 @@ export async function readMemoryFile(params: {
 }
 
 export async function readAgentMemoryFile(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   relPath: string;
   from?: number;

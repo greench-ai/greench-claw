@@ -1,8 +1,8 @@
 import { execFile } from "node:child_process";
 import { access } from "node:fs/promises";
 import { promisify } from "node:util";
-import type { PluginLogger } from "NexisClaw/plugin-sdk/plugin-entry";
-import { isWSL2Sync } from "NexisClaw/plugin-sdk/runtime-env";
+import type { PluginLogger } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { isWSL2Sync } from "GreenchClaw/plugin-sdk/runtime-env";
 
 const execFileAsync = promisify(execFile);
 const SYSTEMCTL_TIMEOUT_MS = 5_000;

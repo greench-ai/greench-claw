@@ -1,10 +1,10 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   __testing as conversationBindingTesting,
   registerSessionBindingAdapter,
   type SessionBindingAdapter,
-} from "NexisClaw/plugin-sdk/conversation-runtime";
-import { resolveThreadSessionKeys } from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { resolveThreadSessionKeys } from "GreenchClaw/plugin-sdk/routing";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   resolveTelegramConversationBaseSessionKey,
@@ -12,7 +12,7 @@ import {
 } from "./conversation-route.js";
 
 describe("resolveTelegramConversationBaseSessionKey", () => {
-  const cfg: NexisClawConfig = {};
+  const cfg: GreenchClawConfig = {};
 
   beforeEach(() => {
     conversationBindingTesting.resetSessionBindingAdaptersForTests();

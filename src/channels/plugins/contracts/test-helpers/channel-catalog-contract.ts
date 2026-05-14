@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { resolvePreferredNexisClawTmpDir } from "../../../../infra/tmp-NexisClaw-dir.js";
+import { resolvePreferredGreenchClawTmpDir } from "../../../../infra/tmp-GreenchClaw-dir.js";
 import { getChannelPluginCatalogEntry, listChannelPluginCatalogEntries } from "../../catalog.js";
 
 type CatalogEntryMeta = {
@@ -23,8 +23,8 @@ function createCatalogFixtureEnv(overrides: NodeJS.ProcessEnv = {}): NodeJS.Proc
 
 function createCatalogFallbackOnlyEnv(): NodeJS.ProcessEnv {
   return createCatalogFixtureEnv({
-    NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+    GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
   });
 }
 
@@ -59,20 +59,20 @@ export function describeBundledMetadataOnlyChannelCatalogContract(params: {
   describe(`${params.pluginId} bundled metadata-only channel catalog contract`, () => {
     it("includes the bundled metadata-only channel entry when the runtime entrypoint is omitted", () => {
       const workspaceDir = fs.mkdtempSync(
-        path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-bundled-catalog-"),
+        path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-bundled-catalog-"),
       );
-      const bundledDir = path.join(workspaceDir, ".NexisClaw", "extensions", params.pluginId);
+      const bundledDir = path.join(workspaceDir, ".GreenchClaw", "extensions", params.pluginId);
       fs.mkdirSync(bundledDir, { recursive: true });
       fs.writeFileSync(
         path.join(workspaceDir, "package.json"),
-        JSON.stringify({ name: "NexisClaw" }),
+        JSON.stringify({ name: "GreenchClaw" }),
         "utf8",
       );
       fs.writeFileSync(
         path.join(bundledDir, "package.json"),
         JSON.stringify({
           name: params.packageName,
-          NexisClaw: {
+          GreenchClaw: {
             extensions: ["./index.js"],
             channel: params.meta,
             install: {
@@ -85,14 +85,14 @@ export function describeBundledMetadataOnlyChannelCatalogContract(params: {
       );
       fs.writeFileSync(path.join(bundledDir, "index.js"), "export default {};\n", "utf8");
       fs.writeFileSync(
-        path.join(bundledDir, "NexisClaw.plugin.json"),
+        path.join(bundledDir, "GreenchClaw.plugin.json"),
         JSON.stringify({ id: params.pluginId, channels: [params.meta.id], configSchema: {} }),
         "utf8",
       );
 
       const entry = listChannelPluginCatalogEntries({
         workspaceDir,
-        env: createCatalogFixtureEnv({ NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1" }),
+        env: createCatalogFixtureEnv({ GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1" }),
       }).find((item) => item.id === params.meta.id);
 
       expect(entry?.install.npmSpec).toBe(params.npmSpec);
@@ -113,7 +113,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
   describe(`${params.channelId} official fallback channel catalog contract`, () => {
     it("includes shipped official channel catalog entries when bundled metadata is omitted", () => {
       const dir = fs.mkdtempSync(
-        path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-official-catalog-"),
+        path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-official-catalog-"),
       );
       const catalogPath = path.join(dir, "channel-catalog.json");
       fs.writeFileSync(
@@ -122,7 +122,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
           entries: [
             {
               name: params.packageName,
-              NexisClaw: {
+              GreenchClaw: {
                 channel: params.meta,
                 install: {
                   npmSpec: params.npmSpec,
@@ -146,7 +146,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
 
     it("lets external catalogs override shipped fallback channel metadata", () => {
       const dir = fs.mkdtempSync(
-        path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-fallback-catalog-"),
+        path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-fallback-catalog-"),
       );
       const bundledDir = path.join(dir, "dist", "extensions", params.pluginId);
       const officialCatalogPath = path.join(dir, "channel-catalog.json");
@@ -156,7 +156,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
         path.join(bundledDir, "package.json"),
         JSON.stringify({
           name: params.packageName,
-          NexisClaw: {
+          GreenchClaw: {
             channel: {
               ...params.meta,
               label: `${params.meta.label} Bundled`,
@@ -174,7 +174,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
           entries: [
             {
               name: params.packageName,
-              NexisClaw: {
+              GreenchClaw: {
                 channel: {
                   ...params.meta,
                   label: `${params.meta.label} Official`,
@@ -194,7 +194,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
           entries: [
             {
               name: params.externalNpmSpec,
-              NexisClaw: {
+              GreenchClaw: {
                 channel: {
                   ...params.meta,
                   label: params.externalLabel,
@@ -223,7 +223,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
 
     it("surfaces package-name drift in external channel catalog install metadata", () => {
       const dir = fs.mkdtempSync(
-        path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-drifted-catalog-"),
+        path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-drifted-catalog-"),
       );
       const catalogPath = path.join(dir, "catalog.json");
       fs.writeFileSync(
@@ -232,7 +232,7 @@ export function describeOfficialFallbackChannelCatalogContract(params: {
           entries: [
             {
               name: params.packageName,
-              NexisClaw: {
+              GreenchClaw: {
                 channel: params.meta,
                 install: {
                   npmSpec: `${params.packageName}-fork@1.2.3`,

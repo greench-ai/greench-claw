@@ -23,7 +23,7 @@ import {
   updateSessionStore,
 } from "./store.js";
 
-const suiteRootTracker = createSuiteTempRootTracker({ prefix: "NexisClaw-skills-strip-" });
+const suiteRootTracker = createSuiteTempRootTracker({ prefix: "GreenchClaw-skills-strip-" });
 
 function makeFixtureSkill(name: string, bodySize = 3000): Skill {
   // 3KB body simulates a realistic SKILL.md.
@@ -72,17 +72,17 @@ describe("session store strips resolvedSkills from persistence", () => {
   beforeEach(async () => {
     testDir = await suiteRootTracker.make("case");
     storePath = path.join(testDir, "sessions.json");
-    savedCacheTtl = process.env.NEXISCLAW_SESSION_CACHE_TTL_MS;
-    process.env.NEXISCLAW_SESSION_CACHE_TTL_MS = "0";
+    savedCacheTtl = process.env.GREENCHCLAW_SESSION_CACHE_TTL_MS;
+    process.env.GREENCHCLAW_SESSION_CACHE_TTL_MS = "0";
     clearSessionStoreCacheForTest();
   });
 
   afterEach(() => {
     clearSessionStoreCacheForTest();
     if (savedCacheTtl === undefined) {
-      delete process.env.NEXISCLAW_SESSION_CACHE_TTL_MS;
+      delete process.env.GREENCHCLAW_SESSION_CACHE_TTL_MS;
     } else {
-      process.env.NEXISCLAW_SESSION_CACHE_TTL_MS = savedCacheTtl;
+      process.env.GREENCHCLAW_SESSION_CACHE_TTL_MS = savedCacheTtl;
     }
   });
 

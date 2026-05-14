@@ -40,7 +40,7 @@ function expectConfiguredChannelPluginIdsParams(expected: {
   expect(params?.workspaceDir).toBe(expected.workspaceDir);
 }
 
-function expectLoadNexisClawPluginsCall(
+function expectLoadGreenchClawPluginsCall(
   callIndex: number,
   expected: {
     config?: unknown;
@@ -51,7 +51,7 @@ function expectLoadNexisClawPluginsCall(
     workspaceDir?: string;
   },
 ) {
-  const params = mocks.loadNexisClawPlugins.mock.calls[callIndex]?.[0] as
+  const params = mocks.loadGreenchClawPlugins.mock.calls[callIndex]?.[0] as
     | {
         config?: unknown;
         activationSourceConfig?: unknown;
@@ -78,7 +78,7 @@ function expectLoadNexisClawPluginsCall(
 }
 
 const mocks = vi.hoisted(() => ({
-  loadNexisClawPlugins: vi.fn<typeof import("../plugins/loader.js").loadNexisClawPlugins>(),
+  loadGreenchClawPlugins: vi.fn<typeof import("../plugins/loader.js").loadGreenchClawPlugins>(),
   resolveCompatibleRuntimePluginRegistry:
     vi.fn<typeof import("../plugins/loader.js").resolveCompatibleRuntimePluginRegistry>(),
   resolveRuntimePluginRegistry:
@@ -102,8 +102,8 @@ let ensurePluginRegistryLoaded: typeof import("./plugin-registry.js").ensurePlug
 let resetPluginRegistryLoadedForTests: typeof import("./plugin-registry.js").__testing.resetPluginRegistryLoadedForTests;
 
 vi.mock("../plugins/loader.js", () => ({
-  loadNexisClawPlugins: (...args: Parameters<typeof mocks.loadNexisClawPlugins>) =>
-    mocks.loadNexisClawPlugins(...args),
+  loadGreenchClawPlugins: (...args: Parameters<typeof mocks.loadGreenchClawPlugins>) =>
+    mocks.loadGreenchClawPlugins(...args),
   resolveCompatibleRuntimePluginRegistry: (
     ...args: Parameters<typeof mocks.resolveCompatibleRuntimePluginRegistry>
   ) => mocks.resolveCompatibleRuntimePluginRegistry(...args),
@@ -184,7 +184,7 @@ describe("ensurePluginRegistryLoaded", () => {
   });
 
   beforeEach(() => {
-    mocks.loadNexisClawPlugins.mockReset();
+    mocks.loadGreenchClawPlugins.mockReset();
     mocks.resolveCompatibleRuntimePluginRegistry.mockReset();
     mocks.resolveRuntimePluginRegistry.mockReset();
     mocks.getActivePluginRegistry.mockReset();
@@ -247,8 +247,8 @@ describe("ensurePluginRegistryLoaded", () => {
       config: autoEnabledConfig,
       workspaceDir: "/tmp/workspace",
     });
-    expect(mocks.loadNexisClawPlugins).toHaveBeenCalledTimes(1);
-    expectLoadNexisClawPluginsCall(0, {
+    expect(mocks.loadGreenchClawPlugins).toHaveBeenCalledTimes(1);
+    expectLoadGreenchClawPluginsCall(0, {
       config: autoEnabledConfig,
       activationSourceConfig: autoEnabledConfig,
       autoEnabledReasons: {
@@ -281,12 +281,12 @@ describe("ensurePluginRegistryLoaded", () => {
     ensurePluginRegistryLoaded({ scope: "configured-channels" });
     ensurePluginRegistryLoaded({ scope: "channels" });
 
-    expect(mocks.loadNexisClawPlugins).toHaveBeenCalledTimes(2);
-    expectLoadNexisClawPluginsCall(0, {
+    expect(mocks.loadGreenchClawPlugins).toHaveBeenCalledTimes(2);
+    expectLoadGreenchClawPluginsCall(0, {
       onlyPluginIds: ["demo-channel-a"],
       throwOnLoadError: true,
     });
-    expectLoadNexisClawPluginsCall(1, {
+    expectLoadGreenchClawPluginsCall(1, {
       onlyPluginIds: ["demo-channel-a", "demo-channel-b"],
       throwOnLoadError: true,
     });
@@ -315,8 +315,8 @@ describe("ensurePluginRegistryLoaded", () => {
 
     ensurePluginRegistryLoaded({ scope: "all" });
 
-    expect(mocks.loadNexisClawPlugins).toHaveBeenCalledTimes(1);
-    expectLoadNexisClawPluginsCall(0, {
+    expect(mocks.loadGreenchClawPlugins).toHaveBeenCalledTimes(1);
+    expectLoadGreenchClawPluginsCall(0, {
       config,
       onlyPluginIds: ["demo"],
       throwOnLoadError: true,
@@ -349,8 +349,8 @@ describe("ensurePluginRegistryLoaded", () => {
 
     ensurePluginRegistryLoaded({ scope: "configured-channels" });
 
-    expect(mocks.loadNexisClawPlugins).toHaveBeenCalledTimes(1);
-    expectLoadNexisClawPluginsCall(0, {
+    expect(mocks.loadGreenchClawPlugins).toHaveBeenCalledTimes(1);
+    expectLoadGreenchClawPluginsCall(0, {
       config: activatedConfig,
       activationSourceConfig: activatedConfig,
       onlyPluginIds: ["demo-channel-a"],
@@ -388,8 +388,8 @@ describe("ensurePluginRegistryLoaded", () => {
     } as never);
     ensurePluginRegistryLoaded({ scope: "configured-channels" });
 
-    expect(mocks.loadNexisClawPlugins).toHaveBeenCalledTimes(1);
-    expectLoadNexisClawPluginsCall(0, {
+    expect(mocks.loadGreenchClawPlugins).toHaveBeenCalledTimes(1);
+    expectLoadGreenchClawPluginsCall(0, {
       config: activatedConfig,
       activationSourceConfig: activatedConfig,
       onlyPluginIds: ["demo-channel-a"],

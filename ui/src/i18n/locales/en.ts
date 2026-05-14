@@ -415,7 +415,7 @@ export const en: TranslationMap = {
     skills: "Skills and API keys.",
     nodes: "Paired devices and commands.",
     chat: "Gateway chat for quick interventions.",
-    config: "Edit NexisClaw.json.",
+    config: "Edit GreenchClaw.json.",
     communications: "Channels, messages, and audio settings.",
     appearance: "Theme, UI, and setup wizard settings.",
     automation: "Commands, hooks, cron, and plugins.",
@@ -488,7 +488,7 @@ export const en: TranslationMap = {
       metadataUpgradeSummary:
         "This device is already paired, but the metadata change is waiting for approval.",
       mobileHint:
-        "On mobile? Copy the full URL (including #token=...) from NexisClaw dashboard --no-open on your desktop.",
+        "On mobile? Copy the full URL (including #token=...) from GreenchClaw dashboard --no-open on your desktop.",
       docsTitle: "Device pairing docs (opens in new tab)",
       docsLink: "Docs: Device pairing",
     },
@@ -526,7 +526,7 @@ export const en: TranslationMap = {
       modelAuthExpiresIn: "expires {when}",
       modelAuthAttentionExpiredTitle: "Model auth expired",
       modelAuthAttentionExpiringTitle: "Model auth expiring soon",
-      modelAuthAttentionExpiredDesc: "{providers} — re-authenticate with NexisClaw models auth",
+      modelAuthAttentionExpiredDesc: "{providers} — re-authenticate with GreenchClaw models auth",
       modelAuthAttentionExpiringEntry: "{provider} ({when})",
     },
     attention: {
@@ -948,9 +948,9 @@ export const en: TranslationMap = {
         summary:
           "The Gateway is reachable, but it needs a matching token or password before this browser can connect.",
         stepPaste:
-          "Paste the token from NexisClaw dashboard --no-open or enter the configured password.",
+          "Paste the token from GreenchClaw dashboard --no-open or enter the configured password.",
         stepGenerate:
-          "If no token is configured, run NexisClaw doctor --generate-gateway-token on the gateway host.",
+          "If no token is configured, run GreenchClaw doctor --generate-gateway-token on the gateway host.",
         stepConnect: "Click Connect again after updating the credential.",
       },
       authFailed: {
@@ -958,7 +958,7 @@ export const en: TranslationMap = {
         summary:
           "The supplied credential was rejected. The most common cause is a stale token or a token copied from another Gateway URL.",
         stepDashboard:
-          "Run NexisClaw dashboard --no-open and open the fresh URL or paste its token.",
+          "Run GreenchClaw dashboard --no-open and open the fresh URL or paste its token.",
         stepReplace:
           "Replace stale token/password values; do not reuse a token from another Gateway URL.",
         stepMode:
@@ -981,8 +981,8 @@ export const en: TranslationMap = {
           "This browser needs one-time approval from the Gateway host before it can use the Control UI.",
         upgradeSummary:
           "This browser is already known, but the requested access changed and needs a fresh approval.",
-        stepList: "Run NexisClaw devices list on the Gateway host.",
-        stepApproveId: "Approve this request: NexisClaw devices approve {requestId}.",
+        stepList: "Run GreenchClaw devices list on the Gateway host.",
+        stepApproveId: "Approve this request: GreenchClaw devices approve {requestId}.",
         stepApprove: "Approve the pending browser/device request from that list.",
         stepReconnect: "Reconnect after the approval completes.",
       },
@@ -1008,21 +1008,22 @@ export const en: TranslationMap = {
         summary:
           "The served Control UI and the running Gateway do not agree on the supported connection protocol.",
         stepDashboard:
-          "Reopen the served dashboard with NexisClaw dashboard so the UI and Gateway come from the same install.",
+          "Reopen the served dashboard with GreenchClaw dashboard so the UI and Gateway come from the same install.",
         stepDevUi:
           "If using pnpm ui:dev, rebuild or restart the dev UI against the current checkout.",
         stepRestart:
-          "Restart the Gateway after updating NexisClaw so it serves the current protocol.",
+          "Restart the Gateway after updating GreenchClaw so it serves the current protocol.",
       },
       network: {
         title: "Could not connect",
         summary:
           "The browser could not complete the Gateway connection. Check the target and transport before retrying credentials.",
-        stepGateway: "Confirm the Gateway is running with NexisClaw status or NexisClaw gateway run.",
+        stepGateway:
+          "Confirm the Gateway is running with GreenchClaw status or GreenchClaw gateway run.",
         stepUrl:
           "Check the WebSocket URL and use wss:// when the Gateway is behind HTTPS/Tailscale Serve.",
         stepDashboard:
-          "Reopen the dashboard with NexisClaw dashboard --no-open to recopy the current URL and auth details.",
+          "Reopen the dashboard with GreenchClaw dashboard --no-open to recopy the current URL and auth details.",
       },
     },
   },

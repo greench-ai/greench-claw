@@ -1,5 +1,5 @@
 ---
-summary: "Run NexisClaw embedded agent turns through the bundled Codex app-server harness"
+summary: "Run GreenchClaw embedded agent turns through the bundled Codex app-server harness"
 title: "Codex harness"
 read_when:
   - You want to use the bundled Codex app-server harness
@@ -7,13 +7,13 @@ read_when:
   - You want Codex-only deployments to fail instead of falling back to PI
 ---
 
-The bundled `codex` plugin lets NexisClaw run embedded OpenAI agent turns
+The bundled `codex` plugin lets GreenchClaw run embedded OpenAI agent turns
 through Codex app-server instead of the built-in PI harness.
 
 Use the Codex harness when you want Codex to own the low-level agent session:
 native thread resume, native tool continuation, native compaction, and
-app-server execution. NexisClaw still owns chat channels, session files, model
-selection, NexisClaw dynamic tools, approvals, media delivery, and the visible
+app-server execution. GreenchClaw still owns chat channels, session files, model
+selection, GreenchClaw dynamic tools, approvals, media delivery, and the visible
 transcript mirror.
 
 The normal setup uses canonical OpenAI model refs such as `openai/gpt-5.5`.
@@ -21,8 +21,8 @@ Do not configure `openai-codex/gpt-*` model refs. Put OpenAI agent auth order
 under `auth.order.openai`; older `openai-codex:*` profiles and
 `auth.order.openai-codex` entries remain supported for existing installs.
 
-NexisClaw starts Codex app-server threads with Codex native code mode and
-code-mode-only enabled. That keeps deferred/searchable NexisClaw dynamic tools
+GreenchClaw starts Codex app-server threads with Codex native code mode and
+code-mode-only enabled. That keeps deferred/searchable GreenchClaw dynamic tools
 inside Codex's own code execution and tool-search surface instead of adding a
 PI-style tool-search wrapper on top of Codex.
 
@@ -33,12 +33,12 @@ Discord, Slack, or another channel remains the communication surface.
 
 ## Requirements
 
-- NexisClaw with the bundled `codex` plugin available.
+- GreenchClaw with the bundled `codex` plugin available.
 - If your config uses `plugins.allow`, include `codex`.
 - Codex app-server `0.125.0` or newer. The bundled plugin manages a compatible
   Codex app-server binary by default, so local `codex` commands on `PATH` do not
   affect normal harness startup.
-- Codex auth available through `NexisClaw models auth login --provider openai-codex`,
+- Codex auth available through `GreenchClaw models auth login --provider openai-codex`,
   an app-server account in the agent's Codex home, or an explicit Codex API-key
   auth profile.
 
@@ -48,14 +48,14 @@ discovery, and all config fields, see
 
 ## Quickstart
 
-Most users who want Codex in NexisClaw want this path: sign in with a
+Most users who want Codex in GreenchClaw want this path: sign in with a
 ChatGPT/Codex subscription, enable the bundled `codex` plugin, and use a
 canonical `openai/gpt-*` model ref.
 
 Sign in with Codex OAuth:
 
 ```bash
-NexisClaw models auth login --provider openai-codex
+GreenchClaw models auth login --provider openai-codex
 ```
 
 Enable the bundled `codex` plugin and select an OpenAI agent model:
@@ -99,20 +99,20 @@ turn resolves the harness from current config.
 ## Configuration
 
 The quickstart config is the minimum viable Codex harness config. Set Codex
-harness options in NexisClaw config, and use the CLI only for Codex auth:
+harness options in GreenchClaw config, and use the CLI only for Codex auth:
 
-| Need                                   | Set                                                                              | Where                              |
-| -------------------------------------- | -------------------------------------------------------------------------------- | ---------------------------------- |
-| Enable the harness                     | `plugins.entries.codex.enabled: true`                                            | NexisClaw config                    |
-| Keep an allowlisted plugin install     | Include `codex` in `plugins.allow`                                               | NexisClaw config                    |
-| Route OpenAI agent turns through Codex | `agents.defaults.model` or `agents.list[].model` as `openai/gpt-*`               | NexisClaw agent config              |
-| Sign in with Codex OAuth               | `NexisClaw models auth login --provider openai-codex`                             | CLI auth profile                   |
-| Add API-key backup for Codex runs      | `openai:*` API-key profile listed after subscription auth in `auth.order.openai` | CLI auth profile + NexisClaw config |
-| Fail closed when Codex is unavailable  | Provider or model `agentRuntime.id: "codex"`                                     | NexisClaw model/provider config     |
-| Use direct OpenAI API traffic          | Provider or model `agentRuntime.id: "pi"` with normal OpenAI auth                | NexisClaw model/provider config     |
-| Tune app-server behavior               | `plugins.entries.codex.config.appServer.*`                                       | Codex plugin config                |
-| Enable native Codex plugin apps        | `plugins.entries.codex.config.codexPlugins.*`                                    | Codex plugin config                |
-| Enable Codex Computer Use              | `plugins.entries.codex.config.computerUse.*`                                     | Codex plugin config                |
+| Need                                   | Set                                                                              | Where                                 |
+| -------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------- |
+| Enable the harness                     | `plugins.entries.codex.enabled: true`                                            | GreenchClaw config                    |
+| Keep an allowlisted plugin install     | Include `codex` in `plugins.allow`                                               | GreenchClaw config                    |
+| Route OpenAI agent turns through Codex | `agents.defaults.model` or `agents.list[].model` as `openai/gpt-*`               | GreenchClaw agent config              |
+| Sign in with Codex OAuth               | `GreenchClaw models auth login --provider openai-codex`                          | CLI auth profile                      |
+| Add API-key backup for Codex runs      | `openai:*` API-key profile listed after subscription auth in `auth.order.openai` | CLI auth profile + GreenchClaw config |
+| Fail closed when Codex is unavailable  | Provider or model `agentRuntime.id: "codex"`                                     | GreenchClaw model/provider config     |
+| Use direct OpenAI API traffic          | Provider or model `agentRuntime.id: "pi"` with normal OpenAI auth                | GreenchClaw model/provider config     |
+| Tune app-server behavior               | `plugins.entries.codex.config.appServer.*`                                       | Codex plugin config                   |
+| Enable native Codex plugin apps        | `plugins.entries.codex.config.codexPlugins.*`                                    | Codex plugin config                   |
+| Enable Codex Computer Use              | `plugins.entries.codex.config.computerUse.*`                                     | Codex plugin config                   |
 
 Use `openai/gpt-*` model refs for Codex-backed OpenAI agent turns. Prefer
 `auth.order.openai` for subscription-first/API-key-backup ordering. Existing
@@ -165,7 +165,7 @@ the harness and account. If `/status` is surprising, see
 Keep provider refs and runtime policy separate:
 
 - Use `openai/gpt-*` for OpenAI agent turns through Codex.
-- Do not use `openai-codex/gpt-*` in config. Run `NexisClaw doctor --fix` to
+- Do not use `openai-codex/gpt-*` in config. Run `GreenchClaw doctor --fix` to
   repair legacy refs and stale session route pins.
 - `agentRuntime.id: "codex"` is optional for normal OpenAI auto mode, but useful
   when a deployment should fail closed if Codex is unavailable.
@@ -190,7 +190,7 @@ Common command routing:
 | ChatGPT/Codex subscription with native Codex runtime | `openai/gpt-*` plus enabled `codex` plugin                       | `/status` shows `Runtime: OpenAI Codex` | Recommended path                   |
 | Fail closed if Codex is unavailable                  | Provider or model `agentRuntime.id: "codex"`                     | Turn fails instead of PI fallback       | Use for Codex-only deployments     |
 | Direct OpenAI API-key traffic through PI             | Provider or model `agentRuntime.id: "pi"` and normal OpenAI auth | `/status` shows PI runtime              | Use only when PI is intentional    |
-| Legacy config                                        | `openai-codex/gpt-*`                                             | `NexisClaw doctor --fix` rewrites it     | Do not write new config this way   |
+| Legacy config                                        | `openai-codex/gpt-*`                                             | `GreenchClaw doctor --fix` rewrites it  | Do not write new config this way   |
 | ACP/acpx Codex adapter                               | ACP `sessions_spawn({ runtime: "acp" })`                         | ACP task/session status                 | Separate from native Codex harness |
 
 `agents.defaults.imageModel` follows the same prefix split. Use `openai/gpt-*`
@@ -290,12 +290,12 @@ fail-closed rule:
 }
 ```
 
-With Codex forced, NexisClaw fails early if the Codex plugin is disabled, the
+With Codex forced, GreenchClaw fails early if the Codex plugin is disabled, the
 app-server is too old, or the app-server cannot start.
 
 ## App-server policy
 
-By default, the plugin starts NexisClaw's managed Codex binary locally with stdio
+By default, the plugin starts GreenchClaw's managed Codex binary locally with stdio
 transport. Set `appServer.command` only when you intentionally want to run a
 different executable. Use WebSocket transport only when an app-server is already
 running elsewhere:
@@ -322,8 +322,8 @@ running elsewhere:
 Local stdio app-server sessions default to the trusted local operator posture:
 `approvalPolicy: "never"`, `approvalsReviewer: "user"`, and
 `sandbox: "danger-full-access"`. If local Codex requirements disallow that
-implicit YOLO posture, NexisClaw selects allowed guardian permissions instead.
-When an NexisClaw sandbox is active for the session, NexisClaw narrows Codex
+implicit YOLO posture, GreenchClaw selects allowed guardian permissions instead.
+When an GreenchClaw sandbox is active for the session, GreenchClaw narrows Codex
 `danger-full-access` to Codex `workspace-write` so native Codex code-mode turns
 stay inside the sandboxed workspace.
 
@@ -358,7 +358,7 @@ timeout behavior, see [Codex harness reference](/plugins/codex-harness-reference
 ## Commands and diagnostics
 
 The bundled plugin registers `/codex` as a slash command on any channel that
-supports NexisClaw text commands.
+supports GreenchClaw text commands.
 
 Common forms:
 
@@ -366,7 +366,7 @@ Common forms:
   MCP servers, and skills.
 - `/codex models` lists live Codex app-server models.
 - `/codex threads [filter]` lists recent Codex app-server threads.
-- `/codex resume <thread-id>` attaches the current NexisClaw session to an
+- `/codex resume <thread-id>` attaches the current GreenchClaw session to an
   existing Codex thread.
 - `/codex compact` asks Codex app-server to compact the attached thread.
 - `/codex review` starts Codex native review for the attached thread.
@@ -410,7 +410,7 @@ Auth is selected in this order:
    `OPENAI_API_KEY`, when no app-server account is present and OpenAI auth is
    still required.
 
-When NexisClaw sees a ChatGPT subscription-style Codex auth profile, it removes
+When GreenchClaw sees a ChatGPT subscription-style Codex auth profile, it removes
 `CODEX_API_KEY` and `OPENAI_API_KEY` from the spawned Codex child process. That
 keeps Gateway-level API keys available for embeddings or direct OpenAI models
 without making native Codex app-server turns bill through the API by accident.
@@ -419,7 +419,7 @@ login instead of inherited child-process env. WebSocket app-server connections
 do not receive Gateway env API-key fallback; use an explicit auth profile or the
 remote app-server's own account.
 
-If a subscription profile hits a Codex usage limit, NexisClaw records the reset
+If a subscription profile hits a Codex usage limit, GreenchClaw records the reset
 time when Codex reports one and tries the next ordered auth profile for the same
 Codex run. When the reset time passes, the subscription profile becomes eligible
 again without changing the selected `openai/gpt-*` model or Codex runtime.
@@ -446,12 +446,12 @@ If a deployment needs additional environment isolation, add those variables to
 
 `appServer.clearEnv` only affects the spawned Codex app-server child process.
 
-Codex dynamic tools default to `searchable` loading. NexisClaw does not expose
+Codex dynamic tools default to `searchable` loading. GreenchClaw does not expose
 dynamic tools that duplicate Codex-native workspace operations: `read`, `write`,
-`edit`, `apply_patch`, `exec`, `process`, and `update_plan`. Remaining NexisClaw
+`edit`, `apply_patch`, `exec`, `process`, and `update_plan`. Remaining GreenchClaw
 integration tools such as messaging, sessions, media, cron, browser, nodes,
 gateway, `heartbeat_respond`, and `web_search` are available through Codex tool
-search under the `NexisClaw` namespace, keeping the initial model context
+search under the `GreenchClaw` namespace, keeping the initial model context
 smaller.
 `sessions_yield` and message-tool-only source replies stay direct because those
 are turn-control contracts. Heartbeat collaboration instructions tell Codex to
@@ -464,54 +464,54 @@ tool payload.
 
 Supported top-level Codex plugin fields:
 
-| Field                      | Default        | Meaning                                                                                  |
-| -------------------------- | -------------- | ---------------------------------------------------------------------------------------- |
-| `codexDynamicToolsLoading` | `"searchable"` | Use `"direct"` to put NexisClaw dynamic tools directly in the initial Codex tool context. |
-| `codexDynamicToolsExclude` | `[]`           | Additional NexisClaw dynamic tool names to omit from Codex app-server turns.              |
-| `codexPlugins`             | disabled       | Native Codex plugin/app support for migrated source-installed curated plugins.           |
+| Field                      | Default        | Meaning                                                                                     |
+| -------------------------- | -------------- | ------------------------------------------------------------------------------------------- |
+| `codexDynamicToolsLoading` | `"searchable"` | Use `"direct"` to put GreenchClaw dynamic tools directly in the initial Codex tool context. |
+| `codexDynamicToolsExclude` | `[]`           | Additional GreenchClaw dynamic tool names to omit from Codex app-server turns.              |
+| `codexPlugins`             | disabled       | Native Codex plugin/app support for migrated source-installed curated plugins.              |
 
 Supported `appServer` fields:
 
-| Field                         | Default                                                | Meaning                                                                                                                                                                                                                                 |
-| ----------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `transport`                   | `"stdio"`                                              | `"stdio"` spawns Codex; `"websocket"` connects to `url`.                                                                                                                                                                                |
-| `command`                     | managed Codex binary                                   | Executable for stdio transport. Leave unset to use the managed binary; set it only for an explicit override.                                                                                                                            |
-| `args`                        | `["app-server", "--listen", "stdio://"]`               | Arguments for stdio transport.                                                                                                                                                                                                          |
-| `url`                         | unset                                                  | WebSocket app-server URL.                                                                                                                                                                                                               |
-| `authToken`                   | unset                                                  | Bearer token for WebSocket transport.                                                                                                                                                                                                   |
-| `headers`                     | `{}`                                                   | Extra WebSocket headers.                                                                                                                                                                                                                |
-| `clearEnv`                    | `[]`                                                   | Extra environment variable names removed from the spawned stdio app-server process after NexisClaw builds its inherited environment. `CODEX_HOME` and `HOME` are reserved for NexisClaw's per-agent Codex isolation on local launches.    |
-| `requestTimeoutMs`            | `60000`                                                | Timeout for app-server control-plane calls.                                                                                                                                                                                             |
-| `turnCompletionIdleTimeoutMs` | `60000`                                                | Quiet window after a turn-scoped Codex app-server request while NexisClaw waits for `turn/completed`. Raise this for slow post-tool or status-only synthesis phases.                                                                     |
-| `mode`                        | `"yolo"` unless local Codex requirements disallow YOLO | Preset for YOLO or guardian-reviewed execution. Local stdio requirements that omit `danger-full-access`, `never` approval, or the `user` reviewer make the implicit default guardian.                                                   |
-| `approvalPolicy`              | `"never"` or an allowed guardian approval policy       | Native Codex approval policy sent to thread start/resume/turn. Guardian defaults prefer `"on-request"` when allowed.                                                                                                                    |
-| `sandbox`                     | `"danger-full-access"` or an allowed guardian sandbox  | Native Codex sandbox mode sent to thread start/resume. Guardian defaults prefer `"workspace-write"` when allowed, otherwise `"read-only"`. When an NexisClaw sandbox is active, `danger-full-access` is narrowed to `"workspace-write"`. |
-| `approvalsReviewer`           | `"user"` or an allowed guardian reviewer               | Use `"auto_review"` to let Codex review native approval prompts when allowed, otherwise `guardian_subagent` or `user`. `guardian_subagent` remains a legacy alias.                                                                      |
-| `serviceTier`                 | unset                                                  | Optional Codex app-server service tier. `"priority"` enables fast-mode routing, `"flex"` requests flex processing, `null` clears the override, and legacy `"fast"` is accepted as `"priority"`.                                         |
+| Field                         | Default                                                | Meaning                                                                                                                                                                                                                                    |
+| ----------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `transport`                   | `"stdio"`                                              | `"stdio"` spawns Codex; `"websocket"` connects to `url`.                                                                                                                                                                                   |
+| `command`                     | managed Codex binary                                   | Executable for stdio transport. Leave unset to use the managed binary; set it only for an explicit override.                                                                                                                               |
+| `args`                        | `["app-server", "--listen", "stdio://"]`               | Arguments for stdio transport.                                                                                                                                                                                                             |
+| `url`                         | unset                                                  | WebSocket app-server URL.                                                                                                                                                                                                                  |
+| `authToken`                   | unset                                                  | Bearer token for WebSocket transport.                                                                                                                                                                                                      |
+| `headers`                     | `{}`                                                   | Extra WebSocket headers.                                                                                                                                                                                                                   |
+| `clearEnv`                    | `[]`                                                   | Extra environment variable names removed from the spawned stdio app-server process after GreenchClaw builds its inherited environment. `CODEX_HOME` and `HOME` are reserved for GreenchClaw's per-agent Codex isolation on local launches. |
+| `requestTimeoutMs`            | `60000`                                                | Timeout for app-server control-plane calls.                                                                                                                                                                                                |
+| `turnCompletionIdleTimeoutMs` | `60000`                                                | Quiet window after a turn-scoped Codex app-server request while GreenchClaw waits for `turn/completed`. Raise this for slow post-tool or status-only synthesis phases.                                                                     |
+| `mode`                        | `"yolo"` unless local Codex requirements disallow YOLO | Preset for YOLO or guardian-reviewed execution. Local stdio requirements that omit `danger-full-access`, `never` approval, or the `user` reviewer make the implicit default guardian.                                                      |
+| `approvalPolicy`              | `"never"` or an allowed guardian approval policy       | Native Codex approval policy sent to thread start/resume/turn. Guardian defaults prefer `"on-request"` when allowed.                                                                                                                       |
+| `sandbox`                     | `"danger-full-access"` or an allowed guardian sandbox  | Native Codex sandbox mode sent to thread start/resume. Guardian defaults prefer `"workspace-write"` when allowed, otherwise `"read-only"`. When an GreenchClaw sandbox is active, `danger-full-access` is narrowed to `"workspace-write"`. |
+| `approvalsReviewer`           | `"user"` or an allowed guardian reviewer               | Use `"auto_review"` to let Codex review native approval prompts when allowed, otherwise `guardian_subagent` or `user`. `guardian_subagent` remains a legacy alias.                                                                         |
+| `serviceTier`                 | unset                                                  | Optional Codex app-server service tier. `"priority"` enables fast-mode routing, `"flex"` requests flex processing, `null` clears the override, and legacy `"fast"` is accepted as `"priority"`.                                            |
 
-NexisClaw-owned dynamic tool calls are bounded independently from
+GreenchClaw-owned dynamic tool calls are bounded independently from
 `appServer.requestTimeoutMs`: Codex `item/tool/call` requests use a 30 second
-NexisClaw watchdog by default. A positive per-call `timeoutMs` argument extends
+GreenchClaw watchdog by default. A positive per-call `timeoutMs` argument extends
 or shortens that specific tool budget. The `image_generate` tool also uses
 `agents.defaults.imageGenerationModel.timeoutMs` when the tool call does not
 provide its own timeout, and the media-understanding `image` tool uses
 `tools.media.image.timeoutSeconds` or its 60 second media default. Dynamic tool
-budgets are capped at 600000 ms. On timeout, NexisClaw aborts the tool signal
+budgets are capped at 600000 ms. On timeout, GreenchClaw aborts the tool signal
 where supported and returns a failed dynamic-tool response to Codex so the turn
 can continue instead of leaving the session in `processing`.
 
-After NexisClaw responds to a Codex turn-scoped app-server request, the harness
+After GreenchClaw responds to a Codex turn-scoped app-server request, the harness
 also expects Codex to finish the native turn with `turn/completed`. If the
 app-server goes quiet for `appServer.turnCompletionIdleTimeoutMs` after that
-response, NexisClaw best-effort interrupts the Codex turn, records a diagnostic
-timeout, and releases the NexisClaw session lane so follow-up chat messages are
+response, GreenchClaw best-effort interrupts the Codex turn, records a diagnostic
+timeout, and releases the GreenchClaw session lane so follow-up chat messages are
 not queued behind a stale native turn. Any non-terminal notification for the
 same turn, including `rawResponseItem/completed`, disarms that short watchdog
 because Codex has proven the turn is still alive; the longer terminal watchdog
 continues to protect genuinely stuck turns. Global app-server notifications,
 such as rate-limit updates, do not reset turn-idle progress. When Codex emits a
 completed `agentMessage` item and then goes quiet without `turn/completed`,
-NexisClaw treats the assistant output as effectively complete, best-effort
+GreenchClaw treats the assistant output as effectively complete, best-effort
 interrupts the native Codex turn, and releases the session lane. Timeout
 diagnostics include the last app-server notification method and, for raw
 assistant response items, the item type, role, id, and a bounded assistant text
@@ -519,26 +519,26 @@ preview.
 
 Environment overrides remain available for local testing:
 
-- `NEXISCLAW_CODEX_APP_SERVER_BIN`
-- `NEXISCLAW_CODEX_APP_SERVER_ARGS`
-- `NEXISCLAW_CODEX_APP_SERVER_MODE=yolo|guardian`
-- `NEXISCLAW_CODEX_APP_SERVER_APPROVAL_POLICY`
-- `NEXISCLAW_CODEX_APP_SERVER_SANDBOX`
+- `GREENCHCLAW_CODEX_APP_SERVER_BIN`
+- `GREENCHCLAW_CODEX_APP_SERVER_ARGS`
+- `GREENCHCLAW_CODEX_APP_SERVER_MODE=yolo|guardian`
+- `GREENCHCLAW_CODEX_APP_SERVER_APPROVAL_POLICY`
+- `GREENCHCLAW_CODEX_APP_SERVER_SANDBOX`
 
-`NEXISCLAW_CODEX_APP_SERVER_BIN` bypasses the managed binary when
+`GREENCHCLAW_CODEX_APP_SERVER_BIN` bypasses the managed binary when
 `appServer.command` is unset.
 
-`NEXISCLAW_CODEX_APP_SERVER_GUARDIAN=1` was removed. Use
+`GREENCHCLAW_CODEX_APP_SERVER_GUARDIAN=1` was removed. Use
 `plugins.entries.codex.config.appServer.mode: "guardian"` instead, or
-`NEXISCLAW_CODEX_APP_SERVER_MODE=guardian` for one-off local testing. Config is
+`GREENCHCLAW_CODEX_APP_SERVER_MODE=guardian` for one-off local testing. Config is
 preferred for repeatable deployments because it keeps the plugin behavior in the
 same reviewed file as the rest of the Codex harness setup.
 
 ## Native Codex plugins
 
 Native Codex plugin support uses Codex app-server's own app and plugin
-capabilities in the same Codex thread as the NexisClaw harness turn. NexisClaw
-does not translate Codex plugins into synthetic `codex_plugin_*` NexisClaw
+capabilities in the same Codex thread as the GreenchClaw harness turn. GreenchClaw
+does not translate Codex plugins into synthetic `codex_plugin_*` GreenchClaw
 dynamic tools.
 
 `codexPlugins` affects only sessions that select the native Codex harness. It
@@ -572,7 +572,7 @@ Minimal migrated config:
 }
 ```
 
-Thread app config is computed when NexisClaw establishes a Codex harness session
+Thread app config is computed when GreenchClaw establishes a Codex harness session
 or replaces a stale Codex thread binding. It is not recomputed on every turn.
 After changing `codexPlugins`, use `/new`, `/reset`, or restart the gateway so
 future Codex harness sessions start with the updated app set.
@@ -586,7 +586,7 @@ elicitations, and native plugin diagnostics, see
 Computer Use is covered in its own setup guide:
 [Codex Computer Use](/plugins/codex-computer-use).
 
-The short version: NexisClaw does not vendor the desktop-control app or execute
+The short version: GreenchClaw does not vendor the desktop-control app or execute
 desktop actions itself. It prepares Codex app-server, verifies that the
 `computer-use` MCP server is available, and then lets Codex own the native MCP
 tool calls during Codex-mode turns.
@@ -595,16 +595,16 @@ tool calls during Codex-mode turns.
 
 The Codex harness changes the low-level embedded agent executor only.
 
-- NexisClaw dynamic tools are supported. Codex asks NexisClaw to execute those
-  tools, so NexisClaw remains in the execution path.
+- GreenchClaw dynamic tools are supported. Codex asks GreenchClaw to execute those
+  tools, so GreenchClaw remains in the execution path.
 - Codex-native shell, patch, MCP, and native app tools are owned by Codex.
-  NexisClaw can observe or block selected native events through the supported
+  GreenchClaw can observe or block selected native events through the supported
   relay, but it does not rewrite native tool arguments.
-- Codex owns native compaction. NexisClaw keeps a transcript mirror for channel
+- Codex owns native compaction. GreenchClaw keeps a transcript mirror for channel
   history, search, `/new`, `/reset`, and future model or harness switching.
 - Media generation, media understanding, TTS, approvals, and messaging-tool
-  output continue through the matching NexisClaw provider/model settings.
-- `tool_result_persist` applies to NexisClaw-owned transcript tool results, not
+  output continue through the matching GreenchClaw provider/model settings.
+- `tool_result_persist` applies to GreenchClaw-owned transcript tool results, not
   Codex-native tool result records.
 
 For hook layers, supported V1 surfaces, native permission handling, queue
@@ -618,19 +618,19 @@ new configs. Select an `openai/gpt-*` model, enable
 `plugins.entries.codex.enabled`, and check whether `plugins.allow` excludes
 `codex`.
 
-**NexisClaw uses PI instead of Codex:** make sure the model ref is
+**GreenchClaw uses PI instead of Codex:** make sure the model ref is
 `openai/gpt-*` on the official OpenAI provider and that the Codex plugin is
 installed and enabled. If you need strict proof while testing, set provider or
 model `agentRuntime.id: "codex"`. A forced Codex runtime fails instead of
 falling back to PI.
 
-**Legacy `openai-codex/*` config remains:** run `NexisClaw doctor --fix`.
+**Legacy `openai-codex/*` config remains:** run `GreenchClaw doctor --fix`.
 Doctor rewrites legacy model refs to `openai/*`, removes stale session and
 whole-agent runtime pins, and preserves existing auth-profile overrides.
 
 **The app-server is rejected:** use Codex app-server `0.125.0` or newer.
 Same-version prereleases or build-suffixed versions such as
-`0.125.0-alpha.2` or `0.125.0+custom` are rejected because NexisClaw tests the
+`0.125.0-alpha.2` or `0.125.0+custom` are rejected because GreenchClaw tests the
 stable `0.125.0` protocol floor.
 
 **`/codex status` cannot connect:** check that the bundled `codex` plugin is

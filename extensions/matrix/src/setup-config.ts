@@ -4,8 +4,8 @@ import {
   normalizeAccountId,
   normalizeSecretInputString,
   type ChannelSetupInput,
-} from "NexisClaw/plugin-sdk/setup";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/setup";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveMatrixEnvAuthReadiness } from "./matrix/client/env-auth.js";
 import { updateMatrixAccountConfig } from "./matrix/config-update.js";
 import { isSupportedMatrixAvatarSource } from "./matrix/profile.js";

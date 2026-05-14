@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const runtimeModule = await import("./runtime.js");
@@ -7,10 +7,10 @@ const handleDiscordActionMock = vi
   .mockResolvedValue({ content: [], details: { ok: true } });
 const { handleDiscordMessageAction } = await import("./handle-action.js");
 
-function discordConfig(actions?: Record<string, boolean>): NexisClawConfig {
+function discordConfig(actions?: Record<string, boolean>): GreenchClawConfig {
   return {
     channels: { discord: { token: "tok", ...(actions ? { actions } : {}) } },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function defaultActionOptions() {
@@ -23,7 +23,7 @@ function defaultActionOptions() {
 
 function expectDiscordActionCall(params: {
   payload: unknown;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   options?: unknown;
 }) {
   expect(handleDiscordActionMock).toHaveBeenCalledTimes(1);

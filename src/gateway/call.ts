@@ -5,7 +5,7 @@ import {
   resolveGatewayPort as resolveGatewayPortFromPaths,
   resolveStateDir as resolveStateDirFromPaths,
 } from "../config/paths.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { loadOrCreateDeviceIdentity, type DeviceIdentity } from "../infra/device-identity.js";
 import { loadGatewayTlsRuntime } from "../infra/tls/gateway.js";
 import { isLoopbackIpAddress } from "../shared/net/ip.js";
@@ -49,7 +49,7 @@ type CallGatewayBaseOptions = {
   token?: string;
   password?: string;
   tlsFingerprint?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   method: string;
   params?: unknown;
   expectFinal?: boolean;
@@ -166,7 +166,7 @@ function resolveGatewayClientDisplayName(opts: CallGatewayBaseOptions): string |
   return method ? `gateway:${method}` : "gateway:request";
 }
 
-function loadGatewayConfig(): NexisClawConfig {
+function loadGatewayConfig(): GreenchClawConfig {
   const loadConfigFn =
     typeof gatewayCallDeps.getRuntimeConfig === "function"
       ? gatewayCallDeps.getRuntimeConfig
@@ -192,7 +192,7 @@ function resolveGatewayConfigPath(env: NodeJS.ProcessEnv): string {
   return resolveConfigPathFn(env, resolveGatewayStateDir(env));
 }
 
-function resolveGatewayPortValue(config?: NexisClawConfig, env?: NodeJS.ProcessEnv): number {
+function resolveGatewayPortValue(config?: GreenchClawConfig, env?: NodeJS.ProcessEnv): number {
   const resolveGatewayPortFn =
     typeof gatewayCallDeps.resolveGatewayPort === "function"
       ? gatewayCallDeps.resolveGatewayPort
@@ -202,7 +202,7 @@ function resolveGatewayPortValue(config?: NexisClawConfig, env?: NodeJS.ProcessE
 
 export function buildGatewayConnectionDetails(
   options: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     url?: string;
     configPath?: string;
     urlSource?: "cli" | "env";
@@ -351,7 +351,7 @@ type GatewayRemoteSettings = {
 };
 
 type ResolvedGatewayCallContext = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   configPath: string;
   isRemoteMode: boolean;
   remote?: GatewayRemoteSettings;
@@ -380,8 +380,8 @@ function resolveGatewayCallTimeout(
     Number.isFinite(configuredHandshakeTimeoutMs) &&
     configuredHandshakeTimeoutMs > 0;
   const hasEnvHandshakeTimeout =
-    Boolean(process.env.NEXISCLAW_HANDSHAKE_TIMEOUT_MS) ||
-    Boolean(process.env.VITEST && process.env.NEXISCLAW_TEST_HANDSHAKE_TIMEOUT_MS);
+    Boolean(process.env.GREENCHCLAW_HANDSHAKE_TIMEOUT_MS) ||
+    Boolean(process.env.VITEST && process.env.GREENCHCLAW_TEST_HANDSHAKE_TIMEOUT_MS);
   const resolvedHandshakeTimeoutMs =
     hasConfiguredHandshakeTimeout || hasEnvHandshakeTimeout
       ? resolvePreauthHandshakeTimeoutMs({ configuredTimeoutMs: configuredHandshakeTimeoutMs })
@@ -401,7 +401,7 @@ function resolveGatewayCallContext(opts: CallGatewayBaseOptions): ResolvedGatewa
   const explicitAuth = resolveExplicitGatewayAuth({ token: opts.token, password: opts.password });
   const envUrlOverride = cliUrlOverride
     ? undefined
-    : trimToUndefined(process.env.NEXISCLAW_GATEWAY_URL);
+    : trimToUndefined(process.env.GREENCHCLAW_GATEWAY_URL);
   const urlOverride = cliUrlOverride ?? envUrlOverride;
   const urlOverrideSource = cliUrlOverride ? "cli" : envUrlOverride ? "env" : undefined;
   const canSkipConfigLoad = canSkipGatewayConfigLoad({
@@ -409,7 +409,8 @@ function resolveGatewayCallContext(opts: CallGatewayBaseOptions): ResolvedGatewa
     urlOverride,
     explicitAuth,
   });
-  const config = opts.config ?? (canSkipConfigLoad ? ({} as NexisClawConfig) : loadGatewayConfig());
+  const config =
+    opts.config ?? (canSkipConfigLoad ? ({} as GreenchClawConfig) : loadGatewayConfig());
   const configPath = opts.configPath ?? resolveGatewayConfigPath(process.env);
   const isRemoteMode = config.gateway?.mode === "remote";
   const remote = isRemoteMode
@@ -525,7 +526,7 @@ function formatGatewayCloseError(
       "\n- Gateway not yet ready to accept connections (retry after a moment)" +
       "\n- TLS mismatch (connecting with ws:// to a wss:// gateway, or vice versa)" +
       "\n- Gateway crashed or was terminated unexpectedly" +
-      "\nRun `NexisClaw doctor` for diagnostics.";
+      "\nRun `GreenchClaw doctor` for diagnostics.";
   }
   return message;
 }

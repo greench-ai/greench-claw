@@ -2,4 +2,4 @@
 // Keep model/vendor-specific protocol code in the plugin that registers the harness.
 
 export * from "./agent-harness-runtime.js";
-export { createNexisClawCodingTools } from "../agents/pi-tools.js";
+export { createGreenchClawCodingTools } from "../agents/pi-tools.js";

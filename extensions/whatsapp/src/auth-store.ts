@@ -1,12 +1,12 @@
 import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { formatCliCommand } from "NexisClaw/plugin-sdk/cli-runtime";
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/routing";
-import { info, success } from "NexisClaw/plugin-sdk/runtime-env";
-import { getChildLogger } from "NexisClaw/plugin-sdk/runtime-env";
-import { defaultRuntime, type RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
-import { replaceFileAtomic } from "NexisClaw/plugin-sdk/security-runtime";
+import { formatCliCommand } from "GreenchClaw/plugin-sdk/cli-runtime";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/routing";
+import { info, success } from "GreenchClaw/plugin-sdk/runtime-env";
+import { getChildLogger } from "GreenchClaw/plugin-sdk/runtime-env";
+import { defaultRuntime, type RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
+import { replaceFileAtomic } from "GreenchClaw/plugin-sdk/security-runtime";
 import { resolveOAuthDir } from "./auth-store.runtime.js";
 import { hasWebCredsSync, resolveWebCredsBackupPath, resolveWebCredsPath } from "./creds-files.js";
 import {
@@ -487,7 +487,7 @@ export async function pickWebChannel(
   }
   if (!auth.exists) {
     throw new Error(
-      `No WhatsApp Web session found. Run \`${formatCliCommand("NexisClaw channels login --channel whatsapp --verbose")}\` to link.`,
+      `No WhatsApp Web session found. Run \`${formatCliCommand("GreenchClaw channels login --channel whatsapp --verbose")}\` to link.`,
     );
   }
   return choice;

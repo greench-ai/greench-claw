@@ -1,12 +1,12 @@
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import type { ChannelSetupAdapter } from "NexisClaw/plugin-sdk/channel-setup";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import type { ChannelSetupAdapter } from "GreenchClaw/plugin-sdk/channel-setup";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   applyAccountNameToChannelSection,
   applySetupAccountConfigPatch,
   migrateBaseNameToDefaultAccount,
-} from "NexisClaw/plugin-sdk/setup";
-import { createSetupInputPresenceValidator } from "NexisClaw/plugin-sdk/setup-runtime";
+} from "GreenchClaw/plugin-sdk/setup";
+import { createSetupInputPresenceValidator } from "GreenchClaw/plugin-sdk/setup-runtime";
 import {
   resolveMattermostAccount,
   type ResolvedMattermostAccount,
@@ -22,7 +22,7 @@ export function isMattermostConfigured(account: ResolvedMattermostAccount): bool
   return tokenConfigured && Boolean(account.baseUrl);
 }
 
-export function resolveMattermostAccountWithSecrets(cfg: NexisClawConfig, accountId: string) {
+export function resolveMattermostAccountWithSecrets(cfg: GreenchClawConfig, accountId: string) {
   return resolveMattermostAccount({
     cfg,
     accountId,
@@ -31,11 +31,11 @@ export function resolveMattermostAccountWithSecrets(cfg: NexisClawConfig, accoun
 }
 
 export function applyMattermostSetupConfigPatch(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   name?: string;
   patch: Record<string, unknown>;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   const namedConfig = applyAccountNameToChannelSection({
     cfg: params.cfg,
     channelKey: channel,

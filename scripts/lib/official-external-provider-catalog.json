@@ -1,11 +1,11 @@
 {
   "entries": [
     {
-      "name": "@NexisClaw/codex",
-      "description": "NexisClaw Codex harness and model provider plugin",
+      "name": "@GreenchClaw/codex",
+      "description": "GreenchClaw Codex harness and model provider plugin",
       "source": "official",
       "kind": "provider",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
           "id": "codex",
           "label": "Codex"
@@ -32,7 +32,7 @@
           }
         ],
         "install": {
-          "npmSpec": "@NexisClaw/codex",
+          "npmSpec": "@GreenchClaw/codex",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.5.1-beta.1"
         }

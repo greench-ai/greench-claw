@@ -1,6 +1,6 @@
-import type { ResolvedChannelMessageIngress } from "NexisClaw/plugin-sdk/channel-ingress-runtime";
-import { createChannelPairingChallengeIssuer } from "NexisClaw/plugin-sdk/channel-pairing";
-import { upsertChannelPairingRequest } from "NexisClaw/plugin-sdk/conversation-runtime";
+import type { ResolvedChannelMessageIngress } from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
+import { createChannelPairingChallengeIssuer } from "GreenchClaw/plugin-sdk/channel-pairing";
+import { upsertChannelPairingRequest } from "GreenchClaw/plugin-sdk/conversation-runtime";
 
 export async function handleDiscordDmCommandDecision(params: {
   senderAccess: Pick<ResolvedChannelMessageIngress["senderAccess"], "decision">;

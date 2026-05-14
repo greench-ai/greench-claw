@@ -1,6 +1,6 @@
 /**
  * @deprecated Compatibility subpath. Import logger/runtime helpers from
- * `NexisClaw/plugin-sdk/runtime` instead.
+ * `GreenchClaw/plugin-sdk/runtime` instead.
  */
 
 import { format } from "node:util";
@@ -12,7 +12,7 @@ type LoggerLike = {
   error: (message: string) => void;
 };
 
-/** @deprecated Import from `NexisClaw/plugin-sdk/runtime` instead. */
+/** @deprecated Import from `GreenchClaw/plugin-sdk/runtime` instead. */
 export function createLoggerBackedRuntime(params: {
   logger: LoggerLike;
   exitError?: (code: number) => Error;
@@ -36,7 +36,7 @@ export function createLoggerBackedRuntime(params: {
   };
 }
 
-/** @deprecated Import from `NexisClaw/plugin-sdk/runtime` instead. */
+/** @deprecated Import from `GreenchClaw/plugin-sdk/runtime` instead. */
 export function resolveRuntimeEnv(params: {
   runtime: RuntimeEnv;
   logger: LoggerLike;
@@ -55,7 +55,7 @@ export function resolveRuntimeEnv(params: {
   return params.runtime ?? createLoggerBackedRuntime(params);
 }
 
-/** @deprecated Import from `NexisClaw/plugin-sdk/runtime` instead. */
+/** @deprecated Import from `GreenchClaw/plugin-sdk/runtime` instead. */
 export function resolveRuntimeEnvWithUnavailableExit(params: {
   runtime: RuntimeEnv;
   logger: LoggerLike;

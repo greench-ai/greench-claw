@@ -1,6 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolvePreferredNexisClawTmpDir, withTempWorkspace } from "NexisClaw/plugin-sdk/temp-path";
+import {
+  resolvePreferredGreenchClawTmpDir,
+  withTempWorkspace,
+} from "GreenchClaw/plugin-sdk/temp-path";
 import { describe, expect, it } from "vitest";
 import { normalizeUrlPath, resolveFileWithinRoot } from "./file-resolver.js";
 
@@ -8,7 +11,7 @@ type ResolvedFile = NonNullable<Awaited<ReturnType<typeof resolveFileWithinRoot>
 
 async function withCanvasTemp<T>(prefix: string, run: (dir: string) => Promise<T>): Promise<T> {
   return await withTempWorkspace(
-    { rootDir: resolvePreferredNexisClawTmpDir(), prefix },
+    { rootDir: resolvePreferredGreenchClawTmpDir(), prefix },
     async ({ dir }) => await run(dir),
   );
 }
@@ -31,7 +34,7 @@ describe("resolveFileWithinRoot", () => {
   });
 
   it("opens directory index files through the fs-safe root", async () => {
-    await withCanvasTemp("NexisClaw-canvas-resolver-", async (root) => {
+    await withCanvasTemp("GreenchClaw-canvas-resolver-", async (root) => {
       await fs.mkdir(path.join(root, "docs"), { recursive: true });
       await fs.writeFile(path.join(root, "docs", "index.html"), "<h1>docs</h1>");
 
@@ -46,14 +49,14 @@ describe("resolveFileWithinRoot", () => {
   });
 
   it("rejects traversal paths", async () => {
-    await withCanvasTemp("NexisClaw-canvas-resolver-", async (root) => {
+    await withCanvasTemp("GreenchClaw-canvas-resolver-", async (root) => {
       await expect(resolveFileWithinRoot(root, "/../outside.txt")).resolves.toBeNull();
     });
   });
 
   it.runIf(process.platform !== "win32")("rejects symlink entries", async () => {
-    await withCanvasTemp("NexisClaw-canvas-resolver-", async (root) => {
-      await withCanvasTemp("NexisClaw-canvas-resolver-outside-", async (outside) => {
+    await withCanvasTemp("GreenchClaw-canvas-resolver-", async (root) => {
+      await withCanvasTemp("GreenchClaw-canvas-resolver-outside-", async (outside) => {
         const target = path.join(outside, "outside.html");
         const link = path.join(root, "link.html");
         await fs.writeFile(target, "outside");

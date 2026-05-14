@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { AgentMessage } from "@earendil-works/pi-agent-core";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { sanitizeGoogleAssistantFirstOrdering } from "../../shared/google-turn-ordering.js";
 import { normalizeOptionalString } from "../../shared/string-coerce.js";
 import { truncateUtf16Safe } from "../../utils.js";
@@ -103,7 +103,7 @@ type TrimBootstrapResult = {
   originalLength: number;
 };
 
-export function resolveBootstrapMaxChars(cfg?: NexisClawConfig): number {
+export function resolveBootstrapMaxChars(cfg?: GreenchClawConfig): number {
   const raw = cfg?.agents?.defaults?.bootstrapMaxChars;
   if (typeof raw === "number" && Number.isFinite(raw) && raw > 0) {
     return Math.floor(raw);
@@ -111,7 +111,7 @@ export function resolveBootstrapMaxChars(cfg?: NexisClawConfig): number {
   return DEFAULT_BOOTSTRAP_MAX_CHARS;
 }
 
-export function resolveBootstrapTotalMaxChars(cfg?: NexisClawConfig): number {
+export function resolveBootstrapTotalMaxChars(cfg?: GreenchClawConfig): number {
   const raw = cfg?.agents?.defaults?.bootstrapTotalMaxChars;
   if (typeof raw === "number" && Number.isFinite(raw) && raw > 0) {
     return Math.floor(raw);
@@ -120,7 +120,7 @@ export function resolveBootstrapTotalMaxChars(cfg?: NexisClawConfig): number {
 }
 
 export function resolveBootstrapPromptTruncationWarningMode(
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
 ): "off" | "once" | "always" {
   const raw = cfg?.agents?.defaults?.bootstrapPromptTruncationWarning;
   if (raw === "off" || raw === "once" || raw === "always") {

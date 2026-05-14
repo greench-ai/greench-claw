@@ -1,9 +1,9 @@
 import fs from "node:fs";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import {
   registerSingleProviderPlugin,
   resolveProviderPluginChoice,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 
@@ -16,7 +16,7 @@ type RegisteredModelCatalogProvider = Parameters<
 
 function readManifest(): NvidiaManifest {
   return JSON.parse(
-    fs.readFileSync(new URL("./NexisClaw.plugin.json", import.meta.url), "utf8"),
+    fs.readFileSync(new URL("./GreenchClaw.plugin.json", import.meta.url), "utf8"),
   ) as NvidiaManifest;
 }
 

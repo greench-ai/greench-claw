@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { resolveAgentWorkspaceDir } from "../agents/agent-scope.js";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { resolveStateDir } from "../config/paths.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
@@ -23,7 +23,7 @@ type ModelRef = { provider: string; model: string };
 type EmbeddedPiPayloadResult = { payloads?: Array<{ text?: string }> };
 
 type CommitmentExtractionEnqueueInput = CommitmentScope & {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   nowMs?: number;
   userText: string;
   assistantText?: string;
@@ -33,10 +33,10 @@ type CommitmentExtractionEnqueueInput = CommitmentScope & {
 
 type CommitmentExtractionRuntime = {
   extractBatch?: (params: {
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
     items: CommitmentExtractionItem[];
   }) => Promise<CommitmentExtractionBatchResult>;
-  resolveDefaultModel?: (params: { cfg: NexisClawConfig; agentId?: string }) => ModelRef;
+  resolveDefaultModel?: (params: { cfg: GreenchClawConfig; agentId?: string }) => ModelRef;
   setTimer?: (callback: () => void, delayMs: number) => TimerHandle;
   clearTimer?: (timer: TimerHandle) => void;
   forceInTests?: boolean;
@@ -46,7 +46,8 @@ const log = createSubsystemLogger("commitments");
 const TERMINAL_EXTRACTION_FAILURE_COOLDOWN_MS = 15 * 60_000;
 
 let runtime: CommitmentExtractionRuntime = {};
-let queue: Array<Omit<CommitmentExtractionItem, "existingPending"> & { cfg?: NexisClawConfig }> = [];
+let queue: Array<Omit<CommitmentExtractionItem, "existingPending"> & { cfg?: GreenchClawConfig }> =
+  [];
 let timer: TimerHandle | null = null;
 let draining = false;
 let queueOverflowWarned = false;
@@ -202,7 +203,7 @@ function joinPayloadText(result: EmbeddedPiPayloadResult): string {
 }
 
 async function resolveDefaultModel(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
 }): Promise<ModelRef> {
   if (runtime.resolveDefaultModel) {
@@ -213,7 +214,7 @@ async function resolveDefaultModel(params: {
 }
 
 async function defaultExtractBatch(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   items: CommitmentExtractionItem[];
 }): Promise<CommitmentExtractionBatchResult> {
   const cfg = params.cfg ?? {};
@@ -251,7 +252,7 @@ async function defaultExtractBatch(params: {
 }
 
 async function hydrateBatch(
-  batch: Array<Omit<CommitmentExtractionItem, "existingPending"> & { cfg?: NexisClawConfig }>,
+  batch: Array<Omit<CommitmentExtractionItem, "existingPending"> & { cfg?: GreenchClawConfig }>,
 ): Promise<CommitmentExtractionItem[]> {
   return Promise.all(
     batch.map(async (item) =>

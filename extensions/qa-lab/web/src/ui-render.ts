@@ -759,14 +759,14 @@ function renderCaptureStartupStatusRow(status: CaptureStartupProbeStatus | null)
 
 function renderCaptureStartupInstructions(status: CaptureStartupStatus | null): string {
   const proxyStart = "pnpm proxy:start --port 7799";
-  const gatewayStart = `NEXISCLAW_DEBUG_PROXY_ENABLED=1 \\
-NEXISCLAW_DEBUG_PROXY_REQUIRE=1 \\
-NEXISCLAW_DEBUG_PROXY_URL=http://127.0.0.1:7799 \\
-pnpm NexisClaw gateway --port 18789 --bind loopback`;
+  const gatewayStart = `GREENCHCLAW_DEBUG_PROXY_ENABLED=1 \\
+GREENCHCLAW_DEBUG_PROXY_REQUIRE=1 \\
+GREENCHCLAW_DEBUG_PROXY_URL=http://127.0.0.1:7799 \\
+pnpm GreenchClaw gateway --port 18789 --bind loopback`;
   const qaStart = "pnpm qa:lab:ui --port 43124 --control-ui-url http://127.0.0.1:18789/";
   const caInstall = "pnpm proxy:install-ca";
   const caTrust =
-    "sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain /Users/thoffman/.NexisClaw/debug-proxy/certs/root-ca.pem";
+    "sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain /Users/thoffman/.GreenchClaw/debug-proxy/certs/root-ca.pem";
   return `<div class="capture-startup-state">
     <div class="capture-startup-title">Proxy capture is not running yet.</div>
     <div class="text-dimmed text-sm capture-startup-copy">

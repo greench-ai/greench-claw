@@ -1,6 +1,6 @@
 import { EventEmitter } from "node:events";
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { MALFORMED_STREAMING_FRAGMENT_ERROR_MESSAGE } from "../shared/assistant-error-format.js";
 import { getSlashCommands, parseCommand } from "./commands.js";
 import {
@@ -137,11 +137,11 @@ describe("resolveTuiSessionKey", () => {
 });
 
 describe("resolveInitialTuiAgentId", () => {
-  const cfg: NexisClawConfig = {
+  const cfg: GreenchClawConfig = {
     agents: {
       list: [
-        { id: "main", workspace: "/tmp/NexisClaw" },
-        { id: "ops", workspace: "/tmp/NexisClaw/projects/ops" },
+        { id: "main", workspace: "/tmp/GreenchClaw" },
+        { id: "ops", workspace: "/tmp/GreenchClaw/projects/ops" },
       ],
     },
   };
@@ -152,7 +152,7 @@ describe("resolveInitialTuiAgentId", () => {
         cfg,
         fallbackAgentId: "main",
         initialSessionInput: "",
-        cwd: "/tmp/NexisClaw/projects/ops/src",
+        cwd: "/tmp/GreenchClaw/projects/ops/src",
       }),
     ).toBe("ops");
   });
@@ -163,7 +163,7 @@ describe("resolveInitialTuiAgentId", () => {
         cfg,
         fallbackAgentId: "main",
         initialSessionInput: "agent:main:incident",
-        cwd: "/tmp/NexisClaw/projects/ops/src",
+        cwd: "/tmp/GreenchClaw/projects/ops/src",
       }),
     ).toBe("main");
   });
@@ -184,8 +184,8 @@ describe("resolveGatewayDisconnectState", () => {
   it("returns pairing recovery guidance when disconnect reason requires pairing", () => {
     const state = resolveGatewayDisconnectState("gateway closed (1008): pairing required");
     expect(state.connectionStatus).toContain("pairing required");
-    expect(state.activityStatus).toBe("pairing required: run NexisClaw devices list");
-    expect(state.pairingHint).toContain("NexisClaw devices list");
+    expect(state.activityStatus).toBe("pairing required: run GreenchClaw devices list");
+    expect(state.pairingHint).toContain("GreenchClaw devices list");
   });
 
   it("falls back to idle for generic disconnect reasons", () => {
@@ -440,7 +440,7 @@ describe("resolveLocalAuthCliInvocation", () => {
     expect(
       resolveLocalAuthCliInvocation({
         execPath: "/usr/bin/node",
-        wrapperPath: "/repo/NexisClaw.mjs",
+        wrapperPath: "/repo/GreenchClaw.mjs",
         runNodePath: "/repo/scripts/run-node.mjs",
         hasDistEntry: false,
         hasRunNodeScript: true,
@@ -455,14 +455,14 @@ describe("resolveLocalAuthCliInvocation", () => {
     expect(
       resolveLocalAuthCliInvocation({
         execPath: "/usr/bin/node",
-        wrapperPath: "/repo/NexisClaw.mjs",
+        wrapperPath: "/repo/GreenchClaw.mjs",
         runNodePath: "/repo/scripts/run-node.mjs",
         hasDistEntry: true,
         hasRunNodeScript: true,
       }),
     ).toEqual({
       command: "/usr/bin/node",
-      args: ["/repo/NexisClaw.mjs", "models", "auth", "login"],
+      args: ["/repo/GreenchClaw.mjs", "models", "auth", "login"],
     });
   });
 });
@@ -506,7 +506,7 @@ describe("resolveLocalAuthSpawnCwd", () => {
   it("runs the packaged wrapper from the repo root", () => {
     expect(
       resolveLocalAuthSpawnCwd({
-        args: ["/repo/NexisClaw.mjs", "models", "auth", "login"],
+        args: ["/repo/GreenchClaw.mjs", "models", "auth", "login"],
         defaultCwd: "/worktree/subdir",
       }),
     ).toBe("/repo");

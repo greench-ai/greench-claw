@@ -15,7 +15,7 @@ const internalHookMocks = vi.hoisted(() => ({
   triggerInternalHook: vi.fn(async () => undefined),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/hook-runtime", () => {
+vi.mock("GreenchClaw/plugin-sdk/hook-runtime", () => {
   return {
     createInternalHookEvent: internalHookMocks.createInternalHookEvent,
     fireAndForgetHook: (task: Promise<unknown>) => void task,
@@ -48,7 +48,7 @@ describe("telegram mention-skip silent ingest", () => {
         agents: {
           defaults: {
             model: "anthropic/sonnet-4.6",
-            workspace: "/tmp/NexisClaw",
+            workspace: "/tmp/GreenchClaw",
           },
         },
         channels: {
@@ -100,7 +100,7 @@ describe("telegram mention-skip silent ingest", () => {
         agents: {
           defaults: {
             model: "anthropic/sonnet-4.6",
-            workspace: "/tmp/NexisClaw",
+            workspace: "/tmp/GreenchClaw",
           },
         },
         channels: {

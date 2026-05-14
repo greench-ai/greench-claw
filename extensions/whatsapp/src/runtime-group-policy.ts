@@ -1,4 +1,4 @@
-import { resolveOpenProviderRuntimeGroupPolicy } from "NexisClaw/plugin-sdk/runtime-group-policy";
+import { resolveOpenProviderRuntimeGroupPolicy } from "GreenchClaw/plugin-sdk/runtime-group-policy";
 
 export function resolveWhatsAppRuntimeGroupPolicy(params: {
   providerConfigPresent: boolean;

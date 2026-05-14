@@ -39,7 +39,7 @@ vi.mock("../plugins/provider-runtime.js", async () => {
 let resolveProviderAuths: typeof import("./provider-usage.auth.js").resolveProviderAuths;
 
 async function withTempHome<T>(fn: (homeDir: string) => Promise<T>): Promise<T> {
-  const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-provider-usage-"));
+  const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-provider-usage-"));
   try {
     return await fn(homeDir);
   } finally {

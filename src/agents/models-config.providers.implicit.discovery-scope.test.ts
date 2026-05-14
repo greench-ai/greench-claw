@@ -72,7 +72,7 @@ describe("resolveImplicitProviders startup discovery scope", () => {
 
   it("passes startup provider scopes as plugin owner filters", async () => {
     await resolveImplicitProviders({
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
       config: {},
       env: {} as NodeJS.ProcessEnv,
       explicitProviders: {},
@@ -95,7 +95,7 @@ describe("resolveImplicitProviders startup discovery scope", () => {
 
   it("can keep startup discovery on provider discovery entries only", async () => {
     await resolveImplicitProviders({
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
       config: {},
       env: {} as NodeJS.ProcessEnv,
       explicitProviders: {},

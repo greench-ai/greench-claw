@@ -1,6 +1,8 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 
-export function makeModelFallbackCfg(overrides: Partial<NexisClawConfig> = {}): NexisClawConfig {
+export function makeModelFallbackCfg(
+  overrides: Partial<GreenchClawConfig> = {},
+): GreenchClawConfig {
   return {
     agents: {
       defaults: {
@@ -11,5 +13,5 @@ export function makeModelFallbackCfg(overrides: Partial<NexisClawConfig> = {}): 
       },
     },
     ...overrides,
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }

@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { listAgentWorkspaceDirs } from "../agents/workspace-dirs.js";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { SecurityAuditFinding } from "./audit.types.js";
 import { isPathInside } from "./scan-paths.js";
 
@@ -109,7 +109,7 @@ async function listWorkspaceSkillMarkdownFiles(
 }
 
 export async function collectWorkspaceSkillSymlinkEscapeFindings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   skillScanLimits?: WorkspaceSkillScanLimits;
 }): Promise<SecurityAuditFinding[]> {
   const findings: SecurityAuditFinding[] = [];

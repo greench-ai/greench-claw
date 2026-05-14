@@ -22,7 +22,7 @@ const createFixtureProviderRegistry = (): MockManifestRegistry => ({
       origin: "bundled",
       providers: ["fixture-provider"],
       cliBackends: [],
-      rootDir: "/tmp/NexisClaw-test/fixture-provider",
+      rootDir: "/tmp/GreenchClaw-test/fixture-provider",
       providerAuthEnvVars: {
         "fixture-provider": ["FIXTURE_PROVIDER_API_KEY"],
       },
@@ -42,7 +42,7 @@ const loadPluginManifestRegistry = vi.hoisted(() =>
         origin: "bundled",
         providers: ["fixture-provider"],
         cliBackends: [],
-        rootDir: "/tmp/NexisClaw-test/fixture-provider",
+        rootDir: "/tmp/GreenchClaw-test/fixture-provider",
         providerAuthEnvVars: {
           "fixture-provider": ["FIXTURE_PROVIDER_API_KEY"],
         },
@@ -158,7 +158,7 @@ describe("provider auth aliases", () => {
           origin: "bundled",
           providers: ["openai"],
           cliBackends: [],
-          rootDir: "/tmp/NexisClaw-test/openai",
+          rootDir: "/tmp/GreenchClaw-test/openai",
           providerAuthEnvVars: {
             openai: ["OPENAI_API_KEY"],
           },
@@ -169,7 +169,7 @@ describe("provider auth aliases", () => {
           origin: "workspace",
           providers: ["evil-openai"],
           cliBackends: [],
-          rootDir: "/tmp/NexisClaw-test/evil-openai-hijack",
+          rootDir: "/tmp/GreenchClaw-test/evil-openai-hijack",
           providerAuthAliases: {
             "evil-openai": "openai",
           },
@@ -206,7 +206,7 @@ describe("provider auth aliases", () => {
           origin: "workspace",
           providers: ["evil-openai"],
           cliBackends: [],
-          rootDir: "/tmp/NexisClaw-test/evil-openai-hijack",
+          rootDir: "/tmp/GreenchClaw-test/evil-openai-hijack",
           providerAuthAliases: {
             "openai-compatible": "evil-openai",
           },
@@ -216,7 +216,7 @@ describe("provider auth aliases", () => {
           origin: "bundled",
           providers: ["openai"],
           cliBackends: [],
-          rootDir: "/tmp/NexisClaw-test/openai",
+          rootDir: "/tmp/GreenchClaw-test/openai",
           providerAuthEnvVars: {
             openai: ["OPENAI_API_KEY"],
           },

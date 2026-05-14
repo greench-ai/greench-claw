@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "./config/config.js";
+import type { GreenchClawConfig } from "./config/config.js";
 import { isDefaultBrowserPluginEnabled } from "./plugin-enabled.js";
 import { createBrowserPluginService } from "./plugin-service.js";
 
 const SERVICE_CONTEXT = {
   config: {},
-  stateDir: "/tmp/NexisClaw-state",
+  stateDir: "/tmp/GreenchClaw-state",
   logger: console,
 };
 
@@ -70,7 +70,7 @@ describe("createBrowserPluginService", () => {
 
 describe("isDefaultBrowserPluginEnabled", () => {
   it("defaults to enabled", () => {
-    expect(isDefaultBrowserPluginEnabled({} as NexisClawConfig)).toBe(true);
+    expect(isDefaultBrowserPluginEnabled({} as GreenchClawConfig)).toBe(true);
   });
 
   it("respects explicit plugin disablement", () => {
@@ -83,7 +83,7 @@ describe("isDefaultBrowserPluginEnabled", () => {
             },
           },
         },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
     ).toBe(false);
   });
 });

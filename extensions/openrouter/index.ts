@@ -2,16 +2,16 @@ import {
   definePluginEntry,
   type ProviderResolveDynamicModelContext,
   type ProviderRuntimeModel,
-} from "NexisClaw/plugin-sdk/plugin-entry";
-import { createProviderApiKeyAuthMethod } from "NexisClaw/plugin-sdk/provider-auth-api-key";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "GreenchClaw/plugin-sdk/provider-auth-api-key";
 import {
   DEFAULT_CONTEXT_TOKENS,
   PASSTHROUGH_GEMINI_REPLAY_HOOKS,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
 import {
   getOpenRouterModelCapabilities,
   loadOpenRouterModelCapabilities,
-} from "NexisClaw/plugin-sdk/provider-stream-family";
+} from "GreenchClaw/plugin-sdk/provider-stream-family";
 import { buildOpenRouterImageGenerationProvider } from "./image-generation-provider.js";
 import { openrouterMediaUnderstandingProvider } from "./media-understanding-provider.js";
 import { applyOpenrouterConfig, OPENROUTER_DEFAULT_MODEL_REF } from "./onboard.js";

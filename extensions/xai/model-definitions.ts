@@ -1,5 +1,5 @@
-import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { ModelDefinitionConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { normalizeOptionalLowercaseString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 export const XAI_BASE_URL = "https://api.x.ai/v1";
 export const XAI_DEFAULT_IMAGE_MODEL = "grok-imagine-image";

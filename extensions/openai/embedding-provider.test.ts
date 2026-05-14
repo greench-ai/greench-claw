@@ -1,4 +1,4 @@
-import type { MemoryEmbeddingProviderCreateOptions } from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
+import type { MemoryEmbeddingProviderCreateOptions } from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -10,7 +10,7 @@ const mocks = vi.hoisted(() => ({
   })),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/memory-core-host-engine-embeddings", () => ({
+vi.mock("GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings", () => ({
   fetchRemoteEmbeddingVectors: mocks.fetchRemoteEmbeddingVectors,
   resolveRemoteEmbeddingClient: mocks.resolveRemoteEmbeddingClient,
 }));

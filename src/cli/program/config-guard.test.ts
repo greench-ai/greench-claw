@@ -21,7 +21,7 @@ function makeSnapshot() {
     valid: true,
     issues: [],
     legacyIssues: [],
-    path: "/tmp/NexisClaw.json",
+    path: "/tmp/GreenchClaw.json",
   };
 }
 
@@ -135,13 +135,13 @@ describe("ensureConfigReady", () => {
     const runtime = await runEnsureConfigReady(["message"]);
 
     expect(plainErrorCalls(runtime)).toEqual([
-      "NexisClaw config is invalid",
-      "File: /tmp/NexisClaw.json",
+      "GreenchClaw config is invalid",
+      "File: /tmp/GreenchClaw.json",
       "Problem:",
       "  - channels.quietchat: invalid",
       "",
-      `Fix: ${formatCliCommand("NexisClaw doctor --fix")}`,
-      `Inspect: ${formatCliCommand("NexisClaw config validate")}`,
+      `Fix: ${formatCliCommand("GreenchClaw doctor --fix")}`,
+      `Inspect: ${formatCliCommand("GreenchClaw config validate")}`,
       "Status, health, logs, and doctor commands still run with invalid config.",
     ]);
     expect(runtime.exit).toHaveBeenCalledWith(1);

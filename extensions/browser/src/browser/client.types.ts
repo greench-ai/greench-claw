@@ -10,7 +10,7 @@ type BrowserHeadlessSource =
 export type BrowserStatus = {
   enabled: boolean;
   profile?: string;
-  driver?: "NexisClaw" | "existing-session";
+  driver?: "GreenchClaw" | "existing-session";
   transport?: BrowserTransport;
   running: boolean;
   cdpReady?: boolean;

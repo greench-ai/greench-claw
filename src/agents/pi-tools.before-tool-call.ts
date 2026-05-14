@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { ToolLoopDetectionConfig } from "../config/types.tools.js";
 import {
   diagnosticErrorCategory,
@@ -53,7 +53,7 @@ export function isAbortSignalCancellation(err: unknown, signal?: AbortSignal): b
 
 export type HookContext = {
   agentId?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   /** Tool execution cwd for host-derived path facts. */
   cwd?: string;
   sessionKey?: string;

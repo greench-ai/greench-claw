@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   applyOpencodeZenModelDefault,
   OPENCODE_ZEN_DEFAULT_MODEL,
 } from "../plugin-sdk/opencode.js";
 
 function expectPrimaryModelChanged(
-  applied: { changed: boolean; next: NexisClawConfig },
+  applied: { changed: boolean; next: GreenchClawConfig },
   primary: string,
 ) {
   expect(applied.changed).toBe(true);
@@ -14,8 +14,8 @@ function expectPrimaryModelChanged(
 }
 
 function expectConfigUnchanged(
-  applied: { changed: boolean; next: NexisClawConfig },
-  cfg: NexisClawConfig,
+  applied: { changed: boolean; next: GreenchClawConfig },
+  cfg: GreenchClawConfig,
 ) {
   expect(applied.changed).toBe(false);
   expect(applied.next).toEqual(cfg);
@@ -23,7 +23,7 @@ function expectConfigUnchanged(
 
 describe("applyOpencodeZenModelDefault", () => {
   it("sets defaults when model is unset", () => {
-    const cfg: NexisClawConfig = { agents: { defaults: {} } };
+    const cfg: GreenchClawConfig = { agents: { defaults: {} } };
     const applied = applyOpencodeZenModelDefault(cfg);
     expectPrimaryModelChanged(applied, OPENCODE_ZEN_DEFAULT_MODEL);
   });
@@ -31,7 +31,7 @@ describe("applyOpencodeZenModelDefault", () => {
   it("overrides existing models", () => {
     const cfg = {
       agents: { defaults: { model: "anthropic/claude-opus-4-6" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const applied = applyOpencodeZenModelDefault(cfg);
     expectPrimaryModelChanged(applied, OPENCODE_ZEN_DEFAULT_MODEL);
   });
@@ -39,13 +39,13 @@ describe("applyOpencodeZenModelDefault", () => {
   it("no-ops when already legacy opencode-zen default", () => {
     const cfg = {
       agents: { defaults: { model: "opencode-zen/claude-opus-4-5" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const applied = applyOpencodeZenModelDefault(cfg);
     expectConfigUnchanged(applied, cfg);
   });
 
   it("preserves fallbacks when setting primary", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       agents: {
         defaults: {
           model: {
@@ -66,7 +66,7 @@ describe("applyOpencodeZenModelDefault", () => {
   it("no-ops when already on the current default", () => {
     const cfg = {
       agents: { defaults: { model: OPENCODE_ZEN_DEFAULT_MODEL } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const applied = applyOpencodeZenModelDefault(cfg);
     expectConfigUnchanged(applied, cfg);
   });

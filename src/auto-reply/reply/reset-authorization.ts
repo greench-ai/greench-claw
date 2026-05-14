@@ -1,11 +1,11 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { isInternalMessageChannel } from "../../utils/message-channel.js";
 import { resolveCommandAuthorization } from "../command-auth.js";
 import type { MsgContext } from "../templating.js";
 
 export function isResetAuthorizedForContext(params: {
   ctx: MsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   commandAuthorized: boolean;
 }): boolean {
   const auth = resolveCommandAuthorization(params);

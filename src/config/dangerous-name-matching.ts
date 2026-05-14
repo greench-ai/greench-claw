@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "./config.js";
+import type { GreenchClawConfig } from "./config.js";
 
 type DangerousNameMatchingConfig = {
   dangerouslyAllowNameMatching?: boolean;
@@ -43,7 +43,7 @@ export function resolveDangerousNameMatchingEnabled(
 }
 
 export function collectProviderDangerousNameMatchingScopes(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   provider: string,
 ): ProviderDangerousNameMatchingScope[] {
   const scopes: ProviderDangerousNameMatchingScope[] = [];

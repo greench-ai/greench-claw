@@ -1,6 +1,6 @@
 // Shared setup wizard/types/helpers for plugin and channel setup surfaces.
 
-export type { NexisClawConfig } from "../config/config.js";
+export type { GreenchClawConfig } from "../config/config.js";
 export type { DmPolicy, GroupPolicy } from "../config/types.js";
 export type { SecretInput } from "../config/types.secrets.js";
 export type {

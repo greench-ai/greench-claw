@@ -1,5 +1,5 @@
 import type { ChannelDirectoryEntryKind, ChannelId } from "../../channels/plugins/types.public.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { maybeResolvePluginMessagingTarget } from "./target-normalization.js";
 
 export type ResolvedIdLikeTarget = {
@@ -10,7 +10,7 @@ export type ResolvedIdLikeTarget = {
 };
 
 export async function maybeResolveIdLikeTarget(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: ChannelId;
   input: string;
   accountId?: string | null;

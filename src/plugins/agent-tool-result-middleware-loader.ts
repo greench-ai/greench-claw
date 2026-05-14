@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { getLoadedRuntimePluginRegistry } from "./active-runtime-registry.js";
 import type {
@@ -9,12 +9,12 @@ import {
   listAgentToolResultMiddlewares,
   normalizeAgentToolResultMiddlewareRuntimeIds,
 } from "./agent-tool-result-middleware.js";
-import { loadNexisClawPlugins } from "./loader.js";
+import { loadGreenchClawPlugins } from "./loader.js";
 import { loadPluginManifestRegistry, type PluginManifestRegistry } from "./manifest-registry.js";
 
 const log = createSubsystemLogger("plugins/agent-tool-result-middleware");
 
-async function resolveRuntimeConfig(): Promise<NexisClawConfig> {
+async function resolveRuntimeConfig(): Promise<GreenchClawConfig> {
   const { getRuntimeConfig } = await import("../config/config.js");
   return getRuntimeConfig();
 }
@@ -40,7 +40,7 @@ function listMiddlewareOwnerPluginIds(params: {
 
 export async function loadAgentToolResultMiddlewaresForRuntime(params: {
   runtime: AgentToolResultMiddlewareRuntime;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   manifestRegistry?: PluginManifestRegistry;
@@ -74,7 +74,7 @@ export async function loadAgentToolResultMiddlewaresForRuntime(params: {
         env,
         requiredPluginIds: pluginIds,
       }) ??
-      loadNexisClawPlugins({
+      loadGreenchClawPlugins({
         config,
         workspaceDir: params.workspaceDir,
         env,

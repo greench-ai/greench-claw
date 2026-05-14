@@ -200,7 +200,7 @@ describe("google prompt cache", () => {
         id: "entry-1",
         parentId: null,
         timestamp: new Date(1_000).toISOString(),
-        customType: "NexisClaw.google-prompt-cache",
+        customType: "GreenchClaw.google-prompt-cache",
         data: {
           status: "ready",
           timestamp: now,
@@ -265,7 +265,7 @@ describe("google prompt cache", () => {
         parentId: null,
         timestamp: new Date(now - 5_000).toISOString(),
         type: "custom",
-        customType: "NexisClaw.google-prompt-cache",
+        customType: "GreenchClaw.google-prompt-cache",
         data: {
           status: "ready",
           timestamp: now - 5_000,

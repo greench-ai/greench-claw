@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { AgentToolResult } from "@earendil-works/pi-agent-core";
 import type { ExtensionFactory, SessionManager } from "@earendil-works/pi-coding-agent";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { ProviderRuntimeModel } from "../../plugins/provider-runtime-model.types.js";
 import { resolveContextWindowInfo } from "../context-window-guard.js";
 import { DEFAULT_CONTEXT_TOKENS } from "../defaults.js";
@@ -69,7 +69,7 @@ function buildAgentToolResultMiddlewareFactory(): ExtensionFactory {
 }
 
 function resolveContextWindowTokens(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   provider: string;
   modelId: string;
   model: ProviderRuntimeModel | undefined;
@@ -85,7 +85,7 @@ function resolveContextWindowTokens(params: {
 }
 
 function buildContextPruningFactory(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   sessionManager: SessionManager;
   provider: string;
   modelId: string;
@@ -124,7 +124,7 @@ function buildContextPruningFactory(params: {
 }
 
 export function buildEmbeddedExtensionFactories(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   sessionManager: SessionManager;
   provider: string;
   modelId: string;

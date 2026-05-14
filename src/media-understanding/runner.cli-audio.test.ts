@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { CLI_OUTPUT_MAX_BUFFER } from "./defaults.constants.js";
 import { withAudioFixture } from "./runner.test-utils.js";
 
@@ -36,7 +36,7 @@ describe("media-understanding CLI audio entry", () => {
   it("applies per-request prompt and language overrides to CLI transcription templating", async () => {
     let mediaPath = "";
 
-    await withAudioFixture("NexisClaw-cli-audio", async ({ ctx, cache }) => {
+    await withAudioFixture("GreenchClaw-cli-audio", async ({ ctx, cache }) => {
       mediaPath = await fs.realpath(ctx.MediaPath);
 
       await runCliEntry({
@@ -59,7 +59,7 @@ describe("media-understanding CLI audio entry", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         ctx,
         attachmentIndex: 0,
         cache,

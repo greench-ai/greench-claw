@@ -26,7 +26,7 @@ describe("buildAgentSystemPrompt", () => {
       {
         name: "plain owner numbers",
         params: {
-          workspaceDir: "/tmp/NexisClaw",
+          workspaceDir: "/tmp/GreenchClaw",
           ownerNumbers: ["+123", " +456 ", ""],
         },
         expectAuthorizedSection: true,
@@ -38,7 +38,7 @@ describe("buildAgentSystemPrompt", () => {
       {
         name: "hashed owner numbers",
         params: {
-          workspaceDir: "/tmp/NexisClaw",
+          workspaceDir: "/tmp/GreenchClaw",
           ownerNumbers: ["+123", "+456", ""],
           ownerDisplay: "hash",
         },
@@ -50,7 +50,7 @@ describe("buildAgentSystemPrompt", () => {
       {
         name: "missing owners",
         params: {
-          workspaceDir: "/tmp/NexisClaw",
+          workspaceDir: "/tmp/GreenchClaw",
         },
         expectAuthorizedSection: false,
         contains: [],
@@ -79,14 +79,14 @@ describe("buildAgentSystemPrompt", () => {
 
   it("uses a stable, keyed HMAC when ownerDisplaySecret is provided", () => {
     const secretA = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       ownerNumbers: ["+123"],
       ownerDisplay: "hash",
       ownerDisplaySecret: "secret-key-A", // pragma: allowlist secret
     });
 
     const secretB = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       ownerNumbers: ["+123"],
       ownerDisplay: "hash",
       ownerDisplaySecret: "secret-key-B", // pragma: allowlist secret
@@ -104,7 +104,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("injects the current model identity into the runtime prompt", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       runtimeInfo: {
         agentId: "main",
         model: "openai/gpt-5.5",
@@ -118,14 +118,14 @@ describe("buildAgentSystemPrompt", () => {
 
   it("omits extended sections in minimal prompt mode", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       promptMode: "minimal",
       ownerNumbers: ["+123"],
       skillsPrompt:
         "<available_skills>\n  <skill>\n    <name>demo</name>\n  </skill>\n</available_skills>",
       heartbeatPrompt: "ping",
       toolNames: ["message", "memory_search"],
-      docsPath: "/tmp/NexisClaw/docs",
+      docsPath: "/tmp/GreenchClaw/docs",
       extraSystemPrompt: "Subagent details",
       ttsHint: "Voice (TTS) is enabled.",
     });
@@ -157,7 +157,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("can omit generic silent-reply guidance for channel-aware prompts", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       extraSystemPrompt: 'If no response is needed, reply with exactly "NO_REPLY".',
       silentReplyPromptMode: "none",
     });
@@ -171,7 +171,7 @@ describe("buildAgentSystemPrompt", () => {
     const skillsPrompt =
       "<available_skills>\n  <skill>\n    <name>demo</name>\n  </skill>\n</available_skills>";
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       promptMode: "minimal",
       skillsPrompt,
     });
@@ -183,7 +183,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("omits skills in minimal prompt mode when skillsPrompt is absent", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       promptMode: "minimal",
     });
 
@@ -192,7 +192,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("avoids the Claude subscription classifier wording in reply tag guidance", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
     });
 
     expect(prompt).toContain("## Assistant Output Directives");
@@ -203,7 +203,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("omits the heartbeat section when no heartbeat prompt is provided", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       promptMode: "full",
       heartbeatPrompt: undefined,
     });
@@ -215,7 +215,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("includes safety guardrails in full prompts", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
     });
 
     expect(prompt).toContain("## Safety");
@@ -229,7 +229,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("includes voice hint when provided", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       ttsHint: "Voice (TTS) is enabled.",
     });
 
@@ -239,7 +239,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("adds reasoning tag hint when enabled", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       reasoningTagHint: true,
     });
 
@@ -248,23 +248,23 @@ describe("buildAgentSystemPrompt", () => {
     expect(prompt).toContain("<final>...</final>");
   });
 
-  it("includes an NexisClaw control section", () => {
+  it("includes an GreenchClaw control section", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
     });
 
-    expect(prompt).toContain("## NexisClaw Control");
+    expect(prompt).toContain("## GreenchClaw Control");
     expect(prompt).toContain("prefer `gateway` tool");
     expect(prompt).toContain("CLI lifecycle only on explicit user request");
-    expect(prompt).toContain("NexisClaw gateway status|restart|start|stop");
+    expect(prompt).toContain("GreenchClaw gateway status|restart|start|stop");
     expect(prompt).toContain("`restart`, not stop+start");
     expect(prompt).toContain("Do not invent commands");
   });
 
   it("points agents to config field docs and broader configuration docs", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
-      docsPath: "/tmp/NexisClaw/docs",
+      workspaceDir: "/tmp/GreenchClaw",
+      docsPath: "/tmp/GreenchClaw/docs",
     });
 
     expect(prompt).toContain("Config fields:");
@@ -275,7 +275,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("guides runtime completion events without exposing internal metadata", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
     });
 
     expect(prompt).toContain("Runtime-generated completion events may ask for a user update.");
@@ -285,7 +285,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("does not include embed guidance in the default global prompt", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
     });
 
     expect(prompt).not.toContain("## Control UI Embed");
@@ -294,7 +294,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("includes embed guidance only for webchat sessions", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       runtimeInfo: {
         channel: "webchat",
       },
@@ -304,7 +304,7 @@ describe("buildAgentSystemPrompt", () => {
     expect(prompt).toContain("Use `[embed ...]` only in Control UI/webchat sessions");
     expect(prompt).toContain('[embed ref="cv_123" title="Status" height="320" /]');
     expect(prompt).toContain(
-      '[embed url="/__NexisClaw__/canvas/documents/cv_123/index.html" title="Status" height="320" /]',
+      '[embed url="/__GreenchClaw__/canvas/documents/cv_123/index.html" title="Status" height="320" /]',
     );
     expect(prompt).toContain(
       "Never use local filesystem paths or `file://...` URLs in `[embed ...]`.",
@@ -317,7 +317,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("guides subagent workflows to avoid polling loops", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
     });
 
     expect(prompt).toContain(
@@ -333,11 +333,11 @@ describe("buildAgentSystemPrompt", () => {
 
   it("only mentions sessions_yield wait guidance when the tool is available", () => {
     const withoutYield = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn", "subagents"],
     });
     const withYield = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn", "sessions_yield", "subagents"],
     });
 
@@ -347,7 +347,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("lists available tools when provided", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["exec", "sessions_list", "sessions_history", "sessions_send"],
     });
 
@@ -359,7 +359,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("uses provider-neutral web_search prompt metadata", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["web_search"],
     });
 
@@ -369,7 +369,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("documents ACP sessions_spawn agent targeting requirements", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn"],
       acpEnabled: true,
     });
@@ -383,7 +383,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("guides harness requests to ACP thread-bound spawns", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn", "subagents", "agents_list", "exec"],
       nativeCommandGuidanceLines: [
         "Native Codex app-server plugin is available (`/codex ...`). For Codex bind/control/thread/resume/steer/stop requests, prefer `/codex bind`, `/codex threads`, `/codex resume`, `/codex steer`, and `/codex stop` over ACP.",
@@ -415,7 +415,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("omits ACP thread-spawn guidance when the runtime capability is absent", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn", "exec"],
       acpEnabled: true,
       runtimeInfo: {
@@ -433,7 +433,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("omits ACP harness guidance when ACP is disabled", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn", "subagents", "agents_list", "exec"],
       acpEnabled: false,
     });
@@ -445,12 +445,14 @@ describe("buildAgentSystemPrompt", () => {
     expect(prompt).not.toContain('runtime="acp" requires `agentId`');
     expect(prompt).not.toContain("not ACP harness ids");
     expect(prompt).toContain("- sessions_spawn: Spawn an isolated sub-agent session");
-    expect(prompt).toContain("- agents_list: List NexisClaw agent ids allowed for sessions_spawn");
+    expect(prompt).toContain(
+      "- agents_list: List GreenchClaw agent ids allowed for sessions_spawn",
+    );
   });
 
   it("omits ACP harness spawn guidance for sandboxed sessions and shows ACP block note", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn", "subagents", "agents_list", "exec"],
       acpEnabled: true,
       sandboxInfo: {
@@ -473,11 +475,11 @@ describe("buildAgentSystemPrompt", () => {
 
   it("preserves tool casing in the prompt", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["Read", "Exec", "process"],
       skillsPrompt:
         "<available_skills>\n  <skill>\n    <name>demo</name>\n  </skill>\n</available_skills>",
-      docsPath: "/tmp/NexisClaw/docs",
+      docsPath: "/tmp/GreenchClaw/docs",
     });
 
     expect(prompt).toContain("- Read: Read file contents");
@@ -486,21 +488,21 @@ describe("buildAgentSystemPrompt", () => {
       "Scan <available_skills>. If one clearly applies, read its SKILL.md at exact <location> with `Read`, then follow it.",
     );
     expect(prompt).toContain("If several apply, choose the most specific.");
-    expect(prompt).toContain("Docs: /tmp/NexisClaw/docs");
-    expect(prompt).toContain("NexisClaw behavior/config/architecture: read local docs first.");
+    expect(prompt).toContain("Docs: /tmp/GreenchClaw/docs");
+    expect(prompt).toContain("GreenchClaw behavior/config/architecture: read local docs first.");
   });
 
   it("includes docs guidance when docsPath is provided", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
-      docsPath: "/tmp/NexisClaw/docs",
-      sourcePath: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
+      docsPath: "/tmp/GreenchClaw/docs",
+      sourcePath: "/tmp/GreenchClaw",
     });
 
     expect(prompt).toContain("## Documentation");
-    expect(prompt).toContain("Docs: /tmp/NexisClaw/docs");
-    expect(prompt).toContain("Source: /tmp/NexisClaw");
-    expect(prompt).toContain("NexisClaw behavior/config/architecture: read local docs first.");
+    expect(prompt).toContain("Docs: /tmp/GreenchClaw/docs");
+    expect(prompt).toContain("Source: /tmp/GreenchClaw");
+    expect(prompt).toContain("GreenchClaw behavior/config/architecture: read local docs first.");
     expect(prompt).toContain("If docs are stale/incomplete, inspect local source.");
   });
 
@@ -509,14 +511,14 @@ describe("buildAgentSystemPrompt", () => {
       workspaceDir: "/tmp/work",
     });
 
-    expect(prompt).toContain("Docs: https://docs.NexisClaw.ai");
-    expect(prompt).toContain("Source: https://github.com/NexisClaw/NexisClaw");
+    expect(prompt).toContain("Docs: https://docs.GreenchClaw.ai");
+    expect(prompt).toContain("Source: https://github.com/GreenchClaw/GreenchClaw");
     expect(prompt).toContain("If docs are stale/incomplete, inspect GitHub source.");
   });
 
   it("includes workspace notes when provided", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       workspaceNotes: ["Reminder: commit your changes in this workspace after edits."],
     });
 
@@ -525,21 +527,21 @@ describe("buildAgentSystemPrompt", () => {
 
   it("includes bootstrap instructions in system prompt when bootstrap is pending", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       bootstrapMode: "full",
-      contextFiles: [{ path: "/tmp/NexisClaw/BOOTSTRAP.md", content: "Ask who I am." }],
+      contextFiles: [{ path: "/tmp/GreenchClaw/BOOTSTRAP.md", content: "Ask who I am." }],
     });
 
     expect(prompt).toContain("## Bootstrap Pending");
     expect(prompt).toContain("BOOTSTRAP.md is included below in Project Context");
     expect(prompt).toContain("must follow BOOTSTRAP.md, not a generic greeting");
-    expect(prompt).toContain("## /tmp/NexisClaw/BOOTSTRAP.md");
+    expect(prompt).toContain("## /tmp/GreenchClaw/BOOTSTRAP.md");
     expect(prompt).toContain("Ask who I am.");
   });
 
   it("includes bootstrap truncation notice in system prompt without raw diagnostics", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       bootstrapTruncationNotice:
         "[Bootstrap truncation warning]\nSome workspace bootstrap files were truncated before Project Context injection.\nTreat Project Context as partial and read the relevant files directly if details seem missing.",
     });
@@ -556,7 +558,7 @@ describe("buildAgentSystemPrompt", () => {
       {
         name: "12-hour",
         params: {
-          workspaceDir: "/tmp/NexisClaw",
+          workspaceDir: "/tmp/GreenchClaw",
           userTimezone: "America/Chicago",
           userTime: "Monday, January 5th, 2026 — 3:26 PM",
           userTimeFormat: "12" as const,
@@ -565,7 +567,7 @@ describe("buildAgentSystemPrompt", () => {
       {
         name: "24-hour",
         params: {
-          workspaceDir: "/tmp/NexisClaw",
+          workspaceDir: "/tmp/GreenchClaw",
           userTimezone: "America/Chicago",
           userTime: "Monday, January 5th, 2026 — 15:26",
           userTimeFormat: "24" as const,
@@ -574,7 +576,7 @@ describe("buildAgentSystemPrompt", () => {
       {
         name: "timezone-only",
         params: {
-          workspaceDir: "/tmp/NexisClaw",
+          workspaceDir: "/tmp/GreenchClaw",
           userTimezone: "America/Chicago",
           userTimeFormat: "24" as const,
         },
@@ -625,7 +627,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("includes model alias guidance when aliases are provided", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       modelAliasLines: [
         "- Opus: anthropic/claude-opus-4-5",
         "- Sonnet: anthropic/claude-sonnet-4-6",
@@ -639,11 +641,11 @@ describe("buildAgentSystemPrompt", () => {
 
   it("adds ClaudeBot self-update guidance when gateway tool is available", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["gateway", "exec"],
     });
 
-    expect(prompt).toContain("## NexisClaw Self-Update");
+    expect(prompt).toContain("## GreenchClaw Self-Update");
     expect(prompt).toContain("config.schema.lookup");
     expect(prompt).toContain("config.apply");
     expect(prompt).toContain("config.patch");
@@ -655,7 +657,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("includes skills guidance when skills prompt is present", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       skillsPrompt:
         "<available_skills>\n  <skill>\n    <name>demo</name>\n  </skill>\n</available_skills>",
     });
@@ -669,7 +671,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("appends available skills when provided", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       skillsPrompt:
         "<available_skills>\n  <skill>\n    <name>demo</name>\n  </skill>\n</available_skills>",
     });
@@ -680,7 +682,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("omits skills section when no skills prompt is provided", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
     });
 
     expect(prompt).not.toContain("## Skills");
@@ -689,7 +691,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("renders project context files when provided", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       contextFiles: [
         { path: "AGENTS.md", content: "Alpha" },
         { path: "IDENTITY.md", content: "Bravo" },
@@ -705,7 +707,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("ignores context files with missing or blank paths", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       contextFiles: [
         { path: undefined as unknown as string, content: "Missing path" },
         { path: "   ", content: "Blank path" },
@@ -722,7 +724,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("adds SOUL guidance when a soul file is present", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       contextFiles: [
         { path: "./SOUL.md", content: "Persona" },
         { path: "dir\\SOUL.md", content: "Persona Windows" },
@@ -736,7 +738,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("omits project context when no context files are injected", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       contextFiles: [],
     });
 
@@ -745,7 +747,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("summarizes the message tool when available", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["message"],
     });
     const channelOptions = listDeliverableMessageChannels().join("|");
@@ -762,7 +764,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("keeps channel choice guidance lean when message sends have a source channel", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["message"],
       runtimeInfo: {
         channel: "telegram",
@@ -778,19 +780,19 @@ describe("buildAgentSystemPrompt", () => {
 
   it("gates sub-agent orchestration guidance on available tools", () => {
     const messagingPrompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["message", "sessions_send"],
     });
     const spawnOnlyPrompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn"],
     });
     const orchestrationPrompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn", "subagents"],
     });
     const orchestrationWaitPrompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn", "sessions_yield", "subagents"],
     });
 
@@ -811,11 +813,11 @@ describe("buildAgentSystemPrompt", () => {
 
   it("adds stronger sub-agent delegation guidance in prefer mode", () => {
     const defaultPrompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn", "subagents"],
     });
     const preferPrompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn", "subagents"],
       subagentDelegationMode: "prefer",
     });
@@ -836,7 +838,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("omits prefer delegation guidance when sessions_spawn is unavailable", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["subagents"],
       subagentDelegationMode: "prefer",
     });
@@ -847,7 +849,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("reapplies provider prompt contributions", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       promptContribution: {
         stablePrefix: "## Provider Stable\n\nStable guidance.",
         dynamicSuffix: "## Provider Dynamic\n\nDynamic guidance.",
@@ -865,7 +867,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("includes inline button style guidance when runtime supports inline buttons", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["message"],
       runtimeInfo: {
         channel: "telegram",
@@ -879,7 +881,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("uses Slack interactive reply hints instead of generic inline button config guidance", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["message"],
       runtimeInfo: {
         channel: "slack",
@@ -899,7 +901,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("describes message-tool-only source delivery without requiring target", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["message"],
       sourceReplyDeliveryMode: "message_tool_only",
       runtimeInfo: {
@@ -921,7 +923,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("suppresses plain chat approval commands when inline approval UI is available", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       runtimeInfo: {
         channel: "telegram",
         capabilities: ["inlineButtons"],
@@ -934,7 +936,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("suppresses plain chat approval commands for native approval channels", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       runtimeInfo: {
         channel: "slack",
       },
@@ -946,7 +948,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("keeps approval slug guidance separate from command previews", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       runtimeInfo: {
         channel: "discord",
       },
@@ -961,7 +963,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("includes runtime provider capabilities when present", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       runtimeInfo: {
         channel: "telegram",
         capabilities: ["inlineButtons"],
@@ -974,7 +976,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("canonicalizes runtime provider capabilities before rendering", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       runtimeInfo: {
         channel: "telegram",
         capabilities: [" InlineButtons ", "voice", "inlinebuttons", "Voice"],
@@ -988,7 +990,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("includes agent id in runtime when provided", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       runtimeInfo: {
         agentId: "work",
         host: "host",
@@ -1004,7 +1006,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("includes reasoning visibility hint", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       reasoningLevel: "off",
     });
 
@@ -1044,7 +1046,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("renders extra system prompt exactly once", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       extraSystemPrompt: "Custom runtime context",
     });
 
@@ -1054,7 +1056,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("describes sandboxed runtime and elevated when allowed", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       sandboxInfo: {
         enabled: true,
         workspaceDir: "/tmp/sandbox",
@@ -1067,7 +1069,7 @@ describe("buildAgentSystemPrompt", () => {
 
     expect(prompt).toContain("Your working directory is: /workspace");
     expect(prompt).toContain(
-      "For read/write/edit/apply_patch, file paths resolve against host workspace: /tmp/NexisClaw. For bash/exec commands, use sandbox container paths under /workspace (or relative paths from that workdir), not host paths.",
+      "For read/write/edit/apply_patch, file paths resolve against host workspace: /tmp/GreenchClaw. For bash/exec commands, use sandbox container paths under /workspace (or relative paths from that workdir), not host paths.",
     );
     expect(prompt).toContain("Sandbox container workdir: /workspace");
     expect(prompt).toContain(
@@ -1081,7 +1083,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("does not advertise /elevated full when auto-approved full access is unavailable", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       sandboxInfo: {
         enabled: true,
         workspaceDir: "/tmp/sandbox",
@@ -1110,7 +1112,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("includes reaction guidance when provided", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       reactionGuidance: {
         level: "minimal",
         channel: "Telegram",
@@ -1123,7 +1125,7 @@ describe("buildAgentSystemPrompt", () => {
 
   it("keeps stable project context before volatile channel guidance for prefix-cache reuse", () => {
     const prompt = buildAgentSystemPrompt({
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["message"],
       runtimeInfo: {
         channel: "telegram",
@@ -1193,7 +1195,7 @@ describe("buildAgentBootstrapSystemPromptSupplement", () => {
     const sections = buildAgentBootstrapSystemPromptSections({
       bootstrapMode: "full",
       bootstrapTruncationNotice: "Bootstrap context was truncated.",
-      contextFiles: [{ path: "/tmp/NexisClaw/BOOTSTRAP.md", content: "Ask who I am." }],
+      contextFiles: [{ path: "/tmp/GreenchClaw/BOOTSTRAP.md", content: "Ask who I am." }],
       includeProjectContext: false,
     }).join("\n");
 
@@ -1201,19 +1203,19 @@ describe("buildAgentBootstrapSystemPromptSupplement", () => {
     expect(sections).toContain("BOOTSTRAP.md is included below in Project Context");
     expect(sections).toContain("## Bootstrap Context Notice");
     expect(sections).toContain("Bootstrap context was truncated.");
-    expect(sections).not.toContain("## /tmp/NexisClaw/BOOTSTRAP.md");
+    expect(sections).not.toContain("## /tmp/GreenchClaw/BOOTSTRAP.md");
     expect(sections).not.toContain("Ask who I am.");
   });
 
   it("adds pending bootstrap guidance and BOOTSTRAP.md contents for override prompts", () => {
     const supplement = buildAgentBootstrapSystemPromptSupplement({
       bootstrapMode: "full",
-      contextFiles: [{ path: "/tmp/NexisClaw/BOOTSTRAP.md", content: "Ask who I am." }],
+      contextFiles: [{ path: "/tmp/GreenchClaw/BOOTSTRAP.md", content: "Ask who I am." }],
     });
 
     expect(supplement).toContain("## Bootstrap Pending");
     expect(supplement).toContain("BOOTSTRAP.md is included below in Project Context");
-    expect(supplement).toContain("## /tmp/NexisClaw/BOOTSTRAP.md");
+    expect(supplement).toContain("## /tmp/GreenchClaw/BOOTSTRAP.md");
     expect(supplement).toContain("Ask who I am.");
   });
 
@@ -1223,7 +1225,7 @@ describe("buildAgentBootstrapSystemPromptSupplement", () => {
       bootstrapMode: "full",
       bootstrapTruncationNotice:
         "[Bootstrap truncation warning]\nSome workspace bootstrap files were truncated before Project Context injection.\nTreat Project Context as partial and read the relevant files directly if details seem missing.",
-      contextFiles: [{ path: "/tmp/NexisClaw/BOOTSTRAP.md", content: "Ask who I am." }],
+      contextFiles: [{ path: "/tmp/GreenchClaw/BOOTSTRAP.md", content: "Ask who I am." }],
     });
 
     expect(prompt).toContain("Custom override prompt.");
@@ -1253,8 +1255,8 @@ describe("buildSubagentSystemPrompt", () => {
     expect(prompt).toContain("For ACP harness sessions (claudecode/gemini/opencode");
     expect(prompt).toContain("set `agentId` unless `acp.defaultAgent` is configured");
     expect(prompt).toContain("Do not ask users to run slash commands or CLI");
-    expect(prompt).toContain("Do not use `exec` (`NexisClaw ...`, `acpx ...`)");
-    expect(prompt).toContain("Use `subagents` only for NexisClaw subagents");
+    expect(prompt).toContain("Do not use `exec` (`GreenchClaw ...`, `acpx ...`)");
+    expect(prompt).toContain("Use `subagents` only for GreenchClaw subagents");
     expect(prompt).toContain("Subagent results auto-announce back to you");
     expect(prompt).toContain(
       "After spawning children, do NOT call sessions_list, sessions_history, exec sleep, or any polling tool.",

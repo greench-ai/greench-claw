@@ -1,14 +1,17 @@
-import { resolveNormalizedAccountEntry } from "NexisClaw/plugin-sdk/account-core";
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import { formatAllowFromLowercase } from "NexisClaw/plugin-sdk/allow-from";
+import { resolveNormalizedAccountEntry } from "GreenchClaw/plugin-sdk/account-core";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import { formatAllowFromLowercase } from "GreenchClaw/plugin-sdk/allow-from";
 import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
-} from "NexisClaw/plugin-sdk/channel-config-helpers";
-import { createChannelPluginBase, type ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import { getChatChannelMeta } from "NexisClaw/plugin-sdk/channel-plugin-common";
-import type { NexisClawConfig, TelegramAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import { createChannelPluginBase, type ChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import { getChatChannelMeta } from "GreenchClaw/plugin-sdk/channel-plugin-common";
+import type {
+  GreenchClawConfig,
+  TelegramAccountConfig,
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/routing";
 import { inspectTelegramAccount } from "./account-inspect.js";
 import {
   listTelegramAccountIds,
@@ -38,7 +41,7 @@ type TelegramConfigAccessorAccount = {
 };
 
 export function findTelegramTokenOwnerAccountId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
 }): string | null {
   const normalizedAccountId = normalizeAccountId(params.accountId);
@@ -83,9 +86,9 @@ export function formatDuplicateTelegramTokenReason(params: {
  *   2. The config has an explicit `accounts` section with entries, AND
  *   3. The accountId is not found in that `accounts` section.
  *
- * See: https://github.com/NexisClaw/NexisClaw/issues/53876
+ * See: https://github.com/GreenchClaw/GreenchClaw/issues/53876
  */
-function isBlockedByMultiBotGuard(cfg: NexisClawConfig, accountId: string): boolean {
+function isBlockedByMultiBotGuard(cfg: GreenchClawConfig, accountId: string): boolean {
   if (normalizeAccountId(accountId) === DEFAULT_ACCOUNT_ID) {
     return false;
   }
@@ -105,7 +108,7 @@ function isBlockedByMultiBotGuard(cfg: NexisClawConfig, accountId: string): bool
 }
 
 function resolveTelegramConfigAccessorAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): TelegramConfigAccessorAccount {
   const accountId = normalizeAccountId(
@@ -193,7 +196,7 @@ export function createTelegramPluginBase(params: {
         // channel-level fallback paths not available in resolveTelegramAccount.
         // This ensures binding-created accountIds that inherit the channel-level
         // token are correctly detected as configured.
-        // See: https://github.com/NexisClaw/NexisClaw/issues/53876
+        // See: https://github.com/GreenchClaw/GreenchClaw/issues/53876
         if (isBlockedByMultiBotGuard(cfg, account.accountId)) {
           return false;
         }

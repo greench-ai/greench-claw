@@ -1,22 +1,22 @@
 import { createHmac } from "node:crypto";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { safeEqualSecret } from "NexisClaw/plugin-sdk/security-runtime";
+import { safeEqualSecret } from "GreenchClaw/plugin-sdk/security-runtime";
 import {
   normalizeOptionalString,
   normalizeStringifiedOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { getMattermostRuntime } from "../runtime.js";
 import { updateMattermostPost, type MattermostClient, type MattermostPost } from "./client.js";
 import {
   isTrustedProxyAddress,
   readRequestBodyWithLimit,
   resolveClientIp,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "./runtime-api.js";
 
 const INTERACTION_MAX_BODY_BYTES = 64 * 1024;
 const INTERACTION_BODY_TIMEOUT_MS = 10_000;
-const SIGNED_CHANNEL_ID_CONTEXT_KEY = "__NexisClaw_channel_id";
+const SIGNED_CHANNEL_ID_CONTEXT_KEY = "__GreenchClaw_channel_id";
 
 /**
  * Mattermost interactive message callback payload.
@@ -69,7 +69,7 @@ export function getInteractionCallbackUrl(accountId: string): string | undefined
   return callbackUrls.get(accountId);
 }
 
-type InteractionCallbackConfig = Pick<NexisClawConfig, "gateway" | "channels"> & {
+type InteractionCallbackConfig = Pick<GreenchClawConfig, "gateway" | "channels"> & {
   interactions?: {
     callbackBaseUrl?: string;
   };
@@ -174,7 +174,7 @@ const interactionSecrets = new Map<string, string>();
 let defaultInteractionSecret: string | undefined;
 
 function deriveInteractionSecret(botToken: string): string {
-  return createHmac("sha256", "NexisClaw-mattermost-interactions").update(botToken).digest("hex");
+  return createHmac("sha256", "GreenchClaw-mattermost-interactions").update(botToken).digest("hex");
 }
 
 export function setInteractionSecret(accountIdOrBotToken: string, botToken?: string): void {

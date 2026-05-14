@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 
 type SignalDaemonOpts = {
   cliPath: string;

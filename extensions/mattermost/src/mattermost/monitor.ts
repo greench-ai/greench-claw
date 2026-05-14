@@ -1,17 +1,20 @@
 import {
   defineFinalizableLivePreviewAdapter,
   deliverWithFinalizableLivePreviewAdapter,
-} from "NexisClaw/plugin-sdk/channel-message";
-import { resolveChannelStreamingPreviewToolProgress } from "NexisClaw/plugin-sdk/channel-streaming";
-import { isLoopbackHost } from "NexisClaw/plugin-sdk/gateway-runtime";
-import { createClaimableDedupe, type ClaimableDedupe } from "NexisClaw/plugin-sdk/persistent-dedupe";
-import { isReasoningReplyPayload } from "NexisClaw/plugin-sdk/reply-payload";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "NexisClaw/plugin-sdk/security-runtime";
-import { isPrivateNetworkOptInEnabled } from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/channel-message";
+import { resolveChannelStreamingPreviewToolProgress } from "GreenchClaw/plugin-sdk/channel-streaming";
+import { isLoopbackHost } from "GreenchClaw/plugin-sdk/gateway-runtime";
+import {
+  createClaimableDedupe,
+  type ClaimableDedupe,
+} from "GreenchClaw/plugin-sdk/persistent-dedupe";
+import { isReasoningReplyPayload } from "GreenchClaw/plugin-sdk/reply-payload";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "GreenchClaw/plugin-sdk/security-runtime";
+import { isPrivateNetworkOptInEnabled } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { getMattermostRuntime } from "../runtime.js";
 import {
   resolveMattermostAccount,
@@ -71,7 +74,7 @@ import { deliverMattermostReplyPayload } from "./reply-delivery.js";
 import type {
   ChannelAccountSnapshot,
   ChatType,
-  NexisClawConfig,
+  GreenchClawConfig,
   ReplyPayload,
   RuntimeEnv,
 } from "./runtime-api.js";
@@ -110,7 +113,7 @@ export type MonitorMattermostOpts = {
   botToken?: string;
   baseUrl?: string;
   accountId?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   runtime?: RuntimeEnv;
   abortSignal?: AbortSignal;
   statusSink?: (patch: Partial<ChannelAccountSnapshot>) => void;
@@ -464,7 +467,7 @@ function buildMattermostWsUrl(baseUrl: string): string {
 export async function monitorMattermostProvider(opts: MonitorMattermostOpts = {}): Promise<void> {
   const core = getMattermostRuntime();
   const runtime = resolveRuntime(opts);
-  const cfg = (opts.config ?? core.config.current()) as NexisClawConfig;
+  const cfg = (opts.config ?? core.config.current()) as GreenchClawConfig;
   const account = resolveMattermostAccount({
     cfg,
     accountId: opts.accountId,
@@ -610,7 +613,7 @@ export async function monitorMattermostProvider(opts: MonitorMattermostOpts = {}
               message: post.message ?? "",
               props: post.props ?? undefined,
             },
-            ephemeral_text: `NexisClaw ignored this action for ${decision.roomLabel}.`,
+            ephemeral_text: `GreenchClaw ignored this action for ${decision.roomLabel}.`,
           },
         };
       },

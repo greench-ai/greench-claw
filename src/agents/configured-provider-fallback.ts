@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 
 type ProviderModelRef = {
   provider: string;
@@ -6,7 +6,7 @@ type ProviderModelRef = {
 };
 
 export function resolveConfiguredProviderFallback(params: {
-  cfg: Pick<NexisClawConfig, "models">;
+  cfg: Pick<GreenchClawConfig, "models">;
   defaultProvider: string;
   defaultModel?: string;
 }): ProviderModelRef | null {

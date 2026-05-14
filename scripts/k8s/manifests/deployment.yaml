@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: NexisClaw
+  name: GreenchClaw
   labels:
-    app: NexisClaw
+    app: GreenchClaw
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: NexisClaw
+      app: GreenchClaw
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: NexisClaw
+        app: GreenchClaw
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -29,9 +29,9 @@ spec:
             - sh
             - -c
             - |
-              cp /config/NexisClaw.json /home/node/.NexisClaw/NexisClaw.json
-              mkdir -p /home/node/.NexisClaw/workspace
-              cp /config/AGENTS.md /home/node/.NexisClaw/workspace/AGENTS.md
+              cp /config/GreenchClaw.json /home/node/.GreenchClaw/GreenchClaw.json
+              mkdir -p /home/node/.GreenchClaw/workspace
+              cp /config/AGENTS.md /home/node/.GreenchClaw/workspace/AGENTS.md
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
@@ -43,13 +43,13 @@ spec:
               memory: 64Mi
               cpu: 100m
           volumeMounts:
-            - name: NexisClaw-home
-              mountPath: /home/node/.NexisClaw
+            - name: GreenchClaw-home
+              mountPath: /home/node/.GreenchClaw
             - name: config
               mountPath: /config
       containers:
         - name: gateway
-          image: ghcr.io/NexisClaw/NexisClaw:slim
+          image: ghcr.io/GreenchClaw/GreenchClaw:slim
           imagePullPolicy: IfNotPresent
           command:
             - node
@@ -63,37 +63,37 @@ spec:
           env:
             - name: HOME
               value: /home/node
-            - name: NEXISCLAW_CONFIG_DIR
-              value: /home/node/.NexisClaw
+            - name: GREENCHCLAW_CONFIG_DIR
+              value: /home/node/.GreenchClaw
             - name: NODE_ENV
               value: production
-            - name: NEXISCLAW_GATEWAY_TOKEN
+            - name: GREENCHCLAW_GATEWAY_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: NexisClaw-secrets
-                  key: NEXISCLAW_GATEWAY_TOKEN
+                  name: GreenchClaw-secrets
+                  key: GREENCHCLAW_GATEWAY_TOKEN
             - name: ANTHROPIC_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: NexisClaw-secrets
+                  name: GreenchClaw-secrets
                   key: ANTHROPIC_API_KEY
                   optional: true
             - name: OPENAI_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: NexisClaw-secrets
+                  name: GreenchClaw-secrets
                   key: OPENAI_API_KEY
                   optional: true
             - name: GEMINI_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: NexisClaw-secrets
+                  name: GreenchClaw-secrets
                   key: GEMINI_API_KEY
                   optional: true
             - name: OPENROUTER_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: NexisClaw-secrets
+                  name: GreenchClaw-secrets
                   key: OPENROUTER_API_KEY
                   optional: true
           resources:
@@ -122,8 +122,8 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
           volumeMounts:
-            - name: NexisClaw-home
-              mountPath: /home/node/.NexisClaw
+            - name: GreenchClaw-home
+              mountPath: /home/node/.GreenchClaw
             - name: tmp-volume
               mountPath: /tmp
           securityContext:
@@ -136,11 +136,11 @@ spec:
               drop:
                 - ALL
       volumes:
-        - name: NexisClaw-home
+        - name: GreenchClaw-home
           persistentVolumeClaim:
-            claimName: NexisClaw-home-pvc
+            claimName: GreenchClaw-home-pvc
         - name: config
           configMap:
-            name: NexisClaw-config
+            name: GreenchClaw-config
         - name: tmp-volume
           emptyDir: {}

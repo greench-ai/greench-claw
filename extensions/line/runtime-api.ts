@@ -4,28 +4,28 @@
 export type {
   ChannelAccountSnapshot,
   ChannelPlugin,
-  NexisClawConfig,
-  NexisClawPluginApi,
+  GreenchClawConfig,
+  GreenchClawPluginApi,
   PluginRuntime,
-} from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/core";
 export type {
   ChannelGatewayContext,
   ChannelStatusIssue,
-} from "NexisClaw/plugin-sdk/channel-contract";
-export { clearAccountEntryFields } from "NexisClaw/plugin-sdk/core";
-export { buildChannelConfigSchema } from "NexisClaw/plugin-sdk/channel-config-schema";
-export type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
-export type { ChannelSetupDmPolicy, ChannelSetupWizard } from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+export { clearAccountEntryFields } from "GreenchClaw/plugin-sdk/core";
+export { buildChannelConfigSchema } from "GreenchClaw/plugin-sdk/channel-config-schema";
+export type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-runtime";
+export type { ChannelSetupDmPolicy, ChannelSetupWizard } from "GreenchClaw/plugin-sdk/setup";
 export {
   buildComputedAccountStatusSnapshot,
   buildTokenChannelStatusSummary,
-} from "NexisClaw/plugin-sdk/status-helpers";
+} from "GreenchClaw/plugin-sdk/status-helpers";
 export {
   DEFAULT_ACCOUNT_ID,
   formatDocsLink,
   setSetupChannelEnabled,
   splitSetupEntries,
-} from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/setup";
 export { setLineRuntime } from "./src/runtime.js";
 export { firstDefined, normalizeAllowFrom } from "./src/bot-access.js";
 export { downloadLineMedia } from "./src/download.js";

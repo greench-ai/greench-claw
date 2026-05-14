@@ -1,5 +1,5 @@
 ---
-summary: "Adds xAI model provider support to NexisClaw."
+summary: "Adds xAI model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the xai plugin
 title: "xAI plugin"
@@ -7,12 +7,12 @@ title: "xAI plugin"
 
 # xAI plugin
 
-Adds xAI model provider support to NexisClaw.
+Adds xAI model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/xai-plugin`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/xai-plugin`
+- Install route: included in GreenchClaw
 
 ## Surface
 

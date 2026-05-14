@@ -1,14 +1,14 @@
 import { randomUUID } from "node:crypto";
 import { Agent as HttpsAgent } from "node:https";
-import * as httpsProxyAgent from "https-proxy-agent";
-import type { DiscordAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   captureWsEvent,
   resolveEffectiveDebugProxyUrl,
   resolveDebugProxySettings,
-} from "NexisClaw/plugin-sdk/proxy-capture";
-import { danger } from "NexisClaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/proxy-capture";
+import { danger } from "GreenchClaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
+import * as httpsProxyAgent from "https-proxy-agent";
 import * as ws from "ws";
 import * as discordGateway from "../internal/gateway.js";
 import { createDiscordDnsLookup } from "../network-config.js";
@@ -70,7 +70,7 @@ function hasGatewaySocketStarted(plugin: discordGateway.GatewayPlugin): boolean 
 }
 
 type ResolveDiscordGatewayIntentsParams = {
-  intentsConfig?: import("NexisClaw/plugin-sdk/config-contracts").DiscordIntentsConfig;
+  intentsConfig?: import("GreenchClaw/plugin-sdk/config-contracts").DiscordIntentsConfig;
   voiceEnabled?: boolean;
 };
 
@@ -110,7 +110,7 @@ function createGatewayPlugin(params: {
   runtime?: RuntimeEnv;
   testing?: GatewayPluginTestingOptions;
 }): discordGateway.GatewayPlugin {
-  class NexisClawGatewayPlugin extends discordGateway.GatewayPlugin {
+  class GreenchClawGatewayPlugin extends discordGateway.GatewayPlugin {
     private gatewayInfoUsedFallback = false;
 
     constructor() {
@@ -227,7 +227,7 @@ function createGatewayPlugin(params: {
     }
   }
 
-  return new NexisClawGatewayPlugin();
+  return new GreenchClawGatewayPlugin();
 }
 
 function createDiscordGatewayMetadataFetch(debugCaptureEnabled: boolean): DiscordGatewayFetch {
@@ -290,7 +290,7 @@ export function createDiscordGatewayPlugin(params: {
     options: {
       reconnect: { maxAttempts: 50 },
       intents,
-      // NexisClaw registers its own async interaction listener.
+      // GreenchClaw registers its own async interaction listener.
       autoInteractions: false,
     },
     gatewayInfoTimeoutMs,

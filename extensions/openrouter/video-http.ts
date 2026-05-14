@@ -1,4 +1,4 @@
-import { fetchWithTimeoutGuarded } from "NexisClaw/plugin-sdk/provider-http";
+import { fetchWithTimeoutGuarded } from "GreenchClaw/plugin-sdk/provider-http";
 
 type GuardedFetchResult = Awaited<ReturnType<typeof fetchWithTimeoutGuarded>>;
 type FetchGuardOptions = NonNullable<Parameters<typeof fetchWithTimeoutGuarded>[4]>;

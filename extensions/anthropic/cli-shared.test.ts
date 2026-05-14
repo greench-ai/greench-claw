@@ -90,7 +90,7 @@ describe("resolveClaudeCliExecutionArgs", () => {
     ).toEqual(["-p", "--output-format", "stream-json"]);
   });
 
-  it("maps NexisClaw thinking levels to Claude effort args", () => {
+  it("maps GreenchClaw thinking levels to Claude effort args", () => {
     expect(
       resolveClaudeCliExecutionArgs({
         workspaceDir: "/tmp",
@@ -172,7 +172,7 @@ describe("normalizeClaudeBackendConfig", () => {
     expect(normalized.input).toBe("stdin");
   });
 
-  it("derives Claude bypass from NexisClaw YOLO policy and disables it for safer policy", () => {
+  it("derives Claude bypass from GreenchClaw YOLO policy and disables it for safer policy", () => {
     expect(resolveClaudePermissionMode({ backendId: "claude-cli" })).toEqual({
       mode: "bypassPermissions",
       overrideExisting: false,
@@ -185,7 +185,7 @@ describe("normalizeClaudeBackendConfig", () => {
     ).toEqual({ overrideExisting: false });
   });
 
-  it("derives Claude bypass from per-agent NexisClaw exec policy", () => {
+  it("derives Claude bypass from per-agent GreenchClaw exec policy", () => {
     expect(
       resolveClaudePermissionMode({
         backendId: "claude-cli",

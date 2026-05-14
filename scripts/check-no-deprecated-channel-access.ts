@@ -46,7 +46,7 @@ const RULES: Rule[] = [
   },
   {
     label: "deprecated group access compatibility module",
-    pattern: /from\s+["']NexisClaw\/plugin-sdk\/group-access["']/u,
+    pattern: /from\s+["']GreenchClaw\/plugin-sdk\/group-access["']/u,
   },
   {
     label: "deprecated command authorization helper",
@@ -54,7 +54,7 @@ const RULES: Rule[] = [
   },
   {
     label: "deprecated command auth SDK facade",
-    pattern: /from\s+["']NexisClaw\/plugin-sdk\/command-auth["']/u,
+    pattern: /from\s+["']GreenchClaw\/plugin-sdk\/command-auth["']/u,
   },
   {
     label: "deprecated AccessFacts command authorizers",

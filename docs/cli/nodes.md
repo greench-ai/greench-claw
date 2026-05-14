@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `NexisClaw nodes` (status, pairing, invoke, camera/canvas/screen)"
+summary: "CLI reference for `GreenchClaw nodes` (status, pairing, invoke, camera/canvas/screen)"
 read_when:
   - You're managing paired nodes (cameras, screen, canvas)
   - You need to approve requests or invoke node commands
 title: "Nodes"
 ---
 
-# `NexisClaw nodes`
+# `GreenchClaw nodes`
 
 Manage paired nodes (devices) and invoke node capabilities.
 
@@ -23,17 +23,17 @@ Common options:
 ## Common commands
 
 ```bash
-NexisClaw nodes list
-NexisClaw nodes list --connected
-NexisClaw nodes list --last-connected 24h
-NexisClaw nodes pending
-NexisClaw nodes approve <requestId>
-NexisClaw nodes reject <requestId>
-NexisClaw nodes remove --node <id|name|ip>
-NexisClaw nodes rename --node <id|name|ip> --name <displayName>
-NexisClaw nodes status
-NexisClaw nodes status --connected
-NexisClaw nodes status --last-connected 24h
+GreenchClaw nodes list
+GreenchClaw nodes list --connected
+GreenchClaw nodes list --last-connected 24h
+GreenchClaw nodes pending
+GreenchClaw nodes approve <requestId>
+GreenchClaw nodes reject <requestId>
+GreenchClaw nodes remove --node <id|name|ip>
+GreenchClaw nodes rename --node <id|name|ip> --name <displayName>
+GreenchClaw nodes status
+GreenchClaw nodes status --connected
+GreenchClaw nodes status --last-connected 24h
 ```
 
 `nodes list` prints pending/paired tables. Paired rows include the most recent connect age (Last Connect).
@@ -43,11 +43,11 @@ Use `nodes remove --node <id|name|ip>` to delete a stale gateway-owned node pair
 
 Approval note:
 
-- `NexisClaw nodes pending` only needs pairing scope.
+- `GreenchClaw nodes pending` only needs pairing scope.
 - `gateway.nodes.pairing.autoApproveCidrs` can skip the pending step only for
   explicitly trusted, first-time `role: node` device pairing. It is off by
   default and does not approve upgrades.
-- `NexisClaw nodes approve <requestId>` inherits extra scope requirements from the
+- `GreenchClaw nodes approve <requestId>` inherits extra scope requirements from the
   pending request:
   - commandless request: pairing only
   - non-exec node commands: pairing + write
@@ -56,7 +56,7 @@ Approval note:
 ## Invoke
 
 ```bash
-NexisClaw nodes invoke --node <id|name|ip> --command <command> --params <json>
+GreenchClaw nodes invoke --node <id|name|ip> --command <command> --params <json>
 ```
 
 Invoke flags:
@@ -66,9 +66,9 @@ Invoke flags:
 - `--idempotency-key <key>`: optional idempotency key.
 - `system.run` and `system.run.prepare` are blocked here; use the `exec` tool with `host=node` for shell execution.
 
-For shell execution on a node, use the `exec` tool with `host=node` instead of `NexisClaw nodes run`.
+For shell execution on a node, use the `exec` tool with `host=node` instead of `GreenchClaw nodes run`.
 The `nodes` CLI is now capability-focused: direct RPC via `nodes invoke`, plus pairing, camera,
-screen, location, Canvas, and notifications. Canvas commands are implemented by the bundled experimental Canvas plugin; core keeps a compatibility hook so they remain under `NexisClaw nodes canvas`.
+screen, location, Canvas, and notifications. Canvas commands are implemented by the bundled experimental Canvas plugin; core keeps a compatibility hook so they remain under `GreenchClaw nodes canvas`.
 
 ## Related
 

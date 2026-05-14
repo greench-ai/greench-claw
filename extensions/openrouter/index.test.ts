@@ -1,11 +1,11 @@
 import {
   registerProviderPlugin,
   registerSingleProviderPlugin,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import {
   expectPassthroughReplayPolicy,
   expectUnifiedModelCatalogProviderRegistration,
-} from "NexisClaw/plugin-sdk/provider-test-contracts";
+} from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { describe, expect, it, vi } from "vitest";
 import openrouterPlugin from "./index.js";
 import {

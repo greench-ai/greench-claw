@@ -25,22 +25,22 @@ function readBundledPluginPackageJson(packageJsonPath) {
 
 function isManifestlessBundledRuntimeSupportPackage(params) {
   const packageName = typeof params.packageJson?.name === "string" ? params.packageJson.name : "";
-  if (packageName !== `@NexisClaw/${params.dirName}`) {
+  if (packageName !== `@GreenchClaw/${params.dirName}`) {
     return false;
   }
   return params.topLevelPublicSurfaceEntries.length > 0;
 }
 
 export function collectPluginSourceEntries(packageJson) {
-  let packageEntries = Array.isArray(packageJson?.NexisClaw?.extensions)
-    ? packageJson.NexisClaw.extensions.filter(
+  let packageEntries = Array.isArray(packageJson?.GreenchClaw?.extensions)
+    ? packageJson.GreenchClaw.extensions.filter(
         (entry) => typeof entry === "string" && entry.trim().length > 0,
       )
     : [];
   const setupEntry =
-    typeof packageJson?.NexisClaw?.setupEntry === "string" &&
-    packageJson.NexisClaw.setupEntry.trim().length > 0
-      ? packageJson.NexisClaw.setupEntry
+    typeof packageJson?.GreenchClaw?.setupEntry === "string" &&
+    packageJson.GreenchClaw.setupEntry.trim().length > 0
+      ? packageJson.GreenchClaw.setupEntry
       : undefined;
   if (setupEntry) {
     packageEntries = Array.from(new Set([...packageEntries, setupEntry]));
@@ -94,7 +94,7 @@ export function collectBundledPluginBuildEntries(params = {}) {
     }
 
     const pluginDir = path.join(extensionsRoot, dirent.name);
-    const manifestPath = path.join(pluginDir, "NexisClaw.plugin.json");
+    const manifestPath = path.join(pluginDir, "GreenchClaw.plugin.json");
     const hasManifest = fs.existsSync(manifestPath);
     const packageJsonPath = path.join(pluginDir, "package.json");
     const packageJson = readBundledPluginPackageJson(packageJsonPath);
@@ -178,7 +178,7 @@ export function listBundledPluginPackArtifacts(params = {}) {
 
   for (const { id, hasManifest, hasPackageJson, sourceEntries } of entries) {
     if (hasManifest) {
-      artifacts.add(bundledDistPluginFile(id, "NexisClaw.plugin.json"));
+      artifacts.add(bundledDistPluginFile(id, "GreenchClaw.plugin.json"));
     }
     if (hasPackageJson) {
       artifacts.add(bundledDistPluginFile(id, "package.json"));

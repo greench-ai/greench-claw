@@ -13,7 +13,7 @@ const WORKFLOW_PATH = ".github/workflows/website-installer-sync.yml";
 describe("website installer sync workflow", () => {
   const workflow = readFileSync(WORKFLOW_PATH, "utf8");
 
-  it("treats all website installer scripts as NexisClaw-owned inputs", () => {
+  it("treats all website installer scripts as GreenchClaw-owned inputs", () => {
     for (const path of ["scripts/install.sh", "scripts/install-cli.sh", "scripts/install.ps1"]) {
       expect(workflow).toContain(path);
       expect(detectInstallSmokeScope([path]).runFullInstallSmoke).toBe(true);
@@ -24,14 +24,14 @@ describe("website installer sync workflow", () => {
     expect(workflow).toContain("linux-docker:");
     expect(workflow).toContain("docker run --rm");
     expect(workflow).toContain("bash /tmp/install.sh --no-prompt --no-onboard");
-    expect(workflow).toContain("bash /tmp/install-cli.sh --prefix /tmp/NexisClaw");
+    expect(workflow).toContain("bash /tmp/install-cli.sh --prefix /tmp/GreenchClaw");
     expect(workflow).toContain("macos-installer:");
     expect(workflow).toContain("runs-on: macos-latest");
     expect(workflow).toContain("node-version: 24");
-    expect(workflow).toContain('NEXISCLAW_NO_ONBOARD: "1"');
-    expect(workflow).toContain('NEXISCLAW_NO_PROMPT: "1"');
+    expect(workflow).toContain('GREENCHCLAW_NO_ONBOARD: "1"');
+    expect(workflow).toContain('GREENCHCLAW_NO_PROMPT: "1"');
     expect(workflow).toContain("bash scripts/install.sh --no-onboard --no-prompt --version latest");
-    expect(workflow).toContain("NexisClaw --version");
+    expect(workflow).toContain("GreenchClaw --version");
     expect(workflow).toContain("windows-installer:");
     expect(workflow).toContain("runs-on: windows-latest");
     expect(workflow).toContain(".\\scripts\\install.ps1 -DryRun");
@@ -39,16 +39,20 @@ describe("website installer sync workflow", () => {
     expect(workflow).not.toContain(".\\scripts\\install.cmd");
   });
 
-  it("syncs verified scripts to NexisClaw.ai only after all installer checks pass", () => {
+  it("syncs verified scripts to GreenchClaw.ai only after all installer checks pass", () => {
     expect(workflow).toContain("needs: [static, linux-docker, macos-installer, windows-installer]");
-    expect(workflow).toContain("repository: NexisClaw/NexisClaw.ai");
-    expect(workflow).toContain("token: ${{ secrets.NEXISCLAW_GH_TOKEN }}");
-    expect(workflow).toContain("cp NexisClaw/scripts/install.sh NexisClaw.ai/public/install.sh");
+    expect(workflow).toContain("repository: GreenchClaw/GreenchClaw.ai");
+    expect(workflow).toContain("token: ${{ secrets.GREENCHCLAW_GH_TOKEN }}");
     expect(workflow).toContain(
-      "cp NexisClaw/scripts/install-cli.sh NexisClaw.ai/public/install-cli.sh",
+      "cp GreenchClaw/scripts/install.sh GreenchClaw.ai/public/install.sh",
     );
-    expect(workflow).toContain("cp NexisClaw/scripts/install.ps1 NexisClaw.ai/public/install.ps1");
-    expect(workflow).toContain("rm -f NexisClaw.ai/public/install.cmd");
+    expect(workflow).toContain(
+      "cp GreenchClaw/scripts/install-cli.sh GreenchClaw.ai/public/install-cli.sh",
+    );
+    expect(workflow).toContain(
+      "cp GreenchClaw/scripts/install.ps1 GreenchClaw.ai/public/install.ps1",
+    );
+    expect(workflow).toContain("rm -f GreenchClaw.ai/public/install.cmd");
     expect(workflow).toContain("bun run build");
     expect(workflow).toContain("git push origin HEAD:main");
   });

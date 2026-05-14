@@ -1,31 +1,31 @@
 import fs from "node:fs";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { tokenjuiceFactory, createTokenjuiceNexisClawEmbeddedExtension } = vi.hoisted(() => {
+const { tokenjuiceFactory, createTokenjuiceGreenchClawEmbeddedExtension } = vi.hoisted(() => {
   const tokenjuiceFactory = vi.fn();
-  const createTokenjuiceNexisClawEmbeddedExtension = vi.fn(() => tokenjuiceFactory);
+  const createTokenjuiceGreenchClawEmbeddedExtension = vi.fn(() => tokenjuiceFactory);
   return {
     tokenjuiceFactory,
-    createTokenjuiceNexisClawEmbeddedExtension,
+    createTokenjuiceGreenchClawEmbeddedExtension,
   };
 });
 
 vi.mock("./runtime-api.js", () => ({
-  createTokenjuiceNexisClawEmbeddedExtension,
+  createTokenjuiceGreenchClawEmbeddedExtension,
 }));
 
 import plugin from "./index.js";
 
 describe("tokenjuice bundled plugin", () => {
   beforeEach(() => {
-    createTokenjuiceNexisClawEmbeddedExtension.mockClear();
+    createTokenjuiceGreenchClawEmbeddedExtension.mockClear();
     tokenjuiceFactory.mockClear();
   });
 
   it("is opt-in by default", () => {
     const manifest = JSON.parse(
-      fs.readFileSync(new URL("./NexisClaw.plugin.json", import.meta.url), "utf8"),
+      fs.readFileSync(new URL("./GreenchClaw.plugin.json", import.meta.url), "utf8"),
     ) as { enabledByDefault?: unknown };
 
     expect(manifest.enabledByDefault).toBeUndefined();
@@ -46,7 +46,7 @@ describe("tokenjuice bundled plugin", () => {
       }),
     );
 
-    expect(createTokenjuiceNexisClawEmbeddedExtension).toHaveBeenCalledTimes(1);
+    expect(createTokenjuiceGreenchClawEmbeddedExtension).toHaveBeenCalledTimes(1);
     expect(tokenjuiceFactory).toHaveBeenCalledTimes(1);
     const registration = registerAgentToolResultMiddleware.mock.calls.at(0);
     expect(typeof registration?.[0]).toBe("function");

@@ -2,7 +2,7 @@
 summary: "Scheduled jobs, webhooks, and Gmail PubSub triggers for the Gateway scheduler"
 read_when:
   - Scheduling background jobs or wakeups
-  - Wiring external triggers (webhooks, Gmail) into NexisClaw
+  - Wiring external triggers (webhooks, Gmail) into GreenchClaw
   - Deciding between heartbeat and cron for scheduled tasks
 title: "Scheduled tasks"
 sidebarTitle: "Scheduled tasks"
@@ -15,7 +15,7 @@ Cron is the Gateway's built-in scheduler. It persists jobs, wakes the agent at t
 <Steps>
   <Step title="Add a one-shot reminder">
     ```bash
-    NexisClaw cron add \
+    GreenchClaw cron add \
       --name "Reminder" \
       --at "2026-02-01T16:00:00Z" \
       --session main \
@@ -26,14 +26,14 @@ Cron is the Gateway's built-in scheduler. It persists jobs, wakes the agent at t
   </Step>
   <Step title="Check your jobs">
     ```bash
-    NexisClaw cron list
-    NexisClaw cron get <job-id>
-    NexisClaw cron show <job-id>
+    GreenchClaw cron list
+    GreenchClaw cron get <job-id>
+    GreenchClaw cron show <job-id>
     ```
   </Step>
   <Step title="See run history">
     ```bash
-    NexisClaw cron runs --id <job-id>
+    GreenchClaw cron runs --id <job-id>
     ```
   </Step>
 </Steps>
@@ -41,16 +41,16 @@ Cron is the Gateway's built-in scheduler. It persists jobs, wakes the agent at t
 ## How cron works
 
 - Cron runs **inside the Gateway** process (not inside the model).
-- Job definitions persist at `~/.NexisClaw/cron/jobs.json` so restarts do not lose schedules.
-- Runtime execution state persists next to it in `~/.NexisClaw/cron/jobs-state.json`. If you track cron definitions in git, track `jobs.json` and gitignore `jobs-state.json`.
-- After the split, older NexisClaw versions can read `jobs.json` but may treat jobs as fresh because runtime fields now live in `jobs-state.json`.
-- When `jobs.json` is edited while the Gateway is running or stopped, NexisClaw compares the changed schedule fields with pending runtime slot metadata and clears stale `nextRunAtMs` values. Pure formatting or key-order-only rewrites preserve the pending slot.
+- Job definitions persist at `~/.GreenchClaw/cron/jobs.json` so restarts do not lose schedules.
+- Runtime execution state persists next to it in `~/.GreenchClaw/cron/jobs-state.json`. If you track cron definitions in git, track `jobs.json` and gitignore `jobs-state.json`.
+- After the split, older GreenchClaw versions can read `jobs.json` but may treat jobs as fresh because runtime fields now live in `jobs-state.json`.
+- When `jobs.json` is edited while the Gateway is running or stopped, GreenchClaw compares the changed schedule fields with pending runtime slot metadata and clears stale `nextRunAtMs` values. Pure formatting or key-order-only rewrites preserve the pending slot.
 - All cron executions create [background task](/automation/tasks) records.
 - On Gateway startup, overdue isolated agent-turn jobs are rescheduled out of the channel-connect window instead of replaying immediately, so Discord/Telegram startup and native-command setup stay responsive after restarts.
 - One-shot jobs (`--at`) auto-delete after success by default.
 - Isolated cron runs best-effort close tracked browser tabs/processes for their `cron:<jobId>` session when the run completes, so detached browser automation does not leave orphaned processes behind.
 - Isolated cron runs that receive the narrow cron self-cleanup grant can still read scheduler status, a self-filtered list of their current job, and that job's run history, so status/heartbeat checks can inspect their own schedule without gaining broader cron mutation access.
-- Isolated cron runs also guard against stale acknowledgement replies. If the first result is just an interim status update (`on it`, `pulling everything together`, and similar hints) and no descendant subagent run is still responsible for the final answer, NexisClaw re-prompts once for the actual result before delivery.
+- Isolated cron runs also guard against stale acknowledgement replies. If the first result is just an interim status update (`on it`, `pulling everything together`, and similar hints) and no descendant subagent run is still responsible for the final answer, GreenchClaw re-prompts once for the actual result before delivery.
 - Isolated cron runs prefer structured execution-denial metadata from the embedded run, then fall back to known final summary/output markers such as `SYSTEM_RUN_DENIED` and `INVALID_REQUEST`, so a blocked command is not reported as a green run.
 - Isolated cron runs also treat run-level agent failures as job errors even when no reply payload is produced, so model/provider failures increment error counters and trigger failure notifications instead of clearing the job as successful.
 - When an isolated agent-turn job reaches `timeoutSeconds`, cron aborts the underlying agent run and gives it a short cleanup window. If the run does not drain, Gateway-owned cleanup force-clears that run's session ownership before cron records the timeout, so queued chat work is not left behind a stale processing session.
@@ -84,7 +84,7 @@ Cron expressions are parsed by [croner](https://github.com/Hexagon/croner). When
 0 9 15 * 1
 ```
 
-This fires ~5–6 times per month instead of 0–1 times per month. NexisClaw uses Croner's default OR behavior here. To require both conditions, use Croner's `+` day-of-week modifier (`0 9 15 * +1`) or schedule on one field and guard the other in your job's prompt or command.
+This fires ~5–6 times per month instead of 0–1 times per month. GreenchClaw uses Croner's default OR behavior here. To require both conditions, use Croner's `+` day-of-week modifier (`0 9 15 * +1`) or schedule on one field and guard the other in your job's prompt or command.
 
 ## Execution styles
 
@@ -100,7 +100,7 @@ This fires ~5–6 times per month instead of 0–1 times per month. NexisClaw us
     **Main session** jobs enqueue a system event and optionally wake the heartbeat (`--wake now` or `--wake next-heartbeat`). Those system events do not extend daily/idle reset freshness for the target session. **Isolated** jobs run a dedicated agent turn with a fresh session. **Custom sessions** (`session:xxx`) persist context across runs, enabling workflows like daily standups that build on previous summaries.
   </Accordion>
   <Accordion title="What 'fresh session' means for isolated jobs">
-    For isolated jobs, "fresh session" means a new transcript/session id for each run. NexisClaw may carry safe preferences such as thinking/fast/verbose settings, labels, and explicit user-selected model/auth overrides, but it does not inherit ambient conversation context from an older cron row: channel/group routing, send or queue policy, elevation, origin, or ACP runtime binding. Use `current` or `session:<id>` when a recurring job should deliberately build on the same conversation context.
+    For isolated jobs, "fresh session" means a new transcript/session id for each run. GreenchClaw may carry safe preferences such as thinking/fast/verbose settings, labels, and explicit user-selected model/auth overrides, but it does not inherit ambient conversation context from an older cron row: channel/group routing, send or queue policy, elevation, origin, or ACP runtime binding. Use `current` or `session:<id>` when a recurring job should deliberately build on the same conversation context.
   </Accordion>
   <Accordion title="Runtime cleanup">
     For isolated jobs, runtime teardown now includes best-effort browser cleanup for that cron session. Cleanup failures are ignored so the actual cron result still wins.
@@ -109,9 +109,9 @@ This fires ~5–6 times per month instead of 0–1 times per month. NexisClaw us
 
   </Accordion>
   <Accordion title="Subagent and Discord delivery">
-    When isolated cron runs orchestrate subagents, delivery also prefers the final descendant output over stale parent interim text. If descendants are still running, NexisClaw suppresses that partial parent update instead of announcing it.
+    When isolated cron runs orchestrate subagents, delivery also prefers the final descendant output over stale parent interim text. If descendants are still running, GreenchClaw suppresses that partial parent update instead of announcing it.
 
-    For text-only Discord announce targets, NexisClaw sends the canonical final assistant text once instead of replaying both streamed/intermediate text payloads and the final answer. Media and structured Discord payloads are still delivered as separate payloads so attachments and components are not dropped.
+    For text-only Discord announce targets, GreenchClaw sends the canonical final assistant text once instead of replaying both streamed/intermediate text payloads and the final answer. Media and structured Discord payloads are still delivered as separate payloads so attachments and components are not dropped.
 
   </Accordion>
 </AccordionGroup>
@@ -136,7 +136,7 @@ This fires ~5–6 times per month instead of 0–1 times per month. NexisClaw us
 
 `--model` uses the selected allowed model as that job's primary model. It is not the same as a chat-session `/model` override: configured fallback chains still apply when the job primary fails. If the requested model is not allowed or cannot be resolved, cron fails the run with an explicit validation error instead of silently falling back to the job's agent/default model selection.
 
-Cron jobs can also carry payload-level `fallbacks`. When present, that list replaces the configured fallback chain for the job. Use `fallbacks: []` in the job payload/API when you want a strict cron run that tries only the selected model. If a job has `--model` but neither payload nor configured fallbacks, NexisClaw passes an explicit empty fallback override so the agent primary is not appended as a hidden extra retry target.
+Cron jobs can also carry payload-level `fallbacks`. When present, that list replaces the configured fallback chain for the job. Use `fallbacks: []` in the job payload/API when you want a strict cron run that tries only the selected model. If a job has `--model` but neither payload nor configured fallbacks, GreenchClaw passes an explicit empty fallback override so the agent primary is not appended as a hidden extra retry target.
 
 Model-selection precedence for isolated jobs is:
 
@@ -149,7 +149,7 @@ Fast mode follows the resolved live selection too. If the selected model config 
 
 If an isolated run hits a live model-switch handoff, cron retries with the switched provider/model and persists that live selection for the active run before retrying. When the switch also carries a new auth profile, cron persists that auth profile override for the active run too. Retries are bounded: after the initial attempt plus 2 switch retries, cron aborts instead of looping forever.
 
-Before an isolated cron run enters the agent runner, NexisClaw checks reachable local provider endpoints for configured `api: "ollama"` and `api: "openai-completions"` providers whose `baseUrl` is loopback, private-network, or `.local`. If that endpoint is down, the run is recorded as `skipped` with a clear provider/model error instead of starting a model call. The endpoint result is cached for 5 minutes, so many due jobs using the same dead local Ollama, vLLM, SGLang, or LM Studio server share one small probe instead of creating a request storm. Skipped provider-preflight runs do not increment execution-error backoff; enable `failureAlert.includeSkipped` when you want repeated skip notifications.
+Before an isolated cron run enters the agent runner, GreenchClaw checks reachable local provider endpoints for configured `api: "ollama"` and `api: "openai-completions"` providers whose `baseUrl` is loopback, private-network, or `.local`. If that endpoint is down, the run is recorded as `skipped` with a clear provider/model error instead of starting a model call. The endpoint result is cached for 5 minutes, so many due jobs using the same dead local Ollama, vLLM, SGLang, or LM Studio server share one small probe instead of creating a request storm. Skipped provider-preflight runs do not increment execution-error backoff; enable `failureAlert.includeSkipped` when you want repeated skip notifications.
 
 ## Delivery and output
 
@@ -163,9 +163,9 @@ Use `--announce --channel telegram --to "-1001234567890"` for channel delivery. 
 
 When announce delivery uses `channel: "last"` or omits `channel`, a provider-prefixed target such as `telegram:123` can select the channel before cron falls back to session history or a single configured channel. Only prefixes advertised by the loaded plugin are provider selectors. If `delivery.channel` is explicit, the target prefix must name the same provider; for example, `channel: "whatsapp"` with `to: "telegram:123"` is rejected instead of letting WhatsApp interpret the Telegram ID as a phone number. Target-kind and service prefixes such as `channel:<id>`, `user:<id>`, `imessage:<handle>`, and `sms:<number>` remain channel-owned target syntax, not provider selectors.
 
-For isolated jobs, chat delivery is shared. If a chat route is available, the agent can use the `message` tool even when the job uses `--no-deliver`. If the agent sends to the configured/current target, NexisClaw skips the fallback announce. Otherwise `announce`, `webhook`, and `none` only control what the runner does with the final reply after the agent turn.
+For isolated jobs, chat delivery is shared. If a chat route is available, the agent can use the `message` tool even when the job uses `--no-deliver`. If the agent sends to the configured/current target, GreenchClaw skips the fallback announce. Otherwise `announce`, `webhook`, and `none` only control what the runner does with the final reply after the agent turn.
 
-When an agent creates an isolated reminder from an active chat, NexisClaw stores the preserved live delivery target for the fallback announce route. Internal session keys may be lowercase; provider delivery targets are not reconstructed from those keys when current chat context is available.
+When an agent creates an isolated reminder from an active chat, GreenchClaw stores the preserved live delivery target for the fallback announce route. Internal session keys may be lowercase; provider delivery targets are not reconstructed from those keys when current chat context is available.
 
 Implicit announce delivery uses configured channel allowlists to validate and reroute stale targets. DM pairing-store approvals are not fallback automation recipients; set `delivery.to` or configure the channel `allowFrom` entry when a scheduled job should proactively send to a DM.
 
@@ -182,7 +182,7 @@ Failure notifications follow a separate destination path:
 <Tabs>
   <Tab title="One-shot reminder">
     ```bash
-    NexisClaw cron add \
+    GreenchClaw cron add \
       --name "Calendar check" \
       --at "20m" \
       --session main \
@@ -192,7 +192,7 @@ Failure notifications follow a separate destination path:
   </Tab>
   <Tab title="Recurring isolated job">
     ```bash
-    NexisClaw cron add \
+    GreenchClaw cron add \
       --name "Morning brief" \
       --cron "0 7 * * *" \
       --tz "America/Los_Angeles" \
@@ -205,7 +205,7 @@ Failure notifications follow a separate destination path:
   </Tab>
   <Tab title="Model and thinking override">
     ```bash
-    NexisClaw cron add \
+    GreenchClaw cron add \
       --name "Deep analysis" \
       --cron "0 6 * * 1" \
       --tz "America/Los_Angeles" \
@@ -237,7 +237,7 @@ Gateway can expose HTTP webhook endpoints for external triggers. Enable in confi
 Every request must include the hook token via header:
 
 - `Authorization: Bearer <token>` (recommended)
-- `x-NexisClaw-token: <token>`
+- `x-GreenchClaw-token: <token>`
 
 Query-string tokens are rejected.
 
@@ -292,23 +292,23 @@ Keep hook endpoints behind loopback, tailnet, or trusted reverse proxy.
 
 ## Gmail PubSub integration
 
-Wire Gmail inbox triggers to NexisClaw via Google PubSub.
+Wire Gmail inbox triggers to GreenchClaw via Google PubSub.
 
 <Note>
-**Prerequisites:** `gcloud` CLI, `gog` (gogcli), NexisClaw hooks enabled, Tailscale for the public HTTPS endpoint.
+**Prerequisites:** `gcloud` CLI, `gog` (gogcli), GreenchClaw hooks enabled, Tailscale for the public HTTPS endpoint.
 </Note>
 
 ### Wizard setup (recommended)
 
 ```bash
-NexisClaw webhooks gmail setup --account NexisClaw@gmail.com
+GreenchClaw webhooks gmail setup --account GreenchClaw@gmail.com
 ```
 
 This writes `hooks.gmail` config, enables the Gmail preset, and uses Tailscale Funnel for the push endpoint.
 
 ### Gateway auto-start
 
-When `hooks.enabled=true` and `hooks.gmail.account` is set, the Gateway starts `gog gmail watch serve` on boot and auto-renews the watch. Set `NEXISCLAW_SKIP_GMAIL_WATCHER=1` to opt out.
+When `hooks.enabled=true` and `hooks.gmail.account` is set, the Gateway starts `gog gmail watch serve` on boot and auto-renews the watch. Set `GREENCHCLAW_SKIP_GMAIL_WATCHER=1` to opt out.
 
 ### Manual one-time setup
 
@@ -334,7 +334,7 @@ When `hooks.enabled=true` and `hooks.gmail.account` is set, the Gateway starts `
   <Step title="Start the watch">
     ```bash
     gog gmail watch start \
-      --account NexisClaw@gmail.com \
+      --account GreenchClaw@gmail.com \
       --label INBOX \
       --topic projects/<project-id>/topics/gog-gmail-watch
     ```
@@ -358,38 +358,38 @@ When `hooks.enabled=true` and `hooks.gmail.account` is set, the Gateway starts `
 
 ```bash
 # List all jobs
-NexisClaw cron list
+GreenchClaw cron list
 
 # Get one stored job as JSON
-NexisClaw cron get <jobId>
+GreenchClaw cron get <jobId>
 
 # Show one job, including resolved delivery route
-NexisClaw cron show <jobId>
+GreenchClaw cron show <jobId>
 
 # Edit a job
-NexisClaw cron edit <jobId> --message "Updated prompt" --model "opus"
+GreenchClaw cron edit <jobId> --message "Updated prompt" --model "opus"
 
 # Force run a job now
-NexisClaw cron run <jobId>
+GreenchClaw cron run <jobId>
 
 # Run only if due
-NexisClaw cron run <jobId> --due
+GreenchClaw cron run <jobId> --due
 
 # View run history
-NexisClaw cron runs --id <jobId> --limit 50
+GreenchClaw cron runs --id <jobId> --limit 50
 
 # Delete a job
-NexisClaw cron remove <jobId>
+GreenchClaw cron remove <jobId>
 
 # Agent selection (multi-agent setups)
-NexisClaw cron add --name "Ops sweep" --cron "0 6 * * *" --session isolated --message "Check ops queue" --agent ops
-NexisClaw cron edit <jobId> --clear-agent
+GreenchClaw cron add --name "Ops sweep" --cron "0 6 * * *" --session isolated --message "Check ops queue" --agent ops
+GreenchClaw cron edit <jobId> --clear-agent
 ```
 
 <Note>
 Model override note:
 
-- `NexisClaw cron add|edit --model ...` changes the job's selected model.
+- `GreenchClaw cron add|edit --model ...` changes the job's selected model.
 - If the model is allowed, that exact provider/model reaches the isolated agent run.
 - If it is not allowed or cannot be resolved, cron fails the run with an explicit validation error.
 - Configured fallback chains still apply because cron `--model` is a job primary, not a session `/model` override.
@@ -404,7 +404,7 @@ Model override note:
 {
   cron: {
     enabled: true,
-    store: "~/.NexisClaw/cron/jobs.json",
+    store: "~/.GreenchClaw/cron/jobs.json",
     maxConcurrentRuns: 1,
     retry: {
       maxAttempts: 3,
@@ -422,9 +422,9 @@ Model override note:
 
 The runtime state sidecar is derived from `cron.store`: a `.json` store such as `~/clawd/cron/jobs.json` uses `~/clawd/cron/jobs-state.json`, while a store path without a `.json` suffix appends `-state.json`.
 
-If you hand-edit `jobs.json`, leave `jobs-state.json` out of source control. NexisClaw uses that sidecar for pending slots, active markers, last-run metadata, and the schedule identity that tells the scheduler when an externally edited job needs a fresh `nextRunAtMs`.
+If you hand-edit `jobs.json`, leave `jobs-state.json` out of source control. GreenchClaw uses that sidecar for pending slots, active markers, last-run metadata, and the schedule identity that tells the scheduler when an externally edited job needs a fresh `nextRunAtMs`.
 
-Disable cron: `cron.enabled: false` or `NEXISCLAW_SKIP_CRON=1`.
+Disable cron: `cron.enabled: false` or `GREENCHCLAW_SKIP_CRON=1`.
 
 <AccordionGroup>
   <Accordion title="Retry behavior">
@@ -443,22 +443,22 @@ Disable cron: `cron.enabled: false` or `NEXISCLAW_SKIP_CRON=1`.
 ### Command ladder
 
 ```bash
-NexisClaw status
-NexisClaw gateway status
-NexisClaw cron status
-NexisClaw cron list
-NexisClaw cron runs --id <jobId> --limit 20
-NexisClaw system heartbeat last
-NexisClaw logs --follow
-NexisClaw doctor
+GreenchClaw status
+GreenchClaw gateway status
+GreenchClaw cron status
+GreenchClaw cron list
+GreenchClaw cron runs --id <jobId> --limit 20
+GreenchClaw system heartbeat last
+GreenchClaw logs --follow
+GreenchClaw doctor
 ```
 
 <AccordionGroup>
   <Accordion title="Cron not firing">
-    - Check `cron.enabled` and `NEXISCLAW_SKIP_CRON` env var.
+    - Check `cron.enabled` and `GREENCHCLAW_SKIP_CRON` env var.
     - Confirm the Gateway is running continuously.
     - For `cron` schedules, verify timezone (`--tz`) vs the host timezone.
-    - `reason: not-due` in run output means manual run was checked with `NexisClaw cron run <jobId> --due` and the job was not due yet.
+    - `reason: not-due` in run output means manual run was checked with `GreenchClaw cron run <jobId> --due` and the job was not due yet.
 
   </Accordion>
   <Accordion title="Cron fired but no delivery">
@@ -466,14 +466,14 @@ NexisClaw doctor
     - Delivery target missing/invalid (`channel`/`to`) means outbound was skipped.
     - For Matrix, copied or legacy jobs with lowercased `delivery.to` room IDs can fail because Matrix room IDs are case-sensitive. Edit the job to the exact `!room:server` or `room:!room:server` value from Matrix.
     - Channel auth errors (`unauthorized`, `Forbidden`) mean delivery was blocked by credentials.
-    - If the isolated run returns only the silent token (`NO_REPLY` / `no_reply`), NexisClaw suppresses direct outbound delivery and also suppresses the fallback queued summary path, so nothing is posted back to chat.
+    - If the isolated run returns only the silent token (`NO_REPLY` / `no_reply`), GreenchClaw suppresses direct outbound delivery and also suppresses the fallback queued summary path, so nothing is posted back to chat.
     - If the agent should message the user itself, check that the job has a usable route (`channel: "last"` with a previous chat, or an explicit channel/target).
 
   </Accordion>
   <Accordion title="Cron or heartbeat appears to prevent /new-style rollover">
     - Daily and idle reset freshness is not based on `updatedAt`; see [Session management](/concepts/session#session-lifecycle).
     - Cron wakeups, heartbeat runs, exec notifications, and gateway bookkeeping may update the session row for routing/status, but they do not extend `sessionStartedAt` or `lastInteractionAt`.
-    - For legacy rows created before those fields existed, NexisClaw can recover `sessionStartedAt` from the transcript JSONL session header when the file is still available. Legacy idle rows without `lastInteractionAt` use that recovered start time as their idle baseline.
+    - For legacy rows created before those fields existed, GreenchClaw can recover `sessionStartedAt` from the transcript JSONL session header when the file is still available. Legacy idle rows without `lastInteractionAt` use that recovered start time as their idle baseline.
 
   </Accordion>
   <Accordion title="Timezone gotchas">

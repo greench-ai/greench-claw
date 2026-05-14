@@ -10,7 +10,7 @@ import { applyPatch } from "./apply-patch.js";
 import type { SandboxFsBridge } from "./sandbox/fs-bridge.js";
 
 async function withTempDir<T>(fn: (dir: string) => Promise<T>) {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-patch-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-patch-"));
   try {
     return await fn(dir);
   } finally {
@@ -19,7 +19,7 @@ async function withTempDir<T>(fn: (dir: string) => Promise<T>) {
 }
 
 async function withWorkspaceTempDir<T>(fn: (dir: string) => Promise<T>) {
-  const dir = await fs.mkdtemp(path.join(process.cwd(), "NexisClaw-patch-workspace-"));
+  const dir = await fs.mkdtemp(path.join(process.cwd(), "GreenchClaw-patch-workspace-"));
   try {
     return await fn(dir);
   } finally {
@@ -169,7 +169,7 @@ describe("applyPatch", () => {
 
   it("rejects absolute paths outside cwd by default", async () => {
     await withTempDir(async (dir) => {
-      const escapedPath = path.join(os.tmpdir(), `NexisClaw-apply-patch-${Date.now()}.txt`);
+      const escapedPath = path.join(os.tmpdir(), `GreenchClaw-apply-patch-${Date.now()}.txt`);
 
       try {
         await expectOutsideWriteRejected({
@@ -366,7 +366,9 @@ describe("applyPatch", () => {
 
   it("allows deleting a symlink itself even if it points outside cwd", async () => {
     await withTempDir(async (dir) => {
-      const outsideDir = await fs.mkdtemp(path.join(path.dirname(dir), "NexisClaw-patch-outside-"));
+      const outsideDir = await fs.mkdtemp(
+        path.join(path.dirname(dir), "GreenchClaw-patch-outside-"),
+      );
       try {
         const outsideTarget = path.join(outsideDir, "target.txt");
         await fs.writeFile(outsideTarget, "keep\n", "utf8");
@@ -400,7 +402,7 @@ describe("applyPatch", () => {
     async () => {
       await withTempDir(async (dir) => {
         const inside = path.join(dir, "inside");
-        const outside = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-patch-outside-"));
+        const outside = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-patch-outside-"));
         const slot = path.join(dir, "slot");
         await fs.mkdir(inside, { recursive: true });
         await fs.writeFile(path.join(inside, "target.txt"), "inside\n", "utf8");
@@ -440,7 +442,7 @@ describe("applyPatch", () => {
     async () => {
       await withTempDir(async (dir) => {
         const inside = path.join(dir, "inside");
-        const outside = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-patch-outside-"));
+        const outside = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-patch-outside-"));
         const slot = path.join(dir, "slot");
         await fs.mkdir(inside, { recursive: true });
         await createRebindableDirectoryAlias({

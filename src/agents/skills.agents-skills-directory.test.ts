@@ -30,7 +30,7 @@ function buildSkillsPrompt(workspaceDir: string, managedDir: string, bundledDir:
 }
 
 async function createWorkspaceSkillDirs() {
-  const workspaceDir = await createTempDir("NexisClaw-");
+  const workspaceDir = await createTempDir("GreenchClaw-");
   return {
     workspaceDir,
     managedDir: path.join(workspaceDir, ".managed"),
@@ -43,7 +43,7 @@ describe("buildWorkspaceSkillsPrompt — .agents/skills/ directories", () => {
   let envSnapshot: SkillsHomeEnvSnapshot;
 
   beforeEach(async () => {
-    fakeHome = await createTempDir("NexisClaw-home-");
+    fakeHome = await createTempDir("GreenchClaw-home-");
     envSnapshot = setMockSkillsHomeEnv(fakeHome);
   });
 

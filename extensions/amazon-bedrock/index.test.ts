@@ -1,12 +1,12 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { PluginRuntime } from "NexisClaw/plugin-sdk/core";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { PluginRuntime } from "GreenchClaw/plugin-sdk/core";
 import {
   buildPluginApi,
   registerSingleProviderPlugin,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { withEnvAsync } from "NexisClaw/plugin-sdk/test-env";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { withEnvAsync } from "GreenchClaw/plugin-sdk/test-env";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { setAwsSharedIniFileLoaderForTest } from "./aws-credential-refresh.js";
 import { resetBedrockDiscoveryCacheForTest } from "./discovery.js";
@@ -107,7 +107,7 @@ async function registerWithConfig(
     name: "Amazon Bedrock Provider",
     source: "test",
     registrationMode: "full",
-    config: {} as NexisClawConfig,
+    config: {} as GreenchClawConfig,
     pluginConfig,
     runtime: {} as PluginRuntime,
     logger: noopLogger,
@@ -165,7 +165,7 @@ async function callWrappedStream(
   provider: RegisteredProviderPlugin,
   modelId: string,
   modelDescriptor: never,
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
   extraParams?: Record<string, unknown>,
   payload: Record<string, unknown> = {},
 ): Promise<Record<string, unknown>> {
@@ -195,7 +195,7 @@ async function callWrappedStream(
   return result;
 }
 
-function runtimePluginConfig(config?: Record<string, unknown>): NexisClawConfig {
+function runtimePluginConfig(config?: Record<string, unknown>): GreenchClawConfig {
   return {
     plugins: {
       entries: config
@@ -206,7 +206,7 @@ function runtimePluginConfig(config?: Record<string, unknown>): NexisClawConfig 
           }
         : {},
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function requireRecord(value: unknown, label: string): Record<string, unknown> {
@@ -576,7 +576,7 @@ describe("amazon-bedrock provider plugin", () => {
   describe("guardrail config schema", () => {
     it("defines discovery and guardrail objects with the expected shape", () => {
       const pluginJson = JSON.parse(
-        readFileSync(resolve(import.meta.dirname, "NexisClaw.plugin.json"), "utf-8"),
+        readFileSync(resolve(import.meta.dirname, "GreenchClaw.plugin.json"), "utf-8"),
       );
       const discovery = pluginJson.configSchema?.properties?.discovery;
       const guardrail = pluginJson.configSchema?.properties?.guardrail;

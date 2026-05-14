@@ -1,18 +1,18 @@
 ---
-summary: "Run NexisClaw Gateway 24/7 on a cheap Hetzner VPS (Docker) with durable state and baked-in binaries"
+summary: "Run GreenchClaw Gateway 24/7 on a cheap Hetzner VPS (Docker) with durable state and baked-in binaries"
 read_when:
-  - You want NexisClaw running 24/7 on a cloud VPS (not your laptop)
+  - You want GreenchClaw running 24/7 on a cloud VPS (not your laptop)
   - You want a production-grade, always-on Gateway on your own VPS
   - You want full control over persistence, binaries, and restart behavior
-  - You are running NexisClaw in Docker on Hetzner or a similar provider
+  - You are running GreenchClaw in Docker on Hetzner or a similar provider
 title: "Hetzner"
 ---
 
 ## Goal
 
-Run a persistent NexisClaw Gateway on a Hetzner VPS using Docker, with durable state, baked-in binaries, and safe restart behavior.
+Run a persistent GreenchClaw Gateway on a Hetzner VPS using Docker, with durable state, baked-in binaries, and safe restart behavior.
 
-If you want "NexisClaw 24/7 for ~$5", this is the simplest reliable setup.
+If you want "GreenchClaw 24/7 for ~$5", this is the simplest reliable setup.
 Hetzner pricing changes; pick the smallest Debian/Ubuntu VPS and scale up if you hit OOMs.
 
 Security model reminder:
@@ -27,11 +27,11 @@ See [Security](/gateway/security) and [VPS hosting](/vps).
 
 - Rent a small Linux server (Hetzner VPS)
 - Install Docker (isolated app runtime)
-- Start the NexisClaw Gateway in Docker
-- Persist `~/.NexisClaw` + `~/.NexisClaw/workspace` on the host (survives restarts/rebuilds)
+- Start the GreenchClaw Gateway in Docker
+- Persist `~/.GreenchClaw` + `~/.GreenchClaw/workspace` on the host (survives restarts/rebuilds)
 - Access the Control UI from your laptop via an SSH tunnel
 
-That mounted `~/.NexisClaw` state includes `NexisClaw.json`, per-agent
+That mounted `~/.GreenchClaw` state includes `GreenchClaw.json`, per-agent
 `agents/<agentId>/agent/auth-profiles.json`, and `.env`.
 
 The Gateway can be accessed via:
@@ -49,7 +49,7 @@ For the generic Docker flow, see [Docker](/install/docker).
 
 1. Provision Hetzner VPS
 2. Install Docker
-3. Clone NexisClaw repository
+3. Clone GreenchClaw repository
 4. Create persistent host directories
 5. Configure `.env` and `docker-compose.yml`
 6. Bake required binaries into the image
@@ -104,10 +104,10 @@ For the generic Docker flow, see [Docker](/install/docker).
 
   </Step>
 
-  <Step title="Clone the NexisClaw repository">
+  <Step title="Clone the GreenchClaw repository">
     ```bash
-    git clone https://github.com/NexisClaw/NexisClaw.git
-    cd NexisClaw
+    git clone https://github.com/GreenchClaw/GreenchClaw.git
+    cd GreenchClaw
     ```
 
     This guide assumes you will build a custom image to guarantee binary persistence.
@@ -119,10 +119,10 @@ For the generic Docker flow, see [Docker](/install/docker).
     All long-lived state must live on the host.
 
     ```bash
-    mkdir -p /root/.NexisClaw/workspace
+    mkdir -p /root/.GreenchClaw/workspace
 
     # Set ownership to the container user (uid 1000):
-    chown -R 1000:1000 /root/.NexisClaw
+    chown -R 1000:1000 /root/.GreenchClaw
     ```
 
   </Step>
@@ -131,21 +131,21 @@ For the generic Docker flow, see [Docker](/install/docker).
     Create `.env` in the repository root.
 
     ```bash
-    NEXISCLAW_IMAGE=NexisClaw:latest
-    NEXISCLAW_GATEWAY_TOKEN=
-    NEXISCLAW_GATEWAY_BIND=lan
-    NEXISCLAW_GATEWAY_PORT=18789
+    GREENCHCLAW_IMAGE=GreenchClaw:latest
+    GREENCHCLAW_GATEWAY_TOKEN=
+    GREENCHCLAW_GATEWAY_BIND=lan
+    GREENCHCLAW_GATEWAY_PORT=18789
 
-    NEXISCLAW_CONFIG_DIR=/root/.NexisClaw
-    NEXISCLAW_WORKSPACE_DIR=/root/.NexisClaw/workspace
+    GREENCHCLAW_CONFIG_DIR=/root/.GreenchClaw
+    GREENCHCLAW_WORKSPACE_DIR=/root/.GreenchClaw/workspace
 
     GOG_KEYRING_PASSWORD=
-    XDG_CONFIG_HOME=/home/node/.NexisClaw
+    XDG_CONFIG_HOME=/home/node/.GreenchClaw
     ```
 
-    Set `NEXISCLAW_GATEWAY_TOKEN` when you want to manage the stable gateway
+    Set `GREENCHCLAW_GATEWAY_TOKEN` when you want to manage the stable gateway
     token through `.env`; otherwise configure `gateway.auth.token` before
-    relying on clients across restarts. If neither source exists, NexisClaw uses
+    relying on clients across restarts. If neither source exists, GreenchClaw uses
     a runtime-only token for that startup. Generate a keyring password and paste
     it into `GOG_KEYRING_PASSWORD`:
 
@@ -155,9 +155,9 @@ For the generic Docker flow, see [Docker](/install/docker).
 
     **Do not commit this file.**
 
-    This `.env` file is for container/runtime env such as `NEXISCLAW_GATEWAY_TOKEN`.
+    This `.env` file is for container/runtime env such as `GREENCHCLAW_GATEWAY_TOKEN`.
     Stored provider OAuth/API-key auth lives in the mounted
-    `~/.NexisClaw/agents/<agentId>/agent/auth-profiles.json`.
+    `~/.GreenchClaw/agents/<agentId>/agent/auth-profiles.json`.
 
   </Step>
 
@@ -166,8 +166,8 @@ For the generic Docker flow, see [Docker](/install/docker).
 
     ```yaml
     services:
-      NexisClaw-gateway:
-        image: ${NEXISCLAW_IMAGE}
+      GreenchClaw-gateway:
+        image: ${GREENCHCLAW_IMAGE}
         build: .
         restart: unless-stopped
         env_file:
@@ -176,28 +176,28 @@ For the generic Docker flow, see [Docker](/install/docker).
           - HOME=/home/node
           - NODE_ENV=production
           - TERM=xterm-256color
-          - NEXISCLAW_GATEWAY_BIND=${NEXISCLAW_GATEWAY_BIND}
-          - NEXISCLAW_GATEWAY_PORT=${NEXISCLAW_GATEWAY_PORT}
-          - NEXISCLAW_GATEWAY_TOKEN=${NEXISCLAW_GATEWAY_TOKEN}
+          - GREENCHCLAW_GATEWAY_BIND=${GREENCHCLAW_GATEWAY_BIND}
+          - GREENCHCLAW_GATEWAY_PORT=${GREENCHCLAW_GATEWAY_PORT}
+          - GREENCHCLAW_GATEWAY_TOKEN=${GREENCHCLAW_GATEWAY_TOKEN}
           - GOG_KEYRING_PASSWORD=${GOG_KEYRING_PASSWORD}
           - XDG_CONFIG_HOME=${XDG_CONFIG_HOME}
           - PATH=/home/linuxbrew/.linuxbrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         volumes:
-          - ${NEXISCLAW_CONFIG_DIR}:/home/node/.NexisClaw
-          - ${NEXISCLAW_WORKSPACE_DIR}:/home/node/.NexisClaw/workspace
+          - ${GREENCHCLAW_CONFIG_DIR}:/home/node/.GreenchClaw
+          - ${GREENCHCLAW_WORKSPACE_DIR}:/home/node/.GreenchClaw/workspace
         ports:
           # Recommended: keep the Gateway loopback-only on the VPS; access via SSH tunnel.
           # To expose it publicly, remove the `127.0.0.1:` prefix and firewall accordingly.
-          - "127.0.0.1:${NEXISCLAW_GATEWAY_PORT}:18789"
+          - "127.0.0.1:${GREENCHCLAW_GATEWAY_PORT}:18789"
         command:
           [
             "node",
             "dist/index.js",
             "gateway",
             "--bind",
-            "${NEXISCLAW_GATEWAY_BIND}",
+            "${GREENCHCLAW_GATEWAY_BIND}",
             "--port",
-            "${NEXISCLAW_GATEWAY_PORT}",
+            "${GREENCHCLAW_GATEWAY_PORT}",
             "--allow-unconfigured",
           ]
     ```
@@ -262,8 +262,8 @@ For teams preferring infrastructure-as-code workflows, a community-maintained Te
 
 **Repositories:**
 
-- Infrastructure: [NexisClaw-terraform-hetzner](https://github.com/andreesg/NexisClaw-terraform-hetzner)
-- Docker config: [NexisClaw-docker-config](https://github.com/andreesg/NexisClaw-docker-config)
+- Infrastructure: [GreenchClaw-terraform-hetzner](https://github.com/andreesg/GreenchClaw-terraform-hetzner)
+- Docker config: [GreenchClaw-docker-config](https://github.com/andreesg/GreenchClaw-docker-config)
 
 This approach complements the Docker setup above with reproducible deployments, version-controlled infrastructure, and automated disaster recovery.
 
@@ -275,7 +275,7 @@ Community-maintained. For issues or contributions, see the repository links abov
 
 - Set up messaging channels: [Channels](/channels)
 - Configure the Gateway: [Gateway configuration](/gateway/configuration)
-- Keep NexisClaw up to date: [Updating](/install/updating)
+- Keep GreenchClaw up to date: [Updating](/install/updating)
 
 ## Related
 

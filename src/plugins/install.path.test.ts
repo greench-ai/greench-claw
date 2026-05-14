@@ -16,7 +16,7 @@ vi.mock("../process/exec.js", () => ({
   runCommandWithTimeout: vi.fn(),
 }));
 
-const suiteTempRootTracker = createSuiteTempRootTracker("NexisClaw-plugin-install-path");
+const suiteTempRootTracker = createSuiteTempRootTracker("GreenchClaw-plugin-install-path");
 
 function setupBundleInstallFixture(params: {
   bundleFormat: "codex" | "claude" | "cursor";
@@ -75,15 +75,15 @@ function setupDualFormatInstallFixture(params: { bundleFormat: "codex" | "claude
   fs.writeFileSync(
     path.join(pluginDir, "package.json"),
     JSON.stringify({
-      name: "@NexisClaw/native-dual",
+      name: "@GreenchClaw/native-dual",
       version: "0.0.1",
-      NexisClaw: { extensions: ["./dist/index.js"] },
+      GreenchClaw: { extensions: ["./dist/index.js"] },
       dependencies: { "left-pad": "1.3.0" },
     }),
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(pluginDir, "NexisClaw.plugin.json"),
+    path.join(pluginDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: "native-dual",
       configSchema: { type: "object", properties: {} },
@@ -114,12 +114,12 @@ function setupNativePluginInstallFixture() {
     JSON.stringify({
       name: "symlink-plugin",
       version: "1.0.0",
-      NexisClaw: { extensions: ["./dist/index.js"] },
+      GreenchClaw: { extensions: ["./dist/index.js"] },
     }),
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(pluginDir, "NexisClaw.plugin.json"),
+    path.join(pluginDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: "symlink-plugin",
       configSchema: { type: "object", properties: {} },

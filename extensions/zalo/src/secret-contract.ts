@@ -5,13 +5,13 @@ import {
   type ResolverContext,
   type SecretDefaults,
   type SecretTargetRegistryEntry,
-} from "NexisClaw/plugin-sdk/channel-secret-basic-runtime";
+} from "GreenchClaw/plugin-sdk/channel-secret-basic-runtime";
 
 export const secretTargetRegistryEntries: SecretTargetRegistryEntry[] = [
   {
     id: "channels.zalo.accounts.*.botToken",
     targetType: "channels.zalo.accounts.*.botToken",
-    configFile: "NexisClaw.json",
+    configFile: "GreenchClaw.json",
     pathPattern: "channels.zalo.accounts.*.botToken",
     secretShape: "secret_input",
     expectedResolvedValue: "string",
@@ -22,7 +22,7 @@ export const secretTargetRegistryEntries: SecretTargetRegistryEntry[] = [
   {
     id: "channels.zalo.accounts.*.webhookSecret",
     targetType: "channels.zalo.accounts.*.webhookSecret",
-    configFile: "NexisClaw.json",
+    configFile: "GreenchClaw.json",
     pathPattern: "channels.zalo.accounts.*.webhookSecret",
     secretShape: "secret_input",
     expectedResolvedValue: "string",
@@ -33,7 +33,7 @@ export const secretTargetRegistryEntries: SecretTargetRegistryEntry[] = [
   {
     id: "channels.zalo.botToken",
     targetType: "channels.zalo.botToken",
-    configFile: "NexisClaw.json",
+    configFile: "GreenchClaw.json",
     pathPattern: "channels.zalo.botToken",
     secretShape: "secret_input",
     expectedResolvedValue: "string",
@@ -44,7 +44,7 @@ export const secretTargetRegistryEntries: SecretTargetRegistryEntry[] = [
   {
     id: "channels.zalo.webhookSecret",
     targetType: "channels.zalo.webhookSecret",
-    configFile: "NexisClaw.json",
+    configFile: "GreenchClaw.json",
     pathPattern: "channels.zalo.webhookSecret",
     secretShape: "secret_input",
     expectedResolvedValue: "string",

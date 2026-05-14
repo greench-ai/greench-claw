@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   hasExplicitPluginConfig,
   isBundledChannelEnabledByChannelConfig,
@@ -42,7 +42,7 @@ describe("isBundledChannelEnabledByChannelConfig", () => {
         telegram: { enabled: true },
         slack: { enabled: false },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(isBundledChannelEnabledByChannelConfig(cfg, "telegram")).toBe(true);
     expect(isBundledChannelEnabledByChannelConfig(cfg, "slack")).toBe(false);

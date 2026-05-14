@@ -8,7 +8,7 @@ import {
 } from "./service.test-harness.js";
 
 const { logger: noopLogger, makeStorePath } = setupCronServiceSuite({
-  prefix: "NexisClaw-cron-16156-",
+  prefix: "GreenchClaw-cron-16156-",
   baseTimeIso: "2025-12-13T00:00:00.000Z",
 });
 

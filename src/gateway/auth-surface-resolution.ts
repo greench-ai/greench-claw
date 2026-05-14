@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { hasConfiguredSecretInput } from "../config/types.secrets.js";
 import { trimToUndefined, type ExplicitGatewayAuth } from "./credentials.js";
 import { resolveConfiguredSecretInputString } from "./resolve-configured-secret-input-string.js";
@@ -15,7 +15,7 @@ type ResolvedGatewayCredential = {
 };
 
 async function resolveGatewayCredential(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   diagnostics: string[];
   path: GatewayCredentialPath;
@@ -44,7 +44,7 @@ function withDiagnostics<T extends object>(params: {
 }
 
 export async function resolveGatewayProbeSurfaceAuth(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   surface: "local" | "remote";
 }): Promise<{ token?: string; password?: string; diagnostics?: string[] }> {
@@ -79,8 +79,8 @@ export async function resolveGatewayProbeSurfaceAuth(params: {
     return {};
   }
 
-  const envToken = trimToUndefined(env.NEXISCLAW_GATEWAY_TOKEN);
-  const envPassword = trimToUndefined(env.NEXISCLAW_GATEWAY_PASSWORD);
+  const envToken = trimToUndefined(env.GREENCHCLAW_GATEWAY_TOKEN);
+  const envPassword = trimToUndefined(env.GREENCHCLAW_GATEWAY_PASSWORD);
 
   if (authMode === "token") {
     const token = await resolveGatewayCredential({
@@ -142,7 +142,7 @@ export async function resolveGatewayProbeSurfaceAuth(params: {
 }
 
 export async function resolveGatewayInteractiveSurfaceAuth(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   explicitAuth?: ExplicitGatewayAuth;
   suppressEnvAuthFallback?: boolean;
@@ -158,10 +158,10 @@ export async function resolveGatewayInteractiveSurfaceAuth(params: {
   const explicitPassword = trimToUndefined(params.explicitAuth?.password);
   const envToken = params.suppressEnvAuthFallback
     ? undefined
-    : trimToUndefined(env.NEXISCLAW_GATEWAY_TOKEN);
+    : trimToUndefined(env.GREENCHCLAW_GATEWAY_TOKEN);
   const envPassword = params.suppressEnvAuthFallback
     ? undefined
-    : trimToUndefined(env.NEXISCLAW_GATEWAY_PASSWORD);
+    : trimToUndefined(env.GREENCHCLAW_GATEWAY_PASSWORD);
 
   if (params.surface === "remote") {
     const remoteToken = explicitToken

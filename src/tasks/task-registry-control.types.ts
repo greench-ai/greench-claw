@@ -1,7 +1,7 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 export type CancelAcpSessionAdmin = (params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   reason: string;
 }) => Promise<void>;
@@ -16,7 +16,7 @@ export type KillSubagentRunAdminResult = {
 };
 
 export type KillSubagentRunAdmin = (params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
 }) => Promise<KillSubagentRunAdminResult>;
 

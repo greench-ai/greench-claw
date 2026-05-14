@@ -1,4 +1,4 @@
-import { importFreshModule } from "NexisClaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 afterEach(() => {
@@ -8,13 +8,15 @@ afterEach(() => {
 
 describe("listBundledChannelCatalogEntries discovery failures", () => {
   it("falls back when bundled plugin catalog discovery is unavailable during import", async () => {
-    vi.doMock("../infra/NexisClaw-root.js", () => ({
-      resolveNexisClawPackageRootSync: () => null,
-      resolveNexisClawPackageRoot: async () => null,
+    vi.doMock("../infra/GreenchClaw-root.js", () => ({
+      resolveGreenchClawPackageRootSync: () => null,
+      resolveGreenchClawPackageRoot: async () => null,
     }));
     vi.doMock("../plugins/channel-catalog-registry.js", () => ({
       listChannelCatalogEntries() {
-        throw new ReferenceError("Cannot access 'discoverNexisClawPlugins' before initialization.");
+        throw new ReferenceError(
+          "Cannot access 'discoverGreenchClawPlugins' before initialization.",
+        );
       },
     }));
 

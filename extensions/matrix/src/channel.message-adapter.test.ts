@@ -2,9 +2,9 @@ import {
   verifyChannelMessageAdapterCapabilityProofs,
   verifyChannelMessageLiveCapabilityAdapterProofs,
   verifyChannelMessageLiveFinalizerProofs,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 
 const mocks = vi.hoisted(() => ({
   sendMessageMatrix: vi.fn(),
@@ -34,7 +34,7 @@ const cfg = {
       accessToken: "resolved-token",
     },
   },
-} as NexisClawConfig;
+} as GreenchClawConfig;
 
 function lastMatrixSendOptions() {
   const options = mocks.sendMessageMatrix.mock.lastCall?.[2];
@@ -83,7 +83,7 @@ describe("matrix channel message adapter", () => {
         to: "room:!room:example",
         text: "caption",
         mediaUrl: "file:///tmp/cat.png",
-        mediaLocalRoots: ["/tmp/NexisClaw"],
+        mediaLocalRoots: ["/tmp/GreenchClaw"],
         accountId: "default",
         audioAsVoice: true,
       });
@@ -93,7 +93,7 @@ describe("matrix channel message adapter", () => {
       const options = lastMatrixSendOptions();
       expect(options.cfg).toBe(cfg);
       expect(options.mediaUrl).toBe("file:///tmp/cat.png");
-      expect(options.mediaLocalRoots).toEqual(["/tmp/NexisClaw"]);
+      expect(options.mediaLocalRoots).toEqual(["/tmp/GreenchClaw"]);
       expect(options.audioAsVoice).toBe(true);
       expect(result.receipt.parts[0]?.kind).toBe("voice");
     };
@@ -165,7 +165,7 @@ describe("matrix channel message adapter", () => {
       | { extraContent?: Record<string, unknown> }
       | undefined;
     expect(matrixChannelData?.extraContent).toEqual({
-      "com.NexisClaw.presentation": {
+      "com.GreenchClaw.presentation": {
         ...presentation,
         version: 1,
         type: "message.presentation",
@@ -189,7 +189,7 @@ describe("matrix channel message adapter", () => {
     expect(options.accountId).toBe("default");
     expect(options.threadId).toBe("$thread");
     expect(options.extraContent).toEqual({
-      "com.NexisClaw.presentation": {
+      "com.GreenchClaw.presentation": {
         ...presentation,
         version: 1,
         type: "message.presentation",

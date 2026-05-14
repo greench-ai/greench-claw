@@ -38,7 +38,7 @@ type NodeInvokeResult = {
   error?: { code?: string; message?: string } | null;
 };
 
-const SERIALIZED_EVENT_PAYLOAD = Symbol("NexisClaw.serializedEventPayload");
+const SERIALIZED_EVENT_PAYLOAD = Symbol("GreenchClaw.serializedEventPayload");
 
 export type SerializedEventPayload = {
   readonly json: string;

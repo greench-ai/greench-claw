@@ -89,22 +89,22 @@ export function registerMigrateCommand(program: Command) {
       collectMigrationPlugin,
     )
     .option("--backup-output <path>", "Pre-migration backup archive path or directory")
-    .option("--no-backup", "Skip the pre-migration NexisClaw backup")
+    .option("--no-backup", "Skip the pre-migration GreenchClaw backup")
     .option("--force", "Allow dangerous options such as --no-backup", false)
     .option("--json", "Output JSON", false)
     .addHelpText(
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["NexisClaw migrate list", "Show available migration providers."],
-          ["NexisClaw migrate hermes", "Preview Hermes migration, then prompt before applying."],
-          ["NexisClaw migrate hermes --dry-run", "Preview Hermes migration only."],
+          ["GreenchClaw migrate list", "Show available migration providers."],
+          ["GreenchClaw migrate hermes", "Preview Hermes migration, then prompt before applying."],
+          ["GreenchClaw migrate hermes --dry-run", "Preview Hermes migration only."],
           [
-            "NexisClaw migrate apply hermes --yes",
+            "GreenchClaw migrate apply hermes --yes",
             "Apply Hermes migration non-interactively after writing a verified backup.",
           ],
           [
-            "NexisClaw migrate apply hermes --include-secrets --yes",
+            "GreenchClaw migrate apply hermes --include-secrets --yes",
             "Include supported credentials in the migration.",
           ],
         ])}`,
@@ -141,7 +141,7 @@ export function registerMigrateCommand(program: Command) {
   addMigrationOptions(
     migrate
       .command("plan <provider>")
-      .description("Preview a migration without changing NexisClaw state"),
+      .description("Preview a migration without changing GreenchClaw state"),
   ).action(async (provider, opts) => {
     await runCommandWithRuntime(defaultRuntime, async () => {
       await migratePlanCommand(defaultRuntime, {
@@ -161,7 +161,7 @@ export function registerMigrateCommand(program: Command) {
   )
     .option("--yes", "Apply without prompting", false)
     .option("--backup-output <path>", "Pre-migration backup archive path or directory")
-    .option("--no-backup", "Skip the pre-migration NexisClaw backup")
+    .option("--no-backup", "Skip the pre-migration GreenchClaw backup")
     .option("--force", "Allow dangerous options such as --no-backup", false)
     .action(async (provider, opts) => {
       await runCommandWithRuntime(defaultRuntime, async () => {

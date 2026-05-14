@@ -1,7 +1,7 @@
 import {
   ToolPolicySchema,
   buildChannelConfigSchema,
-} from "NexisClaw/plugin-sdk/channel-config-schema";
+} from "GreenchClaw/plugin-sdk/channel-config-schema";
 import { z } from "zod";
 
 const QaChannelActionConfigSchema = z

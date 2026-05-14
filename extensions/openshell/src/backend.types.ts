@@ -1,4 +1,7 @@
-import type { RemoteShellSandboxHandle, SandboxBackendHandle } from "NexisClaw/plugin-sdk/sandbox";
+import type {
+  RemoteShellSandboxHandle,
+  SandboxBackendHandle,
+} from "GreenchClaw/plugin-sdk/sandbox";
 
 export type OpenShellFsBridgeContext = Parameters<
   NonNullable<SandboxBackendHandle["createFsBridge"]>

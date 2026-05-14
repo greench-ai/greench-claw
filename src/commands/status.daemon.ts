@@ -7,7 +7,7 @@ type DaemonStatusSummary = {
   label: string;
   installed: boolean | null;
   loaded: boolean;
-  managedByNexisClaw: boolean;
+  managedByGreenchClaw: boolean;
   externallyManaged: boolean;
   loadedText: string;
   runtime: Awaited<ReturnType<typeof readServiceStatusSummary>>["runtime"];
@@ -25,7 +25,7 @@ async function buildDaemonStatusSummary(
     label: summary.label,
     installed: summary.installed,
     loaded: summary.loaded,
-    managedByNexisClaw: summary.managedByNexisClaw,
+    managedByGreenchClaw: summary.managedByGreenchClaw,
     externallyManaged: summary.externallyManaged,
     loadedText: summary.loadedText,
     runtime: summary.runtime,

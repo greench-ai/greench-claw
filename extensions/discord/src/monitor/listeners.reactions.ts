@@ -1,7 +1,7 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
-import { danger, logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { enqueueSystemEvent } from "NexisClaw/plugin-sdk/system-event-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
+import { danger, logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { enqueueSystemEvent } from "GreenchClaw/plugin-sdk/system-event-runtime";
 import {
   ChannelType,
   type Client,
@@ -23,8 +23,8 @@ import { formatDiscordReactionEmoji, formatDiscordUserTag } from "./format.js";
 import { runDiscordListenerWithSlowLog, type DiscordListenerLogger } from "./listeners.queue.js";
 import { resolveFetchedDiscordThreadLikeChannelContext } from "./thread-channel-context.js";
 
-type LoadedConfig = NexisClawConfig;
-type RuntimeEnv = import("NexisClaw/plugin-sdk/runtime-env").RuntimeEnv;
+type LoadedConfig = GreenchClawConfig;
+type RuntimeEnv = import("GreenchClaw/plugin-sdk/runtime-env").RuntimeEnv;
 
 type DiscordReactionEvent = Parameters<MessageReactionAddListener["handle"]>[0];
 

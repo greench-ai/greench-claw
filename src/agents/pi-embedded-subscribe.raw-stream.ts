@@ -7,12 +7,12 @@ import { appendRegularFile } from "../infra/fs-safe.js";
 let rawStreamReady = false;
 
 function isRawStreamEnabled(): boolean {
-  return isTruthyEnvValue(process.env.NEXISCLAW_RAW_STREAM);
+  return isTruthyEnvValue(process.env.GREENCHCLAW_RAW_STREAM);
 }
 
 function resolveRawStreamPath(): string {
   return (
-    process.env.NEXISCLAW_RAW_STREAM_PATH?.trim() ||
+    process.env.GREENCHCLAW_RAW_STREAM_PATH?.trim() ||
     path.join(resolveStateDir(), "logs", "raw-stream.jsonl")
   );
 }

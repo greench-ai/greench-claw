@@ -1,5 +1,5 @@
-import { isSingleUseReplyToMode } from "NexisClaw/plugin-sdk/reply-reference";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { isSingleUseReplyToMode } from "GreenchClaw/plugin-sdk/reply-reference";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { parseSlackTarget } from "./targets.js";
 
 export function resolveSlackAutoThreadId(params: {

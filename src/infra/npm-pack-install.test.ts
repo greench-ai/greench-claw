@@ -14,15 +14,15 @@ vi.mock("./install-source-utils.js", async () => {
   return {
     ...actual,
     withTempDir: vi.fn(async (_prefix: string, fn: (tmpDir: string) => Promise<unknown>) => {
-      return await fn("/tmp/NexisClaw-npm-pack-install-test");
+      return await fn("/tmp/GreenchClaw-npm-pack-install-test");
     }),
     packNpmSpecToArchive: vi.fn(),
   };
 });
 
 describe("installFromNpmSpecArchive", () => {
-  const baseSpec = "@NexisClaw/test@1.0.0";
-  const baseArchivePath = "/tmp/NexisClaw-test.tgz";
+  const baseSpec = "@GreenchClaw/test@1.0.0";
+  const baseArchivePath = "/tmp/GreenchClaw-test.tgz";
 
   const mockPackedSuccess = (overrides?: {
     resolvedSpec?: string;
@@ -51,7 +51,7 @@ describe("installFromNpmSpecArchive", () => {
     }) => Promise<{ ok: boolean; [k: string]: unknown }>;
   }) =>
     await installFromNpmSpecArchive({
-      tempDirPrefix: "NexisClaw-test-",
+      tempDirPrefix: "GreenchClaw-test-",
       spec: baseSpec,
       timeoutMs: 1000,
       expectedIntegrity: overrides.expectedIntegrity,
@@ -82,8 +82,8 @@ describe("installFromNpmSpecArchive", () => {
     const installFromArchive = vi.fn(async () => ({ ok: true as const }));
 
     const result = await installFromNpmSpecArchive({
-      tempDirPrefix: "NexisClaw-test-",
-      spec: "@NexisClaw/test@1.0.0",
+      tempDirPrefix: "GreenchClaw-test-",
+      spec: "@GreenchClaw/test@1.0.0",
       timeoutMs: 1000,
       installFromArchive,
     });
@@ -97,7 +97,7 @@ describe("installFromNpmSpecArchive", () => {
       throw new Error("expected temp dir call");
     }
     const [tempDirPrefix, tempDirCallback] = tempDirCall;
-    expect(tempDirPrefix).toBe("NexisClaw-test-");
+    expect(tempDirPrefix).toBe("GreenchClaw-test-");
     expect(tempDirCallback).toBeTypeOf("function");
   });
 
@@ -105,8 +105,8 @@ describe("installFromNpmSpecArchive", () => {
     const installFromArchive = vi.fn(async () => ({ ok: true as const }));
 
     const result = await installFromNpmSpecArchive({
-      tempDirPrefix: "NexisClaw-test-",
-      spec: "file:/tmp/NexisClaw.tgz",
+      tempDirPrefix: "GreenchClaw-test-",
+      spec: "file:/tmp/GreenchClaw.tgz",
       timeoutMs: 1000,
       installFromArchive,
     });
@@ -120,7 +120,7 @@ describe("installFromNpmSpecArchive", () => {
   });
 
   it("returns resolution metadata and installer result on success", async () => {
-    mockPackedSuccess({ name: "@NexisClaw/test", version: "1.0.0" });
+    mockPackedSuccess({ name: "@GreenchClaw/test", version: "1.0.0" });
     const installFromArchive = vi.fn(async () => ({ ok: true as const, target: "done" }));
 
     const result = await runInstall({
@@ -130,13 +130,13 @@ describe("installFromNpmSpecArchive", () => {
 
     const okResult = expectWrappedOkResult(result, { ok: true, target: "done" });
     expect(okResult.integrityDrift).toBeUndefined();
-    expect(okResult.npmResolution.resolvedSpec).toBe("@NexisClaw/test@1.0.0");
+    expect(okResult.npmResolution.resolvedSpec).toBe("@GreenchClaw/test@1.0.0");
     const resolvedAt = okResult.npmResolution.resolvedAt;
     if (!resolvedAt) {
       throw new Error("expected npm resolution timestamp");
     }
     expect(Date.parse(resolvedAt)).not.toBeNaN();
-    expect(installFromArchive).toHaveBeenCalledWith({ archivePath: "/tmp/NexisClaw-test.tgz" });
+    expect(installFromArchive).toHaveBeenCalledWith({ archivePath: "/tmp/GreenchClaw-test.tgz" });
   });
 
   it("proceeds when integrity drift callback accepts drift", async () => {
@@ -170,7 +170,7 @@ describe("installFromNpmSpecArchive", () => {
 
     expect(result).toEqual({
       ok: false,
-      error: "aborted: npm package integrity drift detected for @NexisClaw/test@1.0.0",
+      error: "aborted: npm package integrity drift detected for @GreenchClaw/test@1.0.0",
     });
     expect(installFromArchive).not.toHaveBeenCalled();
   });
@@ -188,10 +188,10 @@ describe("installFromNpmSpecArchive", () => {
 
     expect(result).toEqual({
       ok: false,
-      error: "aborted: npm package integrity drift detected for @NexisClaw/test@1.0.0",
+      error: "aborted: npm package integrity drift detected for @GreenchClaw/test@1.0.0",
     });
     expect(warn).toHaveBeenCalledWith(
-      "Integrity drift detected for @NexisClaw/test@1.0.0: expected sha512-old, got sha512-new",
+      "Integrity drift detected for @GreenchClaw/test@1.0.0: expected sha512-old, got sha512-new",
     );
     expect(installFromArchive).not.toHaveBeenCalled();
   });
@@ -214,7 +214,7 @@ describe("installFromNpmSpecArchive", () => {
       ok: true,
       archivePath: baseArchivePath,
       metadata: {
-        resolvedSpec: "@NexisClaw/test@latest",
+        resolvedSpec: "@GreenchClaw/test@latest",
         integrity: "sha512-same",
         version: "1.1.0-beta.1",
       },
@@ -222,8 +222,8 @@ describe("installFromNpmSpecArchive", () => {
     const installFromArchive = vi.fn(async () => ({ ok: true as const }));
 
     const result = await installFromNpmSpecArchive({
-      tempDirPrefix: "NexisClaw-test-",
-      spec: "@NexisClaw/test@latest",
+      tempDirPrefix: "GreenchClaw-test-",
+      spec: "@GreenchClaw/test@latest",
       timeoutMs: 1000,
       installFromArchive,
     });
@@ -241,7 +241,7 @@ describe("installFromNpmSpecArchive", () => {
       ok: true,
       archivePath: baseArchivePath,
       metadata: {
-        resolvedSpec: "@NexisClaw/test@beta",
+        resolvedSpec: "@GreenchClaw/test@beta",
         integrity: "sha512-same",
         version: "1.1.0-beta.1",
       },
@@ -249,8 +249,8 @@ describe("installFromNpmSpecArchive", () => {
     const installFromArchive = vi.fn(async () => ({ ok: true as const, pluginId: "beta-plugin" }));
 
     const result = await installFromNpmSpecArchive({
-      tempDirPrefix: "NexisClaw-test-",
-      spec: "@NexisClaw/test@beta",
+      tempDirPrefix: "GreenchClaw-test-",
+      spec: "@GreenchClaw/test@beta",
       timeoutMs: 1000,
       installFromArchive,
     });
@@ -268,9 +268,9 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
   it("passes archive path and installer params to installFromArchive", async () => {
     vi.mocked(packNpmSpecToArchive).mockResolvedValue({
       ok: true,
-      archivePath: "/tmp/NexisClaw-plugin.tgz",
+      archivePath: "/tmp/GreenchClaw-plugin.tgz",
       metadata: {
-        resolvedSpec: "@NexisClaw/voice-call@1.0.0",
+        resolvedSpec: "@GreenchClaw/voice-call@1.0.0",
         integrity: "sha512-same",
       },
     });
@@ -280,8 +280,8 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
     );
 
     const result = await installFromNpmSpecArchiveWithInstaller({
-      tempDirPrefix: "NexisClaw-test-",
-      spec: "@NexisClaw/voice-call@1.0.0",
+      tempDirPrefix: "GreenchClaw-test-",
+      spec: "@GreenchClaw/voice-call@1.0.0",
       timeoutMs: 1000,
       installFromArchive,
       archiveInstallParams: { pluginId: "voice-call" },
@@ -292,7 +292,7 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
       return;
     }
     expect(installFromArchive).toHaveBeenCalledWith({
-      archivePath: "/tmp/NexisClaw-plugin.tgz",
+      archivePath: "/tmp/GreenchClaw-plugin.tgz",
       pluginId: "voice-call",
     });
     expect(result.installResult).toEqual({ ok: true, pluginId: "voice-call" });
@@ -314,7 +314,7 @@ describe("finalizeNpmSpecArchiveInstall", () => {
       ok: true,
       installResult: { ok: false, error: "install failed" },
       npmResolution: {
-        resolvedSpec: "@NexisClaw/test@1.0.0",
+        resolvedSpec: "@GreenchClaw/test@1.0.0",
         integrity: "sha512-same",
         resolvedAt: "2026-01-01T00:00:00.000Z",
       },
@@ -330,7 +330,7 @@ describe("finalizeNpmSpecArchiveInstall", () => {
       ok: true,
       installResult: { ok: true, pluginId: "voice-call" },
       npmResolution: {
-        resolvedSpec: "@NexisClaw/voice-call@1.0.0",
+        resolvedSpec: "@GreenchClaw/voice-call@1.0.0",
         integrity: "sha512-same",
         resolvedAt: "2026-01-01T00:00:00.000Z",
       },
@@ -344,7 +344,7 @@ describe("finalizeNpmSpecArchiveInstall", () => {
       ok: true,
       pluginId: "voice-call",
       npmResolution: {
-        resolvedSpec: "@NexisClaw/voice-call@1.0.0",
+        resolvedSpec: "@GreenchClaw/voice-call@1.0.0",
         integrity: "sha512-same",
         resolvedAt: "2026-01-01T00:00:00.000Z",
       },

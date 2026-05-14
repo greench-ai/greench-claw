@@ -92,7 +92,7 @@ function runVitestSpec(spec) {
 }
 
 function applyDefaultParallelVitestWorkerBudget(specs, env) {
-  if (env.NEXISCLAW_VITEST_MAX_WORKERS || env.NEXISCLAW_TEST_WORKERS || isCiLikeEnv(env)) {
+  if (env.GREENCHCLAW_VITEST_MAX_WORKERS || env.GREENCHCLAW_TEST_WORKERS || isCiLikeEnv(env)) {
     return specs;
   }
   const { vitestMaxWorkers } = resolveLocalFullSuiteProfile(env);
@@ -100,7 +100,7 @@ function applyDefaultParallelVitestWorkerBudget(specs, env) {
     ...spec,
     env: {
       ...spec.env,
-      NEXISCLAW_VITEST_MAX_WORKERS: String(vitestMaxWorkers),
+      GREENCHCLAW_VITEST_MAX_WORKERS: String(vitestMaxWorkers),
     },
   }));
 }
@@ -235,7 +235,7 @@ async function main() {
     changedTargetArgs === null &&
     !runSpecs.some((spec) => spec.watchMode);
   const isExplicitParallelMultiConfigRun =
-    Boolean(baseEnv.NEXISCLAW_TEST_PROJECTS_PARALLEL) &&
+    Boolean(baseEnv.GREENCHCLAW_TEST_PROJECTS_PARALLEL) &&
     runSpecs.length > 1 &&
     !runSpecs.some((spec) => spec.watchMode);
   const isParallelShardRun =
@@ -254,9 +254,9 @@ async function main() {
       );
       if (
         !isCiLikeEnv(baseEnv) &&
-        !baseEnv.NEXISCLAW_TEST_PROJECTS_PARALLEL &&
-        !baseEnv.NEXISCLAW_VITEST_MAX_WORKERS &&
-        !baseEnv.NEXISCLAW_TEST_WORKERS &&
+        !baseEnv.GREENCHCLAW_TEST_PROJECTS_PARALLEL &&
+        !baseEnv.GREENCHCLAW_VITEST_MAX_WORKERS &&
+        !baseEnv.GREENCHCLAW_TEST_WORKERS &&
         localFullSuiteProfile.shardParallelism === 10 &&
         localFullSuiteProfile.vitestMaxWorkers === 2
       ) {

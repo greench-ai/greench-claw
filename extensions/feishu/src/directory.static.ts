@@ -1,7 +1,7 @@
 import {
   listDirectoryGroupEntriesFromMapKeysAndAllowFrom,
   listDirectoryUserEntriesFromAllowFromAndMapKeys,
-} from "NexisClaw/plugin-sdk/directory-runtime";
+} from "GreenchClaw/plugin-sdk/directory-runtime";
 import type { ClawdbotConfig } from "../runtime-api.js";
 import { resolveFeishuAccount } from "./accounts.js";
 import { normalizeFeishuTarget } from "./targets.js";

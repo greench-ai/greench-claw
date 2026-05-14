@@ -18,7 +18,7 @@ let tmpDir: string;
 
 beforeEach(async () => {
   vi.clearAllMocks();
-  tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-main-restart-recovery-"));
+  tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-main-restart-recovery-"));
 });
 
 afterEach(async () => {

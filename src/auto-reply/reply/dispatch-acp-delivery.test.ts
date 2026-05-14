@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { createAcpDispatchDeliveryCoordinator } from "./dispatch-acp-delivery.js";
 import type { ReplyDispatcher } from "./reply-dispatcher.js";
 import { buildTestCtx } from "./test-ctx.js";
@@ -107,7 +107,7 @@ async function raceWithTimeoutResult<T>(
   }
 }
 
-function createVisibleChatAcpCoordinator(cfg: NexisClawConfig) {
+function createVisibleChatAcpCoordinator(cfg: GreenchClawConfig) {
   return createAcpDispatchDeliveryCoordinator({
     cfg,
     ctx: buildTestCtx({
@@ -124,7 +124,7 @@ function createVisibleChatAcpCoordinator(cfg: NexisClawConfig) {
 }
 
 async function expectVisibleChatBlockRoutesToAccount(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string | undefined,
 ): Promise<void> {
   const coordinator = createVisibleChatAcpCoordinator(cfg);
@@ -518,7 +518,7 @@ describe("createAcpDispatchDeliveryCoordinator", () => {
   });
 
   it("routes ACP replies when cfg.channels is missing", async () => {
-    await expectVisibleChatBlockRoutesToAccount({} as NexisClawConfig, undefined);
+    await expectVisibleChatBlockRoutesToAccount({} as GreenchClawConfig, undefined);
   });
 
   it("treats routed plugin-owned block text as visible", async () => {

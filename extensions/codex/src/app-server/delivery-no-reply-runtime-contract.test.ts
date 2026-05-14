@@ -2,9 +2,9 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { SessionManager } from "@earendil-works/pi-coding-agent";
-import type { EmbeddedRunAttemptParams } from "NexisClaw/plugin-sdk/agent-harness";
-import { DELIVERY_NO_REPLY_RUNTIME_CONTRACT } from "NexisClaw/plugin-sdk/agent-runtime-test-contracts";
-import { isSilentReplyPayloadText } from "NexisClaw/plugin-sdk/reply-chunking";
+import type { EmbeddedRunAttemptParams } from "GreenchClaw/plugin-sdk/agent-harness";
+import { DELIVERY_NO_REPLY_RUNTIME_CONTRACT } from "GreenchClaw/plugin-sdk/agent-runtime-test-contracts";
+import { isSilentReplyPayloadText } from "GreenchClaw/plugin-sdk/reply-chunking";
 import { afterEach, describe, expect, it } from "vitest";
 import { CodexAppServerEventProjector } from "./event-projector.js";
 import { createCodexTestModel } from "./test-support.js";
@@ -16,7 +16,7 @@ const tempDirs = new Set<string>();
 type ProjectorNotification = Parameters<CodexAppServerEventProjector["handleNotification"]>[0];
 
 async function createParams(): Promise<EmbeddedRunAttemptParams> {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-codex-delivery-contract-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-codex-delivery-contract-"));
   tempDirs.add(tempDir);
   const sessionFile = path.join(tempDir, "session.jsonl");
   SessionManager.open(sessionFile);

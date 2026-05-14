@@ -1,3 +1,3 @@
-import { describeProviderWizardSetupOptionsContract } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { describeProviderWizardSetupOptionsContract } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 
 describeProviderWizardSetupOptionsContract();

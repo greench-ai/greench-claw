@@ -63,12 +63,12 @@ function setCachedRegistryRead(
 }
 
 function resolveSubagentStateDir(env: NodeJS.ProcessEnv = process.env): string {
-  const explicit = env.NEXISCLAW_STATE_DIR?.trim();
+  const explicit = env.GREENCHCLAW_STATE_DIR?.trim();
   if (explicit) {
     return resolveStateDir(env);
   }
   if (env.VITEST || env.NODE_ENV === "test") {
-    return path.join(os.tmpdir(), "NexisClaw-test-state", String(process.pid));
+    return path.join(os.tmpdir(), "GreenchClaw-test-state", String(process.pid));
   }
   return resolveStateDir(env);
 }

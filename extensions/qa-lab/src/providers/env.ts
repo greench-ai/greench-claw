@@ -6,22 +6,22 @@ import { getQaProvider } from "./index.js";
 
 const QA_LIVE_ENV_ALIASES = Object.freeze([
   {
-    liveVar: "NEXISCLAW_LIVE_OPENAI_KEY",
+    liveVar: "GREENCHCLAW_LIVE_OPENAI_KEY",
     providerVar: "OPENAI_API_KEY",
   },
   {
-    liveVar: "NEXISCLAW_LIVE_ANTHROPIC_KEY",
+    liveVar: "GREENCHCLAW_LIVE_ANTHROPIC_KEY",
     providerVar: "ANTHROPIC_API_KEY",
   },
   {
-    liveVar: "NEXISCLAW_LIVE_GEMINI_KEY",
+    liveVar: "GREENCHCLAW_LIVE_GEMINI_KEY",
     providerVar: "GEMINI_API_KEY",
   },
 ]);
 
-export const QA_LIVE_PROVIDER_CONFIG_PATH_ENV = "NEXISCLAW_QA_LIVE_PROVIDER_CONFIG_PATH";
-const QA_LIVE_CLI_BACKEND_PRESERVE_ENV = "NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV";
-const QA_LIVE_CLI_BACKEND_AUTH_MODE_ENV = "NEXISCLAW_LIVE_CLI_BACKEND_AUTH_MODE";
+export const QA_LIVE_PROVIDER_CONFIG_PATH_ENV = "GREENCHCLAW_QA_LIVE_PROVIDER_CONFIG_PATH";
+const QA_LIVE_CLI_BACKEND_PRESERVE_ENV = "GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV";
+const QA_LIVE_CLI_BACKEND_AUTH_MODE_ENV = "GREENCHCLAW_LIVE_CLI_BACKEND_AUTH_MODE";
 export type QaCliBackendAuthMode = "auto" | "api-key" | "subscription";
 
 export const QA_PROVIDER_SECRET_ENV_VARS = Object.freeze([
@@ -38,12 +38,12 @@ export const QA_PROVIDER_SECRET_ENV_VARS = Object.freeze([
   "MISTRAL_API_KEY",
   "OPENAI_API_KEY",
   "OPENAI_API_KEYS",
-  "NEXISCLAW_LIVE_ANTHROPIC_KEY",
-  "NEXISCLAW_LIVE_ANTHROPIC_KEYS",
-  "NEXISCLAW_LIVE_GEMINI_KEY",
-  "NEXISCLAW_LIVE_OPENAI_KEY",
-  "NEXISCLAW_QA_CONVEX_SECRET_CI",
-  "NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER",
+  "GREENCHCLAW_LIVE_ANTHROPIC_KEY",
+  "GREENCHCLAW_LIVE_ANTHROPIC_KEYS",
+  "GREENCHCLAW_LIVE_GEMINI_KEY",
+  "GREENCHCLAW_LIVE_OPENAI_KEY",
+  "GREENCHCLAW_QA_CONVEX_SECRET_CI",
+  "GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER",
   "VOYAGE_API_KEY",
 ]);
 
@@ -73,13 +73,13 @@ const QA_LIVE_ALLOWED_ENV_VARS = Object.freeze([
   "AWS_REGION",
   "OPENAI_BASE_URL",
   QA_LIVE_PROVIDER_CONFIG_PATH_ENV,
-  "NEXISCLAW_CONFIG_PATH",
+  "GREENCHCLAW_CONFIG_PATH",
 ]);
 
 const QA_LIVE_ALLOWED_ENV_PATTERNS = Object.freeze([
   /^[A-Z0-9_]+_API_KEYS$/u,
   /^[A-Z0-9_]+_API_KEY_[0-9]+$/u,
-  /^NEXISCLAW_LIVE_[A-Z0-9_]+_KEYS$/u,
+  /^GREENCHCLAW_LIVE_[A-Z0-9_]+_KEYS$/u,
 ]);
 
 function resolveUserPath(value: string, env: NodeJS.ProcessEnv = process.env) {
@@ -151,11 +151,11 @@ export function resolveQaLiveCliAuthEnv(
 ) {
   const authMode = opts?.claudeCliAuthMode ?? "auto";
   const hasAnthropicKey = Boolean(
-    baseEnv.ANTHROPIC_API_KEY?.trim() || baseEnv.NEXISCLAW_LIVE_ANTHROPIC_KEY?.trim(),
+    baseEnv.ANTHROPIC_API_KEY?.trim() || baseEnv.GREENCHCLAW_LIVE_ANTHROPIC_KEY?.trim(),
   );
   if (opts?.forwardHostHomeForClaudeCli && authMode === "api-key" && !hasAnthropicKey) {
     throw new Error(
-      "Claude CLI API-key QA mode requires ANTHROPIC_API_KEY or NEXISCLAW_LIVE_ANTHROPIC_KEY",
+      "Claude CLI API-key QA mode requires ANTHROPIC_API_KEY or GREENCHCLAW_LIVE_ANTHROPIC_KEY",
     );
   }
   const preserveEnvValues = (() => {
@@ -198,10 +198,10 @@ export function resolveQaLiveCliAuthEnv(
 
 export function resolveQaLiveProviderConfigPath(env: NodeJS.ProcessEnv = process.env) {
   const explicit =
-    env[QA_LIVE_PROVIDER_CONFIG_PATH_ENV]?.trim() || env.NEXISCLAW_CONFIG_PATH?.trim();
+    env[QA_LIVE_PROVIDER_CONFIG_PATH_ENV]?.trim() || env.GREENCHCLAW_CONFIG_PATH?.trim();
   return explicit
     ? { path: resolveUserPath(explicit, env), explicit: true }
-    : { path: path.join(os.homedir(), ".NexisClaw", "NexisClaw.json"), explicit: false };
+    : { path: path.join(os.homedir(), ".GreenchClaw", "GreenchClaw.json"), explicit: false };
 }
 
 export function resolveQaForwardedLiveEnv(baseEnv: NodeJS.ProcessEnv = process.env) {

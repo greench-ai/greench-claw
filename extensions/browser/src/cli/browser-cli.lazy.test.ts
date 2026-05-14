@@ -83,9 +83,9 @@ describe("registerBrowserCli lazy browser subcommands", () => {
 
   it("registers browser placeholders without loading handlers for help", () => {
     const program = new Command();
-    program.name("NexisClaw");
+    program.name("GreenchClaw");
 
-    registerBrowserCli(program, ["node", "NexisClaw", "browser", "--help"]);
+    registerBrowserCli(program, ["node", "GreenchClaw", "browser", "--help"]);
 
     const browser = program.commands.find((command) => command.name() === "browser");
     expect(browser?.commands.map((command) => command.name())).toContain("status");
@@ -102,9 +102,9 @@ describe("registerBrowserCli lazy browser subcommands", () => {
 
   it("registers only the requested browser group before dispatch", async () => {
     const program = new Command();
-    program.name("NexisClaw");
+    program.name("GreenchClaw");
 
-    registerBrowserCli(program, ["node", "NexisClaw", "browser", "status"]);
+    registerBrowserCli(program, ["node", "GreenchClaw", "browser", "status"]);
 
     const browser = program.commands.find((command) => command.name() === "browser");
     expect(browser?.commands.map((command) => command.name())).toEqual(["status"]);
@@ -118,9 +118,9 @@ describe("registerBrowserCli lazy browser subcommands", () => {
 
   it("loads browser doctor from the manage group so --deep is available", async () => {
     const program = new Command();
-    program.name("NexisClaw");
+    program.name("GreenchClaw");
 
-    registerBrowserCli(program, ["node", "NexisClaw", "browser", "doctor", "--deep"]);
+    registerBrowserCli(program, ["node", "GreenchClaw", "browser", "doctor", "--deep"]);
 
     await program.parseAsync(["browser", "doctor", "--deep"], { from: "user" });
 
@@ -133,9 +133,16 @@ describe("registerBrowserCli lazy browser subcommands", () => {
 
   it("preserves parent --json while reparsing lazy manage commands", async () => {
     const program = new Command();
-    program.name("NexisClaw");
+    program.name("GreenchClaw");
 
-    registerBrowserCli(program, ["node", "NexisClaw", "browser", "--json", "open", "about:blank"]);
+    registerBrowserCli(program, [
+      "node",
+      "GreenchClaw",
+      "browser",
+      "--json",
+      "open",
+      "about:blank",
+    ]);
 
     await program.parseAsync(["browser", "--json", "open", "about:blank"], { from: "user" });
 
@@ -147,8 +154,8 @@ describe("registerBrowserCli lazy browser subcommands", () => {
     expect(openCommand.parent?.opts().json).toBe(true);
 
     const tabsProgram = new Command();
-    tabsProgram.name("NexisClaw");
-    registerBrowserCli(tabsProgram, ["node", "NexisClaw", "browser", "--json", "tabs"]);
+    tabsProgram.name("GreenchClaw");
+    registerBrowserCli(tabsProgram, ["node", "GreenchClaw", "browser", "--json", "tabs"]);
 
     await tabsProgram.parseAsync(["browser", "--json", "tabs"], { from: "user" });
 
@@ -161,11 +168,11 @@ describe("registerBrowserCli lazy browser subcommands", () => {
   });
 
   it("can eagerly register all browser groups for compatibility", async () => {
-    vi.stubEnv("NEXISCLAW_DISABLE_LAZY_SUBCOMMANDS", "1");
+    vi.stubEnv("GREENCHCLAW_DISABLE_LAZY_SUBCOMMANDS", "1");
     const program = new Command();
-    program.name("NexisClaw");
+    program.name("GreenchClaw");
 
-    registerBrowserCli(program, ["node", "NexisClaw", "browser", "--help"]);
+    registerBrowserCli(program, ["node", "GreenchClaw", "browser", "--help"]);
 
     await vi.waitFor(() =>
       expect(manageMocks.registerBrowserManageCommands).toHaveBeenCalledTimes(1),

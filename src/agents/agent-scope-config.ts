@@ -4,13 +4,13 @@ import type {
   AgentContextLimitsConfig,
   AgentDefaultsConfig,
 } from "../config/types.agent-defaults.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { DEFAULT_AGENT_ID, normalizeAgentId } from "../routing/session-key.js";
 import { readStringValue } from "../shared/string-coerce.js";
 import { resolveUserPath } from "../utils.js";
 import { resolveDefaultAgentWorkspaceDir } from "./workspace-default.js";
 
-type AgentEntry = NonNullable<NonNullable<NexisClawConfig["agents"]>["list"]>[number];
+type AgentEntry = NonNullable<NonNullable<GreenchClawConfig["agents"]>["list"]>[number];
 
 export type ResolvedAgentConfig = {
   name?: string;
@@ -54,7 +54,7 @@ function stripNullBytes(s: string): string {
   return s.replaceAll("\0", "");
 }
 
-export function listAgentEntries(cfg: NexisClawConfig): AgentEntry[] {
+export function listAgentEntries(cfg: GreenchClawConfig): AgentEntry[] {
   const list = cfg.agents?.list;
   if (!Array.isArray(list)) {
     return [];
@@ -62,7 +62,7 @@ export function listAgentEntries(cfg: NexisClawConfig): AgentEntry[] {
   return list.filter((entry): entry is AgentEntry => entry !== null && typeof entry === "object");
 }
 
-export function listAgentIds(cfg: NexisClawConfig): string[] {
+export function listAgentIds(cfg: GreenchClawConfig): string[] {
   const agents = listAgentEntries(cfg);
   if (agents.length === 0) {
     return [DEFAULT_AGENT_ID];
@@ -80,7 +80,7 @@ export function listAgentIds(cfg: NexisClawConfig): string[] {
   return ids.length > 0 ? ids : [DEFAULT_AGENT_ID];
 }
 
-export function resolveDefaultAgentId(cfg: NexisClawConfig): string {
+export function resolveDefaultAgentId(cfg: GreenchClawConfig): string {
   const agents = listAgentEntries(cfg);
   if (agents.length === 0) {
     return DEFAULT_AGENT_ID;
@@ -94,13 +94,13 @@ export function resolveDefaultAgentId(cfg: NexisClawConfig): string {
   return normalizeAgentId(chosen || DEFAULT_AGENT_ID);
 }
 
-function resolveAgentEntry(cfg: NexisClawConfig, agentId: string): AgentEntry | undefined {
+function resolveAgentEntry(cfg: GreenchClawConfig, agentId: string): AgentEntry | undefined {
   const id = normalizeAgentId(agentId);
   return listAgentEntries(cfg).find((entry) => normalizeAgentId(entry.id) === id);
 }
 
 export function resolveAgentConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
 ): ResolvedAgentConfig | undefined {
   const id = normalizeAgentId(agentId);
@@ -146,7 +146,7 @@ export function resolveAgentConfig(
 }
 
 export function resolveAgentContextLimits(
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
   agentId?: string | null,
 ): AgentContextLimitsConfig | undefined {
   const defaults = cfg?.agents?.defaults?.contextLimits;
@@ -157,7 +157,7 @@ export function resolveAgentContextLimits(
 }
 
 export function resolveAgentWorkspaceDir(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
   env: NodeJS.ProcessEnv = process.env,
 ) {
@@ -182,7 +182,7 @@ export function resolveAgentWorkspaceDir(
 }
 
 export function resolveAgentDir(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
   env: NodeJS.ProcessEnv = process.env,
 ) {
@@ -196,7 +196,7 @@ export function resolveAgentDir(
 }
 
 export function resolveDefaultAgentDir(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): string {
   return resolveAgentDir(cfg, resolveDefaultAgentId(cfg), env);

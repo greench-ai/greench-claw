@@ -1,15 +1,15 @@
 ---
-summary: "CLI reference for `NexisClaw update` (safe-ish source update + gateway auto-restart)"
+summary: "CLI reference for `GreenchClaw update` (safe-ish source update + gateway auto-restart)"
 read_when:
   - You want to update a source checkout safely
-  - You are debugging `NexisClaw update` output or options
+  - You are debugging `GreenchClaw update` output or options
   - You need to understand `--update` shorthand behavior
 title: "Update"
 ---
 
-# `NexisClaw update`
+# `GreenchClaw update`
 
-Safely update NexisClaw and switch between stable/beta/dev channels.
+Safely update GreenchClaw and switch between stable/beta/dev channels.
 
 If you installed via **npm/pnpm/bun** (global install, no git metadata),
 updates happen via the package-manager flow in [Updating](/install/updating).
@@ -17,25 +17,25 @@ updates happen via the package-manager flow in [Updating](/install/updating).
 ## Usage
 
 ```bash
-NexisClaw update
-NexisClaw update status
-NexisClaw update wizard
-NexisClaw update --channel beta
-NexisClaw update --channel dev
-NexisClaw update --tag beta
-NexisClaw update --tag main
-NexisClaw update --dry-run
-NexisClaw update --no-restart
-NexisClaw update --yes
-NexisClaw update --json
-NexisClaw --update
+GreenchClaw update
+GreenchClaw update status
+GreenchClaw update wizard
+GreenchClaw update --channel beta
+GreenchClaw update --channel dev
+GreenchClaw update --tag beta
+GreenchClaw update --tag main
+GreenchClaw update --dry-run
+GreenchClaw update --no-restart
+GreenchClaw update --yes
+GreenchClaw update --json
+GreenchClaw --update
 ```
 
 ## Options
 
 - `--no-restart`: skip restarting the Gateway service after a successful update. Package-manager updates that do restart the Gateway verify the restarted service reports the expected updated version before the command succeeds.
 - `--channel <stable|beta|dev>`: set the update channel (git + npm; persisted in config).
-- `--tag <dist-tag|version|spec>`: override the package target for this update only. For package installs, `main` maps to `github:NexisClaw/NexisClaw#main`.
+- `--tag <dist-tag|version|spec>`: override the package target for this update only. For package installs, `main` maps to `github:GreenchClaw/GreenchClaw#main`.
 - `--dry-run`: preview planned update actions (channel/tag/target/restart flow) without writing config, installing, syncing plugins, or restarting.
 - `--json`: print machine-readable `UpdateRunResult` JSON, including
   `postUpdate.plugins.warnings` when corrupt or unloadable managed plugins need
@@ -45,16 +45,16 @@ NexisClaw --update
 - `--timeout <seconds>`: per-step timeout (default is 1800s).
 - `--yes`: skip confirmation prompts (for example downgrade confirmation).
 
-`NexisClaw update` does not have a `--verbose` flag. Use `--dry-run` to preview
+`GreenchClaw update` does not have a `--verbose` flag. Use `--dry-run` to preview
 the planned channel/tag/install/restart actions, `--json` for machine-readable
-results, and `NexisClaw update status --json` when you only need channel and
+results, and `GreenchClaw update status --json` when you only need channel and
 availability details. If you are debugging Gateway logs around an update,
 console verbosity and file log level are separate: Gateway `--verbose` affects
 terminal/WebSocket output, while file logs require `logging.level: "debug"` or
 `"trace"` in config. See [Gateway logging](/gateway/logging).
 
 <Note>
-In Nix mode (`NEXISCLAW_NIX_MODE=1`), mutating `NexisClaw update` runs are disabled. Update the Nix source or flake input for this install instead; for nix-NexisClaw, use the agent-first [Quick Start](https://github.com/NexisClaw/nix-NexisClaw#quick-start). `NexisClaw update status` and `NexisClaw update --dry-run` remain read-only.
+In Nix mode (`GREENCHCLAW_NIX_MODE=1`), mutating `GreenchClaw update` runs are disabled. Update the Nix source or flake input for this install instead; for nix-GreenchClaw, use the agent-first [Quick Start](https://github.com/GreenchClaw/nix-GreenchClaw#quick-start). `GreenchClaw update status` and `GreenchClaw update --dry-run` remain read-only.
 </Note>
 
 <Warning>
@@ -66,9 +66,9 @@ Downgrades require confirmation because older versions can break configuration.
 Show the active update channel + git tag/branch/SHA (for source checkouts), plus update availability.
 
 ```bash
-NexisClaw update status
-NexisClaw update status --json
-NexisClaw update status --timeout 10
+GreenchClaw update status
+GreenchClaw update status --json
+GreenchClaw update status --timeout 10
 ```
 
 Options:
@@ -88,10 +88,10 @@ Options:
 
 ## What it does
 
-When you switch channels explicitly (`--channel ...`), NexisClaw also keeps the
+When you switch channels explicitly (`--channel ...`), GreenchClaw also keeps the
 install method aligned:
 
-- `dev` → ensures a git checkout (default: `~/NexisClaw`, override with `NEXISCLAW_GIT_DIR`),
+- `dev` → ensures a git checkout (default: `~/GreenchClaw`, override with `GREENCHCLAW_GIT_DIR`),
   updates it, and installs the global CLI from that checkout.
 - `stable` → installs from npm using `latest`.
 - `beta` → prefers npm dist-tag `beta`, but falls back to `latest` when beta is
@@ -103,17 +103,17 @@ updates force a non-deferred, no-cooldown update restart after the package swap,
 because the old Gateway process may still have in-memory chunks that point at
 files removed by the new package.
 
-For package-manager installs, `NexisClaw update` resolves the target package
+For package-manager installs, `GreenchClaw update` resolves the target package
 version before invoking the package manager. npm global installs use a staged
-install: NexisClaw installs the new package into a temporary npm prefix, verifies
+install: GreenchClaw installs the new package into a temporary npm prefix, verifies
 the packaged `dist` inventory there, then swaps that clean package tree into the
 real global prefix. If verification fails, post-update doctor, plugin sync, and
 restart work do not run from the suspect tree. Even when the installed version
 already matches the target, the command refreshes the global package install,
 then runs plugin sync, a core-command completion refresh, and restart work. This
 keeps packaged sidecars and channel-owned plugin records aligned with the
-installed NexisClaw build while leaving full plugin-command completion rebuilds to
-explicit `NexisClaw completion --write-state` runs.
+installed GreenchClaw build while leaving full plugin-command completion rebuilds to
+explicit `GreenchClaw completion --write-state` runs.
 
 When a local managed Gateway service is installed and restart is enabled,
 package-manager updates stop the running service before replacing the package
@@ -121,7 +121,7 @@ tree, then refresh the service metadata from the updated install, restart the
 service, and verify the restarted Gateway reports the expected version before
 reporting success. On macOS, the post-update check also verifies the LaunchAgent
 is loaded/running for the active profile and the configured loopback port is
-healthy. If the plist is installed but launchd is not supervising it, NexisClaw
+healthy. If the plist is installed but launchd is not supervising it, GreenchClaw
 re-bootstraps the LaunchAgent automatically, then reruns the
 health/version/channel readiness checks. A fresh bootstrap loads the RunAtLoad
 job directly, so update recovery does not immediately `kickstart -k` the newly
@@ -153,7 +153,7 @@ manually.
     Dev only.
   </Step>
   <Step title="Preflight build (dev only)">
-    Runs the TypeScript build in a temp worktree. If the tip fails, walks back up to 10 commits to find the newest buildable commit. Set `NEXISCLAW_UPDATE_PREFLIGHT_LINT=1` to also run lint during this preflight; lint runs in constrained serial mode because user update hosts are often smaller than CI runners.
+    Runs the TypeScript build in a temp worktree. If the tip fails, walks back up to 10 commits to find the newest buildable commit. Set `GREENCHCLAW_UPDATE_PREFLIGHT_LINT=1` to also run lint during this preflight; lint runs in constrained serial mode because user update hosts are often smaller than CI runners.
   </Step>
   <Step title="Rebase">
     Rebases onto the selected commit (dev only).
@@ -165,7 +165,7 @@ manually.
     Builds the gateway and the Control UI.
   </Step>
   <Step title="Run doctor">
-    `NexisClaw doctor` runs as the final safe-update check.
+    `GreenchClaw doctor` runs as the final safe-update check.
   </Step>
   <Step title="Sync plugins">
     Syncs plugins to the active channel. Dev uses bundled plugins; stable and beta use npm. Updates tracked plugin installs.
@@ -174,20 +174,20 @@ manually.
 
 On the beta update channel, tracked npm and ClawHub plugin installs that follow
 the default/latest line try a plugin `@beta` release first. If the plugin has no
-beta release, NexisClaw falls back to the recorded default/latest spec and reports
-that as a warning. For npm plugins, NexisClaw also falls back when the beta
+beta release, GreenchClaw falls back to the recorded default/latest spec and reports
+that as a warning. For npm plugins, GreenchClaw also falls back when the beta
 package exists but fails install validation. These plugin fallback warnings do
 not make the core update fail. Exact versions and explicit tags are not
 rewritten.
 
 <Warning>
-If an exact pinned npm plugin update resolves to an artifact whose integrity differs from the stored install record, `NexisClaw update` aborts that plugin artifact update instead of installing it. Reinstall or update the plugin explicitly only after verifying that you trust the new artifact.
+If an exact pinned npm plugin update resolves to an artifact whose integrity differs from the stored install record, `GreenchClaw update` aborts that plugin artifact update instead of installing it. Reinstall or update the plugin explicitly only after verifying that you trust the new artifact.
 </Warning>
 
 <Note>
-Post-update plugin sync failures that are scoped to a managed plugin and that the sync path can route around (e.g. an unreachable npm registry for a non-essential plugin) are reported as warnings after the core update succeeds. The JSON result keeps the top-level update `status: "ok"` and reports `postUpdate.plugins.status: "warning"` with `NexisClaw doctor --fix` and `NexisClaw plugins inspect <id> --runtime --json` guidance. Unexpected updater or sync exceptions still fail the update result. Fix the plugin install or update error, then rerun `NexisClaw doctor --fix` or `NexisClaw update`.
+Post-update plugin sync failures that are scoped to a managed plugin and that the sync path can route around (e.g. an unreachable npm registry for a non-essential plugin) are reported as warnings after the core update succeeds. The JSON result keeps the top-level update `status: "ok"` and reports `postUpdate.plugins.status: "warning"` with `GreenchClaw doctor --fix` and `GreenchClaw plugins inspect <id> --runtime --json` guidance. Unexpected updater or sync exceptions still fail the update result. Fix the plugin install or update error, then rerun `GreenchClaw doctor --fix` or `GreenchClaw update`.
 
-After the per-plugin sync step, `NexisClaw update` runs a mandatory **post-core convergence** pass before the gateway is restarted: it repairs missing configured plugin payloads, validates each _active_ tracked install record on disk, and statically verifies its `package.json` is parseable (and any explicitly-declared `main` exists). Failures from this pass — and an invalid NexisClaw config snapshot — return `postUpdate.plugins.status: "error"` and flip the top-level update `status` to `"error"`, so `NexisClaw update` exits non-zero and the gateway is _not_ restarted with an unverified plugin set. The error includes structured `postUpdate.plugins.warnings[].guidance` lines pointing at `NexisClaw doctor --fix` and `NexisClaw plugins inspect <id> --runtime --json` for follow-up. Disabled plugin entries and records that are not trusted-source-linked official sync targets are skipped here, mirroring the `skipDisabledPlugins` policy used by the missing-payload check, so a stale disabled plugin record cannot block an otherwise valid update.
+After the per-plugin sync step, `GreenchClaw update` runs a mandatory **post-core convergence** pass before the gateway is restarted: it repairs missing configured plugin payloads, validates each _active_ tracked install record on disk, and statically verifies its `package.json` is parseable (and any explicitly-declared `main` exists). Failures from this pass — and an invalid GreenchClaw config snapshot — return `postUpdate.plugins.status: "error"` and flip the top-level update `status` to `"error"`, so `GreenchClaw update` exits non-zero and the gateway is _not_ restarted with an unverified plugin set. The error includes structured `postUpdate.plugins.warnings[].guidance` lines pointing at `GreenchClaw doctor --fix` and `GreenchClaw plugins inspect <id> --runtime --json` for follow-up. Disabled plugin entries and records that are not trusted-source-linked official sync targets are skipped here, mirroring the `skipDisabledPlugins` policy used by the missing-payload check, so a stale disabled plugin record cannot block an otherwise valid update.
 
 When the updated Gateway starts, plugin loading is verify-only: startup does not run package managers or mutate dependency trees. Package-manager `update.run` restarts bypass the normal idle deferral and restart cooldown after the package tree has been swapped, so the old process cannot keep lazy-loading removed chunks.
 
@@ -196,11 +196,11 @@ If pnpm bootstrap still fails, the updater stops early with a package-manager-sp
 
 ## `--update` shorthand
 
-`NexisClaw --update` rewrites to `NexisClaw update` (useful for shells and launcher scripts).
+`GreenchClaw --update` rewrites to `GreenchClaw update` (useful for shells and launcher scripts).
 
 ## Related
 
-- `NexisClaw doctor` (offers to run update first on git checkouts)
+- `GreenchClaw doctor` (offers to run update first on git checkouts)
 - [Development channels](/install/development-channels)
 - [Updating](/install/updating)
 - [CLI reference](/cli)

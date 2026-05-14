@@ -1,15 +1,15 @@
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { bundledDistPluginFile, bundledPluginFile } from "NexisClaw/plugin-sdk/test-fixtures";
+import { bundledDistPluginFile, bundledPluginFile } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { describe, expect, it } from "vitest";
+import { collectInstalledRootDependencyManifestErrors } from "../scripts/GreenchClaw-npm-postpublish-verify.ts";
 import { listBundledPluginPackArtifacts } from "../scripts/lib/bundled-plugin-build-entries.mjs";
 import { listPluginSdkDistArtifacts } from "../scripts/lib/plugin-sdk-entries.mjs";
 import {
   WORKSPACE_TEMPLATE_PACK_PATHS,
   createWorkspaceBootstrapSmokeEnv,
 } from "../scripts/lib/workspace-bootstrap-smoke.mjs";
-import { collectInstalledRootDependencyManifestErrors } from "../scripts/NexisClaw-npm-postpublish-verify.ts";
 import {
   collectAppcastSparkleVersionErrors,
   collectBundledExtensionManifestErrors,
@@ -106,9 +106,9 @@ describe("packed CLI smoke", () => {
           SystemRoot: "C:\\Windows",
           GITHUB_TOKEN: "redacted",
           OPENAI_API_KEY: "real-secret",
-          NEXISCLAW_CONFIG_PATH: "/tmp/leaky-config.json",
+          GREENCHCLAW_CONFIG_PATH: "/tmp/leaky-config.json",
         },
-        { HOME: "/tmp/smoke-home", NEXISCLAW_STATE_DIR: "/tmp/smoke-state" },
+        { HOME: "/tmp/smoke-home", GREENCHCLAW_STATE_DIR: "/tmp/smoke-state" },
       ),
     ).toEqual({
       PATH:
@@ -125,11 +125,11 @@ describe("packed CLI smoke", () => {
       AWS_CONFIG_FILE: "/tmp/smoke-home/.aws/config",
       TMPDIR: "/tmp/original-tmp",
       SystemRoot: "C:\\Windows",
-      NEXISCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
-      NEXISCLAW_NO_ONBOARD: "1",
-      NEXISCLAW_SERVICE_REPAIR_POLICY: "external",
-      NEXISCLAW_SUPPRESS_NOTES: "1",
-      NEXISCLAW_STATE_DIR: "/tmp/smoke-state",
+      GREENCHCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+      GREENCHCLAW_NO_ONBOARD: "1",
+      GREENCHCLAW_SERVICE_REPAIR_POLICY: "external",
+      GREENCHCLAW_SUPPRESS_NOTES: "1",
+      GREENCHCLAW_STATE_DIR: "/tmp/smoke-state",
     });
   });
 
@@ -138,19 +138,19 @@ describe("packed CLI smoke", () => {
       createPackedCompletionSmokeEnv(
         {
           PATH: "/usr/bin",
-          NEXISCLAW_COMPLETION_SKIP_PLUGIN_COMMANDS: "0",
+          GREENCHCLAW_COMPLETION_SKIP_PLUGIN_COMMANDS: "0",
         },
         {
           HOME: "/tmp/smoke-home",
-          NEXISCLAW_STATE_DIR: "/tmp/smoke-state",
+          GREENCHCLAW_STATE_DIR: "/tmp/smoke-state",
         },
       ),
     ).toEqual({
       PATH: "/usr/bin",
       HOME: "/tmp/smoke-home",
-      NEXISCLAW_STATE_DIR: "/tmp/smoke-state",
-      NEXISCLAW_SUPPRESS_NOTES: "1",
-      NEXISCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+      GREENCHCLAW_STATE_DIR: "/tmp/smoke-state",
+      GREENCHCLAW_SUPPRESS_NOTES: "1",
+      GREENCHCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
       [COMPLETION_SKIP_PLUGIN_COMMANDS_ENV]: "1",
     });
   });
@@ -166,7 +166,7 @@ describe("workspace bootstrap smoke", () => {
           TMPDIR: "/tmp/original-tmp",
           OPENAI_API_KEY: "real-secret",
           ANTHROPIC_API_KEY: "real-secret",
-          NEXISCLAW_CONFIG_PATH: "/tmp/leaky-config.json",
+          GREENCHCLAW_CONFIG_PATH: "/tmp/leaky-config.json",
         },
         "/tmp/bootstrap-home",
       ),
@@ -177,12 +177,12 @@ describe("workspace bootstrap smoke", () => {
           : `${dirname(process.execPath)}:/usr/bin:/bin`,
       HOME: "/tmp/bootstrap-home",
       USERPROFILE: "/tmp/bootstrap-home",
-      NEXISCLAW_HOME: "/tmp/bootstrap-home",
+      GREENCHCLAW_HOME: "/tmp/bootstrap-home",
       TMPDIR: "/tmp/original-tmp",
-      NEXISCLAW_NO_ONBOARD: "1",
-      NEXISCLAW_SUPPRESS_NOTES: "1",
-      NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-      NEXISCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+      GREENCHCLAW_NO_ONBOARD: "1",
+      GREENCHCLAW_SUPPRESS_NOTES: "1",
+      GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      GREENCHCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
       AWS_EC2_METADATA_DISABLED: "true",
       AWS_SHARED_CREDENTIALS_FILE: "/tmp/bootstrap-home/.aws/credentials",
       AWS_CONFIG_FILE: "/tmp/bootstrap-home/.aws/config",
@@ -197,14 +197,14 @@ describe("collectBundledExtensionManifestErrors", () => {
         {
           id: "broken",
           packageJson: {
-            NexisClaw: {
+            GreenchClaw: {
               install: { npmSpec: "   " },
             },
           },
         },
       ]),
     ).toEqual([
-      "bundled extension 'broken' manifest invalid | NexisClaw.install.npmSpec must be a non-empty string",
+      "bundled extension 'broken' manifest invalid | GreenchClaw.install.npmSpec must be a non-empty string",
     ]);
   });
 
@@ -214,14 +214,14 @@ describe("collectBundledExtensionManifestErrors", () => {
         {
           id: "broken",
           packageJson: {
-            NexisClaw: {
-              install: { npmSpec: "@NexisClaw/broken", minHostVersion: "2026.3.14" },
+            GreenchClaw: {
+              install: { npmSpec: "@GreenchClaw/broken", minHostVersion: "2026.3.14" },
             },
           },
         },
       ]),
     ).toEqual([
-      "bundled extension 'broken' manifest invalid | NexisClaw.install.minHostVersion must use a semver floor in the form \">=x.y.z[-prerelease][+build]\"",
+      "bundled extension 'broken' manifest invalid | GreenchClaw.install.minHostVersion must use a semver floor in the form \">=x.y.z[-prerelease][+build]\"",
     ]);
   });
 
@@ -231,7 +231,7 @@ describe("collectBundledExtensionManifestErrors", () => {
         {
           id: "irc",
           packageJson: {
-            NexisClaw: {
+            GreenchClaw: {
               install: { minHostVersion: ">=2026.3.14" },
             },
           },
@@ -246,13 +246,15 @@ describe("collectBundledExtensionManifestErrors", () => {
         {
           id: "broken",
           packageJson: {
-            NexisClaw: {
+            GreenchClaw: {
               install: 123,
             },
           },
         },
       ]),
-    ).toEqual(["bundled extension 'broken' manifest invalid | NexisClaw.install must be an object"]);
+    ).toEqual([
+      "bundled extension 'broken' manifest invalid | GreenchClaw.install must be an object",
+    ]);
   });
 });
 
@@ -281,18 +283,18 @@ describe("bundled plugin package dependency checks", () => {
   });
 
   it("does not require root deps for root chunks sourced from the owning installed plugin", () => {
-    const tempRoot = mkdtempSync(join(tmpdir(), "NexisClaw-root-owned-installed-"));
+    const tempRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-root-owned-installed-"));
 
     try {
       mkdirSync(join(tempRoot, "dist", "extensions", "memory-lancedb"), { recursive: true });
       writeFileSync(
         join(tempRoot, "package.json"),
-        `{"name":"NexisClaw","dependencies":{}}\n`,
+        `{"name":"GreenchClaw","dependencies":{}}\n`,
         "utf8",
       );
       writeFileSync(
         join(tempRoot, "dist", "extensions", "memory-lancedb", "package.json"),
-        `{"name":"@NexisClaw/memory-lancedb","dependencies":{"root-owned-test-dep":"^1.0.0"}}\n`,
+        `{"name":"@GreenchClaw/memory-lancedb","dependencies":{"root-owned-test-dep":"^1.0.0"}}\n`,
         "utf8",
       );
       writeFileSync(
@@ -308,18 +310,18 @@ describe("bundled plugin package dependency checks", () => {
   });
 
   it("still requires root deps for root-owned installed chunks", () => {
-    const tempRoot = mkdtempSync(join(tmpdir(), "NexisClaw-root-owned-installed-missing-"));
+    const tempRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-root-owned-installed-missing-"));
 
     try {
       mkdirSync(join(tempRoot, "dist", "extensions", "memory-lancedb"), { recursive: true });
       writeFileSync(
         join(tempRoot, "package.json"),
-        `{"name":"NexisClaw","dependencies":{}}\n`,
+        `{"name":"GreenchClaw","dependencies":{}}\n`,
         "utf8",
       );
       writeFileSync(
         join(tempRoot, "dist", "extensions", "memory-lancedb", "package.json"),
-        `{"name":"@NexisClaw/memory-lancedb","dependencies":{"root-owned-test-dep":"^1.0.0"}}\n`,
+        `{"name":"@GreenchClaw/memory-lancedb","dependencies":{"root-owned-test-dep":"^1.0.0"}}\n`,
         "utf8",
       );
       writeFileSync(
@@ -344,12 +346,12 @@ describe("collectForbiddenPackPaths", () => {
         "dist/index.js",
         bundledDistPluginFile("discord", "node_modules/@discordjs/voice/index.js"),
         bundledPluginFile("tlon", "node_modules/.bin/tlon"),
-        "node_modules/.bin/NexisClaw",
+        "node_modules/.bin/GreenchClaw",
       ]),
     ).toEqual([
       bundledDistPluginFile("discord", "node_modules/@discordjs/voice/index.js"),
       bundledPluginFile("tlon", "node_modules/.bin/tlon"),
-      "node_modules/.bin/NexisClaw",
+      "node_modules/.bin/GreenchClaw",
     ]);
   });
 
@@ -389,14 +391,14 @@ describe("collectForbiddenPackPaths", () => {
     expect(
       collectForbiddenPackPaths([
         "dist/index.js",
-        "dist/extensions/browser/.NexisClaw-Install-Stage/package.json",
-        "dist/extensions/codex/.NexisClaw-runtime-deps-backup-node_modules-old/zod/index.js",
-        "dist/extensions/discord/.NexisClaw-runtime-deps-stamp.json",
+        "dist/extensions/browser/.GreenchClaw-Install-Stage/package.json",
+        "dist/extensions/codex/.GreenchClaw-runtime-deps-backup-node_modules-old/zod/index.js",
+        "dist/extensions/discord/.GreenchClaw-runtime-deps-stamp.json",
       ]),
     ).toEqual([
-      "dist/extensions/browser/.NexisClaw-Install-Stage/package.json",
-      "dist/extensions/codex/.NexisClaw-runtime-deps-backup-node_modules-old/zod/index.js",
-      "dist/extensions/discord/.NexisClaw-runtime-deps-stamp.json",
+      "dist/extensions/browser/.GreenchClaw-Install-Stage/package.json",
+      "dist/extensions/codex/.GreenchClaw-runtime-deps-backup-node_modules-old/zod/index.js",
+      "dist/extensions/discord/.GreenchClaw-runtime-deps-stamp.json",
     ]);
   });
 
@@ -432,7 +434,7 @@ describe("collectForbiddenPackPaths", () => {
   });
 
   it("blocks root dist chunks that still reference private qa lab sources", () => {
-    const tempRoot = mkdtempSync(join(tmpdir(), "NexisClaw-release-private-qa-"));
+    const tempRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-release-private-qa-"));
 
     try {
       mkdirSync(join(tempRoot, "dist"), { recursive: true });
@@ -452,7 +454,7 @@ describe("collectForbiddenPackPaths", () => {
   });
 
   it("blocks private QA paths in the generated dist inventory", () => {
-    const tempRoot = mkdtempSync(join(tmpdir(), "NexisClaw-release-inventory-"));
+    const tempRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-release-inventory-"));
 
     try {
       mkdirSync(join(tempRoot, "dist"), { recursive: true });
@@ -496,10 +498,10 @@ describe("collectMissingPackPaths", () => {
       "scripts/postinstall-bundled-plugins.mjs",
       "dist/task-registry-control.runtime.js",
       bundledDistPluginFile("slack", "runtime-api.js"),
-      bundledDistPluginFile("slack", "NexisClaw.plugin.json"),
+      bundledDistPluginFile("slack", "GreenchClaw.plugin.json"),
       bundledDistPluginFile("slack", "package.json"),
       bundledDistPluginFile("telegram", "runtime-api.js"),
-      bundledDistPluginFile("telegram", "NexisClaw.plugin.json"),
+      bundledDistPluginFile("telegram", "GreenchClaw.plugin.json"),
       bundledDistPluginFile("telegram", "package.json"),
     ]) {
       expect(missing).toContain(path);
@@ -573,23 +575,23 @@ describe("resolveMissingPackBuildHint", () => {
 describe("collectPackUnpackedSizeErrors", () => {
   it("accepts pack results within the unpacked size budget", () => {
     expect(
-      collectPackUnpackedSizeErrors([makePackResult("NexisClaw-2026.3.14.tgz", 120_354_302)]),
+      collectPackUnpackedSizeErrors([makePackResult("GreenchClaw-2026.3.14.tgz", 120_354_302)]),
     ).toStrictEqual([]);
   });
 
   it("flags oversized pack results that risk low-memory startup failures", () => {
     expect(
-      collectPackUnpackedSizeErrors([makePackResult("NexisClaw-2026.3.12.tgz", 224_002_564)]),
+      collectPackUnpackedSizeErrors([makePackResult("GreenchClaw-2026.3.12.tgz", 224_002_564)]),
     ).toEqual([
-      "NexisClaw-2026.3.12.tgz unpackedSize 224002564 bytes (213.6 MiB) exceeds budget 211812352 bytes (202.0 MiB). Investigate duplicate channel shims, copied extension trees, or other accidental pack bloat before release.",
+      "GreenchClaw-2026.3.12.tgz unpackedSize 224002564 bytes (213.6 MiB) exceeds budget 211812352 bytes (202.0 MiB). Investigate duplicate channel shims, copied extension trees, or other accidental pack bloat before release.",
     ]);
   });
 
   it("fails closed when npm pack output omits unpackedSize for every result", () => {
     expect(
       collectPackUnpackedSizeErrors([
-        { filename: "NexisClaw-2026.3.14.tgz" },
-        { filename: "NexisClaw-extra.tgz", unpackedSize: Number.NaN },
+        { filename: "GreenchClaw-2026.3.14.tgz" },
+        { filename: "GreenchClaw-extra.tgz", unpackedSize: Number.NaN },
       ]),
     ).toEqual([
       "npm pack --dry-run produced no unpackedSize data; pack size budget was not verified.",
@@ -625,7 +627,7 @@ describe("createPackedBundledPluginPostinstallEnv", () => {
   it("keeps packed postinstall on the lazy bundled dependency path", () => {
     expect(createPackedBundledPluginPostinstallEnv({ PATH: "/usr/bin" })).toEqual({
       PATH: "/usr/bin",
-      NEXISCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+      GREENCHCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
     });
   });
 });

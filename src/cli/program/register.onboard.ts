@@ -96,9 +96,9 @@ export function registerOnboardCommand(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/onboard", "docs.NexisClaw.ai/cli/onboard")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/onboard", "docs.GreenchClaw.ai/cli/onboard")}\n`,
     )
-    .option("--workspace <dir>", "Agent workspace directory (default: ~/.NexisClaw/workspace)")
+    .option("--workspace <dir>", "Agent workspace directory (default: ~/.GreenchClaw/workspace)")
     .option(
       "--reset",
       "Reset config + credentials + sessions before running onboard (workspace only with --reset-scope full)",
@@ -152,7 +152,7 @@ export function registerOnboardCommand(program: Command) {
     .option("--gateway-token <token>", "Gateway token (token auth)")
     .option(
       "--gateway-token-ref-env <name>",
-      "Gateway token SecretRef env var name (token auth; e.g. NEXISCLAW_GATEWAY_TOKEN)",
+      "Gateway token SecretRef env var name (token auth; e.g. GREENCHCLAW_GATEWAY_TOKEN)",
     )
     .option("--gateway-password <password>", "Gateway password (password auth)")
     .option("--remote-url <url>", "Remote Gateway WebSocket URL")

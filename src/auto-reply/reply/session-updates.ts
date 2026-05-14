@@ -17,7 +17,7 @@ import {
   type SessionEntry,
   updateSessionStore,
 } from "../../config/sessions.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   forgetActiveSessionForShutdown,
   noteActiveSessionForShutdown,
@@ -58,7 +58,7 @@ async function persistSessionEntryUpdate(params: {
 }
 
 function emitCompactionSessionLifecycleHooks(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   storePath?: string;
   previousEntry: SessionEntry;
@@ -130,7 +130,7 @@ export async function ensureSkillSnapshot(params: {
   sessionId?: string;
   isFirstTurnInSession: boolean;
   workspaceDir: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   /** If provided, only load skills with these names (for per-channel skill filtering) */
   skillFilter?: string[];
 }): Promise<{
@@ -138,7 +138,7 @@ export async function ensureSkillSnapshot(params: {
   skillsSnapshot?: SessionEntry["skillsSnapshot"];
   systemSent: boolean;
 }> {
-  if (process.env.NEXISCLAW_TEST_FAST === "1") {
+  if (process.env.GREENCHCLAW_TEST_FAST === "1") {
     // In fast unit-test runs we skip filesystem scanning, watchers, and session-store writes.
     // Dedicated skills tests cover snapshot generation behavior.
     return {
@@ -244,7 +244,7 @@ export async function incrementCompactionCount(params: {
   sessionStore?: Record<string, SessionEntry>;
   sessionKey?: string;
   storePath?: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   now?: number;
   amount?: number;
   /** Token count after compaction - if provided, updates session token counts */

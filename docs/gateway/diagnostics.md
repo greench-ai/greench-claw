@@ -7,7 +7,7 @@ read_when:
   - Reviewing what diagnostics data is recorded or redacted
 ---
 
-NexisClaw can create a local diagnostics zip for bug reports. It combines
+GreenchClaw can create a local diagnostics zip for bug reports. It combines
 sanitized Gateway status, health, logs, config shape, and recent payload-free
 stability events.
 
@@ -18,19 +18,19 @@ local Gateway logs and host-level runtime state.
 ## Quick start
 
 ```bash
-NexisClaw gateway diagnostics export
+GreenchClaw gateway diagnostics export
 ```
 
 The command prints the written zip path. To choose a path:
 
 ```bash
-NexisClaw gateway diagnostics export --output NexisClaw-diagnostics.zip
+GreenchClaw gateway diagnostics export --output GreenchClaw-diagnostics.zip
 ```
 
 For automation:
 
 ```bash
-NexisClaw gateway diagnostics export --json
+GreenchClaw gateway diagnostics export --json
 ```
 
 ## Chat command
@@ -41,28 +41,28 @@ copy-pasteable report for support:
 
 1. Send `/diagnostics` in the conversation where you noticed the problem. Add a
    short note if it helps, for example `/diagnostics bad tool choice`.
-2. NexisClaw sends the diagnostics preamble and asks for one explicit exec
-   approval. The approval runs `NexisClaw gateway diagnostics export --json`.
+2. GreenchClaw sends the diagnostics preamble and asks for one explicit exec
+   approval. The approval runs `GreenchClaw gateway diagnostics export --json`.
    Do not approve diagnostics through an allow-all rule.
-3. After approval, NexisClaw replies with a pasteable report containing the local
+3. After approval, GreenchClaw replies with a pasteable report containing the local
    bundle path, manifest summary, privacy notes, and relevant session ids.
 
-In group chats, an owner can still run `/diagnostics`, but NexisClaw does not
+In group chats, an owner can still run `/diagnostics`, but GreenchClaw does not
 post the diagnostic details back into the shared chat. It sends the preamble,
 approval prompts, Gateway export result, and Codex session/thread breakdown to
 the owner through the private approval route. The group only gets a short notice
-that the diagnostics flow was sent privately. If NexisClaw cannot find a private
+that the diagnostics flow was sent privately. If GreenchClaw cannot find a private
 owner route, the command fails closed and asks the owner to run it from a DM.
 
-When the active NexisClaw session is using the native OpenAI Codex harness,
+When the active GreenchClaw session is using the native OpenAI Codex harness,
 the same exec approval also covers an OpenAI feedback upload for the Codex
-runtime threads NexisClaw knows about. That upload is separate from the local
+runtime threads GreenchClaw knows about. That upload is separate from the local
 Gateway zip and appears only for Codex harness sessions. Before approval, the
 prompt explains that approving diagnostics will also send Codex feedback, but it
 does not list Codex session or thread ids. After approval, the chat reply lists
-the channels, NexisClaw session ids, Codex thread ids, and local resume commands
+the channels, GreenchClaw session ids, Codex thread ids, and local resume commands
 for the threads that were sent to OpenAI servers. If you deny or ignore the
-approval, NexisClaw does not run the export, does not send Codex feedback, and
+approval, GreenchClaw does not run the export, does not send Codex feedback, and
 does not print the Codex ids.
 
 That makes the common Codex debugging loop short: notice the bad behavior in
@@ -134,31 +134,31 @@ active.
 Inspect the live recorder:
 
 ```bash
-NexisClaw gateway stability
-NexisClaw gateway stability --type payload.large
-NexisClaw gateway stability --json
+GreenchClaw gateway stability
+GreenchClaw gateway stability --type payload.large
+GreenchClaw gateway stability --json
 ```
 
 Inspect the newest persisted stability bundle after a fatal exit, shutdown
 timeout, or restart startup failure:
 
 ```bash
-NexisClaw gateway stability --bundle latest
+GreenchClaw gateway stability --bundle latest
 ```
 
 Create a diagnostics zip from the newest persisted bundle:
 
 ```bash
-NexisClaw gateway stability --bundle latest --export
+GreenchClaw gateway stability --bundle latest --export
 ```
 
-Persisted bundles live under `~/.NexisClaw/logs/stability/` when events exist.
+Persisted bundles live under `~/.GreenchClaw/logs/stability/` when events exist.
 
 ## Useful options
 
 ```bash
-NexisClaw gateway diagnostics export \
-  --output NexisClaw-diagnostics.zip \
+GreenchClaw gateway diagnostics export \
+  --output GreenchClaw-diagnostics.zip \
   --log-lines 5000 \
   --log-bytes 1000000
 ```

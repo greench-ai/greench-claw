@@ -16,7 +16,7 @@ import type {
   ThinkingConfig,
   TurnCoverage,
 } from "@google/genai";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/provider-onboard";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/provider-onboard";
 import type {
   RealtimeVoiceAudioFormat,
   RealtimeVoiceBridge,
@@ -27,7 +27,7 @@ import type {
   RealtimeVoiceProviderPlugin,
   RealtimeVoiceTool,
   RealtimeVoiceToolResultOptions,
-} from "NexisClaw/plugin-sdk/realtime-voice";
+} from "GreenchClaw/plugin-sdk/realtime-voice";
 import {
   convertPcmToMulaw8k,
   mulawToPcm,
@@ -35,9 +35,9 @@ import {
   REALTIME_VOICE_AUDIO_FORMAT_PCM16_24KHZ,
   REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME,
   resamplePcm,
-} from "NexisClaw/plugin-sdk/realtime-voice";
-import { normalizeResolvedSecretInputString } from "NexisClaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/realtime-voice";
+import { normalizeResolvedSecretInputString } from "GreenchClaw/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { createGoogleGenAI } from "./google-genai-runtime.js";
 
 const GOOGLE_REALTIME_DEFAULT_MODEL = "gemini-2.5-flash-native-audio-preview-12-2025";
@@ -202,7 +202,7 @@ function resolveGoogleRealtimeProviderConfigRecord(
 
 function normalizeProviderConfig(
   config: RealtimeVoiceProviderConfig,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
 ): GoogleRealtimeVoiceProviderConfig {
   const raw = resolveGoogleRealtimeProviderConfigRecord(config);
   return {

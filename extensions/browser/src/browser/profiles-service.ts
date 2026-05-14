@@ -1,13 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import type { BrowserProfileConfig, NexisClawConfig } from "../config/config.js";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import type { BrowserProfileConfig, GreenchClawConfig } from "../config/config.js";
 import { getRuntimeConfig, replaceConfigFile } from "../config/config.js";
 import { deriveDefaultBrowserCdpPortRange } from "../config/port-defaults.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { resolveUserPath } from "../utils.js";
 import { assertCdpEndpointAllowed } from "./cdp.helpers.js";
-import { resolveNexisClawUserDataDir } from "./chrome.js";
+import { resolveGreenchClawUserDataDir } from "./chrome.js";
 import { parseHttpUrl, resolveProfile } from "./config.js";
 import {
   BrowserConflictError,
@@ -31,7 +31,7 @@ export type CreateProfileParams = {
   color?: string;
   cdpUrl?: string;
   userDataDir?: string;
-  driver?: "NexisClaw" | "existing-session";
+  driver?: "GreenchClaw" | "existing-session";
 };
 
 export type CreateProfileResult = {
@@ -165,7 +165,7 @@ export function createBrowserProfilesService(ctx: BrowserRouteContext) {
       }
     }
 
-    const nextConfig: NexisClawConfig = {
+    const nextConfig: GreenchClawConfig = {
       ...cfg,
       browser: {
         ...cfg.browser,
@@ -225,14 +225,14 @@ export function createBrowserProfilesService(ctx: BrowserRouteContext) {
     let deleted = false;
     const resolved = resolveProfile(state.resolved, name);
 
-    if (resolved?.cdpIsLoopback && resolved.driver === "NexisClaw") {
+    if (resolved?.cdpIsLoopback && resolved.driver === "GreenchClaw") {
       try {
         await ctx.forProfile(name).stopRunningBrowser();
       } catch {
         // ignore
       }
 
-      const userDataDir = resolveNexisClawUserDataDir(name);
+      const userDataDir = resolveGreenchClawUserDataDir(name);
       const profileDir = path.dirname(userDataDir);
       if (fs.existsSync(profileDir)) {
         await movePathToTrash(profileDir);
@@ -241,7 +241,7 @@ export function createBrowserProfilesService(ctx: BrowserRouteContext) {
     }
 
     const { [name]: _removed, ...remainingProfiles } = profiles;
-    const nextConfig: NexisClawConfig = {
+    const nextConfig: GreenchClawConfig = {
       ...cfg,
       browser: {
         ...cfg.browser,

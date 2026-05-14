@@ -3,7 +3,7 @@ import {
   type MessageReceipt,
   type MessageReceiptPartKind,
   type MessageReceiptSourceResult,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 import type { DiscordSendResult } from "./send.types.js";
 
 export type DiscordReceiptResultSource = {

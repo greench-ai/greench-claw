@@ -58,7 +58,7 @@ vi.mock("./reply/agent-runner.runtime.js", () => ({
         return "⚠️ Context overflow — prompt too large for this model. Try a shorter message or a larger-context model.";
       }
       const trimmed = message.replace(/\.\s*$/, "");
-      return `⚠️ Agent failed before reply: ${trimmed}.\nLogs: NexisClaw logs --follow`;
+      return `⚠️ Agent failed before reply: ${trimmed}.\nLogs: GreenchClaw logs --follow`;
     };
     const stripHeartbeat = (text?: string) => {
       const trimmed = text?.trim();
@@ -344,7 +344,7 @@ describe("trigger handling", () => {
     {
       error: "sandbox is not defined.",
       expected:
-        "⚠️ Agent failed before reply: sandbox is not defined.\nLogs: NexisClaw logs --follow",
+        "⚠️ Agent failed before reply: sandbox is not defined.\nLogs: GreenchClaw logs --follow",
     },
     {
       error: "Context window exceeded",
@@ -392,7 +392,7 @@ describe("trigger handling", () => {
 
   it("acknowledges bare /new without invoking the model or loading startup memory", async () => {
     await withTempHome(async (home) => {
-      const workspaceDir = join(home, "NexisClaw");
+      const workspaceDir = join(home, "GreenchClaw");
       const nowMs = Date.now();
       const todayStamp = formatDateStampForZone(nowMs, TEST_TIME_ZONE);
       const yesterdayStamp = formatDateStampForZone(nowMs - 24 * 60 * 60 * 1000, TEST_TIME_ZONE);
@@ -414,7 +414,7 @@ describe("trigger handling", () => {
 
   it("acknowledges normalized bare /RESET without invoking the model", async () => {
     await withTempHome(async (home) => {
-      const workspaceDir = join(home, "NexisClaw");
+      const workspaceDir = join(home, "GreenchClaw");
       const nowMs = Date.now();
       const todayStamp = formatDateStampForZone(nowMs, TEST_TIME_ZONE);
       await writeDailyMemoryNotes(workspaceDir, [
@@ -757,7 +757,7 @@ describe("trigger handling", () => {
       const runEmbeddedPiAgentMock = getRunEmbeddedPiAgentMock();
       runEmbeddedPiAgentMock.mockReset();
       const storePath = requireSessionStorePath(cfg);
-      const authDir = join(home, ".NexisClaw", "agents", "main", "agent");
+      const authDir = join(home, ".GreenchClaw", "agents", "main", "agent");
       await fs.mkdir(authDir, { recursive: true });
       await fs.writeFile(
         join(authDir, "auth-profiles.json"),

@@ -3,10 +3,10 @@ import type { IncomingMessage } from "node:http";
 import {
   createEmptyPluginRegistry,
   setActivePluginRegistry,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { createMockServerResponse } from "NexisClaw/plugin-sdk/test-env";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { createMockServerResponse } from "GreenchClaw/plugin-sdk/test-env";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig, PluginRuntime } from "../runtime-api.js";
+import type { GreenchClawConfig, PluginRuntime } from "../runtime-api.js";
 import type { ResolvedGoogleChatAccount } from "./accounts.js";
 import { verifyGoogleChatRequest } from "./auth.js";
 import {
@@ -93,7 +93,7 @@ function registerTwoTargets() {
   const logA = vi.fn();
   const logB = vi.fn();
   const core = {} as PluginRuntime;
-  const config = {} as NexisClawConfig;
+  const config = {} as GreenchClawConfig;
 
   const unregisterA = registerGoogleChatWebhookTarget({
     account: baseAccount("A"),

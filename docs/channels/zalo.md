@@ -9,21 +9,21 @@ Status: experimental. DMs are supported. The [Capabilities](#capabilities) secti
 
 ## Bundled plugin
 
-Zalo ships as a bundled plugin in current NexisClaw releases, so normal packaged
+Zalo ships as a bundled plugin in current GreenchClaw releases, so normal packaged
 builds do not need a separate install.
 
 If you are on an older build or a custom install that excludes Zalo, install the
 npm package directly:
 
-- Install via CLI: `NexisClaw plugins install @NexisClaw/zalo`
-- Pinned version: `NexisClaw plugins install @NexisClaw/zalo@2026.5.2`
-- Or from a source checkout: `NexisClaw plugins install ./path/to/local/zalo-plugin`
+- Install via CLI: `GreenchClaw plugins install @GreenchClaw/zalo`
+- Pinned version: `GreenchClaw plugins install @GreenchClaw/zalo@2026.5.2`
+- Or from a source checkout: `GreenchClaw plugins install ./path/to/local/zalo-plugin`
 - Details: [Plugins](/tools/plugin)
 
 ## Quick setup (beginner)
 
 1. Ensure the Zalo plugin is available.
-   - Current packaged NexisClaw releases already bundle it.
+   - Current packaged GreenchClaw releases already bundle it.
    - Older/custom installs can add it manually with the commands above.
 2. Set the token:
    - Env: `ZALO_BOT_TOKEN=...`
@@ -54,7 +54,7 @@ Minimal config:
 Zalo is a Vietnam-focused messaging app; its Bot API lets the Gateway run a bot for 1:1 conversations.
 It is a good fit for support or notifications where you want deterministic routing back to Zalo.
 
-This page reflects current NexisClaw behavior for **Zalo Bot Creator / Marketplace bots**.
+This page reflects current GreenchClaw behavior for **Zalo Bot Creator / Marketplace bots**.
 **Zalo Official Account (OA) bots** are a different Zalo product surface and may behave differently.
 
 - A Zalo Bot API channel owned by the Gateway.
@@ -117,8 +117,8 @@ Multi-account support: use `channels.zalo.accounts` with per-account tokens and 
 
 - Default: `channels.zalo.dmPolicy = "pairing"`. Unknown senders receive a pairing code; messages are ignored until approved (codes expire after 1 hour).
 - Approve via:
-  - `NexisClaw pairing list zalo`
-  - `NexisClaw pairing approve zalo <CODE>`
+  - `GreenchClaw pairing list zalo`
+  - `GreenchClaw pairing approve zalo <CODE>`
 - Pairing is the default token exchange. Details: [Pairing](/channels/pairing)
 - `channels.zalo.allowFrom` accepts numeric user IDs (no username lookup available).
 
@@ -169,7 +169,7 @@ For a quick support snapshot, see [Capabilities](#capabilities). The notes below
 
 ## Capabilities
 
-This table summarizes current **Zalo Bot Creator / Marketplace bot** behavior in NexisClaw.
+This table summarizes current **Zalo Bot Creator / Marketplace bot** behavior in GreenchClaw.
 
 | Feature                     | Status                                  |
 | --------------------------- | --------------------------------------- |
@@ -191,15 +191,15 @@ This table summarizes current **Zalo Bot Creator / Marketplace bot** behavior in
 ## Delivery targets (CLI/cron)
 
 - Use a chat id as the target.
-- Example: `NexisClaw message send --channel zalo --target 123456789 --message "hi"`.
+- Example: `GreenchClaw message send --channel zalo --target 123456789 --message "hi"`.
 
 ## Troubleshooting
 
 **Bot doesn't respond:**
 
-- Check that the token is valid: `NexisClaw channels status --probe`
+- Check that the token is valid: `GreenchClaw channels status --probe`
 - Verify the sender is approved (pairing or allowFrom)
-- Check gateway logs: `NexisClaw logs --follow`
+- Check gateway logs: `GreenchClaw logs --follow`
 
 **Webhook not receiving events:**
 

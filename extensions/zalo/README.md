@@ -1,17 +1,17 @@
-# @NexisClaw/zalo
+# @GreenchClaw/zalo
 
-Zalo channel plugin for NexisClaw (Bot API).
+Zalo channel plugin for GreenchClaw (Bot API).
 
 ## Install (local checkout)
 
 ```bash
-NexisClaw plugins install ./path/to/local/zalo-plugin
+GreenchClaw plugins install ./path/to/local/zalo-plugin
 ```
 
 ## Install (npm)
 
 ```bash
-NexisClaw plugins install @NexisClaw/zalo
+GreenchClaw plugins install @GreenchClaw/zalo
 ```
 
 Onboarding: select Zalo and confirm the install prompt to fetch the plugin automatically.

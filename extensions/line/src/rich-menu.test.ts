@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createDefaultMenuConfig,
@@ -228,7 +228,7 @@ describe("createDefaultMenuConfig", () => {
   });
 });
 
-const richMenuUploadCfg: NexisClawConfig = {
+const richMenuUploadCfg: GreenchClawConfig = {
   channels: {
     line: {
       channelAccessToken: "line-token",
@@ -241,7 +241,7 @@ describe("uploadRichMenuImage", () => {
   let tempRoot: string;
 
   beforeEach(async () => {
-    tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-line-rich-menu-"));
+    tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-line-rich-menu-"));
     setRichMenuImageMock.mockReset();
     MessagingApiBlobClientMock.mockClear();
   });

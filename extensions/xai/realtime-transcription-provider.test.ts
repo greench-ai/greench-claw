@@ -44,7 +44,7 @@ async function createRealtimeSttServer(params?: {
           ws.send(
             JSON.stringify({
               type: "transcript.partial",
-              text: "hello NexisClaw",
+              text: "hello GreenchClaw",
               is_final: false,
               speech_final: false,
             }),
@@ -52,7 +52,7 @@ async function createRealtimeSttServer(params?: {
           ws.send(
             JSON.stringify({
               type: "transcript.partial",
-              text: "hello NexisClaw final",
+              text: "hello GreenchClaw final",
               is_final: true,
               speech_final: true,
             }),
@@ -61,7 +61,7 @@ async function createRealtimeSttServer(params?: {
         }
         const event = JSON.parse(buffer.toString()) as { type?: string };
         if (event.type === "audio.done") {
-          ws.send(JSON.stringify({ type: "transcript.done", text: "hello NexisClaw final" }));
+          ws.send(JSON.stringify({ type: "transcript.done", text: "hello GreenchClaw final" }));
           done();
           resolveDone?.();
         }
@@ -135,7 +135,7 @@ describe("xai realtime transcription provider", () => {
       resolveFinalTranscript = resolve;
     });
     const onTranscript = vi.fn((text: string) => {
-      if (text === "hello NexisClaw final") {
+      if (text === "hello GreenchClaw final") {
         resolveFinalTranscript?.();
       }
     });
@@ -169,7 +169,7 @@ describe("xai realtime transcription provider", () => {
     expect(Buffer.concat(binaryFrames).toString()).toContain("queued-before-ready");
     expect(Buffer.concat(binaryFrames).toString()).toContain("after-ready");
     expect(onSpeechStart).toHaveBeenCalled();
-    expect(onPartial).toHaveBeenCalledWith("hello NexisClaw");
+    expect(onPartial).toHaveBeenCalledWith("hello GreenchClaw");
   });
 
   it("rejects setup errors before the stream is ready", async () => {

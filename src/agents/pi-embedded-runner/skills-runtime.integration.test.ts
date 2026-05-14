@@ -2,19 +2,19 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { writePluginWithSkill } from "../test-helpers/skill-plugin-fixtures.js";
 import { resolveEmbeddedRunSkillEntries } from "./skills-runtime.js";
 
 const tempDirs: string[] = [];
-const originalBundledDir = process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+const originalBundledDir = process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
 
 function restoreBundledPluginsDir() {
   if (originalBundledDir === undefined) {
-    delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
     return;
   }
-  process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = originalBundledDir;
+  process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = originalBundledDir;
 }
 
 async function createTempDir(prefix: string) {
@@ -24,8 +24,8 @@ async function createTempDir(prefix: string) {
 }
 
 async function setupBundledDiffsPlugin() {
-  const bundledPluginsDir = await createTempDir("NexisClaw-bundled-");
-  const workspaceDir = await createTempDir("NexisClaw-workspace-");
+  const bundledPluginsDir = await createTempDir("GreenchClaw-bundled-");
+  const workspaceDir = await createTempDir("GreenchClaw-workspace-");
   const pluginRoot = path.join(bundledPluginsDir, "diffs");
 
   await writePluginWithSkill({
@@ -38,9 +38,9 @@ async function setupBundledDiffsPlugin() {
   return { bundledPluginsDir, workspaceDir };
 }
 
-async function resolveBundledDiffsSkillEntries(config?: NexisClawConfig) {
+async function resolveBundledDiffsSkillEntries(config?: GreenchClawConfig) {
   const { bundledPluginsDir, workspaceDir } = await setupBundledDiffsPlugin();
-  process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
+  process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
 
   return resolveEmbeddedRunSkillEntries({ workspaceDir, ...(config ? { config } : {}) });
 }
@@ -52,7 +52,7 @@ afterEach(async () => {
 
 describe("resolveEmbeddedRunSkillEntries (integration)", () => {
   it("loads bundled diffs skill when explicitly enabled in config", async () => {
-    const config: NexisClawConfig = {
+    const config: GreenchClawConfig = {
       plugins: {
         entries: {
           diffs: { enabled: true },

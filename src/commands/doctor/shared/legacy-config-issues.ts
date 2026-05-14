@@ -1,7 +1,7 @@
 import { collectChannelLegacyConfigRules } from "../../../channels/plugins/legacy-config.js";
 import { findLegacyConfigIssues } from "../../../config/legacy.js";
 import type { LegacyConfigRule } from "../../../config/legacy.shared.js";
-import type { LegacyConfigIssue, NexisClawConfig } from "../../../config/types.js";
+import type { LegacyConfigIssue, GreenchClawConfig } from "../../../config/types.js";
 import {
   collectRelevantDoctorPluginIds,
   collectRelevantDoctorPluginIdsForTouchedPaths,
@@ -32,7 +32,7 @@ function collectPluginLegacyConfigRules(
   if (pluginIds.length === 0) {
     return [];
   }
-  return listPluginDoctorLegacyConfigRules({ config: raw as NexisClawConfig, pluginIds });
+  return listPluginDoctorLegacyConfigRules({ config: raw as GreenchClawConfig, pluginIds });
 }
 
 export function findDoctorLegacyConfigIssues(

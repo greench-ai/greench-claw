@@ -1,8 +1,8 @@
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
 import {
   createResolvedDirectoryEntriesLister,
   type DirectoryConfigParams,
-} from "NexisClaw/plugin-sdk/directory-config-runtime";
+} from "GreenchClaw/plugin-sdk/directory-config-runtime";
 import {
   mergeDiscordAccountConfig,
   resolveDefaultDiscordAccountId,

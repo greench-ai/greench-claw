@@ -1,4 +1,4 @@
-import { readStringValue } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { readStringValue } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { ensurePageState, getPageForTargetId } from "./pw-session.js";
 
 export async function cookiesGetViaPlaywright(opts: {

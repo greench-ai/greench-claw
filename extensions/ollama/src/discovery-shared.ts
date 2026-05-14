@@ -1,5 +1,5 @@
-import { getCachedLiveCatalogValue } from "NexisClaw/plugin-sdk/provider-catalog-shared";
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
+import { getCachedLiveCatalogValue } from "GreenchClaw/plugin-sdk/provider-catalog-shared";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import { OLLAMA_DEFAULT_BASE_URL } from "./defaults.js";
 import { readProviderBaseUrl } from "./provider-base-url.js";
 import { resolveOllamaApiBase } from "./provider-models.js";

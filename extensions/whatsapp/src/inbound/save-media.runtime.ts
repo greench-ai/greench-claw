@@ -1,1 +1,1 @@
-export { saveMediaBuffer } from "NexisClaw/plugin-sdk/media-store";
+export { saveMediaBuffer } from "GreenchClaw/plugin-sdk/media-store";

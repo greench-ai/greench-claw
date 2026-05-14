@@ -3,8 +3,8 @@ import {
   computeBackoff,
   sleepWithAbort,
   type BackoffPolicy,
-} from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 export type TelegramSendChatActionLogger = (message: string) => void;
 
@@ -138,7 +138,7 @@ export function createTelegramSendChatActionHandler({
           logger(
             `CRITICAL: sendChatAction suspended after ${consecutive401Failures} consecutive 401 errors. ` +
               `Bot token is likely invalid. Telegram may DELETE the bot if requests continue. ` +
-              `Replace the token and restart: NexisClaw channels restart telegram`,
+              `Replace the token and restart: GreenchClaw channels restart telegram`,
           );
         } else {
           logger(

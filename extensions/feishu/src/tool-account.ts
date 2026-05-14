@@ -1,6 +1,6 @@
 import type * as Lark from "@larksuiteoapi/node-sdk";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import type { NexisClawPluginApi } from "../runtime-api.js";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawPluginApi } from "../runtime-api.js";
 import {
   listFeishuAccountIds,
   resolveFeishuAccount,
@@ -13,7 +13,7 @@ import type { FeishuToolsConfig, ResolvedFeishuAccount } from "./types.js";
 type AccountAwareParams = { accountId?: string };
 
 function resolveImplicitToolAccountId(params: {
-  api: Pick<NexisClawPluginApi, "config">;
+  api: Pick<GreenchClawPluginApi, "config">;
   executeParams?: AccountAwareParams;
   defaultAccountId?: string;
 }): string | undefined {
@@ -48,7 +48,7 @@ function resolveImplicitToolAccountId(params: {
 }
 
 export function resolveFeishuToolAccount(params: {
-  api: Pick<NexisClawPluginApi, "config">;
+  api: Pick<GreenchClawPluginApi, "config">;
   executeParams?: AccountAwareParams;
   defaultAccountId?: string;
 }): ResolvedFeishuAccount {
@@ -62,7 +62,7 @@ export function resolveFeishuToolAccount(params: {
 }
 
 export function createFeishuToolClient(params: {
-  api: Pick<NexisClawPluginApi, "config">;
+  api: Pick<GreenchClawPluginApi, "config">;
   executeParams?: AccountAwareParams;
   defaultAccountId?: string;
 }): Lark.Client {

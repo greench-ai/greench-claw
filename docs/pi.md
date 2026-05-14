@@ -1,16 +1,16 @@
 ---
-summary: "Architecture of NexisClaw's embedded Pi agent integration and session lifecycle"
+summary: "Architecture of GreenchClaw's embedded Pi agent integration and session lifecycle"
 title: "Pi integration architecture"
 read_when:
-  - Understanding Pi SDK integration design in NexisClaw
+  - Understanding Pi SDK integration design in GreenchClaw
   - Modifying agent session lifecycle, tooling, or provider wiring for Pi
 ---
 
-NexisClaw integrates with [pi-coding-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent) and its sibling packages (`pi-ai`, `pi-agent-core`, `pi-tui`) to power its AI agent capabilities.
+GreenchClaw integrates with [pi-coding-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent) and its sibling packages (`pi-ai`, `pi-agent-core`, `pi-tui`) to power its AI agent capabilities.
 
 ## Overview
 
-NexisClaw uses the pi SDK to embed an AI coding agent into its messaging gateway architecture. Instead of spawning pi as a subprocess or using RPC mode, NexisClaw directly imports and instantiates pi's `AgentSession` via `createAgentSession()`. This embedded approach provides:
+GreenchClaw uses the pi SDK to embed an AI coding agent into its messaging gateway architecture. Instead of spawning pi as a subprocess or using RPC mode, GreenchClaw directly imports and instantiates pi's `AgentSession` via `createAgentSession()`. This embedded approach provides:
 
 - Full control over session lifecycle and event handling
 - Custom tool injection (messaging, sandbox, channel-specific actions)
@@ -35,7 +35,7 @@ NexisClaw uses the pi SDK to embed an AI coding agent into its messaging gateway
 | `pi-ai`           | Core LLM abstractions: `Model`, `streamSimple`, message types, provider APIs                           |
 | `pi-agent-core`   | Agent loop, tool execution, `AgentMessage` types                                                       |
 | `pi-coding-agent` | High-level SDK: `createAgentSession`, `SessionManager`, `AuthStorage`, `ModelRegistry`, built-in tools |
-| `pi-tui`          | Terminal UI components (used in NexisClaw's local TUI mode)                                             |
+| `pi-tui`          | Terminal UI components (used in GreenchClaw's local TUI mode)                                          |
 
 ## File structure
 
@@ -78,7 +78,7 @@ src/agents/
 ├── pi-embedded-helpers.ts         # Error classification, turn validation
 ├── pi-embedded-helpers/           # Helper modules
 ├── pi-embedded-utils.ts           # Formatting utilities
-├── pi-tools.ts                    # createNexisClawCodingTools()
+├── pi-tools.ts                    # createGreenchClawCodingTools()
 ├── pi-tools.abort.ts              # AbortSignal wrapping for tools
 ├── pi-tools.policy.ts             # Tool allowlist/denylist policy
 ├── pi-tools.read.ts               # Read tool customizations
@@ -110,7 +110,7 @@ src/agents/
 ├── sandbox.ts                     # Sandbox context resolution
 ├── sandbox/                       # Sandbox subsystem
 ├── channel-tools.ts               # Channel-specific tool injection
-├── NexisClaw-tools.ts              # NexisClaw-specific tools
+├── GreenchClaw-tools.ts              # GreenchClaw-specific tools
 ├── bash-tools.ts                  # exec/process tools
 ├── apply-patch.ts                 # apply_patch tool (OpenAI)
 ├── tools/                         # Individual tool implementations
@@ -149,7 +149,7 @@ const result = await runEmbeddedPiAgent({
   sessionKey: "main:whatsapp:+1234567890",
   sessionFile: "/path/to/session.jsonl",
   workspaceDir: "/path/to/workspace",
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   prompt: "Hello, how are you?",
   provider: "anthropic",
   model: "claude-sonnet-4-6",
@@ -235,7 +235,7 @@ await session.prompt(effectivePrompt, { images: imageResult.images });
 
 The SDK handles the full agent loop: sending to LLM, executing tool calls, streaming responses.
 
-Image injection is prompt-local: NexisClaw loads image refs from the current prompt and
+Image injection is prompt-local: GreenchClaw loads image refs from the current prompt and
 passes them via `images` for that turn only. It does not re-scan older history turns
 to re-inject image payloads.
 
@@ -244,8 +244,8 @@ to re-inject image payloads.
 ### Tool pipeline
 
 1. **Base Tools**: pi's `codingTools` (read, bash, edit, write)
-2. **Custom Replacements**: NexisClaw replaces bash with `exec`/`process`, customizes read/edit/write for sandbox
-3. **NexisClaw Tools**: messaging, browser, canvas, sessions, cron, gateway, etc.
+2. **Custom Replacements**: GreenchClaw replaces bash with `exec`/`process`, customizes read/edit/write for sandbox
+3. **GreenchClaw Tools**: messaging, browser, canvas, sessions, cron, gateway, etc.
 4. **Channel Tools**: Discord/Telegram/Slack/WhatsApp-specific action tools
 5. **Policy Filtering**: Tools filtered by profile, provider, agent, group, sandbox policies
 6. **Schema Normalization**: Schemas cleaned for Gemini/OpenAI quirks
@@ -283,11 +283,11 @@ export function splitSdkTools(options: { tools: AnyAgentTool[]; sandboxEnabled: 
 }
 ```
 
-This ensures NexisClaw's policy filtering, sandbox integration, and extended toolset remain consistent across providers.
+This ensures GreenchClaw's policy filtering, sandbox integration, and extended toolset remain consistent across providers.
 
 ## System prompt construction
 
-The system prompt is built in `buildAgentSystemPrompt()` (`system-prompt.ts`). It assembles a full prompt with sections including Tooling, Tool Call Style, Safety guardrails, NexisClaw Control, Skills, Docs, Workspace, Sandbox, Messaging, Assistant Output Directives, Voice, Silent Replies, Heartbeats, Runtime metadata, plus Memory and Reactions when enabled, and optional context files and extra system prompt content. Sections are trimmed for minimal prompt mode used by subagents.
+The system prompt is built in `buildAgentSystemPrompt()` (`system-prompt.ts`). It assembles a full prompt with sections including Tooling, Tool Call Style, Safety guardrails, GreenchClaw Control, Skills, Docs, Workspace, Sandbox, Messaging, Assistant Output Directives, Voice, Silent Replies, Heartbeats, Runtime metadata, plus Memory and Reactions when enabled, and optional context files and extra system prompt content. Sections are trimmed for minimal prompt mode used by subagents.
 
 The prompt is applied after session creation via `applySystemPromptOverrideToSession()`:
 
@@ -306,7 +306,7 @@ Sessions are JSONL files with tree structure (id/parentId linking). Pi's `Sessio
 const sessionManager = SessionManager.open(params.sessionFile);
 ```
 
-NexisClaw wraps this with `guardSessionManager()` for tool result safety.
+GreenchClaw wraps this with `guardSessionManager()` for tool result safety.
 
 ### Session caching
 
@@ -341,7 +341,7 @@ const compactResult = await compactEmbeddedPiSessionDirect({
 
 ### Auth profiles
 
-NexisClaw maintains an auth profile store with multiple API keys per provider:
+GreenchClaw maintains an auth profile store with multiple API keys per provider:
 
 ```typescript
 const authStore = ensureAuthProfileStore(agentDir, { allowKeychainPrompt: false });
@@ -389,7 +389,7 @@ if (fallbackConfigured && isFailoverErrorMessage(errorText)) {
 
 ## Pi extensions
 
-NexisClaw loads custom pi extensions for specialized behavior:
+GreenchClaw loads custom pi extensions for specialized behavior:
 
 ### Compaction safeguard
 
@@ -514,7 +514,7 @@ if (sandboxRoot) {
 
 ## TUI Integration
 
-NexisClaw also has a local TUI mode that uses pi-tui components directly:
+GreenchClaw also has a local TUI mode that uses pi-tui components directly:
 
 ```typescript
 // src/tui/tui.ts
@@ -525,15 +525,15 @@ This provides the interactive terminal experience similar to pi's native mode.
 
 ## Key differences from Pi CLI
 
-| Aspect          | Pi CLI                  | NexisClaw Embedded                                                                              |
-| --------------- | ----------------------- | ---------------------------------------------------------------------------------------------- |
-| Invocation      | `pi` command / RPC      | SDK via `createAgentSession()`                                                                 |
-| Tools           | Default coding tools    | Custom NexisClaw tool suite                                                                     |
-| System prompt   | AGENTS.md + prompts     | Dynamic per-channel/context                                                                    |
-| Session storage | `~/.pi/agent/sessions/` | `~/.NexisClaw/agents/<agentId>/sessions/` (or `$NEXISCLAW_STATE_DIR/agents/<agentId>/sessions/`) |
-| Auth            | Single credential       | Multi-profile with rotation                                                                    |
-| Extensions      | Loaded from disk        | Programmatic + disk paths                                                                      |
-| Event handling  | TUI rendering           | Callback-based (onBlockReply, etc.)                                                            |
+| Aspect          | Pi CLI                  | GreenchClaw Embedded                                                                                 |
+| --------------- | ----------------------- | ---------------------------------------------------------------------------------------------------- |
+| Invocation      | `pi` command / RPC      | SDK via `createAgentSession()`                                                                       |
+| Tools           | Default coding tools    | Custom GreenchClaw tool suite                                                                        |
+| System prompt   | AGENTS.md + prompts     | Dynamic per-channel/context                                                                          |
+| Session storage | `~/.pi/agent/sessions/` | `~/.GreenchClaw/agents/<agentId>/sessions/` (or `$GREENCHCLAW_STATE_DIR/agents/<agentId>/sessions/`) |
+| Auth            | Single credential       | Multi-profile with rotation                                                                          |
+| Extensions      | Loaded from disk        | Programmatic + disk paths                                                                            |
+| Event handling  | TUI rendering           | Callback-based (onBlockReply, etc.)                                                                  |
 
 ## Future considerations
 
@@ -563,7 +563,7 @@ Pi integration coverage spans these suites:
 
 Live/opt-in:
 
-- `src/agents/pi-embedded-runner-extraparams.live.test.ts` (enable `NEXISCLAW_LIVE_TEST=1`)
+- `src/agents/pi-embedded-runner-extraparams.live.test.ts` (enable `GREENCHCLAW_LIVE_TEST=1`)
 
 For current run commands, see [Pi Development Workflow](/pi-dev).
 

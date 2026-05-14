@@ -107,7 +107,7 @@ function firstMockArg(mock: { mock: { calls: readonly unknown[][] } }, label: st
 }
 
 describe("createChildAdapter", () => {
-  const originalServiceMarker = process.env.NEXISCLAW_SERVICE_MARKER;
+  const originalServiceMarker = process.env.GREENCHCLAW_SERVICE_MARKER;
   const originalPlatformDescriptor = Object.getOwnPropertyDescriptor(process, "platform");
 
   const setPlatform = (platform: NodeJS.Platform) => {
@@ -129,15 +129,15 @@ describe("createChildAdapter", () => {
       decode: (chunk: Buffer | string) => (Buffer.isBuffer(chunk) ? chunk.toString("utf8") : chunk),
       flush: () => "",
     }));
-    delete process.env.NEXISCLAW_SERVICE_MARKER;
+    delete process.env.GREENCHCLAW_SERVICE_MARKER;
     vi.useRealTimers();
   });
 
   afterAll(() => {
     if (originalServiceMarker === undefined) {
-      delete process.env.NEXISCLAW_SERVICE_MARKER;
+      delete process.env.GREENCHCLAW_SERVICE_MARKER;
     } else {
-      process.env.NEXISCLAW_SERVICE_MARKER = originalServiceMarker;
+      process.env.GREENCHCLAW_SERVICE_MARKER = originalServiceMarker;
     }
   });
 
@@ -166,7 +166,8 @@ describe("createChildAdapter", () => {
 
     // Detachment flag is now passed to killProcessTree so it knows whether
     // it can safely group-kill via -pid. (#71662)
-    const expectedDetached = process.platform !== "win32" && !process.env.NEXISCLAW_SERVICE_MARKER;
+    const expectedDetached =
+      process.platform !== "win32" && !process.env.GREENCHCLAW_SERVICE_MARKER;
     expect(killProcessTreeMock).toHaveBeenCalledWith(4321, { detached: expectedDetached });
     expect(killMock).toHaveBeenCalledWith("SIGKILL");
   });
@@ -193,14 +194,14 @@ describe("createChildAdapter", () => {
   });
 
   it("passes detached:false in service-managed mode where useDetached is false from the start (#71662)", async () => {
-    process.env.NEXISCLAW_SERVICE_MARKER = "1";
+    process.env.GREENCHCLAW_SERVICE_MARKER = "1";
     try {
       const { adapter, killMock } = await createAdapterHarness({ pid: 9999 });
       adapter.kill();
       expect(killProcessTreeMock).toHaveBeenCalledWith(9999, { detached: false });
       expect(killMock).toHaveBeenCalledWith("SIGKILL");
     } finally {
-      delete process.env.NEXISCLAW_SERVICE_MARKER;
+      delete process.env.GREENCHCLAW_SERVICE_MARKER;
     }
   });
 
@@ -313,7 +314,7 @@ describe("createChildAdapter", () => {
         usedFallback: false,
       });
       const adapter = await createChildAdapter({
-        argv: ["NexisClaw", "version"],
+        argv: ["GreenchClaw", "version"],
         stdinMode: "pipe-closed",
       });
       return { ...stub, adapter };
@@ -333,7 +334,7 @@ describe("createChildAdapter", () => {
   });
 
   it("disables detached mode in service-managed runtime", async () => {
-    process.env.NEXISCLAW_SERVICE_MARKER = "NexisClaw";
+    process.env.GREENCHCLAW_SERVICE_MARKER = "GreenchClaw";
 
     await createAdapterHarness({ pid: 7777 });
 

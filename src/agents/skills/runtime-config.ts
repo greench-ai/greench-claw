@@ -1,8 +1,8 @@
 import { getRuntimeConfigSnapshot } from "../../config/runtime-snapshot.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { coerceSecretRef } from "../../config/types.secrets.js";
 
-function hasConfiguredSkillApiKeyRef(config?: NexisClawConfig): boolean {
+function hasConfiguredSkillApiKeyRef(config?: GreenchClawConfig): boolean {
   const entries = config?.skills?.entries;
   if (!entries || typeof entries !== "object") {
     return false;
@@ -18,7 +18,9 @@ function hasConfiguredSkillApiKeyRef(config?: NexisClawConfig): boolean {
   return false;
 }
 
-export function resolveSkillRuntimeConfig(config?: NexisClawConfig): NexisClawConfig | undefined {
+export function resolveSkillRuntimeConfig(
+  config?: GreenchClawConfig,
+): GreenchClawConfig | undefined {
   const runtimeConfig = getRuntimeConfigSnapshot();
   if (!runtimeConfig) {
     return config;

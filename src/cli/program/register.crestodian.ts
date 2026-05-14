@@ -16,11 +16,11 @@ export function registerCrestodianCommand(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["NexisClaw", "Start Crestodian."],
-          ["NexisClaw crestodian", "Start Crestodian explicitly."],
-          ['NexisClaw crestodian -m "status"', "Run one status request."],
+          ["GreenchClaw", "Start Crestodian."],
+          ["GreenchClaw crestodian", "Start Crestodian explicitly."],
+          ['GreenchClaw crestodian -m "status"', "Run one status request."],
           [
-            'NexisClaw crestodian -m "set default model openai/gpt-5.2" --yes',
+            'GreenchClaw crestodian -m "set default model openai/gpt-5.2" --yes',
             "Apply a typed config write.",
           ],
         ])}`,

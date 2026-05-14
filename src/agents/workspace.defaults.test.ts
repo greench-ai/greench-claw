@@ -7,13 +7,13 @@ afterEach(() => {
 });
 
 describe("DEFAULT_AGENT_WORKSPACE_DIR", () => {
-  it("uses NEXISCLAW_HOME when resolving the default workspace dir", () => {
-    const home = path.join(path.sep, "srv", "NexisClaw-home");
-    vi.stubEnv("NEXISCLAW_HOME", home);
+  it("uses GREENCHCLAW_HOME when resolving the default workspace dir", () => {
+    const home = path.join(path.sep, "srv", "GreenchClaw-home");
+    vi.stubEnv("GREENCHCLAW_HOME", home);
     vi.stubEnv("HOME", path.join(path.sep, "home", "other"));
 
     expect(resolveDefaultAgentWorkspaceDir()).toBe(
-      path.join(path.resolve(home), ".NexisClaw", "workspace"),
+      path.join(path.resolve(home), ".GreenchClaw", "workspace"),
     );
   });
 });

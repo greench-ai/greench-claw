@@ -1,6 +1,6 @@
-import type { ChannelDoctorLegacyConfigRule } from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { isRecord } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { ChannelDoctorLegacyConfigRule } from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { isRecord } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { ELEVENLABS_TALK_PROVIDER_ID, migrateElevenLabsLegacyTalkConfig } from "./config-compat.js";
 
 export function hasLegacyTalkFields(value: unknown): boolean {
@@ -17,15 +17,15 @@ export const legacyConfigRules: ChannelDoctorLegacyConfigRule[] = [
   {
     path: ["talk"],
     message:
-      "talk.voiceId/talk.voiceAliases/talk.modelId/talk.outputFormat/talk.apiKey are legacy; use talk.providers.<provider> and run NexisClaw doctor --fix.",
+      "talk.voiceId/talk.voiceAliases/talk.modelId/talk.outputFormat/talk.apiKey are legacy; use talk.providers.<provider> and run GreenchClaw doctor --fix.",
     match: hasLegacyTalkFields,
   },
 ];
 
 export const ELEVENLABS_TALK_LEGACY_CONFIG_RULES = legacyConfigRules;
 
-export function normalizeCompatibilityConfig({ cfg }: { cfg: NexisClawConfig }): {
-  config: NexisClawConfig;
+export function normalizeCompatibilityConfig({ cfg }: { cfg: GreenchClawConfig }): {
+  config: GreenchClawConfig;
   changes: string[];
 } {
   return migrateElevenLabsLegacyTalkConfig(cfg);

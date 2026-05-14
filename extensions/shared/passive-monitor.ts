@@ -1,4 +1,4 @@
-import { runPassiveAccountLifecycle } from "NexisClaw/plugin-sdk/channel-lifecycle";
+import { runPassiveAccountLifecycle } from "GreenchClaw/plugin-sdk/channel-lifecycle";
 
 type StoppableMonitor = {
   stop: () => void;

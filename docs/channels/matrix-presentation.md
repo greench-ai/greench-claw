@@ -1,14 +1,14 @@
 ---
-summary: "Matrix MessagePresentation metadata for NexisClaw-aware clients"
+summary: "Matrix MessagePresentation metadata for GreenchClaw-aware clients"
 read_when:
-  - Building Matrix clients that render NexisClaw rich responses
-  - Debugging com.NexisClaw.presentation event content
+  - Building Matrix clients that render GreenchClaw rich responses
+  - Debugging com.GreenchClaw.presentation event content
 title: "Matrix presentation metadata"
 ---
 
-NexisClaw can attach normalized `MessagePresentation` metadata to outbound Matrix `m.room.message` events under `com.NexisClaw.presentation`.
+GreenchClaw can attach normalized `MessagePresentation` metadata to outbound Matrix `m.room.message` events under `com.GreenchClaw.presentation`.
 
-Stock Matrix clients continue to render the plain text `body`. NexisClaw-aware clients can read the structured metadata and render native UI such as buttons, selects, context rows, and dividers.
+Stock Matrix clients continue to render the plain text `body`. GreenchClaw-aware clients can read the structured metadata and render native UI such as buttons, selects, context rows, and dividers.
 
 ## Event content
 
@@ -18,7 +18,7 @@ The metadata is stored in Matrix event content:
 {
   "msgtype": "m.text",
   "body": "Select model\n\n- DeepSeek: /model deepseek/deepseek-chat",
-  "com.NexisClaw.presentation": {
+  "com.GreenchClaw.presentation": {
     "version": 1,
     "type": "message.presentation",
     "title": "Select model",
@@ -39,13 +39,13 @@ The metadata is stored in Matrix event content:
 }
 ```
 
-`version` is the Matrix presentation metadata schema version. `type` is a stable discriminator for NexisClaw-aware clients. Clients should ignore unknown `type` values, unknown versions they cannot safely interpret, and unknown block types.
+`version` is the Matrix presentation metadata schema version. `type` is a stable discriminator for GreenchClaw-aware clients. Clients should ignore unknown `type` values, unknown versions they cannot safely interpret, and unknown block types.
 
 ## Fallback behavior
 
-NexisClaw always renders a readable plain text fallback into `body`. The structured metadata is additive and must not be required for basic Matrix interoperability.
+GreenchClaw always renders a readable plain text fallback into `body`. The structured metadata is additive and must not be required for basic Matrix interoperability.
 
-Unsupported clients should continue to show the fallback text. NexisClaw-aware clients may prefer the structured metadata for display while preserving the fallback text for copy, search, notifications, and accessibility.
+Unsupported clients should continue to show the fallback text. GreenchClaw-aware clients may prefer the structured metadata for display while preserving the fallback text for copy, search, notifications, and accessibility.
 
 ## Supported blocks
 
@@ -66,12 +66,12 @@ For example, a button with value `/model deepseek/deepseek-chat` can be handled 
 
 ## Relationship to approval metadata
 
-`com.NexisClaw.presentation` is for general rich message presentation.
+`com.GreenchClaw.presentation` is for general rich message presentation.
 
-Approval prompts use the dedicated `com.NexisClaw.approval` metadata because approvals carry safety-sensitive state, decisions, and exec/plugin details. If both metadata keys are present on the same event, clients should prefer the dedicated approval renderer.
+Approval prompts use the dedicated `com.GreenchClaw.approval` metadata because approvals carry safety-sensitive state, decisions, and exec/plugin details. If both metadata keys are present on the same event, clients should prefer the dedicated approval renderer.
 
 ## Media messages
 
-When a reply contains multiple media URLs, NexisClaw sends one Matrix event per media URL. Presentation metadata is attached only to the first media event so clients have one stable structured payload and duplicate renderers are avoided.
+When a reply contains multiple media URLs, GreenchClaw sends one Matrix event per media URL. Presentation metadata is attached only to the first media event so clients have one stable structured payload and duplicate renderers are avoided.
 
 Keep presentation metadata compact. Large user-visible text should stay in `body` and use the normal Matrix text chunking path.

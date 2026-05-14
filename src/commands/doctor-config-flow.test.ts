@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { withTempHome } from "NexisClaw/plugin-sdk/test-env";
+import { withTempHome } from "GreenchClaw/plugin-sdk/test-env";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { loadAndMaybeMigrateDoctorConfig } from "./doctor-config-flow.js";
 import {
@@ -329,14 +329,14 @@ vi.mock("../config/legacy.js", () => {
         addIssue(
           issues,
           ["heartbeat"],
-          'heartbeat is legacy; use agents.defaults.heartbeat and channels.defaults.heartbeat. Run "NexisClaw doctor --fix".',
+          'heartbeat is legacy; use agents.defaults.heartbeat and channels.defaults.heartbeat. Run "GreenchClaw doctor --fix".',
         );
       }
       if ("memorySearch" in root) {
         addIssue(
           issues,
           ["memorySearch"],
-          'memorySearch is legacy; use agents.defaults.memorySearch. Run "NexisClaw doctor --fix".',
+          'memorySearch is legacy; use agents.defaults.memorySearch. Run "GreenchClaw doctor --fix".',
         );
       }
       const gateway = asRecord(root.gateway);
@@ -344,7 +344,7 @@ vi.mock("../config/legacy.js", () => {
         addIssue(
           issues,
           ["gateway", "bind"],
-          'gateway.bind host aliases are legacy; use the canonical bind mode. Run "NexisClaw doctor --fix".',
+          'gateway.bind host aliases are legacy; use the canonical bind mode. Run "GreenchClaw doctor --fix".',
         );
       }
       const sessionThreadBindings = asRecord(asRecord(root.session)?.threadBindings);
@@ -352,7 +352,7 @@ vi.mock("../config/legacy.js", () => {
         addIssue(
           issues,
           ["session", "threadBindings", "ttlHours"],
-          'session.threadBindings.ttlHours is legacy; use session.threadBindings.idleHours. Run "NexisClaw doctor --fix".',
+          'session.threadBindings.ttlHours is legacy; use session.threadBindings.idleHours. Run "GreenchClaw doctor --fix".',
         );
       }
       const sessionMaintenance = asRecord(asRecord(root.session)?.maintenance);
@@ -360,7 +360,7 @@ vi.mock("../config/legacy.js", () => {
         addIssue(
           issues,
           ["session", "maintenance"],
-          'session.maintenance.rotateBytes is deprecated and ignored; run "NexisClaw doctor --fix" to remove it.',
+          'session.maintenance.rotateBytes is deprecated and ignored; run "GreenchClaw doctor --fix" to remove it.',
         );
       }
       const xSearch = asRecord(asRecord(asRecord(root.tools)?.web)?.x_search);
@@ -368,7 +368,7 @@ vi.mock("../config/legacy.js", () => {
         addIssue(
           issues,
           ["tools", "web", "x_search", "apiKey"],
-          'tools.web.x_search.apiKey is legacy; use plugins.entries.xai.config.webSearch.apiKey. Run "NexisClaw doctor --fix".',
+          'tools.web.x_search.apiKey is legacy; use plugins.entries.xai.config.webSearch.apiKey. Run "GreenchClaw doctor --fix".',
         );
       }
       const sandbox = asRecord(asRecord(asRecord(root.agents)?.defaults)?.sandbox);
@@ -376,7 +376,7 @@ vi.mock("../config/legacy.js", () => {
         addIssue(
           issues,
           ["agents", "defaults", "sandbox"],
-          'agents.defaults.sandbox.perSession is legacy; use agents.defaults.sandbox.scope. Run "NexisClaw doctor --fix".',
+          'agents.defaults.sandbox.perSession is legacy; use agents.defaults.sandbox.scope. Run "GreenchClaw doctor --fix".',
         );
       }
 
@@ -394,8 +394,8 @@ vi.mock("../config/legacy.js", () => {
             issues,
             ["channels", channelId],
             channelId === "googlechat"
-              ? `channels.${channelId}.streamMode is legacy and no longer used. Run "NexisClaw doctor --fix".`
-              : `channels.${channelId}.streamMode, channels.${channelId}.streaming aliases are legacy. Run "NexisClaw doctor --fix".`,
+              ? `channels.${channelId}.streamMode is legacy and no longer used. Run "GreenchClaw doctor --fix".`
+              : `channels.${channelId}.streamMode, channels.${channelId}.streaming aliases are legacy. Run "GreenchClaw doctor --fix".`,
           );
         }
         const threadBindings = asRecord(channel.threadBindings);
@@ -403,7 +403,7 @@ vi.mock("../config/legacy.js", () => {
           addIssue(
             issues,
             ["channels", channelId, "threadBindings", "ttlHours"],
-            'channels.<id>.threadBindings.ttlHours is legacy; use channels.<id>.threadBindings.idleHours. Run "NexisClaw doctor --fix".',
+            'channels.<id>.threadBindings.ttlHours is legacy; use channels.<id>.threadBindings.idleHours. Run "GreenchClaw doctor --fix".',
           );
         }
         if (channelId === "slack") {
@@ -412,7 +412,7 @@ vi.mock("../config/legacy.js", () => {
               addIssue(
                 issues,
                 ["channels", "slack"],
-                'channels.slack.channels.<id>.allow is legacy; use enabled. Run "NexisClaw doctor --fix".',
+                'channels.slack.channels.<id>.allow is legacy; use enabled. Run "GreenchClaw doctor --fix".',
               );
             }
           }
@@ -423,7 +423,7 @@ vi.mock("../config/legacy.js", () => {
               addIssue(
                 issues,
                 ["channels", "googlechat"],
-                'channels.googlechat.groups.<id>.allow is legacy; use enabled. Run "NexisClaw doctor --fix".',
+                'channels.googlechat.groups.<id>.allow is legacy; use enabled. Run "GreenchClaw doctor --fix".',
               );
             }
           }
@@ -436,7 +436,7 @@ vi.mock("../config/legacy.js", () => {
                 addIssue(
                   issues,
                   ["channels", "discord"],
-                  'channels.discord.guilds.<id>.channels.<id>.allow is legacy; use enabled. Run "NexisClaw doctor --fix".',
+                  'channels.discord.guilds.<id>.channels.<id>.allow is legacy; use enabled. Run "GreenchClaw doctor --fix".',
                 );
               }
             }
@@ -449,7 +449,7 @@ vi.mock("../config/legacy.js", () => {
             addIssue(
               issues,
               ["channels", channelId, "accounts", accountId, "threadBindings", "ttlHours"],
-              'channels.<id>.threadBindings.ttlHours is legacy; use channels.<id>.threadBindings.idleHours. Run "NexisClaw doctor --fix".',
+              'channels.<id>.threadBindings.ttlHours is legacy; use channels.<id>.threadBindings.idleHours. Run "GreenchClaw doctor --fix".',
             );
           }
         }
@@ -831,12 +831,12 @@ vi.mock("../plugins/doctor-contract-registry.js", () => {
       {
         path: ["channels", "telegram", "groupMentionsOnly"],
         message:
-          'channels.telegram.groupMentionsOnly was removed; use channels.telegram.groups."*".requireMention instead. Run "NexisClaw doctor --fix".',
+          'channels.telegram.groupMentionsOnly was removed; use channels.telegram.groups."*".requireMention instead. Run "GreenchClaw doctor --fix".',
       },
       {
         path: ["talk"],
         message:
-          "talk.voiceId/talk.voiceAliases/talk.modelId/talk.outputFormat/talk.apiKey are legacy; use talk.providers.<provider> and run NexisClaw doctor --fix.",
+          "talk.voiceId/talk.voiceAliases/talk.modelId/talk.outputFormat/talk.apiKey are legacy; use talk.providers.<provider> and run GreenchClaw doctor --fix.",
         match: hasLegacyTalkFields,
       },
     ],
@@ -1166,9 +1166,9 @@ vi.mock("./doctor-config-preflight.js", async () => {
 
   function resolveConfigPath() {
     const stateDir =
-      process.env.NEXISCLAW_STATE_DIR ||
-      (process.env.HOME ? path.join(process.env.HOME, ".NexisClaw") : "");
-    return process.env.NEXISCLAW_CONFIG_PATH || path.join(stateDir, "NexisClaw.json");
+      process.env.GREENCHCLAW_STATE_DIR ||
+      (process.env.HOME ? path.join(process.env.HOME, ".GreenchClaw") : "");
+    return process.env.GREENCHCLAW_CONFIG_PATH || path.join(stateDir, "GreenchClaw.json");
   }
 
   function normalizeDiscordStreamingCompat(cfg: Record<string, unknown>): Record<string, unknown> {
@@ -1469,13 +1469,13 @@ describe("doctor config flow", () => {
       hooks: {
         enabled: true,
         token: "hook-secret",
-        transformsDir: "/virtual/.NexisClaw/workspace/skills/linear-webhook",
+        transformsDir: "/virtual/.GreenchClaw/workspace/skills/linear-webhook",
         mappings: [
           {
             match: { path: "linear" },
             action: "agent",
             messageTemplate: "Linear event",
-            transform: { module: "./NexisClaw-linear-transform.js" },
+            transform: { module: "./GreenchClaw-linear-transform.js" },
           },
         ],
       },
@@ -1483,8 +1483,8 @@ describe("doctor config flow", () => {
 
     const warning = doctorWarnings.join("\n");
     expect(warning).toContain("hooks.transformsDir:");
-    expect(warning).toContain("/virtual/.NexisClaw/workspace/skills/linear-webhook");
-    expect(warning).toContain("/virtual/.NexisClaw/hooks/transforms");
+    expect(warning).toContain("/virtual/.GreenchClaw/workspace/skills/linear-webhook");
+    expect(warning).toContain("/virtual/.GreenchClaw/hooks/transforms");
     expect(warning).toContain("move custom transforms there or remove hooks.transformsDir");
   });
 
@@ -1841,8 +1841,8 @@ describe("doctor config flow", () => {
   it("keeps discord streaming aliases on disk during repair so downgrades stay recoverable", async () => {
     await withTempHome(
       async (home) => {
-        const configDir = path.join(home, ".NexisClaw");
-        const configPath = path.join(configDir, "NexisClaw.json");
+        const configDir = path.join(home, ".GreenchClaw");
+        const configPath = path.join(configDir, "GreenchClaw.json");
         await fs.mkdir(configDir, { recursive: true });
         await fs.writeFile(
           configPath,
@@ -2143,10 +2143,10 @@ describe("doctor config flow", () => {
   it("converts numeric discord ids to strings on repair", async () => {
     await withTempHome(
       async (home) => {
-        const configDir = path.join(home, ".NexisClaw");
+        const configDir = path.join(home, ".GreenchClaw");
         await fs.mkdir(configDir, { recursive: true });
         await fs.writeFile(
-          path.join(configDir, "NexisClaw.json"),
+          path.join(configDir, "GreenchClaw.json"),
           JSON.stringify(
             {
               channels: {
@@ -2314,11 +2314,11 @@ describe("doctor config flow", () => {
   it('repairs dmPolicy="allowlist" by restoring allowFrom from pairing store on repair', async () => {
     const result = await withTempHome(
       async (home) => {
-        const configDir = path.join(home, ".NexisClaw");
+        const configDir = path.join(home, ".GreenchClaw");
         const credentialsDir = path.join(configDir, "credentials");
         await fs.mkdir(credentialsDir, { recursive: true });
         await fs.writeFile(
-          path.join(configDir, "NexisClaw.json"),
+          path.join(configDir, "GreenchClaw.json"),
           JSON.stringify(
             {
               channels: {
@@ -2604,7 +2604,7 @@ describe("doctor config flow", () => {
         noteSpy.mock.calls.some(
           ([message, title]) =>
             title === "Doctor" &&
-            message.includes('Run "NexisClaw doctor --fix" to migrate legacy config keys.'),
+            message.includes('Run "GreenchClaw doctor --fix" to migrate legacy config keys.'),
         ),
       ).toBe(true);
     } finally {
@@ -2688,10 +2688,10 @@ describe("doctor config flow", () => {
     await withTempHome(
       async (home) => {
         const providerId = "acme-speech";
-        const configDir = path.join(home, ".NexisClaw");
+        const configDir = path.join(home, ".GreenchClaw");
         await fs.mkdir(configDir, { recursive: true });
         await fs.writeFile(
-          path.join(configDir, "NexisClaw.json"),
+          path.join(configDir, "GreenchClaw.json"),
           JSON.stringify(
             {
               talk: {

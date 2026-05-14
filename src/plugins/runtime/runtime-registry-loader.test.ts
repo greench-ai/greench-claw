@@ -2,7 +2,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createEmptyPluginRegistry } from "../registry.js";
 
 const mocks = vi.hoisted(() => ({
-  loadNexisClawPlugins: vi.fn<typeof import("../loader.js").loadNexisClawPlugins>(),
+  loadGreenchClawPlugins: vi.fn<typeof import("../loader.js").loadGreenchClawPlugins>(),
   resolveCompatibleRuntimePluginRegistry:
     vi.fn<typeof import("../loader.js").resolveCompatibleRuntimePluginRegistry>(),
   resolveRuntimePluginRegistry: vi.fn<typeof import("../loader.js").resolveRuntimePluginRegistry>(),
@@ -36,7 +36,10 @@ function requireRecord(value: unknown, label: string): Record<string, unknown> {
 }
 
 function loadOptions(index = 0) {
-  return requireRecord(mocks.loadNexisClawPlugins.mock.calls[index]?.[0], `load options ${index}`);
+  return requireRecord(
+    mocks.loadGreenchClawPlugins.mock.calls[index]?.[0],
+    `load options ${index}`,
+  );
 }
 
 function configuredChannelOptions(index = 0) {
@@ -62,8 +65,8 @@ function pluginEntries(config: Record<string, unknown>) {
 }
 
 vi.mock("../loader.js", () => ({
-  loadNexisClawPlugins: (...args: Parameters<typeof mocks.loadNexisClawPlugins>) =>
-    mocks.loadNexisClawPlugins(...args),
+  loadGreenchClawPlugins: (...args: Parameters<typeof mocks.loadGreenchClawPlugins>) =>
+    mocks.loadGreenchClawPlugins(...args),
   resolveCompatibleRuntimePluginRegistry: (
     ...args: Parameters<typeof mocks.resolveCompatibleRuntimePluginRegistry>
   ) => mocks.resolveCompatibleRuntimePluginRegistry(...args),
@@ -115,7 +118,7 @@ describe("ensurePluginRegistryLoaded", () => {
   });
 
   beforeEach(() => {
-    mocks.loadNexisClawPlugins.mockReset();
+    mocks.loadGreenchClawPlugins.mockReset();
     mocks.resolveCompatibleRuntimePluginRegistry.mockReset();
     mocks.resolveRuntimePluginRegistry.mockReset();
     mocks.getActivePluginRegistry.mockReset();
@@ -130,9 +133,10 @@ describe("ensurePluginRegistryLoaded", () => {
 
     mocks.getActivePluginRegistry.mockReturnValue(null);
     mocks.resolveCompatibleRuntimePluginRegistry.mockReturnValue(undefined);
-    mocks.loadNexisClawPlugins.mockReturnValue(createEmptyPluginRegistry());
+    mocks.loadGreenchClawPlugins.mockReturnValue(createEmptyPluginRegistry());
     mocks.resolveRuntimePluginRegistry.mockImplementation(
-      (...args: Parameters<typeof mocks.loadNexisClawPlugins>) => mocks.loadNexisClawPlugins(...args),
+      (...args: Parameters<typeof mocks.loadGreenchClawPlugins>) =>
+        mocks.loadGreenchClawPlugins(...args),
     );
     mocks.applyPluginAutoEnable.mockImplementation((params) => ({
       config:
@@ -165,7 +169,7 @@ describe("ensurePluginRegistryLoaded", () => {
         },
       },
     };
-    const env = { HOME: "/tmp/NexisClaw-home" } as NodeJS.ProcessEnv;
+    const env = { HOME: "/tmp/GreenchClaw-home" } as NodeJS.ProcessEnv;
 
     mocks.resolveConfiguredChannelPluginIds.mockReturnValue(["demo-channel"]);
     ensurePluginRegistryLoaded({
@@ -240,7 +244,7 @@ describe("ensurePluginRegistryLoaded", () => {
       onlyPluginIds: ["demo-b"],
     });
 
-    expect(mocks.loadNexisClawPlugins).toHaveBeenCalledTimes(2);
+    expect(mocks.loadGreenchClawPlugins).toHaveBeenCalledTimes(2);
     expect(loadOptions(0).onlyPluginIds).toEqual(["demo-a"]);
     expect(loadOptions(1).onlyPluginIds).toEqual(["demo-b"]);
   });
@@ -311,7 +315,7 @@ describe("ensurePluginRegistryLoaded", () => {
       plugins: { enabled: true },
       channels: { "demo-channel-a": { enabled: true } },
     };
-    const env = { HOME: "/tmp/NexisClaw-home" } as NodeJS.ProcessEnv;
+    const env = { HOME: "/tmp/GreenchClaw-home" } as NodeJS.ProcessEnv;
 
     mocks.resolveEffectivePluginIds.mockReturnValue(["demo-effective", "demo-hook"]);
 
@@ -360,6 +364,6 @@ describe("ensurePluginRegistryLoaded", () => {
     });
 
     expect(mocks.resolveRuntimePluginRegistry).not.toHaveBeenCalled();
-    expect(mocks.loadNexisClawPlugins).not.toHaveBeenCalled();
+    expect(mocks.loadGreenchClawPlugins).not.toHaveBeenCalled();
   });
 });

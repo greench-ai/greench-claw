@@ -1,4 +1,4 @@
-import { type NexisClawConfig, type RuntimeEnv } from "../runtime-api.js";
+import { type GreenchClawConfig, type RuntimeEnv } from "../runtime-api.js";
 import type { MSTeamsConversationStore } from "./conversation-store.js";
 import type { MSTeamsAdapter } from "./messenger.js";
 import type { MSTeamsMonitorLogger } from "./monitor-types.js";
@@ -6,7 +6,7 @@ import type { MSTeamsPollStore } from "./polls.js";
 import type { MSTeamsSsoDeps } from "./sso.js";
 
 export type MSTeamsMessageHandlerDeps = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   runtime: RuntimeEnv;
   appId: string;
   adapter: MSTeamsAdapter;

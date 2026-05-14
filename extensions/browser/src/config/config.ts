@@ -5,5 +5,5 @@ export {
   replaceConfigFile,
   type BrowserConfig,
   type BrowserProfileConfig,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "../sdk-config.js";

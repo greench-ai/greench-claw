@@ -4,8 +4,8 @@ import path from "node:path";
 
 const home = os.homedir();
 
-function NexisClawPath(...parts) {
-  return path.join(home, ".NexisClaw", ...parts);
+function GreenchClawPath(...parts) {
+  return path.join(home, ".GreenchClaw", ...parts);
 }
 
 function readJson(file) {
@@ -17,7 +17,7 @@ function readJson(file) {
 }
 
 function records() {
-  const index = readJson(NexisClawPath("plugins", "installs.json"));
+  const index = readJson(GreenchClawPath("plugins", "installs.json"));
   return index.installRecords ?? index.records ?? {};
 }
 
@@ -26,7 +26,7 @@ function recordFor(pluginId) {
 }
 
 function config() {
-  return readJson(process.env.NEXISCLAW_CONFIG_PATH ?? NexisClawPath("NexisClaw.json"));
+  return readJson(process.env.GREENCHCLAW_CONFIG_PATH ?? GreenchClawPath("GreenchClaw.json"));
 }
 
 function assert(condition, message) {

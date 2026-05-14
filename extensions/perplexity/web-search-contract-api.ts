@@ -1,4 +1,4 @@
-import { type WebSearchProviderPlugin } from "NexisClaw/plugin-sdk/provider-web-search-config-contract";
+import { type WebSearchProviderPlugin } from "GreenchClaw/plugin-sdk/provider-web-search-config-contract";
 import {
   createPerplexityWebSearchProviderBase,
   resolvePerplexityWebSearchRuntimeMetadata,

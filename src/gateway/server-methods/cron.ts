@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { resolveCronDeliveryPreviews } from "../../cron/delivery-preview.js";
 import { normalizeCronJobCreate, normalizeCronJobPatch } from "../../cron/normalize.js";
 import {
@@ -34,7 +34,7 @@ import {
 } from "../protocol/index.js";
 import type { GatewayRequestHandlers } from "./types.js";
 
-function listConfiguredAnnounceChannelIds(cfg: NexisClawConfig): string[] {
+function listConfiguredAnnounceChannelIds(cfg: GreenchClawConfig): string[] {
   return listConfiguredAnnounceChannelIdsForConfig({
     config: cfg,
     env: process.env,
@@ -42,7 +42,7 @@ function listConfiguredAnnounceChannelIds(cfg: NexisClawConfig): string[] {
 }
 
 function assertConfiguredAnnounceChannel(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel?: string;
   field: "delivery.channel" | "delivery.failureDestination.channel";
 }) {
@@ -99,7 +99,10 @@ function assertCompatibleAnnounceTarget(params: {
   }
 }
 
-function assertValidCronAnnounceDelivery(params: { cfg: NexisClawConfig; delivery?: CronDelivery }) {
+function assertValidCronAnnounceDelivery(params: {
+  cfg: GreenchClawConfig;
+  delivery?: CronDelivery;
+}) {
   if (params.delivery && (params.delivery.mode ?? "announce") === "announce") {
     assertCompatibleAnnounceTarget({
       channel: params.delivery.channel,
@@ -134,7 +137,7 @@ function assertValidCronAnnounceDelivery(params: { cfg: NexisClawConfig; deliver
   }
 }
 
-function assertValidCronCreateDelivery(cfg: NexisClawConfig, jobCreate: CronJobCreate) {
+function assertValidCronCreateDelivery(cfg: GreenchClawConfig, jobCreate: CronJobCreate) {
   assertValidCronAnnounceDelivery({
     cfg,
     delivery: jobCreate.delivery,
@@ -142,7 +145,7 @@ function assertValidCronCreateDelivery(cfg: NexisClawConfig, jobCreate: CronJobC
 }
 
 function assertValidCronUpdateDelivery(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   defaultAgentId?: string;
   currentJob: CronJob | undefined;
   patch: CronJobPatch;

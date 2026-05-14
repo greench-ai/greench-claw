@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   parseLiveCsvFilter,
   parseProviderModelMap,
@@ -37,7 +37,7 @@ export function parseCsvFilter(raw?: string): Set<string> | null {
   return parseLiveCsvFilter(raw, { lowercase: false });
 }
 
-export function resolveConfiguredLiveImageModels(cfg: NexisClawConfig): Map<string, string> {
+export function resolveConfiguredLiveImageModels(cfg: GreenchClawConfig): Map<string, string> {
   return resolveConfiguredLiveProviderModels(cfg.agents?.defaults?.imageGenerationModel);
 }
 

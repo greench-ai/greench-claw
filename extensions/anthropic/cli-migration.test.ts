@@ -1,7 +1,7 @@
 import type {
   ProviderAuthContext,
   ProviderAuthMethodNonInteractiveContext,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const { readClaudeCliCredentialsForSetup, readClaudeCliCredentialsForSetupNonInteractive } =
@@ -21,7 +21,7 @@ vi.mock("./cli-auth-seam.js", async (importActual) => {
 
 const { buildAnthropicCliMigrationResult, hasClaudeCliAuth } = await import("./cli-migration.js");
 const { createTestWizardPrompter, registerSingleProviderPlugin } =
-  await import("NexisClaw/plugin-sdk/plugin-test-runtime");
+  await import("GreenchClaw/plugin-sdk/plugin-test-runtime");
 const { default: anthropicPlugin } = await import("./index.js");
 
 beforeEach(() => {
@@ -50,8 +50,8 @@ function createProviderAuthContext(
     config,
     opts: {},
     env: {},
-    agentDir: "/tmp/NexisClaw/agents/main",
-    workspaceDir: "/tmp/NexisClaw/workspace",
+    agentDir: "/tmp/GreenchClaw/agents/main",
+    workspaceDir: "/tmp/GreenchClaw/workspace",
     prompter: createTestWizardPrompter(),
     runtime: {
       log: vi.fn(),
@@ -80,8 +80,8 @@ function createProviderAuthMethodNonInteractiveContext(
       error: vi.fn(),
       exit: vi.fn(),
     },
-    agentDir: "/tmp/NexisClaw/agents/main",
-    workspaceDir: "/tmp/NexisClaw/workspace",
+    agentDir: "/tmp/GreenchClaw/agents/main",
+    workspaceDir: "/tmp/GreenchClaw/workspace",
     resolveApiKey: vi.fn(async () => null),
     toApiKeyCredential: vi.fn(() => null),
   };

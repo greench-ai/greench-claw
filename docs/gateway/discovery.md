@@ -7,12 +7,12 @@ read_when:
 title: "Discovery and transports"
 ---
 
-NexisClaw has two distinct problems that look similar on the surface:
+GreenchClaw has two distinct problems that look similar on the surface:
 
 1. **Operator remote control**: the macOS menu bar app controlling a gateway running elsewhere.
 2. **Node pairing**: iOS/Android (and future nodes) finding a gateway and pairing securely.
 
-The design goal is to keep all network discovery/advertising in the **Node Gateway** (`NexisClaw gateway`) and keep clients (mac app, iOS) as consumers.
+The design goal is to keep all network discovery/advertising in the **Node Gateway** (`GreenchClaw gateway`) and keep clients (mac app, iOS) as consumers.
 
 ## Terms
 
@@ -44,7 +44,7 @@ Protocol details:
 
 ### 1) Bonjour / DNS-SD discovery
 
-Multicast Bonjour is best-effort and does not cross networks. NexisClaw can also browse the
+Multicast Bonjour is best-effort and does not cross networks. GreenchClaw can also browse the
 same gateway beacon via a configured wide-area DNS-SD domain, so discovery can cover:
 
 - `local.` on the same LAN
@@ -62,7 +62,7 @@ Troubleshooting and beacon details: [Bonjour](/gateway/bonjour).
 #### Service beacon details
 
 - Service types:
-  - `_NexisClaw-gw._tcp` (gateway transport beacon)
+  - `_GreenchClaw-gw._tcp` (gateway transport beacon)
 - TXT keys (non-secret):
   - `role=gateway`
   - `transport=gateway`
@@ -85,18 +85,18 @@ Security notes:
 
 Enable/disable/override:
 
-- `NexisClaw plugins enable bonjour` enables LAN multicast advertising.
-- `NEXISCLAW_DISABLE_BONJOUR=1` disables advertising.
-- When the Bonjour plugin is enabled and `NEXISCLAW_DISABLE_BONJOUR` is unset,
+- `GreenchClaw plugins enable bonjour` enables LAN multicast advertising.
+- `GREENCHCLAW_DISABLE_BONJOUR=1` disables advertising.
+- When the Bonjour plugin is enabled and `GREENCHCLAW_DISABLE_BONJOUR` is unset,
   Bonjour advertises on normal hosts and auto-disables inside detected containers.
   Empty-config macOS Gateway startup enables the plugin automatically; Linux,
   Windows, and containerized deployments need explicit enablement.
   Use `0` only on host, macvlan, or another mDNS-capable network; use `1` to
   force-disable.
-- `gateway.bind` in `~/.NexisClaw/NexisClaw.json` controls the Gateway bind mode.
-- `NEXISCLAW_SSH_PORT` overrides the SSH port advertised when `sshPort` is emitted.
-- `NEXISCLAW_TAILNET_DNS` publishes a `tailnetDns` hint (MagicDNS).
-- `NEXISCLAW_CLI_PATH` overrides the advertised CLI path.
+- `gateway.bind` in `~/.GreenchClaw/GreenchClaw.json` controls the Gateway bind mode.
+- `GREENCHCLAW_SSH_PORT` overrides the SSH port advertised when `sshPort` is emitted.
+- `GREENCHCLAW_TAILNET_DNS` publishes a `tailnetDns` hint (MagicDNS).
+- `GREENCHCLAW_CLI_PATH` overrides the advertised CLI path.
 
 ### 2) Tailnet (cross-network)
 

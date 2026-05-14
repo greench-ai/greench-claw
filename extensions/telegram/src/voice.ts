@@ -1,4 +1,4 @@
-import { isVoiceCompatibleAudio } from "NexisClaw/plugin-sdk/media-runtime";
+import { isVoiceCompatibleAudio } from "GreenchClaw/plugin-sdk/media-runtime";
 
 function resolveTelegramVoiceDecision(opts: {
   wantsVoice: boolean;

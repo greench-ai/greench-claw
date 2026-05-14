@@ -1,12 +1,12 @@
-import { resolveApprovalOverGateway } from "NexisClaw/plugin-sdk/approval-gateway-runtime";
-import type { ExecApprovalReplyDecision } from "NexisClaw/plugin-sdk/approval-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { isApprovalNotFoundError } from "NexisClaw/plugin-sdk/error-runtime";
+import { resolveApprovalOverGateway } from "GreenchClaw/plugin-sdk/approval-gateway-runtime";
+import type { ExecApprovalReplyDecision } from "GreenchClaw/plugin-sdk/approval-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { isApprovalNotFoundError } from "GreenchClaw/plugin-sdk/error-runtime";
 
 export { isApprovalNotFoundError };
 
 export async function resolveMatrixApproval(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   approvalId: string;
   decision: ExecApprovalReplyDecision;
   senderId?: string | null;

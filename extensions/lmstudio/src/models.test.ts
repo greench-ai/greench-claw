@@ -1,7 +1,7 @@
 import {
   SELF_HOSTED_DEFAULT_CONTEXT_WINDOW,
   SELF_HOSTED_DEFAULT_MAX_TOKENS,
-} from "NexisClaw/plugin-sdk/provider-setup";
+} from "GreenchClaw/plugin-sdk/provider-setup";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 import { LMSTUDIO_DEFAULT_LOAD_CONTEXT_LENGTH } from "./defaults.js";
 import { discoverLmstudioModels, ensureLmstudioModelLoaded } from "./models.fetch.js";
@@ -15,8 +15,8 @@ import {
 
 const fetchWithSsrFGuardMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/ssrf-runtime")>();
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("GreenchClaw/plugin-sdk/ssrf-runtime")>();
   return {
     ...actual,
     fetchWithSsrFGuard: (...args: unknown[]) => fetchWithSsrFGuardMock(...args),
@@ -24,7 +24,7 @@ vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
 });
 
 afterAll(() => {
-  vi.doUnmock("NexisClaw/plugin-sdk/ssrf-runtime");
+  vi.doUnmock("GreenchClaw/plugin-sdk/ssrf-runtime");
   vi.resetModules();
 });
 

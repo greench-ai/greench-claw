@@ -1,4 +1,4 @@
-import type { ChannelDoctorAdapter } from "NexisClaw/plugin-sdk/channel-contract";
+import type { ChannelDoctorAdapter } from "GreenchClaw/plugin-sdk/channel-contract";
 import { listNextcloudTalkAccountIds, resolveNextcloudTalkAccount } from "./accounts.js";
 import { probeNextcloudTalkBotResponseFeature } from "./bot-preflight.js";
 import {

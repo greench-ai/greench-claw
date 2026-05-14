@@ -1,11 +1,11 @@
 import type {
-  NexisClawPluginApi,
+  GreenchClawPluginApi,
   ProviderAuthContext,
   ProviderFetchUsageSnapshotContext,
-} from "NexisClaw/plugin-sdk/plugin-entry";
-import { buildOauthProviderAuthResult } from "NexisClaw/plugin-sdk/provider-auth-result";
-import type { ProviderPlugin } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { fetchGeminiUsage } from "NexisClaw/plugin-sdk/provider-usage";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
+import { buildOauthProviderAuthResult } from "GreenchClaw/plugin-sdk/provider-auth-result";
+import type { ProviderPlugin } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { fetchGeminiUsage } from "GreenchClaw/plugin-sdk/provider-usage";
 import { formatGoogleOauthApiKey, parseGoogleUsageToken } from "./oauth-token-shared.js";
 import { GOOGLE_GEMINI_PROVIDER_HOOKS } from "./provider-hooks.js";
 import { isModernGoogleModel, resolveGoogleGeminiForwardCompatModel } from "./provider-models.js";
@@ -14,8 +14,8 @@ const PROVIDER_ID = "google-gemini-cli";
 const PROVIDER_LABEL = "Gemini CLI OAuth";
 const DEFAULT_MODEL = "google/gemini-3.1-pro-preview";
 const ENV_VARS = [
-  "NEXISCLAW_GEMINI_OAUTH_CLIENT_ID",
-  "NEXISCLAW_GEMINI_OAUTH_CLIENT_SECRET",
+  "GREENCHCLAW_GEMINI_OAUTH_CLIENT_ID",
+  "GREENCHCLAW_GEMINI_OAUTH_CLIENT_SECRET",
   "GEMINI_CLI_OAUTH_CLIENT_ID",
   "GEMINI_CLI_OAUTH_CLIENT_SECRET",
 ] as const;
@@ -136,6 +136,6 @@ export function buildGoogleGeminiCliProvider(): ProviderPlugin {
   };
 }
 
-export function registerGoogleGeminiCliProvider(api: NexisClawPluginApi) {
+export function registerGoogleGeminiCliProvider(api: GreenchClawPluginApi) {
   api.registerProvider(buildGoogleGeminiCliProvider());
 }

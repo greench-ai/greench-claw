@@ -1,4 +1,4 @@
-export type { NexisClawConfig } from "../config/config.js";
+export type { GreenchClawConfig } from "../config/config.js";
 
 export { createAccountActionGate } from "../channels/plugins/account-action-gate.js";
 export {

@@ -6,7 +6,7 @@ import {
   type ProviderResolveDynamicModelContext,
   type ProviderRuntimeModel,
   type ProviderWrapStreamFnContext,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import {
   applyAuthProfileConfig,
   buildApiKeyCredential,
@@ -16,18 +16,21 @@ import {
   type SecretInput,
   upsertAuthProfile,
   validateApiKeyInput,
-} from "NexisClaw/plugin-sdk/provider-auth-api-key";
+} from "GreenchClaw/plugin-sdk/provider-auth-api-key";
 import {
   buildProviderReplayFamilyHooks,
   normalizeModelCompat,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
 import {
   createPayloadPatchStreamWrapper,
   createToolStreamWrapper,
   defaultToolStreamExtraParams,
-} from "NexisClaw/plugin-sdk/provider-stream-shared";
-import { fetchZaiUsage, resolveLegacyPiAgentAccessToken } from "NexisClaw/plugin-sdk/provider-usage";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/provider-stream-shared";
+import {
+  fetchZaiUsage,
+  resolveLegacyPiAgentAccessToken,
+} from "GreenchClaw/plugin-sdk/provider-usage";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { detectZaiEndpoint, type ZaiEndpointId } from "./detect.js";
 import { zaiMediaUnderstandingProvider } from "./media-understanding-provider.js";
 import { buildZaiModelDefinition } from "./model-definitions.js";

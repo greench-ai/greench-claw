@@ -111,7 +111,7 @@ describe("buildGatewayAuthConfig", () => {
     const tokenRef = {
       source: "env",
       provider: "default",
-      id: "NEXISCLAW_GATEWAY_TOKEN",
+      id: "GREENCHCLAW_GATEWAY_TOKEN",
     } as const;
     const result = buildGatewayAuthConfig({
       mode: "token",

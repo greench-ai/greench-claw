@@ -21,7 +21,7 @@ Each agent in a multi-agent setup can override the global sandbox and tool polic
 </CardGroup>
 
 <Warning>
-Auth is scoped by agent: each agent has its own `agentDir` auth store at `~/.NexisClaw/agents/<agentId>/agent/auth-profiles.json`. Never reuse `agentDir` across agents. Agents can read through to the default/main agent's auth profiles when they do not have a local profile, but OAuth refresh tokens are not cloned into secondary agent stores. If you copy credentials manually, copy only portable static `api_key` or `token` profiles.
+Auth is scoped by agent: each agent has its own `agentDir` auth store at `~/.GreenchClaw/agents/<agentId>/agent/auth-profiles.json`. Never reuse `agentDir` across agents. Agents can read through to the default/main agent's auth profiles when they do not have a local profile, but OAuth refresh tokens are not cloned into secondary agent stores. If you copy credentials manually, copy only portable static `api_key` or `token` profiles.
 </Warning>
 
 ---
@@ -38,13 +38,13 @@ Auth is scoped by agent: each agent has its own `agentDir` auth store at `~/.Nex
             "id": "main",
             "default": true,
             "name": "Personal Assistant",
-            "workspace": "~/.NexisClaw/workspace",
+            "workspace": "~/.GreenchClaw/workspace",
             "sandbox": { "mode": "off" }
           },
           {
             "id": "family",
             "name": "Family Bot",
-            "workspace": "~/.NexisClaw/workspace-family",
+            "workspace": "~/.GreenchClaw/workspace-family",
             "sandbox": {
               "mode": "all",
               "scope": "agent"
@@ -91,12 +91,12 @@ Auth is scoped by agent: each agent has its own `agentDir` auth store at `~/.Nex
         "list": [
           {
             "id": "personal",
-            "workspace": "~/.NexisClaw/workspace-personal",
+            "workspace": "~/.GreenchClaw/workspace-personal",
             "sandbox": { "mode": "off" }
           },
           {
             "id": "work",
-            "workspace": "~/.NexisClaw/workspace-work",
+            "workspace": "~/.GreenchClaw/workspace-work",
             "sandbox": {
               "mode": "all",
               "scope": "shared",
@@ -146,14 +146,14 @@ Auth is scoped by agent: each agent has its own `agentDir` auth store at `~/.Nex
         "list": [
           {
             "id": "main",
-            "workspace": "~/.NexisClaw/workspace",
+            "workspace": "~/.GreenchClaw/workspace",
             "sandbox": {
               "mode": "off"
             }
           },
           {
             "id": "public",
-            "workspace": "~/.NexisClaw/workspace-public",
+            "workspace": "~/.GreenchClaw/workspace-public",
             "sandbox": {
               "mode": "all",
               "scope": "agent"
@@ -234,7 +234,7 @@ The filtering order is:
 
   </Accordion>
   <Accordion title="Empty allowlist behavior">
-    If any explicit allowlist in that chain leaves the run with no callable tools, NexisClaw stops before submitting the prompt to the model. This is intentional: an agent configured with a missing tool such as `agents.list[].tools.allow: ["query_db"]` should fail loudly until the plugin that registers `query_db` is enabled, not continue as a text-only agent.
+    If any explicit allowlist in that chain leaves the run with no callable tools, GreenchClaw stops before submitting the prompt to the model. This is intentional: an agent configured with a missing tool such as `agents.list[].tools.allow: ["query_db"]` should fail loudly until the plugin that registers `query_db` is enabled, not continue as a text-only agent.
   </Accordion>
 </AccordionGroup>
 
@@ -252,7 +252,7 @@ Per-agent elevated overrides (`agents.list[].tools.elevated`) can further restri
     {
       "agents": {
         "defaults": {
-          "workspace": "~/.NexisClaw/workspace",
+          "workspace": "~/.GreenchClaw/workspace",
           "sandbox": {
             "mode": "non-main"
           }
@@ -277,7 +277,7 @@ Per-agent elevated overrides (`agents.list[].tools.elevated`) can further restri
           {
             "id": "main",
             "default": true,
-            "workspace": "~/.NexisClaw/workspace",
+            "workspace": "~/.GreenchClaw/workspace",
             "sandbox": { "mode": "off" }
           }
         ]
@@ -288,7 +288,7 @@ Per-agent elevated overrides (`agents.list[].tools.elevated`) can further restri
 </Tabs>
 
 <Note>
-Legacy `agent.*` configs are migrated by `NexisClaw doctor`; prefer `agents.defaults` + `agents.list` going forward.
+Legacy `agent.*` configs are migrated by `GreenchClaw doctor`; prefer `agents.defaults` + `agents.list` going forward.
 </Note>
 
 ---
@@ -317,7 +317,7 @@ Legacy `agent.*` configs are migrated by `NexisClaw doctor`; prefer `agents.defa
     ```
 
     <Warning>
-    This policy disables NexisClaw filesystem tools, but `exec` is still a shell and can write files wherever the selected host or sandbox filesystem allows. For a read-only agent, deny `exec` and `process`, or combine shell access with sandbox filesystem controls such as `agents.defaults.sandbox.workspaceAccess: "ro"` or `"none"`.
+    This policy disables GreenchClaw filesystem tools, but `exec` is still a shell and can write files wherever the selected host or sandbox filesystem allows. For a read-only agent, deny `exec` and `process`, or combine shell access with sandbox filesystem controls such as `agents.defaults.sandbox.workspaceAccess: "ro"` or `"none"`.
     </Warning>
 
   </Tab>
@@ -354,12 +354,12 @@ After configuring multi-agent sandbox and tools:
 <Steps>
   <Step title="Check agent resolution">
     ```bash
-    NexisClaw agents list --bindings
+    GreenchClaw agents list --bindings
     ```
   </Step>
   <Step title="Verify sandbox containers">
     ```bash
-    docker ps --filter "name=NexisClaw-sbx-"
+    docker ps --filter "name=GreenchClaw-sbx-"
     ```
   </Step>
   <Step title="Test tool restrictions">
@@ -369,7 +369,7 @@ After configuring multi-agent sandbox and tools:
   </Step>
   <Step title="Monitor logs">
     ```bash
-    tail -f "${NEXISCLAW_STATE_DIR:-$HOME/.NexisClaw}/logs/gateway.log" | grep -E "routing|sandbox|tools"
+    tail -f "${GREENCHCLAW_STATE_DIR:-$HOME/.GreenchClaw}/logs/gateway.log" | grep -E "routing|sandbox|tools"
     ```
   </Step>
 </Steps>

@@ -1,6 +1,6 @@
-import type { BaseProbeResult } from "NexisClaw/plugin-sdk/channel-contract";
-import { expectDirectoryIds } from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { BaseProbeResult } from "GreenchClaw/plugin-sdk/channel-contract";
+import { expectDirectoryIds } from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, expectTypeOf, it, vi } from "vitest";
 import {
   listSlackDirectoryGroupsFromConfig,
@@ -42,7 +42,7 @@ describe("Slack directory contract", () => {
           channels: { C111: { users: ["U777"] } },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     await expectDirectoryIds(
       listSlackDirectoryPeersFromConfig,
@@ -68,7 +68,7 @@ describe("Slack directory contract", () => {
           channels: { C111: {} },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     await expectDirectoryIds(listSlackDirectoryPeersFromConfig, cfg, ["user:u123"]);
     await expectDirectoryIds(listSlackDirectoryGroupsFromConfig, cfg, ["channel:c111"]);
@@ -84,7 +84,7 @@ describe("Slack directory contract", () => {
           dms: { U300: {} },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const peers = await listSlackDirectoryPeersFromConfig({
       cfg,
@@ -120,7 +120,7 @@ describe("Slack directory contract", () => {
           userToken: "xoxp-test",
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const self = await getSlackDirectorySelfLive({ cfg, accountId: "default" });
     if (!self) {
@@ -147,7 +147,7 @@ describe("Slack directory contract", () => {
           userToken: "xoxp-test",
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const self = await getSlackDirectorySelfLive({ cfg, accountId: "default" });
     if (!self) {

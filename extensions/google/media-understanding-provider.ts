@@ -6,12 +6,12 @@ import {
   type MediaUnderstandingProvider,
   type VideoDescriptionRequest,
   type VideoDescriptionResult,
-} from "NexisClaw/plugin-sdk/media-understanding";
+} from "GreenchClaw/plugin-sdk/media-understanding";
 import {
   assertOkOrThrowProviderError,
   postJsonRequest,
   type ProviderRequestTransportOverrides,
-} from "NexisClaw/plugin-sdk/provider-http";
+} from "GreenchClaw/plugin-sdk/provider-http";
 import {
   DEFAULT_GOOGLE_API_BASE_URL,
   normalizeGoogleModelId,

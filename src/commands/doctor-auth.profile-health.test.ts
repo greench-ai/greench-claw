@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
 
 const authProfileMocks = vi.hoisted(() => ({
@@ -25,7 +25,7 @@ import { noteAuthProfileHealth } from "./doctor-auth.js";
 describe("noteAuthProfileHealth", () => {
   it("skips external auth profile resolution when no auth source exists", async () => {
     await noteAuthProfileHealth({
-      cfg: { channels: { telegram: { enabled: true } } } as NexisClawConfig,
+      cfg: { channels: { telegram: { enabled: true } } } as GreenchClawConfig,
       prompter: {} as DoctorPrompter,
       allowKeychainPrompt: false,
     });

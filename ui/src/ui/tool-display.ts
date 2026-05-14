@@ -1,4 +1,4 @@
-import SHARED_TOOL_DISPLAY_JSON from "../../../apps/shared/NexisClawKit/Sources/NexisClawKit/Resources/tool-display.json" with { type: "json" };
+import SHARED_TOOL_DISPLAY_JSON from "../../../apps/shared/GreenchClawKit/Sources/GreenchClawKit/Resources/tool-display.json" with { type: "json" };
 import {
   defaultTitle,
   formatToolDetailText,

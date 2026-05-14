@@ -1,7 +1,7 @@
 import {
   isAbortRequestText,
   isBtwRequestText,
-} from "NexisClaw/plugin-sdk/command-primitives-runtime";
+} from "GreenchClaw/plugin-sdk/command-primitives-runtime";
 import { parseFeishuMessageEvent, type FeishuMessageEvent } from "./bot.js";
 
 export function getFeishuSequentialKey(params: {

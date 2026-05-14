@@ -25,7 +25,7 @@ function mockProcessWrite(
 }
 
 describe("matrix qa cli registration", () => {
-  const originalDisableForceExit = process.env.NEXISCLAW_QA_MATRIX_DISABLE_FORCE_EXIT;
+  const originalDisableForceExit = process.env.GREENCHCLAW_QA_MATRIX_DISABLE_FORCE_EXIT;
   let exitSpy: ReturnType<typeof vi.spyOn>;
   let stderrSpy: ReturnType<typeof vi.spyOn>;
   let stdoutSpy: ReturnType<typeof vi.spyOn>;
@@ -41,9 +41,9 @@ describe("matrix qa cli registration", () => {
 
   afterEach(() => {
     if (originalDisableForceExit === undefined) {
-      delete process.env.NEXISCLAW_QA_MATRIX_DISABLE_FORCE_EXIT;
+      delete process.env.GREENCHCLAW_QA_MATRIX_DISABLE_FORCE_EXIT;
     } else {
-      process.env.NEXISCLAW_QA_MATRIX_DISABLE_FORCE_EXIT = originalDisableForceExit;
+      process.env.GREENCHCLAW_QA_MATRIX_DISABLE_FORCE_EXIT = originalDisableForceExit;
     }
     exitSpy.mockRestore();
     stderrSpy.mockRestore();
@@ -81,7 +81,9 @@ describe("matrix qa cli registration", () => {
     matrixQaCliRegistration.register(qa);
     runQaMatrixCommand.mockRejectedValue(new Error("Matrix QA failed.\nreport: /tmp/report.md"));
 
-    await expect(qa.parseAsync(["node", "NexisClaw", "matrix"])).rejects.toThrow("process.exit(1)");
+    await expect(qa.parseAsync(["node", "GreenchClaw", "matrix"])).rejects.toThrow(
+      "process.exit(1)",
+    );
 
     expect(runQaMatrixCommand).toHaveBeenCalledOnce();
     expect(stderrSpy).toHaveBeenCalledWith("Matrix QA failed.\nreport: /tmp/report.md\n");
@@ -89,12 +91,14 @@ describe("matrix qa cli registration", () => {
   });
 
   it("can disable the forced exit for direct test harnesses", async () => {
-    process.env.NEXISCLAW_QA_MATRIX_DISABLE_FORCE_EXIT = "1";
+    process.env.GREENCHCLAW_QA_MATRIX_DISABLE_FORCE_EXIT = "1";
     const qa = new Command();
     matrixQaCliRegistration.register(qa);
     runQaMatrixCommand.mockRejectedValue(new Error("scenario failed"));
 
-    await expect(qa.parseAsync(["node", "NexisClaw", "matrix"])).rejects.toThrow("scenario failed");
+    await expect(qa.parseAsync(["node", "GreenchClaw", "matrix"])).rejects.toThrow(
+      "scenario failed",
+    );
 
     expect(exitSpy).not.toHaveBeenCalled();
   });

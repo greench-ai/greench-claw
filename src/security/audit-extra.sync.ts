@@ -6,7 +6,7 @@ import { getBlockedBindReason } from "../agents/sandbox/validate-sandbox-securit
 import { isToolAllowedByPolicies } from "../agents/tool-policy-match.js";
 import { resolveToolProfilePolicy } from "../agents/tool-policy.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { AgentToolsConfig } from "../config/types.tools.js";
 import { resolveGatewayAuth } from "../gateway/auth.js";
 import { resolveAllowedAgentIds } from "../gateway/hooks-policy.js";
@@ -57,7 +57,7 @@ function looksLikeEnvRef(value: string): boolean {
   return v.startsWith("${") && v.endsWith("}");
 }
 
-function isGatewayRemotelyExposed(cfg: NexisClawConfig): boolean {
+function isGatewayRemotelyExposed(cfg: GreenchClawConfig): boolean {
   const bind = typeof cfg.gateway?.bind === "string" ? cfg.gateway.bind : "loopback";
   if (bind !== "loopback") {
     return true;
@@ -112,8 +112,8 @@ function isWildcardEntry(value: unknown): boolean {
   return normalizeStringifiedOptionalString(value) === "*";
 }
 
-function listKnownNodeCommands(cfg: NexisClawConfig): Set<string> {
-  const baseCfg: NexisClawConfig = {
+function listKnownNodeCommands(cfg: GreenchClawConfig): Set<string> {
+  const baseCfg: GreenchClawConfig = {
     ...cfg,
     gateway: {
       ...cfg.gateway,
@@ -149,7 +149,7 @@ function listKnownNodeCommands(cfg: NexisClawConfig): Set<string> {
 }
 
 function resolveToolPolicies(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentTools?: AgentToolsConfig;
   sandboxMode?: "off" | "non-main" | "all";
   agentId?: string | null;
@@ -251,7 +251,7 @@ function suggestKnownNodeCommands(unknown: string, known: Set<string>): string[]
     .map((r) => r.cmd);
 }
 
-function listGroupPolicyOpen(cfg: NexisClawConfig): string[] {
+function listGroupPolicyOpen(cfg: GreenchClawConfig): string[] {
   const out: string[] = [];
   const channels = cfg.channels as Record<string, unknown> | undefined;
   if (!channels || typeof channels !== "object") {
@@ -289,7 +289,7 @@ function hasConfiguredGroupTargets(section: Record<string, unknown>): boolean {
   });
 }
 
-function listPotentialMultiUserSignals(cfg: NexisClawConfig): string[] {
+function listPotentialMultiUserSignals(cfg: GreenchClawConfig): string[] {
   const out = new Set<string>();
   const channels = cfg.channels as Record<string, unknown> | undefined;
   if (!channels || typeof channels !== "object") {
@@ -357,7 +357,7 @@ function listPotentialMultiUserSignals(cfg: NexisClawConfig): string[] {
   return Array.from(out);
 }
 
-function collectRiskyToolExposureContexts(cfg: NexisClawConfig): {
+function collectRiskyToolExposureContexts(cfg: GreenchClawConfig): {
   riskyContexts: string[];
   hasRuntimeRisk: boolean;
 } {
@@ -427,13 +427,13 @@ export function collectSyncedFolderFindings(params: {
       severity: "warn",
       title: "State/config path looks like a synced folder",
       detail: `stateDir=${params.stateDir}, configPath=${params.configPath}. Synced folders (iCloud/Dropbox/OneDrive/Google Drive) can leak tokens and transcripts onto other devices.`,
-      remediation: `Keep NEXISCLAW_STATE_DIR on a local-only volume and re-run "${formatCliCommand("NexisClaw security audit --fix")}".`,
+      remediation: `Keep GREENCHCLAW_STATE_DIR on a local-only volume and re-run "${formatCliCommand("GreenchClaw security audit --fix")}".`,
     });
   }
   return findings;
 }
 
-export function collectSecretsInConfigFindings(cfg: NexisClawConfig): SecurityAuditFinding[] {
+export function collectSecretsInConfigFindings(cfg: GreenchClawConfig): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const password = normalizeOptionalString(cfg.gateway?.auth?.password) ?? "";
   if (password && !looksLikeEnvRef(password)) {
@@ -444,7 +444,7 @@ export function collectSecretsInConfigFindings(cfg: NexisClawConfig): SecurityAu
       detail:
         "gateway.auth.password is set in the config file; prefer environment variables for secrets when possible.",
       remediation:
-        "Prefer NEXISCLAW_GATEWAY_PASSWORD (env) and remove gateway.auth.password from disk.",
+        "Prefer GREENCHCLAW_GATEWAY_PASSWORD (env) and remove gateway.auth.password from disk.",
     });
   }
 
@@ -463,7 +463,7 @@ export function collectSecretsInConfigFindings(cfg: NexisClawConfig): SecurityAu
 }
 
 export function collectHooksHardeningFindings(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
@@ -486,17 +486,17 @@ export function collectHooksHardeningFindings(
     tailscaleMode: cfg.gateway?.tailscale?.mode ?? "off",
     env,
   });
-  const NexisClawGatewayToken =
-    typeof env.NEXISCLAW_GATEWAY_TOKEN === "string" && env.NEXISCLAW_GATEWAY_TOKEN.trim()
-      ? env.NEXISCLAW_GATEWAY_TOKEN.trim()
+  const GreenchClawGatewayToken =
+    typeof env.GREENCHCLAW_GATEWAY_TOKEN === "string" && env.GREENCHCLAW_GATEWAY_TOKEN.trim()
+      ? env.GREENCHCLAW_GATEWAY_TOKEN.trim()
       : null;
   const gatewayToken =
     gatewayAuth.mode === "token" &&
     typeof gatewayAuth.token === "string" &&
     gatewayAuth.token.trim()
       ? gatewayAuth.token.trim()
-      : NexisClawGatewayToken
-        ? NexisClawGatewayToken
+      : GreenchClawGatewayToken
+        ? GreenchClawGatewayToken
         : null;
   if (token && gatewayToken && token === gatewayToken) {
     findings.push({
@@ -581,7 +581,7 @@ export function collectHooksHardeningFindings(
 }
 
 export function collectGatewayHttpSessionKeyOverrideFindings(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const chatCompletionsEnabled = cfg.gateway?.http?.endpoints?.chatCompletions?.enabled === true;
@@ -600,7 +600,7 @@ export function collectGatewayHttpSessionKeyOverrideFindings(
     severity: "info",
     title: "HTTP API session-key override is enabled",
     detail:
-      `${enabledEndpoints.join(", ")} accept x-NexisClaw-session-key for per-request session routing. ` +
+      `${enabledEndpoints.join(", ")} accept x-GreenchClaw-session-key for per-request session routing. ` +
       "Treat API credential holders as trusted principals.",
   });
 
@@ -608,7 +608,7 @@ export function collectGatewayHttpSessionKeyOverrideFindings(
 }
 
 export function collectGatewayHttpNoAuthFindings(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env: NodeJS.ProcessEnv,
 ): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
@@ -641,7 +641,7 @@ export function collectGatewayHttpNoAuthFindings(
   return findings;
 }
 
-export function collectSandboxDockerNoopFindings(cfg: NexisClawConfig): SecurityAuditFinding[] {
+export function collectSandboxDockerNoopFindings(cfg: GreenchClawConfig): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const configuredPaths: string[] = [];
   const agents = Array.isArray(cfg.agents?.list) ? cfg.agents.list : [];
@@ -691,7 +691,9 @@ export function collectSandboxDockerNoopFindings(cfg: NexisClawConfig): Security
   return findings;
 }
 
-export function collectSandboxDangerousConfigFindings(cfg: NexisClawConfig): SecurityAuditFinding[] {
+export function collectSandboxDangerousConfigFindings(
+  cfg: GreenchClawConfig,
+): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const agents = Array.isArray(cfg.agents?.list) ? cfg.agents.list : [];
 
@@ -803,7 +805,9 @@ export function collectSandboxDangerousConfigFindings(cfg: NexisClawConfig): Sec
   return findings;
 }
 
-export function collectNodeDenyCommandPatternFindings(cfg: NexisClawConfig): SecurityAuditFinding[] {
+export function collectNodeDenyCommandPatternFindings(
+  cfg: GreenchClawConfig,
+): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const denyListRaw = cfg.gateway?.nodes?.denyCommands;
   if (!Array.isArray(denyListRaw) || denyListRaw.length === 0) {
@@ -861,7 +865,7 @@ export function collectNodeDenyCommandPatternFindings(cfg: NexisClawConfig): Sec
 }
 
 export function collectNodeDangerousAllowCommandFindings(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const allowRaw = cfg.gateway?.nodes?.allowCommands;
@@ -898,7 +902,9 @@ export function collectNodeDangerousAllowCommandFindings(
   return findings;
 }
 
-export function collectMinimalProfileOverrideFindings(cfg: NexisClawConfig): SecurityAuditFinding[] {
+export function collectMinimalProfileOverrideFindings(
+  cfg: GreenchClawConfig,
+): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   if (cfg.tools?.profile !== "minimal") {
     return findings;
@@ -934,7 +940,7 @@ export function collectMinimalProfileOverrideFindings(cfg: NexisClawConfig): Sec
   return findings;
 }
 
-export function collectModelHygieneFindings(cfg: NexisClawConfig): SecurityAuditFinding[] {
+export function collectModelHygieneFindings(cfg: GreenchClawConfig): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const models = collectAuditModelRefs(cfg);
   if (models.length === 0) {
@@ -1019,7 +1025,7 @@ export function collectModelHygieneFindings(cfg: NexisClawConfig): SecurityAudit
   return findings;
 }
 
-export function collectExposureMatrixFindings(cfg: NexisClawConfig): SecurityAuditFinding[] {
+export function collectExposureMatrixFindings(cfg: GreenchClawConfig): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const openGroups = listGroupPolicyOpen(cfg);
   if (openGroups.length === 0) {
@@ -1058,7 +1064,9 @@ export function collectExposureMatrixFindings(cfg: NexisClawConfig): SecurityAud
   return findings;
 }
 
-export function collectLikelyMultiUserSetupFindings(cfg: NexisClawConfig): SecurityAuditFinding[] {
+export function collectLikelyMultiUserSetupFindings(
+  cfg: GreenchClawConfig,
+): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const signals = listPotentialMultiUserSignals(cfg);
   if (signals.length === 0) {
@@ -1082,7 +1090,7 @@ export function collectLikelyMultiUserSetupFindings(cfg: NexisClawConfig): Secur
       "Heuristic signals indicate this gateway may be reachable by multiple users:\n" +
       signals.map((signal) => `- ${signal}`).join("\n") +
       `\n${impactLine}\n${riskyContextsDetail}\n` +
-      "NexisClaw's default security model is personal-assistant (one trusted operator boundary), not hostile multi-tenant isolation on one shared gateway.",
+      "GreenchClaw's default security model is personal-assistant (one trusted operator boundary), not hostile multi-tenant isolation on one shared gateway.",
     remediation:
       'If users may be mutually untrusted, split trust boundaries (separate gateways + credentials, ideally separate OS users/hosts). If you intentionally run shared-user access, set agents.defaults.sandbox.mode="all", keep tools.fs.workspaceOnly=true, deny runtime/fs/web tools unless required, and keep personal/private identities + credentials off that runtime.',
   });

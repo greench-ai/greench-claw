@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { loggingState } from "../logging/state.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { agentCliCommand } from "./agent-via-gateway.js";
@@ -35,7 +35,7 @@ const jsonRuntime = {
   exit: vi.fn(),
 };
 
-function mockConfig(storePath: string, overrides?: Partial<NexisClawConfig>) {
+function mockConfig(storePath: string, overrides?: Partial<GreenchClawConfig>) {
   loadConfig.mockReturnValue({
     agents: {
       defaults: {
@@ -54,9 +54,9 @@ function mockConfig(storePath: string, overrides?: Partial<NexisClawConfig>) {
 
 async function withTempStore(
   fn: (ctx: { dir: string; store: string }) => Promise<void>,
-  overrides?: Partial<NexisClawConfig>,
+  overrides?: Partial<GreenchClawConfig>,
 ) {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-agent-cli-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-agent-cli-"));
   const store = path.join(dir, "sessions.json");
   mockConfig(store, overrides);
   try {

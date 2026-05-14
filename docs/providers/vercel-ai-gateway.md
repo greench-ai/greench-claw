@@ -2,7 +2,7 @@
 summary: "Vercel AI Gateway setup (auth + model selection)"
 title: "Vercel AI gateway"
 read_when:
-  - You want to use Vercel AI Gateway with NexisClaw
+  - You want to use Vercel AI Gateway with GreenchClaw
   - You need the API key env var or CLI auth choice
 ---
 
@@ -17,7 +17,7 @@ access hundreds of models through a single endpoint.
 | Model catalog | Auto-discovered via `/v1/models` |
 
 <Tip>
-NexisClaw auto-discovers the Gateway `/v1/models` catalog, so
+GreenchClaw auto-discovers the Gateway `/v1/models` catalog, so
 `/models vercel-ai-gateway` includes current model refs such as
 `vercel-ai-gateway/openai/gpt-5.5` and
 `vercel-ai-gateway/moonshotai/kimi-k2.6`.
@@ -30,12 +30,12 @@ NexisClaw auto-discovers the Gateway `/v1/models` catalog, so
     Run onboarding and choose the AI Gateway auth option:
 
     ```bash
-    NexisClaw onboard --auth-choice ai-gateway-api-key
+    GreenchClaw onboard --auth-choice ai-gateway-api-key
     ```
 
   </Step>
   <Step title="Set a default model">
-    Add the model to your NexisClaw config:
+    Add the model to your GreenchClaw config:
 
     ```json5
     {
@@ -50,7 +50,7 @@ NexisClaw auto-discovers the Gateway `/v1/models` catalog, so
   </Step>
   <Step title="Verify the model is available">
     ```bash
-    NexisClaw models list --provider vercel-ai-gateway
+    GreenchClaw models list --provider vercel-ai-gateway
     ```
   </Step>
 </Steps>
@@ -60,7 +60,7 @@ NexisClaw auto-discovers the Gateway `/v1/models` catalog, so
 For scripted or CI setups, pass all values on the command line:
 
 ```bash
-NexisClaw onboard --non-interactive \
+GreenchClaw onboard --non-interactive \
   --mode local \
   --auth-choice ai-gateway-api-key \
   --ai-gateway-api-key "$AI_GATEWAY_API_KEY"
@@ -68,7 +68,7 @@ NexisClaw onboard --non-interactive \
 
 ## Model ID shorthand
 
-NexisClaw accepts Vercel Claude shorthand model refs and normalizes them at
+GreenchClaw accepts Vercel Claude shorthand model refs and normalizes them at
 runtime:
 
 | Shorthand input                     | Normalized model ref                          |
@@ -78,20 +78,20 @@ runtime:
 
 <Tip>
 You can use either the shorthand or the fully qualified model ref in your
-configuration. NexisClaw resolves the canonical form automatically.
+configuration. GreenchClaw resolves the canonical form automatically.
 </Tip>
 
 ## Advanced configuration
 
 <AccordionGroup>
   <Accordion title="Environment variable for daemon processes">
-    If the NexisClaw Gateway runs as a daemon (launchd/systemd), make sure
+    If the GreenchClaw Gateway runs as a daemon (launchd/systemd), make sure
     `AI_GATEWAY_API_KEY` is available to that process.
 
     <Warning>
     A key set only in `~/.profile` will not be visible to a launchd/systemd
     daemon unless that environment is explicitly imported. Set the key in
-    `~/.NexisClaw/.env` or via `env.shellEnv` to ensure the gateway process can
+    `~/.GreenchClaw/.env` or via `env.shellEnv` to ensure the gateway process can
     read it.
     </Warning>
 
@@ -106,7 +106,7 @@ configuration. NexisClaw resolves the canonical form automatically.
     upstream providers.
   </Accordion>
   <Accordion title="Thinking levels">
-    `/think` options follow trusted upstream model prefixes when NexisClaw knows
+    `/think` options follow trusted upstream model prefixes when GreenchClaw knows
     the upstream provider contract. `vercel-ai-gateway/anthropic/...` uses the
     Claude thinking profile, including adaptive defaults for Claude 4.6 models.
     `vercel-ai-gateway/openai/gpt-5.4`, `gpt-5.5`, and Codex-style refs expose

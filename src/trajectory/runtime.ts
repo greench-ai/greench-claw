@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { sanitizeDiagnosticPayload } from "../agents/payload-redaction.js";
 import { getQueuedFileWriter, type QueuedFileWriter } from "../agents/queued-file-writer.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { redactSecrets } from "../logging/redact.js";
 import { parseBooleanValue } from "../utils/boolean.js";
 import { safeJsonStringify } from "../utils/safe-json.js";
@@ -26,7 +26,7 @@ export {
 } from "./paths.js";
 
 type TrajectoryRuntimeInit = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   maxRuntimeFileBytes?: number;
   runId?: string;
@@ -84,7 +84,7 @@ function writeTrajectoryPointerBestEffort(params: {
         fd,
         `${JSON.stringify(
           {
-            traceSchema: "NexisClaw-trajectory-pointer",
+            traceSchema: "GreenchClaw-trajectory-pointer",
             schemaVersion: 1,
             sessionId: params.sessionId,
             runtimeFile: params.filePath,
@@ -233,8 +233,8 @@ export function createTrajectoryRuntimeRecorder(
 ): TrajectoryRuntimeRecorder | null {
   const env = params.env ?? process.env;
   // Trajectory capture is now default-on. The env var remains as an explicit
-  // override so operators can still disable recording with NEXISCLAW_TRAJECTORY=0.
-  const enabled = parseBooleanValue(env.NEXISCLAW_TRAJECTORY) ?? true;
+  // override so operators can still disable recording with GREENCHCLAW_TRAJECTORY=0.
+  const enabled = parseBooleanValue(env.GREENCHCLAW_TRAJECTORY) ?? true;
   if (!enabled) {
     return null;
   }
@@ -299,7 +299,7 @@ export function createTrajectoryRuntimeRecorder(
   const buildEventLine = (type: string, data?: Record<string, unknown>): string | undefined => {
     const nextSeq = seq + 1;
     const event: TrajectoryEvent = {
-      traceSchema: "NexisClaw-trajectory",
+      traceSchema: "GreenchClaw-trajectory",
       schemaVersion: 1,
       traceId,
       source: "runtime",

@@ -1,5 +1,5 @@
 import { applyMergePatch } from "../config/merge-patch.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { matchRootFileOpenFailure, type RootFileOpenFailure } from "../infra/boundary-file-read.js";
 import { readRootJsonObjectSync } from "../infra/json-files.js";
 import { normalizePluginsConfig, resolveEffectivePluginActivationState } from "./config-state.js";
@@ -81,7 +81,7 @@ export function inspectBundleServerRuntimeSupport<TConfig>(params: {
 
 export function loadEnabledBundleConfig<TConfig, TDiagnostic>(params: {
   workspaceDir: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   createEmptyConfig: () => TConfig;
   loadBundleConfig: (params: {
     pluginId: string;

@@ -3,7 +3,7 @@ import {
   type ChannelSetupAdapter,
   migrateBaseNameToDefaultAccount,
   normalizeAccountId,
-} from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/setup";
 
 const channel = "whatsapp" as const;
 

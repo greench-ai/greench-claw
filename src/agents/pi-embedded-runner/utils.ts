@@ -2,7 +2,7 @@ import type { ThinkingLevel } from "@earendil-works/pi-agent-core";
 import type { ReasoningLevel, ThinkLevel } from "../../auto-reply/thinking.js";
 
 export function mapThinkingLevel(level?: ThinkLevel): ThinkingLevel {
-  // pi-agent-core supports "xhigh"; NexisClaw enables it for specific models.
+  // pi-agent-core supports "xhigh"; GreenchClaw enables it for specific models.
   if (!level) {
     return "off";
   }

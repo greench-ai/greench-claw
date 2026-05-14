@@ -44,8 +44,8 @@ export type {
   AnyAgentTool,
   CliBackendPlugin,
   MediaUnderstandingProviderPlugin,
-  NexisClawPluginApi,
-  NexisClawPluginConfigSchema,
+  GreenchClawPluginApi,
+  GreenchClawPluginConfigSchema,
   PluginLogger,
   ProviderAuthContext,
   ProviderAuthResult,
@@ -91,11 +91,11 @@ export type {
   TaskRunDetail,
   TaskRunView,
 } from "../plugins/runtime/task-domain-types.js";
-export type { NexisClawConfig } from "../config/config.js";
-/** @deprecated Use NexisClawConfig instead */
-export type { NexisClawConfig as ClawdbotConfig } from "../config/config.js";
-/** @deprecated Use NexisClawConfig instead */
-export type { NexisClawConfig as NexisClawSchemaType } from "../config/config.js";
+export type { GreenchClawConfig } from "../config/config.js";
+/** @deprecated Use GreenchClawConfig instead */
+export type { GreenchClawConfig as ClawdbotConfig } from "../config/config.js";
+/** @deprecated Use GreenchClawConfig instead */
+export type { GreenchClawConfig as GreenchClawSchemaType } from "../config/config.js";
 export type {
   MemoryPluginCapability,
   MemoryPluginPublicArtifact,

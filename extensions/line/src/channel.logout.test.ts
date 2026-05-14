@@ -1,6 +1,6 @@
-import { createRuntimeEnv } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import { createRuntimeEnv } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig, PluginRuntime, ResolvedLineAccount } from "../api.js";
+import type { GreenchClawConfig, PluginRuntime, ResolvedLineAccount } from "../api.js";
 import { lineGatewayAdapter } from "./gateway.js";
 import { setLineRuntime } from "./runtime.js";
 
@@ -14,7 +14,7 @@ type LineRuntimeMocks = {
 function createRuntime(): { runtime: PluginRuntime; mocks: LineRuntimeMocks } {
   const replaceConfigFile = vi.fn(async () => {});
   const resolveLineAccount = vi.fn(
-    ({ cfg, accountId }: { cfg: NexisClawConfig; accountId?: string }) => {
+    ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId?: string }) => {
       const lineConfig = (cfg.channels?.line ?? {}) as {
         tokenFile?: string;
         secretFile?: string;
@@ -42,17 +42,17 @@ function createRuntime(): { runtime: PluginRuntime; mocks: LineRuntimeMocks } {
 
 function resolveAccount(
   resolveLineAccount: LineRuntimeMocks["resolveLineAccount"],
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
 ): ResolvedLineAccount {
   const resolver = resolveLineAccount as unknown as (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string;
   }) => ResolvedLineAccount;
   return resolver({ cfg, accountId });
 }
 
-async function runLogoutScenario(params: { cfg: NexisClawConfig; accountId: string }): Promise<{
+async function runLogoutScenario(params: { cfg: GreenchClawConfig; accountId: string }): Promise<{
   result: Awaited<ReturnType<NonNullable<typeof lineGatewayAdapter.logoutAccount>>>;
   mocks: LineRuntimeMocks;
 }> {
@@ -74,7 +74,7 @@ describe("linePlugin gateway.logoutAccount", () => {
   });
 
   it("clears tokenFile/secretFile on default account logout", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         line: {
           tokenFile: "/tmp/token",
@@ -96,7 +96,7 @@ describe("linePlugin gateway.logoutAccount", () => {
   });
 
   it("clears tokenFile/secretFile on account logout", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         line: {
           accounts: {
@@ -122,7 +122,7 @@ describe("linePlugin gateway.logoutAccount", () => {
   });
 
   it("does not write config when account has no token/secret fields", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         line: {
           accounts: {

@@ -92,7 +92,7 @@ describe("status-all diagnosis port checks", () => {
     gatewayMocks.summarizeLogTail.mockImplementation((lines: string[]) => lines);
   });
 
-  it("labels NexisClaw Tailscale exposure separately from daemon state", async () => {
+  it("labels GreenchClaw Tailscale exposure separately from daemon state", async () => {
     const params = createBaseParams([]);
     params.tailscale.backendState = "Running";
     params.tailscale.dnsName = "box.tail.ts.net";
@@ -106,8 +106,8 @@ describe("status-all diagnosis port checks", () => {
 
   it("treats same-process dual-stack loopback listeners as healthy", async () => {
     const params = createBaseParams([
-      { pid: 5001, commandLine: "NexisClaw-gateway", address: "127.0.0.1:18789" },
-      { pid: 5001, commandLine: "NexisClaw-gateway", address: "[::1]:18789" },
+      { pid: 5001, commandLine: "GreenchClaw-gateway", address: "127.0.0.1:18789" },
+      { pid: 5001, commandLine: "GreenchClaw-gateway", address: "[::1]:18789" },
     ]);
 
     await appendStatusAllDiagnosis(params);
@@ -120,21 +120,21 @@ describe("status-all diagnosis port checks", () => {
 
   it("treats a single wildcard Gateway listener as healthy", async () => {
     const params = createBaseParams([
-      { pid: 5001, commandLine: "NexisClaw-gateway", address: "0.0.0.0:18789" },
+      { pid: 5001, commandLine: "GreenchClaw-gateway", address: "0.0.0.0:18789" },
     ]);
 
     await appendStatusAllDiagnosis(params);
 
     const output = params.lines.join("\n");
     expect(output).toContain("✓ Port 18789");
-    expect(output).toContain("Detected NexisClaw Gateway listener on the configured port.");
+    expect(output).toContain("Detected GreenchClaw Gateway listener on the configured port.");
     expect(output).not.toContain("Port 18789 is already in use.");
   });
 
   it("keeps warning for multi-process listener conflicts", async () => {
     const params = createBaseParams([
-      { pid: 5001, commandLine: "NexisClaw-gateway", address: "127.0.0.1:18789" },
-      { pid: 5002, commandLine: "NexisClaw-gateway", address: "[::1]:18789" },
+      { pid: 5001, commandLine: "GreenchClaw-gateway", address: "127.0.0.1:18789" },
+      { pid: 5002, commandLine: "GreenchClaw-gateway", address: "[::1]:18789" },
     ]);
 
     await appendStatusAllDiagnosis(params);
@@ -180,12 +180,12 @@ describe("status-all diagnosis port checks", () => {
     Object.defineProperty(process, "platform", { value: "darwin" });
     try {
       restartLogMocks.resolveGatewayLogPaths.mockReturnValue({
-        logDir: "/tmp/NexisClaw/logs",
-        stdoutPath: "/tmp/NexisClaw/logs/gateway.log",
-        stderrPath: "/tmp/NexisClaw/logs/gateway.err.log",
+        logDir: "/tmp/GreenchClaw/logs",
+        stdoutPath: "/tmp/GreenchClaw/logs/gateway.log",
+        stderrPath: "/tmp/GreenchClaw/logs/gateway.err.log",
       });
       restartLogMocks.resolveGatewayRestartLogPath.mockReturnValue(
-        "/tmp/NexisClaw/logs/gateway-restart.log",
+        "/tmp/GreenchClaw/logs/gateway-restart.log",
       );
       gatewayMocks.readFileTailLines.mockImplementation(async (filePath: string) => {
         if (filePath.endsWith("gateway.log")) {
@@ -202,10 +202,10 @@ describe("status-all diagnosis port checks", () => {
 
       const output = params.lines.join("\n");
       expect(gatewayMocks.readFileTailLines).not.toHaveBeenCalledWith(
-        "/tmp/NexisClaw/logs/gateway.err.log",
+        "/tmp/GreenchClaw/logs/gateway.err.log",
         40,
       );
-      expect(output).toContain("# stdout: /tmp/NexisClaw/logs/gateway.log");
+      expect(output).toContain("# stdout: /tmp/GreenchClaw/logs/gateway.log");
       expect(output).toContain("gateway stdout current");
       expect(output).not.toContain("# stderr:");
       expect(output).not.toContain("failed to bind gateway socket stale");

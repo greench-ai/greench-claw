@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { resolveMainSessionKey } from "../config/sessions.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import { safeEqualSecret } from "../security/secret-equal.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
@@ -13,8 +13,8 @@ const MAX_MCP_BODY_BYTES = 1_048_576;
 
 function shouldLogMcpLoopbackHttp(): boolean {
   return (
-    isTruthyEnvValue(process.env.NEXISCLAW_CLI_BACKEND_LOG_OUTPUT) ||
-    isTruthyEnvValue(process.env.NEXISCLAW_LIVE_CLI_BACKEND_DEBUG)
+    isTruthyEnvValue(process.env.GREENCHCLAW_CLI_BACKEND_LOG_OUTPUT) ||
+    isTruthyEnvValue(process.env.GREENCHCLAW_LIVE_CLI_BACKEND_DEBUG)
   );
 }
 
@@ -32,7 +32,10 @@ type McpRequestContext = {
   senderIsOwner: boolean;
 };
 
-function resolveScopedSessionKey(cfg: NexisClawConfig, rawSessionKey: string | undefined): string {
+function resolveScopedSessionKey(
+  cfg: GreenchClawConfig,
+  rawSessionKey: string | undefined,
+): string {
   const trimmed = normalizeOptionalString(rawSessionKey);
   return !trimmed || trimmed === "main" ? resolveMainSessionKey(cfg) : trimmed;
 }
@@ -165,14 +168,14 @@ export async function readMcpHttpBody(req: IncomingMessage): Promise<string> {
 
 export function resolveMcpRequestContext(
   req: IncomingMessage,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   auth: { senderIsOwner: boolean },
 ): McpRequestContext {
   return {
     sessionKey: resolveScopedSessionKey(cfg, getHeader(req, "x-session-key")),
     messageProvider:
-      normalizeMessageChannel(getHeader(req, "x-NexisClaw-message-channel")) ?? undefined,
-    accountId: normalizeOptionalString(getHeader(req, "x-NexisClaw-account-id")),
+      normalizeMessageChannel(getHeader(req, "x-GreenchClaw-message-channel")) ?? undefined,
+    accountId: normalizeOptionalString(getHeader(req, "x-GreenchClaw-account-id")),
     senderIsOwner: auth.senderIsOwner,
   };
 }

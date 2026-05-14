@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   applyExclusiveSlotSelection,
   hasKind,
@@ -10,7 +10,7 @@ import {
 import type { PluginKind } from "./types.js";
 
 describe("applyExclusiveSlotSelection", () => {
-  const createMemoryConfig = (plugins?: NexisClawConfig["plugins"]): NexisClawConfig => ({
+  const createMemoryConfig = (plugins?: GreenchClawConfig["plugins"]): GreenchClawConfig => ({
     plugins: {
       ...plugins,
       entries: {
@@ -23,7 +23,7 @@ describe("applyExclusiveSlotSelection", () => {
     },
   });
 
-  const runMemorySelection = (config: NexisClawConfig, selectedId = "memory") =>
+  const runMemorySelection = (config: GreenchClawConfig, selectedId = "memory") =>
     applyExclusiveSlotSelection({
       config,
       selectedId,
@@ -78,7 +78,7 @@ describe("applyExclusiveSlotSelection", () => {
   }
 
   function expectUnchangedSelectionCase(params: {
-    config: NexisClawConfig;
+    config: GreenchClawConfig;
     selectedId: string;
     selectedKind?: PluginKind | PluginKind[];
     registry?: { plugins: ReadonlyArray<{ id: string; kind?: PluginKind | PluginKind[] }> };
@@ -99,7 +99,7 @@ describe("applyExclusiveSlotSelection", () => {
   }
 
   function expectChangedSelectionCase(params: {
-    config: NexisClawConfig;
+    config: GreenchClawConfig;
     selectedId?: string;
     expectedDisabled?: boolean;
     warningChecks: {
@@ -175,7 +175,7 @@ describe("applyExclusiveSlotSelection", () => {
     },
     {
       name: "skips changes when no exclusive slot applies",
-      config: {} as NexisClawConfig,
+      config: {} as GreenchClawConfig,
       selectedId: "custom",
     },
   ] as const)("$name", ({ config, selectedId, selectedKind, registry }) => {
@@ -188,7 +188,7 @@ describe("applyExclusiveSlotSelection", () => {
   });
 
   it("applies slot selection for each kind in a multi-kind array", () => {
-    const config: NexisClawConfig = {
+    const config: GreenchClawConfig = {
       plugins: {
         slots: { memory: "memory-core", contextEngine: "legacy" },
         entries: {
@@ -215,7 +215,7 @@ describe("applyExclusiveSlotSelection", () => {
   });
 
   it("does not disable a dual-kind plugin that still owns another slot", () => {
-    const config: NexisClawConfig = {
+    const config: GreenchClawConfig = {
       plugins: {
         slots: { memory: "dual-plugin", contextEngine: "dual-plugin" },
         entries: {
@@ -240,7 +240,7 @@ describe("applyExclusiveSlotSelection", () => {
 
   it("does not disable a dual-kind plugin that owns another slot via default", () => {
     // contextEngine is NOT explicitly set — defaults to "legacy"
-    const config: NexisClawConfig = {
+    const config: GreenchClawConfig = {
       plugins: {
         slots: { memory: "legacy" },
         entries: {

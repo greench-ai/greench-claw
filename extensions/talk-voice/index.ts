@@ -1,12 +1,12 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import type { SpeechVoiceOption } from "NexisClaw/plugin-sdk/speech";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import type { SpeechVoiceOption } from "GreenchClaw/plugin-sdk/speech";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { resolveActiveTalkProviderConfig } from "NexisClaw/plugin-sdk/talk-config-runtime";
-import { definePluginEntry, type NexisClawPluginApi } from "./api.js";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { resolveActiveTalkProviderConfig } from "GreenchClaw/plugin-sdk/talk-config-runtime";
+import { definePluginEntry, type GreenchClawPluginApi } from "./api.js";
 
 function mask(s: string, keep: number = 6): string {
   const trimmed = s.trim();
@@ -121,7 +121,7 @@ export default definePluginEntry({
   id: "talk-voice",
   name: "Talk Voice",
   description: "Command helpers for managing Talk voice configuration",
-  register(api: NexisClawPluginApi) {
+  register(api: GreenchClawPluginApi) {
     api.registerCommand({
       name: "voice",
       nativeNames: {
@@ -135,7 +135,7 @@ export default definePluginEntry({
         const tokens = args.split(/\s+/).filter(Boolean);
         const action = normalizeLowercaseStringOrEmpty(tokens[0] ?? "status");
 
-        const cfg = api.runtime.config.current() as NexisClawConfig;
+        const cfg = api.runtime.config.current() as GreenchClawConfig;
         const active = resolveActiveTalkProviderConfig(cfg.talk);
         if (!active) {
           return {

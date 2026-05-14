@@ -1,12 +1,12 @@
 ---
-summary: "Hubs that link to every NexisClaw doc"
+summary: "Hubs that link to every GreenchClaw doc"
 read_when:
   - You want a complete map of the documentation
 title: "Docs hubs"
 ---
 
 <Note>
-If you are new to NexisClaw, start with [Getting Started](/start/getting-started).
+If you are new to GreenchClaw, start with [Getting Started](/start/getting-started).
 </Note>
 
 Use these hubs to discover every page, including deep dives and reference docs that don't appear in the left nav.
@@ -23,7 +23,7 @@ Use these hubs to discover every page, including deep dives and reference docs t
 - [Docs directory](/start/docs-directory)
 - [Configuration](/gateway/configuration)
 - [Configuration examples](/gateway/configuration-examples)
-- [NexisClaw assistant](/start/NexisClaw)
+- [GreenchClaw assistant](/start/GreenchClaw)
 - [Showcase](/start/showcase)
 - [Lore](/start/lore)
 

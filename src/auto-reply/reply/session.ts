@@ -31,7 +31,7 @@ import {
   type SessionEntry,
   type SessionScope,
 } from "../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { TtsAutoMode } from "../../config/types.tts.js";
 import {
   forgetActiveSessionForShutdown,
@@ -106,7 +106,7 @@ function resolveExplicitSessionEndReason(matchedResetTriggerLower?: string): Rep
 }
 
 function resolveSessionDefaultAccountId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channelRaw?: string;
   accountIdRaw?: string;
   persistedLastAccountId?: string;
@@ -174,7 +174,7 @@ export type SessionInitResult = {
 };
 
 function resolveSessionConversationBindingContext(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   ctx: MsgContext,
 ): {
   channel: string;
@@ -200,7 +200,7 @@ function resolveSessionConversationBindingContext(
 }
 
 function resolveBoundConversationSessionKey(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   ctx: MsgContext;
   bindingContext?: {
     channel: string;
@@ -233,7 +233,7 @@ function resolveBoundConversationSessionKey(params: {
 
 export async function initSessionState(params: {
   ctx: MsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   commandAuthorized: boolean;
 }): Promise<SessionInitResult> {
   const { ctx, cfg, commandAuthorized } = params;
@@ -279,7 +279,7 @@ export async function initSessionState(params: {
     : DEFAULT_RESET_TRIGGERS;
   const sessionScope = sessionCfg?.scope ?? "per-sender";
   const storePath = resolveStorePath(sessionCfg?.store, { agentId });
-  const ingressTimingEnabled = process.env.NEXISCLAW_DEBUG_INGRESS_TIMING === "1";
+  const ingressTimingEnabled = process.env.GREENCHCLAW_DEBUG_INGRESS_TIMING === "1";
 
   // CRITICAL: Skip cache to ensure fresh data when resolving session identity.
   // Stale cache (especially with multiple gateway processes or on Windows where

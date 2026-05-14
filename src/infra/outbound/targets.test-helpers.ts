@@ -3,10 +3,10 @@ import type {
   ChannelOutboundAdapter,
   ChannelPlugin,
 } from "../../channels/plugins/types.public.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { createTestRegistry } from "../../test-utils/channel-plugins.js";
 
-function readTestDefaultTo(cfg: NexisClawConfig, channelId: string): string | undefined {
+function readTestDefaultTo(cfg: GreenchClawConfig, channelId: string): string | undefined {
   const channels = cfg.channels as Record<string, { defaultTo?: unknown }> | undefined;
   const value = channels?.[channelId]?.defaultTo;
   return typeof value === "string" ? value : undefined;
@@ -115,7 +115,7 @@ export function createTestChannelPlugin(params: {
   label?: string;
   outbound?: ChannelOutboundAdapter;
   messaging?: ChannelMessagingAdapter;
-  resolveDefaultTo?: (params: { cfg: NexisClawConfig }) => string | undefined;
+  resolveDefaultTo?: (params: { cfg: GreenchClawConfig }) => string | undefined;
 }): ChannelPlugin {
   return {
     id: params.id,

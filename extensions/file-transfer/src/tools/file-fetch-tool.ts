@@ -5,8 +5,8 @@ import {
   resolveNodeIdFromList,
   type AnyAgentTool,
   type NodeListNode,
-} from "NexisClaw/plugin-sdk/agent-harness-runtime";
-import { saveMediaBuffer } from "NexisClaw/plugin-sdk/media-store";
+} from "GreenchClaw/plugin-sdk/agent-harness-runtime";
+import { saveMediaBuffer } from "GreenchClaw/plugin-sdk/media-store";
 import { appendFileTransferAudit } from "../shared/audit.js";
 import { throwFromNodePayload } from "../shared/errors.js";
 import {

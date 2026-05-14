@@ -1,5 +1,5 @@
-import type { ProviderWrapStreamFnContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import { createDeepSeekV4OpenAICompatibleThinkingWrapper } from "NexisClaw/plugin-sdk/provider-stream-shared";
+import type { ProviderWrapStreamFnContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createDeepSeekV4OpenAICompatibleThinkingWrapper } from "GreenchClaw/plugin-sdk/provider-stream-shared";
 import { isDeepSeekV4ModelRef } from "./models.js";
 
 export function createDeepSeekV4ThinkingWrapper(

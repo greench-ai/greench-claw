@@ -1,5 +1,5 @@
 import { resolveProviderIdForAuth } from "../agents/provider-auth-aliases.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { sanitizeForLog } from "../terminal/ansi.js";
 import { normalizePluginsConfig, resolveEffectiveEnableState } from "./config-state.js";
 import { loadManifestMetadataSnapshot } from "./manifest-contract-eligibility.js";
@@ -44,7 +44,7 @@ type ProviderOnboardAuthFlagCandidate = ProviderAuthChoiceCandidate & {
   cliOption: string;
 };
 type ManifestProviderAuthChoiceParams = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   includeUntrustedWorkspacePlugins?: boolean;
@@ -177,7 +177,7 @@ function stripChoiceOrigin(choice: ProviderAuthChoiceCandidate): ProviderAuthCho
 }
 
 function resolveManifestProviderAuthChoiceCandidates(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   includeUntrustedWorkspacePlugins?: boolean;
@@ -292,7 +292,7 @@ export function resolveManifestProviderAuthChoice(
 
 export function resolveManifestProviderApiKeyChoice(params: {
   providerId: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   includeUntrustedWorkspacePlugins?: boolean;

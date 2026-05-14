@@ -1,17 +1,17 @@
 import { describe, expect, it, vi } from "vitest";
 import type { ResolvedSlackAccount } from "./accounts.js";
-import type { NexisClawConfig } from "./runtime-api.js";
+import type { GreenchClawConfig } from "./runtime-api.js";
 import { collectSlackSecurityAuditFindings } from "./security-audit.js";
 
 const { readChannelAllowFromStoreMock } = vi.hoisted(() => ({
   readChannelAllowFromStoreMock: vi.fn(async () => [] as string[]),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/conversation-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/conversation-runtime", () => ({
   readChannelAllowFromStore: readChannelAllowFromStoreMock,
 }));
 
-function createSlackAccount(config: NonNullable<NexisClawConfig["channels"]>["slack"]) {
+function createSlackAccount(config: NonNullable<GreenchClawConfig["channels"]>["slack"]) {
   return {
     accountId: "default",
     enabled: true,
@@ -24,7 +24,7 @@ function createSlackAccount(config: NonNullable<NexisClawConfig["channels"]>["sl
 
 function createSlashCommandSlackConfig(
   options: { useAccessGroups?: boolean } = {},
-): NexisClawConfig {
+): GreenchClawConfig {
   return {
     ...(options.useAccessGroups === undefined
       ? {}
@@ -41,7 +41,7 @@ function createSlashCommandSlackConfig(
   };
 }
 
-async function collectSlackFindingsForConfig(cfg: NexisClawConfig) {
+async function collectSlackFindingsForConfig(cfg: GreenchClawConfig) {
   readChannelAllowFromStoreMock.mockResolvedValue([]);
   return await collectSlackSecurityAuditFindings({
     cfg,

@@ -1,15 +1,15 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { resolveIMessageAccount } from "./accounts.js";
 
 export function resolveIMessageConfigAllowFrom(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): string[] {
   return (resolveIMessageAccount(params).config.allowFrom ?? []).map((entry) => String(entry));
 }
 
 export function resolveIMessageConfigDefaultTo(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): string | undefined {
   const defaultTo = resolveIMessageAccount(params).config.defaultTo;

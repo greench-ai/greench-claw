@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   clearActiveSessionsForShutdownTracker,
   forgetActiveSessionForShutdown,
@@ -13,7 +13,7 @@ import {
 // already been finalized through replace / reset / delete / compaction so
 // the shutdown drain never double-fires `session_end` for them.
 
-const cfg: NexisClawConfig = {};
+const cfg: GreenchClawConfig = {};
 
 afterEach(() => {
   clearActiveSessionsForShutdownTracker();

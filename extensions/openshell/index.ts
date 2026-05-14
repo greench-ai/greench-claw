@@ -1,5 +1,5 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
-import { registerSandboxBackend } from "NexisClaw/plugin-sdk/sandbox";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { registerSandboxBackend } from "GreenchClaw/plugin-sdk/sandbox";
 import {
   createOpenShellSandboxBackendFactory,
   createOpenShellSandboxBackendManager,

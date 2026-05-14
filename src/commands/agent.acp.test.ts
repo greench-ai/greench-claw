@@ -1,13 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
-import { withTempHome as withTempHomeBase } from "NexisClaw/plugin-sdk/test-env";
+import { withTempHome as withTempHomeBase } from "GreenchClaw/plugin-sdk/test-env";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import "./agent-command.test-mocks.js";
 import * as acpManagerModule from "../acp/control-plane/manager.js";
 import { AcpRuntimeError } from "../acp/runtime/errors.js";
 import * as embeddedModule from "../agents/pi-embedded.js";
 import * as configIoModule from "../config/io.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { agentCommand } from "./agent.js";
 import { createThrowingTestRuntime } from "./test-runtime-config-helpers.js";
@@ -117,10 +117,10 @@ const getAcpSessionManagerSpy = vi.spyOn(acpManagerModule, "getAcpSessionManager
 const runtime = createThrowingTestRuntime();
 
 async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
-  return withTempHomeBase(fn, { prefix: "NexisClaw-agent-acp-" });
+  return withTempHomeBase(fn, { prefix: "GreenchClaw-agent-acp-" });
 }
 
-function createAcpEnabledConfig(home: string, storePath: string): NexisClawConfig {
+function createAcpEnabledConfig(home: string, storePath: string): GreenchClawConfig {
   return {
     acp: {
       enabled: true,
@@ -132,7 +132,7 @@ function createAcpEnabledConfig(home: string, storePath: string): NexisClawConfi
       defaults: {
         model: { primary: "openai/gpt-5.5" },
         models: { "openai/gpt-5.5": {} },
-        workspace: path.join(home, "NexisClaw"),
+        workspace: path.join(home, "GreenchClaw"),
       },
     },
     session: { store: storePath, mainKey: "main" },
@@ -148,7 +148,7 @@ function mockConfig(home: string, storePath: string) {
 function mockConfigWithAcpOverrides(
   home: string,
   storePath: string,
-  acpOverrides: Partial<NonNullable<NexisClawConfig["acp"]>>,
+  acpOverrides: Partial<NonNullable<GreenchClawConfig["acp"]>>,
 ) {
   const cfg = createAcpEnabledConfig(home, storePath);
   cfg.acp = {
@@ -202,7 +202,7 @@ function resolveReadySession(
 function mockAcpManager(params: {
   runTurn: (params: unknown) => Promise<void>;
   resolveSession?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     sessionKey: string;
   }) => ReturnType<ReturnType<typeof acpManagerModule.getAcpSessionManager>["resolveSession"]>;
 }) {
@@ -305,7 +305,7 @@ function expectPersistedAcpTranscript(params: { userContent: string; assistantTe
 }
 
 async function runAcpSessionWithPolicyOverridesAndExpectBlocked(params: {
-  acpOverrides: Partial<NonNullable<NexisClawConfig["acp"]>>;
+  acpOverrides: Partial<NonNullable<GreenchClawConfig["acp"]>>;
   resolveSession?: Parameters<typeof mockAcpManager>[0]["resolveSession"];
 }) {
   await withTempHome(async (home) => {
@@ -444,7 +444,7 @@ describe("agentCommand ACP runtime routing", () => {
     for (const acpOverrides of [
       { enabled: false },
       { dispatch: { enabled: false } },
-    ] satisfies Array<Partial<NonNullable<NexisClawConfig["acp"]>>>) {
+    ] satisfies Array<Partial<NonNullable<GreenchClawConfig["acp"]>>>) {
       await runAcpSessionWithPolicyOverridesAndExpectBlocked({ acpOverrides });
     }
   });

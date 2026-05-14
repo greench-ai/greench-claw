@@ -1,5 +1,5 @@
 /**
- * NexisClaw Memory (LanceDB) Plugin
+ * GreenchClaw Memory (LanceDB) Plugin
  *
  * Long-term memory with vector search for AI conversations.
  * Uses LanceDB for storage and OpenAI for embeddings.
@@ -9,14 +9,14 @@
 import { Buffer } from "node:buffer";
 import { randomUUID } from "node:crypto";
 import type * as LanceDB from "@lancedb/lancedb";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { MemoryEmbeddingProvider } from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { resolveLivePluginConfigObject } from "NexisClaw/plugin-sdk/plugin-config-runtime";
-import { ensureGlobalUndiciEnvProxyDispatcher } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "NexisClaw/plugin-sdk/text-utility-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { MemoryEmbeddingProvider } from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { resolveLivePluginConfigObject } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
+import { ensureGlobalUndiciEnvProxyDispatcher } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import { Type } from "typebox";
-import { definePluginEntry, type NexisClawPluginApi } from "./api.js";
+import { definePluginEntry, type GreenchClawPluginApi } from "./api.js";
 import {
   DEFAULT_CAPTURE_MAX_CHARS,
   DEFAULT_RECALL_MAX_CHARS,
@@ -71,23 +71,23 @@ function loadOpenAiModule(): Promise<typeof import("openai")> {
 }
 
 let memoryEmbeddingProviderModulePromise:
-  | Promise<typeof import("NexisClaw/plugin-sdk/memory-core-host-engine-embeddings")>
+  | Promise<typeof import("GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings")>
   | undefined;
 function loadMemoryEmbeddingProviderModule(): Promise<
-  typeof import("NexisClaw/plugin-sdk/memory-core-host-engine-embeddings")
+  typeof import("GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings")
 > {
   memoryEmbeddingProviderModulePromise ??=
-    import("NexisClaw/plugin-sdk/memory-core-host-engine-embeddings");
+    import("GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings");
   return memoryEmbeddingProviderModulePromise;
 }
 
 let memoryHostCoreModulePromise:
-  | Promise<typeof import("NexisClaw/plugin-sdk/memory-host-core")>
+  | Promise<typeof import("GreenchClaw/plugin-sdk/memory-host-core")>
   | undefined;
 function loadMemoryHostCoreModule(): Promise<
-  typeof import("NexisClaw/plugin-sdk/memory-host-core")
+  typeof import("GreenchClaw/plugin-sdk/memory-host-core")
 > {
-  memoryHostCoreModulePromise ??= import("NexisClaw/plugin-sdk/memory-host-core");
+  memoryHostCoreModulePromise ??= import("GreenchClaw/plugin-sdk/memory-host-core");
   return memoryHostCoreModulePromise;
 }
 
@@ -381,7 +381,7 @@ class ProviderAdapterEmbeddings implements Embeddings {
   private providerPromise: Promise<MemoryEmbeddingProvider> | undefined;
 
   constructor(
-    private api: NexisClawPluginApi,
+    private api: GreenchClawPluginApi,
     private embedding: MemoryConfig["embedding"],
   ) {}
 
@@ -396,7 +396,7 @@ class ProviderAdapterEmbeddings implements Embeddings {
   }
 
   private async createProvider(): Promise<MemoryEmbeddingProvider> {
-    const cfg = (this.api.runtime.config?.current?.() ?? this.api.config) as NexisClawConfig;
+    const cfg = (this.api.runtime.config?.current?.() ?? this.api.config) as GreenchClawConfig;
     const providerId = this.embedding.provider;
     const { getMemoryEmbeddingProvider } = await loadMemoryEmbeddingProviderModule();
     const adapter = getMemoryEmbeddingProvider(providerId, cfg);
@@ -461,7 +461,7 @@ async function runWithTimeout<T>(params: {
   }
 }
 
-function createEmbeddings(api: NexisClawPluginApi, cfg: MemoryConfig): Embeddings {
+function createEmbeddings(api: GreenchClawPluginApi, cfg: MemoryConfig): Embeddings {
   const { provider, model, dimensions, apiKey, baseUrl } = cfg.embedding;
   if (provider === "openai" && apiKey) {
     return new OpenAiCompatibleEmbeddings(apiKey, model, baseUrl, dimensions);
@@ -611,7 +611,7 @@ export default definePluginEntry({
   kind: "memory" as const,
   configSchema: memoryConfigSchema,
 
-  register(api: NexisClawPluginApi) {
+  register(api: GreenchClawPluginApi) {
     let cfg: MemoryConfig;
     try {
       cfg = memoryConfigSchema.parse(api.pluginConfig);
@@ -637,7 +637,7 @@ export default definePluginEntry({
     const resolveCurrentHookConfig = () => {
       const runtimePluginConfig = resolveLivePluginConfigObject(
         api.runtime.config?.current
-          ? () => api.runtime.config.current() as NexisClawConfig
+          ? () => api.runtime.config.current() as GreenchClawConfig
           : undefined,
         "memory-lancedb",
         api.pluginConfig as Record<string, unknown>,

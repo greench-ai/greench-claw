@@ -1,4 +1,4 @@
-import type { ChannelGatewayContext } from "NexisClaw/plugin-sdk/channel-contract";
+import type { ChannelGatewayContext } from "GreenchClaw/plugin-sdk/channel-contract";
 import type { RawData } from "ws";
 import { resolveClickClackAccount } from "./accounts.js";
 import { createClickClackClient } from "./http-client.js";

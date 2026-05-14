@@ -4,13 +4,13 @@ set -euo pipefail
 # Build the mac app bundle, then create a zip (Sparkle) + styled DMG (humans).
 #
 # Output:
-# - dist/NexisClaw.app
-# - dist/NexisClaw-<version>.zip
-# - dist/NexisClaw-<version>.dmg
+# - dist/GreenchClaw.app
+# - dist/GreenchClaw-<version>.zip
+# - dist/GreenchClaw-<version>.dmg
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 BUILD_ROOT="$ROOT_DIR/apps/macos/.build"
-PRODUCT="NexisClaw"
+PRODUCT="GreenchClaw"
 BUILD_CONFIG="${BUILD_CONFIG:-release}"
 APP_VERSION_INPUT="${APP_VERSION:-$(cd "$ROOT_DIR" && node -p "require('./package.json').version" 2>/dev/null || echo "0.0.0")}"
 
@@ -20,7 +20,7 @@ export BUILD_CONFIG
 
 # Use release bundle ID (not .debug) so Sparkle auto-update works.
 # The .debug suffix in package-mac-app.sh blanks SUFeedURL intentionally for dev builds.
-export BUNDLE_ID="${BUNDLE_ID:-ai.NexisClaw.mac}"
+export BUNDLE_ID="${BUNDLE_ID:-ai.GreenchClaw.mac}"
 
 canonical_sparkle_build() {
   node --import tsx "$ROOT_DIR/scripts/sparkle-build.ts" canonical-build "$1"
@@ -58,7 +58,7 @@ fi
 
 "$ROOT_DIR/scripts/package-mac-app.sh"
 
-APP="$ROOT_DIR/dist/NexisClaw.app"
+APP="$ROOT_DIR/dist/GreenchClaw.app"
 if [[ ! -d "$APP" ]]; then
   echo "Error: missing app bundle at $APP" >&2
   exit 1
@@ -68,10 +68,10 @@ VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$APP/Co
 BUNDLE_VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$APP/Contents/Info.plist" 2>/dev/null || echo "")
 ACTUAL_BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$APP/Contents/Info.plist" 2>/dev/null || echo "")
 ACTUAL_FEED_URL=$(/usr/libexec/PlistBuddy -c "Print SUFeedURL" "$APP/Contents/Info.plist" 2>/dev/null || echo "")
-ZIP="$ROOT_DIR/dist/NexisClaw-$VERSION.zip"
-DMG="$ROOT_DIR/dist/NexisClaw-$VERSION.dmg"
-NOTARY_ZIP="$ROOT_DIR/dist/NexisClaw-$VERSION.notary.zip"
-DSYM_ZIP="$ROOT_DIR/dist/NexisClaw-$VERSION.dSYM.zip"
+ZIP="$ROOT_DIR/dist/GreenchClaw-$VERSION.zip"
+DMG="$ROOT_DIR/dist/GreenchClaw-$VERSION.dmg"
+NOTARY_ZIP="$ROOT_DIR/dist/GreenchClaw-$VERSION.notary.zip"
+DSYM_ZIP="$ROOT_DIR/dist/GreenchClaw-$VERSION.dSYM.zip"
 SKIP_NOTARIZE="${SKIP_NOTARIZE:-0}"
 NOTARIZE=1
 SKIP_DSYM="${SKIP_DSYM:-0}"

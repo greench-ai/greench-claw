@@ -238,7 +238,7 @@ describe("channel doctor compatibility mutations", () => {
 
   it("passes explicit env into read-only channel plugin discovery", () => {
     const cfg = createMatrixEnabledConfig();
-    const env = { NEXISCLAW_HOME: "/tmp/NexisClaw-test-home" };
+    const env = { GREENCHCLAW_HOME: "/tmp/GreenchClaw-test-home" };
 
     collectChannelDoctorCompatibilityMutations(cfg as never, { env });
 
@@ -328,7 +328,7 @@ describe("channel doctor compatibility mutations", () => {
         },
       },
     };
-    const env = { NEXISCLAW_HOME: "/tmp/NexisClaw-test-home" };
+    const env = { GREENCHCLAW_HOME: "/tmp/GreenchClaw-test-home" };
     mocks.resolveReadOnlyChannelPluginsForConfig.mockReturnValue({
       plugins: [
         {

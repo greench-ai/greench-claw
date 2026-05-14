@@ -1,7 +1,7 @@
 /**
  * @deprecated Compatibility subpath. Import setup helpers from
- * `NexisClaw/plugin-sdk/setup-runtime` instead.
+ * `GreenchClaw/plugin-sdk/setup-runtime` instead.
  */
 
-/** @deprecated Import from `NexisClaw/plugin-sdk/setup-runtime` instead. */
+/** @deprecated Import from `GreenchClaw/plugin-sdk/setup-runtime` instead. */
 export { createEnvPatchedAccountSetupAdapter } from "../channels/plugins/setup-helpers.js";

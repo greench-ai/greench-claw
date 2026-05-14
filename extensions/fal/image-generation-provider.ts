@@ -1,26 +1,26 @@
 import type {
   GeneratedImageAsset,
   ImageGenerationProvider,
-} from "NexisClaw/plugin-sdk/image-generation";
+} from "GreenchClaw/plugin-sdk/image-generation";
 import {
   imageFileExtensionForMimeType,
   toImageDataUrl,
-} from "NexisClaw/plugin-sdk/image-generation";
-import { isProviderApiKeyConfigured } from "NexisClaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
+} from "GreenchClaw/plugin-sdk/image-generation";
+import { isProviderApiKeyConfigured } from "GreenchClaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "GreenchClaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   assertOkOrThrowProviderError,
   resolveProviderHttpRequestConfig,
-} from "NexisClaw/plugin-sdk/provider-http";
+} from "GreenchClaw/plugin-sdk/provider-http";
 import {
   buildHostnameAllowlistPolicyFromSuffixAllowlist,
   fetchWithSsrFGuard,
   mergeSsrFPolicies,
   type SsrFPolicy,
   ssrfPolicyFromDangerouslyAllowPrivateNetwork,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 const DEFAULT_FAL_BASE_URL = "https://fal.run";
 const DEFAULT_FAL_IMAGE_MODEL = "fal-ai/flux/dev";

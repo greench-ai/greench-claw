@@ -1,9 +1,9 @@
-import { isBillingErrorMessage } from "NexisClaw/plugin-sdk/test-env";
+import { isBillingErrorMessage } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import { createXSearchTool } from "./x-search.js";
 
 const liveEnabled =
-  process.env.NEXISCLAW_LIVE_TEST === "1" && (process.env.XAI_API_KEY ?? "").trim().length > 0;
+  process.env.GREENCHCLAW_LIVE_TEST === "1" && (process.env.XAI_API_KEY ?? "").trim().length > 0;
 
 const describeLive = liveEnabled ? describe : describe.skip;
 
@@ -34,7 +34,7 @@ describeLive("xai x_search live", () => {
     let result: Awaited<ReturnType<typeof tool.execute>>;
     try {
       result = await tool.execute("x-search:live", {
-        query: "NexisClaw from:steipete",
+        query: "GreenchClaw from:steipete",
         to_date: "2026-03-28",
       });
     } catch (error) {

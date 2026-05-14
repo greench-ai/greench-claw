@@ -1,15 +1,15 @@
-import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
+import { describeAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
 import {
   createScopedDmSecurityResolver,
   createTopLevelChannelConfigAdapter,
-} from "NexisClaw/plugin-sdk/channel-config-helpers";
-import { createChatChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import { createChannelMessageAdapterFromOutbound } from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import { createChatChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import { createChannelMessageAdapterFromOutbound } from "GreenchClaw/plugin-sdk/channel-message";
 import {
   buildPassiveChannelStatusSummary,
   buildTrafficStatusSummary,
-} from "NexisClaw/plugin-sdk/extension-shared";
-import { createComputedAccountStatusAdapter } from "NexisClaw/plugin-sdk/status-helpers";
+} from "GreenchClaw/plugin-sdk/extension-shared";
+import { createComputedAccountStatusAdapter } from "GreenchClaw/plugin-sdk/status-helpers";
 import {
   buildChannelConfigSchema,
   collectStatusIssuesFromLastError,

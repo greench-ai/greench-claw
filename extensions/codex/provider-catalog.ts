@@ -1,7 +1,7 @@
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
 import type { CodexAppServerModel } from "./src/app-server/models.js";
 
 export const CODEX_PROVIDER_ID = "codex";

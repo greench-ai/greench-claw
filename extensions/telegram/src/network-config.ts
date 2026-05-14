@@ -1,13 +1,14 @@
 import * as dns from "node:dns";
 import process from "node:process";
-import type { TelegramNetworkConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { isTruthyEnvValue, isWSL2Sync } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { TelegramNetworkConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { isTruthyEnvValue, isWSL2Sync } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeOptionalLowercaseString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 export const TELEGRAM_DISABLE_AUTO_SELECT_FAMILY_ENV =
-  "NEXISCLAW_TELEGRAM_DISABLE_AUTO_SELECT_FAMILY";
-export const TELEGRAM_ENABLE_AUTO_SELECT_FAMILY_ENV = "NEXISCLAW_TELEGRAM_ENABLE_AUTO_SELECT_FAMILY";
-export const TELEGRAM_DNS_RESULT_ORDER_ENV = "NEXISCLAW_TELEGRAM_DNS_RESULT_ORDER";
+  "GREENCHCLAW_TELEGRAM_DISABLE_AUTO_SELECT_FAMILY";
+export const TELEGRAM_ENABLE_AUTO_SELECT_FAMILY_ENV =
+  "GREENCHCLAW_TELEGRAM_ENABLE_AUTO_SELECT_FAMILY";
+export const TELEGRAM_DNS_RESULT_ORDER_ENV = "GREENCHCLAW_TELEGRAM_DNS_RESULT_ORDER";
 
 export type TelegramAutoSelectFamilyDecision = {
   value: boolean | null;
@@ -65,7 +66,7 @@ export function resolveTelegramAutoSelectFamilyDecision(params?: {
  * Setting "ipv4first" prioritizes IPv4 addresses in DNS resolution.
  *
  * Priority:
- * 1. Environment variable NEXISCLAW_TELEGRAM_DNS_RESULT_ORDER
+ * 1. Environment variable GREENCHCLAW_TELEGRAM_DNS_RESULT_ORDER
  * 2. Config: channels.telegram.network.dnsResultOrder
  * 3. Process default: dns.getDefaultResultOrder()
  * 4. Default: "ipv4first" on Node 22+ (to work around common IPv6 issues)

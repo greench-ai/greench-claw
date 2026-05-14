@@ -11,7 +11,7 @@ import type {
   ChannelDoctorConfigMutation,
   ChannelDoctorLegacyConfigRule,
 } from "./channel-contract.js";
-import type { NexisClawConfig } from "./config-runtime.js";
+import type { GreenchClawConfig } from "./config-runtime.js";
 
 export { isPrivateIpAddress };
 export type { SsrFPolicy };
@@ -154,19 +154,19 @@ function hasLegacyAllowPrivateNetworkInAccounts(value: unknown): boolean {
 
 export function createLegacyPrivateNetworkDoctorContract(params: { channelKey: string }): {
   legacyConfigRules: ChannelDoctorLegacyConfigRule[];
-  normalizeCompatibilityConfig: (params: { cfg: NexisClawConfig }) => ChannelDoctorConfigMutation;
+  normalizeCompatibilityConfig: (params: { cfg: GreenchClawConfig }) => ChannelDoctorConfigMutation;
 } {
   const pathPrefix = `channels.${params.channelKey}`;
   return {
     legacyConfigRules: [
       {
         path: ["channels", params.channelKey],
-        message: `${pathPrefix}.allowPrivateNetwork is legacy; use ${pathPrefix}.network.dangerouslyAllowPrivateNetwork instead. Run "NexisClaw doctor --fix".`,
+        message: `${pathPrefix}.allowPrivateNetwork is legacy; use ${pathPrefix}.network.dangerouslyAllowPrivateNetwork instead. Run "GreenchClaw doctor --fix".`,
         match: (value) => hasLegacyFlatAllowPrivateNetworkAlias(asNullableRecord(value) ?? {}),
       },
       {
         path: ["channels", params.channelKey, "accounts"],
-        message: `${pathPrefix}.accounts.<id>.allowPrivateNetwork is legacy; use ${pathPrefix}.accounts.<id>.network.dangerouslyAllowPrivateNetwork instead. Run "NexisClaw doctor --fix".`,
+        message: `${pathPrefix}.accounts.<id>.allowPrivateNetwork is legacy; use ${pathPrefix}.accounts.<id>.network.dangerouslyAllowPrivateNetwork instead. Run "GreenchClaw doctor --fix".`,
         match: hasLegacyAllowPrivateNetworkInAccounts,
       },
     ],
@@ -225,7 +225,7 @@ export function createLegacyPrivateNetworkDoctorContract(params: { channelKey: s
           channels: {
             ...cfg.channels,
             [params.channelKey]: updatedChannel,
-          } as NexisClawConfig["channels"],
+          } as GreenchClawConfig["channels"],
         },
         changes,
       };

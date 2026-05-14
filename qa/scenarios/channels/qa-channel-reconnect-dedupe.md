@@ -26,8 +26,8 @@ execution:
   kind: flow
   summary: Verify qa-channel readiness recovery does not duplicate old outbound delivery.
   config:
-    firstPrompt: "@NexisClaw Reconnect dedupe setup marker. Reply exactly: RECONNECT-FIRST-OK"
-    secondPrompt: "@NexisClaw Reconnect dedupe follow-up marker. Reply exactly: RECONNECT-SECOND-OK"
+    firstPrompt: "@GreenchClaw Reconnect dedupe setup marker. Reply exactly: RECONNECT-FIRST-OK"
+    secondPrompt: "@GreenchClaw Reconnect dedupe follow-up marker. Reply exactly: RECONNECT-SECOND-OK"
     firstMarker: RECONNECT-FIRST-OK
     secondMarker: RECONNECT-SECOND-OK
 ```

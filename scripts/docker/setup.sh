@@ -5,14 +5,14 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$ROOT_DIR/scripts/lib/docker-build.sh"
 COMPOSE_FILE="$ROOT_DIR/docker-compose.yml"
 EXTRA_COMPOSE_FILE="$ROOT_DIR/docker-compose.extra.yml"
-IMAGE_NAME="${NEXISCLAW_IMAGE:-NexisClaw:local}"
-EXTRA_MOUNTS="${NEXISCLAW_EXTRA_MOUNTS:-}"
-HOME_VOLUME_NAME="${NEXISCLAW_HOME_VOLUME:-}"
-RAW_SANDBOX_SETTING="${NEXISCLAW_SANDBOX:-}"
+IMAGE_NAME="${GREENCHCLAW_IMAGE:-GreenchClaw:local}"
+EXTRA_MOUNTS="${GREENCHCLAW_EXTRA_MOUNTS:-}"
+HOME_VOLUME_NAME="${GREENCHCLAW_HOME_VOLUME:-}"
+RAW_SANDBOX_SETTING="${GREENCHCLAW_SANDBOX:-}"
 SANDBOX_ENABLED=""
-DOCKER_SOCKET_PATH="${NEXISCLAW_DOCKER_SOCKET:-}"
-TIMEZONE="${NEXISCLAW_TZ:-}"
-RAW_SKIP_ONBOARDING="${NEXISCLAW_SKIP_ONBOARDING:-}"
+DOCKER_SOCKET_PATH="${GREENCHCLAW_DOCKER_SOCKET:-}"
+TIMEZONE="${GREENCHCLAW_TZ:-}"
+RAW_SKIP_ONBOARDING="${GREENCHCLAW_SKIP_ONBOARDING:-}"
 SKIP_ONBOARDING=""
 
 fail() {
@@ -43,7 +43,7 @@ is_truthy_value() {
 }
 
 read_config_gateway_token() {
-  local config_path="$NEXISCLAW_CONFIG_DIR/NexisClaw.json"
+  local config_path="$GREENCHCLAW_CONFIG_DIR/GreenchClaw.json"
   if [[ ! -f "$config_path" ]]; then
     return 0
   fi
@@ -99,8 +99,8 @@ read_env_gateway_token() {
   fi
   while IFS= read -r line || [[ -n "$line" ]]; do
     line="${line%$'\r'}"
-    if [[ "$line" == NEXISCLAW_GATEWAY_TOKEN=* ]]; then
-      token="${line#NEXISCLAW_GATEWAY_TOKEN=}"
+    if [[ "$line" == GREENCHCLAW_GATEWAY_TOKEN=* ]]; then
+      token="${line#GREENCHCLAW_GATEWAY_TOKEN=}"
     fi
   done <"$env_path"
   if [[ -n "$token" ]]; then
@@ -113,15 +113,15 @@ sync_gateway_config() {
   local current_allowed_origins=""
   local batch_json=""
 
-  if [[ "${NEXISCLAW_GATEWAY_BIND}" != "loopback" ]]; then
-    allowed_origin_json="$(printf '["http://localhost:%s","http://127.0.0.1:%s"]' "$NEXISCLAW_GATEWAY_PORT" "$NEXISCLAW_GATEWAY_PORT")"
+  if [[ "${GREENCHCLAW_GATEWAY_BIND}" != "loopback" ]]; then
+    allowed_origin_json="$(printf '["http://localhost:%s","http://127.0.0.1:%s"]' "$GREENCHCLAW_GATEWAY_PORT" "$GREENCHCLAW_GATEWAY_PORT")"
     current_allowed_origins="$(
       run_prestart_cli config get gateway.controlUi.allowedOrigins 2>/dev/null || true
     )"
     current_allowed_origins="${current_allowed_origins//$'\r'/}"
   fi
 
-  batch_json="$(printf '[{"path":"gateway.mode","value":"local"},{"path":"gateway.bind","value":"%s"}' "$NEXISCLAW_GATEWAY_BIND")"
+  batch_json="$(printf '[{"path":"gateway.mode","value":"local"},{"path":"gateway.bind","value":"%s"}' "$GREENCHCLAW_GATEWAY_BIND")"
   if [[ -n "$allowed_origin_json" ]]; then
     if [[ -n "$current_allowed_origins" && "$current_allowed_origins" != "null" && "$current_allowed_origins" != "[]" ]]; then
       echo "Control UI allowlist already configured; leaving gateway.controlUi.allowedOrigins unchanged."
@@ -132,7 +132,7 @@ sync_gateway_config() {
   batch_json+="]"
 
   run_prestart_cli config set --batch-json "$batch_json" >/dev/null
-  echo "Pinned gateway.mode=local and gateway.bind=$NEXISCLAW_GATEWAY_BIND for Docker setup."
+  echo "Pinned gateway.mode=local and gateway.bind=$GREENCHCLAW_GATEWAY_BIND for Docker setup."
   if [[ -n "$allowed_origin_json" ]]; then
     if [[ -z "$current_allowed_origins" || "$current_allowed_origins" == "null" || "$current_allowed_origins" == "[]" ]]; then
       echo "Set gateway.controlUi.allowedOrigins to $allowed_origin_json for non-loopback bind."
@@ -145,11 +145,11 @@ run_prestart_gateway() {
 }
 
 run_prestart_cli() {
-  # During setup, avoid the shared-network NexisClaw-cli service because it
+  # During setup, avoid the shared-network GreenchClaw-cli service because it
   # requires the gateway container's network namespace to already exist. That
   # creates a circular dependency for config writes that are needed before the
   # gateway can start cleanly.
-  run_prestart_gateway --entrypoint node NexisClaw-gateway \
+  run_prestart_gateway --entrypoint node GreenchClaw-gateway \
     dist/index.js "$@"
 }
 
@@ -173,7 +173,7 @@ run_runtime_cli() {
     *) fail "Unknown runtime CLI deps mode: $deps_mode" ;;
   esac
 
-  docker compose "${compose_args[@]}" "${run_args[@]}" NexisClaw-cli "$@"
+  docker compose "${compose_args[@]}" "${run_args[@]}" GreenchClaw-cli "$@"
 }
 
 contains_disallowed_chars() {
@@ -203,14 +203,14 @@ validate_mount_path_value() {
 validate_named_volume() {
   local value="$1"
   if [[ ! "$value" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]*$ ]]; then
-    fail "NEXISCLAW_HOME_VOLUME must match [A-Za-z0-9][A-Za-z0-9_.-]* when using a named volume."
+    fail "GREENCHCLAW_HOME_VOLUME must match [A-Za-z0-9][A-Za-z0-9_.-]* when using a named volume."
   fi
 }
 
 validate_mount_spec() {
   local mount="$1"
   if contains_disallowed_chars "$mount"; then
-    fail "NEXISCLAW_EXTRA_MOUNTS entries cannot contain control characters."
+    fail "GREENCHCLAW_EXTRA_MOUNTS entries cannot contain control characters."
   fi
   # Keep mount specs strict to avoid YAML structure injection.
   # Expected format: source:target[:options]
@@ -238,65 +238,65 @@ if is_truthy_value "$RAW_SKIP_ONBOARDING"; then
   SKIP_ONBOARDING="1"
 fi
 
-NEXISCLAW_CONFIG_DIR="${NEXISCLAW_CONFIG_DIR:-$HOME/.NexisClaw}"
-NEXISCLAW_WORKSPACE_DIR="${NEXISCLAW_WORKSPACE_DIR:-$HOME/.NexisClaw/workspace}"
-NEXISCLAW_AUTH_PROFILE_SECRET_DIR="${NEXISCLAW_AUTH_PROFILE_SECRET_DIR:-$HOME/.NexisClaw-auth-profile-secrets}"
+GREENCHCLAW_CONFIG_DIR="${GREENCHCLAW_CONFIG_DIR:-$HOME/.GreenchClaw}"
+GREENCHCLAW_WORKSPACE_DIR="${GREENCHCLAW_WORKSPACE_DIR:-$HOME/.GreenchClaw/workspace}"
+GREENCHCLAW_AUTH_PROFILE_SECRET_DIR="${GREENCHCLAW_AUTH_PROFILE_SECRET_DIR:-$HOME/.GreenchClaw-auth-profile-secrets}"
 
-validate_mount_path_value "NEXISCLAW_CONFIG_DIR" "$NEXISCLAW_CONFIG_DIR"
-validate_mount_path_value "NEXISCLAW_WORKSPACE_DIR" "$NEXISCLAW_WORKSPACE_DIR"
-validate_mount_path_value "NEXISCLAW_AUTH_PROFILE_SECRET_DIR" "$NEXISCLAW_AUTH_PROFILE_SECRET_DIR"
+validate_mount_path_value "GREENCHCLAW_CONFIG_DIR" "$GREENCHCLAW_CONFIG_DIR"
+validate_mount_path_value "GREENCHCLAW_WORKSPACE_DIR" "$GREENCHCLAW_WORKSPACE_DIR"
+validate_mount_path_value "GREENCHCLAW_AUTH_PROFILE_SECRET_DIR" "$GREENCHCLAW_AUTH_PROFILE_SECRET_DIR"
 if [[ -n "$HOME_VOLUME_NAME" ]]; then
   if [[ "$HOME_VOLUME_NAME" == *"/"* ]]; then
-    validate_mount_path_value "NEXISCLAW_HOME_VOLUME" "$HOME_VOLUME_NAME"
+    validate_mount_path_value "GREENCHCLAW_HOME_VOLUME" "$HOME_VOLUME_NAME"
   else
     validate_named_volume "$HOME_VOLUME_NAME"
   fi
 fi
 if contains_disallowed_chars "$EXTRA_MOUNTS"; then
-  fail "NEXISCLAW_EXTRA_MOUNTS cannot contain control characters."
+  fail "GREENCHCLAW_EXTRA_MOUNTS cannot contain control characters."
 fi
 if [[ -n "$SANDBOX_ENABLED" ]]; then
-  validate_mount_path_value "NEXISCLAW_DOCKER_SOCKET" "$DOCKER_SOCKET_PATH"
+  validate_mount_path_value "GREENCHCLAW_DOCKER_SOCKET" "$DOCKER_SOCKET_PATH"
 fi
 if [[ -n "$TIMEZONE" ]]; then
   if contains_disallowed_chars "$TIMEZONE"; then
-    fail "NEXISCLAW_TZ contains unsupported control characters."
+    fail "GREENCHCLAW_TZ contains unsupported control characters."
   fi
   if [[ ! "$TIMEZONE" =~ ^[A-Za-z0-9/_+\-]+$ ]]; then
-    fail "NEXISCLAW_TZ must be a valid IANA timezone string (e.g. Asia/Shanghai)."
+    fail "GREENCHCLAW_TZ must be a valid IANA timezone string (e.g. Asia/Shanghai)."
   fi
   if ! is_valid_timezone "$TIMEZONE"; then
-    fail "NEXISCLAW_TZ must match a timezone in /usr/share/zoneinfo (e.g. Asia/Shanghai)."
+    fail "GREENCHCLAW_TZ must match a timezone in /usr/share/zoneinfo (e.g. Asia/Shanghai)."
   fi
 fi
 
-mkdir -p "$NEXISCLAW_CONFIG_DIR"
-mkdir -p "$NEXISCLAW_WORKSPACE_DIR"
-mkdir -p "$NEXISCLAW_AUTH_PROFILE_SECRET_DIR"
+mkdir -p "$GREENCHCLAW_CONFIG_DIR"
+mkdir -p "$GREENCHCLAW_WORKSPACE_DIR"
+mkdir -p "$GREENCHCLAW_AUTH_PROFILE_SECRET_DIR"
 # Seed directory tree eagerly so bind mounts work even on Docker Desktop/Windows
 # where the container (even as root) cannot create new host subdirectories.
-mkdir -p "$NEXISCLAW_CONFIG_DIR/identity"
-mkdir -p "$NEXISCLAW_CONFIG_DIR/agents/main/agent"
-mkdir -p "$NEXISCLAW_CONFIG_DIR/agents/main/sessions"
+mkdir -p "$GREENCHCLAW_CONFIG_DIR/identity"
+mkdir -p "$GREENCHCLAW_CONFIG_DIR/agents/main/agent"
+mkdir -p "$GREENCHCLAW_CONFIG_DIR/agents/main/sessions"
 
-export NEXISCLAW_CONFIG_DIR
-export NEXISCLAW_WORKSPACE_DIR
-export NEXISCLAW_AUTH_PROFILE_SECRET_DIR
-export NEXISCLAW_GATEWAY_PORT="${NEXISCLAW_GATEWAY_PORT:-19500}"
-export NEXISCLAW_BRIDGE_PORT="${NEXISCLAW_BRIDGE_PORT:-18790}"
-export NEXISCLAW_GATEWAY_BIND="${NEXISCLAW_GATEWAY_BIND:-lan}"
-export NEXISCLAW_DISABLE_BONJOUR="${NEXISCLAW_DISABLE_BONJOUR:-}"
-export NEXISCLAW_IMAGE="$IMAGE_NAME"
-export NEXISCLAW_DOCKER_APT_PACKAGES="${NEXISCLAW_DOCKER_APT_PACKAGES:-}"
-export NEXISCLAW_EXTENSIONS="${NEXISCLAW_EXTENSIONS:-}"
-export NEXISCLAW_INSTALL_BROWSER="${NEXISCLAW_INSTALL_BROWSER:-}"
-export NEXISCLAW_EXTRA_MOUNTS="$EXTRA_MOUNTS"
-export NEXISCLAW_HOME_VOLUME="$HOME_VOLUME_NAME"
-export NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS="${NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS:-}"
-export NEXISCLAW_SANDBOX="$SANDBOX_ENABLED"
-export NEXISCLAW_DOCKER_SOCKET="$DOCKER_SOCKET_PATH"
-export NEXISCLAW_DOCKER_SETUP=1
-export NEXISCLAW_TZ="$TIMEZONE"
+export GREENCHCLAW_CONFIG_DIR
+export GREENCHCLAW_WORKSPACE_DIR
+export GREENCHCLAW_AUTH_PROFILE_SECRET_DIR
+export GREENCHCLAW_GATEWAY_PORT="${GREENCHCLAW_GATEWAY_PORT:-18420}"
+export GREENCHCLAW_BRIDGE_PORT="${GREENCHCLAW_BRIDGE_PORT:-18790}"
+export GREENCHCLAW_GATEWAY_BIND="${GREENCHCLAW_GATEWAY_BIND:-lan}"
+export GREENCHCLAW_DISABLE_BONJOUR="${GREENCHCLAW_DISABLE_BONJOUR:-}"
+export GREENCHCLAW_IMAGE="$IMAGE_NAME"
+export GREENCHCLAW_DOCKER_APT_PACKAGES="${GREENCHCLAW_DOCKER_APT_PACKAGES:-}"
+export GREENCHCLAW_EXTENSIONS="${GREENCHCLAW_EXTENSIONS:-}"
+export GREENCHCLAW_INSTALL_BROWSER="${GREENCHCLAW_INSTALL_BROWSER:-}"
+export GREENCHCLAW_EXTRA_MOUNTS="$EXTRA_MOUNTS"
+export GREENCHCLAW_HOME_VOLUME="$HOME_VOLUME_NAME"
+export GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS="${GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS:-}"
+export GREENCHCLAW_SANDBOX="$SANDBOX_ENABLED"
+export GREENCHCLAW_DOCKER_SOCKET="$DOCKER_SOCKET_PATH"
+export GREENCHCLAW_DOCKER_SETUP=1
+export GREENCHCLAW_TZ="$TIMEZONE"
 export OTEL_EXPORTER_OTLP_ENDPOINT="${OTEL_EXPORTER_OTLP_ENDPOINT:-}"
 export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:-}"
 export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT="${OTEL_EXPORTER_OTLP_METRICS_ENDPOINT:-}"
@@ -304,8 +304,8 @@ export OTEL_EXPORTER_OTLP_LOGS_ENDPOINT="${OTEL_EXPORTER_OTLP_LOGS_ENDPOINT:-}"
 export OTEL_EXPORTER_OTLP_PROTOCOL="${OTEL_EXPORTER_OTLP_PROTOCOL:-}"
 export OTEL_SERVICE_NAME="${OTEL_SERVICE_NAME:-}"
 export OTEL_SEMCONV_STABILITY_OPT_IN="${OTEL_SEMCONV_STABILITY_OPT_IN:-}"
-export NEXISCLAW_OTEL_PRELOADED="${NEXISCLAW_OTEL_PRELOADED:-}"
-export NEXISCLAW_SKIP_ONBOARDING="$SKIP_ONBOARDING"
+export GREENCHCLAW_OTEL_PRELOADED="${GREENCHCLAW_OTEL_PRELOADED:-}"
+export GREENCHCLAW_SKIP_ONBOARDING="$SKIP_ONBOARDING"
 
 # Detect Docker socket GID for sandbox group_add.
 DOCKER_GID=""
@@ -314,20 +314,20 @@ if [[ -n "$SANDBOX_ENABLED" && -S "$DOCKER_SOCKET_PATH" ]]; then
 fi
 export DOCKER_GID
 
-if [[ -z "${NEXISCLAW_GATEWAY_TOKEN:-}" ]]; then
+if [[ -z "${GREENCHCLAW_GATEWAY_TOKEN:-}" ]]; then
   EXISTING_CONFIG_TOKEN="$(read_config_gateway_token || true)"
   if [[ -n "$EXISTING_CONFIG_TOKEN" ]]; then
-    NEXISCLAW_GATEWAY_TOKEN="$EXISTING_CONFIG_TOKEN"
-    echo "Reusing gateway token from $NEXISCLAW_CONFIG_DIR/NexisClaw.json"
+    GREENCHCLAW_GATEWAY_TOKEN="$EXISTING_CONFIG_TOKEN"
+    echo "Reusing gateway token from $GREENCHCLAW_CONFIG_DIR/GreenchClaw.json"
   else
     DOTENV_GATEWAY_TOKEN="$(read_env_gateway_token "$ROOT_DIR/.env" || true)"
     if [[ -n "$DOTENV_GATEWAY_TOKEN" ]]; then
-      NEXISCLAW_GATEWAY_TOKEN="$DOTENV_GATEWAY_TOKEN"
+      GREENCHCLAW_GATEWAY_TOKEN="$DOTENV_GATEWAY_TOKEN"
       echo "Reusing gateway token from $ROOT_DIR/.env"
     elif command -v openssl >/dev/null 2>&1; then
-      NEXISCLAW_GATEWAY_TOKEN="$(openssl rand -hex 32)"
+      GREENCHCLAW_GATEWAY_TOKEN="$(openssl rand -hex 32)"
     else
-      NEXISCLAW_GATEWAY_TOKEN="$(python3 - <<'PY'
+      GREENCHCLAW_GATEWAY_TOKEN="$(python3 - <<'PY'
 import secrets
 print(secrets.token_hex(32))
 PY
@@ -335,7 +335,7 @@ PY
     fi
   fi
 fi
-export NEXISCLAW_GATEWAY_TOKEN
+export GREENCHCLAW_GATEWAY_TOKEN
 
 COMPOSE_FILES=("$COMPOSE_FILE")
 COMPOSE_ARGS=()
@@ -351,15 +351,15 @@ write_extra_compose() {
 
   cat >"$EXTRA_COMPOSE_FILE" <<'YAML'
 services:
-  NexisClaw-gateway:
+  GreenchClaw-gateway:
     volumes:
 YAML
 
   if [[ -n "$home_volume" ]]; then
     gateway_home_mount="${home_volume}:/home/node"
-    gateway_config_mount="${NEXISCLAW_CONFIG_DIR}:/home/node/.NexisClaw"
-    gateway_workspace_mount="${NEXISCLAW_WORKSPACE_DIR}:/home/node/.NexisClaw/workspace"
-    gateway_auth_profile_secret_mount="${NEXISCLAW_AUTH_PROFILE_SECRET_DIR}:/home/node/.config/NexisClaw"
+    gateway_config_mount="${GREENCHCLAW_CONFIG_DIR}:/home/node/.GreenchClaw"
+    gateway_workspace_mount="${GREENCHCLAW_WORKSPACE_DIR}:/home/node/.GreenchClaw/workspace"
+    gateway_auth_profile_secret_mount="${GREENCHCLAW_AUTH_PROFILE_SECRET_DIR}:/home/node/.config/GreenchClaw"
     validate_mount_spec "$gateway_home_mount"
     validate_mount_spec "$gateway_config_mount"
     validate_mount_spec "$gateway_workspace_mount"
@@ -376,7 +376,7 @@ YAML
   done
 
   cat >>"$EXTRA_COMPOSE_FILE" <<'YAML'
-  NexisClaw-cli:
+  GreenchClaw-cli:
     volumes:
 YAML
 
@@ -404,8 +404,8 @@ YAML
 # When sandbox is requested, ensure Docker CLI build arg is set for local builds.
 # Docker socket mount is deferred until sandbox prerequisites are verified.
 if [[ -n "$SANDBOX_ENABLED" ]]; then
-  if [[ -z "${NEXISCLAW_INSTALL_DOCKER_CLI:-}" ]]; then
-    export NEXISCLAW_INSTALL_DOCKER_CLI=1
+  if [[ -z "${GREENCHCLAW_INSTALL_DOCKER_CLI:-}" ]]; then
+    export GREENCHCLAW_INSTALL_DOCKER_CLI=1
   fi
 fi
 
@@ -480,26 +480,26 @@ upsert_env() {
 }
 
 upsert_env "$ENV_FILE" \
-  NEXISCLAW_CONFIG_DIR \
-  NEXISCLAW_WORKSPACE_DIR \
-  NEXISCLAW_AUTH_PROFILE_SECRET_DIR \
-  NEXISCLAW_GATEWAY_PORT \
-  NEXISCLAW_BRIDGE_PORT \
-  NEXISCLAW_GATEWAY_BIND \
-  NEXISCLAW_DISABLE_BONJOUR \
-  NEXISCLAW_GATEWAY_TOKEN \
-  NEXISCLAW_IMAGE \
-  NEXISCLAW_EXTRA_MOUNTS \
-  NEXISCLAW_HOME_VOLUME \
-  NEXISCLAW_DOCKER_APT_PACKAGES \
-  NEXISCLAW_EXTENSIONS \
-  NEXISCLAW_INSTALL_BROWSER \
-  NEXISCLAW_SANDBOX \
-  NEXISCLAW_DOCKER_SOCKET \
+  GREENCHCLAW_CONFIG_DIR \
+  GREENCHCLAW_WORKSPACE_DIR \
+  GREENCHCLAW_AUTH_PROFILE_SECRET_DIR \
+  GREENCHCLAW_GATEWAY_PORT \
+  GREENCHCLAW_BRIDGE_PORT \
+  GREENCHCLAW_GATEWAY_BIND \
+  GREENCHCLAW_DISABLE_BONJOUR \
+  GREENCHCLAW_GATEWAY_TOKEN \
+  GREENCHCLAW_IMAGE \
+  GREENCHCLAW_EXTRA_MOUNTS \
+  GREENCHCLAW_HOME_VOLUME \
+  GREENCHCLAW_DOCKER_APT_PACKAGES \
+  GREENCHCLAW_EXTENSIONS \
+  GREENCHCLAW_INSTALL_BROWSER \
+  GREENCHCLAW_SANDBOX \
+  GREENCHCLAW_DOCKER_SOCKET \
   DOCKER_GID \
-  NEXISCLAW_INSTALL_DOCKER_CLI \
-  NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS \
-  NEXISCLAW_TZ \
+  GREENCHCLAW_INSTALL_DOCKER_CLI \
+  GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS \
+  GREENCHCLAW_TZ \
   OTEL_EXPORTER_OTLP_ENDPOINT \
   OTEL_EXPORTER_OTLP_TRACES_ENDPOINT \
   OTEL_EXPORTER_OTLP_METRICS_ENDPOINT \
@@ -507,16 +507,16 @@ upsert_env "$ENV_FILE" \
   OTEL_EXPORTER_OTLP_PROTOCOL \
   OTEL_SERVICE_NAME \
   OTEL_SEMCONV_STABILITY_OPT_IN \
-  NEXISCLAW_OTEL_PRELOADED \
-  NEXISCLAW_SKIP_ONBOARDING
+  GREENCHCLAW_OTEL_PRELOADED \
+  GREENCHCLAW_SKIP_ONBOARDING
 
-if [[ "$IMAGE_NAME" == "NexisClaw:local" ]]; then
+if [[ "$IMAGE_NAME" == "GreenchClaw:local" ]]; then
   echo "==> Building Docker image: $IMAGE_NAME"
   run_docker_build \
-    --build-arg "NEXISCLAW_DOCKER_APT_PACKAGES=${NEXISCLAW_DOCKER_APT_PACKAGES}" \
-    --build-arg "NEXISCLAW_EXTENSIONS=${NEXISCLAW_EXTENSIONS}" \
-    --build-arg "NEXISCLAW_INSTALL_BROWSER=${NEXISCLAW_INSTALL_BROWSER}" \
-    --build-arg "NEXISCLAW_INSTALL_DOCKER_CLI=${NEXISCLAW_INSTALL_DOCKER_CLI:-}" \
+    --build-arg "GREENCHCLAW_DOCKER_APT_PACKAGES=${GREENCHCLAW_DOCKER_APT_PACKAGES}" \
+    --build-arg "GREENCHCLAW_EXTENSIONS=${GREENCHCLAW_EXTENSIONS}" \
+    --build-arg "GREENCHCLAW_INSTALL_BROWSER=${GREENCHCLAW_INSTALL_BROWSER}" \
+    --build-arg "GREENCHCLAW_INSTALL_DOCKER_CLI=${GREENCHCLAW_INSTALL_DOCKER_CLI:-}" \
     -t "$IMAGE_NAME" \
     -f "$ROOT_DIR/Dockerfile" \
     "$ROOT_DIR"
@@ -538,29 +538,29 @@ echo "==> Fixing data-directory permissions"
 # Use -xdev to restrict chown to the config-dir mount only — without it,
 # the recursive chown would cross into the workspace bind mount and rewrite
 # ownership of all user project files on Linux hosts.
-# After fixing the config dir, only the NexisClaw metadata subdirectory
-# (.NexisClaw/) inside the workspace gets chowned, not the user's project files.
-run_prestart_gateway --user root --entrypoint sh NexisClaw-gateway -c \
-  'find /home/node/.NexisClaw -xdev -exec chown node:node {} +; \
-   find /home/node/.config/NexisClaw -xdev -exec chown node:node {} +; \
-   [ -d /home/node/.NexisClaw/workspace/.NexisClaw ] && chown -R node:node /home/node/.NexisClaw/workspace/.NexisClaw || true'
+# After fixing the config dir, only the GreenchClaw metadata subdirectory
+# (.GreenchClaw/) inside the workspace gets chowned, not the user's project files.
+run_prestart_gateway --user root --entrypoint sh GreenchClaw-gateway -c \
+  'find /home/node/.GreenchClaw -xdev -exec chown node:node {} +; \
+   find /home/node/.config/GreenchClaw -xdev -exec chown node:node {} +; \
+   [ -d /home/node/.GreenchClaw/workspace/.GreenchClaw ] && chown -R node:node /home/node/.GreenchClaw/workspace/.GreenchClaw || true'
 
 echo ""
 if [[ -n "$SKIP_ONBOARDING" ]]; then
-  echo "==> Skipping onboarding (NEXISCLAW_SKIP_ONBOARDING is set)"
+  echo "==> Skipping onboarding (GREENCHCLAW_SKIP_ONBOARDING is set)"
 else
   echo "==> Onboarding (interactive)"
   echo "Docker setup pins Gateway mode to local."
-  echo "Gateway runtime bind comes from NEXISCLAW_GATEWAY_BIND (default: lan)."
-  echo "Current runtime bind: $NEXISCLAW_GATEWAY_BIND"
-  if is_truthy_value "$NEXISCLAW_DISABLE_BONJOUR"; then
-    echo "Bonjour/mDNS advertising: force disabled (NEXISCLAW_DISABLE_BONJOUR=$NEXISCLAW_DISABLE_BONJOUR)."
-  elif [[ -z "$NEXISCLAW_DISABLE_BONJOUR" ]]; then
+  echo "Gateway runtime bind comes from GREENCHCLAW_GATEWAY_BIND (default: lan)."
+  echo "Current runtime bind: $GREENCHCLAW_GATEWAY_BIND"
+  if is_truthy_value "$GREENCHCLAW_DISABLE_BONJOUR"; then
+    echo "Bonjour/mDNS advertising: force disabled (GREENCHCLAW_DISABLE_BONJOUR=$GREENCHCLAW_DISABLE_BONJOUR)."
+  elif [[ -z "$GREENCHCLAW_DISABLE_BONJOUR" ]]; then
     echo "Bonjour/mDNS advertising: auto (disabled inside the Gateway container unless explicitly enabled)."
   else
-    echo "Bonjour/mDNS advertising: explicitly enabled (NEXISCLAW_DISABLE_BONJOUR=$NEXISCLAW_DISABLE_BONJOUR)."
+    echo "Bonjour/mDNS advertising: explicitly enabled (GREENCHCLAW_DISABLE_BONJOUR=$GREENCHCLAW_DISABLE_BONJOUR)."
   fi
-  echo "Gateway token: $NEXISCLAW_GATEWAY_TOKEN"
+  echo "Gateway token: $GREENCHCLAW_GATEWAY_TOKEN"
   echo "Tailscale exposure: Off (use host-level tailnet/Tailscale setup separately)."
   echo "Install Gateway daemon: No (managed by Docker Compose)"
   echo ""
@@ -574,27 +574,27 @@ sync_gateway_config
 echo ""
 echo "==> Provider setup (optional)"
 echo "WhatsApp (QR):"
-echo "  ${COMPOSE_HINT} run --rm NexisClaw-cli channels login"
+echo "  ${COMPOSE_HINT} run --rm GreenchClaw-cli channels login"
 echo "Telegram (bot token):"
-echo "  ${COMPOSE_HINT} run --rm NexisClaw-cli channels add --channel telegram --token <token>"
+echo "  ${COMPOSE_HINT} run --rm GreenchClaw-cli channels add --channel telegram --token <token>"
 echo "Discord (bot token):"
-echo "  ${COMPOSE_HINT} run --rm NexisClaw-cli channels add --channel discord --token <token>"
-echo "Docs: https://docs.NexisClaw.ai/channels"
+echo "  ${COMPOSE_HINT} run --rm GreenchClaw-cli channels add --channel discord --token <token>"
+echo "Docs: https://docs.GreenchClaw.ai/channels"
 
 echo ""
 echo "==> Starting gateway"
-docker compose "${COMPOSE_ARGS[@]}" up -d NexisClaw-gateway
+docker compose "${COMPOSE_ARGS[@]}" up -d GreenchClaw-gateway
 
-# --- Sandbox setup (opt-in via NEXISCLAW_SANDBOX=1) ---
+# --- Sandbox setup (opt-in via GREENCHCLAW_SANDBOX=1) ---
 if [[ -n "$SANDBOX_ENABLED" ]]; then
   echo ""
   echo "==> Sandbox setup"
 
   sandbox_dockerfile="$ROOT_DIR/scripts/docker/sandbox/Dockerfile"
   if [[ -f "$sandbox_dockerfile" ]]; then
-    echo "Building sandbox image: NexisClaw-sandbox:bookworm-slim"
+    echo "Building sandbox image: GreenchClaw-sandbox:bookworm-slim"
     run_docker_build \
-      -t "NexisClaw-sandbox:bookworm-slim" \
+      -t "GreenchClaw-sandbox:bookworm-slim" \
       -f "$sandbox_dockerfile" \
       "$ROOT_DIR"
   else
@@ -606,10 +606,10 @@ if [[ -n "$SANDBOX_ENABLED" ]]; then
   # Defense-in-depth: verify Docker CLI in the running image before enabling
   # sandbox. This avoids claiming sandbox is enabled when the image cannot
   # launch sandbox containers.
-  if ! docker compose "${COMPOSE_ARGS[@]}" run --rm --entrypoint docker NexisClaw-gateway --version >/dev/null 2>&1; then
+  if ! docker compose "${COMPOSE_ARGS[@]}" run --rm --entrypoint docker GreenchClaw-gateway --version >/dev/null 2>&1; then
     echo "WARNING: Docker CLI not found inside the container image." >&2
-    echo "  Sandbox requires Docker CLI. Rebuild with --build-arg NEXISCLAW_INSTALL_DOCKER_CLI=1" >&2
-    echo "  or use a local build (NEXISCLAW_IMAGE=NexisClaw:local). Skipping sandbox setup." >&2
+    echo "  Sandbox requires Docker CLI. Rebuild with --build-arg GREENCHCLAW_INSTALL_DOCKER_CLI=1" >&2
+    echo "  or use a local build (GREENCHCLAW_IMAGE=GreenchClaw:local). Skipping sandbox setup." >&2
     SANDBOX_ENABLED=""
   fi
 fi
@@ -623,7 +623,7 @@ if [[ -n "$SANDBOX_ENABLED" ]]; then
     SANDBOX_COMPOSE_FILE="$ROOT_DIR/docker-compose.sandbox.yml"
     cat >"$SANDBOX_COMPOSE_FILE" <<YAML
 services:
-  NexisClaw-gateway:
+  GreenchClaw-gateway:
     volumes:
       - ${DOCKER_SOCKET_PATH}:/var/run/docker.sock
 YAML
@@ -636,14 +636,14 @@ YAML
     COMPOSE_ARGS+=("-f" "$SANDBOX_COMPOSE_FILE")
     echo "==> Sandbox: added Docker socket mount"
   else
-    echo "WARNING: NEXISCLAW_SANDBOX enabled but Docker socket not found at $DOCKER_SOCKET_PATH." >&2
+    echo "WARNING: GREENCHCLAW_SANDBOX enabled but Docker socket not found at $DOCKER_SOCKET_PATH." >&2
     echo "  Sandbox requires Docker socket access. Skipping sandbox setup." >&2
     SANDBOX_ENABLED=""
   fi
 fi
 
 if [[ -n "$SANDBOX_ENABLED" ]]; then
-  # Enable sandbox in NexisClaw config.
+  # Enable sandbox in GreenchClaw config.
   sandbox_config_ok=true
   if ! run_runtime_cli current no-deps \
     config set agents.defaults.sandbox.mode "non-main" >/dev/null; then
@@ -663,9 +663,9 @@ if [[ -n "$SANDBOX_ENABLED" ]]; then
 
   if [[ "$sandbox_config_ok" == true ]]; then
     echo "Sandbox enabled: mode=non-main, scope=agent, workspaceAccess=none"
-    echo "Docs: https://docs.NexisClaw.ai/gateway/sandboxing"
+    echo "Docs: https://docs.GreenchClaw.ai/gateway/sandboxing"
     # Restart gateway with sandbox compose overlay to pick up socket mount + config.
-    docker compose "${COMPOSE_ARGS[@]}" up -d NexisClaw-gateway
+    docker compose "${COMPOSE_ARGS[@]}" up -d GreenchClaw-gateway
   else
     echo "WARNING: Sandbox config was partially applied. Check errors above." >&2
     echo "  Skipping gateway restart to avoid exposing Docker socket without a full sandbox policy." >&2
@@ -679,7 +679,7 @@ if [[ -n "$SANDBOX_ENABLED" ]]; then
       rm -f "$SANDBOX_COMPOSE_FILE"
     fi
     # Ensure gateway service definition is reset without sandbox overlay mount.
-    docker compose "${BASE_COMPOSE_ARGS[@]}" up -d --force-recreate NexisClaw-gateway
+    docker compose "${BASE_COMPOSE_ARGS[@]}" up -d --force-recreate GreenchClaw-gateway
   fi
 else
   # Keep reruns deterministic: if sandbox is not active for this run, reset
@@ -697,10 +697,10 @@ fi
 echo ""
 echo "Gateway running with host port mapping."
 echo "Access from tailnet devices via the host's tailnet IP."
-echo "Config: $NEXISCLAW_CONFIG_DIR"
-echo "Workspace: $NEXISCLAW_WORKSPACE_DIR"
-echo "Token: $NEXISCLAW_GATEWAY_TOKEN"
+echo "Config: $GREENCHCLAW_CONFIG_DIR"
+echo "Workspace: $GREENCHCLAW_WORKSPACE_DIR"
+echo "Token: $GREENCHCLAW_GATEWAY_TOKEN"
 echo ""
 echo "Commands:"
-echo "  ${COMPOSE_HINT} logs -f NexisClaw-gateway"
-echo "  ${COMPOSE_HINT} exec NexisClaw-gateway node dist/index.js health --token \"$NEXISCLAW_GATEWAY_TOKEN\""
+echo "  ${COMPOSE_HINT} logs -f GreenchClaw-gateway"
+echo "  ${COMPOSE_HINT} exec GreenchClaw-gateway node dist/index.js health --token \"$GREENCHCLAW_GATEWAY_TOKEN\""

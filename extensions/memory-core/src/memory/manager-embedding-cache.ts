@@ -2,7 +2,7 @@ import type { DatabaseSync, SQLInputValue } from "node:sqlite";
 import {
   parseEmbedding,
   type MemoryChunk,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 
 type EmbeddingCacheDb = Pick<DatabaseSync, "prepare">;
 

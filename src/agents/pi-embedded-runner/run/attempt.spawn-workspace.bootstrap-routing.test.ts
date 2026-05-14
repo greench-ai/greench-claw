@@ -7,8 +7,8 @@ import {
 
 describe("runEmbeddedAttempt bootstrap routing", () => {
   it("resolves bootstrap pending from the canonical workspace instead of a copied sandbox", async () => {
-    const sandboxWorkspace = "/tmp/NexisClaw-sandbox-copy";
-    const canonicalWorkspace = "/tmp/NexisClaw-canonical-workspace";
+    const sandboxWorkspace = "/tmp/GreenchClaw-sandbox-copy";
+    const canonicalWorkspace = "/tmp/GreenchClaw-canonical-workspace";
     const isWorkspaceBootstrapPending = vi.fn(async (workspaceDir: string) => {
       return workspaceDir === sandboxWorkspace;
     });
@@ -37,8 +37,8 @@ describe("runEmbeddedAttempt bootstrap routing", () => {
       trigger: "user",
       isPrimaryRun: true,
       isCanonicalWorkspace: true,
-      effectiveWorkspace: "/tmp/NexisClaw-workspace",
-      resolvedWorkspace: "/tmp/NexisClaw-workspace",
+      effectiveWorkspace: "/tmp/GreenchClaw-workspace",
+      resolvedWorkspace: "/tmp/GreenchClaw-workspace",
       hasBootstrapFileAccess: false,
     });
 
@@ -53,7 +53,7 @@ describe("runEmbeddedAttempt bootstrap routing", () => {
       bootstrapFiles: [
         {
           name: "BOOTSTRAP.md",
-          path: "/tmp/NexisClaw-workspace/BOOTSTRAP.md",
+          path: "/tmp/GreenchClaw-workspace/BOOTSTRAP.md",
           content: "Ask who I am before continuing.",
           missing: false,
         },
@@ -61,8 +61,8 @@ describe("runEmbeddedAttempt bootstrap routing", () => {
       trigger: "user",
       isPrimaryRun: true,
       isCanonicalWorkspace: true,
-      effectiveWorkspace: "/tmp/NexisClaw-workspace",
-      resolvedWorkspace: "/tmp/NexisClaw-workspace",
+      effectiveWorkspace: "/tmp/GreenchClaw-workspace",
+      resolvedWorkspace: "/tmp/GreenchClaw-workspace",
       hasBootstrapFileAccess: true,
     });
 
@@ -77,7 +77,7 @@ describe("runEmbeddedAttempt bootstrap routing", () => {
       bootstrapFiles: [
         {
           name: "BOOTSTRAP.md",
-          path: "/tmp/NexisClaw-workspace/BOOTSTRAP.md",
+          path: "/tmp/GreenchClaw-workspace/BOOTSTRAP.md",
           content: "Ask who I am before continuing.",
           missing: false,
         },
@@ -85,8 +85,8 @@ describe("runEmbeddedAttempt bootstrap routing", () => {
       trigger: "user",
       isPrimaryRun: true,
       isCanonicalWorkspace: true,
-      effectiveWorkspace: "/tmp/NexisClaw-workspace",
-      resolvedWorkspace: "/tmp/NexisClaw-workspace",
+      effectiveWorkspace: "/tmp/GreenchClaw-workspace",
+      resolvedWorkspace: "/tmp/GreenchClaw-workspace",
       hasBootstrapFileAccess: false,
     });
 
@@ -100,7 +100,7 @@ describe("runEmbeddedAttempt bootstrap routing", () => {
       hasBootstrapFileContent([
         {
           name: "BOOTSTRAP.md",
-          path: "/tmp/NexisClaw-workspace/BOOTSTRAP.md",
+          path: "/tmp/GreenchClaw-workspace/BOOTSTRAP.md",
           content: "   ",
           missing: false,
         },

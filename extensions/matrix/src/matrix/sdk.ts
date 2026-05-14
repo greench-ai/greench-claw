@@ -1,4 +1,7 @@
 import { EventEmitter } from "node:events";
+import { KeyedAsyncQueue } from "GreenchClaw/plugin-sdk/keyed-async-queue";
+import type { PinnedDispatcherPolicy } from "GreenchClaw/plugin-sdk/ssrf-dispatcher";
+import { normalizeNullableString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   ClientEvent,
   Filter,
@@ -10,9 +13,6 @@ import {
   type MatrixEvent,
 } from "matrix-js-sdk/lib/matrix.js";
 import { VerificationMethod } from "matrix-js-sdk/lib/types.js";
-import { KeyedAsyncQueue } from "NexisClaw/plugin-sdk/keyed-async-queue";
-import type { PinnedDispatcherPolicy } from "NexisClaw/plugin-sdk/ssrf-dispatcher";
-import { normalizeNullableString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
 import type { SsrFPolicy } from "../runtime-api.js";
 import { resolveMatrixRoomKeyBackupReadinessError } from "./backup-health.js";
 import { FileBackedMatrixSyncStore } from "./client/file-sync-store.js";

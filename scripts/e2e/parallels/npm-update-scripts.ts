@@ -3,7 +3,7 @@ import { shellQuote } from "./host-command.ts";
 import {
   psSingleQuote,
   windowsAgentTurnConfigPatchScript,
-  windowsNexisClawResolver,
+  windowsGreenchClawResolver,
   windowsScopedEnvFunction,
 } from "./powershell.ts";
 import {
@@ -18,7 +18,7 @@ export interface NpmUpdateScriptInput {
   updateTarget: string;
 }
 
-const windowsStalePostSwapImportRegex = String.raw`node_modules\\NexisClaw\\dist\\[^\\]+-[A-Za-z0-9_-]+\.js`;
+const windowsStalePostSwapImportRegex = String.raw`node_modules\\GreenchClaw\\dist\\[^\\]+-[A-Za-z0-9_-]+\.js`;
 
 function posixModelProviderConfigCommands(
   command: string,
@@ -46,10 +46,10 @@ function posixAssertAgentOkScript(command: string, input: NpmUpdateScriptInput, 
 for attempt in 1 2; do
   session_id=${shellQuote(sessionId)}
   if [ "$attempt" -gt 1 ]; then session_id=${shellQuote(`${sessionId}-retry`)}"-$attempt"; fi
-  rm -f "$HOME/.NexisClaw/agents/main/sessions/$session_id.jsonl"
+  rm -f "$HOME/.GreenchClaw/agents/main/sessions/$session_id.jsonl"
   output_file="$(mktemp)"
   set +e
-  NEXISCLAW_ALLOW_ROOT="\${NEXISCLAW_ALLOW_ROOT:-}" ${input.auth.apiKeyEnv}=${shellQuote(input.auth.apiKeyValue)} ${command} agent --local --agent main --session-id "$session_id" --message 'Reply with exact ASCII text OK only.' --thinking minimal --json >"$output_file" 2>&1
+  GREENCHCLAW_ALLOW_ROOT="\${GREENCHCLAW_ALLOW_ROOT:-}" ${input.auth.apiKeyEnv}=${shellQuote(input.auth.apiKeyValue)} ${command} agent --local --agent main --session-id "$session_id" --message 'Reply with exact ASCII text OK only.' --thinking minimal --json >"$output_file" 2>&1
   rc=$?
   set -e
   cat "$output_file"
@@ -69,56 +69,56 @@ for attempt in 1 2; do
   fi
 done
 if [ "$agent_ok" != true ]; then
-  echo "NexisClaw agent finished without OK response" >&2
+  echo "GreenchClaw agent finished without OK response" >&2
   exit 1
 fi`;
 }
 
 function windowsUpdateWithBundledPluginsDisabled(input: NpmUpdateScriptInput): string {
-  return `$script:NexisClawUpdateExit = 0
-$updateOutput = Invoke-WithScopedEnv @{ NEXISCLAW_DISABLE_BUNDLED_PLUGINS = '1'; NEXISCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS = '1' } {
-  Invoke-NexisClaw update --tag ${psSingleQuote(input.updateTarget)} --yes --json --no-restart 2>&1
-  $script:NexisClawUpdateExit = $LASTEXITCODE
+  return `$script:GreenchClawUpdateExit = 0
+$updateOutput = Invoke-WithScopedEnv @{ GREENCHCLAW_DISABLE_BUNDLED_PLUGINS = '1'; GREENCHCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS = '1' } {
+  Invoke-GreenchClaw update --tag ${psSingleQuote(input.updateTarget)} --yes --json --no-restart 2>&1
+  $script:GreenchClawUpdateExit = $LASTEXITCODE
 }
-$updateExit = $script:NexisClawUpdateExit
+$updateExit = $script:GreenchClawUpdateExit
 $updateOutput`;
 }
 
 function windowsGatewayReadyScript(): string {
-  return `function Wait-NexisClawGateway {
+  return `function Wait-GreenchClawGateway {
   $deadline = (Get-Date).AddSeconds(180)
   $attempt = 0
   while ((Get-Date) -lt $deadline) {
-    Invoke-NexisClaw gateway status --deep --require-rpc --timeout 15000
+    Invoke-GreenchClaw gateway status --deep --require-rpc --timeout 15000
     if ($LASTEXITCODE -eq 0) { return }
     $attempt += 1
     if ($attempt -eq 4) {
-      Invoke-NexisClaw gateway start *>&1 | Out-Host
+      Invoke-GreenchClaw gateway start *>&1 | Out-Host
     }
     Start-Sleep -Seconds 5
   }
   throw "gateway did not become ready after update"
 }
-Invoke-NexisClaw gateway restart *>&1 | Out-Host
+Invoke-GreenchClaw gateway restart *>&1 | Out-Host
 if ($LASTEXITCODE -ne 0) {
   "gateway restart exited with code $LASTEXITCODE; probing readiness before failing" | Out-Host
 }
-Wait-NexisClawGateway`;
+Wait-GreenchClawGateway`;
 }
 
 function windowsAssertAgentOkScript(input: NpmUpdateScriptInput): string {
   return `${windowsAgentTurnConfigPatchScript(input.auth.modelId)}
-$sessionPath = Join-Path $env:USERPROFILE '.NexisClaw\\agents\\main\\sessions\\parallels-npm-update-windows.jsonl'
+$sessionPath = Join-Path $env:USERPROFILE '.GreenchClaw\\agents\\main\\sessions\\parallels-npm-update-windows.jsonl'
 Remove-Item $sessionPath -Force -ErrorAction SilentlyContinue
 ${windowsAgentWorkspaceScript("Parallels npm update smoke test assistant.")}
 Set-Item -Path ('Env:' + ${psSingleQuote(input.auth.apiKeyEnv)}) -Value ${psSingleQuote(input.auth.apiKeyValue)}
 $agentOk = $false
 for ($attempt = 1; $attempt -le 2; $attempt++) {
   $sessionId = if ($attempt -eq 1) { 'parallels-npm-update-windows' } else { "parallels-npm-update-windows-retry-$attempt" }
-  $sessionsDir = Join-Path $env:USERPROFILE '.NexisClaw\\agents\\main\\sessions'
+  $sessionsDir = Join-Path $env:USERPROFILE '.GreenchClaw\\agents\\main\\sessions'
   $sessionPath = Join-Path $sessionsDir "$sessionId.jsonl"
   Remove-Item $sessionPath -Force -ErrorAction SilentlyContinue
-  $output = Invoke-NexisClaw agent --local --agent main --session-id $sessionId --model ${psSingleQuote(input.auth.modelId)} --message 'Reply with exact ASCII text OK only.' --thinking minimal --timeout ${resolveParallelsModelTimeoutSeconds("windows")} --json 2>&1
+  $output = Invoke-GreenchClaw agent --local --agent main --session-id $sessionId --model ${psSingleQuote(input.auth.modelId)} --message 'Reply with exact ASCII text OK only.' --thinking minimal --timeout ${resolveParallelsModelTimeoutSeconds("windows")} --json 2>&1
   if ($null -ne $output) { $output | ForEach-Object { $_ } }
   if ($LASTEXITCODE -ne 0) { throw "agent failed with exit code $LASTEXITCODE" }
   if (($output | Out-String) -match '"finalAssistant(Raw|Visible)Text":\\s*"OK"') {
@@ -130,7 +130,7 @@ for ($attempt = 1; $attempt -le 2; $attempt++) {
     Start-Sleep -Seconds 3
   }
 }
-if (-not $agentOk) { throw 'NexisClaw agent finished without OK response' }`;
+if (-not $agentOk) { throw 'GreenchClaw agent finished without OK response' }`;
 }
 
 export function macosUpdateScript(input: NpmUpdateScriptInput): string {
@@ -140,7 +140,7 @@ scrub_future_plugin_entries() {
   python3 - <<'PY'
 import json
 from pathlib import Path
-path = Path.home() / ".NexisClaw" / "NexisClaw.json"
+path = Path.home() / ".GreenchClaw" / "GreenchClaw.json"
 if not path.exists():
     raise SystemExit(0)
 try:
@@ -161,9 +161,9 @@ if isinstance(allow, list):
 path.write_text(json.dumps(config, indent=2) + "\n")
 PY
 }
-stop_NexisClaw_gateway_processes() {
-  NEXISCLAW_DISABLE_BUNDLED_PLUGINS=1 /opt/homebrew/bin/NexisClaw gateway stop || true
-  pkill -f 'NexisClaw.*gateway' >/dev/null 2>&1 || true
+stop_GreenchClaw_gateway_processes() {
+  GREENCHCLAW_DISABLE_BUNDLED_PLUGINS=1 /opt/homebrew/bin/GreenchClaw gateway stop || true
+  pkill -f 'GreenchClaw.*gateway' >/dev/null 2>&1 || true
   if command -v lsof >/dev/null 2>&1; then
     pids="$(lsof -tiTCP:18789 -sTCP:LISTEN 2>/dev/null || true)"
     if [ -n "$pids" ]; then
@@ -173,48 +173,48 @@ stop_NexisClaw_gateway_processes() {
     fi
   fi
 }
-start_NexisClaw_gateway() {
-  stop_NexisClaw_gateway_processes
-  rm -f /tmp/NexisClaw-parallels-macos-gateway.log
+start_GreenchClaw_gateway() {
+  stop_GreenchClaw_gateway_processes
+  rm -f /tmp/GreenchClaw-parallels-macos-gateway.log
   trap '' HUP
-  /usr/bin/env NEXISCLAW_HOME="$HOME" NEXISCLAW_STATE_DIR="$HOME/.NexisClaw" NEXISCLAW_CONFIG_PATH="$HOME/.NexisClaw/NexisClaw.json" ${input.auth.apiKeyEnv}=${shellQuote(
+  /usr/bin/env GREENCHCLAW_HOME="$HOME" GREENCHCLAW_STATE_DIR="$HOME/.GreenchClaw" GREENCHCLAW_CONFIG_PATH="$HOME/.GreenchClaw/GreenchClaw.json" ${input.auth.apiKeyEnv}=${shellQuote(
     input.auth.apiKeyValue,
-  )} /opt/homebrew/bin/NexisClaw gateway run --bind loopback --port 18789 --force >/tmp/NexisClaw-parallels-macos-gateway.log 2>&1 </dev/null &
+  )} /opt/homebrew/bin/GreenchClaw gateway run --bind loopback --port 18789 --force >/tmp/GreenchClaw-parallels-macos-gateway.log 2>&1 </dev/null &
   sleep 1
 }
 wait_for_gateway() {
   deadline=$((SECONDS + 240))
   while [ "$SECONDS" -lt "$deadline" ]; do
-    if /opt/homebrew/bin/NexisClaw gateway status --deep --require-rpc --timeout 15000; then
+    if /opt/homebrew/bin/GreenchClaw gateway status --deep --require-rpc --timeout 15000; then
       return
     fi
     sleep 2
   done
-  cat /tmp/NexisClaw-parallels-macos-gateway.log >&2 || true
+  cat /tmp/GreenchClaw-parallels-macos-gateway.log >&2 || true
   echo "gateway did not become ready after update" >&2
   exit 1
 }
 scrub_future_plugin_entries
-stop_NexisClaw_gateway_processes
-NEXISCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1 NEXISCLAW_DISABLE_BUNDLED_PLUGINS=1 /opt/homebrew/bin/NexisClaw update --tag ${shellQuote(input.updateTarget)} --yes --json --no-restart
-${posixVersionCheck("/opt/homebrew/bin/NexisClaw", input.expectedNeedle)}
-start_NexisClaw_gateway
+stop_GreenchClaw_gateway_processes
+GREENCHCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1 GREENCHCLAW_DISABLE_BUNDLED_PLUGINS=1 /opt/homebrew/bin/GreenchClaw update --tag ${shellQuote(input.updateTarget)} --yes --json --no-restart
+${posixVersionCheck("/opt/homebrew/bin/GreenchClaw", input.expectedNeedle)}
+start_GreenchClaw_gateway
 wait_for_gateway
-/opt/homebrew/bin/NexisClaw models set ${shellQuote(input.auth.modelId)}
-${posixModelProviderConfigCommands("/opt/homebrew/bin/NexisClaw", input.auth.modelId, "macos")}
-/opt/homebrew/bin/NexisClaw config set agents.defaults.skipBootstrap true --strict-json
-/opt/homebrew/bin/NexisClaw config set tools.profile minimal
+/opt/homebrew/bin/GreenchClaw models set ${shellQuote(input.auth.modelId)}
+${posixModelProviderConfigCommands("/opt/homebrew/bin/GreenchClaw", input.auth.modelId, "macos")}
+/opt/homebrew/bin/GreenchClaw config set agents.defaults.skipBootstrap true --strict-json
+/opt/homebrew/bin/GreenchClaw config set tools.profile minimal
 ${posixAgentWorkspaceScript("Parallels npm update smoke test assistant.")}
-${posixAssertAgentOkScript("/opt/homebrew/bin/NexisClaw", input, "parallels-npm-update-macos")}`;
+${posixAssertAgentOkScript("/opt/homebrew/bin/GreenchClaw", input, "parallels-npm-update-macos")}`;
 }
 
 export function windowsUpdateScript(input: NpmUpdateScriptInput): string {
   return `$ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $false
-${windowsNexisClawResolver}
+${windowsGreenchClawResolver}
 ${windowsScopedEnvFunction}
 function Remove-FuturePluginEntries {
-  $configPath = Join-Path $env:USERPROFILE '.NexisClaw\\NexisClaw.json'
+  $configPath = Join-Path $env:USERPROFILE '.GreenchClaw\\GreenchClaw.json'
   if (-not (Test-Path $configPath)) { return }
   try { $config = Get-Content $configPath -Raw | ConvertFrom-Json -AsHashtable } catch { return }
   $plugins = $config['plugins']
@@ -231,10 +231,10 @@ function Remove-FuturePluginEntries {
   }
   $config | ConvertTo-Json -Depth 100 | Set-Content -Path $configPath -Encoding UTF8
 }
-function Stop-NexisClawGatewayProcesses {
-  Invoke-NexisClaw gateway stop *>&1 | Out-Host
+function Stop-GreenchClawGatewayProcesses {
+  Invoke-GreenchClaw gateway stop *>&1 | Out-Host
   Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
-    Where-Object { $_.CommandLine -match 'NexisClaw.*gateway' } |
+    Where-Object { $_.CommandLine -match 'GreenchClaw.*gateway' } |
     ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
   Get-NetTCPConnection -LocalPort 18789 -State Listen -ErrorAction SilentlyContinue |
     Select-Object -ExpandProperty OwningProcess -Unique |
@@ -242,13 +242,13 @@ function Stop-NexisClawGatewayProcesses {
   Start-Sleep -Seconds 2
 }
 Remove-FuturePluginEntries
-Stop-NexisClawGatewayProcesses
+Stop-GreenchClawGatewayProcesses
 ${windowsUpdateWithBundledPluginsDisabled(input)}
 if ($updateExit -ne 0) {
   $updateText = $updateOutput | Out-String
   $stalePostSwapImport = $updateText -match 'ERR_MODULE_NOT_FOUND' -and $updateText -match ${psSingleQuote(windowsStalePostSwapImportRegex)}
-  if (-not $stalePostSwapImport) { throw "NexisClaw update failed with exit code $updateExit" }
-  Write-Host "NexisClaw update returned a stale post-swap module import; continuing to post-update health checks"
+  if (-not $stalePostSwapImport) { throw "GreenchClaw update failed with exit code $updateExit" }
+  Write-Host "GreenchClaw update returned a stale post-swap module import; continuing to post-update health checks"
 }
 ${windowsVersionCheck(input.expectedNeedle)}
 ${windowsGatewayReadyScript()}
@@ -258,12 +258,12 @@ ${windowsAssertAgentOkScript(input)}`;
 export function linuxUpdateScript(input: NpmUpdateScriptInput): string {
   return String.raw`set -euo pipefail
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/snap/bin
-export NEXISCLAW_ALLOW_ROOT=1
+export GREENCHCLAW_ALLOW_ROOT=1
 scrub_future_plugin_entries() {
   node - <<'JS'
 const fs = require("node:fs");
 const path = require("node:path");
-const configPath = path.join(process.env.HOME || "/root", ".NexisClaw", "NexisClaw.json");
+const configPath = path.join(process.env.HOME || "/root", ".GreenchClaw", "GreenchClaw.json");
 if (!fs.existsSync(configPath)) process.exit(0);
 let config;
 try { config = JSON.parse(fs.readFileSync(configPath, "utf8")); } catch { process.exit(0); }
@@ -280,43 +280,43 @@ if (Array.isArray(plugins.allow)) {
 fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\n");
 JS
 }
-stop_NexisClaw_gateway_processes() {
-  NEXISCLAW_DISABLE_BUNDLED_PLUGINS=1 NEXISCLAW_ALLOW_ROOT=1 NexisClaw gateway stop || true
-  pkill -f 'NexisClaw.*gateway' >/dev/null 2>&1 || true
+stop_GreenchClaw_gateway_processes() {
+  GREENCHCLAW_DISABLE_BUNDLED_PLUGINS=1 GREENCHCLAW_ALLOW_ROOT=1 GreenchClaw gateway stop || true
+  pkill -f 'GreenchClaw.*gateway' >/dev/null 2>&1 || true
 }
-start_NexisClaw_gateway() {
-  pkill -f "NexisClaw gateway run" >/dev/null 2>&1 || true
-  rm -f /tmp/NexisClaw-parallels-linux-gateway.log
+start_GreenchClaw_gateway() {
+  pkill -f "GreenchClaw gateway run" >/dev/null 2>&1 || true
+  rm -f /tmp/GreenchClaw-parallels-linux-gateway.log
   setsid sh -lc ${shellQuote(
-    `exec env NEXISCLAW_HOME=/root NEXISCLAW_STATE_DIR=/root/.NexisClaw NEXISCLAW_CONFIG_PATH=/root/.NexisClaw/NexisClaw.json NEXISCLAW_DISABLE_BONJOUR=1 NEXISCLAW_ALLOW_ROOT=1 ${input.auth.apiKeyEnv}=${shellQuote(
+    `exec env GREENCHCLAW_HOME=/root GREENCHCLAW_STATE_DIR=/root/.GreenchClaw GREENCHCLAW_CONFIG_PATH=/root/.GreenchClaw/GreenchClaw.json GREENCHCLAW_DISABLE_BONJOUR=1 GREENCHCLAW_ALLOW_ROOT=1 ${input.auth.apiKeyEnv}=${shellQuote(
       input.auth.apiKeyValue,
-    )} NexisClaw gateway run --bind loopback --port 18789 --force >/tmp/NexisClaw-parallels-linux-gateway.log 2>&1`,
+    )} GreenchClaw gateway run --bind loopback --port 18789 --force >/tmp/GreenchClaw-parallels-linux-gateway.log 2>&1`,
   )} >/dev/null 2>&1 < /dev/null &
 }
 wait_for_gateway() {
   deadline=$((SECONDS + 240))
   while [ "$SECONDS" -lt "$deadline" ]; do
-    if NexisClaw gateway status --deep --require-rpc --timeout 15000; then
+    if GreenchClaw gateway status --deep --require-rpc --timeout 15000; then
       return
     fi
     sleep 2
   done
-  cat /tmp/NexisClaw-parallels-linux-gateway.log >&2 || true
+  cat /tmp/GreenchClaw-parallels-linux-gateway.log >&2 || true
   echo "gateway did not become ready after update" >&2
   exit 1
 }
 scrub_future_plugin_entries
-stop_NexisClaw_gateway_processes
-NEXISCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1 NEXISCLAW_DISABLE_BUNDLED_PLUGINS=1 NexisClaw update --tag ${shellQuote(input.updateTarget)} --yes --json --no-restart
-${posixVersionCheck("NexisClaw", input.expectedNeedle)}
-start_NexisClaw_gateway
+stop_GreenchClaw_gateway_processes
+GREENCHCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1 GREENCHCLAW_DISABLE_BUNDLED_PLUGINS=1 GreenchClaw update --tag ${shellQuote(input.updateTarget)} --yes --json --no-restart
+${posixVersionCheck("GreenchClaw", input.expectedNeedle)}
+start_GreenchClaw_gateway
 wait_for_gateway
-NexisClaw models set ${shellQuote(input.auth.modelId)}
-${posixModelProviderConfigCommands("NexisClaw", input.auth.modelId, "linux")}
-NexisClaw config set agents.defaults.skipBootstrap true --strict-json
-NexisClaw config set tools.profile minimal
+GreenchClaw models set ${shellQuote(input.auth.modelId)}
+${posixModelProviderConfigCommands("GreenchClaw", input.auth.modelId, "linux")}
+GreenchClaw config set agents.defaults.skipBootstrap true --strict-json
+GreenchClaw config set tools.profile minimal
 ${posixAgentWorkspaceScript("Parallels npm update smoke test assistant.")}
-${posixAssertAgentOkScript("NexisClaw", input, "parallels-npm-update-linux")}`;
+${posixAssertAgentOkScript("GreenchClaw", input, "parallels-npm-update-linux")}`;
 }
 
 function posixVersionCheck(command: string, expectedNeedle: string): string {
@@ -365,10 +365,10 @@ function windowsVersionCheck(expectedNeedle: string): string {
   if (!expectedNeedle) {
     return `$versionDeadline = (Get-Date).AddSeconds(60)
 while ($true) {
-  $version = Invoke-NexisClaw --version
+  $version = Invoke-GreenchClaw --version
   $version
   if ($LASTEXITCODE -eq 0) { break }
-  if ((Get-Date) -ge $versionDeadline) { throw "NexisClaw --version failed with exit code $LASTEXITCODE" }
+  if ((Get-Date) -ge $versionDeadline) { throw "GreenchClaw --version failed with exit code $LASTEXITCODE" }
   Start-Sleep -Seconds 2
 }`;
   }
@@ -376,11 +376,11 @@ while ($true) {
   const mismatch = psSingleQuote(`version mismatch: expected ${expectedNeedle}`);
   return `$versionDeadline = (Get-Date).AddSeconds(60)
 while ($true) {
-  $version = Invoke-NexisClaw --version
+  $version = Invoke-GreenchClaw --version
   $version
   if ($LASTEXITCODE -eq 0 -and (($version | Out-String) -like ${expectedPattern})) { break }
   if ((Get-Date) -ge $versionDeadline) {
-    if ($LASTEXITCODE -ne 0) { throw "NexisClaw --version failed with exit code $LASTEXITCODE" }
+    if ($LASTEXITCODE -ne 0) { throw "GreenchClaw --version failed with exit code $LASTEXITCODE" }
     throw ${mismatch}
   }
   Start-Sleep -Seconds 2

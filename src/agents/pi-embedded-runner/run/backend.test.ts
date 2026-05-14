@@ -7,22 +7,22 @@ describe("resolveEmbeddedAgentRuntime", () => {
   });
 
   it("accepts the PI kill switch", () => {
-    expect(resolveEmbeddedAgentRuntime({ NEXISCLAW_AGENT_RUNTIME: "pi" })).toBe("pi");
+    expect(resolveEmbeddedAgentRuntime({ GREENCHCLAW_AGENT_RUNTIME: "pi" })).toBe("pi");
   });
 
   it("canonicalizes legacy Codex app-server runtime ids", () => {
-    expect(resolveEmbeddedAgentRuntime({ NEXISCLAW_AGENT_RUNTIME: "codex" })).toBe("codex");
-    expect(resolveEmbeddedAgentRuntime({ NEXISCLAW_AGENT_RUNTIME: "codex-app-server" })).toBe(
+    expect(resolveEmbeddedAgentRuntime({ GREENCHCLAW_AGENT_RUNTIME: "codex" })).toBe("codex");
+    expect(resolveEmbeddedAgentRuntime({ GREENCHCLAW_AGENT_RUNTIME: "codex-app-server" })).toBe(
       "codex",
     );
   });
 
   it("accepts auto mode", () => {
-    expect(resolveEmbeddedAgentRuntime({ NEXISCLAW_AGENT_RUNTIME: "auto" })).toBe("auto");
+    expect(resolveEmbeddedAgentRuntime({ GREENCHCLAW_AGENT_RUNTIME: "auto" })).toBe("auto");
   });
 
   it("preserves plugin harness runtime ids", () => {
-    expect(resolveEmbeddedAgentRuntime({ NEXISCLAW_AGENT_RUNTIME: "custom-harness" })).toBe(
+    expect(resolveEmbeddedAgentRuntime({ GREENCHCLAW_AGENT_RUNTIME: "custom-harness" })).toBe(
       "custom-harness",
     );
   });

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ReplyPayload } from "../../auto-reply/reply-payload.js";
 import type { DispatchReplyWithBufferedBlockDispatcher } from "../../auto-reply/reply/provider-dispatcher.types.js";
 import type { FinalizedMsgContext } from "../../auto-reply/templating.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { RecordInboundSession } from "../session.types.js";
 import {
   createNoopChannelTurnDeliveryAdapter,
@@ -35,7 +35,7 @@ vi.mock("../message/send.js", async (importOriginal) => {
   };
 });
 
-const cfg = {} as NexisClawConfig;
+const cfg = {} as GreenchClawConfig;
 
 function createCtx(overrides: Partial<FinalizedMsgContext> = {}): FinalizedMsgContext {
   return {

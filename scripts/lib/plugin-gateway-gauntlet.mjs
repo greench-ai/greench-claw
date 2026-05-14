@@ -3,7 +3,7 @@ import path from "node:path";
 import JSON5 from "json5";
 import { collectBundledPluginBuildEntries } from "./bundled-plugin-build-entries.mjs";
 
-const MANIFEST_NAMES = ["NexisClaw.plugin.json", "NexisClaw.plugin.json5"];
+const MANIFEST_NAMES = ["GreenchClaw.plugin.json", "GreenchClaw.plugin.json5"];
 
 function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -345,8 +345,8 @@ function buildGauntletPrebuildEnv(env, options = {}) {
   }
   return {
     ...env,
-    NEXISCLAW_BUILD_PRIVATE_QA: "1",
-    NEXISCLAW_ENABLE_PRIVATE_QA_CLI: "1",
+    GREENCHCLAW_BUILD_PRIVATE_QA: "1",
+    GREENCHCLAW_ENABLE_PRIVATE_QA_CLI: "1",
   };
 }
 

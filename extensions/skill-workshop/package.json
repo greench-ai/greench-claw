@@ -1,16 +1,16 @@
 {
-  "name": "@NexisClaw/skill-workshop",
+  "name": "@GreenchClaw/skill-workshop",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw skill workshop plugin",
+  "description": "GreenchClaw skill workshop plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.1.38"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

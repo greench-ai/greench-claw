@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { isRecord } from "./tool-config-shared.js";
 
 type JsonRecord = Record<string, unknown>;
@@ -10,13 +10,13 @@ function cloneRecord<T extends JsonRecord | undefined>(value: T): T {
   return { ...value } as T;
 }
 
-function resolveLegacyXSearchConfig(config?: NexisClawConfig): JsonRecord | undefined {
+function resolveLegacyXSearchConfig(config?: GreenchClawConfig): JsonRecord | undefined {
   const web = config?.tools?.web as Record<string, unknown> | undefined;
   const xSearch = web?.x_search;
   return isRecord(xSearch) ? cloneRecord(xSearch) : undefined;
 }
 
-function resolvePluginXSearchConfig(config?: NexisClawConfig): JsonRecord | undefined {
+function resolvePluginXSearchConfig(config?: GreenchClawConfig): JsonRecord | undefined {
   const pluginConfig = config?.plugins?.entries?.xai?.config;
   if (!isRecord(pluginConfig?.xSearch)) {
     return undefined;
@@ -24,7 +24,7 @@ function resolvePluginXSearchConfig(config?: NexisClawConfig): JsonRecord | unde
   return cloneRecord(pluginConfig.xSearch);
 }
 
-function resolveLegacyGrokWebSearchConfig(config?: NexisClawConfig): JsonRecord | undefined {
+function resolveLegacyGrokWebSearchConfig(config?: GreenchClawConfig): JsonRecord | undefined {
   const web = config?.tools?.web as Record<string, unknown> | undefined;
   const search = web?.search;
   if (!isRecord(search) || !isRecord(search.grok)) {
@@ -33,7 +33,7 @@ function resolveLegacyGrokWebSearchConfig(config?: NexisClawConfig): JsonRecord 
   return cloneRecord(search.grok);
 }
 
-function resolvePluginWebSearchConfig(config?: NexisClawConfig): JsonRecord | undefined {
+function resolvePluginWebSearchConfig(config?: GreenchClawConfig): JsonRecord | undefined {
   const pluginConfig = config?.plugins?.entries?.xai?.config;
   if (!isRecord(pluginConfig?.webSearch)) {
     return undefined;
@@ -47,7 +47,7 @@ function baseUrlFallback(config?: JsonRecord): JsonRecord | undefined {
     : undefined;
 }
 
-export function resolveEffectiveXSearchConfig(config?: NexisClawConfig): JsonRecord | undefined {
+export function resolveEffectiveXSearchConfig(config?: GreenchClawConfig): JsonRecord | undefined {
   const legacyGrokBaseUrl = baseUrlFallback(resolveLegacyGrokWebSearchConfig(config));
   const pluginWebSearchBaseUrl = baseUrlFallback(resolvePluginWebSearchConfig(config));
   const legacy = resolveLegacyXSearchConfig(config);
@@ -65,7 +65,7 @@ export function resolveEffectiveXSearchConfig(config?: NexisClawConfig): JsonRec
 }
 
 export function setPluginXSearchConfigValue(
-  configTarget: NexisClawConfig,
+  configTarget: GreenchClawConfig,
   key: string,
   value: unknown,
 ): void {

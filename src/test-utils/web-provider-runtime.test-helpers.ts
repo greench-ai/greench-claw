@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type {
   PluginWebFetchProviderEntry,
   PluginWebSearchProviderEntry,
@@ -11,7 +11,7 @@ type CommonWebProviderTestParams = {
   autoDetectOrder?: number;
   requiresCredential?: boolean;
   getCredentialValue?: (config?: Record<string, unknown>) => unknown;
-  getConfiguredCredentialValue?: (config?: NexisClawConfig) => unknown;
+  getConfiguredCredentialValue?: (config?: GreenchClawConfig) => unknown;
   getConfiguredCredentialFallback?: PluginWebSearchProviderEntry["getConfiguredCredentialFallback"];
 };
 

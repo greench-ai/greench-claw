@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   resolveBundledPluginCompatibleLoadValues,
   type PluginActivationBundledCompatMode,
@@ -34,7 +34,7 @@ export function listBundledManifestContractPluginIds(params: {
 }
 
 export function resolveEnabledBundledManifestContractPlugins(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   onlyPluginIds?: readonly string[];
@@ -45,7 +45,7 @@ export function resolveEnabledBundledManifestContractPlugins(params: {
     return [];
   }
   let manifestRecords: readonly PluginManifestRecord[] | undefined;
-  const loadManifestRecords = (config?: NexisClawConfig) => {
+  const loadManifestRecords = (config?: GreenchClawConfig) => {
     manifestRecords ??= loadManifestContractSnapshot({
       config,
       workspaceDir: params.workspaceDir,

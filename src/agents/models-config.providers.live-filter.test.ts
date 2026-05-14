@@ -37,8 +37,8 @@ describe("resolveProviderDiscoveryFilterForTest", () => {
     expect(
       resolveProviderDiscoveryFilterForTest({
         env: liveFilterEnv({
-          NEXISCLAW_LIVE_TEST: "1",
-          NEXISCLAW_LIVE_PROVIDERS: "claude-cli",
+          GREENCHCLAW_LIVE_TEST: "1",
+          GREENCHCLAW_LIVE_PROVIDERS: "claude-cli",
         }),
         resolveOwners,
       }),
@@ -49,8 +49,8 @@ describe("resolveProviderDiscoveryFilterForTest", () => {
     expect(
       resolveProviderDiscoveryFilterForTest({
         env: liveFilterEnv({
-          NEXISCLAW_LIVE_TEST: "1",
-          NEXISCLAW_LIVE_GATEWAY_PROVIDERS: "claude-cli",
+          GREENCHCLAW_LIVE_TEST: "1",
+          GREENCHCLAW_LIVE_GATEWAY_PROVIDERS: "claude-cli",
         }),
         resolveOwners,
       }),
@@ -61,8 +61,8 @@ describe("resolveProviderDiscoveryFilterForTest", () => {
     expect(
       resolveProviderDiscoveryFilterForTest({
         env: liveFilterEnv({
-          NEXISCLAW_LIVE_TEST: "1",
-          NEXISCLAW_LIVE_PROVIDERS: "openrouter",
+          GREENCHCLAW_LIVE_TEST: "1",
+          GREENCHCLAW_LIVE_PROVIDERS: "openrouter",
         }),
         resolveOwners,
       }),
@@ -83,8 +83,8 @@ describe("resolveProviderDiscoveryFilterForTest", () => {
     expect(
       resolveProviderDiscoveryFilterForTest({
         env: liveFilterEnv({
-          NEXISCLAW_LIVE_TEST: "1",
-          NEXISCLAW_LIVE_PROVIDERS: "claude-cli",
+          GREENCHCLAW_LIVE_TEST: "1",
+          GREENCHCLAW_LIVE_PROVIDERS: "claude-cli",
         }),
         resolveOwners: resolveMetadataOwners,
       }),
@@ -104,8 +104,8 @@ describe("resolveProviderDiscoveryFilterForTest", () => {
     expect(
       resolveProviderDiscoveryFilterForTest({
         env: liveFilterEnv({
-          NEXISCLAW_LIVE_TEST: "1",
-          NEXISCLAW_LIVE_PROVIDERS: "Claude-CLI",
+          GREENCHCLAW_LIVE_TEST: "1",
+          GREENCHCLAW_LIVE_PROVIDERS: "Claude-CLI",
         }),
         resolveOwners: (provider) => resolvePluginMetadataProviderOwnersForTest(snapshot, provider),
       }),
@@ -125,8 +125,8 @@ describe("resolveProviderDiscoveryFilterForTest", () => {
     expect(
       resolveProviderDiscoveryFilterForTest({
         env: liveFilterEnv({
-          NEXISCLAW_LIVE_TEST: "1",
-          NEXISCLAW_LIVE_PROVIDERS: "bytedance",
+          GREENCHCLAW_LIVE_TEST: "1",
+          GREENCHCLAW_LIVE_PROVIDERS: "bytedance",
         }),
         resolveOwners: (provider) => resolvePluginMetadataProviderOwnersForTest(snapshot, provider),
       }),

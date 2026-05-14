@@ -38,7 +38,7 @@ const mocks = vi.hoisted(() => ({
   loadInstalledPluginIndexInstallRecords: vi.fn(),
   loadPluginMetadataSnapshot: vi.fn(),
   getOfficialExternalPluginCatalogManifest: vi.fn(
-    (entry: { NexisClaw?: unknown }) => entry.NexisClaw,
+    (entry: { GreenchClaw?: unknown }) => entry.GreenchClaw,
   ),
   resolveOfficialExternalPluginId: vi.fn((entry: { id?: string }) => entry.id),
   resolveOfficialExternalPluginInstall: vi.fn(
@@ -47,7 +47,7 @@ const mocks = vi.hoisted(() => ({
   resolveOfficialExternalPluginLabel: vi.fn(
     (entry: { label?: string; id?: string }) => entry.label ?? entry.id ?? "plugin",
   ),
-  resolveDefaultPluginExtensionsDir: vi.fn(() => "/tmp/NexisClaw-plugins"),
+  resolveDefaultPluginExtensionsDir: vi.fn(() => "/tmp/GreenchClaw-plugins"),
   resolveProviderInstallCatalogEntries: vi.fn(),
   updateNpmInstalledPlugins: vi.fn(),
   writePersistedInstalledPluginIndexInstallRecords: vi.fn(),
@@ -123,12 +123,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromClawHub.mockResolvedValue({
       ok: true,
       pluginId: "matrix",
-      targetDir: "/tmp/NexisClaw-plugins/matrix",
+      targetDir: "/tmp/GreenchClaw-plugins/matrix",
       version: "1.2.3",
       clawhub: {
         source: "clawhub",
         clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "@NexisClaw/plugin-matrix",
+        clawhubPackage: "@GreenchClaw/plugin-matrix",
         clawhubFamily: "code-plugin",
         clawhubChannel: "official",
         version: "1.2.3",
@@ -143,26 +143,26 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValue({
       ok: true,
       pluginId: "matrix",
-      targetDir: "/tmp/NexisClaw-plugins/matrix",
+      targetDir: "/tmp/GreenchClaw-plugins/matrix",
       version: "1.2.3",
       npmResolution: {
-        name: "@NexisClaw/plugin-matrix",
+        name: "@GreenchClaw/plugin-matrix",
         version: "1.2.3",
-        resolvedSpec: "@NexisClaw/plugin-matrix@1.2.3",
+        resolvedSpec: "@GreenchClaw/plugin-matrix@1.2.3",
         integrity: "sha512-test",
         resolvedAt: "2026-05-01T00:00:00.000Z",
       },
     });
   });
 
-  it("installs a missing configured NexisClaw channel plugin from npm by default", async () => {
+  it("installs a missing configured GreenchClaw channel plugin from npm by default", async () => {
     mocks.listChannelPluginCatalogEntries.mockReturnValue([
       {
         id: "matrix",
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@NexisClaw/plugin-matrix@1.2.3",
+          npmSpec: "@GreenchClaw/plugin-matrix@1.2.3",
           expectedIntegrity: "sha512-test",
         },
         trustedSourceLinkedOfficialInstall: true,
@@ -182,8 +182,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: "@NexisClaw/plugin-matrix@1.2.3",
-      extensionsDir: "/tmp/NexisClaw-plugins",
+      spec: "@GreenchClaw/plugin-matrix@1.2.3",
+      extensionsDir: "/tmp/GreenchClaw-plugins",
       expectedPluginId: "matrix",
       expectedIntegrity: "sha512-test",
       trustedSourceLinkedOfficialInstall: true,
@@ -191,15 +191,15 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords);
     expectRecordFields((records as Record<string, unknown>).matrix, {
       source: "npm",
-      spec: "@NexisClaw/plugin-matrix@1.2.3",
-      installPath: "/tmp/NexisClaw-plugins/matrix",
+      spec: "@GreenchClaw/plugin-matrix@1.2.3",
+      installPath: "/tmp/GreenchClaw-plugins/matrix",
       version: "1.2.3",
     });
     expect(mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords, 0, 1)).toEqual({
       env: {},
     });
     expect(result.changes).toEqual([
-      'Installed missing configured plugin "matrix" from @NexisClaw/plugin-matrix@1.2.3.',
+      'Installed missing configured plugin "matrix" from @GreenchClaw/plugin-matrix@1.2.3.',
     ]);
     expect(result.warnings).toStrictEqual([]);
   });
@@ -211,8 +211,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          clawhubSpec: "clawhub:@NexisClaw/plugin-matrix@stable",
-          npmSpec: "@NexisClaw/plugin-matrix@1.2.3",
+          clawhubSpec: "clawhub:@GreenchClaw/plugin-matrix@stable",
+          npmSpec: "@GreenchClaw/plugin-matrix@1.2.3",
           expectedIntegrity: "sha512-test",
         },
       },
@@ -230,12 +230,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromClawHub), {
-      spec: "clawhub:@NexisClaw/plugin-matrix@stable",
+      spec: "clawhub:@GreenchClaw/plugin-matrix@stable",
       expectedPluginId: "matrix",
     });
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(result.changes).toEqual([
-      'Installed missing configured plugin "matrix" from clawhub:@NexisClaw/plugin-matrix@stable.',
+      'Installed missing configured plugin "matrix" from clawhub:@GreenchClaw/plugin-matrix@stable.',
     ]);
     expect(result.warnings).toStrictEqual([]);
   });
@@ -244,12 +244,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
       pluginId: "matrix",
-      targetDir: "/tmp/NexisClaw-plugins/matrix",
+      targetDir: "/tmp/GreenchClaw-plugins/matrix",
       version: "1.2.3",
       npmResolution: {
-        name: "@NexisClaw/plugin-matrix",
+        name: "@GreenchClaw/plugin-matrix",
         version: "1.2.3",
-        resolvedSpec: "@NexisClaw/plugin-matrix@1.2.3",
+        resolvedSpec: "@GreenchClaw/plugin-matrix@1.2.3",
         integrity: "sha512-matrix",
         resolvedAt: "2026-05-01T00:00:00.000Z",
       },
@@ -260,7 +260,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@NexisClaw/plugin-matrix@1.2.3",
+          npmSpec: "@GreenchClaw/plugin-matrix@1.2.3",
         },
         trustedSourceLinkedOfficialInstall: true,
       },
@@ -275,27 +275,27 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: "@NexisClaw/plugin-matrix@1.2.3",
-      extensionsDir: "/tmp/NexisClaw-plugins",
+      spec: "@GreenchClaw/plugin-matrix@1.2.3",
+      extensionsDir: "/tmp/GreenchClaw-plugins",
       expectedPluginId: "matrix",
       trustedSourceLinkedOfficialInstall: true,
     });
     const records = mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords);
     expectRecordFields((records as Record<string, unknown>).matrix, {
       source: "npm",
-      spec: "@NexisClaw/plugin-matrix@1.2.3",
-      installPath: "/tmp/NexisClaw-plugins/matrix",
+      spec: "@GreenchClaw/plugin-matrix@1.2.3",
+      installPath: "/tmp/GreenchClaw-plugins/matrix",
     });
     expect(mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords, 0, 1)).toEqual({
       env: { MATRIX_HOMESERVER: "https://matrix.example.org" },
     });
     expect(result.changes).toEqual([
-      'Installed missing configured plugin "matrix" from @NexisClaw/plugin-matrix@1.2.3.',
+      'Installed missing configured plugin "matrix" from @GreenchClaw/plugin-matrix@1.2.3.',
     ]);
     expect(result.warnings).toStrictEqual([]);
   });
 
-  it("falls back to npm when an NexisClaw channel plugin is not on ClawHub", async () => {
+  it("falls back to npm when an GreenchClaw channel plugin is not on ClawHub", async () => {
     mocks.installPluginFromClawHub.mockResolvedValueOnce({
       ok: false,
       code: "package_not_found",
@@ -307,8 +307,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          clawhubSpec: "clawhub:@NexisClaw/plugin-matrix@stable",
-          npmSpec: "@NexisClaw/plugin-matrix@1.2.3",
+          clawhubSpec: "clawhub:@GreenchClaw/plugin-matrix@stable",
+          npmSpec: "@GreenchClaw/plugin-matrix@1.2.3",
         },
         trustedSourceLinkedOfficialInstall: true,
       },
@@ -324,27 +324,27 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: "@NexisClaw/plugin-matrix@1.2.3",
+      spec: "@GreenchClaw/plugin-matrix@1.2.3",
       expectedPluginId: "matrix",
       trustedSourceLinkedOfficialInstall: true,
     });
     expect(result.changes).toEqual([
-      'ClawHub clawhub:@NexisClaw/plugin-matrix@stable unavailable for "matrix"; falling back to npm @NexisClaw/plugin-matrix@1.2.3.',
-      'Installed missing configured plugin "matrix" from @NexisClaw/plugin-matrix@1.2.3.',
+      'ClawHub clawhub:@GreenchClaw/plugin-matrix@stable unavailable for "matrix"; falling back to npm @GreenchClaw/plugin-matrix@1.2.3.',
+      'Installed missing configured plugin "matrix" from @GreenchClaw/plugin-matrix@1.2.3.',
     ]);
     expect(result.warnings).toStrictEqual([]);
   });
 
-  it("honors npm-first catalog metadata for missing NexisClaw channel plugins", async () => {
+  it("honors npm-first catalog metadata for missing GreenchClaw channel plugins", async () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
       pluginId: "twitch",
-      targetDir: "/tmp/NexisClaw-plugins/twitch",
+      targetDir: "/tmp/GreenchClaw-plugins/twitch",
       version: "2026.5.2",
       npmResolution: {
-        name: "@NexisClaw/twitch",
+        name: "@GreenchClaw/twitch",
         version: "2026.5.2",
-        resolvedSpec: "@NexisClaw/twitch@2026.5.2",
+        resolvedSpec: "@GreenchClaw/twitch@2026.5.2",
         integrity: "sha512-twitch",
         resolvedAt: "2026-05-01T00:00:00.000Z",
       },
@@ -355,7 +355,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "twitch",
         meta: { label: "Twitch" },
         install: {
-          npmSpec: "@NexisClaw/twitch",
+          npmSpec: "@GreenchClaw/twitch",
           defaultChoice: "npm",
         },
         trustedSourceLinkedOfficialInstall: true,
@@ -373,12 +373,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@NexisClaw/twitch"),
+      spec: expectedNpmInstallSpec("@GreenchClaw/twitch"),
       expectedPluginId: "twitch",
       trustedSourceLinkedOfficialInstall: true,
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "twitch" from ${expectedNpmInstallSpec("@NexisClaw/twitch")}.`,
+      `Installed missing configured plugin "twitch" from ${expectedNpmInstallSpec("@GreenchClaw/twitch")}.`,
     ]);
   });
 
@@ -386,12 +386,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
       pluginId: "diagnostics-otel",
-      targetDir: "/tmp/NexisClaw-plugins/diagnostics-otel",
+      targetDir: "/tmp/GreenchClaw-plugins/diagnostics-otel",
       version: "2026.5.2",
       npmResolution: {
-        name: "@NexisClaw/diagnostics-otel",
+        name: "@GreenchClaw/diagnostics-otel",
         version: "2026.5.2",
-        resolvedSpec: "@NexisClaw/diagnostics-otel@2026.5.2",
+        resolvedSpec: "@GreenchClaw/diagnostics-otel@2026.5.2",
         integrity: "sha512-otel",
         resolvedAt: "2026-05-01T00:00:00.000Z",
       },
@@ -401,8 +401,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "diagnostics-otel",
         label: "Diagnostics OpenTelemetry",
         install: {
-          clawhubSpec: "clawhub:@NexisClaw/diagnostics-otel",
-          npmSpec: "@NexisClaw/diagnostics-otel",
+          clawhubSpec: "clawhub:@GreenchClaw/diagnostics-otel",
+          npmSpec: "@GreenchClaw/diagnostics-otel",
           defaultChoice: "npm",
         },
       },
@@ -423,11 +423,11 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@NexisClaw/diagnostics-otel"),
+      spec: expectedNpmInstallSpec("@GreenchClaw/diagnostics-otel"),
       expectedPluginId: "diagnostics-otel",
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "diagnostics-otel" from ${expectedNpmInstallSpec("@NexisClaw/diagnostics-otel")}.`,
+      `Installed missing configured plugin "diagnostics-otel" from ${expectedNpmInstallSpec("@GreenchClaw/diagnostics-otel")}.`,
     ]);
   });
 
@@ -435,12 +435,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
       pluginId: "acpx",
-      targetDir: "/tmp/NexisClaw-plugins/acpx",
+      targetDir: "/tmp/GreenchClaw-plugins/acpx",
       version: "2026.5.2-beta.2",
       npmResolution: {
-        name: "@NexisClaw/acpx",
+        name: "@GreenchClaw/acpx",
         version: "2026.5.2-beta.2",
-        resolvedSpec: "@NexisClaw/acpx@2026.5.2-beta.2",
+        resolvedSpec: "@GreenchClaw/acpx@2026.5.2-beta.2",
         integrity: "sha512-acpx",
         resolvedAt: "2026-05-01T00:00:00.000Z",
       },
@@ -450,7 +450,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "acpx",
         label: "ACPX Runtime",
         install: {
-          npmSpec: "@NexisClaw/acpx",
+          npmSpec: "@GreenchClaw/acpx",
           defaultChoice: "npm",
         },
       },
@@ -468,12 +468,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@NexisClaw/acpx"),
+      spec: expectedNpmInstallSpec("@GreenchClaw/acpx"),
       expectedPluginId: "acpx",
       trustedSourceLinkedOfficialInstall: true,
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "acpx" from ${expectedNpmInstallSpec("@NexisClaw/acpx")}.`,
+      `Installed missing configured plugin "acpx" from ${expectedNpmInstallSpec("@GreenchClaw/acpx")}.`,
     ]);
   });
 
@@ -483,7 +483,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "diagnostics-otel",
         label: "Diagnostics OpenTelemetry",
         install: {
-          npmSpec: "@NexisClaw/diagnostics-otel",
+          npmSpec: "@GreenchClaw/diagnostics-otel",
           defaultChoice: "npm",
         },
       },
@@ -521,7 +521,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@NexisClaw/plugin-matrix@1.2.3",
+          npmSpec: "@GreenchClaw/plugin-matrix@1.2.3",
         },
       },
     ]);
@@ -546,7 +546,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@NexisClaw/plugin-matrix@1.2.3",
+          npmSpec: "@GreenchClaw/plugin-matrix@1.2.3",
         },
       },
     ]);
@@ -581,7 +581,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         origin: "bundled",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@NexisClaw/matrix",
+          npmSpec: "@GreenchClaw/matrix",
         },
       },
     ]);
@@ -590,7 +590,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         {
           id: "matrix",
           origin: "bundled",
-          packageName: "@NexisClaw/matrix",
+          packageName: "@GreenchClaw/matrix",
           channels: ["matrix"],
         },
       ],
@@ -624,7 +624,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       matrix: {
         source: "npm",
-        spec: "@NexisClaw/matrix",
+        spec: "@GreenchClaw/matrix",
         installPath: "/missing/matrix",
       },
     };
@@ -636,7 +636,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         origin: "bundled",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@NexisClaw/matrix",
+          npmSpec: "@GreenchClaw/matrix",
         },
       },
     ]);
@@ -645,7 +645,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         {
           id: "matrix",
           origin: "bundled",
-          packageName: "@NexisClaw/matrix",
+          packageName: "@GreenchClaw/matrix",
           channels: ["matrix"],
         },
       ],
@@ -692,8 +692,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       "google-meet": {
         source: "npm",
-        spec: "@NexisClaw/google-meet",
-        resolvedName: "@NexisClaw/google-meet",
+        spec: "@GreenchClaw/google-meet",
+        resolvedName: "@GreenchClaw/google-meet",
         installPath: "/missing/google-meet",
       },
     };
@@ -703,7 +703,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         {
           id: "google-meet",
           origin: "npm",
-          packageName: "@NexisClaw/google-meet",
+          packageName: "@GreenchClaw/google-meet",
         },
       ],
       diagnostics: [],
@@ -713,7 +713,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         {
           pluginId: "google-meet",
           origin: "bundled",
-          packageName: "@NexisClaw/google-meet",
+          packageName: "@GreenchClaw/google-meet",
         },
       ],
       diagnostics: [],
@@ -723,10 +723,10 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       {
         id: "google-meet",
         label: "Google Meet",
-        install: { npmSpec: "@NexisClaw/google-meet" },
-        NexisClaw: {
+        install: { npmSpec: "@GreenchClaw/google-meet" },
+        GreenchClaw: {
           id: "google-meet",
-          install: { npmSpec: "@NexisClaw/google-meet" },
+          install: { npmSpec: "@GreenchClaw/google-meet" },
         },
       },
     ]);
@@ -761,8 +761,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       "google-meet": {
         source: "npm",
-        spec: "@NexisClaw/google-meet",
-        resolvedName: "@NexisClaw/google-meet",
+        spec: "@GreenchClaw/google-meet",
+        resolvedName: "@GreenchClaw/google-meet",
         installPath: "/missing/google-meet",
       },
     };
@@ -776,7 +776,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         {
           pluginId: "google-meet",
           origin: "bundled",
-          packageName: "@NexisClaw/google-meet",
+          packageName: "@GreenchClaw/google-meet",
         },
       ],
       diagnostics: [],
@@ -808,9 +808,9 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       "npm",
       {
         source: "npm",
-        spec: "@NexisClaw/matrix-fork",
-        resolvedName: "@NexisClaw/matrix-fork",
-        resolvedSpec: "@NexisClaw/matrix-fork@1.2.3",
+        spec: "@GreenchClaw/matrix-fork",
+        resolvedName: "@GreenchClaw/matrix-fork",
+        resolvedSpec: "@GreenchClaw/matrix-fork@1.2.3",
         installPath: "/missing/matrix-fork",
       },
     ],
@@ -818,8 +818,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       "clawhub",
       {
         source: "clawhub",
-        spec: "clawhub:@NexisClaw/matrix-fork@stable",
-        clawhubPackage: "@NexisClaw/matrix-fork",
+        spec: "clawhub:@GreenchClaw/matrix-fork@stable",
+        clawhubPackage: "@GreenchClaw/matrix-fork",
         installPath: "/missing/matrix-fork",
       },
     ],
@@ -835,7 +835,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           origin: "bundled",
           meta: { label: "Matrix" },
           install: {
-            npmSpec: "@NexisClaw/matrix",
+            npmSpec: "@GreenchClaw/matrix",
           },
         },
       ]);
@@ -844,7 +844,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           {
             id: "matrix",
             origin: "bundled",
-            packageName: "@NexisClaw/matrix",
+            packageName: "@GreenchClaw/matrix",
             channels: ["matrix"],
           },
         ],
@@ -884,7 +884,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       discord: {
         source: "npm",
-        spec: "@NexisClaw/discord",
+        spec: "@GreenchClaw/discord",
         installPath: "/missing/discord",
       },
     };
@@ -895,7 +895,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@NexisClaw/discord",
+          npmSpec: "@GreenchClaw/discord",
         },
       },
     ]);
@@ -914,7 +914,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         },
       },
       env: {
-        NEXISCLAW_UPDATE_IN_PROGRESS: "1",
+        GREENCHCLAW_UPDATE_IN_PROGRESS: "1",
       },
     });
 
@@ -924,17 +924,17 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
     expect(result).toMatchObject({
       changes: [
-        'Skipped package-manager repair for configured plugin "discord" during package update; rerun "NexisClaw doctor --fix" after the update completes.',
+        'Skipped package-manager repair for configured plugin "discord" during package update; rerun "GreenchClaw doctor --fix" after the update completes.',
       ],
       warnings: [],
     });
   });
 
-  it("repairs missing external payload during post-core convergence even with NEXISCLAW_UPDATE_IN_PROGRESS=1", async () => {
+  it("repairs missing external payload during post-core convergence even with GREENCHCLAW_UPDATE_IN_PROGRESS=1", async () => {
     const records = {
       discord: {
         source: "npm",
-        spec: "@NexisClaw/discord",
+        spec: "@GreenchClaw/discord",
         installPath: "/missing/discord",
       },
     };
@@ -944,7 +944,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "discord",
         pluginId: "discord",
         meta: { label: "Discord" },
-        install: { npmSpec: "@NexisClaw/discord" },
+        install: { npmSpec: "@GreenchClaw/discord" },
       },
     ]);
     mocks.updateNpmInstalledPlugins.mockResolvedValue({
@@ -969,8 +969,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         },
       },
       env: {
-        NEXISCLAW_UPDATE_IN_PROGRESS: "1",
-        NEXISCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
+        GREENCHCLAW_UPDATE_IN_PROGRESS: "1",
+        GREENCHCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
       },
     });
 
@@ -987,7 +987,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       discord: {
         source: "npm",
-        spec: "@NexisClaw/discord",
+        spec: "@GreenchClaw/discord",
         installPath: "/missing/discord",
       },
     };
@@ -998,7 +998,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@NexisClaw/discord",
+          npmSpec: "@GreenchClaw/discord",
         },
       },
     ]);
@@ -1012,7 +1012,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         },
       },
       env: {
-        NEXISCLAW_UPDATE_IN_PROGRESS: "1",
+        GREENCHCLAW_UPDATE_IN_PROGRESS: "1",
       },
     });
 
@@ -1022,7 +1022,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
     expect(result).toMatchObject({
       changes: [
-        'Skipped package-manager repair for configured plugin "discord" during package update; rerun "NexisClaw doctor --fix" after the update completes.',
+        'Skipped package-manager repair for configured plugin "discord" during package update; rerun "GreenchClaw doctor --fix" after the update completes.',
       ],
       warnings: [],
     });
@@ -1035,7 +1035,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@NexisClaw/discord",
+          npmSpec: "@GreenchClaw/discord",
         },
       },
     ]);
@@ -1049,7 +1049,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         },
       },
       env: {
-        NEXISCLAW_UPDATE_IN_PROGRESS: "1",
+        GREENCHCLAW_UPDATE_IN_PROGRESS: "1",
       },
     });
 
@@ -1067,7 +1067,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@NexisClaw/plugin-matrix@1.2.3",
+          npmSpec: "@GreenchClaw/plugin-matrix@1.2.3",
         },
       },
     ]);
@@ -1076,7 +1076,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "codex",
         label: "Codex",
         install: {
-          npmSpec: "@NexisClaw/codex",
+          npmSpec: "@GreenchClaw/codex",
           defaultChoice: "npm",
         },
       },
@@ -1084,7 +1084,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "diagnostics-otel",
         label: "Diagnostics OpenTelemetry",
         install: {
-          npmSpec: "@NexisClaw/diagnostics-otel",
+          npmSpec: "@GreenchClaw/diagnostics-otel",
           defaultChoice: "npm",
         },
       },
@@ -1139,12 +1139,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
       pluginId: "wecom",
-      targetDir: "/tmp/NexisClaw-plugins/wecom",
+      targetDir: "/tmp/GreenchClaw-plugins/wecom",
       version: "2026.4.23",
       npmResolution: {
-        name: "@wecom/wecom-NexisClaw-plugin",
+        name: "@wecom/wecom-GreenchClaw-plugin",
         version: "2026.4.23",
-        resolvedSpec: "@wecom/wecom-NexisClaw-plugin@2026.4.23",
+        resolvedSpec: "@wecom/wecom-GreenchClaw-plugin@2026.4.23",
         integrity: "sha512-third-party",
         resolvedAt: "2026-05-01T00:00:00.000Z",
       },
@@ -1155,7 +1155,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "wecom",
         meta: { label: "WeCom" },
         install: {
-          npmSpec: "@wecom/wecom-NexisClaw-plugin@2026.4.23",
+          npmSpec: "@wecom/wecom-GreenchClaw-plugin@2026.4.23",
         },
       },
     ]);
@@ -1172,12 +1172,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
     const installArg = mockCallArg(mocks.installPluginFromNpmSpec);
     expectRecordFields(installArg, {
-      spec: "@wecom/wecom-NexisClaw-plugin@2026.4.23",
+      spec: "@wecom/wecom-GreenchClaw-plugin@2026.4.23",
       expectedPluginId: "wecom",
     });
     expect(installArg).not.toHaveProperty("trustedSourceLinkedOfficialInstall", true);
     expect(result.changes).toEqual([
-      'Installed missing configured plugin "wecom" from @wecom/wecom-NexisClaw-plugin@2026.4.23.',
+      'Installed missing configured plugin "wecom" from @wecom/wecom-GreenchClaw-plugin@2026.4.23.',
     ]);
   });
 
@@ -1185,12 +1185,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
       pluginId: "codex",
-      targetDir: "/tmp/NexisClaw-plugins/codex",
+      targetDir: "/tmp/GreenchClaw-plugins/codex",
       version: "2026.5.2",
       npmResolution: {
-        name: "@NexisClaw/codex",
+        name: "@GreenchClaw/codex",
         version: "2026.5.2",
-        resolvedSpec: "@NexisClaw/codex@2026.5.2",
+        resolvedSpec: "@GreenchClaw/codex@2026.5.2",
         integrity: "sha512-codex",
         resolvedAt: "2026-05-01T00:00:00.000Z",
       },
@@ -1200,7 +1200,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "codex",
         label: "Codex",
         install: {
-          npmSpec: "@NexisClaw/codex",
+          npmSpec: "@GreenchClaw/codex",
           defaultChoice: "npm",
         },
       },
@@ -1223,22 +1223,22 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.resolveProviderInstallCatalogEntries).toHaveBeenCalled();
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@NexisClaw/codex"),
+      spec: expectedNpmInstallSpec("@GreenchClaw/codex"),
       expectedPluginId: "codex",
       trustedSourceLinkedOfficialInstall: true,
     });
     const records = mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords);
     expectRecordFields((records as Record<string, unknown>).codex, {
       source: "npm",
-      spec: "@NexisClaw/codex",
-      installPath: "/tmp/NexisClaw-plugins/codex",
+      spec: "@GreenchClaw/codex",
+      installPath: "/tmp/GreenchClaw-plugins/codex",
       version: "2026.5.2",
     });
     expect(mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords, 0, 1)).toEqual({
       env: {},
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "codex" from ${expectedNpmInstallSpec("@NexisClaw/codex")}.`,
+      `Installed missing configured plugin "codex" from ${expectedNpmInstallSpec("@GreenchClaw/codex")}.`,
     ]);
     expect(result.warnings).toStrictEqual([]);
   });
@@ -1304,12 +1304,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
       pluginId: "codex",
-      targetDir: "/tmp/NexisClaw-plugins/codex",
+      targetDir: "/tmp/GreenchClaw-plugins/codex",
       version: "2026.5.2",
       npmResolution: {
-        name: "@NexisClaw/codex",
+        name: "@GreenchClaw/codex",
         version: "2026.5.2",
-        resolvedSpec: "@NexisClaw/codex@2026.5.2",
+        resolvedSpec: "@GreenchClaw/codex@2026.5.2",
         integrity: "sha512-codex",
         resolvedAt: "2026-05-01T00:00:00.000Z",
       },
@@ -1319,7 +1319,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "codex",
         label: "Codex",
         install: {
-          npmSpec: "@NexisClaw/codex",
+          npmSpec: "@GreenchClaw/codex",
           defaultChoice: "npm",
         },
       },
@@ -1333,15 +1333,15 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@NexisClaw/codex"),
+      spec: expectedNpmInstallSpec("@GreenchClaw/codex"),
       expectedPluginId: "codex",
       trustedSourceLinkedOfficialInstall: true,
     });
     const records = mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords);
     expectRecordFields((records as Record<string, unknown>).codex, {
       source: "npm",
-      spec: "@NexisClaw/codex",
-      installPath: "/tmp/NexisClaw-plugins/codex",
+      spec: "@GreenchClaw/codex",
+      installPath: "/tmp/GreenchClaw-plugins/codex",
       version: "2026.5.2",
     });
     expect(mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords, 0, 1)).toEqual({
@@ -1349,7 +1349,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
     expect(result).toMatchObject({
       changes: [
-        `Installed missing configured plugin "codex" from ${expectedNpmInstallSpec("@NexisClaw/codex")}.`,
+        `Installed missing configured plugin "codex" from ${expectedNpmInstallSpec("@GreenchClaw/codex")}.`,
       ],
       warnings: [],
     });
@@ -1376,14 +1376,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       },
       {},
     ],
-    ["environment runtime override", {}, { NEXISCLAW_AGENT_RUNTIME: "codex" }],
+    ["environment runtime override", {}, { GREENCHCLAW_AGENT_RUNTIME: "codex" }],
   ])("ignores legacy whole-agent Codex runtime selected by %s", async (_label, cfg, env) => {
     mocks.listOfficialExternalPluginCatalogEntries.mockReturnValue([
       {
         id: "codex",
         label: "Codex",
         install: {
-          npmSpec: "@NexisClaw/codex",
+          npmSpec: "@GreenchClaw/codex",
           defaultChoice: "npm",
         },
       },
@@ -1411,7 +1411,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@NexisClaw/plugin-matrix@1.2.3",
+          npmSpec: "@GreenchClaw/plugin-matrix@1.2.3",
         },
       },
     ]);
@@ -1435,7 +1435,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.loadPluginMetadataSnapshot.mockReturnValue({
       plugins: [
         {
-          id: "NexisClaw-lark",
+          id: "GreenchClaw-lark",
           origin: "config",
           channels: ["feishu"],
           channelConfigs: {
@@ -1455,7 +1455,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "feishu",
         meta: { label: "Feishu" },
         install: {
-          npmSpec: "@NexisClaw/feishu",
+          npmSpec: "@GreenchClaw/feishu",
         },
         trustedSourceLinkedOfficialInstall: true,
       },
@@ -1467,7 +1467,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       cfg: {
         plugins: {
           entries: {
-            "NexisClaw-lark": {
+            "GreenchClaw-lark": {
               enabled: true,
             },
           },
@@ -1493,7 +1493,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.loadPluginMetadataSnapshot.mockReturnValue({
       plugins: [
         {
-          id: "NexisClaw-lark",
+          id: "GreenchClaw-lark",
           origin: "config",
           channels: ["feishu"],
           channelConfigs: {
@@ -1513,7 +1513,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "feishu",
         meta: { label: "Feishu" },
         install: {
-          npmSpec: "@NexisClaw/feishu",
+          npmSpec: "@GreenchClaw/feishu",
         },
         trustedSourceLinkedOfficialInstall: true,
       },
@@ -1521,12 +1521,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
       pluginId: "feishu",
-      targetDir: "/tmp/NexisClaw-plugins/feishu",
+      targetDir: "/tmp/GreenchClaw-plugins/feishu",
       version: "2026.5.2",
       npmResolution: {
-        name: "@NexisClaw/feishu",
+        name: "@GreenchClaw/feishu",
         version: "2026.5.2",
-        resolvedSpec: "@NexisClaw/feishu@2026.5.2",
+        resolvedSpec: "@GreenchClaw/feishu@2026.5.2",
       },
     });
 
@@ -1537,7 +1537,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         plugins: {
           allow: ["some-other-plugin"],
           entries: {
-            "NexisClaw-lark": {
+            "GreenchClaw-lark": {
               enabled: true,
             },
           },
@@ -1554,12 +1554,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@NexisClaw/feishu"),
+      spec: expectedNpmInstallSpec("@GreenchClaw/feishu"),
       expectedPluginId: "feishu",
       trustedSourceLinkedOfficialInstall: true,
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "feishu" from ${expectedNpmInstallSpec("@NexisClaw/feishu")}.`,
+      `Installed missing configured plugin "feishu" from ${expectedNpmInstallSpec("@GreenchClaw/feishu")}.`,
     ]);
   });
 
@@ -1567,7 +1567,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.loadPluginMetadataSnapshot.mockReturnValue({
       plugins: [
         {
-          id: "NexisClaw-lark",
+          id: "GreenchClaw-lark",
           origin: "config",
           channels: ["feishu"],
           channelConfigs: {
@@ -1587,7 +1587,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "feishu",
         meta: { label: "Feishu" },
         install: {
-          npmSpec: "@NexisClaw/feishu",
+          npmSpec: "@GreenchClaw/feishu",
         },
         trustedSourceLinkedOfficialInstall: true,
       },
@@ -1595,12 +1595,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
       pluginId: "feishu",
-      targetDir: "/tmp/NexisClaw-plugins/feishu",
+      targetDir: "/tmp/GreenchClaw-plugins/feishu",
       version: "2026.5.2",
       npmResolution: {
-        name: "@NexisClaw/feishu",
+        name: "@GreenchClaw/feishu",
         version: "2026.5.2",
-        resolvedSpec: "@NexisClaw/feishu@2026.5.2",
+        resolvedSpec: "@GreenchClaw/feishu@2026.5.2",
       },
     });
 
@@ -1613,7 +1613,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
             feishu: {
               enabled: true,
             },
-            "NexisClaw-lark": {
+            "GreenchClaw-lark": {
               enabled: true,
             },
           },
@@ -1630,12 +1630,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@NexisClaw/feishu"),
+      spec: expectedNpmInstallSpec("@GreenchClaw/feishu"),
       expectedPluginId: "feishu",
       trustedSourceLinkedOfficialInstall: true,
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "feishu" from ${expectedNpmInstallSpec("@NexisClaw/feishu")}.`,
+      `Installed missing configured plugin "feishu" from ${expectedNpmInstallSpec("@GreenchClaw/feishu")}.`,
     ]);
   });
 
@@ -1643,7 +1643,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       demo: {
         source: "npm",
-        spec: "@NexisClaw/plugin-demo@1.0.0",
+        spec: "@GreenchClaw/plugin-demo@1.0.0",
         installPath: "/missing/demo",
       },
     };
@@ -1655,8 +1655,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           installs: {
             demo: {
               source: "npm",
-              spec: "@NexisClaw/plugin-demo@1.0.0",
-              installPath: "/tmp/NexisClaw-plugins/demo",
+              spec: "@GreenchClaw/plugin-demo@1.0.0",
+              installPath: "/tmp/GreenchClaw-plugins/demo",
             },
           },
         },
@@ -1690,7 +1690,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     expectRecordFields(updateConfig.plugins, { installs: records });
     const persistedRecords = mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords);
     expectRecordFields((persistedRecords as Record<string, unknown>).demo, {
-      installPath: "/tmp/NexisClaw-plugins/demo",
+      installPath: "/tmp/GreenchClaw-plugins/demo",
     });
     expect(mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords, 0, 1)).toEqual({
       env: {},
@@ -1702,12 +1702,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       demo: {
         source: "npm",
-        spec: "@NexisClaw/plugin-demo@1.0.0",
-        resolvedName: "@NexisClaw/plugin-demo",
-        resolvedSpec: "@NexisClaw/plugin-demo@1.0.0",
+        spec: "@GreenchClaw/plugin-demo@1.0.0",
+        resolvedName: "@GreenchClaw/plugin-demo",
+        resolvedSpec: "@GreenchClaw/plugin-demo@1.0.0",
         resolvedVersion: "1.0.0",
         integrity: "sha512-demo",
-        installPath: "/tmp/NexisClaw-plugins/demo",
+        installPath: "/tmp/GreenchClaw-plugins/demo",
       },
     };
     mocks.loadInstalledPluginIndexInstallRecords.mockResolvedValue(records);
@@ -1728,8 +1728,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           installs: {
             demo: {
               source: "npm",
-              spec: "@NexisClaw/plugin-demo@1.0.0",
-              installPath: "/tmp/NexisClaw-plugins/demo",
+              spec: "@GreenchClaw/plugin-demo@1.0.0",
+              installPath: "/tmp/GreenchClaw-plugins/demo",
             },
           },
         },
@@ -1756,9 +1756,9 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const updateConfig = updateArg.config as { plugins?: { installs?: Record<string, unknown> } };
     const updateRecord = expectRecordFields(updateConfig.plugins?.installs?.demo, {
       source: "npm",
-      spec: "@NexisClaw/plugin-demo@1.0.0",
+      spec: "@GreenchClaw/plugin-demo@1.0.0",
       integrity: "sha512-demo",
-      installPath: "/tmp/NexisClaw-plugins/demo",
+      installPath: "/tmp/GreenchClaw-plugins/demo",
     });
     expect(updateRecord.resolvedSpec).toBeUndefined();
     expect(updateRecord.resolvedVersion).toBeUndefined();
@@ -1769,8 +1769,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       discord: {
         source: "npm",
-        spec: "@NexisClaw/discord",
-        installPath: "/tmp/NexisClaw-missing-discord-install-record",
+        spec: "@GreenchClaw/discord",
+        installPath: "/tmp/GreenchClaw-missing-discord-install-record",
       },
     };
     mocks.loadInstalledPluginIndexInstallRecords.mockResolvedValue(records);
@@ -1789,7 +1789,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@NexisClaw/discord",
+          npmSpec: "@GreenchClaw/discord",
         },
         trustedSourceLinkedOfficialInstall: true,
       },
@@ -1797,12 +1797,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
       pluginId: "discord",
-      targetDir: "/tmp/NexisClaw-plugins/discord",
+      targetDir: "/tmp/GreenchClaw-plugins/discord",
       version: "1.2.3",
       npmResolution: {
-        name: "@NexisClaw/discord",
+        name: "@GreenchClaw/discord",
         version: "1.2.3",
-        resolvedSpec: "@NexisClaw/discord@1.2.3",
+        resolvedSpec: "@GreenchClaw/discord@1.2.3",
         integrity: "sha512-discord",
         resolvedAt: "2026-05-01T00:00:00.000Z",
       },
@@ -1845,19 +1845,19 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const updateConfig = updateArg.config as Record<string, unknown>;
     expectRecordFields(updateConfig.plugins, { installs: records });
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@NexisClaw/discord"),
+      spec: expectedNpmInstallSpec("@GreenchClaw/discord"),
       expectedPluginId: "discord",
       trustedSourceLinkedOfficialInstall: true,
     });
     const persistedRecords = mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords);
     expectRecordFields((persistedRecords as Record<string, unknown>).discord, {
-      installPath: "/tmp/NexisClaw-plugins/discord",
+      installPath: "/tmp/GreenchClaw-plugins/discord",
     });
     expect(mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords, 0, 1)).toEqual({
       env: {},
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "discord" from ${expectedNpmInstallSpec("@NexisClaw/discord")}.`,
+      `Installed missing configured plugin "discord" from ${expectedNpmInstallSpec("@GreenchClaw/discord")}.`,
     ]);
   });
 
@@ -1865,7 +1865,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       discord: {
         source: "npm",
-        spec: "@NexisClaw/discord",
+        spec: "@GreenchClaw/discord",
         installPath: process.cwd(),
       },
     };
@@ -1891,7 +1891,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           installs: {
             discord: {
               source: "npm",
-              spec: "@NexisClaw/discord",
+              spec: "@GreenchClaw/discord",
               installPath: process.cwd(),
             },
           },
@@ -1941,8 +1941,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       discord: {
         source: "npm",
-        spec: "@NexisClaw/discord",
-        installPath: "/tmp/NexisClaw-plugins/discord",
+        spec: "@GreenchClaw/discord",
+        installPath: "/tmp/GreenchClaw-plugins/discord",
       },
     };
     mocks.loadInstalledPluginIndexInstallRecords.mockResolvedValue(records);
@@ -1952,7 +1952,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@NexisClaw/discord",
+          npmSpec: "@GreenchClaw/discord",
         },
       },
     ]);
@@ -1968,7 +1968,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           level: "warn",
           pluginId: "discord",
           message:
-            "channel plugin manifest declares discord without channelConfigs metadata; add NexisClaw.plugin.json#channelConfigs so config schema and setup surfaces work before runtime loads",
+            "channel plugin manifest declares discord without channelConfigs metadata; add GreenchClaw.plugin.json#channelConfigs so config schema and setup surfaces work before runtime loads",
         },
       ],
     });
@@ -1979,7 +1979,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           installs: {
             discord: {
               source: "npm",
-              spec: "@NexisClaw/discord",
+              spec: "@GreenchClaw/discord",
               installPath: process.cwd(),
             },
           },
@@ -2034,7 +2034,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       brave: {
         source: "npm",
-        spec: "@NexisClaw/brave-plugin@beta",
+        spec: "@GreenchClaw/brave-plugin@beta",
         installPath: "/missing/brave",
       },
     };
@@ -2044,10 +2044,10 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "brave",
         label: "Brave",
         install: {
-          npmSpec: "@NexisClaw/brave-plugin",
+          npmSpec: "@GreenchClaw/brave-plugin",
           defaultChoice: "npm",
         },
-        NexisClaw: {
+        GreenchClaw: {
           plugin: { id: "brave", label: "Brave" },
           webSearchProviders: [
             {
@@ -2069,7 +2069,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           installs: {
             brave: {
               source: "npm",
-              spec: "@NexisClaw/brave-plugin@beta",
+              spec: "@GreenchClaw/brave-plugin@beta",
               installPath: process.cwd(),
             },
           },
@@ -2120,10 +2120,10 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "brave",
         label: "Brave",
         install: {
-          npmSpec: "@NexisClaw/brave-plugin",
+          npmSpec: "@GreenchClaw/brave-plugin",
           defaultChoice: "npm",
         },
-        NexisClaw: {
+        GreenchClaw: {
           plugin: { id: "brave", label: "Brave" },
           webSearchProviders: [
             {
@@ -2137,33 +2137,33 @@ describe("repairMissingConfiguredPluginInstalls", () => {
             },
           ],
           install: {
-            npmSpec: "@NexisClaw/brave-plugin",
+            npmSpec: "@GreenchClaw/brave-plugin",
             defaultChoice: "npm",
           },
         },
       },
     ]);
     mocks.resolveOfficialExternalPluginId.mockImplementation(
-      (entry: { id?: string; NexisClaw?: { plugin?: { id?: string } } }) =>
-        entry.NexisClaw?.plugin?.id ?? entry.id,
+      (entry: { id?: string; GreenchClaw?: { plugin?: { id?: string } } }) =>
+        entry.GreenchClaw?.plugin?.id ?? entry.id,
     );
     mocks.resolveOfficialExternalPluginInstall.mockImplementation(
-      (entry: { install?: unknown; NexisClaw?: { install?: unknown } }) =>
-        entry.NexisClaw?.install ?? entry.install ?? null,
+      (entry: { install?: unknown; GreenchClaw?: { install?: unknown } }) =>
+        entry.GreenchClaw?.install ?? entry.install ?? null,
     );
     mocks.resolveOfficialExternalPluginLabel.mockImplementation(
-      (entry: { label?: string; NexisClaw?: { plugin?: { label?: string } } }) =>
-        entry.NexisClaw?.plugin?.label ?? entry.label ?? "plugin",
+      (entry: { label?: string; GreenchClaw?: { plugin?: { label?: string } } }) =>
+        entry.GreenchClaw?.plugin?.label ?? entry.label ?? "plugin",
     );
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
       pluginId: "brave",
-      targetDir: "/tmp/NexisClaw-plugins/brave",
+      targetDir: "/tmp/GreenchClaw-plugins/brave",
       version: "2026.5.2",
       npmResolution: {
-        name: "@NexisClaw/brave-plugin",
+        name: "@GreenchClaw/brave-plugin",
         version: "2026.5.2",
-        resolvedSpec: "@NexisClaw/brave-plugin@2026.5.2",
+        resolvedSpec: "@GreenchClaw/brave-plugin@2026.5.2",
       },
     });
 
@@ -2183,12 +2183,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@NexisClaw/brave-plugin"),
+      spec: expectedNpmInstallSpec("@GreenchClaw/brave-plugin"),
       expectedPluginId: "brave",
       trustedSourceLinkedOfficialInstall: true,
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "brave" from ${expectedNpmInstallSpec("@NexisClaw/brave-plugin")}.`,
+      `Installed missing configured plugin "brave" from ${expectedNpmInstallSpec("@GreenchClaw/brave-plugin")}.`,
     ]);
   });
 
@@ -2198,10 +2198,10 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "brave",
         label: "Brave",
         install: {
-          npmSpec: "@NexisClaw/brave-plugin",
+          npmSpec: "@GreenchClaw/brave-plugin",
           defaultChoice: "npm",
         },
-        NexisClaw: {
+        GreenchClaw: {
           plugin: { id: "brave", label: "Brave" },
           webSearchProviders: [
             {
@@ -2215,33 +2215,33 @@ describe("repairMissingConfiguredPluginInstalls", () => {
             },
           ],
           install: {
-            npmSpec: "@NexisClaw/brave-plugin",
+            npmSpec: "@GreenchClaw/brave-plugin",
             defaultChoice: "npm",
           },
         },
       },
     ]);
     mocks.resolveOfficialExternalPluginId.mockImplementation(
-      (entry: { id?: string; NexisClaw?: { plugin?: { id?: string } } }) =>
-        entry.NexisClaw?.plugin?.id ?? entry.id,
+      (entry: { id?: string; GreenchClaw?: { plugin?: { id?: string } } }) =>
+        entry.GreenchClaw?.plugin?.id ?? entry.id,
     );
     mocks.resolveOfficialExternalPluginInstall.mockImplementation(
-      (entry: { install?: unknown; NexisClaw?: { install?: unknown } }) =>
-        entry.NexisClaw?.install ?? entry.install ?? null,
+      (entry: { install?: unknown; GreenchClaw?: { install?: unknown } }) =>
+        entry.GreenchClaw?.install ?? entry.install ?? null,
     );
     mocks.resolveOfficialExternalPluginLabel.mockImplementation(
-      (entry: { label?: string; NexisClaw?: { plugin?: { label?: string } } }) =>
-        entry.NexisClaw?.plugin?.label ?? entry.label ?? "plugin",
+      (entry: { label?: string; GreenchClaw?: { plugin?: { label?: string } } }) =>
+        entry.GreenchClaw?.plugin?.label ?? entry.label ?? "plugin",
     );
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
       pluginId: "brave",
-      targetDir: "/tmp/NexisClaw-plugins/brave",
+      targetDir: "/tmp/GreenchClaw-plugins/brave",
       version: "2026.5.4-beta.1",
       npmResolution: {
-        name: "@NexisClaw/brave-plugin",
+        name: "@GreenchClaw/brave-plugin",
         version: "2026.5.4-beta.1",
-        resolvedSpec: "@NexisClaw/brave-plugin@2026.5.4-beta.1",
+        resolvedSpec: "@GreenchClaw/brave-plugin@2026.5.4-beta.1",
       },
     });
 
@@ -2262,19 +2262,19 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: "@NexisClaw/brave-plugin@beta",
+      spec: "@GreenchClaw/brave-plugin@beta",
       expectedPluginId: "brave",
       trustedSourceLinkedOfficialInstall: true,
     });
     const persistedRecords = mockCallArg(
       mocks.writePersistedInstalledPluginIndexInstallRecords,
     ) as Record<string, unknown>;
-    expectRecordFields(persistedRecords.brave, { spec: "@NexisClaw/brave-plugin" });
+    expectRecordFields(persistedRecords.brave, { spec: "@GreenchClaw/brave-plugin" });
     expect(mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords, 0, 1)).toEqual({
       env: {},
     });
     expect(result.changes).toEqual([
-      'Installed missing configured plugin "brave" from @NexisClaw/brave-plugin@beta.',
+      'Installed missing configured plugin "brave" from @GreenchClaw/brave-plugin@beta.',
     ]);
   });
 
@@ -2284,10 +2284,10 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "brave",
         label: "Brave",
         install: {
-          npmSpec: "@NexisClaw/brave-plugin",
+          npmSpec: "@GreenchClaw/brave-plugin",
           defaultChoice: "npm",
         },
-        NexisClaw: {
+        GreenchClaw: {
           plugin: { id: "brave", label: "Brave" },
           webSearchProviders: [
             {
@@ -2301,23 +2301,23 @@ describe("repairMissingConfiguredPluginInstalls", () => {
             },
           ],
           install: {
-            npmSpec: "@NexisClaw/brave-plugin",
+            npmSpec: "@GreenchClaw/brave-plugin",
             defaultChoice: "npm",
           },
         },
       },
     ]);
     mocks.resolveOfficialExternalPluginId.mockImplementation(
-      (entry: { id?: string; NexisClaw?: { plugin?: { id?: string } } }) =>
-        entry.NexisClaw?.plugin?.id ?? entry.id,
+      (entry: { id?: string; GreenchClaw?: { plugin?: { id?: string } } }) =>
+        entry.GreenchClaw?.plugin?.id ?? entry.id,
     );
     mocks.resolveOfficialExternalPluginInstall.mockImplementation(
-      (entry: { install?: unknown; NexisClaw?: { install?: unknown } }) =>
-        entry.NexisClaw?.install ?? entry.install ?? null,
+      (entry: { install?: unknown; GreenchClaw?: { install?: unknown } }) =>
+        entry.GreenchClaw?.install ?? entry.install ?? null,
     );
     mocks.resolveOfficialExternalPluginLabel.mockImplementation(
-      (entry: { label?: string; NexisClaw?: { plugin?: { label?: string } } }) =>
-        entry.NexisClaw?.plugin?.label ?? entry.label ?? "plugin",
+      (entry: { label?: string; GreenchClaw?: { plugin?: { label?: string } } }) =>
+        entry.GreenchClaw?.plugin?.label ?? entry.label ?? "plugin",
     );
 
     const { repairMissingConfiguredPluginInstalls } =

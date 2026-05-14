@@ -14,17 +14,17 @@ import { makeBrowserServerState, mockLaunchedChrome } from "./server-context.tes
 function setupEnsureBrowserAvailableHarness() {
   vi.useFakeTimers();
 
-  const launchNexisClawChrome = vi.mocked(chromeModule.launchNexisClawChrome);
-  const stopNexisClawChrome = vi.mocked(chromeModule.stopNexisClawChrome);
+  const launchGreenchClawChrome = vi.mocked(chromeModule.launchGreenchClawChrome);
+  const stopGreenchClawChrome = vi.mocked(chromeModule.stopGreenchClawChrome);
   const isChromeReachable = vi.mocked(chromeModule.isChromeReachable);
   const isChromeCdpReady = vi.mocked(chromeModule.isChromeCdpReady);
   isChromeReachable.mockResolvedValue(false);
 
   const state = makeBrowserServerState();
   const ctx = createBrowserRouteContext({ getState: () => state });
-  const profile = ctx.forProfile("NexisClaw");
+  const profile = ctx.forProfile("GreenchClaw");
 
-  return { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady, profile, state };
+  return { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady, profile, state };
 }
 
 function createAttachOnlyLoopbackProfile(cdpUrl: string) {
@@ -36,7 +36,7 @@ function createAttachOnlyLoopbackProfile(cdpUrl: string) {
       cdpIsLoopback: true,
       cdpPort: 9222,
       color: "#00AA00",
-      driver: "NexisClaw",
+      driver: "GreenchClaw",
       headless: false,
       attachOnly: true,
     },
@@ -49,10 +49,10 @@ function createAttachOnlyLoopbackProfile(cdpUrl: string) {
   return { profile: ctx.forProfile("manual-cdp"), state };
 }
 
-function requireFirstLaunchOptions(launchNexisClawChrome: {
+function requireFirstLaunchOptions(launchGreenchClawChrome: {
   mock: { calls: unknown[][] };
 }): unknown {
-  const [call] = launchNexisClawChrome.mock.calls;
+  const [call] = launchGreenchClawChrome.mock.calls;
   if (!call) {
     throw new Error("expected Chrome launch call");
   }
@@ -67,25 +67,25 @@ afterEach(() => {
 
 describe("browser server-context ensureBrowserAvailable", () => {
   it("waits for CDP readiness after launching to avoid follow-up PortInUseError races (#21149)", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady, profile } =
+    const { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady, profile } =
       setupEnsureBrowserAvailableHarness();
     isChromeCdpReady.mockResolvedValueOnce(false).mockResolvedValue(true);
-    mockLaunchedChrome(launchNexisClawChrome, 123);
+    mockLaunchedChrome(launchGreenchClawChrome, 123);
 
     const promise = profile.ensureBrowserAvailable();
     await vi.advanceTimersByTimeAsync(100);
     await expect(promise).resolves.toBeUndefined();
 
-    expect(launchNexisClawChrome).toHaveBeenCalledTimes(1);
+    expect(launchGreenchClawChrome).toHaveBeenCalledTimes(1);
     expect(isChromeCdpReady).toHaveBeenCalled();
-    expect(stopNexisClawChrome).not.toHaveBeenCalled();
+    expect(stopGreenchClawChrome).not.toHaveBeenCalled();
   });
 
   it("stops launched chrome when CDP readiness never arrives", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady, profile } =
+    const { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady, profile } =
       setupEnsureBrowserAvailableHarness();
     isChromeCdpReady.mockResolvedValue(false);
-    mockLaunchedChrome(launchNexisClawChrome, 321);
+    mockLaunchedChrome(launchGreenchClawChrome, 321);
 
     const promise = profile.ensureBrowserAvailable();
     const rejected = expect(promise).rejects.toThrow("not reachable after start");
@@ -96,84 +96,84 @@ describe("browser server-context ensureBrowserAvailable", () => {
     await rejected;
     await diagnosticRejected;
 
-    expect(launchNexisClawChrome).toHaveBeenCalledTimes(1);
-    expect(stopNexisClawChrome).toHaveBeenCalledTimes(1);
+    expect(launchGreenchClawChrome).toHaveBeenCalledTimes(1);
+    expect(stopGreenchClawChrome).toHaveBeenCalledTimes(1);
   });
 
   it("uses configured local CDP readiness timeout after launching", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady, profile, state } =
+    const { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady, profile, state } =
       setupEnsureBrowserAvailableHarness();
     state.resolved.localCdpReadyTimeoutMs = 250;
     isChromeCdpReady.mockResolvedValue(false);
-    mockLaunchedChrome(launchNexisClawChrome, 322);
+    mockLaunchedChrome(launchGreenchClawChrome, 322);
 
     const promise = profile.ensureBrowserAvailable();
     const rejected = expect(promise).rejects.toThrow("not reachable after start");
     await vi.advanceTimersByTimeAsync(300);
     await rejected;
 
-    expect(launchNexisClawChrome).toHaveBeenCalledTimes(1);
-    expect(stopNexisClawChrome).toHaveBeenCalledTimes(1);
+    expect(launchGreenchClawChrome).toHaveBeenCalledTimes(1);
+    expect(stopGreenchClawChrome).toHaveBeenCalledTimes(1);
   });
 
   it("deduplicates concurrent lazy-start calls to prevent PortInUseError", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady, profile } =
+    const { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady, profile } =
       setupEnsureBrowserAvailableHarness();
     isChromeCdpReady.mockResolvedValue(true);
-    mockLaunchedChrome(launchNexisClawChrome, 456);
+    mockLaunchedChrome(launchGreenchClawChrome, 456);
 
     const first = profile.ensureBrowserAvailable();
     const second = profile.ensureBrowserAvailable();
     await vi.advanceTimersByTimeAsync(100);
     await expect(Promise.all([first, second])).resolves.toEqual([undefined, undefined]);
 
-    expect(launchNexisClawChrome).toHaveBeenCalledTimes(1);
-    expect(stopNexisClawChrome).not.toHaveBeenCalled();
+    expect(launchGreenchClawChrome).toHaveBeenCalledTimes(1);
+    expect(stopGreenchClawChrome).not.toHaveBeenCalled();
   });
 
   it("deduplicates concurrent lazy-start calls across fresh profile contexts", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady, state } =
+    const { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady, state } =
       setupEnsureBrowserAvailableHarness();
     isChromeCdpReady.mockResolvedValue(true);
-    mockLaunchedChrome(launchNexisClawChrome, 457);
+    mockLaunchedChrome(launchGreenchClawChrome, 457);
 
     const firstCtx = createBrowserRouteContext({ getState: () => state });
     const secondCtx = createBrowserRouteContext({ getState: () => state });
-    const first = firstCtx.forProfile("NexisClaw").ensureBrowserAvailable();
-    const second = secondCtx.forProfile("NexisClaw").ensureBrowserAvailable();
+    const first = firstCtx.forProfile("GreenchClaw").ensureBrowserAvailable();
+    const second = secondCtx.forProfile("GreenchClaw").ensureBrowserAvailable();
     await vi.advanceTimersByTimeAsync(100);
     await expect(Promise.all([first, second])).resolves.toEqual([undefined, undefined]);
 
-    expect(launchNexisClawChrome).toHaveBeenCalledTimes(1);
-    expect(stopNexisClawChrome).not.toHaveBeenCalled();
+    expect(launchGreenchClawChrome).toHaveBeenCalledTimes(1);
+    expect(stopGreenchClawChrome).not.toHaveBeenCalled();
   });
 
   it("passes request-local headless override to initial launch", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady, profile } =
+    const { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady, profile } =
       setupEnsureBrowserAvailableHarness();
     isChromeCdpReady.mockResolvedValue(true);
-    mockLaunchedChrome(launchNexisClawChrome, 654);
+    mockLaunchedChrome(launchGreenchClawChrome, 654);
 
     const promise = profile.ensureBrowserAvailable({ headless: true });
     await vi.advanceTimersByTimeAsync(100);
     await expect(promise).resolves.toBeUndefined();
 
-    expect(launchNexisClawChrome).toHaveBeenCalledTimes(1);
-    expect(requireFirstLaunchOptions(launchNexisClawChrome)).toEqual({ headlessOverride: true });
-    expect(stopNexisClawChrome).not.toHaveBeenCalled();
+    expect(launchGreenchClawChrome).toHaveBeenCalledTimes(1);
+    expect(requireFirstLaunchOptions(launchGreenchClawChrome)).toEqual({ headlessOverride: true });
+    expect(stopGreenchClawChrome).not.toHaveBeenCalled();
   });
 
   it("passes request-local headless override to the owned restart path", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady, profile, state } =
+    const { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady, profile, state } =
       setupEnsureBrowserAvailableHarness();
     const isChromeReachable = vi.mocked(chromeModule.isChromeReachable);
     const existingProc = new EventEmitter() as unknown as ChildProcessWithoutNullStreams;
-    state.profiles.set("NexisClaw", {
+    state.profiles.set("GreenchClaw", {
       profile: profile.profile,
       running: {
         pid: 111,
         exe: { kind: "chromium", path: "/usr/bin/chromium" },
-        userDataDir: "/tmp/NexisClaw-test",
+        userDataDir: "/tmp/GreenchClaw-test",
         cdpPort: 18800,
         startedAt: Date.now(),
         proc: existingProc,
@@ -183,37 +183,37 @@ describe("browser server-context ensureBrowserAvailable", () => {
     });
     isChromeReachable.mockResolvedValue(true);
     isChromeCdpReady.mockResolvedValueOnce(false).mockResolvedValueOnce(true);
-    mockLaunchedChrome(launchNexisClawChrome, 987);
+    mockLaunchedChrome(launchGreenchClawChrome, 987);
 
     await expect(profile.ensureBrowserAvailable({ headless: true })).resolves.toBeUndefined();
 
-    expect(stopNexisClawChrome).toHaveBeenCalledTimes(1);
-    expect(launchNexisClawChrome).toHaveBeenCalledTimes(1);
-    expect(requireFirstLaunchOptions(launchNexisClawChrome)).toEqual({ headlessOverride: true });
+    expect(stopGreenchClawChrome).toHaveBeenCalledTimes(1);
+    expect(launchGreenchClawChrome).toHaveBeenCalledTimes(1);
+    expect(requireFirstLaunchOptions(launchGreenchClawChrome)).toEqual({ headlessOverride: true });
   });
 
   it("does not share inflight lazy-start promises across different headless overrides", async () => {
-    const { launchNexisClawChrome, isChromeCdpReady, profile } =
+    const { launchGreenchClawChrome, isChromeCdpReady, profile } =
       setupEnsureBrowserAvailableHarness();
     const isChromeReachable = vi.mocked(chromeModule.isChromeReachable);
     isChromeReachable.mockResolvedValueOnce(false).mockResolvedValueOnce(true);
     isChromeCdpReady.mockResolvedValue(true);
-    mockLaunchedChrome(launchNexisClawChrome, 456);
+    mockLaunchedChrome(launchGreenchClawChrome, 456);
 
     const first = profile.ensureBrowserAvailable();
     const second = profile.ensureBrowserAvailable({ headless: true });
     await vi.advanceTimersByTimeAsync(100);
     await expect(Promise.all([first, second])).resolves.toEqual([undefined, undefined]);
 
-    expect(launchNexisClawChrome).toHaveBeenCalledTimes(1);
+    expect(launchGreenchClawChrome).toHaveBeenCalledTimes(1);
     expect(isChromeReachable.mock.calls.length).toBeGreaterThan(1);
   });
 
   it("clears the concurrent lazy-start guard after launch failure", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady, profile } =
+    const { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady, profile } =
       setupEnsureBrowserAvailableHarness();
     isChromeCdpReady.mockResolvedValue(true);
-    launchNexisClawChrome.mockRejectedValueOnce(
+    launchGreenchClawChrome.mockRejectedValueOnce(
       new Error("PortInUseError: listen EADDRINUSE 127.0.0.1:18800"),
     );
 
@@ -221,63 +221,64 @@ describe("browser server-context ensureBrowserAvailable", () => {
     const second = profile.ensureBrowserAvailable();
     await expect(Promise.all([first, second])).rejects.toThrow("PortInUseError");
 
-    mockLaunchedChrome(launchNexisClawChrome, 789);
+    mockLaunchedChrome(launchGreenchClawChrome, 789);
     const retry = profile.ensureBrowserAvailable();
     await vi.advanceTimersByTimeAsync(100);
     await expect(retry).resolves.toBeUndefined();
 
-    expect(launchNexisClawChrome).toHaveBeenCalledTimes(2);
-    expect(stopNexisClawChrome).not.toHaveBeenCalled();
+    expect(launchGreenchClawChrome).toHaveBeenCalledTimes(2);
+    expect(stopGreenchClawChrome).not.toHaveBeenCalled();
   });
 
   it("cools down repeated managed Chrome launch failures across route contexts", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady, state } =
+    const { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady, state } =
       setupEnsureBrowserAvailableHarness();
     isChromeCdpReady.mockResolvedValue(true);
-    launchNexisClawChrome.mockRejectedValue(new Error("Failed to start Chrome CDP"));
+    launchGreenchClawChrome.mockRejectedValue(new Error("Failed to start Chrome CDP"));
 
     for (let attempt = 0; attempt < 3; attempt += 1) {
       const ctx = createBrowserRouteContext({ getState: () => state });
-      await expect(ctx.forProfile("NexisClaw").ensureBrowserAvailable()).rejects.toThrow(
+      await expect(ctx.forProfile("GreenchClaw").ensureBrowserAvailable()).rejects.toThrow(
         "Failed to start Chrome CDP",
       );
     }
 
     const cooledDownCtx = createBrowserRouteContext({ getState: () => state });
-    await expect(cooledDownCtx.forProfile("NexisClaw").ensureBrowserAvailable()).rejects.toThrow(
-      'Browser launch for profile "NexisClaw" is cooling down after 3 consecutive managed Chrome launch failures.',
+    await expect(cooledDownCtx.forProfile("GreenchClaw").ensureBrowserAvailable()).rejects.toThrow(
+      'Browser launch for profile "GreenchClaw" is cooling down after 3 consecutive managed Chrome launch failures.',
     );
-    await expect(cooledDownCtx.forProfile("NexisClaw").ensureBrowserAvailable()).rejects.toThrow(
+    await expect(cooledDownCtx.forProfile("GreenchClaw").ensureBrowserAvailable()).rejects.toThrow(
       "set browser.enabled=false if the browser tool is not needed",
     );
 
-    expect(launchNexisClawChrome).toHaveBeenCalledTimes(3);
-    expect(stopNexisClawChrome).not.toHaveBeenCalled();
+    expect(launchGreenchClawChrome).toHaveBeenCalledTimes(3);
+    expect(stopGreenchClawChrome).not.toHaveBeenCalled();
   });
 
   it("allows one managed Chrome launch attempt after the cooldown expires", async () => {
-    const { launchNexisClawChrome, isChromeCdpReady, state } = setupEnsureBrowserAvailableHarness();
+    const { launchGreenchClawChrome, isChromeCdpReady, state } =
+      setupEnsureBrowserAvailableHarness();
     isChromeCdpReady.mockResolvedValue(true);
-    launchNexisClawChrome.mockRejectedValue(new Error("Failed to start Chrome CDP"));
+    launchGreenchClawChrome.mockRejectedValue(new Error("Failed to start Chrome CDP"));
 
     for (let attempt = 0; attempt < 3; attempt += 1) {
       const ctx = createBrowserRouteContext({ getState: () => state });
-      await expect(ctx.forProfile("NexisClaw").ensureBrowserAvailable()).rejects.toThrow(
+      await expect(ctx.forProfile("GreenchClaw").ensureBrowserAvailable()).rejects.toThrow(
         "Failed to start Chrome CDP",
       );
     }
 
     await vi.advanceTimersByTimeAsync(30_000);
     const retryCtx = createBrowserRouteContext({ getState: () => state });
-    await expect(retryCtx.forProfile("NexisClaw").ensureBrowserAvailable()).rejects.toThrow(
+    await expect(retryCtx.forProfile("GreenchClaw").ensureBrowserAvailable()).rejects.toThrow(
       "Failed to start Chrome CDP",
     );
 
-    expect(launchNexisClawChrome).toHaveBeenCalledTimes(4);
+    expect(launchGreenchClawChrome).toHaveBeenCalledTimes(4);
   });
 
   it("reuses a pre-existing loopback browser after an initial short probe miss", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady, profile, state } =
+    const { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady, profile, state } =
       setupEnsureBrowserAvailableHarness();
     const isChromeReachable = vi.mocked(chromeModule.isChromeReachable);
     state.resolved.ssrfPolicy = {};
@@ -299,12 +300,12 @@ describe("browser server-context ensureBrowserAvailable", () => {
       PROFILE_ATTACH_RETRY_TIMEOUT_MS,
       undefined,
     );
-    expect(launchNexisClawChrome).not.toHaveBeenCalled();
-    expect(stopNexisClawChrome).not.toHaveBeenCalled();
+    expect(launchGreenchClawChrome).not.toHaveBeenCalled();
+    expect(stopGreenchClawChrome).not.toHaveBeenCalled();
   });
 
   it("explains attachOnly for externally managed loopback CDP services", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady, profile } =
+    const { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady, profile } =
       setupEnsureBrowserAvailableHarness();
     const isChromeReachable = vi.mocked(chromeModule.isChromeReachable);
 
@@ -313,31 +314,31 @@ describe("browser server-context ensureBrowserAvailable", () => {
 
     const promise = profile.ensureBrowserAvailable();
     await expect(promise).rejects.toThrow(
-      'Port 18800 is in use for profile "NexisClaw" but not by NexisClaw.',
+      'Port 18800 is in use for profile "GreenchClaw" but not by GreenchClaw.',
     );
     await expect(promise).rejects.toThrow(
-      "set browser.profiles.NexisClaw.attachOnly=true so NexisClaw attaches without trying to manage the local process",
+      "set browser.profiles.GreenchClaw.attachOnly=true so GreenchClaw attaches without trying to manage the local process",
     );
     await expect(promise).rejects.toThrow(
-      "For Browserless Docker, set EXTERNAL to the same WebSocket endpoint NexisClaw can reach via browser.profiles.<name>.cdpUrl.",
+      "For Browserless Docker, set EXTERNAL to the same WebSocket endpoint GreenchClaw can reach via browser.profiles.<name>.cdpUrl.",
     );
 
-    expect(launchNexisClawChrome).not.toHaveBeenCalled();
-    expect(stopNexisClawChrome).not.toHaveBeenCalled();
+    expect(launchGreenchClawChrome).not.toHaveBeenCalled();
+    expect(stopGreenchClawChrome).not.toHaveBeenCalled();
   });
 
   it("retries remote CDP websocket reachability once before failing", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome, isChromeCdpReady } =
+    const { launchGreenchClawChrome, stopGreenchClawChrome, isChromeCdpReady } =
       setupEnsureBrowserAvailableHarness();
     const isChromeReachable = vi.mocked(chromeModule.isChromeReachable);
 
     const state = makeBrowserServerState();
-    state.resolved.profiles.NexisClaw = {
+    state.resolved.profiles.GreenchClaw = {
       cdpUrl: "ws://browserless:3001",
       color: "#00AA00",
     };
     const ctx = createBrowserRouteContext({ getState: () => state });
-    const profile = ctx.forProfile("NexisClaw");
+    const profile = ctx.forProfile("GreenchClaw");
     const expectedRemoteHttpTimeoutMs = state.resolved.remoteCdpTimeoutMs;
     const expectedRemoteWsTimeoutMs = state.resolved.remoteCdpHandshakeTimeoutMs;
 
@@ -366,12 +367,12 @@ describe("browser server-context ensureBrowserAvailable", () => {
         allowPrivateNetwork: true,
       },
     );
-    expect(launchNexisClawChrome).not.toHaveBeenCalled();
-    expect(stopNexisClawChrome).not.toHaveBeenCalled();
+    expect(launchGreenchClawChrome).not.toHaveBeenCalled();
+    expect(stopGreenchClawChrome).not.toHaveBeenCalled();
   });
 
   it("treats attachOnly loopback CDP as local control with remote-class probe timeouts", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome } = setupEnsureBrowserAvailableHarness();
+    const { launchGreenchClawChrome, stopGreenchClawChrome } = setupEnsureBrowserAvailableHarness();
     const isChromeReachable = vi.mocked(chromeModule.isChromeReachable);
     const isChromeCdpReady = vi.mocked(chromeModule.isChromeCdpReady);
 
@@ -393,8 +394,8 @@ describe("browser server-context ensureBrowserAvailable", () => {
       state.resolved.remoteCdpHandshakeTimeoutMs,
       undefined,
     );
-    expect(launchNexisClawChrome).not.toHaveBeenCalled();
-    expect(stopNexisClawChrome).not.toHaveBeenCalled();
+    expect(launchGreenchClawChrome).not.toHaveBeenCalled();
+    expect(stopGreenchClawChrome).not.toHaveBeenCalled();
   });
 
   it("resolves for attachOnly loopback profile with a bare ws:// cdpUrl when CDP is reachable (#68027)", async () => {
@@ -407,7 +408,7 @@ describe("browser server-context ensureBrowserAvailable", () => {
     // ensureBrowserAvailable() so future refactors of the availability flow
     // cannot silently reintroduce the bug by munging/short-circuiting bare
     // ws:// URLs before they reach the helpers.
-    const { launchNexisClawChrome, stopNexisClawChrome } = setupEnsureBrowserAvailableHarness();
+    const { launchGreenchClawChrome, stopGreenchClawChrome } = setupEnsureBrowserAvailableHarness();
     const isChromeReachable = vi.mocked(chromeModule.isChromeReachable);
     const isChromeCdpReady = vi.mocked(chromeModule.isChromeCdpReady);
 
@@ -431,12 +432,12 @@ describe("browser server-context ensureBrowserAvailable", () => {
       state.resolved.remoteCdpHandshakeTimeoutMs,
       undefined,
     );
-    expect(launchNexisClawChrome).not.toHaveBeenCalled();
-    expect(stopNexisClawChrome).not.toHaveBeenCalled();
+    expect(launchGreenchClawChrome).not.toHaveBeenCalled();
+    expect(stopGreenchClawChrome).not.toHaveBeenCalled();
   });
 
   it("redacts credentials in remote CDP availability errors", async () => {
-    const { launchNexisClawChrome, stopNexisClawChrome } = setupEnsureBrowserAvailableHarness();
+    const { launchGreenchClawChrome, stopGreenchClawChrome } = setupEnsureBrowserAvailableHarness();
     const isChromeReachable = vi.mocked(chromeModule.isChromeReachable);
 
     const state = makeBrowserServerState({
@@ -447,7 +448,7 @@ describe("browser server-context ensureBrowserAvailable", () => {
         cdpIsLoopback: false,
         cdpPort: 443,
         color: "#00AA00",
-        driver: "NexisClaw",
+        driver: "GreenchClaw",
         headless: false,
         attachOnly: false,
       },
@@ -467,7 +468,7 @@ describe("browser server-context ensureBrowserAvailable", () => {
       'Remote CDP for profile "remote" is not reachable at https://browserless.example.com/?token=***.',
     );
 
-    expect(launchNexisClawChrome).not.toHaveBeenCalled();
-    expect(stopNexisClawChrome).not.toHaveBeenCalled();
+    expect(launchGreenchClawChrome).not.toHaveBeenCalled();
+    expect(stopGreenchClawChrome).not.toHaveBeenCalled();
   });
 });

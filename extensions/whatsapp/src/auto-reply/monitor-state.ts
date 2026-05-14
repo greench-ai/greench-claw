@@ -1,7 +1,7 @@
 import {
   createConnectedChannelStatusPatch,
   createTransportActivityStatusPatch,
-} from "NexisClaw/plugin-sdk/gateway-runtime";
+} from "GreenchClaw/plugin-sdk/gateway-runtime";
 import type { WebChannelHealthState, WebChannelStatus } from "./types.js";
 
 function cloneStatus(status: WebChannelStatus): WebChannelStatus {

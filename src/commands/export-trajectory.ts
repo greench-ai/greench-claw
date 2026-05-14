@@ -88,7 +88,7 @@ export async function exportTrajectoryCommand(
   const sessionKey = resolvedOpts.sessionKey?.trim();
   if (!sessionKey) {
     runtime.error(
-      `--session-key is required. Run ${formatCliCommand("NexisClaw sessions")} to choose a session.`,
+      `--session-key is required. Run ${formatCliCommand("GreenchClaw sessions")} to choose a session.`,
     );
     runtime.exit(1);
     return;
@@ -101,7 +101,7 @@ export async function exportTrajectoryCommand(
   const entry = store[sessionKey] as SessionEntry | undefined;
   if (!entry?.sessionId) {
     runtime.error(
-      `Session not found: ${sessionKey}. Run ${formatCliCommand("NexisClaw sessions")} to see available sessions.`,
+      `Session not found: ${sessionKey}. Run ${formatCliCommand("GreenchClaw sessions")} to see available sessions.`,
     );
     runtime.exit(1);
     return;
@@ -121,7 +121,7 @@ export async function exportTrajectoryCommand(
   }
   if (!(await pathExists(sessionFile))) {
     runtime.error(
-      `Session file not found for ${sessionKey}. Run ${formatCliCommand("NexisClaw doctor")} to inspect session storage.`,
+      `Session file not found for ${sessionKey}. Run ${formatCliCommand("GreenchClaw doctor")} to inspect session storage.`,
     );
     runtime.exit(1);
     return;

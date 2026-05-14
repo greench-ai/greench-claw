@@ -41,7 +41,7 @@ or sign in with OpenAI Codex OAuth.
     ```
 
     Codex OAuth uses the same `openai/gpt-image-2` model ref. When an
-    `openai-codex` OAuth profile is configured, NexisClaw routes image
+    `openai-codex` OAuth profile is configured, GreenchClaw routes image
     requests through that OAuth profile instead of first trying
     `OPENAI_API_KEY`. Explicit `models.providers.openai` config (API key,
     custom/Azure base URL) opts back into the direct OpenAI Images API
@@ -163,7 +163,7 @@ Use `action: "list"` to inspect available providers and models at runtime:
 
 <Note>
 Not all providers support all parameters. When a fallback provider supports a
-nearby geometry option instead of the exact requested one, NexisClaw remaps to
+nearby geometry option instead of the exact requested one, GreenchClaw remaps to
 the closest supported size, aspect ratio, or resolution before submission.
 Unsupported output hints are dropped for providers that do not declare
 support and reported in the tool result. Tool results report the applied
@@ -195,7 +195,7 @@ translation.
 
 ### Provider selection order
 
-NexisClaw tries providers in this order:
+GreenchClaw tries providers in this order:
 
 1. **`model` parameter** from the tool call (if the agent specifies one).
 2. **`imageGenerationModel.primary`** from config.
@@ -214,7 +214,7 @@ from each attempt.
     not continue to configured primary/fallback or auto-detected providers.
   </Accordion>
   <Accordion title="Auto-detection is auth-aware">
-    A provider default only enters the candidate list when NexisClaw can
+    A provider default only enters the candidate list when GreenchClaw can
     actually authenticate that provider. Set
     `agents.defaults.mediaGenerationAutoProviderFallback: false` to use only
     explicit `model`, `primary`, and `fallbacks` entries.
@@ -223,7 +223,7 @@ from each attempt.
     Set `agents.defaults.imageGenerationModel.timeoutMs` for slow image
     backends. A per-call `timeoutMs` tool parameter overrides the configured
     default. Codex dynamic-tool calls honor the same timeout budget, bounded
-    by NexisClaw's 600000 ms dynamic-tool bridge maximum.
+    by GreenchClaw's 600000 ms dynamic-tool bridge maximum.
   </Accordion>
   <Accordion title="Inspect at runtime">
     Use `action: "list"` to inspect the currently registered providers,
@@ -250,11 +250,11 @@ ComfyUI support 1.
 <AccordionGroup>
   <Accordion title="OpenAI gpt-image-2 (and gpt-image-1.5)">
     OpenAI image generation defaults to `openai/gpt-image-2`. If an
-    `openai-codex` OAuth profile is configured, NexisClaw reuses the same
+    `openai-codex` OAuth profile is configured, GreenchClaw reuses the same
     OAuth profile used by Codex subscription chat models and sends the
     image request through the Codex Responses backend. Legacy Codex base
     URLs such as `https://chatgpt.com/backend-api` are canonicalized to
-    `https://chatgpt.com/backend-api/codex` for image requests. NexisClaw
+    `https://chatgpt.com/backend-api/codex` for image requests. GreenchClaw
     does **not** silently fall back to `OPENAI_API_KEY` for that request -
     to force direct OpenAI Images API routing, configure
     `models.providers.openai` explicitly with an API key, custom base URL,
@@ -267,9 +267,9 @@ ComfyUI support 1.
 
     `gpt-image-2` supports both text-to-image generation and
     reference-image editing through the same `image_generate` tool.
-    NexisClaw forwards `prompt`, `count`, `size`, `quality`, `outputFormat`,
+    GreenchClaw forwards `prompt`, `count`, `size`, `quality`, `outputFormat`,
     and reference images to OpenAI. OpenAI does **not** receive
-    `aspectRatio` or `resolution` directly; when possible NexisClaw maps
+    `aspectRatio` or `resolution` directly; when possible GreenchClaw maps
     those into a supported `size`, otherwise the tool reports them as
     ignored overrides.
 
@@ -290,7 +290,7 @@ ComfyUI support 1.
 
     `openai.background` accepts `transparent`, `opaque`, or `auto`;
     transparent outputs require `outputFormat` `png` or `webp` and a
-    transparency-capable OpenAI image model. NexisClaw routes default
+    transparency-capable OpenAI image model. GreenchClaw routes default
     `gpt-image-2` transparent-background requests to `gpt-image-1.5`.
     `openai.outputCompression` applies to JPEG/WebP outputs.
 
@@ -321,7 +321,7 @@ ComfyUI support 1.
     }
     ```
 
-    NexisClaw forwards `prompt`, `count`, reference images, and
+    GreenchClaw forwards `prompt`, `count`, reference images, and
     Gemini-compatible `aspectRatio` / `resolution` hints to OpenRouter.
     Current built-in OpenRouter image model shortcuts include
     `google/gemini-3.1-flash-image-preview`,
@@ -346,9 +346,9 @@ ComfyUI support 1.
     - References: one `image` or up to five `images`
     - Aspect ratios: `1:1`, `16:9`, `9:16`, `4:3`, `3:4`, `2:3`, `3:2`
     - Resolutions: `1K`, `2K`
-    - Outputs: returned as NexisClaw-managed image attachments
+    - Outputs: returned as GreenchClaw-managed image attachments
 
-    NexisClaw intentionally does not expose xAI-native `quality`, `mask`,
+    GreenchClaw intentionally does not expose xAI-native `quality`, `mask`,
     `user`, or extra native-only aspect ratios until those controls exist
     in the shared cross-provider `image_generate` contract.
 
@@ -360,7 +360,7 @@ ComfyUI support 1.
 <Tabs>
   <Tab title="Generate (4K landscape)">
 ```text
-/tool image_generate action=generate model=openai/gpt-image-2 prompt="A clean editorial poster for NexisClaw image generation" size=3840x2160 count=1
+/tool image_generate action=generate model=openai/gpt-image-2 prompt="A clean editorial poster for GreenchClaw image generation" size=3840x2160 count=1
 ```
   </Tab>
   <Tab title="Generate (transparent PNG)">
@@ -371,7 +371,7 @@ ComfyUI support 1.
 Equivalent CLI:
 
 ```bash
-NexisClaw infer image generate \
+GreenchClaw infer image generate \
   --model openai/gpt-image-1.5 \
   --output-format png \
   --background transparent \
@@ -398,7 +398,7 @@ NexisClaw infer image generate \
 </Tabs>
 
 The same `--output-format` and `--background` flags are available on
-`NexisClaw infer image edit`; `--openai-background` remains as an
+`GreenchClaw infer image edit`; `--openai-background` remains as an
 OpenAI-specific alias. Bundled providers other than OpenAI do not declare
 explicit background control today, so `background: "transparent"` is reported
 as ignored for them.

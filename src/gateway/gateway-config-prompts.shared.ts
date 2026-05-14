@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { getTailnetHostname } from "../infra/tailscale.js";
 import { isIpv6Address, parseCanonicalIpAddress } from "../shared/net/ip.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
@@ -27,8 +27,8 @@ export const TAILSCALE_MISSING_BIN_NOTE_LINES = [
 
 export const TAILSCALE_DOCS_LINES = [
   "Docs:",
-  "https://docs.NexisClaw.ai/gateway/tailscale",
-  "https://docs.NexisClaw.ai/web",
+  "https://docs.GreenchClaw.ai/gateway/tailscale",
+  "https://docs.GreenchClaw.ai/web",
 ] as const;
 
 function normalizeTailnetHostForUrl(rawHost: string): string | null {
@@ -65,10 +65,10 @@ function appendAllowedOrigin(existing: string[] | undefined, origin: string): st
 }
 
 export async function maybeAddTailnetOriginToControlUiAllowedOrigins(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   tailscaleMode: string;
   tailscaleBin?: string | null;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   if (params.tailscaleMode !== "serve" && params.tailscaleMode !== "funnel") {
     return params.config;
   }

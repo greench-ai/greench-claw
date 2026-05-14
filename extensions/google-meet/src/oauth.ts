@@ -1,10 +1,10 @@
-import { generateHexPkceVerifierChallenge } from "NexisClaw/plugin-sdk/provider-auth";
+import { generateHexPkceVerifierChallenge } from "GreenchClaw/plugin-sdk/provider-auth";
 import {
   generateOAuthState,
   parseOAuthCallbackInput,
   waitForLocalOAuthCallback,
-} from "NexisClaw/plugin-sdk/provider-auth-runtime";
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/provider-auth-runtime";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 
 const GOOGLE_MEET_REDIRECT_URI = "http://localhost:8085/oauth2callback";
 const GOOGLE_MEET_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";

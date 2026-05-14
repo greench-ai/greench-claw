@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveAgentConfig } from "./agent-scope.js";
 import { pickSandboxToolPolicy } from "./sandbox-tool-policy.js";
 import type { ToolFsPolicy } from "./tool-fs-policy.types.js";
@@ -13,7 +13,7 @@ export function createToolFsPolicy(params: { workspaceOnly?: boolean }): ToolFsP
   };
 }
 
-export function resolveToolFsConfig(params: { cfg?: NexisClawConfig; agentId?: string }): {
+export function resolveToolFsConfig(params: { cfg?: GreenchClawConfig; agentId?: string }): {
   workspaceOnly?: boolean;
 } {
   const cfg = params.cfg;
@@ -26,14 +26,14 @@ export function resolveToolFsConfig(params: { cfg?: NexisClawConfig; agentId?: s
 }
 
 export function resolveEffectiveToolFsWorkspaceOnly(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentId?: string;
 }): boolean {
   return resolveToolFsConfig(params).workspaceOnly === true;
 }
 
 export function resolveEffectiveToolFsRootExpansionAllowed(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentId?: string;
 }): boolean {
   const cfg = params.cfg;

@@ -5,7 +5,7 @@ import {
   type PluginConversationBindingRequestParams,
   type PluginConversationBindingRequestResult,
   type PluginInteractiveRegistration,
-} from "NexisClaw/plugin-sdk/plugin-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-runtime";
 
 export type SlackInteractiveHandlerContext = {
   channel: "slack";

@@ -52,7 +52,7 @@ const baseParams = {
       },
     },
   },
-  agentDir: "/tmp/NexisClaw-provider-catalog-test",
+  agentDir: "/tmp/GreenchClaw-provider-catalog-test",
   env: {
     ...process.env,
     CHUTES_API_KEY: "",

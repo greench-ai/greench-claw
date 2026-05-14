@@ -1,9 +1,9 @@
-import type { MusicGenerationProvider } from "NexisClaw/plugin-sdk/music-generation";
-import { isProviderApiKeyConfigured } from "NexisClaw/plugin-sdk/provider-auth";
+import type { MusicGenerationProvider } from "GreenchClaw/plugin-sdk/music-generation";
+import { isProviderApiKeyConfigured } from "GreenchClaw/plugin-sdk/provider-auth";
 import type {
   VideoGenerationProvider,
   VideoGenerationProviderConfiguredContext,
-} from "NexisClaw/plugin-sdk/video-generation";
+} from "GreenchClaw/plugin-sdk/video-generation";
 
 export const DEFAULT_GOOGLE_MUSIC_MODEL = "lyria-3-clip-preview";
 export const GOOGLE_PRO_MUSIC_MODEL = "lyria-3-pro-preview";

@@ -1,13 +1,13 @@
 {
-  "name": "@NexisClaw/lmstudio-provider",
+  "name": "@GreenchClaw/lmstudio-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw LM Studio provider plugin",
+  "description": "GreenchClaw LM Studio provider plugin",
   "type": "module",
   "dependencies": {
     "@earendil-works/pi-ai": "0.74.0"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

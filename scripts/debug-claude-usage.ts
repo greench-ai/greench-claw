@@ -46,7 +46,8 @@ const parseArgs = (): Args => {
 };
 
 const loadAuthProfiles = (agentId: string) => {
-  const stateRoot = process.env.NEXISCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".NexisClaw");
+  const stateRoot =
+    process.env.GREENCHCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".GreenchClaw");
   const authPath = path.join(stateRoot, "agents", agentId, "agent", "auth-profiles.json");
   if (!fs.existsSync(authPath)) {
     throw new Error(`Missing: ${authPath}`);
@@ -81,7 +82,7 @@ const fetchAnthropicOAuthUsage = async (token: string) => {
       Accept: "application/json",
       "anthropic-version": "2023-06-01",
       "anthropic-beta": "oauth-2025-04-20",
-      "User-Agent": "NexisClaw-debug",
+      "User-Agent": "GreenchClaw-debug",
     },
   });
   const text = await res.text();

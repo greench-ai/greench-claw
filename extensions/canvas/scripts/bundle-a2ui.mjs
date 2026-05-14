@@ -181,9 +181,12 @@ async function main() {
       console.log("A2UI package missing; keeping prebuilt bundle.");
       return;
     }
-    if (process.env.NEXISCLAW_SPARSE_PROFILE || process.env.NEXISCLAW_A2UI_SKIP_MISSING === "1") {
+    if (
+      process.env.GREENCHCLAW_SPARSE_PROFILE ||
+      process.env.GREENCHCLAW_A2UI_SKIP_MISSING === "1"
+    ) {
       console.error(
-        "A2UI package missing; skipping bundle because NEXISCLAW_A2UI_SKIP_MISSING=1 or NEXISCLAW_SPARSE_PROFILE is set.",
+        "A2UI package missing; skipping bundle because GREENCHCLAW_A2UI_SKIP_MISSING=1 or GREENCHCLAW_SPARSE_PROFILE is set.",
       );
       return;
     }

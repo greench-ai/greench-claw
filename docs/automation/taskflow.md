@@ -2,7 +2,7 @@
 summary: "Task Flow flow orchestration layer above background tasks"
 read_when:
   - You want to understand how Task Flow relates to background tasks
-  - You encounter Task Flow or NexisClaw tasks flow in release notes or docs
+  - You encounter Task Flow or GreenchClaw tasks flow in release notes or docs
   - You want to inspect or manage durable flow state
 title: "Task flow"
 ---
@@ -32,7 +32,7 @@ For recurring workflows such as market intelligence briefings, treat the schedul
 Example cron shape:
 
 ```bash
-NexisClaw cron add \
+GreenchClaw cron add \
   --name "Market intelligence brief" \
   --cron "0 7 * * 1-5" \
   --tz "America/New_York" \
@@ -70,7 +70,7 @@ steps:
 
 Recommended preflight checks:
 
-- Browser availability and profile choice, for example `NexisClaw` for managed state or `user` when a signed-in Chrome session is required. See [Browser](/tools/browser).
+- Browser availability and profile choice, for example `GreenchClaw` for managed state or `user` when a signed-in Chrome session is required. See [Browser](/tools/browser).
 - API credentials and quota for each source.
 - Network reachability for required endpoints.
 - Required tools enabled for the agent, such as `lobster`, `browser`, and `llm-task`.
@@ -122,34 +122,34 @@ unbounded `registry.sqlite-wal` sidecar files.
 
 ## Cancel behavior
 
-`NexisClaw tasks flow cancel` sets a sticky cancel intent on the flow. Active tasks within the flow are cancelled, and no new steps are started. The cancel intent persists across restarts, so a cancelled flow stays cancelled even if the gateway restarts before all child tasks have terminated.
+`GreenchClaw tasks flow cancel` sets a sticky cancel intent on the flow. Active tasks within the flow are cancelled, and no new steps are started. The cancel intent persists across restarts, so a cancelled flow stays cancelled even if the gateway restarts before all child tasks have terminated.
 
 ## CLI commands
 
 ```bash
 # List active and recent flows
-NexisClaw tasks flow list
+GreenchClaw tasks flow list
 
 # Show details for a specific flow
-NexisClaw tasks flow show <lookup>
+GreenchClaw tasks flow show <lookup>
 
 # Cancel a running flow and its active tasks
-NexisClaw tasks flow cancel <lookup>
+GreenchClaw tasks flow cancel <lookup>
 ```
 
-| Command                           | Description                                   |
-| --------------------------------- | --------------------------------------------- |
-| `NexisClaw tasks flow list`        | Shows tracked flows with status and sync mode |
-| `NexisClaw tasks flow show <id>`   | Inspect one flow by flow id or lookup key     |
-| `NexisClaw tasks flow cancel <id>` | Cancel a running flow and its active tasks    |
+| Command                              | Description                                   |
+| ------------------------------------ | --------------------------------------------- |
+| `GreenchClaw tasks flow list`        | Shows tracked flows with status and sync mode |
+| `GreenchClaw tasks flow show <id>`   | Inspect one flow by flow id or lookup key     |
+| `GreenchClaw tasks flow cancel <id>` | Cancel a running flow and its active tasks    |
 
 ## How flows relate to tasks
 
-Flows coordinate tasks, not replace them. A single flow may drive multiple background tasks over its lifetime. Use `NexisClaw tasks` to inspect individual task records and `NexisClaw tasks flow` to inspect the orchestrating flow.
+Flows coordinate tasks, not replace them. A single flow may drive multiple background tasks over its lifetime. Use `GreenchClaw tasks` to inspect individual task records and `GreenchClaw tasks flow` to inspect the orchestrating flow.
 
 ## Related
 
 - [Background Tasks](/automation/tasks) — the detached work ledger that flows coordinate
-- [CLI: tasks](/cli/tasks) — CLI command reference for `NexisClaw tasks flow`
+- [CLI: tasks](/cli/tasks) — CLI command reference for `GreenchClaw tasks flow`
 - [Automation Overview](/automation) — all automation mechanisms at a glance
 - [Cron Jobs](/automation/cron-jobs) — scheduled jobs that may feed into flows

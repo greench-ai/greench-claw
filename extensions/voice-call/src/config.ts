@@ -1,10 +1,10 @@
-import { REALTIME_VOICE_AGENT_CONSULT_TOOL_POLICIES } from "NexisClaw/plugin-sdk/realtime-voice";
+import { REALTIME_VOICE_AGENT_CONSULT_TOOL_POLICIES } from "GreenchClaw/plugin-sdk/realtime-voice";
 import {
   buildSecretInputSchema,
   hasConfiguredSecretInput,
   normalizeResolvedSecretInputString,
   type SecretInput,
-} from "NexisClaw/plugin-sdk/secret-input";
+} from "GreenchClaw/plugin-sdk/secret-input";
 import { z } from "zod";
 import { TtsConfigSchema } from "../api.js";
 import { deepMergeDefined } from "./deep-merge.js";
@@ -315,9 +315,9 @@ const VoiceCallRealtimeConfigSchema = z
     streamPath: z.string().min(1).optional(),
     /** System instructions passed to the realtime provider. */
     instructions: z.string().default(DEFAULT_VOICE_CALL_REALTIME_INSTRUCTIONS),
-    /** Tool policy for the shared NexisClaw agent consult tool. */
+    /** Tool policy for the shared GreenchClaw agent consult tool. */
     toolPolicy: VoiceCallRealtimeToolPolicySchema.default("safe-read-only"),
-    /** Guidance for when the realtime model should call the NexisClaw agent consult tool. */
+    /** Guidance for when the realtime model should call the GreenchClaw agent consult tool. */
     consultPolicy: VoiceCallRealtimeConsultPolicySchema.default("auto"),
     /** Optional thinking level override for the regular agent behind realtime consults. */
     consultThinkingLevel: VoiceCallRealtimeConsultThinkingLevelSchema.optional(),

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createSentMessageCache } from "./echo-cache.js";
 import { resolveIMessageInboundDecision } from "./inbound-processing.js";
@@ -22,7 +22,7 @@ import { createSelfChatCache } from "./self-chat-cache.js";
 
 type InboundDecisionParams = Parameters<typeof resolveIMessageInboundDecision>[0];
 
-const cfg = {} as NexisClawConfig;
+const cfg = {} as GreenchClawConfig;
 
 function createParams(
   overrides: Omit<Partial<InboundDecisionParams>, "message"> & {

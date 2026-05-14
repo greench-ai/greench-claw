@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import type { GatewayAuthConfig, GatewayTailscaleConfig } from "../config/types.gateway.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
 import {
   hasConfiguredGatewayAuthSecretInput,
@@ -68,7 +68,7 @@ export function mergeGatewayTailscaleConfig(
 }
 
 function resolveGatewayAuthFromConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   authOverride?: GatewayAuthConfig;
   tailscaleOverride?: GatewayTailscaleConfig;
@@ -86,11 +86,11 @@ function resolveGatewayAuthFromConfig(params: {
 }
 
 function hasGatewayTokenCandidate(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   authOverride?: GatewayAuthConfig;
 }): boolean {
-  const envToken = trimToUndefined(params.env.NEXISCLAW_GATEWAY_TOKEN);
+  const envToken = trimToUndefined(params.env.GREENCHCLAW_GATEWAY_TOKEN);
   if (envToken) {
     return true;
   }
@@ -123,7 +123,7 @@ function hasGatewayPasswordOverrideCandidate(params: {
 }
 
 export async function ensureGatewayStartupAuth(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   authOverride?: GatewayAuthConfig;
   tailscaleOverride?: GatewayTailscaleConfig;
@@ -134,7 +134,7 @@ export async function ensureGatewayStartupAuth(params: {
   persist?: boolean;
   baseHash?: string;
 }): Promise<{
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   auth: ReturnType<typeof resolveGatewayAuth>;
   generatedToken?: string;
   persistedGeneratedToken: boolean;
@@ -190,7 +190,7 @@ export async function ensureGatewayStartupAuth(params: {
   }
 
   const generatedToken = crypto.randomBytes(24).toString("hex");
-  const nextCfg: NexisClawConfig = {
+  const nextCfg: GreenchClawConfig = {
     ...params.cfg,
     gateway: {
       ...params.cfg.gateway,
@@ -222,7 +222,7 @@ export async function ensureGatewayStartupAuth(params: {
 }
 
 export function assertHooksTokenSeparateFromGatewayAuth(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   auth: ResolvedGatewayAuth;
 }): void {
   if (params.cfg.hooks?.enabled !== true) {

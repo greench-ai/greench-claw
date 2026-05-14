@@ -27,7 +27,7 @@ export type FireAndForgetBoundedHookOptions = {
 
 const getFireAndForgetHookState = () =>
   resolveGlobalSingleton<FireAndForgetHookState>(
-    Symbol.for("NexisClaw.fireAndForgetHookState"),
+    Symbol.for("GreenchClaw.fireAndForgetHookState"),
     () => ({
       active: 0,
       queue: [],

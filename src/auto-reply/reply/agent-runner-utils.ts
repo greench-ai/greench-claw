@@ -14,7 +14,7 @@ import {
   getRuntimeConfigSnapshot,
   getRuntimeConfigSourceSnapshot,
   selectApplicableRuntimeConfig,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "../../config/config.js";
 import {
   normalizeOptionalLowercaseString,
@@ -37,7 +37,7 @@ import type { FollowupRun } from "./queue.js";
 
 const BUN_FETCH_SOCKET_ERROR_RE = /socket connection was closed unexpectedly/i;
 
-export function resolveQueuedReplyRuntimeConfig(config: NexisClawConfig): NexisClawConfig {
+export function resolveQueuedReplyRuntimeConfig(config: GreenchClawConfig): GreenchClawConfig {
   const runtimeConfig =
     typeof getRuntimeConfigSnapshot === "function" ? getRuntimeConfigSnapshot() : null;
   const runtimeSourceConfig =
@@ -52,14 +52,14 @@ export function resolveQueuedReplyRuntimeConfig(config: NexisClawConfig): NexisC
 }
 
 export async function resolveQueuedReplyExecutionConfig(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   params?: {
     originatingChannel?: string;
     messageProvider?: string;
     originatingAccountId?: string;
     agentAccountId?: string;
   },
-): Promise<NexisClawConfig> {
+): Promise<GreenchClawConfig> {
   const runtimeConfig = resolveQueuedReplyRuntimeConfig(config);
   const { resolvedConfig } = await resolveCommandSecretRefsViaGateway({
     config: runtimeConfig,
@@ -101,7 +101,7 @@ export async function resolveQueuedReplyExecutionConfig(
  */
 export function buildThreadingToolContext(params: {
   sessionCtx: TemplateContext;
-  config: NexisClawConfig | undefined;
+  config: GreenchClawConfig | undefined;
   hasRepliedRef: { value: boolean } | undefined;
 }): ChannelThreadingToolContext {
   const { sessionCtx, config, hasRepliedRef } = params;

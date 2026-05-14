@@ -1,17 +1,17 @@
-import { formatAllowlistMatchMeta } from "NexisClaw/plugin-sdk/allow-from";
-import { recordChannelActivity } from "NexisClaw/plugin-sdk/channel-activity-runtime";
+import { formatAllowlistMatchMeta } from "GreenchClaw/plugin-sdk/allow-from";
+import { recordChannelActivity } from "GreenchClaw/plugin-sdk/channel-activity-runtime";
 import {
   buildMentionRegexes,
   logInboundDrop,
   resolveInboundMentionDecision,
-} from "NexisClaw/plugin-sdk/channel-inbound";
-import { hasControlCommand } from "NexisClaw/plugin-sdk/command-detection";
-import { shouldHandleTextCommands } from "NexisClaw/plugin-sdk/command-surface";
-import { isDangerousNameMatchingEnabled } from "NexisClaw/plugin-sdk/dangerous-name-runtime";
-import { logDebug } from "NexisClaw/plugin-sdk/logging-core";
-import { recordPendingHistoryEntryIfEnabled } from "NexisClaw/plugin-sdk/reply-history";
-import { getChildLogger, logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { enqueueSystemEvent } from "NexisClaw/plugin-sdk/system-event-runtime";
+} from "GreenchClaw/plugin-sdk/channel-inbound";
+import { hasControlCommand } from "GreenchClaw/plugin-sdk/command-detection";
+import { shouldHandleTextCommands } from "GreenchClaw/plugin-sdk/command-surface";
+import { isDangerousNameMatchingEnabled } from "GreenchClaw/plugin-sdk/dangerous-name-runtime";
+import { logDebug } from "GreenchClaw/plugin-sdk/logging-core";
+import { recordPendingHistoryEntryIfEnabled } from "GreenchClaw/plugin-sdk/reply-history";
+import { getChildLogger, logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { enqueueSystemEvent } from "GreenchClaw/plugin-sdk/system-event-runtime";
 import { resolveDefaultDiscordAccountId } from "../accounts.js";
 import { ChannelType, MessageType, type User } from "../internal/discord.js";
 import {

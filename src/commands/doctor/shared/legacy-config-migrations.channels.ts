@@ -358,25 +358,25 @@ const THREAD_BINDING_RULES: LegacyConfigRule[] = [
   {
     path: ["session", "threadBindings"],
     message:
-      'session.threadBindings.ttlHours was renamed to session.threadBindings.idleHours. Run "NexisClaw doctor --fix".',
+      'session.threadBindings.ttlHours was renamed to session.threadBindings.idleHours. Run "GreenchClaw doctor --fix".',
     match: (value) => hasLegacyThreadBindingTtl(value),
   },
   {
     path: ["channels"],
     message:
-      'channels.<id>.threadBindings.ttlHours was renamed to channels.<id>.threadBindings.idleHours. Run "NexisClaw doctor --fix".',
+      'channels.<id>.threadBindings.ttlHours was renamed to channels.<id>.threadBindings.idleHours. Run "GreenchClaw doctor --fix".',
     match: (value) => hasLegacyThreadBindingTtlInAnyChannel(value),
   },
   {
     path: ["session", "threadBindings"],
     message:
-      'session.threadBindings.spawnSubagentSessions/spawnAcpSessions were replaced by session.threadBindings.spawnSessions. Run "NexisClaw doctor --fix".',
+      'session.threadBindings.spawnSubagentSessions/spawnAcpSessions were replaced by session.threadBindings.spawnSessions. Run "GreenchClaw doctor --fix".',
     match: (value) => hasLegacyThreadBindingSpawnSplit(value),
   },
   {
     path: ["channels"],
     message:
-      'channels.<id>.threadBindings.spawnSubagentSessions/spawnAcpSessions were replaced by channels.<id>.threadBindings.spawnSessions. Run "NexisClaw doctor --fix".',
+      'channels.<id>.threadBindings.spawnSubagentSessions/spawnAcpSessions were replaced by channels.<id>.threadBindings.spawnSessions. Run "GreenchClaw doctor --fix".',
     match: (value) => hasLegacyThreadBindingSpawnSplitInAnyChannel(value),
   },
 ];
@@ -385,27 +385,27 @@ const GROUP_ROUTING_RULES: LegacyConfigRule[] = [
   {
     path: ["routing", "allowFrom"],
     message:
-      'routing.allowFrom was removed; use channels.whatsapp.allowFrom instead. Run "NexisClaw doctor --fix".',
+      'routing.allowFrom was removed; use channels.whatsapp.allowFrom instead. Run "GreenchClaw doctor --fix".',
   },
   {
     path: ["routing", "groupChat", "requireMention"],
     message:
-      'routing.groupChat.requireMention was removed; use channels.<channel>.groups."*".requireMention instead. Run "NexisClaw doctor --fix".',
+      'routing.groupChat.requireMention was removed; use channels.<channel>.groups."*".requireMention instead. Run "GreenchClaw doctor --fix".',
   },
   {
     path: ["routing", "groupChat", "historyLimit"],
     message:
-      'routing.groupChat.historyLimit was moved; use messages.groupChat.historyLimit instead. Run "NexisClaw doctor --fix".',
+      'routing.groupChat.historyLimit was moved; use messages.groupChat.historyLimit instead. Run "GreenchClaw doctor --fix".',
   },
   {
     path: ["routing", "groupChat", "mentionPatterns"],
     message:
-      'routing.groupChat.mentionPatterns was moved; use messages.groupChat.mentionPatterns instead. Run "NexisClaw doctor --fix".',
+      'routing.groupChat.mentionPatterns was moved; use messages.groupChat.mentionPatterns instead. Run "GreenchClaw doctor --fix".',
   },
   {
     path: ["channels", "telegram", "requireMention"],
     message:
-      'channels.telegram.requireMention was removed; use channels.telegram.groups."*".requireMention instead. Run "NexisClaw doctor --fix".',
+      'channels.telegram.requireMention was removed; use channels.telegram.groups."*".requireMention instead. Run "GreenchClaw doctor --fix".',
   },
 ];
 

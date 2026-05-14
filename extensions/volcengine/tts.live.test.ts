@@ -7,12 +7,14 @@ const hasVolcengineTtsCredentials = Boolean(
   seedSpeechApiKey || (process.env.VOLCENGINE_TTS_APPID && process.env.VOLCENGINE_TTS_TOKEN),
 );
 const describeLive =
-  process.env.NEXISCLAW_LIVE_TEST === "1" && hasVolcengineTtsCredentials ? describe : describe.skip;
+  process.env.GREENCHCLAW_LIVE_TEST === "1" && hasVolcengineTtsCredentials
+    ? describe
+    : describe.skip;
 
 describeLive("Volcengine TTS live", () => {
   it("synthesizes mp3 audio with .profile credentials", async () => {
     const audio = await volcengineTTS({
-      text: "NexisClaw live test.",
+      text: "GreenchClaw live test.",
       apiKey: seedSpeechApiKey,
       appId: process.env.VOLCENGINE_TTS_APPID,
       token: process.env.VOLCENGINE_TTS_TOKEN,

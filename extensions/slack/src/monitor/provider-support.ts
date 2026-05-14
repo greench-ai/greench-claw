@@ -17,9 +17,10 @@ type SlackSocketModeLogger = SlackSdkLogger & {
 };
 type SlackSocketDisconnect = Awaited<ReturnType<typeof waitForSlackSocketDisconnect>>;
 
-const NEXISCLAW_SLACK_CLIENT_PING_TIMEOUT_MS = 15_000;
-const NEXISCLAW_SLACK_SOCKET_START_FAILED_EVENT = "unable_to_socket_mode_start";
-const NEXISCLAW_SLACK_NATIVE_RECONNECT_OBSERVER_KEY = "__NexisClawNativeReconnectFailureObserver";
+const GREENCHCLAW_SLACK_CLIENT_PING_TIMEOUT_MS = 15_000;
+const GREENCHCLAW_SLACK_SOCKET_START_FAILED_EVENT = "unable_to_socket_mode_start";
+const GREENCHCLAW_SLACK_NATIVE_RECONNECT_OBSERVER_KEY =
+  "__GreenchClawNativeReconnectFailureObserver";
 const SLACK_SOCKET_PONG_TIMEOUT_WARNING_PREFIX = "A pong wasn't received from the server";
 const SLACK_SOCKET_PING_TIMEOUT_WARNING_PREFIX = "A ping wasn't received from the server";
 const SLACK_SOCKET_LOG_LEVEL_IGNORED_WARNING_RE =
@@ -59,7 +60,7 @@ function installSlackNativeReconnectFailureObserver(receiver: unknown) {
   if (!client || typeof client !== "object") {
     return;
   }
-  if (Reflect.get(client, NEXISCLAW_SLACK_NATIVE_RECONNECT_OBSERVER_KEY)) {
+  if (Reflect.get(client, GREENCHCLAW_SLACK_NATIVE_RECONNECT_OBSERVER_KEY)) {
     return;
   }
   const delayReconnectAttempt = Reflect.get(client, "delayReconnectAttempt");
@@ -68,7 +69,7 @@ function installSlackNativeReconnectFailureObserver(receiver: unknown) {
     return;
   }
 
-  Reflect.set(client, NEXISCLAW_SLACK_NATIVE_RECONNECT_OBSERVER_KEY, true);
+  Reflect.set(client, GREENCHCLAW_SLACK_NATIVE_RECONNECT_OBSERVER_KEY, true);
   Reflect.set(
     client,
     "delayReconnectAttempt",
@@ -83,7 +84,7 @@ function installSlackNativeReconnectFailureObserver(receiver: unknown) {
       const delayMs =
         (Number.isFinite(pingTimeoutMs) && pingTimeoutMs >= 0
           ? pingTimeoutMs
-          : NEXISCLAW_SLACK_CLIENT_PING_TIMEOUT_MS) * nextFailureCount;
+          : GREENCHCLAW_SLACK_CLIENT_PING_TIMEOUT_MS) * nextFailureCount;
       const logger = Reflect.get(this, "logger") as { debug?: (message: string) => void };
       logger?.debug?.(
         `Before trying to reconnect, this client will wait for ${delayMs} milliseconds`,
@@ -99,7 +100,7 @@ function installSlackNativeReconnectFailureObserver(receiver: unknown) {
           emit.call(this, "reconnecting");
           Promise.resolve(callback.call(this)).then(resolve, (error: unknown) => {
             if (callback === Reflect.get(this, "start")) {
-              emit.call(this, NEXISCLAW_SLACK_SOCKET_START_FAILED_EVENT, error);
+              emit.call(this, GREENCHCLAW_SLACK_SOCKET_START_FAILED_EVENT, error);
               resolve(undefined);
               return;
             }
@@ -271,7 +272,7 @@ function asRecord(value: unknown): Record<string, unknown> | undefined {
     : undefined;
 }
 
-export function shouldSkipNexisClawSlackSelfEvent(args: SlackSelfFilterArgs): boolean {
+export function shouldSkipGreenchClawSlackSelfEvent(args: SlackSelfFilterArgs): boolean {
   const botId = args.context?.botId;
   const botUserId = args.context?.botUserId;
   const message = asRecord(args.message);
@@ -313,7 +314,7 @@ export function createSlackBoltApp(params: {
     appToken: params.appToken ?? "",
     autoReconnectEnabled: true,
     clientPingTimeout:
-      params.socketMode?.clientPingTimeout ?? NEXISCLAW_SLACK_CLIENT_PING_TIMEOUT_MS,
+      params.socketMode?.clientPingTimeout ?? GREENCHCLAW_SLACK_CLIENT_PING_TIMEOUT_MS,
     logger: socketModeLogger,
     installerOptions: {
       clientOptions: params.clientOptions,
@@ -343,11 +344,11 @@ export function createSlackBoltApp(params: {
     ignoreSelf: false,
     // Bolt eagerly starts an auth.test promise in the constructor when token
     // verification is enabled. Invalid tokens can reject before any listener
-    // consumes that promise, tripping NexisClaw's fatal unhandled-rejection path.
+    // consumes that promise, tripping GreenchClaw's fatal unhandled-rejection path.
     tokenVerificationEnabled: false,
   });
   app.use(async (args) => {
-    if (shouldSkipNexisClawSlackSelfEvent(args)) {
+    if (shouldSkipGreenchClawSlackSelfEvent(args)) {
       return;
     }
     await args.next();

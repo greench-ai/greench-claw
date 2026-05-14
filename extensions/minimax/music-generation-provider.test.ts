@@ -1,4 +1,4 @@
-import { expectExplicitMusicGenerationCapabilities } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { expectExplicitMusicGenerationCapabilities } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import {
   getMinimaxProviderHttpMocks,

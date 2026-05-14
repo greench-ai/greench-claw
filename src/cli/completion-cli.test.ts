@@ -8,7 +8,7 @@ import { getCompletionScript } from "./completion-cli.js";
 
 function createCompletionProgram(): Command {
   const program = new Command();
-  program.name("NexisClaw");
+  program.name("GreenchClaw");
   program.description("CLI root");
   program.option("-v, --verbose", "Verbose output");
 
@@ -25,9 +25,9 @@ describe("completion-cli", () => {
   it("generates zsh functions for nested subcommands", () => {
     const script = getCompletionScript("zsh", createCompletionProgram());
 
-    expect(script).toContain("_NexisClaw_gateway()");
-    expect(script).toContain("(status) _NexisClaw_gateway_status ;;");
-    expect(script).toContain("(restart) _NexisClaw_gateway_restart ;;");
+    expect(script).toContain("_GreenchClaw_gateway()");
+    expect(script).toContain("(status) _GreenchClaw_gateway_status ;;");
+    expect(script).toContain("(restart) _GreenchClaw_gateway_restart ;;");
     expect(script).toContain("--force[Force the action]");
   });
 
@@ -47,9 +47,9 @@ describe("completion-cli", () => {
       throw probe.error;
     }
 
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-zsh-completion-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-zsh-completion-"));
     try {
-      const scriptPath = path.join(tempDir, "NexisClaw.zsh");
+      const scriptPath = path.join(tempDir, "GreenchClaw.zsh");
       await fs.writeFile(scriptPath, getCompletionScript("zsh", createCompletionProgram()), "utf8");
 
       const result = spawnSync(
@@ -58,13 +58,13 @@ describe("completion-cli", () => {
           "-fc",
           `
             source ${JSON.stringify(scriptPath)}
-            [[ -z "\${_comps[NexisClaw]-}" ]] || exit 10
-            [[ "\${precmd_functions[(r)_NexisClaw_register_completion]}" = "_NexisClaw_register_completion" ]] || exit 11
+            [[ -z "\${_comps[GreenchClaw]-}" ]] || exit 10
+            [[ "\${precmd_functions[(r)_GreenchClaw_register_completion]}" = "_GreenchClaw_register_completion" ]] || exit 11
             autoload -Uz compinit
             compinit -C
-            _NexisClaw_register_completion
-            [[ -z "\${precmd_functions[(r)_NexisClaw_register_completion]}" ]] || exit 12
-            [[ "\${_comps[NexisClaw]-}" = "_NexisClaw_root_completion" ]]
+            _GreenchClaw_register_completion
+            [[ -z "\${precmd_functions[(r)_GreenchClaw_register_completion]}" ]] || exit 12
+            [[ "\${_comps[GreenchClaw]-}" = "_GreenchClaw_root_completion" ]]
           `,
         ],
         {
@@ -89,7 +89,7 @@ describe("completion-cli", () => {
 
     expect(script).toContain("if ($commandPath -eq 'gateway') {");
     expect(script).toContain("if ($commandPath -eq 'gateway status') {");
-    expect(script).not.toContain("if ($commandPath -eq 'NexisClaw gateway') {");
+    expect(script).not.toContain("if ($commandPath -eq 'GreenchClaw gateway') {");
     expect(script).toContain("$completions = @('status','restart','--force')");
   });
 
@@ -97,13 +97,13 @@ describe("completion-cli", () => {
     const script = getCompletionScript("fish", createCompletionProgram());
 
     expect(script).toContain(
-      'complete -c NexisClaw -n "__fish_use_subcommand" -a "gateway" -d \'Gateway commands\'',
+      'complete -c GreenchClaw -n "__fish_use_subcommand" -a "gateway" -d \'Gateway commands\'',
     );
     expect(script).toContain(
-      'complete -c NexisClaw -n "__fish_seen_subcommand_from gateway" -a "status" -d \'Show gateway status\'',
+      'complete -c GreenchClaw -n "__fish_seen_subcommand_from gateway" -a "status" -d \'Show gateway status\'',
     );
     expect(script).toContain(
-      "complete -c NexisClaw -n \"__fish_seen_subcommand_from gateway\" -l force -d 'Force the action'",
+      "complete -c GreenchClaw -n \"__fish_seen_subcommand_from gateway\" -l force -d 'Force the action'",
     );
   });
 });

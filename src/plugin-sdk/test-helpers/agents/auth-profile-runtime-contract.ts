@@ -30,9 +30,9 @@ export function createAuthAliasManifestRegistry(): PluginManifestRegistry {
         cliBackends: [],
         skills: [],
         hooks: [],
-        rootDir: "/tmp/NexisClaw-auth-contract-plugin",
+        rootDir: "/tmp/GreenchClaw-auth-contract-plugin",
         source: "test",
-        manifestPath: "/tmp/NexisClaw-auth-contract-plugin/plugin.json",
+        manifestPath: "/tmp/GreenchClaw-auth-contract-plugin/plugin.json",
         providerAuthChoices: [
           {
             provider: AUTH_PROFILE_RUNTIME_CONTRACT.openAiCodexProvider,

@@ -1,6 +1,6 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ChannelGroupPolicy } from "NexisClaw/plugin-sdk/config-contracts";
-import type { TelegramAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ChannelGroupPolicy } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { TelegramAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   createNativeCommandsHarness,
@@ -10,7 +10,7 @@ import {
 
 describe("native command auth in groups", () => {
   function setup(params: {
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
     telegramCfg?: TelegramAccountConfig;
     allowFrom?: string[];
     groupAllowFrom?: string[];
@@ -20,7 +20,7 @@ describe("native command auth in groups", () => {
     resolveGroupPolicy?: () => ChannelGroupPolicy;
   }) {
     return createNativeCommandsHarness({
-      cfg: params.cfg ?? ({} as NexisClawConfig),
+      cfg: params.cfg ?? ({} as GreenchClawConfig),
       telegramCfg: params.telegramCfg ?? ({} as TelegramAccountConfig),
       allowFrom: params.allowFrom ?? [],
       groupAllowFrom: params.groupAllowFrom ?? [],
@@ -74,7 +74,7 @@ describe("native command auth in groups", () => {
             telegram: ["12345"],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       allowFrom: ["99999"],
       groupAllowFrom: ["99999"],
       useAccessGroups: true,
@@ -96,7 +96,7 @@ describe("native command auth in groups", () => {
             telegram: ["99999"],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       groupAllowFrom: ["12345"],
       useAccessGroups: true,
     });
@@ -125,7 +125,7 @@ describe("native command auth in groups", () => {
             telegram: ["12345"],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       useAccessGroups: true,
       resolveGroupPolicy: () =>
         ({
@@ -151,7 +151,7 @@ describe("native command auth in groups", () => {
             telegram: ["12345"],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       useAccessGroups: true,
       resolveGroupPolicy: () =>
         ({

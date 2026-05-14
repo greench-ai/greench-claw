@@ -23,11 +23,11 @@ describe("web_search signal plumbing", () => {
     const controller = new AbortController();
     const tool = createWebSearchTool({ config: {} });
 
-    await tool?.execute("call-search", { query: "NexisClaw" }, controller.signal);
+    await tool?.execute("call-search", { query: "GreenchClaw" }, controller.signal);
 
     expect(mocks.runWebSearch).toHaveBeenCalledTimes(1);
     const params = mocks.runWebSearch.mock.calls.at(0)?.[0];
-    expect(params?.args).toEqual({ query: "NexisClaw" });
+    expect(params?.args).toEqual({ query: "GreenchClaw" });
     expect(params?.signal).toBe(controller.signal);
   });
 });

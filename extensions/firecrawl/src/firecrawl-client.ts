@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   DEFAULT_CACHE_TTL_MINUTES,
   markdownToText,
@@ -10,16 +10,16 @@ import {
   withSelfHostedWebToolsEndpoint,
   withStrictWebToolsEndpoint,
   writeCache,
-} from "NexisClaw/plugin-sdk/provider-web-fetch";
-import { normalizeSecretInput } from "NexisClaw/plugin-sdk/secret-input";
-import { wrapExternalContent, wrapWebContent } from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/provider-web-fetch";
+import { normalizeSecretInput } from "GreenchClaw/plugin-sdk/secret-input";
+import { wrapExternalContent, wrapWebContent } from "GreenchClaw/plugin-sdk/security-runtime";
 import {
   SsrFBlockedError,
   isBlockedHostnameOrIp,
   isPrivateIpAddress,
   resolvePinnedHostnameWithPolicy,
   type LookupFn,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import {
   DEFAULT_FIRECRAWL_BASE_URL,
   resolveFirecrawlApiKey,
@@ -62,7 +62,7 @@ type FirecrawlSearchItem = {
 };
 
 export type FirecrawlSearchParams = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   query: string;
   count?: number;
   timeoutSeconds?: number;
@@ -72,7 +72,7 @@ export type FirecrawlSearchParams = {
 };
 
 export type FirecrawlScrapeParams = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   url: string;
   extractMode: "markdown" | "text";
   maxChars?: number;

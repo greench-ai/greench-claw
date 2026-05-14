@@ -35,7 +35,7 @@ describe("buildStatusCommandReportData", () => {
       Value: "macOS · node " + process.versions.node,
     });
     expect(result.taskMaintenanceHint).toBe(
-      "Task maintenance: cmd:NexisClaw tasks maintenance --apply",
+      "Task maintenance: cmd:GreenchClaw tasks maintenance --apply",
     );
     expect(result.pluginCompatibilityLines).toEqual(["  warn(WARN) legacy"]);
     expect(result.pairingRecoveryLines[0]).toBe("warn(Gateway pairing approval required.)");
@@ -46,7 +46,9 @@ describe("buildStatusCommandReportData", () => {
       Status: "ok(reachable)",
       Detail: "42ms",
     });
-    expect(result.footerLines.at(-1)).toBe("  Need to test channels? cmd:NexisClaw status --deep");
+    expect(result.footerLines.at(-1)).toBe(
+      "  Need to test channels? cmd:GreenchClaw status --deep",
+    );
   });
 
   it("shows skipped audit text when fast status omits the security audit", async () => {
@@ -57,8 +59,8 @@ describe("buildStatusCommandReportData", () => {
     );
 
     expect(result.securityAuditLines).toEqual([
-      "muted(Skipped in fast status. Full report: cmd:NexisClaw security audit)",
-      "muted(Deep probe: cmd:NexisClaw status --deep)",
+      "muted(Skipped in fast status. Full report: cmd:GreenchClaw security audit)",
+      "muted(Deep probe: cmd:GreenchClaw status --deep)",
     ]);
   });
 

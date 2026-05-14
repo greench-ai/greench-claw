@@ -6,29 +6,29 @@ read_when:
 title: "Hooks"
 ---
 
-Hooks are small scripts that run when something happens inside the Gateway. They can be discovered from directories and inspected with `NexisClaw hooks`. The Gateway loads internal hooks only after you enable hooks or configure at least one hook entry, hook pack, legacy handler, or extra hook directory.
+Hooks are small scripts that run when something happens inside the Gateway. They can be discovered from directories and inspected with `GreenchClaw hooks`. The Gateway loads internal hooks only after you enable hooks or configure at least one hook entry, hook pack, legacy handler, or extra hook directory.
 
-There are two kinds of hooks in NexisClaw:
+There are two kinds of hooks in GreenchClaw:
 
 - **Internal hooks** (this page): run inside the Gateway when agent events fire, like `/new`, `/reset`, `/stop`, or lifecycle events.
-- **Webhooks**: external HTTP endpoints that let other systems trigger work in NexisClaw. See [Webhooks](/automation/cron-jobs#webhooks).
+- **Webhooks**: external HTTP endpoints that let other systems trigger work in GreenchClaw. See [Webhooks](/automation/cron-jobs#webhooks).
 
-Hooks can also be bundled inside plugins. `NexisClaw hooks list` shows both standalone hooks and plugin-managed hooks.
+Hooks can also be bundled inside plugins. `GreenchClaw hooks list` shows both standalone hooks and plugin-managed hooks.
 
 ## Quick start
 
 ```bash
 # List available hooks
-NexisClaw hooks list
+GreenchClaw hooks list
 
 # Enable a hook
-NexisClaw hooks enable session-memory
+GreenchClaw hooks enable session-memory
 
 # Check hook status
-NexisClaw hooks check
+GreenchClaw hooks check
 
 # Get detailed information
-NexisClaw hooks info session-memory
+GreenchClaw hooks info session-memory
 ```
 
 ## Event types
@@ -70,7 +70,7 @@ my-hook/
 name: my-hook
 description: "Short description of what this hook does"
 metadata:
-  { "NexisClaw": { "emoji": "🔗", "events": ["command:new"], "requires": { "bins": ["node"] } } }
+  { "GreenchClaw": { "emoji": "🔗", "events": ["command:new"], "requires": { "bins": ["node"] } } }
 ---
 
 # My Hook
@@ -78,7 +78,7 @@ metadata:
 Detailed documentation goes here.
 ```
 
-**Metadata fields** (`metadata.NexisClaw`):
+**Metadata fields** (`metadata.GreenchClaw`):
 
 | Field      | Description                                          |
 | ---------- | ---------------------------------------------------- |
@@ -141,21 +141,21 @@ Between the `gateway:shutdown` (or `gateway:pre-restart`) event and the rest of 
 
 Hooks are discovered from these directories, in order of increasing override precedence:
 
-1. **Bundled hooks**: shipped with NexisClaw
+1. **Bundled hooks**: shipped with GreenchClaw
 2. **Plugin hooks**: hooks bundled inside installed plugins
-3. **Managed hooks**: `~/.NexisClaw/hooks/` (user-installed, shared across workspaces). Extra directories from `hooks.internal.load.extraDirs` share this precedence.
+3. **Managed hooks**: `~/.GreenchClaw/hooks/` (user-installed, shared across workspaces). Extra directories from `hooks.internal.load.extraDirs` share this precedence.
 4. **Workspace hooks**: `<workspace>/hooks/` (per-agent, disabled by default until explicitly enabled)
 
 Workspace hooks can add new hook names but cannot override bundled, managed, or plugin-provided hooks with the same name.
 
-The Gateway skips internal hook discovery on startup until internal hooks are configured. Enable a bundled or managed hook with `NexisClaw hooks enable <name>`, install a hook pack, or set `hooks.internal.enabled=true` to opt in. When you enable one named hook, the Gateway loads only that hook's handler; `hooks.internal.enabled=true`, extra hook directories, and legacy handlers opt into broad discovery.
+The Gateway skips internal hook discovery on startup until internal hooks are configured. Enable a bundled or managed hook with `GreenchClaw hooks enable <name>`, install a hook pack, or set `hooks.internal.enabled=true` to opt in. When you enable one named hook, the Gateway loads only that hook's handler; `hooks.internal.enabled=true`, extra hook directories, and legacy handlers opt into broad discovery.
 
 ### Hook packs
 
-Hook packs are npm packages that export hooks via `NexisClaw.hooks` in `package.json`. Install with:
+Hook packs are npm packages that export hooks via `GreenchClaw.hooks` in `package.json`. Install with:
 
 ```bash
-NexisClaw plugins install <path-or-spec>
+GreenchClaw plugins install <path-or-spec>
 ```
 
 Npm specs are registry-only (package name + optional exact version or dist-tag). Git/URL/file specs and semver ranges are rejected.
@@ -166,14 +166,14 @@ Npm specs are registry-only (package name + optional exact version or dist-tag).
 | --------------------- | ------------------------------------------------- | -------------------------------------------------------------- |
 | session-memory        | `command:new`, `command:reset`                    | Saves session context to `<workspace>/memory/`                 |
 | bootstrap-extra-files | `agent:bootstrap`                                 | Injects additional bootstrap files from glob patterns          |
-| command-logger        | `command`                                         | Logs all commands to `~/.NexisClaw/logs/commands.log`           |
+| command-logger        | `command`                                         | Logs all commands to `~/.GreenchClaw/logs/commands.log`        |
 | compaction-notifier   | `session:compact:before`, `session:compact:after` | Sends visible chat notices when session compaction starts/ends |
 | boot-md               | `gateway:startup`                                 | Runs `BOOT.md` when the gateway starts                         |
 
 Enable any bundled hook:
 
 ```bash
-NexisClaw hooks enable <hook-name>
+GreenchClaw hooks enable <hook-name>
 ```
 
 <a id="session-memory"></a>
@@ -207,13 +207,13 @@ Paths resolve relative to workspace. Only recognized bootstrap basenames are loa
 
 ### command-logger details
 
-Logs every slash command to `~/.NexisClaw/logs/commands.log`.
+Logs every slash command to `~/.GreenchClaw/logs/commands.log`.
 
 <a id="compaction-notifier"></a>
 
 ### compaction-notifier details
 
-Sends short status messages into the current conversation when NexisClaw starts and finishes compacting the session transcript. This makes long turns less confusing on chat surfaces because the user can see that the assistant is summarizing context and will continue after compaction.
+Sends short status messages into the current conversation when GreenchClaw starts and finishes compacting the session transcript. This makes long turns less confusing on chat surfaces because the user can see that the assistant is summarizing context and will continue after compaction.
 
 <a id="boot-md"></a>
 
@@ -285,17 +285,17 @@ The legacy `hooks.internal.handlers` array config format is still supported for 
 
 ```bash
 # List all hooks (add --eligible, --verbose, or --json)
-NexisClaw hooks list
+GreenchClaw hooks list
 
 # Show detailed info about a hook
-NexisClaw hooks info <hook-name>
+GreenchClaw hooks info <hook-name>
 
 # Show eligibility summary
-NexisClaw hooks check
+GreenchClaw hooks check
 
 # Enable/disable
-NexisClaw hooks enable <hook-name>
-NexisClaw hooks disable <hook-name>
+GreenchClaw hooks enable <hook-name>
+GreenchClaw hooks disable <hook-name>
 ```
 
 ## Best practices
@@ -311,24 +311,24 @@ NexisClaw hooks disable <hook-name>
 
 ```bash
 # Verify directory structure
-ls -la ~/.NexisClaw/hooks/my-hook/
+ls -la ~/.GreenchClaw/hooks/my-hook/
 # Should show: HOOK.md, handler.ts
 
 # List all discovered hooks
-NexisClaw hooks list
+GreenchClaw hooks list
 ```
 
 ### Hook not eligible
 
 ```bash
-NexisClaw hooks info my-hook
+GreenchClaw hooks info my-hook
 ```
 
 Check for missing binaries (PATH), environment variables, config values, or OS compatibility.
 
 ### Hook not executing
 
-1. Verify the hook is enabled: `NexisClaw hooks list`
+1. Verify the hook is enabled: `GreenchClaw hooks list`
 2. Restart your gateway process so hooks reload.
 3. Check gateway logs: `./scripts/clawlog.sh | grep hook`
 

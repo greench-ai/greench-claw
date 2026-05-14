@@ -23,9 +23,9 @@ let server: Awaited<ReturnType<typeof startGatewayServer>>;
 let port = 0;
 
 beforeAll(async () => {
-  const configPath = process.env.NEXISCLAW_CONFIG_PATH;
+  const configPath = process.env.GREENCHCLAW_CONFIG_PATH;
   if (!configPath) {
-    throw new Error("NEXISCLAW_CONFIG_PATH missing in gateway test environment");
+    throw new Error("GREENCHCLAW_CONFIG_PATH missing in gateway test environment");
   }
   port = await getFreePort();
   testState.gatewayAuth = undefined;

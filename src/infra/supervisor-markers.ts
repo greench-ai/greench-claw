@@ -1,15 +1,15 @@
 const SUPERVISOR_HINTS = {
-  launchd: ["LAUNCH_JOB_LABEL", "LAUNCH_JOB_NAME", "XPC_SERVICE_NAME", "NEXISCLAW_LAUNCHD_LABEL"],
-  systemd: ["NEXISCLAW_SYSTEMD_UNIT", "INVOCATION_ID", "SYSTEMD_EXEC_PID", "JOURNAL_STREAM"],
-  schtasks: ["NEXISCLAW_WINDOWS_TASK_NAME"],
+  launchd: ["LAUNCH_JOB_LABEL", "LAUNCH_JOB_NAME", "XPC_SERVICE_NAME", "GREENCHCLAW_LAUNCHD_LABEL"],
+  systemd: ["GREENCHCLAW_SYSTEMD_UNIT", "INVOCATION_ID", "SYSTEMD_EXEC_PID", "JOURNAL_STREAM"],
+  schtasks: ["GREENCHCLAW_WINDOWS_TASK_NAME"],
 } as const;
 
 export const SUPERVISOR_HINT_ENV_VARS = [
   ...SUPERVISOR_HINTS.launchd,
   ...SUPERVISOR_HINTS.systemd,
   ...SUPERVISOR_HINTS.schtasks,
-  "NEXISCLAW_SERVICE_MARKER",
-  "NEXISCLAW_SERVICE_KIND",
+  "GREENCHCLAW_SERVICE_MARKER",
+  "GREENCHCLAW_SERVICE_KIND",
 ] as const;
 
 export type RespawnSupervisor = "launchd" | "systemd" | "schtasks";
@@ -35,8 +35,8 @@ export function detectRespawnSupervisor(
     if (hasAnyHint(env, SUPERVISOR_HINTS.schtasks)) {
       return "schtasks";
     }
-    const marker = env.NEXISCLAW_SERVICE_MARKER?.trim();
-    const serviceKind = env.NEXISCLAW_SERVICE_KIND?.trim();
+    const marker = env.GREENCHCLAW_SERVICE_MARKER?.trim();
+    const serviceKind = env.GREENCHCLAW_SERVICE_KIND?.trim();
     return marker && serviceKind === "gateway" ? "schtasks" : null;
   }
   return null;

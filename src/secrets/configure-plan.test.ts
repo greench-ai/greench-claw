@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   TALK_TEST_PROVIDER_API_KEY_PATH,
   TALK_TEST_PROVIDER_ID,
@@ -27,7 +27,7 @@ describe("secrets configure plan helpers", () => {
           botToken: "token", // pragma: allowlist secret
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const candidates = buildConfigureCandidates(config);
     const paths = candidates.map((entry) => entry.path);
@@ -43,7 +43,7 @@ describe("secrets configure plan helpers", () => {
           legacy: { source: "env" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const next = {
       secrets: {
         providers: {
@@ -51,7 +51,7 @@ describe("secrets configure plan helpers", () => {
           modern: { source: "env" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const changes = collectConfigureProviderChanges({ original, next });
     expect(Object.keys(changes.upserts).toSorted()).toEqual(["default", "modern"]);
@@ -60,7 +60,7 @@ describe("secrets configure plan helpers", () => {
 
   it("discovers auth-profiles candidates for the selected agent scope", () => {
     const candidates = buildConfigureCandidatesForScope({
-      config: {} as NexisClawConfig,
+      config: {} as GreenchClawConfig,
       authProfiles: {
         agentId: "main",
         store: {
@@ -98,7 +98,7 @@ describe("secrets configure plan helpers", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       authProfiles: {
         agentId: "main",
         store: {
@@ -149,12 +149,12 @@ describe("secrets configure plan helpers", () => {
           },
           apiKey: "demo-talk-key", // pragma: allowlist secret
         },
-      } as NexisClawConfig,
-      authoredNexisClawConfig: {
+      } as GreenchClawConfig,
+      authoredGreenchClawConfig: {
         talk: {
           apiKey: "demo-talk-key", // pragma: allowlist secret
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     const normalized = candidates.find((entry) => entry.path === TALK_TEST_PROVIDER_API_KEY_PATH);
@@ -170,7 +170,7 @@ describe("secrets configure plan helpers", () => {
           path: TALK_TEST_PROVIDER_API_KEY_PATH,
           pathSegments: ["talk", "providers", TALK_TEST_PROVIDER_ID, "apiKey"],
           label: TALK_TEST_PROVIDER_API_KEY_PATH,
-          configFile: "NexisClaw.json" as const,
+          configFile: "GreenchClaw.json" as const,
           expectedResolvedValue: "string" as const,
           providerId: TALK_TEST_PROVIDER_ID,
           ref: {

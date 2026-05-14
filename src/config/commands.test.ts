@@ -105,8 +105,8 @@ describe("resolveNativeSkillsEnabled", () => {
     setActivePluginRegistry(createTestRegistry([]));
     const env = {
       ...process.env,
-      NEXISCLAW_BUNDLED_PLUGINS_DIR: path.resolve("extensions"),
-      NEXISCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY: "1",
+      GREENCHCLAW_BUNDLED_PLUGINS_DIR: path.resolve("extensions"),
+      GREENCHCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY: "1",
     };
 
     expect(

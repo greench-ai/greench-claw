@@ -1,7 +1,7 @@
 import {
   embeddedAgentLog,
   type EmbeddedRunAttemptParams,
-} from "NexisClaw/plugin-sdk/agent-harness-runtime";
+} from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import {
   CODEX_GPT5_HEARTBEAT_PROMPT_OVERLAY,
   renderCodexPromptOverlay,
@@ -308,7 +308,7 @@ export function buildThreadStartParams(
     approvalsReviewer: options.appServer.approvalsReviewer,
     sandbox: options.appServer.sandbox,
     ...(options.appServer.serviceTier ? { serviceTier: options.appServer.serviceTier } : {}),
-    serviceName: "NexisClaw",
+    serviceName: "GreenchClaw",
     config: buildCodexRuntimeThreadConfig(options.config),
     developerInstructions: options.developerInstructions ?? buildDeveloperInstructions(params),
     dynamicTools: options.dynamicTools,
@@ -397,8 +397,8 @@ export function buildTurnCollaborationMode(
 
 function buildHeartbeatCollaborationInstructions(): string {
   return [
-    "This is an NexisClaw heartbeat turn. Apply these instructions only to this heartbeat wake; ordinary chat turns should stay in Codex Default mode.",
-    "When you are ready to end the heartbeat, prefer the structured `heartbeat_respond` tool so NexisClaw can record the wake outcome and notification decision. If `heartbeat_respond` is not already available and `tool_search` is available, search for `heartbeat_respond`, load it, then call it. Use `notify=false` when nothing should visibly interrupt the user.",
+    "This is an GreenchClaw heartbeat turn. Apply these instructions only to this heartbeat wake; ordinary chat turns should stay in Codex Default mode.",
+    "When you are ready to end the heartbeat, prefer the structured `heartbeat_respond` tool so GreenchClaw can record the wake outcome and notification decision. If `heartbeat_respond` is not already available and `tool_search` is available, search for `heartbeat_respond`, load it, then call it. Use `notify=false` when nothing should visibly interrupt the user.",
     CODEX_GPT5_HEARTBEAT_PROMPT_OVERLAY,
   ].join("\n\n");
 }
@@ -476,7 +476,7 @@ function compareJsonFingerprint(left: JsonValue, right: JsonValue): number {
 export function buildDeveloperInstructions(params: EmbeddedRunAttemptParams): string {
   const promptOverlay = renderCodexRuntimePromptOverlay(params);
   const sections = [
-    "Running inside NexisClaw. Use dynamic tools for messaging, cron, sessions, media, gateway, and nodes when available.",
+    "Running inside GreenchClaw. Use dynamic tools for messaging, cron, sessions, media, gateway, and nodes when available.",
     "Preserve channel/session context. Visible channel replies: use `message`, do not describe would-reply.",
     promptOverlay,
     params.extraSystemPrompt,
@@ -538,7 +538,7 @@ export function resolveCodexAppServerModelProvider(params: {
   const normalized = params.provider.trim();
   const normalizedLower = normalized.toLowerCase();
   if (!normalized || normalizedLower === "codex") {
-    // `codex` is NexisClaw's virtual provider; let Codex app-server keep its
+    // `codex` is GreenchClaw's virtual provider; let Codex app-server keep its
     // native provider/auth selection instead of forcing the legacy OpenAI path.
     return undefined;
   }
@@ -546,7 +546,7 @@ export function resolveCodexAppServerModelProvider(params: {
     isCodexAppServerNativeAuthProfile(params) &&
     (normalizedLower === "openai" || normalizedLower === "openai-codex")
   ) {
-    // When NexisClaw is forwarding ChatGPT/Codex OAuth, `openai` is Codex's
+    // When GreenchClaw is forwarding ChatGPT/Codex OAuth, `openai` is Codex's
     // native provider id, not a public OpenAI API-key choice. Omit the override
     // so app-server keeps its configured provider/auth pair for this session.
     return undefined;

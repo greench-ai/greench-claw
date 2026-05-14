@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { OutboundDeliveryError } from "../../infra/outbound/deliver-types.js";
 import type { OutboundPayloadDeliveryOutcome } from "../../infra/outbound/deliver-types.js";
 import type { OutboundDeliveryIntent } from "../../infra/outbound/deliver.js";
@@ -31,7 +31,7 @@ type DeliveryRequest = DeliveryIntentCallbackParams & {
   threadId?: string | number;
 };
 
-const cfg = {} as NexisClawConfig;
+const cfg = {} as GreenchClawConfig;
 
 function requireMockCall(
   mock: { mock: { calls: unknown[][] } },

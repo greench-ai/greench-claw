@@ -191,7 +191,7 @@ function buildLocalProviderInstallCatalogEntry() {
     label: LOCAL_PROVIDER_LABEL,
     origin: "bundled" as const,
     install: {
-      npmSpec: "@NexisClaw/local-provider",
+      npmSpec: "@GreenchClaw/local-provider",
     },
   };
 }

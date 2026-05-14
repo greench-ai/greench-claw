@@ -1,7 +1,7 @@
 import type { AgentModelEntryConfig } from "../config/types.agent-defaults.js";
 import type { AgentRuntimePolicyConfig } from "../config/types.agents-shared.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { ModelDefinitionConfig, ModelProviderConfig } from "../config/types.models.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import { listAgentEntries, resolveSessionAgentIds } from "./agent-scope.js";
 import { normalizeProviderId } from "./provider-id.js";
@@ -18,7 +18,7 @@ function hasRuntimePolicy(value: AgentRuntimePolicyConfig | undefined): boolean 
 }
 
 function resolveProviderConfig(
-  config: NexisClawConfig | undefined,
+  config: GreenchClawConfig | undefined,
   provider: string | undefined,
 ): ModelProviderConfig | undefined {
   if (!config?.models?.providers || !provider?.trim()) {
@@ -90,7 +90,7 @@ function modelKeyMatches(params: {
 }
 
 function resolveAgentModelEntryRuntimePolicy(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   provider?: string;
   modelId?: string;
   agentId?: string;
@@ -140,7 +140,7 @@ function resolveModelConfig(params: {
 }
 
 export function resolveModelRuntimePolicy(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   provider?: string;
   modelId?: string;
   agentId?: string;

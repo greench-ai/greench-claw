@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import type {
   CostUsageSummary,
   CostUsageTotals,
@@ -60,7 +60,7 @@ function buildUsageParams(): HandleCommandsParams {
     cfg: {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as NexisClawConfig,
+    } as GreenchClawConfig,
     ctx: {
       Provider: "whatsapp",
       Surface: "whatsapp",

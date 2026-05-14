@@ -1,6 +1,7 @@
 // Shared error graph/format helpers without the full infra-runtime surface.
 
-export const SUBAGENT_RUNTIME_REQUEST_SCOPE_ERROR_CODE = "NEXISCLAW_SUBAGENT_RUNTIME_REQUEST_SCOPE";
+export const SUBAGENT_RUNTIME_REQUEST_SCOPE_ERROR_CODE =
+  "GREENCHCLAW_SUBAGENT_RUNTIME_REQUEST_SCOPE";
 export const SUBAGENT_RUNTIME_REQUEST_SCOPE_ERROR_MESSAGE =
   "Plugin runtime subagent methods are only available during a gateway request.";
 

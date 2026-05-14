@@ -66,9 +66,9 @@ describe("startProxy", () => {
     "GLOBAL_AGENT_HTTPS_PROXY",
     "GLOBAL_AGENT_FORCE_GLOBAL_AGENT",
     "GLOBAL_AGENT_NO_PROXY",
-    "NEXISCLAW_PROXY_ACTIVE",
-    "NEXISCLAW_PROXY_LOOPBACK_MODE",
-    "NEXISCLAW_PROXY_URL",
+    "GREENCHCLAW_PROXY_ACTIVE",
+    "GREENCHCLAW_PROXY_LOOPBACK_MODE",
+    "GREENCHCLAW_PROXY_URL",
   ];
   const originalHttpRequest = http.request;
   const originalHttpGet = http.get;
@@ -166,8 +166,8 @@ describe("startProxy", () => {
     expect(getActiveManagedProxyUrl()).toBeUndefined();
   });
 
-  it("uses NEXISCLAW_PROXY_URL when config proxyUrl is omitted", async () => {
-    process.env["NEXISCLAW_PROXY_URL"] = "http://127.0.0.1:3128";
+  it("uses GREENCHCLAW_PROXY_URL when config proxyUrl is omitted", async () => {
+    process.env["GREENCHCLAW_PROXY_URL"] = "http://127.0.0.1:3128";
 
     const handle = await startProxy({ enabled: true });
 
@@ -175,8 +175,8 @@ describe("startProxy", () => {
     expect(process.env["HTTP_PROXY"]).toBe("http://127.0.0.1:3128");
   });
 
-  it("prefers config proxyUrl over NEXISCLAW_PROXY_URL", async () => {
-    process.env["NEXISCLAW_PROXY_URL"] = "http://127.0.0.1:3128";
+  it("prefers config proxyUrl over GREENCHCLAW_PROXY_URL", async () => {
+    process.env["GREENCHCLAW_PROXY_URL"] = "http://127.0.0.1:3128";
 
     const handle = await startProxy({
       enabled: true,
@@ -187,8 +187,8 @@ describe("startProxy", () => {
     expect(process.env["HTTP_PROXY"]).toBe("http://127.0.0.1:3129");
   });
 
-  it("throws for HTTPS proxy URLs from NEXISCLAW_PROXY_URL", async () => {
-    process.env["NEXISCLAW_PROXY_URL"] = "https://127.0.0.1:3128";
+  it("throws for HTTPS proxy URLs from GREENCHCLAW_PROXY_URL", async () => {
+    process.env["GREENCHCLAW_PROXY_URL"] = "https://127.0.0.1:3128";
 
     await expect(startProxy({ enabled: true })).rejects.toThrow("http:// forward proxy");
 
@@ -210,8 +210,8 @@ describe("startProxy", () => {
     expect(process.env["GLOBAL_AGENT_HTTP_PROXY"]).toBe("http://127.0.0.1:3128");
     expect(process.env["GLOBAL_AGENT_HTTPS_PROXY"]).toBe("http://127.0.0.1:3128");
     expect(process.env["GLOBAL_AGENT_FORCE_GLOBAL_AGENT"]).toBe("true");
-    expect(process.env["NEXISCLAW_PROXY_ACTIVE"]).toBe("1");
-    expect(process.env["NEXISCLAW_PROXY_LOOPBACK_MODE"]).toBe("gateway-only");
+    expect(process.env["GREENCHCLAW_PROXY_ACTIVE"]).toBe("1");
+    expect(process.env["GREENCHCLAW_PROXY_LOOPBACK_MODE"]).toBe("gateway-only");
   });
 
   it("persists loopbackMode in env for forked child CLIs", async () => {
@@ -222,12 +222,12 @@ describe("startProxy", () => {
       loopbackMode: "block",
     });
 
-    expect(process.env["NEXISCLAW_PROXY_LOOPBACK_MODE"]).toBe("block");
+    expect(process.env["GREENCHCLAW_PROXY_LOOPBACK_MODE"]).toBe("block");
     expect(getActiveManagedProxyLoopbackMode()).toBe("block");
 
     await stopProxy(handle);
-    process.env["NEXISCLAW_PROXY_ACTIVE"] = "1";
-    process.env["NEXISCLAW_PROXY_LOOPBACK_MODE"] = "proxy";
+    process.env["GREENCHCLAW_PROXY_ACTIVE"] = "1";
+    process.env["GREENCHCLAW_PROXY_LOOPBACK_MODE"] = "proxy";
 
     expect(getActiveManagedProxyLoopbackMode()).toBe("proxy");
   });
@@ -301,7 +301,7 @@ describe("startProxy", () => {
     expect(process.env["GLOBAL_AGENT_HTTP_PROXY"]).toBe("http://previous-global.example.com:8080");
     expect(process.env["GLOBAL_AGENT_HTTPS_PROXY"]).toBe("http://previous-global.example.com:8443");
     expect(process.env["GLOBAL_AGENT_NO_PROXY"]).toBe("global.corp.example.com");
-    expect(process.env["NEXISCLAW_PROXY_ACTIVE"]).toBeUndefined();
+    expect(process.env["GREENCHCLAW_PROXY_ACTIVE"]).toBeUndefined();
     const agent = (global as Record<string, unknown>)["GLOBAL_AGENT"] as Record<string, unknown>;
     expect(agent["HTTP_PROXY"]).toBe("");
     expect(agent["HTTPS_PROXY"]).toBe("");
@@ -378,14 +378,14 @@ describe("startProxy", () => {
     expect(http.request).toBe(patchedHttpRequest);
     expect(https.request).toBe(patchedHttpsRequest);
     expect(process.env["HTTP_PROXY"]).toBe("http://127.0.0.1:3128");
-    expect(process.env["NEXISCLAW_PROXY_ACTIVE"]).toBe("1");
+    expect(process.env["GREENCHCLAW_PROXY_ACTIVE"]).toBe("1");
 
     await stopProxy(secondHandle);
 
     expect(http.request).toBe(patchedHttpRequest);
     expect(https.request).toBe(patchedHttpsRequest);
     expect(process.env["HTTP_PROXY"]).toBe("http://127.0.0.1:3128");
-    expect(process.env["NEXISCLAW_PROXY_ACTIVE"]).toBe("1");
+    expect(process.env["GREENCHCLAW_PROXY_ACTIVE"]).toBe("1");
 
     await stopProxy(firstHandle);
 
@@ -394,7 +394,7 @@ describe("startProxy", () => {
     expect(https.request).toBe(originalHttpsRequest);
     expect(https.get).toBe(originalHttpsGet);
     expect(process.env["HTTP_PROXY"]).toBeUndefined();
-    expect(process.env["NEXISCLAW_PROXY_ACTIVE"]).toBeUndefined();
+    expect(process.env["GREENCHCLAW_PROXY_ACTIVE"]).toBeUndefined();
   });
 
   it("rejects overlapping handles with different managed proxy URLs", async () => {
@@ -411,7 +411,7 @@ describe("startProxy", () => {
     ).rejects.toThrow("cannot activate a managed proxy");
 
     expect(process.env["HTTP_PROXY"]).toBe("http://127.0.0.1:3128");
-    expect(process.env["NEXISCLAW_PROXY_ACTIVE"]).toBe("1");
+    expect(process.env["GREENCHCLAW_PROXY_ACTIVE"]).toBe("1");
 
     await stopProxy(firstHandle);
   });
@@ -432,7 +432,7 @@ describe("startProxy", () => {
     ).rejects.toThrow("cannot activate a managed proxy with a different proxy.loopbackMode");
 
     expect(process.env["HTTP_PROXY"]).toBe("http://127.0.0.1:3128");
-    expect(process.env["NEXISCLAW_PROXY_ACTIVE"]).toBe("1");
+    expect(process.env["GREENCHCLAW_PROXY_ACTIVE"]).toBe("1");
 
     await stopProxy(firstHandle);
   });

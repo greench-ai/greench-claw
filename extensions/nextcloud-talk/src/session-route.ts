@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { buildOutboundBaseSessionKey } from "NexisClaw/plugin-sdk/routing";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { buildOutboundBaseSessionKey } from "GreenchClaw/plugin-sdk/routing";
 import { stripNextcloudTalkTargetPrefix } from "./normalize.js";
 
 type NextcloudTalkOutboundSessionRouteParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   accountId?: string | null;
   target: string;

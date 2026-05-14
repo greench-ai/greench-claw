@@ -9,7 +9,7 @@ const modelAttempts = Number.parseInt(process.env.OPENWEBUI_MODEL_ATTEMPTS ?? "7
 const modelRetryMs = Number.parseInt(process.env.OPENWEBUI_MODEL_RETRY_MS ?? "5000", 10);
 const fetchTimeoutMs = Number.parseInt(process.env.OPENWEBUI_FETCH_TIMEOUT_MS ?? "720000", 10);
 const smokeMode =
-  process.env.OPENWEBUI_SMOKE_MODE ?? process.env.NEXISCLAW_OPENWEBUI_SMOKE_MODE ?? "chat";
+  process.env.OPENWEBUI_SMOKE_MODE ?? process.env.GREENCHCLAW_OPENWEBUI_SMOKE_MODE ?? "chat";
 
 setGlobalDispatcher(new Agent({ bodyTimeout: fetchTimeoutMs, headersTimeout: fetchTimeoutMs }));
 
@@ -95,11 +95,12 @@ for (let attempt = 1; attempt <= modelAttempts; attempt += 1) {
     const modelsJson = await modelsRes.json();
     modelIds = extractModelIds(modelsJson);
     targetModel =
-      modelIds.find((id) => id === "NexisClaw/default") ?? modelIds.find((id) => id === "NexisClaw");
+      modelIds.find((id) => id === "GreenchClaw/default") ??
+      modelIds.find((id) => id === "GreenchClaw");
     if (targetModel) {
       break;
     }
-    lastModelsError = `missing NexisClaw model: ${JSON.stringify(modelIds)}`;
+    lastModelsError = `missing GreenchClaw model: ${JSON.stringify(modelIds)}`;
   } else if (modelsRes) {
     lastModelsError = `HTTP ${modelsRes.status} ${await modelsRes.text()}`;
   }
@@ -107,7 +108,7 @@ for (let attempt = 1; attempt <= modelAttempts; attempt += 1) {
 }
 if (!targetModel) {
   throw new Error(
-    `NexisClaw model missing from Open WebUI model list after retry: ${JSON.stringify(modelIds)} (${lastModelsError})`,
+    `GreenchClaw model missing from Open WebUI model list after retry: ${JSON.stringify(modelIds)} (${lastModelsError})`,
   );
 }
 if (smokeMode === "models") {

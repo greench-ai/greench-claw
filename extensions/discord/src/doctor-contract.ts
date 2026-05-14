@@ -1,13 +1,16 @@
 import type {
   ChannelDoctorConfigMutation,
   ChannelDoctorLegacyConfigRule,
-} from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { asObjectRecord, normalizeLegacyChannelAliases } from "NexisClaw/plugin-sdk/runtime-doctor";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import {
+  asObjectRecord,
+  normalizeLegacyChannelAliases,
+} from "GreenchClaw/plugin-sdk/runtime-doctor";
 import { resolveDiscordPreviewStreamMode } from "./preview-streaming.js";
 
 const LEGACY_TTS_PROVIDER_KEYS = ["openai", "elevenlabs", "microsoft", "edge"] as const;
-type AgentBindingConfig = NonNullable<NexisClawConfig["bindings"]>[number];
+type AgentBindingConfig = NonNullable<GreenchClawConfig["bindings"]>[number];
 
 function hasLegacyTtsProviderKeys(value: unknown): boolean {
   const tts = asObjectRecord(value);
@@ -224,7 +227,7 @@ function isDiscordChannelAgentBinding(
 }
 
 function normalizeDiscordGuildChannelAgentIds(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   entry: Record<string, unknown>;
   pathPrefix: string;
   accountId?: string;
@@ -310,37 +313,37 @@ export const legacyConfigRules: ChannelDoctorLegacyConfigRule[] = [
   {
     path: ["channels", "discord", "voice", "tts"],
     message:
-      'channels.discord.voice.tts.<provider> keys (openai/elevenlabs/microsoft/edge) are legacy; use channels.discord.voice.tts.providers.<provider>. Run "NexisClaw doctor --fix".',
+      'channels.discord.voice.tts.<provider> keys (openai/elevenlabs/microsoft/edge) are legacy; use channels.discord.voice.tts.providers.<provider>. Run "GreenchClaw doctor --fix".',
     match: hasLegacyTtsProviderKeys,
   },
   {
     path: ["channels", "discord", "accounts"],
     message:
-      'channels.discord.accounts.<id>.voice.tts.<provider> keys (openai/elevenlabs/microsoft/edge) are legacy; use channels.discord.accounts.<id>.voice.tts.providers.<provider>. Run "NexisClaw doctor --fix".',
+      'channels.discord.accounts.<id>.voice.tts.<provider> keys (openai/elevenlabs/microsoft/edge) are legacy; use channels.discord.accounts.<id>.voice.tts.providers.<provider>. Run "GreenchClaw doctor --fix".',
     match: hasLegacyDiscordAccountTtsProviderKeys,
   },
   {
     path: ["channels", "discord"],
     message:
-      'channels.discord.guilds.<id>.channels.<id>.allow is legacy; use channels.discord.guilds.<id>.channels.<id>.enabled instead. Run "NexisClaw doctor --fix".',
+      'channels.discord.guilds.<id>.channels.<id>.allow is legacy; use channels.discord.guilds.<id>.channels.<id>.enabled instead. Run "GreenchClaw doctor --fix".',
     match: hasLegacyDiscordGuildChannelAllowAlias,
   },
   {
     path: ["channels", "discord", "accounts"],
     message:
-      'channels.discord.accounts.<id>.guilds.<id>.channels.<id>.allow is legacy; use channels.discord.accounts.<id>.guilds.<id>.channels.<id>.enabled instead. Run "NexisClaw doctor --fix".',
+      'channels.discord.accounts.<id>.guilds.<id>.channels.<id>.allow is legacy; use channels.discord.accounts.<id>.guilds.<id>.channels.<id>.enabled instead. Run "GreenchClaw doctor --fix".',
     match: hasLegacyDiscordAccountGuildChannelAllowAlias,
   },
   {
     path: ["channels", "discord"],
     message:
-      'channels.discord.guilds.<id>.channels.<id>.agentId is legacy; use top-level bindings[] for per-channel Discord agent routing. Run "NexisClaw doctor --fix".',
+      'channels.discord.guilds.<id>.channels.<id>.agentId is legacy; use top-level bindings[] for per-channel Discord agent routing. Run "GreenchClaw doctor --fix".',
     match: hasLegacyDiscordGuildChannelAgentId,
   },
   {
     path: ["channels", "discord", "accounts"],
     message:
-      'channels.discord.accounts.<id>.guilds.<id>.channels.<id>.agentId is legacy; use top-level bindings[] with match.accountId for per-channel Discord agent routing. Run "NexisClaw doctor --fix".',
+      'channels.discord.accounts.<id>.guilds.<id>.channels.<id>.agentId is legacy; use top-level bindings[] with match.accountId for per-channel Discord agent routing. Run "GreenchClaw doctor --fix".',
     match: hasLegacyDiscordAccountGuildChannelAgentId,
   },
 ];
@@ -348,7 +351,7 @@ export const legacyConfigRules: ChannelDoctorLegacyConfigRule[] = [
 export function normalizeCompatibilityConfig({
   cfg,
 }: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): ChannelDoctorConfigMutation {
   const rawEntry = asObjectRecord((cfg.channels as Record<string, unknown> | undefined)?.discord);
   if (!rawEntry) {
@@ -468,7 +471,7 @@ export function normalizeCompatibilityConfig({
       channels: {
         ...cfg.channels,
         discord: updated,
-      } as NexisClawConfig["channels"],
+      } as GreenchClawConfig["channels"],
       bindings:
         bindingsToAdd.length > 0 ? [...(cfg.bindings ?? []), ...bindingsToAdd] : cfg.bindings,
     },

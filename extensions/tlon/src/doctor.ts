@@ -1,4 +1,4 @@
-import type { ChannelDoctorAdapter } from "NexisClaw/plugin-sdk/channel-contract";
+import type { ChannelDoctorAdapter } from "GreenchClaw/plugin-sdk/channel-contract";
 import {
   legacyConfigRules as TLON_LEGACY_CONFIG_RULES,
   normalizeCompatibilityConfig as normalizeTlonCompatibilityConfig,

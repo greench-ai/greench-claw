@@ -57,6 +57,6 @@ export function resetLifecycleServiceMocks() {
 
 export function stubEmptyGatewayEnv() {
   vi.unstubAllEnvs();
-  vi.stubEnv("NEXISCLAW_GATEWAY_TOKEN", "");
-  vi.stubEnv("NEXISCLAW_GATEWAY_URL", "");
+  vi.stubEnv("GREENCHCLAW_GATEWAY_TOKEN", "");
+  vi.stubEnv("GREENCHCLAW_GATEWAY_URL", "");
 }

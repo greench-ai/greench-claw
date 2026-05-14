@@ -1,5 +1,5 @@
-import type { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import type { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import { ChannelType } from "../internal/discord.js";
 import type { VoiceCaptureState } from "./capture-state.js";
 import type { VoiceReceiveRecoveryState } from "./receive-recovery.js";

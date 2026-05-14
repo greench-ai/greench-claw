@@ -7,16 +7,16 @@ describe("buildPlatformRuntimeLogHints", () => {
       buildPlatformRuntimeLogHints({
         platform: "darwin",
         env: {
-          NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-state",
-          NEXISCLAW_LOG_PREFIX: "gateway",
+          GREENCHCLAW_STATE_DIR: "/tmp/GreenchClaw-state",
+          GREENCHCLAW_LOG_PREFIX: "gateway",
         },
-        systemdServiceName: "NexisClaw-gateway",
-        windowsTaskName: "NexisClaw Gateway",
+        systemdServiceName: "GreenchClaw-gateway",
+        windowsTaskName: "GreenchClaw Gateway",
       }),
     ).toEqual([
-      "Launchd stdout (if installed): /tmp/NexisClaw-state/logs/gateway.log",
+      "Launchd stdout (if installed): /tmp/GreenchClaw-state/logs/gateway.log",
       "Launchd stderr (if installed): suppressed",
-      "Restart attempts: /tmp/NexisClaw-state/logs/gateway-restart.log",
+      "Restart attempts: /tmp/GreenchClaw-state/logs/gateway-restart.log",
     ]);
   });
 
@@ -25,27 +25,27 @@ describe("buildPlatformRuntimeLogHints", () => {
       buildPlatformRuntimeLogHints({
         platform: "linux",
         env: {
-          NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-state",
+          GREENCHCLAW_STATE_DIR: "/tmp/GreenchClaw-state",
         },
-        systemdServiceName: "NexisClaw-gateway",
-        windowsTaskName: "NexisClaw Gateway",
+        systemdServiceName: "GreenchClaw-gateway",
+        windowsTaskName: "GreenchClaw Gateway",
       }),
     ).toEqual([
-      "Logs: journalctl --user -u NexisClaw-gateway.service -n 200 --no-pager",
-      "Restart attempts: /tmp/NexisClaw-state/logs/gateway-restart.log",
+      "Logs: journalctl --user -u GreenchClaw-gateway.service -n 200 --no-pager",
+      "Restart attempts: /tmp/GreenchClaw-state/logs/gateway-restart.log",
     ]);
     expect(
       buildPlatformRuntimeLogHints({
         platform: "win32",
         env: {
-          NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-state",
+          GREENCHCLAW_STATE_DIR: "/tmp/GreenchClaw-state",
         },
-        systemdServiceName: "NexisClaw-gateway",
-        windowsTaskName: "NexisClaw Gateway",
+        systemdServiceName: "GreenchClaw-gateway",
+        windowsTaskName: "GreenchClaw Gateway",
       }),
     ).toEqual([
-      'Logs: schtasks /Query /TN "NexisClaw Gateway" /V /FO LIST',
-      "Restart attempts: /tmp/NexisClaw-state/logs/gateway-restart.log",
+      'Logs: schtasks /Query /TN "GreenchClaw Gateway" /V /FO LIST',
+      "Restart attempts: /tmp/GreenchClaw-state/logs/gateway-restart.log",
     ]);
   });
 });
@@ -55,30 +55,30 @@ describe("buildPlatformServiceStartHints", () => {
     expect(
       buildPlatformServiceStartHints({
         platform: "darwin",
-        installCommand: "NexisClaw gateway install",
-        startCommand: "NexisClaw gateway",
-        launchAgentPlistPath: "~/Library/LaunchAgents/com.NexisClaw.gateway.plist",
-        systemdServiceName: "NexisClaw-gateway",
-        windowsTaskName: "NexisClaw Gateway",
+        installCommand: "GreenchClaw gateway install",
+        startCommand: "GreenchClaw gateway",
+        launchAgentPlistPath: "~/Library/LaunchAgents/com.GreenchClaw.gateway.plist",
+        systemdServiceName: "GreenchClaw-gateway",
+        windowsTaskName: "GreenchClaw Gateway",
       }),
     ).toEqual([
-      "NexisClaw gateway install",
-      "NexisClaw gateway",
-      "launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.NexisClaw.gateway.plist",
+      "GreenchClaw gateway install",
+      "GreenchClaw gateway",
+      "launchctl bootstrap gui/$UID ~/Library/LaunchAgents/com.GreenchClaw.gateway.plist",
     ]);
     expect(
       buildPlatformServiceStartHints({
         platform: "linux",
-        installCommand: "NexisClaw gateway install",
-        startCommand: "NexisClaw gateway",
-        launchAgentPlistPath: "~/Library/LaunchAgents/com.NexisClaw.gateway.plist",
-        systemdServiceName: "NexisClaw-gateway",
-        windowsTaskName: "NexisClaw Gateway",
+        installCommand: "GreenchClaw gateway install",
+        startCommand: "GreenchClaw gateway",
+        launchAgentPlistPath: "~/Library/LaunchAgents/com.GreenchClaw.gateway.plist",
+        systemdServiceName: "GreenchClaw-gateway",
+        windowsTaskName: "GreenchClaw Gateway",
       }),
     ).toEqual([
-      "NexisClaw gateway install",
-      "NexisClaw gateway",
-      "systemctl --user start NexisClaw-gateway.service",
+      "GreenchClaw gateway install",
+      "GreenchClaw gateway",
+      "systemctl --user start GreenchClaw-gateway.service",
     ]);
   });
 });

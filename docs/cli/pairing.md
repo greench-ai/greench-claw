@@ -1,11 +1,11 @@
 ---
-summary: "CLI reference for `NexisClaw pairing` (approve/list pairing requests)"
+summary: "CLI reference for `GreenchClaw pairing` (approve/list pairing requests)"
 read_when:
   - You're using pairing-mode DMs and need to approve senders
 title: "Pairing"
 ---
 
-# `NexisClaw pairing`
+# `GreenchClaw pairing`
 
 Approve or inspect DM pairing requests (for channels that support pairing).
 
@@ -16,13 +16,13 @@ Related:
 ## Commands
 
 ```bash
-NexisClaw pairing list telegram
-NexisClaw pairing list --channel telegram --account work
-NexisClaw pairing list telegram --json
+GreenchClaw pairing list telegram
+GreenchClaw pairing list --channel telegram --account work
+GreenchClaw pairing list telegram --json
 
-NexisClaw pairing approve <code>
-NexisClaw pairing approve telegram <code>
-NexisClaw pairing approve --channel telegram --account work <code> --notify
+GreenchClaw pairing approve <code>
+GreenchClaw pairing approve telegram <code>
+GreenchClaw pairing approve --channel telegram --account work <code> --notify
 ```
 
 ## `pairing list`
@@ -47,9 +47,9 @@ Approve a pending pairing code and allow that sender.
 
 Usage:
 
-- `NexisClaw pairing approve <channel> <code>`
-- `NexisClaw pairing approve --channel <channel> <code>`
-- `NexisClaw pairing approve <code>` when exactly one pairing-capable channel is configured
+- `GreenchClaw pairing approve <channel> <code>`
+- `GreenchClaw pairing approve --channel <channel> <code>`
+- `GreenchClaw pairing approve <code>` when exactly one pairing-capable channel is configured
 
 Options:
 
@@ -59,7 +59,7 @@ Options:
 
 Owner bootstrap:
 
-- If `commands.ownerAllowFrom` is empty when you approve a pairing code, NexisClaw also records the approved sender as the command owner, using a channel-scoped entry such as `telegram:123456789`.
+- If `commands.ownerAllowFrom` is empty when you approve a pairing code, GreenchClaw also records the approved sender as the command owner, using a channel-scoped entry such as `telegram:123456789`.
 - This only bootstraps the first owner. Later pairing approvals do not replace or expand `commands.ownerAllowFrom`.
 - The command owner is the human operator account allowed to run owner-only commands and approve dangerous actions such as `/diagnostics`, `/export-trajectory`, `/config`, and exec approvals.
 
@@ -69,7 +69,7 @@ Owner bootstrap:
 - `pairing list` supports `--account <accountId>` for multi-account channels.
 - `pairing approve` supports `--account <accountId>` and `--notify`.
 - If only one pairing-capable channel is configured, `pairing approve <code>` is allowed.
-- If you approved a sender before this bootstrap existed, run `NexisClaw doctor`; it warns when no command owner is configured and shows the `NexisClaw config set commands.ownerAllowFrom ...` command to fix it.
+- If you approved a sender before this bootstrap existed, run `GreenchClaw doctor`; it warns when no command owner is configured and shows the `GreenchClaw config set commands.ownerAllowFrom ...` command to fix it.
 
 ## Related
 

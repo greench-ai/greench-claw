@@ -38,46 +38,46 @@ const BLOCKED_WORKSPACE_DOTENV_KEYS = new Set([
   "NPM_EXECPATH",
   "OPENAI_API_KEY",
   "OPENAI_API_KEYS",
-  "NEXISCLAW_AGENT_DIR",
-  "NEXISCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES",
-  "NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS",
-  "NEXISCLAW_ALLOW_PROJECT_LOCAL_BIN",
-  "NEXISCLAW_BROWSER_EXECUTABLE_PATH",
-  "NEXISCLAW_BROWSER_CONTROL_MODULE",
-  "NEXISCLAW_BUNDLED_HOOKS_DIR",
-  "NEXISCLAW_BUNDLED_PLUGINS_DIR",
-  "NEXISCLAW_BUNDLED_SKILLS_DIR",
-  "NEXISCLAW_CACHE_TRACE",
-  "NEXISCLAW_CACHE_TRACE_FILE",
-  "NEXISCLAW_CACHE_TRACE_MESSAGES",
-  "NEXISCLAW_CACHE_TRACE_PROMPT",
-  "NEXISCLAW_CACHE_TRACE_SYSTEM",
-  "NEXISCLAW_CONFIG_PATH",
-  "NEXISCLAW_GATEWAY_PASSWORD",
-  "NEXISCLAW_GATEWAY_PORT",
-  "NEXISCLAW_GATEWAY_SECRET",
-  "NEXISCLAW_GATEWAY_TOKEN",
-  "NEXISCLAW_GATEWAY_URL",
-  "NEXISCLAW_HOME",
-  "NEXISCLAW_LIVE_ANTHROPIC_KEY",
-  "NEXISCLAW_LIVE_ANTHROPIC_KEYS",
-  "NEXISCLAW_LIVE_GEMINI_KEY",
-  "NEXISCLAW_LIVE_OPENAI_KEY",
-  "NEXISCLAW_MPM_CATALOG_PATHS",
-  "NEXISCLAW_NODE_EXEC_FALLBACK",
-  "NEXISCLAW_NODE_EXEC_HOST",
-  "NEXISCLAW_OAUTH_DIR",
-  "NEXISCLAW_PINNED_PYTHON",
-  "NEXISCLAW_PINNED_WRITE_PYTHON",
-  "NEXISCLAW_PLUGIN_INSTALL_OVERRIDES",
-  "NEXISCLAW_PLUGIN_CATALOG_PATHS",
-  "NEXISCLAW_PROFILE",
-  "NEXISCLAW_RAW_STREAM",
-  "NEXISCLAW_RAW_STREAM_PATH",
-  "NEXISCLAW_SHOW_SECRETS",
-  "NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "NEXISCLAW_STATE_DIR",
-  "NEXISCLAW_TEST_TAILSCALE_BINARY",
+  "GREENCHCLAW_AGENT_DIR",
+  "GREENCHCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES",
+  "GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS",
+  "GREENCHCLAW_ALLOW_PROJECT_LOCAL_BIN",
+  "GREENCHCLAW_BROWSER_EXECUTABLE_PATH",
+  "GREENCHCLAW_BROWSER_CONTROL_MODULE",
+  "GREENCHCLAW_BUNDLED_HOOKS_DIR",
+  "GREENCHCLAW_BUNDLED_PLUGINS_DIR",
+  "GREENCHCLAW_BUNDLED_SKILLS_DIR",
+  "GREENCHCLAW_CACHE_TRACE",
+  "GREENCHCLAW_CACHE_TRACE_FILE",
+  "GREENCHCLAW_CACHE_TRACE_MESSAGES",
+  "GREENCHCLAW_CACHE_TRACE_PROMPT",
+  "GREENCHCLAW_CACHE_TRACE_SYSTEM",
+  "GREENCHCLAW_CONFIG_PATH",
+  "GREENCHCLAW_GATEWAY_PASSWORD",
+  "GREENCHCLAW_GATEWAY_PORT",
+  "GREENCHCLAW_GATEWAY_SECRET",
+  "GREENCHCLAW_GATEWAY_TOKEN",
+  "GREENCHCLAW_GATEWAY_URL",
+  "GREENCHCLAW_HOME",
+  "GREENCHCLAW_LIVE_ANTHROPIC_KEY",
+  "GREENCHCLAW_LIVE_ANTHROPIC_KEYS",
+  "GREENCHCLAW_LIVE_GEMINI_KEY",
+  "GREENCHCLAW_LIVE_OPENAI_KEY",
+  "GREENCHCLAW_MPM_CATALOG_PATHS",
+  "GREENCHCLAW_NODE_EXEC_FALLBACK",
+  "GREENCHCLAW_NODE_EXEC_HOST",
+  "GREENCHCLAW_OAUTH_DIR",
+  "GREENCHCLAW_PINNED_PYTHON",
+  "GREENCHCLAW_PINNED_WRITE_PYTHON",
+  "GREENCHCLAW_PLUGIN_INSTALL_OVERRIDES",
+  "GREENCHCLAW_PLUGIN_CATALOG_PATHS",
+  "GREENCHCLAW_PROFILE",
+  "GREENCHCLAW_RAW_STREAM",
+  "GREENCHCLAW_RAW_STREAM_PATH",
+  "GREENCHCLAW_SHOW_SECRETS",
+  "GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "GREENCHCLAW_STATE_DIR",
+  "GREENCHCLAW_TEST_TAILSCALE_BINARY",
   "PI_CODING_AGENT_DIR",
   "PATH",
   "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH",
@@ -98,13 +98,13 @@ const BLOCKED_WORKSPACE_DOTENV_PREFIXES = [
   "ANTHROPIC_API_KEY_",
   "CLAWHUB_",
   "OPENAI_API_KEY_",
-  // Workspace .env is untrusted; reserve the full NexisClaw runtime namespace
-  // for shell/global config so new NEXISCLAW_* controls are fail-closed by default.
-  "NEXISCLAW_",
-  "NEXISCLAW_CLAWHUB_",
-  "NEXISCLAW_DISABLE_",
-  "NEXISCLAW_SKIP_",
-  "NEXISCLAW_UPDATE_",
+  // Workspace .env is untrusted; reserve the full GreenchClaw runtime namespace
+  // for shell/global config so new GREENCHCLAW_* controls are fail-closed by default.
+  "GREENCHCLAW_",
+  "GREENCHCLAW_CLAWHUB_",
+  "GREENCHCLAW_DISABLE_",
+  "GREENCHCLAW_SKIP_",
+  "GREENCHCLAW_UPDATE_",
 ];
 
 function shouldBlockWorkspaceRuntimeDotEnvKey(key: string): boolean {
@@ -112,7 +112,7 @@ function shouldBlockWorkspaceRuntimeDotEnvKey(key: string): boolean {
 }
 
 function shouldBlockRuntimeDotEnvKey(key: string): boolean {
-  // The global ~/.NexisClaw/.env (or NEXISCLAW_STATE_DIR/.env) is a trusted
+  // The global ~/.GreenchClaw/.env (or GREENCHCLAW_STATE_DIR/.env) is a trusted
   // operator-controlled runtime surface. Workspace .env is untrusted and gets
   // the strict blocklist, but the trusted global fallback is allowed to set
   // runtime vars like proxy/base-url/auth values.
@@ -247,11 +247,11 @@ export function loadGlobalRuntimeDotEnvFiles(opts?: { quiet?: boolean; stateEnvP
   const stateEnvPath = opts?.stateEnvPath ?? path.join(resolveConfigDir(process.env), ".env");
   const defaultStateEnvPath = path.join(
     resolveRequiredHomeDir(process.env, os.homedir),
-    ".NexisClaw",
+    ".GreenchClaw",
     ".env",
   );
   const hasExplicitNonDefaultStateDir =
-    process.env.NEXISCLAW_STATE_DIR?.trim() !== undefined &&
+    process.env.GREENCHCLAW_STATE_DIR?.trim() !== undefined &&
     path.resolve(stateEnvPath) !== path.resolve(defaultStateEnvPath);
   const parsedFiles = [
     readDotEnvFile({
@@ -266,7 +266,7 @@ export function loadGlobalRuntimeDotEnvFiles(opts?: { quiet?: boolean; stateEnvP
         filePath: path.join(
           resolveRequiredHomeDir(process.env, os.homedir),
           ".config",
-          "NexisClaw",
+          "GreenchClaw",
           "gateway.env",
         ),
         shouldBlockKey: shouldBlockRuntimeDotEnvKey,
@@ -283,7 +283,7 @@ export function loadDotEnv(opts?: { quiet?: boolean }) {
   const cwdEnvPath = path.join(process.cwd(), ".env");
   loadWorkspaceDotEnvFile(cwdEnvPath, { quiet });
 
-  // Then load global fallback: ~/.NexisClaw/.env (or NEXISCLAW_STATE_DIR/.env),
+  // Then load global fallback: ~/.GreenchClaw/.env (or GREENCHCLAW_STATE_DIR/.env),
   // without overriding any env vars already present.
   loadGlobalRuntimeDotEnvFiles({ quiet });
 }

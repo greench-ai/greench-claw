@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resetGlobalHookRunner } from "../plugins/hook-runner-global.js";
 import type { ReplyDispatchBeforeDeliver } from "./reply/reply-dispatcher.js";
 import { buildTestCtx } from "./reply/test-ctx.js";
@@ -63,7 +63,7 @@ function dispatchWithDeliveries(
 ) {
   return dispatchInboundMessageWithBufferedDispatcher({
     ctx,
-    cfg: {} as NexisClawConfig,
+    cfg: {} as GreenchClawConfig,
     dispatcherOptions: {
       ...dispatcherOptions,
       deliver: async (payload: ReplyPayload, info: { kind: Delivery["kind"] }) => {

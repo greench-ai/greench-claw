@@ -1,5 +1,5 @@
 ---
-summary: "Run multiple NexisClaw Gateways on one host (isolation, ports, and profiles)"
+summary: "Run multiple GreenchClaw Gateways on one host (isolation, ports, and profiles)"
 read_when:
   - Running more than one Gateway on the same machine
   - You need isolated config/state/ports per Gateway
@@ -28,13 +28,13 @@ else:
 
 ```bash
 # Rescue bot (separate Telegram bot, separate profile, port 19789)
-NexisClaw --profile rescue onboard
-NexisClaw --profile rescue gateway install --port 19789
+GreenchClaw --profile rescue onboard
+GreenchClaw --profile rescue gateway install --port 19789
 ```
 
 If your main bot is already running, that is usually all you need.
 
-During `NexisClaw --profile rescue onboard`:
+During `GreenchClaw --profile rescue onboard`:
 
 - use the separate Telegram bot token
 - keep the `rescue` profile
@@ -63,14 +63,14 @@ For most setups, use a completely separate Telegram bot for the rescue profile:
 
 ## What `--profile rescue onboard` Changes
 
-`NexisClaw --profile rescue onboard` uses the normal onboarding flow, but it
+`GreenchClaw --profile rescue onboard` uses the normal onboarding flow, but it
 writes everything into a separate profile.
 
 In practice, that means the rescue bot gets its own:
 
 - config file
 - state directory
-- workspace (by default `~/.NexisClaw/workspace-rescue`)
+- workspace (by default `~/.GreenchClaw/workspace-rescue`)
 - managed service name
 
 The prompts are otherwise the same as normal onboarding.
@@ -85,29 +85,29 @@ own base port:
 
 ```bash
 # main (default profile)
-NexisClaw setup
-NexisClaw gateway --port 18789
+GreenchClaw setup
+GreenchClaw gateway --port 18789
 
 # extra gateway
-NexisClaw --profile ops setup
-NexisClaw --profile ops gateway --port 19789
+GreenchClaw --profile ops setup
+GreenchClaw --profile ops gateway --port 19789
 ```
 
 If you want both Gateways to use named profiles, that also works:
 
 ```bash
-NexisClaw --profile main setup
-NexisClaw --profile main gateway --port 18789
+GreenchClaw --profile main setup
+GreenchClaw --profile main gateway --port 18789
 
-NexisClaw --profile ops setup
-NexisClaw --profile ops gateway --port 19789
+GreenchClaw --profile ops setup
+GreenchClaw --profile ops gateway --port 19789
 ```
 
 Services follow the same pattern:
 
 ```bash
-NexisClaw gateway install
-NexisClaw --profile ops gateway install --port 19789
+GreenchClaw gateway install
+GreenchClaw --profile ops gateway install --port 19789
 ```
 
 Use the rescue-bot quickstart when you want a fallback operator lane. Use the
@@ -118,8 +118,8 @@ different channels, tenants, workspaces, or operational roles.
 
 Keep these unique per Gateway instance:
 
-- `NEXISCLAW_CONFIG_PATH` — per-instance config file
-- `NEXISCLAW_STATE_DIR` — per-instance sessions, creds, caches
+- `GREENCHCLAW_CONFIG_PATH` — per-instance config file
+- `GREENCHCLAW_STATE_DIR` — per-instance sessions, creds, caches
 - `agents.defaults.workspace` — per-instance workspace root
 - `gateway.port` (or `--port`) — unique per instance
 - derived browser/canvas/CDP ports
@@ -128,7 +128,7 @@ If these are shared, you will hit config races and port conflicts.
 
 ## Port mapping (derived)
 
-Base port = `gateway.port` (or `NEXISCLAW_GATEWAY_PORT` / `--port`).
+Base port = `gateway.port` (or `GREENCHCLAW_GATEWAY_PORT` / `--port`).
 
 - browser control service port = base + 2 (loopback only)
 - canvas host is served on the Gateway HTTP server (same port as `gateway.port`)
@@ -146,24 +146,24 @@ If you override any of these in config or env, you must keep them unique per ins
 ## Manual env example
 
 ```bash
-NEXISCLAW_CONFIG_PATH=~/.NexisClaw/main.json \
-NEXISCLAW_STATE_DIR=~/.NexisClaw \
-NexisClaw gateway --port 18789
+GREENCHCLAW_CONFIG_PATH=~/.GreenchClaw/main.json \
+GREENCHCLAW_STATE_DIR=~/.GreenchClaw \
+GreenchClaw gateway --port 18789
 
-NEXISCLAW_CONFIG_PATH=~/.NexisClaw/rescue.json \
-NEXISCLAW_STATE_DIR=~/.NexisClaw-rescue \
-NexisClaw gateway --port 19789
+GREENCHCLAW_CONFIG_PATH=~/.GreenchClaw/rescue.json \
+GREENCHCLAW_STATE_DIR=~/.GreenchClaw-rescue \
+GreenchClaw gateway --port 19789
 ```
 
 ## Quick checks
 
 ```bash
-NexisClaw gateway status --deep
-NexisClaw --profile rescue gateway status --deep
-NexisClaw --profile rescue gateway probe
-NexisClaw status
-NexisClaw --profile rescue status
-NexisClaw --profile rescue browser status
+GreenchClaw gateway status --deep
+GreenchClaw --profile rescue gateway status --deep
+GreenchClaw --profile rescue gateway probe
+GreenchClaw status
+GreenchClaw --profile rescue status
+GreenchClaw --profile rescue browser status
 ```
 
 Interpretation:

@@ -8,8 +8,8 @@ import {
   type AuthProfileCredential,
   type AuthProfileFailureReason,
   type AuthProfileStore,
-} from "NexisClaw/plugin-sdk/agent-runtime";
-import type { PluginCommandContext } from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
+import type { PluginCommandContext } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { CODEX_CONTROL_METHODS, type CodexControlMethod } from "./app-server/capabilities.js";
 import { isJsonObject, type JsonObject, type JsonValue } from "./app-server/protocol.js";
 import { rememberCodexRateLimits } from "./app-server/rate-limit-cache.js";

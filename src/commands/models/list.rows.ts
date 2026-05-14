@@ -6,8 +6,8 @@ import {
   shouldSuppressBuiltInModelFromManifest,
 } from "../../agents/model-suppression.js";
 import { normalizeProviderId } from "../../agents/provider-id.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { ModelDefinitionConfig, ModelProviderConfig } from "../../config/types.models.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import type { NormalizedModelCatalogRow } from "../../model-catalog/index.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 import type { ModelListAuthIndex } from "./list.auth-index.js";
@@ -27,7 +27,7 @@ type RowFilter = {
 };
 
 export type RowBuilderContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir: string;
   authIndex: ModelListAuthIndex;
   availableKeys?: Set<string>;
@@ -205,7 +205,7 @@ function shouldListConfiguredProviderModel(params: {
 }
 
 function findConfiguredProviderModel(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   provider: string;
   modelId: string;
 }): ListRowModel | undefined {
@@ -221,7 +221,10 @@ function findConfiguredProviderModel(params: {
   });
 }
 
-function toFallbackConfiguredListModel(entry: ConfiguredEntry, cfg: NexisClawConfig): ListRowModel {
+function toFallbackConfiguredListModel(
+  entry: ConfiguredEntry,
+  cfg: GreenchClawConfig,
+): ListRowModel {
   return (
     findConfiguredProviderModel({
       cfg,

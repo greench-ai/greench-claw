@@ -1,13 +1,13 @@
 import type { Bot } from "grammy";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import type {
   DmPolicy,
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "NexisClaw/plugin-sdk/config-contracts";
-import type { HistoryEntry } from "NexisClaw/plugin-sdk/reply-history";
-import type { MsgContext } from "NexisClaw/plugin-sdk/reply-runtime";
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import type { HistoryEntry } from "GreenchClaw/plugin-sdk/reply-history";
+import type { MsgContext } from "GreenchClaw/plugin-sdk/reply-runtime";
 import type { StickerMetadata, TelegramContext } from "./bot/types.js";
 import type { TelegramReplyChainEntry } from "./message-cache.js";
 
@@ -82,7 +82,7 @@ export type BuildTelegramMessageContextParams = {
   storeAllowFrom: string[];
   options?: TelegramMessageContextOptions;
   bot: Bot;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   account: { accountId: string };
   historyLimit: number;
   groupHistories: Map<string, HistoryEntry[]>;
@@ -94,10 +94,10 @@ export type BuildTelegramMessageContextParams = {
   resolveGroupActivation: ResolveGroupActivation;
   resolveGroupRequireMention: ResolveGroupRequireMention;
   resolveTelegramGroupConfig: ResolveTelegramGroupConfig;
-  loadFreshConfig?: () => NexisClawConfig;
+  loadFreshConfig?: () => GreenchClawConfig;
   runtime?: TelegramMessageContextRuntimeOverrides;
   sessionRuntime?: TelegramMessageContextSessionRuntimeOverrides;
-  upsertPairingRequest?: typeof import("NexisClaw/plugin-sdk/conversation-runtime").upsertChannelPairingRequest;
+  upsertPairingRequest?: typeof import("GreenchClaw/plugin-sdk/conversation-runtime").upsertChannelPairingRequest;
   /** Global (per-account) handler for sendChatAction 401 backoff (#27092). */
   sendChatActionHandler: import("./sendchataction-401-backoff.js").TelegramSendChatActionHandler;
 };

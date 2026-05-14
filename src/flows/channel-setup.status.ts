@@ -16,7 +16,7 @@ import type {
 } from "../commands/channel-setup/types.js";
 import type { ChannelChoice } from "../commands/onboard-types.js";
 import { isChannelConfigured } from "../config/channel-configured.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   findBundledPluginSourceInMap,
   resolveBundledPluginSources,
@@ -190,7 +190,7 @@ export function findBundledSourceForCatalogChannel(params: {
 }
 
 export async function collectChannelStatus(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   options?: SetupChannelsOptions;
   accountOverrides: Partial<Record<ChannelChoice, string>>;
   installedPlugins?: ChannelSetupPlugin[];
@@ -296,7 +296,7 @@ export async function collectChannelStatus(params: {
 }
 
 export async function noteChannelStatus(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prompter: WizardPrompter;
   options?: SetupChannelsOptions;
   accountOverrides?: Partial<Record<ChannelChoice, string>>;
@@ -333,10 +333,10 @@ export async function noteChannelPrimer(
   await prompter.note(
     [
       "Inbound DM safety defaults to pairing: unknown senders get a pairing code first.",
-      `Approve with: ${formatCliCommand("NexisClaw pairing approve <channel> <code>")}`,
+      `Approve with: ${formatCliCommand("GreenchClaw pairing approve <channel> <code>")}`,
       'Open/public DMs require dmPolicy="open" plus allowFrom=["*"].',
       "For multi-user DMs, isolate sessions with: " +
-        formatCliCommand('NexisClaw config set session.dmScope "per-channel-peer"') +
+        formatCliCommand('GreenchClaw config set session.dmScope "per-channel-peer"') +
         ' (or "per-account-channel-peer" for multi-account channels).',
       `Docs: ${formatDocsLink("/channels/pairing", "channels/pairing")}`,
       "",
@@ -362,7 +362,7 @@ export function resolveQuickstartDefault(
 }
 
 export function resolveChannelSelectionNoteLines(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   installedPlugins: ChannelSetupPlugin[];
   selection: ChannelChoice[];
 }): string[] {

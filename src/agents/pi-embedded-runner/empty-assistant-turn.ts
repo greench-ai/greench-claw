@@ -15,7 +15,7 @@ type UsageFieldMap = {
 };
 
 // Upstream badlogic/pi-mono should normalize Anthropic zero-token empty `stop`
-// turns before NexisClaw sees them. Downstream: NexisClaw/NexisClaw#71880.
+// turns before GreenchClaw sees them. Downstream: GreenchClaw/GreenchClaw#71880.
 function readFiniteTokenCount(value: unknown): number | undefined {
   return typeof value === "number" && Number.isFinite(value) ? value : undefined;
 }

@@ -1,4 +1,4 @@
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime";
 import type { Foreigns } from "../urbit/foreigns.js";
 import { asRecord, formatErrorMessage } from "./utils.js";
 

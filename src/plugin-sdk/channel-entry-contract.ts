@@ -7,7 +7,7 @@ import type { ChannelOutboundAdapter } from "../channels/plugins/types.adapters.
 import type { ChannelConfigSchema } from "../channels/plugins/types.config.js";
 import type { ChannelLegacyStateMigrationPlan } from "../channels/plugins/types.core.js";
 import type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { openRootFileSync } from "../infra/boundary-file-read.js";
 import {
   createProfiler,
@@ -23,8 +23,8 @@ import type { PluginRuntime } from "../plugins/runtime/types.js";
 import { resolveLoaderPackageRoot } from "../plugins/sdk-alias.js";
 import type {
   AnyAgentTool,
-  NexisClawPluginApi,
-  NexisClawPluginCommandDefinition,
+  GreenchClawPluginApi,
+  GreenchClawPluginCommandDefinition,
   PluginCommandContext,
 } from "../plugins/types.js";
 import { toSafeImportPath } from "../shared/import-specifier.js";
@@ -32,8 +32,8 @@ import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 
 export type {
   AnyAgentTool,
-  NexisClawPluginApi,
-  NexisClawPluginCommandDefinition,
+  GreenchClawPluginApi,
+  GreenchClawPluginCommandDefinition,
   PluginCommandContext,
 };
 
@@ -59,8 +59,8 @@ type DefineBundledChannelEntryOptions<TPlugin = ChannelPlugin> = {
   runtime?: BundledEntryModuleRef;
   accountInspect?: BundledEntryModuleRef;
   features?: BundledChannelEntryFeatures;
-  registerCliMetadata?: (api: NexisClawPluginApi) => void;
-  registerFull?: (api: NexisClawPluginApi) => void;
+  registerCliMetadata?: (api: GreenchClawPluginApi) => void;
+  registerFull?: (api: GreenchClawPluginApi) => void;
 };
 
 type DefineBundledChannelSetupEntryOptions = {
@@ -91,7 +91,7 @@ export type BundledChannelLegacySessionSurface = {
 };
 
 export type BundledChannelLegacyStateMigrationDetector = (params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   stateDir: string;
   oauthDir: string;
@@ -108,7 +108,7 @@ export type BundledChannelEntryContract<TPlugin = ChannelPlugin> = {
   description: string;
   configSchema: ChannelEntryConfigSchema<TPlugin>;
   features?: BundledChannelEntryFeatures;
-  register: (api: NexisClawPluginApi) => void;
+  register: (api: GreenchClawPluginApi) => void;
   loadChannelPlugin: (options?: BundledEntryModuleLoadOptions) => TPlugin;
   loadChannelOutbound?: (
     options?: BundledEntryModuleLoadOptions,
@@ -145,7 +145,7 @@ export type BundledEntryModuleLoadOptions = {
 const nodeRequire = createRequire(import.meta.url);
 const moduleLoaders: PluginModuleLoaderCache = new Map();
 const loadedModuleExports = new Map<string, unknown>();
-const disableBundledEntrySourceFallbackEnv = "NEXISCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK";
+const disableBundledEntrySourceFallbackEnv = "GREENCHCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK";
 
 function isTruthyEnvFlag(value: string | undefined): boolean {
   return value !== undefined && !/^(?:0|false)$/iu.test(value.trim());
@@ -498,7 +498,7 @@ export function defineBundledChannelEntry<TPlugin = ChannelPlugin>({
     ...(features || accountInspect
       ? { features: { ...features, ...(accountInspect ? { accountInspect: true } : {}) } }
       : {}),
-    register(api: NexisClawPluginApi) {
+    register(api: GreenchClawPluginApi) {
       if (api.registrationMode === "cli-metadata") {
         registerCliMetadata?.(api);
         return;

@@ -8,11 +8,11 @@ export {
 export { DELIVERY_NO_REPLY_RUNTIME_CONTRACT } from "./test-helpers/agents/delivery-no-reply-runtime-contract.js";
 export {
   installCodexToolResultMiddleware,
-  installNexisClawOwnedToolHooks,
+  installGreenchClawOwnedToolHooks,
   mediaToolResult,
-  resetNexisClawOwnedToolHooks,
+  resetGreenchClawOwnedToolHooks,
   textToolResult,
-} from "./test-helpers/agents/NexisClaw-owned-tool-runtime-contract.js";
+} from "./test-helpers/agents/GreenchClaw-owned-tool-runtime-contract.js";
 export {
   createContractFallbackConfig,
   createContractRunResult,

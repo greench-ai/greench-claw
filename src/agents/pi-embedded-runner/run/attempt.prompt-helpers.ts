@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import type {
   ContextEnginePromptCacheInfo,
   ContextEngineRuntimeContext,
@@ -92,7 +92,7 @@ export function forgetPromptBuildDrainCacheForRun(runId: string | undefined): vo
 }
 
 export async function resolvePromptBuildHookResult(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   prompt: string;
   messages: unknown[];
   hookCtx: PluginHookAgentContext;
@@ -214,7 +214,7 @@ export function resolvePromptModeForSession(sessionKey?: string): "minimal" | "f
 }
 
 export function shouldInjectHeartbeatPrompt(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   defaultAgentId?: string;
   isDefaultAgent: boolean;
@@ -455,7 +455,7 @@ export function mergeOrphanedTrailingUserPrompt(params: {
 }
 
 export function resolveAttemptFsWorkspaceOnly(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sessionAgentId: string;
 }): boolean {
   return resolveEffectiveToolFsWorkspaceOnly({

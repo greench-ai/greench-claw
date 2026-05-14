@@ -16,7 +16,7 @@ const createTelegramBot = (opts: import("./bot.types.js").TelegramBotOptions) =>
 
 function createWrappedTelegramClientFetch(
   proxyFetch: typeof fetch,
-  config?: import("NexisClaw/plugin-sdk/config-contracts").NexisClawConfig,
+  config?: import("GreenchClaw/plugin-sdk/config-contracts").GreenchClawConfig,
 ) {
   const shutdown = new AbortController();
   botCtorSpy.mockClear();

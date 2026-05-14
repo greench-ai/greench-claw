@@ -1,35 +1,36 @@
 import { isRecord } from "../utils.js";
 
 type ConfigMcpServers = Record<string, Record<string, unknown>>;
-type NexisClawMcpHttpTransport = "sse" | "streamable-http";
+type GreenchClawMcpHttpTransport = "sse" | "streamable-http";
 
-const CLI_MCP_TYPE_TO_NEXISCLAW_TRANSPORT: Record<string, NexisClawMcpHttpTransport | "stdio"> = {
-  http: "streamable-http",
-  "streamable-http": "streamable-http",
-  sse: "sse",
-  stdio: "stdio",
-};
+const CLI_MCP_TYPE_TO_GREENCHCLAW_TRANSPORT: Record<string, GreenchClawMcpHttpTransport | "stdio"> =
+  {
+    http: "streamable-http",
+    "streamable-http": "streamable-http",
+    sse: "sse",
+    stdio: "stdio",
+  };
 
 function normalizeMcpString(value: unknown): string {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
 }
 
-export function resolveNexisClawMcpTransportAlias(
+export function resolveGreenchClawMcpTransportAlias(
   value: unknown,
-): NexisClawMcpHttpTransport | undefined {
-  const mapped = CLI_MCP_TYPE_TO_NEXISCLAW_TRANSPORT[normalizeMcpString(value)];
+): GreenchClawMcpHttpTransport | undefined {
+  const mapped = CLI_MCP_TYPE_TO_GREENCHCLAW_TRANSPORT[normalizeMcpString(value)];
   return mapped === "sse" || mapped === "streamable-http" ? mapped : undefined;
 }
 
 export function isKnownCliMcpTypeAlias(value: unknown): boolean {
-  return Object.hasOwn(CLI_MCP_TYPE_TO_NEXISCLAW_TRANSPORT, normalizeMcpString(value));
+  return Object.hasOwn(CLI_MCP_TYPE_TO_GREENCHCLAW_TRANSPORT, normalizeMcpString(value));
 }
 
 export function canonicalizeConfiguredMcpServer(
   server: Record<string, unknown>,
 ): Record<string, unknown> {
   const next = { ...server };
-  const transportAlias = resolveNexisClawMcpTransportAlias(next.type);
+  const transportAlias = resolveGreenchClawMcpTransportAlias(next.type);
   if (typeof next.transport !== "string" && transportAlias) {
     next.transport = transportAlias;
   }

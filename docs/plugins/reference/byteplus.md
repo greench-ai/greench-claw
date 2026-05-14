@@ -1,5 +1,5 @@
 ---
-summary: "Adds BytePlus, BytePlus Plan model provider support to NexisClaw."
+summary: "Adds BytePlus, BytePlus Plan model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the byteplus plugin
 title: "BytePlus plugin"
@@ -7,12 +7,12 @@ title: "BytePlus plugin"
 
 # BytePlus plugin
 
-Adds BytePlus, BytePlus Plan model provider support to NexisClaw.
+Adds BytePlus, BytePlus Plan model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/byteplus-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/byteplus-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

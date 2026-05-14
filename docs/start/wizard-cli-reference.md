@@ -1,13 +1,13 @@
 ---
 summary: "Complete reference for CLI setup flow, auth/model setup, outputs, and internals"
 read_when:
-  - You need detailed behavior for NexisClaw onboard
+  - You need detailed behavior for GreenchClaw onboard
   - You are debugging onboarding results or integrating onboarding clients
 title: "CLI setup reference"
 sidebarTitle: "CLI reference"
 ---
 
-This page is the full reference for `NexisClaw onboard`.
+This page is the full reference for `GreenchClaw onboard`.
 For the short guide, see [Onboarding (CLI)](/start/wizard).
 
 ## What the wizard does
@@ -29,10 +29,10 @@ It does not install or modify anything on the remote host.
 
 <Steps>
   <Step title="Existing config detection">
-    - If `~/.NexisClaw/NexisClaw.json` exists, choose Keep, Modify, or Reset.
+    - If `~/.GreenchClaw/GreenchClaw.json` exists, choose Keep, Modify, or Reset.
     - Re-running the wizard does not wipe anything unless you explicitly choose Reset (or pass `--reset`).
     - CLI `--reset` defaults to `config+creds+sessions`; use `--reset-scope full` to also remove workspace.
-    - If config is invalid or contains legacy keys, the wizard stops and asks you to run `NexisClaw doctor` before continuing.
+    - If config is invalid or contains legacy keys, the wizard stops and asks you to run `GreenchClaw doctor` before continuing.
     - Reset uses `trash` and offers scopes:
       - Config only
       - Config + credentials + sessions
@@ -44,7 +44,7 @@ It does not install or modify anything on the remote host.
 
   </Step>
   <Step title="Workspace">
-    - Default `~/.NexisClaw/workspace` (configurable).
+    - Default `~/.GreenchClaw/workspace` (configurable).
     - Seeds workspace files needed for first-run bootstrap ritual.
     - Workspace layout: [Agent workspace](/concepts/agent-workspace).
 
@@ -72,7 +72,7 @@ It does not install or modify anything on the remote host.
     - [Signal](/channels/signal): optional `signal-cli` install + account config
     - [iMessage](/channels/imessage): `imsg` CLI path + Messages DB access; use an SSH wrapper when the Gateway runs off-Mac
     - DM security: default is pairing. First DM sends a code; approve via
-      `NexisClaw pairing approve <channel> <code>` or use allowlists.
+      `GreenchClaw pairing approve <channel> <code>` or use allowlists.
   </Step>
   <Step title="Daemon install">
     - macOS: LaunchAgent
@@ -81,14 +81,14 @@ It does not install or modify anything on the remote host.
       - Wizard attempts `loginctl enable-linger <user>` so gateway stays up after logout.
       - May prompt for sudo (writes `/var/lib/systemd/linger`); it tries without sudo first.
     - Native Windows: Scheduled Task first
-      - If task creation is denied, NexisClaw falls back to a per-user Startup-folder login item and starts the gateway immediately.
+      - If task creation is denied, GreenchClaw falls back to a per-user Startup-folder login item and starts the gateway immediately.
       - Scheduled Tasks remain preferred because they provide better supervisor status.
     - Runtime selection: Node (recommended; required for WhatsApp and Telegram). Bun is not recommended.
 
   </Step>
   <Step title="Health check">
-    - Starts gateway (if needed) and runs `NexisClaw health`.
-    - `NexisClaw status --deep` adds the live gateway health probe to status output, including channel probes when supported.
+    - Starts gateway (if needed) and runs `GreenchClaw health`.
+    - `GreenchClaw status --deep` adds the live gateway health probe to status output, including channel probes when supported.
 
   </Step>
   <Step title="Skills">
@@ -232,8 +232,8 @@ Model behavior:
 
 Credential and profile paths:
 
-- Auth profiles (API keys + OAuth): `~/.NexisClaw/agents/<agentId>/agent/auth-profiles.json`
-- Legacy OAuth import: `~/.NexisClaw/credentials/oauth.json`
+- Auth profiles (API keys + OAuth): `~/.GreenchClaw/agents/<agentId>/agent/auth-profiles.json`
+- Legacy OAuth import: `~/.GreenchClaw/credentials/oauth.json`
 
 Credential storage mode:
 
@@ -260,14 +260,14 @@ Credential storage mode:
 <Note>
 Headless and server tip: complete OAuth on a machine with a browser, then copy
 that agent's `auth-profiles.json` (for example
-`~/.NexisClaw/agents/<agentId>/agent/auth-profiles.json`, or the matching
-`$NEXISCLAW_STATE_DIR/...` path) to the gateway host. `credentials/oauth.json`
+`~/.GreenchClaw/agents/<agentId>/agent/auth-profiles.json`, or the matching
+`$GREENCHCLAW_STATE_DIR/...` path) to the gateway host. `credentials/oauth.json`
 is only a legacy import source.
 </Note>
 
 ## Outputs and internals
 
-Typical fields in `~/.NexisClaw/NexisClaw.json`:
+Typical fields in `~/.GreenchClaw/GreenchClaw.json`:
 
 - `agents.defaults.workspace`
 - `agents.defaults.skipBootstrap` when `--skip-bootstrap` is passed
@@ -286,10 +286,10 @@ Typical fields in `~/.NexisClaw/NexisClaw.json`:
 - `wizard.lastRunCommand`
 - `wizard.lastRunMode`
 
-`NexisClaw agents add` writes `agents.list[]` and optional `bindings`.
+`GreenchClaw agents add` writes `agents.list[]` and optional `bindings`.
 
-WhatsApp credentials go under `~/.NexisClaw/credentials/whatsapp/<accountId>/`.
-Sessions are stored under `~/.NexisClaw/agents/<agentId>/sessions/`.
+WhatsApp credentials go under `~/.GreenchClaw/credentials/whatsapp/<accountId>/`.
+Sessions are stored under `~/.GreenchClaw/agents/<agentId>/sessions/`.
 
 <Note>
 Some channels are delivered as plugins. When selected during setup, the wizard
@@ -308,7 +308,7 @@ Clients (macOS app and Control UI) can render steps without re-implementing onbo
 Signal setup behavior:
 
 - Downloads the appropriate release asset
-- Stores it under `~/.NexisClaw/tools/signal-cli/<version>/`
+- Stores it under `~/.GreenchClaw/tools/signal-cli/<version>/`
 - Writes `channels.signal.cliPath` in config
 - JVM builds require Java 21
 - Native builds are used when available
@@ -318,4 +318,4 @@ Signal setup behavior:
 
 - Onboarding hub: [Onboarding (CLI)](/start/wizard)
 - Automation and scripts: [CLI Automation](/start/wizard-cli-automation)
-- Command reference: [`NexisClaw onboard`](/cli/onboard)
+- Command reference: [`GreenchClaw onboard`](/cli/onboard)

@@ -2,7 +2,7 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   emitDiagnosticsTimelineEvent,
   flushDiagnosticsTimelineForTest,
@@ -14,14 +14,14 @@ import {
 const tempDirs: string[] = [];
 
 async function createTimelineEnv() {
-  const dir = await mkdtemp(join(tmpdir(), "NexisClaw-diagnostics-timeline-"));
+  const dir = await mkdtemp(join(tmpdir(), "GreenchClaw-diagnostics-timeline-"));
   tempDirs.push(dir);
   return {
     env: {
-      NEXISCLAW_DIAGNOSTICS: "timeline",
-      NEXISCLAW_DIAGNOSTICS_RUN_ID: "run-1",
-      NEXISCLAW_DIAGNOSTICS_ENV: "env-1",
-      NEXISCLAW_DIAGNOSTICS_TIMELINE_PATH: join(dir, "nested", "timeline.jsonl"),
+      GREENCHCLAW_DIAGNOSTICS: "timeline",
+      GREENCHCLAW_DIAGNOSTICS_RUN_ID: "run-1",
+      GREENCHCLAW_DIAGNOSTICS_ENV: "env-1",
+      GREENCHCLAW_DIAGNOSTICS_TIMELINE_PATH: join(dir, "nested", "timeline.jsonl"),
     } as NodeJS.ProcessEnv,
     path: join(dir, "nested", "timeline.jsonl"),
   };
@@ -63,31 +63,35 @@ describe("diagnostics timeline", () => {
     const { env } = await createTimelineEnv();
 
     expect(isDiagnosticsTimelineEnabled({ env })).toBe(true);
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, NEXISCLAW_DIAGNOSTICS: "1" } })).toBe(true);
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, NEXISCLAW_DIAGNOSTICS: "yes" } })).toBe(
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, GREENCHCLAW_DIAGNOSTICS: "1" } })).toBe(
       true,
     );
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, NEXISCLAW_DIAGNOSTICS: "on" } })).toBe(
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, GREENCHCLAW_DIAGNOSTICS: "yes" } })).toBe(
       true,
     );
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, NEXISCLAW_DIAGNOSTICS: "all" } })).toBe(
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, GREENCHCLAW_DIAGNOSTICS: "on" } })).toBe(
       true,
     );
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, NEXISCLAW_DIAGNOSTICS: "*" } })).toBe(true);
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, GREENCHCLAW_DIAGNOSTICS: "all" } })).toBe(
+      true,
+    );
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, GREENCHCLAW_DIAGNOSTICS: "*" } })).toBe(
+      true,
+    );
     expect(
       isDiagnosticsTimelineEnabled({
-        env: { ...env, NEXISCLAW_DIAGNOSTICS: "diagnostics.timeline" },
+        env: { ...env, GREENCHCLAW_DIAGNOSTICS: "diagnostics.timeline" },
       }),
     ).toBe(true);
     expect(
-      isDiagnosticsTimelineEnabled({ env: { ...env, NEXISCLAW_DIAGNOSTICS: "telegram.http" } }),
+      isDiagnosticsTimelineEnabled({ env: { ...env, GREENCHCLAW_DIAGNOSTICS: "telegram.http" } }),
     ).toBe(false);
-    expect(isDiagnosticsTimelineEnabled({ env: { ...env, NEXISCLAW_DIAGNOSTICS: "0" } })).toBe(
+    expect(isDiagnosticsTimelineEnabled({ env: { ...env, GREENCHCLAW_DIAGNOSTICS: "0" } })).toBe(
       false,
     );
     expect(
       isDiagnosticsTimelineEnabled({
-        env: { ...env, NEXISCLAW_DIAGNOSTICS_TIMELINE_PATH: "" },
+        env: { ...env, GREENCHCLAW_DIAGNOSTICS_TIMELINE_PATH: "" },
       }),
     ).toBe(false);
   });
@@ -95,10 +99,12 @@ describe("diagnostics timeline", () => {
   it("honors config diagnostics flags after config is available", async () => {
     const { env } = await createTimelineEnv();
     const envWithoutFlag = { ...env };
-    delete envWithoutFlag.NEXISCLAW_DIAGNOSTICS;
-    const configWithTimeline = { diagnostics: { flags: ["timeline"] } } as NexisClawConfig;
-    const configWithWildcard = { diagnostics: { flags: ["*"] } } as NexisClawConfig;
-    const configWithoutTimeline = { diagnostics: { flags: ["telegram.http"] } } as NexisClawConfig;
+    delete envWithoutFlag.GREENCHCLAW_DIAGNOSTICS;
+    const configWithTimeline = { diagnostics: { flags: ["timeline"] } } as GreenchClawConfig;
+    const configWithWildcard = { diagnostics: { flags: ["*"] } } as GreenchClawConfig;
+    const configWithoutTimeline = {
+      diagnostics: { flags: ["telegram.http"] },
+    } as GreenchClawConfig;
 
     expect(isDiagnosticsTimelineEnabled({ config: configWithTimeline, env: envWithoutFlag })).toBe(
       true,
@@ -113,12 +119,12 @@ describe("diagnostics timeline", () => {
 
   it("lets false-like env diagnostics disable config-enabled timeline output", async () => {
     const { env } = await createTimelineEnv();
-    const configWithTimeline = { diagnostics: { flags: ["timeline"] } } as NexisClawConfig;
+    const configWithTimeline = { diagnostics: { flags: ["timeline"] } } as GreenchClawConfig;
 
     expect(
       isDiagnosticsTimelineEnabled({
         config: configWithTimeline,
-        env: { ...env, NEXISCLAW_DIAGNOSTICS: "0" },
+        env: { ...env, GREENCHCLAW_DIAGNOSTICS: "0" },
       }),
     ).toBe(false);
   });
@@ -141,7 +147,7 @@ describe("diagnostics timeline", () => {
     );
 
     const [event] = await readTimeline(path);
-    expect(event?.schemaVersion).toBe("NexisClaw.diagnostics.v1");
+    expect(event?.schemaVersion).toBe("GreenchClaw.diagnostics.v1");
     expect(event?.type).toBe("mark");
     expect(event?.name).toBe("gateway.ready");
     expect(event?.runId).toBe("run-1");
@@ -158,13 +164,13 @@ describe("diagnostics timeline", () => {
   it("records span start and end events around successful work", async () => {
     const { env, path } = await createTimelineEnv();
     const configOnlyEnv = { ...env };
-    delete configOnlyEnv.NEXISCLAW_DIAGNOSTICS;
+    delete configOnlyEnv.GREENCHCLAW_DIAGNOSTICS;
 
     await expect(
       measureDiagnosticsTimelineSpan("runtimeDeps.stage", () => "ok", {
         phase: "startup",
         attributes: { pluginCount: 3 },
-        config: { diagnostics: { flags: ["timeline"] } } as NexisClawConfig,
+        config: { diagnostics: { flags: ["timeline"] } } as GreenchClawConfig,
         env: configOnlyEnv,
       }),
     ).resolves.toBe("ok");

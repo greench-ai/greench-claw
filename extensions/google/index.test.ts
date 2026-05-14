@@ -2,14 +2,14 @@ import type { Context, Model } from "@earendil-works/pi-ai";
 import type {
   ProviderReplaySessionEntry,
   ProviderSanitizeReplayHistoryContext,
-} from "NexisClaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import {
   registerProviderPlugin,
   requireRegisteredProvider,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { createCapturedThinkingConfigStream } from "NexisClaw/plugin-sdk/provider-test-contracts";
-import type { RealtimeVoiceProviderPlugin } from "NexisClaw/plugin-sdk/realtime-voice";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { createCapturedThinkingConfigStream } from "GreenchClaw/plugin-sdk/provider-test-contracts";
+import type { RealtimeVoiceProviderPlugin } from "GreenchClaw/plugin-sdk/realtime-voice";
 import { describe, expect, it } from "vitest";
 import { registerGoogleGeminiCliProvider } from "./gemini-cli-provider.js";
 import googlePlugin from "./index.js";

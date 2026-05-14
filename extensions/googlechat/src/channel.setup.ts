@@ -1,11 +1,11 @@
-import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
-import { formatNormalizedAllowFromEntries } from "NexisClaw/plugin-sdk/allow-from";
+import { describeAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
+import { formatNormalizedAllowFromEntries } from "GreenchClaw/plugin-sdk/allow-from";
 import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
-} from "NexisClaw/plugin-sdk/channel-config-helpers";
-import type { ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import type { ChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   type GoogleChatConfigAccessorAccount,
   listGoogleChatAccountIds,

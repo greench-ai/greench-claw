@@ -43,7 +43,7 @@ describe("gateway hook runner methods", () => {
   const gatewayCtx = {
     port: 18789,
     config: {} as never,
-    workspaceDir: "/tmp/NexisClaw-workspace",
+    workspaceDir: "/tmp/GreenchClaw-workspace",
     getCron: () => undefined,
   };
 

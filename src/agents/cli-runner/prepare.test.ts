@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { CURRENT_SESSION_VERSION } from "@earendil-works/pi-coding-agent";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { getGlobalHookRunner } from "../../plugins/hook-runner-global.js";
 import { __testing as cliBackendsTesting } from "../cli-backends.js";
 import { hashCliSessionText } from "../cli-session.js";
@@ -57,15 +57,15 @@ const mockBuildActiveMusicGenerationTaskPromptContextForSession = vi.mocked(
 function createTestMcpLoopbackServerConfig(port: number) {
   return {
     mcpServers: {
-      NexisClaw: {
+      GreenchClaw: {
         type: "http",
         url: `http://127.0.0.1:${port}/mcp`,
         headers: {
-          Authorization: "Bearer ${NEXISCLAW_MCP_TOKEN}",
-          "x-session-key": "${NEXISCLAW_MCP_SESSION_KEY}",
-          "x-NexisClaw-agent-id": "${NEXISCLAW_MCP_AGENT_ID}",
-          "x-NexisClaw-account-id": "${NEXISCLAW_MCP_ACCOUNT_ID}",
-          "x-NexisClaw-message-channel": "${NEXISCLAW_MCP_MESSAGE_CHANNEL}",
+          Authorization: "Bearer ${GREENCHCLAW_MCP_TOKEN}",
+          "x-session-key": "${GREENCHCLAW_MCP_SESSION_KEY}",
+          "x-GreenchClaw-agent-id": "${GREENCHCLAW_MCP_AGENT_ID}",
+          "x-GreenchClaw-account-id": "${GREENCHCLAW_MCP_ACCOUNT_ID}",
+          "x-GreenchClaw-message-channel": "${GREENCHCLAW_MCP_MESSAGE_CHANNEL}",
         },
       },
     },
@@ -85,7 +85,7 @@ function createCliBackendConfig(
     bundleMcp?: boolean;
     reseedFromRawTranscriptWhenUncompacted?: boolean;
   } = {},
-): NexisClawConfig {
+): GreenchClawConfig {
   return {
     agents: {
       defaults: {
@@ -111,12 +111,12 @@ function createCliBackendConfig(
         },
       },
     },
-  } satisfies NexisClawConfig;
+  } satisfies GreenchClawConfig;
 }
 
 function createSessionFile() {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-prepare-"));
-  vi.stubEnv("NEXISCLAW_STATE_DIR", dir);
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-prepare-"));
+  vi.stubEnv("GREENCHCLAW_STATE_DIR", dir);
   const sessionFile = path.join(dir, "agents", "main", "sessions", "session-test.jsonl");
   fs.mkdirSync(path.dirname(sessionFile), { recursive: true });
   fs.writeFileSync(
@@ -170,7 +170,7 @@ describe("shouldSkipLocalCliCredentialEpoch", () => {
       getActiveMcpLoopbackRuntime: vi.fn(() => undefined),
       ensureMcpLoopbackServer: vi.fn(createTestMcpLoopbackServer),
       createMcpLoopbackServerConfig: vi.fn(createTestMcpLoopbackServerConfig),
-      resolveNexisClawReferencePaths: vi.fn(async () => ({ docsPath: null, sourcePath: null })),
+      resolveGreenchClawReferencePaths: vi.fn(async () => ({ docsPath: null, sourcePath: null })),
     });
     mockGetGlobalHookRunner.mockReturnValue(null);
     mockBuildActiveVideoGenerationTaskPromptContextForSession.mockReturnValue(undefined);

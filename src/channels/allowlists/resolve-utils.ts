@@ -1,4 +1,4 @@
-import { mapAllowFromEntries } from "NexisClaw/plugin-sdk/channel-config-helpers";
+import { mapAllowFromEntries } from "GreenchClaw/plugin-sdk/channel-config-helpers";
 import type { RuntimeEnv } from "../../runtime.js";
 import {
   normalizeLowercaseStringOrEmpty,

@@ -1,6 +1,6 @@
 import { normalizeLowercaseStringOrEmpty } from "./string-utils.js";
 
-const debugEmbeddings = isTruthyEnvValue(process.env.NEXISCLAW_DEBUG_MEMORY_EMBEDDINGS);
+const debugEmbeddings = isTruthyEnvValue(process.env.GREENCHCLAW_DEBUG_MEMORY_EMBEDDINGS);
 
 export function debugEmbeddingsLog(message: string, meta?: Record<string, unknown>): void {
   if (!debugEmbeddings) {

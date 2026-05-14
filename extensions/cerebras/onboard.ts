@@ -1,7 +1,7 @@
 import {
   createModelCatalogPresetAppliers,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildCerebrasModelDefinition,
   CEREBRAS_BASE_URL,
@@ -12,7 +12,7 @@ export const CEREBRAS_DEFAULT_MODEL_REF = "cerebras/zai-glm-4.7";
 
 const cerebrasPresetAppliers = createModelCatalogPresetAppliers({
   primaryModelRef: CEREBRAS_DEFAULT_MODEL_REF,
-  resolveParams: (_cfg: NexisClawConfig) => ({
+  resolveParams: (_cfg: GreenchClawConfig) => ({
     providerId: "cerebras",
     api: "openai-completions",
     baseUrl: CEREBRAS_BASE_URL,
@@ -21,6 +21,6 @@ const cerebrasPresetAppliers = createModelCatalogPresetAppliers({
   }),
 });
 
-export function applyCerebrasConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyCerebrasConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return cerebrasPresetAppliers.applyConfig(cfg);
 }

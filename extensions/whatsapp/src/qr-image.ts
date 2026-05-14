@@ -1,1 +1,1 @@
-export { renderQrPngBase64, renderQrPngDataUrl } from "NexisClaw/plugin-sdk/media-runtime";
+export { renderQrPngBase64, renderQrPngDataUrl } from "GreenchClaw/plugin-sdk/media-runtime";

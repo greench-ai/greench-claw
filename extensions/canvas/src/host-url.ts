@@ -1,7 +1,7 @@
 import {
   resolveHostedPluginSurfaceUrl,
   type HostedPluginSurfaceUrlParams,
-} from "NexisClaw/plugin-sdk/gateway-runtime";
+} from "GreenchClaw/plugin-sdk/gateway-runtime";
 
 type CanvasHostUrlParams = Omit<HostedPluginSurfaceUrlParams, "port"> & {
   canvasPort?: number;

@@ -1,12 +1,12 @@
-import type { ReplyToMode } from "NexisClaw/plugin-sdk/config-contracts";
-import type { TelegramAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { ReplyToMode } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { TelegramAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   createSubsystemLogger,
   danger,
   logVerbose,
   shouldLogVerbose,
-} from "NexisClaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import type { TelegramBotDeps } from "./bot-deps.js";
 import {
   buildTelegramMessageContext,
@@ -87,7 +87,7 @@ export const createTelegramMessageProcessor = (deps: TelegramMessageProcessorDep
         ? options.receivedAtMs
         : undefined;
     const ingressDebugEnabled =
-      shouldLogVerbose() || process.env.NEXISCLAW_DEBUG_TELEGRAM_INGRESS === "1";
+      shouldLogVerbose() || process.env.GREENCHCLAW_DEBUG_TELEGRAM_INGRESS === "1";
     const ingressContextStartMs = ingressReceivedAtMs ? Date.now() : undefined;
     const context = await buildTelegramMessageContext({
       primaryCtx,

@@ -17,7 +17,7 @@ export type GatewayTlsConfig = {
 
 export type WideAreaDiscoveryConfig = {
   enabled?: boolean;
-  /** Optional unicast DNS-SD domain (e.g. "NexisClaw.internal"). */
+  /** Optional unicast DNS-SD domain (e.g. "GreenchClaw.internal"). */
   domain?: string;
 };
 
@@ -106,7 +106,7 @@ export type TalkConfigResponse = TalkConfig & {
 export type GatewayControlUiConfig = {
   /** If false, the Gateway will not serve the Control UI (default /). */
   enabled?: boolean;
-  /** Optional base path prefix for the Control UI (e.g. "/NexisClaw"). */
+  /** Optional base path prefix for the Control UI (e.g. "/GreenchClaw"). */
   basePath?: string;
   /** Optional filesystem root for Control UI assets (defaults to dist/control-ui). */
   root?: string;
@@ -119,7 +119,7 @@ export type GatewayControlUiConfig = {
   embedSandbox?: "strict" | "scripts" | "trusted";
   /**
    * DANGEROUS: Allow hosted embeds to load absolute external http(s) URLs.
-   * Default off; prefer hosted /__NexisClaw__/canvas or /__NexisClaw__/a2ui content.
+   * Default off; prefer hosted /__GreenchClaw__/canvas or /__GreenchClaw__/a2ui content.
    */
   allowExternalEmbedUrls?: boolean;
   /** Optional max-width for grouped Control UI chat messages (default: min(900px, 68%)). */
@@ -213,7 +213,7 @@ export type GatewayTailscaleConfig = {
   /**
    * When `mode="serve"` and an externally configured Tailscale Funnel route
    * already covers the gateway port, skip re-applying `tailscale serve` on
-   * startup. Lets operators manage Funnel exposure outside NexisClaw without
+   * startup. Lets operators manage Funnel exposure outside GreenchClaw without
    * losing it across gateway restarts.
    */
   preserveFunnel?: boolean;
@@ -250,7 +250,7 @@ export type GatewayReloadConfig = {
    * before forcing a restart. Absent uses the gateway's default bounded wait;
    * 0 waits indefinitely and logs periodic still-pending warnings.
    * Lower positive values risk aborting active subagent LLM calls.
-   * @see https://github.com/NexisClaw/NexisClaw/issues/65485
+   * @see https://github.com/GreenchClaw/GreenchClaw/issues/65485
    */
   deferralTimeoutMs?: number;
 };
@@ -487,7 +487,7 @@ export type GatewayConfig = {
   webchat?: GatewayWebchatConfig;
   /**
    * Pre-auth Gateway WebSocket handshake timeout in milliseconds.
-   * Env var NEXISCLAW_HANDSHAKE_TIMEOUT_MS takes precedence. Default: 15000.
+   * Env var GREENCHCLAW_HANDSHAKE_TIMEOUT_MS takes precedence. Default: 15000.
    */
   handshakeTimeoutMs?: number;
   /**

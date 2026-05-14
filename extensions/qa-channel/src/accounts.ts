@@ -1,7 +1,7 @@
-import { createAccountListHelpers } from "NexisClaw/plugin-sdk/account-helpers";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import { resolveMergedAccountConfig } from "NexisClaw/plugin-sdk/account-resolution-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { createAccountListHelpers } from "GreenchClaw/plugin-sdk/account-helpers";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import { resolveMergedAccountConfig } from "GreenchClaw/plugin-sdk/account-resolution-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { CoreConfig, QaChannelAccountConfig, ResolvedQaChannelAccount } from "./types.js";
 
 const DEFAULT_POLL_TIMEOUT_MS = 1_000;
@@ -32,8 +32,8 @@ export function resolveQaChannelAccount(params: {
   const baseEnabled = params.cfg.channels?.["qa-channel"]?.enabled !== false;
   const enabled = baseEnabled && merged.enabled !== false;
   const baseUrl = merged.baseUrl?.trim() ?? "";
-  const botUserId = merged.botUserId?.trim() || "NexisClaw";
-  const botDisplayName = merged.botDisplayName?.trim() || "NexisClaw QA";
+  const botUserId = merged.botUserId?.trim() || "GreenchClaw";
+  const botDisplayName = merged.botDisplayName?.trim() || "GreenchClaw QA";
   return {
     accountId,
     enabled,

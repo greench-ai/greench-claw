@@ -416,7 +416,7 @@ describe("runContextEngineMaintenance", () => {
   });
 
   it("defers turn maintenance to a hidden background task when enabled", async () => {
-    await withStateDirEnv("NexisClaw-turn-maintenance-", async () => {
+    await withStateDirEnv("GreenchClaw-turn-maintenance-", async () => {
       vi.useFakeTimers();
       try {
         resetCommandQueueStateForTest();
@@ -553,7 +553,7 @@ describe("runContextEngineMaintenance", () => {
   });
 
   it("coalesces repeated requests into one active run plus one follow-up run for the same session", async () => {
-    await withStateDirEnv("NexisClaw-turn-maintenance-", async () => {
+    await withStateDirEnv("GreenchClaw-turn-maintenance-", async () => {
       vi.useFakeTimers();
       try {
         resetCommandQueueStateForTest();
@@ -632,7 +632,7 @@ describe("runContextEngineMaintenance", () => {
   });
 
   it("queues a follow-up maintenance run when a new turn finishes during an active deferred run", async () => {
-    await withStateDirEnv("NexisClaw-turn-maintenance-rerun-", async () => {
+    await withStateDirEnv("GreenchClaw-turn-maintenance-rerun-", async () => {
       vi.useFakeTimers();
       try {
         resetCommandQueueStateForTest();
@@ -707,7 +707,7 @@ describe("runContextEngineMaintenance", () => {
   });
 
   it("replaces legacy active maintenance tasks that are missing a runId", async () => {
-    await withStateDirEnv("NexisClaw-turn-maintenance-", async () => {
+    await withStateDirEnv("GreenchClaw-turn-maintenance-", async () => {
       vi.useFakeTimers();
       try {
         resetCommandQueueStateForTest();
@@ -780,7 +780,7 @@ describe("runContextEngineMaintenance", () => {
   });
 
   it("cancels the queued task when deferred scheduling is rejected", async () => {
-    await withStateDirEnv("NexisClaw-turn-maintenance-", async () => {
+    await withStateDirEnv("GreenchClaw-turn-maintenance-", async () => {
       vi.useFakeTimers();
       const scheduleError = new Error("gateway draining");
       const enqueueSpy = vi
@@ -837,7 +837,7 @@ describe("runContextEngineMaintenance", () => {
   });
 
   it("lets foreground turns win while deferred maintenance is waiting", async () => {
-    await withStateDirEnv("NexisClaw-turn-maintenance-", async () => {
+    await withStateDirEnv("GreenchClaw-turn-maintenance-", async () => {
       vi.useFakeTimers();
       try {
         resetCommandQueueStateForTest();
@@ -917,7 +917,7 @@ describe("runContextEngineMaintenance", () => {
   });
 
   it("lets a foreground turn run before a deferred maintenance transcript rewrite", async () => {
-    await withStateDirEnv("NexisClaw-turn-maintenance-", async () => {
+    await withStateDirEnv("GreenchClaw-turn-maintenance-", async () => {
       vi.useFakeTimers();
       try {
         resetCommandQueueStateForTest();
@@ -1022,7 +1022,7 @@ describe("runContextEngineMaintenance", () => {
   });
 
   it("keeps fast deferred maintenance silent for the user", async () => {
-    await withStateDirEnv("NexisClaw-turn-maintenance-", async () => {
+    await withStateDirEnv("GreenchClaw-turn-maintenance-", async () => {
       vi.useFakeTimers();
       try {
         resetCommandQueueStateForTest();
@@ -1072,7 +1072,7 @@ describe("runContextEngineMaintenance", () => {
   });
 
   it("surfaces long-running deferred maintenance and completion via task updates", async () => {
-    await withStateDirEnv("NexisClaw-turn-maintenance-", async () => {
+    await withStateDirEnv("GreenchClaw-turn-maintenance-", async () => {
       vi.useFakeTimers();
       try {
         resetCommandQueueStateForTest();
@@ -1145,7 +1145,7 @@ describe("runContextEngineMaintenance", () => {
   });
 
   it("throttles deferred wait notices while the session lane stays busy", async () => {
-    await withStateDirEnv("NexisClaw-turn-maintenance-", async () => {
+    await withStateDirEnv("GreenchClaw-turn-maintenance-", async () => {
       vi.useFakeTimers();
       try {
         resetCommandQueueStateForTest();
@@ -1225,7 +1225,7 @@ describe("runContextEngineMaintenance", () => {
   });
 
   it("surfaces deferred maintenance failures even when they fail quickly", async () => {
-    await withStateDirEnv("NexisClaw-turn-maintenance-", async () => {
+    await withStateDirEnv("GreenchClaw-turn-maintenance-", async () => {
       vi.useFakeTimers();
       try {
         resetCommandQueueStateForTest();

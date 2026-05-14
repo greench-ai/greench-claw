@@ -1,15 +1,15 @@
 ---
-summary: "CLI reference for `NexisClaw browser` (lifecycle, profiles, tabs, actions, state, and debugging)"
+summary: "CLI reference for `GreenchClaw browser` (lifecycle, profiles, tabs, actions, state, and debugging)"
 read_when:
-  - You use `NexisClaw browser` and want examples for common tasks
+  - You use `GreenchClaw browser` and want examples for common tasks
   - You want to control a browser running on another machine via a node host
   - You want to attach to your local signed-in Chrome via Chrome MCP
 title: "Browser"
 ---
 
-# `NexisClaw browser`
+# `GreenchClaw browser`
 
-Manage NexisClaw's browser control surface and run browser actions (lifecycle, profiles, tabs, snapshots, screenshots, navigation, input, state emulation, and debugging).
+Manage GreenchClaw's browser control surface and run browser actions (lifecycle, profiles, tabs, snapshots, screenshots, navigation, input, state emulation, and debugging).
 
 Related:
 
@@ -27,10 +27,10 @@ Related:
 ## Quick start (local)
 
 ```bash
-NexisClaw browser profiles
-NexisClaw browser --browser-profile NexisClaw start
-NexisClaw browser --browser-profile NexisClaw open https://example.com
-NexisClaw browser --browser-profile NexisClaw snapshot
+GreenchClaw browser profiles
+GreenchClaw browser --browser-profile GreenchClaw start
+GreenchClaw browser --browser-profile GreenchClaw open https://example.com
+GreenchClaw browser --browser-profile GreenchClaw snapshot
 ```
 
 Agents can run the same readiness check with `browser({ action: "doctor" })`.
@@ -42,10 +42,10 @@ If `start` fails with `not reachable after start`, troubleshoot CDP readiness fi
 Minimal sequence:
 
 ```bash
-NexisClaw browser --browser-profile NexisClaw doctor
-NexisClaw browser --browser-profile NexisClaw start
-NexisClaw browser --browser-profile NexisClaw tabs
-NexisClaw browser --browser-profile NexisClaw open https://example.com
+GreenchClaw browser --browser-profile GreenchClaw doctor
+GreenchClaw browser --browser-profile GreenchClaw start
+GreenchClaw browser --browser-profile GreenchClaw tabs
+GreenchClaw browser --browser-profile GreenchClaw open https://example.com
 ```
 
 Detailed guidance: [Browser troubleshooting](/tools/browser#cdp-startup-failure-vs-navigation-ssrf-block)
@@ -53,37 +53,37 @@ Detailed guidance: [Browser troubleshooting](/tools/browser#cdp-startup-failure-
 ## Lifecycle
 
 ```bash
-NexisClaw browser status
-NexisClaw browser doctor
-NexisClaw browser doctor --deep
-NexisClaw browser start
-NexisClaw browser start --headless
-NexisClaw browser stop
-NexisClaw browser --browser-profile NexisClaw reset-profile
+GreenchClaw browser status
+GreenchClaw browser doctor
+GreenchClaw browser doctor --deep
+GreenchClaw browser start
+GreenchClaw browser start --headless
+GreenchClaw browser stop
+GreenchClaw browser --browser-profile GreenchClaw reset-profile
 ```
 
 Notes:
 
 - `doctor --deep` adds a live snapshot probe. It is useful when basic CDP
   readiness is green but you want proof that the current tab can be inspected.
-- For `attachOnly` and remote CDP profiles, `NexisClaw browser stop` closes the
+- For `attachOnly` and remote CDP profiles, `GreenchClaw browser stop` closes the
   active control session and clears temporary emulation overrides even when
-  NexisClaw did not launch the browser process itself.
-- For local managed profiles, `NexisClaw browser stop` stops the spawned browser
+  GreenchClaw did not launch the browser process itself.
+- For local managed profiles, `GreenchClaw browser stop` stops the spawned browser
   process.
-- `NexisClaw browser start --headless` applies only to that start request and
-  only when NexisClaw launches a local managed browser. It does not rewrite
+- `GreenchClaw browser start --headless` applies only to that start request and
+  only when GreenchClaw launches a local managed browser. It does not rewrite
   `browser.headless` or profile config, and it is a no-op for an already-running
   browser.
 - On Linux hosts without `DISPLAY` or `WAYLAND_DISPLAY`, local managed profiles
-  run headless automatically unless `NEXISCLAW_BROWSER_HEADLESS=0`,
+  run headless automatically unless `GREENCHCLAW_BROWSER_HEADLESS=0`,
   `browser.headless=false`, or `browser.profiles.<name>.headless=false`
   explicitly requests a visible browser.
 
 ## If the command is missing
 
-If `NexisClaw browser` is an unknown command, check `plugins.allow` in
-`~/.NexisClaw/NexisClaw.json`.
+If `GreenchClaw browser` is an unknown command, check `plugins.allow` in
+`~/.GreenchClaw/GreenchClaw.json`.
 
 When `plugins.allow` is present, list the bundled browser plugin explicitly
 unless the config already has a root `browser` block:
@@ -106,35 +106,35 @@ Related: [Browser tool](/tools/browser#missing-browser-command-or-tool)
 
 Profiles are named browser routing configs. In practice:
 
-- `NexisClaw`: launches or attaches to a dedicated NexisClaw-managed Chrome instance (isolated user data dir).
+- `GreenchClaw`: launches or attaches to a dedicated GreenchClaw-managed Chrome instance (isolated user data dir).
 - `user`: controls your existing signed-in Chrome session via Chrome DevTools MCP.
 - custom CDP profiles: point at a local or remote CDP endpoint.
 
 ```bash
-NexisClaw browser profiles
-NexisClaw browser create-profile --name work --color "#FF5A36"
-NexisClaw browser create-profile --name chrome-live --driver existing-session
-NexisClaw browser create-profile --name remote --cdp-url https://browser-host.example.com
-NexisClaw browser delete-profile --name work
+GreenchClaw browser profiles
+GreenchClaw browser create-profile --name work --color "#FF5A36"
+GreenchClaw browser create-profile --name chrome-live --driver existing-session
+GreenchClaw browser create-profile --name remote --cdp-url https://browser-host.example.com
+GreenchClaw browser delete-profile --name work
 ```
 
 Use a specific profile:
 
 ```bash
-NexisClaw browser --browser-profile work tabs
+GreenchClaw browser --browser-profile work tabs
 ```
 
 ## Tabs
 
 ```bash
-NexisClaw browser tabs
-NexisClaw browser tab new --label docs
-NexisClaw browser tab label t1 docs
-NexisClaw browser tab select 2
-NexisClaw browser tab close 2
-NexisClaw browser open https://docs.NexisClaw.ai --label docs
-NexisClaw browser focus docs
-NexisClaw browser close t1
+GreenchClaw browser tabs
+GreenchClaw browser tab new --label docs
+GreenchClaw browser tab label t1 docs
+GreenchClaw browser tab select 2
+GreenchClaw browser tab close 2
+GreenchClaw browser open https://docs.GreenchClaw.ai --label docs
+GreenchClaw browser focus docs
+GreenchClaw browser close t1
 ```
 
 `tabs` returns `suggestedTargetId` first, then the stable `tabId` such as `t1`,
@@ -143,7 +143,7 @@ the optional label, and the raw `targetId`. Agents should pass
 assign a label with `open --label`, `tab new --label`, or `tab label`; labels,
 tab ids, raw target ids, and unique target-id prefixes are all accepted.
 When Chromium replaces the underlying raw target during a navigation or form
-submit, NexisClaw keeps the stable `tabId`/label attached to the replacement tab
+submit, GreenchClaw keeps the stable `tabId`/label attached to the replacement tab
 when it can prove the match. Raw target ids remain volatile; prefer
 `suggestedTargetId`.
 
@@ -152,17 +152,17 @@ when it can prove the match. Raw target ids remain volatile; prefer
 Snapshot:
 
 ```bash
-NexisClaw browser snapshot
-NexisClaw browser snapshot --urls
+GreenchClaw browser snapshot
+GreenchClaw browser snapshot --urls
 ```
 
 Screenshot:
 
 ```bash
-NexisClaw browser screenshot
-NexisClaw browser screenshot --full-page
-NexisClaw browser screenshot --ref e12
-NexisClaw browser screenshot --labels
+GreenchClaw browser screenshot
+GreenchClaw browser screenshot --full-page
+GreenchClaw browser screenshot --ref e12
+GreenchClaw browser screenshot --labels
 ```
 
 Notes:
@@ -179,35 +179,35 @@ Notes:
 Navigate/click/type (ref-based UI automation):
 
 ```bash
-NexisClaw browser navigate https://example.com
-NexisClaw browser click <ref>
-NexisClaw browser click-coords 120 340
-NexisClaw browser type <ref> "hello"
-NexisClaw browser press Enter
-NexisClaw browser hover <ref>
-NexisClaw browser scrollintoview <ref>
-NexisClaw browser drag <startRef> <endRef>
-NexisClaw browser select <ref> OptionA OptionB
-NexisClaw browser fill --fields '[{"ref":"1","value":"Ada"}]'
-NexisClaw browser wait --text "Done"
-NexisClaw browser evaluate --fn '(el) => el.textContent' --ref <ref>
+GreenchClaw browser navigate https://example.com
+GreenchClaw browser click <ref>
+GreenchClaw browser click-coords 120 340
+GreenchClaw browser type <ref> "hello"
+GreenchClaw browser press Enter
+GreenchClaw browser hover <ref>
+GreenchClaw browser scrollintoview <ref>
+GreenchClaw browser drag <startRef> <endRef>
+GreenchClaw browser select <ref> OptionA OptionB
+GreenchClaw browser fill --fields '[{"ref":"1","value":"Ada"}]'
+GreenchClaw browser wait --text "Done"
+GreenchClaw browser evaluate --fn '(el) => el.textContent' --ref <ref>
 ```
 
 Action responses return the current raw `targetId` after action-triggered page
-replacement when NexisClaw can prove the replacement tab. Scripts should still
+replacement when GreenchClaw can prove the replacement tab. Scripts should still
 store and pass `suggestedTargetId`/labels for long-lived workflows.
 
 File + dialog helpers:
 
 ```bash
-NexisClaw browser upload /tmp/NexisClaw/uploads/file.pdf --ref <ref>
-NexisClaw browser waitfordownload
-NexisClaw browser download <ref> report.pdf
-NexisClaw browser dialog --accept
+GreenchClaw browser upload /tmp/GreenchClaw/uploads/file.pdf --ref <ref>
+GreenchClaw browser waitfordownload
+GreenchClaw browser download <ref> report.pdf
+GreenchClaw browser dialog --accept
 ```
 
-Managed Chrome profiles save ordinary click-triggered downloads into the NexisClaw
-downloads directory (`/tmp/NexisClaw/downloads` by default, or the configured temp
+Managed Chrome profiles save ordinary click-triggered downloads into the GreenchClaw
+downloads directory (`/tmp/GreenchClaw/downloads` by default, or the configured temp
 root). Use `waitfordownload` or `download` when the agent needs to wait for a
 specific file and return its path; those explicit waiters own the next download.
 
@@ -216,40 +216,40 @@ specific file and return its path; those explicit waiters own the next download.
 Viewport + emulation:
 
 ```bash
-NexisClaw browser resize 1280 720
-NexisClaw browser set viewport 1280 720
-NexisClaw browser set offline on
-NexisClaw browser set media dark
-NexisClaw browser set timezone Europe/London
-NexisClaw browser set locale en-GB
-NexisClaw browser set geo 51.5074 -0.1278 --accuracy 25
-NexisClaw browser set device "iPhone 14"
-NexisClaw browser set headers '{"x-test":"1"}'
-NexisClaw browser set credentials myuser mypass
+GreenchClaw browser resize 1280 720
+GreenchClaw browser set viewport 1280 720
+GreenchClaw browser set offline on
+GreenchClaw browser set media dark
+GreenchClaw browser set timezone Europe/London
+GreenchClaw browser set locale en-GB
+GreenchClaw browser set geo 51.5074 -0.1278 --accuracy 25
+GreenchClaw browser set device "iPhone 14"
+GreenchClaw browser set headers '{"x-test":"1"}'
+GreenchClaw browser set credentials myuser mypass
 ```
 
 Cookies + storage:
 
 ```bash
-NexisClaw browser cookies
-NexisClaw browser cookies set session abc123 --url https://example.com
-NexisClaw browser cookies clear
-NexisClaw browser storage local get
-NexisClaw browser storage local set token abc123
-NexisClaw browser storage session clear
+GreenchClaw browser cookies
+GreenchClaw browser cookies set session abc123 --url https://example.com
+GreenchClaw browser cookies clear
+GreenchClaw browser storage local get
+GreenchClaw browser storage local set token abc123
+GreenchClaw browser storage session clear
 ```
 
 ## Debugging
 
 ```bash
-NexisClaw browser console --level error
-NexisClaw browser pdf
-NexisClaw browser responsebody "**/api"
-NexisClaw browser highlight <ref>
-NexisClaw browser errors --clear
-NexisClaw browser requests --filter api
-NexisClaw browser trace start
-NexisClaw browser trace stop --out trace.zip
+GreenchClaw browser console --level error
+GreenchClaw browser pdf
+GreenchClaw browser responsebody "**/api"
+GreenchClaw browser highlight <ref>
+GreenchClaw browser errors --clear
+GreenchClaw browser requests --filter api
+GreenchClaw browser trace start
+GreenchClaw browser trace stop --out trace.zip
 ```
 
 ## Existing Chrome via MCP
@@ -257,10 +257,10 @@ NexisClaw browser trace stop --out trace.zip
 Use the built-in `user` profile, or create your own `existing-session` profile:
 
 ```bash
-NexisClaw browser --browser-profile user tabs
-NexisClaw browser create-profile --name chrome-live --driver existing-session
-NexisClaw browser create-profile --name brave-live --driver existing-session --user-data-dir "~/Library/Application Support/BraveSoftware/Brave-Browser"
-NexisClaw browser --browser-profile chrome-live tabs
+GreenchClaw browser --browser-profile user tabs
+GreenchClaw browser create-profile --name chrome-live --driver existing-session
+GreenchClaw browser create-profile --name brave-live --driver existing-session --user-data-dir "~/Library/Application Support/BraveSoftware/Brave-Browser"
+GreenchClaw browser --browser-profile chrome-live tabs
 ```
 
 This path is host-only. For Docker, headless servers, Browserless, or other remote setups, use a CDP profile instead.

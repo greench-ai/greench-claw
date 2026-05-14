@@ -229,7 +229,7 @@ export function resolveProviderHttpRequestConfig(params: {
  * `TRUSTED_ENV_PROXY` mode based on the runtime environment.
  *
  * This is gated conservatively to avoid the SSRF bypasses the initial
- * auto-upgrade path exposed (see NexisClaw#64974 review threads):
+ * auto-upgrade path exposed (see GreenchClaw#64974 review threads):
  *
  * 1. If the caller supplied an explicit `dispatcherPolicy` — custom proxy URL,
  *    `proxyTls`, or `connect` options — do NOT override it. Trusted-env mode
@@ -293,7 +293,7 @@ export async function fetchWithTimeoutGuarded(
   // `mode: GUARDED_FETCH_MODE.STRICT` here or by using `fetchWithSsrFGuard`
   // directly.
   //
-  // See NexisClaw#52162 for the reported failure mode on memory embeddings,
+  // See GreenchClaw#52162 for the reported failure mode on memory embeddings,
   // which shares this code path with image/music/video/audio generation.
   const resolvedMode =
     options?.mode ??

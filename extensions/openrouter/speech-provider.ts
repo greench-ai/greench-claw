@@ -2,7 +2,7 @@ import {
   asObject,
   createOpenAiCompatibleSpeechProvider,
   type SpeechProviderPlugin,
-} from "NexisClaw/plugin-sdk/speech";
+} from "GreenchClaw/plugin-sdk/speech";
 import { OPENROUTER_BASE_URL } from "./provider-catalog.js";
 
 const DEFAULT_OPENROUTER_TTS_MODEL = "hexgrad/kokoro-82m";
@@ -35,8 +35,8 @@ export function buildOpenRouterSpeechProvider(): SpeechProviderPlugin {
     voiceCompatibleResponseFormats: ["mp3"],
     baseUrlPolicy: { kind: "canonical", aliases: ["https://openrouter.ai/v1"] },
     extraHeaders: {
-      "HTTP-Referer": "https://NexisClaw.ai",
-      "X-OpenRouter-Title": "NexisClaw",
+      "HTTP-Referer": "https://GreenchClaw.ai",
+      "X-OpenRouter-Title": "GreenchClaw",
     },
     apiErrorLabel: "OpenRouter TTS API error",
     missingApiKeyError: "OpenRouter API key missing",

@@ -1,10 +1,10 @@
 import { expect } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 export function expectGeneratedTokenPersistedToGatewayAuth(params: {
   generatedToken?: string;
   authToken?: string;
-  persistedConfig?: NexisClawConfig;
+  persistedConfig?: GreenchClawConfig;
 }) {
   expect(params.generatedToken).toMatch(/^[0-9a-f]{48}$/);
   expect(params.authToken).toBe(params.generatedToken);

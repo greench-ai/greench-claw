@@ -1,6 +1,6 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { isProviderApiKeyConfigured } from "NexisClaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { isProviderApiKeyConfigured } from "GreenchClaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "GreenchClaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
@@ -9,8 +9,8 @@ import {
   resolveProviderHttpRequestConfig,
   resolveProviderOperationTimeoutMs,
   sanitizeConfiguredModelProviderRequest,
-} from "NexisClaw/plugin-sdk/provider-http";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/provider-http";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   parseOpenAiCompatibleImageResponse,
   type OpenAiCompatibleImageResponsePayload,
@@ -23,7 +23,9 @@ import type {
   ImageGenerationSourceImage,
 } from "./types.js";
 
-type ModelProviderConfig = NonNullable<NonNullable<NexisClawConfig["models"]>["providers"]>[string];
+type ModelProviderConfig = NonNullable<
+  NonNullable<GreenchClawConfig["models"]>["providers"]
+>[string];
 
 export type OpenAiCompatibleImageRequestMode = "generate" | "edit";
 
@@ -86,7 +88,7 @@ export type OpenAiCompatibleImageProviderOptions = {
 };
 
 function readProviderConfig(
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
   providerConfigKey: string,
 ): ModelProviderConfig | undefined {
   return cfg?.models?.providers?.[providerConfigKey];

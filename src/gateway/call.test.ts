@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { DeviceIdentity } from "../infra/device-identity.js";
 import { createEmptyPluginRegistry } from "../plugins/registry-empty.js";
 import { setActivePluginRegistry } from "../plugins/runtime.js";
@@ -208,9 +208,9 @@ function resetGatewayCallMocks() {
   closeCode = 1006;
   closeReason = "";
   helloMethods = ["health", "secrets.resolve"];
-  const loadConfigForTests = getRuntimeConfig as unknown as () => NexisClawConfig;
+  const loadConfigForTests = getRuntimeConfig as unknown as () => GreenchClawConfig;
   const resolveGatewayPortForTests = resolveGatewayPort as unknown as (
-    cfg?: NexisClawConfig,
+    cfg?: GreenchClawConfig,
     env?: NodeJS.ProcessEnv,
   ) => number;
   __testing.setDepsForTests({
@@ -250,22 +250,22 @@ function makeRemotePasswordGatewayConfig(remotePassword: string, localPassword =
 
 describe("callGateway url resolution", () => {
   const envSnapshot = captureEnv([
-    "NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS",
-    "NEXISCLAW_CONFIG_PATH",
-    "NEXISCLAW_GATEWAY_PORT",
-    "NEXISCLAW_GATEWAY_URL",
-    "NEXISCLAW_GATEWAY_TOKEN",
-    "NEXISCLAW_STATE_DIR",
+    "GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS",
+    "GREENCHCLAW_CONFIG_PATH",
+    "GREENCHCLAW_GATEWAY_PORT",
+    "GREENCHCLAW_GATEWAY_URL",
+    "GREENCHCLAW_GATEWAY_TOKEN",
+    "GREENCHCLAW_STATE_DIR",
   ]);
 
   beforeEach(() => {
     envSnapshot.restore();
-    delete process.env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS;
-    delete process.env.NEXISCLAW_CONFIG_PATH;
-    delete process.env.NEXISCLAW_GATEWAY_PORT;
-    delete process.env.NEXISCLAW_GATEWAY_URL;
-    delete process.env.NEXISCLAW_GATEWAY_TOKEN;
-    delete process.env.NEXISCLAW_STATE_DIR;
+    delete process.env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS;
+    delete process.env.GREENCHCLAW_CONFIG_PATH;
+    delete process.env.GREENCHCLAW_GATEWAY_PORT;
+    delete process.env.GREENCHCLAW_GATEWAY_URL;
+    delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
+    delete process.env.GREENCHCLAW_STATE_DIR;
     resetGatewayCallMocks();
   });
 
@@ -448,14 +448,14 @@ describe("callGateway url resolution", () => {
     expect(lastClientOptions?.deviceIdentity).toBeNull();
   });
 
-  it("uses NEXISCLAW_GATEWAY_URL env override in remote mode when remote URL is missing", async () => {
+  it("uses GREENCHCLAW_GATEWAY_URL env override in remote mode when remote URL is missing", async () => {
     getRuntimeConfig.mockReturnValue({
       gateway: { mode: "remote", bind: "loopback", remote: {} },
     });
     resolveGatewayPort.mockReturnValue(18789);
     pickPrimaryTailnetIPv4.mockReturnValue(undefined);
-    process.env.NEXISCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
-    process.env.NEXISCLAW_GATEWAY_TOKEN = "env-token";
+    process.env.GREENCHCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = "env-token";
 
     await callGateway({
       method: "health",
@@ -480,11 +480,11 @@ describe("callGateway url resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
     resolveGatewayPort.mockReturnValue(18789);
     pickPrimaryTailnetIPv4.mockReturnValue(undefined);
-    process.env.NEXISCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
-    process.env.NEXISCLAW_GATEWAY_TOKEN = "env-token";
+    process.env.GREENCHCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = "env-token";
 
     await callGateway({
       method: "health",
@@ -507,8 +507,8 @@ describe("callGateway url resolution", () => {
     });
     setGatewayNetworkDefaults(18789);
     pickPrimaryTailnetIPv4.mockReturnValue(undefined);
-    process.env.NEXISCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
-    process.env.NEXISCLAW_GATEWAY_TOKEN = "env-token";
+    process.env.GREENCHCLAW_GATEWAY_URL = "wss://gateway-in-container.internal:9443/ws";
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = "env-token";
 
     await callGateway({
       method: "health",
@@ -756,32 +756,32 @@ describe("buildGatewayConnectionDetails", () => {
     expect(details.remoteFallbackNote).toBeUndefined();
   });
 
-  it("uses env NEXISCLAW_GATEWAY_URL when set", () => {
+  it("uses env GREENCHCLAW_GATEWAY_URL when set", () => {
     getRuntimeConfig.mockReturnValue({ gateway: { mode: "local", bind: "loopback" } });
     resolveGatewayPort.mockReturnValue(18800);
     pickPrimaryTailnetIPv4.mockReturnValue(undefined);
-    const prevUrl = process.env.NEXISCLAW_GATEWAY_URL;
+    const prevUrl = process.env.GREENCHCLAW_GATEWAY_URL;
     try {
-      process.env.NEXISCLAW_GATEWAY_URL = "wss://browser-gateway.local:9443/ws";
+      process.env.GREENCHCLAW_GATEWAY_URL = "wss://browser-gateway.local:9443/ws";
 
       const details = buildGatewayConnectionDetails();
 
       expect(details.url).toBe("wss://browser-gateway.local:9443/ws");
-      expect(details.urlSource).toBe("env NEXISCLAW_GATEWAY_URL");
+      expect(details.urlSource).toBe("env GREENCHCLAW_GATEWAY_URL");
       expect(details.bindDetail).toBeUndefined();
     } finally {
       if (prevUrl === undefined) {
-        delete process.env.NEXISCLAW_GATEWAY_URL;
+        delete process.env.GREENCHCLAW_GATEWAY_URL;
       } else {
-        process.env.NEXISCLAW_GATEWAY_URL = prevUrl;
+        process.env.GREENCHCLAW_GATEWAY_URL = prevUrl;
       }
     }
   });
 
   it("falls back to the default config loader when test deps drift", () => {
-    const tempStateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-gateway-call-"));
-    process.env.NEXISCLAW_STATE_DIR = tempStateDir;
-    process.env.NEXISCLAW_CONFIG_PATH = path.join(tempStateDir, "missing-config.json");
+    const tempStateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-gateway-call-"));
+    process.env.GREENCHCLAW_STATE_DIR = tempStateDir;
+    process.env.GREENCHCLAW_CONFIG_PATH = path.join(tempStateDir, "missing-config.json");
     try {
       getRuntimeConfig.mockReturnValue({ gateway: { mode: "local", bind: "loopback" } });
       resolveGatewayPort.mockReturnValue(18800);
@@ -821,11 +821,11 @@ describe("buildGatewayConnectionDetails", () => {
     expect((thrown as Error).message).toContain("plaintext ws://");
     expect((thrown as Error).message).toContain("wss://");
     expect((thrown as Error).message).toContain("Tailscale Serve/Funnel");
-    expect((thrown as Error).message).toContain("NexisClaw doctor --fix");
+    expect((thrown as Error).message).toContain("GreenchClaw doctor --fix");
   });
 
-  it("allows ws:// private remote URLs only when NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
-    process.env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
+  it("allows ws:// private remote URLs only when GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
+    process.env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
     getRuntimeConfig.mockReturnValue({
       gateway: {
         mode: "remote",
@@ -841,20 +841,20 @@ describe("buildGatewayConnectionDetails", () => {
     expect(details.urlSource).toBe("config gateway.remote.url");
   });
 
-  it("allows ws:// hostname remote URLs when NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
-    process.env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
+  it("allows ws:// hostname remote URLs when GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
+    process.env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
     getRuntimeConfig.mockReturnValue({
       gateway: {
         mode: "remote",
         bind: "loopback",
-        remote: { url: "ws://NexisClaw-gateway.ai:18789" },
+        remote: { url: "ws://GreenchClaw-gateway.ai:18789" },
       },
     });
     resolveGatewayPort.mockReturnValue(18789);
 
     const details = buildGatewayConnectionDetails();
 
-    expect(details.url).toBe("ws://NexisClaw-gateway.ai:18789");
+    expect(details.url).toBe("ws://GreenchClaw-gateway.ai:18789");
     expect(details.urlSource).toBe("config gateway.remote.url");
   });
 
@@ -1025,9 +1025,9 @@ describe("callGateway error details", () => {
   });
 
   it("keeps the default wrapper timeout aligned with env handshake timeout", async () => {
-    const envSnapshot = captureEnv(["NEXISCLAW_HANDSHAKE_TIMEOUT_MS"]);
+    const envSnapshot = captureEnv(["GREENCHCLAW_HANDSHAKE_TIMEOUT_MS"]);
     try {
-      process.env.NEXISCLAW_HANDSHAKE_TIMEOUT_MS = "30000";
+      process.env.GREENCHCLAW_HANDSHAKE_TIMEOUT_MS = "30000";
       startMode = "silent";
       setLocalLoopbackGatewayConfig();
 
@@ -1135,10 +1135,10 @@ describe("callGateway error details", () => {
             });
           },
         }) as never,
-      getRuntimeConfig: getRuntimeConfig as unknown as () => NexisClawConfig,
+      getRuntimeConfig: getRuntimeConfig as unknown as () => GreenchClawConfig,
       loadOrCreateDeviceIdentity: () => deviceIdentityState.value,
       resolveGatewayPort: resolveGatewayPort as unknown as (
-        cfg?: NexisClawConfig,
+        cfg?: GreenchClawConfig,
         env?: NodeJS.ProcessEnv,
       ) => number,
     });
@@ -1196,10 +1196,10 @@ describe("callGateway error details", () => {
             });
           },
         }) as never,
-      getRuntimeConfig: getRuntimeConfig as unknown as () => NexisClawConfig,
+      getRuntimeConfig: getRuntimeConfig as unknown as () => GreenchClawConfig,
       loadOrCreateDeviceIdentity: () => deviceIdentityState.value,
       resolveGatewayPort: resolveGatewayPort as unknown as (
-        cfg?: NexisClawConfig,
+        cfg?: GreenchClawConfig,
         env?: NodeJS.ProcessEnv,
       ) => number,
     });
@@ -1249,14 +1249,14 @@ describe("callGateway url override auth requirements", () => {
 
   beforeEach(() => {
     envSnapshot = captureEnv([
-      "NEXISCLAW_GATEWAY_TOKEN",
-      "NEXISCLAW_GATEWAY_PASSWORD",
-      "NEXISCLAW_GATEWAY_URL",
+      "GREENCHCLAW_GATEWAY_TOKEN",
+      "GREENCHCLAW_GATEWAY_PASSWORD",
+      "GREENCHCLAW_GATEWAY_URL",
     ]);
     resetGatewayCallMocks();
-    delete process.env.NEXISCLAW_GATEWAY_TOKEN;
-    delete process.env.NEXISCLAW_GATEWAY_PASSWORD;
-    delete process.env.NEXISCLAW_GATEWAY_URL;
+    delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
+    delete process.env.GREENCHCLAW_GATEWAY_PASSWORD;
+    delete process.env.GREENCHCLAW_GATEWAY_URL;
     setGatewayNetworkDefaults(18789);
   });
 
@@ -1265,8 +1265,8 @@ describe("callGateway url override auth requirements", () => {
   });
 
   it("throws when url override is set without explicit credentials", async () => {
-    process.env.NEXISCLAW_GATEWAY_TOKEN = "env-token";
-    process.env.NEXISCLAW_GATEWAY_PASSWORD = "env-password";
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = "env-token";
+    process.env.GREENCHCLAW_GATEWAY_PASSWORD = "env-password";
     getRuntimeConfig.mockReturnValue({
       gateway: {
         mode: "local",
@@ -1280,7 +1280,7 @@ describe("callGateway url override auth requirements", () => {
   });
 
   it("throws when env URL override is set without env credentials", async () => {
-    process.env.NEXISCLAW_GATEWAY_URL = "wss://override.example/ws";
+    process.env.GREENCHCLAW_GATEWAY_URL = "wss://override.example/ws";
     getRuntimeConfig.mockReturnValue({
       gateway: {
         mode: "local",
@@ -1298,7 +1298,7 @@ describe("callGateway password resolution", () => {
     {
       label: "password",
       authKey: "password", // pragma: allowlist secret
-      envKey: "NEXISCLAW_GATEWAY_PASSWORD",
+      envKey: "GREENCHCLAW_GATEWAY_PASSWORD",
       envValue: "from-env",
       configValue: "from-config",
       explicitValue: "explicit-password",
@@ -1306,7 +1306,7 @@ describe("callGateway password resolution", () => {
     {
       label: "token",
       authKey: "token", // pragma: allowlist secret
-      envKey: "NEXISCLAW_GATEWAY_TOKEN",
+      envKey: "GREENCHCLAW_GATEWAY_TOKEN",
       envValue: "env-token",
       configValue: "local-token",
       explicitValue: "explicit-token",
@@ -1315,16 +1315,16 @@ describe("callGateway password resolution", () => {
 
   beforeEach(() => {
     envSnapshot = captureEnv([
-      "NEXISCLAW_GATEWAY_PASSWORD",
-      "NEXISCLAW_GATEWAY_TOKEN",
+      "GREENCHCLAW_GATEWAY_PASSWORD",
+      "GREENCHCLAW_GATEWAY_TOKEN",
       "LOCAL_REMOTE_FALLBACK_TOKEN",
       "LOCAL_REF_PASSWORD",
       "REMOTE_REF_TOKEN",
       "REMOTE_REF_PASSWORD",
     ]);
     resetGatewayCallMocks();
-    delete process.env.NEXISCLAW_GATEWAY_PASSWORD;
-    delete process.env.NEXISCLAW_GATEWAY_TOKEN;
+    delete process.env.GREENCHCLAW_GATEWAY_PASSWORD;
+    delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
     delete process.env.LOCAL_REMOTE_FALLBACK_TOKEN;
     delete process.env.LOCAL_REF_PASSWORD;
     delete process.env.REMOTE_REF_TOKEN;
@@ -1375,7 +1375,7 @@ describe("callGateway password resolution", () => {
     },
   ])("$label", async ({ envPassword, config, expectedPassword }) => {
     if (envPassword !== undefined) {
-      process.env.NEXISCLAW_GATEWAY_PASSWORD = envPassword;
+      process.env.GREENCHCLAW_GATEWAY_PASSWORD = envPassword;
     }
     getRuntimeConfig.mockReturnValue(config);
 
@@ -1400,7 +1400,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1408,7 +1408,7 @@ describe("callGateway password resolution", () => {
   });
 
   it("does not resolve local password ref when env password takes precedence", async () => {
-    process.env.NEXISCLAW_GATEWAY_PASSWORD = "from-env";
+    process.env.GREENCHCLAW_GATEWAY_PASSWORD = "from-env";
     getRuntimeConfig.mockReturnValue({
       gateway: {
         mode: "local",
@@ -1423,7 +1423,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1446,7 +1446,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1469,7 +1469,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1496,7 +1496,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await expect(callGateway({ method: "health" })).rejects.toThrow("gateway.auth.token");
   });
@@ -1516,7 +1516,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1540,7 +1540,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1563,7 +1563,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await expect(callGateway({ method: "health" })).rejects.toThrow("gateway.auth.password");
   });
@@ -1587,7 +1587,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1611,7 +1611,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1635,7 +1635,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1659,7 +1659,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1685,7 +1685,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1710,7 +1710,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1735,7 +1735,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1760,7 +1760,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 
@@ -1785,7 +1785,7 @@ describe("callGateway password resolution", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     await callGateway({ method: "health" });
 

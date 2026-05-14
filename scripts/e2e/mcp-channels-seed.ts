@@ -1,12 +1,13 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { applyDockerOpenAiProviderConfig, type NexisClawConfig } from "./docker-openai-seed.ts";
+import { applyDockerOpenAiProviderConfig, type GreenchClawConfig } from "./docker-openai-seed.ts";
 
 async function main() {
-  const stateDir = process.env.NEXISCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".NexisClaw");
+  const stateDir =
+    process.env.GREENCHCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".GreenchClaw");
   const configPath =
-    process.env.NEXISCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "NexisClaw.json");
+    process.env.GREENCHCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "GreenchClaw.json");
   const sessionsDir = path.join(stateDir, "agents", "main", "sessions");
   const sessionFile = path.join(sessionsDir, "sess-main.jsonl");
   const storePath = path.join(sessionsDir, "sessions.json");
@@ -33,7 +34,7 @@ async function main() {
       plugins: {
         enabled: false,
       },
-    } satisfies NexisClawConfig,
+    } satisfies GreenchClawConfig,
     "sk-docker-smoke-test",
   );
 

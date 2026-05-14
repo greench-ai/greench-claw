@@ -1,9 +1,9 @@
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { uploadFile } from "../tlon-api.js";
 import { uploadImageFromUrl } from "./upload.js";
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard: vi.fn(),
 }));
 

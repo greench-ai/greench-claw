@@ -3,7 +3,10 @@ import { fileURLToPath } from "node:url";
 import { runCommandWithTimeout } from "../process/exec.js";
 import { defaultRuntime, type RuntimeEnv } from "../runtime.js";
 import * as controlUiFsRuntime from "./control-ui-assets.fs.runtime.js";
-import { resolveNexisClawPackageRoot, resolveNexisClawPackageRootSync } from "./NexisClaw-root.js";
+import {
+  resolveGreenchClawPackageRoot,
+  resolveGreenchClawPackageRootSync,
+} from "./GreenchClaw-root.js";
 
 const CONTROL_UI_DIST_PATH_SEGMENTS = ["dist", "control-ui", "index.html"] as const;
 
@@ -98,12 +101,12 @@ export async function resolveControlUiDistIndexPath(
     }
   }
 
-  const packageRoot = await resolveNexisClawPackageRoot({ argv1: normalized, moduleUrl });
+  const packageRoot = await resolveGreenchClawPackageRoot({ argv1: normalized, moduleUrl });
   if (packageRoot) {
     return path.join(packageRoot, "dist", "control-ui", "index.html");
   }
 
-  // Fallback: traverse up and find package.json with name "NexisClaw" + dist/control-ui/index.html
+  // Fallback: traverse up and find package.json with name "GreenchClaw" + dist/control-ui/index.html
   // This handles global installs where path-based resolution might fail.
   const fallbackStartDirs = new Set(
     entrypointCandidates.map((candidate) => path.dirname(candidate)),
@@ -117,7 +120,7 @@ export async function resolveControlUiDistIndexPath(
         try {
           const raw = controlUiFsRuntime.readFileSync(pkgJsonPath, "utf-8");
           const parsed = JSON.parse(raw) as { name?: unknown };
-          if (parsed.name === "NexisClaw") {
+          if (parsed.name === "GreenchClaw") {
             return controlUiFsRuntime.existsSync(indexPath) ? indexPath : null;
           }
           // Stop at the first package boundary to avoid resolving through unrelated ancestors.
@@ -209,7 +212,7 @@ export function resolveControlUiRootSync(opts: ControlUiRootResolveOptions = {})
       return null;
     }
   })();
-  const packageRoot = resolveNexisClawPackageRootSync({
+  const packageRoot = resolveGreenchClawPackageRootSync({
     argv1,
     moduleUrl: opts.moduleUrl,
     cwd,
@@ -227,12 +230,12 @@ export function resolveControlUiRootSync(opts: ControlUiRootResolveOptions = {})
     addCandidate(candidates, path.join(moduleDir, "../../dist/control-ui"));
   }
   if (argv1Dir) {
-    // NexisClaw.mjs or dist/<bundle>.js
+    // GreenchClaw.mjs or dist/<bundle>.js
     addCandidate(candidates, path.join(argv1Dir, "dist", "control-ui"));
     addCandidate(candidates, path.join(argv1Dir, "control-ui"));
   }
   if (argv1RealpathDir && argv1RealpathDir !== argv1Dir) {
-    // Symlinked wrappers (e.g. ~/.bun/bin/NexisClaw -> .../dist/index.js)
+    // Symlinked wrappers (e.g. ~/.bun/bin/GreenchClaw -> .../dist/index.js)
     addCandidate(candidates, path.join(argv1RealpathDir, "dist", "control-ui"));
     addCandidate(candidates, path.join(argv1RealpathDir, "control-ui"));
   }
@@ -256,7 +259,7 @@ export function isPackageProvenControlUiRootSync(
 ): boolean {
   const argv1 = opts.argv1 ?? process.argv[1];
   const cwd = opts.cwd ?? process.cwd();
-  const packageRoot = resolveNexisClawPackageRootSync({
+  const packageRoot = resolveGreenchClawPackageRootSync({
     argv1,
     moduleUrl: opts.moduleUrl,
     cwd,

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginManifestRegistry } from "../plugins/manifest-registry.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 
@@ -97,7 +97,7 @@ const loadPluginLookUpTable = vi.hoisted(() =>
     metrics: pluginLookUpTableMetrics,
   })),
 );
-const resolveNexisClawPackageRootSync = vi.hoisted(() => vi.fn((_params: unknown) => "/package"));
+const resolveGreenchClawPackageRootSync = vi.hoisted(() => vi.fn((_params: unknown) => "/package"));
 const runChannelPluginStartupMaintenance = vi.hoisted(() =>
   vi.fn(async (_params: unknown) => undefined),
 );
@@ -120,8 +120,8 @@ vi.mock("../config/plugin-auto-enable.js", () => ({
   applyPluginAutoEnable: (params: { config: unknown }) => applyPluginAutoEnable(params),
 }));
 
-vi.mock("../infra/NexisClaw-root.js", () => ({
-  resolveNexisClawPackageRootSync: (params: unknown) => resolveNexisClawPackageRootSync(params),
+vi.mock("../infra/GreenchClaw-root.js", () => ({
+  resolveGreenchClawPackageRootSync: (params: unknown) => resolveGreenchClawPackageRootSync(params),
 }));
 
 vi.mock("../plugins/plugin-lookup-table.js", () => ({
@@ -183,7 +183,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
       },
       metrics: pluginLookUpTableMetrics,
     });
-    resolveNexisClawPackageRootSync.mockClear().mockReturnValue("/package");
+    resolveGreenchClawPackageRootSync.mockClear().mockReturnValue("/package");
     runChannelPluginStartupMaintenance.mockClear();
     runStartupSessionMigration.mockClear();
   });
@@ -197,7 +197,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
       plugins: {
         allow: ["bench-plugin"],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const activationConfig = {
       channels: {
         telegram: {
@@ -213,7 +213,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const runtimeConfig = {
       channels: {
         telegram: {
@@ -239,7 +239,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     applyPluginAutoEnable.mockReturnValueOnce({
       config: activationConfig,
       changes: [],
@@ -263,9 +263,9 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
       manifestRegistry: pluginManifestRegistry,
     });
     const lookupInput = firstCallArg<{
-      activationSourceConfig?: NexisClawConfig;
+      activationSourceConfig?: GreenchClawConfig;
       metadataSnapshot?: PluginMetadataSnapshot;
-      config?: NexisClawConfig;
+      config?: GreenchClawConfig;
     }>(loadPluginLookUpTable);
     expect(lookupInput.activationSourceConfig).toBe(sourceConfig);
     expect(lookupInput.metadataSnapshot).toBe(pluginMetadataSnapshot);
@@ -282,8 +282,8 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
     });
 
     const startupInput = firstCallArg<{
-      activationSourceConfig?: NexisClawConfig;
-      cfg?: NexisClawConfig;
+      activationSourceConfig?: GreenchClawConfig;
+      cfg?: GreenchClawConfig;
     }>(loadGatewayStartupPlugins);
     expect(startupInput.activationSourceConfig).toBe(sourceConfig);
     expect(startupInput.cfg?.channels?.telegram?.enabled).toBe(true);
@@ -312,7 +312,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
           telegram: { enabled: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const log = createLog();
     const { prepareGatewayPluginBootstrap } = await import("./server-startup-plugins.js");
 
@@ -329,7 +329,7 @@ describe("prepareGatewayPluginBootstrap startup plugins", () => {
 
     expect(loadPluginLookUpTable).not.toHaveBeenCalled();
     const startupInput = firstCallArg<{
-      cfg?: NexisClawConfig;
+      cfg?: GreenchClawConfig;
       pluginIds?: string[];
       pluginLookUpTable?: unknown;
       preferSetupRuntimeForChannelPlugins?: boolean;

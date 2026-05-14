@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const hoisted = vi.hoisted(() => ({
   completeMock: vi.fn(),
-  ensureNexisClawModelsJsonMock: vi.fn(async () => {}),
+  ensureGreenchClawModelsJsonMock: vi.fn(async () => {}),
   getApiKeyForModelMock: vi.fn(async () => ({
     apiKey: "oauth-test", // pragma: allowlist secret
     source: "test",
@@ -24,7 +24,7 @@ const hoisted = vi.hoisted(() => ({
 }));
 const {
   completeMock,
-  ensureNexisClawModelsJsonMock,
+  ensureGreenchClawModelsJsonMock,
   getApiKeyForModelMock,
   resolveApiKeyForProviderMock,
   requireApiKeyMock,
@@ -87,7 +87,7 @@ vi.mock("../agents/models-config.js", async () => ({
   ...(await vi.importActual<typeof import("../agents/models-config.js")>(
     "../agents/models-config.js",
   )),
-  ensureNexisClawModelsJson: ensureNexisClawModelsJsonMock,
+  ensureGreenchClawModelsJson: ensureGreenchClawModelsJsonMock,
 }));
 
 vi.mock("../agents/model-auth.js", () => ({
@@ -186,7 +186,7 @@ describe("describeImageWithModel", () => {
     const authStore = { version: 1, profiles: {} };
     const result = await describeImageWithModel({
       cfg: {},
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
       provider: "minimax-portal",
       model: "MiniMax-VL-01",
       buffer: Buffer.from("png-bytes"),
@@ -201,7 +201,7 @@ describe("describeImageWithModel", () => {
       text: "portal ok",
       model: "MiniMax-VL-01",
     });
-    expect(ensureNexisClawModelsJsonMock).toHaveBeenCalled();
+    expect(ensureGreenchClawModelsJsonMock).toHaveBeenCalled();
     const authRequest = getApiKeyForModelCall();
     expect(authRequest?.store).toBe(authStore);
     expect(requireApiKeyMock).toHaveBeenCalled();
@@ -214,7 +214,7 @@ describe("describeImageWithModel", () => {
       headers: {
         Authorization: "Bearer oauth-test",
         "Content-Type": "application/json",
-        "MM-API-Source": "NexisClaw",
+        "MM-API-Source": "GreenchClaw",
       },
       body: JSON.stringify({
         prompt: "Describe the image.",
@@ -248,7 +248,7 @@ describe("describeImageWithModel", () => {
 
     const result = await describeImageWithModel({
       cfg: {},
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
       provider: "minimax-portal",
       model: "custom-vision",
       buffer: Buffer.from("png-bytes"),
@@ -274,7 +274,7 @@ describe("describeImageWithModel", () => {
         baseUrl: "https://api.minimax.io/anthropic",
       },
       cfg: {},
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
     });
     expect(completeMock).toHaveBeenCalledOnce();
     expect(fetchMock).not.toHaveBeenCalled();
@@ -324,7 +324,7 @@ describe("describeImageWithModel", () => {
           },
         },
       },
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
       provider: "lmstudio",
       model: "google/gemma-4-e2b",
       buffer: Buffer.from("png-bytes"),
@@ -346,7 +346,7 @@ describe("describeImageWithModel", () => {
     const resolveRequest = requireRecord(resolveRequestValue, "model registry request");
     expect(resolveRequest.provider).toBe("lmstudio");
     expect(resolveRequest.modelId).toBe("google/gemma-4-e2b");
-    expect(resolveRequest.agentDir).toBe("/tmp/NexisClaw-agent");
+    expect(resolveRequest.agentDir).toBe("/tmp/GreenchClaw-agent");
     expect(
       requireRecord(
         requireRecord(
@@ -375,7 +375,7 @@ describe("describeImageWithModel", () => {
     await expect(
       describeImageWithModel({
         cfg: {},
-        agentDir: "/tmp/NexisClaw-agent",
+        agentDir: "/tmp/GreenchClaw-agent",
         provider: "lmstudio",
         model: "text-only",
         buffer: Buffer.from("png-bytes"),
@@ -411,7 +411,7 @@ describe("describeImageWithModel", () => {
 
     const result = await describeImageWithModel({
       cfg: {},
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
       provider: "openai-codex",
       model: "gpt-5.4",
       buffer: Buffer.from("png-bytes"),
@@ -477,7 +477,7 @@ describe("describeImageWithModel", () => {
 
     const result = await describeImageWithModel({
       cfg: {},
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
       provider: "openrouter",
       model: "google/gemini-2.5-flash",
       buffer: Buffer.from("png-bytes"),
@@ -596,7 +596,7 @@ describe("describeImageWithModel", () => {
 
       const result = await describeImageWithModel({
         cfg: {},
-        agentDir: "/tmp/NexisClaw-agent",
+        agentDir: "/tmp/GreenchClaw-agent",
         provider,
         model: model.id,
         buffer: Buffer.from("png-bytes"),
@@ -643,7 +643,7 @@ describe("describeImageWithModel", () => {
 
     const result = describeImageWithModel({
       cfg: {},
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
       provider: "openai",
       model: "gpt-5.4-mini",
       buffer: Buffer.from("png-bytes"),
@@ -667,11 +667,11 @@ describe("describeImageWithModel", () => {
 
   it("rejects when image runtime setup exceeds the request timeout", async () => {
     vi.useFakeTimers();
-    ensureNexisClawModelsJsonMock.mockImplementationOnce(() => new Promise(() => {}));
+    ensureGreenchClawModelsJsonMock.mockImplementationOnce(() => new Promise(() => {}));
 
     const result = describeImageWithModel({
       cfg: {},
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
       provider: "openai",
       model: "gpt-5.4-mini",
       buffer: Buffer.from("png-bytes"),
@@ -711,7 +711,7 @@ describe("describeImageWithModel", () => {
 
     const result = await describeImageWithModel({
       cfg: {},
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
       provider: "google",
       model: "gemini-3.1-flash-preview",
       profile: "google:default",
@@ -756,7 +756,7 @@ describe("describeImageWithModel", () => {
 
     const result = await describeImageWithModel({
       cfg: {},
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
       provider: "google",
       model: "gemini-3.1-flash-lite",
       profile: "google:default",

@@ -1,3 +1,3 @@
-import { describeZAIProviderRuntimeContract } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { describeZAIProviderRuntimeContract } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 
 describeZAIProviderRuntimeContract(() => import("./index.js"));

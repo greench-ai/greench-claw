@@ -3,12 +3,12 @@ import { randomUUID } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { performance } from "node:perf_hooks";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isDiagnosticFlagEnabled } from "./diagnostic-flags.js";
 import { isTruthyEnvValue } from "./env.js";
 import { appendRegularFileSync } from "./regular-file.js";
 
-const NEXISCLAW_DIAGNOSTICS_TIMELINE_SCHEMA_VERSION = "NexisClaw.diagnostics.v1";
+const GREENCHCLAW_DIAGNOSTICS_TIMELINE_SCHEMA_VERSION = "GreenchClaw.diagnostics.v1";
 
 type DiagnosticsTimelineEventType =
   | "span.start"
@@ -52,12 +52,12 @@ type DiagnosticsTimelineSpanOptions = {
   phase?: string;
   parentSpanId?: string;
   attributes?: DiagnosticsTimelineAttributes;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 };
 
 type DiagnosticsTimelineOptions = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 };
 
@@ -87,9 +87,9 @@ export function isDiagnosticsTimelineEnabled(options: DiagnosticsTimelineOptions
   return (
     (isDiagnosticFlagEnabled("timeline", config, env) ||
       isDiagnosticFlagEnabled("diagnostics.timeline", config, env) ||
-      isTruthyEnvValue(env.NEXISCLAW_DIAGNOSTICS)) &&
-    typeof env.NEXISCLAW_DIAGNOSTICS_TIMELINE_PATH === "string" &&
-    env.NEXISCLAW_DIAGNOSTICS_TIMELINE_PATH.trim().length > 0
+      isTruthyEnvValue(env.GREENCHCLAW_DIAGNOSTICS)) &&
+    typeof env.GREENCHCLAW_DIAGNOSTICS_TIMELINE_PATH === "string" &&
+    env.GREENCHCLAW_DIAGNOSTICS_TIMELINE_PATH.trim().length > 0
   );
 }
 
@@ -123,12 +123,12 @@ function normalizeAttributes(
 
 function serializeTimelineEvent(event: DiagnosticsTimelineEvent, env: NodeJS.ProcessEnv): string {
   const normalized = {
-    schemaVersion: NEXISCLAW_DIAGNOSTICS_TIMELINE_SCHEMA_VERSION,
+    schemaVersion: GREENCHCLAW_DIAGNOSTICS_TIMELINE_SCHEMA_VERSION,
     type: event.type,
     timestamp: event.timestamp ?? new Date().toISOString(),
     name: event.name,
-    ...(env.NEXISCLAW_DIAGNOSTICS_RUN_ID ? { runId: env.NEXISCLAW_DIAGNOSTICS_RUN_ID } : {}),
-    ...(env.NEXISCLAW_DIAGNOSTICS_ENV ? { envName: env.NEXISCLAW_DIAGNOSTICS_ENV } : {}),
+    ...(env.GREENCHCLAW_DIAGNOSTICS_RUN_ID ? { runId: env.GREENCHCLAW_DIAGNOSTICS_RUN_ID } : {}),
+    ...(env.GREENCHCLAW_DIAGNOSTICS_ENV ? { envName: env.GREENCHCLAW_DIAGNOSTICS_ENV } : {}),
     pid: process.pid,
     ...(event.runId ? { runId: event.runId } : {}),
     ...(event.envName ? { envName: event.envName } : {}),
@@ -167,7 +167,7 @@ export function emitDiagnosticsTimelineEvent(
   if (!isDiagnosticsTimelineEnabled(options)) {
     return;
   }
-  const path = env.NEXISCLAW_DIAGNOSTICS_TIMELINE_PATH?.trim();
+  const path = env.GREENCHCLAW_DIAGNOSTICS_TIMELINE_PATH?.trim();
   if (!path) {
     return;
   }

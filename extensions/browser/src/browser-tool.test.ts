@@ -4,7 +4,7 @@ const browserClientMocks = vi.hoisted(() => ({
   browserCloseTab: vi.fn(async (..._args: unknown[]) => ({})),
   browserDoctor: vi.fn(async (..._args: unknown[]) => ({
     ok: true,
-    profile: "NexisClaw",
+    profile: "GreenchClaw",
     transport: "cdp",
     checks: [],
     status: {
@@ -68,7 +68,7 @@ const browserConfigMocks = vi.hoisted(() => ({
     enabled: true,
     controlPort: 18791,
     profiles: {},
-    defaultProfile: "NexisClaw",
+    defaultProfile: "GreenchClaw",
     actionTimeoutMs: 60_000,
   })),
   resolveProfile: vi.fn((resolved: Record<string, unknown>, name: string) => {
@@ -78,7 +78,7 @@ const browserConfigMocks = vi.hoisted(() => ({
     if (!profile) {
       return null;
     }
-    const driver = profile.driver === "existing-session" ? "existing-session" : "NexisClaw";
+    const driver = profile.driver === "existing-session" ? "existing-session" : "GreenchClaw";
     if (driver === "existing-session") {
       return {
         name,
@@ -126,10 +126,10 @@ const configMocks = vi.hoisted(() => ({
     }
   >(() => ({ browser: {} })),
 }));
-vi.mock("NexisClaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("GreenchClaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot")
-  >("NexisClaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("GreenchClaw/plugin-sdk/runtime-config-snapshot")
+  >("GreenchClaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: configMocks.loadConfig,
@@ -176,7 +176,7 @@ vi.mock("./browser-tool.runtime.js", () => {
 
   return {
     DEFAULT_AI_SNAPSHOT_MAX_CHARS: 40_000,
-    DEFAULT_UPLOAD_DIR: "/tmp/NexisClaw-browser-uploads",
+    DEFAULT_UPLOAD_DIR: "/tmp/GreenchClaw-browser-uploads",
     BrowserToolSchema: {},
     ...browserActionsMocks,
     ...browserClientMocks,
@@ -241,7 +241,7 @@ function resetBrowserToolMocks() {
     enabled: true,
     controlPort: 18791,
     profiles: {},
-    defaultProfile: "NexisClaw",
+    defaultProfile: "GreenchClaw",
     actionTimeoutMs: 60_000,
   });
   nodesUtilsMocks.listNodes.mockResolvedValue([]);
@@ -279,7 +279,7 @@ function resetBrowserToolMocks() {
 
 function setResolvedBrowserProfiles(
   profiles: Record<string, Record<string, unknown>>,
-  defaultProfile = "NexisClaw",
+  defaultProfile = "GreenchClaw",
 ) {
   browserConfigMocks.resolveBrowserConfig.mockReturnValue({
     enabled: true,

@@ -1,6 +1,6 @@
-import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import type { ModelDefinitionConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 
 export const VERCEL_AI_GATEWAY_PROVIDER_ID = "vercel-ai-gateway";
 export const VERCEL_AI_GATEWAY_BASE_URL = "https://ai-gateway.vercel.sh";

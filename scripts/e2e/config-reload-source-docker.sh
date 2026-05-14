@@ -4,11 +4,11 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$ROOT_DIR/scripts/lib/docker-e2e-image.sh"
 
-IMAGE_NAME="$(docker_e2e_resolve_image "NexisClaw-config-reload-e2e" NEXISCLAW_CONFIG_RELOAD_E2E_IMAGE)"
-SKIP_BUILD="${NEXISCLAW_CONFIG_RELOAD_E2E_SKIP_BUILD:-0}"
+IMAGE_NAME="$(docker_e2e_resolve_image "GreenchClaw-config-reload-e2e" GREENCHCLAW_CONFIG_RELOAD_E2E_IMAGE)"
+SKIP_BUILD="${GREENCHCLAW_CONFIG_RELOAD_E2E_SKIP_BUILD:-0}"
 PORT="18789"
 TOKEN="reload-e2e-token"
-CONTAINER_NAME="NexisClaw-config-reload-e2e-$$"
+CONTAINER_NAME="GreenchClaw-config-reload-e2e-$$"
 
 cleanup() {
   docker_e2e_docker_cmd rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
@@ -16,14 +16,14 @@ cleanup() {
 trap cleanup EXIT
 
 docker_e2e_build_or_reuse "$IMAGE_NAME" config-reload "$ROOT_DIR/scripts/e2e/Dockerfile" "$ROOT_DIR" "" "$SKIP_BUILD"
-NEXISCLAW_TEST_STATE_SCRIPT_B64="$(docker_e2e_test_state_shell_b64 config-reload empty)"
+GREENCHCLAW_TEST_STATE_SCRIPT_B64="$(docker_e2e_test_state_shell_b64 config-reload empty)"
 
 check_rpc_status() {
   local out_file="$1"
   docker_e2e_docker_cmd exec "$CONTAINER_NAME" bash -lc "
-source /tmp/NexisClaw-test-state-env
-source scripts/lib/NexisClaw-e2e-instance.sh
-entry=\"\$(NexisClaw_e2e_resolve_entrypoint)\"
+source /tmp/GreenchClaw-test-state-env
+source scripts/lib/GreenchClaw-e2e-instance.sh
+entry=\"\$(GreenchClaw_e2e_resolve_entrypoint)\"
 deadline=\$((SECONDS + 120))
 last_status=1
 while [ \"\$SECONDS\" -lt \"\$deadline\" ]; do
@@ -43,23 +43,23 @@ docker_e2e_run_detached_with_harness \
   --name "$CONTAINER_NAME" \
   -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
   -e GATEWAY_AUTH_TOKEN_REF="$TOKEN" \
-  -e NEXISCLAW_SKIP_CHANNELS=1 \
-  -e NEXISCLAW_SKIP_PROVIDERS=1 \
-  -e NEXISCLAW_SKIP_GMAIL_WATCHER=1 \
-  -e NEXISCLAW_SKIP_CRON=1 \
-  -e NEXISCLAW_SKIP_CANVAS_HOST=1 \
-  -e "NEXISCLAW_TEST_STATE_SCRIPT_B64=$NEXISCLAW_TEST_STATE_SCRIPT_B64" \
+  -e GREENCHCLAW_SKIP_CHANNELS=1 \
+  -e GREENCHCLAW_SKIP_PROVIDERS=1 \
+  -e GREENCHCLAW_SKIP_GMAIL_WATCHER=1 \
+  -e GREENCHCLAW_SKIP_CRON=1 \
+  -e GREENCHCLAW_SKIP_CANVAS_HOST=1 \
+  -e "GREENCHCLAW_TEST_STATE_SCRIPT_B64=$GREENCHCLAW_TEST_STATE_SCRIPT_B64" \
   "$IMAGE_NAME" \
   bash -lc "set -euo pipefail
-source scripts/lib/NexisClaw-e2e-instance.sh
-NexisClaw_e2e_eval_test_state_from_b64 \"\${NEXISCLAW_TEST_STATE_SCRIPT_B64:?missing NEXISCLAW_TEST_STATE_SCRIPT_B64}\"
-NexisClaw_e2e_write_state_env
-entry=\"\$(NexisClaw_e2e_resolve_entrypoint)\"
+source scripts/lib/GreenchClaw-e2e-instance.sh
+GreenchClaw_e2e_eval_test_state_from_b64 \"\${GREENCHCLAW_TEST_STATE_SCRIPT_B64:?missing GREENCHCLAW_TEST_STATE_SCRIPT_B64}\"
+GreenchClaw_e2e_write_state_env
+entry=\"\$(GreenchClaw_e2e_resolve_entrypoint)\"
 PORT=$PORT node scripts/e2e/lib/fixture.mjs config-reload
-NexisClaw_e2e_exec_gateway \"\$entry\" $PORT loopback /tmp/config-reload-e2e.log" >/dev/null
+GreenchClaw_e2e_exec_gateway \"\$entry\" $PORT loopback /tmp/config-reload-e2e.log" >/dev/null
 
 echo "Waiting for gateway..."
-if ! docker_e2e_wait_container_bash "$CONTAINER_NAME" 180 0.5 "source scripts/lib/NexisClaw-e2e-instance.sh; NexisClaw_e2e_probe_tcp 127.0.0.1 $PORT"; then
+if ! docker_e2e_wait_container_bash "$CONTAINER_NAME" 180 0.5 "source scripts/lib/GreenchClaw-e2e-instance.sh; GreenchClaw_e2e_probe_tcp 127.0.0.1 $PORT"; then
   echo "Gateway failed to start"
   docker_e2e_docker_cmd logs "$CONTAINER_NAME" 2>&1 | tail -n 120 || true
   docker_e2e_docker_cmd exec "$CONTAINER_NAME" bash -lc "tail -n 120 /tmp/config-reload-e2e.log" || true
@@ -70,7 +70,7 @@ echo "Checking initial RPC status..."
 check_rpc_status /tmp/config-reload-status-before.log
 
 echo "Mutating hot-reload gateway metadata..."
-docker_e2e_docker_cmd exec "$CONTAINER_NAME" bash -lc "source /tmp/NexisClaw-test-state-env
+docker_e2e_docker_cmd exec "$CONTAINER_NAME" bash -lc "source /tmp/GreenchClaw-test-state-env
 node scripts/e2e/lib/config-reload/mutate-metadata.mjs"
 
 sleep 2

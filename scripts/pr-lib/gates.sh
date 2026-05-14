@@ -104,12 +104,12 @@ prepare_gates() {
       echo "Docs-only change detected with high confidence; skipping pnpm test."
     else
       gates_mode="full"
-      if [ -n "${NEXISCLAW_VITEST_MAX_WORKERS:-}" ]; then
-        echo "Running pnpm test with NEXISCLAW_VITEST_MAX_WORKERS=$NEXISCLAW_VITEST_MAX_WORKERS."
+      if [ -n "${GREENCHCLAW_VITEST_MAX_WORKERS:-}" ]; then
+        echo "Running pnpm test with GREENCHCLAW_VITEST_MAX_WORKERS=$GREENCHCLAW_VITEST_MAX_WORKERS."
         run_quiet_logged \
           "pnpm test" \
           ".local/gates-test.log" \
-          env NEXISCLAW_VITEST_MAX_WORKERS="$NEXISCLAW_VITEST_MAX_WORKERS" pnpm test
+          env GREENCHCLAW_VITEST_MAX_WORKERS="$GREENCHCLAW_VITEST_MAX_WORKERS" pnpm test
       else
         echo "Running pnpm test with host-aware scheduling defaults."
         run_quiet_logged "pnpm test" ".local/gates-test.log" pnpm test

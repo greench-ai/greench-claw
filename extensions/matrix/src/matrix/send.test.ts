@@ -9,7 +9,7 @@ import {
   sendSingleTextMessageMatrix,
   sendTypingMatrix,
 } from "./send.js";
-import { MATRIX_NEXISCLAW_FINALIZED_PREVIEW_KEY } from "./send/types.js";
+import { MATRIX_GREENCHCLAW_FINALIZED_PREVIEW_KEY } from "./send/types.js";
 
 const loadOutboundMediaFromUrlMock = vi.hoisted(() => vi.fn());
 const loadWebMediaMock = vi.fn().mockResolvedValue({
@@ -33,10 +33,10 @@ const resolveMarkdownTableModeMock = vi.fn(() => "code");
 const convertMarkdownTablesMock = vi.fn((text: string) => text);
 const chunkMarkdownTextWithModeMock = vi.fn((text: string) => (text ? [text] : []));
 
-vi.mock("NexisClaw/plugin-sdk/plugin-config-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/plugin-config-runtime")>(
-    "NexisClaw/plugin-sdk/plugin-config-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/plugin-config-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/plugin-config-runtime")
+  >("GreenchClaw/plugin-sdk/plugin-config-runtime");
   return {
     ...actual,
     requireRuntimeConfig: vi.fn((cfg: unknown) => cfg ?? loadConfigMock()),
@@ -457,7 +457,7 @@ describe("sendMessageMatrix media", () => {
       client,
       cfg: {} as never,
       mediaUrl: "file:///tmp/photo.png",
-      mediaLocalRoots: ["/tmp/NexisClaw-matrix-test"],
+      mediaLocalRoots: ["/tmp/GreenchClaw-matrix-test"],
     });
 
     expect(mockCallArg(loadWebMediaMock, "loadWebMedia", 0)).toBe("file:///tmp/photo.png");
@@ -466,7 +466,7 @@ describe("sendMessageMatrix media", () => {
       "media options",
     );
     expect(mediaOptions.maxBytes).toBeUndefined();
-    expect(mediaOptions.localRoots).toEqual(["/tmp/NexisClaw-matrix-test"]);
+    expect(mediaOptions.localRoots).toEqual(["/tmp/GreenchClaw-matrix-test"]);
   });
 });
 
@@ -669,16 +669,16 @@ describe("sendMessageMatrix threads", () => {
     await sendMessageMatrix("room:!room:example", "ignored", {
       client,
       cfg: {} as never,
-      extraContent: { "com.NexisClaw.approval": { id: "req-1" } },
+      extraContent: { "com.GreenchClaw.approval": { id: "req-1" } },
     });
 
     expect(sendMessage).toHaveBeenCalledTimes(3);
     expect(sentContent(sendMessage, 0).body).toBe("first");
-    expect(sentContent(sendMessage, 0)["com.NexisClaw.approval"]).toEqual({ id: "req-1" });
+    expect(sentContent(sendMessage, 0)["com.GreenchClaw.approval"]).toEqual({ id: "req-1" });
     expect(sentContent(sendMessage, 1).body).toBe("second");
-    expect(sendMessage.mock.calls.at(1)?.[1]).not.toHaveProperty("com.NexisClaw.approval");
+    expect(sendMessage.mock.calls.at(1)?.[1]).not.toHaveProperty("com.GreenchClaw.approval");
     expect(sentContent(sendMessage, 2).body).toBe("third");
-    expect(sendMessage.mock.calls.at(2)?.[1]).not.toHaveProperty("com.NexisClaw.approval");
+    expect(sendMessage.mock.calls.at(2)?.[1]).not.toHaveProperty("com.GreenchClaw.approval");
   });
 });
 
@@ -748,11 +748,11 @@ describe("sendSingleTextMessageMatrix", () => {
     const result = await sendSingleTextMessageMatrix("room:!room:example", "done", {
       client,
       cfg: {} as never,
-      extraContent: { [MATRIX_NEXISCLAW_FINALIZED_PREVIEW_KEY]: true },
+      extraContent: { [MATRIX_GREENCHCLAW_FINALIZED_PREVIEW_KEY]: true },
     });
 
     expect(sentContent(sendMessage).body).toBe("done");
-    expect(sentContent(sendMessage)[MATRIX_NEXISCLAW_FINALIZED_PREVIEW_KEY]).toBe(true);
+    expect(sentContent(sendMessage)[MATRIX_GREENCHCLAW_FINALIZED_PREVIEW_KEY]).toBe(true);
     expect(result.receipt.primaryPlatformMessageId).toBe("evt1");
     expect(result.receipt.platformMessageIds).toEqual(["evt1"]);
     expectTextReceiptPart(result.receipt.parts[0], "evt1");
@@ -869,12 +869,12 @@ describe("editMessageMatrix mentions", () => {
     await editMessageMatrix("room:!room:example", "$original", "done", {
       client,
       cfg: {} as never,
-      extraContent: { [MATRIX_NEXISCLAW_FINALIZED_PREVIEW_KEY]: true },
+      extraContent: { [MATRIX_GREENCHCLAW_FINALIZED_PREVIEW_KEY]: true },
     });
 
     const content = sentContent(sendMessage);
-    expect(content[MATRIX_NEXISCLAW_FINALIZED_PREVIEW_KEY]).toBe(true);
-    expect(newContent(content)[MATRIX_NEXISCLAW_FINALIZED_PREVIEW_KEY]).toBe(true);
+    expect(content[MATRIX_GREENCHCLAW_FINALIZED_PREVIEW_KEY]).toBe(true);
+    expect(newContent(content)[MATRIX_GREENCHCLAW_FINALIZED_PREVIEW_KEY]).toBe(true);
   });
 });
 

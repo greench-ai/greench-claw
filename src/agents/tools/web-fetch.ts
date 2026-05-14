@@ -1,5 +1,5 @@
 import { Type } from "typebox";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { SsrFBlockedError, type LookupFn, type SsrFPolicy } from "../../infra/net/ssrf.js";
 import { logDebug } from "../../logger.js";
 import type { RuntimeWebFetchMetadata } from "../../secrets/runtime-web-tools.types.js";
@@ -66,7 +66,7 @@ const WebFetchSchema = Type.Object({
   ),
 });
 
-type WebFetchConfig = NonNullable<NexisClawConfig["tools"]>["web"] extends infer Web
+type WebFetchConfig = NonNullable<GreenchClawConfig["tools"]>["web"] extends infer Web
   ? Web extends { fetch?: infer Fetch }
     ? Fetch
     : undefined
@@ -100,7 +100,7 @@ async function loadWebGuardedFetch(): Promise<
   return (await webGuardedFetchLoader.load()).fetchWithWebToolsNetworkGuard;
 }
 
-function resolveFetchConfig(cfg?: NexisClawConfig): WebFetchConfig {
+function resolveFetchConfig(cfg?: GreenchClawConfig): WebFetchConfig {
   return resolveWebProviderConfig(cfg, "fetch") as NonNullable<WebFetchConfig> | undefined;
 }
 
@@ -277,7 +277,7 @@ type WebFetchRuntimeParams = {
   cacheTtlMs: number;
   userAgent: string;
   readabilityEnabled: boolean;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   useTrustedEnvProxy: boolean;
   ssrfPolicy?: {
     allowRfc2544BenchmarkRange?: boolean;
@@ -614,7 +614,7 @@ async function runWebFetch(params: WebFetchRuntimeParams): Promise<Record<string
 }
 
 export function createWebFetchTool(options?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sandboxed?: boolean;
   runtimeWebFetch?: RuntimeWebFetchMetadata;
   lateBindRuntimeConfig?: boolean;

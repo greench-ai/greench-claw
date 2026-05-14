@@ -1,137 +1,72 @@
 /**
- * GreenchHostTools — tools for executing on the WSL2/Linux host machine.
- *
- * This plugin provides the host_bash tool which runs shell commands on the
- * WSL2 host (outside the sandboxed environment), enabling file operations
- * on the host filesystem, git operations, npm commands, docker commands, etc.
+ * GreenchHostTools — host_bash tool for WSL2 host command execution.
  */
 
-import { spawn } from "node:child_process";
 import { definePluginEntry, type GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
 
-// ── Tool Implementation ──────────────────────────────────────────────────────
-
-async function runHostBash(
-  command: string,
-  timeout: number = 30,
-): Promise<{ output: string; error: string | null }> {
-  return new Promise((resolve) => {
-    const isWindows = process.platform === "win32";
-
-    let proc;
-    if (isWindows) {
-      // On Windows (WSL2 scenario), use wsl -e bash -c
-      proc = spawn("wsl", ["-e", "bash", "-c", command], {
-        timeout: timeout * 1000,
-        shell: false,
-      });
-    } else {
-      // On native Linux, try wsl -e bash -c (WSL2 host scenario) or bash -c directly
-      proc = spawn("wsl", ["-e", "bash", "-c", command], {
-        timeout: timeout * 1000,
-        shell: false,
-      });
-    }
-
-    let stdout = "";
-    let stderr = "";
-
-    proc.stdout?.on("data", (data) => {
-      stdout += data.toString();
-    });
-
-    proc.stderr?.on("data", (data) => {
-      stderr += data.toString();
-    });
-
-    proc.on("close", (code) => {
-      const output = (stdout || "").slice(0, 5000);
-      const err = (stderr || "").slice(0, 1000);
-      resolve({ output, error: code === 0 ? null : err || `Exit code: ${code}` });
-    });
-
-    proc.on("error", (err) => {
-      resolve({ output: "", error: err.message });
-    });
-
-    // Timeout handling
-    setTimeout(
-      () => {
-        proc.kill("SIGKILL");
-        resolve({ output: stdout.slice(0, 5000), error: `Command timed out after ${timeout}s` });
-      },
-      timeout * 1000 + 1000,
-    );
-  });
+function makeResult(
+  text: string,
+  details: Record<string, unknown> = {},
+): { content: Array<{ type: "text"; text: string }>; details: Record<string, unknown> } {
+  return { content: [{ type: "text" as const, text }], details };
 }
-
-// ── Plugin Entry ─────────────────────────────────────────────────────────────
 
 export default definePluginEntry({
   id: "greench-host-tools",
   name: "GreenchHostTools",
-  description: "Host machine tools — run commands on the WSL2/Linux host outside the sandbox.",
-  async register(api: GreenchClawPluginApi) {
-    api.logger.info?.("greench-host-tools: registering host_bash tool");
-
-    try {
-      api.runtime.agent.tools.register?.({
-        id: "host_bash",
-        description:
-          "Execute a shell command on the WSL2/Linux host machine (outside the sandbox). Use for file operations on the host filesystem (/home/greench/), git operations, npm, docker commands on host, etc.",
+  description: "Run commands on the Windows host from WSL2 via wsl.exe.",
+  register(api: GreenchClawPluginApi) {
+    api.registerTool(
+      () => ({
+        name: "host_bash",
+        description: "Execute a bash command on the Windows host. Timeout: 30s.",
         inputSchema: {
           type: "object",
           properties: {
-            command: {
-              type: "string",
-              description: "Shell command to run on the host machine",
-            },
-            timeout: {
+            command: { type: "string", description: "Bash command to run on the host" },
+            timeout_ms: {
               type: "number",
-              description: "Timeout in seconds (default 30)",
-              default: 30,
+              description: "Timeout in ms (default: 30000)",
+              default: 30000,
             },
           },
           required: ["command"],
         },
-        async handler(args: Record<string, unknown>) {
-          const command = String(args.command ?? "");
-          const timeout = Number(args.timeout ?? 30);
-
-          if (!command.trim()) {
-            return { success: false, output: "", error: "Empty command" };
-          }
-
-          api.logger.debug?.("greench-host-tools: host_bash", { command, timeout });
+        execute: async (_toolCallId, toolParams, _signal) => {
+          const { command, timeout_ms = 30000 } = toolParams as {
+            command: string;
+            timeout_ms?: number;
+          };
+          const { execFile } = await import("node:child_process");
+          const timeout = Math.min(Math.max(timeout_ms, 1000), 120_000);
 
           try {
-            const { output, error } = await runHostBash(command, timeout);
-            return {
-              success: error === null,
-              output,
-              error,
-            };
-          } catch (err) {
-            return { success: false, output: "", error: String(err) };
+            const stdout: string = await new Promise((res, rej) =>
+              execFile(
+                "wsl",
+                ["-e", "bash", "-c", command],
+                { timeout, maxBuffer: 512_000 },
+                (err, out, err2) =>
+                  err ? rej(new Error(err2 || err.message)) : res(out as string),
+              ),
+            );
+            return makeResult(stdout || "(no output)", { success: true });
+          } catch (e) {
+            return makeResult(`Error: ${e}`, { success: false, error: String(e) });
           }
         },
-      });
+      }),
+      { names: ["host_bash"] },
+    );
 
-      api.logger.info?.("greench-host-tools: host_bash registered");
-    } catch (err) {
-      api.logger.error?.("greench-host-tools: failed to register", { error: String(err) });
-    }
+    api.logger.info?.("greench-host-tools: registered");
   },
   tools: {
     host_bash: {
-      description:
-        "Execute a shell command on the WSL2/Linux host machine (outside the sandbox). Use for /home/greench/ file operations, git, npm, docker on host.",
+      description: "Run command on Windows host.",
       inputSchema: {
         type: "object",
-        properties: {
-          command: { type: "string", description: "Shell command to run on the host" },
-          timeout: { type: "number", description: "Timeout in seconds (default 30)", default: 30 },
-        },
+        properties: { command: { type: "string" }, timeout_ms: { type: "number", default: 30000 } },
         required: ["command"],
       },
     },

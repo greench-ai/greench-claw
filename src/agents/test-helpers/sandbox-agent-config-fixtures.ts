@@ -1,6 +1,8 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 
-type AgentToolsConfig = NonNullable<NonNullable<NexisClawConfig["agents"]>["list"]>[number]["tools"];
+type AgentToolsConfig = NonNullable<
+  NonNullable<GreenchClawConfig["agents"]>["list"]
+>[number]["tools"];
 type SandboxToolsConfig = {
   allow?: string[];
   deny?: string[];
@@ -10,7 +12,7 @@ export function createRestrictedAgentSandboxConfig(params: {
   agentTools?: AgentToolsConfig;
   globalSandboxTools?: SandboxToolsConfig;
   workspace?: string;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   return {
     agents: {
       defaults: {
@@ -22,7 +24,7 @@ export function createRestrictedAgentSandboxConfig(params: {
       list: [
         {
           id: "restricted",
-          workspace: params.workspace ?? "~/NexisClaw-restricted",
+          workspace: params.workspace ?? "~/GreenchClaw-restricted",
           sandbox: {
             mode: "all",
             scope: "agent",
@@ -40,5 +42,5 @@ export function createRestrictedAgentSandboxConfig(params: {
           },
         }
       : {}),
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }

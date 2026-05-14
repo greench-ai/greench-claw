@@ -7,17 +7,17 @@ import {
   DEFAULT_ACCOUNT_ID,
   listCombinedAccountIds,
   resolveMergedAccountConfig,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/account-resolution";
-import { resolveDangerousNameMatchingEnabled } from "NexisClaw/plugin-sdk/dangerous-name-runtime";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/account-resolution";
+import { resolveDangerousNameMatchingEnabled } from "GreenchClaw/plugin-sdk/dangerous-name-runtime";
 import type {
   SynologyChatChannelConfig,
   ResolvedSynologyChatAccount,
   SynologyWebhookPathSource,
 } from "./types.js";
 
-/** Extract the channel config from the full NexisClaw config object. */
-function getChannelConfig(cfg: NexisClawConfig): SynologyChatChannelConfig | undefined {
+/** Extract the channel config from the full GreenchClaw config object. */
+function getChannelConfig(cfg: GreenchClawConfig): SynologyChatChannelConfig | undefined {
   return cfg?.channels?.["synology-chat"] as SynologyChatChannelConfig | undefined;
 }
 
@@ -82,7 +82,7 @@ function parseRateLimitPerMinute(raw: string | undefined): number {
  * List all configured account IDs for this channel.
  * Returns ["default"] if there's a base config, plus any named accounts.
  */
-export function listAccountIds(cfg: NexisClawConfig): string[] {
+export function listAccountIds(cfg: GreenchClawConfig): string[] {
   const channelCfg = getChannelConfig(cfg);
   if (!channelCfg) {
     return [];
@@ -99,7 +99,7 @@ export function listAccountIds(cfg: NexisClawConfig): string[] {
  * Falls back to env vars for the "default" account.
  */
 export function resolveAccount(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId?: string | null,
 ): ResolvedSynologyChatAccount {
   const channelCfg = getChannelConfig(cfg) ?? {};
@@ -121,7 +121,7 @@ export function resolveAccount(
   const envNasHost = process.env.SYNOLOGY_NAS_HOST ?? "localhost";
   const envAllowedUserIds = process.env.SYNOLOGY_ALLOWED_USER_IDS ?? "";
   const envRateLimitValue = parseRateLimitPerMinute(process.env.SYNOLOGY_RATE_LIMIT);
-  const envBotName = process.env.NEXISCLAW_BOT_NAME ?? "NexisClaw";
+  const envBotName = process.env.GREENCHCLAW_BOT_NAME ?? "GreenchClaw";
   const webhookPathSource = resolveWebhookPathSource({ accountId: id, channelCfg, rawAccount });
   const dangerouslyAllowInheritedWebhookPath =
     rawAccount.dangerouslyAllowInheritedWebhookPath ??

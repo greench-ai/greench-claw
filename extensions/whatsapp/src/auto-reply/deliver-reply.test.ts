@@ -2,9 +2,9 @@ import fsSync from "node:fs";
 import {
   createMessageReceiptFromOutboundResults,
   listMessageReceiptPlatformIds,
-} from "NexisClaw/plugin-sdk/channel-message";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { sleep } from "NexisClaw/plugin-sdk/text-utility-runtime";
+} from "GreenchClaw/plugin-sdk/channel-message";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { sleep } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { loadWebMedia } from "../media.js";
 import { cacheInboundMessageMeta } from "../quoted-message.js";
@@ -14,9 +14,9 @@ const hoisted = vi.hoisted(() => ({
   runFfmpeg: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/media-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/media-runtime")>(
-    "NexisClaw/plugin-sdk/media-runtime",
+vi.mock("GreenchClaw/plugin-sdk/media-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/media-runtime")>(
+    "GreenchClaw/plugin-sdk/media-runtime",
   );
   return {
     ...actual,
@@ -24,9 +24,9 @@ vi.mock("NexisClaw/plugin-sdk/media-runtime", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/runtime-env")>(
-    "NexisClaw/plugin-sdk/runtime-env",
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/runtime-env")>(
+    "GreenchClaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -35,10 +35,10 @@ vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/text-utility-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/text-utility-runtime")>(
-    "NexisClaw/plugin-sdk/text-utility-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/text-utility-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/text-utility-runtime")
+  >("GreenchClaw/plugin-sdk/text-utility-runtime");
   return {
     ...actual,
     sleep: vi.fn(async () => {}),

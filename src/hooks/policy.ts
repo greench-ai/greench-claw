@@ -1,4 +1,4 @@
-import type { NexisClawConfig, HookConfig } from "../config/config.js";
+import type { GreenchClawConfig, HookConfig } from "../config/config.js";
 import { resolveHookKey } from "./frontmatter.js";
 import type { HookEntry, HookSource } from "./types.js";
 
@@ -24,33 +24,33 @@ type HookResolutionCollision = {
 };
 
 const HOOK_SOURCE_POLICIES: Record<HookSource, HookSourcePolicy> = {
-  "NexisClaw-bundled": {
+  "GreenchClaw-bundled": {
     precedence: 10,
     trustedLocalCode: true,
     defaultEnableMode: "default-on",
-    canOverride: ["NexisClaw-bundled"],
-    canBeOverriddenBy: ["NexisClaw-managed", "NexisClaw-plugin"],
+    canOverride: ["GreenchClaw-bundled"],
+    canBeOverriddenBy: ["GreenchClaw-managed", "GreenchClaw-plugin"],
   },
-  "NexisClaw-plugin": {
+  "GreenchClaw-plugin": {
     precedence: 20,
     trustedLocalCode: true,
     defaultEnableMode: "default-on",
-    canOverride: ["NexisClaw-bundled", "NexisClaw-plugin"],
-    canBeOverriddenBy: ["NexisClaw-managed"],
+    canOverride: ["GreenchClaw-bundled", "GreenchClaw-plugin"],
+    canBeOverriddenBy: ["GreenchClaw-managed"],
   },
-  "NexisClaw-managed": {
+  "GreenchClaw-managed": {
     precedence: 30,
     trustedLocalCode: true,
     defaultEnableMode: "default-on",
-    canOverride: ["NexisClaw-bundled", "NexisClaw-managed", "NexisClaw-plugin"],
-    canBeOverriddenBy: ["NexisClaw-managed"],
+    canOverride: ["GreenchClaw-bundled", "GreenchClaw-managed", "GreenchClaw-plugin"],
+    canBeOverriddenBy: ["GreenchClaw-managed"],
   },
-  "NexisClaw-workspace": {
+  "GreenchClaw-workspace": {
     precedence: 40,
     trustedLocalCode: true,
     defaultEnableMode: "explicit-opt-in",
-    canOverride: ["NexisClaw-workspace"],
-    canBeOverriddenBy: ["NexisClaw-workspace"],
+    canOverride: ["GreenchClaw-workspace"],
+    canBeOverriddenBy: ["GreenchClaw-workspace"],
   },
 };
 
@@ -59,7 +59,7 @@ function getHookSourcePolicy(source: HookSource): HookSourcePolicy {
 }
 
 export function resolveHookConfig(
-  config: NexisClawConfig | undefined,
+  config: GreenchClawConfig | undefined,
   hookKey: string,
 ): HookConfig | undefined {
   const hooks = config?.hooks?.internal?.entries;
@@ -75,14 +75,14 @@ export function resolveHookConfig(
 
 export function resolveHookEnableState(params: {
   entry: HookEntry;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   hookConfig?: HookConfig;
 }): HookEnableState {
   const { entry, config } = params;
   const hookKey = resolveHookKey(entry.hook.name, entry);
   const hookConfig = params.hookConfig ?? resolveHookConfig(config, hookKey);
 
-  if (entry.hook.source === "NexisClaw-plugin") {
+  if (entry.hook.source === "GreenchClaw-plugin") {
     return { enabled: true };
   }
   if (hookConfig?.enabled === false) {

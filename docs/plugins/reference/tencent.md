@@ -1,5 +1,5 @@
 ---
-summary: "Adds Tencent TokenHub model provider support to NexisClaw."
+summary: "Adds Tencent TokenHub model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the tencent plugin
 title: "Tencent plugin"
@@ -7,12 +7,12 @@ title: "Tencent plugin"
 
 # Tencent plugin
 
-Adds Tencent TokenHub model provider support to NexisClaw.
+Adds Tencent TokenHub model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/tencent-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/tencent-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

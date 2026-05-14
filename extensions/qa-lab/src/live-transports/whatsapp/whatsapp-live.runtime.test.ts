@@ -96,7 +96,7 @@ describe("WhatsApp QA live runtime", () => {
   });
 
   it("unpacks auth archives into a caller-provided temp directory", async () => {
-    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-wa-qa-test-"));
+    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-wa-qa-test-"));
     try {
       const archiveBase64 = await createTgz({
         root: tempRoot,
@@ -132,21 +132,21 @@ describe("WhatsApp QA live runtime", () => {
   it("uses automatic visible replies for WhatsApp group mention gating", () => {
     const [scenario] = __testing.findScenarios(["whatsapp-mention-gating"]);
     const scenarioRun = scenario.buildRun();
-    expect(scenarioRun.input).toContain("NexisClawqa reply with only this exact marker");
+    expect(scenarioRun.input).toContain("GreenchClawqa reply with only this exact marker");
     expect(scenarioRun.input).not.toContain("visible reply tool check");
 
     const cfg = __testing.buildWhatsAppQaConfig(
       {},
       {
         allowFrom: ["+15550000001"],
-        authDir: "/tmp/NexisClaw-whatsapp-qa-auth",
+        authDir: "/tmp/GreenchClaw-whatsapp-qa-auth",
         dmPolicy: "allowlist",
         groupJid: "120363000000000000@g.us",
         sutAccountId: "sut",
       },
     );
     expect(cfg.messages?.groupChat?.visibleReplies).toBe("automatic");
-    expect(cfg.messages?.groupChat?.mentionPatterns).toContain("\\bNexisClawqa\\b");
+    expect(cfg.messages?.groupChat?.mentionPatterns).toContain("\\bGreenchClawqa\\b");
   });
 
   it("fails explicitly requested group scenarios when group credentials are missing", () => {

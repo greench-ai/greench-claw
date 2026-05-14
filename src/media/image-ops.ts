@@ -1,5 +1,5 @@
 import { withTempWorkspace, type TempWorkspace } from "../infra/private-temp-workspace.js";
-import { resolvePreferredNexisClawTmpDir } from "../infra/tmp-NexisClaw-dir.js";
+import { resolvePreferredGreenchClawTmpDir } from "../infra/tmp-GreenchClaw-dir.js";
 import { runExec } from "../process/exec.js";
 import { createLazyPromiseLoader } from "../shared/lazy-promise.js";
 
@@ -49,8 +49,8 @@ function isBun(): boolean {
 
 function prefersSips(): boolean {
   return (
-    process.env.NEXISCLAW_IMAGE_BACKEND === "sips" ||
-    (process.env.NEXISCLAW_IMAGE_BACKEND !== "sharp" && isBun() && process.platform === "darwin")
+    process.env.GREENCHCLAW_IMAGE_BACKEND === "sips" ||
+    (process.env.GREENCHCLAW_IMAGE_BACKEND !== "sharp" && isBun() && process.platform === "darwin")
   );
 }
 
@@ -358,7 +358,7 @@ function readJpegExifOrientation(buffer: Buffer): number | null {
 
 async function withImageTemp<T>(fn: (workspace: TempWorkspace) => Promise<T>): Promise<T> {
   return await withTempWorkspace(
-    { rootDir: resolvePreferredNexisClawTmpDir(), prefix: "NexisClaw-img-" },
+    { rootDir: resolvePreferredGreenchClawTmpDir(), prefix: "GreenchClaw-img-" },
     fn,
   );
 }

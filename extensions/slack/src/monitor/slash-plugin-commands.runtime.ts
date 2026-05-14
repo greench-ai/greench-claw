@@ -1,1 +1,1 @@
-export { listProviderPluginCommandSpecs } from "NexisClaw/plugin-sdk/command-auth-native";
+export { listProviderPluginCommandSpecs } from "GreenchClaw/plugin-sdk/command-auth-native";

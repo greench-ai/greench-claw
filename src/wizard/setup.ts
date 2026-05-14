@@ -9,7 +9,7 @@ import type {
   ResetScope,
 } from "../commands/onboard-types.js";
 import { createConfigIO, replaceConfigFile, resolveGatewayPort } from "../config/config.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeSecretInputString } from "../config/types.secrets.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import {
@@ -54,7 +54,7 @@ function loadModelPickerModule(): Promise<ModelPickerModule> {
   return modelPickerModulePromise;
 }
 
-async function writeWizardConfigFile(config: NexisClawConfig): Promise<NexisClawConfig> {
+async function writeWizardConfigFile(config: GreenchClawConfig): Promise<GreenchClawConfig> {
   const committed = await commitConfigWriteWithPendingPluginInstalls({
     nextConfig: config,
     commit: async (nextConfig, writeOptions) => {
@@ -74,12 +74,12 @@ async function readSetupConfigFileSnapshot() {
 
 async function resolveAuthChoiceModelSelectionPolicy(params: {
   authChoice: string;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   resolvePreferredProviderForAuthChoice: (params: {
     choice: string;
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     workspaceDir?: string;
     env?: NodeJS.ProcessEnv;
   }) => Promise<string | undefined>;
@@ -184,11 +184,11 @@ export async function runSetupWizard(
   runtime ??= defaultRuntime;
   const onboardHelpers = await import("../commands/onboard-helpers.js");
   onboardHelpers.printWizardHeader(runtime);
-  await prompter.intro("NexisClaw setup");
+  await prompter.intro("GreenchClaw setup");
   await requireRiskAcknowledgement({ opts, prompter });
 
   const snapshot = await readSetupConfigFileSnapshot();
-  let baseConfig: NexisClawConfig = snapshot.valid
+  let baseConfig: GreenchClawConfig = snapshot.valid
     ? snapshot.exists
       ? (snapshot.sourceConfig ?? snapshot.config)
       : {}
@@ -201,13 +201,13 @@ export async function runSetupWizard(
         [
           ...snapshot.issues.map((iss) => `- ${iss.path}: ${iss.message}`),
           "",
-          "Docs: https://docs.NexisClaw.ai/gateway/configuration",
+          "Docs: https://docs.GreenchClaw.ai/gateway/configuration",
         ].join("\n"),
         "Config issues",
       );
     }
     await prompter.outro(
-      `Config invalid. Run \`${formatCliCommand("NexisClaw doctor")}\` to repair it, then re-run setup.`,
+      `Config invalid. Run \`${formatCliCommand("GreenchClaw doctor")}\` to repair it, then re-run setup.`,
     );
     runtime.exit(1);
     return;
@@ -227,14 +227,14 @@ export async function runSetupWizard(
           ? [`- ... +${compatibilityNotices.length - 4} more`]
           : []),
         "",
-        `Review: ${formatCliCommand("NexisClaw doctor")}`,
-        `Inspect: ${formatCliCommand("NexisClaw plugins inspect --all")}`,
+        `Review: ${formatCliCommand("GreenchClaw doctor")}`,
+        `Inspect: ${formatCliCommand("GreenchClaw plugins inspect --all")}`,
       ].join("\n"),
       "Plugin compatibility",
     );
   }
 
-  const quickstartHint = `Recommended local setup. Change details later with ${formatCliCommand("NexisClaw configure")}.`;
+  const quickstartHint = `Recommended local setup. Change details later with ${formatCliCommand("GreenchClaw configure")}.`;
   const manualHint = "Choose Gateway port, network exposure, Tailscale, and auth.";
   const migrationDetections = await detectSetupMigrationSources({ config: baseConfig, runtime });
   const firstMigrationDetection = migrationDetections[0];
@@ -254,7 +254,7 @@ export async function runSetupWizard(
     normalizedExplicitFlow !== "import"
   ) {
     runtime.error(
-      "Invalid --flow. Use quickstart, manual, advanced, or import. Example: NexisClaw onboard --flow quickstart",
+      "Invalid --flow. Use quickstart, manual, advanced, or import. Example: GreenchClaw onboard --flow quickstart",
     );
     runtime.exit(1);
     return;
@@ -441,7 +441,7 @@ export async function runSetupWizard(
 
   const localPort = resolveGatewayPort(baseConfig);
   const localUrl = `ws://127.0.0.1:${localPort}`;
-  let localGatewayToken = process.env.NEXISCLAW_GATEWAY_TOKEN;
+  let localGatewayToken = process.env.GREENCHCLAW_GATEWAY_TOKEN;
   try {
     const resolvedGatewayToken = await resolveSetupSecretInputString({
       config: baseConfig,
@@ -461,7 +461,7 @@ export async function runSetupWizard(
       "Gateway auth",
     );
   }
-  let localGatewayPassword = process.env.NEXISCLAW_GATEWAY_PASSWORD;
+  let localGatewayPassword = process.env.GREENCHCLAW_GATEWAY_PASSWORD;
   try {
     const resolvedGatewayPassword = await resolveSetupSecretInputString({
       config: baseConfig,
@@ -571,7 +571,7 @@ export async function runSetupWizard(
 
   const { applyLocalSetupWorkspaceConfig, applySkipBootstrapConfig } =
     await import("../commands/onboard-config.js");
-  let nextConfig: NexisClawConfig = applyLocalSetupWorkspaceConfig(baseConfig, workspaceDir);
+  let nextConfig: GreenchClawConfig = applyLocalSetupWorkspaceConfig(baseConfig, workspaceDir);
   if (opts.skipBootstrap) {
     nextConfig = applySkipBootstrapConfig(nextConfig);
   }

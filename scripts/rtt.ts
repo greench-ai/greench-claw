@@ -13,7 +13,7 @@ import {
   resolveMainVersion,
   resolvePublishedVersion,
   runHarness,
-  validateNexisClawPackageSpec,
+  validateGreenchClawPackageSpec,
   writeJson,
   type RttProviderMode,
 } from "./lib/rtt-harness.ts";
@@ -26,13 +26,13 @@ const DEFAULT_SAMPLE_TIMEOUT_MS = 30_000;
 
 function usage() {
   return [
-    "Usage: pnpm rtt <NexisClaw@spec> [--package-tgz PATH] [--provider mock-openai|live-frontier] [--runs N] [--samples N] [--sample-timeout-ms N] [--timeout-ms N] [--harness-root PATH] [--output PATH]",
+    "Usage: pnpm rtt <GreenchClaw@spec> [--package-tgz PATH] [--provider mock-openai|live-frontier] [--runs N] [--samples N] [--sample-timeout-ms N] [--timeout-ms N] [--harness-root PATH] [--output PATH]",
     "",
     "Examples:",
-    "  pnpm rtt NexisClaw@main --package-tgz .artifacts/package/NexisClaw.tgz",
-    "  pnpm rtt NexisClaw@beta",
-    "  pnpm rtt NexisClaw@2026.4.30",
-    "  pnpm rtt NexisClaw@latest --provider live-frontier",
+    "  pnpm rtt GreenchClaw@main --package-tgz .artifacts/package/GreenchClaw.tgz",
+    "  pnpm rtt GreenchClaw@beta",
+    "  pnpm rtt GreenchClaw@2026.4.30",
+    "  pnpm rtt GreenchClaw@latest --provider live-frontier",
   ].join("\n");
 }
 
@@ -134,7 +134,7 @@ function parseArgs(argv: string[]) {
   }
 
   return {
-    spec: validateNexisClawPackageSpec(spec),
+    spec: validateGreenchClawPackageSpec(spec),
     options: {
       packageTgz,
       providerMode,
@@ -218,11 +218,11 @@ async function main() {
   assertRequiredEnv(process.env);
   await assertHarnessRoot(options.harnessRoot);
   await assertDockerAvailable();
-  if (spec === "NexisClaw@main" && !options.packageTgz) {
-    throw new Error("NexisClaw@main requires --package-tgz.");
+  if (spec === "GreenchClaw@main" && !options.packageTgz) {
+    throw new Error("GreenchClaw@main requires --package-tgz.");
   }
   const version =
-    spec === "NexisClaw@main"
+    spec === "GreenchClaw@main"
       ? await resolveMainVersion(options.harnessRoot)
       : await resolvePublishedVersion(spec);
   let failed = false;

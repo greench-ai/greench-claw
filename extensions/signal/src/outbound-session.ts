@@ -1,5 +1,5 @@
-import { type RoutePeer } from "NexisClaw/plugin-sdk/routing";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { type RoutePeer } from "GreenchClaw/plugin-sdk/routing";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveSignalPeerId, resolveSignalRecipient, resolveSignalSender } from "./identity.js";
 import { looksLikeUuid } from "./uuid.js";
 

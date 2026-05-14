@@ -3,7 +3,7 @@ import {
   resolveProviderWebSearchPluginConfig,
   type WebSearchProviderPlugin,
   type WebSearchProviderToolDefinition,
-} from "NexisClaw/plugin-sdk/provider-web-search-config-contract";
+} from "GreenchClaw/plugin-sdk/provider-web-search-config-contract";
 import {
   createPerplexityWebSearchProviderBase,
   resolvePerplexityWebSearchRuntimeMetadata,

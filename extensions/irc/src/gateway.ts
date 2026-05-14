@@ -1,5 +1,5 @@
-import { runStoppablePassiveMonitor } from "NexisClaw/plugin-sdk/extension-shared";
-import type { ChannelAccountSnapshot } from "NexisClaw/plugin-sdk/status-helpers";
+import { runStoppablePassiveMonitor } from "GreenchClaw/plugin-sdk/extension-shared";
+import type { ChannelAccountSnapshot } from "GreenchClaw/plugin-sdk/status-helpers";
 import type { ResolvedIrcAccount } from "./accounts.js";
 import { createAccountStatusSink } from "./channel-api.js";
 import type { RuntimeEnv } from "./runtime-api.js";

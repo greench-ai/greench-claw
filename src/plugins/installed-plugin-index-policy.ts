@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { listPluginCompatRecords } from "./compat/registry.js";
 import { normalizePluginsConfig } from "./config-state.js";
 import { hashJson } from "./installed-plugin-index-hash.js";
@@ -16,7 +16,9 @@ export function resolveCompatRegistryVersion(): string {
   );
 }
 
-export function resolveInstalledPluginIndexPolicyHash(config: NexisClawConfig | undefined): string {
+export function resolveInstalledPluginIndexPolicyHash(
+  config: GreenchClawConfig | undefined,
+): string {
   const normalized = normalizePluginsConfig(config?.plugins);
   const channelPolicy: Record<string, boolean> = {};
   const channels = config?.channels;

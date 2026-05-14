@@ -1,44 +1,44 @@
 ---
-summary: "CLI reference for `NexisClaw approvals` and `NexisClaw exec-policy`"
+summary: "CLI reference for `GreenchClaw approvals` and `GreenchClaw exec-policy`"
 read_when:
   - You want to edit exec approvals from the CLI
   - You need to manage allowlists on gateway or node hosts
 title: "Approvals"
 ---
 
-# `NexisClaw approvals`
+# `GreenchClaw approvals`
 
 Manage exec approvals for the **local host**, **gateway host**, or a **node host**.
 By default, commands target the local approvals file on disk. Use `--gateway` to target the gateway, or `--node` to target a specific node.
 
-Alias: `NexisClaw exec-approvals`
+Alias: `GreenchClaw exec-approvals`
 
 Related:
 
 - Exec approvals: [Exec approvals](/tools/exec-approvals)
 - Nodes: [Nodes](/nodes)
 
-## `NexisClaw exec-policy`
+## `GreenchClaw exec-policy`
 
-`NexisClaw exec-policy` is the local convenience command for keeping the requested
+`GreenchClaw exec-policy` is the local convenience command for keeping the requested
 `tools.exec.*` config and the local host approvals file aligned in one step.
 
 Use it when you want to:
 
 - inspect the local requested policy, host approvals file, and effective merge
 - apply a local preset such as YOLO or deny-all
-- synchronize local `tools.exec.*` and local `~/.NexisClaw/exec-approvals.json`
+- synchronize local `tools.exec.*` and local `~/.GreenchClaw/exec-approvals.json`
 
 Examples:
 
 ```bash
-NexisClaw exec-policy show
-NexisClaw exec-policy show --json
+GreenchClaw exec-policy show
+GreenchClaw exec-policy show --json
 
-NexisClaw exec-policy preset yolo
-NexisClaw exec-policy preset cautious --json
+GreenchClaw exec-policy preset yolo
+GreenchClaw exec-policy preset cautious --json
 
-NexisClaw exec-policy set --host gateway --security full --ask off --ask-fallback full
+GreenchClaw exec-policy set --host gateway --security full --ask off --ask-fallback full
 ```
 
 Output modes:
@@ -52,20 +52,20 @@ Current scope:
 - it updates the local config file and the local approvals file together
 - it does **not** push policy to the gateway host or a node host
 - `--host node` is rejected in this command because node exec approvals are fetched from the node at runtime and must be managed through node-targeted approvals commands instead
-- `NexisClaw exec-policy show` marks `host=node` scopes as node-managed at runtime instead of deriving an effective policy from the local approvals file
+- `GreenchClaw exec-policy show` marks `host=node` scopes as node-managed at runtime instead of deriving an effective policy from the local approvals file
 
-If you need to edit remote host approvals directly, keep using `NexisClaw approvals set --gateway`
-or `NexisClaw approvals set --node <id|name|ip>`.
+If you need to edit remote host approvals directly, keep using `GreenchClaw approvals set --gateway`
+or `GreenchClaw approvals set --node <id|name|ip>`.
 
 ## Common commands
 
 ```bash
-NexisClaw approvals get
-NexisClaw approvals get --node <id|name|ip>
-NexisClaw approvals get --gateway
+GreenchClaw approvals get
+GreenchClaw approvals get --node <id|name|ip>
+GreenchClaw approvals get --gateway
 ```
 
-`NexisClaw approvals get` now shows the effective exec policy for local, gateway, and node targets:
+`GreenchClaw approvals get` now shows the effective exec policy for local, gateway, and node targets:
 
 - requested `tools.exec` policy
 - host approvals-file policy
@@ -81,12 +81,12 @@ Precedence is intentional:
 ## Replace approvals from a file
 
 ```bash
-NexisClaw approvals set --file ./exec-approvals.json
-NexisClaw approvals set --stdin <<'EOF'
+GreenchClaw approvals set --file ./exec-approvals.json
+GreenchClaw approvals set --stdin <<'EOF'
 { version: 1, defaults: { security: "full", ask: "off" } }
 EOF
-NexisClaw approvals set --node <id|name|ip> --file ./exec-approvals.json
-NexisClaw approvals set --gateway --file ./exec-approvals.json
+GreenchClaw approvals set --node <id|name|ip> --file ./exec-approvals.json
+GreenchClaw approvals set --gateway --file ./exec-approvals.json
 ```
 
 `set` accepts JSON5, not only strict JSON. Use either `--file` or `--stdin`, not both.
@@ -96,7 +96,7 @@ NexisClaw approvals set --gateway --file ./exec-approvals.json
 For a host that should never stop on exec approvals, set the host approvals defaults to `full` + `off`:
 
 ```bash
-NexisClaw approvals set --stdin <<'EOF'
+GreenchClaw approvals set --stdin <<'EOF'
 {
   version: 1,
   defaults: {
@@ -111,7 +111,7 @@ EOF
 Node variant:
 
 ```bash
-NexisClaw approvals set --node <id|name|ip> --stdin <<'EOF'
+GreenchClaw approvals set --node <id|name|ip> --stdin <<'EOF'
 {
   version: 1,
   defaults: {
@@ -123,12 +123,12 @@ NexisClaw approvals set --node <id|name|ip> --stdin <<'EOF'
 EOF
 ```
 
-This changes the **host approvals file** only. To keep the requested NexisClaw policy aligned, also set:
+This changes the **host approvals file** only. To keep the requested GreenchClaw policy aligned, also set:
 
 ```bash
-NexisClaw config set tools.exec.host gateway
-NexisClaw config set tools.exec.security full
-NexisClaw config set tools.exec.ask off
+GreenchClaw config set tools.exec.host gateway
+GreenchClaw config set tools.exec.security full
+GreenchClaw config set tools.exec.ask off
 ```
 
 Why `tools.exec.host=gateway` in this example:
@@ -142,7 +142,7 @@ This matches the current host-default YOLO behavior. Tighten it if you want appr
 Local shortcut:
 
 ```bash
-NexisClaw exec-policy preset yolo
+GreenchClaw exec-policy preset yolo
 ```
 
 That local shortcut updates both the requested local `tools.exec.*` config and the
@@ -152,11 +152,11 @@ setup above, but only for the local machine.
 ## Allowlist helpers
 
 ```bash
-NexisClaw approvals allowlist add "~/Projects/**/bin/rg"
-NexisClaw approvals allowlist add --agent main --node <id|name|ip> "/usr/bin/uptime"
-NexisClaw approvals allowlist add --agent "*" "/usr/bin/uname"
+GreenchClaw approvals allowlist add "~/Projects/**/bin/rg"
+GreenchClaw approvals allowlist add --agent main --node <id|name|ip> "/usr/bin/uptime"
+GreenchClaw approvals allowlist add --agent "*" "/usr/bin/uname"
 
-NexisClaw approvals allowlist remove "~/Projects/**/bin/rg"
+GreenchClaw approvals allowlist remove "~/Projects/**/bin/rg"
 ```
 
 ## Common options
@@ -179,10 +179,10 @@ Targeting notes:
 
 ## Notes
 
-- `--node` uses the same resolver as `NexisClaw nodes` (id, name, ip, or id prefix).
+- `--node` uses the same resolver as `GreenchClaw nodes` (id, name, ip, or id prefix).
 - `--agent` defaults to `"*"`, which applies to all agents.
 - The node host must advertise `system.execApprovals.get/set` (macOS app or headless node host).
-- Approvals files are stored per host at `~/.NexisClaw/exec-approvals.json`.
+- Approvals files are stored per host at `~/.GreenchClaw/exec-approvals.json`.
 
 ## Related
 

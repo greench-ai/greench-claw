@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { coerceSecretRef, type SecretRef } from "../config/types.secrets.js";
 import { resolveDefaultSecretProviderAlias } from "../secrets/ref-contract.js";
 import type { PluginManifestRecord } from "./manifest-registry.js";
@@ -39,7 +39,7 @@ function readStringAtPath(root: unknown, path: string): string | undefined {
 }
 
 function readEffectiveConfig(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   rootPath: string;
   overlayPath?: string;
 }): Record<string, unknown> | undefined {
@@ -52,7 +52,7 @@ function readEffectiveConfig(params: {
 }
 
 function hasConfiguredSecretRefInConfigPath(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   ref: SecretRef;
 }): boolean {
@@ -71,7 +71,7 @@ function hasConfiguredSecretRefInConfigPath(params: {
 }
 
 function hasConfiguredValue(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   value: unknown;
 }): boolean {
@@ -99,7 +99,7 @@ function hasConfiguredValue(params: {
 }
 
 export function manifestConfigSignalPasses(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   signal: ManifestConfigAvailabilitySignal;
 }): boolean {
@@ -157,7 +157,7 @@ function normalizeBaseUrlForManifestGuard(value: string): string {
 }
 
 export function manifestProviderBaseUrlGuardPasses(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   guard: ManifestAuthAvailabilitySignal["providerBaseUrl"];
 }): boolean {
   const guard = params.guard;
@@ -211,7 +211,7 @@ function listToolAuthSignals(metadata: ToolMetadata): ManifestAuthAvailabilitySi
 function toolMetadataPasses(params: {
   plugin: PluginManifestRecord;
   metadata: ToolMetadata;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   hasAuthForProvider?: (providerId: string) => boolean;
 }): boolean {
@@ -257,7 +257,7 @@ function toolMetadataPasses(params: {
 export function hasManifestToolAvailability(params: {
   plugin: PluginManifestRecord;
   toolNames: readonly string[];
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   hasAuthForProvider?: (providerId: string) => boolean;
 }): boolean {

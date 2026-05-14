@@ -10,7 +10,7 @@ import type {
   ChannelDoctorEmptyAllowlistAccountContext,
   ChannelDoctorSequenceResult,
 } from "../../../channels/plugins/types.adapters.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { normalizeOptionalLowercaseString } from "../../../shared/string-coerce.js";
 
 type ChannelDoctorEntry = {
@@ -23,12 +23,12 @@ type ChannelDoctorPluginCandidate = {
 };
 
 type ChannelDoctorLookupContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 };
 
 type ChannelDoctorEmptyAllowlistLookupParams = ChannelDoctorEmptyAllowlistAccountContext & {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 };
 
 const channelDoctorFunctionKeys = new Set<keyof ChannelDoctorAdapter>([
@@ -59,7 +59,7 @@ export type ChannelDoctorEmptyAllowlistPolicyHooks = {
   ) => boolean;
 };
 
-function collectConfiguredChannelIds(cfg: NexisClawConfig): string[] {
+function collectConfiguredChannelIds(cfg: GreenchClawConfig): string[] {
   if (cfg.plugins?.enabled === false) {
     return [];
   }
@@ -90,7 +90,7 @@ function collectConfiguredChannelIds(cfg: NexisClawConfig): string[] {
     .toSorted();
 }
 
-function isChannelDoctorBlockedByConfig(channelId: string, cfg: NexisClawConfig): boolean {
+function isChannelDoctorBlockedByConfig(channelId: string, cfg: GreenchClawConfig): boolean {
   if (cfg.plugins?.enabled === false) {
     return true;
   }
@@ -286,7 +286,7 @@ export function createChannelDoctorEmptyAllowlistPolicyHooks(
 }
 
 export async function runChannelDoctorConfigSequences(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   shouldRepair: boolean;
 }): Promise<ChannelDoctorSequenceResult> {
@@ -307,7 +307,7 @@ export async function runChannelDoctorConfigSequences(params: {
 }
 
 export function collectChannelDoctorCompatibilityMutations(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   options: { env?: NodeJS.ProcessEnv } = {},
 ): ChannelDoctorConfigMutation[] {
   const channelIds = collectConfiguredChannelIds(cfg);
@@ -328,7 +328,7 @@ export function collectChannelDoctorCompatibilityMutations(
 }
 
 export async function collectChannelDoctorStaleConfigMutations(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   options: { env?: NodeJS.ProcessEnv } = {},
 ): Promise<ChannelDoctorConfigMutation[]> {
   const mutations: ChannelDoctorConfigMutation[] = [];
@@ -348,7 +348,7 @@ export async function collectChannelDoctorStaleConfigMutations(
 }
 
 export async function collectChannelDoctorPreviewWarnings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   doctorFixCommand: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<string[]> {
@@ -366,7 +366,7 @@ export async function collectChannelDoctorPreviewWarnings(params: {
 }
 
 export async function collectChannelDoctorMutableAllowlistWarnings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): Promise<string[]> {
   const warnings: string[] = [];
@@ -383,7 +383,7 @@ export async function collectChannelDoctorMutableAllowlistWarnings(params: {
 }
 
 export async function collectChannelDoctorRepairMutations(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   doctorFixCommand: string;
   env?: NodeJS.ProcessEnv;
 }): Promise<ChannelDoctorConfigMutation[]> {

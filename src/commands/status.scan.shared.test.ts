@@ -443,7 +443,9 @@ describe("resolveSharedMemoryStatusSnapshot", () => {
     };
     const resolveMemoryConfig = vi.fn(() => null);
     const getMemorySearchManager = vi.fn(async () => ({ manager }));
-    const requireDefaultStore = vi.fn(() => `/tmp/NexisClaw-missing-memory-${process.pid}.sqlite`);
+    const requireDefaultStore = vi.fn(
+      () => `/tmp/GreenchClaw-missing-memory-${process.pid}.sqlite`,
+    );
 
     const result = await resolveSharedMemoryStatusSnapshot({
       cfg: {
@@ -534,7 +536,7 @@ describe("resolveSharedMemoryStatusSnapshot", () => {
       memoryPlugin: { enabled: true, slot: "memory-core" },
       resolveMemoryConfig,
       getMemorySearchManager,
-      requireDefaultStore: () => `/tmp/NexisClaw-missing-memory-${process.pid}.sqlite`,
+      requireDefaultStore: () => `/tmp/GreenchClaw-missing-memory-${process.pid}.sqlite`,
     });
 
     expect(result).toBeNull();

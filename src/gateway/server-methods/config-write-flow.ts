@@ -5,7 +5,7 @@ import {
   replaceConfigFile,
 } from "../../config/config.js";
 import { extractDeliveryInfo } from "../../config/sessions.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   formatDoctorNonInteractiveHint,
   type RestartSentinelPayload,
@@ -49,7 +49,10 @@ function normalizeTrustedProxyAuthForCompare(auth: ReturnType<typeof resolveGate
   };
 }
 
-export function didSharedGatewayAuthChange(prev: NexisClawConfig, next: NexisClawConfig): boolean {
+export function didSharedGatewayAuthChange(
+  prev: GreenchClawConfig,
+  next: GreenchClawConfig,
+): boolean {
   const prevResolvedAuth = resolveGatewayAuth({
     authConfig: prev.gateway?.auth,
     env: process.env,
@@ -93,8 +96,8 @@ export function didSharedGatewayAuthChange(prev: NexisClawConfig, next: NexisCla
 }
 
 export function didActiveSharedGatewayAuthChange(params: {
-  fallbackPrev: NexisClawConfig;
-  next: NexisClawConfig;
+  fallbackPrev: GreenchClawConfig;
+  next: GreenchClawConfig;
 }): boolean {
   return didSharedGatewayAuthChange(
     getActiveSecretsRuntimeSnapshot()?.config ?? params.fallbackPrev,
@@ -116,7 +119,7 @@ function queueSharedGatewayAuthDisconnect(
 
 function queueSharedGatewayAuthGenerationRefresh(
   shouldRefresh: boolean,
-  nextConfig: NexisClawConfig,
+  nextConfig: GreenchClawConfig,
   context?: GatewayRequestContext,
 ): void {
   if (!shouldRefresh) {
@@ -129,7 +132,7 @@ function queueSharedGatewayAuthGenerationRefresh(
 
 function shouldScheduleDirectConfigRestart(params: {
   changedPaths: string[];
-  nextConfig: NexisClawConfig;
+  nextConfig: GreenchClawConfig;
 }): boolean {
   const reloadSettings = resolveGatewayReloadSettings(params.nextConfig);
   if (reloadSettings.mode === "off") {
@@ -209,7 +212,7 @@ async function tryWriteRestartSentinelPayload(
 export async function commitGatewayConfigWrite(params: {
   snapshot: ConfigWriteSnapshot;
   writeOptions: ConfigWriteOptions;
-  nextConfig: NexisClawConfig;
+  nextConfig: GreenchClawConfig;
   context?: GatewayRequestContext;
   disconnectSharedAuthClients?: boolean;
 }): Promise<{ path: string; queueFollowUp: () => void }> {
@@ -233,7 +236,7 @@ export async function resolveGatewayConfigRestartWriteResult(params: {
   mode: "config.patch" | "config.apply";
   configPath: string;
   changedPaths: string[];
-  nextConfig: NexisClawConfig;
+  nextConfig: GreenchClawConfig;
   actor: ControlPlaneActor;
   context?: GatewayRequestContext;
 }): Promise<{

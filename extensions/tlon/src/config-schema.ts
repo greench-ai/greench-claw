@@ -1,4 +1,4 @@
-import { buildChannelConfigSchema } from "NexisClaw/plugin-sdk/channel-config-schema";
+import { buildChannelConfigSchema } from "GreenchClaw/plugin-sdk/channel-config-schema";
 import { z } from "zod";
 
 const ShipSchema = z.string().min(1);

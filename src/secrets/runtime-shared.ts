@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { coerceSecretRef, type SecretRef } from "../config/types.secrets.js";
 import { secretRefKey } from "./ref-contract.js";
 import type { SecretRefResolveCache } from "./resolve-types.js";
@@ -31,7 +31,7 @@ export type SecretAssignment = {
 };
 
 export type ResolverContext = {
-  sourceConfig: NexisClawConfig;
+  sourceConfig: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   cache: SecretRefResolveCache;
   warnings: SecretResolverWarning[];
@@ -39,11 +39,11 @@ export type ResolverContext = {
   assignments: SecretAssignment[];
 };
 
-export type SecretDefaults = NonNullable<NexisClawConfig["secrets"]>["defaults"];
+export type SecretDefaults = NonNullable<GreenchClawConfig["secrets"]>["defaults"];
 export type { SecretRefResolveCache } from "./resolve-types.js";
 
 export function createResolverContext(params: {
-  sourceConfig: NexisClawConfig;
+  sourceConfig: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
 }): ResolverContext {
   return {

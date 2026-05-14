@@ -15,7 +15,7 @@ import type {
   ChannelMessageActionName,
   ChannelThreadingToolContext,
 } from "../../channels/plugins/types.public.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   hasInteractiveReplyBlocks,
   hasMessagePresentationBlocks,
@@ -100,7 +100,7 @@ function loadMessageActionGatewayRuntime() {
 }
 
 export type RunMessageActionParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   action: ChannelMessageActionName;
   params: Record<string, unknown>;
   defaultAccountId?: string;
@@ -250,7 +250,7 @@ function applyCrossContextMessageDecoration({
 }
 
 async function maybeApplyCrossContextMarker(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: ChannelId;
   action: ChannelMessageActionName;
   target: string;
@@ -284,7 +284,7 @@ async function maybeApplyCrossContextMarker(params: {
 }
 
 async function resolveChannel(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params: Record<string, unknown>,
   toolContext?: { currentChannelProvider?: string },
 ) {
@@ -338,7 +338,7 @@ function inferPeerKindForAccountBinding(channel: ChannelId, target: string): Cha
 }
 
 function resolveTargetBoundAccountId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: ChannelId;
   args: Record<string, unknown>;
   agentId?: string;
@@ -374,7 +374,7 @@ function resolveTargetBoundAccountId(params: {
 }
 
 async function resolveActionTarget(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: ChannelId;
   action: ChannelMessageActionName;
   args: Record<string, unknown>;
@@ -415,7 +415,7 @@ function sanitizeGroupTargetId(target: string): string {
 }
 
 async function resolveResolvedTargetOrThrow(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: ChannelId;
   input: string;
   accountId?: string;
@@ -440,7 +440,7 @@ async function resolveResolvedTargetOrThrow(params: {
 }
 
 type ResolvedActionContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   params: Record<string, unknown>;
   channel: ChannelId;
   mediaAccess: OutboundMediaAccess;
@@ -454,7 +454,7 @@ type ResolvedActionContext = {
 };
 
 async function runGatewayPluginMessageActionOrNull(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   params: Record<string, unknown>;
   channel: ChannelId;
   action: ChannelMessageActionName;

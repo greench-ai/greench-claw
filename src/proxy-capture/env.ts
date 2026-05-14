@@ -8,13 +8,13 @@ import {
   resolveDebugProxyDbPath,
 } from "./paths.js";
 
-export const NEXISCLAW_DEBUG_PROXY_ENABLED = "NEXISCLAW_DEBUG_PROXY_ENABLED";
-export const NEXISCLAW_DEBUG_PROXY_URL = "NEXISCLAW_DEBUG_PROXY_URL";
-export const NEXISCLAW_DEBUG_PROXY_DB_PATH = "NEXISCLAW_DEBUG_PROXY_DB_PATH";
-export const NEXISCLAW_DEBUG_PROXY_BLOB_DIR = "NEXISCLAW_DEBUG_PROXY_BLOB_DIR";
-export const NEXISCLAW_DEBUG_PROXY_CERT_DIR = "NEXISCLAW_DEBUG_PROXY_CERT_DIR";
-export const NEXISCLAW_DEBUG_PROXY_SESSION_ID = "NEXISCLAW_DEBUG_PROXY_SESSION_ID";
-export const NEXISCLAW_DEBUG_PROXY_REQUIRE = "NEXISCLAW_DEBUG_PROXY_REQUIRE";
+export const GREENCHCLAW_DEBUG_PROXY_ENABLED = "GREENCHCLAW_DEBUG_PROXY_ENABLED";
+export const GREENCHCLAW_DEBUG_PROXY_URL = "GREENCHCLAW_DEBUG_PROXY_URL";
+export const GREENCHCLAW_DEBUG_PROXY_DB_PATH = "GREENCHCLAW_DEBUG_PROXY_DB_PATH";
+export const GREENCHCLAW_DEBUG_PROXY_BLOB_DIR = "GREENCHCLAW_DEBUG_PROXY_BLOB_DIR";
+export const GREENCHCLAW_DEBUG_PROXY_CERT_DIR = "GREENCHCLAW_DEBUG_PROXY_CERT_DIR";
+export const GREENCHCLAW_DEBUG_PROXY_SESSION_ID = "GREENCHCLAW_DEBUG_PROXY_SESSION_ID";
+export const GREENCHCLAW_DEBUG_PROXY_REQUIRE = "GREENCHCLAW_DEBUG_PROXY_REQUIRE";
 
 export type DebugProxySettings = {
   enabled: boolean;
@@ -44,18 +44,18 @@ function isTruthy(value: string | undefined): boolean {
 export function resolveDebugProxySettings(
   env: NodeJS.ProcessEnv = process.env,
 ): DebugProxySettings {
-  const enabled = isTruthy(env[NEXISCLAW_DEBUG_PROXY_ENABLED]);
-  const explicitSessionId = env[NEXISCLAW_DEBUG_PROXY_SESSION_ID]?.trim() || undefined;
+  const enabled = isTruthy(env[GREENCHCLAW_DEBUG_PROXY_ENABLED]);
+  const explicitSessionId = env[GREENCHCLAW_DEBUG_PROXY_SESSION_ID]?.trim() || undefined;
   const sessionId = explicitSessionId ?? (cachedImplicitSessionId ??= randomUUID());
   return {
     enabled,
-    required: isTruthy(env[NEXISCLAW_DEBUG_PROXY_REQUIRE]),
-    proxyUrl: env[NEXISCLAW_DEBUG_PROXY_URL]?.trim() || undefined,
-    dbPath: env[NEXISCLAW_DEBUG_PROXY_DB_PATH]?.trim() || resolveDebugProxyDbPath(env),
-    blobDir: env[NEXISCLAW_DEBUG_PROXY_BLOB_DIR]?.trim() || resolveDebugProxyBlobDir(env),
-    certDir: env[NEXISCLAW_DEBUG_PROXY_CERT_DIR]?.trim() || resolveDebugProxyCertDir(env),
+    required: isTruthy(env[GREENCHCLAW_DEBUG_PROXY_REQUIRE]),
+    proxyUrl: env[GREENCHCLAW_DEBUG_PROXY_URL]?.trim() || undefined,
+    dbPath: env[GREENCHCLAW_DEBUG_PROXY_DB_PATH]?.trim() || resolveDebugProxyDbPath(env),
+    blobDir: env[GREENCHCLAW_DEBUG_PROXY_BLOB_DIR]?.trim() || resolveDebugProxyBlobDir(env),
+    certDir: env[GREENCHCLAW_DEBUG_PROXY_CERT_DIR]?.trim() || resolveDebugProxyCertDir(env),
     sessionId,
-    sourceProcess: "NexisClaw",
+    sourceProcess: "GreenchClaw",
   };
 }
 
@@ -71,13 +71,13 @@ export function applyDebugProxyEnv(
 ): NodeJS.ProcessEnv {
   return {
     ...env,
-    [NEXISCLAW_DEBUG_PROXY_ENABLED]: "1",
-    [NEXISCLAW_DEBUG_PROXY_REQUIRE]: "1",
-    [NEXISCLAW_DEBUG_PROXY_URL]: params.proxyUrl,
-    [NEXISCLAW_DEBUG_PROXY_DB_PATH]: params.dbPath ?? resolveDebugProxyDbPath(env),
-    [NEXISCLAW_DEBUG_PROXY_BLOB_DIR]: params.blobDir ?? resolveDebugProxyBlobDir(env),
-    [NEXISCLAW_DEBUG_PROXY_CERT_DIR]: params.certDir ?? resolveDebugProxyCertDir(env),
-    [NEXISCLAW_DEBUG_PROXY_SESSION_ID]: params.sessionId,
+    [GREENCHCLAW_DEBUG_PROXY_ENABLED]: "1",
+    [GREENCHCLAW_DEBUG_PROXY_REQUIRE]: "1",
+    [GREENCHCLAW_DEBUG_PROXY_URL]: params.proxyUrl,
+    [GREENCHCLAW_DEBUG_PROXY_DB_PATH]: params.dbPath ?? resolveDebugProxyDbPath(env),
+    [GREENCHCLAW_DEBUG_PROXY_BLOB_DIR]: params.blobDir ?? resolveDebugProxyBlobDir(env),
+    [GREENCHCLAW_DEBUG_PROXY_CERT_DIR]: params.certDir ?? resolveDebugProxyCertDir(env),
+    [GREENCHCLAW_DEBUG_PROXY_SESSION_ID]: params.sessionId,
     HTTP_PROXY: params.proxyUrl,
     HTTPS_PROXY: params.proxyUrl,
     ALL_PROXY: params.proxyUrl,

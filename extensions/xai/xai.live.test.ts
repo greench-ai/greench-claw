@@ -1,29 +1,30 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { encodePngRgba, fillPixel } from "NexisClaw/plugin-sdk/media-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { encodePngRgba, fillPixel } from "GreenchClaw/plugin-sdk/media-runtime";
 import {
   registerProviderPlugin,
   requireRegisteredProvider,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import {
-  expectNexisClawLiveTranscriptMarker,
+  expectGreenchClawLiveTranscriptMarker,
   runRealtimeSttLiveTest,
-} from "NexisClaw/plugin-sdk/provider-test-contracts";
-import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
-import { isBillingErrorMessage } from "NexisClaw/plugin-sdk/test-env";
+} from "GreenchClaw/plugin-sdk/provider-test-contracts";
+import { getRuntimeConfig } from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
+import { isBillingErrorMessage } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 import { XAI_DEFAULT_STT_MODEL } from "./stt.js";
 
 const XAI_API_KEY = process.env.XAI_API_KEY ?? "";
-const LIVE_IMAGE_MODEL = process.env.NEXISCLAW_LIVE_XAI_IMAGE_MODEL?.trim() || "grok-imagine-image";
-const liveEnabled = XAI_API_KEY.trim().length > 0 && process.env.NEXISCLAW_LIVE_TEST === "1";
+const LIVE_IMAGE_MODEL =
+  process.env.GREENCHCLAW_LIVE_XAI_IMAGE_MODEL?.trim() || "grok-imagine-image";
+const liveEnabled = XAI_API_KEY.trim().length > 0 && process.env.GREENCHCLAW_LIVE_TEST === "1";
 const describeLive = liveEnabled ? describe : describe.skip;
 const EMPTY_AUTH_STORE = { version: 1, profiles: {} } as const;
 
-function createLiveConfig(): NexisClawConfig {
+function createLiveConfig(): GreenchClawConfig {
   const cfg = getRuntimeConfig();
   return {
     ...cfg,
@@ -38,7 +39,7 @@ function createLiveConfig(): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function createReferencePng(): Buffer {
@@ -100,7 +101,7 @@ describeLive("xai plugin live", () => {
       expect(voices?.some((voice) => voice.id === "eve")).toBe(true);
 
       const audioFile = await speechProvider.synthesize({
-        text: "NexisClaw xAI text to speech integration test OK.",
+        text: "GreenchClaw xAI text to speech integration test OK.",
         cfg,
         providerConfig: {
           apiKey: XAI_API_KEY,
@@ -117,7 +118,7 @@ describeLive("xai plugin live", () => {
       expect(audioFile.audioBuffer.byteLength).toBeGreaterThan(512);
 
       const telephony = await speechProvider.synthesizeTelephony?.({
-        text: "NexisClaw xAI telephony check OK.",
+        text: "GreenchClaw xAI telephony check OK.",
         cfg,
         providerConfig: {
           apiKey: XAI_API_KEY,
@@ -141,7 +142,7 @@ describeLive("xai plugin live", () => {
       const mediaProvider = requireRegisteredProvider(mediaProviders, "xai");
       const speechProvider = requireRegisteredProvider(speechProviders, "xai");
       const cfg = createLiveConfig();
-      const phrase = "NexisClaw xAI speech to text integration test OK.";
+      const phrase = "GreenchClaw xAI speech to text integration test OK.";
 
       const audioFile = await speechProvider.synthesize({
         text: phrase,
@@ -167,7 +168,7 @@ describeLive("xai plugin live", () => {
 
       const normalized = transcript?.text.toLowerCase() ?? "";
       expect(transcript?.model).toBe(XAI_DEFAULT_STT_MODEL);
-      expectNexisClawLiveTranscriptMarker(normalized);
+      expectGreenchClawLiveTranscriptMarker(normalized);
       expect(normalized).toContain("speech");
       expect(normalized).toContain("text");
       expect(normalized).toContain("integration");
@@ -222,7 +223,7 @@ describeLive("xai plugin live", () => {
       const realtimeProvider = requireRegisteredProvider(realtimeTranscriptionProviders, "xai");
       const speechProvider = requireRegisteredProvider(speechProviders, "xai");
       const cfg = createLiveConfig();
-      const phrase = "NexisClaw xAI realtime transcription integration test OK.";
+      const phrase = "GreenchClaw xAI realtime transcription integration test OK.";
 
       const telephony = await speechProvider.synthesizeTelephony?.({
         text: phrase,
@@ -259,7 +260,7 @@ describeLive("xai plugin live", () => {
       });
 
       const normalized = transcripts.join(" ").toLowerCase();
-      expectNexisClawLiveTranscriptMarker(normalized);
+      expectGreenchClawLiveTranscriptMarker(normalized);
       expect(normalized).toContain("transcription");
       expect(partials.length + transcripts.length).toBeGreaterThan(0);
     });

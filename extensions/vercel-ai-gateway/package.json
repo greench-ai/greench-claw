@@ -1,13 +1,13 @@
 {
-  "name": "@NexisClaw/vercel-ai-gateway-provider",
+  "name": "@GreenchClaw/vercel-ai-gateway-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw Vercel AI Gateway provider plugin",
+  "description": "GreenchClaw Vercel AI Gateway provider plugin",
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

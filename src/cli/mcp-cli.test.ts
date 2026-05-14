@@ -19,27 +19,27 @@ const mocks = vi.hoisted(() => {
   };
   return {
     runtime,
-    serveNexisClawChannelMcp: vi.fn(),
+    serveGreenchClawChannelMcp: vi.fn(),
   };
 });
 
 const defaultRuntime = mocks.runtime;
 const mockLog = defaultRuntime.log;
 const mockError = defaultRuntime.error;
-const serveNexisClawChannelMcp = mocks.serveNexisClawChannelMcp;
+const serveGreenchClawChannelMcp = mocks.serveGreenchClawChannelMcp;
 
 vi.mock("../runtime.js", () => ({
   defaultRuntime: mocks.runtime,
 }));
 
 vi.mock("../mcp/channel-server.js", () => ({
-  serveNexisClawChannelMcp: mocks.serveNexisClawChannelMcp,
+  serveGreenchClawChannelMcp: mocks.serveGreenchClawChannelMcp,
 }));
 
 const tempDirs: string[] = [];
 
 async function createWorkspace(): Promise<string> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-cli-mcp-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-cli-mcp-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -73,9 +73,9 @@ describe("mcp cli", () => {
   });
 
   it("sets and shows a configured MCP server", async () => {
-    await withTempHome("NexisClaw-cli-mcp-home-", async (home) => {
+    await withTempHome("GreenchClaw-cli-mcp-home-", async (home) => {
       const workspaceDir = await createWorkspace();
-      const configPath = path.join(home, ".NexisClaw", "NexisClaw.json");
+      const configPath = path.join(home, ".GreenchClaw", "GreenchClaw.json");
       vi.spyOn(process, "cwd").mockReturnValue(workspaceDir);
 
       await runMcpCommand(["mcp", "set", "context7", '{"command":"uvx","args":["context7-mcp"]}']);
@@ -88,21 +88,21 @@ describe("mcp cli", () => {
   });
 
   it("fails when removing an unknown MCP server", async () => {
-    await withTempHome("NexisClaw-cli-mcp-home-", async (home) => {
+    await withTempHome("GreenchClaw-cli-mcp-home-", async (home) => {
       const workspaceDir = await createWorkspace();
-      const configPath = path.join(home, ".NexisClaw", "NexisClaw.json");
+      const configPath = path.join(home, ".GreenchClaw", "GreenchClaw.json");
       vi.spyOn(process, "cwd").mockReturnValue(workspaceDir);
 
       await expect(runMcpCommand(["mcp", "unset", "missing"])).rejects.toThrow("__exit__:1");
       const errorLine = String(mockError.mock.calls.at(-1)?.[0] ?? "");
       expect(errorLine).toBe(
-        `No MCP server named "missing" in ${configPath}. Run NexisClaw mcp list to see configured servers.`,
+        `No MCP server named "missing" in ${configPath}. Run GreenchClaw mcp list to see configured servers.`,
       );
     });
   });
 
   it("starts the channel bridge with parsed serve options", async () => {
-    await withTempHome("NexisClaw-cli-mcp-home-", async () => {
+    await withTempHome("GreenchClaw-cli-mcp-home-", async () => {
       const workspaceDir = await createWorkspace();
       const tokenFile = path.join(workspaceDir, "gateway.token");
       vi.spyOn(process, "cwd").mockReturnValue(workspaceDir);
@@ -120,7 +120,7 @@ describe("mcp cli", () => {
         "--verbose",
       ]);
 
-      expect(serveNexisClawChannelMcp).toHaveBeenCalledWith({
+      expect(serveGreenchClawChannelMcp).toHaveBeenCalledWith({
         gatewayUrl: "ws://127.0.0.1:18789",
         gatewayToken: "secret-token",
         gatewayPassword: undefined,

@@ -3,24 +3,24 @@ summary: "Inferred follow-up memory for check-ins that are not exact reminders"
 title: "Inferred commitments"
 sidebarTitle: "Commitments"
 read_when:
-  - You want NexisClaw to remember natural follow-ups
+  - You want GreenchClaw to remember natural follow-ups
   - You want to understand how inferred check-ins differ from reminders
   - You want to review or dismiss follow-up commitments
 ---
 
-Commitments are short-lived follow-up memories. When enabled, NexisClaw can
+Commitments are short-lived follow-up memories. When enabled, GreenchClaw can
 notice that a conversation created a future check-in opportunity and remember
 to bring it back later.
 
 Examples:
 
-- You mention an interview tomorrow. NexisClaw may check in afterward.
-- You say you are exhausted. NexisClaw may ask later whether you slept.
-- The agent says it will follow up after something changes. NexisClaw may track
+- You mention an interview tomorrow. GreenchClaw may check in afterward.
+- You say you are exhausted. GreenchClaw may ask later whether you slept.
+- The agent says it will follow up after something changes. GreenchClaw may track
   that open loop.
 
 Commitments are not durable facts like `MEMORY.md`, and they are not exact
-reminders. They sit between memory and automation: NexisClaw remembers a
+reminders. They sit between memory and automation: GreenchClaw remembers a
 conversation-bound obligation, then heartbeat delivers it when it is due.
 
 ## Enable commitments
@@ -28,11 +28,11 @@ conversation-bound obligation, then heartbeat delivers it when it is due.
 Commitments are off by default. Enable them in config:
 
 ```bash
-NexisClaw config set commitments.enabled true
-NexisClaw config set commitments.maxPerDay 3
+GreenchClaw config set commitments.enabled true
+GreenchClaw config set commitments.maxPerDay 3
 ```
 
-Equivalent `NexisClaw.json`:
+Equivalent `GreenchClaw.json`:
 
 ```json
 {
@@ -48,12 +48,12 @@ per agent session in a rolling day. The default is `3`.
 
 ## How it works
 
-After an agent reply, NexisClaw may run a hidden background extraction pass in a
+After an agent reply, GreenchClaw may run a hidden background extraction pass in a
 separate context. That pass looks only for inferred follow-up commitments. It
 does not write into the visible conversation and it does not ask the main agent
 to reason about the extraction.
 
-When it finds a high-confidence candidate, NexisClaw stores a commitment with:
+When it finds a high-confidence candidate, GreenchClaw stores a commitment with:
 
 - the agent id
 - the session key
@@ -68,9 +68,9 @@ The model can send one natural check-in or reply `HEARTBEAT_OK` to dismiss it.
 If heartbeat is configured with `target: "none"`, due commitments remain
 internal and do not send external check-ins. Commitment delivery prompts do not
 replay the original conversation text, and due commitment heartbeat turns run
-without NexisClaw tools.
+without GreenchClaw tools.
 
-NexisClaw never delivers an inferred commitment immediately after writing it.
+GreenchClaw never delivers an inferred commitment immediately after writing it.
 The due time is clamped to at least one heartbeat interval after the commitment
 is created, so the follow-up cannot echo back in the same moment it was
 inferred.
@@ -104,14 +104,14 @@ but the conversation clearly created a useful future check-in.
 Use the CLI to inspect and clear stored commitments:
 
 ```bash
-NexisClaw commitments
-NexisClaw commitments --all
-NexisClaw commitments --agent main
-NexisClaw commitments --status snoozed
-NexisClaw commitments dismiss cm_abc123
+GreenchClaw commitments
+GreenchClaw commitments --all
+GreenchClaw commitments --agent main
+GreenchClaw commitments --status snoozed
+GreenchClaw commitments dismiss cm_abc123
 ```
 
-See [`NexisClaw commitments`](/cli/commitments) for the command reference.
+See [`GreenchClaw commitments`](/cli/commitments) for the command reference.
 
 ## Privacy and cost
 
@@ -120,11 +120,11 @@ usage after eligible turns. The pass is hidden from the user-visible
 conversation, but it can read the recent exchange needed to decide whether a
 follow-up exists.
 
-Stored commitments are local NexisClaw state. They are operational memory, not
+Stored commitments are local GreenchClaw state. They are operational memory, not
 long-term memory. Disable the feature with:
 
 ```bash
-NexisClaw config set commitments.enabled false
+GreenchClaw config set commitments.enabled false
 ```
 
 ## Troubleshooting
@@ -132,7 +132,7 @@ NexisClaw config set commitments.enabled false
 If expected follow-ups are not appearing:
 
 - Confirm `commitments.enabled` is `true`.
-- Check `NexisClaw commitments --all` for pending, dismissed, snoozed, or expired
+- Check `GreenchClaw commitments --all` for pending, dismissed, snoozed, or expired
   records.
 - Make sure heartbeat is running for the agent.
 - Check whether `commitments.maxPerDay` has already been reached for that
@@ -146,5 +146,5 @@ If expected follow-ups are not appearing:
 - [Active memory](/concepts/active-memory)
 - [Heartbeat](/gateway/heartbeat)
 - [Scheduled tasks](/automation/cron-jobs)
-- [`NexisClaw commitments`](/cli/commitments)
+- [`GreenchClaw commitments`](/cli/commitments)
 - [Configuration reference](/gateway/configuration-reference#commitments)

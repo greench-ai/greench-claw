@@ -1,7 +1,7 @@
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/logging-core";
-import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { SELF_HOSTED_DEFAULT_COST } from "NexisClaw/plugin-sdk/provider-setup";
-import { fetchWithSsrFGuard, type SsrFPolicy } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/logging-core";
+import type { ModelDefinitionConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { SELF_HOSTED_DEFAULT_COST } from "GreenchClaw/plugin-sdk/provider-setup";
+import { fetchWithSsrFGuard, type SsrFPolicy } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { LMSTUDIO_DEFAULT_LOAD_CONTEXT_LENGTH } from "./defaults.js";
 import {
   buildLmstudioModelName,
@@ -119,7 +119,7 @@ export async function fetchLmstudioModels(params: {
   }
 }
 
-/** Discovers LLM models from LM Studio and maps them to NexisClaw model definitions. */
+/** Discovers LLM models from LM Studio and maps them to GreenchClaw model definitions. */
 export async function discoverLmstudioModels(
   params: DiscoverLmstudioModelsParams,
 ): Promise<ModelDefinitionConfig[]> {

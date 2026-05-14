@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { pathExists } from "NexisClaw/plugin-sdk/security-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { pathExists } from "GreenchClaw/plugin-sdk/security-runtime";
 import { ensureRepoBoundDirectory, resolveRepoRelativeOutputDir } from "../cli-paths.js";
 import {
   acquireQaCredentialLease,
@@ -124,18 +124,18 @@ const DEFAULT_CREDENTIAL_SOURCE = "convex";
 const DEFAULT_CREDENTIAL_ROLE = "maintainer";
 const DEFAULT_HYDRATE_MODE: MantisTelegramDesktopHydrateMode = "source";
 const DEFAULT_TELEGRAM_PROFILE_DIR = "$HOME/.local/share/TelegramDesktop";
-const CRABBOX_BIN_ENV = "NEXISCLAW_MANTIS_CRABBOX_BIN";
-const CRABBOX_PROVIDER_ENV = "NEXISCLAW_MANTIS_CRABBOX_PROVIDER";
-const CRABBOX_CLASS_ENV = "NEXISCLAW_MANTIS_CRABBOX_CLASS";
-const CRABBOX_LEASE_ID_ENV = "NEXISCLAW_MANTIS_CRABBOX_LEASE_ID";
-const CRABBOX_KEEP_ENV = "NEXISCLAW_MANTIS_KEEP_VM";
-const CRABBOX_IDLE_TIMEOUT_ENV = "NEXISCLAW_MANTIS_CRABBOX_IDLE_TIMEOUT";
-const CRABBOX_TTL_ENV = "NEXISCLAW_MANTIS_CRABBOX_TTL";
-const HYDRATE_MODE_ENV = "NEXISCLAW_MANTIS_HYDRATE_MODE";
-const TELEGRAM_PROFILE_ARCHIVE_ENV = "NEXISCLAW_MANTIS_TELEGRAM_DESKTOP_PROFILE_TGZ_B64";
+const CRABBOX_BIN_ENV = "GREENCHCLAW_MANTIS_CRABBOX_BIN";
+const CRABBOX_PROVIDER_ENV = "GREENCHCLAW_MANTIS_CRABBOX_PROVIDER";
+const CRABBOX_CLASS_ENV = "GREENCHCLAW_MANTIS_CRABBOX_CLASS";
+const CRABBOX_LEASE_ID_ENV = "GREENCHCLAW_MANTIS_CRABBOX_LEASE_ID";
+const CRABBOX_KEEP_ENV = "GREENCHCLAW_MANTIS_KEEP_VM";
+const CRABBOX_IDLE_TIMEOUT_ENV = "GREENCHCLAW_MANTIS_CRABBOX_IDLE_TIMEOUT";
+const CRABBOX_TTL_ENV = "GREENCHCLAW_MANTIS_CRABBOX_TTL";
+const HYDRATE_MODE_ENV = "GREENCHCLAW_MANTIS_HYDRATE_MODE";
+const TELEGRAM_PROFILE_ARCHIVE_ENV = "GREENCHCLAW_MANTIS_TELEGRAM_DESKTOP_PROFILE_TGZ_B64";
 const TELEGRAM_PROFILE_ARCHIVE_ENV_NAME_ENV =
-  "NEXISCLAW_MANTIS_TELEGRAM_DESKTOP_PROFILE_ARCHIVE_ENV";
-const TELEGRAM_PROFILE_DIR_ENV = "NEXISCLAW_MANTIS_TELEGRAM_DESKTOP_PROFILE_DIR";
+  "GREENCHCLAW_MANTIS_TELEGRAM_DESKTOP_PROFILE_ARCHIVE_ENV";
+const TELEGRAM_PROFILE_DIR_ENV = "GREENCHCLAW_MANTIS_TELEGRAM_DESKTOP_PROFILE_DIR";
 
 function trimToValue(value: string | undefined) {
   const trimmed = value?.trim();
@@ -206,20 +206,20 @@ function defaultOutputDir(repoRoot: string, startedAt: Date) {
 
 function buildCrabboxEnv(env: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
   const next = { ...env };
-  if (!trimToValue(next.NEXISCLAW_LIVE_OPENAI_KEY) && trimToValue(next.OPENAI_API_KEY)) {
-    next.NEXISCLAW_LIVE_OPENAI_KEY = next.OPENAI_API_KEY;
+  if (!trimToValue(next.GREENCHCLAW_LIVE_OPENAI_KEY) && trimToValue(next.OPENAI_API_KEY)) {
+    next.GREENCHCLAW_LIVE_OPENAI_KEY = next.OPENAI_API_KEY;
   }
-  if (!trimToValue(next.NEXISCLAW_MANTIS_TELEGRAM_GROUP_ID)) {
-    next.NEXISCLAW_MANTIS_TELEGRAM_GROUP_ID = trimToValue(next.NEXISCLAW_QA_TELEGRAM_GROUP_ID);
+  if (!trimToValue(next.GREENCHCLAW_MANTIS_TELEGRAM_GROUP_ID)) {
+    next.GREENCHCLAW_MANTIS_TELEGRAM_GROUP_ID = trimToValue(next.GREENCHCLAW_QA_TELEGRAM_GROUP_ID);
   }
-  if (!trimToValue(next.NEXISCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN)) {
-    next.NEXISCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN = trimToValue(
-      next.NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN,
+  if (!trimToValue(next.GREENCHCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN)) {
+    next.GREENCHCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN = trimToValue(
+      next.GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN,
     );
   }
-  if (!trimToValue(next.NEXISCLAW_MANTIS_TELEGRAM_SUT_BOT_TOKEN)) {
-    next.NEXISCLAW_MANTIS_TELEGRAM_SUT_BOT_TOKEN = trimToValue(
-      next.NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN,
+  if (!trimToValue(next.GREENCHCLAW_MANTIS_TELEGRAM_SUT_BOT_TOKEN)) {
+    next.GREENCHCLAW_MANTIS_TELEGRAM_SUT_BOT_TOKEN = trimToValue(
+      next.GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN,
     );
   }
   return next;
@@ -228,12 +228,12 @@ function buildCrabboxEnv(env: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
 function resolveTelegramGatewayEnvPayload(
   env: NodeJS.ProcessEnv,
 ): TelegramGatewayCredentialPayload {
-  const groupId = trimToValue(env.NEXISCLAW_QA_TELEGRAM_GROUP_ID);
-  const driverToken = trimToValue(env.NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN);
-  const sutToken = trimToValue(env.NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN);
+  const groupId = trimToValue(env.GREENCHCLAW_QA_TELEGRAM_GROUP_ID);
+  const driverToken = trimToValue(env.GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN);
+  const sutToken = trimToValue(env.GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN);
   if (!groupId || !driverToken || !sutToken) {
     throw new Error(
-      "Telegram desktop builder requires NEXISCLAW_QA_TELEGRAM_GROUP_ID, NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN, and NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN when using --credential-source env.",
+      "Telegram desktop builder requires GREENCHCLAW_QA_TELEGRAM_GROUP_ID, GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN, and GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN when using --credential-source env.",
     );
   }
   return { driverToken, groupId, sutToken };
@@ -268,9 +268,9 @@ async function prepareGatewayCredentialEnv(params: {
     return {};
   }
   if (
-    trimToValue(params.env.NEXISCLAW_MANTIS_TELEGRAM_GROUP_ID) &&
-    trimToValue(params.env.NEXISCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN) &&
-    trimToValue(params.env.NEXISCLAW_MANTIS_TELEGRAM_SUT_BOT_TOKEN)
+    trimToValue(params.env.GREENCHCLAW_MANTIS_TELEGRAM_GROUP_ID) &&
+    trimToValue(params.env.GREENCHCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN) &&
+    trimToValue(params.env.GREENCHCLAW_MANTIS_TELEGRAM_SUT_BOT_TOKEN)
   ) {
     return {};
   }
@@ -284,15 +284,15 @@ async function prepareGatewayCredentialEnv(params: {
   });
   const leaseHeartbeat = startQaCredentialLeaseHeartbeat(credentialLease);
   const payload = credentialLease.payload;
-  params.env.NEXISCLAW_MANTIS_TELEGRAM_GROUP_ID = payload.groupId;
-  params.env.NEXISCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN = payload.driverToken;
-  params.env.NEXISCLAW_MANTIS_TELEGRAM_SUT_BOT_TOKEN = payload.sutToken;
-  params.env.NEXISCLAW_QA_TELEGRAM_GROUP_ID =
-    trimToValue(params.env.NEXISCLAW_QA_TELEGRAM_GROUP_ID) ?? payload.groupId;
-  params.env.NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN =
-    trimToValue(params.env.NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN) ?? payload.driverToken;
-  params.env.NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN =
-    trimToValue(params.env.NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN) ?? payload.sutToken;
+  params.env.GREENCHCLAW_MANTIS_TELEGRAM_GROUP_ID = payload.groupId;
+  params.env.GREENCHCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN = payload.driverToken;
+  params.env.GREENCHCLAW_MANTIS_TELEGRAM_SUT_BOT_TOKEN = payload.sutToken;
+  params.env.GREENCHCLAW_QA_TELEGRAM_GROUP_ID =
+    trimToValue(params.env.GREENCHCLAW_QA_TELEGRAM_GROUP_ID) ?? payload.groupId;
+  params.env.GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN =
+    trimToValue(params.env.GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN) ?? payload.driverToken;
+  params.env.GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN =
+    trimToValue(params.env.GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN) ?? payload.sutToken;
   return {
     credentialLease,
     leaseHeartbeat,
@@ -368,8 +368,8 @@ telegram_profile_dir=${telegramProfileDir}
 rm -rf "$out"
 mkdir -p "$out"
 export DISPLAY="\${DISPLAY:-:99}"
-if [ -n "\${NEXISCLAW_LIVE_OPENAI_KEY:-}" ] && [ -z "\${OPENAI_API_KEY:-}" ]; then
-  export OPENAI_API_KEY="$NEXISCLAW_LIVE_OPENAI_KEY"
+if [ -n "\${GREENCHCLAW_LIVE_OPENAI_KEY:-}" ] && [ -z "\${OPENAI_API_KEY:-}" ]; then
+  export OPENAI_API_KEY="$GREENCHCLAW_LIVE_OPENAI_KEY"
 fi
 if ! command -v node >/dev/null 2>&1; then
   sudo apt-get update -y >"$out/node-apt.log" 2>&1
@@ -384,7 +384,7 @@ if ! command -v ffmpeg >/dev/null 2>&1; then
   sudo apt-get update -y >>"$out/apt.log" 2>&1 || true
   sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ffmpeg >>"$out/apt.log" 2>&1 || true
 fi
-telegram_root="$HOME/.local/share/NexisClaw-mantis/telegram-desktop-bin"
+telegram_root="$HOME/.local/share/GreenchClaw-mantis/telegram-desktop-bin"
 telegram_bin="$telegram_root/Telegram/Telegram"
 if [ ! -x "$telegram_bin" ]; then
   mkdir -p "$telegram_root"
@@ -396,8 +396,8 @@ if [ -z "$telegram_profile_dir" ] || [ "$telegram_profile_dir" = "\\$HOME/.local
 fi
 mkdir -p "$telegram_profile_dir"
 telegram_profile_restored=false
-if [ -n "\${NEXISCLAW_MANTIS_TELEGRAM_DESKTOP_PROFILE_TGZ_B64:-}" ]; then
-  printf '%s' "$NEXISCLAW_MANTIS_TELEGRAM_DESKTOP_PROFILE_TGZ_B64" | base64 -d >"$out/telegram-profile.tgz"
+if [ -n "\${GREENCHCLAW_MANTIS_TELEGRAM_DESKTOP_PROFILE_TGZ_B64:-}" ]; then
+  printf '%s' "$GREENCHCLAW_MANTIS_TELEGRAM_DESKTOP_PROFILE_TGZ_B64" | base64 -d >"$out/telegram-profile.tgz"
   tar -xzf "$out/telegram-profile.tgz" -C "$telegram_profile_dir"
   telegram_profile_restored=true
 fi
@@ -447,23 +447,23 @@ qa_status=0
     exit 3
   fi
   if [ "$setup_gateway" = "1" ]; then
-    export TELEGRAM_BOT_TOKEN="\${NEXISCLAW_MANTIS_TELEGRAM_SUT_BOT_TOKEN:-\${TELEGRAM_BOT_TOKEN:-}}"
-    telegram_group_id="\${NEXISCLAW_MANTIS_TELEGRAM_GROUP_ID:-}"
-    driver_token="\${NEXISCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN:-}"
+    export TELEGRAM_BOT_TOKEN="\${GREENCHCLAW_MANTIS_TELEGRAM_SUT_BOT_TOKEN:-\${TELEGRAM_BOT_TOKEN:-}}"
+    telegram_group_id="\${GREENCHCLAW_MANTIS_TELEGRAM_GROUP_ID:-}"
+    driver_token="\${GREENCHCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN:-}"
     if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$telegram_group_id" ] || [ -z "$driver_token" ]; then
-      echo "Gateway setup requires NEXISCLAW_MANTIS_TELEGRAM_GROUP_ID, NEXISCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN, and NEXISCLAW_MANTIS_TELEGRAM_SUT_BOT_TOKEN." >&2
+      echo "Gateway setup requires GREENCHCLAW_MANTIS_TELEGRAM_GROUP_ID, GREENCHCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN, and GREENCHCLAW_MANTIS_TELEGRAM_SUT_BOT_TOKEN." >&2
       exit 2
     fi
     driver_user_id="$(node --input-type=module >"$out/telegram-driver-getme.json" 2>"$out/telegram-driver-getme.err" <<'MANTIS_TELEGRAM_GETME'
-const token = process.env.NEXISCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN;
+const token = process.env.GREENCHCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN;
 const response = await fetch(\`https://api.telegram.org/bot\${token}/getMe\`);
 const body = await response.json();
 process.stdout.write(JSON.stringify({ ok: body.ok, id: body.result?.id, username: body.result?.username }));
 if (!body.ok || !body.result?.id) process.exit(1);
 MANTIS_TELEGRAM_GETME
 node --input-type=module -e 'import fs from "node:fs"; const value = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); process.stdout.write(String(value.id || ""));' "$out/telegram-driver-getme.json")"
-    export NEXISCLAW_HOME="$HOME/.NexisClaw-mantis/telegram-NexisClaw"
-    mkdir -p "$NEXISCLAW_HOME"
+    export GREENCHCLAW_HOME="$HOME/.GreenchClaw-mantis/telegram-GreenchClaw"
+    mkdir -p "$GREENCHCLAW_HOME"
     cat >"$out/telegram.patch.json5" <<MANTIS_TELEGRAM_PATCH
 {
   gateway: {
@@ -487,11 +487,11 @@ node --input-type=module -e 'import fs from "node:fs"; const value = JSON.parse(
   },
 }
 MANTIS_TELEGRAM_PATCH
-    pnpm NexisClaw config patch --file "$out/telegram.patch.json5" --dry-run
-    pnpm NexisClaw config patch --file "$out/telegram.patch.json5"
+    pnpm GreenchClaw config patch --file "$out/telegram.patch.json5" --dry-run
+    pnpm GreenchClaw config patch --file "$out/telegram.patch.json5"
     node --input-type=module >"$out/telegram-ready-message.json" 2>"$out/telegram-ready-message.err" <<'MANTIS_TELEGRAM_READY'
-const token = process.env.NEXISCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN;
-const chatId = process.env.NEXISCLAW_MANTIS_TELEGRAM_GROUP_ID;
+const token = process.env.GREENCHCLAW_MANTIS_TELEGRAM_DRIVER_BOT_TOKEN;
+const chatId = process.env.GREENCHCLAW_MANTIS_TELEGRAM_GROUP_ID;
 const text = \`Mantis Telegram desktop builder ready: \${new Date().toISOString()}\`;
 const response = await fetch(\`https://api.telegram.org/bot\${token}/sendMessage\`, {
   method: "POST",
@@ -502,12 +502,12 @@ const body = await response.json();
 process.stdout.write(JSON.stringify({ ok: body.ok, message_id: body.result?.message_id }));
 if (!body.ok) process.exit(1);
 MANTIS_TELEGRAM_READY
-    nohup pnpm NexisClaw gateway run --dev --allow-unconfigured --port 38974 --cli-backend-logs </dev/null >"$out/NexisClaw-gateway.log" 2>&1 &
+    nohup pnpm GreenchClaw gateway run --dev --allow-unconfigured --port 38974 --cli-backend-logs </dev/null >"$out/GreenchClaw-gateway.log" 2>&1 &
     gateway_pid="$!"
-    echo "$gateway_pid" >"$out/NexisClaw-gateway.pid"
+    echo "$gateway_pid" >"$out/GreenchClaw-gateway.pid"
     sleep 12
     if ! kill -0 "$gateway_pid" >/dev/null 2>&1; then
-      echo "NexisClaw gateway exited during startup." >&2
+      echo "GreenchClaw gateway exited during startup." >&2
       wait "$gateway_pid" || true
       exit 1
     fi
@@ -527,8 +527,8 @@ cat >"$out/remote-metadata.json" <<MANTIS_REMOTE_METADATA
   "telegramProfileDir": "$telegram_profile_dir",
   "telegramProfileRestored": $telegram_profile_restored,
   "gatewaySetup": $setup_gateway,
-  "gatewayAlive": $(if [ "$setup_gateway" = "1" ] && [ -f "$out/NexisClaw-gateway.pid" ] && kill -0 "$(cat "$out/NexisClaw-gateway.pid")" >/dev/null 2>&1; then echo true; else echo false; fi),
-  "gatewayPid": "$(if [ -f "$out/NexisClaw-gateway.pid" ]; then cat "$out/NexisClaw-gateway.pid"; fi)",
+  "gatewayAlive": $(if [ "$setup_gateway" = "1" ] && [ -f "$out/GreenchClaw-gateway.pid" ] && kill -0 "$(cat "$out/GreenchClaw-gateway.pid")" >/dev/null 2>&1; then echo true; else echo false; fi),
+  "gatewayPid": "$(if [ -f "$out/GreenchClaw-gateway.pid" ]; then cat "$out/GreenchClaw-gateway.pid"; fi)",
   "gatewayPort": 38974,
   "qaExitCode": $qa_status,
   "credentialSource": "$credential_source",
@@ -586,7 +586,7 @@ function renderReport(summary: MantisTelegramDesktopBuilderSummary) {
     "- Remote metadata: `remote-metadata.json`",
     "- Remote command log: `telegram-desktop-builder-command.log`",
     "- Telegram Desktop log: `telegram-desktop.log`",
-    "- NexisClaw gateway log: `NexisClaw-gateway.log`",
+    "- GreenchClaw gateway log: `GreenchClaw-gateway.log`",
     summary.error ? `- Error: ${summary.error}` : undefined,
     "",
   ].filter((line) => line !== undefined);
@@ -670,7 +670,7 @@ export async function runMantisTelegramDesktopBuilder(
   const explicitLeaseId = trimToValue(opts.leaseId) ?? trimToValue(env[CRABBOX_LEASE_ID_ENV]);
   const keepLease = opts.keepLease ?? (gatewaySetup || isTruthyOptIn(env[CRABBOX_KEEP_ENV]));
   const createdLease = explicitLeaseId === undefined;
-  const remoteOutputDir = `/tmp/NexisClaw-mantis-telegram-desktop-${startedAt
+  const remoteOutputDir = `/tmp/GreenchClaw-mantis-telegram-desktop-${startedAt
     .toISOString()
     .replace(/[^0-9A-Za-z]/gu, "-")}`;
   let credentialLease: TelegramGatewayCredentialLease | undefined;
@@ -784,7 +784,7 @@ export async function runMantisTelegramDesktopBuilder(
       throw remoteRunError;
     }
     if (gatewaySetup && !gatewaySetupCompleted) {
-      throw new Error("Telegram desktop builder did not report a live NexisClaw gateway.");
+      throw new Error("Telegram desktop builder did not report a live GreenchClaw gateway.");
     }
     summary = {
       artifacts: {

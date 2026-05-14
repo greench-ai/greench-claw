@@ -4,7 +4,7 @@ import {
   GroupPolicySchema,
   MarkdownConfigSchema,
   requireOpenAllowFrom,
-} from "NexisClaw/plugin-sdk/channel-config-primitives";
+} from "GreenchClaw/plugin-sdk/channel-config-primitives";
 import { z } from "zod";
 import { buildSecretInputSchema } from "./secret-input.js";
 

@@ -383,7 +383,7 @@ describe("forceResetGlobalDispatcher", () => {
     expect(setGlobalDispatcher).not.toHaveBeenCalled();
   });
 
-  it("restores a direct Agent when clearing a proxy dispatcher installed by NexisClaw", () => {
+  it("restores a direct Agent when clearing a proxy dispatcher installed by GreenchClaw", () => {
     vi.mocked(hasEnvHttpProxyAgentConfigured).mockReturnValue(true);
     ensureGlobalUndiciEnvProxyDispatcher();
     expect(getCurrentDispatcher()).toBeInstanceOf(EnvHttpProxyAgent);

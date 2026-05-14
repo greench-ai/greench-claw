@@ -1,8 +1,8 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   normalizeResolvedSecretInputString,
   normalizeSecretInput,
-} from "NexisClaw/plugin-sdk/secret-input";
+} from "GreenchClaw/plugin-sdk/secret-input";
 
 type SearxngPluginConfig = {
   webSearch?: {
@@ -49,7 +49,7 @@ function normalizeBaseUrl(value: string | undefined): string | undefined {
 }
 
 function resolveSearxngWebSearchConfig(
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
 ): SearxngPluginConfig["webSearch"] | undefined {
   const pluginConfig = config?.plugins?.entries?.searxng?.config as SearxngPluginConfig | undefined;
   const webSearch = pluginConfig?.webSearch;
@@ -60,7 +60,7 @@ function resolveSearxngWebSearchConfig(
 }
 
 export function resolveSearxngBaseUrl(
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): string | undefined {
   const webSearch = resolveSearxngWebSearchConfig(config);
@@ -76,10 +76,10 @@ export function resolveSearxngBaseUrl(
   );
 }
 
-export function resolveSearxngCategories(config?: NexisClawConfig): string | undefined {
+export function resolveSearxngCategories(config?: GreenchClawConfig): string | undefined {
   return normalizeTrimmedString(resolveSearxngWebSearchConfig(config)?.categories);
 }
 
-export function resolveSearxngLanguage(config?: NexisClawConfig): string | undefined {
+export function resolveSearxngLanguage(config?: GreenchClawConfig): string | undefined {
   return normalizeTrimmedString(resolveSearxngWebSearchConfig(config)?.language);
 }

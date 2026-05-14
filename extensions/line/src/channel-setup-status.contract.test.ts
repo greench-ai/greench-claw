@@ -1,8 +1,8 @@
 import {
   installChannelSetupContractSuite,
   installChannelStatusContractSuite,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect } from "vitest";
 import { linePlugin, lineSetupPlugin } from "../api.js";
 
@@ -12,7 +12,7 @@ describe("line setup contract", () => {
     cases: [
       {
         name: "default account stores token and secret",
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         input: {
           channelAccessToken: "line-token",
           channelSecret: "line-secret",
@@ -26,7 +26,7 @@ describe("line setup contract", () => {
       },
       {
         name: "non-default env setup is rejected",
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         accountId: "ops",
         input: {
           useEnv: true,
@@ -52,7 +52,7 @@ describe("line status contract", () => {
               channelSecret: "line-secret",
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         runtime: {
           accountId: "default",
           running: true,

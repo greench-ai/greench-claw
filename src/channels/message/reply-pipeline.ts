@@ -4,7 +4,7 @@ import {
   resolveSourceReplyDeliveryMode,
   type SourceReplyDeliveryModeContext,
 } from "../../auto-reply/reply/source-reply-delivery-mode.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { getLoadedChannelPluginForRead } from "../plugins/registry-loaded-read.js";
 import { normalizeAnyChannelId } from "../registry-normalize.js";
 import {
@@ -26,7 +26,7 @@ export { createReplyPrefixContext, createReplyPrefixOptions, createTypingCallbac
 export type { SourceReplyDeliveryMode };
 
 export function resolveChannelSourceReplyDeliveryMode(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   ctx: SourceReplyDeliveryModeContext;
   requested?: SourceReplyDeliveryMode;
   messageToolAvailable?: boolean;

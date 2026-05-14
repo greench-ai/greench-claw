@@ -1,5 +1,5 @@
 ---
-summary: "NexisClaw Gateway CLI (`NexisClaw gateway`) — run, query, and discover gateways"
+summary: "GreenchClaw Gateway CLI (`GreenchClaw gateway`) — run, query, and discover gateways"
 read_when:
   - Running the Gateway from the CLI (dev or servers)
   - Debugging Gateway auth, bind modes, and connectivity
@@ -8,14 +8,14 @@ title: "Gateway"
 sidebarTitle: "Gateway"
 ---
 
-The Gateway is NexisClaw's WebSocket server (channels, nodes, sessions, hooks). Subcommands in this page live under `NexisClaw gateway …`.
+The Gateway is GreenchClaw's WebSocket server (channels, nodes, sessions, hooks). Subcommands in this page live under `GreenchClaw gateway …`.
 
 <CardGroup cols={3}>
   <Card title="Bonjour discovery" href="/gateway/bonjour">
     Local mDNS + wide-area DNS-SD setup.
   </Card>
   <Card title="Discovery overview" href="/gateway/discovery">
-    How NexisClaw advertises and finds gateways.
+    How GreenchClaw advertises and finds gateways.
   </Card>
   <Card title="Configuration" href="/gateway/configuration">
     Top-level gateway config keys.
@@ -27,19 +27,19 @@ The Gateway is NexisClaw's WebSocket server (channels, nodes, sessions, hooks). 
 Run a local Gateway process:
 
 ```bash
-NexisClaw gateway
+GreenchClaw gateway
 ```
 
 Foreground alias:
 
 ```bash
-NexisClaw gateway run
+GreenchClaw gateway run
 ```
 
 <AccordionGroup>
   <Accordion title="Startup behavior">
-    - By default, the Gateway refuses to start unless `gateway.mode=local` is set in `~/.NexisClaw/NexisClaw.json`. Use `--allow-unconfigured` for ad-hoc/dev runs.
-    - `NexisClaw onboard --mode local` and `NexisClaw setup` are expected to write `gateway.mode=local`. If the file exists but `gateway.mode` is missing, treat that as a broken or clobbered config and repair it instead of assuming local mode implicitly.
+    - By default, the Gateway refuses to start unless `gateway.mode=local` is set in `~/.GreenchClaw/GreenchClaw.json`. Use `--allow-unconfigured` for ad-hoc/dev runs.
+    - `GreenchClaw onboard --mode local` and `GreenchClaw setup` are expected to write `gateway.mode=local`. If the file exists but `gateway.mode` is missing, treat that as a broken or clobbered config and repair it instead of assuming local mode implicitly.
     - If the file exists and `gateway.mode` is missing, the Gateway treats that as suspicious config damage and refuses to "guess local" for you.
     - Binding beyond loopback without auth is blocked (safety guardrail).
     - `SIGUSR1` triggers an in-process restart when authorized (`commands.restart` is enabled by default; set `commands.restart: false` to block manual restart, while gateway tool/config apply/update remain allowed).
@@ -60,7 +60,7 @@ NexisClaw gateway run
   Auth mode override.
 </ParamField>
 <ParamField path="--token <token>" type="string">
-  Token override (also sets `NEXISCLAW_GATEWAY_TOKEN` for the process).
+  Token override (also sets `GREENCHCLAW_GATEWAY_TOKEN` for the process).
 </ParamField>
 <ParamField path="--password <password>" type="string">
   Password override.
@@ -108,15 +108,15 @@ NexisClaw gateway run
 ## Restart the Gateway
 
 ```bash
-NexisClaw gateway restart
-NexisClaw gateway restart --safe
-NexisClaw gateway restart --safe --skip-deferral
-NexisClaw gateway restart --force
+GreenchClaw gateway restart
+GreenchClaw gateway restart --safe
+GreenchClaw gateway restart --safe --skip-deferral
+GreenchClaw gateway restart --force
 ```
 
-`NexisClaw gateway restart --safe` asks the running Gateway to preflight active NexisClaw work before restarting. If queued operations, reply delivery, embedded runs, or task runs are active, the Gateway reports the blockers, coalesces duplicate safe restart requests, and restarts once the active work drains. Plain `restart` keeps the existing service-manager behavior for compatibility. Use `--force` only when you explicitly want the immediate override path.
+`GreenchClaw gateway restart --safe` asks the running Gateway to preflight active GreenchClaw work before restarting. If queued operations, reply delivery, embedded runs, or task runs are active, the Gateway reports the blockers, coalesces duplicate safe restart requests, and restarts once the active work drains. Plain `restart` keeps the existing service-manager behavior for compatibility. Use `--force` only when you explicitly want the immediate override path.
 
-`NexisClaw gateway restart --safe --skip-deferral` runs the same NexisClaw-aware coordinated restart as `--safe`, but bypasses the active-work deferral gate so the Gateway emits the restart immediately even when blockers are reported. Use it as the operator escape hatch when a deferral has been pinned by a stuck task run and `--safe` alone would wait indefinitely. `--skip-deferral` requires `--safe`.
+`GreenchClaw gateway restart --safe --skip-deferral` runs the same GreenchClaw-aware coordinated restart as `--safe`, but bypasses the active-work deferral gate so the Gateway emits the restart immediately even when blockers are reported. Use it as the operator escape hatch when a deferral has been pinned by a stuck task run and `--safe` alone would wait indefinitely. `--skip-deferral` requires `--safe`.
 
 <Warning>
 Inline `--password` can be exposed in local process listings. Prefer `--password-file`, env, or a SecretRef-backed `gateway.auth.password`.
@@ -124,8 +124,8 @@ Inline `--password` can be exposed in local process listings. Prefer `--password
 
 ### Startup profiling
 
-- Set `NEXISCLAW_GATEWAY_STARTUP_TRACE=1` to log phase timings during Gateway startup, including per-phase `eventLoopMax` delay and plugin lookup-table timings for installed-index, manifest registry, startup planning, and owner-map work.
-- Set `NEXISCLAW_DIAGNOSTICS=timeline` with `NEXISCLAW_DIAGNOSTICS_TIMELINE_PATH=<path>` to write a best-effort JSONL startup diagnostics timeline for external QA harnesses. You can also enable the flag with `diagnostics.flags: ["timeline"]` in config; the path is still env-provided. Add `NEXISCLAW_DIAGNOSTICS_EVENT_LOOP=1` to include event-loop samples.
+- Set `GREENCHCLAW_GATEWAY_STARTUP_TRACE=1` to log phase timings during Gateway startup, including per-phase `eventLoopMax` delay and plugin lookup-table timings for installed-index, manifest registry, startup planning, and owner-map work.
+- Set `GREENCHCLAW_DIAGNOSTICS=timeline` with `GREENCHCLAW_DIAGNOSTICS_TIMELINE_PATH=<path>` to write a best-effort JSONL startup diagnostics timeline for external QA harnesses. You can also enable the flag with `diagnostics.flags: ["timeline"]` in config; the path is still env-provided. Add `GREENCHCLAW_DIAGNOSTICS_EVENT_LOOP=1` to include event-loop samples.
 - Run `pnpm test:startup:gateway -- --runs 5 --warmup 1` to benchmark Gateway startup. The benchmark records first process output, `/healthz`, `/readyz`, startup trace timings, event-loop delay, and plugin lookup-table timing details.
 
 ## Query a running Gateway
@@ -156,7 +156,7 @@ When you set `--url`, the CLI does not fall back to config or environment creden
 ### `gateway health`
 
 ```bash
-NexisClaw gateway health --url ws://127.0.0.1:18789
+GreenchClaw gateway health --url ws://127.0.0.1:18789
 ```
 
 The HTTP `/healthz` endpoint is a liveness probe: it returns once the server can answer HTTP. The HTTP `/readyz` endpoint is stricter and stays red while startup plugin sidecars, channels, or configured hooks are still settling. Local or authenticated detailed readiness responses include an `eventLoop` diagnostic block with event-loop delay, event-loop utilization, CPU core ratio, and a `degraded` flag.
@@ -166,9 +166,9 @@ The HTTP `/healthz` endpoint is a liveness probe: it returns once the server can
 Fetch usage-cost summaries from session logs.
 
 ```bash
-NexisClaw gateway usage-cost
-NexisClaw gateway usage-cost --days 7
-NexisClaw gateway usage-cost --json
+GreenchClaw gateway usage-cost
+GreenchClaw gateway usage-cost --days 7
+GreenchClaw gateway usage-cost --json
 ```
 
 <ParamField path="--days <days>" type="number" default="30">
@@ -180,11 +180,11 @@ NexisClaw gateway usage-cost --json
 Fetch the recent diagnostic stability recorder from a running Gateway.
 
 ```bash
-NexisClaw gateway stability
-NexisClaw gateway stability --type payload.large
-NexisClaw gateway stability --bundle latest
-NexisClaw gateway stability --bundle latest --export
-NexisClaw gateway stability --json
+GreenchClaw gateway stability
+GreenchClaw gateway stability --type payload.large
+GreenchClaw gateway stability --bundle latest
+GreenchClaw gateway stability --bundle latest --export
+GreenchClaw gateway stability --json
 ```
 
 <ParamField path="--limit <limit>" type="number" default="25">
@@ -209,7 +209,7 @@ NexisClaw gateway stability --json
 <AccordionGroup>
   <Accordion title="Privacy and bundle behavior">
     - Records keep operational metadata: event names, counts, byte sizes, memory readings, queue/session state, channel/plugin names, and redacted session summaries. They do not keep chat text, webhook bodies, tool outputs, raw request or response bodies, tokens, cookies, secret values, hostnames, or raw session ids. Set `diagnostics.enabled: false` to disable the recorder entirely.
-    - On fatal Gateway exits, shutdown timeouts, and restart startup failures, NexisClaw writes the same diagnostic snapshot to `~/.NexisClaw/logs/stability/NexisClaw-stability-*.json` when the recorder has events. Inspect the newest bundle with `NexisClaw gateway stability --bundle latest`; `--limit`, `--type`, and `--since-seq` also apply to bundle output.
+    - On fatal Gateway exits, shutdown timeouts, and restart startup failures, GreenchClaw writes the same diagnostic snapshot to `~/.GreenchClaw/logs/stability/GreenchClaw-stability-*.json` when the recorder has events. Inspect the newest bundle with `GreenchClaw gateway stability --bundle latest`; `--limit`, `--type`, and `--since-seq` also apply to bundle output.
 
   </Accordion>
 </AccordionGroup>
@@ -219,9 +219,9 @@ NexisClaw gateway stability --json
 Write a local diagnostics zip that is designed to attach to bug reports. For the privacy model and bundle contents, see [Diagnostics Export](/gateway/diagnostics).
 
 ```bash
-NexisClaw gateway diagnostics export
-NexisClaw gateway diagnostics export --output NexisClaw-diagnostics.zip
-NexisClaw gateway diagnostics export --json
+GreenchClaw gateway diagnostics export
+GreenchClaw gateway diagnostics export --output GreenchClaw-diagnostics.zip
+GreenchClaw gateway diagnostics export --json
 ```
 
 <ParamField path="--output <path>" type="string">
@@ -254,16 +254,16 @@ NexisClaw gateway diagnostics export --json
 
 The export contains a manifest, a Markdown summary, config shape, sanitized config details, sanitized log summaries, sanitized Gateway status/health snapshots, and the newest stability bundle when one exists.
 
-It is meant to be shared. It keeps operational details that help debugging, such as safe NexisClaw log fields, subsystem names, status codes, durations, configured modes, ports, plugin ids, provider ids, non-secret feature settings, and redacted operational log messages. It omits or redacts chat text, webhook bodies, tool outputs, credentials, cookies, account/message identifiers, prompt/instruction text, hostnames, and secret values. When a LogTape-style message looks like user/chat/tool payload text, the export keeps only that a message was omitted plus its byte count.
+It is meant to be shared. It keeps operational details that help debugging, such as safe GreenchClaw log fields, subsystem names, status codes, durations, configured modes, ports, plugin ids, provider ids, non-secret feature settings, and redacted operational log messages. It omits or redacts chat text, webhook bodies, tool outputs, credentials, cookies, account/message identifiers, prompt/instruction text, hostnames, and secret values. When a LogTape-style message looks like user/chat/tool payload text, the export keeps only that a message was omitted plus its byte count.
 
 ### `gateway status`
 
 `gateway status` shows the Gateway service (launchd/systemd/schtasks) plus an optional probe of connectivity/auth capability.
 
 ```bash
-NexisClaw gateway status
-NexisClaw gateway status --json
-NexisClaw gateway status --require-rpc
+GreenchClaw gateway status
+GreenchClaw gateway status --json
+GreenchClaw gateway status --require-rpc
 ```
 
 <ParamField path="--url <url>" type="string">
@@ -329,8 +329,8 @@ If multiple gateways are reachable, it prints all of them. Multiple gateways are
 </Note>
 
 ```bash
-NexisClaw gateway probe
-NexisClaw gateway probe --json
+GreenchClaw gateway probe
+GreenchClaw gateway probe --json
 ```
 
 <AccordionGroup>
@@ -384,7 +384,7 @@ The macOS app "Remote over SSH" mode uses a local port-forward so the remote gat
 CLI equivalent:
 
 ```bash
-NexisClaw gateway probe --ssh user@gateway-host
+GreenchClaw gateway probe --ssh user@gateway-host
 ```
 
 <ParamField path="--ssh <target>" type="string">
@@ -407,8 +407,8 @@ Config (optional, used as defaults):
 Low-level RPC helper.
 
 ```bash
-NexisClaw gateway call status
-NexisClaw gateway call logs.tail --params '{"sinceMs": 60000}'
+GreenchClaw gateway call status
+GreenchClaw gateway call logs.tail --params '{"sinceMs": 60000}'
 ```
 
 <ParamField path="--params <json>" type="string" default="{}">
@@ -440,46 +440,46 @@ NexisClaw gateway call logs.tail --params '{"sinceMs": 60000}'
 ## Manage the Gateway service
 
 ```bash
-NexisClaw gateway install
-NexisClaw gateway start
-NexisClaw gateway stop
-NexisClaw gateway restart
-NexisClaw gateway uninstall
+GreenchClaw gateway install
+GreenchClaw gateway start
+GreenchClaw gateway stop
+GreenchClaw gateway restart
+GreenchClaw gateway uninstall
 ```
 
 ### Install with a wrapper
 
 Use `--wrapper` when the managed service must start through another executable, for example a
 secrets manager shim or a run-as helper. The wrapper receives the normal Gateway args and is
-responsible for eventually exec'ing `NexisClaw` or Node with those args.
+responsible for eventually exec'ing `GreenchClaw` or Node with those args.
 
 ```bash
-cat > ~/.local/bin/NexisClaw-doppler <<'EOF'
+cat > ~/.local/bin/GreenchClaw-doppler <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
-exec doppler run --project my-project --config production -- NexisClaw "$@"
+exec doppler run --project my-project --config production -- GreenchClaw "$@"
 EOF
-chmod +x ~/.local/bin/NexisClaw-doppler
+chmod +x ~/.local/bin/GreenchClaw-doppler
 
-NexisClaw gateway install --wrapper ~/.local/bin/NexisClaw-doppler --force
-NexisClaw gateway restart
+GreenchClaw gateway install --wrapper ~/.local/bin/GreenchClaw-doppler --force
+GreenchClaw gateway restart
 ```
 
 You can also set the wrapper through the environment. `gateway install` validates that the path is
 an executable file, writes the wrapper into service `ProgramArguments`, and persists
-`NEXISCLAW_WRAPPER` in the service environment for later forced reinstalls, updates, and doctor
+`GREENCHCLAW_WRAPPER` in the service environment for later forced reinstalls, updates, and doctor
 repairs.
 
 ```bash
-NEXISCLAW_WRAPPER="$HOME/.local/bin/NexisClaw-doppler" NexisClaw gateway install --force
-NexisClaw doctor
+GREENCHCLAW_WRAPPER="$HOME/.local/bin/GreenchClaw-doppler" GreenchClaw gateway install --force
+GreenchClaw doctor
 ```
 
-To remove a persisted wrapper, clear `NEXISCLAW_WRAPPER` while reinstalling:
+To remove a persisted wrapper, clear `GREENCHCLAW_WRAPPER` while reinstalling:
 
 ```bash
-NEXISCLAW_WRAPPER= NexisClaw gateway install --force
-NexisClaw gateway restart
+GREENCHCLAW_WRAPPER= GreenchClaw gateway install --force
+GreenchClaw gateway restart
 ```
 
 <AccordionGroup>
@@ -494,9 +494,9 @@ NexisClaw gateway restart
   <Accordion title="Lifecycle behavior">
     - Use `gateway restart` to restart a managed service. Do not chain `gateway stop` and `gateway start` as a restart substitute.
     - On macOS, `gateway stop` uses `launchctl bootout` by default, which removes the LaunchAgent from the current boot session without persisting a disable — KeepAlive auto-recovery remains active for future crashes and `gateway start` re-enables cleanly without a manual `launchctl enable`. Pass `--disable` to persistently suppress KeepAlive and RunAtLoad so the gateway does not respawn until the next explicit `gateway start`; use this when a manual stop should survive reboots or system restarts.
-    - `gateway restart --safe` asks the running Gateway to preflight active NexisClaw work and defer the restart until reply delivery, embedded runs, and task runs drain. `--safe` cannot be combined with `--force` or `--wait`.
+    - `gateway restart --safe` asks the running Gateway to preflight active GreenchClaw work and defer the restart until reply delivery, embedded runs, and task runs drain. `--safe` cannot be combined with `--force` or `--wait`.
     - `gateway restart --wait 30s` overrides the configured restart drain budget for that restart. Bare numbers are milliseconds; units such as `s`, `m`, and `h` are accepted. `--wait 0` waits indefinitely.
-    - `gateway restart --safe --skip-deferral` runs the NexisClaw-aware safe restart but bypasses the deferral gate so the Gateway emits the restart immediately even when blockers are reported. Operator escape hatch for stuck-task-run deferrals; requires `--safe`.
+    - `gateway restart --safe --skip-deferral` runs the GreenchClaw-aware safe restart but bypasses the deferral gate so the Gateway emits the restart immediately even when blockers are reported. Operator escape hatch for stuck-task-run deferrals; requires `--safe`.
     - `gateway restart --force` skips the active-work drain and restarts immediately. Use it when an operator has already inspected the listed task blockers and wants the gateway back now.
     - Lifecycle commands accept `--json` for scripting.
 
@@ -504,8 +504,8 @@ NexisClaw gateway restart
   <Accordion title="Auth and SecretRefs at install time">
     - When token auth requires a token and `gateway.auth.token` is SecretRef-managed, `gateway install` validates that the SecretRef is resolvable but does not persist the resolved token into service environment metadata.
     - If token auth requires a token and the configured token SecretRef is unresolved, install fails closed instead of persisting fallback plaintext.
-    - For password auth on `gateway run`, prefer `NEXISCLAW_GATEWAY_PASSWORD`, `--password-file`, or a SecretRef-backed `gateway.auth.password` over inline `--password`.
-    - In inferred auth mode, shell-only `NEXISCLAW_GATEWAY_PASSWORD` does not relax install token requirements; use durable config (`gateway.auth.password` or config `env`) when installing a managed service.
+    - For password auth on `gateway run`, prefer `GREENCHCLAW_GATEWAY_PASSWORD`, `--password-file`, or a SecretRef-backed `gateway.auth.password` over inline `--password`.
+    - In inferred auth mode, shell-only `GREENCHCLAW_GATEWAY_PASSWORD` does not relax install token requirements; use durable config (`gateway.auth.password` or config `env`) when installing a managed service.
     - If both `gateway.auth.token` and `gateway.auth.password` are configured and `gateway.auth.mode` is unset, install is blocked until mode is set explicitly.
 
   </Accordion>
@@ -513,10 +513,10 @@ NexisClaw gateway restart
 
 ## Discover gateways (Bonjour)
 
-`gateway discover` scans for Gateway beacons (`_NexisClaw-gw._tcp`).
+`gateway discover` scans for Gateway beacons (`_GreenchClaw-gw._tcp`).
 
 - Multicast DNS-SD: `local.`
-- Unicast DNS-SD (Wide-Area Bonjour): choose a domain (example: `NexisClaw.internal.`) and set up split DNS + a DNS server; see [Bonjour](/gateway/bonjour).
+- Unicast DNS-SD (Wide-Area Bonjour): choose a domain (example: `GreenchClaw.internal.`) and set up split DNS + a DNS server; see [Bonjour](/gateway/bonjour).
 
 Only gateways with Bonjour discovery enabled (default) advertise the beacon.
 
@@ -533,7 +533,7 @@ Wide-area discovery records can include these TXT hints:
 ### `gateway discover`
 
 ```bash
-NexisClaw gateway discover
+GreenchClaw gateway discover
 ```
 
 <ParamField path="--timeout <ms>" type="number" default="2000">
@@ -546,8 +546,8 @@ NexisClaw gateway discover
 Examples:
 
 ```bash
-NexisClaw gateway discover --timeout 4000
-NexisClaw gateway discover --json | jq '.beacons[].wsUrl'
+GreenchClaw gateway discover --timeout 4000
+GreenchClaw gateway discover --json | jq '.beacons[].wsUrl'
 ```
 
 <Note>

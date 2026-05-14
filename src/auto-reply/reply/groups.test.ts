@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { resetPluginRuntimeStateForTest } from "../../plugins/runtime.js";
 import * as groups from "./groups.js";
 
@@ -53,7 +53,7 @@ describe("group runtime loading", () => {
     expect(toolOnlyContext).not.toContain('reply with exactly "NO_REPLY"');
     expect(
       isolatedGroups.buildGroupIntro({
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         sessionCtx: { Provider: "whatsapp" },
         defaultActivation: "mention",
         silentToken: "NO_REPLY",
@@ -82,7 +82,7 @@ describe("group runtime loading", () => {
         silentReplyRewrite: true,
         silentToken: "NO_REPLY",
       }),
-    ).toContain("so NexisClaw can send a short fallback reply");
+    ).toContain("so GreenchClaw can send a short fallback reply");
 
     expect(
       groups.buildDirectChatContext({
@@ -194,7 +194,7 @@ describe("group runtime loading", () => {
               },
             },
           },
-        } as unknown as NexisClawConfig,
+        } as unknown as GreenchClawConfig,
         ctx: {
           Provider: "slack",
           From: "slack:channel:C123",
@@ -225,7 +225,7 @@ describe("group runtime loading", () => {
               },
             },
           },
-        } as unknown as NexisClawConfig,
+        } as unknown as GreenchClawConfig,
         ctx: {
           Provider: "discord",
           From: "discord:channel:C1",
@@ -258,7 +258,7 @@ describe("group runtime loading", () => {
               },
             },
           },
-        } as unknown as NexisClawConfig,
+        } as unknown as GreenchClawConfig,
         ctx: {
           Provider: "discord",
           From: "discord:channel:C1",

@@ -1,6 +1,6 @@
 import { normalizeChatChannelId } from "../channels/ids.js";
 import { listRouteBindings } from "../config/bindings.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 import { resolveAgentRoute } from "./resolve-route.js";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId, normalizeAgentId } from "./session-key.js";
@@ -24,7 +24,7 @@ function normalizeRouteBindingChannelKey(raw?: string | null): string {
   return normalizeLowercaseStringOrEmpty(raw);
 }
 
-function listConfiguredChannelIds(cfg: NexisClawConfig): string[] {
+function listConfiguredChannelIds(cfg: GreenchClawConfig): string[] {
   if (!hasRecord(cfg.channels)) {
     return [];
   }
@@ -40,7 +40,7 @@ function listConfiguredChannelIds(cfg: NexisClawConfig): string[] {
     .toSorted();
 }
 
-function listConfiguredChannelAccountIds(cfg: NexisClawConfig, channelId: string): string[] {
+function listConfiguredChannelAccountIds(cfg: GreenchClawConfig, channelId: string): string[] {
   if (!hasRecord(cfg.channels)) {
     return [];
   }
@@ -68,7 +68,7 @@ function addTarget(byAgent: Map<string, Set<string>>, agentId: string, channel: 
   byAgent.set(normalizedAgentId, channels);
 }
 
-export function collectChannelRouteTargets(cfg: NexisClawConfig): ChannelRouteTarget[] {
+export function collectChannelRouteTargets(cfg: GreenchClawConfig): ChannelRouteTarget[] {
   const byAgent = new Map<string, Set<string>>();
 
   for (const binding of listRouteBindings(cfg)) {

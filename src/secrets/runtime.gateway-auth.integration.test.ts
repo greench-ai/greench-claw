@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { getRuntimeConfig, writeConfigFile } from "../config/config.js";
 import { withTempHome } from "../config/home-env.test-harness.js";
 import { withEnvAsync } from "../test-utils/env.js";
@@ -36,8 +36,8 @@ describe("secrets runtime snapshot gateway-auth integration", () => {
   it("fails fast at startup when gateway auth SecretRef is active and unresolved", async () => {
     await withEnvAsync(
       {
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-        NEXISCLAW_VERSION: undefined,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+        GREENCHCLAW_VERSION: undefined,
       },
       async () => {
         await expect(
@@ -55,7 +55,7 @@ describe("secrets runtime snapshot gateway-auth integration", () => {
               },
             }),
             env: {},
-            agentDirs: ["/tmp/NexisClaw-agent-main"],
+            agentDirs: ["/tmp/GreenchClaw-agent-main"],
             loadablePluginOrigins: EMPTY_LOADABLE_PLUGIN_ORIGINS,
             loadAuthStore: () => ({ version: 1, profiles: {} }),
           }),
@@ -67,7 +67,7 @@ describe("secrets runtime snapshot gateway-auth integration", () => {
   it(
     "keeps last-known-good runtime snapshot active when reload introduces unresolved active gateway auth refs",
     async () => {
-      await withTempHome("NexisClaw-secrets-runtime-gateway-auth-reload-lkg-", async (home) => {
+      await withTempHome("GreenchClaw-secrets-runtime-gateway-auth-reload-lkg-", async (home) => {
         const initialTokenRef = {
           source: "env",
           provider: "default",
@@ -91,7 +91,7 @@ describe("secrets runtime snapshot gateway-auth integration", () => {
           env: {
             GATEWAY_AUTH_TOKEN: "gateway-runtime-token",
           },
-          agentDirs: ["/tmp/NexisClaw-agent-main"],
+          agentDirs: ["/tmp/GreenchClaw-agent-main"],
           loadablePluginOrigins: EMPTY_LOADABLE_PLUGIN_ORIGINS,
           loadAuthStore: () => loadAuthStoreWithProfiles({}),
         });
@@ -119,8 +119,8 @@ describe("secrets runtime snapshot gateway-auth integration", () => {
         expect(activeAfterFailure.sourceConfig.gateway?.auth?.token).toEqual(initialTokenRef);
 
         const persistedConfig = JSON.parse(
-          await fs.readFile(path.join(home, ".NexisClaw", "NexisClaw.json"), "utf8"),
-        ) as NexisClawConfig;
+          await fs.readFile(path.join(home, ".GreenchClaw", "GreenchClaw.json"), "utf8"),
+        ) as GreenchClawConfig;
         expect(persistedConfig.gateway?.auth?.token).toEqual(missingTokenRef);
       });
     },

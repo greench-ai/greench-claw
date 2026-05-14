@@ -16,7 +16,7 @@ import {
 } from "../../config/redact-snapshot.js";
 import { loadGatewayRuntimeConfigSchema } from "../../config/runtime-schema.js";
 import { lookupConfigSchema, type ConfigSchemaResponse } from "../../config/schema.js";
-import type { ConfigValidationIssue, NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { ConfigValidationIssue, GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import {
   prepareSecretsRuntimeSnapshot,
@@ -187,7 +187,7 @@ function parseValidateConfigFromRawOrRespond(
   requestName: string,
   snapshot: Awaited<ReturnType<typeof readConfigFileSnapshot>>,
   respond: RespondFn,
-): { config: NexisClawConfig; schema: ConfigSchemaResponse } | null {
+): { config: GreenchClawConfig; schema: ConfigSchemaResponse } | null {
   const rawValue = parseRawConfigOrRespond(params, requestName, respond);
   if (!rawValue) {
     return null;
@@ -236,7 +236,7 @@ function summarizeConfigValidationIssues(issues: ReadonlyArray<ConfigValidationI
 }
 
 async function ensureResolvableSecretRefsOrRespond(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   respond: RespondFn;
 }): Promise<PreparedSecretsRuntimeSnapshot | null> {
   try {
@@ -260,7 +260,7 @@ async function ensureResolvableSecretRefsOrRespond(params: {
 
 function loadSchemaWithPlugins(): ConfigSchemaResponse {
   // Note: We can't easily cache this, as there are no callback that can invalidate
-  // our cache. However, getRuntimeConfig() and loadNexisClawPlugins() (called inside
+  // our cache. However, getRuntimeConfig() and loadGreenchClawPlugins() (called inside
   // loadGatewayRuntimeConfigSchema) already cache their results, and buildConfigSchema()
   // is just a cheap transformation.
   return loadGatewayRuntimeConfigSchema();

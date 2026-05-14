@@ -1,4 +1,4 @@
-import { mockPinnedHostnameResolution } from "NexisClaw/plugin-sdk/test-env";
+import { mockPinnedHostnameResolution } from "GreenchClaw/plugin-sdk/test-env";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { isValidXaiTtsVoice, XAI_BASE_URL, XAI_TTS_VOICES, xaiTTS } from "./tts.js";
 

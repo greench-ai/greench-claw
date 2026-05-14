@@ -15,14 +15,14 @@ afterEach(() => {
 });
 
 function makeTempDir() {
-  return makeTrackedTempDir("NexisClaw-plugin-registry-snapshot", tempDirs);
+  return makeTrackedTempDir("GreenchClaw-plugin-registry-snapshot", tempDirs);
 }
 
 function createHermeticEnv(rootDir: string): NodeJS.ProcessEnv {
   return {
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: path.join(rootDir, "bundled"),
-    NEXISCLAW_STATE_DIR: path.join(rootDir, "state"),
-    NEXISCLAW_VERSION: "2026.4.26",
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: path.join(rootDir, "bundled"),
+    GREENCHCLAW_STATE_DIR: path.join(rootDir, "state"),
+    GREENCHCLAW_VERSION: "2026.4.26",
     VITEST: "true",
   };
 }
@@ -36,7 +36,7 @@ function writePackagePlugin(rootDir: string) {
   fs.mkdirSync(rootDir, { recursive: true });
   fs.writeFileSync(path.join(rootDir, "index.ts"), "export default { register() {} };\n", "utf8");
   fs.writeFileSync(
-    path.join(rootDir, "NexisClaw.plugin.json"),
+    path.join(rootDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: "demo",
       name: "Demo",
@@ -108,13 +108,13 @@ describe("loadPluginRegistrySnapshotWithMetadata", () => {
     const stateDir = path.join(tempRoot, "state");
     const env = {
       ...createHermeticEnv(tempRoot),
-      NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-      NEXISCLAW_STATE_DIR: stateDir,
+      GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      GREENCHCLAW_STATE_DIR: stateDir,
     };
     const config = {};
     const whatsappDir = writeManagedNpmPlugin({
       stateDir,
-      packageName: "@NexisClaw/whatsapp",
+      packageName: "@GreenchClaw/whatsapp",
       pluginId: "whatsapp",
       version: "2026.5.2",
     });
@@ -137,12 +137,12 @@ describe("loadPluginRegistrySnapshotWithMetadata", () => {
     expectDiagnosticsContainCode(result.diagnostics, "persisted-registry-stale-source");
     expect(result.snapshot.installRecords.whatsapp).toEqual({
       source: "npm",
-      spec: "@NexisClaw/whatsapp@2026.5.2",
+      spec: "@GreenchClaw/whatsapp@2026.5.2",
       installPath: whatsappDir,
       version: "2026.5.2",
-      resolvedName: "@NexisClaw/whatsapp",
+      resolvedName: "@GreenchClaw/whatsapp",
       resolvedVersion: "2026.5.2",
-      resolvedSpec: "@NexisClaw/whatsapp@2026.5.2",
+      resolvedSpec: "@GreenchClaw/whatsapp@2026.5.2",
     });
     const whatsappPlugin = requirePluginRecord(result.snapshot.plugins, "whatsapp");
     expect(whatsappPlugin.origin).toBe("global");
@@ -152,7 +152,7 @@ describe("loadPluginRegistrySnapshotWithMetadata", () => {
     const tempRoot = makeTempDir();
     const rootDir = path.join(tempRoot, "workspace");
     const stateDir = path.join(tempRoot, "state");
-    const env = { ...createHermeticEnv(tempRoot), NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1" };
+    const env = { ...createHermeticEnv(tempRoot), GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1" };
     const config = {
       plugins: {
         load: { paths: [rootDir] },
@@ -176,7 +176,7 @@ describe("loadPluginRegistrySnapshotWithMetadata", () => {
     const tempRoot = makeTempDir();
     const rootDir = path.join(tempRoot, "workspace");
     const stateDir = path.join(tempRoot, "state");
-    const env = { ...createHermeticEnv(tempRoot), NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1" };
+    const env = { ...createHermeticEnv(tempRoot), GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1" };
     const config = {
       plugins: {
         load: { paths: [rootDir] },
@@ -189,7 +189,7 @@ describe("loadPluginRegistrySnapshotWithMetadata", () => {
       throw new Error("expected package plugin index record with file signatures");
     }
     expect(record.manifestFile.size).toBe(
-      fs.statSync(path.join(rootDir, "NexisClaw.plugin.json")).size,
+      fs.statSync(path.join(rootDir, "GreenchClaw.plugin.json")).size,
     );
     expect(record.packageJson.fileSignature.size).toBe(
       fs.statSync(path.join(rootDir, "package.json")).size,
@@ -210,7 +210,7 @@ describe("loadPluginRegistrySnapshotWithMetadata", () => {
     const tempRoot = makeTempDir();
     const rootDir = path.join(tempRoot, "workspace");
     const stateDir = path.join(tempRoot, "state");
-    const env = { ...createHermeticEnv(tempRoot), NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1" };
+    const env = { ...createHermeticEnv(tempRoot), GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1" };
     const config = {
       plugins: {
         load: { paths: [rootDir] },
@@ -221,7 +221,7 @@ describe("loadPluginRegistrySnapshotWithMetadata", () => {
     writePersistedInstalledPluginIndexSync(index, { stateDir });
 
     replaceFilePreservingSizeAndMtime(
-      path.join(rootDir, "NexisClaw.plugin.json"),
+      path.join(rootDir, "GreenchClaw.plugin.json"),
       JSON.stringify({
         id: "demo",
         name: "Demo",
@@ -244,7 +244,7 @@ describe("loadPluginRegistrySnapshotWithMetadata", () => {
     const tempRoot = makeTempDir();
     const rootDir = path.join(tempRoot, "workspace");
     const stateDir = path.join(tempRoot, "state");
-    const env = { ...createHermeticEnv(tempRoot), NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1" };
+    const env = { ...createHermeticEnv(tempRoot), GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1" };
     const config = {
       plugins: {
         load: { paths: [rootDir] },
@@ -273,7 +273,7 @@ describe("loadPluginRegistrySnapshotWithMetadata", () => {
     const tempRoot = makeTempDir();
     const rootDir = path.join(tempRoot, "workspace");
     const stateDir = path.join(tempRoot, "state");
-    const env = { ...createHermeticEnv(tempRoot), NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1" };
+    const env = { ...createHermeticEnv(tempRoot), GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1" };
     const config = {
       plugins: {
         load: { paths: [rootDir] },
@@ -323,8 +323,8 @@ describe("loadPluginRegistrySnapshotWithMetadata", () => {
     const stateDir = path.join(tempRoot, "state");
     const env = {
       ...createHermeticEnv(tempRoot),
-      NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-      NEXISCLAW_STATE_DIR: stateDir,
+      GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+      GREENCHCLAW_STATE_DIR: stateDir,
     };
     const config = {};
     const ghostDir = path.join(tempRoot, "extensions", "lossless-claw");
@@ -363,7 +363,7 @@ describe("loadPluginRegistrySnapshotWithMetadata", () => {
   it("keeps persisted registry when a non-plugin diagnostic source path still does not exist", () => {
     const tempRoot = makeTempDir();
     const stateDir = path.join(tempRoot, "state");
-    const env = { ...createHermeticEnv(tempRoot), NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1" };
+    const env = { ...createHermeticEnv(tempRoot), GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1" };
     const config = {};
     const missingConfiguredPath = path.join(tempRoot, "missing-configured-plugin");
     const index: InstalledPluginIndex = {

@@ -1,7 +1,7 @@
 import type { messagingApi } from "@line/bot-sdk";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveSendableOutboundReplyParts } from "NexisClaw/plugin-sdk/reply-payload";
-import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveSendableOutboundReplyParts } from "GreenchClaw/plugin-sdk/reply-payload";
+import type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-runtime";
 import type { FlexContainer } from "./flex-templates.js";
 import type { ProcessedLineMessage } from "./markdown-to-line.js";
 import { buildLineQuickReplyFallbackText } from "./quick-reply-fallback.js";
@@ -19,7 +19,7 @@ export type LineAutoReplyDeps = {
   pushMessagesLine: (
     to: string,
     messages: messagingApi.Message[],
-    opts: { cfg: NexisClawConfig; accountId?: string },
+    opts: { cfg: GreenchClawConfig; accountId?: string },
   ) => Promise<unknown>;
   createFlexMessage: (altText: string, contents: FlexContainer) => messagingApi.FlexMessage;
   createImageMessage: (
@@ -48,7 +48,7 @@ export async function deliverLineAutoReply(params: {
   replyToken?: string | null;
   replyTokenUsed: boolean;
   accountId?: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   textLimit: number;
   deps: LineAutoReplyDeps;
 }): Promise<{ replyTokenUsed: boolean }> {

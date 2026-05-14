@@ -1,5 +1,5 @@
-import { logDebug } from "NexisClaw/plugin-sdk/logging-core";
-import { logVerbose, shouldLogVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { logDebug } from "GreenchClaw/plugin-sdk/logging-core";
+import { logVerbose, shouldLogVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import type { DiscordChannelConfigResolved } from "./allow-list.js";
 
 export function logDiscordPreflightChannelConfig(params: {

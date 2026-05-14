@@ -1,8 +1,8 @@
-import { buildChannelTurnContext } from "NexisClaw/plugin-sdk/channel-inbound";
+import { buildChannelTurnContext } from "GreenchClaw/plugin-sdk/channel-inbound";
 import type { BuildTelegramMessageContextParams, TelegramMediaRef } from "./bot-message-context.js";
 
 export const baseTelegramMessageContextConfig = {
-  agents: { defaults: { model: "anthropic/claude-opus-4-5", workspace: "/tmp/NexisClaw" } },
+  agents: { defaults: { model: "anthropic/claude-opus-4-5", workspace: "/tmp/GreenchClaw" } },
   channels: { telegram: { dmPolicy: "open", allowFrom: ["*"] } },
   messages: { groupChat: { mentionPatterns: [] } },
 } as never;
@@ -31,7 +31,7 @@ const telegramMessageContextSessionRuntimeForTest = {
   resolveInboundLastRouteSessionKey: ({ route, sessionKey }) =>
     route.lastRoutePolicy === "main" ? route.mainSessionKey : sessionKey,
   resolvePinnedMainDmOwnerFromAllowlist: () => null,
-  resolveStorePath: () => "/tmp/NexisClaw/session-store.json",
+  resolveStorePath: () => "/tmp/GreenchClaw/session-store.json",
 } satisfies NonNullable<BuildTelegramMessageContextParams["sessionRuntime"]>;
 
 export async function buildTelegramMessageContextForTest(

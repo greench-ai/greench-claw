@@ -1,17 +1,17 @@
 ---
 summary: "Migration hub: cross-system imports, machine-to-machine moves, and plugin upgrades"
 read_when:
-  - You are moving NexisClaw to a new laptop or server
+  - You are moving GreenchClaw to a new laptop or server
   - You are coming from another agent system and want to keep state
   - You are upgrading an in-place plugin
 title: "Migration guide"
 ---
 
-NexisClaw supports three migration paths: importing from another agent system, moving an existing install to a new machine, and upgrading a plugin in place.
+GreenchClaw supports three migration paths: importing from another agent system, moving an existing install to a new machine, and upgrading a plugin in place.
 
 ## Import from another agent system
 
-Use the bundled migration providers to bring instructions, MCP servers, skills, model config, and (opt-in) API keys into NexisClaw. Plans are previewed before any change, secrets are redacted in reports, and apply is backed by a verified backup.
+Use the bundled migration providers to bring instructions, MCP servers, skills, model config, and (opt-in) API keys into GreenchClaw. Plans are previewed before any change, secrets are redacted in reports, and apply is backed by a verified backup.
 
 <CardGroup cols={2}>
   <Card title="Migrating from Claude" href="/install/migrating-claude" icon="brain">
@@ -22,20 +22,20 @@ Use the bundled migration providers to bring instructions, MCP servers, skills, 
   </Card>
 </CardGroup>
 
-The CLI entry point is [`NexisClaw migrate`](/cli/migrate). Onboarding can also offer migration when it detects a known source (`NexisClaw onboard --flow import`).
+The CLI entry point is [`GreenchClaw migrate`](/cli/migrate). Onboarding can also offer migration when it detects a known source (`GreenchClaw onboard --flow import`).
 
-## Move NexisClaw to a new machine
+## Move GreenchClaw to a new machine
 
-Copy the **state directory** (`~/.NexisClaw/` by default) and your **workspace** to preserve:
+Copy the **state directory** (`~/.GreenchClaw/` by default) and your **workspace** to preserve:
 
-- **Config** — `NexisClaw.json` and all gateway settings.
+- **Config** — `GreenchClaw.json` and all gateway settings.
 - **Auth** — per-agent `auth-profiles.json` (API keys plus OAuth), plus any channel or provider state under `credentials/`.
 - **Sessions** — conversation history and agent state.
 - **Channel state** — WhatsApp login, Telegram session, and similar.
 - **Workspace files** — `MEMORY.md`, `USER.md`, skills, and prompts.
 
 <Tip>
-Run `NexisClaw status` on the old machine to confirm your state directory path. Custom profiles use `~/.NexisClaw-<profile>/` or a path set via `NEXISCLAW_STATE_DIR`.
+Run `GreenchClaw status` on the old machine to confirm your state directory path. Custom profiles use `~/.GreenchClaw-<profile>/` or a path set via `GREENCHCLAW_STATE_DIR`.
 </Tip>
 
 ### Migration steps
@@ -45,17 +45,17 @@ Run `NexisClaw status` on the old machine to confirm your state directory path. 
     On the **old** machine, stop the gateway so files are not changing mid-copy, then archive:
 
     ```bash
-    NexisClaw gateway stop
+    GreenchClaw gateway stop
     cd ~
-    tar -czf NexisClaw-state.tgz .NexisClaw
+    tar -czf GreenchClaw-state.tgz .GreenchClaw
     ```
 
-    If you use multiple profiles (for example `~/.NexisClaw-work`), archive each separately.
+    If you use multiple profiles (for example `~/.GreenchClaw-work`), archive each separately.
 
   </Step>
 
-  <Step title="Install NexisClaw on the new machine">
-    [Install](/install) the CLI (and Node if needed) on the new machine. It is fine if onboarding creates a fresh `~/.NexisClaw/`. You will overwrite it next.
+  <Step title="Install GreenchClaw on the new machine">
+    [Install](/install) the CLI (and Node if needed) on the new machine. It is fine if onboarding creates a fresh `~/.GreenchClaw/`. You will overwrite it next.
   </Step>
 
   <Step title="Copy state directory and workspace">
@@ -63,7 +63,7 @@ Run `NexisClaw status` on the old machine to confirm your state directory path. 
 
     ```bash
     cd ~
-    tar -xzf NexisClaw-state.tgz
+    tar -xzf GreenchClaw-state.tgz
     ```
 
     Ensure hidden directories were included and file ownership matches the user that will run the gateway.
@@ -74,9 +74,9 @@ Run `NexisClaw status` on the old machine to confirm your state directory path. 
     On the new machine, run [Doctor](/gateway/doctor) to apply config migrations and repair services:
 
     ```bash
-    NexisClaw doctor
-    NexisClaw gateway restart
-    NexisClaw status
+    GreenchClaw doctor
+    GreenchClaw gateway restart
+    GreenchClaw status
     ```
 
   </Step>
@@ -85,19 +85,19 @@ Run `NexisClaw status` on the old machine to confirm your state directory path. 
 If Telegram or Discord uses the default env fallback (`TELEGRAM_BOT_TOKEN` or `DISCORD_BOT_TOKEN`), verify the migrated state-dir `.env` contains those keys without printing the secret values:
 
 ```bash
-awk -F= '/^(TELEGRAM_BOT_TOKEN|DISCORD_BOT_TOKEN)=/ { print $1 "=present" }' ~/.NexisClaw/.env
+awk -F= '/^(TELEGRAM_BOT_TOKEN|DISCORD_BOT_TOKEN)=/ { print $1 "=present" }' ~/.GreenchClaw/.env
 ```
 
-`NexisClaw doctor` also warns when an enabled default Telegram or Discord account has no configured token and the matching env variable is unavailable to the doctor process.
+`GreenchClaw doctor` also warns when an enabled default Telegram or Discord account has no configured token and the matching env variable is unavailable to the doctor process.
 
 ### Common pitfalls
 
 <AccordionGroup>
   <Accordion title="Profile or state-dir mismatch">
-    If the old gateway used `--profile` or `NEXISCLAW_STATE_DIR` and the new one does not, channels will appear logged out and sessions will be empty. Launch the gateway with the **same** profile or state-dir you migrated, then rerun `NexisClaw doctor`.
+    If the old gateway used `--profile` or `GREENCHCLAW_STATE_DIR` and the new one does not, channels will appear logged out and sessions will be empty. Launch the gateway with the **same** profile or state-dir you migrated, then rerun `GreenchClaw doctor`.
   </Accordion>
 
-  <Accordion title="Copying only NexisClaw.json">
+  <Accordion title="Copying only GreenchClaw.json">
     The config file alone is not enough. Model auth profiles live under `agents/<agentId>/agent/auth-profiles.json`, and channel and provider state lives under `credentials/`. Always migrate the **entire** state directory.
   </Accordion>
 
@@ -118,7 +118,7 @@ awk -F= '/^(TELEGRAM_BOT_TOKEN|DISCORD_BOT_TOKEN)=/ { print $1 "=present" }' ~/.
 
 On the new machine, confirm:
 
-- [ ] `NexisClaw status` shows the gateway running.
+- [ ] `GreenchClaw status` shows the gateway running.
 - [ ] Channels are still connected (no re-pairing needed).
 - [ ] The dashboard opens and shows existing sessions.
 - [ ] Workspace files (memory, configs) are present.
@@ -131,7 +131,7 @@ In-place plugin upgrades preserve the same plugin id and config keys but may mov
 
 ## Related
 
-- [`NexisClaw migrate`](/cli/migrate): CLI reference for cross-system imports.
+- [`GreenchClaw migrate`](/cli/migrate): CLI reference for cross-system imports.
 - [Install overview](/install): all installation methods.
 - [Doctor](/gateway/doctor): post-migration health check.
-- [Uninstall](/install/uninstall): removing NexisClaw cleanly.
+- [Uninstall](/install/uninstall): removing GreenchClaw cleanly.

@@ -4,9 +4,12 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { PassThrough, Writable } from "node:stream";
 import { createContext, Script } from "node:vm";
-import { validateJsonSchemaValue, type JsonSchemaObject } from "NexisClaw/plugin-sdk/config-schema";
-import type { RealtimeTranscriptionProviderPlugin } from "NexisClaw/plugin-sdk/realtime-transcription";
-import type { RealtimeVoiceProviderPlugin } from "NexisClaw/plugin-sdk/realtime-voice";
+import {
+  validateJsonSchemaValue,
+  type JsonSchemaObject,
+} from "GreenchClaw/plugin-sdk/config-schema";
+import type { RealtimeTranscriptionProviderPlugin } from "GreenchClaw/plugin-sdk/realtime-transcription";
+import type { RealtimeVoiceProviderPlugin } from "GreenchClaw/plugin-sdk/realtime-voice";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import plugin, { __testing as googleMeetPluginTesting } from "./index.js";
 import {
@@ -86,8 +89,8 @@ const fetchGuardMocks = vi.hoisted(() => ({
   ),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/ssrf-runtime")>();
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("GreenchClaw/plugin-sdk/ssrf-runtime")>();
   return {
     ...actual,
     fetchWithSsrFGuard: fetchGuardMocks.fetchWithSsrFGuard,
@@ -430,7 +433,7 @@ describe("google-meet plugin", () => {
   });
 
   afterAll(() => {
-    vi.doUnmock("NexisClaw/plugin-sdk/ssrf-runtime");
+    vi.doUnmock("GreenchClaw/plugin-sdk/ssrf-runtime");
     vi.doUnmock("./src/voice-call-gateway.js");
     vi.resetModules();
   });
@@ -446,7 +449,7 @@ describe("google-meet plugin", () => {
     expect(config.chrome).toEqual({
       audioBackend: "blackhole-2ch",
       launch: true,
-      guestName: "NexisClaw Agent",
+      guestName: "GreenchClaw Agent",
       reuseExistingTab: true,
       autoJoin: true,
       joinTimeoutMs: 30000,
@@ -513,7 +516,7 @@ describe("google-meet plugin", () => {
     expect(config.realtime.introMessage).toBe("Say exactly: I'm here and listening.");
     expect(config.realtime.toolPolicy).toBe("safe-read-only");
     expect(config.realtime.providers).toEqual({});
-    expect(config.realtime.instructions).toContain("NexisClaw_agent_consult");
+    expect(config.realtime.instructions).toContain("GreenchClaw_agent_consult");
     expect(config.oauth).toEqual({});
     expect(config.auth).toEqual({ provider: "google-oauth" });
 
@@ -614,7 +617,7 @@ describe("google-meet plugin", () => {
 
   it("declares advanced config metadata in the plugin entry and manifest", () => {
     const manifest = JSON.parse(
-      readFileSync(new URL("./NexisClaw.plugin.json", import.meta.url), "utf8"),
+      readFileSync(new URL("./GreenchClaw.plugin.json", import.meta.url), "utf8"),
     ) as {
       uiHints?: Record<string, unknown>;
       configSchema?: GoogleMeetManifestConfigSchema;
@@ -756,13 +759,13 @@ describe("google-meet plugin", () => {
     const config = resolveGoogleMeetConfigWithEnv(
       {},
       {
-        NEXISCLAW_GOOGLE_MEET_CLIENT_ID: "client-id",
+        GREENCHCLAW_GOOGLE_MEET_CLIENT_ID: "client-id",
         GOOGLE_MEET_CLIENT_SECRET: "client-secret",
-        NEXISCLAW_GOOGLE_MEET_REFRESH_TOKEN: "refresh-token",
+        GREENCHCLAW_GOOGLE_MEET_REFRESH_TOKEN: "refresh-token",
         GOOGLE_MEET_ACCESS_TOKEN: "access-token",
-        NEXISCLAW_GOOGLE_MEET_ACCESS_TOKEN_EXPIRES_AT: "123456",
+        GREENCHCLAW_GOOGLE_MEET_ACCESS_TOKEN_EXPIRES_AT: "123456",
         GOOGLE_MEET_DEFAULT_MEETING: "https://meet.google.com/abc-defg-hij",
-        NEXISCLAW_GOOGLE_MEET_PREVIEW_ACK: "true",
+        GREENCHCLAW_GOOGLE_MEET_PREVIEW_ACK: "true",
       },
     );
     expect(config.defaults).toEqual({ meeting: "https://meet.google.com/abc-defg-hij" });
@@ -916,7 +919,7 @@ describe("google-meet plugin", () => {
       type: "string",
       enum: ["agent", "bidi", "transcribe"],
       description:
-        "Join mode. agent uses realtime transcription, the configured NexisClaw agent, and regular TTS. bidi uses the realtime voice model directly. transcribe joins observe-only.",
+        "Join mode. agent uses realtime transcription, the configured GreenchClaw agent, and regular TTS. bidi uses the realtime voice model directly. transcribe joins observe-only.",
     });
   });
 
@@ -1499,8 +1502,8 @@ describe("google-meet plugin", () => {
     try {
       const { tools } = setup({
         chrome: {
-          audioInputCommand: ["NexisClaw-audio-bridge", "capture"],
-          audioOutputCommand: ["NexisClaw-audio-bridge", "play"],
+          audioInputCommand: ["GreenchClaw-audio-bridge", "capture"],
+          audioOutputCommand: ["GreenchClaw-audio-bridge", "play"],
         },
       });
       const tool = tools[0] as {
@@ -1585,7 +1588,7 @@ describe("google-meet plugin", () => {
 
   it("writes export bundles through the tool", async () => {
     stubMeetArtifactsApi();
-    const tempDir = mkdtempSync(path.join(tmpdir(), "NexisClaw-google-meet-tool-export-"));
+    const tempDir = mkdtempSync(path.join(tmpdir(), "GreenchClaw-google-meet-tool-export-"));
     const { tools } = setup();
     const tool = tools[0] as {
       execute: (
@@ -1644,7 +1647,7 @@ describe("google-meet plugin", () => {
 
   it("dry-runs export bundles through the tool", async () => {
     stubMeetArtifactsApi();
-    const parentDir = mkdtempSync(path.join(tmpdir(), "NexisClaw-google-meet-tool-dry-run-"));
+    const parentDir = mkdtempSync(path.join(tmpdir(), "GreenchClaw-google-meet-tool-dry-run-"));
     const outputDir = path.join(parentDir, "bundle");
     const { tools } = setup();
     const tool = tools[0] as {
@@ -2416,7 +2419,7 @@ describe("google-meet plugin", () => {
                 lobbyWaiting: true,
                 manualActionRequired: true,
                 manualActionReason: "meet-admission-required",
-                manualActionMessage: "Admit the NexisClaw browser participant in Google Meet.",
+                manualActionMessage: "Admit the GreenchClaw browser participant in Google Meet.",
                 title: "Meet",
                 url: "https://meet.google.com/abc-defg-hij",
               }),
@@ -2736,12 +2739,12 @@ describe("google-meet plugin", () => {
         allowMicrophone: false,
         autoJoin: false,
         captureCaptions: true,
-        guestName: "NexisClaw Agent",
+        guestName: "GreenchClaw Agent",
       })})`,
     ).runInContext(context) as () => string | Promise<string>;
 
     const first = JSON.parse(await inspect()) as { captionsEnabledAttempted?: boolean };
-    const captionsStateKey = "__NexisClawMeetCaptions";
+    const captionsStateKey = "__GreenchClawMeetCaptions";
     const stateAfterFirst = windowState[captionsStateKey] as {
       enabledAttempted?: boolean;
     };
@@ -2800,7 +2803,7 @@ describe("google-meet plugin", () => {
         allowMicrophone: true,
         autoJoin: false,
         captureCaptions: false,
-        guestName: "NexisClaw Agent",
+        guestName: "GreenchClaw Agent",
       })})`,
     ).runInContext(context) as () => string | Promise<string>;
 
@@ -2855,7 +2858,7 @@ describe("google-meet plugin", () => {
         allowMicrophone: true,
         autoJoin: false,
         captureCaptions: false,
-        guestName: "NexisClaw Agent",
+        guestName: "GreenchClaw Agent",
       })})`,
     ).runInContext(context) as () => string | Promise<string>;
 
@@ -3260,7 +3263,8 @@ describe("google-meet plugin", () => {
                     inCall: false,
                     manualActionRequired: true,
                     manualActionReason: "meet-admission-required",
-                    manualActionMessage: "Admit the NexisClaw browser participant in Google Meet.",
+                    manualActionMessage:
+                      "Admit the GreenchClaw browser participant in Google Meet.",
                     title: "Meet",
                     url: "https://meet.google.com/abc-defg-hij?authuser=me@example.com",
                   }),
@@ -3342,7 +3346,7 @@ describe("google-meet plugin", () => {
               inCall: false,
               manualActionRequired: true,
               manualActionReason: "meet-admission-required",
-              manualActionMessage: "Admit the NexisClaw browser participant in Google Meet.",
+              manualActionMessage: "Admit the GreenchClaw browser participant in Google Meet.",
               title: "Meet",
               url: "https://meet.google.com/abc-defg-hij?authuser=me@example.com",
             }),
@@ -3718,7 +3722,7 @@ describe("google-meet plugin", () => {
           manualActionRequired: true,
           manualActionReason: "google-login-required",
           manualActionMessage:
-            "Sign in to Google in the NexisClaw browser profile, then retry the Meet join.",
+            "Sign in to Google in the GreenchClaw browser profile, then retry the Meet join.",
           title: "Sign in - Google Accounts",
           url: "https://accounts.google.com/signin",
         },
@@ -3830,7 +3834,7 @@ describe("google-meet plugin", () => {
                             manualActionRequired: true,
                             manualActionReason: "google-login-required",
                             manualActionMessage:
-                              "Sign in to Google in the NexisClaw browser profile, then retry the Meet join.",
+                              "Sign in to Google in the GreenchClaw browser profile, then retry the Meet join.",
                             title: "Sign in - Google Accounts",
                             url: "https://accounts.google.com/signin",
                           },
@@ -3916,7 +3920,7 @@ describe("google-meet plugin", () => {
     });
 
     expect(result.details.error).toContain("No connected Google Meet-capable node");
-    expect(result.details.error).toContain("NexisClaw node run");
+    expect(result.details.error).toContain("GreenchClaw node run");
   });
 
   it("requires chromeNode.node when multiple capable nodes are connected", async () => {
@@ -4293,7 +4297,7 @@ describe("google-meet plugin", () => {
     callbacks?.onToolCall?.({
       itemId: "item-1",
       callId: "tool-call-1",
-      name: "NexisClaw_agent_consult",
+      name: "GreenchClaw_agent_consult",
       args: { question: "What should I say about launch timing?" },
     });
     expect(bridge.submitToolResult).toHaveBeenCalled();
@@ -4302,7 +4306,7 @@ describe("google-meet plugin", () => {
     expect(firstToolResultCall[2]).toStrictEqual({ willContinue: true });
     const progressPayload = requireRecord(firstToolResultCall[1], "tool progress payload");
     expect(progressPayload.status).toBe("working");
-    expect(progressPayload.tool).toBe("NexisClaw_agent_consult");
+    expect(progressPayload.tool).toBe("GreenchClaw_agent_consult");
 
     expect(spawnMock).toHaveBeenNthCalledWith(1, "play-meet", [], {
       stdio: ["pipe", "ignore", "pipe"],
@@ -4354,7 +4358,7 @@ describe("google-meet plugin", () => {
       channels: 1,
     });
     expect(callbacks.autoRespondToAudio).toBe(true);
-    expect(callbacks.tools?.map((tool) => tool.name)).toContain("NexisClaw_agent_consult");
+    expect(callbacks.tools?.map((tool) => tool.name)).toContain("GreenchClaw_agent_consult");
     await vi.waitFor(() => {
       expect(bridge.submitToolResult).toHaveBeenLastCalledWith(
         "tool-call-1",
@@ -4783,7 +4787,7 @@ describe("google-meet plugin", () => {
     callbacks?.onToolCall?.({
       itemId: "item-1",
       callId: "tool-call-1",
-      name: "NexisClaw_agent_consult",
+      name: "GreenchClaw_agent_consult",
       args: { question: "What should I say?" },
     });
     expect(bridge.submitToolResult).toHaveBeenCalled();
@@ -4792,7 +4796,7 @@ describe("google-meet plugin", () => {
     expect(firstToolResultCall[2]).toStrictEqual({ willContinue: true });
     const progressPayload = requireRecord(firstToolResultCall[1], "node tool progress payload");
     expect(progressPayload.status).toBe("working");
-    expect(progressPayload.tool).toBe("NexisClaw_agent_consult");
+    expect(progressPayload.tool).toBe("GreenchClaw_agent_consult");
 
     await vi.waitFor(() => {
       expect(sendAudio).toHaveBeenCalledWith(Buffer.from([9, 8, 7]));
@@ -4839,7 +4843,7 @@ describe("google-meet plugin", () => {
       channels: 1,
     });
     expect(callbacks.autoRespondToAudio).toBe(true);
-    expect(callbacks.tools?.map((tool) => tool.name)).toContain("NexisClaw_agent_consult");
+    expect(callbacks.tools?.map((tool) => tool.name)).toContain("GreenchClaw_agent_consult");
     expect(handle.type).toBe("node-command-pair");
     expect(handle.providerId).toBe("openai");
     expect(handle.nodeId).toBe("node-1");

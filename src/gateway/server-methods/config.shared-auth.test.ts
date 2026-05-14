@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { RestartSentinelPayload } from "../../infra/restart-sentinel.js";
 import {
   createConfigHandlerHarness,
@@ -27,7 +27,7 @@ vi.mock("../../config/config.js", async () => {
     await vi.importActual<typeof import("../../config/config.js")>("../../config/config.js");
   return {
     ...actual,
-    createConfigIO: () => ({ configPath: "/tmp/NexisClaw.json" }),
+    createConfigIO: () => ({ configPath: "/tmp/GreenchClaw.json" }),
     readConfigFileSnapshotForWrite: readConfigFileSnapshotForWriteMock,
     validateConfigObjectWithPlugins: validateConfigObjectWithPluginsMock,
     writeConfigFile: writeConfigFileMock,
@@ -66,12 +66,12 @@ afterEach(() => {
 });
 
 beforeEach(() => {
-  validateConfigObjectWithPluginsMock.mockImplementation((config: NexisClawConfig) => ({
+  validateConfigObjectWithPluginsMock.mockImplementation((config: GreenchClawConfig) => ({
     ok: true,
     config,
   }));
   prepareSecretsRuntimeSnapshotMock.mockImplementation(
-    async ({ config }: { config: NexisClawConfig }) => ({
+    async ({ config }: { config: GreenchClawConfig }) => ({
       config,
     }),
   );
@@ -80,7 +80,7 @@ beforeEach(() => {
 
 describe("config shared auth disconnects", () => {
   it("does not disconnect shared-auth clients for config.set auth writes without restart", async () => {
-    const prevConfig: NexisClawConfig = {
+    const prevConfig: GreenchClawConfig = {
       gateway: {
         auth: {
           mode: "token",
@@ -88,7 +88,7 @@ describe("config shared auth disconnects", () => {
         },
       },
     };
-    const nextConfig: NexisClawConfig = {
+    const nextConfig: GreenchClawConfig = {
       gateway: {
         auth: {
           mode: "token",
@@ -115,7 +115,7 @@ describe("config shared auth disconnects", () => {
   });
 
   it("lets the config reloader own hybrid-mode auth restarts", async () => {
-    const prevConfig: NexisClawConfig = {
+    const prevConfig: GreenchClawConfig = {
       gateway: {
         auth: {
           mode: "token",
@@ -142,7 +142,7 @@ describe("config shared auth disconnects", () => {
   });
 
   it("does not disconnect shared-auth clients when config.patch changes only inactive password auth", async () => {
-    const prevConfig: NexisClawConfig = {
+    const prevConfig: GreenchClawConfig = {
       gateway: {
         auth: {
           mode: "token",
@@ -169,7 +169,7 @@ describe("config shared auth disconnects", () => {
   });
 
   it("disconnects gateway-auth clients when active trusted-proxy policy changes", async () => {
-    const prevConfig: NexisClawConfig = {
+    const prevConfig: GreenchClawConfig = {
       gateway: {
         auth: {
           mode: "trusted-proxy",
@@ -209,7 +209,7 @@ describe("config shared auth disconnects", () => {
   });
 
   it("disconnects gateway-auth clients when trusted-proxy source list changes", async () => {
-    const prevConfig: NexisClawConfig = {
+    const prevConfig: GreenchClawConfig = {
       gateway: {
         auth: {
           mode: "trusted-proxy",
@@ -243,7 +243,7 @@ describe("config shared auth disconnects", () => {
   });
 
   it("does not disconnect gateway-auth clients when trusted-proxy lists are reordered", async () => {
-    const prevConfig: NexisClawConfig = {
+    const prevConfig: GreenchClawConfig = {
       gateway: {
         auth: {
           mode: "trusted-proxy",
@@ -286,7 +286,7 @@ describe("config shared auth disconnects", () => {
   });
 
   it("still schedules a direct restart for hot mode when the reloader cannot apply the change", async () => {
-    const prevConfig: NexisClawConfig = {
+    const prevConfig: GreenchClawConfig = {
       gateway: {
         reload: {
           mode: "hot",
@@ -311,7 +311,7 @@ describe("config shared auth disconnects", () => {
   });
 
   it("does not add an agent continuation from generic control-plane sessionKey params", async () => {
-    const prevConfig: NexisClawConfig = {
+    const prevConfig: GreenchClawConfig = {
       gateway: {
         reload: {
           mode: "hot",

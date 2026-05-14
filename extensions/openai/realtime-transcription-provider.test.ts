@@ -62,12 +62,12 @@ vi.mock("ws", () => ({
   default: FakeWebSocket,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-auth", () => ({
+vi.mock("GreenchClaw/plugin-sdk/provider-auth", () => ({
   isProviderAuthProfileConfigured: providerAuthMocks.isProviderAuthProfileConfigured,
   resolveProviderAuthProfileApiKey: providerAuthMocks.resolveProviderAuthProfileApiKey,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard: ssrfMocks.fetchWithSsrFGuard,
 }));
 
@@ -144,7 +144,7 @@ describe("buildOpenAIRealtimeTranscriptionProvider", () => {
           openai: {
             language: "en",
             model: "gpt-4o-transcribe",
-            prompt: "expect NexisClaw product names",
+            prompt: "expect GreenchClaw product names",
             silenceDurationMs: 900,
             vadThreshold: 0.45,
           },
@@ -155,7 +155,7 @@ describe("buildOpenAIRealtimeTranscriptionProvider", () => {
     expect(resolved).toEqual({
       language: "en",
       model: "gpt-4o-transcribe",
-      prompt: "expect NexisClaw product names",
+      prompt: "expect GreenchClaw product names",
       silenceDurationMs: 900,
       vadThreshold: 0.45,
     });
@@ -280,7 +280,7 @@ describe("buildOpenAIRealtimeTranscriptionProvider", () => {
         apiKey: "sk-test", // pragma: allowlist secret
         language: "en",
         model: "gpt-4o-transcribe",
-        prompt: "expect NexisClaw product names",
+        prompt: "expect GreenchClaw product names",
         silenceDurationMs: 900,
         vadThreshold: 0.45,
       },
@@ -305,7 +305,7 @@ describe("buildOpenAIRealtimeTranscriptionProvider", () => {
               transcription: {
                 model: "gpt-4o-transcribe",
                 language: "en",
-                prompt: "expect NexisClaw product names",
+                prompt: "expect GreenchClaw product names",
               },
               turn_detection: {
                 type: "server_vad",
@@ -334,7 +334,7 @@ describe("buildOpenAIRealtimeTranscriptionProvider", () => {
               transcription: {
                 model: "gpt-4o-transcribe",
                 language: "en",
-                prompt: "expect NexisClaw product names",
+                prompt: "expect GreenchClaw product names",
               },
               turn_detection: {
                 type: "server_vad",

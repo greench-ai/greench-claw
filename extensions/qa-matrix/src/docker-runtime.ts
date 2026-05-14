@@ -1,6 +1,6 @@
 import { createServer } from "node:net";
-import { runExec } from "NexisClaw/plugin-sdk/process-runtime";
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { runExec } from "GreenchClaw/plugin-sdk/process-runtime";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 
 const DEFAULT_DOCKER_COMMAND_TIMEOUT_MS = 120_000;
 

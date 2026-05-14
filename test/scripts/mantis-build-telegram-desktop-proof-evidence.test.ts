@@ -87,11 +87,11 @@ describe("scripts/mantis/build-telegram-desktop-proof-evidence", () => {
       manifest,
       marker: "<!-- mantis-telegram-desktop-proof -->",
       rawBase:
-        "https://raw.githubusercontent.com/NexisClaw/NexisClaw/qa-artifacts/mantis/telegram-desktop/pr-1/run-1",
+        "https://raw.githubusercontent.com/GreenchClaw/GreenchClaw/qa-artifacts/mantis/telegram-desktop/pr-1/run-1",
       requestSource: "workflow_dispatch",
-      runUrl: "https://github.com/NexisClaw/NexisClaw/actions/runs/1",
+      runUrl: "https://github.com/GreenchClaw/GreenchClaw/actions/runs/1",
       treeUrl:
-        "https://github.com/NexisClaw/NexisClaw/tree/qa-artifacts/mantis/telegram-desktop/pr-1/run-1",
+        "https://github.com/GreenchClaw/GreenchClaw/tree/qa-artifacts/mantis/telegram-desktop/pr-1/run-1",
     });
 
     expect(body).toContain('<th width="50%">Main</th>');

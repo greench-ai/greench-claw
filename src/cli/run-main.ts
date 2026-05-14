@@ -3,11 +3,11 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { resolveStateDir } from "../config/paths.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isTruthyEnvValue, normalizeEnv } from "../infra/env.js";
 import { isMainModule } from "../infra/is-main.js";
 import type { ProxyHandle } from "../infra/net/proxy/proxy-lifecycle.js";
-import { ensureNexisClawCliOnPath } from "../infra/path-env.js";
+import { ensureGreenchClawCliOnPath } from "../infra/path-env.js";
 import { assertSupportedRuntime } from "../infra/runtime-guard.js";
 import type { PluginManifestCommandAliasRegistry } from "../plugins/manifest-command-aliases.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
@@ -60,7 +60,7 @@ const CLI_PROXY_ENV_KEYS = [
 
 function createGatewayCliMainStartupTrace(argv: string[]) {
   const enabled =
-    isTruthyEnvValue(process.env.NEXISCLAW_GATEWAY_STARTUP_TRACE) &&
+    isTruthyEnvValue(process.env.GREENCHCLAW_GATEWAY_STARTUP_TRACE) &&
     argv.slice(2).includes("gateway");
   const started = performance.now();
   let last = started;
@@ -171,7 +171,7 @@ async function tryRunGatewayRunFastPath(
     emitCliBanner(VERSION, { argv });
   }
   const program = new Command();
-  program.name("NexisClaw");
+  program.name("GreenchClaw");
   program.enablePositionalOptions();
   program.option("--no-color", "Disable ANSI colors", false);
   program.exitOverride((err) => {
@@ -238,7 +238,7 @@ function pauseNonTtyStdinForCliExit(): void {
 
 export function resolveMissingPluginCommandMessage(
   pluginId: string,
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
   options?: { registry?: PluginManifestCommandAliasRegistry },
 ): string | null {
   return resolveMissingPluginCommandMessageFromPolicy(
@@ -284,8 +284,8 @@ async function ensureCliEnvProxyDispatcher(): Promise<void> {
 
 function shouldBootstrapCliProxyBeforeFastPath(env: NodeJS.ProcessEnv = process.env): boolean {
   if (
-    isTruthyEnvValue(env.NEXISCLAW_DEBUG_PROXY_ENABLED) ||
-    isTruthyEnvValue(env.NEXISCLAW_DEBUG_PROXY_REQUIRE)
+    isTruthyEnvValue(env.GREENCHCLAW_DEBUG_PROXY_ENABLED) ||
+    isTruthyEnvValue(env.GREENCHCLAW_DEBUG_PROXY_REQUIRE)
   ) {
     return true;
   }
@@ -304,7 +304,7 @@ function isKnownBuiltInCommandRoot(primary: string): boolean {
 
 async function isPluginCliRoot(params: {
   primary: string;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
 }): Promise<boolean | null> {
   try {
     const { resolvePluginCliRootOwnerIds } = await import("../plugins/cli-registry-loader.js");
@@ -319,7 +319,7 @@ async function isPluginCliRoot(params: {
   }
 }
 
-function createAllowlistAgnosticCliLookupConfig(config: NexisClawConfig): NexisClawConfig {
+function createAllowlistAgnosticCliLookupConfig(config: GreenchClawConfig): GreenchClawConfig {
   if (!Array.isArray(config.plugins?.allow) || config.plugins.allow.length === 0) {
     return config;
   }
@@ -334,7 +334,7 @@ function createAllowlistAgnosticCliLookupConfig(config: NexisClawConfig): NexisC
 
 async function resolveCliCommandSurfaceOwner(params: {
   primary: string;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
 }): Promise<string | undefined> {
   const { resolveManifestCliCommandSurfaceOwner } =
     await import("../plugins/manifest-command-aliases.runtime.js");
@@ -362,7 +362,7 @@ async function resolveCliCommandSurfaceOwner(params: {
 
 async function resolveUnownedCliPrimary(params: {
   argv: string[];
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
 }): Promise<string | null> {
   const invocation = resolveCliArgvInvocation(rewriteUpdateFlagArgv(params.argv));
   const { primary } = invocation;
@@ -384,7 +384,7 @@ async function resolveUnownedCliPrimary(params: {
 
 async function resolveUnownedCliPrimaryMessage(params: {
   primary: string;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
 }): Promise<string> {
   const { resolveManifestCommandAliasOwner, resolveManifestToolOwner } =
     await import("../plugins/manifest-command-aliases.runtime.js");
@@ -395,7 +395,7 @@ async function resolveUnownedCliPrimaryMessage(params: {
       resolveToolOwner: resolveManifestToolOwner,
       resolveCliCommandSurfaceOwner: () => cliCommandSurfaceOwner,
     }) ??
-    `Unknown command: NexisClaw ${params.primary}. No built-in command or plugin CLI metadata owns "${params.primary}".`
+    `Unknown command: GreenchClaw ${params.primary}. No built-in command or plugin CLI metadata owns "${params.primary}".`
   );
 }
 
@@ -434,7 +434,7 @@ export async function runCli(argv: string[] = process.argv) {
     applyCliProfileEnv({ profile: parsedProfile.profile });
   }
   const containerTargetName =
-    parsedContainer.container ?? normalizeOptionalString(process.env.NEXISCLAW_CONTAINER) ?? null;
+    parsedContainer.container ?? normalizeOptionalString(process.env.GREENCHCLAW_CONTAINER) ?? null;
   if (containerTargetName && parsedProfile.profile) {
     throw new Error("--container cannot be combined with --profile/--dev");
   }
@@ -459,7 +459,7 @@ export async function runCli(argv: string[] = process.argv) {
   }
   normalizeEnv();
   if (shouldEnsureCliPath(normalizedArgv)) {
-    ensureNexisClawCliOnPath();
+    ensureGreenchClawCliOnPath();
   }
 
   // Enforce the minimum supported runtime before doing any work.
@@ -469,8 +469,8 @@ export async function runCli(argv: string[] = process.argv) {
   // Local Gateway/control-plane commands keep direct loopback access while
   // runtime, provider, plugin, update, and manifest/metadata-owned plugin commands route egress.
   let proxyHandle: ProxyHandle | null = null;
-  let bestEffortConfigPromise: Promise<NexisClawConfig> | null = null;
-  const readBestEffortCliConfig = async (): Promise<NexisClawConfig> => {
+  let bestEffortConfigPromise: Promise<GreenchClawConfig> | null = null;
+  const readBestEffortCliConfig = async (): Promise<GreenchClawConfig> => {
     if (!bestEffortConfigPromise) {
       bestEffortConfigPromise = import("../config/io.js").then(({ readBestEffortConfig }) =>
         readBestEffortConfig(),
@@ -550,7 +550,7 @@ export async function runCli(argv: string[] = process.argv) {
     if (shouldRunBareRootCrestodian) {
       if (!process.stdin.isTTY || !process.stdout.isTTY) {
         console.error(
-          'Crestodian needs an interactive TTY. Use `NexisClaw crestodian --message "status"` for one command.',
+          'Crestodian needs an interactive TTY. Use `GreenchClaw crestodian --message "status"` for one command.',
         );
         process.exitCode = 1;
         return;
@@ -622,7 +622,7 @@ export async function runCli(argv: string[] = process.argv) {
 
     const { createCliProgress } = await import("./progress.js");
     const startupProgress = createCliProgress({
-      label: "Loading NexisClaw CLI…",
+      label: "Loading GreenchClaw CLI…",
       indeterminate: true,
       delayMs: 0,
       fallback: "none",
@@ -674,20 +674,20 @@ export async function runCli(argv: string[] = process.argv) {
         }
         if (isBenignUncaughtExceptionError(error)) {
           console.warn(
-            "[NexisClaw] Non-fatal uncaught exception (continuing):",
+            "[GreenchClaw] Non-fatal uncaught exception (continuing):",
             formatUncaughtError(error),
           );
           return;
         }
         for (const line of formatCliFailureLines({
-          title: "NexisClaw hit an unexpected runtime error.",
+          title: "GreenchClaw hit an unexpected runtime error.",
           error,
           argv: normalizedArgv,
         })) {
           console.error(line);
         }
         for (const message of runFatalErrorHooks({ reason: "uncaught_exception", error })) {
-          console.error("[NexisClaw]", message);
+          console.error("[GreenchClaw]", message);
         }
         restoreTerminalState("uncaught exception", { resumeStdinIfPaused: false });
         process.exit(1);

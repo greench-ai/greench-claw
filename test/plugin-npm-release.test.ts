@@ -1,13 +1,13 @@
 import { mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { bundledPluginFile, bundledPluginRoot } from "NexisClaw/plugin-sdk/test-fixtures";
+import { bundledPluginFile, bundledPluginRoot } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it } from "vitest";
 import { collectClawHubPublishablePluginPackages } from "../scripts/lib/plugin-clawhub-release.ts";
 import {
   collectPublishablePluginPackages,
   collectChangedExtensionIdsFromPaths,
   collectPublishablePluginPackageErrors,
-  NEXISCLAW_PLUGIN_NPM_REPOSITORY_URL,
+  GREENCHCLAW_PLUGIN_NPM_REPOSITORY_URL,
   parsePluginReleaseArgs,
   parsePluginReleaseSelection,
   parsePluginReleaseSelectionMode,
@@ -32,8 +32,8 @@ describe("parsePluginReleaseSelection", () => {
 
   it("dedupes and sorts comma or whitespace separated package names", () => {
     expect(
-      parsePluginReleaseSelection(" @NexisClaw/zalo, @NexisClaw/feishu  @NexisClaw/zalo "),
-    ).toEqual(["@NexisClaw/feishu", "@NexisClaw/zalo"]);
+      parsePluginReleaseSelection(" @GreenchClaw/zalo, @GreenchClaw/feishu  @GreenchClaw/zalo "),
+    ).toEqual(["@GreenchClaw/feishu", "@GreenchClaw/zalo"]);
   });
 });
 
@@ -69,7 +69,7 @@ describe("parsePluginReleaseArgs", () => {
         "--selection-mode",
         "all-publishable",
         "--plugins",
-        "@NexisClaw/zalo",
+        "@GreenchClaw/zalo",
       ]),
     ).toThrowError("`--selection-mode all-publishable` must not be combined with `--plugins`.");
   });
@@ -92,16 +92,16 @@ describe("collectPublishablePluginPackageErrors", () => {
         extensionId: "zalo",
         packageDir: bundledPluginRoot("zalo"),
         packageJson: {
-          name: "@NexisClaw/zalo",
+          name: "@GreenchClaw/zalo",
           version: "2026.3.15",
           repository: {
             type: "git",
-            url: NEXISCLAW_PLUGIN_NPM_REPOSITORY_URL,
+            url: GREENCHCLAW_PLUGIN_NPM_REPOSITORY_URL,
           },
-          NexisClaw: {
+          GreenchClaw: {
             extensions: ["./index.ts"],
             install: {
-              npmSpec: "@NexisClaw/zalo",
+              npmSpec: "@GreenchClaw/zalo",
             },
             release: {
               publishToNpm: true,
@@ -121,7 +121,7 @@ describe("collectPublishablePluginPackageErrors", () => {
           name: "broken",
           version: "latest",
           private: true,
-          NexisClaw: {
+          GreenchClaw: {
             extensions: [""],
             install: {
               npmSpec: "   ",
@@ -133,12 +133,12 @@ describe("collectPublishablePluginPackageErrors", () => {
         },
       }),
     ).toEqual([
-      'package name must start with "@NexisClaw/"; found "broken".',
+      'package name must start with "@GreenchClaw/"; found "broken".',
       "package.json private must not be true.",
-      `package.json repository.url must be "${NEXISCLAW_PLUGIN_NPM_REPOSITORY_URL}" so npm provenance can validate GitHub trusted publishing; found "<missing>".`,
+      `package.json repository.url must be "${GREENCHCLAW_PLUGIN_NPM_REPOSITORY_URL}" so npm provenance can validate GitHub trusted publishing; found "<missing>".`,
       'package.json version must match YYYY.M.D, YYYY.M.D-N, YYYY.M.D-alpha.N, or YYYY.M.D-beta.N; found "latest".',
-      "NexisClaw.extensions must contain only non-empty strings.",
-      "NexisClaw.install.npmSpec must be a non-empty string for publishable plugins.",
+      "GreenchClaw.extensions must contain only non-empty strings.",
+      "GreenchClaw.install.npmSpec must be a non-empty string for publishable plugins.",
     ]);
   });
 
@@ -148,12 +148,12 @@ describe("collectPublishablePluginPackageErrors", () => {
         extensionId: "twitch",
         packageDir: bundledPluginRoot("twitch"),
         packageJson: {
-          name: "@NexisClaw/twitch",
+          name: "@GreenchClaw/twitch",
           version: "2026.5.1-beta.1",
-          NexisClaw: {
+          GreenchClaw: {
             extensions: ["./index.ts"],
             install: {
-              npmSpec: "@NexisClaw/twitch",
+              npmSpec: "@GreenchClaw/twitch",
             },
             release: {
               publishToNpm: true,
@@ -162,7 +162,7 @@ describe("collectPublishablePluginPackageErrors", () => {
         },
       }),
     ).toEqual([
-      `package.json repository.url must be "${NEXISCLAW_PLUGIN_NPM_REPOSITORY_URL}" so npm provenance can validate GitHub trusted publishing; found "<missing>".`,
+      `package.json repository.url must be "${GREENCHCLAW_PLUGIN_NPM_REPOSITORY_URL}" so npm provenance can validate GitHub trusted publishing; found "<missing>".`,
     ]);
   });
 
@@ -172,13 +172,13 @@ describe("collectPublishablePluginPackageErrors", () => {
         extensionId: "voice-call",
         packageDir: bundledPluginRoot("voice-call"),
         packageJson: {
-          name: "@NexisClaw/voice-call",
+          name: "@GreenchClaw/voice-call",
           version: "2026.5.1-beta.1",
           repository: {
             type: "git",
-            url: NEXISCLAW_PLUGIN_NPM_REPOSITORY_URL,
+            url: GREENCHCLAW_PLUGIN_NPM_REPOSITORY_URL,
           },
-          NexisClaw: {
+          GreenchClaw: {
             extensions: ["./index.ts"],
             release: {
               publishToNpm: true,
@@ -186,7 +186,7 @@ describe("collectPublishablePluginPackageErrors", () => {
           },
         },
       }),
-    ).toEqual(["NexisClaw.install.npmSpec must be a non-empty string for publishable plugins."]);
+    ).toEqual(["GreenchClaw.install.npmSpec must be a non-empty string for publishable plugins."]);
   });
 });
 
@@ -213,19 +213,19 @@ describe("collectPublishablePluginPackages", () => {
   });
 
   it("collects publishable npm plugins from extension package manifests", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "NexisClaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "GreenchClaw-plugin-npm-release-");
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@NexisClaw/demo-plugin",
+      name: "@GreenchClaw/demo-plugin",
       version: "2026.4.10",
       repository: {
         type: "git",
-        url: NEXISCLAW_PLUGIN_NPM_REPOSITORY_URL,
+        url: GREENCHCLAW_PLUGIN_NPM_REPOSITORY_URL,
       },
-      NexisClaw: {
+      GreenchClaw: {
         extensions: ["./index.ts"],
         install: {
-          npmSpec: "@NexisClaw/demo-plugin",
+          npmSpec: "@GreenchClaw/demo-plugin",
         },
         release: {
           publishToNpm: true,
@@ -237,29 +237,29 @@ describe("collectPublishablePluginPackages", () => {
       {
         extensionId: "demo-plugin",
         packageDir: "extensions/demo-plugin",
-        packageName: "@NexisClaw/demo-plugin",
+        packageName: "@GreenchClaw/demo-plugin",
         version: "2026.4.10",
         channel: "stable",
         publishTag: "latest",
-        installNpmSpec: "@NexisClaw/demo-plugin",
+        installNpmSpec: "@GreenchClaw/demo-plugin",
       },
     ]);
   });
 
   it("does not validate unselected publishable plugin manifests", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "NexisClaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "GreenchClaw-plugin-npm-release-");
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@NexisClaw/demo-plugin",
+      name: "@GreenchClaw/demo-plugin",
       version: "2026.4.10-beta.1",
       repository: {
         type: "git",
-        url: NEXISCLAW_PLUGIN_NPM_REPOSITORY_URL,
+        url: GREENCHCLAW_PLUGIN_NPM_REPOSITORY_URL,
       },
-      NexisClaw: {
+      GreenchClaw: {
         extensions: ["./index.ts"],
         install: {
-          npmSpec: "@NexisClaw/demo-plugin",
+          npmSpec: "@GreenchClaw/demo-plugin",
         },
         release: {
           publishToNpm: true,
@@ -268,13 +268,13 @@ describe("collectPublishablePluginPackages", () => {
     });
     mkdirSync(join(repoDir, "extensions", "private-plugin"), { recursive: true });
     writeJsonFile(join(repoDir, "extensions", "private-plugin", "package.json"), {
-      name: "@NexisClaw/private-plugin",
+      name: "@GreenchClaw/private-plugin",
       version: "2026.4.10-beta.1",
       private: true,
-      NexisClaw: {
+      GreenchClaw: {
         extensions: ["./index.ts"],
         install: {
-          npmSpec: "@NexisClaw/private-plugin",
+          npmSpec: "@GreenchClaw/private-plugin",
         },
         release: {
           publishToNpm: true,
@@ -284,15 +284,15 @@ describe("collectPublishablePluginPackages", () => {
 
     expect(
       collectPublishablePluginPackages(repoDir, {
-        packageNames: ["@NexisClaw/demo-plugin"],
+        packageNames: ["@GreenchClaw/demo-plugin"],
       }),
     ).toEqual([
       {
         extensionId: "demo-plugin",
         packageDir: "extensions/demo-plugin",
-        installNpmSpec: "@NexisClaw/demo-plugin",
+        installNpmSpec: "@GreenchClaw/demo-plugin",
         channel: "beta",
-        packageName: "@NexisClaw/demo-plugin",
+        packageName: "@GreenchClaw/demo-plugin",
         publishTag: "beta",
         version: "2026.4.10-beta.1",
       },
@@ -300,13 +300,13 @@ describe("collectPublishablePluginPackages", () => {
   });
 
   it("treats an explicit empty extension filter as no candidates", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "NexisClaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "GreenchClaw-plugin-npm-release-");
     mkdirSync(join(repoDir, "extensions", "private-plugin"), { recursive: true });
     writeJsonFile(join(repoDir, "extensions", "private-plugin", "package.json"), {
-      name: "@NexisClaw/private-plugin",
+      name: "@GreenchClaw/private-plugin",
       version: "2026.4.10-beta.1",
       private: true,
-      NexisClaw: {
+      GreenchClaw: {
         extensions: ["./index.ts"],
         release: {
           publishToNpm: true,
@@ -322,19 +322,19 @@ describe("collectPublishablePluginPackages", () => {
   });
 
   it("publishes alpha plugin packages to the alpha dist-tag", () => {
-    const repoDir = makeTempRepoRoot(tempDirs, "NexisClaw-plugin-npm-release-");
+    const repoDir = makeTempRepoRoot(tempDirs, "GreenchClaw-plugin-npm-release-");
     mkdirSync(join(repoDir, "extensions", "demo-plugin"), { recursive: true });
     writeJsonFile(join(repoDir, "extensions", "demo-plugin", "package.json"), {
-      name: "@NexisClaw/demo-plugin",
+      name: "@GreenchClaw/demo-plugin",
       version: "2026.4.10-alpha.1",
       repository: {
         type: "git",
-        url: NEXISCLAW_PLUGIN_NPM_REPOSITORY_URL,
+        url: GREENCHCLAW_PLUGIN_NPM_REPOSITORY_URL,
       },
-      NexisClaw: {
+      GreenchClaw: {
         extensions: ["./index.ts"],
         install: {
-          npmSpec: "@NexisClaw/demo-plugin",
+          npmSpec: "@GreenchClaw/demo-plugin",
         },
         release: {
           publishToNpm: true,
@@ -346,8 +346,8 @@ describe("collectPublishablePluginPackages", () => {
       {
         extensionId: "demo-plugin",
         packageDir: "extensions/demo-plugin",
-        installNpmSpec: "@NexisClaw/demo-plugin",
-        packageName: "@NexisClaw/demo-plugin",
+        installNpmSpec: "@GreenchClaw/demo-plugin",
+        packageName: "@GreenchClaw/demo-plugin",
         channel: "alpha",
         publishTag: "alpha",
         version: "2026.4.10-alpha.1",
@@ -361,7 +361,7 @@ describe("resolveSelectedPublishablePluginPackages", () => {
     {
       extensionId: "feishu",
       packageDir: bundledPluginRoot("feishu"),
-      packageName: "@NexisClaw/feishu",
+      packageName: "@GreenchClaw/feishu",
       version: "2026.3.15",
       channel: "stable",
       publishTag: "latest",
@@ -369,7 +369,7 @@ describe("resolveSelectedPublishablePluginPackages", () => {
     {
       extensionId: "zalo",
       packageDir: bundledPluginRoot("zalo"),
-      packageName: "@NexisClaw/zalo",
+      packageName: "@GreenchClaw/zalo",
       version: "2026.3.15-beta.1",
       channel: "beta",
       publishTag: "beta",
@@ -389,7 +389,7 @@ describe("resolveSelectedPublishablePluginPackages", () => {
     expect(
       resolveSelectedPublishablePluginPackages({
         plugins: publishablePlugins,
-        selection: ["@NexisClaw/zalo"],
+        selection: ["@GreenchClaw/zalo"],
       }),
     ).toEqual([publishablePlugins[1]]);
   });
@@ -398,9 +398,9 @@ describe("resolveSelectedPublishablePluginPackages", () => {
     expect(() =>
       resolveSelectedPublishablePluginPackages({
         plugins: publishablePlugins,
-        selection: ["@NexisClaw/missing"],
+        selection: ["@GreenchClaw/missing"],
       }),
-    ).toThrowError("Unknown or non-publishable plugin package selection: @NexisClaw/missing.");
+    ).toThrowError("Unknown or non-publishable plugin package selection: @GreenchClaw/missing.");
   });
 });
 
@@ -422,7 +422,7 @@ describe("resolveChangedPublishablePluginPackages", () => {
     {
       extensionId: "feishu",
       packageDir: bundledPluginRoot("feishu"),
-      packageName: "@NexisClaw/feishu",
+      packageName: "@GreenchClaw/feishu",
       version: "2026.3.15",
       channel: "stable",
       publishTag: "latest",
@@ -430,7 +430,7 @@ describe("resolveChangedPublishablePluginPackages", () => {
     {
       extensionId: "zalo",
       packageDir: bundledPluginRoot("zalo"),
-      packageName: "@NexisClaw/zalo",
+      packageName: "@GreenchClaw/zalo",
       version: "2026.3.15-beta.1",
       channel: "beta",
       publishTag: "beta",

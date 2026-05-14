@@ -1,12 +1,12 @@
-import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { patchTopLevelChannelConfigSection } from "NexisClaw/plugin-sdk/setup";
+import { describeAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { patchTopLevelChannelConfigSection } from "GreenchClaw/plugin-sdk/setup";
 import {
   createDelegatedSetupWizardProxy,
   createStandardChannelSetupStatus,
   DEFAULT_ACCOUNT_ID,
   type ChannelSetupAdapter,
-} from "NexisClaw/plugin-sdk/setup-runtime";
+} from "GreenchClaw/plugin-sdk/setup-runtime";
 import { buildChannelConfigSchema, type ChannelPlugin } from "./channel-api.js";
 import { NostrConfigSchema } from "./config-schema.js";
 import { DEFAULT_RELAYS } from "./default-relays.js";
@@ -36,13 +36,13 @@ type ResolvedNostrSetupAccount = {
   config: NostrAccountConfig;
 };
 
-function getNostrConfig(cfg: NexisClawConfig): NostrAccountConfig | undefined {
+function getNostrConfig(cfg: GreenchClawConfig): NostrAccountConfig | undefined {
   return (cfg.channels as Record<string, unknown> | undefined)?.nostr as
     | NostrAccountConfig
     | undefined;
 }
 
-function listSetupNostrAccountIds(cfg: NexisClawConfig): string[] {
+function listSetupNostrAccountIds(cfg: GreenchClawConfig): string[] {
   const nostrCfg = getNostrConfig(cfg);
   const privateKey = typeof nostrCfg?.privateKey === "string" ? nostrCfg.privateKey.trim() : "";
   if (!privateKey) {
@@ -51,7 +51,7 @@ function listSetupNostrAccountIds(cfg: NexisClawConfig): string[] {
   return [resolveDefaultSetupNostrAccountId(cfg)];
 }
 
-function resolveDefaultSetupNostrAccountId(cfg: NexisClawConfig): string {
+function resolveDefaultSetupNostrAccountId(cfg: GreenchClawConfig): string {
   const configured = getNostrConfig(cfg)?.defaultAccount;
   return typeof configured === "string" && configured.trim()
     ? configured.trim()
@@ -59,7 +59,7 @@ function resolveDefaultSetupNostrAccountId(cfg: NexisClawConfig): string {
 }
 
 function resolveSetupNostrAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): ResolvedNostrSetupAccount {
   const nostrCfg = getNostrConfig(params.cfg);

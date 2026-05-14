@@ -1,5 +1,5 @@
 import { getApiProvider, type Api, type Model } from "@earendil-works/pi-ai";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { createAnthropicVertexStreamFnForModel } from "./anthropic-vertex-stream.js";
 import { ensureCustomApiRegistered } from "./custom-api-registry.js";
 import { registerProviderStreamForModel } from "./provider-stream.js";
@@ -10,12 +10,12 @@ import {
 
 function resolveAnthropicVertexSimpleApi(baseUrl?: string): Api {
   const suffix = baseUrl?.trim() ? encodeURIComponent(baseUrl.trim()) : "default";
-  return `NexisClaw-anthropic-vertex-simple:${suffix}`;
+  return `GreenchClaw-anthropic-vertex-simple:${suffix}`;
 }
 
 export function prepareModelForSimpleCompletion<TApi extends Api>(params: {
   model: Model<TApi>;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): Model<Api> {
   const { model, cfg } = params;
   // Only provider-owned custom APIs need runtime stream registration here.

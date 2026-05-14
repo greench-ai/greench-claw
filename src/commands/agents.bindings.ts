@@ -5,8 +5,8 @@ import type { ChannelId } from "../channels/plugins/types.public.js";
 import { normalizeChannelId as normalizeBundledChannelId } from "../channels/registry.js";
 import { formatUnknownChannelMessage } from "../cli/error-format.js";
 import { isRouteBinding, listRouteBindings } from "../config/bindings.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { AgentRouteBinding } from "../config/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { listManifestChannelContributionIds } from "../plugins/manifest-contribution-ids.js";
 import { DEFAULT_ACCOUNT_ID, normalizeAgentId } from "../routing/session-key.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
@@ -56,10 +56,10 @@ function canUpgradeBindingAccountScope(params: {
 }
 
 export function applyAgentBindings(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   bindings: AgentRouteBinding[],
 ): {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   added: AgentRouteBinding[];
   updated: AgentRouteBinding[];
   skipped: AgentRouteBinding[];
@@ -142,10 +142,10 @@ export function applyAgentBindings(
 }
 
 export function removeAgentBindings(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   bindings: AgentRouteBinding[],
 ): {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   removed: AgentRouteBinding[];
   missing: AgentRouteBinding[];
   conflicts: Array<{ binding: AgentRouteBinding; existingAgentId: string }>;
@@ -209,7 +209,7 @@ export function removeAgentBindings(
   };
 }
 
-function resolveDefaultAccountId(cfg: NexisClawConfig, provider: ChannelId): string {
+function resolveDefaultAccountId(cfg: GreenchClawConfig, provider: ChannelId): string {
   const plugin = getBindingChannelPlugin(provider);
   if (!plugin) {
     return DEFAULT_ACCOUNT_ID;
@@ -217,7 +217,7 @@ function resolveDefaultAccountId(cfg: NexisClawConfig, provider: ChannelId): str
   return resolveChannelDefaultAccountId({ plugin, cfg });
 }
 
-function listManifestChannelIds(config: NexisClawConfig): Set<string> {
+function listManifestChannelIds(config: GreenchClawConfig): Set<string> {
   return new Set(
     listManifestChannelContributionIds({
       includeDisabled: true,
@@ -229,7 +229,7 @@ function listManifestChannelIds(config: NexisClawConfig): Set<string> {
 
 function normalizeBindingChannelId(
   raw: string | undefined,
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
 ): ChannelId | null {
   const bundled = normalizeBundledChannelId(raw);
   if (bundled) {
@@ -248,7 +248,7 @@ function getBindingChannelPlugin(channel: ChannelId) {
 
 function resolveBindingAccountId(params: {
   channel: ChannelId;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   agentId: string;
   explicitAccountId?: string;
 }): string | undefined {
@@ -276,7 +276,7 @@ function resolveBindingAccountId(params: {
 export function buildChannelBindings(params: {
   agentId: string;
   selection: ChannelChoice[];
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   accountIds?: Partial<Record<ChannelChoice, string>>;
 }): AgentRouteBinding[] {
   const bindings: AgentRouteBinding[] = [];
@@ -300,7 +300,7 @@ export function buildChannelBindings(params: {
 export function parseBindingSpecs(params: {
   agentId: string;
   specs?: string[];
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
 }): { bindings: AgentRouteBinding[]; errors: string[] } {
   const bindings: AgentRouteBinding[] = [];
   const errors: string[] = [];

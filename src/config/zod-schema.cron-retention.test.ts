@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { NexisClawSchema } from "./zod-schema.js";
+import { GreenchClawSchema } from "./zod-schema.js";
 
-describe("NexisClawSchema cron retention and run-log validation", () => {
+describe("GreenchClawSchema cron retention and run-log validation", () => {
   it("accepts valid cron.sessionRetention and runLog values", () => {
-    const result = NexisClawSchema.safeParse({
+    const result = GreenchClawSchema.safeParse({
       cron: {
         sessionRetention: "1h30m",
         runLog: {
@@ -17,7 +17,7 @@ describe("NexisClawSchema cron retention and run-log validation", () => {
 
   it("rejects invalid cron.sessionRetention", () => {
     expect(() =>
-      NexisClawSchema.parse({
+      GreenchClawSchema.parse({
         cron: {
           sessionRetention: "abc",
         },
@@ -27,7 +27,7 @@ describe("NexisClawSchema cron retention and run-log validation", () => {
 
   it("rejects invalid cron.runLog.maxBytes", () => {
     expect(() =>
-      NexisClawSchema.parse({
+      GreenchClawSchema.parse({
         cron: {
           runLog: {
             maxBytes: "wat",

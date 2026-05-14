@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "../test-support/browser-security.mock.js";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { BrowserDispatchResponse } from "./routes/dispatcher.js";
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/ssrf-runtime")>(
-    "NexisClaw/plugin-sdk/ssrf-runtime",
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/ssrf-runtime")>(
+    "GreenchClaw/plugin-sdk/ssrf-runtime",
   );
   return {
     ...actual,
@@ -29,7 +29,7 @@ function okDispatchResponse(): BrowserDispatchResponse {
 }
 
 const mocks = vi.hoisted(() => ({
-  loadConfig: vi.fn<() => NexisClawConfig>(() => ({
+  loadConfig: vi.fn<() => GreenchClawConfig>(() => ({
     gateway: {
       auth: {
         token: "loopback-token",
@@ -130,7 +130,7 @@ describe("fetchBrowserJson loopback auth", () => {
     ]) {
       vi.stubEnv(key, "");
     }
-    vi.stubEnv("NEXISCLAW_GATEWAY_TOKEN", "loopback-token");
+    vi.stubEnv("GREENCHCLAW_GATEWAY_TOKEN", "loopback-token");
     mocks.loadConfig.mockClear();
     mocks.loadConfig.mockReturnValue({
       gateway: {
@@ -212,8 +212,11 @@ describe("fetchBrowserJson loopback auth", () => {
     mocks.dispatch.mockRejectedValueOnce(new Error("Chrome CDP handshake timeout"));
 
     await expectThrownBrowserFetchError(() => fetchBrowserJson<{ ok: boolean }>("/tabs"), {
-      contains: ["Chrome CDP handshake timeout", "Restart the NexisClaw gateway"],
-      omits: ["Can't reach the NexisClaw browser control service", "Do NOT retry the browser tool"],
+      contains: ["Chrome CDP handshake timeout", "Restart the GreenchClaw gateway"],
+      omits: [
+        "Can't reach the GreenchClaw browser control service",
+        "Do NOT retry the browser tool",
+      ],
     });
   });
 
@@ -221,7 +224,7 @@ describe("fetchBrowserJson loopback auth", () => {
     mocks.dispatch.mockRejectedValueOnce(new DOMException("operation aborted", "AbortError"));
 
     await expectThrownBrowserFetchError(() => fetchBrowserJson<{ ok: boolean }>("/tabs"), {
-      contains: ["operation aborted", "Restart the NexisClaw gateway"],
+      contains: ["operation aborted", "Restart the GreenchClaw gateway"],
       omits: ["Do NOT retry the browser tool"],
     });
   });
@@ -247,10 +250,10 @@ describe("fetchBrowserJson loopback auth", () => {
       {
         contains: [
           "Chrome CDP handshake timeout",
-          "browser profile is external to NexisClaw",
-          "Restarting the NexisClaw gateway will not launch it",
+          "browser profile is external to GreenchClaw",
+          "Restarting the GreenchClaw gateway will not launch it",
         ],
-        omits: ["Restart the NexisClaw gateway", "Do NOT retry the browser tool"],
+        omits: ["Restart the GreenchClaw gateway", "Do NOT retry the browser tool"],
       },
     );
   });
@@ -273,10 +276,10 @@ describe("fetchBrowserJson loopback auth", () => {
     await expectThrownBrowserFetchError(() => fetchBrowserJson<{ ok: boolean }>("/tabs"), {
       contains: [
         "operation aborted",
-        "browser profile is external to NexisClaw",
-        "Restarting the NexisClaw gateway will not launch it",
+        "browser profile is external to GreenchClaw",
+        "Restarting the GreenchClaw gateway will not launch it",
       ],
-      omits: ["Restart the NexisClaw gateway", "Do NOT retry the browser tool"],
+      omits: ["Restart the GreenchClaw gateway", "Do NOT retry the browser tool"],
     });
   });
 
@@ -299,10 +302,10 @@ describe("fetchBrowserJson loopback auth", () => {
       {
         contains: [
           "timed out",
-          "browser profile is external to NexisClaw",
-          "Restarting the NexisClaw gateway will not launch it",
+          "browser profile is external to GreenchClaw",
+          "Restarting the GreenchClaw gateway will not launch it",
         ],
-        omits: ["Restart the NexisClaw gateway", "Do NOT retry the browser tool"],
+        omits: ["Restart the GreenchClaw gateway", "Do NOT retry the browser tool"],
       },
     );
   });
@@ -310,9 +313,9 @@ describe("fetchBrowserJson loopback auth", () => {
   it("keeps restart-gateway guidance for managed local dispatcher timeouts", async () => {
     mocks.loadConfig.mockReturnValue({
       browser: {
-        defaultProfile: "NexisClaw",
+        defaultProfile: "GreenchClaw",
         profiles: {
-          NexisClaw: {
+          GreenchClaw: {
             cdpPort: 18800,
             color: "#FF4500",
           },
@@ -322,10 +325,10 @@ describe("fetchBrowserJson loopback auth", () => {
     mocks.dispatch.mockRejectedValueOnce(new Error("Chrome CDP handshake timeout"));
 
     await expectThrownBrowserFetchError(
-      () => fetchBrowserJson<{ ok: boolean }>("/tabs?profile=NexisClaw"),
+      () => fetchBrowserJson<{ ok: boolean }>("/tabs?profile=GreenchClaw"),
       {
-        contains: ["Chrome CDP handshake timeout", "Restart the NexisClaw gateway"],
-        omits: ["browser profile is external to NexisClaw", "Do NOT retry the browser tool"],
+        contains: ["Chrome CDP handshake timeout", "Restart the GreenchClaw gateway"],
+        omits: ["browser profile is external to GreenchClaw", "Do NOT retry the browser tool"],
       },
     );
   });
@@ -339,8 +342,8 @@ describe("fetchBrowserJson loopback auth", () => {
     await expectThrownBrowserFetchError(
       () => fetchBrowserJson<{ ok: boolean }>("/tabs?profile=manual"),
       {
-        contains: ["Chrome CDP handshake timeout", "Restart the NexisClaw gateway"],
-        omits: ["browser profile is external to NexisClaw", "Do NOT retry the browser tool"],
+        contains: ["Chrome CDP handshake timeout", "Restart the GreenchClaw gateway"],
+        omits: ["browser profile is external to GreenchClaw", "Do NOT retry the browser tool"],
       },
     );
   });
@@ -348,9 +351,9 @@ describe("fetchBrowserJson loopback auth", () => {
   it("keeps restart-gateway guidance for unknown dispatcher profiles", async () => {
     mocks.loadConfig.mockReturnValue({
       browser: {
-        defaultProfile: "NexisClaw",
+        defaultProfile: "GreenchClaw",
         profiles: {
-          NexisClaw: {
+          GreenchClaw: {
             cdpPort: 18800,
             color: "#FF4500",
           },
@@ -362,8 +365,8 @@ describe("fetchBrowserJson loopback auth", () => {
     await expectThrownBrowserFetchError(
       () => fetchBrowserJson<{ ok: boolean }>("/tabs?profile=missing"),
       {
-        contains: ["Chrome CDP handshake timeout", "Restart the NexisClaw gateway"],
-        omits: ["browser profile is external to NexisClaw", "Do NOT retry the browser tool"],
+        contains: ["Chrome CDP handshake timeout", "Restart the GreenchClaw gateway"],
+        omits: ["browser profile is external to GreenchClaw", "Do NOT retry the browser tool"],
       },
     );
   });
@@ -386,10 +389,10 @@ describe("fetchBrowserJson loopback auth", () => {
     await expectThrownBrowserFetchError(() => fetchBrowserJson<{ ok: boolean }>("/tabs"), {
       contains: [
         "Chrome CDP handshake timeout",
-        "browser profile is external to NexisClaw",
-        "Restarting the NexisClaw gateway will not launch it",
+        "browser profile is external to GreenchClaw",
+        "Restarting the GreenchClaw gateway will not launch it",
       ],
-      omits: ["Restart the NexisClaw gateway", "Do NOT retry the browser tool"],
+      omits: ["Restart the GreenchClaw gateway", "Do NOT retry the browser tool"],
     });
   });
 
@@ -414,10 +417,10 @@ describe("fetchBrowserJson loopback auth", () => {
       {
         contains: [
           "Chrome CDP connection refused",
-          "browser profile is external to NexisClaw",
+          "browser profile is external to GreenchClaw",
           "Do NOT retry the browser tool",
         ],
-        omits: ["Restart the NexisClaw gateway"],
+        omits: ["Restart the GreenchClaw gateway"],
       },
     );
   });
@@ -427,7 +430,7 @@ describe("fetchBrowserJson loopback auth", () => {
 
     await expectThrownBrowserFetchError(() => fetchBrowserJson<{ ok: boolean }>("/tabs"), {
       contains: ["Chrome CDP connection refused", "Do NOT retry the browser tool"],
-      omits: ["Can't reach the NexisClaw browser control service"],
+      omits: ["Can't reach the GreenchClaw browser control service"],
     });
   });
 
@@ -519,7 +522,7 @@ describe("fetchBrowserJson loopback auth", () => {
       () => fetchBrowserJson<{ ok: boolean }>("http://example.com/"),
       {
         contains: [
-          "Can't reach the NexisClaw browser control service",
+          "Can't reach the GreenchClaw browser control service",
           "Do NOT retry the browser tool",
         ],
       },

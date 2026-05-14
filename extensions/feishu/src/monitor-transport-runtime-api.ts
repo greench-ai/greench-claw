@@ -1,10 +1,10 @@
 export type { RuntimeEnv } from "../runtime-api.js";
-export { safeEqualSecret } from "NexisClaw/plugin-sdk/security-runtime";
+export { safeEqualSecret } from "GreenchClaw/plugin-sdk/security-runtime";
 export {
   applyBasicWebhookRequestGuards,
   resolveRequestClientIp,
-} from "NexisClaw/plugin-sdk/webhook-ingress";
+} from "GreenchClaw/plugin-sdk/webhook-ingress";
 export {
   installRequestBodyLimitGuard,
   readWebhookBodyOrReject,
-} from "NexisClaw/plugin-sdk/webhook-request-guards";
+} from "GreenchClaw/plugin-sdk/webhook-request-guards";

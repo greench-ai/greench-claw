@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeStaticProviderModelId } from "./model-ref-shared.js";
 import { resolveModelRuntimePolicy } from "./model-runtime-policy.js";
 import { normalizeProviderId } from "./provider-id.js";
@@ -120,7 +120,7 @@ export function areRuntimeModelRefsEquivalent(left: string, right: string): bool
 }
 
 function resolveConfiguredRuntime(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   provider: string;
   agentId?: string;
   modelId?: string;
@@ -135,7 +135,7 @@ function resolveConfiguredRuntime(params: {
 
 export function resolveCliRuntimeExecutionProvider(params: {
   provider: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentId?: string;
   modelId?: string;
 }): string | undefined {

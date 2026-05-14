@@ -1,4 +1,4 @@
-import { KeyedAsyncQueue } from "NexisClaw/plugin-sdk/keyed-async-queue";
+import { KeyedAsyncQueue } from "GreenchClaw/plugin-sdk/keyed-async-queue";
 
 export class SessionActorQueue {
   private readonly queue = new KeyedAsyncQueue();

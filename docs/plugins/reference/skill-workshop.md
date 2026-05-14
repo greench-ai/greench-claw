@@ -11,8 +11,8 @@ Captures repeatable workflows as workspace skills, with pending review, safe wri
 
 ## Distribution
 
-- Package: `@NexisClaw/skill-workshop`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/skill-workshop`
+- Install route: included in GreenchClaw
 
 ## Surface
 

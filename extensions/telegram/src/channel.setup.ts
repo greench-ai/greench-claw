@@ -1,4 +1,4 @@
-import type { ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
+import type { ChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
 import { type ResolvedTelegramAccount } from "./accounts.js";
 import type { TelegramProbe } from "./probe.js";
 import { telegramSetupAdapter } from "./setup-core.js";

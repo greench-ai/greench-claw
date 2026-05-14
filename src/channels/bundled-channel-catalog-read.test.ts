@@ -15,32 +15,35 @@ vi.mock("../plugins/bundled-dir.js", () => ({
 }));
 
 // The channel-catalog.json fallback still walks package roots via
-// resolveNexisClawPackageRootSync. Isolate from the real repo by mocking
+// resolveGreenchClawPackageRootSync. Isolate from the real repo by mocking
 // moduleUrl/argv1 resolution to null and deriving only from the tmp cwd.
-vi.mock("../infra/NexisClaw-root.js", () => ({
-  resolveNexisClawPackageRootSync: (opts: { cwd?: string; argv1?: string; moduleUrl?: string }) =>
+vi.mock("../infra/GreenchClaw-root.js", () => ({
+  resolveGreenchClawPackageRootSync: (opts: { cwd?: string; argv1?: string; moduleUrl?: string }) =>
     opts.cwd ?? null,
-  resolveNexisClawPackageRoot: async (opts: { cwd?: string; argv1?: string; moduleUrl?: string }) =>
-    opts.cwd ?? null,
+  resolveGreenchClawPackageRoot: async (opts: {
+    cwd?: string;
+    argv1?: string;
+    moduleUrl?: string;
+  }) => opts.cwd ?? null,
 }));
 
 import { resolveBundledPluginsDir } from "../plugins/bundled-dir.js";
 import { listBundledChannelCatalogEntries } from "./bundled-channel-catalog-read.js";
 
 const tempDirs: string[] = [];
-const originalBundledPluginsDir = process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
-const originalTrustBundledPluginsDir = process.env.NEXISCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR;
+const originalBundledPluginsDir = process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
+const originalTrustBundledPluginsDir = process.env.GREENCHCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR;
 
 afterEach(() => {
   if (originalBundledPluginsDir === undefined) {
-    delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = originalBundledPluginsDir;
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = originalBundledPluginsDir;
   }
   if (originalTrustBundledPluginsDir === undefined) {
-    delete process.env.NEXISCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR;
+    delete process.env.GREENCHCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.NEXISCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR = originalTrustBundledPluginsDir;
+    process.env.GREENCHCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR = originalTrustBundledPluginsDir;
   }
   cleanupTempDirs(tempDirs);
   vi.restoreAllMocks();
@@ -49,17 +52,17 @@ afterEach(() => {
 
 function useBundledPluginsDir(extensionsRoot: string | undefined): void {
   if (extensionsRoot) {
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = extensionsRoot;
-    process.env.NEXISCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR = "1";
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = extensionsRoot;
+    process.env.GREENCHCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR = "1";
   } else {
-    delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
   }
   vi.mocked(resolveBundledPluginsDir).mockReturnValue(extensionsRoot);
 }
 
 function seedRoot(prefix: string): string {
   const root = makeTempRepoRoot(tempDirs, prefix);
-  writeJsonFile(path.join(root, "package.json"), { name: "NexisClaw" });
+  writeJsonFile(path.join(root, "package.json"), { name: "GreenchClaw" });
   vi.spyOn(process, "cwd").mockReturnValue(root);
   return root;
 }
@@ -70,8 +73,8 @@ function seedChannelPkg(
 ): void {
   const pluginDir = path.dirname(pkgJsonPath);
   writeJsonFile(pkgJsonPath, {
-    name: `@NexisClaw/${opts.id}`,
-    NexisClaw: {
+    name: `@GreenchClaw/${opts.id}`,
+    GreenchClaw: {
       channel: {
         id: opts.id,
         label: opts.label ?? opts.id,
@@ -80,7 +83,7 @@ function seedChannelPkg(
       },
     },
   });
-  writeJsonFile(path.join(pluginDir, "NexisClaw.plugin.json"), {
+  writeJsonFile(path.join(pluginDir, "GreenchClaw.plugin.json"), {
     id: opts.id,
     configSchema: { type: "object" },
     channels: [opts.id],
@@ -128,8 +131,8 @@ describe("listBundledChannelCatalogEntries", () => {
     writeJsonFile(path.join(root, "dist", "channel-catalog.json"), {
       entries: [
         {
-          name: "@NexisClaw/qqbot",
-          NexisClaw: {
+          name: "@GreenchClaw/qqbot",
+          GreenchClaw: {
             channel: {
               id: "qqbot",
               label: "QQ Bot",
@@ -149,7 +152,7 @@ describe("listBundledChannelCatalogEntries", () => {
   });
 
   it("falls back to dist/channel-catalog.json when the resolver returns undefined", () => {
-    // NEXISCLAW_DISABLE_BUNDLED_PLUGINS, missing bundled tree, or an unresolvable
+    // GREENCHCLAW_DISABLE_BUNDLED_PLUGINS, missing bundled tree, or an unresolvable
     // package root all surface as undefined from resolveBundledPluginsDir. In
     // that case the loader should consult the shipped channel-catalog.json
     // rather than report zero bundled channels.
@@ -157,8 +160,8 @@ describe("listBundledChannelCatalogEntries", () => {
     writeJsonFile(path.join(root, "dist", "channel-catalog.json"), {
       entries: [
         {
-          name: "@NexisClaw/fallback",
-          NexisClaw: {
+          name: "@GreenchClaw/fallback",
+          GreenchClaw: {
             channel: {
               id: "fallback-channel",
               label: "Fallback",
@@ -176,7 +179,7 @@ describe("listBundledChannelCatalogEntries", () => {
   });
 
   it("falls back to dist/channel-catalog.json when the resolved dir has no plugin package.jsons", () => {
-    // A stale staged dir or an NEXISCLAW_BUNDLED_PLUGINS_DIR override pointing at
+    // A stale staged dir or an GREENCHCLAW_BUNDLED_PLUGINS_DIR override pointing at
     // an empty tree should not hide the shipped catalog entries. The loader's
     // own readdir returns nothing, bundledEntries is empty, and control falls
     // through to readOfficialCatalogFileSync.
@@ -186,8 +189,8 @@ describe("listBundledChannelCatalogEntries", () => {
     writeJsonFile(path.join(root, "dist", "channel-catalog.json"), {
       entries: [
         {
-          name: "@NexisClaw/fallback",
-          NexisClaw: {
+          name: "@GreenchClaw/fallback",
+          GreenchClaw: {
             channel: {
               id: "fallback-channel",
               label: "Fallback",

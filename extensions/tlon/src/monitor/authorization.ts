@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import type { TlonSettingsStore } from "../settings.js";
 
 type ChannelAuthorization = {
@@ -7,7 +7,7 @@ type ChannelAuthorization = {
 };
 
 export function resolveChannelAuthorization(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   channelNest: string,
   settings?: TlonSettingsStore,
 ): { mode: "restricted" | "open"; allowedShips: string[] } {

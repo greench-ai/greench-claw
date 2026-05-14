@@ -1,4 +1,4 @@
-import { installedPluginRoot } from "NexisClaw/plugin-sdk/test-fixtures";
+import { installedPluginRoot } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { describe, expect, it } from "vitest";
 import {
   buildNpmInstallRecordFields,
@@ -9,58 +9,58 @@ import {
   resolvePinnedNpmSpec,
 } from "./npm-resolution.js";
 
-const CLI_STATE_ROOT = "/tmp/NexisClaw";
+const CLI_STATE_ROOT = "/tmp/GreenchClaw";
 const ALPHA_INSTALL_PATH = installedPluginRoot(CLI_STATE_ROOT, "alpha");
 
 describe("npm-resolution helpers", () => {
   it("keeps original spec when pin is disabled", () => {
     const result = resolvePinnedNpmSpec({
-      rawSpec: "@NexisClaw/plugin-alpha@latest",
+      rawSpec: "@GreenchClaw/plugin-alpha@latest",
       pin: false,
-      resolvedSpec: "@NexisClaw/plugin-alpha@1.2.3",
+      resolvedSpec: "@GreenchClaw/plugin-alpha@1.2.3",
     });
     expect(result).toEqual({
-      recordSpec: "@NexisClaw/plugin-alpha@latest",
+      recordSpec: "@GreenchClaw/plugin-alpha@latest",
     });
   });
 
   it("warns when pin is enabled but resolved spec is missing", () => {
     const result = resolvePinnedNpmSpec({
-      rawSpec: "@NexisClaw/plugin-alpha@latest",
+      rawSpec: "@GreenchClaw/plugin-alpha@latest",
       pin: true,
     });
     expect(result).toEqual({
-      recordSpec: "@NexisClaw/plugin-alpha@latest",
+      recordSpec: "@GreenchClaw/plugin-alpha@latest",
       pinWarning: "Could not resolve exact npm version for --pin; storing original npm spec.",
     });
   });
 
   it("returns pinned spec notice when resolved spec is available", () => {
     const result = resolvePinnedNpmSpec({
-      rawSpec: "@NexisClaw/plugin-alpha@latest",
+      rawSpec: "@GreenchClaw/plugin-alpha@latest",
       pin: true,
-      resolvedSpec: "@NexisClaw/plugin-alpha@1.2.3",
+      resolvedSpec: "@GreenchClaw/plugin-alpha@1.2.3",
     });
     expect(result).toEqual({
-      recordSpec: "@NexisClaw/plugin-alpha@1.2.3",
-      pinNotice: "Pinned npm install record to @NexisClaw/plugin-alpha@1.2.3.",
+      recordSpec: "@GreenchClaw/plugin-alpha@1.2.3",
+      pinNotice: "Pinned npm install record to @GreenchClaw/plugin-alpha@1.2.3.",
     });
   });
 
   it("maps npm resolution metadata to install fields", () => {
     expect(
       mapNpmResolutionMetadata({
-        name: "@NexisClaw/plugin-alpha",
+        name: "@GreenchClaw/plugin-alpha",
         version: "1.2.3",
-        resolvedSpec: "@NexisClaw/plugin-alpha@1.2.3",
+        resolvedSpec: "@GreenchClaw/plugin-alpha@1.2.3",
         integrity: "sha512-abc",
         shasum: "deadbeef",
         resolvedAt: "2026-02-21T00:00:00.000Z",
       }),
     ).toEqual({
-      resolvedName: "@NexisClaw/plugin-alpha",
+      resolvedName: "@GreenchClaw/plugin-alpha",
       resolvedVersion: "1.2.3",
-      resolvedSpec: "@NexisClaw/plugin-alpha@1.2.3",
+      resolvedSpec: "@GreenchClaw/plugin-alpha@1.2.3",
       integrity: "sha512-abc",
       shasum: "deadbeef",
       resolvedAt: "2026-02-21T00:00:00.000Z",
@@ -70,24 +70,24 @@ describe("npm-resolution helpers", () => {
   it("builds common npm install record fields", () => {
     expect(
       buildNpmInstallRecordFields({
-        spec: "@NexisClaw/plugin-alpha@1.2.3",
+        spec: "@GreenchClaw/plugin-alpha@1.2.3",
         installPath: ALPHA_INSTALL_PATH,
         version: "1.2.3",
         resolution: {
-          name: "@NexisClaw/plugin-alpha",
+          name: "@GreenchClaw/plugin-alpha",
           version: "1.2.3",
-          resolvedSpec: "@NexisClaw/plugin-alpha@1.2.3",
+          resolvedSpec: "@GreenchClaw/plugin-alpha@1.2.3",
           integrity: "sha512-abc",
         },
       }),
     ).toEqual({
       source: "npm",
-      spec: "@NexisClaw/plugin-alpha@1.2.3",
+      spec: "@GreenchClaw/plugin-alpha@1.2.3",
       installPath: ALPHA_INSTALL_PATH,
       version: "1.2.3",
-      resolvedName: "@NexisClaw/plugin-alpha",
+      resolvedName: "@GreenchClaw/plugin-alpha",
       resolvedVersion: "1.2.3",
-      resolvedSpec: "@NexisClaw/plugin-alpha@1.2.3",
+      resolvedSpec: "@GreenchClaw/plugin-alpha@1.2.3",
       integrity: "sha512-abc",
       shasum: undefined,
       resolvedAt: undefined,
@@ -114,14 +114,14 @@ describe("npm-resolution helpers", () => {
     const logs: string[] = [];
     const warns: string[] = [];
     const record = resolvePinnedNpmInstallRecord({
-      rawSpec: "@NexisClaw/plugin-alpha@latest",
+      rawSpec: "@GreenchClaw/plugin-alpha@latest",
       pin: true,
       installPath: ALPHA_INSTALL_PATH,
       version: "1.2.3",
       resolution: {
-        name: "@NexisClaw/plugin-alpha",
+        name: "@GreenchClaw/plugin-alpha",
         version: "1.2.3",
-        resolvedSpec: "@NexisClaw/plugin-alpha@1.2.3",
+        resolvedSpec: "@GreenchClaw/plugin-alpha@1.2.3",
       },
       log: (message) => logs.push(message),
       warn: (message) => warns.push(message),
@@ -129,24 +129,24 @@ describe("npm-resolution helpers", () => {
 
     expect(record).toEqual({
       source: "npm",
-      spec: "@NexisClaw/plugin-alpha@1.2.3",
+      spec: "@GreenchClaw/plugin-alpha@1.2.3",
       installPath: ALPHA_INSTALL_PATH,
       version: "1.2.3",
-      resolvedName: "@NexisClaw/plugin-alpha",
+      resolvedName: "@GreenchClaw/plugin-alpha",
       resolvedVersion: "1.2.3",
-      resolvedSpec: "@NexisClaw/plugin-alpha@1.2.3",
+      resolvedSpec: "@GreenchClaw/plugin-alpha@1.2.3",
       integrity: undefined,
       shasum: undefined,
       resolvedAt: undefined,
     });
-    expect(logs).toEqual(["Pinned npm install record to @NexisClaw/plugin-alpha@1.2.3."]);
+    expect(logs).toEqual(["Pinned npm install record to @GreenchClaw/plugin-alpha@1.2.3."]);
     expect(warns).toStrictEqual([]);
   });
 
   it("resolves pinned install record for CLI and formats warning output", () => {
     const logs: string[] = [];
     const record = resolvePinnedNpmInstallRecordForCli(
-      "@NexisClaw/plugin-alpha@latest",
+      "@GreenchClaw/plugin-alpha@latest",
       true,
       ALPHA_INSTALL_PATH,
       "1.2.3",
@@ -157,7 +157,7 @@ describe("npm-resolution helpers", () => {
 
     expect(record).toEqual({
       source: "npm",
-      spec: "@NexisClaw/plugin-alpha@latest",
+      spec: "@GreenchClaw/plugin-alpha@latest",
       installPath: ALPHA_INSTALL_PATH,
       version: "1.2.3",
       resolvedName: undefined,

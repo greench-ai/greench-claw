@@ -2,8 +2,7 @@ import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { readRegularFile, statRegularFile } from "./fs-utils.js";
-import { hashText } from "./hash.js";
-import { createSubsystemLogger, redactSensitiveText } from "./NexisClaw-runtime-io.js";
+import { createSubsystemLogger, redactSensitiveText } from "./GreenchClaw-runtime-io.js";
 import {
   HEARTBEAT_PROMPT,
   HEARTBEAT_TOKEN,
@@ -19,7 +18,8 @@ import {
   resolveSessionTranscriptsDirForAgent,
   stripInboundMetadata,
   stripInternalRuntimeContext,
-} from "./NexisClaw-runtime-session.js";
+} from "./GreenchClaw-runtime-session.js";
+import { hashText } from "./hash.js";
 
 const DREAMING_NARRATIVE_RUN_PREFIX = "dreaming-narrative-";
 // Keep the historical one-line-per-message export shape for normal turns, but
@@ -107,7 +107,7 @@ function isDreamingNarrativeBootstrapRecord(record: unknown): boolean {
   };
   if (
     candidate.type !== "custom" ||
-    candidate.customType !== "NexisClaw:bootstrap-context:full" ||
+    candidate.customType !== "GreenchClaw:bootstrap-context:full" ||
     !candidate.data ||
     typeof candidate.data !== "object" ||
     Array.isArray(candidate.data)
@@ -418,7 +418,7 @@ function renderSessionExportLines(label: string, text: string): string[] {
 }
 
 /**
- * Strip NexisClaw-injected inbound metadata envelopes from a raw text block.
+ * Strip GreenchClaw-injected inbound metadata envelopes from a raw text block.
  *
  * User-role messages arriving from external channels (Telegram, Discord,
  * Slack, …) are stored with a multi-line prefix containing Conversation info,
@@ -428,7 +428,7 @@ function renderSessionExportLines(label: string, text: string): string[] {
  * `normalizeSessionText` collapses newlines into spaces, stripping is
  * impossible.
  *
- * See: https://github.com/NexisClaw/NexisClaw/issues/63921
+ * See: https://github.com/GreenchClaw/GreenchClaw/issues/63921
  */
 function stripInboundMetadataForUserRole(text: string, role: "user" | "assistant"): string {
   if (role !== "user") {

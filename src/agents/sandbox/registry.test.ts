@@ -20,7 +20,7 @@ const {
   const path = require("node:path");
   const { mkdtempSync } = require("node:fs");
   const { tmpdir } = require("node:os");
-  const baseDir = mkdtempSync(path.join(tmpdir(), "NexisClaw-sandbox-registry-"));
+  const baseDir = mkdtempSync(path.join(tmpdir(), "GreenchClaw-sandbox-registry-"));
 
   return {
     TEST_STATE_DIR: baseDir,
@@ -152,7 +152,7 @@ function browserEntry(
     sessionKey: "agent:main",
     createdAtMs: 1,
     lastUsedAtMs: 1,
-    image: "NexisClaw-browser:test",
+    image: "GreenchClaw-browser:test",
     cdpPort: 9222,
     ...overrides,
   };
@@ -164,7 +164,7 @@ function containerEntry(overrides: Partial<SandboxRegistryEntry> = {}): SandboxR
     sessionKey: "agent:main",
     createdAtMs: 1,
     lastUsedAtMs: 1,
-    image: "NexisClaw-sandbox:test",
+    image: "GreenchClaw-sandbox:test",
     ...overrides,
   };
 }
@@ -226,7 +226,7 @@ describe("registry race safety", () => {
         sessionKey: "agent:main",
         createdAtMs: 1,
         lastUsedAtMs: 1,
-        image: "NexisClaw-sandbox:test",
+        image: "GreenchClaw-sandbox:test",
       },
     ]);
 

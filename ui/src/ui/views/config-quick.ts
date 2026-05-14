@@ -901,8 +901,8 @@ function renderPresetsCard(props: QuickSettingsProps) {
         <div class="qs-profiles__copy">
           <div class="qs-profiles__eyebrow">Bootstrap Context</div>
           <p class="qs-profiles__intro">
-            Choose how much workspace context NexisClaw injects into each run. These profiles do not
-            change your model, tools, channels, or theme.
+            Choose how much workspace context GreenchClaw injects into each run. These profiles do
+            not change your model, tools, channels, or theme.
           </p>
           ${stateBanner}
           <div class="qs-presets-grid">

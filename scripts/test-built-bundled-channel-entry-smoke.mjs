@@ -10,15 +10,15 @@ import { installProcessWarningFilter } from "./process-warning-filter.mjs";
 
 installProcessWarningFilter();
 
-process.env.NEXISCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK ??= "1";
+process.env.GREENCHCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK ??= "1";
 
 const { packageRoot } = parsePackageRootArg(
   process.argv.slice(2),
-  "NEXISCLAW_BUNDLED_CHANNEL_SMOKE_ROOT",
+  "GREENCHCLAW_BUNDLED_CHANNEL_SMOKE_ROOT",
 );
 const distExtensionsRoot = path.join(packageRoot, "dist", "extensions");
 const excludedPackageExtensionDirs = collectRootPackageExcludedExtensionDirs({ cwd: packageRoot });
-const installedLayoutEnv = "NEXISCLAW_BUNDLED_CHANNEL_SMOKE_INSTALLED_LAYOUT";
+const installedLayoutEnv = "GREENCHCLAW_BUNDLED_CHANNEL_SMOKE_INSTALLED_LAYOUT";
 
 function collectExcludedDistExtensionIds() {
   const packageJsonPath = path.join(packageRoot, "package.json");
@@ -41,7 +41,7 @@ function collectExcludedDistExtensionIds() {
 }
 
 function packageRootLooksInstalled(root) {
-  return root.replaceAll("\\", "/").endsWith("/node_modules/NexisClaw");
+  return root.replaceAll("\\", "/").endsWith("/node_modules/GreenchClaw");
 }
 
 function smokeInInstalledLayoutIfNeeded() {
@@ -49,9 +49,9 @@ function smokeInInstalledLayoutIfNeeded() {
     return;
   }
 
-  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-channel-entry-smoke-"));
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-channel-entry-smoke-"));
   const nodeModulesRoot = path.join(tempRoot, "node_modules");
-  const installedPackageRoot = path.join(nodeModulesRoot, "NexisClaw");
+  const installedPackageRoot = path.join(nodeModulesRoot, "GreenchClaw");
   fs.mkdirSync(nodeModulesRoot, { recursive: true });
   fs.symlinkSync(packageRoot, installedPackageRoot, "dir");
 
@@ -105,7 +105,7 @@ function collectBundledChannelEntryFiles() {
       continue;
     }
     const packageJson = readJson(packageJsonPath);
-    if (!packageJson.NexisClaw?.channel) {
+    if (!packageJson.GreenchClaw?.channel) {
       continue;
     }
     if (excludedPackageExtensionDirs.has(dirent.name)) {
@@ -113,8 +113,9 @@ function collectBundledChannelEntryFiles() {
     }
 
     const extensionEntries =
-      Array.isArray(packageJson.NexisClaw.extensions) && packageJson.NexisClaw.extensions.length > 0
-        ? packageJson.NexisClaw.extensions
+      Array.isArray(packageJson.GreenchClaw.extensions) &&
+      packageJson.GreenchClaw.extensions.length > 0
+        ? packageJson.GreenchClaw.extensions
         : ["./index.ts"];
     for (const entry of extensionEntries) {
       if (typeof entry !== "string" || entry.trim().length === 0) {
@@ -127,7 +128,7 @@ function collectBundledChannelEntryFiles() {
       });
     }
 
-    const setupEntry = packageJson.NexisClaw.setupEntry;
+    const setupEntry = packageJson.GreenchClaw.setupEntry;
     if (typeof setupEntry === "string" && setupEntry.trim().length > 0) {
       files.push({
         id: dirent.name,

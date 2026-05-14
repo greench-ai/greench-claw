@@ -2,7 +2,7 @@ import type { WebClient } from "@slack/web-api";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { createSlackWebClient } from "./client.js";
 import {
   collectSlackCursorItems,

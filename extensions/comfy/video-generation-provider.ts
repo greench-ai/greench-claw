@@ -2,7 +2,7 @@ import type {
   GeneratedVideoAsset,
   VideoGenerationProvider,
   VideoGenerationSourceAsset,
-} from "NexisClaw/plugin-sdk/video-generation";
+} from "GreenchClaw/plugin-sdk/video-generation";
 import {
   DEFAULT_COMFY_MODEL,
   _setComfyFetchGuardForTesting,

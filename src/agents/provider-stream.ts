@@ -1,13 +1,13 @@
 import type { StreamFn } from "@earendil-works/pi-agent-core";
 import type { Api, Model } from "@earendil-works/pi-ai";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveProviderStreamFn } from "../plugins/provider-runtime.js";
 import { ensureCustomApiRegistered } from "./custom-api-registry.js";
 import { createTransportAwareStreamFnForModel } from "./provider-transport-stream.js";
 
 export function registerProviderStreamForModel<TApi extends Api>(params: {
   model: Model<TApi>;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentDir?: string;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;

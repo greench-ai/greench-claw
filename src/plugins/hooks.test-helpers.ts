@@ -68,7 +68,7 @@ export const TEST_PLUGIN_AGENT_CTX: PluginHookAgentContext = {
   agentId: "test-agent",
   sessionKey: "test-session",
   sessionId: "test-session-id",
-  workspaceDir: "/tmp/NexisClaw-test",
+  workspaceDir: "/tmp/GreenchClaw-test",
   messageProvider: "test",
 };
 

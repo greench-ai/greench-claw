@@ -1,11 +1,11 @@
 {
-  "name": "@NexisClaw/canvas-plugin",
+  "name": "@GreenchClaw/canvas-plugin",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw Canvas plugin",
+  "description": "GreenchClaw Canvas plugin",
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
   "dependencies": {
     "@a2ui/lit": "0.9.3",
@@ -15,7 +15,7 @@
     "typebox": "1.1.38",
     "ws": "8.20.0"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ],

@@ -1,10 +1,10 @@
 {
-  "name": "@NexisClaw/feishu",
+  "name": "@GreenchClaw/feishu",
   "version": "2026.5.12-beta.1",
-  "description": "NexisClaw Feishu/Lark channel plugin (community maintained by @m1heng)",
+  "description": "GreenchClaw Feishu/Lark channel plugin (community maintained by @m1heng)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NexisClaw/NexisClaw"
+    "url": "https://github.com/GreenchClaw/GreenchClaw"
   },
   "type": "module",
   "dependencies": {
@@ -13,18 +13,18 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*",
-    "NexisClaw": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*",
+    "GreenchClaw": "workspace:*"
   },
   "peerDependencies": {
-    "NexisClaw": ">=2026.5.12-beta.1"
+    "GreenchClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "NexisClaw": {
+    "GreenchClaw": {
       "optional": true
     }
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -43,7 +43,7 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@NexisClaw/feishu",
+      "npmSpec": "@GreenchClaw/feishu",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.25"
     },
@@ -51,7 +51,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "NexisClawVersion": "2026.5.12-beta.1"
+      "GreenchClawVersion": "2026.5.12-beta.1"
     },
     "release": {
       "publishToClawHub": true,

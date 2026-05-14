@@ -43,7 +43,7 @@ function createManifestPlugin(id: string): PluginManifestRecord {
     origin: "bundled",
     rootDir: `/tmp/${id}`,
     source: "bundled",
-    manifestPath: `/tmp/${id}/NexisClaw.plugin.json`,
+    manifestPath: `/tmp/${id}/GreenchClaw.plugin.json`,
     providerDiscoverySource: `/tmp/${id}/provider-discovery.ts`,
   };
 }

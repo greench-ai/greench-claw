@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   ErrorCodes,
   applyBrowserProxyPaths,
@@ -21,7 +21,7 @@ import {
   withTimeout,
   type GatewayRequestHandlers,
   type NodeSession,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "../core-api.js";
 
 type BrowserRequestParams = {
@@ -89,7 +89,7 @@ function resolveBrowserNode(nodes: NodeSession[], query: string): NodeSession | 
 }
 
 function resolveBrowserNodeTarget(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   nodes: NodeSession[];
 }): NodeSession | null {
   const policy = params.cfg.gateway?.nodes?.browser;

@@ -1,4 +1,4 @@
-import { createScopedChannelConfigAdapter } from "NexisClaw/plugin-sdk/channel-config-helpers";
+import { createScopedChannelConfigAdapter } from "GreenchClaw/plugin-sdk/channel-config-helpers";
 import {
   listLineAccountIds,
   resolveDefaultLineAccountId,

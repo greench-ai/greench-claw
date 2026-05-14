@@ -1,4 +1,4 @@
-export type { AuthProfileStore } from "NexisClaw/plugin-sdk/video-generation-core";
+export type { AuthProfileStore } from "GreenchClaw/plugin-sdk/video-generation-core";
 export {
   buildNoCapabilityModelConfiguredMessage,
   createSubsystemLogger,
@@ -12,11 +12,11 @@ export {
   resolveAgentModelPrimaryValue,
   resolveCapabilityModelCandidates,
   throwCapabilityGenerationFailure,
-} from "NexisClaw/plugin-sdk/video-generation-core";
+} from "GreenchClaw/plugin-sdk/video-generation-core";
 export type {
   FallbackAttempt,
   GeneratedVideoAsset,
-  NexisClawConfig,
+  GreenchClawConfig,
   VideoGenerationIgnoredOverride,
   VideoGenerationMode,
   VideoGenerationModeCapabilities,
@@ -29,4 +29,4 @@ export type {
   VideoGenerationResult,
   VideoGenerationSourceAsset,
   VideoGenerationTransformCapabilities,
-} from "NexisClaw/plugin-sdk/video-generation-core";
+} from "GreenchClaw/plugin-sdk/video-generation-core";

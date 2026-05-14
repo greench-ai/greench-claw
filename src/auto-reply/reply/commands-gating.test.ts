@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { isCommandFlagEnabled } from "../../config/commands.js";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import type { MsgContext } from "../templating.js";
 import { handleBashChatCommand } from "./bash-command.js";
 import { requireGatewayClientScope } from "./command-gates.js";
@@ -138,7 +138,7 @@ vi.mock("./debug-commands.js", () => ({
   }),
 }));
 
-function buildParams(commandBody: string, cfg: NexisClawConfig): HandleCommandsParams {
+function buildParams(commandBody: string, cfg: GreenchClawConfig): HandleCommandsParams {
   const ctx = {
     Body: commandBody,
     CommandBody: commandBody,
@@ -229,7 +229,7 @@ describe("command gating", () => {
         CommandBody: "/bash echo hi",
         SessionKey: "agent:main:main",
       } as MsgContext,
-      cfg: { commands: { bash: false } } as NexisClawConfig,
+      cfg: { commands: { bash: false } } as GreenchClawConfig,
       sessionKey: "agent:main:main",
       isGroup: false,
       elevated: { enabled: true, allowed: true, failures: [] },
@@ -244,7 +244,7 @@ describe("command gating", () => {
         CommandBody: "/bash echo hi",
         SessionKey: "agent:main:main",
       } as MsgContext,
-      cfg: { commands: { bash: true } } as NexisClawConfig,
+      cfg: { commands: { bash: true } } as GreenchClawConfig,
       sessionKey: "agent:main:main",
       isGroup: false,
       elevated: {
@@ -260,7 +260,7 @@ describe("command gating", () => {
     const params = buildParams("/config show", {
       commands: { config: false, debug: false, text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     params.command.senderIsOwner = true;
     const result = await handleConfigCommand(params, true);
     expect(result?.reply?.text).toContain("/config is disabled");
@@ -270,7 +270,7 @@ describe("command gating", () => {
     const params = buildParams("/debug show", {
       commands: { config: false, debug: false, text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     params.command.senderIsOwner = true;
     const result = await handleDebugCommand(params, true);
     expect(result?.reply?.text).toContain("/debug is disabled");
@@ -280,14 +280,14 @@ describe("command gating", () => {
     const configParams = buildParams("/config show", {
       commands: { config: true, text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     const configResult = await handleConfigCommand(configParams, true);
     expect(configResult).toEqual({ shouldContinue: false });
 
     const debugParams = buildParams("/debug show", {
       commands: { debug: true, text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     const debugResult = await handleDebugCommand(debugParams, true);
     expect(debugResult).toEqual({ shouldContinue: false });
   });
@@ -300,7 +300,7 @@ describe("command gating", () => {
     const configParams = buildParams("/config show messages.ackReaction", {
       commands: { config: true, text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     configParams.command.senderIsOwner = true;
     const configResult = await handleConfigCommand(configParams, true);
     expect(configResult?.reply?.text).toContain("⚙️ Config");
@@ -309,7 +309,7 @@ describe("command gating", () => {
     const debugParams = buildParams("/debug show", {
       commands: { debug: true, text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     debugParams.command.senderIsOwner = true;
     const debugResult = await handleDebugCommand(debugParams, true);
     expect(debugResult?.reply?.text).toContain("Debug overrides");
@@ -319,7 +319,7 @@ describe("command gating", () => {
     const configParams = buildParams("/config show", {
       commands: { config: true, text: true },
       channels: { telegram: { allowFrom: ["*"] } },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     configParams.ctx.CommandSource = "native";
     configParams.command.channel = "telegram";
     configParams.command.channelId = "telegram";
@@ -333,7 +333,7 @@ describe("command gating", () => {
     const debugParams = buildParams("/debug show", {
       commands: { debug: true, text: true },
       channels: { telegram: { allowFrom: ["*"] } },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     debugParams.ctx.CommandSource = "native";
     debugParams.command.channel = "telegram";
     debugParams.command.channelId = "telegram";
@@ -351,7 +351,7 @@ describe("command gating", () => {
       config: true,
       debug: true,
     }) as Record<string, unknown>;
-    const cfg = { commands: inheritedCommands as never } as NexisClawConfig;
+    const cfg = { commands: inheritedCommands as never } as GreenchClawConfig;
     expect(isCommandFlagEnabled(cfg, "bash")).toBe(false);
     expect(isCommandFlagEnabled(cfg, "config")).toBe(false);
     expect(isCommandFlagEnabled(cfg, "debug")).toBe(false);
@@ -370,7 +370,7 @@ describe("command gating", () => {
           const params = buildParams('/config set messages.ackReaction=":)"', {
             commands: { config: true, text: true },
             channels: { whatsapp: { allowFrom: ["*"], configWrites: false } },
-          } as NexisClawConfig);
+          } as GreenchClawConfig);
           params.command.senderIsOwner = true;
           return params;
         })(),
@@ -389,7 +389,7 @@ describe("command gating", () => {
                 },
               },
             },
-          } as NexisClawConfig);
+          } as GreenchClawConfig);
           params.ctx.Provider = "telegram";
           params.ctx.Surface = "telegram";
           params.command.channel = "telegram";
@@ -406,7 +406,7 @@ describe("command gating", () => {
           const params = buildParams('/config set channels.telegram={"enabled":false}', {
             commands: { config: true, text: true },
             channels: { telegram: { configWrites: true } },
-          } as NexisClawConfig);
+          } as GreenchClawConfig);
           params.ctx.Provider = "telegram";
           params.ctx.Surface = "telegram";
           params.command.channel = "telegram";
@@ -443,7 +443,7 @@ describe("command gating", () => {
           },
         },
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     params.ctx.Provider = "telegram";
     params.ctx.Surface = "telegram";
     params.command.channel = "telegram";
@@ -530,7 +530,7 @@ describe("command gating", () => {
   });
 
   it("enforces gateway client permissions for /config commands", async () => {
-    const baseCfg = { commands: { config: true, text: true } } as NexisClawConfig;
+    const baseCfg = { commands: { config: true, text: true } } as GreenchClawConfig;
 
     const blockedParams = buildParams('/config set messages.ackReaction=":)"', baseCfg);
     blockedParams.ctx.Provider = "webchat";

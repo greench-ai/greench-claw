@@ -2,41 +2,41 @@
 set -euo pipefail
 
 SCRIPT_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ROOT_DIR="${NEXISCLAW_LIVE_DOCKER_REPO_ROOT:-$SCRIPT_ROOT_DIR}"
+ROOT_DIR="${GREENCHCLAW_LIVE_DOCKER_REPO_ROOT:-$SCRIPT_ROOT_DIR}"
 ROOT_DIR="$(cd "$ROOT_DIR" && pwd)"
-TRUSTED_HARNESS_DIR="${NEXISCLAW_LIVE_DOCKER_TRUSTED_HARNESS_DIR:-$SCRIPT_ROOT_DIR}"
+TRUSTED_HARNESS_DIR="${GREENCHCLAW_LIVE_DOCKER_TRUSTED_HARNESS_DIR:-$SCRIPT_ROOT_DIR}"
 if [[ -z "$TRUSTED_HARNESS_DIR" || ! -d "$TRUSTED_HARNESS_DIR" ]]; then
   echo "ERROR: trusted live Docker harness directory not found: ${TRUSTED_HARNESS_DIR:-<empty>}." >&2
   exit 1
 fi
 TRUSTED_HARNESS_DIR="$(cd "$TRUSTED_HARNESS_DIR" && pwd)"
 source "$TRUSTED_HARNESS_DIR/scripts/lib/live-docker-auth.sh"
-IMAGE_NAME="${NEXISCLAW_IMAGE:-NexisClaw:local}"
-LIVE_IMAGE_NAME="${NEXISCLAW_LIVE_IMAGE:-${IMAGE_NAME}-live}"
-CONFIG_DIR="${NEXISCLAW_CONFIG_DIR:-$HOME/.NexisClaw}"
-WORKSPACE_DIR="${NEXISCLAW_WORKSPACE_DIR:-$HOME/.NexisClaw/workspace}"
-PROFILE_FILE="$(NexisClaw_live_default_profile_file)"
-ACP_AGENT_LIST_RAW="${NEXISCLAW_LIVE_ACP_BIND_AGENTS:-${NEXISCLAW_LIVE_ACP_BIND_AGENT:-claude,codex,gemini}}"
+IMAGE_NAME="${GREENCHCLAW_IMAGE:-GreenchClaw:local}"
+LIVE_IMAGE_NAME="${GREENCHCLAW_LIVE_IMAGE:-${IMAGE_NAME}-live}"
+CONFIG_DIR="${GREENCHCLAW_CONFIG_DIR:-$HOME/.GreenchClaw}"
+WORKSPACE_DIR="${GREENCHCLAW_WORKSPACE_DIR:-$HOME/.GreenchClaw/workspace}"
+PROFILE_FILE="$(GreenchClaw_live_default_profile_file)"
+ACP_AGENT_LIST_RAW="${GREENCHCLAW_LIVE_ACP_BIND_AGENTS:-${GREENCHCLAW_LIVE_ACP_BIND_AGENT:-claude,codex,gemini}}"
 TEMP_DIRS=()
-DOCKER_USER="${NEXISCLAW_DOCKER_USER:-node}"
+DOCKER_USER="${GREENCHCLAW_DOCKER_USER:-node}"
 DOCKER_HOME_MOUNT=()
 DOCKER_AUTH_PRESTAGED=0
 DOCKER_TRUSTED_HARNESS_CONTAINER_DIR="/trusted-harness"
 DOCKER_TRUSTED_HARNESS_MOUNT=(-v "$TRUSTED_HARNESS_DIR":"$DOCKER_TRUSTED_HARNESS_CONTAINER_DIR":ro)
 
-NexisClaw_live_acp_bind_append_build_extension() {
+GreenchClaw_live_acp_bind_append_build_extension() {
   local extension="${1:?extension required}"
-  local current="${NEXISCLAW_DOCKER_BUILD_EXTENSIONS:-${NEXISCLAW_EXTENSIONS:-}}"
+  local current="${GREENCHCLAW_DOCKER_BUILD_EXTENSIONS:-${GREENCHCLAW_EXTENSIONS:-}}"
   case " $current " in
     *" $extension "*)
       ;;
     *)
-      export NEXISCLAW_DOCKER_BUILD_EXTENSIONS="${current:+$current }$extension"
+      export GREENCHCLAW_DOCKER_BUILD_EXTENSIONS="${current:+$current }$extension"
       ;;
   esac
 }
 
-NexisClaw_live_acp_bind_resolve_auth_provider() {
+GreenchClaw_live_acp_bind_resolve_auth_provider() {
   case "${1:-}" in
     claude) printf '%s\n' "claude-cli" ;;
     codex) printf '%s\n' "codex-cli" ;;
@@ -44,19 +44,19 @@ NexisClaw_live_acp_bind_resolve_auth_provider() {
     gemini) printf '%s\n' "google-gemini-cli" ;;
     opencode) printf '%s\n' "opencode" ;;
     *)
-      echo "Unsupported NEXISCLAW_LIVE_ACP_BIND agent: ${1:-} (expected claude, codex, droid, gemini, or opencode)" >&2
+      echo "Unsupported GREENCHCLAW_LIVE_ACP_BIND agent: ${1:-} (expected claude, codex, droid, gemini, or opencode)" >&2
       return 1
       ;;
   esac
 }
 
-NexisClaw_live_acp_bind_resolve_agent_command() {
+GreenchClaw_live_acp_bind_resolve_agent_command() {
   case "${1:-}" in
-    claude) printf '%s' "${NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND_CLAUDE:-${NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
-    codex) printf '%s' "${NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND_CODEX:-${NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
-    droid) printf '%s' "${NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND_DROID:-${NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
-    gemini) printf '%s' "${NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND_GEMINI:-${NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
-    opencode) printf '%s' "${NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND_OPENCODE:-${NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
+    claude) printf '%s' "${GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND_CLAUDE:-${GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
+    codex) printf '%s' "${GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND_CODEX:-${GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
+    droid) printf '%s' "${GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND_DROID:-${GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
+    gemini) printf '%s' "${GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND_GEMINI:-${GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
+    opencode) printf '%s' "${GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND_OPENCODE:-${GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}}" ;;
     *) return 1 ;;
   esac
 }
@@ -68,26 +68,26 @@ cleanup_temp_dirs() {
 }
 trap cleanup_temp_dirs EXIT
 
-if [[ -n "${NEXISCLAW_DOCKER_CLI_TOOLS_DIR:-}" ]]; then
-  CLI_TOOLS_DIR="${NEXISCLAW_DOCKER_CLI_TOOLS_DIR}"
-elif NexisClaw_live_is_ci; then
-  CLI_TOOLS_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/NexisClaw-docker-cli-tools.XXXXXX")"
+if [[ -n "${GREENCHCLAW_DOCKER_CLI_TOOLS_DIR:-}" ]]; then
+  CLI_TOOLS_DIR="${GREENCHCLAW_DOCKER_CLI_TOOLS_DIR}"
+elif GreenchClaw_live_is_ci; then
+  CLI_TOOLS_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/GreenchClaw-docker-cli-tools.XXXXXX")"
   TEMP_DIRS+=("$CLI_TOOLS_DIR")
 else
-  CLI_TOOLS_DIR="$HOME/.cache/NexisClaw/docker-cli-tools"
+  CLI_TOOLS_DIR="$HOME/.cache/GreenchClaw/docker-cli-tools"
 fi
-if [[ -n "${NEXISCLAW_DOCKER_CACHE_HOME_DIR:-}" ]]; then
-  CACHE_HOME_DIR="${NEXISCLAW_DOCKER_CACHE_HOME_DIR}"
-elif NexisClaw_live_is_ci; then
-  CACHE_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/NexisClaw-docker-cache.XXXXXX")"
+if [[ -n "${GREENCHCLAW_DOCKER_CACHE_HOME_DIR:-}" ]]; then
+  CACHE_HOME_DIR="${GREENCHCLAW_DOCKER_CACHE_HOME_DIR}"
+elif GreenchClaw_live_is_ci; then
+  CACHE_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/GreenchClaw-docker-cache.XXXXXX")"
   TEMP_DIRS+=("$CACHE_HOME_DIR")
 else
-  CACHE_HOME_DIR="$HOME/.cache/NexisClaw/docker-cache"
+  CACHE_HOME_DIR="$HOME/.cache/GreenchClaw/docker-cache"
 fi
 
 mkdir -p "$CLI_TOOLS_DIR"
 mkdir -p "$CACHE_HOME_DIR"
-if NexisClaw_live_is_ci; then
+if GreenchClaw_live_is_ci; then
   DOCKER_USER="$(id -u):$(id -g)"
 fi
 
@@ -110,9 +110,9 @@ export npm_config_cache="$NPM_CONFIG_CACHE"
 mkdir -p "$NPM_CONFIG_PREFIX" "$HOME/.local/bin" "$XDG_CACHE_HOME" "$COREPACK_HOME" "$NPM_CONFIG_CACHE"
 chmod 700 "$XDG_CACHE_HOME" "$COREPACK_HOME" "$NPM_CONFIG_CACHE" || true
 export PATH="$HOME/.local/bin:$NPM_CONFIG_PREFIX/bin:$PATH"
-if [ "${NEXISCLAW_DOCKER_AUTH_PRESTAGED:-0}" != "1" ]; then
-  IFS=',' read -r -a auth_dirs <<<"${NEXISCLAW_DOCKER_AUTH_DIRS_RESOLVED:-}"
-  IFS=',' read -r -a auth_files <<<"${NEXISCLAW_DOCKER_AUTH_FILES_RESOLVED:-}"
+if [ "${GREENCHCLAW_DOCKER_AUTH_PRESTAGED:-0}" != "1" ]; then
+  IFS=',' read -r -a auth_dirs <<<"${GREENCHCLAW_DOCKER_AUTH_DIRS_RESOLVED:-}"
+  IFS=',' read -r -a auth_files <<<"${GREENCHCLAW_DOCKER_AUTH_FILES_RESOLVED:-}"
   if ((${#auth_dirs[@]} > 0)); then
     for auth_dir in "${auth_dirs[@]}"; do
       [ -n "$auth_dir" ] || continue
@@ -134,7 +134,7 @@ if [ "${NEXISCLAW_DOCKER_AUTH_PRESTAGED:-0}" != "1" ]; then
     done
   fi
 fi
-agent="${NEXISCLAW_LIVE_ACP_BIND_AGENT:-claude}"
+agent="${GREENCHCLAW_LIVE_ACP_BIND_AGENT:-claude}"
 case "$agent" in
   claude)
     if [ ! -x "$NPM_CONFIG_PREFIX/bin/claude" ]; then
@@ -148,11 +148,11 @@ case "$agent" in
       cat > "$NPM_CONFIG_PREFIX/bin/claude" <<WRAP
 #!/usr/bin/env bash
 script_dir="\$(CDPATH= cd -- "\$(dirname -- "\$0")" && pwd)"
-if [ -n "\${NEXISCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY:-}" ]; then
-  export ANTHROPIC_API_KEY="\${NEXISCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY}"
+if [ -n "\${GREENCHCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY:-}" ]; then
+  export ANTHROPIC_API_KEY="\${GREENCHCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY}"
 fi
-if [ -n "\${NEXISCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY_OLD:-}" ]; then
-  export ANTHROPIC_API_KEY_OLD="\${NEXISCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY_OLD}"
+if [ -n "\${GREENCHCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY_OLD:-}" ]; then
+  export ANTHROPIC_API_KEY_OLD="\${GREENCHCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY_OLD}"
 fi
 exec "\$script_dir/claude-real" "\$@"
 WRAP
@@ -214,89 +214,89 @@ NODE
       npm install -g opencode-ai
     fi
     export OPENCODE_CONFIG_CONTENT="$(
-      node -e 'process.stdout.write(JSON.stringify({model: process.env.NEXISCLAW_LIVE_ACP_BIND_OPENCODE_MODEL || "opencode/kimi-k2.6"}))'
+      node -e 'process.stdout.write(JSON.stringify({model: process.env.GREENCHCLAW_LIVE_ACP_BIND_OPENCODE_MODEL || "opencode/kimi-k2.6"}))'
     )"
     ;;
   *)
-    echo "Unsupported NEXISCLAW_LIVE_ACP_BIND_AGENT: $agent" >&2
+    echo "Unsupported GREENCHCLAW_LIVE_ACP_BIND_AGENT: $agent" >&2
     exit 1
     ;;
 esac
 tmp_dir="$(mktemp -d)"
-trusted_scripts_dir="${NEXISCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
+trusted_scripts_dir="${GREENCHCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
 source "$trusted_scripts_dir/lib/live-docker-stage.sh"
-NexisClaw_live_stage_source_tree "$tmp_dir"
-NexisClaw_live_stage_node_modules "$tmp_dir"
-NexisClaw_live_link_runtime_tree "$tmp_dir"
-NexisClaw_live_stage_state_dir "$tmp_dir/.NexisClaw-state"
-NexisClaw_live_prepare_staged_config
+GreenchClaw_live_stage_source_tree "$tmp_dir"
+GreenchClaw_live_stage_node_modules "$tmp_dir"
+GreenchClaw_live_link_runtime_tree "$tmp_dir"
+GreenchClaw_live_stage_state_dir "$tmp_dir/.GreenchClaw-state"
+GreenchClaw_live_prepare_staged_config
 cd "$tmp_dir"
-export NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND="${NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}"
+export GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND="${GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND:-}"
 pnpm test:live src/gateway/gateway-acp-bind.live.test.ts
 EOF
 
-NexisClaw_live_acp_bind_append_build_extension acpx
-NEXISCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"
+GreenchClaw_live_acp_bind_append_build_extension acpx
+GREENCHCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR" "$TRUSTED_HARNESS_DIR/scripts/test-live-build-docker.sh"
 
 IFS=',' read -r -a ACP_AGENT_TOKENS <<<"$ACP_AGENT_LIST_RAW"
 ACP_AGENTS=()
 for token in "${ACP_AGENT_TOKENS[@]}"; do
-  agent="$(NexisClaw_live_trim "$token")"
+  agent="$(GreenchClaw_live_trim "$token")"
   [[ -n "$agent" ]] || continue
-  NexisClaw_live_acp_bind_resolve_auth_provider "$agent" >/dev/null
+  GreenchClaw_live_acp_bind_resolve_auth_provider "$agent" >/dev/null
   ACP_AGENTS+=("$agent")
 done
 
 if ((${#ACP_AGENTS[@]} == 0)); then
-  echo "No ACP bind agents selected. Use NEXISCLAW_LIVE_ACP_BIND_AGENTS=claude,codex,droid,gemini,opencode." >&2
+  echo "No ACP bind agents selected. Use GREENCHCLAW_LIVE_ACP_BIND_AGENTS=claude,codex,droid,gemini,opencode." >&2
   exit 1
 fi
 
 for ACP_AGENT in "${ACP_AGENTS[@]}"; do
-  AUTH_PROVIDER="$(NexisClaw_live_acp_bind_resolve_auth_provider "$ACP_AGENT")"
-  AGENT_COMMAND="$(NexisClaw_live_acp_bind_resolve_agent_command "$ACP_AGENT")"
+  AUTH_PROVIDER="$(GreenchClaw_live_acp_bind_resolve_auth_provider "$ACP_AGENT")"
+  AGENT_COMMAND="$(GreenchClaw_live_acp_bind_resolve_agent_command "$ACP_AGENT")"
 
   AUTH_DIRS=()
   AUTH_FILES=()
-  if [[ -n "${NEXISCLAW_DOCKER_AUTH_DIRS:-}" ]]; then
+  if [[ -n "${GREENCHCLAW_DOCKER_AUTH_DIRS:-}" ]]; then
     while IFS= read -r auth_dir; do
       [[ -n "$auth_dir" ]] || continue
       AUTH_DIRS+=("$auth_dir")
-    done < <(NexisClaw_live_collect_auth_dirs)
+    done < <(GreenchClaw_live_collect_auth_dirs)
     while IFS= read -r auth_file; do
       [[ -n "$auth_file" ]] || continue
       AUTH_FILES+=("$auth_file")
-    done < <(NexisClaw_live_collect_auth_files)
+    done < <(GreenchClaw_live_collect_auth_files)
   else
     while IFS= read -r auth_dir; do
       [[ -n "$auth_dir" ]] || continue
       AUTH_DIRS+=("$auth_dir")
-    done < <(NexisClaw_live_collect_auth_dirs_from_csv "$AUTH_PROVIDER")
+    done < <(GreenchClaw_live_collect_auth_dirs_from_csv "$AUTH_PROVIDER")
     while IFS= read -r auth_file; do
       [[ -n "$auth_file" ]] || continue
       AUTH_FILES+=("$auth_file")
-    done < <(NexisClaw_live_collect_auth_files_from_csv "$AUTH_PROVIDER")
+    done < <(GreenchClaw_live_collect_auth_files_from_csv "$AUTH_PROVIDER")
   fi
 
   AUTH_DIRS_CSV=""
   if ((${#AUTH_DIRS[@]} > 0)); then
-    AUTH_DIRS_CSV="$(NexisClaw_live_join_csv "${AUTH_DIRS[@]}")"
+    AUTH_DIRS_CSV="$(GreenchClaw_live_join_csv "${AUTH_DIRS[@]}")"
   fi
   AUTH_FILES_CSV=""
   if ((${#AUTH_FILES[@]} > 0)); then
-    AUTH_FILES_CSV="$(NexisClaw_live_join_csv "${AUTH_FILES[@]}")"
+    AUTH_FILES_CSV="$(GreenchClaw_live_join_csv "${AUTH_FILES[@]}")"
   fi
 
   DOCKER_HOME_MOUNT=()
   DOCKER_AUTH_PRESTAGED=0
-  if NexisClaw_live_is_ci; then
-    DOCKER_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/NexisClaw-docker-home.XXXXXX")"
+  if GreenchClaw_live_is_ci; then
+    DOCKER_HOME_DIR="$(mktemp -d "${RUNNER_TEMP:-/tmp}/GreenchClaw-docker-home.XXXXXX")"
     TEMP_DIRS+=("$DOCKER_HOME_DIR")
     DOCKER_HOME_MOUNT=(-v "$DOCKER_HOME_DIR":/home/node)
   fi
 
   if [[ -n "${DOCKER_HOME_DIR:-}" ]]; then
-    NexisClaw_live_stage_auth_into_home "$DOCKER_HOME_DIR" "${AUTH_DIRS[@]}" --files "${AUTH_FILES[@]}"
+    GreenchClaw_live_stage_auth_into_home "$DOCKER_HOME_DIR" "${AUTH_DIRS[@]}" --files "${AUTH_FILES[@]}"
     DOCKER_AUTH_PRESTAGED=1
   fi
 
@@ -313,7 +313,7 @@ for ACP_AGENT in "${ACP_AGENTS[@]}"; do
   EXTERNAL_AUTH_MOUNTS=()
   if ((${#AUTH_DIRS[@]} > 0)); then
     for auth_dir in "${AUTH_DIRS[@]}"; do
-      auth_dir="$(NexisClaw_live_validate_relative_home_path "$auth_dir")"
+      auth_dir="$(GreenchClaw_live_validate_relative_home_path "$auth_dir")"
       host_path="$HOME/$auth_dir"
       if [[ -d "$host_path" ]]; then
         EXTERNAL_AUTH_MOUNTS+=(-v "$host_path":/host-auth/"$auth_dir":ro)
@@ -322,7 +322,7 @@ for ACP_AGENT in "${ACP_AGENTS[@]}"; do
   fi
   if ((${#AUTH_FILES[@]} > 0)); then
     for auth_file in "${AUTH_FILES[@]}"; do
-      auth_file="$(NexisClaw_live_validate_relative_home_path "$auth_file")"
+      auth_file="$(GreenchClaw_live_validate_relative_home_path "$auth_file")"
       host_path="$HOME/$auth_file"
       if [[ -f "$host_path" ]]; then
         EXTERNAL_AUTH_MOUNTS+=(-v "$host_path":/host-auth-files/"$auth_file":ro)
@@ -340,8 +340,8 @@ for ACP_AGENT in "${ACP_AGENTS[@]}"; do
     --entrypoint bash \
     -e ANTHROPIC_API_KEY \
     -e ANTHROPIC_API_KEY_OLD \
-    -e NEXISCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}" \
-    -e NEXISCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY_OLD="${ANTHROPIC_API_KEY_OLD:-}" \
+    -e GREENCHCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}" \
+    -e GREENCHCLAW_LIVE_ACP_BIND_ANTHROPIC_API_KEY_OLD="${ANTHROPIC_API_KEY_OLD:-}" \
     -e GEMINI_API_KEY \
     -e GOOGLE_API_KEY \
     -e FACTORY_API_KEY \
@@ -352,28 +352,28 @@ for ACP_AGENT in "${ACP_AGENTS[@]}"; do
     -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
     -e HOME=/home/node \
     -e NODE_OPTIONS=--disable-warning=ExperimentalWarning \
-    -e NEXISCLAW_SKIP_CHANNELS=1 \
-    -e NEXISCLAW_VITEST_FS_MODULE_CACHE=0 \
-    -e NEXISCLAW_DOCKER_AUTH_PRESTAGED="$DOCKER_AUTH_PRESTAGED" \
-    -e NEXISCLAW_DOCKER_AUTH_DIRS_RESOLVED="$AUTH_DIRS_CSV" \
-    -e NEXISCLAW_DOCKER_AUTH_FILES_RESOLVED="$AUTH_FILES_CSV" \
-    -e NEXISCLAW_LIVE_DOCKER_SCRIPTS_DIR="${DOCKER_TRUSTED_HARNESS_CONTAINER_DIR}/scripts" \
-    -e NEXISCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE="${NEXISCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}" \
-    -e NEXISCLAW_LIVE_TEST=1 \
-    -e NEXISCLAW_LIVE_ACP_BIND=1 \
-    -e NEXISCLAW_LIVE_ACP_BIND_AGENT="$ACP_AGENT" \
-    -e NEXISCLAW_LIVE_ACP_BIND_OPENCODE_MODEL="${NEXISCLAW_LIVE_ACP_BIND_OPENCODE_MODEL:-opencode/kimi-k2.6}" \
-    -e NEXISCLAW_LIVE_ACP_BIND_AGENT_COMMAND="$AGENT_COMMAND")
-  NexisClaw_live_append_array DOCKER_RUN_ARGS DOCKER_HOME_MOUNT
-  NexisClaw_live_append_array DOCKER_RUN_ARGS DOCKER_TRUSTED_HARNESS_MOUNT
+    -e GREENCHCLAW_SKIP_CHANNELS=1 \
+    -e GREENCHCLAW_VITEST_FS_MODULE_CACHE=0 \
+    -e GREENCHCLAW_DOCKER_AUTH_PRESTAGED="$DOCKER_AUTH_PRESTAGED" \
+    -e GREENCHCLAW_DOCKER_AUTH_DIRS_RESOLVED="$AUTH_DIRS_CSV" \
+    -e GREENCHCLAW_DOCKER_AUTH_FILES_RESOLVED="$AUTH_FILES_CSV" \
+    -e GREENCHCLAW_LIVE_DOCKER_SCRIPTS_DIR="${DOCKER_TRUSTED_HARNESS_CONTAINER_DIR}/scripts" \
+    -e GREENCHCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE="${GREENCHCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}" \
+    -e GREENCHCLAW_LIVE_TEST=1 \
+    -e GREENCHCLAW_LIVE_ACP_BIND=1 \
+    -e GREENCHCLAW_LIVE_ACP_BIND_AGENT="$ACP_AGENT" \
+    -e GREENCHCLAW_LIVE_ACP_BIND_OPENCODE_MODEL="${GREENCHCLAW_LIVE_ACP_BIND_OPENCODE_MODEL:-opencode/kimi-k2.6}" \
+    -e GREENCHCLAW_LIVE_ACP_BIND_AGENT_COMMAND="$AGENT_COMMAND")
+  GreenchClaw_live_append_array DOCKER_RUN_ARGS DOCKER_HOME_MOUNT
+  GreenchClaw_live_append_array DOCKER_RUN_ARGS DOCKER_TRUSTED_HARNESS_MOUNT
   DOCKER_RUN_ARGS+=(\
     -v "$CACHE_HOME_DIR":/home/node/.cache \
     -v "$ROOT_DIR":/src:ro \
-    -v "$CONFIG_DIR":/home/node/.NexisClaw \
-    -v "$WORKSPACE_DIR":/home/node/.NexisClaw/workspace \
+    -v "$CONFIG_DIR":/home/node/.GreenchClaw \
+    -v "$WORKSPACE_DIR":/home/node/.GreenchClaw/workspace \
     -v "$CLI_TOOLS_DIR":/home/node/.npm-global)
-  NexisClaw_live_append_array DOCKER_RUN_ARGS EXTERNAL_AUTH_MOUNTS
-  NexisClaw_live_append_array DOCKER_RUN_ARGS PROFILE_MOUNT
+  GreenchClaw_live_append_array DOCKER_RUN_ARGS EXTERNAL_AUTH_MOUNTS
+  GreenchClaw_live_append_array DOCKER_RUN_ARGS PROFILE_MOUNT
   DOCKER_RUN_ARGS+=(\
     "$LIVE_IMAGE_NAME" \
     -lc "$LIVE_TEST_CMD")

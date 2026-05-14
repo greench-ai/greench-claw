@@ -16,12 +16,12 @@ const mocks = vi.hoisted(() => ({
     },
     threadId: "thread-1",
   })),
-  formatDoctorNonInteractiveHint: vi.fn(() => "Run: NexisClaw doctor --non-interactive"),
+  formatDoctorNonInteractiveHint: vi.fn(() => "Run: GreenchClaw doctor --non-interactive"),
   writeRestartSentinel: vi.fn(async (_payload: RestartSentinelPayload) => "/tmp/sentinel.json"),
   scheduleGatewaySigusr1Restart: vi.fn((_opts?: ScheduleGatewayRestartArgs) => ({
     scheduled: true,
   })),
-  triggerNexisClawRestart: vi.fn(() => ({ ok: true, method: "launchctl" })),
+  triggerGreenchClawRestart: vi.fn(() => ({ ok: true, method: "launchctl" })),
 }));
 
 vi.mock("node:fs/promises", () => ({
@@ -70,7 +70,7 @@ vi.mock("../../infra/restart-sentinel.js", async () => {
 
 vi.mock("../../infra/restart.js", () => ({
   scheduleGatewaySigusr1Restart: mocks.scheduleGatewaySigusr1Restart,
-  triggerNexisClawRestart: mocks.triggerNexisClawRestart,
+  triggerGreenchClawRestart: mocks.triggerGreenchClawRestart,
 }));
 
 const { handleRestartCommand } = await import("./commands-session.js");
@@ -116,8 +116,8 @@ describe("handleRestartCommand", () => {
     mocks.formatDoctorNonInteractiveHint.mockClear();
     mocks.writeRestartSentinel.mockClear();
     mocks.scheduleGatewaySigusr1Restart.mockClear();
-    mocks.triggerNexisClawRestart.mockReset();
-    mocks.triggerNexisClawRestart.mockReturnValue({ ok: true, method: "launchctl" });
+    mocks.triggerGreenchClawRestart.mockReset();
+    mocks.triggerGreenchClawRestart.mockReturnValue({ ok: true, method: "launchctl" });
   });
 
   it("writes a routed restart sentinel before restarting from chat", async () => {
@@ -144,12 +144,12 @@ describe("handleRestartCommand", () => {
       kind: "agentTurn",
       message: DEFAULT_RESTART_SUCCESS_CONTINUATION_MESSAGE,
     });
-    expect(sentinelPayload?.doctorHint).toBe("Run: NexisClaw doctor --non-interactive");
+    expect(sentinelPayload?.doctorHint).toBe("Run: GreenchClaw doctor --non-interactive");
     expect(sentinelPayload?.stats).toEqual({
       mode: "gateway.restart",
       reason: "/restart",
     });
-    expect(mocks.triggerNexisClawRestart).toHaveBeenCalledTimes(1);
+    expect(mocks.triggerGreenchClawRestart).toHaveBeenCalledTimes(1);
   });
 
   it("prepares the routed sentinel only when SIGUSR1 restart emits", async () => {
@@ -160,7 +160,7 @@ describe("handleRestartCommand", () => {
 
       expect(result?.reply?.text).toContain("SIGUSR1");
       expect(mocks.writeRestartSentinel).not.toHaveBeenCalled();
-      expect(mocks.triggerNexisClawRestart).not.toHaveBeenCalled();
+      expect(mocks.triggerGreenchClawRestart).not.toHaveBeenCalled();
 
       const scheduledArgs = mocks.scheduleGatewaySigusr1Restart.mock.calls.at(-1)?.[0];
       await scheduledArgs?.emitHooks?.beforeEmit?.();
@@ -173,7 +173,7 @@ describe("handleRestartCommand", () => {
       expect(sentinelPayload?.continuation).toEqual({
         kind: "agentTurn",
         message:
-          "The gateway restart completed successfully. Tell the user NexisClaw restarted successfully and continue any pending work.",
+          "The gateway restart completed successfully. Tell the user GreenchClaw restarted successfully and continue any pending work.",
       });
     } finally {
       process.removeListener("SIGUSR1", handler);
@@ -194,7 +194,7 @@ describe("handleRestartCommand", () => {
 
     expect(result).toEqual({ shouldContinue: false });
     expect(mocks.writeRestartSentinel).not.toHaveBeenCalled();
-    expect(mocks.triggerNexisClawRestart).not.toHaveBeenCalled();
+    expect(mocks.triggerGreenchClawRestart).not.toHaveBeenCalled();
   });
 
   it("does not restart when the sentinel cannot be written", async () => {
@@ -203,11 +203,11 @@ describe("handleRestartCommand", () => {
     const result = await handleRestartCommand(restartCommandParams(), true);
 
     expect(result?.reply?.text).toContain("could not persist");
-    expect(mocks.triggerNexisClawRestart).not.toHaveBeenCalled();
+    expect(mocks.triggerGreenchClawRestart).not.toHaveBeenCalled();
   });
 
   it("removes the success sentinel when fallback restart fails", async () => {
-    mocks.triggerNexisClawRestart.mockReturnValueOnce({
+    mocks.triggerGreenchClawRestart.mockReturnValueOnce({
       ok: false,
       method: "launchctl",
     });

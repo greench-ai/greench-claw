@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { WizardPrompter } from "../../wizard/prompts.js";
 import { promptChannelAccessConfig, type ChannelAccessPolicy } from "./setup-group-access.js";
 
 export async function configureChannelAccessWithAllowlist<TResolved>(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prompter: WizardPrompter;
   label: string;
   currentPolicy: ChannelAccessPolicy;
@@ -11,10 +11,10 @@ export async function configureChannelAccessWithAllowlist<TResolved>(params: {
   placeholder: string;
   updatePrompt: boolean;
   skipAllowlistEntries?: boolean;
-  setPolicy: (cfg: NexisClawConfig, policy: ChannelAccessPolicy) => NexisClawConfig;
-  resolveAllowlist?: (params: { cfg: NexisClawConfig; entries: string[] }) => Promise<TResolved>;
-  applyAllowlist?: (params: { cfg: NexisClawConfig; resolved: TResolved }) => NexisClawConfig;
-}): Promise<NexisClawConfig> {
+  setPolicy: (cfg: GreenchClawConfig, policy: ChannelAccessPolicy) => GreenchClawConfig;
+  resolveAllowlist?: (params: { cfg: GreenchClawConfig; entries: string[] }) => Promise<TResolved>;
+  applyAllowlist?: (params: { cfg: GreenchClawConfig; resolved: TResolved }) => GreenchClawConfig;
+}): Promise<GreenchClawConfig> {
   let next = params.cfg;
   const accessConfig = await promptChannelAccessConfig({
     prompter: params.prompter,

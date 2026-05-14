@@ -3,15 +3,15 @@ import {
   listConfiguredAccountIds,
   resolveListedDefaultAccountId,
   resolveNormalizedAccountEntry,
-} from "NexisClaw/plugin-sdk/account-core";
+} from "GreenchClaw/plugin-sdk/account-core";
 import {
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId,
   normalizeOptionalAccountId,
-} from "NexisClaw/plugin-sdk/account-id";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { hasConfiguredSecretInput } from "NexisClaw/plugin-sdk/secret-input-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/account-id";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { hasConfiguredSecretInput } from "GreenchClaw/plugin-sdk/secret-input-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   resolveMatrixAccountStringValues,
   type MatrixResolvedStringField,
@@ -136,12 +136,12 @@ function hasConfiguredDefaultMatrixAccountSource(params: {
   });
 }
 
-export function resolveMatrixChannelConfig(cfg: NexisClawConfig): Record<string, unknown> | null {
+export function resolveMatrixChannelConfig(cfg: GreenchClawConfig): Record<string, unknown> | null {
   return isRecord(cfg.channels?.matrix) ? cfg.channels.matrix : null;
 }
 
 export function findMatrixAccountEntry(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
 ): Record<string, unknown> | null {
   const channel = resolveMatrixChannelConfig(cfg);
@@ -158,7 +158,7 @@ export function findMatrixAccountEntry(
 }
 
 export function resolveConfiguredMatrixAccountIds(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): string[] {
   const channel = resolveMatrixChannelConfig(cfg);
@@ -182,7 +182,7 @@ export function resolveConfiguredMatrixAccountIds(
 }
 
 export function resolveMatrixDefaultOrOnlyAccountId(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): string {
   const channel = resolveMatrixChannelConfig(cfg);
@@ -202,7 +202,7 @@ export function resolveMatrixDefaultOrOnlyAccountId(
 }
 
 export function requiresExplicitMatrixDefaultAccount(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
   const channel = resolveMatrixChannelConfig(cfg);

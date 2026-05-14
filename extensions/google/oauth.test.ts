@@ -1,9 +1,9 @@
 import { join, parse } from "node:path";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/runtime-env")>(
-    "NexisClaw/plugin-sdk/runtime-env",
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/runtime-env")>(
+    "GreenchClaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -11,9 +11,9 @@ vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/ssrf-runtime")>(
-    "NexisClaw/plugin-sdk/ssrf-runtime",
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/ssrf-runtime")>(
+    "GreenchClaw/plugin-sdk/ssrf-runtime",
   );
   return {
     ...actual,
@@ -34,8 +34,8 @@ vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", async () => {
 });
 
 afterAll(() => {
-  vi.doUnmock("NexisClaw/plugin-sdk/runtime-env");
-  vi.doUnmock("NexisClaw/plugin-sdk/ssrf-runtime");
+  vi.doUnmock("GreenchClaw/plugin-sdk/runtime-env");
+  vi.doUnmock("GreenchClaw/plugin-sdk/ssrf-runtime");
   vi.resetModules();
 });
 
@@ -566,8 +566,8 @@ describe("loginGeminiCliOAuth", () => {
     "https://autopush-cloudcode-pa.sandbox.googleapis.com/v1internal:loadCodeAssist";
 
   const ENV_KEYS = [
-    "NEXISCLAW_GEMINI_OAUTH_CLIENT_ID",
-    "NEXISCLAW_GEMINI_OAUTH_CLIENT_SECRET",
+    "GREENCHCLAW_GEMINI_OAUTH_CLIENT_ID",
+    "GREENCHCLAW_GEMINI_OAUTH_CLIENT_SECRET",
     "GEMINI_CLI_OAUTH_CLIENT_ID",
     "GEMINI_CLI_OAUTH_CLIENT_SECRET",
     "GOOGLE_CLOUD_PROJECT",
@@ -620,7 +620,7 @@ describe("loginGeminiCliOAuth", () => {
   }
 
   function userInfoResponse(): Response {
-    return responseJson({ email: "lobster@NexisClaw.ai" });
+    return responseJson({ email: "lobster@GreenchClaw.ai" });
   }
 
   type RecordedFetchRequest = {
@@ -729,8 +729,8 @@ describe("loginGeminiCliOAuth", () => {
 
   beforeEach(() => {
     envSnapshot = Object.fromEntries(ENV_KEYS.map((key) => [key, process.env[key]]));
-    process.env.NEXISCLAW_GEMINI_OAUTH_CLIENT_ID = "test-client-id.apps.googleusercontent.com";
-    process.env.NEXISCLAW_GEMINI_OAUTH_CLIENT_SECRET = "GOCSPX-test-client-secret"; // pragma: allowlist secret
+    process.env.GREENCHCLAW_GEMINI_OAUTH_CLIENT_ID = "test-client-id.apps.googleusercontent.com";
+    process.env.GREENCHCLAW_GEMINI_OAUTH_CLIENT_SECRET = "GOCSPX-test-client-secret"; // pragma: allowlist secret
     delete process.env.GEMINI_CLI_OAUTH_CLIENT_ID;
     delete process.env.GEMINI_CLI_OAUTH_CLIENT_SECRET;
     delete process.env.GOOGLE_CLOUD_PROJECT;

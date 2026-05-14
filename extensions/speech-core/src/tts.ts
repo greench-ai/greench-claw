@@ -1,35 +1,38 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { resolveChannelTtsVoiceDelivery } from "NexisClaw/plugin-sdk/channel-targets";
+import { resolveChannelTtsVoiceDelivery } from "GreenchClaw/plugin-sdk/channel-targets";
 import type {
-  NexisClawConfig,
+  GreenchClawConfig,
   ResolvedTtsPersona,
   TtsAutoMode,
   TtsConfig,
   TtsModelOverrideConfig,
   TtsProvider,
-} from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { redactSensitiveText } from "NexisClaw/plugin-sdk/logging-core";
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { redactSensitiveText } from "GreenchClaw/plugin-sdk/logging-core";
 import {
   resolveSendableOutboundReplyParts,
   type ReplyPayload,
-} from "NexisClaw/plugin-sdk/reply-payload";
+} from "GreenchClaw/plugin-sdk/reply-payload";
 import {
   getRuntimeConfigSnapshot,
   getRuntimeConfigSourceSnapshot,
   selectApplicableRuntimeConfig,
-} from "NexisClaw/plugin-sdk/runtime-config-snapshot";
-import { isVerbose, logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { tempWorkspaceSync, resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/sandbox";
-import { privateFileStoreSync } from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
+import { isVerbose, logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import {
+  tempWorkspaceSync,
+  resolvePreferredGreenchClawTmpDir,
+} from "GreenchClaw/plugin-sdk/sandbox";
+import { privateFileStoreSync } from "GreenchClaw/plugin-sdk/security-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { stripMarkdown } from "NexisClaw/plugin-sdk/text-chunking";
-import { resolveConfigDir, resolveUserPath } from "NexisClaw/plugin-sdk/text-utility-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { stripMarkdown } from "GreenchClaw/plugin-sdk/text-chunking";
+import { resolveConfigDir, resolveUserPath } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import {
   canonicalizeSpeechProviderId,
   getSpeechProvider,
@@ -202,7 +205,7 @@ function resolveTtsPrefsPathValue(prefsPath: string | undefined): string {
   if (prefsPath?.trim()) {
     return resolveUserPath(prefsPath.trim());
   }
-  const envPath = process.env.NEXISCLAW_TTS_PREFS?.trim();
+  const envPath = process.env.GREENCHCLAW_TTS_PREFS?.trim();
   if (envPath) {
     return resolveUserPath(envPath);
   }
@@ -238,7 +241,7 @@ function resolveModelOverridePolicy(
   };
 }
 
-function sortSpeechProvidersForAutoSelection(cfg?: NexisClawConfig) {
+function sortSpeechProvidersForAutoSelection(cfg?: GreenchClawConfig) {
   return listSpeechProviders(cfg).toSorted((left, right) => {
     const leftOrder = left.autoSelectOrder ?? Number.MAX_SAFE_INTEGER;
     const rightOrder = right.autoSelectOrder ?? Number.MAX_SAFE_INTEGER;
@@ -249,7 +252,7 @@ function sortSpeechProvidersForAutoSelection(cfg?: NexisClawConfig) {
   });
 }
 
-function resolveTtsRuntimeConfig(cfg: NexisClawConfig): NexisClawConfig {
+function resolveTtsRuntimeConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return (
     selectApplicableRuntimeConfig({
       inputConfig: cfg,
@@ -367,7 +370,7 @@ function resolveRawProviderConfig(
 function resolveLazyProviderConfig(
   config: ResolvedTtsConfig,
   providerId: string,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
 ): SpeechProviderConfig {
   const canonical =
     normalizeConfiguredSpeechProviderId(providerId) ?? normalizeLowercaseStringOrEmpty(providerId);
@@ -430,7 +433,7 @@ function collectDirectProviderConfigEntries(raw: TtsConfig): Record<string, Spee
 export function getResolvedSpeechProviderConfig(
   config: ResolvedTtsConfig,
   providerId: string,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
 ): SpeechProviderConfig {
   const effectiveCfg = cfg ? resolveTtsRuntimeConfig(cfg) : config.sourceConfig;
   const canonical =
@@ -441,7 +444,7 @@ export function getResolvedSpeechProviderConfig(
 }
 
 export function resolveTtsConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   contextOrAgentId?: string | TtsConfigResolutionContext,
 ): ResolvedTtsConfig {
   cfg = resolveTtsRuntimeConfig(cfg);
@@ -502,7 +505,7 @@ export function resolveTtsAutoMode(params: {
 }
 
 function resolveEffectiveTtsAutoState(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionAuto?: string;
   agentId?: string;
   channelId?: string;
@@ -532,7 +535,7 @@ function resolveEffectiveTtsAutoState(params: {
 }
 
 export function buildTtsSystemPromptHint(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId?: string,
 ): string | undefined {
   cfg = resolveTtsRuntimeConfig(cfg);
@@ -678,7 +681,7 @@ export function setTtsProvider(prefsPath: string, provider: TtsProvider): void {
 }
 
 export function resolveExplicitTtsOverrides(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prefsPath?: string;
   provider?: string;
   modelId?: string;
@@ -832,7 +835,10 @@ function shouldDeliverTtsAsVoice(params: {
   return params.voiceCompatible === true || delivery.transcodesAudio === true;
 }
 
-export function resolveTtsProviderOrder(primary: TtsProvider, cfg?: NexisClawConfig): TtsProvider[] {
+export function resolveTtsProviderOrder(
+  primary: TtsProvider,
+  cfg?: GreenchClawConfig,
+): TtsProvider[] {
   const effectiveCfg = cfg ? resolveTtsRuntimeConfig(cfg) : undefined;
   const normalizedPrimary = canonicalizeSpeechProviderId(primary, effectiveCfg) ?? primary;
   const ordered = new Set<TtsProvider>([normalizedPrimary]);
@@ -848,7 +854,7 @@ export function resolveTtsProviderOrder(primary: TtsProvider, cfg?: NexisClawCon
 export function isTtsProviderConfigured(
   config: ResolvedTtsConfig,
   provider: TtsProvider,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
 ): boolean {
   const effectiveCfg = cfg ? resolveTtsRuntimeConfig(cfg) : config.sourceConfig;
   const resolvedProvider = getSpeechProvider(provider, effectiveCfg);
@@ -916,7 +922,7 @@ type TtsProviderReadyResolution =
 
 function resolveReadySpeechProvider(params: {
   provider: TtsProvider;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   config: ResolvedTtsConfig;
   persona?: ResolvedTtsPersona;
   requireTelephony?: boolean;
@@ -983,7 +989,7 @@ function resolveReadySpeechProvider(params: {
 async function prepareSpeechSynthesis(params: {
   provider: NonNullable<ReturnType<typeof getSpeechProvider>>;
   text: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   providerConfig: SpeechProviderConfig;
   providerOverrides?: SpeechProviderOverrides;
   persona?: ResolvedTtsPersona;
@@ -1025,7 +1031,7 @@ async function prepareSpeechSynthesis(params: {
 
 function resolveTtsRequestSetup(params: {
   text: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prefsPath?: string;
   providerOverride?: TtsProvider;
   disableFallback?: boolean;
@@ -1034,7 +1040,7 @@ function resolveTtsRequestSetup(params: {
   accountId?: string;
 }):
   | {
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       config: ResolvedTtsConfig;
       persona?: ResolvedTtsPersona;
       providers: TtsProvider[];
@@ -1097,7 +1103,7 @@ function resolveTtsResultVoice(
 
 export async function textToSpeech(params: {
   text: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prefsPath?: string;
   channel?: string;
   overrides?: TtsDirectiveOverrides;
@@ -1134,7 +1140,7 @@ export async function textToSpeech(params: {
   }
 
   const temp = tempWorkspaceSync({
-    rootDir: resolvePreferredNexisClawTmpDir(),
+    rootDir: resolvePreferredGreenchClawTmpDir(),
     prefix: "tts-",
   });
   const audioPath = temp.write(`voice-${Date.now()}${fileExtension}`, audioBuffer);
@@ -1209,7 +1215,7 @@ async function maybePreTranscodeForVoiceDelivery(params: {
 
 export async function synthesizeSpeech(params: {
   text: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prefsPath?: string;
   channel?: string;
   overrides?: TtsDirectiveOverrides;
@@ -1349,7 +1355,7 @@ export async function synthesizeSpeech(params: {
 
 export async function streamSpeech(params: {
   text: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prefsPath?: string;
   channel?: string;
   overrides?: TtsDirectiveOverrides;
@@ -1503,7 +1509,7 @@ export async function streamSpeech(params: {
 
 export async function textToSpeechStream(params: {
   text: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prefsPath?: string;
   channel?: string;
   overrides?: TtsDirectiveOverrides;
@@ -1527,7 +1533,7 @@ export async function textToSpeechStream(params: {
 
 export async function textToSpeechTelephony(params: {
   text: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prefsPath?: string;
   overrides?: TtsDirectiveOverrides;
 }): Promise<TtsTelephonyResult> {
@@ -1657,7 +1663,7 @@ export async function textToSpeechTelephony(params: {
 
 export async function listSpeechVoices(params: {
   provider: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   config?: ResolvedTtsConfig;
   apiKey?: string;
   baseUrl?: string;
@@ -1688,7 +1694,7 @@ export async function listSpeechVoices(params: {
 
 export async function maybeApplyTtsToPayload(params: {
   payload: ReplyPayload;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel?: string;
   kind?: "tool" | "block" | "final";
   inboundAudio?: boolean;

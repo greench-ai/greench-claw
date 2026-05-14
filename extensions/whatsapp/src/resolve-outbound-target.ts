@@ -1,4 +1,4 @@
-import { missingTargetError } from "NexisClaw/plugin-sdk/channel-feedback";
+import { missingTargetError } from "GreenchClaw/plugin-sdk/channel-feedback";
 import {
   isWhatsAppGroupJid,
   isWhatsAppNewsletterJid,

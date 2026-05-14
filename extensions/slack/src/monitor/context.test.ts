@@ -1,6 +1,6 @@
 import type { App } from "@slack/bolt";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import { describe, expect, it } from "vitest";
 import { createSlackMonitorContext } from "./context.js";
 
@@ -9,7 +9,7 @@ function createTestContext() {
     cfg: {
       channels: { slack: { enabled: true } },
       session: { dmScope: "main" },
-    } as NexisClawConfig,
+    } as GreenchClawConfig,
     accountId: "default",
     botToken: "xoxb-test",
     app: { client: {} } as App,
@@ -38,7 +38,7 @@ function createTestContext() {
     threadRequireExplicitMention: false,
     slashCommand: {
       enabled: true,
-      name: "NexisClaw",
+      name: "GreenchClaw",
       ephemeral: true,
       sessionPrefix: "slack:slash",
     },

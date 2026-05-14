@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { SessionEntry } from "../config/sessions.js";
 import { resolveSendPolicy } from "./send-policy.js";
 
 describe("resolveSendPolicy", () => {
   const cfgWithRules = (
-    rules: NonNullable<NonNullable<NexisClawConfig["session"]>["sendPolicy"]>["rules"],
+    rules: NonNullable<NonNullable<GreenchClawConfig["session"]>["sendPolicy"]>["rules"],
   ) =>
     ({
       session: {
@@ -14,17 +14,17 @@ describe("resolveSendPolicy", () => {
           rules,
         },
       },
-    }) as NexisClawConfig;
+    }) as GreenchClawConfig;
 
   it("defaults to allow", () => {
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
     expect(resolveSendPolicy({ cfg })).toBe("allow");
   });
 
   it("entry override wins", () => {
     const cfg = {
       session: { sendPolicy: { default: "allow" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const entry: SessionEntry = {
       sessionId: "s",
       updatedAt: 0,

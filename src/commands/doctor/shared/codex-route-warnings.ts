@@ -6,7 +6,7 @@ import { loadSessionStore, updateSessionStore } from "../../../config/sessions/s
 import { resolveAllAgentSessionStoreTargetsSync } from "../../../config/sessions/targets.js";
 import type { SessionEntry } from "../../../config/sessions/types.js";
 import type { AgentRuntimePolicyConfig } from "../../../config/types.agents-shared.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 
 type CodexRouteHit = {
   path: string;
@@ -21,7 +21,7 @@ type SessionRouteRepairResult = {
   sessionKeys: string[];
 };
 type ConfigRouteRepairResult = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   changes: CodexRouteHit[];
   runtimePinChanges: string[];
   runtimePolicyChanges: string[];
@@ -75,7 +75,7 @@ function resolveRuntime(params: {
   defaultsRuntime?: AgentRuntimePolicyConfig;
 }): string | undefined {
   return (
-    normalizeString(params.env?.NEXISCLAW_AGENT_RUNTIME) ??
+    normalizeString(params.env?.GREENCHCLAW_AGENT_RUNTIME) ??
     normalizeString(params.agentRuntime?.id) ??
     normalizeString(params.defaultsRuntime?.id)
   );
@@ -230,7 +230,7 @@ function collectAgentModelRefs(params: {
   }
 }
 
-function collectConfigModelRefs(cfg: NexisClawConfig, env?: NodeJS.ProcessEnv): CodexRouteHit[] {
+function collectConfigModelRefs(cfg: GreenchClawConfig, env?: NodeJS.ProcessEnv): CodexRouteHit[] {
   const hits: CodexRouteHit[] = [];
   const defaults = cfg.agents?.defaults;
   const defaultsRuntime = defaults?.agentRuntime;
@@ -470,7 +470,7 @@ function parseModelRef(modelRef: string): { provider: string; modelId: string } 
 }
 
 function resolveCurrentRuntimeIdForCanonicalModel(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   modelRef: string;
   agentId: string;
 }): string {
@@ -527,7 +527,7 @@ function setModelRuntimePolicy(params: {
 }
 
 function shieldExplicitListedAgentRefsFromDefaultPolicy(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   modelRef: string;
   changes: string[];
 }): void {
@@ -556,7 +556,7 @@ function shieldExplicitListedAgentRefsFromDefaultPolicy(params: {
 }
 
 function rewriteAgentModelRefs(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   hits: CodexRouteHit[];
   agent: MutableRecord | undefined;
   path: string;
@@ -648,7 +648,7 @@ function rewriteAgentModelRefs(params: {
 }
 
 function ensureCodexRuntimePolicy(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agent: MutableRecord;
   agentPath: string;
   modelRef: string;
@@ -686,7 +686,7 @@ function ensureCodexRuntimePolicy(params: {
 }
 
 function canonicalOpenAIModelUsesCodexRuntime(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   modelRef: string;
   agentId?: string;
 }): boolean {
@@ -713,7 +713,7 @@ function canonicalOpenAIModelUsesCodexRuntime(params: {
 }
 
 function rewriteStringModelSlotIfCanonicalCodexRuntime(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
   hits: CodexRouteHit[];
   container: MutableRecord | undefined;
@@ -744,7 +744,7 @@ function rewriteStringModelSlotIfCanonicalCodexRuntime(params: {
 }
 
 function rewriteModelConfigSlotIfCanonicalCodexRuntime(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
   hits: CodexRouteHit[];
   container: MutableRecord | undefined;
@@ -814,7 +814,7 @@ function clearLegacyAgentRuntimePolicy(
   }
 }
 
-function clearConfigLegacyAgentRuntimePolicies(cfg: NexisClawConfig): string[] {
+function clearConfigLegacyAgentRuntimePolicies(cfg: GreenchClawConfig): string[] {
   const changes: string[] = [];
   clearLegacyAgentRuntimePolicy(asMutableRecord(cfg.agents?.defaults), "agents.defaults", changes);
   const agents = Array.isArray(cfg.agents?.list) ? cfg.agents.list : [];
@@ -833,7 +833,7 @@ function clearConfigLegacyAgentRuntimePolicies(cfg: NexisClawConfig): string[] {
 }
 
 function rewriteConfigModelRefs(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): ConfigRouteRepairResult {
   const nextConfig = structuredClone(params.cfg);
@@ -946,7 +946,7 @@ function formatCodexRouteChange(hit: CodexRouteHit): string {
 }
 
 export function collectCodexRouteWarnings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): string[] {
   const hits = collectConfigModelRefs(params.cfg, params.env);
@@ -962,17 +962,17 @@ export function collectCodexRouteWarnings(params: {
             hit.runtime ? `; current runtime is "${hit.runtime}"` : ""
           }.`,
       ),
-      "- Run `NexisClaw doctor --fix`: it rewrites configured model refs and stale sessions to `openai/*`, moves Codex intent to provider/model runtime policy, and clears old whole-agent runtime pins.",
+      "- Run `GreenchClaw doctor --fix`: it rewrites configured model refs and stale sessions to `openai/*`, moves Codex intent to provider/model runtime policy, and clears old whole-agent runtime pins.",
     ].join("\n"),
   ];
 }
 
 export function maybeRepairCodexRoutes(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   shouldRepair: boolean;
   codexRuntimeReady?: boolean;
-}): { cfg: NexisClawConfig; warnings: string[]; changes: string[] } {
+}): { cfg: GreenchClawConfig; warnings: string[]; changes: string[] } {
   const hits = collectConfigModelRefs(params.cfg, params.env);
   if (hits.length === 0) {
     return { cfg: params.cfg, warnings: [], changes: [] };
@@ -1113,7 +1113,7 @@ function scanCodexSessionStoreRoutes(store: Record<string, SessionEntry>): strin
 }
 
 export async function maybeRepairCodexSessionRoutes(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   shouldRepair: boolean;
   codexRuntimeReady?: boolean;
@@ -1145,7 +1145,7 @@ export async function maybeRepairCodexSessionRoutes(params: {
               [
                 "- Legacy `openai-codex/*` session route state detected.",
                 `- Affected sessions: ${stale.length}.`,
-                "- Run `NexisClaw doctor --fix` to rewrite stale session model/provider pins across all agent session stores.",
+                "- Run `GreenchClaw doctor --fix` to rewrite stale session model/provider pins across all agent session stores.",
               ].join("\n"),
             ]
           : [],

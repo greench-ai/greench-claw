@@ -13,7 +13,7 @@ import type { CrestodianOverview } from "./overview.js";
 function overview(overrides: Partial<CrestodianOverview["tools"]> = {}): CrestodianOverview {
   return {
     config: {
-      path: "/tmp/NexisClaw.json",
+      path: "/tmp/GreenchClaw.json",
       exists: false,
       valid: false,
       issues: [],
@@ -33,8 +33,8 @@ function overview(overrides: Partial<CrestodianOverview["tools"]> = {}): Crestod
       reachable: false,
     },
     references: {
-      docsUrl: "https://docs.NexisClaw.ai",
-      sourceUrl: "https://github.com/NexisClaw/NexisClaw",
+      docsUrl: "https://docs.GreenchClaw.ai",
+      sourceUrl: "https://github.com/GreenchClaw/GreenchClaw",
     },
   };
 }
@@ -80,7 +80,7 @@ describe("Crestodian assistant", () => {
           apiKeys: { openai: true, anthropic: false },
         }),
         config: {
-          path: "/tmp/NexisClaw.json",
+          path: "/tmp/GreenchClaw.json",
           exists: true,
           valid: true,
           issues: [],
@@ -98,10 +98,10 @@ describe("Crestodian assistant", () => {
         defaultAgentId: "main",
         defaultModel: "openai/gpt-5.5",
         references: {
-          docsPath: "/tmp/NexisClaw/docs",
-          docsUrl: "https://docs.NexisClaw.ai",
-          sourcePath: "/tmp/NexisClaw",
-          sourceUrl: "https://github.com/NexisClaw/NexisClaw",
+          docsPath: "/tmp/GreenchClaw/docs",
+          docsUrl: "https://docs.GreenchClaw.ai",
+          sourcePath: "/tmp/GreenchClaw",
+          sourceUrl: "https://github.com/GreenchClaw/GreenchClaw",
         },
       },
     });
@@ -110,8 +110,8 @@ describe("Crestodian assistant", () => {
     expect(prompt).toContain("Default model: openai/gpt-5.5");
     expect(prompt).toContain("id=main, name=Main, workspace=/tmp/main");
     expect(prompt).toContain("OpenAI API key: found");
-    expect(prompt).toContain("NexisClaw docs: /tmp/NexisClaw/docs");
-    expect(prompt).toContain("NexisClaw source: /tmp/NexisClaw");
+    expect(prompt).toContain("GreenchClaw docs: /tmp/GreenchClaw/docs");
+    expect(prompt).toContain("GreenchClaw source: /tmp/GreenchClaw");
   });
 
   it("uses Claude CLI first for configless planning", async () => {

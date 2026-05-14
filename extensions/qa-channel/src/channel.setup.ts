@@ -1,4 +1,4 @@
-import { getChatChannelMeta } from "NexisClaw/plugin-sdk/channel-plugin-common";
+import { getChatChannelMeta } from "GreenchClaw/plugin-sdk/channel-plugin-common";
 import {
   listQaChannelAccountIds,
   resolveDefaultQaChannelAccountId,

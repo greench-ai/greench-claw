@@ -1,4 +1,4 @@
-# NexisClaw Android UI Style Guide
+# GreenchClaw Android UI Style Guide
 
 Scope: all native Android UI in `apps/android` (Jetpack Compose).
 Goal: one coherent visual system across onboarding, settings, and future screens.
@@ -104,10 +104,10 @@ Hard rule: avoid ultra-thin weights on light backgrounds.
 
 ## 11. Source Of Truth
 
-- `app/src/main/java/ai/NexisClaw/android/ui/NexisClawTheme.kt`
-- `app/src/main/java/ai/NexisClaw/android/ui/OnboardingFlow.kt`
-- `app/src/main/java/ai/NexisClaw/android/ui/RootScreen.kt`
-- `app/src/main/java/ai/NexisClaw/android/ui/SettingsSheet.kt`
-- `app/src/main/java/ai/NexisClaw/android/MainViewModel.kt`
+- `app/src/main/java/ai/GreenchClaw/android/ui/GreenchClawTheme.kt`
+- `app/src/main/java/ai/GreenchClaw/android/ui/OnboardingFlow.kt`
+- `app/src/main/java/ai/GreenchClaw/android/ui/RootScreen.kt`
+- `app/src/main/java/ai/GreenchClaw/android/ui/SettingsSheet.kt`
+- `app/src/main/java/ai/GreenchClaw/android/MainViewModel.kt`
 
 If style and implementation diverge, update both in the same change.

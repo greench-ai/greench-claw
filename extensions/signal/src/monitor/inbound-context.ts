@@ -1,9 +1,9 @@
-import { resolveChannelContextVisibilityMode } from "NexisClaw/plugin-sdk/context-visibility-runtime";
+import { resolveChannelContextVisibilityMode } from "GreenchClaw/plugin-sdk/context-visibility-runtime";
 import {
   evaluateSupplementalContextVisibility,
   type ContextVisibilityDecision,
-} from "NexisClaw/plugin-sdk/security-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/security-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   formatSignalSenderDisplay,
   isSignalSenderAllowed,

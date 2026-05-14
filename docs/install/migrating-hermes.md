@@ -1,16 +1,16 @@
 ---
-summary: "Move from Hermes to NexisClaw with a previewed, reversible import"
+summary: "Move from Hermes to GreenchClaw with a previewed, reversible import"
 read_when:
   - You are coming from Hermes and want to keep your model config, prompts, memory, and skills
-  - You want to know what NexisClaw imports automatically and what stays archive-only
+  - You want to know what GreenchClaw imports automatically and what stays archive-only
   - You need a clean, scripted migration path (CI, fresh laptop, automation)
 title: "Migrating from Hermes"
 ---
 
-NexisClaw imports Hermes state through a bundled migration provider. The provider previews everything before changing state, redacts secrets in plans and reports, and creates a verified backup before apply.
+GreenchClaw imports Hermes state through a bundled migration provider. The provider previews everything before changing state, redacts secrets in plans and reports, and creates a verified backup before apply.
 
 <Note>
-Imports require a fresh NexisClaw setup. If you already have local NexisClaw state, reset config, credentials, sessions, and the workspace first, or use `NexisClaw migrate` directly with `--overwrite` after reviewing the plan.
+Imports require a fresh GreenchClaw setup. If you already have local GreenchClaw state, reset config, credentials, sessions, and the workspace first, or use `GreenchClaw migrate` directly with `--overwrite` after reviewing the plan.
 </Note>
 
 ## Two ways to import
@@ -20,22 +20,22 @@ Imports require a fresh NexisClaw setup. If you already have local NexisClaw sta
     The fastest path. The wizard detects Hermes at `~/.hermes` and shows a preview before applying.
 
     ```bash
-    NexisClaw onboard --flow import
+    GreenchClaw onboard --flow import
     ```
 
     Or point at a specific source:
 
     ```bash
-    NexisClaw onboard --import-from hermes --import-source ~/.hermes
+    GreenchClaw onboard --import-from hermes --import-source ~/.hermes
     ```
 
   </Tab>
   <Tab title="CLI">
-    Use `NexisClaw migrate` for scripted or repeatable runs. See [`NexisClaw migrate`](/cli/migrate) for the full reference.
+    Use `GreenchClaw migrate` for scripted or repeatable runs. See [`GreenchClaw migrate`](/cli/migrate) for the full reference.
 
     ```bash
-    NexisClaw migrate hermes --dry-run    # preview only
-    NexisClaw migrate apply hermes --yes  # apply with confirmation skipped
+    GreenchClaw migrate hermes --dry-run    # preview only
+    GreenchClaw migrate apply hermes --yes  # apply with confirmation skipped
     ```
 
     Add `--from <path>` when Hermes lives outside `~/.hermes`.
@@ -55,12 +55,12 @@ Imports require a fresh NexisClaw setup. If you already have local NexisClaw sta
     MCP server definitions from `mcp_servers` or `mcp.servers`.
   </Accordion>
   <Accordion title="Workspace files">
-    - `SOUL.md` and `AGENTS.md` are copied into the NexisClaw agent workspace.
-    - `memories/MEMORY.md` and `memories/USER.md` are **appended** to the matching NexisClaw memory files instead of overwriting them.
+    - `SOUL.md` and `AGENTS.md` are copied into the GreenchClaw agent workspace.
+    - `memories/MEMORY.md` and `memories/USER.md` are **appended** to the matching GreenchClaw memory files instead of overwriting them.
 
   </Accordion>
   <Accordion title="Memory configuration">
-    Memory config defaults for NexisClaw file memory. External memory providers such as Honcho are recorded as archive or manual-review items so you can move them deliberately.
+    Memory config defaults for GreenchClaw file memory. External memory providers such as Honcho are recorded as archive or manual-review items so you can move them deliberately.
   </Accordion>
   <Accordion title="Skills">
     Skills with a `SKILL.md` file under `skills/<name>/` are copied, along with per-skill config values from `skills.config`.
@@ -72,7 +72,7 @@ Imports require a fresh NexisClaw setup. If you already have local NexisClaw sta
 
 ## What stays archive-only
 
-The provider copies these into the migration report directory for manual review, but does **not** load them into live NexisClaw config or credentials:
+The provider copies these into the migration report directory for manual review, but does **not** load them into live GreenchClaw config or credentials:
 
 - `plugins/`
 - `sessions/`
@@ -82,14 +82,14 @@ The provider copies these into the migration report directory for manual review,
 - `auth.json`
 - `state.db`
 
-NexisClaw refuses to execute or trust this state automatically because the formats and trust assumptions can drift between systems. Move what you need by hand after reviewing the archive.
+GreenchClaw refuses to execute or trust this state automatically because the formats and trust assumptions can drift between systems. Move what you need by hand after reviewing the archive.
 
 ## Recommended flow
 
 <Steps>
   <Step title="Preview the plan">
     ```bash
-    NexisClaw migrate hermes --dry-run
+    GreenchClaw migrate hermes --dry-run
     ```
 
     The plan lists everything that will change, including conflicts, skipped items, and any sensitive items. Plan output redacts nested secret-looking keys.
@@ -97,15 +97,15 @@ NexisClaw refuses to execute or trust this state automatically because the forma
   </Step>
   <Step title="Apply with backup">
     ```bash
-    NexisClaw migrate apply hermes --yes
+    GreenchClaw migrate apply hermes --yes
     ```
 
-    NexisClaw creates and verifies a backup before applying. If you need API keys imported, add `--include-secrets`.
+    GreenchClaw creates and verifies a backup before applying. If you need API keys imported, add `--include-secrets`.
 
   </Step>
   <Step title="Run doctor">
     ```bash
-    NexisClaw doctor
+    GreenchClaw doctor
     ```
 
     [Doctor](/gateway/doctor) reapplies any pending config migrations and checks for issues introduced during the import.
@@ -113,8 +113,8 @@ NexisClaw refuses to execute or trust this state automatically because the forma
   </Step>
   <Step title="Restart and verify">
     ```bash
-    NexisClaw gateway restart
-    NexisClaw status
+    GreenchClaw gateway restart
+    GreenchClaw status
     ```
 
     Confirm the gateway is healthy and your imported model, memory, and skills are loaded.
@@ -130,7 +130,7 @@ Apply refuses to continue when the plan reports conflicts (a file or config valu
 Rerun with `--overwrite` only when replacing the existing target is intentional. Providers may still write item-level backups for overwritten files in the migration report directory.
 </Warning>
 
-For a fresh NexisClaw install, conflicts are unusual. They typically appear when you re-run the import on a setup that already has user edits.
+For a fresh GreenchClaw install, conflicts are unusual. They typically appear when you re-run the import on a setup that already has user edits.
 
 If a conflict surfaces mid-apply (for example, an unexpected race on a config file), Hermes marks remaining dependent config items as `skipped` with reason `blocked by earlier apply conflict` instead of writing them partially. The migration report records each blocked item so you can resolve the original conflict and rerun the import.
 
@@ -138,15 +138,15 @@ If a conflict surfaces mid-apply (for example, an unexpected race on a config fi
 
 Secrets are never imported by default.
 
-- Run `NexisClaw migrate apply hermes --yes` first to import non-secret state.
+- Run `GreenchClaw migrate apply hermes --yes` first to import non-secret state.
 - If you also want supported `.env` keys copied across, rerun with `--include-secrets`.
 - For SecretRef-managed credentials, configure the SecretRef source after the import completes.
 
 ## JSON output for automation
 
 ```bash
-NexisClaw migrate hermes --dry-run --json
-NexisClaw migrate apply hermes --json --yes
+GreenchClaw migrate hermes --dry-run --json
+GreenchClaw migrate apply hermes --json --yes
 ```
 
 With `--json` and no `--yes`, apply prints the plan and does not mutate state. This is the safest mode for CI and shared scripts.
@@ -161,7 +161,7 @@ With `--json` and no `--yes`, apply prints the plan and does not mutate state. T
     Pass `--from /actual/path` (CLI) or `--import-source /actual/path` (onboarding).
   </Accordion>
   <Accordion title="Onboarding refuses to import on an existing setup">
-    Onboarding imports require a fresh setup. Either reset state and re-onboard, or use `NexisClaw migrate apply hermes` directly, which supports `--overwrite` and explicit backup control.
+    Onboarding imports require a fresh setup. Either reset state and re-onboard, or use `GreenchClaw migrate apply hermes` directly, which supports `--overwrite` and explicit backup control.
   </Accordion>
   <Accordion title="API keys did not import">
     `--include-secrets` is required, and only the keys listed above are recognized. Other variables in `.env` are ignored.
@@ -170,8 +170,8 @@ With `--json` and no `--yes`, apply prints the plan and does not mutate state. T
 
 ## Related
 
-- [`NexisClaw migrate`](/cli/migrate): full CLI reference, plugin contract, and JSON shapes.
+- [`GreenchClaw migrate`](/cli/migrate): full CLI reference, plugin contract, and JSON shapes.
 - [Onboarding](/cli/onboard): wizard flow and non-interactive flags.
-- [Migrating](/install/migrating): move an NexisClaw install between machines.
+- [Migrating](/install/migrating): move an GreenchClaw install between machines.
 - [Doctor](/gateway/doctor): post-migration health check.
 - [Agent workspace](/concepts/agent-workspace): where `SOUL.md`, `AGENTS.md`, and memory files live.

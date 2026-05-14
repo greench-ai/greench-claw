@@ -1,5 +1,5 @@
-import type { MemoryPluginRuntime } from "NexisClaw/plugin-sdk/memory-core-host-runtime-core";
-import { resolveMemoryBackendConfig } from "NexisClaw/plugin-sdk/memory-core-host-runtime-files";
+import type { MemoryPluginRuntime } from "GreenchClaw/plugin-sdk/memory-core-host-runtime-core";
+import { resolveMemoryBackendConfig } from "GreenchClaw/plugin-sdk/memory-core-host-runtime-files";
 import { closeAllMemorySearchManagers, getMemorySearchManager } from "./memory/index.js";
 
 export const memoryRuntime: MemoryPluginRuntime = {

@@ -1,16 +1,16 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 export type RealtimeTranscriptionProviderId = string;
 
 export type RealtimeTranscriptionProviderConfig = Record<string, unknown>;
 
 export type RealtimeTranscriptionProviderResolveConfigContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   rawConfig: RealtimeTranscriptionProviderConfig;
 };
 
 export type RealtimeTranscriptionProviderConfiguredContext = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   providerConfig: RealtimeTranscriptionProviderConfig;
 };
 
@@ -22,7 +22,7 @@ export type RealtimeTranscriptionSessionCallbacks = {
 };
 
 export type RealtimeTranscriptionSessionCreateRequest = RealtimeTranscriptionSessionCallbacks & {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   providerConfig: RealtimeTranscriptionProviderConfig;
 };
 

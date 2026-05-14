@@ -1,4 +1,4 @@
-# NexisClaw QA Scenarios
+# GreenchClaw QA Scenarios
 
 Canonical scenario source now lives in:
 

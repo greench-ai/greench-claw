@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolveNexisClawPackageRootSync } from "../infra/NexisClaw-root.js";
+import { resolveGreenchClawPackageRootSync } from "../infra/GreenchClaw-root.js";
 
 type PluginPeerLinkLogger = {
   info?: (message: string) => void;
@@ -14,7 +14,7 @@ type RelinkManagedNpmRootResult = {
   skipped: number;
 };
 
-type NexisClawPeerLinkAuditIssue = {
+type GreenchClawPeerLinkAuditIssue = {
   packageName: string;
   packageDir: string;
   reason: string;
@@ -23,10 +23,10 @@ type NexisClawPeerLinkAuditIssue = {
 type AuditManagedNpmRootResult = {
   checked: number;
   broken: number;
-  issues: NexisClawPeerLinkAuditIssue[];
+  issues: GreenchClawPeerLinkAuditIssue[];
 };
 
-type NexisClawPeerLinkResult = "linked" | "skipped" | "unchanged";
+type GreenchClawPeerLinkResult = "linked" | "skipped" | "unchanged";
 
 function readStringRecord(value: unknown): Record<string, string> {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
@@ -108,11 +108,11 @@ function managedPackageNameFromDir(params: { npmRoot: string; packageDir: string
     .join("/");
 }
 
-async function auditNexisClawPeerDependency(params: {
+async function auditGreenchClawPeerDependency(params: {
   hostRoot: string;
   npmRoot: string;
   packageDir: string;
-}): Promise<NexisClawPeerLinkAuditIssue | null> {
+}): Promise<GreenchClawPeerLinkAuditIssue | null> {
   const packageName = managedPackageNameFromDir({
     npmRoot: params.npmRoot,
     packageDir: params.packageDir,
@@ -132,13 +132,13 @@ async function auditNexisClawPeerDependency(params: {
       return {
         packageName,
         packageDir: params.packageDir,
-        reason: `missing ${path.join(nodeModulesDir, "NexisClaw")}`,
+        reason: `missing ${path.join(nodeModulesDir, "GreenchClaw")}`,
       };
     }
     throw error;
   }
 
-  const linkPath = path.join(nodeModulesDir, "NexisClaw");
+  const linkPath = path.join(nodeModulesDir, "GreenchClaw");
   const currentTarget = await safeRealpath(linkPath);
   if (!currentTarget) {
     return {
@@ -167,7 +167,7 @@ async function ensureRealNodeModulesDir(params: {
     const existing = await fs.lstat(nodeModulesDir);
     if (!existing.isDirectory() || existing.isSymbolicLink()) {
       params.logger.warn?.(
-        `Skipping NexisClaw peerDependency link because ${nodeModulesDir} is not a real directory.`,
+        `Skipping GreenchClaw peerDependency link because ${nodeModulesDir} is not a real directory.`,
       );
       return null;
     }
@@ -182,19 +182,19 @@ async function ensureRealNodeModulesDir(params: {
   const created = await fs.lstat(nodeModulesDir);
   if (!created.isDirectory() || created.isSymbolicLink()) {
     params.logger.warn?.(
-      `Skipping NexisClaw peerDependency link because ${nodeModulesDir} is not a real directory.`,
+      `Skipping GreenchClaw peerDependency link because ${nodeModulesDir} is not a real directory.`,
     );
     return null;
   }
   return nodeModulesDir;
 }
 
-async function linkNexisClawPeerDependency(params: {
+async function linkGreenchClawPeerDependency(params: {
   hostRoot: string;
   installedDir: string;
   peerName: string;
   logger: PluginPeerLinkLogger;
-}): Promise<NexisClawPeerLinkResult> {
+}): Promise<GreenchClawPeerLinkResult> {
   const nodeModulesDir = await ensureRealNodeModulesDir({
     installedDir: params.installedDir,
     logger: params.logger,
@@ -222,28 +222,28 @@ async function linkNexisClawPeerDependency(params: {
 }
 
 /**
- * Symlink the host NexisClaw package for plugins that declare it as a peer.
+ * Symlink the host GreenchClaw package for plugins that declare it as a peer.
  * Plugin package managers still own third-party dependencies; this only wires
  * the host SDK package into the plugin-local Node graph.
  */
-export async function linkNexisClawPeerDependencies(params: {
+export async function linkGreenchClawPeerDependencies(params: {
   installedDir: string;
   peerDependencies: Record<string, string>;
   logger: PluginPeerLinkLogger;
 }): Promise<{ repaired: number; skipped: number }> {
-  const peers = Object.keys(params.peerDependencies).filter((name) => name === "NexisClaw");
+  const peers = Object.keys(params.peerDependencies).filter((name) => name === "GreenchClaw");
   if (peers.length === 0) {
     return { repaired: 0, skipped: 0 };
   }
 
-  const hostRoot = resolveNexisClawPackageRootSync({
+  const hostRoot = resolveGreenchClawPackageRootSync({
     argv1: process.argv[1],
     moduleUrl: import.meta.url,
     cwd: process.cwd(),
   });
   if (!hostRoot) {
     params.logger.warn?.(
-      "Could not locate NexisClaw package root to symlink peerDependencies; plugin may fail to resolve NexisClaw at runtime.",
+      "Could not locate GreenchClaw package root to symlink peerDependencies; plugin may fail to resolve GreenchClaw at runtime.",
     );
     return { repaired: 0, skipped: peers.length };
   }
@@ -251,7 +251,7 @@ export async function linkNexisClawPeerDependencies(params: {
   let repaired = 0;
   let skipped = 0;
   for (const peerName of peers) {
-    const result = await linkNexisClawPeerDependency({
+    const result = await linkGreenchClawPeerDependency({
       hostRoot,
       installedDir: params.installedDir,
       peerName,
@@ -266,7 +266,7 @@ export async function linkNexisClawPeerDependencies(params: {
   return { repaired, skipped };
 }
 
-export async function relinkNexisClawPeerDependenciesInManagedNpmRoot(params: {
+export async function relinkGreenchClawPeerDependenciesInManagedNpmRoot(params: {
   npmRoot: string;
   logger: PluginPeerLinkLogger;
 }): Promise<RelinkManagedNpmRootResult> {
@@ -276,11 +276,11 @@ export async function relinkNexisClawPeerDependenciesInManagedNpmRoot(params: {
   let skipped = 0;
   for (const packageDir of await listManagedNpmRootPackageDirs(params.npmRoot)) {
     const peerDependencies = await readPackagePeerDependencies(packageDir);
-    if (!Object.hasOwn(peerDependencies, "NexisClaw")) {
+    if (!Object.hasOwn(peerDependencies, "GreenchClaw")) {
       continue;
     }
     checked += 1;
-    const result = await linkNexisClawPeerDependencies({
+    const result = await linkGreenchClawPeerDependencies({
       installedDir: packageDir,
       peerDependencies,
       logger: params.logger,
@@ -292,10 +292,10 @@ export async function relinkNexisClawPeerDependenciesInManagedNpmRoot(params: {
   return { checked, attempted, repaired, skipped };
 }
 
-export async function auditNexisClawPeerDependenciesInManagedNpmRoot(params: {
+export async function auditGreenchClawPeerDependenciesInManagedNpmRoot(params: {
   npmRoot: string;
 }): Promise<AuditManagedNpmRootResult> {
-  const hostRoot = resolveNexisClawPackageRootSync({
+  const hostRoot = resolveGreenchClawPackageRootSync({
     argv1: process.argv[1],
     moduleUrl: import.meta.url,
     cwd: process.cwd(),
@@ -305,14 +305,14 @@ export async function auditNexisClawPeerDependenciesInManagedNpmRoot(params: {
   }
 
   let checked = 0;
-  const issues: NexisClawPeerLinkAuditIssue[] = [];
+  const issues: GreenchClawPeerLinkAuditIssue[] = [];
   for (const packageDir of await listManagedNpmRootPackageDirs(params.npmRoot)) {
     const peerDependencies = await readPackagePeerDependencies(packageDir);
-    if (!Object.hasOwn(peerDependencies, "NexisClaw")) {
+    if (!Object.hasOwn(peerDependencies, "GreenchClaw")) {
       continue;
     }
     checked += 1;
-    const issue = await auditNexisClawPeerDependency({
+    const issue = await auditGreenchClawPeerDependency({
       hostRoot,
       npmRoot: params.npmRoot,
       packageDir,

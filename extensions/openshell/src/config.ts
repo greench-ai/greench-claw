@@ -1,9 +1,12 @@
 import path from "node:path";
-import { buildPluginConfigSchema, type NexisClawPluginConfigSchema } from "NexisClaw/plugin-sdk/core";
+import {
+  buildPluginConfigSchema,
+  type GreenchClawPluginConfigSchema,
+} from "GreenchClaw/plugin-sdk/core";
 import {
   formatPluginConfigIssue,
   mapPluginConfigIssues,
-} from "NexisClaw/plugin-sdk/extension-shared";
+} from "GreenchClaw/plugin-sdk/extension-shared";
 import { z } from "zod";
 
 type OpenShellPluginConfig = {
@@ -38,7 +41,7 @@ export type ResolvedOpenShellPluginConfig = {
 
 const DEFAULT_COMMAND = "openshell";
 const DEFAULT_MODE = "mirror";
-const DEFAULT_SOURCE = "NexisClaw";
+const DEFAULT_SOURCE = "GreenchClaw";
 const DEFAULT_REMOTE_WORKSPACE_DIR = "/sandbox";
 const DEFAULT_REMOTE_AGENT_WORKSPACE_DIR = "/agent";
 const DEFAULT_TIMEOUT_MS = 120_000;
@@ -119,7 +122,7 @@ function normalizeOpenShellRemotePath(
   return normalized;
 }
 
-export function createOpenShellPluginConfigSchema(): NexisClawPluginConfigSchema {
+export function createOpenShellPluginConfigSchema(): GreenchClawPluginConfigSchema {
   return buildPluginConfigSchema(OpenShellPluginConfigSchema, {
     safeParse(value) {
       if (value === undefined) {

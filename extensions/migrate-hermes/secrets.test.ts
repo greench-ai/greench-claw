@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/provider-auth";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/provider-auth";
 import { afterEach, describe, expect, it } from "vitest";
 import { HERMES_REASON_AUTH_PROFILE_EXISTS } from "./items.js";
 import { buildHermesMigrationProvider } from "./provider.js";
@@ -41,7 +41,7 @@ describe("Hermes migration secret items", () => {
           },
         ],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const provider = buildHermesMigrationProvider();
     const plan = await provider.plan(

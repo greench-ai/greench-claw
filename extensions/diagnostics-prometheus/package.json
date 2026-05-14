@@ -1,22 +1,22 @@
 {
-  "name": "@NexisClaw/diagnostics-prometheus",
+  "name": "@GreenchClaw/diagnostics-prometheus",
   "version": "2026.5.12-beta.1",
-  "description": "NexisClaw diagnostics Prometheus exporter",
+  "description": "GreenchClaw diagnostics Prometheus exporter",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NexisClaw/NexisClaw"
+    "url": "https://github.com/GreenchClaw/GreenchClaw"
   },
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@NexisClaw/diagnostics-prometheus",
-      "npmSpec": "@NexisClaw/diagnostics-prometheus",
+      "clawhubSpec": "clawhub:@GreenchClaw/diagnostics-prometheus",
+      "npmSpec": "@GreenchClaw/diagnostics-prometheus",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.25"
     },
@@ -24,7 +24,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "NexisClawVersion": "2026.5.12-beta.1"
+      "GreenchClawVersion": "2026.5.12-beta.1"
     },
     "release": {
       "publishToClawHub": true,

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   collectDiscordMissingEnvTokenWarnings,
@@ -305,7 +305,7 @@ describe("discord doctor", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const hits = scanDiscordNumericIdEntries(cfg);
     expect(hits.map((hit) => hit.path)).toEqual([
@@ -328,9 +328,9 @@ describe("discord doctor", () => {
           guilds: { main: { users: [111], roles: [222] } },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
-    const result = maybeRepairDiscordNumericIds(cfg, "NexisClaw doctor --fix");
+    const result = maybeRepairDiscordNumericIds(cfg, "GreenchClaw doctor --fix");
     expect(result.config.channels?.discord?.allowFrom).toEqual(["123"]);
     expect(result.config.channels?.discord?.dm?.allowFrom).toEqual(["99"]);
     expect(result.config.channels?.discord?.guilds?.main?.users).toEqual(["111"]);
@@ -342,11 +342,11 @@ describe("discord doctor", () => {
   it("formats repair guidance for unsafe numeric ids", () => {
     const warnings = collectDiscordNumericIdWarnings({
       hits: [{ path: "channels.discord.allowFrom[0]", entry: 106232522769186816, safe: false }],
-      doctorFixCommand: "NexisClaw doctor --fix",
+      doctorFixCommand: "GreenchClaw doctor --fix",
     });
 
     expect(warnings[0]).toContain("cannot be auto-repaired");
-    expect(warnings[1]).toContain("NexisClaw doctor --fix");
+    expect(warnings[1]).toContain("GreenchClaw doctor --fix");
   });
 
   it("warns when default env fallback token is missing after migration", async () => {
@@ -356,7 +356,7 @@ describe("discord doctor", () => {
           allowFrom: ["123"],
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const missingTokenWarning =
       "- channels.discord: default account has no available bot token, and DISCORD_BOT_TOKEN is absent in this doctor environment. After migration, verify DISCORD_BOT_TOKEN is present in the state-dir .env or configure channels.discord.token / channels.discord.accounts.default.token as a SecretRef.";
@@ -369,7 +369,7 @@ describe("discord doctor", () => {
     expect(
       await discordDoctor.collectPreviewWarnings?.({
         cfg,
-        doctorFixCommand: "NexisClaw doctor --fix",
+        doctorFixCommand: "GreenchClaw doctor --fix",
         env: {},
       }),
     ).toStrictEqual([missingTokenWarning]);
@@ -386,7 +386,7 @@ describe("discord doctor", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     expect(collectDiscordMissingEnvTokenWarnings({ cfg, env: {} })).toStrictEqual([]);
   });

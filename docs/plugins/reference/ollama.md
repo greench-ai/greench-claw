@@ -1,5 +1,5 @@
 ---
-summary: "Adds Ollama model provider support to NexisClaw."
+summary: "Adds Ollama model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the ollama plugin
 title: "Ollama plugin"
@@ -7,12 +7,12 @@ title: "Ollama plugin"
 
 # Ollama plugin
 
-Adds Ollama model provider support to NexisClaw.
+Adds Ollama model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/ollama-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/ollama-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

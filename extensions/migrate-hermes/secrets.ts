@@ -1,6 +1,6 @@
-import { loadAuthProfileStoreWithoutExternalProfiles } from "NexisClaw/plugin-sdk/agent-runtime";
-import type { MigrationItem, MigrationProviderContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import { updateAuthProfileStoreWithLock } from "NexisClaw/plugin-sdk/provider-auth";
+import { loadAuthProfileStoreWithoutExternalProfiles } from "GreenchClaw/plugin-sdk/agent-runtime";
+import type { MigrationItem, MigrationProviderContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { updateAuthProfileStoreWithLock } from "GreenchClaw/plugin-sdk/provider-auth";
 import { parseEnv, readText } from "./helpers.js";
 import {
   createHermesSecretItem,

@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { MemoryPromptSectionBuilder } from "NexisClaw/plugin-sdk/memory-host-core";
+import type { MemoryPromptSectionBuilder } from "GreenchClaw/plugin-sdk/memory-host-core";
 import { resolveMemoryWikiConfig, type ResolvedMemoryWikiConfig } from "./config.js";
 
-const AGENT_DIGEST_PATH = ".NexisClaw-wiki/cache/agent-digest.json";
+const AGENT_DIGEST_PATH = ".GreenchClaw-wiki/cache/agent-digest.json";
 const DIGEST_MAX_PAGES = 4;
 const DIGEST_MAX_CLAIMS_PER_PAGE = 2;
 

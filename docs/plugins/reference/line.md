@@ -1,5 +1,5 @@
 ---
-summary: "Adds the LINE channel surface for sending and receiving NexisClaw messages."
+summary: "Adds the LINE channel surface for sending and receiving GreenchClaw messages."
 read_when:
   - You are installing, configuring, or auditing the line plugin
 title: "LINE plugin"
@@ -7,11 +7,11 @@ title: "LINE plugin"
 
 # LINE plugin
 
-Adds the LINE channel surface for sending and receiving NexisClaw messages.
+Adds the LINE channel surface for sending and receiving GreenchClaw messages.
 
 ## Distribution
 
-- Package: `@NexisClaw/line`
+- Package: `@GreenchClaw/line`
 - Install route: npm; ClawHub
 
 ## Surface

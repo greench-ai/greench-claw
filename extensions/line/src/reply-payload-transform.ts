@@ -1,5 +1,5 @@
-import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   createAgendaCard,
   createAppleTvRemoteCard,

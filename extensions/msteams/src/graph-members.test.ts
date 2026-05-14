@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import { getMemberInfoMSTeams } from "./graph-members.js";
 
 const mockState = vi.hoisted(() => ({
@@ -33,7 +33,7 @@ describe("getMemberInfoMSTeams", () => {
     });
 
     const result = await getMemberInfoMSTeams({
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       userId: "user-123",
     });
 
@@ -60,7 +60,7 @@ describe("getMemberInfoMSTeams", () => {
     });
 
     const result = await getMemberInfoMSTeams({
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       userId: "user-456",
     });
 
@@ -81,7 +81,7 @@ describe("getMemberInfoMSTeams", () => {
 
     await expect(
       getMemberInfoMSTeams({
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         userId: "nonexistent-user",
       }),
     ).rejects.toThrow("Graph API 404: user not found");

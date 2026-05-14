@@ -1,13 +1,13 @@
 ---
-summary: "Use Z.AI (GLM models) with NexisClaw"
+summary: "Use Z.AI (GLM models) with GreenchClaw"
 read_when:
-  - You want Z.AI / GLM models in NexisClaw
+  - You want Z.AI / GLM models in GreenchClaw
   - You need a simple ZAI_API_KEY setup
 title: "Z.AI"
 ---
 
 Z.AI is the API platform for **GLM** models. It provides REST APIs for GLM and uses API keys
-for authentication. Create your API key in the Z.AI console. NexisClaw uses the `zai` provider
+for authentication. Create your API key in the Z.AI console. GreenchClaw uses the `zai` provider
 with a Z.AI API key.
 
 - Provider: `zai`
@@ -18,12 +18,12 @@ with a Z.AI API key.
 
 <Tabs>
   <Tab title="Auto-detect endpoint">
-    **Best for:** most users. NexisClaw detects the matching Z.AI endpoint from the key and applies the correct base URL automatically.
+    **Best for:** most users. GreenchClaw detects the matching Z.AI endpoint from the key and applies the correct base URL automatically.
 
     <Steps>
       <Step title="Run onboarding">
         ```bash
-        NexisClaw onboard --auth-choice zai-api-key
+        GreenchClaw onboard --auth-choice zai-api-key
         ```
       </Step>
       <Step title="Set a default model">
@@ -36,7 +36,7 @@ with a Z.AI API key.
       </Step>
       <Step title="Verify the model is listed">
         ```bash
-        NexisClaw models list --all --provider zai
+        GreenchClaw models list --all --provider zai
         ```
       </Step>
     </Steps>
@@ -50,16 +50,16 @@ with a Z.AI API key.
       <Step title="Pick the right onboarding choice">
         ```bash
         # Coding Plan Global (recommended for Coding Plan users)
-        NexisClaw onboard --auth-choice zai-coding-global
+        GreenchClaw onboard --auth-choice zai-coding-global
 
         # Coding Plan CN (China region)
-        NexisClaw onboard --auth-choice zai-coding-cn
+        GreenchClaw onboard --auth-choice zai-coding-cn
 
         # General API
-        NexisClaw onboard --auth-choice zai-global
+        GreenchClaw onboard --auth-choice zai-global
 
         # General API CN (China region)
-        NexisClaw onboard --auth-choice zai-cn
+        GreenchClaw onboard --auth-choice zai-cn
         ```
       </Step>
       <Step title="Set a default model">
@@ -72,7 +72,7 @@ with a Z.AI API key.
       </Step>
       <Step title="Verify the model is listed">
         ```bash
-        NexisClaw models list --all --provider zai
+        GreenchClaw models list --all --provider zai
         ```
       </Step>
     </Steps>
@@ -82,11 +82,11 @@ with a Z.AI API key.
 
 ## Built-in catalog
 
-NexisClaw ships the bundled `zai` provider catalog in the plugin manifest, so read-only
+GreenchClaw ships the bundled `zai` provider catalog in the plugin manifest, so read-only
 listing can show known GLM rows without loading provider runtime:
 
 ```bash
-NexisClaw models list --all --provider zai
+GreenchClaw models list --all --provider zai
 ```
 
 The manifest-backed catalog currently includes:
@@ -140,8 +140,8 @@ GLM models are available as `zai/<model>` (example: `zai/glm-5`). The default bu
   </Accordion>
 
   <Accordion title="Thinking and preserved thinking">
-    Z.AI thinking follows NexisClaw's `/think` controls. With thinking off,
-    NexisClaw sends `thinking: { type: "disabled" }` to avoid responses that
+    Z.AI thinking follows GreenchClaw's `/think` controls. With thinking off,
+    GreenchClaw sends `thinking: { type: "disabled" }` to avoid responses that
     spend the output budget on `reasoning_content` before visible text.
 
     Preserved thinking is opt-in because Z.AI requires the full historical
@@ -162,7 +162,7 @@ GLM models are available as `zai/<model>` (example: `zai/glm-5`). The default bu
     }
     ```
 
-    When enabled and thinking is on, NexisClaw sends
+    When enabled and thinking is on, GreenchClaw sends
     `thinking: { type: "enabled", clear_thinking: false }` and replays prior
     `reasoning_content` for the same OpenAI-compatible transcript.
 

@@ -2,12 +2,12 @@
 summary: "Plugin compatibility contracts, deprecation metadata, and migration expectations"
 title: "Plugin compatibility"
 read_when:
-  - You maintain an NexisClaw plugin
+  - You maintain an GreenchClaw plugin
   - You see a plugin compatibility warning
   - You are planning a plugin SDK or manifest migration
 ---
 
-NexisClaw keeps older plugin contracts wired through named compatibility
+GreenchClaw keeps older plugin contracts wired through named compatibility
 adapters before removing them. This protects existing bundled and external
 plugins while the SDK, manifest, setup, config, and agent runtime contracts
 evolve.
@@ -45,14 +45,14 @@ core.
 
 ## Plugin inspector package
 
-The plugin inspector should live outside the core NexisClaw repo as a separate
+The plugin inspector should live outside the core GreenchClaw repo as a separate
 package/repository backed by the versioned compatibility and manifest
 contracts.
 
 The day-one CLI should be:
 
 ```sh
-NexisClaw-plugin-inspector ./my-plugin
+GreenchClaw-plugin-inspector ./my-plugin
 ```
 
 It should emit:
@@ -63,20 +63,20 @@ It should emit:
 - cold-path import checks
 - deprecation and compatibility warnings
 
-Use `--json` for stable machine-readable output in CI annotations. NexisClaw
+Use `--json` for stable machine-readable output in CI annotations. GreenchClaw
 core should expose contracts and fixtures the inspector can consume, but should
-not publish the inspector binary from the main `NexisClaw` package.
+not publish the inspector binary from the main `GreenchClaw` package.
 
 ### Maintainer acceptance lane
 
 Use Crabbox-backed Blacksmith Testbox for the installable-package acceptance
-lane when validating the external inspector against NexisClaw plugin packages.
-Run it from a clean NexisClaw checkout after the package is built:
+lane when validating the external inspector against GreenchClaw plugin packages.
+Run it from a clean GreenchClaw checkout after the package is built:
 
 ```sh
-pnpm crabbox:run -- --provider blacksmith-testbox --timing-json --shell -- "pnpm install && pnpm build && npm exec --yes @NexisClaw/plugin-inspector@0.1.0 -- ./extensions/telegram --json"
-pnpm crabbox:run -- --provider blacksmith-testbox --timing-json --shell -- "npm exec --yes @NexisClaw/plugin-inspector@0.1.0 -- ./extensions/discord --json"
-pnpm crabbox:run -- --provider blacksmith-testbox --timing-json --shell -- "npm exec --yes @NexisClaw/plugin-inspector@0.1.0 -- <clawhub-plugin-dir> --json"
+pnpm crabbox:run -- --provider blacksmith-testbox --timing-json --shell -- "pnpm install && pnpm build && npm exec --yes @GreenchClaw/plugin-inspector@0.1.0 -- ./extensions/telegram --json"
+pnpm crabbox:run -- --provider blacksmith-testbox --timing-json --shell -- "npm exec --yes @GreenchClaw/plugin-inspector@0.1.0 -- ./extensions/discord --json"
+pnpm crabbox:run -- --provider blacksmith-testbox --timing-json --shell -- "npm exec --yes @GreenchClaw/plugin-inspector@0.1.0 -- <clawhub-plugin-dir> --json"
 ```
 
 Keep this lane opt-in for maintainers because it installs an external npm
@@ -87,7 +87,7 @@ proof covers the package as external plugin authors consume it.
 
 ## Deprecation policy
 
-NexisClaw should not remove a documented plugin contract in the same release
+GreenchClaw should not remove a documented plugin contract in the same release
 that introduces its replacement.
 
 The migration sequence is:
@@ -110,15 +110,15 @@ instead.
 
 Current compatibility records include:
 
-- legacy broad SDK imports such as `NexisClaw/plugin-sdk/compat`
+- legacy broad SDK imports such as `GreenchClaw/plugin-sdk/compat`
 - legacy hook-only plugin shapes and `before_agent_start`
 - legacy `activate(api)` plugin entrypoints while plugins migrate to
   `register(api)`
-- legacy SDK aliases such as `NexisClaw/extension-api`,
-  `NexisClaw/plugin-sdk/channel-runtime`, `NexisClaw/plugin-sdk/command-auth`
-  status builders, `NexisClaw/plugin-sdk/test-utils` (replaced by focused
-  `NexisClaw/plugin-sdk/*` test subpaths), and the `ClawdbotConfig` /
-  `NexisClawSchemaType` type aliases
+- legacy SDK aliases such as `GreenchClaw/extension-api`,
+  `GreenchClaw/plugin-sdk/channel-runtime`, `GreenchClaw/plugin-sdk/command-auth`
+  status builders, `GreenchClaw/plugin-sdk/test-utils` (replaced by focused
+  `GreenchClaw/plugin-sdk/*` test subpaths), and the `ClawdbotConfig` /
+  `GreenchClawSchemaType` type aliases
 - bundled plugin allowlist and enablement behavior
 - legacy provider/channel env-var manifest metadata
 - legacy provider plugin hooks and type aliases while providers move to
@@ -131,21 +131,21 @@ Current compatibility records include:
 - legacy channel SDK helpers for native message schemas, mention gating,
   inbound envelope formatting, and approval capability nesting
 - legacy channel route key and comparable-target helper aliases while plugins
-  move to `NexisClaw/plugin-sdk/channel-route`
+  move to `GreenchClaw/plugin-sdk/channel-route`
 - activation hints that are being replaced by manifest contribution ownership
 - `setup-api` runtime fallback while setup descriptors move to cold
   `setup.requiresRuntime: false` metadata
 - provider `discovery` hooks while provider catalog hooks move to
   `catalog.run(...)`
 - channel `showConfigured` / `showInSetup` metadata while channel packages move
-  to `NexisClaw.channel.exposure`
+  to `GreenchClaw.channel.exposure`
 - legacy runtime-policy config keys while doctor migrates operators to
   `agentRuntime`
 - generated bundled channel config metadata fallback while registry-first
   `channelConfigs` metadata lands
 - persisted plugin registry disable and install-migration env flags while
-  repair flows migrate operators to `NexisClaw plugins registry --refresh` and
-  `NexisClaw doctor --fix`
+  repair flows migrate operators to `GreenchClaw plugins registry --refresh` and
+  `GreenchClaw doctor --fix`
 - legacy plugin-owned web search, web fetch, and x_search config paths while
   doctor migrates them to `plugins.entries.<plugin>.config`
 - legacy `plugins.installs` authored config and bundled plugin load-path

@@ -1,10 +1,10 @@
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { loadManifestMetadataSnapshot } from "../plugins/manifest-contract-eligibility.js";
 import { normalizeMediaProviderId } from "./provider-id.js";
 import type { MediaUnderstandingProvider } from "./types.js";
 
 export function buildMediaUnderstandingManifestMetadataRegistry(
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
   workspaceDir?: string,
 ): Map<string, MediaUnderstandingProvider> {
   const registry = new Map<string, MediaUnderstandingProvider>();

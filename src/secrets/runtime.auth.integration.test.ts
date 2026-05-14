@@ -89,9 +89,9 @@ describe("secrets runtime snapshot auth integration", () => {
   });
 
   it("recomputes config-derived agent dirs when refreshing active secrets runtime snapshots", async () => {
-    await withTempHome("NexisClaw-secrets-runtime-agent-dirs-", async (home) => {
-      const mainAgentDir = path.join(home, ".NexisClaw", "agents", "main", "agent");
-      const opsAgentDir = path.join(home, ".NexisClaw", "agents", "ops", "agent");
+    await withTempHome("GreenchClaw-secrets-runtime-agent-dirs-", async (home) => {
+      const mainAgentDir = path.join(home, ".GreenchClaw", "agents", "main", "agent");
+      const opsAgentDir = path.join(home, ".GreenchClaw", "agents", "ops", "agent");
       await fs.mkdir(mainAgentDir, { recursive: true });
       await fs.mkdir(opsAgentDir, { recursive: true });
       await fs.writeFile(

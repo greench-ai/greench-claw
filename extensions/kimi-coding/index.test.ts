@@ -1,4 +1,4 @@
-import { registerSingleProviderPlugin } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import { registerSingleProviderPlugin } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 

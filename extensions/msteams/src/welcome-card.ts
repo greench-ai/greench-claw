@@ -9,7 +9,7 @@ const DEFAULT_PROMPT_STARTERS = [
 ];
 
 type WelcomeCardOptions = {
-  /** Bot display name. Falls back to "NexisClaw". */
+  /** Bot display name. Falls back to "GreenchClaw". */
   botName?: string;
   /** Custom prompt starters. Falls back to defaults. */
   promptStarters?: string[];
@@ -19,7 +19,7 @@ type WelcomeCardOptions = {
  * Build a welcome Adaptive Card for 1:1 personal chats.
  */
 export function buildWelcomeCard(options?: WelcomeCardOptions): Record<string, unknown> {
-  const botName = options?.botName || "NexisClaw";
+  const botName = options?.botName || "GreenchClaw";
   const starters = options?.promptStarters?.length
     ? options.promptStarters
     : DEFAULT_PROMPT_STARTERS;
@@ -52,6 +52,6 @@ export function buildWelcomeCard(options?: WelcomeCardOptions): Record<string, u
  * Build a brief welcome message for group chats (when the bot is @mentioned).
  */
 export function buildGroupWelcomeText(botName?: string): string {
-  const name = botName || "NexisClaw";
+  const name = botName || "GreenchClaw";
   return `Hi! I'm ${name}. Mention me with @${name} to get started.`;
 }

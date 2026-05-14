@@ -1,9 +1,9 @@
 import { getChannelEnvVars } from "../secrets/channel-env-vars.js";
 import { isRecord } from "../utils.js";
-import type { NexisClawConfig } from "./config.js";
+import type { GreenchClawConfig } from "./config.js";
 
 export function resolveChannelConfigRecord(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   channelId: string,
 ): Record<string, unknown> | null {
   const channels = cfg.channels as Record<string, unknown> | undefined;
@@ -19,7 +19,7 @@ export function hasMeaningfulChannelConfigShallow(value: unknown): boolean {
 }
 
 export function isStaticallyChannelConfigured(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   channelId: string,
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {

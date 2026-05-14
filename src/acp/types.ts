@@ -47,7 +47,7 @@ export type AcpServerOptions = {
 };
 
 export const ACP_AGENT_INFO = {
-  name: "NexisClaw-acp",
-  title: "NexisClaw ACP Gateway",
+  name: "GreenchClaw-acp",
+  title: "GreenchClaw ACP Gateway",
   version: VERSION,
 };

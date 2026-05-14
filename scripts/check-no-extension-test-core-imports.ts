@@ -6,68 +6,68 @@ type Offender = { file: string; hint: string; line?: number; specifier?: string 
 
 const FORBIDDEN_PATTERNS: Array<{ pattern: RegExp; hint: string }> = [
   {
-    pattern: /["']NexisClaw\/plugin-sdk["']/,
-    hint: "Use NexisClaw/plugin-sdk/<subpath> instead of the monolithic root entry.",
+    pattern: /["']GreenchClaw\/plugin-sdk["']/,
+    hint: "Use GreenchClaw/plugin-sdk/<subpath> instead of the monolithic root entry.",
   },
   {
-    pattern: /["']NexisClaw\/plugin-sdk\/test-utils["']/,
+    pattern: /["']GreenchClaw\/plugin-sdk\/test-utils["']/,
     hint: "Use a focused plugin-sdk test subpath for the public extension test surface.",
   },
   {
-    pattern: /["']NexisClaw\/plugin-sdk\/testing["']/,
+    pattern: /["']GreenchClaw\/plugin-sdk\/testing["']/,
     hint: "Use a focused plugin-sdk test subpath instead of the broad compatibility testing barrel.",
   },
   {
-    pattern: /["']NexisClaw\/plugin-sdk\/compat["']/,
+    pattern: /["']GreenchClaw\/plugin-sdk\/compat["']/,
     hint: "Use a focused public plugin-sdk subpath instead of compat.",
   },
   {
     pattern: /["'](?:\.\.\/)+(?:test-utils\/)[^"']+["']/,
-    hint: "Use a documented NexisClaw/plugin-sdk test subpath for bundled extension test helpers.",
+    hint: "Use a documented GreenchClaw/plugin-sdk test subpath for bundled extension test helpers.",
   },
   {
     pattern: /["'](?:\.\.\/)+(?:test\/helpers\/plugins\/)[^"']+["']/,
-    hint: "Use a documented NexisClaw/plugin-sdk test subpath instead of repo-only plugin helper bridges.",
+    hint: "Use a documented GreenchClaw/plugin-sdk test subpath instead of repo-only plugin helper bridges.",
   },
   {
     pattern: /["'](?:\.\.\/)+(?:test\/helpers\/channels\/)[^"']+["']/,
-    hint: "Use NexisClaw/plugin-sdk/channel-test-helpers or another focused SDK test subpath instead of repo-only channel helper bridges.",
+    hint: "Use GreenchClaw/plugin-sdk/channel-test-helpers or another focused SDK test subpath instead of repo-only channel helper bridges.",
   },
   {
     pattern: /["'](?:\.\.\/)+(?:test\/helpers\/media-generation\/)[^"']+["']/,
-    hint: "Use NexisClaw/plugin-sdk/provider-test-contracts or NexisClaw/plugin-sdk/provider-http-test-mocks instead of repo-only media provider helper bridges.",
+    hint: "Use GreenchClaw/plugin-sdk/provider-test-contracts or GreenchClaw/plugin-sdk/provider-http-test-mocks instead of repo-only media provider helper bridges.",
   },
   {
     pattern:
       /["'](?:\.\.\/)+(?:test\/helpers\/(?:bundled-channel-entry|envelope-timestamp|pairing-reply)\.(?:js|ts))["']/,
-    hint: "Use NexisClaw/plugin-sdk/channel-test-helpers instead of repo-only channel test helper bridges.",
+    hint: "Use GreenchClaw/plugin-sdk/channel-test-helpers instead of repo-only channel test helper bridges.",
   },
   {
     pattern:
       /["'](?:\.\.\/)+(?:test\/helpers\/(?:http-test-server|mock-incoming-request|temp-home)\.(?:js|ts))["']/,
-    hint: "Use NexisClaw/plugin-sdk/test-env instead of repo-only environment/network test helper bridges.",
+    hint: "Use GreenchClaw/plugin-sdk/test-env instead of repo-only environment/network test helper bridges.",
   },
   {
     pattern:
       /["'](?:\.\.\/)+(?:test\/helpers\/(?:bundled-plugin-paths|import-fresh|node-builtin-mocks)\.(?:js|ts))["']/,
-    hint: "Use NexisClaw/plugin-sdk/test-fixtures instead of repo-only generic test helper bridges.",
+    hint: "Use GreenchClaw/plugin-sdk/test-fixtures instead of repo-only generic test helper bridges.",
   },
   {
     pattern:
       /["'](?:\.\.\/)+(?:test\/helpers\/(?:provider-replay-policy|stt-live-audio)\.(?:js|ts))["']/,
-    hint: "Use NexisClaw/plugin-sdk/provider-test-contracts instead of repo-only provider test helper bridges.",
+    hint: "Use GreenchClaw/plugin-sdk/provider-test-contracts instead of repo-only provider test helper bridges.",
   },
   {
     pattern: /["'](?:\.\.\/)+(?:test\/helpers\/)[^"']+["']/,
-    hint: "Use a documented NexisClaw/plugin-sdk test subpath instead of repo-only test helper bridges.",
+    hint: "Use a documented GreenchClaw/plugin-sdk test subpath instead of repo-only test helper bridges.",
   },
   {
     pattern: /["'](?:\.\.\/)+(?:src\/channels\/plugins\/contracts\/test-helpers\/)[^"']+["']/,
-    hint: "Use NexisClaw/plugin-sdk/channel-test-helpers or another focused SDK test subpath instead of core-only channel contract helpers.",
+    hint: "Use GreenchClaw/plugin-sdk/channel-test-helpers or another focused SDK test subpath instead of core-only channel contract helpers.",
   },
   {
     pattern: /["'](?:\.\.\/)+(?:src\/test-utils\/)[^"']+["']/,
-    hint: "Use a documented NexisClaw/plugin-sdk test subpath for public surfaces.",
+    hint: "Use a documented GreenchClaw/plugin-sdk test subpath for public surfaces.",
   },
   {
     pattern: /["'](?:\.\.\/)+(?:src\/plugins\/types\.js)["']/,
@@ -75,7 +75,7 @@ const FORBIDDEN_PATTERNS: Array<{ pattern: RegExp; hint: string }> = [
   },
   {
     pattern: /["'](?:\.\.\/)+(?:src\/channels\/plugins\/contracts\/test-helpers\.js)["']/,
-    hint: "Use NexisClaw/plugin-sdk/channel-contract-testing for channel contract test helpers.",
+    hint: "Use GreenchClaw/plugin-sdk/channel-contract-testing for channel contract test helpers.",
   },
 ];
 
@@ -152,7 +152,7 @@ const RETIRED_EXTENSION_TEST_HELPER_BRIDGE_FILES = [
   "test/helpers/temp-home.ts",
   "test/helpers/agents/auth-profile-runtime-contract.ts",
   "test/helpers/agents/delivery-no-reply-runtime-contract.ts",
-  "test/helpers/agents/NexisClaw-owned-tool-runtime-contract.ts",
+  "test/helpers/agents/GreenchClaw-owned-tool-runtime-contract.ts",
   "test/helpers/agents/outcome-fallback-runtime-contract.ts",
   "test/helpers/agents/prompt-overlay-runtime-contract.ts",
   "test/helpers/agents/schema-normalization-runtime-contract.ts",
@@ -296,7 +296,7 @@ function main() {
   for (const file of retiredChannelHelperFiles) {
     offenders.push({
       file,
-      hint: "Keep core channel contract helpers under src/channels/plugins/contracts/test-helpers and public plugin helpers under focused NexisClaw/plugin-sdk test subpaths.",
+      hint: "Keep core channel contract helpers under src/channels/plugins/contracts/test-helpers and public plugin helpers under focused GreenchClaw/plugin-sdk test subpaths.",
     });
   }
 
@@ -307,7 +307,7 @@ function main() {
     }
     offenders.push({
       file: filePath,
-      hint: "Import the helper directly from a documented NexisClaw/plugin-sdk testing subpath instead of recreating this bridge.",
+      hint: "Import the helper directly from a documented GreenchClaw/plugin-sdk testing subpath instead of recreating this bridge.",
     });
   }
 

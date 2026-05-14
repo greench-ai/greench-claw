@@ -1,8 +1,8 @@
-import { resolveDefaultAgentDir } from "NexisClaw/plugin-sdk/agent-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
-import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
-import { isLiveTestEnabled } from "NexisClaw/plugin-sdk/test-env";
+import { resolveDefaultAgentDir } from "GreenchClaw/plugin-sdk/agent-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
+import { getRuntimeConfig } from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
+import { isLiveTestEnabled } from "GreenchClaw/plugin-sdk/test-env";
 import { beforeAll, describe, expect, it } from "vitest";
 import plugin from "./index.js";
 import { getComfyConfig, isComfyCapabilityConfigured } from "./workflow-runtime.js";
@@ -40,7 +40,7 @@ function requireProvider<T extends { id: string }>(providers: T[], id: string): 
 }
 
 describeLive("comfy live", () => {
-  let cfg = {} as NexisClawConfig;
+  let cfg = {} as GreenchClawConfig;
   let agentDir = "";
   const imageProviders: Array<{ id: string; generateImage: Function; isConfigured?: Function }> =
     [];

@@ -5,8 +5,8 @@ export function buildMissingXSearchApiKeyPayload() {
   return {
     error: "missing_xai_api_key",
     message:
-      "x_search needs an xAI API key. Run NexisClaw onboard --auth-choice xai-api-key, set XAI_API_KEY in the Gateway environment, or configure plugins.entries.xai.config.webSearch.apiKey.",
-    docs: "https://docs.NexisClaw.ai/tools/web",
+      "x_search needs an xAI API key. Run GreenchClaw onboard --auth-choice xai-api-key, set XAI_API_KEY in the Gateway environment, or configure plugins.entries.xai.config.webSearch.apiKey.",
+    docs: "https://docs.GreenchClaw.ai/tools/web",
   };
 }
 

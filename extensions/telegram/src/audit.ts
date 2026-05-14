@@ -1,5 +1,5 @@
-import type { TelegramGroupConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { TelegramGroupConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 export type {
   AuditTelegramGroupMembershipParams,
   TelegramGroupMembershipAudit,

@@ -1,11 +1,11 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   createOpenAiCompatibleImageGenerationProvider,
   type ImageGenerationProvider,
   type ImageGenerationSourceImage,
   toImageDataUrl,
-} from "NexisClaw/plugin-sdk/image-generation";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/image-generation";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { LITELLM_BASE_URL } from "./onboard.js";
 
 const DEFAULT_SIZE = "1024x1024";
@@ -26,16 +26,16 @@ const LITELLM_SUPPORTED_SIZES = [
 const LITELLM_MAX_INPUT_IMAGES = 5;
 
 type LitellmProviderConfig = NonNullable<
-  NonNullable<NexisClawConfig["models"]>["providers"]
+  NonNullable<GreenchClawConfig["models"]>["providers"]
 >[string];
 
 function resolveLitellmProviderConfig(
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
 ): LitellmProviderConfig | undefined {
   return cfg?.models?.providers?.litellm;
 }
 
-function resolveConfiguredLitellmBaseUrl(cfg: NexisClawConfig | undefined): string {
+function resolveConfiguredLitellmBaseUrl(cfg: GreenchClawConfig | undefined): string {
   return normalizeOptionalString(resolveLitellmProviderConfig(cfg)?.baseUrl) ?? LITELLM_BASE_URL;
 }
 

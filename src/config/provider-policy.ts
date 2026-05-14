@@ -1,6 +1,6 @@
 import type { PluginManifestRegistry } from "../plugins/manifest-registry.js";
 import { resolveBundledProviderPolicySurface } from "../plugins/provider-public-artifacts.js";
-import type { ModelProviderConfig, NexisClawConfig } from "./types.js";
+import type { ModelProviderConfig, GreenchClawConfig } from "./types.js";
 
 export function normalizeProviderConfigForConfigDefaults(params: {
   provider: string;
@@ -18,10 +18,10 @@ export function normalizeProviderConfigForConfigDefaults(params: {
 
 export function applyProviderConfigDefaultsForConfig(params: {
   provider: string;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   manifestRegistry?: Pick<PluginManifestRegistry, "plugins">;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   return (
     resolveBundledProviderPolicySurface(params.provider, {
       manifestRegistry: params.manifestRegistry,

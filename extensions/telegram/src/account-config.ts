@@ -1,9 +1,9 @@
 import {
   normalizeAccountId,
   resolveAccountEntry,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/account-core";
-import type { TelegramAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/account-core";
+import type { TelegramAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
 function normalizeAllowFromEntry(value: string | number): string {
   return String(value).trim();
@@ -45,7 +45,7 @@ function resolveMergedAllowFrom(params: {
 }
 
 export function resolveTelegramAccountConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
 ): TelegramAccountConfig | undefined {
   const normalized = normalizeAccountId(accountId);
@@ -53,7 +53,7 @@ export function resolveTelegramAccountConfig(
 }
 
 export function mergeTelegramAccountConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
 ): TelegramAccountConfig {
   const {

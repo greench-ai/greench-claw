@@ -1,25 +1,25 @@
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
-import { buildDmGroupAccountAllowlistAdapter } from "NexisClaw/plugin-sdk/allowlist-config-edit";
-import { createChatChannelPlugin, type ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import { defineChannelMessageAdapter } from "NexisClaw/plugin-sdk/channel-message";
-import { createPairingPrefixStripper } from "NexisClaw/plugin-sdk/channel-pairing";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
+import { buildDmGroupAccountAllowlistAdapter } from "GreenchClaw/plugin-sdk/allowlist-config-edit";
+import { createChatChannelPlugin, type ChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import { defineChannelMessageAdapter } from "GreenchClaw/plugin-sdk/channel-message";
+import { createPairingPrefixStripper } from "GreenchClaw/plugin-sdk/channel-pairing";
 import {
   attachChannelToResult,
   attachChannelToResults,
-} from "NexisClaw/plugin-sdk/channel-send-result";
-import { PAIRING_APPROVED_MESSAGE } from "NexisClaw/plugin-sdk/channel-status";
-import { resolveMarkdownTableMode } from "NexisClaw/plugin-sdk/markdown-table-runtime";
-import { resolveChannelMediaMaxBytes } from "NexisClaw/plugin-sdk/media-runtime";
-import { resolveOutboundSendDep } from "NexisClaw/plugin-sdk/outbound-send-deps";
-import { chunkText, resolveTextChunkLimit } from "NexisClaw/plugin-sdk/reply-chunking";
-import { buildOutboundBaseSessionKey, type RoutePeer } from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/channel-send-result";
+import { PAIRING_APPROVED_MESSAGE } from "GreenchClaw/plugin-sdk/channel-status";
+import { resolveMarkdownTableMode } from "GreenchClaw/plugin-sdk/markdown-table-runtime";
+import { resolveChannelMediaMaxBytes } from "GreenchClaw/plugin-sdk/media-runtime";
+import { resolveOutboundSendDep } from "GreenchClaw/plugin-sdk/outbound-send-deps";
+import { chunkText, resolveTextChunkLimit } from "GreenchClaw/plugin-sdk/reply-chunking";
+import { buildOutboundBaseSessionKey, type RoutePeer } from "GreenchClaw/plugin-sdk/routing";
 import {
   buildBaseChannelStatusSummary,
   collectStatusIssuesFromLastError,
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/status-helpers";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveSignalAccount, type ResolvedSignalAccount } from "./accounts.js";
 import { signalApprovalAuth } from "./approval-auth.js";
 import { markdownToSignalTextChunks } from "./format.js";

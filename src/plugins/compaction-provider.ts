@@ -47,7 +47,9 @@ export type RegisteredCompactionProvider = {
 // Registry (process-global singleton)
 // ---------------------------------------------------------------------------
 
-const COMPACTION_PROVIDER_REGISTRY_STATE = Symbol.for("NexisClaw.compactionProviderRegistryState");
+const COMPACTION_PROVIDER_REGISTRY_STATE = Symbol.for(
+  "GreenchClaw.compactionProviderRegistryState",
+);
 
 type CompactionProviderRegistryState = {
   providers: Map<string, RegisteredCompactionProvider>;

@@ -205,7 +205,7 @@ function isRuntimeTrajectoryEventForSession(
     return false;
   }
   return (
-    value.traceSchema === "NexisClaw-trajectory" &&
+    value.traceSchema === "GreenchClaw-trajectory" &&
     value.schemaVersion === 1 &&
     value.source === "runtime" &&
     typeof value.type === "string" &&
@@ -367,7 +367,7 @@ function buildTranscriptEvents(params: {
   for (const entry of params.entries) {
     const push = (type: string, data?: Record<string, unknown>) => {
       events.push({
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: params.traceId,
         source: "transcript",
@@ -701,7 +701,7 @@ function buildMetadataCapture(params: {
     };
   })();
   return {
-    traceSchema: "NexisClaw-trajectory",
+    traceSchema: "GreenchClaw-trajectory",
     schemaVersion: 1,
     generatedAt: new Date().toISOString(),
     traceId: params.manifest.traceId,
@@ -732,7 +732,7 @@ function buildArtifactsCapture(params: {
     return undefined;
   }
   return {
-    traceSchema: "NexisClaw-trajectory",
+    traceSchema: "GreenchClaw-trajectory",
     schemaVersion: 1,
     generatedAt: new Date().toISOString(),
     traceId: params.manifest.traceId,
@@ -802,7 +802,7 @@ function buildPromptsCapture(params: {
     return undefined;
   }
   return {
-    traceSchema: "NexisClaw-trajectory",
+    traceSchema: "GreenchClaw-trajectory",
     schemaVersion: 1,
     generatedAt: new Date().toISOString(),
     traceId: params.manifest.traceId,
@@ -826,9 +826,9 @@ export function resolveDefaultTrajectoryExportDir(params: {
   const sessionFileName = safeTrajectorySessionFileName(params.sessionId);
   return path.join(
     params.workspaceDir,
-    ".NexisClaw",
+    ".GreenchClaw",
     "trajectory-exports",
-    `NexisClaw-trajectory-${sessionFileName.slice(0, 8)}-${timestamp}`,
+    `GreenchClaw-trajectory-${sessionFileName.slice(0, 8)}-${timestamp}`,
   );
 }
 
@@ -880,7 +880,7 @@ export async function exportTrajectoryBundle(params: BuildTrajectoryBundleParams
   const rawEvents = sortTrajectoryEvents([...runtimeEvents, ...transcriptEvents]);
   const events = rawEvents.map((event) => redactEventForExport(event, redaction));
   const manifest: TrajectoryBundleManifest = {
-    traceSchema: "NexisClaw-trajectory",
+    traceSchema: "GreenchClaw-trajectory",
     schemaVersion: 1,
     generatedAt: new Date().toISOString(),
     traceId: params.sessionId,

@@ -21,7 +21,7 @@ function makeRegistry(
       origin: "config" as const,
       rootDir: `/fake/${plugin.id}`,
       source: `/fake/${plugin.id}/index.js`,
-      manifestPath: `/fake/${plugin.id}/NexisClaw.plugin.json`,
+      manifestPath: `/fake/${plugin.id}/GreenchClaw.plugin.json`,
     })),
     diagnostics: [],
   };

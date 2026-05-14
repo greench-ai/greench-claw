@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { listSkillCommandsForAgents as listActualSkillCommandsForAgents } from "NexisClaw/plugin-sdk/skill-commands-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { listSkillCommandsForAgents as listActualSkillCommandsForAgents } from "GreenchClaw/plugin-sdk/skill-commands-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { registerTelegramNativeCommands } from "./bot-native-commands.js";
 import {
@@ -32,7 +32,7 @@ describe("registerTelegramNativeCommands skill allowlist integration", () => {
   });
 
   it("registers only allowlisted skills for the bound agent menu", async () => {
-    const workspaceDir = await makeWorkspace("NexisClaw-telegram-skills-");
+    const workspaceDir = await makeWorkspace("GreenchClaw-telegram-skills-");
     await writeSkill({
       dir: path.join(workspaceDir, "skills", "alpha-skill"),
       name: "alpha-skill",
@@ -45,7 +45,7 @@ describe("registerTelegramNativeCommands skill allowlist integration", () => {
     });
 
     const setMyCommands = vi.fn().mockResolvedValue(undefined);
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       agents: {
         list: [
           { id: "alpha", workspace: workspaceDir, skills: ["alpha-skill"] },
@@ -60,7 +60,7 @@ describe("registerTelegramNativeCommands skill allowlist integration", () => {
       ],
     };
     listSkillCommandsForAgents.mockImplementation(
-      ({ cfg, agentIds }: { cfg: NexisClawConfig; agentIds?: string[] }) =>
+      ({ cfg, agentIds }: { cfg: GreenchClawConfig; agentIds?: string[] }) =>
         listActualSkillCommandsForAgents({ cfg, agentIds }),
     );
 

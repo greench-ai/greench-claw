@@ -11,8 +11,8 @@ Adds web search provider support.
 
 ## Distribution
 
-- Package: `@NexisClaw/searxng-plugin`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/searxng-plugin`
+- Install route: included in GreenchClaw
 
 ## Surface
 

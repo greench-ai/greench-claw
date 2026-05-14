@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChannelPlugin } from "../../channels/plugins/types.js";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { resolveApprovalApprovers } from "../../plugin-sdk/approval-approvers.js";
 import {
   createApproverRestrictedNativeApprovalAdapter,
@@ -63,7 +63,7 @@ function normalizeDiscordDirectApproverId(value: string | number): string | unde
   return normalized || undefined;
 }
 
-function getDiscordExecApprovalApproversForTests(params: { cfg: NexisClawConfig }): string[] {
+function getDiscordExecApprovalApproversForTests(params: { cfg: GreenchClawConfig }): string[] {
   const discord = params.cfg.channels?.discord;
   return resolveApprovalApprovers({
     explicit: discord?.execApprovals?.approvers,
@@ -183,7 +183,7 @@ type TelegramTestSectionConfig = TelegramTestAccountConfig & {
   accounts?: Record<string, TelegramTestAccountConfig>;
 };
 
-function listConfiguredTelegramAccountIds(cfg: NexisClawConfig): string[] {
+function listConfiguredTelegramAccountIds(cfg: GreenchClawConfig): string[] {
   const channel = cfg.channels?.telegram as TelegramTestSectionConfig | undefined;
   const accountIds = Object.keys(channel?.accounts ?? {});
   if (accountIds.length > 0) {
@@ -197,7 +197,7 @@ function listConfiguredTelegramAccountIds(cfg: NexisClawConfig): string[] {
 }
 
 function resolveTelegramTestAccount(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId?: string | null,
 ): TelegramTestAccountConfig {
   const resolvedAccountId = normalizeAccountId(accountId);
@@ -246,7 +246,7 @@ function normalizeTelegramDirectApproverId(value: string | number): string | und
 }
 
 function getTelegramExecApprovalApprovers(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): string[] {
   const account = resolveTelegramTestAccount(params.cfg, params.accountId);
@@ -258,7 +258,7 @@ function getTelegramExecApprovalApprovers(params: {
 }
 
 function isTelegramExecApprovalTargetRecipient(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   senderId?: string | null;
   accountId?: string | null;
 }): boolean {
@@ -285,7 +285,7 @@ function isTelegramExecApprovalTargetRecipient(params: {
 }
 
 function isTelegramExecApprovalAuthorizedSender(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   senderId?: string | null;
 }): boolean {
@@ -300,7 +300,7 @@ function isTelegramExecApprovalAuthorizedSender(params: {
 }
 
 function isTelegramExecApprovalClientEnabled(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): boolean {
   const config = resolveTelegramTestAccount(params.cfg, params.accountId).execApprovals;
@@ -308,7 +308,7 @@ function isTelegramExecApprovalClientEnabled(params: {
 }
 
 function resolveTelegramExecApprovalTarget(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): "dm" | "channel" | "both" {
   return resolveTelegramTestAccount(params.cfg, params.accountId).execApprovals?.target ?? "dm";
@@ -349,9 +349,9 @@ const telegramApproveTestPlugin: ChannelPlugin = {
     },
     config: {
       listAccountIds: listConfiguredTelegramAccountIds,
-      resolveAccount: (cfg: NexisClawConfig, accountId?: string | null) =>
+      resolveAccount: (cfg: GreenchClawConfig, accountId?: string | null) =>
         resolveTelegramTestAccount(cfg, accountId),
-      defaultAccountId: (cfg: NexisClawConfig) =>
+      defaultAccountId: (cfg: GreenchClawConfig) =>
         (cfg.channels?.telegram as TelegramTestSectionConfig | undefined)?.defaultAccount ??
         DEFAULT_ACCOUNT_ID,
     },
@@ -397,7 +397,7 @@ function setApprovePluginRegistry(): void {
 
 function buildApproveParams(
   commandBodyNormalized: string,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   ctxOverrides?: {
     Provider?: string;
     Surface?: string;
@@ -439,7 +439,7 @@ describe("handleApproveCommand", () => {
       approvers: string[];
       target: "dm";
     } | null = { enabled: true, approvers: ["123"], target: "dm" },
-  ): NexisClawConfig {
+  ): GreenchClawConfig {
     return {
       commands: { text: true },
       channels: {
@@ -448,7 +448,7 @@ describe("handleApproveCommand", () => {
           ...(execApprovals ? { execApprovals } : {}),
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
   }
 
   function createDiscordApproveCfg(
@@ -457,7 +457,7 @@ describe("handleApproveCommand", () => {
       approvers: string[];
       target: "dm" | "channel" | "both";
     } | null = { enabled: true, approvers: ["123"], target: "channel" },
-  ): NexisClawConfig {
+  ): GreenchClawConfig {
     return {
       commands: { text: true },
       channels: {
@@ -466,7 +466,7 @@ describe("handleApproveCommand", () => {
           ...(execApprovals ? { execApprovals } : {}),
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
   }
 
   it("rejects invalid usage", async () => {
@@ -474,7 +474,7 @@ describe("handleApproveCommand", () => {
       buildApproveParams("/approve", {
         commands: { text: true },
         channels: { whatsapp: { allowFrom: ["*"] } },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
       true,
     );
     expect(result?.shouldContinue).toBe(false);
@@ -489,7 +489,7 @@ describe("handleApproveCommand", () => {
         {
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         { SenderId: "123" },
       ),
       true,
@@ -508,7 +508,7 @@ describe("handleApproveCommand", () => {
         {
           commands: { text: true },
           channels: { slack: { allowFrom: ["*"] } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         {
           Provider: "slack",
           Surface: "slack",
@@ -564,7 +564,7 @@ describe("handleApproveCommand", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {
         Provider: "telegram",
         Surface: "telegram",
@@ -590,7 +590,7 @@ describe("handleApproveCommand", () => {
             allowFrom: ["+15551230000"],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {
         Provider: "signal",
         Surface: "signal",
@@ -611,7 +611,7 @@ describe("handleApproveCommand", () => {
       "/approve abc12345 allow-once",
       {
         commands: { text: true },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {
         Provider: "webchat",
         Surface: "webchat",
@@ -647,7 +647,7 @@ describe("handleApproveCommand", () => {
       {
         commands: { text: true },
         channels: { slack: { allowFrom: ["*"] } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {
         Provider: "slack",
         Surface: "slack",
@@ -672,7 +672,7 @@ describe("handleApproveCommand", () => {
             allowFrom: [],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {
         Provider: "signal",
         Surface: "signal",
@@ -698,7 +698,7 @@ describe("handleApproveCommand", () => {
             allowFrom: [],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {
         Provider: "signal",
         Surface: "signal",
@@ -730,7 +730,7 @@ describe("handleApproveCommand", () => {
             allowFrom: ["*"],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {
         Provider: "telegram",
         Surface: "telegram",
@@ -887,7 +887,7 @@ describe("handleApproveCommand", () => {
         {
           commands: { text: true },
           channels: { matrix: { allowFrom: ["*"] } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         {
           Provider: "matrix",
           Surface: "matrix",
@@ -1009,7 +1009,7 @@ describe("handleApproveCommand", () => {
   it("enforces gateway approval scopes", async () => {
     const cfg = {
       commands: { text: true },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     for (const testCase of [
       {
         scopes: ["operator.write"],

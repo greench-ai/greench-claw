@@ -5,9 +5,9 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { resetFacadeRuntimeStateForTest } from "./facade-runtime.js";
 
 const ORIGINAL_ENV = {
-  NEXISCLAW_DISABLE_BUNDLED_PLUGINS: process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS,
-  NEXISCLAW_CONFIG_PATH: process.env.NEXISCLAW_CONFIG_PATH,
-  NEXISCLAW_TEST_FAST: process.env.NEXISCLAW_TEST_FAST,
+  GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS,
+  GREENCHCLAW_CONFIG_PATH: process.env.GREENCHCLAW_CONFIG_PATH,
+  GREENCHCLAW_TEST_FAST: process.env.GREENCHCLAW_TEST_FAST,
 } as const;
 
 const tempDirs: string[] = [];
@@ -25,8 +25,8 @@ function resetQaRunnerRuntimeState() {
 describe("plugin-sdk qa-runner-runtime linked plugin smoke", () => {
   beforeEach(() => {
     resetQaRunnerRuntimeState();
-    process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = "1";
-    process.env.NEXISCLAW_TEST_FAST = "1";
+    process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+    process.env.GREENCHCLAW_TEST_FAST = "1";
   });
 
   afterEach(() => {
@@ -44,9 +44,9 @@ describe("plugin-sdk qa-runner-runtime linked plugin smoke", () => {
   });
 
   it("loads an activated qa runner from a linked plugin path without a bundled install fallback", async () => {
-    const stateDir = makeTempDir("NexisClaw-qa-runner-state-");
+    const stateDir = makeTempDir("GreenchClaw-qa-runner-state-");
     const pluginDir = path.join(stateDir, "extensions", "qa-linked");
-    const configPath = path.join(stateDir, "NexisClaw.json");
+    const configPath = path.join(stateDir, "GreenchClaw.json");
 
     fs.writeFileSync(
       configPath,
@@ -55,11 +55,11 @@ describe("plugin-sdk qa-runner-runtime linked plugin smoke", () => {
       }),
       "utf8",
     );
-    process.env.NEXISCLAW_CONFIG_PATH = configPath;
+    process.env.GREENCHCLAW_CONFIG_PATH = configPath;
 
     fs.mkdirSync(pluginDir, { recursive: true });
     fs.writeFileSync(
-      path.join(pluginDir, "NexisClaw.plugin.json"),
+      path.join(pluginDir, "GreenchClaw.plugin.json"),
       JSON.stringify({
         id: "qa-linked",
         qaRunners: [
@@ -79,12 +79,12 @@ describe("plugin-sdk qa-runner-runtime linked plugin smoke", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@NexisClaw/qa-linked",
+        name: "@GreenchClaw/qa-linked",
         type: "module",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: ["./index.js"],
           install: {
-            npmSpec: "@NexisClaw/qa-linked",
+            npmSpec: "@GreenchClaw/qa-linked",
           },
         },
       }),

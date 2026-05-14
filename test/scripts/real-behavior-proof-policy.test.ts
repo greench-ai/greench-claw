@@ -24,8 +24,8 @@ function externalPr(body: string, overrides: Record<string, unknown> = {}) {
 function proofBody(evidence: string, overrides: Record<string, string> = {}) {
   const fields = {
     behavior: "Gateway startup no longer drops the configured Discord channel.",
-    environment: "macOS 15.4, Node 24, local NexisClaw gateway with a redacted Discord token.",
-    steps: "pnpm NexisClaw gateway restart, then pnpm NexisClaw gateway status",
+    environment: "macOS 15.4, Node 24, local GreenchClaw gateway with a redacted Discord token.",
+    steps: "pnpm GreenchClaw gateway restart, then pnpm GreenchClaw gateway status",
     evidence,
     observedResult: "The gateway stayed connected and the Discord channel showed ready.",
     notTested: "No known gaps.",
@@ -46,11 +46,15 @@ function proofBody(evidence: string, overrides: Record<string, string> = {}) {
 describe("real-behavior-proof-policy", () => {
   it.each([
     "![after](https://github.com/user-attachments/assets/abc123)",
-    "Linked artifact: https://github.com/NexisClaw/NexisClaw/actions/runs/123456789/artifacts/987654321",
+    "Linked artifact: https://github.com/GreenchClaw/GreenchClaw/actions/runs/123456789/artifacts/987654321",
     "Redacted runtime log: gateway connected Discord channel and delivered the reply.",
-    ["Terminal transcript:", "```text", "$ NexisClaw gateway status", "discord ready", "```"].join(
-      "\n",
-    ),
+    [
+      "Terminal transcript:",
+      "```text",
+      "$ GreenchClaw gateway status",
+      "discord ready",
+      "```",
+    ].join("\n"),
   ])("passes external PRs with real after-fix evidence: %s", (evidence) => {
     const evaluation = evaluateRealBehaviorProof({
       pullRequest: externalPr(proofBody(evidence)),
@@ -74,10 +78,10 @@ describe("real-behavior-proof-policy", () => {
     expect(evaluation.fields).toStrictEqual({
       behavior: "Gateway startup no longer drops the configured Discord channel.",
       evidence: "![after](https://github.com/user-attachments/assets/gateway-ready)",
-      environment: "macOS 15.4, Node 24, local NexisClaw gateway with a redacted Discord token.",
+      environment: "macOS 15.4, Node 24, local GreenchClaw gateway with a redacted Discord token.",
       notTested: "No known gaps.",
       observedResult: "The gateway stayed connected and the Discord channel showed ready.",
-      steps: "pnpm NexisClaw gateway restart, then pnpm NexisClaw gateway status",
+      steps: "pnpm GreenchClaw gateway restart, then pnpm GreenchClaw gateway status",
     });
     expect(labelsForRealBehaviorProof(evaluation)).toEqual([PROOF_SUPPLIED_LABEL]);
   });

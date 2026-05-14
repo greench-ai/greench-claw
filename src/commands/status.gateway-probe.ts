@@ -1,11 +1,11 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   resolveGatewayProbeAuthSafeWithSecretInputs,
   resolveGatewayProbeTarget,
 } from "../gateway/probe-auth.js";
 export { pickGatewaySelfPresence } from "./gateway-presence.js";
 
-export async function resolveGatewayProbeAuthResolution(cfg: NexisClawConfig): Promise<{
+export async function resolveGatewayProbeAuthResolution(cfg: GreenchClawConfig): Promise<{
   auth: {
     token?: string;
     password?: string;
@@ -20,7 +20,7 @@ export async function resolveGatewayProbeAuthResolution(cfg: NexisClawConfig): P
   });
 }
 
-export async function resolveGatewayProbeAuth(cfg: NexisClawConfig): Promise<{
+export async function resolveGatewayProbeAuth(cfg: GreenchClawConfig): Promise<{
   token?: string;
   password?: string;
 }> {

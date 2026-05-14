@@ -103,7 +103,7 @@ export function formatElevatedUnavailableText(params: {
   }
   if (params.sessionKey) {
     lines.push(
-      `See: ${formatCliCommand(`NexisClaw sandbox explain --session ${params.sessionKey}`)}`,
+      `See: ${formatCliCommand(`GreenchClaw sandbox explain --session ${params.sessionKey}`)}`,
     );
   }
   return lines.join("\n");

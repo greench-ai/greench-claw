@@ -1,6 +1,6 @@
-import { buildManifestModelProviderConfig } from "NexisClaw/plugin-sdk/provider-catalog-shared";
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
-import manifest from "./NexisClaw.plugin.json" with { type: "json" };
+import { buildManifestModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-catalog-shared";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import manifest from "./GreenchClaw.plugin.json" with { type: "json" };
 
 export function buildBytePlusProvider(): ModelProviderConfig {
   return buildManifestModelProviderConfig({

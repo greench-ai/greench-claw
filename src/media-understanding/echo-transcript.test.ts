@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MsgContext } from "../auto-reply/templating.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 
 const mockDeliverOutboundPayloads = vi.hoisted(() => vi.fn());
 
@@ -25,7 +25,7 @@ vi.mock("../utils/message-channel.js", () => ({
 
 import { DEFAULT_ECHO_TRANSCRIPT_FORMAT, sendTranscriptEcho } from "./echo-transcript.js";
 
-const EMPTY_CONFIG = {} as NexisClawConfig;
+const EMPTY_CONFIG = {} as GreenchClawConfig;
 
 function createCtx(overrides?: Partial<MsgContext>): MsgContext {
   return {

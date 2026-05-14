@@ -24,7 +24,7 @@ vi.mock("../config/config.js", () => ({
 }));
 
 vi.mock("../config/paths.js", () => ({
-  resolveStateDir: () => "/tmp/NexisClaw-migrate-command-test",
+  resolveStateDir: () => "/tmp/GreenchClaw-migrate-command-test",
 }));
 
 vi.mock("../cli/prompt.js", () => ({
@@ -84,7 +84,7 @@ function codexSkillPlan(overrides: Partial<MigrationPlan> = {}): MigrationPlan {
       action: "copy",
       status: "planned",
       source: "/tmp/codex/skills/alpha",
-      target: "/tmp/NexisClaw/workspace/skills/alpha",
+      target: "/tmp/GreenchClaw/workspace/skills/alpha",
       details: {
         skillName: "alpha",
         sourceLabel: "Codex CLI skill",
@@ -96,7 +96,7 @@ function codexSkillPlan(overrides: Partial<MigrationPlan> = {}): MigrationPlan {
       action: "copy",
       status: "planned",
       source: "/tmp/codex/skills/beta",
-      target: "/tmp/NexisClaw/workspace/skills/beta",
+      target: "/tmp/GreenchClaw/workspace/skills/beta",
       details: {
         skillName: "beta",
         sourceLabel: "Personal AgentSkill",
@@ -246,7 +246,7 @@ describe("migrateApplyCommand", () => {
   const originalIsTty = process.stdin.isTTY;
 
   beforeEach(async () => {
-    await fs.rm("/tmp/NexisClaw-migrate-command-test", { force: true, recursive: true });
+    await fs.rm("/tmp/GreenchClaw-migrate-command-test", { force: true, recursive: true });
     Object.defineProperty(process.stdin, "isTTY", {
       configurable: true,
       value: false,
@@ -259,7 +259,7 @@ describe("migrateApplyCommand", () => {
     mocks.clackIsCancel.mockImplementation((value) => value === mocks.cancelSymbol);
     mocks.promptYesNo.mockReset();
     mocks.backupCreateCommand.mockReset();
-    mocks.backupCreateCommand.mockResolvedValue({ archivePath: "/tmp/NexisClaw-backup.tgz" });
+    mocks.backupCreateCommand.mockResolvedValue({ archivePath: "/tmp/GreenchClaw-backup.tgz" });
   });
 
   afterEach(async () => {
@@ -267,7 +267,7 @@ describe("migrateApplyCommand", () => {
       configurable: true,
       value: originalIsTty,
     });
-    await fs.rm("/tmp/NexisClaw-migrate-command-test", { force: true, recursive: true });
+    await fs.rm("/tmp/GreenchClaw-migrate-command-test", { force: true, recursive: true });
     vi.clearAllMocks();
   });
 
@@ -1041,10 +1041,10 @@ describe("migrateApplyCommand", () => {
     expect(typeof (backupCall?.[0] as { log?: unknown } | undefined)?.log).toBe("function");
     expect(backupCall?.[1]).toStrictEqual({ output: undefined, verify: true });
     const applyContext = firstApplyContext();
-    expect(applyContext.backupPath).toBe("/tmp/NexisClaw-backup.tgz");
+    expect(applyContext.backupPath).toBe("/tmp/GreenchClaw-backup.tgz");
     expect(String(applyContext.reportDir)).toContain("/migration/hermes/");
     expect(firstAppliedPlan()).toBe(planned);
-    expect(result.backupPath).toBe("/tmp/NexisClaw-backup.tgz");
+    expect(result.backupPath).toBe("/tmp/GreenchClaw-backup.tgz");
   });
 
   it("prints only the final result for root apply in JSON mode", async () => {
@@ -1099,7 +1099,7 @@ describe("migrateApplyCommand", () => {
       providerId?: unknown;
     };
     expect(logPayload.providerId).toBe("hermes");
-    expect(logPayload.backupPath).toBe("/tmp/NexisClaw-backup.tgz");
+    expect(logPayload.backupPath).toBe("/tmp/GreenchClaw-backup.tgz");
     expect(logPayload.items?.[0]?.details?.value?.time?.env?.OPENAI_API_KEY).toBe("[redacted]");
     expect(logPayload.items?.[0]?.details?.value?.time?.headers?.["x-api-key"]).toBe("[redacted]");
     expect(logs[0]).not.toContain("short-dev-key");

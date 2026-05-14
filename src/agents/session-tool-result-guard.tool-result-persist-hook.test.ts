@@ -8,11 +8,11 @@ import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
 } from "../plugins/hook-runner-global.js";
-import { loadNexisClawPlugins } from "../plugins/loader.js";
+import { loadGreenchClawPlugins } from "../plugins/loader.js";
 import { guardSessionManager } from "./session-tool-result-guard-wrapper.js";
 
 const EMPTY_PLUGIN_SCHEMA = { type: "object", additionalProperties: false, properties: {} };
-const originalBundledPluginsDir = process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+const originalBundledPluginsDir = process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
 
 function writeTempPlugin(params: { dir: string; id: string; body: string }): string {
   const pluginDir = path.join(params.dir, params.id);
@@ -20,7 +20,7 @@ function writeTempPlugin(params: { dir: string; id: string; body: string }): str
   const file = path.join(pluginDir, `${params.id}.mjs`);
   fs.writeFileSync(file, params.body, "utf-8");
   fs.writeFileSync(
-    path.join(pluginDir, "NexisClaw.plugin.json"),
+    path.join(pluginDir, "GreenchClaw.plugin.json"),
     JSON.stringify(
       {
         id: params.id,
@@ -69,13 +69,13 @@ function requirePersistedToolResult(sm: ReturnType<typeof SessionManager.inMemor
 
 function initializeTempPlugin(params: { tmpPrefix: string; id: string; body: string }) {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), params.tmpPrefix));
-  process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+  process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
   const plugin = writeTempPlugin({
     dir: tmp,
     id: params.id,
     body: params.body,
   });
-  const registry = loadNexisClawPlugins({
+  const registry = loadGreenchClawPlugins({
     cache: false,
     workspaceDir: tmp,
     config: {
@@ -107,9 +107,9 @@ function expectPersistedToolResultDetailsCapped(sm: ReturnType<typeof SessionMan
 afterEach(() => {
   resetGlobalHookRunner();
   if (originalBundledPluginsDir === undefined) {
-    delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = originalBundledPluginsDir;
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = originalBundledPluginsDir;
   }
 });
 
@@ -312,8 +312,8 @@ describe("tool_result_persist hook", () => {
   });
 
   it("loads tool_result_persist hooks without breaking persistence", () => {
-    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-toolpersist-"));
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-toolpersist-"));
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
 
     const pluginA = writeTempPlugin({
       dir: tmp,
@@ -339,7 +339,7 @@ describe("tool_result_persist hook", () => {
 } };`,
     });
 
-    const registry = loadNexisClawPlugins({
+    const registry = loadGreenchClawPlugins({
       cache: false,
       workspaceDir: tmp,
       config: {
@@ -367,7 +367,7 @@ describe("tool_result_persist hook", () => {
 
   it("reapplies the cap after tool_result_persist expands a tool result", () => {
     initializeTempPlugin({
-      tmpPrefix: "NexisClaw-toolpersist-expand-",
+      tmpPrefix: "GreenchClaw-toolpersist-expand-",
       id: "persist-expand",
       body: `export default { id: "persist-expand", register(api) {
   api.on("tool_result_persist", (event) => {
@@ -393,7 +393,7 @@ describe("tool_result_persist hook", () => {
 
   it("reapplies the details cap after tool_result_persist expands details", () => {
     initializeTempPlugin({
-      tmpPrefix: "NexisClaw-toolpersist-details-expand-",
+      tmpPrefix: "GreenchClaw-toolpersist-details-expand-",
       id: "persist-details-expand",
       body: `export default { id: "persist-details-expand", register(api) {
   api.on("tool_result_persist", (event) => {
@@ -424,7 +424,7 @@ describe("tool_result_persist hook", () => {
 describe("before_message_write hook", () => {
   it("continues persistence when a before_message_write hook throws", () => {
     initializeTempPlugin({
-      tmpPrefix: "NexisClaw-before-write-",
+      tmpPrefix: "GreenchClaw-before-write-",
       id: "before-write-throws",
       body: `export default { id: "before-write-throws", register(api) {
   api.on("before_message_write", () => {
@@ -455,7 +455,7 @@ describe("before_message_write hook", () => {
 
   it("reapplies the cap after before_message_write expands a tool result", () => {
     initializeTempPlugin({
-      tmpPrefix: "NexisClaw-before-write-expand-",
+      tmpPrefix: "GreenchClaw-before-write-expand-",
       id: "before-write-expand",
       body: `export default { id: "before-write-expand", register(api) {
   api.on("before_message_write", (event) => {

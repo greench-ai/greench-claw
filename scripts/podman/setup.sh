@@ -1,33 +1,33 @@
 #!/usr/bin/env bash
-# One-time host setup for rootless NexisClaw in Podman. Uses the current
+# One-time host setup for rootless GreenchClaw in Podman. Uses the current
 # non-root user throughout, builds or pulls the image into that user's Podman
-# store, writes config under ~/.NexisClaw by default, and uses the repo-local
-# launch script at ./scripts/run-NexisClaw-podman.sh.
+# store, writes config under ~/.GreenchClaw by default, and uses the repo-local
+# launch script at ./scripts/run-GreenchClaw-podman.sh.
 #
 # Usage: ./scripts/podman/setup.sh [--quadlet|--container]
 #   --quadlet   Install a Podman Quadlet as the current user's systemd service
 #   --container Only install image + config; you start the container manually (default)
-#   Or set NEXISCLAW_PODMAN_QUADLET=1 (or 0) to choose without a flag.
+#   Or set GREENCHCLAW_PODMAN_QUADLET=1 (or 0) to choose without a flag.
 #
 # After this, start the gateway manually:
-#   ./scripts/run-NexisClaw-podman.sh launch
-#   ./scripts/run-NexisClaw-podman.sh launch setup
+#   ./scripts/run-GreenchClaw-podman.sh launch
+#   ./scripts/run-GreenchClaw-podman.sh launch setup
 # Or, if you used --quadlet:
-#   systemctl --user start NexisClaw.service
+#   systemctl --user start GreenchClaw.service
 set -euo pipefail
 
-REPO_PATH="${NEXISCLAW_REPO_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
-RUN_SCRIPT_SRC="$REPO_PATH/scripts/run-NexisClaw-podman.sh"
-QUADLET_TEMPLATE="$REPO_PATH/scripts/podman/NexisClaw.container.in"
-NEXISCLAW_USER="$(id -un)"
-NEXISCLAW_HOME="${HOME:-}"
-NEXISCLAW_CONFIG_DIR="${NEXISCLAW_CONFIG_DIR:-}"
-NEXISCLAW_WORKSPACE_DIR="${NEXISCLAW_WORKSPACE_DIR:-}"
-NEXISCLAW_IMAGE="${NEXISCLAW_PODMAN_IMAGE:-${NEXISCLAW_IMAGE:-NexisClaw:local}}"
-NEXISCLAW_CONTAINER_NAME="${NEXISCLAW_PODMAN_CONTAINER:-NexisClaw}"
+REPO_PATH="${GREENCHCLAW_REPO_PATH:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
+RUN_SCRIPT_SRC="$REPO_PATH/scripts/run-GreenchClaw-podman.sh"
+QUADLET_TEMPLATE="$REPO_PATH/scripts/podman/GreenchClaw.container.in"
+GREENCHCLAW_USER="$(id -un)"
+GREENCHCLAW_HOME="${HOME:-}"
+GREENCHCLAW_CONFIG_DIR="${GREENCHCLAW_CONFIG_DIR:-}"
+GREENCHCLAW_WORKSPACE_DIR="${GREENCHCLAW_WORKSPACE_DIR:-}"
+GREENCHCLAW_IMAGE="${GREENCHCLAW_PODMAN_IMAGE:-${GREENCHCLAW_IMAGE:-GreenchClaw:local}}"
+GREENCHCLAW_CONTAINER_NAME="${GREENCHCLAW_PODMAN_CONTAINER:-GreenchClaw}"
 PLATFORM_NAME="$(uname -s 2>/dev/null || echo unknown)"
-HOST_GATEWAY_PORT="${NEXISCLAW_PODMAN_GATEWAY_HOST_PORT:-${NEXISCLAW_GATEWAY_PORT:-19500}}"
-QUADLET_GATEWAY_PORT="19500"
+HOST_GATEWAY_PORT="${GREENCHCLAW_PODMAN_GATEWAY_HOST_PORT:-${GREENCHCLAW_GATEWAY_PORT:-18420}}"
+QUADLET_GATEWAY_PORT="18420"
 
 require_cmd() {
   if ! command -v "$1" >/dev/null 2>&1; then
@@ -195,7 +195,7 @@ PY
     od -An -N32 -tx1 /dev/urandom | tr -d " \n"
     return 0
   fi
-  echo "Missing dependency: need openssl or python3 (or od) to generate NEXISCLAW_GATEWAY_TOKEN." >&2
+  echo "Missing dependency: need openssl or python3 (or od) to generate GREENCHCLAW_GATEWAY_TOKEN." >&2
   exit 1
 }
 
@@ -304,8 +304,8 @@ for arg in "$@"; do
     --container) INSTALL_QUADLET=false ;;
   esac
 done
-if [[ -n "${NEXISCLAW_PODMAN_QUADLET:-}" ]]; then
-  case "${NEXISCLAW_PODMAN_QUADLET,,}" in
+if [[ -n "${GREENCHCLAW_PODMAN_QUADLET:-}" ]]; then
+  case "${GREENCHCLAW_PODMAN_QUADLET,,}" in
     1|yes|true) INSTALL_QUADLET=true ;;
     0|no|false) INSTALL_QUADLET=false ;;
   esac
@@ -324,8 +324,8 @@ if is_root; then
   echo "Run scripts/podman/setup.sh as your normal user so Podman stays rootless." >&2
   exit 1
 fi
-if [[ "$NEXISCLAW_IMAGE" == "NexisClaw:local" ]] && [[ ! -f "$REPO_PATH/Dockerfile" ]]; then
-  echo "Dockerfile not found at $REPO_PATH. Set NEXISCLAW_REPO_PATH to the repo root." >&2
+if [[ "$GREENCHCLAW_IMAGE" == "GreenchClaw:local" ]] && [[ ! -f "$REPO_PATH/Dockerfile" ]]; then
+  echo "Dockerfile not found at $REPO_PATH. Set GREENCHCLAW_REPO_PATH to the repo root." >&2
   exit 1
 fi
 if [[ ! -f "$RUN_SCRIPT_SRC" ]]; then
@@ -333,69 +333,69 @@ if [[ ! -f "$RUN_SCRIPT_SRC" ]]; then
   exit 1
 fi
 
-if [[ -z "$NEXISCLAW_HOME" ]]; then
-  NEXISCLAW_HOME="$(resolve_user_home "$NEXISCLAW_USER")"
+if [[ -z "$GREENCHCLAW_HOME" ]]; then
+  GREENCHCLAW_HOME="$(resolve_user_home "$GREENCHCLAW_USER")"
 fi
-if [[ -z "$NEXISCLAW_HOME" ]]; then
-  echo "Unable to resolve HOME for user $NEXISCLAW_USER." >&2
+if [[ -z "$GREENCHCLAW_HOME" ]]; then
+  echo "Unable to resolve HOME for user $GREENCHCLAW_USER." >&2
   exit 1
 fi
-if [[ -z "$NEXISCLAW_CONFIG_DIR" ]]; then
-  NEXISCLAW_CONFIG_DIR="$NEXISCLAW_HOME/.NexisClaw"
+if [[ -z "$GREENCHCLAW_CONFIG_DIR" ]]; then
+  GREENCHCLAW_CONFIG_DIR="$GREENCHCLAW_HOME/.GreenchClaw"
 fi
-if [[ -z "$NEXISCLAW_WORKSPACE_DIR" ]]; then
-  NEXISCLAW_WORKSPACE_DIR="$NEXISCLAW_CONFIG_DIR/workspace"
+if [[ -z "$GREENCHCLAW_WORKSPACE_DIR" ]]; then
+  GREENCHCLAW_WORKSPACE_DIR="$GREENCHCLAW_CONFIG_DIR/workspace"
 fi
-validate_absolute_path "home directory" "$NEXISCLAW_HOME"
-validate_mount_source_path "config directory" "$NEXISCLAW_CONFIG_DIR"
-validate_mount_source_path "workspace directory" "$NEXISCLAW_WORKSPACE_DIR"
-validate_container_name "$NEXISCLAW_CONTAINER_NAME"
-validate_image_name "$NEXISCLAW_IMAGE"
+validate_absolute_path "home directory" "$GREENCHCLAW_HOME"
+validate_mount_source_path "config directory" "$GREENCHCLAW_CONFIG_DIR"
+validate_mount_source_path "workspace directory" "$GREENCHCLAW_WORKSPACE_DIR"
+validate_container_name "$GREENCHCLAW_CONTAINER_NAME"
+validate_image_name "$GREENCHCLAW_IMAGE"
 validate_port "gateway host port" "$HOST_GATEWAY_PORT"
 validate_port "seed gateway port" "$SEED_GATEWAY_PORT"
 
-install -d -m 700 "$NEXISCLAW_CONFIG_DIR" "$NEXISCLAW_WORKSPACE_DIR"
-ensure_private_existing_dir_owned_by_user "config directory" "$NEXISCLAW_CONFIG_DIR"
-ensure_private_existing_dir_owned_by_user "workspace directory" "$NEXISCLAW_WORKSPACE_DIR"
+install -d -m 700 "$GREENCHCLAW_CONFIG_DIR" "$GREENCHCLAW_WORKSPACE_DIR"
+ensure_private_existing_dir_owned_by_user "config directory" "$GREENCHCLAW_CONFIG_DIR"
+ensure_private_existing_dir_owned_by_user "workspace directory" "$GREENCHCLAW_WORKSPACE_DIR"
 
 BUILD_ARGS=()
-if [[ -n "${NEXISCLAW_DOCKER_APT_PACKAGES:-}" ]]; then
-  BUILD_ARGS+=(--build-arg "NEXISCLAW_DOCKER_APT_PACKAGES=${NEXISCLAW_DOCKER_APT_PACKAGES}")
+if [[ -n "${GREENCHCLAW_DOCKER_APT_PACKAGES:-}" ]]; then
+  BUILD_ARGS+=(--build-arg "GREENCHCLAW_DOCKER_APT_PACKAGES=${GREENCHCLAW_DOCKER_APT_PACKAGES}")
 fi
-if [[ -n "${NEXISCLAW_EXTENSIONS:-}" ]]; then
-  BUILD_ARGS+=(--build-arg "NEXISCLAW_EXTENSIONS=${NEXISCLAW_EXTENSIONS}")
+if [[ -n "${GREENCHCLAW_EXTENSIONS:-}" ]]; then
+  BUILD_ARGS+=(--build-arg "GREENCHCLAW_EXTENSIONS=${GREENCHCLAW_EXTENSIONS}")
 fi
-if [[ -n "${NEXISCLAW_INSTALL_BROWSER:-}" ]]; then
-  BUILD_ARGS+=(--build-arg "NEXISCLAW_INSTALL_BROWSER=${NEXISCLAW_INSTALL_BROWSER}")
+if [[ -n "${GREENCHCLAW_INSTALL_BROWSER:-}" ]]; then
+  BUILD_ARGS+=(--build-arg "GREENCHCLAW_INSTALL_BROWSER=${GREENCHCLAW_INSTALL_BROWSER}")
 fi
 
-if [[ "$NEXISCLAW_IMAGE" == "NexisClaw:local" ]]; then
-  echo "Building image $NEXISCLAW_IMAGE ..."
-  podman build -t "$NEXISCLAW_IMAGE" -f "$REPO_PATH/Dockerfile" "${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}" "$REPO_PATH"
+if [[ "$GREENCHCLAW_IMAGE" == "GreenchClaw:local" ]]; then
+  echo "Building image $GREENCHCLAW_IMAGE ..."
+  podman build -t "$GREENCHCLAW_IMAGE" -f "$REPO_PATH/Dockerfile" "${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}" "$REPO_PATH"
 else
-  if podman image exists "$NEXISCLAW_IMAGE" >/dev/null 2>&1; then
-    echo "Using existing image $NEXISCLAW_IMAGE"
+  if podman image exists "$GREENCHCLAW_IMAGE" >/dev/null 2>&1; then
+    echo "Using existing image $GREENCHCLAW_IMAGE"
   else
-    echo "Pulling image $NEXISCLAW_IMAGE ..."
-    podman pull "$NEXISCLAW_IMAGE"
+    echo "Pulling image $GREENCHCLAW_IMAGE ..."
+    podman pull "$GREENCHCLAW_IMAGE"
   fi
 fi
 
-ENV_FILE="$NEXISCLAW_CONFIG_DIR/.env"
+ENV_FILE="$GREENCHCLAW_CONFIG_DIR/.env"
 if [[ ! -f "$ENV_FILE" ]]; then
   TOKEN="$(generate_token_hex_32)"
   (
     umask 077
     write_file_atomically "$ENV_FILE" 600 <<EOF
-NEXISCLAW_GATEWAY_TOKEN=$TOKEN
+GREENCHCLAW_GATEWAY_TOKEN=$TOKEN
 EOF
   )
-  echo "Generated NEXISCLAW_GATEWAY_TOKEN and wrote it to $ENV_FILE"
+  echo "Generated GREENCHCLAW_GATEWAY_TOKEN and wrote it to $ENV_FILE"
 fi
-upsert_env_var "$ENV_FILE" "NEXISCLAW_PODMAN_CONTAINER" "$NEXISCLAW_CONTAINER_NAME"
-upsert_env_var "$ENV_FILE" "NEXISCLAW_PODMAN_IMAGE" "$NEXISCLAW_IMAGE"
+upsert_env_var "$ENV_FILE" "GREENCHCLAW_PODMAN_CONTAINER" "$GREENCHCLAW_CONTAINER_NAME"
+upsert_env_var "$ENV_FILE" "GREENCHCLAW_PODMAN_IMAGE" "$GREENCHCLAW_IMAGE"
 
-CONFIG_JSON="$NEXISCLAW_CONFIG_DIR/NexisClaw.json"
+CONFIG_JSON="$GREENCHCLAW_CONFIG_DIR/GreenchClaw.json"
 if [[ ! -f "$CONFIG_JSON" ]]; then
   (
     umask 077
@@ -418,31 +418,31 @@ fi
 seed_local_control_ui_origins "$CONFIG_JSON" "$SEED_GATEWAY_PORT"
 
 if [[ "$INSTALL_QUADLET" == true ]]; then
-  QUADLET_DIR="$NEXISCLAW_HOME/.config/containers/systemd"
-  QUADLET_DST="$QUADLET_DIR/NexisClaw.container"
+  QUADLET_DIR="$GREENCHCLAW_HOME/.config/containers/systemd"
+  QUADLET_DST="$QUADLET_DIR/GreenchClaw.container"
   echo "Installing Quadlet to $QUADLET_DST ..."
   mkdir -p "$QUADLET_DIR"
   ensure_safe_existing_dir "quadlet directory" "$QUADLET_DIR"
-  NEXISCLAW_HOME_ESCAPED="$(escape_sed_replacement_pipe_delim "$NEXISCLAW_HOME")"
-  NEXISCLAW_CONFIG_ESCAPED="$(escape_sed_replacement_pipe_delim "$NEXISCLAW_CONFIG_DIR")"
-  NEXISCLAW_WORKSPACE_ESCAPED="$(escape_sed_replacement_pipe_delim "$NEXISCLAW_WORKSPACE_DIR")"
-  NEXISCLAW_IMAGE_ESCAPED="$(escape_sed_replacement_pipe_delim "$NEXISCLAW_IMAGE")"
-  NEXISCLAW_CONTAINER_ESCAPED="$(escape_sed_replacement_pipe_delim "$NEXISCLAW_CONTAINER_NAME")"
+  GREENCHCLAW_HOME_ESCAPED="$(escape_sed_replacement_pipe_delim "$GREENCHCLAW_HOME")"
+  GREENCHCLAW_CONFIG_ESCAPED="$(escape_sed_replacement_pipe_delim "$GREENCHCLAW_CONFIG_DIR")"
+  GREENCHCLAW_WORKSPACE_ESCAPED="$(escape_sed_replacement_pipe_delim "$GREENCHCLAW_WORKSPACE_DIR")"
+  GREENCHCLAW_IMAGE_ESCAPED="$(escape_sed_replacement_pipe_delim "$GREENCHCLAW_IMAGE")"
+  GREENCHCLAW_CONTAINER_ESCAPED="$(escape_sed_replacement_pipe_delim "$GREENCHCLAW_CONTAINER_NAME")"
   sed \
-    -e "s|{{NEXISCLAW_HOME}}|$NEXISCLAW_HOME_ESCAPED|g" \
-    -e "s|{{NEXISCLAW_CONFIG_DIR}}|$NEXISCLAW_CONFIG_ESCAPED|g" \
-    -e "s|{{NEXISCLAW_WORKSPACE_DIR}}|$NEXISCLAW_WORKSPACE_ESCAPED|g" \
-    -e "s|{{IMAGE_NAME}}|$NEXISCLAW_IMAGE_ESCAPED|g" \
-    -e "s|{{CONTAINER_NAME}}|$NEXISCLAW_CONTAINER_ESCAPED|g" \
+    -e "s|{{GREENCHCLAW_HOME}}|$GREENCHCLAW_HOME_ESCAPED|g" \
+    -e "s|{{GREENCHCLAW_CONFIG_DIR}}|$GREENCHCLAW_CONFIG_ESCAPED|g" \
+    -e "s|{{GREENCHCLAW_WORKSPACE_DIR}}|$GREENCHCLAW_WORKSPACE_ESCAPED|g" \
+    -e "s|{{IMAGE_NAME}}|$GREENCHCLAW_IMAGE_ESCAPED|g" \
+    -e "s|{{CONTAINER_NAME}}|$GREENCHCLAW_CONTAINER_ESCAPED|g" \
     "$QUADLET_TEMPLATE" | write_file_atomically "$QUADLET_DST" 644
 
   if command -v systemctl >/dev/null 2>&1; then
     echo "Reloading and starting user service..."
-    if systemctl --user daemon-reload && systemctl --user start NexisClaw.service; then
+    if systemctl --user daemon-reload && systemctl --user start GreenchClaw.service; then
       echo "Quadlet installed and service started."
     else
       echo "Quadlet installed, but automatic start failed." >&2
-      echo "Try: systemctl --user daemon-reload && systemctl --user start NexisClaw.service" >&2
+      echo "Try: systemctl --user daemon-reload && systemctl --user start GreenchClaw.service" >&2
       if command -v loginctl >/dev/null 2>&1; then
         echo "For boot persistence on headless hosts, you may also need: sudo loginctl enable-linger $(whoami)" >&2
       fi
@@ -456,6 +456,6 @@ fi
 
 echo
 echo "Next:"
-echo "  ./scripts/run-NexisClaw-podman.sh launch"
-echo "  ./scripts/run-NexisClaw-podman.sh launch setup"
-echo "  NexisClaw --container $NEXISCLAW_CONTAINER_NAME dashboard --no-open"
+echo "  ./scripts/run-GreenchClaw-podman.sh launch"
+echo "  ./scripts/run-GreenchClaw-podman.sh launch setup"
+echo "  GreenchClaw --container $GREENCHCLAW_CONTAINER_NAME dashboard --no-open"

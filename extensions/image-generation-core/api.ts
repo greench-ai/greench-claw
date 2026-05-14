@@ -1,4 +1,4 @@
-export type { AuthProfileStore } from "NexisClaw/plugin-sdk/image-generation-core";
+export type { AuthProfileStore } from "GreenchClaw/plugin-sdk/image-generation-core";
 export {
   buildNoCapabilityModelConfiguredMessage,
   createSubsystemLogger,
@@ -15,7 +15,7 @@ export {
   resolveApiKeyForProvider,
   resolveCapabilityModelCandidates,
   throwCapabilityGenerationFailure,
-} from "NexisClaw/plugin-sdk/image-generation-core";
+} from "GreenchClaw/plugin-sdk/image-generation-core";
 export type {
   FallbackAttempt,
   GeneratedImageAsset,
@@ -26,5 +26,5 @@ export type {
   ImageGenerationResolution,
   ImageGenerationResult,
   ImageGenerationSourceImage,
-  NexisClawConfig,
-} from "NexisClaw/plugin-sdk/image-generation-core";
+  GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/image-generation-core";

@@ -1,10 +1,10 @@
-import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
+import type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-dispatch-runtime";
 import {
   resolveSendableOutboundReplyParts,
   resolveTextChunksWithFallback,
-} from "NexisClaw/plugin-sdk/reply-payload";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { loadWebMedia } from "NexisClaw/plugin-sdk/web-media";
+} from "GreenchClaw/plugin-sdk/reply-payload";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { loadWebMedia } from "GreenchClaw/plugin-sdk/web-media";
 import { chunkDiscordTextWithMode } from "../chunk.js";
 import type {
   ButtonInteraction,

@@ -18,9 +18,9 @@ import {
 import { createPluginSdkTestHarness } from "./test-helpers.js";
 
 const { createTempDirSync } = createPluginSdkTestHarness();
-const originalBundledPluginsDir = process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
-const originalDisableBundledPlugins = process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS;
-const originalStateDir = process.env.NEXISCLAW_STATE_DIR;
+const originalBundledPluginsDir = process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
+const originalDisableBundledPlugins = process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS;
+const originalStateDir = process.env.GREENCHCLAW_STATE_DIR;
 const trustedBundledFixturesRoot = path.resolve("dist-runtime", "extensions");
 const trustedBundledFixtureDirs: string[] = [];
 
@@ -42,7 +42,7 @@ function writePluginPackageJson(
   type: "commonjs" | "module" = "module",
 ): void {
   writeJsonFile(path.join(pluginDir, "package.json"), {
-    name: `@NexisClaw/plugin-${name}`,
+    name: `@GreenchClaw/plugin-${name}`,
     version: "0.0.0",
     type,
   });
@@ -62,7 +62,7 @@ function createBundledPluginDir(prefix: string, marker: string): string {
 }
 
 function useBundledPluginDirOverrideForTest(dir: string): void {
-  process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = dir;
+  process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = dir;
   setBundledPluginsDirOverrideForTest(dir);
 }
 
@@ -80,9 +80,9 @@ function createThrowingPluginDir(prefix: string): string {
 }
 
 beforeEach(() => {
-  delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
-  delete process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS;
-  delete process.env.NEXISCLAW_STATE_DIR;
+  delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
+  delete process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS;
+  delete process.env.GREENCHCLAW_STATE_DIR;
 });
 
 afterEach(() => {
@@ -95,26 +95,26 @@ afterEach(() => {
   setBundledPluginsDirOverrideForTest(undefined);
   vi.doUnmock("../plugins/manifest-registry.js");
   if (originalBundledPluginsDir === undefined) {
-    delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = originalBundledPluginsDir;
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = originalBundledPluginsDir;
   }
   if (originalDisableBundledPlugins === undefined) {
-    delete process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS;
+    delete process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS;
   } else {
-    process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = originalDisableBundledPlugins;
+    process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS = originalDisableBundledPlugins;
   }
   if (originalStateDir === undefined) {
-    delete process.env.NEXISCLAW_STATE_DIR;
+    delete process.env.GREENCHCLAW_STATE_DIR;
   } else {
-    process.env.NEXISCLAW_STATE_DIR = originalStateDir;
+    process.env.GREENCHCLAW_STATE_DIR = originalStateDir;
   }
 });
 
 describe("plugin-sdk facade runtime", () => {
   it("honors trusted bundled plugin dir overrides", () => {
-    const overrideA = createBundledPluginDir("NexisClaw-facade-runtime-a-", "override-a");
-    const overrideB = createBundledPluginDir("NexisClaw-facade-runtime-b-", "override-b");
+    const overrideA = createBundledPluginDir("GreenchClaw-facade-runtime-a-", "override-a");
+    const overrideB = createBundledPluginDir("GreenchClaw-facade-runtime-b-", "override-b");
 
     useBundledPluginDirOverrideForTest(overrideA);
     const fromA = __testing.resolveFacadeModuleLocation({
@@ -138,7 +138,7 @@ describe("plugin-sdk facade runtime", () => {
   });
 
   it("falls back to package source surfaces when an override dir is partial", () => {
-    const overrideDir = createTrustedBundledFixtureRoot("NexisClaw-facade-runtime-empty-");
+    const overrideDir = createTrustedBundledFixtureRoot("GreenchClaw-facade-runtime-empty-");
     useBundledPluginDirOverrideForTest(overrideDir);
 
     const resolved = __testing.resolveFacadeModuleLocation({
@@ -153,8 +153,8 @@ describe("plugin-sdk facade runtime", () => {
   });
 
   it("does not fall back to package source surfaces when bundled plugins are disabled", () => {
-    process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = "1";
-    delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+    process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+    delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
 
     expect(
       __testing.resolveFacadeModuleLocation({
@@ -165,7 +165,7 @@ describe("plugin-sdk facade runtime", () => {
   });
 
   it("returns the same object identity on repeated calls (sentinel consistency)", () => {
-    const dir = createBundledPluginDir("NexisClaw-facade-identity-", "identity-check");
+    const dir = createBundledPluginDir("GreenchClaw-facade-identity-", "identity-check");
     useBundledPluginDirOverrideForTest(dir);
     const location = {
       modulePath: path.join(dir, "demo", "api.js"),
@@ -190,7 +190,7 @@ describe("plugin-sdk facade runtime", () => {
   });
 
   it("breaks circular facade re-entry during module evaluation", () => {
-    const dir = createBundledPluginDir("NexisClaw-facade-circular-", "circular-ok");
+    const dir = createBundledPluginDir("GreenchClaw-facade-circular-", "circular-ok");
     const location = {
       modulePath: path.join(dir, "demo", "api.js"),
       boundaryRoot: dir,
@@ -218,7 +218,7 @@ describe("plugin-sdk facade runtime", () => {
   });
 
   it("back-fills the sentinel before post-load facade tracking re-enters", () => {
-    const dir = createBundledPluginDir("NexisClaw-facade-post-load-", "post-load-ok");
+    const dir = createBundledPluginDir("GreenchClaw-facade-post-load-", "post-load-ok");
     const location = {
       modulePath: path.join(dir, "demo", "api.js"),
       boundaryRoot: dir,
@@ -248,7 +248,7 @@ describe("plugin-sdk facade runtime", () => {
     expect(loader).toHaveBeenCalledTimes(1);
   });
   it("clears the cache on load failure so retries re-execute", () => {
-    const dir = createThrowingPluginDir("NexisClaw-facade-throw-");
+    const dir = createThrowingPluginDir("GreenchClaw-facade-throw-");
     useBundledPluginDirOverrideForTest(dir);
 
     expect(() =>
@@ -304,7 +304,7 @@ describe("plugin-sdk facade runtime", () => {
   });
 
   it("allows runtime-api facade loads when the bundled plugin is explicitly enabled", () => {
-    const dir = createTempDirSync("NexisClaw-facade-runtime-enabled-");
+    const dir = createTempDirSync("GreenchClaw-facade-runtime-enabled-");
     fs.mkdirSync(path.join(dir, "discord"), { recursive: true });
     fs.writeFileSync(
       path.join(dir, "discord", "runtime-api.js"),
@@ -354,7 +354,7 @@ describe("plugin-sdk facade runtime", () => {
   });
 
   it("resolves a globally-installed plugin whose rootDir basename matches the dirName", () => {
-    const lineDir = createTempDirSync("NexisClaw-facade-global-line-");
+    const lineDir = createTempDirSync("GreenchClaw-facade-global-line-");
     fs.mkdirSync(lineDir, { recursive: true });
     fs.writeFileSync(
       path.join(lineDir, "runtime-api.js"),
@@ -364,9 +364,9 @@ describe("plugin-sdk facade runtime", () => {
     fs.writeFileSync(
       path.join(lineDir, "package.json"),
       JSON.stringify({
-        name: "@NexisClaw/line",
+        name: "@GreenchClaw/line",
         version: "0.0.0",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: ["./runtime-api.js"],
           channel: { id: "line" },
         },
@@ -374,7 +374,7 @@ describe("plugin-sdk facade runtime", () => {
       "utf8",
     );
     fs.writeFileSync(
-      path.join(lineDir, "NexisClaw.plugin.json"),
+      path.join(lineDir, "GreenchClaw.plugin.json"),
       JSON.stringify({
         id: "line",
         channels: ["line"],
@@ -402,7 +402,7 @@ describe("plugin-sdk facade runtime", () => {
   });
 
   it("resolves a globally-installed plugin with an encoded scoped rootDir basename", () => {
-    const encodedDir = createTempDirSync("NexisClaw-facade-encoded-line-");
+    const encodedDir = createTempDirSync("GreenchClaw-facade-encoded-line-");
     fs.mkdirSync(encodedDir, { recursive: true });
     fs.writeFileSync(
       path.join(encodedDir, "runtime-api.js"),
@@ -412,9 +412,9 @@ describe("plugin-sdk facade runtime", () => {
     fs.writeFileSync(
       path.join(encodedDir, "package.json"),
       JSON.stringify({
-        name: "@NexisClaw/line",
+        name: "@GreenchClaw/line",
         version: "0.0.0",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: ["./runtime-api.js"],
           channel: { id: "line" },
         },
@@ -422,7 +422,7 @@ describe("plugin-sdk facade runtime", () => {
       "utf8",
     );
     fs.writeFileSync(
-      path.join(encodedDir, "NexisClaw.plugin.json"),
+      path.join(encodedDir, "GreenchClaw.plugin.json"),
       JSON.stringify({
         id: "line",
         channels: ["line"],
@@ -469,7 +469,7 @@ describe("plugin-sdk facade runtime", () => {
   });
 
   it("prefers the source runtime snapshot for facade activation checks", () => {
-    const dir = createTempDirSync("NexisClaw-facade-source-snapshot-");
+    const dir = createTempDirSync("GreenchClaw-facade-source-snapshot-");
     fs.mkdirSync(path.join(dir, "demo"), { recursive: true });
     fs.writeFileSync(
       path.join(dir, "demo", "runtime-api.js"),
@@ -477,7 +477,7 @@ describe("plugin-sdk facade runtime", () => {
       "utf8",
     );
     fs.writeFileSync(
-      path.join(dir, "demo", "NexisClaw.plugin.json"),
+      path.join(dir, "demo", "GreenchClaw.plugin.json"),
       JSON.stringify({
         id: "demo",
       }),

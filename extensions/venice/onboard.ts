@@ -1,7 +1,7 @@
 import {
   createModelCatalogPresetAppliers,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildVeniceModelDefinition,
   VENICE_BASE_URL,
@@ -13,7 +13,7 @@ export { VENICE_DEFAULT_MODEL_REF };
 
 const venicePresetAppliers = createModelCatalogPresetAppliers({
   primaryModelRef: VENICE_DEFAULT_MODEL_REF,
-  resolveParams: (_cfg: NexisClawConfig) => ({
+  resolveParams: (_cfg: GreenchClawConfig) => ({
     providerId: "venice",
     api: "openai-completions",
     baseUrl: VENICE_BASE_URL,
@@ -22,6 +22,6 @@ const venicePresetAppliers = createModelCatalogPresetAppliers({
   }),
 });
 
-export function applyVeniceConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyVeniceConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return venicePresetAppliers.applyConfig(cfg);
 }

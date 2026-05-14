@@ -11,7 +11,7 @@ import {
 import { tasksHandlers } from "./tasks.js";
 import type { RespondFn } from "./types.js";
 
-const ORIGINAL_STATE_DIR = process.env.NEXISCLAW_STATE_DIR;
+const ORIGINAL_STATE_DIR = process.env.GREENCHCLAW_STATE_DIR;
 type TaskResponsePayload = {
   tasks?: Array<Record<string, unknown>>;
   task?: Record<string, unknown>;
@@ -22,17 +22,17 @@ type TaskResponsePayload = {
 let stateDir: string;
 
 beforeEach(async () => {
-  stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-gateway-tasks-"));
-  process.env.NEXISCLAW_STATE_DIR = stateDir;
+  stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-gateway-tasks-"));
+  process.env.GREENCHCLAW_STATE_DIR = stateDir;
   resetTaskRegistryForTests();
 });
 
 afterEach(async () => {
   resetTaskRegistryForTests();
   if (ORIGINAL_STATE_DIR === undefined) {
-    delete process.env.NEXISCLAW_STATE_DIR;
+    delete process.env.GREENCHCLAW_STATE_DIR;
   } else {
-    process.env.NEXISCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
+    process.env.GREENCHCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
   }
   await fs.rm(stateDir, { recursive: true, force: true });
 });
@@ -144,7 +144,7 @@ describe("tasks gateway handlers", () => {
       scopeKind: "session",
       runId: "run-sanitized",
       label:
-        "Compile artifact\nNexisClaw runtime context (internal): Keep internal details private.",
+        "Compile artifact\nGreenchClaw runtime context (internal): Keep internal details private.",
       task: "Compile artifact",
       status: "running",
       deliveryStatus: "pending",
@@ -152,15 +152,15 @@ describe("tasks gateway handlers", () => {
     recordTaskProgressByRunId({
       runId: "run-sanitized",
       progressSummary:
-        "Bundling output\nNexisClaw runtime context (internal): Keep internal details private.",
+        "Bundling output\nGreenchClaw runtime context (internal): Keep internal details private.",
     });
     markTaskTerminalById({
       taskId: task.taskId,
       status: "failed",
       endedAt: Date.now(),
       terminalSummary:
-        "Failed after build\nNexisClaw runtime context (internal): Keep internal details private.",
-      error: "Tool failed\nNexisClaw runtime context (internal): Keep internal details private.",
+        "Failed after build\nGreenchClaw runtime context (internal): Keep internal details private.",
+      error: "Tool failed\nGreenchClaw runtime context (internal): Keep internal details private.",
     });
 
     const { calls, respond } = captureRespond();
@@ -179,7 +179,7 @@ describe("tasks gateway handlers", () => {
     expect(payload?.task?.title).toBe("Compile artifact");
     expect(payload?.task?.terminalSummary).toBe("Failed after build");
     expect(payload?.task?.error).toBe("Tool failed");
-    expect(JSON.stringify(calls[0]?.[1])).not.toContain("NexisClaw runtime context");
+    expect(JSON.stringify(calls[0]?.[1])).not.toContain("GreenchClaw runtime context");
   });
 
   it("cancels running task records and returns the updated task", async () => {

@@ -6,14 +6,14 @@ describe("resolveQaSelfCheckOutputPath", () => {
   it("keeps explicit output paths untouched", () => {
     expect(
       resolveQaSelfCheckOutputPath({
-        repoRoot: "/tmp/NexisClaw-repo",
+        repoRoot: "/tmp/GreenchClaw-repo",
         outputPath: "/tmp/custom/self-check.md",
       }),
     ).toBe("/tmp/custom/self-check.md");
   });
 
   it("anchors default self-check reports under the provided repo root", () => {
-    const repoRoot = path.resolve("/tmp/NexisClaw-repo");
+    const repoRoot = path.resolve("/tmp/GreenchClaw-repo");
     expect(resolveQaSelfCheckOutputPath({ repoRoot })).toBe(
       path.join(repoRoot, ".artifacts", "qa-e2e", "self-check.md"),
     );

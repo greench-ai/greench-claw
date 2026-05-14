@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   createGatewayCredentialPlan,
   type GatewayCredentialPlan,
@@ -36,7 +36,7 @@ export class GatewaySecretRefUnavailableError extends Error {
     super(
       [
         `${path} is configured as a secret reference but is unavailable in this command path.`,
-        "Fix: set NEXISCLAW_GATEWAY_TOKEN/NEXISCLAW_GATEWAY_PASSWORD, pass explicit --token/--password,",
+        "Fix: set GREENCHCLAW_GATEWAY_TOKEN/GREENCHCLAW_GATEWAY_PASSWORD, pass explicit --token/--password,",
         "or run a gateway command path that resolves secret references before credential selection.",
       ].join("\n"),
     );
@@ -79,8 +79,8 @@ export function resolveGatewayCredentialsFromValues(params: {
   passwordPrecedence?: GatewayCredentialPrecedence;
 }): ResolvedGatewayCredentials {
   const env = params.env ?? process.env;
-  const envToken = trimToUndefined(env.NEXISCLAW_GATEWAY_TOKEN);
-  const envPassword = trimToUndefined(env.NEXISCLAW_GATEWAY_PASSWORD);
+  const envToken = trimToUndefined(env.GREENCHCLAW_GATEWAY_TOKEN);
+  const envPassword = trimToUndefined(env.GREENCHCLAW_GATEWAY_PASSWORD);
   const configToken = trimCredentialToUndefined(params.configToken);
   const configPassword = trimCredentialToUndefined(params.configPassword);
   const tokenPrecedence = params.tokenPrecedence ?? "env-first";
@@ -242,7 +242,7 @@ function resolveRemoteGatewayCredentials(params: {
 }
 
 export function resolveGatewayCredentialsFromConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   explicitAuth?: ExplicitGatewayAuth;
   urlOverride?: string;
@@ -282,7 +282,7 @@ export function resolveGatewayCredentialsFromConfig(params: {
 
   const localTokenPrecedence =
     params.localTokenPrecedence ??
-    (env.NEXISCLAW_SERVICE_KIND === "gateway" ? "config-first" : "env-first");
+    (env.GREENCHCLAW_SERVICE_KIND === "gateway" ? "config-first" : "env-first");
   const localPasswordPrecedence = params.localPasswordPrecedence ?? "env-first";
 
   if (mode === "local") {
@@ -309,7 +309,7 @@ export function resolveGatewayCredentialsFromConfig(params: {
 }
 
 export function resolveGatewayProbeCredentialsFromConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   mode: GatewayCredentialMode;
   env?: NodeJS.ProcessEnv;
   explicitAuth?: ExplicitGatewayAuth;

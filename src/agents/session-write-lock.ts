@@ -33,8 +33,8 @@ export type SessionLockOwnerProcessArgsReader = (pid: number) => string[] | null
 
 const CLEANUP_SIGNALS = ["SIGINT", "SIGTERM", "SIGQUIT", "SIGABRT"] as const;
 type CleanupSignal = (typeof CLEANUP_SIGNALS)[number];
-const CLEANUP_STATE_KEY = Symbol.for("NexisClaw.sessionWriteLockCleanupState");
-const WATCHDOG_STATE_KEY = Symbol.for("NexisClaw.sessionWriteLockWatchdogState");
+const CLEANUP_STATE_KEY = Symbol.for("GreenchClaw.sessionWriteLockCleanupState");
+const WATCHDOG_STATE_KEY = Symbol.for("GreenchClaw.sessionWriteLockWatchdogState");
 
 const DEFAULT_STALE_MS = 30 * 60 * 1000;
 const DEFAULT_MAX_HOLD_MS = 5 * 60 * 1000;
@@ -63,7 +63,7 @@ type LockInspectionDetails = Pick<
   "pid" | "pidAlive" | "createdAt" | "ageMs" | "stale" | "staleReasons"
 >;
 
-const SESSION_LOCKS = createFileLockManager("NexisClaw.session-write-lock");
+const SESSION_LOCKS = createFileLockManager("GreenchClaw.session-write-lock");
 let resolveProcessStartTimeForLock = getProcessStartTime;
 
 function isFileLockError(error: unknown, code: string): boolean {
@@ -187,7 +187,9 @@ function stopWatchdogTimer(): void {
 }
 
 function shouldStartBackgroundWatchdog(): boolean {
-  return process.env.VITEST !== "true" || process.env.NEXISCLAW_TEST_SESSION_LOCK_WATCHDOG === "1";
+  return (
+    process.env.VITEST !== "true" || process.env.GREENCHCLAW_TEST_SESSION_LOCK_WATCHDOG === "1"
+  );
 }
 
 function ensureWatchdogStarted(intervalMs: number): void {
@@ -302,22 +304,26 @@ function normalizeOwnerProcessArg(arg: string): string {
   return arg.trim().replaceAll("\\", "/").toLowerCase();
 }
 
-function isNexisClawSessionOwnerArgv(args: string[]): boolean {
+function isGreenchClawSessionOwnerArgv(args: string[]): boolean {
   const normalized = args.map(normalizeOwnerProcessArg).filter(Boolean);
   if (normalized.length === 0) {
     return false;
   }
   const exe = (normalized[0] ?? "").replace(/\.(bat|cmd|exe)$/i, "");
-  if (exe === "NexisClaw" || exe.endsWith("/NexisClaw") || exe.endsWith("/NexisClaw-gateway")) {
+  if (
+    exe === "GreenchClaw" ||
+    exe.endsWith("/GreenchClaw") ||
+    exe.endsWith("/GreenchClaw-gateway")
+  ) {
     return true;
   }
   if (
     normalized.some(
       (arg) =>
-        arg === "NexisClaw" ||
-        arg.endsWith("/NexisClaw") ||
-        arg === "NexisClaw.mjs" ||
-        arg.endsWith("/NexisClaw.mjs"),
+        arg === "GreenchClaw" ||
+        arg.endsWith("/GreenchClaw") ||
+        arg === "GreenchClaw.mjs" ||
+        arg.endsWith("/GreenchClaw.mjs"),
     )
   ) {
     return true;
@@ -330,9 +336,9 @@ function isNexisClawSessionOwnerArgv(args: string[]): boolean {
     "src/entry.ts",
     "src/index.ts",
   ];
-  const hasNexisClawCommandToken = normalized.some((arg) => arg === "gateway" || arg === "agent");
+  const hasGreenchClawCommandToken = normalized.some((arg) => arg === "gateway" || arg === "agent");
   return normalized.some(
-    (arg) => entryCandidates.some((entry) => arg.endsWith(entry)) && hasNexisClawCommandToken,
+    (arg) => entryCandidates.some((entry) => arg.endsWith(entry)) && hasGreenchClawCommandToken,
   );
 }
 
@@ -395,7 +401,7 @@ function inspectLockPayload(
   };
 }
 
-function shouldTreatAsNonNexisClawOwner(params: {
+function shouldTreatAsNonGreenchClawOwner(params: {
   payload: LockFilePayload | null;
   inspected: LockInspectionDetails;
   heldByThisProcess: boolean;
@@ -415,7 +421,7 @@ function shouldTreatAsNonNexisClawOwner(params: {
   if (!args || args.every((arg) => !arg.trim())) {
     return false;
   }
-  return !isNexisClawSessionOwnerArgv(args);
+  return !isGreenchClawSessionOwnerArgv(args);
 }
 
 function lockInspectionNeedsMtimeStaleFallback(details: LockInspectionDetails): boolean {
@@ -528,7 +534,7 @@ function inspectLockPayloadForSession(params: {
   }
 
   if (
-    shouldTreatAsNonNexisClawOwner({
+    shouldTreatAsNonGreenchClawOwner({
       payload: params.payload,
       inspected,
       heldByThisProcess: params.heldByThisProcess,
@@ -538,7 +544,7 @@ function inspectLockPayloadForSession(params: {
     return {
       ...inspected,
       stale: true,
-      staleReasons: [...inspected.staleReasons, "non-NexisClaw-owner"],
+      staleReasons: [...inspected.staleReasons, "non-GreenchClaw-owner"],
     };
   }
 

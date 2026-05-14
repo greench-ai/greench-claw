@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   buildPluginRegistrySnapshotReport,
   enablePluginInConfig,
@@ -11,7 +11,7 @@ import {
   writeConfigFile,
 } from "./plugins-cli-test-helpers.js";
 
-const ORIGINAL_NEXISCLAW_NIX_MODE = process.env.NEXISCLAW_NIX_MODE;
+const ORIGINAL_GREENCHCLAW_NIX_MODE = process.env.GREENCHCLAW_NIX_MODE;
 
 describe("plugins cli policy mutations", () => {
   const compatibilityPluginIds = [
@@ -25,10 +25,10 @@ describe("plugins cli policy mutations", () => {
   });
 
   afterEach(() => {
-    if (ORIGINAL_NEXISCLAW_NIX_MODE === undefined) {
-      delete process.env.NEXISCLAW_NIX_MODE;
+    if (ORIGINAL_GREENCHCLAW_NIX_MODE === undefined) {
+      delete process.env.GREENCHCLAW_NIX_MODE;
     } else {
-      process.env.NEXISCLAW_NIX_MODE = ORIGINAL_NEXISCLAW_NIX_MODE;
+      process.env.GREENCHCLAW_NIX_MODE = ORIGINAL_GREENCHCLAW_NIX_MODE;
     }
   });
 
@@ -41,7 +41,7 @@ describe("plugins cli policy mutations", () => {
     });
   }
 
-  function requireFirstWrittenConfig(): NexisClawConfig {
+  function requireFirstWrittenConfig(): GreenchClawConfig {
     const call = writeConfigFile.mock.calls.at(0);
     if (!call) {
       throw new Error("expected writeConfigFile to be called");
@@ -54,8 +54,8 @@ describe("plugins cli policy mutations", () => {
   }
 
   function requirePluginEntries(
-    config: NexisClawConfig,
-  ): NonNullable<NonNullable<NexisClawConfig["plugins"]>["entries"]> {
+    config: GreenchClawConfig,
+  ): NonNullable<NonNullable<GreenchClawConfig["plugins"]>["entries"]> {
     if (!config.plugins?.entries) {
       throw new Error("expected plugin entries in config");
     }
@@ -63,14 +63,14 @@ describe("plugins cli policy mutations", () => {
   }
 
   it("refreshes the persisted plugin registry after enabling a plugin", async () => {
-    const sourceConfig = {} as NexisClawConfig;
+    const sourceConfig = {} as GreenchClawConfig;
     const enabledConfig = {
       plugins: {
         entries: {
           alpha: { enabled: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     loadConfig.mockReturnValue(sourceConfig);
     enablePluginInConfig.mockReturnValue({
       config: enabledConfig,
@@ -94,17 +94,17 @@ describe("plugins cli policy mutations", () => {
   });
 
   it("refuses plugin enablement in Nix mode before config mutation", async () => {
-    const previous = process.env.NEXISCLAW_NIX_MODE;
-    process.env.NEXISCLAW_NIX_MODE = "1";
+    const previous = process.env.GREENCHCLAW_NIX_MODE;
+    process.env.GREENCHCLAW_NIX_MODE = "1";
     try {
       await expect(runPluginsCommand(["plugins", "enable", "alpha"])).rejects.toThrow(
-        "NEXISCLAW_NIX_MODE=1",
+        "GREENCHCLAW_NIX_MODE=1",
       );
     } finally {
       if (previous === undefined) {
-        delete process.env.NEXISCLAW_NIX_MODE;
+        delete process.env.GREENCHCLAW_NIX_MODE;
       } else {
-        process.env.NEXISCLAW_NIX_MODE = previous;
+        process.env.GREENCHCLAW_NIX_MODE = previous;
       }
     }
 
@@ -119,7 +119,7 @@ describe("plugins cli policy mutations", () => {
           alpha: { enabled: true },
         },
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     mockPluginRegistry(["alpha"]);
 
     await runPluginsCommand(["plugins", "disable", "alpha"]);
@@ -138,14 +138,14 @@ describe("plugins cli policy mutations", () => {
   it.each(compatibilityPluginIds)(
     "enables compatibility id $alias through canonical plugin $pluginId",
     async ({ alias, pluginId }) => {
-      const sourceConfig = {} as NexisClawConfig;
+      const sourceConfig = {} as GreenchClawConfig;
       const enabledConfig = {
         plugins: {
           entries: {
             [pluginId]: { enabled: true },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
       loadConfig.mockReturnValue(sourceConfig);
       enablePluginInConfig.mockReturnValue({
         config: enabledConfig,
@@ -171,7 +171,7 @@ describe("plugins cli policy mutations", () => {
             [pluginId]: { enabled: true },
           },
         },
-      } as NexisClawConfig);
+      } as GreenchClawConfig);
       mockPluginRegistry([pluginId]);
 
       await runPluginsCommand(["plugins", "disable", alias]);
@@ -193,7 +193,7 @@ describe("plugins cli policy mutations", () => {
       );
 
       expect(runtimeErrors).toContain(
-        "Plugin not found: missing-plugin. Run `NexisClaw plugins list` to see installed plugins, or `NexisClaw plugins search missing-plugin` to look for installable plugins.",
+        "Plugin not found: missing-plugin. Run `GreenchClaw plugins list` to see installed plugins, or `GreenchClaw plugins search missing-plugin` to look for installable plugins.",
       );
       expect(enablePluginInConfig).not.toHaveBeenCalled();
       expect(writeConfigFile).not.toHaveBeenCalled();
@@ -202,7 +202,7 @@ describe("plugins cli policy mutations", () => {
   );
 
   it("does not create a channel config when disabling a channel plugin by policy", async () => {
-    loadConfig.mockReturnValue({} as NexisClawConfig);
+    loadConfig.mockReturnValue({} as GreenchClawConfig);
     mockPluginRegistry(["twitch"]);
 
     await runPluginsCommand(["plugins", "disable", "twitch"]);

@@ -55,11 +55,11 @@ describe("resolveGatewayService", () => {
     expect(() => resolveGatewayService()).toThrow("Gateway service install not supported on aix");
   });
 
-  it("guards mutating service adapters when config was written by a newer NexisClaw", async () => {
-    const tempHome = await makeTempWorkspace("NexisClaw-service-future-config-");
-    const stateDir = path.join(tempHome, ".NexisClaw");
-    const configPath = path.join(stateDir, "NexisClaw.json");
-    const envSnapshot = captureEnv(["HOME", "NEXISCLAW_STATE_DIR", "NEXISCLAW_CONFIG_PATH"]);
+  it("guards mutating service adapters when config was written by a newer GreenchClaw", async () => {
+    const tempHome = await makeTempWorkspace("GreenchClaw-service-future-config-");
+    const stateDir = path.join(tempHome, ".GreenchClaw");
+    const configPath = path.join(stateDir, "GreenchClaw.json");
+    const envSnapshot = captureEnv(["HOME", "GREENCHCLAW_STATE_DIR", "GREENCHCLAW_CONFIG_PATH"]);
     try {
       await fs.mkdir(stateDir, { recursive: true });
       await fs.writeFile(
@@ -75,8 +75,8 @@ describe("resolveGatewayService", () => {
         ),
       );
       process.env.HOME = tempHome;
-      process.env.NEXISCLAW_STATE_DIR = stateDir;
-      process.env.NEXISCLAW_CONFIG_PATH = configPath;
+      process.env.GREENCHCLAW_STATE_DIR = stateDir;
+      process.env.GREENCHCLAW_CONFIG_PATH = configPath;
       clearConfigCache();
       clearRuntimeConfigSnapshot();
 
@@ -108,20 +108,20 @@ describe("readGatewayServiceState", () => {
     const service = createService({
       isLoaded: vi.fn(async () => true),
       readCommand: vi.fn(async () => ({
-        programArguments: ["NexisClaw", "gateway", "run"],
-        environment: { NEXISCLAW_GATEWAY_PORT: "18789" },
+        programArguments: ["GreenchClaw", "gateway", "run"],
+        environment: { GREENCHCLAW_GATEWAY_PORT: "18789" },
       })),
       readRuntime: vi.fn(async () => ({ status: "running" })),
     });
 
     const state = await readGatewayServiceState(service, {
-      env: { NEXISCLAW_GATEWAY_PORT: "1" },
+      env: { GREENCHCLAW_GATEWAY_PORT: "1" },
     });
 
     expect(state.installed).toBe(true);
     expect(state.loaded).toBe(true);
     expect(state.running).toBe(true);
-    expect(state.env.NEXISCLAW_GATEWAY_PORT).toBe("18789");
+    expect(state.env.GREENCHCLAW_GATEWAY_PORT).toBe("18789");
   });
 });
 
@@ -140,8 +140,8 @@ describe("startGatewayService", () => {
 
   it("restarts stopped installed services and returns post-start state", async () => {
     const readCommand = vi.fn(async () => ({
-      programArguments: ["NexisClaw", "gateway", "run"],
-      environment: { NEXISCLAW_GATEWAY_PORT: "18789" },
+      programArguments: ["GreenchClaw", "gateway", "run"],
+      environment: { GREENCHCLAW_GATEWAY_PORT: "18789" },
     }));
     const isLoaded = vi
       .fn<GatewayService["isLoaded"]>()
@@ -172,8 +172,8 @@ describe("startGatewayService", () => {
   it("requests repair before start when the loaded service version is stale", async () => {
     const service = createService({
       readCommand: vi.fn(async () => ({
-        programArguments: ["NexisClaw", "gateway", "run"],
-        environment: { NEXISCLAW_SERVICE_VERSION: "2026.4.24" },
+        programArguments: ["GreenchClaw", "gateway", "run"],
+        environment: { GREENCHCLAW_SERVICE_VERSION: "2026.4.24" },
       })),
       isLoaded: vi.fn(async () => true),
       readRuntime: vi.fn(async () => ({ status: "stopped" })),
@@ -187,7 +187,7 @@ describe("startGatewayService", () => {
     expect(result.outcome).toBe("repair-required");
     if (result.outcome === "repair-required") {
       expect(formatGatewayServiceStartRepairIssues(result.issues)).toContain(
-        "service was installed by NexisClaw 2026.4.24",
+        "service was installed by GreenchClaw 2026.4.24",
       );
     }
     expect(service.restart).not.toHaveBeenCalled();
@@ -197,8 +197,8 @@ describe("startGatewayService", () => {
     const service = createService({
       readCommand: vi.fn(async () => ({
         programArguments: [
-          "/private/tmp/NexisClaw-ai-install-cli-pr118/tools/node/bin/node",
-          "/tmp/NexisClaw-ai-install-cli-pr118/lib/node_modules/NexisClaw/dist/index.js",
+          "/private/tmp/GreenchClaw-ai-install-cli-pr118/tools/node/bin/node",
+          "/tmp/GreenchClaw-ai-install-cli-pr118/lib/node_modules/GreenchClaw/dist/index.js",
           "gateway",
         ],
         environment: {},
@@ -222,7 +222,7 @@ describe("startGatewayService", () => {
     const readCommand = vi
       .fn<GatewayService["readCommand"]>()
       .mockResolvedValueOnce({
-        programArguments: ["NexisClaw", "gateway", "run"],
+        programArguments: ["GreenchClaw", "gateway", "run"],
       })
       .mockResolvedValueOnce(null);
     const service = createService({

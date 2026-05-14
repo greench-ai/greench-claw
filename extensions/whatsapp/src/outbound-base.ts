@@ -3,14 +3,14 @@ import {
   listCombinedAccountIds,
   normalizeOptionalAccountId,
   resolveListedDefaultAccountId,
-} from "NexisClaw/plugin-sdk/account-core";
+} from "GreenchClaw/plugin-sdk/account-core";
 import {
   createAttachedChannelResultAdapter,
   type ChannelOutboundAdapter,
-} from "NexisClaw/plugin-sdk/channel-send-result";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveOutboundSendDep } from "NexisClaw/plugin-sdk/outbound-send-deps";
-import { sendTextMediaPayload } from "NexisClaw/plugin-sdk/reply-payload";
+} from "GreenchClaw/plugin-sdk/channel-send-result";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveOutboundSendDep } from "GreenchClaw/plugin-sdk/outbound-send-deps";
+import { sendTextMediaPayload } from "GreenchClaw/plugin-sdk/reply-payload";
 import {
   normalizeWhatsAppOutboundPayload,
   normalizeWhatsAppPayloadText,
@@ -22,7 +22,7 @@ import { toWhatsappJid } from "./text-runtime.js";
 type WhatsAppChunker = NonNullable<ChannelOutboundAdapter["chunker"]>;
 type WhatsAppSendTextOptions = {
   verbose: boolean;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   mediaUrl?: string;
   mediaAccess?: {
     localRoots?: readonly string[];
@@ -50,7 +50,7 @@ type WhatsAppSendMessage = (
 type WhatsAppSendPoll = (
   to: string,
   poll: Parameters<NonNullable<ChannelOutboundAdapter["sendPoll"]>>[0]["poll"],
-  options: { verbose: boolean; accountId?: string; cfg: NexisClawConfig },
+  options: { verbose: boolean; accountId?: string; cfg: GreenchClawConfig },
 ) => Promise<{ messageId: string; toJid: string }>;
 
 type CreateWhatsAppOutboundBaseParams = {
@@ -63,7 +63,7 @@ type CreateWhatsAppOutboundBaseParams = {
   skipEmptyText?: boolean;
 };
 
-function resolveQuoteLookupAccountId(cfg?: NexisClawConfig, accountId?: string | null): string {
+function resolveQuoteLookupAccountId(cfg?: GreenchClawConfig, accountId?: string | null): string {
   const explicitAccountId = normalizeOptionalAccountId(accountId);
   if (explicitAccountId) {
     return explicitAccountId;

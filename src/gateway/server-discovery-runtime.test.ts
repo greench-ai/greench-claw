@@ -6,13 +6,13 @@ type WriteWideAreaGatewayZone = typeof import("../infra/widearea-dns.js").writeW
 const mocks = vi.hoisted(() => ({
   pickPrimaryTailnetIPv4: vi.fn(() => "100.64.0.10"),
   pickPrimaryTailnetIPv6: vi.fn(() => undefined as string | undefined),
-  resolveWideAreaDiscoveryDomain: vi.fn(() => "NexisClaw.internal."),
+  resolveWideAreaDiscoveryDomain: vi.fn(() => "GreenchClaw.internal."),
   writeWideAreaGatewayZone: vi.fn<WriteWideAreaGatewayZone>(async () => ({
     changed: true,
-    zonePath: "/tmp/NexisClaw.internal.db",
+    zonePath: "/tmp/GreenchClaw.internal.db",
   })),
-  formatBonjourInstanceName: vi.fn((name: string) => `${name} (NexisClaw)`),
-  resolveBonjourCliPath: vi.fn(() => "/usr/local/bin/NexisClaw"),
+  formatBonjourInstanceName: vi.fn((name: string) => `${name} (GreenchClaw)`),
+  resolveBonjourCliPath: vi.fn(() => "/usr/local/bin/GreenchClaw"),
   resolveTailnetDnsHint: vi.fn(async () => "gateway.tailnet.example.ts.net"),
 }));
 
@@ -74,7 +74,7 @@ describe("startGatewayDiscovery", () => {
   it("starts registered local discovery services with gateway advertisement context", async () => {
     process.env.NODE_ENV = "development";
     delete process.env.VITEST;
-    process.env.NEXISCLAW_SSH_PORT = "2222";
+    process.env.GREENCHCLAW_SSH_PORT = "2222";
 
     const stopped: string[] = [];
     const bonjour = makeDiscoveryService({
@@ -113,7 +113,7 @@ describe("startGatewayDiscovery", () => {
       canvasPort: 18789,
       sshPort: 2222,
       tailnetDns: "gateway.tailnet.example.ts.net",
-      cliPath: "/usr/local/bin/NexisClaw",
+      cliPath: "/usr/local/bin/GreenchClaw",
       minimal: false,
     });
     expect(peer.service.advertise).toHaveBeenCalledTimes(1);
@@ -127,7 +127,7 @@ describe("startGatewayDiscovery", () => {
     vi.useFakeTimers();
     process.env.NODE_ENV = "development";
     delete process.env.VITEST;
-    process.env.NEXISCLAW_GATEWAY_DISCOVERY_ADVERTISE_TIMEOUT_MS = "10";
+    process.env.GREENCHCLAW_GATEWAY_DISCOVERY_ADVERTISE_TIMEOUT_MS = "10";
 
     const service = makeDiscoveryService({
       id: "stuck-discovery",
@@ -177,10 +177,10 @@ describe("startGatewayDiscovery", () => {
     expect(result.bonjourStop).toBeNull();
   });
 
-  it("skips local discovery services for truthy NEXISCLAW_DISABLE_BONJOUR values", async () => {
+  it("skips local discovery services for truthy GREENCHCLAW_DISABLE_BONJOUR values", async () => {
     process.env.NODE_ENV = "development";
     delete process.env.VITEST;
-    process.env.NEXISCLAW_DISABLE_BONJOUR = "yes";
+    process.env.GREENCHCLAW_DISABLE_BONJOUR = "yes";
 
     const service = makeDiscoveryService({ id: "bonjour" });
     const result = await startGatewayDiscovery({
@@ -209,7 +209,7 @@ describe("startGatewayDiscovery", () => {
       port: 18789,
       gatewayTls: { enabled: false },
       wideAreaDiscoveryEnabled: true,
-      wideAreaDiscoveryDomain: "NexisClaw.internal.",
+      wideAreaDiscoveryDomain: "GreenchClaw.internal.",
       tailscaleMode: "serve",
       mdnsMode: "off",
       gatewayDiscoveryServices: [service],
@@ -222,13 +222,13 @@ describe("startGatewayDiscovery", () => {
     if (zoneParams === undefined) {
       throw new Error("Expected wide-area gateway zone to be written");
     }
-    expect(zoneParams.domain).toBe("NexisClaw.internal.");
+    expect(zoneParams.domain).toBe("GreenchClaw.internal.");
     expect(zoneParams.gatewayPort).toBe(18789);
-    expect(zoneParams.displayName).toBe("Lab Mac (NexisClaw)");
+    expect(zoneParams.displayName).toBe("Lab Mac (GreenchClaw)");
     expect(zoneParams.tailnetIPv4).toBe("100.64.0.10");
     expect(zoneParams.tailnetDns).toBe("gateway.tailnet.example.ts.net");
     expect(logs.info.mock.calls).toContainEqual([
-      "wide-area DNS-SD updated (NexisClaw.internal. → /tmp/NexisClaw.internal.db)",
+      "wide-area DNS-SD updated (GreenchClaw.internal. → /tmp/GreenchClaw.internal.db)",
     ]);
     expect(result.bonjourStop).toBeNull();
   });
@@ -244,7 +244,7 @@ describe("startGatewayDiscovery", () => {
       port: 18789,
       gatewayTls: { enabled: false },
       wideAreaDiscoveryEnabled: true,
-      wideAreaDiscoveryDomain: "NexisClaw.internal.",
+      wideAreaDiscoveryDomain: "GreenchClaw.internal.",
       tailscaleMode: "serve",
       mdnsMode: "minimal",
       gatewayDiscoveryServices: [],

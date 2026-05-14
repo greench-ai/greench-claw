@@ -1,7 +1,7 @@
 [
   {
-    "source": "NexisClaw",
-    "target": "NexisClaw"
+    "source": "GreenchClaw",
+    "target": "GreenchClaw"
   },
   {
     "source": "iMessage",
@@ -48,12 +48,12 @@
     "target": "Mantis"
   },
   {
-    "source": "NexisClaw App SDK",
-    "target": "NexisClaw 应用 SDK"
+    "source": "GreenchClaw App SDK",
+    "target": "GreenchClaw 应用 SDK"
   },
   {
-    "source": "NexisClaw App SDK API design",
-    "target": "NexisClaw 应用 SDK API 设计"
+    "source": "GreenchClaw App SDK API design",
+    "target": "GreenchClaw 应用 SDK API 设计"
   },
   {
     "source": "Message lifecycle refactor",

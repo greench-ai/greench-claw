@@ -1,18 +1,18 @@
 import type { HumanDelayConfig, IdentityConfig } from "../config/types.base.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveAgentConfig } from "./agent-scope.js";
 
 const DEFAULT_ACK_REACTION = "👀";
 
 export function resolveAgentIdentity(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
 ): IdentityConfig | undefined {
   return resolveAgentConfig(cfg, agentId)?.identity;
 }
 
 export function resolveAckReaction(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
   opts?: { channel?: string; accountId?: string },
 ): string {
@@ -47,7 +47,7 @@ export function resolveAckReaction(
 }
 
 export function resolveIdentityNamePrefix(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
 ): string | undefined {
   const name = resolveAgentIdentity(cfg, agentId)?.name?.trim();
@@ -58,7 +58,7 @@ export function resolveIdentityNamePrefix(
 }
 
 export function resolveMessagePrefix(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
   opts?: { configured?: string; hasAllowFrom?: boolean; fallback?: string },
 ): string {
@@ -72,12 +72,12 @@ export function resolveMessagePrefix(
     return "";
   }
 
-  return resolveIdentityNamePrefix(cfg, agentId) ?? opts?.fallback ?? "[NexisClaw]";
+  return resolveIdentityNamePrefix(cfg, agentId) ?? opts?.fallback ?? "[GreenchClaw]";
 }
 
 /** Helper to extract a channel config value by dynamic key. */
 function getChannelConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   channel: string,
 ): Record<string, unknown> | undefined {
   const channels = cfg.channels as Record<string, unknown> | undefined;
@@ -88,7 +88,7 @@ function getChannelConfig(
 }
 
 export function resolveResponsePrefix(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
   opts?: { channel?: string; accountId?: string },
 ): string | undefined {
@@ -129,7 +129,7 @@ export function resolveResponsePrefix(
 }
 
 export function resolveEffectiveMessagesConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
   opts?: {
     hasAllowFrom?: boolean;
@@ -151,7 +151,7 @@ export function resolveEffectiveMessagesConfig(
 }
 
 export function resolveHumanDelayConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
 ): HumanDelayConfig | undefined {
   const defaults = cfg.agents?.defaults?.humanDelay;

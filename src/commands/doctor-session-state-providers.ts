@@ -12,7 +12,7 @@ import {
 import { resolveAgentModelFallbackValues } from "../config/model-input.js";
 import type { SessionEntry } from "../config/sessions.js";
 import { updateSessionStore } from "../config/sessions/store.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { listPluginDoctorSessionRouteStateOwners } from "../plugins/doctor-contract-registry.js";
 import type { DoctorSessionRouteStateOwner } from "../plugins/doctor-session-route-state-owner-types.js";
 import { parseAgentSessionKey } from "../sessions/session-key-utils.js";
@@ -56,12 +56,12 @@ function repairExample(repair: DoctorSessionRouteStateRepair): string {
   return `${repair.key} (${repair.reasons.join(", ")})`;
 }
 
-function resolveSessionAgentId(cfg: NexisClawConfig, sessionKey: string): string {
+function resolveSessionAgentId(cfg: GreenchClawConfig, sessionKey: string): string {
   return parseAgentSessionKey(sessionKey)?.agentId ?? resolveDefaultAgentId(cfg);
 }
 
 export function resolveConfiguredDoctorSessionStateRoute(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   env?: NodeJS.ProcessEnv;
 }): DoctorSessionRouteState {
@@ -98,7 +98,7 @@ export function resolveConfiguredDoctorSessionStateRoute(params: {
 }
 
 function resolvePluginDoctorSessionRouteStateOwners(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): DoctorSessionRouteStateOwner[] {
   return listPluginDoctorSessionRouteStateOwners({ config: params.cfg, env: params.env });
@@ -427,7 +427,7 @@ function groupRepairsByOwner(
 }
 
 export async function runPluginSessionStateDoctorRepairs(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   store: Record<string, SessionEntry>;
   absoluteStorePath: string;
   prompter: DoctorPrompterLike;

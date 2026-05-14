@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
 import type { ProviderSystemPromptContribution } from "./system-prompt-contribution.js";
 
@@ -97,7 +97,7 @@ export function normalizeGpt5PromptOverlayMode(value: unknown): Gpt5PromptOverla
 
 /** @deprecated OpenAI/Codex provider-owned prompt overlay helper; do not use from third-party plugins. */
 export function resolveGpt5PromptOverlayMode(
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
   legacyPluginConfig?: Record<string, unknown>,
   params?: { providerId?: string },
 ): Gpt5PromptOverlayMode {
@@ -122,7 +122,7 @@ export function isGpt5ModelId(modelId?: string): boolean {
 
 /** @deprecated OpenAI/Codex provider-owned prompt overlay helper; do not use from third-party plugins. */
 export function resolveGpt5SystemPromptContribution(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   providerId?: string;
   modelId?: string;
   legacyPluginConfig?: Record<string, unknown>;
@@ -149,7 +149,7 @@ export function resolveGpt5SystemPromptContribution(params: {
 
 /** @deprecated OpenAI/Codex provider-owned prompt overlay helper; do not use from third-party plugins. */
 export function renderGpt5PromptOverlay(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   providerId?: string;
   modelId?: string;
   legacyPluginConfig?: Record<string, unknown>;

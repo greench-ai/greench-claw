@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 
 const hoisted = vi.hoisted(() => ({
   resolveCommandSecretRefsViaGatewayMock: vi.fn(),
@@ -44,9 +44,9 @@ describe("resolveQueuedReplyExecutionConfig channel scope", () => {
   });
 
   it("resolves base runtime targets, then active channel/account targets from originating context", async () => {
-    const sourceConfig = { source: true } as unknown as NexisClawConfig;
-    const baseResolved = { baseResolved: true } as unknown as NexisClawConfig;
-    const scopedResolved = { scopedResolved: true } as unknown as NexisClawConfig;
+    const sourceConfig = { source: true } as unknown as GreenchClawConfig;
+    const baseResolved = { baseResolved: true } as unknown as GreenchClawConfig;
+    const scopedResolved = { scopedResolved: true } as unknown as GreenchClawConfig;
     hoisted.resolveCommandSecretRefsViaGatewayMock
       .mockResolvedValueOnce({
         resolvedConfig: baseResolved,
@@ -71,7 +71,7 @@ describe("resolveQueuedReplyExecutionConfig channel scope", () => {
     expect(resolved).toBe(scopedResolved);
     expect(hoisted.resolveCommandSecretRefsViaGatewayMock).toHaveBeenCalledTimes(2);
     const baseCall = hoisted.resolveCommandSecretRefsViaGatewayMock.mock.calls.at(0)?.[0] as {
-      config: NexisClawConfig;
+      config: GreenchClawConfig;
       commandName: string;
       targetIds: Set<string>;
     };
@@ -84,7 +84,7 @@ describe("resolveQueuedReplyExecutionConfig channel scope", () => {
       accountId: "work",
     });
     const scopedCall = hoisted.resolveCommandSecretRefsViaGatewayMock.mock.calls.at(1)?.[0] as {
-      config: NexisClawConfig;
+      config: GreenchClawConfig;
       commandName: string;
       targetIds: Set<string>;
       allowedPaths?: Set<string>;
@@ -98,7 +98,7 @@ describe("resolveQueuedReplyExecutionConfig channel scope", () => {
   });
 
   it("falls back to messageProvider and agentAccountId when originating values are missing", async () => {
-    const sourceConfig = { source: true } as unknown as NexisClawConfig;
+    const sourceConfig = { source: true } as unknown as GreenchClawConfig;
 
     await resolveQueuedReplyExecutionConfig(sourceConfig, {
       messageProvider: "discord",
@@ -113,7 +113,7 @@ describe("resolveQueuedReplyExecutionConfig channel scope", () => {
   });
 
   it("skips scoped channel resolution when no active channel can be resolved", async () => {
-    const sourceConfig = { source: true } as unknown as NexisClawConfig;
+    const sourceConfig = { source: true } as unknown as GreenchClawConfig;
 
     const resolved = await resolveQueuedReplyExecutionConfig(sourceConfig);
 
@@ -123,8 +123,8 @@ describe("resolveQueuedReplyExecutionConfig channel scope", () => {
   });
 
   it("prefers the runtime snapshot as the base config for secret resolution", async () => {
-    const sourceConfig = { source: true } as unknown as NexisClawConfig;
-    const runtimeConfig = { runtime: true } as unknown as NexisClawConfig;
+    const sourceConfig = { source: true } as unknown as GreenchClawConfig;
+    const runtimeConfig = { runtime: true } as unknown as GreenchClawConfig;
     setRuntimeConfigSnapshot(runtimeConfig, sourceConfig);
     hoisted.getScopedChannelsCommandSecretTargetsMock.mockReturnValue({
       targetIds: new Set<string>(),
@@ -135,7 +135,7 @@ describe("resolveQueuedReplyExecutionConfig channel scope", () => {
     });
 
     const baseCall = hoisted.resolveCommandSecretRefsViaGatewayMock.mock.calls.at(0)?.[0] as {
-      config: NexisClawConfig;
+      config: GreenchClawConfig;
       commandName: string;
     };
     expect(baseCall.config).toBe(runtimeConfig);
@@ -157,7 +157,7 @@ describe("resolveQueuedReplyExecutionConfig channel scope", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
     const staleRuntimeConfig = {
       models: {
         providers: {
@@ -167,7 +167,7 @@ describe("resolveQueuedReplyExecutionConfig channel scope", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
     const scopedResolvedConfig = {
       models: {
         providers: {
@@ -182,7 +182,7 @@ describe("resolveQueuedReplyExecutionConfig channel scope", () => {
           planTool: true,
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
     setRuntimeConfigSnapshot(staleRuntimeConfig, sourceConfig);
 
     expect(resolveQueuedReplyRuntimeConfig(structuredClone(sourceConfig))).toBe(staleRuntimeConfig);

@@ -2,9 +2,9 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import {
   createFixedWindowRateLimiter,
   WEBHOOK_RATE_LIMIT_DEFAULTS,
-} from "NexisClaw/plugin-sdk/webhook-ingress";
-import { createWebhookInFlightLimiter } from "NexisClaw/plugin-sdk/webhook-request-guards";
-import { registerWebhookTargetWithPluginRoute } from "NexisClaw/plugin-sdk/webhook-targets";
+} from "GreenchClaw/plugin-sdk/webhook-ingress";
+import { createWebhookInFlightLimiter } from "GreenchClaw/plugin-sdk/webhook-request-guards";
+import { registerWebhookTargetWithPluginRoute } from "GreenchClaw/plugin-sdk/webhook-targets";
 import type { WebhookTarget } from "./monitor-types.js";
 import { createGoogleChatWebhookRequestHandler } from "./monitor-webhook.js";
 import type { GoogleChatEvent } from "./types.js";

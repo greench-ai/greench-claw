@@ -10,22 +10,22 @@ function buildSecretRefCredentialMatrixJson(): string {
   return `${JSON.stringify(buildSecretRefCredentialMatrix(), null, 2)}\n`;
 }
 
-const previousBundledPluginsDir = process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
-const previousTrustBundledPluginsDir = process.env.NEXISCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR;
+const previousBundledPluginsDir = process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
+const previousTrustBundledPluginsDir = process.env.GREENCHCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR;
 
-process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR ??= "extensions";
-process.env.NEXISCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR ??= "1";
+process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR ??= "extensions";
+process.env.GREENCHCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR ??= "1";
 
 afterAll(() => {
   if (previousBundledPluginsDir === undefined) {
-    delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = previousBundledPluginsDir;
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = previousBundledPluginsDir;
   }
   if (previousTrustBundledPluginsDir === undefined) {
-    delete process.env.NEXISCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR;
+    delete process.env.GREENCHCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.NEXISCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR = previousTrustBundledPluginsDir;
+    process.env.GREENCHCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR = previousTrustBundledPluginsDir;
   }
 });
 

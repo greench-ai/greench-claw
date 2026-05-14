@@ -1,20 +1,20 @@
-import { resolveApprovalApprovers } from "NexisClaw/plugin-sdk/approval-auth-runtime";
+import { resolveApprovalApprovers } from "GreenchClaw/plugin-sdk/approval-auth-runtime";
 import {
   createChannelExecApprovalProfile,
   getExecApprovalReplyMetadata,
   isChannelExecApprovalClientEnabledFromConfig,
   isChannelExecApprovalTargetRecipient,
   matchesApprovalRequestFilters,
-} from "NexisClaw/plugin-sdk/approval-client-runtime";
-import { resolveApprovalRequestChannelAccountId } from "NexisClaw/plugin-sdk/approval-native-runtime";
+} from "GreenchClaw/plugin-sdk/approval-client-runtime";
+import { resolveApprovalRequestChannelAccountId } from "GreenchClaw/plugin-sdk/approval-native-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "NexisClaw/plugin-sdk/approval-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/routing";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/approval-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-runtime";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/routing";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { getMatrixApprovalAuthApprovers } from "./approval-auth.js";
 import { normalizeMatrixApproverId } from "./approval-ids.js";
 import { listMatrixAccountIds, resolveMatrixAccount } from "./matrix/accounts.js";
@@ -31,7 +31,7 @@ function normalizeMatrixExecApproverId(value: string | number): string | undefin
 }
 
 function resolveMatrixExecApprovalConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }) {
   const account = resolveMatrixAccount(params);
@@ -46,7 +46,7 @@ function resolveMatrixExecApprovalConfig(params: {
 }
 
 function countMatrixExecApprovalEligibleAccounts(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   request: ApprovalRequest;
   approvalKind: ApprovalKind;
 }): number {
@@ -87,7 +87,7 @@ function countMatrixExecApprovalEligibleAccounts(params: {
 }
 
 function matchesMatrixRequestAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   request: ApprovalRequest;
   approvalKind: ApprovalKind;
@@ -117,7 +117,7 @@ function matchesMatrixRequestAccount(params: {
 }
 
 export function getMatrixExecApprovalApprovers(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): string[] {
   const account = resolveMatrixAccount(params).config;
@@ -133,7 +133,7 @@ function resolveMatrixApprovalKind(request: ApprovalRequest): ApprovalKind {
 }
 
 export function getMatrixApprovalApprovers(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   approvalKind: ApprovalKind;
 }): string[] {
@@ -147,7 +147,7 @@ export function getMatrixApprovalApprovers(params: {
 }
 
 export function isMatrixExecApprovalTargetRecipient(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   senderId?: string | null;
   accountId?: string | null;
 }): boolean {
@@ -179,7 +179,7 @@ export const resolveMatrixExecApprovalTarget = matrixExecApprovalProfile.resolve
 export const shouldHandleMatrixExecApprovalRequest = matrixExecApprovalProfile.shouldHandleRequest;
 
 export function isMatrixApprovalClientEnabled(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   approvalKind: ApprovalKind;
 }): boolean {
@@ -194,7 +194,7 @@ export function isMatrixApprovalClientEnabled(params: {
 }
 
 export function isMatrixAnyApprovalClientEnabled(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): boolean {
   return (
@@ -210,7 +210,7 @@ export function isMatrixAnyApprovalClientEnabled(params: {
 }
 
 export function shouldHandleMatrixApprovalRequest(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   request: ApprovalRequest;
 }): boolean {
@@ -271,7 +271,7 @@ function buildFilterCheckRequest(params: {
 }
 
 export function shouldSuppressLocalMatrixExecApprovalPrompt(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   payload: ReplyPayload;
 }): boolean {

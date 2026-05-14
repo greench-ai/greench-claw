@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { collectExecRuntimeFindings } from "./audit.js";
 
 function hasFinding(
@@ -45,7 +45,7 @@ describe("security audit exec safe-bin findings", () => {
             },
           ],
         },
-      } satisfies NexisClawConfig,
+      } satisfies GreenchClawConfig,
       expected: true,
     },
     {
@@ -78,7 +78,7 @@ describe("security audit exec safe-bin findings", () => {
             },
           ],
         },
-      } satisfies NexisClawConfig,
+      } satisfies GreenchClawConfig,
       expected: false,
     },
   ])(
@@ -99,7 +99,7 @@ describe("security audit exec safe-bin findings", () => {
             safeBins: ["jq"],
           },
         },
-      } satisfies NexisClawConfig,
+      } satisfies GreenchClawConfig,
       expected: true,
     },
     {
@@ -110,7 +110,7 @@ describe("security audit exec safe-bin findings", () => {
             safeBins: ["cut"],
           },
         },
-      } satisfies NexisClawConfig,
+      } satisfies GreenchClawConfig,
       expected: false,
     },
   ])(
@@ -126,7 +126,7 @@ describe("security audit exec safe-bin findings", () => {
     const riskyGlobalTrustedDirs =
       process.platform === "win32"
         ? [String.raw`C:\Users\ci-user\bin`, String.raw`C:\Users\ci-user\.local\bin`]
-        : ["/usr/local/bin", "/tmp/NexisClaw-safe-bins"];
+        : ["/usr/local/bin", "/tmp/GreenchClaw-safe-bins"];
     const findings = collectExecRuntimeFindings({
       tools: {
         exec: {
@@ -145,7 +145,7 @@ describe("security audit exec safe-bin findings", () => {
           },
         ],
       },
-    } satisfies NexisClawConfig);
+    } satisfies GreenchClawConfig);
 
     const riskyFinding = requireFinding("tools.exec.safe_bin_trusted_dirs_risky", findings);
     expect(riskyFinding.severity).toBe("warn");
@@ -164,7 +164,7 @@ describe("security audit exec safe-bin findings", () => {
               safeBinTrustedDirs: ["/usr/libexec"],
             },
           },
-        } satisfies NexisClawConfig),
+        } satisfies GreenchClawConfig),
       ),
     ).toBe(false);
   });

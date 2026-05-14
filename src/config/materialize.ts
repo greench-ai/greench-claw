@@ -11,7 +11,7 @@ import {
 } from "./defaults.js";
 import { normalizeExecSafeBinProfilesInConfig } from "./normalize-exec-safe-bin.js";
 import { normalizeConfigPaths } from "./normalize-paths.js";
-import type { NexisClawConfig, ResolvedSourceConfig, RuntimeConfig } from "./types.js";
+import type { GreenchClawConfig, ResolvedSourceConfig, RuntimeConfig } from "./types.js";
 
 type ConfigMaterializationMode = "load" | "missing" | "snapshot";
 
@@ -43,16 +43,16 @@ const MATERIALIZATION_PROFILES: Record<ConfigMaterializationMode, Materializatio
   },
 };
 
-export function asResolvedSourceConfig(config: NexisClawConfig): ResolvedSourceConfig {
+export function asResolvedSourceConfig(config: GreenchClawConfig): ResolvedSourceConfig {
   return config as ResolvedSourceConfig;
 }
 
-export function asRuntimeConfig(config: NexisClawConfig): RuntimeConfig {
+export function asRuntimeConfig(config: GreenchClawConfig): RuntimeConfig {
   return config as RuntimeConfig;
 }
 
 export function materializeRuntimeConfig(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   mode: ConfigMaterializationMode,
   options: { manifestRegistry?: Pick<PluginManifestRegistry, "plugins"> } = {},
 ): RuntimeConfig {

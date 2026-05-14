@@ -7,7 +7,7 @@ import { exportTrajectoryBundle, resolveDefaultTrajectoryExportDir } from "./exp
 import { TRAJECTORY_RUNTIME_FILE_MAX_BYTES, resolveTrajectoryPointerFilePath } from "./paths.js";
 import type { TrajectoryEvent } from "./types.js";
 
-const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-trajectory-"));
+const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-trajectory-"));
 let tempDirId = 0;
 
 function makeTempDir(): string {
@@ -199,9 +199,9 @@ describe("exportTrajectoryBundle", () => {
     expect(outputDir).toBe(
       path.join(
         "/tmp/workspace",
-        ".NexisClaw",
+        ".GreenchClaw",
         "trajectory-exports",
-        "NexisClaw-trajectory-___evil_-2026-04-22T08-00-00",
+        "GreenchClaw-trajectory-___evil_-2026-04-22T08-00-00",
       ),
     );
   });
@@ -318,7 +318,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       runtimeFile,
       `${JSON.stringify({})}\n${JSON.stringify({
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -354,7 +354,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       resolveTrajectoryPointerFilePath(sessionFile),
       `${JSON.stringify({
-        traceSchema: "NexisClaw-trajectory-pointer",
+        traceSchema: "GreenchClaw-trajectory-pointer",
         schemaVersion: 1,
         sessionId: "session-1",
         runtimeFile: recordedRuntimeFile,
@@ -364,7 +364,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       recordedRuntimeFile,
       `${JSON.stringify({
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -379,7 +379,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       path.join(envRuntimeDir, "session-1.jsonl"),
       `${JSON.stringify({
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -391,8 +391,8 @@ describe("exportTrajectoryBundle", () => {
       })}\n`,
       "utf8",
     );
-    const previous = process.env.NEXISCLAW_TRAJECTORY_DIR;
-    process.env.NEXISCLAW_TRAJECTORY_DIR = envRuntimeDir;
+    const previous = process.env.GREENCHCLAW_TRAJECTORY_DIR;
+    process.env.GREENCHCLAW_TRAJECTORY_DIR = envRuntimeDir;
     try {
       const bundle = await exportTrajectoryBundle({
         outputDir,
@@ -406,9 +406,9 @@ describe("exportTrajectoryBundle", () => {
       expect(eventTypes(bundle.events)).not.toContain("env-runtime");
     } finally {
       if (previous === undefined) {
-        delete process.env.NEXISCLAW_TRAJECTORY_DIR;
+        delete process.env.GREENCHCLAW_TRAJECTORY_DIR;
       } else {
-        process.env.NEXISCLAW_TRAJECTORY_DIR = previous;
+        process.env.GREENCHCLAW_TRAJECTORY_DIR = previous;
       }
     }
   });
@@ -422,7 +422,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       resolveTrajectoryPointerFilePath(sessionFile),
       `${JSON.stringify({
-        traceSchema: "NexisClaw-trajectory-pointer",
+        traceSchema: "GreenchClaw-trajectory-pointer",
         schemaVersion: 1,
         sessionId: "session-1",
         runtimeFile: outsideFile,
@@ -432,7 +432,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       outsideFile,
       `${JSON.stringify({
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -467,7 +467,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       resolveTrajectoryPointerFilePath(sessionFile),
       `${JSON.stringify({
-        traceSchema: "NexisClaw-trajectory-pointer",
+        traceSchema: "GreenchClaw-trajectory-pointer",
         schemaVersion: 1,
         sessionId: "session-1",
         runtimeFile: symlinkFile,
@@ -477,7 +477,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       targetFile,
       `${JSON.stringify({
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -528,7 +528,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       runtimeFile,
       `${JSON.stringify({
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: "other-session",
         source: "runtime",
@@ -563,7 +563,7 @@ describe("exportTrajectoryBundle", () => {
     fs.writeFileSync(
       runtimeFile,
       `${JSON.stringify({
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -615,7 +615,7 @@ describe("exportTrajectoryBundle", () => {
 
     const runtimeEvents: TrajectoryEvent[] = [
       {
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -631,7 +631,7 @@ describe("exportTrajectoryBundle", () => {
         },
       },
       {
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -652,7 +652,7 @@ describe("exportTrajectoryBundle", () => {
         },
       },
       {
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -662,7 +662,7 @@ describe("exportTrajectoryBundle", () => {
         sourceSeq: 3,
         sessionId: "session-1",
         data: {
-          harness: { type: "NexisClaw", version: "0.1.0" },
+          harness: { type: "GreenchClaw", version: "0.1.0" },
           model: { provider: "openai", name: "gpt-5.4" },
           skills: {
             entries: [
@@ -681,7 +681,7 @@ describe("exportTrajectoryBundle", () => {
         },
       },
       {
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",
@@ -695,7 +695,7 @@ describe("exportTrajectoryBundle", () => {
         },
       },
       {
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: "session-1",
         source: "runtime",

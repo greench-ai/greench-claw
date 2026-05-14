@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 import http from "node:http";
 import type { Duplex } from "node:stream";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import {
   buildRealtimeVoiceAgentConsultWorkingResponse,
   createTalkSessionController,
@@ -15,7 +15,7 @@ import {
   type TalkEvent,
   type TalkEventInput,
   type TalkSessionController,
-} from "NexisClaw/plugin-sdk/realtime-voice";
+} from "GreenchClaw/plugin-sdk/realtime-voice";
 import WebSocket, { WebSocketServer } from "ws";
 import type { VoiceCallRealtimeConfig } from "../config.js";
 import type { CallManager } from "../manager.js";
@@ -212,7 +212,7 @@ function buildForcedConsultSpeechPrompt(result: string): string {
       ? trimmed
       : `${trimmed.slice(0, FORCED_CONSULT_RESULT_MAX_CHARS - 16).trimEnd()} [truncated]`;
   return [
-    "Internal NexisClaw consult result is ready.",
+    "Internal GreenchClaw consult result is ready.",
     "Do not call tools for this internal result.",
     "Speak the following answer to the caller now, briefly and naturally:",
     bounded,
@@ -327,7 +327,7 @@ export class RealtimeCallHandler {
     private readonly realtimeProvider: RealtimeVoiceProviderPlugin,
     private readonly providerConfig: RealtimeVoiceProviderConfig,
     private readonly servePath: string,
-    private readonly coreConfig?: NexisClawConfig,
+    private readonly coreConfig?: GreenchClawConfig,
   ) {}
 
   setPublicUrl(url: string): void {
@@ -1093,7 +1093,7 @@ export class RealtimeCallHandler {
           {
             question: params.question,
             context:
-              "The realtime provider produced a final user transcript without invoking NexisClaw_agent_consult, so NexisClaw is forcing the consult because consultPolicy is always.",
+              "The realtime provider produced a final user transcript without invoking GreenchClaw_agent_consult, so GreenchClaw is forcing the consult because consultPolicy is always.",
           },
           params.callId,
           {},
@@ -1280,7 +1280,8 @@ export class RealtimeCallHandler {
         if (forcedConsult.completedAt) {
           submitFinalToolResult({
             status: "already_delivered",
-            message: "NexisClaw already delivered this consult result internally. Do not repeat it.",
+            message:
+              "GreenchClaw already delivered this consult result internally. Do not repeat it.",
           });
           return;
         }

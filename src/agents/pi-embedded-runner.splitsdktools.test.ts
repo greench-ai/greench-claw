@@ -43,7 +43,7 @@ describe("splitSdkTools", () => {
     ]);
   });
 
-  it("keeps NexisClaw-managed custom tools in Pi's session allowlist", () => {
+  it("keeps GreenchClaw-managed custom tools in Pi's session allowlist", () => {
     const { customTools } = splitSdkTools({
       tools: [createStubTool("read"), createStubTool("sessions_spawn")],
       sandboxEnabled: true,

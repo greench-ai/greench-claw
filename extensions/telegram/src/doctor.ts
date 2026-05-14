@@ -1,14 +1,14 @@
 import {
   type ChannelDoctorAdapter,
   type ChannelDoctorEmptyAllowlistAccountContext,
-} from "NexisClaw/plugin-sdk/channel-contract";
+} from "GreenchClaw/plugin-sdk/channel-contract";
 import {
   resolveChannelStreamingBlockEnabled,
   resolveChannelStreamingPreviewToolProgress,
-} from "NexisClaw/plugin-sdk/channel-streaming";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/channel-streaming";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { inspectTelegramAccount } from "./account-inspect.js";
 import {
   listTelegramAccountIds,
@@ -57,7 +57,7 @@ function hasAllowFromEntries(values?: DoctorAllowFromList): boolean {
 }
 
 function collectTelegramAccountScopes(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ): Array<{ prefix: string; pathSegments: string[]; account: Record<string, unknown> }> {
   const scopes: Array<{
     prefix: string;
@@ -132,7 +132,7 @@ function collectTelegramAllowFromLists(
 }
 
 export function scanTelegramInvalidAllowFromEntries(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ): TelegramAllowFromInvalidHit[] {
   const hits: TelegramAllowFromInvalidHit[] = [];
   const scanList = (pathLabel: string, list: unknown) => {
@@ -171,7 +171,7 @@ export function collectTelegramInvalidAllowFromWarnings(params: {
 }
 
 export function scanTelegramBotEndpointApiRoots(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ): TelegramApiRootBotEndpointHit[] {
   const hits: TelegramApiRootBotEndpointHit[] = [];
   for (const scope of collectTelegramAccountScopes(cfg)) {
@@ -203,7 +203,7 @@ export function collectTelegramApiRootWarnings(params: {
   ];
 }
 
-function formatTelegramAccountConfigPath(cfg: NexisClawConfig, accountId: string): string {
+function formatTelegramAccountConfigPath(cfg: GreenchClawConfig, accountId: string): string {
   const telegram = asObjectRecord((cfg.channels as Record<string, unknown> | undefined)?.telegram);
   const accounts = asObjectRecord(telegram?.accounts);
   if (!accounts || Object.keys(accounts).length === 0) {
@@ -213,7 +213,7 @@ function formatTelegramAccountConfigPath(cfg: NexisClawConfig, accountId: string
 }
 
 export function scanTelegramSelectedQuoteToolProgressWarnings(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ): TelegramSelectedQuoteToolProgressHit[] {
   if (!asObjectRecord((cfg.channels as Record<string, unknown> | undefined)?.telegram)) {
     return [];
@@ -255,8 +255,8 @@ export function collectTelegramSelectedQuoteToolProgressWarnings(params: {
   ];
 }
 
-export function maybeRepairTelegramApiRoots(cfg: NexisClawConfig): {
-  config: NexisClawConfig;
+export function maybeRepairTelegramApiRoots(cfg: GreenchClawConfig): {
+  config: GreenchClawConfig;
   changes: string[];
 } {
   const hits = scanTelegramBotEndpointApiRoots(cfg);
@@ -288,7 +288,7 @@ export function maybeRepairTelegramApiRoots(cfg: NexisClawConfig): {
 }
 
 export function collectTelegramMissingEnvTokenWarnings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): string[] {
   if (resolveDefaultTelegramAccountId(params.cfg) !== "default") {
@@ -307,8 +307,8 @@ export function collectTelegramMissingEnvTokenWarnings(params: {
   ];
 }
 
-async function repairTelegramConfig(params: { cfg: NexisClawConfig }): Promise<{
-  config: NexisClawConfig;
+async function repairTelegramConfig(params: { cfg: GreenchClawConfig }): Promise<{
+  config: GreenchClawConfig;
   changes: string[];
 }> {
   const apiRootRepair = maybeRepairTelegramApiRoots(params.cfg);
@@ -319,8 +319,8 @@ async function repairTelegramConfig(params: { cfg: NexisClawConfig }): Promise<{
   };
 }
 
-export async function maybeRepairTelegramAllowFromUsernames(cfg: NexisClawConfig): Promise<{
-  config: NexisClawConfig;
+export async function maybeRepairTelegramAllowFromUsernames(cfg: GreenchClawConfig): Promise<{
+  config: GreenchClawConfig;
   changes: string[];
 }> {
   const hits = scanTelegramInvalidAllowFromEntries(cfg);
@@ -346,7 +346,7 @@ export async function maybeRepairTelegramAllowFromUsernames(cfg: NexisClawConfig
   }
 
   const { getChannelsCommandSecretTargetIds, resolveCommandSecretRefsViaGateway } =
-    await import("NexisClaw/plugin-sdk/runtime");
+    await import("GreenchClaw/plugin-sdk/runtime");
 
   const { resolvedConfig } = await resolveCommandSecretRefsViaGateway({
     config: cfg,

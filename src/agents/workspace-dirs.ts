@@ -1,7 +1,7 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "./agent-scope.js";
 
-export function listAgentWorkspaceDirs(cfg: NexisClawConfig): string[] {
+export function listAgentWorkspaceDirs(cfg: GreenchClawConfig): string[] {
   const dirs = new Set<string>();
   const list = cfg.agents?.list;
   if (Array.isArray(list)) {

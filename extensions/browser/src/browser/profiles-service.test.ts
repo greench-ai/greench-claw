@@ -2,13 +2,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getRuntimeConfig } from "../config/config.js";
-import type { NexisClawConfig } from "../config/config.js";
-import { resolveNexisClawUserDataDir } from "./chrome.js";
+import type { GreenchClawConfig } from "../config/config.js";
+import { resolveGreenchClawUserDataDir } from "./chrome.js";
 import type { BrowserRouteContext, BrowserServerState } from "./server-context.js";
 import { movePathToTrash } from "./trash.js";
 
 const configMocks = vi.hoisted(() => ({
-  writeConfigFile: vi.fn<(cfg: NexisClawConfig) => Promise<void>>(async (_cfg) => {}),
+  writeConfigFile: vi.fn<(cfg: GreenchClawConfig) => Promise<void>>(async (_cfg) => {}),
 }));
 const writeConfigFile = configMocks.writeConfigFile;
 
@@ -17,7 +17,7 @@ vi.mock("../config/config.js", async () => {
   return {
     ...actual,
     getRuntimeConfig: vi.fn(),
-    replaceConfigFile: vi.fn(async ({ nextConfig }: { nextConfig: NexisClawConfig }) => {
+    replaceConfigFile: vi.fn(async ({ nextConfig }: { nextConfig: GreenchClawConfig }) => {
       await configMocks.writeConfigFile(nextConfig);
     }),
   };
@@ -28,7 +28,7 @@ vi.mock("./trash.js", () => ({
 }));
 
 vi.mock("./chrome.js", () => ({
-  resolveNexisClawUserDataDir: vi.fn(() => "/tmp/NexisClaw-test/NexisClaw/user-data"),
+  resolveGreenchClawUserDataDir: vi.fn(() => "/tmp/GreenchClaw-test/GreenchClaw/user-data"),
 }));
 
 const [{ resolveBrowserConfig }, { createBrowserProfilesService }] = await Promise.all([
@@ -224,7 +224,7 @@ describe("BrowserProfilesService", () => {
     const { ctx, state } = createCtx(resolved);
     vi.mocked(getRuntimeConfig).mockReturnValue({ browser: { profiles: {} } });
 
-    const tempDir = fs.mkdtempSync(path.join("/tmp", "NexisClaw-profile-"));
+    const tempDir = fs.mkdtempSync(path.join("/tmp", "GreenchClaw-profile-"));
     const userDataDir = path.join(tempDir, "BraveSoftware", "Brave-Browser");
     fs.mkdirSync(userDataDir, { recursive: true });
 
@@ -249,7 +249,7 @@ describe("BrowserProfilesService", () => {
     const { ctx } = createCtx(resolved);
     vi.mocked(getRuntimeConfig).mockReturnValue({ browser: { profiles: {} } });
 
-    const tempDir = fs.mkdtempSync(path.join("/tmp", "NexisClaw-profile-"));
+    const tempDir = fs.mkdtempSync(path.join("/tmp", "GreenchClaw-profile-"));
     const userDataDir = path.join(tempDir, "BraveSoftware", "Brave-Browser");
     fs.mkdirSync(userDataDir, { recursive: true });
 
@@ -273,9 +273,9 @@ describe("BrowserProfilesService", () => {
 
     vi.mocked(getRuntimeConfig).mockReturnValue({
       browser: {
-        defaultProfile: "NexisClaw",
+        defaultProfile: "GreenchClaw",
         profiles: {
-          NexisClaw: { cdpPort: 18800, color: "#FF4500" },
+          GreenchClaw: { cdpPort: 18800, color: "#FF4500" },
           remote: { cdpUrl: "http://10.0.0.42:9222", color: "#0066CC" },
         },
       },
@@ -299,18 +299,18 @@ describe("BrowserProfilesService", () => {
 
     vi.mocked(getRuntimeConfig).mockReturnValue({
       browser: {
-        defaultProfile: "NexisClaw",
+        defaultProfile: "GreenchClaw",
         profiles: {
-          NexisClaw: { cdpPort: 18800, color: "#FF4500" },
+          GreenchClaw: { cdpPort: 18800, color: "#FF4500" },
           work: { cdpPort: 18801, color: "#0066CC" },
         },
       },
     });
 
-    const tempDir = fs.mkdtempSync(path.join("/tmp", "NexisClaw-profile-"));
+    const tempDir = fs.mkdtempSync(path.join("/tmp", "GreenchClaw-profile-"));
     const userDataDir = path.join(tempDir, "work", "user-data");
     fs.mkdirSync(path.dirname(userDataDir), { recursive: true });
-    vi.mocked(resolveNexisClawUserDataDir).mockReturnValue(userDataDir);
+    vi.mocked(resolveGreenchClawUserDataDir).mockReturnValue(userDataDir);
 
     const service = createBrowserProfilesService(ctx);
     const result = await service.deleteProfile("work");
@@ -334,9 +334,9 @@ describe("BrowserProfilesService", () => {
 
     vi.mocked(getRuntimeConfig).mockReturnValue({
       browser: {
-        defaultProfile: "NexisClaw",
+        defaultProfile: "GreenchClaw",
         profiles: {
-          NexisClaw: { cdpPort: 18800, color: "#FF4500" },
+          GreenchClaw: { cdpPort: 18800, color: "#FF4500" },
           "chrome-live": {
             cdpPort: 18801,
             color: "#0066CC",

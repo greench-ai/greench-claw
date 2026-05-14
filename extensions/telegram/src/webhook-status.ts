@@ -1,5 +1,5 @@
-import type { ChannelAccountSnapshot } from "NexisClaw/plugin-sdk/channel-contract";
-import { createConnectedChannelStatusPatch } from "NexisClaw/plugin-sdk/gateway-runtime";
+import type { ChannelAccountSnapshot } from "GreenchClaw/plugin-sdk/channel-contract";
+import { createConnectedChannelStatusPatch } from "GreenchClaw/plugin-sdk/gateway-runtime";
 
 type TelegramWebhookStatusSink = (patch: Omit<ChannelAccountSnapshot, "accountId">) => void;
 

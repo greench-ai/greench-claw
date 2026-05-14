@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { collectConfiguredAgentHarnessRuntimes } from "../../../agents/harness-runtimes.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 
 export type CodexNativeAssetHit = {
   kind: "skill" | "plugin" | "config" | "hooks";
@@ -113,11 +113,11 @@ async function discoverPluginHits(root: string): Promise<CodexNativeAssetHit[]> 
   return [...hits.values()];
 }
 
-function isCodexRuntimeConfigured(cfg: NexisClawConfig, env: NodeJS.ProcessEnv): boolean {
+function isCodexRuntimeConfigured(cfg: GreenchClawConfig, env: NodeJS.ProcessEnv): boolean {
   return collectConfiguredAgentHarnessRuntimes(cfg, env).includes("codex");
 }
 
-function isCodexPluginConfigured(cfg: NexisClawConfig): boolean {
+function isCodexPluginConfigured(cfg: GreenchClawConfig): boolean {
   const plugins = cfg.plugins;
   if (plugins?.enabled === false) {
     return false;
@@ -133,12 +133,12 @@ function isCodexPluginConfigured(cfg: NexisClawConfig): boolean {
   return hasRecord(plugins?.entries?.codex) && plugins.entries.codex.enabled !== false;
 }
 
-function shouldScanCodexNativeAssets(cfg: NexisClawConfig, env: NodeJS.ProcessEnv): boolean {
+function shouldScanCodexNativeAssets(cfg: GreenchClawConfig, env: NodeJS.ProcessEnv): boolean {
   return isCodexRuntimeConfigured(cfg, env) || isCodexPluginConfigured(cfg);
 }
 
 export async function scanCodexNativeAssets(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): Promise<CodexNativeAssetHit[]> {
   const env = params.env ?? process.env;
@@ -182,7 +182,7 @@ function plural(count: number, singular: string): string {
 }
 
 export async function collectCodexNativeAssetWarnings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): Promise<string[]> {
   const env = params.env ?? process.env;
@@ -198,10 +198,10 @@ export async function collectCodexNativeAssetWarnings(params: {
   ];
   return [
     [
-      "- Personal Codex CLI assets were found, but native Codex-mode NexisClaw agents use isolated per-agent Codex homes.",
+      "- Personal Codex CLI assets were found, but native Codex-mode GreenchClaw agents use isolated per-agent Codex homes.",
       `- Sources: ${resolveCodexHome(env)} and ${resolvePersonalAgentSkillsDir(env)} (${counts.join(", ")}).`,
       "- These assets will not be loaded by the Codex app-server child unless you intentionally promote them.",
-      "- Run `NexisClaw migrate codex --dry-run` to inventory them. Applying that migration copies skills into the current NexisClaw agent workspace; Codex plugins, hooks, and config stay manual-review only.",
+      "- Run `GreenchClaw migrate codex --dry-run` to inventory them. Applying that migration copies skills into the current GreenchClaw agent workspace; Codex plugins, hooks, and config stay manual-review only.",
     ].join("\n"),
   ];
 }

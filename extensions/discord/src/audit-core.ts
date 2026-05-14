@@ -2,10 +2,10 @@ import { ChannelType } from "discord-api-types/v10";
 import type {
   DiscordGuildChannelConfig,
   DiscordGuildEntry,
-  NexisClawConfig,
-} from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { isRecord, normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+  GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { isRecord, normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 type DiscordChannelPermissionsAuditEntry = {
   channelId: string;
@@ -113,14 +113,14 @@ export function collectDiscordAuditChannelIdsForAccount(config: {
 }
 
 export async function auditDiscordChannelPermissionsWithFetcher(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   token: string;
   accountId?: string | null;
   channelIds: string[];
   timeoutMs: number;
   fetchChannelPermissions: (
     channelId: string,
-    params: { cfg: NexisClawConfig; token: string; accountId?: string },
+    params: { cfg: GreenchClawConfig; token: string; accountId?: string },
   ) => Promise<{
     permissions: string[];
     channelType?: number;

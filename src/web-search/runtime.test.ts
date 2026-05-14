@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { PluginWebSearchProviderEntry } from "../plugins/web-provider-types.js";
 import {
   createWebSearchTestProvider,
@@ -14,13 +14,13 @@ type TestPluginWebSearchConfig = {
 
 type WebSearchProviderResolverParams = {
   bundledAllowlistCompat?: boolean;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   onlyPluginIds?: readonly string[];
   origin?: string;
 };
 
 type ManifestContractOwnerParams = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   contract?: string;
   origin?: string;
   value?: string;
@@ -59,7 +59,7 @@ function createCustomSearchTool() {
   };
 }
 
-function getCustomSearchApiKey(config?: NexisClawConfig): unknown {
+function getCustomSearchApiKey(config?: GreenchClawConfig): unknown {
   const pluginConfig = config?.plugins?.entries?.["custom-search"]?.config as
     | TestPluginWebSearchConfig
     | undefined;
@@ -80,7 +80,7 @@ function createCustomSearchProvider(
   });
 }
 
-function createCustomSearchConfig(apiKey: unknown): NexisClawConfig {
+function createCustomSearchConfig(apiKey: unknown): GreenchClawConfig {
   return {
     plugins: {
       entries: {

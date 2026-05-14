@@ -6,8 +6,8 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 import {
   normalizeOptionalString,
   readStringValue,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { resolvePreferredNexisClawTmpDir } from "../infra/tmp-NexisClaw-dir.js";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { resolvePreferredGreenchClawTmpDir } from "../infra/tmp-GreenchClaw-dir.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { asRecord } from "../record-shared.js";
 import type { ChromeMcpSnapshotNode } from "./chrome-mcp.snapshot.js";
@@ -408,7 +408,7 @@ async function createRealSession(
   });
   const client = new Client(
     {
-      name: "NexisClaw-browser",
+      name: "GreenchClaw-browser",
       version: "0.0.0",
     },
     {},
@@ -808,7 +808,9 @@ async function callTool(
 }
 
 async function withTempFile<T>(fn: (filePath: string) => Promise<T>): Promise<T> {
-  const dir = await fs.mkdtemp(path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-chrome-mcp-"));
+  const dir = await fs.mkdtemp(
+    path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-chrome-mcp-"),
+  );
   const filePath = path.join(dir, randomUUID());
   try {
     return await fn(filePath);

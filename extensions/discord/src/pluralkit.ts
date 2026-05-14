@@ -1,4 +1,4 @@
-import { resolveFetch } from "NexisClaw/plugin-sdk/fetch-runtime";
+import { resolveFetch } from "GreenchClaw/plugin-sdk/fetch-runtime";
 
 const PLURALKIT_API_BASE = "https://api.pluralkit.me/v2";
 

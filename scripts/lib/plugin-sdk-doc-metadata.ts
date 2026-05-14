@@ -115,5 +115,5 @@ export const pluginSdkDocMetadata = {
 export type PluginSdkDocEntrypoint = keyof typeof pluginSdkDocMetadata;
 
 export function resolvePluginSdkDocImportSpecifier(entrypoint: PluginSdkDocEntrypoint): string {
-  return entrypoint === "index" ? "NexisClaw/plugin-sdk" : `NexisClaw/plugin-sdk/${entrypoint}`;
+  return entrypoint === "index" ? "GreenchClaw/plugin-sdk" : `GreenchClaw/plugin-sdk/${entrypoint}`;
 }

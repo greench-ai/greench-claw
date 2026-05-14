@@ -1,5 +1,5 @@
 ---
-summary: "Move one NexisClaw session's reply route between linked chat channels"
+summary: "Move one GreenchClaw session's reply route between linked chat channels"
 title: "Channel docking"
 read_when:
   - You want replies for one active session to move from Telegram to Discord, Slack, Mattermost, or another linked channel
@@ -7,14 +7,14 @@ read_when:
   - A /dock command says the sender is not linked or no active session exists
 ---
 
-Channel docking is call forwarding for one NexisClaw session.
+Channel docking is call forwarding for one GreenchClaw session.
 
 It keeps the same conversation context, but changes where future replies for
 that session are delivered.
 
 ## Example
 
-Alice can message NexisClaw on Telegram and Discord:
+Alice can message GreenchClaw on Telegram and Discord:
 
 ```json5
 {
@@ -32,7 +32,7 @@ If Alice sends this from Telegram:
 /dock_discord
 ```
 
-NexisClaw keeps the current session context and changes the reply route:
+GreenchClaw keeps the current session context and changes the reply route:
 
 | Before docking               | After `/dock_discord`       |
 | ---------------------------- | --------------------------- |
@@ -51,7 +51,7 @@ Common flow:
 1. Start an agent task from Telegram.
 2. Move to Discord where you are coordinating work.
 3. Send `/dock_discord` from the Telegram session.
-4. Keep the same NexisClaw session, but receive future replies in Discord.
+4. Keep the same GreenchClaw session, but receive future replies in Discord.
 
 ## Required config
 

@@ -1,4 +1,4 @@
-import { resolveSendableOutboundReplyParts } from "NexisClaw/plugin-sdk/reply-payload";
+import { resolveSendableOutboundReplyParts } from "GreenchClaw/plugin-sdk/reply-payload";
 import { logVerbose } from "../../globals.js";
 import { getReplyPayloadMetadata } from "../reply-payload.js";
 import type { ReplyPayload } from "../types.js";

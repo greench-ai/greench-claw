@@ -1,19 +1,19 @@
-import { readBooleanParam } from "NexisClaw/plugin-sdk/boolean-param";
+import { readBooleanParam } from "GreenchClaw/plugin-sdk/boolean-param";
 import {
   createActionGate,
   jsonResult,
   readNumberParam,
   readReactionParams,
   readStringParam,
-} from "NexisClaw/plugin-sdk/channel-actions";
+} from "GreenchClaw/plugin-sdk/channel-actions";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageActionName,
-} from "NexisClaw/plugin-sdk/channel-contract";
-import { createLazyRuntimeNamedExport } from "NexisClaw/plugin-sdk/lazy-runtime";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { extractToolSend } from "NexisClaw/plugin-sdk/tool-send";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+import { createLazyRuntimeNamedExport } from "GreenchClaw/plugin-sdk/lazy-runtime";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeOptionalLowercaseString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { extractToolSend } from "GreenchClaw/plugin-sdk/tool-send";
 import { resolveIMessageAccount } from "./accounts.js";
 import { IMESSAGE_ACTION_NAMES, IMESSAGE_ACTIONS } from "./actions-contract.js";
 import { DEFAULT_IMESSAGE_PROBE_TIMEOUT_MS } from "./constants.js";
@@ -430,10 +430,10 @@ export const imessageMessageActions: ChannelMessageActionAdapter = {
         // Common cause: gateway restart un-injects the imsg-bridge-helper.dylib
         // from Messages.app while imsg rpc keeps running.
         log.warn(
-          `iMessage ${action} blocked: private API bridge unavailable (accountId=${account.accountId}, cliPath=${cliPathForProbe}). Run \`imsg launch\` to re-inject the dylib, then \`NexisClaw channels status\` to refresh.`,
+          `iMessage ${action} blocked: private API bridge unavailable (accountId=${account.accountId}, cliPath=${cliPathForProbe}). Run \`imsg launch\` to re-inject the dylib, then \`GreenchClaw channels status\` to refresh.`,
         );
         throw new Error(
-          `iMessage ${action} requires the imsg private API bridge. Run imsg launch, then NexisClaw channels status to refresh capability detection.`,
+          `iMessage ${action} requires the imsg private API bridge. Run imsg launch, then GreenchClaw channels status to refresh capability detection.`,
         );
       }
     };
@@ -557,14 +557,14 @@ export const imessageMessageActions: ChannelMessageActionAdapter = {
           );
         }
         // Reply-with-attachment requires the `imsg send-rich --file` flag
-        // (NexisClaw/imsg#114). Older imsg builds reject the option, so
+        // (GreenchClaw/imsg#114). Older imsg builds reject the option, so
         // refuse loudly here rather than letting send-rich ship the text
         // alone and silently drop the attachment — the original symptom
-        // of NexisClaw/NexisClaw#79822.
+        // of GreenchClaw/GreenchClaw#79822.
         if (privateApiStatus?.cliCapabilities?.sendRichSupportsAttachment !== true) {
           throw new Error(
             "iMessage reply with an attachment needs an imsg build that exposes `send-rich --file` " +
-              "(NexisClaw/imsg#114). Upgrade imsg, or use action 'upload-file' (with filePath/filename) " +
+              "(GreenchClaw/imsg#114). Upgrade imsg, or use action 'upload-file' (with filePath/filename) " +
               "or action 'send' (with media) to deliver the file plus a separate 'reply' for any text.",
           );
         }

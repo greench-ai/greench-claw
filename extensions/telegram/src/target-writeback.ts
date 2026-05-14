@@ -1,18 +1,18 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   readConfigFileSnapshotForWrite,
   replaceConfigFile,
-} from "NexisClaw/plugin-sdk/config-mutation";
+} from "GreenchClaw/plugin-sdk/config-mutation";
 import {
   loadCronStore,
   resolveCronStorePath,
   saveCronStore,
-} from "NexisClaw/plugin-sdk/cron-store-runtime";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/cron-store-runtime";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   normalizeTelegramChatId,
   normalizeTelegramLookupTarget,
@@ -103,7 +103,7 @@ function rewriteTargetIfMatch(params: {
 }
 
 function replaceTelegramDefaultToTargets(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   matchKey: string;
   resolvedTarget: string;
 }): boolean {
@@ -142,7 +142,7 @@ function replaceTelegramDefaultToTargets(params: {
 }
 
 export async function maybePersistResolvedTelegramTarget(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   rawTarget: string;
   resolvedChatId: string;
   verbose?: boolean;

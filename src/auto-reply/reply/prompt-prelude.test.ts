@@ -25,7 +25,7 @@ describe("buildReplyPromptEnvelope", () => {
 
     expect(envelope.prefixedCommandBody).toContain("sender_id=telegram-user-1");
     expect(envelope.prefixedCommandBody).toContain("Startup context");
-    expect(envelope.transcriptCommandBody).toBe("[NexisClaw session reset]");
+    expect(envelope.transcriptCommandBody).toBe("[GreenchClaw session reset]");
     expect(envelope.currentTurnContext).toBeUndefined();
   });
 

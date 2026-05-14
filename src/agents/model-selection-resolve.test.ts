@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { resolveAllowedModelRef, resolveConfiguredModelRef } from "./model-selection-resolve.js";
 
 describe("model-selection-resolve OpenRouter compat aliases", () => {
@@ -21,7 +21,7 @@ describe("model-selection-resolve OpenRouter compat aliases", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     expect(
       resolveAllowedModelRef({
@@ -44,7 +44,7 @@ describe("model-selection-resolve OpenRouter compat aliases", () => {
           model: { primary: "openrouter:auto" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(
       resolveConfiguredModelRef({
@@ -64,7 +64,7 @@ describe("model-selection-resolve OpenRouter compat aliases", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const catalog = [
       {

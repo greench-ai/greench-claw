@@ -2,12 +2,12 @@ import type { Block, KnownBlock } from "@slack/web-api";
 import {
   presentationToInteractiveControlsReply,
   reduceInteractiveReply,
-} from "NexisClaw/plugin-sdk/interactive-runtime";
+} from "GreenchClaw/plugin-sdk/interactive-runtime";
 import type {
   InteractiveReply,
   MessagePresentation,
-} from "NexisClaw/plugin-sdk/interactive-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/interactive-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { SLACK_REPLY_BUTTON_ACTION_ID, SLACK_REPLY_SELECT_ACTION_ID } from "./reply-action-ids.js";
 import { truncateSlackText } from "./truncate.js";
 
@@ -55,7 +55,7 @@ function readSlackBlockId(block: SlackBlock): string | undefined {
   return typeof value === "string" ? value : undefined;
 }
 
-function readSlackNexisClawBlockIndex(blockId: string, prefix: string): number | undefined {
+function readSlackGreenchClawBlockIndex(blockId: string, prefix: string): number | undefined {
   if (!blockId.startsWith(prefix)) {
     return undefined;
   }
@@ -75,11 +75,11 @@ export function resolveSlackInteractiveBlockOffsets(
     }
     buttonIndexOffset = Math.max(
       buttonIndexOffset,
-      readSlackNexisClawBlockIndex(blockId, "NexisClaw_reply_buttons_") ?? 0,
+      readSlackGreenchClawBlockIndex(blockId, "GreenchClaw_reply_buttons_") ?? 0,
     );
     selectIndexOffset = Math.max(
       selectIndexOffset,
-      readSlackNexisClawBlockIndex(blockId, "NexisClaw_reply_select_") ?? 0,
+      readSlackGreenchClawBlockIndex(blockId, "GreenchClaw_reply_select_") ?? 0,
     );
   }
   return { buttonIndexOffset, selectIndexOffset };
@@ -145,7 +145,7 @@ export function buildSlackInteractiveBlocks(
       }
       state.blocks.push({
         type: "actions",
-        block_id: `NexisClaw_reply_buttons_${++state.buttonIndex}`,
+        block_id: `GreenchClaw_reply_buttons_${++state.buttonIndex}`,
         elements,
       });
       return state;
@@ -158,7 +158,7 @@ export function buildSlackInteractiveBlocks(
     }
     state.blocks.push({
       type: "actions",
-      block_id: `NexisClaw_reply_select_${++state.selectIndex}`,
+      block_id: `GreenchClaw_reply_select_${++state.selectIndex}`,
       elements: [
         {
           type: "static_select",

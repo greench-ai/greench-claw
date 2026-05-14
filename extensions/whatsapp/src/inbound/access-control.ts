@@ -1,8 +1,8 @@
-import { createChannelPairingChallengeIssuer } from "NexisClaw/plugin-sdk/channel-pairing";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { upsertChannelPairingRequest } from "NexisClaw/plugin-sdk/conversation-runtime";
-import { defaultRuntime } from "NexisClaw/plugin-sdk/runtime-env";
-import { warnMissingProviderGroupPolicyFallbackOnce } from "NexisClaw/plugin-sdk/runtime-group-policy";
+import { createChannelPairingChallengeIssuer } from "GreenchClaw/plugin-sdk/channel-pairing";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { upsertChannelPairingRequest } from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { defaultRuntime } from "GreenchClaw/plugin-sdk/runtime-env";
+import { warnMissingProviderGroupPolicyFallbackOnce } from "GreenchClaw/plugin-sdk/runtime-group-policy";
 import { resolveWhatsAppInboundPolicy, resolveWhatsAppIngressAccess } from "../inbound-policy.js";
 
 export type InboundAccessControlResult = {
@@ -22,7 +22,7 @@ function logWhatsAppVerbose(enabled: boolean | undefined, message: string) {
 }
 
 export async function checkInboundAccessControl(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   from: string;
   selfE164: string | null;

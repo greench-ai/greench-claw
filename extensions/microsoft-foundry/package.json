@@ -1,13 +1,13 @@
 {
-  "name": "@NexisClaw/microsoft-foundry",
+  "name": "@GreenchClaw/microsoft-foundry",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw Microsoft Foundry provider plugin",
+  "description": "GreenchClaw Microsoft Foundry provider plugin",
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

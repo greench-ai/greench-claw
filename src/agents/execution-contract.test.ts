@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   isStrictAgenticExecutionContractActive,
   resolveEffectiveExecutionContract,
@@ -8,7 +8,7 @@ import {
 describe("resolveEffectiveExecutionContract", () => {
   const supportedProvider = "openai";
   const unsupportedProvider = "anthropic";
-  const emptyConfig: NexisClawConfig = {};
+  const emptyConfig: GreenchClawConfig = {};
 
   describe("supported provider + model detection", () => {
     it("auto-activates on bare gpt-5 model ids", () => {
@@ -134,7 +134,7 @@ describe("resolveEffectiveExecutionContract", () => {
 
   describe("explicit override behavior", () => {
     it("honors explicit strict-agentic on the supported lane", () => {
-      const config: NexisClawConfig = {
+      const config: GreenchClawConfig = {
         agents: {
           defaults: {
             embeddedPi: {
@@ -153,7 +153,7 @@ describe("resolveEffectiveExecutionContract", () => {
     });
 
     it("honors explicit default opt-out even on the supported lane", () => {
-      const config: NexisClawConfig = {
+      const config: GreenchClawConfig = {
         agents: {
           defaults: {
             embeddedPi: {
@@ -172,7 +172,7 @@ describe("resolveEffectiveExecutionContract", () => {
     });
 
     it("collapses explicit strict-agentic to default on an unsupported lane", () => {
-      const config: NexisClawConfig = {
+      const config: GreenchClawConfig = {
         agents: {
           defaults: {
             embeddedPi: {

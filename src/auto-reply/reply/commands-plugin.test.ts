@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { handlePluginCommand } from "./commands-plugin.js";
 import type { HandleCommandsParams } from "./commands-types.js";
 
@@ -13,7 +13,7 @@ vi.mock("../../plugins/commands.js", () => ({
 
 function buildPluginParams(
   commandBodyNormalized: string,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ): HandleCommandsParams {
   return {
     cfg,
@@ -57,7 +57,7 @@ describe("handlePluginCommand", () => {
       buildPluginParams("/card", {
         commands: { text: true },
         channels: { whatsapp: { allowFrom: ["*"] } },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
       true,
     );
 
@@ -90,7 +90,7 @@ describe("handlePluginCommand", () => {
     const params = buildPluginParams("/card", {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     params.sessionEntry = {
       sessionId: "wrapper-session",
       sessionFile: "/tmp/wrapper-session.jsonl",
@@ -128,7 +128,7 @@ describe("handlePluginCommand", () => {
       buildPluginParams("/card", {
         commands: { text: true },
         channels: { whatsapp: { allowFrom: ["*"] } },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
       true,
     );
 
@@ -165,7 +165,7 @@ describe("handlePluginCommand", () => {
       buildPluginParams("/approve-deploy", {
         commands: { text: true },
         channels: { whatsapp: { allowFrom: ["*"] } },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
       true,
     );
 
@@ -178,7 +178,7 @@ describe("handlePluginCommand", () => {
     const allowedParams = buildPluginParams("/approve-deploy", {
       commands: { text: true },
       channels: { whatsapp: { allowFrom: ["*"] } },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     allowedParams.ctx.GatewayClientScopes = ["operator.approvals"];
 
     const allowed = await handlePluginCommand(allowedParams, true);

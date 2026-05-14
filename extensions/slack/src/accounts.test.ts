@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   resolveSlackAccount,
@@ -171,7 +171,7 @@ describe("resolveSlackAccount allowFrom precedence", () => {
           },
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     expect(resolveSlackAccountAllowFrom({ cfg, accountId: "work" })).toEqual(["account-legacy"]);
   });
@@ -189,7 +189,7 @@ describe("resolveSlackAccount allowFrom precedence", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     expect(resolveSlackAccountAllowFrom({ cfg, accountId: "work" })).toEqual(["12345"]);
   });
@@ -208,7 +208,7 @@ describe("resolveSlackAccount allowFrom precedence", () => {
           },
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     expect(resolveSlackAccountDmPolicy({ cfg, accountId: "work" })).toBe("allowlist");
   });
@@ -229,7 +229,7 @@ describe("resolveSlackAccount allowFrom precedence", () => {
           },
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     expect(resolveSlackAccountDmPolicy({ cfg, accountId: "work" })).toBe("allowlist");
     expect(resolveSlackAccountAllowFrom({ cfg, accountId: "work" })).toEqual(["U123"]);
@@ -249,7 +249,7 @@ describe("resolveSlackAccount active secret surfaces", () => {
         },
       },
     },
-  } as unknown as NexisClawConfig;
+  } as unknown as GreenchClawConfig;
 
   it("throws when an enabled account still has an unresolved active bot token SecretRef", () => {
     expect(() =>
@@ -276,7 +276,7 @@ describe("resolveSlackAccount active secret surfaces", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig,
+      } as unknown as GreenchClawConfig,
       accountId: "default",
     });
 
@@ -305,7 +305,7 @@ describe("resolveSlackAccount active secret surfaces", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig,
+      } as unknown as GreenchClawConfig,
       accountId: "default",
     });
 
@@ -330,7 +330,7 @@ describe("resolveSlackAccount active secret surfaces", () => {
               },
             },
           },
-        } as unknown as NexisClawConfig,
+        } as unknown as GreenchClawConfig,
         accountId: "default",
       }),
     ).toThrowError(/channels\.slack\.accounts\.default\.appToken/);

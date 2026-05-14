@@ -11,8 +11,8 @@ const { prepareAcpxCodexAuthConfigMock } = vi.hoisted(() => ({
     async ({ pluginConfig }: { pluginConfig: unknown }) => pluginConfig,
   ),
 }));
-const { cleanupNexisClawOwnedAcpxProcessTreeMock } = vi.hoisted(() => ({
-  cleanupNexisClawOwnedAcpxProcessTreeMock: vi.fn(
+const { cleanupGreenchClawOwnedAcpxProcessTreeMock } = vi.hoisted(() => ({
+  cleanupGreenchClawOwnedAcpxProcessTreeMock: vi.fn(
     async (): Promise<{
       inspectedPids: number[];
       terminatedPids: number[];
@@ -23,8 +23,8 @@ const { cleanupNexisClawOwnedAcpxProcessTreeMock } = vi.hoisted(() => ({
     }),
   ),
 }));
-const { reapStaleNexisClawOwnedAcpxOrphansMock } = vi.hoisted(() => ({
-  reapStaleNexisClawOwnedAcpxOrphansMock: vi.fn(
+const { reapStaleGreenchClawOwnedAcpxOrphansMock } = vi.hoisted(() => ({
+  reapStaleGreenchClawOwnedAcpxOrphansMock: vi.fn(
     async (): Promise<{
       inspectedPids: number[];
       terminatedPids: number[];
@@ -84,8 +84,8 @@ vi.mock("./codex-auth-bridge.js", () => ({
 }));
 
 vi.mock("./process-reaper.js", () => ({
-  cleanupNexisClawOwnedAcpxProcessTree: cleanupNexisClawOwnedAcpxProcessTreeMock,
-  reapStaleNexisClawOwnedAcpxOrphans: reapStaleNexisClawOwnedAcpxOrphansMock,
+  cleanupGreenchClawOwnedAcpxProcessTree: cleanupGreenchClawOwnedAcpxProcessTreeMock,
+  reapStaleGreenchClawOwnedAcpxOrphans: reapStaleGreenchClawOwnedAcpxOrphansMock,
 }));
 
 import { getAcpRuntimeBackend } from "../runtime-api.js";
@@ -93,9 +93,9 @@ import { createAcpxRuntimeService } from "./service.js";
 
 const tempDirs: string[] = [];
 const previousEnv = {
-  NEXISCLAW_ACPX_RUNTIME_STARTUP_PROBE: process.env.NEXISCLAW_ACPX_RUNTIME_STARTUP_PROBE,
-  NEXISCLAW_SKIP_ACPX_RUNTIME: process.env.NEXISCLAW_SKIP_ACPX_RUNTIME,
-  NEXISCLAW_SKIP_ACPX_RUNTIME_PROBE: process.env.NEXISCLAW_SKIP_ACPX_RUNTIME_PROBE,
+  GREENCHCLAW_ACPX_RUNTIME_STARTUP_PROBE: process.env.GREENCHCLAW_ACPX_RUNTIME_STARTUP_PROBE,
+  GREENCHCLAW_SKIP_ACPX_RUNTIME: process.env.GREENCHCLAW_SKIP_ACPX_RUNTIME,
+  GREENCHCLAW_SKIP_ACPX_RUNTIME_PROBE: process.env.GREENCHCLAW_SKIP_ACPX_RUNTIME_PROBE,
 };
 
 function restoreEnv(name: keyof typeof previousEnv): void {
@@ -108,7 +108,7 @@ function restoreEnv(name: keyof typeof previousEnv): void {
 }
 
 async function makeTempDir(): Promise<string> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-acpx-service-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-acpx-service-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -116,14 +116,14 @@ async function makeTempDir(): Promise<string> {
 afterEach(async () => {
   runtimeRegistry.clear();
   prepareAcpxCodexAuthConfigMock.mockClear();
-  cleanupNexisClawOwnedAcpxProcessTreeMock.mockClear();
-  reapStaleNexisClawOwnedAcpxOrphansMock.mockClear();
+  cleanupGreenchClawOwnedAcpxProcessTreeMock.mockClear();
+  reapStaleGreenchClawOwnedAcpxOrphansMock.mockClear();
   acpxRuntimeConstructorMock.mockClear();
   createAgentRegistryMock.mockClear();
   createFileSessionStoreMock.mockClear();
-  restoreEnv("NEXISCLAW_ACPX_RUNTIME_STARTUP_PROBE");
-  restoreEnv("NEXISCLAW_SKIP_ACPX_RUNTIME");
-  restoreEnv("NEXISCLAW_SKIP_ACPX_RUNTIME_PROBE");
+  restoreEnv("GREENCHCLAW_ACPX_RUNTIME_STARTUP_PROBE");
+  restoreEnv("GREENCHCLAW_SKIP_ACPX_RUNTIME");
+  restoreEnv("GREENCHCLAW_SKIP_ACPX_RUNTIME_PROBE");
   for (const dir of tempDirs.splice(0)) {
     await fs.rm(dir, { recursive: true, force: true });
   }
@@ -132,7 +132,7 @@ afterEach(async () => {
 function createServiceContext(workspaceDir: string) {
   return {
     workspaceDir,
-    stateDir: path.join(workspaceDir, ".NexisClaw-plugin-state"),
+    stateDir: path.join(workspaceDir, ".GreenchClaw-plugin-state"),
     config: {},
     logger: {
       info: vi.fn(),
@@ -192,7 +192,7 @@ describe("createAcpxRuntimeService", () => {
   });
 
   it("skips the startup probe and defers acpx backend health reporting when explicitly opted out", async () => {
-    process.env.NEXISCLAW_ACPX_RUNTIME_STARTUP_PROBE = "0";
+    process.env.GREENCHCLAW_ACPX_RUNTIME_STARTUP_PROBE = "0";
     const workspaceDir = await makeTempDir();
     const stateDir = path.join(workspaceDir, "custom-state");
     const ctx = createServiceContext(workspaceDir);
@@ -285,7 +285,7 @@ describe("createAcpxRuntimeService", () => {
         ],
       }),
     );
-    cleanupNexisClawOwnedAcpxProcessTreeMock.mockResolvedValueOnce({
+    cleanupGreenchClawOwnedAcpxProcessTreeMock.mockResolvedValueOnce({
       inspectedPids: [101, 102],
       terminatedPids: [101, 102],
     });
@@ -296,14 +296,14 @@ describe("createAcpxRuntimeService", () => {
 
     await service.start(ctx);
 
-    expect(cleanupNexisClawOwnedAcpxProcessTreeMock).toHaveBeenCalledWith({
+    expect(cleanupGreenchClawOwnedAcpxProcessTreeMock).toHaveBeenCalledWith({
       rootPid: 101,
       expectedLeaseId: "lease-1",
       expectedGatewayInstanceId: "gw-test",
       wrapperRoot: path.join(ctx.stateDir, "acpx"),
       deps: processCleanupDeps,
     });
-    expect(ctx.logger.info).toHaveBeenCalledWith("reaped 2 stale NexisClaw-owned ACPX processes");
+    expect(ctx.logger.info).toHaveBeenCalledWith("reaped 2 stale GreenchClaw-owned ACPX processes");
 
     await service.stop?.(ctx);
   });
@@ -335,7 +335,7 @@ describe("createAcpxRuntimeService", () => {
         ],
       }),
     );
-    reapStaleNexisClawOwnedAcpxOrphansMock.mockResolvedValueOnce({
+    reapStaleGreenchClawOwnedAcpxOrphansMock.mockResolvedValueOnce({
       inspectedPids: [201, 202],
       terminatedPids: [201, 202],
     });
@@ -346,12 +346,12 @@ describe("createAcpxRuntimeService", () => {
 
     await service.start(ctx);
 
-    expect(cleanupNexisClawOwnedAcpxProcessTreeMock).not.toHaveBeenCalled();
-    expect(reapStaleNexisClawOwnedAcpxOrphansMock).toHaveBeenCalledWith({
+    expect(cleanupGreenchClawOwnedAcpxProcessTreeMock).not.toHaveBeenCalled();
+    expect(reapStaleGreenchClawOwnedAcpxOrphansMock).toHaveBeenCalledWith({
       wrapperRoot,
       deps: processCleanupDeps,
     });
-    expect(ctx.logger.info).toHaveBeenCalledWith("reaped 2 stale NexisClaw-owned ACPX processes");
+    expect(ctx.logger.info).toHaveBeenCalledWith("reaped 2 stale GreenchClaw-owned ACPX processes");
     const leaseFile = JSON.parse(
       await fs.readFile(path.join(wrapperRoot, "process-leases.json"), "utf8"),
     );
@@ -370,14 +370,14 @@ describe("createAcpxRuntimeService", () => {
 
     await service.start(ctx);
 
-    expect(cleanupNexisClawOwnedAcpxProcessTreeMock).not.toHaveBeenCalled();
+    expect(cleanupGreenchClawOwnedAcpxProcessTreeMock).not.toHaveBeenCalled();
     expect(ctx.logger.warn).not.toHaveBeenCalled();
 
     await service.stop?.(ctx);
   });
 
   it("registers the default backend lazily without importing ACPX runtime when startup probing is opted out", async () => {
-    process.env.NEXISCLAW_ACPX_RUNTIME_STARTUP_PROBE = "0";
+    process.env.GREENCHCLAW_ACPX_RUNTIME_STARTUP_PROBE = "0";
     const workspaceDir = await makeTempDir();
     const ctx = createServiceContext(workspaceDir);
     const service = createAcpxRuntimeService();
@@ -555,7 +555,7 @@ describe("createAcpxRuntimeService", () => {
   });
 
   it("can skip the embedded runtime probe via env", async () => {
-    process.env.NEXISCLAW_SKIP_ACPX_RUNTIME_PROBE = "1";
+    process.env.GREENCHCLAW_SKIP_ACPX_RUNTIME_PROBE = "1";
     const workspaceDir = await makeTempDir();
     const ctx = createServiceContext(workspaceDir);
     const probeAvailability = vi.fn(async () => {});
@@ -602,7 +602,7 @@ describe("createAcpxRuntimeService", () => {
   });
 
   it("can skip the embedded runtime backend via env", async () => {
-    process.env.NEXISCLAW_SKIP_ACPX_RUNTIME = "1";
+    process.env.GREENCHCLAW_SKIP_ACPX_RUNTIME = "1";
     const workspaceDir = await makeTempDir();
     const ctx = createServiceContext(workspaceDir);
     const runtimeFactory = vi.fn(() => {
@@ -617,7 +617,7 @@ describe("createAcpxRuntimeService", () => {
     expect(runtimeFactory).not.toHaveBeenCalled();
     expect(getAcpRuntimeBackend("acpx")).toBeUndefined();
     expect(ctx.logger.info).toHaveBeenCalledWith(
-      "skipping embedded acpx runtime backend (NEXISCLAW_SKIP_ACPX_RUNTIME=1)",
+      "skipping embedded acpx runtime backend (GREENCHCLAW_SKIP_ACPX_RUNTIME=1)",
     );
   });
 });

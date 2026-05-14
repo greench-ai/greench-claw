@@ -1,29 +1,29 @@
 import { describe, expect, it } from "vitest";
-import { isNexisClawManagedMatrixDevice, summarizeMatrixDeviceHealth } from "./device-health.js";
+import { isGreenchClawManagedMatrixDevice, summarizeMatrixDeviceHealth } from "./device-health.js";
 
 describe("matrix device health", () => {
-  it("detects NexisClaw-managed device names", () => {
-    expect(isNexisClawManagedMatrixDevice("NexisClaw Gateway")).toBe(true);
-    expect(isNexisClawManagedMatrixDevice("NexisClaw Debug")).toBe(true);
-    expect(isNexisClawManagedMatrixDevice("Element iPhone")).toBe(false);
-    expect(isNexisClawManagedMatrixDevice(null)).toBe(false);
+  it("detects GreenchClaw-managed device names", () => {
+    expect(isGreenchClawManagedMatrixDevice("GreenchClaw Gateway")).toBe(true);
+    expect(isGreenchClawManagedMatrixDevice("GreenchClaw Debug")).toBe(true);
+    expect(isGreenchClawManagedMatrixDevice("Element iPhone")).toBe(false);
+    expect(isGreenchClawManagedMatrixDevice(null)).toBe(false);
   });
 
-  it("summarizes stale NexisClaw-managed devices separately from the current device", () => {
+  it("summarizes stale GreenchClaw-managed devices separately from the current device", () => {
     const summary = summarizeMatrixDeviceHealth([
       {
         deviceId: "du314Zpw3A",
-        displayName: "NexisClaw Gateway",
+        displayName: "GreenchClaw Gateway",
         current: true,
       },
       {
         deviceId: "BritdXC6iL",
-        displayName: "NexisClaw Gateway",
+        displayName: "GreenchClaw Gateway",
         current: false,
       },
       {
         deviceId: "G6NJU9cTgs",
-        displayName: "NexisClaw Debug",
+        displayName: "GreenchClaw Debug",
         current: false,
       },
       {
@@ -35,22 +35,22 @@ describe("matrix device health", () => {
 
     expect(summary).toEqual({
       currentDeviceId: "du314Zpw3A",
-      currentNexisClawDevices: [
+      currentGreenchClawDevices: [
         {
           deviceId: "du314Zpw3A",
-          displayName: "NexisClaw Gateway",
+          displayName: "GreenchClaw Gateway",
           current: true,
         },
       ],
-      staleNexisClawDevices: [
+      staleGreenchClawDevices: [
         {
           deviceId: "BritdXC6iL",
-          displayName: "NexisClaw Gateway",
+          displayName: "GreenchClaw Gateway",
           current: false,
         },
         {
           deviceId: "G6NJU9cTgs",
-          displayName: "NexisClaw Debug",
+          displayName: "GreenchClaw Debug",
           current: false,
         },
       ],

@@ -13,7 +13,7 @@
       "kind": "html-text",
       "name": "text",
       "path": "ui/src/ui/app-render.ts",
-      "text": "NexisClaw"
+      "text": "GreenchClaw"
     },
     {
       "count": 1,
@@ -342,7 +342,7 @@
       "kind": "html-text",
       "name": "text",
       "path": "ui/src/ui/components/dashboard-header.ts",
-      "text": "NexisClaw"
+      "text": "GreenchClaw"
     },
     {
       "count": 1,
@@ -2358,7 +2358,7 @@
       "kind": "html-text",
       "name": "text",
       "path": "ui/src/ui/views/config-quick.ts",
-      "text": "Choose how much workspace context NexisClaw injects into each run. These profiles do not change your model, tools, channels, or theme."
+      "text": "Choose how much workspace context GreenchClaw injects into each run. These profiles do not change your model, tools, channels, or theme."
     },
     {
       "count": 1,
@@ -3415,7 +3415,7 @@
       "kind": "html-text",
       "name": "text",
       "path": "ui/src/ui/views/debug.ts",
-      "text": "NexisClaw security audit --deep"
+      "text": "GreenchClaw security audit --deep"
     },
     {
       "count": 1,
@@ -3716,7 +3716,7 @@
       "kind": "html-text",
       "name": "text",
       "path": "ui/src/ui/views/login-gate.ts",
-      "text": "NexisClaw"
+      "text": "GreenchClaw"
     },
     {
       "count": 1,
@@ -4178,7 +4178,7 @@
       "kind": "html-attribute",
       "name": "placeholder",
       "path": "ui/src/ui/views/overview.ts",
-      "text": "NEXISCLAW_GATEWAY_TOKEN"
+      "text": "GREENCHCLAW_GATEWAY_TOKEN"
     },
     {
       "count": 1,
@@ -4241,21 +4241,21 @@
       "kind": "html-text",
       "name": "text",
       "path": "ui/src/ui/views/overview.ts",
-      "text": "NexisClaw dashboard --no-open"
+      "text": "GreenchClaw dashboard --no-open"
     },
     {
       "count": 1,
       "kind": "html-text",
       "name": "text",
       "path": "ui/src/ui/views/overview.ts",
-      "text": "NexisClaw devices list"
+      "text": "GreenchClaw devices list"
     },
     {
       "count": 2,
       "kind": "html-text",
       "name": "text",
       "path": "ui/src/ui/views/overview.ts",
-      "text": "NexisClaw doctor --generate-gateway-token"
+      "text": "GreenchClaw doctor --generate-gateway-token"
     },
     {
       "count": 1,

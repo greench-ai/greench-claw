@@ -1,4 +1,4 @@
-import { isLiveTestEnabled } from "NexisClaw/plugin-sdk/test-env";
+import { isLiveTestEnabled } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import { buildOpenAISpeechProvider } from "./speech-provider.js";
 
@@ -21,7 +21,7 @@ describeLive("openai tts live", () => {
     };
 
     const audioFile = await speechProvider.synthesize({
-      text: "NexisClaw OpenAI text to speech integration test OK.",
+      text: "GreenchClaw OpenAI text to speech integration test OK.",
       cfg: { plugins: { enabled: true } } as never,
       providerConfig,
       target: "audio-file",
@@ -32,7 +32,7 @@ describeLive("openai tts live", () => {
     expect(audioFile.audioBuffer.byteLength).toBeGreaterThan(512);
 
     const telephony = await speechProvider.synthesizeTelephony?.({
-      text: "NexisClaw OpenAI telephony integration test OK.",
+      text: "GreenchClaw OpenAI telephony integration test OK.",
       cfg: { plugins: { enabled: true } } as never,
       providerConfig,
       timeoutMs: 45_000,

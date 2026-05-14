@@ -275,8 +275,8 @@ describe("buildProviderStreamFamilyHooks", () => {
     expectDefaultThinkingBudget(openAiPayload);
     expect(openAiPayload.service_tier).toBe("flex");
     expect(capturedHeaders).toEqual({
-      "User-Agent": `NexisClaw/${VERSION}`,
-      originator: "NexisClaw",
+      "User-Agent": `GreenchClaw/${VERSION}`,
+      originator: "GreenchClaw",
       version: VERSION,
     });
 

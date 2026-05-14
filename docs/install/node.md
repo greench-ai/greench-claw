@@ -1,13 +1,13 @@
 ---
-summary: "Install and configure Node.js for NexisClaw - version requirements, install options, and PATH troubleshooting"
+summary: "Install and configure Node.js for GreenchClaw - version requirements, install options, and PATH troubleshooting"
 title: "Node.js"
 read_when:
-  - "You need to install Node.js before installing NexisClaw"
-  - "You installed NexisClaw but `NexisClaw` is command not found"
+  - "You need to install Node.js before installing GreenchClaw"
+  - "You installed GreenchClaw but `GreenchClaw` is command not found"
   - "npm install -g fails with permissions or PATH issues"
 ---
 
-NexisClaw requires **Node 22.16 or newer**. **Node 24 is the default and recommended runtime** for installs, CI, and release workflows. Node 22 remains supported via the active LTS line. The [installer script](/install#alternative-install-methods) will detect and install Node automatically - this page is for when you want to set up Node yourself and make sure everything is wired up correctly (versions, PATH, global installs).
+GreenchClaw requires **Node 22.16 or newer**. **Node 24 is the default and recommended runtime** for installs, CI, and release workflows. Node 22 remains supported via the active LTS line. The [installer script](/install#alternative-install-methods) will detect and install Node automatically - this page is for when you want to set up Node yourself and make sure everything is wired up correctly (versions, PATH, global installs).
 
 ## Check your version
 
@@ -80,13 +80,13 @@ fnm use 24
 ```
 
   <Warning>
-  Make sure your version manager is initialized in your shell startup file (`~/.zshrc` or `~/.bashrc`). If it isn't, `NexisClaw` may not be found in new terminal sessions because the PATH won't include Node's bin directory.
+  Make sure your version manager is initialized in your shell startup file (`~/.zshrc` or `~/.bashrc`). If it isn't, `GreenchClaw` may not be found in new terminal sessions because the PATH won't include Node's bin directory.
   </Warning>
 </Accordion>
 
 ## Troubleshooting
 
-### `NexisClaw: command not found`
+### `GreenchClaw: command not found`
 
 This almost always means npm's global bin directory isn't on your PATH.
 
@@ -138,5 +138,5 @@ Add the `export PATH=...` line to your `~/.bashrc` or `~/.zshrc` to make it perm
 ## Related
 
 - [Install Overview](/install) - all installation methods
-- [Updating](/install/updating) - keeping NexisClaw up to date
+- [Updating](/install/updating) - keeping GreenchClaw up to date
 - [Getting Started](/start/getting-started) - first steps after install

@@ -10,8 +10,8 @@ import {
   sendMissingScopeForbidden,
 } from "./http-common.js";
 import {
-  NEXISCLAW_DEFAULT_MODEL_ID,
-  NEXISCLAW_MODEL_ID,
+  GREENCHCLAW_DEFAULT_MODEL_ID,
+  GREENCHCLAW_MODEL_ID,
   authorizeGatewayHttpRequestOrReply,
   type AuthorizedGatewayHttpRequest,
   resolveAgentIdFromModel,
@@ -39,7 +39,7 @@ function toOpenAiModel(id: string): OpenAiModelObject {
     id,
     object: "model",
     created: 0,
-    owned_by: "NexisClaw",
+    owned_by: "GreenchClaw",
     permission: [],
   };
 }
@@ -62,10 +62,10 @@ async function authorizeRequest(
 function loadAgentModelIds(): string[] {
   const cfg = getRuntimeConfig();
   const defaultAgentId = resolveDefaultAgentId(cfg);
-  const ids = new Set<string>([NEXISCLAW_MODEL_ID, NEXISCLAW_DEFAULT_MODEL_ID]);
-  ids.add(`NexisClaw/${defaultAgentId}`);
+  const ids = new Set<string>([GREENCHCLAW_MODEL_ID, GREENCHCLAW_DEFAULT_MODEL_ID]);
+  ids.add(`GreenchClaw/${defaultAgentId}`);
   for (const agentId of listAgentIds(cfg)) {
-    ids.add(`NexisClaw/${agentId}`);
+    ids.add(`GreenchClaw/${agentId}`);
   }
   return Array.from(ids);
 }
@@ -124,7 +124,7 @@ export async function handleOpenAiModelsHttpRequest(
     return true;
   }
 
-  if (decodedId !== NEXISCLAW_MODEL_ID && !resolveAgentIdFromModel(decodedId)) {
+  if (decodedId !== GREENCHCLAW_MODEL_ID && !resolveAgentIdFromModel(decodedId)) {
     sendInvalidRequest(res, "Invalid model id.");
     return true;
   }

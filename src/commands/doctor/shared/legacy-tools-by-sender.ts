@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { parseToolsBySenderTypedKey } from "../../../config/types.tools.js";
 import { sanitizeForLog } from "../../../terminal/ansi.js";
 import { formatConfigPath, resolveConfigPathTarget } from "../../doctor-config-analysis.js";
@@ -53,7 +53,7 @@ function collectLegacyToolsBySenderKeyHits(
   }
 }
 
-export function scanLegacyToolsBySenderKeys(cfg: NexisClawConfig): LegacyToolsBySenderKeyHit[] {
+export function scanLegacyToolsBySenderKeys(cfg: GreenchClawConfig): LegacyToolsBySenderKeyHit[] {
   const hits: LegacyToolsBySenderKeyHit[] = [];
   collectLegacyToolsBySenderKeyHits(cfg, [], hits);
   return hits;
@@ -77,8 +77,8 @@ export function collectLegacyToolsBySenderWarnings(params: {
   ];
 }
 
-export function maybeRepairLegacyToolsBySenderKeys(cfg: NexisClawConfig): {
-  config: NexisClawConfig;
+export function maybeRepairLegacyToolsBySenderKeys(cfg: GreenchClawConfig): {
+  config: GreenchClawConfig;
   changes: string[];
 } {
   const hits = scanLegacyToolsBySenderKeys(cfg);

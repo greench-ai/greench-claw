@@ -1,7 +1,7 @@
 import {
   applyAgentDefaultModelPrimary,
   resolveAgentModelPrimaryValue,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import { OPENCODE_GO_DEFAULT_MODEL_REF } from "./onboard.js";
 
 export {
@@ -11,9 +11,9 @@ export {
 } from "./onboard.js";
 
 export function applyOpencodeGoModelDefault(
-  cfg: import("NexisClaw/plugin-sdk/provider-onboard").NexisClawConfig,
+  cfg: import("GreenchClaw/plugin-sdk/provider-onboard").GreenchClawConfig,
 ): {
-  next: import("NexisClaw/plugin-sdk/provider-onboard").NexisClawConfig;
+  next: import("GreenchClaw/plugin-sdk/provider-onboard").GreenchClawConfig;
   changed: boolean;
 } {
   const current = resolveAgentModelPrimaryValue(cfg.agents?.defaults?.model);

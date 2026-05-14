@@ -1,7 +1,7 @@
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
 
 const KIMI_BASE_URL = "https://api.kimi.com/coding/";
 const KIMI_CODING_USER_AGENT = "claude-code/0.1.0";

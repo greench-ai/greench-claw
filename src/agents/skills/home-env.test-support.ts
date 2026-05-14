@@ -3,18 +3,18 @@ import { vi } from "vitest";
 
 export type SkillsHomeEnvSnapshot = {
   previousHome: string | undefined;
-  previousNexisClawHome: string | undefined;
+  previousGreenchClawHome: string | undefined;
   previousUserProfile: string | undefined;
 };
 
 export function setMockSkillsHomeEnv(fakeHome: string): SkillsHomeEnvSnapshot {
   const snapshot: SkillsHomeEnvSnapshot = {
     previousHome: process.env.HOME,
-    previousNexisClawHome: process.env.NEXISCLAW_HOME,
+    previousGreenchClawHome: process.env.GREENCHCLAW_HOME,
     previousUserProfile: process.env.USERPROFILE,
   };
   process.env.HOME = fakeHome;
-  delete process.env.NEXISCLAW_HOME;
+  delete process.env.GREENCHCLAW_HOME;
   delete process.env.USERPROFILE;
   vi.spyOn(os, "homedir").mockReturnValue(fakeHome);
   return snapshot;
@@ -30,10 +30,10 @@ export async function restoreMockSkillsHomeEnv(
   } else {
     process.env.HOME = snapshot.previousHome;
   }
-  if (snapshot.previousNexisClawHome === undefined) {
-    delete process.env.NEXISCLAW_HOME;
+  if (snapshot.previousGreenchClawHome === undefined) {
+    delete process.env.GREENCHCLAW_HOME;
   } else {
-    process.env.NEXISCLAW_HOME = snapshot.previousNexisClawHome;
+    process.env.GREENCHCLAW_HOME = snapshot.previousGreenchClawHome;
   }
   if (snapshot.previousUserProfile === undefined) {
     delete process.env.USERPROFILE;

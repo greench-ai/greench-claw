@@ -7,7 +7,7 @@ import type { ChannelPlugin } from "../../channels/plugins/types.plugin.js";
 import type { ChannelMeta } from "../../channels/plugins/types.public.js";
 import { isStaticallyChannelConfigured } from "../../config/channel-configured-shared.js";
 import { applyPluginAutoEnable } from "../../config/plugin-auto-enable.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { listManifestChannelContributionIds } from "../../plugins/manifest-contribution-ids.js";
 import type { ChannelChoice } from "../onboard-types.js";
 import {
@@ -34,12 +34,12 @@ export type ResolvedChannelSetupEntries = {
   installableCatalogById: Map<ChannelChoice, ChannelPluginCatalogEntry>;
 };
 
-function resolveWorkspaceDir(cfg: NexisClawConfig, workspaceDir?: string): string | undefined {
+function resolveWorkspaceDir(cfg: GreenchClawConfig, workspaceDir?: string): string | undefined {
   return workspaceDir ?? resolveAgentWorkspaceDir(cfg, resolveDefaultAgentId(cfg));
 }
 
 export function listManifestInstalledChannelIds(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Set<ChannelChoice> {
@@ -58,7 +58,7 @@ export function listManifestInstalledChannelIds(params: {
 }
 
 export function isCatalogChannelInstalled(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   entry: ChannelPluginCatalogEntry;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
@@ -67,7 +67,7 @@ export function isCatalogChannelInstalled(params: {
 }
 
 export function resolveChannelSetupEntries(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   installedPlugins: ChannelPlugin[];
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;

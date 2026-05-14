@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 const callGatewayMock = vi.fn();
 vi.mock("../../gateway/call.js", () => ({
   callGateway: (opts: unknown) => callGatewayMock(opts),
@@ -51,7 +51,7 @@ describe("resolveMainSessionAlias", () => {
   it("uses normalized main key and global alias for global scope", () => {
     const cfg = {
       session: { mainKey: " Primary ", scope: "global" },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveMainSessionAlias(cfg)).toEqual({
       mainKey: "primary",
@@ -61,7 +61,7 @@ describe("resolveMainSessionAlias", () => {
   });
 
   it("falls back to per-sender defaults", () => {
-    expect(resolveMainSessionAlias({} as NexisClawConfig)).toEqual({
+    expect(resolveMainSessionAlias({} as GreenchClawConfig)).toEqual({
       mainKey: "main",
       alias: "main",
       scope: "per-sender",
@@ -72,7 +72,7 @@ describe("resolveMainSessionAlias", () => {
     const cfg = {
       session: { mainKey: "  work ", scope: "per-sender" },
       routing: { sessions: { mainKey: "legacy-main" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveMainSessionAlias(cfg)).toEqual({
       mainKey: "work",
@@ -124,11 +124,11 @@ describe("session key display/internal mapping", () => {
   it("maps interactive client ids to the requester session", () => {
     expect(
       resolveCurrentSessionClientAlias({
-        key: "NexisClaw-tui",
+        key: "GreenchClaw-tui",
         requesterInternalKey: "agent:main:main",
       }),
     ).toBe("agent:main:main");
-    expect(resolveCurrentSessionClientAlias({ key: "NexisClaw-tui" })).toBeUndefined();
+    expect(resolveCurrentSessionClientAlias({ key: "GreenchClaw-tui" })).toBeUndefined();
     expect(
       resolveCurrentSessionClientAlias({
         key: "node-host",
@@ -331,7 +331,7 @@ describe("resolveSessionReference", () => {
 
   it("treats the TUI client label as the requester session", async () => {
     const result = await resolveSessionReference({
-      sessionKey: "NexisClaw-tui",
+      sessionKey: "GreenchClaw-tui",
       alias: "main",
       mainKey: "main",
       requesterInternalKey: "agent:main:main",

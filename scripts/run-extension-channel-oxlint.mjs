@@ -5,7 +5,7 @@ runExtensionOxlint({
   roots: extensionChannelTestRoots,
   toolName: "oxlint-extension-channels",
   lockName: "oxlint-extension-channels",
-  tempDirPrefix: "NexisClaw-extension-channel-oxlint-",
+  tempDirPrefix: "GreenchClaw-extension-channel-oxlint-",
   emptyMessage: "No extension channel files found.",
   allowEmpty: true,
 });

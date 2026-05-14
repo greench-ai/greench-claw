@@ -1,6 +1,6 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { isLoopbackHost } from "NexisClaw/plugin-sdk/gateway-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { isLoopbackHost } from "GreenchClaw/plugin-sdk/gateway-runtime";
 import {
   consultRealtimeVoiceAgent,
   REALTIME_VOICE_AGENT_CONSULT_TOOL_NAME,
@@ -8,7 +8,7 @@ import {
   resolveRealtimeVoiceAgentConsultToolsAllow,
   type RealtimeVoiceAgentConsultTranscriptEntry,
   type ResolvedRealtimeVoiceProvider,
-} from "NexisClaw/plugin-sdk/realtime-voice";
+} from "GreenchClaw/plugin-sdk/realtime-voice";
 import type { VoiceCallConfig } from "./config.js";
 import {
   resolveVoiceCallEffectiveConfig,
@@ -62,7 +62,7 @@ type RealtimeVoiceRuntimeModule = typeof import("./realtime-voice.runtime.js");
 type RealtimeHandlerModule = typeof import("./webhook/realtime-handler.js");
 
 const REALTIME_VOICE_CONSULT_SYSTEM_PROMPT = [
-  "You are the configured NexisClaw agent receiving delegated requests from a live phone voice bridge.",
+  "You are the configured GreenchClaw agent receiving delegated requests from a live phone voice bridge.",
   "Act on behalf of the caller using the normal available tools when the caller asks you to do work.",
   "Prioritize completing the user's request and returning a fast, speakable result over exhaustive investigation.",
   "For tool-backed status checks, prefer one or two bounded read-only queries before answering.",
@@ -250,7 +250,7 @@ async function resolveProvider(config: VoiceCallConfig): Promise<VoiceCallProvid
 
 async function resolveRealtimeProvider(params: {
   config: VoiceCallConfig;
-  fullConfig: NexisClawConfig;
+  fullConfig: GreenchClawConfig;
 }): Promise<ResolvedRealtimeProvider> {
   const { resolveConfiguredRealtimeVoiceProvider } = await loadRealtimeVoiceRuntime();
   return resolveConfiguredRealtimeVoiceProvider({
@@ -263,7 +263,7 @@ async function resolveRealtimeProvider(params: {
 export async function createVoiceCallRuntime(params: {
   config: VoiceCallConfig;
   coreConfig: CoreConfig;
-  fullConfig?: NexisClawConfig;
+  fullConfig?: GreenchClawConfig;
   agentRuntime: CoreAgentDeps;
   ttsRuntime?: TelephonyTtsRuntime;
   logger?: Logger;
@@ -277,7 +277,7 @@ export async function createVoiceCallRuntime(params: {
   };
 
   const config = resolveVoiceCallConfig(rawConfig);
-  const cfg = fullConfig ?? (coreConfig as NexisClawConfig);
+  const cfg = fullConfig ?? (coreConfig as GreenchClawConfig);
 
   if (!config.enabled) {
     throw new Error("Voice call disabled. Enable the plugin entry in config.");
@@ -307,7 +307,7 @@ export async function createVoiceCallRuntime(params: {
     manager,
     provider,
     coreConfig,
-    fullConfig ?? (coreConfig as NexisClawConfig),
+    fullConfig ?? (coreConfig as GreenchClawConfig),
     agentRuntime,
     log,
   );

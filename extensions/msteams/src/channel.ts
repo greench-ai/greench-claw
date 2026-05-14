@@ -1,33 +1,33 @@
-import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
-import { formatAllowFromLowercase } from "NexisClaw/plugin-sdk/allow-from";
-import { createTopLevelChannelConfigAdapter } from "NexisClaw/plugin-sdk/channel-config-helpers";
+import { describeAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
+import { formatAllowFromLowercase } from "GreenchClaw/plugin-sdk/allow-from";
+import { createTopLevelChannelConfigAdapter } from "GreenchClaw/plugin-sdk/channel-config-helpers";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageToolDiscovery,
-} from "NexisClaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import { createChannelMessageAdapterFromOutbound } from "NexisClaw/plugin-sdk/channel-message";
-import { createPairingPrefixStripper } from "NexisClaw/plugin-sdk/channel-pairing";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import { createChannelMessageAdapterFromOutbound } from "GreenchClaw/plugin-sdk/channel-message";
+import { createPairingPrefixStripper } from "GreenchClaw/plugin-sdk/channel-pairing";
 import {
   createAllowlistProviderGroupPolicyWarningCollector,
   projectConfigWarningCollector,
-} from "NexisClaw/plugin-sdk/channel-policy";
+} from "GreenchClaw/plugin-sdk/channel-policy";
 import {
   createChannelDirectoryAdapter,
   createRuntimeDirectoryLiveAdapter,
   listDirectoryEntriesFromSources,
-} from "NexisClaw/plugin-sdk/directory-runtime";
-import { normalizeMessagePresentation } from "NexisClaw/plugin-sdk/interactive-runtime";
-import { createLazyRuntimeNamedExport } from "NexisClaw/plugin-sdk/lazy-runtime";
-import { createRuntimeOutboundDelegates } from "NexisClaw/plugin-sdk/outbound-runtime";
-import { createComputedAccountStatusAdapter } from "NexisClaw/plugin-sdk/status-helpers";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/directory-runtime";
+import { normalizeMessagePresentation } from "GreenchClaw/plugin-sdk/interactive-runtime";
+import { createLazyRuntimeNamedExport } from "GreenchClaw/plugin-sdk/lazy-runtime";
+import { createRuntimeOutboundDelegates } from "GreenchClaw/plugin-sdk/outbound-runtime";
+import { createComputedAccountStatusAdapter } from "GreenchClaw/plugin-sdk/status-helpers";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { Type } from "typebox";
 import type {
   ChannelMessageActionName,
   ChannelOutboundAdapter,
   ChannelPlugin,
-  NexisClawConfig,
+  GreenchClawConfig,
 } from "../runtime-api.js";
 import {
   buildProbeChannelStatusSummary,
@@ -84,7 +84,7 @@ const TEAMS_GRAPH_PERMISSION_HINTS: Record<string, string> = {
 };
 
 const collectMSTeamsSecurityWarnings = createAllowlistProviderGroupPolicyWarningCollector<{
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }>({
   providerConfigPresent: (cfg) => cfg.channels?.msteams !== undefined,
   resolveGroupPolicy: ({ cfg }) => cfg.channels?.msteams?.groupPolicy,
@@ -101,7 +101,7 @@ const loadMSTeamsChannelRuntime = createLazyRuntimeNamedExport(
   "msTeamsChannelRuntime",
 );
 
-const resolveMSTeamsChannelConfig = (cfg: NexisClawConfig) => ({
+const resolveMSTeamsChannelConfig = (cfg: GreenchClawConfig) => ({
   allowFrom: cfg.channels?.msteams?.allowFrom,
   defaultTo: cfg.channels?.msteams?.defaultTo,
 });
@@ -1137,7 +1137,7 @@ export const msteamsPlugin: ChannelPlugin<ResolvedMSTeamsAccount, ProbeMSTeamsRe
       },
     },
     security: {
-      collectWarnings: projectConfigWarningCollector<{ cfg: NexisClawConfig }>(
+      collectWarnings: projectConfigWarningCollector<{ cfg: GreenchClawConfig }>(
         collectMSTeamsSecurityWarnings,
       ),
     },

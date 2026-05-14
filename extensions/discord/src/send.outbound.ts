@@ -1,13 +1,13 @@
 import { ChannelType } from "discord-api-types/v10";
-import { recordChannelActivity } from "NexisClaw/plugin-sdk/channel-activity-runtime";
-import type { MarkdownTableMode, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveMarkdownTableMode } from "NexisClaw/plugin-sdk/markdown-table-runtime";
-import type { OutboundMediaAccess, PollInput } from "NexisClaw/plugin-sdk/media-runtime";
-import { requireRuntimeConfig } from "NexisClaw/plugin-sdk/plugin-config-runtime";
-import { resolveChunkMode, type ChunkMode } from "NexisClaw/plugin-sdk/reply-chunking";
-import type { RetryConfig } from "NexisClaw/plugin-sdk/retry-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { convertMarkdownTables } from "NexisClaw/plugin-sdk/text-chunking";
+import { recordChannelActivity } from "GreenchClaw/plugin-sdk/channel-activity-runtime";
+import type { MarkdownTableMode, GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveMarkdownTableMode } from "GreenchClaw/plugin-sdk/markdown-table-runtime";
+import type { OutboundMediaAccess, PollInput } from "GreenchClaw/plugin-sdk/media-runtime";
+import { requireRuntimeConfig } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
+import { resolveChunkMode, type ChunkMode } from "GreenchClaw/plugin-sdk/reply-chunking";
+import type { RetryConfig } from "GreenchClaw/plugin-sdk/retry-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { convertMarkdownTables } from "GreenchClaw/plugin-sdk/text-chunking";
 import { resolveDiscordAccount } from "./accounts.js";
 import { createChannelMessage, createThread, type RequestClient } from "./internal/discord.js";
 import { rewriteDiscordKnownMentions } from "./mentions.js";
@@ -32,7 +32,7 @@ import {
 } from "./send.shared.js";
 import type { DiscordSendResult } from "./send.types.js";
 type DiscordSendOpts = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   token?: string;
   accountId?: string;
   mediaUrl?: string;

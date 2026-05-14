@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { setTimeout as sleep } from "node:timers/promises";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import type { MatrixQaObservedEvent } from "./events.js";
 import { requestMatrixJson, type MatrixQaFetchLike } from "./request.js";
 import {
@@ -851,19 +851,19 @@ export async function provisionMatrixQaRoom(params: {
   });
   const [driver, sut, observer] = await Promise.all([
     anonClient.registerWithToken({
-      deviceName: "NexisClaw Matrix QA Driver",
+      deviceName: "GreenchClaw Matrix QA Driver",
       localpart: params.driverLocalpart,
       password: `driver-${randomUUID()}`,
       registrationToken: params.registrationToken,
     }),
     anonClient.registerWithToken({
-      deviceName: "NexisClaw Matrix QA SUT",
+      deviceName: "GreenchClaw Matrix QA SUT",
       localpart: params.sutLocalpart,
       password: `sut-${randomUUID()}`,
       registrationToken: params.registrationToken,
     }),
     anonClient.registerWithToken({
-      deviceName: "NexisClaw Matrix QA Observer",
+      deviceName: "GreenchClaw Matrix QA Observer",
       localpart: params.observerLocalpart,
       password: `observer-${randomUUID()}`,
       registrationToken: params.registrationToken,

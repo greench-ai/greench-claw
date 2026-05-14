@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { BridgeMemoryWikiResult } from "./bridge.js";
 import type { ResolvedMemoryWikiConfig } from "./config.js";
 import { appendMemoryWikiLog } from "./log.js";
@@ -184,8 +184,8 @@ async function writeUnsafeLocalSourcePage(params: {
           renderMarkdownFence(raw, detectFenceLanguage(params.artifact.absolutePath)),
           "",
           "## Notes",
-          "<!-- NexisClaw:human:start -->",
-          "<!-- NexisClaw:human:end -->",
+          "<!-- GreenchClaw:human:start -->",
+          "<!-- GreenchClaw:human:end -->",
           "",
         ].join("\n"),
       }),

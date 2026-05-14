@@ -1,5 +1,5 @@
 import type { SessionAcpMeta } from "../config/sessions/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { logVerbose } from "../globals.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
@@ -14,7 +14,7 @@ import {
 import { readAcpSessionEntry } from "./runtime/session-meta.js";
 
 function sessionMatchesConfiguredBinding(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   spec: ConfiguredAcpBindingSpec;
   meta: SessionAcpMeta;
 }): boolean {
@@ -54,7 +54,7 @@ function sessionMatchesConfiguredBinding(params: {
 }
 
 export async function ensureConfiguredAcpBindingSession(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   spec: ConfiguredAcpBindingSpec;
 }): Promise<{ ok: true; sessionKey: string } | { ok: false; sessionKey: string; error: string }> {
   const sessionKey = buildConfiguredAcpSessionKey(params.spec);
@@ -116,7 +116,7 @@ export async function ensureConfiguredAcpBindingSession(params: {
 }
 
 export async function ensureConfiguredAcpBindingReady(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   configuredBinding: ResolvedConfiguredAcpBinding | null;
 }): Promise<{ ok: true } | { ok: false; error: string }> {
   if (!params.configuredBinding) {
@@ -136,7 +136,7 @@ export async function ensureConfiguredAcpBindingReady(params: {
 }
 
 export async function resetAcpSessionInPlace(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   reason: "new" | "reset";
   clearMeta?: boolean;

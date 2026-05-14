@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import type {
-  NexisClawPluginCommandDefinition,
+  GreenchClawPluginCommandDefinition,
   PluginCommandContext,
-} from "NexisClaw/plugin-sdk/core";
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/core";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { describe, expect, it, vi } from "vitest";
 import { registerDreamingCommand } from "./dreaming-command.js";
 
@@ -14,35 +14,35 @@ function asRecord(value: unknown): Record<string, unknown> | null {
   return value as Record<string, unknown>;
 }
 
-function resolveStoredDreaming(config: NexisClawConfig): Record<string, unknown> {
+function resolveStoredDreaming(config: GreenchClawConfig): Record<string, unknown> {
   const entry = asRecord(config.plugins?.entries?.["memory-core"]);
   const pluginConfig = asRecord(entry?.config);
   return asRecord(pluginConfig?.dreaming) ?? {};
 }
 
-function createHarness(initialConfig: NexisClawConfig = {}) {
-  const registered: { command?: NexisClawPluginCommandDefinition } = {};
-  let runtimeConfig: NexisClawConfig = initialConfig;
+function createHarness(initialConfig: GreenchClawConfig = {}) {
+  const registered: { command?: GreenchClawPluginCommandDefinition } = {};
+  let runtimeConfig: GreenchClawConfig = initialConfig;
 
   const runtime = {
     config: {
       current: vi.fn(() => runtimeConfig),
       loadConfig: vi.fn(() => runtimeConfig),
-      replaceConfigFile: vi.fn(async ({ nextConfig }: { nextConfig: NexisClawConfig }) => {
+      replaceConfigFile: vi.fn(async ({ nextConfig }: { nextConfig: GreenchClawConfig }) => {
         runtimeConfig = nextConfig;
       }),
-      writeConfigFile: vi.fn(async (nextConfig: NexisClawConfig) => {
+      writeConfigFile: vi.fn(async (nextConfig: GreenchClawConfig) => {
         runtimeConfig = nextConfig;
       }),
     },
-  } as unknown as NexisClawPluginApi["runtime"];
+  } as unknown as GreenchClawPluginApi["runtime"];
 
   const api = {
     runtime,
-    registerCommand: vi.fn((definition: NexisClawPluginCommandDefinition) => {
+    registerCommand: vi.fn((definition: GreenchClawPluginCommandDefinition) => {
       registered.command = definition;
     }),
-  } as unknown as NexisClawPluginApi;
+  } as unknown as GreenchClawPluginApi;
 
   registerDreamingCommand(api);
 

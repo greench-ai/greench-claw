@@ -42,7 +42,7 @@ const ADAPTIVE_READ_CONTEXT_SHARE = 0.1;
 const CHARS_PER_TOKEN_ESTIMATE = 4;
 const MAX_ADAPTIVE_READ_PAGES = 4;
 
-type NexisClawReadToolOptions = {
+type GreenchClawReadToolOptions = {
   modelContextWindowTokens?: number;
   imageSanitization?: ImageSanitizationLimits;
 };
@@ -61,7 +61,7 @@ function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
 
-function resolveAdaptiveReadMaxBytes(options?: NexisClawReadToolOptions): number {
+function resolveAdaptiveReadMaxBytes(options?: GreenchClawReadToolOptions): number {
   const contextWindowTokens = options?.modelContextWindowTokens;
   if (
     typeof contextWindowTokens !== "number" ||
@@ -696,7 +696,7 @@ export function createSandboxedReadTool(params: SandboxToolParams) {
   const base = createReadTool(params.root, {
     operations: createSandboxReadOperations(params),
   }) as unknown as AnyAgentTool;
-  return createNexisClawReadTool(base, {
+  return createGreenchClawReadTool(base, {
     modelContextWindowTokens: params.modelContextWindowTokens,
     imageSanitization: params.imageSanitization,
   });
@@ -739,9 +739,9 @@ export function createHostWorkspaceEditTool(root: string, options?: { workspaceO
   return wrapToolParamValidation(withRecovery, REQUIRED_PARAM_GROUPS.edit);
 }
 
-export function createNexisClawReadTool(
+export function createGreenchClawReadTool(
   base: AnyAgentTool,
-  options?: NexisClawReadToolOptions,
+  options?: GreenchClawReadToolOptions,
 ): AnyAgentTool {
   return {
     ...base,

@@ -1,15 +1,15 @@
 import fs from "node:fs";
 import type { App } from "@slack/bolt";
-import { expectChannelInboundContextContract as expectInboundContextContract } from "NexisClaw/plugin-sdk/channel-contract-testing";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { expectChannelInboundContextContract as expectInboundContextContract } from "GreenchClaw/plugin-sdk/channel-contract-testing";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   registerSessionBindingAdapter,
   unregisterSessionBindingAdapter,
   type SessionBindingAdapter,
   type SessionBindingRecord,
-} from "NexisClaw/plugin-sdk/conversation-runtime";
-import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
-import { resolveThreadSessionKeys } from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
+import { resolveThreadSessionKeys } from "GreenchClaw/plugin-sdk/routing";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import {
@@ -31,8 +31,9 @@ import { clearSlackSubteamMentionCacheForTest } from "./subteam-mentions.js";
 
 const enqueueSystemEventMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/system-event-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/system-event-runtime")>();
+vi.mock("GreenchClaw/plugin-sdk/system-event-runtime", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("GreenchClaw/plugin-sdk/system-event-runtime")>();
   return {
     ...actual,
     enqueueSystemEvent: (...args: unknown[]) => enqueueSystemEventMock(...args),
@@ -40,7 +41,7 @@ vi.mock("NexisClaw/plugin-sdk/system-event-runtime", async (importOriginal) => {
 });
 
 describe("slack prepareSlackMessage inbound contract", () => {
-  const storeFixture = createSlackSessionStoreFixture("NexisClaw-slack-thread-");
+  const storeFixture = createSlackSessionStoreFixture("GreenchClaw-slack-thread-");
 
   beforeAll(() => {
     storeFixture.setup();
@@ -64,7 +65,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
     const slackCtx = createInboundSlackCtx({
       cfg: {
         channels: { slack: { enabled: true } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
     slackCtx.resolveUserName = async () => ({ name: "Alice" }) as any;
     return slackCtx;
@@ -135,7 +136,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
         channels: {
           slack: { enabled: true },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { members } } as unknown as App["client"],
       defaultRequireMention: false,
     });
@@ -167,7 +168,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
     });
   });
 
-  function createThreadSlackCtx(params: { cfg: NexisClawConfig; replies: unknown }) {
+  function createThreadSlackCtx(params: { cfg: GreenchClawConfig; replies: unknown }) {
     return createInboundSlackCtx({
       cfg: params.cfg,
       appClient: { conversations: { replies: params.replies } } as App["client"],
@@ -252,7 +253,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
             contextVisibility: "allowlist",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { replies } } as unknown as App["client"],
       defaultRequireMention: false,
       replyToMode: "all",
@@ -306,7 +307,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
       cfg: {
         channels: { slack: { enabled: true } },
         session: { dmScope: "main" },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
     slackCtx.resolveUserName = async () => ({ name: "Alice" }) as any;
     // Simulate API returning correct type for DM channel
@@ -352,7 +353,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
             ...(params?.groupPolicy ? { groupPolicy: params.groupPolicy } : {}),
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       replyToMode: "all",
       ...(params?.defaultRequireMention === undefined
         ? {}
@@ -390,7 +391,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
           statusReactions: { enabled: true },
         },
         channels: { slack: { enabled: true } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
     slackCtx.resolveUserName = async () => ({ name: "Alice" }) as any;
 
@@ -422,7 +423,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
             replyToMode: "all",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       replyToMode: "all",
     });
     slackCtx.resolveUserName = async () => ({ name: "Alice" }) as any;
@@ -560,7 +561,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
         channels: {
           slack: { enabled: true },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       defaultRequireMention: false,
     });
     slackCtx.resolveUserName = async () => ({ name: "Bot" }) as any;
@@ -622,7 +623,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
         channels: {
           slack: { enabled: true },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { members } } as unknown as App["client"],
       defaultRequireMention: false,
       channelsConfig: {
@@ -648,7 +649,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
         channels: {
           slack: { enabled: true },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { members } } as unknown as App["client"],
       defaultRequireMention: false,
       channelsConfig: {
@@ -673,7 +674,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
         channels: {
           slack: { enabled: true },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { members } } as unknown as App["client"],
       defaultRequireMention: false,
       channelsConfig: {
@@ -698,7 +699,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
         channels: {
           slack: { enabled: true },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       defaultRequireMention: false,
     });
     slackCtx.resolveUserName = async () => ({ name: "Bot" }) as any;
@@ -726,7 +727,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
         channels: {
           slack: { enabled: true },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { members } } as unknown as App["client"],
       defaultRequireMention: false,
     });
@@ -749,7 +750,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
             enabled: true,
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       defaultRequireMention: false,
       channelsConfig: {
         C123: { systemPrompt: "Config prompt" },
@@ -885,7 +886,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
             },
           ],
           channels: { slack: { enabled: true, groupPolicy: "open" } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         defaultRequireMention: false,
       });
       slackCtx.resolveChannelName = async () => ({ name: "strategy", type: "channel" });
@@ -960,7 +961,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
       cfg: {
         session: { store: storePath },
         channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       replies,
     });
     slackCtx.resolveUserName = async (id: string) => ({
@@ -994,7 +995,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
       cfg: {
         session: { store: storePath },
         channels: { slack: { enabled: true, dmHistoryLimit: 2 } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { history } } as unknown as App["client"],
       dmHistoryLimit: 2,
     });
@@ -1046,7 +1047,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
           dms: { U1: { historyLimit: 1 } },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const history = vi.fn().mockResolvedValue({
       messages: [
         { text: "current", user: "U1", ts: "400.000" },
@@ -1197,7 +1198,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
     const cfg = {
       session: { store: storePath },
       channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const route = resolveAgentRoute({
       cfg,
       channel: "slack",
@@ -1243,7 +1244,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
     const cfg = {
       session: { store: storePath },
       channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const replies = vi.fn();
     const slackCtx = createThreadSlackCtx({ cfg, replies });
     slackCtx.resolveUserName = async () => ({ name: "Alice" });
@@ -1312,7 +1313,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
       cfg: {
         session: { store: storePath, dmScope: "per-channel-peer" },
         channels: { slack: { enabled: true, replyToMode: "all" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       replyToMode: "all",
     });
     slackCtx.resolveUserName = async () => ({ name: "Alice" }) as any;
@@ -1335,7 +1336,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
       cfg: {
         session: { store: storePath, dmScope: "per-channel-peer" },
         channels: { slack: { enabled: true, replyToMode: "all" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       replyToMode: "all",
     });
     slackCtx.resolveUserName = async () => ({ name: "Alice" }) as any;
@@ -1369,7 +1370,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
     const slackCtx = createInboundSlackCtx({
       cfg: {
         channels: { slack: { enabled: true, replyToMode: "all" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       replyToMode: "all",
     });
     slackCtx.resolveUserName = async () => ({ name: "Alice" }) as any;
@@ -1439,7 +1440,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
       const slackCtx = createThreadSlackCtx({
         cfg: {
           channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         replies,
       });
       slackCtx.resolveUserName = async () => ({ name: "Alice" });
@@ -1486,12 +1487,12 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
       cfg: {
         session: { store: storePath },
         channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { replies } } as unknown as App["client"],
       defaultRequireMention: true,
       replyToMode: "all",
     });
-    slackCtx.resolveChannelName = async () => ({ name: "proj-NexisClaw", type: "channel" });
+    slackCtx.resolveChannelName = async () => ({ name: "proj-GreenchClaw", type: "channel" });
     slackCtx.resolveUserName = async () => ({ name: "Bek" });
 
     const root = await prepareSlackMessage({
@@ -1517,7 +1518,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
         channel: "C0AHZFCAS1K",
         channel_type: "channel",
         user: "U_BEK",
-        text: "https://github.com/NexisClaw/NexisClaw/issues/50621",
+        text: "https://github.com/GreenchClaw/GreenchClaw/issues/50621",
         ts: "1777244714.000100",
         thread_ts: rootTs,
       } as SlackMessageEvent,
@@ -1550,12 +1551,12 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
       cfg: {
         session: { store: storePath },
         channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { replies } } as unknown as App["client"],
       defaultRequireMention: true,
       replyToMode: "all",
     });
-    slackCtx.resolveChannelName = async () => ({ name: "proj-NexisClaw", type: "channel" });
+    slackCtx.resolveChannelName = async () => ({ name: "proj-GreenchClaw", type: "channel" });
     slackCtx.resolveUserName = async () => ({ name: "Bek" });
 
     const root = await prepareSlackMessage({
@@ -1581,7 +1582,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
         channel: "C0AHZFCAS1K",
         channel_type: "channel",
         user: "U_BEK",
-        text: "https://github.com/NexisClaw/NexisClaw/issues/50621",
+        text: "https://github.com/GreenchClaw/GreenchClaw/issues/50621",
         ts: "1777244714.000100",
         thread_ts: rootTs,
       } as SlackMessageEvent,
@@ -1603,11 +1604,11 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
       cfg: {
         session: { store: storePath },
         channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       defaultRequireMention: true,
       replyToMode: "all",
     });
-    slackCtx.resolveChannelName = async () => ({ name: "proj-NexisClaw", type: "channel" });
+    slackCtx.resolveChannelName = async () => ({ name: "proj-GreenchClaw", type: "channel" });
     slackCtx.resolveUserName = async () => ({ name: "Bek" });
 
     const prepared = await prepareSlackMessage({
@@ -1648,12 +1649,12 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
             groupPolicy: "open",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       defaultRequireMention: true,
       replyToMode: "all",
     });
     slackCtx.allowFrom = ["U_BEK"];
-    slackCtx.resolveChannelName = async () => ({ name: "proj-NexisClaw", type: "channel" });
+    slackCtx.resolveChannelName = async () => ({ name: "proj-GreenchClaw", type: "channel" });
     slackCtx.resolveUserName = async () => ({ name: "Bek" });
 
     const prepared = await prepareSlackMessage({
@@ -1705,7 +1706,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
             channels: { C0AGG76CP1S: { enabled: true, requireMention: false } },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { replies } } as unknown as App["client"],
       defaultRequireMention: true,
       replyToMode: "first",
@@ -1768,7 +1769,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
             channels: { C0AGENTS: { requireMention: true } },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: {
         usergroups: { users: { list: usergroupsUsersList } },
       } as unknown as App["client"],
@@ -1816,7 +1817,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
             channels: { C0AGENTS: { requireMention: true } },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: {
         usergroups: { users: { list: usergroupsUsersList } },
       } as unknown as App["client"],
@@ -1865,12 +1866,12 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
         session: { store: storePath },
         messages: { groupChat: { mentionPatterns: ["\\bbill\\b"] } },
         channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { replies } } as unknown as App["client"],
       defaultRequireMention: true,
       replyToMode: "all",
     });
-    slackCtx.resolveChannelName = async () => ({ name: "proj-NexisClaw", type: "channel" });
+    slackCtx.resolveChannelName = async () => ({ name: "proj-GreenchClaw", type: "channel" });
     slackCtx.resolveUserName = async () => ({ name: "Bek" });
 
     const root = await prepareSlackMessage({
@@ -1896,7 +1897,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
         channel: "C0AHZFCAS1K",
         channel_type: "channel",
         user: "U_BEK",
-        text: "https://github.com/NexisClaw/NexisClaw/issues/50621",
+        text: "https://github.com/GreenchClaw/GreenchClaw/issues/50621",
         ts: "1777244714.000100",
         thread_ts: rootTs,
       } as SlackMessageEvent,
@@ -1948,11 +1949,11 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
             ],
           },
           channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         defaultRequireMention: true,
         replyToMode: "all",
       });
-      slackCtx.resolveChannelName = async () => ({ name: "proj-NexisClaw", type: "channel" });
+      slackCtx.resolveChannelName = async () => ({ name: "proj-GreenchClaw", type: "channel" });
       slackCtx.resolveUserName = async () => ({ name: "Bek" });
 
       const prepared = await prepareSlackMessage({
@@ -1978,7 +1979,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
           channel: "C0AHZFCAS1K",
           channel_type: "channel",
           user: "U_BEK",
-          text: "https://github.com/NexisClaw/NexisClaw/issues/50621",
+          text: "https://github.com/GreenchClaw/GreenchClaw/issues/50621",
           ts: "1777244714.000100",
           thread_ts: rootTs,
         } as SlackMessageEvent,
@@ -2037,11 +2038,11 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
           session: { store: storePath },
           messages: { groupChat: { mentionPatterns: ["\\bbill\\b"] } },
           channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         defaultRequireMention: true,
         replyToMode: "all",
       });
-      slackCtx.resolveChannelName = async () => ({ name: "proj-NexisClaw", type: "channel" });
+      slackCtx.resolveChannelName = async () => ({ name: "proj-GreenchClaw", type: "channel" });
       slackCtx.resolveUserName = async () => ({ name: "Bek" });
 
       const root = await prepareSlackMessage({
@@ -2067,7 +2068,7 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
           channel: "C0AHZFCAS1K",
           channel_type: "channel",
           user: "U_BEK",
-          text: "https://github.com/NexisClaw/NexisClaw/issues/50621",
+          text: "https://github.com/GreenchClaw/GreenchClaw/issues/50621",
           ts: "1777244714.000100",
           thread_ts: rootTs,
         } as SlackMessageEvent,
@@ -2105,12 +2106,12 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
       cfg: {
         session: { store: storePath },
         channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { replies } } as unknown as App["client"],
       defaultRequireMention: true,
       replyToMode: "all",
     });
-    slackCtx.resolveChannelName = async () => ({ name: "proj-NexisClaw", type: "channel" });
+    slackCtx.resolveChannelName = async () => ({ name: "proj-GreenchClaw", type: "channel" });
     slackCtx.resolveUserName = async () => ({ name: "Bek" });
 
     const prepared = await prepareSlackMessage({
@@ -2147,11 +2148,11 @@ Second paragraph should still reach the agent after Slack's preview cutoff.`;
         cfg: {
           session: { store: storePath },
           channels: { slack: { enabled: true, replyToMode, groupPolicy: "open" } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         defaultRequireMention: true,
         replyToMode,
       });
-      slackCtx.resolveChannelName = async () => ({ name: "proj-NexisClaw", type: "channel" });
+      slackCtx.resolveChannelName = async () => ({ name: "proj-GreenchClaw", type: "channel" });
       slackCtx.resolveUserName = async () => ({ name: "Bek" });
 
       const prepared = await prepareSlackMessage({
@@ -2187,7 +2188,7 @@ describe("prepareSlackMessage sender prefix", () => {
   }): SlackMonitorContext {
     return {
       cfg: {
-        agents: { defaults: { model: "anthropic/claude-opus-4-5", workspace: "/tmp/NexisClaw" } },
+        agents: { defaults: { model: "anthropic/claude-opus-4-5", workspace: "/tmp/GreenchClaw" } },
         channels: { slack: params.channels },
       },
       accountId: "default",
@@ -2259,7 +2260,7 @@ describe("prepareSlackMessage sender prefix", () => {
   it("prefixes channel bodies with sender label and annotates Slack mention tokens", async () => {
     const ctx = createSenderPrefixCtx({
       channels: {},
-      slashCommand: { command: "/NexisClaw", enabled: true },
+      slashCommand: { command: "/GreenchClaw", enabled: true },
     });
     ctx.resolveUserName = async (id: string) => ({ name: id === "U1" ? "Alice" : "Bek" }) as any;
 
@@ -2276,7 +2277,7 @@ describe("prepareSlackMessage sender prefix", () => {
   it("keeps raw Slack mention tokens when user lookup cannot resolve them", async () => {
     const ctx = createSenderPrefixCtx({
       channels: {},
-      slashCommand: { command: "/NexisClaw", enabled: true },
+      slashCommand: { command: "/GreenchClaw", enabled: true },
     });
     ctx.resolveUserName = async (id: string) =>
       ({ name: id === "U1" ? "Alice" : undefined }) as any;
@@ -2383,7 +2384,7 @@ describe("prepareSlackMessage sender prefix", () => {
       useAccessGroups: true,
       slashCommand: {
         enabled: false,
-        name: "NexisClaw",
+        name: "GreenchClaw",
         sessionPrefix: "slack:slash",
         ephemeral: true,
       },
@@ -2399,7 +2400,7 @@ describe("prepareSlackMessage sender prefix", () => {
 });
 
 describe("slack thread.requireExplicitMention", () => {
-  const storeFixture = createSlackSessionStoreFixture("NexisClaw-slack-explicit-mention-");
+  const storeFixture = createSlackSessionStoreFixture("GreenchClaw-slack-explicit-mention-");
 
   beforeAll(() => {
     storeFixture.setup();
@@ -2414,7 +2415,7 @@ describe("slack thread.requireExplicitMention", () => {
       cfg: {
         channels: { slack: { enabled: true } },
         session: {},
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       threadRequireExplicitMention: requireExplicitMention,
     });
     ctx.resolveUserName = async () => ({ name: "Alice" }) as any;
@@ -2425,7 +2426,7 @@ describe("slack thread.requireExplicitMention", () => {
     const ctx = createCtxWithExplicitMention(true);
     const { storePath } = storeFixture.makeTmpStorePath();
     vi.spyOn(
-      await import("NexisClaw/plugin-sdk/session-store-runtime"),
+      await import("GreenchClaw/plugin-sdk/session-store-runtime"),
       "resolveStorePath",
     ).mockReturnValue(storePath);
     const account = createSlackTestAccount();
@@ -2452,7 +2453,7 @@ describe("slack thread.requireExplicitMention", () => {
     const ctx = createCtxWithExplicitMention(true);
     const { storePath } = storeFixture.makeTmpStorePath();
     vi.spyOn(
-      await import("NexisClaw/plugin-sdk/session-store-runtime"),
+      await import("GreenchClaw/plugin-sdk/session-store-runtime"),
       "resolveStorePath",
     ).mockReturnValue(storePath);
     const account = createSlackTestAccount();
@@ -2481,7 +2482,7 @@ describe("slack thread.requireExplicitMention", () => {
     const ctx = createCtxWithExplicitMention(false);
     const { storePath } = storeFixture.makeTmpStorePath();
     vi.spyOn(
-      await import("NexisClaw/plugin-sdk/session-store-runtime"),
+      await import("GreenchClaw/plugin-sdk/session-store-runtime"),
       "resolveStorePath",
     ).mockReturnValue(storePath);
     const account = createSlackTestAccount();

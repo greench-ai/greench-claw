@@ -7,8 +7,8 @@ import {
   type RegisterSlackModalHandler,
 } from "./interactions.modal.js";
 
-// Prefix for NexisClaw-generated action IDs to scope our handler
-const NEXISCLAW_ACTION_PREFIX = "NexisClaw:";
+// Prefix for GreenchClaw-generated action IDs to scope our handler
+const GREENCHCLAW_ACTION_PREFIX = "GreenchClaw:";
 const SLACK_INTERACTION_EVENT_PREFIX = "Slack interaction: ";
 const REDACTED_INTERACTION_VALUE = "[redacted]";
 const SLACK_INTERACTION_EVENT_MAX_CHARS = 2400;
@@ -189,9 +189,9 @@ export function registerSlackInteractionEvents(params: {
   if (typeof ctx.app.view !== "function") {
     return;
   }
-  const modalMatcher = new RegExp(`^${NEXISCLAW_ACTION_PREFIX}`);
+  const modalMatcher = new RegExp(`^${GREENCHCLAW_ACTION_PREFIX}`);
 
-  // Handle NexisClaw modal submissions with callback_ids scoped by our prefix.
+  // Handle GreenchClaw modal submissions with callback_ids scoped by our prefix.
   registerModalLifecycleHandler({
     register: (matcher, handler) => ctx.app.view(matcher, handler),
     matcher: modalMatcher,

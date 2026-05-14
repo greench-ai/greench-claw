@@ -10,7 +10,7 @@ import {
 import { buildQaGatewayConfig } from "./qa-gateway-config.js";
 
 const QA_LAB_INTERNAL_PORT = 43123;
-const QA_LAB_UI_OVERLAY_DIR = "/opt/NexisClaw-qa-lab-ui";
+const QA_LAB_UI_OVERLAY_DIR = "/opt/GreenchClaw-qa-lab-ui";
 
 function toPosixRelative(fromDir: string, toPath: string): string {
   return path.relative(fromDir, toPath).split(path.sep).join("/");
@@ -26,7 +26,7 @@ function renderImageBlock(params: {
     return `    image: ${params.imageName}\n`;
   }
   const context = toPosixRelative(params.outputDir, params.repoRoot) || ".";
-  return `    build:\n      context: ${context}\n      dockerfile: Dockerfile\n      args:\n        NEXISCLAW_EXTENSIONS: "qa-channel qa-lab"\n`;
+  return `    build:\n      context: ${context}\n      dockerfile: Dockerfile\n      args:\n        GREENCHCLAW_EXTENSIONS: "qa-channel qa-lab"\n`;
 }
 
 function renderCompose(params: {
@@ -86,10 +86,10 @@ ${params.bindUiDist ? `    volumes:\n      - ${qaLabUiMount}:${QA_LAB_UI_OVERLAY
       retries: 6
       start_period: 5s
     environment:
-      NEXISCLAW_SKIP_GMAIL_WATCHER: "1"
-      NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER: "1"
-      NEXISCLAW_SKIP_CANVAS_HOST: "1"
-      NEXISCLAW_PROFILE: ""
+      GREENCHCLAW_SKIP_GMAIL_WATCHER: "1"
+      GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER: "1"
+      GREENCHCLAW_SKIP_CANVAS_HOST: "1"
+      GREENCHCLAW_PROFILE: ""
     command:
       - node
       - dist/index.js
@@ -106,7 +106,7 @@ ${params.bindUiDist ? `    volumes:\n      - ${qaLabUiMount}:${QA_LAB_UI_OVERLAY
       - --control-ui-url
       - "http://127.0.0.1:${params.gatewayPort}/"
       - --control-ui-proxy-target
-      - "http://NexisClaw-qa-gateway:18789/"
+      - "http://GreenchClaw-qa-gateway:18789/"
       - --control-ui-token
       - "${params.gatewayToken}"
 ${params.bindUiDist ? `      - --ui-dist-dir\n      - "${QA_LAB_UI_OVERLAY_DIR}"\n` : ""}      - --auto-kickoff-target
@@ -119,23 +119,23 @@ ${params.bindUiDist ? `      - --ui-dist-dir\n      - "${QA_LAB_UI_OVERLAY_DIR}"
         condition: service_healthy
 `
     : ""
-}  NexisClaw-qa-gateway:
+}  GreenchClaw-qa-gateway:
 ${imageBlock}    pull_policy: never
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
       - "${params.gatewayPort}:18789"
     environment:
-      NEXISCLAW_CONFIG_PATH: /tmp/NexisClaw/NexisClaw.json
-      NEXISCLAW_STATE_DIR: /tmp/NexisClaw/state
-      NEXISCLAW_NO_RESPAWN: "1"
-      NEXISCLAW_SKIP_GMAIL_WATCHER: "1"
-      NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER: "1"
-      NEXISCLAW_SKIP_CANVAS_HOST: "1"
-      NEXISCLAW_PROFILE: ""
+      GREENCHCLAW_CONFIG_PATH: /tmp/GreenchClaw/GreenchClaw.json
+      GREENCHCLAW_STATE_DIR: /tmp/GreenchClaw/state
+      GREENCHCLAW_NO_RESPAWN: "1"
+      GREENCHCLAW_SKIP_GMAIL_WATCHER: "1"
+      GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER: "1"
+      GREENCHCLAW_SKIP_CANVAS_HOST: "1"
+      GREENCHCLAW_PROFILE: ""
     volumes:
-      - ./state:/opt/NexisClaw-scaffold:ro
-      - ${repoMount}:/opt/NexisClaw-repo:ro
+      - ./state:/opt/GreenchClaw-scaffold:ro
+      - ${repoMount}:/opt/GreenchClaw-repo:ro
     healthcheck:
       test:
         - CMD
@@ -158,7 +158,7 @@ ${
     command:
       - sh
       - -lc
-      - mkdir -p /tmp/NexisClaw/workspace /tmp/NexisClaw/state && cp /opt/NexisClaw-scaffold/NexisClaw.json /tmp/NexisClaw/NexisClaw.json && cp -R /opt/NexisClaw-scaffold/seed-workspace/. /tmp/NexisClaw/workspace/ && ln -snf /opt/NexisClaw-repo /tmp/NexisClaw/workspace/repo && exec node dist/index.js gateway run --port 18789 --bind lan --allow-unconfigured
+      - mkdir -p /tmp/GreenchClaw/workspace /tmp/GreenchClaw/state && cp /opt/GreenchClaw-scaffold/GreenchClaw.json /tmp/GreenchClaw/GreenchClaw.json && cp -R /opt/GreenchClaw-scaffold/seed-workspace/. /tmp/GreenchClaw/workspace/ && ln -snf /opt/GreenchClaw-repo /tmp/GreenchClaw/workspace/repo && exec node dist/index.js gateway run --port 18789 --bind lan --allow-unconfigured
 `;
 }
 
@@ -171,7 +171,7 @@ function renderEnvExample(params: {
   includeQaLabUi: boolean;
 }) {
   return `# QA Docker harness example env
-NEXISCLAW_GATEWAY_TOKEN=${params.gatewayToken}
+GREENCHCLAW_GATEWAY_TOKEN=${params.gatewayToken}
 QA_GATEWAY_PORT=${params.gatewayPort}
 QA_BUS_BASE_URL=${params.qaBusBaseUrl}
 QA_PROVIDER_BASE_URL=${params.providerBaseUrl}
@@ -193,12 +193,12 @@ Files:
 
 - \`docker-compose.qa.yml\`
 - \`.env.example\`
-- \`state/NexisClaw.json\`
+- \`state/GreenchClaw.json\`
 
 Suggested flow:
 
 1. Build the prebaked image once:
-   - \`docker build -t NexisClaw:qa-local-prebaked --build-arg NEXISCLAW_EXTENSIONS="qa-channel qa-lab" -f Dockerfile .\`
+   - \`docker build -t GreenchClaw:qa-local-prebaked --build-arg GREENCHCLAW_EXTENSIONS="qa-channel qa-lab" -f Dockerfile .\`
 2. Start the stack:
    - \`docker compose -f docker-compose.qa.yml up${params.usePrebuiltImage ? "" : " --build"} -d\`
 3. Open the QA dashboard:
@@ -246,7 +246,7 @@ export async function writeQaDockerHarnessFiles(params: {
   const gatewayToken = params.gatewayToken ?? `qa-token-${randomUUID()}`;
   const providerBaseUrl = params.providerBaseUrl ?? "http://qa-mock-openai:44080/v1";
   const qaBusBaseUrl = params.qaBusBaseUrl ?? "http://qa-lab:43123";
-  const imageName = params.imageName ?? "NexisClaw:qa-local-prebaked";
+  const imageName = params.imageName ?? "GreenchClaw:qa-local-prebaked";
   const usePrebuiltImage = params.usePrebuiltImage ?? false;
   const bindUiDist = params.bindUiDist ?? false;
   const includeQaLabUi = params.includeQaLabUi ?? true;
@@ -262,7 +262,7 @@ export async function writeQaDockerHarnessFiles(params: {
     gatewayPort: 18789,
     gatewayToken,
     providerBaseUrl,
-    workspaceDir: "/tmp/NexisClaw/workspace",
+    workspaceDir: "/tmp/GreenchClaw/workspace",
     controlUiRoot: "/app/dist/control-ui",
     transportPluginIds: QA_CHANNEL_REQUIRED_PLUGIN_IDS,
     transportConfig: createQaChannelGatewayConfig({
@@ -274,7 +274,7 @@ export async function writeQaDockerHarnessFiles(params: {
     path.join(params.outputDir, "docker-compose.qa.yml"),
     path.join(params.outputDir, ".env.example"),
     path.join(params.outputDir, "README.md"),
-    path.join(params.outputDir, "state", "NexisClaw.json"),
+    path.join(params.outputDir, "state", "GreenchClaw.json"),
   ];
 
   await Promise.all([
@@ -317,7 +317,7 @@ export async function writeQaDockerHarnessFiles(params: {
       "utf8",
     ),
     fs.writeFile(
-      path.join(params.outputDir, "state", "NexisClaw.json"),
+      path.join(params.outputDir, "state", "GreenchClaw.json"),
       `${JSON.stringify(config, null, 2)}\n`,
       "utf8",
     ),
@@ -349,7 +349,7 @@ export async function buildQaDockerHarnessImage(
     ) => Promise<{ stdout: string; stderr: string }>;
   },
 ) {
-  const imageName = params.imageName ?? "NexisClaw:qa-local-prebaked";
+  const imageName = params.imageName ?? "GreenchClaw:qa-local-prebaked";
   const runCommand =
     deps?.runCommand ??
     (async (command: string, args: string[], cwd: string) => {
@@ -371,7 +371,7 @@ export async function buildQaDockerHarnessImage(
       "-t",
       imageName,
       "--build-arg",
-      "NEXISCLAW_EXTENSIONS=qa-channel qa-lab",
+      "GREENCHCLAW_EXTENSIONS=qa-channel qa-lab",
       "-f",
       "Dockerfile",
       ".",

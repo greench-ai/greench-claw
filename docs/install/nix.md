@@ -1,5 +1,5 @@
 ---
-summary: "Install NexisClaw declaratively with Nix"
+summary: "Install GreenchClaw declaratively with Nix"
 read_when:
   - You want reproducible, rollback-able installs
   - You're already using Nix/NixOS/Home Manager
@@ -7,10 +7,10 @@ read_when:
 title: "Nix"
 ---
 
-Install NexisClaw declaratively with **[nix-NexisClaw](https://github.com/NexisClaw/nix-NexisClaw)** - the first-party, batteries-included Home Manager module.
+Install GreenchClaw declaratively with **[nix-GreenchClaw](https://github.com/GreenchClaw/nix-GreenchClaw)** - the first-party, batteries-included Home Manager module.
 
 <Info>
-The [nix-NexisClaw](https://github.com/NexisClaw/nix-NexisClaw) repo is the source of truth for Nix installation. This page is a quick overview.
+The [nix-GreenchClaw](https://github.com/GreenchClaw/nix-GreenchClaw) repo is the source of truth for Nix installation. This page is a quick overview.
 </Info>
 
 ## What you get
@@ -27,10 +27,10 @@ The [nix-NexisClaw](https://github.com/NexisClaw/nix-NexisClaw) repo is the sour
     If Nix is not already installed, follow the [Determinate Nix installer](https://github.com/DeterminateSystems/nix-installer) instructions.
   </Step>
   <Step title="Create a local flake">
-    Use the agent-first template from the nix-NexisClaw repo:
+    Use the agent-first template from the nix-GreenchClaw repo:
     ```bash
-    mkdir -p ~/code/NexisClaw-local
-    # Copy templates/agent-first/flake.nix from the nix-NexisClaw repo
+    mkdir -p ~/code/GreenchClaw-local
+    # Copy templates/agent-first/flake.nix from the nix-GreenchClaw repo
     ```
   </Step>
   <Step title="Configure secrets">
@@ -46,41 +46,41 @@ The [nix-NexisClaw](https://github.com/NexisClaw/nix-NexisClaw) repo is the sour
   </Step>
 </Steps>
 
-See the [nix-NexisClaw README](https://github.com/NexisClaw/nix-NexisClaw) for full module options and examples.
+See the [nix-GreenchClaw README](https://github.com/GreenchClaw/nix-GreenchClaw) for full module options and examples.
 
 ## Nix-mode runtime behavior
 
-When `NEXISCLAW_NIX_MODE=1` is set (automatic with nix-NexisClaw), NexisClaw enters a deterministic mode for Nix-managed installs. Other Nix packages can set the same mode; nix-NexisClaw is the first-party reference.
+When `GREENCHCLAW_NIX_MODE=1` is set (automatic with nix-GreenchClaw), GreenchClaw enters a deterministic mode for Nix-managed installs. Other Nix packages can set the same mode; nix-GreenchClaw is the first-party reference.
 
 You can also set it manually:
 
 ```bash
-export NEXISCLAW_NIX_MODE=1
+export GREENCHCLAW_NIX_MODE=1
 ```
 
 On macOS, the GUI app does not automatically inherit shell environment variables. Enable Nix mode via defaults instead:
 
 ```bash
-defaults write ai.NexisClaw.mac NexisClaw.nixMode -bool true
+defaults write ai.GreenchClaw.mac GreenchClaw.nixMode -bool true
 ```
 
 ### What changes in Nix mode
 
 - Auto-install and self-mutation flows are disabled
-- `NexisClaw.json` is treated as immutable. Startup-derived defaults stay runtime-only, and config writers such as setup, onboarding, mutating `NexisClaw update`, plugin install/update/uninstall/enable, `doctor --fix`, `doctor --generate-gateway-token`, and `NexisClaw config set` refuse to edit the file.
-- Agents should edit the Nix source instead. For nix-NexisClaw, use the agent-first [Quick Start](https://github.com/NexisClaw/nix-NexisClaw#quick-start) and set config under `programs.NexisClaw.config` or `instances.<name>.config`.
+- `GreenchClaw.json` is treated as immutable. Startup-derived defaults stay runtime-only, and config writers such as setup, onboarding, mutating `GreenchClaw update`, plugin install/update/uninstall/enable, `doctor --fix`, `doctor --generate-gateway-token`, and `GreenchClaw config set` refuse to edit the file.
+- Agents should edit the Nix source instead. For nix-GreenchClaw, use the agent-first [Quick Start](https://github.com/GreenchClaw/nix-GreenchClaw#quick-start) and set config under `programs.GreenchClaw.config` or `instances.<name>.config`.
 - Missing dependencies surface Nix-specific remediation messages
 - UI surfaces a read-only Nix mode banner
 
 ### Config and state paths
 
-NexisClaw reads JSON5 config from `NEXISCLAW_CONFIG_PATH` and stores mutable data in `NEXISCLAW_STATE_DIR`. When running under Nix, set these explicitly to Nix-managed locations so runtime state and config stay out of the immutable store.
+GreenchClaw reads JSON5 config from `GREENCHCLAW_CONFIG_PATH` and stores mutable data in `GREENCHCLAW_STATE_DIR`. When running under Nix, set these explicitly to Nix-managed locations so runtime state and config stay out of the immutable store.
 
-| Variable               | Default                                 |
-| ---------------------- | --------------------------------------- |
-| `NEXISCLAW_HOME`        | `HOME` / `USERPROFILE` / `os.homedir()` |
-| `NEXISCLAW_STATE_DIR`   | `~/.NexisClaw`                           |
-| `NEXISCLAW_CONFIG_PATH` | `$NEXISCLAW_STATE_DIR/NexisClaw.json`     |
+| Variable                  | Default                                   |
+| ------------------------- | ----------------------------------------- |
+| `GREENCHCLAW_HOME`        | `HOME` / `USERPROFILE` / `os.homedir()`   |
+| `GREENCHCLAW_STATE_DIR`   | `~/.GreenchClaw`                          |
+| `GREENCHCLAW_CONFIG_PATH` | `$GREENCHCLAW_STATE_DIR/GreenchClaw.json` |
 
 ### Service PATH discovery
 
@@ -97,7 +97,7 @@ This applies to both macOS launchd and Linux systemd service environments.
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="nix-NexisClaw" href="https://github.com/NexisClaw/nix-NexisClaw" icon="arrow-up-right-from-square">
+  <Card title="nix-GreenchClaw" href="https://github.com/GreenchClaw/nix-GreenchClaw" icon="arrow-up-right-from-square">
     Source-of-truth Home Manager module and full setup guide.
   </Card>
   <Card title="Setup wizard" href="/start/wizard" icon="wand-magic-sparkles">

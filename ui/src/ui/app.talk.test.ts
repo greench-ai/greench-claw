@@ -8,7 +8,7 @@ const { realtimeTalkCtor, startMock, stopMock } = vi.hoisted(() => ({
   stopMock: vi.fn(),
 }));
 
-describe("NexisClawApp Talk controls", () => {
+describe("GreenchClawApp Talk controls", () => {
   beforeEach(() => {
     vi.resetModules();
     vi.doMock("./chat/realtime-talk.ts", () => ({
@@ -27,8 +27,8 @@ describe("NexisClawApp Talk controls", () => {
   });
 
   it("retries Talk immediately when the previous session is already in error state", async () => {
-    const { NexisClawApp } = await import("./app.ts");
-    const app = Object.create(NexisClawApp.prototype) as {
+    const { GreenchClawApp } = await import("./app.ts");
+    const app = Object.create(GreenchClawApp.prototype) as {
       client: unknown;
       connected: boolean;
       lastError: string | null;
@@ -52,7 +52,7 @@ describe("NexisClawApp Talk controls", () => {
       sessionKey: { value: "main", writable: true },
     });
 
-    await NexisClawApp.prototype.toggleRealtimeTalk.call(app as never);
+    await GreenchClawApp.prototype.toggleRealtimeTalk.call(app as never);
 
     expect(staleStop).toHaveBeenCalledOnce();
     expect(realtimeTalkCtor).toHaveBeenCalledOnce();

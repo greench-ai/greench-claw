@@ -1,10 +1,10 @@
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import { listCombinedAccountIds } from "NexisClaw/plugin-sdk/account-resolution";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import { listCombinedAccountIds } from "GreenchClaw/plugin-sdk/account-resolution";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   hasConfiguredSecretInput,
   normalizeSecretInputString,
-} from "NexisClaw/plugin-sdk/secret-input";
+} from "GreenchClaw/plugin-sdk/secret-input";
 import { resolveDefaultDiscordAccountId } from "./accounts.js";
 import { mergeDiscordAccountConfig, resolveDiscordAccountConfig } from "./accounts.js";
 import type { DiscordAccountConfig } from "./runtime-api.js";
@@ -43,7 +43,7 @@ function inspectConfiguredToken(value: unknown): {
   return null;
 }
 
-export function listDiscordSetupAccountIds(cfg: NexisClawConfig): string[] {
+export function listDiscordSetupAccountIds(cfg: GreenchClawConfig): string[] {
   const accounts = cfg.channels?.discord?.accounts;
   return listCombinedAccountIds({
     configuredAccountIds:
@@ -54,12 +54,12 @@ export function listDiscordSetupAccountIds(cfg: NexisClawConfig): string[] {
   });
 }
 
-export function resolveDefaultDiscordSetupAccountId(cfg: NexisClawConfig): string {
+export function resolveDefaultDiscordSetupAccountId(cfg: GreenchClawConfig): string {
   return resolveDefaultDiscordAccountId(cfg);
 }
 
 export function resolveDiscordSetupAccountConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): { accountId: string; config: DiscordAccountConfig } {
   const accountId = normalizeAccountId(
@@ -72,7 +72,7 @@ export function resolveDiscordSetupAccountConfig(params: {
 }
 
 export function inspectDiscordSetupAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): InspectedDiscordSetupAccount {
   const { accountId, config } = resolveDiscordSetupAccountConfig(params);

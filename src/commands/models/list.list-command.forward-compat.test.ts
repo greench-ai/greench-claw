@@ -43,7 +43,7 @@ const mocks = vi.hoisted(() => {
     sourceConfig,
     resolvedConfig,
     loadModelsConfigWithSource: vi.fn(),
-    ensureNexisClawModelsJson: vi.fn(),
+    ensureGreenchClawModelsJson: vi.fn(),
     ensureAuthProfileStore: vi.fn(),
     resolveDefaultAgentDir: vi.fn(),
     loadModelRegistry: vi.fn(),
@@ -67,9 +67,9 @@ function resetMocks() {
     resolvedConfig: mocks.resolvedConfig,
     diagnostics: [],
   });
-  mocks.ensureNexisClawModelsJson.mockResolvedValue({ wrote: false });
+  mocks.ensureGreenchClawModelsJson.mockResolvedValue({ wrote: false });
   mocks.ensureAuthProfileStore.mockReturnValue({ version: 1, profiles: {}, order: {} });
-  mocks.resolveDefaultAgentDir.mockReturnValue("/tmp/NexisClaw-agent");
+  mocks.resolveDefaultAgentDir.mockReturnValue("/tmp/GreenchClaw-agent");
   mocks.loadModelRegistry.mockResolvedValue({
     models: [],
     availableKeys: new Set(),
@@ -241,7 +241,7 @@ function installModelsListCommandForwardCompatMocks() {
   }));
 
   vi.doMock("../../agents/agent-scope.js", () => ({
-    resolveAgentWorkspaceDir: vi.fn(() => "/tmp/NexisClaw-workspace"),
+    resolveAgentWorkspaceDir: vi.fn(() => "/tmp/GreenchClaw-workspace"),
     resolveDefaultAgentDir: mocks.resolveDefaultAgentDir,
     resolveDefaultAgentId: vi.fn(() => "main"),
   }));
@@ -285,7 +285,7 @@ async function buildAllOpenAiCodexRows(opts: { supplementCatalog?: boolean } = {
   const rows: unknown[] = [];
   const context = {
     cfg: mocks.resolvedConfig,
-    agentDir: "/tmp/NexisClaw-agent",
+    agentDir: "/tmp/GreenchClaw-agent",
     authIndex: {
       hasProviderAuth: (provider: string) => provider === "openai-codex",
       allowsProviderAuthAvailabilityFallback: () => false,
@@ -818,11 +818,11 @@ describe("modelsListCommand forward-compat", () => {
 
       await modelsListCommand({ all: true, provider: "codex", json: true }, runtime as never);
 
-      expect(mocks.ensureNexisClawModelsJson).not.toHaveBeenCalled();
+      expect(mocks.ensureGreenchClawModelsJson).not.toHaveBeenCalled();
       expect(mocks.loadModelRegistry).not.toHaveBeenCalled();
       expect(mocks.loadProviderCatalogModelsForList).toHaveBeenCalledWith({
         cfg: mocks.resolvedConfig,
-        agentDir: "/tmp/NexisClaw-agent",
+        agentDir: "/tmp/GreenchClaw-agent",
         providerFilter: "codex",
         staticOnly: true,
       });
@@ -1011,13 +1011,13 @@ describe("modelsListCommand forward-compat", () => {
       expect(modelRegistryOptions().normalizeModels).toBe(true);
       expect(mocks.loadProviderCatalogModelsForList).toHaveBeenNthCalledWith(1, {
         cfg: mocks.resolvedConfig,
-        agentDir: "/tmp/NexisClaw-agent",
+        agentDir: "/tmp/GreenchClaw-agent",
         providerFilter: "openai-codex",
         staticOnly: true,
       });
       expect(mocks.loadProviderCatalogModelsForList).toHaveBeenNthCalledWith(2, {
         cfg: mocks.resolvedConfig,
-        agentDir: "/tmp/NexisClaw-agent",
+        agentDir: "/tmp/GreenchClaw-agent",
         providerFilter: "openai-codex",
         staticOnly: undefined,
       });

@@ -1,1 +1,1 @@
-export type * from "NexisClaw/plugin-sdk/qa-channel-protocol";
+export type * from "GreenchClaw/plugin-sdk/qa-channel-protocol";

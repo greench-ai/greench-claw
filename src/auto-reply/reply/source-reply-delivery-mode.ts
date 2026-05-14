@@ -1,5 +1,5 @@
 import { normalizeChatType } from "../../channels/chat-type.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { SessionSendPolicyDecision } from "../../sessions/send-policy.js";
 import type { SourceReplyDeliveryMode } from "../get-reply-options.types.js";
 
@@ -18,7 +18,7 @@ export function isExplicitSourceReplyCommand(ctx: SourceReplyDeliveryModeContext
 }
 
 export function resolveSourceReplyDeliveryMode(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   ctx: SourceReplyDeliveryModeContext;
   requested?: SourceReplyDeliveryMode;
   messageToolAvailable?: boolean;
@@ -60,7 +60,7 @@ export type SourceReplyVisibilityPolicy = {
 };
 
 export function resolveSourceReplyVisibilityPolicy(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   ctx: SourceReplyDeliveryModeContext;
   requested?: SourceReplyDeliveryMode;
   sendPolicy: SessionSendPolicyDecision;

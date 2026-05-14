@@ -1,7 +1,7 @@
 ---
-summary: "Use NVIDIA's OpenAI-compatible API in NexisClaw"
+summary: "Use NVIDIA's OpenAI-compatible API in GreenchClaw"
 read_when:
-  - You want to use open models in NexisClaw for free
+  - You want to use open models in GreenchClaw for free
   - You need NVIDIA_API_KEY setup
 title: "NVIDIA"
 ---
@@ -19,12 +19,12 @@ open models for free. Authenticate with an API key from
   <Step title="Export the key and run onboarding">
     ```bash
     export NVIDIA_API_KEY="nvapi-..."
-    NexisClaw onboard --auth-choice nvidia-api-key
+    GreenchClaw onboard --auth-choice nvidia-api-key
     ```
   </Step>
   <Step title="Set an NVIDIA model">
     ```bash
-    NexisClaw models set nvidia/nvidia/nemotron-3-super-120b-a12b
+    GreenchClaw models set nvidia/nvidia/nemotron-3-super-120b-a12b
     ```
   </Step>
 </Steps>
@@ -38,7 +38,7 @@ possible.
 For non-interactive setup, you can also pass the key directly:
 
 ```bash
-NexisClaw onboard --auth-choice nvidia-api-key --nvidia-api-key "nvapi-..."
+GreenchClaw onboard --auth-choice nvidia-api-key --nvidia-api-key "nvapi-..."
 ```
 
 ## Config example

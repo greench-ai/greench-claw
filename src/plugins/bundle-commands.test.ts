@@ -45,7 +45,7 @@ async function createTempDir(prefix: string): Promise<string> {
 }
 
 function resolveBundlePluginRoot(homeDir: string, pluginId: string) {
-  return path.join(homeDir, ".NexisClaw", "extensions", pluginId);
+  return path.join(homeDir, ".GreenchClaw", "extensions", pluginId);
 }
 
 async function writeClaudeBundleCommandFixture(params: {
@@ -94,14 +94,14 @@ function expectEnabledClaudeBundleCommands(
 
 describe("loadEnabledClaudeBundleCommands", () => {
   it("loads enabled Claude bundle markdown commands and skips disabled-model-invocation entries", async () => {
-    const env = captureEnv(["HOME", "USERPROFILE", "NEXISCLAW_HOME", "NEXISCLAW_STATE_DIR"]);
+    const env = captureEnv(["HOME", "USERPROFILE", "GREENCHCLAW_HOME", "GREENCHCLAW_STATE_DIR"]);
     try {
-      const homeDir = await createTempDir("NexisClaw-bundle-commands-home-");
-      const workspaceDir = await createTempDir("NexisClaw-bundle-commands-workspace-");
+      const homeDir = await createTempDir("GreenchClaw-bundle-commands-home-");
+      const workspaceDir = await createTempDir("GreenchClaw-bundle-commands-workspace-");
       process.env.HOME = homeDir;
       process.env.USERPROFILE = homeDir;
-      delete process.env.NEXISCLAW_HOME;
-      delete process.env.NEXISCLAW_STATE_DIR;
+      delete process.env.GREENCHCLAW_HOME;
+      delete process.env.GREENCHCLAW_STATE_DIR;
 
       await writeClaudeBundleCommandFixture({
         homeDir,

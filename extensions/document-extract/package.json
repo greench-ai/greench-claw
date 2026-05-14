@@ -1,14 +1,14 @@
 {
-  "name": "@NexisClaw/document-extract-plugin",
+  "name": "@GreenchClaw/document-extract-plugin",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw local document extraction plugin",
+  "description": "GreenchClaw local document extraction plugin",
   "type": "module",
   "dependencies": {
     "pdfjs-dist": "5.7.284"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
   "peerDependencies": {
     "@napi-rs/canvas": "^0.1.89"
@@ -18,7 +18,7 @@
       "optional": true
     }
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

@@ -4,8 +4,8 @@
  */
 
 import crypto from "node:crypto";
-import { applyModelOverrideToSessionEntry } from "NexisClaw/plugin-sdk/model-session-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { applyModelOverrideToSessionEntry } from "GreenchClaw/plugin-sdk/model-session-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { SessionEntry } from "../api.js";
 import { resolveVoiceCallSessionKey, type VoiceCallConfig } from "./config.js";
 import type { CoreAgentDeps, CoreConfig } from "./core-bridge.js";
@@ -14,7 +14,7 @@ import { resolveVoiceResponseModel } from "./response-model.js";
 export type VoiceResponseParams = {
   /** Voice call config */
   voiceConfig: VoiceCallConfig;
-  /** Core NexisClaw config */
+  /** Core GreenchClaw config */
   coreConfig: CoreConfig;
   /** Injected host agent runtime */
   agentRuntime: CoreAgentDeps;

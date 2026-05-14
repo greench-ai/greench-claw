@@ -1,5 +1,5 @@
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
-import type { DmPolicy } from "NexisClaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
+import type { DmPolicy } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   type ChannelSetupDmPolicy,
   type ChannelSetupWizardAdapter,
@@ -10,13 +10,13 @@ import {
   promptAccountId,
   promptChannelAccessConfig,
   splitSetupEntries,
-} from "NexisClaw/plugin-sdk/setup";
-import { isPrivateNetworkOptInEnabled } from "NexisClaw/plugin-sdk/ssrf-policy";
+} from "GreenchClaw/plugin-sdk/setup";
+import { isPrivateNetworkOptInEnabled } from "GreenchClaw/plugin-sdk/ssrf-policy";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   normalizeStringifiedOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { requiresExplicitMatrixDefaultAccount } from "./account-selection.js";
 import {
   listMatrixAccountIds,
@@ -241,7 +241,7 @@ async function configureMatrixInviteAutoJoin(params: {
   await params.prompter.note(
     [
       "WARNING: Matrix invite auto-join defaults to off.",
-      "NexisClaw agents will not join invited rooms or fresh DM-style invites unless you set autoJoin.",
+      "GreenchClaw agents will not join invited rooms or fresh DM-style invites unless you set autoJoin.",
       'Choose "allowlist" to restrict joins or "always" to join every invite.',
     ].join("\n"),
     "Matrix invite auto-join",
@@ -632,7 +632,7 @@ async function runMatrixConfigure(params: {
     normalizeStringifiedOptionalString(
       await params.prompter.text({
         message: "Matrix device name (optional)",
-        initialValue: existing.deviceName ?? "NexisClaw Gateway",
+        initialValue: existing.deviceName ?? "GreenchClaw Gateway",
       }),
     ) ?? "";
 

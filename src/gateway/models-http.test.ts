@@ -3,7 +3,7 @@ import { getFreePort, installGatewayTestHooks } from "./test-helpers.js";
 
 installGatewayTestHooks({ scope: "suite" });
 
-const READ_SCOPE_HEADER = { "x-NexisClaw-scopes": "operator.read" };
+const READ_SCOPE_HEADER = { "x-GreenchClaw-scopes": "operator.read" };
 
 let startGatewayServer: typeof import("./server.js").startGatewayServer;
 let enabledServer: Awaited<ReturnType<typeof startServer>>;
@@ -76,10 +76,12 @@ describe("OpenAI-compatible models HTTP API (e2e)", () => {
     expect(json.object).toBe("list");
     expect(Array.isArray(json.data)).toBe(true);
     expect((json.data?.length ?? 0) > 0).toBe(true);
-    expect(json.data?.map((entry) => entry.id)).toContain("NexisClaw");
-    expect(json.data?.map((entry) => entry.id)).toContain("NexisClaw/default");
+    expect(json.data?.map((entry) => entry.id)).toContain("GreenchClaw");
+    expect(json.data?.map((entry) => entry.id)).toContain("GreenchClaw/default");
     expect(
-      json.data?.every((entry) => typeof entry.id === "string" && entry.id?.startsWith("NexisClaw")),
+      json.data?.every(
+        (entry) => typeof entry.id === "string" && entry.id?.startsWith("GreenchClaw"),
+      ),
     ).toBe(true);
   });
 
@@ -93,19 +95,19 @@ describe("OpenAI-compatible models HTTP API (e2e)", () => {
   });
 
   it("rejects operator scopes that lack read access", async () => {
-    const res = await getModels("/v1/models", { "x-NexisClaw-scopes": "operator.approvals" });
+    const res = await getModels("/v1/models", { "x-GreenchClaw-scopes": "operator.approvals" });
     await expectMissingReadScope(res);
   });
 
   it("rejects requests with no declared operator scopes", async () => {
-    const res = await getModels("/v1/models", { "x-NexisClaw-scopes": "" });
+    const res = await getModels("/v1/models", { "x-GreenchClaw-scopes": "" });
     await expectMissingReadScope(res);
   });
 
   it("rejects /v1/models/{id} without read access", async () => {
     const firstId = await expectFirstModelId();
     const res = await getModels(`/v1/models/${encodeURIComponent(firstId)}`, {
-      "x-NexisClaw-scopes": "operator.approvals",
+      "x-GreenchClaw-scopes": "operator.approvals",
     });
     await expectMissingReadScope(res);
   });
@@ -130,13 +132,13 @@ describe("OpenAI-compatible models HTTP API (e2e)", () => {
       const res = await fetch(`http://127.0.0.1:${port}/v1/models`, {
         headers: {
           authorization: "Bearer secret",
-          "x-NexisClaw-scopes": "operator.approvals",
+          "x-GreenchClaw-scopes": "operator.approvals",
         },
       });
       expect(res.status).toBe(200);
       const json = (await res.json()) as { object?: string; data?: Array<{ id?: string }> };
       expect(json.object).toBe("list");
-      expect(json.data?.map((entry) => entry.id)).toContain("NexisClaw/default");
+      expect(json.data?.map((entry) => entry.id)).toContain("GreenchClaw/default");
     } finally {
       await server.close({ reason: "models token auth compat test done" });
     }

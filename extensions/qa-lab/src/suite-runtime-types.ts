@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import type { QaProviderMode } from "./model-selection.js";
 import type { QaTransportActionName, QaTransportAdapter } from "./qa-transport.js";
 
@@ -39,7 +39,7 @@ export type QaSuiteRuntimeEnv = {
   mock: {
     baseUrl: string;
   } | null;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 };
 
 export type QaSkillStatusEntry = {

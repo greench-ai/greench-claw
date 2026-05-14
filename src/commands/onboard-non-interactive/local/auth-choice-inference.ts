@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { resolveManifestProviderOnboardAuthFlags } from "../../../plugins/provider-auth-choices.js";
 import { normalizeOptionalString } from "../../../shared/string-coerce.js";
 import { CORE_ONBOARD_AUTH_FLAGS } from "../../onboard-core-auth-flags.js";
@@ -23,7 +23,7 @@ function hasStringValue(value: unknown): boolean {
 export function inferAuthChoiceFromFlags(
   opts: OnboardOptions,
   params?: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     workspaceDir?: string;
     env?: NodeJS.ProcessEnv;
   },

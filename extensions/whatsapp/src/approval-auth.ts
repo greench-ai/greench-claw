@@ -1,7 +1,7 @@
 import {
   createResolvedApproverActionAuthAdapter,
   resolveApprovalApprovers,
-} from "NexisClaw/plugin-sdk/approval-auth-runtime";
+} from "GreenchClaw/plugin-sdk/approval-auth-runtime";
 import { resolveWhatsAppAccount } from "./accounts.js";
 import { normalizeWhatsAppTarget } from "./normalize.js";
 

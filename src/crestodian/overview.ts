@@ -4,16 +4,16 @@ import {
   resolveDefaultAgentId,
 } from "../agents/agent-scope.js";
 import {
-  NEXISCLAW_DOCS_URL,
-  NEXISCLAW_SOURCE_URL,
-  resolveNexisClawReferencePaths,
+  GREENCHCLAW_DOCS_URL,
+  GREENCHCLAW_SOURCE_URL,
+  resolveGreenchClawReferencePaths,
 } from "../agents/docs-path.js";
 import {
   readConfigFileSnapshot,
   resolveConfigPath,
   resolveGatewayPort,
   type ConfigFileSnapshot,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "../config/config.js";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
 import { normalizeAgentId } from "../routing/session-key.js";
@@ -60,7 +60,7 @@ export type CrestodianOverview = {
   };
 };
 
-type NexisClawReferencePaths = Awaited<ReturnType<typeof resolveNexisClawReferencePaths>>;
+type GreenchClawReferencePaths = Awaited<ReturnType<typeof resolveGreenchClawReferencePaths>>;
 
 type GatewayConnectionDetails = {
   url: string;
@@ -73,12 +73,12 @@ type CrestodianOverviewDependencies = {
   resolveConfigPath?: typeof resolveConfigPath;
   resolveGatewayPort?: typeof resolveGatewayPort;
   buildGatewayConnectionDetails?: (input: {
-    config: NexisClawConfig;
+    config: GreenchClawConfig;
     configPath: string;
   }) => GatewayConnectionDetails;
   probeLocalCommand?: typeof probeLocalCommand;
   probeGatewayUrl?: typeof probeGatewayUrl;
-  resolveNexisClawReferencePaths?: typeof resolveNexisClawReferencePaths;
+  resolveGreenchClawReferencePaths?: typeof resolveGreenchClawReferencePaths;
 };
 
 function issueMessages(snapshot: ConfigFileSnapshot): string[] {
@@ -88,7 +88,7 @@ function issueMessages(snapshot: ConfigFileSnapshot): string[] {
   });
 }
 
-function buildAgentSummaries(cfg: NexisClawConfig): CrestodianAgentSummary[] {
+function buildAgentSummaries(cfg: GreenchClawConfig): CrestodianAgentSummary[] {
   const defaultAgentId = resolveDefaultAgentId(cfg);
   const entries = listAgentEntries(cfg);
   if (entries.length === 0) {
@@ -127,8 +127,8 @@ function buildAgentSummaries(cfg: NexisClawConfig): CrestodianAgentSummary[] {
   return summaries;
 }
 
-function resolveFastTestReferences(env: NodeJS.ProcessEnv): NexisClawReferencePaths | undefined {
-  if (env.NEXISCLAW_TEST_FAST !== "1") {
+function resolveFastTestReferences(env: NodeJS.ProcessEnv): GreenchClawReferencePaths | undefined {
+  if (env.GREENCHCLAW_TEST_FAST !== "1") {
     return undefined;
   }
   const sourcePath = process.cwd();
@@ -165,7 +165,8 @@ export async function loadCrestodianOverview(
   } catch (err) {
     gatewayError = err instanceof Error ? err.message : String(err);
   }
-  const resolveReferences = deps.resolveNexisClawReferencePaths ?? resolveNexisClawReferencePaths;
+  const resolveReferences =
+    deps.resolveGreenchClawReferencePaths ?? resolveGreenchClawReferencePaths;
   const commandProbe = deps.probeLocalCommand ?? probeLocalCommand;
   const [codex, claude, gateway, references] = await Promise.all([
     commandProbe("codex"),
@@ -205,9 +206,9 @@ export async function loadCrestodianOverview(
     },
     references: {
       docsPath: references.docsPath ?? undefined,
-      docsUrl: NEXISCLAW_DOCS_URL,
+      docsUrl: GREENCHCLAW_DOCS_URL,
       sourcePath: references.sourcePath ?? undefined,
-      sourceUrl: NEXISCLAW_SOURCE_URL,
+      sourceUrl: GREENCHCLAW_SOURCE_URL,
     },
   };
 }

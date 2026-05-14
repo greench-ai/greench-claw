@@ -1,5 +1,5 @@
 ---
-summary: "Adds the Feishu channel surface for sending and receiving NexisClaw messages."
+summary: "Adds the Feishu channel surface for sending and receiving GreenchClaw messages."
 read_when:
   - You are installing, configuring, or auditing the feishu plugin
 title: "Feishu plugin"
@@ -7,11 +7,11 @@ title: "Feishu plugin"
 
 # Feishu plugin
 
-Adds the Feishu channel surface for sending and receiving NexisClaw messages.
+Adds the Feishu channel surface for sending and receiving GreenchClaw messages.
 
 ## Distribution
 
-- Package: `@NexisClaw/feishu`
+- Package: `@GreenchClaw/feishu`
 - Install route: npm; ClawHub
 
 ## Surface

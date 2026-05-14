@@ -14,52 +14,52 @@ This page is the deep runbook. Start at [/help/troubleshooting](/help/troublesho
 Run these first, in this order:
 
 ```bash
-NexisClaw status
-NexisClaw gateway status
-NexisClaw logs --follow
-NexisClaw doctor
-NexisClaw channels status --probe
+GreenchClaw status
+GreenchClaw gateway status
+GreenchClaw logs --follow
+GreenchClaw doctor
+GreenchClaw channels status --probe
 ```
 
 Expected healthy signals:
 
-- `NexisClaw gateway status` shows `Runtime: running`, `Connectivity probe: ok`, and a `Capability: ...` line.
-- `NexisClaw doctor` reports no blocking config/service issues.
-- `NexisClaw channels status --probe` shows live per-account transport status and, where supported, probe/audit results such as `works` or `audit ok`.
+- `GreenchClaw gateway status` shows `Runtime: running`, `Connectivity probe: ok`, and a `Capability: ...` line.
+- `GreenchClaw doctor` reports no blocking config/service issues.
+- `GreenchClaw channels status --probe` shows live per-account transport status and, where supported, probe/audit results such as `works` or `audit ok`.
 
 ## Split brain installs and newer config guard
 
-Use this when a gateway service unexpectedly stops after an update, or logs show that one `NexisClaw` binary is older than the version that last wrote `NexisClaw.json`.
+Use this when a gateway service unexpectedly stops after an update, or logs show that one `GreenchClaw` binary is older than the version that last wrote `GreenchClaw.json`.
 
-NexisClaw stamps config writes with `meta.lastTouchedVersion`. Read-only commands can still inspect a config written by a newer NexisClaw, but process and service mutations refuse to continue from an older binary. Blocked actions include gateway service start, stop, restart, uninstall, forced service reinstall, service-mode gateway startup, and `gateway --force` port cleanup.
+GreenchClaw stamps config writes with `meta.lastTouchedVersion`. Read-only commands can still inspect a config written by a newer GreenchClaw, but process and service mutations refuse to continue from an older binary. Blocked actions include gateway service start, stop, restart, uninstall, forced service reinstall, service-mode gateway startup, and `gateway --force` port cleanup.
 
 ```bash
-which NexisClaw
-NexisClaw --version
-NexisClaw gateway status --deep
-NexisClaw config get meta.lastTouchedVersion
+which GreenchClaw
+GreenchClaw --version
+GreenchClaw gateway status --deep
+GreenchClaw config get meta.lastTouchedVersion
 ```
 
 <Steps>
   <Step title="Fix PATH">
-    Fix `PATH` so `NexisClaw` resolves to the newer install, then rerun the action.
+    Fix `PATH` so `GreenchClaw` resolves to the newer install, then rerun the action.
   </Step>
   <Step title="Reinstall the gateway service">
     Reinstall the intended gateway service from the newer install:
 
     ```bash
-    NexisClaw gateway install --force
-    NexisClaw gateway restart
+    GreenchClaw gateway install --force
+    GreenchClaw gateway restart
     ```
 
   </Step>
   <Step title="Remove stale wrappers">
-    Remove stale system package or old wrapper entries that still point at an old `NexisClaw` binary.
+    Remove stale system package or old wrapper entries that still point at an old `GreenchClaw` binary.
   </Step>
 </Steps>
 
 <Warning>
-For intentional downgrade or emergency recovery only, set `NEXISCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1` for the single command. Leave it unset for normal operation.
+For intentional downgrade or emergency recovery only, set `GREENCHCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1` for the single command. Leave it unset for normal operation.
 </Warning>
 
 ## Skill symlink skipped as path escape
@@ -70,9 +70,9 @@ Use this when logs include:
 Skipping escaped skill path outside its configured root: ... reason=symlink-escape
 ```
 
-NexisClaw treats every skill root as a containment boundary. A symlink under
+GreenchClaw treats every skill root as a containment boundary. A symlink under
 `~/.agents/skills`, `<workspace>/.agents/skills`, `<workspace>/skills`, or
-`~/.NexisClaw/skills` is skipped when its real target resolves outside that root
+`~/.GreenchClaw/skills` is skipped when its real target resolves outside that root
 unless the target is explicitly trusted.
 
 Inspect the link:
@@ -80,7 +80,7 @@ Inspect the link:
 ```bash
 ls -l ~/.agents/skills/<name>
 realpath ~/.agents/skills/<name>
-NexisClaw config get skills.load
+GreenchClaw config get skills.load
 ```
 
 If the target is intentional, configure both the direct skill root and the
@@ -114,9 +114,9 @@ Related:
 Use this when logs/errors include: `HTTP 429: rate_limit_error: Extra usage is required for long context requests`.
 
 ```bash
-NexisClaw logs --follow
-NexisClaw models status
-NexisClaw config get agents.defaults.models
+GreenchClaw logs --follow
+GreenchClaw models status
+GreenchClaw config get agents.defaults.models
 ```
 
 Look for:
@@ -151,20 +151,20 @@ Use this when:
 
 - `curl ... /v1/models` works
 - tiny direct `/v1/chat/completions` calls work
-- NexisClaw model runs fail only on normal agent turns
+- GreenchClaw model runs fail only on normal agent turns
 
 ```bash
 curl http://127.0.0.1:1234/v1/models
 curl http://127.0.0.1:1234/v1/chat/completions \
   -H 'content-type: application/json' \
   -d '{"model":"<id>","messages":[{"role":"user","content":"hi"}],"stream":false}'
-NexisClaw infer model run --model <provider/model> --prompt "hi" --json
-NexisClaw logs --follow
+GreenchClaw infer model run --model <provider/model> --prompt "hi" --json
+GreenchClaw logs --follow
 ```
 
 Look for:
 
-- direct tiny calls succeed, but NexisClaw runs fail only on larger prompts
+- direct tiny calls succeed, but GreenchClaw runs fail only on larger prompts
 - `model_not_found` or 404 errors even though direct `/v1/chat/completions`
   works with the same bare model id
 - backend errors about `messages[].content` expecting a string
@@ -176,17 +176,17 @@ Look for:
     - `model_not_found` with a local MLX/vLLM-style server → verify `baseUrl` includes `/v1`, `api` is `"openai-completions"` for `/v1/chat/completions` backends, and `models.providers.<provider>.models[].id` is the bare provider-local id. Select it with the provider prefix once, for example `mlx/mlx-community/Qwen3-30B-A3B-6bit`; keep the catalog entry as `mlx-community/Qwen3-30B-A3B-6bit`.
     - `messages[...].content: invalid type: sequence, expected a string` → backend rejects structured Chat Completions content parts. Fix: set `models.providers.<provider>.models[].compat.requiresStringContent: true`.
     - `validation.keys` or allowed message keys like `["role","content"]` → backend rejects OpenAI-style replay metadata on Chat Completions messages. Fix: set `models.providers.<provider>.models[].compat.strictMessageKeys: true`.
-    - `incomplete turn detected ... stopReason=stop payloads=0` → the backend completed the Chat Completions request but returned no user-visible assistant text for that turn. NexisClaw retries replay-safe empty OpenAI-compatible turns once; persistent failures usually mean the backend is emitting empty/non-text content or suppressing final-answer text.
-    - direct tiny requests succeed, but NexisClaw agent runs fail with backend/model crashes (for example Gemma on some `inferrs` builds) → NexisClaw transport is likely already correct; the backend is failing on the larger agent-runtime prompt shape.
+    - `incomplete turn detected ... stopReason=stop payloads=0` → the backend completed the Chat Completions request but returned no user-visible assistant text for that turn. GreenchClaw retries replay-safe empty OpenAI-compatible turns once; persistent failures usually mean the backend is emitting empty/non-text content or suppressing final-answer text.
+    - direct tiny requests succeed, but GreenchClaw agent runs fail with backend/model crashes (for example Gemma on some `inferrs` builds) → GreenchClaw transport is likely already correct; the backend is failing on the larger agent-runtime prompt shape.
     - failures shrink after disabling tools but do not disappear → tool schemas were part of the pressure, but the remaining issue is still upstream model/server capacity or a backend bug.
 
   </Accordion>
   <Accordion title="Fix options">
     1. Set `compat.requiresStringContent: true` for string-only Chat Completions backends.
     2. Set `compat.strictMessageKeys: true` for strict Chat Completions backends that only accept `role` and `content` on each message.
-    3. Set `compat.supportsTools: false` for models/backends that cannot handle NexisClaw's tool schema surface reliably.
+    3. Set `compat.supportsTools: false` for models/backends that cannot handle GreenchClaw's tool schema surface reliably.
     4. Lower prompt pressure where possible: smaller workspace bootstrap, shorter session history, lighter local model, or a backend with stronger long-context support.
-    5. If tiny direct requests keep passing while NexisClaw agent turns still crash inside the backend, treat it as an upstream server/model limitation and file a repro there with the accepted payload shape.
+    5. If tiny direct requests keep passing while GreenchClaw agent turns still crash inside the backend, treat it as an upstream server/model limitation and file a repro there with the accepted payload shape.
   </Accordion>
 </AccordionGroup>
 
@@ -201,11 +201,11 @@ Related:
 If channels are up but nothing answers, check routing and policy before reconnecting anything.
 
 ```bash
-NexisClaw status
-NexisClaw channels status --probe
-NexisClaw pairing list --channel <channel> [--account <id>]
-NexisClaw config get channels
-NexisClaw logs --follow
+GreenchClaw status
+GreenchClaw channels status --probe
+GreenchClaw pairing list --channel <channel> [--account <id>]
+GreenchClaw config get channels
+GreenchClaw logs --follow
 ```
 
 Look for:
@@ -231,11 +231,11 @@ Related:
 When dashboard/control UI will not connect, validate URL, auth mode, and secure context assumptions.
 
 ```bash
-NexisClaw gateway status
-NexisClaw status
-NexisClaw logs --follow
-NexisClaw doctor
-NexisClaw gateway status --json
+GreenchClaw gateway status
+GreenchClaw status
+GreenchClaw logs --follow
+GreenchClaw doctor
+GreenchClaw gateway status --json
 ```
 
 Look for:
@@ -268,11 +268,11 @@ Use `error.details.code` from the failed `connect` response to pick the next act
 
 | Detail code                  | Meaning                                                                                                                                                                                      | Recommended action                                                                                                                                                                                                                                                                       |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AUTH_TOKEN_MISSING`         | Client did not send a required shared token.                                                                                                                                                 | Paste/set token in the client and retry. For dashboard paths: `NexisClaw config get gateway.auth.token` then paste into Control UI settings.                                                                                                                                              |
+| `AUTH_TOKEN_MISSING`         | Client did not send a required shared token.                                                                                                                                                 | Paste/set token in the client and retry. For dashboard paths: `GreenchClaw config get gateway.auth.token` then paste into Control UI settings.                                                                                                                                           |
 | `AUTH_TOKEN_MISMATCH`        | Shared token did not match gateway auth token.                                                                                                                                               | If `canRetryWithDeviceToken=true`, allow one trusted retry. Cached-token retries reuse stored approved scopes; explicit `deviceToken` / `scopes` callers keep requested scopes. If still failing, run the [token drift recovery checklist](/cli/devices#token-drift-recovery-checklist). |
 | `AUTH_DEVICE_TOKEN_MISMATCH` | Cached per-device token is stale or revoked.                                                                                                                                                 | Rotate/re-approve device token using [devices CLI](/cli/devices), then reconnect.                                                                                                                                                                                                        |
 | `AUTH_SCOPE_MISMATCH`        | Device token is valid, but its approved role/scopes do not cover this connect request.                                                                                                       | Re-pair the device or approve the requested scope contract; do not treat this as shared-token drift.                                                                                                                                                                                     |
-| `PAIRING_REQUIRED`           | Device identity needs approval. Check `error.details.reason` for `not-paired`, `scope-upgrade`, `role-upgrade`, or `metadata-upgrade`, and use `requestId` / `remediationHint` when present. | Approve pending request: `NexisClaw devices list` then `NexisClaw devices approve <requestId>`. Scope/role upgrades use the same flow after you review the requested access.                                                                                                               |
+| `PAIRING_REQUIRED`           | Device identity needs approval. Check `error.details.reason` for `not-paired`, `scope-upgrade`, `role-upgrade`, or `metadata-upgrade`, and use `requestId` / `remediationHint` when present. | Approve pending request: `GreenchClaw devices list` then `GreenchClaw devices approve <requestId>`. Scope/role upgrades use the same flow after you review the requested access.                                                                                                         |
 
 <Note>
 Direct loopback backend RPCs authenticated with the shared gateway token/password should not depend on the CLI's paired-device scope baseline. If subagents or other internal calls still fail with `scope-upgrade`, verify the caller is using `client.id: "gateway-client"` and `client.mode: "backend"` and is not forcing an explicit `deviceIdentity` or device token.
@@ -281,9 +281,9 @@ Direct loopback backend RPCs authenticated with the shared gateway token/passwor
 Device auth v2 migration check:
 
 ```bash
-NexisClaw --version
-NexisClaw doctor
-NexisClaw gateway status
+GreenchClaw --version
+GreenchClaw doctor
+GreenchClaw gateway status
 ```
 
 If logs show nonce/signature errors, update the connecting client and verify it:
@@ -300,10 +300,10 @@ If logs show nonce/signature errors, update the connecting client and verify it:
   </Step>
 </Steps>
 
-If `NexisClaw devices rotate` / `revoke` / `remove` is denied unexpectedly:
+If `GreenchClaw devices rotate` / `revoke` / `remove` is denied unexpectedly:
 
 - paired-device token sessions can manage only **their own** device unless the caller also has `operator.admin`
-- `NexisClaw devices rotate --scope ...` can only request operator scopes that the caller session already holds
+- `GreenchClaw devices rotate --scope ...` can only request operator scopes that the caller session already holds
 
 Related:
 
@@ -318,11 +318,11 @@ Related:
 Use this when service is installed but process does not stay up.
 
 ```bash
-NexisClaw gateway status
-NexisClaw status
-NexisClaw logs --follow
-NexisClaw doctor
-NexisClaw gateway status --deep   # also scan system-level services
+GreenchClaw gateway status
+GreenchClaw status
+GreenchClaw logs --follow
+GreenchClaw doctor
+GreenchClaw gateway status --deep   # also scan system-level services
 ```
 
 Look for:
@@ -335,12 +335,12 @@ Look for:
 
 <AccordionGroup>
   <Accordion title="Common signatures">
-    - `Gateway start blocked: set gateway.mode=local` or `existing config is missing gateway.mode` → local gateway mode is not enabled, or the config file was clobbered and lost `gateway.mode`. Fix: set `gateway.mode="local"` in your config, or re-run `NexisClaw onboard --mode local` / `NexisClaw setup` to restamp the expected local-mode config. If you are running NexisClaw via Podman, the default config path is `~/.NexisClaw/NexisClaw.json`.
+    - `Gateway start blocked: set gateway.mode=local` or `existing config is missing gateway.mode` → local gateway mode is not enabled, or the config file was clobbered and lost `gateway.mode`. Fix: set `gateway.mode="local"` in your config, or re-run `GreenchClaw onboard --mode local` / `GreenchClaw setup` to restamp the expected local-mode config. If you are running GreenchClaw via Podman, the default config path is `~/.GreenchClaw/GreenchClaw.json`.
     - `refusing to bind gateway ... without auth` → non-loopback bind without a valid gateway auth path (token/password, or trusted-proxy where configured).
     - `another gateway instance is already listening` / `EADDRINUSE` → port conflict.
     - `Other gateway-like services detected (best effort)` → stale or parallel launchd/systemd/schtasks units exist. Most setups should keep one gateway per machine; if you do need more than one, isolate ports + config/state/workspace. See [/gateway#multiple-gateways-same-host](/gateway#multiple-gateways-same-host).
-    - `System-level NexisClaw gateway service detected` from doctor → a systemd system unit exists while the user-level service is missing. Remove or disable the duplicate before allowing doctor to install a user service, or set `NEXISCLAW_SERVICE_REPAIR_POLICY=external` if the system unit is the intended supervisor.
-    - `Gateway service port does not match current gateway config` → the installed supervisor still pins the old `--port`. Run `NexisClaw doctor --fix` or `NexisClaw gateway install --force`, then restart the gateway service.
+    - `System-level GreenchClaw gateway service detected` from doctor → a systemd system unit exists while the user-level service is missing. Remove or disable the duplicate before allowing doctor to install a user service, or set `GREENCHCLAW_SERVICE_REPAIR_POLICY=external` if the system unit is the intended supervisor.
+    - `Gateway service port does not match current gateway config` → the installed supervisor still pins the old `--port`. Run `GreenchClaw doctor --fix` or `GreenchClaw gateway install --force`, then restart the gateway service.
 
   </Accordion>
 </AccordionGroup>
@@ -357,10 +357,10 @@ Use this when Gateway startup fails with `Invalid config` or hot reload logs say
 it skipped an invalid edit.
 
 ```bash
-NexisClaw logs --follow
-NexisClaw config file
-NexisClaw config validate
-NexisClaw doctor
+GreenchClaw logs --follow
+GreenchClaw config file
+GreenchClaw config validate
+GreenchClaw doctor
 ```
 
 Look for:
@@ -368,41 +368,41 @@ Look for:
 - `Invalid config at ...`
 - `config reload skipped (invalid config): ...`
 - `Config write rejected: ...`
-- A timestamped `NexisClaw.json.rejected.*` file beside the active config
-- A timestamped `NexisClaw.json.clobbered.*` file if `doctor --fix` repaired a broken direct edit
+- A timestamped `GreenchClaw.json.rejected.*` file beside the active config
+- A timestamped `GreenchClaw.json.clobbered.*` file if `doctor --fix` repaired a broken direct edit
 
 <AccordionGroup>
   <Accordion title="What happened">
-    - The config did not validate during startup, hot reload, or an NexisClaw-owned write.
-    - Gateway startup fails closed instead of rewriting `NexisClaw.json`.
+    - The config did not validate during startup, hot reload, or an GreenchClaw-owned write.
+    - Gateway startup fails closed instead of rewriting `GreenchClaw.json`.
     - Hot reload skips invalid external edits and keeps the current runtime config active.
-    - NexisClaw-owned writes reject invalid/destructive payloads before commit and save `.rejected.*`.
-    - `NexisClaw doctor --fix` owns repair. It can remove non-JSON prefixes or restore the last-known-good copy while preserving the rejected payload as `.clobbered.*`.
+    - GreenchClaw-owned writes reject invalid/destructive payloads before commit and save `.rejected.*`.
+    - `GreenchClaw doctor --fix` owns repair. It can remove non-JSON prefixes or restore the last-known-good copy while preserving the rejected payload as `.clobbered.*`.
 
   </Accordion>
   <Accordion title="Inspect and repair">
     ```bash
-    CONFIG="$(NexisClaw config file)"
+    CONFIG="$(GreenchClaw config file)"
     ls -lt "$CONFIG".clobbered.* "$CONFIG".rejected.* 2>/dev/null | head
     diff -u "$CONFIG" "$(ls -t "$CONFIG".clobbered.* 2>/dev/null | head -n 1)"
-    NexisClaw config validate
-    NexisClaw doctor
+    GreenchClaw config validate
+    GreenchClaw doctor
     ```
   </Accordion>
   <Accordion title="Common signatures">
     - `.clobbered.*` exists → doctor preserved a broken external edit while repairing the active config.
-    - `.rejected.*` exists → an NexisClaw-owned config write failed schema or clobber checks before commit.
+    - `.rejected.*` exists → an GreenchClaw-owned config write failed schema or clobber checks before commit.
     - `Config write rejected:` → the write tried to drop required shape, shrink the file sharply, or persist invalid config.
     - `config reload skipped (invalid config):` → a direct edit failed validation and was ignored by the running Gateway.
     - `Invalid config at ...` → startup failed before Gateway services booted.
-    - `missing-meta-vs-last-good`, `gateway-mode-missing-vs-last-good`, or `size-drop-vs-last-good:*` → an NexisClaw-owned write was rejected because it lost fields or size compared with the last-known-good backup.
+    - `missing-meta-vs-last-good`, `gateway-mode-missing-vs-last-good`, or `size-drop-vs-last-good:*` → an GreenchClaw-owned write was rejected because it lost fields or size compared with the last-known-good backup.
     - `Config last-known-good promotion skipped` → the candidate contained redacted secret placeholders such as `***`.
 
   </Accordion>
   <Accordion title="Fix options">
-    1. Run `NexisClaw doctor --fix` to let doctor repair prefixed/clobbered config or restore last-known-good.
-    2. Copy only the intended keys from `.clobbered.*` or `.rejected.*`, then apply them with `NexisClaw config set` or `config.patch`.
-    3. Run `NexisClaw config validate` before restarting.
+    1. Run `GreenchClaw doctor --fix` to let doctor repair prefixed/clobbered config or restore last-known-good.
+    2. Copy only the intended keys from `.clobbered.*` or `.rejected.*`, then apply them with `GreenchClaw config set` or `config.patch`.
+    3. Run `GreenchClaw config validate` before restarting.
     4. If you edit by hand, keep the full JSON5 config, not just the partial object you wanted to change.
   </Accordion>
 </AccordionGroup>
@@ -416,12 +416,12 @@ Related:
 
 ## Gateway probe warnings
 
-Use this when `NexisClaw gateway probe` reaches something, but still prints a warning block.
+Use this when `GreenchClaw gateway probe` reaches something, but still prints a warning block.
 
 ```bash
-NexisClaw gateway probe
-NexisClaw gateway probe --json
-NexisClaw gateway probe --ssh user@gateway-host
+GreenchClaw gateway probe
+GreenchClaw gateway probe --json
+GreenchClaw gateway probe --ssh user@gateway-host
 ```
 
 Look for:
@@ -449,11 +449,11 @@ Related:
 If channel state is connected but message flow is dead, focus on policy, permissions, and channel specific delivery rules.
 
 ```bash
-NexisClaw channels status --probe
-NexisClaw pairing list --channel <channel> [--account <id>]
-NexisClaw status --deep
-NexisClaw logs --follow
-NexisClaw config get channels
+GreenchClaw channels status --probe
+GreenchClaw pairing list --channel <channel> [--account <id>]
+GreenchClaw status --deep
+GreenchClaw logs --follow
+GreenchClaw config get channels
 ```
 
 Look for:
@@ -480,11 +480,11 @@ Related:
 If cron or heartbeat did not run or did not deliver, verify scheduler state first, then delivery target.
 
 ```bash
-NexisClaw cron status
-NexisClaw cron list
-NexisClaw cron runs --id <jobId> --limit 20
-NexisClaw system heartbeat last
-NexisClaw logs --follow
+GreenchClaw cron status
+GreenchClaw cron list
+GreenchClaw cron runs --id <jobId> --limit 20
+GreenchClaw system heartbeat last
+GreenchClaw logs --follow
 ```
 
 Look for:
@@ -498,7 +498,7 @@ Look for:
     - `cron: scheduler disabled; jobs will not run automatically` → cron disabled.
     - `cron: timer tick failed` → scheduler tick failed; check file/log/runtime errors.
     - `heartbeat skipped` with `reason=quiet-hours` → outside active hours window.
-    - `heartbeat skipped` with `reason=empty-heartbeat-file` → `HEARTBEAT.md` exists but only contains blank lines / markdown headers, so NexisClaw skips the model call.
+    - `heartbeat skipped` with `reason=empty-heartbeat-file` → `HEARTBEAT.md` exists but only contains blank lines / markdown headers, so GreenchClaw skips the model call.
     - `heartbeat skipped` with `reason=no-tasks-due` → `HEARTBEAT.md` contains a `tasks:` block, but none of the tasks are due on this tick.
     - `heartbeat: unknown accountId` → invalid account id for heartbeat delivery target.
     - `heartbeat skipped` with `reason=dm-blocked` → heartbeat target resolved to a DM-style destination while `agents.defaults.heartbeat.directPolicy` (or per-agent override) is set to `block`.
@@ -517,11 +517,11 @@ Related:
 If a node is paired but tools fail, isolate foreground, permission, and approval state.
 
 ```bash
-NexisClaw nodes status
-NexisClaw nodes describe --node <idOrNameOrIp>
-NexisClaw approvals get --node <idOrNameOrIp>
-NexisClaw logs --follow
-NexisClaw status
+GreenchClaw nodes status
+GreenchClaw nodes describe --node <idOrNameOrIp>
+GreenchClaw approvals get --node <idOrNameOrIp>
+GreenchClaw logs --follow
+GreenchClaw status
 ```
 
 Look for:
@@ -548,11 +548,11 @@ Related:
 Use this when browser tool actions fail even though the gateway itself is healthy.
 
 ```bash
-NexisClaw browser status
-NexisClaw browser start --browser-profile NexisClaw
-NexisClaw browser profiles
-NexisClaw logs --follow
-NexisClaw doctor
+GreenchClaw browser status
+GreenchClaw browser start --browser-profile GreenchClaw
+GreenchClaw browser profiles
+GreenchClaw logs --follow
+GreenchClaw doctor
 ```
 
 Look for:
@@ -570,11 +570,11 @@ Look for:
     - `browser.executablePath not found` → configured path is invalid.
     - `browser.cdpUrl must be http(s) or ws(s)` → the configured CDP URL uses an unsupported scheme such as `file:` or `ftp:`.
     - `browser.cdpUrl has invalid port` → the configured CDP URL has a bad or out-of-range port.
-    - `Playwright is not available in this gateway build; '<feature>' is unsupported.` → the current gateway install lacks the core browser runtime dependency; reinstall or update NexisClaw, then restart the gateway. ARIA snapshots and basic page screenshots can still work, but navigation, AI snapshots, CSS-selector element screenshots, and PDF export stay unavailable.
+    - `Playwright is not available in this gateway build; '<feature>' is unsupported.` → the current gateway install lacks the core browser runtime dependency; reinstall or update GreenchClaw, then restart the gateway. ARIA snapshots and basic page screenshots can still work, but navigation, AI snapshots, CSS-selector element screenshots, and PDF export stay unavailable.
 
   </Accordion>
   <Accordion title="Chrome MCP / existing-session signatures">
-    - `Could not find DevToolsActivePort for chrome` → Chrome MCP existing-session could not attach to the selected browser data dir yet. Open the browser inspect page, enable remote debugging, keep the browser open, approve the first attach prompt, then retry. If signed-in state is not required, prefer the managed `NexisClaw` profile.
+    - `Could not find DevToolsActivePort for chrome` → Chrome MCP existing-session could not attach to the selected browser data dir yet. Open the browser inspect page, enable remote debugging, keep the browser open, approve the first attach prompt, then retry. If signed-in state is not required, prefer the managed `GreenchClaw` profile.
     - `No Chrome tabs found for profile="user"` → the Chrome MCP attach profile has no open local Chrome tabs.
     - `Remote CDP for profile "<name>" is not reachable` → the configured remote CDP endpoint is not reachable from the gateway host.
     - `Browser attachOnly is enabled ... not reachable` or `Browser attachOnly is enabled and CDP websocket ... is not reachable` → attach-only profile has no reachable target, or the HTTP endpoint answered but the CDP WebSocket still could not be opened.
@@ -589,14 +589,14 @@ Look for:
     - `existing-session type does not support timeoutMs overrides.` → omit `timeoutMs` for `act:type` on `profile="user"` / Chrome MCP existing-session profiles, or use a managed/CDP browser profile when a custom timeout is required.
     - `existing-session evaluate does not support timeoutMs overrides.` → omit `timeoutMs` for `act:evaluate` on `profile="user"` / Chrome MCP existing-session profiles, or use a managed/CDP browser profile when a custom timeout is required.
     - `response body is not supported for existing-session profiles yet.` → `responsebody` still requires a managed browser or raw CDP profile.
-    - stale viewport / dark-mode / locale / offline overrides on attach-only or remote CDP profiles → run `NexisClaw browser stop --browser-profile <name>` to close the active control session and release Playwright/CDP emulation state without restarting the whole gateway.
+    - stale viewport / dark-mode / locale / offline overrides on attach-only or remote CDP profiles → run `GreenchClaw browser stop --browser-profile <name>` to close the active control session and release Playwright/CDP emulation state without restarting the whole gateway.
 
   </Accordion>
 </AccordionGroup>
 
 Related:
 
-- [Browser (NexisClaw-managed)](/tools/browser)
+- [Browser (GreenchClaw-managed)](/tools/browser)
 - [Browser troubleshooting](/tools/browser-linux-troubleshooting)
 
 ## If you upgraded and something suddenly broke
@@ -606,10 +606,10 @@ Most post-upgrade breakage is config drift or stricter defaults now being enforc
 <AccordionGroup>
   <Accordion title="1. Auth and URL override behavior changed">
     ```bash
-    NexisClaw gateway status
-    NexisClaw config get gateway.mode
-    NexisClaw config get gateway.remote.url
-    NexisClaw config get gateway.auth.mode
+    GreenchClaw gateway status
+    GreenchClaw config get gateway.mode
+    GreenchClaw config get gateway.remote.url
+    GreenchClaw config get gateway.auth.mode
     ```
 
     What to check:
@@ -625,11 +625,11 @@ Most post-upgrade breakage is config drift or stricter defaults now being enforc
   </Accordion>
   <Accordion title="2. Bind and auth guardrails are stricter">
     ```bash
-    NexisClaw config get gateway.bind
-    NexisClaw config get gateway.auth.mode
-    NexisClaw config get gateway.auth.token
-    NexisClaw gateway status
-    NexisClaw logs --follow
+    GreenchClaw config get gateway.bind
+    GreenchClaw config get gateway.auth.mode
+    GreenchClaw config get gateway.auth.token
+    GreenchClaw gateway status
+    GreenchClaw logs --follow
     ```
 
     What to check:
@@ -645,10 +645,10 @@ Most post-upgrade breakage is config drift or stricter defaults now being enforc
   </Accordion>
   <Accordion title="3. Pairing and device identity state changed">
     ```bash
-    NexisClaw devices list
-    NexisClaw pairing list --channel <channel> [--account <id>]
-    NexisClaw logs --follow
-    NexisClaw doctor
+    GreenchClaw devices list
+    GreenchClaw pairing list --channel <channel> [--account <id>]
+    GreenchClaw logs --follow
+    GreenchClaw doctor
     ```
 
     What to check:
@@ -667,8 +667,8 @@ Most post-upgrade breakage is config drift or stricter defaults now being enforc
 If the service config and runtime still disagree after checks, reinstall service metadata from the same profile/state directory:
 
 ```bash
-NexisClaw gateway install --force
-NexisClaw gateway restart
+GreenchClaw gateway install --force
+GreenchClaw gateway restart
 ```
 
 Related:

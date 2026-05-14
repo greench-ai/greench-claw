@@ -9,7 +9,7 @@ describe("runObsidianSearch", () => {
         obsidian: {
           enabled: true,
           useOfficialCli: true,
-          vaultName: "NexisClaw Wiki",
+          vaultName: "GreenchClaw Wiki",
         },
       },
       { homedir: "/Users/tester" },
@@ -35,7 +35,7 @@ describe("runObsidianSearch", () => {
     expect(calls).toEqual([
       {
         command: "/usr/local/bin/obsidian",
-        argv: ["vault=NexisClaw Wiki", "search", "query=agent memory"],
+        argv: ["vault=GreenchClaw Wiki", "search", "query=agent memory"],
       },
     ]);
     expect(result.stdout).toBe("search output\n");

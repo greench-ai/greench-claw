@@ -60,7 +60,7 @@ describe("OAuth credential adoption is identity-gated", () => {
   let mainAgentDir = "";
 
   beforeAll(async () => {
-    tempRoot = await createOAuthTestTempRoot("NexisClaw-oauth-adopt-identity-");
+    tempRoot = await createOAuthTestTempRoot("GreenchClaw-oauth-adopt-identity-");
   });
 
   beforeEach(async () => {

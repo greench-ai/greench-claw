@@ -7,7 +7,7 @@ const { fetchWithSsrFGuard } = vi.hoisted(() => ({
   fetchWithSsrFGuard: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard,
 }));
 
@@ -107,8 +107,8 @@ describe("mantis discord smoke runtime", () => {
       outputDir: ".artifacts/qa-e2e/mantis/test",
       tokenFile,
       env: {
-        NEXISCLAW_QA_DISCORD_GUILD_ID: "1456350064065904867",
-        NEXISCLAW_QA_DISCORD_CHANNEL_ID: "1456744319972282449",
+        GREENCHCLAW_QA_DISCORD_GUILD_ID: "1456350064065904867",
+        GREENCHCLAW_QA_DISCORD_CHANNEL_ID: "1456744319972282449",
       },
       now: () => new Date("2026-05-03T12:00:00.000Z"),
     });
@@ -135,8 +135,8 @@ describe("mantis discord smoke runtime", () => {
       tokenFile,
       skipPost: true,
       env: {
-        NEXISCLAW_QA_DISCORD_GUILD_ID: "1456350064065904867",
-        NEXISCLAW_QA_DISCORD_CHANNEL_ID: "1456744319972282449",
+        GREENCHCLAW_QA_DISCORD_GUILD_ID: "1456350064065904867",
+        GREENCHCLAW_QA_DISCORD_CHANNEL_ID: "1456744319972282449",
       },
     });
 
@@ -151,8 +151,8 @@ describe("mantis discord smoke runtime", () => {
       tokenFile,
       redactPublicMetadata: true,
       env: {
-        NEXISCLAW_QA_DISCORD_GUILD_ID: "1456350064065904867",
-        NEXISCLAW_QA_DISCORD_CHANNEL_ID: "1456744319972282449",
+        GREENCHCLAW_QA_DISCORD_GUILD_ID: "1456350064065904867",
+        GREENCHCLAW_QA_DISCORD_CHANNEL_ID: "1456744319972282449",
       },
     });
 
@@ -197,7 +197,7 @@ describe("mantis discord smoke runtime", () => {
 
     expect(result.status).toBe("fail");
     const errorText = await fs.readFile(path.join(result.outputDir, "error.txt"), "utf8");
-    expect(errorText).toContain("Missing NEXISCLAW_QA_DISCORD_GUILD_ID");
+    expect(errorText).toContain("Missing GREENCHCLAW_QA_DISCORD_GUILD_ID");
   });
 
   it("fails when the channel is not in the configured guild", async () => {
@@ -243,8 +243,8 @@ describe("mantis discord smoke runtime", () => {
       outputDir: ".artifacts/qa-e2e/mantis/wrong-guild",
       tokenFile,
       env: {
-        NEXISCLAW_QA_DISCORD_GUILD_ID: "1456350064065904867",
-        NEXISCLAW_QA_DISCORD_CHANNEL_ID: "1456744319972282449",
+        GREENCHCLAW_QA_DISCORD_GUILD_ID: "1456350064065904867",
+        GREENCHCLAW_QA_DISCORD_CHANNEL_ID: "1456744319972282449",
       },
     });
 
@@ -298,8 +298,8 @@ describe("mantis discord smoke runtime", () => {
       tokenFile,
       redactPublicMetadata: true,
       env: {
-        NEXISCLAW_QA_DISCORD_GUILD_ID: "1456350064065904867",
-        NEXISCLAW_QA_DISCORD_CHANNEL_ID: "1456744319972282449",
+        GREENCHCLAW_QA_DISCORD_GUILD_ID: "1456350064065904867",
+        GREENCHCLAW_QA_DISCORD_CHANNEL_ID: "1456744319972282449",
       },
     });
 

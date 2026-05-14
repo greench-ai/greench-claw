@@ -1,13 +1,13 @@
 {
-  "name": "@NexisClaw/tts-local-cli",
+  "name": "@GreenchClaw/tts-local-cli",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw local CLI TTS plugin",
+  "description": "GreenchClaw local CLI TTS plugin",
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

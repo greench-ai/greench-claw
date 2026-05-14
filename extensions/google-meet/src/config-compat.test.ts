@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   legacyConfigRules,
@@ -37,7 +37,7 @@ describe("google-meet config compatibility", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const migration = migrateGoogleMeetLegacyRealtimeProvider(config);
 
@@ -78,7 +78,7 @@ describe("google-meet config compatibility", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const migration = normalizeCompatibilityConfig({ cfg: config });
 

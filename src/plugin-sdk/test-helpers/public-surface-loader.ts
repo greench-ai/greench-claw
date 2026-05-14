@@ -29,7 +29,7 @@ function resolveSourceArtifactPath(packageDir: string, artifactBasename: string)
 
 function resolveExtensionDirByManifestId(pluginId: string): string {
   const pluginDir = path.resolve(repoRoot, "extensions", pluginId);
-  const manifest = readJson(path.join(pluginDir, "NexisClaw.plugin.json")) as
+  const manifest = readJson(path.join(pluginDir, "GreenchClaw.plugin.json")) as
     | { id?: unknown }
     | undefined;
   if (manifest?.id === pluginId) {

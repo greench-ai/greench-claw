@@ -7,9 +7,9 @@ import {
   resetPluginRuntimeStateForTest,
   setActivePluginRegistry,
 } from "../plugins/runtime.js";
-import type { ConfigFileSnapshot, NexisClawConfig } from "./types.js";
+import type { ConfigFileSnapshot, GreenchClawConfig } from "./types.js";
 
-const mockLoadConfig = vi.hoisted(() => vi.fn<() => NexisClawConfig>());
+const mockLoadConfig = vi.hoisted(() => vi.fn<() => GreenchClawConfig>());
 const mockReadConfigFileSnapshot = vi.hoisted(() => vi.fn<() => Promise<ConfigFileSnapshot>>());
 const mockLoadPluginManifestRegistry = vi.hoisted(() => vi.fn());
 const mockGetCurrentPluginMetadataSnapshot = vi.hoisted(() => vi.fn());
@@ -45,9 +45,9 @@ vi.mock("../plugins/current-plugin-metadata-snapshot.js", () => ({
     mockGetCurrentPluginMetadataSnapshot(...args),
 }));
 
-function makeSnapshot(params: { valid: boolean; config?: NexisClawConfig }): ConfigFileSnapshot {
+function makeSnapshot(params: { valid: boolean; config?: GreenchClawConfig }): ConfigFileSnapshot {
   return {
-    path: "/tmp/NexisClaw.json",
+    path: "/tmp/GreenchClaw.json",
     exists: true,
     raw: "{}",
     parsed: params.config ?? {},

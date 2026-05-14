@@ -3,9 +3,9 @@ export {
   DEFAULT_ACCOUNT_ID,
   formatPairingApproveHint,
   type ChannelPlugin,
-} from "NexisClaw/plugin-sdk/channel-plugin-common";
-export type { ChannelOutboundAdapter } from "NexisClaw/plugin-sdk/channel-contract";
+} from "GreenchClaw/plugin-sdk/channel-plugin-common";
+export type { ChannelOutboundAdapter } from "GreenchClaw/plugin-sdk/channel-contract";
 export {
   collectStatusIssuesFromLastError,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
+} from "GreenchClaw/plugin-sdk/status-helpers";

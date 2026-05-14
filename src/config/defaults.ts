@@ -9,8 +9,8 @@ import {
   normalizeProviderConfigForConfigDefaults,
 } from "./provider-policy.js";
 import { normalizeTalkConfig } from "./talk.js";
+import type { GreenchClawConfig } from "./types.GreenchClaw.js";
 import type { ModelDefinitionConfig } from "./types.models.js";
-import type { NexisClawConfig } from "./types.NexisClaw.js";
 
 type WarnState = { warned: boolean };
 type ProviderPolicyDefaultsOptions = {
@@ -95,7 +95,7 @@ type SessionDefaultsOptions = {
   warnState?: WarnState;
 };
 
-export function applyMessageDefaults(cfg: NexisClawConfig): NexisClawConfig {
+export function applyMessageDefaults(cfg: GreenchClawConfig): GreenchClawConfig {
   const messages = cfg.messages;
   const hasAckScope = messages?.ackReactionScope !== undefined;
   if (hasAckScope) {
@@ -111,9 +111,9 @@ export function applyMessageDefaults(cfg: NexisClawConfig): NexisClawConfig {
 }
 
 export function applySessionDefaults(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   options: SessionDefaultsOptions = {},
-): NexisClawConfig {
+): GreenchClawConfig {
   const session = cfg.session;
   if (!session || session.mainKey === undefined) {
     return cfg;
@@ -123,7 +123,7 @@ export function applySessionDefaults(
   const warn = options.warn ?? console.warn;
   const warnState = options.warnState ?? defaultWarnState;
 
-  const next: NexisClawConfig = {
+  const next: GreenchClawConfig = {
     ...cfg,
     session: { ...session, mainKey: "main" },
   };
@@ -136,14 +136,14 @@ export function applySessionDefaults(
   return next;
 }
 
-export function applyTalkConfigNormalization(config: NexisClawConfig): NexisClawConfig {
+export function applyTalkConfigNormalization(config: GreenchClawConfig): GreenchClawConfig {
   return normalizeTalkConfig(config);
 }
 
 export function applyModelDefaults(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   options: ProviderPolicyDefaultsOptions = {},
-): NexisClawConfig {
+): GreenchClawConfig {
   let mutated = false;
   let nextCfg = cfg;
 
@@ -348,7 +348,7 @@ function normalizeAgentModelConfigForDefaults(value: unknown): unknown {
   return mutated ? next : value;
 }
 
-export function applyAgentDefaults(cfg: NexisClawConfig): NexisClawConfig {
+export function applyAgentDefaults(cfg: GreenchClawConfig): GreenchClawConfig {
   const agents = cfg.agents;
   const defaults = agents?.defaults;
   const hasMax =
@@ -389,7 +389,7 @@ export function applyAgentDefaults(cfg: NexisClawConfig): NexisClawConfig {
   };
 }
 
-export function applyLoggingDefaults(cfg: NexisClawConfig): NexisClawConfig {
+export function applyLoggingDefaults(cfg: GreenchClawConfig): GreenchClawConfig {
   const logging = cfg.logging;
   if (!logging) {
     return cfg;
@@ -406,7 +406,7 @@ export function applyLoggingDefaults(cfg: NexisClawConfig): NexisClawConfig {
   };
 }
 
-function hasAnthropicDefaultSignal(cfg: NexisClawConfig, env: NodeJS.ProcessEnv): boolean {
+function hasAnthropicDefaultSignal(cfg: GreenchClawConfig, env: NodeJS.ProcessEnv): boolean {
   if (env.ANTHROPIC_API_KEY?.trim() || env.ANTHROPIC_OAUTH_TOKEN?.trim()) {
     return true;
   }
@@ -433,9 +433,9 @@ function hasAnthropicDefaultSignal(cfg: NexisClawConfig, env: NodeJS.ProcessEnv)
 }
 
 export function applyContextPruningDefaults(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   options: ProviderPolicyDefaultsOptions = {},
-): NexisClawConfig {
+): GreenchClawConfig {
   if (!cfg.agents?.defaults) {
     return cfg;
   }
@@ -452,7 +452,7 @@ export function applyContextPruningDefaults(
   );
 }
 
-export function applyCompactionDefaults(cfg: NexisClawConfig): NexisClawConfig {
+export function applyCompactionDefaults(cfg: GreenchClawConfig): GreenchClawConfig {
   const defaults = cfg.agents?.defaults;
   if (!defaults) {
     return cfg;

@@ -10,7 +10,7 @@ import {
 } from "./status.test-helpers.js";
 
 const loadConfigMock = vi.fn();
-const loadNexisClawPluginsMock = vi.fn();
+const loadGreenchClawPluginsMock = vi.fn();
 const loadPluginMetadataRegistrySnapshotMock = vi.fn();
 const loadPluginManifestRegistryForPluginRegistryMock = vi.fn();
 const loadPluginRegistrySnapshotWithMetadataMock = vi.fn();
@@ -56,7 +56,7 @@ vi.mock("../config/plugin-auto-enable.js", () => ({
 }));
 
 vi.mock("./loader.js", () => ({
-  loadNexisClawPlugins: (...args: unknown[]) => loadNexisClawPluginsMock(...args),
+  loadGreenchClawPlugins: (...args: unknown[]) => loadGreenchClawPluginsMock(...args),
 }));
 
 vi.mock("./runtime/metadata-registry-loader.js", () => ({
@@ -116,7 +116,7 @@ function setPluginLoadResult(overrides: Partial<ReturnType<typeof createPluginLo
     plugins: [],
     ...overrides,
   });
-  loadNexisClawPluginsMock.mockReturnValue(result);
+  loadGreenchClawPluginsMock.mockReturnValue(result);
   loadPluginMetadataRegistrySnapshotMock.mockReturnValue(result);
 }
 
@@ -185,7 +185,7 @@ function expectPluginLoaderCall(params: {
   logger?: unknown;
   loadModules?: boolean;
 }) {
-  expectMockCalledWithFields(loadNexisClawPluginsMock, {
+  expectMockCalledWithFields(loadGreenchClawPluginsMock, {
     ...(params.config !== undefined ? { config: params.config } : {}),
     ...(params.activationSourceConfig !== undefined
       ? { activationSourceConfig: params.activationSourceConfig }
@@ -396,7 +396,7 @@ describe("plugin status reports", () => {
 
   beforeEach(() => {
     loadConfigMock.mockReset();
-    loadNexisClawPluginsMock.mockReset();
+    loadGreenchClawPluginsMock.mockReset();
     loadPluginMetadataRegistrySnapshotMock.mockReset();
     loadPluginManifestRegistryForPluginRegistryMock.mockReset();
     loadPluginRegistrySnapshotWithMetadataMock.mockReset();
@@ -440,7 +440,7 @@ describe("plugin status reports", () => {
   });
 
   it("forwards an explicit env to plugin loading", () => {
-    const env = { HOME: "/tmp/NexisClaw-home" } as NodeJS.ProcessEnv;
+    const env = { HOME: "/tmp/GreenchClaw-home" } as NodeJS.ProcessEnv;
 
     buildPluginSnapshotReport({
       config: {},
@@ -482,7 +482,7 @@ describe("plugin status reports", () => {
       snapshot: createInstalledPluginIndexSnapshot([
         {
           pluginId: "provider-env-plugin",
-          manifestPath: "/tmp/provider-env-plugin/NexisClaw.plugin.json",
+          manifestPath: "/tmp/provider-env-plugin/GreenchClaw.plugin.json",
           manifestHash: "manifest-hash",
           rootDir: "/tmp/provider-env-plugin",
           origin: "workspace",
@@ -514,7 +514,7 @@ describe("plugin status reports", () => {
     buildPluginSnapshotReport({ config: {}, workspaceDir: "/workspace" });
 
     expect(mockInput(loadPluginMetadataRegistrySnapshotMock).loadModules).toBe(false);
-    expect(loadNexisClawPluginsMock).not.toHaveBeenCalled();
+    expect(loadGreenchClawPluginsMock).not.toHaveBeenCalled();
   });
 
   it("loads plugin status from the auto-enabled config snapshot", () => {
@@ -630,7 +630,7 @@ describe("plugin status reports", () => {
     const report = buildPluginDiagnosticsReport({
       config: {},
       env: {
-        NEXISCLAW_VERSION: "2026.3.23-1",
+        GREENCHCLAW_VERSION: "2026.3.23-1",
       } as NodeJS.ProcessEnv,
     });
 

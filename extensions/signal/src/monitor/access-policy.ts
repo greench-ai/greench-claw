@@ -1,10 +1,10 @@
 import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
-} from "NexisClaw/plugin-sdk/channel-ingress-runtime";
-import { createChannelPairingChallengeIssuer } from "NexisClaw/plugin-sdk/channel-pairing";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { upsertChannelPairingRequest } from "NexisClaw/plugin-sdk/conversation-runtime";
+} from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
+import { createChannelPairingChallengeIssuer } from "GreenchClaw/plugin-sdk/channel-pairing";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { upsertChannelPairingRequest } from "GreenchClaw/plugin-sdk/conversation-runtime";
 import {
   formatSignalSenderId,
   looksLikeUuid,
@@ -115,7 +115,7 @@ export async function resolveSignalAccessState(params: {
   sender: SignalSender;
   groupId?: string;
   isGroup?: boolean;
-  cfg?: Pick<NexisClawConfig, "accessGroups" | "commands">;
+  cfg?: Pick<GreenchClawConfig, "accessGroups" | "commands">;
   hasControlCommand?: boolean;
   readStoreAllowFrom?: () => Promise<string[]>;
 }) {

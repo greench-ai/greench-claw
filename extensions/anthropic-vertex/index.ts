@@ -1,6 +1,6 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
-import { readConfiguredProviderCatalogEntries } from "NexisClaw/plugin-sdk/provider-catalog-shared";
-import { NATIVE_ANTHROPIC_REPLAY_HOOKS } from "NexisClaw/plugin-sdk/provider-model-shared";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { readConfiguredProviderCatalogEntries } from "GreenchClaw/plugin-sdk/provider-catalog-shared";
+import { NATIVE_ANTHROPIC_REPLAY_HOOKS } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import {
   hasAnthropicVertexAvailableAuth,
   mergeImplicitAnthropicVertexProvider,

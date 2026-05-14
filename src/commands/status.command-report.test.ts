@@ -32,7 +32,7 @@ describe("buildStatusCommandReportLines", () => {
     });
 
     expect(lines).toEqual([
-      "# NexisClaw status",
+      "# GreenchClaw status",
       "",
       "# Overview",
       "table:Item:1",

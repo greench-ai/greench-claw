@@ -1,32 +1,32 @@
 ---
-summary: "CLI reference for `NexisClaw tasks` (background task ledger and Task Flow state)"
+summary: "CLI reference for `GreenchClaw tasks` (background task ledger and Task Flow state)"
 read_when:
   - You want to inspect, audit, or cancel background task records
-  - You are documenting Task Flow commands under `NexisClaw tasks flow`
-title: "`NexisClaw tasks`"
+  - You are documenting Task Flow commands under `GreenchClaw tasks flow`
+title: "`GreenchClaw tasks`"
 ---
 
 Inspect durable background tasks and Task Flow state. With no subcommand,
-`NexisClaw tasks` is equivalent to `NexisClaw tasks list`.
+`GreenchClaw tasks` is equivalent to `GreenchClaw tasks list`.
 
 See [Background Tasks](/automation/tasks) for the lifecycle and delivery model.
 
 ## Usage
 
 ```bash
-NexisClaw tasks
-NexisClaw tasks list
-NexisClaw tasks list --runtime acp
-NexisClaw tasks list --status running
-NexisClaw tasks show <lookup>
-NexisClaw tasks notify <lookup> state_changes
-NexisClaw tasks cancel <lookup>
-NexisClaw tasks audit
-NexisClaw tasks maintenance
-NexisClaw tasks maintenance --apply
-NexisClaw tasks flow list
-NexisClaw tasks flow show <lookup>
-NexisClaw tasks flow cancel <lookup>
+GreenchClaw tasks
+GreenchClaw tasks list
+GreenchClaw tasks list --runtime acp
+GreenchClaw tasks list --status running
+GreenchClaw tasks show <lookup>
+GreenchClaw tasks notify <lookup> state_changes
+GreenchClaw tasks cancel <lookup>
+GreenchClaw tasks audit
+GreenchClaw tasks maintenance
+GreenchClaw tasks maintenance --apply
+GreenchClaw tasks flow list
+GreenchClaw tasks flow show <lookup>
+GreenchClaw tasks flow cancel <lookup>
 ```
 
 ## Root Options
@@ -40,7 +40,7 @@ NexisClaw tasks flow cancel <lookup>
 ### `list`
 
 ```bash
-NexisClaw tasks list [--runtime <name>] [--status <name>] [--json]
+GreenchClaw tasks list [--runtime <name>] [--status <name>] [--json]
 ```
 
 Lists tracked background tasks newest first.
@@ -48,7 +48,7 @@ Lists tracked background tasks newest first.
 ### `show`
 
 ```bash
-NexisClaw tasks show <lookup> [--json]
+GreenchClaw tasks show <lookup> [--json]
 ```
 
 Shows one task by task ID, run ID, or session key.
@@ -56,7 +56,7 @@ Shows one task by task ID, run ID, or session key.
 ### `notify`
 
 ```bash
-NexisClaw tasks notify <lookup> <done_only|state_changes|silent>
+GreenchClaw tasks notify <lookup> <done_only|state_changes|silent>
 ```
 
 Changes the notification policy for a running task.
@@ -64,7 +64,7 @@ Changes the notification policy for a running task.
 ### `cancel`
 
 ```bash
-NexisClaw tasks cancel <lookup>
+GreenchClaw tasks cancel <lookup>
 ```
 
 Cancels a running background task.
@@ -72,7 +72,7 @@ Cancels a running background task.
 ### `audit`
 
 ```bash
-NexisClaw tasks audit [--severity <warn|error>] [--code <name>] [--limit <n>] [--json]
+GreenchClaw tasks audit [--severity <warn|error>] [--code <name>] [--limit <n>] [--json]
 ```
 
 Surfaces stale, lost, delivery-failed, or otherwise inconsistent task and Task Flow records. Lost tasks retained until `cleanupAfter` are warnings; expired or unstamped lost tasks are errors.
@@ -80,7 +80,7 @@ Surfaces stale, lost, delivery-failed, or otherwise inconsistent task and Task F
 ### `maintenance`
 
 ```bash
-NexisClaw tasks maintenance [--apply] [--json]
+GreenchClaw tasks maintenance [--apply] [--json]
 ```
 
 Previews or applies task and Task Flow reconciliation, cleanup stamping, pruning,
@@ -98,9 +98,9 @@ non-cron session rows untouched.
 ### `flow`
 
 ```bash
-NexisClaw tasks flow list [--status <name>] [--json]
-NexisClaw tasks flow show <lookup> [--json]
-NexisClaw tasks flow cancel <lookup>
+GreenchClaw tasks flow list [--status <name>] [--json]
+GreenchClaw tasks flow show <lookup> [--json]
+GreenchClaw tasks flow cancel <lookup>
 ```
 
 Inspects or cancels durable Task Flow state under the task ledger.

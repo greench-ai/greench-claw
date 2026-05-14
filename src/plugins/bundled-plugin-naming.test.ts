@@ -6,9 +6,9 @@ type PluginManifestShape = {
   id?: unknown;
 };
 
-type NexisClawPackageShape = {
+type GreenchClawPackageShape = {
   name?: unknown;
-  NexisClaw?: {
+  GreenchClaw?: {
     install?: {
       npmSpec?: unknown;
     };
@@ -61,13 +61,13 @@ function readBundledPluginRecords(): BundledPluginRecord[] {
     .flatMap((dirName) => {
       const rootDir = path.join(EXTENSIONS_ROOT, dirName);
       const packagePath = path.join(rootDir, "package.json");
-      const manifestPath = path.join(rootDir, "NexisClaw.plugin.json");
+      const manifestPath = path.join(rootDir, "GreenchClaw.plugin.json");
       if (!fs.existsSync(packagePath) || !fs.existsSync(manifestPath)) {
         return [];
       }
 
       const manifest = readJsonFile<PluginManifestShape>(manifestPath);
-      const pkg = readJsonFile<NexisClawPackageShape>(packagePath);
+      const pkg = readJsonFile<GreenchClawPackageShape>(packagePath);
       const manifestId = normalizeText(manifest.id);
       const packageName = normalizeText(pkg.name);
       if (!manifestId || !packageName) {
@@ -79,15 +79,15 @@ function readBundledPluginRecords(): BundledPluginRecord[] {
           dirName,
           packageName,
           manifestId,
-          installNpmSpec: normalizeText(pkg.NexisClaw?.install?.npmSpec),
-          channelId: normalizeText(pkg.NexisClaw?.channel?.id),
+          installNpmSpec: normalizeText(pkg.GreenchClaw?.install?.npmSpec),
+          channelId: normalizeText(pkg.GreenchClaw?.channel?.id),
         },
       ];
     });
 }
 
 function resolveAllowedPackageNamesForId(pluginId: string): string[] {
-  return ALLOWED_PACKAGE_SUFFIXES.map((suffix) => `@NexisClaw/${pluginId}${suffix}`);
+  return ALLOWED_PACKAGE_SUFFIXES.map((suffix) => `@GreenchClaw/${pluginId}${suffix}`);
 }
 
 function resolveBundledPluginMismatches(
@@ -111,7 +111,7 @@ describe("bundled plugin naming guardrails", () => {
   it.each([
     {
       name: "keeps bundled workspace package names anchored to the plugin id",
-      message: `Bundled extension package names must stay anchored to the manifest id via @NexisClaw/<id> or an approved suffix (${ALLOWED_PACKAGE_SUFFIXES.join(", ")}). Update the plugin naming docs and this invariant before adding a new naming form.`,
+      message: `Bundled extension package names must stay anchored to the manifest id via @GreenchClaw/<id> or an approved suffix (${ALLOWED_PACKAGE_SUFFIXES.join(", ")}). Update the plugin naming docs and this invariant before adding a new naming form.`,
       collectMismatches: (records: BundledPluginRecord[]) =>
         records
           .filter(
@@ -126,7 +126,7 @@ describe("bundled plugin naming guardrails", () => {
     {
       name: "keeps bundled workspace directories aligned with the plugin id unless explicitly allowlisted",
       message:
-        "Bundled extension directory names should match NexisClaw.plugin.json:id. If a legacy exception is unavoidable, add it to DIR_ID_EXCEPTIONS with a comment.",
+        "Bundled extension directory names should match GreenchClaw.plugin.json:id. If a legacy exception is unavoidable, add it to DIR_ID_EXCEPTIONS with a comment.",
       collectMismatches: (records: BundledPluginRecord[]) =>
         records
           .filter(
@@ -135,9 +135,9 @@ describe("bundled plugin naming guardrails", () => {
           .map(({ dirName, manifestId }) => `${dirName} -> ${manifestId}`),
     },
     {
-      name: "keeps bundled NexisClaw.install.npmSpec aligned with the package name",
+      name: "keeps bundled GreenchClaw.install.npmSpec aligned with the package name",
       message:
-        "Bundled NexisClaw.install.npmSpec values must match the package name so install/update paths stay deterministic.",
+        "Bundled GreenchClaw.install.npmSpec values must match the package name so install/update paths stay deterministic.",
       collectMismatches: (records: BundledPluginRecord[]) =>
         records
           .filter(
@@ -152,7 +152,7 @@ describe("bundled plugin naming guardrails", () => {
     {
       name: "keeps non-packaged bundled plugins from advertising npm installs",
       message:
-        "Non-packaged bundled plugins are source-only/private and must not advertise NexisClaw.install.npmSpec.",
+        "Non-packaged bundled plugins are source-only/private and must not advertise GreenchClaw.install.npmSpec.",
       collectMismatches: (records: BundledPluginRecord[]) =>
         records
           .filter(
@@ -164,7 +164,7 @@ describe("bundled plugin naming guardrails", () => {
     {
       name: "keeps bundled channel ids aligned with the canonical plugin id",
       message:
-        "Bundled NexisClaw.channel.id values must match NexisClaw.plugin.json:id for the owning plugin.",
+        "Bundled GreenchClaw.channel.id values must match GreenchClaw.plugin.json:id for the owning plugin.",
       collectMismatches: (records: BundledPluginRecord[]) =>
         records
           .filter(

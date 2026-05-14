@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { resetLogger, setLoggerOverride } from "../logging/logger.js";
 import { createWarnLogCapture } from "../logging/test-helpers/warn-log-capture.js";
 import { migrateLegacyRuntimeModelRef } from "./model-runtime-aliases.js";
@@ -117,7 +117,7 @@ const EXPLICIT_ALLOWLIST_CONFIG = {
       },
     },
   },
-} as NexisClawConfig;
+} as GreenchClawConfig;
 
 const BUNDLED_ALLOWLIST_CATALOG = [
   { provider: "anthropic", id: "claude-sonnet-4-6", name: "Claude Sonnet 4.5" },
@@ -142,7 +142,7 @@ const ANTHROPIC_OPUS_47_CATALOG = [
   },
 ];
 
-function resolveAnthropicOpusThinking(cfg: NexisClawConfig) {
+function resolveAnthropicOpusThinking(cfg: GreenchClawConfig) {
   return resolveThinkingDefault({
     cfg,
     provider: "anthropic",
@@ -151,7 +151,7 @@ function resolveAnthropicOpusThinking(cfg: NexisClawConfig) {
   });
 }
 
-function resolveAnthropicOpus47Thinking(cfg: NexisClawConfig) {
+function resolveAnthropicOpus47Thinking(cfg: GreenchClawConfig) {
   return resolveThinkingDefault({
     cfg,
     provider: "anthropic",
@@ -190,7 +190,7 @@ function createAgentFallbackConfig(params: {
           }
         : {}),
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function createProviderWithModelsConfig(provider: string, models: Array<Record<string, unknown>>) {
@@ -203,12 +203,12 @@ function createProviderWithModelsConfig(provider: string, models: Array<Record<s
         },
       },
     },
-  } as Partial<NexisClawConfig>;
+  } as Partial<GreenchClawConfig>;
 }
 
-function resolveConfiguredRefForTest(cfg: Partial<NexisClawConfig>) {
+function resolveConfiguredRefForTest(cfg: Partial<GreenchClawConfig>) {
   return resolveConfiguredModelRef({
-    cfg: cfg as NexisClawConfig,
+    cfg: cfg as GreenchClawConfig,
     defaultProvider: "openai",
     defaultModel: "gpt-5.4",
   });
@@ -607,7 +607,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       expect(
         inferUniqueProviderFromConfiguredModels({
@@ -627,7 +627,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       expect(
         inferUniqueProviderFromConfiguredModels({
@@ -646,7 +646,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       expect(
         inferUniqueProviderFromConfiguredModels({
@@ -665,7 +665,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       expect(
         inferUniqueProviderFromConfiguredModels({
@@ -684,7 +684,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       expect(
         inferUniqueProviderFromConfiguredModels({
@@ -703,7 +703,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       expect(
         inferUniqueProviderFromConfiguredModels({
@@ -722,7 +722,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       expect(
         inferUniqueProviderFromConfiguredModels({
@@ -744,7 +744,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       expect(
         inferUniqueProviderFromConfiguredModels({
@@ -770,7 +770,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const model = buildConfiguredModelCatalog({ cfg }).find(
         (entry) => entry.provider === "google" && entry.id === "gemini-3.1-pro-preview",
@@ -794,7 +794,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const model = buildConfiguredModelCatalog({ cfg }).find(
         (entry) => entry.provider === "kilocode" && entry.id === "google/gemini-3.1-pro-preview",
@@ -807,7 +807,7 @@ describe("model-selection", () => {
 
   describe("buildModelAliasIndex", () => {
     it("should build alias index from config", () => {
-      const cfg: Partial<NexisClawConfig> = {
+      const cfg: Partial<GreenchClawConfig> = {
         agents: {
           defaults: {
             models: {
@@ -819,7 +819,7 @@ describe("model-selection", () => {
       };
 
       const index = buildModelAliasIndex({
-        cfg: cfg as NexisClawConfig,
+        cfg: cfg as GreenchClawConfig,
         defaultProvider: "anthropic",
       });
 
@@ -853,7 +853,7 @@ describe("model-selection", () => {
     });
 
     it("overlays configured provider metadata and alias onto matching catalog entries", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             model: { primary: "openai/gpt-test-z" },
@@ -877,7 +877,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const result = buildAllowedModelSet({
         cfg,
@@ -899,7 +899,7 @@ describe("model-selection", () => {
     });
 
     it("keeps configured provider models visible when the catalog is otherwise allow-any", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             model: { primary: "ollama/existing" },
@@ -921,7 +921,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const result = buildAllowedModelSet({
         cfg,
@@ -944,7 +944,7 @@ describe("model-selection", () => {
     });
 
     it("allows every discovered catalog model for provider wildcard entries", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             models: {
@@ -953,7 +953,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const result = buildAllowedModelSet({
         cfg,
@@ -982,7 +982,7 @@ describe("model-selection", () => {
     });
 
     it("preserves provider wildcard intent when catalog rows are unavailable", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             models: {
@@ -990,7 +990,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const result = buildAllowedModelSet({
         cfg,
@@ -1007,7 +1007,7 @@ describe("model-selection", () => {
     });
 
     it("exposes wildcard allow and visible catalog behavior through one policy", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             models: {
@@ -1016,7 +1016,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const policy = createModelVisibilityPolicy({
         cfg,
@@ -1047,7 +1047,7 @@ describe("model-selection", () => {
     });
 
     it("keeps exact same-provider entries visible beside wildcard catalog rows", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             models: {
@@ -1056,7 +1056,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const policy = createModelVisibilityPolicy({
         cfg,
@@ -1077,7 +1077,7 @@ describe("model-selection", () => {
     });
 
     it("does not re-add a default outside mixed wildcard and exact filters", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             models: {
@@ -1086,7 +1086,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const result = buildAllowedModelSet({
         cfg,
@@ -1108,7 +1108,7 @@ describe("model-selection", () => {
     });
 
     it("unions exact model entries with provider wildcard entries", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             models: {
@@ -1117,7 +1117,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const result = buildAllowedModelSet({
         cfg,
@@ -1141,7 +1141,7 @@ describe("model-selection", () => {
     });
 
     it("matches allowlisted catalog entries with normalized provider and model ids", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             models: {
@@ -1149,7 +1149,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const result = buildAllowedModelSet({
         cfg,
@@ -1172,7 +1172,7 @@ describe("model-selection", () => {
     });
 
     it("applies configured provider metadata and alias to synthetic allowlist entries", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             model: { primary: "nvidia/moonshotai/kimi-k2.5" },
@@ -1197,7 +1197,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const result = buildAllowedModelSet({
         cfg,
@@ -1300,7 +1300,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       const result = resolveAllowedModelRef({
         cfg,
@@ -1317,7 +1317,7 @@ describe("model-selection", () => {
     });
 
     it("strips trailing auth profile suffix before allowlist matching", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             models: {
@@ -1325,7 +1325,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       const result = resolveAllowedModelRef({
         cfg,
@@ -1351,7 +1351,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       // When session default is openai-codex, switching to a bare "kimi-k2.6"
       // should resolve to opencode-go/kimi-k2.6, not openai-codex/kimi-k2.6
@@ -1379,7 +1379,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       const result = resolveAllowedModelRef({
         cfg,
@@ -1554,7 +1554,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       const result = resolveConfiguredModelRef({
         cfg,
@@ -1569,7 +1569,7 @@ describe("model-selection", () => {
       setLoggerOverride({ level: "silent", consoleLevel: "warn" });
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
       try {
-        const cfg: Partial<NexisClawConfig> = {
+        const cfg: Partial<GreenchClawConfig> = {
           agents: {
             defaults: {
               model: { primary: "claude-3-5-sonnet" },
@@ -1578,7 +1578,7 @@ describe("model-selection", () => {
         };
 
         const result = resolveConfiguredModelRef({
-          cfg: cfg as NexisClawConfig,
+          cfg: cfg as GreenchClawConfig,
           defaultProvider: "google",
           defaultModel: "gemini-pro",
         });
@@ -1595,9 +1595,9 @@ describe("model-selection", () => {
     });
 
     it("sanitizes control characters in providerless-model warnings", async () => {
-      const warnLogs = createWarnLogCapture("NexisClaw-model-selection-test");
+      const warnLogs = createWarnLogCapture("GreenchClaw-model-selection-test");
       try {
-        const cfg: Partial<NexisClawConfig> = {
+        const cfg: Partial<GreenchClawConfig> = {
           agents: {
             defaults: {
               model: { primary: "\u001B[31mclaude-3-5-sonnet\nspoof" },
@@ -1606,7 +1606,7 @@ describe("model-selection", () => {
         };
 
         const result = resolveConfiguredModelRef({
-          cfg: cfg as NexisClawConfig,
+          cfg: cfg as GreenchClawConfig,
           defaultProvider: "google",
           defaultModel: "gemini-pro",
         });
@@ -1637,7 +1637,7 @@ describe("model-selection", () => {
               },
             },
           },
-        } as NexisClawConfig;
+        } as GreenchClawConfig;
 
         const result = resolveConfiguredModelRef({
           cfg,
@@ -1666,7 +1666,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       const result = resolveConfiguredModelRef({
         cfg,
@@ -1678,9 +1678,9 @@ describe("model-selection", () => {
     });
 
     it("should use default provider/model if config is empty", () => {
-      const cfg: Partial<NexisClawConfig> = {};
+      const cfg: Partial<GreenchClawConfig> = {};
       const result = resolveConfiguredModelRef({
-        cfg: cfg as NexisClawConfig,
+        cfg: cfg as GreenchClawConfig,
         defaultProvider: "openai",
         defaultModel: "gpt-4",
       });
@@ -1726,7 +1726,7 @@ describe("model-selection", () => {
             model: { primary: "google-vertex/gemini-3.1-flash-lite" },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       const result = resolveConfiguredModelRef({
         cfg,
@@ -1757,7 +1757,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       expect(
         resolveConfiguredModelRef({
@@ -1784,7 +1784,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as unknown as NexisClawConfig;
+      } as unknown as GreenchClawConfig;
 
       expect(
         resolveConfiguredModelRef({
@@ -1803,7 +1803,7 @@ describe("model-selection", () => {
             model: { primary: "modelstudio/qwen3.5-plus" },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       expect(
         resolveConfiguredModelRef({
@@ -1824,7 +1824,7 @@ describe("model-selection", () => {
       setLoggerOverride({ level: "silent", consoleLevel: "warn" });
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
       try {
-        const cfg: Partial<NexisClawConfig> = {
+        const cfg: Partial<GreenchClawConfig> = {
           agents: {
             defaults: {
               model: { primary: "openai/" },
@@ -1833,7 +1833,7 @@ describe("model-selection", () => {
         };
 
         const result = resolveConfiguredModelRef({
-          cfg: cfg as NexisClawConfig,
+          cfg: cfg as GreenchClawConfig,
           defaultProvider: "openai",
           defaultModel: "gpt-5.4",
         });
@@ -1856,7 +1856,7 @@ describe("model-selection", () => {
             model: { primary: "openrouter:auto" },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       const result = resolveConfiguredModelRef({
         cfg,
@@ -1877,7 +1877,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       const result = resolveConfiguredModelRef({
         cfg,
@@ -1916,7 +1916,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       const result = resolveConfiguredModelRef({
         cfg,
@@ -1939,7 +1939,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       const catalog = [
         {
@@ -1992,7 +1992,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       const catalog = [
         {
@@ -2032,7 +2032,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       expect(resolveAnthropicOpusThinking(cfg)).toBe("high");
     });
@@ -2048,7 +2048,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       expect(
         resolveThinkingDefault({
@@ -2070,7 +2070,7 @@ describe("model-selection", () => {
             },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       expect(resolveAnthropicOpusThinking(cfg)).toBe("adaptive");
     });
@@ -2082,13 +2082,13 @@ describe("model-selection", () => {
             model: { primary: "anthropic/claude-opus-4-7" },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       expect(resolveAnthropicOpus47Thinking(cfg)).toBe("off");
     });
 
     it("uses bundled provider thinking defaults when no explicit config overrides them", () => {
-      const cfg = {} as NexisClawConfig;
+      const cfg = {} as GreenchClawConfig;
 
       expect(resolveAnthropicOpusThinking(cfg)).toBe("adaptive");
       expect(
@@ -2109,7 +2109,7 @@ describe("model-selection", () => {
     });
 
     it("falls back to medium when no provider thinking policy is active", () => {
-      const cfg = {} as NexisClawConfig;
+      const cfg = {} as GreenchClawConfig;
 
       expect(
         resolveThinkingDefault({
@@ -2148,7 +2148,7 @@ describe("resolveDefaultModelForAgent", () => {
           },
         ],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveDefaultModelForAgent({ cfg, agentId: "main" })).toEqual({
       provider: "openai-codex",
@@ -2200,7 +2200,7 @@ describe("resolveSubagentConfiguredModelSelection", () => {
           },
         ],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveSubagentConfiguredModelSelection({ cfg, agentId: "research" })).toBe(
       "anthropic/claude-opus-4-6",
@@ -2222,7 +2222,7 @@ describe("resolveSubagentConfiguredModelSelection", () => {
           },
         ],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveSubagentConfiguredModelSelection({ cfg, agentId: "research" })).toBe(
       "google/gemini-2.5-pro",
@@ -2242,7 +2242,7 @@ describe("resolveSubagentSpawnModelSelection", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(
       resolveSubagentSpawnModelSelection({ cfg, agentId: "main", modelOverride: "opus" }),
@@ -2265,7 +2265,7 @@ describe("resolveSubagentSpawnModelSelection", () => {
           },
         ],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(
       resolveSubagentSpawnModelSelection({
@@ -2287,7 +2287,7 @@ describe("resolveSubagentSpawnModelSelection", () => {
           subagents: { model: "gpt" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveSubagentSpawnModelSelection({ cfg, agentId: "main" })).toBe("openai/gpt-5.4");
   });
@@ -2299,7 +2299,7 @@ describe("resolveSubagentSpawnModelSelection", () => {
           model: { primary: "anthropic/claude-sonnet-4-6" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(
       resolveSubagentSpawnModelSelection({
@@ -2317,7 +2317,7 @@ describe("resolveSubagentSpawnModelSelection", () => {
           model: { primary: "anthropic/claude-sonnet-4-6" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveSubagentSpawnModelSelection({ cfg, agentId: "main" })).toBe(
       "anthropic/claude-sonnet-4-6",

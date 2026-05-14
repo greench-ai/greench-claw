@@ -6,17 +6,17 @@ describe("SUPERVISOR_HINT_ENV_VARS", () => {
     const envVars = new Set(SUPERVISOR_HINT_ENV_VARS);
     expect(envVars.has("LAUNCH_JOB_LABEL")).toBe(true);
     expect(envVars.has("INVOCATION_ID")).toBe(true);
-    expect(envVars.has("NEXISCLAW_WINDOWS_TASK_NAME")).toBe(true);
-    expect(envVars.has("NEXISCLAW_SERVICE_MARKER")).toBe(true);
-    expect(envVars.has("NEXISCLAW_SERVICE_KIND")).toBe(true);
+    expect(envVars.has("GREENCHCLAW_WINDOWS_TASK_NAME")).toBe(true);
+    expect(envVars.has("GREENCHCLAW_SERVICE_MARKER")).toBe(true);
+    expect(envVars.has("GREENCHCLAW_SERVICE_KIND")).toBe(true);
   });
 });
 
 describe("detectRespawnSupervisor", () => {
   it("detects launchd and systemd only from non-blank platform-specific hints", () => {
-    expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: " ai.NexisClaw.gateway " }, "darwin")).toBe(
-      "launchd",
-    );
+    expect(
+      detectRespawnSupervisor({ LAUNCH_JOB_LABEL: " ai.GreenchClaw.gateway " }, "darwin"),
+    ).toBe("launchd");
     expect(detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "   " }, "darwin")).toBeNull();
 
     expect(detectRespawnSupervisor({ INVOCATION_ID: "abc123" }, "linux")).toBe("systemd");
@@ -25,13 +25,13 @@ describe("detectRespawnSupervisor", () => {
 
   it("detects scheduled-task supervision on Windows from either hint family", () => {
     expect(
-      detectRespawnSupervisor({ NEXISCLAW_WINDOWS_TASK_NAME: "NexisClaw Gateway" }, "win32"),
+      detectRespawnSupervisor({ GREENCHCLAW_WINDOWS_TASK_NAME: "GreenchClaw Gateway" }, "win32"),
     ).toBe("schtasks");
     expect(
       detectRespawnSupervisor(
         {
-          NEXISCLAW_SERVICE_MARKER: "NexisClaw",
-          NEXISCLAW_SERVICE_KIND: "gateway",
+          GREENCHCLAW_SERVICE_MARKER: "GreenchClaw",
+          GREENCHCLAW_SERVICE_KIND: "gateway",
         },
         "win32",
       ),
@@ -39,8 +39,8 @@ describe("detectRespawnSupervisor", () => {
     expect(
       detectRespawnSupervisor(
         {
-          NEXISCLAW_SERVICE_MARKER: "NexisClaw",
-          NEXISCLAW_SERVICE_KIND: "worker",
+          GREENCHCLAW_SERVICE_MARKER: "GreenchClaw",
+          GREENCHCLAW_SERVICE_KIND: "worker",
         },
         "win32",
       ),
@@ -51,14 +51,14 @@ describe("detectRespawnSupervisor", () => {
     expect(
       detectRespawnSupervisor(
         {
-          NEXISCLAW_SERVICE_MARKER: "NexisClaw",
-          NEXISCLAW_SERVICE_KIND: "gateway",
+          GREENCHCLAW_SERVICE_MARKER: "GreenchClaw",
+          GREENCHCLAW_SERVICE_KIND: "gateway",
         },
         "linux",
       ),
     ).toBeNull();
     expect(
-      detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.NexisClaw.gateway" }, "freebsd"),
+      detectRespawnSupervisor({ LAUNCH_JOB_LABEL: "ai.GreenchClaw.gateway" }, "freebsd"),
     ).toBeNull();
   });
 });

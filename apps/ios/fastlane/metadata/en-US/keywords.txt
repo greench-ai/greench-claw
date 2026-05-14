@@ -1,1 +1,1 @@
-NexisClaw,ai assistant,local ai,voice assistant,automation,gateway,chat,agent,node
+GreenchClaw,ai assistant,local ai,voice assistant,automation,gateway,chat,agent,node

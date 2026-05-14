@@ -1,4 +1,4 @@
-import { expectPairingReplyText } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { expectPairingReplyText } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { captureEnv } from "../test-utils/env.js";
 import { buildPairingReply } from "./pairing-messages.js";
@@ -7,9 +7,9 @@ describe("buildPairingReply", () => {
   let envSnapshot: ReturnType<typeof captureEnv>;
 
   beforeEach(() => {
-    envSnapshot = captureEnv(["NEXISCLAW_CONTAINER_HINT", "NEXISCLAW_PROFILE"]);
-    delete process.env.NEXISCLAW_CONTAINER_HINT;
-    process.env.NEXISCLAW_PROFILE = "isolated";
+    envSnapshot = captureEnv(["GREENCHCLAW_CONTAINER_HINT", "GREENCHCLAW_PROFILE"]);
+    delete process.env.GREENCHCLAW_CONTAINER_HINT;
+    process.env.GREENCHCLAW_PROFILE = "isolated";
   });
 
   afterEach(() => {
@@ -51,7 +51,7 @@ describe("buildPairingReply", () => {
 
   function expectPairingApproveCommand(text: string, testCase: (typeof pairingReplyCases)[number]) {
     const commandRe = new RegExp(
-      `(?:NexisClaw|NexisClaw) --profile isolated pairing approve ${testCase.channel} ${testCase.code}`,
+      `(?:GreenchClaw|GreenchClaw) --profile isolated pairing approve ${testCase.channel} ${testCase.code}`,
     );
     expect(text).toMatch(commandRe);
   }

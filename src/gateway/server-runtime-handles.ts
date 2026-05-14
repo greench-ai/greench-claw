@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { HeartbeatRunner } from "../infra/heartbeat-runner.js";
 import type { ChannelHealthMonitor } from "./channel-health-monitor.js";
 
@@ -42,7 +42,7 @@ export function createGatewayServerMutableState(): GatewayServerMutableState {
     mediaCleanup: null as ReturnType<typeof setInterval> | null,
     heartbeatRunner: {
       stop: () => {},
-      updateConfig: (_cfg: NexisClawConfig) => {},
+      updateConfig: (_cfg: GreenchClawConfig) => {},
     } satisfies HeartbeatRunner,
     stopGatewayUpdateCheck: () => {},
     tailscaleCleanup: null as (() => Promise<void>) | null,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ConfigFileSnapshot, NexisClawConfig } from "../config/config.js";
+import type { ConfigFileSnapshot, GreenchClawConfig } from "../config/config.js";
 import {
   formatCrestodianOverview,
   formatCrestodianStartupMessage,
@@ -8,7 +8,7 @@ import {
 
 describe("loadCrestodianOverview", () => {
   it("summarizes config, agents, model, tools, and gateway", async () => {
-    const runtimeConfig: NexisClawConfig = {
+    const runtimeConfig: GreenchClawConfig = {
       agents: {
         defaults: { model: { primary: "openai/gpt-5.2" } },
         list: [
@@ -19,7 +19,7 @@ describe("loadCrestodianOverview", () => {
       gateway: { port: 19001 },
     };
     const snapshot: ConfigFileSnapshot = {
-      path: "/tmp/NexisClaw.json",
+      path: "/tmp/GreenchClaw.json",
       exists: true,
       raw: "{}",
       parsed: runtimeConfig,
@@ -34,10 +34,10 @@ describe("loadCrestodianOverview", () => {
       legacyIssues: [],
     };
     const overview = await loadCrestodianOverview({
-      env: { NEXISCLAW_TEST_FAST: "1" },
+      env: { GREENCHCLAW_TEST_FAST: "1" },
       deps: {
         readConfigFileSnapshot: async () => snapshot,
-        resolveConfigPath: () => "/tmp/NexisClaw.json",
+        resolveConfigPath: () => "/tmp/GreenchClaw.json",
         resolveGatewayPort: (cfg) => cfg?.gateway?.port ?? 8765,
         buildGatewayConnectionDetails: (input) => ({
           url: `ws://127.0.0.1:${input.config.gateway?.port ?? 8765}`,
@@ -62,7 +62,7 @@ describe("loadCrestodianOverview", () => {
     expect(overview.gateway.url).toBe("ws://127.0.0.1:19001");
     expect(overview.gateway.reachable).toBe(false);
     expect(overview.references.docsPath).toMatch(/docs$/);
-    expect(overview.references.sourceUrl).toBe("https://github.com/NexisClaw/NexisClaw");
+    expect(overview.references.sourceUrl).toBe("https://github.com/GreenchClaw/GreenchClaw");
     expect(formatCrestodianOverview(overview)).toContain(
       'Next: run "gateway status" or "restart gateway"',
     );

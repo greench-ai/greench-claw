@@ -3,14 +3,14 @@ import {
   getChannelRecord,
   type ResolverContext,
   type SecretDefaults,
-} from "NexisClaw/plugin-sdk/channel-secret-basic-runtime";
+} from "GreenchClaw/plugin-sdk/channel-secret-basic-runtime";
 
-export const secretTargetRegistryEntries: import("NexisClaw/plugin-sdk/channel-secret-basic-runtime").SecretTargetRegistryEntry[] =
+export const secretTargetRegistryEntries: import("GreenchClaw/plugin-sdk/channel-secret-basic-runtime").SecretTargetRegistryEntry[] =
   [
     {
       id: "channels.msteams.appPassword",
       targetType: "channels.msteams.appPassword",
-      configFile: "NexisClaw.json",
+      configFile: "GreenchClaw.json",
       pathPattern: "channels.msteams.appPassword",
       secretShape: "secret_input",
       expectedResolvedValue: "string",

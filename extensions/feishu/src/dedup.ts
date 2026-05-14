@@ -12,14 +12,14 @@ const MEMORY_MAX_SIZE = 1_000;
 const FILE_MAX_ENTRIES = 10_000;
 
 function resolveStateDirFromEnv(env: NodeJS.ProcessEnv = process.env): string {
-  const stateOverride = env.NEXISCLAW_STATE_DIR?.trim();
+  const stateOverride = env.GREENCHCLAW_STATE_DIR?.trim();
   if (stateOverride) {
     return stateOverride;
   }
   if (env.VITEST || env.NODE_ENV === "test") {
-    return path.join(os.tmpdir(), ["NexisClaw-vitest", String(process.pid)].join("-"));
+    return path.join(os.tmpdir(), ["GreenchClaw-vitest", String(process.pid)].join("-"));
   }
-  return path.join(os.homedir(), ".NexisClaw");
+  return path.join(os.homedir(), ".GreenchClaw");
 }
 
 function resolveNamespaceFilePath(namespace: string): string {

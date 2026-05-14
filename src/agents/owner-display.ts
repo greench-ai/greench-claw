@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
 
 type OwnerDisplaySetting = {
@@ -8,7 +8,7 @@ type OwnerDisplaySetting = {
 };
 
 type OwnerDisplaySecretResolution = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   generatedSecret?: string;
 };
 
@@ -16,7 +16,7 @@ type OwnerDisplaySecretResolution = {
  * Resolve owner display settings for prompt rendering.
  * Keep auth secrets decoupled from owner hash secrets.
  */
-export function resolveOwnerDisplaySetting(config?: NexisClawConfig): OwnerDisplaySetting {
+export function resolveOwnerDisplaySetting(config?: GreenchClawConfig): OwnerDisplaySetting {
   const ownerDisplay = config?.commands?.ownerDisplay;
   if (ownerDisplay !== "hash") {
     return { ownerDisplay, ownerDisplaySecret: undefined };
@@ -32,7 +32,7 @@ export function resolveOwnerDisplaySetting(config?: NexisClawConfig): OwnerDispl
  * Returns updated config and generated secret when autofill was needed.
  */
 export function ensureOwnerDisplaySecret(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   generateSecret: () => string = () => crypto.randomBytes(32).toString("hex"),
 ): OwnerDisplaySecretResolution {
   const settings = resolveOwnerDisplaySetting(config);

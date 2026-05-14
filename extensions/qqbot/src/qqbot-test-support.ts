@@ -1,6 +1,6 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
-export function makeQqbotSecretRefConfig(): NexisClawConfig {
+export function makeQqbotSecretRefConfig(): GreenchClawConfig {
   return {
     channels: {
       qqbot: {
@@ -12,10 +12,10 @@ export function makeQqbotSecretRefConfig(): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-export function makeQqbotDefaultAccountConfig(): NexisClawConfig {
+export function makeQqbotDefaultAccountConfig(): GreenchClawConfig {
   return {
     channels: {
       qqbot: {
@@ -25,5 +25,5 @@ export function makeQqbotDefaultAccountConfig(): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }

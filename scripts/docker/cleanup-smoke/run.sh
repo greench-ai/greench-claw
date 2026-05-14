@@ -3,42 +3,42 @@ set -euo pipefail
 
 cd /repo
 
-export NEXISCLAW_STATE_DIR="/tmp/NexisClaw-test"
-export NEXISCLAW_CONFIG_PATH="${NEXISCLAW_STATE_DIR}/NexisClaw.json"
+export GREENCHCLAW_STATE_DIR="/tmp/GreenchClaw-test"
+export GREENCHCLAW_CONFIG_PATH="${GREENCHCLAW_STATE_DIR}/GreenchClaw.json"
 
 echo "==> Build"
-if ! pnpm build >/tmp/NexisClaw-cleanup-build.log 2>&1; then
-  cat /tmp/NexisClaw-cleanup-build.log
+if ! pnpm build >/tmp/GreenchClaw-cleanup-build.log 2>&1; then
+  cat /tmp/GreenchClaw-cleanup-build.log
   exit 1
 fi
 
 echo "==> Seed state"
-mkdir -p "${NEXISCLAW_STATE_DIR}/credentials"
-mkdir -p "${NEXISCLAW_STATE_DIR}/agents/main/sessions"
-echo '{}' >"${NEXISCLAW_CONFIG_PATH}"
-echo 'creds' >"${NEXISCLAW_STATE_DIR}/credentials/marker.txt"
-echo 'session' >"${NEXISCLAW_STATE_DIR}/agents/main/sessions/sessions.json"
+mkdir -p "${GREENCHCLAW_STATE_DIR}/credentials"
+mkdir -p "${GREENCHCLAW_STATE_DIR}/agents/main/sessions"
+echo '{}' >"${GREENCHCLAW_CONFIG_PATH}"
+echo 'creds' >"${GREENCHCLAW_STATE_DIR}/credentials/marker.txt"
+echo 'session' >"${GREENCHCLAW_STATE_DIR}/agents/main/sessions/sessions.json"
 
 echo "==> Reset (config+creds+sessions)"
-if ! pnpm NexisClaw reset --scope config+creds+sessions --yes --non-interactive >/tmp/NexisClaw-cleanup-reset.log 2>&1; then
-  cat /tmp/NexisClaw-cleanup-reset.log
+if ! pnpm GreenchClaw reset --scope config+creds+sessions --yes --non-interactive >/tmp/GreenchClaw-cleanup-reset.log 2>&1; then
+  cat /tmp/GreenchClaw-cleanup-reset.log
   exit 1
 fi
 
-test ! -f "${NEXISCLAW_CONFIG_PATH}"
-test ! -d "${NEXISCLAW_STATE_DIR}/credentials"
-test ! -d "${NEXISCLAW_STATE_DIR}/agents/main/sessions"
+test ! -f "${GREENCHCLAW_CONFIG_PATH}"
+test ! -d "${GREENCHCLAW_STATE_DIR}/credentials"
+test ! -d "${GREENCHCLAW_STATE_DIR}/agents/main/sessions"
 
 echo "==> Recreate minimal config"
-mkdir -p "${NEXISCLAW_STATE_DIR}/credentials"
-echo '{}' >"${NEXISCLAW_CONFIG_PATH}"
+mkdir -p "${GREENCHCLAW_STATE_DIR}/credentials"
+echo '{}' >"${GREENCHCLAW_CONFIG_PATH}"
 
 echo "==> Uninstall (state only)"
-if ! pnpm NexisClaw uninstall --state --yes --non-interactive >/tmp/NexisClaw-cleanup-uninstall.log 2>&1; then
-  cat /tmp/NexisClaw-cleanup-uninstall.log
+if ! pnpm GreenchClaw uninstall --state --yes --non-interactive >/tmp/GreenchClaw-cleanup-uninstall.log 2>&1; then
+  cat /tmp/GreenchClaw-cleanup-uninstall.log
   exit 1
 fi
 
-test ! -d "${NEXISCLAW_STATE_DIR}"
+test ! -d "${GREENCHCLAW_STATE_DIR}"
 
 echo "OK"

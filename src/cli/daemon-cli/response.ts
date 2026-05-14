@@ -46,7 +46,10 @@ function emitDaemonActionJson(payload: DaemonActionResponse) {
 }
 
 function classifyDaemonHintText(text: string): DaemonHintKind {
-  if (text.includes("NexisClaw gateway install") || text.startsWith("Service not installed. Run:")) {
+  if (
+    text.includes("GreenchClaw gateway install") ||
+    text.startsWith("Service not installed. Run:")
+  ) {
     return "install";
   }
   if (text.startsWith("Restart the container or the service that manages it for ")) {

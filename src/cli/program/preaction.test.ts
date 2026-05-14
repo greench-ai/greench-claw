@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { repoInstallSpec } from "NexisClaw/plugin-sdk/test-fixtures";
+import { repoInstallSpec } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { loggingState } from "../../logging/state.js";
 import { setCommandJsonMode } from "./json-mode.js";
@@ -38,7 +38,7 @@ vi.mock("../../logging/console.js", () => ({
 }));
 
 vi.mock("../cli-name.js", () => ({
-  resolveCliName: () => "NexisClaw",
+  resolveCliName: () => "GreenchClaw",
 }));
 
 vi.mock("./config-guard.js", () => ({
@@ -69,7 +69,7 @@ beforeEach(() => {
   originalProcessTitleDescriptor = Object.getOwnPropertyDescriptor(process, "title");
   observedProcessTitle = originalProcessTitle;
   originalNodeNoWarnings = process.env.NODE_NO_WARNINGS;
-  originalHideBanner = process.env.NEXISCLAW_HIDE_BANNER;
+  originalHideBanner = process.env.GREENCHCLAW_HIDE_BANNER;
   originalForceStderr = loggingState.forceConsoleToStderr;
   // Worker-thread Vitest runs do not reliably mutate the real process title,
   // so capture writes at the property boundary instead.
@@ -83,7 +83,7 @@ beforeEach(() => {
   });
   loggingState.forceConsoleToStderr = false;
   delete process.env.NODE_NO_WARNINGS;
-  delete process.env.NEXISCLAW_HIDE_BANNER;
+  delete process.env.GREENCHCLAW_HIDE_BANNER;
 });
 
 afterEach(() => {
@@ -105,9 +105,9 @@ afterEach(() => {
     process.env.NODE_NO_WARNINGS = originalNodeNoWarnings;
   }
   if (originalHideBanner === undefined) {
-    delete process.env.NEXISCLAW_HIDE_BANNER;
+    delete process.env.GREENCHCLAW_HIDE_BANNER;
   } else {
-    process.env.NEXISCLAW_HIDE_BANNER = originalHideBanner;
+    process.env.GREENCHCLAW_HIDE_BANNER = originalHideBanner;
   }
 });
 
@@ -118,7 +118,7 @@ describe("registerPreActionHooks", () => {
     | null = null;
 
   function buildProgram() {
-    const program = new Command().name("NexisClaw");
+    const program = new Command().name("GreenchClaw");
     program
       .command("agent")
       .requiredOption("-m, --message <text>")
@@ -207,7 +207,7 @@ describe("registerPreActionHooks", () => {
     const processTitleSetSpy = vi.spyOn(process, "title", "set");
     await runPreAction({
       parseArgv: ["status"],
-      processArgv: ["node", "NexisClaw", "status", "--debug"],
+      processArgv: ["node", "GreenchClaw", "status", "--debug"],
     });
 
     expect(emitCliBannerMock).toHaveBeenCalledWith("9.9.9-test");
@@ -217,12 +217,12 @@ describe("registerPreActionHooks", () => {
       commandPath: ["status"],
     });
     expect(ensurePluginRegistryLoadedMock).not.toHaveBeenCalled();
-    expect(processTitleSetSpy).toHaveBeenCalledWith("NexisClaw-status");
+    expect(processTitleSetSpy).toHaveBeenCalledWith("GreenchClaw-status");
 
     vi.clearAllMocks();
     await runPreAction({
       parseArgv: ["agents", "list"],
-      processArgv: ["node", "NexisClaw", "agents", "list"],
+      processArgv: ["node", "GreenchClaw", "agents", "list"],
     });
 
     expect(setVerboseMock).toHaveBeenCalledWith(false);
@@ -238,7 +238,7 @@ describe("registerPreActionHooks", () => {
   it("loads plugins for text local agent runs", async () => {
     await runPreAction({
       parseArgv: ["agent"],
-      processArgv: ["node", "NexisClaw", "agent", "--local", "--message", "hi"],
+      processArgv: ["node", "GreenchClaw", "agent", "--local", "--message", "hi"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -253,7 +253,7 @@ describe("registerPreActionHooks", () => {
   it("loads plugins for json local agent runs", async () => {
     await runPreAction({
       parseArgv: ["agent"],
-      processArgv: ["node", "NexisClaw", "agent", "--local", "--message", "hi", "--json"],
+      processArgv: ["node", "GreenchClaw", "agent", "--local", "--message", "hi", "--json"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -269,7 +269,7 @@ describe("registerPreActionHooks", () => {
   it("keeps setup alias and channels add manifest-first", async () => {
     await runPreAction({
       parseArgv: ["onboard"],
-      processArgv: ["node", "NexisClaw", "onboard"],
+      processArgv: ["node", "GreenchClaw", "onboard"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -281,7 +281,7 @@ describe("registerPreActionHooks", () => {
     vi.clearAllMocks();
     await runPreAction({
       parseArgv: ["channels", "add"],
-      processArgv: ["node", "NexisClaw", "channels", "add"],
+      processArgv: ["node", "GreenchClaw", "channels", "add"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -294,7 +294,7 @@ describe("registerPreActionHooks", () => {
   it("skips startup bootstrap for parent default help actions", async () => {
     await runPreAction({
       parseArgv: ["channels"],
-      processArgv: ["node", "NexisClaw", "channels"],
+      processArgv: ["node", "GreenchClaw", "channels"],
     });
 
     expect(emitCliBannerMock).not.toHaveBeenCalled();
@@ -306,7 +306,7 @@ describe("registerPreActionHooks", () => {
   it("lets configure own config validation and plugin loading", async () => {
     await runPreAction({
       parseArgv: ["configure"],
-      processArgv: ["node", "NexisClaw", "configure"],
+      processArgv: ["node", "GreenchClaw", "configure"],
     });
 
     expect(ensureConfigReadyMock).not.toHaveBeenCalled();
@@ -315,8 +315,8 @@ describe("registerPreActionHooks", () => {
 
   it("only allows invalid config for explicit Discord reinstall requests", async () => {
     await runPreAction({
-      parseArgv: ["plugins", "install", "@NexisClaw/discord"],
-      processArgv: ["node", "NexisClaw", "plugins", "install", "@NexisClaw/discord"],
+      parseArgv: ["plugins", "install", "@GreenchClaw/discord"],
+      processArgv: ["node", "GreenchClaw", "plugins", "install", "@GreenchClaw/discord"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -328,7 +328,7 @@ describe("registerPreActionHooks", () => {
     vi.clearAllMocks();
     await runPreAction({
       parseArgv: ["plugins", "install", "alpha"],
-      processArgv: ["node", "NexisClaw", "plugins", "install", "alpha"],
+      processArgv: ["node", "GreenchClaw", "plugins", "install", "alpha"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -339,7 +339,7 @@ describe("registerPreActionHooks", () => {
     vi.clearAllMocks();
     await runPreAction({
       parseArgv: ["plugins", "install", DISCORD_REPO_INSTALL_SPEC],
-      processArgv: ["node", "NexisClaw", "plugins", "install", DISCORD_REPO_INSTALL_SPEC],
+      processArgv: ["node", "GreenchClaw", "plugins", "install", DISCORD_REPO_INSTALL_SPEC],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -350,13 +350,13 @@ describe("registerPreActionHooks", () => {
 
     vi.clearAllMocks();
     await runPreAction({
-      parseArgv: ["plugins", "install", "@NexisClaw/discord", "--marketplace", "local/repo"],
+      parseArgv: ["plugins", "install", "@GreenchClaw/discord", "--marketplace", "local/repo"],
       processArgv: [
         "node",
-        "NexisClaw",
+        "GreenchClaw",
         "plugins",
         "install",
-        "@NexisClaw/discord",
+        "@GreenchClaw/discord",
         "--marketplace",
         "local/repo",
       ],
@@ -371,7 +371,7 @@ describe("registerPreActionHooks", () => {
   it("skips help/version preaction and respects banner opt-out", async () => {
     await runPreAction({
       parseArgv: ["status"],
-      processArgv: ["node", "NexisClaw", "--version"],
+      processArgv: ["node", "GreenchClaw", "--version"],
     });
 
     expect(emitCliBannerMock).not.toHaveBeenCalled();
@@ -379,11 +379,11 @@ describe("registerPreActionHooks", () => {
     expect(ensureConfigReadyMock).not.toHaveBeenCalled();
 
     vi.clearAllMocks();
-    process.env.NEXISCLAW_HIDE_BANNER = "1";
+    process.env.GREENCHCLAW_HIDE_BANNER = "1";
 
     await runPreAction({
       parseArgv: ["status"],
-      processArgv: ["node", "NexisClaw", "status"],
+      processArgv: ["node", "GreenchClaw", "status"],
     });
 
     expect(emitCliBannerMock).not.toHaveBeenCalled();
@@ -393,7 +393,7 @@ describe("registerPreActionHooks", () => {
   it("applies --json stdout suppression only for explicit JSON output commands", async () => {
     await runPreAction({
       parseArgv: ["status"],
-      processArgv: ["node", "NexisClaw", "status", "--json"],
+      processArgv: ["node", "GreenchClaw", "status", "--json"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -406,7 +406,7 @@ describe("registerPreActionHooks", () => {
     vi.clearAllMocks();
     await runPreAction({
       parseArgv: ["update", "status", "--json"],
-      processArgv: ["node", "NexisClaw", "update", "status", "--json"],
+      processArgv: ["node", "GreenchClaw", "update", "status", "--json"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -419,7 +419,7 @@ describe("registerPreActionHooks", () => {
     vi.clearAllMocks();
     await runPreAction({
       parseArgv: ["config", "set", "gateway.auth.mode", "{bad", "--json"],
-      processArgv: ["node", "NexisClaw", "config", "set", "gateway.auth.mode", "{bad", "--json"],
+      processArgv: ["node", "GreenchClaw", "config", "set", "gateway.auth.mode", "{bad", "--json"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -431,7 +431,7 @@ describe("registerPreActionHooks", () => {
   it("routes logs to stderr in --json mode so stdout stays clean", async () => {
     await runPreAction({
       parseArgv: ["channels", "send"],
-      processArgv: ["node", "NexisClaw", "channels", "send", "--json"],
+      processArgv: ["node", "GreenchClaw", "channels", "send", "--json"],
     });
 
     expect(routeLogsToStderrMock).toHaveBeenCalledOnce();
@@ -441,7 +441,7 @@ describe("registerPreActionHooks", () => {
     // config set --json is parse-only (not JSON output mode), should not route
     await runPreAction({
       parseArgv: ["config", "set", "gateway.auth.mode", "local", "--json"],
-      processArgv: ["node", "NexisClaw", "config", "set", "gateway.auth.mode", "local", "--json"],
+      processArgv: ["node", "GreenchClaw", "config", "set", "gateway.auth.mode", "local", "--json"],
     });
 
     expect(routeLogsToStderrMock).not.toHaveBeenCalled();
@@ -451,7 +451,7 @@ describe("registerPreActionHooks", () => {
     // non-json command should not route
     await runPreAction({
       parseArgv: ["agents", "list"],
-      processArgv: ["node", "NexisClaw", "agents", "list"],
+      processArgv: ["node", "GreenchClaw", "agents", "list"],
     });
 
     expect(routeLogsToStderrMock).not.toHaveBeenCalled();
@@ -460,7 +460,7 @@ describe("registerPreActionHooks", () => {
   it("does not preload plugins for agents list JSON output", async () => {
     await runPreAction({
       parseArgv: ["agents", "list"],
-      processArgv: ["node", "NexisClaw", "agents", "list", "--json"],
+      processArgv: ["node", "GreenchClaw", "agents", "list", "--json"],
     });
 
     expect(routeLogsToStderrMock).toHaveBeenCalledOnce();
@@ -470,7 +470,7 @@ describe("registerPreActionHooks", () => {
   it("does not preload plugins for remote agent JSON output", async () => {
     await runPreAction({
       parseArgv: ["agent"],
-      processArgv: ["node", "NexisClaw", "agent", "--message", "hi", "--json"],
+      processArgv: ["node", "GreenchClaw", "agent", "--message", "hi", "--json"],
     });
 
     expect(routeLogsToStderrMock).toHaveBeenCalledOnce();
@@ -480,7 +480,7 @@ describe("registerPreActionHooks", () => {
   it("bypasses config guard for config validate", async () => {
     await runPreAction({
       parseArgv: ["config", "validate"],
-      processArgv: ["node", "NexisClaw", "config", "validate"],
+      processArgv: ["node", "GreenchClaw", "config", "validate"],
     });
 
     expect(ensureConfigReadyMock).not.toHaveBeenCalled();
@@ -489,7 +489,7 @@ describe("registerPreActionHooks", () => {
   it("bypasses config guard for config validate when root option values are present", async () => {
     await runPreAction({
       parseArgv: ["config", "validate"],
-      processArgv: ["node", "NexisClaw", "--profile", "work", "config", "validate"],
+      processArgv: ["node", "GreenchClaw", "--profile", "work", "config", "validate"],
     });
 
     expect(ensureConfigReadyMock).not.toHaveBeenCalled();
@@ -498,7 +498,7 @@ describe("registerPreActionHooks", () => {
   it("bypasses config guard for config schema", async () => {
     await runPreAction({
       parseArgv: ["config", "schema"],
-      processArgv: ["node", "NexisClaw", "config", "schema"],
+      processArgv: ["node", "GreenchClaw", "config", "schema"],
     });
 
     expect(ensureConfigReadyMock).not.toHaveBeenCalled();
@@ -507,7 +507,7 @@ describe("registerPreActionHooks", () => {
   it("bypasses config guard for backup create", async () => {
     await runPreAction({
       parseArgv: ["backup", "create"],
-      processArgv: ["node", "NexisClaw", "backup", "create", "--json"],
+      processArgv: ["node", "GreenchClaw", "backup", "create", "--json"],
     });
 
     expect(ensureConfigReadyMock).not.toHaveBeenCalled();
@@ -521,7 +521,7 @@ describe("registerPreActionHooks", () => {
 
     await runPreAction({
       parseArgv: ["channels", "send"],
-      processArgv: ["node", "NexisClaw", "channels", "send", "--json"],
+      processArgv: ["node", "GreenchClaw", "channels", "send", "--json"],
     });
 
     expect(ensurePluginRegistryLoadedMock).toHaveBeenCalledWith({
@@ -535,7 +535,7 @@ describe("registerPreActionHooks", () => {
   it("does not preload plugins or route logs to stderr for agents list without --json", async () => {
     await runPreAction({
       parseArgv: ["agents", "list"],
-      processArgv: ["node", "NexisClaw", "agents", "list"],
+      processArgv: ["node", "GreenchClaw", "agents", "list"],
     });
 
     expect(ensurePluginRegistryLoadedMock).not.toHaveBeenCalled();

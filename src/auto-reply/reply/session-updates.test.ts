@@ -78,7 +78,7 @@ describe("ensureSkillSnapshot", () => {
   });
 
   it("uses config-aware session agent resolution for legacy session keys", async () => {
-    vi.stubEnv("NEXISCLAW_TEST_FAST", "0");
+    vi.stubEnv("GREENCHCLAW_TEST_FAST", "0");
 
     await ensureSkillSnapshot({
       sessionKey: "main",

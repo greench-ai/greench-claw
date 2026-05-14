@@ -6,14 +6,14 @@ describe("check-plugin-sdk-wildcard-reexports", () => {
     expect(
       findPluginSdkWildcardReexports(
         [
-          'export * from "NexisClaw/plugin-sdk/foo";',
-          'export type * from "NexisClaw/plugin-sdk/bar";',
-          'export { named } from "NexisClaw/plugin-sdk/foo";',
+          'export * from "GreenchClaw/plugin-sdk/foo";',
+          'export type * from "GreenchClaw/plugin-sdk/bar";',
+          'export { named } from "GreenchClaw/plugin-sdk/foo";',
         ].join("\n"),
       ),
     ).toEqual([
-      { line: 1, text: 'export * from "NexisClaw/plugin-sdk/foo";' },
-      { line: 2, text: 'export type * from "NexisClaw/plugin-sdk/bar";' },
+      { line: 1, text: 'export * from "GreenchClaw/plugin-sdk/foo";' },
+      { line: 2, text: 'export type * from "GreenchClaw/plugin-sdk/bar";' },
     ]);
   });
 
@@ -21,8 +21,8 @@ describe("check-plugin-sdk-wildcard-reexports", () => {
     expect(
       findPluginSdkWildcardReexports(
         [
-          'export { named } from "NexisClaw/plugin-sdk/foo";',
-          'export type { Named } from "NexisClaw/plugin-sdk/foo";',
+          'export { named } from "GreenchClaw/plugin-sdk/foo";',
+          'export type { Named } from "GreenchClaw/plugin-sdk/foo";',
           'export * from "./src/runtime-api.js";',
         ].join("\n"),
       ),

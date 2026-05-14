@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { CommandLane } from "../process/lanes.js";
 
 const sessionStoreMocks = vi.hoisted(() => ({
@@ -19,11 +19,11 @@ vi.mock("../process/command-queue.js", () => commandQueueMocks);
 vi.mock("./command/session.js", () => ({
   resolveStoredSessionKeyForSessionId: () => ({
     sessionKey: "session-key",
-    storePath: "/tmp/NexisClaw-session-suspension-test/sessions.json",
+    storePath: "/tmp/GreenchClaw-session-suspension-test/sessions.json",
   }),
 }));
 
-async function suspendMainLane(ttlMs: number, cfg: NexisClawConfig) {
+async function suspendMainLane(ttlMs: number, cfg: GreenchClawConfig) {
   const { suspendSession } = await import("./session-suspension.js");
   await suspendSession({
     cfg,
@@ -49,7 +49,7 @@ describe("session suspension", () => {
     vi.useFakeTimers();
     const cfg = {
       agents: { defaults: { maxConcurrent: 4 } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await suspendMainLane(100, cfg);
 

@@ -28,7 +28,7 @@ let resolveExecApprovalsSocketPath: ExecApprovalsModule["resolveExecApprovalsSoc
 let saveExecApprovals: ExecApprovalsModule["saveExecApprovals"];
 
 const tempDirs: string[] = [];
-const originalNexisClawHome = process.env.NEXISCLAW_HOME;
+const originalGreenchClawHome = process.env.GREENCHCLAW_HOME;
 
 beforeAll(async () => {
   ({
@@ -54,10 +54,10 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.restoreAllMocks();
-  if (originalNexisClawHome === undefined) {
-    delete process.env.NEXISCLAW_HOME;
+  if (originalGreenchClawHome === undefined) {
+    delete process.env.GREENCHCLAW_HOME;
   } else {
-    process.env.NEXISCLAW_HOME = originalNexisClawHome;
+    process.env.GREENCHCLAW_HOME = originalGreenchClawHome;
   }
   for (const dir of tempDirs.splice(0)) {
     fs.rmSync(dir, { recursive: true, force: true });
@@ -67,12 +67,12 @@ afterEach(() => {
 function createHomeDir(): string {
   const dir = makeTempDir();
   tempDirs.push(dir);
-  process.env.NEXISCLAW_HOME = dir;
+  process.env.GREENCHCLAW_HOME = dir;
   return dir;
 }
 
 function approvalsFilePath(homeDir: string): string {
-  return path.join(homeDir, ".NexisClaw", "exec-approvals.json");
+  return path.join(homeDir, ".GreenchClaw", "exec-approvals.json");
 }
 
 function readApprovalsFile(homeDir: string): ExecApprovalsFile {
@@ -113,10 +113,10 @@ describe("exec approvals store helpers", () => {
     const dir = createHomeDir();
 
     expect(path.normalize(resolveExecApprovalsPath())).toBe(
-      path.normalize(path.join(dir, ".NexisClaw", "exec-approvals.json")),
+      path.normalize(path.join(dir, ".GreenchClaw", "exec-approvals.json")),
     );
     expect(path.normalize(resolveExecApprovalsSocketPath())).toBe(
-      path.normalize(path.join(dir, ".NexisClaw", "exec-approvals.sock")),
+      path.normalize(path.join(dir, ".GreenchClaw", "exec-approvals.sock")),
     );
   });
 
@@ -399,17 +399,17 @@ describe("exec approvals store helpers", () => {
     expect(fs.readFileSync(targetPath, "utf8")).toBe('{"sentinel":true}\n');
   });
 
-  it("accepts a symlinked NEXISCLAW_HOME as the trusted approvals root", () => {
+  it("accepts a symlinked GREENCHCLAW_HOME as the trusted approvals root", () => {
     const realHome = makeTempDir();
     const linkedHome = `${realHome}-link`;
     tempDirs.push(realHome, linkedHome);
     fs.symlinkSync(realHome, linkedHome, "dir");
-    process.env.NEXISCLAW_HOME = linkedHome;
+    process.env.GREENCHCLAW_HOME = linkedHome;
 
     saveExecApprovals({ version: 1, defaults: { security: "full" }, agents: {} });
 
     expect(
-      fs.readFileSync(path.join(realHome, ".NexisClaw", "exec-approvals.json"), "utf8"),
+      fs.readFileSync(path.join(realHome, ".GreenchClaw", "exec-approvals.json"), "utf8"),
     ).toContain('"security": "full"');
   });
 
@@ -420,8 +420,8 @@ describe("exec approvals store helpers", () => {
     tempDirs.push(realHome, linkedHome);
     fs.mkdirSync(linkedStateTarget, { recursive: true });
     fs.symlinkSync(realHome, linkedHome, "dir");
-    fs.symlinkSync(linkedStateTarget, path.join(realHome, ".NexisClaw"), "dir");
-    process.env.NEXISCLAW_HOME = linkedHome;
+    fs.symlinkSync(linkedStateTarget, path.join(realHome, ".GreenchClaw"), "dir");
+    process.env.GREENCHCLAW_HOME = linkedHome;
 
     expect(() =>
       saveExecApprovals({ version: 1, defaults: { security: "full" }, agents: {} }),

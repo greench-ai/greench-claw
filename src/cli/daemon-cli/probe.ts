@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.js";
+import type { GreenchClawConfig } from "../../config/types.js";
 import type { GatewayProbeResult } from "../../gateway/probe.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
@@ -38,7 +38,7 @@ export async function probeGatewayStatus(opts: {
   url: string;
   token?: string;
   password?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   tlsFingerprint?: string;
   timeoutMs: number;
   preauthHandshakeTimeoutMs?: number;

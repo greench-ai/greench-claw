@@ -1,11 +1,11 @@
 import { randomUUID } from "node:crypto";
-import { resolveSendableOutboundReplyParts } from "NexisClaw/plugin-sdk/reply-payload";
+import { resolveSendableOutboundReplyParts } from "GreenchClaw/plugin-sdk/reply-payload";
 import { listAgentIds } from "../agents/agent-scope.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import type { CliDeps } from "../cli/deps.types.js";
 import { withProgress } from "../cli/progress.js";
 import { getRuntimeConfig } from "../config/config.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { callGateway, isGatewayTransportError, randomIdempotencyKey } from "../gateway/call.js";
 import { ADMIN_SCOPE } from "../gateway/operator-scopes.js";
 import { GATEWAY_CLIENT_MODES, GATEWAY_CLIENT_NAMES } from "../gateway/protocol/client-info.js";
@@ -70,7 +70,7 @@ function protectJsonStdout(opts: Pick<AgentCliOpts, "json">): void {
   }
 }
 
-function parseTimeoutSeconds(opts: { cfg: NexisClawConfig; timeout?: string }) {
+function parseTimeoutSeconds(opts: { cfg: GreenchClawConfig; timeout?: string }) {
   const raw =
     opts.timeout !== undefined
       ? Number.parseInt(opts.timeout, 10)
@@ -145,12 +145,12 @@ async function agentViaGatewayCommand(opts: AgentCliOpts, runtime: RuntimeEnv) {
   const body = (opts.message ?? "").trim();
   if (!body) {
     throw new Error(
-      `Missing message. Use ${formatCliCommand('NexisClaw agent --message "..." --agent <id>')} or pass --to/--session-id for an existing conversation.`,
+      `Missing message. Use ${formatCliCommand('GreenchClaw agent --message "..." --agent <id>')} or pass --to/--session-id for an existing conversation.`,
     );
   }
   if (!opts.to && !opts.sessionId && !opts.agent) {
     throw new Error(
-      `No target session selected. Use --agent <id>, --session-id <id>, or --to <E.164>. Run ${formatCliCommand("NexisClaw agents list")} to see agents.`,
+      `No target session selected. Use --agent <id>, --session-id <id>, or --to <E.164>. Run ${formatCliCommand("GreenchClaw agents list")} to see agents.`,
     );
   }
 
@@ -161,7 +161,7 @@ async function agentViaGatewayCommand(opts: AgentCliOpts, runtime: RuntimeEnv) {
     const knownAgents = listAgentIds(cfg);
     if (!knownAgents.includes(agentId)) {
       throw new Error(
-        `Unknown agent id "${agentIdRaw}". Use "${formatCliCommand("NexisClaw agents list")}" to see configured agents.`,
+        `Unknown agent id "${agentIdRaw}". Use "${formatCliCommand("GreenchClaw agents list")}" to see configured agents.`,
       );
     }
   }

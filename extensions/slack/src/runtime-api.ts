@@ -3,22 +3,22 @@ export {
   PAIRING_APPROVED_MESSAGE,
   projectCredentialSnapshotFields,
   resolveConfiguredFromRequiredCredentialStatuses,
-} from "NexisClaw/plugin-sdk/channel-status";
+} from "GreenchClaw/plugin-sdk/channel-status";
 export { buildChannelConfigSchema, SlackConfigSchema } from "../config-api.js";
-export type { ChannelMessageActionContext } from "NexisClaw/plugin-sdk/channel-contract";
-export { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
+export type { ChannelMessageActionContext } from "GreenchClaw/plugin-sdk/channel-contract";
+export { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
 export type {
   ChannelPlugin,
-  NexisClawPluginApi,
+  GreenchClawPluginApi,
   PluginRuntime,
-} from "NexisClaw/plugin-sdk/channel-plugin-common";
-export type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-export type { SlackAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-plugin-common";
+export type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+export type { SlackAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 export {
   emptyPluginConfigSchema,
   formatPairingApproveHint,
-} from "NexisClaw/plugin-sdk/channel-plugin-common";
-export { loadOutboundMediaFromUrl } from "NexisClaw/plugin-sdk/outbound-media";
+} from "GreenchClaw/plugin-sdk/channel-plugin-common";
+export { loadOutboundMediaFromUrl } from "GreenchClaw/plugin-sdk/outbound-media";
 export { looksLikeSlackTargetId, normalizeSlackMessagingTarget } from "./target-parsing.js";
 export { getChatChannelMeta } from "./channel-api.js";
 export {
@@ -29,4 +29,4 @@ export {
   readReactionParams,
   readStringParam,
   withNormalizedTimestamp,
-} from "NexisClaw/plugin-sdk/channel-actions";
+} from "GreenchClaw/plugin-sdk/channel-actions";

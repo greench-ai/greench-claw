@@ -8,16 +8,22 @@ import {
 
 describe("gh-read helpers", () => {
   it("finds repo from gh args", () => {
-    expect(parseRepoArg(["pr", "view", "42", "-R", "NexisClaw/NexisClaw"])).toBe("NexisClaw/NexisClaw");
-    expect(parseRepoArg(["run", "list", "--repo=NexisClaw/docs"])).toBe("NexisClaw/docs");
+    expect(parseRepoArg(["pr", "view", "42", "-R", "GreenchClaw/GreenchClaw"])).toBe(
+      "GreenchClaw/GreenchClaw",
+    );
+    expect(parseRepoArg(["run", "list", "--repo=GreenchClaw/docs"])).toBe("GreenchClaw/docs");
     expect(parseRepoArg(["pr", "view", "42"])).toBeNull();
   });
 
   it("normalizes repo strings from common git formats", () => {
-    expect(normalizeRepo("NexisClaw/NexisClaw")).toBe("NexisClaw/NexisClaw");
-    expect(normalizeRepo("github.com/NexisClaw/NexisClaw")).toBe("NexisClaw/NexisClaw");
-    expect(normalizeRepo("https://github.com/NexisClaw/NexisClaw.git")).toBe("NexisClaw/NexisClaw");
-    expect(normalizeRepo("git@github.com:NexisClaw/NexisClaw.git")).toBe("NexisClaw/NexisClaw");
+    expect(normalizeRepo("GreenchClaw/GreenchClaw")).toBe("GreenchClaw/GreenchClaw");
+    expect(normalizeRepo("github.com/GreenchClaw/GreenchClaw")).toBe("GreenchClaw/GreenchClaw");
+    expect(normalizeRepo("https://github.com/GreenchClaw/GreenchClaw.git")).toBe(
+      "GreenchClaw/GreenchClaw",
+    );
+    expect(normalizeRepo("git@github.com:GreenchClaw/GreenchClaw.git")).toBe(
+      "GreenchClaw/GreenchClaw",
+    );
     expect(normalizeRepo("invalid")).toBeNull();
   });
 

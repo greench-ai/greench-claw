@@ -1,13 +1,13 @@
 ---
-summary: "Export NexisClaw diagnostics to any OpenTelemetry collector via the diagnostics-otel plugin (OTLP/HTTP)"
+summary: "Export GreenchClaw diagnostics to any OpenTelemetry collector via the diagnostics-otel plugin (OTLP/HTTP)"
 title: "OpenTelemetry export"
 read_when:
-  - You want to send NexisClaw model usage, message flow, or session metrics to an OpenTelemetry collector
+  - You want to send GreenchClaw model usage, message flow, or session metrics to an OpenTelemetry collector
   - You are wiring traces, metrics, or logs into Grafana, Datadog, Honeycomb, New Relic, Tempo, or another OTLP backend
   - You need the exact metric names, span names, or attribute shapes to build dashboards or alerts
 ---
 
-NexisClaw exports diagnostics through the official `diagnostics-otel` plugin
+GreenchClaw exports diagnostics through the official `diagnostics-otel` plugin
 using **OTLP/HTTP (protobuf)**. Any collector or backend that accepts OTLP/HTTP
 works without code changes. For local file logs and how to read them, see
 [Logging](/logging).
@@ -19,7 +19,7 @@ works without code changes. For local file logs and how to read them, see
   and exec.
 - **`diagnostics-otel` plugin** subscribes to those events and exports them as
   OpenTelemetry **metrics**, **traces**, and **logs** over OTLP/HTTP.
-- **Provider calls** receive a W3C `traceparent` header from NexisClaw's
+- **Provider calls** receive a W3C `traceparent` header from GreenchClaw's
   trusted model-call span context when the provider transport accepts custom
   headers. Plugin-emitted trace context is not propagated.
 - Exporters only attach when both the diagnostics surface and the plugin are
@@ -30,7 +30,7 @@ works without code changes. For local file logs and how to read them, see
 For packaged installs, install the plugin first:
 
 ```bash
-NexisClaw plugins install clawhub:@NexisClaw/diagnostics-otel
+GreenchClaw plugins install clawhub:@GreenchClaw/diagnostics-otel
 ```
 
 ```json5
@@ -47,7 +47,7 @@ NexisClaw plugins install clawhub:@NexisClaw/diagnostics-otel
       enabled: true,
       endpoint: "http://otel-collector:4318",
       protocol: "http/protobuf",
-      serviceName: "NexisClaw-gateway",
+      serviceName: "GreenchClaw-gateway",
       traces: true,
       metrics: true,
       logs: true,
@@ -61,7 +61,7 @@ NexisClaw plugins install clawhub:@NexisClaw/diagnostics-otel
 You can also enable the plugin from the CLI:
 
 ```bash
-NexisClaw plugins enable diagnostics-otel
+GreenchClaw plugins enable diagnostics-otel
 ```
 
 <Note>
@@ -92,7 +92,7 @@ when `diagnostics.otel.enabled` is true.
       metricsEndpoint: "http://otel-collector:4318/v1/metrics",
       logsEndpoint: "http://otel-collector:4318/v1/logs",
       protocol: "http/protobuf", // grpc is ignored
-      serviceName: "NexisClaw-gateway",
+      serviceName: "GreenchClaw-gateway",
       headers: { "x-collector-token": "..." },
       traces: true,
       metrics: true,
@@ -121,7 +121,7 @@ when `diagnostics.otel.enabled` is true.
 | `OTEL_SERVICE_NAME`                                                                                               | Override `diagnostics.otel.serviceName`.                                                                                                                                                                                                   |
 | `OTEL_EXPORTER_OTLP_PROTOCOL`                                                                                     | Override the wire protocol (only `http/protobuf` is honored today).                                                                                                                                                                        |
 | `OTEL_SEMCONV_STABILITY_OPT_IN`                                                                                   | Set to `gen_ai_latest_experimental` to emit the latest experimental GenAI span attribute (`gen_ai.provider.name`) instead of the legacy `gen_ai.system`. GenAI metrics always use bounded, low-cardinality semantic attributes regardless. |
-| `NEXISCLAW_OTEL_PRELOADED`                                                                                         | Set to `1` when another preload or host process already registered the global OpenTelemetry SDK. The plugin then skips its own NodeSDK lifecycle but still wires diagnostic listeners and honors `traces`/`metrics`/`logs`.                |
+| `GREENCHCLAW_OTEL_PRELOADED`                                                                                      | Set to `1` when another preload or host process already registered the global OpenTelemetry SDK. The plugin then skips its own NodeSDK lifecycle but still wires diagnostic listeners and honors `traces`/`metrics`/`logs`.                |
 
 ## Privacy and content capture
 
@@ -134,7 +134,7 @@ provider, and event type. They do not include transcripts, audio payloads,
 session ids, turn ids, call ids, room ids, or handoff tokens.
 
 Outbound model requests may include a W3C `traceparent` header. That header is
-generated only from NexisClaw-owned diagnostic trace context for the active model
+generated only from GreenchClaw-owned diagnostic trace context for the active model
 call. Existing caller-supplied `traceparent` headers are replaced, so plugins or
 custom provider options cannot spoof cross-service trace ancestry.
 
@@ -149,7 +149,7 @@ text. Each subkey is opt-in independently:
 - `systemPrompt` - assembled system/developer prompt.
 
 When any subkey is enabled, model and tool spans get bounded, redacted
-`NexisClaw.content.*` attributes for that class only.
+`GreenchClaw.content.*` attributes for that class only.
 
 ## Sampling and flushing
 
@@ -172,57 +172,57 @@ When any subkey is enabled, model and tool spans get bounded, redacted
 
 ### Model usage
 
-- `NexisClaw.tokens` (counter, attrs: `NexisClaw.token`, `NexisClaw.channel`, `NexisClaw.provider`, `NexisClaw.model`, `NexisClaw.agent`)
-- `NexisClaw.cost.usd` (counter, attrs: `NexisClaw.channel`, `NexisClaw.provider`, `NexisClaw.model`)
-- `NexisClaw.run.duration_ms` (histogram, attrs: `NexisClaw.channel`, `NexisClaw.provider`, `NexisClaw.model`)
-- `NexisClaw.context.tokens` (histogram, attrs: `NexisClaw.context`, `NexisClaw.channel`, `NexisClaw.provider`, `NexisClaw.model`)
+- `GreenchClaw.tokens` (counter, attrs: `GreenchClaw.token`, `GreenchClaw.channel`, `GreenchClaw.provider`, `GreenchClaw.model`, `GreenchClaw.agent`)
+- `GreenchClaw.cost.usd` (counter, attrs: `GreenchClaw.channel`, `GreenchClaw.provider`, `GreenchClaw.model`)
+- `GreenchClaw.run.duration_ms` (histogram, attrs: `GreenchClaw.channel`, `GreenchClaw.provider`, `GreenchClaw.model`)
+- `GreenchClaw.context.tokens` (histogram, attrs: `GreenchClaw.context`, `GreenchClaw.channel`, `GreenchClaw.provider`, `GreenchClaw.model`)
 - `gen_ai.client.token.usage` (histogram, GenAI semantic-conventions metric, attrs: `gen_ai.token.type` = `input`/`output`, `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.request.model`)
 - `gen_ai.client.operation.duration` (histogram, seconds, GenAI semantic-conventions metric, attrs: `gen_ai.provider.name`, `gen_ai.operation.name`, `gen_ai.request.model`, optional `error.type`)
-- `NexisClaw.model_call.duration_ms` (histogram, attrs: `NexisClaw.provider`, `NexisClaw.model`, `NexisClaw.api`, `NexisClaw.transport`, plus `NexisClaw.errorCategory` and `NexisClaw.failureKind` on classified errors)
-- `NexisClaw.model_call.request_bytes` (histogram, UTF-8 byte size of the final model request payload; no raw payload content)
-- `NexisClaw.model_call.response_bytes` (histogram, UTF-8 byte size of streamed model response events; no raw response content)
-- `NexisClaw.model_call.time_to_first_byte_ms` (histogram, elapsed time before the first streamed response event)
+- `GreenchClaw.model_call.duration_ms` (histogram, attrs: `GreenchClaw.provider`, `GreenchClaw.model`, `GreenchClaw.api`, `GreenchClaw.transport`, plus `GreenchClaw.errorCategory` and `GreenchClaw.failureKind` on classified errors)
+- `GreenchClaw.model_call.request_bytes` (histogram, UTF-8 byte size of the final model request payload; no raw payload content)
+- `GreenchClaw.model_call.response_bytes` (histogram, UTF-8 byte size of streamed model response events; no raw response content)
+- `GreenchClaw.model_call.time_to_first_byte_ms` (histogram, elapsed time before the first streamed response event)
 
 ### Message flow
 
-- `NexisClaw.webhook.received` (counter, attrs: `NexisClaw.channel`, `NexisClaw.webhook`)
-- `NexisClaw.webhook.error` (counter, attrs: `NexisClaw.channel`, `NexisClaw.webhook`)
-- `NexisClaw.webhook.duration_ms` (histogram, attrs: `NexisClaw.channel`, `NexisClaw.webhook`)
-- `NexisClaw.message.queued` (counter, attrs: `NexisClaw.channel`, `NexisClaw.source`)
-- `NexisClaw.message.processed` (counter, attrs: `NexisClaw.channel`, `NexisClaw.outcome`)
-- `NexisClaw.message.duration_ms` (histogram, attrs: `NexisClaw.channel`, `NexisClaw.outcome`)
-- `NexisClaw.message.delivery.started` (counter, attrs: `NexisClaw.channel`, `NexisClaw.delivery.kind`)
-- `NexisClaw.message.delivery.duration_ms` (histogram, attrs: `NexisClaw.channel`, `NexisClaw.delivery.kind`, `NexisClaw.outcome`, `NexisClaw.errorCategory`)
+- `GreenchClaw.webhook.received` (counter, attrs: `GreenchClaw.channel`, `GreenchClaw.webhook`)
+- `GreenchClaw.webhook.error` (counter, attrs: `GreenchClaw.channel`, `GreenchClaw.webhook`)
+- `GreenchClaw.webhook.duration_ms` (histogram, attrs: `GreenchClaw.channel`, `GreenchClaw.webhook`)
+- `GreenchClaw.message.queued` (counter, attrs: `GreenchClaw.channel`, `GreenchClaw.source`)
+- `GreenchClaw.message.processed` (counter, attrs: `GreenchClaw.channel`, `GreenchClaw.outcome`)
+- `GreenchClaw.message.duration_ms` (histogram, attrs: `GreenchClaw.channel`, `GreenchClaw.outcome`)
+- `GreenchClaw.message.delivery.started` (counter, attrs: `GreenchClaw.channel`, `GreenchClaw.delivery.kind`)
+- `GreenchClaw.message.delivery.duration_ms` (histogram, attrs: `GreenchClaw.channel`, `GreenchClaw.delivery.kind`, `GreenchClaw.outcome`, `GreenchClaw.errorCategory`)
 
 ### Talk
 
-- `NexisClaw.talk.event` (counter, attrs: `NexisClaw.talk.event_type`, `NexisClaw.talk.mode`, `NexisClaw.talk.transport`, `NexisClaw.talk.brain`, `NexisClaw.talk.provider`)
-- `NexisClaw.talk.event.duration_ms` (histogram, attrs: same as `NexisClaw.talk.event`; emitted when a Talk event reports duration)
-- `NexisClaw.talk.audio.bytes` (histogram, attrs: same as `NexisClaw.talk.event`; emitted for Talk audio frame events that report byte length)
+- `GreenchClaw.talk.event` (counter, attrs: `GreenchClaw.talk.event_type`, `GreenchClaw.talk.mode`, `GreenchClaw.talk.transport`, `GreenchClaw.talk.brain`, `GreenchClaw.talk.provider`)
+- `GreenchClaw.talk.event.duration_ms` (histogram, attrs: same as `GreenchClaw.talk.event`; emitted when a Talk event reports duration)
+- `GreenchClaw.talk.audio.bytes` (histogram, attrs: same as `GreenchClaw.talk.event`; emitted for Talk audio frame events that report byte length)
 
 ### Queues and sessions
 
-- `NexisClaw.queue.lane.enqueue` (counter, attrs: `NexisClaw.lane`)
-- `NexisClaw.queue.lane.dequeue` (counter, attrs: `NexisClaw.lane`)
-- `NexisClaw.queue.depth` (histogram, attrs: `NexisClaw.lane` or `NexisClaw.channel=heartbeat`)
-- `NexisClaw.queue.wait_ms` (histogram, attrs: `NexisClaw.lane`)
-- `NexisClaw.session.state` (counter, attrs: `NexisClaw.state`, `NexisClaw.reason`)
-- `NexisClaw.session.stuck` (counter, attrs: `NexisClaw.state`; emitted only for stale session bookkeeping with no active work)
-- `NexisClaw.session.stuck_age_ms` (histogram, attrs: `NexisClaw.state`; emitted only for stale session bookkeeping with no active work)
-- `NexisClaw.session.recovery.requested` (counter, attrs: `NexisClaw.state`, `NexisClaw.action`, `NexisClaw.active_work_kind`, `NexisClaw.reason`)
-- `NexisClaw.session.recovery.completed` (counter, attrs: `NexisClaw.state`, `NexisClaw.action`, `NexisClaw.status`, `NexisClaw.active_work_kind`, `NexisClaw.reason`)
-- `NexisClaw.session.recovery.age_ms` (histogram, attrs: same as the matching recovery counter)
-- `NexisClaw.run.attempt` (counter, attrs: `NexisClaw.attempt`)
+- `GreenchClaw.queue.lane.enqueue` (counter, attrs: `GreenchClaw.lane`)
+- `GreenchClaw.queue.lane.dequeue` (counter, attrs: `GreenchClaw.lane`)
+- `GreenchClaw.queue.depth` (histogram, attrs: `GreenchClaw.lane` or `GreenchClaw.channel=heartbeat`)
+- `GreenchClaw.queue.wait_ms` (histogram, attrs: `GreenchClaw.lane`)
+- `GreenchClaw.session.state` (counter, attrs: `GreenchClaw.state`, `GreenchClaw.reason`)
+- `GreenchClaw.session.stuck` (counter, attrs: `GreenchClaw.state`; emitted only for stale session bookkeeping with no active work)
+- `GreenchClaw.session.stuck_age_ms` (histogram, attrs: `GreenchClaw.state`; emitted only for stale session bookkeeping with no active work)
+- `GreenchClaw.session.recovery.requested` (counter, attrs: `GreenchClaw.state`, `GreenchClaw.action`, `GreenchClaw.active_work_kind`, `GreenchClaw.reason`)
+- `GreenchClaw.session.recovery.completed` (counter, attrs: `GreenchClaw.state`, `GreenchClaw.action`, `GreenchClaw.status`, `GreenchClaw.active_work_kind`, `GreenchClaw.reason`)
+- `GreenchClaw.session.recovery.age_ms` (histogram, attrs: same as the matching recovery counter)
+- `GreenchClaw.run.attempt` (counter, attrs: `GreenchClaw.attempt`)
 
 ### Session liveness telemetry
 
 `diagnostics.stuckSessionWarnMs` is the no-progress age threshold for session
 liveness diagnostics. A `processing` session does not age toward this threshold
-while NexisClaw observes reply, tool, status, block, or ACP runtime progress.
+while GreenchClaw observes reply, tool, status, block, or ACP runtime progress.
 Typing keepalives are not counted as progress, so a silent model or harness can
 still be detected.
 
-NexisClaw classifies sessions by the work it can still observe:
+GreenchClaw classifies sessions by the work it can still observe:
 
 - `session.long_running`: active embedded work, model calls, or tool calls are
   still making progress.
@@ -240,8 +240,8 @@ Recovery emits structured `session.recovery.requested` and
 only after a mutating recovery outcome (`aborted` or `released`) and only if the
 same processing generation is still current.
 
-Only `session.stuck` emits the `NexisClaw.session.stuck` counter, the
-`NexisClaw.session.stuck_age_ms` histogram, and the `NexisClaw.session.stuck`
+Only `session.stuck` emits the `GreenchClaw.session.stuck` counter, the
+`GreenchClaw.session.stuck_age_ms` histogram, and the `GreenchClaw.session.stuck`
 span. Repeated `session.stuck` diagnostics back off while the session remains
 unchanged, so dashboards should alert on sustained increases rather than every
 heartbeat tick. For the config knob and defaults, see
@@ -249,62 +249,62 @@ heartbeat tick. For the config knob and defaults, see
 
 ### Harness lifecycle
 
-- `NexisClaw.harness.duration_ms` (histogram, attrs: `NexisClaw.harness.id`, `NexisClaw.harness.plugin`, `NexisClaw.outcome`, `NexisClaw.harness.phase` on errors)
+- `GreenchClaw.harness.duration_ms` (histogram, attrs: `GreenchClaw.harness.id`, `GreenchClaw.harness.plugin`, `GreenchClaw.outcome`, `GreenchClaw.harness.phase` on errors)
 
 ### Exec
 
-- `NexisClaw.exec.duration_ms` (histogram, attrs: `NexisClaw.exec.target`, `NexisClaw.exec.mode`, `NexisClaw.outcome`, `NexisClaw.failureKind`)
+- `GreenchClaw.exec.duration_ms` (histogram, attrs: `GreenchClaw.exec.target`, `GreenchClaw.exec.mode`, `GreenchClaw.outcome`, `GreenchClaw.failureKind`)
 
 ### Diagnostics internals (memory and tool loop)
 
-- `NexisClaw.memory.heap_used_bytes` (histogram, attrs: `NexisClaw.memory.kind`)
-- `NexisClaw.memory.rss_bytes` (histogram)
-- `NexisClaw.memory.pressure` (counter, attrs: `NexisClaw.memory.level`)
-- `NexisClaw.tool.loop.iterations` (counter, attrs: `NexisClaw.toolName`, `NexisClaw.outcome`)
-- `NexisClaw.tool.loop.duration_ms` (histogram, attrs: `NexisClaw.toolName`, `NexisClaw.outcome`)
+- `GreenchClaw.memory.heap_used_bytes` (histogram, attrs: `GreenchClaw.memory.kind`)
+- `GreenchClaw.memory.rss_bytes` (histogram)
+- `GreenchClaw.memory.pressure` (counter, attrs: `GreenchClaw.memory.level`)
+- `GreenchClaw.tool.loop.iterations` (counter, attrs: `GreenchClaw.toolName`, `GreenchClaw.outcome`)
+- `GreenchClaw.tool.loop.duration_ms` (histogram, attrs: `GreenchClaw.toolName`, `GreenchClaw.outcome`)
 
 ## Exported spans
 
-- `NexisClaw.model.usage`
-  - `NexisClaw.channel`, `NexisClaw.provider`, `NexisClaw.model`
-  - `NexisClaw.tokens.*` (input/output/cache_read/cache_write/total)
+- `GreenchClaw.model.usage`
+  - `GreenchClaw.channel`, `GreenchClaw.provider`, `GreenchClaw.model`
+  - `GreenchClaw.tokens.*` (input/output/cache_read/cache_write/total)
   - `gen_ai.system` by default, or `gen_ai.provider.name` when the latest GenAI semantic conventions are opted in
   - `gen_ai.request.model`, `gen_ai.operation.name`, `gen_ai.usage.*`
-- `NexisClaw.run`
-  - `NexisClaw.outcome`, `NexisClaw.channel`, `NexisClaw.provider`, `NexisClaw.model`, `NexisClaw.errorCategory`
-- `NexisClaw.model.call`
+- `GreenchClaw.run`
+  - `GreenchClaw.outcome`, `GreenchClaw.channel`, `GreenchClaw.provider`, `GreenchClaw.model`, `GreenchClaw.errorCategory`
+- `GreenchClaw.model.call`
   - `gen_ai.system` by default, or `gen_ai.provider.name` when the latest GenAI semantic conventions are opted in
-  - `gen_ai.request.model`, `gen_ai.operation.name`, `NexisClaw.provider`, `NexisClaw.model`, `NexisClaw.api`, `NexisClaw.transport`
-  - `NexisClaw.errorCategory` and optional `NexisClaw.failureKind` on errors
-  - `NexisClaw.model_call.request_bytes`, `NexisClaw.model_call.response_bytes`, `NexisClaw.model_call.time_to_first_byte_ms`
-  - `NexisClaw.provider.request_id_hash` (bounded SHA-based hash of the upstream provider request id; raw ids are not exported)
-- `NexisClaw.harness.run`
-  - `NexisClaw.harness.id`, `NexisClaw.harness.plugin`, `NexisClaw.outcome`, `NexisClaw.provider`, `NexisClaw.model`, `NexisClaw.channel`
-  - On completion: `NexisClaw.harness.result_classification`, `NexisClaw.harness.yield_detected`, `NexisClaw.harness.items.started`, `NexisClaw.harness.items.completed`, `NexisClaw.harness.items.active`
-  - On error: `NexisClaw.harness.phase`, `NexisClaw.errorCategory`, optional `NexisClaw.harness.cleanup_failed`
-- `NexisClaw.tool.execution`
-  - `gen_ai.tool.name`, `NexisClaw.toolName`, `NexisClaw.errorCategory`, `NexisClaw.tool.params.*`
-- `NexisClaw.exec`
-  - `NexisClaw.exec.target`, `NexisClaw.exec.mode`, `NexisClaw.outcome`, `NexisClaw.failureKind`, `NexisClaw.exec.command_length`, `NexisClaw.exec.exit_code`, `NexisClaw.exec.timed_out`
-- `NexisClaw.webhook.processed`
-  - `NexisClaw.channel`, `NexisClaw.webhook`
-- `NexisClaw.webhook.error`
-  - `NexisClaw.channel`, `NexisClaw.webhook`, `NexisClaw.error`
-- `NexisClaw.message.processed`
-  - `NexisClaw.channel`, `NexisClaw.outcome`, `NexisClaw.reason`
-- `NexisClaw.message.delivery`
-  - `NexisClaw.channel`, `NexisClaw.delivery.kind`, `NexisClaw.outcome`, `NexisClaw.errorCategory`, `NexisClaw.delivery.result_count`
-- `NexisClaw.session.stuck`
-  - `NexisClaw.state`, `NexisClaw.ageMs`, `NexisClaw.queueDepth`
-- `NexisClaw.context.assembled`
-  - `NexisClaw.prompt.size`, `NexisClaw.history.size`, `NexisClaw.context.tokens`, `NexisClaw.errorCategory` (no prompt, history, response, or session-key content)
-- `NexisClaw.tool.loop`
-  - `NexisClaw.toolName`, `NexisClaw.outcome`, `NexisClaw.iterations`, `NexisClaw.errorCategory` (no loop messages, params, or tool output)
-- `NexisClaw.memory.pressure`
-  - `NexisClaw.memory.level`, `NexisClaw.memory.heap_used_bytes`, `NexisClaw.memory.rss_bytes`
+  - `gen_ai.request.model`, `gen_ai.operation.name`, `GreenchClaw.provider`, `GreenchClaw.model`, `GreenchClaw.api`, `GreenchClaw.transport`
+  - `GreenchClaw.errorCategory` and optional `GreenchClaw.failureKind` on errors
+  - `GreenchClaw.model_call.request_bytes`, `GreenchClaw.model_call.response_bytes`, `GreenchClaw.model_call.time_to_first_byte_ms`
+  - `GreenchClaw.provider.request_id_hash` (bounded SHA-based hash of the upstream provider request id; raw ids are not exported)
+- `GreenchClaw.harness.run`
+  - `GreenchClaw.harness.id`, `GreenchClaw.harness.plugin`, `GreenchClaw.outcome`, `GreenchClaw.provider`, `GreenchClaw.model`, `GreenchClaw.channel`
+  - On completion: `GreenchClaw.harness.result_classification`, `GreenchClaw.harness.yield_detected`, `GreenchClaw.harness.items.started`, `GreenchClaw.harness.items.completed`, `GreenchClaw.harness.items.active`
+  - On error: `GreenchClaw.harness.phase`, `GreenchClaw.errorCategory`, optional `GreenchClaw.harness.cleanup_failed`
+- `GreenchClaw.tool.execution`
+  - `gen_ai.tool.name`, `GreenchClaw.toolName`, `GreenchClaw.errorCategory`, `GreenchClaw.tool.params.*`
+- `GreenchClaw.exec`
+  - `GreenchClaw.exec.target`, `GreenchClaw.exec.mode`, `GreenchClaw.outcome`, `GreenchClaw.failureKind`, `GreenchClaw.exec.command_length`, `GreenchClaw.exec.exit_code`, `GreenchClaw.exec.timed_out`
+- `GreenchClaw.webhook.processed`
+  - `GreenchClaw.channel`, `GreenchClaw.webhook`
+- `GreenchClaw.webhook.error`
+  - `GreenchClaw.channel`, `GreenchClaw.webhook`, `GreenchClaw.error`
+- `GreenchClaw.message.processed`
+  - `GreenchClaw.channel`, `GreenchClaw.outcome`, `GreenchClaw.reason`
+- `GreenchClaw.message.delivery`
+  - `GreenchClaw.channel`, `GreenchClaw.delivery.kind`, `GreenchClaw.outcome`, `GreenchClaw.errorCategory`, `GreenchClaw.delivery.result_count`
+- `GreenchClaw.session.stuck`
+  - `GreenchClaw.state`, `GreenchClaw.ageMs`, `GreenchClaw.queueDepth`
+- `GreenchClaw.context.assembled`
+  - `GreenchClaw.prompt.size`, `GreenchClaw.history.size`, `GreenchClaw.context.tokens`, `GreenchClaw.errorCategory` (no prompt, history, response, or session-key content)
+- `GreenchClaw.tool.loop`
+  - `GreenchClaw.toolName`, `GreenchClaw.outcome`, `GreenchClaw.iterations`, `GreenchClaw.errorCategory` (no loop messages, params, or tool output)
+- `GreenchClaw.memory.pressure`
+  - `GreenchClaw.memory.level`, `GreenchClaw.memory.heap_used_bytes`, `GreenchClaw.memory.rss_bytes`
 
 When content capture is explicitly enabled, model and tool spans can also
-include bounded, redacted `NexisClaw.content.*` attributes for the specific
+include bounded, redacted `GreenchClaw.content.*` attributes for the specific
 content classes you opted into.
 
 ## Diagnostic event catalog
@@ -372,7 +372,7 @@ flags. Flags are case-insensitive and support wildcards (e.g. `telegram.*` or
 Or as a one-off env override:
 
 ```bash
-NEXISCLAW_DIAGNOSTICS=telegram.http,telegram.payload NexisClaw gateway
+GREENCHCLAW_DIAGNOSTICS=telegram.http,telegram.payload GreenchClaw gateway
 ```
 
 Flag output goes to the standard log file (`logging.file`) and is still
@@ -388,7 +388,7 @@ redacted by `logging.redactSensitive`. Full guide:
 ```
 
 You can also leave `diagnostics-otel` out of `plugins.allow`, or run
-`NexisClaw plugins disable diagnostics-otel`.
+`GreenchClaw plugins disable diagnostics-otel`.
 
 ## Related
 

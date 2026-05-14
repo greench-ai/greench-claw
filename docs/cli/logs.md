@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `NexisClaw logs` (tail gateway logs via RPC)"
+summary: "CLI reference for `GreenchClaw logs` (tail gateway logs via RPC)"
 read_when:
   - You need to tail Gateway logs remotely (without SSH)
   - You want JSON log lines for tooling
 title: "Logs"
 ---
 
-# `NexisClaw logs`
+# `GreenchClaw logs`
 
 Tail Gateway file logs over RPC (works in remote mode).
 
@@ -28,7 +28,7 @@ Related:
 
 ## Shared Gateway RPC options
 
-`NexisClaw logs` also accepts the standard Gateway client flags:
+`GreenchClaw logs` also accepts the standard Gateway client flags:
 
 - `--url <url>`: Gateway WebSocket URL
 - `--token <token>`: Gateway token
@@ -40,23 +40,23 @@ When you pass `--url`, the CLI does not auto-apply config or environment credent
 ## Examples
 
 ```bash
-NexisClaw logs
-NexisClaw logs --follow
-NexisClaw logs --follow --interval 2000
-NexisClaw logs --limit 500 --max-bytes 500000
-NexisClaw logs --json
-NexisClaw logs --plain
-NexisClaw logs --no-color
-NexisClaw logs --limit 500
-NexisClaw logs --local-time
-NexisClaw logs --follow --local-time
-NexisClaw logs --url ws://127.0.0.1:18789 --token "$NEXISCLAW_GATEWAY_TOKEN"
+GreenchClaw logs
+GreenchClaw logs --follow
+GreenchClaw logs --follow --interval 2000
+GreenchClaw logs --limit 500 --max-bytes 500000
+GreenchClaw logs --json
+GreenchClaw logs --plain
+GreenchClaw logs --no-color
+GreenchClaw logs --limit 500
+GreenchClaw logs --local-time
+GreenchClaw logs --follow --local-time
+GreenchClaw logs --url ws://127.0.0.1:18789 --token "$GREENCHCLAW_GATEWAY_TOKEN"
 ```
 
 ## Notes
 
 - Use `--local-time` to render timestamps in your local timezone.
-- If the implicit local loopback Gateway asks for pairing, closes during connect, or times out before `logs.tail` answers, `NexisClaw logs` falls back to the configured Gateway file log automatically. Explicit `--url` targets do not use this fallback.
+- If the implicit local loopback Gateway asks for pairing, closes during connect, or times out before `logs.tail` answers, `GreenchClaw logs` falls back to the configured Gateway file log automatically. Explicit `--url` targets do not use this fallback.
 - When using `--follow`, transient gateway disconnects (WebSocket close, timeout, connection drop) trigger automatic reconnection with exponential backoff (up to 8 retries, capped at 30 s between attempts). A warning is printed to stderr on each retry, and a `[logs] gateway reconnected` notice is printed once a poll succeeds. In `--json` mode both the retry warning and the reconnect transition are emitted as `{"type":"notice"}` records on stderr. Non-recoverable errors (auth failure, bad configuration) still exit immediately.
 
 ## Related

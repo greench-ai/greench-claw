@@ -15,15 +15,15 @@ export function registerSetupCommand(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n` +
-        `  ${theme.command("NexisClaw setup")}\n` +
+        `  ${theme.command("GreenchClaw setup")}\n` +
         `    ${theme.muted("Create config, workspace, and session folders.")}\n` +
-        `  ${theme.command("NexisClaw setup --wizard")}\n` +
+        `  ${theme.command("GreenchClaw setup --wizard")}\n` +
         `    ${theme.muted("Run full onboarding for auth, models, Gateway, and channels.")}\n\n` +
-        `${theme.muted("Docs:")} ${formatDocsLink("/cli/setup", "docs.NexisClaw.ai/cli/setup")}\n`,
+        `${theme.muted("Docs:")} ${formatDocsLink("/cli/setup", "docs.GreenchClaw.ai/cli/setup")}\n`,
     )
     .option(
       "--workspace <dir>",
-      "Agent workspace directory (default: ~/.NexisClaw/workspace; stored as agents.defaults.workspace)",
+      "Agent workspace directory (default: ~/.GreenchClaw/workspace; stored as agents.defaults.workspace)",
     )
     .option("--wizard", "Run interactive onboarding", false)
     .option("--non-interactive", "Run onboarding without prompts", false)

@@ -49,8 +49,8 @@ function createUsableOAuthExpiry(): number {
 
 describe("resolveApiKeyForProfile fallback to main agent", () => {
   const envSnapshot = captureEnv([
-    "NEXISCLAW_STATE_DIR",
-    "NEXISCLAW_AGENT_DIR",
+    "GREENCHCLAW_STATE_DIR",
+    "GREENCHCLAW_AGENT_DIR",
     "PI_CODING_AGENT_DIR",
   ]);
   let tmpDir: string;
@@ -70,8 +70,8 @@ describe("resolveApiKeyForProfile fallback to main agent", () => {
     await fs.mkdir(secondaryAgentDir, { recursive: true });
 
     // Set environment variables so the default agent dir resolves under tmpDir.
-    process.env.NEXISCLAW_STATE_DIR = tmpDir;
-    process.env.NEXISCLAW_AGENT_DIR = mainAgentDir;
+    process.env.GREENCHCLAW_STATE_DIR = tmpDir;
+    process.env.GREENCHCLAW_AGENT_DIR = mainAgentDir;
     process.env.PI_CODING_AGENT_DIR = mainAgentDir;
     clearRuntimeAuthProfileStoreSnapshots();
   });

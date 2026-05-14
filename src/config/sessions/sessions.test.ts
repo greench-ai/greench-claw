@@ -5,7 +5,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest
 import { upsertAcpSessionMeta } from "../../acp/runtime/session-meta.js";
 import * as jsonFiles from "../../infra/json-files.js";
 import { createSuiteTempRootTracker, withTempDirSync } from "../../test-helpers/temp-dir.js";
-import type { NexisClawConfig } from "../config.js";
+import type { GreenchClawConfig } from "../config.js";
 import type { SessionConfig } from "../types.base.js";
 import { resolveSessionLifecycleTimestamps } from "./lifecycle.js";
 import {
@@ -48,18 +48,18 @@ describe("session path safety", () => {
   });
 
   it("resolves transcript path inside an explicit sessions dir", () => {
-    const sessionsDir = "/tmp/NexisClaw/agents/main/sessions";
+    const sessionsDir = "/tmp/GreenchClaw/agents/main/sessions";
     const resolved = resolveSessionTranscriptPathInDir("sess-1", sessionsDir, "topic/a+b");
 
     expect(resolved).toBe(path.resolve(sessionsDir, "sess-1-topic-topic%2Fa%2Bb.jsonl"));
   });
 
   it("falls back to derived path when sessionFile is outside known agent sessions dirs", () => {
-    const sessionsDir = "/tmp/NexisClaw/agents/main/sessions";
+    const sessionsDir = "/tmp/GreenchClaw/agents/main/sessions";
 
     const resolved = resolveSessionFilePath(
       "sess-1",
-      { sessionFile: "/tmp/NexisClaw/agents/work/not-sessions/abc-123.jsonl" },
+      { sessionFile: "/tmp/GreenchClaw/agents/work/not-sessions/abc-123.jsonl" },
       { sessionsDir },
     );
     expect(resolved).toBe(path.resolve(sessionsDir, "sess-1.jsonl"));
@@ -76,7 +76,7 @@ describe("session path safety", () => {
     if (process.platform === "win32") {
       return;
     }
-    withTempDirSync({ prefix: "NexisClaw-symlink-session-" }, (tmpDir) => {
+    withTempDirSync({ prefix: "GreenchClaw-symlink-session-" }, (tmpDir) => {
       const realRoot = path.join(tmpDir, "real-state");
       const aliasRoot = path.join(tmpDir, "alias-state");
       const sessionsDir = path.join(realRoot, "agents", "main", "sessions");
@@ -95,7 +95,7 @@ describe("session path safety", () => {
     if (process.platform === "win32") {
       return;
     }
-    withTempDirSync({ prefix: "NexisClaw-symlink-escape-" }, (tmpDir) => {
+    withTempDirSync({ prefix: "GreenchClaw-symlink-escape-" }, (tmpDir) => {
       const sessionsDir = path.join(tmpDir, "agents", "main", "sessions");
       const outsideDir = path.join(tmpDir, "outside");
       fs.mkdirSync(sessionsDir, { recursive: true });
@@ -243,7 +243,7 @@ describe("resolveSessionResetPolicy", () => {
 
 describe("session lifecycle timestamps", () => {
   it("falls back to the JSONL session header for legacy session start time", async () => {
-    const dir = await fsPromises.mkdtemp("/tmp/NexisClaw-lifecycle-test-");
+    const dir = await fsPromises.mkdtemp("/tmp/GreenchClaw-lifecycle-test-");
     try {
       const storePath = path.join(dir, "sessions.json");
       const sessionFile = path.join(dir, "legacy-session.jsonl");
@@ -277,7 +277,9 @@ describe("session lifecycle timestamps", () => {
 });
 
 describe("session store writer queue", () => {
-  const writerFixtureRootTracker = createSuiteTempRootTracker({ prefix: "NexisClaw-writer-test-" });
+  const writerFixtureRootTracker = createSuiteTempRootTracker({
+    prefix: "GreenchClaw-writer-test-",
+  });
 
   async function makeTmpStore(
     initial: Record<string, unknown> = {},
@@ -511,7 +513,7 @@ describe("session store writer queue", () => {
       session: {
         store: storePath,
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const result = await upsertAcpSessionMeta({
       cfg,

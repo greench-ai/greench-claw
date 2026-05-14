@@ -28,14 +28,14 @@ describe("command-execution-startup", () => {
   it("resolves startup context from argv and mode", () => {
     expect(
       mod.resolveCliExecutionStartupContext({
-        argv: ["node", "NexisClaw", "status", "--json"],
+        argv: ["node", "GreenchClaw", "status", "--json"],
         jsonOutputMode: true,
         env: {},
         routeMode: true,
       }),
     ).toEqual({
       invocation: {
-        argv: ["node", "NexisClaw", "status", "--json"],
+        argv: ["node", "GreenchClaw", "status", "--json"],
         commandPath: ["status"],
         primary: "status",
         hasHelpOrVersion: false,
@@ -53,28 +53,28 @@ describe("command-execution-startup", () => {
   });
 
   it("uses process env banner suppression when startup env is omitted", () => {
-    const originalHideBanner = process.env.NEXISCLAW_HIDE_BANNER;
+    const originalHideBanner = process.env.GREENCHCLAW_HIDE_BANNER;
     try {
-      process.env.NEXISCLAW_HIDE_BANNER = "1";
+      process.env.GREENCHCLAW_HIDE_BANNER = "1";
 
       expect(
         mod.resolveCliExecutionStartupContext({
-          argv: ["node", "NexisClaw", "status"],
+          argv: ["node", "GreenchClaw", "status"],
           jsonOutputMode: false,
         }).startupPolicy.hideBanner,
       ).toBe(true);
       expect(
         mod.resolveCliExecutionStartupContext({
-          argv: ["node", "NexisClaw", "status"],
+          argv: ["node", "GreenchClaw", "status"],
           jsonOutputMode: false,
           env: {},
         }).startupPolicy.hideBanner,
       ).toBe(false);
     } finally {
       if (originalHideBanner === undefined) {
-        delete process.env.NEXISCLAW_HIDE_BANNER;
+        delete process.env.GREENCHCLAW_HIDE_BANNER;
       } else {
-        process.env.NEXISCLAW_HIDE_BANNER = originalHideBanner;
+        process.env.GREENCHCLAW_HIDE_BANNER = originalHideBanner;
       }
     }
   });
@@ -82,7 +82,7 @@ describe("command-execution-startup", () => {
   it("skips local plugin bootstrap for JSON gateway agent calls", () => {
     expect(
       mod.resolveCliExecutionStartupContext({
-        argv: ["node", "NexisClaw", "agent", "--agent", "main", "--message", "hi", "--json"],
+        argv: ["node", "GreenchClaw", "agent", "--agent", "main", "--message", "hi", "--json"],
         jsonOutputMode: true,
       }).startupPolicy.loadPlugins,
     ).toBe(false);
@@ -90,7 +90,7 @@ describe("command-execution-startup", () => {
       mod.resolveCliExecutionStartupContext({
         argv: [
           "node",
-          "NexisClaw",
+          "GreenchClaw",
           "agent",
           "--agent",
           "main",
@@ -104,7 +104,7 @@ describe("command-execution-startup", () => {
     ).toBe(true);
     expect(
       mod.resolveCliExecutionStartupContext({
-        argv: ["node", "NexisClaw", "agent", "--agent", "main", "--message", "hi"],
+        argv: ["node", "GreenchClaw", "agent", "--agent", "main", "--message", "hi"],
         jsonOutputMode: false,
       }).startupPolicy.loadPlugins,
     ).toBe(true);
@@ -120,12 +120,12 @@ describe("command-execution-startup", () => {
         pluginRegistry: { scope: "all" },
       },
       version: "1.2.3",
-      argv: ["node", "NexisClaw", "status"],
+      argv: ["node", "GreenchClaw", "status"],
     });
 
     expect(routeLogsToStderrMock).toHaveBeenCalledTimes(1);
     expect(emitCliBannerMock).toHaveBeenCalledWith("1.2.3", {
-      argv: ["node", "NexisClaw", "status"],
+      argv: ["node", "GreenchClaw", "status"],
     });
 
     await mod.applyCliExecutionStartupPresentation({

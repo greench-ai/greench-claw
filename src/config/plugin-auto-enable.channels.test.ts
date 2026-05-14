@@ -44,8 +44,8 @@ describe("applyPluginAutoEnable channels", () => {
       JSON.stringify({
         entries: [
           {
-            name: "@NexisClaw/env-secondary",
-            NexisClaw: {
+            name: "@GreenchClaw/env-secondary",
+            GreenchClaw: {
               channel: {
                 id: "env-secondary",
                 label: "Env Secondary",
@@ -55,7 +55,7 @@ describe("applyPluginAutoEnable channels", () => {
                 preferOver: ["env-primary"],
               },
               install: {
-                npmSpec: "@NexisClaw/env-secondary",
+                npmSpec: "@GreenchClaw/env-secondary",
               },
             },
           },
@@ -85,8 +85,8 @@ describe("applyPluginAutoEnable channels", () => {
       ],
       env: {
         ...makeIsolatedEnv(),
-        NEXISCLAW_STATE_DIR: stateDir,
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+        GREENCHCLAW_STATE_DIR: stateDir,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
       },
       manifestRegistry: makeRegistry([]),
     });
@@ -104,8 +104,8 @@ describe("applyPluginAutoEnable channels", () => {
       JSON.stringify({
         entries: [
           {
-            name: "@NexisClaw/env-primary",
-            NexisClaw: {
+            name: "@GreenchClaw/env-primary",
+            GreenchClaw: {
               channel: {
                 id: "env-primary",
                 label: "Env Primary",
@@ -114,13 +114,13 @@ describe("applyPluginAutoEnable channels", () => {
                 blurb: "Env primary entry",
               },
               install: {
-                npmSpec: "@NexisClaw/env-primary",
+                npmSpec: "@GreenchClaw/env-primary",
               },
             },
           },
           {
-            name: "@NexisClaw/env-secondary",
-            NexisClaw: {
+            name: "@GreenchClaw/env-secondary",
+            GreenchClaw: {
               channel: {
                 id: "env-secondary",
                 label: "Env Secondary",
@@ -130,7 +130,7 @@ describe("applyPluginAutoEnable channels", () => {
                 preferOver: ["env-primary"],
               },
               install: {
-                npmSpec: "@NexisClaw/env-secondary",
+                npmSpec: "@GreenchClaw/env-secondary",
               },
             },
           },
@@ -156,8 +156,8 @@ describe("applyPluginAutoEnable channels", () => {
         })),
         env: {
           ...makeIsolatedEnv(),
-          NEXISCLAW_STATE_DIR: stateDir,
-          NEXISCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+          GREENCHCLAW_STATE_DIR: stateDir,
+          GREENCHCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
         },
         manifestRegistry: makeRegistry([]),
       });
@@ -217,7 +217,7 @@ describe("applyPluginAutoEnable channels", () => {
             },
           },
           {
-            id: "NexisClaw-modern-chat",
+            id: "GreenchClaw-modern-chat",
             channels: ["legacy-bundled-chat"],
             channelConfigs: {
               "legacy-bundled-chat": {
@@ -230,7 +230,7 @@ describe("applyPluginAutoEnable channels", () => {
         ]),
       });
 
-      expect(result.config.plugins?.entries?.["NexisClaw-modern-chat"]?.enabled).toBe(true);
+      expect(result.config.plugins?.entries?.["GreenchClaw-modern-chat"]?.enabled).toBe(true);
       expect(result.config.plugins?.entries?.["legacy-bundled-chat"]?.enabled).toBe(false);
       expect(result.changes.join("\n")).toContain("Modern Chat configured, enabled automatically.");
     });
@@ -239,7 +239,7 @@ describe("applyPluginAutoEnable channels", () => {
       const result = applyPluginAutoEnable({
         config: {
           channels: { "legacy-bundled-chat": { token: "legacy" } },
-          plugins: { entries: { "NexisClaw-modern-chat": { enabled: false } } },
+          plugins: { entries: { "GreenchClaw-modern-chat": { enabled: false } } },
         },
         env: makeIsolatedEnv(),
         manifestRegistry: makeRegistry([
@@ -255,7 +255,7 @@ describe("applyPluginAutoEnable channels", () => {
             },
           },
           {
-            id: "NexisClaw-modern-chat",
+            id: "GreenchClaw-modern-chat",
             channels: ["legacy-bundled-chat"],
             channelConfigs: {
               "legacy-bundled-chat": {
@@ -268,7 +268,7 @@ describe("applyPluginAutoEnable channels", () => {
         ]),
       });
 
-      expect(result.config.plugins?.entries?.["NexisClaw-modern-chat"]?.enabled).toBe(false);
+      expect(result.config.plugins?.entries?.["GreenchClaw-modern-chat"]?.enabled).toBe(false);
       expect(result.config.plugins?.entries?.["legacy-bundled-chat"]).toBeUndefined();
       expect(result.config.channels?.["legacy-bundled-chat"]?.enabled).toBe(true);
       expect(result.changes.join("\n")).toContain(
@@ -290,7 +290,7 @@ describe("applyPluginAutoEnable channels", () => {
         manifestRegistry: makeRegistry([
           { id: "qqbot", channels: ["qqbot"] },
           {
-            id: "NexisClaw-qqbot",
+            id: "GreenchClaw-qqbot",
             channels: ["qqbot"],
             channelConfigs: {
               qqbot: {
@@ -302,7 +302,7 @@ describe("applyPluginAutoEnable channels", () => {
         ]),
       });
 
-      expect(result.config.plugins?.entries?.["NexisClaw-qqbot"]?.enabled).toBe(true);
+      expect(result.config.plugins?.entries?.["GreenchClaw-qqbot"]?.enabled).toBe(true);
       expect(result.config.plugins?.entries?.qqbot?.enabled).toBe(true);
     });
 
@@ -335,15 +335,15 @@ describe("applyPluginAutoEnable channels", () => {
         env: makeIsolatedEnv(),
         manifestRegistry: makeRegistry([
           {
-            id: "wecom-NexisClaw-plugin",
+            id: "wecom-GreenchClaw-plugin",
             channels: ["wecom"],
           },
         ]),
       });
 
-      expect(result.config.plugins?.entries?.["wecom-NexisClaw-plugin"]?.enabled).toBe(true);
+      expect(result.config.plugins?.entries?.["wecom-GreenchClaw-plugin"]?.enabled).toBe(true);
       expect(result.config.plugins?.entries?.wecom).toBeUndefined();
-      expect(result.config.plugins?.allow).toEqual(["existing-plugin", "wecom-NexisClaw-plugin"]);
+      expect(result.config.plugins?.allow).toEqual(["existing-plugin", "wecom-GreenchClaw-plugin"]);
       expect(result.changes.join("\n")).toContain("enabled automatically.");
     });
 

@@ -1,5 +1,5 @@
 ---
-summary: "Adds StepFun, StepFun Plan model provider support to NexisClaw."
+summary: "Adds StepFun, StepFun Plan model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the stepfun plugin
 title: "StepFun plugin"
@@ -7,12 +7,12 @@ title: "StepFun plugin"
 
 # StepFun plugin
 
-Adds StepFun, StepFun Plan model provider support to NexisClaw.
+Adds StepFun, StepFun Plan model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/stepfun-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/stepfun-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

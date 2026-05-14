@@ -1,5 +1,5 @@
 ---
-summary: "Adds Amazon Bedrock Mantle model provider support to NexisClaw."
+summary: "Adds Amazon Bedrock Mantle model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the amazon-bedrock-mantle plugin
 title: "Amazon Bedrock Mantle plugin"
@@ -7,12 +7,12 @@ title: "Amazon Bedrock Mantle plugin"
 
 # Amazon Bedrock Mantle plugin
 
-Adds Amazon Bedrock Mantle model provider support to NexisClaw.
+Adds Amazon Bedrock Mantle model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/amazon-bedrock-mantle-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/amazon-bedrock-mantle-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

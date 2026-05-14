@@ -11,8 +11,8 @@ Adds text-to-speech provider support.
 
 ## Distribution
 
-- Package: `@NexisClaw/tts-local-cli`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/tts-local-cli`
+- Install route: included in GreenchClaw
 
 ## Surface
 

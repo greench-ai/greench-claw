@@ -1,5 +1,5 @@
-import { createNonExitingRuntime, type RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeStringEntries } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { createNonExitingRuntime, type RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeStringEntries } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { MonitorIMessageOpts } from "./types.js";
 
 export function resolveRuntime(opts: MonitorIMessageOpts): RuntimeEnv {

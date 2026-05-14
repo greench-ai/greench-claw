@@ -298,7 +298,7 @@ describe("buildEmbeddedRunPayloads", () => {
             type: "toolCall",
             id: "toolu_01",
             name: "browser",
-            arguments: { action: "search", query: "NexisClaw docs" },
+            arguments: { action: "search", query: "GreenchClaw docs" },
           },
         ],
       }),

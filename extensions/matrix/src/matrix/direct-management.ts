@@ -1,5 +1,5 @@
-import { KeyedAsyncQueue } from "NexisClaw/plugin-sdk/keyed-async-queue";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { KeyedAsyncQueue } from "GreenchClaw/plugin-sdk/keyed-async-queue";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { inspectMatrixDirectRoomEvidence } from "./direct-room.js";
 import type { MatrixClient } from "./sdk.js";
 import { EventType, type MatrixDirectAccountData } from "./send/types.js";

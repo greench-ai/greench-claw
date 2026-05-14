@@ -127,7 +127,7 @@ describe("pi tool definition adapter logging", () => {
 
     const result = await def.execute(
       "call-web-search-abort",
-      { query: "NexisClaw" },
+      { query: "GreenchClaw" },
       undefined,
       undefined,
       extensionContext,
@@ -169,7 +169,7 @@ describe("pi tool definition adapter logging", () => {
     try {
       await def.execute(
         "call-web-search-agent-abort",
-        { query: "NexisClaw" },
+        { query: "GreenchClaw" },
         controller.signal,
         undefined,
         extensionContext,

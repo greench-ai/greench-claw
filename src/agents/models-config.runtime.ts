@@ -1,1 +1,1 @@
-export { ensureNexisClawModelsJson } from "./models-config.js";
+export { ensureGreenchClawModelsJson } from "./models-config.js";

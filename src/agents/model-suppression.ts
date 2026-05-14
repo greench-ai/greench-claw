@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   buildManifestBuiltInModelSuppressionResolver,
   resolveManifestBuiltInModelSuppression,
@@ -10,7 +10,7 @@ function resolveBuiltInModelSuppressionFromManifest(params: {
   provider?: string | null;
   id?: string | null;
   baseUrl?: string | null;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   unconditionalOnly?: boolean;
 }) {
   const provider = normalizeProviderId(params.provider ?? "");
@@ -32,7 +32,7 @@ function resolveBuiltInModelSuppression(params: {
   provider?: string | null;
   id?: string | null;
   baseUrl?: string | null;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }) {
   const manifestResult = resolveBuiltInModelSuppressionFromManifest(params);
   if (manifestResult?.suppress) {
@@ -49,7 +49,7 @@ function resolveBuiltInModelSuppression(params: {
 export function shouldSuppressBuiltInModelFromManifest(params: {
   provider?: string | null;
   id?: string | null;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }) {
   return resolveBuiltInModelSuppressionFromManifest(params)?.suppress ?? false;
 }
@@ -58,7 +58,7 @@ export function shouldSuppressBuiltInModel(params: {
   provider?: string | null;
   id?: string | null;
   baseUrl?: string | null;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }) {
   return resolveBuiltInModelSuppression(params)?.suppress ?? false;
 }
@@ -69,7 +69,7 @@ export function shouldSuppressBuiltInModel(params: {
 export function shouldUnconditionallySuppress(params: {
   provider?: string | null;
   id?: string | null;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): boolean {
   return (
     resolveBuiltInModelSuppressionFromManifest({ ...params, unconditionalOnly: true })?.suppress ??
@@ -81,13 +81,13 @@ export function buildSuppressedBuiltInModelError(params: {
   provider?: string | null;
   id?: string | null;
   baseUrl?: string | null;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): string | undefined {
   return resolveBuiltInModelSuppression(params)?.errorMessage;
 }
 
 export function buildShouldSuppressBuiltInModel(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): (input: { provider?: string | null; id?: string | null; baseUrl?: string | null }) => boolean {
   const resolver = buildManifestBuiltInModelSuppressionResolver({
     config: params.config,

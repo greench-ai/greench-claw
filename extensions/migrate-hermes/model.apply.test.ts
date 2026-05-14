@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/provider-auth";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/provider-auth";
 import { afterEach, describe, expect, it } from "vitest";
 import { HERMES_REASON_DEFAULT_MODEL_CONFIGURED } from "./items.js";
 import { buildHermesMigrationProvider } from "./provider.js";
@@ -89,8 +89,8 @@ describe("Hermes migration model apply", () => {
           },
         },
       },
-    } as NexisClawConfig;
-    let writtenConfig: NexisClawConfig | undefined;
+    } as GreenchClawConfig;
+    let writtenConfig: GreenchClawConfig | undefined;
     const provider = buildHermesMigrationProvider({
       runtime: makeConfigRuntime(existingConfig, (next) => {
         writtenConfig = next;
@@ -146,8 +146,8 @@ describe("Hermes migration model apply", () => {
           },
         ],
       },
-    } as NexisClawConfig;
-    let writtenConfig: NexisClawConfig | undefined;
+    } as GreenchClawConfig;
+    let writtenConfig: GreenchClawConfig | undefined;
     const provider = buildHermesMigrationProvider({
       runtime: makeConfigRuntime(existingConfig, (next) => {
         writtenConfig = next;
@@ -190,7 +190,7 @@ describe("Hermes migration model apply", () => {
           model: "anthropic/claude-sonnet-4.6",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const provider = buildHermesMigrationProvider({
       runtime: makeConfigRuntime(lateConfig),
     });

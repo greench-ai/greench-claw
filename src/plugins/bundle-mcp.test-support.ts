@@ -21,7 +21,7 @@ export function createBundleMcpTempHarness() {
 }
 
 function resolveBundlePluginRoot(homeDir: string, pluginId: string) {
-  return path.join(homeDir, ".NexisClaw", "extensions", pluginId);
+  return path.join(homeDir, ".GreenchClaw", "extensions", pluginId);
 }
 
 export async function writeClaudeBundleManifest(params: {
@@ -77,14 +77,14 @@ export async function withBundleHomeEnv<T>(
   prefix: string,
   run: (params: { homeDir: string; workspaceDir: string }) => Promise<T>,
 ): Promise<T> {
-  const env = captureEnv(["HOME", "USERPROFILE", "NEXISCLAW_HOME", "NEXISCLAW_STATE_DIR"]);
+  const env = captureEnv(["HOME", "USERPROFILE", "GREENCHCLAW_HOME", "GREENCHCLAW_STATE_DIR"]);
   try {
     const homeDir = await tempHarness.createTempDir(`${prefix}-home-`);
     const workspaceDir = await tempHarness.createTempDir(`${prefix}-workspace-`);
     process.env.HOME = homeDir;
     process.env.USERPROFILE = homeDir;
-    delete process.env.NEXISCLAW_HOME;
-    delete process.env.NEXISCLAW_STATE_DIR;
+    delete process.env.GREENCHCLAW_HOME;
+    delete process.env.GREENCHCLAW_STATE_DIR;
     return await run({ homeDir, workspaceDir });
   } finally {
     env.restore();

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { VIDEO_GENERATION_TASK_KIND } from "../video-generation-task-status.js";
 import {
   createMediaGenerationTaskLifecycle,
@@ -36,7 +36,7 @@ export const failVideoGenerationTaskRun = (
 ) => videoGenerationTaskLifecycle.failTaskRun(...params);
 
 export async function wakeVideoGenerationTaskCompletion(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   handle: VideoGenerationTaskHandle | null;
   status: "ok" | "error";
   statusLabel: string;

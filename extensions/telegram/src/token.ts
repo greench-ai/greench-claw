@@ -1,14 +1,14 @@
-import { resolveNormalizedAccountEntry } from "NexisClaw/plugin-sdk/account-core";
-import type { BaseTokenResolution } from "NexisClaw/plugin-sdk/channel-contract";
-import { tryReadSecretFileSync } from "NexisClaw/plugin-sdk/channel-core";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { TelegramAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveDefaultSecretProviderAlias } from "NexisClaw/plugin-sdk/provider-auth";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/routing";
+import { resolveNormalizedAccountEntry } from "GreenchClaw/plugin-sdk/account-core";
+import type { BaseTokenResolution } from "GreenchClaw/plugin-sdk/channel-contract";
+import { tryReadSecretFileSync } from "GreenchClaw/plugin-sdk/channel-core";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { TelegramAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveDefaultSecretProviderAlias } from "GreenchClaw/plugin-sdk/provider-auth";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/routing";
 import {
   normalizeSecretInputString,
   resolveSecretInputString,
-} from "NexisClaw/plugin-sdk/secret-input";
+} from "GreenchClaw/plugin-sdk/secret-input";
 
 type TelegramTokenSource = "env" | "tokenFile" | "config" | "none";
 
@@ -22,7 +22,7 @@ type RuntimeTokenValueResolution =
   | { status: "missing" };
 
 function resolveEnvSecretRefValue(params: {
-  cfg?: Pick<NexisClawConfig, "secrets">;
+  cfg?: Pick<GreenchClawConfig, "secrets">;
   provider: string;
   id: string;
   env?: NodeJS.ProcessEnv;
@@ -50,7 +50,7 @@ function resolveEnvSecretRefValue(params: {
 }
 
 function resolveRuntimeTokenValue(params: {
-  cfg?: Pick<NexisClawConfig, "secrets">;
+  cfg?: Pick<GreenchClawConfig, "secrets">;
   value: unknown;
   path: string;
 }): RuntimeTokenValueResolution {
@@ -100,7 +100,7 @@ type ResolveTelegramTokenOpts = {
 };
 
 export function resolveTelegramToken(
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
   opts: ResolveTelegramTokenOpts = {},
 ): TelegramTokenResolution {
   const accountId = normalizeAccountId(opts.accountId);
@@ -128,7 +128,7 @@ export function resolveTelegramToken(
   //
   // Single-bot: no accounts section (or empty) → allow fallthrough so that
   // binding-created accountIds inherit the channel-level token.
-  // See: https://github.com/NexisClaw/NexisClaw/issues/53876
+  // See: https://github.com/GreenchClaw/GreenchClaw/issues/53876
   if (accountId !== DEFAULT_ACCOUNT_ID && !accountCfg) {
     const accounts = telegramCfg?.accounts;
     const hasConfiguredAccounts =

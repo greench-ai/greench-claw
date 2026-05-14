@@ -4,10 +4,10 @@ import {
   resolveTtsConfig,
   resolveTtsPrefsPath,
   type ResolvedTtsConfig,
-} from "NexisClaw/plugin-sdk/agent-runtime";
-import type { NexisClawConfig, TtsConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { parseTtsDirectives } from "NexisClaw/plugin-sdk/speech";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
+import type { GreenchClawConfig, TtsConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { parseTtsDirectives } from "GreenchClaw/plugin-sdk/speech";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { getDiscordRuntime } from "../runtime.js";
 import { sanitizeVoiceReplyTextForSpeech } from "./sanitize.js";
 
@@ -65,8 +65,8 @@ function mergeTtsConfig(base: TtsConfig, override?: TtsConfig): TtsConfig {
   };
 }
 
-function resolveVoiceTtsConfig(params: { cfg: NexisClawConfig; override?: TtsConfig }): {
-  cfg: NexisClawConfig;
+function resolveVoiceTtsConfig(params: { cfg: GreenchClawConfig; override?: TtsConfig }): {
+  cfg: GreenchClawConfig;
   resolved: ResolvedTtsConfig;
 } {
   if (!params.override) {
@@ -86,7 +86,7 @@ function resolveVoiceTtsConfig(params: { cfg: NexisClawConfig; override?: TtsCon
 }
 
 export async function transcribeVoiceAudio(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   filePath: string;
 }): Promise<string | undefined> {
@@ -100,7 +100,7 @@ export async function transcribeVoiceAudio(params: {
 }
 
 export async function synthesizeVoiceReplyAudio(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   override?: TtsConfig;
   replyText: string;
   speakerLabel: string;

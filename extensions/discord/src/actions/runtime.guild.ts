@@ -8,7 +8,7 @@ import {
   readStringArrayParam,
   readStringParam,
   type DiscordActionConfig,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "../runtime-api.js";
 import {
   addRoleDiscord,
@@ -60,7 +60,7 @@ export const discordGuildActionRuntime = {
   uploadStickerDiscord,
 };
 
-type DiscordRoleMutationOpts = { cfg: NexisClawConfig; accountId?: string };
+type DiscordRoleMutationOpts = { cfg: GreenchClawConfig; accountId?: string };
 type DiscordRoleMutation = (
   params: {
     guildId: string;
@@ -71,7 +71,7 @@ type DiscordRoleMutation = (
 ) => Promise<unknown>;
 
 async function runRoleMutation(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string;
   values: Record<string, unknown>;
   mutate: DiscordRoleMutation;
@@ -96,7 +96,7 @@ export async function handleDiscordGuildAction(
   action: string,
   params: Record<string, unknown>,
   isActionEnabled: ActionGate<DiscordActionConfig>,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   options?: { mediaLocalRoots?: readonly string[] },
 ): Promise<AgentToolResult<unknown>> {
   const accountId = readStringParam(params, "accountId");

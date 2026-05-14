@@ -12,7 +12,7 @@ Use these when a task is clearly tied to a script; otherwise prefer the CLI.
 ## Conventions
 
 - Scripts are **optional** unless referenced in docs or release checklists.
-- Prefer CLI surfaces when they exist (example: auth monitoring uses `NexisClaw models status --check`).
+- Prefer CLI surfaces when they exist (example: auth monitoring uses `GreenchClaw models status --check`).
 - Assume scripts are host-specific; read them before running on a new machine.
 
 ## Auth monitoring scripts
@@ -25,13 +25,13 @@ Use `scripts/gh-read` when you want `gh` to use a GitHub App installation token 
 
 Required env:
 
-- `NEXISCLAW_GH_READ_APP_ID`
-- `NEXISCLAW_GH_READ_PRIVATE_KEY_FILE`
+- `GREENCHCLAW_GH_READ_APP_ID`
+- `GREENCHCLAW_GH_READ_PRIVATE_KEY_FILE`
 
 Optional env:
 
-- `NEXISCLAW_GH_READ_INSTALLATION_ID` when you want to skip repo-based installation lookup
-- `NEXISCLAW_GH_READ_PERMISSIONS` as a comma-separated override for the read permission subset to request
+- `GREENCHCLAW_GH_READ_INSTALLATION_ID` when you want to skip repo-based installation lookup
+- `GREENCHCLAW_GH_READ_PERMISSIONS` as a comma-separated override for the read permission subset to request
 
 Repo resolution order:
 
@@ -42,8 +42,8 @@ Repo resolution order:
 Examples:
 
 - `scripts/gh-read pr view 123`
-- `scripts/gh-read run list -R NexisClaw/NexisClaw`
-- `scripts/gh-read api repos/NexisClaw/NexisClaw/pulls/123`
+- `scripts/gh-read run list -R GreenchClaw/GreenchClaw`
+- `scripts/gh-read api repos/GreenchClaw/GreenchClaw/pulls/123`
 
 ## When adding scripts
 

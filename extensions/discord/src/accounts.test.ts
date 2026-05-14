@@ -1,8 +1,8 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   clearRuntimeConfigSnapshot,
   setRuntimeConfigSnapshot,
-} from "NexisClaw/plugin-sdk/runtime-config-snapshot";
+} from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   createDiscordActionGate,
@@ -280,7 +280,7 @@ describe("resolveDiscordAccount runtime config selection", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
     const runtimeCfg = {
       channels: {
         discord: {
@@ -293,7 +293,7 @@ describe("resolveDiscordAccount runtime config selection", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     setRuntimeConfigSnapshot(runtimeCfg, sourceCfg);
 
     const resolved = resolveDiscordAccount({ cfg: sourceCfg });
@@ -313,7 +313,7 @@ describe("resolveDiscordAccount runtime config selection", () => {
             token: { source: "env", provider: "default", id: "DISCORD_BOT_TOKEN" },
           },
         },
-      } as unknown as NexisClawConfig,
+      } as unknown as GreenchClawConfig,
       accountId: "default",
     });
 

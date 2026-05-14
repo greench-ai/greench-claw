@@ -1,8 +1,8 @@
-import type { MemorySearchResult } from "NexisClaw/plugin-sdk/memory-core-host-runtime-files";
-import * as sessionTranscriptHit from "NexisClaw/plugin-sdk/session-transcript-hit";
+import type { MemorySearchResult } from "GreenchClaw/plugin-sdk/memory-core-host-runtime-files";
+import * as sessionTranscriptHit from "GreenchClaw/plugin-sdk/session-transcript-hit";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { filterMemorySearchHitsBySessionVisibility } from "./session-search-visibility.js";
-import { asNexisClawConfig } from "./tools.test-helpers.js";
+import { asGreenchClawConfig } from "./tools.test-helpers.js";
 
 const crossAgentStore = {
   "agent:peer:only": {
@@ -13,9 +13,9 @@ const crossAgentStore = {
 };
 let combinedSessionStore: typeof crossAgentStore | Record<string, never> = crossAgentStore;
 
-vi.mock("NexisClaw/plugin-sdk/session-transcript-hit", async (importOriginal) => {
+vi.mock("GreenchClaw/plugin-sdk/session-transcript-hit", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("NexisClaw/plugin-sdk/session-transcript-hit")>();
+    await importOriginal<typeof import("GreenchClaw/plugin-sdk/session-transcript-hit")>();
   return {
     ...actual,
     loadCombinedSessionStoreForGateway: vi.fn(() => ({
@@ -32,7 +32,7 @@ describe("filterMemorySearchHitsBySessionVisibility", () => {
   });
 
   it("drops sessions-sourced hits when requester key is missing (fail closed)", async () => {
-    const cfg = asNexisClawConfig({ tools: { sessions: { visibility: "all" } } });
+    const cfg = asGreenchClawConfig({ tools: { sessions: { visibility: "all" } } });
     const hits: MemorySearchResult[] = [
       {
         path: "sessions/u1.jsonl",
@@ -53,7 +53,7 @@ describe("filterMemorySearchHitsBySessionVisibility", () => {
   });
 
   it("keeps non-session hits unchanged", async () => {
-    const cfg = asNexisClawConfig({ tools: { sessions: { visibility: "all" } } });
+    const cfg = asGreenchClawConfig({ tools: { sessions: { visibility: "all" } } });
     const hits: MemorySearchResult[] = [
       {
         path: "memory/foo.md",
@@ -74,7 +74,7 @@ describe("filterMemorySearchHitsBySessionVisibility", () => {
   });
 
   it("loads the combined session store once per filter pass", async () => {
-    const cfg = asNexisClawConfig({ tools: { sessions: { visibility: "all" } } });
+    const cfg = asGreenchClawConfig({ tools: { sessions: { visibility: "all" } } });
     const hits: MemorySearchResult[] = [
       {
         path: "sessions/w1.jsonl",
@@ -112,7 +112,7 @@ describe("filterMemorySearchHitsBySessionVisibility", () => {
       startLine: 1,
       endLine: 2,
     };
-    const cfg = asNexisClawConfig({
+    const cfg = asGreenchClawConfig({
       tools: {
         sessions: { visibility: "all" },
         agentToAgent: { enabled: true, allow: ["*"] },
@@ -136,7 +136,7 @@ describe("filterMemorySearchHitsBySessionVisibility", () => {
       startLine: 1,
       endLine: 2,
     };
-    const cfg = asNexisClawConfig({
+    const cfg = asGreenchClawConfig({
       tools: {
         sessions: { visibility: "all" },
         agentToAgent: { enabled: false },
@@ -161,7 +161,7 @@ describe("filterMemorySearchHitsBySessionVisibility", () => {
       startLine: 1,
       endLine: 2,
     };
-    const cfg = asNexisClawConfig({
+    const cfg = asGreenchClawConfig({
       tools: {
         sessions: { visibility: "agent" },
       },
@@ -187,7 +187,7 @@ describe("filterMemorySearchHitsBySessionVisibility", () => {
       startLine: 1,
       endLine: 2,
     };
-    const cfg = asNexisClawConfig({
+    const cfg = asGreenchClawConfig({
       tools: {
         sessions: { visibility: "all" },
         agentToAgent: { enabled: false },

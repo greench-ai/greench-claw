@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { withNexisClawTestState } from "../test-utils/NexisClaw-test-state.js";
+import { withGreenchClawTestState } from "../test-utils/GreenchClaw-test-state.js";
 import {
   createFlowRecord,
   createTaskFlowForTask,
@@ -18,8 +18,8 @@ import {
 import { configureTaskFlowRegistryRuntime } from "./task-flow-registry.store.js";
 
 async function withFlowRegistryTempDir<T>(run: (root: string) => Promise<T>): Promise<T> {
-  return await withNexisClawTestState(
-    { layout: "state-only", prefix: "NexisClaw-task-flow-registry-" },
+  return await withGreenchClawTestState(
+    { layout: "state-only", prefix: "GreenchClaw-task-flow-registry-" },
     async (state) => {
       resetTaskFlowRegistryForTests();
       try {
@@ -43,7 +43,7 @@ describe("task-flow-registry", () => {
 
   it("creates managed flows and updates them through revision-checked helpers", async () => {
     await withFlowRegistryTempDir(async (root) => {
-      process.env.NEXISCLAW_STATE_DIR = root;
+      process.env.GREENCHCLAW_STATE_DIR = root;
       resetTaskFlowRegistryForTests();
 
       const created = createManagedTaskFlow({
@@ -154,7 +154,7 @@ describe("task-flow-registry", () => {
 
   it("requires a controller for managed flows and rejects clearing it later", async () => {
     await withFlowRegistryTempDir(async (root) => {
-      process.env.NEXISCLAW_STATE_DIR = root;
+      process.env.GREENCHCLAW_STATE_DIR = root;
       resetTaskFlowRegistryForTests();
 
       expect(() =>
@@ -248,7 +248,7 @@ describe("task-flow-registry", () => {
 
   it("mirrors one-task flow state from tasks and leaves managed flows alone", async () => {
     await withFlowRegistryTempDir(async (root) => {
-      process.env.NEXISCLAW_STATE_DIR = root;
+      process.env.GREENCHCLAW_STATE_DIR = root;
       resetTaskFlowRegistryForTests();
 
       const mirrored = createTaskFlowForTask({
@@ -355,7 +355,7 @@ describe("task-flow-registry", () => {
 
   it("preserves explicit json null in state and wait payloads", async () => {
     await withFlowRegistryTempDir(async (root) => {
-      process.env.NEXISCLAW_STATE_DIR = root;
+      process.env.GREENCHCLAW_STATE_DIR = root;
       resetTaskFlowRegistryForTests();
 
       const created = createManagedTaskFlow({

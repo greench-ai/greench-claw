@@ -1,18 +1,18 @@
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { listRouteBindings } from "../config/bindings.js";
 import type { AgentRouteBinding } from "../config/types.agents.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   normalizeRouteBindingChannelId,
   resolveNormalizedRouteBindingMatch,
 } from "./binding-scope.js";
 import { normalizeAgentId } from "./session-key.js";
 
-export function listBindings(cfg: NexisClawConfig): AgentRouteBinding[] {
+export function listBindings(cfg: GreenchClawConfig): AgentRouteBinding[] {
   return listRouteBindings(cfg);
 }
 
-export function listBoundAccountIds(cfg: NexisClawConfig, channelId: string): string[] {
+export function listBoundAccountIds(cfg: GreenchClawConfig, channelId: string): string[] {
   const normalizedChannel = normalizeRouteBindingChannelId(channelId);
   if (!normalizedChannel) {
     return [];
@@ -29,7 +29,7 @@ export function listBoundAccountIds(cfg: NexisClawConfig, channelId: string): st
 }
 
 export function resolveDefaultAgentBoundAccountId(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   channelId: string,
 ): string | null {
   const normalizedChannel = normalizeRouteBindingChannelId(channelId);
@@ -51,7 +51,7 @@ export function resolveDefaultAgentBoundAccountId(
   return null;
 }
 
-export function buildChannelAccountBindings(cfg: NexisClawConfig) {
+export function buildChannelAccountBindings(cfg: GreenchClawConfig) {
   const map = new Map<string, Map<string, string[]>>();
   for (const binding of listBindings(cfg)) {
     const resolved = resolveNormalizedRouteBindingMatch(binding);

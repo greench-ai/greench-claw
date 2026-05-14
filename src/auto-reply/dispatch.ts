@@ -1,5 +1,5 @@
 import { normalizeChatType } from "../channels/chat-type.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   deriveInboundMessageHookContext,
   toPluginMessageContext,
@@ -114,7 +114,7 @@ function endForegroundReplyFence(snapshot: ForegroundReplyFenceSnapshot): void {
 
 function resolveDispatcherSilentReplyContext(
   ctx: MsgContext | FinalizedMsgContext,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ) {
   const finalized = finalizeInboundContext(ctx);
   const policySessionKey =
@@ -242,7 +242,7 @@ function finalizeDispatchResult(
 
 export async function dispatchInboundMessage(params: {
   ctx: MsgContext | FinalizedMsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   dispatcher: ReplyDispatcher;
   replyOptions?: Omit<GetReplyOptions, "onBlockReply">;
   replyResolver?: GetReplyFromConfig;
@@ -281,7 +281,7 @@ export async function dispatchInboundMessage(params: {
 
 export async function dispatchInboundMessageWithBufferedDispatcher(params: {
   ctx: MsgContext | FinalizedMsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   dispatcherOptions: ReplyDispatcherWithTypingOptions;
   replyOptions?: Omit<GetReplyOptions, "onBlockReply">;
   replyResolver?: GetReplyFromConfig;
@@ -334,7 +334,7 @@ export async function dispatchInboundMessageWithBufferedDispatcher(params: {
 
 export async function dispatchInboundMessageWithDispatcher(params: {
   ctx: MsgContext | FinalizedMsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   dispatcherOptions: ReplyDispatcherOptions;
   replyOptions?: Omit<GetReplyOptions, "onBlockReply">;
   replyResolver?: GetReplyFromConfig;

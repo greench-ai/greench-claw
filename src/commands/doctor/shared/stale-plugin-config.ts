@@ -1,6 +1,6 @@
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../../agents/agent-scope.js";
 import { CHANNEL_IDS } from "../../../channels/ids.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { normalizePluginId } from "../../../plugins/config-state.js";
 import { loadInstalledPluginIndexInstallRecordsSync } from "../../../plugins/installed-plugin-index-records.js";
 import { loadManifestMetadataSnapshot } from "../../../plugins/manifest-contract-eligibility.js";
@@ -34,7 +34,7 @@ type StalePluginRegistryState = {
 };
 
 function collectPluginRegistryState(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env?: NodeJS.ProcessEnv,
 ): StalePluginRegistryState {
   const workspaceDir = resolveAgentWorkspaceDir(cfg, resolveDefaultAgentId(cfg));
@@ -79,7 +79,7 @@ function collectPluginRegistryState(
 }
 
 export function isStalePluginAutoRepairBlocked(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env?: NodeJS.ProcessEnv,
 ): boolean {
   if (cfg.plugins?.enabled === false) {
@@ -89,7 +89,7 @@ export function isStalePluginAutoRepairBlocked(
 }
 
 export function scanStalePluginConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env?: NodeJS.ProcessEnv,
 ): StalePluginConfigHit[] {
   if (cfg.plugins?.enabled === false) {
@@ -99,7 +99,7 @@ export function scanStalePluginConfig(
 }
 
 function scanStalePluginConfigWithState(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   registryState: StalePluginRegistryState,
 ): StalePluginConfigHit[] {
   const plugins = asObjectRecord(cfg.plugins);
@@ -203,7 +203,7 @@ function scanStalePluginConfigWithState(
 }
 
 function collectDanglingChannelIds(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   registryState: StalePluginRegistryState;
   staleEvidenceIds: ReadonlySet<string>;
 }): string[] {
@@ -233,7 +233,7 @@ function collectDanglingChannelIds(params: {
 }
 
 function collectDependentChannelConfigHits(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   channelIds: readonly string[],
 ): StalePluginConfigHit[] {
   if (channelIds.length === 0) {
@@ -323,10 +323,10 @@ export function collectStalePluginConfigWarnings(params: {
 }
 
 export function maybeRepairStalePluginConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env?: NodeJS.ProcessEnv,
 ): {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   changes: string[];
 } {
   if (cfg.plugins?.enabled === false) {
@@ -434,7 +434,7 @@ export function maybeRepairStalePluginConfig(
   return { config: next, changes };
 }
 
-function removeDanglingChannelReferences(config: NexisClawConfig, channelIds: readonly string[]) {
+function removeDanglingChannelReferences(config: GreenchClawConfig, channelIds: readonly string[]) {
   const staleChannelIds = new Set(channelIds.map((channelId) => normalizePluginId(channelId)));
   const channels = asObjectRecord(config.channels);
   if (channels) {

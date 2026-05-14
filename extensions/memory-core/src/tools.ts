@@ -1,21 +1,21 @@
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import type { MemorySource } from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import type { MemorySource } from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 import {
   asToolParamsRecord,
   jsonResult,
   readNumberParam,
   readStringParam,
   type MemoryCorpusSearchResult,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-runtime-core";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/memory-core-host-runtime-core";
 import type {
   MemorySearchResult,
   MemorySearchRuntimeDebug,
-} from "NexisClaw/plugin-sdk/memory-core-host-runtime-files";
+} from "GreenchClaw/plugin-sdk/memory-core-host-runtime-files";
 import {
   resolveMemoryCorePluginConfig,
   resolveMemoryDeepDreamingConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-status";
+} from "GreenchClaw/plugin-sdk/memory-core-host-status";
 import { filterMemorySearchHitsBySessionVisibility } from "./session-search-visibility.js";
 import { recordShortTermRecalls } from "./short-term-promotion.js";
 import {
@@ -134,7 +134,7 @@ function isActiveMemorySessionKey(sessionKey?: string): boolean {
 }
 
 function resolveActiveMemoryQmdSearchModeOverride(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   sessionKey?: string,
 ): "search" | "vsearch" | "query" | undefined {
   if (!isActiveMemorySessionKey(sessionKey)) {
@@ -226,8 +226,8 @@ async function executeMemoryReadResult<T>(params: {
 }
 
 export function createMemorySearchTool(options: {
-  config?: NexisClawConfig;
-  getConfig?: () => NexisClawConfig | undefined;
+  config?: GreenchClawConfig;
+  getConfig?: () => GreenchClawConfig | undefined;
   agentId?: string;
   agentSessionKey?: string;
   sandboxed?: boolean;
@@ -389,8 +389,8 @@ export function createMemorySearchTool(options: {
 }
 
 export function createMemoryGetTool(options: {
-  config?: NexisClawConfig;
-  getConfig?: () => NexisClawConfig | undefined;
+  config?: GreenchClawConfig;
+  getConfig?: () => GreenchClawConfig | undefined;
   agentId?: string;
   agentSessionKey?: string;
 }) {

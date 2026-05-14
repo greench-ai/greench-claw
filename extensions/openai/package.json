@@ -1,17 +1,17 @@
 {
-  "name": "@NexisClaw/openai-provider",
+  "name": "@GreenchClaw/openai-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw OpenAI provider plugins",
+  "description": "GreenchClaw OpenAI provider plugins",
   "type": "module",
   "dependencies": {
     "@earendil-works/pi-ai": "0.74.0",
     "ws": "8.20.0"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

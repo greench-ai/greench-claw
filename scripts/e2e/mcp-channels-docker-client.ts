@@ -192,7 +192,7 @@ async function main() {
       "seeded attachment message",
       () =>
         messages.find((entry) => {
-          const raw = entry.__NexisClaw;
+          const raw = entry.__GreenchClaw;
           return (
             raw && typeof raw === "object" && (raw as { id?: unknown }).id === "msg-attachment"
           );

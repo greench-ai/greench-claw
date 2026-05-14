@@ -1,17 +1,18 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   createEmptyPluginRegistry,
   setActivePluginRegistry,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { clearSessionStoreCacheForTest } from "NexisClaw/plugin-sdk/session-store-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { clearSessionStoreCacheForTest } from "GreenchClaw/plugin-sdk/session-store-runtime";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { ChannelType, type AutocompleteInteraction } from "../internal/discord.js";
 import { createNoopThreadBindingManager } from "./thread-bindings.js";
 
-type ConversationRuntimeModule = typeof import("NexisClaw/plugin-sdk/conversation-binding-runtime");
+type ConversationRuntimeModule =
+  typeof import("GreenchClaw/plugin-sdk/conversation-binding-runtime");
 type ResolveConfiguredBindingRoute = ConversationRuntimeModule["resolveConfiguredBindingRoute"];
 type ConfiguredBindingRouteResult = ReturnType<ResolveConfiguredBindingRoute>;
 type EnsureConfiguredBindingRouteReady =
@@ -77,26 +78,26 @@ function createConfiguredRouteResult(
   };
 }
 
-vi.mock("NexisClaw/plugin-sdk/conversation-binding-runtime", async () => {
+vi.mock("GreenchClaw/plugin-sdk/conversation-binding-runtime", async () => {
   const { createConfiguredBindingConversationRuntimeModuleMock } =
     await import("../test-support/configured-binding-runtime.js");
   return await createConfiguredBindingConversationRuntimeModuleMock<
-    typeof import("NexisClaw/plugin-sdk/conversation-binding-runtime")
+    typeof import("GreenchClaw/plugin-sdk/conversation-binding-runtime")
   >(
     {
       ensureConfiguredBindingRouteReadyMock,
       resolveConfiguredBindingRouteMock,
     },
     () =>
-      vi.importActual<typeof import("NexisClaw/plugin-sdk/conversation-binding-runtime")>(
-        "NexisClaw/plugin-sdk/conversation-binding-runtime",
+      vi.importActual<typeof import("GreenchClaw/plugin-sdk/conversation-binding-runtime")>(
+        "GreenchClaw/plugin-sdk/conversation-binding-runtime",
       ),
   );
 });
 
-vi.mock("NexisClaw/plugin-sdk/agent-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/agent-runtime", () => ({
   normalizeProviderId: (value: string) => value.trim().toLowerCase(),
-  resolveDefaultModelForAgent: (params: { cfg: NexisClawConfig }) => {
+  resolveDefaultModelForAgent: (params: { cfg: GreenchClawConfig }) => {
     const configuredModel = params.cfg.agents?.defaults?.model;
     const primary =
       typeof configuredModel === "string"
@@ -116,17 +117,17 @@ vi.mock("NexisClaw/plugin-sdk/agent-runtime", () => ({
   },
 }));
 
-vi.mock("NexisClaw/plugin-sdk/models-provider-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/models-provider-runtime", () => ({
   buildModelsProviderData: buildModelsProviderDataMock,
 }));
 
 const STORE_PATH = path.join(
   os.tmpdir(),
-  `NexisClaw-discord-think-autocomplete-${process.pid}.json`,
+  `GreenchClaw-discord-think-autocomplete-${process.pid}.json`,
 );
 const SESSION_KEY = "agent:main:main";
-let findCommandByNativeName: typeof import("NexisClaw/plugin-sdk/command-auth").findCommandByNativeName;
-let resolveCommandArgChoices: typeof import("NexisClaw/plugin-sdk/command-auth").resolveCommandArgChoices;
+let findCommandByNativeName: typeof import("GreenchClaw/plugin-sdk/command-auth").findCommandByNativeName;
+let resolveCommandArgChoices: typeof import("GreenchClaw/plugin-sdk/command-auth").resolveCommandArgChoices;
 let resolveDiscordNativeChoiceContext: typeof import("./native-command-model-picker-ui.js").resolveDiscordNativeChoiceContext;
 
 function installProviderThinkingRegistryForTest(): void {
@@ -166,7 +167,7 @@ function installProviderThinkingRegistryForTest(): void {
 
 async function loadDiscordThinkAutocompleteModulesForTest() {
   installProviderThinkingRegistryForTest();
-  const commandAuth = await import("NexisClaw/plugin-sdk/command-auth");
+  const commandAuth = await import("GreenchClaw/plugin-sdk/command-auth");
   const nativeCommandUi = await import("./native-command-model-picker-ui.js");
   return {
     findCommandByNativeName: commandAuth.findCommandByNativeName,
@@ -250,7 +251,7 @@ describe("discord native /think autocomplete", () => {
       session: {
         store: STORE_PATH,
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
   }
 
   function requireThinkLevelCommand() {

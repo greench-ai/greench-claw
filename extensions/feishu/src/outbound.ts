@@ -2,7 +2,7 @@ import path from "node:path";
 import {
   attachChannelToResult,
   createAttachedChannelResultAdapter,
-} from "NexisClaw/plugin-sdk/channel-send-result";
+} from "GreenchClaw/plugin-sdk/channel-send-result";
 import {
   interactiveReplyToPresentation,
   normalizeInteractiveReply,
@@ -11,14 +11,14 @@ import {
   resolveInteractiveTextFallback,
   type MessagePresentationBlock,
   type MessagePresentationButton,
-} from "NexisClaw/plugin-sdk/interactive-runtime";
+} from "GreenchClaw/plugin-sdk/interactive-runtime";
 import {
   resolvePayloadMediaUrls,
   sendPayloadMediaSequenceAndFinalize,
   sendTextMediaPayload,
-} from "NexisClaw/plugin-sdk/reply-payload";
-import { statRegularFileSync } from "NexisClaw/plugin-sdk/security-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/reply-payload";
+import { statRegularFileSync } from "GreenchClaw/plugin-sdk/security-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveFeishuAccount } from "./accounts.js";
 import { createFeishuCardInteractionEnvelope } from "./card-interaction.js";
 import { createFeishuClient } from "./client.js";
@@ -35,7 +35,7 @@ import {
   sendStructuredCardFeishu,
 } from "./send.js";
 
-const RENDERED_FEISHU_CARD = Symbol("NexisClaw.renderedFeishuCard");
+const RENDERED_FEISHU_CARD = Symbol("GreenchClaw.renderedFeishuCard");
 
 function normalizePossibleLocalImagePath(text: string | undefined): string | null {
   const raw = text?.trim();

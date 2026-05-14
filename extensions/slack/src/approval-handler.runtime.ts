@@ -5,14 +5,14 @@ import type {
   ExecApprovalExpiredView,
   ExecApprovalPendingView,
   ExecApprovalResolvedView,
-} from "NexisClaw/plugin-sdk/approval-handler-runtime";
-import { createChannelApprovalNativeRuntimeAdapter } from "NexisClaw/plugin-sdk/approval-handler-runtime";
-import { buildChannelApprovalNativeTargetKey } from "NexisClaw/plugin-sdk/approval-native-runtime";
-import { buildApprovalInteractiveReplyFromActionDescriptors } from "NexisClaw/plugin-sdk/approval-reply-runtime";
-import type { ExecApprovalRequest } from "NexisClaw/plugin-sdk/approval-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { logError } from "NexisClaw/plugin-sdk/logging-core";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/approval-handler-runtime";
+import { createChannelApprovalNativeRuntimeAdapter } from "GreenchClaw/plugin-sdk/approval-handler-runtime";
+import { buildChannelApprovalNativeTargetKey } from "GreenchClaw/plugin-sdk/approval-native-runtime";
+import { buildApprovalInteractiveReplyFromActionDescriptors } from "GreenchClaw/plugin-sdk/approval-reply-runtime";
+import type { ExecApprovalRequest } from "GreenchClaw/plugin-sdk/approval-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { logError } from "GreenchClaw/plugin-sdk/logging-core";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   isSlackExecApprovalClientEnabled,
   shouldHandleSlackExecApprovalRequest,
@@ -37,7 +37,7 @@ const SLACK_CHAT_UPDATE_TEXT_LIMIT = 4000;
 const SLACK_TEXT_OBJECT_MAX = 3000;
 
 type SlackExecApprovalConfig = NonNullable<
-  NonNullable<NonNullable<NexisClawConfig["channels"]>["slack"]>["execApprovals"]
+  NonNullable<NonNullable<GreenchClawConfig["channels"]>["slack"]>["execApprovals"]
 >;
 
 export type SlackApprovalHandlerContext = {

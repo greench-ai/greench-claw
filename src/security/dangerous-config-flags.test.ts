@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { collectEnabledInsecureOrDangerousFlagsFromContracts } from "./dangerous-config-flags-core.js";
 
-function asConfig(value: unknown): NexisClawConfig {
-  return value as NexisClawConfig;
+function asConfig(value: unknown): GreenchClawConfig {
+  return value as GreenchClawConfig;
 }
 
 describe("collectEnabledInsecureOrDangerousFlags", () => {

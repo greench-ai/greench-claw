@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import type { AssistantMessage } from "@earendil-works/pi-ai";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { redactIdentifier } from "../logging/redact-identifier.js";
 import type { AuthProfileFailureReason } from "./auth-profiles.js";
 import { buildAttemptReplayMetadata } from "./pi-embedded-runner/run/incomplete-turn.js";
@@ -77,7 +77,7 @@ const installRunEmbeddedMocks = () => {
     const mod = await vi.importActual<typeof import("./models-config.js")>("./models-config.js");
     return {
       ...mod,
-      ensureNexisClawModelsJson: vi.fn(async () => ({ wrote: false })),
+      ensureGreenchClawModelsJson: vi.fn(async () => ({ wrote: false })),
     };
   });
 };
@@ -205,7 +205,7 @@ const makeConfig = (opts?: {
   apiKey?: string;
   overloadedBackoffMs?: number;
   overloadedProfileRotations?: number;
-}): NexisClawConfig =>
+}): GreenchClawConfig =>
   ({
     auth:
       opts?.overloadedBackoffMs != null || opts?.overloadedProfileRotations != null
@@ -247,9 +247,9 @@ const makeConfig = (opts?: {
         },
       },
     },
-  }) satisfies NexisClawConfig;
+  }) satisfies GreenchClawConfig;
 
-const makeAgentOverrideOnlyFallbackConfig = (agentId: string): NexisClawConfig =>
+const makeAgentOverrideOnlyFallbackConfig = (agentId: string): GreenchClawConfig =>
   ({
     agents: {
       defaults: {
@@ -286,11 +286,11 @@ const makeAgentOverrideOnlyFallbackConfig = (agentId: string): NexisClawConfig =
         },
       },
     },
-  }) satisfies NexisClawConfig;
+  }) satisfies GreenchClawConfig;
 
 const copilotModelId = "gpt-4o";
 
-const makeCopilotConfig = (): NexisClawConfig =>
+const makeCopilotConfig = (): GreenchClawConfig =>
   ({
     models: {
       providers: {
@@ -311,7 +311,7 @@ const makeCopilotConfig = (): NexisClawConfig =>
         },
       },
     },
-  }) satisfies NexisClawConfig;
+  }) satisfies GreenchClawConfig;
 
 const writeAuthStore = async (
   agentDir: string,
@@ -431,7 +431,7 @@ async function runAutoPinnedOpenAiTurn(params: {
   sessionKey: string;
   runId: string;
   authProfileId?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }) {
   await runEmbeddedPiAgentInline({
     sessionId: "session:test",
@@ -474,7 +474,7 @@ async function runAutoPinnedRotationCase(params: {
   errorMessage: string;
   sessionKey: string;
   runId: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }) {
   runEmbeddedAttemptMock.mockReset();
   return withAgentWorkspace(async ({ agentDir, workspaceDir }) => {
@@ -498,7 +498,7 @@ async function runAutoPinnedPromptErrorRotationCase(params: {
   errorMessage: string;
   sessionKey: string;
   runId: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }) {
   runEmbeddedAttemptMock.mockReset();
   return withAgentWorkspace(async ({ agentDir, workspaceDir }) => {
@@ -557,8 +557,8 @@ async function withTimedAgentWorkspace<T>(
 ) {
   vi.useFakeTimers();
   try {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-agent-"));
-    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-workspace-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-agent-"));
+    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-workspace-"));
     const now = Date.now();
     vi.setSystemTime(now);
 
@@ -576,8 +576,8 @@ async function withTimedAgentWorkspace<T>(
 async function withAgentWorkspace<T>(
   run: (ctx: { agentDir: string; workspaceDir: string }) => Promise<T>,
 ) {
-  const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-agent-"));
-  const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-workspace-"));
+  const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-agent-"));
+  const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-workspace-"));
   try {
     return await run({ agentDir, workspaceDir });
   } finally {
@@ -678,8 +678,8 @@ async function runTurnWithCooldownSeed(params: {
 
 describe("runEmbeddedPiAgent auth profile rotation", () => {
   it("refreshes copilot token after auth error and retries once", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-agent-"));
-    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-workspace-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-agent-"));
+    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-workspace-"));
     try {
       await writeCopilotAuthStore(agentDir);
       const now = Date.now();
@@ -744,8 +744,8 @@ describe("runEmbeddedPiAgent auth profile rotation", () => {
   });
 
   it("allows another auth refresh after a successful retry", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-agent-"));
-    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-workspace-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-agent-"));
+    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-workspace-"));
     try {
       await writeCopilotAuthStore(agentDir);
       const now = Date.now();
@@ -828,8 +828,8 @@ describe("runEmbeddedPiAgent auth profile rotation", () => {
   });
 
   it("does not reschedule copilot refresh after shutdown", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-agent-"));
-    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-workspace-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-agent-"));
+    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-workspace-"));
     vi.useFakeTimers();
     try {
       await writeCopilotAuthStore(agentDir);
@@ -909,7 +909,7 @@ describe("runEmbeddedPiAgent auth profile rotation", () => {
     setLoggerOverrideFn({
       level: "trace",
       consoleLevel: "silent",
-      file: path.join(os.tmpdir(), `NexisClaw-auth-rotation-${Date.now()}.log`),
+      file: path.join(os.tmpdir(), `GreenchClaw-auth-rotation-${Date.now()}.log`),
     });
 
     await runAutoPinnedRotationCase({

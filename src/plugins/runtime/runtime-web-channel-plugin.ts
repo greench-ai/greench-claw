@@ -1,6 +1,6 @@
 import type { AgentToolResult } from "@earendil-works/pi-agent-core";
 import type { ChannelAgentTool } from "../../channels/plugins/types.core.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   getDefaultLocalRoots as getDefaultLocalRootsImpl,
   loadWebMedia as loadWebMediaImpl,
@@ -59,7 +59,7 @@ type WebChannelHeavyRuntimeModule = {
     body: string,
     options: {
       verbose: boolean;
-      cfg?: NexisClawConfig;
+      cfg?: GreenchClawConfig;
       mediaUrl?: string;
       mediaAccess?: {
         localRoots?: readonly string[];
@@ -74,7 +74,7 @@ type WebChannelHeavyRuntimeModule = {
   sendPollWhatsApp: (
     to: string,
     poll: PollInput,
-    options: { verbose: boolean; accountId?: string; cfg?: NexisClawConfig },
+    options: { verbose: boolean; accountId?: string; cfg?: GreenchClawConfig },
   ) => Promise<{ messageId: string; toJid: string }>;
   sendReactionWhatsApp: (
     chatJid: string,
@@ -94,7 +94,7 @@ type WebChannelHeavyRuntimeModule = {
   ) => Promise<unknown>;
   handleWhatsAppAction: (
     params: Record<string, unknown>,
-    cfg: NexisClawConfig,
+    cfg: GreenchClawConfig,
   ) => Promise<AgentToolResult<unknown>>;
   monitorWebChannel: (...args: unknown[]) => Promise<unknown>;
   monitorWebInbox: (...args: unknown[]) => Promise<unknown>;

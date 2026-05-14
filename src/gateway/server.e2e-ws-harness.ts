@@ -20,8 +20,8 @@ export type GatewayServerHarness = {
 };
 
 export async function startGatewayServerHarness(): Promise<GatewayServerHarness> {
-  const envSnapshot = captureEnv(["NEXISCLAW_GATEWAY_TOKEN"]);
-  delete process.env.NEXISCLAW_GATEWAY_TOKEN;
+  const envSnapshot = captureEnv(["GREENCHCLAW_GATEWAY_TOKEN"]);
+  delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
   const port = await getFreePort();
   const server = await startGatewayServer(port, {
     auth: { mode: "none" },

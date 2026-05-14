@@ -1,9 +1,9 @@
-import { verifyChannelMessageAdapterCapabilityProofs } from "NexisClaw/plugin-sdk/channel-message";
+import { verifyChannelMessageAdapterCapabilityProofs } from "GreenchClaw/plugin-sdk/channel-message";
 import {
   createSendCfgThreadingRuntime,
   expectProvidedCfgSkipsRuntimeLoad,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { NexisClawConfig as CoreConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { GreenchClawConfig as CoreConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const hoisted = vi.hoisted(() => ({

@@ -2,7 +2,7 @@ import {
   createAuthCaptureJsonFetch,
   createRequestCaptureJsonFetch,
   installPinnedHostnameTestHooks,
-} from "NexisClaw/plugin-sdk/test-env";
+} from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import {
   openaiCodexMediaUnderstandingProvider,

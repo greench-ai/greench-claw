@@ -10,7 +10,7 @@ import {
 const tempDirs: string[] = [];
 
 function makeTempDir(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-native-require-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-native-require-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -67,7 +67,7 @@ describe("tryNativeRequireJavaScriptModule", () => {
   it("declines missing dependency errors when source-transform fallback is available", () => {
     const dir = makeTempDir();
     const modulePath = path.join(dir, "plugin.cjs");
-    fs.writeFileSync(modulePath, 'require("NexisClaw/plugin-sdk");\n', "utf8");
+    fs.writeFileSync(modulePath, 'require("GreenchClaw/plugin-sdk");\n', "utf8");
 
     expect(
       tryNativeRequireJavaScriptModule(modulePath, {

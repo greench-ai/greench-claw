@@ -3,8 +3,8 @@ import path from "node:path";
 import {
   clearMemoryPluginState,
   registerMemoryCorpusSupplement,
-} from "NexisClaw/plugin-sdk/memory-host-core";
-import { readMemoryHostEvents } from "NexisClaw/plugin-sdk/memory-host-events";
+} from "GreenchClaw/plugin-sdk/memory-host-core";
+import { readMemoryHostEvents } from "GreenchClaw/plugin-sdk/memory-host-events";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   getMemorySearchManagerMockCalls,
@@ -18,7 +18,7 @@ import {
 } from "./memory-tool-manager-mock.js";
 import { createMemoryCoreTestHarness } from "./test-helpers.js";
 import {
-  asNexisClawConfig,
+  asGreenchClawConfig,
   createAutoCitationsMemorySearchTool,
   createDefaultMemoryToolConfig,
   createMemoryGetToolOrThrow,
@@ -84,7 +84,7 @@ describe("memory search citations", () => {
 
   it("appends source information when citations are enabled", async () => {
     setMemoryBackend("builtin");
-    const cfg = asNexisClawConfig({
+    const cfg = asGreenchClawConfig({
       memory: { citations: "on" },
       agents: { list: [{ id: "main", default: true }] },
     });
@@ -98,7 +98,7 @@ describe("memory search citations", () => {
 
   it("leaves snippet untouched when citations are off", async () => {
     setMemoryBackend("builtin");
-    const cfg = asNexisClawConfig({
+    const cfg = asGreenchClawConfig({
       memory: { citations: "off" },
       agents: { list: [{ id: "main", default: true }] },
     });
@@ -112,7 +112,7 @@ describe("memory search citations", () => {
 
   it("clamps decorated snippets to qmd injected budget", async () => {
     setMemoryBackend("qmd");
-    const cfg = asNexisClawConfig({
+    const cfg = asGreenchClawConfig({
       memory: { citations: "on", backend: "qmd", qmd: { limits: { maxInjectedChars: 20 } } },
       agents: { list: [{ id: "main", default: true }] },
     });

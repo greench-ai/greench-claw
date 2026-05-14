@@ -1,7 +1,7 @@
 import {
   createWebSearchProviderContractFields,
   type WebSearchProviderPlugin,
-} from "NexisClaw/plugin-sdk/provider-web-search-config-contract";
+} from "GreenchClaw/plugin-sdk/provider-web-search-config-contract";
 
 export function createBraveWebSearchProvider(): WebSearchProviderPlugin {
   const credentialPath = "plugins.entries.brave.config.webSearch.apiKey";
@@ -15,7 +15,7 @@ export function createBraveWebSearchProvider(): WebSearchProviderPlugin {
     envVars: ["BRAVE_API_KEY"],
     placeholder: "BSA...",
     signupUrl: "https://brave.com/search/api/",
-    docsUrl: "https://docs.NexisClaw.ai/tools/brave-search",
+    docsUrl: "https://docs.GreenchClaw.ai/tools/brave-search",
     autoDetectOrder: 10,
     credentialPath,
     ...createWebSearchProviderContractFields({

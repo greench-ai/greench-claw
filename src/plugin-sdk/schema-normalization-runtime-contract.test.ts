@@ -5,7 +5,7 @@ import {
   createPermissiveTool,
   createProxyOpenAIResponsesModel,
   normalizedParameterFreeSchema,
-} from "NexisClaw/plugin-sdk/agent-runtime-test-contracts";
+} from "GreenchClaw/plugin-sdk/agent-runtime-test-contracts";
 import { describe, expect, it } from "vitest";
 import { buildProviderToolCompatFamilyHooks } from "./provider-tools.js";
 

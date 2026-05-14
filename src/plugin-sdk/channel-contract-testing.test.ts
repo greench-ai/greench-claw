@@ -1,4 +1,4 @@
-import { expectChannelTurnDispatchResultContract } from "NexisClaw/plugin-sdk/channel-contract-testing";
+import { expectChannelTurnDispatchResultContract } from "GreenchClaw/plugin-sdk/channel-contract-testing";
 import { describe, it } from "vitest";
 
 describe("channel contract testing helpers", () => {

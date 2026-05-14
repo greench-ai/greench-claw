@@ -4,13 +4,13 @@ import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
 import type { CliDeps } from "../cli/deps.types.js";
 import type { GatewayTailscaleMode } from "../config/types.gateway.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { hasConfiguredInternalHooks } from "../hooks/configured.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import type { scheduleGatewayUpdateCheck } from "../infra/update-startup.js";
 import type { getGlobalHookRunner } from "../plugins/hook-runner-global.js";
 import type { PluginHookGatewayCronService } from "../plugins/hook-types.js";
-import type { loadNexisClawPlugins } from "../plugins/loader.js";
+import type { loadGreenchClawPlugins } from "../plugins/loader.js";
 import { getPluginModuleLoaderStats } from "../plugins/plugin-module-loader-cache.js";
 import type { PluginRegistry } from "../plugins/registry.js";
 import type { PluginServicesHandle } from "../plugins/services.js";
@@ -28,7 +28,7 @@ const ACP_BACKEND_READY_TIMEOUT_MS = 5_000;
 const ACP_BACKEND_READY_POLL_MS = 50;
 const PRIMARY_MODEL_PREWARM_TIMEOUT_MS = 5_000;
 const STARTUP_PROVIDER_DISCOVERY_TIMEOUT_MS = 5_000;
-const SKIP_STARTUP_MODEL_PREWARM_ENV = "NEXISCLAW_SKIP_STARTUP_MODEL_PREWARM";
+const SKIP_STARTUP_MODEL_PREWARM_ENV = "GREENCHCLAW_SKIP_STARTUP_MODEL_PREWARM";
 const QMD_STARTUP_IDLE_DELAY_MS = 120_000;
 const RESTART_SENTINEL_FILENAME = "restart-sentinel.json";
 
@@ -62,7 +62,7 @@ function shouldSkipStartupModelPrewarm(env: NodeJS.ProcessEnv = process.env): bo
   return raw === "1" || raw === "true" || raw === "yes" || raw === "on";
 }
 
-function resolveGatewayMemoryStartupPolicy(cfg: NexisClawConfig): GatewayMemoryStartupPolicy {
+function resolveGatewayMemoryStartupPolicy(cfg: GreenchClawConfig): GatewayMemoryStartupPolicy {
   if (cfg.memory?.backend !== "qmd") {
     return { mode: "off" };
   }
@@ -85,7 +85,7 @@ function resolveGatewayMemoryStartupPolicy(cfg: NexisClawConfig): GatewayMemoryS
 }
 
 function scheduleGatewayMemoryBackend(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   log: { warn: (msg: string) => void };
   policy: GatewayMemoryStartupPolicy;
 }): void {
@@ -163,7 +163,7 @@ async function resolveRestartSentinelPathFast(
   const resolveRawOsHome = () => normalizePathEnv(env.HOME) ?? normalizePathEnv(env.USERPROFILE);
   const expandHomePrefix = (input: string, home: string) => input.replace(/^~(?=$|[\\/])/, home);
   const resolveHome = () => {
-    const explicitHome = normalizePathEnv(env.NEXISCLAW_HOME);
+    const explicitHome = normalizePathEnv(env.GREENCHCLAW_HOME);
     if (explicitHome) {
       const osHome = resolveRawOsHome() ?? os.homedir();
       return path.resolve(expandHomePrefix(explicitHome, osHome));
@@ -177,13 +177,13 @@ async function resolveRestartSentinelPathFast(
     }
     return path.resolve(trimmed);
   };
-  const override = normalizePathEnv(env.NEXISCLAW_STATE_DIR);
+  const override = normalizePathEnv(env.GREENCHCLAW_STATE_DIR);
   if (override) {
     return path.join(resolveUserPath(override), RESTART_SENTINEL_FILENAME);
   }
   const home = resolveHome();
-  const newStateDir = path.join(home, ".NexisClaw");
-  if (env.NEXISCLAW_TEST_FAST === "1" || (await pathExists(newStateDir))) {
+  const newStateDir = path.join(home, ".GreenchClaw");
+  if (env.GREENCHCLAW_TEST_FAST === "1" || (await pathExists(newStateDir))) {
     return path.join(newStateDir, RESTART_SENTINEL_FILENAME);
   }
   const legacyStateDir = path.join(home, ".clawdbot");
@@ -210,12 +210,12 @@ async function refreshLatestUpdateRestartSentinelIfPresent(): Promise<Awaited<
   return await (await import("./server-restart-sentinel.js")).refreshLatestUpdateRestartSentinel();
 }
 
-function hasGatewayStartHooks(pluginRegistry: ReturnType<typeof loadNexisClawPlugins>): boolean {
+function hasGatewayStartHooks(pluginRegistry: ReturnType<typeof loadGreenchClawPlugins>): boolean {
   return pluginRegistry.typedHooks.some((hook) => hook.hookName === "gateway_start");
 }
 
 function isConfiguredCliBackendPrimary(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   explicitPrimary: string;
   normalizeProviderId: (provider: string) => string;
 }): boolean {
@@ -262,7 +262,7 @@ async function waitForAcpRuntimeBackendReady(params: {
 }
 
 async function prewarmConfiguredPrimaryModel(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   workspaceDir?: string;
   log: { warn: (msg: string) => void };
 }): Promise<void> {
@@ -305,12 +305,12 @@ async function prewarmConfiguredPrimaryModel(params: {
     return;
   }
   // Keep startup prewarm metadata-only; resolving models can import provider runtimes and block readiness.
-  const { ensureNexisClawModelsJson } = await import("../agents/models-config.js");
+  const { ensureGreenchClawModelsJson } = await import("../agents/models-config.js");
   const agentDir = resolveDefaultAgentDir(params.cfg);
   const workspaceDir =
     params.workspaceDir ?? resolveAgentWorkspaceDir(params.cfg, resolveDefaultAgentId(params.cfg));
   try {
-    await ensureNexisClawModelsJson(params.cfg, agentDir, {
+    await ensureGreenchClawModelsJson(params.cfg, agentDir, {
       workspaceDir,
       providerDiscoveryProviderIds: [provider],
       providerDiscoveryTimeoutMs: STARTUP_PROVIDER_DISCOVERY_TIMEOUT_MS,
@@ -323,7 +323,7 @@ async function prewarmConfiguredPrimaryModel(params: {
 
 async function prewarmConfiguredPrimaryModelWithTimeout(
   params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     workspaceDir?: string;
     log: { warn: (msg: string) => void };
     timeoutMs?: number;
@@ -352,7 +352,7 @@ async function prewarmConfiguredPrimaryModelWithTimeout(
 
 function schedulePrimaryModelPrewarm(
   params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     workspaceDir?: string;
     log: { warn: (msg: string) => void };
     startupTrace?: GatewayStartupTrace;
@@ -377,8 +377,8 @@ function schedulePrimaryModelPrewarm(
 }
 
 export async function startGatewaySidecars(params: {
-  cfg: NexisClawConfig;
-  pluginRegistry: ReturnType<typeof loadNexisClawPlugins>;
+  cfg: GreenchClawConfig;
+  pluginRegistry: ReturnType<typeof loadGreenchClawPlugins>;
   defaultWorkspaceDir: string;
   deps: CliDeps;
   startChannels: () => Promise<void>;
@@ -468,8 +468,8 @@ export async function startGatewaySidecars(params: {
   });
 
   const skipChannels =
-    isTruthyEnvValue(process.env.NEXISCLAW_SKIP_CHANNELS) ||
-    isTruthyEnvValue(process.env.NEXISCLAW_SKIP_PROVIDERS);
+    isTruthyEnvValue(process.env.GREENCHCLAW_SKIP_CHANNELS) ||
+    isTruthyEnvValue(process.env.GREENCHCLAW_SKIP_PROVIDERS);
   await measureStartup(params.startupTrace, "sidecars.channels", async () => {
     if (!skipChannels) {
       try {
@@ -490,7 +490,7 @@ export async function startGatewaySidecars(params: {
       }
     } else {
       params.logChannels.info(
-        "skipping channel start (NEXISCLAW_SKIP_CHANNELS=1 or NEXISCLAW_SKIP_PROVIDERS=1)",
+        "skipping channel start (GREENCHCLAW_SKIP_CHANNELS=1 or GREENCHCLAW_SKIP_PROVIDERS=1)",
       );
     }
   });
@@ -670,7 +670,7 @@ const defaultGatewayPostAttachRuntimeDeps: GatewayPostAttachRuntimeDeps = {
 export async function startGatewayPostAttachRuntime(
   params: {
     minimalTestGateway: boolean;
-    cfgAtStart: NexisClawConfig;
+    cfgAtStart: GreenchClawConfig;
     bindHost: string;
     bindHosts: string[];
     port: number;
@@ -692,8 +692,8 @@ export async function startGatewayPostAttachRuntime(
       error: (msg: string) => void;
       debug?: (msg: string) => void;
     };
-    gatewayPluginConfigAtStart: NexisClawConfig;
-    pluginRegistry: ReturnType<typeof loadNexisClawPlugins>;
+    gatewayPluginConfigAtStart: GreenchClawConfig;
+    pluginRegistry: ReturnType<typeof loadGreenchClawPlugins>;
     defaultWorkspaceDir: string;
     deps: CliDeps;
     startChannels: () => Promise<void>;

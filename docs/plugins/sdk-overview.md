@@ -4,7 +4,7 @@ title: "Plugin SDK overview"
 sidebarTitle: "Plugin SDK overview"
 read_when:
   - You need to know which SDK subpath to import from
-  - You want a reference for all registration methods on NexisClawPluginApi
+  - You want a reference for all registration methods on GreenchClawPluginApi
   - You are looking up a specific SDK export
 ---
 
@@ -12,10 +12,10 @@ The plugin SDK is the typed contract between plugins and core. This page is the
 reference for **what to import** and **what you can register**.
 
 <Note>
-  This page is for plugin authors using `NexisClaw/plugin-sdk/*` inside
-  NexisClaw. For external apps, scripts, dashboards, CI jobs, and IDE extensions
+  This page is for plugin authors using `GreenchClaw/plugin-sdk/*` inside
+  GreenchClaw. For external apps, scripts, dashboards, CI jobs, and IDE extensions
   that want to run agents through the Gateway, use the
-  [NexisClaw App SDK](/concepts/NexisClaw-sdk) and the `@NexisClaw/sdk` package
+  [GreenchClaw App SDK](/concepts/GreenchClaw-sdk) and the `@GreenchClaw/sdk` package
   instead.
 </Note>
 
@@ -28,19 +28,19 @@ Looking for a how-to guide instead? Start with [Building plugins](/plugins/build
 Always import from a specific subpath:
 
 ```typescript
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
-import { defineChannelPluginEntry } from "NexisClaw/plugin-sdk/channel-core";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { defineChannelPluginEntry } from "GreenchClaw/plugin-sdk/channel-core";
 ```
 
 Each subpath is a small, self-contained module. This keeps startup fast and
 prevents circular dependency issues. For channel-specific entry/build helpers,
-prefer `NexisClaw/plugin-sdk/channel-core`; keep `NexisClaw/plugin-sdk/core` for
+prefer `GreenchClaw/plugin-sdk/channel-core`; keep `GreenchClaw/plugin-sdk/core` for
 the broader umbrella surface and shared helpers such as
 `buildChannelConfigSchema`.
 
 For channel config, publish the channel-owned JSON Schema through
-`NexisClaw.plugin.json#channelConfigs`. The `plugin-sdk/channel-config-schema`
-subpath is for shared schema primitives and the generic builder. NexisClaw's
+`GreenchClaw.plugin.json#channelConfigs`. The `plugin-sdk/channel-config-schema`
+subpath is for shared schema primitives and the generic builder. GreenchClaw's
 bundled plugins use `plugin-sdk/bundled-channel-config-schema` for retained
 bundled-channel schemas. Deprecated compatibility exports remain on
 `plugin-sdk/channel-config-schema-legacy`; neither bundled schema subpath is a
@@ -48,7 +48,7 @@ pattern for new plugins.
 
 <Warning>
   Do not import provider- or channel-branded convenience seams (for example
-  `NexisClaw/plugin-sdk/slack`, `.../discord`, `.../signal`, `.../whatsapp`).
+  `GreenchClaw/plugin-sdk/slack`, `.../discord`, `.../signal`, `.../whatsapp`).
   Bundled plugins compose generic SDK subpaths inside their own `api.ts` /
   `runtime-api.ts` barrels; core consumers should either use those plugin-local
   barrels or add a narrow generic SDK contract when a need is truly
@@ -59,7 +59,7 @@ map when they have tracked owner usage. They exist for bundled-plugin
 maintenance only and are not recommended import paths for new third-party
 plugins.
 
-`NexisClaw/plugin-sdk/discord` and `NexisClaw/plugin-sdk/telegram-account` are
+`GreenchClaw/plugin-sdk/discord` and `GreenchClaw/plugin-sdk/telegram-account` are
 also kept as deprecated compatibility facades for tracked owner usage. Do not
 copy those import paths into new plugins; use injected runtime helpers and
 generic channel SDK subpaths instead.
@@ -84,7 +84,7 @@ deprecated re-export barrels are tracked in
 
 ## Registration API
 
-The `register(api)` callback receives an `NexisClawPluginApi` object with these
+The `register(api)` callback receives an `GreenchClawPluginApi` object with these
 methods:
 
 ### Capability registration
@@ -118,19 +118,19 @@ provider- or plugin-specific policy to core prompt builders.
 
 ### Infrastructure
 
-| Method                                         | What it registers                       |
-| ---------------------------------------------- | --------------------------------------- |
-| `api.registerHook(events, handler, opts?)`     | Event hook                              |
-| `api.registerHttpRoute(params)`                | Gateway HTTP endpoint                   |
-| `api.registerGatewayMethod(name, handler)`     | Gateway RPC method                      |
-| `api.registerGatewayDiscoveryService(service)` | Local Gateway discovery advertiser      |
-| `api.registerCli(registrar, opts?)`            | CLI subcommand                          |
-| `api.registerNodeCliFeature(registrar, opts?)` | Node feature CLI under `NexisClaw nodes` |
-| `api.registerService(service)`                 | Background service                      |
-| `api.registerInteractiveHandler(registration)` | Interactive handler                     |
-| `api.registerAgentToolResultMiddleware(...)`   | Runtime tool-result middleware          |
-| `api.registerMemoryPromptSupplement(builder)`  | Additive memory-adjacent prompt section |
-| `api.registerMemoryCorpusSupplement(adapter)`  | Additive memory search/read corpus      |
+| Method                                         | What it registers                          |
+| ---------------------------------------------- | ------------------------------------------ |
+| `api.registerHook(events, handler, opts?)`     | Event hook                                 |
+| `api.registerHttpRoute(params)`                | Gateway HTTP endpoint                      |
+| `api.registerGatewayMethod(name, handler)`     | Gateway RPC method                         |
+| `api.registerGatewayDiscoveryService(service)` | Local Gateway discovery advertiser         |
+| `api.registerCli(registrar, opts?)`            | CLI subcommand                             |
+| `api.registerNodeCliFeature(registrar, opts?)` | Node feature CLI under `GreenchClaw nodes` |
+| `api.registerService(service)`                 | Background service                         |
+| `api.registerInteractiveHandler(registration)` | Interactive handler                        |
+| `api.registerAgentToolResultMiddleware(...)`   | Runtime tool-result middleware             |
+| `api.registerMemoryPromptSupplement(builder)`  | Additive memory-adjacent prompt section    |
+| `api.registerMemoryCorpusSupplement(adapter)`  | Additive memory search/read corpus         |
 
 ### Host hooks for workflow plugins
 
@@ -224,7 +224,7 @@ Examples of non-Plan consumers:
 
 Bundled plugins must declare `contracts.agentToolResultMiddleware` for each
 targeted runtime, for example `["pi", "codex"]`. External plugins
-cannot register this middleware; keep normal NexisClaw plugin hooks for work
+cannot register this middleware; keep normal GreenchClaw plugin hooks for work
 that does not need pre-model tool-result timing. The old Pi-only embedded
 extension factory registration path has been removed.
 </Accordion>
@@ -232,7 +232,7 @@ extension factory registration path has been removed.
 ### Gateway discovery registration
 
 `api.registerGatewayDiscoveryService(...)` lets a plugin advertise the active
-Gateway on a local discovery transport such as mDNS/Bonjour. NexisClaw calls the
+Gateway on a local discovery transport such as mDNS/Bonjour. GreenchClaw calls the
 service during Gateway startup when local discovery is enabled, passes the
 current Gateway ports and non-secret TXT hint data, and calls the returned
 `stop` handler during Gateway shutdown.
@@ -268,7 +268,7 @@ own trust.
 For paired-node features, prefer
 `api.registerNodeCliFeature(registrar, opts?)`. It is a small wrapper around
 `api.registerCli(..., { parentPath: ["nodes"] })` and makes commands such as
-`NexisClaw nodes canvas` explicit plugin-owned node features.
+`GreenchClaw nodes canvas` explicit plugin-owned node features.
 
 If you want a plugin command to stay lazy-loaded in the normal root CLI path,
 provide `descriptors` that cover every top-level command root exposed by that
@@ -324,12 +324,12 @@ AI CLI backend such as `codex-cli`.
 
 - The backend `id` becomes the provider prefix in model refs like `codex-cli/gpt-5`.
 - The backend `config` uses the same shape as `agents.defaults.cliBackends.<id>`.
-- User config still wins. NexisClaw merges `agents.defaults.cliBackends.<id>` over the
+- User config still wins. GreenchClaw merges `agents.defaults.cliBackends.<id>` over the
   plugin default before running the CLI.
 - Use `normalizeConfig` when a backend needs compatibility rewrites after merge
   (for example normalizing old flag shapes).
 - Use `resolveExecutionArgs` for request-scoped argv rewrites that belong to
-  the CLI dialect, such as mapping NexisClaw thinking levels to a native effort
+  the CLI dialect, such as mapping GreenchClaw thinking levels to a native effort
   flag.
 
 For an end-to-end authoring guide, see
@@ -354,7 +354,7 @@ For an end-to-end authoring guide, see
 - `registerMemoryCapability` is the preferred exclusive memory-plugin API.
 - `registerMemoryCapability` may also expose `publicArtifacts.listArtifacts(...)`
   so companion plugins can consume exported memory artifacts through
-  `NexisClaw/plugin-sdk/memory-host-core` instead of reaching into a specific
+  `GreenchClaw/plugin-sdk/memory-host-core` instead of reaching into a specific
   memory plugin's private layout.
 - `registerMemoryPromptSection`, `registerMemoryFlushPlan`, and
   `registerMemoryRuntime` are legacy-compatible exclusive memory-plugin APIs.
@@ -390,7 +390,7 @@ semantics.
 - `message_received`: use the typed `threadId` field when you need inbound thread/topic routing. Keep `metadata` for channel-specific extras.
 - `message_sending`: use typed `replyToId` / `threadId` routing fields before falling back to channel-specific `metadata`.
 - `gateway_start`: use `ctx.config`, `ctx.workspaceDir`, and `ctx.getCron?.()` for gateway-owned startup state instead of relying on internal `gateway:startup` hooks.
-- `cron_changed`: observe gateway-owned cron lifecycle changes. Use `event.job?.state?.nextRunAtMs` and `ctx.getCron?.()` when syncing external wake schedulers, and keep NexisClaw as the source of truth for due checks and execution.
+- `cron_changed`: observe gateway-owned cron lifecycle changes. Use `event.job?.state?.nextRunAtMs` and `ctx.getCron?.()` when syncing external wake schedulers, and keep GreenchClaw as the source of truth for due checks and execution.
 
 ### API object fields
 
@@ -402,7 +402,7 @@ semantics.
 | `api.description`        | `string?`                 | Plugin description (optional)                                                               |
 | `api.source`             | `string`                  | Plugin source path                                                                          |
 | `api.rootDir`            | `string?`                 | Plugin root directory (optional)                                                            |
-| `api.config`             | `NexisClawConfig`          | Current config snapshot (active in-memory runtime snapshot when available)                  |
+| `api.config`             | `GreenchClawConfig`       | Current config snapshot (active in-memory runtime snapshot when available)                  |
 | `api.pluginConfig`       | `Record<string, unknown>` | Plugin-specific config from `plugins.entries.<id>.config`                                   |
 | `api.runtime`            | `PluginRuntime`           | [Runtime helpers](/plugins/sdk-runtime)                                                     |
 | `api.logger`             | `PluginLogger`            | Scoped logger (`debug`, `info`, `warn`, `error`)                                            |
@@ -422,16 +422,16 @@ my-plugin/
 ```
 
 <Warning>
-  Never import your own plugin through `NexisClaw/plugin-sdk/<your-plugin>`
+  Never import your own plugin through `GreenchClaw/plugin-sdk/<your-plugin>`
   from production code. Route internal imports through `./api.ts` or
   `./runtime-api.ts`. The SDK path is the external contract only.
 </Warning>
 
 Facade-loaded bundled plugin public surfaces (`api.ts`, `runtime-api.ts`,
 `index.ts`, `setup-entry.ts`, and similar public entry files) prefer the
-active runtime config snapshot when NexisClaw is already running. If no runtime
+active runtime config snapshot when GreenchClaw is already running. If no runtime
 snapshot exists yet, they fall back to the resolved config file on disk.
-Packaged bundled plugin facades should be loaded through NexisClaw's plugin
+Packaged bundled plugin facades should be loaded through GreenchClaw's plugin
 facade loaders; direct imports from `dist/extensions/...` bypass the manifest
 and runtime sidecar checks that packaged installs use for plugin-owned code.
 
@@ -441,15 +441,15 @@ subpath yet. Bundled examples:
 
 - **Anthropic**: public `api.ts` / `contract-api.ts` seam for Claude
   beta-header and `service_tier` stream helpers.
-- **`@NexisClaw/openai-provider`**: `api.ts` exports provider builders,
+- **`@GreenchClaw/openai-provider`**: `api.ts` exports provider builders,
   default-model helpers, and realtime provider builders.
-- **`@NexisClaw/openrouter-provider`**: `api.ts` exports the provider builder
+- **`@GreenchClaw/openrouter-provider`**: `api.ts` exports the provider builder
   plus onboarding/config helpers.
 
 <Warning>
-  Extension production code should also avoid `NexisClaw/plugin-sdk/<other-plugin>`
+  Extension production code should also avoid `GreenchClaw/plugin-sdk/<other-plugin>`
   imports. If a helper is truly shared, promote it to a neutral SDK subpath
-  such as `NexisClaw/plugin-sdk/speech`, `.../provider-model-shared`, or another
+  such as `GreenchClaw/plugin-sdk/speech`, `.../provider-model-shared`, or another
   capability-oriented surface instead of coupling two plugins together.
 </Warning>
 

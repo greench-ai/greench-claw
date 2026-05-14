@@ -1,9 +1,9 @@
 import { spawn } from "node:child_process";
 import type {
-  NexisClawPluginNodeInvokePolicy,
-  NexisClawPluginNodeInvokePolicyContext,
-  NexisClawPluginNodeInvokePolicyResult,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+  GreenchClawPluginNodeInvokePolicy,
+  GreenchClawPluginNodeInvokePolicyContext,
+  GreenchClawPluginNodeInvokePolicyResult,
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import { appendFileTransferAudit, type FileTransferAuditOp } from "./audit.js";
 import { evaluateFilePolicy, persistAllowAlways, type FilePolicyKind } from "./policy.js";
 
@@ -61,7 +61,7 @@ function promptVerb(command: FileTransferCommand): string {
 }
 
 async function requestApproval(input: {
-  ctx: NexisClawPluginNodeInvokePolicyContext;
+  ctx: GreenchClawPluginNodeInvokePolicyContext;
   op: FileTransferAuditOp;
   kind: FilePolicyKind;
   path: string;
@@ -377,14 +377,14 @@ async function listDirFetchArchiveEntries(
 }
 
 async function validateDirFetchEntries(input: {
-  ctx: NexisClawPluginNodeInvokePolicyContext;
+  ctx: GreenchClawPluginNodeInvokePolicyContext;
   op: FileTransferAuditOp;
   requestedPath: string;
   canonicalPath: string;
   entries: unknown;
   startedAt: number;
   phase: "preflight" | "archive";
-}): Promise<NexisClawPluginNodeInvokePolicyResult | null> {
+}): Promise<GreenchClawPluginNodeInvokePolicyResult | null> {
   const nodeDisplayName = input.ctx.node?.displayName;
   const missingCode =
     input.phase === "preflight" ? "PREFLIGHT_ENTRIES_MISSING" : "ARCHIVE_ENTRIES_MISSING";
@@ -497,7 +497,7 @@ function policyDeniedResult(input: {
   code: string;
   message: string;
   details?: Record<string, unknown>;
-}): NexisClawPluginNodeInvokePolicyResult {
+}): GreenchClawPluginNodeInvokePolicyResult {
   return {
     ok: false,
     code: input.code,
@@ -514,11 +514,11 @@ type PreflightResult =
     }
   | {
       ok: false;
-      result: NexisClawPluginNodeInvokePolicyResult;
+      result: GreenchClawPluginNodeInvokePolicyResult;
     };
 
 async function invokePreflight(input: {
-  ctx: NexisClawPluginNodeInvokePolicyContext;
+  ctx: GreenchClawPluginNodeInvokePolicyContext;
   op: FileTransferAuditOp;
   params: Record<string, unknown>;
   requestedPath: string;
@@ -578,13 +578,13 @@ async function invokePreflight(input: {
 }
 
 async function runPathPreflight(input: {
-  ctx: NexisClawPluginNodeInvokePolicyContext;
+  ctx: GreenchClawPluginNodeInvokePolicyContext;
   op: FileTransferAuditOp;
   kind: FilePolicyKind;
   params: Record<string, unknown>;
   requestedPath: string;
   startedAt: number;
-}): Promise<NexisClawPluginNodeInvokePolicyResult | null> {
+}): Promise<GreenchClawPluginNodeInvokePolicyResult | null> {
   const preflight = await invokePreflight(input);
   if (!preflight.ok) {
     return preflight.result;
@@ -626,12 +626,12 @@ async function runPathPreflight(input: {
 }
 
 async function runDirFetchPreflight(input: {
-  ctx: NexisClawPluginNodeInvokePolicyContext;
+  ctx: GreenchClawPluginNodeInvokePolicyContext;
   op: FileTransferAuditOp;
   params: Record<string, unknown>;
   requestedPath: string;
   startedAt: number;
-}): Promise<NexisClawPluginNodeInvokePolicyResult | null> {
+}): Promise<GreenchClawPluginNodeInvokePolicyResult | null> {
   const preflight = await invokePreflight(input);
   if (!preflight.ok) {
     return preflight.result;
@@ -649,8 +649,8 @@ async function runDirFetchPreflight(input: {
 }
 
 async function handleFileTransferInvoke(
-  ctx: NexisClawPluginNodeInvokePolicyContext,
-): Promise<NexisClawPluginNodeInvokePolicyResult> {
+  ctx: GreenchClawPluginNodeInvokePolicyContext,
+): Promise<GreenchClawPluginNodeInvokePolicyResult> {
   if (!COMMANDS.includes(ctx.command as FileTransferCommand)) {
     return { ok: false, code: "UNSUPPORTED_COMMAND", message: "unsupported file-transfer command" };
   }
@@ -835,7 +835,7 @@ async function handleFileTransferInvoke(
   return result;
 }
 
-export function createFileTransferNodeInvokePolicy(): NexisClawPluginNodeInvokePolicy {
+export function createFileTransferNodeInvokePolicy(): GreenchClawPluginNodeInvokePolicy {
   return {
     commands: COMMANDS,
     handle: handleFileTransferInvoke,

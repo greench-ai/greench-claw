@@ -1,4 +1,4 @@
-import * as fetchModule from "NexisClaw/plugin-sdk/fetch-runtime";
+import * as fetchModule from "GreenchClaw/plugin-sdk/fetch-runtime";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import {
   containerCheck,

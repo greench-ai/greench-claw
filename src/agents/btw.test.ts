@@ -6,7 +6,7 @@ const readFileMock = vi.fn();
 const parseSessionEntriesMock = vi.fn();
 const migrateSessionEntriesMock = vi.fn();
 const buildSessionContextMock = vi.fn();
-const ensureNexisClawModelsJsonMock = vi.fn();
+const ensureGreenchClawModelsJsonMock = vi.fn();
 const discoverAuthStorageMock = vi.fn();
 const discoverModelsMock = vi.fn();
 const resolveModelWithRegistryMock = vi.fn();
@@ -46,7 +46,7 @@ vi.mock("@earendil-works/pi-coding-agent", () => ({
 }));
 
 vi.mock("./models-config.js", () => ({
-  ensureNexisClawModelsJson: (...args: unknown[]) => ensureNexisClawModelsJsonMock(...args),
+  ensureGreenchClawModelsJson: (...args: unknown[]) => ensureGreenchClawModelsJsonMock(...args),
 }));
 
 vi.mock("./pi-model-discovery.js", () => ({
@@ -337,7 +337,7 @@ describe("runBtwSideQuestion", () => {
     parseSessionEntriesMock.mockReset();
     migrateSessionEntriesMock.mockReset();
     buildSessionContextMock.mockReset();
-    ensureNexisClawModelsJsonMock.mockReset();
+    ensureGreenchClawModelsJsonMock.mockReset();
     discoverAuthStorageMock.mockReset();
     discoverModelsMock.mockReset();
     resolveModelWithRegistryMock.mockReset();
@@ -474,7 +474,7 @@ describe("runBtwSideQuestion", () => {
     const result = await runSideQuestion();
 
     expect(result).toEqual({ text: "Final answer." });
-    const ensureArgs = ensureNexisClawModelsJsonMock.mock.calls.at(0);
+    const ensureArgs = ensureGreenchClawModelsJsonMock.mock.calls.at(0);
     expect(ensureArgs?.[1]).toBe(DEFAULT_AGENT_DIR);
     expect(ensureArgs?.[2]).toEqual({ workspaceDir: "/tmp/workspace" });
   });

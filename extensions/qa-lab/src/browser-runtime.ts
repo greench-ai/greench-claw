@@ -1,4 +1,4 @@
-import { sleep } from "NexisClaw/plugin-sdk/runtime-env";
+import { sleep } from "GreenchClaw/plugin-sdk/runtime-env";
 
 type QaBrowserGateway = {
   call: (

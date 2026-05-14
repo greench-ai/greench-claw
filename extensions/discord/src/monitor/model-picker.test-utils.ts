@@ -1,4 +1,4 @@
-import type { ModelsProviderData } from "NexisClaw/plugin-sdk/models-provider-runtime";
+import type { ModelsProviderData } from "GreenchClaw/plugin-sdk/models-provider-runtime";
 
 export function createModelsProviderData(
   entries: Record<string, string[]>,

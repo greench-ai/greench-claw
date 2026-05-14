@@ -14,7 +14,7 @@ const keyMetricIds = [
   "peakRssMb",
   "resourcePeakGatewayRssMb",
   "cpuPercentMax",
-  "NexisClawEventLoopMaxMs",
+  "GreenchClawEventLoopMaxMs",
   "agentTurnP95Ms",
   "coldAgentTurnMs",
   "warmAgentTurnMs",
@@ -46,7 +46,7 @@ function renderSummary(report, options) {
       .map(([status, count]) => `${status}: ${value(count)}`)
       .join(", ") || "unknown";
 
-  lines.push(`# NexisClaw Performance Report`);
+  lines.push(`# GreenchClaw Performance Report`);
   lines.push("");
   lines.push(`- Lane: ${options.lane}`);
   lines.push(`- Run: ${value(report.runId)}`);

@@ -1,8 +1,8 @@
 import type { StreamFn } from "@earendil-works/pi-agent-core";
 import { createAssistantMessageEventStream, streamSimple } from "@earendil-works/pi-ai";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/logging-core";
-import type { ProviderWrapStreamFnContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import { ssrfPolicyFromHttpBaseUrlAllowedHostname } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/logging-core";
+import type { ProviderWrapStreamFnContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { ssrfPolicyFromHttpBaseUrlAllowedHostname } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { LMSTUDIO_PROVIDER_ID } from "./defaults.js";
 import { ensureLmstudioModelLoaded } from "./models.fetch.js";
 import { resolveLmstudioInferenceBase } from "./models.js";

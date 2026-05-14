@@ -11,8 +11,8 @@ Adds text-to-speech provider support.
 
 ## Distribution
 
-- Package: `@NexisClaw/microsoft-speech`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/microsoft-speech`
+- Install route: included in GreenchClaw
 
 ## Surface
 

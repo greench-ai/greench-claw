@@ -1,5 +1,5 @@
-import type { BaseProbeResult } from "NexisClaw/plugin-sdk/channel-contract";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import type { BaseProbeResult } from "GreenchClaw/plugin-sdk/channel-contract";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import { type SignalApiMode, signalCheck, signalRpcRequest } from "./client-adapter.js";
 
 export type SignalProbe = BaseProbeResult & {

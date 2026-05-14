@@ -6,7 +6,7 @@ import {
   type SessionEntry,
   type SessionHeader,
 } from "@earendil-works/pi-coding-agent";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { collectDuplicateUserMessageEntryIdsForCompaction } from "./compaction-duplicate-user-messages.js";
 import {
   readTranscriptFileState,
@@ -29,7 +29,7 @@ export type CompactionTranscriptRotation = {
   entriesWritten?: number;
 };
 
-export function shouldRotateCompactionTranscript(config?: NexisClawConfig): boolean {
+export function shouldRotateCompactionTranscript(config?: GreenchClawConfig): boolean {
   return config?.agents?.defaults?.compaction?.truncateAfterCompaction === true;
 }
 

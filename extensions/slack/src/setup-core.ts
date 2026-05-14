@@ -1,4 +1,4 @@
-import { hasConfiguredSecretInput } from "NexisClaw/plugin-sdk/secret-input";
+import { hasConfiguredSecretInput } from "GreenchClaw/plugin-sdk/secret-input";
 import {
   createAccountScopedAllowFromSection,
   createAccountScopedGroupAccessSection,
@@ -13,13 +13,13 @@ import {
   type ChannelSetupAdapter,
   type ChannelSetupDmPolicy,
   type ChannelSetupWizard,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/setup-runtime";
-import { formatDocsLink } from "NexisClaw/plugin-sdk/setup-tools";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/setup-runtime";
+import { formatDocsLink } from "GreenchClaw/plugin-sdk/setup-tools";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { inspectSlackAccount } from "./account-inspect.js";
 import { resolveSlackAccount } from "./accounts.js";
 import {
@@ -30,7 +30,7 @@ import {
   setSlackChannelAllowlist,
 } from "./setup-shared.js";
 
-function enableSlackAccount(cfg: NexisClawConfig, accountId: string): NexisClawConfig {
+function enableSlackAccount(cfg: GreenchClawConfig, accountId: string): GreenchClawConfig {
   return patchChannelConfigForAccount({
     cfg,
     channel,
@@ -39,7 +39,7 @@ function enableSlackAccount(cfg: NexisClawConfig, accountId: string): NexisClawC
   });
 }
 
-function hasSlackInteractiveRepliesConfig(cfg: NexisClawConfig, accountId: string): boolean {
+function hasSlackInteractiveRepliesConfig(cfg: GreenchClawConfig, accountId: string): boolean {
   const capabilities = resolveSlackAccount({ cfg, accountId }).config.capabilities;
   if (Array.isArray(capabilities)) {
     return capabilities.some(
@@ -53,10 +53,10 @@ function hasSlackInteractiveRepliesConfig(cfg: NexisClawConfig, accountId: strin
 }
 
 function setSlackInteractiveReplies(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
   interactiveReplies: boolean,
-): NexisClawConfig {
+): GreenchClawConfig {
   const capabilities = resolveSlackAccount({ cfg, accountId }).config.capabilities;
   const nextCapabilities = Array.isArray(capabilities)
     ? interactiveReplies
@@ -96,7 +96,7 @@ function createSlackTokenCredential(params: {
     keepPrompt: params.keepPrompt,
     inputPrompt: params.inputPrompt,
     allowEnv: ({ accountId }: { accountId: string }) => accountId === DEFAULT_ACCOUNT_ID,
-    inspect: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId: string }) => {
+    inspect: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId: string }) => {
       const resolved = resolveSlackAccount({ cfg, accountId });
       const configuredValue =
         params.inputKey === "botToken" ? resolved.config.botToken : resolved.config.appToken;
@@ -111,14 +111,14 @@ function createSlackTokenCredential(params: {
             : undefined,
       };
     },
-    applyUseEnv: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId: string }) =>
+    applyUseEnv: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId: string }) =>
       enableSlackAccount(cfg, accountId),
     applySet: ({
       cfg,
       accountId,
       value,
     }: {
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       accountId: string;
       value: unknown;
     }) =>
@@ -247,13 +247,13 @@ export function createSlackSetupWizardBase(handlers: {
       channel,
       label: "Slack channels",
       placeholder: "#general, #private, C123",
-      currentPolicy: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId: string }) =>
+      currentPolicy: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId: string }) =>
         resolveSlackAccount({ cfg, accountId }).config.groupPolicy ?? "allowlist",
-      currentEntries: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId: string }) =>
+      currentEntries: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId: string }) =>
         Object.entries(resolveSlackAccount({ cfg, accountId }).config.channels ?? {})
           .filter(([, value]) => value?.enabled !== false)
           .map(([key]) => key),
-      updatePrompt: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId: string }) =>
+      updatePrompt: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId: string }) =>
         Boolean(resolveSlackAccount({ cfg, accountId }).config.channels),
       resolveAllowlist: handlers.resolveGroupAllowlist,
       fallbackResolved: (entries) => entries,
@@ -262,7 +262,7 @@ export function createSlackSetupWizardBase(handlers: {
         accountId,
         resolved,
       }: {
-        cfg: NexisClawConfig;
+        cfg: GreenchClawConfig;
         accountId: string;
         resolved: unknown;
       }) => setSlackChannelAllowlist(cfg, accountId, resolved as string[]),
@@ -284,7 +284,7 @@ export function createSlackSetupWizardBase(handlers: {
         cfg: setSlackInteractiveReplies(cfg, accountId, enableInteractiveReplies),
       };
     },
-    disable: (cfg: NexisClawConfig) => setSetupChannelEnabled(cfg, channel, false),
+    disable: (cfg: GreenchClawConfig) => setSetupChannelEnabled(cfg, channel, false),
   } satisfies ChannelSetupWizard;
 }
 export function createSlackSetupWizardProxy(

@@ -20,7 +20,7 @@ vi.mock("./shared.js", async (importOriginal) => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard: vi.fn(),
 }));
 
@@ -48,7 +48,7 @@ vi.mock("./remote-media.js", () => ({
   downloadAndStoreMSTeamsRemoteMedia: vi.fn(),
 }));
 
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { downloadMSTeamsGraphMedia } from "./graph.js";
 import { downloadAndStoreMSTeamsRemoteMedia } from "./remote-media.js";
 import { safeFetchWithPolicy } from "./shared.js";
@@ -213,7 +213,7 @@ describe("downloadMSTeamsGraphMedia hosted content $value fallback", () => {
     expect(result.media.length).toBeGreaterThan(0);
   });
 
-  it("adds the NexisClaw User-Agent to guarded Graph attachment fetches", async () => {
+  it("adds the GreenchClaw User-Agent to guarded Graph attachment fetches", async () => {
     mockGraphMediaFetch({ messageId: "msg-ua" });
 
     await downloadMSTeamsGraphMedia({
@@ -228,12 +228,12 @@ describe("downloadMSTeamsGraphMedia hosted content $value fallback", () => {
       expect(headers).toBeInstanceOf(Headers);
       expect((headers as Headers).get("Authorization")).toBe("Bearer test-token");
       expect((headers as Headers).get("User-Agent")).toMatch(
-        /^teams\.ts\[apps\]\/.+ NexisClaw\/.+$/,
+        /^teams\.ts\[apps\]\/.+ GreenchClaw\/.+$/,
       );
     }
   });
 
-  it("adds the NexisClaw User-Agent to Graph shares downloads for reference attachments", async () => {
+  it("adds the GreenchClaw User-Agent to Graph shares downloads for reference attachments", async () => {
     mockGraphMediaFetch({
       messageId: "msg-share",
       messageResponse: {
@@ -272,7 +272,7 @@ describe("downloadMSTeamsGraphMedia hosted content $value fallback", () => {
     expect(fetchParams.requestInit?.headers).toBeInstanceOf(Headers);
     const requestInit = fetchParams.requestInit;
     const headers = requestInit?.headers as Headers;
-    expect(headers.get("User-Agent")).toMatch(/^teams\.ts\[apps\]\/.+ NexisClaw\/.+$/);
+    expect(headers.get("User-Agent")).toMatch(/^teams\.ts\[apps\]\/.+ GreenchClaw\/.+$/);
   });
 });
 

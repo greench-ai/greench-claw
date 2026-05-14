@@ -1,14 +1,14 @@
 ---
-summary: "SSH tunnel setup for NexisClaw.app connecting to a remote gateway"
+summary: "SSH tunnel setup for GreenchClaw.app connecting to a remote gateway"
 read_when: "Connecting the macOS app to a remote gateway over SSH"
 title: "Remote gateway setup"
 ---
 
 > This content has been merged into [Remote Access](/gateway/remote#macos-persistent-ssh-tunnel-via-launchagent). See that page for the current guide.
 
-# Running NexisClaw.app with a Remote Gateway
+# Running GreenchClaw.app with a Remote Gateway
 
-NexisClaw.app uses SSH tunneling to connect to a remote gateway. This guide shows you how to set it up.
+GreenchClaw.app uses SSH tunneling to connect to a remote gateway. This guide shows you how to set it up.
 
 ## Overview
 
@@ -16,7 +16,7 @@ NexisClaw.app uses SSH tunneling to connect to a remote gateway. This guide show
 flowchart TB
     subgraph Client["Client Machine"]
         direction TB
-        A["NexisClaw.app"]
+        A["GreenchClaw.app"]
         B["ws://127.0.0.1:18789\n(local port)"]
         T["SSH Tunnel"]
 
@@ -60,11 +60,11 @@ ssh-copy-id -i ~/.ssh/id_rsa <REMOTE_USER>@<REMOTE_IP>
 ### Step 3: Configure Remote Gateway Auth
 
 ```bash
-NexisClaw config set gateway.remote.token "<your-token>"
+GreenchClaw config set gateway.remote.token "<your-token>"
 ```
 
 Use `gateway.remote.password` instead if your remote gateway uses password auth.
-`NEXISCLAW_GATEWAY_TOKEN` is still valid as a shell-level override, but the durable
+`GREENCHCLAW_GATEWAY_TOKEN` is still valid as a shell-level override, but the durable
 remote-client setup is `gateway.remote.token` / `gateway.remote.password`.
 
 ### Step 4: Start SSH Tunnel
@@ -73,11 +73,11 @@ remote-client setup is `gateway.remote.token` / `gateway.remote.password`.
 ssh -N remote-gateway &
 ```
 
-### Step 5: Restart NexisClaw.app
+### Step 5: Restart GreenchClaw.app
 
 ```bash
-# Quit NexisClaw.app (⌘Q), then reopen:
-open /path/to/NexisClaw.app
+# Quit GreenchClaw.app (⌘Q), then reopen:
+open /path/to/GreenchClaw.app
 ```
 
 The app will now connect to the remote gateway through the SSH tunnel.
@@ -90,7 +90,7 @@ To have the SSH tunnel start automatically when you log in, create a Launch Agen
 
 ### Create the PLIST file
 
-Save this as `~/Library/LaunchAgents/ai.NexisClaw.ssh-tunnel.plist`:
+Save this as `~/Library/LaunchAgents/ai.GreenchClaw.ssh-tunnel.plist`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -98,7 +98,7 @@ Save this as `~/Library/LaunchAgents/ai.NexisClaw.ssh-tunnel.plist`:
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>ai.NexisClaw.ssh-tunnel</string>
+    <string>ai.GreenchClaw.ssh-tunnel</string>
     <key>ProgramArguments</key>
     <array>
         <string>/usr/bin/ssh</string>
@@ -116,7 +116,7 @@ Save this as `~/Library/LaunchAgents/ai.NexisClaw.ssh-tunnel.plist`:
 ### Load the Launch Agent
 
 ```bash
-launchctl bootstrap gui/$UID ~/Library/LaunchAgents/ai.NexisClaw.ssh-tunnel.plist
+launchctl bootstrap gui/$UID ~/Library/LaunchAgents/ai.GreenchClaw.ssh-tunnel.plist
 ```
 
 The tunnel will now:
@@ -125,7 +125,7 @@ The tunnel will now:
 - Restart if it crashes
 - Keep running in the background
 
-Legacy note: remove any leftover `com.NexisClaw.ssh-tunnel` LaunchAgent if present.
+Legacy note: remove any leftover `com.GreenchClaw.ssh-tunnel` LaunchAgent if present.
 
 ---
 
@@ -141,13 +141,13 @@ lsof -i :18789
 **Restart the tunnel:**
 
 ```bash
-launchctl kickstart -k gui/$UID/ai.NexisClaw.ssh-tunnel
+launchctl kickstart -k gui/$UID/ai.GreenchClaw.ssh-tunnel
 ```
 
 **Stop the tunnel:**
 
 ```bash
-launchctl bootout gui/$UID/ai.NexisClaw.ssh-tunnel
+launchctl bootout gui/$UID/ai.GreenchClaw.ssh-tunnel
 ```
 
 ---
@@ -161,7 +161,7 @@ launchctl bootout gui/$UID/ai.NexisClaw.ssh-tunnel
 | `KeepAlive`                          | Automatically restarts tunnel if it crashes                  |
 | `RunAtLoad`                          | Starts tunnel when the agent loads                           |
 
-NexisClaw.app connects to `ws://127.0.0.1:18789` on your client machine. The SSH tunnel forwards that connection to port 18789 on the remote machine where the Gateway is running.
+GreenchClaw.app connects to `ws://127.0.0.1:18789` on your client machine. The SSH tunnel forwards that connection to port 18789 on the remote machine where the Gateway is running.
 
 ## Related
 

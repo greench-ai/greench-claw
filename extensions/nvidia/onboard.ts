@@ -1,14 +1,14 @@
 import {
   createDefaultModelsPresetAppliers,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import { buildNvidiaProvider, NVIDIA_DEFAULT_MODEL_ID } from "./provider-catalog.js";
 
 export const NVIDIA_DEFAULT_MODEL_REF = NVIDIA_DEFAULT_MODEL_ID;
 
 const nvidiaPresetAppliers = createDefaultModelsPresetAppliers({
   primaryModelRef: NVIDIA_DEFAULT_MODEL_REF,
-  resolveParams: (_cfg: NexisClawConfig) => {
+  resolveParams: (_cfg: GreenchClawConfig) => {
     const defaultProvider = buildNvidiaProvider();
     return {
       providerId: "nvidia",
@@ -21,10 +21,10 @@ const nvidiaPresetAppliers = createDefaultModelsPresetAppliers({
   },
 });
 
-export function applyNvidiaProviderConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyNvidiaProviderConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return nvidiaPresetAppliers.applyProviderConfig(cfg);
 }
 
-export function applyNvidiaConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyNvidiaConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return nvidiaPresetAppliers.applyConfig(cfg);
 }

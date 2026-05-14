@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { isWithinActiveHours } from "./heartbeat-active-hours.js";
 
-function cfgWithUserTimezone(userTimezone = "UTC"): NexisClawConfig {
+function cfgWithUserTimezone(userTimezone = "UTC"): GreenchClawConfig {
   return {
     agents: {
       defaults: {

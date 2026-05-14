@@ -9,18 +9,18 @@ function requireEnv(name) {
   return value;
 }
 
-const configPath = requireEnv("NEXISCLAW_CONFIG_PATH");
-const stateDir = requireEnv("NEXISCLAW_STATE_DIR");
-const workspaceDir = requireEnv("NEXISCLAW_TEST_WORKSPACE_DIR");
-const modelRef = requireEnv("NEXISCLAW_OPENAI_CHAT_TOOLS_MODEL");
-const token = requireEnv("NEXISCLAW_GATEWAY_TOKEN");
+const configPath = requireEnv("GREENCHCLAW_CONFIG_PATH");
+const stateDir = requireEnv("GREENCHCLAW_STATE_DIR");
+const workspaceDir = requireEnv("GREENCHCLAW_TEST_WORKSPACE_DIR");
+const modelRef = requireEnv("GREENCHCLAW_OPENAI_CHAT_TOOLS_MODEL");
+const token = requireEnv("GREENCHCLAW_GATEWAY_TOKEN");
 const timeoutSeconds = Number.parseInt(
-  process.env.NEXISCLAW_OPENAI_CHAT_TOOLS_TIMEOUT_SECONDS ?? "180",
+  process.env.GREENCHCLAW_OPENAI_CHAT_TOOLS_TIMEOUT_SECONDS ?? "180",
   10,
 );
 const [providerId, modelId] = modelRef.split("/");
 if (providerId !== "openai" || !modelId) {
-  throw new Error(`NEXISCLAW_OPENAI_CHAT_TOOLS_MODEL must be openai/*, got ${modelRef}`);
+  throw new Error(`GREENCHCLAW_OPENAI_CHAT_TOOLS_MODEL must be openai/*, got ${modelRef}`);
 }
 
 const config = {

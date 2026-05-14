@@ -4,13 +4,13 @@ import {
   type ResolverContext,
   type SecretDefaults,
   type SecretTargetRegistryEntry,
-} from "NexisClaw/plugin-sdk/channel-secret-basic-runtime";
+} from "GreenchClaw/plugin-sdk/channel-secret-basic-runtime";
 
 export const secretTargetRegistryEntries: SecretTargetRegistryEntry[] = [
   {
     id: "channels.mattermost.accounts.*.botToken",
     targetType: "channels.mattermost.accounts.*.botToken",
-    configFile: "NexisClaw.json",
+    configFile: "GreenchClaw.json",
     pathPattern: "channels.mattermost.accounts.*.botToken",
     secretShape: "secret_input",
     expectedResolvedValue: "string",
@@ -21,7 +21,7 @@ export const secretTargetRegistryEntries: SecretTargetRegistryEntry[] = [
   {
     id: "channels.mattermost.botToken",
     targetType: "channels.mattermost.botToken",
-    configFile: "NexisClaw.json",
+    configFile: "GreenchClaw.json",
     pathPattern: "channels.mattermost.botToken",
     secretShape: "secret_input",
     expectedResolvedValue: "string",

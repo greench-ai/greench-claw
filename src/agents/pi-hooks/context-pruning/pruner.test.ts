@@ -155,7 +155,7 @@ describe("pruneContextMessages", () => {
   it("keeps tool results with malformed text blocks", () => {
     // Regression: a plugin returning undefined produces {type: "text"} with no text property,
     // which crashed estimateTextAndImageChars / collectTextSegments / collectPrunableToolResultSegments.
-    // See https://github.com/NexisClaw/NexisClaw/issues/34979
+    // See https://github.com/GreenchClaw/GreenchClaw/issues/34979
     const malformedToolResult = {
       role: "toolResult",
       toolName: "sentinel_control",

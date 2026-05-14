@@ -1,5 +1,5 @@
 ---
-summary: "Adds the Discord channel surface for sending and receiving NexisClaw messages."
+summary: "Adds the Discord channel surface for sending and receiving GreenchClaw messages."
 read_when:
   - You are installing, configuring, or auditing the discord plugin
 title: "Discord plugin"
@@ -7,11 +7,11 @@ title: "Discord plugin"
 
 # Discord plugin
 
-Adds the Discord channel surface for sending and receiving NexisClaw messages.
+Adds the Discord channel surface for sending and receiving GreenchClaw messages.
 
 ## Distribution
 
-- Package: `@NexisClaw/discord`
+- Package: `@GreenchClaw/discord`
 - Install route: npm; ClawHub
 
 ## Surface

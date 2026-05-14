@@ -1,49 +1,49 @@
 ---
-summary: "Expose NexisClaw channel conversations over MCP and manage saved MCP server definitions"
+summary: "Expose GreenchClaw channel conversations over MCP and manage saved MCP server definitions"
 read_when:
-  - Connecting Codex, Claude Code, or another MCP client to NexisClaw-backed channels
-  - Running `NexisClaw mcp serve`
-  - Managing NexisClaw-saved MCP server definitions
+  - Connecting Codex, Claude Code, or another MCP client to GreenchClaw-backed channels
+  - Running `GreenchClaw mcp serve`
+  - Managing GreenchClaw-saved MCP server definitions
 title: "MCP"
 sidebarTitle: "MCP"
 ---
 
-`NexisClaw mcp` has two jobs:
+`GreenchClaw mcp` has two jobs:
 
-- run NexisClaw as an MCP server with `NexisClaw mcp serve`
-- manage NexisClaw-owned outbound MCP server definitions with `list`, `show`, `set`, and `unset`
+- run GreenchClaw as an MCP server with `GreenchClaw mcp serve`
+- manage GreenchClaw-owned outbound MCP server definitions with `list`, `show`, `set`, and `unset`
 
 In other words:
 
-- `serve` is NexisClaw acting as an MCP server
-- `list` / `show` / `set` / `unset` is NexisClaw acting as an MCP client-side registry for other MCP servers its runtimes may consume later
+- `serve` is GreenchClaw acting as an MCP server
+- `list` / `show` / `set` / `unset` is GreenchClaw acting as an MCP client-side registry for other MCP servers its runtimes may consume later
 
-Use [`NexisClaw acp`](/cli/acp) when NexisClaw should host a coding harness session itself and route that runtime through ACP.
+Use [`GreenchClaw acp`](/cli/acp) when GreenchClaw should host a coding harness session itself and route that runtime through ACP.
 
-## NexisClaw as an MCP server
+## GreenchClaw as an MCP server
 
-This is the `NexisClaw mcp serve` path.
+This is the `GreenchClaw mcp serve` path.
 
 ### When to use `serve`
 
-Use `NexisClaw mcp serve` when:
+Use `GreenchClaw mcp serve` when:
 
-- Codex, Claude Code, or another MCP client should talk directly to NexisClaw-backed channel conversations
-- you already have a local or remote NexisClaw Gateway with routed sessions
-- you want one MCP server that works across NexisClaw's channel backends instead of running separate per-channel bridges
+- Codex, Claude Code, or another MCP client should talk directly to GreenchClaw-backed channel conversations
+- you already have a local or remote GreenchClaw Gateway with routed sessions
+- you want one MCP server that works across GreenchClaw's channel backends instead of running separate per-channel bridges
 
-Use [`NexisClaw acp`](/cli/acp) instead when NexisClaw should host the coding runtime itself and keep the agent session inside NexisClaw.
+Use [`GreenchClaw acp`](/cli/acp) instead when GreenchClaw should host the coding runtime itself and keep the agent session inside GreenchClaw.
 
 ### How it works
 
-`NexisClaw mcp serve` starts a stdio MCP server. The MCP client owns that process. While the client keeps the stdio session open, the bridge connects to a local or remote NexisClaw Gateway over WebSocket and exposes routed channel conversations over MCP.
+`GreenchClaw mcp serve` starts a stdio MCP server. The MCP client owns that process. While the client keeps the stdio session open, the bridge connects to a local or remote GreenchClaw Gateway over WebSocket and exposes routed channel conversations over MCP.
 
 <Steps>
   <Step title="Client spawns the bridge">
-    The MCP client spawns `NexisClaw mcp serve`.
+    The MCP client spawns `GreenchClaw mcp serve`.
   </Step>
   <Step title="Bridge connects to Gateway">
-    The bridge connects to the NexisClaw Gateway over WebSocket.
+    The bridge connects to the GreenchClaw Gateway over WebSocket.
   </Step>
   <Step title="Sessions become MCP conversations">
     Routed sessions become MCP conversations and transcript/history tools.
@@ -62,8 +62,8 @@ Use [`NexisClaw acp`](/cli/acp) instead when NexisClaw should host the coding ru
     - older transcript history is read with `messages_read`
     - Claude push notifications only exist while the MCP session is alive
     - when the client disconnects, the bridge exits and the live queue is gone
-    - one-shot agent entry points such as `NexisClaw agent` and `NexisClaw infer model run` retire any bundled MCP runtimes they open when the reply completes, so repeated scripted runs do not accumulate stdio MCP child processes
-    - stdio MCP servers launched by NexisClaw (bundled or user-configured) are torn down as a process tree on shutdown, so child subprocesses started by the server do not survive after the parent stdio client exits
+    - one-shot agent entry points such as `GreenchClaw agent` and `GreenchClaw infer model run` retire any bundled MCP runtimes they open when the reply completes, so repeated scripted runs do not accumulate stdio MCP child processes
+    - stdio MCP servers launched by GreenchClaw (bundled or user-configured) are torn down as a process tree on shutdown, so child subprocesses started by the server do not survive after the parent stdio client exits
     - deleting or resetting a session disposes that session's MCP clients through the shared runtime cleanup path, so there are no lingering stdio connections tied to a removed session
 
   </Accordion>
@@ -88,7 +88,7 @@ Today, `auto` behaves the same as `on`. There is no client capability detection 
 
 ### What `serve` exposes
 
-The bridge uses existing Gateway session route metadata to expose channel-backed conversations. A conversation appears when NexisClaw already has session state with a known route such as:
+The bridge uses existing Gateway session route metadata to expose channel-backed conversations. A conversation appears when GreenchClaw already has session state with a known route such as:
 
 - `channel`
 - recipient or destination metadata
@@ -108,23 +108,23 @@ This gives MCP clients one place to:
 <Tabs>
   <Tab title="Local Gateway">
     ```bash
-    NexisClaw mcp serve
+    GreenchClaw mcp serve
     ```
   </Tab>
   <Tab title="Remote Gateway (token)">
     ```bash
-    NexisClaw mcp serve --url wss://gateway-host:18789 --token-file ~/.NexisClaw/gateway.token
+    GreenchClaw mcp serve --url wss://gateway-host:18789 --token-file ~/.GreenchClaw/gateway.token
     ```
   </Tab>
   <Tab title="Remote Gateway (password)">
     ```bash
-    NexisClaw mcp serve --url wss://gateway-host:18789 --password-file ~/.NexisClaw/gateway.password
+    GreenchClaw mcp serve --url wss://gateway-host:18789 --password-file ~/.GreenchClaw/gateway.password
     ```
   </Tab>
   <Tab title="Verbose / Claude off">
     ```bash
-    NexisClaw mcp serve --verbose
-    NexisClaw mcp serve --claude-channel-mode off
+    GreenchClaw mcp serve --verbose
+    GreenchClaw mcp serve --claude-channel-mode off
     ```
   </Tab>
 </Tabs>
@@ -209,7 +209,7 @@ Current event types:
 
 ### Claude channel notifications
 
-The bridge can also expose Claude-specific channel notifications. This is the NexisClaw equivalent of a Claude Code channel adapter: standard MCP tools remain available, but live inbound messages can also arrive as Claude-specific MCP notifications.
+The bridge can also expose Claude-specific channel notifications. This is the GreenchClaw equivalent of a Claude Code channel adapter: standard MCP tools remain available, but live inbound messages can also arrive as Claude-specific MCP notifications.
 
 <Tabs>
   <Tab title="off">
@@ -244,8 +244,8 @@ Example stdio client config:
 ```json
 {
   "mcpServers": {
-    "NexisClaw": {
-      "command": "NexisClaw",
+    "GreenchClaw": {
+      "command": "GreenchClaw",
       "args": [
         "mcp",
         "serve",
@@ -263,7 +263,7 @@ For most generic MCP clients, start with the standard tool surface and ignore Cl
 
 ### Options
 
-`NexisClaw mcp serve` supports:
+`GreenchClaw mcp serve` supports:
 
 <ParamField path="--url" type="string">
   Gateway WebSocket URL.
@@ -297,7 +297,7 @@ The bridge does not invent routing. It only exposes conversations that Gateway a
 
 That means:
 
-- sender allowlists, pairing, and channel-level trust still belong to the underlying NexisClaw channel configuration
+- sender allowlists, pairing, and channel-level trust still belong to the underlying GreenchClaw channel configuration
 - `messages_send` can only reply through an existing stored route
 - approval state is live/in-memory only for the current bridge session
 - bridge auth should use the same Gateway token or password controls you would trust for any other remote Gateway client
@@ -306,7 +306,7 @@ If a conversation is missing from `conversations_list`, the usual cause is not M
 
 ### Testing
 
-NexisClaw ships a deterministic Docker smoke for this bridge:
+GreenchClaw ships a deterministic Docker smoke for this bridge:
 
 ```bash
 pnpm test:docker:mcp-channels
@@ -315,7 +315,7 @@ pnpm test:docker:mcp-channels
 That smoke:
 
 - starts a seeded Gateway container
-- starts a second container that spawns `NexisClaw mcp serve`
+- starts a second container that spawns `GreenchClaw mcp serve`
 - verifies conversation discovery, transcript reads, attachment metadata reads, live event queue behavior, and outbound send routing
 - validates Claude-style channel and permission notifications over the real stdio MCP bridge
 
@@ -346,17 +346,17 @@ For broader testing context, see [Testing](/help/testing).
   </Accordion>
 </AccordionGroup>
 
-## NexisClaw as an MCP client registry
+## GreenchClaw as an MCP client registry
 
-This is the `NexisClaw mcp list`, `show`, `set`, and `unset` path.
+This is the `GreenchClaw mcp list`, `show`, `set`, and `unset` path.
 
-These commands do not expose NexisClaw over MCP. They manage NexisClaw-owned MCP server definitions under `mcp.servers` in NexisClaw config.
+These commands do not expose GreenchClaw over MCP. They manage GreenchClaw-owned MCP server definitions under `mcp.servers` in GreenchClaw config.
 
-Those saved definitions are for runtimes that NexisClaw launches or configures later, such as embedded Pi and other runtime adapters. NexisClaw stores the definitions centrally so those runtimes do not need to keep their own duplicate MCP server lists.
+Those saved definitions are for runtimes that GreenchClaw launches or configures later, such as embedded Pi and other runtime adapters. GreenchClaw stores the definitions centrally so those runtimes do not need to keep their own duplicate MCP server lists.
 
 <AccordionGroup>
   <Accordion title="Important behavior">
-    - these commands only read or write NexisClaw config
+    - these commands only read or write GreenchClaw config
     - they do not connect to the target MCP server
     - they do not validate whether the command, URL, or remote transport is reachable right now
     - runtime adapters decide which transport shapes they actually support at execution time
@@ -366,35 +366,35 @@ Those saved definitions are for runtimes that NexisClaw launches or configures l
   </Accordion>
 </AccordionGroup>
 
-Runtime adapters may normalize this shared registry into the shape their downstream client expects. For example, embedded Pi consumes NexisClaw `transport` values directly, while Claude Code and Gemini receive CLI-native `type` values such as `http`, `sse`, or `stdio`.
+Runtime adapters may normalize this shared registry into the shape their downstream client expects. For example, embedded Pi consumes GreenchClaw `transport` values directly, while Claude Code and Gemini receive CLI-native `type` values such as `http`, `sse`, or `stdio`.
 
 ### Saved MCP server definitions
 
-NexisClaw also stores a lightweight MCP server registry in config for surfaces that want NexisClaw-managed MCP definitions.
+GreenchClaw also stores a lightweight MCP server registry in config for surfaces that want GreenchClaw-managed MCP definitions.
 
 Commands:
 
-- `NexisClaw mcp list`
-- `NexisClaw mcp show [name]`
-- `NexisClaw mcp set <name> <json>`
-- `NexisClaw mcp unset <name>`
+- `GreenchClaw mcp list`
+- `GreenchClaw mcp show [name]`
+- `GreenchClaw mcp set <name> <json>`
+- `GreenchClaw mcp unset <name>`
 
 Notes:
 
 - `list` sorts server names.
 - `show` without a name prints the full configured MCP server object.
 - `set` expects one JSON object value on the command line.
-- Use `transport: "streamable-http"` for Streamable HTTP MCP servers. `NexisClaw mcp set` also normalizes CLI-native `type: "http"` to the same canonical config shape for compatibility.
+- Use `transport: "streamable-http"` for Streamable HTTP MCP servers. `GreenchClaw mcp set` also normalizes CLI-native `type: "http"` to the same canonical config shape for compatibility.
 - `unset` fails if the named server does not exist.
 
 Examples:
 
 ```bash
-NexisClaw mcp list
-NexisClaw mcp show context7 --json
-NexisClaw mcp set context7 '{"command":"uvx","args":["context7-mcp"]}'
-NexisClaw mcp set docs '{"url":"https://mcp.example.com","transport":"streamable-http"}'
-NexisClaw mcp unset context7
+GreenchClaw mcp list
+GreenchClaw mcp show context7 --json
+GreenchClaw mcp set context7 '{"command":"uvx","args":["context7-mcp"]}'
+GreenchClaw mcp set docs '{"url":"https://mcp.example.com","transport":"streamable-http"}'
+GreenchClaw mcp unset context7
 ```
 
 Example config shape:
@@ -430,7 +430,7 @@ Launches a local child process and communicates over stdin/stdout.
 <Warning>
 **Stdio env safety filter**
 
-NexisClaw rejects interpreter-startup env keys that can alter how a stdio MCP server starts up before the first RPC, even if they appear in a server's `env` block. Blocked keys include `NODE_OPTIONS`, `PYTHONSTARTUP`, `PYTHONPATH`, `PERL5OPT`, `RUBYOPT`, `SHELLOPTS`, `PS4`, and similar runtime-control variables. Startup rejects these with a configuration error so they cannot inject an implicit prelude, swap the interpreter, or enable a debugger against the stdio process. Ordinary credential, proxy, and server-specific env vars (`GITHUB_TOKEN`, `HTTP_PROXY`, custom `*_API_KEY`, etc.) are unaffected.
+GreenchClaw rejects interpreter-startup env keys that can alter how a stdio MCP server starts up before the first RPC, even if they appear in a server's `env` block. Blocked keys include `NODE_OPTIONS`, `PYTHONSTARTUP`, `PYTHONPATH`, `PERL5OPT`, `RUBYOPT`, `SHELLOPTS`, `PS4`, and similar runtime-control variables. Startup rejects these with a configuration error so they cannot inject an implicit prelude, swap the interpreter, or enable a debugger against the stdio process. Ordinary credential, proxy, and server-specific env vars (`GITHUB_TOKEN`, `HTTP_PROXY`, custom `*_API_KEY`, etc.) are unaffected.
 
 If your MCP server genuinely needs one of the blocked variables, set it on the gateway host process instead of under the stdio server's `env`.
 </Warning>
@@ -468,14 +468,14 @@ Sensitive values in `url` (userinfo) and `headers` are redacted in logs and stat
 
 `streamable-http` is an additional transport option alongside `sse` and `stdio`. It uses HTTP streaming for bidirectional communication with remote MCP servers.
 
-| Field                 | Description                                                                            |
-| --------------------- | -------------------------------------------------------------------------------------- |
-| `url`                 | HTTP or HTTPS URL of the remote server (required)                                      |
-| `transport`           | Set to `"streamable-http"` to select this transport; when omitted, NexisClaw uses `sse` |
-| `headers`             | Optional key-value map of HTTP headers (for example auth tokens)                       |
-| `connectionTimeoutMs` | Per-server connection timeout in ms (optional)                                         |
+| Field                 | Description                                                                               |
+| --------------------- | ----------------------------------------------------------------------------------------- |
+| `url`                 | HTTP or HTTPS URL of the remote server (required)                                         |
+| `transport`           | Set to `"streamable-http"` to select this transport; when omitted, GreenchClaw uses `sse` |
+| `headers`             | Optional key-value map of HTTP headers (for example auth tokens)                          |
+| `connectionTimeoutMs` | Per-server connection timeout in ms (optional)                                            |
 
-NexisClaw config uses `transport: "streamable-http"` as the canonical spelling. CLI-native MCP `type: "http"` values are accepted when saved through `NexisClaw mcp set` and repaired by `NexisClaw doctor --fix` in existing config, but `transport` is what embedded Pi consumes directly.
+GreenchClaw config uses `transport: "streamable-http"` as the canonical spelling. CLI-native MCP `type: "http"` values are accepted when saved through `GreenchClaw mcp set` and repaired by `GreenchClaw doctor --fix` in existing config, but `transport` is what embedded Pi consumes directly.
 
 Example:
 

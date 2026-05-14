@@ -11,8 +11,8 @@ Extract readable article content from local HTML web fetch responses.
 
 ## Distribution
 
-- Package: `@NexisClaw/web-readability-plugin`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/web-readability-plugin`
+- Install route: included in GreenchClaw
 
 ## Surface
 

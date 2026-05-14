@@ -65,7 +65,7 @@ type GatewayPluginUpgradeHandler = (
 ) => Promise<boolean>;
 
 export async function createGatewayRuntimeState(params: {
-  cfg: import("../config/config.js").NexisClawConfig;
+  cfg: import("../config/config.js").GreenchClawConfig;
   bindHost: string;
   port: number;
   controlUiEnabled: boolean;

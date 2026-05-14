@@ -5,23 +5,23 @@ import {
   mergeAllowlist,
   patchAllowlistUsersInConfigEntries,
   summarizeMapping,
-} from "NexisClaw/plugin-sdk/allow-from";
-import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "NexisClaw/plugin-sdk/approval-handler-adapter-runtime";
-import { registerChannelRuntimeContext } from "NexisClaw/plugin-sdk/channel-runtime-context";
-import type { SessionScope } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveTextChunkLimit } from "NexisClaw/plugin-sdk/reply-chunking";
-import { DEFAULT_GROUP_HISTORY_LIMIT } from "NexisClaw/plugin-sdk/reply-history";
-import { normalizeMainKey } from "NexisClaw/plugin-sdk/routing";
-import { warn } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/allow-from";
+import { CHANNEL_APPROVAL_NATIVE_RUNTIME_CONTEXT_CAPABILITY } from "GreenchClaw/plugin-sdk/approval-handler-adapter-runtime";
+import { registerChannelRuntimeContext } from "GreenchClaw/plugin-sdk/channel-runtime-context";
+import type { SessionScope } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveTextChunkLimit } from "GreenchClaw/plugin-sdk/reply-chunking";
+import { DEFAULT_GROUP_HISTORY_LIMIT } from "GreenchClaw/plugin-sdk/reply-history";
+import { normalizeMainKey } from "GreenchClaw/plugin-sdk/routing";
+import { warn } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   computeBackoff,
   createNonExitingRuntime,
   sleepWithAbort,
   type RuntimeEnv,
-} from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeResolvedSecretInputString } from "NexisClaw/plugin-sdk/secret-input";
-import { normalizeStringEntries } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { installRequestBodyLimitGuard } from "NexisClaw/plugin-sdk/webhook-request-guards";
+} from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeResolvedSecretInputString } from "GreenchClaw/plugin-sdk/secret-input";
+import { normalizeStringEntries } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { installRequestBodyLimitGuard } from "GreenchClaw/plugin-sdk/webhook-request-guards";
 import {
   resolveSlackAccount,
   resolveSlackAccountAllowFrom,
@@ -259,7 +259,7 @@ export async function monitorSlackProvider(opts: MonitorSlackOpts = {}) {
   // Pre-set shuttingDown on the SocketModeClient before app.stop() to prevent
   // a race where the library's internal ping timeout fires disconnect() before
   // shuttingDown is set, causing orphaned reconnects with leaked ping intervals.
-  // See: NexisClaw/NexisClaw#56508
+  // See: GreenchClaw/GreenchClaw#56508
   const gracefulStop = async () => {
     await gracefulStopSlackApp(app);
   };

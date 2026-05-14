@@ -7,7 +7,7 @@ read_when:
   - You are tuning heartbeat and cache-ttl pruning together
 ---
 
-Prompt caching means the model provider can reuse unchanged prompt prefixes (usually system/developer instructions and other stable context) across turns instead of re-processing them every time. NexisClaw normalizes provider usage into `cacheRead` and `cacheWrite` where the upstream API exposes those counters directly.
+Prompt caching means the model provider can reuse unchanged prompt prefixes (usually system/developer instructions and other stable context) across turns instead of re-processing them every time. GreenchClaw normalizes provider usage into `cacheRead` and `cacheWrite` where the upstream API exposes those counters directly.
 
 Status surfaces can also recover cache counters from the most recent transcript
 usage log when the live session snapshot is missing them, so `/status` can keep
@@ -97,16 +97,16 @@ Per-agent heartbeat is supported at `agents.list[].heartbeat`.
 ### Anthropic (direct API)
 
 - `cacheRetention` is supported.
-- With Anthropic API-key auth profiles, NexisClaw seeds `cacheRetention: "short"` for Anthropic model refs when unset.
-- Anthropic native Messages responses expose both `cache_read_input_tokens` and `cache_creation_input_tokens`, so NexisClaw can show both `cacheRead` and `cacheWrite`.
+- With Anthropic API-key auth profiles, GreenchClaw seeds `cacheRetention: "short"` for Anthropic model refs when unset.
+- Anthropic native Messages responses expose both `cache_read_input_tokens` and `cache_creation_input_tokens`, so GreenchClaw can show both `cacheRead` and `cacheWrite`.
 - For native Anthropic requests, `cacheRetention: "short"` maps to the default 5-minute ephemeral cache, and `cacheRetention: "long"` upgrades to the 1-hour TTL only on direct `api.anthropic.com` hosts.
 
 ### OpenAI (direct API)
 
-- Prompt caching is automatic on supported recent models. NexisClaw does not need to inject block-level cache markers.
-- NexisClaw uses `prompt_cache_key` to keep cache routing stable across turns and uses `prompt_cache_retention: "24h"` only when `cacheRetention: "long"` is selected on direct OpenAI hosts.
+- Prompt caching is automatic on supported recent models. GreenchClaw does not need to inject block-level cache markers.
+- GreenchClaw uses `prompt_cache_key` to keep cache routing stable across turns and uses `prompt_cache_retention: "24h"` only when `cacheRetention: "long"` is selected on direct OpenAI hosts.
 - OpenAI-compatible Completions providers receive `prompt_cache_key` only when their model config explicitly sets `compat.supportsPromptCacheKey: true`; `cacheRetention: "none"` still suppresses it.
-- OpenAI responses expose cached prompt tokens via `usage.prompt_tokens_details.cached_tokens` (or `input_tokens_details.cached_tokens` on Responses API events). NexisClaw maps that to `cacheRead`.
+- OpenAI responses expose cached prompt tokens via `usage.prompt_tokens_details.cached_tokens` (or `input_tokens_details.cached_tokens` on Responses API events). GreenchClaw maps that to `cacheRead`.
 - OpenAI does not expose a separate cache-write token counter, so `cacheWrite` stays `0` on OpenAI paths even when the provider is warming a cache.
 - OpenAI returns useful tracing and rate-limit headers such as `x-request-id`, `openai-processing-ms`, and `x-ratelimit-*`, but cache-hit accounting should come from the usage payload, not from headers.
 - In practice, OpenAI often behaves like an initial-prefix cache rather than Anthropic-style moving full-history reuse. Stable long-prefix text turns can land near a `4864` cached-token plateau in current live probes, while tool-heavy or MCP-style transcripts often plateau near `4608` cached tokens even on exact repeats.
@@ -125,7 +125,7 @@ Per-agent heartbeat is supported at `agents.list[].heartbeat`.
 
 ### OpenRouter models
 
-For `openrouter/anthropic/*` model refs, NexisClaw injects Anthropic
+For `openrouter/anthropic/*` model refs, GreenchClaw injects Anthropic
 `cache_control` on system/developer prompt blocks to improve prompt-cache
 reuse only when the request is still targeting a verified OpenRouter route
 (`openrouter` on its default endpoint, or any provider/base URL that resolves
@@ -133,7 +133,7 @@ to `openrouter.ai`).
 
 For `openrouter/deepseek/*`, `openrouter/moonshot*/*`, and `openrouter/zai/*`
 model refs, `contextPruning.mode: "cache-ttl"` is allowed because OpenRouter
-handles provider-side prompt caching automatically. NexisClaw does not inject
+handles provider-side prompt caching automatically. GreenchClaw does not inject
 Anthropic `cache_control` markers into those requests.
 
 DeepSeek cache construction is best-effort and can take a few seconds. An
@@ -141,7 +141,7 @@ immediate follow-up may still show `cached_tokens: 0`; verify with a repeated
 same-prefix request after a short delay and use `usage.prompt_tokens_details.cached_tokens`
 as the cache-hit signal.
 
-If you repoint the model at an arbitrary OpenAI-compatible proxy URL, NexisClaw
+If you repoint the model at an arbitrary OpenAI-compatible proxy URL, GreenchClaw
 stops injecting those OpenRouter-specific Anthropic cache markers.
 
 ### Other providers
@@ -151,8 +151,8 @@ If the provider does not support this cache mode, `cacheRetention` has no effect
 ### Google Gemini direct API
 
 - Direct Gemini transport (`api: "google-generative-ai"`) reports cache hits
-  through upstream `cachedContentTokenCount`; NexisClaw maps that to `cacheRead`.
-- When `cacheRetention` is set on a direct Gemini model, NexisClaw automatically
+  through upstream `cachedContentTokenCount`; GreenchClaw maps that to `cacheRead`.
+- When `cacheRetention` is set on a direct Gemini model, GreenchClaw automatically
   creates, reuses, and refreshes `cachedContents` resources for system prompts
   on Google AI Studio runs. This means you no longer need to pre-create a
   cached-content handle manually.
@@ -160,21 +160,21 @@ If the provider does not support this cache mode, `cacheRetention` has no effect
   `params.cachedContent` (or legacy `params.cached_content`) on the configured
   model.
 - This is separate from Anthropic/OpenAI prompt-prefix caching. For Gemini,
-  NexisClaw manages a provider-native `cachedContents` resource rather than
+  GreenchClaw manages a provider-native `cachedContents` resource rather than
   injecting cache markers into the request.
 
 ### Gemini CLI JSON usage
 
 - Gemini CLI JSON output can also surface cache hits through `stats.cached`;
-  NexisClaw maps that to `cacheRead`.
-- If the CLI omits a direct `stats.input` value, NexisClaw derives input tokens
+  GreenchClaw maps that to `cacheRead`.
+- If the CLI omits a direct `stats.input` value, GreenchClaw derives input tokens
   from `stats.input_tokens - stats.cached`.
-- This is usage normalization only. It does not mean NexisClaw is creating
+- This is usage normalization only. It does not mean GreenchClaw is creating
   Anthropic/OpenAI-style prompt-cache markers for Gemini CLI.
 
 ## System-prompt cache boundary
 
-NexisClaw splits the system prompt into a **stable prefix** and a **volatile
+GreenchClaw splits the system prompt into a **stable prefix** and a **volatile
 suffix** separated by an internal cache-prefix boundary. Content above the
 boundary (tool definitions, skills metadata, workspace files, and other
 relatively static context) is ordered so it stays byte-identical across turns.
@@ -201,9 +201,9 @@ check whether the change lands above or below the cache boundary. Moving
 volatile content below the boundary (or stabilizing it) often resolves the
 issue.
 
-## NexisClaw cache-stability guards
+## GreenchClaw cache-stability guards
 
-NexisClaw also keeps several cache-sensitive payload shapes deterministic before
+GreenchClaw also keeps several cache-sensitive payload shapes deterministic before
 the request reaches the provider:
 
 - Bundle MCP tool catalogs are sorted deterministically before tool
@@ -247,7 +247,7 @@ agents:
 
 ## Cache diagnostics
 
-NexisClaw exposes dedicated cache-trace diagnostics for embedded agent runs.
+GreenchClaw exposes dedicated cache-trace diagnostics for embedded agent runs.
 
 For normal user-facing diagnostics, `/status` and other usage summaries can use
 the latest transcript usage entry as a fallback source for `cacheRead` /
@@ -255,7 +255,7 @@ the latest transcript usage entry as a fallback source for `cacheRead` /
 
 ## Live regression tests
 
-NexisClaw keeps one combined live cache regression gate for repeated prefixes, tool turns, image turns, MCP-style tool transcripts, and an Anthropic no-cache control.
+GreenchClaw keeps one combined live cache regression gate for repeated prefixes, tool turns, image turns, MCP-style tool transcripts, and an Anthropic no-cache control.
 
 - `src/agents/live-cache-regression.live.test.ts`
 - `src/agents/live-cache-regression-baseline.ts`
@@ -263,7 +263,7 @@ NexisClaw keeps one combined live cache regression gate for repeated prefixes, t
 Run the narrow live gate with:
 
 ```sh
-NEXISCLAW_LIVE_TEST=1 NEXISCLAW_LIVE_CACHE_TEST=1 pnpm test:live:cache
+GREENCHCLAW_LIVE_TEST=1 GREENCHCLAW_LIVE_CACHE_TEST=1 pnpm test:live:cache
 ```
 
 The baseline file stores the most recent observed live numbers plus the provider-specific regression floors used by the test.
@@ -308,7 +308,7 @@ Why the assertions differ:
 diagnostics:
   cacheTrace:
     enabled: true
-    filePath: "~/.NexisClaw/logs/cache-trace.jsonl" # optional
+    filePath: "~/.GreenchClaw/logs/cache-trace.jsonl" # optional
     includeMessages: false # default true
     includePrompt: false # default true
     includeSystem: false # default true
@@ -316,18 +316,18 @@ diagnostics:
 
 Defaults:
 
-- `filePath`: `$NEXISCLAW_STATE_DIR/logs/cache-trace.jsonl`
+- `filePath`: `$GREENCHCLAW_STATE_DIR/logs/cache-trace.jsonl`
 - `includeMessages`: `true`
 - `includePrompt`: `true`
 - `includeSystem`: `true`
 
 ### Env toggles (one-off debugging)
 
-- `NEXISCLAW_CACHE_TRACE=1` enables cache tracing.
-- `NEXISCLAW_CACHE_TRACE_FILE=/path/to/cache-trace.jsonl` overrides output path.
-- `NEXISCLAW_CACHE_TRACE_MESSAGES=0|1` toggles full message payload capture.
-- `NEXISCLAW_CACHE_TRACE_PROMPT=0|1` toggles prompt text capture.
-- `NEXISCLAW_CACHE_TRACE_SYSTEM=0|1` toggles system prompt capture.
+- `GREENCHCLAW_CACHE_TRACE=1` enables cache tracing.
+- `GREENCHCLAW_CACHE_TRACE_FILE=/path/to/cache-trace.jsonl` overrides output path.
+- `GREENCHCLAW_CACHE_TRACE_MESSAGES=0|1` toggles full message payload capture.
+- `GREENCHCLAW_CACHE_TRACE_PROMPT=0|1` toggles prompt text capture.
+- `GREENCHCLAW_CACHE_TRACE_SYSTEM=0|1` toggles system prompt capture.
 
 ### What to inspect
 
@@ -335,7 +335,7 @@ Defaults:
 - Per-turn cache token impact is visible in normal usage surfaces via `cacheRead` and `cacheWrite` (for example `/usage full` and session usage summaries).
 - For Anthropic, expect both `cacheRead` and `cacheWrite` when caching is active.
 - For OpenAI, expect `cacheRead` on cache hits and `cacheWrite` to remain `0`; OpenAI does not publish a separate cache-write token field.
-- If you need request tracing, log request IDs and rate-limit headers separately from cache metrics. NexisClaw's current cache-trace output is focused on prompt/session shape and normalized token usage rather than raw provider response headers.
+- If you need request tracing, log request IDs and rate-limit headers separately from cache metrics. GreenchClaw's current cache-trace output is focused on prompt/session shape and normalized token usage rather than raw provider response headers.
 
 ## Quick troubleshooting
 

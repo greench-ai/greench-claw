@@ -1,7 +1,7 @@
 import {
   createWebSearchProviderContractFields,
   type WebSearchProviderPlugin,
-} from "NexisClaw/plugin-sdk/provider-web-search-config-contract";
+} from "GreenchClaw/plugin-sdk/provider-web-search-config-contract";
 
 export function createXaiWebSearchProvider(): WebSearchProviderPlugin {
   const credentialPath = "plugins.entries.xai.config.webSearch.apiKey";
@@ -15,7 +15,7 @@ export function createXaiWebSearchProvider(): WebSearchProviderPlugin {
     envVars: ["XAI_API_KEY"],
     placeholder: "xai-...",
     signupUrl: "https://console.x.ai/",
-    docsUrl: "https://docs.NexisClaw.ai/tools/web",
+    docsUrl: "https://docs.GreenchClaw.ai/tools/web",
     autoDetectOrder: 30,
     credentialPath,
     ...createWebSearchProviderContractFields({

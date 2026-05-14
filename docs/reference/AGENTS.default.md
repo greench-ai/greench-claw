@@ -1,40 +1,40 @@
 ---
-summary: "Default NexisClaw agent instructions and skills roster for the personal assistant setup"
+summary: "Default GreenchClaw agent instructions and skills roster for the personal assistant setup"
 title: "Default AGENTS.md"
 read_when:
-  - Starting a new NexisClaw agent session
+  - Starting a new GreenchClaw agent session
   - Enabling or auditing default skills
 ---
 
 ## First run (recommended)
 
-NexisClaw uses a dedicated workspace directory for the agent. Default: `~/.NexisClaw/workspace` (configurable via `agents.defaults.workspace`).
+GreenchClaw uses a dedicated workspace directory for the agent. Default: `~/.GreenchClaw/workspace` (configurable via `agents.defaults.workspace`).
 
 1. Create the workspace (if it doesn't already exist):
 
 ```bash
-mkdir -p ~/.NexisClaw/workspace
+mkdir -p ~/.GreenchClaw/workspace
 ```
 
 2. Copy the default workspace templates into the workspace:
 
 ```bash
-cp docs/reference/templates/AGENTS.md ~/.NexisClaw/workspace/AGENTS.md
-cp docs/reference/templates/SOUL.md ~/.NexisClaw/workspace/SOUL.md
-cp docs/reference/templates/TOOLS.md ~/.NexisClaw/workspace/TOOLS.md
+cp docs/reference/templates/AGENTS.md ~/.GreenchClaw/workspace/AGENTS.md
+cp docs/reference/templates/SOUL.md ~/.GreenchClaw/workspace/SOUL.md
+cp docs/reference/templates/TOOLS.md ~/.GreenchClaw/workspace/TOOLS.md
 ```
 
 3. Optional: if you want the personal assistant skill roster, replace AGENTS.md with this file:
 
 ```bash
-cp docs/reference/AGENTS.default.md ~/.NexisClaw/workspace/AGENTS.md
+cp docs/reference/AGENTS.default.md ~/.GreenchClaw/workspace/AGENTS.md
 ```
 
 4. Optional: choose a different workspace by setting `agents.defaults.workspace` (supports `~`):
 
 ```json5
 {
-  agents: { defaults: { workspace: "~/.NexisClaw/workspace" } },
+  agents: { defaults: { workspace: "~/.GreenchClaw/workspace" } },
 }
 ```
 
@@ -80,17 +80,17 @@ cp docs/reference/AGENTS.default.md ~/.NexisClaw/workspace/AGENTS.md
 If you treat this workspace as Clawd's "memory", make it a git repo (ideally private) so `AGENTS.md` and your memory files are backed up.
 
 ```bash
-cd ~/.NexisClaw/workspace
+cd ~/.GreenchClaw/workspace
 git init
 git add AGENTS.md
 git commit -m "Add Clawd workspace"
 # Optional: add a private remote + push
 ```
 
-## What NexisClaw does
+## What GreenchClaw does
 
 - Runs WhatsApp gateway + Pi coding agent so the assistant can read/write chats, fetch context, and run skills via the host Mac.
-- macOS app manages permissions (screen recording, notifications, microphone) and exposes the `NexisClaw` CLI via its bundled binary.
+- macOS app manages permissions (screen recording, notifications, microphone) and exposes the `GreenchClaw` CLI via its bundled binary.
 - Direct chats collapse into the agent's `main` session by default; groups stay isolated as `agent:<agentId>:<channel>:group:<id>` (rooms/channels: `agent:<agentId>:<channel>:channel:<id>`); heartbeats keep background tasks alive.
 
 ## Core skills (enable in Settings → Skills)
@@ -115,13 +115,13 @@ git commit -m "Add Clawd workspace"
 
 ## Usage notes
 
-- Prefer the `NexisClaw` CLI for scripting; mac app handles permissions.
+- Prefer the `GreenchClaw` CLI for scripting; mac app handles permissions.
 - Run installs from the Skills tab; it hides the button if a binary is already present.
 - Keep heartbeats enabled so the assistant can schedule reminders, monitor inboxes, and trigger camera captures.
 - Canvas UI runs full-screen with native overlays. Avoid placing critical controls in the top-left/top-right/bottom edges; add explicit gutters in the layout and don't rely on safe-area insets.
-- For browser-driven verification, use `NexisClaw browser` (tabs/status/screenshot) with the NexisClaw-managed Chrome profile.
-- For DOM inspection, use `NexisClaw browser eval|query|dom|snapshot` (and `--json`/`--out` when you need machine output).
-- For interactions, use `NexisClaw browser click|type|hover|drag|select|upload|press|wait|navigate|back|evaluate|run` (click/type require snapshot refs; use `evaluate` for CSS selectors).
+- For browser-driven verification, use `GreenchClaw browser` (tabs/status/screenshot) with the GreenchClaw-managed Chrome profile.
+- For DOM inspection, use `GreenchClaw browser eval|query|dom|snapshot` (and `--json`/`--out` when you need machine output).
+- For interactions, use `GreenchClaw browser click|type|hover|drag|select|upload|press|wait|navigate|back|evaluate|run` (click/type require snapshot refs; use `evaluate` for CSS selectors).
 
 ## Related
 

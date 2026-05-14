@@ -297,7 +297,7 @@ export function renderAgentChannels(params: {
                           ? html`
                               <div>
                                 <a
-                                  href="https://docs.NexisClaw.ai/channels"
+                                  href="https://docs.GreenchClaw.ai/channels"
                                   target="_blank"
                                   rel="noopener"
                                   style="color: var(--accent); font-size: 12px"

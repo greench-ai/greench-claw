@@ -27,7 +27,7 @@ import {
   updateSessionStore,
 } from "../../config/sessions.js";
 import { resolveAgentMainSessionKey } from "../../config/sessions/main-session.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   createInternalHookEvent,
   hasInternalHookListeners,
@@ -121,7 +121,7 @@ import type {
 import { assertValidParams } from "./validation.js";
 
 function filterSessionStoreToConfiguredAgents(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   store: Record<string, SessionEntry>,
 ): Record<string, SessionEntry> {
   const configuredAgentIds = new Set(listAgentIds(cfg).map((agentId) => normalizeAgentId(agentId)));
@@ -220,7 +220,7 @@ function rejectPluginRuntimeDeleteMismatch(params: {
   return true;
 }
 
-function resolveGatewaySessionTargetFromKey(key: string, cfg: NexisClawConfig) {
+function resolveGatewaySessionTargetFromKey(key: string, cfg: GreenchClawConfig) {
   const target = resolveGatewaySessionStoreTarget({ cfg, key });
   return { cfg, target, storePath: target.storePath };
 }

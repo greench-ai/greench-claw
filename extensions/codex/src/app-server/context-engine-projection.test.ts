@@ -136,7 +136,7 @@ describe("projectContextEngineAssemblyForCodex", () => {
     );
   });
 
-  it("maps NexisClaw compaction reserve config onto Codex projection reserves", () => {
+  it("maps GreenchClaw compaction reserve config onto Codex projection reserves", () => {
     expect(
       resolveCodexContextEngineProjectionReserveTokens({
         config: { agents: { defaults: { compaction: { reserveTokens: 12_000 } } } },

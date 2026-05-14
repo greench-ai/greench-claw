@@ -13,7 +13,7 @@ import {
 import { normalizeBundledPluginArtifactSubpath } from "../plugins/public-surface-runtime.js";
 import { resolveLoaderPackageRoot } from "../plugins/sdk-alias.js";
 
-const NEXISCLAW_PACKAGE_ROOT =
+const GREENCHCLAW_PACKAGE_ROOT =
   resolveLoaderPackageRoot({
     modulePath: fileURLToPath(import.meta.url),
     moduleUrl: import.meta.url,
@@ -27,7 +27,7 @@ function isSafeBundledPluginDirName(pluginId: string): boolean {
 
 function readPluginManifestId(pluginDir: string): string | undefined {
   try {
-    const manifestPath = path.join(pluginDir, "NexisClaw.plugin.json");
+    const manifestPath = path.join(pluginDir, "GreenchClaw.plugin.json");
     const parsed = JSON.parse(fs.readFileSync(manifestPath, "utf-8")) as { id?: unknown };
     return typeof parsed.id === "string" ? parsed.id : undefined;
   } catch {
@@ -43,9 +43,9 @@ function findBundledPluginMetadataFast(
   }
   const roots = [
     resolveBundledPluginsDir(),
-    path.resolve(NEXISCLAW_PACKAGE_ROOT, "extensions"),
-    path.resolve(NEXISCLAW_PACKAGE_ROOT, "dist-runtime", "extensions"),
-    path.resolve(NEXISCLAW_PACKAGE_ROOT, "dist", "extensions"),
+    path.resolve(GREENCHCLAW_PACKAGE_ROOT, "extensions"),
+    path.resolve(GREENCHCLAW_PACKAGE_ROOT, "dist-runtime", "extensions"),
+    path.resolve(GREENCHCLAW_PACKAGE_ROOT, "dist", "extensions"),
   ].filter(
     (entry, index, values): entry is string => Boolean(entry) && values.indexOf(entry) === index,
   );
@@ -81,9 +81,9 @@ function readPackageName(packageDir: string): string | undefined {
 function resolveWorkspacePackageDir(packageName: string): string {
   const roots = [
     resolveBundledPluginsDir(),
-    path.resolve(NEXISCLAW_PACKAGE_ROOT, "extensions"),
-    path.resolve(NEXISCLAW_PACKAGE_ROOT, "dist-runtime", "extensions"),
-    path.resolve(NEXISCLAW_PACKAGE_ROOT, "dist", "extensions"),
+    path.resolve(GREENCHCLAW_PACKAGE_ROOT, "extensions"),
+    path.resolve(GREENCHCLAW_PACKAGE_ROOT, "dist-runtime", "extensions"),
+    path.resolve(GREENCHCLAW_PACKAGE_ROOT, "dist", "extensions"),
   ].filter(
     (entry, index, values): entry is string => Boolean(entry) && values.indexOf(entry) === index,
   );
@@ -169,7 +169,7 @@ export function resolveBundledPluginPublicModulePath(params: {
 }): string {
   const metadata = findBundledPluginMetadata(params.pluginId);
   return path.resolve(
-    NEXISCLAW_PACKAGE_ROOT,
+    GREENCHCLAW_PACKAGE_ROOT,
     "extensions",
     metadata.dirName,
     normalizeBundledPluginArtifactSubpath(params.artifactBasename),
@@ -217,7 +217,7 @@ export function resolveRelativeExtensionPublicModuleId(params: {
 }): string {
   const fromFilePath = fileURLToPath(params.fromModuleUrl);
   const targetPath = resolveVitestSourceModulePath(
-    path.resolve(NEXISCLAW_PACKAGE_ROOT, "extensions", params.dirName, params.artifactBasename),
+    path.resolve(GREENCHCLAW_PACKAGE_ROOT, "extensions", params.dirName, params.artifactBasename),
   );
   const relativePath = path
     .relative(path.dirname(fromFilePath), targetPath)

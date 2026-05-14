@@ -1,5 +1,8 @@
-import type { NexisClawConfig, TelegramAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import type {
+  GreenchClawConfig,
+  TelegramAccountConfig,
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createCommandBot,
@@ -26,7 +29,7 @@ type TelegramInlineKeyboardReplyMarkup = {
 };
 type PlugCommandHarnessParams = {
   botHarness?: CommandBotHarness;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   command?: Record<string, unknown>;
   args?: string;
   result?: Record<string, unknown>;
@@ -161,7 +164,7 @@ describe("registerTelegramNativeCommands", () => {
   });
 
   it("scopes skill commands when account binding exists", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       agents: {
         list: [{ id: "main", default: true }, { id: "butler" }],
       },
@@ -182,7 +185,7 @@ describe("registerTelegramNativeCommands", () => {
   });
 
   it("scopes skill commands to default agent without a matching binding (#15599)", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       agents: {
         list: [{ id: "main", default: true }, { id: "butler" }],
       },
@@ -325,7 +328,7 @@ describe("registerTelegramNativeCommands", () => {
   });
 
   it("passes agent-scoped media roots for plugin command replies with media", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       agents: {
         list: [{ id: "main", default: true }, { id: "work" }],
       },
@@ -344,9 +347,9 @@ describe("registerTelegramNativeCommands", () => {
 
     const deliverParams = firstDeliverRepliesParams();
     const mediaLocalRoots = deliverParams.mediaLocalRoots as Array<string> | undefined;
-    expect(mediaLocalRoots?.some((root) => /[\\/]\.NexisClaw[\\/]workspace-work$/.test(root))).toBe(
-      true,
-    );
+    expect(
+      mediaLocalRoots?.some((root) => /[\\/]\.GreenchClaw[\\/]workspace-work$/.test(root)),
+    ).toBe(true);
     expect(sendMessage).not.toHaveBeenCalledWith(123, "Command not found.");
   });
 

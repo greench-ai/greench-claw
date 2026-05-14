@@ -1,6 +1,6 @@
 import type { ApiKeyCredential } from "../../../agents/auth-profiles/types.js";
 import { formatCliCommand } from "../../../cli/command-format.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import type { SecretInput } from "../../../config/types.secrets.js";
 import { formatErrorMessage } from "../../../infra/errors.js";
 import { resolveManifestDeprecatedProviderAuthChoice } from "../../../plugins/provider-auth-choices.js";
@@ -27,12 +27,12 @@ type ResolvedNonInteractiveApiKey = NonNullable<
 >;
 
 export async function applyNonInteractiveAuthChoice(params: {
-  nextConfig: NexisClawConfig;
+  nextConfig: GreenchClawConfig;
   authChoice: AuthChoice;
   opts: OnboardOptions;
   runtime: RuntimeEnv;
-  baseConfig: NexisClawConfig;
-}): Promise<NexisClawConfig | null> {
+  baseConfig: GreenchClawConfig;
+}): Promise<GreenchClawConfig | null> {
   const { opts, runtime, baseConfig } = params;
   const authChoice = normalizeApiKeyTokenProviderAuthChoice({
     authChoice: params.authChoice,
@@ -44,7 +44,7 @@ export async function applyNonInteractiveAuthChoice(params: {
   const requestedSecretInputMode = normalizeSecretInputModeInput(opts.secretInputMode);
   if (opts.secretInputMode && !requestedSecretInputMode) {
     runtime.error(
-      `Invalid --secret-input-mode. Use "plaintext" or "ref", or run ${formatCliCommand("NexisClaw onboard")} for interactive setup.`,
+      `Invalid --secret-input-mode. Use "plaintext" or "ref", or run ${formatCliCommand("GreenchClaw onboard")} for interactive setup.`,
     );
     runtime.exit(1);
     return null;

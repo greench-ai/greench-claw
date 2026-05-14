@@ -16,7 +16,7 @@ import {
   resolveSessionTranscriptsDirForAgent,
 } from "../config/sessions/paths.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { stripEnvelope, stripMessageIdHints } from "../shared/chat-envelope.js";
 import { asFiniteNumber } from "../shared/number-coercion.js";
@@ -88,7 +88,7 @@ const logger = createSubsystemLogger("usage-cost-cache");
 
 type UsageCostRefreshState = {
   agentId?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   fullRefreshRequested: boolean;
   pendingSessionFiles: Set<string>;
   running: boolean;
@@ -166,7 +166,7 @@ const addTotals = (target: CostUsageTotals, source: CostUsageTotals): void => {
   target.missingCostEntries += source.missingCostEntries;
 };
 
-function resolveUsageCostPricingFingerprint(config?: NexisClawConfig): string {
+function resolveUsageCostPricingFingerprint(config?: GreenchClawConfig): string {
   return resolveModelCostConfigFingerprint(config);
 }
 
@@ -772,7 +772,7 @@ async function* readJsonlRecords(
 
 async function scanTranscriptFile(params: {
   filePath: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   startOffset?: number;
   endOffset?: number;
   onEntry: (entry: ParsedTranscriptEntry) => void;
@@ -812,7 +812,7 @@ async function scanTranscriptFile(params: {
 
 async function scanUsageFile(params: {
   filePath: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   startOffset?: number;
   endOffset?: number;
   onEntry: (entry: ParsedUsageEntry) => void;
@@ -906,7 +906,7 @@ export async function loadCostUsageSummary(params?: {
   endMs?: number;
   /** @deprecated Use startMs/endMs. */
   days?: number;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
 }): Promise<CostUsageSummary> {
   const now = new Date();
@@ -995,7 +995,7 @@ export async function loadCostUsageSummary(params?: {
 
 async function scanUsageFileForCache(params: {
   file: UsageCostTranscriptFile;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   previous?: UsageCostCacheFileEntry;
   includeSessionSummary?: boolean;
 }): Promise<UsageCostCacheFileEntry> {
@@ -1087,7 +1087,7 @@ async function scanUsageFileForCache(params: {
 }
 
 export async function refreshCostUsageCache(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   maxFiles?: number;
   sessionFiles?: string[];
@@ -1156,7 +1156,7 @@ export async function refreshCostUsageCache(params?: {
 export async function loadCostUsageSummaryFromCache(params: {
   startMs: number;
   endMs: number;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   requestRefresh?: boolean;
   refreshMode?: "background" | "sync-when-empty";
@@ -1217,7 +1217,7 @@ export async function loadSessionCostSummaryFromCache(params: {
   sessionId?: string;
   sessionEntry?: SessionEntry;
   sessionFile: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   startMs?: number;
   endMs?: number;
@@ -1323,7 +1323,7 @@ export async function loadSessionCostSummaryFromCache(params: {
 }
 
 export function requestCostUsageCacheRefresh(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   sessionFiles?: string[];
 }): void {
@@ -1349,7 +1349,7 @@ export function requestCostUsageCacheRefresh(params?: {
 function mergeUsageCostRefreshRequest(
   state: UsageCostRefreshState,
   params?: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     agentId?: string;
     sessionFiles?: string[];
   },
@@ -1536,7 +1536,7 @@ export async function loadSessionCostSummary(params: {
   sessionId?: string;
   sessionEntry?: SessionEntry;
   sessionFile?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   startMs?: number;
   endMs?: number;
@@ -1847,7 +1847,7 @@ export async function loadSessionUsageTimeSeries(params: {
   sessionId?: string;
   sessionEntry?: SessionEntry;
   sessionFile?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   maxPoints?: number;
 }): Promise<SessionUsageTimeSeries | null> {
@@ -1948,7 +1948,7 @@ export async function loadSessionLogs(params: {
   sessionId?: string;
   sessionEntry?: SessionEntry;
   sessionFile?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   limit?: number;
 }): Promise<SessionLogEntry[] | null> {

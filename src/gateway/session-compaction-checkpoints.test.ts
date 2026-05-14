@@ -5,7 +5,7 @@ import path from "node:path";
 import type { AssistantMessage } from "@earendil-works/pi-ai";
 import { CURRENT_SESSION_VERSION, SessionManager } from "@earendil-works/pi-coding-agent";
 import { afterEach, describe, expect, test, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   captureCompactionCheckpointSnapshotAsync,
   cleanupCompactionCheckpointSnapshot,
@@ -51,7 +51,7 @@ afterEach(async () => {
 
 describe("session-compaction-checkpoints", () => {
   test("async capture stores the copied pre-compaction transcript without sync copy", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-checkpoint-async-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-checkpoint-async-"));
     tempDirs.push(dir);
 
     const session = SessionManager.create(dir, dir);
@@ -108,7 +108,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async capture derives session metadata without synchronous SessionManager.open", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-checkpoint-async-metadata-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-checkpoint-async-metadata-"));
     tempDirs.push(dir);
 
     const session = SessionManager.create(dir, dir);
@@ -157,7 +157,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async capture skips oversized pre-compaction transcripts without sync copy", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-checkpoint-async-oversized-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-checkpoint-async-oversized-"));
     tempDirs.push(dir);
 
     const session = SessionManager.create(dir, dir);
@@ -187,7 +187,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async fork creates a checkpoint branch transcript without SessionManager sync reads", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-checkpoint-fork-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-checkpoint-fork-"));
     tempDirs.push(dir);
 
     const session = SessionManager.create(dir, dir);
@@ -256,7 +256,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("async fork migrates legacy checkpoint snapshots before writing a current header", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-checkpoint-legacy-fork-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-checkpoint-legacy-fork-"));
     tempDirs.push(dir);
 
     const legacySessionFile = path.join(dir, "legacy.jsonl");
@@ -343,7 +343,7 @@ describe("session-compaction-checkpoints", () => {
   });
 
   test("persist trims old checkpoint metadata and removes trimmed snapshot files", async () => {
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-checkpoint-trim-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-checkpoint-trim-"));
     tempDirs.push(dir);
 
     const storePath = path.join(dir, "sessions.json");
@@ -394,7 +394,7 @@ describe("session-compaction-checkpoints", () => {
       cfg: {
         session: { store: storePath },
         agents: { list: [{ id: "main", default: true }] },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       sessionKey: "main",
       sessionId,
       reason: "manual",

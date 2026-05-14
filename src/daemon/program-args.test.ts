@@ -46,8 +46,8 @@ afterEach(() => {
 
 describe("resolveGatewayProgramArguments", () => {
   it("prefers index.js over legacy entry.js when both exist in the same dist directory", async () => {
-    const entryPath = path.resolve("/opt/NexisClaw/dist/entry.js");
-    const indexPath = path.resolve("/opt/NexisClaw/dist/index.js");
+    const entryPath = path.resolve("/opt/GreenchClaw/dist/entry.js");
+    const indexPath = path.resolve("/opt/GreenchClaw/dist/index.js");
     process.argv = ["node", entryPath];
     fsMocks.realpath.mockResolvedValue(entryPath);
     fsMocks.access.mockResolvedValue(undefined);
@@ -64,9 +64,9 @@ describe("resolveGatewayProgramArguments", () => {
   });
 
   it("keeps entry.js when index.js is missing", async () => {
-    const entryPath = path.resolve("/opt/NexisClaw/dist/entry.js");
-    const indexPath = path.resolve("/opt/NexisClaw/dist/index.js");
-    const indexMjsPath = path.resolve("/opt/NexisClaw/dist/index.mjs");
+    const entryPath = path.resolve("/opt/GreenchClaw/dist/entry.js");
+    const indexPath = path.resolve("/opt/GreenchClaw/dist/index.js");
+    const indexMjsPath = path.resolve("/opt/GreenchClaw/dist/index.mjs");
     process.argv = ["node", entryPath];
     fsMocks.realpath.mockResolvedValue(entryPath);
     fsMocks.access.mockImplementation(async (target: string) => {
@@ -88,8 +88,8 @@ describe("resolveGatewayProgramArguments", () => {
   });
 
   it("uses realpath-resolved dist entry when running via npx shim", async () => {
-    const argv1 = path.resolve("/tmp/.npm/_npx/63c3/node_modules/.bin/NexisClaw");
-    const entryPath = path.resolve("/tmp/.npm/_npx/63c3/node_modules/NexisClaw/dist/entry.js");
+    const argv1 = path.resolve("/tmp/.npm/_npx/63c3/node_modules/.bin/GreenchClaw");
+    const entryPath = path.resolve("/tmp/.npm/_npx/63c3/node_modules/GreenchClaw/dist/entry.js");
     process.argv = ["node", argv1];
     fsMocks.realpath.mockResolvedValue(entryPath);
     fsMocks.access.mockImplementation(async (target: string) => {
@@ -111,13 +111,13 @@ describe("resolveGatewayProgramArguments", () => {
   });
 
   it("prefers symlinked path over realpath for stable service config", async () => {
-    // Simulates pnpm global install where node_modules/NexisClaw is a symlink
-    // to .pnpm/NexisClaw@X.Y.Z/node_modules/NexisClaw
+    // Simulates pnpm global install where node_modules/GreenchClaw is a symlink
+    // to .pnpm/GreenchClaw@X.Y.Z/node_modules/GreenchClaw
     const symlinkPath = path.resolve(
-      "/Users/test/Library/pnpm/global/5/node_modules/NexisClaw/dist/entry.js",
+      "/Users/test/Library/pnpm/global/5/node_modules/GreenchClaw/dist/entry.js",
     );
     const realpathResolved = path.resolve(
-      "/Users/test/Library/pnpm/global/5/node_modules/.pnpm/NexisClaw@2026.1.21-2/node_modules/NexisClaw/dist/entry.js",
+      "/Users/test/Library/pnpm/global/5/node_modules/.pnpm/GreenchClaw@2026.1.21-2/node_modules/GreenchClaw/dist/entry.js",
     );
     process.argv = ["node", symlinkPath];
     fsMocks.realpath.mockResolvedValue(realpathResolved);
@@ -127,14 +127,14 @@ describe("resolveGatewayProgramArguments", () => {
 
     // Should use the symlinked canonical index.js path, not the realpath-resolved versioned path
     expect(result.programArguments[1]).toBe(
-      path.resolve("/Users/test/Library/pnpm/global/5/node_modules/NexisClaw/dist/index.js"),
+      path.resolve("/Users/test/Library/pnpm/global/5/node_modules/GreenchClaw/dist/index.js"),
     );
     expect(result.programArguments[1]).not.toContain("@2026.1.21-2");
   });
 
   it("falls back to node_modules package dist when .bin path is not resolved", async () => {
-    const argv1 = path.resolve("/tmp/.npm/_npx/63c3/node_modules/.bin/NexisClaw");
-    const indexPath = path.resolve("/tmp/.npm/_npx/63c3/node_modules/NexisClaw/dist/index.js");
+    const argv1 = path.resolve("/tmp/.npm/_npx/63c3/node_modules/.bin/GreenchClaw");
+    const indexPath = path.resolve("/tmp/.npm/_npx/63c3/node_modules/GreenchClaw/dist/index.js");
     process.argv = ["node", argv1];
     fsMocks.realpath.mockRejectedValue(new Error("no realpath"));
     fsMocks.access.mockImplementation(async (target: string) => {
@@ -180,7 +180,7 @@ describe("resolveGatewayProgramArguments", () => {
   });
 
   it("uses an executable wrapper when provided", async () => {
-    const wrapperPath = path.resolve("/usr/local/bin/NexisClaw-doppler");
+    const wrapperPath = path.resolve("/usr/local/bin/GreenchClaw-doppler");
     fsMocks.stat.mockResolvedValue({ isFile: () => true } as never);
     fsMocks.access.mockResolvedValue(undefined);
 
@@ -194,7 +194,7 @@ describe("resolveGatewayProgramArguments", () => {
   });
 
   it("rejects a non-executable wrapper file", async () => {
-    const wrapperPath = path.resolve("/usr/local/bin/NexisClaw-doppler");
+    const wrapperPath = path.resolve("/usr/local/bin/GreenchClaw-doppler");
     fsMocks.stat.mockResolvedValue({ isFile: () => true } as never);
     fsMocks.access.mockRejectedValue(new Error("EACCES"));
 
@@ -203,6 +203,6 @@ describe("resolveGatewayProgramArguments", () => {
         port: 18789,
         wrapperPath,
       }),
-    ).rejects.toThrow("NEXISCLAW_WRAPPER must point to an executable file");
+    ).rejects.toThrow("GREENCHCLAW_WRAPPER must point to an executable file");
   });
 });

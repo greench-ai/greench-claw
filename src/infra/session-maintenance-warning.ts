@@ -1,6 +1,6 @@
 import type { SessionMaintenanceWarning } from "../config/sessions/store-maintenance.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { deliveryContextFromSession } from "../utils/delivery-context.shared.js";
 import { isDeliverableMessageChannel, normalizeMessageChannel } from "../utils/message-channel.js";
@@ -8,7 +8,7 @@ import { buildOutboundSessionContext } from "./outbound/session-context.js";
 import { enqueueSystemEvent } from "./system-events.js";
 
 type WarningParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   entry: SessionEntry;
   warning: SessionMaintenanceWarning;

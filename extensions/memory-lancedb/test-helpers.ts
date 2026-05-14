@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 import { afterEach, beforeEach } from "vitest";
 
 export function installTmpDirHarness(params: { prefix: string }) {
@@ -8,7 +8,7 @@ export function installTmpDirHarness(params: { prefix: string }) {
   let dbPath = "";
 
   beforeEach(async () => {
-    tmpDir = await fs.mkdtemp(path.join(resolvePreferredNexisClawTmpDir(), params.prefix));
+    tmpDir = await fs.mkdtemp(path.join(resolvePreferredGreenchClawTmpDir(), params.prefix));
     dbPath = path.join(tmpDir, "lancedb");
   });
 

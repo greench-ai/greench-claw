@@ -1,5 +1,5 @@
 import type { ChannelHeartbeatVisibilityConfig } from "../config/types.channels.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { GatewayMessageChannel } from "../utils/message-channel.js";
 
 export type ResolvedHeartbeatVisibility = {
@@ -20,7 +20,7 @@ const DEFAULT_VISIBILITY: ResolvedHeartbeatVisibility = {
  * For webchat, uses channels.defaults.heartbeat since webchat doesn't have per-channel config.
  */
 export function resolveHeartbeatVisibility(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: GatewayMessageChannel;
   accountId?: string;
 }): ResolvedHeartbeatVisibility {

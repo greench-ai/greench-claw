@@ -4,7 +4,7 @@ import {
   pathExists,
   replaceFileAtomic,
   resolvePathWithinRoot,
-} from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/security-runtime";
 import { bumpSkillsSnapshotVersion } from "../api.js";
 import { assertSkillContentSafe, scanSkillContent } from "./scanner.js";
 import type { SkillProposal, SkillScanFinding } from "./types.js";

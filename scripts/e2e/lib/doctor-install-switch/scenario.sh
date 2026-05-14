@@ -1,44 +1,44 @@
 #!/usr/bin/env bash
 set -euo pipefail
-source scripts/lib/NexisClaw-e2e-instance.sh
-NexisClaw_e2e_eval_test_state_from_b64 "${NEXISCLAW_TEST_STATE_FUNCTION_B64:?missing NEXISCLAW_TEST_STATE_FUNCTION_B64}"
+source scripts/lib/GreenchClaw-e2e-instance.sh
+GreenchClaw_e2e_eval_test_state_from_b64 "${GREENCHCLAW_TEST_STATE_FUNCTION_B64:?missing GREENCHCLAW_TEST_STATE_FUNCTION_B64}"
 
 # Keep logs focused; the npm global install step can emit noisy deprecation warnings.
 export npm_config_loglevel=error
 export npm_config_fund=false
 export npm_config_audit=false
-export NEXISCLAW_DISABLE_BUNDLED_PLUGINS=1
+export GREENCHCLAW_DISABLE_BUNDLED_PLUGINS=1
 
 # Stub systemd/loginctl so doctor + daemon flows work in Docker.
-export PATH="/tmp/NexisClaw-bin:$PATH"
-mkdir -p /tmp/NexisClaw-bin
-cp scripts/e2e/lib/doctor-install-switch/shims/systemctl /tmp/NexisClaw-bin/systemctl
-cp scripts/e2e/lib/doctor-install-switch/shims/loginctl /tmp/NexisClaw-bin/loginctl
-chmod +x /tmp/NexisClaw-bin/systemctl /tmp/NexisClaw-bin/loginctl
+export PATH="/tmp/GreenchClaw-bin:$PATH"
+mkdir -p /tmp/GreenchClaw-bin
+cp scripts/e2e/lib/doctor-install-switch/shims/systemctl /tmp/GreenchClaw-bin/systemctl
+cp scripts/e2e/lib/doctor-install-switch/shims/loginctl /tmp/GreenchClaw-bin/loginctl
+chmod +x /tmp/GreenchClaw-bin/systemctl /tmp/GreenchClaw-bin/loginctl
 
-package_tgz="${NEXISCLAW_CURRENT_PACKAGE_TGZ:?missing NEXISCLAW_CURRENT_PACKAGE_TGZ}"
-git_root="/tmp/NexisClaw-git"
+package_tgz="${GREENCHCLAW_CURRENT_PACKAGE_TGZ:?missing GREENCHCLAW_CURRENT_PACKAGE_TGZ}"
+git_root="/tmp/GreenchClaw-git"
 mkdir -p "$git_root"
 # The git-style install fixture is unpacked from the tarball so this lane does
 # not depend on checkout source files being present in the Docker image.
 tar -xzf "$package_tgz" -C "$git_root" --strip-components=1
 (
   cd "$git_root"
-  npm install --omit=optional --no-fund --no-audit >/tmp/NexisClaw-git-install.log 2>&1
+  npm install --omit=optional --no-fund --no-audit >/tmp/GreenchClaw-git-install.log 2>&1
   git init -q
-  git config user.email "docker-e2e@NexisClaw.local"
-  git config user.name "NexisClaw Docker E2E"
+  git config user.email "docker-e2e@GreenchClaw.local"
+  git config user.name "GreenchClaw Docker E2E"
   git add -A
   git commit -qm "test fixture"
 )
-npm_log="/tmp/NexisClaw-doctor-switch-npm-install.log"
+npm_log="/tmp/GreenchClaw-doctor-switch-npm-install.log"
 if ! npm install -g --prefix /tmp/npm-prefix --omit=optional "$package_tgz" >"$npm_log" 2>&1; then
   cat "$npm_log"
   exit 1
 fi
 
-npm_bin="/tmp/npm-prefix/bin/NexisClaw"
-npm_root="/tmp/npm-prefix/lib/node_modules/NexisClaw"
+npm_bin="/tmp/npm-prefix/bin/GreenchClaw"
+npm_root="/tmp/npm-prefix/lib/node_modules/GreenchClaw"
 if [ -f "$npm_root/dist/index.mjs" ]; then
   npm_entry="$npm_root/dist/index.mjs"
 else
@@ -50,7 +50,7 @@ if [ -f "$git_root/dist/index.mjs" ]; then
 else
   git_entry="$git_root/dist/index.js"
 fi
-git_cli="$git_root/NexisClaw.mjs"
+git_cli="$git_root/GreenchClaw.mjs"
 
 package_version="$(node -p "require(\"$npm_root/package.json\").version")"
 is_legacy_package_acceptance_compat() {
@@ -127,12 +127,12 @@ run_flow() {
   local install_expected="$3"
   local doctor_cmd="$4"
   local doctor_expected="$5"
-  local install_log="/tmp/NexisClaw-doctor-switch-${name}-install.log"
-  local doctor_log="/tmp/NexisClaw-doctor-switch-${name}-doctor.log"
-  local command_timeout="${NEXISCLAW_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-900s}"
+  local install_log="/tmp/GreenchClaw-doctor-switch-${name}-install.log"
+  local doctor_log="/tmp/GreenchClaw-doctor-switch-${name}-doctor.log"
+  local command_timeout="${GREENCHCLAW_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-900s}"
 
   echo "== Flow: $name =="
-  NexisClaw_test_state_create "switch-${name}" empty
+  GreenchClaw_test_state_create "switch-${name}" empty
   export USER="testuser"
 
   if ! timeout "$command_timeout" bash -c "$install_cmd" >"$install_log" 2>&1; then
@@ -142,7 +142,7 @@ run_flow() {
   rm -f "$HOME/.zshrc" "$HOME/.bashrc" "$HOME/.bash_profile"
   rm -rf "$HOME/.config/fish" "$HOME/.config/powershell"
 
-  unit_path="$HOME/.config/systemd/user/NexisClaw-gateway.service"
+  unit_path="$HOME/.config/systemd/user/GreenchClaw-gateway.service"
   if [ ! -f "$unit_path" ]; then
     echo "Missing unit file: $unit_path"
     exit 1
@@ -161,27 +161,27 @@ run_flow \
   "npm-to-git" \
   "$npm_bin daemon install --force" \
   "$npm_entry" \
-  "NEXISCLAW_UPDATE_IN_PROGRESS=1 node $git_cli doctor --repair --force --yes --non-interactive" \
+  "GREENCHCLAW_UPDATE_IN_PROGRESS=1 node $git_cli doctor --repair --force --yes --non-interactive" \
   "$git_entry"
 
 run_flow \
   "git-to-npm" \
   "node $git_cli daemon install --force" \
   "$git_entry" \
-  "NEXISCLAW_UPDATE_IN_PROGRESS=1 $npm_bin doctor --repair --force --yes --non-interactive" \
+  "GREENCHCLAW_UPDATE_IN_PROGRESS=1 $npm_bin doctor --repair --force --yes --non-interactive" \
   "$npm_entry"
 
 run_proxy_env_flow() {
   local name="proxy-env-cleanup"
-  local install_log="/tmp/NexisClaw-doctor-switch-${name}-install.log"
-  local doctor_log="/tmp/NexisClaw-doctor-switch-${name}-doctor.log"
-  local command_timeout="${NEXISCLAW_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-900s}"
+  local install_log="/tmp/GreenchClaw-doctor-switch-${name}-install.log"
+  local doctor_log="/tmp/GreenchClaw-doctor-switch-${name}-doctor.log"
+  local command_timeout="${GREENCHCLAW_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-900s}"
 
   echo "== Flow: $name =="
-  NexisClaw_test_state_create "switch-${name}" empty
+  GreenchClaw_test_state_create "switch-${name}" empty
   export USER="testuser"
 
-  unit_path="$HOME/.config/systemd/user/NexisClaw-gateway.service"
+  unit_path="$HOME/.config/systemd/user/GreenchClaw-gateway.service"
   if ! timeout "$command_timeout" env \
     HTTP_PROXY="http://proxy.local:7890" \
     HTTPS_PROXY="https://proxy.local:7890" \
@@ -198,7 +198,7 @@ run_proxy_env_flow() {
     printf "%s\n" "Environment=HTTP_PROXY=http://stale-proxy.local:7890"
     printf "%s\n" "Environment=HTTPS_PROXY=https://stale-proxy.local:7890"
   } >>"$unit_path"
-  if ! timeout "$command_timeout" env NEXISCLAW_UPDATE_IN_PROGRESS=1 \
+  if ! timeout "$command_timeout" env GREENCHCLAW_UPDATE_IN_PROGRESS=1 \
     node "$git_cli" doctor --repair --force --yes --non-interactive >"$doctor_log" 2>&1; then
     cat "$doctor_log"
     exit 1
@@ -211,24 +211,24 @@ run_proxy_env_flow
 
 run_wrapper_flow() {
   local name="wrapper-persistence"
-  local install_log="/tmp/NexisClaw-doctor-switch-${name}-install.log"
-  local reinstall_log="/tmp/NexisClaw-doctor-switch-${name}-reinstall.log"
-  local env_repair_log="/tmp/NexisClaw-doctor-switch-${name}-env-repair.log"
-  local doctor_log="/tmp/NexisClaw-doctor-switch-${name}-doctor.log"
-  local clear_log="/tmp/NexisClaw-doctor-switch-${name}-clear.log"
-  local command_timeout="${NEXISCLAW_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-900s}"
+  local install_log="/tmp/GreenchClaw-doctor-switch-${name}-install.log"
+  local reinstall_log="/tmp/GreenchClaw-doctor-switch-${name}-reinstall.log"
+  local env_repair_log="/tmp/GreenchClaw-doctor-switch-${name}-env-repair.log"
+  local doctor_log="/tmp/GreenchClaw-doctor-switch-${name}-doctor.log"
+  local clear_log="/tmp/GreenchClaw-doctor-switch-${name}-clear.log"
+  local command_timeout="${GREENCHCLAW_DOCKER_DOCTOR_SWITCH_COMMAND_TIMEOUT:-900s}"
 
   echo "== Flow: $name =="
-  NexisClaw_test_state_create "switch-${name}" empty
+  GreenchClaw_test_state_create "switch-${name}" empty
   export USER="testuser"
   mkdir -p "$HOME/.local/bin"
-  local wrapper="$HOME/.local/bin/NexisClaw-wrapper"
+  local wrapper="$HOME/.local/bin/GreenchClaw-wrapper"
   node scripts/e2e/lib/doctor-install-switch/write-wrapper.mjs \
     "$wrapper" \
     "$npm_bin" \
-    "$HOME/NexisClaw-wrapper-argv.log"
+    "$HOME/GreenchClaw-wrapper-argv.log"
 
-  local unit_path="$HOME/.config/systemd/user/NexisClaw-gateway.service"
+  local unit_path="$HOME/.config/systemd/user/GreenchClaw-gateway.service"
 
   if ! timeout "$command_timeout" "$npm_bin" gateway install --wrapper "$wrapper" --force >"$install_log" 2>&1; then
     cat "$install_log"
@@ -236,7 +236,7 @@ run_wrapper_flow() {
   fi
   assert_exec_arg "$unit_path" 1 "$wrapper"
   assert_exec_arg "$unit_path" 2 "gateway"
-  assert_env_value "$unit_path" "NEXISCLAW_WRAPPER" "$wrapper"
+  assert_env_value "$unit_path" "GREENCHCLAW_WRAPPER" "$wrapper"
 
   if ! timeout "$command_timeout" "$npm_bin" gateway install --force >"$reinstall_log" 2>&1; then
     cat "$reinstall_log"
@@ -244,41 +244,41 @@ run_wrapper_flow() {
   fi
   assert_exec_arg "$unit_path" 1 "$wrapper"
   assert_exec_arg "$unit_path" 2 "gateway"
-  assert_env_value "$unit_path" "NEXISCLAW_WRAPPER" "$wrapper"
+  assert_env_value "$unit_path" "GREENCHCLAW_WRAPPER" "$wrapper"
 
-  sed -i "/^Environment=NEXISCLAW_WRAPPER=/d" "$unit_path"
+  sed -i "/^Environment=GREENCHCLAW_WRAPPER=/d" "$unit_path"
   if ! timeout "$command_timeout" "$npm_bin" gateway install --wrapper "$wrapper" >"$env_repair_log" 2>&1; then
     cat "$env_repair_log"
     exit 1
   fi
   assert_exec_arg "$unit_path" 1 "$wrapper"
-  assert_env_value "$unit_path" "NEXISCLAW_WRAPPER" "$wrapper"
+  assert_env_value "$unit_path" "GREENCHCLAW_WRAPPER" "$wrapper"
 
-  sed -i "s#^Environment=NEXISCLAW_WRAPPER=.*#Environment=NEXISCLAW_WRAPPER=/tmp/stale-NexisClaw-wrapper#" "$unit_path"
+  sed -i "s#^Environment=GREENCHCLAW_WRAPPER=.*#Environment=GREENCHCLAW_WRAPPER=/tmp/stale-GreenchClaw-wrapper#" "$unit_path"
   if ! timeout "$command_timeout" "$npm_bin" gateway install --wrapper "$wrapper" >"$env_repair_log" 2>&1; then
     cat "$env_repair_log"
     exit 1
   fi
   assert_exec_arg "$unit_path" 1 "$wrapper"
-  assert_env_value "$unit_path" "NEXISCLAW_WRAPPER" "$wrapper"
+  assert_env_value "$unit_path" "GREENCHCLAW_WRAPPER" "$wrapper"
 
   if ! timeout "$command_timeout" node "$git_cli" doctor --repair --force --yes >"$doctor_log" 2>&1; then
     cat "$doctor_log"
     exit 1
   fi
-  if ! grep -Fq "Gateway service invokes NEXISCLAW_WRAPPER:" "$doctor_log"; then
+  if ! grep -Fq "Gateway service invokes GREENCHCLAW_WRAPPER:" "$doctor_log"; then
     echo "Expected doctor to report active wrapper"
     cat "$doctor_log"
     exit 1
   fi
   assert_exec_arg "$unit_path" 1 "$wrapper"
-  assert_env_value "$unit_path" "NEXISCLAW_WRAPPER" "$wrapper"
+  assert_env_value "$unit_path" "GREENCHCLAW_WRAPPER" "$wrapper"
 
-  if ! timeout "$command_timeout" env NEXISCLAW_WRAPPER= "$npm_bin" gateway install --force >"$clear_log" 2>&1; then
+  if ! timeout "$command_timeout" env GREENCHCLAW_WRAPPER= "$npm_bin" gateway install --force >"$clear_log" 2>&1; then
     cat "$clear_log"
     exit 1
   fi
-  assert_no_env_key "$unit_path" "NEXISCLAW_WRAPPER"
+  assert_no_env_key "$unit_path" "GREENCHCLAW_WRAPPER"
   assert_entrypoint "$unit_path" "$npm_entry"
 }
 

@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { isRecord, normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { isRecord, normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveMSTeamsStorePath } from "./storage.js";
 import { readJsonFile, withFileLock, writeJsonFile } from "./store-fs.js";
 
@@ -99,13 +99,13 @@ export function extractMSTeamsPollVote(
     return null;
   }
   const pollId =
-    readNestedString(value, ["NexisClawPollId"]) ??
+    readNestedString(value, ["GreenchClawPollId"]) ??
     readNestedString(value, ["pollId"]) ??
-    readNestedString(value, ["NexisClaw", "pollId"]) ??
-    readNestedString(value, ["NexisClaw", "poll", "id"]) ??
-    readNestedString(value, ["data", "NexisClawPollId"]) ??
+    readNestedString(value, ["GreenchClaw", "pollId"]) ??
+    readNestedString(value, ["GreenchClaw", "poll", "id"]) ??
+    readNestedString(value, ["data", "GreenchClawPollId"]) ??
     readNestedString(value, ["data", "pollId"]) ??
-    readNestedString(value, ["data", "NexisClaw", "pollId"]);
+    readNestedString(value, ["data", "GreenchClaw", "pollId"]);
   if (!pollId) {
     return null;
   }
@@ -182,14 +182,14 @@ export function buildMSTeamsPollCard(params: {
         type: "Action.Submit",
         title: "Vote",
         data: {
-          NexisClawPollId: pollId,
+          GreenchClawPollId: pollId,
           pollId,
         },
         msteams: {
           type: "messageBack",
-          text: "NexisClaw poll vote",
+          text: "GreenchClaw poll vote",
           displayText: "Vote recorded",
-          value: { NexisClawPollId: pollId, pollId },
+          value: { GreenchClawPollId: pollId, pollId },
         },
       },
     ],

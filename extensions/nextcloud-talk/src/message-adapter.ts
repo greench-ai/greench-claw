@@ -1,4 +1,4 @@
-import { defineChannelMessageAdapter } from "NexisClaw/plugin-sdk/channel-message";
+import { defineChannelMessageAdapter } from "GreenchClaw/plugin-sdk/channel-message";
 import { sendMessageNextcloudTalk } from "./send.js";
 import type { CoreConfig } from "./types.js";
 

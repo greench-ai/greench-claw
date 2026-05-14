@@ -3,7 +3,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { resolveStateDir } from "../config/paths.js";
-import { resolvePreferredNexisClawTmpDir } from "../infra/tmp-NexisClaw-dir.js";
+import { resolvePreferredGreenchClawTmpDir } from "../infra/tmp-GreenchClaw-dir.js";
 import { createEmptyPluginRegistry } from "../plugins/registry-empty.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../plugins/runtime.js";
 
@@ -13,7 +13,7 @@ let optimizeImageToJpeg: typeof import("./web-media.js").optimizeImageToJpeg;
 
 const TINY_PNG_BASE64 =
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/woAAn8B9FD5fHAAAAAASUVORK5CYII=";
-const CANVAS_HOST_PATH = "/__NexisClaw__/canvas";
+const CANVAS_HOST_PATH = "/__GreenchClaw__/canvas";
 
 let fixtureRoot = "";
 let tinyPngFile = "";
@@ -39,7 +39,7 @@ function installCanvasMediaResolver() {
 
 beforeAll(async () => {
   ({ LocalMediaAccessError, loadWebMedia, optimizeImageToJpeg } = await import("./web-media.js"));
-  fixtureRoot = await fs.mkdtemp(path.join(resolvePreferredNexisClawTmpDir(), "web-media-core-"));
+  fixtureRoot = await fs.mkdtemp(path.join(resolvePreferredGreenchClawTmpDir(), "web-media-core-"));
   tinyPngFile = path.join(fixtureRoot, "tiny.png");
   await fs.writeFile(tinyPngFile, Buffer.from(TINY_PNG_BASE64, "base64"));
   workspaceDir = path.join(fixtureRoot, "workspace");
@@ -309,7 +309,7 @@ describe("loadWebMedia", () => {
   });
 
   it("resolves home-relative local media paths through allowed local roots", async () => {
-    vi.stubEnv("NEXISCLAW_HOME", fixtureRoot);
+    vi.stubEnv("GREENCHCLAW_HOME", fixtureRoot);
     try {
       const result = await loadWebMedia("~/workspace/chart.png", {
         maxBytes: 1024 * 1024,

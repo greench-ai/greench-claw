@@ -1,6 +1,6 @@
 # Bundled Hooks
 
-This directory contains hooks that ship with NexisClaw. These hooks are automatically discovered and can be enabled/disabled via CLI or configuration.
+This directory contains hooks that ship with GreenchClaw. These hooks are automatically discovered and can be enabled/disabled via CLI or configuration.
 
 ## Available Hooks
 
@@ -10,12 +10,12 @@ Automatically saves session context to memory when you issue `/new` or `/reset`.
 
 **Events**: `command:new`, `command:reset`
 **What it does**: Creates a dated memory file with LLM-generated slug based on conversation content.
-**Output**: `<workspace>/memory/YYYY-MM-DD-slug.md` (defaults to `~/.NexisClaw/workspace`)
+**Output**: `<workspace>/memory/YYYY-MM-DD-slug.md` (defaults to `~/.GreenchClaw/workspace`)
 
 **Enable**:
 
 ```bash
-NexisClaw hooks enable session-memory
+GreenchClaw hooks enable session-memory
 ```
 
 ### 📎 bootstrap-extra-files
@@ -29,7 +29,7 @@ Injects extra bootstrap files (for example monorepo `AGENTS.md`/`TOOLS.md`) duri
 **Enable**:
 
 ```bash
-NexisClaw hooks enable bootstrap-extra-files
+GreenchClaw hooks enable bootstrap-extra-files
 ```
 
 ### 📝 command-logger
@@ -38,12 +38,12 @@ Logs all command events to a centralized audit file.
 
 **Events**: `command` (all commands)
 **What it does**: Appends JSONL entries to command log file.
-**Output**: `~/.NexisClaw/logs/commands.log`
+**Output**: `~/.GreenchClaw/logs/commands.log`
 
 **Enable**:
 
 ```bash
-NexisClaw hooks enable command-logger
+GreenchClaw hooks enable command-logger
 ```
 
 ### 🚀 boot-md
@@ -57,7 +57,7 @@ Runs `BOOT.md` whenever the gateway starts (after channels start).
 **Enable**:
 
 ```bash
-NexisClaw hooks enable boot-md
+GreenchClaw hooks enable boot-md
 ```
 
 ## Hook Structure
@@ -81,9 +81,9 @@ session-memory/
 ---
 name: my-hook
 description: "Short description"
-homepage: https://docs.NexisClaw.ai/automation/hooks#my-hook
+homepage: https://docs.GreenchClaw.ai/automation/hooks#my-hook
 metadata:
-  { "NexisClaw": { "emoji": "🔗", "events": ["command:new"], "requires": { "bins": ["node"] } } }
+  { "GreenchClaw": { "emoji": "🔗", "events": ["command:new"], "requires": { "bins": ["node"] } } }
 ---
 # Hook Title
 
@@ -107,7 +107,7 @@ Documentation goes here...
 To create your own hooks, place them in:
 
 - **Workspace hooks**: `<workspace>/hooks/` (highest precedence)
-- **Managed hooks**: `~/.NexisClaw/hooks/` (shared across workspaces)
+- **Managed hooks**: `~/.GreenchClaw/hooks/` (shared across workspaces)
 
 Custom hooks follow the same structure as bundled hooks.
 
@@ -116,31 +116,31 @@ Custom hooks follow the same structure as bundled hooks.
 List all hooks:
 
 ```bash
-NexisClaw hooks list
+GreenchClaw hooks list
 ```
 
 Show hook details:
 
 ```bash
-NexisClaw hooks info session-memory
+GreenchClaw hooks info session-memory
 ```
 
 Check hook status:
 
 ```bash
-NexisClaw hooks check
+GreenchClaw hooks check
 ```
 
 Enable/disable:
 
 ```bash
-NexisClaw hooks enable session-memory
-NexisClaw hooks disable command-logger
+GreenchClaw hooks enable session-memory
+GreenchClaw hooks disable command-logger
 ```
 
 ## Configuration
 
-Hooks can be configured in `~/.NexisClaw/NexisClaw.json`:
+Hooks can be configured in `~/.GreenchClaw/GreenchClaw.json`:
 
 ```json
 {
@@ -215,11 +215,11 @@ export default myHandler;
 Test your hooks by:
 
 1. Place hook in workspace hooks directory
-2. Restart gateway: `pkill -9 -f 'NexisClaw.*gateway' && pnpm NexisClaw gateway`
-3. Enable the hook: `NexisClaw hooks enable my-hook`
+2. Restart gateway: `pkill -9 -f 'GreenchClaw.*gateway' && pnpm GreenchClaw gateway`
+3. Enable the hook: `GreenchClaw hooks enable my-hook`
 4. Trigger the event (e.g., send `/new` command)
 5. Check gateway logs for hook execution
 
 ## Documentation
 
-Full documentation: https://docs.NexisClaw.ai/automation/hooks
+Full documentation: https://docs.GreenchClaw.ai/automation/hooks

@@ -27,8 +27,8 @@ import {
   hasConfiguredSecretInput,
   normalizeResolvedSecretInputString,
   normalizeSecretInputString,
-} from "NexisClaw/plugin-sdk/secret-input";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+} from "GreenchClaw/plugin-sdk/secret-input";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 import {
   registerPlatformAdapter,
   registerPlatformAdapterFactory,
@@ -52,7 +52,7 @@ function createBuiltinAdapter(): PlatformAdapter {
     },
 
     async downloadFile(url: string, destDir: string, filename?: string): Promise<string> {
-      const { fetchRemoteMedia } = await import("NexisClaw/plugin-sdk/media-runtime");
+      const { fetchRemoteMedia } = await import("GreenchClaw/plugin-sdk/media-runtime");
       const result = await fetchRemoteMedia({ url, filePathHint: filename });
       const fs = await import("node:fs");
       const path = await import("node:path");
@@ -65,7 +65,7 @@ function createBuiltinAdapter(): PlatformAdapter {
     },
 
     async fetchMedia(options: FetchMediaOptions): Promise<FetchMediaResult> {
-      const { fetchRemoteMedia } = await import("NexisClaw/plugin-sdk/media-runtime");
+      const { fetchRemoteMedia } = await import("GreenchClaw/plugin-sdk/media-runtime");
       const result = await fetchRemoteMedia({
         url: options.url,
         filePathHint: options.filePathHint,
@@ -78,7 +78,7 @@ function createBuiltinAdapter(): PlatformAdapter {
     },
 
     getTempDir(): string {
-      return resolvePreferredNexisClawTmpDir();
+      return resolvePreferredGreenchClawTmpDir();
     },
 
     hasConfiguredSecret(value: unknown): boolean {
@@ -95,9 +95,9 @@ function createBuiltinAdapter(): PlatformAdapter {
 
     async resolveApproval(approvalId: string, decision: string): Promise<boolean> {
       try {
-        const { getRuntimeConfig } = await import("NexisClaw/plugin-sdk/runtime-config-snapshot");
+        const { getRuntimeConfig } = await import("GreenchClaw/plugin-sdk/runtime-config-snapshot");
         const { resolveApprovalOverGateway } =
-          await import("NexisClaw/plugin-sdk/approval-gateway-runtime");
+          await import("GreenchClaw/plugin-sdk/approval-gateway-runtime");
         const cfg = getRuntimeConfig();
         await resolveApprovalOverGateway({
           cfg,

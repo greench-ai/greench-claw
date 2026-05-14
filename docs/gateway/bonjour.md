@@ -6,7 +6,7 @@ read_when:
 title: "Bonjour discovery"
 ---
 
-NexisClaw can use Bonjour (mDNS / DNS-SD) to discover an active Gateway (WebSocket endpoint).
+GreenchClaw can use Bonjour (mDNS / DNS-SD) to discover an active Gateway (WebSocket endpoint).
 Multicast `local.` browsing is a **LAN-only convenience**. The bundled `bonjour`
 plugin owns LAN advertising. It auto-starts on macOS hosts and is opt-in on
 Linux, Windows, and containerized Gateway deployments. For cross-network discovery, the same
@@ -22,12 +22,12 @@ boundary. You can keep the same discovery UX by switching to **unicast DNS-SD**
 High-level steps:
 
 1. Run a DNS server on the gateway host (reachable over Tailnet).
-2. Publish DNS-SD records for `_NexisClaw-gw._tcp` under a dedicated zone
-   (example: `NexisClaw.internal.`).
+2. Publish DNS-SD records for `_GreenchClaw-gw._tcp` under a dedicated zone
+   (example: `GreenchClaw.internal.`).
 3. Configure Tailscale **split DNS** so your chosen domain resolves via that
    DNS server for clients (including iOS).
 
-NexisClaw supports any discovery domain; `NexisClaw.internal.` is just an example.
+GreenchClaw supports any discovery domain; `GreenchClaw.internal.` is just an example.
 iOS/Android nodes browse both `local.` and your configured wide-area domain.
 
 ### Gateway config (recommended)
@@ -42,19 +42,19 @@ iOS/Android nodes browse both `local.` and your configured wide-area domain.
 ### One-time DNS server setup (gateway host)
 
 ```bash
-NexisClaw dns setup --apply
+GreenchClaw dns setup --apply
 ```
 
 This installs CoreDNS and configures it to:
 
 - listen on port 53 only on the gateway's Tailscale interfaces
-- serve your chosen domain (example: `NexisClaw.internal.`) from `~/.NexisClaw/dns/<domain>.db`
+- serve your chosen domain (example: `GreenchClaw.internal.`) from `~/.GreenchClaw/dns/<domain>.db`
 
 Validate from a tailnet-connected machine:
 
 ```bash
-dns-sd -B _NexisClaw-gw._tcp NexisClaw.internal.
-dig @<TAILNET_IPV4> -p 53 _NexisClaw-gw._tcp.NexisClaw.internal PTR +short
+dns-sd -B _GreenchClaw-gw._tcp GreenchClaw.internal.
+dig @<TAILNET_IPV4> -p 53 _GreenchClaw-gw._tcp.GreenchClaw.internal PTR +short
 ```
 
 ### Tailscale DNS settings
@@ -65,7 +65,7 @@ In the Tailscale admin console:
 - Add split DNS so your discovery domain uses that nameserver.
 
 Once clients accept tailnet DNS, iOS nodes and CLI discovery can browse
-`_NexisClaw-gw._tcp` in your discovery domain without multicast.
+`_GreenchClaw-gw._tcp` in your discovery domain without multicast.
 
 ### Gateway listener security (recommended)
 
@@ -74,18 +74,18 @@ access, bind explicitly and keep auth enabled.
 
 For tailnet-only setups:
 
-- Set `gateway.bind: "tailnet"` in `~/.NexisClaw/NexisClaw.json`.
+- Set `gateway.bind: "tailnet"` in `~/.GreenchClaw/GreenchClaw.json`.
 - Restart the Gateway (or restart the macOS menubar app).
 
 ## What advertises
 
-Only the Gateway advertises `_NexisClaw-gw._tcp`. LAN multicast advertising is
+Only the Gateway advertises `_GreenchClaw-gw._tcp`. LAN multicast advertising is
 provided by the bundled `bonjour` plugin when the plugin is enabled; wide-area
 DNS-SD publishing remains Gateway-owned.
 
 ## Service types
 
-- `_NexisClaw-gw._tcp` - gateway transport beacon (used by macOS/iOS/Android nodes).
+- `_GreenchClaw-gw._tcp` - gateway transport beacon (used by macOS/iOS/Android nodes).
 
 ## TXT keys (non-secret hints)
 
@@ -118,13 +118,13 @@ Useful built-in tools:
 - Browse instances:
 
   ```bash
-  dns-sd -B _NexisClaw-gw._tcp local.
+  dns-sd -B _GreenchClaw-gw._tcp local.
   ```
 
 - Resolve one instance (replace `<instance>`):
 
   ```bash
-  dns-sd -L "<instance>" _NexisClaw-gw._tcp local.
+  dns-sd -L "<instance>" _GreenchClaw-gw._tcp local.
   ```
 
 If browsing works but resolving fails, you're usually hitting a LAN policy or
@@ -142,19 +142,19 @@ The Gateway writes a rolling log file (printed on startup as
 - `bonjour: disabling advertiser after ... failed restarts ...`
 
 The watchdog treats active `probing`, `announcing`, and fresh conflict-renames as
-in-progress states. If the service never reaches `announced`, NexisClaw eventually
+in-progress states. If the service never reaches `announced`, GreenchClaw eventually
 recreates the advertiser and, after repeated failures, disables Bonjour for that
 Gateway process instead of re-advertising forever.
 
 Bonjour uses the system hostname for the advertised `.local` host when it is a
 valid DNS label. If the system hostname contains spaces, underscores, or another
-invalid DNS-label character, NexisClaw falls back to `NexisClaw.local`. Set
-`NEXISCLAW_MDNS_HOSTNAME=<name>` before starting the Gateway when you need an
+invalid DNS-label character, GreenchClaw falls back to `GreenchClaw.local`. Set
+`GREENCHCLAW_MDNS_HOSTNAME=<name>` before starting the Gateway when you need an
 explicit host label.
 
 ## Debugging on iOS node
 
-The iOS node uses `NWBrowser` to discover `_NexisClaw-gw._tcp`.
+The iOS node uses `NWBrowser` to discover `_GreenchClaw-gw._tcp`.
 
 To capture logs:
 
@@ -172,7 +172,7 @@ Enable Bonjour explicitly when same-LAN auto-discovery is useful on Linux,
 Windows, or another non-macOS host:
 
 ```bash
-NexisClaw plugins enable bonjour
+GreenchClaw plugins enable bonjour
 ```
 
 When enabled, Bonjour uses `discovery.mdns.mode` to decide how much TXT metadata
@@ -193,7 +193,7 @@ DNS-SD, but LAN auto-discovery is not reliable.
 Prefer the existing environment override when the problem is deployment-scoped:
 
 ```bash
-NEXISCLAW_DISABLE_BONJOUR=1
+GREENCHCLAW_DISABLE_BONJOUR=1
 ```
 
 That disables LAN multicast advertising without changing plugin configuration.
@@ -201,16 +201,16 @@ It is safe for Docker images, service files, launch scripts, and one-off
 debugging because the setting disappears when the environment does.
 
 Use plugin configuration when you intentionally want to turn off the bundled LAN
-discovery plugin for that NexisClaw config:
+discovery plugin for that GreenchClaw config:
 
 ```bash
-NexisClaw plugins disable bonjour
+GreenchClaw plugins disable bonjour
 ```
 
 ## Docker gotchas
 
 The bundled Bonjour plugin auto-disables LAN multicast advertising in detected
-containers when `NEXISCLAW_DISABLE_BONJOUR` is unset. Docker bridge networks
+containers when `GREENCHCLAW_DISABLE_BONJOUR` is unset. Docker bridge networks
 usually do not forward mDNS multicast (`224.0.0.251:5353`) between the container
 and the LAN, so advertising from the container rarely makes discovery work.
 
@@ -219,12 +219,12 @@ Important gotchas:
 - Bonjour auto-starts on macOS hosts and is opt-in elsewhere. Leaving it
   disabled does not stop the Gateway; it only skips LAN multicast advertising.
 - Disabling Bonjour does not change `gateway.bind`; Docker still defaults to
-  `NEXISCLAW_GATEWAY_BIND=lan` so the published host port can work.
+  `GREENCHCLAW_GATEWAY_BIND=lan` so the published host port can work.
 - Disabling Bonjour does not disable wide-area DNS-SD. Use wide-area discovery
   or Tailnet when the Gateway and node are not on the same LAN.
-- Reusing the same `NEXISCLAW_CONFIG_DIR` outside Docker does not persist the
+- Reusing the same `GREENCHCLAW_CONFIG_DIR` outside Docker does not persist the
   container auto-disable policy.
-- Set `NEXISCLAW_DISABLE_BONJOUR=0` only for host networking, macvlan, or another
+- Set `GREENCHCLAW_DISABLE_BONJOUR=0` only for host networking, macvlan, or another
   network where mDNS multicast is known to pass; set it to `1` to force-disable.
 
 ## Troubleshooting disabled Bonjour
@@ -234,7 +234,7 @@ If a node no longer auto-discovers the Gateway after Docker setup:
 1. Confirm whether the Gateway is running in auto, forced-on, or forced-off mode:
 
    ```bash
-   docker compose config | grep NEXISCLAW_DISABLE_BONJOUR
+   docker compose config | grep GREENCHCLAW_DISABLE_BONJOUR
    ```
 
 2. Confirm the Gateway itself is reachable through the published port:
@@ -250,14 +250,14 @@ If a node no longer auto-discovers the Gateway after Docker setup:
      wide-area DNS-SD
 
 4. If you deliberately enabled the Bonjour plugin in Docker and forced advertising
-   with `NEXISCLAW_DISABLE_BONJOUR=0`, test multicast from the host:
+   with `GREENCHCLAW_DISABLE_BONJOUR=0`, test multicast from the host:
 
    ```bash
-   dns-sd -B _NexisClaw-gw._tcp local.
+   dns-sd -B _GreenchClaw-gw._tcp local.
    ```
 
    If browsing is empty or the Gateway logs show repeated ciao watchdog
-   cancellations, restore `NEXISCLAW_DISABLE_BONJOUR=1` and use a direct or
+   cancellations, restore `GREENCHCLAW_DISABLE_BONJOUR=1` and use a direct or
    Tailnet route.
 
 ## Common failure modes
@@ -266,10 +266,10 @@ If a node no longer auto-discovers the Gateway after Docker setup:
 - **Multicast blocked**: some Wi-Fi networks disable mDNS.
 - **Advertiser stuck in probing/announcing**: hosts with blocked multicast,
   container bridges, WSL, or interface churn can leave the ciao advertiser in a
-  non-announced state. NexisClaw retries a few times and then disables Bonjour
+  non-announced state. GreenchClaw retries a few times and then disables Bonjour
   for the current Gateway process instead of restarting the advertiser forever.
 - **Docker bridge networking**: Bonjour auto-disables in detected containers.
-  Set `NEXISCLAW_DISABLE_BONJOUR=0` only for host, macvlan, or another
+  Set `GREENCHCLAW_DISABLE_BONJOUR=0` only for host, macvlan, or another
   mDNS-capable network.
 - **Sleep / interface churn**: macOS may temporarily drop mDNS results; retry.
 - **Browse works but resolve fails**: keep machine names simple (avoid emojis or
@@ -287,15 +287,15 @@ sequences (e.g. spaces become `\032`).
 ## Enabling / disabling / configuration
 
 - macOS hosts auto-start the bundled LAN discovery plugin by default.
-- `NexisClaw plugins enable bonjour` enables the bundled LAN discovery plugin on hosts where it is not default-enabled.
-- `NexisClaw plugins disable bonjour` disables LAN multicast advertising by disabling the bundled plugin.
-- `NEXISCLAW_DISABLE_BONJOUR=1` disables LAN multicast advertising without changing plugin config; accepted truthy values are `1`, `true`, `yes`, and `on` (legacy: `NEXISCLAW_DISABLE_BONJOUR`).
-- `NEXISCLAW_DISABLE_BONJOUR=0` forces LAN multicast advertising on, including inside detected containers; accepted falsy values are `0`, `false`, `no`, and `off`.
-- When the Bonjour plugin is enabled and `NEXISCLAW_DISABLE_BONJOUR` is unset, Bonjour advertises on normal hosts and auto-disables inside detected containers.
-- `gateway.bind` in `~/.NexisClaw/NexisClaw.json` controls the Gateway bind mode.
-- `NEXISCLAW_SSH_PORT` overrides the SSH port when `sshPort` is advertised (legacy: `NEXISCLAW_SSH_PORT`).
-- `NEXISCLAW_TAILNET_DNS` publishes a MagicDNS hint in TXT when mDNS full mode is enabled (legacy: `NEXISCLAW_TAILNET_DNS`).
-- `NEXISCLAW_CLI_PATH` overrides the advertised CLI path (legacy: `NEXISCLAW_CLI_PATH`).
+- `GreenchClaw plugins enable bonjour` enables the bundled LAN discovery plugin on hosts where it is not default-enabled.
+- `GreenchClaw plugins disable bonjour` disables LAN multicast advertising by disabling the bundled plugin.
+- `GREENCHCLAW_DISABLE_BONJOUR=1` disables LAN multicast advertising without changing plugin config; accepted truthy values are `1`, `true`, `yes`, and `on` (legacy: `GREENCHCLAW_DISABLE_BONJOUR`).
+- `GREENCHCLAW_DISABLE_BONJOUR=0` forces LAN multicast advertising on, including inside detected containers; accepted falsy values are `0`, `false`, `no`, and `off`.
+- When the Bonjour plugin is enabled and `GREENCHCLAW_DISABLE_BONJOUR` is unset, Bonjour advertises on normal hosts and auto-disables inside detected containers.
+- `gateway.bind` in `~/.GreenchClaw/GreenchClaw.json` controls the Gateway bind mode.
+- `GREENCHCLAW_SSH_PORT` overrides the SSH port when `sshPort` is advertised (legacy: `GREENCHCLAW_SSH_PORT`).
+- `GREENCHCLAW_TAILNET_DNS` publishes a MagicDNS hint in TXT when mDNS full mode is enabled (legacy: `GREENCHCLAW_TAILNET_DNS`).
+- `GREENCHCLAW_CLI_PATH` overrides the advertised CLI path (legacy: `GREENCHCLAW_CLI_PATH`).
 
 ## Related docs
 

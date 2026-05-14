@@ -1,10 +1,10 @@
 {
-  "name": "@NexisClaw/codex",
+  "name": "@GreenchClaw/codex",
   "version": "2026.5.12-beta.1",
-  "description": "NexisClaw Codex harness and model provider plugin",
+  "description": "GreenchClaw Codex harness and model provider plugin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NexisClaw/NexisClaw"
+    "url": "https://github.com/GreenchClaw/GreenchClaw"
   },
   "type": "module",
   "dependencies": {
@@ -15,14 +15,14 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@NexisClaw/codex",
+      "npmSpec": "@GreenchClaw/codex",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.1-beta.1"
     },
@@ -30,7 +30,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "NexisClawVersion": "2026.5.12-beta.1"
+      "GreenchClawVersion": "2026.5.12-beta.1"
     },
     "release": {
       "publishToClawHub": true,

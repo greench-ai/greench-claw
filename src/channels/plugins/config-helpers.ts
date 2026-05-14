@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { DEFAULT_ACCOUNT_ID } from "../../routing/session-key.js";
 
 type ChannelSection = {
@@ -14,12 +14,12 @@ function isConfiguredSecretValue(value: unknown): boolean {
 }
 
 export function setAccountEnabledInConfigSection(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sectionKey: string;
   accountId: string;
   enabled: boolean;
   allowTopLevel?: boolean;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   const accountKey = params.accountId || DEFAULT_ACCOUNT_ID;
   const channels = params.cfg.channels as Record<string, unknown> | undefined;
   const base = channels?.[params.sectionKey] as ChannelSection | undefined;
@@ -34,7 +34,7 @@ export function setAccountEnabledInConfigSection(params: {
           enabled: params.enabled,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
   }
 
   const baseAccounts = base?.accounts ?? {};
@@ -54,15 +54,15 @@ export function setAccountEnabledInConfigSection(params: {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 export function deleteAccountFromConfigSection(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sectionKey: string;
   accountId: string;
   clearBaseFields?: string[];
-}): NexisClawConfig {
+}): GreenchClawConfig {
   const accountKey = params.accountId || DEFAULT_ACCOUNT_ID;
   const channels = params.cfg.channels as Record<string, unknown> | undefined;
   const base = channels?.[params.sectionKey] as ChannelSection | undefined;
@@ -85,7 +85,7 @@ export function deleteAccountFromConfigSection(params: {
           accounts: Object.keys(accounts).length ? accounts : undefined,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
   }
 
   if (baseAccounts && Object.keys(baseAccounts).length > 0) {
@@ -105,14 +105,14 @@ export function deleteAccountFromConfigSection(params: {
           accounts: Object.keys(baseAccounts).length ? baseAccounts : undefined,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
   }
 
   const nextChannels = { ...params.cfg.channels } as Record<string, unknown>;
   delete nextChannels[params.sectionKey];
-  const nextCfg = { ...params.cfg } as NexisClawConfig;
+  const nextCfg = { ...params.cfg } as GreenchClawConfig;
   if (Object.keys(nextChannels).length > 0) {
-    nextCfg.channels = nextChannels as NexisClawConfig["channels"];
+    nextCfg.channels = nextChannels as GreenchClawConfig["channels"];
   } else {
     delete nextCfg.channels;
   }

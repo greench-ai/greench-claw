@@ -6,7 +6,7 @@ import {
   ToolPolicySchema,
   buildChannelConfigSchema,
   requireOpenAllowFrom,
-} from "NexisClaw/plugin-sdk/channel-config-schema";
+} from "GreenchClaw/plugin-sdk/channel-config-schema";
 import { z } from "zod";
 import { ircChannelConfigUiHints } from "./config-ui-hints.js";
 

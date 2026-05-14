@@ -3,15 +3,15 @@ import {
   readNumberParam,
   readStringParam,
   ToolAuthorizationError,
-} from "NexisClaw/plugin-sdk/channel-actions";
+} from "GreenchClaw/plugin-sdk/channel-actions";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageActionContext,
   ChannelMessageActionName,
   ChannelMessageToolDiscovery,
-} from "NexisClaw/plugin-sdk/channel-contract";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { extractToolSend } from "NexisClaw/plugin-sdk/tool-send";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { extractToolSend } from "GreenchClaw/plugin-sdk/tool-send";
 import { Type } from "typebox";
 import { requiresExplicitMatrixDefaultAccount } from "./account-selection.js";
 import { resolveDefaultMatrixAccountId, resolveMatrixAccount } from "./matrix/accounts.js";

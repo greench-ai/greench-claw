@@ -7,11 +7,11 @@ import {
 
 describe("resolveGatewayDevMode", () => {
   it("detects src ts entrypoints", () => {
-    expect(resolveGatewayDevMode(["node", "/Users/me/NexisClaw/src/cli/index.ts"])).toBe(true);
-    expect(resolveGatewayDevMode(["node", "C:\\Users\\me\\NexisClaw\\src\\cli\\index.ts"])).toBe(
+    expect(resolveGatewayDevMode(["node", "/Users/me/GreenchClaw/src/cli/index.ts"])).toBe(true);
+    expect(resolveGatewayDevMode(["node", "C:\\Users\\me\\GreenchClaw\\src\\cli\\index.ts"])).toBe(
       true,
     );
-    expect(resolveGatewayDevMode(["node", "/Users/me/NexisClaw/dist/cli/index.js"])).toBe(false);
+    expect(resolveGatewayDevMode(["node", "/Users/me/GreenchClaw/dist/cli/index.js"])).toBe(false);
   });
 });
 

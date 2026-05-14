@@ -88,7 +88,7 @@ vi.mock("../../terminal/health-style.js", () => ({
 }));
 
 vi.mock("../../terminal/links.js", () => ({
-  formatDocsLink: () => "docs.NexisClaw.ai/cli/gateway",
+  formatDocsLink: () => "docs.GreenchClaw.ai/cli/gateway",
 }));
 
 vi.mock("../../terminal/theme.js", () => ({

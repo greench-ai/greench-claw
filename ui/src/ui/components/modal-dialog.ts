@@ -12,7 +12,7 @@ const FOCUSABLE_SELECTOR = [
   "[tabindex]:not([tabindex='-1'])",
 ].join(",");
 
-export class NexisClawModalDialog extends LitElement {
+export class GreenchClawModalDialog extends LitElement {
   @property() label = "";
   @property() description = "";
 
@@ -269,11 +269,11 @@ export class NexisClawModalDialog extends LitElement {
 }
 
 if (!customElements.get("nexisclaw-modal-dialog")) {
-  customElements.define("nexisclaw-modal-dialog", NexisClawModalDialog);
+  customElements.define("nexisclaw-modal-dialog", GreenchClawModalDialog);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    "nexisclaw-modal-dialog": NexisClawModalDialog;
+    "nexisclaw-modal-dialog": GreenchClawModalDialog;
   }
 }

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 // Regression coverage for #57790: the bounded shutdown drain must fire a
 // typed `session_end` for every session the tracker has noted, must skip
@@ -52,7 +52,7 @@ const {
 const { clearActiveSessionsForShutdownTracker, listActiveSessionsForShutdown } =
   await import("./active-sessions-shutdown-tracker.js");
 
-const cfg: NexisClawConfig = {};
+const cfg: GreenchClawConfig = {};
 
 const requireSessionEndHookEvent = (index: number): SessionEndHookEvent => {
   const call = runSessionEndMock.mock.calls.at(index);

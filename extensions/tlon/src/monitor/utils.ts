@@ -1,8 +1,8 @@
 import {
   resolveStableChannelMessageIngress,
   type StableChannelIngressIdentityParams,
-} from "NexisClaw/plugin-sdk/channel-ingress-runtime";
-import { formatErrorMessage as sharedFormatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+} from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
+import { formatErrorMessage as sharedFormatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import { normalizeShip } from "../targets.js";
 
 export interface ParsedCite {

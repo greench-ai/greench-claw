@@ -7,7 +7,7 @@ import { repoRoot } from "./vitest.shared.config.ts";
 export function loadIncludePatternsFromEnv(
   env: Record<string, string | undefined> = process.env,
 ): string[] | null {
-  return loadPatternListFromEnv("NEXISCLAW_VITEST_INCLUDE_FILE", env);
+  return loadPatternListFromEnv("GREENCHCLAW_VITEST_INCLUDE_FILE", env);
 }
 
 export function createExtensionProviderOpenAiVitestConfig(

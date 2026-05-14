@@ -3,7 +3,7 @@ import { isModelKeyAllowedBySet } from "../../agents/model-selection-shared.js";
 import { normalizeProviderId } from "../../agents/provider-id.js";
 import { resolveAgentModelFallbackValues } from "../../config/model-input.js";
 import type { SessionEntry } from "../../config/sessions.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { applyModelOverrideToSessionEntry } from "../../sessions/model-overrides.js";
 import { normalizeOptionalString } from "../../shared/string-coerce.js";
 import type { MsgContext, TemplateContext } from "../templating.js";
@@ -30,13 +30,13 @@ function splitBody(body: string) {
   };
 }
 
-async function loadResetModelCatalog(cfg: NexisClawConfig): Promise<ModelCatalogEntry[]> {
+async function loadResetModelCatalog(cfg: GreenchClawConfig): Promise<ModelCatalogEntry[]> {
   const { loadModelCatalog } = await import("../../agents/model-catalog.js");
   return loadModelCatalog({ config: cfg });
 }
 
 async function resolveResetFallbackModels(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
 }): Promise<string[]> {
   if (params.agentId) {
@@ -50,7 +50,7 @@ async function resolveResetFallbackModels(params: {
 }
 
 async function buildResetAllowedModelKeys(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   catalog: ModelCatalogEntry[];
   defaultProvider: string;
   defaultModel?: string;
@@ -136,7 +136,7 @@ function applySelectionToSession(params: {
 }
 
 export async function applyResetModelOverride(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
   resetTriggered: boolean;
   bodyStripped?: string;

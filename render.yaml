@@ -1,19 +1,19 @@
 services:
   - type: web
-    name: NexisClaw
+    name: GreenchClaw
     runtime: docker
     plan: starter
     healthCheckPath: /health
     envVars:
-      - key: NEXISCLAW_GATEWAY_PORT
+      - key: GREENCHCLAW_GATEWAY_PORT
         value: "8080"
-      - key: NEXISCLAW_STATE_DIR
-        value: /data/.NexisClaw
-      - key: NEXISCLAW_WORKSPACE_DIR
+      - key: GREENCHCLAW_STATE_DIR
+        value: /data/.GreenchClaw
+      - key: GREENCHCLAW_WORKSPACE_DIR
         value: /data/workspace
-      - key: NEXISCLAW_GATEWAY_TOKEN
+      - key: GREENCHCLAW_GATEWAY_TOKEN
         generateValue: true
     disk:
-      name: NexisClaw-data
+      name: GreenchClaw-data
       mountPath: /data
       sizeGB: 1

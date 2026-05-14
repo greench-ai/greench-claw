@@ -1,5 +1,5 @@
 import type { MsgContext } from "../auto-reply/templating.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 let inboundSessionRuntimePromise: Promise<
   typeof import("../config/sessions/inbound.runtime.js")
@@ -11,7 +11,7 @@ function loadInboundSessionRuntime() {
 }
 
 export async function recordInboundSessionMetaSafe(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   sessionKey: string;
   ctx: MsgContext;

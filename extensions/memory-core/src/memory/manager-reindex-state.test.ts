@@ -1,4 +1,4 @@
-import type { MemorySource } from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+import type { MemorySource } from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 import { describe, expect, it } from "vitest";
 import {
   resolveConfiguredScopeHash,

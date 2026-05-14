@@ -1,13 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
+import { resolveGreenchClawPackageRootSync } from "../infra/GreenchClaw-root.js";
 import { tryReadJsonSync } from "../infra/json-files.js";
-import { resolveNexisClawPackageRootSync } from "../infra/NexisClaw-root.js";
 import { listChannelCatalogEntries } from "../plugins/channel-catalog-registry.js";
 import type { PluginPackageChannel } from "../plugins/manifest.js";
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
 
 type ChannelCatalogEntryLike = {
-  NexisClaw?: {
+  GreenchClaw?: {
     channel?: PluginPackageChannel;
   };
 };
@@ -24,8 +24,8 @@ const officialCatalogFileCache = new Map<string, ChannelCatalogEntryLike[] | nul
 
 function listPackageRoots(): string[] {
   return [
-    resolveNexisClawPackageRootSync({ cwd: process.cwd() }),
-    resolveNexisClawPackageRootSync({ moduleUrl: import.meta.url }),
+    resolveGreenchClawPackageRootSync({ cwd: process.cwd() }),
+    resolveGreenchClawPackageRootSync({ moduleUrl: import.meta.url }),
   ].filter((entry, index, all): entry is string => Boolean(entry) && all.indexOf(entry) === index);
 }
 
@@ -67,14 +67,14 @@ function readOfficialCatalogFileSync(): ChannelCatalogEntryLike[] {
 function isChannelCatalogEntryLike(
   entry: ChannelCatalogEntryLike | PluginPackageChannel,
 ): entry is ChannelCatalogEntryLike {
-  return "NexisClaw" in entry;
+  return "GreenchClaw" in entry;
 }
 
 function toBundledChannelEntry(
   entry: ChannelCatalogEntryLike | PluginPackageChannel,
 ): BundledChannelCatalogEntry | null {
   const channel: PluginPackageChannel | undefined = isChannelCatalogEntryLike(entry)
-    ? entry.NexisClaw?.channel
+    ? entry.GreenchClaw?.channel
     : entry;
   const id = normalizeOptionalLowercaseString(channel?.id);
   if (!id || !channel) {

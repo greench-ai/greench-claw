@@ -1,4 +1,4 @@
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { isRecord } from "./comment-shared.js";
 import { normalizeFeishuExternalKey } from "./external-keys.js";
 

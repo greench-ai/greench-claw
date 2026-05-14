@@ -35,11 +35,11 @@ describe("resolveMissingOfficialExternalChannelPluginRepairHint", () => {
       pluginId: "feishu",
       channelId: "feishu",
       label: "Feishu",
-      installSpec: "@NexisClaw/feishu",
-      installCommand: "NexisClaw plugins install @NexisClaw/feishu",
-      doctorFixCommand: "NexisClaw doctor --fix",
+      installSpec: "@GreenchClaw/feishu",
+      installCommand: "GreenchClaw plugins install @GreenchClaw/feishu",
+      doctorFixCommand: "GreenchClaw doctor --fix",
       repairHint:
-        "Install the official external plugin with: NexisClaw plugins install @NexisClaw/feishu, or run: NexisClaw doctor --fix.",
+        "Install the official external plugin with: GreenchClaw plugins install @GreenchClaw/feishu, or run: GreenchClaw doctor --fix.",
     });
   });
 

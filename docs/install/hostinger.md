@@ -1,29 +1,29 @@
 ---
-summary: "Host NexisClaw on Hostinger"
+summary: "Host GreenchClaw on Hostinger"
 read_when:
-  - Setting up NexisClaw on Hostinger
-  - Looking for a managed VPS for NexisClaw
-  - Using Hostinger 1-Click NexisClaw
+  - Setting up GreenchClaw on Hostinger
+  - Looking for a managed VPS for GreenchClaw
+  - Using Hostinger 1-Click GreenchClaw
 title: "Hostinger"
 ---
 
-Run a persistent NexisClaw Gateway on [Hostinger](https://www.hostinger.com/NexisClaw) via a **1-Click** managed deployment or a **VPS** install.
+Run a persistent GreenchClaw Gateway on [Hostinger](https://www.hostinger.com/GreenchClaw) via a **1-Click** managed deployment or a **VPS** install.
 
 ## Prerequisites
 
-- Hostinger account ([signup](https://www.hostinger.com/NexisClaw))
+- Hostinger account ([signup](https://www.hostinger.com/GreenchClaw))
 - About 5-10 minutes
 
-## Option A: 1-Click NexisClaw
+## Option A: 1-Click GreenchClaw
 
 The fastest way to get started. Hostinger handles infrastructure, Docker, and automatic updates.
 
 <Steps>
   <Step title="Purchase and launch">
-    1. From the [Hostinger NexisClaw page](https://www.hostinger.com/NexisClaw), choose a Managed NexisClaw plan and complete checkout.
+    1. From the [Hostinger GreenchClaw page](https://www.hostinger.com/GreenchClaw), choose a Managed GreenchClaw plan and complete checkout.
 
     <Note>
-    During checkout you can select **Ready-to-Use AI** credits that are pre-purchased and integrated instantly inside NexisClaw -- no external accounts or API keys from other providers needed. You can start chatting right away. Alternatively, provide your own key from Anthropic, OpenAI, Google Gemini, or xAI during setup.
+    During checkout you can select **Ready-to-Use AI** credits that are pre-purchased and integrated instantly inside GreenchClaw -- no external accounts or API keys from other providers needed. You can start chatting right away. Alternatively, provide your own key from Anthropic, OpenAI, Google Gemini, or xAI during setup.
     </Note>
 
   </Step>
@@ -37,26 +37,26 @@ The fastest way to get started. Hostinger handles infrastructure, Docker, and au
   </Step>
 
   <Step title="Complete installation">
-    Click **Finish** to deploy the instance. Once ready, access the NexisClaw dashboard from **NexisClaw Overview** in hPanel.
+    Click **Finish** to deploy the instance. Once ready, access the GreenchClaw dashboard from **GreenchClaw Overview** in hPanel.
   </Step>
 
 </Steps>
 
-## Option B: NexisClaw on VPS
+## Option B: GreenchClaw on VPS
 
-More control over your server. Hostinger deploys NexisClaw via Docker on your VPS and you manage it through the **Docker Manager** in hPanel.
+More control over your server. Hostinger deploys GreenchClaw via Docker on your VPS and you manage it through the **Docker Manager** in hPanel.
 
 <Steps>
   <Step title="Purchase a VPS">
-    1. From the [Hostinger NexisClaw page](https://www.hostinger.com/NexisClaw), choose an NexisClaw on VPS plan and complete checkout.
+    1. From the [Hostinger GreenchClaw page](https://www.hostinger.com/GreenchClaw), choose an GreenchClaw on VPS plan and complete checkout.
 
     <Note>
-    You can select **Ready-to-Use AI** credits during checkout -- these are pre-purchased and integrated instantly inside NexisClaw, so you can start chatting without any external accounts or API keys from other providers.
+    You can select **Ready-to-Use AI** credits during checkout -- these are pre-purchased and integrated instantly inside GreenchClaw, so you can start chatting without any external accounts or API keys from other providers.
     </Note>
 
   </Step>
 
-  <Step title="Configure NexisClaw">
+  <Step title="Configure GreenchClaw">
     Once the VPS is provisioned, fill in the configuration fields:
 
     - **Gateway token** -- auto-generated; save it for later use.
@@ -66,8 +66,8 @@ More control over your server. Hostinger deploys NexisClaw via Docker on your VP
 
   </Step>
 
-  <Step title="Start NexisClaw">
-    Click **Deploy**. Once running, open the NexisClaw dashboard from the hPanel by clicking on **Open**.
+  <Step title="Start GreenchClaw">
+    Click **Deploy**. Once running, open the GreenchClaw dashboard from the hPanel by clicking on **Open**.
   </Step>
 
 </Steps>
@@ -76,7 +76,7 @@ Logs, restarts, and updates are managed directly from the Docker Manager interfa
 
 ## Verify your setup
 
-Send "Hi" to your assistant on the channel you connected. NexisClaw will reply and walk you through initial preferences.
+Send "Hi" to your assistant on the channel you connected. GreenchClaw will reply and walk you through initial preferences.
 
 ## Troubleshooting
 
@@ -84,7 +84,7 @@ Send "Hi" to your assistant on the channel you connected. NexisClaw will reply a
 
 **Docker container keeps restarting** -- Open Docker Manager logs and look for configuration errors (missing tokens, invalid API keys).
 
-**Telegram bot not responding** -- Send your pairing code message from Telegram directly as a message inside your NexisClaw chat to complete the connection.
+**Telegram bot not responding** -- Send your pairing code message from Telegram directly as a message inside your GreenchClaw chat to complete the connection.
 
 ## Next steps
 

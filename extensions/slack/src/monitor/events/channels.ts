@@ -1,10 +1,10 @@
 import type { SlackEventMiddlewareArgs } from "@slack/bolt";
-import { resolveChannelConfigWrites } from "NexisClaw/plugin-sdk/channel-config-writes";
-import { replaceConfigFile } from "NexisClaw/plugin-sdk/config-mutation";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
-import { danger, warn } from "NexisClaw/plugin-sdk/runtime-env";
-import { enqueueSystemEvent } from "NexisClaw/plugin-sdk/system-event-runtime";
+import { resolveChannelConfigWrites } from "GreenchClaw/plugin-sdk/channel-config-writes";
+import { replaceConfigFile } from "GreenchClaw/plugin-sdk/config-mutation";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { getRuntimeConfig } from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
+import { danger, warn } from "GreenchClaw/plugin-sdk/runtime-env";
+import { enqueueSystemEvent } from "GreenchClaw/plugin-sdk/system-event-runtime";
 import { migrateSlackChannelConfig } from "../../channel-migration.js";
 import { resolveSlackChannelLabel } from "../channel-config.js";
 import type { SlackMonitorContext } from "../context.js";

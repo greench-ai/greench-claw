@@ -347,7 +347,7 @@ const CommitmentsSchema = z
   .strict()
   .optional();
 
-export const NexisClawSchema = z
+export const GreenchClawSchema = z
   .object({
     $schema: z.string().optional(),
     meta: z
@@ -529,7 +529,11 @@ export const NexisClawSchema = z
                 mcpCommand: z.string().optional(),
                 mcpArgs: z.array(z.string()).optional(),
                 driver: z
-                  .union([z.literal("NexisClaw"), z.literal("clawd"), z.literal("existing-session")])
+                  .union([
+                    z.literal("GreenchClaw"),
+                    z.literal("clawd"),
+                    z.literal("existing-session"),
+                  ])
                   .optional(),
                 headless: z.boolean().optional(),
                 executablePath: z.string().optional(),

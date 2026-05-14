@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { loadNexisClawProviderIndex, normalizeNexisClawProviderIndex } from "./index.js";
+import { loadGreenchClawProviderIndex, normalizeGreenchClawProviderIndex } from "./index.js";
 
-describe("NexisClaw provider index", () => {
+describe("GreenchClaw provider index", () => {
   it("normalizes provider preview catalog rows through model catalog validation", () => {
-    const index = normalizeNexisClawProviderIndex({
+    const index = normalizeGreenchClawProviderIndex({
       version: 1,
       providers: {
         Moonshot: {
@@ -11,10 +11,10 @@ describe("NexisClaw provider index", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: " @NexisClaw/plugin-moonshot ",
+            package: " @GreenchClaw/plugin-moonshot ",
             install: {
-              clawhubSpec: " clawhub:NexisClaw/moonshot@2026.5.2 ",
-              npmSpec: " @NexisClaw/plugin-moonshot@1.2.3 ",
+              clawhubSpec: " clawhub:GreenchClaw/moonshot@2026.5.2 ",
+              npmSpec: " @GreenchClaw/plugin-moonshot@1.2.3 ",
               defaultChoice: "clawhub",
               expectedIntegrity: " sha512-moonshot ",
             },
@@ -62,10 +62,10 @@ describe("NexisClaw provider index", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@NexisClaw/plugin-moonshot",
+            package: "@GreenchClaw/plugin-moonshot",
             install: {
-              clawhubSpec: "clawhub:NexisClaw/moonshot@2026.5.2",
-              npmSpec: "@NexisClaw/plugin-moonshot@1.2.3",
+              clawhubSpec: "clawhub:GreenchClaw/moonshot@2026.5.2",
+              npmSpec: "@GreenchClaw/plugin-moonshot@1.2.3",
               defaultChoice: "clawhub",
               expectedIntegrity: "sha512-moonshot",
             },
@@ -103,7 +103,7 @@ describe("NexisClaw provider index", () => {
   });
 
   it("drops unsafe providers and malformed preview catalog rows", () => {
-    const index = normalizeNexisClawProviderIndex({
+    const index = normalizeGreenchClawProviderIndex({
       version: 1,
       providers: {
         ["__proto__"]: {
@@ -140,7 +140,7 @@ describe("NexisClaw provider index", () => {
   });
 
   it("loads the bundled provider index without runtime plugin loading", () => {
-    const index = loadNexisClawProviderIndex();
+    const index = loadGreenchClawProviderIndex();
 
     expect(index.providers.moonshot?.previewCatalog).not.toHaveProperty("api");
     expect(index.providers.moonshot?.previewCatalog).not.toHaveProperty("baseUrl");

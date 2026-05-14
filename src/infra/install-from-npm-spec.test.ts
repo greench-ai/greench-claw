@@ -24,7 +24,7 @@ describe("installFromValidatedNpmSpecArchive", () => {
       installFromValidatedNpmSpecArchive({
         spec: "  nope  ",
         timeoutMs: 30_000,
-        tempDirPrefix: "NexisClaw-npm-",
+        tempDirPrefix: "GreenchClaw-npm-",
         installFromArchive: vi.fn(),
         archiveInstallParams: {},
       }),
@@ -51,9 +51,9 @@ describe("installFromValidatedNpmSpecArchive", () => {
 
     await expect(
       installFromValidatedNpmSpecArchive({
-        spec: "  @NexisClaw/demo@beta  ",
+        spec: "  @GreenchClaw/demo@beta  ",
         timeoutMs: 45_000,
-        tempDirPrefix: "NexisClaw-npm-",
+        tempDirPrefix: "GreenchClaw-npm-",
         expectedIntegrity: "sha512-demo",
         onIntegrityDrift,
         warn,
@@ -63,8 +63,8 @@ describe("installFromValidatedNpmSpecArchive", () => {
     ).resolves.toBe(finalized);
 
     expect(installFromNpmSpecArchiveWithInstallerMock).toHaveBeenCalledWith({
-      tempDirPrefix: "NexisClaw-npm-",
-      spec: "@NexisClaw/demo@beta",
+      tempDirPrefix: "GreenchClaw-npm-",
+      spec: "@GreenchClaw/demo@beta",
       timeoutMs: 45_000,
       expectedIntegrity: "sha512-demo",
       onIntegrityDrift,

@@ -2,9 +2,9 @@ import {
   createAccountListHelpers,
   normalizeAccountId,
   resolveMergedAccountConfig,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/account-resolution";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/account-resolution";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { IMessageAccountConfig } from "./account-types.js";
 
 export type ResolvedIMessageAccount = {
@@ -19,7 +19,10 @@ const { listAccountIds, resolveDefaultAccountId } = createAccountListHelpers("im
 export const listIMessageAccountIds = listAccountIds;
 export const resolveDefaultIMessageAccountId = resolveDefaultAccountId;
 
-function mergeIMessageAccountConfig(cfg: NexisClawConfig, accountId: string): IMessageAccountConfig {
+function mergeIMessageAccountConfig(
+  cfg: GreenchClawConfig,
+  accountId: string,
+): IMessageAccountConfig {
   return resolveMergedAccountConfig<IMessageAccountConfig>({
     channelConfig: cfg.channels?.imessage as IMessageAccountConfig | undefined,
     accounts: cfg.channels?.imessage?.accounts as
@@ -30,7 +33,7 @@ function mergeIMessageAccountConfig(cfg: NexisClawConfig, accountId: string): IM
 }
 
 export function resolveIMessageAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): ResolvedIMessageAccount {
   const accountId = normalizeAccountId(
@@ -64,7 +67,7 @@ export function resolveIMessageAccount(params: {
   };
 }
 
-export function listEnabledIMessageAccounts(cfg: NexisClawConfig): ResolvedIMessageAccount[] {
+export function listEnabledIMessageAccounts(cfg: GreenchClawConfig): ResolvedIMessageAccount[] {
   return listIMessageAccountIds(cfg)
     .map((accountId) => resolveIMessageAccount({ cfg, accountId }))
     .filter((account) => account.enabled);

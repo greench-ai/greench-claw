@@ -130,7 +130,7 @@ export async function commitmentsListCommand(
   }
   if (commitments.length === 0) {
     runtime.log(
-      `No commitments found. Run ${formatCliCommand("NexisClaw commitments --all")} to include dismissed and expired commitments.`,
+      `No commitments found. Run ${formatCliCommand("GreenchClaw commitments --all")} to include dismissed and expired commitments.`,
     );
     return;
   }
@@ -146,7 +146,7 @@ export async function commitmentsDismissCommand(
   const ids = opts.ids.map((id) => id.trim()).filter(Boolean);
   if (ids.length === 0) {
     runtime.error(
-      `At least one commitment id is required. Run ${formatCliCommand("NexisClaw commitments list")} to choose one.`,
+      `At least one commitment id is required. Run ${formatCliCommand("GreenchClaw commitments list")} to choose one.`,
     );
     runtime.exit(1);
     return;

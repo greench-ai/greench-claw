@@ -1,7 +1,7 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
-import { attachPluginApiFacades, type NexisClawPluginApiWithoutFacades } from "./api-facades.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
+import { attachPluginApiFacades, type GreenchClawPluginApiWithoutFacades } from "./api-facades.js";
 import type { PluginRuntime } from "./runtime/types.js";
-import type { NexisClawPluginApi, PluginLogger } from "./types.js";
+import type { GreenchClawPluginApi, PluginLogger } from "./types.js";
 
 export type BuildPluginApiParams = {
   id: string;
@@ -10,15 +10,15 @@ export type BuildPluginApiParams = {
   description?: string;
   source: string;
   rootDir?: string;
-  registrationMode: NexisClawPluginApi["registrationMode"];
-  config: NexisClawConfig;
+  registrationMode: GreenchClawPluginApi["registrationMode"];
+  config: GreenchClawConfig;
   pluginConfig?: Record<string, unknown>;
   runtime: PluginRuntime;
   logger: PluginLogger;
   resolvePath: (input: string) => string;
   handlers?: Partial<
     Pick<
-      NexisClawPluginApi,
+      GreenchClawPluginApi,
       | "registerTool"
       | "registerHook"
       | "registerHttpRoute"
@@ -85,99 +85,103 @@ export type BuildPluginApiParams = {
   >;
 };
 
-const noopRegisterTool: NexisClawPluginApi["registerTool"] = () => {};
-const noopRegisterHook: NexisClawPluginApi["registerHook"] = () => {};
-const noopRegisterHttpRoute: NexisClawPluginApi["registerHttpRoute"] = () => {};
-const noopRegisterHostedMediaResolver: NexisClawPluginApi["registerHostedMediaResolver"] = () => {};
-const noopRegisterChannel: NexisClawPluginApi["registerChannel"] = () => {};
-const noopRegisterGatewayMethod: NexisClawPluginApi["registerGatewayMethod"] = () => {};
-const noopRegisterCli: NexisClawPluginApi["registerCli"] = () => {};
-const noopRegisterReload: NexisClawPluginApi["registerReload"] = () => {};
-const noopRegisterNodeHostCommand: NexisClawPluginApi["registerNodeHostCommand"] = () => {};
-const noopRegisterNodeInvokePolicy: NexisClawPluginApi["registerNodeInvokePolicy"] = () => {};
-const noopRegisterSecurityAuditCollector: NexisClawPluginApi["registerSecurityAuditCollector"] =
+const noopRegisterTool: GreenchClawPluginApi["registerTool"] = () => {};
+const noopRegisterHook: GreenchClawPluginApi["registerHook"] = () => {};
+const noopRegisterHttpRoute: GreenchClawPluginApi["registerHttpRoute"] = () => {};
+const noopRegisterHostedMediaResolver: GreenchClawPluginApi["registerHostedMediaResolver"] =
   () => {};
-const noopRegisterService: NexisClawPluginApi["registerService"] = () => {};
-const noopRegisterGatewayDiscoveryService: NexisClawPluginApi["registerGatewayDiscoveryService"] =
+const noopRegisterChannel: GreenchClawPluginApi["registerChannel"] = () => {};
+const noopRegisterGatewayMethod: GreenchClawPluginApi["registerGatewayMethod"] = () => {};
+const noopRegisterCli: GreenchClawPluginApi["registerCli"] = () => {};
+const noopRegisterReload: GreenchClawPluginApi["registerReload"] = () => {};
+const noopRegisterNodeHostCommand: GreenchClawPluginApi["registerNodeHostCommand"] = () => {};
+const noopRegisterNodeInvokePolicy: GreenchClawPluginApi["registerNodeInvokePolicy"] = () => {};
+const noopRegisterSecurityAuditCollector: GreenchClawPluginApi["registerSecurityAuditCollector"] =
   () => {};
-const noopRegisterCliBackend: NexisClawPluginApi["registerCliBackend"] = () => {};
-const noopRegisterTextTransforms: NexisClawPluginApi["registerTextTransforms"] = () => {};
-const noopRegisterConfigMigration: NexisClawPluginApi["registerConfigMigration"] = () => {};
-const noopRegisterMigrationProvider: NexisClawPluginApi["registerMigrationProvider"] = () => {};
-const noopRegisterAutoEnableProbe: NexisClawPluginApi["registerAutoEnableProbe"] = () => {};
-const noopRegisterProvider: NexisClawPluginApi["registerProvider"] = () => {};
-const noopRegisterModelCatalogProvider: NexisClawPluginApi["registerModelCatalogProvider"] =
+const noopRegisterService: GreenchClawPluginApi["registerService"] = () => {};
+const noopRegisterGatewayDiscoveryService: GreenchClawPluginApi["registerGatewayDiscoveryService"] =
   () => {};
-const noopRegisterSpeechProvider: NexisClawPluginApi["registerSpeechProvider"] = () => {};
-const noopRegisterRealtimeTranscriptionProvider: NexisClawPluginApi["registerRealtimeTranscriptionProvider"] =
+const noopRegisterCliBackend: GreenchClawPluginApi["registerCliBackend"] = () => {};
+const noopRegisterTextTransforms: GreenchClawPluginApi["registerTextTransforms"] = () => {};
+const noopRegisterConfigMigration: GreenchClawPluginApi["registerConfigMigration"] = () => {};
+const noopRegisterMigrationProvider: GreenchClawPluginApi["registerMigrationProvider"] = () => {};
+const noopRegisterAutoEnableProbe: GreenchClawPluginApi["registerAutoEnableProbe"] = () => {};
+const noopRegisterProvider: GreenchClawPluginApi["registerProvider"] = () => {};
+const noopRegisterModelCatalogProvider: GreenchClawPluginApi["registerModelCatalogProvider"] =
   () => {};
-const noopRegisterRealtimeVoiceProvider: NexisClawPluginApi["registerRealtimeVoiceProvider"] =
+const noopRegisterSpeechProvider: GreenchClawPluginApi["registerSpeechProvider"] = () => {};
+const noopRegisterRealtimeTranscriptionProvider: GreenchClawPluginApi["registerRealtimeTranscriptionProvider"] =
   () => {};
-const noopRegisterMediaUnderstandingProvider: NexisClawPluginApi["registerMediaUnderstandingProvider"] =
+const noopRegisterRealtimeVoiceProvider: GreenchClawPluginApi["registerRealtimeVoiceProvider"] =
   () => {};
-const noopRegisterImageGenerationProvider: NexisClawPluginApi["registerImageGenerationProvider"] =
+const noopRegisterMediaUnderstandingProvider: GreenchClawPluginApi["registerMediaUnderstandingProvider"] =
   () => {};
-const noopRegisterVideoGenerationProvider: NexisClawPluginApi["registerVideoGenerationProvider"] =
+const noopRegisterImageGenerationProvider: GreenchClawPluginApi["registerImageGenerationProvider"] =
   () => {};
-const noopRegisterMusicGenerationProvider: NexisClawPluginApi["registerMusicGenerationProvider"] =
+const noopRegisterVideoGenerationProvider: GreenchClawPluginApi["registerVideoGenerationProvider"] =
   () => {};
-const noopRegisterWebFetchProvider: NexisClawPluginApi["registerWebFetchProvider"] = () => {};
-const noopRegisterWebSearchProvider: NexisClawPluginApi["registerWebSearchProvider"] = () => {};
-const noopRegisterInteractiveHandler: NexisClawPluginApi["registerInteractiveHandler"] = () => {};
-const noopOnConversationBindingResolved: NexisClawPluginApi["onConversationBindingResolved"] =
+const noopRegisterMusicGenerationProvider: GreenchClawPluginApi["registerMusicGenerationProvider"] =
   () => {};
-const noopRegisterCommand: NexisClawPluginApi["registerCommand"] = () => {};
-const noopRegisterContextEngine: NexisClawPluginApi["registerContextEngine"] = () => {};
-const noopRegisterCompactionProvider: NexisClawPluginApi["registerCompactionProvider"] = () => {};
-const noopRegisterAgentHarness: NexisClawPluginApi["registerAgentHarness"] = () => {};
-const noopRegisterCodexAppServerExtensionFactory: NexisClawPluginApi["registerCodexAppServerExtensionFactory"] =
+const noopRegisterWebFetchProvider: GreenchClawPluginApi["registerWebFetchProvider"] = () => {};
+const noopRegisterWebSearchProvider: GreenchClawPluginApi["registerWebSearchProvider"] = () => {};
+const noopRegisterInteractiveHandler: GreenchClawPluginApi["registerInteractiveHandler"] = () => {};
+const noopOnConversationBindingResolved: GreenchClawPluginApi["onConversationBindingResolved"] =
   () => {};
-const noopRegisterAgentToolResultMiddleware: NexisClawPluginApi["registerAgentToolResultMiddleware"] =
+const noopRegisterCommand: GreenchClawPluginApi["registerCommand"] = () => {};
+const noopRegisterContextEngine: GreenchClawPluginApi["registerContextEngine"] = () => {};
+const noopRegisterCompactionProvider: GreenchClawPluginApi["registerCompactionProvider"] = () => {};
+const noopRegisterAgentHarness: GreenchClawPluginApi["registerAgentHarness"] = () => {};
+const noopRegisterCodexAppServerExtensionFactory: GreenchClawPluginApi["registerCodexAppServerExtensionFactory"] =
   () => {};
-const noopRegisterSessionExtension: NexisClawPluginApi["registerSessionExtension"] = () => {};
-const noopEnqueueNextTurnInjection: NexisClawPluginApi["enqueueNextTurnInjection"] = async (
+const noopRegisterAgentToolResultMiddleware: GreenchClawPluginApi["registerAgentToolResultMiddleware"] =
+  () => {};
+const noopRegisterSessionExtension: GreenchClawPluginApi["registerSessionExtension"] = () => {};
+const noopEnqueueNextTurnInjection: GreenchClawPluginApi["enqueueNextTurnInjection"] = async (
   injection,
 ) => ({ enqueued: false, id: "", sessionKey: injection.sessionKey });
-const noopRegisterTrustedToolPolicy: NexisClawPluginApi["registerTrustedToolPolicy"] = () => {};
-const noopRegisterToolMetadata: NexisClawPluginApi["registerToolMetadata"] = () => {};
-const noopRegisterControlUiDescriptor: NexisClawPluginApi["registerControlUiDescriptor"] = () => {};
-const noopRegisterRuntimeLifecycle: NexisClawPluginApi["registerRuntimeLifecycle"] = () => {};
-const noopRegisterAgentEventSubscription: NexisClawPluginApi["registerAgentEventSubscription"] =
+const noopRegisterTrustedToolPolicy: GreenchClawPluginApi["registerTrustedToolPolicy"] = () => {};
+const noopRegisterToolMetadata: GreenchClawPluginApi["registerToolMetadata"] = () => {};
+const noopRegisterControlUiDescriptor: GreenchClawPluginApi["registerControlUiDescriptor"] =
   () => {};
-const noopEmitAgentEvent: NexisClawPluginApi["emitAgentEvent"] = () => ({
+const noopRegisterRuntimeLifecycle: GreenchClawPluginApi["registerRuntimeLifecycle"] = () => {};
+const noopRegisterAgentEventSubscription: GreenchClawPluginApi["registerAgentEventSubscription"] =
+  () => {};
+const noopEmitAgentEvent: GreenchClawPluginApi["emitAgentEvent"] = () => ({
   emitted: false,
   reason: "not wired",
 });
-const noopSetRunContext: NexisClawPluginApi["setRunContext"] = () => false;
-const noopGetRunContext: NexisClawPluginApi["getRunContext"] = () => undefined;
-const noopClearRunContext: NexisClawPluginApi["clearRunContext"] = () => {};
-const noopRegisterSessionSchedulerJob: NexisClawPluginApi["registerSessionSchedulerJob"] = () =>
+const noopSetRunContext: GreenchClawPluginApi["setRunContext"] = () => false;
+const noopGetRunContext: GreenchClawPluginApi["getRunContext"] = () => undefined;
+const noopClearRunContext: GreenchClawPluginApi["clearRunContext"] = () => {};
+const noopRegisterSessionSchedulerJob: GreenchClawPluginApi["registerSessionSchedulerJob"] = () =>
   undefined;
-const noopRegisterSessionAction: NexisClawPluginApi["registerSessionAction"] = () => {};
-const noopSendSessionAttachment: NexisClawPluginApi["sendSessionAttachment"] = async () => ({
+const noopRegisterSessionAction: GreenchClawPluginApi["registerSessionAction"] = () => {};
+const noopSendSessionAttachment: GreenchClawPluginApi["sendSessionAttachment"] = async () => ({
   ok: false,
   error: "not wired",
 });
-const noopScheduleSessionTurn: NexisClawPluginApi["scheduleSessionTurn"] = async () => undefined;
-const noopUnscheduleSessionTurnsByTag: NexisClawPluginApi["unscheduleSessionTurnsByTag"] =
+const noopScheduleSessionTurn: GreenchClawPluginApi["scheduleSessionTurn"] = async () => undefined;
+const noopUnscheduleSessionTurnsByTag: GreenchClawPluginApi["unscheduleSessionTurnsByTag"] =
   async () => ({ removed: 0, failed: 0 });
-const noopRegisterDetachedTaskRuntime: NexisClawPluginApi["registerDetachedTaskRuntime"] = () => {};
-const noopRegisterMemoryCapability: NexisClawPluginApi["registerMemoryCapability"] = () => {};
-const noopRegisterMemoryPromptSection: NexisClawPluginApi["registerMemoryPromptSection"] = () => {};
-const noopRegisterMemoryPromptSupplement: NexisClawPluginApi["registerMemoryPromptSupplement"] =
+const noopRegisterDetachedTaskRuntime: GreenchClawPluginApi["registerDetachedTaskRuntime"] =
   () => {};
-const noopRegisterMemoryCorpusSupplement: NexisClawPluginApi["registerMemoryCorpusSupplement"] =
+const noopRegisterMemoryCapability: GreenchClawPluginApi["registerMemoryCapability"] = () => {};
+const noopRegisterMemoryPromptSection: GreenchClawPluginApi["registerMemoryPromptSection"] =
   () => {};
-const noopRegisterMemoryFlushPlan: NexisClawPluginApi["registerMemoryFlushPlan"] = () => {};
-const noopRegisterMemoryRuntime: NexisClawPluginApi["registerMemoryRuntime"] = () => {};
-const noopRegisterMemoryEmbeddingProvider: NexisClawPluginApi["registerMemoryEmbeddingProvider"] =
+const noopRegisterMemoryPromptSupplement: GreenchClawPluginApi["registerMemoryPromptSupplement"] =
   () => {};
-const noopOn: NexisClawPluginApi["on"] = () => {};
+const noopRegisterMemoryCorpusSupplement: GreenchClawPluginApi["registerMemoryCorpusSupplement"] =
+  () => {};
+const noopRegisterMemoryFlushPlan: GreenchClawPluginApi["registerMemoryFlushPlan"] = () => {};
+const noopRegisterMemoryRuntime: GreenchClawPluginApi["registerMemoryRuntime"] = () => {};
+const noopRegisterMemoryEmbeddingProvider: GreenchClawPluginApi["registerMemoryEmbeddingProvider"] =
+  () => {};
+const noopOn: GreenchClawPluginApi["on"] = () => {};
 
-export function buildPluginApi(params: BuildPluginApiParams): NexisClawPluginApi {
+export function buildPluginApi(params: BuildPluginApiParams): GreenchClawPluginApi {
   const handlers = params.handlers ?? {};
   const registerCli = handlers.registerCli ?? noopRegisterCli;
-  const api: NexisClawPluginApiWithoutFacades = {
+  const api: GreenchClawPluginApiWithoutFacades = {
     id: params.id,
     name: params.name,
     version: params.version,

@@ -1,6 +1,6 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
 export type SignalAccountConfig = Omit<
-  Exclude<NonNullable<NexisClawConfig["channels"]>["signal"], undefined>,
+  Exclude<NonNullable<GreenchClawConfig["channels"]>["signal"], undefined>,
   "accounts"
 >;

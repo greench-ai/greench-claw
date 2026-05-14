@@ -11,7 +11,7 @@ import {
 } from "./provider-openai-codex-oauth-tls.js";
 
 const manualInputPromptMessage = "Paste the authorization code (or full redirect URL):";
-const openAICodexOAuthOriginator = "NexisClaw";
+const openAICodexOAuthOriginator = "GreenchClaw";
 const localManualFallbackDelayMs = 15_000;
 const localManualFallbackGraceMs = 1_000;
 
@@ -62,7 +62,7 @@ function rewriteOpenAICodexOAuthError(error: unknown): Error {
       "unsupported_region",
       [
         "OpenAI rejected the token exchange for this country, region, or network route.",
-        "If you normally use a proxy, verify HTTPS_PROXY, HTTP_PROXY, or ALL_PROXY is set for the NexisClaw process and then retry `NexisClaw models auth login --provider openai-codex`.",
+        "If you normally use a proxy, verify HTTPS_PROXY, HTTP_PROXY, or ALL_PROXY is set for the GreenchClaw process and then retry `GreenchClaw models auth login --provider openai-codex`.",
       ].join(" "),
       error,
     );
@@ -230,7 +230,10 @@ export async function loginOpenAICodexOAuth(params: {
     stopProgress("OpenAI OAuth failed");
     const rewrittenError = rewriteOpenAICodexOAuthError(err);
     runtime.error(String(rewrittenError));
-    await prompter.note("Trouble with OAuth? See https://docs.NexisClaw.ai/start/faq", "OAuth help");
+    await prompter.note(
+      "Trouble with OAuth? See https://docs.GreenchClaw.ai/start/faq",
+      "OAuth help",
+    );
     throw rewrittenError;
   } finally {
     markLoginSettled();

@@ -9,7 +9,7 @@ function createHost() {
     connectGeneration: 0,
     connected: true,
     tab: "chat",
-    assistantName: "NexisClaw",
+    assistantName: "GreenchClaw",
     assistantAvatar: null,
     assistantAgentId: null,
     localMediaPreviewRoots: [],

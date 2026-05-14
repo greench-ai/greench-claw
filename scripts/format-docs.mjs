@@ -55,7 +55,7 @@ function repairFiles(root, files) {
 }
 
 function copyDocsToTemp(files) {
-  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-docs-format-"));
+  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-docs-format-"));
   for (const relativePath of files) {
     const source = path.join(ROOT, relativePath);
     const target = path.join(tempRoot, relativePath);

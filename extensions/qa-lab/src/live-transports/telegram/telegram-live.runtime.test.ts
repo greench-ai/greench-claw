@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   LIVE_TRANSPORT_BASELINE_STANDARD_SCENARIO_IDS,
@@ -16,9 +16,9 @@ const fetchWithSsrFGuardMock = vi.hoisted(() =>
   })),
 );
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/ssrf-runtime")>(
-    "NexisClaw/plugin-sdk/ssrf-runtime",
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/ssrf-runtime")>(
+    "GreenchClaw/plugin-sdk/ssrf-runtime",
   );
   return {
     ...actual,
@@ -44,9 +44,9 @@ describe("telegram live qa runtime", () => {
   it("resolves required Telegram QA env vars", () => {
     expect(
       __testing.resolveTelegramQaRuntimeEnv({
-        NEXISCLAW_QA_TELEGRAM_GROUP_ID: "-100123",
-        NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: "driver",
-        NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN: "sut",
+        GREENCHCLAW_QA_TELEGRAM_GROUP_ID: "-100123",
+        GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: "driver",
+        GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN: "sut",
       }),
     ).toEqual({
       groupId: "-100123",
@@ -58,20 +58,20 @@ describe("telegram live qa runtime", () => {
   it("fails when a required Telegram QA env var is missing", () => {
     expect(() =>
       __testing.resolveTelegramQaRuntimeEnv({
-        NEXISCLAW_QA_TELEGRAM_GROUP_ID: "-100123",
-        NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: "driver",
+        GREENCHCLAW_QA_TELEGRAM_GROUP_ID: "-100123",
+        GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: "driver",
       }),
-    ).toThrow("NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN");
+    ).toThrow("GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN");
   });
 
   it("fails when the Telegram group id is not numeric", () => {
     expect(() =>
       __testing.resolveTelegramQaRuntimeEnv({
-        NEXISCLAW_QA_TELEGRAM_GROUP_ID: "qa-group",
-        NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: "driver",
-        NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN: "sut",
+        GREENCHCLAW_QA_TELEGRAM_GROUP_ID: "qa-group",
+        GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN: "driver",
+        GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN: "sut",
       }),
-    ).toThrow("NEXISCLAW_QA_TELEGRAM_GROUP_ID must be a numeric Telegram chat id.");
+    ).toThrow("GREENCHCLAW_QA_TELEGRAM_GROUP_ID must be a numeric Telegram chat id.");
   });
 
   it("parses Telegram live progress env booleans", () => {
@@ -87,23 +87,23 @@ describe("telegram live qa runtime", () => {
     expect(__testing.shouldLogTelegramQaLiveProgress({ CI: "false" })).toBe(false);
   });
 
-  it("applies NEXISCLAW_QA_SUITE_PROGRESS override to Telegram live logging", () => {
+  it("applies GREENCHCLAW_QA_SUITE_PROGRESS override to Telegram live logging", () => {
     expect(
       __testing.shouldLogTelegramQaLiveProgress({
         CI: "false",
-        NEXISCLAW_QA_SUITE_PROGRESS: "true",
+        GREENCHCLAW_QA_SUITE_PROGRESS: "true",
       }),
     ).toBe(true);
     expect(
       __testing.shouldLogTelegramQaLiveProgress({
         CI: "true",
-        NEXISCLAW_QA_SUITE_PROGRESS: "false",
+        GREENCHCLAW_QA_SUITE_PROGRESS: "false",
       }),
     ).toBe(false);
     expect(
       __testing.shouldLogTelegramQaLiveProgress({
         CI: "true",
-        NEXISCLAW_QA_SUITE_PROGRESS: "definitely",
+        GREENCHCLAW_QA_SUITE_PROGRESS: "definitely",
       }),
     ).toBe(true);
   });
@@ -112,12 +112,12 @@ describe("telegram live qa runtime", () => {
     expect(__testing.resolveTelegramQaCanaryTimeoutMs({})).toBe(30_000);
     expect(
       __testing.resolveTelegramQaCanaryTimeoutMs({
-        NEXISCLAW_QA_TELEGRAM_CANARY_TIMEOUT_MS: "90000",
+        GREENCHCLAW_QA_TELEGRAM_CANARY_TIMEOUT_MS: "90000",
       }),
     ).toBe(90_000);
     expect(
       __testing.resolveTelegramQaCanaryTimeoutMs({
-        NEXISCLAW_QA_TELEGRAM_CANARY_TIMEOUT_MS: "nope",
+        GREENCHCLAW_QA_TELEGRAM_CANARY_TIMEOUT_MS: "nope",
       }),
     ).toBe(30_000);
   });
@@ -126,12 +126,12 @@ describe("telegram live qa runtime", () => {
     expect(__testing.resolveTelegramQaScenarioTimeoutMs(45_000, {})).toBe(45_000);
     expect(
       __testing.resolveTelegramQaScenarioTimeoutMs(45_000, {
-        NEXISCLAW_QA_TELEGRAM_SCENARIO_TIMEOUT_MS: "180000",
+        GREENCHCLAW_QA_TELEGRAM_SCENARIO_TIMEOUT_MS: "180000",
       }),
     ).toBe(180_000);
     expect(
       __testing.resolveTelegramQaScenarioTimeoutMs(45_000, {
-        NEXISCLAW_QA_TELEGRAM_SCENARIO_TIMEOUT_MS: "nope",
+        GREENCHCLAW_QA_TELEGRAM_SCENARIO_TIMEOUT_MS: "nope",
       }),
     ).toBe(45_000);
   });
@@ -172,7 +172,7 @@ describe("telegram live qa runtime", () => {
   });
 
   it("injects a temporary Telegram account into the QA gateway config", () => {
-    const baseCfg: NexisClawConfig = {
+    const baseCfg: GreenchClawConfig = {
       plugins: {
         allow: ["memory-core", "qa-channel"],
         entries: {
@@ -184,8 +184,8 @@ describe("telegram live qa runtime", () => {
         "qa-channel": {
           enabled: true,
           baseUrl: "http://127.0.0.1:43123",
-          botUserId: "NexisClaw",
-          botDisplayName: "NexisClaw QA",
+          botUserId: "GreenchClaw",
+          botDisplayName: "GreenchClaw QA",
           allowFrom: ["*"],
         },
       },
@@ -374,7 +374,7 @@ describe("telegram live qa runtime", () => {
     expect(
       scenarios.find((scenario) => scenario.id === "telegram-status-command")?.buildRun("sut_bot")
         .steps[0].expectedTextIncludes,
-    ).toEqual(["NexisClaw", "Model:", "Session:", "Activation:"]);
+    ).toEqual(["GreenchClaw", "Model:", "Session:", "Activation:"]);
     expect(
       scenarios
         .find((scenario) => scenario.id === "telegram-repeated-command-authorization")
@@ -398,7 +398,7 @@ describe("telegram live qa runtime", () => {
       "sut_bot",
     ).steps[0];
     expect(otherBotStep?.expectReply).toBe(false);
-    expect(otherBotStep?.input).toBe("/status@NexisClawQaOtherBot");
+    expect(otherBotStep?.input).toBe("/status@GreenchClawQaOtherBot");
     const statusToolStep = requireScenario(
       scenarios,
       "telegram-current-session-status-tool",
@@ -491,13 +491,13 @@ describe("telegram live qa runtime", () => {
     const catalog = __testing.listTelegramQaScenarioCatalog("mock-openai");
     const status = requireScenario(catalog, "telegram-status-command");
     expect(status.defaultEnabled).toBe(true);
-    expect(status.regressionRefs).toEqual(["NexisClaw/NexisClaw#74698"]);
+    expect(status.regressionRefs).toEqual(["GreenchClaw/GreenchClaw#74698"]);
     expect(requireScenario(catalog, "telegram-current-session-status-tool").defaultEnabled).toBe(
       false,
     );
     const streamSingle = requireScenario(catalog, "telegram-stream-final-single-message");
     expect(streamSingle.defaultEnabled).toBe(true);
-    expect(streamSingle.regressionRefs).toEqual(["NexisClaw/NexisClaw#39905"]);
+    expect(streamSingle.regressionRefs).toEqual(["GreenchClaw/GreenchClaw#39905"]);
   });
 
   it("tracks Telegram live coverage against the shared transport contract", () => {

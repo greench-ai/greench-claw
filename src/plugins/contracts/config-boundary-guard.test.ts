@@ -10,7 +10,7 @@ import {
 let tempRoots: string[] = [];
 
 function makeRepoFixture(): string {
-  const repoRoot = mkdtempSync(join(tmpdir(), "NexisClaw-config-boundary-"));
+  const repoRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-config-boundary-"));
   tempRoots.push(repoRoot);
   for (const dir of ["src", "extensions", "packages", "test", "scripts"]) {
     mkdirSync(join(repoRoot, dir), { recursive: true });
@@ -77,18 +77,18 @@ describe("config boundary guard", () => {
       repoRoot,
       "extensions/telegram/src/index.ts",
       [
-        'import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-runtime";',
-        'import { requireRuntimeConfig } from "NexisClaw/plugin-sdk/config-runtime";',
-        'type Loader = typeof import("NexisClaw/plugin-sdk/config-runtime").getRuntimeConfig;',
-        "export type Config = NexisClawConfig;",
+        'import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-runtime";',
+        'import { requireRuntimeConfig } from "GreenchClaw/plugin-sdk/config-runtime";',
+        'type Loader = typeof import("GreenchClaw/plugin-sdk/config-runtime").getRuntimeConfig;',
+        "export type Config = GreenchClawConfig;",
         "export const load: Loader = requireRuntimeConfig;",
       ].join("\n"),
     );
 
     expect(collectDeprecatedInternalConfigApiViolations({ repoRoot })).toEqual([
-      "extensions/telegram/src/index.ts:1 use narrow plugin-sdk config subpaths instead of NexisClaw/plugin-sdk/config-runtime",
-      "extensions/telegram/src/index.ts:2 use narrow plugin-sdk config subpaths instead of NexisClaw/plugin-sdk/config-runtime",
-      "extensions/telegram/src/index.ts:3 use narrow plugin-sdk config subpaths instead of NexisClaw/plugin-sdk/config-runtime",
+      "extensions/telegram/src/index.ts:1 use narrow plugin-sdk config subpaths instead of GreenchClaw/plugin-sdk/config-runtime",
+      "extensions/telegram/src/index.ts:2 use narrow plugin-sdk config subpaths instead of GreenchClaw/plugin-sdk/config-runtime",
+      "extensions/telegram/src/index.ts:3 use narrow plugin-sdk config subpaths instead of GreenchClaw/plugin-sdk/config-runtime",
     ]);
   });
 
@@ -97,11 +97,11 @@ describe("config boundary guard", () => {
     writeFixture(
       repoRoot,
       "extensions/telegram/src/index.test.ts",
-      'vi.mock("NexisClaw/plugin-sdk/config-runtime", () => ({}));',
+      'vi.mock("GreenchClaw/plugin-sdk/config-runtime", () => ({}));',
     );
 
     expect(collectDeprecatedInternalConfigApiViolations({ repoRoot })).toEqual([
-      "extensions/telegram/src/index.test.ts:1 use narrow plugin-sdk config subpaths instead of NexisClaw/plugin-sdk/config-runtime",
+      "extensions/telegram/src/index.test.ts:1 use narrow plugin-sdk config subpaths instead of GreenchClaw/plugin-sdk/config-runtime",
     ]);
   });
 
@@ -111,10 +111,10 @@ describe("config boundary guard", () => {
       repoRoot,
       "extensions/telegram/src/index.ts",
       [
-        'import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";',
-        'import { requireRuntimeConfig } from "NexisClaw/plugin-sdk/plugin-config-runtime";',
-        'type Loader = typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot").getRuntimeConfig;',
-        'export const load = (cfg: NexisClawConfig) => requireRuntimeConfig(cfg, "telegram");',
+        'import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";',
+        'import { requireRuntimeConfig } from "GreenchClaw/plugin-sdk/plugin-config-runtime";',
+        'type Loader = typeof import("GreenchClaw/plugin-sdk/runtime-config-snapshot").getRuntimeConfig;',
+        'export const load = (cfg: GreenchClawConfig) => requireRuntimeConfig(cfg, "telegram");',
       ].join("\n"),
     );
 

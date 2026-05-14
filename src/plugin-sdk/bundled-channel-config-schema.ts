@@ -1,8 +1,8 @@
 /**
- * Bundled-channel config schemas for NexisClaw-maintained plugins.
+ * Bundled-channel config schemas for GreenchClaw-maintained plugins.
  *
  * Third-party plugins should define plugin-local schemas and import primitives
- * from NexisClaw/plugin-sdk/channel-config-schema instead of depending on these
+ * from GreenchClaw/plugin-sdk/channel-config-schema instead of depending on these
  * bundled channel schemas.
  */
 export {

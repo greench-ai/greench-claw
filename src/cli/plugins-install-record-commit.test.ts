@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 
 const mocks = vi.hoisted(() => ({
@@ -50,7 +50,7 @@ describe("commitConfigWithPendingPluginInstalls", () => {
       },
     };
     mocks.loadInstalledPluginIndexInstallRecords.mockResolvedValue(existingRecords);
-    const nextConfig: NexisClawConfig = {
+    const nextConfig: GreenchClawConfig = {
       plugins: {
         entries: {
           demo: { enabled: true },
@@ -167,7 +167,7 @@ describe("commitConfigWithPendingPluginInstalls", () => {
   });
 
   it("uses a plain config write when no pending plugin install records exist", async () => {
-    const nextConfig: NexisClawConfig = {
+    const nextConfig: GreenchClawConfig = {
       gateway: {
         mode: "local",
       },
@@ -189,7 +189,7 @@ describe("commitConfigWithPendingPluginInstalls", () => {
 
   it("supports non-replace config writers without adding an undefined write options argument", async () => {
     const writeConfigFile = vi.fn(async () => undefined);
-    const nextConfig: NexisClawConfig = {
+    const nextConfig: GreenchClawConfig = {
       gateway: {
         mode: "local",
       },

@@ -5,7 +5,7 @@ import { collectChannelSchemaMetadata } from "../config/channel-config-metadata.
 import { collectBundledChannelConfigs } from "./bundled-channel-config-metadata.js";
 import type { PluginCandidate } from "./discovery.js";
 import { loadPluginManifestRegistry } from "./manifest-registry.js";
-import type { NexisClawPackageManifest } from "./manifest.js";
+import type { GreenchClawPackageManifest } from "./manifest.js";
 import { cleanupTrackedTempDirs, makeTrackedTempDir } from "./test-helpers/fs-fixtures.js";
 
 vi.unmock("../version.js");
@@ -25,11 +25,11 @@ function mkdirSafe(dir: string) {
 }
 
 function makeTempDir() {
-  return makeTrackedTempDir("NexisClaw-manifest-registry", tempDirs);
+  return makeTrackedTempDir("GreenchClaw-manifest-registry", tempDirs);
 }
 
 function writeManifest(dir: string, manifest: Record<string, unknown>) {
-  fs.writeFileSync(path.join(dir, "NexisClaw.plugin.json"), JSON.stringify(manifest), "utf-8");
+  fs.writeFileSync(path.join(dir, "GreenchClaw.plugin.json"), JSON.stringify(manifest), "utf-8");
 }
 
 function writeTextFile(rootDir: string, relativePath: string, value: string) {
@@ -60,11 +60,11 @@ function createPluginCandidate(params: {
   rootDir: string;
   sourceName?: string;
   origin: "bundled" | "global" | "workspace" | "config";
-  format?: "NexisClaw" | "bundle";
+  format?: "GreenchClaw" | "bundle";
   bundleFormat?: "codex" | "claude" | "cursor";
   packageName?: string;
   packageVersion?: string;
-  packageManifest?: NexisClawPackageManifest;
+  packageManifest?: GreenchClawPackageManifest;
   packageDir?: string;
   bundledManifest?: PluginCandidate["bundledManifest"];
   bundledManifestPath?: string;
@@ -93,8 +93,8 @@ function loadRegistry(candidates: PluginCandidate[]) {
 
 function hermeticEnv(overrides: NodeJS.ProcessEnv = {}): NodeJS.ProcessEnv {
   return {
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-    NEXISCLAW_VERSION: undefined,
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+    GREENCHCLAW_VERSION: undefined,
     VITEST: "true",
     ...overrides,
   };
@@ -186,8 +186,8 @@ function prepareLinkedManifestFixture(params: { id: string; mode: "symlink" | "h
 } {
   const rootDir = makeTempDir();
   const outsideDir = makeTempDir();
-  const outsideManifest = path.join(outsideDir, "NexisClaw.plugin.json");
-  const linkedManifest = path.join(rootDir, "NexisClaw.plugin.json");
+  const outsideManifest = path.join(outsideDir, "GreenchClaw.plugin.json");
+  const linkedManifest = path.join(rootDir, "GreenchClaw.plugin.json");
   fs.writeFileSync(path.join(rootDir, "index.ts"), "export default function () {}", "utf-8");
   fs.writeFileSync(
     outsideManifest,
@@ -242,7 +242,7 @@ function loadRegistryForMinHostVersionCase(params: {
         origin: "global",
         packageManifest: {
           install: {
-            npmSpec: "@NexisClaw/synology-chat",
+            npmSpec: "@GreenchClaw/synology-chat",
             minHostVersion: params.minHostVersion,
           },
         },
@@ -376,19 +376,19 @@ describe("loadPluginManifestRegistry", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@NexisClaw/cached-manifest",
-        NexisClaw: { extensions: ["./index.js"] },
+        name: "@GreenchClaw/cached-manifest",
+        GreenchClaw: { extensions: ["./index.js"] },
       }),
       "utf-8",
     );
-    const manifestPath = path.join(pluginDir, "NexisClaw.plugin.json");
+    const manifestPath = path.join(pluginDir, "GreenchClaw.plugin.json");
     writeManifest(pluginDir, {
       id: "cached-manifest",
       name: "Before",
       configSchema: { type: "object" },
     });
     const env = hermeticEnv({
-      NEXISCLAW_STATE_DIR: stateDir,
+      GREENCHCLAW_STATE_DIR: stateDir,
     });
 
     const first = loadPluginManifestRegistry({ env });
@@ -595,7 +595,7 @@ describe("loadPluginManifestRegistry", () => {
         "diagnostics-prometheus": {
           source: "npm",
           installPath: dir,
-          resolvedName: "@NexisClaw/diagnostics-prometheus",
+          resolvedName: "@GreenchClaw/diagnostics-prometheus",
           resolvedVersion: "2026.5.3",
         },
       },
@@ -603,7 +603,7 @@ describe("loadPluginManifestRegistry", () => {
         createPluginCandidate({
           idHint: "diagnostics-prometheus",
           rootDir: dir,
-          packageName: "@NexisClaw/diagnostics-prometheus",
+          packageName: "@GreenchClaw/diagnostics-prometheus",
           origin: "global",
         }),
       ],
@@ -621,7 +621,7 @@ describe("loadPluginManifestRegistry", () => {
         "diagnostics-prometheus": {
           source: "npm",
           installPath: dir,
-          resolvedName: "@NexisClaw/diagnostics-prometheus",
+          resolvedName: "@GreenchClaw/diagnostics-prometheus",
           resolvedVersion: "2026.5.3",
         },
       },
@@ -629,13 +629,13 @@ describe("loadPluginManifestRegistry", () => {
         createPluginCandidate({
           idHint: "diagnostics-prometheus",
           rootDir: dir,
-          packageName: "@NexisClaw/diagnostics-prometheus",
+          packageName: "@GreenchClaw/diagnostics-prometheus",
           origin: "global",
         }),
         createPluginCandidate({
           idHint: "diagnostics-prometheus",
           rootDir: dir,
-          packageName: "@NexisClaw/diagnostics-prometheus",
+          packageName: "@GreenchClaw/diagnostics-prometheus",
           origin: "config",
         }),
       ],
@@ -658,7 +658,7 @@ describe("loadPluginManifestRegistry", () => {
         createPluginCandidate({
           idHint: "diagnostics-prometheus",
           rootDir: dir,
-          packageName: "@NexisClaw/diagnostics-prometheus",
+          packageName: "@GreenchClaw/diagnostics-prometheus",
           origin: "global",
         }),
       ],
@@ -1117,7 +1117,7 @@ describe("loadPluginManifestRegistry", () => {
     expectDiagnosticFields(registry, {
       level: "warn",
       pluginId: "external-openai",
-      source: path.join(dir, "NexisClaw.plugin.json"),
+      source: path.join(dir, "GreenchClaw.plugin.json"),
       messageIncludes: "providerAuthEnvVars is deprecated compatibility metadata",
     });
   });
@@ -1194,7 +1194,7 @@ describe("loadPluginManifestRegistry", () => {
     expectDiagnosticFields(registry, {
       level: "warn",
       pluginId: "external-chat",
-      source: path.join(dir, "NexisClaw.plugin.json"),
+      source: path.join(dir, "GreenchClaw.plugin.json"),
       messageIncludes: "without channelConfigs metadata",
     });
   });
@@ -1259,17 +1259,17 @@ describe("loadPluginManifestRegistry", () => {
   it("hydrates supplemental official external catalog contracts for lagging npm manifests", () => {
     const dir = makeTempDir();
     writeManifest(dir, {
-      id: "wecom-NexisClaw-plugin",
+      id: "wecom-GreenchClaw-plugin",
       channels: ["wecom"],
       configSchema: { type: "object" },
     });
 
     const registry = loadRegistry([
       createPluginCandidate({
-        idHint: "wecom-NexisClaw-plugin",
+        idHint: "wecom-GreenchClaw-plugin",
         rootDir: dir,
         origin: "global",
-        packageName: "@wecom/wecom-NexisClaw-plugin",
+        packageName: "@wecom/wecom-GreenchClaw-plugin",
       }),
     ]);
 
@@ -1288,7 +1288,7 @@ describe("loadPluginManifestRegistry", () => {
   it("fills missing official external catalog descriptors for partial npm channel configs", () => {
     const dir = makeTempDir();
     writeManifest(dir, {
-      id: "wecom-NexisClaw-plugin",
+      id: "wecom-GreenchClaw-plugin",
       channels: ["wecom"],
       configSchema: { type: "object" },
       channelConfigs: {
@@ -1306,10 +1306,10 @@ describe("loadPluginManifestRegistry", () => {
 
     const registry = loadRegistry([
       createPluginCandidate({
-        idHint: "wecom-NexisClaw-plugin",
+        idHint: "wecom-GreenchClaw-plugin",
         rootDir: dir,
         origin: "global",
-        packageName: "@wecom/wecom-NexisClaw-plugin",
+        packageName: "@wecom/wecom-GreenchClaw-plugin",
       }),
     ]);
 
@@ -1333,7 +1333,7 @@ describe("loadPluginManifestRegistry", () => {
     const dir = makeTempDir();
     writeTextFile(
       dir,
-      "NexisClaw.plugin.json",
+      "GreenchClaw.plugin.json",
       JSON.stringify({
         id: "external-chat",
         channels: ["safe-chat"],
@@ -1779,7 +1779,7 @@ describe("loadPluginManifestRegistry", () => {
         idHint: "telegram",
         rootDir: dir,
         origin: "bundled",
-        bundledManifestPath: path.join(dir, "NexisClaw.plugin.json"),
+        bundledManifestPath: path.join(dir, "GreenchClaw.plugin.json"),
         bundledManifest: {
           id: "telegram",
           configSchema: { type: "object" },
@@ -1903,27 +1903,27 @@ describe("loadPluginManifestRegistry", () => {
     {
       name: "skips plugins whose minHostVersion is newer than the current host",
       minHostVersion: ">=2026.3.22",
-      env: { NEXISCLAW_VERSION: "2026.3.21" } as NodeJS.ProcessEnv,
-      expectedMessage: "plugin requires NexisClaw >=2026.3.22, but this host is 2026.3.21",
+      env: { GREENCHCLAW_VERSION: "2026.3.21" } as NodeJS.ProcessEnv,
+      expectedMessage: "plugin requires GreenchClaw >=2026.3.22, but this host is 2026.3.21",
       expectWarn: true,
     },
     {
       name: "skips plugins whose beta minHostVersion is newer than the current host",
       minHostVersion: ">=2026.5.1-beta.1",
-      env: { NEXISCLAW_VERSION: "2026.4.30" } as NodeJS.ProcessEnv,
-      expectedMessage: "plugin requires NexisClaw >=2026.5.1-beta.1, but this host is 2026.4.30",
+      env: { GREENCHCLAW_VERSION: "2026.4.30" } as NodeJS.ProcessEnv,
+      expectedMessage: "plugin requires GreenchClaw >=2026.5.1-beta.1, but this host is 2026.4.30",
       expectWarn: true,
     },
     {
       name: "rejects invalid minHostVersion metadata",
       minHostVersion: "2026.3.22",
-      expectedMessage: "plugin manifest invalid | NexisClaw.install.minHostVersion must use",
+      expectedMessage: "plugin manifest invalid | GreenchClaw.install.minHostVersion must use",
       expectWarn: false,
     },
     {
       name: "warns distinctly when host version cannot be determined",
       minHostVersion: ">=2026.3.22",
-      env: { NEXISCLAW_VERSION: "unknown" } as NodeJS.ProcessEnv,
+      env: { GREENCHCLAW_VERSION: "unknown" } as NodeJS.ProcessEnv,
       expectedMessage: "host version could not be determined",
       expectWarn: true,
     },
@@ -1963,7 +1963,7 @@ describe("loadPluginManifestRegistry", () => {
           origin: "global",
           packageManifest: {
             install: {
-              npmSpec: "@NexisClaw/codex",
+              npmSpec: "@GreenchClaw/codex",
               minHostVersion: "2026.3.22",
             },
           },
@@ -1972,7 +1972,7 @@ describe("loadPluginManifestRegistry", () => {
     });
 
     expect(registry.plugins.map((plugin) => plugin.id)).toEqual(["codex"]);
-    expectNoRegistryDiagnosticContains(registry, "NexisClaw.install.minHostVersion must use");
+    expectNoRegistryDiagnosticContains(registry, "GreenchClaw.install.minHostVersion must use");
   });
 
   it("does not runtime-gate bundled source plugins by install minHostVersion", () => {
@@ -1988,17 +1988,17 @@ describe("loadPluginManifestRegistry", () => {
           origin: "bundled",
           packageManifest: {
             install: {
-              npmSpec: "@NexisClaw/codex",
+              npmSpec: "@GreenchClaw/codex",
               minHostVersion: ">=2026.5.1-beta.1",
             },
           },
         }),
       ],
-      env: { NEXISCLAW_VERSION: "2026.4.30" } as NodeJS.ProcessEnv,
+      env: { GREENCHCLAW_VERSION: "2026.4.30" } as NodeJS.ProcessEnv,
     });
 
     expect(registry.plugins.map((plugin) => plugin.id)).toContain("codex");
-    expectNoRegistryDiagnosticContains(registry, "requires NexisClaw");
+    expectNoRegistryDiagnosticContains(registry, "requires GreenchClaw");
   });
 
   it.each([
@@ -2085,23 +2085,23 @@ describe("loadPluginManifestRegistry", () => {
   it("suppresses duplicate warning when global candidates come from the same package artifact", () => {
     const firstDir = makeTempDir();
     const secondDir = makeTempDir();
-    const manifest = { id: "opik-NexisClaw", configSchema: { type: "object" } };
+    const manifest = { id: "opik-GreenchClaw", configSchema: { type: "object" } };
     writeManifest(firstDir, manifest);
     writeManifest(secondDir, manifest);
 
     const candidates: PluginCandidate[] = [
       createPluginCandidate({
-        idHint: "opik-NexisClaw",
+        idHint: "opik-GreenchClaw",
         rootDir: firstDir,
         origin: "global",
-        packageName: "@opik/opik-NexisClaw",
+        packageName: "@opik/opik-GreenchClaw",
         packageVersion: "0.2.14",
       }),
       createPluginCandidate({
-        idHint: "opik-NexisClaw",
+        idHint: "opik-GreenchClaw",
         rootDir: secondDir,
         origin: "global",
-        packageName: "@opik/opik-NexisClaw",
+        packageName: "@opik/opik-GreenchClaw",
         packageVersion: "0.2.14",
       }),
     ];
@@ -2294,7 +2294,7 @@ describe("loadPluginManifestRegistry", () => {
       return;
     }
     const registry = loadPluginManifestRegistry({
-      env: hermeticEnv({ NEXISCLAW_NIX_MODE: "1" }),
+      env: hermeticEnv({ GREENCHCLAW_NIX_MODE: "1" }),
       candidates: [
         createPluginCandidate({
           idHint: "unsafe-config-hardlink",
@@ -2353,16 +2353,16 @@ describe("loadPluginManifestRegistry", () => {
       config,
       env: hermeticEnv({
         HOME: homeA,
-        NEXISCLAW_HOME: undefined,
-        NEXISCLAW_STATE_DIR: path.join(homeA, ".state"),
+        GREENCHCLAW_HOME: undefined,
+        GREENCHCLAW_STATE_DIR: path.join(homeA, ".state"),
       }),
     });
     const second = loadPluginManifestRegistry({
       config,
       env: hermeticEnv({
         HOME: homeB,
-        NEXISCLAW_HOME: undefined,
-        NEXISCLAW_STATE_DIR: path.join(homeB, ".state"),
+        GREENCHCLAW_HOME: undefined,
+        GREENCHCLAW_STATE_DIR: path.join(homeB, ".state"),
       }),
     });
 
@@ -2387,7 +2387,7 @@ describe("loadPluginManifestRegistry", () => {
         origin: "global",
         packageManifest: {
           install: {
-            npmSpec: "@NexisClaw/synology-chat",
+            npmSpec: "@GreenchClaw/synology-chat",
             minHostVersion: ">=2026.3.22",
           },
         },
@@ -2397,13 +2397,13 @@ describe("loadPluginManifestRegistry", () => {
     const olderHost = loadPluginManifestRegistry({
       candidates,
       env: hermeticEnv({
-        NEXISCLAW_VERSION: "2026.3.21",
+        GREENCHCLAW_VERSION: "2026.3.21",
       }),
     });
     const newerHost = loadPluginManifestRegistry({
       candidates,
       env: hermeticEnv({
-        NEXISCLAW_VERSION: "2026.3.22",
+        GREENCHCLAW_VERSION: "2026.3.22",
       }),
     });
 

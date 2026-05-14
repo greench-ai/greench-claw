@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { TelegramAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { TelegramAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { normalizeAllowFrom, type NormalizedAllowFrom } from "./bot-access.js";
 import {
@@ -76,7 +76,7 @@ describe("evaluateTelegramGroupBaseAccess", () => {
  */
 const baseCfg = {
   channels: { telegram: {} },
-} as unknown as NexisClawConfig;
+} as unknown as GreenchClawConfig;
 
 const baseTelegramCfg: TelegramAccountConfig = {
   groupPolicy: "allowlist",

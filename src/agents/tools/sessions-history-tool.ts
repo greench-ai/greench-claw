@@ -1,6 +1,6 @@
 import { Type } from "typebox";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { callGateway } from "../../gateway/call.js";
 import { capArrayByJsonBytes } from "../../gateway/session-utils.fs.js";
 import { jsonUtf8Bytes } from "../../infra/json-utf8-bytes.js";
@@ -176,7 +176,7 @@ function enforceSessionsHistoryHardCap(params: {
 export function createSessionsHistoryTool(opts?: {
   agentSessionKey?: string;
   sandboxed?: boolean;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   callGateway?: GatewayCaller;
 }): AnyAgentTool {
   return {

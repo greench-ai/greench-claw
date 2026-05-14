@@ -78,8 +78,8 @@ export function resolveAugmentedPluginNpmPackageJson(params) {
     files: plan.packageFiles,
     peerDependencies: plan.packagePeerMetadata.peerDependencies,
     peerDependenciesMeta: plan.packagePeerMetadata.peerDependenciesMeta,
-    NexisClaw: {
-      ...plan.packageJson.NexisClaw,
+    GreenchClaw: {
+      ...plan.packageJson.GreenchClaw,
       runtimeExtensions: plan.runtimeExtensions,
       ...(plan.runtimeSetupEntry ? { runtimeSetupEntry: plan.runtimeSetupEntry } : {}),
     },
@@ -198,7 +198,7 @@ export function mergeGeneratedChannelConfigs(manifest, generatedChannelConfigs) 
 export function resolveAugmentedPluginNpmManifest(params) {
   const repoRoot = path.resolve(params.repoRoot ?? ".");
   const packageDir = resolvePackageDir(repoRoot, params.packageDir);
-  const manifestPath = path.join(packageDir, "NexisClaw.plugin.json");
+  const manifestPath = path.join(packageDir, "GreenchClaw.plugin.json");
   if (!fs.existsSync(manifestPath)) {
     return {
       manifestPath,

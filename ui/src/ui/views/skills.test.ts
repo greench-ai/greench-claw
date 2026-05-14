@@ -165,7 +165,7 @@ describe("renderSkills", () => {
               score: 0.95,
               slug: "github",
               displayName: "GitHub",
-              summary: "GitHub integration for NexisClaw",
+              summary: "GitHub integration for GreenchClaw",
               version: "1.2.3",
             },
           ],
@@ -183,7 +183,7 @@ describe("renderSkills", () => {
     expect(installButton).toBeInstanceOf(HTMLButtonElement);
     expect(resultItem?.querySelector(".list-title")?.textContent?.trim()).toBe("GitHub");
     expect(resultItem?.querySelector(".list-sub")?.textContent?.trim()).toBe(
-      "GitHub integration for NexisClaw",
+      "GitHub integration for GreenchClaw",
     );
     expect(resultItem?.querySelector(".list-meta .muted")?.textContent?.trim()).toBe("v1.2.3");
     expect(installButton?.textContent?.trim()).toBe("Install");
@@ -208,7 +208,7 @@ describe("renderSkills", () => {
             skill: {
               slug: "github",
               displayName: "GitHub",
-              summary: "GitHub integration for NexisClaw",
+              summary: "GitHub integration for GreenchClaw",
               createdAt: 1_700_000_000,
               updatedAt: 1_700_000_100,
             },
@@ -221,8 +221,8 @@ describe("renderSkills", () => {
               os: ["macos", "linux"],
             },
             owner: {
-              displayName: "NexisClaw",
-              handle: "NexisClaw",
+              displayName: "GreenchClaw",
+              handle: "GreenchClaw",
             },
           },
           onClawHubInstall,
@@ -237,7 +237,7 @@ describe("renderSkills", () => {
       Array.from(container.querySelectorAll(".callout")).map((node) => normalizeText(node)),
     ).toEqual(["rate limited", "Installed github"]);
     expect(normalizeText(container.querySelector(".md-preview-dialog__body")!)).toBe(
-      "GitHub integration for NexisClaw By NexisClaw (@NexisClaw) Latest: v1.2.3 Added search support Platforms: macos, linux Install GitHub",
+      "GitHub integration for GreenchClaw By GreenchClaw (@GreenchClaw) Latest: v1.2.3 Added search support Platforms: macos, linux Install GitHub",
     );
 
     const detailInstallButton = container.querySelector<HTMLButtonElement>(

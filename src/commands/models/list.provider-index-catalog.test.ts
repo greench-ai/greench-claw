@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { loadProviderIndexCatalogRowsForList } from "./list.provider-index-catalog.js";
 
-const baseConfig = {} satisfies NexisClawConfig;
+const baseConfig = {} satisfies GreenchClawConfig;
 
 describe("loadProviderIndexCatalogRowsForList", () => {
   it("returns provider-index preview rows when the provider plugin is enabled", () => {

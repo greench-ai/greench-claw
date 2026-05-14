@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { collectGatewayConfigFindings } from "./audit-gateway-config.js";
 
 function hasFinding(
@@ -22,7 +22,7 @@ describe("security audit gateway HTTP tool findings", () => {
           auth: { token: "secret" },
           tools: { allow: ["sessions_spawn"] },
         },
-      } satisfies NexisClawConfig,
+      } satisfies GreenchClawConfig,
       expectedSeverity: "warn" as const,
     },
     {
@@ -33,7 +33,7 @@ describe("security audit gateway HTTP tool findings", () => {
           auth: { token: "secret" },
           tools: { allow: ["sessions_spawn", "gateway"] },
         },
-      } satisfies NexisClawConfig,
+      } satisfies GreenchClawConfig,
       expectedSeverity: "critical" as const,
     },
     {
@@ -44,7 +44,7 @@ describe("security audit gateway HTTP tool findings", () => {
           auth: { token: "secret" },
           tools: { allow: ["exec"] },
         },
-      } satisfies NexisClawConfig,
+      } satisfies GreenchClawConfig,
       expectedSeverity: "critical" as const,
     },
   ])(

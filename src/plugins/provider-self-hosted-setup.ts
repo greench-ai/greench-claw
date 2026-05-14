@@ -5,8 +5,8 @@ import {
   SELF_HOSTED_DEFAULT_COST,
   SELF_HOSTED_DEFAULT_MAX_TOKENS,
 } from "../agents/self-hosted-provider-defaults.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { ModelDefinitionConfig } from "../config/types.models.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { fetchWithSsrFGuard } from "../infra/net/fetch-guard.js";
 import type { SsrFPolicy } from "../infra/net/ssrf.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
@@ -228,7 +228,10 @@ export async function discoverOpenAICompatibleLocalModels(params: {
   }
 }
 
-export function applyProviderDefaultModel(cfg: NexisClawConfig, modelRef: string): NexisClawConfig {
+export function applyProviderDefaultModel(
+  cfg: GreenchClawConfig,
+  modelRef: string,
+): GreenchClawConfig {
   const existingModel = cfg.agents?.defaults?.model;
   const fallbacks =
     existingModel && typeof existingModel === "object" && "fallbacks" in existingModel
@@ -251,7 +254,7 @@ export function applyProviderDefaultModel(cfg: NexisClawConfig, modelRef: string
 }
 
 function buildOpenAICompatibleSelfHostedProviderConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   providerId: string;
   baseUrl: string;
   providerApiKey: string;
@@ -260,7 +263,7 @@ function buildOpenAICompatibleSelfHostedProviderConfig(params: {
   reasoning?: boolean;
   contextWindow?: number;
   maxTokens?: number;
-}): { config: NexisClawConfig; modelId: string; modelRef: string; profileId: string } {
+}): { config: GreenchClawConfig; modelId: string; modelRef: string; profileId: string } {
   const modelRef = `${params.providerId}/${params.modelId}`;
   const profileId = `${params.providerId}:default`;
   return {
@@ -297,7 +300,7 @@ function buildOpenAICompatibleSelfHostedProviderConfig(params: {
 }
 
 type OpenAICompatibleSelfHostedProviderSetupParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prompter: WizardPrompter;
   providerId: string;
   providerLabel: string;
@@ -311,7 +314,7 @@ type OpenAICompatibleSelfHostedProviderSetupParams = {
 };
 
 type OpenAICompatibleSelfHostedProviderPromptResult = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   credential: AuthProfileCredential;
   modelId: string;
   modelRef: string;
@@ -445,7 +448,7 @@ export async function configureOpenAICompatibleSelfHostedProviderNonInteractive(
   reasoning?: boolean;
   contextWindow?: number;
   maxTokens?: number;
-}): Promise<NexisClawConfig | null> {
+}): Promise<GreenchClawConfig | null> {
   const baseUrl = (
     normalizeOptionalSecretInput(params.ctx.opts.customBaseUrl) ?? params.defaultBaseUrl
   ).replace(/\/+$/, "");

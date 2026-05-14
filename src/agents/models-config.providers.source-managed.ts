@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveSecretInputRef } from "../config/types.secrets.js";
 import { isRecord } from "../utils.js";
 import {
@@ -8,7 +8,7 @@ import {
 } from "./model-auth-markers.js";
 import type { ProviderConfig, SecretDefaults } from "./models-config.providers.secrets.js";
 
-type ModelsConfig = NonNullable<NexisClawConfig["models"]>;
+type ModelsConfig = NonNullable<GreenchClawConfig["models"]>;
 
 function normalizeSourceProviderLookup(
   providers: ModelsConfig["providers"] | undefined,

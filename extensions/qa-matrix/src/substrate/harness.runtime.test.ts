@@ -17,7 +17,7 @@ async function withStartedMatrixHarness(
     const result = await startMatrixQaHarness(
       {
         outputDir,
-        repoRoot: "/repo/NexisClaw",
+        repoRoot: "/repo/GreenchClaw",
         homeserverPort: 28008,
       },
       deps,
@@ -116,9 +116,9 @@ describe("matrix harness runtime", () => {
       },
       async ({ outputDir, result }) => {
         expect(calls).toEqual([
-          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml down --remove-orphans @/repo/NexisClaw`,
-          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml up -d @/repo/NexisClaw`,
-          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml ps --format json matrix-qa-homeserver @/repo/NexisClaw`,
+          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml down --remove-orphans @/repo/GreenchClaw`,
+          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml up -d @/repo/GreenchClaw`,
+          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml ps --format json matrix-qa-homeserver @/repo/GreenchClaw`,
         ]);
         expect(fetchCalls).toEqual([
           "http://127.0.0.1:28008/_matrix/client/versions",
@@ -130,7 +130,7 @@ describe("matrix harness runtime", () => {
         );
         await result.restartService();
         expect(calls).toContain(
-          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml restart matrix-qa-homeserver @/repo/NexisClaw`,
+          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml restart matrix-qa-homeserver @/repo/GreenchClaw`,
         );
       },
     );
@@ -170,10 +170,10 @@ describe("matrix harness runtime", () => {
       ({ outputDir, result }) => {
         expect(result.baseUrl).toBe("http://172.18.0.10:8008/");
         expect(calls).toContain(
-          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml ps -q matrix-qa-homeserver @/repo/NexisClaw`,
+          `docker compose -f ${outputDir}/docker-compose.matrix-qa.yml ps -q matrix-qa-homeserver @/repo/GreenchClaw`,
         );
         expect(calls).toContain(
-          "docker inspect --format {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}} container-123 @/repo/NexisClaw",
+          "docker inspect --format {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}} container-123 @/repo/GreenchClaw",
         );
       },
     );

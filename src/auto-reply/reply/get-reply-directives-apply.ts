@@ -1,5 +1,5 @@
 import type { SessionEntry, SessionScope } from "../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { enqueueSystemEvent } from "../../infra/system-events.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 import type { MsgContext } from "../templating.js";
@@ -14,8 +14,8 @@ import { clearInlineDirectives } from "./get-reply-directives-utils.js";
 import type { createModelSelectionState } from "./model-selection.js";
 import type { TypingController } from "./typing.js";
 
-type AgentDefaults = NonNullable<NexisClawConfig["agents"]>["defaults"];
-type AgentEntry = NonNullable<NonNullable<NexisClawConfig["agents"]>["list"]>[number];
+type AgentDefaults = NonNullable<GreenchClawConfig["agents"]>["defaults"];
+type AgentEntry = NonNullable<NonNullable<GreenchClawConfig["agents"]>["list"]>[number];
 
 const commandsStatusLoader = createLazyImportLoader(() => import("./commands-status.runtime.js"));
 const directiveLevelsLoader = createLazyImportLoader(
@@ -93,7 +93,7 @@ export type ApplyDirectiveResult =
 
 export async function applyInlineDirectiveOverrides(params: {
   ctx: MsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   agentDir: string;
   workspaceDir: string;

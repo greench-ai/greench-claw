@@ -3,7 +3,7 @@ import {
   resolveThinkingDefaultWithRuntimeCatalog,
   type ModelAliasIndex,
 } from "../../agents/model-selection.js";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 import { normalizeOptionalString } from "../../shared/string-coerce.js";
 import type { GetReplyOptions } from "../get-reply-options.types.js";
@@ -18,7 +18,7 @@ import { handleInlineActions } from "./get-reply-inline-actions.js";
 import { stripStructuralPrefixes } from "./mentions.js";
 import type { createTypingController } from "./typing.js";
 
-type AgentDefaults = NonNullable<NonNullable<NexisClawConfig["agents"]>["defaults"]> | undefined;
+type AgentDefaults = NonNullable<NonNullable<GreenchClawConfig["agents"]>["defaults"]> | undefined;
 
 const commandsRuntimeLoader = createLazyImportLoader(() => import("./commands.runtime.js"));
 const statusCommandRuntimeLoader = createLazyImportLoader(() => import("./commands-status.js"));
@@ -48,7 +48,7 @@ function shouldRunNativeSlashCommandFastPath(ctx: MsgContext): boolean {
 }
 
 async function resolveNativeSlashDefaultThinkingLevel(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   provider: string;
   model: string;
 }): Promise<ThinkLevel> {
@@ -62,7 +62,7 @@ async function resolveNativeSlashDefaultThinkingLevel(params: {
 
 export async function maybeResolveNativeSlashCommandFastReply(params: {
   ctx: MsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   agentDir: string;
   agentCfg: AgentDefaults;

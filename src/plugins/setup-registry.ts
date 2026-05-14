@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { normalizeProviderId } from "../agents/provider-id.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { buildPluginApi } from "./api-builder.js";
 import { collectPluginConfigContractMatches } from "./config-contracts.js";
 import type { PluginManifestRecord, PluginManifestRegistry } from "./manifest-registry.js";
@@ -17,7 +17,7 @@ import type { PluginRuntime } from "./runtime/types.js";
 import { listSetupCliBackendIds, listSetupProviderIds } from "./setup-descriptors.js";
 import type {
   CliBackendPlugin,
-  NexisClawPluginModule,
+  GreenchClawPluginModule,
   PluginConfigMigration,
   PluginLogger,
   PluginSetupAutoEnableProbe,
@@ -153,7 +153,7 @@ function resolveSetupApiPath(
   return null;
 }
 
-function collectConfiguredPluginEntryIds(config: NexisClawConfig): string[] {
+function collectConfiguredPluginEntryIds(config: GreenchClawConfig): string[] {
   const entries = config.plugins?.entries;
   if (!entries || typeof entries !== "object") {
     return [];
@@ -165,7 +165,7 @@ function collectConfiguredPluginEntryIds(config: NexisClawConfig): string[] {
 }
 
 function resolveRelevantSetupMigrationPluginIds(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): string[] {
@@ -195,7 +195,7 @@ function resolveRelevantSetupMigrationPluginIds(params: {
   return [...ids].toSorted();
 }
 
-function resolveRegister(mod: NexisClawPluginModule): {
+function resolveRegister(mod: GreenchClawPluginModule): {
   definition?: { id?: string };
   register?: (api: ReturnType<typeof buildPluginApi>) => void | Promise<void>;
 } {
@@ -236,14 +236,14 @@ function resolveSetupRegistration(record: PluginManifestRecord): {
     return null;
   }
 
-  let mod: NexisClawPluginModule;
+  let mod: GreenchClawPluginModule;
   try {
-    mod = getModuleLoader(setupSource)(setupSource) as NexisClawPluginModule;
+    mod = getModuleLoader(setupSource)(setupSource) as GreenchClawPluginModule;
   } catch {
     return null;
   }
 
-  const resolved = resolveRegister((mod as { default?: NexisClawPluginModule }).default ?? mod);
+  const resolved = resolveRegister((mod as { default?: GreenchClawPluginModule }).default ?? mod);
   if (!resolved.register) {
     return null;
   }
@@ -269,7 +269,7 @@ function buildSetupPluginApi(params: {
     source: params.setupSource,
     rootDir: params.record.rootDir,
     registrationMode: "setup-only",
-    config: {} as NexisClawConfig,
+    config: {} as GreenchClawConfig,
     runtime: EMPTY_RUNTIME,
     logger: NOOP_LOGGER,
     resolvePath: (input) => input,
@@ -297,7 +297,7 @@ function matchesProvider(provider: ProviderPlugin, providerId: string): boolean 
 }
 
 function loadSetupManifestRegistry(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   pluginIds?: readonly string[];
@@ -351,7 +351,7 @@ function pushDescriptorRuntimeDisabledDiagnostic(params: {
     pluginId: params.record.id,
     code: "setup-descriptor-runtime-disabled",
     message:
-      "setup.requiresRuntime is false, so NexisClaw ignored the plugin setup runtime entry. Remove setup-api/NexisClaw.setupEntry or set requiresRuntime true if setup lookup still needs plugin code.",
+      "setup.requiresRuntime is false, so GreenchClaw ignored the plugin setup runtime entry. Remove setup-api/GreenchClaw.setupEntry or set requiresRuntime true if setup lookup still needs plugin code.",
   });
 }
 
@@ -413,7 +413,7 @@ function pushSetupDescriptorDriftDiagnostics(params: {
 }
 
 export function resolvePluginSetupRegistry(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   pluginIds?: readonly string[];
@@ -541,7 +541,7 @@ export function resolvePluginSetupRegistry(params?: {
 
 export function resolvePluginSetupProvider(params: {
   provider: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   pluginIds?: readonly string[];
@@ -604,7 +604,7 @@ export function resolvePluginSetupProvider(params: {
 
 export function resolvePluginSetupCliBackend(params: {
   backend: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): SetupCliBackendEntry | undefined {
@@ -670,11 +670,11 @@ export function resolvePluginSetupCliBackend(params: {
 }
 
 export function runPluginSetupConfigMigrations(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   changes: string[];
 } {
   let next = params.config;
@@ -702,7 +702,7 @@ export function runPluginSetupConfigMigrations(params: {
 }
 
 export function resolvePluginSetupAutoEnableReasons(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   pluginIds?: readonly string[];

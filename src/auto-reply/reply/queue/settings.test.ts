@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { resolveQueueSettings } from "./settings.js";
 
 describe("resolveQueueSettings", () => {
   it("defaults inbound channels to steer with a short followup debounce", () => {
-    expect(resolveQueueSettings({ cfg: {} as NexisClawConfig })).toEqual({
+    expect(resolveQueueSettings({ cfg: {} as GreenchClawConfig })).toEqual({
       mode: "steer",
       debounceMs: 500,
       cap: 20,
@@ -21,7 +21,7 @@ describe("resolveQueueSettings", () => {
               mode: "collect",
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
       }),
     ).toEqual({
       mode: "collect",
@@ -44,7 +44,7 @@ describe("resolveQueueSettings", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         channel: "discord",
       }),
     ).toEqual({
@@ -63,7 +63,7 @@ describe("resolveQueueSettings", () => {
             mode: "queue",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
     expect(settings.mode).toBe("queue");
   });

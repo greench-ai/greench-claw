@@ -42,9 +42,9 @@ vi.mock("../config/config.js", async () => {
     browser: {
       enabled: true,
       evaluateEnabled: false,
-      defaultProfile: "NexisClaw",
+      defaultProfile: "GreenchClaw",
       profiles: {
-        NexisClaw: { cdpPort: testPort + 1, color: "#FF4500" },
+        GreenchClaw: { cdpPort: testPort + 1, color: "#FF4500" },
       },
     },
   });
@@ -74,12 +74,12 @@ const { startBrowserControlServerFromConfig, stopBrowserControlServer } =
 describe("browser control evaluate gating", () => {
   beforeEach(async () => {
     testPort = await getFreePort();
-    prevGatewayPort = process.env.NEXISCLAW_GATEWAY_PORT;
-    process.env.NEXISCLAW_GATEWAY_PORT = String(testPort - 2);
-    prevGatewayToken = process.env.NEXISCLAW_GATEWAY_TOKEN;
-    prevGatewayPassword = process.env.NEXISCLAW_GATEWAY_PASSWORD;
-    delete process.env.NEXISCLAW_GATEWAY_TOKEN;
-    delete process.env.NEXISCLAW_GATEWAY_PASSWORD;
+    prevGatewayPort = process.env.GREENCHCLAW_GATEWAY_PORT;
+    process.env.GREENCHCLAW_GATEWAY_PORT = String(testPort - 2);
+    prevGatewayToken = process.env.GREENCHCLAW_GATEWAY_TOKEN;
+    prevGatewayPassword = process.env.GREENCHCLAW_GATEWAY_PASSWORD;
+    delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
+    delete process.env.GREENCHCLAW_GATEWAY_PASSWORD;
 
     pwMocks.cookiesGetViaPlaywright.mockClear();
     pwMocks.storageGetViaPlaywright.mockClear();
@@ -91,19 +91,19 @@ describe("browser control evaluate gating", () => {
   afterEach(async () => {
     vi.restoreAllMocks();
     if (prevGatewayPort === undefined) {
-      delete process.env.NEXISCLAW_GATEWAY_PORT;
+      delete process.env.GREENCHCLAW_GATEWAY_PORT;
     } else {
-      process.env.NEXISCLAW_GATEWAY_PORT = prevGatewayPort;
+      process.env.GREENCHCLAW_GATEWAY_PORT = prevGatewayPort;
     }
     if (prevGatewayToken === undefined) {
-      delete process.env.NEXISCLAW_GATEWAY_TOKEN;
+      delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
     } else {
-      process.env.NEXISCLAW_GATEWAY_TOKEN = prevGatewayToken;
+      process.env.GREENCHCLAW_GATEWAY_TOKEN = prevGatewayToken;
     }
     if (prevGatewayPassword === undefined) {
-      delete process.env.NEXISCLAW_GATEWAY_PASSWORD;
+      delete process.env.GREENCHCLAW_GATEWAY_PASSWORD;
     } else {
-      process.env.NEXISCLAW_GATEWAY_PASSWORD = prevGatewayPassword;
+      process.env.GREENCHCLAW_GATEWAY_PASSWORD = prevGatewayPassword;
     }
 
     await stopBrowserControlServer();

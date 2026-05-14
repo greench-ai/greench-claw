@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
 import { createTestRegistry } from "../../test-utils/channel-plugins.js";
 import {
@@ -8,7 +8,7 @@ import {
   resolveReplyToModeWithThreading,
 } from "./reply-threading.js";
 
-const emptyCfg = {} as NexisClawConfig;
+const emptyCfg = {} as GreenchClawConfig;
 
 describe("resolveReplyToMode", () => {
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe("resolveReplyToMode", () => {
         discord: { replyToMode: "first" },
         slack: { replyToMode: "all" },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const chatTypeCfg = {
       channels: {
         slack: {
@@ -34,14 +34,14 @@ describe("resolveReplyToMode", () => {
           replyToModeByChatType: { direct: "all", group: "first" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const topLevelFallbackCfg = {
       channels: {
         slack: {
           replyToMode: "first",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const legacyDmCfg = {
       channels: {
         slack: {
@@ -49,10 +49,10 @@ describe("resolveReplyToMode", () => {
           dm: { replyToMode: "all" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const cases: Array<{
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       channel?: "telegram" | "discord" | "slack";
       chatType?: "direct" | "group" | "channel";
       expected: "off" | "all" | "first";
@@ -89,7 +89,7 @@ describe("resolveReplyToMode", () => {
               replyToMode: "off",
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         {
           resolveReplyToMode: () => "first",
         },
@@ -131,8 +131,8 @@ describe("resolveReplyToMode", () => {
       ]),
     );
 
-    expect(resolveReplyToMode({} as NexisClawConfig, "whatsapp", "work", "group")).toBe("first");
-    expect(resolveReplyToMode({} as NexisClawConfig, "whatsapp", "default", "group")).toBe("all");
+    expect(resolveReplyToMode({} as GreenchClawConfig, "whatsapp", "work", "group")).toBe("first");
+    expect(resolveReplyToMode({} as GreenchClawConfig, "whatsapp", "default", "group")).toBe("all");
   });
 });
 
@@ -154,7 +154,7 @@ describe("resolveConfiguredReplyToMode", () => {
           dm: { replyToMode: "all" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveConfiguredReplyToMode(cfg, "slack", "direct")).toBe("all");
     expect(resolveConfiguredReplyToMode(cfg, "slack", "group")).toBe("first");

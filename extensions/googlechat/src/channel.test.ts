@@ -1,10 +1,10 @@
-import { verifyChannelMessageAdapterCapabilityProofs } from "NexisClaw/plugin-sdk/channel-message";
+import { verifyChannelMessageAdapterCapabilityProofs } from "GreenchClaw/plugin-sdk/channel-message";
 import {
   createDirectoryTestRuntime,
   expectDirectorySurface,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import {
   googlechatDirectoryAdapter,
   googlechatMessageAdapter,
@@ -47,7 +47,10 @@ function normalizeGoogleChatTarget(raw?: string | null): string | undefined {
   return normalized;
 }
 
-function resolveGoogleChatAccountImpl(params: { cfg: NexisClawConfig; accountId?: string | null }) {
+function resolveGoogleChatAccountImpl(params: {
+  cfg: GreenchClawConfig;
+  accountId?: string | null;
+}) {
   const accountId = params.accountId?.trim() || DEFAULT_ACCOUNT_ID;
   const channelConfig = (params.cfg.channels?.googlechat ?? {}) as Record<string, unknown>;
   const accounts =
@@ -131,7 +134,7 @@ vi.mock("./channel.deps.runtime.js", () => {
     getChatChannelMeta: (id: string) => ({ id, name: id }),
     isGoogleChatSpaceTarget: (value: string) => value.toLowerCase().startsWith("spaces/"),
     isGoogleChatUserTarget: (value: string) => value.toLowerCase().startsWith("users/"),
-    listGoogleChatAccountIds: (cfg: NexisClawConfig) => {
+    listGoogleChatAccountIds: (cfg: GreenchClawConfig) => {
       const ids = Object.keys(cfg.channels?.googlechat?.accounts ?? {});
       return ids.length > 0 ? ids : ["default"];
     },
@@ -141,9 +144,9 @@ vi.mock("./channel.deps.runtime.js", () => {
     normalizeGoogleChatTarget,
     PAIRING_APPROVED_MESSAGE: "approved",
     resolveChannelMediaMaxBytes: (params: {
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       resolveChannelLimitMb: (args: {
-        cfg: NexisClawConfig;
+        cfg: GreenchClawConfig;
         accountId?: string;
       }) => number | undefined;
       accountId?: string;
@@ -181,7 +184,7 @@ afterAll(() => {
   vi.resetModules();
 });
 
-function createGoogleChatCfg(): NexisClawConfig {
+function createGoogleChatCfg(): GreenchClawConfig {
   return {
     channels: {
       googlechat: {
@@ -420,7 +423,7 @@ describe("googlechatPlugin threading", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const workAccount = googlechatThreadingAdapter.scopedAccountReplyToMode.resolveAccount(
       cfg,
@@ -702,7 +705,7 @@ describe("googlechat directory", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const directory = expectDirectorySurface(googlechatDirectoryAdapter);
 
@@ -739,7 +742,7 @@ describe("googlechat directory", () => {
           dm: { allowFrom: [" users/alice ", " googlechat:user:Bob@Example.com "] },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const directory = expectDirectorySurface(googlechatDirectoryAdapter);
 
@@ -769,7 +772,7 @@ describe("googlechatPlugin security", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const account = resolveGoogleChatAccountImpl({ cfg, accountId: "default" });
 

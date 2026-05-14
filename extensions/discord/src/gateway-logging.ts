@@ -1,6 +1,6 @@
 import type { EventEmitter } from "node:events";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 
 type GatewayEmitter = Pick<EventEmitter, "on" | "removeListener">;
 

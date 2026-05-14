@@ -40,7 +40,7 @@ function writeAllowFromFile(params: {
 }
 
 beforeAll(() => {
-  fixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-allow-from-read-"));
+  fixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-allow-from-read-"));
 });
 
 afterAll(() => {

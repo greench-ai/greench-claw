@@ -1,1 +1,4 @@
-export { resolvePreferredNexisClawTmpDir, withTempWorkspace } from "NexisClaw/plugin-sdk/temp-path";
+export {
+  resolvePreferredGreenchClawTmpDir,
+  withTempWorkspace,
+} from "GreenchClaw/plugin-sdk/temp-path";

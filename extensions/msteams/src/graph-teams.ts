@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import { type GraphResponse, fetchGraphJson, resolveGraphToken } from "./graph.js";
 
 // ---------------------------------------------------------------------------
@@ -15,7 +15,7 @@ type GraphTeamsChannel = {
 };
 
 type ListChannelsMSTeamsParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   teamId: string;
 };
 
@@ -30,7 +30,7 @@ type ListChannelsMSTeamsResult = {
 };
 
 type GetChannelInfoMSTeamsParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   teamId: string;
   channelId: string;
 };

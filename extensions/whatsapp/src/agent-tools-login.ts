@@ -1,4 +1,4 @@
-import type { ChannelAgentTool } from "NexisClaw/plugin-sdk/channel-contract";
+import type { ChannelAgentTool } from "GreenchClaw/plugin-sdk/channel-contract";
 import { Type } from "typebox";
 import { startWebLoginWithQr, waitForWebLogin } from "../login-qr-api.js";
 

@@ -5,7 +5,7 @@ import {
   shouldEagerRegisterSubcommands,
   type CommandGroupEntry,
   type CommandGroupPlaceholder,
-} from "NexisClaw/plugin-sdk/cli-runtime";
+} from "GreenchClaw/plugin-sdk/cli-runtime";
 import { browserActionExamples, browserCoreExamples } from "./browser-cli-examples.js";
 import type { BrowserParentOpts } from "./browser-cli-shared.js";
 import {
@@ -160,7 +160,7 @@ function registerLazyBrowserCommands(
 export function registerBrowserCli(program: Command, argv: string[] = process.argv) {
   const browser = program
     .command("browser")
-    .description("Manage NexisClaw's dedicated browser (Chrome/Chromium)")
+    .description("Manage GreenchClaw's dedicated browser (Chrome/Chromium)")
     .option("--browser-profile <name>", "Browser profile name (default from config)")
     .option("--json", "Output machine-readable JSON", false)
     .addHelpText(
@@ -171,13 +171,13 @@ export function registerBrowserCli(program: Command, argv: string[] = process.ar
           true,
         )}\n\n${theme.muted("Docs:")} ${formatDocsLink(
           "/cli/browser",
-          "docs.NexisClaw.ai/cli/browser",
+          "docs.GreenchClaw.ai/cli/browser",
         )}\n`,
     )
     .action(() => {
       browser.outputHelp();
       defaultRuntime.error(
-        danger(`Missing subcommand. Try: "${formatCliCommand("NexisClaw browser status")}"`),
+        danger(`Missing subcommand. Try: "${formatCliCommand("GreenchClaw browser status")}"`),
       );
       defaultRuntime.exit(1);
     });

@@ -6,7 +6,7 @@ import path from "node:path";
 import {
   pathExistsSync,
   resolveLocalPathFromRootsSync,
-} from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/security-runtime";
 import type { GatewayAccount } from "../types.js";
 import { MediaFileType } from "../types.js";
 import {

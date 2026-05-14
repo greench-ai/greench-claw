@@ -1,6 +1,6 @@
 import os from "node:os";
 import path from "node:path";
-import { createCapturedPluginRegistration } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import { createCapturedPluginRegistration } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, describe, expect, it } from "vitest";
 import { resolveHomePath } from "./helpers.js";
 import pluginEntry from "./index.js";
@@ -26,16 +26,16 @@ describe("Hermes migration provider", () => {
     expect(captured.migrationProviders.map((provider) => provider.id)).toEqual(["hermes"]);
   });
 
-  it("resolves tilde source paths against the OS home when NEXISCLAW_HOME is set", () => {
-    const previous = process.env.NEXISCLAW_HOME;
-    process.env.NEXISCLAW_HOME = path.join(path.sep, "tmp", "NexisClaw-home");
+  it("resolves tilde source paths against the OS home when GREENCHCLAW_HOME is set", () => {
+    const previous = process.env.GREENCHCLAW_HOME;
+    process.env.GREENCHCLAW_HOME = path.join(path.sep, "tmp", "GreenchClaw-home");
     try {
       expect(resolveHomePath("~/.hermes")).toBe(path.join(os.homedir(), ".hermes"));
     } finally {
       if (previous === undefined) {
-        delete process.env.NEXISCLAW_HOME;
+        delete process.env.GREENCHCLAW_HOME;
       } else {
-        process.env.NEXISCLAW_HOME = previous;
+        process.env.GREENCHCLAW_HOME = previous;
       }
     }
   });

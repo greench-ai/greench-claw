@@ -196,14 +196,14 @@ describe("command explainer tree-sitter runtime", () => {
   it("reports missing parser packages and wasm files with explainer context", () => {
     expect(() =>
       resolvePackageFileForCommandExplanation(
-        "definitely-missing-NexisClaw-parser-package",
+        "definitely-missing-GreenchClaw-parser-package",
         "parser.wasm",
       ),
-    ).toThrow("Unable to resolve definitely-missing-NexisClaw-parser-package");
+    ).toThrow("Unable to resolve definitely-missing-GreenchClaw-parser-package");
 
     expect(() =>
-      resolvePackageFileForCommandExplanation("web-tree-sitter", "missing-NexisClaw-parser.wasm"),
-    ).toThrow("Unable to locate missing-NexisClaw-parser.wasm in web-tree-sitter");
+      resolvePackageFileForCommandExplanation("web-tree-sitter", "missing-GreenchClaw-parser.wasm"),
+    ).toThrow("Unable to locate missing-GreenchClaw-parser.wasm in web-tree-sitter");
   });
 
   it("reports parser progress cancellation as a timeout", async () => {
@@ -595,7 +595,7 @@ describe("command explainer tree-sitter runtime", () => {
   });
 
   it("detects eval, source, aliases, and carrier shell wrappers", async () => {
-    const evalCommand = await explainShellCommand('eval "$NEXISCLAW_CMD"');
+    const evalCommand = await explainShellCommand('eval "$GREENCHCLAW_CMD"');
     expectRisk(evalCommand.risks, { kind: "eval" });
 
     const builtinEval = await explainShellCommand("builtin eval 'echo hi'");

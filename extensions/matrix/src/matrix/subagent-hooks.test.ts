@@ -1,8 +1,8 @@
-import type { NexisClawPluginApi as MatrixEntryPluginApi } from "NexisClaw/plugin-sdk/channel-entry-contract";
+import type { GreenchClawPluginApi as MatrixEntryPluginApi } from "GreenchClaw/plugin-sdk/channel-entry-contract";
 import {
   getRequiredHookHandler,
   registerHookHandlersForTest,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { registerMatrixSubagentHooks } from "../../subagent-hooks-api.js";
 
@@ -17,7 +17,7 @@ const removeBindingRecordMock = vi.hoisted(() => vi.fn(() => false));
 const resolveMatrixBaseConfigMock = vi.hoisted(() => vi.fn((): any => ({})));
 const findMatrixAccountConfigMock = vi.hoisted(() => vi.fn((): any => undefined));
 
-vi.mock("NexisClaw/plugin-sdk/conversation-binding-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/conversation-binding-runtime", () => ({
   getSessionBindingService: () => ({
     bind: bindMock,
     getCapabilities: getCapabilitiesMock,

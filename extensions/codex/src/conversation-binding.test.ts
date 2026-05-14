@@ -19,7 +19,7 @@ const agentRuntimeMocks = vi.hoisted(() => ({
 }));
 
 vi.mock("./app-server/shared-client.js", () => sharedClientMocks);
-vi.mock("NexisClaw/plugin-sdk/agent-runtime", () => agentRuntimeMocks);
+vi.mock("GreenchClaw/plugin-sdk/agent-runtime", () => agentRuntimeMocks);
 
 import {
   handleCodexConversationBindingResolved,
@@ -39,7 +39,7 @@ function mockCallArg(mock: ReturnType<typeof vi.fn>, callIndex = 0, argIndex = 0
 
 describe("codex conversation binding", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-codex-binding-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-codex-binding-"));
   });
 
   afterEach(async () => {

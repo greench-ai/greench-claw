@@ -54,8 +54,8 @@ import {
 import { createTempDirHarness } from "./temp-dir.test-helper.js";
 
 const { cleanup, makeTempDir } = createTempDirHarness();
-const repoRoot = "/repo/NexisClaw";
-const gatewayTempRoot = "/tmp/NexisClaw-qa-runtime";
+const repoRoot = "/repo/GreenchClaw";
+const gatewayTempRoot = "/tmp/GreenchClaw-qa-runtime";
 
 afterEach(cleanup);
 
@@ -119,7 +119,7 @@ describe("qa suite runtime agent tools helpers", () => {
             tempRoot: gatewayTempRoot,
             runtimeEnv: {
               PATH: "/usr/bin",
-              NEXISCLAW_KEY: "1",
+              GREENCHCLAW_KEY: "1",
               EMPTY: undefined,
             },
           },
@@ -143,7 +143,7 @@ describe("qa suite runtime agent tools helpers", () => {
       cwd: gatewayTempRoot,
       env: {
         PATH: "/usr/bin",
-        NEXISCLAW_KEY: "1",
+        GREENCHCLAW_KEY: "1",
       },
     });
     expect(callToolMock).toHaveBeenCalledWith({

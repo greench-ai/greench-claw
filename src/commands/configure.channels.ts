@@ -2,7 +2,7 @@ import { listChatChannels } from "../channels/chat-meta.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import { CONFIG_PATH } from "../config/config.js";
 import { isBlockedObjectKey } from "../config/prototype-keys.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { note } from "../terminal/note.js";
 import { sanitizeTerminalText } from "../terminal/safe-text.js";
@@ -29,7 +29,7 @@ const RESERVED_CHANNEL_CONFIG_KEYS = new Set(["defaults", "modelByChannel"]);
 const DONE_VALUE: Extract<ChannelRemovalSelectValue, { kind: "done" }> = { kind: "done" };
 
 function listConfiguredChannelRemovalChoices(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ): ConfiguredChannelRemovalChoice[] {
   const channels = cfg.channels;
   if (!channels) {
@@ -67,9 +67,9 @@ function compareChannelRemovalChoices(
 }
 
 export async function removeChannelConfigWizard(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   runtime: RuntimeEnv,
-): Promise<NexisClawConfig> {
+): Promise<GreenchClawConfig> {
   let next = { ...cfg };
 
   while (true) {
@@ -77,8 +77,8 @@ export async function removeChannelConfigWizard(
     if (configured.length === 0) {
       note(
         [
-          "No channel config found in NexisClaw.json.",
-          `Tip: \`${formatCliCommand("NexisClaw channels status")}\` shows what is configured and enabled.`,
+          "No channel config found in GreenchClaw.json.",
+          `Tip: \`${formatCliCommand("GreenchClaw channels status")}\` shows what is configured and enabled.`,
         ].join("\n"),
         "Remove channel",
       );
@@ -120,7 +120,7 @@ export async function removeChannelConfigWizard(
     const nextChannels: Record<string, unknown> = { ...next.channels };
     delete nextChannels[channel];
     if (Object.keys(nextChannels).length) {
-      next.channels = nextChannels as NexisClawConfig["channels"];
+      next.channels = nextChannels as GreenchClawConfig["channels"];
     } else {
       delete next.channels;
     }

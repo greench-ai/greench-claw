@@ -13,7 +13,7 @@ vi.mock("@line/bot-sdk", () => ({
   },
 }));
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", () => ({
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", () => ({
   createSubsystemLogger: () => {
     const logger = {
       debug: () => {},
@@ -27,7 +27,7 @@ vi.mock("NexisClaw/plugin-sdk/runtime-env", () => ({
   logVerbose: () => {},
 }));
 
-vi.mock("NexisClaw/plugin-sdk/media-store", () => ({
+vi.mock("GreenchClaw/plugin-sdk/media-store", () => ({
   saveMediaBuffer: saveMediaBufferMock,
 }));
 
@@ -54,8 +54,8 @@ describe("downloadLineMedia", () => {
 
   afterAll(() => {
     vi.doUnmock("@line/bot-sdk");
-    vi.doUnmock("NexisClaw/plugin-sdk/runtime-env");
-    vi.doUnmock("NexisClaw/plugin-sdk/media-store");
+    vi.doUnmock("GreenchClaw/plugin-sdk/runtime-env");
+    vi.doUnmock("GreenchClaw/plugin-sdk/media-store");
     vi.resetModules();
   });
 
@@ -65,7 +65,7 @@ describe("downloadLineMedia", () => {
     saveMediaBufferMock.mockReset();
     saveMediaBufferMock.mockImplementation(
       async (_buffer: Buffer, contentType?: string, subdir?: string) => ({
-        path: `/home/user/.NexisClaw/media/${subdir ?? "unknown"}/saved-media`,
+        path: `/home/user/.GreenchClaw/media/${subdir ?? "unknown"}/saved-media`,
         contentType,
       }),
     );
@@ -84,7 +84,7 @@ describe("downloadLineMedia", () => {
     expect(call[2]).toBe("inbound");
     expect(call[3]).toBe(10 * 1024 * 1024);
     expect(result).toEqual({
-      path: "/home/user/.NexisClaw/media/inbound/saved-media",
+      path: "/home/user/.GreenchClaw/media/inbound/saved-media",
       contentType: "image/jpeg",
       size: jpeg.length,
     });

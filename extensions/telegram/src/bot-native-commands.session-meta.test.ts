@@ -1,6 +1,6 @@
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ResolvedAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ResolvedAgentRoute } from "GreenchClaw/plugin-sdk/routing";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { TelegramNativeCommandDeps } from "./bot-native-command-deps.runtime.js";
 import {
@@ -16,11 +16,11 @@ import { type RegisterTelegramHandlerParams } from "./bot-native-commands.js";
 // All mocks scoped to this file only — does not affect bot-native-commands.test.ts
 
 type ResolveConfiguredBindingRouteFn =
-  typeof import("NexisClaw/plugin-sdk/conversation-runtime").resolveConfiguredBindingRoute;
+  typeof import("GreenchClaw/plugin-sdk/conversation-runtime").resolveConfiguredBindingRoute;
 type EnsureConfiguredBindingRouteReadyFn =
-  typeof import("NexisClaw/plugin-sdk/conversation-runtime").ensureConfiguredBindingRouteReady;
+  typeof import("GreenchClaw/plugin-sdk/conversation-runtime").ensureConfiguredBindingRouteReady;
 type DispatchReplyWithBufferedBlockDispatcherFn =
-  typeof import("NexisClaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithBufferedBlockDispatcher;
+  typeof import("GreenchClaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithBufferedBlockDispatcher;
 type DispatchReplyWithBufferedBlockDispatcherParams =
   Parameters<DispatchReplyWithBufferedBlockDispatcherFn>[0];
 type DispatchReplyWithBufferedBlockDispatcherResult = Awaited<
@@ -28,7 +28,7 @@ type DispatchReplyWithBufferedBlockDispatcherResult = Awaited<
 >;
 type DeliverRepliesFn = typeof import("./bot/delivery.js").deliverReplies;
 type DeliverRepliesParams = Parameters<DeliverRepliesFn>[0];
-type LoadModelCatalogFn = typeof import("NexisClaw/plugin-sdk/agent-runtime").loadModelCatalog;
+type LoadModelCatalogFn = typeof import("GreenchClaw/plugin-sdk/agent-runtime").loadModelCatalog;
 type MatchPluginCommandFn = typeof import("./bot-native-commands.runtime.js").matchPluginCommand;
 
 const dispatchReplyResult: DispatchReplyWithBufferedBlockDispatcherResult = {
@@ -87,10 +87,10 @@ const conversationStoreMocks = vi.hoisted(() => ({
   upsertChannelPairingRequest: vi.fn(async () => ({ code: "PAIRCODE", created: true })),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/conversation-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/conversation-runtime")>(
-    "NexisClaw/plugin-sdk/conversation-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/conversation-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/conversation-runtime")
+  >("GreenchClaw/plugin-sdk/conversation-runtime");
   return {
     ...actual,
     resolveConfiguredBindingRoute: persistentBindingMocks.resolveConfiguredBindingRoute,
@@ -127,7 +127,7 @@ vi.mock("NexisClaw/plugin-sdk/conversation-runtime", async () => {
     ensureConfiguredBindingRouteReady: persistentBindingMocks.ensureConfiguredBindingRouteReady,
     recordInboundSessionMetaSafe: vi.fn(
       async (params: {
-        cfg: NexisClawConfig;
+        cfg: GreenchClawConfig;
         agentId: string;
         sessionKey: string;
         ctx: unknown;
@@ -159,10 +159,10 @@ vi.mock("NexisClaw/plugin-sdk/conversation-runtime", async () => {
     }),
   };
 });
-vi.mock("NexisClaw/plugin-sdk/session-store-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/session-store-runtime")>(
-    "NexisClaw/plugin-sdk/session-store-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/session-store-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/session-store-runtime")
+  >("GreenchClaw/plugin-sdk/session-store-runtime");
   return {
     ...actual,
     loadSessionStore: sessionMocks.loadSessionStore,
@@ -170,9 +170,9 @@ vi.mock("NexisClaw/plugin-sdk/session-store-runtime", async () => {
     resolveStorePath: sessionMocks.resolveStorePath,
   };
 });
-vi.mock("NexisClaw/plugin-sdk/command-auth-native", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/command-auth-native")>(
-    "NexisClaw/plugin-sdk/command-auth-native",
+vi.mock("GreenchClaw/plugin-sdk/command-auth-native", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/command-auth-native")>(
+    "GreenchClaw/plugin-sdk/command-auth-native",
   );
   commandAuthMocks.resolveCommandArgMenu.mockImplementation(actual.resolveCommandArgMenu);
   return {
@@ -180,9 +180,9 @@ vi.mock("NexisClaw/plugin-sdk/command-auth-native", async () => {
     resolveCommandArgMenu: commandAuthMocks.resolveCommandArgMenu,
   };
 });
-vi.mock("NexisClaw/plugin-sdk/agent-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/agent-runtime")>(
-    "NexisClaw/plugin-sdk/agent-runtime",
+vi.mock("GreenchClaw/plugin-sdk/agent-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/agent-runtime")>(
+    "GreenchClaw/plugin-sdk/agent-runtime",
   );
   return {
     ...actual,
@@ -199,9 +199,9 @@ vi.mock("./bot-native-commands.runtime.js", async () => {
     dispatchReplyWithBufferedBlockDispatcher: replyMocks.dispatchReplyWithBufferedBlockDispatcher,
   };
 });
-vi.mock("NexisClaw/plugin-sdk/plugin-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/plugin-runtime")>(
-    "NexisClaw/plugin-sdk/plugin-runtime",
+vi.mock("GreenchClaw/plugin-sdk/plugin-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/plugin-runtime")>(
+    "GreenchClaw/plugin-sdk/plugin-runtime",
   );
   return {
     ...actual,
@@ -225,7 +225,7 @@ type TelegramPluginCommandSpecs = ReturnType<
 >;
 
 function registerAndResolveStatusHandler(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   allowFrom?: string[];
   groupAllowFrom?: string[];
   storeAllowFrom?: string[];
@@ -257,7 +257,7 @@ function registerAndResolveStatusHandler(params: {
 
 function registerAndResolveCommandHandlerBase(params: {
   commandName: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   allowFrom: string[];
   groupAllowFrom: string[];
   storeAllowFrom?: string[];
@@ -320,7 +320,7 @@ function registerAndResolveCommandHandlerBase(params: {
 
 function registerAndResolveCommandHandler(params: {
   commandName: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   allowFrom?: string[];
   groupAllowFrom?: string[];
   storeAllowFrom?: string[];
@@ -564,7 +564,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
     sessionMocks.recordSessionMetaFromInbound.mockClear().mockResolvedValue(undefined);
     sessionMocks.resolveAndPersistSessionFile.mockClear().mockImplementation(async (params) => {
       const sessionFile =
-        params.fallbackSessionFile ?? `/tmp/NexisClaw-sessions/${params.sessionId}.jsonl`;
+        params.fallbackSessionFile ?? `/tmp/GreenchClaw-sessions/${params.sessionId}.jsonl`;
       return {
         sessionFile,
         sessionEntry: {
@@ -575,7 +575,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
         },
       };
     });
-    sessionMocks.resolveStorePath.mockClear().mockReturnValue("/tmp/NexisClaw-sessions.json");
+    sessionMocks.resolveStorePath.mockClear().mockReturnValue("/tmp/GreenchClaw-sessions.json");
     pluginRuntimeMocks.executePluginCommand.mockClear().mockResolvedValue({ text: "ok" });
     pluginRuntimeMocks.matchPluginCommand.mockClear().mockReturnValue(null);
     replyMocks.dispatchReplyWithBufferedBlockDispatcher
@@ -587,7 +587,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
   });
 
   it("calls recordSessionMetaFromInbound after a native slash command", async () => {
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     const { handler } = registerAndResolveStatusHandler({ cfg });
     await handler(createTelegramPrivateCommandContext());
 
@@ -619,7 +619,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({
       "agent:main:main": {
         providerOverride: "anthropic",
@@ -645,7 +645,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
       { provider: "anthropic", model: "claude-opus-4-7" },
       "thinking menu call",
     );
-    expect(sessionMocks.loadSessionStore).toHaveBeenCalledWith("/tmp/NexisClaw-sessions.json");
+    expect(sessionMocks.loadSessionStore).toHaveBeenCalledWith("/tmp/GreenchClaw-sessions.json");
     expectSendMessageCall({
       sendMessage,
       chatId: 100,
@@ -657,7 +657,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
   });
 
   it("inherits the parent session model when building DM thread native argument menus", async () => {
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     sessionMocks.loadSessionStore.mockReturnValue({
       "agent:main:main": {
         providerOverride: "anthropic",
@@ -700,7 +700,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
           thinkingDefault: "medium",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({
       "agent:main:main": {
         providerOverride: "anthropic",
@@ -744,7 +744,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
           model: { primary: "openai/gpt-5.5" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({});
 
     const { handler, sendMessage } = registerAndResolveCommandHandler({
@@ -779,7 +779,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({
       "agent:main:main": {
         providerOverride: "anthropic",
@@ -825,7 +825,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
           },
         ],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     sessionMocks.loadSessionStore.mockReturnValue({});
 
     const { handler, sendMessage } = registerAndResolveCommandHandler({
@@ -861,7 +861,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
     const deferred = createDeferred<void>();
     sessionMocks.recordSessionMetaFromInbound.mockReturnValue(deferred.promise);
 
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     const { handler } = registerAndResolveStatusHandler({ cfg });
     const runPromise = handler(createTelegramPrivateCommandContext());
 
@@ -1284,7 +1284,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
   });
 
   it("passes a persisted topic session file to plugin commands", async () => {
-    sessionMocks.resolveStorePath.mockReturnValue("/tmp/NexisClaw-sessions/sessions.json");
+    sessionMocks.resolveStorePath.mockReturnValue("/tmp/GreenchClaw-sessions/sessions.json");
     sessionMocks.loadSessionStore.mockReturnValue({
       "agent:main:telegram:group:-1001234567890:topic:42": {
         sessionId: "sess-topic",
@@ -1294,7 +1294,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
 
     const { handler } = registerAndResolveCommandHandler({
       commandName: "codex",
-      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as NexisClawConfig,
+      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as GreenchClawConfig,
       groupAllowFrom: ["-1001234567890"],
       useAccessGroups: false,
       pluginCommandSpecs: [
@@ -1310,7 +1310,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
         name: "codex",
         description: "Codex",
         handler: vi.fn(),
-        pluginId: "NexisClaw-codex-app-server",
+        pluginId: "GreenchClaw-codex-app-server",
         pluginName: "Codex",
         requireAuth: true,
       },
@@ -1326,9 +1326,9 @@ describe("registerTelegramNativeCommands — session metadata", () => {
       {
         sessionId: "sess-topic",
         sessionKey: "agent:main:telegram:group:-1001234567890:topic:42",
-        storePath: "/tmp/NexisClaw-sessions/sessions.json",
-        sessionsDir: "/tmp/NexisClaw-sessions",
-        fallbackSessionFile: path.resolve("/tmp/NexisClaw-sessions", "sess-topic-topic-42.jsonl"),
+        storePath: "/tmp/GreenchClaw-sessions/sessions.json",
+        sessionsDir: "/tmp/GreenchClaw-sessions",
+        fallbackSessionFile: path.resolve("/tmp/GreenchClaw-sessions", "sess-topic-topic-42.jsonl"),
       },
       "resolved session file params",
     );
@@ -1337,7 +1337,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
       {
         sessionKey: "agent:main:telegram:group:-1001234567890:topic:42",
         sessionId: "sess-topic",
-        sessionFile: path.resolve("/tmp/NexisClaw-sessions", "sess-topic-topic-42.jsonl"),
+        sessionFile: path.resolve("/tmp/GreenchClaw-sessions", "sess-topic-topic-42.jsonl"),
         messageThreadId: 42,
       },
       "plugin command params",
@@ -1349,7 +1349,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
 
     const { handler } = registerAndResolveCommandHandler({
       commandName: "codex",
-      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as NexisClawConfig,
+      cfg: { commands: { allowFrom: { telegram: ["200"] } } } as GreenchClawConfig,
       useAccessGroups: false,
       pluginCommandSpecs: [
         {
@@ -1364,7 +1364,7 @@ describe("registerTelegramNativeCommands — session metadata", () => {
         name: "codex",
         description: "Codex",
         handler: vi.fn(),
-        pluginId: "NexisClaw-codex-app-server",
+        pluginId: "GreenchClaw-codex-app-server",
         pluginName: "Codex",
         requireAuth: true,
       },

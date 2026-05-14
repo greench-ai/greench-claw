@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "./types.NexisClaw.js";
+import type { GreenchClawConfig } from "./types.GreenchClaw.js";
 
 export type PluginAutoEnableCandidate =
   | {
@@ -50,7 +50,7 @@ export type PluginAutoEnableCandidate =
     };
 
 export type PluginAutoEnableResult = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   changes: string[];
   autoEnabledReasons: Record<string, string[]>;
 };

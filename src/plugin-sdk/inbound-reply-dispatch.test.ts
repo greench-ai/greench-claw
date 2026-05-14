@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { DispatchReplyWithBufferedBlockDispatcher } from "../auto-reply/reply/provider-dispatcher.types.js";
 import type { FinalizedMsgContext } from "../auto-reply/templating.js";
 import type { RecordInboundSession } from "../channels/session.types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 const deliverInboundReplyWithMessageSendContext = vi.hoisted(() => vi.fn());
 
@@ -75,7 +75,7 @@ describe("recordInboundSessionAndDispatchReply", () => {
     } as FinalizedMsgContext;
 
     await recordChannelMessageReplyDispatch({
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       channel: "test",
       accountId: "default",
       agentId: "main",
@@ -117,7 +117,7 @@ describe("recordInboundSessionAndDispatchReply", () => {
     }) as DispatchReplyWithBufferedBlockDispatcher;
 
     await recordInboundSessionAndDispatchReply({
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       channel: "telegram",
       accountId: "default",
       agentId: "main",
@@ -180,7 +180,7 @@ describe("recordInboundSessionAndDispatchReply", () => {
     } as FinalizedMsgContext;
 
     await dispatchChannelMessageReplyWithBase({
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       channel: "telegram",
       accountId: "default",
       route: {

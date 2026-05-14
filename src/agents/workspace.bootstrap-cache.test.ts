@@ -10,7 +10,7 @@ describe("workspace bootstrap file caching", () => {
 
   beforeEach(async () => {
     clearAllBootstrapSnapshots();
-    workspaceDir = await makeTempWorkspace("NexisClaw-bootstrap-cache-test-");
+    workspaceDir = await makeTempWorkspace("GreenchClaw-bootstrap-cache-test-");
   });
 
   afterEach(() => {
@@ -180,8 +180,8 @@ describe("workspace bootstrap file caching", () => {
     const content2 = "# File 2 content";
 
     // Create two different workspace directories
-    const workspace1 = await makeTempWorkspace("NexisClaw-cache-test1-");
-    const workspace2 = await makeTempWorkspace("NexisClaw-cache-test2-");
+    const workspace1 = await makeTempWorkspace("GreenchClaw-cache-test1-");
+    const workspace2 = await makeTempWorkspace("GreenchClaw-cache-test2-");
 
     await writeWorkspaceFile({ dir: workspace1, name: DEFAULT_AGENTS_FILENAME, content: content1 });
     await writeWorkspaceFile({ dir: workspace2, name: DEFAULT_AGENTS_FILENAME, content: content2 });

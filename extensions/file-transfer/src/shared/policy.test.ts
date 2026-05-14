@@ -5,14 +5,14 @@ import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vites
 // Mock the plugin-sdk runtime-config surface so we can drive the policy
 // reader from the test without booting a gateway. mutateConfigFile is also
 // mocked so persistAllowAlways tests can assert what would have been written
-// without touching ~/.NexisClaw/NexisClaw.json.
+// without touching ~/.GreenchClaw/GreenchClaw.json.
 const getRuntimeConfigMock = vi.fn();
 const mutateConfigFileMock = vi.fn();
 
-vi.mock("NexisClaw/plugin-sdk/runtime-config-snapshot", () => ({
+vi.mock("GreenchClaw/plugin-sdk/runtime-config-snapshot", () => ({
   getRuntimeConfig: () => getRuntimeConfigMock(),
 }));
-vi.mock("NexisClaw/plugin-sdk/config-mutation", () => ({
+vi.mock("GreenchClaw/plugin-sdk/config-mutation", () => ({
   mutateConfigFile: (input: unknown) => mutateConfigFileMock(input),
 }));
 
@@ -29,8 +29,8 @@ afterEach(() => {
 });
 
 afterAll(() => {
-  vi.doUnmock("NexisClaw/plugin-sdk/runtime-config-snapshot");
-  vi.doUnmock("NexisClaw/plugin-sdk/config-mutation");
+  vi.doUnmock("GreenchClaw/plugin-sdk/runtime-config-snapshot");
+  vi.doUnmock("GreenchClaw/plugin-sdk/config-mutation");
   vi.resetModules();
 });
 

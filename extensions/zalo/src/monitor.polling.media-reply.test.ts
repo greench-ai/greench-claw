@@ -5,8 +5,8 @@ import {
   createEmptyPluginRegistry,
   createRuntimeEnv,
   setActivePluginRegistry,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PluginRuntime } from "../runtime-api.js";
 import {
@@ -35,8 +35,8 @@ vi.mock("./outbound-media.js", async () => {
 import { clearHostedZaloMediaForTest } from "./outbound-media.js";
 
 const ZALO_OUTBOUND_MEDIA_DIR = join(
-  resolvePreferredNexisClawTmpDir(),
-  "NexisClaw-zalo-outbound-media",
+  resolvePreferredGreenchClawTmpDir(),
+  "GreenchClaw-zalo-outbound-media",
 );
 
 async function writeHostedZaloMediaFixture(params: {

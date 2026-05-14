@@ -1,4 +1,4 @@
-import { importFreshModule } from "NexisClaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { CliCommandCatalogEntry, CliCommandPathPolicy } from "./command-catalog.js";
 import {
@@ -92,13 +92,13 @@ describe("command-path-policy", () => {
     expectNetworkProxyResolver(channelsStatusPolicy);
     expect(
       channelsStatusPolicy.networkProxy({
-        argv: ["node", "NexisClaw", "channels", "status"],
+        argv: ["node", "GreenchClaw", "channels", "status"],
         commandPath: ["channels", "status"],
       }),
     ).toBe("bypass");
     expect(
       channelsStatusPolicy.networkProxy({
-        argv: ["node", "NexisClaw", "channels", "status", "--probe"],
+        argv: ["node", "GreenchClaw", "channels", "status", "--probe"],
         commandPath: ["channels", "status"],
       }),
     ).toBe("default");
@@ -136,34 +136,34 @@ describe("command-path-policy", () => {
     expectNetworkProxyResolver(agentPolicy);
     expect(
       agentPolicy.loadPlugins({
-        argv: ["node", "NexisClaw", "agent"],
+        argv: ["node", "GreenchClaw", "agent"],
         commandPath: ["agent"],
         jsonOutputMode: false,
       }),
     ).toBe(true);
     expect(
       agentPolicy.loadPlugins({
-        argv: ["node", "NexisClaw", "agent", "--json"],
+        argv: ["node", "GreenchClaw", "agent", "--json"],
         commandPath: ["agent"],
         jsonOutputMode: true,
       }),
     ).toBe(false);
     expect(
       agentPolicy.loadPlugins({
-        argv: ["node", "NexisClaw", "agent", "--local"],
+        argv: ["node", "GreenchClaw", "agent", "--local"],
         commandPath: ["agent"],
         jsonOutputMode: true,
       }),
     ).toBe(true);
     expect(
       agentPolicy.networkProxy({
-        argv: ["node", "NexisClaw", "agent"],
+        argv: ["node", "GreenchClaw", "agent"],
         commandPath: ["agent"],
       }),
     ).toBe("bypass");
     expect(
       agentPolicy.networkProxy({
-        argv: ["node", "NexisClaw", "agent", "--local"],
+        argv: ["node", "GreenchClaw", "agent", "--local"],
         commandPath: ["agent"],
       }),
     ).toBe("default");
@@ -222,47 +222,57 @@ describe("command-path-policy", () => {
   });
 
   it("defaults unknown command paths to network proxy routing", () => {
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "googlemeet", "login"])).toBe(
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "googlemeet", "login"])).toBe(
       "default",
     );
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "tool", "image_generate"])).toBe(
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "tool", "image_generate"])).toBe(
       "bypass",
     );
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "tools", "effective"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "tools", "effective"])).toBe(
+      "bypass",
+    );
   });
 
   it("resolves static network proxy bypass policies from the catalog", () => {
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "status"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "status"])).toBe("bypass");
     expect(
-      resolveCliNetworkProxyPolicy(["node", "NexisClaw", "config", "get", "proxy.enabled"]),
+      resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "config", "get", "proxy.enabled"]),
     ).toBe("bypass");
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "proxy", "start"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "proxy", "start"])).toBe("bypass");
   });
 
   it("resolves mixed network proxy policies from argv-sensitive catalog entries", () => {
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "gateway"])).toBe("default");
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "gateway", "run"])).toBe("default");
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "gateway", "health"])).toBe("bypass");
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "node", "run"])).toBe("default");
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "node", "status"])).toBe("bypass");
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "agent", "--local"])).toBe("default");
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "agent", "run"])).toBe("bypass");
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "channels", "status"])).toBe("bypass");
-    expect(
-      resolveCliNetworkProxyPolicy(["node", "NexisClaw", "channels", "status", "--probe"]),
-    ).toBe("default");
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "models", "status"])).toBe("bypass");
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "models", "status", "--probe"])).toBe(
-      "default",
-    );
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "skills", "info", "browser"])).toBe(
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "gateway"])).toBe("default");
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "gateway", "run"])).toBe("default");
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "gateway", "health"])).toBe(
       "bypass",
     );
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "skills", "check"])).toBe("bypass");
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "skills", "list"])).toBe("bypass");
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "skills", "search", "browser"])).toBe(
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "node", "run"])).toBe("default");
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "node", "status"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "agent", "--local"])).toBe(
       "default",
     );
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "agent", "run"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "channels", "status"])).toBe(
+      "bypass",
+    );
+    expect(
+      resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "channels", "status", "--probe"]),
+    ).toBe("default");
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "models", "status"])).toBe(
+      "bypass",
+    );
+    expect(
+      resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "models", "status", "--probe"]),
+    ).toBe("default");
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "skills", "info", "browser"])).toBe(
+      "bypass",
+    );
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "skills", "check"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "skills", "list"])).toBe("bypass");
+    expect(
+      resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "skills", "search", "browser"]),
+    ).toBe("default");
   });
 
   it("uses the longest catalog command path for deep network proxy overrides", async () => {
@@ -283,30 +293,28 @@ describe("command-path-policy", () => {
       typeof import("./command-path-policy.js")
     >(import.meta.url, "./command-path-policy.js?catalog-overrides");
 
-    expect(resolveCliCatalogCommandPath(["node", "NexisClaw", "nodes", "camera", "snap"])).toEqual([
-      "nodes",
-      "camera",
-      "snap",
-    ]);
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "nodes", "camera", "snap"])).toBe(
+    expect(
+      resolveCliCatalogCommandPath(["node", "GreenchClaw", "nodes", "camera", "snap"]),
+    ).toEqual(["nodes", "camera", "snap"]);
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "nodes", "camera", "snap"])).toBe(
       "default",
     );
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "nodes", "camera", "list"])).toBe(
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "nodes", "camera", "list"])).toBe(
       "bypass",
     );
   });
 
   it("stops catalog command path resolution before positional arguments", () => {
     expect(
-      resolveCliCatalogCommandPath(["node", "NexisClaw", "config", "get", "proxy.enabled"]),
+      resolveCliCatalogCommandPath(["node", "GreenchClaw", "config", "get", "proxy.enabled"]),
     ).toEqual(["config", "get"]);
     expect(
-      resolveCliCatalogCommandPath(["node", "NexisClaw", "message", "send", "--to", "demo"]),
+      resolveCliCatalogCommandPath(["node", "GreenchClaw", "message", "send", "--to", "demo"]),
     ).toEqual(["message"]);
   });
 
   it("treats bare gateway invocations with options as the gateway runtime", () => {
-    const argv = ["node", "NexisClaw", "gateway", "--port", "1234"];
+    const argv = ["node", "GreenchClaw", "gateway", "--port", "1234"];
 
     expect(resolveCliCatalogCommandPath(argv)).toEqual(["gateway"]);
     expect(resolveCliNetworkProxyPolicy(argv)).toBe("default");
@@ -314,11 +322,11 @@ describe("command-path-policy", () => {
 
   it("does not let gateway run option values spoof bypass subcommands", () => {
     for (const argv of [
-      ["node", "NexisClaw", "gateway", "--token", "status"],
-      ["node", "NexisClaw", "gateway", "--token=status"],
-      ["node", "NexisClaw", "gateway", "--password", "health"],
-      ["node", "NexisClaw", "gateway", "--password-file", "status"],
-      ["node", "NexisClaw", "gateway", "--ws-log", "compact"],
+      ["node", "GreenchClaw", "gateway", "--token", "status"],
+      ["node", "GreenchClaw", "gateway", "--token=status"],
+      ["node", "GreenchClaw", "gateway", "--password", "health"],
+      ["node", "GreenchClaw", "gateway", "--password-file", "status"],
+      ["node", "GreenchClaw", "gateway", "--ws-log", "compact"],
     ]) {
       expect(resolveCliCatalogCommandPath(argv), argv.join(" ")).toEqual(["gateway"]);
       expect(resolveCliNetworkProxyPolicy(argv), argv.join(" ")).toBe("default");
@@ -326,13 +334,22 @@ describe("command-path-policy", () => {
   });
 
   it("still resolves real gateway bypass subcommands after their command token", () => {
-    expect(resolveCliCatalogCommandPath(["node", "NexisClaw", "gateway", "status"])).toEqual([
+    expect(resolveCliCatalogCommandPath(["node", "GreenchClaw", "gateway", "status"])).toEqual([
       "gateway",
       "status",
     ]);
     expect(
-      resolveCliCatalogCommandPath(["node", "NexisClaw", "gateway", "status", "--token", "secret"]),
+      resolveCliCatalogCommandPath([
+        "node",
+        "GreenchClaw",
+        "gateway",
+        "status",
+        "--token",
+        "secret",
+      ]),
     ).toEqual(["gateway", "status"]);
-    expect(resolveCliNetworkProxyPolicy(["node", "NexisClaw", "gateway", "status"])).toBe("bypass");
+    expect(resolveCliNetworkProxyPolicy(["node", "GreenchClaw", "gateway", "status"])).toBe(
+      "bypass",
+    );
   });
 });

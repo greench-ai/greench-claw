@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveNexisClawMetadata, resolveSkillInvocationPolicy } from "./frontmatter.js";
+import { resolveGreenchClawMetadata, resolveSkillInvocationPolicy } from "./frontmatter.js";
 
 describe("resolveSkillInvocationPolicy", () => {
   it("defaults to enabled behaviors", () => {
@@ -18,15 +18,15 @@ describe("resolveSkillInvocationPolicy", () => {
   });
 });
 
-describe("resolveNexisClawMetadata install validation", () => {
+describe("resolveGreenchClawMetadata install validation", () => {
   function resolveInstall(frontmatter: Record<string, string>) {
-    return resolveNexisClawMetadata(frontmatter)?.install;
+    return resolveGreenchClawMetadata(frontmatter)?.install;
   }
 
   it("accepts safe install specs", () => {
     const install = resolveInstall({
       metadata:
-        '{"NexisClaw":{"install":[{"kind":"brew","formula":"python@3.12"},{"kind":"node","package":"@scope/pkg@1.2.3"},{"kind":"go","module":"example.com/tool/cmd@v1.2.3"},{"kind":"uv","package":"uvicorn[standard]==0.31.0"},{"kind":"download","url":"https://example.com/tool.tar.gz"}]}}',
+        '{"GreenchClaw":{"install":[{"kind":"brew","formula":"python@3.12"},{"kind":"node","package":"@scope/pkg@1.2.3"},{"kind":"go","module":"example.com/tool/cmd@v1.2.3"},{"kind":"uv","package":"uvicorn[standard]==0.31.0"},{"kind":"download","url":"https://example.com/tool.tar.gz"}]}}',
     });
     expect(install).toEqual([
       { kind: "brew", formula: "python@3.12" },
@@ -39,28 +39,28 @@ describe("resolveNexisClawMetadata install validation", () => {
 
   it("drops unsafe brew formula values", () => {
     const install = resolveInstall({
-      metadata: '{"NexisClaw":{"install":[{"kind":"brew","formula":"wget --HEAD"}]}}',
+      metadata: '{"GreenchClaw":{"install":[{"kind":"brew","formula":"wget --HEAD"}]}}',
     });
     expect(install).toBeUndefined();
   });
 
   it("drops unsafe npm package specs for node installers", () => {
     const install = resolveInstall({
-      metadata: '{"NexisClaw":{"install":[{"kind":"node","package":"file:../malicious"}]}}',
+      metadata: '{"GreenchClaw":{"install":[{"kind":"node","package":"file:../malicious"}]}}',
     });
     expect(install).toBeUndefined();
   });
 
   it("drops unsafe go module specs", () => {
     const install = resolveInstall({
-      metadata: '{"NexisClaw":{"install":[{"kind":"go","module":"https://evil.example/mod"}]}}',
+      metadata: '{"GreenchClaw":{"install":[{"kind":"go","module":"https://evil.example/mod"}]}}',
     });
     expect(install).toBeUndefined();
   });
 
   it("drops unsafe download urls", () => {
     const install = resolveInstall({
-      metadata: '{"NexisClaw":{"install":[{"kind":"download","url":"file:///tmp/payload.tgz"}]}}',
+      metadata: '{"GreenchClaw":{"install":[{"kind":"download","url":"file:///tmp/payload.tgz"}]}}',
     });
     expect(install).toBeUndefined();
   });

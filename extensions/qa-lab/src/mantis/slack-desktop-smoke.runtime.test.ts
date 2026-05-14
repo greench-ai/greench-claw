@@ -51,10 +51,10 @@ describe("mantis Slack desktop smoke runtime", () => {
     const runtimeEnv = {
       PATH: process.env.PATH,
       OPENAI_API_KEY: "openai-runtime-key",
-      NEXISCLAW_QA_SLACK_CHANNEL_ID: "C123",
-      NEXISCLAW_QA_SLACK_DRIVER_BOT_TOKEN: "driver-token",
-      NEXISCLAW_QA_SLACK_SUT_APP_TOKEN: "app-token",
-      NEXISCLAW_QA_SLACK_SUT_BOT_TOKEN: "sut-token",
+      GREENCHCLAW_QA_SLACK_CHANNEL_ID: "C123",
+      GREENCHCLAW_QA_SLACK_DRIVER_BOT_TOKEN: "driver-token",
+      GREENCHCLAW_QA_SLACK_SUT_APP_TOKEN: "app-token",
+      GREENCHCLAW_QA_SLACK_SUT_BOT_TOKEN: "sut-token",
     };
     const runner = vi.fn(
       async (command: string, args: readonly string[], options: { env?: NodeJS.ProcessEnv }) => {
@@ -119,7 +119,7 @@ describe("mantis Slack desktop smoke runtime", () => {
       ["/tmp/crabbox", "stop"],
     ]);
     expect(
-      commands.every((entry) => entry.env?.NEXISCLAW_LIVE_OPENAI_KEY === "openai-runtime-key"),
+      commands.every((entry) => entry.env?.GREENCHCLAW_LIVE_OPENAI_KEY === "openai-runtime-key"),
     ).toBe(true);
     const runArgs = commands.find(
       (entry) => entry.command === "/tmp/crabbox" && entry.args[0] === "run",
@@ -137,18 +137,18 @@ describe("mantis Slack desktop smoke runtime", () => {
     expect(remoteScript).toContain('sudo apt-get update -y >>"$out/apt.log" 2>&1 || true');
     expect(remoteScript).toContain("slack-desktop-smoke.mp4");
     expect(remoteScript).not.toContain("-video_size");
-    expect(remoteScript).toContain("NexisClaw qa slack");
+    expect(remoteScript).toContain("GreenchClaw qa slack");
     expect(remoteScript).toContain("--scenario 'slack-canary'");
-    expect(remoteScript).toContain("NEXISCLAW_MANTIS_SLACK_BROWSER_PROFILE_DIR");
+    expect(remoteScript).toContain("GREENCHCLAW_MANTIS_SLACK_BROWSER_PROFILE_DIR");
     const rsyncArgs = commands
       .filter((entry) => entry.command === "rsync")
       .flatMap((entry) => entry.args);
     expect(rsyncArgs).not.toContain("--delete");
     expect(rsyncArgs).toContain(
-      "crabbox@203.0.113.10:/tmp/NexisClaw-mantis-slack-desktop-2026-05-04T13-00-00-000Z/",
+      "crabbox@203.0.113.10:/tmp/GreenchClaw-mantis-slack-desktop-2026-05-04T13-00-00-000Z/",
     );
     expect(rsyncArgs).toContain(
-      "crabbox@203.0.113.10:/tmp/NexisClaw-mantis-slack-desktop-2026-05-04T13-00-00-000Z/slack-qa/",
+      "crabbox@203.0.113.10:/tmp/GreenchClaw-mantis-slack-desktop-2026-05-04T13-00-00-000Z/slack-qa/",
     );
     await expect(fs.readFile(result.screenshotPath ?? "", "utf8")).resolves.toBe("png");
     await expect(fs.readFile(result.videoPath ?? "", "utf8")).resolves.toBe("mp4");
@@ -308,8 +308,8 @@ describe("mantis Slack desktop smoke runtime", () => {
       env: {
         CI: "1",
         OPENAI_API_KEY: "openai-runtime-key",
-        NEXISCLAW_QA_CONVEX_SECRET_CI: "convex-secret",
-        NEXISCLAW_QA_CONVEX_SITE_URL: "https://example.convex.site",
+        GREENCHCLAW_QA_CONVEX_SECRET_CI: "convex-secret",
+        GREENCHCLAW_QA_CONVEX_SITE_URL: "https://example.convex.site",
         PATH: process.env.PATH,
       },
       gatewaySetup: true,
@@ -330,16 +330,16 @@ describe("mantis Slack desktop smoke runtime", () => {
     const runCommand = commands.find(
       (entry) => entry.command === "/tmp/crabbox" && entry.args[0] === "run",
     );
-    expect(runCommand?.env?.NEXISCLAW_MANTIS_SLACK_APP_TOKEN).toBe("xapp-leased");
-    expect(runCommand?.env?.NEXISCLAW_MANTIS_SLACK_BOT_TOKEN).toBe("xoxb-leased");
-    expect(runCommand?.env?.NEXISCLAW_MANTIS_SLACK_CHANNEL_ID).toBe("CLEASED");
-    expect(runCommand?.env?.NEXISCLAW_QA_SLACK_CHANNEL_ID).toBe("CLEASED");
-    expect(runCommand?.env?.NEXISCLAW_QA_SLACK_SUT_APP_TOKEN).toBe("xapp-leased");
-    expect(runCommand?.env?.NEXISCLAW_QA_SLACK_SUT_BOT_TOKEN).toBe("xoxb-leased");
+    expect(runCommand?.env?.GREENCHCLAW_MANTIS_SLACK_APP_TOKEN).toBe("xapp-leased");
+    expect(runCommand?.env?.GREENCHCLAW_MANTIS_SLACK_BOT_TOKEN).toBe("xoxb-leased");
+    expect(runCommand?.env?.GREENCHCLAW_MANTIS_SLACK_CHANNEL_ID).toBe("CLEASED");
+    expect(runCommand?.env?.GREENCHCLAW_QA_SLACK_CHANNEL_ID).toBe("CLEASED");
+    expect(runCommand?.env?.GREENCHCLAW_QA_SLACK_SUT_APP_TOKEN).toBe("xapp-leased");
+    expect(runCommand?.env?.GREENCHCLAW_QA_SLACK_SUT_BOT_TOKEN).toBe("xoxb-leased");
     const remoteScript = runCommand?.args.at(-1);
     expect(remoteScript).toContain("setup_gateway=1");
-    expect(remoteScript).toContain("NexisClaw gateway run");
-    expect(remoteScript).toContain('</dev/null >"$out/NexisClaw-gateway.log"');
+    expect(remoteScript).toContain("GreenchClaw gateway run");
+    expect(remoteScript).toContain('</dev/null >"$out/GreenchClaw-gateway.log"');
     expect(remoteScript).toContain('kill -0 "$gateway_pid"');
     expect(remoteScript).toContain('disown "$gateway_pid"');
     expect(fetchMock.mock.calls.map(([url]) => describeFetchInput(url))).toEqual([
@@ -454,8 +454,8 @@ describe("mantis Slack desktop smoke runtime", () => {
       crabboxBin: "/tmp/crabbox",
       env: {
         OPENAI_API_KEY: "openai-runtime-key",
-        NEXISCLAW_MANTIS_SLACK_APP_TOKEN: "xapp-direct",
-        NEXISCLAW_MANTIS_SLACK_BOT_TOKEN: "xoxb-direct",
+        GREENCHCLAW_MANTIS_SLACK_APP_TOKEN: "xapp-direct",
+        GREENCHCLAW_MANTIS_SLACK_BOT_TOKEN: "xoxb-direct",
         PATH: process.env.PATH,
       },
       gatewaySetup: true,

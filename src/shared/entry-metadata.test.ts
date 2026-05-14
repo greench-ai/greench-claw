@@ -5,12 +5,12 @@ describe("shared/entry-metadata", () => {
   it("prefers metadata emoji and homepage when present", () => {
     expect(
       resolveEmojiAndHomepage({
-        metadata: { emoji: "🦀", homepage: " https://NexisClaw.ai " },
+        metadata: { emoji: "🦀", homepage: " https://GreenchClaw.ai " },
         frontmatter: { emoji: "🙂", homepage: "https://example.com" },
       }),
     ).toEqual({
       emoji: "🦀",
-      homepage: "https://NexisClaw.ai",
+      homepage: "https://GreenchClaw.ai",
     });
   });
 
@@ -26,11 +26,11 @@ describe("shared/entry-metadata", () => {
   it("falls back through frontmatter homepage aliases and drops blanks", () => {
     expect(
       resolveEmojiAndHomepage({
-        frontmatter: { emoji: "🙂", website: " https://docs.NexisClaw.ai " },
+        frontmatter: { emoji: "🙂", website: " https://docs.GreenchClaw.ai " },
       }),
     ).toEqual({
       emoji: "🙂",
-      homepage: "https://docs.NexisClaw.ai",
+      homepage: "https://docs.GreenchClaw.ai",
     });
     expect(
       resolveEmojiAndHomepage({
@@ -40,10 +40,10 @@ describe("shared/entry-metadata", () => {
     ).toStrictEqual({});
     expect(
       resolveEmojiAndHomepage({
-        frontmatter: { url: " https://NexisClaw.ai/install " },
+        frontmatter: { url: " https://GreenchClaw.ai/install " },
       }),
     ).toEqual({
-      homepage: "https://NexisClaw.ai/install",
+      homepage: "https://GreenchClaw.ai/install",
     });
   });
 
@@ -52,8 +52,8 @@ describe("shared/entry-metadata", () => {
       resolveEmojiAndHomepage({
         frontmatter: {
           homepage: " ",
-          website: "https://docs.NexisClaw.ai",
-          url: "https://NexisClaw.ai/install",
+          website: "https://docs.GreenchClaw.ai",
+          url: "https://GreenchClaw.ai/install",
         },
       }),
     ).toStrictEqual({});

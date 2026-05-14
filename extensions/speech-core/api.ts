@@ -25,7 +25,7 @@ export {
   trimToUndefined,
   truncateErrorDetail,
   TTS_AUTO_MODES,
-} from "NexisClaw/plugin-sdk/speech-core";
+} from "GreenchClaw/plugin-sdk/speech-core";
 export type {
   ResolvedTtsConfig,
   ResolvedTtsModelOverrides,
@@ -51,4 +51,4 @@ export type {
   TtsConfigResolutionContext,
   TtsDirectiveOverrides,
   TtsDirectiveParseResult,
-} from "NexisClaw/plugin-sdk/speech-core";
+} from "GreenchClaw/plugin-sdk/speech-core";

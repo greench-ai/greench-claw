@@ -6,5 +6,5 @@ export {
   optimizeImageToJpeg,
   optimizeImageToPng,
   type WebMediaResult,
-} from "NexisClaw/plugin-sdk/web-media";
-export type { LocalMediaAccessErrorCode } from "NexisClaw/plugin-sdk/web-media";
+} from "GreenchClaw/plugin-sdk/web-media";
+export type { LocalMediaAccessErrorCode } from "GreenchClaw/plugin-sdk/web-media";

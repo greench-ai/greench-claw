@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { clearRuntimeAuthProfileStoreSnapshots } from "NexisClaw/plugin-sdk/agent-runtime";
-import { upsertAuthProfile } from "NexisClaw/plugin-sdk/provider-auth";
+import { clearRuntimeAuthProfileStoreSnapshots } from "GreenchClaw/plugin-sdk/agent-runtime";
+import { upsertAuthProfile } from "GreenchClaw/plugin-sdk/provider-auth";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   readCodexAppServerBinding,
@@ -24,8 +24,8 @@ vi.mock("./app-server/shared-client.js", () => sharedClientMocks);
 
 describe("codex conversation controls", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-codex-control-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", tempDir);
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-codex-control-"));
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", tempDir);
     sharedClientMocks.getSharedCodexAppServerClient.mockReset();
   });
 

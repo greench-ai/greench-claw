@@ -1,10 +1,10 @@
 {
-  "name": "@NexisClaw/msteams",
+  "name": "@GreenchClaw/msteams",
   "version": "2026.5.12-beta.1",
-  "description": "NexisClaw Microsoft Teams channel plugin",
+  "description": "GreenchClaw Microsoft Teams channel plugin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NexisClaw/NexisClaw"
+    "url": "https://github.com/GreenchClaw/GreenchClaw"
   },
   "type": "module",
   "dependencies": {
@@ -17,19 +17,19 @@
     "typebox": "1.1.38"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*",
+    "@GreenchClaw/plugin-sdk": "workspace:*",
     "@types/jsonwebtoken": "9.0.10",
-    "NexisClaw": "workspace:*"
+    "GreenchClaw": "workspace:*"
   },
   "peerDependencies": {
-    "NexisClaw": ">=2026.5.12-beta.1"
+    "GreenchClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "NexisClaw": {
+    "GreenchClaw": {
       "optional": true
     }
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -53,7 +53,7 @@
       }
     },
     "install": {
-      "npmSpec": "@NexisClaw/msteams",
+      "npmSpec": "@GreenchClaw/msteams",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },
@@ -61,7 +61,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "NexisClawVersion": "2026.5.12-beta.1"
+      "GreenchClawVersion": "2026.5.12-beta.1"
     },
     "release": {
       "publishToClawHub": true,

@@ -35,13 +35,13 @@ async function loadTemplate(fileName: string): Promise<string> {
 function replaceHtmlPlaceholder(template: string, name: string, value: string): string {
   let replaced = false;
   const placeholder = new RegExp(
-    `(<(?:script|style)\\b(?=[^>]*\\bdata-NexisClaw-export-placeholder="${name}")[^>]*>)(</(?:script|style)>)`,
+    `(<(?:script|style)\\b(?=[^>]*\\bdata-GreenchClaw-export-placeholder="${name}")[^>]*>)(</(?:script|style)>)`,
   );
   const next = template.replace(
     placeholder,
     (_match: string, openTag: string, closeTag: string) => {
       replaced = true;
-      const finalOpenTag = openTag.replace(/\sdata-NexisClaw-export-placeholder="[^"]*"/, "");
+      const finalOpenTag = openTag.replace(/\sdata-GreenchClaw-export-placeholder="[^"]*"/, "");
       return `${finalOpenTag}${value}${closeTag}`;
     },
   );
@@ -205,7 +205,7 @@ export async function buildExportSessionReply(params: HandleCommandsParams): Pro
 
   // 6. Determine output path
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
-  const defaultFileName = `NexisClaw-session-${entry.sessionId.slice(0, 8)}-${timestamp}.html`;
+  const defaultFileName = `GreenchClaw-session-${entry.sessionId.slice(0, 8)}-${timestamp}.html`;
   let outputPath = args.outputPath
     ? path.resolve(
         args.outputPath.startsWith("~")

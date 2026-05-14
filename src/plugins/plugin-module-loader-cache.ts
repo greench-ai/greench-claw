@@ -50,7 +50,7 @@ export type PluginModuleLoaderStatsSnapshot = {
 const DEFAULT_PLUGIN_MODULE_LOADER_CACHE_ENTRIES = 128;
 const MAX_TRACKED_SOURCE_TRANSFORM_TARGETS = 24;
 const PLUGIN_SDK_IMPORT_SPECIFIER_PATTERN =
-  /(?:\bfrom\s*["']|\bimport\s*\(\s*["']|\brequire\s*\(\s*["'])(?:NexisClaw|@NexisClaw)\/plugin-sdk(?:\/[^"']*)?["']/u;
+  /(?:\bfrom\s*["']|\bimport\s*\(\s*["']|\brequire\s*\(\s*["'])(?:GreenchClaw|@GreenchClaw)\/plugin-sdk(?:\/[^"']*)?["']/u;
 const requireForJiti = createRequire(import.meta.url);
 let createJitiLoaderFactory: PluginModuleLoaderFactory | undefined;
 const pluginModuleLoaderStats = {
@@ -221,10 +221,11 @@ function shouldForceSourceTransformForPluginSdkAlias(params: {
   aliasMap: Record<string, string>;
 }): boolean {
   if (
-    !params.aliasMap["NexisClaw/plugin-sdk"] &&
-    !params.aliasMap["@NexisClaw/plugin-sdk"] &&
+    !params.aliasMap["GreenchClaw/plugin-sdk"] &&
+    !params.aliasMap["@GreenchClaw/plugin-sdk"] &&
     !Object.keys(params.aliasMap).some(
-      (key) => key.startsWith("NexisClaw/plugin-sdk/") || key.startsWith("@NexisClaw/plugin-sdk/"),
+      (key) =>
+        key.startsWith("GreenchClaw/plugin-sdk/") || key.startsWith("@GreenchClaw/plugin-sdk/"),
     )
   ) {
     return false;

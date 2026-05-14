@@ -1,4 +1,4 @@
-import { readClaudeCliCredentialsCached } from "NexisClaw/plugin-sdk/provider-auth";
+import { readClaudeCliCredentialsCached } from "GreenchClaw/plugin-sdk/provider-auth";
 
 export function readClaudeCliCredentialsForSetup() {
   return readClaudeCliCredentialsCached();

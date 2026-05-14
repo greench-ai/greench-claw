@@ -2,7 +2,7 @@ import {
   asObject,
   createOpenAiCompatibleSpeechProvider,
   type SpeechProviderPlugin,
-} from "NexisClaw/plugin-sdk/speech";
+} from "GreenchClaw/plugin-sdk/speech";
 import {
   DEEPINFRA_BASE_URL,
   DEEPINFRA_TTS_MODELS,

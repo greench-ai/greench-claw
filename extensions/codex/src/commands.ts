@@ -1,8 +1,8 @@
 import type {
-  NexisClawPluginCommandDefinition,
+  GreenchClawPluginCommandDefinition,
   PluginCommandContext,
   PluginCommandResult,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import { describeControlFailure } from "./app-server/capabilities.js";
 import { formatCodexDisplayText } from "./command-formatters.js";
 import type { CodexCommandDeps } from "./command-handlers.js";
@@ -21,7 +21,9 @@ type CodexCommandInternalOptions = CodexCommandOptions & {
   loadSubcommandHandler?: () => Promise<CodexSubcommandHandler>;
 };
 
-export function createCodexCommand(options: CodexCommandOptions): NexisClawPluginCommandDefinition {
+export function createCodexCommand(
+  options: CodexCommandOptions,
+): GreenchClawPluginCommandDefinition {
   return {
     name: "codex",
     description: "Inspect and control the Codex app-server harness",

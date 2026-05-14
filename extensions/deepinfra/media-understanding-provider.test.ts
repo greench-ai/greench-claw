@@ -1,7 +1,7 @@
 import {
   describeImagesWithModel,
   describeImageWithModel,
-} from "NexisClaw/plugin-sdk/media-understanding";
+} from "GreenchClaw/plugin-sdk/media-understanding";
 import { afterAll, describe, expect, it, vi } from "vitest";
 import {
   deepinfraMediaUnderstandingProvider,
@@ -12,9 +12,9 @@ const { transcribeOpenAiCompatibleAudioMock } = vi.hoisted(() => ({
   transcribeOpenAiCompatibleAudioMock: vi.fn(async () => ({ text: "hello", model: "whisper" })),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/media-understanding", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/media-understanding")>(
-    "NexisClaw/plugin-sdk/media-understanding",
+vi.mock("GreenchClaw/plugin-sdk/media-understanding", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/media-understanding")>(
+    "GreenchClaw/plugin-sdk/media-understanding",
   );
   return {
     ...actual,
@@ -23,7 +23,7 @@ vi.mock("NexisClaw/plugin-sdk/media-understanding", async () => {
 });
 
 afterAll(() => {
-  vi.doUnmock("NexisClaw/plugin-sdk/media-understanding");
+  vi.doUnmock("GreenchClaw/plugin-sdk/media-understanding");
   vi.resetModules();
 });
 

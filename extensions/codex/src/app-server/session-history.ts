@@ -5,7 +5,7 @@ import {
   migrateSessionEntries,
   parseSessionEntries,
 } from "@earendil-works/pi-coding-agent";
-import type { AgentMessage } from "NexisClaw/plugin-sdk/agent-harness-runtime";
+import type { AgentMessage } from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 
 function isMissingFileError(error: unknown): boolean {
   return Boolean(

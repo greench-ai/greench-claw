@@ -5,7 +5,7 @@ import type { RuntimeEnv } from "../runtime.js";
 import { formatDocsLink } from "../terminal/links.js";
 import { isRich, theme } from "../terminal/theme.js";
 
-const SEARCH_TOOL = "https://docs.NexisClaw.ai/mcp.SearchNexisClaw";
+const SEARCH_TOOL = "https://docs.GreenchClaw.ai/mcp.SearchGreenchClaw";
 const SEARCH_TIMEOUT_MS = 30_000;
 const DEFAULT_SNIPPET_MAX = 220;
 
@@ -163,13 +163,13 @@ async function renderMarkdown(markdown: string, runtime: RuntimeEnv) {
 export async function docsSearchCommand(queryParts: string[], runtime: RuntimeEnv) {
   const query = queryParts.join(" ").trim();
   if (!query) {
-    const docs = formatDocsLink("/", "docs.NexisClaw.ai");
+    const docs = formatDocsLink("/", "docs.GreenchClaw.ai");
     if (isRich()) {
       runtime.log(`${theme.muted("Docs:")} ${docs}`);
-      runtime.log(`${theme.muted("Search:")} ${formatCliCommand('NexisClaw docs "your query"')}`);
+      runtime.log(`${theme.muted("Search:")} ${formatCliCommand('GreenchClaw docs "your query"')}`);
     } else {
-      runtime.log("Docs: https://docs.NexisClaw.ai/");
-      runtime.log(`Search: ${formatCliCommand('NexisClaw docs "your query"')}`);
+      runtime.log("Docs: https://docs.GreenchClaw.ai/");
+      runtime.log(`Search: ${formatCliCommand('GreenchClaw docs "your query"')}`);
     }
     return;
   }

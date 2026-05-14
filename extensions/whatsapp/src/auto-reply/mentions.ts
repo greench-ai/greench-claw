@@ -1,8 +1,8 @@
 import {
   buildMentionRegexes,
   normalizeMentionText,
-} from "NexisClaw/plugin-sdk/channel-mention-gating";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-mention-gating";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   getComparableIdentityValues,
   getMentionIdentities,
@@ -25,7 +25,7 @@ export type MentionTargets = {
   self: WhatsAppIdentity;
 };
 
-export function buildMentionConfig(cfg: NexisClawConfig, agentId?: string): MentionConfig {
+export function buildMentionConfig(cfg: GreenchClawConfig, agentId?: string): MentionConfig {
   const mentionRegexes = buildMentionRegexes(cfg, agentId);
   return { mentionRegexes, allowFrom: cfg.channels?.whatsapp?.allowFrom };
 }

@@ -360,11 +360,11 @@ describe("models list/status", () => {
   }
 
   async function writeWorkspaceAuthEvidencePlugin(workspaceDir: string) {
-    const pluginDir = path.join(workspaceDir, ".NexisClaw", "extensions", "workspace-cloud");
+    const pluginDir = path.join(workspaceDir, ".GreenchClaw", "extensions", "workspace-cloud");
     await fs.mkdir(pluginDir, { recursive: true });
     await fs.writeFile(path.join(pluginDir, "index.ts"), "export default {}\n", "utf8");
     await fs.writeFile(
-      path.join(pluginDir, "NexisClaw.plugin.json"),
+      path.join(pluginDir, "GreenchClaw.plugin.json"),
       JSON.stringify({
         id: "workspace-cloud",
         configSchema: { type: "object" },
@@ -466,7 +466,7 @@ describe("models list/status", () => {
   });
 
   it("models list uses trusted workspace plugin auth evidence for configured rows", async () => {
-    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-models-list-auth-"));
+    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-models-list-auth-"));
     const workspaceDir = path.join(tempRoot, "workspace");
     const bundledDir = path.join(tempRoot, "bundled");
     const stateDir = path.join(tempRoot, "state");
@@ -507,8 +507,8 @@ describe("models list/status", () => {
     try {
       await withEnvAsync(
         {
-          NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
-          NEXISCLAW_STATE_DIR: stateDir,
+          GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+          GREENCHCLAW_STATE_DIR: stateDir,
           WORKSPACE_CLOUD_CREDENTIALS: credentialsPath,
         },
         () => modelsListCommand({ all: true, provider: "workspace-cloud", json: true }, runtime),

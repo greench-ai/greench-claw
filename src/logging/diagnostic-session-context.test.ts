@@ -20,16 +20,16 @@ function writeJsonl(filePath: string, rows: unknown[]) {
 
 describe("diagnostic session context", () => {
   beforeEach(() => {
-    previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-diagnostic-session-"));
-    process.env.NEXISCLAW_STATE_DIR = tempDir;
+    previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-diagnostic-session-"));
+    process.env.GREENCHCLAW_STATE_DIR = tempDir;
   });
 
   afterEach(() => {
     if (previousStateDir === undefined) {
-      delete process.env.NEXISCLAW_STATE_DIR;
+      delete process.env.GREENCHCLAW_STATE_DIR;
     } else {
-      process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+      process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
     }
     if (tempDir) {
       fs.rmSync(tempDir, { recursive: true, force: true });

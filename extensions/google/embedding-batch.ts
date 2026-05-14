@@ -7,8 +7,8 @@ import {
   normalizeBatchBaseUrl,
   sanitizeAndNormalizeEmbedding,
   withRemoteHttpResponse,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { createProviderHttpError } from "NexisClaw/plugin-sdk/provider-http";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { createProviderHttpError } from "GreenchClaw/plugin-sdk/provider-http";
 import type { GeminiEmbeddingClient, GeminiTextEmbeddingRequest } from "./embedding-provider.js";
 
 type EmbeddingBatchExecutionParams = {
@@ -64,7 +64,7 @@ function buildGeminiUploadBody(params: { jsonl: string; displayName: string }): 
   body: Blob;
   contentType: string;
 } {
-  const boundary = `NexisClaw-${hashText(params.displayName)}`;
+  const boundary = `GreenchClaw-${hashText(params.displayName)}`;
   const jsonPart = JSON.stringify({
     file: {
       displayName: params.displayName,

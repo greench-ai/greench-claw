@@ -1,4 +1,4 @@
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
 
 export function readProviderBaseUrl(provider: ModelProviderConfig | undefined): string | undefined {
   if (!provider) {

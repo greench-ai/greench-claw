@@ -2,33 +2,33 @@ import {
   buildLegacyDmAccountAllowlistAdapter,
   createAccountScopedAllowlistNameResolver,
   createFlatAllowlistOverrideResolver,
-} from "NexisClaw/plugin-sdk/allowlist-config-edit";
-import { adaptScopedAccountAccessor } from "NexisClaw/plugin-sdk/channel-config-helpers";
+} from "GreenchClaw/plugin-sdk/allowlist-config-edit";
+import { adaptScopedAccountAccessor } from "GreenchClaw/plugin-sdk/channel-config-helpers";
 import {
   buildThreadAwareOutboundSessionRoute,
   createChatChannelPlugin,
-} from "NexisClaw/plugin-sdk/channel-core";
-import { createChannelMessageAdapterFromOutbound } from "NexisClaw/plugin-sdk/channel-message";
-import { createPairingPrefixStripper } from "NexisClaw/plugin-sdk/channel-pairing";
+} from "GreenchClaw/plugin-sdk/channel-core";
+import { createChannelMessageAdapterFromOutbound } from "GreenchClaw/plugin-sdk/channel-message";
+import { createPairingPrefixStripper } from "GreenchClaw/plugin-sdk/channel-pairing";
 import {
   createAttachedChannelResultAdapter,
   type ChannelOutboundAdapter,
-} from "NexisClaw/plugin-sdk/channel-send-result";
+} from "GreenchClaw/plugin-sdk/channel-send-result";
 import {
   createChannelDirectoryAdapter,
   createRuntimeDirectoryLiveAdapter,
-} from "NexisClaw/plugin-sdk/directory-runtime";
-import { createLazyRuntimeModule } from "NexisClaw/plugin-sdk/lazy-runtime";
-import { resolveOutboundSendDep } from "NexisClaw/plugin-sdk/outbound-send-deps";
-import { buildOutboundBaseSessionKey, type RoutePeer } from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/directory-runtime";
+import { createLazyRuntimeModule } from "GreenchClaw/plugin-sdk/lazy-runtime";
+import { resolveOutboundSendDep } from "GreenchClaw/plugin-sdk/outbound-send-deps";
+import { buildOutboundBaseSessionKey, type RoutePeer } from "GreenchClaw/plugin-sdk/routing";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
+} from "GreenchClaw/plugin-sdk/status-helpers";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   resolveDefaultSlackAccountId,
   resolveSlackAccount,
@@ -48,7 +48,7 @@ import {
   projectCredentialSnapshotFields,
   resolveConfiguredFromRequiredCredentialStatuses,
   type ChannelPlugin,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "./channel-api.js";
 import { resolveSlackChannelType, resolveSlackConversationInfo } from "./channel-type.js";
 import { shouldSuppressLocalSlackExecApprovalPrompt } from "./exec-approvals.js";
@@ -77,7 +77,7 @@ import { buildSlackThreadingToolContext } from "./threading-tool-context.js";
 // module id and typed by a hand-written structural alias so TypeScript does
 // not have to crawl the SDK module's type graph just to type the loader.
 //
-// `NexisClaw/plugin-sdk/channel-policy` is intentionally NOT lazy here —
+// `GreenchClaw/plugin-sdk/channel-policy` is intentionally NOT lazy here —
 // `./group-policy.js` already imports it eagerly, so deferring it from
 // `channel.ts` would not change the load graph.
 
@@ -122,8 +122,8 @@ type TargetResolverRuntimeSurface = {
   >;
 };
 
-const EXTENSION_SHARED_MODULE_ID = "NexisClaw/plugin-sdk/extension-shared";
-const TARGET_RESOLVER_RUNTIME_MODULE_ID = "NexisClaw/plugin-sdk/target-resolver-runtime";
+const EXTENSION_SHARED_MODULE_ID = "GreenchClaw/plugin-sdk/extension-shared";
+const TARGET_RESOLVER_RUNTIME_MODULE_ID = "GreenchClaw/plugin-sdk/target-resolver-runtime";
 
 const loadExtensionSharedSdk = createLazyRuntimeModule(
   () => import(EXTENSION_SHARED_MODULE_ID) as Promise<ExtensionSharedSurface>,
@@ -284,7 +284,7 @@ function matchSlackAcpConversation(params: {
 }
 
 function buildSlackBaseSessionKey(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   accountId?: string | null;
   peer: RoutePeer;
@@ -293,7 +293,7 @@ function buildSlackBaseSessionKey(params: {
 }
 
 function shouldRecoverSlackThreadFromCurrentSession(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   peerKind: RoutePeer["kind"];
 }): boolean {
   // Shared DM sessions (dmScope="main") do not encode the DM peer in the base key,
@@ -305,7 +305,7 @@ function shouldRecoverSlackThreadFromCurrentSession(params: {
 }
 
 async function resolveSlackOutboundSessionRoute(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   accountId?: string | null;
   target: string;
@@ -677,7 +677,7 @@ export const slackPlugin: ChannelPlugin<ResolvedSlackAccount, SlackProbe> = crea
       invoke: async (action, cfg, toolContext) =>
         await (
           await resolveSlackHandleAction()
-        )(action, cfg as NexisClawConfig, toolContext as SlackActionContext | undefined),
+        )(action, cfg as GreenchClawConfig, toolContext as SlackActionContext | undefined),
     }),
     message: slackMessageAdapter,
     status: createComputedAccountStatusAdapter<ResolvedSlackAccount, SlackProbe>({

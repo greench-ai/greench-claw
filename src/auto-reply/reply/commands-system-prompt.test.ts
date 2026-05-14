@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveSessionAgentIds } from "../../agents/agent-scope.js";
 import { resolveBootstrapContextForRun } from "../../agents/bootstrap-files.js";
-import { createNexisClawCodingTools } from "../../agents/pi-tools.js";
+import { createGreenchClawCodingTools } from "../../agents/pi-tools.js";
 import { resolveSandboxRuntimeStatus } from "../../agents/sandbox.js";
 import { buildAgentSystemPrompt } from "../../agents/system-prompt.js";
 import { resolveCommandsSystemPromptBundle } from "./commands-system-prompt.js";
 import type { HandleCommandsParams } from "./commands-types.js";
 
-const { createNexisClawCodingToolsMock } = vi.hoisted(() => ({
-  createNexisClawCodingToolsMock: vi.fn(() => []),
+const { createGreenchClawCodingToolsMock } = vi.hoisted(() => ({
+  createGreenchClawCodingToolsMock: vi.fn(() => []),
 }));
 
 vi.mock("../../agents/bootstrap-files.js", () => ({
@@ -53,7 +53,7 @@ vi.mock("../../agents/system-prompt.js", () => ({
 }));
 
 vi.mock("../../agents/pi-tools.js", () => ({
-  createNexisClawCodingTools: createNexisClawCodingToolsMock,
+  createGreenchClawCodingTools: createGreenchClawCodingToolsMock,
 }));
 
 vi.mock("../../tts/tts.js", () => ({
@@ -127,16 +127,16 @@ function requireFirstArg(
 describe("resolveCommandsSystemPromptBundle", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    createNexisClawCodingToolsMock.mockClear();
-    createNexisClawCodingToolsMock.mockReturnValue([]);
+    createGreenchClawCodingToolsMock.mockClear();
+    createGreenchClawCodingToolsMock.mockReturnValue([]);
   });
 
   it("opts command tool builds into gateway subagent binding", async () => {
     await resolveCommandsSystemPromptBundle(makeParams());
 
     const toolParams = requireFirstArg(
-      vi.mocked(createNexisClawCodingTools),
-      "createNexisClawCodingTools",
+      vi.mocked(createGreenchClawCodingTools),
+      "createGreenchClawCodingTools",
     );
     expect(toolParams.allowGatewaySubagentBinding).toBe(true);
     expect(toolParams.sessionKey).toBe("agent:main:default");
@@ -173,8 +173,8 @@ describe("resolveCommandsSystemPromptBundle", () => {
     await resolveCommandsSystemPromptBundle(params);
 
     const toolParams = requireFirstArg(
-      vi.mocked(createNexisClawCodingTools),
-      "createNexisClawCodingTools",
+      vi.mocked(createGreenchClawCodingTools),
+      "createGreenchClawCodingTools",
     );
     expect(toolParams.agentId).toBe("target");
     expect(toolParams.sessionKey).toBe("agent:target:telegram:direct:target-session");
@@ -210,8 +210,8 @@ describe("resolveCommandsSystemPromptBundle", () => {
     );
     expect(bootstrapParams.sessionId).toBe("target-session");
     const toolParams = requireFirstArg(
-      vi.mocked(createNexisClawCodingTools),
-      "createNexisClawCodingTools",
+      vi.mocked(createGreenchClawCodingTools),
+      "createGreenchClawCodingTools",
     );
     expect(toolParams.groupId).toBe("target-group");
     expect(toolParams.groupChannel).toBe("#target");
@@ -253,7 +253,7 @@ describe("resolveCommandsSystemPromptBundle", () => {
       sandboxed: false,
       mode: "off",
     } as never);
-    createNexisClawCodingToolsMock.mockReturnValue([{ name: "sessions_spawn" }] as never);
+    createGreenchClawCodingToolsMock.mockReturnValue([{ name: "sessions_spawn" }] as never);
     const params = makeParams();
     params.cfg = {
       agents: {

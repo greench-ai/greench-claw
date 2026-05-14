@@ -218,7 +218,7 @@ describe("codex provider", () => {
     const listModels = vi.fn();
 
     const result = await buildCodexProviderCatalog({
-      env: { NEXISCLAW_CODEX_DISCOVERY_LIVE: "0" },
+      env: { GREENCHCLAW_CODEX_DISCOVERY_LIVE: "0" },
       listModels,
     });
 
@@ -231,7 +231,7 @@ describe("codex provider", () => {
     vi.spyOn(CodexAppServerClient, "start").mockReturnValue(client);
 
     await buildCodexProviderCatalog({
-      env: { NEXISCLAW_CODEX_DISCOVERY_LIVE: "1" },
+      env: { GREENCHCLAW_CODEX_DISCOVERY_LIVE: "1" },
     });
 
     expect(client.close).toHaveBeenCalledTimes(1);
@@ -246,7 +246,7 @@ describe("codex provider", () => {
 
     await getSharedCodexAppServerClient({ timeoutMs: 1000 });
     await buildCodexProviderCatalog({
-      env: { NEXISCLAW_CODEX_DISCOVERY_LIVE: "1" },
+      env: { GREENCHCLAW_CODEX_DISCOVERY_LIVE: "1" },
     });
 
     expect(activeClient.close).not.toHaveBeenCalled();
@@ -348,7 +348,7 @@ describe("codex provider", () => {
     const result = await codexProviderDiscovery.staticCatalog?.run({
       config: {},
       env: {},
-      agentDir: "/tmp/NexisClaw-agent",
+      agentDir: "/tmp/GreenchClaw-agent",
     } as never);
 
     expect(

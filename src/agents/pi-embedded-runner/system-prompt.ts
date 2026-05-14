@@ -2,8 +2,8 @@ import type { AgentTool } from "@earendil-works/pi-agent-core";
 import type { AgentSession } from "@earendil-works/pi-coding-agent";
 import type { SourceReplyDeliveryMode } from "../../auto-reply/get-reply-options.types.js";
 import type { SubagentDelegationMode } from "../../config/types.agent-defaults.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { MemoryCitationsMode } from "../../config/types.memory.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import type { ActiveProcessSessionReference } from "../bash-process-references.js";
 import type { BootstrapMode } from "../bootstrap-mode.js";
 import type { ResolvedTimeFormat } from "../date-time.js";
@@ -15,7 +15,7 @@ import type { EmbeddedSandboxInfo } from "./types.js";
 import type { ReasoningLevel, ThinkLevel } from "./utils.js";
 
 export function buildEmbeddedSystemPrompt(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   workspaceDir: string;
   defaultThinkLevel?: ThinkLevel;

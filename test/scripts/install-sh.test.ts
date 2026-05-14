@@ -11,7 +11,7 @@ function runInstallShell(script: string, env: NodeJS.ProcessEnv = {}) {
     encoding: "utf8",
     env: {
       ...process.env,
-      NEXISCLAW_INSTALL_SH_NO_RUN: "1",
+      GREENCHCLAW_INSTALL_SH_NO_RUN: "1",
       ...env,
     },
   });
@@ -48,7 +48,7 @@ describe("install.sh", () => {
       /# Step 2: Node\.js\s+load_nvm_for_node_detection\s+if ! check_node; then/,
     );
 
-    const tmp = mkdtempSync(join(tmpdir(), "NexisClaw-install-nvm-"));
+    const tmp = mkdtempSync(join(tmpdir(), "GreenchClaw-install-nvm-"));
     const home = join(tmp, "home");
     const systemBin = join(tmp, "system-bin");
     const nvmBin = join(home, ".nvm/versions/node/v22.22.1/bin");
@@ -110,7 +110,7 @@ describe("install.sh", () => {
   });
 
   it("promotes a supported Linux Node binary over stale PATH entries", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "NexisClaw-install-node-promote-"));
+    const tmp = mkdtempSync(join(tmpdir(), "GreenchClaw-install-node-promote-"));
     const staleBin = join(tmp, "usr-local-bin");
     const supportedBin = join(tmp, "usr-bin");
     mkdirSync(staleBin, { recursive: true });
@@ -156,7 +156,7 @@ describe("install.sh", () => {
   });
 
   it("persists a supported Linux Node path before noninteractive shell guards", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "NexisClaw-install-linux-node-path-"));
+    const tmp = mkdtempSync(join(tmpdir(), "GreenchClaw-install-linux-node-path-"));
     const home = join(tmp, "home");
     const oldBin = join(tmp, "old/bin");
     const installedBin = join(tmp, "usr/bin");
@@ -221,7 +221,7 @@ describe("install.sh", () => {
   });
 
   it("warns before redirecting an unwritable npm prefix", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "NexisClaw-install-npm-prefix-"));
+    const tmp = mkdtempSync(join(tmpdir(), "GreenchClaw-install-npm-prefix-"));
     const home = join(tmp, "home");
     const events = join(tmp, "events.log");
     mkdirSync(home, { recursive: true });
@@ -268,13 +268,13 @@ describe("install.sh", () => {
     expect(noSudoWarningIndex).toBeGreaterThan(npmSetIndex);
     expect(result?.stdout).toContain("npm global prefix is not writable");
     expect(result?.stdout).toContain("npm normally writes that setting to ~/.npmrc");
-    expect(result?.stdout).toContain("npm i -g NexisClaw@latest");
+    expect(result?.stdout).toContain("npm i -g GreenchClaw@latest");
     expect(result?.stdout).toContain("using this user prefix");
     expect(result?.stdout).not.toContain("has been saved");
   });
 
   it("persists npm prefix PATH before noninteractive shell guards", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "NexisClaw-install-npm-prefix-shell-"));
+    const tmp = mkdtempSync(join(tmpdir(), "GreenchClaw-install-npm-prefix-shell-"));
     const home = join(tmp, "home");
     mkdirSync(home, { recursive: true });
     writeFileSync(
@@ -324,15 +324,15 @@ describe("install.sh", () => {
     expect(result?.stdout).toContain(`path=${home}/.npm-global/bin`);
   });
 
-  it("uses a quoted absolute NexisClaw path in follow-up commands when npm bin is not on the original PATH", () => {
-    const tmp = mkdtempSync(join(tmpdir(), "NexisClaw-install-command-"));
+  it("uses a quoted absolute GreenchClaw path in follow-up commands when npm bin is not on the original PATH", () => {
+    const tmp = mkdtempSync(join(tmpdir(), "GreenchClaw-install-command-"));
     const npmBin = join(tmp, "npm bin");
     const visibleBin = join(tmp, "visible-bin");
     mkdirSync(npmBin, { recursive: true });
     mkdirSync(visibleBin, { recursive: true });
-    const NexisClawBin = join(npmBin, "NexisClaw");
-    writeFileSync(NexisClawBin, "#!/bin/sh\nexit 0\n");
-    chmodSync(NexisClawBin, 0o755);
+    const GreenchClawBin = join(npmBin, "GreenchClaw");
+    writeFileSync(GreenchClawBin, "#!/bin/sh\nexit 0\n");
+    chmodSync(GreenchClawBin, 0o755);
 
     let result: ReturnType<typeof runInstallShell> | undefined;
     try {
@@ -340,17 +340,17 @@ describe("install.sh", () => {
         set -euo pipefail
         source "${SCRIPT_PATH}"
         ORIGINAL_PATH=${JSON.stringify(`${visibleBin}:/usr/bin:/bin`)}
-        printf 'missing=%s\\n' "$(NexisClaw_command_for_user "${NexisClawBin}")"
+        printf 'missing=%s\\n' "$(GreenchClaw_command_for_user "${GreenchClawBin}")"
         ORIGINAL_PATH=${JSON.stringify(`${npmBin}:${visibleBin}:/usr/bin:/bin`)}
-        printf 'present=%s\\n' "$(NexisClaw_command_for_user "${NexisClawBin}")"
+        printf 'present=%s\\n' "$(GreenchClaw_command_for_user "${GreenchClawBin}")"
       `);
     } finally {
       rmSync(tmp, { recursive: true, force: true });
     }
 
     expect(result?.status).toBe(0);
-    expect(result?.stdout).toContain(`missing=${NexisClawBin.replace(/ /g, "\\ ")}`);
-    expect(result?.stdout).toContain("present=NexisClaw");
+    expect(result?.stdout).toContain(`missing=${GreenchClawBin.replace(/ /g, "\\ ")}`);
+    expect(result?.stdout).toContain("present=GreenchClaw");
   });
 });
 
@@ -452,7 +452,7 @@ describe("install.sh macOS Homebrew Node behavior", () => {
   });
 
   it("reruns spinner-wrapped commands when gum reports ioctl failure", () => {
-    const dir = mkdtempSync(join(tmpdir(), "NexisClaw-install-sh-gum-"));
+    const dir = mkdtempSync(join(tmpdir(), "GreenchClaw-install-sh-gum-"));
     try {
       const gumPath = join(dir, "gum");
       const commandPath = join(dir, "command");
@@ -486,46 +486,46 @@ describe("install.sh macOS Homebrew Node behavior", () => {
   });
 });
 
-describe("install.sh duplicate NexisClaw install detection", () => {
+describe("install.sh duplicate GreenchClaw install detection", () => {
   it("warns with concrete package paths and versions for duplicate npm roots", () => {
     const result = runInstallShell(`
       set -euo pipefail
       source "${SCRIPT_PATH}"
       root="$(mktemp -d)"
       trap 'rm -rf "$root"' EXIT
-      mkdir -p "$root/brew/NexisClaw" "$root/fnm/NexisClaw"
-      printf '{"version":"2026.3.7"}\\n' > "$root/brew/NexisClaw/package.json"
-      printf '{"version":"2026.3.1"}\\n' > "$root/fnm/NexisClaw/package.json"
-      collect_NexisClaw_npm_root_candidates() { printf '%s\\n' "$root/brew" "$root/fnm"; }
-      NEXISCLAW_BIN="$root/fnm/.bin/NexisClaw"
+      mkdir -p "$root/brew/GreenchClaw" "$root/fnm/GreenchClaw"
+      printf '{"version":"2026.3.7"}\\n' > "$root/brew/GreenchClaw/package.json"
+      printf '{"version":"2026.3.1"}\\n' > "$root/fnm/GreenchClaw/package.json"
+      collect_GreenchClaw_npm_root_candidates() { printf '%s\\n' "$root/brew" "$root/fnm"; }
+      GREENCHCLAW_BIN="$root/fnm/.bin/GreenchClaw"
       ui_warn() { echo "WARN: $*"; }
-      warn_duplicate_NexisClaw_global_installs
+      warn_duplicate_GreenchClaw_global_installs
     `);
 
     expect(result.status).toBe(0);
-    expect(result.stdout).toContain("Multiple NexisClaw global installs detected");
+    expect(result.stdout).toContain("Multiple GreenchClaw global installs detected");
     expect(result.stdout).toContain("2026.3.7");
     expect(result.stdout).toContain("2026.3.1");
-    expect(result.stdout).toContain("/brew/NexisClaw");
-    expect(result.stdout).toContain("/fnm/NexisClaw");
-    expect(result.stdout).toContain("Active NexisClaw:");
-    expect(result.stdout).toContain("npm uninstall -g NexisClaw");
+    expect(result.stdout).toContain("/brew/GreenchClaw");
+    expect(result.stdout).toContain("/fnm/GreenchClaw");
+    expect(result.stdout).toContain("Active GreenchClaw:");
+    expect(result.stdout).toContain("npm uninstall -g GreenchClaw");
   });
 
-  it("stays quiet when only one NexisClaw npm root exists", () => {
+  it("stays quiet when only one GreenchClaw npm root exists", () => {
     const result = runInstallShell(`
       set -euo pipefail
       source "${SCRIPT_PATH}"
       root="$(mktemp -d)"
       trap 'rm -rf "$root"' EXIT
-      mkdir -p "$root/only/NexisClaw"
-      printf '{"version":"2026.3.7"}\\n' > "$root/only/NexisClaw/package.json"
-      collect_NexisClaw_npm_root_candidates() { printf '%s\\n' "$root/only"; }
+      mkdir -p "$root/only/GreenchClaw"
+      printf '{"version":"2026.3.7"}\\n' > "$root/only/GreenchClaw/package.json"
+      collect_GreenchClaw_npm_root_candidates() { printf '%s\\n' "$root/only"; }
       ui_warn() { echo "WARN: $*"; }
-      warn_duplicate_NexisClaw_global_installs
+      warn_duplicate_GreenchClaw_global_installs
     `);
 
     expect(result.status).toBe(0);
-    expect(result.stdout).not.toContain("Multiple NexisClaw global installs detected");
+    expect(result.stdout).not.toContain("Multiple GreenchClaw global installs detected");
   });
 });

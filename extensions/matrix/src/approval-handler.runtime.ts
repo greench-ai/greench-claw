@@ -3,23 +3,23 @@ import type {
   ChannelApprovalCapabilityHandlerContext,
   PendingApprovalView,
   ResolvedApprovalView,
-} from "NexisClaw/plugin-sdk/approval-handler-runtime";
-import { createChannelApprovalNativeRuntimeAdapter } from "NexisClaw/plugin-sdk/approval-handler-runtime";
-import { buildChannelApprovalNativeTargetKey } from "NexisClaw/plugin-sdk/approval-native-runtime";
+} from "GreenchClaw/plugin-sdk/approval-handler-runtime";
+import { createChannelApprovalNativeRuntimeAdapter } from "GreenchClaw/plugin-sdk/approval-handler-runtime";
+import { buildChannelApprovalNativeTargetKey } from "GreenchClaw/plugin-sdk/approval-native-runtime";
 import {
   buildExecApprovalPendingReplyPayload,
   buildPluginApprovalPendingReplyPayload,
   type ExecApprovalReplyDecision,
-} from "NexisClaw/plugin-sdk/approval-reply-runtime";
-import { buildPluginApprovalResolvedReplyPayload } from "NexisClaw/plugin-sdk/approval-runtime";
+} from "GreenchClaw/plugin-sdk/approval-reply-runtime";
+import { buildPluginApprovalResolvedReplyPayload } from "GreenchClaw/plugin-sdk/approval-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "NexisClaw/plugin-sdk/approval-runtime";
+} from "GreenchClaw/plugin-sdk/approval-runtime";
 import {
   listMessageReceiptPlatformIds,
   resolveMessageReceiptPrimaryId,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 import {
   buildMatrixApprovalReactionHint,
   listMatrixApprovalReactionBindings,
@@ -42,8 +42,8 @@ import {
 import { resolveMatrixTargetIdentity } from "./matrix/target-ids.js";
 import type { CoreConfig } from "./types.js";
 
-// NexisClaw Matrix custom event content for capable clients; body and reactions remain fallback.
-const MATRIX_APPROVAL_METADATA_KEY = "com.NexisClaw.approval" as const;
+// GreenchClaw Matrix custom event content for capable clients; body and reactions remain fallback.
+const MATRIX_APPROVAL_METADATA_KEY = "com.GreenchClaw.approval" as const;
 
 type PendingMessage = {
   roomId: string;

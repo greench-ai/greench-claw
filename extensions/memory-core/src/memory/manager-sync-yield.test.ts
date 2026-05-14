@@ -3,10 +3,10 @@ import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
 import {
   resolveSessionTranscriptsDirForAgent,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   type ResolvedMemorySearchConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-foundation";
-import type { MemorySource } from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-foundation";
+import type { MemorySource } from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const { buildSessionEntryMock } = vi.hoisted(() => ({
@@ -22,7 +22,7 @@ vi.mock("undici", () => ({
   setGlobalDispatcher: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/memory-core-host-engine-qmd", () => {
+vi.mock("GreenchClaw/plugin-sdk/memory-core-host-engine-qmd", () => {
   const basename = (filePath: string) => filePath.split(/[\\/]/).pop() ?? filePath;
   return {
     buildSessionEntry: buildSessionEntryMock,
@@ -59,9 +59,9 @@ function createDbMock(): DatabaseSync {
 }
 
 class SessionSyncYieldHarness extends MemoryManagerSyncOps {
-  protected readonly cfg = {} as NexisClawConfig;
+  protected readonly cfg = {} as GreenchClawConfig;
   protected readonly agentId = "main";
-  protected readonly workspaceDir = "/tmp/NexisClaw-test-workspace";
+  protected readonly workspaceDir = "/tmp/GreenchClaw-test-workspace";
   protected readonly settings = {
     sync: {
       sessions: {
@@ -133,7 +133,7 @@ class SessionSyncYieldHarness extends MemoryManagerSyncOps {
 
 describe("session sync responsiveness", () => {
   beforeEach(() => {
-    vi.stubEnv("NEXISCLAW_STATE_DIR", path.join(os.tmpdir(), "NexisClaw-session-sync-yield"));
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", path.join(os.tmpdir(), "GreenchClaw-session-sync-yield"));
     buildSessionEntryMock.mockImplementation(async (absPath: string) => {
       const name = path.basename(absPath);
       return {

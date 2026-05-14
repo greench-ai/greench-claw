@@ -15,7 +15,7 @@ export function clampConnectChallengeTimeoutMs(
 export function getConnectChallengeTimeoutMsFromEnv(
   env: NodeJS.ProcessEnv = process.env,
 ): number | undefined {
-  const raw = env.NEXISCLAW_CONNECT_CHALLENGE_TIMEOUT_MS;
+  const raw = env.GREENCHCLAW_CONNECT_CHALLENGE_TIMEOUT_MS;
   if (raw) {
     const parsed = Number(raw);
     if (Number.isFinite(parsed) && parsed > 0) {
@@ -55,7 +55,8 @@ export function resolveConnectChallengeTimeoutMs(
 
 export function getPreauthHandshakeTimeoutMsFromEnv(env: NodeJS.ProcessEnv = process.env): number {
   const configuredTimeout =
-    env.NEXISCLAW_HANDSHAKE_TIMEOUT_MS || (env.VITEST && env.NEXISCLAW_TEST_HANDSHAKE_TIMEOUT_MS);
+    env.GREENCHCLAW_HANDSHAKE_TIMEOUT_MS ||
+    (env.VITEST && env.GREENCHCLAW_TEST_HANDSHAKE_TIMEOUT_MS);
   if (configuredTimeout) {
     const parsed = Number(configuredTimeout);
     if (Number.isFinite(parsed) && parsed > 0) {
@@ -71,7 +72,8 @@ export function resolvePreauthHandshakeTimeoutMs(params?: {
 }): number {
   const env = params?.env ?? process.env;
   const configuredTimeout =
-    env.NEXISCLAW_HANDSHAKE_TIMEOUT_MS || (env.VITEST && env.NEXISCLAW_TEST_HANDSHAKE_TIMEOUT_MS);
+    env.GREENCHCLAW_HANDSHAKE_TIMEOUT_MS ||
+    (env.VITEST && env.GREENCHCLAW_TEST_HANDSHAKE_TIMEOUT_MS);
   if (configuredTimeout) {
     const parsed = Number(configuredTimeout);
     if (Number.isFinite(parsed) && parsed > 0) {

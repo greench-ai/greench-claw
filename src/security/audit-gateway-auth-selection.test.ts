@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { resolveGatewayProbeAuthSafe, resolveGatewayProbeTarget } from "../gateway/probe-auth.js";
 import { collectDeepProbeFindings } from "./audit-deep-probe-findings.js";
 
@@ -18,17 +18,17 @@ describe("security audit gateway auth selection", () => {
     const makeProbeEnv = (env?: { token?: string; password?: string }) => {
       const probeEnv: NodeJS.ProcessEnv = {};
       if (env?.token !== undefined) {
-        probeEnv.NEXISCLAW_GATEWAY_TOKEN = env.token;
+        probeEnv.GREENCHCLAW_GATEWAY_TOKEN = env.token;
       }
       if (env?.password !== undefined) {
-        probeEnv.NEXISCLAW_GATEWAY_PASSWORD = env.password;
+        probeEnv.GREENCHCLAW_GATEWAY_PASSWORD = env.password;
       }
       return probeEnv;
     };
 
     const cases: Array<{
       name: string;
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       env?: { token?: string; password?: string };
       expectedAuth: { token?: string; password?: string };
     }> = [
@@ -119,7 +119,7 @@ describe("security audit gateway auth selection", () => {
   });
 
   it("adds warning finding when probe auth SecretRef is unavailable", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       gateway: {
         mode: "local",
         auth: {

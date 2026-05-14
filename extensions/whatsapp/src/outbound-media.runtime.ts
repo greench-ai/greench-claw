@@ -1,4 +1,4 @@
-import { loadWebMedia } from "NexisClaw/plugin-sdk/web-media";
+import { loadWebMedia } from "GreenchClaw/plugin-sdk/web-media";
 
 export async function loadOutboundMediaFromUrl(
   mediaUrl: string,

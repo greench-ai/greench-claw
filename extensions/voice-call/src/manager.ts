@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { VoiceCallConfig } from "./config.js";
 import type { CallManagerContext, StreamSessionIssuer } from "./manager/context.js";
 import { processEvent as processManagerEvent } from "./manager/events.js";
@@ -50,7 +50,7 @@ function resolveDefaultStoreBase(config: VoiceCallConfig, storePath?: string): s
   if (rawOverride) {
     return resolveUserPath(rawOverride);
   }
-  const preferred = path.join(os.homedir(), ".NexisClaw", "voice-calls");
+  const preferred = path.join(os.homedir(), ".GreenchClaw", "voice-calls");
   const candidates = [preferred].map((dir) => resolveUserPath(dir));
   const existing =
     candidates.find((dir) => {

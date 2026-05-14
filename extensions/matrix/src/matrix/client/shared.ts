@@ -1,4 +1,4 @@
-import { normalizeOptionalAccountId } from "NexisClaw/plugin-sdk/account-id";
+import { normalizeOptionalAccountId } from "GreenchClaw/plugin-sdk/account-id";
 import type { CoreConfig } from "../../types.js";
 import type { MatrixClient } from "../sdk.js";
 import { LogService } from "../sdk/logger.js";

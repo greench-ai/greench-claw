@@ -4,11 +4,11 @@ import {
   isChannelExecApprovalClientEnabledFromConfig,
   isChannelExecApprovalTargetRecipient,
 } from "./approval-client-helpers.js";
-import type { NexisClawConfig } from "./config-runtime.js";
+import type { GreenchClawConfig } from "./config-runtime.js";
 
 describe("isChannelExecApprovalTargetRecipient", () => {
   it("matches targets by channel and account", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       approvals: {
         exec: {
           enabled: true,
@@ -43,7 +43,7 @@ describe("isChannelExecApprovalTargetRecipient", () => {
   });
 
   it("normalizes the requested channel id before matching targets", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       approvals: {
         exec: {
           enabled: true,

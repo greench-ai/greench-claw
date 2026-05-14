@@ -1,9 +1,9 @@
 import {
   getRequiredHookHandler,
   registerHookHandlersForTest,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { beforeEach, describe, expect, it } from "vitest";
-import type { ClawdbotConfig, NexisClawPluginApi } from "../runtime-api.js";
+import type { ClawdbotConfig, GreenchClawPluginApi } from "../runtime-api.js";
 import { registerFeishuSubagentHooks } from "../subagent-hooks-api.js";
 import {
   createFeishuThreadBindingManager,
@@ -16,7 +16,7 @@ const baseConfig: ClawdbotConfig = {
 };
 
 function registerHandlersForTest(config: Record<string, unknown> = baseConfig) {
-  return registerHookHandlersForTest<NexisClawPluginApi>({
+  return registerHookHandlersForTest<GreenchClawPluginApi>({
     config,
     register: registerFeishuSubagentHooks,
   });

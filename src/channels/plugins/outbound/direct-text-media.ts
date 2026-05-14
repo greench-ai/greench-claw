@@ -1,14 +1,14 @@
-import { sanitizeForPlainText } from "NexisClaw/plugin-sdk/outbound-runtime";
-import { sendTextMediaPayload } from "NexisClaw/plugin-sdk/reply-payload";
+import { sanitizeForPlainText } from "GreenchClaw/plugin-sdk/outbound-runtime";
+import { sendTextMediaPayload } from "GreenchClaw/plugin-sdk/reply-payload";
 import { chunkText } from "../../../auto-reply/chunk.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import type { OutboundSendDeps } from "../../../infra/outbound/deliver.js";
 import type { OutboundMediaAccess } from "../../../media/load-options.js";
 import { resolveChannelMediaMaxBytes } from "../media-limits.js";
 import type { ChannelOutboundAdapter } from "../types.adapters.js";
 
 type DirectSendOptions = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   replyToId?: string | null;
   mediaUrl?: string;
@@ -31,12 +31,15 @@ export {
   sendPayloadMediaSequenceAndFinalize,
   sendPayloadMediaSequenceOrFallback,
   sendTextMediaPayload,
-} from "NexisClaw/plugin-sdk/reply-payload";
+} from "GreenchClaw/plugin-sdk/reply-payload";
 
 export function resolveScopedChannelMediaMaxBytes(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
-  resolveChannelLimitMb: (params: { cfg: NexisClawConfig; accountId: string }) => number | undefined;
+  resolveChannelLimitMb: (params: {
+    cfg: GreenchClawConfig;
+    accountId: string;
+  }) => number | undefined;
 }): number | undefined {
   return resolveChannelMediaMaxBytes({
     cfg: params.cfg,
@@ -46,7 +49,7 @@ export function resolveScopedChannelMediaMaxBytes(params: {
 }
 
 export function createScopedChannelMediaMaxBytesResolver(channel: string) {
-  return (params: { cfg: NexisClawConfig; accountId?: string | null }) =>
+  return (params: { cfg: GreenchClawConfig; accountId?: string | null }) =>
     resolveScopedChannelMediaMaxBytes({
       cfg: params.cfg,
       accountId: params.accountId,
@@ -63,14 +66,14 @@ export function createDirectTextMediaOutbound<
   channel: string;
   resolveSender: (deps: OutboundSendDeps | undefined) => DirectSendFn<TOpts, TResult>;
   resolveMaxBytes: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string | null;
   }) => number | undefined;
   buildTextOptions: (params: DirectSendOptions) => TOpts;
   buildMediaOptions: (params: DirectSendOptions) => TOpts;
 }): ChannelOutboundAdapter {
   const sendDirect = async (sendParams: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     to: string;
     text: string;
     accountId?: string | null;

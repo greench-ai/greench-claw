@@ -1,17 +1,17 @@
 import path from "node:path";
-import { summarizeMigrationItems } from "NexisClaw/plugin-sdk/migration";
+import { summarizeMigrationItems } from "GreenchClaw/plugin-sdk/migration";
 import {
   archiveMigrationItem,
   copyMigrationFileItem,
   withCachedMigrationConfigRuntime,
   writeMigrationReport,
-} from "NexisClaw/plugin-sdk/migration-runtime";
+} from "GreenchClaw/plugin-sdk/migration-runtime";
 import type {
   MigrationApplyResult,
   MigrationItem,
   MigrationPlan,
   MigrationProviderContext,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import { applyConfigItem, applyManualItem } from "./config.js";
 import { appendItem } from "./helpers.js";
 import { buildClaudePlan } from "./plan.js";

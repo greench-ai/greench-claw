@@ -44,23 +44,23 @@ describe("buildUserAgent", () => {
     vi.restoreAllMocks();
   });
 
-  it("returns teams.ts[apps]/<sdk> NexisClaw/<version> format", () => {
+  it("returns teams.ts[apps]/<sdk> GreenchClaw/<version> format", () => {
     const ua = buildUserAgent();
-    expect(ua).toMatch(/^teams\.ts\[apps\]\/.+ NexisClaw\/2026\.3\.19$/);
+    expect(ua).toMatch(/^teams\.ts\[apps\]\/.+ GreenchClaw\/2026\.3\.19$/);
   });
 
   it("reflects the runtime version", () => {
     vi.mocked(getMSTeamsRuntime).mockReturnValue({ version: "1.2.3" } as never);
     const ua = buildUserAgent();
-    expect(ua).toMatch(/NexisClaw\/1\.2\.3$/);
+    expect(ua).toMatch(/GreenchClaw\/1\.2\.3$/);
   });
 
-  it("returns NexisClaw/unknown when runtime is not initialized", () => {
+  it("returns GreenchClaw/unknown when runtime is not initialized", () => {
     vi.mocked(getMSTeamsRuntime).mockImplementation(() => {
       throw new Error("MSTeams runtime not initialized");
     });
     const ua = buildUserAgent();
-    expect(ua).toMatch(/NexisClaw\/unknown$/);
+    expect(ua).toMatch(/GreenchClaw\/unknown$/);
     // SDK version should still be present
     expect(ua).toMatch(/^teams\.ts\[apps\]\//);
   });
@@ -76,7 +76,7 @@ describe("buildUserAgent", () => {
 
     expect(mockFetch).toHaveBeenCalledOnce();
     const init = readFirstFetchInit(mockFetch);
-    expect(init.headers["User-Agent"]).toMatch(/^teams\.ts\[apps\]\/.+ NexisClaw\/2026\.3\.19$/);
+    expect(init.headers["User-Agent"]).toMatch(/^teams\.ts\[apps\]\/.+ GreenchClaw\/2026\.3\.19$/);
     expect(init.headers).toHaveProperty("Authorization", "Bearer test-token");
   });
 
@@ -99,7 +99,7 @@ describe("buildUserAgent", () => {
 
   it("adds the generated User-Agent to Headers instances without overwriting callers", () => {
     const generated = ensureUserAgentHeader();
-    expect(generated.get("User-Agent")).toMatch(/^teams\.ts\[apps\]\/.+ NexisClaw\/2026\.3\.19$/);
+    expect(generated.get("User-Agent")).toMatch(/^teams\.ts\[apps\]\/.+ GreenchClaw\/2026\.3\.19$/);
 
     const custom = ensureUserAgentHeader({ "User-Agent": "custom-agent/2.0" });
     expect(custom.get("User-Agent")).toBe("custom-agent/2.0");

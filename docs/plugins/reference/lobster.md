@@ -11,7 +11,7 @@ Typed workflow tool with resumable approvals.
 
 ## Distribution
 
-- Package: `@NexisClaw/lobster`
+- Package: `@GreenchClaw/lobster`
 - Install route: npm; ClawHub
 
 ## Surface

@@ -1,12 +1,12 @@
 import fs from "node:fs/promises";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import {
   enforceEmbeddingMaxInputTokens,
   hasNonTextEmbeddingParts,
   type EmbeddingInput,
   type MemoryEmbeddingProviderRuntime,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/memory-core-host-engine-foundation";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   buildMultimodalChunkForIndexing,
   chunkMarkdown,
@@ -14,7 +14,7 @@ import {
   remapChunkLines,
   type MemoryChunk,
   type MemorySource,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 import {
   MEMORY_BATCH_FAILURE_LIMIT,
   recordMemoryBatchFailure,

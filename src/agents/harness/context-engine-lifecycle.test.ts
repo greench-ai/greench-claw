@@ -1,7 +1,7 @@
 import type { AgentMessage } from "@earendil-works/pi-agent-core";
 import { describe, expect, it, vi } from "vitest";
 import type { ContextEngine } from "../../context-engine/types.js";
-import { NEXISCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE } from "../internal-runtime-context.js";
+import { GREENCHCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE } from "../internal-runtime-context.js";
 import {
   assembleHarnessContextEngine,
   finalizeHarnessContextEngineTurn,
@@ -18,10 +18,10 @@ function textMessage(role: "user" | "assistant", text: string, timestamp: number
 function runtimeContextMessage(content: string, timestamp: number): AgentMessage {
   return {
     role: "custom",
-    customType: NEXISCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE,
+    customType: GREENCHCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE,
     content,
     display: false,
-    details: { source: "NexisClaw-runtime-context" },
+    details: { source: "GreenchClaw-runtime-context" },
     timestamp,
   } as AgentMessage;
 }

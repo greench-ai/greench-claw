@@ -6,12 +6,12 @@ import {
 } from "./bot-message-context.route-test-support.js";
 
 let buildTelegramMessageContextForTest: typeof import("./bot-message-context.test-harness.js").buildTelegramMessageContextForTest;
-let clearRuntimeConfigSnapshot: typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot").clearRuntimeConfigSnapshot;
-let setRuntimeConfigSnapshot: typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot").setRuntimeConfigSnapshot;
+let clearRuntimeConfigSnapshot: typeof import("GreenchClaw/plugin-sdk/runtime-config-snapshot").clearRuntimeConfigSnapshot;
+let setRuntimeConfigSnapshot: typeof import("GreenchClaw/plugin-sdk/runtime-config-snapshot").setRuntimeConfigSnapshot;
 
 describe("buildTelegramMessageContext named-account DM fallback", () => {
   const baseCfg = {
-    agents: { defaults: { model: "anthropic/claude-opus-4-5", workspace: "/tmp/NexisClaw" } },
+    agents: { defaults: { model: "anthropic/claude-opus-4-5", workspace: "/tmp/GreenchClaw" } },
     channels: { telegram: {} },
     messages: { groupChat: { mentionPatterns: [] } },
   };

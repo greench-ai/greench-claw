@@ -1,5 +1,5 @@
 import path from "node:path";
-import { resolvePreferredNexisClawTmpDir } from "../infra/tmp-NexisClaw-dir.js";
+import { resolvePreferredGreenchClawTmpDir } from "../infra/tmp-GreenchClaw-dir.js";
 export {
   resolveExistingPathsWithinRoot,
   pathScope,
@@ -9,7 +9,7 @@ export {
   resolveWritablePathWithinRoot,
 } from "../sdk-security-runtime.js";
 
-const DEFAULT_FALLBACK_BROWSER_TMP_DIR = "/tmp/NexisClaw";
+const DEFAULT_FALLBACK_BROWSER_TMP_DIR = "/tmp/GreenchClaw";
 
 function canUseNodeFs(): boolean {
   const getBuiltinModule = (
@@ -28,7 +28,7 @@ function canUseNodeFs(): boolean {
 }
 
 const DEFAULT_BROWSER_TMP_DIR = canUseNodeFs()
-  ? resolvePreferredNexisClawTmpDir()
+  ? resolvePreferredGreenchClawTmpDir()
   : DEFAULT_FALLBACK_BROWSER_TMP_DIR;
 export const DEFAULT_TRACE_DIR = DEFAULT_BROWSER_TMP_DIR;
 export const DEFAULT_DOWNLOAD_DIR = path.join(DEFAULT_BROWSER_TMP_DIR, "downloads");

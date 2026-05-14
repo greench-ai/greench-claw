@@ -1,4 +1,4 @@
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import {
   buildSyntheticModelDefinition,
   SYNTHETIC_BASE_URL,

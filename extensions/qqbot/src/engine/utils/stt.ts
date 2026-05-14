@@ -7,8 +7,8 @@
 
 import * as fs from "node:fs";
 import path from "node:path";
-import { mimeTypeFromFilePath } from "NexisClaw/plugin-sdk/media-mime";
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { mimeTypeFromFilePath } from "GreenchClaw/plugin-sdk/media-mime";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeOptionalString,
   asOptionalObjectRecord as asRecord,

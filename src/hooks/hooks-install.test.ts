@@ -13,7 +13,7 @@ import { loadInternalHooks } from "./loader.js";
 const tempDirs: string[] = [];
 
 async function makeTempDir() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-hooks-e2e-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-hooks-e2e-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -49,7 +49,7 @@ describe("hooks install (e2e)", () => {
         {
           name: "@acme/hello-hooks",
           version: "0.0.0",
-          NexisClaw: { hooks: ["./hooks/hello-hook"] },
+          GreenchClaw: { hooks: ["./hooks/hello-hook"] },
         },
         null,
         2,
@@ -63,7 +63,7 @@ describe("hooks install (e2e)", () => {
         "---",
         'name: "hello-hook"',
         'description: "Test hook"',
-        'metadata: {"NexisClaw":{"events":["command:new"]}}',
+        'metadata: {"GreenchClaw":{"events":["command:new"]}}',
         "---",
         "",
         "# Hello Hook",

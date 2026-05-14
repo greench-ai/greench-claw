@@ -1,4 +1,4 @@
-import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalLowercaseString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type {
   QaBusAttachment,
   QaBusConversation,

@@ -1,7 +1,7 @@
-import type { ProviderPrepareRuntimeAuthContext } from "NexisClaw/plugin-sdk/core";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { ensureAuthProfileStore } from "NexisClaw/plugin-sdk/provider-auth";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { ProviderPrepareRuntimeAuthContext } from "GreenchClaw/plugin-sdk/core";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { ensureAuthProfileStore } from "GreenchClaw/plugin-sdk/provider-auth";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { getAccessTokenResultAsync } from "./cli.js";
 import {
   type CachedTokenEntry,

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { loadManifestMetadataSnapshot } from "./manifest-contract-eligibility.js";
 import type { PluginManifestRecord } from "./manifest-registry.js";
 
@@ -22,7 +22,7 @@ function hasConfiguredSearchCredentialCandidate(searchConfig: unknown): boolean 
   );
 }
 
-function hasConfiguredPluginWebSearchCandidate(config: NexisClawConfig): boolean {
+function hasConfiguredPluginWebSearchCandidate(config: GreenchClawConfig): boolean {
   const entries = isRecord(config.plugins?.entries) ? config.plugins.entries : undefined;
   if (!entries) {
     return false;
@@ -34,7 +34,7 @@ function hasConfiguredPluginWebSearchCandidate(config: NexisClawConfig): boolean
 }
 
 function hasManifestWebSearchEnvCredentialCandidate(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   origin?: PluginManifestRecord["origin"];
 }): boolean {
@@ -63,7 +63,7 @@ function hasManifestWebSearchEnvCredentialCandidate(params: {
 }
 
 export function hasConfiguredWebSearchCredential(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   searchConfig?: Record<string, unknown>;
   origin?: PluginManifestRecord["origin"];

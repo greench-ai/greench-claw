@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { RequestClient } from "../internal/discord.js";
 
@@ -12,9 +12,9 @@ const sendDurableMessageBatchMock = vi.hoisted(() =>
 const sendMessageDiscordMock = vi.hoisted(() => vi.fn());
 const sendVoiceMessageDiscordMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/channel-message", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/channel-message")>(
-    "NexisClaw/plugin-sdk/channel-message",
+vi.mock("GreenchClaw/plugin-sdk/channel-message", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/channel-message")>(
+    "GreenchClaw/plugin-sdk/channel-message",
   );
   return {
     ...actual,
@@ -34,7 +34,7 @@ vi.mock("../send.js", async () => {
 let deliverDiscordReply: typeof import("./reply-delivery.js").deliverDiscordReply;
 
 type DeliverParams = Record<string, unknown> & {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   formatting?: unknown;
   deps?: Record<string, (...args: unknown[]) => Promise<unknown>>;
 };
@@ -82,7 +82,7 @@ describe("deliverDiscordReply", () => {
   const runtime = {} as RuntimeEnv;
   const cfg = {
     channels: { discord: { token: "test-token" } },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 
   beforeAll(async () => {
     ({ deliverDiscordReply } = await import("./reply-delivery.js"));
@@ -321,7 +321,7 @@ describe("deliverDiscordReply", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await deliverDiscordReply({
       replies: [{ text: "formatted" }],
@@ -362,14 +362,14 @@ describe("deliverDiscordReply", () => {
       cfg,
       textLimit: 2000,
       replyToMode: "off",
-      mediaLocalRoots: ["/tmp/NexisClaw-media"],
+      mediaLocalRoots: ["/tmp/GreenchClaw-media"],
     });
 
     const params = firstDeliverParams();
     expect(params.payloads).toEqual(replies);
     expect(params.replyToId).toBeUndefined();
     expect(params.replyToMode).toBe("off");
-    expect(params.mediaAccess).toEqual({ localRoots: ["/tmp/NexisClaw-media"] });
+    expect(params.mediaAccess).toEqual({ localRoots: ["/tmp/GreenchClaw-media"] });
   });
 
   it("bridges Discord voice sends through the outbound dependency bag", async () => {

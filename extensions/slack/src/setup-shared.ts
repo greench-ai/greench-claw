@@ -1,18 +1,18 @@
-import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
-import { hasConfiguredSecretInput } from "NexisClaw/plugin-sdk/secret-input";
-import { patchChannelConfigForAccount } from "NexisClaw/plugin-sdk/setup-runtime";
-import { formatDocsLink } from "NexisClaw/plugin-sdk/setup-tools";
+import { describeAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
+import { hasConfiguredSecretInput } from "GreenchClaw/plugin-sdk/secret-input";
+import { patchChannelConfigForAccount } from "GreenchClaw/plugin-sdk/setup-runtime";
+import { formatDocsLink } from "GreenchClaw/plugin-sdk/setup-tools";
 import type { ResolvedSlackAccount } from "./accounts.js";
-import type { NexisClawConfig } from "./channel-api.js";
+import type { GreenchClawConfig } from "./channel-api.js";
 
 export const SLACK_CHANNEL = "slack" as const;
 
-export function buildSlackManifest(botName = "NexisClaw") {
-  const safeName = botName.trim() || "NexisClaw";
+export function buildSlackManifest(botName = "GreenchClaw") {
+  const safeName = botName.trim() || "GreenchClaw";
   const manifest = {
     display_information: {
       name: safeName,
-      description: `${safeName} connector for NexisClaw`,
+      description: `${safeName} connector for GreenchClaw`,
     },
     features: {
       bot_user: {
@@ -26,8 +26,8 @@ export function buildSlackManifest(botName = "NexisClaw") {
       },
       slash_commands: [
         {
-          command: "/NexisClaw",
-          description: "Send a message to NexisClaw",
+          command: "/GreenchClaw",
+          description: "Send a message to GreenchClaw",
           should_escape: false,
         },
       ],
@@ -99,10 +99,10 @@ export function buildSlackSetupLines(): string[] {
 }
 
 export function setSlackChannelAllowlist(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
   channelKeys: string[],
-): NexisClawConfig {
+): GreenchClawConfig {
   const channels = Object.fromEntries(channelKeys.map((key) => [key, { enabled: true }]));
   return patchChannelConfigForAccount({
     cfg,

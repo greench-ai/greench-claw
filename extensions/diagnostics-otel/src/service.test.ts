@@ -133,12 +133,12 @@ import {
   emitTrustedDiagnosticEvent,
   onInternalDiagnosticEvent,
   resetDiagnosticEventsForTest,
-} from "NexisClaw/plugin-sdk/diagnostic-runtime";
-import type { NexisClawPluginServiceContext } from "../api.js";
+} from "GreenchClaw/plugin-sdk/diagnostic-runtime";
+import type { GreenchClawPluginServiceContext } from "../api.js";
 import { emitDiagnosticEvent } from "../api.js";
 import { createDiagnosticsOtelService } from "./service.js";
 
-const OTEL_TEST_STATE_DIR = "/tmp/NexisClaw-diagnostics-otel-test";
+const OTEL_TEST_STATE_DIR = "/tmp/GreenchClaw-diagnostics-otel-test";
 const OTEL_TEST_ENDPOINT = "http://otel-collector:4318";
 const OTEL_TEST_PROTOCOL = "http/protobuf";
 const TRACE_ID = "4bf92f3577b34da6a3ce929d0e0e4736";
@@ -149,7 +149,7 @@ const TOOL_SPAN_ID = "3333333333333333";
 const PROTO_KEY = "__proto__";
 const MAX_TEST_OTEL_CONTENT_ATTRIBUTE_CHARS = 4096;
 const OTEL_TRUNCATED_SUFFIX_MAX_CHARS = 20;
-const ORIGINAL_NEXISCLAW_OTEL_PRELOADED = process.env.NEXISCLAW_OTEL_PRELOADED;
+const ORIGINAL_GREENCHCLAW_OTEL_PRELOADED = process.env.GREENCHCLAW_OTEL_PRELOADED;
 const ORIGINAL_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = process.env.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT;
 const ORIGINAL_OTEL_EXPORTER_OTLP_METRICS_ENDPOINT =
   process.env.OTEL_EXPORTER_OTLP_METRICS_ENDPOINT;
@@ -170,13 +170,13 @@ type OtelContextFlags = {
   metrics?: boolean;
   logs?: boolean;
   captureContent?: NonNullable<
-    NonNullable<NexisClawPluginServiceContext["config"]["diagnostics"]>["otel"]
+    NonNullable<GreenchClawPluginServiceContext["config"]["diagnostics"]>["otel"]
   >["captureContent"];
 };
 function createOtelContext(
   endpoint: string,
   { traces = false, metrics = false, logs = false, captureContent }: OtelContextFlags = {},
-): NexisClawPluginServiceContext {
+): GreenchClawPluginServiceContext {
   return {
     config: {
       diagnostics: {
@@ -201,7 +201,7 @@ function createOtelContext(
   };
 }
 
-function createTraceOnlyContext(endpoint: string): NexisClawPluginServiceContext {
+function createTraceOnlyContext(endpoint: string): GreenchClawPluginServiceContext {
   return createOtelContext(endpoint, { traces: true });
 }
 
@@ -320,7 +320,7 @@ afterAll(() => {
 describe("diagnostics-otel service", () => {
   beforeEach(() => {
     resetDiagnosticEventsForTest();
-    delete process.env.NEXISCLAW_OTEL_PRELOADED;
+    delete process.env.GREENCHCLAW_OTEL_PRELOADED;
     delete process.env.OTEL_SEMCONV_STABILITY_OPT_IN;
     telemetryState.counters.clear();
     telemetryState.histograms.clear();
@@ -343,10 +343,10 @@ describe("diagnostics-otel service", () => {
 
   afterEach(() => {
     resetDiagnosticEventsForTest();
-    if (ORIGINAL_NEXISCLAW_OTEL_PRELOADED === undefined) {
-      delete process.env.NEXISCLAW_OTEL_PRELOADED;
+    if (ORIGINAL_GREENCHCLAW_OTEL_PRELOADED === undefined) {
+      delete process.env.GREENCHCLAW_OTEL_PRELOADED;
     } else {
-      process.env.NEXISCLAW_OTEL_PRELOADED = ORIGINAL_NEXISCLAW_OTEL_PRELOADED;
+      process.env.GREENCHCLAW_OTEL_PRELOADED = ORIGINAL_GREENCHCLAW_OTEL_PRELOADED;
     }
     if (ORIGINAL_OTEL_SEMCONV_STABILITY_OPT_IN === undefined) {
       delete process.env.OTEL_SEMCONV_STABILITY_OPT_IN;
@@ -421,70 +421,84 @@ describe("diagnostics-otel service", () => {
       attempt: 2,
     });
 
-    expect(telemetryState.counters.get("NexisClaw.webhook.received")?.add).toHaveBeenCalledWith(1, {
-      "NexisClaw.channel": "telegram",
-      "NexisClaw.webhook": "telegram-post",
-    });
-    expect(
-      telemetryState.histograms.get("NexisClaw.webhook.duration_ms")?.record,
-    ).toHaveBeenCalledWith(120, {
-      "NexisClaw.channel": "telegram",
-      "NexisClaw.webhook": "telegram-post",
-    });
-    expect(telemetryState.counters.get("NexisClaw.message.queued")?.add).toHaveBeenCalledWith(1, {
-      "NexisClaw.channel": "telegram",
-      "NexisClaw.source": "telegram",
-    });
-    expect(telemetryState.histograms.get("NexisClaw.queue.depth")?.record).toHaveBeenCalledTimes(2);
-    expect(telemetryState.histograms.get("NexisClaw.queue.depth")?.record).toHaveBeenCalledWith(2, {
-      "NexisClaw.channel": "telegram",
-      "NexisClaw.source": "telegram",
-    });
-    expect(telemetryState.histograms.get("NexisClaw.queue.depth")?.record).toHaveBeenCalledWith(3, {
-      "NexisClaw.lane": "main",
-    });
-    expect(telemetryState.counters.get("NexisClaw.message.processed")?.add).toHaveBeenCalledWith(1, {
-      "NexisClaw.channel": "telegram",
-      "NexisClaw.outcome": "completed",
-    });
-    expect(
-      telemetryState.histograms.get("NexisClaw.message.duration_ms")?.record,
-    ).toHaveBeenCalledWith(55, {
-      "NexisClaw.channel": "telegram",
-      "NexisClaw.outcome": "completed",
-    });
-    expect(telemetryState.histograms.get("NexisClaw.queue.wait_ms")?.record).toHaveBeenCalledWith(
-      10,
+    expect(telemetryState.counters.get("GreenchClaw.webhook.received")?.add).toHaveBeenCalledWith(
+      1,
       {
-        "NexisClaw.lane": "main",
+        "GreenchClaw.channel": "telegram",
+        "GreenchClaw.webhook": "telegram-post",
       },
     );
-    expect(telemetryState.counters.get("NexisClaw.session.stuck")?.add).toHaveBeenCalledTimes(1);
-    expect(telemetryState.counters.get("NexisClaw.session.stuck")?.add).toHaveBeenCalledWith(1, {
-      "NexisClaw.state": "processing",
+    expect(
+      telemetryState.histograms.get("GreenchClaw.webhook.duration_ms")?.record,
+    ).toHaveBeenCalledWith(120, {
+      "GreenchClaw.channel": "telegram",
+      "GreenchClaw.webhook": "telegram-post",
+    });
+    expect(telemetryState.counters.get("GreenchClaw.message.queued")?.add).toHaveBeenCalledWith(1, {
+      "GreenchClaw.channel": "telegram",
+      "GreenchClaw.source": "telegram",
+    });
+    expect(telemetryState.histograms.get("GreenchClaw.queue.depth")?.record).toHaveBeenCalledTimes(
+      2,
+    );
+    expect(telemetryState.histograms.get("GreenchClaw.queue.depth")?.record).toHaveBeenCalledWith(
+      2,
+      {
+        "GreenchClaw.channel": "telegram",
+        "GreenchClaw.source": "telegram",
+      },
+    );
+    expect(telemetryState.histograms.get("GreenchClaw.queue.depth")?.record).toHaveBeenCalledWith(
+      3,
+      {
+        "GreenchClaw.lane": "main",
+      },
+    );
+    expect(telemetryState.counters.get("GreenchClaw.message.processed")?.add).toHaveBeenCalledWith(
+      1,
+      {
+        "GreenchClaw.channel": "telegram",
+        "GreenchClaw.outcome": "completed",
+      },
+    );
+    expect(
+      telemetryState.histograms.get("GreenchClaw.message.duration_ms")?.record,
+    ).toHaveBeenCalledWith(55, {
+      "GreenchClaw.channel": "telegram",
+      "GreenchClaw.outcome": "completed",
+    });
+    expect(telemetryState.histograms.get("GreenchClaw.queue.wait_ms")?.record).toHaveBeenCalledWith(
+      10,
+      {
+        "GreenchClaw.lane": "main",
+      },
+    );
+    expect(telemetryState.counters.get("GreenchClaw.session.stuck")?.add).toHaveBeenCalledTimes(1);
+    expect(telemetryState.counters.get("GreenchClaw.session.stuck")?.add).toHaveBeenCalledWith(1, {
+      "GreenchClaw.state": "processing",
     });
     expect(
-      telemetryState.histograms.get("NexisClaw.session.stuck_age_ms")?.record,
+      telemetryState.histograms.get("GreenchClaw.session.stuck_age_ms")?.record,
     ).toHaveBeenCalledWith(125_000, {
-      "NexisClaw.state": "processing",
+      "GreenchClaw.state": "processing",
     });
-    expect(telemetryState.counters.get("NexisClaw.run.attempt")?.add).toHaveBeenCalledWith(1, {
-      "NexisClaw.attempt": 2,
+    expect(telemetryState.counters.get("GreenchClaw.run.attempt")?.add).toHaveBeenCalledWith(1, {
+      "GreenchClaw.attempt": 2,
     });
 
     const spanNames = telemetryState.tracer.startSpan.mock.calls.map((call) => call[0]);
-    expect(spanNames).toContain("NexisClaw.webhook.processed");
-    expect(spanNames).toContain("NexisClaw.message.processed");
-    expect(spanNames).toContain("NexisClaw.session.stuck");
-    const webhookSpanOptions = startedSpanOptions("NexisClaw.webhook.processed");
-    expect(webhookSpanOptions?.attributes).not.toHaveProperty("NexisClaw.chatId");
+    expect(spanNames).toContain("GreenchClaw.webhook.processed");
+    expect(spanNames).toContain("GreenchClaw.message.processed");
+    expect(spanNames).toContain("GreenchClaw.session.stuck");
+    const webhookSpanOptions = startedSpanOptions("GreenchClaw.webhook.processed");
+    expect(webhookSpanOptions?.attributes).not.toHaveProperty("GreenchClaw.chatId");
     expect(webhookSpanOptions?.startTime).toBeTypeOf("number");
-    const messageSpanOptions = startedSpanOptions("NexisClaw.message.processed");
-    expect(messageSpanOptions?.attributes?.["NexisClaw.channel"]).toBe("telegram");
-    expect(messageSpanOptions?.attributes?.["NexisClaw.outcome"]).toBe("completed");
-    expect(messageSpanOptions?.attributes?.["NexisClaw.reason"]).toBe("unknown");
-    expect(messageSpanOptions?.attributes).not.toHaveProperty("NexisClaw.chatId");
-    expect(messageSpanOptions?.attributes).not.toHaveProperty("NexisClaw.messageId");
+    const messageSpanOptions = startedSpanOptions("GreenchClaw.message.processed");
+    expect(messageSpanOptions?.attributes?.["GreenchClaw.channel"]).toBe("telegram");
+    expect(messageSpanOptions?.attributes?.["GreenchClaw.outcome"]).toBe("completed");
+    expect(messageSpanOptions?.attributes?.["GreenchClaw.reason"]).toBe("unknown");
+    expect(messageSpanOptions?.attributes).not.toHaveProperty("GreenchClaw.chatId");
+    expect(messageSpanOptions?.attributes).not.toHaveProperty("GreenchClaw.messageId");
     expect(messageSpanOptions?.startTime).toBeTypeOf("number");
 
     emitDiagnosticEvent({
@@ -532,7 +546,7 @@ describe("diagnostics-otel service", () => {
   });
 
   test("uses a preloaded OpenTelemetry SDK without dropping diagnostic listeners", async () => {
-    process.env.NEXISCLAW_OTEL_PRELOADED = "1";
+    process.env.GREENCHCLAW_OTEL_PRELOADED = "1";
     const service = createDiagnosticsOtelService();
     const ctx = createOtelContext(OTEL_TEST_ENDPOINT, { traces: true, metrics: true, logs: true });
     await service.start(ctx);
@@ -558,13 +572,13 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    const runDurationRecordCall = lastHistogramRecord("NexisClaw.run.duration_ms");
+    const runDurationRecordCall = lastHistogramRecord("GreenchClaw.run.duration_ms");
     expect(runDurationRecordCall?.[0]).toBe(100);
     const runDurationAttributes = runDurationRecordCall?.[1];
-    expect(runDurationAttributes?.["NexisClaw.provider"]).toBe("openai");
-    expect(runDurationAttributes?.["NexisClaw.model"]).toBe("gpt-5.4");
-    const runSpanOptions = startedSpanOptions("NexisClaw.run");
-    expect(runSpanOptions?.attributes?.["NexisClaw.outcome"]).toBe("completed");
+    expect(runDurationAttributes?.["GreenchClaw.provider"]).toBe("openai");
+    expect(runDurationAttributes?.["GreenchClaw.model"]).toBe("gpt-5.4");
+    const runSpanOptions = startedSpanOptions("GreenchClaw.run");
+    expect(runSpanOptions?.attributes?.["GreenchClaw.outcome"]).toBe("completed");
     expect(logEmit).toHaveBeenCalled();
 
     await service.stop?.(ctx);
@@ -593,12 +607,12 @@ describe("diagnostics-otel service", () => {
       expect(event?.reason).toBe("configured");
     }
     expect(
-      telemetryState.counters.get("NexisClaw.telemetry.exporter.events")?.add,
+      telemetryState.counters.get("GreenchClaw.telemetry.exporter.events")?.add,
     ).toHaveBeenCalledWith(1, {
-      "NexisClaw.exporter": "diagnostics-otel",
-      "NexisClaw.signal": "logs",
-      "NexisClaw.status": "started",
-      "NexisClaw.reason": "configured",
+      "GreenchClaw.exporter": "diagnostics-otel",
+      "GreenchClaw.signal": "logs",
+      "GreenchClaw.status": "started",
+      "GreenchClaw.reason": "configured",
     });
 
     unsubscribe();
@@ -627,26 +641,29 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    expect(telemetryState.counters.get("NexisClaw.liveness.warning")?.add).toHaveBeenCalledWith(1, {
-      "NexisClaw.liveness.reason": "event_loop_delay:cpu",
-    });
+    expect(telemetryState.counters.get("GreenchClaw.liveness.warning")?.add).toHaveBeenCalledWith(
+      1,
+      {
+        "GreenchClaw.liveness.reason": "event_loop_delay:cpu",
+      },
+    );
     expect(
-      telemetryState.histograms.get("NexisClaw.liveness.event_loop_delay_p99_ms")?.record,
+      telemetryState.histograms.get("GreenchClaw.liveness.event_loop_delay_p99_ms")?.record,
     ).toHaveBeenCalledWith(250, {
-      "NexisClaw.liveness.reason": "event_loop_delay:cpu",
+      "GreenchClaw.liveness.reason": "event_loop_delay:cpu",
     });
     expect(
-      telemetryState.histograms.get("NexisClaw.liveness.cpu_core_ratio")?.record,
+      telemetryState.histograms.get("GreenchClaw.liveness.cpu_core_ratio")?.record,
     ).toHaveBeenCalledWith(1.4, {
-      "NexisClaw.liveness.reason": "event_loop_delay:cpu",
+      "GreenchClaw.liveness.reason": "event_loop_delay:cpu",
     });
-    const livenessSpanOptions = startedSpanOptions("NexisClaw.liveness.warning");
-    expect(livenessSpanOptions?.attributes?.["NexisClaw.liveness.reason"]).toBe(
+    const livenessSpanOptions = startedSpanOptions("GreenchClaw.liveness.warning");
+    expect(livenessSpanOptions?.attributes?.["GreenchClaw.liveness.reason"]).toBe(
       "event_loop_delay:cpu",
     );
-    expect(livenessSpanOptions?.attributes?.["NexisClaw.liveness.active"]).toBe(2);
-    expect(livenessSpanOptions?.attributes?.["NexisClaw.liveness.queued"]).toBe(4);
-    const span = telemetryState.spans.find((item) => item.name === "NexisClaw.liveness.warning");
+    expect(livenessSpanOptions?.attributes?.["GreenchClaw.liveness.active"]).toBe(2);
+    expect(livenessSpanOptions?.attributes?.["GreenchClaw.liveness.queued"]).toBe(4);
+    const span = telemetryState.spans.find((item) => item.name === "GreenchClaw.liveness.warning");
     expect(span?.setStatus).toHaveBeenCalledWith({
       code: 2,
       message: "event_loop_delay:cpu",
@@ -685,13 +702,13 @@ describe("diagnostics-otel service", () => {
     expect(failureEvent?.reason).toBe("emit_failed");
     expect(failureEvent?.errorCategory).toBe("TypeError");
     expect(
-      telemetryState.counters.get("NexisClaw.telemetry.exporter.events")?.add,
+      telemetryState.counters.get("GreenchClaw.telemetry.exporter.events")?.add,
     ).toHaveBeenCalledWith(1, {
-      "NexisClaw.exporter": "diagnostics-otel",
-      "NexisClaw.signal": "logs",
-      "NexisClaw.status": "failure",
-      "NexisClaw.reason": "emit_failed",
-      "NexisClaw.errorCategory": "TypeError",
+      "GreenchClaw.exporter": "diagnostics-otel",
+      "GreenchClaw.signal": "logs",
+      "GreenchClaw.status": "failure",
+      "GreenchClaw.reason": "emit_failed",
+      "GreenchClaw.errorCategory": "TypeError",
     });
 
     unsubscribe();
@@ -703,7 +720,7 @@ describe("diagnostics-otel service", () => {
     const ctx = createOtelContext(OTEL_TEST_ENDPOINT, { metrics: true });
 
     await service.start(ctx);
-    telemetryState.counters.get("NexisClaw.telemetry.exporter.events")?.add.mockClear();
+    telemetryState.counters.get("GreenchClaw.telemetry.exporter.events")?.add.mockClear();
     emitDiagnosticEvent({
       type: "telemetry.exporter",
       exporter: "spoofed-plugin-exporter",
@@ -713,7 +730,7 @@ describe("diagnostics-otel service", () => {
     });
 
     expect(
-      telemetryState.counters.get("NexisClaw.telemetry.exporter.events")?.add,
+      telemetryState.counters.get("GreenchClaw.telemetry.exporter.events")?.add,
     ).not.toHaveBeenCalled();
 
     await service.stop?.(ctx);
@@ -735,17 +752,17 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    const runDurationRecordCall = lastHistogramRecord("NexisClaw.run.duration_ms");
+    const runDurationRecordCall = lastHistogramRecord("GreenchClaw.run.duration_ms");
     expect(runDurationRecordCall?.[0]).toBe(100);
-    expect(runDurationRecordCall?.[1]?.["NexisClaw.outcome"]).toBe("blocked");
-    expect(runDurationRecordCall?.[1]?.["NexisClaw.blocked_by"]).toBe("policy-plugin");
+    expect(runDurationRecordCall?.[1]?.["GreenchClaw.outcome"]).toBe("blocked");
+    expect(runDurationRecordCall?.[1]?.["GreenchClaw.blocked_by"]).toBe("policy-plugin");
     expect(JSON.stringify(telemetryState)).not.toContain("matched secret prompt");
 
     await service.stop?.(ctx);
   });
 
   test("honors disabled traces when an OpenTelemetry SDK is preloaded", async () => {
-    process.env.NEXISCLAW_OTEL_PRELOADED = "1";
+    process.env.GREENCHCLAW_OTEL_PRELOADED = "1";
     const service = createDiagnosticsOtelService();
     const ctx = createOtelContext(OTEL_TEST_ENDPOINT, { traces: false, metrics: true });
     await service.start(ctx);
@@ -761,9 +778,9 @@ describe("diagnostics-otel service", () => {
     await flushDiagnosticEvents();
 
     expect(sdkStart).not.toHaveBeenCalled();
-    const runDurationRecordCall = lastHistogramRecord("NexisClaw.run.duration_ms");
+    const runDurationRecordCall = lastHistogramRecord("GreenchClaw.run.duration_ms");
     expect(runDurationRecordCall?.[0]).toBe(100);
-    expect(runDurationRecordCall?.[1]?.["NexisClaw.provider"]).toBe("openai");
+    expect(runDurationRecordCall?.[1]?.["GreenchClaw.provider"]).toBe("openai");
     expect(telemetryState.tracer.startSpan).not.toHaveBeenCalled();
 
     await service.stop?.(ctx);
@@ -900,7 +917,7 @@ describe("diagnostics-otel service", () => {
       },
     });
 
-    const tokenAttr = emitCall?.attributes?.["NexisClaw.token"];
+    const tokenAttr = emitCall?.attributes?.["GreenchClaw.token"];
     expect(tokenAttr).not.toBe("ghp_abcdefghijklmnopqrstuvwxyz123456"); // pragma: allowlist secret
     if (typeof tokenAttr === "string") {
       expect(tokenAttr).toContain("…");
@@ -921,9 +938,9 @@ describe("diagnostics-otel service", () => {
       },
     });
 
-    expect(Object.hasOwn(emitCall?.attributes ?? {}, "NexisClaw.traceId")).toBe(false);
-    expect(Object.hasOwn(emitCall?.attributes ?? {}, "NexisClaw.spanId")).toBe(false);
-    expect(Object.hasOwn(emitCall?.attributes ?? {}, "NexisClaw.traceFlags")).toBe(false);
+    expect(Object.hasOwn(emitCall?.attributes ?? {}, "GreenchClaw.traceId")).toBe(false);
+    expect(Object.hasOwn(emitCall?.attributes ?? {}, "GreenchClaw.spanId")).toBe(false);
+    expect(Object.hasOwn(emitCall?.attributes ?? {}, "GreenchClaw.traceFlags")).toBe(false);
     expect(telemetryState.tracer.setSpanContext).not.toHaveBeenCalled();
     expect(emitCall?.context).toBeUndefined();
   });
@@ -973,10 +990,10 @@ describe("diagnostics-otel service", () => {
       message: "x".repeat(6000),
       attributes,
       code: {
-        filepath: "/Users/alice/NexisClaw/src/private.ts",
+        filepath: "/Users/alice/GreenchClaw/src/private.ts",
         line: 42,
         functionName: "handler",
-        location: "/Users/alice/NexisClaw/src/private.ts:42",
+        location: "/Users/alice/GreenchClaw/src/private.ts:42",
       },
     } as Parameters<typeof emitDiagnosticEvent>[0]);
     await flushDiagnosticEvents();
@@ -986,22 +1003,22 @@ describe("diagnostics-otel service", () => {
       body: string;
     };
     expect(emitCall.body.length).toBeLessThanOrEqual(4200);
-    expect(String(emitCall.attributes["NexisClaw.good"])).toMatch(/^y+/);
+    expect(String(emitCall.attributes["GreenchClaw.good"])).toMatch(/^y+/);
     expect(emitCall.attributes["code.lineno"]).toBe(42);
     expect(emitCall.attributes["code.function"]).toBe("handler");
-    expect(String(emitCall.attributes["NexisClaw.good"]).length).toBeLessThanOrEqual(4200);
-    expect(Object.hasOwn(emitCall.attributes, `NexisClaw.${PROTO_KEY}`)).toBe(false);
-    expect(Object.hasOwn(emitCall.attributes, "NexisClaw.constructor")).toBe(false);
-    expect(Object.hasOwn(emitCall.attributes, "NexisClaw.prototype")).toBe(false);
+    expect(String(emitCall.attributes["GreenchClaw.good"]).length).toBeLessThanOrEqual(4200);
+    expect(Object.hasOwn(emitCall.attributes, `GreenchClaw.${PROTO_KEY}`)).toBe(false);
+    expect(Object.hasOwn(emitCall.attributes, "GreenchClaw.constructor")).toBe(false);
+    expect(Object.hasOwn(emitCall.attributes, "GreenchClaw.prototype")).toBe(false);
     expect(
       Object.hasOwn(
         emitCall.attributes,
-        "NexisClaw.sk-1234567890abcdef1234567890abcdef", // pragma: allowlist secret
+        "GreenchClaw.sk-1234567890abcdef1234567890abcdef", // pragma: allowlist secret
       ),
     ).toBe(false);
-    expect(Object.hasOwn(emitCall.attributes, "NexisClaw.bad key")).toBe(false);
+    expect(Object.hasOwn(emitCall.attributes, "GreenchClaw.bad key")).toBe(false);
     expect(Object.hasOwn(emitCall.attributes, "code.filepath")).toBe(false);
-    expect(Object.hasOwn(emitCall.attributes, "NexisClaw.code.location")).toBe(false);
+    expect(Object.hasOwn(emitCall.attributes, "GreenchClaw.code.location")).toBe(false);
     await service.stop?.(ctx);
   });
 
@@ -1063,7 +1080,7 @@ describe("diagnostics-otel service", () => {
     });
 
     const modelUsageCall = telemetryState.tracer.startSpan.mock.calls.find(
-      (call) => call[0] === "NexisClaw.model.usage",
+      (call) => call[0] === "GreenchClaw.model.usage",
     );
     expect(telemetryState.tracer.setSpanContext).not.toHaveBeenCalled();
     expect(modelUsageCall?.[2]).toBeUndefined();
@@ -1100,13 +1117,13 @@ describe("diagnostics-otel service", () => {
       expect(tokenUsageBoundaries).toContain(boundary);
     }
     const genAiTokenUsage = telemetryState.histograms.get("gen_ai.client.token.usage");
-    const tokens = telemetryState.counters.get("NexisClaw.tokens");
+    const tokens = telemetryState.counters.get("GreenchClaw.tokens");
     expect(tokens?.add).toHaveBeenCalledWith(12, {
-      "NexisClaw.channel": "webchat",
-      "NexisClaw.agent": "ops",
-      "NexisClaw.provider": "openai",
-      "NexisClaw.model": "gpt-5.4",
-      "NexisClaw.token": "input",
+      "GreenchClaw.channel": "webchat",
+      "GreenchClaw.agent": "ops",
+      "GreenchClaw.provider": "openai",
+      "GreenchClaw.model": "gpt-5.4",
+      "GreenchClaw.token": "input",
     });
     expect(genAiTokenUsage?.record).toHaveBeenCalledTimes(2);
     expect(genAiTokenUsage?.record).toHaveBeenCalledWith(12, {
@@ -1139,15 +1156,15 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    expect(telemetryState.counters.get("NexisClaw.tokens")?.add).toHaveBeenCalledWith(2, {
-      "NexisClaw.channel": "unknown",
-      "NexisClaw.agent": "unknown",
-      "NexisClaw.provider": "openai",
-      "NexisClaw.model": "gpt-5.4",
-      "NexisClaw.token": "input",
+    expect(telemetryState.counters.get("GreenchClaw.tokens")?.add).toHaveBeenCalledWith(2, {
+      "GreenchClaw.channel": "unknown",
+      "GreenchClaw.agent": "unknown",
+      "GreenchClaw.provider": "openai",
+      "GreenchClaw.model": "gpt-5.4",
+      "GreenchClaw.token": "input",
     });
     expect(
-      JSON.stringify(telemetryState.counters.get("NexisClaw.tokens")?.add.mock.calls),
+      JSON.stringify(telemetryState.counters.get("GreenchClaw.tokens")?.add.mock.calls),
     ).not.toContain("sk-test-secret-value");
     await service.stop?.(ctx);
   });
@@ -1199,7 +1216,7 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    const modelUsageOptions = startedSpanOptions("NexisClaw.model.usage");
+    const modelUsageOptions = startedSpanOptions("GreenchClaw.model.usage");
     expect(modelUsageOptions?.attributes?.["gen_ai.operation.name"]).toBe("chat");
     expect(modelUsageOptions?.attributes?.["gen_ai.system"]).toBe("anthropic");
     expect(modelUsageOptions?.attributes?.["gen_ai.request.model"]).toBe("claude-sonnet-4.6");
@@ -1207,8 +1224,10 @@ describe("diagnostics-otel service", () => {
     expect(modelUsageOptions?.attributes?.["gen_ai.usage.output_tokens"]).toBe(40);
     expect(modelUsageOptions?.attributes?.["gen_ai.usage.cache_read.input_tokens"]).toBe(30);
     expect(modelUsageOptions?.attributes?.["gen_ai.usage.cache_creation.input_tokens"]).toBe(20);
-    expect(Object.hasOwn(modelUsageOptions?.attributes ?? {}, "NexisClaw.sessionKey")).toBe(false);
-    expect(Object.hasOwn(modelUsageOptions?.attributes ?? {}, "NexisClaw.sessionId")).toBe(false);
+    expect(Object.hasOwn(modelUsageOptions?.attributes ?? {}, "GreenchClaw.sessionKey")).toBe(
+      false,
+    );
+    expect(Object.hasOwn(modelUsageOptions?.attributes ?? {}, "GreenchClaw.sessionId")).toBe(false);
     expect(Object.hasOwn(modelUsageOptions?.attributes ?? {}, "gen_ai.provider.name")).toBe(false);
     expect(Object.hasOwn(modelUsageOptions?.attributes ?? {}, "gen_ai.input.messages")).toBe(false);
     expect(Object.hasOwn(modelUsageOptions?.attributes ?? {}, "gen_ai.output.messages")).toBe(
@@ -1353,111 +1372,111 @@ describe("diagnostics-otel service", () => {
     await flushDiagnosticEvents();
 
     const spanNames = telemetryState.tracer.startSpan.mock.calls.map((call) => call[0]);
-    expect(spanNames).toContain("NexisClaw.run");
-    expect(spanNames).toContain("NexisClaw.model.call");
-    expect(spanNames).toContain("NexisClaw.harness.run");
-    expect(spanNames).toContain("NexisClaw.tool.execution");
+    expect(spanNames).toContain("GreenchClaw.run");
+    expect(spanNames).toContain("GreenchClaw.model.call");
+    expect(spanNames).toContain("GreenchClaw.harness.run");
+    expect(spanNames).toContain("GreenchClaw.tool.execution");
 
-    const runOptions = startedSpanOptions("NexisClaw.run");
-    expect(runOptions?.attributes?.["NexisClaw.outcome"]).toBe("completed");
-    expect(runOptions?.attributes?.["NexisClaw.provider"]).toBe("openai");
-    expect(runOptions?.attributes?.["NexisClaw.model"]).toBe("gpt-5.4");
-    expect(runOptions?.attributes?.["NexisClaw.channel"]).toBe("webchat");
+    const runOptions = startedSpanOptions("GreenchClaw.run");
+    expect(runOptions?.attributes?.["GreenchClaw.outcome"]).toBe("completed");
+    expect(runOptions?.attributes?.["GreenchClaw.provider"]).toBe("openai");
+    expect(runOptions?.attributes?.["GreenchClaw.model"]).toBe("gpt-5.4");
+    expect(runOptions?.attributes?.["GreenchClaw.channel"]).toBe("webchat");
     expect(Object.hasOwn(runOptions?.attributes ?? {}, "gen_ai.system")).toBe(false);
     expect(Object.hasOwn(runOptions?.attributes ?? {}, "gen_ai.request.model")).toBe(false);
-    expect(Object.hasOwn(runOptions?.attributes ?? {}, "NexisClaw.runId")).toBe(false);
-    expect(Object.hasOwn(runOptions?.attributes ?? {}, "NexisClaw.sessionKey")).toBe(false);
-    expect(Object.hasOwn(runOptions?.attributes ?? {}, "NexisClaw.traceId")).toBe(false);
+    expect(Object.hasOwn(runOptions?.attributes ?? {}, "GreenchClaw.runId")).toBe(false);
+    expect(Object.hasOwn(runOptions?.attributes ?? {}, "GreenchClaw.sessionKey")).toBe(false);
+    expect(Object.hasOwn(runOptions?.attributes ?? {}, "GreenchClaw.traceId")).toBe(false);
     expect(runOptions?.startTime).toBeTypeOf("number");
 
-    const modelCall = startedSpanCall("NexisClaw.model.call");
+    const modelCall = startedSpanCall("GreenchClaw.model.call");
     const modelOptions = modelCall?.[1];
     expect(modelOptions?.attributes?.["gen_ai.system"]).toBe("openai");
     expect(modelOptions?.attributes?.["gen_ai.request.model"]).toBe("gpt-5.4");
     expect(modelOptions?.attributes?.["gen_ai.operation.name"]).toBe("text_completion");
     expect(Object.hasOwn(modelOptions?.attributes ?? {}, "gen_ai.provider.name")).toBe(false);
-    expect(Object.hasOwn(modelOptions?.attributes ?? {}, "NexisClaw.callId")).toBe(false);
-    expect(Object.hasOwn(modelOptions?.attributes ?? {}, "NexisClaw.runId")).toBe(false);
-    expect(Object.hasOwn(modelOptions?.attributes ?? {}, "NexisClaw.sessionKey")).toBe(false);
+    expect(Object.hasOwn(modelOptions?.attributes ?? {}, "GreenchClaw.callId")).toBe(false);
+    expect(Object.hasOwn(modelOptions?.attributes ?? {}, "GreenchClaw.runId")).toBe(false);
+    expect(Object.hasOwn(modelOptions?.attributes ?? {}, "GreenchClaw.sessionKey")).toBe(false);
     expect(modelOptions?.startTime).toBeTypeOf("number");
     expect(modelCall?.[2]).toBeUndefined();
 
-    const harnessCall = startedSpanCall("NexisClaw.harness.run");
+    const harnessCall = startedSpanCall("GreenchClaw.harness.run");
     const harnessOptions = harnessCall?.[1];
-    expect(harnessOptions?.attributes?.["NexisClaw.harness.id"]).toBe("codex");
-    expect(harnessOptions?.attributes?.["NexisClaw.harness.plugin"]).toBe("codex-plugin");
-    expect(harnessOptions?.attributes?.["NexisClaw.outcome"]).toBe("completed");
-    expect(harnessOptions?.attributes?.["NexisClaw.provider"]).toBe("codex");
-    expect(harnessOptions?.attributes?.["NexisClaw.model"]).toBe("gpt-5.4");
-    expect(harnessOptions?.attributes?.["NexisClaw.channel"]).toBe("qa");
-    expect(harnessOptions?.attributes?.["NexisClaw.harness.result_classification"]).toBe(
+    expect(harnessOptions?.attributes?.["GreenchClaw.harness.id"]).toBe("codex");
+    expect(harnessOptions?.attributes?.["GreenchClaw.harness.plugin"]).toBe("codex-plugin");
+    expect(harnessOptions?.attributes?.["GreenchClaw.outcome"]).toBe("completed");
+    expect(harnessOptions?.attributes?.["GreenchClaw.provider"]).toBe("codex");
+    expect(harnessOptions?.attributes?.["GreenchClaw.model"]).toBe("gpt-5.4");
+    expect(harnessOptions?.attributes?.["GreenchClaw.channel"]).toBe("qa");
+    expect(harnessOptions?.attributes?.["GreenchClaw.harness.result_classification"]).toBe(
       "reasoning-only",
     );
-    expect(harnessOptions?.attributes?.["NexisClaw.harness.yield_detected"]).toBe(true);
-    expect(harnessOptions?.attributes?.["NexisClaw.harness.items.started"]).toBe(3);
-    expect(harnessOptions?.attributes?.["NexisClaw.harness.items.completed"]).toBe(2);
-    expect(harnessOptions?.attributes?.["NexisClaw.harness.items.active"]).toBe(1);
-    expect(Object.hasOwn(harnessOptions?.attributes ?? {}, "NexisClaw.runId")).toBe(false);
-    expect(Object.hasOwn(harnessOptions?.attributes ?? {}, "NexisClaw.sessionId")).toBe(false);
-    expect(Object.hasOwn(harnessOptions?.attributes ?? {}, "NexisClaw.sessionKey")).toBe(false);
-    expect(Object.hasOwn(harnessOptions?.attributes ?? {}, "NexisClaw.traceId")).toBe(false);
+    expect(harnessOptions?.attributes?.["GreenchClaw.harness.yield_detected"]).toBe(true);
+    expect(harnessOptions?.attributes?.["GreenchClaw.harness.items.started"]).toBe(3);
+    expect(harnessOptions?.attributes?.["GreenchClaw.harness.items.completed"]).toBe(2);
+    expect(harnessOptions?.attributes?.["GreenchClaw.harness.items.active"]).toBe(1);
+    expect(Object.hasOwn(harnessOptions?.attributes ?? {}, "GreenchClaw.runId")).toBe(false);
+    expect(Object.hasOwn(harnessOptions?.attributes ?? {}, "GreenchClaw.sessionId")).toBe(false);
+    expect(Object.hasOwn(harnessOptions?.attributes ?? {}, "GreenchClaw.sessionKey")).toBe(false);
+    expect(Object.hasOwn(harnessOptions?.attributes ?? {}, "GreenchClaw.traceId")).toBe(false);
     expect(harnessOptions?.startTime).toBeTypeOf("number");
     expect(harnessCall?.[2]).toBeUndefined();
 
-    const toolCall = startedSpanCall("NexisClaw.tool.execution");
+    const toolCall = startedSpanCall("GreenchClaw.tool.execution");
     const toolOptions = toolCall?.[1];
-    expect(toolOptions?.attributes?.["NexisClaw.toolName"]).toBe("read");
-    expect(toolOptions?.attributes?.["NexisClaw.errorCategory"]).toBe("TypeError");
-    expect(toolOptions?.attributes?.["NexisClaw.errorCode"]).toBe("429");
-    expect(toolOptions?.attributes?.["NexisClaw.tool.params.kind"]).toBe("object");
+    expect(toolOptions?.attributes?.["GreenchClaw.toolName"]).toBe("read");
+    expect(toolOptions?.attributes?.["GreenchClaw.errorCategory"]).toBe("TypeError");
+    expect(toolOptions?.attributes?.["GreenchClaw.errorCode"]).toBe("429");
+    expect(toolOptions?.attributes?.["GreenchClaw.tool.params.kind"]).toBe("object");
     expect(toolOptions?.attributes?.["gen_ai.tool.name"]).toBe("read");
-    expect(Object.hasOwn(toolOptions?.attributes ?? {}, "NexisClaw.toolCallId")).toBe(false);
-    expect(Object.hasOwn(toolOptions?.attributes ?? {}, "NexisClaw.runId")).toBe(false);
-    expect(Object.hasOwn(toolOptions?.attributes ?? {}, "NexisClaw.sessionKey")).toBe(false);
+    expect(Object.hasOwn(toolOptions?.attributes ?? {}, "GreenchClaw.toolCallId")).toBe(false);
+    expect(Object.hasOwn(toolOptions?.attributes ?? {}, "GreenchClaw.runId")).toBe(false);
+    expect(Object.hasOwn(toolOptions?.attributes ?? {}, "GreenchClaw.sessionKey")).toBe(false);
     expect(toolOptions?.startTime).toBeTypeOf("number");
     expect(toolCall?.[2]).toBeUndefined();
 
-    const modelCallDuration = lastHistogramRecord("NexisClaw.model_call.duration_ms");
+    const modelCallDuration = lastHistogramRecord("GreenchClaw.model_call.duration_ms");
     expect(modelCallDuration?.[0]).toBe(80);
-    expect(modelCallDuration?.[1]?.["NexisClaw.provider"]).toBe("openai");
-    expect(modelCallDuration?.[1]?.["NexisClaw.model"]).toBe("gpt-5.4");
-    const requestBytes = lastHistogramRecord("NexisClaw.model_call.request_bytes");
+    expect(modelCallDuration?.[1]?.["GreenchClaw.provider"]).toBe("openai");
+    expect(modelCallDuration?.[1]?.["GreenchClaw.model"]).toBe("gpt-5.4");
+    const requestBytes = lastHistogramRecord("GreenchClaw.model_call.request_bytes");
     expect(requestBytes?.[0]).toBe(1234);
-    expect(requestBytes?.[1]?.["NexisClaw.provider"]).toBe("openai");
-    expect(requestBytes?.[1]?.["NexisClaw.model"]).toBe("gpt-5.4");
-    const responseBytes = lastHistogramRecord("NexisClaw.model_call.response_bytes");
+    expect(requestBytes?.[1]?.["GreenchClaw.provider"]).toBe("openai");
+    expect(requestBytes?.[1]?.["GreenchClaw.model"]).toBe("gpt-5.4");
+    const responseBytes = lastHistogramRecord("GreenchClaw.model_call.response_bytes");
     expect(responseBytes?.[0]).toBe(567);
-    expect(responseBytes?.[1]?.["NexisClaw.provider"]).toBe("openai");
-    expect(responseBytes?.[1]?.["NexisClaw.model"]).toBe("gpt-5.4");
-    const timeToFirstByte = lastHistogramRecord("NexisClaw.model_call.time_to_first_byte_ms");
+    expect(responseBytes?.[1]?.["GreenchClaw.provider"]).toBe("openai");
+    expect(responseBytes?.[1]?.["GreenchClaw.model"]).toBe("gpt-5.4");
+    const timeToFirstByte = lastHistogramRecord("GreenchClaw.model_call.time_to_first_byte_ms");
     expect(timeToFirstByte?.[0]).toBe(45);
-    expect(timeToFirstByte?.[1]?.["NexisClaw.provider"]).toBe("openai");
-    expect(timeToFirstByte?.[1]?.["NexisClaw.model"]).toBe("gpt-5.4");
-    const modelSpanAttributes = firstSpanAttributes("NexisClaw.model.call");
-    expect(modelSpanAttributes["NexisClaw.model_call.request_bytes"]).toBe(1234);
-    expect(modelSpanAttributes["NexisClaw.model_call.response_bytes"]).toBe(567);
-    expect(modelSpanAttributes["NexisClaw.model_call.time_to_first_byte_ms"]).toBe(45);
-    const runDuration = lastHistogramRecord("NexisClaw.run.duration_ms");
+    expect(timeToFirstByte?.[1]?.["GreenchClaw.provider"]).toBe("openai");
+    expect(timeToFirstByte?.[1]?.["GreenchClaw.model"]).toBe("gpt-5.4");
+    const modelSpanAttributes = firstSpanAttributes("GreenchClaw.model.call");
+    expect(modelSpanAttributes["GreenchClaw.model_call.request_bytes"]).toBe(1234);
+    expect(modelSpanAttributes["GreenchClaw.model_call.response_bytes"]).toBe(567);
+    expect(modelSpanAttributes["GreenchClaw.model_call.time_to_first_byte_ms"]).toBe(45);
+    const runDuration = lastHistogramRecord("GreenchClaw.run.duration_ms");
     expect(runDuration?.[0]).toBe(100);
-    expect(Object.hasOwn(runDuration?.[1] ?? {}, "NexisClaw.runId")).toBe(false);
-    const harnessDuration = lastHistogramRecord("NexisClaw.harness.duration_ms");
+    expect(Object.hasOwn(runDuration?.[1] ?? {}, "GreenchClaw.runId")).toBe(false);
+    const harnessDuration = lastHistogramRecord("GreenchClaw.harness.duration_ms");
     expect(harnessDuration?.[0]).toBe(90);
-    expect(harnessDuration?.[1]?.["NexisClaw.harness.id"]).toBe("codex");
-    expect(harnessDuration?.[1]?.["NexisClaw.harness.plugin"]).toBe("codex-plugin");
-    expect(harnessDuration?.[1]?.["NexisClaw.outcome"]).toBe("completed");
-    expect(Object.hasOwn(harnessDuration?.[1] ?? {}, "NexisClaw.runId")).toBe(false);
-    expect(Object.hasOwn(harnessDuration?.[1] ?? {}, "NexisClaw.sessionKey")).toBe(false);
-    const toolDuration = lastHistogramRecord("NexisClaw.tool.execution.duration_ms");
+    expect(harnessDuration?.[1]?.["GreenchClaw.harness.id"]).toBe("codex");
+    expect(harnessDuration?.[1]?.["GreenchClaw.harness.plugin"]).toBe("codex-plugin");
+    expect(harnessDuration?.[1]?.["GreenchClaw.outcome"]).toBe("completed");
+    expect(Object.hasOwn(harnessDuration?.[1] ?? {}, "GreenchClaw.runId")).toBe(false);
+    expect(Object.hasOwn(harnessDuration?.[1] ?? {}, "GreenchClaw.sessionKey")).toBe(false);
+    const toolDuration = lastHistogramRecord("GreenchClaw.tool.execution.duration_ms");
     expect(toolDuration?.[0]).toBe(20);
-    expect(Object.hasOwn(toolDuration?.[1] ?? {}, "NexisClaw.errorCode")).toBe(false);
-    expect(Object.hasOwn(toolDuration?.[1] ?? {}, "NexisClaw.runId")).toBe(false);
+    expect(Object.hasOwn(toolDuration?.[1] ?? {}, "GreenchClaw.errorCode")).toBe(false);
+    expect(Object.hasOwn(toolDuration?.[1] ?? {}, "GreenchClaw.runId")).toBe(false);
 
-    const toolSpan = spanByName("NexisClaw.tool.execution");
+    const toolSpan = spanByName("GreenchClaw.tool.execution");
     expect(toolSpan?.setStatus).toHaveBeenCalledWith({
       code: 2,
       message: "TypeError",
     });
-    expect(firstSpanEndTime("NexisClaw.tool.execution")).toBeTypeOf("number");
+    expect(firstSpanEndTime("GreenchClaw.tool.execution")).toBeTypeOf("number");
     expect(telemetryState.tracer.setSpanContext).not.toHaveBeenCalled();
     await service.stop?.(ctx);
   });
@@ -1481,19 +1500,19 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    const failoverOptions = startedSpanOptions("NexisClaw.model.failover");
-    expect(failoverOptions?.attributes?.["NexisClaw.provider"]).toBe("anthropic");
-    expect(failoverOptions?.attributes?.["NexisClaw.model"]).toBe("claude-opus-4-6");
-    expect(failoverOptions?.attributes?.["NexisClaw.failover.to_provider"]).toBe("openai");
-    expect(failoverOptions?.attributes?.["NexisClaw.failover.to_model"]).toBe("gpt-5.4");
-    expect(failoverOptions?.attributes?.["NexisClaw.failover.reason"]).toBe("overloaded");
-    expect(failoverOptions?.attributes?.["NexisClaw.failover.suspended"]).toBe(true);
-    expect(failoverOptions?.attributes?.["NexisClaw.failover.cascade_depth"]).toBe(1);
-    expect(failoverOptions?.attributes?.["NexisClaw.lane"]).toBe("main");
-    expect(Object.hasOwn(failoverOptions?.attributes ?? {}, "NexisClaw.sessionId")).toBe(false);
-    expect(Object.hasOwn(failoverOptions?.attributes ?? {}, "NexisClaw.sessionKey")).toBe(false);
+    const failoverOptions = startedSpanOptions("GreenchClaw.model.failover");
+    expect(failoverOptions?.attributes?.["GreenchClaw.provider"]).toBe("anthropic");
+    expect(failoverOptions?.attributes?.["GreenchClaw.model"]).toBe("claude-opus-4-6");
+    expect(failoverOptions?.attributes?.["GreenchClaw.failover.to_provider"]).toBe("openai");
+    expect(failoverOptions?.attributes?.["GreenchClaw.failover.to_model"]).toBe("gpt-5.4");
+    expect(failoverOptions?.attributes?.["GreenchClaw.failover.reason"]).toBe("overloaded");
+    expect(failoverOptions?.attributes?.["GreenchClaw.failover.suspended"]).toBe(true);
+    expect(failoverOptions?.attributes?.["GreenchClaw.failover.cascade_depth"]).toBe(1);
+    expect(failoverOptions?.attributes?.["GreenchClaw.lane"]).toBe("main");
+    expect(Object.hasOwn(failoverOptions?.attributes ?? {}, "GreenchClaw.sessionId")).toBe(false);
+    expect(Object.hasOwn(failoverOptions?.attributes ?? {}, "GreenchClaw.sessionKey")).toBe(false);
     expect(failoverOptions?.startTime).toBeTypeOf("number");
-    expect(firstSpanEndTime("NexisClaw.model.failover")).toBeTypeOf("number");
+    expect(firstSpanEndTime("GreenchClaw.model.failover")).toBeTypeOf("number");
     await service.stop?.(ctx);
   });
 
@@ -1533,7 +1552,7 @@ describe("diagnostics-otel service", () => {
     await flushDiagnosticEvents();
 
     const modelCallAttrs = telemetryState.tracer.startSpan.mock.calls
-      .filter((call) => call[0] === "NexisClaw.model.call")
+      .filter((call) => call[0] === "GreenchClaw.model.call")
       .map((call) => (call[1] as { attributes?: Record<string, unknown> }).attributes);
     expect(modelCallAttrs).toHaveLength(3);
     expect(modelCallAttrs[0]?.["gen_ai.system"]).toBe("openai");
@@ -1574,13 +1593,13 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    const modelCallOptions = startedSpanOptions("NexisClaw.model.call");
+    const modelCallOptions = startedSpanOptions("GreenchClaw.model.call");
     expect(modelCallOptions?.attributes?.["gen_ai.provider.name"]).toBe("openai");
     expect(modelCallOptions?.attributes?.["gen_ai.request.model"]).toBe("gpt-5.4");
     expect(modelCallOptions?.attributes?.["gen_ai.operation.name"]).toBe("text_completion");
     expect(Object.hasOwn(modelCallOptions?.attributes ?? {}, "gen_ai.system")).toBe(false);
     expect(modelCallOptions?.startTime).toBeTypeOf("number");
-    const modelUsageOptions = startedSpanOptions("NexisClaw.model.usage");
+    const modelUsageOptions = startedSpanOptions("GreenchClaw.model.usage");
     expect(modelUsageOptions?.attributes?.["gen_ai.provider.name"]).toBe("openai");
     expect(modelUsageOptions?.attributes?.["gen_ai.request.model"]).toBe("gpt-5.4");
     expect(modelUsageOptions?.attributes?.["gen_ai.operation.name"]).toBe("chat");
@@ -1608,20 +1627,22 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    const modelCallOptions = startedSpanOptions("NexisClaw.model.call");
-    expect(modelCallOptions?.attributes?.["NexisClaw.failureKind"]).toBe("terminated");
+    const modelCallOptions = startedSpanOptions("GreenchClaw.model.call");
+    expect(modelCallOptions?.attributes?.["GreenchClaw.failureKind"]).toBe("terminated");
     expect(
-      Object.hasOwn(modelCallOptions?.attributes ?? {}, "NexisClaw.upstreamRequestIdHash"),
+      Object.hasOwn(modelCallOptions?.attributes ?? {}, "GreenchClaw.upstreamRequestIdHash"),
     ).toBe(false);
     expect(modelCallOptions?.startTime).toBeTypeOf("number");
-    const span = telemetryState.spans.find((candidate) => candidate.name === "NexisClaw.model.call");
-    expect(span?.addEvent).toHaveBeenCalledWith("NexisClaw.provider.request", {
-      "NexisClaw.upstreamRequestIdHash": "sha256:123456abcdef",
+    const span = telemetryState.spans.find(
+      (candidate) => candidate.name === "GreenchClaw.model.call",
+    );
+    expect(span?.addEvent).toHaveBeenCalledWith("GreenchClaw.provider.request", {
+      "GreenchClaw.upstreamRequestIdHash": "sha256:123456abcdef",
     });
-    const modelCallDuration = lastHistogramRecord("NexisClaw.model_call.duration_ms");
+    const modelCallDuration = lastHistogramRecord("GreenchClaw.model_call.duration_ms");
     expect(modelCallDuration?.[0]).toBe(40);
-    expect(modelCallDuration?.[1]?.["NexisClaw.failureKind"]).toBe("terminated");
-    expect(Object.hasOwn(modelCallDuration?.[1] ?? {}, "NexisClaw.upstreamRequestIdHash")).toBe(
+    expect(modelCallDuration?.[1]?.["GreenchClaw.failureKind"]).toBe("terminated");
+    expect(Object.hasOwn(modelCallDuration?.[1] ?? {}, "GreenchClaw.upstreamRequestIdHash")).toBe(
       false,
     );
     await service.stop?.(ctx);
@@ -1670,23 +1691,23 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    const contextCall = startedSpanCall("NexisClaw.context.assembled");
+    const contextCall = startedSpanCall("GreenchClaw.context.assembled");
     const contextOptions = contextCall?.[1];
-    const runSpan = telemetryState.spans.find((span) => span.name === "NexisClaw.run");
+    const runSpan = telemetryState.spans.find((span) => span.name === "GreenchClaw.run");
     const runSpanId = runSpan?.spanContext.mock.results[0]?.value?.spanId;
-    expect(contextOptions?.attributes?.["NexisClaw.provider"]).toBe("openai");
-    expect(contextOptions?.attributes?.["NexisClaw.model"]).toBe("gpt-5.4");
-    expect(contextOptions?.attributes?.["NexisClaw.channel"]).toBe("webchat");
-    expect(contextOptions?.attributes?.["NexisClaw.trigger"]).toBe("message");
-    expect(contextOptions?.attributes?.["NexisClaw.context.message_count"]).toBe(12);
-    expect(contextOptions?.attributes?.["NexisClaw.context.history_text_chars"]).toBe(1234);
-    expect(contextOptions?.attributes?.["NexisClaw.context.history_image_blocks"]).toBe(2);
-    expect(contextOptions?.attributes?.["NexisClaw.context.max_message_text_chars"]).toBe(456);
-    expect(contextOptions?.attributes?.["NexisClaw.context.system_prompt_chars"]).toBe(789);
-    expect(contextOptions?.attributes?.["NexisClaw.context.prompt_chars"]).toBe(42);
-    expect(contextOptions?.attributes?.["NexisClaw.context.prompt_images"]).toBe(1);
-    expect(contextOptions?.attributes?.["NexisClaw.context.token_budget"]).toBe(128_000);
-    expect(contextOptions?.attributes?.["NexisClaw.context.reserve_tokens"]).toBe(4096);
+    expect(contextOptions?.attributes?.["GreenchClaw.provider"]).toBe("openai");
+    expect(contextOptions?.attributes?.["GreenchClaw.model"]).toBe("gpt-5.4");
+    expect(contextOptions?.attributes?.["GreenchClaw.channel"]).toBe("webchat");
+    expect(contextOptions?.attributes?.["GreenchClaw.trigger"]).toBe("message");
+    expect(contextOptions?.attributes?.["GreenchClaw.context.message_count"]).toBe(12);
+    expect(contextOptions?.attributes?.["GreenchClaw.context.history_text_chars"]).toBe(1234);
+    expect(contextOptions?.attributes?.["GreenchClaw.context.history_image_blocks"]).toBe(2);
+    expect(contextOptions?.attributes?.["GreenchClaw.context.max_message_text_chars"]).toBe(456);
+    expect(contextOptions?.attributes?.["GreenchClaw.context.system_prompt_chars"]).toBe(789);
+    expect(contextOptions?.attributes?.["GreenchClaw.context.prompt_chars"]).toBe(42);
+    expect(contextOptions?.attributes?.["GreenchClaw.context.prompt_images"]).toBe(1);
+    expect(contextOptions?.attributes?.["GreenchClaw.context.token_budget"]).toBe(128_000);
+    expect(contextOptions?.attributes?.["GreenchClaw.context.reserve_tokens"]).toBe(4096);
     expect(contextOptions?.attributes).toBeTypeOf("object");
     expect(contextOptions?.startTime).toBeTypeOf("number");
     expect(JSON.stringify(contextCall)).not.toContain("session-key");
@@ -1719,23 +1740,23 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    expect(telemetryState.counters.get("NexisClaw.tool.loop")?.add).toHaveBeenCalledWith(1, {
-      "NexisClaw.toolName": "process",
-      "NexisClaw.loop.level": "critical",
-      "NexisClaw.loop.action": "block",
-      "NexisClaw.loop.detector": "known_poll_no_progress",
-      "NexisClaw.loop.count": 20,
-      "NexisClaw.loop.paired_tool": "read",
+    expect(telemetryState.counters.get("GreenchClaw.tool.loop")?.add).toHaveBeenCalledWith(1, {
+      "GreenchClaw.toolName": "process",
+      "GreenchClaw.loop.level": "critical",
+      "GreenchClaw.loop.action": "block",
+      "GreenchClaw.loop.detector": "known_poll_no_progress",
+      "GreenchClaw.loop.count": 20,
+      "GreenchClaw.loop.paired_tool": "read",
     });
-    const loopSpanCall = startedSpanCall("NexisClaw.tool.loop");
+    const loopSpanCall = startedSpanCall("GreenchClaw.tool.loop");
     const loopOptions = loopSpanCall?.[1];
-    expect(loopOptions?.attributes?.["NexisClaw.toolName"]).toBe("process");
-    expect(loopOptions?.attributes?.["NexisClaw.loop.level"]).toBe("critical");
-    expect(loopOptions?.attributes?.["NexisClaw.loop.action"]).toBe("block");
-    expect(loopOptions?.attributes?.["NexisClaw.loop.detector"]).toBe("known_poll_no_progress");
-    expect(loopOptions?.attributes?.["NexisClaw.loop.count"]).toBe(20);
-    expect(loopOptions?.attributes?.["NexisClaw.loop.paired_tool"]).toBe("read");
-    const loopSpan = telemetryState.spans.find((span) => span.name === "NexisClaw.tool.loop");
+    expect(loopOptions?.attributes?.["GreenchClaw.toolName"]).toBe("process");
+    expect(loopOptions?.attributes?.["GreenchClaw.loop.level"]).toBe("critical");
+    expect(loopOptions?.attributes?.["GreenchClaw.loop.action"]).toBe("block");
+    expect(loopOptions?.attributes?.["GreenchClaw.loop.detector"]).toBe("known_poll_no_progress");
+    expect(loopOptions?.attributes?.["GreenchClaw.loop.count"]).toBe(20);
+    expect(loopOptions?.attributes?.["GreenchClaw.loop.paired_tool"]).toBe("read");
+    const loopSpan = telemetryState.spans.find((span) => span.name === "GreenchClaw.tool.loop");
     expect(loopSpan?.setStatus).toHaveBeenCalledWith({
       code: 2,
       message: "known_poll_no_progress:block",
@@ -1778,35 +1799,36 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    expect(telemetryState.histograms.get("NexisClaw.memory.rss_bytes")?.record).toHaveBeenCalledWith(
-      100,
-      {},
-    );
-    expect(telemetryState.histograms.get("NexisClaw.memory.rss_bytes")?.record).toHaveBeenCalledWith(
-      200,
+    expect(
+      telemetryState.histograms.get("GreenchClaw.memory.rss_bytes")?.record,
+    ).toHaveBeenCalledWith(100, {});
+    expect(
+      telemetryState.histograms.get("GreenchClaw.memory.rss_bytes")?.record,
+    ).toHaveBeenCalledWith(200, {
+      "GreenchClaw.memory.level": "critical",
+      "GreenchClaw.memory.reason": "rss_growth",
+    });
+    expect(telemetryState.counters.get("GreenchClaw.memory.pressure")?.add).toHaveBeenCalledWith(
+      1,
       {
-        "NexisClaw.memory.level": "critical",
-        "NexisClaw.memory.reason": "rss_growth",
+        "GreenchClaw.memory.level": "critical",
+        "GreenchClaw.memory.reason": "rss_growth",
       },
     );
-    expect(telemetryState.counters.get("NexisClaw.memory.pressure")?.add).toHaveBeenCalledWith(1, {
-      "NexisClaw.memory.level": "critical",
-      "NexisClaw.memory.reason": "rss_growth",
-    });
-    const pressureCall = startedSpanCall("NexisClaw.memory.pressure");
+    const pressureCall = startedSpanCall("GreenchClaw.memory.pressure");
     const pressureOptions = pressureCall?.[1];
-    expect(pressureOptions?.attributes?.["NexisClaw.memory.level"]).toBe("critical");
-    expect(pressureOptions?.attributes?.["NexisClaw.memory.reason"]).toBe("rss_growth");
-    expect(pressureOptions?.attributes?.["NexisClaw.memory.rss_bytes"]).toBe(200);
-    expect(pressureOptions?.attributes?.["NexisClaw.memory.heap_used_bytes"]).toBe(50);
-    expect(pressureOptions?.attributes?.["NexisClaw.memory.heap_total_bytes"]).toBe(90);
-    expect(pressureOptions?.attributes?.["NexisClaw.memory.external_bytes"]).toBe(20);
-    expect(pressureOptions?.attributes?.["NexisClaw.memory.array_buffers_bytes"]).toBe(6);
-    expect(pressureOptions?.attributes?.["NexisClaw.memory.threshold_bytes"]).toBe(512);
-    expect(pressureOptions?.attributes?.["NexisClaw.memory.rss_growth_bytes"]).toBe(256);
-    expect(pressureOptions?.attributes?.["NexisClaw.memory.window_ms"]).toBe(60_000);
+    expect(pressureOptions?.attributes?.["GreenchClaw.memory.level"]).toBe("critical");
+    expect(pressureOptions?.attributes?.["GreenchClaw.memory.reason"]).toBe("rss_growth");
+    expect(pressureOptions?.attributes?.["GreenchClaw.memory.rss_bytes"]).toBe(200);
+    expect(pressureOptions?.attributes?.["GreenchClaw.memory.heap_used_bytes"]).toBe(50);
+    expect(pressureOptions?.attributes?.["GreenchClaw.memory.heap_total_bytes"]).toBe(90);
+    expect(pressureOptions?.attributes?.["GreenchClaw.memory.external_bytes"]).toBe(20);
+    expect(pressureOptions?.attributes?.["GreenchClaw.memory.array_buffers_bytes"]).toBe(6);
+    expect(pressureOptions?.attributes?.["GreenchClaw.memory.threshold_bytes"]).toBe(512);
+    expect(pressureOptions?.attributes?.["GreenchClaw.memory.rss_growth_bytes"]).toBe(256);
+    expect(pressureOptions?.attributes?.["GreenchClaw.memory.window_ms"]).toBe(60_000);
     const pressureSpan = telemetryState.spans.find(
-      (span) => span.name === "NexisClaw.memory.pressure",
+      (span) => span.name === "GreenchClaw.memory.pressure",
     );
     expect(pressureSpan?.setStatus).toHaveBeenCalledWith({
       code: 2,
@@ -1900,9 +1922,11 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    const runSpan = telemetryState.spans.find((span) => span.name === "NexisClaw.run");
-    const modelSpan = telemetryState.spans.find((span) => span.name === "NexisClaw.model.call");
-    const toolSpan = telemetryState.spans.find((span) => span.name === "NexisClaw.tool.execution");
+    const runSpan = telemetryState.spans.find((span) => span.name === "GreenchClaw.run");
+    const modelSpan = telemetryState.spans.find((span) => span.name === "GreenchClaw.model.call");
+    const toolSpan = telemetryState.spans.find(
+      (span) => span.name === "GreenchClaw.tool.execution",
+    );
     const runSpanId = runSpan?.spanContext.mock.results[0]?.value?.spanId;
     const modelSpanId = modelSpan?.spanContext.mock.results[0]?.value?.spanId;
 
@@ -1921,9 +1945,9 @@ describe("diagnostics-otel service", () => {
         (call[2] as { spanContext?: { spanId?: string } } | undefined)?.spanContext?.spanId,
       ]),
     );
-    expect(parentBySpanName["NexisClaw.run"]).toBeUndefined();
-    expect(parentBySpanName["NexisClaw.model.call"]).toBe(runSpanId);
-    expect(parentBySpanName["NexisClaw.tool.execution"]).toBe(modelSpanId);
+    expect(parentBySpanName["GreenchClaw.run"]).toBeUndefined();
+    expect(parentBySpanName["GreenchClaw.model.call"]).toBe(runSpanId);
+    expect(parentBySpanName["GreenchClaw.tool.execution"]).toBe(modelSpanId);
     expect(toolSpan?.setStatus).toHaveBeenCalledWith({
       code: 2,
       message: "TypeError",
@@ -1977,10 +2001,10 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    const runSpan = telemetryState.spans.find((span) => span.name === "NexisClaw.run");
+    const runSpan = telemetryState.spans.find((span) => span.name === "GreenchClaw.run");
     const runSpanId = runSpan?.spanContext.mock.results[0]?.value?.spanId;
     const modelUsageCall = telemetryState.tracer.startSpan.mock.calls.find(
-      (call) => call[0] === "NexisClaw.model.usage",
+      (call) => call[0] === "GreenchClaw.model.usage",
     );
 
     const linkedSpanContext = firstSetSpanContext();
@@ -1990,7 +2014,7 @@ describe("diagnostics-otel service", () => {
       (modelUsageCall?.[2] as { spanContext?: { spanId?: string } } | undefined)?.spanContext
         ?.spanId,
     ).toBe(runSpanId);
-    expect(firstSpanEndTime("NexisClaw.run")).toBeTypeOf("number");
+    expect(firstSpanEndTime("GreenchClaw.run")).toBeTypeOf("number");
     await service.stop?.(ctx);
   });
 
@@ -2033,8 +2057,8 @@ describe("diagnostics-otel service", () => {
     const parentBySpanName = Object.fromEntries(
       telemetryState.tracer.startSpan.mock.calls.map((call) => [call[0], call[2]]),
     );
-    expect(parentBySpanName["NexisClaw.run"]).toBeUndefined();
-    expect(parentBySpanName["NexisClaw.model.call"]).toBeUndefined();
+    expect(parentBySpanName["GreenchClaw.run"]).toBeUndefined();
+    expect(parentBySpanName["GreenchClaw.model.call"]).toBeUndefined();
     await service.stop?.(ctx);
   });
 
@@ -2075,8 +2099,8 @@ describe("diagnostics-otel service", () => {
     const parentBySpanName = Object.fromEntries(
       telemetryState.tracer.startSpan.mock.calls.map((call) => [call[0], call[2]]),
     );
-    expect(parentBySpanName["NexisClaw.run"]).toBeUndefined();
-    expect(parentBySpanName["NexisClaw.model.call"]).toBeUndefined();
+    expect(parentBySpanName["GreenchClaw.run"]).toBeUndefined();
+    expect(parentBySpanName["GreenchClaw.model.call"]).toBeUndefined();
     await service.stop?.(ctx);
   });
 
@@ -2131,9 +2155,9 @@ describe("diagnostics-otel service", () => {
     const parentBySpanName = Object.fromEntries(
       telemetryState.tracer.startSpan.mock.calls.map((call) => [call[0], call[2]]),
     );
-    expect(parentBySpanName["NexisClaw.run"]).toBeUndefined();
-    expect(parentBySpanName["NexisClaw.model.call"]).toBeUndefined();
-    expect(parentBySpanName["NexisClaw.tool.execution"]).toBeUndefined();
+    expect(parentBySpanName["GreenchClaw.run"]).toBeUndefined();
+    expect(parentBySpanName["GreenchClaw.model.call"]).toBeUndefined();
+    expect(parentBySpanName["GreenchClaw.tool.execution"]).toBeUndefined();
     await service.stop?.(ctx);
   });
 
@@ -2204,21 +2228,21 @@ describe("diagnostics-otel service", () => {
     await flushDiagnosticEvents();
 
     expect(
-      telemetryState.tracer.startSpan.mock.calls.filter((call) => call[0] === "NexisClaw.run"),
+      telemetryState.tracer.startSpan.mock.calls.filter((call) => call[0] === "GreenchClaw.run"),
     ).toHaveLength(1);
     expect(
       telemetryState.tracer.startSpan.mock.calls.filter(
-        (call) => call[0] === "NexisClaw.model.call",
+        (call) => call[0] === "GreenchClaw.model.call",
       ),
     ).toHaveLength(1);
     expect(
       telemetryState.tracer.startSpan.mock.calls.filter(
-        (call) => call[0] === "NexisClaw.tool.execution",
+        (call) => call[0] === "GreenchClaw.tool.execution",
       ),
     ).toHaveLength(1);
     expect(
       telemetryState.tracer.startSpan.mock.calls.filter(
-        (call) => call[0] === "NexisClaw.harness.run",
+        (call) => call[0] === "GreenchClaw.harness.run",
       ),
     ).toHaveLength(1);
     await service.stop?.(ctx);
@@ -2242,33 +2266,33 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    const execDuration = lastHistogramRecord("NexisClaw.exec.duration_ms");
+    const execDuration = lastHistogramRecord("GreenchClaw.exec.duration_ms");
     expect(execDuration?.[0]).toBe(30);
-    expect(execDuration?.[1]?.["NexisClaw.exec.target"]).toBe("host");
-    expect(execDuration?.[1]?.["NexisClaw.exec.mode"]).toBe("child");
-    expect(execDuration?.[1]?.["NexisClaw.outcome"]).toBe("failed");
-    expect(execDuration?.[1]?.["NexisClaw.failureKind"]).toBe("runtime-error");
+    expect(execDuration?.[1]?.["GreenchClaw.exec.target"]).toBe("host");
+    expect(execDuration?.[1]?.["GreenchClaw.exec.mode"]).toBe("child");
+    expect(execDuration?.[1]?.["GreenchClaw.outcome"]).toBe("failed");
+    expect(execDuration?.[1]?.["GreenchClaw.failureKind"]).toBe("runtime-error");
 
-    const execCall = startedSpanCall("NexisClaw.exec");
+    const execCall = startedSpanCall("GreenchClaw.exec");
     const execOptions = execCall?.[1];
-    expect(execOptions?.attributes?.["NexisClaw.exec.target"]).toBe("host");
-    expect(execOptions?.attributes?.["NexisClaw.exec.mode"]).toBe("child");
-    expect(execOptions?.attributes?.["NexisClaw.outcome"]).toBe("failed");
-    expect(execOptions?.attributes?.["NexisClaw.exec.command_length"]).toBe(42);
-    expect(execOptions?.attributes?.["NexisClaw.exec.exit_code"]).toBe(1);
-    expect(execOptions?.attributes?.["NexisClaw.exec.timed_out"]).toBe(false);
-    expect(execOptions?.attributes?.["NexisClaw.failureKind"]).toBe("runtime-error");
-    expect(Object.hasOwn(execOptions?.attributes ?? {}, "NexisClaw.exec.command")).toBe(false);
-    expect(Object.hasOwn(execOptions?.attributes ?? {}, "NexisClaw.exec.workdir")).toBe(false);
-    expect(Object.hasOwn(execOptions?.attributes ?? {}, "NexisClaw.sessionKey")).toBe(false);
+    expect(execOptions?.attributes?.["GreenchClaw.exec.target"]).toBe("host");
+    expect(execOptions?.attributes?.["GreenchClaw.exec.mode"]).toBe("child");
+    expect(execOptions?.attributes?.["GreenchClaw.outcome"]).toBe("failed");
+    expect(execOptions?.attributes?.["GreenchClaw.exec.command_length"]).toBe(42);
+    expect(execOptions?.attributes?.["GreenchClaw.exec.exit_code"]).toBe(1);
+    expect(execOptions?.attributes?.["GreenchClaw.exec.timed_out"]).toBe(false);
+    expect(execOptions?.attributes?.["GreenchClaw.failureKind"]).toBe("runtime-error");
+    expect(Object.hasOwn(execOptions?.attributes ?? {}, "GreenchClaw.exec.command")).toBe(false);
+    expect(Object.hasOwn(execOptions?.attributes ?? {}, "GreenchClaw.exec.workdir")).toBe(false);
+    expect(Object.hasOwn(execOptions?.attributes ?? {}, "GreenchClaw.sessionKey")).toBe(false);
     expect(execOptions?.startTime).toBeTypeOf("number");
 
-    const execSpan = spanByName("NexisClaw.exec");
+    const execSpan = spanByName("GreenchClaw.exec");
     expect(execSpan?.setStatus).toHaveBeenCalledWith({
       code: 2,
       message: "runtime-error",
     });
-    expect(firstSpanEndTime("NexisClaw.exec")).toBeTypeOf("number");
+    expect(firstSpanEndTime("GreenchClaw.exec")).toBeTypeOf("number");
     await service.stop?.(ctx);
   });
 
@@ -2302,56 +2326,57 @@ describe("diagnostics-otel service", () => {
     await flushDiagnosticEvents();
 
     expect(
-      telemetryState.counters.get("NexisClaw.message.delivery.started")?.add,
+      telemetryState.counters.get("GreenchClaw.message.delivery.started")?.add,
     ).toHaveBeenCalledWith(1, {
-      "NexisClaw.channel": "matrix",
-      "NexisClaw.delivery.kind": "text",
+      "GreenchClaw.channel": "matrix",
+      "GreenchClaw.delivery.kind": "text",
     });
     const deliveryDurationRecords = telemetryState.histograms.get(
-      "NexisClaw.message.delivery.duration_ms",
+      "GreenchClaw.message.delivery.duration_ms",
     )?.record.mock.calls as Array<[unknown, Record<string, unknown>]>;
     expect(deliveryDurationRecords[0]?.[0]).toBe(25);
-    expect(deliveryDurationRecords[0]?.[1]["NexisClaw.channel"]).toBe("matrix");
-    expect(deliveryDurationRecords[0]?.[1]["NexisClaw.delivery.kind"]).toBe("text");
-    expect(deliveryDurationRecords[0]?.[1]["NexisClaw.outcome"]).toBe("completed");
+    expect(deliveryDurationRecords[0]?.[1]["GreenchClaw.channel"]).toBe("matrix");
+    expect(deliveryDurationRecords[0]?.[1]["GreenchClaw.delivery.kind"]).toBe("text");
+    expect(deliveryDurationRecords[0]?.[1]["GreenchClaw.outcome"]).toBe("completed");
     expect(deliveryDurationRecords[1]?.[0]).toBe(40);
-    expect(deliveryDurationRecords[1]?.[1]["NexisClaw.channel"]).toBe("discord");
-    expect(deliveryDurationRecords[1]?.[1]["NexisClaw.delivery.kind"]).toBe("media");
-    expect(deliveryDurationRecords[1]?.[1]["NexisClaw.outcome"]).toBe("error");
-    expect(deliveryDurationRecords[1]?.[1]["NexisClaw.errorCategory"]).toBe("TypeError");
+    expect(deliveryDurationRecords[1]?.[1]["GreenchClaw.channel"]).toBe("discord");
+    expect(deliveryDurationRecords[1]?.[1]["GreenchClaw.delivery.kind"]).toBe("media");
+    expect(deliveryDurationRecords[1]?.[1]["GreenchClaw.outcome"]).toBe("error");
+    expect(deliveryDurationRecords[1]?.[1]["GreenchClaw.errorCategory"]).toBe("TypeError");
 
     const deliverySpanCalls = telemetryState.tracer.startSpan.mock.calls.filter(
-      (call) => call[0] === "NexisClaw.message.delivery",
+      (call) => call[0] === "GreenchClaw.message.delivery",
     );
     expect(deliverySpanCalls).toHaveLength(2);
     const firstDeliveryOptions = deliverySpanCalls[0]?.[1] as
       | { attributes?: Record<string, unknown>; startTime?: unknown }
       | undefined;
-    expect(firstDeliveryOptions?.attributes?.["NexisClaw.channel"]).toBe("matrix");
-    expect(firstDeliveryOptions?.attributes?.["NexisClaw.delivery.kind"]).toBe("text");
-    expect(firstDeliveryOptions?.attributes?.["NexisClaw.outcome"]).toBe("completed");
-    expect(firstDeliveryOptions?.attributes?.["NexisClaw.delivery.result_count"]).toBe(1);
+    expect(firstDeliveryOptions?.attributes?.["GreenchClaw.channel"]).toBe("matrix");
+    expect(firstDeliveryOptions?.attributes?.["GreenchClaw.delivery.kind"]).toBe("text");
+    expect(firstDeliveryOptions?.attributes?.["GreenchClaw.outcome"]).toBe("completed");
+    expect(firstDeliveryOptions?.attributes?.["GreenchClaw.delivery.result_count"]).toBe(1);
     expect(firstDeliveryOptions?.startTime).toBeTypeOf("number");
     const secondDeliveryOptions = deliverySpanCalls[1]?.[1] as
       | { attributes?: Record<string, unknown>; startTime?: unknown }
       | undefined;
-    expect(secondDeliveryOptions?.attributes?.["NexisClaw.channel"]).toBe("discord");
-    expect(secondDeliveryOptions?.attributes?.["NexisClaw.delivery.kind"]).toBe("media");
-    expect(secondDeliveryOptions?.attributes?.["NexisClaw.outcome"]).toBe("error");
-    expect(secondDeliveryOptions?.attributes?.["NexisClaw.errorCategory"]).toBe("TypeError");
+    expect(secondDeliveryOptions?.attributes?.["GreenchClaw.channel"]).toBe("discord");
+    expect(secondDeliveryOptions?.attributes?.["GreenchClaw.delivery.kind"]).toBe("media");
+    expect(secondDeliveryOptions?.attributes?.["GreenchClaw.outcome"]).toBe("error");
+    expect(secondDeliveryOptions?.attributes?.["GreenchClaw.errorCategory"]).toBe("TypeError");
     expect(secondDeliveryOptions?.startTime).toBeTypeOf("number");
     for (const call of deliverySpanCalls) {
       const options = call[1] as { attributes?: Record<string, unknown>; startTime?: unknown };
-      expect(Object.hasOwn(options.attributes ?? {}, "NexisClaw.chatId")).toBe(false);
-      expect(Object.hasOwn(options.attributes ?? {}, "NexisClaw.sessionKey")).toBe(false);
-      expect(Object.hasOwn(options.attributes ?? {}, "NexisClaw.messageId")).toBe(false);
-      expect(Object.hasOwn(options.attributes ?? {}, "NexisClaw.conversationId")).toBe(false);
-      expect(Object.hasOwn(options.attributes ?? {}, "NexisClaw.content")).toBe(false);
-      expect(Object.hasOwn(options.attributes ?? {}, "NexisClaw.to")).toBe(false);
+      expect(Object.hasOwn(options.attributes ?? {}, "GreenchClaw.chatId")).toBe(false);
+      expect(Object.hasOwn(options.attributes ?? {}, "GreenchClaw.sessionKey")).toBe(false);
+      expect(Object.hasOwn(options.attributes ?? {}, "GreenchClaw.messageId")).toBe(false);
+      expect(Object.hasOwn(options.attributes ?? {}, "GreenchClaw.conversationId")).toBe(false);
+      expect(Object.hasOwn(options.attributes ?? {}, "GreenchClaw.content")).toBe(false);
+      expect(Object.hasOwn(options.attributes ?? {}, "GreenchClaw.to")).toBe(false);
       expect(options.startTime).toBeTypeOf("number");
     }
     const errorSpan = telemetryState.spans.find(
-      (span) => span.name === "NexisClaw.message.delivery" && span.setStatus.mock.calls.length > 0,
+      (span) =>
+        span.name === "GreenchClaw.message.delivery" && span.setStatus.mock.calls.length > 0,
     );
     expect(errorSpan?.setStatus).toHaveBeenCalledWith({
       code: 2,
@@ -2375,17 +2400,17 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    const deliveryDuration = lastHistogramRecord("NexisClaw.message.delivery.duration_ms");
+    const deliveryDuration = lastHistogramRecord("GreenchClaw.message.delivery.duration_ms");
     expect(deliveryDuration?.[0]).toBe(20);
-    expect(deliveryDuration?.[1]?.["NexisClaw.channel"]).toBe("unknown");
-    expect(deliveryDuration?.[1]?.["NexisClaw.delivery.kind"]).toBe("other");
-    expect(deliveryDuration?.[1]?.["NexisClaw.outcome"]).toBe("completed");
-    const deliverySpanCall = startedSpanCall("NexisClaw.message.delivery");
+    expect(deliveryDuration?.[1]?.["GreenchClaw.channel"]).toBe("unknown");
+    expect(deliveryDuration?.[1]?.["GreenchClaw.delivery.kind"]).toBe("other");
+    expect(deliveryDuration?.[1]?.["GreenchClaw.outcome"]).toBe("completed");
+    const deliverySpanCall = startedSpanCall("GreenchClaw.message.delivery");
     const deliveryOptions = deliverySpanCall?.[1];
-    expect(deliveryOptions?.attributes?.["NexisClaw.channel"]).toBe("unknown");
-    expect(deliveryOptions?.attributes?.["NexisClaw.delivery.kind"]).toBe("other");
-    expect(deliveryOptions?.attributes?.["NexisClaw.outcome"]).toBe("completed");
-    expect(deliveryOptions?.attributes?.["NexisClaw.delivery.result_count"]).toBe(1);
+    expect(deliveryOptions?.attributes?.["GreenchClaw.channel"]).toBe("unknown");
+    expect(deliveryOptions?.attributes?.["GreenchClaw.delivery.kind"]).toBe("other");
+    expect(deliveryOptions?.attributes?.["GreenchClaw.outcome"]).toBe("completed");
+    expect(deliveryOptions?.attributes?.["GreenchClaw.delivery.result_count"]).toBe(1);
     expect(deliveryOptions?.startTime).toBeTypeOf("number");
     await service.stop?.(ctx);
   });
@@ -2439,48 +2464,47 @@ describe("diagnostics-otel service", () => {
     });
     await flushDiagnosticEvents();
 
-    const recoveryRequestedCall = firstCounterAddCall("NexisClaw.session.recovery.requested");
+    const recoveryRequestedCall = firstCounterAddCall("GreenchClaw.session.recovery.requested");
     expect(recoveryRequestedCall[0]).toBe(1);
-    expect(recoveryRequestedCall[1]?.["NexisClaw.state"]).toBe("processing");
-    expect(recoveryRequestedCall[1]?.["NexisClaw.action"]).toBe("abort");
-    expect(recoveryRequestedCall[1]?.["NexisClaw.active_work_kind"]).toBe("tool_call");
-    const recoveryCompletedCall = firstCounterAddCall("NexisClaw.session.recovery.completed");
+    expect(recoveryRequestedCall[1]?.["GreenchClaw.state"]).toBe("processing");
+    expect(recoveryRequestedCall[1]?.["GreenchClaw.action"]).toBe("abort");
+    expect(recoveryRequestedCall[1]?.["GreenchClaw.active_work_kind"]).toBe("tool_call");
+    const recoveryCompletedCall = firstCounterAddCall("GreenchClaw.session.recovery.completed");
     expect(recoveryCompletedCall[0]).toBe(1);
-    expect(recoveryCompletedCall[1]?.["NexisClaw.state"]).toBe("processing");
-    expect(recoveryCompletedCall[1]?.["NexisClaw.status"]).toBe("released");
-    expect(recoveryCompletedCall[1]?.["NexisClaw.action"]).toBe("abort-active-run");
-    const recoveryAgeRecord = lastHistogramRecord("NexisClaw.session.recovery.age_ms");
+    expect(recoveryCompletedCall[1]?.["GreenchClaw.state"]).toBe("processing");
+    expect(recoveryCompletedCall[1]?.["GreenchClaw.status"]).toBe("released");
+    expect(recoveryCompletedCall[1]?.["GreenchClaw.action"]).toBe("abort-active-run");
+    const recoveryAgeRecord = lastHistogramRecord("GreenchClaw.session.recovery.age_ms");
     expect(recoveryAgeRecord?.[0]).toBe(13_000);
-    expect(recoveryAgeRecord?.[1]?.["NexisClaw.status"]).toBe("released");
-    expect(telemetryState.counters.get("NexisClaw.talk.event")?.add).toHaveBeenCalledWith(1, {
-      "NexisClaw.talk.brain": "agent-consult",
-      "NexisClaw.talk.event_type": "input.audio.delta",
-      "NexisClaw.talk.mode": "realtime",
-      "NexisClaw.talk.provider": "openai",
-      "NexisClaw.talk.transport": "gateway-relay",
+    expect(recoveryAgeRecord?.[1]?.["GreenchClaw.status"]).toBe("released");
+    expect(telemetryState.counters.get("GreenchClaw.talk.event")?.add).toHaveBeenCalledWith(1, {
+      "GreenchClaw.talk.brain": "agent-consult",
+      "GreenchClaw.talk.event_type": "input.audio.delta",
+      "GreenchClaw.talk.mode": "realtime",
+      "GreenchClaw.talk.provider": "openai",
+      "GreenchClaw.talk.transport": "gateway-relay",
     });
-    expect(telemetryState.histograms.get("NexisClaw.talk.audio.bytes")?.record).toHaveBeenCalledWith(
-      320,
-      {
-        "NexisClaw.talk.brain": "agent-consult",
-        "NexisClaw.talk.event_type": "input.audio.delta",
-        "NexisClaw.talk.mode": "realtime",
-        "NexisClaw.talk.provider": "openai",
-        "NexisClaw.talk.transport": "gateway-relay",
-      },
-    );
     expect(
-      telemetryState.histograms.get("NexisClaw.talk.event.duration_ms")?.record,
+      telemetryState.histograms.get("GreenchClaw.talk.audio.bytes")?.record,
+    ).toHaveBeenCalledWith(320, {
+      "GreenchClaw.talk.brain": "agent-consult",
+      "GreenchClaw.talk.event_type": "input.audio.delta",
+      "GreenchClaw.talk.mode": "realtime",
+      "GreenchClaw.talk.provider": "openai",
+      "GreenchClaw.talk.transport": "gateway-relay",
+    });
+    expect(
+      telemetryState.histograms.get("GreenchClaw.talk.event.duration_ms")?.record,
     ).toHaveBeenCalledWith(45, {
-      "NexisClaw.talk.brain": "agent-consult",
-      "NexisClaw.talk.event_type": "latency.metrics",
-      "NexisClaw.talk.mode": "realtime",
-      "NexisClaw.talk.provider": "openai",
-      "NexisClaw.talk.transport": "gateway-relay",
+      "GreenchClaw.talk.brain": "agent-consult",
+      "GreenchClaw.talk.event_type": "latency.metrics",
+      "GreenchClaw.talk.mode": "realtime",
+      "GreenchClaw.talk.provider": "openai",
+      "GreenchClaw.talk.transport": "gateway-relay",
     });
 
     const talkCounterCalls = JSON.stringify(
-      telemetryState.counters.get("NexisClaw.talk.event")?.add.mock.calls,
+      telemetryState.counters.get("GreenchClaw.talk.event")?.add.mock.calls,
     );
     expect(talkCounterCalls).not.toContain("talk-session-should-not-export");
     expect(talkCounterCalls).not.toContain("turn-should-not-export");
@@ -2514,20 +2538,22 @@ describe("diagnostics-otel service", () => {
     } as Parameters<typeof emitDiagnosticEvent>[0]);
     await flushDiagnosticEvents();
 
-    const modelOptions = startedSpanOptions("NexisClaw.model.call");
-    expect(Object.hasOwn(modelOptions?.attributes ?? {}, "NexisClaw.content.input_messages")).toBe(
-      false,
-    );
-    expect(Object.hasOwn(modelOptions?.attributes ?? {}, "NexisClaw.content.output_messages")).toBe(
-      false,
-    );
-    expect(Object.hasOwn(modelOptions?.attributes ?? {}, "NexisClaw.content.system_prompt")).toBe(
+    const modelOptions = startedSpanOptions("GreenchClaw.model.call");
+    expect(
+      Object.hasOwn(modelOptions?.attributes ?? {}, "GreenchClaw.content.input_messages"),
+    ).toBe(false);
+    expect(
+      Object.hasOwn(modelOptions?.attributes ?? {}, "GreenchClaw.content.output_messages"),
+    ).toBe(false);
+    expect(Object.hasOwn(modelOptions?.attributes ?? {}, "GreenchClaw.content.system_prompt")).toBe(
       false,
     );
     expect(modelOptions?.startTime).toBeTypeOf("number");
-    const toolOptions = startedSpanOptions("NexisClaw.tool.execution");
-    expect(Object.hasOwn(toolOptions?.attributes ?? {}, "NexisClaw.content.tool_input")).toBe(false);
-    expect(Object.hasOwn(toolOptions?.attributes ?? {}, "NexisClaw.content.tool_output")).toBe(
+    const toolOptions = startedSpanOptions("GreenchClaw.tool.execution");
+    expect(Object.hasOwn(toolOptions?.attributes ?? {}, "GreenchClaw.content.tool_input")).toBe(
+      false,
+    );
+    expect(Object.hasOwn(toolOptions?.attributes ?? {}, "GreenchClaw.content.tool_output")).toBe(
       false,
     );
     expect(toolOptions?.startTime).toBeTypeOf("number");
@@ -2573,26 +2599,26 @@ describe("diagnostics-otel service", () => {
     await flushDiagnosticEvents();
 
     const modelCall = telemetryState.tracer.startSpan.mock.calls.find(
-      (call) => call[0] === "NexisClaw.model.call",
+      (call) => call[0] === "GreenchClaw.model.call",
     );
     const toolCall = telemetryState.tracer.startSpan.mock.calls.find(
-      (call) => call[0] === "NexisClaw.tool.execution",
+      (call) => call[0] === "GreenchClaw.tool.execution",
     );
     const modelAttrs = (modelCall?.[1] as { attributes?: Record<string, unknown> } | undefined)
       ?.attributes;
     const toolAttrs = (toolCall?.[1] as { attributes?: Record<string, unknown> } | undefined)
       ?.attributes;
 
-    expect(modelAttrs?.["NexisClaw.content.output_messages"]).toBe("model reply");
-    expect(modelAttrs?.["NexisClaw.content.system_prompt"]).toBe("system prompt");
-    expect(String(modelAttrs?.["NexisClaw.content.input_messages"])).not.toContain(
+    expect(modelAttrs?.["GreenchClaw.content.output_messages"]).toBe("model reply");
+    expect(modelAttrs?.["GreenchClaw.content.system_prompt"]).toBe("system prompt");
+    expect(String(modelAttrs?.["GreenchClaw.content.input_messages"])).not.toContain(
       "sk-1234567890abcdef1234567890abcdef", // pragma: allowlist secret
     );
-    expect(toolAttrs?.["NexisClaw.content.tool_input"]).toBe("tool input");
-    expect(String(toolAttrs?.["NexisClaw.content.tool_output"]).length).toBeLessThanOrEqual(
+    expect(toolAttrs?.["GreenchClaw.content.tool_input"]).toBe("tool input");
+    expect(String(toolAttrs?.["GreenchClaw.content.tool_output"]).length).toBeLessThanOrEqual(
       MAX_TEST_OTEL_CONTENT_ATTRIBUTE_CHARS + OTEL_TRUNCATED_SUFFIX_MAX_CHARS,
     );
-    expect(String(toolAttrs?.["NexisClaw.content.tool_output"])).not.toContain("a".repeat(11));
+    expect(String(toolAttrs?.["GreenchClaw.content.tool_output"])).not.toContain("a".repeat(11));
     await service.stop?.(ctx);
   });
 
@@ -2615,7 +2641,7 @@ describe("diagnostics-otel service", () => {
     });
 
     const modelUsageCall = telemetryState.tracer.startSpan.mock.calls.find(
-      (call) => call[0] === "NexisClaw.model.usage",
+      (call) => call[0] === "GreenchClaw.model.usage",
     );
     expect(telemetryState.tracer.setSpanContext).not.toHaveBeenCalled();
     expect(modelUsageCall?.[2]).toBeUndefined();
@@ -2633,12 +2659,12 @@ describe("diagnostics-otel service", () => {
       reason: "token=ghp_abcdefghijklmnopqrstuvwxyz123456", // pragma: allowlist secret
     });
 
-    const sessionStateCall = firstCounterAddCall("NexisClaw.session.state");
+    const sessionStateCall = firstCounterAddCall("GreenchClaw.session.state");
     const attrs = sessionStateCall[1];
     expect(sessionStateCall[0]).toBe(1);
-    expect(String(attrs?.["NexisClaw.reason"])).toContain("…");
-    expect(typeof attrs?.["NexisClaw.reason"]).toBe("string");
-    expect(String(attrs?.["NexisClaw.reason"])).not.toContain(
+    expect(String(attrs?.["GreenchClaw.reason"])).toContain("…");
+    expect(typeof attrs?.["GreenchClaw.reason"]).toBe("string");
+    expect(String(attrs?.["GreenchClaw.reason"])).not.toContain(
       "ghp_abcdefghijklmnopqrstuvwxyz123456", // pragma: allowlist secret
     );
     await service.stop?.(ctx);

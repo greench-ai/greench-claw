@@ -1,3 +1,3 @@
-import { describeVeniceProviderRuntimeContract } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { describeVeniceProviderRuntimeContract } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 
 describeVeniceProviderRuntimeContract(() => import("./index.js"));

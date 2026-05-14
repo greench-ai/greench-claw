@@ -41,12 +41,12 @@ export function writeManagedNpmPlugin(params: {
     JSON.stringify({
       name: params.packageName,
       version: params.version,
-      NexisClaw: { extensions: ["./dist/index.js"] },
+      GreenchClaw: { extensions: ["./dist/index.js"] },
     }),
     "utf8",
   );
   fs.writeFileSync(
-    path.join(packageDir, "NexisClaw.plugin.json"),
+    path.join(packageDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: params.pluginId,
       ...(params.name ? { name: params.name } : {}),

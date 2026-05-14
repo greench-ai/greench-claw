@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig, PluginRuntime } from "../runtime-api.js";
+import type { GreenchClawConfig, PluginRuntime } from "../runtime-api.js";
 import type { DynamicAgentCreationConfig } from "./types.js";
 
 type MaybeCreateDynamicAgentResult = {
   created: boolean;
-  updatedCfg: NexisClawConfig;
+  updatedCfg: GreenchClawConfig;
   agentId?: string;
 };
 
@@ -15,7 +15,7 @@ type MaybeCreateDynamicAgentResult = {
  * This creates a unique agent instance with its own workspace for each DM user.
  */
 export async function maybeCreateDynamicAgent(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   runtime: PluginRuntime;
   senderOpenId: string;
   dynamicCfg: DynamicAgentCreationConfig;
@@ -64,7 +64,7 @@ export async function maybeCreateDynamicAgent(params: {
     // Agent exists but binding doesn't - just add the binding
     log(`feishu: agent "${agentId}" exists, adding missing binding for ${senderOpenId}`);
 
-    const updatedCfg: NexisClawConfig = {
+    const updatedCfg: GreenchClawConfig = {
       ...cfg,
       bindings: [
         ...existingBindings,
@@ -86,8 +86,8 @@ export async function maybeCreateDynamicAgent(params: {
   }
 
   // Resolve path templates with substitutions
-  const workspaceTemplate = dynamicCfg.workspaceTemplate ?? "~/.NexisClaw/workspace-{agentId}";
-  const agentDirTemplate = dynamicCfg.agentDirTemplate ?? "~/.NexisClaw/agents/{agentId}/agent";
+  const workspaceTemplate = dynamicCfg.workspaceTemplate ?? "~/.GreenchClaw/workspace-{agentId}";
+  const agentDirTemplate = dynamicCfg.agentDirTemplate ?? "~/.GreenchClaw/agents/{agentId}/agent";
 
   const workspace = resolveUserPath(
     workspaceTemplate.replace("{userId}", senderOpenId).replace("{agentId}", agentId),
@@ -105,7 +105,7 @@ export async function maybeCreateDynamicAgent(params: {
   await fs.promises.mkdir(agentDir, { recursive: true });
 
   // Update configuration with new agent and binding
-  const updatedCfg: NexisClawConfig = {
+  const updatedCfg: GreenchClawConfig = {
     ...cfg,
     agents: {
       ...cfg.agents,

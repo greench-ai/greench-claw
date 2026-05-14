@@ -1,6 +1,6 @@
-import { createClaimableDedupe } from "NexisClaw/plugin-sdk/persistent-dedupe";
+import { createClaimableDedupe } from "GreenchClaw/plugin-sdk/persistent-dedupe";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../runtime-api.js";
+import type { GreenchClawConfig } from "../../runtime-api.js";
 import { resolveMattermostAccount } from "./accounts.js";
 import * as clientModule from "./client.js";
 import type { MattermostClient } from "./client.js";
@@ -78,7 +78,7 @@ beforeEach(() => {
   updateMattermostPostSpy.mockResolvedValue({ id: "patched" } as never);
 });
 
-function evaluateMentionGateForMessage(params: { cfg: NexisClawConfig; threadRootId?: string }) {
+function evaluateMentionGateForMessage(params: { cfg: GreenchClawConfig; threadRootId?: string }) {
   const account = resolveMattermostAccount({ cfg: params.cfg, accountId: "default" });
   const resolver = vi.fn(resolveRequireMentionForTest);
   const input: MattermostMentionGateInput = {
@@ -102,7 +102,7 @@ function evaluateMentionGateForMessage(params: { cfg: NexisClawConfig; threadRoo
 
 describe("mattermost mention gating", () => {
   it("accepts unmentioned root channel posts in onmessage mode", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         mattermost: {
           chatmode: "onmessage",
@@ -125,7 +125,7 @@ describe("mattermost mention gating", () => {
   });
 
   it("accepts unmentioned thread replies in onmessage mode", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         mattermost: {
           chatmode: "onmessage",
@@ -145,7 +145,7 @@ describe("mattermost mention gating", () => {
   });
 
   it("rejects unmentioned channel posts in oncall mode", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: {
         mattermost: {
           chatmode: "oncall",
@@ -271,7 +271,7 @@ describe("canFinalizeMattermostPreviewInPlace", () => {
 });
 
 describe("shouldUpdateMattermostDraftToolProgress", () => {
-  type MattermostConfig = NonNullable<NonNullable<NexisClawConfig["channels"]>["mattermost"]>;
+  type MattermostConfig = NonNullable<NonNullable<GreenchClawConfig["channels"]>["mattermost"]>;
 
   function resolveToolProgressEnabled(mattermostConfig: MattermostConfig) {
     const account = resolveMattermostAccount({
@@ -318,7 +318,7 @@ describe("shouldUpdateMattermostDraftToolProgress", () => {
 });
 
 describe("shouldSuppressMattermostDefaultToolProgressMessages", () => {
-  type MattermostConfig = NonNullable<NonNullable<NexisClawConfig["channels"]>["mattermost"]>;
+  type MattermostConfig = NonNullable<NonNullable<GreenchClawConfig["channels"]>["mattermost"]>;
 
   function resolveSuppressDefaultProgress(mattermostConfig: MattermostConfig) {
     const account = resolveMattermostAccount({

@@ -31,7 +31,7 @@ let parseScreenRecordPayload: typeof import("./nodes-screen.js").parseScreenReco
 let screenRecordTempPath: typeof import("./nodes-screen.js").screenRecordTempPath;
 
 async function withCameraTempDir<T>(run: (dir: string) => Promise<T>): Promise<T> {
-  return await withTempDir("NexisClaw-test-", run);
+  return await withTempDir("GreenchClaw-test-", run);
 }
 
 async function expectPathMissing(targetPath: string): Promise<void> {
@@ -108,7 +108,7 @@ describe("nodes camera helpers", () => {
       tmpDir: "/tmp",
       id: "id1",
     });
-    expect(p).toBe(path.join("/tmp", "NexisClaw-camera-snap-front-id1.jpg"));
+    expect(p).toBe(path.join("/tmp", "GreenchClaw-camera-snap-front-id1.jpg"));
   });
 
   it("writes camera clip payload to temp path", async () => {
@@ -124,7 +124,7 @@ describe("nodes camera helpers", () => {
         tmpDir: dir,
         id: "clip1",
       });
-      expect(out).toBe(path.join(dir, "NexisClaw-camera-clip-front-clip1.mp4"));
+      expect(out).toBe(path.join(dir, "GreenchClaw-camera-clip-front-clip1.mp4"));
       await expect(readFileUtf8AndCleanup(out)).resolves.toBe("hi");
     });
   });
@@ -145,7 +145,7 @@ describe("nodes camera helpers", () => {
         id: "clip2",
         expectedHost,
       });
-      expect(out).toBe(path.join(dir, "NexisClaw-camera-clip-back-clip2.mp4"));
+      expect(out).toBe(path.join(dir, "GreenchClaw-camera-clip-back-clip2.mp4"));
       await expect(readFileUtf8AndCleanup(out)).resolves.toBe("url-clip");
     });
   });
@@ -300,6 +300,6 @@ describe("nodes screen helpers", () => {
       tmpDir: "/tmp",
       id: "id1",
     });
-    expect(p).toBe(path.join("/tmp", "NexisClaw-screen-record-id1.mp4"));
+    expect(p).toBe(path.join("/tmp", "GreenchClaw-screen-record-id1.mp4"));
   });
 });

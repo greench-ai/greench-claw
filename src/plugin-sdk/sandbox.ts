@@ -19,7 +19,7 @@ export type {
   SshSandboxSession,
   SshSandboxSettings,
 } from "../agents/sandbox.js";
-export type { NexisClawConfig } from "../config/config.js";
+export type { GreenchClawConfig } from "../config/config.js";
 
 export {
   buildExecRemoteCommand,
@@ -47,7 +47,7 @@ export {
   type PluginCommandRunOptions,
   type PluginCommandRunResult,
 } from "./run-command.js";
-export { resolvePreferredNexisClawTmpDir } from "../infra/tmp-NexisClaw-dir.js";
+export { resolvePreferredGreenchClawTmpDir } from "../infra/tmp-GreenchClaw-dir.js";
 export {
   tempWorkspace,
   tempWorkspaceSync,

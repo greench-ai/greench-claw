@@ -1,6 +1,6 @@
-import { readChannelAllowFromStore } from "NexisClaw/plugin-sdk/conversation-runtime";
-import { resolveNativeSkillsEnabled } from "NexisClaw/plugin-sdk/native-command-config-runtime";
-import type { NexisClawConfig } from "../runtime-api.js";
+import { readChannelAllowFromStore } from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { resolveNativeSkillsEnabled } from "GreenchClaw/plugin-sdk/native-command-config-runtime";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import type { ResolvedTelegramAccount } from "./accounts.js";
 import { isNumericTelegramSenderUserId, normalizeTelegramAllowFromEntry } from "./allow-from.js";
 
@@ -55,7 +55,7 @@ function appendInvalidTelegramAllowFromFinding(
 }
 
 export async function collectTelegramSecurityAuditFindings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   account: ResolvedTelegramAccount;
 }) {

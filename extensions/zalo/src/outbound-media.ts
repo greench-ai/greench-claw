@@ -3,17 +3,17 @@ import { rmSync } from "node:fs";
 import { readdir, readFile, stat, unlink } from "node:fs/promises";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { join } from "node:path";
-import { loadOutboundMediaFromUrl } from "NexisClaw/plugin-sdk/outbound-media";
-import { privateFileStore } from "NexisClaw/plugin-sdk/security-runtime";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
-import { resolveWebhookPath } from "NexisClaw/plugin-sdk/webhook-ingress";
+import { loadOutboundMediaFromUrl } from "GreenchClaw/plugin-sdk/outbound-media";
+import { privateFileStore } from "GreenchClaw/plugin-sdk/security-runtime";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
+import { resolveWebhookPath } from "GreenchClaw/plugin-sdk/webhook-ingress";
 
 const ZALO_OUTBOUND_MEDIA_TTL_MS = 2 * 60_000;
 const ZALO_OUTBOUND_MEDIA_SEGMENT = "media";
 const ZALO_OUTBOUND_MEDIA_PREFIX = `/${ZALO_OUTBOUND_MEDIA_SEGMENT}/`;
 const ZALO_OUTBOUND_MEDIA_DIR = join(
-  resolvePreferredNexisClawTmpDir(),
-  "NexisClaw-zalo-outbound-media",
+  resolvePreferredGreenchClawTmpDir(),
+  "GreenchClaw-zalo-outbound-media",
 );
 const ZALO_OUTBOUND_MEDIA_ID_RE = /^[a-f0-9]{24}$/;
 

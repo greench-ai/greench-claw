@@ -18,25 +18,25 @@ export function resetPairingSecurityMocks(config: Record<string, unknown>) {
   upsertPairingRequestMock.mockReset().mockResolvedValue({ code: "PAIRCODE", created: true });
 }
 
-vi.mock("NexisClaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("GreenchClaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot")
-  >("NexisClaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("GreenchClaw/plugin-sdk/runtime-config-snapshot")
+  >("GreenchClaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: (...args: unknown[]) => loadConfigMock(...args),
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/conversation-runtime", () => {
+vi.mock("GreenchClaw/plugin-sdk/conversation-runtime", () => {
   return {
     upsertChannelPairingRequest: (...args: unknown[]) => upsertPairingRequestMock(...args),
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/security-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/security-runtime")>(
-    "NexisClaw/plugin-sdk/security-runtime",
+vi.mock("GreenchClaw/plugin-sdk/security-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/security-runtime")>(
+    "GreenchClaw/plugin-sdk/security-runtime",
   );
   return {
     ...actual,

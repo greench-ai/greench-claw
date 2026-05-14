@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { clearInternalHooks, registerInternalHook } from "../../hooks/internal-hooks.js";
 import type { FinalizedMsgContext } from "../templating.js";
 import { emitPreAgentMessageHooks } from "./message-preprocess-hooks.js";
@@ -37,7 +37,7 @@ describe("emitPreAgentMessageHooks", () => {
 
     emitPreAgentMessageHooks({
       ctx: makeCtx(),
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       isFastTestEnv: false,
     });
     await Promise.resolve();
@@ -54,7 +54,7 @@ describe("emitPreAgentMessageHooks", () => {
 
     emitPreAgentMessageHooks({
       ctx: makeCtx({ Transcript: undefined }),
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       isFastTestEnv: false,
     });
     await Promise.resolve();
@@ -69,7 +69,7 @@ describe("emitPreAgentMessageHooks", () => {
 
     emitPreAgentMessageHooks({
       ctx: makeCtx(),
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       isFastTestEnv: true,
     });
     await Promise.resolve();
@@ -83,7 +83,7 @@ describe("emitPreAgentMessageHooks", () => {
 
     emitPreAgentMessageHooks({
       ctx: makeCtx({ SessionKey: " " }),
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       isFastTestEnv: false,
     });
     await Promise.resolve();

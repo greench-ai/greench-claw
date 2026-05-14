@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../api.js";
+import type { GreenchClawConfig } from "../api.js";
 
 type LegacyConfigRule = {
   path: Array<string | number>;
@@ -20,13 +20,13 @@ export const legacyConfigRules: LegacyConfigRule[] = [
   {
     path: ["plugins", "entries", "memory-wiki", "config", "bridge"],
     message:
-      'plugins.entries.memory-wiki.config.bridge.readMemoryCore is legacy; use plugins.entries.memory-wiki.config.bridge.readMemoryArtifacts. Run "NexisClaw doctor --fix".',
+      'plugins.entries.memory-wiki.config.bridge.readMemoryCore is legacy; use plugins.entries.memory-wiki.config.bridge.readMemoryArtifacts. Run "GreenchClaw doctor --fix".',
     match: hasLegacyBridgeArtifactToggle,
   },
 ];
 
-export function migrateMemoryWikiLegacyConfig(config: NexisClawConfig): {
-  config: NexisClawConfig;
+export function migrateMemoryWikiLegacyConfig(config: GreenchClawConfig): {
+  config: GreenchClawConfig;
   changes: string[];
 } | null {
   const rawEntry = asRecord(config.plugins?.entries?.["memory-wiki"]);
@@ -67,8 +67,8 @@ export function migrateMemoryWikiLegacyConfig(config: NexisClawConfig): {
   };
 }
 
-export function normalizeCompatibilityConfig({ cfg }: { cfg: NexisClawConfig }): {
-  config: NexisClawConfig;
+export function normalizeCompatibilityConfig({ cfg }: { cfg: GreenchClawConfig }): {
+  config: GreenchClawConfig;
   changes: string[];
 } {
   return migrateMemoryWikiLegacyConfig(cfg) ?? { config: cfg, changes: [] };

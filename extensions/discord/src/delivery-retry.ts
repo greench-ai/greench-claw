@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   resolveRetryConfig,
   retryAsync,
   type RetryConfig,
-} from "NexisClaw/plugin-sdk/retry-runtime";
+} from "GreenchClaw/plugin-sdk/retry-runtime";
 import { resolveDiscordAccount } from "./accounts.js";
 import { DiscordError } from "./internal/discord.js";
 
@@ -42,7 +42,7 @@ function getDiscordDeliveryRetryAfterMs(err: unknown): number | undefined {
 }
 
 export async function withDiscordDeliveryRetry<T>(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   fn: () => Promise<T>;
 }): Promise<T> {

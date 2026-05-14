@@ -11,8 +11,8 @@ Adds agent-callable tools. Adds web fetch provider support. Adds web search prov
 
 ## Distribution
 
-- Package: `@NexisClaw/firecrawl-plugin`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/firecrawl-plugin`
+- Install route: included in GreenchClaw
 
 ## Surface
 

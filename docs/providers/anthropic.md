@@ -1,18 +1,18 @@
 ---
-summary: "Use Anthropic Claude via API keys or Claude CLI in NexisClaw"
+summary: "Use Anthropic Claude via API keys or Claude CLI in GreenchClaw"
 read_when:
-  - You want to use Anthropic models in NexisClaw
+  - You want to use Anthropic models in GreenchClaw
 title: "Anthropic"
 ---
 
-Anthropic builds the **Claude** model family. NexisClaw supports two auth routes:
+Anthropic builds the **Claude** model family. GreenchClaw supports two auth routes:
 
 - **API key** — direct Anthropic API access with usage-based billing (`anthropic/*` models)
 - **Claude CLI** — reuse an existing Claude CLI login on the same host
 
 <Warning>
-Anthropic staff told us NexisClaw-style Claude CLI usage is allowed again, so
-NexisClaw treats Claude CLI reuse and `claude -p` usage as sanctioned unless
+Anthropic staff told us GreenchClaw-style Claude CLI usage is allowed again, so
+GreenchClaw treats Claude CLI reuse and `claude -p` usage as sanctioned unless
 Anthropic publishes a new policy.
 
 For long-lived gateway hosts, Anthropic API keys are still the clearest and
@@ -39,19 +39,19 @@ Anthropic's current public docs:
       </Step>
       <Step title="Run onboarding">
         ```bash
-        NexisClaw onboard
+        GreenchClaw onboard
         # choose: Anthropic API key
         ```
 
         Or pass the key directly:
 
         ```bash
-        NexisClaw onboard --anthropic-api-key "$ANTHROPIC_API_KEY"
+        GreenchClaw onboard --anthropic-api-key "$ANTHROPIC_API_KEY"
         ```
       </Step>
       <Step title="Verify the model is available">
         ```bash
-        NexisClaw models list --provider anthropic
+        GreenchClaw models list --provider anthropic
         ```
       </Step>
     </Steps>
@@ -80,15 +80,15 @@ Anthropic's current public docs:
       </Step>
       <Step title="Run onboarding">
         ```bash
-        NexisClaw onboard
+        GreenchClaw onboard
         # choose: Claude CLI
         ```
 
-        NexisClaw detects and reuses the existing Claude CLI credentials.
+        GreenchClaw detects and reuses the existing Claude CLI credentials.
       </Step>
       <Step title="Verify the model is available">
         ```bash
-        NexisClaw models list --provider anthropic
+        GreenchClaw models list --provider anthropic
         ```
       </Step>
     </Steps>
@@ -121,7 +121,7 @@ Anthropic's current public docs:
     `anthropic/*` and put the execution backend in provider/model runtime policy.
 
     <Tip>
-    If you want the clearest billing path, use an Anthropic API key instead. NexisClaw also supports subscription-style options from [OpenAI Codex](/providers/openai), [Qwen Cloud](/providers/qwen), [MiniMax](/providers/minimax), and [Z.AI / GLM](/providers/glm).
+    If you want the clearest billing path, use an Anthropic API key instead. GreenchClaw also supports subscription-style options from [OpenAI Codex](/providers/openai), [Qwen Cloud](/providers/qwen), [MiniMax](/providers/minimax), and [Z.AI / GLM](/providers/glm).
     </Tip>
 
   </Tab>
@@ -129,7 +129,7 @@ Anthropic's current public docs:
 
 ## Thinking defaults (Claude 4.6)
 
-Claude 4.6 models default to `adaptive` thinking in NexisClaw when no explicit thinking level is set.
+Claude 4.6 models default to `adaptive` thinking in GreenchClaw when no explicit thinking level is set.
 
 Override per-message with `/think:<level>` or in model params:
 
@@ -156,7 +156,7 @@ Related Anthropic docs:
 
 ## Prompt caching
 
-NexisClaw supports Anthropic's prompt caching feature for API-key auth.
+GreenchClaw supports Anthropic's prompt caching feature for API-key auth.
 
 | Value               | Cache duration | Description                            |
 | ------------------- | -------------- | -------------------------------------- |
@@ -222,7 +222,7 @@ NexisClaw supports Anthropic's prompt caching feature for API-key auth.
 
 <AccordionGroup>
   <Accordion title="Fast mode">
-    NexisClaw's shared `/fast` toggle supports direct Anthropic traffic (API-key and OAuth to `api.anthropic.com`).
+    GreenchClaw's shared `/fast` toggle supports direct Anthropic traffic (API-key and OAuth to `api.anthropic.com`).
 
     | Command | Maps to |
     |---------|---------|
@@ -253,7 +253,7 @@ NexisClaw supports Anthropic's prompt caching feature for API-key auth.
   </Accordion>
 
   <Accordion title="Media understanding (image and PDF)">
-    The bundled Anthropic plugin registers image and PDF understanding. NexisClaw
+    The bundled Anthropic plugin registers image and PDF understanding. GreenchClaw
     auto-resolves media capabilities from the configured Anthropic auth — no
     additional config is needed.
 
@@ -262,7 +262,7 @@ NexisClaw supports Anthropic's prompt caching feature for API-key auth.
     | Default model   | `claude-opus-4-7`     |
     | Supported input | Images, PDF documents |
 
-    When an image or PDF is attached to a conversation, NexisClaw automatically
+    When an image or PDF is attached to a conversation, GreenchClaw automatically
     routes it through the Anthropic media understanding provider.
 
   </Accordion>
@@ -284,14 +284,14 @@ NexisClaw supports Anthropic's prompt caching feature for API-key auth.
     }
     ```
 
-    NexisClaw maps this to `anthropic-beta: context-1m-2025-08-07` on requests.
+    GreenchClaw maps this to `anthropic-beta: context-1m-2025-08-07` on requests.
 
     `params.context1m: true` also applies to the Claude CLI backend
     (`claude-cli/*`) for eligible Opus and Sonnet models, expanding the runtime
     context window for those CLI sessions to match the direct-API behavior.
 
     <Warning>
-    Requires long-context access on your Anthropic credential. Legacy token auth (`sk-ant-oat-*`) is rejected for 1M context requests — NexisClaw logs a warning and falls back to the standard context window.
+    Requires long-context access on your Anthropic credential. Legacy token auth (`sk-ant-oat-*`) is rejected for 1M context requests — GreenchClaw logs a warning and falls back to the standard context window.
     </Warning>
 
   </Accordion>
@@ -310,15 +310,15 @@ NexisClaw supports Anthropic's prompt caching feature for API-key auth.
   </Accordion>
 
   <Accordion title='No API key found for provider "anthropic"'>
-    Anthropic auth is **per agent** — new agents do not inherit the main agent's keys. Re-run onboarding for that agent (or configure an API key on the gateway host), then verify with `NexisClaw models status`.
+    Anthropic auth is **per agent** — new agents do not inherit the main agent's keys. Re-run onboarding for that agent (or configure an API key on the gateway host), then verify with `GreenchClaw models status`.
   </Accordion>
 
   <Accordion title='No credentials found for profile "anthropic:default"'>
-    Run `NexisClaw models status` to see which auth profile is active. Re-run onboarding, or configure an API key for that profile path.
+    Run `GreenchClaw models status` to see which auth profile is active. Re-run onboarding, or configure an API key for that profile path.
   </Accordion>
 
   <Accordion title="No available auth profile (all in cooldown)">
-    Check `NexisClaw models status --json` for `auth.unusableProfiles`. Anthropic rate-limit cooldowns can be model-scoped, so a sibling Anthropic model may still be usable. Add another Anthropic profile or wait for cooldown.
+    Check `GreenchClaw models status --json` for `auth.unusableProfiles`. Anthropic rate-limit cooldowns can be model-scoped, so a sibling Anthropic model may still be usable. Add another Anthropic profile or wait for cooldown.
   </Accordion>
 </AccordionGroup>
 

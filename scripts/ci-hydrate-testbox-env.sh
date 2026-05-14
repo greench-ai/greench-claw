@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-profile_path="${1:-$HOME/.NexisClaw-testbox-live.profile}"
-helper_path="${2:-$HOME/.local/bin/NexisClaw-testbox-env}"
+profile_path="${1:-$HOME/.GreenchClaw-testbox-live.profile}"
+helper_path="${2:-$HOME/.local/bin/GreenchClaw-testbox-env}"
 
 mkdir -p "$(dirname "$helper_path")"
 
@@ -12,7 +12,7 @@ cat >"$helper_path" <<'SH'
 #!/usr/bin/env bash
 set -euo pipefail
 
-profile_path="${NEXISCLAW_TESTBOX_PROFILE_FILE:-$HOME/.NexisClaw-testbox-live.profile}"
+profile_path="${GREENCHCLAW_TESTBOX_PROFILE_FILE:-$HOME/.GreenchClaw-testbox-live.profile}"
 if [[ ! -f "$profile_path" ]]; then
   echo "Missing Testbox provider env profile: $profile_path" >&2
   exit 1

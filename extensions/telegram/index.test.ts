@@ -1,4 +1,4 @@
-import { assertBundledChannelEntries } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { assertBundledChannelEntries } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { beforeEach, describe, vi } from "vitest";
 import entry from "./index.js";
 import setupEntry from "./setup-entry.js";

@@ -1,6 +1,6 @@
 import { resolveLanguage } from "@pierre/diffs";
 import type { FileContents, FileDiffMetadata, SupportedLanguages } from "@pierre/diffs";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { DiffViewerPayload } from "./types.js";
 
 const PASSTHROUGH_LANGUAGE_HINTS = new Set<SupportedLanguages>(["ansi", "text"]);

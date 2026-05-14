@@ -1,12 +1,12 @@
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import type { UpdateCheckResult } from "../infra/update-check.js";
 import { buildStatusJsonPayload } from "./status-json-payload.ts";
 import { buildStatusOverviewSurfaceFromScan } from "./status-overview-surface.ts";
 import { resolveStatusRuntimeSnapshot } from "./status-runtime-shared.ts";
 
 type StatusJsonScanLike = {
-  cfg: NexisClawConfig;
-  sourceConfig: NexisClawConfig;
+  cfg: GreenchClawConfig;
+  sourceConfig: GreenchClawConfig;
   summary: Record<string, unknown>;
   update: UpdateCheckResult;
   osSummary: unknown;

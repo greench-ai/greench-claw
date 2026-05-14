@@ -1,7 +1,7 @@
 import type { StreamFn } from "@earendil-works/pi-agent-core";
 import type { Context, Model, SimpleStreamOptions } from "@earendil-works/pi-ai";
 import type { ThinkLevel } from "../../auto-reply/thinking.shared.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { __testing as extraParamsTesting, applyExtraParamsToAgent } from "./extra-params.js";
 
 export type ExtraParamsCapture<TPayload extends Record<string, unknown>> = {
@@ -29,7 +29,7 @@ type RunExtraParamsCaseParams<
   applyModelId?: string;
   applyProvider?: string;
   callerHeaders?: Record<string, string>;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   model: Model<TApi>;
   mockProviderRuntime?: boolean;
   options?: SimpleStreamOptions;

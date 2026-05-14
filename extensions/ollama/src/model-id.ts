@@ -1,4 +1,4 @@
-import { normalizeProviderId } from "NexisClaw/plugin-sdk/provider-model-shared";
+import { normalizeProviderId } from "GreenchClaw/plugin-sdk/provider-model-shared";
 
 const OLLAMA_PROVIDER_ID = "ollama";
 

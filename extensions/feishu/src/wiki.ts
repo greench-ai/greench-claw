@@ -1,5 +1,5 @@
 import type * as Lark from "@larksuiteoapi/node-sdk";
-import type { NexisClawPluginApi } from "../runtime-api.js";
+import type { GreenchClawPluginApi } from "../runtime-api.js";
 import { listEnabledFeishuAccounts } from "./accounts.js";
 import { createFeishuToolClient, resolveAnyEnabledFeishuToolsConfig } from "./tool-account.js";
 import {
@@ -151,7 +151,7 @@ async function renameNode(client: Lark.Client, spaceId: string, nodeToken: strin
 
 // ============ Tool Registration ============
 
-export function registerFeishuWikiTools(api: NexisClawPluginApi) {
+export function registerFeishuWikiTools(api: GreenchClawPluginApi) {
   if (!api.config) {
     return;
   }

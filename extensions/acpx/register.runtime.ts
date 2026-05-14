@@ -6,12 +6,15 @@ import {
   type AcpRuntimeCapabilities,
   type AcpRuntimeDoctorReport,
   type AcpRuntimeStatus,
-} from "NexisClaw/plugin-sdk/acp-runtime-backend";
-import type { NexisClawPluginService, NexisClawPluginServiceContext } from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/acp-runtime-backend";
+import type {
+  GreenchClawPluginService,
+  GreenchClawPluginServiceContext,
+} from "GreenchClaw/plugin-sdk/core";
 
 const ACPX_BACKEND_ID = "acpx";
-const ENABLE_STARTUP_PROBE_ENV = "NEXISCLAW_ACPX_RUNTIME_STARTUP_PROBE";
-const SKIP_RUNTIME_PROBE_ENV = "NEXISCLAW_SKIP_ACPX_RUNTIME_PROBE";
+const ENABLE_STARTUP_PROBE_ENV = "GREENCHCLAW_ACPX_RUNTIME_STARTUP_PROBE";
+const SKIP_RUNTIME_PROBE_ENV = "GREENCHCLAW_SKIP_ACPX_RUNTIME_PROBE";
 
 type RealAcpxServiceModule = typeof import("./src/service.js");
 type CreateAcpxRuntimeServiceParams = NonNullable<
@@ -25,10 +28,10 @@ type AcpxRuntimeLike = AcpRuntime & {
 };
 
 type DeferredServiceState = {
-  ctx: NexisClawPluginServiceContext | null;
+  ctx: GreenchClawPluginServiceContext | null;
   params: CreateAcpxRuntimeServiceParams;
   realRuntime: AcpxRuntimeLike | null;
-  realService: NexisClawPluginService | null;
+  realService: GreenchClawPluginService | null;
   startPromise: Promise<AcpxRuntimeLike> | null;
 };
 
@@ -54,7 +57,7 @@ async function startRealService(state: DeferredServiceState): Promise<AcpxRuntim
     const { createAcpxRuntimeService } = await loadServiceModule();
     const service = createAcpxRuntimeService(state.params);
     state.realService = service;
-    await service.start(state.ctx as NexisClawPluginServiceContext);
+    await service.start(state.ctx as GreenchClawPluginServiceContext);
     const backend = getAcpRuntimeBackend(ACPX_BACKEND_ID);
     if (!backend?.runtime) {
       throw new Error("ACPX runtime service did not register an ACP backend");
@@ -111,7 +114,7 @@ function createDeferredRuntime(state: DeferredServiceState): AcpxRuntimeLike {
 
 export function createAcpxRuntimeService(
   params: CreateAcpxRuntimeServiceParams = {},
-): NexisClawPluginService {
+): GreenchClawPluginService {
   const state: DeferredServiceState = {
     ctx: null,
     params,
@@ -123,8 +126,8 @@ export function createAcpxRuntimeService(
   return {
     id: "acpx-runtime",
     async start(ctx) {
-      if (process.env.NEXISCLAW_SKIP_ACPX_RUNTIME === "1") {
-        ctx.logger.info("skipping embedded acpx runtime backend (NEXISCLAW_SKIP_ACPX_RUNTIME=1)");
+      if (process.env.GREENCHCLAW_SKIP_ACPX_RUNTIME === "1") {
+        ctx.logger.info("skipping embedded acpx runtime backend (GREENCHCLAW_SKIP_ACPX_RUNTIME=1)");
         return;
       }
 

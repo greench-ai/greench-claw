@@ -3,7 +3,7 @@ export {
   formatDocsLink,
   setSetupChannelEnabled,
   splitSetupEntries,
-} from "NexisClaw/plugin-sdk/setup";
-export type { ChannelSetupDmPolicy, ChannelSetupWizard } from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/setup";
+export type { ChannelSetupDmPolicy, ChannelSetupWizard } from "GreenchClaw/plugin-sdk/setup";
 export { listLineAccountIds, normalizeAccountId, resolveLineAccount } from "./accounts.js";
 export type { LineConfig } from "./types.js";

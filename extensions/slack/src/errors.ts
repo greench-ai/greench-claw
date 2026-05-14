@@ -1,4 +1,4 @@
-import { redactSensitiveText } from "NexisClaw/plugin-sdk/logging-core";
+import { redactSensitiveText } from "GreenchClaw/plugin-sdk/logging-core";
 
 const NO_ERROR_DETAIL = "no error detail";
 

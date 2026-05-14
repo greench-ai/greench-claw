@@ -5,7 +5,7 @@ import {
   configureMemorySqliteWalMaintenance,
   ensureDir,
   requireNodeSqlite,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 
 export function openMemoryDatabaseAtPath(dbPath: string, allowExtension: boolean): DatabaseSync {
   const dir = path.dirname(dbPath);

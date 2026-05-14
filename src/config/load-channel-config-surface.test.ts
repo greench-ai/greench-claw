@@ -1,11 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
+import { importFreshModule } from "GreenchClaw/plugin-sdk/test-fixtures";
 import type { createJiti as createJitiType } from "jiti";
-import { importFreshModule } from "NexisClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { withTempDir } from "../test-helpers/temp-dir.js";
 
-const jitiFactoryOverrideKey = Symbol.for("NexisClaw.channelConfigSurfaceJitiFactoryOverride");
+const jitiFactoryOverrideKey = Symbol.for("GreenchClaw.channelConfigSurfaceJitiFactoryOverride");
 
 function stubChannelConfigSurfaceJitiFactory(createJiti: typeof createJitiType): void {
   (
@@ -94,7 +94,7 @@ function createDemoConfigSchemaModule(repoRoot: string, sourceLines?: string[]) 
   fs.mkdirSync(path.join(packageRoot, "src"), { recursive: true });
   fs.writeFileSync(
     path.join(packageRoot, "package.json"),
-    JSON.stringify({ name: "@NexisClaw/demo", type: "module" }, null, 2),
+    JSON.stringify({ name: "@GreenchClaw/demo", type: "module" }, null, 2),
     "utf8",
   );
   fs.writeFileSync(
@@ -118,7 +118,7 @@ function createDemoConfigSchemaModule(repoRoot: string, sourceLines?: string[]) 
 
 describe("loadChannelConfigSurfaceModule", () => {
   it("prefers the source-aware loader over bun when both succeed", async () => {
-    await withTempDir({ prefix: "NexisClaw-config-surface-" }, async (repoRoot) => {
+    await withTempDir({ prefix: "GreenchClaw-config-surface-" }, async (repoRoot) => {
       const { modulePath } = createDemoConfigSchemaModule(repoRoot);
 
       const spawnSync = vi.fn(() => ({
@@ -151,7 +151,7 @@ describe("loadChannelConfigSurfaceModule", () => {
   });
 
   it("does not require bun when the source-aware loader succeeds", async () => {
-    await withTempDir({ prefix: "NexisClaw-config-surface-" }, async (repoRoot) => {
+    await withTempDir({ prefix: "GreenchClaw-config-surface-" }, async (repoRoot) => {
       const { modulePath } = createDemoConfigSchemaModule(repoRoot);
 
       const { loadChannelConfigSurfaceModule: loadWithMissingBun, spawnSync } =
@@ -164,7 +164,7 @@ describe("loadChannelConfigSurfaceModule", () => {
   });
 
   it("falls back to bun when the source-aware loader fails", async () => {
-    await withTempDir({ prefix: "NexisClaw-config-surface-" }, async (repoRoot) => {
+    await withTempDir({ prefix: "GreenchClaw-config-surface-" }, async (repoRoot) => {
       const { modulePath } = createDemoConfigSchemaModule(repoRoot, ["export const = ;"]);
 
       const { loadChannelConfigSurfaceModule: loadWithFailingJiti, spawnSync } =

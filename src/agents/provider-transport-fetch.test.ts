@@ -80,13 +80,13 @@ describe("buildGuardedModelFetch", () => {
       .mockReturnValue({ allowPrivateNetwork: false });
     shouldUseEnvHttpProxyForUrlMock.mockClear().mockReturnValue(false);
     withTrustedEnvProxyGuardedFetchModeMock.mockClear();
-    delete process.env.NEXISCLAW_DEBUG_PROXY_ENABLED;
-    delete process.env.NEXISCLAW_DEBUG_PROXY_URL;
-    delete process.env.NEXISCLAW_SDK_RETRY_MAX_WAIT_SECONDS;
+    delete process.env.GREENCHCLAW_DEBUG_PROXY_ENABLED;
+    delete process.env.GREENCHCLAW_DEBUG_PROXY_URL;
+    delete process.env.GREENCHCLAW_SDK_RETRY_MAX_WAIT_SECONDS;
   });
 
   afterEach(() => {
-    delete process.env.NEXISCLAW_SDK_RETRY_MAX_WAIT_SECONDS;
+    delete process.env.GREENCHCLAW_SDK_RETRY_MAX_WAIT_SECONDS;
   });
 
   it("pushes provider capture metadata into the shared guarded fetch seam", async () => {
@@ -334,8 +334,8 @@ describe("buildGuardedModelFetch", () => {
   });
 
   it("does not force explicit debug proxy overrides onto plain HTTP model transports", async () => {
-    process.env.NEXISCLAW_DEBUG_PROXY_ENABLED = "1";
-    process.env.NEXISCLAW_DEBUG_PROXY_URL = "http://127.0.0.1:7799";
+    process.env.GREENCHCLAW_DEBUG_PROXY_ENABLED = "1";
+    process.env.GREENCHCLAW_DEBUG_PROXY_URL = "http://127.0.0.1:7799";
     const model = {
       id: "kimi-k2.5:cloud",
       provider: "ollama",
@@ -669,8 +669,8 @@ describe("buildGuardedModelFetch", () => {
       expect(response.headers.get("x-should-retry")).toBe("false");
     });
 
-    it("respects NEXISCLAW_SDK_RETRY_MAX_WAIT_SECONDS", async () => {
-      process.env.NEXISCLAW_SDK_RETRY_MAX_WAIT_SECONDS = "10";
+    it("respects GREENCHCLAW_SDK_RETRY_MAX_WAIT_SECONDS", async () => {
+      process.env.GREENCHCLAW_SDK_RETRY_MAX_WAIT_SECONDS = "10";
       fetchWithSsrFGuardMock.mockResolvedValue({
         response: new Response(null, {
           status: 429,
@@ -723,8 +723,8 @@ describe("buildGuardedModelFetch", () => {
       expect(response.headers.get("x-should-retry")).toBeNull();
     });
 
-    it("can be disabled with NEXISCLAW_SDK_RETRY_MAX_WAIT_SECONDS=0", async () => {
-      process.env.NEXISCLAW_SDK_RETRY_MAX_WAIT_SECONDS = "0";
+    it("can be disabled with GREENCHCLAW_SDK_RETRY_MAX_WAIT_SECONDS=0", async () => {
+      process.env.GREENCHCLAW_SDK_RETRY_MAX_WAIT_SECONDS = "0";
       fetchWithSsrFGuardMock.mockResolvedValue({
         response: new Response(null, {
           status: 429,

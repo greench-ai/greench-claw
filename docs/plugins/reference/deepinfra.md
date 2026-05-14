@@ -1,5 +1,5 @@
 ---
-summary: "Adds DeepInfra model provider support to NexisClaw."
+summary: "Adds DeepInfra model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the deepinfra plugin
 title: "DeepInfra plugin"
@@ -7,12 +7,12 @@ title: "DeepInfra plugin"
 
 # DeepInfra plugin
 
-Adds DeepInfra model provider support to NexisClaw.
+Adds DeepInfra model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/deepinfra-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/deepinfra-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

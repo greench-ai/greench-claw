@@ -1,8 +1,8 @@
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { normalizeMediaProviderId } from "./provider-id.js";
 
 type ConfigProvider = NonNullable<
-  NonNullable<NonNullable<NexisClawConfig["models"]>["providers"]>[string]
+  NonNullable<NonNullable<GreenchClawConfig["models"]>["providers"]>[string]
 >;
 
 type ConfigProviderModel = NonNullable<ConfigProvider["models"]>[number];
@@ -14,7 +14,7 @@ function hasImageCapableModel(providerCfg: ConfigProvider): boolean {
   );
 }
 
-export function resolveImageCapableConfigProviderIds(cfg?: NexisClawConfig): string[] {
+export function resolveImageCapableConfigProviderIds(cfg?: GreenchClawConfig): string[] {
   const configProviders = cfg?.models?.providers;
   if (!configProviders || typeof configProviders !== "object") {
     return [];

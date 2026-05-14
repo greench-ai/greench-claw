@@ -30,12 +30,12 @@ codeRefs:
   - scripts/e2e/kitchen-sink-plugin-docker.sh
 execution:
   kind: flow
-  summary: Install @NexisClaw/kitchen-sink, restart the gateway, exercise command inventory/tool/channel/OpenAI paths, and record CPU/RSS/log evidence.
+  summary: Install @GreenchClaw/kitchen-sink, restart the gateway, exercise command inventory/tool/channel/OpenAI paths, and record CPU/RSS/log evidence.
   config:
     requiredProviderMode: live-frontier
     requiredProvider: openai
-    pluginSpec: npm:@NexisClaw/kitchen-sink@latest
-    pluginId: NexisClaw-kitchen-sink-fixture
+    pluginSpec: npm:@GreenchClaw/kitchen-sink@latest
+    pluginId: GreenchClaw-kitchen-sink-fixture
     pluginPersonality: conformance
     adversarialPersonality: adversarial
     channelId: kitchen-sink-channel

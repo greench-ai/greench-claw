@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
 export type WhatsAppAccountConfig = NonNullable<
-  NonNullable<NonNullable<NexisClawConfig["channels"]>["whatsapp"]>["accounts"]
+  NonNullable<NonNullable<GreenchClawConfig["channels"]>["whatsapp"]>["accounts"]
 >[string];

@@ -1,8 +1,8 @@
-import { readNumberParam, readStringParam } from "NexisClaw/plugin-sdk/param-readers";
+import { readNumberParam, readStringParam } from "GreenchClaw/plugin-sdk/param-readers";
 import {
   createWebSearchProviderContractFields,
   type WebSearchProviderPlugin,
-} from "NexisClaw/plugin-sdk/provider-web-search-contract";
+} from "GreenchClaw/plugin-sdk/provider-web-search-contract";
 
 const SEARXNG_CREDENTIAL_PATH = "plugins.entries.searxng.config.webSearch.baseUrl";
 

@@ -1,4 +1,4 @@
-import { normalizeResolvedSecretInputString } from "NexisClaw/plugin-sdk/secret-input";
+import { normalizeResolvedSecretInputString } from "GreenchClaw/plugin-sdk/secret-input";
 
 export function resolveSlackBotToken(
   raw?: unknown,

@@ -1,9 +1,12 @@
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
-import type { DiscordGuildEntry, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ChannelSetupDmPolicy, ChannelSetupWizard } from "NexisClaw/plugin-sdk/setup-runtime";
-import { createStandardChannelSetupStatus } from "NexisClaw/plugin-sdk/setup-runtime";
-import { formatDocsLink } from "NexisClaw/plugin-sdk/setup-tools";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
+import type { DiscordGuildEntry, GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type {
+  ChannelSetupDmPolicy,
+  ChannelSetupWizard,
+} from "GreenchClaw/plugin-sdk/setup-runtime";
+import { createStandardChannelSetupStatus } from "GreenchClaw/plugin-sdk/setup-runtime";
+import { formatDocsLink } from "GreenchClaw/plugin-sdk/setup-tools";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   inspectDiscordSetupAccount,
   resolveDiscordSetupAccountConfig,
@@ -62,10 +65,10 @@ function mapDiscordSetupAllowlistEntries(resolved: unknown): DiscordGuildChannel
 }
 
 function setDiscordGuildChannelAllowlist(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
   entries: DiscordGuildChannelAllowlistEntry[],
-): NexisClawConfig {
+): GreenchClawConfig {
   const baseGuilds =
     accountId === DEFAULT_ACCOUNT_ID
       ? (cfg.channels?.discord?.guilds ?? {})
@@ -139,7 +142,7 @@ export function createDiscordSetupWizardBase(handlers: {
         keepPrompt: "Discord token already configured. Keep it?",
         inputPrompt: "Enter Discord bot token",
         allowEnv: ({ accountId }: { accountId: string }) => accountId === DEFAULT_ACCOUNT_ID,
-        inspect: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId: string }) => {
+        inspect: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId: string }) => {
           const account = inspectDiscordSetupAccount({ cfg, accountId });
           return {
             accountConfigured: account.configured,
@@ -157,9 +160,9 @@ export function createDiscordSetupWizardBase(handlers: {
       channel,
       label: "Discord channels",
       placeholder: "My Server/#general, guildId/channelId, #support",
-      currentPolicy: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId: string }) =>
+      currentPolicy: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId: string }) =>
         resolveDiscordSetupAccountConfig({ cfg, accountId }).config.groupPolicy ?? "allowlist",
-      currentEntries: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId: string }) =>
+      currentEntries: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId: string }) =>
         Object.entries(
           resolveDiscordSetupAccountConfig({ cfg, accountId }).config.guilds ?? {},
         ).flatMap(([guildKey, value]) => {
@@ -171,7 +174,7 @@ export function createDiscordSetupWizardBase(handlers: {
           }
           return channelKeys.map((channelKey) => `${guildKey}/${channelKey}`);
         }),
-      updatePrompt: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId: string }) =>
+      updatePrompt: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId: string }) =>
         Boolean(resolveDiscordSetupAccountConfig({ cfg, accountId }).config.guilds),
       resolveAllowlist: handlers.resolveGroupAllowlist,
       fallbackResolved: (entries) => entries.map((input) => ({ input, resolved: false })),
@@ -180,7 +183,7 @@ export function createDiscordSetupWizardBase(handlers: {
         accountId,
         resolved,
       }: {
-        cfg: NexisClawConfig;
+        cfg: GreenchClawConfig;
         accountId: string;
         resolved: unknown;
       }) =>
@@ -207,6 +210,6 @@ export function createDiscordSetupWizardBase(handlers: {
       resolveEntries: handlers.resolveAllowFromEntries,
     }),
     dmPolicy: discordDmPolicy,
-    disable: (cfg: NexisClawConfig) => setSetupChannelEnabled(cfg, channel, false),
+    disable: (cfg: GreenchClawConfig) => setSetupChannelEnabled(cfg, channel, false),
   } satisfies ChannelSetupWizard;
 }

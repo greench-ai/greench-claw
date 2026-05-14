@@ -1,1 +1,1 @@
-export { writeSkill } from "NexisClaw/plugin-sdk/test-fixtures";
+export { writeSkill } from "GreenchClaw/plugin-sdk/test-fixtures";

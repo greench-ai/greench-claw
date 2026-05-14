@@ -1,10 +1,10 @@
-import { buildThreadAwareOutboundSessionRoute } from "NexisClaw/plugin-sdk/channel-core";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { buildOutboundBaseSessionKey, type RoutePeer } from "NexisClaw/plugin-sdk/routing";
+import { buildThreadAwareOutboundSessionRoute } from "GreenchClaw/plugin-sdk/channel-core";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { buildOutboundBaseSessionKey, type RoutePeer } from "GreenchClaw/plugin-sdk/routing";
 import { parseDiscordTarget } from "./target-parsing.js";
 
 export type ResolveDiscordOutboundSessionRouteParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   accountId?: string | null;
   target: string;

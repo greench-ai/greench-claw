@@ -23,7 +23,7 @@ const configMocks = vi.hoisted(() => ({
 const browserConfigMocks = vi.hoisted(() => ({
   resolveBrowserConfig: vi.fn((browser?: { defaultProfile?: string }) => ({
     enabled: true,
-    defaultProfile: browser?.defaultProfile ?? "NexisClaw",
+    defaultProfile: browser?.defaultProfile ?? "GreenchClaw",
   })),
 }));
 
@@ -173,7 +173,7 @@ describe("runBrowserProxyCommand", () => {
     });
     browserConfigMocks.resolveBrowserConfig.mockReset().mockReturnValue({
       enabled: true,
-      defaultProfile: "NexisClaw",
+      defaultProfile: "GreenchClaw",
     });
     configMocks.loadConfig.mockReturnValue({
       browser: {},
@@ -181,7 +181,7 @@ describe("runBrowserProxyCommand", () => {
     });
     browserConfigMocks.resolveBrowserConfig.mockReturnValue({
       enabled: true,
-      defaultProfile: "NexisClaw",
+      defaultProfile: "GreenchClaw",
     });
     controlServiceMocks.startBrowserControlServiceFromConfig.mockResolvedValue(true);
   });
@@ -207,12 +207,12 @@ describe("runBrowserProxyCommand", () => {
         JSON.stringify({
           method: "GET",
           path: "/snapshot",
-          profile: "NexisClaw",
+          profile: "GreenchClaw",
           timeoutMs: 5,
         }),
       ),
     ).rejects.toThrow(
-      /browser proxy timed out for GET \/snapshot after 5ms; ws-backed browser action; profile=NexisClaw; status\(running=true, cdpHttp=true, cdpReady=false, cdpUrl=http:\/\/127\.0\.0\.1:18792\)/,
+      /browser proxy timed out for GET \/snapshot after 5ms; ws-backed browser action; profile=GreenchClaw; status\(running=true, cdpHttp=true, cdpReady=false, cdpUrl=http:\/\/127\.0\.0\.1:18792\)/,
     );
     await vi.advanceTimersByTimeAsync(10);
     await result;
@@ -295,7 +295,7 @@ describe("runBrowserProxyCommand", () => {
         JSON.stringify({
           method: "POST",
           path: "/act",
-          profile: "NexisClaw",
+          profile: "GreenchClaw",
           timeoutMs: 50,
         }),
       ),
@@ -305,7 +305,7 @@ describe("runBrowserProxyCommand", () => {
   it("rejects unauthorized query.profile when allowProfiles is configured", async () => {
     configMocks.loadConfig.mockReturnValue({
       browser: {},
-      nodeHost: { browserProxy: { enabled: true, allowProfiles: ["NexisClaw"] } },
+      nodeHost: { browserProxy: { enabled: true, allowProfiles: ["GreenchClaw"] } },
     });
 
     await expect(
@@ -323,7 +323,7 @@ describe("runBrowserProxyCommand", () => {
 
   it("uses the browser source snapshot for proxy default-profile decisions", async () => {
     configMocks.loadConfig.mockReturnValue({
-      browser: { defaultProfile: "NexisClaw" },
+      browser: { defaultProfile: "GreenchClaw" },
       nodeHost: { browserProxy: { enabled: true, allowProfiles: ["work"] } },
     });
     configMocks.sourceConfig = {
@@ -333,7 +333,7 @@ describe("runBrowserProxyCommand", () => {
     browserConfigMocks.resolveBrowserConfig.mockImplementation(
       (browser?: { defaultProfile?: string }) => ({
         enabled: true,
-        defaultProfile: browser?.defaultProfile ?? "NexisClaw",
+        defaultProfile: browser?.defaultProfile ?? "GreenchClaw",
       }),
     );
     dispatcherMocks.dispatch.mockResolvedValue({
@@ -356,7 +356,7 @@ describe("runBrowserProxyCommand", () => {
   it("rejects unauthorized body.profile when allowProfiles is configured", async () => {
     configMocks.loadConfig.mockReturnValue({
       browser: {},
-      nodeHost: { browserProxy: { enabled: true, allowProfiles: ["NexisClaw"] } },
+      nodeHost: { browserProxy: { enabled: true, allowProfiles: ["GreenchClaw"] } },
     });
 
     await expect(
@@ -375,7 +375,7 @@ describe("runBrowserProxyCommand", () => {
   it("rejects persistent profile creation when allowProfiles is configured", async () => {
     configMocks.loadConfig.mockReturnValue({
       browser: {},
-      nodeHost: { browserProxy: { enabled: true, allowProfiles: ["NexisClaw"] } },
+      nodeHost: { browserProxy: { enabled: true, allowProfiles: ["GreenchClaw"] } },
     });
 
     await expect(
@@ -394,7 +394,7 @@ describe("runBrowserProxyCommand", () => {
   it("rejects persistent profile deletion when allowProfiles is configured", async () => {
     configMocks.loadConfig.mockReturnValue({
       browser: {},
-      nodeHost: { browserProxy: { enabled: true, allowProfiles: ["NexisClaw"] } },
+      nodeHost: { browserProxy: { enabled: true, allowProfiles: ["GreenchClaw"] } },
     });
 
     await expect(
@@ -412,7 +412,7 @@ describe("runBrowserProxyCommand", () => {
   it("rejects persistent profile reset when allowProfiles is configured", async () => {
     configMocks.loadConfig.mockReturnValue({
       browser: {},
-      nodeHost: { browserProxy: { enabled: true, allowProfiles: ["NexisClaw"] } },
+      nodeHost: { browserProxy: { enabled: true, allowProfiles: ["GreenchClaw"] } },
     });
 
     await expect(
@@ -420,7 +420,7 @@ describe("runBrowserProxyCommand", () => {
         JSON.stringify({
           method: "POST",
           path: "/reset-profile",
-          body: { profile: "NexisClaw", name: "NexisClaw" },
+          body: { profile: "GreenchClaw", name: "GreenchClaw" },
           timeoutMs: 50,
         }),
       ),
@@ -431,7 +431,7 @@ describe("runBrowserProxyCommand", () => {
   it("canonicalizes an allowlisted body profile into the dispatched query", async () => {
     configMocks.loadConfig.mockReturnValue({
       browser: {},
-      nodeHost: { browserProxy: { enabled: true, allowProfiles: ["NexisClaw"] } },
+      nodeHost: { browserProxy: { enabled: true, allowProfiles: ["GreenchClaw"] } },
     });
     dispatcherMocks.dispatch.mockResolvedValue({
       status: 200,
@@ -442,14 +442,14 @@ describe("runBrowserProxyCommand", () => {
       JSON.stringify({
         method: "POST",
         path: "/stop",
-        body: { profile: "NexisClaw" },
+        body: { profile: "GreenchClaw" },
         timeoutMs: 50,
       }),
     );
 
     const request = firstBrowserDispatchRequest();
     expect(request.path).toBe("/stop");
-    expect(request.query).toEqual({ profile: "NexisClaw" });
+    expect(request.query).toEqual({ profile: "GreenchClaw" });
   });
 
   it("rejects persistent profile creation when allowProfiles is empty", async () => {

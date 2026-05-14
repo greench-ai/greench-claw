@@ -1,7 +1,7 @@
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "NexisClaw/plugin-sdk/approval-runtime";
+} from "GreenchClaw/plugin-sdk/approval-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { matrixApprovalNativeRuntime } from "./approval-handler.runtime.js";
 import {
@@ -19,7 +19,7 @@ type MatrixPendingPluginApprovalView = Extract<
   { approvalKind: "plugin" }
 >;
 
-const MATRIX_APPROVAL_METADATA_KEY = "com.NexisClaw.approval";
+const MATRIX_APPROVAL_METADATA_KEY = "com.GreenchClaw.approval";
 
 function expectRecordFields(value: unknown, expected: Record<string, unknown>) {
   if (!value || typeof value !== "object") {

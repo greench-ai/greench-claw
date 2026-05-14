@@ -5,7 +5,7 @@ describe("security audit plugin code safety gating", () => {
   it("skips plugin code safety findings when deep audit is disabled", async () => {
     const findings = await collectDeepCodeSafetyFindings({
       cfg: {},
-      stateDir: "/tmp/NexisClaw-audit-deep-false-unused",
+      stateDir: "/tmp/GreenchClaw-audit-deep-false-unused",
       deep: false,
     });
 

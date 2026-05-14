@@ -1,13 +1,13 @@
 {
-  "name": "@NexisClaw/elevenlabs-speech",
+  "name": "@GreenchClaw/elevenlabs-speech",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw ElevenLabs speech plugin",
+  "description": "GreenchClaw ElevenLabs speech plugin",
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

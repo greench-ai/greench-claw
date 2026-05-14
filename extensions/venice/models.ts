@@ -1,9 +1,9 @@
-import { buildManifestModelProviderConfig } from "NexisClaw/plugin-sdk/provider-catalog-shared";
-import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { createSubsystemLogger, retryAsync } from "NexisClaw/plugin-sdk/runtime-env";
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import manifest from "./NexisClaw.plugin.json" with { type: "json" };
+import { buildManifestModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-catalog-shared";
+import type { ModelDefinitionConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { createSubsystemLogger, retryAsync } from "GreenchClaw/plugin-sdk/runtime-env";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import manifest from "./GreenchClaw.plugin.json" with { type: "json" };
 
 const log = createSubsystemLogger("venice-models");
 

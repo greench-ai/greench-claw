@@ -1,6 +1,6 @@
-import type { NexisClawPluginApi } from "../types.js";
+import type { GreenchClawPluginApi } from "../types.js";
 
-export function registerHostHookFixture(api: NexisClawPluginApi) {
+export function registerHostHookFixture(api: GreenchClawPluginApi) {
   api.session.state.registerSessionExtension({
     namespace: "workflow",
     description: "Generic approval-workflow state projection",
@@ -59,7 +59,7 @@ export function registerHostHookFixture(api: NexisClawPluginApi) {
   }));
 }
 
-export function registerTrustedHostHookFixture(api: NexisClawPluginApi) {
+export function registerTrustedHostHookFixture(api: GreenchClawPluginApi) {
   registerHostHookFixture(api);
   api.registerTrustedToolPolicy({
     id: "budget-policy",

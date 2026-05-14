@@ -2,22 +2,22 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type {
   CreateSandboxBackendParams,
-  NexisClawConfig,
+  GreenchClawConfig,
   SandboxBackendCommandParams,
   SandboxBackendCommandResult,
   SandboxBackendFactory,
   SandboxBackendManager,
   SshSandboxSession,
-} from "NexisClaw/plugin-sdk/sandbox";
+} from "GreenchClaw/plugin-sdk/sandbox";
 import {
   createRemoteShellSandboxFsBridge,
   disposeSshSandboxSession,
-  resolvePreferredNexisClawTmpDir,
+  resolvePreferredGreenchClawTmpDir,
   runSshSandboxCommand,
   sanitizeEnvVars,
   withTempWorkspace,
-} from "NexisClaw/plugin-sdk/sandbox";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/sandbox";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { OpenShellSandboxBackend } from "./backend.types.js";
 import {
   buildExecRemoteCommand,
@@ -273,7 +273,7 @@ class OpenShellSandboxBackendImpl {
           "/bin/sh",
           "-c",
           params.script,
-          "NexisClaw-openshell-fs",
+          "GreenchClaw-openshell-fs",
           ...(params.args ?? []),
         ]),
         stdin: params.stdin,
@@ -413,7 +413,7 @@ class OpenShellSandboxBackendImpl {
 
   private async syncWorkspaceFromRemote(): Promise<void> {
     await withTempWorkspace(
-      { rootDir: resolveOpenShellTmpRoot(), prefix: "NexisClaw-openshell-sync-" },
+      { rootDir: resolveOpenShellTmpRoot(), prefix: "GreenchClaw-openshell-sync-" },
       async ({ dir: tmpDir }) => {
         const result = await runOpenShellCli({
           context: this.params.execContext,
@@ -442,7 +442,7 @@ class OpenShellSandboxBackendImpl {
 
   private async uploadPathToRemote(localPath: string, remotePath: string): Promise<void> {
     await withTempWorkspace(
-      { rootDir: resolveOpenShellTmpRoot(), prefix: "NexisClaw-openshell-upload-" },
+      { rootDir: resolveOpenShellTmpRoot(), prefix: "GreenchClaw-openshell-upload-" },
       async ({ dir: tmpDir }) => {
         // Stage a symlink-free snapshot so upload never dereferences host paths
         // outside the mirrored workspace tree.
@@ -484,7 +484,7 @@ class OpenShellSandboxBackendImpl {
 }
 
 function resolveOpenShellPluginConfigFromConfig(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   fallback: ResolvedOpenShellPluginConfig,
 ): ResolvedOpenShellPluginConfig {
   const pluginConfig = config.plugins?.entries?.openshell?.config;
@@ -504,9 +504,9 @@ function buildOpenShellSandboxName(scopeKey: string): string {
     (acc, char) => ((acc * 33) ^ char.charCodeAt(0)) >>> 0,
     5381,
   );
-  return `NexisClaw-${safe || "session"}-${hash.toString(16).slice(0, 8)}`;
+  return `GreenchClaw-${safe || "session"}-${hash.toString(16).slice(0, 8)}`;
 }
 
 function resolveOpenShellTmpRoot(): string {
-  return path.resolve(resolvePreferredNexisClawTmpDir());
+  return path.resolve(resolvePreferredGreenchClawTmpDir());
 }

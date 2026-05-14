@@ -8,7 +8,7 @@ import {
   makeTempDir,
   packageBuildCommitFromTgz,
   packageVersionFromTgz,
-  packNexisClaw,
+  packGreenchClaw,
   parseBoolEnv,
   parseMode,
   parseProvider,
@@ -42,13 +42,13 @@ import { PhaseRunner } from "./phase-runner.ts";
 // Older published baselines predate this warning, but still need update coverage.
 const BAD_PLUGIN_DIAGNOSTIC_MIN_VERSION = "2026.5.7";
 
-function parseNexisClawPackageVersion(value: string): string | null {
+function parseGreenchClawPackageVersion(value: string): string | null {
   return value.match(/\b(\d{4}\.\d{1,2}\.\d{1,2}(?:-[A-Za-z0-9.]+)?)\b/u)?.[1] ?? null;
 }
 
-function compareNexisClawPackageVersions(left: string, right: string): number {
+function compareGreenchClawPackageVersions(left: string, right: string): number {
   const parse = (value: string): [number, number, number] => {
-    const match = parseNexisClawPackageVersion(value)?.match(/^(\d{4})\.(\d+)\.(\d+)/u);
+    const match = parseGreenchClawPackageVersion(value)?.match(/^(\d{4})\.(\d+)\.(\d+)/u);
     if (!match) {
       return [0, 0, 0];
     }
@@ -116,7 +116,7 @@ const defaultOptions = (): LinuxOptions => ({
   hostIp: undefined,
   hostPort: 18427,
   hostPortExplicit: false,
-  installUrl: "https://NexisClaw.ai/install.sh",
+  installUrl: "https://GreenchClaw.ai/install.sh",
   installVersion: "",
   json: false,
   keepServer: false,
@@ -143,7 +143,7 @@ Options:
   --model <provider/model>    Override the model used for the agent-turn smoke.
   --api-key-env <var>        Host env var name for provider API key.
   --openai-api-key-env <var> Alias for --api-key-env (backward compatible)
-  --install-url <url>        Installer URL for latest release. Default: https://NexisClaw.ai/install.sh
+  --install-url <url>        Installer URL for latest release. Default: https://GreenchClaw.ai/install.sh
   --host-port <port>         Host HTTP port for current-main tgz. Default: 18427
   --host-ip <ip>             Override Parallels host IP.
   --latest-version <ver>     Override npm latest version lookup.
@@ -233,7 +233,7 @@ function parseArgs(argv: string[]): LinuxOptions {
 
 class LinuxSmoke {
   private auth: ProviderAuth;
-  private disableBonjour = parseBoolEnv(process.env.NEXISCLAW_PARALLELS_LINUX_DISABLE_BONJOUR);
+  private disableBonjour = parseBoolEnv(process.env.GREENCHCLAW_PARALLELS_LINUX_DISABLE_BONJOUR);
   private hostIp = "";
   private hostPort = 0;
   private server: HostServer | null = null;
@@ -267,9 +267,9 @@ class LinuxSmoke {
   }
 
   async run(): Promise<void> {
-    this.runDir = await makeTempDir("NexisClaw-parallels-linux.");
+    this.runDir = await makeTempDir("GreenchClaw-parallels-linux.");
     this.phases = new PhaseRunner(this.runDir);
-    this.tgzDir = await makeTempDir("NexisClaw-parallels-linux-tgz.");
+    this.tgzDir = await makeTempDir("GreenchClaw-parallels-linux-tgz.");
     try {
       this.options.vmName = this.resolveVmName();
       this.snapshot = resolveSnapshot(this.options.vmName, this.options.snapshotHint);
@@ -291,7 +291,7 @@ class LinuxSmoke {
       );
       say(`Run logs: ${this.runDir}`);
 
-      this.artifact = await packNexisClaw({
+      this.artifact = await packGreenchClaw({
         destination: this.tgzDir,
         packageSpec: this.options.targetPackageSpec,
         requireControlUi: false,
@@ -358,7 +358,7 @@ class LinuxSmoke {
     await this.phase("fresh.preflight", 90, () => this.logGuestPreflight());
     await this.phase("fresh.install-latest-bootstrap", 420, () => this.installLatestRelease());
     await this.phase("fresh.install-main", 420, () =>
-      this.installMainTgz("NexisClaw-main-fresh.tgz"),
+      this.installMainTgz("GreenchClaw-main-fresh.tgz"),
     );
     this.status.freshVersion = await this.extractLastVersion("fresh.install-main");
     await this.phase("fresh.verify-main-version", 90, () => this.verifyTargetVersion());
@@ -374,7 +374,7 @@ class LinuxSmoke {
     this.status.freshGateway = "pass";
     await this.phase(
       "fresh.first-local-agent-turn",
-      Number(process.env.NEXISCLAW_PARALLELS_LINUX_AGENT_TIMEOUT_S || 1500),
+      Number(process.env.GREENCHCLAW_PARALLELS_LINUX_AGENT_TIMEOUT_S || 1500),
       () => this.verifyLocalTurn(),
     );
     this.status.freshAgent = "pass";
@@ -390,7 +390,7 @@ class LinuxSmoke {
       this.verifyVersionContains(this.latestVersion),
     );
     await this.phase("upgrade.install-main", 420, () =>
-      this.installMainTgz("NexisClaw-main-upgrade.tgz"),
+      this.installMainTgz("GreenchClaw-main-upgrade.tgz"),
     );
     this.status.upgradeVersion = await this.extractLastVersion("upgrade.install-main");
     await this.phase("upgrade.verify-main-version", 90, () => this.verifyTargetVersion());
@@ -406,7 +406,7 @@ class LinuxSmoke {
     this.status.upgradeGateway = "pass";
     await this.phase(
       "upgrade.first-local-agent-turn",
-      Number(process.env.NEXISCLAW_PARALLELS_LINUX_AGENT_TIMEOUT_S || 1500),
+      Number(process.env.GREENCHCLAW_PARALLELS_LINUX_AGENT_TIMEOUT_S || 1500),
       () => this.verifyLocalTurn(),
     );
     this.status.upgradeAgent = "pass";
@@ -501,13 +501,13 @@ printf 'preflight.npmRoot=%s\n' "$(npm root -g 2>/dev/null || true)"`);
   }
 
   private installLatestRelease(): void {
-    this.guestExec(["curl", "-fsSL", this.options.installUrl, "-o", "/tmp/NexisClaw-install.sh"]);
+    this.guestExec(["curl", "-fsSL", this.options.installUrl, "-o", "/tmp/GreenchClaw-install.sh"]);
     if (this.options.installVersion) {
       this.guestExec([
         "/usr/bin/env",
-        "NEXISCLAW_NO_ONBOARD=1",
+        "GREENCHCLAW_NO_ONBOARD=1",
         "bash",
-        "/tmp/NexisClaw-install.sh",
+        "/tmp/GreenchClaw-install.sh",
         "--version",
         this.options.installVersion,
         "--no-onboard",
@@ -515,13 +515,13 @@ printf 'preflight.npmRoot=%s\n' "$(npm root -g 2>/dev/null || true)"`);
     } else {
       this.guestExec([
         "/usr/bin/env",
-        "NEXISCLAW_NO_ONBOARD=1",
+        "GREENCHCLAW_NO_ONBOARD=1",
         "bash",
-        "/tmp/NexisClaw-install.sh",
+        "/tmp/GreenchClaw-install.sh",
         "--no-onboard",
       ]);
     }
-    this.guestExec(["NexisClaw", "--version"]);
+    this.guestExec(["GreenchClaw", "--version"]);
   }
 
   private installMainTgz(tempName: string): void {
@@ -531,7 +531,7 @@ printf 'preflight.npmRoot=%s\n' "$(npm root -g 2>/dev/null || true)"`);
     const tgzUrl = this.server.urlFor(this.artifact.path);
     this.guestExec(["curl", "-fsSL", tgzUrl, "-o", `/tmp/${tempName}`]);
     this.guestExec(["npm", "install", "-g", `/tmp/${tempName}`, "--no-fund", "--no-audit"]);
-    this.guestExec(["NexisClaw", "--version"]);
+    this.guestExec(["GreenchClaw", "--version"]);
   }
 
   private async verifyTargetVersion(): Promise<void> {
@@ -550,7 +550,7 @@ printf 'preflight.npmRoot=%s\n' "$(npm root -g 2>/dev/null || true)"`);
   }
 
   private verifyVersionContains(needle: string): void {
-    const version = this.guestExec(["NexisClaw", "--version"]);
+    const version = this.guestExec(["GreenchClaw", "--version"]);
     if (!version.includes(needle)) {
       throw new Error(`version mismatch: expected substring ${needle}`);
     }
@@ -560,7 +560,7 @@ printf 'preflight.npmRoot=%s\n' "$(npm root -g 2>/dev/null || true)"`);
     this.guestExec([
       "/usr/bin/env",
       `${this.auth.apiKeyEnv}=${this.auth.apiKeyValue}`,
-      "NexisClaw",
+      "GreenchClaw",
       "onboard",
       "--non-interactive",
       "--mode",
@@ -582,12 +582,12 @@ printf 'preflight.npmRoot=%s\n' "$(npm root -g 2>/dev/null || true)"`);
 
   private injectBadPluginFixture(): void {
     this.guestBash(String.raw`set -euo pipefail
-plugin_dir=/root/.NexisClaw/test-bad-plugin
+plugin_dir=/root/.GreenchClaw/test-bad-plugin
 mkdir -p "$plugin_dir"
 cat >"$plugin_dir/package.json" <<'JSON'
-{"name":"@NexisClaw/test-bad-plugin","version":"1.0.0","NexisClaw":{"extensions":["./index.cjs"],"setupEntry":"./setup-entry.cjs"}}
+{"name":"@GreenchClaw/test-bad-plugin","version":"1.0.0","GreenchClaw":{"extensions":["./index.cjs"],"setupEntry":"./setup-entry.cjs"}}
 JSON
-cat >"$plugin_dir/NexisClaw.plugin.json" <<'JSON'
+cat >"$plugin_dir/GreenchClaw.plugin.json" <<'JSON'
 {"id":"test-bad-plugin","configSchema":{"type":"object","additionalProperties":false,"properties":{}},"channels":["test-bad-plugin"]}
 JSON
 cat >"$plugin_dir/index.cjs" <<'JS'
@@ -604,12 +604,12 @@ JS
 python3 - <<'PY'
 import json
 from pathlib import Path
-config_path = Path("/root/.NexisClaw/NexisClaw.json")
+config_path = Path("/root/.GreenchClaw/GreenchClaw.json")
 config = json.loads(config_path.read_text()) if config_path.exists() else {}
 plugins = config.setdefault("plugins", {})
 load = plugins.setdefault("load", {})
 paths = load.setdefault("paths", [])
-plugin_dir = "/root/.NexisClaw/test-bad-plugin"
+plugin_dir = "/root/.GreenchClaw/test-bad-plugin"
 if plugin_dir not in paths:
     paths.append(plugin_dir)
 allow = plugins.get("allow")
@@ -627,11 +627,11 @@ PY`);
   }
 
   private shouldExpectBadPluginDiagnostic(lane: "fresh" | "upgrade"): boolean {
-    const version = parseNexisClawPackageVersion(this.versionForLane(lane));
+    const version = parseGreenchClawPackageVersion(this.versionForLane(lane));
     if (!version) {
       return true;
     }
-    return compareNexisClawPackageVersions(version, BAD_PLUGIN_DIAGNOSTIC_MIN_VERSION) >= 0;
+    return compareGreenchClawPackageVersions(version, BAD_PLUGIN_DIAGNOSTIC_MIN_VERSION) >= 0;
   }
 
   private maybeInjectBadPluginFixture(lane: "fresh" | "upgrade"): void {
@@ -645,15 +645,15 @@ PY`);
   }
 
   private startGatewayBackground(): void {
-    const bonjourEnv = this.disableBonjour ? " NEXISCLAW_DISABLE_BONJOUR=1" : "";
+    const bonjourEnv = this.disableBonjour ? " GREENCHCLAW_DISABLE_BONJOUR=1" : "";
     this.guestBash(
-      String.raw`pkill -f "NexisClaw gateway run" >/dev/null 2>&1 || true
-rm -f /tmp/NexisClaw-parallels-linux-gateway.log
+      String.raw`pkill -f "GreenchClaw gateway run" >/dev/null 2>&1 || true
+rm -f /tmp/GreenchClaw-parallels-linux-gateway.log
 setsid sh -lc ` +
         shellQuote(
-          `exec env NEXISCLAW_HOME=/root NEXISCLAW_STATE_DIR=/root/.NexisClaw NEXISCLAW_CONFIG_PATH=/root/.NexisClaw/NexisClaw.json NEXISCLAW_ALLOW_ROOT=1${bonjourEnv} ${this.auth.apiKeyEnv}=${shellQuote(
+          `exec env GREENCHCLAW_HOME=/root GREENCHCLAW_STATE_DIR=/root/.GreenchClaw GREENCHCLAW_CONFIG_PATH=/root/.GreenchClaw/GreenchClaw.json GREENCHCLAW_ALLOW_ROOT=1${bonjourEnv} ${this.auth.apiKeyEnv}=${shellQuote(
             this.auth.apiKeyValue,
-          )} NexisClaw gateway run --bind loopback --port 18789 --force >/tmp/NexisClaw-parallels-linux-gateway.log 2>&1`,
+          )} GreenchClaw gateway run --bind loopback --port 18789 --force >/tmp/GreenchClaw-parallels-linux-gateway.log 2>&1`,
         ) +
         String.raw` >/dev/null 2>&1 < /dev/null &`,
     );
@@ -668,13 +668,20 @@ setsid sh -lc ` +
   }
 
   private showGatewayStatusCompat(check = true): boolean {
-    const help = this.guestExec(["NexisClaw", "gateway", "status", "--help"], { check: false });
+    const help = this.guestExec(["GreenchClaw", "gateway", "status", "--help"], { check: false });
     const args = help.includes("--require-rpc")
-      ? ["NexisClaw", "gateway", "status", "--deep", "--require-rpc"]
-      : ["NexisClaw", "gateway", "status", "--deep"];
+      ? ["GreenchClaw", "gateway", "status", "--deep", "--require-rpc"]
+      : ["GreenchClaw", "gateway", "status", "--deep"];
     const result = run(
       "prlctl",
-      ["exec", this.options.vmName, "/usr/bin/env", "HOME=/root", "NEXISCLAW_ALLOW_ROOT=1", ...args],
+      [
+        "exec",
+        this.options.vmName,
+        "/usr/bin/env",
+        "HOME=/root",
+        "GREENCHCLAW_ALLOW_ROOT=1",
+        ...args,
+      ],
       {
         check: false,
         quiet: true,
@@ -698,8 +705,8 @@ setsid sh -lc ` +
           this.options.vmName,
           "/usr/bin/env",
           "HOME=/root",
-          "NEXISCLAW_ALLOW_ROOT=1",
-          "NexisClaw",
+          "GREENCHCLAW_ALLOW_ROOT=1",
+          "GreenchClaw",
           "gateway",
           "status",
           "--deep",
@@ -743,51 +750,51 @@ setsid sh -lc ` +
 python3 - <<'PY'
 import json
 from pathlib import Path
-config_path = Path("/root/.NexisClaw/NexisClaw.json")
+config_path = Path("/root/.GreenchClaw/GreenchClaw.json")
 config = json.loads(config_path.read_text()) if config_path.exists() else {}
 plugins = config.setdefault("plugins", {})
 load = plugins.setdefault("load", {})
 paths = load.get("paths")
 if isinstance(paths, list):
-    load["paths"] = [path for path in paths if path != "/root/.NexisClaw/test-bad-plugin"]
+    load["paths"] = [path for path in paths if path != "/root/.GreenchClaw/test-bad-plugin"]
 allow = plugins.get("allow")
 if isinstance(allow, list):
     plugins["allow"] = [plugin_id for plugin_id in allow if plugin_id != "test-bad-plugin"]
 config_path.write_text(json.dumps(config, indent=2) + "\n")
 PY
-rm -rf /root/.NexisClaw/test-bad-plugin`);
+rm -rf /root/.GreenchClaw/test-bad-plugin`);
   }
 
   private verifyLocalTurn(): void {
-    this.guestExec(["NexisClaw", "models", "set", this.auth.modelId]);
+    this.guestExec(["GreenchClaw", "models", "set", this.auth.modelId]);
     const modelProviderConfigBatch = modelProviderConfigBatchJson(this.auth.modelId, "linux");
     if (modelProviderConfigBatch) {
       this.guestBash(`provider_config_batch="$(mktemp)"
 cat >"$provider_config_batch" <<'JSON'
 ${modelProviderConfigBatch}
 JSON
-NexisClaw config set --batch-file "$provider_config_batch" --strict-json
+GreenchClaw config set --batch-file "$provider_config_batch" --strict-json
 rm -f "$provider_config_batch"`);
     }
     this.guestExec([
-      "NexisClaw",
+      "GreenchClaw",
       "config",
       "set",
       "agents.defaults.skipBootstrap",
       "true",
       "--strict-json",
     ]);
-    this.guestExec(["NexisClaw", "config", "set", "tools.profile", "minimal"]);
+    this.guestExec(["GreenchClaw", "config", "set", "tools.profile", "minimal"]);
     this.prepareAgentWorkspace();
     this.guestBash(
       `agent_ok=false
 for attempt in 1 2; do
   session_id="parallels-linux-smoke"
   if [ "$attempt" -gt 1 ]; then session_id="parallels-linux-smoke-retry-$attempt"; fi
-  rm -f "$HOME/.NexisClaw/agents/main/sessions/$session_id.jsonl"
+  rm -f "$HOME/.GreenchClaw/agents/main/sessions/$session_id.jsonl"
   output_file="$(mktemp)"
   set +e
-  /usr/bin/env NEXISCLAW_ALLOW_ROOT=1 ${shellQuote(`${this.auth.apiKeyEnv}=${this.auth.apiKeyValue}`)} NexisClaw agent --local --agent main --session-id "$session_id" --message ${shellQuote(
+  /usr/bin/env GREENCHCLAW_ALLOW_ROOT=1 ${shellQuote(`${this.auth.apiKeyEnv}=${this.auth.apiKeyValue}`)} GreenchClaw agent --local --agent main --session-id "$session_id" --message ${shellQuote(
     "Reply with exact ASCII text OK only.",
   )} --thinking minimal --timeout ${resolveParallelsModelTimeoutSeconds("linux")} --json >"$output_file" 2>&1
   rc=$?
@@ -809,7 +816,7 @@ for attempt in 1 2; do
   fi
 done
 if [ "$agent_ok" != true ]; then
-  echo "NexisClaw agent finished without OK response" >&2
+  echo "GreenchClaw agent finished without OK response" >&2
   exit 1
 fi`,
     );
@@ -821,7 +828,7 @@ fi`,
 
   private async extractLastVersion(phaseId: string): Promise<string> {
     const text = await readFile(path.join(this.runDir, `${phaseId}.log`), "utf8").catch(() => "");
-    return [...text.matchAll(/NexisClaw [^\r\n]+ \([0-9a-f]{7,}\)/g)].at(-1)?.[0] ?? "";
+    return [...text.matchAll(/GreenchClaw [^\r\n]+ \([0-9a-f]{7,}\)/g)].at(-1)?.[0] ?? "";
   }
 
   private async writeSummary(): Promise<string> {

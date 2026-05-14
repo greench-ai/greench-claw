@@ -13,7 +13,7 @@ import {
   resolveAgentWorkspaceDir,
 } from "../../../agents/agent-scope.js";
 import { resolveStateDir } from "../../../config/paths.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { root } from "../../../infra/fs-safe.js";
 import { createSubsystemLogger } from "../../../logging/subsystem.js";
 import {
@@ -108,7 +108,7 @@ async function resolveAvailableMemoryFilename(params: {
 }
 
 function resolveDisplaySessionKey(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   workspaceDir?: string;
   sessionKey: string;
 }): string {
@@ -140,7 +140,7 @@ async function saveSessionMemoryNow(event: Parameters<HookHandler>[0]): Promise<
     log.debug("Hook triggered for reset/new command", { action: event.action });
 
     const context = event.context || {};
-    const cfg = context.cfg as NexisClawConfig | undefined;
+    const cfg = context.cfg as GreenchClawConfig | undefined;
     const contextWorkspaceDir =
       typeof context.workspaceDir === "string" && context.workspaceDir.trim().length > 0
         ? context.workspaceDir
@@ -224,7 +224,7 @@ async function saveSessionMemoryNow(event: Parameters<HookHandler>[0]): Promise<
 
       // Avoid calling the model provider in unit tests; keep hooks fast and deterministic.
       const isTestEnv =
-        process.env.NEXISCLAW_TEST_FAST === "1" ||
+        process.env.GREENCHCLAW_TEST_FAST === "1" ||
         process.env.VITEST === "true" ||
         process.env.VITEST === "1" ||
         process.env.NODE_ENV === "test";

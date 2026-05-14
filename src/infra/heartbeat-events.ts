@@ -42,7 +42,7 @@ type HeartbeatEventState = {
   listeners: Set<(evt: HeartbeatEventPayload) => void>;
 };
 
-const HEARTBEAT_EVENT_STATE_KEY = Symbol.for("NexisClaw.heartbeatEvents.state");
+const HEARTBEAT_EVENT_STATE_KEY = Symbol.for("GreenchClaw.heartbeatEvents.state");
 
 const state = resolveGlobalSingleton<HeartbeatEventState>(HEARTBEAT_EVENT_STATE_KEY, () => ({
   lastHeartbeat: null,

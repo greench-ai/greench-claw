@@ -1,13 +1,13 @@
-import { createAccountListHelpers } from "NexisClaw/plugin-sdk/account-helpers";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import { resolveMergedAccountConfig } from "NexisClaw/plugin-sdk/account-resolution";
-import { resolveDefaultSecretProviderAlias } from "NexisClaw/plugin-sdk/provider-auth";
+import { createAccountListHelpers } from "GreenchClaw/plugin-sdk/account-helpers";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import { resolveMergedAccountConfig } from "GreenchClaw/plugin-sdk/account-resolution";
+import { resolveDefaultSecretProviderAlias } from "GreenchClaw/plugin-sdk/provider-auth";
 import {
   normalizeSecretInputString,
   normalizeResolvedSecretInputString,
   resolveSecretInputString,
-} from "NexisClaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { ClickClackAccountConfig, CoreConfig, ResolvedClickClackAccount } from "./types.js";
 
 const DEFAULT_RECONNECT_MS = 1_500;

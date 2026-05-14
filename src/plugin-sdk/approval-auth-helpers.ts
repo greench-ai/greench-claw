@@ -1,5 +1,5 @@
 import { normalizeOptionalString } from "../shared/string-coerce.js";
-import type { NexisClawConfig } from "./config-runtime.js";
+import type { GreenchClawConfig } from "./config-runtime.js";
 
 type ApprovalKind = "exec" | "plugin";
 type ApprovalAuthorizationResult = {
@@ -7,7 +7,7 @@ type ApprovalAuthorizationResult = {
   reason?: string;
 };
 const IMPLICIT_SAME_CHAT_APPROVAL_AUTHORIZATION = Symbol(
-  "NexisClaw.implicitSameChatApprovalAuthorization",
+  "GreenchClaw.implicitSameChatApprovalAuthorization",
 );
 
 function markImplicitSameChatApprovalAuthorization(
@@ -39,7 +39,7 @@ export function isImplicitSameChatApprovalAuthorization(
 
 export function createResolvedApproverActionAuthAdapter(params: {
   channelLabel: string;
-  resolveApprovers: (params: { cfg: NexisClawConfig; accountId?: string | null }) => string[];
+  resolveApprovers: (params: { cfg: GreenchClawConfig; accountId?: string | null }) => string[];
   normalizeSenderId?: (value: string) => string | undefined;
 }) {
   const normalizeSenderId = params.normalizeSenderId ?? normalizeOptionalString;
@@ -51,7 +51,7 @@ export function createResolvedApproverActionAuthAdapter(params: {
       senderId,
       approvalKind,
     }: {
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       accountId?: string | null;
       senderId?: string | null;
       action: "approve";

@@ -1,4 +1,4 @@
-import { createPluginRuntimeStore, type PluginRuntime } from "NexisClaw/plugin-sdk/runtime-store";
+import { createPluginRuntimeStore, type PluginRuntime } from "GreenchClaw/plugin-sdk/runtime-store";
 
 const { setRuntime: setSynologyRuntime, getRuntime: getSynologyRuntime } =
   createPluginRuntimeStore<PluginRuntime>({

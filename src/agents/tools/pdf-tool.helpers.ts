@@ -3,7 +3,7 @@ import {
   resolveAgentModelFallbackValues,
   resolveAgentModelPrimaryValue,
 } from "../../config/model-input.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { providerSupportsNativePdfDocument } from "../../media-understanding/defaults.js";
 import { extractAssistantText } from "../pi-embedded-utils.js";
 
@@ -100,7 +100,7 @@ export function coercePdfAssistantText(params: {
   throw new Error(`PDF model returned no text (${label}).`);
 }
 
-export function coercePdfModelConfig(cfg?: NexisClawConfig): PdfModelConfig {
+export function coercePdfModelConfig(cfg?: GreenchClawConfig): PdfModelConfig {
   const primary = resolveAgentModelPrimaryValue(cfg?.agents?.defaults?.pdfModel);
   const fallbacks = resolveAgentModelFallbackValues(cfg?.agents?.defaults?.pdfModel);
   const modelConfig: PdfModelConfig = {};

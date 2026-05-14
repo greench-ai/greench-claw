@@ -10,7 +10,7 @@ sidebarTitle: "Control UI"
 The Control UI is a small **Vite + Lit** single-page app served by the Gateway:
 
 - default: `http://<host>:18789/`
-- optional prefix: set `gateway.controlUi.basePath` (e.g. `/NexisClaw`)
+- optional prefix: set `gateway.controlUi.basePath` (e.g. `/GreenchClaw`)
 
 It speaks **directly to the Gateway WebSocket** on the same port.
 
@@ -20,7 +20,7 @@ If the Gateway is running on the same computer, open:
 
 - [http://127.0.0.1:18789/](http://127.0.0.1:18789/) (or [http://localhost:18789/](http://localhost:18789/))
 
-If the page fails to load, start the Gateway first: `NexisClaw gateway`.
+If the page fails to load, start the Gateway first: `GreenchClaw gateway`.
 
 Auth is supplied during the WebSocket handshake via:
 
@@ -40,21 +40,21 @@ When you connect to the Control UI from a new browser or device, the Gateway usu
 <Steps>
   <Step title="List pending requests">
     ```bash
-    NexisClaw devices list
+    GreenchClaw devices list
     ```
   </Step>
   <Step title="Approve by request ID">
     ```bash
-    NexisClaw devices approve <requestId>
+    GreenchClaw devices approve <requestId>
     ```
   </Step>
 </Steps>
 
-If the browser retries pairing with changed auth details (role/scopes/public key), the previous pending request is superseded and a new `requestId` is created. Re-run `NexisClaw devices list` before approval.
+If the browser retries pairing with changed auth details (role/scopes/public key), the previous pending request is superseded and a new `requestId` is created. Re-run `GreenchClaw devices list` before approval.
 
-If the browser is already paired and you change it from read access to write/admin access, this is treated as an approval upgrade, not a silent reconnect. NexisClaw keeps the old approval active, blocks the broader reconnect, and asks you to approve the new scope set explicitly.
+If the browser is already paired and you change it from read access to write/admin access, this is treated as an approval upgrade, not a silent reconnect. GreenchClaw keeps the old approval active, blocks the broader reconnect, and asks you to approve the new scope set explicitly.
 
-Once approved, the device is remembered and won't require re-approval unless you revoke it with `NexisClaw devices revoke --device <id> --role <role>`. See [Devices CLI](/cli/devices) for token rotation and revocation.
+Once approved, the device is remembered and won't require re-approval unless you revoke it with `GreenchClaw devices revoke --device <id> --role <role>`. See [Devices CLI](/cli/devices) for token rotation and revocation.
 
 <Note>
 - Direct local loopback browser connections (`127.0.0.1` / `localhost`) are auto-approved.
@@ -72,7 +72,7 @@ The same browser-local pattern applies to the assistant avatar override. Uploade
 
 ## Runtime config endpoint
 
-The Control UI fetches its runtime settings from `/__NexisClaw/control-ui-config.json`. That endpoint is gated by the same gateway auth as the rest of the HTTP surface: unauthenticated browsers cannot fetch it, and a successful fetch requires either an already valid gateway token/password, Tailscale Serve identity, or a trusted-proxy identity.
+The Control UI fetches its runtime settings from `/__GreenchClaw/control-ui-config.json`. That endpoint is gated by the same gateway auth as the rest of the HTTP surface: unauthenticated browsers cannot fetch it, and a successful fetch requires either an already valid gateway token/password, Tailscale Serve identity, or a trusted-proxy identity.
 
 ## Language support
 
@@ -97,7 +97,7 @@ Imported themes are stored only in the current browser profile. They are not wri
   <Accordion title="Chat and Talk">
     - Chat with the model via Gateway WS (`chat.history`, `chat.send`, `chat.abort`, `chat.inject`).
     - Chat history refreshes request a bounded recent window with per-message text caps so large sessions do not force the browser to render a full transcript payload before the chat becomes usable.
-    - Talk through browser realtime sessions. OpenAI uses direct WebRTC, Google Live uses a constrained one-use browser token over WebSocket, and backend-only realtime voice plugins use the Gateway relay transport. Client-owned provider sessions start with `talk.client.create`; Gateway relay sessions start with `talk.session.create`. The relay keeps provider credentials on the Gateway while the browser streams microphone PCM through `talk.session.appendAudio` and forwards `NexisClaw_agent_consult` provider tool calls through `talk.client.toolCall` for Gateway policy and the larger configured NexisClaw model.
+    - Talk through browser realtime sessions. OpenAI uses direct WebRTC, Google Live uses a constrained one-use browser token over WebSocket, and backend-only realtime voice plugins use the Gateway relay transport. Client-owned provider sessions start with `talk.client.create`; Gateway relay sessions start with `talk.session.create`. The relay keeps provider credentials on the Gateway while the browser streams microphone PCM through `talk.session.appendAudio` and forwards `GreenchClaw_agent_consult` provider tool calls through `talk.client.toolCall` for Gateway policy and the larger configured GreenchClaw model.
     - Stream tool calls + live tool output cards in Chat (agent events).
 
   </Accordion>
@@ -117,7 +117,7 @@ Imported themes are stored only in the current browser profile. They are not wri
 
   </Accordion>
   <Accordion title="Config">
-    - View/edit `~/.NexisClaw/NexisClaw.json` (`config.get`, `config.set`).
+    - View/edit `~/.GreenchClaw/GreenchClaw.json` (`config.get`, `config.set`).
     - Apply + restart with validation (`config.apply`) and wake the last active session.
     - Writes include a base-hash guard to prevent clobbering concurrent edits.
     - Writes (`config.set`/`config.apply`/`config.patch`) preflight active SecretRef resolution for refs in the submitted config payload; unresolved active submitted refs are rejected before write.
@@ -175,7 +175,7 @@ Imported themes are stored only in the current browser profile. They are not wri
 
     The Chat composer includes a Talk options button next to the Talk start/stop button. The options apply to the next Talk session and can override provider, transport, model, voice, reasoning effort, VAD threshold, silence duration, and prefix padding. When an option is blank, the Gateway uses configured defaults where available or the provider default. Selecting Gateway relay forces the backend relay path; selecting WebRTC keeps the session client-owned and fails instead of silently falling back to relay if the provider cannot create a browser session.
 
-    In the Chat composer, the Talk control is the waves button next to the microphone dictation button. When Talk starts, the composer status row shows `Connecting Talk...`, then `Talk live` while audio is connected, or `Asking NexisClaw...` while a realtime tool call is consulting the configured larger model through `talk.client.toolCall`.
+    In the Chat composer, the Talk control is the waves button next to the microphone dictation button. When Talk starts, the composer status row shows `Connecting Talk...`, then `Talk live` while audio is connected, or `Asking GreenchClaw...` while a realtime tool call is consulting the configured larger model through `talk.client.toolCall`.
 
     Maintainer live smoke: `OPENAI_API_KEY=... GEMINI_API_KEY=... node --import tsx scripts/dev/realtime-talk-live-smoke.ts` verifies the OpenAI backend WebSocket bridge, OpenAI browser WebRTC SDP exchange, Google Live constrained-token browser WebSocket setup, and the Gateway relay browser adapter with fake microphone media. The command prints provider status only and does not log secrets.
 
@@ -183,7 +183,7 @@ Imported themes are stored only in the current browser profile. They are not wri
   <Accordion title="Stop and abort">
     - Click **Stop** (calls `chat.abort`).
     - While a run is active, normal follow-ups queue. Click **Steer** on a queued message to inject that follow-up into the running turn.
-    - Type `/stop` (or standalone abort phrases like `stop`, `stop action`, `stop run`, `stop NexisClaw`, `please stop`) to abort out-of-band.
+    - Type `/stop` (or standalone abort phrases like `stop`, `stop action`, `stop run`, `stop GreenchClaw`, `please stop`) to abort out-of-band.
     - `chat.abort` supports `{ sessionKey }` (no `runId`) to abort all active runs for that session.
 
   </Accordion>
@@ -199,18 +199,18 @@ Imported themes are stored only in the current browser profile. They are not wri
 
 The Control UI ships a `manifest.webmanifest` and a service worker, so modern browsers can install it as a standalone PWA. Web Push lets the Gateway wake the installed PWA with notifications even when the tab or browser window is not open.
 
-| Surface                                               | What it does                                                       |
-| ----------------------------------------------------- | ------------------------------------------------------------------ |
-| `ui/public/manifest.webmanifest`                      | PWA manifest. Browsers offer "Install app" once it is reachable.   |
-| `ui/public/sw.js`                                     | Service worker that handles `push` events and notification clicks. |
-| `push/vapid-keys.json` (under the NexisClaw state dir) | Auto-generated VAPID keypair used to sign Web Push payloads.       |
-| `push/web-push-subscriptions.json`                    | Persisted browser subscription endpoints.                          |
+| Surface                                                  | What it does                                                       |
+| -------------------------------------------------------- | ------------------------------------------------------------------ |
+| `ui/public/manifest.webmanifest`                         | PWA manifest. Browsers offer "Install app" once it is reachable.   |
+| `ui/public/sw.js`                                        | Service worker that handles `push` events and notification clicks. |
+| `push/vapid-keys.json` (under the GreenchClaw state dir) | Auto-generated VAPID keypair used to sign Web Push payloads.       |
+| `push/web-push-subscriptions.json`                       | Persisted browser subscription endpoints.                          |
 
 Override the VAPID keypair through env vars on the Gateway process when you want to pin keys (for multi-host deployments, secrets rotation, or tests):
 
-- `NEXISCLAW_VAPID_PUBLIC_KEY`
-- `NEXISCLAW_VAPID_PRIVATE_KEY`
-- `NEXISCLAW_VAPID_SUBJECT` (defaults to `mailto:NexisClaw@localhost`)
+- `GREENCHCLAW_VAPID_PUBLIC_KEY`
+- `GREENCHCLAW_VAPID_PRIVATE_KEY`
+- `GREENCHCLAW_VAPID_SUBJECT` (defaults to `mailto:GreenchClaw@localhost`)
 
 The Control UI uses these scope-gated Gateway methods to register and test browser subscriptions:
 
@@ -280,14 +280,14 @@ The value is validated before it reaches the browser. Supported values include p
     Keep the Gateway on loopback and let Tailscale Serve proxy it with HTTPS:
 
     ```bash
-    NexisClaw gateway --tailscale serve
+    GreenchClaw gateway --tailscale serve
     ```
 
     Open:
 
     - `https://<magicdns>/` (or your configured `gateway.controlUi.basePath`)
 
-    By default, Control UI/WebSocket Serve requests can authenticate via Tailscale identity headers (`tailscale-user-login`) when `gateway.auth.allowTailscale` is `true`. NexisClaw verifies the identity by resolving the `x-forwarded-for` address with `tailscale whois` and matching it to the header, and only accepts these when the request hits loopback with Tailscale's `x-forwarded-*` headers. For Control UI operator sessions with browser device identity, this verified Serve path also skips the device-pairing round trip; device-less browsers and node-role connections still follow the normal device checks. Set `gateway.auth.allowTailscale: false` if you want to require explicit shared-secret credentials even for Serve traffic. Then use `gateway.auth.mode: "token"` or `"password"`.
+    By default, Control UI/WebSocket Serve requests can authenticate via Tailscale identity headers (`tailscale-user-login`) when `gateway.auth.allowTailscale` is `true`. GreenchClaw verifies the identity by resolving the `x-forwarded-for` address with `tailscale whois` and matching it to the header, and only accepts these when the request hits loopback with Tailscale's `x-forwarded-*` headers. For Control UI operator sessions with browser device identity, this verified Serve path also skips the device-pairing round trip; device-less browsers and node-role connections still follow the normal device checks. Set `gateway.auth.allowTailscale: false` if you want to require explicit shared-secret credentials even for Serve traffic. Then use `gateway.auth.mode: "token"` or `"password"`.
 
     For that async Serve identity path, failed auth attempts for the same client IP and auth scope are serialized before rate-limit writes. Concurrent bad retries from the same browser can therefore show `retry later` on the second request instead of two plain mismatches racing in parallel.
 
@@ -298,7 +298,7 @@ The value is validated before it reaches the browser. Supported values include p
   </Tab>
   <Tab title="Bind to tailnet + token">
     ```bash
-    NexisClaw gateway --bind tailnet --token "$(openssl rand -hex 32)"
+    GreenchClaw gateway --bind tailnet --token "$(openssl rand -hex 32)"
     ```
 
     Then open:
@@ -312,7 +312,7 @@ The value is validated before it reaches the browser. Supported values include p
 
 ## Insecure HTTP
 
-If you open the dashboard over plain HTTP (`http://<lan-ip>` or `http://<tailscale-ip>`), the browser runs in a **non-secure context** and blocks WebCrypto. By default, NexisClaw **blocks** Control UI connections without device identity.
+If you open the dashboard over plain HTTP (`http://<lan-ip>` or `http://<tailscale-ip>`), the browser runs in a **non-secure context** and blocks WebCrypto. By default, GreenchClaw **blocks** Control UI connections without device identity.
 
 Documented exceptions:
 
@@ -397,7 +397,7 @@ If you disable gateway auth (not recommended on shared hosts), the avatar route 
 
 When gateway auth is configured, assistant local-media previews use a two-step route:
 
-- `GET /__NexisClaw__/assistant-media?meta=1&source=<path>` requires the normal Control UI operator auth. The browser sends the gateway token as a bearer header when checking availability.
+- `GET /__GreenchClaw__/assistant-media?meta=1&source=<path>` requires the normal Control UI operator auth. The browser sends the gateway token as a bearer header when checking availability.
 - Successful metadata responses include a short-lived `mediaTicket` scoped to that exact source path.
 - Browser-rendered image, audio, video, and document URLs use `mediaTicket=<ticket>` instead of the active gateway token or password. The ticket expires quickly and cannot authorize a different source.
 
@@ -414,7 +414,7 @@ pnpm ui:build
 Optional absolute base (when you want fixed asset URLs):
 
 ```bash
-NEXISCLAW_CONTROL_UI_BASE_PATH=/NexisClaw/ pnpm ui:build
+GREENCHCLAW_CONTROL_UI_BASE_PATH=/GreenchClaw/ pnpm ui:build
 ```
 
 For local development (separate dev server):
@@ -427,7 +427,7 @@ Then point the UI at your Gateway WS URL (e.g. `ws://127.0.0.1:18789`).
 
 ## Blank Control UI page
 
-If the browser loads a blank dashboard and DevTools shows no useful error, an extension or early content script may have prevented the JavaScript module app from evaluating. The static page includes a plain HTML recovery panel that appears when `<NexisClaw-app>` is not registered after startup.
+If the browser loads a blank dashboard and DevTools shows no useful error, an extension or early content script may have prevented the JavaScript module app from evaluating. The static page includes a plain HTML recovery panel that appears when `<GreenchClaw-app>` is not registered after startup.
 
 Use the panel's **Try again** action after changing the browser environment, or reload manually after these checks:
 

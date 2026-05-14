@@ -88,24 +88,24 @@ async function readRequestBodyWithLimitForTest(req: IncomingMessage): Promise<st
   });
 }
 
-vi.mock("NexisClaw/plugin-sdk/setup", async () => {
-  const actual = await vi.importActual<object>("NexisClaw/plugin-sdk/setup");
+vi.mock("GreenchClaw/plugin-sdk/setup", async () => {
+  const actual = await vi.importActual<object>("GreenchClaw/plugin-sdk/setup");
   return {
     ...actual,
     DEFAULT_ACCOUNT_ID: "default",
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/channel-config-schema", async () => {
-  const actual = await vi.importActual<object>("NexisClaw/plugin-sdk/channel-config-schema");
+vi.mock("GreenchClaw/plugin-sdk/channel-config-schema", async () => {
+  const actual = await vi.importActual<object>("GreenchClaw/plugin-sdk/channel-config-schema");
   return {
     ...actual,
     buildChannelConfigSchema: vi.fn((schema: unknown) => ({ schema })),
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/webhook-ingress", async () => {
-  const actual = await vi.importActual<object>("NexisClaw/plugin-sdk/webhook-ingress");
+vi.mock("GreenchClaw/plugin-sdk/webhook-ingress", async () => {
+  const actual = await vi.importActual<object>("GreenchClaw/plugin-sdk/webhook-ingress");
   return {
     ...actual,
     registerPluginHttpRoute: registerPluginHttpRouteMock,
@@ -138,7 +138,7 @@ vi.mock("./runtime.js", () => ({
         dispatchReplyWithBufferedBlockDispatcher,
       },
       session: {
-        resolveStorePath: vi.fn(() => "/tmp/NexisClaw/synology-chat-sessions.json"),
+        resolveStorePath: vi.fn(() => "/tmp/GreenchClaw/synology-chat-sessions.json"),
         recordInboundSession: vi.fn(async () => undefined),
       },
       turn: {

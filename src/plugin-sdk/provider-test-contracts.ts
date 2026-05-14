@@ -73,9 +73,9 @@ export {
 export { expectPassthroughReplayPolicy } from "./test-helpers/provider-replay-policy.js";
 export { createCapturedThinkingConfigStream } from "./test-helpers/stream-hooks.js";
 export {
-  expectNexisClawLiveTranscriptMarker,
+  expectGreenchClawLiveTranscriptMarker,
   normalizeTranscriptForMatch,
-  NEXISCLAW_LIVE_TRANSCRIPT_MARKER_RE,
+  GREENCHCLAW_LIVE_TRANSCRIPT_MARKER_RE,
   runRealtimeSttLiveTest,
   streamAudioForLiveTest,
   synthesizeElevenLabsLiveSpeech,

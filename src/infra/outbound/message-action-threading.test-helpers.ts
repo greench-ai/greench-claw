@@ -1,8 +1,8 @@
 import { vi } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 
 type AutoThreadResolver = (params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   to: string;
   toolContext?: Record<string, unknown>;
@@ -10,7 +10,7 @@ type AutoThreadResolver = (params: {
 }) => string | undefined;
 
 type OutboundThreadContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   to: string;
   accountId?: string | null;
   toolContext?: Record<string, unknown>;
@@ -127,7 +127,7 @@ export function createOutboundThreadingMock() {
         resolveAutoThreadId,
       }: {
         actionParams: Record<string, unknown>;
-        cfg: NexisClawConfig;
+        cfg: GreenchClawConfig;
         to: string;
         accountId?: string | null;
         toolContext?: Record<string, unknown>;

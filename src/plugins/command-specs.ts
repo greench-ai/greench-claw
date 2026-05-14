@@ -1,13 +1,13 @@
 import { getLoadedChannelPlugin } from "../channels/plugins/index.js";
 import { resolveReadOnlyChannelCommandDefaults } from "../channels/plugins/read-only-command-defaults.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
 import { pluginCommandSupportsChannel } from "./command-registration.js";
 import { pluginCommands } from "./command-registry-state.js";
-import type { NexisClawPluginCommandDefinition } from "./types.js";
+import type { GreenchClawPluginCommandDefinition } from "./types.js";
 
 function resolvePluginNativeName(
-  command: NexisClawPluginCommandDefinition,
+  command: GreenchClawPluginCommandDefinition,
   provider?: string,
 ): string {
   const providerName = normalizeOptionalLowercaseString(provider);
@@ -28,7 +28,7 @@ export function getPluginCommandSpecs(
     env?: NodeJS.ProcessEnv;
     stateDir?: string;
     workspaceDir?: string;
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
   } = {},
 ): Array<{
   name: string;

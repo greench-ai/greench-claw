@@ -2,7 +2,7 @@ import type { AgentMessage } from "@earendil-works/pi-agent-core";
 import { SessionManager } from "@earendil-works/pi-coding-agent";
 import type { SessionEntry } from "../../config/sessions/types.js";
 import type { AgentCompactionMode } from "../../config/types.agent-defaults.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { ensureContextEnginesInitialized as ensureContextEnginesInitializedImpl } from "../../context-engine/init.js";
 import { resolveContextEngine as resolveContextEngineImpl } from "../../context-engine/registry.js";
 import type { ContextEngine } from "../../context-engine/types.js";
@@ -34,11 +34,11 @@ type SettingsManagerLike = {
 type CliCompactionDeps = {
   openSessionManager: (sessionFile: string) => SessionManagerLike;
   ensureContextEnginesInitialized: () => void;
-  resolveContextEngine: (cfg: NexisClawConfig) => Promise<ContextEngine>;
+  resolveContextEngine: (cfg: GreenchClawConfig) => Promise<ContextEngine>;
   createPreparedEmbeddedPiSettingsManager: (params: {
     cwd: string;
     agentDir: string;
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
     contextTokenBudget?: number;
   }) => SettingsManagerLike | Promise<SettingsManagerLike>;
   applyPiAutoCompactionGuard: (params: {
@@ -113,7 +113,7 @@ async function compactCliTranscript(params: {
   sessionKey: string;
   sessionFile: string;
   sessionManager: SessionManagerLike;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   workspaceDir: string;
   agentDir: string;
   provider: string;
@@ -181,7 +181,7 @@ async function compactCliTranscript(params: {
 }
 
 export async function runCliTurnCompactionLifecycle(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionId: string;
   sessionKey: string;
   sessionEntry: SessionEntry | undefined;

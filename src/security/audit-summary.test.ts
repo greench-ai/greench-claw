@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { collectAttackSurfaceSummaryFindings } from "./audit-extra.summary.js";
 
 function requireAttackSurfaceSummary(
@@ -16,7 +16,7 @@ function requireAttackSurfaceSummary(
 
 describe("security audit attack surface summary", () => {
   it("includes an attack surface summary (info)", () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       channels: { whatsapp: { groupPolicy: "open" }, telegram: { groupPolicy: "allowlist" } },
       tools: { elevated: { enabled: true, allowFrom: { whatsapp: ["+1"] } } },
       hooks: { enabled: true },

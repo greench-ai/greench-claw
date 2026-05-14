@@ -1,17 +1,17 @@
 {
-  "name": "@NexisClaw/google-plugin",
+  "name": "@GreenchClaw/google-plugin",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw Google plugin",
+  "description": "GreenchClaw Google plugin",
   "type": "module",
   "dependencies": {
     "@google/genai": "2.0.1",
     "@earendil-works/pi-ai": "0.74.0"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

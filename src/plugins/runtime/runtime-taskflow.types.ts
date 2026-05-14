@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { JsonValue, TaskFlowRecord } from "../../tasks/task-flow-registry.types.js";
 import type {
   TaskDeliveryState,
@@ -8,7 +8,7 @@ import type {
   TaskRegistrySummary,
   TaskRuntime,
 } from "../../tasks/task-registry.types.js";
-import type { NexisClawPluginToolContext } from "../tool-types.js";
+import type { GreenchClawPluginToolContext } from "../tool-types.js";
 
 export type ManagedTaskFlowRecord = TaskFlowRecord & {
   syncMode: "managed";
@@ -109,7 +109,10 @@ export type BoundTaskFlowRuntime = {
     expectedRevision: number;
     cancelRequestedAt?: number;
   }) => ManagedTaskFlowMutationResult;
-  cancel: (params: { flowId: string; cfg: NexisClawConfig }) => Promise<BoundTaskFlowCancelResult>;
+  cancel: (params: {
+    flowId: string;
+    cfg: GreenchClawConfig;
+  }) => Promise<BoundTaskFlowCancelResult>;
   runTask: (params: {
     flowId: string;
     runtime: TaskRuntime;
@@ -136,6 +139,6 @@ export type PluginRuntimeTaskFlow = {
     requesterOrigin?: TaskDeliveryState["requesterOrigin"];
   }) => BoundTaskFlowRuntime;
   fromToolContext: (
-    ctx: Pick<NexisClawPluginToolContext, "sessionKey" | "deliveryContext">,
+    ctx: Pick<GreenchClawPluginToolContext, "sessionKey" | "deliveryContext">,
   ) => BoundTaskFlowRuntime;
 };

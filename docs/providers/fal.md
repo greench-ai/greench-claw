@@ -1,13 +1,13 @@
 ---
-summary: "fal image and video generation setup in NexisClaw"
+summary: "fal image and video generation setup in GreenchClaw"
 title: "Fal"
 read_when:
-  - You want to use fal image generation in NexisClaw
+  - You want to use fal image generation in GreenchClaw
   - You need the FAL_KEY auth flow
   - You want fal defaults for image_generate or video_generate
 ---
 
-NexisClaw ships a bundled `fal` provider for hosted image and video generation.
+GreenchClaw ships a bundled `fal` provider for hosted image and video generation.
 
 | Property | Value                                                         |
 | -------- | ------------------------------------------------------------- |
@@ -20,7 +20,7 @@ NexisClaw ships a bundled `fal` provider for hosted image and video generation.
 <Steps>
   <Step title="Set the API key">
     ```bash
-    NexisClaw onboard --auth-choice fal-api-key
+    GreenchClaw onboard --auth-choice fal-api-key
     ```
   </Step>
   <Step title="Set a default image model">
@@ -59,7 +59,7 @@ aspect-ratio hints.
 </Warning>
 
 Use `outputFormat: "png"` when you want PNG output. fal does not declare an
-explicit transparent-background control in NexisClaw, so `background:
+explicit transparent-background control in GreenchClaw, so `background:
 "transparent"` is reported as an ignored override for fal models.
 
 To use fal as the default image provider:
@@ -152,7 +152,7 @@ The bundled `fal` video-generation provider defaults to
 </AccordionGroup>
 
 <Tip>
-Use `NexisClaw models list --provider fal` to see the full list of available fal
+Use `GreenchClaw models list --provider fal` to see the full list of available fal
 models, including any recently added entries.
 </Tip>
 

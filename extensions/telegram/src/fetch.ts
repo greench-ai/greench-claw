@@ -1,21 +1,21 @@
 import { randomUUID } from "node:crypto";
 import * as dns from "node:dns";
-import type { TelegramNetworkConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import type { TelegramNetworkConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import {
   createPinnedLookup,
   hasEnvHttpProxyAgentConfigured,
   resolveEnvHttpProxyAgentOptions,
   resolveFetch,
   type PinnedDispatcherPolicy,
-} from "NexisClaw/plugin-sdk/fetch-runtime";
+} from "GreenchClaw/plugin-sdk/fetch-runtime";
 import {
   captureHttpExchange,
   resolveEffectiveDebugProxyUrl,
-} from "NexisClaw/plugin-sdk/proxy-capture";
-import { resolveRequestUrl } from "NexisClaw/plugin-sdk/request-url";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/proxy-capture";
+import { resolveRequestUrl } from "GreenchClaw/plugin-sdk/request-url";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { Agent, EnvHttpProxyAgent, ProxyAgent, fetch as undiciFetch } from "undici";
 import { normalizeTelegramApiRoot } from "./api-root.js";
 import {
@@ -35,7 +35,7 @@ const TELEGRAM_FALLBACK_IPS: readonly string[] = ["149.154.167.220"];
 // strict enough that (a) idle sockets are closed even when the pool is still
 // actively used and (b) the pool itself cannot grow unbounded under transient
 // concurrency spikes. These values are a defence-in-depth layer; the primary
-// fix for the leak observed in NexisClaw#68128 is the transport lifecycle that
+// fix for the leak observed in GreenchClaw#68128 is the transport lifecycle that
 // calls `close()` on abandoned dispatchers.
 const TELEGRAM_DISPATCHER_KEEP_ALIVE_TIMEOUT_MS = 30_000;
 const TELEGRAM_DISPATCHER_KEEP_ALIVE_MAX_TIMEOUT_MS = 600_000;
@@ -224,10 +224,10 @@ function hasEnvHttpProxyForTelegramApi(env: NodeJS.ProcessEnv = process.env): bo
   return hasEnvHttpProxyAgentConfigured(env);
 }
 
-function resolveNexisClawProxyUrlForTelegram(
+function resolveGreenchClawProxyUrlForTelegram(
   env: NodeJS.ProcessEnv = process.env,
 ): string | undefined {
-  const proxyUrl = env.NEXISCLAW_PROXY_URL?.trim();
+  const proxyUrl = env.GREENCHCLAW_PROXY_URL?.trim();
   return proxyUrl ? proxyUrl : undefined;
 }
 
@@ -597,7 +597,7 @@ export function resolveTelegramTransport(
     : undefined;
   const hasEnvProxy = !explicitProxyUrl && hasEnvHttpProxyForTelegramApi();
   const managedProxyUrl =
-    !effectiveProxyFetch && !hasEnvProxy ? resolveNexisClawProxyUrlForTelegram() : undefined;
+    !effectiveProxyFetch && !hasEnvProxy ? resolveGreenchClawProxyUrlForTelegram() : undefined;
   const resolvedExplicitProxyUrl = explicitProxyUrl ?? managedProxyUrl;
   const undiciSourceFetch = resolveWrappedFetch(undiciFetch as unknown as typeof fetch);
   const sourceFetch = resolvedExplicitProxyUrl

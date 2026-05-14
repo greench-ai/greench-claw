@@ -1,9 +1,9 @@
-import type { NexisClawPluginApi } from "../../../src/plugins/types.js";
+import type { GreenchClawPluginApi } from "../../../src/plugins/types.js";
 import { loadBundledPluginPublicSurfaceSync } from "../../../src/test-utils/bundled-plugin-public-surface.js";
 
 type BundledPluginEntryModule = {
   default: {
-    register(api: NexisClawPluginApi): void;
+    register(api: GreenchClawPluginApi): void;
   };
 };
 

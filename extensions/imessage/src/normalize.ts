@@ -1,8 +1,8 @@
-import { normalizeE164 } from "NexisClaw/plugin-sdk/account-resolution";
+import { normalizeE164 } from "GreenchClaw/plugin-sdk/account-resolution";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 const SERVICE_PREFIXES = ["imessage:", "sms:", "auto:"] as const;
 const CHAT_TARGET_PREFIX_RE =

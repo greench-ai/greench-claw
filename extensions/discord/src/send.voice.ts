@@ -1,16 +1,16 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { recordChannelActivity } from "NexisClaw/plugin-sdk/channel-activity-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { recordChannelActivity } from "GreenchClaw/plugin-sdk/channel-activity-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   extensionForMime,
   maxBytesForKind,
   unlinkIfExists,
-} from "NexisClaw/plugin-sdk/media-runtime";
-import { requireRuntimeConfig } from "NexisClaw/plugin-sdk/plugin-config-runtime";
-import type { RetryConfig } from "NexisClaw/plugin-sdk/retry-runtime";
-import { tempWorkspace, resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
-import { loadWebMediaRaw } from "NexisClaw/plugin-sdk/web-media";
+} from "GreenchClaw/plugin-sdk/media-runtime";
+import { requireRuntimeConfig } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
+import type { RetryConfig } from "GreenchClaw/plugin-sdk/retry-runtime";
+import { tempWorkspace, resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
+import { loadWebMediaRaw } from "GreenchClaw/plugin-sdk/web-media";
 import { resolveDiscordAccount } from "./accounts.js";
 import type { RequestClient } from "./internal/discord.js";
 import { parseAndResolveRecipient } from "./recipient-resolution.js";
@@ -24,7 +24,7 @@ import {
 } from "./voice-message.js";
 
 type VoiceMessageOpts = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   token?: string;
   accountId?: string;
   verbose?: boolean;
@@ -55,7 +55,7 @@ async function materializeVoiceMessageInput(
   const extFromMime = media.contentType ? extensionForMime(media.contentType) : "";
   const ext = extFromName || extFromMime || ".bin";
   const workspace = await tempWorkspace({
-    rootDir: resolvePreferredNexisClawTmpDir(),
+    rootDir: resolvePreferredGreenchClawTmpDir(),
     prefix: "voice-src-",
   });
   const filePath = await workspace.write(`input${ext}`, media.buffer);

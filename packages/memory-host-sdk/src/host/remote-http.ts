@@ -2,7 +2,7 @@ import {
   fetchWithSsrFGuard,
   shouldUseEnvHttpProxyForUrl,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "./NexisClaw-runtime-network.js";
+} from "./GreenchClaw-runtime-network.js";
 import type { SsrFPolicy } from "./ssrf-policy.js";
 
 export const MEMORY_REMOTE_TRUSTED_ENV_PROXY_MODE = "trusted_env_proxy";

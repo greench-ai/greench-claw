@@ -6,4 +6,4 @@ export {
   transcribeAudioFile,
   type RunMediaUnderstandingFileParams,
   type RunMediaUnderstandingFileResult,
-} from "NexisClaw/plugin-sdk/media-understanding-runtime";
+} from "GreenchClaw/plugin-sdk/media-understanding-runtime";

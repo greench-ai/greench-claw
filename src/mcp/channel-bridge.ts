@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { GatewayClient } from "../gateway/client.js";
 import type { EventFrame } from "../gateway/protocol/index.js";
 import { extractFirstTextBlock } from "../shared/chat-message-content.js";
@@ -39,7 +39,7 @@ type ServerNotification = {
 const CLAUDE_PERMISSION_REPLY_RE = /^(yes|no)\s+([a-km-z]{5})$/i;
 const QUEUE_LIMIT = 1_000;
 
-export class NexisClawChannelBridge {
+export class GreenchClawChannelBridge {
   private gateway: GatewayClient | null = null;
   private readonly verbose: boolean;
   private readonly claudeChannelMode: ClaudeChannelMode;
@@ -59,7 +59,7 @@ export class NexisClawChannelBridge {
   private readySettled = false;
 
   constructor(
-    private readonly cfg: NexisClawConfig,
+    private readonly cfg: GreenchClawConfig,
     private readonly params: {
       gatewayUrl?: string;
       gatewayToken?: string;
@@ -119,7 +119,7 @@ export class NexisClawChannelBridge {
       password: bootstrap.auth.password,
       preauthHandshakeTimeoutMs: bootstrap.preauthHandshakeTimeoutMs,
       clientName: GATEWAY_CLIENT_NAMES.CLI,
-      clientDisplayName: "NexisClaw MCP",
+      clientDisplayName: "GreenchClaw MCP",
       clientVersion: VERSION,
       mode: GATEWAY_CLIENT_MODES.CLI,
       scopes: [READ_SCOPE, WRITE_SCOPE, APPROVALS_SCOPE],
@@ -319,7 +319,7 @@ export class NexisClawChannelBridge {
       inputPreview: params.inputPreview,
     });
     if (this.verbose) {
-      process.stderr.write(`NexisClaw mcp: pending Claude permission ${params.requestId}\n`);
+      process.stderr.write(`GreenchClaw mcp: pending Claude permission ${params.requestId}\n`);
     }
   }
 
@@ -342,7 +342,7 @@ export class NexisClawChannelBridge {
     } catch (error) {
       if (this.verbose && !this.closed) {
         process.stderr.write(
-          `NexisClaw mcp: notification ${notification.method} failed: ${String(error)}\n`,
+          `GreenchClaw mcp: notification ${notification.method} failed: ${String(error)}\n`,
         );
       }
     }

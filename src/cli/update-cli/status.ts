@@ -106,7 +106,7 @@ export async function updateStatusCommand(opts: UpdateStatusOptions): Promise<vo
     },
   ];
 
-  defaultRuntime.log(theme.heading("NexisClaw update status"));
+  defaultRuntime.log(theme.heading("GreenchClaw update status"));
   defaultRuntime.log("");
   defaultRuntime.log(
     renderTable({

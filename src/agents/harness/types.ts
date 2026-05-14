@@ -13,7 +13,7 @@ export type AgentHarnessAttemptParams =
 export type AgentHarnessAttemptResult =
   import("../pi-embedded-runner/run/types.js").EmbeddedRunAttemptResult;
 export type AgentHarnessSideQuestionParams = {
-  cfg: import("../../config/types.NexisClaw.js").NexisClawConfig;
+  cfg: import("../../config/types.GreenchClaw.js").GreenchClawConfig;
   agentDir: string;
   provider: string;
   model: string;

@@ -108,7 +108,7 @@ function loadProfileEnv(homeDir = os.homedir()): void {
       { encoding: "utf8" },
     );
     const applied = countAppliedEntries(output.split("\0").filter(Boolean));
-    if (applied > 0 && !isTruthyEnvValue(process.env.NEXISCLAW_LIVE_TEST_QUIET)) {
+    if (applied > 0 && !isTruthyEnvValue(process.env.GREENCHCLAW_LIVE_TEST_QUIET)) {
       console.log(`[live] loaded ${applied} env vars from ~/.profile`);
     }
   } catch {
@@ -135,7 +135,7 @@ function loadProfileEnv(homeDir = os.homedir()): void {
         })
         .filter(Boolean);
       const applied = countAppliedEntries(fallbackEntries);
-      if (applied > 0 && !isTruthyEnvValue(process.env.NEXISCLAW_LIVE_TEST_QUIET)) {
+      if (applied > 0 && !isTruthyEnvValue(process.env.GREENCHCLAW_LIVE_TEST_QUIET)) {
         console.log(`[live] loaded ${applied} env vars from ~/.profile`);
       }
     } catch {
@@ -146,18 +146,18 @@ function loadProfileEnv(homeDir = os.homedir()): void {
 
 function resolveRestoreEntries(): RestoreEntry[] {
   return [
-    { key: "NEXISCLAW_TEST_FAST", value: process.env.NEXISCLAW_TEST_FAST },
+    { key: "GREENCHCLAW_TEST_FAST", value: process.env.GREENCHCLAW_TEST_FAST },
     {
-      key: "NEXISCLAW_STRICT_FAST_REPLY_CONFIG",
-      value: process.env.NEXISCLAW_STRICT_FAST_REPLY_CONFIG,
+      key: "GREENCHCLAW_STRICT_FAST_REPLY_CONFIG",
+      value: process.env.GREENCHCLAW_STRICT_FAST_REPLY_CONFIG,
     },
     {
-      key: "NEXISCLAW_ALLOW_SLOW_REPLY_TESTS",
-      value: process.env.NEXISCLAW_ALLOW_SLOW_REPLY_TESTS,
+      key: "GREENCHCLAW_ALLOW_SLOW_REPLY_TESTS",
+      value: process.env.GREENCHCLAW_ALLOW_SLOW_REPLY_TESTS,
     },
     {
-      key: "NEXISCLAW_LIVE_TEST_NORMALIZE_CONFIG",
-      value: process.env.NEXISCLAW_LIVE_TEST_NORMALIZE_CONFIG,
+      key: "GREENCHCLAW_LIVE_TEST_NORMALIZE_CONFIG",
+      value: process.env.GREENCHCLAW_LIVE_TEST_NORMALIZE_CONFIG,
     },
     { key: "HOME", value: process.env.HOME },
     { key: "USERPROFILE", value: process.env.USERPROFILE },
@@ -165,15 +165,15 @@ function resolveRestoreEntries(): RestoreEntry[] {
     { key: "XDG_DATA_HOME", value: process.env.XDG_DATA_HOME },
     { key: "XDG_STATE_HOME", value: process.env.XDG_STATE_HOME },
     { key: "XDG_CACHE_HOME", value: process.env.XDG_CACHE_HOME },
-    { key: "NEXISCLAW_STATE_DIR", value: process.env.NEXISCLAW_STATE_DIR },
-    { key: "NEXISCLAW_CONFIG_PATH", value: process.env.NEXISCLAW_CONFIG_PATH },
-    { key: "NEXISCLAW_GATEWAY_PORT", value: process.env.NEXISCLAW_GATEWAY_PORT },
-    { key: "NEXISCLAW_BRIDGE_ENABLED", value: process.env.NEXISCLAW_BRIDGE_ENABLED },
-    { key: "NEXISCLAW_BRIDGE_HOST", value: process.env.NEXISCLAW_BRIDGE_HOST },
-    { key: "NEXISCLAW_BRIDGE_PORT", value: process.env.NEXISCLAW_BRIDGE_PORT },
-    { key: "NEXISCLAW_CANVAS_HOST_PORT", value: process.env.NEXISCLAW_CANVAS_HOST_PORT },
-    { key: "NEXISCLAW_TEST_HOME", value: process.env.NEXISCLAW_TEST_HOME },
-    { key: "NEXISCLAW_AGENT_DIR", value: process.env.NEXISCLAW_AGENT_DIR },
+    { key: "GREENCHCLAW_STATE_DIR", value: process.env.GREENCHCLAW_STATE_DIR },
+    { key: "GREENCHCLAW_CONFIG_PATH", value: process.env.GREENCHCLAW_CONFIG_PATH },
+    { key: "GREENCHCLAW_GATEWAY_PORT", value: process.env.GREENCHCLAW_GATEWAY_PORT },
+    { key: "GREENCHCLAW_BRIDGE_ENABLED", value: process.env.GREENCHCLAW_BRIDGE_ENABLED },
+    { key: "GREENCHCLAW_BRIDGE_HOST", value: process.env.GREENCHCLAW_BRIDGE_HOST },
+    { key: "GREENCHCLAW_BRIDGE_PORT", value: process.env.GREENCHCLAW_BRIDGE_PORT },
+    { key: "GREENCHCLAW_CANVAS_HOST_PORT", value: process.env.GREENCHCLAW_CANVAS_HOST_PORT },
+    { key: "GREENCHCLAW_TEST_HOME", value: process.env.GREENCHCLAW_TEST_HOME },
+    { key: "GREENCHCLAW_AGENT_DIR", value: process.env.GREENCHCLAW_AGENT_DIR },
     { key: "PI_CODING_AGENT_DIR", value: process.env.PI_CODING_AGENT_DIR },
     { key: "TELEGRAM_BOT_TOKEN", value: process.env.TELEGRAM_BOT_TOKEN },
     { key: "DISCORD_BOT_TOKEN", value: process.env.DISCORD_BOT_TOKEN },
@@ -191,27 +191,27 @@ function createIsolatedTestHome(restore: RestoreEntry[]): {
   cleanup: () => void;
   tempHome: string;
 } {
-  const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-test-home-"));
+  const tempHome = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-test-home-"));
 
   process.env.HOME = tempHome;
   process.env.USERPROFILE = tempHome;
-  process.env.NEXISCLAW_TEST_HOME = tempHome;
-  process.env.NEXISCLAW_TEST_FAST = "1";
-  process.env.NEXISCLAW_STRICT_FAST_REPLY_CONFIG = "1";
-  delete process.env.NEXISCLAW_ALLOW_SLOW_REPLY_TESTS;
+  process.env.GREENCHCLAW_TEST_HOME = tempHome;
+  process.env.GREENCHCLAW_TEST_FAST = "1";
+  process.env.GREENCHCLAW_STRICT_FAST_REPLY_CONFIG = "1";
+  delete process.env.GREENCHCLAW_ALLOW_SLOW_REPLY_TESTS;
 
   // Ensure test runs never touch the developer's real config/state, even if they have overrides set.
-  delete process.env.NEXISCLAW_CONFIG_PATH;
+  delete process.env.GREENCHCLAW_CONFIG_PATH;
   // Prefer deriving state dir from HOME so nested tests that change HOME also isolate correctly.
-  delete process.env.NEXISCLAW_STATE_DIR;
-  delete process.env.NEXISCLAW_AGENT_DIR;
+  delete process.env.GREENCHCLAW_STATE_DIR;
+  delete process.env.GREENCHCLAW_AGENT_DIR;
   delete process.env.PI_CODING_AGENT_DIR;
   // Prefer test-controlled ports over developer overrides (avoid port collisions across tests/workers).
-  delete process.env.NEXISCLAW_GATEWAY_PORT;
-  delete process.env.NEXISCLAW_BRIDGE_ENABLED;
-  delete process.env.NEXISCLAW_BRIDGE_HOST;
-  delete process.env.NEXISCLAW_BRIDGE_PORT;
-  delete process.env.NEXISCLAW_CANVAS_HOST_PORT;
+  delete process.env.GREENCHCLAW_GATEWAY_PORT;
+  delete process.env.GREENCHCLAW_BRIDGE_ENABLED;
+  delete process.env.GREENCHCLAW_BRIDGE_HOST;
+  delete process.env.GREENCHCLAW_BRIDGE_PORT;
+  delete process.env.GREENCHCLAW_CANVAS_HOST_PORT;
   // Avoid leaking real GitHub/Copilot tokens into non-live test runs.
   delete process.env.TELEGRAM_BOT_TOKEN;
   delete process.env.DISCORD_BOT_TOKEN;
@@ -226,7 +226,7 @@ function createIsolatedTestHome(restore: RestoreEntry[]): {
 
   // Windows: prefer the default state dir so auth/profile tests match real paths.
   if (process.platform === "win32") {
-    process.env.NEXISCLAW_STATE_DIR = path.join(tempHome, ".NexisClaw");
+    process.env.GREENCHCLAW_STATE_DIR = path.join(tempHome, ".GreenchClaw");
   }
 
   process.env.XDG_CONFIG_HOME = path.join(tempHome, ".config");
@@ -328,7 +328,7 @@ function sanitizeLiveConfig(raw: string): string {
       });
     }
 
-    if (!isTruthyEnvValue(process.env.NEXISCLAW_LIVE_TEST_NORMALIZE_CONFIG)) {
+    if (!isTruthyEnvValue(process.env.GREENCHCLAW_LIVE_TEST_NORMALIZE_CONFIG)) {
       return `${JSON.stringify(parsed, null, 2)}\n`;
     }
 
@@ -366,31 +366,31 @@ function stageLiveTestState(params: {
   realHome: string;
   tempHome: string;
 }): void {
-  const rawStateDir = params.env.NEXISCLAW_STATE_DIR?.trim();
+  const rawStateDir = params.env.GREENCHCLAW_STATE_DIR?.trim();
   let realStateDir = rawStateDir
     ? resolveHomeRelativePath(rawStateDir, params.realHome)
-    : path.join(params.realHome, ".NexisClaw");
-  const priorIsolatedHome = params.env.NEXISCLAW_TEST_HOME?.trim();
+    : path.join(params.realHome, ".GreenchClaw");
+  const priorIsolatedHome = params.env.GREENCHCLAW_TEST_HOME?.trim();
   const snapshotHome = params.env.HOME?.trim();
   if (
     priorIsolatedHome &&
     snapshotHome &&
     snapshotHome !== priorIsolatedHome &&
-    realStateDir === path.join(priorIsolatedHome, ".NexisClaw")
+    realStateDir === path.join(priorIsolatedHome, ".GreenchClaw")
   ) {
-    realStateDir = path.join(params.realHome, ".NexisClaw");
+    realStateDir = path.join(params.realHome, ".GreenchClaw");
   }
-  const tempStateDir = path.join(params.tempHome, ".NexisClaw");
+  const tempStateDir = path.join(params.tempHome, ".GreenchClaw");
   fs.mkdirSync(tempStateDir, { recursive: true });
   fs.mkdirSync(path.join(params.tempHome, ".gemini"), { recursive: true });
 
-  const realConfigPath = params.env.NEXISCLAW_CONFIG_PATH?.trim()
-    ? resolveHomeRelativePath(params.env.NEXISCLAW_CONFIG_PATH, params.realHome)
-    : path.join(realStateDir, "NexisClaw.json");
+  const realConfigPath = params.env.GREENCHCLAW_CONFIG_PATH?.trim()
+    ? resolveHomeRelativePath(params.env.GREENCHCLAW_CONFIG_PATH, params.realHome)
+    : path.join(realStateDir, "GreenchClaw.json");
   if (fs.existsSync(realConfigPath)) {
     const rawConfig = fs.readFileSync(realConfigPath, "utf8");
     fs.writeFileSync(
-      path.join(tempStateDir, "NexisClaw.json"),
+      path.join(tempStateDir, "GreenchClaw.json"),
       sanitizeLiveConfig(rawConfig),
       "utf8",
     );
@@ -418,9 +418,9 @@ export function installTestEnv(options?: { loadProfileEnv?: boolean }): {
 } {
   const live =
     process.env.LIVE === "1" ||
-    process.env.NEXISCLAW_LIVE_TEST === "1" ||
-    process.env.NEXISCLAW_LIVE_GATEWAY === "1";
-  const allowRealHome = isTruthyEnvValue(process.env.NEXISCLAW_LIVE_USE_REAL_HOME);
+    process.env.GREENCHCLAW_LIVE_TEST === "1" ||
+    process.env.GREENCHCLAW_LIVE_GATEWAY === "1";
+  const allowRealHome = isTruthyEnvValue(process.env.GREENCHCLAW_LIVE_USE_REAL_HOME);
   const realHome = process.env.HOME ?? os.homedir();
   const liveEnvSnapshot = { ...process.env };
 

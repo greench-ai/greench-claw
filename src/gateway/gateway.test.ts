@@ -24,17 +24,17 @@ const GATEWAY_E2E_TIMEOUT_MS = 90_000;
 let gatewayTestSeq = 0;
 const GATEWAY_TEST_ENV_KEYS = [
   "HOME",
-  "NEXISCLAW_STATE_DIR",
-  "NEXISCLAW_CONFIG_PATH",
-  "NEXISCLAW_GATEWAY_TOKEN",
-  "NEXISCLAW_SKIP_CHANNELS",
-  "NEXISCLAW_SKIP_GMAIL_WATCHER",
-  "NEXISCLAW_SKIP_CRON",
-  "NEXISCLAW_SKIP_CANVAS_HOST",
-  "NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "NEXISCLAW_SKIP_PROVIDERS",
-  "NEXISCLAW_BUNDLED_PLUGINS_DIR",
-  "NEXISCLAW_DISABLE_BUNDLED_PLUGINS",
+  "GREENCHCLAW_STATE_DIR",
+  "GREENCHCLAW_CONFIG_PATH",
+  "GREENCHCLAW_GATEWAY_TOKEN",
+  "GREENCHCLAW_SKIP_CHANNELS",
+  "GREENCHCLAW_SKIP_GMAIL_WATCHER",
+  "GREENCHCLAW_SKIP_CRON",
+  "GREENCHCLAW_SKIP_CANVAS_HOST",
+  "GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "GREENCHCLAW_SKIP_PROVIDERS",
+  "GREENCHCLAW_BUNDLED_PLUGINS_DIR",
+  "GREENCHCLAW_DISABLE_BUNDLED_PLUGINS",
 ] as const;
 
 function nextGatewayId(prefix: string): string {
@@ -42,7 +42,7 @@ function nextGatewayId(prefix: string): string {
 }
 
 async function createEmptyBundledPluginsDir(tempHome: string): Promise<string> {
-  const bundledPluginsDir = path.join(tempHome, "NexisClaw-test-empty-bundled-plugins");
+  const bundledPluginsDir = path.join(tempHome, "GreenchClaw-test-empty-bundled-plugins");
   await fs.mkdir(bundledPluginsDir, { recursive: true });
   return bundledPluginsDir;
 }
@@ -53,10 +53,10 @@ async function writeWorkspacePlugin(params: {
   body: string;
   activation?: { onStartup?: boolean };
 }): Promise<void> {
-  const pluginDir = path.join(params.workspaceDir, ".NexisClaw", "extensions", params.id);
+  const pluginDir = path.join(params.workspaceDir, ".GreenchClaw", "extensions", params.id);
   await fs.mkdir(pluginDir, { recursive: true });
   await fs.writeFile(
-    path.join(pluginDir, "NexisClaw.plugin.json"),
+    path.join(pluginDir, "GreenchClaw.plugin.json"),
     `${JSON.stringify(
       {
         id: params.id,
@@ -104,29 +104,29 @@ async function readCounterWithRetry(filePath: string): Promise<number> {
 async function setupGatewayTempHome(params: { prefix: string; minimalGateway?: boolean }) {
   const envSnapshot = captureEnv([
     ...GATEWAY_TEST_ENV_KEYS,
-    ...(params.minimalGateway ? (["NEXISCLAW_TEST_MINIMAL_GATEWAY"] as const) : []),
+    ...(params.minimalGateway ? (["GREENCHCLAW_TEST_MINIMAL_GATEWAY"] as const) : []),
   ]);
 
   const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), params.prefix));
   process.env.HOME = tempHome;
-  process.env.NEXISCLAW_STATE_DIR = path.join(tempHome, ".NexisClaw");
-  delete process.env.NEXISCLAW_CONFIG_PATH;
-  process.env.NEXISCLAW_SKIP_CHANNELS = "1";
-  process.env.NEXISCLAW_SKIP_GMAIL_WATCHER = "1";
-  process.env.NEXISCLAW_SKIP_CRON = "1";
-  process.env.NEXISCLAW_SKIP_CANVAS_HOST = "1";
-  process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-  process.env.NEXISCLAW_SKIP_PROVIDERS = "1";
+  process.env.GREENCHCLAW_STATE_DIR = path.join(tempHome, ".GreenchClaw");
+  delete process.env.GREENCHCLAW_CONFIG_PATH;
+  process.env.GREENCHCLAW_SKIP_CHANNELS = "1";
+  process.env.GREENCHCLAW_SKIP_GMAIL_WATCHER = "1";
+  process.env.GREENCHCLAW_SKIP_CRON = "1";
+  process.env.GREENCHCLAW_SKIP_CANVAS_HOST = "1";
+  process.env.GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+  process.env.GREENCHCLAW_SKIP_PROVIDERS = "1";
   if (params.minimalGateway) {
-    process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY = "1";
+    process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY = "1";
   } else {
-    delete process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY;
+    delete process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY;
   }
 
-  const workspaceDir = path.join(tempHome, "NexisClaw");
+  const workspaceDir = path.join(tempHome, "GreenchClaw");
   await fs.mkdir(workspaceDir, { recursive: true });
-  process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = await createEmptyBundledPluginsDir(tempHome);
-  process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+  process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = await createEmptyBundledPluginsDir(tempHome);
+  process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS = "1";
   return { envSnapshot, tempHome, workspaceDir };
 }
 
@@ -159,16 +159,16 @@ describe("gateway e2e", () => {
     async () => {
       const { baseUrl: openaiBaseUrl, restore } = installOpenAiResponsesMock();
       const { envSnapshot, tempHome, workspaceDir } = await setupGatewayTempHome({
-        prefix: "NexisClaw-gw-mock-home-",
+        prefix: "GreenchClaw-gw-mock-home-",
         minimalGateway: true,
       });
 
       const token = nextGatewayId("test-token");
-      process.env.NEXISCLAW_GATEWAY_TOKEN = token;
+      process.env.GREENCHCLAW_GATEWAY_TOKEN = token;
 
-      const configDir = path.join(tempHome, ".NexisClaw");
+      const configDir = path.join(tempHome, ".GreenchClaw");
       await fs.mkdir(configDir, { recursive: true });
-      const configPath = path.join(configDir, "NexisClaw.json");
+      const configPath = path.join(configDir, "GreenchClaw.json");
       const mockProvider = buildMockOpenAiResponsesProvider(openaiBaseUrl);
 
       const cfg = {
@@ -239,11 +239,11 @@ describe("gateway e2e", () => {
     { timeout: GATEWAY_E2E_TIMEOUT_MS },
     async () => {
       const { envSnapshot, tempHome, workspaceDir } = await setupGatewayTempHome({
-        prefix: "NexisClaw-gw-http-tools-home-",
+        prefix: "GreenchClaw-gw-http-tools-home-",
       });
 
       const token = nextGatewayId("http-tools-token");
-      process.env.NEXISCLAW_GATEWAY_TOKEN = token;
+      process.env.GREENCHCLAW_GATEWAY_TOKEN = token;
       const registerCountPath = path.join(tempHome, "workspace-plugin-register-count.txt");
       await writeWorkspacePlugin({
         workspaceDir,
@@ -264,9 +264,9 @@ module.exports = {
 `.trimStart(),
       });
 
-      const configDir = path.join(tempHome, ".NexisClaw");
+      const configDir = path.join(tempHome, ".GreenchClaw");
       await fs.mkdir(configDir, { recursive: true });
-      const configPath = path.join(configDir, "NexisClaw.json");
+      const configPath = path.join(configDir, "GreenchClaw.json");
       const cfg = {
         agents: {
           defaults: { workspace: workspaceDir },
@@ -278,7 +278,7 @@ module.exports = {
         gateway: { auth: { token } },
       };
       await fs.writeFile(configPath, `${JSON.stringify(cfg, null, 2)}\n`);
-      process.env.NEXISCLAW_CONFIG_PATH = configPath;
+      process.env.GREENCHCLAW_CONFIG_PATH = configPath;
 
       const port = await getFreeGatewayPort();
       const server = await startGatewayServer(port, {
@@ -331,36 +331,36 @@ module.exports = {
     async () => {
       const envSnapshot = captureEnv([
         "HOME",
-        "NEXISCLAW_STATE_DIR",
-        "NEXISCLAW_CONFIG_PATH",
-        "NEXISCLAW_GATEWAY_TOKEN",
-        "NEXISCLAW_SKIP_CHANNELS",
-        "NEXISCLAW_SKIP_GMAIL_WATCHER",
-        "NEXISCLAW_SKIP_CRON",
-        "NEXISCLAW_SKIP_CANVAS_HOST",
-        "NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER",
-        "NEXISCLAW_SKIP_PROVIDERS",
-        "NEXISCLAW_BUNDLED_PLUGINS_DIR",
-        "NEXISCLAW_DISABLE_BUNDLED_PLUGINS",
-        "NEXISCLAW_TEST_MINIMAL_GATEWAY",
+        "GREENCHCLAW_STATE_DIR",
+        "GREENCHCLAW_CONFIG_PATH",
+        "GREENCHCLAW_GATEWAY_TOKEN",
+        "GREENCHCLAW_SKIP_CHANNELS",
+        "GREENCHCLAW_SKIP_GMAIL_WATCHER",
+        "GREENCHCLAW_SKIP_CRON",
+        "GREENCHCLAW_SKIP_CANVAS_HOST",
+        "GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER",
+        "GREENCHCLAW_SKIP_PROVIDERS",
+        "GREENCHCLAW_BUNDLED_PLUGINS_DIR",
+        "GREENCHCLAW_DISABLE_BUNDLED_PLUGINS",
+        "GREENCHCLAW_TEST_MINIMAL_GATEWAY",
       ]);
 
-      process.env.NEXISCLAW_SKIP_CHANNELS = "1";
-      process.env.NEXISCLAW_SKIP_GMAIL_WATCHER = "1";
-      process.env.NEXISCLAW_SKIP_CRON = "1";
-      process.env.NEXISCLAW_SKIP_CANVAS_HOST = "1";
-      process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-      process.env.NEXISCLAW_SKIP_PROVIDERS = "1";
-      process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY = "1";
-      delete process.env.NEXISCLAW_GATEWAY_TOKEN;
+      process.env.GREENCHCLAW_SKIP_CHANNELS = "1";
+      process.env.GREENCHCLAW_SKIP_GMAIL_WATCHER = "1";
+      process.env.GREENCHCLAW_SKIP_CRON = "1";
+      process.env.GREENCHCLAW_SKIP_CANVAS_HOST = "1";
+      process.env.GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+      process.env.GREENCHCLAW_SKIP_PROVIDERS = "1";
+      process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY = "1";
+      delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
 
-      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-wizard-home-"));
-      const configPath = path.join(tempHome, ".NexisClaw", "NexisClaw.json");
+      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-wizard-home-"));
+      const configPath = path.join(tempHome, ".GreenchClaw", "GreenchClaw.json");
       process.env.HOME = tempHome;
-      process.env.NEXISCLAW_STATE_DIR = path.join(tempHome, ".NexisClaw");
-      process.env.NEXISCLAW_CONFIG_PATH = configPath;
-      process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = await createEmptyBundledPluginsDir(tempHome);
-      process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+      process.env.GREENCHCLAW_STATE_DIR = path.join(tempHome, ".GreenchClaw");
+      process.env.GREENCHCLAW_CONFIG_PATH = configPath;
+      process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = await createEmptyBundledPluginsDir(tempHome);
+      process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS = "1";
       clearRuntimeConfigSnapshot();
       clearConfigCache();
 
@@ -482,38 +482,40 @@ module.exports = {
     async () => {
       const envSnapshot = captureEnv([
         "HOME",
-        "NEXISCLAW_STATE_DIR",
-        "NEXISCLAW_CONFIG_PATH",
-        "NEXISCLAW_GATEWAY_TOKEN",
-        "NEXISCLAW_SKIP_CHANNELS",
-        "NEXISCLAW_SKIP_GMAIL_WATCHER",
-        "NEXISCLAW_SKIP_CRON",
-        "NEXISCLAW_SKIP_CANVAS_HOST",
-        "NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER",
-        "NEXISCLAW_SKIP_PROVIDERS",
-        "NEXISCLAW_BUNDLED_PLUGINS_DIR",
-        "NEXISCLAW_TEST_MINIMAL_GATEWAY",
+        "GREENCHCLAW_STATE_DIR",
+        "GREENCHCLAW_CONFIG_PATH",
+        "GREENCHCLAW_GATEWAY_TOKEN",
+        "GREENCHCLAW_SKIP_CHANNELS",
+        "GREENCHCLAW_SKIP_GMAIL_WATCHER",
+        "GREENCHCLAW_SKIP_CRON",
+        "GREENCHCLAW_SKIP_CANVAS_HOST",
+        "GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER",
+        "GREENCHCLAW_SKIP_PROVIDERS",
+        "GREENCHCLAW_BUNDLED_PLUGINS_DIR",
+        "GREENCHCLAW_TEST_MINIMAL_GATEWAY",
         "DISCORD_BOT_TOKEN",
       ]);
 
-      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-minimal-gateway-home-"));
-      const configPath = path.join(tempHome, ".NexisClaw", "NexisClaw.json");
-      const bundledPluginsDir = path.join(tempHome, "NexisClaw-test-no-bundled-extensions");
+      const tempHome = await fs.mkdtemp(
+        path.join(os.tmpdir(), "GreenchClaw-minimal-gateway-home-"),
+      );
+      const configPath = path.join(tempHome, ".GreenchClaw", "GreenchClaw.json");
+      const bundledPluginsDir = path.join(tempHome, "GreenchClaw-test-no-bundled-extensions");
       process.env.HOME = tempHome;
-      process.env.NEXISCLAW_STATE_DIR = path.join(tempHome, ".NexisClaw");
-      process.env.NEXISCLAW_CONFIG_PATH = configPath;
-      process.env.NEXISCLAW_SKIP_CHANNELS = "1";
-      process.env.NEXISCLAW_SKIP_GMAIL_WATCHER = "1";
-      process.env.NEXISCLAW_SKIP_CRON = "1";
-      process.env.NEXISCLAW_SKIP_CANVAS_HOST = "1";
-      process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-      process.env.NEXISCLAW_SKIP_PROVIDERS = "1";
-      process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
-      process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY = "1";
+      process.env.GREENCHCLAW_STATE_DIR = path.join(tempHome, ".GreenchClaw");
+      process.env.GREENCHCLAW_CONFIG_PATH = configPath;
+      process.env.GREENCHCLAW_SKIP_CHANNELS = "1";
+      process.env.GREENCHCLAW_SKIP_GMAIL_WATCHER = "1";
+      process.env.GREENCHCLAW_SKIP_CRON = "1";
+      process.env.GREENCHCLAW_SKIP_CANVAS_HOST = "1";
+      process.env.GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+      process.env.GREENCHCLAW_SKIP_PROVIDERS = "1";
+      process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = bundledPluginsDir;
+      process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY = "1";
       process.env.DISCORD_BOT_TOKEN = "discord-test-token";
 
       const token = nextGatewayId("minimal-token");
-      process.env.NEXISCLAW_GATEWAY_TOKEN = token;
+      process.env.GREENCHCLAW_GATEWAY_TOKEN = token;
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.mkdir(bundledPluginsDir, { recursive: true });
       await fs.writeFile(

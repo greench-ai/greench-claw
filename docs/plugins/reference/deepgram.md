@@ -11,8 +11,8 @@ Adds media understanding provider support. Adds realtime transcription provider 
 
 ## Distribution
 
-- Package: `@NexisClaw/deepgram-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/deepgram-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

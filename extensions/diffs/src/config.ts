@@ -1,7 +1,7 @@
-import { mapPluginConfigIssues } from "NexisClaw/plugin-sdk/extension-shared";
-import { buildPluginConfigSchema } from "NexisClaw/plugin-sdk/plugin-entry";
+import { mapPluginConfigIssues } from "GreenchClaw/plugin-sdk/extension-shared";
+import { buildPluginConfigSchema } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { z } from "zod";
-import type { NexisClawPluginConfigSchema } from "../api.js";
+import type { GreenchClawPluginConfigSchema } from "../api.js";
 import {
   DIFF_IMAGE_QUALITY_PRESETS,
   DIFF_INDICATORS,
@@ -209,7 +209,7 @@ const diffsPluginConfigSchemaBase = buildPluginConfigSchema(DiffsPluginJsonSchem
   },
 });
 
-export const diffsPluginConfigSchema: NexisClawPluginConfigSchema = {
+export const diffsPluginConfigSchema: GreenchClawPluginConfigSchema = {
   ...diffsPluginConfigSchemaBase,
   jsonSchema: {
     ...diffsPluginConfigSchemaBase.jsonSchema,

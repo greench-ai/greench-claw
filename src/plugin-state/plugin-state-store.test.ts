@@ -2,9 +2,9 @@ import { mkdirSync, rmSync, statSync } from "node:fs";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { requireNodeSqlite } from "../infra/node-sqlite.js";
 import {
-  createNexisClawTestState,
-  type NexisClawTestState,
-} from "../test-utils/NexisClaw-test-state.js";
+  createGreenchClawTestState,
+  type GreenchClawTestState,
+} from "../test-utils/GreenchClaw-test-state.js";
 import {
   clearPluginStateStoreForTests,
   closePluginStateSqliteStore,
@@ -18,10 +18,10 @@ import {
 import { resolvePluginStateDir, resolvePluginStateSqlitePath } from "./plugin-state-store.paths.js";
 import { seedPluginStateEntriesForTests } from "./plugin-state-store.test-helpers.js";
 
-let testState: NexisClawTestState | undefined;
+let testState: GreenchClawTestState | undefined;
 
 beforeAll(async () => {
-  testState = await createNexisClawTestState({ label: "plugin-state-store" });
+  testState = await createGreenchClawTestState({ label: "plugin-state-store" });
   rmSync(resolvePluginStateDir(), { recursive: true, force: true });
 });
 

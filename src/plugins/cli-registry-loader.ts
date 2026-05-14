@@ -1,10 +1,10 @@
 import { collectUniqueCommandDescriptors } from "../cli/program/command-descriptor-utils.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 import { resolveManifestActivationPluginIds } from "./activation-planner.js";
 import { createPluginCliGatewayNodesRuntime } from "./cli-gateway-nodes-runtime.js";
 import type { PluginLoadOptions } from "./loader.js";
-import { loadNexisClawPluginCliRegistry, loadNexisClawPlugins } from "./loader.js";
+import { loadGreenchClawPluginCliRegistry, loadGreenchClawPlugins } from "./loader.js";
 import { createEmptyPluginRegistry } from "./registry-empty.js";
 import type { PluginRegistry } from "./registry.js";
 import {
@@ -14,15 +14,15 @@ import {
   type PluginRuntimeLoadContext,
 } from "./runtime/load-context.js";
 import type {
-  NexisClawPluginCliCommandDescriptor,
-  NexisClawPluginCliContext,
+  GreenchClawPluginCliCommandDescriptor,
+  GreenchClawPluginCliContext,
   PluginLogger,
 } from "./types.js";
 
 export type PluginCliLoaderOptions = Pick<PluginLoadOptions, "pluginSdkResolution">;
 
 export type PluginCliPublicLoadParams = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   loaderOptions?: PluginCliLoaderOptions;
   logger?: PluginLogger;
@@ -38,9 +38,9 @@ export type PluginCliRegistryLoadResult = PluginCliLoadContext & {
 export type PluginCliCommandGroupEntry = {
   pluginId: string;
   parentPath: readonly string[];
-  placeholders: readonly NexisClawPluginCliCommandDescriptor[];
+  placeholders: readonly GreenchClawPluginCliCommandDescriptor[];
   names: readonly string[];
-  register: (program: NexisClawPluginCliContext["program"]) => Promise<void>;
+  register: (program: GreenchClawPluginCliContext["program"]) => Promise<void>;
 };
 
 export function createPluginCliLogger(): PluginLogger {
@@ -129,7 +129,7 @@ async function resolvePrimaryCommandPluginIds(
 }
 
 export function resolvePluginCliLoadContext(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   logger: PluginLogger;
 }): PluginCliLoadContext {
@@ -147,7 +147,7 @@ export async function loadPluginCliMetadataRegistryWithContext(
 ): Promise<PluginCliRegistryLoadResult> {
   return {
     ...context,
-    registry: await loadNexisClawPluginCliRegistry(
+    registry: await loadGreenchClawPluginCliRegistry(
       buildPluginCliLoaderParams(context, params, loaderOptions),
     ),
   };
@@ -176,7 +176,7 @@ export async function loadPluginCliCommandRegistryWithContext(params: {
   }
   return {
     ...params.context,
-    registry: loadNexisClawPlugins(
+    registry: loadGreenchClawPlugins(
       buildPluginRuntimeLoadOptions(params.context, {
         ...params.loaderOptions,
         ...(onlyPluginIds && onlyPluginIds.length > 0 ? { onlyPluginIds } : {}),
@@ -192,7 +192,7 @@ export async function loadPluginCliCommandRegistryWithContext(params: {
 
 function buildPluginCliCommandGroupEntries(params: {
   registry: PluginRegistry;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   workspaceDir: string | undefined;
   logger: PluginLogger;
 }): PluginCliCommandGroupEntry[] {
@@ -215,7 +215,7 @@ function buildPluginCliCommandGroupEntries(params: {
 
 export async function loadPluginCliDescriptors(
   params: PluginCliPublicLoadParams,
-): Promise<NexisClawPluginCliCommandDescriptor[]> {
+): Promise<GreenchClawPluginCliCommandDescriptor[]> {
   try {
     const logger = resolvePluginCliLogger(params.logger);
     const context = resolvePluginCliLoadContext({
@@ -239,7 +239,7 @@ export async function loadPluginCliDescriptors(
 }
 
 export async function loadPluginCliRegistrationEntries(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   loaderOptions?: PluginCliLoaderOptions;
   logger?: PluginLogger;

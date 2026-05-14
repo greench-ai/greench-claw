@@ -11,8 +11,8 @@ Compacts exec and bash tool results with tokenjuice reducers.
 
 ## Distribution
 
-- Package: `@NexisClaw/tokenjuice`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/tokenjuice`
+- Install route: included in GreenchClaw
 
 ## Surface
 

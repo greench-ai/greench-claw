@@ -1,13 +1,13 @@
 import {
   attachChannelToResult,
   type ChannelOutboundAdapter,
-} from "NexisClaw/plugin-sdk/channel-send-result";
+} from "GreenchClaw/plugin-sdk/channel-send-result";
 import {
   resolvePayloadMediaUrls,
   sendPayloadMediaSequenceOrFallback,
   sendTextMediaPayload,
-} from "NexisClaw/plugin-sdk/reply-payload";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/reply-payload";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { normalizeDiscordApprovalPayload } from "./outbound-approval.js";
 import {
   resolveDiscordComponentSpec,

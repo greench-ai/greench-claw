@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type {
   DocumentExtractionRequest,
   DocumentExtractionResult,
@@ -7,13 +7,13 @@ import { resolvePluginDocumentExtractors } from "../plugins/document-extractors.
 import { createConfigScopedPromiseLoader } from "../plugins/plugin-cache-primitives.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 
-const documentExtractorLoader = createConfigScopedPromiseLoader((config?: NexisClawConfig) =>
+const documentExtractorLoader = createConfigScopedPromiseLoader((config?: GreenchClawConfig) =>
   resolvePluginDocumentExtractors(config ? { config } : undefined),
 );
 
 export async function extractDocumentContent(
   params: DocumentExtractionRequest & {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
   },
 ): Promise<(DocumentExtractionResult & { extractor: string }) | null> {
   const mimeType = normalizeLowercaseStringOrEmpty(params.mimeType);

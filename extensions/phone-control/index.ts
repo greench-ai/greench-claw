@@ -1,15 +1,15 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { replaceFileAtomic } from "NexisClaw/plugin-sdk/security-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { replaceFileAtomic } from "GreenchClaw/plugin-sdk/security-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   definePluginEntry,
-  type NexisClawPluginApi,
-  type NexisClawPluginService,
+  type GreenchClawPluginApi,
+  type GreenchClawPluginService,
 } from "./runtime-api.js";
 
 type ArmGroup = "camera" | "screen" | "writes" | "all";
@@ -166,18 +166,18 @@ async function writeArmState(statePath: string, state: ArmStateFile | null): Pro
   });
 }
 
-function normalizeDenyList(cfg: NexisClawPluginApi["config"]): string[] {
+function normalizeDenyList(cfg: GreenchClawPluginApi["config"]): string[] {
   return uniqSorted([...(cfg.gateway?.nodes?.denyCommands ?? [])]);
 }
 
-function normalizeAllowList(cfg: NexisClawPluginApi["config"]): string[] {
+function normalizeAllowList(cfg: GreenchClawPluginApi["config"]): string[] {
   return uniqSorted([...(cfg.gateway?.nodes?.allowCommands ?? [])]);
 }
 
 function patchConfigNodeLists(
-  cfg: NexisClawPluginApi["config"],
+  cfg: GreenchClawPluginApi["config"],
   next: { allowCommands: string[]; denyCommands: string[] },
-): NexisClawPluginApi["config"] {
+): GreenchClawPluginApi["config"] {
   return {
     ...cfg,
     gateway: {
@@ -192,7 +192,7 @@ function patchConfigNodeLists(
 }
 
 async function disarmNow(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   stateDir: string;
   statePath: string;
   reason: string;
@@ -202,7 +202,7 @@ async function disarmNow(params: {
   if (!state) {
     return { changed: false, restored: [], removed: [] };
   }
-  const cfg = api.runtime.config.current() as NexisClawConfig;
+  const cfg = api.runtime.config.current() as GreenchClawConfig;
   const allow = new Set(normalizeAllowList(cfg));
   const deny = new Set(normalizeDenyList(cfg));
   const removed: string[] = [];
@@ -311,10 +311,10 @@ export default definePluginEntry({
   id: "phone-control",
   name: "Phone Control",
   description: "Temporary allowlist control for phone automation commands",
-  register(api: NexisClawPluginApi) {
+  register(api: GreenchClawPluginApi) {
     let expiryInterval: ReturnType<typeof setInterval> | null = null;
 
-    const timerService: NexisClawPluginService = {
+    const timerService: GreenchClawPluginService = {
       id: "phone-control-expiry",
       start: async (ctx) => {
         const statePath = resolveStatePath(ctx.stateDir);
@@ -413,7 +413,7 @@ export default definePluginEntry({
           const expiresAtMs = Date.now() + durationMs;
 
           const commands = resolveCommandsForGroup(group);
-          const cfg = api.runtime.config.current() as NexisClawConfig;
+          const cfg = api.runtime.config.current() as GreenchClawConfig;
           const allowSet = new Set(normalizeAllowList(cfg));
           const denySet = new Set(normalizeDenyList(cfg));
 

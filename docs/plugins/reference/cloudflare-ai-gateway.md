@@ -1,5 +1,5 @@
 ---
-summary: "Adds Cloudflare AI Gateway model provider support to NexisClaw."
+summary: "Adds Cloudflare AI Gateway model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the cloudflare-ai-gateway plugin
 title: "Cloudflare AI Gateway plugin"
@@ -7,12 +7,12 @@ title: "Cloudflare AI Gateway plugin"
 
 # Cloudflare AI Gateway plugin
 
-Adds Cloudflare AI Gateway model provider support to NexisClaw.
+Adds Cloudflare AI Gateway model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/cloudflare-ai-gateway-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/cloudflare-ai-gateway-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

@@ -3,7 +3,7 @@
  *
  * The package ships TypeScript types in dist/index.d.ts but omits the
  * "types" field in package.json, so TypeScript cannot resolve them
- * automatically. This shim re-exports the types that NexisClaw uses.
+ * automatically. This shim re-exports the types that GreenchClaw uses.
  */
 declare module "global-agent" {
   /**

@@ -1,5 +1,5 @@
 ---
-summary: "Adds LiteLLM model provider support to NexisClaw."
+summary: "Adds LiteLLM model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the litellm plugin
 title: "LiteLLM plugin"
@@ -7,12 +7,12 @@ title: "LiteLLM plugin"
 
 # LiteLLM plugin
 
-Adds LiteLLM model provider support to NexisClaw.
+Adds LiteLLM model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/litellm-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/litellm-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

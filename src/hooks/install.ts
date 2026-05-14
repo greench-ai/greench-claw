@@ -101,14 +101,14 @@ export function resolveHookInstallDir(hookId: string, hooksDir?: string): string
   return targetDirResult.path;
 }
 
-async function ensureNexisClawHooks(manifest: HookPackageManifest) {
+async function ensureGreenchClawHooks(manifest: HookPackageManifest) {
   const hooks = manifest[MANIFEST_KEY]?.hooks;
   if (!Array.isArray(hooks)) {
-    throw new Error("package.json missing NexisClaw.hooks");
+    throw new Error("package.json missing GreenchClaw.hooks");
   }
   const list = hooks.map((e) => (typeof e === "string" ? e.trim() : "")).filter(Boolean);
   if (list.length === 0) {
-    throw new Error("package.json NexisClaw.hooks is empty");
+    throw new Error("package.json GreenchClaw.hooks is empty");
   }
   return list;
 }
@@ -228,7 +228,7 @@ async function installHookPackageFromDir(
 
   let hookEntries: string[];
   try {
-    hookEntries = await ensureNexisClawHooks(manifest);
+    hookEntries = await ensureGreenchClawHooks(manifest);
   } catch (err) {
     return { ok: false, error: String(err) };
   }
@@ -263,7 +263,7 @@ async function installHookPackageFromDir(
     if (!runtime.isPathInside(params.packageDir, hookDir)) {
       return {
         ok: false,
-        error: `NexisClaw.hooks entry escapes package directory: ${entry}`,
+        error: `GreenchClaw.hooks entry escapes package directory: ${entry}`,
       };
     }
     await validateHookDir(hookDir);
@@ -274,7 +274,7 @@ async function installHookPackageFromDir(
     ) {
       return {
         ok: false,
-        error: `NexisClaw.hooks entry resolves outside package directory: ${entry}`,
+        error: `GreenchClaw.hooks entry resolves outside package directory: ${entry}`,
       };
     }
     const hookName = await resolveHookNameFromDir(hookDir);
@@ -385,7 +385,7 @@ export async function installHooksFromArchive(
 
   return await runtime.withExtractedArchiveRoot({
     archivePath,
-    tempDirPrefix: "NexisClaw-hook-",
+    tempDirPrefix: "GreenchClaw-hook-",
     timeoutMs,
     logger,
     onExtracted: async (rootDir) =>
@@ -425,7 +425,7 @@ export async function installHooksFromNpmSpec(params: {
 
   logger.info?.(`Downloading ${spec.trim()}…`);
   return await runtime.installFromValidatedNpmSpecArchive({
-    tempDirPrefix: "NexisClaw-hook-pack-",
+    tempDirPrefix: "GreenchClaw-hook-pack-",
     spec,
     timeoutMs,
     expectedIntegrity: params.expectedIntegrity,

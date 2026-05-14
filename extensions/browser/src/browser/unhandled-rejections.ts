@@ -1,4 +1,4 @@
-import { registerUnhandledRejectionHandler } from "NexisClaw/plugin-sdk/runtime-env";
+import { registerUnhandledRejectionHandler } from "GreenchClaw/plugin-sdk/runtime-env";
 
 const PLAYWRIGHT_DIALOG_METHODS = new Set([
   "Page.handleJavaScriptDialog",

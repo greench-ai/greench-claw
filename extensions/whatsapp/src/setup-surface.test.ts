@@ -2,9 +2,9 @@ import {
   createPluginSetupWizardStatus,
   createQueuedWizardPrompter,
   runSetupWizardFinalize,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
-import { DEFAULT_ACCOUNT_ID, type NexisClawConfig } from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
+import { DEFAULT_ACCOUNT_ID, type GreenchClawConfig } from "GreenchClaw/plugin-sdk/setup";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { whatsappSetupWizard } from "./setup-surface.js";
 import {
@@ -26,7 +26,7 @@ import {
 } from "./setup-test-helpers.js";
 
 const hoisted = vi.hoisted(() => ({
-  detectWhatsAppLinked: vi.fn<(cfg: NexisClawConfig, accountId: string) => Promise<boolean>>(
+  detectWhatsAppLinked: vi.fn<(cfg: GreenchClawConfig, accountId: string) => Promise<boolean>>(
     async () => false,
   ),
   loginWeb: vi.fn(async () => {}),
@@ -35,9 +35,9 @@ const hoisted = vi.hoisted(() => ({
     async () => "not-linked",
   ),
   resolveWhatsAppAuthDir: vi.fn<
-    (params: { cfg: NexisClawConfig; accountId: string }) => { authDir: string }
+    (params: { cfg: GreenchClawConfig; accountId: string }) => { authDir: string }
   >(() => ({
-    authDir: "/tmp/NexisClaw-whatsapp-test",
+    authDir: "/tmp/GreenchClaw-whatsapp-test",
   })),
 }));
 
@@ -53,9 +53,9 @@ vi.mock("./setup-finalize.js", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/setup", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/setup")>(
-    "NexisClaw/plugin-sdk/setup",
+vi.mock("GreenchClaw/plugin-sdk/setup", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/setup")>(
+    "GreenchClaw/plugin-sdk/setup",
   );
   return {
     ...actual,
@@ -116,12 +116,12 @@ function createSeparatePhoneHarness(params: { selectValues: string[]; textValues
 }
 
 function expectFinalizeResult(result: Awaited<ReturnType<typeof runFinalizeWithHarness>>): {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 } {
   if (!result || typeof result !== "object" || !("cfg" in result) || !result.cfg) {
     throw new Error("Expected WhatsApp finalize result with cfg");
   }
-  return result as { cfg: NexisClawConfig };
+  return result as { cfg: GreenchClawConfig };
 }
 
 async function runSeparatePhoneFlow(params: { selectValues: string[]; textValues?: string[] }) {
@@ -148,7 +148,7 @@ describe("whatsapp setup wizard", () => {
     hoisted.readWebAuthState.mockReset();
     hoisted.readWebAuthState.mockResolvedValue("not-linked");
     hoisted.resolveWhatsAppAuthDir.mockReset();
-    hoisted.resolveWhatsAppAuthDir.mockReturnValue({ authDir: "/tmp/NexisClaw-whatsapp-test" });
+    hoisted.resolveWhatsAppAuthDir.mockReturnValue({ authDir: "/tmp/GreenchClaw-whatsapp-test" });
   });
 
   it("applies owner allowlist when forceAllowFrom is enabled", async () => {
@@ -183,7 +183,7 @@ describe("whatsapp setup wizard", () => {
       await runFinalizeWithHarness({
         harness,
         accountId: "work",
-        cfg: createWhatsAppWorkAccountConfig() as NexisClawConfig,
+        cfg: createWhatsAppWorkAccountConfig() as GreenchClawConfig,
       }),
     );
 
@@ -203,7 +203,7 @@ describe("whatsapp setup wizard", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       accountOverrides: {
         whatsapp: "work",
       },
@@ -236,7 +236,7 @@ describe("whatsapp setup wizard", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       accountOverrides: {},
     });
 
@@ -261,7 +261,7 @@ describe("whatsapp setup wizard", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       accountOverrides: {
         whatsapp: "work",
       },
@@ -281,7 +281,7 @@ describe("whatsapp setup wizard", () => {
       await runFinalizeWithHarness({
         harness,
         accountId: "",
-        cfg: createWhatsAppWorkAccountConfig({ defaultAccount: "work" }) as NexisClawConfig,
+        cfg: createWhatsAppWorkAccountConfig({ defaultAccount: "work" }) as GreenchClawConfig,
       }),
     );
 
@@ -317,7 +317,7 @@ describe("whatsapp setup wizard", () => {
     const result = expectFinalizeResult(
       await runFinalizeWithHarness({
         harness,
-        cfg: createWhatsAppRootAllowFromConfig() as NexisClawConfig,
+        cfg: createWhatsAppRootAllowFromConfig() as GreenchClawConfig,
       }),
     );
 

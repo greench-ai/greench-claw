@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NEXISCLAW_CLI_ENV_VALUE } from "../infra/NexisClaw-exec-env.js";
+import { GREENCHCLAW_CLI_ENV_VALUE } from "../infra/GreenchClaw-exec-env.js";
 import { buildSandboxCreateArgs } from "./sandbox/docker.js";
 import type { SandboxDockerConfig } from "./sandbox/types.js";
 
@@ -9,8 +9,8 @@ describe("buildSandboxCreateArgs", () => {
     binds?: string[],
   ): SandboxDockerConfig {
     return {
-      image: "NexisClaw-sandbox:bookworm-slim",
-      containerPrefix: "NexisClaw-sbx-",
+      image: "GreenchClaw-sandbox:bookworm-slim",
+      containerPrefix: "GreenchClaw-sbx-",
       workdir: "/workspace",
       readOnlyRoot: false,
       tmpfs: [],
@@ -60,8 +60,8 @@ describe("buildSandboxCreateArgs", () => {
 
   it("includes hardening and resource flags", () => {
     const cfg: SandboxDockerConfig = {
-      image: "NexisClaw-sandbox:bookworm-slim",
-      containerPrefix: "NexisClaw-sbx-",
+      image: "GreenchClaw-sandbox:bookworm-slim",
+      containerPrefix: "GreenchClaw-sbx-",
       workdir: "/workspace",
       readOnlyRoot: true,
       tmpfs: ["/tmp"],
@@ -79,26 +79,26 @@ describe("buildSandboxCreateArgs", () => {
         core: "0",
       },
       seccompProfile: "/tmp/seccomp.json",
-      apparmorProfile: "NexisClaw-sandbox",
+      apparmorProfile: "GreenchClaw-sandbox",
       dns: ["1.1.1.1"],
       extraHosts: ["internal.service:10.0.0.5"],
     };
 
     const args = buildSandboxCreateArgs({
-      name: "NexisClaw-sbx-test",
+      name: "GreenchClaw-sbx-test",
       cfg,
       scopeKey: "main",
       createdAtMs: 1700000000000,
-      labels: { "NexisClaw.sandboxBrowser": "1" },
+      labels: { "GreenchClaw.sandboxBrowser": "1" },
     });
 
     expect(args[0]).toBe("create");
-    expectFlagValues(args, "--name", ["NexisClaw-sbx-test"]);
+    expectFlagValues(args, "--name", ["GreenchClaw-sbx-test"]);
     expectFlagValues(args, "--label", [
-      "NexisClaw.sandbox=1",
-      "NexisClaw.sessionKey=main",
-      "NexisClaw.createdAtMs=1700000000000",
-      "NexisClaw.sandboxBrowser=1",
+      "GreenchClaw.sandbox=1",
+      "GreenchClaw.sessionKey=main",
+      "GreenchClaw.createdAtMs=1700000000000",
+      "GreenchClaw.sandboxBrowser=1",
     ]);
     expect(args).toContain("--read-only");
     expectFlagValues(args, "--tmpfs", ["/tmp"]);
@@ -108,7 +108,7 @@ describe("buildSandboxCreateArgs", () => {
     expectFlagValues(args, "--security-opt", [
       "no-new-privileges",
       "seccomp=/tmp/seccomp.json",
-      "apparmor=NexisClaw-sandbox",
+      "apparmor=GreenchClaw-sandbox",
     ]);
     expectFlagValues(args, "--dns", ["1.1.1.1"]);
     expectFlagValues(args, "--add-host", ["internal.service:10.0.0.5"]);
@@ -116,11 +116,14 @@ describe("buildSandboxCreateArgs", () => {
     expectFlagValues(args, "--memory", ["512m"]);
     expectFlagValues(args, "--memory-swap", ["1024"]);
     expectFlagValues(args, "--cpus", ["1.5"]);
-    expectFlagValues(args, "--env", ["LANG=C.UTF-8", `NEXISCLAW_CLI=${NEXISCLAW_CLI_ENV_VALUE}`]);
+    expectFlagValues(args, "--env", [
+      "LANG=C.UTF-8",
+      `GREENCHCLAW_CLI=${GREENCHCLAW_CLI_ENV_VALUE}`,
+    ]);
     expectFlagValues(args, "--ulimit", ["nofile=1024:2048", "nproc=128", "core=0"]);
   });
 
-  it("preserves the NexisClaw exec marker when strict env sanitization is enabled", () => {
+  it("preserves the GreenchClaw exec marker when strict env sanitization is enabled", () => {
     const cfg = createSandboxConfig({
       env: {
         NODE_ENV: "test",
@@ -128,7 +131,7 @@ describe("buildSandboxCreateArgs", () => {
     });
 
     const args = buildSandboxCreateArgs({
-      name: "NexisClaw-sbx-marker",
+      name: "GreenchClaw-sbx-marker",
       cfg,
       scopeKey: "main",
       createdAtMs: 1700000000000,
@@ -137,7 +140,10 @@ describe("buildSandboxCreateArgs", () => {
       },
     });
 
-    expectFlagValues(args, "--env", ["NODE_ENV=test", `NEXISCLAW_CLI=${NEXISCLAW_CLI_ENV_VALUE}`]);
+    expectFlagValues(args, "--env", [
+      "NODE_ENV=test",
+      `GREENCHCLAW_CLI=${GREENCHCLAW_CLI_ENV_VALUE}`,
+    ]);
   });
 
   it("emits Docker GPU passthrough as a separate argument", () => {
@@ -146,7 +152,7 @@ describe("buildSandboxCreateArgs", () => {
     });
 
     const args = buildSandboxCreateArgs({
-      name: "NexisClaw-sbx-gpu",
+      name: "GreenchClaw-sbx-gpu",
       cfg,
       scopeKey: "main",
       createdAtMs: 1700000000000,
@@ -157,8 +163,8 @@ describe("buildSandboxCreateArgs", () => {
 
   it("emits -v flags for safe custom binds", () => {
     const cfg: SandboxDockerConfig = {
-      image: "NexisClaw-sandbox:bookworm-slim",
-      containerPrefix: "NexisClaw-sbx-",
+      image: "GreenchClaw-sandbox:bookworm-slim",
+      containerPrefix: "GreenchClaw-sbx-",
       workdir: "/workspace",
       readOnlyRoot: false,
       tmpfs: [],
@@ -168,7 +174,7 @@ describe("buildSandboxCreateArgs", () => {
     };
 
     const args = buildSandboxCreateArgs({
-      name: "NexisClaw-sbx-binds",
+      name: "GreenchClaw-sbx-binds",
       cfg,
       scopeKey: "main",
       createdAtMs: 1700000000000,
@@ -191,37 +197,37 @@ describe("buildSandboxCreateArgs", () => {
   it.each([
     {
       name: "dangerous Docker socket bind mounts",
-      containerName: "NexisClaw-sbx-dangerous",
+      containerName: "GreenchClaw-sbx-dangerous",
       cfg: createSandboxConfig({}, ["/var/run/docker.sock:/var/run/docker.sock"]),
       expected: /blocked path/,
     },
     {
       name: "dangerous parent bind mounts",
-      containerName: "NexisClaw-sbx-dangerous-parent",
+      containerName: "GreenchClaw-sbx-dangerous-parent",
       cfg: createSandboxConfig({}, ["/run:/run"]),
       expected: /blocked path/,
     },
     {
       name: "network host mode",
-      containerName: "NexisClaw-sbx-host",
+      containerName: "GreenchClaw-sbx-host",
       cfg: createSandboxConfig({ network: "host" }),
       expected: /network mode "host" is blocked/,
     },
     {
       name: "network container namespace join",
-      containerName: "NexisClaw-sbx-container-network",
+      containerName: "GreenchClaw-sbx-container-network",
       cfg: createSandboxConfig({ network: "container:peer" }),
       expected: /network mode "container:peer" is blocked by default/,
     },
     {
       name: "seccomp unconfined",
-      containerName: "NexisClaw-sbx-seccomp",
+      containerName: "GreenchClaw-sbx-seccomp",
       cfg: createSandboxConfig({ seccompProfile: "unconfined" }),
       expected: /seccomp profile "unconfined" is blocked/,
     },
     {
       name: "apparmor unconfined",
-      containerName: "NexisClaw-sbx-apparmor",
+      containerName: "GreenchClaw-sbx-apparmor",
       cfg: createSandboxConfig({ apparmorProfile: "unconfined" }),
       expected: /apparmor profile "unconfined" is blocked/,
     },
@@ -231,8 +237,8 @@ describe("buildSandboxCreateArgs", () => {
 
   it("omits -v flags when binds is empty or undefined", () => {
     const cfg: SandboxDockerConfig = {
-      image: "NexisClaw-sandbox:bookworm-slim",
-      containerPrefix: "NexisClaw-sbx-",
+      image: "GreenchClaw-sandbox:bookworm-slim",
+      containerPrefix: "GreenchClaw-sbx-",
       workdir: "/workspace",
       readOnlyRoot: false,
       tmpfs: [],
@@ -242,7 +248,7 @@ describe("buildSandboxCreateArgs", () => {
     };
 
     const args = buildSandboxCreateArgs({
-      name: "NexisClaw-sbx-no-binds",
+      name: "GreenchClaw-sbx-no-binds",
       cfg,
       scopeKey: "main",
       createdAtMs: 1700000000000,
@@ -265,7 +271,7 @@ describe("buildSandboxCreateArgs", () => {
     const cfg = createSandboxConfig({}, ["/opt/external:/data:rw"]);
     expect(() =>
       buildSandboxCreateArgs({
-        name: "NexisClaw-sbx-outside-roots",
+        name: "GreenchClaw-sbx-outside-roots",
         cfg,
         scopeKey: "main",
         createdAtMs: 1700000000000,
@@ -277,7 +283,7 @@ describe("buildSandboxCreateArgs", () => {
   it("allows bind sources outside runtime allowlist with explicit override", () => {
     const cfg = createSandboxConfig({}, ["/opt/external:/data:rw"]);
     const args = buildSandboxCreateArgs({
-      name: "NexisClaw-sbx-outside-roots-override",
+      name: "GreenchClaw-sbx-outside-roots-override",
       cfg,
       scopeKey: "main",
       createdAtMs: 1700000000000,
@@ -289,13 +295,13 @@ describe("buildSandboxCreateArgs", () => {
 
   it("blocks reserved /workspace target bind mounts by default", () => {
     const cfg = createSandboxConfig({}, ["/tmp/override:/workspace:rw"]);
-    expectBuildToThrow("NexisClaw-sbx-reserved-target", cfg, /reserved container path/);
+    expectBuildToThrow("GreenchClaw-sbx-reserved-target", cfg, /reserved container path/);
   });
 
   it("allows reserved /workspace target bind mounts with explicit dangerous override", () => {
     const cfg = createSandboxConfig({}, ["/tmp/override:/workspace:rw"]);
     const args = buildSandboxCreateArgs({
-      name: "NexisClaw-sbx-reserved-target-override",
+      name: "GreenchClaw-sbx-reserved-target-override",
       cfg,
       scopeKey: "main",
       createdAtMs: 1700000000000,
@@ -310,7 +316,7 @@ describe("buildSandboxCreateArgs", () => {
       dangerouslyAllowContainerNamespaceJoin: true,
     });
     const args = buildSandboxCreateArgs({
-      name: "NexisClaw-sbx-container-network-override",
+      name: "GreenchClaw-sbx-container-network-override",
       cfg,
       scopeKey: "main",
       createdAtMs: 1700000000000,

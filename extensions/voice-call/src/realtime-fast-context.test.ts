@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { VoiceCallRealtimeFastContextConfig } from "./config.js";
 
@@ -6,13 +6,13 @@ const mocks = vi.hoisted(() => ({
   resolveRealtimeVoiceFastContextConsult: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/realtime-voice", () => ({
+vi.mock("GreenchClaw/plugin-sdk/realtime-voice", () => ({
   resolveRealtimeVoiceFastContextConsult: mocks.resolveRealtimeVoiceFastContextConsult,
 }));
 
 import { resolveRealtimeFastContextConsult } from "./realtime-fast-context.js";
 
-const cfg = {} as NexisClawConfig;
+const cfg = {} as GreenchClawConfig;
 
 function createFastContextConfig(
   overrides: Partial<VoiceCallRealtimeFastContextConfig> = {},
@@ -67,7 +67,7 @@ describe("resolveRealtimeFastContextConsult", () => {
       logger,
       labels: {
         audienceLabel: "caller",
-        contextName: "NexisClaw memory or session context",
+        contextName: "GreenchClaw memory or session context",
       },
     });
   });

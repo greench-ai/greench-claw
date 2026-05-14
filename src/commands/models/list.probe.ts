@@ -28,7 +28,7 @@ import {
   resolveSessionTranscriptPath,
   resolveSessionTranscriptsDirForAgent,
 } from "../../config/sessions/paths.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { coerceSecretRef, normalizeSecretInputString } from "../../config/types.secrets.js";
 import { type SecretRefResolveCache, resolveSecretRefString } from "../../secrets/resolve.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
@@ -235,7 +235,7 @@ function formatMissingCredentialProbeError(reasonCode: AuthProbeReasonCode): str
   return `${legacyLine}\n↳ Auth reason [ineligible_profile]: profile is incompatible with provider config.`;
 }
 
-function resolveProbeSecretRef(profile: AuthProfileCredential, cfg: NexisClawConfig) {
+function resolveProbeSecretRef(profile: AuthProfileCredential, cfg: GreenchClawConfig) {
   const defaults = cfg.secrets?.defaults;
   if (profile.type === "api_key") {
     if (normalizeSecretInputString(profile.key) !== undefined) {
@@ -258,7 +258,7 @@ function formatUnresolvedRefProbeError(refLabel: string): string {
 }
 
 async function maybeResolveUnresolvedRefIssue(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   profile?: AuthProfileCredential;
   cache: SecretRefResolveCache;
 }): Promise<{ reasonCode: "unresolved_ref"; error: string } | null> {
@@ -285,7 +285,7 @@ async function maybeResolveUnresolvedRefIssue(params: {
 }
 
 export async function buildProbeTargets(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir?: string;
   workspaceDir?: string;
   providers: string[];
@@ -466,7 +466,7 @@ export async function buildProbeTargets(params: {
 }
 
 async function probeTarget(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   agentDir: string;
   workspaceDir: string;
@@ -542,7 +542,7 @@ async function probeTarget(params: {
 }
 
 async function runTargetsWithConcurrency(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
   agentDir?: string;
   workspaceDir?: string;
@@ -604,7 +604,7 @@ async function runTargetsWithConcurrency(params: {
 }
 
 export async function runAuthProbes(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
   agentDir?: string;
   workspaceDir?: string;

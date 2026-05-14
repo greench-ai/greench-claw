@@ -1,15 +1,15 @@
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
 import {
   getSessionBindingService,
   type SessionBindingRecord,
-} from "NexisClaw/plugin-sdk/conversation-binding-runtime";
+} from "GreenchClaw/plugin-sdk/conversation-binding-runtime";
 import {
   formatThreadBindingDisabledError,
   formatThreadBindingSpawnDisabledError,
   resolveThreadBindingSpawnPolicy,
-} from "NexisClaw/plugin-sdk/conversation-runtime";
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/core";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/conversation-runtime";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/core";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveMatrixTargetIdentity } from "./target-ids.js";
 import {
   getMatrixThreadBindingManager,
@@ -103,7 +103,7 @@ function resolveMatrixBindingDeliveryOrigin(
 }
 
 export async function handleMatrixSubagentSpawning(
-  api: NexisClawPluginApi,
+  api: GreenchClawPluginApi,
   event: MatrixSubagentSpawningEvent,
 ): Promise<SpawningResult | undefined> {
   if (!event.threadRequested) {

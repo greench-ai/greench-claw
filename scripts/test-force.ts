@@ -26,13 +26,13 @@ function killGatewayListeners(port: number): PortProcess[] {
 
 function runTests() {
   const isolatedLock =
-    process.env.NEXISCLAW_GATEWAY_LOCK ??
-    path.join(os.tmpdir(), `NexisClaw-gateway.lock.test.${Date.now()}`);
+    process.env.GREENCHCLAW_GATEWAY_LOCK ??
+    path.join(os.tmpdir(), `GreenchClaw-gateway.lock.test.${Date.now()}`);
   const result = spawnSync(process.execPath, ["scripts/test-projects.mjs"], {
     stdio: "inherit",
     env: {
       ...process.env,
-      NEXISCLAW_GATEWAY_LOCK: isolatedLock,
+      GREENCHCLAW_GATEWAY_LOCK: isolatedLock,
     },
   });
   if (result.error) {

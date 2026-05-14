@@ -1,7 +1,7 @@
 import {
   startLazyPluginServiceModule,
   type LazyPluginServiceHandle,
-  type NexisClawPluginService,
+  type GreenchClawPluginService,
 } from "./sdk-node-runtime.js";
 
 type BrowserControlHandle = LazyPluginServiceHandle | null;
@@ -15,7 +15,7 @@ function validateBrowserControlOverrideSpecifier(specifier: string): string {
   return trimmed;
 }
 
-export function createBrowserPluginService(): NexisClawPluginService {
+export function createBrowserPluginService(): GreenchClawPluginService {
   let handle: BrowserControlHandle = null;
 
   return {
@@ -25,8 +25,8 @@ export function createBrowserPluginService(): NexisClawPluginService {
         return;
       }
       handle = await startLazyPluginServiceModule({
-        skipEnvVar: "NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER",
-        overrideEnvVar: "NEXISCLAW_BROWSER_CONTROL_MODULE",
+        skipEnvVar: "GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER",
+        overrideEnvVar: "GREENCHCLAW_BROWSER_CONTROL_MODULE",
         validateOverrideSpecifier: validateBrowserControlOverrideSpecifier,
         // Keep the default module import static so compiled builds still bundle it.
         loadDefaultModule: async () => await import("./server.js"),

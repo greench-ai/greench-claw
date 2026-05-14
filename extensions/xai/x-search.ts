@@ -6,8 +6,8 @@ import {
   resolveCacheTtlMs,
   resolveTimeoutSeconds,
   writeCache,
-} from "NexisClaw/plugin-sdk/provider-web-search";
-import { getRuntimeConfigSnapshot } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
+} from "GreenchClaw/plugin-sdk/provider-web-search";
+import { getRuntimeConfigSnapshot } from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
 import {
   isXaiToolEnabled,
   resolveXaiToolApiKeyWithAuth,
@@ -35,7 +35,7 @@ class PluginToolInputError extends Error {
   }
 }
 
-const X_SEARCH_CACHE_KEY = Symbol.for("NexisClaw.xai.x-search.cache");
+const X_SEARCH_CACHE_KEY = Symbol.for("GreenchClaw.xai.x-search.cache");
 
 type XSearchCacheEntry = {
   expiresAt: number;

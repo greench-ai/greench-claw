@@ -17,12 +17,12 @@ const qaTempPathState = vi.hoisted(() => ({
   preferredTmpDir: process.env.TMPDIR || "/tmp",
 }));
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard: fetchWithSsrFGuardMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/temp-path", () => ({
-  resolvePreferredNexisClawTmpDir: () => qaTempPathState.preferredTmpDir,
+vi.mock("GreenchClaw/plugin-sdk/temp-path", () => ({
+  resolvePreferredGreenchClawTmpDir: () => qaTempPathState.preferredTmpDir,
 }));
 
 vi.mock("./node-exec.js", () => ({
@@ -42,14 +42,14 @@ afterEach(async () => {
 
 function createParams(baseEnv?: NodeJS.ProcessEnv) {
   return {
-    configPath: "/tmp/NexisClaw-qa/NexisClaw.json",
+    configPath: "/tmp/GreenchClaw-qa/GreenchClaw.json",
     gatewayToken: "qa-token",
-    homeDir: "/tmp/NexisClaw-qa/home",
-    stateDir: "/tmp/NexisClaw-qa/state",
-    xdgConfigHome: "/tmp/NexisClaw-qa/xdg-config",
-    xdgDataHome: "/tmp/NexisClaw-qa/xdg-data",
-    xdgCacheHome: "/tmp/NexisClaw-qa/xdg-cache",
-    bundledPluginsDir: "/tmp/NexisClaw-qa/bundled-plugins",
+    homeDir: "/tmp/GreenchClaw-qa/home",
+    stateDir: "/tmp/GreenchClaw-qa/state",
+    xdgConfigHome: "/tmp/GreenchClaw-qa/xdg-config",
+    xdgDataHome: "/tmp/GreenchClaw-qa/xdg-data",
+    xdgCacheHome: "/tmp/GreenchClaw-qa/xdg-cache",
+    bundledPluginsDir: "/tmp/GreenchClaw-qa/bundled-plugins",
     compatibilityHostVersion: "2026.4.8",
     baseEnv,
   };
@@ -137,21 +137,21 @@ describe("buildQaRuntimeEnv", () => {
       providerMode: "mock-openai",
     });
 
-    expect(env.NEXISCLAW_TEST_FAST).toBe("1");
-    expect(env.NEXISCLAW_QA_PARENT_PID).toBe(String(process.pid));
-    expect(env.NEXISCLAW_QA_ALLOW_LOCAL_IMAGE_PROVIDER).toBe("1");
-    expect(env.NEXISCLAW_ALLOW_SLOW_REPLY_TESTS).toBe("1");
-    expect(env.NEXISCLAW_SKIP_STARTUP_MODEL_PREWARM).toBe("1");
-    expect(env.NEXISCLAW_BUNDLED_PLUGINS_DIR).toBe("/tmp/NexisClaw-qa/bundled-plugins");
-    expect(env.NEXISCLAW_COMPATIBILITY_HOST_VERSION).toBe("2026.4.8");
+    expect(env.GREENCHCLAW_TEST_FAST).toBe("1");
+    expect(env.GREENCHCLAW_QA_PARENT_PID).toBe(String(process.pid));
+    expect(env.GREENCHCLAW_QA_ALLOW_LOCAL_IMAGE_PROVIDER).toBe("1");
+    expect(env.GREENCHCLAW_ALLOW_SLOW_REPLY_TESTS).toBe("1");
+    expect(env.GREENCHCLAW_SKIP_STARTUP_MODEL_PREWARM).toBe("1");
+    expect(env.GREENCHCLAW_BUNDLED_PLUGINS_DIR).toBe("/tmp/GreenchClaw-qa/bundled-plugins");
+    expect(env.GREENCHCLAW_COMPATIBILITY_HOST_VERSION).toBe("2026.4.8");
   });
 
   it("maps live frontier key aliases into provider env vars", () => {
     const env = buildQaRuntimeEnv({
       ...createParams({
-        NEXISCLAW_LIVE_OPENAI_KEY: "openai-live",
-        NEXISCLAW_LIVE_ANTHROPIC_KEY: "anthropic-live",
-        NEXISCLAW_LIVE_GEMINI_KEY: "gemini-live",
+        GREENCHCLAW_LIVE_OPENAI_KEY: "openai-live",
+        GREENCHCLAW_LIVE_ANTHROPIC_KEY: "anthropic-live",
+        GREENCHCLAW_LIVE_GEMINI_KEY: "gemini-live",
       }),
       providerMode: "live-frontier",
     });
@@ -170,7 +170,7 @@ describe("buildQaRuntimeEnv", () => {
     const env = buildQaRuntimeEnv({
       ...createParams({
         OPENAI_API_KEY: "openai-explicit",
-        NEXISCLAW_LIVE_OPENAI_KEY: "openai-live",
+        GREENCHCLAW_LIVE_OPENAI_KEY: "openai-live",
       }),
       providerMode: "live-frontier",
     });
@@ -178,7 +178,7 @@ describe("buildQaRuntimeEnv", () => {
     expect(env.OPENAI_API_KEY).toBe("openai-explicit");
   });
 
-  it("preserves Codex CLI auth home for live frontier runs while sandboxing NexisClaw home", async () => {
+  it("preserves Codex CLI auth home for live frontier runs while sandboxing GreenchClaw home", async () => {
     const hostHome = await mkdtemp(path.join(os.tmpdir(), "qa-host-home-"));
     cleanups.push(async () => {
       await rm(hostHome, { recursive: true, force: true });
@@ -193,12 +193,12 @@ describe("buildQaRuntimeEnv", () => {
       providerMode: "live-frontier",
     });
 
-    expect(env.HOME).toBe("/tmp/NexisClaw-qa/home");
-    expect(env.NEXISCLAW_HOME).toBe("/tmp/NexisClaw-qa/home");
+    expect(env.HOME).toBe("/tmp/GreenchClaw-qa/home");
+    expect(env.GREENCHCLAW_HOME).toBe("/tmp/GreenchClaw-qa/home");
     expect(env.CODEX_HOME).toBe(codexHome);
   });
 
-  it("forwards host HOME for live Claude CLI runs while keeping NexisClaw home sandboxed", async () => {
+  it("forwards host HOME for live Claude CLI runs while keeping GreenchClaw home sandboxed", async () => {
     const hostHome = await mkdtemp(path.join(os.tmpdir(), "qa-host-home-"));
     cleanups.push(async () => {
       await rm(hostHome, { recursive: true, force: true });
@@ -213,11 +213,11 @@ describe("buildQaRuntimeEnv", () => {
     });
 
     expect(env.HOME).toBe(hostHome);
-    expect(env.NEXISCLAW_HOME).toBe("/tmp/NexisClaw-qa/home");
-    expect(env.NEXISCLAW_STATE_DIR).toBe("/tmp/NexisClaw-qa/state");
+    expect(env.GREENCHCLAW_HOME).toBe("/tmp/GreenchClaw-qa/home");
+    expect(env.GREENCHCLAW_STATE_DIR).toBe("/tmp/GreenchClaw-qa/state");
   });
 
-  it("can forward host HOME for browser-backed QA runs while keeping NexisClaw home sandboxed", async () => {
+  it("can forward host HOME for browser-backed QA runs while keeping GreenchClaw home sandboxed", async () => {
     const hostHome = await mkdtemp(path.join(os.tmpdir(), "qa-host-home-"));
     cleanups.push(async () => {
       await rm(hostHome, { recursive: true, force: true });
@@ -232,8 +232,8 @@ describe("buildQaRuntimeEnv", () => {
     });
 
     expect(env.HOME).toBe(hostHome);
-    expect(env.NEXISCLAW_HOME).toBe("/tmp/NexisClaw-qa/home");
-    expect(env.NEXISCLAW_STATE_DIR).toBe("/tmp/NexisClaw-qa/state");
+    expect(env.GREENCHCLAW_HOME).toBe("/tmp/GreenchClaw-qa/home");
+    expect(env.GREENCHCLAW_STATE_DIR).toBe("/tmp/GreenchClaw-qa/state");
   });
 
   it("preserves the live Anthropic key for live Claude CLI runs without writing it into config", async () => {
@@ -245,8 +245,8 @@ describe("buildQaRuntimeEnv", () => {
     const env = buildQaRuntimeEnv({
       ...createParams({
         HOME: hostHome,
-        NEXISCLAW_LIVE_ANTHROPIC_KEY: "anthropic-live",
-        NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV: '["SAFE_KEEP"]',
+        GREENCHCLAW_LIVE_ANTHROPIC_KEY: "anthropic-live",
+        GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV: '["SAFE_KEEP"]',
       }),
       providerMode: "live-frontier",
       forwardHostHomeForClaudeCli: true,
@@ -254,8 +254,8 @@ describe("buildQaRuntimeEnv", () => {
     });
 
     expect(env.ANTHROPIC_API_KEY).toBe("anthropic-live");
-    expect(env.NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV).toBe('["SAFE_KEEP","ANTHROPIC_API_KEY"]');
-    expect(env.NEXISCLAW_LIVE_CLI_BACKEND_AUTH_MODE).toBe("api-key");
+    expect(env.GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV).toBe('["SAFE_KEEP","ANTHROPIC_API_KEY"]');
+    expect(env.GREENCHCLAW_LIVE_CLI_BACKEND_AUTH_MODE).toBe("api-key");
   });
 
   it("removes preserved Anthropic keys for live Claude CLI subscription runs", async () => {
@@ -268,7 +268,7 @@ describe("buildQaRuntimeEnv", () => {
       ...createParams({
         HOME: hostHome,
         ANTHROPIC_API_KEY: "anthropic-live",
-        NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV: '["SAFE_KEEP","ANTHROPIC_API_KEY"]',
+        GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV: '["SAFE_KEEP","ANTHROPIC_API_KEY"]',
       }),
       providerMode: "live-frontier",
       forwardHostHomeForClaudeCli: true,
@@ -276,34 +276,34 @@ describe("buildQaRuntimeEnv", () => {
     });
 
     expect(env.ANTHROPIC_API_KEY).toBe("anthropic-live");
-    expect(env.NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV).toBe('["SAFE_KEEP"]');
-    expect(env.NEXISCLAW_LIVE_CLI_BACKEND_AUTH_MODE).toBe("subscription");
+    expect(env.GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV).toBe('["SAFE_KEEP"]');
+    expect(env.GREENCHCLAW_LIVE_CLI_BACKEND_AUTH_MODE).toBe("subscription");
   });
 
   it("does not pass QA setup-token values to the gateway child env", () => {
     const env = buildQaRuntimeEnv({
       ...createParams({
-        NEXISCLAW_LIVE_SETUP_TOKEN_VALUE: `sk-ant-oat01-${"a".repeat(80)}`,
-        NEXISCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN: `sk-ant-oat01-${"b".repeat(80)}`,
+        GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE: `sk-ant-oat01-${"a".repeat(80)}`,
+        GREENCHCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN: `sk-ant-oat01-${"b".repeat(80)}`,
       }),
       providerMode: "live-frontier",
     });
 
-    expect(env.NEXISCLAW_LIVE_SETUP_TOKEN_VALUE).toBeUndefined();
-    expect(env.NEXISCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN).toBeUndefined();
+    expect(env.GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE).toBeUndefined();
+    expect(env.GREENCHCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN).toBeUndefined();
   });
 
   it("does not pass Convex credential broker secrets to the gateway child env", () => {
     const env = buildQaRuntimeEnv({
       ...createParams({
-        NEXISCLAW_QA_CONVEX_SECRET_CI: "convex-ci-secret",
-        NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER: "convex-maintainer-secret",
+        GREENCHCLAW_QA_CONVEX_SECRET_CI: "convex-ci-secret",
+        GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER: "convex-maintainer-secret",
       }),
       providerMode: "live-frontier",
     });
 
-    expect(env.NEXISCLAW_QA_CONVEX_SECRET_CI).toBeUndefined();
-    expect(env.NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER).toBeUndefined();
+    expect(env.GREENCHCLAW_QA_CONVEX_SECRET_CI).toBeUndefined();
+    expect(env.GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER).toBeUndefined();
   });
 
   it("requires an Anthropic key for live Claude CLI API-key mode", async () => {
@@ -349,10 +349,10 @@ describe("buildQaRuntimeEnv", () => {
           OPENAI_API_KEY: "openai-live",
           OPENAI_API_KEYS: "openai-a,openai-b",
           CODEX_HOME: "/host/.codex",
-          NEXISCLAW_LIVE_ANTHROPIC_KEY: "anthropic-live",
-          NEXISCLAW_LIVE_ANTHROPIC_KEYS: "anthropic-a,anthropic-b",
-          NEXISCLAW_LIVE_GEMINI_KEY: "gemini-live",
-          NEXISCLAW_LIVE_OPENAI_KEY: "openai-live",
+          GREENCHCLAW_LIVE_ANTHROPIC_KEY: "anthropic-live",
+          GREENCHCLAW_LIVE_ANTHROPIC_KEYS: "anthropic-a,anthropic-b",
+          GREENCHCLAW_LIVE_GEMINI_KEY: "gemini-live",
+          GREENCHCLAW_LIVE_OPENAI_KEY: "openai-live",
         }),
         providerMode,
       });
@@ -365,10 +365,10 @@ describe("buildQaRuntimeEnv", () => {
       expect(env.GEMINI_API_KEY).toBeUndefined();
       expect(env.GEMINI_API_KEYS).toBeUndefined();
       expect(env.GOOGLE_API_KEY).toBeUndefined();
-      expect(env.NEXISCLAW_LIVE_OPENAI_KEY).toBeUndefined();
-      expect(env.NEXISCLAW_LIVE_ANTHROPIC_KEY).toBeUndefined();
-      expect(env.NEXISCLAW_LIVE_ANTHROPIC_KEYS).toBeUndefined();
-      expect(env.NEXISCLAW_LIVE_GEMINI_KEY).toBeUndefined();
+      expect(env.GREENCHCLAW_LIVE_OPENAI_KEY).toBeUndefined();
+      expect(env.GREENCHCLAW_LIVE_ANTHROPIC_KEY).toBeUndefined();
+      expect(env.GREENCHCLAW_LIVE_ANTHROPIC_KEYS).toBeUndefined();
+      expect(env.GREENCHCLAW_LIVE_GEMINI_KEY).toBeUndefined();
     },
   );
 
@@ -437,7 +437,7 @@ describe("buildQaRuntimeEnv", () => {
       cfg: {},
       stateDir,
       env: {
-        NEXISCLAW_LIVE_SETUP_TOKEN_VALUE: token,
+        GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE: token,
       },
     });
 
@@ -693,10 +693,10 @@ describe("buildQaRuntimeEnv", () => {
     await writeFile(
       stdoutLogPath,
       [
-        "NEXISCLAW_GATEWAY_TOKEN=qa-suite-token",
+        "GREENCHCLAW_GATEWAY_TOKEN=qa-suite-token",
         'OPENAI_API_KEY="openai-live"',
-        "NEXISCLAW_QA_CONVEX_SECRET_CI=convex-ci-secret",
-        "NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER=convex-maintainer-secret",
+        "GREENCHCLAW_QA_CONVEX_SECRET_CI=convex-ci-secret",
+        "GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER=convex-maintainer-secret",
         "botToken=12345:AbCdEfGhIjKl",
         '"driverToken":"12345:driver-secr3t"',
         "sutToken='12345:sut-secr3t'",
@@ -724,10 +724,10 @@ describe("buildQaRuntimeEnv", () => {
     ]);
     await expect(readFile(path.join(artifactDir, "gateway.stdout.log"), "utf8")).resolves.toBe(
       [
-        "NEXISCLAW_GATEWAY_TOKEN=<redacted>",
+        "GREENCHCLAW_GATEWAY_TOKEN=<redacted>",
         "OPENAI_API_KEY=<redacted>",
-        "NEXISCLAW_QA_CONVEX_SECRET_CI=<redacted>",
-        "NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER=<redacted>",
+        "GREENCHCLAW_QA_CONVEX_SECRET_CI=<redacted>",
+        "GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER=<redacted>",
         "botToken=<redacted>",
         '"driverToken":"<redacted>"',
         "sutToken=<redacted>",
@@ -745,7 +745,7 @@ describe("buildQaRuntimeEnv", () => {
 
   it("rejects preserved gateway artifacts outside the repo root", async () => {
     await expect(
-      __testing.assertQaArtifactDirWithinRepo("/tmp/NexisClaw-repo", "/tmp/outside"),
+      __testing.assertQaArtifactDirWithinRepo("/tmp/GreenchClaw-repo", "/tmp/outside"),
     ).rejects.toThrow("QA gateway artifact directory must stay within the repo root.");
   });
 
@@ -775,7 +775,7 @@ describe("buildQaRuntimeEnv", () => {
       await rm(stagedRoot, { recursive: true, force: true });
     });
 
-    await writeFile(path.join(tempRoot, "NexisClaw.json"), "{}", "utf8");
+    await writeFile(path.join(tempRoot, "GreenchClaw.json"), "{}", "utf8");
     await writeFile(path.join(stagedRoot, "marker.txt"), "x", "utf8");
 
     await __testing.cleanupQaGatewayTempRoots({
@@ -870,7 +870,7 @@ describe("qa bundled plugin dir", () => {
       recursive: true,
     });
     await writeFile(
-      path.join(repoRoot, "dist", "extensions", "kimi-coding", "NexisClaw.plugin.json"),
+      path.join(repoRoot, "dist", "extensions", "kimi-coding", "GreenchClaw.plugin.json"),
       JSON.stringify({ id: "kimi", providers: ["kimi"] }),
       "utf8",
     );
@@ -900,14 +900,14 @@ describe("qa bundled plugin dir", () => {
       "utf8",
     );
     await writeFile(
-      path.join(repoRoot, "dist", "extensions", "memory-core", "NexisClaw.plugin.json"),
+      path.join(repoRoot, "dist", "extensions", "memory-core", "GreenchClaw.plugin.json"),
       JSON.stringify({ id: "memory-core", kind: "memory" }),
       "utf8",
     );
     await mkdir(path.join(repoRoot, "extensions", "memory-core"), { recursive: true });
     await writeFile(path.join(repoRoot, "extensions", "memory-core", "package.json"), "{}", "utf8");
     await writeFile(
-      path.join(repoRoot, "extensions", "memory-core", "NexisClaw.plugin.json"),
+      path.join(repoRoot, "extensions", "memory-core", "GreenchClaw.plugin.json"),
       JSON.stringify({ id: "memory-core", kind: "memory" }),
       "utf8",
     );
@@ -934,7 +934,7 @@ describe("qa bundled plugin dir", () => {
       path.join(repoRoot, "package.json"),
       JSON.stringify(
         {
-          name: "NexisClaw",
+          name: "GreenchClaw",
           type: "module",
           exports: {
             "./plugin-sdk/account-id": {
@@ -959,13 +959,13 @@ describe("qa bundled plugin dir", () => {
     );
     await writeFile(
       path.join(repoRoot, "dist", "extensions", "qa-channel", "package.json"),
-      JSON.stringify({ name: "@NexisClaw/qa-channel", type: "module" }, null, 2),
+      JSON.stringify({ name: "@GreenchClaw/qa-channel", type: "module" }, null, 2),
       "utf8",
     );
     await writeFile(
       path.join(repoRoot, "dist", "extensions", "qa-channel", "index.js"),
       [
-        'import { normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";',
+        'import { normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";',
         'export const accountId = normalizeAccountId("QA");',
         "",
       ].join("\n"),
@@ -1002,7 +1002,7 @@ describe("qa bundled plugin dir", () => {
       path.join(repoRoot, ".artifacts", "qa-runtime", path.basename(tempRoot)),
     );
     await expect(readFile(path.join(stagedRoot, "package.json"), "utf8")).resolves.toContain(
-      '"name": "NexisClaw"',
+      '"name": "GreenchClaw"',
     );
     const qaChannel = (await import(
       `${pathToFileURL(path.join(bundledPluginsDir, "qa-channel", "index.js")).href}?t=${Date.now()}`
@@ -1035,7 +1035,7 @@ describe("qa bundled plugin dir", () => {
     });
     await writeFile(
       path.join(repoRoot, "package.json"),
-      JSON.stringify({ name: "NexisClaw", type: "module" }, null, 2),
+      JSON.stringify({ name: "GreenchClaw", type: "module" }, null, 2),
       "utf8",
     );
     await mkdir(path.join(repoRoot, "dist"), { recursive: true });
@@ -1054,7 +1054,7 @@ describe("qa bundled plugin dir", () => {
     );
     await writeFile(
       path.join(repoRoot, "dist-runtime", "extensions", "runtime-only", "package.json"),
-      JSON.stringify({ name: "@NexisClaw/runtime-only", type: "module" }, null, 2),
+      JSON.stringify({ name: "@GreenchClaw/runtime-only", type: "module" }, null, 2),
       "utf8",
     );
     await writeFile(
@@ -1111,7 +1111,7 @@ describe("qa bundled plugin dir", () => {
     });
     await writeFile(
       path.join(repoRoot, "package.json"),
-      JSON.stringify({ name: "NexisClaw", type: "module" }, null, 2),
+      JSON.stringify({ name: "GreenchClaw", type: "module" }, null, 2),
       "utf8",
     );
     const tempRoot = await mkdtemp(path.join(os.tmpdir(), "qa-bundled-invalid-target-"));
@@ -1141,7 +1141,7 @@ describe("qa bundled plugin dir", () => {
       path.join(repoRoot, "package.json"),
       JSON.stringify(
         {
-          name: "NexisClaw",
+          name: "GreenchClaw",
           type: "module",
           exports: {
             "./plugin-sdk/account-id": {
@@ -1163,13 +1163,13 @@ describe("qa bundled plugin dir", () => {
     await mkdir(path.join(repoRoot, "extensions", "qa-channel"), { recursive: true });
     await writeFile(
       path.join(repoRoot, "extensions", "qa-channel", "package.json"),
-      JSON.stringify({ name: "@NexisClaw/qa-channel", type: "module" }, null, 2),
+      JSON.stringify({ name: "@GreenchClaw/qa-channel", type: "module" }, null, 2),
       "utf8",
     );
     await writeFile(
       path.join(repoRoot, "extensions", "qa-channel", "index.ts"),
       [
-        'import { normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";',
+        'import { normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";',
         'import { marker } from "fake-dep";',
         'export const accountId = `${normalizeAccountId("QA")}:${marker}`;',
         "",
@@ -1235,7 +1235,7 @@ describe("qa bundled plugin dir", () => {
     });
     await mkdir(path.join(repoRoot, "dist", "extensions", "openai"), { recursive: true });
     await writeFile(
-      path.join(repoRoot, "dist", "extensions", "openai", "NexisClaw.plugin.json"),
+      path.join(repoRoot, "dist", "extensions", "openai", "GreenchClaw.plugin.json"),
       JSON.stringify({
         id: "openai",
         providers: ["openai", "openai-codex"],
@@ -1259,7 +1259,7 @@ describe("qa bundled plugin dir", () => {
     });
     await mkdir(path.join(repoRoot, "dist", "extensions", "openai"), { recursive: true });
     await writeFile(
-      path.join(repoRoot, "dist", "extensions", "openai", "NexisClaw.plugin.json"),
+      path.join(repoRoot, "dist", "extensions", "openai", "GreenchClaw.plugin.json"),
       JSON.stringify({
         id: "openai",
         providers: ["openai"],
@@ -1297,7 +1297,7 @@ describe("qa bundled plugin dir", () => {
   it("copies selected live provider configs from the host config", async () => {
     const configPath = path.join(
       await mkdtemp(path.join(os.tmpdir(), "qa-provider-config-")),
-      "NexisClaw.json",
+      "GreenchClaw.json",
     );
     cleanups.push(async () => {
       await rm(path.dirname(configPath), { recursive: true, force: true });
@@ -1336,7 +1336,7 @@ describe("qa bundled plugin dir", () => {
 
     const overrides = await __testing.readQaLiveProviderConfigOverrides({
       providerIds: ["custom-openai"],
-      env: { NEXISCLAW_QA_LIVE_PROVIDER_CONFIG_PATH: configPath },
+      env: { GREENCHCLAW_QA_LIVE_PROVIDER_CONFIG_PATH: configPath },
     });
     expect(Object.keys(overrides)).toEqual(["custom-openai"]);
     expect(overrides["custom-openai"]?.baseUrl).toBe("https://api.example.test/v1");
@@ -1357,14 +1357,14 @@ describe("qa bundled plugin dir", () => {
     await mkdir(path.join(bundledRoot, "qa-channel"), { recursive: true });
     await writeFile(
       path.join(bundledRoot, "qa-channel", "package.json"),
-      JSON.stringify({ NexisClaw: { install: { minHostVersion: ">=2026.4.8" } } }),
+      JSON.stringify({ GreenchClaw: { install: { minHostVersion: ">=2026.4.8" } } }),
       "utf8",
     );
 
     await mkdir(path.join(bundledRoot, "memory-core"), { recursive: true });
     await writeFile(
       path.join(bundledRoot, "memory-core", "package.json"),
-      JSON.stringify({ NexisClaw: { install: { minHostVersion: ">=2026.4.7" } } }),
+      JSON.stringify({ GreenchClaw: { install: { minHostVersion: ">=2026.4.7" } } }),
       "utf8",
     );
 
@@ -1390,13 +1390,13 @@ describe("qa bundled plugin dir", () => {
     await mkdir(path.join(bundledRoot, "qa-channel"), { recursive: true });
     await writeFile(
       path.join(bundledRoot, "qa-channel", "package.json"),
-      JSON.stringify({ NexisClaw: { install: { minHostVersion: ">=2026.4.8" } } }),
+      JSON.stringify({ GreenchClaw: { install: { minHostVersion: ">=2026.4.8" } } }),
       "utf8",
     );
     await mkdir(path.join(bundledRoot, "speech-core"), { recursive: true });
     await writeFile(
       path.join(bundledRoot, "speech-core", "package.json"),
-      JSON.stringify({ NexisClaw: { install: { minHostVersion: ">=2026.4.9" } } }),
+      JSON.stringify({ GreenchClaw: { install: { minHostVersion: ">=2026.4.9" } } }),
       "utf8",
     );
 

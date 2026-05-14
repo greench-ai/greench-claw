@@ -100,18 +100,21 @@ export async function registerChannelsCli(
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["NexisClaw channels list", "List configured channels."],
-          ["NexisClaw channels list --all", "Show configured, bundled, and installable channels."],
-          ["NexisClaw channels add", "Open guided channel setup."],
-          ["NexisClaw channels status --probe", "Run channel status checks and probes."],
+          ["GreenchClaw channels list", "List configured channels."],
           [
-            "NexisClaw channels add --channel telegram --token <token>",
+            "GreenchClaw channels list --all",
+            "Show configured, bundled, and installable channels.",
+          ],
+          ["GreenchClaw channels add", "Open guided channel setup."],
+          ["GreenchClaw channels status --probe", "Run channel status checks and probes."],
+          [
+            "GreenchClaw channels add --channel telegram --token <token>",
             "Add or update a channel account non-interactively.",
           ],
-          ["NexisClaw channels login --channel whatsapp", "Link a WhatsApp Web account."],
+          ["GreenchClaw channels login --channel whatsapp", "Link a WhatsApp Web account."],
         ])}\n\n${theme.muted("Docs:")} ${formatDocsLink(
           "/cli/channels",
-          "docs.NexisClaw.ai/cli/channels",
+          "docs.GreenchClaw.ai/cli/channels",
         )}\n`,
     );
 
@@ -200,12 +203,12 @@ export async function registerChannelsCli(
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["NexisClaw channels add", "Open guided setup for available chat channels."],
+          ["GreenchClaw channels add", "Open guided setup for available chat channels."],
           [
-            "NexisClaw channels add --channel telegram --token <token>",
+            "GreenchClaw channels add --channel telegram --token <token>",
             "Add or update Telegram non-interactively.",
           ],
-          ["NexisClaw channels list --all", "Find channel ids before using --channel."],
+          ["GreenchClaw channels list --all", "Find channel ids before using --channel."],
         ])}\n`,
     )
     .option("--channel <name>", `Channel (${channelNames})`)

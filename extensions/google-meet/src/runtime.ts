@@ -1,9 +1,9 @@
 import { randomUUID } from "node:crypto";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import type { PluginRuntime, RuntimeLogger } from "NexisClaw/plugin-sdk/plugin-runtime";
-import { sleep } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import type { PluginRuntime, RuntimeLogger } from "GreenchClaw/plugin-sdk/plugin-runtime";
+import { sleep } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type {
   GoogleMeetConfig,
   GoogleMeetMode,
@@ -165,7 +165,7 @@ function evaluateSpeechReadiness(session: GoogleMeetSession): {
       reason: health.manualActionReason ?? "browser-unverified",
       message:
         health.manualActionMessage ??
-        "Resolve the Google Meet browser prompt before asking NexisClaw to speak.",
+        "Resolve the Google Meet browser prompt before asking GreenchClaw to speak.",
     };
   }
   if (health?.inCall === true) {
@@ -173,7 +173,8 @@ function evaluateSpeechReadiness(session: GoogleMeetSession): {
       return {
         ready: false,
         reason: "meet-microphone-muted",
-        message: "Turn on the NexisClaw Google Meet microphone before asking NexisClaw to speak.",
+        message:
+          "Turn on the GreenchClaw Google Meet microphone before asking GreenchClaw to speak.",
       };
     }
     if (session.chrome.audioBridge) {
@@ -227,7 +228,7 @@ export class GoogleMeetRuntime {
   constructor(
     private readonly params: {
       config: GoogleMeetConfig;
-      fullConfig: NexisClawConfig;
+      fullConfig: GreenchClawConfig;
       runtime: PluginRuntime;
       logger: RuntimeLogger;
     },

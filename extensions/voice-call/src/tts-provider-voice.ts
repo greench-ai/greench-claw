@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { VoiceCallTtsConfig } from "./config.js";
 
 function resolveProviderVoiceSetting(providerConfig: unknown): string | undefined {

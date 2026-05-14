@@ -1,10 +1,10 @@
 {
-  "name": "@NexisClaw/lobster",
+  "name": "@GreenchClaw/lobster",
   "version": "2026.5.12-beta.1",
   "description": "Lobster workflow tool plugin (typed pipelines + resumable approvals)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NexisClaw/NexisClaw"
+    "url": "https://github.com/GreenchClaw/GreenchClaw"
   },
   "type": "module",
   "dependencies": {
@@ -13,14 +13,14 @@
     "typebox": "1.1.38"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@NexisClaw/lobster",
+      "npmSpec": "@GreenchClaw/lobster",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.25"
     },
@@ -28,7 +28,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "NexisClawVersion": "2026.5.12-beta.1"
+      "GreenchClawVersion": "2026.5.12-beta.1"
     },
     "release": {
       "publishToClawHub": true,

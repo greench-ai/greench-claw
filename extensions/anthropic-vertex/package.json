@@ -1,8 +1,8 @@
 {
-  "name": "@NexisClaw/anthropic-vertex-provider",
+  "name": "@GreenchClaw/anthropic-vertex-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw Anthropic Vertex provider plugin",
+  "description": "GreenchClaw Anthropic Vertex provider plugin",
   "type": "module",
   "dependencies": {
     "@anthropic-ai/vertex-sdk": "0.16.0",
@@ -10,9 +10,9 @@
     "@earendil-works/pi-ai": "0.74.0"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

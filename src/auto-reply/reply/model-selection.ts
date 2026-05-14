@@ -20,7 +20,7 @@ import {
 } from "../../agents/model-visibility-policy.js";
 import { listOpenAIAuthProfileProvidersForAgentRuntime } from "../../agents/openai-codex-routing.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { applyModelOverrideToSessionEntry } from "../../sessions/model-overrides.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 import type { ThinkLevel } from "./directives.js";
@@ -50,7 +50,7 @@ type ModelSelectionState = {
 };
 
 export function createFastTestModelSelectionState(params: {
-  agentCfg: NonNullable<NonNullable<NexisClawConfig["agents"]>["defaults"]> | undefined;
+  agentCfg: NonNullable<NonNullable<GreenchClawConfig["agents"]>["defaults"]> | undefined;
   provider: string;
   model: string;
 }): ModelSelectionState {
@@ -69,7 +69,7 @@ export function createFastTestModelSelectionState(params: {
 }
 
 function shouldLogModelSelectionTiming(): boolean {
-  return process.env.NEXISCLAW_DEBUG_INGRESS_TIMING === "1";
+  return process.env.GREENCHCLAW_DEBUG_INGRESS_TIMING === "1";
 }
 
 const modelCatalogRuntimeLoader = createLazyImportLoader(
@@ -88,9 +88,9 @@ function loadSessionStoreRuntime() {
 }
 
 export async function createModelSelectionState(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
-  agentCfg: NonNullable<NonNullable<NexisClawConfig["agents"]>["defaults"]> | undefined;
+  agentCfg: NonNullable<NonNullable<GreenchClawConfig["agents"]>["defaults"]> | undefined;
   sessionEntry?: SessionEntry;
   sessionStore?: Record<string, SessionEntry>;
   sessionKey?: string;
@@ -411,8 +411,8 @@ export async function createModelSelectionState(params: {
 }
 
 export function resolveContextTokens(params: {
-  cfg: NexisClawConfig;
-  agentCfg: NonNullable<NonNullable<NexisClawConfig["agents"]>["defaults"]> | undefined;
+  cfg: GreenchClawConfig;
+  agentCfg: NonNullable<NonNullable<GreenchClawConfig["agents"]>["defaults"]> | undefined;
   provider: string;
   model: string;
 }): number {

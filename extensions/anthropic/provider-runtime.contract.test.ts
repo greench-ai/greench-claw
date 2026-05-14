@@ -1,3 +1,3 @@
-import { describeAnthropicProviderRuntimeContract } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { describeAnthropicProviderRuntimeContract } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 
 describeAnthropicProviderRuntimeContract(() => import("./index.js"));

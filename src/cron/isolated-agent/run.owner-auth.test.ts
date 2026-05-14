@@ -69,8 +69,8 @@ describe("runCronIsolatedAgentTurn owner auth", () => {
   let previousFastTestEnv: string | undefined;
 
   beforeEach(() => {
-    previousFastTestEnv = process.env.NEXISCLAW_TEST_FAST;
-    vi.stubEnv("NEXISCLAW_TEST_FAST", "1");
+    previousFastTestEnv = process.env.GREENCHCLAW_TEST_FAST;
+    vi.stubEnv("GREENCHCLAW_TEST_FAST", "1");
     resetRunCronIsolatedAgentTurnHarness();
     resolveDeliveryTargetMock.mockResolvedValue({
       channel: "forum",
@@ -87,10 +87,10 @@ describe("runCronIsolatedAgentTurn owner auth", () => {
   afterEach(() => {
     if (previousFastTestEnv == null) {
       vi.unstubAllEnvs();
-      delete process.env.NEXISCLAW_TEST_FAST;
+      delete process.env.GREENCHCLAW_TEST_FAST;
       return;
     }
-    vi.stubEnv("NEXISCLAW_TEST_FAST", previousFastTestEnv);
+    vi.stubEnv("GREENCHCLAW_TEST_FAST", previousFastTestEnv);
   });
 
   it(

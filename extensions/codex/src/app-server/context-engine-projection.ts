@@ -1,4 +1,4 @@
-import type { AgentMessage } from "NexisClaw/plugin-sdk/agent-harness-runtime";
+import type { AgentMessage } from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 
 type CodexContextProjection = {
   developerInstructionAddition?: string;
@@ -7,7 +7,7 @@ type CodexContextProjection = {
   prePromptMessageCount: number;
 };
 
-const CONTEXT_HEADER = "NexisClaw assembled context for this turn:";
+const CONTEXT_HEADER = "GreenchClaw assembled context for this turn:";
 const CONTEXT_OPEN = "<conversation_context>";
 const CONTEXT_CLOSE = "</conversation_context>";
 const REQUEST_HEADER = "Current user request:";
@@ -23,7 +23,7 @@ const MIN_PROMPT_BUDGET_RATIO = 0.5;
 const MIN_PROMPT_BUDGET_TOKENS = 8_000;
 
 /**
- * Project assembled NexisClaw context-engine messages into Codex prompt inputs.
+ * Project assembled GreenchClaw context-engine messages into Codex prompt inputs.
  */
 export function projectContextEngineAssemblyForCodex(params: {
   assembledMessages: AgentMessage[];

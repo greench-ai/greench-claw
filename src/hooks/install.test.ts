@@ -28,14 +28,14 @@ const { installHooksFromArchive, installHooksFromNpmSpec, installHooksFromPath }
   await import("./install.js");
 const hookInstallRuntime = await import("./install.runtime.js");
 
-const fixtureRoot = path.join(process.cwd(), ".tmp", `NexisClaw-hook-install-${randomUUID()}`);
+const fixtureRoot = path.join(process.cwd(), ".tmp", `GreenchClaw-hook-install-${randomUUID()}`);
 const sharedArchiveDir = path.join(fixtureRoot, "_archives");
 let tempDirIndex = 0;
 const sharedArchivePathByName = new Map<string, string>();
 
 const fixturesDir = path.resolve(process.cwd(), "test", "fixtures", "hooks-install");
 const zipHooksBuffer = await createZipHookPackBuffer({
-  packageName: "@NexisClaw/zip-hooks",
+  packageName: "@GreenchClaw/zip-hooks",
   hookName: "zip-hook",
   hookDescription: "Zip hook",
   heading: "Zip Hook",
@@ -46,7 +46,7 @@ const tarTraversalBuffer = fs.readFileSync(path.join(fixturesDir, "tar-traversal
 const tarEvilIdBuffer = fs.readFileSync(path.join(fixturesDir, "tar-evil-id.tar"));
 const tarReservedIdBuffer = fs.readFileSync(path.join(fixturesDir, "tar-reserved-id.tar"));
 const npmPackHooksBuffer = await createTarGzHookPackBuffer({
-  packageName: "@NexisClaw/test-hooks",
+  packageName: "@GreenchClaw/test-hooks",
   hookName: "one-hook",
   hookDescription: "One hook",
   heading: "One Hook",
@@ -113,9 +113,9 @@ function writeHookPackManifest(params: {
   fs.writeFileSync(
     path.join(params.pkgDir, "package.json"),
     JSON.stringify({
-      name: "@NexisClaw/test-hooks",
+      name: "@GreenchClaw/test-hooks",
       version: "0.0.1",
-      NexisClaw: { hooks: params.hooks },
+      GreenchClaw: { hooks: params.hooks },
       ...(params.dependencies ? { dependencies: params.dependencies } : {}),
     }),
     "utf-8",
@@ -149,7 +149,7 @@ function writeHookPackFiles(params: {
       "---",
       `name: ${params.hookName}`,
       `description: ${params.hookDescription}`,
-      'metadata: {"NexisClaw":{"events":["command:new"]}}',
+      'metadata: {"GreenchClaw":{"events":["command:new"]}}',
       "---",
       "",
       `# ${params.heading}`,
@@ -173,7 +173,7 @@ async function createZipHookPackBuffer(params: {
   const packageJson = JSON.stringify({
     name: params.packageName,
     version: "0.0.1",
-    NexisClaw: { hooks: [`./hooks/${params.hookName}`] },
+    GreenchClaw: { hooks: [`./hooks/${params.hookName}`] },
   });
   return createZipBuffer([
     { path: "package/package.json", contents: packageJson },
@@ -183,7 +183,7 @@ async function createZipHookPackBuffer(params: {
         "---",
         `name: ${params.hookName}`,
         `description: ${params.hookDescription}`,
-        'metadata: {"NexisClaw":{"events":["command:new"]}}',
+        'metadata: {"GreenchClaw":{"events":["command:new"]}}',
         "---",
         "",
         `# ${params.heading}`,
@@ -321,7 +321,7 @@ describe("installHooksFromPath", () => {
         "---",
         "name: one-hook",
         "description: One hook",
-        'metadata: {"NexisClaw":{"events":["command:new"]}}',
+        'metadata: {"GreenchClaw":{"events":["command:new"]}}',
         "---",
         "",
         "# One Hook",
@@ -356,7 +356,7 @@ describe("installHooksFromPath", () => {
         "---",
         "name: my-hook",
         "description: My hook",
-        'metadata: {"NexisClaw":{"events":["command:new"]}}',
+        'metadata: {"GreenchClaw":{"events":["command:new"]}}',
         "---",
         "",
         "# My Hook",
@@ -383,12 +383,12 @@ describe("installHooksFromPath", () => {
       {
         hooks: ["../outside"],
         setupLink: false,
-        expected: "NexisClaw.hooks entry escapes package directory",
+        expected: "GreenchClaw.hooks entry escapes package directory",
       },
       {
         hooks: ["./linked"],
         setupLink: true,
-        expected: "NexisClaw.hooks entry resolves outside package directory",
+        expected: "GreenchClaw.hooks entry resolves outside package directory",
       },
     ] as const;
 
@@ -455,7 +455,7 @@ describe("installHooksFromNpmSpec", () => {
 
     try {
       const result = await installHooksFromNpmSpec({
-        spec: "@NexisClaw/test-hooks@0.0.1",
+        spec: "@GreenchClaw/test-hooks@0.0.1",
       });
 
       expect(result.ok).toBe(true);
@@ -482,8 +482,8 @@ describe("installHooksFromNpmSpec", () => {
           code: 0,
           stdout: JSON.stringify([
             {
-              id: "@NexisClaw/test-hooks@0.0.1",
-              name: "@NexisClaw/test-hooks",
+              id: "@GreenchClaw/test-hooks@0.0.1",
+              name: "@GreenchClaw/test-hooks",
               version: "0.0.1",
               filename: packedName,
               integrity: "sha512-hook-test",
@@ -501,7 +501,7 @@ describe("installHooksFromNpmSpec", () => {
 
     const hooksDir = path.join(stateDir, "hooks");
     const result = await installHooksFromNpmSpec({
-      spec: "@NexisClaw/test-hooks@0.0.1",
+      spec: "@GreenchClaw/test-hooks@0.0.1",
       hooksDir,
       logger: { info: () => {}, warn: () => {} },
     });
@@ -510,13 +510,13 @@ describe("installHooksFromNpmSpec", () => {
       return;
     }
     expect(result.hookPackId).toBe("test-hooks");
-    expect(result.npmResolution?.resolvedSpec).toBe("@NexisClaw/test-hooks@0.0.1");
+    expect(result.npmResolution?.resolvedSpec).toBe("@GreenchClaw/test-hooks@0.0.1");
     expect(result.npmResolution?.integrity).toBe("sha512-hook-test");
     expect(fs.existsSync(path.join(result.targetDir, "hooks", "one-hook", "HOOK.md"))).toBe(true);
 
     expectSingleNpmPackIgnoreScriptsCall({
       calls: run.mock.calls as Array<[unknown, unknown]>,
-      expectedSpec: "@NexisClaw/test-hooks@0.0.1",
+      expectedSpec: "@GreenchClaw/test-hooks@0.0.1",
     });
 
     expect(packTmpDir).not.toBe("");
@@ -526,8 +526,8 @@ describe("installHooksFromNpmSpec", () => {
   it("aborts when integrity drift callback rejects the fetched artifact", async () => {
     const run = runCommandWithTimeoutMock;
     mockNpmPackMetadataResult(run, {
-      id: "@NexisClaw/test-hooks@0.0.1",
-      name: "@NexisClaw/test-hooks",
+      id: "@GreenchClaw/test-hooks@0.0.1",
+      name: "@GreenchClaw/test-hooks",
       version: "0.0.1",
       filename: "test-hooks-0.0.1.tgz",
       integrity: "sha512-new",
@@ -536,7 +536,7 @@ describe("installHooksFromNpmSpec", () => {
 
     const onIntegrityDrift = vi.fn(async () => false);
     const result = await installHooksFromNpmSpec({
-      spec: "@NexisClaw/test-hooks@0.0.1",
+      spec: "@GreenchClaw/test-hooks@0.0.1",
       expectedIntegrity: "sha512-old",
       onIntegrityDrift,
     });
@@ -553,8 +553,8 @@ describe("installHooksFromNpmSpec", () => {
 
     const run = runCommandWithTimeoutMock;
     mockNpmPackMetadataResult(run, {
-      id: "@NexisClaw/test-hooks@0.0.2-beta.1",
-      name: "@NexisClaw/test-hooks",
+      id: "@GreenchClaw/test-hooks@0.0.2-beta.1",
+      name: "@GreenchClaw/test-hooks",
       version: "0.0.2-beta.1",
       filename: "test-hooks-0.0.2-beta.1.tgz",
       integrity: "sha512-beta",
@@ -562,13 +562,13 @@ describe("installHooksFromNpmSpec", () => {
     });
 
     const result = await installHooksFromNpmSpec({
-      spec: "@NexisClaw/test-hooks",
+      spec: "@GreenchClaw/test-hooks",
       logger: { info: () => {}, warn: () => {} },
     });
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error).toContain("prerelease version 0.0.2-beta.1");
-      expect(result.error).toContain('"@NexisClaw/test-hooks@beta"');
+      expect(result.error).toContain('"@GreenchClaw/test-hooks@beta"');
     }
   });
 });

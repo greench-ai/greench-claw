@@ -11,9 +11,9 @@ const ROOT = path.resolve(HERE, "..");
 const SOURCE_DOCS_DIR = path.join(ROOT, "docs");
 const SOURCE_CONFIG_PATH = path.join(SOURCE_DOCS_DIR, "docs.json");
 const INTERNAL_DOCS_DIRS = ["internal"];
-const DEFAULT_CLAWHUB_SOURCE_REPO = "NexisClaw/clawhub";
+const DEFAULT_CLAWHUB_SOURCE_REPO = "GreenchClaw/clawhub";
 const CLAWHUB_DOCS_TARGET_DIR = "clawhub";
-const CLAWHUB_REPO_ENV = "NEXISCLAW_DOCS_SYNC_CLAWHUB_REPO";
+const CLAWHUB_REPO_ENV = "GREENCHCLAW_DOCS_SYNC_CLAWHUB_REPO";
 const DEFAULT_CLAWHUB_REPO_CANDIDATES = [
   path.resolve(ROOT, "..", "clawhub-docs-clawhub"),
   path.resolve(ROOT, "..", "clawhub"),
@@ -21,15 +21,15 @@ const DEFAULT_CLAWHUB_REPO_CANDIDATES = [
 const SYNC_SUPPORT_FILES = [
   {
     source: path.join(ROOT, "scripts", "check-docs-mdx.mjs"),
-    target: path.join(".NexisClaw-sync", "check-docs-mdx.mjs"),
+    target: path.join(".GreenchClaw-sync", "check-docs-mdx.mjs"),
   },
   {
     source: path.join(ROOT, "scripts", "lib", "mintlify-accordion.mjs"),
-    target: path.join(".NexisClaw-sync", "lib", "mintlify-accordion.mjs"),
+    target: path.join(".GreenchClaw-sync", "lib", "mintlify-accordion.mjs"),
   },
   {
     source: path.join(ROOT, ".github", "codex", "prompts", "docs-mdx-repair.md"),
-    target: path.join(".NexisClaw-sync", "docs-mdx-repair.md"),
+    target: path.join(".GreenchClaw-sync", "docs-mdx-repair.md"),
   },
 ];
 const GENERATED_LOCALES = [
@@ -176,8 +176,8 @@ function parseArgs(argv) {
     sourceSha: "",
     clawhubRepo: process.env[CLAWHUB_REPO_ENV] || "",
     clawhubSourceRepo:
-      process.env.NEXISCLAW_DOCS_SYNC_CLAWHUB_SOURCE_REPO || DEFAULT_CLAWHUB_SOURCE_REPO,
-    clawhubSourceSha: process.env.NEXISCLAW_DOCS_SYNC_CLAWHUB_SOURCE_SHA || "",
+      process.env.GREENCHCLAW_DOCS_SYNC_CLAWHUB_SOURCE_REPO || DEFAULT_CLAWHUB_SOURCE_REPO,
+    clawhubSourceSha: process.env.GREENCHCLAW_DOCS_SYNC_CLAWHUB_SOURCE_SHA || "",
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -691,7 +691,7 @@ function writeSyncMetadata(targetRoot, args, sources) {
     repository: args.sourceRepo || "",
     sha: args.sourceSha || "",
     sources: {
-      NexisClaw: {
+      GreenchClaw: {
         repository: args.sourceRepo || "",
         sha: args.sourceSha || "",
       },
@@ -703,7 +703,7 @@ function writeSyncMetadata(targetRoot, args, sources) {
     },
     syncedAt: new Date().toISOString(),
   };
-  writeJson(path.join(targetRoot, ".NexisClaw-sync", "source.json"), metadata);
+  writeJson(path.join(targetRoot, ".GreenchClaw-sync", "source.json"), metadata);
 }
 
 function syncSupportFiles(targetRoot) {

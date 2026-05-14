@@ -6,7 +6,7 @@ import {
 } from "./message-channel-constants.js";
 import { normalizeMessageChannel as normalizeMessageChannelCore } from "./message-channel-core.js";
 
-type ChannelId = string & { readonly __NexisClawChannelIdBrand?: never };
+type ChannelId = string & { readonly __GreenchClawChannelIdBrand?: never };
 
 export type DeliverableMessageChannel = ChannelId;
 

@@ -15,13 +15,13 @@ function hasDebugArg(argv: string[] | undefined): boolean {
 }
 
 function shouldShowStack(argv: string[] | undefined, env: NodeJS.ProcessEnv): boolean {
-  return hasDebugArg(argv) || isTruthyEnvValue(env.NEXISCLAW_DEBUG);
+  return hasDebugArg(argv) || isTruthyEnvValue(env.GREENCHCLAW_DEBUG);
 }
 
 function pushPrefixed(out: string[], value: string): void {
   for (const line of value.split("\n")) {
     if (line.trim().length > 0) {
-      out.push(`[NexisClaw] ${line}`);
+      out.push(`[GreenchClaw] ${line}`);
     }
   }
 }
@@ -29,20 +29,20 @@ function pushPrefixed(out: string[], value: string): void {
 export function formatCliFailureLines(options: FormatCliFailureOptions): string[] {
   const env = options.env ?? process.env;
   const lines = [
-    `[NexisClaw] ${options.title}`,
-    `[NexisClaw] Reason: ${formatErrorMessage(options.error)}`,
+    `[GreenchClaw] ${options.title}`,
+    `[GreenchClaw] Reason: ${formatErrorMessage(options.error)}`,
   ];
 
   if (shouldShowStack(options.argv, env)) {
-    lines.push("[NexisClaw] Stack:");
+    lines.push("[GreenchClaw] Stack:");
     pushPrefixed(lines, formatUncaughtError(options.error));
   } else {
-    lines.push("[NexisClaw] Debug: set NEXISCLAW_DEBUG=1 to include the stack trace.");
+    lines.push("[GreenchClaw] Debug: set GREENCHCLAW_DEBUG=1 to include the stack trace.");
   }
 
   if (options.includeDoctorHint !== false) {
-    lines.push(`[NexisClaw] Try: ${formatCliCommand("NexisClaw doctor", env)}`);
+    lines.push(`[GreenchClaw] Try: ${formatCliCommand("GreenchClaw doctor", env)}`);
   }
-  lines.push(`[NexisClaw] Help: ${formatCliCommand("NexisClaw --help", env)}`);
+  lines.push(`[GreenchClaw] Help: ${formatCliCommand("GreenchClaw --help", env)}`);
   return lines;
 }

@@ -161,7 +161,7 @@ const CLI_ENV_AUTH_LOG_KEYS = [
   "OPENROUTER_API_KEY",
 ] as const;
 
-const CLI_BACKEND_PRESERVE_ENV = "NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV";
+const CLI_BACKEND_PRESERVE_ENV = "GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV";
 
 function parseCliBackendPreserveEnv(raw: string | undefined): Set<string> {
   const trimmed = raw?.trim();
@@ -201,12 +201,12 @@ function formatCliEnvKeyList(keys: readonly string[]): string {
 
 function buildCliEnvMcpLog(childEnv: Record<string, string>): string {
   return [
-    `token=${childEnv.NEXISCLAW_MCP_TOKEN ? "set" : "missing"}`,
-    `sessionKey=${childEnv.NEXISCLAW_MCP_SESSION_KEY ? "set" : "<empty>"}`,
-    `agentId=${childEnv.NEXISCLAW_MCP_AGENT_ID || "<empty>"}`,
-    `accountId=${childEnv.NEXISCLAW_MCP_ACCOUNT_ID || "<empty>"}`,
-    `messageChannel=${childEnv.NEXISCLAW_MCP_MESSAGE_CHANNEL || "<empty>"}`,
-    `senderIsOwner=${childEnv.NEXISCLAW_MCP_SENDER_IS_OWNER || "<empty>"}`,
+    `token=${childEnv.GREENCHCLAW_MCP_TOKEN ? "set" : "missing"}`,
+    `sessionKey=${childEnv.GREENCHCLAW_MCP_SESSION_KEY ? "set" : "<empty>"}`,
+    `agentId=${childEnv.GREENCHCLAW_MCP_AGENT_ID || "<empty>"}`,
+    `accountId=${childEnv.GREENCHCLAW_MCP_ACCOUNT_ID || "<empty>"}`,
+    `messageChannel=${childEnv.GREENCHCLAW_MCP_MESSAGE_CHANNEL || "<empty>"}`,
+    `senderIsOwner=${childEnv.GREENCHCLAW_MCP_SENDER_IS_OWNER || "<empty>"}`,
   ].join(" ");
 }
 
@@ -428,9 +428,9 @@ export async function executePreparedCliRun(
           cliBackendLog.info(`cli argv: ${backend.command} ${logArgs.join(" ")}`);
           cliBackendLog.info(`cli env auth: ${buildCliEnvAuthLog(env)}`);
           if (
-            env.NEXISCLAW_MCP_TOKEN ||
-            env.NEXISCLAW_MCP_SESSION_KEY ||
-            env.NEXISCLAW_MCP_SENDER_IS_OWNER
+            env.GREENCHCLAW_MCP_TOKEN ||
+            env.GREENCHCLAW_MCP_SESSION_KEY ||
+            env.GREENCHCLAW_MCP_SENDER_IS_OWNER
           ) {
             cliBackendLog.info(`cli env mcp: ${buildCliEnvMcpLog(env)}`);
           }

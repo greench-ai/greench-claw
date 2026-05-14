@@ -1,8 +1,8 @@
 {
-  "name": "@NexisClaw/qa-lab",
+  "name": "@GreenchClaw/qa-lab",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw QA lab plugin with private debugger UI and scenario runner",
+  "description": "GreenchClaw QA lab plugin with private debugger UI and scenario runner",
   "type": "module",
   "dependencies": {
     "@copilotkit/aimock": "1.22.0",
@@ -12,21 +12,21 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@NexisClaw/discord": "workspace:*",
-    "@NexisClaw/plugin-sdk": "workspace:*",
-    "@NexisClaw/slack": "workspace:*",
-    "@NexisClaw/whatsapp": "workspace:*",
-    "NexisClaw": "workspace:*"
+    "@GreenchClaw/discord": "workspace:*",
+    "@GreenchClaw/plugin-sdk": "workspace:*",
+    "@GreenchClaw/slack": "workspace:*",
+    "@GreenchClaw/whatsapp": "workspace:*",
+    "GreenchClaw": "workspace:*"
   },
   "peerDependencies": {
-    "NexisClaw": ">=2026.5.12-beta.1"
+    "GreenchClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "NexisClaw": {
+    "GreenchClaw": {
       "optional": true
     }
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ],

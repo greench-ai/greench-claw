@@ -1,4 +1,4 @@
-import type { ChannelStructuredComponents } from "NexisClaw/plugin-sdk/channel-contract";
+import type { ChannelStructuredComponents } from "GreenchClaw/plugin-sdk/channel-contract";
 import {
   createInteractiveConversationBindingHelpers,
   dispatchPluginInteractiveHandler,
@@ -6,7 +6,7 @@ import {
   type PluginConversationBindingRequestParams,
   type PluginConversationBindingRequestResult,
   type PluginInteractiveRegistration,
-} from "NexisClaw/plugin-sdk/plugin-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-runtime";
 
 export type DiscordInteractiveHandlerContext = {
   channel: "discord";

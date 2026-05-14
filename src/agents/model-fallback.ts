@@ -2,7 +2,7 @@ import {
   resolveAgentModelFallbackValues,
   resolveAgentModelPrimaryValue,
 } from "../config/model-input.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { emitFailoverEvent } from "../infra/diagnostic-events.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
@@ -403,7 +403,7 @@ function throwFallbackFailureSummary(params: {
   formatAttempt: (attempt: FallbackAttempt) => string;
   soonestCooldownExpiry?: number | null;
   attribution?: FailoverAttribution;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentDir?: string;
 }): never {
   if (params.attempts.length <= 1 && params.lastError) {
@@ -437,7 +437,7 @@ function resolveFallbackSoonestCooldownExpiry(params: {
   authRuntime: ModelFallbackAuthRuntime | null;
   authStore: AuthProfileStore | null;
   agentDir?: string;
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   candidates: ModelCandidate[];
 }): number | null {
   if (!params.authRuntime || !params.authStore) {
@@ -476,7 +476,7 @@ function resolveFallbackSoonestCooldownExpiry(params: {
 }
 
 function resolveImageFallbackCandidates(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   defaultProvider: string;
   modelOverride?: string;
 }): ModelCandidate[] {
@@ -527,7 +527,7 @@ function resolveImageFallbackCandidates(params: {
   return candidates;
 }
 
-function resolveImageFallbackDefaultProvider(cfg: NexisClawConfig | undefined): string {
+function resolveImageFallbackDefaultProvider(cfg: GreenchClawConfig | undefined): string {
   const configuredPrimary = resolveAgentModelPrimaryValue(cfg?.agents?.defaults?.imageModel);
   if (configuredPrimary?.trim()) {
     const aliasIndex = buildModelAliasIndex({
@@ -554,7 +554,7 @@ export const __testing = {
 } as const;
 
 function resolveFallbackCandidates(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   provider: string;
   model: string;
   /** Optional explicit fallbacks list; when provided (even empty), replaces agents.defaults.model.fallbacks. */
@@ -815,7 +815,7 @@ function resolveCooldownDecision(params: {
 }
 
 export async function runWithModelFallback<T>(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   provider: string;
   model: string;
   runId?: string;
@@ -1214,7 +1214,7 @@ export async function runWithModelFallback<T>(params: {
 }
 
 export async function runWithImageModelFallback<T>(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   modelOverride?: string;
   run: (provider: string, model: string) => Promise<T>;
   onError?: ModelFallbackErrorHandler;

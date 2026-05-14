@@ -14,30 +14,33 @@ type CommandOptions = Record<string, unknown>;
 
 const SANDBOX_EXAMPLES = {
   main: [
-    ["NexisClaw sandbox list", "List all sandbox containers."],
-    ["NexisClaw sandbox list --browser", "List only browser containers."],
-    ["NexisClaw sandbox recreate --all", "Recreate all containers."],
-    ["NexisClaw sandbox recreate --session main", "Recreate a specific session."],
-    ["NexisClaw sandbox recreate --agent mybot", "Recreate agent containers."],
-    ["NexisClaw sandbox explain", "Explain effective sandbox config."],
+    ["GreenchClaw sandbox list", "List all sandbox containers."],
+    ["GreenchClaw sandbox list --browser", "List only browser containers."],
+    ["GreenchClaw sandbox recreate --all", "Recreate all containers."],
+    ["GreenchClaw sandbox recreate --session main", "Recreate a specific session."],
+    ["GreenchClaw sandbox recreate --agent mybot", "Recreate agent containers."],
+    ["GreenchClaw sandbox explain", "Explain effective sandbox config."],
   ],
   list: [
-    ["NexisClaw sandbox list", "List all sandbox containers."],
-    ["NexisClaw sandbox list --browser", "List only browser containers."],
-    ["NexisClaw sandbox list --json", "JSON output."],
+    ["GreenchClaw sandbox list", "List all sandbox containers."],
+    ["GreenchClaw sandbox list --browser", "List only browser containers."],
+    ["GreenchClaw sandbox list --json", "JSON output."],
   ],
   recreate: [
-    ["NexisClaw sandbox recreate --all", "Recreate all containers."],
-    ["NexisClaw sandbox recreate --session main", "Recreate a specific session."],
-    ["NexisClaw sandbox recreate --agent mybot", "Recreate a specific agent (includes sub-agents)."],
-    ["NexisClaw sandbox recreate --browser --all", "Recreate only browser containers."],
-    ["NexisClaw sandbox recreate --all --force", "Skip confirmation."],
+    ["GreenchClaw sandbox recreate --all", "Recreate all containers."],
+    ["GreenchClaw sandbox recreate --session main", "Recreate a specific session."],
+    [
+      "GreenchClaw sandbox recreate --agent mybot",
+      "Recreate a specific agent (includes sub-agents).",
+    ],
+    ["GreenchClaw sandbox recreate --browser --all", "Recreate only browser containers."],
+    ["GreenchClaw sandbox recreate --all --force", "Skip confirmation."],
   ],
   explain: [
-    ["NexisClaw sandbox explain", "Show effective sandbox config."],
-    ["NexisClaw sandbox explain --session agent:main:main", "Explain a specific session."],
-    ["NexisClaw sandbox explain --agent work", "Explain an agent sandbox."],
-    ["NexisClaw sandbox explain --json", "JSON output."],
+    ["GreenchClaw sandbox explain", "Show effective sandbox config."],
+    ["GreenchClaw sandbox explain --session agent:main:main", "Explain a specific session."],
+    ["GreenchClaw sandbox explain --agent work", "Explain an agent sandbox."],
+    ["GreenchClaw sandbox explain --json", "JSON output."],
   ],
 } as const;
 
@@ -67,7 +70,7 @@ export function registerSandboxCli(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/sandbox", "docs.NexisClaw.ai/cli/sandbox")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/sandbox", "docs.GreenchClaw.ai/cli/sandbox")}\n`,
     )
     .action(() => {
       sandbox.help({ error: true });

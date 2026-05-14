@@ -59,8 +59,9 @@ describe("buildSlackProgressDraftBlocks", () => {
           kind: "tool",
           icon: "🛠️",
           label: "Exec",
-          detail: "run tests in /Users/example/Projects/NexisClaw/packages/very/deep/path/example",
-          text: "🛠️ Exec: run tests in /Users/example/Projects/NexisClaw/packages/very/deep/path/example",
+          detail:
+            "run tests in /Users/example/Projects/GreenchClaw/packages/very/deep/path/example",
+          text: "🛠️ Exec: run tests in /Users/example/Projects/GreenchClaw/packages/very/deep/path/example",
         },
       ],
     });

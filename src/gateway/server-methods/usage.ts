@@ -4,7 +4,7 @@ import {
   resolveSessionFilePathOptions,
 } from "../../config/sessions/paths.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { loadProviderUsageSummary } from "../../infra/provider-usage.js";
 import type {
   CostUsageSummary,
@@ -90,9 +90,9 @@ function setCostUsageCache(cacheKey: string, entry: CostUsageCacheEntry): void {
 function resolveSessionUsageFileOrRespond(
   key: string,
   respond: RespondFn,
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
 ): {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   entry: SessionEntry | undefined;
   agentId: string | undefined;
   sessionId: string;
@@ -348,7 +348,7 @@ function buildStoreBySessionId(
 }
 
 async function discoverAllSessionsForUsage(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   startMs: number;
   endMs: number;
 }): Promise<DiscoveredSessionWithAgent[]> {
@@ -687,7 +687,7 @@ function mergeDailyModelRows(
 async function loadCostUsageSummaryCached(params: {
   startMs: number;
   endMs: number;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
 }): Promise<CostUsageSummary> {
   const cacheKey = `${params.startMs}-${params.endMs}`;
   const now = Date.now();

@@ -3,15 +3,15 @@ import { repairToolUseResultPairing } from "./session-transcript-repair.js";
 
 const SYNTHETIC_TOOL_RESULT_APIS = new Set<string>([
   "anthropic-messages",
-  "NexisClaw-anthropic-messages-transport",
+  "GreenchClaw-anthropic-messages-transport",
   "bedrock-converse-stream",
   "google-generative-ai",
-  "NexisClaw-google-generative-ai-transport",
+  "GreenchClaw-google-generative-ai-transport",
   "openai-responses",
   "openai-codex-responses",
   "azure-openai-responses",
-  "NexisClaw-openai-responses-transport",
-  "NexisClaw-azure-openai-responses-transport",
+  "GreenchClaw-openai-responses-transport",
+  "GreenchClaw-azure-openai-responses-transport",
 ]);
 
 // "aborted" is an OpenAI Responses-family convention from upstream Codex
@@ -22,8 +22,8 @@ const CODEX_STYLE_ABORTED_OUTPUT_APIS = new Set<string>([
   "openai-responses",
   "openai-codex-responses",
   "azure-openai-responses",
-  "NexisClaw-openai-responses-transport",
-  "NexisClaw-azure-openai-responses-transport",
+  "GreenchClaw-openai-responses-transport",
+  "GreenchClaw-azure-openai-responses-transport",
 ]);
 
 function defaultAllowSyntheticToolResults(modelApi: Api): boolean {

@@ -12,7 +12,7 @@ import {
 } from "./secret-file.js";
 
 const tempDirs = createTrackedTempDirs();
-const createTempDir = () => tempDirs.make("NexisClaw-secret-file-test-");
+const createTempDir = () => tempDirs.make("GreenchClaw-secret-file-test-");
 
 afterEach(async () => {
   await tempDirs.cleanup();

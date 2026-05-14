@@ -1,21 +1,21 @@
 import type { AssistantMessage } from "@earendil-works/pi-ai";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   createEmptyPluginRegistry,
   pluginRegistrationContractRegistry,
   setActivePluginRegistry,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import type { ResolvedTtsConfig, SpeechProviderPlugin } from "NexisClaw/plugin-sdk/speech-core";
-import { withEnv, withEnvAsync } from "NexisClaw/plugin-sdk/test-env";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import type { ResolvedTtsConfig, SpeechProviderPlugin } from "GreenchClaw/plugin-sdk/speech-core";
+import { withEnv, withEnvAsync } from "GreenchClaw/plugin-sdk/test-env";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveWorkspacePackagePublicModuleUrl } from "../../plugin-sdk/test-helpers/public-surface-loader.js";
 
-type TtsRuntimeModule = typeof import("NexisClaw/plugin-sdk/tts-runtime");
-type TtsCoreModule = typeof import("NexisClaw/plugin-sdk/speech-core");
+type TtsRuntimeModule = typeof import("GreenchClaw/plugin-sdk/tts-runtime");
+type TtsCoreModule = typeof import("GreenchClaw/plugin-sdk/speech-core");
 type SummarizeTextDeps = NonNullable<Parameters<TtsCoreModule["summarizeText"]>[1]>;
 
 const speechCoreRuntimeApiModuleId = resolveWorkspacePackagePublicModuleUrl({
-  packageName: "@NexisClaw/speech-core",
+  packageName: "@GreenchClaw/speech-core",
   artifactBasename: "runtime-api.js",
 });
 
@@ -110,12 +110,12 @@ function createResolvedModel(provider: string, modelId: string, api = "openai-co
   };
 }
 
-function asLegacyTtsConfig(value: unknown): NexisClawConfig {
-  return value as NexisClawConfig;
+function asLegacyTtsConfig(value: unknown): GreenchClawConfig {
+  return value as GreenchClawConfig;
 }
 
-function asLegacyNexisClawConfig(value: Record<string, unknown>): NexisClawConfig {
-  return value as unknown as NexisClawConfig;
+function asLegacyGreenchClawConfig(value: Record<string, unknown>): GreenchClawConfig {
+  return value as unknown as GreenchClawConfig;
 }
 
 const mockAssistantMessage = (content: AssistantMessage["content"]): AssistantMessage => ({
@@ -152,7 +152,7 @@ function createSummarizeTextDeps() {
   };
 }
 
-function createOpenAiTelephonyCfg(model: "tts-1" | "gpt-4o-mini-tts"): NexisClawConfig {
+function createOpenAiTelephonyCfg(model: "tts-1" | "gpt-4o-mini-tts"): GreenchClawConfig {
   return asLegacyTtsConfig({
     messages: {
       tts: {
@@ -424,7 +424,7 @@ async function loadTtsRuntime(): Promise<TtsRuntimeModule> {
 }
 
 async function loadTtsCore(): Promise<TtsCoreModule> {
-  ttsCorePromise ??= import("NexisClaw/plugin-sdk/speech-core");
+  ttsCorePromise ??= import("GreenchClaw/plugin-sdk/speech-core");
   return await ttsCorePromise;
 }
 
@@ -464,7 +464,7 @@ function setupTestSpeechProviderRegistry() {
   setActivePluginRegistry(registry);
 }
 
-function createResolvedSummarizationConfig(cfg: NexisClawConfig): ResolvedTtsConfig {
+function createResolvedSummarizationConfig(cfg: GreenchClawConfig): ResolvedTtsConfig {
   const rawConfig =
     typeof cfg.messages?.tts === "object" && cfg.messages?.tts !== null ? cfg.messages.tts : {};
   return {
@@ -537,7 +537,7 @@ export function describeTtsConfigContract() {
     beforeEach(setupTtsContractTest);
 
     describe("resolveEdgeOutputFormat", () => {
-      const baseCfg: NexisClawConfig = {
+      const baseCfg: GreenchClawConfig = {
         agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
         messages: { tts: {} },
       };
@@ -557,7 +557,7 @@ export function describeTtsConfigContract() {
                 edge: { outputFormat: "audio-24khz-96kbitrate-mono-mp3" },
               },
             },
-          } as unknown as NexisClawConfig,
+          } as unknown as GreenchClawConfig,
           expected: "audio-24khz-96kbitrate-mono-mp3",
         },
       ] as const)("$name", ({ cfg, expected, name }) => {
@@ -721,7 +721,7 @@ export function describeTtsConfigContract() {
             GOOGLE_API_KEY: undefined,
           },
           () => {
-            const cfg = asLegacyNexisClawConfig({
+            const cfg = asLegacyGreenchClawConfig({
               agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
               models: {
                 providers: {
@@ -752,7 +752,7 @@ export function describeTtsConfigContract() {
     describe("resolveTtsConfig provider normalization", () => {
       it("normalizes legacy edge provider ids to microsoft", () => {
         const config = resolveTtsConfig(
-          asLegacyNexisClawConfig({
+          asLegacyGreenchClawConfig({
             agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
             messages: {
               tts: {
@@ -773,7 +773,7 @@ export function describeTtsConfigContract() {
     });
 
     describe("resolveTtsConfig – openai.baseUrl", () => {
-      const baseCfg: NexisClawConfig = {
+      const baseCfg: GreenchClawConfig = {
         agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
         messages: { tts: {} },
       };
@@ -798,7 +798,7 @@ export function describeTtsConfigContract() {
             messages: {
               tts: { ...baseCfg.messages!.tts, openai: { baseUrl: "http://my-server:9000/v1" } },
             },
-          } as unknown as NexisClawConfig,
+          } as unknown as GreenchClawConfig,
           env: { OPENAI_TTS_BASE_URL: "http://localhost:8880/v1" },
           expected: "http://my-server:9000/v1",
         },
@@ -812,7 +812,7 @@ export function describeTtsConfigContract() {
                 openai: { baseUrl: "http://my-server:9000/v1///" },
               },
             },
-          } as unknown as NexisClawConfig,
+          } as unknown as GreenchClawConfig,
           env: { OPENAI_TTS_BASE_URL: undefined },
           expected: "http://my-server:9000/v1",
         },
@@ -854,7 +854,7 @@ export function describeTtsSummarizationContract() {
   describe("tts summarization contract", () => {
     beforeEach(setupTtsSummarizationTest);
 
-    const baseCfg: NexisClawConfig = {
+    const baseCfg: GreenchClawConfig = {
       agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
       messages: { tts: {} },
     };
@@ -862,7 +862,7 @@ export function describeTtsSummarizationContract() {
     async function runSummarizeText(params?: {
       text?: string;
       targetLength?: number;
-      cfg?: NexisClawConfig;
+      cfg?: GreenchClawConfig;
     }) {
       const cfg = params?.cfg ?? baseCfg;
       const config = createResolvedSummarizationConfig(cfg);
@@ -908,7 +908,7 @@ export function describeTtsSummarizationContract() {
     });
 
     it("uses summaryModel override when configured", async () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: { defaults: { model: { primary: "anthropic/claude-opus-4-5" } } },
         messages: { tts: { summaryModel: "openai/gpt-4.1-mini" } },
       };
@@ -1224,7 +1224,7 @@ export function describeTtsAutoApplyContract() {
   describe("tts auto-apply contract", () => {
     beforeEach(setupTtsContractTest);
 
-    const baseCfg: NexisClawConfig = asLegacyNexisClawConfig({
+    const baseCfg: GreenchClawConfig = asLegacyGreenchClawConfig({
       agents: { defaults: { model: { primary: "openai/gpt-4o-mini" } } },
       messages: {
         tts: {
@@ -1240,16 +1240,16 @@ export function describeTtsAutoApplyContract() {
     const withMockedAutoTtsFetch = async (
       run: (fetchMock: ReturnType<typeof vi.fn>) => Promise<void>,
     ) => {
-      const prevPrefs = process.env.NEXISCLAW_TTS_PREFS;
-      process.env.NEXISCLAW_TTS_PREFS = `/tmp/tts-test-${Date.now()}.json`;
+      const prevPrefs = process.env.GREENCHCLAW_TTS_PREFS;
+      process.env.GREENCHCLAW_TTS_PREFS = `/tmp/tts-test-${Date.now()}.json`;
       try {
         await withMockedSpeechFetch(run, 1);
       } finally {
-        process.env.NEXISCLAW_TTS_PREFS = prevPrefs;
+        process.env.GREENCHCLAW_TTS_PREFS = prevPrefs;
       }
     };
 
-    const taggedCfg: NexisClawConfig = {
+    const taggedCfg: GreenchClawConfig = {
       ...baseCfg,
       messages: {
         ...baseCfg.messages!,
@@ -1258,7 +1258,7 @@ export function describeTtsAutoApplyContract() {
     };
 
     async function expectAutoTtsOutcome(params: {
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       payload: { text: string };
       inboundAudio?: boolean;
       expectedFetchCalls: number;

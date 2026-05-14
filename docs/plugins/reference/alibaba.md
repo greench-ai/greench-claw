@@ -11,8 +11,8 @@ Adds video generation provider support.
 
 ## Distribution
 
-- Package: `@NexisClaw/alibaba-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/alibaba-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

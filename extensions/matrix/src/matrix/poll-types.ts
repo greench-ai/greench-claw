@@ -7,8 +7,8 @@
  * - m.poll.end - Closes a poll
  */
 
-import { normalizePollInput, type PollInput } from "NexisClaw/plugin-sdk/poll-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizePollInput, type PollInput } from "GreenchClaw/plugin-sdk/poll-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 export const M_POLL_START = "m.poll.start" as const;
 const M_POLL_RESPONSE = "m.poll.response" as const;

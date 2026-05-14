@@ -1,12 +1,12 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { EmbeddedRunAttemptParams } from "NexisClaw/plugin-sdk/agent-harness";
+import type { EmbeddedRunAttemptParams } from "GreenchClaw/plugin-sdk/agent-harness";
 import {
   createParameterFreeTool,
   createPermissiveTool,
   normalizedParameterFreeSchema,
-} from "NexisClaw/plugin-sdk/agent-runtime-test-contracts";
+} from "GreenchClaw/plugin-sdk/agent-runtime-test-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CodexThreadStartParams } from "./protocol.js";
 import { createCodexTestModel } from "./test-support.js";
@@ -87,7 +87,7 @@ function threadStartResult(threadId = "thread-1", serviceTier: string | null = n
 
 describe("Codex app-server dynamic tool schema boundary contract", () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-codex-schema-contract-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-codex-schema-contract-"));
   });
 
   afterEach(async () => {
@@ -132,11 +132,11 @@ describe("Codex app-server dynamic tool schema boundary contract", () => {
     expect(startPayload?.approvalPolicy).toBe("never");
     expect(startPayload?.approvalsReviewer).toBe("user");
     expect(startPayload?.sandbox).toBe("workspace-write");
-    expect(startPayload?.serviceName).toBe("NexisClaw");
+    expect(startPayload?.serviceName).toBe("GreenchClaw");
     expect(startPayload?.experimentalRawEvents).toBe(true);
     expect(startPayload?.persistExtendedHistory).toBe(true);
     expect(typeof startPayload?.developerInstructions).toBe("string");
-    expect(startPayload?.developerInstructions).toContain("NexisClaw");
+    expect(startPayload?.developerInstructions).toContain("GreenchClaw");
   });
 
   it("accepts Codex app-server priority service tier responses", async () => {

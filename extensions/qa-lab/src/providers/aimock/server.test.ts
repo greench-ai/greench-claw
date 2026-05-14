@@ -69,7 +69,7 @@ describe("qa aimock server", () => {
         body: JSON.stringify({
           model: "aimock/gpt-5.5",
           stream: false,
-          input: [makeResponsesInput("@NexisClaw explain the QA lab")],
+          input: [makeResponsesInput("@GreenchClaw explain the QA lab")],
         }),
       });
       expect(response.status).toBe(200);
@@ -80,7 +80,7 @@ describe("qa aimock server", () => {
       expect(debug.status).toBe(200);
       const expectedBody = {
         model: "aimock/gpt-5.5",
-        messages: [{ role: "user", content: "@NexisClaw explain the QA lab" }],
+        messages: [{ role: "user", content: "@GreenchClaw explain the QA lab" }],
         stream: false,
         _endpointType: "chat",
       };
@@ -88,8 +88,8 @@ describe("qa aimock server", () => {
         {
           raw: JSON.stringify(expectedBody),
           body: expectedBody,
-          prompt: "@NexisClaw explain the QA lab",
-          allInputText: "@NexisClaw explain the QA lab",
+          prompt: "@GreenchClaw explain the QA lab",
+          allInputText: "@GreenchClaw explain the QA lab",
           toolOutput: "",
           model: "aimock/gpt-5.5",
           providerVariant: "openai",

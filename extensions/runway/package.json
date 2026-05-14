@@ -1,13 +1,13 @@
 {
-  "name": "@NexisClaw/runway-provider",
+  "name": "@GreenchClaw/runway-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw Runway video provider plugin",
+  "description": "GreenchClaw Runway video provider plugin",
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

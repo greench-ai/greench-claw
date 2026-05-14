@@ -29,13 +29,13 @@ import { sandboxListCommand, sandboxRecreateCommand } from "./sandbox.js";
 const NOW = Date.now();
 
 function createContainer(overrides: Partial<SandboxContainerInfo> = {}): SandboxContainerInfo {
-  const containerName = overrides.containerName ?? "NexisClaw-sandbox-test";
+  const containerName = overrides.containerName ?? "GreenchClaw-sandbox-test";
   return {
     containerName,
     backendId: "docker",
     runtimeLabel: containerName,
     sessionKey: "test-session",
-    image: "NexisClaw/sandbox:latest",
+    image: "GreenchClaw/sandbox:latest",
     configLabelKind: "Image",
     imageMatch: true,
     running: true,
@@ -47,9 +47,9 @@ function createContainer(overrides: Partial<SandboxContainerInfo> = {}): Sandbox
 
 function createBrowser(overrides: Partial<SandboxBrowserInfo> = {}): SandboxBrowserInfo {
   return {
-    containerName: "NexisClaw-browser-test",
+    containerName: "GreenchClaw-browser-test",
     sessionKey: "test-session",
-    image: "NexisClaw/browser:latest",
+    image: "GreenchClaw/browser:latest",
     imageMatch: true,
     running: true,
     createdAtMs: NOW - 3600000,

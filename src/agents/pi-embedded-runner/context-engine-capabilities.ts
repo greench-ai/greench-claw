@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { ContextEngineRuntimeContext } from "../../context-engine/types.js";
 import {
   parseAgentSessionKey,
@@ -12,7 +12,7 @@ import {
 import { resolveDefaultAgentId } from "../agent-scope.js";
 
 export type ResolveContextEngineCapabilitiesParams = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sessionKey?: string;
   agentId?: string;
   contextEnginePluginId?: string;
@@ -20,7 +20,7 @@ export type ResolveContextEngineCapabilitiesParams = {
 };
 
 function resolveBoundAgentId(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sessionKey?: string;
   agentId?: string;
 }): string | undefined {

@@ -1,13 +1,13 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { resolveBundledPluginInstallCommandHint } from "../../../plugins/bundled-sources.js";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
 } from "../../../shared/string-coerce.js";
 
-export function resolveAcpInstallCommandHint(cfg: NexisClawConfig): string {
+export function resolveAcpInstallCommandHint(cfg: GreenchClawConfig): string {
   const configured = normalizeOptionalString(cfg.acp?.runtime?.installCommand);
   if (configured) {
     return configured;
@@ -17,14 +17,14 @@ export function resolveAcpInstallCommandHint(cfg: NexisClawConfig): string {
   if (backendId === "acpx") {
     const workspaceLocalPath = path.join(workspaceDir, "extensions", "acpx");
     if (existsSync(workspaceLocalPath)) {
-      return `NexisClaw plugins install ${workspaceLocalPath}`;
+      return `GreenchClaw plugins install ${workspaceLocalPath}`;
     }
     const bundledInstallHint = resolveBundledPluginInstallCommandHint({
       pluginId: backendId,
       workspaceDir,
     });
     if (bundledInstallHint) {
-      const localPath = bundledInstallHint.replace(/^NexisClaw plugins install /u, "");
+      const localPath = bundledInstallHint.replace(/^GreenchClaw plugins install /u, "");
       const resolvedLocalPath = path.resolve(localPath);
       const relativeToWorkspace = path.relative(workspaceDir, resolvedLocalPath);
       const belongsToWorkspace =
@@ -34,7 +34,7 @@ export function resolveAcpInstallCommandHint(cfg: NexisClawConfig): string {
         return bundledInstallHint;
       }
     }
-    return "NexisClaw plugins install acpx";
+    return "GreenchClaw plugins install acpx";
   }
   return `Install and enable the plugin that provides ACP backend "${backendId}".`;
 }

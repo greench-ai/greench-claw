@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { resolveFollowupDeliveryPayloads } from "./followup-delivery.js";
 
 vi.mock("../../channels/plugins/index.js", () => ({
   getChannelPlugin: () => undefined,
 }));
 
-const baseConfig = {} as NexisClawConfig;
+const baseConfig = {} as GreenchClawConfig;
 
 describe("resolveFollowupDeliveryPayloads", () => {
   it("drops heartbeat ack payloads without media", () => {

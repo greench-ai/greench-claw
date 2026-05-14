@@ -4,7 +4,7 @@ import path from "node:path";
 import { vi } from "vitest";
 import { heartbeatRunnerTelegramPlugin } from "../../test/helpers/infra/heartbeat-runner-channel-plugins.js";
 import { resolveMainSessionKey } from "../config/sessions.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { setActivePluginRegistry } from "../plugins/runtime.js";
 import { createTestRegistry } from "../test-utils/channel-plugins.js";
 import type { HeartbeatDeps } from "./heartbeat-runner.js";
@@ -58,7 +58,7 @@ export async function seedSessionStore(
 
 export async function seedMainSessionStore(
   storePath: string,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   session: HeartbeatSessionSeed,
 ): Promise<string> {
   const sessionKey = resolveMainSessionKey(cfg);
@@ -73,7 +73,7 @@ export async function withTempHeartbeatSandbox<T>(
     unsetEnvVars?: string[];
   },
 ): Promise<T> {
-  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), options?.prefix ?? "NexisClaw-hb-"));
+  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), options?.prefix ?? "GreenchClaw-hb-"));
   await fs.writeFile(path.join(tmpDir, "HEARTBEAT.md"), "- Check status\n", "utf-8");
   const storePath = path.join(tmpDir, "sessions.json");
   const replySpy = createHeartbeatReplySpy();

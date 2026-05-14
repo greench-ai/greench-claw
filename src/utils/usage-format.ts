@@ -3,8 +3,8 @@ import path from "node:path";
 import { resolveDefaultAgentDir } from "../agents/agent-scope-config.js";
 import { modelKey, normalizeModelRef, normalizeProviderId } from "../agents/model-selection.js";
 import type { NormalizedUsage } from "../agents/usage.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { ModelProviderConfig } from "../config/types.models.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { getGatewayModelPricingCacheFingerprint } from "../gateway/model-pricing-cache-state.js";
 import { getCachedGatewayModelPricing } from "../gateway/model-pricing-cache.js";
 import { tryReadJsonSync } from "../infra/json-files.js";
@@ -250,7 +250,7 @@ function loadModelsJsonCostIndex(options?: {
 function findConfiguredProviderCost(params: {
   provider?: string;
   model?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   allowPluginNormalization?: boolean;
 }): ModelCostConfig | undefined {
   const key = toResolvedModelKey(params);
@@ -286,7 +286,7 @@ function serializeCostIndex(
   return Array.from(entries.entries()).toSorted(([a], [b]) => a.localeCompare(b));
 }
 
-export function resolveModelCostConfigFingerprint(config?: NexisClawConfig): string {
+export function resolveModelCostConfigFingerprint(config?: GreenchClawConfig): string {
   return stableCostFingerprintValue({
     configuredRaw: serializeCostIndex(
       buildProviderCostIndex(config?.models?.providers, { allowPluginNormalization: false }),
@@ -301,7 +301,7 @@ export function resolveModelCostConfigFingerprint(config?: NexisClawConfig): str
 export function resolveModelCostConfig(params: {
   provider?: string;
   model?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   allowPluginNormalization?: boolean;
 }): ModelCostConfig | undefined {
   const rawKey = toDirectModelKey(params);

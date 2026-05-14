@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { googlechatPlugin } from "./channel.js";
 
@@ -9,7 +9,7 @@ describe("googlechatPlugin config adapter", () => {
         providers: {
           google_chat_service_account: {
             source: "file",
-            path: "/tmp/NexisClaw-missing-google-chat-service-account",
+            path: "/tmp/GreenchClaw-missing-google-chat-service-account",
             mode: "singleValue",
           },
         },
@@ -27,7 +27,7 @@ describe("googlechatPlugin config adapter", () => {
           defaultTo: "spaces/AAA",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(googlechatPlugin.config.resolveAllowFrom?.({ cfg, accountId: "default" })).toEqual([
       "users/123",

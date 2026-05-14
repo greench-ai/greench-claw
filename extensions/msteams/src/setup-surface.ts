@@ -6,9 +6,9 @@ import {
   splitSetupEntries,
   type ChannelSetupDmPolicy,
   type ChannelSetupWizard,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   type WizardPrompter,
-} from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/setup";
 import type { MSTeamsTeamConfig } from "../runtime-api.js";
 import { formatUnknownError } from "./errors.js";
 import {
@@ -39,9 +39,9 @@ function looksLikeGuid(value: string): boolean {
 }
 
 async function promptMSTeamsAllowFrom(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prompter: WizardPrompter;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   const existing = params.cfg.channels?.msteams?.allowFrom ?? [];
   await params.prompter.note(
     [
@@ -102,9 +102,9 @@ async function promptMSTeamsAllowFrom(params: {
 }
 
 function setMSTeamsTeamsAllowlist(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   entries: Array<{ teamKey: string; channelKey?: string }>,
-): NexisClawConfig {
+): GreenchClawConfig {
   const baseTeams = cfg.channels?.msteams?.teams ?? {};
   const teams: Record<string, { channels?: Record<string, unknown> }> = { ...baseTeams };
   for (const entry of entries) {
@@ -134,7 +134,7 @@ function setMSTeamsTeamsAllowlist(
   };
 }
 
-function listMSTeamsGroupEntries(cfg: NexisClawConfig): string[] {
+function listMSTeamsGroupEntries(cfg: GreenchClawConfig): string[] {
   return Object.entries(cfg.channels?.msteams?.teams ?? {}).flatMap(([teamKey, value]) => {
     const channels = value?.channels ?? {};
     const channelKeys = Object.keys(channels);
@@ -146,7 +146,7 @@ function listMSTeamsGroupEntries(cfg: NexisClawConfig): string[] {
 }
 
 async function resolveMSTeamsGroupAllowlist(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   entries: string[];
   prompter: Pick<WizardPrompter, "note">;
 }): Promise<Array<{ teamKey: string; channelKey?: string }>> {

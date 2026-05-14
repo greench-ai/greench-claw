@@ -1,7 +1,10 @@
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/account-core";
-import { mapAllowFromEntries } from "NexisClaw/plugin-sdk/channel-config-helpers";
-import type { NexisClawConfig, TelegramAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { createResolvedDirectoryEntriesLister } from "NexisClaw/plugin-sdk/directory-config-runtime";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/account-core";
+import { mapAllowFromEntries } from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import type {
+  GreenchClawConfig,
+  TelegramAccountConfig,
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { createResolvedDirectoryEntriesLister } from "GreenchClaw/plugin-sdk/directory-config-runtime";
 import { mergeTelegramAccountConfig } from "./account-config.js";
 import { resolveDefaultTelegramAccountSelection } from "./account-selection.js";
 
@@ -10,7 +13,7 @@ type TelegramDirectoryAccount = {
 };
 
 function resolveTelegramDirectoryAccount(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId?: string | null,
 ): TelegramDirectoryAccount {
   const resolvedAccountId = accountId?.trim()

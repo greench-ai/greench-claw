@@ -27,7 +27,7 @@ const providerEnvVarsById = vi.hoisted(
 );
 
 vi.mock("../config/paths.js", () => ({
-  resolveStateDir: () => process.env.NEXISCLAW_STATE_DIR ?? "/tmp/NexisClaw-state",
+  resolveStateDir: () => process.env.GREENCHCLAW_STATE_DIR ?? "/tmp/GreenchClaw-state",
 }));
 
 vi.mock("../agents/auth-profiles/profiles.js", async () => {
@@ -35,7 +35,7 @@ vi.mock("../agents/auth-profiles/profiles.js", async () => {
   const path = await import("node:path");
   return {
     upsertAuthProfile: (params: { profileId: string; credential: unknown; agentDir?: string }) => {
-      const stateDir = process.env.NEXISCLAW_STATE_DIR ?? "/tmp/NexisClaw-state";
+      const stateDir = process.env.GREENCHCLAW_STATE_DIR ?? "/tmp/GreenchClaw-state";
       const agentDir = params.agentDir ?? path.join(stateDir, "agents", "main", "agent");
       const file = path.join(agentDir, "auth-profiles.json");
       fs.mkdirSync(agentDir, { recursive: true });
@@ -108,10 +108,10 @@ async function expectMissingFile(readPromise: Promise<unknown>) {
 
 describe("writeOAuthCredentials", () => {
   const lifecycle = createAuthTestLifecycle([
-    "NEXISCLAW_STATE_DIR",
-    "NEXISCLAW_AGENT_DIR",
+    "GREENCHCLAW_STATE_DIR",
+    "GREENCHCLAW_AGENT_DIR",
     "PI_CODING_AGENT_DIR",
-    "NEXISCLAW_OAUTH_DIR",
+    "GREENCHCLAW_OAUTH_DIR",
   ]);
 
   let tempStateDir: string;
@@ -122,7 +122,7 @@ describe("writeOAuthCredentials", () => {
   });
 
   it("writes auth-profiles.json under the default agent dir", async () => {
-    const env = await setupAuthTestEnv("NexisClaw-oauth-");
+    const env = await setupAuthTestEnv("GreenchClaw-oauth-");
     lifecycle.setStateDir(env.stateDir);
     const defaultAgentDir = path.join(env.stateDir, "agents", "main", "agent");
 
@@ -147,8 +147,8 @@ describe("writeOAuthCredentials", () => {
   });
 
   it("writes OAuth credentials to all sibling agent dirs when syncSiblingAgents=true", async () => {
-    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-oauth-sync-"));
-    process.env.NEXISCLAW_STATE_DIR = tempStateDir;
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-oauth-sync-"));
+    process.env.GREENCHCLAW_STATE_DIR = tempStateDir;
 
     const mainAgentDir = path.join(tempStateDir, "agents", "main", "agent");
     const kidAgentDir = path.join(tempStateDir, "agents", "kid", "agent");
@@ -157,7 +157,7 @@ describe("writeOAuthCredentials", () => {
     await fs.mkdir(kidAgentDir, { recursive: true });
     await fs.mkdir(workerAgentDir, { recursive: true });
 
-    process.env.NEXISCLAW_AGENT_DIR = kidAgentDir;
+    process.env.GREENCHCLAW_AGENT_DIR = kidAgentDir;
     process.env.PI_CODING_AGENT_DIR = kidAgentDir;
 
     const creds = {
@@ -184,15 +184,15 @@ describe("writeOAuthCredentials", () => {
   });
 
   it("writes OAuth credentials only to target dir by default", async () => {
-    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-oauth-nosync-"));
-    process.env.NEXISCLAW_STATE_DIR = tempStateDir;
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-oauth-nosync-"));
+    process.env.GREENCHCLAW_STATE_DIR = tempStateDir;
 
     const mainAgentDir = path.join(tempStateDir, "agents", "main", "agent");
     const kidAgentDir = path.join(tempStateDir, "agents", "kid", "agent");
     await fs.mkdir(mainAgentDir, { recursive: true });
     await fs.mkdir(kidAgentDir, { recursive: true });
 
-    process.env.NEXISCLAW_AGENT_DIR = kidAgentDir;
+    process.env.GREENCHCLAW_AGENT_DIR = kidAgentDir;
     process.env.PI_CODING_AGENT_DIR = kidAgentDir;
 
     const creds = {
@@ -215,11 +215,11 @@ describe("writeOAuthCredentials", () => {
     await expectMissingFile(fs.readFile(authProfilePathFor(mainAgentDir), "utf8"));
   });
 
-  it("syncs siblings from explicit agentDir outside NEXISCLAW_STATE_DIR", async () => {
-    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-oauth-external-"));
-    process.env.NEXISCLAW_STATE_DIR = tempStateDir;
+  it("syncs siblings from explicit agentDir outside GREENCHCLAW_STATE_DIR", async () => {
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-oauth-external-"));
+    process.env.GREENCHCLAW_STATE_DIR = tempStateDir;
 
-    // Create standard-layout agents tree *outside* NEXISCLAW_STATE_DIR
+    // Create standard-layout agents tree *outside* GREENCHCLAW_STATE_DIR
     const externalRoot = path.join(tempStateDir, "external", "agents");
     const extMain = path.join(externalRoot, "main", "agent");
     const extKid = path.join(externalRoot, "kid", "agent");
@@ -259,8 +259,8 @@ describe("writeOAuthCredentials", () => {
 
 describe("upsertApiKeyProfile secret refs", () => {
   const lifecycle = createAuthTestLifecycle([
-    "NEXISCLAW_STATE_DIR",
-    "NEXISCLAW_AGENT_DIR",
+    "GREENCHCLAW_STATE_DIR",
+    "GREENCHCLAW_AGENT_DIR",
     "PI_CODING_AGENT_DIR",
     "MOONSHOT_API_KEY",
     "OPENAI_API_KEY",
@@ -287,7 +287,7 @@ describe("upsertApiKeyProfile secret refs", () => {
   }
 
   it("handles plaintext, ref mode, and inline env-ref provider keys", async () => {
-    const env = await setupAuthTestEnv("NexisClaw-onboard-auth-credentials-");
+    const env = await setupAuthTestEnv("GreenchClaw-onboard-auth-credentials-");
     lifecycle.setStateDir(env.stateDir);
     process.env.MOONSHOT_API_KEY = "sk-moonshot-env"; // pragma: allowlist secret
     process.env.OPENAI_API_KEY = "sk-openai-env"; // pragma: allowlist secret
@@ -352,7 +352,7 @@ describe("upsertApiKeyProfile secret refs", () => {
   });
 
   it("stores provider-specific env refs and metadata in ref mode", async () => {
-    const env = await setupAuthTestEnv("NexisClaw-onboard-auth-credentials-provider-ref-");
+    const env = await setupAuthTestEnv("GreenchClaw-onboard-auth-credentials-provider-ref-");
     lifecycle.setStateDir(env.stateDir);
     process.env.CLOUDFLARE_AI_GATEWAY_API_KEY = "cf-secret"; // pragma: allowlist secret
     process.env.VOLCANO_ENGINE_API_KEY = "volcengine-secret"; // pragma: allowlist secret
@@ -405,8 +405,8 @@ describe("upsertApiKeyProfile secret refs", () => {
 
 describe("upsertApiKeyProfile", () => {
   const lifecycle = createAuthTestLifecycle([
-    "NEXISCLAW_STATE_DIR",
-    "NEXISCLAW_AGENT_DIR",
+    "GREENCHCLAW_STATE_DIR",
+    "GREENCHCLAW_AGENT_DIR",
     "PI_CODING_AGENT_DIR",
   ]);
 
@@ -415,7 +415,7 @@ describe("upsertApiKeyProfile", () => {
   });
 
   it("writes to the default agent dir", async () => {
-    const env = await setupAuthTestEnv("NexisClaw-minimax-", { agentSubdir: "custom-agent" });
+    const env = await setupAuthTestEnv("GreenchClaw-minimax-", { agentSubdir: "custom-agent" });
     lifecycle.setStateDir(env.stateDir);
     const defaultAgentDir = path.join(env.stateDir, "agents", "main", "agent");
 

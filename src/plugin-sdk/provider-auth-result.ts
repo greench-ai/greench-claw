@@ -5,8 +5,8 @@ import {
   normalizeAgentModelMapForConfig,
   normalizeAgentModelRefForConfig,
 } from "../config/model-input.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { ModelProviderConfig } from "../config/types.models.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type { ProviderAuthResult } from "../plugins/types.js";
 
 function normalizeAgentModelConfigForAuthResult(value: unknown): unknown {
@@ -61,8 +61,8 @@ function normalizeProviderConfigModelIdsForAuthResult(
 }
 
 function normalizeProviderAuthConfigPatchModelRefs(
-  patch: Partial<NexisClawConfig>,
-): Partial<NexisClawConfig> {
+  patch: Partial<GreenchClawConfig>,
+): Partial<GreenchClawConfig> {
   let next = patch;
   const defaults = patch.agents?.defaults;
   if (defaults) {
@@ -129,7 +129,7 @@ export function buildOauthProviderAuthResult(params: {
   profileName?: string | null;
   profilePrefix?: string;
   credentialExtra?: Record<string, unknown>;
-  configPatch?: Partial<NexisClawConfig>;
+  configPatch?: Partial<GreenchClawConfig>;
   notes?: string[];
 }): ProviderAuthResult {
   const email = params.email ?? undefined;
@@ -164,7 +164,7 @@ export function buildOauthProviderAuthResult(params: {
               },
             },
           },
-        } as Partial<NexisClawConfig>),
+        } as Partial<GreenchClawConfig>),
     ),
     defaultModel,
     notes: params.notes,

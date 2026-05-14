@@ -1,11 +1,11 @@
 ---
-summary: "CLI reference for `NexisClaw agents` (list/add/delete/bindings/bind/unbind/set identity)"
+summary: "CLI reference for `GreenchClaw agents` (list/add/delete/bindings/bind/unbind/set identity)"
 read_when:
   - You want multiple isolated agents (workspaces + routing + auth)
 title: "Agents"
 ---
 
-# `NexisClaw agents`
+# `GreenchClaw agents`
 
 Manage isolated agents (workspaces + auth + routing).
 
@@ -18,56 +18,56 @@ Related:
 ## Examples
 
 ```bash
-NexisClaw agents list
-NexisClaw agents list --bindings
-NexisClaw agents add work --workspace ~/.NexisClaw/workspace-work
-NexisClaw agents add ops --workspace ~/.NexisClaw/workspace-ops --bind telegram:ops --non-interactive
-NexisClaw agents bindings
-NexisClaw agents bind --agent work --bind telegram:ops
-NexisClaw agents unbind --agent work --bind telegram:ops
-NexisClaw agents set-identity --workspace ~/.NexisClaw/workspace --from-identity
-NexisClaw agents set-identity --agent main --avatar avatars/NexisClaw.png
-NexisClaw agents delete work
+GreenchClaw agents list
+GreenchClaw agents list --bindings
+GreenchClaw agents add work --workspace ~/.GreenchClaw/workspace-work
+GreenchClaw agents add ops --workspace ~/.GreenchClaw/workspace-ops --bind telegram:ops --non-interactive
+GreenchClaw agents bindings
+GreenchClaw agents bind --agent work --bind telegram:ops
+GreenchClaw agents unbind --agent work --bind telegram:ops
+GreenchClaw agents set-identity --workspace ~/.GreenchClaw/workspace --from-identity
+GreenchClaw agents set-identity --agent main --avatar avatars/GreenchClaw.png
+GreenchClaw agents delete work
 ```
 
 ## Routing bindings
 
 Use routing bindings to pin inbound channel traffic to a specific agent.
 
-If you also want different visible skills per agent, configure `agents.defaults.skills` and `agents.list[].skills` in `NexisClaw.json`. See [Skills config](/tools/skills-config) and [Configuration reference](/gateway/config-agents#agents-defaults-skills).
+If you also want different visible skills per agent, configure `agents.defaults.skills` and `agents.list[].skills` in `GreenchClaw.json`. See [Skills config](/tools/skills-config) and [Configuration reference](/gateway/config-agents#agents-defaults-skills).
 
 List bindings:
 
 ```bash
-NexisClaw agents bindings
-NexisClaw agents bindings --agent work
-NexisClaw agents bindings --json
+GreenchClaw agents bindings
+GreenchClaw agents bindings --agent work
+GreenchClaw agents bindings --json
 ```
 
 Add bindings:
 
 ```bash
-NexisClaw agents bind --agent work --bind telegram:ops --bind discord:guild-a
+GreenchClaw agents bind --agent work --bind telegram:ops --bind discord:guild-a
 ```
 
-If you omit `accountId` (`--bind <channel>`), NexisClaw resolves it from channel defaults and plugin setup hooks when available.
+If you omit `accountId` (`--bind <channel>`), GreenchClaw resolves it from channel defaults and plugin setup hooks when available.
 
-If you omit `--agent` for `bind` or `unbind`, NexisClaw targets the current default agent.
+If you omit `--agent` for `bind` or `unbind`, GreenchClaw targets the current default agent.
 
 ### Binding scope behavior
 
 - A binding without `accountId` matches the channel default account only.
 - `accountId: "*"` is the channel-wide fallback (all accounts) and is less specific than an explicit account binding.
-- If the same agent already has a matching channel binding without `accountId`, and you later bind with an explicit or resolved `accountId`, NexisClaw upgrades that existing binding in place instead of adding a duplicate.
+- If the same agent already has a matching channel binding without `accountId`, and you later bind with an explicit or resolved `accountId`, GreenchClaw upgrades that existing binding in place instead of adding a duplicate.
 
 Example:
 
 ```bash
 # initial channel-only binding
-NexisClaw agents bind --agent work --bind telegram
+GreenchClaw agents bind --agent work --bind telegram
 
 # later upgrade to account-scoped binding
-NexisClaw agents bind --agent work --bind telegram:ops
+GreenchClaw agents bind --agent work --bind telegram:ops
 ```
 
 After the upgrade, routing for that binding is scoped to `telegram:ops`. If you also want default-account routing, add it explicitly (for example `--bind telegram:default`).
@@ -75,8 +75,8 @@ After the upgrade, routing for that binding is scoped to `telegram:ops`. If you 
 Remove bindings:
 
 ```bash
-NexisClaw agents unbind --agent work --bind telegram:ops
-NexisClaw agents unbind --agent work --all
+GreenchClaw agents unbind --agent work --bind telegram:ops
+GreenchClaw agents unbind --agent work --all
 ```
 
 `unbind` accepts either `--all` or one or more `--bind` values, not both.
@@ -85,7 +85,7 @@ NexisClaw agents unbind --agent work --all
 
 ### `agents`
 
-Running `NexisClaw agents` with no subcommand is equivalent to `NexisClaw agents list`.
+Running `GreenchClaw agents` with no subcommand is equivalent to `GreenchClaw agents list`.
 
 ### `agents list`
 
@@ -161,7 +161,7 @@ Notes:
 
 Each agent workspace can include an `IDENTITY.md` at the workspace root:
 
-- Example path: `~/.NexisClaw/workspace/IDENTITY.md`
+- Example path: `~/.GreenchClaw/workspace/IDENTITY.md`
 - `set-identity --from-identity` reads from the workspace root (or an explicit `--identity-file`)
 
 Avatar paths resolve relative to the workspace root.
@@ -196,13 +196,13 @@ Notes:
 Load from `IDENTITY.md`:
 
 ```bash
-NexisClaw agents set-identity --workspace ~/.NexisClaw/workspace --from-identity
+GreenchClaw agents set-identity --workspace ~/.GreenchClaw/workspace --from-identity
 ```
 
 Override fields explicitly:
 
 ```bash
-NexisClaw agents set-identity --agent main --name "NexisClaw" --emoji "🦞" --avatar avatars/NexisClaw.png
+GreenchClaw agents set-identity --agent main --name "GreenchClaw" --emoji "🦞" --avatar avatars/GreenchClaw.png
 ```
 
 Config sample:
@@ -214,10 +214,10 @@ Config sample:
       {
         id: "main",
         identity: {
-          name: "NexisClaw",
+          name: "GreenchClaw",
           theme: "space lobster",
           emoji: "🦞",
-          avatar: "avatars/NexisClaw.png",
+          avatar: "avatars/GreenchClaw.png",
         },
       },
     ],

@@ -2,7 +2,7 @@ import {
   describeImageWithModel,
   describeImagesWithModel,
   type MediaUnderstandingProvider,
-} from "NexisClaw/plugin-sdk/media-understanding";
+} from "GreenchClaw/plugin-sdk/media-understanding";
 
 export const minimaxMediaUnderstandingProvider: MediaUnderstandingProvider = {
   id: "minimax",

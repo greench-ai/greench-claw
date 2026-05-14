@@ -1,7 +1,7 @@
 import {
   buildChannelOutboundSessionRoute,
   type ChannelOutboundSessionRouteParams,
-} from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/core";
 import { parseTlonTarget } from "./targets.js";
 
 export function resolveTlonOutboundSessionRoute(params: ChannelOutboundSessionRouteParams) {

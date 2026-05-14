@@ -5,18 +5,18 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
   it("flags published plugin packages with TypeScript entries and no compiled runtime output", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
-        spec: "@NexisClaw/discord@2026.5.2",
+        spec: "@GreenchClaw/discord@2026.5.2",
         packageJson: {
-          name: "@NexisClaw/discord",
+          name: "@GreenchClaw/discord",
           version: "2026.5.2",
-          NexisClaw: {
+          GreenchClaw: {
             extensions: ["./index.ts"],
           },
         },
         files: ["package.json", "index.ts"],
       }),
     ).toEqual([
-      "@NexisClaw/discord@2026.5.2 requires compiled runtime output for TypeScript entry ./index.ts: expected ./dist/index.js, ./dist/index.mjs, ./dist/index.cjs, ./index.js, ./index.mjs, ./index.cjs",
+      "@GreenchClaw/discord@2026.5.2 requires compiled runtime output for TypeScript entry ./index.ts: expected ./dist/index.js, ./dist/index.mjs, ./dist/index.cjs, ./index.js, ./index.mjs, ./index.cjs",
     ]);
   });
 
@@ -24,9 +24,9 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@NexisClaw/zalo",
+          name: "@GreenchClaw/zalo",
           version: "2026.5.3",
-          NexisClaw: {
+          GreenchClaw: {
             extensions: ["./index.ts"],
             runtimeExtensions: ["./dist/index.js"],
           },
@@ -40,25 +40,25 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@NexisClaw/line",
+          name: "@GreenchClaw/line",
           version: "2026.5.3",
-          NexisClaw: {
+          GreenchClaw: {
             extensions: ["./src/index.ts"],
             runtimeExtensions: ["./dist/index.js"],
           },
         },
         files: ["package.json", "src/index.ts"],
       }),
-    ).toEqual(["@NexisClaw/line@2026.5.3 runtime extension entry not found: ./dist/index.js"]);
+    ).toEqual(["@GreenchClaw/line@2026.5.3 runtime extension entry not found: ./dist/index.js"]);
   });
 
   it("flags runtimeExtensions length mismatches", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@NexisClaw/acpx",
+          name: "@GreenchClaw/acpx",
           version: "2026.5.3",
-          NexisClaw: {
+          GreenchClaw: {
             extensions: ["./index.ts", "./tools.ts"],
             runtimeExtensions: ["./dist/index.js"],
           },
@@ -66,7 +66,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
         files: ["package.json", "dist/index.js"],
       }),
     ).toEqual([
-      "@NexisClaw/acpx@2026.5.3 package.json NexisClaw.runtimeExtensions length (1) must match NexisClaw.extensions length (2)",
+      "@GreenchClaw/acpx@2026.5.3 package.json GreenchClaw.runtimeExtensions length (1) must match GreenchClaw.extensions length (2)",
     ]);
   });
 
@@ -74,9 +74,9 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@NexisClaw/whatsapp",
+          name: "@GreenchClaw/whatsapp",
           version: "2026.5.3",
-          NexisClaw: {
+          GreenchClaw: {
             extensions: ["./src/index.ts"],
             runtimeExtensions: [" "],
           },
@@ -84,7 +84,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
         files: ["package.json", "src/index.ts", "dist/index.js"],
       }),
     ).toEqual([
-      "@NexisClaw/whatsapp@2026.5.3 package.json NexisClaw.runtimeExtensions[0] must be a non-empty string",
+      "@GreenchClaw/whatsapp@2026.5.3 package.json GreenchClaw.runtimeExtensions[0] must be a non-empty string",
     ]);
   });
 });

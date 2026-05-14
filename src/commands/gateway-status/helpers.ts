@@ -1,6 +1,6 @@
 import { parseTimeoutMsWithFallback } from "../../cli/parse-timeout.js";
 import { resolveGatewayPort } from "../../config/config.js";
-import type { NexisClawConfig, ConfigFileSnapshot } from "../../config/types.js";
+import type { GreenchClawConfig, ConfigFileSnapshot } from "../../config/types.js";
 import { hasConfiguredSecretInput } from "../../config/types.secrets.js";
 import { resolveGatewayProbeSurfaceAuth } from "../../gateway/auth-surface-resolution.js";
 import { isLoopbackHost } from "../../gateway/net.js";
@@ -82,7 +82,10 @@ function normalizeWsUrl(value: string): string | null {
   return trimmed;
 }
 
-export function resolveTargets(cfg: NexisClawConfig, explicitUrl?: string): GatewayStatusTarget[] {
+export function resolveTargets(
+  cfg: GreenchClawConfig,
+  explicitUrl?: string,
+): GatewayStatusTarget[] {
   const targets: GatewayStatusTarget[] = [];
   const add = (t: GatewayStatusTarget) => {
     if (!targets.some((x) => x.url === t.url)) {
@@ -160,7 +163,7 @@ export function sanitizeSshTarget(value: unknown): string | null {
 }
 
 export async function resolveAuthForTarget(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   target: GatewayStatusTarget,
   overrides: { token?: string; password?: string },
 ): Promise<{ token?: string; password?: string; diagnostics?: string[] }> {
@@ -244,7 +247,7 @@ export function extractConfigSummary(snapshotUnknown: unknown): GatewayConfigSum
   };
 }
 
-export function buildNetworkHints(cfg: NexisClawConfig) {
+export function buildNetworkHints(cfg: GreenchClawConfig) {
   const { tailnetIPv4 } = inspectBestEffortPrimaryTailnetIPv4();
   const port = resolveGatewayPort(cfg);
   const localScheme = cfg.gateway?.tls?.enabled === true ? "wss" : "ws";

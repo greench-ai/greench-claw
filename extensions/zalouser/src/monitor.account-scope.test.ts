@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig, PluginRuntime } from "../runtime-api.js";
+import type { GreenchClawConfig, PluginRuntime } from "../runtime-api.js";
 import "./monitor.send-mocks.js";
 import { __testing } from "./monitor.js";
 import "./zalo-js.test-mocks.js";
@@ -71,7 +71,7 @@ describe("zalouser monitor pairing account scoping", () => {
       },
     };
 
-    const config: NexisClawConfig = {
+    const config: GreenchClawConfig = {
       channels: {
         zalouser: {
           accounts: {

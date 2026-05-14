@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
@@ -40,7 +40,7 @@ const PLUGIN_DISCOVERY_ORDERS = ["simple", "profile", "paired", "late"] as const
 
 type ImplicitProviderParams = {
   agentDir: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
   explicitProviders?: Record<string, ProviderConfig> | null;
@@ -59,11 +59,11 @@ type ImplicitProviderContext = ImplicitProviderParams & {
 
 function resolveLiveProviderCatalogTimeoutMs(env: NodeJS.ProcessEnv): number | null {
   const live =
-    env.NEXISCLAW_LIVE_TEST === "1" || env.NEXISCLAW_LIVE_GATEWAY === "1" || env.LIVE === "1";
+    env.GREENCHCLAW_LIVE_TEST === "1" || env.GREENCHCLAW_LIVE_GATEWAY === "1" || env.LIVE === "1";
   if (!live) {
     return null;
   }
-  const raw = env.NEXISCLAW_LIVE_PROVIDER_DISCOVERY_TIMEOUT_MS?.trim();
+  const raw = env.GREENCHCLAW_LIVE_PROVIDER_DISCOVERY_TIMEOUT_MS?.trim();
   if (!raw) {
     return 15_000;
   }
@@ -72,14 +72,14 @@ function resolveLiveProviderCatalogTimeoutMs(env: NodeJS.ProcessEnv): number | n
 }
 
 function resolveProviderDiscoveryFilter(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;
   resolveOwners?: (provider: string) => readonly string[] | undefined;
   providerIds?: readonly string[];
 }): string[] | undefined {
   const { config, workspaceDir, env } = params;
-  const testRaw = env.NEXISCLAW_TEST_ONLY_PROVIDER_PLUGIN_IDS?.trim();
+  const testRaw = env.GREENCHCLAW_TEST_ONLY_PROVIDER_PLUGIN_IDS?.trim();
   if (testRaw) {
     const ids = testRaw
       .split(",")
@@ -100,13 +100,13 @@ function resolveProviderDiscoveryFilter(params: {
     });
   }
   const live =
-    env.NEXISCLAW_LIVE_TEST === "1" || env.NEXISCLAW_LIVE_GATEWAY === "1" || env.LIVE === "1";
+    env.GREENCHCLAW_LIVE_TEST === "1" || env.GREENCHCLAW_LIVE_GATEWAY === "1" || env.LIVE === "1";
   if (!live) {
     return undefined;
   }
   const rawValues = [
-    env.NEXISCLAW_LIVE_PROVIDERS?.trim(),
-    env.NEXISCLAW_LIVE_GATEWAY_PROVIDERS?.trim(),
+    env.GREENCHCLAW_LIVE_PROVIDERS?.trim(),
+    env.GREENCHCLAW_LIVE_GATEWAY_PROVIDERS?.trim(),
   ].filter((value): value is string => Boolean(value && value !== "all"));
   if (rawValues.length === 0) {
     return undefined;
@@ -129,7 +129,7 @@ function resolveProviderDiscoveryFilter(params: {
 
 function resolveProviderPluginScopeFromProviderIds(params: {
   providerIds: readonly string[];
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;
   resolveOwners?: (provider: string) => readonly string[] | undefined;
@@ -225,7 +225,7 @@ function appendNormalizedPluginMetadataOwners(
 }
 
 export function resolveProviderDiscoveryFilterForTest(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;
   resolveOwners?: (provider: string) => readonly string[] | undefined;
@@ -394,7 +394,7 @@ async function resolvePluginImplicitProviders(
   return Object.keys(discovered).length > 0 ? discovered : undefined;
 }
 
-function buildPluginCatalogConfig(ctx: ImplicitProviderContext): NexisClawConfig {
+function buildPluginCatalogConfig(ctx: ImplicitProviderContext): GreenchClawConfig {
   if (!ctx.explicitProviders || Object.keys(ctx.explicitProviders).length === 0) {
     return ctx.config ?? {};
   }
@@ -450,7 +450,7 @@ async function runProviderCatalogWithTimeout(
 
 export async function resolveImplicitProviders(
   params: ImplicitProviderParams,
-): Promise<NonNullable<NexisClawConfig["models"]>["providers"]> {
+): Promise<NonNullable<GreenchClawConfig["models"]>["providers"]> {
   const providers: Record<string, ProviderConfig> = {};
   const env = params.env ?? process.env;
   let authStore: ReturnType<typeof ensureAuthProfileStore> | undefined;

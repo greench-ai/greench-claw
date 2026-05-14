@@ -1,11 +1,11 @@
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   applySetupAccountConfigPatch,
   createStandardChannelSetupStatus,
   formatDocsLink,
   type ChannelSetupWizard,
-} from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/setup";
 import {
   applyMattermostSetupConfigPatch,
   isMattermostConfigured,
@@ -124,7 +124,7 @@ export const mattermostSetupWizard: ChannelSetupWizard = {
         }),
     },
   ],
-  disable: (cfg: NexisClawConfig) => ({
+  disable: (cfg: GreenchClawConfig) => ({
     ...cfg,
     channels: {
       ...cfg.channels,

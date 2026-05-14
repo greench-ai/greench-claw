@@ -3,9 +3,9 @@ import os from "node:os";
 import path from "node:path";
 import type { Api, Model } from "@earendil-works/pi-ai";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { withEnvAsync } from "../test-utils/env.js";
-import { withNexisClawTestState } from "../test-utils/NexisClaw-test-state.js";
+import { withGreenchClawTestState } from "../test-utils/GreenchClaw-test-state.js";
 import {
   clearRuntimeAuthProfileStoreSnapshots,
   ensureAuthProfileStore,
@@ -27,7 +27,7 @@ async function expectVertexAdcEnvApiKey(params: {
   env?: NodeJS.ProcessEnv;
   tempPrefix?: string;
 }) {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), params.tempPrefix ?? "NexisClaw-adc-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), params.tempPrefix ?? "GreenchClaw-adc-"));
   const credentialsPath = path.join(tempDir, "adc.json");
   await fs.writeFile(credentialsPath, params.credentialsJson, "utf8");
 
@@ -140,7 +140,7 @@ vi.mock("./model-auth-env-vars.js", () => {
     PROVIDER_ENV_API_KEY_CANDIDATES: candidates,
     listKnownProviderEnvApiKeyNames: () => [...new Set(Object.values(candidates).flat())],
     resolveProviderEnvApiKeyCandidates: () => candidates,
-    resolveProviderEnvAuthEvidence: (params?: { config?: NexisClawConfig }) => {
+    resolveProviderEnvAuthEvidence: (params?: { config?: GreenchClawConfig }) => {
       const evidence = {
         "google-vertex": [
           {
@@ -348,7 +348,7 @@ function buildDemoLocalStore(keys: string[]) {
   };
 }
 
-function buildDemoLocalProviderCfg(apiKey: string): NexisClawConfig {
+function buildDemoLocalProviderCfg(apiKey: string): GreenchClawConfig {
   return {
     models: {
       providers: {
@@ -379,10 +379,10 @@ async function resolveDemoLocalApiKey(params: {
 
 describe("getApiKeyForModel", () => {
   it("reads oauth auth-profiles entries from auth-profiles.json via explicit profile", async () => {
-    await withNexisClawTestState(
+    await withGreenchClawTestState(
       {
         layout: "state-only",
-        prefix: "NexisClaw-oauth-",
+        prefix: "GreenchClaw-oauth-",
         agentEnv: "main",
       },
       async (state) => {
@@ -403,14 +403,14 @@ describe("getApiKeyForModel", () => {
           api: "openai-codex-responses",
         } as Model<Api>;
 
-        const store = ensureAuthProfileStore(process.env.NEXISCLAW_AGENT_DIR, {
+        const store = ensureAuthProfileStore(process.env.GREENCHCLAW_AGENT_DIR, {
           allowKeychainPrompt: false,
         });
         const apiKey = await getApiKeyForModel({
           model,
           profileId: "openai-codex:default",
           store,
-          agentDir: process.env.NEXISCLAW_AGENT_DIR,
+          agentDir: process.env.GREENCHCLAW_AGENT_DIR,
         });
         expect(apiKey.apiKey).toBe(oauthFixture.access);
       },
@@ -418,10 +418,10 @@ describe("getApiKeyForModel", () => {
   });
 
   it("suggests openai-codex when only Codex OAuth is configured", async () => {
-    await withNexisClawTestState(
+    await withGreenchClawTestState(
       {
         layout: "state-only",
-        prefix: "NexisClaw-auth-",
+        prefix: "GreenchClaw-auth-",
         agentEnv: "main",
         env: {
           OPENAI_API_KEY: undefined,
@@ -459,10 +459,10 @@ describe("getApiKeyForModel", () => {
       expires: createUsableOAuthExpiry(),
     });
 
-    await withNexisClawTestState(
+    await withGreenchClawTestState(
       {
         layout: "state-only",
-        prefix: "NexisClaw-auth-scope-",
+        prefix: "GreenchClaw-auth-scope-",
         agentEnv: "main",
         env: {
           OPENAI_API_KEY: undefined,
@@ -489,10 +489,10 @@ describe("getApiKeyForModel", () => {
       expires: createUsableOAuthExpiry(),
     });
 
-    await withNexisClawTestState(
+    await withGreenchClawTestState(
       {
         layout: "state-only",
-        prefix: "NexisClaw-auth-claude-cli-",
+        prefix: "GreenchClaw-auth-claude-cli-",
         agentEnv: "main",
       },
       async () => {
@@ -593,11 +593,11 @@ describe("getApiKeyForModel", () => {
   });
 
   it("uses trusted workspace manifest auth evidence in runtime auth checks", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-workspace-cloud-auth-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-workspace-cloud-auth-"));
     const credentialsPath = path.join(tempDir, "credentials.json");
     await fs.writeFile(credentialsPath, "{}", "utf8");
 
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       plugins: {
         allow: ["workspace-cloud"],
       },
@@ -632,7 +632,7 @@ describe("getApiKeyForModel", () => {
   });
 
   it("ignores untrusted workspace manifest auth evidence in runtime auth checks", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-workspace-cloud-auth-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-workspace-cloud-auth-"));
     const credentialsPath = path.join(tempDir, "credentials.json");
     await fs.writeFile(credentialsPath, "{}", "utf8");
 
@@ -654,7 +654,7 @@ describe("getApiKeyForModel", () => {
   });
 
   it("uses the same trusted workspace manifest auth evidence in provider auth checks", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-workspace-cloud-auth-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-workspace-cloud-auth-"));
     const credentialsPath = path.join(tempDir, "credentials.json");
     await fs.writeFile(credentialsPath, "{}", "utf8");
     const store = { version: 1 as const, profiles: {} };
@@ -698,12 +698,12 @@ describe("getApiKeyForModel", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(
       hasAuthForModelProvider({
         provider: "amazon-bedrock",
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         env: {},
         store,
       }),
@@ -1123,7 +1123,7 @@ describe("getApiKeyForModel", () => {
     await expectVertexAdcEnvApiKey({
       provider: "google-vertex",
       credentialsJson: "{}",
-      tempPrefix: "NexisClaw-google-adc-",
+      tempPrefix: "GreenchClaw-google-adc-",
       env: {
         GOOGLE_CLOUD_LOCATION: "us-central1",
         GOOGLE_CLOUD_PROJECT: "vertex-project",
@@ -1132,7 +1132,7 @@ describe("getApiKeyForModel", () => {
   });
 
   it("resolveEnvApiKey('google-vertex') accepts Unicode explicit ADC credential paths", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-google-adc-unicode-"));
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-google-adc-unicode-"));
     const explicitDir = path.join(homeDir, "認証情報");
     const fallbackDir = path.join(homeDir, ".config", "gcloud");
     const explicitCredentialsPath = path.join(explicitDir, "adc.json");
@@ -1161,7 +1161,7 @@ describe("getApiKeyForModel", () => {
   });
 
   it("resolveEnvApiKey('google-vertex') accepts Unicode ADC fallback home paths", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-google-adc-home-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-google-adc-home-"));
     const homeDir = path.join(tempDir, "認証情報-home");
     const fallbackDir = path.join(homeDir, ".config", "gcloud");
     await fs.mkdir(fallbackDir, { recursive: true });
@@ -1186,7 +1186,7 @@ describe("getApiKeyForModel", () => {
   });
 
   it("resolveEnvApiKey('google-vertex') rejects GOOGLE_CLOUD_PROJECT_ID-only ADC auth evidence", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-google-adc-project-id-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-google-adc-project-id-"));
     const credentialsPath = path.join(tempDir, "adc.json");
     await fs.writeFile(credentialsPath, "{}", "utf8");
 
@@ -1204,7 +1204,7 @@ describe("getApiKeyForModel", () => {
   });
 
   it("resolveEnvApiKey('google-vertex') accepts Windows APPDATA ADC fallback evidence", async () => {
-    const appDataDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-google-adc-appdata-"));
+    const appDataDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-google-adc-appdata-"));
     const fallbackDir = path.join(appDataDir, "gcloud");
     await fs.mkdir(fallbackDir, { recursive: true });
     await fs.writeFile(
@@ -1228,9 +1228,9 @@ describe("getApiKeyForModel", () => {
   });
 
   it("resolveEnvApiKey('google-vertex') does not synthesize APPDATA from USERPROFILE", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-google-adc-home-"));
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-google-adc-home-"));
     const userProfileDir = await fs.mkdtemp(
-      path.join(os.tmpdir(), "NexisClaw-google-adc-userprofile-"),
+      path.join(os.tmpdir(), "GreenchClaw-google-adc-userprofile-"),
     );
     const fallbackDir = path.join(userProfileDir, "AppData", "Roaming", "gcloud");
     await fs.mkdir(fallbackDir, { recursive: true });
@@ -1256,7 +1256,7 @@ describe("getApiKeyForModel", () => {
   });
 
   it("resolveEnvApiKey('google-vertex') keeps ADC fallback when manifest env candidates are empty", async () => {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-google-adc-candidates-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-google-adc-candidates-"));
     const credentialsPath = path.join(tempDir, "adc.json");
     await fs.writeFile(credentialsPath, "{}", "utf8");
 
@@ -1279,7 +1279,7 @@ describe("getApiKeyForModel", () => {
   });
 
   it("resolveEnvApiKey('google-vertex') rejects missing explicit ADC path before fallback paths", async () => {
-    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-google-adc-home-"));
+    const homeDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-google-adc-home-"));
     const fallbackDir = path.join(homeDir, ".config", "gcloud");
     const missingCredentialsPath = path.join(homeDir, "missing-adc.json");
     await fs.mkdir(fallbackDir, { recursive: true });

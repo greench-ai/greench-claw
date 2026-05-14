@@ -54,13 +54,13 @@ async function installFakeClaudeCli(fakeBinDir, promptLogPath) {
 
 async function main() {
   const stateDir =
-    process.env.NEXISCLAW_STATE_DIR ??
-    (await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-crestodian-planner-")));
-  const configPath = process.env.NEXISCLAW_CONFIG_PATH ?? path.join(stateDir, "NexisClaw.json");
+    process.env.GREENCHCLAW_STATE_DIR ??
+    (await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-crestodian-planner-")));
+  const configPath = process.env.GREENCHCLAW_CONFIG_PATH ?? path.join(stateDir, "GreenchClaw.json");
   const fakeBinDir = path.join(stateDir, "fake-bin");
   const promptLogPath = path.join(stateDir, "fake-claude-prompt.jsonl");
-  process.env.NEXISCLAW_STATE_DIR = stateDir;
-  process.env.NEXISCLAW_CONFIG_PATH = configPath;
+  process.env.GREENCHCLAW_STATE_DIR = stateDir;
+  process.env.GREENCHCLAW_CONFIG_PATH = configPath;
   process.env.PATH = `${fakeBinDir}:${process.env.PATH ?? ""}`;
   await fs.rm(stateDir, { recursive: true, force: true });
   await fs.mkdir(stateDir, { recursive: true });
@@ -101,7 +101,7 @@ async function main() {
   const promptLine = await fs.readFile(promptLogPath, "utf8");
   assert(promptLine.includes("User request:"), "fake Claude CLI did not receive planner prompt");
   assert(
-    promptLine.includes("NexisClaw docs:"),
+    promptLine.includes("GreenchClaw docs:"),
     "planner prompt did not include docs reference context",
   );
 

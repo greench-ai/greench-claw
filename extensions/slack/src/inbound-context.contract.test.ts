@@ -1,6 +1,6 @@
-import { expectChannelInboundContextContract } from "NexisClaw/plugin-sdk/channel-contract-testing";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { createTempHomeEnv } from "NexisClaw/plugin-sdk/test-env";
+import { expectChannelInboundContextContract } from "GreenchClaw/plugin-sdk/channel-contract-testing";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { createTempHomeEnv } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, it } from "vitest";
 import {
   createInboundSlackTestContext,
@@ -37,12 +37,12 @@ function createSlackMessage(overrides: Partial<SlackMessageEvent>): SlackMessage
 
 describe("Slack inbound context contract", () => {
   it("keeps inbound context finalized", async () => {
-    const tempHome = await createTempHomeEnv("NexisClaw-slack-inbound-contract-");
+    const tempHome = await createTempHomeEnv("GreenchClaw-slack-inbound-contract-");
     try {
       const ctx = createInboundSlackTestContext({
         cfg: {
           channels: { slack: { enabled: true } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
       });
       ctx.resolveUserName = async () => ({ name: "Alice" }) as never;
 

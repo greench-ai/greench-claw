@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import { fetchGraphJson, resolveGraphToken } from "./graph.js";
 
 type GraphUserProfile = {
@@ -11,7 +11,7 @@ type GraphUserProfile = {
 };
 
 type GetMemberInfoMSTeamsParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   userId: string;
 };
 

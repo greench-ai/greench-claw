@@ -1,5 +1,5 @@
 import { applyOwnerOnlyToolPolicy } from "../agents/tool-policy.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   buildMcpToolSchema,
   type McpLoopbackTool,
@@ -14,7 +14,7 @@ type CachedScopedTools = {
   agentId: string | undefined;
   tools: McpLoopbackTool[];
   toolSchema: McpToolSchemaEntry[];
-  configRef: NexisClawConfig;
+  configRef: GreenchClawConfig;
   time: number;
 };
 
@@ -22,7 +22,7 @@ export class McpLoopbackToolCache {
   #entries = new Map<string, CachedScopedTools>();
 
   resolve(params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     sessionKey: string;
     messageProvider: string | undefined;
     accountId: string | undefined;

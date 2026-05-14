@@ -1,5 +1,5 @@
-import { danger } from "NexisClaw/plugin-sdk/runtime-env";
-import { typedCases } from "NexisClaw/plugin-sdk/test-fixtures";
+import { danger } from "GreenchClaw/plugin-sdk/runtime-env";
+import { typedCases } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ChannelType, type Guild } from "./internal/discord.js";
 import {
@@ -27,10 +27,10 @@ type DiscordReactionClient = Parameters<
 
 const readAllowFromStoreMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/conversation-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/conversation-runtime")>(
-    "NexisClaw/plugin-sdk/conversation-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/conversation-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/conversation-runtime")
+  >("GreenchClaw/plugin-sdk/conversation-runtime");
   return {
     ...actual,
     readChannelAllowFromStore: (...args: unknown[]) => readAllowFromStoreMock(...args),
@@ -190,7 +190,7 @@ describe("DiscordMessageListener", () => {
       warn: vi.fn(),
       error: vi.fn(),
     } as unknown as ReturnType<
-      typeof import("NexisClaw/plugin-sdk/logging-core").createSubsystemLogger
+      typeof import("GreenchClaw/plugin-sdk/logging-core").createSubsystemLogger
     >;
     const handler = vi.fn(async () => {
       throw new Error("boom");
@@ -212,7 +212,7 @@ describe("DiscordMessageListener", () => {
       warn: vi.fn(),
       error: vi.fn(),
     } as unknown as ReturnType<
-      typeof import("NexisClaw/plugin-sdk/logging-core").createSubsystemLogger
+      typeof import("GreenchClaw/plugin-sdk/logging-core").createSubsystemLogger
     >;
     const listener = new DiscordMessageListener(handler, logger);
 
@@ -232,22 +232,22 @@ describe("DiscordMessageListener", () => {
 
 describe("discord allowlist helpers", () => {
   it("normalizes slugs", () => {
-    expect(normalizeDiscordSlug("Friends of NexisClaw")).toBe("friends-of-NexisClaw");
+    expect(normalizeDiscordSlug("Friends of GreenchClaw")).toBe("friends-of-GreenchClaw");
     expect(normalizeDiscordSlug("#General")).toBe("general");
     expect(normalizeDiscordSlug("Dev__Chat")).toBe("dev-chat");
   });
 
   it("matches ids by default and names only when enabled", () => {
     const allow = expectNormalizedAllowList(
-      ["123", "steipete", "Friends of NexisClaw"],
+      ["123", "steipete", "Friends of GreenchClaw"],
       ["discord:", "user:", "guild:", "channel:"],
     );
     expect(allowListMatches(allow, { id: "123" })).toBe(true);
     expect(allowListMatches(allow, { name: "steipete" })).toBe(false);
-    expect(allowListMatches(allow, { name: "friends-of-NexisClaw" })).toBe(false);
+    expect(allowListMatches(allow, { name: "friends-of-GreenchClaw" })).toBe(false);
     expect(allowListMatches(allow, { name: "steipete" }, { allowNameMatching: true })).toBe(true);
     expect(
-      allowListMatches(allow, { name: "friends-of-NexisClaw" }, { allowNameMatching: true }),
+      allowListMatches(allow, { name: "friends-of-GreenchClaw" }, { allowNameMatching: true }),
     ).toBe(true);
     expect(allowListMatches(allow, { name: "other" })).toBe(false);
   });
@@ -282,38 +282,38 @@ describe("discord allowlist helpers", () => {
 describe("discord guild/channel resolution", () => {
   it("resolves guild entry by id", () => {
     const guildEntries = makeEntries({
-      "123": { slug: "friends-of-NexisClaw" },
+      "123": { slug: "friends-of-GreenchClaw" },
     });
     const resolved = resolveDiscordGuildEntry({
-      guild: fakeGuild("123", "Friends of NexisClaw"),
+      guild: fakeGuild("123", "Friends of GreenchClaw"),
       guildEntries,
     });
     expect(resolved?.id).toBe("123");
-    expect(resolved?.slug).toBe("friends-of-NexisClaw");
+    expect(resolved?.slug).toBe("friends-of-GreenchClaw");
   });
 
   it("resolves guild entry by raw guild id when guild object is missing", () => {
     const guildEntries = makeEntries({
-      "123": { slug: "friends-of-NexisClaw" },
+      "123": { slug: "friends-of-GreenchClaw" },
     });
     const resolved = resolveDiscordGuildEntry({
       guildId: "123",
       guildEntries,
     });
     expect(resolved?.id).toBe("123");
-    expect(resolved?.slug).toBe("friends-of-NexisClaw");
+    expect(resolved?.slug).toBe("friends-of-GreenchClaw");
   });
 
   it("resolves guild entry by slug key", () => {
     const guildEntries = makeEntries({
-      "friends-of-NexisClaw": { slug: "friends-of-NexisClaw" },
+      "friends-of-GreenchClaw": { slug: "friends-of-GreenchClaw" },
     });
     const resolved = resolveDiscordGuildEntry({
-      guild: fakeGuild("123", "Friends of NexisClaw"),
+      guild: fakeGuild("123", "Friends of GreenchClaw"),
       guildEntries,
     });
     expect(resolved?.id).toBe("123");
-    expect(resolved?.slug).toBe("friends-of-NexisClaw");
+    expect(resolved?.slug).toBe("friends-of-GreenchClaw");
   });
 
   it("falls back to wildcard guild entry", () => {
@@ -321,7 +321,7 @@ describe("discord guild/channel resolution", () => {
       "*": { requireMention: false },
     });
     const resolved = resolveDiscordGuildEntry({
-      guild: fakeGuild("123", "Friends of NexisClaw"),
+      guild: fakeGuild("123", "Friends of GreenchClaw"),
       guildEntries,
     });
     expect(resolved?.id).toBe("123");
@@ -668,15 +668,15 @@ describe("discord group DM gating", () => {
   it("matches group DM allowlist", () => {
     expect(
       resolveGroupDmAllow({
-        channels: ["NexisClaw-dm"],
+        channels: ["GreenchClaw-dm"],
         channelId: "1",
-        channelName: "NexisClaw DM",
-        channelSlug: "NexisClaw-dm",
+        channelName: "GreenchClaw DM",
+        channelSlug: "GreenchClaw-dm",
       }),
     ).toBe(true);
     expect(
       resolveGroupDmAllow({
-        channels: ["NexisClaw-dm"],
+        channels: ["GreenchClaw-dm"],
         channelId: "1",
         channelName: "Other",
         channelSlug: "other",
@@ -935,10 +935,10 @@ const { enqueueSystemEventSpy, resolveAgentRouteMock } = vi.hoisted(() => ({
   })),
 }));
 
-const channelRuntimeModule = await import("NexisClaw/plugin-sdk/system-event-runtime");
+const channelRuntimeModule = await import("GreenchClaw/plugin-sdk/system-event-runtime");
 vi.spyOn(channelRuntimeModule, "enqueueSystemEvent").mockImplementation(enqueueSystemEventSpy);
 
-const routingModule = await import("NexisClaw/plugin-sdk/routing");
+const routingModule = await import("GreenchClaw/plugin-sdk/routing");
 vi.spyOn(routingModule, "resolveAgentRoute").mockImplementation(resolveAgentRouteMock);
 
 const { DiscordMessageListener, DiscordReactionListener, registerDiscordListener } =
@@ -1046,9 +1046,9 @@ function makeReactionListenerParams(overrides?: {
   guildEntries?: Record<string, DiscordGuildEntryResolved>;
 }) {
   return {
-    cfg: {} as import("NexisClaw/plugin-sdk/config-contracts").NexisClawConfig,
+    cfg: {} as import("GreenchClaw/plugin-sdk/config-contracts").GreenchClawConfig,
     accountId: "acc-1",
-    runtime: {} as import("NexisClaw/plugin-sdk/runtime-env").RuntimeEnv,
+    runtime: {} as import("GreenchClaw/plugin-sdk/runtime-env").RuntimeEnv,
     botUserId: overrides?.botUserId ?? "bot-1",
     dmEnabled: overrides?.dmEnabled ?? true,
     groupDmEnabled: overrides?.groupDmEnabled ?? true,
@@ -1064,7 +1064,7 @@ function makeReactionListenerParams(overrides?: {
       error: vi.fn(),
       debug: vi.fn(),
     } as unknown as ReturnType<
-      typeof import("NexisClaw/plugin-sdk/logging-core").createSubsystemLogger
+      typeof import("GreenchClaw/plugin-sdk/logging-core").createSubsystemLogger
     >,
   };
 }

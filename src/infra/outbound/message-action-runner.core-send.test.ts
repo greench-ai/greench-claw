@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
 import { createOutboundTestPlugin, createTestRegistry } from "../../test-utils/channel-plugins.js";
 import { runMessageAction } from "./message-action-runner.js";
@@ -56,7 +56,7 @@ describe("runMessageAction core send routing", () => {
           enabled: true,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const result = await runMessageAction({
       cfg,
@@ -109,7 +109,7 @@ describe("runMessageAction core send routing", () => {
           enabled: true,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const result = await runMessageAction({
       cfg,
@@ -166,7 +166,7 @@ describe("runMessageAction core send routing", () => {
             botToken: "123:test",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       action: "send",
       params: {
         channel: "telegram",

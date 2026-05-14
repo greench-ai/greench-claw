@@ -1,5 +1,5 @@
 import type { Message } from "@grammyjs/types";
-import { retryAsync } from "NexisClaw/plugin-sdk/retry-runtime";
+import { retryAsync } from "GreenchClaw/plugin-sdk/retry-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveMedia } from "./delivery.resolve-media.js";
 import type { TelegramContext } from "./types.js";
@@ -8,7 +8,7 @@ const saveMediaBuffer = vi.fn();
 const fetchRemoteMedia = vi.fn();
 const rootRead = vi.fn();
 
-vi.mock("NexisClaw/plugin-sdk/file-access-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/file-access-runtime", () => ({
   root: async (rootDir: string) => ({
     read: async (relativePath: string, options?: { maxBytes?: number }) =>
       await rootRead({

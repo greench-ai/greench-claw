@@ -1,9 +1,9 @@
 import {
   createInboundDebouncer,
   resolveInboundDebounceMs,
-} from "NexisClaw/plugin-sdk/channel-inbound-debounce";
-import { hasControlCommand } from "NexisClaw/plugin-sdk/command-detection";
-import { createNonExitingRuntimeEnv } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/channel-inbound-debounce";
+import { hasControlCommand } from "GreenchClaw/plugin-sdk/command-detection";
+import { createNonExitingRuntimeEnv } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ClawdbotConfig, PluginRuntime } from "../runtime-api.js";
 import { parseFeishuMessageEvent, type FeishuMessageEvent } from "./bot.js";
@@ -556,7 +556,7 @@ describe("Feishu inbound debounce regressions", () => {
     vi.spyOn(dedup, "tryBeginFeishuMessageProcessing").mockReturnValue(true);
     vi.spyOn(dedup, "recordProcessedFeishuMessage").mockResolvedValue(true);
     vi.spyOn(dedup, "hasProcessedFeishuMessage").mockResolvedValue(false);
-    const onMessage = await setupDebounceMonitor({ botName: "NexisClaw Bot" });
+    const onMessage = await setupDebounceMonitor({ botName: "GreenchClaw Bot" });
 
     await onMessage(
       createTextEvent({
@@ -566,7 +566,7 @@ describe("Feishu inbound debounce regressions", () => {
           {
             key: "@_user_1",
             id: { open_id: "ou_bot" },
-            name: "NexisClaw Bot",
+            name: "GreenchClaw Bot",
           },
         ],
       }),
@@ -579,7 +579,7 @@ describe("Feishu inbound debounce regressions", () => {
     const firstParams = handleFeishuMessageMock.mock.calls.at(0)?.[0] as
       | { botName?: string }
       | undefined;
-    expect(firstParams?.botName).toBe("NexisClaw Bot");
+    expect(firstParams?.botName).toBe("GreenchClaw Bot");
   });
 
   it("does not synthesize mention-forward intent across separate messages", async () => {

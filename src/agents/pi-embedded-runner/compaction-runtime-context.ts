@@ -1,6 +1,6 @@
 import type { SourceReplyDeliveryMode } from "../../auto-reply/get-reply-options.types.js";
 import type { ReasoningLevel, ThinkLevel } from "../../auto-reply/thinking.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   listActiveProcessSessionReferences,
   type ActiveProcessSessionReference,
@@ -19,7 +19,7 @@ export type EmbeddedCompactionRuntimeContext = {
   authProfileId?: string;
   workspaceDir: string;
   agentDir: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   skillsSnapshot?: SkillSnapshot;
   senderIsOwner?: boolean;
   senderId?: string;
@@ -40,7 +40,7 @@ export type EmbeddedCompactionRuntimeContext = {
  * caller-supplied provider/model and optionally applying runtime defaults.
  */
 export function resolveEmbeddedCompactionTarget(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   provider?: string | null;
   modelId?: string | null;
   authProfileId?: string | null;
@@ -87,7 +87,7 @@ export function buildEmbeddedCompactionRuntimeContext(params: {
   authProfileId?: string | null;
   workspaceDir: string;
   agentDir: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   skillsSnapshot?: SkillSnapshot;
   senderIsOwner?: boolean;
   senderId?: string | null;

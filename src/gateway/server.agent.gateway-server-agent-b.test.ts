@@ -178,7 +178,7 @@ async function sendAgentWsRequestAndWaitFinal(
 }
 
 async function useTempSessionStorePath() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-gw-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-gw-"));
   testState.sessionStorePath = path.join(dir, "sessions.json");
 }
 

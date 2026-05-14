@@ -1,13 +1,13 @@
 {
   "entries": [
     {
-      "name": "@wecom/wecom-NexisClaw-plugin",
-      "description": "NexisClaw WeCom channel plugin by the Tencent WeCom team.",
+      "name": "@wecom/wecom-GreenchClaw-plugin",
+      "description": "GreenchClaw WeCom channel plugin by the Tencent WeCom team.",
       "source": "external",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
-          "id": "wecom-NexisClaw-plugin",
+          "id": "wecom-GreenchClaw-plugin",
           "label": "WeCom"
         },
         "contracts": {
@@ -35,20 +35,20 @@
           }
         },
         "install": {
-          "npmSpec": "@wecom/wecom-NexisClaw-plugin@2026.4.23",
+          "npmSpec": "@wecom/wecom-GreenchClaw-plugin@2026.4.23",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-bnzfdIEEu1/LFvcdyjaTkyxt27w6c7dqhkPezU62OWaqmcdFsUGR3T55USK/O9pIKsNcnL1Tnu1pqKYCWHFgWQ=="
         }
       }
     },
     {
-      "name": "NexisClaw-plugin-yuanbao",
-      "description": "NexisClaw Yuanbao channel plugin by the Tencent Yuanbao team.",
+      "name": "GreenchClaw-plugin-yuanbao",
+      "description": "GreenchClaw Yuanbao channel plugin by the Tencent Yuanbao team.",
       "source": "external",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
-          "id": "NexisClaw-plugin-yuanbao",
+          "id": "GreenchClaw-plugin-yuanbao",
           "label": "Yuanbao"
         },
         "contracts": {
@@ -76,24 +76,24 @@
           }
         },
         "install": {
-          "npmSpec": "NexisClaw-plugin-yuanbao@2.13.1",
+          "npmSpec": "GreenchClaw-plugin-yuanbao@2.13.1",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-lH2I9/nsmrg7l0YJJSQhOSpWMEFBAa6FwKbZcRLDFHDT2+mOZkHa44XE+8KYN4VmorlUdAxHzpZQmVr7C98IuA=="
         }
       }
     },
     {
-      "name": "@tencent-weixin/NexisClaw-weixin",
-      "description": "NexisClaw Weixin channel plugin by the Tencent Weixin team.",
+      "name": "@tencent-weixin/GreenchClaw-weixin",
+      "description": "GreenchClaw Weixin channel plugin by the Tencent Weixin team.",
       "source": "external",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
-          "id": "NexisClaw-weixin",
+          "id": "GreenchClaw-weixin",
           "label": "Weixin"
         },
         "channel": {
-          "id": "NexisClaw-weixin",
+          "id": "GreenchClaw-weixin",
           "label": "Weixin",
           "selectionLabel": "Weixin（微信）",
           "detailLabel": "Weixin",
@@ -104,7 +104,7 @@
           "order": 75
         },
         "channelConfigs": {
-          "NexisClaw-weixin": {
+          "GreenchClaw-weixin": {
             "label": "Weixin",
             "description": "Personal WeChat conversation channel.",
             "schema": {
@@ -114,7 +114,7 @@
           }
         },
         "install": {
-          "npmSpec": "@tencent-weixin/NexisClaw-weixin@2.4.1",
+          "npmSpec": "@tencent-weixin/GreenchClaw-weixin@2.4.1",
           "defaultChoice": "npm",
           "expectedIntegrity": "sha512-FZnUVMQRpKGTKezeplr/DYal+5RSif2tXE51pljIFrO8rn7bVnnvpbj81/i9UMrYbuGiom1sl8OeSDzWRDKGhQ==",
           "minHostVersion": ">=2026.3.22"
@@ -122,11 +122,11 @@
       }
     },
     {
-      "name": "@NexisClaw/discord",
-      "description": "NexisClaw Discord channel plugin",
+      "name": "@GreenchClaw/discord",
+      "description": "GreenchClaw Discord channel plugin",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "discord",
           "label": "Discord",
@@ -140,7 +140,7 @@
           "preferSessionLookupForAnnounceTarget": true
         },
         "install": {
-          "npmSpec": "@NexisClaw/discord",
+          "npmSpec": "@GreenchClaw/discord",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10",
           "allowInvalidConfigRecovery": true
@@ -148,11 +148,11 @@
       }
     },
     {
-      "name": "@NexisClaw/feishu",
-      "description": "NexisClaw Feishu/Lark channel plugin",
+      "name": "@GreenchClaw/feishu",
+      "description": "GreenchClaw Feishu/Lark channel plugin",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "feishu",
           "label": "Feishu",
@@ -165,18 +165,18 @@
           "quickstartAllowFrom": true
         },
         "install": {
-          "npmSpec": "@NexisClaw/feishu",
+          "npmSpec": "@GreenchClaw/feishu",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@NexisClaw/googlechat",
-      "description": "NexisClaw Google Chat channel plugin",
+      "name": "@GreenchClaw/googlechat",
+      "description": "GreenchClaw Google Chat channel plugin",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "googlechat",
           "label": "Google Chat",
@@ -215,18 +215,18 @@
           ]
         },
         "install": {
-          "npmSpec": "@NexisClaw/googlechat",
+          "npmSpec": "@GreenchClaw/googlechat",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@NexisClaw/line",
-      "description": "NexisClaw LINE channel plugin",
+      "name": "@GreenchClaw/line",
+      "description": "GreenchClaw LINE channel plugin",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "line",
           "label": "LINE",
@@ -240,18 +240,18 @@
           "quickstartAllowFrom": true
         },
         "install": {
-          "npmSpec": "@NexisClaw/line",
+          "npmSpec": "@GreenchClaw/line",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@NexisClaw/matrix",
-      "description": "NexisClaw Matrix channel plugin",
+      "name": "@GreenchClaw/matrix",
+      "description": "GreenchClaw Matrix channel plugin",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "matrix",
           "label": "Matrix",
@@ -291,8 +291,8 @@
           ]
         },
         "install": {
-          "clawhubSpec": "clawhub:@NexisClaw/matrix",
-          "npmSpec": "@NexisClaw/matrix",
+          "clawhubSpec": "clawhub:@GreenchClaw/matrix",
+          "npmSpec": "@GreenchClaw/matrix",
           "defaultChoice": "clawhub",
           "minHostVersion": ">=2026.4.10",
           "allowInvalidConfigRecovery": true
@@ -300,11 +300,11 @@
       }
     },
     {
-      "name": "@NexisClaw/msteams",
-      "description": "NexisClaw Microsoft Teams channel plugin",
+      "name": "@GreenchClaw/msteams",
+      "description": "GreenchClaw Microsoft Teams channel plugin",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "msteams",
           "label": "Microsoft Teams",
@@ -316,18 +316,18 @@
           "order": 60
         },
         "install": {
-          "npmSpec": "@NexisClaw/msteams",
+          "npmSpec": "@GreenchClaw/msteams",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@NexisClaw/nextcloud-talk",
-      "description": "NexisClaw Nextcloud Talk channel plugin",
+      "name": "@GreenchClaw/nextcloud-talk",
+      "description": "GreenchClaw Nextcloud Talk channel plugin",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "nextcloud-talk",
           "label": "Nextcloud Talk",
@@ -340,18 +340,18 @@
           "quickstartAllowFrom": true
         },
         "install": {
-          "npmSpec": "@NexisClaw/nextcloud-talk",
+          "npmSpec": "@GreenchClaw/nextcloud-talk",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@NexisClaw/nostr",
-      "description": "NexisClaw Nostr channel plugin for NIP-04 encrypted DMs",
+      "name": "@GreenchClaw/nostr",
+      "description": "GreenchClaw Nostr channel plugin for NIP-04 encrypted DMs",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "nostr",
           "label": "Nostr",
@@ -363,18 +363,18 @@
           "quickstartAllowFrom": true
         },
         "install": {
-          "npmSpec": "@NexisClaw/nostr",
+          "npmSpec": "@GreenchClaw/nostr",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@NexisClaw/qqbot",
-      "description": "NexisClaw QQ Bot channel plugin",
+      "name": "@GreenchClaw/qqbot",
+      "description": "GreenchClaw QQ Bot channel plugin",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "qqbot",
           "label": "QQ Bot",
@@ -386,40 +386,40 @@
           "systemImage": "bubble.left.and.bubble.right"
         },
         "install": {
-          "npmSpec": "@NexisClaw/qqbot",
+          "npmSpec": "@GreenchClaw/qqbot",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@NexisClaw/synology-chat",
-      "description": "Synology Chat channel plugin for NexisClaw",
+      "name": "@GreenchClaw/synology-chat",
+      "description": "Synology Chat channel plugin for GreenchClaw",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "synology-chat",
           "label": "Synology Chat",
           "selectionLabel": "Synology Chat (Webhook)",
           "docsPath": "/channels/synology-chat",
           "docsLabel": "synology-chat",
-          "blurb": "Connect your Synology NAS Chat to NexisClaw with full agent capabilities.",
+          "blurb": "Connect your Synology NAS Chat to GreenchClaw with full agent capabilities.",
           "order": 90
         },
         "install": {
-          "npmSpec": "@NexisClaw/synology-chat",
+          "npmSpec": "@GreenchClaw/synology-chat",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@NexisClaw/tlon",
-      "description": "NexisClaw Tlon/Urbit channel plugin",
+      "name": "@GreenchClaw/tlon",
+      "description": "GreenchClaw Tlon/Urbit channel plugin",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "tlon",
           "label": "Tlon",
@@ -431,18 +431,18 @@
           "quickstartAllowFrom": true
         },
         "install": {
-          "npmSpec": "@NexisClaw/tlon",
+          "npmSpec": "@GreenchClaw/tlon",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@NexisClaw/twitch",
-      "description": "NexisClaw Twitch channel plugin",
+      "name": "@GreenchClaw/twitch",
+      "description": "GreenchClaw Twitch channel plugin",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "twitch",
           "label": "Twitch",
@@ -452,18 +452,18 @@
           "aliases": ["twitch-chat"]
         },
         "install": {
-          "npmSpec": "@NexisClaw/twitch",
+          "npmSpec": "@GreenchClaw/twitch",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@NexisClaw/whatsapp",
-      "description": "NexisClaw WhatsApp channel plugin",
+      "name": "@GreenchClaw/whatsapp",
+      "description": "GreenchClaw WhatsApp channel plugin",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "whatsapp",
           "label": "WhatsApp",
@@ -475,18 +475,18 @@
           "systemImage": "message"
         },
         "install": {
-          "npmSpec": "@NexisClaw/whatsapp",
+          "npmSpec": "@GreenchClaw/whatsapp",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@NexisClaw/zalo",
-      "description": "NexisClaw Zalo channel plugin",
+      "name": "@GreenchClaw/zalo",
+      "description": "GreenchClaw Zalo channel plugin",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "zalo",
           "label": "Zalo",
@@ -499,18 +499,18 @@
           "quickstartAllowFrom": true
         },
         "install": {
-          "npmSpec": "@NexisClaw/zalo",
+          "npmSpec": "@GreenchClaw/zalo",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@NexisClaw/zalouser",
-      "description": "NexisClaw Zalo Personal Account plugin via native zca-js integration",
+      "name": "@GreenchClaw/zalouser",
+      "description": "GreenchClaw Zalo Personal Account plugin via native zca-js integration",
       "source": "official",
       "kind": "channel",
-      "NexisClaw": {
+      "GreenchClaw": {
         "channel": {
           "id": "zalouser",
           "label": "Zalo Personal",
@@ -523,7 +523,7 @@
           "quickstartAllowFrom": false
         },
         "install": {
-          "npmSpec": "@NexisClaw/zalouser",
+          "npmSpec": "@GreenchClaw/zalouser",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }

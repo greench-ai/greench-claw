@@ -433,9 +433,9 @@ describe("provider request config", () => {
       precedence: "defaults-win",
     });
 
-    expect(resolved?.originator).toBe("NexisClaw");
+    expect(resolved?.originator).toBe("GreenchClaw");
     expect(typeof resolved?.version).toBe("string");
-    expect(resolved?.["User-Agent"]).toMatch(/^NexisClaw\//);
+    expect(resolved?.["User-Agent"]).toMatch(/^GreenchClaw\//);
     expect(resolved?.["X-Custom"]).toBe("1");
   });
 
@@ -453,8 +453,8 @@ describe("provider request config", () => {
     });
 
     expect(resolved).toEqual({
-      "HTTP-Referer": "https://NexisClaw.ai",
-      "X-OpenRouter-Title": "NexisClaw",
+      "HTTP-Referer": "https://GreenchClaw.ai",
+      "X-OpenRouter-Title": "GreenchClaw",
       "X-OpenRouter-Categories":
         "cli-agent,cloud-agent,programming-app,creative-writing,writing-assistant,general-chat,personal-agent",
       "X-Custom": "1",
@@ -477,7 +477,7 @@ describe("provider request config", () => {
     expect(
       Object.keys(resolved ?? {}).filter((key) => key.toLowerCase() === "user-agent"),
     ).toHaveLength(1);
-    expect(resolved?.["User-Agent"]).toMatch(/^NexisClaw\//);
+    expect(resolved?.["User-Agent"]).toMatch(/^GreenchClaw\//);
   });
 
   it("drops forbidden header keys while merging", () => {
@@ -525,9 +525,9 @@ describe("provider request config", () => {
     expect(resolved.policy.endpointClass).toBe("openai-public");
     expect(resolved.capabilities.allowsResponsesStore).toBe(true);
     expect(resolved.headers?.authorization).toBe("Bearer test-key");
-    expect(resolved.headers?.originator).toBe("NexisClaw");
+    expect(resolved.headers?.originator).toBe("GreenchClaw");
     expect(typeof resolved.headers?.version).toBe("string");
-    expect(resolved.headers?.["User-Agent"]).toMatch(/^NexisClaw\//);
+    expect(resolved.headers?.["User-Agent"]).toMatch(/^GreenchClaw\//);
     expect(resolved.headers?.["X-Custom"]).toBe("1");
   });
 

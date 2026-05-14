@@ -1,11 +1,11 @@
-export { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
+export { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
 export {
   PAIRING_APPROVED_MESSAGE,
   projectCredentialSnapshotFields,
   resolveConfiguredFromRequiredCredentialStatuses,
-} from "NexisClaw/plugin-sdk/channel-status";
-export type { ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-export type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-status";
+export type { ChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+export type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 export { looksLikeSlackTargetId, normalizeSlackMessagingTarget } from "./target-parsing.js";
 
 const SLACK_CHANNEL_META = {

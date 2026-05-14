@@ -108,7 +108,7 @@ describe("doctor health contributions", () => {
   it("skips doctor config writes under legacy update parents", () => {
     expect(
       shouldSkipLegacyUpdateDoctorConfigWrite({
-        env: { NEXISCLAW_UPDATE_IN_PROGRESS: "1" },
+        env: { GREENCHCLAW_UPDATE_IN_PROGRESS: "1" },
       }),
     ).toBe(true);
   });
@@ -125,8 +125,8 @@ describe("doctor health contributions", () => {
     expect(
       shouldSkipLegacyUpdateDoctorConfigWrite({
         env: {
-          NEXISCLAW_UPDATE_IN_PROGRESS: "1",
-          NEXISCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
+          GREENCHCLAW_UPDATE_IN_PROGRESS: "1",
+          GREENCHCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE: "1",
         },
       }),
     ).toBe(false);
@@ -136,7 +136,7 @@ describe("doctor health contributions", () => {
     expect(
       shouldSkipLegacyUpdateDoctorConfigWrite({
         env: {
-          NEXISCLAW_UPDATE_IN_PROGRESS: "0",
+          GREENCHCLAW_UPDATE_IN_PROGRESS: "0",
         },
       }),
     ).toBe(false);

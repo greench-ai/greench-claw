@@ -1,6 +1,6 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
-  loadNexisClawProviderIndex,
+  loadGreenchClawProviderIndex,
   normalizeModelCatalogProviderId,
   planProviderIndexModelCatalogRows,
 } from "../../model-catalog/index.js";
@@ -9,12 +9,12 @@ import { normalizePluginsConfig, resolveEffectiveEnableState } from "../../plugi
 
 export function loadProviderIndexCatalogRowsForList(params: {
   providerFilter?: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): readonly NormalizedModelCatalogRow[] {
   const providerFilter = params.providerFilter
     ? normalizeModelCatalogProviderId(params.providerFilter)
     : undefined;
-  const index = loadNexisClawProviderIndex();
+  const index = loadGreenchClawProviderIndex();
   return planProviderIndexModelCatalogRows({
     index,
     ...(providerFilter ? { providerFilter } : {}),

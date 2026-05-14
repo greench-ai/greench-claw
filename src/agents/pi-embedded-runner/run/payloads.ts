@@ -1,5 +1,5 @@
 import type { AssistantMessage } from "@earendil-works/pi-ai";
-import { hasOutboundReplyContent } from "NexisClaw/plugin-sdk/reply-payload";
+import { hasOutboundReplyContent } from "GreenchClaw/plugin-sdk/reply-payload";
 import {
   createHeartbeatToolResponsePayload,
   type HeartbeatToolResponse,
@@ -8,7 +8,7 @@ import { parseReplyDirectives } from "../../../auto-reply/reply/reply-directives
 import type { ReasoningLevel, ThinkLevel, VerboseLevel } from "../../../auto-reply/thinking.js";
 import { isSilentReplyPayloadText, SILENT_REPLY_TOKEN } from "../../../auto-reply/tokens.js";
 import { formatToolAggregate } from "../../../auto-reply/tool-meta.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { isCronSessionKey } from "../../../routing/session-key.js";
 import { extractAssistantTextForPhase } from "../../../shared/chat-message-content.js";
 import {
@@ -175,7 +175,7 @@ export function buildEmbeddedRunPayloads(params: {
   toolMetas: ToolMetaEntry[];
   lastAssistant: AssistantMessage | undefined;
   lastToolError?: ToolErrorSummary;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   isCronTrigger?: boolean;
   sessionKey: string;
   provider?: string;

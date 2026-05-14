@@ -6,7 +6,7 @@ import type {
   GroupToolPolicyBySenderConfig,
   GroupToolPolicyConfig,
   MarkdownConfig,
-  NexisClawConfig,
+  GreenchClawConfig,
   BaseProbeResult,
 } from "./runtime-api.js";
 
@@ -71,8 +71,8 @@ type IrcConfig = IrcAccountConfig & {
   defaultAccount?: string;
 };
 
-export type CoreConfig = NexisClawConfig & {
-  channels?: NexisClawConfig["channels"] & {
+export type CoreConfig = GreenchClawConfig & {
+  channels?: GreenchClawConfig["channels"] & {
     irc?: IrcConfig;
   };
 };

@@ -20,12 +20,12 @@ export const SECRETS_RUNTIME_INTEGRATION_TIMEOUT_MS = 300_000;
 
 export function beginSecretsRuntimeIsolationForTest(): SecretsRuntimeEnvSnapshot {
   const envSnapshot = captureEnv([
-    "NEXISCLAW_BUNDLED_PLUGINS_DIR",
-    "NEXISCLAW_DISABLE_BUNDLED_PLUGINS",
-    "NEXISCLAW_VERSION",
+    "GREENCHCLAW_BUNDLED_PLUGINS_DIR",
+    "GREENCHCLAW_DISABLE_BUNDLED_PLUGINS",
+    "GREENCHCLAW_VERSION",
   ]);
-  delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
-  delete process.env.NEXISCLAW_VERSION;
+  delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
+  delete process.env.GREENCHCLAW_VERSION;
   return envSnapshot;
 }
 

@@ -25,7 +25,7 @@ function buildSessionHeaderAndMessage() {
 const tempDirs: string[] = [];
 
 async function createTempSessionPath() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-session-repair-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-session-repair-"));
   tempDirs.push(dir);
   return { dir, file: path.join(dir, "session.jsonl") };
 }
@@ -506,7 +506,7 @@ describe("repairSessionFileIfNeeded", () => {
       timestamp: new Date().toISOString(),
       message: {
         role: "assistant",
-        provider: "NexisClaw",
+        provider: "GreenchClaw",
         model: "delivery-mirror",
         api: "openai-responses",
         content: [{ type: "text", text: "Process: `wild-wharf`" }],

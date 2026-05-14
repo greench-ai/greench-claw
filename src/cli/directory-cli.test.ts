@@ -102,7 +102,7 @@ describe("registerDirectoryCli", () => {
       configChanged: true,
     });
 
-    const program = new Command().name("NexisClaw");
+    const program = new Command().name("GreenchClaw");
     registerDirectoryCli(program);
 
     await program.parseAsync(["directory", "self", "--channel", "demo-directory", "--json"], {
@@ -145,7 +145,7 @@ describe("registerDirectoryCli", () => {
       directory: { self },
     });
 
-    const program = new Command().name("NexisClaw");
+    const program = new Command().name("GreenchClaw");
     registerDirectoryCli(program);
 
     await program.parseAsync(["directory", "self", "--json"], { from: "user" });
@@ -179,7 +179,7 @@ describe("registerDirectoryCli", () => {
       configChanged: false,
     });
 
-    const program = new Command().name("NexisClaw");
+    const program = new Command().name("GreenchClaw");
     registerDirectoryCli(program);
 
     await program.parseAsync(
@@ -221,7 +221,7 @@ describe("registerDirectoryCli", () => {
       configChanged: false,
     });
 
-    const program = new Command().name("NexisClaw");
+    const program = new Command().name("GreenchClaw");
     registerDirectoryCli(program);
 
     await program.parseAsync(["directory", "groups", "list", "--channel", "slack", "--json"], {
@@ -237,32 +237,32 @@ describe("registerDirectoryCli", () => {
 
   it("reports unsupported directory capability instead of continuing setup for installed plugins", async () => {
     mocks.resolveInstallableChannelPlugin.mockResolvedValue({
-      cfg: { channels: { "NexisClaw-weixin": {} } },
-      channelId: "NexisClaw-weixin",
+      cfg: { channels: { "GreenchClaw-weixin": {} } },
+      channelId: "GreenchClaw-weixin",
       plugin: {
-        id: "NexisClaw-weixin",
+        id: "GreenchClaw-weixin",
       },
       configChanged: false,
       pluginInstalled: false,
     });
 
-    const program = new Command().name("NexisClaw");
+    const program = new Command().name("GreenchClaw");
     registerDirectoryCli(program);
 
     await expect(
-      program.parseAsync(["directory", "peers", "list", "--channel", "NexisClaw-weixin"], {
+      program.parseAsync(["directory", "peers", "list", "--channel", "GreenchClaw-weixin"], {
         from: "user",
       }),
     ).rejects.toThrow("exit:1");
 
     expect(mocks.resolveInstallableChannelPlugin).toHaveBeenCalledTimes(1);
     const installArgs = requireRecord(mocks.resolveInstallableChannelPlugin.mock.calls.at(0)?.[0]);
-    expect(installArgs.rawChannel).toBe("NexisClaw-weixin");
+    expect(installArgs.rawChannel).toBe("GreenchClaw-weixin");
     expect(installArgs.allowInstall).toBe(true);
     expect(mocks.replaceConfigFile).not.toHaveBeenCalled();
     expect(
       runtimeErrors().some((message) =>
-        message.includes("Channel NexisClaw-weixin does not support directory peers"),
+        message.includes("Channel GreenchClaw-weixin does not support directory peers"),
       ),
     ).toBe(true);
   });

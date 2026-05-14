@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 /**
  * Twitch-specific utility functions

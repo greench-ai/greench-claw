@@ -1,8 +1,8 @@
 export type {
   ChannelConfigUiHint,
   ChannelPlugin,
-  NexisClawConfig,
-  NexisClawPluginApi,
+  GreenchClawConfig,
+  GreenchClawPluginApi,
   PluginCommandContext,
   PluginRuntime,
   ChannelOutboundSessionRouteParams,

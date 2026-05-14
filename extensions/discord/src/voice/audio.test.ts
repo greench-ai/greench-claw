@@ -6,8 +6,8 @@ describe("discord voice opus decoder selection", () => {
   it("defaults to the pure-JS opusscript decoder", async () => {
     const verbose: string[] = [];
     const warnings: string[] = [];
-    const previousPreference = process.env.NEXISCLAW_DISCORD_OPUS_DECODER;
-    delete process.env.NEXISCLAW_DISCORD_OPUS_DECODER;
+    const previousPreference = process.env.GREENCHCLAW_DISCORD_OPUS_DECODER;
+    delete process.env.GREENCHCLAW_DISCORD_OPUS_DECODER;
 
     try {
       const decoded = await decodeOpusStream(Readable.from([]), {
@@ -20,9 +20,9 @@ describe("discord voice opus decoder selection", () => {
       expect(warnings).toEqual([]);
     } finally {
       if (previousPreference === undefined) {
-        delete process.env.NEXISCLAW_DISCORD_OPUS_DECODER;
+        delete process.env.GREENCHCLAW_DISCORD_OPUS_DECODER;
       } else {
-        process.env.NEXISCLAW_DISCORD_OPUS_DECODER = previousPreference;
+        process.env.GREENCHCLAW_DISCORD_OPUS_DECODER = previousPreference;
       }
     }
   });

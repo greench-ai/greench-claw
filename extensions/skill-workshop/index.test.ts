@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { AnyAgentTool } from "NexisClaw/plugin-sdk/agent-runtime";
-import type { PluginTrustedToolPolicyRegistration } from "NexisClaw/plugin-sdk/core";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import type { AnyAgentTool } from "GreenchClaw/plugin-sdk/agent-runtime";
+import type { PluginTrustedToolPolicyRegistration } from "GreenchClaw/plugin-sdk/core";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import plugin, {
   applyProposalToWorkspace,
@@ -17,7 +17,7 @@ import type { SkillProposal } from "./src/types.js";
 const tempDirs: string[] = [];
 
 async function makeTempDir(): Promise<string> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-skill-workshop-test-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-skill-workshop-test-"));
   tempDirs.push(dir);
   return dir;
 }

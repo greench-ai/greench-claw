@@ -1,1 +1,1 @@
-export { createLoggerBackedRuntime } from "NexisClaw/plugin-sdk/runtime";
+export { createLoggerBackedRuntime } from "GreenchClaw/plugin-sdk/runtime";

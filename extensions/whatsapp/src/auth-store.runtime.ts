@@ -1,1 +1,1 @@
-export { resolveOAuthDir } from "NexisClaw/plugin-sdk/state-paths";
+export { resolveOAuthDir } from "GreenchClaw/plugin-sdk/state-paths";

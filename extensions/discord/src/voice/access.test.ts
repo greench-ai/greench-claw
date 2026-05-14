@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { DiscordAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { DiscordAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { authorizeDiscordVoiceIngress } from "./access.js";
 
-const baseCfg = { commands: { useAccessGroups: true } } as NexisClawConfig;
+const baseCfg = { commands: { useAccessGroups: true } } as GreenchClawConfig;
 
 describe("authorizeDiscordVoiceIngress", () => {
   it("blocks speakers outside the configured channel user allowlist", async () => {

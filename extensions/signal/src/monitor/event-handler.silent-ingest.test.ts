@@ -18,9 +18,9 @@ const internalHookMocks = vi.hoisted(() => ({
   triggerInternalHook: vi.fn(async () => undefined),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/hook-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/hook-runtime")>(
-    "NexisClaw/plugin-sdk/hook-runtime",
+vi.mock("GreenchClaw/plugin-sdk/hook-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/hook-runtime")>(
+    "GreenchClaw/plugin-sdk/hook-runtime",
   );
   return {
     ...actual,

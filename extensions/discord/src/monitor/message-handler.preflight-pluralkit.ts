@@ -1,4 +1,4 @@
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import { isPreflightAborted, loadPluralKitRuntime } from "./message-handler.preflight-runtime.js";
 import type { DiscordMessageEvent } from "./message-handler.preflight.types.js";
 
@@ -6,7 +6,7 @@ export async function resolveDiscordPreflightPluralKitInfo(params: {
   message: DiscordMessageEvent["message"];
   config?: NonNullable<
     NonNullable<
-      import("NexisClaw/plugin-sdk/config-contracts").NexisClawConfig["channels"]
+      import("GreenchClaw/plugin-sdk/config-contracts").GreenchClawConfig["channels"]
     >["discord"]
   >["pluralkit"];
   abortSignal?: AbortSignal;

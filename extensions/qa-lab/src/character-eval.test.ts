@@ -23,7 +23,7 @@ function makeRunJudge(rankings: TestJudgeRanking[]) {
 }
 
 function defaultModelTranscript(model: string) {
-  return `USER Alice: hi\n\nASSISTANT NexisClaw: reply from ${model}`;
+  return `USER Alice: hi\n\nASSISTANT GreenchClaw: reply from ${model}`;
 }
 
 function makeReplySuiteResult(params: CharacterRunSuiteParams, transcript?: string) {
@@ -142,7 +142,7 @@ describe("runQaCharacterEval", () => {
   let tempRoot: string;
 
   beforeEach(async () => {
-    tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-character-eval-test-"));
+    tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-character-eval-test-"));
   });
 
   afterEach(async () => {
@@ -152,7 +152,7 @@ describe("runQaCharacterEval", () => {
   it("runs each requested model and writes a judged report with transcripts", async () => {
     const runSuite = vi.fn(async (params: CharacterRunSuiteParams) => {
       const model = params.primaryModel;
-      const transcript = `USER Alice: prompt for ${model}\n\nASSISTANT NexisClaw: reply from ${model}`;
+      const transcript = `USER Alice: prompt for ${model}\n\nASSISTANT GreenchClaw: reply from ${model}`;
       return makeSuiteResult({ outputDir: params.outputDir, model, transcript });
     });
     const runJudge = makeRunJudge([
@@ -224,7 +224,7 @@ describe("runQaCharacterEval", () => {
       makeSuiteResult({
         outputDir: params.outputDir,
         model: params.primaryModel,
-        transcript: "USER Alice: hi\n\nASSISTANT NexisClaw: anonymous reply",
+        transcript: "USER Alice: hi\n\nASSISTANT GreenchClaw: anonymous reply",
       }),
     );
     const runJudge = vi.fn(async (params: CharacterRunJudgeParams) => {
@@ -407,7 +407,7 @@ describe("runQaCharacterEval", () => {
         outputDir: params.outputDir,
         model: params.primaryModel,
         transcript:
-          "USER Alice: Are you awake?\n\nASSISTANT NexisClaw QA: 400 model `qwen3.6-plus` is not supported.",
+          "USER Alice: Are you awake?\n\nASSISTANT GreenchClaw QA: 400 model `qwen3.6-plus` is not supported.",
       }),
     );
     const runJudge = makeRunJudge([
@@ -434,7 +434,7 @@ describe("runQaCharacterEval", () => {
       makeSuiteResult({
         outputDir: params.outputDir,
         model: params.primaryModel,
-        transcript: "ASSISTANT NexisClaw QA: ⚠️ ✍️ Write: to /tmp/precious.html failed",
+        transcript: "ASSISTANT GreenchClaw QA: ⚠️ ✍️ Write: to /tmp/precious.html failed",
       }),
     );
     const runJudge = makeRunJudge([
@@ -462,7 +462,7 @@ describe("runQaCharacterEval", () => {
         outputDir: params.outputDir,
         model: params.primaryModel,
         transcript:
-          "ASSISTANT NexisClaw QA: ⚠️ Something went wrong while processing your request. Please try again, or use /new to start a fresh session.",
+          "ASSISTANT GreenchClaw QA: ⚠️ Something went wrong while processing your request. Please try again, or use /new to start a fresh session.",
       }),
     );
     const runJudge = makeRunJudge([
@@ -490,7 +490,7 @@ describe("runQaCharacterEval", () => {
         outputDir: params.outputDir,
         model: params.primaryModel,
         transcript:
-          "ASSISTANT NexisClaw QA: The model did not produce a response before the LLM idle timeout. Please try again, or increase `agents.defaults.llm.idleTimeoutSeconds` in your config.",
+          "ASSISTANT GreenchClaw QA: The model did not produce a response before the LLM idle timeout. Please try again, or increase `agents.defaults.llm.idleTimeoutSeconds` in your config.",
       }),
     );
     const runJudge = makeRunJudge([
@@ -518,7 +518,7 @@ describe("runQaCharacterEval", () => {
         outputDir: params.outputDir,
         model: params.primaryModel,
         transcript:
-          "ASSISTANT NexisClaw QA: checking thread context; then post a tight progress reply here.\nQA_LEAK_OK",
+          "ASSISTANT GreenchClaw QA: checking thread context; then post a tight progress reply here.\nQA_LEAK_OK",
       }),
     );
     const runJudge = makeRunJudge([
@@ -607,7 +607,7 @@ describe("runQaCharacterEval", () => {
       return makeSuiteResult({
         outputDir: params.outputDir,
         model: params.primaryModel,
-        transcript: "USER Alice: hi\n\nASSISTANT NexisClaw: hello",
+        transcript: "USER Alice: hi\n\nASSISTANT GreenchClaw: hello",
       });
     });
     const runJudge = vi.fn(async (_params: CharacterRunJudgeParams) =>

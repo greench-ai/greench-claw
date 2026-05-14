@@ -1,1 +1,4 @@
-export { buildSecretInputSchema, hasConfiguredSecretInput } from "NexisClaw/plugin-sdk/secret-input";
+export {
+  buildSecretInputSchema,
+  hasConfiguredSecretInput,
+} from "GreenchClaw/plugin-sdk/secret-input";

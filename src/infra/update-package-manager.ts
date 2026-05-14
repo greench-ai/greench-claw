@@ -120,7 +120,7 @@ async function bootstrapPnpmViaNpm(params: {
   timeoutMs: number;
   baseEnv?: NodeJS.ProcessEnv;
 }): Promise<{ env: NodeJS.ProcessEnv; cleanup: () => Promise<void> } | null> {
-  const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-update-pnpm-"));
+  const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-update-pnpm-"));
   const cleanup = async () => {
     await fs.rm(tempRoot, { recursive: true, force: true }).catch(() => {});
   };

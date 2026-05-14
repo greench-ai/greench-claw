@@ -21,27 +21,27 @@ function normalizeLowercaseStringOrEmpty(value) {
   return typeof value === "string" ? value.toLowerCase() : "";
 }
 
-function hasTrustedNexisClawRootIndicator(packageRoot, packageJson) {
+function hasTrustedGreenchClawRootIndicator(packageRoot, packageJson) {
   const packageExports = packageJson?.exports ?? {};
   if (!Object.prototype.hasOwnProperty.call(packageExports, "./plugin-sdk")) {
     return false;
   }
   const hasCliEntryExport = Object.prototype.hasOwnProperty.call(packageExports, "./cli-entry");
-  const hasNexisClawBin =
+  const hasGreenchClawBin =
     (typeof packageJson?.bin === "string" &&
-      normalizeLowercaseStringOrEmpty(packageJson.bin).includes("NexisClaw")) ||
+      normalizeLowercaseStringOrEmpty(packageJson.bin).includes("GreenchClaw")) ||
     (typeof packageJson?.bin === "object" &&
       packageJson.bin !== null &&
-      typeof packageJson.bin.NexisClaw === "string");
-  const hasNexisClawEntrypoint = fs.existsSync(path.join(packageRoot, "NexisClaw.mjs"));
-  return hasCliEntryExport || hasNexisClawBin || hasNexisClawEntrypoint;
+      typeof packageJson.bin.GreenchClaw === "string");
+  const hasGreenchClawEntrypoint = fs.existsSync(path.join(packageRoot, "GreenchClaw.mjs"));
+  return hasCliEntryExport || hasGreenchClawBin || hasGreenchClawEntrypoint;
 }
 
-function findNexisClawPackageRoot(startDir) {
+function findGreenchClawPackageRoot(startDir) {
   let cursor = path.resolve(startDir);
   for (let i = 0; i < 12; i += 1) {
     const pkg = readPackageJson(cursor);
-    if (pkg?.name === "NexisClaw" && hasTrustedNexisClawRootIndicator(cursor, pkg)) {
+    if (pkg?.name === "GreenchClaw" && hasTrustedGreenchClawRootIndicator(cursor, pkg)) {
       return { packageRoot: cursor, packageJson: pkg };
     }
     const parent = path.dirname(cursor);
@@ -78,7 +78,7 @@ function resolveBundledPluginRuntimeModulePath(moduleUrl, params) {
     }
   }
 
-  const location = findNexisClawPackageRoot(moduleDir);
+  const location = findGreenchClawPackageRoot(moduleDir);
   if (location) {
     const { packageRoot } = location;
     const packageCandidates = [

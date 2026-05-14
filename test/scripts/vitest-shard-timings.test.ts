@@ -32,7 +32,7 @@ describe("scripts/lib/vitest-shard-timings.mjs", () => {
     expect(
       resolveShardTimingKey({
         config: "test/vitest/vitest.auto-reply-reply.config.ts",
-        env: { NEXISCLAW_VITEST_SHARD_NAME: "auto-reply/reply agent dispatch" },
+        env: { GREENCHCLAW_VITEST_SHARD_NAME: "auto-reply/reply agent dispatch" },
         includePatterns: ["src/auto-reply/reply/agent-runner.test.ts"],
       }),
     ).toBe("test/vitest/vitest.auto-reply-reply.config.ts#auto-reply-reply-agent-dispatch");
@@ -55,11 +55,11 @@ describe("scripts/lib/vitest-shard-timings.mjs", () => {
   });
 
   it("persists include-pattern timing metadata", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-shard-timings-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-shard-timings-"));
     tempDirs.push(tempDir);
     const env = {
-      NEXISCLAW_TEST_PROJECTS_TIMINGS_PATH: path.join(tempDir, "timings.json"),
-      NEXISCLAW_VITEST_SHARD_NAME: "auto-reply-reply-agent-runner",
+      GREENCHCLAW_TEST_PROJECTS_TIMINGS_PATH: path.join(tempDir, "timings.json"),
+      GREENCHCLAW_VITEST_SHARD_NAME: "auto-reply-reply-agent-runner",
     };
     const sample = createShardTimingSample(
       {
@@ -86,7 +86,7 @@ describe("scripts/lib/vitest-shard-timings.mjs", () => {
       ]),
     );
     const persistedTiming = JSON.parse(
-      fs.readFileSync(env.NEXISCLAW_TEST_PROJECTS_TIMINGS_PATH, "utf8"),
+      fs.readFileSync(env.GREENCHCLAW_TEST_PROJECTS_TIMINGS_PATH, "utf8"),
     ).configs["test/vitest/vitest.auto-reply-reply.config.ts#auto-reply-reply-agent-runner"];
     expect(typeof persistedTiming.updatedAt).toBe("string");
     expect(persistedTiming.updatedAt.length).toBeGreaterThan(0);

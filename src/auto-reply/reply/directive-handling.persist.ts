@@ -9,7 +9,7 @@ import { listLegacyRuntimeModelProviderAliases } from "../../agents/model-runtim
 import { normalizeProviderId, type ModelAliasIndex } from "../../agents/model-selection.js";
 import { updateSessionStore } from "../../config/sessions/store.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { enqueueSystemEvent } from "../../infra/system-events.js";
 import { applyTraceOverride, applyVerboseOverride } from "../../sessions/level-overrides.js";
 import { applyModelOverrideToSessionEntry } from "../../sessions/model-overrides.js";
@@ -83,7 +83,7 @@ function resolveContextConfigProviderForRuntime(params: {
 export async function persistInlineDirectives(params: {
   directives: InlineDirectives;
   effectiveModelDirective?: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir?: string;
   sessionEntry?: SessionEntry;
   sessionStore?: Record<string, SessionEntry>;
@@ -99,7 +99,7 @@ export async function persistInlineDirectives(params: {
   model: string;
   initialModelLabel: string;
   formatModelSwitchEvent: (label: string, alias?: string) => string;
-  agentCfg: NonNullable<NexisClawConfig["agents"]>["defaults"] | undefined;
+  agentCfg: NonNullable<GreenchClawConfig["agents"]>["defaults"] | undefined;
   messageProvider?: string;
   surface?: string;
   gatewayClientScopes?: string[];

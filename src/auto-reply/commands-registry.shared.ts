@@ -563,7 +563,7 @@ export function buildBuiltinChatCommands(
     defineChatCommand({
       key: "mcp",
       nativeName: "mcp",
-      description: "Show or set NexisClaw MCP servers.",
+      description: "Show or set GreenchClaw MCP servers.",
       textAlias: "/mcp",
       category: "management",
       tier: "power",
@@ -669,7 +669,7 @@ export function buildBuiltinChatCommands(
     defineChatCommand({
       key: "restart",
       nativeName: "restart",
-      description: "Restart NexisClaw.",
+      description: "Restart GreenchClaw.",
       textAlias: "/restart",
       category: "tools",
       tier: "power",

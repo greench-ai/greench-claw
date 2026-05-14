@@ -1,4 +1,4 @@
-import type { ChannelConfigUiHint } from "NexisClaw/plugin-sdk/core";
+import type { ChannelConfigUiHint } from "GreenchClaw/plugin-sdk/core";
 
 export const whatsAppChannelConfigUiHints = {
   "": {

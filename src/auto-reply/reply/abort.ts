@@ -18,7 +18,7 @@ import {
   type SessionEntry,
   updateSessionStore,
 } from "../../config/sessions.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { logVerbose } from "../../globals.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { parseAgentSessionKey } from "../../routing/session-key.js";
@@ -122,7 +122,7 @@ export function resolveSessionEntryForKey(
 }
 
 function normalizeRequesterSessionKey(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   key: string | undefined,
 ): string | undefined {
   const cleaned = normalizeOptionalString(key);
@@ -134,7 +134,7 @@ function normalizeRequesterSessionKey(
 }
 
 export function stopSubagentsForRequester(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   requesterSessionKey?: string;
 }): { stopped: number } {
   const requesterKey = normalizeRequesterSessionKey(params.cfg, params.requesterSessionKey);
@@ -224,7 +224,7 @@ export function stopSubagentsForRequester(params: {
 
 export async function tryFastAbortFromMessage(params: {
   ctx: FinalizedMsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): Promise<{ handled: boolean; aborted: boolean; stoppedSubagents?: number }> {
   const { ctx, cfg } = params;
   const targetKey =

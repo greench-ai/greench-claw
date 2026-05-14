@@ -8,9 +8,9 @@
 import {
   createMessageReceiptFromOutboundResults,
   type MessageReceipt,
-} from "NexisClaw/plugin-sdk/channel-message";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+} from "GreenchClaw/plugin-sdk/channel-message";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import { getClientManager as getRegistryClientManager } from "./client-manager-registry.js";
 import { resolveTwitchAccountContext } from "./config.js";
 import { stripMarkdownForTwitch } from "./utils/markdown.js";
@@ -55,12 +55,12 @@ function createTwitchSendReceipt(params: {
 /**
  * Internal send function used by the outbound adapter.
  *
- * This function has access to the full NexisClaw config and handles
+ * This function has access to the full GreenchClaw config and handles
  * account resolution, markdown stripping, and actual message sending.
  *
  * @param channel - The channel name
  * @param text - The message text
- * @param cfg - Full NexisClaw configuration
+ * @param cfg - Full GreenchClaw configuration
  * @param accountId - Account ID to use
  * @param stripMarkdown - Whether to strip markdown (default: true)
  * @param logger - Logger instance
@@ -70,7 +70,7 @@ function createTwitchSendReceipt(params: {
  * const result = await sendMessageTwitchInternal(
  *   "#mychannel",
  *   "Hello Twitch!",
- *   NexisClawConfig,
+ *   GreenchClawConfig,
  *   "default",
  *   true,
  *   console,
@@ -79,7 +79,7 @@ function createTwitchSendReceipt(params: {
 export async function sendMessageTwitchInternal(
   channel: string,
   text: string,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId?: string,
   stripMarkdown: boolean = true,
   logger: Console = console,

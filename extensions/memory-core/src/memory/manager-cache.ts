@@ -1,4 +1,4 @@
-import { resolveGlobalSingleton } from "NexisClaw/plugin-sdk/memory-core-host-engine-foundation";
+import { resolveGlobalSingleton } from "GreenchClaw/plugin-sdk/memory-core-host-engine-foundation";
 
 type Closable = {
   close?: () => Promise<void> | void;

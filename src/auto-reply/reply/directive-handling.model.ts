@@ -11,7 +11,7 @@ import {
 import { buildAgentRuntimeAuthPlan } from "../../agents/runtime-plan/auth.js";
 import { getChannelPlugin } from "../../channels/plugins/index.js";
 import type { SessionEntry } from "../../config/sessions.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
@@ -47,7 +47,7 @@ function resolveStatusHarnessRuntime(params: {
 async function resolveStatusAuthLabel(params: {
   provider: string;
   modelId: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   modelsPath: string;
   agentDir: string;
   activeAgentId: string;
@@ -129,7 +129,7 @@ function pushUniqueCatalogEntry(params: {
 }
 
 function buildModelPickerCatalog(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   defaultProvider: string;
   defaultModel: string;
   aliasIndex: ModelAliasIndex;
@@ -265,7 +265,7 @@ function buildModelPickerCatalog(params: {
 }
 
 function filterMissingAuthNestedProviderDuplicates(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   entries: ModelPickerCatalogEntry[];
   authByProvider: Map<string, string>;
 }): ModelPickerCatalogEntry[] {
@@ -306,7 +306,7 @@ function filterMissingAuthNestedProviderDuplicates(params: {
 
 export async function maybeHandleModelDirectiveInfo(params: {
   directives: InlineDirectives;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir: string;
   activeAgentId: string;
   provider: string;

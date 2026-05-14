@@ -1,10 +1,10 @@
 export {
   registerSessionBindingAdapter,
   __testing,
-} from "NexisClaw/plugin-sdk/session-binding-runtime";
-export { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/session-binding-runtime";
+export { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
 export {
   createTestRegistry,
   setActivePluginRegistry,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-export type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+export type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";

@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { createPluginRuntimeMock } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { createPluginRuntimeMock } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { expect, vi, type Mock } from "vitest";
 import type { ClawdbotConfig, PluginRuntime, RuntimeEnv } from "../../runtime-api.js";
 import { setFeishuRuntime } from "../runtime.js";
@@ -44,15 +44,15 @@ type FeishuLifecycleReplyDispatcher = {
 };
 
 export function setFeishuLifecycleStateDir(prefix: string) {
-  process.env.NEXISCLAW_STATE_DIR = `/tmp/${prefix}-${randomUUID()}`;
+  process.env.GREENCHCLAW_STATE_DIR = `/tmp/${prefix}-${randomUUID()}`;
 }
 
 export function restoreFeishuLifecycleStateDir(originalStateDir: string | undefined) {
   if (originalStateDir === undefined) {
-    delete process.env.NEXISCLAW_STATE_DIR;
+    delete process.env.GREENCHCLAW_STATE_DIR;
     return;
   }
-  process.env.NEXISCLAW_STATE_DIR = originalStateDir;
+  process.env.GREENCHCLAW_STATE_DIR = originalStateDir;
 }
 
 const FEISHU_PREFETCHED_BOT_OPEN_ID_SOURCE = {

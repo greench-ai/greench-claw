@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { addSession, resetProcessRegistryForTests } from "../bash-process-registry.js";
 import { createProcessSessionFixture } from "../bash-process-registry.test-helpers.js";
 import {
@@ -24,7 +24,7 @@ describe("buildEmbeddedCompactionRuntimeContext", () => {
       authProfileId: "openai:p1",
       workspaceDir: "/tmp/workspace",
       agentDir: "/tmp/agent",
-      config: {} as NexisClawConfig,
+      config: {} as GreenchClawConfig,
       senderIsOwner: true,
       senderId: "user-123",
       provider: "openai-codex",
@@ -84,7 +84,7 @@ describe("buildEmbeddedCompactionRuntimeContext", () => {
       agentDir: "/tmp/agent",
       config: {
         agents: { defaults: { compaction: { model: "anthropic/claude-opus-4-6" } } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       provider: "ollama",
       modelId: "minimax-m2.7:cloud",
       authProfileId: "ollama:default",
@@ -101,7 +101,7 @@ describe("buildEmbeddedCompactionRuntimeContext", () => {
       agentDir: "/tmp/agent",
       config: {
         agents: { defaults: { compaction: { model: "gpt-4o" } } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       provider: "openai",
       modelId: "gpt-3.5-turbo",
       authProfileId: "openai:p1",
@@ -116,7 +116,7 @@ describe("buildEmbeddedCompactionRuntimeContext", () => {
     const result = buildEmbeddedCompactionRuntimeContext({
       workspaceDir: "/tmp/workspace",
       agentDir: "/tmp/agent",
-      config: {} as NexisClawConfig,
+      config: {} as GreenchClawConfig,
       provider: "ollama",
       modelId: "minimax-m2.7:cloud",
       authProfileId: "ollama:default",
@@ -150,7 +150,7 @@ describe("buildEmbeddedCompactionRuntimeContext", () => {
       sessionKey: "agent:main:thread:1",
       workspaceDir: "/tmp/workspace",
       agentDir: "/tmp/agent",
-      config: {} as NexisClawConfig,
+      config: {} as GreenchClawConfig,
     });
 
     try {
@@ -185,7 +185,7 @@ describe("buildEmbeddedCompactionRuntimeContext", () => {
     const result = buildEmbeddedCompactionRuntimeContext({
       workspaceDir: "/tmp/workspace",
       agentDir: "/tmp/agent",
-      config: {} as NexisClawConfig,
+      config: {} as GreenchClawConfig,
     });
 
     expect(result.activeProcessSessions).toBeUndefined();
@@ -196,7 +196,7 @@ describe("buildEmbeddedCompactionRuntimeContext", () => {
       resolveEmbeddedCompactionTarget({
         config: {
           agents: { defaults: { compaction: { model: "anthropic/" } } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         provider: "openai-codex",
         modelId: "gpt-5.4",
         authProfileId: "openai:p1",

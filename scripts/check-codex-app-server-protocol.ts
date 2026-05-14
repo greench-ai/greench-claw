@@ -108,7 +108,7 @@ if (failures.length > 0) {
 }
 
 console.log(
-  `Codex app-server generated protocol matches NexisClaw bridge assumptions: ${source.codexRepo}`,
+  `Codex app-server generated protocol matches GreenchClaw bridge assumptions: ${source.codexRepo}`,
 );
 
 async function compareGeneratedProtocolMirror(sourceJsonRoot: string): Promise<void> {

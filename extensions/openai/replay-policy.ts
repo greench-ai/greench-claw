@@ -1,7 +1,7 @@
 import type {
   ProviderReplayPolicy,
   ProviderReplayPolicyContext,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 
 const RESPONSES_FAMILY_APIS = new Set([
   "openai-responses",

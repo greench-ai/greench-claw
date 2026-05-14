@@ -1,1 +1,1 @@
-export { getProxyUrlFromFetch, makeProxyFetch } from "NexisClaw/plugin-sdk/fetch-runtime";
+export { getProxyUrlFromFetch, makeProxyFetch } from "GreenchClaw/plugin-sdk/fetch-runtime";

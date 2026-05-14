@@ -2,13 +2,13 @@ import {
   defineChannelMessageAdapter,
   type ChannelMessageSendResult,
   type MessageReceiptPartKind,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 import {
   createAttachedChannelResultAdapter,
   createEmptyChannelResult,
-} from "NexisClaw/plugin-sdk/channel-send-result";
-import { createLazyRuntimeModule } from "NexisClaw/plugin-sdk/lazy-runtime";
-import { resolveOutboundMediaUrls } from "NexisClaw/plugin-sdk/reply-payload";
+} from "GreenchClaw/plugin-sdk/channel-send-result";
+import { createLazyRuntimeModule } from "GreenchClaw/plugin-sdk/lazy-runtime";
+import { resolveOutboundMediaUrls } from "GreenchClaw/plugin-sdk/reply-payload";
 import { type ChannelPlugin, type ResolvedLineAccount } from "./channel-api.js";
 import { resolveLineOutboundMedia, type LineOutboundMediaResolved } from "./outbound-media.js";
 import { buildLineQuickReplyFallbackText } from "./quick-reply-fallback.js";

@@ -1,28 +1,31 @@
 import {
   resolveChannelGroupPolicy,
   resolveChannelGroupRequireMention,
-} from "NexisClaw/plugin-sdk/channel-policy";
+} from "GreenchClaw/plugin-sdk/channel-policy";
 import {
   resolveThreadBindingIdleTimeoutMsForChannel,
   resolveThreadBindingMaxAgeMsForChannel,
   resolveThreadBindingSpawnPolicy,
-} from "NexisClaw/plugin-sdk/conversation-runtime";
-import { formatErrorMessage, formatUncaughtError } from "NexisClaw/plugin-sdk/error-runtime";
+} from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { formatErrorMessage, formatUncaughtError } from "GreenchClaw/plugin-sdk/error-runtime";
 import {
   isNativeCommandsExplicitlyDisabled,
   resolveNativeCommandsEnabled,
   resolveNativeSkillsEnabled,
-} from "NexisClaw/plugin-sdk/native-command-config-runtime";
-import { resolveTextChunkLimit } from "NexisClaw/plugin-sdk/reply-chunking";
-import { DEFAULT_GROUP_HISTORY_LIMIT, type HistoryEntry } from "NexisClaw/plugin-sdk/reply-history";
-import { danger, logVerbose, shouldLogVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { getChildLogger } from "NexisClaw/plugin-sdk/runtime-env";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
-import { createNonExitingRuntime, type RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/native-command-config-runtime";
+import { resolveTextChunkLimit } from "GreenchClaw/plugin-sdk/reply-chunking";
+import {
+  DEFAULT_GROUP_HISTORY_LIMIT,
+  type HistoryEntry,
+} from "GreenchClaw/plugin-sdk/reply-history";
+import { danger, logVerbose, shouldLogVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { getChildLogger } from "GreenchClaw/plugin-sdk/runtime-env";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
+import { createNonExitingRuntime, type RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { getOrCreateAccountThrottler } from "./account-throttler.js";
 import { resolveTelegramAccount } from "./accounts.js";
 import { normalizeTelegramApiRoot } from "./api-root.js";

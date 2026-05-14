@@ -486,7 +486,7 @@ describe("plugin interactive handlers", () => {
 
   it("hydrates legacy interactive state shapes before clearing handlers", async () => {
     const globalStore = globalThis as Record<PropertyKey, unknown>;
-    const stateKey = Symbol.for("NexisClaw.pluginInteractiveState");
+    const stateKey = Symbol.for("GreenchClaw.pluginInteractiveState");
     const originalState = globalStore[stateKey];
 
     globalStore[stateKey] = {

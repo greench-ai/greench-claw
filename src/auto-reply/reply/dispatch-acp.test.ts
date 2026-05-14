@@ -4,7 +4,7 @@ import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AcpRuntimeError } from "../../acp/runtime/errors.js";
 import type { AcpSessionStoreEntry } from "../../acp/runtime/session-meta.js";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import type { SessionBindingRecord } from "../../infra/outbound/session-binding-service.js";
 import type { MediaUnderstandingSkipError } from "../../media-understanding/errors.js";
 import { withFetchPreconnect } from "../../test-utils/fetch-mock.js";
@@ -27,10 +27,12 @@ const managerMocks = vi.hoisted(() => ({
 }));
 
 const policyMocks = vi.hoisted(() => ({
-  resolveAcpDispatchPolicyError: vi.fn<(cfg: NexisClawConfig) => AcpRuntimeError | null>(() => null),
-  resolveAcpAgentPolicyError: vi.fn<(cfg: NexisClawConfig, agent: string) => AcpRuntimeError | null>(
+  resolveAcpDispatchPolicyError: vi.fn<(cfg: GreenchClawConfig) => AcpRuntimeError | null>(
     () => null,
   ),
+  resolveAcpAgentPolicyError: vi.fn<
+    (cfg: GreenchClawConfig, agent: string) => AcpRuntimeError | null
+  >(() => null),
 }));
 
 const routeMocks = vi.hoisted(() => ({
@@ -67,7 +69,7 @@ const ttsMocks = vi.hoisted(() => ({
     const params = paramsUnknown as { payload: unknown };
     return params.payload;
   }),
-  resolveTtsConfig: vi.fn((_cfg: NexisClawConfig) => ({ mode: "final" })),
+  resolveTtsConfig: vi.fn((_cfg: GreenchClawConfig) => ({ mode: "final" })),
 }));
 
 const mediaUnderstandingMocks = vi.hoisted(() => ({
@@ -80,7 +82,7 @@ const diagnosticMocks = vi.hoisted(() => ({
 
 const sessionMetaMocks = vi.hoisted(() => ({
   readAcpSessionEntry: vi.fn<
-    (params: { sessionKey: string; cfg?: NexisClawConfig }) => AcpSessionStoreEntry | null
+    (params: { sessionKey: string; cfg?: GreenchClawConfig }) => AcpSessionStoreEntry | null
   >(() => null),
 }));
 
@@ -103,9 +105,9 @@ vi.mock("./dispatch-acp-manager.runtime.js", () => ({
 }));
 
 vi.mock("../../acp/policy.js", () => ({
-  resolveAcpDispatchPolicyError: (cfg: NexisClawConfig) =>
+  resolveAcpDispatchPolicyError: (cfg: GreenchClawConfig) =>
     policyMocks.resolveAcpDispatchPolicyError(cfg),
-  resolveAcpAgentPolicyError: (cfg: NexisClawConfig, agent: string) =>
+  resolveAcpAgentPolicyError: (cfg: GreenchClawConfig, agent: string) =>
     policyMocks.resolveAcpAgentPolicyError(cfg, agent),
 }));
 
@@ -168,7 +170,7 @@ vi.mock("./dispatch-acp-media.runtime.js", () => ({
 }));
 
 vi.mock("./dispatch-acp-session.runtime.js", () => ({
-  readAcpSessionEntry: (params: { sessionKey: string; cfg?: NexisClawConfig }) =>
+  readAcpSessionEntry: (params: { sessionKey: string; cfg?: GreenchClawConfig }) =>
     sessionMetaMocks.readAcpSessionEntry(params),
 }));
 
@@ -257,7 +259,7 @@ function setReadyAcpResolution() {
   });
 }
 
-function createAcpConfigWithVisibleToolTags(): NexisClawConfig {
+function createAcpConfigWithVisibleToolTags(): GreenchClawConfig {
   return createAcpTestConfig({
     acp: {
       enabled: true,
@@ -273,7 +275,7 @@ function createAcpConfigWithVisibleToolTags(): NexisClawConfig {
 
 async function runDispatch(params: {
   bodyForAgent: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   dispatcher?: ReplyDispatcher;
   shouldRouteToOriginating?: boolean;
   originatingChannel?: string;
@@ -1092,11 +1094,11 @@ describe("tryDispatchAcpReply", () => {
         : [],
     );
     sessionMetaMocks.readAcpSessionEntry.mockImplementation(
-      (params: { sessionKey: string; cfg?: NexisClawConfig }) =>
+      (params: { sessionKey: string; cfg?: GreenchClawConfig }) =>
         params.sessionKey === canonicalSessionKey
           ? {
               cfg: params.cfg ?? createAcpTestConfig(),
-              storePath: "/tmp/NexisClaw-session-store.json",
+              storePath: "/tmp/GreenchClaw-session-store.json",
               sessionKey: canonicalSessionKey,
               storeSessionKey: canonicalSessionKey,
               acp: createAcpSessionMeta({
@@ -1159,11 +1161,11 @@ describe("tryDispatchAcpReply", () => {
         : [],
     );
     sessionMetaMocks.readAcpSessionEntry.mockImplementation(
-      (params: { sessionKey: string; cfg?: NexisClawConfig }) =>
+      (params: { sessionKey: string; cfg?: GreenchClawConfig }) =>
         params.sessionKey === canonicalSessionKey
           ? {
               cfg: params.cfg ?? createAcpTestConfig(),
-              storePath: "/tmp/NexisClaw-session-store.json",
+              storePath: "/tmp/GreenchClaw-session-store.json",
               sessionKey: canonicalSessionKey,
               storeSessionKey: canonicalSessionKey,
               acp: createAcpSessionMeta({

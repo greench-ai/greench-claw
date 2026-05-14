@@ -1,4 +1,4 @@
-import type { AgentHarness } from "NexisClaw/plugin-sdk/agent-harness-runtime";
+import type { AgentHarness } from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import type {
   CodexAppServerListModelsOptions,
   CodexAppServerModel,

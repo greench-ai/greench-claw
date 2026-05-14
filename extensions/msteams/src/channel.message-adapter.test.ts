@@ -2,9 +2,9 @@ import {
   verifyChannelMessageAdapterCapabilityProofs,
   verifyChannelMessageLiveCapabilityAdapterProofs,
   verifyChannelMessageLiveFinalizerProofs,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 
 const mocks = vi.hoisted(() => ({
   sendText: vi.fn(),
@@ -61,7 +61,7 @@ const cfg = {
       appId: "resolved-app-id",
     },
   },
-} as NexisClawConfig;
+} as GreenchClawConfig;
 
 describe("msteams channel message adapter", () => {
   beforeEach(() => {

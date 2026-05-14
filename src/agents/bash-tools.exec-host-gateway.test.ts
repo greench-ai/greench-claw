@@ -331,11 +331,11 @@ describe("processGatewayAllowlist", () => {
       durationMs: 12,
       timedOut: false,
       aggregated: JSON.stringify({
-        path: "/tmp/NexisClaw-diagnostics.zip",
+        path: "/tmp/GreenchClaw-diagnostics.zip",
         bytes: 1234,
         manifest: {
           generatedAt: "2026-04-28T20:58:29.311Z",
-          NexisClawVersion: "2026.4.27",
+          GreenchClawVersion: "2026.4.27",
           contents: [
             { path: "diagnostics.json", bytes: 100 },
             { path: "summary.md", bytes: 200 },
@@ -360,13 +360,13 @@ describe("processGatewayAllowlist", () => {
         "Codex diagnostics sent to OpenAI servers:",
         "Session 1",
         "Channel: telegram",
-        "NexisClaw session id: `session-1`",
+        "GreenchClaw session id: `session-1`",
         "Codex thread id: `thread-1`",
       ].join("\n"),
     );
 
     await runGatewayAllowlist({
-      command: "NexisClaw gateway diagnostics export --json",
+      command: "GreenchClaw gateway diagnostics export --json",
       trigger: "diagnostics",
       approvalFollowupMode: "direct",
       approvalFollowup,
@@ -387,7 +387,7 @@ describe("processGatewayAllowlist", () => {
     expect(followupTarget?.direct).toBe(true);
     const followupText = sendExecApprovalFollowupResultMock.mock.calls.at(0)?.[1] ?? "";
     expect(followupText).toContain("Diagnostics export created.");
-    expect(followupText).toContain("Path: /tmp/NexisClaw-diagnostics.zip");
+    expect(followupText).toContain("Path: /tmp/GreenchClaw-diagnostics.zip");
     expect(followupText).toContain("Contents (2 files):");
     expect(followupText).toContain("OpenAI Codex harness:");
     expect(followupText).toContain("Codex diagnostics sent to OpenAI servers:");

@@ -1,14 +1,14 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   definePluginEntry,
-  type NexisClawPluginApi,
+  type GreenchClawPluginApi,
   type ProviderAuthMethodNonInteractiveContext,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import {
   createProviderApiKeyAuthMethod,
   normalizeOptionalSecretInput,
-} from "NexisClaw/plugin-sdk/provider-auth";
-import { buildSingleProviderApiKeyCatalog } from "NexisClaw/plugin-sdk/provider-catalog-shared";
+} from "GreenchClaw/plugin-sdk/provider-auth";
+import { buildSingleProviderApiKeyCatalog } from "GreenchClaw/plugin-sdk/provider-catalog-shared";
 import { buildLitellmImageGenerationProvider } from "./image-generation-provider.js";
 import { applyLitellmConfig, LITELLM_DEFAULT_MODEL_REF } from "./onboard.js";
 import { buildLitellmProvider } from "./provider-catalog.js";
@@ -16,9 +16,9 @@ import { buildLitellmProvider } from "./provider-catalog.js";
 const PROVIDER_ID = "litellm";
 
 function applyCustomBaseUrlForNonInteractiveSetup(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   customBaseUrl: unknown,
-): NexisClawConfig {
+): GreenchClawConfig {
   const baseUrl = normalizeOptionalSecretInput(customBaseUrl)?.replace(/\/+$/, "");
   if (!baseUrl) {
     return cfg;
@@ -44,7 +44,7 @@ export default definePluginEntry({
   id: PROVIDER_ID,
   name: "LiteLLM Provider",
   description: "Bundled LiteLLM provider plugin",
-  register(api: NexisClawPluginApi) {
+  register(api: GreenchClawPluginApi) {
     const apiKeyAuth = createProviderApiKeyAuthMethod({
       providerId: PROVIDER_ID,
       methodId: "api-key",

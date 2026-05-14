@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
-import { applyDockerOpenAiProviderConfig, type NexisClawConfig } from "./docker-openai-seed.ts";
+import { applyDockerOpenAiProviderConfig, type GreenchClawConfig } from "./docker-openai-seed.ts";
 
 const require = createRequire(import.meta.url);
 
@@ -22,7 +22,7 @@ import fsp from "node:fs/promises";
 import { McpServer } from ${JSON.stringify(sdkMcpServerPath)};
 import { StdioServerTransport } from ${JSON.stringify(sdkStdioServerPath)};
 
-process.title = "NexisClaw-cron-mcp-cleanup-probe";
+process.title = "GreenchClaw-cron-mcp-cleanup-probe";
 await fsp.mkdir(${JSON.stringify(path.dirname(params.pidPath))}, { recursive: true });
 await fsp.writeFile(${JSON.stringify(params.pidPath)}, String(process.pid), "utf8");
 await fsp.appendFile(${JSON.stringify(params.pidsPath)}, String(process.pid) + "\\n", "utf8");
@@ -51,9 +51,10 @@ await server.connect(new StdioServerTransport());
 }
 
 async function main() {
-  const stateDir = process.env.NEXISCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".NexisClaw");
+  const stateDir =
+    process.env.GREENCHCLAW_STATE_DIR?.trim() || path.join(os.homedir(), ".GreenchClaw");
   const configPath =
-    process.env.NEXISCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "NexisClaw.json");
+    process.env.GREENCHCLAW_CONFIG_PATH?.trim() || path.join(stateDir, "GreenchClaw.json");
   const probeDir = path.join(stateDir, "cron-mcp-cleanup");
   const serverPath = path.join(probeDir, "probe-server.mjs");
   const pidPath = path.join(probeDir, "probe.pid");
@@ -112,7 +113,7 @@ async function main() {
           },
         },
       },
-    } satisfies NexisClawConfig,
+    } satisfies GreenchClawConfig,
     "sk-docker-cron-mcp-cleanup-test",
   );
 

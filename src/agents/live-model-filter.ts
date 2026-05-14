@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveProviderModernModelRef } from "../plugins/provider-runtime.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 import { liveProvidersShareOwningPlugin } from "./live-provider-owner.js";
@@ -213,7 +213,7 @@ export function shouldExcludeProviderFromDefaultHighSignalLiveSweep(params: {
   provider?: string | null;
   useExplicitModels: boolean;
   providerFilter?: ReadonlySet<string> | null;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   resolveProviderOwners?: (provider: string) => readonly string[] | undefined;

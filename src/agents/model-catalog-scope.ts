@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { findNormalizedProviderValue, normalizeProviderId } from "./provider-id.js";
 
 function dedupeCatalogScopeRefs(values: Array<string | undefined>): string[] {
@@ -26,7 +26,7 @@ function providerFromModelRef(value: string | undefined): string | undefined {
 }
 
 export function resolveModelCatalogScope(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   provider: string;
   model: string;
 }): { providerRefs: string[]; modelRefs: string[] } {

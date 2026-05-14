@@ -97,7 +97,7 @@ describe("buildInboundMetaSystemPrompt", () => {
     } as TemplateContext);
 
     const payload = parseInboundMetaPayload(prompt);
-    expect(payload["schema"]).toBe("NexisClaw.inbound_meta.v2");
+    expect(payload["schema"]).toBe("GreenchClaw.inbound_meta.v2");
     expect(payload["chat_id"]).toBeUndefined();
     expect(payload["account_id"]).toBe("work");
     expect(payload["channel"]).toBe("telegram");
@@ -252,7 +252,7 @@ describe("buildInboundUserContextPrefix", () => {
   it("omits conversation label block for direct chats", () => {
     const text = buildInboundUserContextPrefix({
       ChatType: "direct",
-      ConversationLabel: "NexisClaw-tui",
+      ConversationLabel: "GreenchClaw-tui",
     } as TemplateContext);
 
     expect(text).toBe("");
@@ -335,14 +335,14 @@ describe("buildInboundUserContextPrefix", () => {
   it("does not treat group chats as direct based on sender id", () => {
     const text = buildInboundUserContextPrefix({
       ChatType: "group",
-      SenderId: "NexisClaw-control-ui",
+      SenderId: "GreenchClaw-control-ui",
       MessageSid: "123",
       ConversationLabel: "some-label",
     } as TemplateContext);
 
     const conversationInfo = parseConversationInfoPayload(text);
     expect(conversationInfo["message_id"]).toBe("123");
-    expect(conversationInfo["sender_id"]).toBe("NexisClaw-control-ui");
+    expect(conversationInfo["sender_id"]).toBe("GreenchClaw-control-ui");
     expect(conversationInfo["conversation_label"]).toBe("some-label");
   });
 

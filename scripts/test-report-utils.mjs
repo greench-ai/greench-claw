@@ -32,7 +32,7 @@ export function tryReadJsonFile(filePath, fallback) {
 export function runVitestJsonReport({
   config,
   reportPath = "",
-  prefix = "NexisClaw-vitest-report",
+  prefix = "GreenchClaw-vitest-report",
 }) {
   const resolvedReportPath = reportPath || path.join(os.tmpdir(), `${prefix}-${Date.now()}.json`);
 

@@ -2,9 +2,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import {
-  auditNexisClawPeerDependenciesInManagedNpmRoot,
-  linkNexisClawPeerDependencies,
-  relinkNexisClawPeerDependenciesInManagedNpmRoot,
+  auditGreenchClawPeerDependenciesInManagedNpmRoot,
+  linkGreenchClawPeerDependencies,
+  relinkGreenchClawPeerDependenciesInManagedNpmRoot,
 } from "./plugin-peer-link.js";
 import { cleanupTrackedTempDirs, makeTrackedTempDir } from "./test-helpers/fs-fixtures.js";
 
@@ -15,11 +15,11 @@ afterEach(() => {
 });
 
 function makeTempDir() {
-  return makeTrackedTempDir("NexisClaw-plugin-peer-link", tempDirs);
+  return makeTrackedTempDir("GreenchClaw-plugin-peer-link", tempDirs);
 }
 
 describe("plugin peer links", () => {
-  it("relinks NexisClaw peers in the managed npm root", async () => {
+  it("relinks GreenchClaw peers in the managed npm root", async () => {
     const npmRoot = makeTempDir();
     const packageDir = path.join(npmRoot, "node_modules", "peer-plugin");
     fs.mkdirSync(packageDir, { recursive: true });
@@ -29,14 +29,14 @@ describe("plugin peer links", () => {
         name: "peer-plugin",
         version: "1.0.0",
         peerDependencies: {
-          NexisClaw: ">=2026.0.0",
+          GreenchClaw: ">=2026.0.0",
         },
       }),
       "utf8",
     );
 
     const messages: string[] = [];
-    const result = await relinkNexisClawPeerDependenciesInManagedNpmRoot({
+    const result = await relinkGreenchClawPeerDependenciesInManagedNpmRoot({
       npmRoot,
       logger: {
         info: (message) => messages.push(message),
@@ -44,14 +44,14 @@ describe("plugin peer links", () => {
       },
     });
 
-    const linkPath = path.join(packageDir, "node_modules", "NexisClaw");
+    const linkPath = path.join(packageDir, "node_modules", "GreenchClaw");
     expect(result).toEqual({ checked: 1, attempted: 1, repaired: 1, skipped: 0 });
     expect(fs.lstatSync(linkPath).isSymbolicLink()).toBe(true);
     expect(fs.realpathSync(linkPath)).toBe(fs.realpathSync(process.cwd()));
-    expect(messages.join("\n")).toContain('Linked peerDependency "NexisClaw"');
+    expect(messages.join("\n")).toContain('Linked peerDependency "GreenchClaw"');
   });
 
-  it("audits missing managed npm NexisClaw peer links without relinking", async () => {
+  it("audits missing managed npm GreenchClaw peer links without relinking", async () => {
     const npmRoot = makeTempDir();
     const packageDir = path.join(npmRoot, "node_modules", "peer-plugin");
     fs.mkdirSync(packageDir, { recursive: true });
@@ -61,15 +61,15 @@ describe("plugin peer links", () => {
         name: "peer-plugin",
         version: "1.0.0",
         peerDependencies: {
-          NexisClaw: ">=2026.0.0",
+          GreenchClaw: ">=2026.0.0",
         },
       }),
       "utf8",
     );
 
-    const result = await auditNexisClawPeerDependenciesInManagedNpmRoot({ npmRoot });
+    const result = await auditGreenchClawPeerDependenciesInManagedNpmRoot({ npmRoot });
 
-    const linkPath = path.join(packageDir, "node_modules", "NexisClaw");
+    const linkPath = path.join(packageDir, "node_modules", "GreenchClaw");
     expect(result.checked).toBe(1);
     expect(result.broken).toBe(1);
     expect(result.issues[0]?.packageName).toBe("peer-plugin");
@@ -78,7 +78,7 @@ describe("plugin peer links", () => {
   });
 
   it.runIf(process.platform !== "win32")(
-    "does not follow a package-local node_modules symlink while linking NexisClaw peers",
+    "does not follow a package-local node_modules symlink while linking GreenchClaw peers",
     async () => {
       const root = makeTempDir();
       const packageDir = path.join(root, "peer-plugin");
@@ -88,10 +88,10 @@ describe("plugin peer links", () => {
       fs.symlinkSync(outsideDir, path.join(packageDir, "node_modules"), "dir");
 
       const warnings: string[] = [];
-      const result = await linkNexisClawPeerDependencies({
+      const result = await linkGreenchClawPeerDependencies({
         installedDir: packageDir,
         peerDependencies: {
-          NexisClaw: ">=2026.0.0",
+          GreenchClaw: ">=2026.0.0",
         },
         logger: {
           warn: (message) => warnings.push(message),
@@ -99,7 +99,7 @@ describe("plugin peer links", () => {
       });
 
       expect(result).toEqual({ repaired: 0, skipped: 1 });
-      expect(fs.existsSync(path.join(outsideDir, "NexisClaw"))).toBe(false);
+      expect(fs.existsSync(path.join(outsideDir, "GreenchClaw"))).toBe(false);
       expect(warnings.join("\n")).toContain("is not a real directory");
     },
   );

@@ -1,4 +1,4 @@
-import { registerSingleProviderPlugin } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import { registerSingleProviderPlugin } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 function mockBedrockSdkImportTripwire(): () => number {

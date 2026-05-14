@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import {
   buildReferenceInputCapabilityFailure,
   mergeVideoGenerationProviderCapabilities,
@@ -99,7 +99,7 @@ describe("video-generation capability overlays", () => {
       provider,
       providerId: "openrouter",
       model: "minimax/hailuo-2.3",
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       log: { debug: vi.fn() },
     });
 

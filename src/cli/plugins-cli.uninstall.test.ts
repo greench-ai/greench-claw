@@ -1,6 +1,6 @@
-import { installedPluginRoot } from "NexisClaw/plugin-sdk/test-fixtures";
+import { installedPluginRoot } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   applyPluginUninstallDirectoryRemoval,
   buildPluginDiagnosticsReport,
@@ -20,9 +20,9 @@ import {
   writePersistedInstalledPluginIndexInstallRecords,
 } from "./plugins-cli-test-helpers.js";
 
-const CLI_STATE_ROOT = "/tmp/NexisClaw-state";
+const CLI_STATE_ROOT = "/tmp/GreenchClaw-state";
 const ALPHA_INSTALL_PATH = installedPluginRoot(CLI_STATE_ROOT, "alpha");
-const ORIGINAL_NEXISCLAW_NIX_MODE = process.env.NEXISCLAW_NIX_MODE;
+const ORIGINAL_GREENCHCLAW_NIX_MODE = process.env.GREENCHCLAW_NIX_MODE;
 
 function expectRuntimeLogIncludes(fragment: string) {
   expect(runtimeLogs.some((message) => message.includes(fragment))).toBe(true);
@@ -50,25 +50,25 @@ describe("plugins cli uninstall", () => {
   });
 
   afterEach(() => {
-    if (ORIGINAL_NEXISCLAW_NIX_MODE === undefined) {
-      delete process.env.NEXISCLAW_NIX_MODE;
+    if (ORIGINAL_GREENCHCLAW_NIX_MODE === undefined) {
+      delete process.env.GREENCHCLAW_NIX_MODE;
     } else {
-      process.env.NEXISCLAW_NIX_MODE = ORIGINAL_NEXISCLAW_NIX_MODE;
+      process.env.GREENCHCLAW_NIX_MODE = ORIGINAL_GREENCHCLAW_NIX_MODE;
     }
   });
 
   it("refuses plugin uninstalls in Nix mode before planning file removal", async () => {
-    const previous = process.env.NEXISCLAW_NIX_MODE;
-    process.env.NEXISCLAW_NIX_MODE = "1";
+    const previous = process.env.GREENCHCLAW_NIX_MODE;
+    process.env.GREENCHCLAW_NIX_MODE = "1";
     try {
       await expect(runPluginsCommand(["plugins", "uninstall", "alpha", "--force"])).rejects.toThrow(
-        "NEXISCLAW_NIX_MODE=1",
+        "GREENCHCLAW_NIX_MODE=1",
       );
     } finally {
       if (previous === undefined) {
-        delete process.env.NEXISCLAW_NIX_MODE;
+        delete process.env.GREENCHCLAW_NIX_MODE;
       } else {
-        process.env.NEXISCLAW_NIX_MODE = previous;
+        process.env.GREENCHCLAW_NIX_MODE = previous;
       }
     }
 
@@ -96,14 +96,14 @@ describe("plugins cli uninstall", () => {
           contextEngine: "alpha",
         },
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     buildPluginSnapshotReport.mockReturnValue({
       plugins: [{ id: "alpha", name: "alpha" }],
       diagnostics: [],
     });
     planPluginUninstall.mockReturnValue({
       ok: true,
-      config: {} as NexisClawConfig,
+      config: {} as GreenchClawConfig,
       actions: {
         entry: true,
         install: true,
@@ -142,13 +142,13 @@ describe("plugins cli uninstall", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const nextConfig = {
       plugins: {
         entries: {},
         installs: {},
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(baseConfig.plugins?.installs ?? {});
@@ -207,7 +207,7 @@ describe("plugins cli uninstall", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(baseConfig.plugins?.installs ?? {});
     buildPluginSnapshotReport.mockReturnValue({
@@ -216,7 +216,7 @@ describe("plugins cli uninstall", () => {
     });
     planPluginUninstall.mockReturnValue({
       ok: true,
-      config: { plugins: { entries: {}, installs: {} } } as NexisClawConfig,
+      config: { plugins: { entries: {}, installs: {} } } as GreenchClawConfig,
       actions: {
         entry: true,
         install: true,
@@ -259,13 +259,13 @@ describe("plugins cli uninstall", () => {
         },
         installs: installRecords,
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const nextConfig = {
       plugins: {
         entries: {},
         installs: {},
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(installRecords);
@@ -318,13 +318,13 @@ describe("plugins cli uninstall", () => {
         },
         installs: installRecords,
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const nextConfig = {
       plugins: {
         entries: {},
         installs: {},
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(installRecords);
@@ -375,12 +375,12 @@ describe("plugins cli uninstall", () => {
         allow: ["alpha", "beta"],
         deny: ["alpha"],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const nextConfig = {
       plugins: {
         allow: ["beta"],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     buildPluginSnapshotReport.mockReturnValue({
@@ -418,8 +418,8 @@ describe("plugins cli uninstall", () => {
           alpha: { enabled: true },
         },
       },
-    } as NexisClawConfig;
-    const nextConfig = {} as NexisClawConfig;
+    } as GreenchClawConfig;
+    const nextConfig = {} as GreenchClawConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     buildPluginSnapshotReport.mockReturnValue({
@@ -479,14 +479,14 @@ describe("plugins cli uninstall", () => {
           enabled: true,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const nextConfig = {
       channels: {
         discord: {
           enabled: true,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     loadConfig.mockReturnValue(baseConfig);
     setInstalledPluginIndexInstallRecords(installRecords);
@@ -530,7 +530,7 @@ describe("plugins cli uninstall", () => {
         entries: {},
         installs: {},
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     buildPluginSnapshotReport.mockReturnValue({
       plugins: [{ id: "alpha", name: "alpha" }],
       diagnostics: [],

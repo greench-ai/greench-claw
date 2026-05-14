@@ -39,7 +39,7 @@ type RuntimeConfigAfterWrite = import("../../config/config.js").ConfigWriteAfter
 type RuntimeConfigReplaceResult = import("../../config/mutate.js").ConfigReplaceResult;
 type RuntimeConfigMutationBase = import("../../config/mutate.js").ConfigMutationBase;
 type RuntimeConfigMutationContext = {
-  snapshot: import("../../config/types.NexisClaw.js").ConfigFileSnapshot;
+  snapshot: import("../../config/types.GreenchClaw.js").ConfigFileSnapshot;
   previousHash: string | null;
 };
 type RuntimeMutateConfigFileParams<T = void> = {
@@ -48,12 +48,12 @@ type RuntimeMutateConfigFileParams<T = void> = {
   afterWrite: RuntimeConfigAfterWrite;
   writeOptions?: RuntimeWriteConfigOptions;
   mutate: (
-    draft: import("../../config/types.NexisClaw.js").NexisClawConfig,
+    draft: import("../../config/types.GreenchClaw.js").GreenchClawConfig,
     context: RuntimeConfigMutationContext,
   ) => Promise<T | void> | T | void;
 };
 type RuntimeReplaceConfigFileParams = {
-  nextConfig: import("../../config/types.NexisClaw.js").NexisClawConfig;
+  nextConfig: import("../../config/types.GreenchClaw.js").GreenchClawConfig;
   baseHash?: string;
   afterWrite: RuntimeConfigAfterWrite;
   writeOptions?: RuntimeWriteConfigOptions;
@@ -144,7 +144,7 @@ export type PluginRuntimeCore = {
   version: string;
   config: {
     /** Current process runtime config snapshot. Prefer config passed into the active call path. */
-    current: () => DeepReadonly<import("../../config/types.NexisClaw.js").NexisClawConfig>;
+    current: () => DeepReadonly<import("../../config/types.GreenchClaw.js").GreenchClawConfig>;
     /**
      * Persist a focused config mutation. Callers must choose the post-write
      * behavior explicitly so the gateway can hot-reload, restart, or defer.
@@ -165,7 +165,7 @@ export type PluginRuntimeCore = {
      * plugins and repo code are blocked from using this by the
      * deprecated-internal-config-api architecture guard.
      */
-    loadConfig: () => import("../../config/types.NexisClaw.js").NexisClawConfig;
+    loadConfig: () => import("../../config/types.GreenchClaw.js").GreenchClawConfig;
     /**
      * @deprecated Use mutateConfigFile() or replaceConfigFile() with an
      * explicit afterWrite intent so restart behavior stays under host control.
@@ -173,7 +173,7 @@ export type PluginRuntimeCore = {
      * deprecated-internal-config-api architecture guard.
      */
     writeConfigFile: (
-      cfg: import("../../config/types.NexisClaw.js").NexisClawConfig,
+      cfg: import("../../config/types.GreenchClaw.js").GreenchClawConfig,
       options?: RuntimeWriteConfigOptions & { afterWrite?: RuntimeConfigAfterWrite },
     ) => Promise<void>;
   };
@@ -186,7 +186,7 @@ export type PluginRuntimeCore = {
     resolveAgentWorkspaceDir: typeof import("../../agents/agent-scope.js").resolveAgentWorkspaceDir;
     resolveAgentIdentity: typeof import("../../agents/identity.js").resolveAgentIdentity;
     resolveThinkingDefault: (params: {
-      cfg: import("../../config/types.NexisClaw.js").NexisClawConfig;
+      cfg: import("../../config/types.GreenchClaw.js").GreenchClawConfig;
       provider: string;
       model: string;
       catalog?: import("../../agents/model-catalog.types.js").ModelCatalogEntry[];
@@ -318,19 +318,19 @@ export type PluginRuntimeCore = {
     /** Resolve auth for a model. Only provider/model, optional cfg, and workspaceDir are used. */
     getApiKeyForModel: (params: {
       model: import("@earendil-works/pi-ai").Model<import("@earendil-works/pi-ai").Api>;
-      cfg?: import("../../config/types.NexisClaw.js").NexisClawConfig;
+      cfg?: import("../../config/types.GreenchClaw.js").GreenchClawConfig;
       workspaceDir?: string;
     }) => Promise<import("../../agents/model-auth-runtime-shared.js").ResolvedProviderAuth>;
     /** Resolve request-ready auth for a model, including provider runtime exchanges. */
     getRuntimeAuthForModel: (params: {
       model: import("@earendil-works/pi-ai").Model<import("@earendil-works/pi-ai").Api>;
-      cfg?: import("../../config/types.NexisClaw.js").NexisClawConfig;
+      cfg?: import("../../config/types.GreenchClaw.js").GreenchClawConfig;
       workspaceDir?: string;
     }) => Promise<import("./model-auth-types.js").ResolvedProviderRuntimeAuth>;
     /** Resolve auth for a provider by name. Only provider, optional cfg, and workspaceDir are used. */
     resolveApiKeyForProvider: (params: {
       provider: string;
-      cfg?: import("../../config/types.NexisClaw.js").NexisClawConfig;
+      cfg?: import("../../config/types.GreenchClaw.js").GreenchClawConfig;
       workspaceDir?: string;
     }) => Promise<import("../../agents/model-auth-runtime-shared.js").ResolvedProviderAuth>;
   };

@@ -2,8 +2,8 @@ import { createCodingTools, createReadTool } from "@earendil-works/pi-coding-age
 import type { SourceReplyDeliveryMode } from "../auto-reply/get-reply-options.types.js";
 import { HEARTBEAT_RESPONSE_TOOL_NAME } from "../auto-reply/heartbeat-tool-response.js";
 import { resolveExecCommandHighlighting } from "../config/exec-command-highlighting.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { ModelCompatConfig } from "../config/types.models.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type { DiagnosticTraceContext } from "../infra/diagnostic-trace-context.js";
 import { resolveMergedSafeBinProfileFixtures } from "../infra/exec-safe-bin-runtime-policy.js";
 import { logWarn } from "../logger.js";
@@ -23,10 +23,10 @@ import type { ProcessToolDefaults } from "./bash-tools.process.js";
 import { execSchema, processSchema } from "./bash-tools.schemas.js";
 import { listChannelAgentTools } from "./channel-tools.js";
 import { shouldSuppressManagedWebSearchTool } from "./codex-native-web-search.js";
+import { resolveGreenchClawPluginToolsForOptions } from "./GreenchClaw-plugin-tools.js";
+import { createGreenchClawTools } from "./GreenchClaw-tools.js";
 import { resolveImageSanitizationLimits } from "./image-sanitization.js";
 import type { ModelAuthMode } from "./model-auth.js";
-import { resolveNexisClawPluginToolsForOptions } from "./NexisClaw-plugin-tools.js";
-import { createNexisClawTools } from "./NexisClaw-tools.js";
 import { wrapToolWithAbortSignal } from "./pi-tools.abort.js";
 import {
   type ToolOutcomeObserver,
@@ -44,7 +44,7 @@ import {
   assertRequiredParams,
   createHostWorkspaceEditTool,
   createHostWorkspaceWriteTool,
-  createNexisClawReadTool,
+  createGreenchClawReadTool,
   createSandboxedEditTool,
   createSandboxedReadTool,
   createSandboxedWriteTool,
@@ -205,7 +205,7 @@ export function resolveProcessToolScopeKey(params: {
 function applyModelProviderToolPolicy(
   tools: AnyAgentTool[],
   params?: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     modelProvider?: string;
     modelApi?: string;
     modelId?: string;
@@ -262,7 +262,7 @@ function isApplyPatchAllowedForModel(params: {
   });
 }
 
-function resolveExecConfig(params: { cfg?: NexisClawConfig; agentId?: string }) {
+function resolveExecConfig(params: { cfg?: GreenchClawConfig; agentId?: string }) {
   const cfg = params.cfg;
   const globalExec = cfg?.tools?.exec;
   const agentExec =
@@ -306,15 +306,15 @@ export const __testing = {
   applyModelProviderToolPolicy,
 } as const;
 
-export type NexisClawCodingToolConstructionPlan = {
+export type GreenchClawCodingToolConstructionPlan = {
   includeBaseCodingTools: boolean;
   includeShellTools: boolean;
   includeChannelTools: boolean;
-  includeNexisClawTools: boolean;
+  includeGreenchClawTools: boolean;
   includePluginTools: boolean;
 };
 
-export function createNexisClawCodingTools(options?: {
+export function createGreenchClawCodingTools(options?: {
   agentId?: string;
   exec?: ExecToolDefaults & ProcessToolDefaults;
   messageProvider?: string;
@@ -350,7 +350,7 @@ export function createNexisClawCodingTools(options?: {
    * Defaults to workspaceDir when not set.
    */
   spawnWorkspaceDir?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   abortSignal?: AbortSignal;
   /**
    * Provider of the currently selected model (used for provider-specific tool quirks).
@@ -365,7 +365,7 @@ export function createNexisClawCodingTools(options?: {
   modelContextWindowTokens?: number;
   /** Resolved runtime model compatibility hints. */
   modelCompat?: ModelCompatConfig;
-  /** If false, keep NexisClaw web_search even when a provider-native search tool is active. */
+  /** If false, keep GreenchClaw web_search even when a provider-native search tool is active. */
   suppressManagedWebSearch?: boolean;
   /**
    * Auth mode for the current provider. We only need this for Anthropic OAuth
@@ -423,7 +423,7 @@ export function createNexisClawCodingTools(options?: {
   /** Runtime-local Tool Search catalog ref shared with PI attempt compaction. */
   toolSearchCatalogRef?: ToolSearchCatalogRef;
   /** Limits which tool families are materialized before the shared policy pipeline runs. */
-  toolConstructionPlan?: NexisClawCodingToolConstructionPlan;
+  toolConstructionPlan?: GreenchClawCodingToolConstructionPlan;
   /** Whether the sender is an owner (required for owner-only tools). */
   senderIsOwner?: boolean;
   /**
@@ -591,12 +591,12 @@ export function createNexisClawCodingTools(options?: {
     includeBaseCodingTools: includeCoreTools,
     includeShellTools: includeCoreTools,
     includeChannelTools: includeCoreTools,
-    includeNexisClawTools: includeCoreTools,
+    includeGreenchClawTools: includeCoreTools,
     includePluginTools: true,
   };
   const includeBaseCodingTools = includeCoreTools && toolConstructionPlan.includeBaseCodingTools;
   const includeShellTools = includeCoreTools && toolConstructionPlan.includeShellTools;
-  const includeNexisClawTools = includeCoreTools && toolConstructionPlan.includeNexisClawTools;
+  const includeGreenchClawTools = includeCoreTools && toolConstructionPlan.includeGreenchClawTools;
   const includeChannelTools = toolConstructionPlan.includeChannelTools;
   const includePluginTools = toolConstructionPlan.includePluginTools;
   const workspaceOnly = fsPolicy.workspaceOnly;
@@ -641,7 +641,7 @@ export function createNexisClawCodingTools(options?: {
           continue;
         }
         const freshReadTool = createReadTool(workspaceRoot);
-        const wrapped = createNexisClawReadTool(freshReadTool, {
+        const wrapped = createGreenchClawReadTool(freshReadTool, {
           modelContextWindowTokens: options?.modelContextWindowTokens,
           imageSanitization,
         });
@@ -760,9 +760,9 @@ export function createNexisClawCodingTools(options?: {
     subagentPolicy,
   ]);
   const pluginToolsOnly =
-    includeNexisClawTools || !includePluginTools
+    includeGreenchClawTools || !includePluginTools
       ? []
-      : resolveNexisClawPluginToolsForOptions({
+      : resolveGreenchClawPluginToolsForOptions({
           options: {
             agentSessionKey: options?.sessionKey,
             agentChannel: resolveGatewayMessageChannel(options?.messageProvider),
@@ -838,8 +838,8 @@ export function createNexisClawCodingTools(options?: {
     ...(processTool ? [processTool as unknown as AnyAgentTool] : []),
     // Channel docking: include channel-defined agent tools (login, etc.).
     ...(includeChannelTools ? listChannelAgentTools({ cfg: options?.config }) : []),
-    ...(includeNexisClawTools
-      ? createNexisClawTools({
+    ...(includeGreenchClawTools
+      ? createGreenchClawTools({
           sandboxBrowserBridgeUrl: sandbox?.browser?.bridgeUrl,
           allowHostBrowserControl: sandbox ? sandbox.browserAllowHostControl : true,
           agentSessionKey: options?.sessionKey,
@@ -892,7 +892,7 @@ export function createNexisClawCodingTools(options?: {
       : pluginToolsOnly),
     ...toolSearchTools,
   ];
-  options?.recordToolPrepStage?.("NexisClaw-tools");
+  options?.recordToolPrepStage?.("GreenchClaw-tools");
   const toolsForMemoryFlush: AnyAgentTool[] = isMemoryFlushRun && memoryFlushWritePath ? [] : tools;
   if (isMemoryFlushRun && memoryFlushWritePath) {
     for (const tool of tools) {

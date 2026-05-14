@@ -1,5 +1,5 @@
 import path from "node:path";
-import { resolveSendableOutboundReplyParts } from "NexisClaw/plugin-sdk/reply-payload";
+import { resolveSendableOutboundReplyParts } from "GreenchClaw/plugin-sdk/reply-payload";
 import { resolveSessionAgentId } from "../../agents/agent-scope.js";
 import { resolvePathFromInput, toRelativeWorkspacePath } from "../../agents/path-policy.js";
 import {
@@ -8,7 +8,7 @@ import {
   resolveSandboxedMediaSource,
 } from "../../agents/sandbox-paths.js";
 import { ensureSandboxWorkspaceForSession } from "../../agents/sandbox.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { logVerbose } from "../../globals.js";
 import { resolveChannelAccountMediaMaxMb } from "../../media/configured-max-bytes.js";
 import { isPassThroughRemoteMediaSource } from "../../media/media-source-url.js";
@@ -41,7 +41,7 @@ function getPayloadMediaList(payload: ReplyPayload): string[] {
 }
 
 function resolveReplyMediaMaxBytes(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel?: string;
   accountId?: string;
 }): number {
@@ -57,7 +57,7 @@ function formatBlockedReplyMediaWarning(): string {
 }
 
 export function createReplyMediaPathNormalizer(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey?: string;
   agentId?: string;
   workspaceDir: string;
@@ -72,7 +72,7 @@ export function createReplyMediaPathNormalizer(params: {
   requesterSenderE164?: string;
 }): (payload: ReplyPayload) => Promise<ReplyPayload> {
   // Prefer an explicit agentId so callers without a resolved sessionKey (e.g.
-  // `NexisClaw agent --deliver` with `--reply-channel/--reply-to`) still get
+  // `GreenchClaw agent --deliver` with `--reply-channel/--reply-to`) still get
   // the stricter agent-scoped file-read policy applied during staging.
   const agentId =
     params.agentId ??

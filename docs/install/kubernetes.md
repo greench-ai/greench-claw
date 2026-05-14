@@ -1,16 +1,16 @@
 ---
-summary: "Deploy NexisClaw Gateway to a Kubernetes cluster with Kustomize"
+summary: "Deploy GreenchClaw Gateway to a Kubernetes cluster with Kustomize"
 read_when:
-  - You want to run NexisClaw on a Kubernetes cluster
-  - You want to test NexisClaw in a Kubernetes environment
+  - You want to run GreenchClaw on a Kubernetes cluster
+  - You want to test GreenchClaw in a Kubernetes environment
 title: "Kubernetes"
 ---
 
-A minimal starting point for running NexisClaw on Kubernetes — not a production-ready deployment. It covers the core resources and is meant to be adapted to your environment.
+A minimal starting point for running GreenchClaw on Kubernetes — not a production-ready deployment. It covers the core resources and is meant to be adapted to your environment.
 
 ## Why not Helm?
 
-NexisClaw is a single container with some config files. The interesting customization is in agent content (markdown files, skills, config overrides), not infrastructure templating. Kustomize handles overlays without the overhead of a Helm chart. If your deployment grows more complex, a Helm chart can be layered on top of these manifests.
+GreenchClaw is a single container with some config files. The interesting customization is in agent content (markdown files, skills, config overrides), not infrastructure templating. Kustomize handles overlays without the overhead of a Helm chart. If your deployment grows more complex, a Helm chart can be layered on top of these manifests.
 
 ## What you need
 
@@ -25,7 +25,7 @@ NexisClaw is a single container with some config files. The interesting customiz
 export <PROVIDER>_API_KEY="..."
 ./scripts/k8s/deploy.sh
 
-kubectl port-forward svc/NexisClaw 18789:18789 -n NexisClaw
+kubectl port-forward svc/GreenchClaw 18789:18789 -n GreenchClaw
 open http://localhost:18789
 ```
 
@@ -33,7 +33,7 @@ Retrieve the configured shared secret for the Control UI. This deploy script
 creates token auth by default:
 
 ```bash
-kubectl get secret NexisClaw-secrets -n NexisClaw -o jsonpath='{.data.NEXISCLAW_GATEWAY_TOKEN}' | base64 -d
+kubectl get secret GreenchClaw-secrets -n GreenchClaw -o jsonpath='{.data.GREENCHCLAW_GATEWAY_TOKEN}' | base64 -d
 ```
 
 For local debugging, `./scripts/k8s/deploy.sh --show-token` prints the token after deploy.
@@ -76,19 +76,19 @@ Use `--show-token` with either command if you want the token printed to stdout f
 ### 2) Access the gateway
 
 ```bash
-kubectl port-forward svc/NexisClaw 18789:18789 -n NexisClaw
+kubectl port-forward svc/GreenchClaw 18789:18789 -n GreenchClaw
 open http://localhost:18789
 ```
 
 ## What gets deployed
 
 ```
-Namespace: NexisClaw (configurable via NEXISCLAW_NAMESPACE)
-├── Deployment/NexisClaw        # Single pod, init container + gateway
-├── Service/NexisClaw           # ClusterIP on port 18789
+Namespace: GreenchClaw (configurable via GREENCHCLAW_NAMESPACE)
+├── Deployment/GreenchClaw        # Single pod, init container + gateway
+├── Service/GreenchClaw           # ClusterIP on port 18789
 ├── PersistentVolumeClaim      # 10Gi for agent state and config
-├── ConfigMap/NexisClaw-config  # NexisClaw.json + AGENTS.md
-└── Secret/NexisClaw-secrets    # Gateway token + API keys
+├── ConfigMap/GreenchClaw-config  # GreenchClaw.json + AGENTS.md
+└── Secret/GreenchClaw-secrets    # Gateway token + API keys
 ```
 
 ## Customization
@@ -103,7 +103,7 @@ Edit the `AGENTS.md` in `scripts/k8s/manifests/configmap.yaml` and redeploy:
 
 ### Gateway config
 
-Edit `NexisClaw.json` in `scripts/k8s/manifests/configmap.yaml`. See [Gateway configuration](/gateway/configuration) for the full reference.
+Edit `GreenchClaw.json` in `scripts/k8s/manifests/configmap.yaml`. See [Gateway configuration](/gateway/configuration) for the full reference.
 
 ### Add providers
 
@@ -121,15 +121,15 @@ Existing provider keys stay in the Secret unless you overwrite them.
 Or patch the Secret directly:
 
 ```bash
-kubectl patch secret NexisClaw-secrets -n NexisClaw \
+kubectl patch secret GreenchClaw-secrets -n GreenchClaw \
   -p '{"stringData":{"<PROVIDER>_API_KEY":"..."}}'
-kubectl rollout restart deployment/NexisClaw -n NexisClaw
+kubectl rollout restart deployment/GreenchClaw -n GreenchClaw
 ```
 
 ### Custom namespace
 
 ```bash
-NEXISCLAW_NAMESPACE=my-namespace ./scripts/k8s/deploy.sh
+GREENCHCLAW_NAMESPACE=my-namespace ./scripts/k8s/deploy.sh
 ```
 
 ### Custom image
@@ -137,7 +137,7 @@ NEXISCLAW_NAMESPACE=my-namespace ./scripts/k8s/deploy.sh
 Edit the `image` field in `scripts/k8s/manifests/deployment.yaml`:
 
 ```yaml
-image: ghcr.io/NexisClaw/NexisClaw:latest # or pin to a specific version from https://github.com/NexisClaw/NexisClaw/releases
+image: ghcr.io/GreenchClaw/GreenchClaw:latest # or pin to a specific version from https://github.com/GreenchClaw/GreenchClaw/releases
 ```
 
 ### Expose beyond port-forward
@@ -183,7 +183,7 @@ scripts/k8s/
 ├── create-kind.sh              # Local Kind cluster (auto-detects docker/podman)
 └── manifests/
     ├── kustomization.yaml      # Kustomize base
-    ├── configmap.yaml          # NexisClaw.json + AGENTS.md
+    ├── configmap.yaml          # GreenchClaw.json + AGENTS.md
     ├── deployment.yaml         # Pod spec with security hardening
     ├── pvc.yaml                # 10Gi persistent storage
     └── service.yaml            # ClusterIP on 18789

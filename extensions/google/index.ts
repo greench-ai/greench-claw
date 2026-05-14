@@ -1,16 +1,16 @@
-import type { ImageGenerationProvider } from "NexisClaw/plugin-sdk/image-generation";
-import type { MediaUnderstandingProvider } from "NexisClaw/plugin-sdk/media-understanding";
-import type { MusicGenerationProvider } from "NexisClaw/plugin-sdk/music-generation";
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
+import type { ImageGenerationProvider } from "GreenchClaw/plugin-sdk/image-generation";
+import type { MediaUnderstandingProvider } from "GreenchClaw/plugin-sdk/media-understanding";
+import type { MusicGenerationProvider } from "GreenchClaw/plugin-sdk/music-generation";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
 import type {
   RealtimeVoiceBridge,
   RealtimeVoiceBridgeCreateRequest,
   RealtimeVoiceProviderConfig,
   RealtimeVoiceProviderPlugin,
-} from "NexisClaw/plugin-sdk/realtime-voice";
-import { normalizeResolvedSecretInputString } from "NexisClaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import type { VideoGenerationProvider } from "NexisClaw/plugin-sdk/video-generation";
+} from "GreenchClaw/plugin-sdk/realtime-voice";
+import { normalizeResolvedSecretInputString } from "GreenchClaw/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import type { VideoGenerationProvider } from "GreenchClaw/plugin-sdk/video-generation";
 import { buildGoogleGeminiCliBackend } from "./cli-backend.js";
 import { registerGoogleGeminiCliProvider } from "./gemini-cli-provider.js";
 import {

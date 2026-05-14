@@ -11,7 +11,7 @@ sidebarTitle: "Install overrides"
 Plugin install overrides let maintainers test setup-time plugin installs against
 a specific npm package or local npm-pack tarball. They are for E2E and package
 validation only. Normal users should install plugins with
-[`NexisClaw plugins install`](/cli/plugins).
+[`GreenchClaw plugins install`](/cli/plugins).
 
 <Warning>
 Overrides execute plugin code from the source you provide. Use them only in an
@@ -23,10 +23,10 @@ isolated state directory or disposable test machine.
 Overrides are disabled unless both variables are set:
 
 ```bash
-export NEXISCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES=1
-export NEXISCLAW_PLUGIN_INSTALL_OVERRIDES='{
-  "codex": "npm-pack:/tmp/NexisClaw-codex-2026.5.8.tgz",
-  "NexisClaw-web-search": "npm:@NexisClaw/web-search@2026.5.8"
+export GREENCHCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES=1
+export GREENCHCLAW_PLUGIN_INSTALL_OVERRIDES='{
+  "codex": "npm-pack:/tmp/GreenchClaw-codex-2026.5.8.tgz",
+  "GreenchClaw-web-search": "npm:@GreenchClaw/web-search@2026.5.8"
 }'
 ```
 
@@ -40,7 +40,7 @@ Relative `npm-pack:` paths resolve from the current working directory.
 ## Behavior
 
 When a setup-time flow asks to install a plugin whose id appears in the map,
-NexisClaw uses the override source instead of the catalog, bundled, or default
+GreenchClaw uses the override source instead of the catalog, bundled, or default
 npm source. This applies to onboarding and other flows that use the shared
 setup-time plugin installer.
 
@@ -48,31 +48,31 @@ Overrides still enforce the expected plugin id. A tarball mapped to `codex`
 must install a plugin whose manifest id is `codex`.
 
 Overrides do not inherit official trusted-source status. Even when the catalog
-entry normally represents an NexisClaw-owned package, an override is treated as
+entry normally represents an GreenchClaw-owned package, an override is treated as
 operator-supplied test input.
 
 Workspace `.env` files cannot enable install overrides. Set these variables in
-the trusted shell, CI job, or remote test command that launches NexisClaw.
+the trusted shell, CI job, or remote test command that launches GreenchClaw.
 
 ## Package E2E
 
 Use an isolated state directory so package installs and install records do not
-touch your normal NexisClaw state:
+touch your normal GreenchClaw state:
 
 ```bash
 npm pack extensions/codex --pack-destination /tmp
 
-NEXISCLAW_STATE_DIR="$(mktemp -d)" \
-NEXISCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES=1 \
-NEXISCLAW_PLUGIN_INSTALL_OVERRIDES='{"codex":"npm-pack:/tmp/NexisClaw-codex-2026.5.8.tgz"}' \
-pnpm NexisClaw onboard --mode local
+GREENCHCLAW_STATE_DIR="$(mktemp -d)" \
+GREENCHCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES=1 \
+GREENCHCLAW_PLUGIN_INSTALL_OVERRIDES='{"codex":"npm-pack:/tmp/GreenchClaw-codex-2026.5.8.tgz"}' \
+pnpm GreenchClaw onboard --mode local
 ```
 
 Verify the installed package under the state directory:
 
 ```bash
-find "$NEXISCLAW_STATE_DIR/npm/node_modules" -maxdepth 3 -name package.json -print
-grep -R '"@NexisClaw/codex"' "$NEXISCLAW_STATE_DIR/npm/package-lock.json"
+find "$GREENCHCLAW_STATE_DIR/npm/node_modules" -maxdepth 3 -name package.json -print
+grep -R '"@GreenchClaw/codex"' "$GREENCHCLAW_STATE_DIR/npm/package-lock.json"
 ```
 
 For live provider E2E, source the real API key from a trusted shell or CI secret

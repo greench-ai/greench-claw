@@ -1,7 +1,7 @@
 import {
   createResolvedApproverActionAuthAdapter,
   resolveApprovalApprovers,
-} from "NexisClaw/plugin-sdk/approval-auth-runtime";
+} from "GreenchClaw/plugin-sdk/approval-auth-runtime";
 import { resolveZaloAccount } from "./accounts.js";
 
 function normalizeZaloApproverId(value: string | number): string | undefined {

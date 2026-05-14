@@ -427,7 +427,7 @@ describe("createGatewayPluginUpgradeHandler", () => {
       registry: createTestRegistry({
         httpRoutes: [
           createRoute({
-            path: "/__NexisClaw__/canvas/ws",
+            path: "/__GreenchClaw__/canvas/ws",
             auth: "gateway",
             handleUpgrade: routeUpgradeHandler,
           }),
@@ -438,7 +438,7 @@ describe("createGatewayPluginUpgradeHandler", () => {
     const socket = createMockUpgradeSocket();
 
     const handled = await handler(
-      { url: "/__NexisClaw__/canvas/ws" } as IncomingMessage,
+      { url: "/__GreenchClaw__/canvas/ws" } as IncomingMessage,
       socket,
       Buffer.alloc(0),
       undefined,
@@ -457,7 +457,7 @@ describe("createGatewayPluginUpgradeHandler", () => {
       registry: createTestRegistry({
         httpRoutes: [
           createRoute({
-            path: "/__NexisClaw__/canvas/ws",
+            path: "/__GreenchClaw__/canvas/ws",
             auth: "gateway",
             handleUpgrade: routeUpgradeHandler,
           }),
@@ -468,7 +468,7 @@ describe("createGatewayPluginUpgradeHandler", () => {
     const socket = createMockUpgradeSocket();
 
     const handled = await handler(
-      { url: "/__NexisClaw__/canvas/ws" } as IncomingMessage,
+      { url: "/__GreenchClaw__/canvas/ws" } as IncomingMessage,
       socket,
       Buffer.alloc(0),
       undefined,

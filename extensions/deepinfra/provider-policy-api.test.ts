@@ -1,7 +1,7 @@
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "NexisClaw/plugin-sdk/provider-model-types";
+} from "GreenchClaw/plugin-sdk/provider-model-types";
 import { describe, expect, it } from "vitest";
 import { normalizeConfig } from "./provider-policy-api.js";
 

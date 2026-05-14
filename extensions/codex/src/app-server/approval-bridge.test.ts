@@ -1,12 +1,12 @@
 import {
   callGatewayTool,
   type EmbeddedRunAttemptParams,
-} from "NexisClaw/plugin-sdk/agent-harness-runtime";
+} from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { buildApprovalResponse, handleCodexAppServerApprovalRequest } from "./approval-bridge.js";
 
-vi.mock("NexisClaw/plugin-sdk/agent-harness-runtime", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("NexisClaw/plugin-sdk/agent-harness-runtime")>()),
+vi.mock("GreenchClaw/plugin-sdk/agent-harness-runtime", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("GreenchClaw/plugin-sdk/agent-harness-runtime")>()),
   callGatewayTool: vi.fn(),
 }));
 
@@ -105,7 +105,7 @@ describe("Codex app-server approval bridge", () => {
     expect(gatewayCallMethod()).toBe("plugin.approval.request");
     expect(typeof mockCallGatewayTool.mock.calls.at(0)?.[1]).toBe("object");
     const requestPayload = gatewayRequestPayload();
-    expect(requestPayload.pluginId).toBe("NexisClaw-codex-app-server");
+    expect(requestPayload.pluginId).toBe("GreenchClaw-codex-app-server");
     expect(requestPayload.title).toBe("Codex app-server command approval");
     expect(requestPayload.twoPhase).toBe(true);
     expect(requestPayload.turnSourceChannel).toBe("telegram");
@@ -576,7 +576,7 @@ describe("Codex app-server approval bridge", () => {
 
     expect(result).toEqual({
       decision: "decline",
-      reason: "NexisClaw codex app-server bridge does not grant native approvals yet.",
+      reason: "GreenchClaw codex app-server bridge does not grant native approvals yet.",
     });
     expect(mockCallGatewayTool).not.toHaveBeenCalled();
     expect(params.onAgentEvent).not.toHaveBeenCalled();
@@ -937,7 +937,7 @@ describe("Codex app-server approval bridge", () => {
     });
     expect(buildApprovalResponse("future/requestApproval", undefined, "approved-once")).toEqual({
       decision: "decline",
-      reason: "NexisClaw codex app-server bridge does not grant native approvals yet.",
+      reason: "GreenchClaw codex app-server bridge does not grant native approvals yet.",
     });
   });
 });

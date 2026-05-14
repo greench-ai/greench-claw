@@ -1,5 +1,5 @@
 ---
-summary: "Adds SGLang model provider support to NexisClaw."
+summary: "Adds SGLang model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the sglang plugin
 title: "SGLang plugin"
@@ -7,12 +7,12 @@ title: "SGLang plugin"
 
 # SGLang plugin
 
-Adds SGLang model provider support to NexisClaw.
+Adds SGLang model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/sglang-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/sglang-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

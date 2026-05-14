@@ -7,7 +7,7 @@ const VERSION_ONLY_TEXT_PATHS = new Set([
   "apps/android/app/build.gradle.kts",
   "apps/ios/Config/Version.xcconfig",
   "apps/ios/version.json",
-  "apps/macos/Sources/NexisClaw/Resources/Info.plist",
+  "apps/macos/Sources/GreenchClaw/Resources/Info.plist",
 ]);
 
 function normalizePath(input) {
@@ -108,8 +108,8 @@ function stableJson(value) {
 
 function normalizeVersionText(raw) {
   return raw
-    .replace(/\b20\d{2}\.\d{1,2}\.\d{1,2}(?:-beta\.\d+|-\d+)?\b/gu, "<NEXISCLAW_VERSION>")
-    .replace(/\b20\d{6}(?:\d{2})?\b/gu, "<NEXISCLAW_BUILD>");
+    .replace(/\b20\d{2}\.\d{1,2}\.\d{1,2}(?:-beta\.\d+|-\d+)?\b/gu, "<GREENCHCLAW_VERSION>")
+    .replace(/\b20\d{6}(?:\d{2})?\b/gu, "<GREENCHCLAW_BUILD>");
 }
 
 function fail(message) {

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../../config/config.js";
+import type { GreenchClawConfig } from "../../../config/config.js";
 import type { PluginInstallRecord } from "../../../config/types.plugins.js";
 import type { PluginManifestRecord } from "../../../plugins/manifest-registry.js";
 import * as manifestRegistry from "../../../plugins/manifest-registry.js";
@@ -32,7 +32,7 @@ function manifest(id: string): PluginManifestRecord {
     origin: "bundled",
     rootDir: `/plugins/${id}`,
     source: `/plugins/${id}`,
-    manifestPath: `/plugins/${id}/NexisClaw.plugin.json`,
+    manifestPath: `/plugins/${id}/GreenchClaw.plugin.json`,
   };
 }
 
@@ -60,7 +60,7 @@ describe("doctor stale plugin config helpers", () => {
           acpx: { enabled: true },
         },
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
 
     expect(hits).toEqual([
       {
@@ -91,7 +91,7 @@ describe("doctor stale plugin config helpers", () => {
           acpx: { enabled: true },
         },
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
 
     expect(result.changes).toEqual([
       "- plugins.allow: removed 1 stale plugin id (acpx)",
@@ -113,7 +113,7 @@ describe("doctor stale plugin config helpers", () => {
           contextEngine: "missing-engine",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const hits = scanStalePluginConfig(cfg);
     expect(hits).toEqual([
@@ -151,7 +151,7 @@ describe("doctor stale plugin config helpers", () => {
             contextEngine: "legacy",
           },
         },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
     ).toStrictEqual([]);
   });
 
@@ -164,12 +164,12 @@ describe("doctor stale plugin config helpers", () => {
           surface: "allow",
         },
       ],
-      doctorFixCommand: "NexisClaw doctor --fix",
+      doctorFixCommand: "GreenchClaw doctor --fix",
     });
 
     expect(warnings).toEqual([
       '- plugins.allow: stale plugin reference "acpx" was found.',
-      '- Run "NexisClaw doctor --fix" to remove stale plugin ids and dangling channel references.',
+      '- Run "GreenchClaw doctor --fix" to remove stale plugin ids and dangling channel references.',
     ]);
   });
 
@@ -190,7 +190,7 @@ describe("doctor stale plugin config helpers", () => {
           allowFrom: ["+15555550123"],
         },
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
 
     expect(result.changes).toEqual([
       "- plugins.allow: removed 1 stale plugin id (acpx)",
@@ -255,7 +255,7 @@ describe("doctor stale plugin config helpers", () => {
           },
         ],
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
 
     expect(result.changes).toEqual([
       "- plugins.allow: removed 1 stale plugin id (missing-chat-plugin)",
@@ -287,7 +287,7 @@ describe("doctor stale plugin config helpers", () => {
           botToken: "typo",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(scanStalePluginConfig(cfg)).toStrictEqual([]);
     expect(maybeRepairStalePluginConfig(cfg)).toEqual({ config: cfg, changes: [] });
@@ -303,11 +303,11 @@ describe("doctor stale plugin config helpers", () => {
         },
       },
       channels: {
-        "NexisClaw-weixin": {
+        "GreenchClaw-weixin": {
           enabled: true,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(scanStalePluginConfig(cfg)).toStrictEqual([]);
     expect(maybeRepairStalePluginConfig(cfg)).toEqual({ config: cfg, changes: [] });
@@ -329,7 +329,7 @@ describe("doctor stale plugin config helpers", () => {
           enabled: true,
         },
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
 
     expect(result.changes).toEqual([
       "- channels: removed 1 stale channel config (missing-chat-plugin)",
@@ -352,7 +352,7 @@ describe("doctor stale plugin config helpers", () => {
           acpx: { enabled: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const hits = scanStalePluginConfig(cfg);
     expect(hits).toEqual([
@@ -374,7 +374,7 @@ describe("doctor stale plugin config helpers", () => {
 
     const warnings = collectStalePluginConfigWarnings({
       hits,
-      doctorFixCommand: "NexisClaw doctor --fix",
+      doctorFixCommand: "GreenchClaw doctor --fix",
       autoRepairBlocked: true,
     });
     expect(warnings[2]).toContain("Auto-removal is paused");
@@ -389,7 +389,7 @@ describe("doctor stale plugin config helpers", () => {
           acpx: { enabled: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(scanStalePluginConfig(cfg)).toEqual([
       {

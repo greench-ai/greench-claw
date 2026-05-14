@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginOrigin } from "../plugins/plugin-origin.types.js";
 import { collectChannelConfigAssignments } from "./runtime-config-collectors-channels.js";
 import { collectCoreConfigAssignments } from "./runtime-config-collectors-core.js";
@@ -6,7 +6,7 @@ import { collectPluginConfigAssignments } from "./runtime-config-collectors-plug
 import type { ResolverContext } from "./runtime-shared.js";
 
 export function collectConfigAssignments(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   context: ResolverContext;
   loadablePluginOrigins?: ReadonlyMap<string, PluginOrigin>;
 }): void {

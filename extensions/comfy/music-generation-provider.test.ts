@@ -1,4 +1,4 @@
-import { expectExplicitMusicGenerationCapabilities } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { expectExplicitMusicGenerationCapabilities } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { buildComfyMusicGenerationProvider } from "./music-generation-provider.js";
 import { _setComfyFetchGuardForTesting } from "./workflow-runtime.js";

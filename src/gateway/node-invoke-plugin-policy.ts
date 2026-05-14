@@ -4,9 +4,9 @@ import { DEFAULT_PLUGIN_APPROVAL_TIMEOUT_MS } from "../infra/plugin-approvals.js
 import { getActiveRuntimePluginRegistry } from "../plugins/active-runtime-registry.js";
 import type { PluginRegistry } from "../plugins/registry-types.js";
 import type {
-  NexisClawPluginNodeInvokePolicyContext,
-  NexisClawPluginNodeInvokePolicyResult,
-  NexisClawPluginNodeInvokeTransportResult,
+  GreenchClawPluginNodeInvokePolicyContext,
+  GreenchClawPluginNodeInvokePolicyResult,
+  GreenchClawPluginNodeInvokeTransportResult,
 } from "../plugins/types.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
 import type { NodeSession } from "./node-registry.js";
@@ -46,7 +46,7 @@ function createApprovalRuntime(params: {
   context: GatewayRequestContext;
   client: GatewayClient | null;
   pluginId: string;
-}): NexisClawPluginNodeInvokePolicyContext["approvals"] | undefined {
+}): GreenchClawPluginNodeInvokePolicyContext["approvals"] | undefined {
   const manager = params.context.pluginApprovalManager;
   if (!manager) {
     return undefined;
@@ -98,7 +98,7 @@ export async function applyPluginNodeInvokePolicy(params: {
   params: unknown;
   timeoutMs?: number;
   idempotencyKey?: string;
-}): Promise<NexisClawPluginNodeInvokePolicyResult | null> {
+}): Promise<GreenchClawPluginNodeInvokePolicyResult | null> {
   const registry = getActiveRuntimePluginRegistry();
   const entry = registry?.nodeInvokePolicies?.find((candidate) =>
     candidate.policy.commands.includes(params.command),
@@ -115,9 +115,9 @@ export async function applyPluginNodeInvokePolicy(params: {
     return null;
   }
 
-  const invokeNode: NexisClawPluginNodeInvokePolicyContext["invokeNode"] = async (
+  const invokeNode: GreenchClawPluginNodeInvokePolicyContext["invokeNode"] = async (
     override = {},
-  ): Promise<NexisClawPluginNodeInvokeTransportResult> => {
+  ): Promise<GreenchClawPluginNodeInvokeTransportResult> => {
     const res = await params.context.nodeRegistry.invoke({
       nodeId: params.nodeSession.nodeId,
       command: params.command,

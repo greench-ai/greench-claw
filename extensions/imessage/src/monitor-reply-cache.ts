@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { resolveStateDir } from "NexisClaw/plugin-sdk/state-paths";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { resolveStateDir } from "GreenchClaw/plugin-sdk/state-paths";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 const REPLY_CACHE_MAX = 2000;
 const REPLY_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
@@ -589,10 +589,10 @@ export function _resetIMessageShortIdState(): void {
   parseFailureLogged = false;
   // Only delete the persisted file when the test harness has explicitly
   // pointed us at an isolated state directory. Otherwise we would nuke
-  // whatever live gateway happens to share `~/.NexisClaw` — and in vitest
+  // whatever live gateway happens to share `~/.GreenchClaw` — and in vitest
   // file-level parallelism, two test files calling this at once could
   // race a peer's appendFileSync mid-write.
-  if (!process.env.NEXISCLAW_STATE_DIR) {
+  if (!process.env.GREENCHCLAW_STATE_DIR) {
     return;
   }
   try {

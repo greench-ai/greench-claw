@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginMetadataSnapshot } from "./plugin-metadata-snapshot.js";
 
 const mocks = vi.hoisted(() => ({
@@ -56,7 +56,7 @@ vi.mock("./manifest-owner-policy.js", () => ({
 
 import { resolveEffectivePluginIds } from "./effective-plugin-ids.js";
 
-function resolve(config: NexisClawConfig): string[] {
+function resolve(config: GreenchClawConfig): string[] {
   return resolveEffectivePluginIds({
     config,
     env: {},
@@ -139,7 +139,7 @@ describe("resolveEffectivePluginIds", () => {
         slots: { contextEngine: "lossless-claw" },
       },
     },
-  ] satisfies Array<{ name: string; plugins: NonNullable<NexisClawConfig["plugins"]> }>)(
+  ] satisfies Array<{ name: string; plugins: NonNullable<GreenchClawConfig["plugins"]> }>)(
     "does not preload a selected context-engine slot when $name",
     ({ plugins }) => {
       expect(resolve({ plugins })).toStrictEqual([]);

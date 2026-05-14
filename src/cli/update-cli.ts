@@ -35,7 +35,7 @@ export function registerUpdateCli(program: Command) {
   program.enablePositionalOptions();
   const update = program
     .command("update")
-    .description("Update NexisClaw and inspect update channel status")
+    .description("Update GreenchClaw and inspect update channel status")
     .option("--json", "Output result as JSON", false)
     .option("--no-restart", "Skip restarting the gateway service after a successful update")
     .option("--dry-run", "Preview update actions without making changes", false)
@@ -48,17 +48,17 @@ export function registerUpdateCli(program: Command) {
     .option("--yes", "Skip confirmation prompts (non-interactive)", false)
     .addHelpText("after", () => {
       const examples = [
-        ["NexisClaw update", "Update a source checkout (git)"],
-        ["NexisClaw update --channel beta", "Switch to beta channel (git + npm)"],
-        ["NexisClaw update --channel dev", "Switch to dev channel (git + npm)"],
-        ["NexisClaw update --tag beta", "One-off update to a dist-tag or version"],
-        ["NexisClaw update --tag main", "One-off package install from GitHub main"],
-        ["NexisClaw update --dry-run", "Preview actions without changing anything"],
-        ["NexisClaw update --no-restart", "Update without restarting the service"],
-        ["NexisClaw update --json", "Output result as JSON"],
-        ["NexisClaw update --yes", "Non-interactive (accept downgrade prompts)"],
-        ["NexisClaw update wizard", "Interactive update wizard"],
-        ["NexisClaw --update", "Shorthand for NexisClaw update"],
+        ["GreenchClaw update", "Update a source checkout (git)"],
+        ["GreenchClaw update --channel beta", "Switch to beta channel (git + npm)"],
+        ["GreenchClaw update --channel dev", "Switch to dev channel (git + npm)"],
+        ["GreenchClaw update --tag beta", "One-off update to a dist-tag or version"],
+        ["GreenchClaw update --tag main", "One-off package install from GitHub main"],
+        ["GreenchClaw update --dry-run", "Preview actions without changing anything"],
+        ["GreenchClaw update --no-restart", "Update without restarting the service"],
+        ["GreenchClaw update --json", "Output result as JSON"],
+        ["GreenchClaw update --yes", "Non-interactive (accept downgrade prompts)"],
+        ["GreenchClaw update wizard", "Interactive update wizard"],
+        ["GreenchClaw --update", "Shorthand for GreenchClaw update"],
       ] as const;
       const fmtExamples = examples
         .map(([cmd, desc]) => `  ${theme.command(cmd)} ${theme.muted(`# ${desc}`)}`)
@@ -70,7 +70,7 @@ ${theme.heading("What this does:")}
 
 ${theme.heading("Switch channels:")}
   - Use --channel stable|beta|dev to persist the update channel in config
-  - Run NexisClaw update status to see the active channel and source
+  - Run GreenchClaw update status to see the active channel and source
   - Use --tag <dist-tag|version|spec> for a one-off package update without persisting
 
 ${theme.heading("Non-interactive:")}
@@ -87,7 +87,7 @@ ${theme.heading("Notes:")}
   - Downgrades require confirmation (can break configuration)
   - Skips update if the working directory has uncommitted changes
 
-${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.NexisClaw.ai/cli/update")}`;
+${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.GreenchClaw.ai/cli/update")}`;
     })
     .action(async (opts) => {
       try {
@@ -112,7 +112,7 @@ ${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.NexisClaw.ai/cli/u
     .option("--timeout <seconds>", "Timeout for each update step in seconds (default: 1800)")
     .addHelpText(
       "after",
-      `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.NexisClaw.ai/cli/update")}\n`,
+      `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.GreenchClaw.ai/cli/update")}\n`,
     )
     .action(async (opts, command) => {
       try {
@@ -134,14 +134,14 @@ ${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.NexisClaw.ai/cli/u
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["NexisClaw update status", "Show channel + version status."],
-          ["NexisClaw update status --json", "JSON output."],
-          ["NexisClaw update status --timeout 10", "Custom timeout."],
+          ["GreenchClaw update status", "Show channel + version status."],
+          ["GreenchClaw update status --json", "JSON output."],
+          ["GreenchClaw update status --timeout 10", "Custom timeout."],
         ])}\n\n${theme.heading("Notes:")}\n${theme.muted(
           "- Shows current update channel (stable/beta/dev) and source",
         )}\n${theme.muted("- Includes git tag/branch/SHA for source checkouts")}\n\n${theme.muted(
           "Docs:",
-        )} ${formatDocsLink("/cli/update", "docs.NexisClaw.ai/cli/update")}`,
+        )} ${formatDocsLink("/cli/update", "docs.GreenchClaw.ai/cli/update")}`,
     )
     .action(async (opts, command) => {
       try {

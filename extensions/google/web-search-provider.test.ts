@@ -1,10 +1,10 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { withEnv, withEnvAsync, withFetchPreconnect } from "NexisClaw/plugin-sdk/test-env";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { withEnv, withEnvAsync, withFetchPreconnect } from "GreenchClaw/plugin-sdk/test-env";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { __testing, createGeminiWebSearchProvider } from "./src/gemini-web-search-provider.js";
 
 type TestModelProviderConfig = NonNullable<
-  NonNullable<NexisClawConfig["models"]>["providers"]
+  NonNullable<GreenchClawConfig["models"]>["providers"]
 >[string];
 
 function installGeminiFetch() {
@@ -92,8 +92,8 @@ describe("google web search provider", () => {
         throw new Error("Expected tool definition");
       }
 
-      await expect(tool.execute({ query: "NexisClaw docs" })).resolves.toEqual({
-        docs: "https://docs.NexisClaw.ai/tools/web",
+      await expect(tool.execute({ query: "GreenchClaw docs" })).resolves.toEqual({
+        docs: "https://docs.GreenchClaw.ai/tools/web",
         error: "missing_gemini_api_key",
         message:
           "web_search (gemini) needs an API key. Set GEMINI_API_KEY in the Gateway environment, configure plugins.entries.google.config.webSearch.apiKey, or reuse models.providers.google.apiKey. If you do not want to configure a search API key, use web_fetch for a specific URL or the browser tool for interactive pages.",
@@ -125,7 +125,7 @@ describe("google web search provider", () => {
 
   it("stores configured credentials at the canonical plugin config path", () => {
     const provider = createGeminiWebSearchProvider();
-    const config = {} as NexisClawConfig;
+    const config = {} as GreenchClawConfig;
 
     provider.setConfiguredCredentialValue?.(config, "AIza-plugin-test");
 
@@ -159,7 +159,7 @@ describe("google web search provider", () => {
       searchConfig: { provider: "gemini" },
     });
 
-    await tool?.execute({ query: "NexisClaw docs" });
+    await tool?.execute({ query: "GreenchClaw docs" });
 
     expect(getGeminiFetchUrl(mockFetch)).toBe(
       "https://generativelanguage.googleapis.com/proxy/v1beta/models/gemini-2.5-flash:generateContent",
@@ -188,7 +188,7 @@ describe("google web search provider", () => {
       searchConfig: { provider: "gemini" },
     });
 
-    await tool?.execute({ query: "NexisClaw docs" }, { signal: controller.signal });
+    await tool?.execute({ query: "GreenchClaw docs" }, { signal: controller.signal });
 
     const [, init] = requireFirstGeminiFetchCall(mockFetch);
     expect(init?.signal?.aborted).toBe(true);
@@ -211,7 +211,7 @@ describe("google web search provider", () => {
         searchConfig: { provider: "gemini" },
       });
 
-      await tool?.execute({ query: "NexisClaw provider key fallback" });
+      await tool?.execute({ query: "GreenchClaw provider key fallback" });
 
       expect(getFetchHeaders(mockFetch)["x-goog-api-key"]).toBe("AIza-provider-test");
     });
@@ -245,7 +245,7 @@ describe("google web search provider", () => {
         searchConfig: { provider: "gemini" },
       });
 
-      await tool?.execute({ query: "NexisClaw plugin key precedence" });
+      await tool?.execute({ query: "GreenchClaw plugin key precedence" });
 
       expect(getFetchHeaders(mockFetch)["x-goog-api-key"]).toBe("AIza-plugin-test");
     });
@@ -268,7 +268,7 @@ describe("google web search provider", () => {
       searchConfig: { provider: "gemini" },
     });
 
-    await tool?.execute({ query: "NexisClaw provider baseUrl fallback" });
+    await tool?.execute({ query: "GreenchClaw provider baseUrl fallback" });
 
     expect(getGeminiFetchUrl(mockFetch)).toBe(
       "https://generativelanguage.googleapis.com/provider/v1beta/models/gemini-2.5-flash:generateContent",
@@ -303,7 +303,7 @@ describe("google web search provider", () => {
       searchConfig: { provider: "gemini" },
     });
 
-    await tool?.execute({ query: "NexisClaw plugin baseUrl precedence" });
+    await tool?.execute({ query: "GreenchClaw plugin baseUrl precedence" });
 
     expect(getGeminiFetchUrl(mockFetch)).toBe(
       "https://generativelanguage.googleapis.com/plugin/v1beta/models/gemini-2.5-flash:generateContent",
@@ -362,7 +362,7 @@ describe("google web search provider", () => {
     });
 
     await tool?.execute({
-      query: "NexisClaw release notes",
+      query: "GreenchClaw release notes",
       date_after: "2026-04-01",
       date_before: "2026-04-30",
     });
@@ -396,12 +396,12 @@ describe("google web search provider", () => {
 
     await expect(
       tool?.execute({
-        query: "NexisClaw release notes",
+        query: "GreenchClaw release notes",
         freshness: "week",
         date_after: "2026-04-01",
       }),
     ).resolves.toEqual({
-      docs: "https://docs.NexisClaw.ai/tools/web",
+      docs: "https://docs.GreenchClaw.ai/tools/web",
       error: "conflicting_time_filters",
       message:
         "freshness and date_after/date_before cannot be used together. Use either freshness (day/week/month/year) or a date range (date_after/date_before), not both.",

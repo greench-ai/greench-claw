@@ -1,4 +1,4 @@
-import type { SecretInput } from "NexisClaw/plugin-sdk/secret-input";
+import type { SecretInput } from "GreenchClaw/plugin-sdk/secret-input";
 
 export type ZaloAccountConfig = {
   /** Optional display name for this account (used in CLI/UI lists). */

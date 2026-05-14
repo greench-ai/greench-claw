@@ -15,14 +15,14 @@ import type {
   ChannelMessageActionName,
 } from "../channels/plugins/types.public.js";
 import { normalizeAnyChannelId } from "../channels/registry.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 type ChannelAgentToolMeta = {
   channelId: string;
 };
 
 type ChannelMessageActionDiscoveryParams = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   currentChannelId?: string | null;
   currentThreadTs?: string | null;
   currentMessageId?: string | number | null;
@@ -96,7 +96,7 @@ export function listAllChannelSupportedActions(
   return Array.from(actions);
 }
 
-export function listChannelAgentTools(params: { cfg?: NexisClawConfig }): ChannelAgentTool[] {
+export function listChannelAgentTools(params: { cfg?: GreenchClawConfig }): ChannelAgentTool[] {
   // Channel docking: aggregate channel-owned tools (login, etc.).
   const tools: ChannelAgentTool[] = [];
   for (const plugin of listChannelPlugins()) {
@@ -116,7 +116,7 @@ export function listChannelAgentTools(params: { cfg?: NexisClawConfig }): Channe
 }
 
 export function resolveChannelMessageToolHints(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   channel?: string | null;
   accountId?: string | null;
 }): string[] {
@@ -128,14 +128,14 @@ export function resolveChannelMessageToolHints(params: {
   if (!resolve) {
     return [];
   }
-  const cfg = params.cfg ?? ({} as NexisClawConfig);
+  const cfg = params.cfg ?? ({} as GreenchClawConfig);
   return (resolve({ cfg, accountId: params.accountId }) ?? [])
     .map((entry) => entry.trim())
     .filter(Boolean);
 }
 
 export function resolveChannelPromptCapabilities(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   channel?: string | null;
   accountId?: string | null;
 }): string[] {
@@ -144,7 +144,7 @@ export function resolveChannelPromptCapabilities(params: {
     return [];
   }
   const plugin = getChannelPlugin(channelId);
-  const cfg = params.cfg ?? ({} as NexisClawConfig);
+  const cfg = params.cfg ?? ({} as GreenchClawConfig);
   const capabilities = normalizePromptCapabilities(
     plugin?.agentPrompt?.messageToolCapabilities?.({ cfg, accountId: params.accountId }),
   );
@@ -159,7 +159,7 @@ function normalizePromptCapabilities(capabilities?: readonly string[] | null): s
 }
 
 export function resolveChannelReactionGuidance(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   channel?: string | null;
   accountId?: string | null;
 }): { level: "minimal" | "extensive"; channel: string } | undefined {
@@ -171,7 +171,7 @@ export function resolveChannelReactionGuidance(params: {
   if (!resolve) {
     return undefined;
   }
-  const cfg = params.cfg ?? ({} as NexisClawConfig);
+  const cfg = params.cfg ?? ({} as GreenchClawConfig);
   const resolved = resolve({ cfg, accountId: params.accountId });
   if (!resolved?.level) {
     return undefined;

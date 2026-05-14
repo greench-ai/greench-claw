@@ -1,8 +1,8 @@
 import {
   createResolvedApproverActionAuthAdapter,
   resolveApprovalApprovers,
-} from "NexisClaw/plugin-sdk/approval-auth-runtime";
-import { normalizeE164 } from "NexisClaw/plugin-sdk/text-utility-runtime";
+} from "GreenchClaw/plugin-sdk/approval-auth-runtime";
+import { normalizeE164 } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import { resolveSignalAccount } from "./accounts.js";
 import { normalizeSignalMessagingTarget } from "./normalize.js";
 import { looksLikeUuid } from "./uuid.js";

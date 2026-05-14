@@ -1,7 +1,7 @@
 import type { WebClient as SlackWebClient } from "@slack/web-api";
-import { runTasksWithConcurrency } from "NexisClaw/plugin-sdk/concurrency-runtime";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { runTasksWithConcurrency } from "GreenchClaw/plugin-sdk/concurrency-runtime";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { formatSlackFileReference } from "../../file-reference.js";
 import type { SlackFile, SlackMessageEvent } from "../../types.js";
 import { MAX_SLACK_MEDIA_FILES, type SlackMediaResult } from "../media-types.js";

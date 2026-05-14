@@ -3,14 +3,14 @@ import { chmod, mkdtemp, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { bundledPluginFile } from "NexisClaw/plugin-sdk/test-fixtures";
+import { bundledPluginFile } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it } from "vitest";
 
 const tempDirs: string[] = [];
 const proxyPath = path.resolve(bundledPluginFile("acpx", "src/runtime-internals/mcp-proxy.mjs"));
 
 async function makeTempScript(name: string, content: string): Promise<string> {
-  const dir = await mkdtemp(path.join(os.tmpdir(), "NexisClaw-acpx-mcp-proxy-"));
+  const dir = await mkdtemp(path.join(os.tmpdir(), "GreenchClaw-acpx-mcp-proxy-"));
   tempDirs.push(dir);
   const scriptPath = path.join(dir, name);
   await writeFile(scriptPath, content, "utf8");

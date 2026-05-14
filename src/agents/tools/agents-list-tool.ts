@@ -35,7 +35,7 @@ export function createAgentsListTool(opts?: {
     label: "Agents",
     name: "agents_list",
     description:
-      'List NexisClaw agent ids you can target with `sessions_spawn` when `runtime="subagent"` (based on subagent allowlists).',
+      'List GreenchClaw agent ids you can target with `sessions_spawn` when `runtime="subagent"` (based on subagent allowlists).',
     parameters: AgentsListToolSchema,
     execute: async () => {
       const cfg = getRuntimeConfig();

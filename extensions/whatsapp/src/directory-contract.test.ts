@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   listWhatsAppDirectoryGroupsFromConfig,
@@ -18,7 +18,7 @@ describe("WhatsApp directory contract", () => {
           groups: { "999@g.us": { requireMention: true }, "*": {} },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const peers = await listWhatsAppDirectoryPeersFromConfig({
       cfg,
@@ -43,7 +43,7 @@ describe("WhatsApp directory contract", () => {
           groups: { "111@g.us": {}, "222@g.us": {}, "333@s.whatsapp.net": {} },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const groups = await listWhatsAppDirectoryGroupsFromConfig({
       cfg,

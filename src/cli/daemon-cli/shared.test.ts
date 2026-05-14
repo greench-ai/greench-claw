@@ -24,58 +24,58 @@ describe("renderGatewayServiceStartHints", () => {
   it("resolves daemon container context from either env key", () => {
     expect(
       resolveDaemonContainerContext({
-        NEXISCLAW_CONTAINER: "NexisClaw-demo-container",
+        GREENCHCLAW_CONTAINER: "GreenchClaw-demo-container",
       } as NodeJS.ProcessEnv),
-    ).toBe("NexisClaw-demo-container");
+    ).toBe("GreenchClaw-demo-container");
     expect(
       resolveDaemonContainerContext({
-        NEXISCLAW_CONTAINER_HINT: "NexisClaw-demo-container",
+        GREENCHCLAW_CONTAINER_HINT: "GreenchClaw-demo-container",
       } as NodeJS.ProcessEnv),
-    ).toBe("NexisClaw-demo-container");
+    ).toBe("GreenchClaw-demo-container");
   });
 
-  it("prepends a single container restart hint when NEXISCLAW_CONTAINER is set", () => {
+  it("prepends a single container restart hint when GREENCHCLAW_CONTAINER is set", () => {
     expect(
       renderGatewayServiceStartHints({
-        NEXISCLAW_CONTAINER: "NexisClaw-demo-container",
+        GREENCHCLAW_CONTAINER: "GreenchClaw-demo-container",
       } as NodeJS.ProcessEnv),
     ).toContain(
-      "Restart the container or the service that manages it for NexisClaw-demo-container.",
+      "Restart the container or the service that manages it for GreenchClaw-demo-container.",
     );
   });
 
-  it("prepends a single container restart hint when NEXISCLAW_CONTAINER_HINT is set", () => {
+  it("prepends a single container restart hint when GREENCHCLAW_CONTAINER_HINT is set", () => {
     expect(
       renderGatewayServiceStartHints({
-        NEXISCLAW_CONTAINER_HINT: "NexisClaw-demo-container",
+        GREENCHCLAW_CONTAINER_HINT: "GreenchClaw-demo-container",
       } as NodeJS.ProcessEnv),
     ).toContain(
-      "Restart the container or the service that manages it for NexisClaw-demo-container.",
+      "Restart the container or the service that manages it for GreenchClaw-demo-container.",
     );
   });
 });
 
 describe("filterContainerGenericHints", () => {
-  it("drops the generic container foreground hint when NEXISCLAW_CONTAINER is set", () => {
+  it("drops the generic container foreground hint when GREENCHCLAW_CONTAINER is set", () => {
     expect(
       filterContainerGenericHints(
         [
           "systemd user services are unavailable; install/enable systemd or run the gateway under your supervisor.",
-          "If you're in a container, run the gateway in the foreground instead of `NexisClaw gateway`.",
+          "If you're in a container, run the gateway in the foreground instead of `GreenchClaw gateway`.",
         ],
-        { NEXISCLAW_CONTAINER: "NexisClaw-demo-container" } as NodeJS.ProcessEnv,
+        { GREENCHCLAW_CONTAINER: "GreenchClaw-demo-container" } as NodeJS.ProcessEnv,
       ),
     ).toStrictEqual([]);
   });
 
-  it("drops the generic container foreground hint when NEXISCLAW_CONTAINER_HINT is set", () => {
+  it("drops the generic container foreground hint when GREENCHCLAW_CONTAINER_HINT is set", () => {
     expect(
       filterContainerGenericHints(
         [
           "systemd user services are unavailable; install/enable systemd or run the gateway under your supervisor.",
-          "If you're in a container, run the gateway in the foreground instead of `NexisClaw gateway`.",
+          "If you're in a container, run the gateway in the foreground instead of `GreenchClaw gateway`.",
         ],
-        { NEXISCLAW_CONTAINER_HINT: "NexisClaw-demo-container" } as NodeJS.ProcessEnv,
+        { GREENCHCLAW_CONTAINER_HINT: "GreenchClaw-demo-container" } as NodeJS.ProcessEnv,
       ),
     ).toStrictEqual([]);
   });

@@ -1,4 +1,4 @@
-import type { AnyAgentTool } from "NexisClaw/plugin-sdk/plugin-entry";
+import type { AnyAgentTool } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { Type } from "typebox";
 
 type FileTransferToolDescriptor = Pick<

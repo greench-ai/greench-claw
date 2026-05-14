@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { isAcpEnabledByPolicy } from "../policy.js";
 import { getAcpRuntimeBackend } from "./registry.js";
 
 export function isAcpRuntimeSpawnAvailable(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sandboxed?: boolean;
   backendId?: string;
 }): boolean {

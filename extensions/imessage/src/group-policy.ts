@@ -2,11 +2,11 @@ import {
   resolveChannelGroupRequireMention,
   resolveChannelGroupToolsPolicy,
   type GroupToolPolicyConfig,
-} from "NexisClaw/plugin-sdk/channel-policy";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/channel-policy";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/core";
 
 type IMessageGroupContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   groupId?: string | null;
   senderId?: string | null;

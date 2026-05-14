@@ -1,5 +1,5 @@
 ---
-summary: "Adds the NexisClaw path CLI for oc:// workspace file addressing."
+summary: "Adds the GreenchClaw path CLI for oc:// workspace file addressing."
 read_when:
   - You are installing, configuring, or auditing the oc-path plugin
 title: "Oc Path plugin"
@@ -7,12 +7,12 @@ title: "Oc Path plugin"
 
 # Oc Path plugin
 
-Adds the NexisClaw path CLI for oc:// workspace file addressing.
+Adds the GreenchClaw path CLI for oc:// workspace file addressing.
 
 ## Distribution
 
-- Package: `@NexisClaw/oc-path`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/oc-path`
+- Install route: included in GreenchClaw
 
 ## Surface
 

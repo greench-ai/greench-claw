@@ -2,7 +2,7 @@ import path from "node:path";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { resolveSandboxConfigForAgent } from "../agents/sandbox/config.js";
 import type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
-import type { ConfigFileSnapshot, NexisClawConfig } from "../config/config.js";
+import type { ConfigFileSnapshot, GreenchClawConfig } from "../config/config.js";
 import { resolveConfigPath, resolveStateDir } from "../config/paths.js";
 import { isInterpreterLikeAllowlistPattern } from "../infra/command-analysis/inline-eval.js";
 import { type ExecApprovalsFile, loadExecApprovals } from "../infra/exec-approvals.js";
@@ -43,8 +43,8 @@ export type {
 } from "./audit.types.js";
 
 export type SecurityAuditOptions = {
-  config: NexisClawConfig;
-  sourceConfig?: NexisClawConfig;
+  config: GreenchClawConfig;
+  sourceConfig?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   platform?: NodeJS.Platform;
   deep?: boolean;
@@ -77,8 +77,8 @@ export type SecurityAuditOptions = {
 };
 
 export type AuditExecutionContext = {
-  cfg: NexisClawConfig;
-  sourceConfig: NexisClawConfig;
+  cfg: GreenchClawConfig;
+  sourceConfig: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   platform: NodeJS.Platform;
   includeFilesystem: boolean;
@@ -225,7 +225,7 @@ export async function collectFilesystemFindings(params: {
         checkId: "fs.state_dir.perms_world_writable",
         severity: "critical",
         title: "State dir is world-writable",
-        detail: `${formatPermissionDetail(params.stateDir, stateDirPerms)}; other users can write into your NexisClaw state.`,
+        detail: `${formatPermissionDetail(params.stateDir, stateDirPerms)}; other users can write into your GreenchClaw state.`,
         remediation: formatPermissionRemediation({
           targetPath: params.stateDir,
           perms: stateDirPerms,
@@ -239,7 +239,7 @@ export async function collectFilesystemFindings(params: {
         checkId: "fs.state_dir.perms_group_writable",
         severity: "warn",
         title: "State dir is group-writable",
-        detail: `${formatPermissionDetail(params.stateDir, stateDirPerms)}; group users can write into your NexisClaw state.`,
+        detail: `${formatPermissionDetail(params.stateDir, stateDirPerms)}; group users can write into your GreenchClaw state.`,
         remediation: formatPermissionRemediation({
           targetPath: params.stateDir,
           perms: stateDirPerms,
@@ -329,8 +329,8 @@ export async function collectFilesystemFindings(params: {
 }
 
 export function collectGatewayConfigFindings(
-  cfg: NexisClawConfig,
-  sourceConfig: NexisClawConfig,
+  cfg: GreenchClawConfig,
+  sourceConfig: GreenchClawConfig,
   env: NodeJS.ProcessEnv,
 ): SecurityAuditFinding[] {
   return collectGatewayConfigFindingsBase(cfg, sourceConfig, env, {
@@ -430,7 +430,7 @@ export async function collectPluginSecurityAuditFindings(
   return collectorResults.flat();
 }
 
-export function collectLoggingFindings(cfg: NexisClawConfig): SecurityAuditFinding[] {
+export function collectLoggingFindings(cfg: GreenchClawConfig): SecurityAuditFinding[] {
   const redact = cfg.logging?.redactSensitive;
   if (redact !== "off") {
     return [];
@@ -446,7 +446,7 @@ export function collectLoggingFindings(cfg: NexisClawConfig): SecurityAuditFindi
   ];
 }
 
-export function collectElevatedFindings(cfg: NexisClawConfig): SecurityAuditFinding[] {
+export function collectElevatedFindings(cfg: GreenchClawConfig): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const enabled = cfg.tools?.elevated?.enabled;
   const allowFrom = cfg.tools?.elevated?.allowFrom ?? {};
@@ -481,7 +481,7 @@ export function collectElevatedFindings(cfg: NexisClawConfig): SecurityAuditFind
   return findings;
 }
 
-export function collectExecRuntimeFindings(cfg: NexisClawConfig): SecurityAuditFinding[] {
+export function collectExecRuntimeFindings(cfg: GreenchClawConfig): SecurityAuditFinding[] {
   const findings: SecurityAuditFinding[] = [];
   const globalExecHost = cfg.tools?.exec?.host;
   const globalStrictInlineEval = cfg.tools?.exec?.strictInlineEval === true;
@@ -803,7 +803,7 @@ export function collectExecRuntimeFindings(cfg: NexisClawConfig): SecurityAuditF
   return findings;
 }
 
-function collectOpenExecSurfacePaths(cfg: NexisClawConfig): string[] {
+function collectOpenExecSurfacePaths(cfg: GreenchClawConfig): string[] {
   const channels = asNullableRecord(cfg.channels);
   if (!channels) {
     return [];
@@ -871,7 +871,7 @@ function collectInterpreterAllowlistHits(params: {
 }
 
 async function maybeProbeGateway(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   timeoutMs: number;
   probe: ProbeGatewayFn;

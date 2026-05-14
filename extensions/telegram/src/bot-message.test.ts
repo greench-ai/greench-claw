@@ -8,7 +8,7 @@ const upsertChannelPairingRequest = vi.hoisted(() =>
   vi.fn(async () => ({ code: "PAIRCODE", created: true })),
 );
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", () => ({
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", () => ({
   createSubsystemLogger: () => ({
     child: () => ({
       info: telegramInboundInfo,
@@ -110,7 +110,7 @@ describe("telegram bot message processor", () => {
         ChatType: "direct",
         RawBody: "hello there",
       },
-      primaryCtx: { me: { username: "NexisClaw_bot" } },
+      primaryCtx: { me: { username: "GreenchClaw_bot" } },
       route: { sessionKey: "agent:main:main" },
       sendTyping: vi.fn().mockResolvedValue(undefined),
       ...context,
@@ -134,7 +134,7 @@ describe("telegram bot message processor", () => {
       dispatchTelegramMessage.mock.invocationCallOrder[0],
     );
     expect(telegramInboundInfo).toHaveBeenCalledWith(
-      "Inbound message telegram:123 -> @NexisClaw_bot (direct, 11 chars)",
+      "Inbound message telegram:123 -> @GreenchClaw_bot (direct, 11 chars)",
     );
   });
 
@@ -150,20 +150,20 @@ describe("telegram bot message processor", () => {
     expect(
       formatTelegramInboundLogLine({
         from: "telegram:123",
-        to: "@NexisClaw_bot",
+        to: "@GreenchClaw_bot",
         chatType: "direct",
         body: "secret message",
       }),
-    ).toBe("Inbound message telegram:123 -> @NexisClaw_bot (direct, 14 chars)");
+    ).toBe("Inbound message telegram:123 -> @GreenchClaw_bot (direct, 14 chars)");
     expect(
       formatTelegramInboundLogLine({
         from: "telegram:group:-100",
-        to: "@NexisClaw_bot",
+        to: "@GreenchClaw_bot",
         chatType: "group",
         body: "<media:image>",
         mediaType: "image/jpeg",
       }),
-    ).toBe("Inbound message telegram:group:-100 -> @NexisClaw_bot (group, image/jpeg, 13 chars)");
+    ).toBe("Inbound message telegram:group:-100 -> @GreenchClaw_bot (group, image/jpeg, 13 chars)");
   });
 
   it("keeps dispatch running when the early typing cue fails", async () => {

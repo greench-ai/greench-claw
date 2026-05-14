@@ -1,7 +1,7 @@
 import {
   createDefaultModelPresetAppliers,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildKimiCodingProvider,
   KIMI_CODING_BASE_URL,
@@ -17,7 +17,7 @@ function resolveKimiCodingDefaultModel() {
 
 const kimiCodingPresetAppliers = createDefaultModelPresetAppliers({
   primaryModelRef: KIMI_MODEL_REF,
-  resolveParams: (_cfg: NexisClawConfig) => {
+  resolveParams: (_cfg: GreenchClawConfig) => {
     const defaultModel = resolveKimiCodingDefaultModel();
     if (!defaultModel) {
       return null;
@@ -33,10 +33,10 @@ const kimiCodingPresetAppliers = createDefaultModelPresetAppliers({
   },
 });
 
-export function applyKimiCodeProviderConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyKimiCodeProviderConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return kimiCodingPresetAppliers.applyProviderConfig(cfg);
 }
 
-export function applyKimiCodeConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyKimiCodeConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return kimiCodingPresetAppliers.applyConfig(cfg);
 }

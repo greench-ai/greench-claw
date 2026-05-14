@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { RuntimeWebSearchMetadata } from "../../secrets/runtime-web-tools.types.js";
 import { resolveWebSearchProviderId, runWebSearch } from "../../web-search/runtime.js";
 import type { AnyAgentTool } from "./common.js";
@@ -63,13 +63,13 @@ const WebSearchSchema = {
   },
 } satisfies Record<string, unknown>;
 
-function isWebSearchDisabled(config?: NexisClawConfig): boolean {
+function isWebSearchDisabled(config?: GreenchClawConfig): boolean {
   const search = config?.tools?.web?.search;
   return Boolean(search && typeof search === "object" && search.enabled === false);
 }
 
 export function createWebSearchTool(options?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sandboxed?: boolean;
   runtimeWebSearch?: RuntimeWebSearchMetadata;
   lateBindRuntimeConfig?: boolean;

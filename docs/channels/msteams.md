@@ -9,14 +9,14 @@ Status: text + DM attachments are supported; channel/group file sending requires
 
 ## Bundled plugin
 
-Microsoft Teams ships as a bundled plugin in current NexisClaw releases, so no
+Microsoft Teams ships as a bundled plugin in current GreenchClaw releases, so no
 separate install is required in the normal packaged build.
 
 If you are on an older build or a custom install that excludes bundled Teams,
 install the npm package directly:
 
 ```bash
-NexisClaw plugins install @NexisClaw/msteams
+GreenchClaw plugins install @GreenchClaw/msteams
 ```
 
 Use the bare package to follow the current official release tag. Pin an exact
@@ -25,7 +25,7 @@ version only when you need a reproducible install.
 Local checkout (when running from a git repo):
 
 ```bash
-NexisClaw plugins install ./path/to/local/msteams-plugin
+GreenchClaw plugins install ./path/to/local/msteams-plugin
 ```
 
 Details: [Plugins](/tools/plugin)
@@ -52,11 +52,11 @@ Install and authenticate the devtunnel CLI if you haven't already ([getting star
 
 ```bash
 # One-time setup (persistent URL across sessions):
-devtunnel create my-NexisClaw-bot --allow-anonymous
-devtunnel port create my-NexisClaw-bot -p 3978 --protocol auto
+devtunnel create my-GreenchClaw-bot --allow-anonymous
+devtunnel port create my-GreenchClaw-bot -p 3978 --protocol auto
 
 # Each dev session:
-devtunnel host my-NexisClaw-bot
+devtunnel host my-GreenchClaw-bot
 # Your endpoint: https://<tunnel-id>.devtunnels.ms/api/messages
 ```
 
@@ -70,7 +70,7 @@ Alternatives: `ngrok http 3978` or `tailscale funnel 3978` (but these may change
 
 ```bash
 teams app create \
-  --name "NexisClaw" \
+  --name "GreenchClaw" \
   --endpoint "https://<your-tunnel-url>/api/messages"
 ```
 
@@ -83,7 +83,7 @@ This single command:
 
 The output will show `CLIENT_ID`, `CLIENT_SECRET`, `TENANT_ID`, and a **Teams App ID** - note these for the next steps. It also offers to install the app in Teams directly.
 
-**4. Configure NexisClaw** using the credentials from the output:
+**4. Configure GreenchClaw** using the credentials from the output:
 
 ```json5
 {
@@ -125,7 +125,7 @@ Group chats are blocked by default (`channels.msteams.groupPolicy: "allowlist"`)
 
 ## Goals
 
-- Talk to NexisClaw via Teams DMs, group chats, or channels.
+- Talk to GreenchClaw via Teams DMs, group chats, or channels.
 - Keep routing deterministic: replies always go back to the channel they arrived on.
 - Default to safe channel behavior (mentions required unless configured otherwise).
 
@@ -147,7 +147,7 @@ Disable with:
 
 - Default: `channels.msteams.dmPolicy = "pairing"`. Unknown senders are ignored until approved.
 - `channels.msteams.allowFrom` should use stable AAD object IDs or static sender access groups such as `accessGroup:core-team`.
-- Do not rely on UPN/display-name matching for allowlists - they can change. NexisClaw disables direct name matching by default; opt in explicitly with `channels.msteams.dangerouslyAllowNameMatching: true`.
+- Do not rely on UPN/display-name matching for allowlists - they can change. GreenchClaw disables direct name matching by default; opt in explicitly with `channels.msteams.dangerouslyAllowNameMatching: true`.
 - The wizard can resolve names to IDs via Microsoft Graph when credentials allow.
 
 **Group access**
@@ -176,7 +176,7 @@ Example:
 - Keys should use stable Teams conversation IDs from Teams links, not mutable display names.
 - When `groupPolicy="allowlist"` and a teams allowlist is present, only listed teams/channels are accepted (mention-gated).
 - The configure wizard accepts `Team/Channel` entries and stores them for you.
-- On startup, NexisClaw resolves team/channel and user allowlist names to IDs (when Graph permissions allow)
+- On startup, GreenchClaw resolves team/channel and user allowlist names to IDs (when Graph permissions allow)
   and logs the mapping; unresolved team/channel names are kept as typed but ignored for routing by default unless `channels.msteams.dangerouslyAllowNameMatching: true` is enabled.
 
 Example:
@@ -209,7 +209,7 @@ If you can't use the Teams CLI, you can set up the bot manually through the Azur
 2. Create an **Azure Bot** (App ID + secret + tenant ID).
 3. Build a **Teams app package** that references the bot and includes the RSC permissions below.
 4. Upload/install the Teams app into a team (or personal scope for DMs).
-5. Configure `msteams` in `~/.NexisClaw/NexisClaw.json` (or env vars) and start the gateway.
+5. Configure `msteams` in `~/.GreenchClaw/GreenchClaw.json` (or env vars) and start the gateway.
 6. The gateway listens for Bot Framework webhook traffic on `/api/messages` by default.
 
 ### Step 1: Create Azure Bot
@@ -217,14 +217,14 @@ If you can't use the Teams CLI, you can set up the bot manually through the Azur
 1. Go to [Create Azure Bot](https://portal.azure.com/#create/Microsoft.AzureBot)
 2. Fill in the **Basics** tab:
 
-   | Field              | Value                                                    |
-   | ------------------ | -------------------------------------------------------- |
-   | **Bot handle**     | Your bot name, e.g., `NexisClaw-msteams` (must be unique) |
-   | **Subscription**   | Select your Azure subscription                           |
-   | **Resource group** | Create new or use existing                               |
-   | **Pricing tier**   | **Free** for dev/testing                                 |
-   | **Type of App**    | **Single Tenant** (recommended - see note below)         |
-   | **Creation type**  | **Create new Microsoft App ID**                          |
+   | Field              | Value                                                       |
+   | ------------------ | ----------------------------------------------------------- |
+   | **Bot handle**     | Your bot name, e.g., `GreenchClaw-msteams` (must be unique) |
+   | **Subscription**   | Select your Azure subscription                              |
+   | **Resource group** | Create new or use existing                                  |
+   | **Pricing tier**   | **Free** for dev/testing                                    |
+   | **Type of App**    | **Single Tenant** (recommended - see note below)            |
+   | **Creation type**  | **Create new Microsoft App ID**                             |
 
 <Warning>
 Creation of new multi-tenant bots was deprecated after 2025-07-31. Use **Single Tenant** for new bots.
@@ -262,7 +262,7 @@ Creation of new multi-tenant bots was deprecated after 2025-07-31. Use **Single 
 - Create icons: `outline.png` (32x32) and `color.png` (192x192).
 - Zip all three files together: `manifest.json`, `outline.png`, `color.png`.
 
-### Step 6: Configure NexisClaw
+### Step 6: Configure GreenchClaw
 
 ```json5
 {
@@ -290,7 +290,7 @@ The Teams channel starts automatically when the plugin is available and `msteams
 
 > Added in 2026.4.11
 
-For production deployments, NexisClaw supports **federated authentication** as a more secure alternative to client secrets. Two methods are available:
+For production deployments, GreenchClaw supports **federated authentication** as a more secure alternative to client secrets. Two methods are available:
 
 ### Option A: Certificate-based authentication
 
@@ -331,7 +331,7 @@ Use Azure Managed Identity for passwordless authentication. This is ideal for de
 
 1. The bot pod/VM has a managed identity (system-assigned or user-assigned).
 2. A **federated identity credential** links the managed identity to the Entra ID app registration.
-3. At runtime, NexisClaw uses `@azure/identity` to acquire tokens from the Azure IMDS endpoint (`169.254.169.254`).
+3. At runtime, GreenchClaw uses `@azure/identity` to acquire tokens from the Azure IMDS endpoint (`169.254.169.254`).
 4. The token is passed to the Teams SDK for bot authentication.
 
 **Prerequisites:**
@@ -426,7 +426,7 @@ For AKS deployments using workload identity:
 | **Certificate**      | `authType: "federated"` + `certificatePath`    | No shared secret over network      | Certificate management overhead       |
 | **Managed Identity** | `authType: "federated"` + `useManagedIdentity` | Passwordless, no secrets to manage | Azure infrastructure required         |
 
-**Default behavior:** When `authType` is not set, NexisClaw defaults to client secret authentication. Existing configurations continue to work without changes.
+**Default behavior:** When `authType` is not set, GreenchClaw defaults to client secret authentication. Existing configurations continue to work without changes.
 
 ## Local development (tunneling)
 
@@ -434,11 +434,11 @@ Teams can't reach `localhost`. Use a persistent dev tunnel so your URL stays the
 
 ```bash
 # One-time setup:
-devtunnel create my-NexisClaw-bot --allow-anonymous
-devtunnel port create my-NexisClaw-bot -p 3978 --protocol auto
+devtunnel create my-GreenchClaw-bot --allow-anonymous
+devtunnel port create my-GreenchClaw-bot -p 3978 --protocol auto
 
 # Each dev session:
-devtunnel host my-NexisClaw-bot
+devtunnel host my-GreenchClaw-bot
 ```
 
 Alternatives: `ngrok http 3978` or `tailscale funnel 3978` (URLs may change each session).
@@ -480,7 +480,7 @@ All config keys can be set via environment variables instead:
 
 ## Member info action
 
-NexisClaw exposes a Graph-backed `member-info` action for Microsoft Teams so agents and automations can resolve channel member details (display name, email, role) directly from Microsoft Graph.
+GreenchClaw exposes a Graph-backed `member-info` action for Microsoft Teams so agents and automations can resolve channel member details (display name, email, role) directly from Microsoft Graph.
 
 Requirements:
 
@@ -532,14 +532,14 @@ Minimal, valid example with the required fields. Replace IDs and URLs.
   manifestVersion: "1.23",
   version: "1.0.0",
   id: "00000000-0000-0000-0000-000000000000",
-  name: { short: "NexisClaw" },
+  name: { short: "GreenchClaw" },
   developer: {
     name: "Your Org",
     websiteUrl: "https://example.com",
     privacyUrl: "https://example.com/privacy",
     termsOfUseUrl: "https://example.com/terms",
   },
-  description: { short: "NexisClaw in Teams", full: "NexisClaw in Teams" },
+  description: { short: "GreenchClaw in Teams", full: "GreenchClaw in Teams" },
   icons: { outline: "outline.png", color: "color.png" },
   accentColor: "#5B6DEF",
   bots: [
@@ -664,7 +664,7 @@ Teams delivers messages via HTTP webhook. If processing takes too long (e.g., sl
 - Teams retrying the message (causing duplicates)
 - Dropped replies
 
-NexisClaw handles this by returning quickly and sending replies proactively, but very slow responses may still cause issues.
+GreenchClaw handles this by returning quickly and sending replies proactively, but very slow responses may still cause issues.
 
 ### Formatting
 
@@ -767,7 +767,7 @@ If you set `requireMention: false` globally without an explicit `replyStyle`, me
 
 ### Thread context preservation
 
-When `replyStyle: "thread"` is in effect and the bot was @mentioned from inside a channel thread, NexisClaw re-attaches the original thread root to the outbound conversation reference (`19:…@thread.tacv2;messageid=<root>`) so the reply lands inside the same thread. This holds for both live (in-turn) sends and proactive sends made after the Bot Framework turn context has expired (e.g., long-running agents, queued tool-call replies via `mcp__NexisClaw__message`).
+When `replyStyle: "thread"` is in effect and the bot was @mentioned from inside a channel thread, GreenchClaw re-attaches the original thread root to the outbound conversation reference (`19:…@thread.tacv2;messageid=<root>`) so the reply lands inside the same thread. This holds for both live (in-turn) sends and proactive sends made after the Bot Framework turn context has expired (e.g., long-running agents, queued tool-call replies via `mcp__GreenchClaw__message`).
 
 The thread root is taken from the stored `threadId` on the conversation reference. Older stored references that predate `threadId` fall back to `activityId` (whatever inbound activity last seeded the conversation), so existing deployments keep working without a re-seed.
 
@@ -782,7 +782,7 @@ When `replyStyle: "top-level"` is in effect, channel-thread inbounds are intenti
 - For explicit file-first sends, use `action=upload-file` with `media` / `filePath` / `path`; optional `message` becomes the accompanying text/comment, and `filename` overrides the uploaded name.
 
 Without Graph permissions, channel messages with images will be received as text-only (the image content is not accessible to the bot).
-By default, NexisClaw only downloads media from Microsoft/Teams hostnames. Override with `channels.msteams.mediaAllowHosts` (use `["*"]` to allow any host).
+By default, GreenchClaw only downloads media from Microsoft/Teams hostnames. Override with `channels.msteams.mediaAllowHosts` (use `["*"]` to allow any host).
 Authorization headers are only attached for hosts in `channels.msteams.mediaAuthAllowHosts` (defaults to Graph + Bot Framework hosts). Keep this list strict (avoid multi-tenant suffixes).
 
 ## Sending files in group chats
@@ -821,7 +821,7 @@ Bots don't have a personal OneDrive drive (the `/me/drive` Graph API endpoint do
    # Response includes: "id": "contoso.sharepoint.com,guid1,guid2"
    ```
 
-4. **Configure NexisClaw:**
+4. **Configure GreenchClaw:**
 
    ```json5
    {
@@ -854,20 +854,20 @@ Per-user sharing is more secure as only the chat participants can access the fil
 
 ### Files stored location
 
-Uploaded files are stored in a `/NexisClawShared/` folder in the configured SharePoint site's default document library.
+Uploaded files are stored in a `/GreenchClawShared/` folder in the configured SharePoint site's default document library.
 
 ## Polls (Adaptive Cards)
 
-NexisClaw sends Teams polls as Adaptive Cards (there is no native Teams poll API).
+GreenchClaw sends Teams polls as Adaptive Cards (there is no native Teams poll API).
 
-- CLI: `NexisClaw message poll --channel msteams --target conversation:<id> ...`
-- Votes are recorded by the gateway in `~/.NexisClaw/msteams-polls.json`.
+- CLI: `GreenchClaw message poll --channel msteams --target conversation:<id> ...`
+- Votes are recorded by the gateway in `~/.GreenchClaw/msteams-polls.json`.
 - The gateway must stay online to record votes.
 - Polls do not auto-post result summaries yet (inspect the store file if needed).
 
 ## Presentation cards
 
-Send semantic presentation payloads to Teams users or conversations using the `message` tool or CLI. NexisClaw renders them as Teams Adaptive Cards from the generic presentation contract.
+Send semantic presentation payloads to Teams users or conversations using the `message` tool or CLI. GreenchClaw renders them as Teams Adaptive Cards from the generic presentation contract.
 
 The `presentation` parameter accepts semantic blocks. When `presentation` is provided, the message text is optional.
 
@@ -888,7 +888,7 @@ The `presentation` parameter accepts semantic blocks. When `presentation` is pro
 **CLI:**
 
 ```bash
-NexisClaw message send --channel msteams \
+GreenchClaw message send --channel msteams \
   --target "conversation:19:abc...@thread.tacv2" \
   --presentation '{"title":"Hello","blocks":[{"type":"text","text":"Hello!"}]}'
 ```
@@ -910,16 +910,16 @@ MSTeams targets use prefixes to distinguish between users and conversations:
 
 ```bash
 # Send to a user by ID
-NexisClaw message send --channel msteams --target "user:40a1a0ed-..." --message "Hello"
+GreenchClaw message send --channel msteams --target "user:40a1a0ed-..." --message "Hello"
 
 # Send to a user by display name (triggers Graph API lookup)
-NexisClaw message send --channel msteams --target "user:John Smith" --message "Hello"
+GreenchClaw message send --channel msteams --target "user:John Smith" --message "Hello"
 
 # Send to a group chat or channel
-NexisClaw message send --channel msteams --target "conversation:19:abc...@thread.tacv2" --message "Hello"
+GreenchClaw message send --channel msteams --target "conversation:19:abc...@thread.tacv2" --message "Hello"
 
 # Send a presentation card to a conversation
-NexisClaw message send --channel msteams --target "conversation:19:abc...@thread.tacv2" \
+GreenchClaw message send --channel msteams --target "conversation:19:abc...@thread.tacv2" \
   --presentation '{"title":"Hello","blocks":[{"type":"text","text":"Hello"}]}'
 ```
 
@@ -979,7 +979,7 @@ https://teams.microsoft.com/l/channel/19%3A15bc...%40thread.tacv2/ChannelName?gr
 
 - Team key = path segment after `/team/` (URL-decoded, e.g., `19:Bk4j...@thread.tacv2`; older tenants may show `@thread.skype`, which is also valid)
 - Channel key = path segment after `/channel/` (URL-decoded)
-- **Ignore** the `groupId` query parameter for NexisClaw routing. It is the Microsoft Entra group ID, not the Bot Framework conversation ID used in incoming Teams activities.
+- **Ignore** the `groupId` query parameter for GreenchClaw routing. It is the Microsoft Entra group ID, not the Bot Framework conversation ID used in incoming Teams activities.
 
 ## Private channels
 

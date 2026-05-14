@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { WhatsAppSendResult } from "../inbound/send-result.js";
 import { buildMentionConfig } from "./mentions.js";
@@ -22,7 +22,7 @@ function acceptedSendResult(kind: "media" | "text", id: string): WhatsAppSendRes
 }
 
 beforeEach(async () => {
-  sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-group-gating-"));
+  sessionDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-group-gating-"));
   sessionStorePath = path.join(sessionDir, "sessions.json");
   await fs.writeFile(sessionStorePath, "{}");
 });
@@ -44,10 +44,10 @@ const makeConfig = (overrides: Record<string, unknown>) =>
     },
     session: { store: sessionStorePath },
     ...overrides,
-  }) as unknown as import("NexisClaw/plugin-sdk/config-contracts").NexisClawConfig;
+  }) as unknown as import("GreenchClaw/plugin-sdk/config-contracts").GreenchClawConfig;
 
 async function runGroupGating(params: {
-  cfg: import("NexisClaw/plugin-sdk/config-contracts").NexisClawConfig;
+  cfg: import("GreenchClaw/plugin-sdk/config-contracts").GreenchClawConfig;
   msg: WebInboundMsg;
   conversationId?: string;
   agentId?: string;
@@ -111,7 +111,7 @@ function makeOwnerGroupConfig() {
 
 function makeInboundCfg(messagePrefix = "") {
   return {
-    agents: { defaults: { workspace: "/tmp/NexisClaw" } },
+    agents: { defaults: { workspace: "/tmp/GreenchClaw" } },
     channels: { whatsapp: { messagePrefix } },
   } as never;
 }
@@ -431,14 +431,14 @@ describe("applyGroupGating", () => {
           groups: { "*": { requireMention: true } },
         },
       },
-      messages: { groupChat: { mentionPatterns: ["@NexisClaw"] } },
+      messages: { groupChat: { mentionPatterns: ["@GreenchClaw"] } },
     });
 
     const { result, groupHistories } = await runGroupGating({
       cfg,
       msg: createGroupMessage({
         id: "g-other-mention",
-        body: "@NexisClaw please check this",
+        body: "@GreenchClaw please check this",
         mentionedJids: ["15550000000@s.whatsapp.net"],
         selfE164: "+15551234567",
         selfJid: "15551234567@s.whatsapp.net",
@@ -560,7 +560,7 @@ describe("applyGroupGating", () => {
           groups: { "*": { requireMention: false } },
         },
       },
-      messages: { groupChat: { mentionPatterns: ["@NexisClaw"] } },
+      messages: { groupChat: { mentionPatterns: ["@GreenchClaw"] } },
     });
 
     const { result } = await runGroupGating({

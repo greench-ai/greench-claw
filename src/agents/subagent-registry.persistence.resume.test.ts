@@ -72,7 +72,7 @@ let callGatewayModule: typeof import("../gateway/call.js");
 let agentEventsModule: typeof import("../infra/agent-events.js");
 
 describe("subagent registry persistence resume", () => {
-  const envSnapshot = captureEnv(["NEXISCLAW_STATE_DIR"]);
+  const envSnapshot = captureEnv(["GREENCHCLAW_STATE_DIR"]);
   let tempStateDir: string | null = null;
 
   const writeChildSessionEntry = async (params: {
@@ -137,8 +137,8 @@ describe("subagent registry persistence resume", () => {
   });
 
   it("persists runs to disk and resumes after restart", async () => {
-    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-subagent-"));
-    process.env.NEXISCLAW_STATE_DIR = tempStateDir;
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-subagent-"));
+    process.env.GREENCHCLAW_STATE_DIR = tempStateDir;
     const registryPath = path.join(tempStateDir, "subagents", "runs.json");
     hoisted.registryPath = registryPath;
     await fs.mkdir(path.dirname(registryPath), { recursive: true });

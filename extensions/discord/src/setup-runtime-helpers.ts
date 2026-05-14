@@ -7,4 +7,4 @@ export {
   promptLegacyChannelAllowFromForAccount,
   resolveEntriesWithOptionalToken,
   setSetupChannelEnabled,
-} from "NexisClaw/plugin-sdk/setup-runtime";
+} from "GreenchClaw/plugin-sdk/setup-runtime";

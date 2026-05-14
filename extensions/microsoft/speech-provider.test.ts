@@ -1,12 +1,12 @@
 import { mkdtempSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   finalizeDebugProxyCapture,
   getDebugProxyCaptureStore,
   initializeDebugProxyCapture,
-} from "NexisClaw/plugin-sdk/proxy-capture";
+} from "GreenchClaw/plugin-sdk/proxy-capture";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { installDebugProxyTestResetHooks } from "../test-support/debug-proxy-env-test-helpers.js";
 
@@ -23,7 +23,7 @@ import {
 } from "./speech-provider.js";
 import * as ttsModule from "./tts.js";
 
-const TEST_CFG = {} as NexisClawConfig;
+const TEST_CFG = {} as GreenchClawConfig;
 
 function requireFirstEdgeTtsCall(edgeSpy: ReturnType<typeof vi.spyOn>): {
   config?: unknown;
@@ -97,10 +97,10 @@ describe("listMicrosoftVoices", () => {
   it("records voice discovery exchanges in debug proxy capture mode", async () => {
     const tempDir = mkdtempSync(path.join(os.tmpdir(), "microsoft-voices-capture-"));
     proxyReset.captureProxyEnv();
-    process.env.NEXISCLAW_DEBUG_PROXY_ENABLED = "1";
-    process.env.NEXISCLAW_DEBUG_PROXY_DB_PATH = path.join(tempDir, "capture.sqlite");
-    process.env.NEXISCLAW_DEBUG_PROXY_BLOB_DIR = path.join(tempDir, "blobs");
-    process.env.NEXISCLAW_DEBUG_PROXY_SESSION_ID = "ms-voices-session";
+    process.env.GREENCHCLAW_DEBUG_PROXY_ENABLED = "1";
+    process.env.GREENCHCLAW_DEBUG_PROXY_DB_PATH = path.join(tempDir, "capture.sqlite");
+    process.env.GREENCHCLAW_DEBUG_PROXY_BLOB_DIR = path.join(tempDir, "blobs");
+    process.env.GREENCHCLAW_DEBUG_PROXY_SESSION_ID = "ms-voices-session";
 
     globalThis.fetch = vi
       .fn()
@@ -109,17 +109,17 @@ describe("listMicrosoftVoices", () => {
       ) as unknown as typeof globalThis.fetch;
 
     const store = getDebugProxyCaptureStore(
-      process.env.NEXISCLAW_DEBUG_PROXY_DB_PATH,
-      process.env.NEXISCLAW_DEBUG_PROXY_BLOB_DIR,
+      process.env.GREENCHCLAW_DEBUG_PROXY_DB_PATH,
+      process.env.GREENCHCLAW_DEBUG_PROXY_BLOB_DIR,
     );
     store.upsertSession({
       id: "ms-voices-session",
       startedAt: Date.now(),
       mode: "test",
-      sourceScope: "NexisClaw",
-      sourceProcess: "NexisClaw",
-      dbPath: process.env.NEXISCLAW_DEBUG_PROXY_DB_PATH,
-      blobDir: process.env.NEXISCLAW_DEBUG_PROXY_BLOB_DIR,
+      sourceScope: "GreenchClaw",
+      sourceProcess: "GreenchClaw",
+      dbPath: process.env.GREENCHCLAW_DEBUG_PROXY_DB_PATH,
+      blobDir: process.env.GREENCHCLAW_DEBUG_PROXY_BLOB_DIR,
     });
 
     await listMicrosoftVoices();
@@ -142,27 +142,27 @@ describe("listMicrosoftVoices", () => {
   it("does not double-capture voice discovery when the global fetch patch is installed", async () => {
     const tempDir = mkdtempSync(path.join(os.tmpdir(), "microsoft-voices-global-"));
     proxyReset.captureProxyEnv();
-    process.env.NEXISCLAW_DEBUG_PROXY_ENABLED = "1";
-    process.env.NEXISCLAW_DEBUG_PROXY_DB_PATH = path.join(tempDir, "capture.sqlite");
-    process.env.NEXISCLAW_DEBUG_PROXY_BLOB_DIR = path.join(tempDir, "blobs");
-    process.env.NEXISCLAW_DEBUG_PROXY_SESSION_ID = "ms-voices-global-session";
+    process.env.GREENCHCLAW_DEBUG_PROXY_ENABLED = "1";
+    process.env.GREENCHCLAW_DEBUG_PROXY_DB_PATH = path.join(tempDir, "capture.sqlite");
+    process.env.GREENCHCLAW_DEBUG_PROXY_BLOB_DIR = path.join(tempDir, "blobs");
+    process.env.GREENCHCLAW_DEBUG_PROXY_SESSION_ID = "ms-voices-global-session";
 
     globalThis.fetch = vi.fn(
       async () => new Response(JSON.stringify([{ ShortName: "en-US-AvaNeural" }]), { status: 200 }),
     ) as unknown as typeof globalThis.fetch;
 
     const store = getDebugProxyCaptureStore(
-      process.env.NEXISCLAW_DEBUG_PROXY_DB_PATH,
-      process.env.NEXISCLAW_DEBUG_PROXY_BLOB_DIR,
+      process.env.GREENCHCLAW_DEBUG_PROXY_DB_PATH,
+      process.env.GREENCHCLAW_DEBUG_PROXY_BLOB_DIR,
     );
     store.upsertSession({
       id: "ms-voices-global-session",
       startedAt: Date.now(),
       mode: "test",
-      sourceScope: "NexisClaw",
-      sourceProcess: "NexisClaw",
-      dbPath: process.env.NEXISCLAW_DEBUG_PROXY_DB_PATH,
-      blobDir: process.env.NEXISCLAW_DEBUG_PROXY_BLOB_DIR,
+      sourceScope: "GreenchClaw",
+      sourceProcess: "GreenchClaw",
+      dbPath: process.env.GREENCHCLAW_DEBUG_PROXY_DB_PATH,
+      blobDir: process.env.GREENCHCLAW_DEBUG_PROXY_BLOB_DIR,
     });
     initializeDebugProxyCapture("test");
 

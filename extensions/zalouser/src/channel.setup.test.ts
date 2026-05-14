@@ -1,8 +1,8 @@
 import { mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { createPluginSetupWizardStatus } from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { withEnvAsync } from "NexisClaw/plugin-sdk/test-env";
+import { createPluginSetupWizardStatus } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { withEnvAsync } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import "./zalo-js.test-mocks.js";
 import { zalouserSetupPlugin } from "./setup-test-helpers.js";
@@ -11,10 +11,10 @@ const zalouserSetupGetStatus = createPluginSetupWizardStatus(zalouserSetupPlugin
 
 describe("zalouser setup plugin", () => {
   it("builds setup status without an initialized runtime", async () => {
-    const stateDir = await mkdtemp(path.join(os.tmpdir(), "NexisClaw-zalouser-setup-"));
+    const stateDir = await mkdtemp(path.join(os.tmpdir(), "GreenchClaw-zalouser-setup-"));
 
     try {
-      await withEnvAsync({ NEXISCLAW_STATE_DIR: stateDir }, async () => {
+      await withEnvAsync({ GREENCHCLAW_STATE_DIR: stateDir }, async () => {
         const status = await zalouserSetupGetStatus({
           cfg: {},
           accountOverrides: {},

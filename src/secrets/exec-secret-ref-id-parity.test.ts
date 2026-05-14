@@ -204,7 +204,7 @@ describe("exec SecretRef id parity", () => {
 
   function planAcceptsExecRefForSample(params: {
     type: string;
-    configFile: "NexisClaw.json" | "auth-profiles.json";
+    configFile: "GreenchClaw.json" | "auth-profiles.json";
     pathSegments: string[];
     id: string;
   }): boolean {

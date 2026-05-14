@@ -1,5 +1,5 @@
 import { resolveUserTimezone } from "../../agents/date-time.js";
-import type { NexisClawConfig } from "../../config/types.js";
+import type { GreenchClawConfig } from "../../config/types.js";
 import { formatZonedTimestamp } from "../../infra/format-time/format-datetime.ts";
 
 /**
@@ -36,7 +36,7 @@ export interface TimestampInjectionOptions {
  * these handlers, so there is no double-stamping risk. The detection
  * pattern is a safety net for edge cases.
  *
- * @see https://github.com/NexisClaw/NexisClaw/issues/3658
+ * @see https://github.com/GreenchClaw/GreenchClaw/issues/3658
  */
 export function injectTimestamp(message: string, opts?: TimestampInjectionOptions): string {
   if (!message.trim()) {
@@ -71,9 +71,9 @@ export function injectTimestamp(message: string, opts?: TimestampInjectionOption
 }
 
 /**
- * Build TimestampInjectionOptions from an NexisClawConfig.
+ * Build TimestampInjectionOptions from an GreenchClawConfig.
  */
-export function timestampOptsFromConfig(cfg: NexisClawConfig): TimestampInjectionOptions {
+export function timestampOptsFromConfig(cfg: GreenchClawConfig): TimestampInjectionOptions {
   return {
     timezone: resolveUserTimezone(cfg.agents?.defaults?.userTimezone),
   };

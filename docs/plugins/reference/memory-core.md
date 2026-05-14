@@ -11,8 +11,8 @@ Adds memory embedding provider support. Adds agent-callable tools.
 
 ## Distribution
 
-- Package: `@NexisClaw/memory-core`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/memory-core`
+- Install route: included in GreenchClaw
 
 ## Surface
 

@@ -16,8 +16,8 @@ vi.mock("./google-genai-runtime.js", () => ({
   createGoogleGenAI: createGoogleGenAIMock,
 }));
 
-import * as providerAuthRuntime from "NexisClaw/plugin-sdk/provider-auth-runtime";
-import { expectExplicitMusicGenerationCapabilities } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import * as providerAuthRuntime from "GreenchClaw/plugin-sdk/provider-auth-runtime";
+import { expectExplicitMusicGenerationCapabilities } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { buildGoogleMusicGenerationProvider } from "./music-generation-provider.js";
 
 type GoogleGenAIConfig = {

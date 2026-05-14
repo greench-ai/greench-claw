@@ -61,7 +61,7 @@ function runCommand(
   });
 }
 
-describe("NexisClaw SDK package e2e", () => {
+describe("GreenchClaw SDK package e2e", () => {
   afterEach(async () => {
     await Promise.all(
       tempDirs.splice(0).map((dir) => fs.rm(dir, { recursive: true, force: true })),
@@ -71,10 +71,10 @@ describe("NexisClaw SDK package e2e", () => {
   it("packs and imports from an external temp consumer", async () => {
     const repoRoot = process.cwd();
     const packageRoot = path.join(repoRoot, "packages", "sdk");
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-sdk-consumer-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-sdk-consumer-"));
     tempDirs.push(tempDir);
 
-    await runCommand("pnpm", ["--filter", "@NexisClaw/sdk", "build"], {
+    await runCommand("pnpm", ["--filter", "@GreenchClaw/sdk", "build"], {
       cwd: repoRoot,
       timeoutMs: 180_000,
     });
@@ -95,9 +95,9 @@ describe("NexisClaw SDK package e2e", () => {
     });
 
     const importScript = `
-      import { GatewayClientTransport, NexisClaw, normalizeGatewayEvent } from "@NexisClaw/sdk";
+      import { GatewayClientTransport, GreenchClaw, normalizeGatewayEvent } from "@GreenchClaw/sdk";
       if (typeof GatewayClientTransport !== "function") throw new Error("missing transport export");
-      if (typeof NexisClaw !== "function") throw new Error("missing client export");
+      if (typeof GreenchClaw !== "function") throw new Error("missing client export");
       const event = normalizeGatewayEvent({
         event: "agent",
         payload: { runId: "pack-smoke", stream: "lifecycle", data: { phase: "start" } }

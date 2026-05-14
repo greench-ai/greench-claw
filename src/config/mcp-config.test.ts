@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { withTempHome } from "NexisClaw/plugin-sdk/test-env";
+import { withTempHome } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it, vi } from "vitest";
 import {
   listConfiguredMcpServers,
@@ -15,7 +15,7 @@ function validationOk(raw: unknown) {
 const mockReadSourceConfigSnapshot = vi.hoisted(() => async () => {
   const fs = await import("node:fs/promises");
   const path = await import("node:path");
-  const configPath = path.join(process.env.NEXISCLAW_STATE_DIR ?? "", "NexisClaw.json");
+  const configPath = path.join(process.env.GREENCHCLAW_STATE_DIR ?? "", "GreenchClaw.json");
   try {
     const raw = await fs.readFile(configPath, "utf-8");
     const parsed = JSON.parse(raw);
@@ -37,7 +37,7 @@ const mockReadSourceConfigSnapshot = vi.hoisted(() => async () => {
 const mockReplaceConfigFile = vi.hoisted(() => async ({ nextConfig }: { nextConfig: unknown }) => {
   const fs = await import("node:fs/promises");
   const path = await import("node:path");
-  const configPath = path.join(process.env.NEXISCLAW_STATE_DIR ?? "", "NexisClaw.json");
+  const configPath = path.join(process.env.GREENCHCLAW_STATE_DIR ?? "", "GreenchClaw.json");
   await fs.writeFile(configPath, JSON.stringify(nextConfig, null, 2), "utf-8");
 });
 
@@ -60,18 +60,18 @@ async function withMcpConfigHome<T>(
 ) {
   return await withTempHome(
     async (home) => {
-      const configPath = path.join(home, ".NexisClaw", "NexisClaw.json");
+      const configPath = path.join(home, ".GreenchClaw", "GreenchClaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(configPath, JSON.stringify(config, null, 2), "utf-8");
       return await fn({ configPath });
     },
     {
-      prefix: "NexisClaw-mcp-config-",
+      prefix: "GreenchClaw-mcp-config-",
       skipSessionCleanup: true,
       env: {
-        NEXISCLAW_CONFIG_PATH: undefined,
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-        NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+        GREENCHCLAW_CONFIG_PATH: undefined,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+        GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
       },
     },
   );

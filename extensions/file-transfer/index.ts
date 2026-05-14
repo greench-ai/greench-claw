@@ -1,8 +1,8 @@
 import {
   definePluginEntry,
   type AnyAgentTool,
-  type NexisClawPluginNodeHostCommand,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+  type GreenchClawPluginNodeHostCommand,
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import { createFileTransferNodeInvokePolicy } from "./src/shared/node-invoke-policy.js";
 import {
   DIR_FETCH_TOOL_DESCRIPTOR,
@@ -38,7 +38,7 @@ function createLazyTool(
   };
 }
 
-const fileTransferNodeHostCommands: NexisClawPluginNodeHostCommand[] = [
+const fileTransferNodeHostCommands: GreenchClawPluginNodeHostCommand[] = [
   {
     command: "file.fetch",
     cap: "file",

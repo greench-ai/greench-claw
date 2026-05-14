@@ -1,7 +1,7 @@
 ---
-summary: "Synology Chat webhook setup and NexisClaw config"
+summary: "Synology Chat webhook setup and GreenchClaw config"
 read_when:
-  - Setting up Synology Chat with NexisClaw
+  - Setting up Synology Chat with GreenchClaw
   - Debugging Synology Chat webhook routing
 title: "Synology Chat"
 ---
@@ -12,7 +12,7 @@ through a Synology Chat incoming webhook.
 
 ## Bundled plugin
 
-Synology Chat ships as a bundled plugin in current NexisClaw releases, so normal
+Synology Chat ships as a bundled plugin in current GreenchClaw releases, so normal
 packaged builds do not need a separate install.
 
 If you are on an older build or a custom install that excludes Synology Chat,
@@ -21,7 +21,7 @@ install it manually:
 Install from a local checkout:
 
 ```bash
-NexisClaw plugins install ./path/to/local/synology-chat-plugin
+GreenchClaw plugins install ./path/to/local/synology-chat-plugin
 ```
 
 Details: [Plugins](/tools/plugin)
@@ -29,29 +29,29 @@ Details: [Plugins](/tools/plugin)
 ## Quick setup
 
 1. Ensure the Synology Chat plugin is available.
-   - Current packaged NexisClaw releases already bundle it.
+   - Current packaged GreenchClaw releases already bundle it.
    - Older/custom installs can add it manually from a source checkout with the command above.
-   - `NexisClaw onboard` now shows Synology Chat in the same channel setup list as `NexisClaw channels add`.
-   - Non-interactive setup: `NexisClaw channels add --channel synology-chat --token <token> --url <incoming-webhook-url>`
+   - `GreenchClaw onboard` now shows Synology Chat in the same channel setup list as `GreenchClaw channels add`.
+   - Non-interactive setup: `GreenchClaw channels add --channel synology-chat --token <token> --url <incoming-webhook-url>`
 2. In Synology Chat integrations:
    - Create an incoming webhook and copy its URL.
    - Create an outgoing webhook with your secret token.
-3. Point the outgoing webhook URL to your NexisClaw gateway:
+3. Point the outgoing webhook URL to your GreenchClaw gateway:
    - `https://gateway-host/webhook/synology` by default.
    - Or your custom `channels.synology-chat.webhookPath`.
-4. Finish setup in NexisClaw.
-   - Guided: `NexisClaw onboard`
-   - Direct: `NexisClaw channels add --channel synology-chat --token <token> --url <incoming-webhook-url>`
+4. Finish setup in GreenchClaw.
+   - Guided: `GreenchClaw onboard`
+   - Direct: `GreenchClaw channels add --channel synology-chat --token <token> --url <incoming-webhook-url>`
 5. Restart gateway and send a DM to the Synology Chat bot.
 
 Webhook auth details:
 
-- NexisClaw accepts the outgoing webhook token from `body.token`, then
+- GreenchClaw accepts the outgoing webhook token from `body.token`, then
   `?token=...`, then headers.
 - Accepted header forms:
   - `x-synology-token`
   - `x-webhook-token`
-  - `x-NexisClaw-token`
+  - `x-GreenchClaw-token`
   - `Authorization: Bearer <token>`
 - Empty or missing tokens fail closed.
 
@@ -83,7 +83,7 @@ For the default account, you can use env vars:
 - `SYNOLOGY_NAS_HOST`
 - `SYNOLOGY_ALLOWED_USER_IDS` (comma-separated)
 - `SYNOLOGY_RATE_LIMIT`
-- `NEXISCLAW_BOT_NAME`
+- `GREENCHCLAW_BOT_NAME`
 
 Config values override env vars.
 
@@ -98,8 +98,8 @@ Config values override env vars.
 - `dmPolicy: "disabled"` blocks DMs.
 - Reply recipient binding stays on stable numeric `user_id` by default. `channels.synology-chat.dangerouslyAllowNameMatching: true` is break-glass compatibility mode that re-enables mutable username/nickname lookup for reply delivery.
 - Pairing approvals work with:
-  - `NexisClaw pairing list synology-chat`
-  - `NexisClaw pairing approve synology-chat <CODE>`
+  - `GreenchClaw pairing list synology-chat`
+  - `GreenchClaw pairing approve synology-chat <CODE>`
 
 ## Outbound delivery
 
@@ -108,13 +108,13 @@ Use numeric Synology Chat user IDs as targets.
 Examples:
 
 ```bash
-NexisClaw message send --channel synology-chat --target 123456 --text "Hello from NexisClaw"
-NexisClaw message send --channel synology-chat --target synology-chat:123456 --text "Hello again"
-NexisClaw message send --channel synology-chat --target synology:123456 --text "Short prefix"
+GreenchClaw message send --channel synology-chat --target 123456 --text "Hello from GreenchClaw"
+GreenchClaw message send --channel synology-chat --target synology-chat:123456 --text "Hello again"
+GreenchClaw message send --channel synology-chat --target synology:123456 --text "Short prefix"
 ```
 
 Media sends are supported by URL-based file delivery.
-Outbound file URLs must use `http` or `https`, and private or otherwise blocked network targets are rejected before NexisClaw forwards the URL to the NAS webhook.
+Outbound file URLs must use `http` or `https`, and private or otherwise blocked network targets are rejected before GreenchClaw forwards the URL to the NAS webhook.
 
 ## Multi-account
 
@@ -122,7 +122,7 @@ Multiple Synology Chat accounts are supported under `channels.synology-chat.acco
 Each account can override token, incoming URL, webhook path, DM policy, and limits.
 Direct-message sessions are isolated per account and user, so the same numeric `user_id`
 on two different Synology accounts does not share transcript state.
-Give each enabled account a distinct `webhookPath`. NexisClaw now rejects duplicate exact paths
+Give each enabled account a distinct `webhookPath`. GreenchClaw now rejects duplicate exact paths
 and refuses to start named accounts that only inherit a shared webhook path in multi-account setups.
 If you intentionally need legacy inheritance for a named account, set
 `dangerouslyAllowInheritedWebhookPath: true` on that account or at `channels.synology-chat`,
@@ -169,7 +169,7 @@ but duplicate exact paths are still rejected fail-closed. Prefer explicit per-ac
 - `Invalid token`:
   - the outgoing webhook secret does not match `channels.synology-chat.token`
   - the request is hitting the wrong account/webhook path
-  - a reverse proxy stripped the token header before the request reached NexisClaw
+  - a reverse proxy stripped the token header before the request reached GreenchClaw
 - `Rate limit exceeded`:
   - too many invalid token attempts from the same source can temporarily lock that source out
   - authenticated senders also have a separate per-user message rate limit

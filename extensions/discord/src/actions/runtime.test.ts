@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { DiscordActionConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { DiscordActionConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { clearPresences, setPresence } from "../monitor/presence-cache.js";
 import { DiscordThreadInitialMessageError } from "../send.js";
@@ -114,7 +114,7 @@ function handleMessagingAction(
   action: string,
   params: Record<string, unknown>,
   isActionEnabled: (key: keyof DiscordActionConfig) => boolean,
-  cfg: NexisClawConfig = DISCORD_TEST_CFG,
+  cfg: GreenchClawConfig = DISCORD_TEST_CFG,
   options?: {
     mediaAccess?: {
       localRoots?: readonly string[];
@@ -132,7 +132,7 @@ function handleGuildAction(
   action: string,
   params: Record<string, unknown>,
   isActionEnabled: (key: keyof DiscordActionConfig) => boolean,
-  cfg: NexisClawConfig = DISCORD_TEST_CFG,
+  cfg: GreenchClawConfig = DISCORD_TEST_CFG,
   options?: { mediaLocalRoots?: readonly string[] },
 ) {
   return handleDiscordGuildAction(action, params, isActionEnabled, cfg, options);
@@ -142,7 +142,7 @@ function handleModerationAction(
   action: string,
   params: Record<string, unknown>,
   isActionEnabled: (key: keyof DiscordActionConfig, defaultValue?: boolean) => boolean,
-  cfg: NexisClawConfig = DISCORD_TEST_CFG,
+  cfg: GreenchClawConfig = DISCORD_TEST_CFG,
 ) {
   return handleDiscordModerationAction(action, params, isActionEnabled, cfg);
 }
@@ -209,7 +209,7 @@ describe("handleDiscordMessagingAction", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await handleMessagingAction(
       "react",
@@ -394,7 +394,7 @@ describe("handleDiscordMessagingAction", () => {
           token: "token",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     await handleMessagingAction("readMessages", { channelId: "C1" }, enableAllActions, cfg);
     expect(readMessagesDiscord).toHaveBeenCalledWith(
       "C1",
@@ -428,7 +428,7 @@ describe("handleDiscordMessagingAction", () => {
           token: "token",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     await handleMessagingAction(
       "fetchMessage",
       { guildId: "G1", channelId: "C1", messageId: "M1" },
@@ -685,7 +685,7 @@ describe("handleDiscordGuildAction", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const result = await handleGuildAction(
       "memberInfo",
       {
@@ -1022,7 +1022,7 @@ describe("handleDiscordAction per-account gating", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await handleDiscordAction(
       { action: "timeout", guildId: "G1", userId: "U1", durationMinutes: 5, accountId: "ops" },
@@ -1047,7 +1047,7 @@ describe("handleDiscordAction per-account gating", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await expect(
       handleDiscordAction(
@@ -1068,7 +1068,7 @@ describe("handleDiscordAction per-account gating", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await handleDiscordAction(
       { action: "kick", guildId: "G1", userId: "U1", accountId: "ops" },
@@ -1087,7 +1087,7 @@ describe("handleDiscordAction per-account gating", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await expect(
       handleDiscordAction(
@@ -1110,7 +1110,7 @@ describe("handleDiscordAction per-account gating", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await handleDiscordAction(
       { action: "channelCreate", guildId: "G1", name: "alerts", accountId: "ops" },

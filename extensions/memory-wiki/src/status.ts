@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { listActiveMemoryPublicArtifacts } from "NexisClaw/plugin-sdk/memory-host-core";
-import { pathExists } from "NexisClaw/plugin-sdk/security-runtime";
-import type { NexisClawConfig } from "../api.js";
+import { listActiveMemoryPublicArtifacts } from "GreenchClaw/plugin-sdk/memory-host-core";
+import { pathExists } from "GreenchClaw/plugin-sdk/security-runtime";
+import type { GreenchClawConfig } from "../api.js";
 import type { ResolvedMemoryWikiConfig } from "./config.js";
 import { inferWikiPageKind, toWikiPageSummary, type WikiPageKind } from "./markdown.js";
 import { probeObsidianCli } from "./obsidian.js";
@@ -60,7 +60,7 @@ export type MemoryWikiDoctorReport = {
 };
 
 type ResolveMemoryWikiStatusDeps = {
-  appConfig?: NexisClawConfig;
+  appConfig?: GreenchClawConfig;
   pathExists?: (inputPath: string) => Promise<boolean>;
   listPublicArtifacts?: typeof listActiveMemoryPublicArtifacts;
   resolveCommand?: (command: string) => Promise<string | null>;
@@ -270,7 +270,7 @@ export function buildMemoryWikiDoctorReport(status: MemoryWikiStatus): MemoryWik
     code: warning.code,
     message:
       warning.code === "vault-missing"
-        ? "Run `NexisClaw wiki init` to create the vault layout."
+        ? "Run `GreenchClaw wiki init` to create the vault layout."
         : warning.code === "obsidian-cli-missing"
           ? "Install the official Obsidian CLI or disable `obsidian.useOfficialCli`."
           : warning.code === "bridge-disabled"

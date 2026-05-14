@@ -8,7 +8,7 @@ import {
   legacyModelKey,
   modelKey,
 } from "../agents/model-selection.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { getResolvedLoggerSettings } from "../logging.js";
 import { collectEnabledInsecureOrDangerousFlags } from "../security/dangerous-config-flags.js";
 
@@ -23,7 +23,7 @@ type StartupThinkLevel =
   | "max";
 
 export function logGatewayStartup(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   bindHost: string;
   bindHosts?: string[];
   port: number;
@@ -63,7 +63,7 @@ export function logGatewayStartup(params: {
   if (enabledDangerousFlags.length > 0) {
     const warning =
       `security warning: dangerous config flags enabled: ${enabledDangerousFlags.join(", ")}. ` +
-      "Run `NexisClaw security audit`.";
+      "Run `GreenchClaw security audit`.";
     params.log.warn(warning);
   }
 }
@@ -82,7 +82,7 @@ function normalizeStartupThinkLevel(value: unknown): StartupThinkLevel | undefin
 }
 
 function resolveExplicitStartupThinking(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   provider: string;
   model: string;
   defaultAgentThinking: unknown;
@@ -99,7 +99,7 @@ function resolveExplicitStartupThinking(params: {
 }
 
 export function formatAgentModelStartupDetails(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   provider: string;
   model: string;
 }): string {

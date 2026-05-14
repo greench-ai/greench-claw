@@ -309,7 +309,7 @@ md.core.ruler.after("linkify", "linkify-cjk-trim", (state) => {
         continue;
       }
       // Only trim linkify-generated autolinks, not explicit markdown links
-      // like [NexisClaw中文](https://docs.NexisClaw.ai) where CJK in display
+      // like [GreenchClaw中文](https://docs.GreenchClaw.ai) where CJK in display
       // text is intentional and href must not be rewritten.
       if (token.markup !== "linkify") {
         continue;

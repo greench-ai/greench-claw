@@ -21,25 +21,28 @@ import {
 installGatewayTestHooks({ scope: "suite" });
 
 const ORIGINAL_GATEWAY_AUTH = testState.gatewayAuth;
-const ORIGINAL_GATEWAY_TOKEN_ENV = process.env.NEXISCLAW_GATEWAY_TOKEN;
+const ORIGINAL_GATEWAY_TOKEN_ENV = process.env.GREENCHCLAW_GATEWAY_TOKEN;
 const OLD_TOKEN = "shared-token-old";
 const NEW_TOKEN = "shared-token-new";
 const DEFERRED_RESTART_DELAY_MS = 1_000;
-const SECRET_REF_TOKEN_ID = "NEXISCLAW_SHARED_AUTH_ROTATION_SECRET_REF";
+const SECRET_REF_TOKEN_ID = "GREENCHCLAW_SHARED_AUTH_ROTATION_SECRET_REF";
 
 let port = 0;
 
 afterAll(() => {
   testState.gatewayAuth = ORIGINAL_GATEWAY_AUTH;
   if (ORIGINAL_GATEWAY_TOKEN_ENV === undefined) {
-    delete process.env.NEXISCLAW_GATEWAY_TOKEN;
+    delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
   } else {
-    process.env.NEXISCLAW_GATEWAY_TOKEN = ORIGINAL_GATEWAY_TOKEN_ENV;
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = ORIGINAL_GATEWAY_TOKEN_ENV;
   }
 });
 
 async function openDeviceTokenWs(): Promise<WebSocket> {
-  const identityPath = path.join(os.tmpdir(), `NexisClaw-shared-auth-${process.pid}-${port}.json`);
+  const identityPath = path.join(
+    os.tmpdir(),
+    `GreenchClaw-shared-auth-${process.pid}-${port}.json`,
+  );
   const { loadOrCreateDeviceIdentity, publicKeyRawBase64UrlFromPem } =
     await import("../infra/device-identity.js");
   const { approveDevicePairing, requestDevicePairing, rotateDeviceToken } =
@@ -172,9 +175,9 @@ describe("gateway shared auth rotation with unchanged SecretRefs", () => {
   let secretRefPort = 0;
 
   beforeAll(async () => {
-    const configPath = process.env.NEXISCLAW_CONFIG_PATH;
+    const configPath = process.env.GREENCHCLAW_CONFIG_PATH;
     if (!configPath) {
-      throw new Error("NEXISCLAW_CONFIG_PATH missing in gateway test environment");
+      throw new Error("GREENCHCLAW_CONFIG_PATH missing in gateway test environment");
     }
     secretRefPort = await getFreePort();
     testState.gatewayAuth = undefined;

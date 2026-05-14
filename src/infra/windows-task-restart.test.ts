@@ -5,16 +5,16 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import { captureFullEnv } from "../test-utils/env.js";
 
 const spawnMock = vi.hoisted(() => vi.fn());
-const resolvePreferredNexisClawTmpDirMock = vi.hoisted(() => vi.fn(() => os.tmpdir()));
+const resolvePreferredGreenchClawTmpDirMock = vi.hoisted(() => vi.fn(() => os.tmpdir()));
 const resolveTaskScriptPathMock = vi.hoisted(() =>
   vi.fn((env: Record<string, string | undefined>) => {
     const home = env.USERPROFILE || env.HOME || os.homedir();
-    return path.join(home, ".NexisClaw", "gateway.cmd");
+    return path.join(home, ".GreenchClaw", "gateway.cmd");
   }),
 );
 
 vi.mock("node:child_process", async () => {
-  const { mockNodeBuiltinModule } = await import("NexisClaw/plugin-sdk/test-node-mocks");
+  const { mockNodeBuiltinModule } = await import("GreenchClaw/plugin-sdk/test-node-mocks");
   return mockNodeBuiltinModule(
     () => vi.importActual<typeof import("node:child_process")>("node:child_process"),
     {
@@ -22,8 +22,8 @@ vi.mock("node:child_process", async () => {
     },
   );
 });
-vi.mock("./tmp-NexisClaw-dir.js", () => ({
-  resolvePreferredNexisClawTmpDir: () => resolvePreferredNexisClawTmpDirMock(),
+vi.mock("./tmp-GreenchClaw-dir.js", () => ({
+  resolvePreferredGreenchClawTmpDir: () => resolvePreferredGreenchClawTmpDirMock(),
 }));
 vi.mock("../daemon/schtasks.js", () => ({
   resolveTaskScriptPath: (env: Record<string, string | undefined>) =>
@@ -80,12 +80,12 @@ describe("relaunchGatewayScheduledTask", () => {
 
   beforeEach(() => {
     spawnMock.mockReset();
-    resolvePreferredNexisClawTmpDirMock.mockReset();
-    resolvePreferredNexisClawTmpDirMock.mockReturnValue(os.tmpdir());
+    resolvePreferredGreenchClawTmpDirMock.mockReset();
+    resolvePreferredGreenchClawTmpDirMock.mockReturnValue(os.tmpdir());
     resolveTaskScriptPathMock.mockReset();
     resolveTaskScriptPathMock.mockImplementation((env: Record<string, string | undefined>) => {
       const home = env.USERPROFILE || env.HOME || os.homedir();
-      return path.join(home, ".NexisClaw", "gateway.cmd");
+      return path.join(home, ".GreenchClaw", "gateway.cmd");
     });
   });
 
@@ -98,11 +98,11 @@ describe("relaunchGatewayScheduledTask", () => {
       return { unref };
     });
 
-    const result = relaunchGatewayScheduledTask({ NEXISCLAW_PROFILE: "work" });
+    const result = relaunchGatewayScheduledTask({ GREENCHCLAW_PROFILE: "work" });
 
     expect(result.ok).toBe(true);
     expect(result.method).toBe("schtasks");
-    expect(result.tried).toContain('schtasks /Run /TN "NexisClaw Gateway (work)"');
+    expect(result.tried).toContain('schtasks /Run /TN "GreenchClaw Gateway (work)"');
     expect(result.tried).toContain(`cmd.exe /d /s /c ${seenCommandArg}`);
     const spawnCall = requireFirstMockCall(spawnMock, "restart helper spawn");
     expect(spawnCall[0]).toBe("cmd.exe");
@@ -123,32 +123,32 @@ describe("relaunchGatewayScheduledTask", () => {
     expect(script).toContain("timeout /t 1 /nobreak >nul");
     expect(script).toContain("gateway-restart.log");
     expect(script).toContain(
-      'NexisClaw restart attempt source=windows-task-handoff target="NexisClaw Gateway (work)"',
+      'GreenchClaw restart attempt source=windows-task-handoff target="GreenchClaw Gateway (work)"',
     );
     expect(script).toContain(
-      `powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "(Get-ScheduledTask -TaskName 'NexisClaw Gateway (work)' -ErrorAction SilentlyContinue).State" 2>nul | findstr /I /C:"Running" >nul 2>&1`,
+      `powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command "(Get-ScheduledTask -TaskName 'GreenchClaw Gateway (work)' -ErrorAction SilentlyContinue).State" 2>nul | findstr /I /C:"Running" >nul 2>&1`,
     );
-    expect(script).toContain('schtasks /Run /TN "NexisClaw Gateway (work)" >>');
+    expect(script).toContain('schtasks /Run /TN "GreenchClaw Gateway (work)" >>');
     expect(script.indexOf("powershell.exe -NoProfile")).toBeLessThan(
-      script.indexOf('schtasks /Run /TN "NexisClaw Gateway (work)"'),
+      script.indexOf('schtasks /Run /TN "GreenchClaw Gateway (work)"'),
     );
     expect(script).toContain('del "%~f0" >nul 2>&1');
   });
 
-  it("prefers NEXISCLAW_WINDOWS_TASK_NAME overrides", () => {
+  it("prefers GREENCHCLAW_WINDOWS_TASK_NAME overrides", () => {
     spawnMock.mockImplementation((_file: string, args: string[]) => {
       createdScriptPaths.add(decodeCmdPathArg(args[3]));
       return { unref: vi.fn() };
     });
 
     relaunchGatewayScheduledTask({
-      NEXISCLAW_PROFILE: "work",
-      NEXISCLAW_WINDOWS_TASK_NAME: "NexisClaw Gateway (custom)",
+      GREENCHCLAW_PROFILE: "work",
+      GREENCHCLAW_WINDOWS_TASK_NAME: "GreenchClaw Gateway (custom)",
     });
 
     const scriptPath = [...createdScriptPaths][0];
     const script = fs.readFileSync(scriptPath, "utf8");
-    expect(script).toContain('schtasks /Run /TN "NexisClaw Gateway (custom)" >>');
+    expect(script).toContain('schtasks /Run /TN "GreenchClaw Gateway (custom)" >>');
   });
 
   it("escapes custom task names in the PowerShell running-task probe", () => {
@@ -158,13 +158,13 @@ describe("relaunchGatewayScheduledTask", () => {
     });
 
     relaunchGatewayScheduledTask({
-      NEXISCLAW_WINDOWS_TASK_NAME: "NexisClaw Gateway (Bob's work)",
+      GREENCHCLAW_WINDOWS_TASK_NAME: "GreenchClaw Gateway (Bob's work)",
     });
 
     const scriptPath = [...createdScriptPaths][0];
     const script = fs.readFileSync(scriptPath, "utf8");
     expect(script).toContain(
-      "-Command \"(Get-ScheduledTask -TaskName 'NexisClaw Gateway (Bob''s work)' -ErrorAction SilentlyContinue).State\"",
+      "-Command \"(Get-ScheduledTask -TaskName 'GreenchClaw Gateway (Bob''s work)' -ErrorAction SilentlyContinue).State\"",
     );
   });
 
@@ -173,7 +173,7 @@ describe("relaunchGatewayScheduledTask", () => {
       throw new Error("spawn failed");
     });
 
-    const result = relaunchGatewayScheduledTask({ NEXISCLAW_PROFILE: "work" });
+    const result = relaunchGatewayScheduledTask({ GREENCHCLAW_PROFILE: "work" });
 
     expect(result.ok).toBe(false);
     expect(result.method).toBe("schtasks");
@@ -182,12 +182,12 @@ describe("relaunchGatewayScheduledTask", () => {
 
   it("quotes the cmd /c script path when temp paths contain metacharacters", () => {
     const unref = vi.fn();
-    const metacharTmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw&(restart)-"));
+    const metacharTmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw&(restart)-"));
     createdTmpDirs.add(metacharTmpDir);
-    resolvePreferredNexisClawTmpDirMock.mockReturnValue(metacharTmpDir);
+    resolvePreferredGreenchClawTmpDirMock.mockReturnValue(metacharTmpDir);
     spawnMock.mockReturnValue({ unref });
 
-    relaunchGatewayScheduledTask({ NEXISCLAW_PROFILE: "work" });
+    relaunchGatewayScheduledTask({ GREENCHCLAW_PROFILE: "work" });
 
     expect(spawnMock).toHaveBeenCalledOnce();
     const spawnCall = requireFirstMockCall(spawnMock, "restart helper spawn");
@@ -212,7 +212,7 @@ describe("relaunchGatewayScheduledTask", () => {
   });
 
   it("includes startup fallback", () => {
-    const taskScriptDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-state-"));
+    const taskScriptDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-state-"));
     createdTmpDirs.add(taskScriptDir);
     const taskScriptPath = path.join(taskScriptDir, "gateway.cmd");
     fs.writeFileSync(taskScriptPath, "@echo off\r\nrem placeholder\r\n", "utf8");
@@ -223,7 +223,7 @@ describe("relaunchGatewayScheduledTask", () => {
       return { unref: vi.fn() };
     });
 
-    const result = relaunchGatewayScheduledTask({ NEXISCLAW_PROFILE: "work" });
+    const result = relaunchGatewayScheduledTask({ GREENCHCLAW_PROFILE: "work" });
 
     expect(result.ok).toBe(true);
     const scriptPath = [...createdScriptPaths][0];

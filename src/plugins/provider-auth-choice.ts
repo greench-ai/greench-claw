@@ -7,7 +7,7 @@ import { upsertAuthProfile } from "../agents/auth-profiles.js";
 import { formatLiteralProviderPrefixedModelRef } from "../agents/model-ref-shared.js";
 import { resolveDefaultAgentWorkspaceDir } from "../agents/workspace.js";
 import { normalizeAgentModelRefForConfig } from "../config/model-input.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { sanitizeTerminalText } from "../terminal/safe-text.js";
 import type { WizardPrompter } from "../wizard/prompts.js";
@@ -30,7 +30,7 @@ import type { ProviderAuthMethod, ProviderAuthOptionBag, ProviderPlugin } from "
 
 export type ApplyProviderAuthChoiceParams = {
   authChoice: string;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   prompter: WizardPrompter;
   runtime: RuntimeEnv;
@@ -42,7 +42,7 @@ export type ApplyProviderAuthChoiceParams = {
 };
 
 export type ApplyProviderAuthChoiceResult = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   agentModelOverride?: string;
   retrySelection?: boolean;
 };
@@ -63,9 +63,9 @@ function formatModelRefForDisplay(modelRef: string, provider: ProviderPlugin): s
 }
 
 function restoreConfiguredPrimaryModel(
-  nextConfig: NexisClawConfig,
-  originalConfig: NexisClawConfig,
-): NexisClawConfig {
+  nextConfig: GreenchClawConfig,
+  originalConfig: GreenchClawConfig,
+): GreenchClawConfig {
   const originalModel = originalConfig.agents?.defaults?.model;
   const nextAgents = nextConfig.agents;
   const nextDefaults = nextAgents?.defaults;
@@ -94,7 +94,7 @@ function restoreConfiguredPrimaryModel(
   };
 }
 
-function resolveConfiguredDefaultModelPrimary(cfg: NexisClawConfig): string | undefined {
+function resolveConfiguredDefaultModelPrimary(cfg: GreenchClawConfig): string | undefined {
   const model = cfg.agents?.defaults?.model;
   if (typeof model === "string") {
     return model;
@@ -129,16 +129,16 @@ async function noteDefaultModelResult(params: {
 }
 
 async function applyDefaultModelFromAuthChoice(params: {
-  config: NexisClawConfig;
-  configBeforeProviderAuth?: NexisClawConfig;
+  config: GreenchClawConfig;
+  configBeforeProviderAuth?: GreenchClawConfig;
   selectedModel: string;
   selectedModelDisplay?: string;
   preserveExistingDefaultModel: boolean | undefined;
   prompter: WizardPrompter;
   runtime: RuntimeEnv;
   workspaceDir?: string;
-  runSelectedModelHook: (config: NexisClawConfig) => Promise<void>;
-}): Promise<NexisClawConfig> {
+  runSelectedModelHook: (config: GreenchClawConfig) => Promise<void>;
+}): Promise<GreenchClawConfig> {
   const defaultModelBaseConfig = params.configBeforeProviderAuth ?? params.config;
   const previousPrimary = resolveConfiguredDefaultModelPrimary(defaultModelBaseConfig);
   const preservesDifferentPrimary =
@@ -191,7 +191,7 @@ async function loadPluginProviderRuntime() {
 
 function resolveManifestAuthChoiceScope(params: {
   authChoice: string;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   workspaceDir: string;
   env?: NodeJS.ProcessEnv;
 }): ProviderAuthChoiceMetadata | undefined {
@@ -220,7 +220,7 @@ export const __testing = {
 } as const;
 
 export async function runProviderPluginAuthMethod(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   runtime: RuntimeEnv;
   prompter: WizardPrompter;
@@ -232,7 +232,7 @@ export async function runProviderPluginAuthMethod(params: {
   secretInputMode?: ProviderAuthOptionBag["secretInputMode"];
   allowSecretRefPrompt?: boolean;
   opts?: Partial<ProviderAuthOptionBag>;
-}): Promise<{ config: NexisClawConfig; defaultModel?: string }> {
+}): Promise<{ config: GreenchClawConfig; defaultModel?: string }> {
   const agentId = params.agentId ?? resolveDefaultAgentId(params.config);
   const agentDir = params.agentDir ?? resolveAgentDir(params.config, agentId);
   const workspaceDir =
@@ -344,7 +344,7 @@ export async function applyAuthChoiceLoadedPluginProvider(
     enabledConfig = enableResult.config;
   }
 
-  const resolveScopedRuntimeProviders = (config: NexisClawConfig): ProviderPlugin[] =>
+  const resolveScopedRuntimeProviders = (config: GreenchClawConfig): ProviderPlugin[] =>
     resolvePluginProviders({
       config,
       workspaceDir,
@@ -498,7 +498,7 @@ export async function applyAuthChoicePluginProvider(
   const provider = resolveProviderMatch(providers, options.providerId);
   if (!provider) {
     await params.prompter.note(
-      `${options.label} auth plugin is not available. Install or enable the plugin, then rerun onboarding. If this started after an update, run "NexisClaw doctor --fix" first.`,
+      `${options.label} auth plugin is not available. Install or enable the plugin, then rerun onboarding. If this started after an update, run "GreenchClaw doctor --fix" first.`,
       options.label,
     );
     return { config: nextConfig };

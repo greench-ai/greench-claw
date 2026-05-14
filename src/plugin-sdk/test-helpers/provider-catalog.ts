@@ -11,13 +11,13 @@ export {
 } from "./public-surface-loader.js";
 
 type ProviderRuntimeCatalogModule = Pick<
-  typeof import("NexisClaw/plugin-sdk/provider-catalog-runtime"),
+  typeof import("GreenchClaw/plugin-sdk/provider-catalog-runtime"),
   "augmentModelCatalogWithProviderPlugins"
 >;
 
 export async function importProviderRuntimeCatalogModule(): Promise<ProviderRuntimeCatalogModule> {
   const { augmentModelCatalogWithProviderPlugins } =
-    await import("NexisClaw/plugin-sdk/provider-catalog-runtime");
+    await import("GreenchClaw/plugin-sdk/provider-catalog-runtime");
   return {
     augmentModelCatalogWithProviderPlugins,
   };

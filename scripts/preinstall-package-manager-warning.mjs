@@ -44,9 +44,9 @@ export function createPackageManagerWarningMessage(packageManager) {
   }
 
   return [
-    `[NexisClaw] warning: detected ${packageManager} for install lifecycle.`,
-    "[NexisClaw] this repo works best with pnpm; npm-compatible installs are slower and much larger here.",
-    "[NexisClaw] prefer: corepack pnpm install",
+    `[GreenchClaw] warning: detected ${packageManager} for install lifecycle.`,
+    "[GreenchClaw] this repo works best with pnpm; npm-compatible installs are slower and much larger here.",
+    "[GreenchClaw] prefer: corepack pnpm install",
   ].join("\n");
 }
 

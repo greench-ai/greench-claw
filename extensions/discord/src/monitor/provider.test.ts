@@ -1,6 +1,6 @@
 import { EventEmitter } from "node:events";
-import type { ChannelRuntimeSurface } from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { ChannelRuntimeSurface } from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { RateLimitError } from "../internal/discord.js";
 import {
@@ -39,7 +39,7 @@ const {
 
 let monitorDiscordProvider: typeof import("./provider.js").monitorDiscordProvider;
 let providerTesting: typeof import("./provider.js").__testing;
-let runtimeEnvModule: typeof import("NexisClaw/plugin-sdk/runtime-env");
+let runtimeEnvModule: typeof import("GreenchClaw/plugin-sdk/runtime-env");
 
 function createAcpRuntimeError(code: string, message: string): Error & { code: string } {
   return Object.assign(new Error(message), { code });
@@ -87,7 +87,9 @@ function createRateLimitError(
   return new RateLimitErrorCtor(response, body, fallbackRequest);
 }
 
-function createConfigWithDiscordAccount(overrides: Record<string, unknown> = {}): NexisClawConfig {
+function createConfigWithDiscordAccount(
+  overrides: Record<string, unknown> = {},
+): GreenchClawConfig {
   return {
     channels: {
       discord: {
@@ -99,7 +101,7 @@ function createConfigWithDiscordAccount(overrides: Record<string, unknown> = {})
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 type MockCallReader = { mock: { calls: unknown[][] } };
@@ -144,7 +146,7 @@ vi.mock("../voice/manager.runtime.js", () => {
 });
 describe("monitorDiscordProvider", () => {
   type ReconcileHealthProbeParams = {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     sessionKey: string;
     binding: unknown;
@@ -152,7 +154,7 @@ describe("monitorDiscordProvider", () => {
   };
 
   type ReconcileStartupParams = {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     healthProbe?: (
       params: ReconcileHealthProbeParams,
     ) => Promise<{ status: string; reason?: string }>;
@@ -209,9 +211,9 @@ describe("monitorDiscordProvider", () => {
   };
 
   beforeAll(async () => {
-    vi.doMock("NexisClaw/plugin-sdk/plugin-runtime", async () => {
-      const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/plugin-runtime")>(
-        "NexisClaw/plugin-sdk/plugin-runtime",
+    vi.doMock("GreenchClaw/plugin-sdk/plugin-runtime", async () => {
+      const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/plugin-runtime")>(
+        "GreenchClaw/plugin-sdk/plugin-runtime",
       );
       return {
         ...actual,
@@ -242,7 +244,7 @@ describe("monitorDiscordProvider", () => {
     vi.doMock("../token.js", () => ({
       normalizeDiscordToken: (value?: string) => value,
     }));
-    runtimeEnvModule = await import("NexisClaw/plugin-sdk/runtime-env");
+    runtimeEnvModule = await import("GreenchClaw/plugin-sdk/runtime-env");
     vi.spyOn(runtimeEnvModule, "logVerbose").mockImplementation(() => undefined);
     ({ monitorDiscordProvider, __testing: providerTesting } = await import("./provider.js"));
   });
@@ -776,7 +778,7 @@ describe("monitorDiscordProvider", () => {
     expect(drained[0]?.message).toContain("4014");
   });
 
-  it("passes NexisClaw event queue defaults to the Discord client", async () => {
+  it("passes GreenchClaw event queue defaults to the Discord client", async () => {
     await monitorDiscordProvider({
       config: baseConfig(),
       runtime: baseRuntime(),

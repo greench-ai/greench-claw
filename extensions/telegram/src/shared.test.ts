@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import type { ResolvedTelegramAccount } from "./accounts.js";
 import { createTelegramPluginBase, telegramConfigAdapter } from "./shared.js";
@@ -8,7 +8,7 @@ const telegramPluginBase = createTelegramPluginBase({
   setup: {} as never,
 });
 
-function createCfg(): NexisClawConfig {
+function createCfg(): GreenchClawConfig {
   return {
     channels: {
       telegram: {
@@ -20,10 +20,10 @@ function createCfg(): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-function resolveAccount(cfg: NexisClawConfig, accountId: string): ResolvedTelegramAccount {
+function resolveAccount(cfg: GreenchClawConfig, accountId: string): ResolvedTelegramAccount {
   return telegramPluginBase.config.resolveAccount(cfg, accountId);
 }
 
@@ -94,7 +94,7 @@ describe("createTelegramPluginBase config duplicate token guard", () => {
           enabled: true,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const account = resolveAccount(cfg, "default");
     expect(await telegramPluginBase.config.isConfigured!(account, cfg)).toBe(true);
@@ -108,7 +108,7 @@ describe("createTelegramPluginBase config duplicate token guard", () => {
           enabled: true,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const account = resolveAccount(cfg, "bot-main");
     expect(account.token).toBe("single-bot-token");
@@ -126,7 +126,7 @@ describe("createTelegramPluginBase config duplicate token guard", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const account = resolveAccount(cfg, "unknownBot");
     expect(await telegramPluginBase.config.isConfigured!(account, cfg)).toBe(false);
@@ -146,7 +146,7 @@ describe("createTelegramPluginBase config duplicate token guard", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const account = resolveAccount(cfg, "carey-notifications");
     expect(await telegramPluginBase.config.isConfigured!(account, cfg)).toBe(true);
@@ -160,7 +160,7 @@ describe("createTelegramPluginBase config duplicate token guard", () => {
           enabled: true,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const account = resolveAccount(cfg, "default");
     expect(await telegramPluginBase.config.isConfigured!(account, cfg)).toBe(false);
@@ -173,7 +173,7 @@ describe("createTelegramPluginBase config duplicate token guard", () => {
         providers: {
           telegram_token: {
             source: "file",
-            path: "/tmp/NexisClaw-missing-telegram-token",
+            path: "/tmp/GreenchClaw-missing-telegram-token",
             mode: "singleValue",
           },
         },
@@ -185,7 +185,7 @@ describe("createTelegramPluginBase config duplicate token guard", () => {
           defaultTo: "1498959610751750304",
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     expect(telegramConfigAdapter.resolveAllowFrom?.({ cfg, accountId: "default" })).toEqual([
       "1128540374256849009",

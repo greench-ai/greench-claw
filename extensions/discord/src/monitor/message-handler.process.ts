@@ -2,36 +2,36 @@ import {
   formatReasoningMessage,
   resolveAckReaction,
   resolveHumanDelayConfig,
-} from "NexisClaw/plugin-sdk/agent-runtime";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
 import {
   createStatusReactionController,
   DEFAULT_TIMING,
   logAckFailure,
   logTypingFailure,
   shouldAckReaction as shouldAckReactionGate,
-} from "NexisClaw/plugin-sdk/channel-feedback";
+} from "GreenchClaw/plugin-sdk/channel-feedback";
 import {
   createChannelMessageReplyPipeline,
   defineFinalizableLivePreviewAdapter,
   deliverWithFinalizableLivePreviewAdapter,
   resolveChannelMessageSourceReplyDeliveryMode,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 import {
   buildChannelProgressDraftLine,
   buildChannelProgressDraftLineForEntry,
   resolveChannelStreamingBlockEnabled,
-} from "NexisClaw/plugin-sdk/channel-streaming";
-import { recordInboundSession } from "NexisClaw/plugin-sdk/conversation-runtime";
+} from "GreenchClaw/plugin-sdk/channel-streaming";
+import { recordInboundSession } from "GreenchClaw/plugin-sdk/conversation-runtime";
 import {
   hasFinalInboundReplyDispatch,
   runInboundReplyTurn,
-} from "NexisClaw/plugin-sdk/inbound-reply-dispatch";
-import { resolveMarkdownTableMode } from "NexisClaw/plugin-sdk/markdown-table-runtime";
-import { getAgentScopedMediaLocalRoots } from "NexisClaw/plugin-sdk/media-runtime";
-import { resolveChunkMode } from "NexisClaw/plugin-sdk/reply-chunking";
-import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
-import { resolveSendableOutboundReplyParts } from "NexisClaw/plugin-sdk/reply-payload";
-import { danger, logVerbose, shouldLogVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/inbound-reply-dispatch";
+import { resolveMarkdownTableMode } from "GreenchClaw/plugin-sdk/markdown-table-runtime";
+import { getAgentScopedMediaLocalRoots } from "GreenchClaw/plugin-sdk/media-runtime";
+import { resolveChunkMode } from "GreenchClaw/plugin-sdk/reply-chunking";
+import type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-dispatch-runtime";
+import { resolveSendableOutboundReplyParts } from "GreenchClaw/plugin-sdk/reply-payload";
+import { danger, logVerbose, shouldLogVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import { resolveDiscordMaxLinesPerMessage } from "../accounts.js";
 import { createDiscordRestClient } from "../client.js";
 import { removeReactionDiscord } from "../send.js";
@@ -61,10 +61,10 @@ function sleep(ms: number): Promise<void> {
 }
 
 const DISCORD_TYPING_MAX_DURATION_MS = 20 * 60_000;
-let replyRuntimePromise: Promise<typeof import("NexisClaw/plugin-sdk/reply-runtime")> | undefined;
+let replyRuntimePromise: Promise<typeof import("GreenchClaw/plugin-sdk/reply-runtime")> | undefined;
 
 async function loadReplyRuntime() {
-  replyRuntimePromise ??= import("NexisClaw/plugin-sdk/reply-runtime");
+  replyRuntimePromise ??= import("GreenchClaw/plugin-sdk/reply-runtime");
   return await replyRuntimePromise;
 }
 

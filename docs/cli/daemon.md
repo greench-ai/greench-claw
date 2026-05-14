@@ -1,26 +1,26 @@
 ---
-summary: "CLI reference for `NexisClaw daemon` (legacy alias for gateway service management)"
+summary: "CLI reference for `GreenchClaw daemon` (legacy alias for gateway service management)"
 read_when:
-  - You still use `NexisClaw daemon ...` in scripts
+  - You still use `GreenchClaw daemon ...` in scripts
   - You need service lifecycle commands (install/start/stop/restart/status)
 title: "Daemon"
 ---
 
-# `NexisClaw daemon`
+# `GreenchClaw daemon`
 
 Legacy alias for Gateway service management commands.
 
-`NexisClaw daemon ...` maps to the same service control surface as `NexisClaw gateway ...` service commands.
+`GreenchClaw daemon ...` maps to the same service control surface as `GreenchClaw gateway ...` service commands.
 
 ## Usage
 
 ```bash
-NexisClaw daemon status
-NexisClaw daemon install
-NexisClaw daemon start
-NexisClaw daemon stop
-NexisClaw daemon restart
-NexisClaw daemon uninstall
+GreenchClaw daemon status
+GreenchClaw daemon install
+GreenchClaw daemon start
+GreenchClaw daemon stop
+GreenchClaw daemon restart
+GreenchClaw daemon uninstall
 ```
 
 ## Subcommands
@@ -55,11 +55,11 @@ Notes:
 - On macOS, `install` keeps LaunchAgent plists owner-only and loads managed service environment values through an owner-only file and wrapper instead of serializing API keys or auth-profile env refs into `EnvironmentVariables`.
 - If you intentionally run multiple gateways on one host, isolate ports, config/state, and workspaces; see [/gateway#multiple-gateways-same-host](/gateway#multiple-gateways-same-host).
 - `restart --safe` asks the running Gateway to preflight active work and schedule one coalesced restart after active work drains. Plain `restart` keeps the existing service-manager behavior; `--force` remains the immediate override path.
-- `restart --safe --skip-deferral` runs the NexisClaw-aware safe restart but bypasses the active-work deferral gate so the Gateway emits the restart immediately even when blockers are reported. Operator escape hatch when a stuck task run pins the safe restart; requires `--safe`.
+- `restart --safe --skip-deferral` runs the GreenchClaw-aware safe restart but bypasses the active-work deferral gate so the Gateway emits the restart immediately even when blockers are reported. Operator escape hatch when a stuck task run pins the safe restart; requires `--safe`.
 
 ## Prefer
 
-Use [`NexisClaw gateway`](/cli/gateway) for current docs and examples.
+Use [`GreenchClaw gateway`](/cli/gateway) for current docs and examples.
 
 ## Related
 

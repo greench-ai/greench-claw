@@ -24,7 +24,7 @@ describe("session store writer", () => {
   });
 
   it("serializes runtime writes through one in-process writer", async () => {
-    const storePath = "/tmp/NexisClaw-store.json";
+    const storePath = "/tmp/GreenchClaw-store.json";
     const firstStarted = createDeferred<void>();
     const releaseFirst = createDeferred<void>();
     const order: string[] = [];

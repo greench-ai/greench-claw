@@ -1,11 +1,11 @@
 import type { CliDeps } from "../cli/deps.types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { CronServiceContract } from "../cron/service-contract.js";
 import { resolveCronStorePath } from "../cron/store.js";
 import type { GatewayCronState } from "./server-cron.js";
 
 type LazyGatewayCronParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   deps: CliDeps;
   broadcast: (event: string, payload: unknown, opts?: { dropIfSlow?: boolean }) => void;
 };
@@ -17,7 +17,8 @@ type LoadedGatewayCronState = {
 
 export function createLazyGatewayCronState(params: LazyGatewayCronParams): GatewayCronState {
   const storePath = resolveCronStorePath(params.cfg.cron?.store);
-  const cronEnabled = process.env.NEXISCLAW_SKIP_CRON !== "1" && params.cfg.cron?.enabled !== false;
+  const cronEnabled =
+    process.env.GREENCHCLAW_SKIP_CRON !== "1" && params.cfg.cron?.enabled !== false;
   let loaded: LoadedGatewayCronState | null = null;
   let loading: Promise<LoadedGatewayCronState> | null = null;
   let stopped = false;

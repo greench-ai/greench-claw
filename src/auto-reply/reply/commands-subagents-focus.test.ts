@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
 import type { SessionBindingRecord } from "../../infra/outbound/session-binding-service.js";
 import { createEmptyInlineDirectives } from "./commands-subagents.test-helpers.js";
@@ -85,7 +85,7 @@ vi.mock("../../channels/thread-bindings-policy.js", () => ({
     threadId?: string;
   }) => (params.channel === ROOM_CHANNEL && !params.threadId ? "child" : "current"),
   resolveThreadBindingSpawnPolicy: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     channel: string;
     accountId: string;
   }) => {
@@ -126,7 +126,7 @@ vi.mock("./commands-subagents/shared.js", async () => {
 
 const baseCfg = {
   session: { mainKey: "main", scope: "per-sender" },
-} satisfies NexisClawConfig;
+} satisfies GreenchClawConfig;
 
 function createSessionBindingRecord(
   overrides?: Partial<SessionBindingRecord>,
@@ -194,7 +194,7 @@ function firstSessionBindingBindInput(): SessionBindingBindInput {
 }
 
 function buildCommandParams(params?: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   chatType?: string;
   senderId?: string;
   sessionEntry?: SessionEntry;
@@ -218,7 +218,7 @@ function buildCommandParams(params?: {
     elevated: { enabled: false, allowed: false, failures: [] },
     sessionEntry: params?.sessionEntry,
     sessionKey: "agent:main:main",
-    workspaceDir: "/tmp/NexisClaw-subagents-focus",
+    workspaceDir: "/tmp/GreenchClaw-subagents-focus",
     defaultGroupActivation: () => "mention",
     resolvedVerboseLevel: "off",
     resolvedReasoningLevel: "off",
@@ -231,7 +231,7 @@ function buildCommandParams(params?: {
 }
 
 function buildFocusContext(params?: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   chatType?: string;
   senderId?: string;
   token?: string;
@@ -390,8 +390,8 @@ describe("focus actions", () => {
                 spawnSessions: true,
               },
             },
-          } as NexisClawConfig["channels"],
-        } as NexisClawConfig,
+          } as GreenchClawConfig["channels"],
+        } as GreenchClawConfig,
       }),
     );
 
@@ -439,8 +439,8 @@ describe("focus actions", () => {
                 spawnSessions: false,
               },
             },
-          } as NexisClawConfig["channels"],
-        } as NexisClawConfig,
+          } as GreenchClawConfig["channels"],
+        } as GreenchClawConfig,
       }),
     );
 

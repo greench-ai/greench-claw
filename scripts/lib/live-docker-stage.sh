@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-NexisClaw_live_stage_source_tree() {
+GreenchClaw_live_stage_source_tree() {
   local dest_dir="${1:?destination directory required}"
-  local stage_mode="${NEXISCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}"
+  local stage_mode="${GREENCHCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE:-copy}"
 
   if [ "$stage_mode" = "symlink" ]; then
-    echo "NEXISCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE=symlink is disabled; using copy staging." >&2
+    echo "GREENCHCLAW_LIVE_DOCKER_SOURCE_STAGE_MODE=symlink is disabled; using copy staging." >&2
   fi
 
   set +e
@@ -22,7 +22,7 @@ NexisClaw_live_stage_source_tree() {
     --exclude=.tmp \
     --exclude=.tmp-precommit-venv \
     --exclude=.worktrees \
-    --exclude=__NexisClaw_vitest__ \
+    --exclude=__GreenchClaw_vitest__ \
     --exclude=relay.sock \
     --exclude='*.sock' \
     --exclude='*/*.sock' \
@@ -39,7 +39,7 @@ NexisClaw_live_stage_source_tree() {
   fi
 }
 
-NexisClaw_live_link_runtime_tree() {
+GreenchClaw_live_link_runtime_tree() {
   local dest_dir="${1:?destination directory required}"
 
   if [ ! -e "$dest_dir/node_modules" ]; then
@@ -47,13 +47,13 @@ NexisClaw_live_link_runtime_tree() {
   fi
   ln -s /app/dist "$dest_dir/dist"
   if [ -d /app/dist-runtime/extensions ]; then
-    export NEXISCLAW_BUNDLED_PLUGINS_DIR=/app/dist-runtime/extensions
+    export GREENCHCLAW_BUNDLED_PLUGINS_DIR=/app/dist-runtime/extensions
   elif [ -d /app/dist/extensions ]; then
-    export NEXISCLAW_BUNDLED_PLUGINS_DIR=/app/dist/extensions
+    export GREENCHCLAW_BUNDLED_PLUGINS_DIR=/app/dist/extensions
   fi
 }
 
-NexisClaw_live_stage_node_modules() {
+GreenchClaw_live_stage_node_modules() {
   local dest_dir="${1:?destination directory required}"
   local target_dir="$dest_dir/node_modules"
 
@@ -63,9 +63,9 @@ NexisClaw_live_stage_node_modules() {
   mkdir -p "$target_dir/.vite-temp"
 }
 
-NexisClaw_live_stage_state_dir() {
+GreenchClaw_live_stage_state_dir() {
   local dest_dir="${1:?destination directory required}"
-  local source_dir="${HOME}/.NexisClaw"
+  local source_dir="${HOME}/.GreenchClaw"
 
   mkdir -p "$dest_dir"
   if [ -d "$source_dir" ]; then
@@ -95,16 +95,16 @@ NexisClaw_live_stage_state_dir() {
     fi
   fi
 
-  export NEXISCLAW_STATE_DIR="$dest_dir"
-  export NEXISCLAW_CONFIG_PATH="$dest_dir/NexisClaw.json"
+  export GREENCHCLAW_STATE_DIR="$dest_dir"
+  export GREENCHCLAW_CONFIG_PATH="$dest_dir/GreenchClaw.json"
 }
 
-NexisClaw_live_prepare_staged_config() {
-  if [ ! -f "${NEXISCLAW_CONFIG_PATH:-}" ]; then
+GreenchClaw_live_prepare_staged_config() {
+  if [ ! -f "${GREENCHCLAW_CONFIG_PATH:-}" ]; then
     return 0
   fi
 
-  local scripts_dir="${NEXISCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
+  local scripts_dir="${GREENCHCLAW_LIVE_DOCKER_SCRIPTS_DIR:-/src/scripts}"
   (
     cd /app
     node --import tsx "$scripts_dir/live-docker-normalize-config.ts"

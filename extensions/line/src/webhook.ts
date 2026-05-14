@@ -3,8 +3,8 @@ import type { NextFunction, Request, Response } from "express";
 import {
   createMessageReceiveContext,
   type MessageReceiveContext,
-} from "NexisClaw/plugin-sdk/channel-message";
-import { danger, logVerbose, type RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/channel-message";
+import { danger, logVerbose, type RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import { parseLineWebhookBody, validateLineSignature } from "./webhook-utils.js";
 
 const LINE_WEBHOOK_MAX_RAW_BODY_BYTES = 64 * 1024;

@@ -7,7 +7,7 @@ read_when:
   - Looking for version naming and cadence
 ---
 
-NexisClaw has three public release lanes:
+GreenchClaw has three public release lanes:
 
 - stable: tagged releases that publish to npm `beta` by default, or to npm `latest` when explicitly requested
 - beta: prerelease tags that publish to npm `beta`
@@ -25,7 +25,7 @@ NexisClaw has three public release lanes:
 - `latest` means the current promoted stable npm release
 - `beta` means the current beta install target
 - Stable and stable correction releases publish to npm `beta` by default; release operators can target `latest` explicitly, or promote a vetted beta build later
-- Every stable NexisClaw release ships the npm package and macOS app together;
+- Every stable GreenchClaw release ships the npm package and macOS app together;
   beta releases normally validate and publish the npm/package path first, with
   mac app build/sign/notarize reserved for stable unless explicitly requested
 
@@ -66,7 +66,7 @@ the maintainer-only release runbook.
    drift before tagging. Then run the local deterministic preflight:
    `pnpm check:test-types`, `pnpm check:architecture`,
    `pnpm build && pnpm ui:build`, and `pnpm release:check`.
-6. Run `NexisClaw NPM Release` with `preflight_only=true`. Before a tag exists,
+6. Run `GreenchClaw NPM Release` with `preflight_only=true`. Before a tag exists,
    a full 40-character release-branch SHA is allowed for validation-only
    preflight. Save the successful `preflight_run_id`.
 7. Kick off all pre-release tests with `Full Release Validation` for the
@@ -76,38 +76,38 @@ the maintainer-only release runbook.
    file, lane, workflow job, package profile, provider, or model allowlist that
    proves the fix. Rerun the full umbrella only when the changed surface makes
    prior evidence stale.
-9. For beta, tag `vYYYY.M.D-beta.N`, then run `NexisClaw Release Publish` from
+9. For beta, tag `vYYYY.M.D-beta.N`, then run `GreenchClaw Release Publish` from
    the matching `release/YYYY.M.D` branch. It verifies `pnpm plugins:sync:check`,
    dispatches all publishable plugin packages to npm and the same set to
-   ClawHub in parallel, and then promotes the prepared NexisClaw npm preflight
+   ClawHub in parallel, and then promotes the prepared GreenchClaw npm preflight
    artifact with the matching dist-tag as soon as plugin npm publish succeeds.
-   After the NexisClaw npm publish child succeeds, it creates or updates the
+   After the GreenchClaw npm publish child succeeds, it creates or updates the
    matching GitHub release/prerelease page from the complete matching
    `CHANGELOG.md` section. Stable releases published to npm `latest` become the
    GitHub latest release; stable maintenance releases kept on npm `beta` are
    created with GitHub `latest=false`.
-   ClawHub publishing may still be running while NexisClaw npm publishes, but the
+   ClawHub publishing may still be running while GreenchClaw npm publishes, but the
    release publish workflow prints the child run IDs immediately. By default it
-   does not wait for ClawHub after dispatching it, so NexisClaw npm availability
+   does not wait for ClawHub after dispatching it, so GreenchClaw npm availability
    is not blocked by slower ClawHub approvals or registry work; set
    `wait_for_clawhub=true` when ClawHub must block workflow completion. The
    ClawHub path retries transient CLI dependency install failures, publishes
    preview-passing plugins even when one preview cell flakes, and ends with
    registry verification for every expected plugin version so partial publishes
    remain visible and retryable. After publish, run
-   `pnpm release:verify-beta -- YYYY.M.D-beta.N --NexisClaw-npm-run <run-id> --plugin-npm-run <run-id> --plugin-clawhub-run <run-id>`
+   `pnpm release:verify-beta -- YYYY.M.D-beta.N --GreenchClaw-npm-run <run-id> --plugin-npm-run <run-id> --plugin-clawhub-run <run-id>`
    to verify the GitHub prerelease, npm `beta` dist-tags, npm integrity,
    published install path, ClawHub exact versions, ClawHub artifacts, and child
    workflow conclusions from one command. Add `--rerun-failed-clawhub` when the
    ClawHub sidecar failed only in retryable jobs and should be rerun in place.
    Then run the post-publish package acceptance against the published
-   `NexisClaw@YYYY.M.D-beta.N` or
-   `NexisClaw@beta` package. If a pushed or published prerelease needs a fix,
+   `GreenchClaw@YYYY.M.D-beta.N` or
+   `GreenchClaw@beta` package. If a pushed or published prerelease needs a fix,
    cut the next matching prerelease number; do not delete or rewrite the old
    prerelease.
 10. For stable, continue only after the vetted beta or release candidate has the
     required validation evidence. Stable npm publish also goes through
-    `NexisClaw Release Publish`, reusing the successful preflight artifact via
+    `GreenchClaw Release Publish`, reusing the successful preflight artifact via
     `preflight_run_id`; stable macOS release readiness also requires the
     packaged `.zip`, `.dmg`, `.dSYM.zip`, and updated `appcast.xml` on `main`.
     The private macOS publish workflow publishes the signed appcast to public
@@ -137,7 +137,7 @@ the maintainer-only release runbook.
 - Run the manual `Full Release Validation` workflow before release approval to
   kick off all pre-release test boxes from one entrypoint. It accepts a branch,
   tag, or full commit SHA, dispatches manual `CI`, and dispatches
-  `NexisClaw Release Checks` for install smoke, package acceptance, cross-OS
+  `GreenchClaw Release Checks` for install smoke, package acceptance, cross-OS
   package checks, QA Lab parity, Matrix, and Telegram lanes. Stable/default runs
   keep exhaustive live/E2E and Docker release-path soak behind
   `run_release_soak=true`; `release_profile=full` forces soak on. With
@@ -156,7 +156,7 @@ the maintainer-only release runbook.
   `gh workflow run full-release-validation.yml --ref main -f ref=release/YYYY.M.D`
 - Run the manual `Package Acceptance` workflow when you want side-channel proof
   for a package candidate while release work continues. Use `source=npm` for
-  `NexisClaw@beta`, `NexisClaw@latest`, or an exact release version; `source=ref`
+  `GreenchClaw@beta`, `GreenchClaw@latest`, or an exact release version; `source=ref`
   to pack a trusted `package_ref` branch/tag/SHA with the current
   `workflow_ref` harness; `source=url` for an HTTPS tarball with a required
   SHA-256; or `source=artifact` for a tarball uploaded by another GitHub
@@ -169,7 +169,7 @@ the maintainer-only release runbook.
   the published baseline. `update-restart-auth` uses the candidate package as
   both the installed CLI and the package-under-test so it exercises the
   candidate update command's managed restart path.
-  Example: `gh workflow run package-acceptance.yml --ref main -f workflow_ref=main -f source=npm -f package_spec=NexisClaw@beta -f suite_profile=product -f published_upgrade_survivor_baseline=NexisClaw@2026.4.26 -f telegram_mode=mock-openai`
+  Example: `gh workflow run package-acceptance.yml --ref main -f workflow_ref=main -f source=npm -f package_spec=GreenchClaw@beta -f suite_profile=product -f published_upgrade_survivor_baseline=GreenchClaw@2026.4.26 -f telegram_mode=mock-openai`
   Common profiles:
   - `smoke`: install/channel/agent, gateway network, and config reload lanes
   - `package`: artifact-native package/update/restart/plugin lanes without OpenWebUI or live ClawHub
@@ -189,35 +189,35 @@ the maintainer-only release runbook.
   span names, bounded attributes, and content/identifier redaction without
   requiring Opik, Langfuse, or another external collector.
 - Run `pnpm release:check` before every tagged release
-- Run `NexisClaw Release Publish` for the mutating publish sequence after the
+- Run `GreenchClaw Release Publish` for the mutating publish sequence after the
   tag exists. Dispatch it from `release/YYYY.M.D` (or `main` when publishing a
-  main-reachable tag), pass the release tag and successful NexisClaw npm
+  main-reachable tag), pass the release tag and successful GreenchClaw npm
   `preflight_run_id`, and keep the default plugin publish scope
   `all-publishable` unless you are deliberately running a focused repair. The
-  workflow serializes plugin npm publish, plugin ClawHub publish, and NexisClaw
+  workflow serializes plugin npm publish, plugin ClawHub publish, and GreenchClaw
   npm publish so the core package is not published before its externalized
   plugins.
 - Release checks now run in a separate manual workflow:
-  `NexisClaw Release Checks`
-- `NexisClaw Release Checks` also runs the QA Lab mock parity lane plus the fast
+  `GreenchClaw Release Checks`
+- `GreenchClaw Release Checks` also runs the QA Lab mock parity lane plus the fast
   live Matrix profile and Telegram QA lane before release approval. The live
   lanes use the `qa-live-shared` environment; Telegram also uses Convex CI
   credential leases. Run the manual `QA-Lab - All Lanes` workflow with
   `matrix_profile=all` and `matrix_shards=true` when you want full Matrix
   transport, media, and E2EE inventory in parallel.
 - Cross-OS install and upgrade runtime validation is part of public
-  `NexisClaw Release Checks` and `Full Release Validation`, which call the
+  `GreenchClaw Release Checks` and `Full Release Validation`, which call the
   reusable workflow
-  `.github/workflows/NexisClaw-cross-os-release-checks-reusable.yml` directly
+  `.github/workflows/GreenchClaw-cross-os-release-checks-reusable.yml` directly
 - This split is intentional: keep the real npm release path short,
   deterministic, and artifact-focused, while slower live checks stay in their
   own lane so they do not stall or block publish
 - Secret-bearing release checks should be dispatched through `Full Release
 Validation` or from the `main`/release workflow ref so workflow logic and
   secrets stay controlled
-- `NexisClaw Release Checks` accepts a branch, tag, or full commit SHA as long
-  as the resolved commit is reachable from an NexisClaw branch or release tag
-- `NexisClaw NPM Release` validation-only preflight also accepts the current
+- `GreenchClaw Release Checks` accepts a branch, tag, or full commit SHA as long
+  as the resolved commit is reachable from an GreenchClaw branch or release tag
+- `GreenchClaw NPM Release` validation-only preflight also accepts the current
   full 40-character workflow-branch commit SHA without requiring a pushed tag
 - That SHA path is validation-only and cannot be promoted into a real publish
 - In SHA mode the workflow synthesizes `v<package.json version>` only for the
@@ -226,25 +226,25 @@ Validation` or from the `main`/release workflow ref so workflow logic and
   runners, while the non-mutating validation path can use the larger
   Blacksmith Linux runners
 - That workflow runs
-  `NEXISCLAW_LIVE_TEST=1 NEXISCLAW_LIVE_CACHE_TEST=1 pnpm test:live:cache`
+  `GREENCHCLAW_LIVE_TEST=1 GREENCHCLAW_LIVE_CACHE_TEST=1 pnpm test:live:cache`
   using both `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` workflow secrets
 - npm release preflight no longer waits on the separate release checks lane
 - Before tagging a release candidate locally, run
   `RELEASE_TAG=vYYYY.M.D-beta.N pnpm release:fast-pretag-check`. The helper
   runs the fast release guardrails, plugin npm/ClawHub release checks, build,
-  UI build, and `release:NexisClaw:npm:check` in the order that catches common
+  UI build, and `release:GreenchClaw:npm:check` in the order that catches common
   approval-blocking mistakes before the GitHub publish workflow starts.
-- Run `RELEASE_TAG=vYYYY.M.D node --import tsx scripts/NexisClaw-npm-release-check.ts`
+- Run `RELEASE_TAG=vYYYY.M.D node --import tsx scripts/GreenchClaw-npm-release-check.ts`
   (or the matching beta/correction tag) before approval
 - After npm publish, run
-  `node --import tsx scripts/NexisClaw-npm-postpublish-verify.ts YYYY.M.D`
+  `node --import tsx scripts/GreenchClaw-npm-postpublish-verify.ts YYYY.M.D`
   (or the matching beta/correction version) to verify the published registry
   install path in a fresh temp prefix
-- After a beta publish, run `NEXISCLAW_NPM_TELEGRAM_PACKAGE_SPEC=NexisClaw@YYYY.M.D-beta.N NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE=convex NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE=ci pnpm test:docker:npm-telegram-live`
+- After a beta publish, run `GREENCHCLAW_NPM_TELEGRAM_PACKAGE_SPEC=GreenchClaw@YYYY.M.D-beta.N GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE=convex GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE=ci pnpm test:docker:npm-telegram-live`
   to verify installed-package onboarding, Telegram setup, and real Telegram E2E
   against the published npm package using the shared leased Telegram credential
   pool. Local maintainer one-offs may omit the Convex vars and pass the three
-  `NEXISCLAW_QA_TELEGRAM_*` env credentials directly.
+  `GREENCHCLAW_QA_TELEGRAM_*` env credentials directly.
 - To run the full post-publish beta smoke from a maintainer machine, use `pnpm release:beta-smoke -- --beta betaN`. The helper runs Parallels npm update/fresh-target validation, dispatches `NPM Telegram Beta E2E`, polls the exact workflow run, downloads the artifact, and prints the Telegram report.
 - Maintainers can run the same post-publish check from GitHub Actions via the
   manual `NPM Telegram Beta E2E` workflow. It is intentionally manual-only and
@@ -256,7 +256,7 @@ Validation` or from the `main`/release workflow ref so workflow logic and
   - stable npm releases default to `beta`
   - stable npm publish can target `latest` explicitly via workflow input
   - token-based npm dist-tag mutation now lives in
-    `NexisClaw/releases-private/.github/workflows/NexisClaw-npm-dist-tags.yml`
+    `GreenchClaw/releases-private/.github/workflows/GreenchClaw-npm-dist-tags.yml`
     for security, because `npm dist-tag add` still needs `NPM_TOKEN` while the
     public repo keeps OIDC-only publish
   - public `macOS Release` is validation-only; when a tag lives only on a
@@ -320,15 +320,15 @@ gh workflow run full-release-validation.yml \
   -f provider=openai \
   -f mode=both \
   -f release_profile=stable \
-  -f evidence_package_spec=NexisClaw@YYYY.M.D-beta.N
+  -f evidence_package_spec=GreenchClaw@YYYY.M.D-beta.N
 ```
 
 The workflow resolves the target ref, dispatches manual `CI` with
-`target_ref=<release-ref>`, dispatches `NexisClaw Release Checks`, prepares a
+`target_ref=<release-ref>`, dispatches `GreenchClaw Release Checks`, prepares a
 parent `release-package-under-test` artifact for package-facing checks, and
 dispatches standalone package Telegram E2E when `release_profile=full` with
 `rerun_group=all` or when `release_package_spec` or
-`npm_telegram_package_spec` is set. `NexisClaw Release
+`npm_telegram_package_spec` is set. `GreenchClaw Release
 Checks` then fans out install smoke, cross-OS release checks, live/E2E Docker
 release-path coverage when soak is enabled, Package Acceptance with Telegram
 package QA, QA Lab parity, live Matrix, and live Telegram. A full run is only acceptable when the
@@ -364,15 +364,15 @@ baselines plus older `2026.4.15` coverage, with duplicate baselines removed and
 each baseline sharded into its own Docker runner job. `full` implies
 `run_release_soak=true`.
 
-`NexisClaw Release Checks` uses the trusted workflow ref to resolve the target
+`GreenchClaw Release Checks` uses the trusted workflow ref to resolve the target
 ref once as `release-package-under-test` and reuses that artifact in cross-OS,
 Package Acceptance, and release-path Docker checks when soak runs. This keeps
 all package-facing boxes on the same bytes and avoids repeated package builds.
-After a beta is already on npm, set `release_package_spec=NexisClaw@YYYY.M.D-beta.N`
+After a beta is already on npm, set `release_package_spec=GreenchClaw@YYYY.M.D-beta.N`
 so release checks download the shipped package once, extract its build source
 SHA from `dist/build-info.json`, and reuse that artifact for cross-OS,
 Package Acceptance, release-path Docker, and package Telegram lanes.
-The cross-OS OpenAI install smoke uses `NEXISCLAW_CROSS_OS_OPENAI_MODEL` when the
+The cross-OS OpenAI install smoke uses `GREENCHCLAW_CROSS_OS_OPENAI_MODEL` when the
 repo/org variable is set, otherwise `openai/gpt-5.4`, because this lane is
 proving package install, onboarding, gateway startup, and one live agent turn
 rather than benchmarking the slowest default model. The broader live provider
@@ -403,8 +403,8 @@ gh workflow run full-release-validation.yml \
   -f provider=openai \
   -f mode=both \
   -f release_profile=full \
-  -f release_package_spec=NexisClaw@YYYY.M.D-beta.N \
-  -f evidence_package_spec=NexisClaw@YYYY.M.D-beta.N \
+  -f release_package_spec=GreenchClaw@YYYY.M.D-beta.N \
+  -f evidence_package_spec=GreenchClaw@YYYY.M.D-beta.N \
   -f npm_telegram_provider_mode=mock-openai
 ```
 
@@ -454,8 +454,8 @@ gh workflow run ci.yml --ref main -f target_ref=release/YYYY.M.D
 
 ### Docker
 
-The Docker box lives in `NexisClaw Release Checks` through
-`NexisClaw-live-and-e2e-checks-reusable.yml`, plus the release-mode
+The Docker box lives in `GreenchClaw Release Checks` through
+`GreenchClaw-live-and-e2e-checks-reusable.yml`, plus the release-mode
 `install-smoke` workflow. It validates the release candidate through packaged
 Docker environments instead of only source-level tests.
 
@@ -490,7 +490,7 @@ failed lane can reuse the same tarball and GHCR images.
 
 ### QA Lab
 
-The QA Lab box is also part of `NexisClaw Release Checks`. It is the agentic
+The QA Lab box is also part of `GreenchClaw Release Checks`. It is the agentic
 behavior and channel-level release gate, separate from Vitest and Docker
 package mechanics.
 
@@ -511,21 +511,21 @@ manual sharded QA-Lab run rather than the default release-critical lane.
 
 The Package box is the installable-product gate. It is backed by
 `Package Acceptance` and the resolver
-`scripts/resolve-NexisClaw-package-candidate.mjs`. The resolver normalizes a
+`scripts/resolve-GreenchClaw-package-candidate.mjs`. The resolver normalizes a
 candidate into the `package-under-test` tarball consumed by Docker E2E, validates
 the package inventory, records the package version and SHA-256, and keeps the
 workflow harness ref separate from the package source ref.
 
 Supported candidate sources:
 
-- `source=npm`: `NexisClaw@beta`, `NexisClaw@latest`, or an exact NexisClaw release
+- `source=npm`: `GreenchClaw@beta`, `GreenchClaw@latest`, or an exact GreenchClaw release
   version
 - `source=ref`: pack a trusted `package_ref` branch, tag, or full commit SHA
   with the selected `workflow_ref` harness
 - `source=url`: download an HTTPS `.tgz` with required `package_sha256`
 - `source=artifact`: reuse a `.tgz` uploaded by another GitHub Actions run
 
-`NexisClaw Release Checks` runs Package Acceptance with `source=artifact`, the
+`GreenchClaw Release Checks` runs Package Acceptance with `source=artifact`, the
 prepared release package artifact, `suite_profile=custom`,
 `docker_lanes=doctor-switch update-channel-switch skill-install update-corrupt-plugin upgrade-survivor published-upgrade-survivor update-restart-auth plugins-offline plugin-update`,
 `telegram_mode=mock-openai`. Package Acceptance keeps migration, update,
@@ -569,9 +569,9 @@ gh workflow run package-acceptance.yml \
   --ref main \
   -f workflow_ref=main \
   -f source=npm \
-  -f package_spec=NexisClaw@beta \
+  -f package_spec=GreenchClaw@beta \
   -f suite_profile=product \
-  -f published_upgrade_survivor_baseline=NexisClaw@2026.4.26
+  -f published_upgrade_survivor_baseline=GreenchClaw@2026.4.26
 ```
 
 Common package profiles:
@@ -592,7 +592,7 @@ Telegram workflow still accepts a published npm spec for post-publish checks.
 
 ## Release publish automation
 
-`NexisClaw Release Publish` is the normal mutating publish entrypoint. It
+`GreenchClaw Release Publish` is the normal mutating publish entrypoint. It
 orchestrates the trusted-publisher workflows in the order the release needs:
 
 1. Check out the release tag and resolve its commit SHA.
@@ -601,48 +601,48 @@ orchestrates the trusted-publisher workflows in the order the release needs:
 4. Dispatch `Plugin NPM Release` with `publish_scope=all-publishable` and
    `ref=<release-sha>`.
 5. Dispatch `Plugin ClawHub Release` with the same scope and SHA.
-6. Dispatch `NexisClaw NPM Release` with the release tag, npm dist-tag, and
+6. Dispatch `GreenchClaw NPM Release` with the release tag, npm dist-tag, and
    saved `preflight_run_id`.
 
 Beta publish example:
 
 ```bash
-gh workflow run NexisClaw-release-publish.yml \
+gh workflow run GreenchClaw-release-publish.yml \
   --ref release/YYYY.M.D \
   -f tag=vYYYY.M.D-beta.N \
-  -f preflight_run_id=<successful-NexisClaw-npm-preflight-run-id> \
+  -f preflight_run_id=<successful-GreenchClaw-npm-preflight-run-id> \
   -f npm_dist_tag=beta
 ```
 
 Stable publish to the default beta dist-tag:
 
 ```bash
-gh workflow run NexisClaw-release-publish.yml \
+gh workflow run GreenchClaw-release-publish.yml \
   --ref release/YYYY.M.D \
   -f tag=vYYYY.M.D \
-  -f preflight_run_id=<successful-NexisClaw-npm-preflight-run-id> \
+  -f preflight_run_id=<successful-GreenchClaw-npm-preflight-run-id> \
   -f npm_dist_tag=beta
 ```
 
 Stable promotion directly to `latest` is explicit:
 
 ```bash
-gh workflow run NexisClaw-release-publish.yml \
+gh workflow run GreenchClaw-release-publish.yml \
   --ref release/YYYY.M.D \
   -f tag=vYYYY.M.D \
-  -f preflight_run_id=<successful-NexisClaw-npm-preflight-run-id> \
+  -f preflight_run_id=<successful-GreenchClaw-npm-preflight-run-id> \
   -f npm_dist_tag=latest
 ```
 
 Use the lower-level `Plugin NPM Release` and `Plugin ClawHub Release` workflows
 only for focused repair or republish work. For a selected plugin repair, pass
-`plugin_publish_scope=selected` and `plugins=@NexisClaw/name` to
-`NexisClaw Release Publish`, or dispatch the child workflow directly when the
-NexisClaw package must not be published.
+`plugin_publish_scope=selected` and `plugins=@GreenchClaw/name` to
+`GreenchClaw Release Publish`, or dispatch the child workflow directly when the
+GreenchClaw package must not be published.
 
 ## NPM workflow inputs
 
-`NexisClaw NPM Release` accepts these operator-controlled inputs:
+`GreenchClaw NPM Release` accepts these operator-controlled inputs:
 
 - `tag`: required release tag such as `v2026.4.2`, `v2026.4.2-1`, or
   `v2026.4.2-beta.1`; when `preflight_only=true`, it may also be the current
@@ -653,26 +653,26 @@ NexisClaw package must not be published.
   the prepared tarball from the successful preflight run
 - `npm_dist_tag`: npm target tag for the publish path; defaults to `beta`
 
-`NexisClaw Release Publish` accepts these operator-controlled inputs:
+`GreenchClaw Release Publish` accepts these operator-controlled inputs:
 
 - `tag`: required release tag; must already exist
-- `preflight_run_id`: successful `NexisClaw NPM Release` preflight run id;
-  required when `publish_NexisClaw_npm=true`
-- `npm_dist_tag`: npm target tag for the NexisClaw package
+- `preflight_run_id`: successful `GreenchClaw NPM Release` preflight run id;
+  required when `publish_GreenchClaw_npm=true`
+- `npm_dist_tag`: npm target tag for the GreenchClaw package
 - `plugin_publish_scope`: defaults to `all-publishable`; use `selected` only
   for focused repair work
-- `plugins`: comma-separated `@NexisClaw/*` package names when
+- `plugins`: comma-separated `@GreenchClaw/*` package names when
   `plugin_publish_scope=selected`
-- `publish_NexisClaw_npm`: defaults to `true`; set `false` only when using the
+- `publish_GreenchClaw_npm`: defaults to `true`; set `false` only when using the
   workflow as a plugin-only repair orchestrator
 - `wait_for_clawhub`: defaults to `false` so npm availability is not blocked by
   the ClawHub sidecar; set `true` only when workflow completion must include
   ClawHub completion
 
-`NexisClaw Release Checks` accepts these operator-controlled inputs:
+`GreenchClaw Release Checks` accepts these operator-controlled inputs:
 
 - `ref`: branch, tag, or full commit SHA to validate. Secret-bearing checks
-  require the resolved commit to be reachable from an NexisClaw branch or
+  require the resolved commit to be reachable from an GreenchClaw branch or
   release tag.
 - `run_release_soak`: opt into exhaustive live/E2E, Docker release-path, and
   all-since upgrade-survivor soak on stable/default release checks. It is forced
@@ -682,9 +682,9 @@ Rules:
 
 - Stable and correction tags may publish to either `beta` or `latest`
 - Beta prerelease tags may publish only to `beta`
-- For `NexisClaw NPM Release`, full commit SHA input is allowed only when
+- For `GreenchClaw NPM Release`, full commit SHA input is allowed only when
   `preflight_only=true`
-- `NexisClaw Release Checks` and `Full Release Validation` are always
+- `GreenchClaw Release Checks` and `Full Release Validation` are always
   validation-only
 - The real publish path must use the same `npm_dist_tag` used during preflight;
   the workflow verifies that metadata before publish continues
@@ -693,7 +693,7 @@ Rules:
 
 When cutting a stable npm release:
 
-1. Run `NexisClaw NPM Release` with `preflight_only=true`
+1. Run `GreenchClaw NPM Release` with `preflight_only=true`
    - Before a tag exists, you may use the current full workflow-branch commit
      SHA for a validation-only dry run of the preflight workflow
 2. Choose `npm_dist_tag=beta` for the normal beta-first flow, or `latest` only
@@ -704,11 +704,11 @@ When cutting a stable npm release:
 4. If you intentionally only need the deterministic normal test graph, run the
    manual `CI` workflow on the release ref instead
 5. Save the successful `preflight_run_id`
-6. Run `NexisClaw Release Publish` with the same `tag`, the same `npm_dist_tag`,
+6. Run `GreenchClaw Release Publish` with the same `tag`, the same `npm_dist_tag`,
    and the saved `preflight_run_id`; it publishes externalized plugins to npm
-   and ClawHub before promoting the NexisClaw npm package
+   and ClawHub before promoting the GreenchClaw npm package
 7. If the release landed on `beta`, use the private
-   `NexisClaw/releases-private/.github/workflows/NexisClaw-npm-dist-tags.yml`
+   `GreenchClaw/releases-private/.github/workflows/GreenchClaw-npm-dist-tags.yml`
    workflow to promote that stable version from `beta` to `latest`
 8. If the release intentionally published directly to `latest` and `beta`
    should follow the same stable build immediately, use that same private
@@ -728,18 +728,18 @@ alerts, and OTP handling observable and prevents repeated host alerts.
 
 ## Public references
 
-- [`.github/workflows/full-release-validation.yml`](https://github.com/NexisClaw/NexisClaw/blob/main/.github/workflows/full-release-validation.yml)
-- [`.github/workflows/package-acceptance.yml`](https://github.com/NexisClaw/NexisClaw/blob/main/.github/workflows/package-acceptance.yml)
-- [`.github/workflows/NexisClaw-npm-release.yml`](https://github.com/NexisClaw/NexisClaw/blob/main/.github/workflows/NexisClaw-npm-release.yml)
-- [`.github/workflows/NexisClaw-release-checks.yml`](https://github.com/NexisClaw/NexisClaw/blob/main/.github/workflows/NexisClaw-release-checks.yml)
-- [`.github/workflows/NexisClaw-cross-os-release-checks-reusable.yml`](https://github.com/NexisClaw/NexisClaw/blob/main/.github/workflows/NexisClaw-cross-os-release-checks-reusable.yml)
-- [`scripts/resolve-NexisClaw-package-candidate.mjs`](https://github.com/NexisClaw/NexisClaw/blob/main/scripts/resolve-NexisClaw-package-candidate.mjs)
-- [`scripts/NexisClaw-npm-release-check.ts`](https://github.com/NexisClaw/NexisClaw/blob/main/scripts/NexisClaw-npm-release-check.ts)
-- [`scripts/package-mac-dist.sh`](https://github.com/NexisClaw/NexisClaw/blob/main/scripts/package-mac-dist.sh)
-- [`scripts/make_appcast.sh`](https://github.com/NexisClaw/NexisClaw/blob/main/scripts/make_appcast.sh)
+- [`.github/workflows/full-release-validation.yml`](https://github.com/GreenchClaw/GreenchClaw/blob/main/.github/workflows/full-release-validation.yml)
+- [`.github/workflows/package-acceptance.yml`](https://github.com/GreenchClaw/GreenchClaw/blob/main/.github/workflows/package-acceptance.yml)
+- [`.github/workflows/GreenchClaw-npm-release.yml`](https://github.com/GreenchClaw/GreenchClaw/blob/main/.github/workflows/GreenchClaw-npm-release.yml)
+- [`.github/workflows/GreenchClaw-release-checks.yml`](https://github.com/GreenchClaw/GreenchClaw/blob/main/.github/workflows/GreenchClaw-release-checks.yml)
+- [`.github/workflows/GreenchClaw-cross-os-release-checks-reusable.yml`](https://github.com/GreenchClaw/GreenchClaw/blob/main/.github/workflows/GreenchClaw-cross-os-release-checks-reusable.yml)
+- [`scripts/resolve-GreenchClaw-package-candidate.mjs`](https://github.com/GreenchClaw/GreenchClaw/blob/main/scripts/resolve-GreenchClaw-package-candidate.mjs)
+- [`scripts/GreenchClaw-npm-release-check.ts`](https://github.com/GreenchClaw/GreenchClaw/blob/main/scripts/GreenchClaw-npm-release-check.ts)
+- [`scripts/package-mac-dist.sh`](https://github.com/GreenchClaw/GreenchClaw/blob/main/scripts/package-mac-dist.sh)
+- [`scripts/make_appcast.sh`](https://github.com/GreenchClaw/GreenchClaw/blob/main/scripts/make_appcast.sh)
 
 Maintainers use the private release docs in
-[`NexisClaw/maintainers/release/README.md`](https://github.com/NexisClaw/maintainers/blob/main/release/README.md)
+[`GreenchClaw/maintainers/release/README.md`](https://github.com/GreenchClaw/maintainers/blob/main/release/README.md)
 for the actual runbook.
 
 ## Related

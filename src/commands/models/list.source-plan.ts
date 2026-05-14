@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { NormalizedModelCatalogRow } from "../../model-catalog/index.js";
 
 export type ModelListSourcePlanKind =
@@ -46,7 +46,7 @@ export async function planAllModelListSources(params: {
   all?: boolean;
   enableCascade?: boolean;
   providerFilter?: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): Promise<ModelListSourcePlan> {
   const enableCascade = params.enableCascade ?? params.all;
   if (!enableCascade) {

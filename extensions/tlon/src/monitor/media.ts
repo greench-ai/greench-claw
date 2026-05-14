@@ -1,14 +1,14 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import * as path from "node:path";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { extensionForMime } from "NexisClaw/plugin-sdk/media-mime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { extensionForMime } from "GreenchClaw/plugin-sdk/media-mime";
 import {
   fetchRemoteMedia,
   MAX_IMAGE_BYTES,
   saveMediaBuffer,
-} from "NexisClaw/plugin-sdk/media-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/media-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { getDefaultSsrFPolicy } from "../urbit/context.js";
 
 const MAX_IMAGES_PER_MESSAGE = 8;
@@ -134,7 +134,7 @@ function getExtensionFromUrl(url: string): string | null {
 
 /**
  * Download all images from a message and return attachment metadata.
- * Format matches NexisClaw's expected attachment structure.
+ * Format matches GreenchClaw's expected attachment structure.
  */
 export async function downloadMessageImages(
   content: unknown,

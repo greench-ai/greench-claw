@@ -2,7 +2,7 @@ import {
   createDelegatedSetupWizardProxy,
   createPatchedAccountSetupAdapter,
   type ChannelSetupWizard,
-} from "NexisClaw/plugin-sdk/setup-runtime";
+} from "GreenchClaw/plugin-sdk/setup-runtime";
 
 const channel = "zalouser" as const;
 

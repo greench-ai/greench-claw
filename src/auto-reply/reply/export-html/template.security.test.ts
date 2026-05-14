@@ -95,10 +95,10 @@ async function renderTemplate(sessionData: SessionData) {
     (currentHtml, [name, value]) =>
       currentHtml.replace(
         new RegExp(
-          `(<(?:script|style)\\b(?=[^>]*\\bdata-NexisClaw-export-placeholder="${name}")[^>]*>)(</(?:script|style)>)`,
+          `(<(?:script|style)\\b(?=[^>]*\\bdata-GreenchClaw-export-placeholder="${name}")[^>]*>)(</(?:script|style)>)`,
         ),
         (_match: string, openTag: string, closeTag: string) =>
-          `${openTag.replace(/\sdata-NexisClaw-export-placeholder="[^"]*"/, "")}${value}${closeTag}`,
+          `${openTag.replace(/\sdata-GreenchClaw-export-placeholder="[^"]*"/, "")}${value}${closeTag}`,
       ),
     templateHtml,
   );

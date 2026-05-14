@@ -9,7 +9,7 @@ vi.mock("./client.js", () => ({
   createSlackWebClient: createSlackWebClientMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/text-utility-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/text-utility-runtime", () => ({
   withTimeout: withTimeoutMock,
 }));
 
@@ -40,17 +40,17 @@ describe("probeSlack", () => {
     authTestMock.mockResolvedValue({
       ok: true,
       user_id: "U123",
-      user: "NexisClaw-bot",
+      user: "GreenchClaw-bot",
       team_id: "T123",
-      team: "NexisClaw",
+      team: "GreenchClaw",
     });
 
     await expect(probeSlack("xoxb-test", 2500)).resolves.toEqual({
       ok: true,
       status: 200,
       elapsedMs: 45,
-      bot: { id: "U123", name: "NexisClaw-bot" },
-      team: { id: "T123", name: "NexisClaw" },
+      bot: { id: "U123", name: "GreenchClaw-bot" },
+      team: { id: "T123", name: "GreenchClaw" },
     });
     expect(createSlackWebClientMock).toHaveBeenCalledWith("xoxb-test");
     expect(withTimeoutMock).toHaveBeenCalledTimes(1);

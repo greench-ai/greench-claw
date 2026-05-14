@@ -1,7 +1,7 @@
-import type * as ConversationRuntime from "NexisClaw/plugin-sdk/conversation-runtime";
-import { createRuntimeEnv } from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import type { ResolvedAgentRoute } from "NexisClaw/plugin-sdk/routing";
-import { resolveGroupSessionKey } from "NexisClaw/plugin-sdk/session-store-runtime";
+import type * as ConversationRuntime from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { createRuntimeEnv } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import type { ResolvedAgentRoute } from "GreenchClaw/plugin-sdk/routing";
+import { resolveGroupSessionKey } from "GreenchClaw/plugin-sdk/session-store-runtime";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ClawdbotConfig, PluginRuntime } from "../runtime-api.js";
 import type { FeishuMessageEvent } from "./bot.js";
@@ -349,10 +349,10 @@ vi.mock("./dynamic-agent.js", () => ({
   maybeCreateDynamicAgent: mockMaybeCreateDynamicAgent,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/conversation-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/conversation-runtime")>(
-    "NexisClaw/plugin-sdk/conversation-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/conversation-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/conversation-runtime")
+  >("GreenchClaw/plugin-sdk/conversation-runtime");
   return {
     ...actual,
     resolveConfiguredBindingRoute: (params: unknown) =>
@@ -397,7 +397,7 @@ afterAll(() => {
   vi.doUnmock("./media.js");
   vi.doUnmock("./audio-preflight.runtime.js");
   vi.doUnmock("./client.js");
-  vi.doUnmock("NexisClaw/plugin-sdk/conversation-runtime");
+  vi.doUnmock("GreenchClaw/plugin-sdk/conversation-runtime");
   vi.resetModules();
 });
 

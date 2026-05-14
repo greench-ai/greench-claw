@@ -11,11 +11,11 @@ describe("npm project install env", () => {
     try {
       expect(
         createNpmProjectInstallEnv({
-          PATH: "/tmp/NexisClaw-npm-global/bin",
+          PATH: "/tmp/GreenchClaw-npm-global/bin",
         }),
       ).toEqual({
         NPM_CONFIG_SCRIPT_SHELL: "/bin/sh",
-        PATH: "/tmp/NexisClaw-npm-global/bin",
+        PATH: "/tmp/GreenchClaw-npm-global/bin",
         npm_config_dry_run: "false",
         npm_config_fetch_retries: "5",
         npm_config_fetch_retry_maxtimeout: "120000",

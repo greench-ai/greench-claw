@@ -11,7 +11,7 @@ Adds agent-callable tools.
 
 ## Distribution
 
-- Package: `@NexisClaw/memory-lancedb`
+- Package: `@GreenchClaw/memory-lancedb`
 - Install route: npm; ClawHub
 
 ## Surface

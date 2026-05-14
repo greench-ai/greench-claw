@@ -1,4 +1,4 @@
-import { createLegacyPrivateNetworkDoctorContract } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { createLegacyPrivateNetworkDoctorContract } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 
 const contract = createLegacyPrivateNetworkDoctorContract({
   channelKey: "nextcloud-talk",

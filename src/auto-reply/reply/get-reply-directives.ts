@@ -5,7 +5,7 @@ import { type ModelAliasIndex, resolveModelRefFromString } from "../../agents/mo
 import { resolveSandboxRuntimeStatus } from "../../agents/sandbox/runtime-status.js";
 import type { SkillCommandSpec } from "../../agents/skills.js";
 import type { SessionEntry } from "../../config/sessions.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { normalizeAgentId } from "../../routing/session-key.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 import {
@@ -45,7 +45,7 @@ import { stripInlineStatus } from "./reply-inline.js";
 import { resolveRuntimePolicySessionKey } from "./runtime-policy-session-key.js";
 import type { TypingController } from "./typing.js";
 
-type AgentDefaults = NonNullable<NexisClawConfig["agents"]>["defaults"];
+type AgentDefaults = NonNullable<GreenchClawConfig["agents"]>["defaults"];
 
 const commandsRegistryLoader = createLazyImportLoader(
   () => import("../commands-registry.runtime.js"),
@@ -148,7 +148,7 @@ export type ReplyDirectiveResult =
 
 export async function resolveReplyDirectives(params: {
   ctx: MsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   agentDir: string;
   workspaceDir: string;
@@ -496,7 +496,7 @@ export async function resolveReplyDirectives(params: {
     : undefined;
   const useFastReplyRuntime = shouldUseReplyFastTestRuntime({
     cfg,
-    isFastTestEnv: process.env.NEXISCLAW_TEST_FAST === "1",
+    isFastTestEnv: process.env.GREENCHCLAW_TEST_FAST === "1",
   });
 
   const useFastModelSelection =

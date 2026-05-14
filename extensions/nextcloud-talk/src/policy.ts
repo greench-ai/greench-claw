@@ -3,7 +3,7 @@ import {
   normalizeChannelSlug,
   resolveChannelEntryMatchWithFallback,
   resolveNestedAllowlistDecision,
-} from "NexisClaw/plugin-sdk/channel-targets";
+} from "GreenchClaw/plugin-sdk/channel-targets";
 import type { AllowlistMatch, ChannelGroupContext, GroupToolPolicyConfig } from "../runtime-api.js";
 import type { NextcloudTalkRoomConfig } from "./types.js";
 

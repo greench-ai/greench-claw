@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { HookNpmIntegrityDriftParams } from "./install.js";
 
 const installHooksFromNpmSpecMock = vi.fn();
@@ -15,7 +15,7 @@ function createHookInstallConfig(params: {
   hookId: string;
   spec: string;
   integrity?: string;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   return {
     hooks: {
       internal: {
@@ -29,7 +29,7 @@ function createHookInstallConfig(params: {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 describe("updateNpmInstalledHookPacks", () => {
@@ -50,14 +50,15 @@ describe("updateNpmInstalledHookPacks", () => {
           actualIntegrity: "sha512-new",
           resolution: {
             integrity: "sha512-new",
-            resolvedSpec: "@NexisClaw/demo-hooks@1.0.0",
+            resolvedSpec: "@GreenchClaw/demo-hooks@1.0.0",
             version: "1.0.0",
           },
         });
         if (proceed === false) {
           return {
             ok: false,
-            error: "aborted: npm package integrity drift detected for @NexisClaw/demo-hooks@1.0.0",
+            error:
+              "aborted: npm package integrity drift detected for @GreenchClaw/demo-hooks@1.0.0",
           };
         }
         return {
@@ -72,7 +73,7 @@ describe("updateNpmInstalledHookPacks", () => {
 
     const config = createHookInstallConfig({
       hookId: "demo-hooks",
-      spec: "@NexisClaw/demo-hooks@1.0.0",
+      spec: "@GreenchClaw/demo-hooks@1.0.0",
       integrity: "sha512-old",
     });
     const result = await updateNpmInstalledHookPacks({
@@ -82,7 +83,7 @@ describe("updateNpmInstalledHookPacks", () => {
     });
 
     expect(warn).toHaveBeenCalledWith(
-      'Integrity drift for hook pack "demo-hooks" (@NexisClaw/demo-hooks@1.0.0): expected sha512-old, got sha512-new',
+      'Integrity drift for hook pack "demo-hooks" (@GreenchClaw/demo-hooks@1.0.0): expected sha512-old, got sha512-new',
     );
     expect(result.changed).toBe(false);
     expect(result.config).toBe(config);
@@ -91,7 +92,7 @@ describe("updateNpmInstalledHookPacks", () => {
         hookId: "demo-hooks",
         status: "error",
         message:
-          'Failed to update hook pack "demo-hooks": aborted: npm package integrity drift detected for @NexisClaw/demo-hooks@1.0.0',
+          'Failed to update hook pack "demo-hooks": aborted: npm package integrity drift detected for @GreenchClaw/demo-hooks@1.0.0',
       },
     ]);
   });

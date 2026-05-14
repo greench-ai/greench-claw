@@ -1,5 +1,8 @@
 import { createInterface, type Interface as ReadlineInterface } from "node:readline";
-import { embeddedAgentLog, NEXISCLAW_VERSION } from "NexisClaw/plugin-sdk/agent-harness-runtime";
+import {
+  embeddedAgentLog,
+  GREENCHCLAW_VERSION,
+} from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import { resolveCodexAppServerRuntimeOptions, type CodexAppServerStartOptions } from "./config.js";
 import {
   type CodexAppServerRequestMethod,
@@ -142,9 +145,9 @@ export class CodexAppServerClient {
     // which matters when callers override the binary or app-server args.
     const response = await this.request("initialize", {
       clientInfo: {
-        name: "NexisClaw",
-        title: "NexisClaw",
-        version: NEXISCLAW_VERSION,
+        name: "GreenchClaw",
+        title: "GreenchClaw",
+        version: GREENCHCLAW_VERSION,
       },
       capabilities: {
         experimentalApi: true,
@@ -478,7 +481,7 @@ function defaultServerRequestResponse(
       contentItems: [
         {
           type: "inputText",
-          text: "NexisClaw did not register a handler for this app-server tool call.",
+          text: "GreenchClaw did not register a handler for this app-server tool call.",
         },
       ],
       success: false,
@@ -496,7 +499,7 @@ function defaultServerRequestResponse(
   if (isCodexAppServerApprovalRequest(request.method)) {
     return {
       decision: "decline",
-      reason: "NexisClaw codex app-server bridge does not grant native approvals yet.",
+      reason: "GreenchClaw codex app-server bridge does not grant native approvals yet.",
     };
   }
   if (request.method === "item/tool/requestUserInput") {
@@ -522,7 +525,7 @@ function timeoutServerRequestResponse(
     contentItems: [
       {
         type: "inputText",
-        text: `NexisClaw dynamic tool call timed out after ${CODEX_DYNAMIC_TOOL_SERVER_REQUEST_TIMEOUT_MS}ms before sending a response to Codex.`,
+        text: `GreenchClaw dynamic tool call timed out after ${CODEX_DYNAMIC_TOOL_SERVER_REQUEST_TIMEOUT_MS}ms before sending a response to Codex.`,
       },
     ],
     success: false,
@@ -533,7 +536,7 @@ function assertSupportedCodexAppServerVersion(response: CodexInitializeResponse)
   const detectedVersion = readCodexVersionFromUserAgent(response.userAgent);
   if (!detectedVersion) {
     throw new Error(
-      `Codex app-server ${MIN_CODEX_APP_SERVER_VERSION} or newer is required, but NexisClaw could not determine the running Codex version. Update the configured Codex app-server binary, or remove custom command overrides to use the managed binary.`,
+      `Codex app-server ${MIN_CODEX_APP_SERVER_VERSION} or newer is required, but GreenchClaw could not determine the running Codex version. Update the configured Codex app-server binary, or remove custom command overrides to use the managed binary.`,
     );
   }
   if (compareVersions(detectedVersion, MIN_CODEX_APP_SERVER_VERSION) < 0) {
@@ -545,7 +548,7 @@ function assertSupportedCodexAppServerVersion(response: CodexInitializeResponse)
 
 export function readCodexVersionFromUserAgent(userAgent: string | undefined): string | undefined {
   // Codex returns `<originator>/<codex-version> ...`; the originator can be
-  // NexisClaw, Codex Desktop, or an env override, so only the slash-delimited
+  // GreenchClaw, Codex Desktop, or an env override, so only the slash-delimited
   // version in the leading product field is stable.
   const match = userAgent?.match(
     /^[^/]+\/(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?)(?:[\s(]|$)/,

@@ -30,12 +30,12 @@ describe("exec allowlist matching", () => {
   it("does not let bare command-name patterns match path-selected executables", () => {
     const relativeResolution = {
       rawExecutable: "./rg",
-      resolvedPath: "/tmp/NexisClaw-workspace/rg",
+      resolvedPath: "/tmp/GreenchClaw-workspace/rg",
       executableName: "rg",
     };
     const absoluteResolution = {
-      rawExecutable: "/tmp/NexisClaw-workspace/rg",
-      resolvedPath: "/tmp/NexisClaw-workspace/rg",
+      rawExecutable: "/tmp/GreenchClaw-workspace/rg",
+      resolvedPath: "/tmp/GreenchClaw-workspace/rg",
       executableName: "rg",
     };
 

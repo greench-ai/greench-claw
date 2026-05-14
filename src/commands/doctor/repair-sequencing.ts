@@ -1,7 +1,7 @@
 import { applyPluginAutoEnable } from "../../config/plugin-auto-enable.js";
 import { sanitizeForLog } from "../../terminal/ansi.js";
 import {
-  maybeRepairManagedNpmNexisClawPeerLinks,
+  maybeRepairManagedNpmGreenchClawPeerLinks,
   maybeRepairStaleManagedNpmBundledPlugins,
 } from "../doctor-plugin-registry.js";
 import { maybeRepairAllowlistPolicyAllowFrom } from "./shared/allowlist-policy-repair.js";
@@ -72,7 +72,7 @@ export async function runDoctorRepairSequence(params: {
     env,
     prompter: { shouldRepair: true },
   });
-  await maybeRepairManagedNpmNexisClawPeerLinks({
+  await maybeRepairManagedNpmGreenchClawPeerLinks({
     config: state.candidate,
     env,
     prompter: { shouldRepair: true },

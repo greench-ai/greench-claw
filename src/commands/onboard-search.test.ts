@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { PluginWebSearchProviderEntry } from "../plugins/types.js";
 import type { RuntimeEnv } from "../runtime.js";
 import type { WizardPrompter } from "../wizard/prompts.js";
@@ -47,12 +47,12 @@ const SEARCH_PROVIDER_PLUGINS: Record<
   tavily: { pluginId: "tavily", envVars: ["TAVILY_API_KEY"], label: "Tavily" },
 };
 
-function getWebSearchConfig(config: NexisClawConfig | undefined, pluginId: string) {
+function getWebSearchConfig(config: GreenchClawConfig | undefined, pluginId: string) {
   return (config as WebSearchConfigRecord | undefined)?.plugins?.entries?.[pluginId]?.config
     ?.webSearch;
 }
 
-function ensureWebSearchConfig(config: NexisClawConfig, pluginId: string) {
+function ensureWebSearchConfig(config: GreenchClawConfig, pluginId: string) {
   const entries = ((config.plugins ??= {}).entries ??= {});
   const pluginEntry = (entries[pluginId] ??= {}) as {
     enabled?: boolean;
@@ -89,9 +89,9 @@ function createSearchProviderEntry(id: string): PluginWebSearchProviderEntry {
     },
     createTool: () => null,
     applySelectionConfig: (config) => {
-      const next: NexisClawConfig = { ...config, plugins: { ...config.plugins } };
+      const next: GreenchClawConfig = { ...config, plugins: { ...config.plugins } };
       const entries = { ...next.plugins?.entries } as NonNullable<
-        NonNullable<NexisClawConfig["plugins"]>["entries"]
+        NonNullable<GreenchClawConfig["plugins"]>["entries"]
       >;
       entries[metadata.pluginId] = { ...entries[metadata.pluginId], enabled: true };
       next.plugins = { ...next.plugins, entries };
@@ -190,7 +190,7 @@ function mockCalls<T extends unknown[]>(fn: unknown): T[] {
   return (fn as { mock: { calls: T[] } }).mock.calls;
 }
 
-function createPerplexityConfig(apiKey: string, enabled?: boolean): NexisClawConfig {
+function createPerplexityConfig(apiKey: string, enabled?: boolean): GreenchClawConfig {
   return {
     tools: {
       web: {
@@ -214,7 +214,7 @@ function createPerplexityConfig(apiKey: string, enabled?: boolean): NexisClawCon
   };
 }
 
-function pluginWebSearchApiKey(config: NexisClawConfig, pluginId: string): unknown {
+function pluginWebSearchApiKey(config: GreenchClawConfig, pluginId: string): unknown {
   const entry = (
     config.plugins?.entries as
       | Record<string, { config?: { webSearch?: { apiKey?: unknown } } }>
@@ -223,7 +223,7 @@ function pluginWebSearchApiKey(config: NexisClawConfig, pluginId: string): unkno
   return entry?.config?.webSearch?.apiKey;
 }
 
-function createDisabledFirecrawlConfig(apiKey?: string): NexisClawConfig {
+function createDisabledFirecrawlConfig(apiKey?: string): GreenchClawConfig {
   return {
     tools: {
       web: {
@@ -251,7 +251,7 @@ function createDisabledFirecrawlConfig(apiKey?: string): NexisClawConfig {
   };
 }
 
-function readFirecrawlPluginApiKey(config: NexisClawConfig): string | undefined {
+function readFirecrawlPluginApiKey(config: GreenchClawConfig): string | undefined {
   const pluginConfig = config.plugins?.entries?.firecrawl?.config as
     | {
         webSearch?: {
@@ -265,7 +265,7 @@ function readFirecrawlPluginApiKey(config: NexisClawConfig): string | undefined 
 async function runBlankPerplexityKeyEntry(
   apiKey: string,
   enabled?: boolean,
-): Promise<NexisClawConfig> {
+): Promise<GreenchClawConfig> {
   const cfg = createPerplexityConfig(apiKey, enabled);
   const { prompter } = createPrompter({
     selectValue: "perplexity",
@@ -277,7 +277,7 @@ async function runBlankPerplexityKeyEntry(
 async function runQuickstartPerplexitySetup(
   apiKey: string,
   enabled?: boolean,
-): Promise<{ result: NexisClawConfig; prompter: WizardPrompter }> {
+): Promise<{ result: GreenchClawConfig; prompter: WizardPrompter }> {
   const cfg = createPerplexityConfig(apiKey, enabled);
   const { prompter } = createPrompter({ selectValue: "perplexity" });
   const result = await setupSearch(cfg, runtime, prompter, {
@@ -308,7 +308,7 @@ describe("setupSearch", () => {
   });
 
   it("returns config unchanged when user skips", async () => {
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     const { prompter } = createPrompter({ selectValue: "__skip__" });
     const result = await setupSearch(cfg, runtime, prompter);
     expect(result).toBe(cfg);
@@ -330,7 +330,7 @@ describe("setupSearch", () => {
     ];
 
     for (const entry of cases) {
-      const cfg: NexisClawConfig = {};
+      const cfg: GreenchClawConfig = {};
       const { prompter } = createPrompter({
         selectValue: entry.provider,
         textValue: entry.key,
@@ -348,7 +348,7 @@ describe("setupSearch", () => {
       }
     }
 
-    const kimiCfg: NexisClawConfig = {};
+    const kimiCfg: GreenchClawConfig = {};
     const { prompter: kimiPrompter } = createPrompter({
       selectValues: ["kimi", "https://api.moonshot.ai/v1", "__keep__"],
       textValue: "sk-moonshot",
@@ -383,7 +383,7 @@ describe("setupSearch", () => {
     const original = process.env.BRAVE_API_KEY;
     delete process.env.BRAVE_API_KEY;
     try {
-      const cfg: NexisClawConfig = {};
+      const cfg: GreenchClawConfig = {};
       const { prompter, notes } = createPrompter({
         selectValue: "brave",
         textValue: "",
@@ -438,7 +438,7 @@ describe("setupSearch", () => {
   });
 
   it("quickstart skips key prompt when canonical plugin config key exists", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       tools: {
         web: {
           search: {
@@ -473,7 +473,7 @@ describe("setupSearch", () => {
     const original = process.env.XAI_API_KEY;
     delete process.env.XAI_API_KEY;
     try {
-      const cfg: NexisClawConfig = {};
+      const cfg: GreenchClawConfig = {};
       const { prompter } = createPrompter({ selectValue: "grok", textValue: "" });
       const result = await setupSearch(cfg, runtime, prompter, {
         quickstartDefaults: true,
@@ -491,7 +491,7 @@ describe("setupSearch", () => {
   });
 
   it("uses provider-specific credential copy for kimi in onboarding", async () => {
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     const { prompter } = createPrompter({
       selectValue: "kimi",
       textValue: "",
@@ -507,7 +507,7 @@ describe("setupSearch", () => {
     const orig = process.env.BRAVE_API_KEY;
     process.env.BRAVE_API_KEY = "env-brave-key"; // pragma: allowlist secret
     try {
-      const cfg: NexisClawConfig = {};
+      const cfg: GreenchClawConfig = {};
       const { prompter } = createPrompter({ selectValue: "brave" });
       const result = await setupSearch(cfg, runtime, prompter, {
         quickstartDefaults: true,
@@ -540,7 +540,7 @@ describe("setupSearch", () => {
   it("preserves disabled firecrawl plugin state and allowlist when web search stays disabled", async () => {
     const original = process.env.FIRECRAWL_API_KEY;
     process.env.FIRECRAWL_API_KEY = "env-firecrawl-key"; // pragma: allowlist secret
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       tools: {
         web: {
           search: {
@@ -651,7 +651,7 @@ describe("setupSearch", () => {
   });
 
   it("stores plaintext key when secretInputMode is unset", async () => {
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     const { prompter } = createPrompter({
       selectValue: "brave",
       textValue: "BSA-plain",

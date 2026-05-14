@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { GatewayServerLiveState } from "./server-live-state.js";
 import type { GatewayRequestContext, GatewayClient } from "./server-methods/types.js";
 import { disconnectAllSharedGatewayAuthClients } from "./server-shared-auth-generation.js";
@@ -30,7 +30,7 @@ type GatewayRequestContextParams = {
   nodeUnsubscribeAll: GatewayRequestContext["nodeUnsubscribeAll"];
   hasConnectedTalkNode: GatewayRequestContext["hasConnectedTalkNode"];
   clients: Set<GatewayRequestContextClient>;
-  enforceSharedGatewayAuthGenerationForConfigWrite: (nextConfig: NexisClawConfig) => void;
+  enforceSharedGatewayAuthGenerationForConfigWrite: (nextConfig: GreenchClawConfig) => void;
   nodeRegistry: GatewayRequestContext["nodeRegistry"];
   agentRunSeq: GatewayRequestContext["agentRunSeq"];
   chatAbortControllers: GatewayRequestContext["chatAbortControllers"];

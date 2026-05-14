@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { DEFAULT_AGENT_ID } from "../routing/session-key.js";
 import {
   DEFAULT_EXEC_APPROVAL_ASK_FALLBACK,
@@ -15,7 +15,7 @@ import {
 
 const DEFAULT_REQUESTED_SECURITY: ExecSecurity = "full";
 const DEFAULT_REQUESTED_ASK: ExecAsk = "off";
-const DEFAULT_HOST_PATH = "~/.NexisClaw/exec-approvals.json";
+const DEFAULT_HOST_PATH = "~/.GreenchClaw/exec-approvals.json";
 const REQUESTED_DEFAULT_LABEL = {
   security: DEFAULT_REQUESTED_SECURITY,
   ask: DEFAULT_REQUESTED_ASK,
@@ -88,7 +88,7 @@ function formatRequestedSource(params: {
   defaultValue: ExecSecurity | ExecAsk;
 }): string {
   return params.sourcePath === "__default__"
-    ? `NexisClaw default (${params.defaultValue})`
+    ? `GreenchClaw default (${params.defaultValue})`
     : `${params.sourcePath}.${params.field}`;
 }
 
@@ -132,7 +132,7 @@ function formatHostFieldSource(params: {
     return `${params.hostPath} ${params.sourceSuffix}`;
   }
   if (params.field === "askFallback") {
-    return `NexisClaw default (${DEFAULT_EXEC_APPROVAL_ASK_FALLBACK})`;
+    return `GreenchClaw default (${DEFAULT_EXEC_APPROVAL_ASK_FALLBACK})`;
   }
   return "inherits requested tool policy";
 }
@@ -149,7 +149,7 @@ function resolveAskNote(params: {
 }
 
 export function collectExecPolicyScopeSnapshots(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   approvals: ExecApprovalsFile;
   hostPath?: string;
 }): ExecPolicyScopeSnapshot[] {
@@ -246,7 +246,7 @@ export function resolveExecPolicyScopeSnapshot(params: {
       requested: requestedHost.value,
       requestedSource:
         requestedHost.sourcePath === "__default__"
-          ? "NexisClaw default (auto)"
+          ? "GreenchClaw default (auto)"
           : `${requestedHost.sourcePath === "scope" ? params.configPath : requestedHost.sourcePath}.host`,
     },
     security: {

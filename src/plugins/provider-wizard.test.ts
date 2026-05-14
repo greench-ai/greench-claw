@@ -63,7 +63,7 @@ function createSglangConfig() {
 
 function createHomeEnv(suffix = "", overrides?: Partial<NodeJS.ProcessEnv>) {
   return {
-    NEXISCLAW_HOME: `/tmp/NexisClaw-home${suffix}`,
+    GREENCHCLAW_HOME: `/tmp/GreenchClaw-home${suffix}`,
     ...overrides,
   } as NodeJS.ProcessEnv;
 }

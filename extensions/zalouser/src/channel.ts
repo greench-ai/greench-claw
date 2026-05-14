@@ -1,11 +1,11 @@
-import { createChatChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import { createAccountStatusSink } from "NexisClaw/plugin-sdk/channel-lifecycle";
-import { buildPassiveProbedChannelStatusSummary } from "NexisClaw/plugin-sdk/extension-shared";
-import { createLazyRuntimeModule } from "NexisClaw/plugin-sdk/lazy-runtime";
+import { createChatChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import { createAccountStatusSink } from "GreenchClaw/plugin-sdk/channel-lifecycle";
+import { buildPassiveProbedChannelStatusSummary } from "GreenchClaw/plugin-sdk/extension-shared";
+import { createLazyRuntimeModule } from "GreenchClaw/plugin-sdk/lazy-runtime";
 import {
   createAsyncComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
+} from "GreenchClaw/plugin-sdk/status-helpers";
 import {
   checkZcaAuthenticated,
   resolveZalouserAccountSync,

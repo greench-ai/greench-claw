@@ -5,7 +5,7 @@ import { attachModelProviderRequestTransport } from "./provider-request-config.j
 import {
   buildTransportAwareSimpleStreamFn,
   createBoundaryAwareStreamFnForModel,
-  createNexisClawTransportStreamFnForModel,
+  createGreenchClawTransportStreamFnForModel,
   createTransportAwareStreamFnForModel,
   isTransportAwareApiSupported,
   prepareTransportAwareSimpleModel,
@@ -42,42 +42,42 @@ describe("provider transport stream contracts", () => {
         provider: "openai",
         id: "gpt-5.4",
         baseUrl: "https://api.openai.com/v1",
-        alias: "NexisClaw-openai-responses-transport",
+        alias: "GreenchClaw-openai-responses-transport",
       },
       {
         api: "openai-codex-responses" as const,
         provider: "openai-codex",
         id: "codex-mini-latest",
         baseUrl: "https://chatgpt.com/backend-api",
-        alias: "NexisClaw-openai-responses-transport",
+        alias: "GreenchClaw-openai-responses-transport",
       },
       {
         api: "openai-completions" as const,
         provider: "xai",
         id: "grok-4",
         baseUrl: "https://api.x.ai/v1",
-        alias: "NexisClaw-openai-completions-transport",
+        alias: "GreenchClaw-openai-completions-transport",
       },
       {
         api: "azure-openai-responses" as const,
         provider: "azure-openai-responses",
         id: "gpt-5.4",
         baseUrl: "https://example.openai.azure.com/openai/v1",
-        alias: "NexisClaw-azure-openai-responses-transport",
+        alias: "GreenchClaw-azure-openai-responses-transport",
       },
       {
         api: "anthropic-messages" as const,
         provider: "anthropic",
         id: "claude-sonnet-4.6",
         baseUrl: "https://api.anthropic.com",
-        alias: "NexisClaw-anthropic-messages-transport",
+        alias: "GreenchClaw-anthropic-messages-transport",
       },
       {
         api: "google-generative-ai" as const,
         provider: "google",
         id: "gemini-3.1-pro-preview",
         baseUrl: "https://generativelanguage.googleapis.com/v1beta",
-        alias: "NexisClaw-google-generative-ai-transport",
+        alias: "GreenchClaw-google-generative-ai-transport",
         providerOwnedRuntime: true,
       },
     ];
@@ -153,7 +153,7 @@ describe("provider transport stream contracts", () => {
     expect(prepareTransportAwareSimpleModel(model)).toBe(model);
   });
 
-  it("keeps OpenAI API-key default streams on NexisClaw transport", () => {
+  it("keeps OpenAI API-key default streams on GreenchClaw transport", () => {
     const cases = [
       buildModel("openai-responses", {
         id: "gpt-5.4",
@@ -169,14 +169,14 @@ describe("provider transport stream contracts", () => {
 
     for (const model of cases) {
       expect(createBoundaryAwareStreamFnForModel(model)).toBeTypeOf("function");
-      expect(createNexisClawTransportStreamFnForModel(model)).toBeTypeOf("function");
+      expect(createGreenchClawTransportStreamFnForModel(model)).toBeTypeOf("function");
       expect(createTransportAwareStreamFnForModel(model)).toBeUndefined();
       expect(buildTransportAwareSimpleStreamFn(model)).toBeUndefined();
       expect(prepareTransportAwareSimpleModel(model)).toBe(model);
     }
   });
 
-  it("routes localService models through the NexisClaw simple-completion transport", () => {
+  it("routes localService models through the GreenchClaw simple-completion transport", () => {
     const model = attachModelProviderLocalService(
       buildModel("openai-completions", {
         id: "google/gemma-4-E2B-it",
@@ -192,12 +192,12 @@ describe("provider transport stream contracts", () => {
     expect(createTransportAwareStreamFnForModel(model)).toBeTypeOf("function");
     expect(buildTransportAwareSimpleStreamFn(model)).toBeTypeOf("function");
     const preparedModel = prepareTransportAwareSimpleModel(model);
-    expect(preparedModel.api).toBe("NexisClaw-openai-completions-transport");
+    expect(preparedModel.api).toBe("GreenchClaw-openai-completions-transport");
     expect(preparedModel.provider).toBe("inferrs");
     expect(preparedModel.id).toBe("google/gemma-4-E2B-it");
   });
 
-  it("keeps Codex defaults on the NexisClaw transport until PI preserves attribution", () => {
+  it("keeps Codex defaults on the GreenchClaw transport until PI preserves attribution", () => {
     const model = buildModel("openai-codex-responses", {
       id: "gpt-5.4",
       provider: "openai-codex",

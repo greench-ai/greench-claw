@@ -1,6 +1,6 @@
 import { normalizeProviderId } from "../agents/provider-id.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { ModelProviderConfig } from "../config/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { resolveBundledPluginsDir } from "./bundled-dir.js";
 import { loadPluginManifestRegistry, type PluginManifestRegistry } from "./manifest-registry.js";
 import type {
@@ -20,7 +20,7 @@ export type BundledProviderPolicySurface = {
   normalizeConfig?: (ctx: ProviderNormalizeConfigContext) => ModelProviderConfig | null | undefined;
   applyConfigDefaults?: (
     ctx: ProviderApplyConfigDefaultsContext,
-  ) => NexisClawConfig | null | undefined;
+  ) => GreenchClawConfig | null | undefined;
   resolveConfigApiKey?: (ctx: ProviderResolveConfigApiKeyContext) => string | null | undefined;
   resolveThinkingProfile?: (
     ctx: ProviderDefaultThinkingPolicyContext,

@@ -1,5 +1,5 @@
 ---
-summary: "Adds the Twitch channel surface for sending and receiving NexisClaw messages."
+summary: "Adds the Twitch channel surface for sending and receiving GreenchClaw messages."
 read_when:
   - You are installing, configuring, or auditing the twitch plugin
 title: "Twitch plugin"
@@ -7,11 +7,11 @@ title: "Twitch plugin"
 
 # Twitch plugin
 
-Adds the Twitch channel surface for sending and receiving NexisClaw messages.
+Adds the Twitch channel surface for sending and receiving GreenchClaw messages.
 
 ## Distribution
 
-- Package: `@NexisClaw/twitch`
+- Package: `@GreenchClaw/twitch`
 - Install route: npm; ClawHub
 
 ## Surface

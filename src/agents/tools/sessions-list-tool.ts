@@ -7,7 +7,7 @@ import {
   resolveStorePath,
 } from "../../config/sessions.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { callGateway } from "../../gateway/call.js";
 import {
   deriveSessionTitle,
@@ -64,7 +64,7 @@ function readSessionRunStatus(value: unknown): SessionRunStatus | undefined {
 export function createSessionsListTool(opts?: {
   agentSessionKey?: string;
   sandboxed?: boolean;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   callGateway?: GatewayCaller;
 }): AnyAgentTool {
   return {

@@ -1,7 +1,7 @@
 // Path policy for file-transfer node.invoke calls.
 //
 // Default behavior is DENY. The operator must explicitly opt in by adding
-// a config block to ~/.NexisClaw/NexisClaw.json under
+// a config block to ~/.GreenchClaw/GreenchClaw.json under
 // `plugins.entries.file-transfer.config.nodes`. Without a matching block,
 // every file operation is rejected before reaching the node.
 //
@@ -47,9 +47,9 @@
 
 import os from "node:os";
 import path from "node:path";
+import { mutateConfigFile } from "GreenchClaw/plugin-sdk/config-mutation";
+import { getRuntimeConfig } from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
 import { minimatch } from "minimatch";
-import { mutateConfigFile } from "NexisClaw/plugin-sdk/config-mutation";
-import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
 
 export type FilePolicyKind = "read" | "write";
 export type FilePolicyAskMode = "off" | "on-miss" | "always";
@@ -349,7 +349,7 @@ export async function persistAllowAlways(input: {
   await mutateConfigFile({
     afterWrite: { mode: "none", reason: "file-transfer allow-always policy update" },
     mutate: (draft) => {
-      // Plugin config is intentionally plugin-owned; the root NexisClawConfig
+      // Plugin config is intentionally plugin-owned; the root GreenchClawConfig
       // type only guarantees `Record<string, unknown>` here.
       const root = draft as unknown as Record<string, unknown>;
       const plugins = (root.plugins ??= {}) as Record<string, unknown>;

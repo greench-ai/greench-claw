@@ -1,11 +1,11 @@
 import type { PluginRegistryParams } from "../../plugins/registry-types.js";
-import type { NexisClawPluginApi } from "../plugin-entry.js";
+import type { GreenchClawPluginApi } from "../plugin-entry.js";
 import {
   createPluginRecord,
   createPluginRegistry,
   registerProviderPlugins as registerProviders,
   requireRegisteredProvider as requireProvider,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   type PluginRecord,
   type PluginRuntime,
 } from "../testing.js";
@@ -15,7 +15,7 @@ import { uniqueSortedStrings } from "./string-utils.js";
 export { registerProviders, requireProvider, uniqueSortedStrings };
 
 export function createPluginRegistryFixture(
-  config = {} as NexisClawConfig,
+  config = {} as GreenchClawConfig,
   params: { hostServices?: PluginRegistryParams["hostServices"] } = {},
 ) {
   return {
@@ -35,9 +35,9 @@ export function createPluginRegistryFixture(
 
 export function registerTestPlugin(params: {
   registry: ReturnType<typeof createPluginRegistry>;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   record: PluginRecord;
-  register(api: NexisClawPluginApi): void;
+  register(api: GreenchClawPluginApi): void;
 }) {
   params.registry.registry.plugins.push(params.record);
   params.register(
@@ -49,13 +49,13 @@ export function registerTestPlugin(params: {
 
 export function registerVirtualTestPlugin(params: {
   registry: ReturnType<typeof createPluginRegistry>;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   id: string;
   name: string;
   source?: string;
   kind?: PluginRecord["kind"];
   contracts?: PluginRecord["contracts"];
-  register(this: void, api: NexisClawPluginApi): void;
+  register(this: void, api: GreenchClawPluginApi): void;
 }) {
   registerTestPlugin({
     registry: params.registry,

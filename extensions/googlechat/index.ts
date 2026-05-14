@@ -1,9 +1,9 @@
-import { defineBundledChannelEntry } from "NexisClaw/plugin-sdk/channel-entry-contract";
+import { defineBundledChannelEntry } from "GreenchClaw/plugin-sdk/channel-entry-contract";
 
 export default defineBundledChannelEntry({
   id: "googlechat",
   name: "Google Chat",
-  description: "NexisClaw Google Chat channel plugin",
+  description: "GreenchClaw Google Chat channel plugin",
   importMetaUrl: import.meta.url,
   plugin: {
     specifier: "./channel-plugin-api.js",

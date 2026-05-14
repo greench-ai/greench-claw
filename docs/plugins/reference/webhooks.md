@@ -1,5 +1,5 @@
 ---
-summary: "Authenticated inbound webhooks that bind external automation to NexisClaw TaskFlows."
+summary: "Authenticated inbound webhooks that bind external automation to GreenchClaw TaskFlows."
 read_when:
   - You are installing, configuring, or auditing the webhooks plugin
 title: "Webhooks plugin"
@@ -7,12 +7,12 @@ title: "Webhooks plugin"
 
 # Webhooks plugin
 
-Authenticated inbound webhooks that bind external automation to NexisClaw TaskFlows.
+Authenticated inbound webhooks that bind external automation to GreenchClaw TaskFlows.
 
 ## Distribution
 
-- Package: `@NexisClaw/webhooks`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/webhooks`
+- Install route: included in GreenchClaw
 
 ## Surface
 

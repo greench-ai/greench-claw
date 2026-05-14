@@ -72,7 +72,7 @@ describe("secrets runtime fast path", () => {
         },
       }),
       env: {},
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: emptyAuthStore,
     });
 
@@ -80,7 +80,7 @@ describe("secrets runtime fast path", () => {
     expect(requireGatewayAuth(snapshot).token).toBe("plain-startup-token");
     expect(snapshot.authStores).toEqual([
       {
-        agentDir: "/tmp/NexisClaw-agent-main",
+        agentDir: "/tmp/GreenchClaw-agent-main",
         store: emptyAuthStore(),
       },
     ]);
@@ -107,7 +107,7 @@ describe("secrets runtime fast path", () => {
         },
       }),
       env: {},
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: emptyAuthStore,
     });
 
@@ -130,7 +130,7 @@ describe("secrets runtime fast path", () => {
         },
       }),
       env: {},
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: emptyAuthStore,
     });
 
@@ -143,7 +143,7 @@ describe("secrets runtime fast path", () => {
     await prepareSecretsRuntimeSnapshot({
       config: asConfig({}),
       env: {},
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: () => ({
         version: 1,
         profiles: {
@@ -173,7 +173,7 @@ describe("secrets runtime fast path", () => {
         },
       }),
       env: {},
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: emptyAuthStore,
     });
 

@@ -1,5 +1,5 @@
 import { deriveSessionTotalTokens, type NormalizedUsage } from "../../agents/usage.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { incrementCompactionCount } from "./session-updates.js";
 import { persistSessionUsageUpdate } from "./session-usage.js";
 
@@ -10,7 +10,7 @@ type IncrementRunCompactionCountParams = Omit<
   "tokensAfter"
 > & {
   amount?: number;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   compactionTokensAfter?: number;
   lastCallUsage?: NormalizedUsage;
   contextTokensUsed?: number;

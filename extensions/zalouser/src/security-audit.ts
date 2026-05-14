@@ -1,4 +1,4 @@
-import { isDangerousNameMatchingEnabled } from "NexisClaw/plugin-sdk/dangerous-name-runtime";
+import { isDangerousNameMatchingEnabled } from "GreenchClaw/plugin-sdk/dangerous-name-runtime";
 import type { ResolvedZalouserAccount } from "./accounts.js";
 
 export function isZalouserMutableGroupEntry(raw: string): boolean {

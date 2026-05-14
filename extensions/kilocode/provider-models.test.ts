@@ -4,7 +4,7 @@ const { fetchWithSsrFGuardMock } = vi.hoisted(() => ({
   fetchWithSsrFGuardMock: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard: fetchWithSsrFGuardMock,
   ssrfPolicyFromHttpBaseUrlAllowedHostname: (baseUrl: string) => ({
     allowedHostnames: [new URL(baseUrl).hostname],
@@ -140,7 +140,7 @@ async function withFetchPathTest(mockFetch: MockKilocodeFetch, runAssertions: ()
 }
 
 afterAll(() => {
-  vi.doUnmock("NexisClaw/plugin-sdk/ssrf-runtime");
+  vi.doUnmock("GreenchClaw/plugin-sdk/ssrf-runtime");
   vi.resetModules();
 });
 

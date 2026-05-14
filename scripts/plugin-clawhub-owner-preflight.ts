@@ -2,7 +2,7 @@
 
 import { readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
-import { collectClawHubNexisClawOwnerErrors } from "./lib/plugin-clawhub-release.ts";
+import { collectClawHubGreenchClawOwnerErrors } from "./lib/plugin-clawhub-release.ts";
 
 type ReleasePlanFile = {
   candidates?: Array<{
@@ -24,14 +24,14 @@ export async function runClawHubOwnerPreflight(argv: string[]) {
     )
     .map((candidate) => ({ packageName: candidate.packageName }));
 
-  const errors = await collectClawHubNexisClawOwnerErrors({ plugins: candidates });
+  const errors = await collectClawHubGreenchClawOwnerErrors({ plugins: candidates });
   if (errors.length > 0) {
     throw new Error(
-      `ClawHub NexisClaw package ownership preflight failed:\n${errors.map((error) => `- ${error}`).join("\n")}`,
+      `ClawHub GreenchClaw package ownership preflight failed:\n${errors.map((error) => `- ${error}`).join("\n")}`,
     );
   }
 
-  console.log(`ClawHub NexisClaw owner preflight passed for ${candidates.length} candidate(s).`);
+  console.log(`ClawHub GreenchClaw owner preflight passed for ${candidates.length} candidate(s).`);
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {

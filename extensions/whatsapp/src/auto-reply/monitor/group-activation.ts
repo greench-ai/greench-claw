@@ -1,12 +1,12 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/routing";
-import { updateSessionStore } from "NexisClaw/plugin-sdk/session-store-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/routing";
+import { updateSessionStore } from "GreenchClaw/plugin-sdk/session-store-runtime";
 import { resolveWhatsAppLegacyGroupSessionKey } from "../../group-session-key.js";
 import { resolveWhatsAppInboundPolicy } from "../../inbound-policy.js";
 import { loadSessionStore, resolveStorePath } from "../config.runtime.js";
 import { normalizeGroupActivation } from "./group-activation.runtime.js";
 
-function hasNamedWhatsAppAccounts(cfg: NexisClawConfig) {
+function hasNamedWhatsAppAccounts(cfg: GreenchClawConfig) {
   const accountIds = Object.keys(cfg.channels?.whatsapp?.accounts ?? {});
   return accountIds.some((accountId) => normalizeAccountId(accountId) !== DEFAULT_ACCOUNT_ID);
 }
@@ -28,7 +28,7 @@ function isActivationOnlyEntry(
 }
 
 export async function resolveGroupActivationFor(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   agentId: string;
   sessionKey: string;

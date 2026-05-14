@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 import { afterEach, vi } from "vitest";
-import type { NexisClawPluginApi } from "../api.js";
+import type { GreenchClawPluginApi } from "../api.js";
 import {
   resolveMemoryWikiConfig,
   type MemoryWikiPluginConfig,
@@ -19,7 +19,7 @@ type MemoryWikiTestVault = {
 };
 
 type MemoryWikiPluginApiHarness = {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   registerCli: ReturnType<typeof vi.fn>;
   registerGatewayMethod: ReturnType<typeof vi.fn>;
   registerMemoryCorpusSupplement: ReturnType<typeof vi.fn>;
@@ -37,7 +37,7 @@ export function createMemoryWikiTestHarness() {
   });
 
   async function createTempDir(prefix: string): Promise<string> {
-    const tempDir = await fs.mkdtemp(path.join(resolvePreferredNexisClawTmpDir(), prefix));
+    const tempDir = await fs.mkdtemp(path.join(resolvePreferredGreenchClawTmpDir(), prefix));
     tempDirs.push(tempDir);
     return tempDir;
   }
@@ -79,7 +79,7 @@ export function createMemoryWikiTestHarness() {
       name: "Memory Wiki",
       source: "test",
       config: {},
-      runtime: {} as NexisClawPluginApi["runtime"],
+      runtime: {} as GreenchClawPluginApi["runtime"],
       registerCli,
       registerGatewayMethod,
       registerMemoryCorpusSupplement,

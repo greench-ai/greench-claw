@@ -70,16 +70,16 @@ describe("logAcceptedEnvOption", () => {
       {
         VITEST: "",
         NODE_ENV: "development",
-        NEXISCLAW_TEST_ENV: "  line one\nline two  ",
+        GREENCHCLAW_TEST_ENV: "  line one\nline two  ",
       },
       () => {
         logAcceptedEnvOption({
-          key: "NEXISCLAW_TEST_ENV",
+          key: "GREENCHCLAW_TEST_ENV",
           description: "test option",
           redact: true,
         });
         logAcceptedEnvOption({
-          key: "NEXISCLAW_TEST_ENV",
+          key: "GREENCHCLAW_TEST_ENV",
           description: "test option",
           redact: true,
         });
@@ -90,7 +90,7 @@ describe("logAcceptedEnvOption", () => {
       expect(loggerMocks.info).toHaveBeenCalledTimes(1);
     });
     expect(loggerMocks.info).toHaveBeenCalledWith(
-      "env: NEXISCLAW_TEST_ENV=<redacted> (test option)",
+      "env: GREENCHCLAW_TEST_ENV=<redacted> (test option)",
     );
   });
 
@@ -101,11 +101,11 @@ describe("logAcceptedEnvOption", () => {
       {
         VITEST: "1",
         NODE_ENV: "development",
-        NEXISCLAW_BLANK_ENV: "value",
+        GREENCHCLAW_BLANK_ENV: "value",
       },
       () => {
         logAcceptedEnvOption({
-          key: "NEXISCLAW_BLANK_ENV",
+          key: "GREENCHCLAW_BLANK_ENV",
           description: "skipped in vitest",
         });
       },
@@ -115,11 +115,11 @@ describe("logAcceptedEnvOption", () => {
       {
         VITEST: "",
         NODE_ENV: "development",
-        NEXISCLAW_BLANK_ENV: "   ",
+        GREENCHCLAW_BLANK_ENV: "   ",
       },
       () => {
         logAcceptedEnvOption({
-          key: "NEXISCLAW_BLANK_ENV",
+          key: "GREENCHCLAW_BLANK_ENV",
           description: "blank value",
         });
       },

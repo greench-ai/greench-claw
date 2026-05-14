@@ -1,11 +1,11 @@
 import type { Command } from "commander";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { callGateway } from "../../gateway/call.js";
 import { GATEWAY_CLIENT_MODES, GATEWAY_CLIENT_NAMES } from "../../gateway/protocol/client-info.js";
 import { withProgress } from "../progress.js";
 
 export type GatewayRpcOpts = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   url?: string;
   token?: string;
   password?: string;

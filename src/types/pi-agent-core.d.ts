@@ -1,7 +1,7 @@
 import "@earendil-works/pi-agent-core";
 
 declare module "@earendil-works/pi-agent-core" {
-  // NexisClaw persists compaction markers alongside normal agent history.
+  // GreenchClaw persists compaction markers alongside normal agent history.
   interface CustomAgentMessages {
     compactionSummary: {
       role: "compactionSummary";

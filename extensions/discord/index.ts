@@ -1,4 +1,4 @@
-import { defineBundledChannelEntry } from "NexisClaw/plugin-sdk/channel-entry-contract";
+import { defineBundledChannelEntry } from "GreenchClaw/plugin-sdk/channel-entry-contract";
 import { registerDiscordSubagentHooks } from "./subagent-hooks-api.js";
 
 export default defineBundledChannelEntry({

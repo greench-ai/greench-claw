@@ -1,17 +1,17 @@
 import path from "node:path";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { parseClawHubPluginSpec } from "../infra/clawhub-spec.js";
 import type { NpmSpecResolution } from "../infra/install-source-utils.js";
 import { resolveNpmSpecMetadata } from "../infra/install-source-utils.js";
 import {
-  compareNexisClawReleaseVersions,
+  compareGreenchClawReleaseVersions,
   isPrereleaseResolutionAllowed,
   parseRegistryNpmSpec,
 } from "../infra/npm-registry-spec.js";
 import {
   expectedIntegrityForUpdate,
-  installedPackageNeedsNexisClawPeerLinkRepair,
+  installedPackageNeedsGreenchClawPeerLinkRepair,
   readInstalledPackagePeerDependencies,
   readInstalledPackageVersion,
 } from "../infra/package-update-utils.js";
@@ -47,7 +47,7 @@ import {
   getOfficialExternalPluginCatalogEntry,
   resolveOfficialExternalPluginInstall,
 } from "./official-external-plugin-catalog.js";
-import { linkNexisClawPeerDependencies } from "./plugin-peer-link.js";
+import { linkGreenchClawPeerDependencies } from "./plugin-peer-link.js";
 
 export type PluginUpdateLogger = {
   info?: (message: string) => void;
@@ -66,7 +66,7 @@ export type PluginUpdateOutcome = {
 };
 
 export type PluginUpdateSummary = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   changed: boolean;
   outcomes: PluginUpdateOutcome[];
 };
@@ -90,7 +90,7 @@ export type PluginChannelSyncSummary = {
 };
 
 export type PluginChannelSyncResult = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   changed: boolean;
   summary: PluginChannelSyncSummary;
 };
@@ -209,7 +209,7 @@ function shouldBypassTrustedOfficialUnchangedNpmCheck(params: {
 }
 
 function isBundledVersionNewer(bundledVersion: string, installedVersion: string): boolean {
-  const releaseCmp = compareNexisClawReleaseVersions(bundledVersion, installedVersion);
+  const releaseCmp = compareGreenchClawReleaseVersions(bundledVersion, installedVersion);
   if (releaseCmp !== null) {
     return releaseCmp > 0;
   }
@@ -371,7 +371,7 @@ function resolveBridgeInstallRecord(params: {
 }
 
 function isBridgeChannelEnabledByConfig(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   bridge: ExternalizedBundledPluginBridge;
 }): boolean {
   const channels = params.config.channels;
@@ -391,7 +391,7 @@ function isBridgeChannelEnabledByConfig(params: {
 }
 
 function isExternalizedBundledPluginEnabled(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   bridge: ExternalizedBundledPluginBridge;
 }): boolean {
   const normalized = normalizePluginsConfig(params.config.plugins);
@@ -679,7 +679,11 @@ function replacePluginIdInList(
   return next;
 }
 
-function migratePluginConfigId(cfg: NexisClawConfig, fromId: string, toId: string): NexisClawConfig {
+function migratePluginConfigId(
+  cfg: GreenchClawConfig,
+  fromId: string,
+  toId: string,
+): GreenchClawConfig {
   if (fromId === toId) {
     return cfg;
   }
@@ -760,7 +764,7 @@ function createPluginUpdateIntegrityDriftHandler(params: {
   };
 }
 
-function disablePluginConfigEntry(config: NexisClawConfig, pluginId: string): NexisClawConfig {
+function disablePluginConfigEntry(config: GreenchClawConfig, pluginId: string): GreenchClawConfig {
   const existingEntry = config.plugins?.entries?.[pluginId];
   return {
     ...config,
@@ -777,8 +781,8 @@ function disablePluginConfigEntry(config: NexisClawConfig, pluginId: string): Ne
   };
 }
 
-async function repairNexisClawPeerLinksForNpmInstalls(params: {
-  config: NexisClawConfig;
+async function repairGreenchClawPeerLinksForNpmInstalls(params: {
+  config: GreenchClawConfig;
   logger: PluginUpdateLogger;
 }): Promise<boolean> {
   let repaired = false;
@@ -794,23 +798,23 @@ async function repairNexisClawPeerLinksForNpmInstalls(params: {
       );
     } catch (err) {
       params.logger.warn?.(
-        `Could not repair NexisClaw peer link for "${pluginId}" due to invalid install path: ${String(err)}`,
+        `Could not repair GreenchClaw peer link for "${pluginId}" due to invalid install path: ${String(err)}`,
       );
       continue;
     }
 
-    if (!installedPackageNeedsNexisClawPeerLinkRepair(installPath)) {
+    if (!installedPackageNeedsGreenchClawPeerLinkRepair(installPath)) {
       continue;
     }
 
     const peerDependencies = readInstalledPackagePeerDependencies(installPath);
-    if (!Object.hasOwn(peerDependencies, "NexisClaw")) {
+    if (!Object.hasOwn(peerDependencies, "GreenchClaw")) {
       continue;
     }
 
     try {
       const warnings: string[] = [];
-      const peerLinkRepair = await linkNexisClawPeerDependencies({
+      const peerLinkRepair = await linkGreenchClawPeerDependencies({
         installedDir: installPath,
         peerDependencies,
         logger: {
@@ -820,14 +824,14 @@ async function repairNexisClawPeerLinksForNpmInstalls(params: {
       });
       if (peerLinkRepair.skipped > 0) {
         params.logger.warn?.(
-          `Could not repair NexisClaw peer link for "${pluginId}" at ${installPath}: ${warnings.join("; ") || "peer link repair was skipped"}`,
+          `Could not repair GreenchClaw peer link for "${pluginId}" at ${installPath}: ${warnings.join("; ") || "peer link repair was skipped"}`,
         );
         continue;
       }
-      repaired = !installedPackageNeedsNexisClawPeerLinkRepair(installPath) || repaired;
+      repaired = !installedPackageNeedsGreenchClawPeerLinkRepair(installPath) || repaired;
     } catch (err) {
       params.logger.warn?.(
-        `Could not repair NexisClaw peer link for "${pluginId}" at ${installPath}: ${String(err)}`,
+        `Could not repair GreenchClaw peer link for "${pluginId}" at ${installPath}: ${String(err)}`,
       );
     }
   }
@@ -835,7 +839,7 @@ async function repairNexisClawPeerLinksForNpmInstalls(params: {
 }
 
 export async function updateNpmInstalledPlugins(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   logger?: PluginUpdateLogger;
   pluginIds?: string[];
   skipIds?: Set<string>;
@@ -870,7 +874,7 @@ export async function updateNpmInstalledPlugins(params: {
   const recordFailure = (pluginId: string, message: string) => {
     if (params.disableOnFailure && !params.dryRun) {
       const disabledMessage =
-        `Disabled "${pluginId}" after plugin update failure; NexisClaw will continue without it. ` +
+        `Disabled "${pluginId}" after plugin update failure; GreenchClaw will continue without it. ` +
         message;
       logger.warn?.(disabledMessage);
       next = disablePluginConfigEntry(next, pluginId);
@@ -1085,7 +1089,7 @@ export async function updateNpmInstalledPlugins(params: {
             spec: effectiveSpec!,
             trustedSourceLinkedOfficialInstall,
           }) &&
-          !installedPackageNeedsNexisClawPeerLinkRepair(installPath) &&
+          !installedPackageNeedsGreenchClawPeerLinkRepair(installPath) &&
           shouldSkipUnchangedNpmInstall({
             currentVersion,
             record,
@@ -1553,7 +1557,7 @@ export async function updateNpmInstalledPlugins(params: {
 
   if (ranNpmInstaller) {
     changed =
-      (await repairNexisClawPeerLinksForNpmInstalls({
+      (await repairGreenchClawPeerLinksForNpmInstalls({
         config: next,
         logger,
       })) || changed;
@@ -1563,7 +1567,7 @@ export async function updateNpmInstalledPlugins(params: {
 }
 
 export async function syncPluginsForUpdateChannel(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   channel: UpdateChannel;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;

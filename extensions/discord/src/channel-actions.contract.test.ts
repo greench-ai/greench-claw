@@ -1,5 +1,5 @@
-import { installChannelActionsContractSuite } from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { installChannelActionsContractSuite } from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe } from "vitest";
 import { discordPlugin } from "../api.js";
 
@@ -36,7 +36,7 @@ describe("discord actions contract", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         expectedActions: ["send", "poll", "react", "reactions", "emoji-list"],
         expectedCapabilities: ["presentation"],
       },

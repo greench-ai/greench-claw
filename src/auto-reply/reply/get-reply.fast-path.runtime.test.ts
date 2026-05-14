@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import {
   createReplyRuntimeMocks,
   createTempHomeHarness,
@@ -12,13 +12,13 @@ import { loadGetReplyModuleForTest } from "./get-reply.test-loader.js";
 
 let getReplyFromConfig: typeof import("./get-reply.js").getReplyFromConfig;
 const agentMocks = createReplyRuntimeMocks();
-const { withTempHome } = createTempHomeHarness({ prefix: "NexisClaw-getreply-fast-" });
+const { withTempHome } = createTempHomeHarness({ prefix: "GreenchClaw-getreply-fast-" });
 
 installReplyRuntimeMocks(agentMocks);
 
 describe("getReplyFromConfig fast-path runtime", () => {
   beforeEach(async () => {
-    vi.stubEnv("NEXISCLAW_TEST_FAST", "1");
+    vi.stubEnv("GREENCHCLAW_TEST_FAST", "1");
     resetReplyRuntimeMocks(agentMocks);
     ({ getReplyFromConfig } = await loadGetReplyModuleForTest({ cacheKey: import.meta.url }));
   });
@@ -52,7 +52,7 @@ describe("getReplyFromConfig fast-path runtime", () => {
           ChatType: "direct",
         },
         {},
-        makeReplyConfig(home) as NexisClawConfig,
+        makeReplyConfig(home) as GreenchClawConfig,
       );
 
       const text = Array.isArray(res) ? res[0]?.text : res?.text;

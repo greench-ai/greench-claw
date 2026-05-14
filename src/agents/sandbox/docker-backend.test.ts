@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 
 const dockerMocks = vi.hoisted(() => ({
   dockerContainerState: vi.fn(),
@@ -21,7 +21,7 @@ vi.mock("./docker.js", async () => {
 
 const { dockerSandboxBackendManager } = await import("./docker-backend.js");
 
-function createConfig(): NexisClawConfig {
+function createConfig(): GreenchClawConfig {
   return {
     agents: {
       defaults: {
@@ -30,11 +30,11 @@ function createConfig(): NexisClawConfig {
           scope: "session",
           workspaceAccess: "none",
           docker: {
-            image: "NexisClaw-sandbox:bookworm-slim",
+            image: "GreenchClaw-sandbox:bookworm-slim",
           },
           browser: {
             enabled: true,
-            image: "NexisClaw-sandbox-browser:bookworm-slim",
+            image: "GreenchClaw-sandbox-browser:bookworm-slim",
           },
         },
       },
@@ -60,7 +60,7 @@ describe("docker sandbox backend manager", () => {
   it("matches ordinary sandbox runtimes against sandbox.docker.image", async () => {
     dockerMocks.execDocker.mockResolvedValueOnce({
       code: 0,
-      stdout: "NexisClaw-sandbox:bookworm-slim\n",
+      stdout: "GreenchClaw-sandbox:bookworm-slim\n",
       stderr: "",
     });
 
@@ -81,7 +81,7 @@ describe("docker sandbox backend manager", () => {
 
     expect(result).toEqual({
       running: true,
-      actualConfigLabel: "NexisClaw-sandbox:bookworm-slim",
+      actualConfigLabel: "GreenchClaw-sandbox:bookworm-slim",
       configLabelMatch: true,
     });
   });
@@ -89,7 +89,7 @@ describe("docker sandbox backend manager", () => {
   it("matches browser runtimes against sandbox.browser.image", async () => {
     dockerMocks.execDocker.mockResolvedValueOnce({
       code: 0,
-      stdout: "NexisClaw-sandbox-browser:bookworm-slim\n",
+      stdout: "GreenchClaw-sandbox-browser:bookworm-slim\n",
       stderr: "",
     });
 
@@ -110,7 +110,7 @@ describe("docker sandbox backend manager", () => {
 
     expect(result).toEqual({
       running: true,
-      actualConfigLabel: "NexisClaw-sandbox-browser:bookworm-slim",
+      actualConfigLabel: "GreenchClaw-sandbox-browser:bookworm-slim",
       configLabelMatch: true,
     });
   });
@@ -118,7 +118,7 @@ describe("docker sandbox backend manager", () => {
   it("defaults docker-backed runtime matching to sandbox.docker.image when label kind is missing", async () => {
     dockerMocks.execDocker.mockResolvedValueOnce({
       code: 0,
-      stdout: "NexisClaw-sandbox:bookworm-slim\n",
+      stdout: "GreenchClaw-sandbox:bookworm-slim\n",
       stderr: "",
     });
 
@@ -138,7 +138,7 @@ describe("docker sandbox backend manager", () => {
 
     expect(result).toEqual({
       running: true,
-      actualConfigLabel: "NexisClaw-sandbox:bookworm-slim",
+      actualConfigLabel: "GreenchClaw-sandbox:bookworm-slim",
       configLabelMatch: true,
     });
   });
@@ -159,7 +159,7 @@ describe("docker sandbox backend manager", () => {
           sessionKey: "agent:coder:main",
           createdAtMs: 1,
           lastUsedAtMs: 1,
-          image: "NexisClaw-sandbox:bookworm-slim",
+          image: "GreenchClaw-sandbox:bookworm-slim",
         },
         config: createConfig(),
       }),
@@ -182,7 +182,7 @@ describe("docker sandbox backend manager", () => {
           sessionKey: "agent:coder:main",
           createdAtMs: 1,
           lastUsedAtMs: 1,
-          image: "NexisClaw-sandbox:bookworm-slim",
+          image: "GreenchClaw-sandbox:bookworm-slim",
         },
         config: createConfig(),
       }),

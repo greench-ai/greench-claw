@@ -1,1 +1,1 @@
-export { createPersistentDedupe } from "NexisClaw/plugin-sdk/persistent-dedupe";
+export { createPersistentDedupe } from "GreenchClaw/plugin-sdk/persistent-dedupe";

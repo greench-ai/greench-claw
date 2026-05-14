@@ -2,9 +2,9 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { loadQaRuntimeModule } from "NexisClaw/plugin-sdk/qa-runner-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { loadQaRuntimeModule } from "GreenchClaw/plugin-sdk/qa-runner-runtime";
 import type { QaReportCheck } from "../../report.js";
 import { renderQaMarkdownReport } from "../../report.js";
 import { type QaProviderModeInput } from "../../run-config.js";
@@ -149,7 +149,7 @@ type MatrixQaTimings = {
 };
 
 function shouldWriteMatrixQaProgress() {
-  const override = process.env.NEXISCLAW_QA_MATRIX_PROGRESS;
+  const override = process.env.GREENCHCLAW_QA_MATRIX_PROGRESS;
   if (override === "0") {
     return false;
   }
@@ -184,7 +184,7 @@ function parsePositiveMatrixQaEnvMs(name: string, fallback: number) {
 
 function createMatrixQaRunDeadline() {
   const timeoutMs = parsePositiveMatrixQaEnvMs(
-    "NEXISCLAW_QA_MATRIX_TIMEOUT_MS",
+    "GREENCHCLAW_QA_MATRIX_TIMEOUT_MS",
     DEFAULT_MATRIX_QA_RUN_TIMEOUT_MS,
   );
   return {
@@ -195,7 +195,7 @@ function createMatrixQaRunDeadline() {
 
 function resolveMatrixQaCanaryTimeoutMs() {
   return parsePositiveMatrixQaEnvMs(
-    "NEXISCLAW_QA_MATRIX_CANARY_TIMEOUT_MS",
+    "GREENCHCLAW_QA_MATRIX_CANARY_TIMEOUT_MS",
     DEFAULT_MATRIX_QA_CANARY_TIMEOUT_MS,
   );
 }
@@ -240,7 +240,7 @@ async function cleanupMatrixQaResource(params: {
   recovery?: string;
 }) {
   const timeoutMs = parsePositiveMatrixQaEnvMs(
-    "NEXISCLAW_QA_MATRIX_CLEANUP_TIMEOUT_MS",
+    "GREENCHCLAW_QA_MATRIX_CLEANUP_TIMEOUT_MS",
     DEFAULT_MATRIX_QA_CLEANUP_TIMEOUT_MS,
   );
   try {
@@ -513,7 +513,7 @@ async function startMatrixQaLiveLaneGateway(params: {
     requiredPluginIds: readonly string[];
     createGatewayConfig: (params: {
       baseUrl: string;
-    }) => Pick<NexisClawConfig, "channels" | "messages">;
+    }) => Pick<GreenchClawConfig, "channels" | "messages">;
   };
   transportBaseUrl: string;
   providerMode: "mock-openai" | "live-frontier";
@@ -521,7 +521,7 @@ async function startMatrixQaLiveLaneGateway(params: {
   alternateModel: string;
   fastMode?: boolean;
   controlUiEnabled?: boolean;
-  mutateConfig?: (cfg: NexisClawConfig) => NexisClawConfig;
+  mutateConfig?: (cfg: GreenchClawConfig) => GreenchClawConfig;
 }): Promise<MatrixQaLiveLaneGatewayHarness> {
   return (await loadQaRuntimeModule().startQaLiveLaneGateway(
     params,
@@ -555,11 +555,11 @@ export async function runMatrixQaLive(params: {
   const scenarios = findMatrixQaScenarios(params.scenarioIds, params.profile);
   const runSuffix = randomUUID().slice(0, 8);
   const topology = buildMatrixQaTopologyForScenarios({
-    defaultRoomName: `NexisClaw Matrix QA ${runSuffix}`,
+    defaultRoomName: `GreenchClaw Matrix QA ${runSuffix}`,
     scenarios,
   });
   const observedEvents: MatrixQaObservedEvent[] = [];
-  const includeObservedEventContent = process.env.NEXISCLAW_QA_MATRIX_CAPTURE_CONTENT === "1";
+  const includeObservedEventContent = process.env.GREENCHCLAW_QA_MATRIX_CAPTURE_CONTENT === "1";
   const startedAtDate = new Date();
   const startedAt = startedAtDate.toISOString();
   const runStartedAtMs = Date.now();
@@ -588,7 +588,7 @@ export async function runMatrixQaLive(params: {
             driverLocalpart: `qa-driver-${runSuffix}`,
             observerLocalpart: `qa-observer-${runSuffix}`,
             registrationToken: harness.registrationToken,
-            roomName: `NexisClaw Matrix QA ${runSuffix}`,
+            roomName: `GreenchClaw Matrix QA ${runSuffix}`,
             sutLocalpart: `qa-sut-${runSuffix}`,
             topology,
           }),
@@ -800,7 +800,7 @@ export async function runMatrixQaLive(params: {
                 observerPassword: provisioning.observer.password,
                 observerUserId: provisioning.observer.userId,
                 gatewayRuntimeEnv: scenarioGateway.harness.gateway.runtimeEnv,
-                gatewayStateDir: scenarioGateway.harness.gateway.runtimeEnv?.NEXISCLAW_STATE_DIR,
+                gatewayStateDir: scenarioGateway.harness.gateway.runtimeEnv?.GREENCHCLAW_STATE_DIR,
                 gatewayCall: async (method, params, opts) =>
                   await scenarioGateway.harness.gateway.call(method, params ?? {}, opts),
                 outputDir,

@@ -5,13 +5,16 @@
 
 import * as http from "node:http";
 import * as https from "node:https";
-import { safeParseJsonWithSchema, safeParseWithSchema } from "NexisClaw/plugin-sdk/extension-shared";
-import { sleep } from "NexisClaw/plugin-sdk/runtime-env";
+import {
+  safeParseJsonWithSchema,
+  safeParseWithSchema,
+} from "GreenchClaw/plugin-sdk/extension-shared";
+import { sleep } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   formatErrorMessage,
   resolvePinnedHostnameWithPolicy,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { z } from "zod";
 
 const MIN_SEND_INTERVAL_MS = 500;

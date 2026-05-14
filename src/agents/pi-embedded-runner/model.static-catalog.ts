@@ -1,5 +1,5 @@
 import type { Api, Model } from "@earendil-works/pi-ai";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { planManifestModelCatalogRows } from "../../model-catalog/manifest-planner.js";
 import type { NormalizedModelCatalogRow } from "../../model-catalog/types.js";
 import {
@@ -45,7 +45,7 @@ function modelFromStaticCatalogRow(row: NormalizedModelCatalogRow): Model<Api> {
 export function resolveBundledStaticCatalogModel(params: {
   provider: string;
   modelId: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Model<Api> | undefined {

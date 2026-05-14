@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { readRootJsonObjectSync } from "../infra/json-files.js";
 import { parseFrontmatterBlock } from "../markdown/frontmatter.js";
 import { isPathInsideWithRealpath } from "../security/scan-paths.js";
@@ -158,7 +158,7 @@ function loadBundleCommandsFromRoot(params: {
 
 export function loadEnabledClaudeBundleCommands(params: {
   workspaceDir: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): ClaudeBundleCommandSpec[] {
   if (!hasExplicitPluginConfig(params.cfg?.plugins)) {
     return [];

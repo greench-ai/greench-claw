@@ -68,7 +68,7 @@ export function resolveCliBackendLiveModelSelection(params: {
   const parsed = parseModelRef(params.rawModel, params.defaultProvider);
   if (!parsed) {
     throw new Error(
-      `NEXISCLAW_LIVE_CLI_BACKEND_MODEL must resolve to a CLI backend model. Got: ${params.rawModel}`,
+      `GREENCHCLAW_LIVE_CLI_BACKEND_MODEL must resolve to a CLI backend model. Got: ${params.rawModel}`,
     );
   }
 
@@ -115,11 +115,11 @@ export function parseImageMode(raw?: string): "list" | "repeat" | undefined {
   if (trimmed === "list" || trimmed === "repeat") {
     return trimmed;
   }
-  throw new Error("NEXISCLAW_LIVE_CLI_BACKEND_IMAGE_MODE must be 'list' or 'repeat'.");
+  throw new Error("GREENCHCLAW_LIVE_CLI_BACKEND_IMAGE_MODE must be 'list' or 'repeat'.");
 }
 
 export function shouldRunCliImageProbe(providerId: string): boolean {
-  const raw = process.env.NEXISCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE?.trim();
+  const raw = process.env.GREENCHCLAW_LIVE_CLI_BACKEND_IMAGE_PROBE?.trim();
   if (raw) {
     return isTruthyEnvValue(raw);
   }
@@ -127,7 +127,7 @@ export function shouldRunCliImageProbe(providerId: string): boolean {
 }
 
 export function shouldRunCliMcpProbe(providerId: string): boolean {
-  const raw = process.env.NEXISCLAW_LIVE_CLI_BACKEND_MCP_PROBE?.trim();
+  const raw = process.env.GREENCHCLAW_LIVE_CLI_BACKEND_MCP_PROBE?.trim();
   if (raw) {
     return isTruthyEnvValue(raw);
   }
@@ -141,18 +141,18 @@ export function resolveCliBackendLiveArgs(params: {
 }): { args: string[]; resumeArgs?: string[] } {
   const args =
     parseJsonStringArray(
-      "NEXISCLAW_LIVE_CLI_BACKEND_ARGS",
-      process.env.NEXISCLAW_LIVE_CLI_BACKEND_ARGS,
+      "GREENCHCLAW_LIVE_CLI_BACKEND_ARGS",
+      process.env.GREENCHCLAW_LIVE_CLI_BACKEND_ARGS,
     ) ?? params.defaultArgs;
   if (!args || args.length === 0) {
     throw new Error(
-      `NEXISCLAW_LIVE_CLI_BACKEND_ARGS is required for provider "${params.providerId}".`,
+      `GREENCHCLAW_LIVE_CLI_BACKEND_ARGS is required for provider "${params.providerId}".`,
     );
   }
   const resumeArgs =
     parseJsonStringArray(
-      "NEXISCLAW_LIVE_CLI_BACKEND_RESUME_ARGS",
-      process.env.NEXISCLAW_LIVE_CLI_BACKEND_RESUME_ARGS,
+      "GREENCHCLAW_LIVE_CLI_BACKEND_RESUME_ARGS",
+      process.env.GREENCHCLAW_LIVE_CLI_BACKEND_RESUME_ARGS,
     ) ?? params.defaultResumeArgs;
   return { args, resumeArgs };
 }
@@ -173,7 +173,7 @@ export function resolveCliModelSwitchProbeTarget(
 }
 
 export function shouldRunCliModelSwitchProbe(providerId: string, modelRef: string): boolean {
-  const raw = process.env.NEXISCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE?.trim();
+  const raw = process.env.GREENCHCLAW_LIVE_CLI_BACKEND_MODEL_SWITCH_PROBE?.trim();
   if (raw) {
     return isTruthyEnvValue(raw);
   }
@@ -415,30 +415,30 @@ function isRetryableGatewayConnectError(error: Error): boolean {
 
 export function snapshotCliBackendLiveEnv(): CliBackendLiveEnvSnapshot {
   return {
-    configPath: process.env.NEXISCLAW_CONFIG_PATH,
-    stateDir: process.env.NEXISCLAW_STATE_DIR,
-    token: process.env.NEXISCLAW_GATEWAY_TOKEN,
-    skipChannels: process.env.NEXISCLAW_SKIP_CHANNELS,
-    skipProviders: process.env.NEXISCLAW_SKIP_PROVIDERS,
-    skipGmail: process.env.NEXISCLAW_SKIP_GMAIL_WATCHER,
-    skipCron: process.env.NEXISCLAW_SKIP_CRON,
-    skipCanvas: process.env.NEXISCLAW_SKIP_CANVAS_HOST,
-    skipBrowserControl: process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER,
-    bundledPluginsDir: process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR,
-    minimalGateway: process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY,
+    configPath: process.env.GREENCHCLAW_CONFIG_PATH,
+    stateDir: process.env.GREENCHCLAW_STATE_DIR,
+    token: process.env.GREENCHCLAW_GATEWAY_TOKEN,
+    skipChannels: process.env.GREENCHCLAW_SKIP_CHANNELS,
+    skipProviders: process.env.GREENCHCLAW_SKIP_PROVIDERS,
+    skipGmail: process.env.GREENCHCLAW_SKIP_GMAIL_WATCHER,
+    skipCron: process.env.GREENCHCLAW_SKIP_CRON,
+    skipCanvas: process.env.GREENCHCLAW_SKIP_CANVAS_HOST,
+    skipBrowserControl: process.env.GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER,
+    bundledPluginsDir: process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR,
+    minimalGateway: process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY,
     anthropicApiKey: process.env.ANTHROPIC_API_KEY,
     anthropicApiKeyOld: process.env.ANTHROPIC_API_KEY_OLD,
   };
 }
 
 export function applyCliBackendLiveEnv(preservedEnv: ReadonlySet<string>): void {
-  process.env.NEXISCLAW_SKIP_CHANNELS = "1";
-  process.env.NEXISCLAW_SKIP_PROVIDERS = "1";
-  process.env.NEXISCLAW_SKIP_GMAIL_WATCHER = "1";
-  process.env.NEXISCLAW_SKIP_CRON = "1";
-  process.env.NEXISCLAW_SKIP_CANVAS_HOST = "1";
-  process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-  process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY = "1";
+  process.env.GREENCHCLAW_SKIP_CHANNELS = "1";
+  process.env.GREENCHCLAW_SKIP_PROVIDERS = "1";
+  process.env.GREENCHCLAW_SKIP_GMAIL_WATCHER = "1";
+  process.env.GREENCHCLAW_SKIP_CRON = "1";
+  process.env.GREENCHCLAW_SKIP_CANVAS_HOST = "1";
+  process.env.GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+  process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY = "1";
   if (!preservedEnv.has("ANTHROPIC_API_KEY")) {
     delete process.env.ANTHROPIC_API_KEY;
   }
@@ -448,17 +448,17 @@ export function applyCliBackendLiveEnv(preservedEnv: ReadonlySet<string>): void 
 }
 
 export function restoreCliBackendLiveEnv(snapshot: CliBackendLiveEnvSnapshot): void {
-  restoreEnvVar("NEXISCLAW_CONFIG_PATH", snapshot.configPath);
-  restoreEnvVar("NEXISCLAW_STATE_DIR", snapshot.stateDir);
-  restoreEnvVar("NEXISCLAW_GATEWAY_TOKEN", snapshot.token);
-  restoreEnvVar("NEXISCLAW_SKIP_CHANNELS", snapshot.skipChannels);
-  restoreEnvVar("NEXISCLAW_SKIP_PROVIDERS", snapshot.skipProviders);
-  restoreEnvVar("NEXISCLAW_SKIP_GMAIL_WATCHER", snapshot.skipGmail);
-  restoreEnvVar("NEXISCLAW_SKIP_CRON", snapshot.skipCron);
-  restoreEnvVar("NEXISCLAW_SKIP_CANVAS_HOST", snapshot.skipCanvas);
-  restoreEnvVar("NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER", snapshot.skipBrowserControl);
-  restoreEnvVar("NEXISCLAW_BUNDLED_PLUGINS_DIR", snapshot.bundledPluginsDir);
-  restoreEnvVar("NEXISCLAW_TEST_MINIMAL_GATEWAY", snapshot.minimalGateway);
+  restoreEnvVar("GREENCHCLAW_CONFIG_PATH", snapshot.configPath);
+  restoreEnvVar("GREENCHCLAW_STATE_DIR", snapshot.stateDir);
+  restoreEnvVar("GREENCHCLAW_GATEWAY_TOKEN", snapshot.token);
+  restoreEnvVar("GREENCHCLAW_SKIP_CHANNELS", snapshot.skipChannels);
+  restoreEnvVar("GREENCHCLAW_SKIP_PROVIDERS", snapshot.skipProviders);
+  restoreEnvVar("GREENCHCLAW_SKIP_GMAIL_WATCHER", snapshot.skipGmail);
+  restoreEnvVar("GREENCHCLAW_SKIP_CRON", snapshot.skipCron);
+  restoreEnvVar("GREENCHCLAW_SKIP_CANVAS_HOST", snapshot.skipCanvas);
+  restoreEnvVar("GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER", snapshot.skipBrowserControl);
+  restoreEnvVar("GREENCHCLAW_BUNDLED_PLUGINS_DIR", snapshot.bundledPluginsDir);
+  restoreEnvVar("GREENCHCLAW_TEST_MINIMAL_GATEWAY", snapshot.minimalGateway);
   restoreEnvVar("ANTHROPIC_API_KEY", snapshot.anthropicApiKey);
   restoreEnvVar("ANTHROPIC_API_KEY_OLD", snapshot.anthropicApiKeyOld);
 }

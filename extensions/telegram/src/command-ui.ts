@@ -1,4 +1,4 @@
-import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
+import type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-runtime";
 import {
   buildBrowseProvidersButton,
   buildModelsKeyboard,

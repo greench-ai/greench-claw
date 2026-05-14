@@ -1,5 +1,5 @@
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { callGatewayFromCli } from "NexisClaw/plugin-sdk/gateway-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { callGatewayFromCli } from "GreenchClaw/plugin-sdk/gateway-runtime";
 import { formatQaGatewayLogsForError } from "./gateway-log-redaction.js";
 
 type QaGatewayRpcRequestOptions = {

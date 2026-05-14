@@ -59,7 +59,7 @@ function backupAssetPriority(kind: BackupAssetKind): number {
 }
 
 export function buildBackupArchiveRoot(nowMs = Date.now()): string {
-  return `${formatSessionArchiveTimestamp(nowMs)}-NexisClaw-backup`;
+  return `${formatSessionArchiveTimestamp(nowMs)}-GreenchClaw-backup`;
 }
 
 export function buildBackupArchiveBasename(nowMs = Date.now()): string {
@@ -260,7 +260,7 @@ export async function resolveBackupPlanFromDisk(
   const configSnapshot = await readConfigFileSnapshot();
   if (includeWorkspace && configSnapshot.exists && !configSnapshot.valid) {
     throw new Error(
-      `Config invalid at ${shortenHomePath(configSnapshot.path)}. NexisClaw cannot reliably discover custom workspaces for backup. Fix the config or rerun with --no-include-workspace for a partial backup.`,
+      `Config invalid at ${shortenHomePath(configSnapshot.path)}. GreenchClaw cannot reliably discover custom workspaces for backup. Fix the config or rerun with --no-include-workspace for a partial backup.`,
     );
   }
   const cleanupPlan = buildCleanupPlan({

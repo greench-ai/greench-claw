@@ -11,15 +11,15 @@ import {
 import { resolveNpmIntegrityDriftWithDefaultMessage } from "../infra/npm-integrity.js";
 import {
   readManagedNpmRootInstalledDependency,
-  readNexisClawManagedNpmRootOverrides,
-  repairManagedNpmRootNexisClawPeer,
+  readGreenchClawManagedNpmRootOverrides,
+  repairManagedNpmRootGreenchClawPeer,
   removeManagedNpmRootDependency,
   resolveManagedNpmRootDependencySpec,
   upsertManagedNpmRootDependency,
   type ManagedNpmRootInstalledDependency,
 } from "../infra/npm-managed-root.js";
 import {
-  compareNexisClawReleaseVersions,
+  compareGreenchClawReleaseVersions,
   formatPrereleaseResolutionError,
   isExactSemverVersion,
   isPrereleaseSemverVersion,
@@ -28,7 +28,7 @@ import {
   validateRegistryNpmSpec,
   type ParsedRegistryNpmSpec,
 } from "../infra/npm-registry-spec.js";
-import { installedPackageNeedsNexisClawPeerLinkRepair } from "../infra/package-update-utils.js";
+import { installedPackageNeedsGreenchClawPeerLinkRepair } from "../infra/package-update-utils.js";
 import {
   createSafeNpmInstallArgs,
   createSafeNpmInstallEnv,
@@ -54,8 +54,8 @@ import {
 } from "./manifest.js";
 import { validatePackageExtensionEntriesForInstall } from "./package-entry-resolution.js";
 import {
-  linkNexisClawPeerDependencies,
-  relinkNexisClawPeerDependenciesInManagedNpmRoot,
+  linkGreenchClawPeerDependencies,
+  relinkGreenchClawPeerDependenciesInManagedNpmRoot,
 } from "./plugin-peer-link.js";
 
 export { resolvePluginInstallDir } from "./install-paths.js";
@@ -77,30 +77,30 @@ type PackageManifest = PluginPackageManifest & {
   peerDependencies?: Record<string, string>;
 };
 
-function formatUnresolvedNexisClawPeerLinkError(packageName: string): string {
-  return `Installed plugin ${packageName} declares NexisClaw as a peer dependency, but NexisClaw could not create a plugin-local node_modules/NexisClaw link. Run from a packaged NexisClaw install or reinstall NexisClaw, then retry.`;
+function formatUnresolvedGreenchClawPeerLinkError(packageName: string): string {
+  return `Installed plugin ${packageName} declares GreenchClaw as a peer dependency, but GreenchClaw could not create a plugin-local node_modules/GreenchClaw link. Run from a packaged GreenchClaw install or reinstall GreenchClaw, then retry.`;
 }
 
 const MISSING_EXTENSIONS_ERROR =
-  'package.json missing NexisClaw.extensions; update the plugin package to include NexisClaw.extensions (for example ["./dist/index.js"]). See https://docs.NexisClaw.ai/help/troubleshooting#plugin-install-fails-with-missing-NexisClaw-extensions';
+  'package.json missing GreenchClaw.extensions; update the plugin package to include GreenchClaw.extensions (for example ["./dist/index.js"]). See https://docs.GreenchClaw.ai/help/troubleshooting#plugin-install-fails-with-missing-GreenchClaw-extensions';
 const PLUGIN_ARCHIVE_ROOT_MARKERS = [
   "package.json",
-  "NexisClaw.plugin.json",
+  "GreenchClaw.plugin.json",
   ".codex-plugin/plugin.json",
   ".claude-plugin/plugin.json",
   ".cursor-plugin/plugin.json",
 ];
-const MANAGED_NPM_PACK_ARCHIVE_DIR = "_NexisClaw-pack-archives";
+const MANAGED_NPM_PACK_ARCHIVE_DIR = "_GreenchClaw-pack-archives";
 
 export const PLUGIN_INSTALL_ERROR_CODE = {
   INVALID_NPM_SPEC: "invalid_npm_spec",
   INVALID_MIN_HOST_VERSION: "invalid_min_host_version",
   UNKNOWN_HOST_VERSION: "unknown_host_version",
   INCOMPATIBLE_HOST_VERSION: "incompatible_host_version",
-  MISSING_NEXISCLAW_EXTENSIONS: "missing_NexisClaw_extensions",
+  MISSING_GREENCHCLAW_EXTENSIONS: "missing_GreenchClaw_extensions",
   MISSING_PLUGIN_MANIFEST: "missing_plugin_manifest",
-  EMPTY_NEXISCLAW_EXTENSIONS: "empty_NexisClaw_extensions",
-  INVALID_NEXISCLAW_EXTENSIONS: "invalid_NexisClaw_extensions",
+  EMPTY_GREENCHCLAW_EXTENSIONS: "empty_GreenchClaw_extensions",
+  INVALID_GREENCHCLAW_EXTENSIONS: "invalid_GreenchClaw_extensions",
   NPM_PACKAGE_NOT_FOUND: "npm_package_not_found",
   PLUGIN_ID_MISMATCH: "plugin_id_mismatch",
   SECURITY_SCAN_BLOCKED: "security_scan_blocked",
@@ -137,7 +137,7 @@ type PluginInstallPolicyRequest = {
 
 const defaultLogger: PluginInstallLogger = {};
 
-function ensureNexisClawExtensions(params: { manifest: PackageManifest }):
+function ensureGreenchClawExtensions(params: { manifest: PackageManifest }):
   | {
       ok: true;
       entries: string[];
@@ -152,14 +152,14 @@ function ensureNexisClawExtensions(params: { manifest: PackageManifest }):
     return {
       ok: false,
       error: MISSING_EXTENSIONS_ERROR,
-      code: PLUGIN_INSTALL_ERROR_CODE.MISSING_NEXISCLAW_EXTENSIONS,
+      code: PLUGIN_INSTALL_ERROR_CODE.MISSING_GREENCHCLAW_EXTENSIONS,
     };
   }
   if (resolved.status === "empty") {
     return {
       ok: false,
-      error: "package.json NexisClaw.extensions is empty",
-      code: PLUGIN_INSTALL_ERROR_CODE.EMPTY_NEXISCLAW_EXTENSIONS,
+      error: "package.json GreenchClaw.extensions is empty",
+      code: PLUGIN_INSTALL_ERROR_CODE.EMPTY_GREENCHCLAW_EXTENSIONS,
     };
   }
   return {
@@ -177,7 +177,7 @@ function isNpmPackageNotFoundMessage(error: string): boolean {
 }
 
 function compareNpmSemver(a: string, b: string): number {
-  const releaseCmp = compareNexisClawReleaseVersions(a, b);
+  const releaseCmp = compareGreenchClawReleaseVersions(a, b);
   if (releaseCmp !== null) {
     return releaseCmp;
   }
@@ -195,7 +195,7 @@ async function resolveTrustedOfficialPrereleaseResolution(params: {
   timeoutMs: number;
   logger: PluginInstallLogger;
 }): Promise<TrustedOfficialPrereleaseResolution | null> {
-  if (!params.spec.name.startsWith("@NexisClaw/")) {
+  if (!params.spec.name.startsWith("@GreenchClaw/")) {
     return null;
   }
   const versions = await runCommandWithTimeout(
@@ -241,12 +241,12 @@ async function resolveTrustedOfficialPrereleaseResolution(params: {
           return null;
         }
         params.logger.warn?.(
-          `Resolved ${params.spec.raw} to prerelease version ${params.resolvedPrereleaseVersion}; using newest prerelease ${prereleaseSpec} because this trusted official NexisClaw package has no stable npm versions yet.`,
+          `Resolved ${params.spec.raw} to prerelease version ${params.resolvedPrereleaseVersion}; using newest prerelease ${prereleaseSpec} because this trusted official GreenchClaw package has no stable npm versions yet.`,
         );
         return { kind: "prerelease-only", resolution: metadataResult.metadata };
       }
       params.logger.warn?.(
-        `Resolved ${params.spec.raw} to prerelease version ${params.resolvedPrereleaseVersion}; allowing it because this trusted official NexisClaw package has no stable npm versions yet.`,
+        `Resolved ${params.spec.raw} to prerelease version ${params.resolvedPrereleaseVersion}; allowing it because this trusted official GreenchClaw package has no stable npm versions yet.`,
       );
       return { kind: "allow-prerelease-only" };
     }
@@ -262,7 +262,7 @@ async function resolveTrustedOfficialPrereleaseResolution(params: {
     return null;
   }
   params.logger.warn?.(
-    `Resolved ${params.spec.raw} to prerelease version ${params.resolvedPrereleaseVersion}; falling back to stable ${stableSpec} for this trusted official NexisClaw install.`,
+    `Resolved ${params.spec.raw} to prerelease version ${params.resolvedPrereleaseVersion}; falling back to stable ${stableSpec} for this trusted official GreenchClaw install.`,
   );
   return { kind: "stable", resolution: metadataResult.metadata };
 }
@@ -368,7 +368,7 @@ async function rollbackManagedNpmPluginInstall(params: {
     );
   }
   try {
-    await relinkNexisClawPeerDependenciesInManagedNpmRoot({
+    await relinkGreenchClawPeerDependenciesInManagedNpmRoot({
       npmRoot: params.npmRoot,
       logger: params.logger,
     });
@@ -475,21 +475,21 @@ async function installPluginFromManagedNpmRoot(
   }
 
   logger.info?.(`Installing ${params.displaySpec} into ${npmRoot}…`);
-  if (params.packageName !== "NexisClaw") {
-    const repairedNexisClawPeer = await repairManagedNpmRootNexisClawPeer({
+  if (params.packageName !== "GreenchClaw") {
+    const repairedGreenchClawPeer = await repairManagedNpmRootGreenchClawPeer({
       npmRoot,
       timeoutMs,
       logger,
     });
-    if (repairedNexisClawPeer) {
-      logger.info?.(`Repaired stale NexisClaw peer dependency in ${npmRoot}`);
+    if (repairedGreenchClawPeer) {
+      logger.info?.(`Repaired stale GreenchClaw peer dependency in ${npmRoot}`);
     }
   }
   await upsertManagedNpmRootDependency({
     npmRoot,
     packageName: params.packageName,
     dependencySpec: params.dependencySpec,
-    managedOverrides: await readNexisClawManagedNpmRootOverrides(),
+    managedOverrides: await readGreenchClawManagedNpmRootOverrides(),
   });
   const install = await runCommandWithTimeout(
     [
@@ -526,18 +526,18 @@ async function installPluginFromManagedNpmRoot(
       error: `npm install failed: ${install.stderr.trim() || install.stdout.trim()}`,
     };
   }
-  if (params.packageName !== "NexisClaw") {
-    const repairedNexisClawPeer = await repairManagedNpmRootNexisClawPeer({
+  if (params.packageName !== "GreenchClaw") {
+    const repairedGreenchClawPeer = await repairManagedNpmRootGreenchClawPeer({
       npmRoot,
       timeoutMs,
       logger,
     });
-    if (repairedNexisClawPeer) {
-      logger.info?.(`Repaired stale NexisClaw peer dependency in ${npmRoot} after npm install`);
+    if (repairedGreenchClawPeer) {
+      logger.info?.(`Repaired stale GreenchClaw peer dependency in ${npmRoot} after npm install`);
     }
   }
   try {
-    await relinkNexisClawPeerDependenciesInManagedNpmRoot({
+    await relinkGreenchClawPeerDependenciesInManagedNpmRoot({
       npmRoot,
       logger,
     });
@@ -551,10 +551,10 @@ async function installPluginFromManagedNpmRoot(
     });
     return {
       ok: false,
-      error: `Failed to repair NexisClaw peer links after npm install: ${String(error)}`,
+      error: `Failed to repair GreenchClaw peer links after npm install: ${String(error)}`,
     };
   }
-  if (installedPackageNeedsNexisClawPeerLinkRepair(installRoot)) {
+  if (installedPackageNeedsGreenchClawPeerLinkRepair(installRoot)) {
     await rollbackManagedNpmPluginInstall({
       npmRoot,
       packageName: params.packageName,
@@ -564,7 +564,7 @@ async function installPluginFromManagedNpmRoot(
     });
     return {
       ok: false,
-      error: formatUnresolvedNexisClawPeerLinkError(params.packageName),
+      error: formatUnresolvedGreenchClawPeerLinkError(params.packageName),
     };
   }
 
@@ -770,7 +770,7 @@ async function runInstallSourceScan(params: {
   } catch (err) {
     return {
       ok: false,
-      error: `${params.subject} installation blocked: code safety scan failed (${String(err)}). Run "NexisClaw security audit --deep" for details.`,
+      error: `${params.subject} installation blocked: code safety scan failed (${String(err)}). Run "GreenchClaw security audit --deep" for details.`,
       code: PLUGIN_INSTALL_ERROR_CODE.SECURITY_SCAN_FAILED,
     };
   }
@@ -1015,7 +1015,7 @@ async function detectNativePackageInstallSource(packageDir: string): Promise<boo
 
   try {
     const manifest = await runtime.readJsonFile<PackageManifest>(manifestPath);
-    return ensureNexisClawExtensions({ manifest }).ok;
+    return ensureGreenchClawExtensions({ manifest }).ok;
   } catch {
     return false;
   }
@@ -1061,7 +1061,7 @@ async function validatePackagePluginInstallSource(params: {
     return { ok: false, error: `invalid package.json: ${String(err)}` };
   }
 
-  const extensionsResult = ensureNexisClawExtensions({
+  const extensionsResult = ensureGreenchClawExtensions({
     manifest,
   });
   if (!extensionsResult.ok) {
@@ -1079,7 +1079,7 @@ async function validatePackagePluginInstallSource(params: {
   if (!ocManifestResult.ok && params.requirePluginManifest) {
     return {
       ok: false,
-      error: `package missing valid NexisClaw.plugin.json: ${ocManifestResult.error}`,
+      error: `package missing valid GreenchClaw.plugin.json: ${ocManifestResult.error}`,
       code: PLUGIN_INSTALL_ERROR_CODE.MISSING_PLUGIN_MANIFEST,
     };
   }
@@ -1123,20 +1123,20 @@ async function validatePackagePluginInstallSource(params: {
     if (minHostVersionCheck.kind === "invalid") {
       return {
         ok: false,
-        error: `invalid package.json NexisClaw.install.minHostVersion: ${minHostVersionCheck.error}`,
+        error: `invalid package.json GreenchClaw.install.minHostVersion: ${minHostVersionCheck.error}`,
         code: PLUGIN_INSTALL_ERROR_CODE.INVALID_MIN_HOST_VERSION,
       };
     }
     if (minHostVersionCheck.kind === "unknown_host_version") {
       return {
         ok: false,
-        error: `plugin "${pluginId}" requires NexisClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host version could not be determined. Re-run from a released build or set NEXISCLAW_VERSION and retry.`,
+        error: `plugin "${pluginId}" requires GreenchClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host version could not be determined. Re-run from a released build or set GREENCHCLAW_VERSION and retry.`,
         code: PLUGIN_INSTALL_ERROR_CODE.UNKNOWN_HOST_VERSION,
       };
     }
     return {
       ok: false,
-      error: `plugin "${pluginId}" requires NexisClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host is ${minHostVersionCheck.currentVersion}. Upgrade NexisClaw and retry.`,
+      error: `plugin "${pluginId}" requires GreenchClaw >=${minHostVersionCheck.requirement.minimumLabel}, but this host is ${minHostVersionCheck.currentVersion}. Upgrade GreenchClaw and retry.`,
       code: PLUGIN_INSTALL_ERROR_CODE.INCOMPATIBLE_HOST_VERSION,
     };
   }
@@ -1150,7 +1150,7 @@ async function validatePackagePluginInstallSource(params: {
     return {
       ok: false,
       error: extensionValidation.error,
-      code: PLUGIN_INSTALL_ERROR_CODE.INVALID_NEXISCLAW_EXTENSIONS,
+      code: PLUGIN_INSTALL_ERROR_CODE.INVALID_GREENCHCLAW_EXTENSIONS,
     };
   }
 
@@ -1217,7 +1217,7 @@ async function scanAndLinkInstalledPackage(params: {
   if (scanResult) {
     return scanResult;
   }
-  const peerLinkRepair = await linkNexisClawPeerDependencies({
+  const peerLinkRepair = await linkGreenchClawPeerDependencies({
     installedDir: params.installedDir,
     peerDependencies: params.peerDependencies,
     logger: params.logger,
@@ -1225,7 +1225,7 @@ async function scanAndLinkInstalledPackage(params: {
   if (peerLinkRepair.skipped > 0) {
     return {
       ok: false,
-      error: formatUnresolvedNexisClawPeerLinkError(params.pluginId),
+      error: formatUnresolvedGreenchClawPeerLinkError(params.pluginId),
     };
   }
   return null;
@@ -1374,7 +1374,7 @@ export async function installPluginFromArchive(
 
   return await runtime.withExtractedArchiveRoot({
     archivePath,
-    tempDirPrefix: "NexisClaw-plugin-",
+    tempDirPrefix: "GreenchClaw-plugin-",
     timeoutMs,
     logger,
     rootMarkers: PLUGIN_ARCHIVE_ROOT_MARKERS,

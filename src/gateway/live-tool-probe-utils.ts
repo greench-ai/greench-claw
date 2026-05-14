@@ -29,9 +29,9 @@ const NONCE_REFUSAL_MARKERS = [
   "no read tool available",
   "won't output",
   "won’t output",
-  "isn't a real NexisClaw probe",
-  "is not a real NexisClaw probe",
-  "not a real NexisClaw probe",
+  "isn't a real GreenchClaw probe",
+  "is not a real GreenchClaw probe",
+  "not a real GreenchClaw probe",
   "no part of the system asks me",
 ];
 

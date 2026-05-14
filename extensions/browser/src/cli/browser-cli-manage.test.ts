@@ -150,7 +150,7 @@ describe("browser manage output", () => {
         ? {
             enabled: true,
             profile: "remote",
-            driver: "NexisClaw",
+            driver: "GreenchClaw",
             transport: "cdp",
             running: true,
             cdpReady: true,
@@ -187,8 +187,8 @@ describe("browser manage output", () => {
       if (req.path === "/") {
         return {
           enabled: true,
-          profile: "NexisClaw",
-          driver: "NexisClaw",
+          profile: "GreenchClaw",
+          driver: "GreenchClaw",
           transport: "cdp",
           running: true,
           cdpReady: true,
@@ -206,7 +206,7 @@ describe("browser manage output", () => {
         };
       }
       if (req.path === "/profiles") {
-        return { profiles: [{ name: "NexisClaw", running: true }] };
+        return { profiles: [{ name: "GreenchClaw", running: true }] };
       }
       if (req.path === "/tabs") {
         return {

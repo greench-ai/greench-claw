@@ -2,8 +2,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { MsgContext } from "../auto-reply/templating.js";
-import type { NexisClawConfig } from "../config/types.js";
-import { resolvePreferredNexisClawTmpDir } from "../infra/tmp-NexisClaw-dir.js";
+import type { GreenchClawConfig } from "../config/types.js";
+import { resolvePreferredGreenchClawTmpDir } from "../infra/tmp-GreenchClaw-dir.js";
 import { createSafeAudioFixtureBuffer } from "./runner.test-utils.js";
 import type { MediaUnderstandingProvider } from "./types.js";
 
@@ -52,7 +52,7 @@ const { MediaFetchErrorMock } = vi.hoisted(() => {
 
 let applyMediaUnderstanding: typeof import("./apply.js").applyMediaUnderstanding;
 
-const TEMP_MEDIA_PREFIX = "NexisClaw-echo-transcript-test-";
+const TEMP_MEDIA_PREFIX = "GreenchClaw-echo-transcript-test-";
 let suiteTempMediaRootDir = "";
 
 async function createTempAudioFile(): Promise<string> {
@@ -79,10 +79,10 @@ function createAudioConfigWithEcho(opts?: {
   echoFormat?: string;
   transcribedText?: string;
 }): {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   providers: Record<string, { id: string; transcribeAudio: () => Promise<{ text: string }> }>;
 } {
-  const cfg: NexisClawConfig = {
+  const cfg: GreenchClawConfig = {
     tools: {
       media: {
         audio: {
@@ -104,7 +104,7 @@ function createAudioConfigWithEcho(opts?: {
   return { cfg, providers };
 }
 
-function disableImageUnderstanding(cfg: NexisClawConfig): void {
+function disableImageUnderstanding(cfg: GreenchClawConfig): void {
   if (!cfg.tools?.media) {
     throw new Error("Expected media tool config");
   }
@@ -221,7 +221,7 @@ describe("applyMediaUnderstanding – echo transcript", () => {
       };
     });
 
-    const baseDir = resolvePreferredNexisClawTmpDir();
+    const baseDir = resolvePreferredGreenchClawTmpDir();
     await fs.mkdir(baseDir, { recursive: true });
     suiteTempMediaRootDir = await fs.mkdtemp(path.join(baseDir, TEMP_MEDIA_PREFIX));
     const mod = await import("./apply.js");

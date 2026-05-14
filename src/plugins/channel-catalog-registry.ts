@@ -1,5 +1,5 @@
 import type { PluginInstallRecord } from "../config/types.plugins.js";
-import { discoverNexisClawPlugins } from "./discovery.js";
+import { discoverGreenchClawPlugins } from "./discovery.js";
 import { shouldRejectHardlinkedPluginFiles } from "./hardlink-policy.js";
 import { loadInstalledPluginIndexInstallRecordsSync } from "./installed-plugin-index-record-reader.js";
 import {
@@ -34,7 +34,7 @@ export function listChannelCatalogEntries(
   } = {},
 ): PluginChannelCatalogEntry[] {
   const installRecords = resolveInstallRecords(params);
-  return discoverNexisClawPlugins({
+  return discoverGreenchClawPlugins({
     workspaceDir: params.workspaceDir,
     env: params.env,
     ...(installRecords && Object.keys(installRecords).length > 0 ? { installRecords } : {}),

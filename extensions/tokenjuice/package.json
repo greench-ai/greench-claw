@@ -1,5 +1,5 @@
 {
-  "name": "@NexisClaw/tokenjuice",
+  "name": "@GreenchClaw/tokenjuice",
   "version": "2026.5.12-beta.1",
   "description": "Bundled tokenjuice exec output compaction plugin",
   "type": "module",
@@ -7,9 +7,9 @@
     "tokenjuice": "0.7.0"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

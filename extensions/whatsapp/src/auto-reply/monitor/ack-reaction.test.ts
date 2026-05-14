@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { WhatsAppSendResult } from "../../inbound/send-result.js";
 import type { WebInboundMessage } from "../../inbound/types.js";
@@ -40,8 +40,8 @@ function createMessage(overrides: Partial<WebInboundMessage> = {}): WebInboundMe
 
 function createConfig(
   reactionLevel: "off" | "ack" | "minimal" | "extensive",
-  extras?: Partial<NonNullable<NexisClawConfig["channels"]>["whatsapp"]>,
-): NexisClawConfig {
+  extras?: Partial<NonNullable<GreenchClawConfig["channels"]>["whatsapp"]>,
+): GreenchClawConfig {
   return {
     channels: {
       whatsapp: {
@@ -54,7 +54,7 @@ function createConfig(
         ...extras,
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 type AckReactionParams = Parameters<typeof maybeSendAckReaction>[0];
@@ -73,7 +73,7 @@ const runAckReaction = (overrides: Partial<AckReactionParams> = {}) =>
     ...overrides,
   });
 
-const expectAckReactionSent = (accountId: string, cfg: NexisClawConfig = createConfig("ack")) => {
+const expectAckReactionSent = (accountId: string, cfg: GreenchClawConfig = createConfig("ack")) => {
   expect(hoisted.sendReactionWhatsApp).toHaveBeenCalledWith(
     "15551234567@s.whatsapp.net",
     "msg-1",

@@ -3,10 +3,10 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 import { z } from "zod";
 import { startQaGatewayChild } from "../../gateway-child.js";
 import { DEFAULT_QA_LIVE_PROVIDER_MODE } from "../../providers/index.js";
@@ -299,13 +299,13 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     id: "telegram-status-command",
     title: "Telegram status command reply",
     rationale: "Recent Telegram group regressions broke /status while normal chat still worked.",
-    regressionRefs: ["NexisClaw/NexisClaw#74698"],
+    regressionRefs: ["GreenchClaw/GreenchClaw#74698"],
     timeoutMs: 45_000,
     buildRun: (sutUsername) =>
       telegramQaStepRun({
         expectReply: true,
         input: `/status@${sutUsername}`,
-        expectedTextIncludes: ["NexisClaw", "Model:", "Session:", "Activation:"],
+        expectedTextIncludes: ["GreenchClaw", "Model:", "Session:", "Activation:"],
       }),
   },
   {
@@ -326,7 +326,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
           driverGroupAuthorization: "allow",
           expectReply: true,
           input: `/status@${sutUsername}`,
-          expectedTextIncludes: ["NexisClaw", "Session:"],
+          expectedTextIncludes: ["GreenchClaw", "Session:"],
         },
         {
           expectReply: true,
@@ -350,7 +350,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     buildRun: () =>
       telegramQaStepRun({
         expectReply: false,
-        input: "/status@NexisClawQaOtherBot",
+        input: "/status@GreenchClawQaOtherBot",
       }),
   },
   {
@@ -414,7 +414,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     title: "Telegram streamed final stays one message",
     defaultProviderModes: ["mock-openai"],
     rationale: "Regression guard for duplicate final replies from Telegram streaming paths.",
-    regressionRefs: ["NexisClaw/NexisClaw#39905"],
+    regressionRefs: ["GreenchClaw/GreenchClaw#39905"],
     timeoutMs: 45_000,
     buildRun: (sutUsername) =>
       telegramQaStepRun({
@@ -433,7 +433,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     title: "Telegram long final reuses the preview message",
     defaultProviderModes: ["mock-openai"],
     rationale: "Regression guard for long streamed finals leaving stale preview messages behind.",
-    regressionRefs: ["NexisClaw/NexisClaw#39905"],
+    regressionRefs: ["GreenchClaw/GreenchClaw#39905"],
     timeoutMs: 60_000,
     buildRun: (sutUsername) =>
       telegramQaStepRun({
@@ -452,7 +452,7 @@ const TELEGRAM_QA_SCENARIOS: TelegramQaScenarioDefinition[] = [
     title: "Telegram three-chunk final keeps only final chunks",
     defaultEnabled: false,
     rationale: "Opt-in stress probe for Telegram long final chunk accounting.",
-    regressionRefs: ["NexisClaw/NexisClaw#39905"],
+    regressionRefs: ["GreenchClaw/GreenchClaw#39905"],
     timeoutMs: 60_000,
     buildRun: (sutUsername) =>
       telegramQaStepRun({
@@ -492,13 +492,13 @@ const TELEGRAM_QA_STANDARD_SCENARIO_IDS = collectLiveTransportStandardScenarioCo
 });
 
 const TELEGRAM_QA_ENV_KEYS = [
-  "NEXISCLAW_QA_TELEGRAM_GROUP_ID",
-  "NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN",
-  "NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN",
+  "GREENCHCLAW_QA_TELEGRAM_GROUP_ID",
+  "GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN",
+  "GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN",
 ] as const;
-const TELEGRAM_QA_CAPTURE_CONTENT_ENV = "NEXISCLAW_QA_TELEGRAM_CAPTURE_CONTENT";
-const QA_REDACT_PUBLIC_METADATA_ENV = "NEXISCLAW_QA_REDACT_PUBLIC_METADATA";
-const QA_SUITE_PROGRESS_ENV = "NEXISCLAW_QA_SUITE_PROGRESS";
+const TELEGRAM_QA_CAPTURE_CONTENT_ENV = "GREENCHCLAW_QA_TELEGRAM_CAPTURE_CONTENT";
+const QA_REDACT_PUBLIC_METADATA_ENV = "GREENCHCLAW_QA_REDACT_PUBLIC_METADATA";
+const QA_SUITE_PROGRESS_ENV = "GREENCHCLAW_QA_SUITE_PROGRESS";
 const TELEGRAM_QA_PROGRESS_DETAIL_LIMIT = 240;
 const TELEGRAM_QA_PROGRESS_PREFIX = "[qa-telegram-live]";
 const execFileAsync = promisify(execFile);
@@ -571,7 +571,7 @@ function parsePositiveTelegramQaEnvMs(env: NodeJS.ProcessEnv, name: string, fall
 function resolveTelegramQaCanaryTimeoutMs(env: NodeJS.ProcessEnv = process.env) {
   return parsePositiveTelegramQaEnvMs(
     env,
-    "NEXISCLAW_QA_TELEGRAM_CANARY_TIMEOUT_MS",
+    "GREENCHCLAW_QA_TELEGRAM_CANARY_TIMEOUT_MS",
     DEFAULT_TELEGRAM_QA_CANARY_TIMEOUT_MS,
   );
 }
@@ -580,7 +580,11 @@ function resolveTelegramQaScenarioTimeoutMs(
   fallbackMs: number,
   env: NodeJS.ProcessEnv = process.env,
 ) {
-  return parsePositiveTelegramQaEnvMs(env, "NEXISCLAW_QA_TELEGRAM_SCENARIO_TIMEOUT_MS", fallbackMs);
+  return parsePositiveTelegramQaEnvMs(
+    env,
+    "GREENCHCLAW_QA_TELEGRAM_SCENARIO_TIMEOUT_MS",
+    fallbackMs,
+  );
 }
 
 function formatTelegramQaTimeoutSeconds(timeoutMs: number) {
@@ -617,14 +621,14 @@ function formatTelegramQaProgressDetails(details: string): string {
 }
 
 function resolveTelegramQaRuntimeEnv(env: NodeJS.ProcessEnv = process.env): TelegramQaRuntimeEnv {
-  const groupId = resolveEnvValue(env, "NEXISCLAW_QA_TELEGRAM_GROUP_ID");
+  const groupId = resolveEnvValue(env, "GREENCHCLAW_QA_TELEGRAM_GROUP_ID");
   if (!/^-?\d+$/u.test(groupId)) {
-    throw new Error("NEXISCLAW_QA_TELEGRAM_GROUP_ID must be a numeric Telegram chat id.");
+    throw new Error("GREENCHCLAW_QA_TELEGRAM_GROUP_ID must be a numeric Telegram chat id.");
   }
   return {
     groupId,
-    driverToken: resolveEnvValue(env, "NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN"),
-    sutToken: resolveEnvValue(env, "NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN"),
+    driverToken: resolveEnvValue(env, "GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN"),
+    sutToken: resolveEnvValue(env, "GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN"),
   };
 }
 
@@ -692,14 +696,14 @@ function normalizeTelegramObservedMessage(update: TelegramUpdate): TelegramObser
 }
 
 function buildTelegramQaConfig(
-  baseCfg: NexisClawConfig,
+  baseCfg: GreenchClawConfig,
   params: {
     groupId: string;
     sutToken: string;
     driverBotId: number;
     sutAccountId: string;
   },
-): NexisClawConfig {
+): GreenchClawConfig {
   const pluginAllow = [...new Set([...(baseCfg.plugins?.allow ?? []), "telegram"])];
   const pluginEntries = {
     ...baseCfg.plugins?.entries,
@@ -1524,29 +1528,29 @@ function canaryFailureMessage(params: {
   ].join("\n");
 }
 
-async function runInstalledNexisClawTelegramOnboardingPreflight(params: {
+async function runInstalledGreenchClawTelegramOnboardingPreflight(params: {
   openClawCommand: string;
   providerMode: ReturnType<typeof normalizeQaProviderMode>;
   sutToken: string;
 }) {
   const tempRoot = await fs.mkdtemp(
-    path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-npm-telegram-"),
+    path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-npm-telegram-"),
   );
   const homeDir = path.join(tempRoot, "home");
-  const stateDir = path.join(homeDir, ".NexisClaw");
+  const stateDir = path.join(homeDir, ".GreenchClaw");
   await fs.mkdir(stateDir, { recursive: true });
   const tokenPath = path.join(tempRoot, "sut-token.txt");
   await fs.writeFile(tokenPath, params.sutToken, { encoding: "utf8", mode: 0o600 });
   const env = {
     ...process.env,
     HOME: homeDir,
-    NEXISCLAW_HOME: stateDir,
-    NEXISCLAW_CONFIG_PATH: path.join(stateDir, "NexisClaw.json"),
-    NEXISCLAW_STATE_DIR: stateDir,
-    NEXISCLAW_GATEWAY_TOKEN: "npm-telegram-live-onboard",
+    GREENCHCLAW_HOME: stateDir,
+    GREENCHCLAW_CONFIG_PATH: path.join(stateDir, "GreenchClaw.json"),
+    GREENCHCLAW_STATE_DIR: stateDir,
+    GREENCHCLAW_GATEWAY_TOKEN: "npm-telegram-live-onboard",
     ...(params.providerMode === "live-frontier"
       ? {}
-      : { OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? "sk-NexisClaw-npm-telegram-preflight" }),
+      : { OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? "sk-GreenchClaw-npm-telegram-preflight" }),
   };
   try {
     await execFileAsync(
@@ -1587,7 +1591,7 @@ async function runInstalledNexisClawTelegramOnboardingPreflight(params: {
 export async function runTelegramQaLive(params: {
   repoRoot?: string;
   outputDir?: string;
-  sutNexisClawCommand?: string;
+  sutGreenchClawCommand?: string;
   preflightInstalledOnboarding?: boolean;
   providerMode?: QaProviderModeInput;
   primaryModel?: string;
@@ -1648,10 +1652,10 @@ export async function runTelegramQaLive(params: {
   let preservedGatewayDebugArtifacts = false;
   let canaryFailure: string | null = null;
   try {
-    if (params.sutNexisClawCommand && params.preflightInstalledOnboarding === true) {
+    if (params.sutGreenchClawCommand && params.preflightInstalledOnboarding === true) {
       writeTelegramQaProgress(progressEnabled, "installed package onboarding preflight start");
-      await runInstalledNexisClawTelegramOnboardingPreflight({
-        openClawCommand: params.sutNexisClawCommand,
+      await runInstalledGreenchClawTelegramOnboardingPreflight({
+        openClawCommand: params.sutGreenchClawCommand,
         providerMode,
         sutToken: runtimeEnv.sutToken,
       });
@@ -1676,9 +1680,9 @@ export async function runTelegramQaLive(params: {
 
     const gatewayHarness = await startQaLiveLaneGateway({
       repoRoot,
-      command: params.sutNexisClawCommand
+      command: params.sutGreenchClawCommand
         ? {
-            executablePath: params.sutNexisClawCommand,
+            executablePath: params.sutGreenchClawCommand,
             usePackagedPlugins: true,
           }
         : undefined,
@@ -1914,7 +1918,7 @@ export async function runTelegramQaLive(params: {
 
   const finishedAt = new Date().toISOString();
   const publishedCleanupIssues = redactPublicMetadata
-    ? cleanupIssues.map(() => "details redacted (NEXISCLAW_QA_REDACT_PUBLIC_METADATA=1)")
+    ? cleanupIssues.map(() => "details redacted (GREENCHCLAW_QA_REDACT_PUBLIC_METADATA=1)")
     : cleanupIssues;
   const passedCount = scenarioResults.filter((entry) => entry.status === "pass").length;
   const failedCount = scenarioResults.filter((entry) => entry.status === "fail").length;

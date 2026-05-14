@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { loggingState } from "../logging/state.js";
 import { createLazyImportLoader } from "../shared/lazy-promise.js";
 import type { CliPluginRegistryScope } from "./command-catalog.js";
@@ -16,8 +16,8 @@ export type CliPluginRegistryLoadPolicy = {
 export async function ensureCliPluginRegistryLoaded(params: {
   scope: CliPluginRegistryScope;
   routeLogsToStderr?: boolean;
-  config?: NexisClawConfig;
-  activationSourceConfig?: NexisClawConfig;
+  config?: GreenchClawConfig;
+  activationSourceConfig?: GreenchClawConfig;
 }) {
   const { ensurePluginRegistryLoaded } = await loadPluginRegistryModule();
   const previousForceStderr = loggingState.forceConsoleToStderr;

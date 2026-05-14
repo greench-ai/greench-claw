@@ -2,8 +2,8 @@ import path from "node:path";
 import { type Api, type Model } from "@earendil-works/pi-ai";
 import { formatCliCommand } from "../cli/command-format.js";
 import { getRuntimeConfigSnapshot } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { ModelProviderAuthMode, ModelProviderConfig } from "../config/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { coerceSecretRef } from "../config/types.secrets.js";
 import { getShellEnvAppliedKeys } from "../infra/shell-env.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
@@ -53,7 +53,7 @@ export type ProviderCredentialPrecedence = "profile-first" | "env-first";
 const log = createSubsystemLogger("model-auth");
 
 function resolveConfigAwareEnvApiKey(
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
   provider: string,
   workspaceDir?: string,
 ): EnvApiKeyResult | null {
@@ -61,7 +61,7 @@ function resolveConfigAwareEnvApiKey(
 }
 
 function resolveProviderConfig(
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
   provider: string,
 ): ModelProviderConfig | undefined {
   const providers = cfg?.models?.providers ?? {};
@@ -83,7 +83,7 @@ function resolveProviderConfig(
 }
 
 export function getCustomProviderApiKey(
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
   provider: string,
 ): string | undefined {
   const entry = resolveProviderConfig(cfg, provider);
@@ -108,7 +108,7 @@ type ResolvedCustomProviderApiKey = {
 };
 
 function canResolveEnvSecretRefInReadOnlyPath(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   provider: string;
   id: string;
 }): boolean {
@@ -124,7 +124,7 @@ function canResolveEnvSecretRefInReadOnlyPath(params: {
 }
 
 export function resolveUsableCustomProviderApiKey(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   provider: string;
   env?: NodeJS.ProcessEnv;
 }): ResolvedCustomProviderApiKey | null {
@@ -200,7 +200,7 @@ export function resolveUsableCustomProviderApiKey(params: {
 }
 
 export function hasUsableCustomProviderApiKey(
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
   provider: string,
   env?: NodeJS.ProcessEnv,
 ): boolean {
@@ -208,7 +208,7 @@ export function hasUsableCustomProviderApiKey(
 }
 
 export function shouldPreferExplicitConfigApiKeyAuth(
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
   provider: string,
 ): boolean {
   const providerConfig = resolveProviderConfig(cfg, provider);
@@ -220,7 +220,7 @@ export function shouldPreferExplicitConfigApiKeyAuth(
 }
 
 function resolveProviderAuthOverride(
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
   provider: string,
 ): ModelProviderAuthMode | undefined {
   const entry = resolveProviderConfig(cfg, provider);
@@ -236,7 +236,7 @@ function profileTypeToAuthMode(type: AuthProfileCredential["type"]): ResolvedPro
 }
 
 function resolveConfiguredAwsSdkProfileAuth(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   provider: string;
   profileId: string;
 }): ResolvedProviderAuth | null {
@@ -306,7 +306,7 @@ function isManagedSecretRefApiKeyMarker(apiKey: string | undefined): boolean {
 }
 
 export function hasSyntheticLocalProviderAuthConfig(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   provider: string;
 }): boolean {
   const providerConfig = resolveProviderConfig(params.cfg, params.provider);
@@ -337,7 +337,7 @@ export function hasSyntheticLocalProviderAuthConfig(params: {
 
 export function hasRuntimeAvailableProviderAuth(params: {
   provider: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   allowPluginSyntheticAuth?: boolean;
@@ -379,11 +379,11 @@ type SyntheticProviderAuthResolution = {
 };
 
 function resolveProviderSyntheticRuntimeAuth(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   provider: string;
 }): SyntheticProviderAuthResolution {
   const resolveFromConfig = (
-    config: NexisClawConfig | undefined,
+    config: GreenchClawConfig | undefined,
   ): ResolvedProviderAuth | undefined => {
     const providerConfig = resolveProviderConfig(config, params.provider);
     return (
@@ -423,7 +423,7 @@ function resolveProviderSyntheticRuntimeAuth(params: {
 }
 
 function resolveSyntheticLocalProviderAuth(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   provider: string;
 }): ResolvedProviderAuth | null {
   const syntheticProviderAuth = resolveProviderSyntheticRuntimeAuth(params);
@@ -499,7 +499,7 @@ function resolveAwsSdkAuthInfo(): { mode: "aws-sdk"; source: string } {
 }
 
 function shouldDeferSyntheticProfileAuth(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   provider: string;
   resolvedApiKey: string | undefined;
 }): boolean {
@@ -520,7 +520,7 @@ function shouldDeferSyntheticProfileAuth(params: {
 
 function resolveScopedAuthProfileStore(params: {
   agentDir?: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   provider: string;
   profileId?: string;
   preferredProfile?: string;
@@ -532,7 +532,7 @@ function resolveScopedAuthProfileStore(params: {
 
 export async function resolveApiKeyForProvider(params: {
   provider: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   profileId?: string;
   preferredProfile?: string;
   store?: AuthProfileStore;
@@ -788,7 +788,7 @@ export async function resolveApiKeyForProvider(params: {
     [
       `No API key found for provider "${provider}".`,
       `Auth store: ${authStorePath} (agentDir: ${resolvedAgentDir}).`,
-      `Configure auth for this agent (${formatCliCommand("NexisClaw agents add <id>")}) or copy only portable static auth profiles from the main agentDir.`,
+      `Configure auth for this agent (${formatCliCommand("GreenchClaw agents add <id>")}) or copy only portable static auth profiles from the main agentDir.`,
     ].join(" "),
   );
 }
@@ -800,7 +800,7 @@ export type { EnvApiKeyResult } from "./model-auth-env.js";
 
 export function resolveModelAuthMode(
   provider?: string,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
   store?: AuthProfileStore,
   options?: { workspaceDir?: string },
 ): ModelAuthMode | undefined {
@@ -869,7 +869,7 @@ export function resolveModelAuthMode(
 
 export async function hasAvailableAuthForProvider(params: {
   provider: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   preferredProfile?: string;
   store?: AuthProfileStore;
   agentDir?: string;
@@ -931,7 +931,7 @@ export async function hasAvailableAuthForProvider(params: {
 
 export async function getApiKeyForModel(params: {
   model: Model<Api>;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   profileId?: string;
   preferredProfile?: string;
   store?: AuthProfileStore;
@@ -988,7 +988,7 @@ export function applyLocalNoAuthHeaderOverride<T extends Model<Api>>(
 export function applyAuthHeaderOverride<T extends Model<Api>>(
   model: T,
   auth: ResolvedProviderAuth | null | undefined,
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
 ): T {
   if (!auth?.apiKey) {
     return model;

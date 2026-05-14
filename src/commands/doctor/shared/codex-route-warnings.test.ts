@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveAgentHarnessPolicy } from "../../../agents/harness/policy.js";
 import type { SessionEntry } from "../../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 
 const mocks = vi.hoisted(() => ({
   ensureAuthProfileStore: vi.fn(),
@@ -62,14 +62,14 @@ describe("collectCodexRouteWarnings", () => {
             model: "openai-codex/gpt-5.5",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     expect(warnings).toStrictEqual([
       [
         "- Legacy `openai-codex/*` model refs should be rewritten to `openai/*`.",
         "- agents.defaults.model: openai-codex/gpt-5.5 should become openai/gpt-5.5.",
-        "- Run `NexisClaw doctor --fix`: it rewrites configured model refs and stale sessions to `openai/*`, moves Codex intent to provider/model runtime policy, and clears old whole-agent runtime pins.",
+        "- Run `GreenchClaw doctor --fix`: it rewrites configured model refs and stale sessions to `openai/*`, moves Codex intent to provider/model runtime policy, and clears old whole-agent runtime pins.",
       ].join("\n"),
     ]);
   });
@@ -85,19 +85,19 @@ describe("collectCodexRouteWarnings", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     expect(warnings).toStrictEqual([
       [
         "- Legacy `openai-codex/*` model refs should be rewritten to `openai/*`.",
         '- agents.defaults.model: openai-codex/gpt-5.5 should become openai/gpt-5.5; current runtime is "codex".',
-        "- Run `NexisClaw doctor --fix`: it rewrites configured model refs and stale sessions to `openai/*`, moves Codex intent to provider/model runtime policy, and clears old whole-agent runtime pins.",
+        "- Run `GreenchClaw doctor --fix`: it rewrites configured model refs and stale sessions to `openai/*`, moves Codex intent to provider/model runtime policy, and clears old whole-agent runtime pins.",
       ].join("\n"),
     ]);
   });
 
-  it("still warns when NEXISCLAW_AGENT_RUNTIME selects native Codex with a legacy model ref", () => {
+  it("still warns when GREENCHCLAW_AGENT_RUNTIME selects native Codex with a legacy model ref", () => {
     const warnings = collectCodexRouteWarnings({
       cfg: {
         agents: {
@@ -105,9 +105,9 @@ describe("collectCodexRouteWarnings", () => {
             model: "openai-codex/gpt-5.5",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       env: {
-        NEXISCLAW_AGENT_RUNTIME: "codex",
+        GREENCHCLAW_AGENT_RUNTIME: "codex",
       },
     });
 
@@ -115,7 +115,7 @@ describe("collectCodexRouteWarnings", () => {
       [
         "- Legacy `openai-codex/*` model refs should be rewritten to `openai/*`.",
         '- agents.defaults.model: openai-codex/gpt-5.5 should become openai/gpt-5.5; current runtime is "codex".',
-        "- Run `NexisClaw doctor --fix`: it rewrites configured model refs and stale sessions to `openai/*`, moves Codex intent to provider/model runtime policy, and clears old whole-agent runtime pins.",
+        "- Run `GreenchClaw doctor --fix`: it rewrites configured model refs and stale sessions to `openai/*`, moves Codex intent to provider/model runtime policy, and clears old whole-agent runtime pins.",
       ].join("\n"),
     ]);
   });
@@ -128,7 +128,7 @@ describe("collectCodexRouteWarnings", () => {
             model: "openai/gpt-5.5",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     expect(warnings).toStrictEqual([]);
@@ -201,7 +201,7 @@ describe("collectCodexRouteWarnings", () => {
             summaryModel: "openai-codex/gpt-5.4-mini",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       shouldRepair: true,
       codexRuntimeReady: true,
     });
@@ -272,7 +272,7 @@ describe("collectCodexRouteWarnings", () => {
             model: "openai-codex/gpt-5.5",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       shouldRepair: true,
     });
 
@@ -301,7 +301,7 @@ describe("collectCodexRouteWarnings", () => {
             model: "openai-codex/gpt-5.5",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       shouldRepair: true,
     });
 
@@ -345,7 +345,7 @@ describe("collectCodexRouteWarnings", () => {
             },
           ],
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       shouldRepair: true,
     });
 
@@ -387,7 +387,7 @@ describe("collectCodexRouteWarnings", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       shouldRepair: true,
     });
 
@@ -428,7 +428,7 @@ describe("collectCodexRouteWarnings", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       shouldRepair: true,
     });
 
@@ -467,7 +467,7 @@ describe("collectCodexRouteWarnings", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       shouldRepair: true,
     });
 
@@ -486,7 +486,7 @@ describe("collectCodexRouteWarnings", () => {
       [
         "- Legacy `openai-codex/*` model refs should be rewritten to `openai/*`.",
         "- agents.defaults.heartbeat.model: openai-codex/gpt-5.4 should become openai/gpt-5.4.",
-        "- Run `NexisClaw doctor --fix`: it rewrites configured model refs and stale sessions to `openai/*`, moves Codex intent to provider/model runtime policy, and clears old whole-agent runtime pins.",
+        "- Run `GreenchClaw doctor --fix`: it rewrites configured model refs and stale sessions to `openai/*`, moves Codex intent to provider/model runtime policy, and clears old whole-agent runtime pins.",
       ].join("\n"),
     ]);
   });
@@ -522,7 +522,7 @@ describe("collectCodexRouteWarnings", () => {
             summaryModel: "openai-codex/gpt-5.4",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       shouldRepair: true,
     });
 
@@ -560,7 +560,7 @@ describe("collectCodexRouteWarnings", () => {
             model: "openai-codex/gpt-5.4",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       shouldRepair: true,
     });
 
@@ -579,7 +579,7 @@ describe("collectCodexRouteWarnings", () => {
       [
         "- Legacy `openai-codex/*` model refs should be rewritten to `openai/*`.",
         "- hooks.gmail.model: openai-codex/gpt-5.4 should become openai/gpt-5.4.",
-        "- Run `NexisClaw doctor --fix`: it rewrites configured model refs and stale sessions to `openai/*`, moves Codex intent to provider/model runtime policy, and clears old whole-agent runtime pins.",
+        "- Run `GreenchClaw doctor --fix`: it rewrites configured model refs and stale sessions to `openai/*`, moves Codex intent to provider/model runtime policy, and clears old whole-agent runtime pins.",
       ].join("\n"),
     ]);
   });
@@ -730,7 +730,7 @@ describe("collectCodexRouteWarnings", () => {
             model: "openai-codex/gpt-5.5",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       shouldRepair: true,
     });
 
@@ -776,7 +776,7 @@ describe("collectCodexRouteWarnings", () => {
             model: "openai-codex/gpt-5.5",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       shouldRepair: true,
     });
 

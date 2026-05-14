@@ -19,7 +19,7 @@ const moduleLoaders: PluginModuleLoaderCache = new Map();
 const loadedFacadeModules = new Map<string, unknown>();
 const loadedFacadePluginIds = new Set<string>();
 let facadeLoaderSourceTransformFactory: PluginModuleLoaderFactory | undefined;
-let cachedNexisClawPackageRoot: string | undefined;
+let cachedGreenchClawPackageRoot: string | undefined;
 
 function getSourceTransformFactory() {
   if (facadeLoaderSourceTransformFactory) {
@@ -30,16 +30,16 @@ function getSourceTransformFactory() {
   return facadeLoaderSourceTransformFactory;
 }
 
-function getNexisClawPackageRoot() {
-  if (cachedNexisClawPackageRoot) {
-    return cachedNexisClawPackageRoot;
+function getGreenchClawPackageRoot() {
+  if (cachedGreenchClawPackageRoot) {
+    return cachedGreenchClawPackageRoot;
   }
-  cachedNexisClawPackageRoot =
+  cachedGreenchClawPackageRoot =
     resolveLoaderPackageRoot({
       modulePath: fileURLToPath(import.meta.url),
       moduleUrl: import.meta.url,
     }) ?? fileURLToPath(new URL("../..", import.meta.url));
-  return cachedNexisClawPackageRoot;
+  return cachedGreenchClawPackageRoot;
 }
 
 function resolveFacadeModuleLocation(params: {
@@ -51,7 +51,7 @@ function resolveFacadeModuleLocation(params: {
   return resolveBundledFacadeModuleLocation({
     ...params,
     currentModulePath: CURRENT_MODULE_PATH,
-    packageRoot: getNexisClawPackageRoot(),
+    packageRoot: getGreenchClawPackageRoot(),
     bundledPluginsDir,
   });
 }
@@ -149,8 +149,8 @@ export function loadFacadeModuleAtLocationSync<T extends object>(params: {
     absolutePath: location.modulePath,
     rootPath: location.boundaryRoot,
     boundaryLabel:
-      location.boundaryRoot === getNexisClawPackageRoot()
-        ? "NexisClaw package root"
+      location.boundaryRoot === getGreenchClawPackageRoot()
+        ? "GreenchClaw package root"
         : (() => {
             const bundledDir = resolveBundledPluginsDir();
             return bundledDir && path.resolve(location.boundaryRoot) === path.resolve(bundledDir)
@@ -228,8 +228,8 @@ export async function loadBundledPluginPublicSurfaceModule<T extends object>(par
     absolutePath: preparedLocation.modulePath,
     rootPath: preparedLocation.boundaryRoot,
     boundaryLabel:
-      preparedLocation.boundaryRoot === getNexisClawPackageRoot()
-        ? "NexisClaw package root"
+      preparedLocation.boundaryRoot === getGreenchClawPackageRoot()
+        ? "GreenchClaw package root"
         : "plugin root",
     rejectHardlinks: false,
   });
@@ -266,7 +266,7 @@ export function resetFacadeLoaderStateForTest(): void {
   loadedFacadePluginIds.clear();
   moduleLoaders.clear();
   facadeLoaderSourceTransformFactory = undefined;
-  cachedNexisClawPackageRoot = undefined;
+  cachedGreenchClawPackageRoot = undefined;
 }
 
 export function setFacadeLoaderSourceTransformFactoryForTest(

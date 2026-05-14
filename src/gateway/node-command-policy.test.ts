@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { createEmptyPluginRegistry } from "../plugins/registry-empty.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../plugins/runtime.js";
 import {
@@ -43,7 +43,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("allows declared push-to-talk commands on trusted talk-capable nodes", () => {
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
     for (const platform of ["ios", "android", "macos", "other"]) {
       const allowlist = resolveNodeCommandAllowlist(cfg, { platform, caps: ["talk"] });
       expect(allowlist.has("talk.ptt.start")).toBe(true);
@@ -61,7 +61,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("does not allow push-to-talk commands from platform label alone", () => {
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
     const allowlist = resolveNodeCommandAllowlist(cfg, {
       platform: "android",
       caps: ["device"],
@@ -72,7 +72,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("allows push-to-talk commands when the node declares talk command support", () => {
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
     const allowlist = resolveNodeCommandAllowlist(cfg, {
       platform: "custom",
       commands: ["talk.ptt.start"],
@@ -82,7 +82,7 @@ describe("gateway/node-command-policy", () => {
   });
 
   it("keeps canvas commands out of core defaults when the canvas plugin is not active", () => {
-    const allowlist = resolveNodeCommandAllowlist({} as NexisClawConfig, {
+    const allowlist = resolveNodeCommandAllowlist({} as GreenchClawConfig, {
       platform: "windows",
       deviceFamily: "Windows",
     });
@@ -93,7 +93,7 @@ describe("gateway/node-command-policy", () => {
   it("adds canvas commands from the active canvas plugin node policy", () => {
     installCanvasPluginDefaults();
 
-    const allowlist = resolveNodeCommandAllowlist({} as NexisClawConfig, {
+    const allowlist = resolveNodeCommandAllowlist({} as GreenchClawConfig, {
       platform: "windows",
       deviceFamily: "Windows",
     });

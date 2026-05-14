@@ -117,7 +117,7 @@ describe("resolveProviderAuthOverview", () => {
   });
 
   it("reports the selected agent auth store when profiles are effective", () => {
-    persistedStores.set("/tmp/NexisClaw-agent-custom", {
+    persistedStores.set("/tmp/GreenchClaw-agent-custom", {
       profiles: {
         "openai-codex:peter@example.test": {},
       },
@@ -137,13 +137,13 @@ describe("resolveProviderAuthOverview", () => {
           },
         },
       } as never,
-      modelsPath: "/tmp/NexisClaw-agent-custom/models.json",
-      agentDir: "/tmp/NexisClaw-agent-custom",
+      modelsPath: "/tmp/GreenchClaw-agent-custom/models.json",
+      agentDir: "/tmp/GreenchClaw-agent-custom",
     });
 
     expect(overview.effective).toEqual({
       kind: "profiles",
-      detail: "/tmp/NexisClaw-agent-custom/auth-profiles.json",
+      detail: "/tmp/GreenchClaw-agent-custom/auth-profiles.json",
     });
   });
 
@@ -168,8 +168,8 @@ describe("resolveProviderAuthOverview", () => {
           },
         },
       } as never,
-      modelsPath: "/tmp/NexisClaw-agent-custom/models.json",
-      agentDir: "/tmp/NexisClaw-agent-custom",
+      modelsPath: "/tmp/GreenchClaw-agent-custom/models.json",
+      agentDir: "/tmp/GreenchClaw-agent-custom",
     });
 
     expect(overview.effective).toEqual({

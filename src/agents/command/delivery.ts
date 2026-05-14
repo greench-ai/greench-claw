@@ -8,7 +8,7 @@ import { getChannelPlugin, normalizeChannelId } from "../../channels/plugins/ind
 import { createReplyPrefixContext } from "../../channels/reply-prefix.js";
 import { createOutboundSendDeps, type CliDeps } from "../../cli/outbound-send-deps.js";
 import type { SessionEntry } from "../../config/sessions.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import {
   resolveAgentDeliveryPlan,
@@ -228,7 +228,7 @@ function noVisiblePayloadStatus(): AgentCommandDeliveryStatus {
 }
 
 async function normalizeReplyMediaPathsForDelivery(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   payloads: ReplyPayload[];
   sessionKey?: string;
   outboundSession: OutboundSessionContext | undefined;
@@ -261,7 +261,7 @@ async function normalizeReplyMediaPathsForDelivery(params: {
 }
 
 export function normalizeAgentCommandReplyPayloads(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   opts: AgentCommandOpts;
   outboundSession: OutboundSessionContext | undefined;
   payloads: RunResult["payloads"];
@@ -332,7 +332,7 @@ export function normalizeAgentCommandReplyPayloads(params: {
 }
 
 export async function deliverAgentCommandResult(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   deps: CliDeps;
   runtime: RuntimeEnv;
   opts: AgentCommandOpts;

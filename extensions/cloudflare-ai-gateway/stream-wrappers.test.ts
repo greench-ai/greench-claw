@@ -10,7 +10,7 @@ const { warnMock } = vi.hoisted(() => ({
   warnMock: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", () => ({
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", () => ({
   createSubsystemLogger: () => ({
     debug: vi.fn(),
     error: vi.fn(),
@@ -20,7 +20,7 @@ vi.mock("NexisClaw/plugin-sdk/runtime-env", () => ({
 }));
 
 afterAll(() => {
-  vi.doUnmock("NexisClaw/plugin-sdk/runtime-env");
+  vi.doUnmock("GreenchClaw/plugin-sdk/runtime-env");
   vi.resetModules();
 });
 

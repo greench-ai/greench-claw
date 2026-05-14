@@ -1,7 +1,7 @@
-import type { ReplyToMode } from "NexisClaw/plugin-sdk/config-contracts";
-import { createReplyReferencePlanner } from "NexisClaw/plugin-sdk/reply-reference";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { truncateUtf16Safe } from "NexisClaw/plugin-sdk/text-utility-runtime";
+import type { ReplyToMode } from "GreenchClaw/plugin-sdk/config-contracts";
+import { createReplyReferencePlanner } from "GreenchClaw/plugin-sdk/reply-reference";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { truncateUtf16Safe } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import { ChannelType, getChannelMessage, type Client } from "../internal/discord.js";
 import {
   resolveDiscordChannelIdSafe,

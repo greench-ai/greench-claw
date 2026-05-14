@@ -1,4 +1,4 @@
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
 import { updateMatrixOwnProfile } from "./matrix/actions/profile.js";
 import { updateMatrixAccountConfig, resolveMatrixConfigPath } from "./matrix/config-update.js";
 import { getMatrixRuntime } from "./runtime.js";

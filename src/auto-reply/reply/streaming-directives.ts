@@ -1,4 +1,4 @@
-import { hasOutboundReplyContent } from "NexisClaw/plugin-sdk/reply-payload";
+import { hasOutboundReplyContent } from "GreenchClaw/plugin-sdk/reply-payload";
 import { splitMediaFromOutput } from "../../media/parse.js";
 import { parseInlineDirectives } from "../../utils/directive-tags.js";
 import {

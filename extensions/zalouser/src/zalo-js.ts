@@ -2,21 +2,21 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { extensionForMime } from "NexisClaw/plugin-sdk/media-mime";
-import { loadOutboundMediaFromUrl } from "NexisClaw/plugin-sdk/outbound-media";
+import { extensionForMime } from "GreenchClaw/plugin-sdk/media-mime";
+import { loadOutboundMediaFromUrl } from "GreenchClaw/plugin-sdk/outbound-media";
 import {
   privateFileStoreSync,
   readRegularFileSync,
   statRegularFileSync,
   withTimeout,
-} from "NexisClaw/plugin-sdk/security-runtime";
-import { resolveStateDir as resolvePluginStateDir } from "NexisClaw/plugin-sdk/state-paths";
+} from "GreenchClaw/plugin-sdk/security-runtime";
+import { resolveStateDir as resolvePluginStateDir } from "GreenchClaw/plugin-sdk/state-paths";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { sleep } from "NexisClaw/plugin-sdk/text-utility-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { sleep } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import { normalizeZaloReactionIcon } from "./reaction.js";
 import { createZalouserSendReceipt } from "./send-receipt.js";
 import type {

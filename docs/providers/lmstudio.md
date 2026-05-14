@@ -1,7 +1,7 @@
 ---
-summary: "Run NexisClaw with LM Studio"
+summary: "Run GreenchClaw with LM Studio"
 read_when:
-  - You want to run NexisClaw with open source models via LM Studio
+  - You want to run GreenchClaw with open source models via LM Studio
   - You want to set up and configure LM Studio
 title: "LM Studio"
 ---
@@ -36,14 +36,14 @@ If you are using the app, make sure you have JIT enabled for a smooth experience
 export LM_API_TOKEN="your-lm-studio-api-token"
 ```
 
-If LM Studio authentication is disabled, you can leave the API key blank during interactive NexisClaw setup.
+If LM Studio authentication is disabled, you can leave the API key blank during interactive GreenchClaw setup.
 
 For LM Studio auth setup details, see [LM Studio Authentication](https://lmstudio.ai/docs/developer/core/authentication).
 
 4. Run onboarding and choose `LM Studio`:
 
 ```bash
-NexisClaw onboard
+GreenchClaw onboard
 ```
 
 5. In onboarding, use the `Default model` prompt to pick your LM Studio model.
@@ -51,10 +51,10 @@ NexisClaw onboard
 You can also set or change it later:
 
 ```bash
-NexisClaw models set lmstudio/qwen/qwen3.5-9b
+GreenchClaw models set lmstudio/qwen/qwen3.5-9b
 ```
 
-LM Studio model keys follow a `author/model-name` format (e.g. `qwen/qwen3.5-9b`). NexisClaw
+LM Studio model keys follow a `author/model-name` format (e.g. `qwen/qwen3.5-9b`). GreenchClaw
 model refs prepend the provider name: `lmstudio/qwen/qwen3.5-9b`. You can find the exact key for
 a model by running `curl http://localhost:1234/api/v1/models` and looking at the `key` field.
 
@@ -63,7 +63,7 @@ a model by running `curl http://localhost:1234/api/v1/models` and looking at the
 Use non-interactive onboarding when you want to script setup (CI, provisioning, remote bootstrap):
 
 ```bash
-NexisClaw onboard \
+GreenchClaw onboard \
   --non-interactive \
   --accept-risk \
   --auth-choice lmstudio
@@ -72,7 +72,7 @@ NexisClaw onboard \
 Or specify the base URL, model, and optional API key:
 
 ```bash
-NexisClaw onboard \
+GreenchClaw onboard \
   --non-interactive \
   --accept-risk \
   --auth-choice lmstudio \
@@ -85,7 +85,7 @@ NexisClaw onboard \
 the `lmstudio/` provider prefix.
 
 For authenticated LM Studio servers, pass `--lmstudio-api-key` or set `LM_API_TOKEN`.
-For unauthenticated LM Studio servers, omit the key; NexisClaw stores a local non-secret marker.
+For unauthenticated LM Studio servers, omit the key; GreenchClaw stores a local non-secret marker.
 
 `--custom-api-key` remains supported for compatibility, but `--lmstudio-api-key` is preferred for LM Studio.
 
@@ -101,7 +101,7 @@ LM Studio plugin config trusts the configured LM Studio endpoint for model reque
 ### Streaming usage compatibility
 
 LM Studio is streaming-usage compatible. When it does not emit an OpenAI-shaped
-`usage` object, NexisClaw recovers token counts from llama.cpp-style
+`usage` object, GreenchClaw recovers token counts from llama.cpp-style
 `timings.prompt_n` / `timings.predicted_n` metadata instead.
 
 Same streaming usage behavior applies to these OpenAI-compatible local backends:
@@ -117,10 +117,10 @@ Same streaming usage behavior applies to these OpenAI-compatible local backends:
 ### Thinking compatibility
 
 When LM Studio's `/api/v1/models` discovery reports model-specific reasoning
-options, NexisClaw exposes the matching OpenAI-compatible `reasoning_effort`
+options, GreenchClaw exposes the matching OpenAI-compatible `reasoning_effort`
 values in model compat metadata. Current LM Studio builds can advertise binary
 UI options such as `allowed_options: ["off", "on"]` while rejecting those values
-on `/v1/chat/completions`; NexisClaw normalizes that binary discovery shape to
+on `/v1/chat/completions`; GreenchClaw normalizes that binary discovery shape to
 `none`, `minimal`, `low`, `medium`, `high`, and `xhigh` before sending requests.
 Older saved LM Studio config that contains `off`/`on` reasoning maps is
 normalized the same way when the catalog is loaded.
@@ -179,7 +179,7 @@ If setup reports HTTP 401, verify your API key:
 
 ### Just-in-time model loading
 
-LM Studio supports just-in-time (JIT) model loading, where models are loaded on first request. NexisClaw preloads models through LM Studio's native load endpoint by default, which helps when JIT is disabled. To let LM Studio's JIT, idle TTL, and auto-evict behavior own model lifecycle, disable NexisClaw's preload step:
+LM Studio supports just-in-time (JIT) model loading, where models are loaded on first request. GreenchClaw preloads models through LM Studio's native load endpoint by default, which helps when JIT is disabled. To let LM Studio's JIT, idle TTL, and auto-evict behavior own model lifecycle, disable GreenchClaw's preload step:
 
 ```json5
 {

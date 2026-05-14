@@ -1,5 +1,5 @@
-import type { ProviderWrapStreamFnContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import { createDeepSeekV4OpenAICompatibleThinkingWrapper } from "NexisClaw/plugin-sdk/provider-stream-shared";
+import type { ProviderWrapStreamFnContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createDeepSeekV4OpenAICompatibleThinkingWrapper } from "GreenchClaw/plugin-sdk/provider-stream-shared";
 
 function isOpencodeGoDeepSeekV4ModelId(modelId: unknown): boolean {
   return modelId === "deepseek-v4-flash" || modelId === "deepseek-v4-pro";

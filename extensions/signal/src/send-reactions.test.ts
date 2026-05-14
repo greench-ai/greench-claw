@@ -2,10 +2,10 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const rpcMock = vi.fn();
 
-vi.mock("NexisClaw/plugin-sdk/plugin-config-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/plugin-config-runtime")>(
-    "NexisClaw/plugin-sdk/plugin-config-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/plugin-config-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/plugin-config-runtime")
+  >("GreenchClaw/plugin-sdk/plugin-config-runtime");
   return {
     ...actual,
     loadConfig: () => ({}),

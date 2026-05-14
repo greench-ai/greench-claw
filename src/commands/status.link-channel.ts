@@ -1,7 +1,7 @@
 import { listReadOnlyChannelPluginsForConfig } from "../channels/plugins/read-only.js";
 import type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
 import type { ChannelAccountSnapshot } from "../channels/plugins/types.public.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveDefaultChannelAccountContext } from "./channel-account-context.js";
 
 export type LinkChannelContext = {
@@ -13,8 +13,8 @@ export type LinkChannelContext = {
 };
 
 export async function resolveLinkChannelContext(
-  cfg: NexisClawConfig,
-  options: { sourceConfig?: NexisClawConfig } = {},
+  cfg: GreenchClawConfig,
+  options: { sourceConfig?: GreenchClawConfig } = {},
 ): Promise<LinkChannelContext | null> {
   const sourceConfig = options.sourceConfig ?? cfg;
   for (const plugin of listReadOnlyChannelPluginsForConfig(cfg, {

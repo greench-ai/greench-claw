@@ -1,5 +1,5 @@
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { MediaNormalizationEntry } from "../media-generation/normalization.types.js";
 
 export type GeneratedVideoAsset = {
@@ -47,7 +47,7 @@ export type VideoGenerationSourceAsset = {
 };
 
 export type VideoGenerationProviderConfiguredContext = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentDir?: string;
 };
 
@@ -55,7 +55,7 @@ export type VideoGenerationRequest = {
   provider: string;
   model: string;
   prompt: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir?: string;
   authStore?: AuthProfileStore;
   timeoutMs?: number;
@@ -77,7 +77,7 @@ export type VideoGenerationRequest = {
 export type VideoGenerationModelCapabilitiesContext = {
   provider: string;
   model: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir?: string;
   authStore?: AuthProfileStore;
   timeoutMs?: number;

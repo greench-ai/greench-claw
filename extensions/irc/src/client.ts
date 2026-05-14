@@ -1,7 +1,7 @@
 import net from "node:net";
 import tls from "node:tls";
-import { withTimeout } from "NexisClaw/plugin-sdk/security-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { withTimeout } from "GreenchClaw/plugin-sdk/security-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   parseIrcLine,
   parseIrcPrefix,
@@ -68,7 +68,7 @@ function toError(err: unknown): Error {
 function buildFallbackNick(nick: string): string {
   const normalized = nick.replace(/\s+/g, "");
   const safe = normalized.replace(/[^A-Za-z0-9_\-[\]\\`^{}|]/g, "");
-  const base = safe || "NexisClaw";
+  const base = safe || "GreenchClaw";
   const suffix = "_";
   const maxNickLen = 30;
   if (base.length >= maxNickLen) {

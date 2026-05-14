@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_BUNDLE="${1:-dist/NexisClaw.app}"
+APP_BUNDLE="${1:-dist/GreenchClaw.app}"
 IDENTITY="${SIGN_IDENTITY:-}"
 TIMESTAMP_MODE="${CODESIGN_TIMESTAMP:-auto}"
 DISABLE_LIBRARY_VALIDATION="${DISABLE_LIBRARY_VALIDATION:-0}"
 SKIP_TEAM_ID_CHECK="${SKIP_TEAM_ID_CHECK:-0}"
-ENT_TMP_BASE=$(mktemp -t NexisClaw-entitlements-base.XXXXXX)
-ENT_TMP_APP_BASE=$(mktemp -t NexisClaw-entitlements-app-base.XXXXXX)
-ENT_TMP_RUNTIME=$(mktemp -t NexisClaw-entitlements-runtime.XXXXXX)
+ENT_TMP_BASE=$(mktemp -t GreenchClaw-entitlements-base.XXXXXX)
+ENT_TMP_APP_BASE=$(mktemp -t GreenchClaw-entitlements-app-base.XXXXXX)
+ENT_TMP_RUNTIME=$(mktemp -t GreenchClaw-entitlements-runtime.XXXXXX)
 
 if [[ "${APP_BUNDLE}" == "--help" || "${APP_BUNDLE}" == "-h" ]]; then
   cat <<'HELP'
@@ -248,14 +248,14 @@ verify_team_ids() {
 }
 
 # Sign bundled helper binaries before signing the app bundle.
-MLX_TTS_HELPER="$APP_BUNDLE/Contents/MacOS/NexisClaw-mlx-tts"
+MLX_TTS_HELPER="$APP_BUNDLE/Contents/MacOS/GreenchClaw-mlx-tts"
 if [ -f "$MLX_TTS_HELPER" ]; then
   echo "Signing MLX TTS helper"; sign_item "$MLX_TTS_HELPER" "$APP_ENTITLEMENTS"
 fi
 
 # Sign main binary
-if [ -f "$APP_BUNDLE/Contents/MacOS/NexisClaw" ]; then
-  echo "Signing main binary"; sign_item "$APP_BUNDLE/Contents/MacOS/NexisClaw" "$APP_ENTITLEMENTS"
+if [ -f "$APP_BUNDLE/Contents/MacOS/GreenchClaw" ]; then
+  echo "Signing main binary"; sign_item "$APP_BUNDLE/Contents/MacOS/GreenchClaw" "$APP_ENTITLEMENTS"
 fi
 
 # Sign Sparkle deeply if present

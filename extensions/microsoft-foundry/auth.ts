@@ -2,7 +2,7 @@ import type {
   ProviderAuthContext,
   ProviderAuthMethod,
   ProviderAuthResult,
-} from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/core";
 import {
   ensureApiKeyFromOptionEnvOrPrompt,
   ensureAuthProfileStore,
@@ -10,7 +10,7 @@ import {
   normalizeOptionalSecretInput,
   type SecretInput,
   validateApiKeyInput,
-} from "NexisClaw/plugin-sdk/provider-auth";
+} from "GreenchClaw/plugin-sdk/provider-auth";
 import { getLoggedInAccount, isAzCliInstalled } from "./cli.js";
 import {
   loginWithTenantFallback,

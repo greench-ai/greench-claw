@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   buildConfiguredAgentSystemPrompt,
   resolveAgentSystemPromptConfig,
@@ -23,7 +23,7 @@ describe("resolveAgentSystemPromptConfig", () => {
           },
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     expect(resolveAgentSystemPromptConfig({ config, agentId: "main" }).subagentDelegationMode).toBe(
       "prefer",
@@ -47,7 +47,7 @@ describe("resolveAgentSystemPromptConfig", () => {
           },
         ],
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     expect(
       resolveAgentSystemPromptConfig({ config, agentId: "coordinator" }).subagentDelegationMode,
@@ -68,7 +68,7 @@ describe("buildConfiguredAgentSystemPrompt", () => {
         },
       },
       agentId: "main",
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       toolNames: ["sessions_spawn", "subagents"],
     });
 

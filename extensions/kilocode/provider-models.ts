@@ -1,10 +1,10 @@
-import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
+import type { ModelDefinitionConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 const log = createSubsystemLogger("kilocode-models");
 

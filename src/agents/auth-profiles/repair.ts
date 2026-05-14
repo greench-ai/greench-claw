@@ -1,5 +1,5 @@
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { AuthProfileConfig } from "../../config/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { findNormalizedProviderKey, normalizeProviderId } from "../provider-id.js";
 import { resolveAuthProfileMetadata } from "./identity.js";
 import { dedupeProfileIds, listProfilesForProvider } from "./profile-list.js";
@@ -22,7 +22,7 @@ function isEmailLike(value: string): boolean {
 }
 
 export function suggestOAuthProfileIdForLegacyDefault(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   store: AuthProfileStore;
   provider: string;
   legacyProfileId: string;
@@ -83,7 +83,7 @@ export function suggestOAuthProfileIdForLegacyDefault(params: {
 }
 
 export function repairOAuthProfileIdMismatch(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   store: AuthProfileStore;
   provider: string;
   legacyProfileId?: string;
@@ -148,7 +148,7 @@ export function repairOAuthProfileIdMismatch(params: {
     return { ...order, [resolvedKey]: deduped };
   })();
 
-  const nextCfg: NexisClawConfig = {
+  const nextCfg: GreenchClawConfig = {
     ...params.cfg,
     auth: {
       ...params.cfg.auth,

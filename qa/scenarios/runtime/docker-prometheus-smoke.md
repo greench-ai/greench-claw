@@ -76,7 +76,7 @@ steps:
           expr: "`${env.gateway.baseUrl}/api/diagnostics/prometheus`"
       - set: gatewayToken
         value:
-          expr: "String(env.gateway.token ?? env.gateway.runtimeEnv.NEXISCLAW_GATEWAY_TOKEN ?? '')"
+          expr: "String(env.gateway.token ?? env.gateway.runtimeEnv.GREENCHCLAW_GATEWAY_TOKEN ?? '')"
       - assert:
           expr: "gatewayToken.length > 0"
           message: "expected QA gateway token to be available for protected scrape"
@@ -118,16 +118,16 @@ steps:
         value:
           expr: "String(authenticatedScrape.text ?? '')"
       - assert:
-          expr: "prometheusText.includes('# TYPE NexisClaw_run_completed_total counter')"
+          expr: "prometheusText.includes('# TYPE GreenchClaw_run_completed_total counter')"
           message: "missing run completion counter"
       - assert:
-          expr: "prometheusText.includes('# TYPE NexisClaw_run_duration_seconds histogram')"
+          expr: "prometheusText.includes('# TYPE GreenchClaw_run_duration_seconds histogram')"
           message: "missing run duration histogram"
       - assert:
-          expr: "prometheusText.includes('# TYPE NexisClaw_model_call_total counter')"
+          expr: "prometheusText.includes('# TYPE GreenchClaw_model_call_total counter')"
           message: "missing model call counter"
       - assert:
-          expr: "prometheusText.includes('# TYPE NexisClaw_harness_run_total counter')"
+          expr: "prometheusText.includes('# TYPE GreenchClaw_harness_run_total counter')"
           message: "missing harness run counter"
       - assert:
           expr: "!prometheusText.includes(config.secretNeedle)"
@@ -148,9 +148,9 @@ steps:
           expr: "!/\\/tmp\\/|\\/private\\/tmp\\/|\\/app\\//.test(prometheusText)"
           message: "prometheus output leaked a local file path"
       - assert:
-          expr: "!prometheusText.includes('NexisClaw.content.')"
+          expr: "!prometheusText.includes('GreenchClaw.content.')"
           message: "prometheus output leaked content attributes"
       - assert:
-          expr: "!/NexisClaw_prometheus_series_dropped_total(?:\\{[^}]*\\})?\\s+(?!0(?:\\.0+)?(?:\\s|$))/.test(prometheusText)"
+          expr: "!/GreenchClaw_prometheus_series_dropped_total(?:\\{[^}]*\\})?\\s+(?!0(?:\\.0+)?(?:\\s|$))/.test(prometheusText)"
           message: "prometheus dropped series during the smoke"
 ```

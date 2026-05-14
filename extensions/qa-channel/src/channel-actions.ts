@@ -1,5 +1,5 @@
-import { jsonResult, readStringParam } from "NexisClaw/plugin-sdk/channel-actions";
-import { extractToolSend } from "NexisClaw/plugin-sdk/tool-send";
+import { jsonResult, readStringParam } from "GreenchClaw/plugin-sdk/channel-actions";
+import { extractToolSend } from "GreenchClaw/plugin-sdk/tool-send";
 import { Type } from "typebox";
 import { resolveQaChannelAccount } from "./accounts.js";
 import {

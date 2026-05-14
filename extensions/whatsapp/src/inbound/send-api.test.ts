@@ -2,17 +2,17 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import type { AnyMessageContent, MiscMessageGenerationOptions, WAMessage } from "baileys";
-import { listMessageReceiptPlatformIds } from "NexisClaw/plugin-sdk/channel-message";
+import { listMessageReceiptPlatformIds } from "GreenchClaw/plugin-sdk/channel-message";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveWhatsAppOutboundMentions } from "./outbound-mentions.js";
 import { createWebSendApi } from "./send-api.js";
 
 const recordChannelActivity = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/channel-activity-runtime", async () => {
+vi.mock("GreenchClaw/plugin-sdk/channel-activity-runtime", async () => {
   const actual = await vi.importActual<
-    typeof import("NexisClaw/plugin-sdk/channel-activity-runtime")
-  >("NexisClaw/plugin-sdk/channel-activity-runtime");
+    typeof import("GreenchClaw/plugin-sdk/channel-activity-runtime")
+  >("GreenchClaw/plugin-sdk/channel-activity-runtime");
   return {
     ...actual,
     recordChannelActivity: (...args: unknown[]) => recordChannelActivity(...args),
@@ -385,7 +385,7 @@ describe("createWebSendApi LID resolution (issue #67378)", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    authDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-wa-lid-"));
+    authDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-wa-lid-"));
     fs.writeFileSync(path.join(authDir, "lid-mapping-15555550000.json"), JSON.stringify("987654"));
   });
 

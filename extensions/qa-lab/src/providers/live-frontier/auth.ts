@@ -1,14 +1,15 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   applyAuthProfileConfig,
   resolveEnvApiKey,
   validateAnthropicSetupToken,
-} from "NexisClaw/plugin-sdk/provider-auth";
+} from "GreenchClaw/plugin-sdk/provider-auth";
 import { resolveQaAgentAuthDir, writeQaAuthProfiles } from "../shared/auth-store.js";
 
-export const QA_LIVE_ANTHROPIC_SETUP_TOKEN_ENV = "NEXISCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN";
-export const QA_LIVE_SETUP_TOKEN_VALUE_ENV = "NEXISCLAW_LIVE_SETUP_TOKEN_VALUE";
-const QA_LIVE_ANTHROPIC_SETUP_TOKEN_PROFILE_ENV = "NEXISCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN_PROFILE";
+export const QA_LIVE_ANTHROPIC_SETUP_TOKEN_ENV = "GREENCHCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN";
+export const QA_LIVE_SETUP_TOKEN_VALUE_ENV = "GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE";
+const QA_LIVE_ANTHROPIC_SETUP_TOKEN_PROFILE_ENV =
+  "GREENCHCLAW_QA_LIVE_ANTHROPIC_SETUP_TOKEN_PROFILE";
 const QA_LIVE_ANTHROPIC_SETUP_TOKEN_PROFILE_ID = "anthropic:qa-setup-token";
 const QA_LIVE_API_KEY_AGENT_IDS = Object.freeze(["main", "qa"] as const);
 
@@ -36,10 +37,10 @@ function resolveQaLiveAnthropicSetupToken(env: NodeJS.ProcessEnv = process.env) 
 }
 
 export async function stageQaLiveAnthropicSetupToken(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   stateDir: string;
   env?: NodeJS.ProcessEnv;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   const resolved = resolveQaLiveAnthropicSetupToken(params.env);
   if (!resolved) {
     return params.cfg;
@@ -63,12 +64,12 @@ export async function stageQaLiveAnthropicSetupToken(params: {
 }
 
 export async function stageQaLiveApiKeyProfiles(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   stateDir: string;
   providerIds: readonly string[];
   env?: NodeJS.ProcessEnv;
   agentIds?: readonly string[];
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   const env = params.env ?? process.env;
   const providerIds = [...new Set(params.providerIds.map((providerId) => providerId.trim()))]
     .filter((providerId) => providerId.length > 0)

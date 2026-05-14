@@ -4,8 +4,8 @@ import { normalizeChatChannelId } from "../../../channels/registry.js";
 import { isChannelConfigured } from "../../../config/channel-configured.js";
 import { collectConfiguredModelRefs } from "../../../config/model-refs.js";
 import { detectPluginAutoEnableCandidates } from "../../../config/plugin-auto-enable.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
-import { compareNexisClawVersions } from "../../../config/version.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
+import { compareGreenchClawVersions } from "../../../config/version.js";
 import { getOfficialExternalPluginCatalogEntry } from "../../../plugins/official-external-plugin-catalog.js";
 import { resolveProviderInstallCatalogEntries } from "../../../plugins/provider-install-catalog.js";
 import { resolveWebSearchInstallCatalogEntry } from "../../../plugins/web-search-install-catalog.js";
@@ -30,16 +30,16 @@ function normalizeId(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
-function isPluginsGloballyDisabled(cfg: NexisClawConfig): boolean {
+function isPluginsGloballyDisabled(cfg: GreenchClawConfig): boolean {
   return cfg.plugins?.enabled === false;
 }
 
-function isDenied(cfg: NexisClawConfig, pluginId: string): boolean {
+function isDenied(cfg: GreenchClawConfig, pluginId: string): boolean {
   const deny = cfg.plugins?.deny;
   return Array.isArray(deny) && deny.includes(pluginId);
 }
 
-function collectBlockedPluginIds(cfg: NexisClawConfig): string[] {
+function collectBlockedPluginIds(cfg: GreenchClawConfig): string[] {
   const ids = new Set<string>();
   const deny = cfg.plugins?.deny;
   if (Array.isArray(deny)) {
@@ -59,17 +59,17 @@ function collectBlockedPluginIds(cfg: NexisClawConfig): string[] {
   return [...ids].toSorted((left, right) => left.localeCompare(right));
 }
 
-function isPluginEntryDisabled(cfg: NexisClawConfig, pluginId: string): boolean {
+function isPluginEntryDisabled(cfg: GreenchClawConfig, pluginId: string): boolean {
   return cfg.plugins?.entries?.[pluginId]?.enabled === false;
 }
 
-function isChannelDisabled(cfg: NexisClawConfig, channelId: string): boolean {
+function isChannelDisabled(cfg: GreenchClawConfig, channelId: string): boolean {
   const channels = asObjectRecord(cfg.channels);
   const entry = asObjectRecord(channels?.[channelId]);
   return entry?.enabled === false;
 }
 
-function isDisabled(cfg: NexisClawConfig, pluginId: string): boolean {
+function isDisabled(cfg: GreenchClawConfig, pluginId: string): boolean {
   if (isPluginEntryDisabled(cfg, pluginId)) {
     return true;
   }
@@ -92,7 +92,7 @@ function hasMaterialPluginEntry(entry: unknown): boolean {
   );
 }
 
-function collectMaterialPluginEntryIds(cfg: NexisClawConfig): string[] {
+function collectMaterialPluginEntryIds(cfg: GreenchClawConfig): string[] {
   const entries = asObjectRecord(cfg.plugins?.entries);
   if (!entries) {
     return [];
@@ -103,14 +103,14 @@ function collectMaterialPluginEntryIds(cfg: NexisClawConfig): string[] {
     .filter((pluginId) => pluginId);
 }
 
-function collectSlotPluginIds(cfg: NexisClawConfig): string[] {
+function collectSlotPluginIds(cfg: GreenchClawConfig): string[] {
   const slots = asObjectRecord(cfg.plugins?.slots);
   return ["memory", "contextEngine"]
     .map((key) => normalizeId(slots?.[key]))
     .filter((pluginId): pluginId is string => !!pluginId && pluginId.toLowerCase() !== "none");
 }
 
-function collectConfiguredChannelIds(cfg: NexisClawConfig, env: NodeJS.ProcessEnv): string[] {
+function collectConfiguredChannelIds(cfg: GreenchClawConfig, env: NodeJS.ProcessEnv): string[] {
   const ids = new Set<string>();
   const channels = asObjectRecord(cfg.channels);
   if (channels) {
@@ -138,7 +138,7 @@ function collectConfiguredChannelIds(cfg: NexisClawConfig, env: NodeJS.ProcessEn
   return [...ids].toSorted((left, right) => left.localeCompare(right));
 }
 
-function collectConfiguredProviderIds(cfg: NexisClawConfig): Set<string> {
+function collectConfiguredProviderIds(cfg: GreenchClawConfig): Set<string> {
   const ids = new Set<string>();
   const add = (value: unknown) => {
     const id = normalizeId(value);
@@ -163,7 +163,7 @@ function collectConfiguredProviderIds(cfg: NexisClawConfig): Set<string> {
   return ids;
 }
 
-function collectProviderPluginIds(cfg: NexisClawConfig, env: NodeJS.ProcessEnv): string[] {
+function collectProviderPluginIds(cfg: GreenchClawConfig, env: NodeJS.ProcessEnv): string[] {
   const configuredProviders = collectConfiguredProviderIds(cfg);
   if (configuredProviders.size === 0) {
     return [];
@@ -182,7 +182,7 @@ function collectProviderPluginIds(cfg: NexisClawConfig, env: NodeJS.ProcessEnv):
 }
 
 function collectAgentHarnessRuntimePluginIds(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env: NodeJS.ProcessEnv,
 ): string[] {
   return collectConfiguredAgentHarnessRuntimes(cfg, env)
@@ -191,7 +191,7 @@ function collectAgentHarnessRuntimePluginIds(
     .toSorted((left, right) => left.localeCompare(right));
 }
 
-function collectWebSearchPluginIds(cfg: NexisClawConfig): string[] {
+function collectWebSearchPluginIds(cfg: GreenchClawConfig): string[] {
   const providerId = cfg.tools?.web?.search?.provider;
   if (typeof providerId !== "string") {
     return [];
@@ -200,7 +200,7 @@ function collectWebSearchPluginIds(cfg: NexisClawConfig): string[] {
   return entry?.pluginId ? [entry.pluginId] : [];
 }
 
-function collectAcpRuntimePluginIds(cfg: NexisClawConfig): string[] {
+function collectAcpRuntimePluginIds(cfg: GreenchClawConfig): string[] {
   const acp = asObjectRecord(cfg.acp);
   if (!acp) {
     return [];
@@ -214,7 +214,7 @@ function collectAcpRuntimePluginIds(cfg: NexisClawConfig): string[] {
   return ["acpx"];
 }
 
-function collectAllowOnlyOfficialPluginIds(cfg: NexisClawConfig): string[] {
+function collectAllowOnlyOfficialPluginIds(cfg: GreenchClawConfig): string[] {
   const allow = cfg.plugins?.allow;
   if (!Array.isArray(allow) || allow.length === 0) {
     return [];
@@ -235,7 +235,11 @@ function collectAllowOnlyOfficialPluginIds(cfg: NexisClawConfig): string[] {
   return ids;
 }
 
-function addEligiblePluginId(cfg: NexisClawConfig, pluginIds: Set<string>, pluginId: string): void {
+function addEligiblePluginId(
+  cfg: GreenchClawConfig,
+  pluginIds: Set<string>,
+  pluginId: string,
+): void {
   const normalized = pluginId.trim();
   if (!normalized || isDenied(cfg, normalized) || isDisabled(cfg, normalized)) {
     return;
@@ -249,19 +253,22 @@ export function shouldRunConfiguredPluginInstallReleaseStep(params: {
   releaseVersion?: string;
 }): boolean {
   const releaseVersion = params.releaseVersion ?? CONFIGURED_PLUGIN_INSTALL_RELEASE_VERSION;
-  const currentComparedToRelease = compareNexisClawVersions(
+  const currentComparedToRelease = compareGreenchClawVersions(
     params.currentVersion ?? VERSION,
     releaseVersion,
   );
   if (currentComparedToRelease === null || currentComparedToRelease < 0) {
     return false;
   }
-  const touchedComparedToRelease = compareNexisClawVersions(params.touchedVersion, releaseVersion);
+  const touchedComparedToRelease = compareGreenchClawVersions(
+    params.touchedVersion,
+    releaseVersion,
+  );
   return touchedComparedToRelease === null || touchedComparedToRelease < 0;
 }
 
 export function collectReleaseConfiguredPluginIds(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): ReleaseConfiguredPluginIds {
   const env = params.env ?? process.env;
@@ -315,7 +322,7 @@ export function collectReleaseConfiguredPluginIds(params: {
 }
 
 export async function maybeRunConfiguredPluginInstallReleaseStep(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   touchedVersion?: string | null;
   currentVersion?: string | null;

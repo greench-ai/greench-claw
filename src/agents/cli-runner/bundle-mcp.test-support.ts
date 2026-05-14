@@ -1,5 +1,5 @@
 import { afterAll, beforeAll } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   createBundleMcpTempHarness,
   createBundleProbePlugin,
@@ -40,11 +40,13 @@ export function requireMcpConfigPath(args: readonly string[] | undefined): strin
 
 export function setupCliBundleMcpTestHarness(): void {
   beforeAll(async () => {
-    envSnapshot = captureEnv(["NEXISCLAW_BUNDLED_PLUGINS_DIR"]);
-    bundleProbeHomeDir = await tempHarness.createTempDir("NexisClaw-cli-bundle-mcp-home-");
-    bundleProbeWorkspaceDir = await tempHarness.createTempDir("NexisClaw-cli-bundle-mcp-workspace-");
-    const emptyBundledDir = await tempHarness.createTempDir("NexisClaw-cli-bundle-mcp-bundled-");
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = emptyBundledDir;
+    envSnapshot = captureEnv(["GREENCHCLAW_BUNDLED_PLUGINS_DIR"]);
+    bundleProbeHomeDir = await tempHarness.createTempDir("GreenchClaw-cli-bundle-mcp-home-");
+    bundleProbeWorkspaceDir = await tempHarness.createTempDir(
+      "GreenchClaw-cli-bundle-mcp-workspace-",
+    );
+    const emptyBundledDir = await tempHarness.createTempDir("GreenchClaw-cli-bundle-mcp-bundled-");
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = emptyBundledDir;
     ({ serverPath: bundleProbeServerPath } = await createBundleProbePlugin(bundleProbeHomeDir));
   });
 
@@ -54,7 +56,7 @@ export function setupCliBundleMcpTestHarness(): void {
   });
 }
 
-function createEnabledBundleProbeConfig(): NexisClawConfig {
+function createEnabledBundleProbeConfig(): GreenchClawConfig {
   return {
     plugins: {
       entries: {

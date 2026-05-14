@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { emptyPluginConfigSchema } from "../plugins/config-schema.js";
 import type {
   AnyAgentTool,
@@ -11,22 +11,22 @@ import type {
   MigrationProviderContext,
   MigrationProviderPlugin,
   MigrationSummary,
-  NexisClawPluginApi,
-  NexisClawPluginCommandDefinition,
-  NexisClawPluginConfigSchema,
-  NexisClawPluginDefinition,
-  NexisClawPluginHttpRouteHandler,
-  NexisClawPluginNodeHostCommand,
-  NexisClawPluginNodeInvokePolicy,
-  NexisClawPluginNodeInvokePolicyContext,
-  NexisClawPluginNodeInvokePolicyResult,
-  NexisClawPluginReloadRegistration,
-  NexisClawPluginSecurityAuditCollector,
-  NexisClawPluginSecurityAuditContext,
-  NexisClawPluginService,
-  NexisClawPluginServiceContext,
-  NexisClawPluginToolContext,
-  NexisClawPluginToolFactory,
+  GreenchClawPluginApi,
+  GreenchClawPluginCommandDefinition,
+  GreenchClawPluginConfigSchema,
+  GreenchClawPluginDefinition,
+  GreenchClawPluginHttpRouteHandler,
+  GreenchClawPluginNodeHostCommand,
+  GreenchClawPluginNodeInvokePolicy,
+  GreenchClawPluginNodeInvokePolicyContext,
+  GreenchClawPluginNodeInvokePolicyResult,
+  GreenchClawPluginReloadRegistration,
+  GreenchClawPluginSecurityAuditCollector,
+  GreenchClawPluginSecurityAuditContext,
+  GreenchClawPluginService,
+  GreenchClawPluginServiceContext,
+  GreenchClawPluginToolContext,
+  GreenchClawPluginToolFactory,
   PluginLogger,
   ProviderAugmentModelCatalogContext,
   ProviderAuthContext,
@@ -80,8 +80,8 @@ import type {
   ProviderWrapStreamFnContext,
   UnifiedModelCatalogProviderContext,
   UnifiedModelCatalogProviderPlugin,
-  NexisClawGatewayDiscoveryAdvertiseContext,
-  NexisClawGatewayDiscoveryService,
+  GreenchClawGatewayDiscoveryAdvertiseContext,
+  GreenchClawGatewayDiscoveryService,
   SpeechProviderPlugin,
   PluginCommandContext,
   PluginCommandResult,
@@ -128,16 +128,16 @@ export type {
   MigrationProviderContext,
   MigrationProviderPlugin,
   MigrationSummary,
-  NexisClawPluginApi,
-  NexisClawPluginNodeHostCommand,
-  NexisClawPluginNodeInvokePolicy,
-  NexisClawPluginNodeInvokePolicyContext,
-  NexisClawPluginNodeInvokePolicyResult,
-  NexisClawPluginReloadRegistration,
-  NexisClawPluginSecurityAuditCollector,
-  NexisClawPluginSecurityAuditContext,
-  NexisClawPluginToolContext,
-  NexisClawPluginToolFactory,
+  GreenchClawPluginApi,
+  GreenchClawPluginNodeHostCommand,
+  GreenchClawPluginNodeInvokePolicy,
+  GreenchClawPluginNodeInvokePolicyContext,
+  GreenchClawPluginNodeInvokePolicyResult,
+  GreenchClawPluginReloadRegistration,
+  GreenchClawPluginSecurityAuditCollector,
+  GreenchClawPluginSecurityAuditContext,
+  GreenchClawPluginToolContext,
+  GreenchClawPluginToolFactory,
   PluginCommandContext,
   PluginCommandResult,
   PluginAgentEventEmitParams,
@@ -169,8 +169,8 @@ export type {
   PluginSessionExtensionProjection,
   PluginToolMetadataRegistration,
   PluginTrustedToolPolicyRegistration,
-  NexisClawPluginConfigSchema,
-  NexisClawPluginHttpRouteHandler,
+  GreenchClawPluginConfigSchema,
+  GreenchClawPluginHttpRouteHandler,
   ProviderDiscoveryContext,
   ProviderCatalogContext,
   ProviderCatalogResult,
@@ -219,17 +219,17 @@ export type {
   ProviderWrapStreamFnContext,
   UnifiedModelCatalogProviderContext,
   UnifiedModelCatalogProviderPlugin,
-  NexisClawGatewayDiscoveryAdvertiseContext,
-  NexisClawGatewayDiscoveryService,
-  NexisClawPluginService,
-  NexisClawPluginServiceContext,
+  GreenchClawGatewayDiscoveryAdvertiseContext,
+  GreenchClawGatewayDiscoveryService,
+  GreenchClawPluginService,
+  GreenchClawPluginServiceContext,
   ProviderAuthContext,
   ProviderAuthDoctorHintContext,
   ProviderAuthMethodNonInteractiveContext,
   ProviderAuthMethod,
   ProviderAuthResult,
-  NexisClawPluginCommandDefinition,
-  NexisClawPluginDefinition,
+  GreenchClawPluginCommandDefinition,
+  GreenchClawPluginDefinition,
   PluginLogger,
 };
 export type {
@@ -249,7 +249,7 @@ export type {
   UnifiedModelCatalogKind,
   UnifiedModelCatalogSource,
 } from "../model-catalog/types.js";
-export type { NexisClawConfig };
+export type { GreenchClawConfig };
 
 export {
   buildJsonPluginConfigSchema,
@@ -263,27 +263,27 @@ type DefinePluginEntryOptions = {
   name: string;
   description: string;
   /**
-   * @deprecated Declare exclusive plugin kind in `NexisClaw.plugin.json` via
+   * @deprecated Declare exclusive plugin kind in `GreenchClaw.plugin.json` via
    * manifest `kind`. Runtime-entry `kind` remains only as a compatibility
    * fallback for older plugins.
    */
-  kind?: NexisClawPluginDefinition["kind"];
-  configSchema?: NexisClawPluginConfigSchema | (() => NexisClawPluginConfigSchema);
-  reload?: NexisClawPluginDefinition["reload"];
-  nodeHostCommands?: NexisClawPluginDefinition["nodeHostCommands"];
-  securityAuditCollectors?: NexisClawPluginDefinition["securityAuditCollectors"];
-  register: (api: NexisClawPluginApi) => void;
+  kind?: GreenchClawPluginDefinition["kind"];
+  configSchema?: GreenchClawPluginConfigSchema | (() => GreenchClawPluginConfigSchema);
+  reload?: GreenchClawPluginDefinition["reload"];
+  nodeHostCommands?: GreenchClawPluginDefinition["nodeHostCommands"];
+  securityAuditCollectors?: GreenchClawPluginDefinition["securityAuditCollectors"];
+  register: (api: GreenchClawPluginApi) => void;
 };
 
-/** Normalized object shape that NexisClaw loads from a plugin entry module. */
+/** Normalized object shape that GreenchClaw loads from a plugin entry module. */
 type DefinedPluginEntry = {
   id: string;
   name: string;
   description: string;
-  configSchema: NexisClawPluginConfigSchema;
-  register: NonNullable<NexisClawPluginDefinition["register"]>;
+  configSchema: GreenchClawPluginConfigSchema;
+  register: NonNullable<GreenchClawPluginDefinition["register"]>;
 } & Pick<
-  NexisClawPluginDefinition,
+  GreenchClawPluginDefinition,
   "kind" | "reload" | "nodeHostCommands" | "securityAuditCollectors"
 >;
 
@@ -292,7 +292,7 @@ type DefinedPluginEntry = {
  *
  * Use this for provider, tool, command, service, memory, and context-engine
  * plugins. Channel plugins should use `defineChannelPluginEntry(...)` from
- * `NexisClaw/plugin-sdk/core` so they inherit the channel capability wiring.
+ * `GreenchClaw/plugin-sdk/core` so they inherit the channel capability wiring.
  */
 export function definePluginEntry({
   id,

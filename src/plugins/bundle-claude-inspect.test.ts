@@ -150,7 +150,7 @@ describe("Claude bundle plugin inspect integration", () => {
   }
 
   beforeAll(() => {
-    rootDir = makeTrackedTempDir("NexisClaw-claude-bundle", tempDirs);
+    rootDir = makeTrackedTempDir("GreenchClaw-claude-bundle", tempDirs);
     setupClaudeInspectFixture();
   });
 

@@ -12,9 +12,9 @@ import { listImportedBundledPluginFacadeIds as listImportedFacadeRuntimeIds } fr
 import { createPluginSdkTestHarness } from "./test-helpers.js";
 
 const { createTempDirSync } = createPluginSdkTestHarness();
-const originalBundledPluginsDir = process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
-const originalDisableBundledPlugins = process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS;
-const FACADE_LOADER_GLOBAL = "__NexisClawTestLoadBundledPluginPublicSurfaceModuleSync";
+const originalBundledPluginsDir = process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
+const originalDisableBundledPlugins = process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS;
+const FACADE_LOADER_GLOBAL = "__GreenchClawTestLoadBundledPluginPublicSurfaceModuleSync";
 type FacadeLoaderSourceTransformFactory = NonNullable<
   Parameters<typeof setFacadeLoaderSourceTransformFactoryForTest>[0]
 >;
@@ -62,7 +62,7 @@ function writeFixturePackageJson(
   type: "commonjs" | "module" = "module",
 ): void {
   writeJsonFile(path.join(pluginRoot, "package.json"), {
-    name: `@NexisClaw/${pluginId}`,
+    name: `@GreenchClaw/${pluginId}`,
     version: "0.0.0",
     type,
   });
@@ -171,41 +171,41 @@ afterEach(() => {
   }
   delete (globalThis as typeof globalThis & Record<string, unknown>)[FACADE_LOADER_GLOBAL];
   if (originalBundledPluginsDir === undefined) {
-    delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+    delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
   } else {
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = originalBundledPluginsDir;
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = originalBundledPluginsDir;
   }
   if (originalDisableBundledPlugins === undefined) {
-    delete process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS;
+    delete process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS;
   } else {
-    process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = originalDisableBundledPlugins;
+    process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS = originalDisableBundledPlugins;
   }
 });
 
 describe("plugin-sdk facade loader", () => {
   it("honors trusted bundled plugin dir overrides under the package root", () => {
-    const pluginId = nextTrustedPluginId("NexisClaw-facade-loader-override-");
+    const pluginId = nextTrustedPluginId("GreenchClaw-facade-loader-override-");
     const overrideA = createBundledPluginFixture({
       pluginId,
       kind: "dist",
-      prefix: "NexisClaw-facade-loader-a-",
+      prefix: "GreenchClaw-facade-loader-a-",
       marker: "override-a",
     });
     const overrideB = createBundledPluginFixture({
       pluginId,
       kind: "dist-runtime",
-      prefix: "NexisClaw-facade-loader-b-",
+      prefix: "GreenchClaw-facade-loader-b-",
       marker: "override-b",
     });
 
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = overrideA.bundledPluginsDir;
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = overrideA.bundledPluginsDir;
     const fromA = loadBundledPluginPublicSurfaceModuleSync<{ marker: string }>({
       dirName: pluginId,
       artifactBasename: "api.js",
     });
     expect(fromA.marker).toBe("override-a");
 
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = overrideB.bundledPluginsDir;
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = overrideB.bundledPluginsDir;
     const fromB = loadBundledPluginPublicSurfaceModuleSync<{ marker: string }>({
       dirName: pluginId,
       artifactBasename: "api.js",
@@ -215,10 +215,12 @@ describe("plugin-sdk facade loader", () => {
 
   it("falls back to package source surfaces when an override dir lacks a bundled plugin", () => {
     const fixture = createPackageSourcePluginFixture({
-      prefix: "NexisClaw-facade-loader-source-fallback-",
+      prefix: "GreenchClaw-facade-loader-source-fallback-",
       marker: "source-fallback",
     });
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = createTempDirSync("NexisClaw-facade-loader-empty-");
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = createTempDirSync(
+      "GreenchClaw-facade-loader-empty-",
+    );
 
     const loaded = loadBundledPluginPublicSurfaceModuleSync<{
       marker: string;
@@ -231,8 +233,8 @@ describe("plugin-sdk facade loader", () => {
   });
 
   it("keeps bundled facade loads disabled when bundled plugins are disabled", () => {
-    process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = "1";
-    delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+    process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+    delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
 
     expect(() =>
       loadBundledPluginPublicSurfaceModuleSync({
@@ -244,10 +246,10 @@ describe("plugin-sdk facade loader", () => {
 
   it("shares loaded facade ids with facade-runtime", () => {
     const fixture = createBundledPluginFixture({
-      prefix: "NexisClaw-facade-loader-ids-",
+      prefix: "GreenchClaw-facade-loader-ids-",
       marker: "identity-check",
     });
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = fixture.bundledPluginsDir;
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = fixture.bundledPluginsDir;
 
     const first = loadBundledPluginPublicSurfaceModuleSync<{ marker: string }>({
       dirName: fixture.pluginId,
@@ -266,10 +268,10 @@ describe("plugin-sdk facade loader", () => {
 
   it("uses native require for Windows dist facade loads", () => {
     const fixture = createBundledPluginFixture({
-      prefix: "NexisClaw-facade-loader-windows-",
+      prefix: "GreenchClaw-facade-loader-windows-",
       marker: "windows-dist-ok",
     });
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = fixture.bundledPluginsDir;
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = fixture.bundledPluginsDir;
 
     const createJitiCalls: Parameters<FacadeLoaderSourceTransformFactory>[] = [];
     setFacadeLoaderSourceTransformFactoryForTest(((...args) => {
@@ -296,8 +298,8 @@ describe("plugin-sdk facade loader", () => {
   });
 
   it("breaks circular facade re-entry during module evaluation", () => {
-    const fixture = createCircularPluginFixture("NexisClaw-facade-loader-circular-");
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = fixture.bundledPluginsDir;
+    const fixture = createCircularPluginFixture("GreenchClaw-facade-loader-circular-");
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = fixture.bundledPluginsDir;
     (globalThis as typeof globalThis & Record<string, unknown>)[FACADE_LOADER_GLOBAL] =
       loadBundledPluginPublicSurfaceModuleSync;
 
@@ -310,8 +312,8 @@ describe("plugin-sdk facade loader", () => {
   });
 
   it("clears the cache on load failure so retries re-execute", () => {
-    const fixture = createThrowingPluginFixture("NexisClaw-facade-loader-throw-");
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = fixture.bundledPluginsDir;
+    const fixture = createThrowingPluginFixture("GreenchClaw-facade-loader-throw-");
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = fixture.bundledPluginsDir;
 
     expect(() =>
       loadBundledPluginPublicSurfaceModuleSync<{ marker: string }>({

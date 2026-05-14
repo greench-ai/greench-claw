@@ -1,4 +1,4 @@
-import { createPluginRuntimeMock } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { createPluginRuntimeMock } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ResolvedIrcAccount } from "./accounts.js";
 import { handleIrcInbound } from "./inbound.js";
@@ -57,7 +57,7 @@ function createAccount(overrides?: Partial<ResolvedIrcAccount>): ResolvedIrcAcco
     accountId: "default",
     enabled: true,
     server: "irc.example.com",
-    nick: "NexisClaw",
+    nick: "GreenchClaw",
     config: {
       dmPolicy: "pairing",
       allowFrom: [],
@@ -124,7 +124,7 @@ describe("irc inbound behavior", () => {
     expect(sendReply).toHaveBeenCalledWith(
       "alice",
       [
-        "NexisClaw: access not configured.",
+        "GreenchClaw: access not configured.",
         "",
         "Your IRC id: alice!ident@example.com",
         "Pairing code:",
@@ -133,9 +133,9 @@ describe("irc inbound behavior", () => {
         "```",
         "",
         "Ask the bot owner to approve with:",
-        "NexisClaw pairing approve irc CODE",
+        "GreenchClaw pairing approve irc CODE",
         "```",
-        "NexisClaw pairing approve irc CODE",
+        "GreenchClaw pairing approve irc CODE",
         "```",
       ].join("\n"),
       undefined,

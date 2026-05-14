@@ -73,17 +73,17 @@ function writeJsonFile(targetPath, value) {
   fs.writeFileSync(targetPath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
-function ensureNexisClawExtensionAlias(params) {
+function ensureGreenchClawExtensionAlias(params) {
   const pluginSdkDir = path.join(params.repoRoot, "dist", "plugin-sdk");
   if (!fs.existsSync(pluginSdkDir)) {
     return;
   }
 
-  const aliasDir = path.join(params.distExtensionsRoot, "node_modules", "NexisClaw");
+  const aliasDir = path.join(params.distExtensionsRoot, "node_modules", "GreenchClaw");
   const pluginSdkAliasPath = path.join(aliasDir, "plugin-sdk");
   fs.mkdirSync(aliasDir, { recursive: true });
   writeJsonFile(path.join(aliasDir, "package.json"), {
-    name: "NexisClaw",
+    name: "GreenchClaw",
     type: "module",
     exports: {
       "./plugin-sdk": "./plugin-sdk/index.js",
@@ -119,7 +119,7 @@ function shouldCopyRuntimeFile(relativePath) {
   return (
     isBundledSkillRuntimePath(relativePath) ||
     isPathOrNestedPath(relativePath, "package.json") ||
-    isPathOrNestedPath(relativePath, "NexisClaw.plugin.json") ||
+    isPathOrNestedPath(relativePath, "GreenchClaw.plugin.json") ||
     isPathOrNestedPath(relativePath, ".codex-plugin/plugin.json") ||
     isPathOrNestedPath(relativePath, ".claude-plugin/plugin.json") ||
     isPathOrNestedPath(relativePath, ".cursor-plugin/plugin.json") ||
@@ -220,7 +220,7 @@ export function stageBundledPluginRuntime(params = {}) {
 
   removePathIfExists(runtimeRoot);
   fs.mkdirSync(runtimeExtensionsRoot, { recursive: true });
-  ensureNexisClawExtensionAlias({ repoRoot, distExtensionsRoot });
+  ensureGreenchClawExtensionAlias({ repoRoot, distExtensionsRoot });
 
   for (const dirent of fs.readdirSync(distExtensionsRoot, { withFileTypes: true })) {
     if (!dirent.isDirectory() || dirent.name === "node_modules") {

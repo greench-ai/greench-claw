@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveSecretInputRef } from "../config/types.secrets.js";
 import { resolveSecretInputString } from "../secrets/resolve-secret-input-string.js";
 import {
@@ -21,7 +21,7 @@ import {
 } from "./secret-input-paths.js";
 
 type GatewayCredentialSecretInputOptions = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   explicitAuth?: ExplicitGatewayAuth;
   urlOverride?: string;
   urlOverrideSource?: "cli" | "env";
@@ -53,7 +53,7 @@ function resolveExplicitGatewayAuth(opts?: ExplicitGatewayAuth): ExplicitGateway
 }
 
 async function resolveGatewaySecretInputString(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   value: unknown;
   path: string;
   env: NodeJS.ProcessEnv;
@@ -74,7 +74,7 @@ async function resolveGatewaySecretInputString(params: {
 }
 
 function hasConfiguredGatewaySecretRef(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   path: SupportedGatewaySecretInputPath,
 ): boolean {
   return Boolean(
@@ -86,7 +86,7 @@ function hasConfiguredGatewaySecretRef(
 }
 
 function resolveGatewayCredentialsFromConfigOptions(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   options: NormalizedGatewayCredentialSecretInputOptions;
 }) {
@@ -130,7 +130,7 @@ function localAuthModeAllowsGatewaySecretInputPath(params: {
 function gatewaySecretInputPathCanWin(params: {
   options: NormalizedGatewayCredentialSecretInputOptions;
   env: NodeJS.ProcessEnv;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   path: SupportedGatewaySecretInputPath;
 }): boolean {
   if (!hasConfiguredGatewaySecretRef(params.config, params.path)) {
@@ -147,7 +147,7 @@ function gatewaySecretInputPathCanWin(params: {
   ) {
     return false;
   }
-  const sentinel = `__NEXISCLAW_GATEWAY_SECRET_REF_PROBE_${params.path.replaceAll(".", "_")}__`;
+  const sentinel = `__GREENCHCLAW_GATEWAY_SECRET_REF_PROBE_${params.path.replaceAll(".", "_")}__`;
   const probeConfig = structuredClone(params.config);
   for (const candidatePath of ALL_GATEWAY_SECRET_INPUT_PATHS) {
     if (!hasConfiguredGatewaySecretRef(probeConfig, candidatePath)) {
@@ -181,7 +181,7 @@ function gatewaySecretInputPathCanWin(params: {
 }
 
 async function resolveConfiguredGatewaySecretInput(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   path: SupportedGatewaySecretInputPath;
   env: NodeJS.ProcessEnv;
 }): Promise<string | undefined> {
@@ -196,8 +196,8 @@ async function resolveConfiguredGatewaySecretInput(params: {
 async function resolvePreferredGatewaySecretInputs(params: {
   options: NormalizedGatewayCredentialSecretInputOptions;
   env: NodeJS.ProcessEnv;
-  config: NexisClawConfig;
-}): Promise<NexisClawConfig> {
+  config: GreenchClawConfig;
+}): Promise<GreenchClawConfig> {
   let nextConfig = params.config;
   for (const path of ALL_GATEWAY_SECRET_INPUT_PATHS) {
     if (

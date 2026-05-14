@@ -7,7 +7,7 @@ import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
 } from "../shared/string-coerce.js";
-import type { NexisClawConfig } from "./config-runtime.js";
+import type { GreenchClawConfig } from "./config-runtime.js";
 import type { ReplyPayload } from "./reply-payload.js";
 import { normalizeAccountId } from "./routing.js";
 
@@ -23,11 +23,11 @@ type ChannelApprovalConfig = {
 };
 
 type ApprovalProfileParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 };
 
-function isApprovalTargetsMode(cfg: NexisClawConfig): boolean {
+function isApprovalTargetsMode(cfg: GreenchClawConfig): boolean {
   const execApprovals = cfg.approvals?.exec;
   if (!execApprovals?.enabled) {
     return false;
@@ -48,7 +48,7 @@ export function isChannelExecApprovalClientEnabledFromConfig(params: {
 }
 
 export function isChannelExecApprovalTargetRecipient(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   senderId?: string | null;
   accountId?: string | null;
   channel: string;

@@ -1,6 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { note } from "../terminal/note.js";
 import type { StatusSummary } from "./status.types.js";
 
@@ -16,7 +16,7 @@ type ProcessController = {
 };
 
 const LOCAL_TUI_CMD_RE =
-  /(?:^|\s)(?:NexisClaw-tui|NexisClaw\s+tui|NexisClaw\s+chat|NexisClaw\s+terminal)(?:\s|$)/;
+  /(?:^|\s)(?:GreenchClaw-tui|GreenchClaw\s+tui|GreenchClaw\s+chat|GreenchClaw\s+terminal)(?:\s|$)/;
 
 function parsePsPidLine(line: string): LocalTuiProcess | null {
   const match = line.match(/^\s*(\d+)\s+(.+)$/);
@@ -58,7 +58,7 @@ export function listLocalTuiProcesses(): LocalTuiProcess[] {
   return processes;
 }
 
-function hasWhatsappEnabled(cfg: NexisClawConfig): boolean {
+function hasWhatsappEnabled(cfg: GreenchClawConfig): boolean {
   const whatsapp = cfg.channels?.whatsapp;
   if (!whatsapp || whatsapp.enabled === false) {
     return false;
@@ -127,7 +127,7 @@ export async function terminateLocalTuiProcesses(params: {
 }
 
 export async function noteWhatsappResponsivenessHealth(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   status?: Pick<StatusSummary, "eventLoop"> | null;
   shouldRepair: boolean;
   listLocalTuiProcesses?: () => LocalTuiProcess[];
@@ -166,7 +166,7 @@ export async function noteWhatsappResponsivenessHealth(params: {
       }
     } else {
       warnings.push(
-        `Fix: close those TUI sessions, or run ${formatCliCommand("NexisClaw doctor --fix")}.`,
+        `Fix: close those TUI sessions, or run ${formatCliCommand("GreenchClaw doctor --fix")}.`,
       );
     }
   }

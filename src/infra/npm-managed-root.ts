@@ -1,10 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { runCommandWithTimeout } from "../process/exec.js";
+import { resolveGreenchClawPackageRootSync } from "./GreenchClaw-root.js";
 import type { NpmSpecResolution } from "./install-source-utils.js";
 import { readJson, readJsonIfExists, writeJson } from "./json-files.js";
 import type { ParsedRegistryNpmSpec } from "./npm-registry-spec.js";
-import { resolveNexisClawPackageRootSync } from "./NexisClaw-root.js";
 import { createSafeNpmInstallEnv } from "./safe-package-install.js";
 
 type ManagedNpmRootManifest = {
@@ -22,7 +22,7 @@ type HostPackageManifest = {
   peerDependencies?: Record<string, string>;
 };
 
-type ManagedNpmRootNexisClawMetadata = {
+type ManagedNpmRootGreenchClawMetadata = {
   managedOverrides?: string[];
   [key: string]: unknown;
 };
@@ -86,11 +86,11 @@ function readManagedOverrideKeys(value: unknown): string[] {
   return value.managedOverrides.filter((key): key is string => typeof key === "string");
 }
 
-function buildManagedNexisClawMetadata(params: {
+function buildManagedGreenchClawMetadata(params: {
   current: unknown;
   managedOverrideKeys: string[];
-}): ManagedNpmRootNexisClawMetadata | undefined {
-  const metadata: ManagedNpmRootNexisClawMetadata = isRecord(params.current)
+}): ManagedNpmRootGreenchClawMetadata | undefined {
+  const metadata: ManagedNpmRootGreenchClawMetadata = isRecord(params.current)
     ? { ...params.current }
     : {};
   if (params.managedOverrideKeys.length > 0) {
@@ -132,7 +132,7 @@ function resolveHostOverrideReferences(value: unknown, manifest: HostPackageMani
   return resolved;
 }
 
-export async function readNexisClawManagedNpmRootOverrides(params?: {
+export async function readGreenchClawManagedNpmRootOverrides(params?: {
   argv1?: string;
   cwd?: string;
   moduleUrl?: string;
@@ -140,7 +140,7 @@ export async function readNexisClawManagedNpmRootOverrides(params?: {
 }): Promise<Record<string, unknown>> {
   const packageRoot =
     params?.packageRoot ??
-    resolveNexisClawPackageRootSync({
+    resolveGreenchClawPackageRootSync({
       argv1: params?.argv1 ?? process.argv[1],
       moduleUrl: params?.moduleUrl ?? import.meta.url,
       cwd: params?.cwd ?? process.cwd(),
@@ -188,12 +188,12 @@ export async function upsertManagedNpmRootDependency(params: {
   const managedOverrides = readOverrideRecord(params.managedOverrides);
   const managedOverrideKeys = Object.keys(managedOverrides).toSorted();
   const overrides = readOverrideRecord(manifest.overrides);
-  for (const key of readManagedOverrideKeys(manifest.NexisClaw)) {
+  for (const key of readManagedOverrideKeys(manifest.GreenchClaw)) {
     delete overrides[key];
   }
   Object.assign(overrides, managedOverrides);
-  const NexisClawMetadata = buildManagedNexisClawMetadata({
-    current: manifest.NexisClaw,
+  const GreenchClawMetadata = buildManagedGreenchClawMetadata({
+    current: manifest.GreenchClaw,
     managedOverrideKeys,
   });
   const next: ManagedNpmRootManifest = {
@@ -209,15 +209,15 @@ export async function upsertManagedNpmRootDependency(params: {
   } else {
     delete next.overrides;
   }
-  if (NexisClawMetadata) {
-    next.NexisClaw = NexisClawMetadata;
+  if (GreenchClawMetadata) {
+    next.GreenchClaw = GreenchClawMetadata;
   } else {
-    delete next.NexisClaw;
+    delete next.GreenchClaw;
   }
   await writeJson(manifestPath, next, { trailingNewline: true });
 }
 
-export async function repairManagedNpmRootNexisClawPeer(params: {
+export async function repairManagedNpmRootGreenchClawPeer(params: {
   npmRoot: string;
   timeoutMs?: number;
   logger?: ManagedNpmRootLogger;
@@ -228,9 +228,9 @@ export async function repairManagedNpmRootNexisClawPeer(params: {
   const manifestPath = path.join(params.npmRoot, "package.json");
   const manifest = await readManagedNpmRootManifest(manifestPath);
   const dependencies = readDependencyRecord(manifest.dependencies);
-  const hasManifestDependency = "NexisClaw" in dependencies;
-  const hasLockDependency = await managedNpmRootLockfileHasNexisClawPeer(params.npmRoot);
-  const hasPackageDir = await pathExists(path.join(params.npmRoot, "node_modules", "NexisClaw"));
+  const hasManifestDependency = "GreenchClaw" in dependencies;
+  const hasLockDependency = await managedNpmRootLockfileHasGreenchClawPeer(params.npmRoot);
+  const hasPackageDir = await pathExists(path.join(params.npmRoot, "node_modules", "GreenchClaw"));
   if (!hasManifestDependency && !hasLockDependency && !hasPackageDir) {
     return false;
   }
@@ -245,7 +245,7 @@ export async function repairManagedNpmRootNexisClawPeer(params: {
         "--ignore-scripts",
         "--no-audit",
         "--no-fund",
-        "NexisClaw",
+        "GreenchClaw",
       ]
     : [
         "npm",
@@ -268,20 +268,20 @@ export async function repairManagedNpmRootNexisClawPeer(params: {
     });
     if (result.code !== 0) {
       params.logger?.warn?.(
-        `npm ${hasManifestDependency ? "uninstall NexisClaw" : "prune"} failed while repairing managed npm root; falling back to direct cleanup: ${result.stderr.trim() || result.stdout.trim()}`,
+        `npm ${hasManifestDependency ? "uninstall GreenchClaw" : "prune"} failed while repairing managed npm root; falling back to direct cleanup: ${result.stderr.trim() || result.stdout.trim()}`,
       );
     }
   } catch (error) {
     params.logger?.warn?.(
-      `npm ${hasManifestDependency ? "uninstall NexisClaw" : "prune"} failed while repairing managed npm root; falling back to direct cleanup: ${String(error)}`,
+      `npm ${hasManifestDependency ? "uninstall GreenchClaw" : "prune"} failed while repairing managed npm root; falling back to direct cleanup: ${String(error)}`,
     );
   }
 
-  await scrubManagedNpmRootNexisClawPeer({ npmRoot: params.npmRoot });
+  await scrubManagedNpmRootGreenchClawPeer({ npmRoot: params.npmRoot });
   return true;
 }
 
-async function managedNpmRootLockfileHasNexisClawPeer(npmRoot: string): Promise<boolean> {
+async function managedNpmRootLockfileHasGreenchClawPeer(npmRoot: string): Promise<boolean> {
   const lockPath = path.join(npmRoot, "package-lock.json");
   try {
     const parsed = JSON.parse(await fs.readFile(lockPath, "utf8")) as ManagedNpmRootLockfile;
@@ -290,15 +290,15 @@ async function managedNpmRootLockfileHasNexisClawPeer(npmRoot: string): Promise<
       if (
         isRecord(rootPackage) &&
         isRecord(rootPackage.dependencies) &&
-        "NexisClaw" in rootPackage.dependencies
+        "GreenchClaw" in rootPackage.dependencies
       ) {
         return true;
       }
-      if ("node_modules/NexisClaw" in parsed.packages) {
+      if ("node_modules/GreenchClaw" in parsed.packages) {
         return true;
       }
     }
-    return isRecord(parsed.dependencies) && "NexisClaw" in parsed.dependencies;
+    return isRecord(parsed.dependencies) && "GreenchClaw" in parsed.dependencies;
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code === "ENOENT") {
       return false;
@@ -319,12 +319,12 @@ async function pathExists(filePath: string): Promise<boolean> {
     });
 }
 
-async function scrubManagedNpmRootNexisClawPeer(params: { npmRoot: string }): Promise<void> {
+async function scrubManagedNpmRootGreenchClawPeer(params: { npmRoot: string }): Promise<void> {
   const manifestPath = path.join(params.npmRoot, "package.json");
   const manifest = await readManagedNpmRootManifest(manifestPath);
   const dependencies = readDependencyRecord(manifest.dependencies);
-  if ("NexisClaw" in dependencies) {
-    const { NexisClaw: _removed, ...nextDependencies } = dependencies;
+  if ("GreenchClaw" in dependencies) {
+    const { GreenchClaw: _removed, ...nextDependencies } = dependencies;
     await fs.writeFile(
       manifestPath,
       `${JSON.stringify({ ...manifest, private: true, dependencies: nextDependencies }, null, 2)}\n`,
@@ -340,20 +340,20 @@ async function scrubManagedNpmRootNexisClawPeer(params: { npmRoot: string }): Pr
       const rootPackage = parsed.packages[""];
       if (isRecord(rootPackage) && isRecord(rootPackage.dependencies)) {
         const dependencies = { ...rootPackage.dependencies };
-        if ("NexisClaw" in dependencies) {
-          delete dependencies.NexisClaw;
+        if ("GreenchClaw" in dependencies) {
+          delete dependencies.GreenchClaw;
           parsed.packages[""] = { ...rootPackage, dependencies };
           lockChanged = true;
         }
       }
-      if ("node_modules/NexisClaw" in parsed.packages) {
-        delete parsed.packages["node_modules/NexisClaw"];
+      if ("node_modules/GreenchClaw" in parsed.packages) {
+        delete parsed.packages["node_modules/GreenchClaw"];
         lockChanged = true;
       }
     }
-    if (isRecord(parsed.dependencies) && "NexisClaw" in parsed.dependencies) {
+    if (isRecord(parsed.dependencies) && "GreenchClaw" in parsed.dependencies) {
       const dependencies = { ...parsed.dependencies };
-      delete dependencies.NexisClaw;
+      delete dependencies.GreenchClaw;
       parsed.dependencies = dependencies;
       lockChanged = true;
     }
@@ -366,13 +366,13 @@ async function scrubManagedNpmRootNexisClawPeer(params: { npmRoot: string }): Pr
     }
   }
 
-  const NexisClawPackageDir = path.join(params.npmRoot, "node_modules", "NexisClaw");
-  if (await pathExists(NexisClawPackageDir)) {
-    await fs.rm(NexisClawPackageDir, { recursive: true, force: true });
+  const GreenchClawPackageDir = path.join(params.npmRoot, "node_modules", "GreenchClaw");
+  if (await pathExists(GreenchClawPackageDir)) {
+    await fs.rm(GreenchClawPackageDir, { recursive: true, force: true });
   }
   const binDir = path.join(params.npmRoot, "node_modules", ".bin");
   await Promise.all(
-    ["NexisClaw", "NexisClaw.cmd", "NexisClaw.ps1"].map((binName) =>
+    ["GreenchClaw", "GreenchClaw.cmd", "GreenchClaw.ps1"].map((binName) =>
       fs.rm(path.join(binDir, binName), { force: true }),
     ),
   );

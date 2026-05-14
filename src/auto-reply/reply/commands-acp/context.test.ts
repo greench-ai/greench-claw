@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../../../config/config.js";
+import type { GreenchClawConfig } from "../../../config/config.js";
 import {
   __testing as sessionBindingTesting,
   getSessionBindingService,
@@ -20,7 +20,7 @@ import {
 
 const baseCfg = {
   session: { mainKey: "main", scope: "per-sender" },
-} satisfies NexisClawConfig;
+} satisfies GreenchClawConfig;
 
 function parseTelegramChatIdForTest(raw?: string | null): string | undefined {
   const trimmed = raw?.trim().replace(/^telegram:/i, "");

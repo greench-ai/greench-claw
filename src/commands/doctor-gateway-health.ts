@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { buildGatewayConnectionDetails, callGateway } from "../gateway/call.js";
 import type { DoctorMemoryStatusPayload } from "../gateway/server-methods/doctor.js";
 import { collectChannelStatusIssues } from "../infra/channels-status-issues.js";
@@ -33,17 +33,17 @@ function noteCliGatewayVersionSkew(status: StatusSummary | undefined): void {
   }
   note(
     [
-      `This command is NexisClaw ${VERSION}; the running Gateway is NexisClaw ${gatewayVersion}.`,
-      "Check `NexisClaw --version`, `which NexisClaw`, and `NexisClaw gateway status --deep`.",
-      "If this mismatch is unexpected, update PATH so `NexisClaw` points to the version you want, or reinstall the Gateway service from that same NexisClaw install.",
+      `This command is GreenchClaw ${VERSION}; the running Gateway is GreenchClaw ${gatewayVersion}.`,
+      "Check `GreenchClaw --version`, `which GreenchClaw`, and `GreenchClaw gateway status --deep`.",
+      "If this mismatch is unexpected, update PATH so `GreenchClaw` points to the version you want, or reinstall the Gateway service from that same GreenchClaw install.",
     ].join("\n"),
-    "NexisClaw version mismatch",
+    "GreenchClaw version mismatch",
   );
 }
 
 export async function checkGatewayHealth(params: {
   runtime: RuntimeEnv;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   timeoutMs?: number;
 }): Promise<{ healthOk: boolean; status?: StatusSummary }> {
   const gatewayDetails = buildGatewayConnectionDetails({ config: params.cfg });
@@ -100,7 +100,7 @@ export async function checkGatewayHealth(params: {
 }
 
 export async function probeGatewayMemoryStatus(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   timeoutMs?: number;
 }): Promise<GatewayMemoryProbe> {
   const timeoutMs =

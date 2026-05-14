@@ -1,7 +1,7 @@
 import { EventEmitter } from "node:events";
 import type { Request, Response } from "express";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig, RuntimeEnv } from "../runtime-api.js";
+import type { GreenchClawConfig, RuntimeEnv } from "../runtime-api.js";
 import type { MSTeamsConversationStore } from "./conversation-store.js";
 import type { MSTeamsActivityHandler, MSTeamsMessageHandlerDeps } from "./monitor-handler.js";
 import type { MSTeamsPollStore } from "./polls.js";
@@ -188,7 +188,7 @@ vi.mock("./runtime.js", () => ({
 
 import { monitorMSTeamsProvider } from "./monitor.js";
 
-function createConfig(port: number): NexisClawConfig {
+function createConfig(port: number): GreenchClawConfig {
   return {
     channels: {
       msteams: {
@@ -202,12 +202,12 @@ function createConfig(port: number): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function updateMSTeamsConfig(
-  cfg: NexisClawConfig,
-  patch: NonNullable<NonNullable<NexisClawConfig["channels"]>["msteams"]>,
+  cfg: GreenchClawConfig,
+  patch: NonNullable<NonNullable<GreenchClawConfig["channels"]>["msteams"]>,
 ): void {
   const msteams = cfg.channels?.msteams;
   if (!cfg.channels || !msteams) {
@@ -247,8 +247,8 @@ function readMockCallArg(mock: ReturnType<typeof vi.fn>, callIndex: number, argI
   return call[argIndex];
 }
 
-function requireRegisteredMSTeamsConfig(): NexisClawConfig {
-  const registered = readMockCallArg(registerMSTeamsHandlers, 0, 1) as { cfg?: NexisClawConfig };
+function requireRegisteredMSTeamsConfig(): GreenchClawConfig {
+  const registered = readMockCallArg(registerMSTeamsHandlers, 0, 1) as { cfg?: GreenchClawConfig };
   if (!registered?.cfg) {
     throw new Error("expected registered MSTeams handler config");
   }

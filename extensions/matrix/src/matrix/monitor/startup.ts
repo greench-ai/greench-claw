@@ -119,9 +119,9 @@ export async function runMatrixStartupMaintenance(
     const deviceHealth = runtimeDeps.summarizeMatrixDeviceHealth(
       await params.client.listOwnDevices(),
     );
-    if (deviceHealth.staleNexisClawDevices.length > 0) {
+    if (deviceHealth.staleGreenchClawDevices.length > 0) {
       params.logger.warn(
-        `matrix: stale NexisClaw devices detected for ${params.auth.userId}: ${deviceHealth.staleNexisClawDevices.map((device) => device.deviceId).join(", ")}. Run 'NexisClaw matrix devices prune-stale --account ${params.effectiveAccountId}' to keep encrypted-room trust healthy.`,
+        `matrix: stale GreenchClaw devices detected for ${params.auth.userId}: ${deviceHealth.staleGreenchClawDevices.map((device) => device.deviceId).join(", ")}. Run 'GreenchClaw matrix devices prune-stale --account ${params.effectiveAccountId}' to keep encrypted-room trust healthy.`,
       );
     }
   } catch (err) {
@@ -151,7 +151,7 @@ export async function runMatrixStartupMaintenance(
       startupVerification.kind === "request-failed"
     ) {
       params.logger.info(
-        "matrix: device not verified — run 'NexisClaw matrix verify device <key>' to enable E2EE",
+        "matrix: device not verified — run 'GreenchClaw matrix verify device <key>' to enable E2EE",
       );
       if (startupVerification.kind === "pending") {
         params.logger.info(

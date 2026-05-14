@@ -27,7 +27,7 @@ Model refs choose a provider and model. They do not usually choose the low-level
 
 ## How model selection works
 
-NexisClaw selects models in this order:
+GreenchClaw selects models in this order:
 
 <Steps>
   <Step title="Primary model">
@@ -43,7 +43,7 @@ NexisClaw selects models in this order:
 
 <AccordionGroup>
   <Accordion title="Related model surfaces">
-    - `agents.defaults.models` is the allowlist/catalog of models NexisClaw can use (plus aliases). Use `provider/*` entries to limit visible providers while keeping provider discovery dynamic.
+    - `agents.defaults.models` is the allowlist/catalog of models GreenchClaw can use (plus aliases). Use `provider/*` entries to limit visible providers while keeping provider discovery dynamic.
     - `agents.defaults.imageModel` is used **only when** the primary model can't accept images.
     - `agents.defaults.pdfModel` is used by the `pdf` tool. If omitted, the tool falls back to `agents.defaults.imageModel`, then the resolved session/default model.
     - `agents.defaults.imageGenerationModel` is used by the shared image-generation capability. If omitted, `image_generate` can still infer an auth-backed provider default. It tries the current default provider first, then the remaining registered image-generation providers in provider-id order. If you set a specific provider/model, also configure that provider's auth/API key.
@@ -60,10 +60,10 @@ The same `provider/model` can mean different things depending on where it came f
 
 - Configured defaults (`agents.defaults.model.primary` and agent-specific primaries) are the normal starting point and use `agents.defaults.model.fallbacks`.
 - Auto fallback selections are temporary recovery state. They are stored with `modelOverrideSource: "auto"` so later turns can keep using the fallback chain without probing a known-bad primary first.
-- User session selections are exact. `/model`, the model picker, `session_status(model=...)`, and `sessions.patch` store `modelOverrideSource: "user"`; if that selected provider/model is unreachable, NexisClaw fails visibly instead of falling through to another configured model.
+- User session selections are exact. `/model`, the model picker, `session_status(model=...)`, and `sessions.patch` store `modelOverrideSource: "user"`; if that selected provider/model is unreachable, GreenchClaw fails visibly instead of falling through to another configured model.
 - Cron `--model` / payload `model` is a per-job primary. It still uses configured fallbacks unless the job supplies explicit payload `fallbacks` (use `fallbacks: []` for a strict cron run).
 - CLI default-model and allowlist pickers respect `models.mode: "replace"` by listing explicit `models.providers.*.models` instead of loading the full built-in catalog.
-- The Control UI model picker asks the Gateway for its configured model view: `agents.defaults.models` when present, including provider-wide `provider/*` entries, otherwise explicit `models.providers.*.models` plus providers with usable auth. The full built-in catalog is reserved for explicit browse views such as `models.list` with `view: "all"` or `NexisClaw models list --all`.
+- The Control UI model picker asks the Gateway for its configured model view: `agents.defaults.models` when present, including provider-wide `provider/*` entries, otherwise explicit `models.providers.*.models` plus providers with usable auth. The full built-in catalog is reserved for explicit browse views such as `models.list` with `view: "all"` or `GreenchClaw models list --all`.
 
 ## Quick model policy
 
@@ -76,7 +76,7 @@ The same `provider/model` can mean different things depending on where it came f
 If you don't want to hand-edit config, run onboarding:
 
 ```bash
-NexisClaw onboard
+GreenchClaw onboard
 ```
 
 It can set up model + auth for common providers, including **OpenAI Code (Codex) subscription** (OAuth) and **Anthropic** (API key or Claude CLI).
@@ -102,25 +102,25 @@ Provider configuration examples (including OpenCode) live in [OpenCode](/provide
 Use additive writes when updating `agents.defaults.models` by hand:
 
 ```bash
-NexisClaw config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
+GreenchClaw config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
 ```
 
 <AccordionGroup>
   <Accordion title="Clobber protection rules">
-    `NexisClaw config set` protects model/provider maps from accidental clobbers. A plain object assignment to `agents.defaults.models`, `models.providers`, or `models.providers.<id>.models` is rejected when it would remove existing entries. Use `--merge` for additive changes; use `--replace` only when the provided value should become the complete target value.
+    `GreenchClaw config set` protects model/provider maps from accidental clobbers. A plain object assignment to `agents.defaults.models`, `models.providers`, or `models.providers.<id>.models` is rejected when it would remove existing entries. Use `--merge` for additive changes; use `--replace` only when the provided value should become the complete target value.
 
-    Interactive provider setup and `NexisClaw configure --section model` also merge provider-scoped selections into the existing allowlist, so adding Codex, Ollama, or another provider does not drop unrelated model entries. Configure preserves an existing `agents.defaults.model.primary` when provider auth is re-applied. Explicit default-setting commands such as `NexisClaw models auth login --provider <id> --set-default` and `NexisClaw models set <model>` still replace `agents.defaults.model.primary`.
+    Interactive provider setup and `GreenchClaw configure --section model` also merge provider-scoped selections into the existing allowlist, so adding Codex, Ollama, or another provider does not drop unrelated model entries. Configure preserves an existing `agents.defaults.model.primary` when provider auth is re-applied. Explicit default-setting commands such as `GreenchClaw models auth login --provider <id> --set-default` and `GreenchClaw models set <model>` still replace `agents.defaults.model.primary`.
 
   </Accordion>
 </AccordionGroup>
 
 ## "Model is not allowed" (and why replies stop)
 
-If `agents.defaults.models` is set, it becomes the **allowlist** for `/model` and for session overrides. When a user selects a model that isn't in that allowlist, NexisClaw returns:
+If `agents.defaults.models` is set, it becomes the **allowlist** for `/model` and for session overrides. When a user selects a model that isn't in that allowlist, GreenchClaw returns:
 
 ```
 Model "provider/model" is not allowed. Use /models to list providers, or /models <provider> to list models.
-Add it with: NexisClaw config set agents.defaults.models '{"provider/model":{}}' --strict-json --merge
+Add it with: GreenchClaw config set agents.defaults.models '{"provider/model":{}}' --strict-json --merge
 ```
 
 <Warning>
@@ -136,7 +136,7 @@ When the rejected command included a runtime override such as `/model openai/gpt
 
 For local/GGUF models, store the full provider-prefixed ref in the allowlist,
 for example `ollama/gemma4:26b`, `lmstudio/Gemma4-26b-a4-it-gguf`, or the
-exact provider/model shown by `NexisClaw models list --provider <provider>`.
+exact provider/model shown by `GreenchClaw models list --provider <provider>`.
 Bare local filenames or display names are not enough when the allowlist is
 active.
 
@@ -193,7 +193,7 @@ You can switch models for the current session without restarting:
   <Accordion title="Picker behavior">
     - `/model` (and `/model list`) is a compact, numbered picker (model family + available providers).
     - On Discord, `/model` and `/models` open an interactive picker with provider and model dropdowns plus a Submit step.
-    - On Telegram, `/models` picker selections are session-scoped; they do not change the agent's persistent default in `NexisClaw.json`.
+    - On Telegram, `/models` picker selections are session-scoped; they do not change the agent's persistent default in `GreenchClaw.json`.
     - `/models add` is deprecated and now returns a deprecation message instead of registering models from chat.
     - `/model <#>` selects from that picker.
 
@@ -201,7 +201,7 @@ You can switch models for the current session without restarting:
   <Accordion title="Persistence and live switching">
     - `/model` persists the new session selection immediately.
     - If the agent is idle, the next run uses the new model right away.
-    - If a run is already active, NexisClaw marks a live switch as pending and only restarts into the new model at a clean retry point.
+    - If a run is already active, GreenchClaw marks a live switch as pending and only restarts into the new model at a clean retry point.
     - If tool activity or reply output has already started, the pending switch can stay queued until a later retry opportunity or the next user turn.
     - A user-selected `/model` ref is strict for that session: if the selected provider/model is unreachable, the reply fails visibly instead of silently answering from `agents.defaults.model.fallbacks`. This is different from configured defaults and cron job primaries, which can still use fallback chains.
     - `/model status` is the detailed view (auth candidates and, when configured, provider endpoint `baseUrl` + `api` mode).
@@ -210,10 +210,10 @@ You can switch models for the current session without restarting:
   <Accordion title="Ref parsing">
     - Model refs are parsed by splitting on the **first** `/`. Use `provider/model` when typing `/model <ref>`.
     - If the model ID itself contains `/` (OpenRouter-style), you must include the provider prefix (example: `/model openrouter/moonshotai/kimi-k2`).
-    - If you omit the provider, NexisClaw resolves the input in this order:
+    - If you omit the provider, GreenchClaw resolves the input in this order:
       1. alias match
       2. unique configured-provider match for that exact unprefixed model id
-      3. deprecated fallback to the configured default provider — if that provider no longer exposes the configured default model, NexisClaw instead falls back to the first configured provider/model to avoid surfacing a stale removed-provider default.
+      3. deprecated fallback to the configured default provider — if that provider no longer exposes the configured default model, GreenchClaw instead falls back to the first configured provider/model to avoid surfacing a stale removed-provider default.
   </Accordion>
 </AccordionGroup>
 
@@ -222,27 +222,27 @@ Full command behavior/config: [Slash commands](/tools/slash-commands).
 ## CLI commands
 
 ```bash
-NexisClaw models list
-NexisClaw models status
-NexisClaw models set <provider/model>
-NexisClaw models set-image <provider/model>
+GreenchClaw models list
+GreenchClaw models status
+GreenchClaw models set <provider/model>
+GreenchClaw models set-image <provider/model>
 
-NexisClaw models aliases list
-NexisClaw models aliases add <alias> <provider/model>
-NexisClaw models aliases remove <alias>
+GreenchClaw models aliases list
+GreenchClaw models aliases add <alias> <provider/model>
+GreenchClaw models aliases remove <alias>
 
-NexisClaw models fallbacks list
-NexisClaw models fallbacks add <provider/model>
-NexisClaw models fallbacks remove <provider/model>
-NexisClaw models fallbacks clear
+GreenchClaw models fallbacks list
+GreenchClaw models fallbacks add <provider/model>
+GreenchClaw models fallbacks remove <provider/model>
+GreenchClaw models fallbacks clear
 
-NexisClaw models image-fallbacks list
-NexisClaw models image-fallbacks add <provider/model>
-NexisClaw models image-fallbacks remove <provider/model>
-NexisClaw models image-fallbacks clear
+GreenchClaw models image-fallbacks list
+GreenchClaw models image-fallbacks add <provider/model>
+GreenchClaw models image-fallbacks remove <provider/model>
+GreenchClaw models image-fallbacks clear
 ```
 
-`NexisClaw models` (no subcommand) is a shortcut for `models status`.
+`GreenchClaw models` (no subcommand) is a shortcut for `models status`.
 
 ### `models list`
 
@@ -287,12 +287,12 @@ Example (Claude CLI):
 
 ```bash
 claude auth login
-NexisClaw models status
+GreenchClaw models status
 ```
 
 ## Scanning (OpenRouter free models)
 
-`NexisClaw models scan` inspects OpenRouter's **free model catalog** and can optionally probe models for tool and image support.
+`GreenchClaw models scan` inspects OpenRouter's **free model catalog** and can optionally probe models for tool and image support.
 
 <ParamField path="--no-probe" type="boolean">
   Skip live probes (metadata only).
@@ -317,7 +317,7 @@ NexisClaw models status
 </ParamField>
 
 <Note>
-The OpenRouter `/models` catalog is public, so metadata-only scans can list free candidates without a key. Probing and inference still require an OpenRouter API key (from auth profiles or `OPENROUTER_API_KEY`). If no key is available, `NexisClaw models scan` falls back to metadata-only output and leaves config unchanged. Use `--no-probe` to request metadata-only mode explicitly.
+The OpenRouter `/models` catalog is public, so metadata-only scans can list free candidates without a key. Probing and inference still require an OpenRouter API key (from auth profiles or `OPENROUTER_API_KEY`). If no key is available, `GreenchClaw models scan` falls back to metadata-only output and leaves config unchanged. Use `--no-probe` to request metadata-only mode explicitly.
 </Note>
 
 Scan results are ranked by:
@@ -334,11 +334,11 @@ Input:
 - Optional filters: `--max-age-days`, `--min-params`, `--provider`, `--max-candidates`
 - Request/probe controls: `--timeout`, `--concurrency`
 
-When live probes run in a TTY, you can select fallbacks interactively. In non-interactive mode, pass `--yes` to accept defaults. Metadata-only results are informational; `--set-default` and `--set-image` require live probes so NexisClaw does not configure an unusable keyless OpenRouter model.
+When live probes run in a TTY, you can select fallbacks interactively. In non-interactive mode, pass `--yes` to accept defaults. Metadata-only results are informational; `--set-default` and `--set-image` require live probes so GreenchClaw does not configure an unusable keyless OpenRouter model.
 
 ## Models registry (`models.json`)
 
-Custom providers in `models.providers` are written into `models.json` under the agent directory (default `~/.NexisClaw/agents/<agentId>/agent/models.json`). This file is merged by default unless `models.mode` is set to `replace`.
+Custom providers in `models.providers` are written into `models.json` under the agent directory (default `~/.GreenchClaw/agents/<agentId>/agent/models.json`). This file is merged by default unless `models.mode` is set to `replace`.
 
 <AccordionGroup>
   <Accordion title="Merge mode precedence">
@@ -355,7 +355,7 @@ Custom providers in `models.providers` are written into `models.json` under the 
 </AccordionGroup>
 
 <Note>
-Marker persistence is source-authoritative: NexisClaw writes markers from the active source config snapshot (pre-resolution), not from resolved runtime secret values. This applies whenever NexisClaw regenerates `models.json`, including command-driven paths like `NexisClaw agent`.
+Marker persistence is source-authoritative: GreenchClaw writes markers from the active source config snapshot (pre-resolution), not from resolved runtime secret values. This applies whenever GreenchClaw regenerates `models.json`, including command-driven paths like `GreenchClaw agent`.
 </Note>
 
 ## Related

@@ -10,7 +10,7 @@ let fixtureRoot = "";
 let caseId = 0;
 
 beforeAll(async () => {
-  fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-cron-store-"));
+  fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-cron-store-"));
 });
 
 afterAll(async () => {
@@ -80,12 +80,12 @@ describe("resolveCronStorePath", () => {
     vi.unstubAllEnvs();
   });
 
-  it("uses NEXISCLAW_HOME for tilde expansion", () => {
-    vi.stubEnv("NEXISCLAW_HOME", "/srv/NexisClaw-home");
+  it("uses GREENCHCLAW_HOME for tilde expansion", () => {
+    vi.stubEnv("GREENCHCLAW_HOME", "/srv/GreenchClaw-home");
     vi.stubEnv("HOME", "/home/other");
 
     const result = resolveCronStorePath("~/cron/jobs.json");
-    expect(result).toBe(path.resolve("/srv/NexisClaw-home", "cron", "jobs.json"));
+    expect(result).toBe(path.resolve("/srv/GreenchClaw-home", "cron", "jobs.json"));
   });
 });
 

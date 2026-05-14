@@ -1,11 +1,11 @@
-import { createPluginRuntimeMock } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { createPluginRuntimeMock } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import {
   createEmptyPluginRegistry,
   createRuntimeEnv,
   setActivePluginRegistry,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { vi, type Mock } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import type { ResolvedZaloAccount } from "../types.js";
 
 type MonitorModule = typeof import("../monitor.js");
@@ -148,7 +148,7 @@ export async function loadCachedLifecycleMonitorModule(cacheKey: string): Promis
 
 export async function startWebhookLifecycleMonitor(params: {
   account: ResolvedZaloAccount;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   token?: string;
   webhookUrl?: string;
   webhookSecret?: string;

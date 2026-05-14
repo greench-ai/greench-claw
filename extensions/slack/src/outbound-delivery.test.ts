@@ -9,10 +9,10 @@ import {
   resetGlobalHookRunner,
   setActivePluginRegistry,
   type PluginHookRegistration,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { slackOutbound } from "./outbound-adapter.js";
-import type { NexisClawConfig } from "./runtime-api.js";
+import type { GreenchClawConfig } from "./runtime-api.js";
 
 const sendMessageSlackMock = vi.hoisted(() => vi.fn());
 
@@ -20,7 +20,7 @@ vi.mock("./send.runtime.js", () => ({
   sendMessageSlack: sendMessageSlackMock,
 }));
 
-const cfg: NexisClawConfig = {
+const cfg: GreenchClawConfig = {
   channels: {
     slack: {
       botToken: "xoxb-test",

@@ -5,7 +5,7 @@ import {
   clearRuntimeConfigSnapshot,
   setRuntimeConfigSnapshot,
 } from "../config/runtime-snapshot.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { captureEnv, withPathResolutionEnv } from "../test-utils/env.js";
 import { createFixtureSuite } from "../test-utils/fixture-suite.js";
 import { createTempHomeEnv, type TempHomeEnv } from "../test-utils/temp-home.js";
@@ -28,10 +28,10 @@ vi.mock("./skills/plugin-skills.js", () => ({
   resolvePluginSkillDirs: () => [],
 }));
 
-const fixtureSuite = createFixtureSuite("NexisClaw-skills-suite-");
+const fixtureSuite = createFixtureSuite("GreenchClaw-skills-suite-");
 let tempHome: TempHomeEnv | null = null;
 let skillsHomeEnv: SkillsHomeEnvSnapshot | null = null;
-const pluginEnvSnapshot = captureEnv(["NEXISCLAW_DISABLE_BUNDLED_PLUGINS"]);
+const pluginEnvSnapshot = captureEnv(["GREENCHCLAW_DISABLE_BUNDLED_PLUGINS"]);
 
 const resolveTestSkillDirs = (workspaceDir: string) => ({
   managedSkillsDir: path.join(workspaceDir, ".managed"),
@@ -118,7 +118,7 @@ function envSkillSnapshot(name: string, metadata: SkillEntry["metadata"]): Skill
   };
 }
 
-function rawSkillApiKeyRefConfig(skillName: string): NexisClawConfig {
+function rawSkillApiKeyRefConfig(skillName: string): GreenchClawConfig {
   return {
     skills: {
       entries: {
@@ -134,7 +134,7 @@ function rawSkillApiKeyRefConfig(skillName: string): NexisClawConfig {
   };
 }
 
-function resolvedSkillApiKeyConfig(skillName: string, apiKey: string): NexisClawConfig {
+function resolvedSkillApiKeyConfig(skillName: string, apiKey: string): GreenchClawConfig {
   return {
     skills: {
       entries: {
@@ -148,10 +148,10 @@ function resolvedSkillApiKeyConfig(skillName: string, apiKey: string): NexisClaw
 
 beforeAll(async () => {
   await fixtureSuite.setup();
-  process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = "1";
-  tempHome = await createTempHomeEnv("NexisClaw-skills-home-");
+  process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+  tempHome = await createTempHomeEnv("GreenchClaw-skills-home-");
   skillsHomeEnv = setMockSkillsHomeEnv(tempHome.home);
-  await fs.mkdir(path.join(tempHome.home, ".NexisClaw", "agents", "main", "sessions"), {
+  await fs.mkdir(path.join(tempHome.home, ".GreenchClaw", "agents", "main", "sessions"), {
     recursive: true,
   });
 });
@@ -275,7 +275,7 @@ describe("buildWorkspaceSkillCommandSpecs", () => {
     expect(commands.map((entry) => entry.skillName)).toEqual(["alpha-skill"]);
   });
 
-  it("includes enabled Claude bundle markdown commands as native NexisClaw slash commands", async () => {
+  it("includes enabled Claude bundle markdown commands as native GreenchClaw slash commands", async () => {
     const workspaceDir = await makeWorkspace();
     const config = {
       plugins: {
@@ -283,7 +283,7 @@ describe("buildWorkspaceSkillCommandSpecs", () => {
           "compound-bundle": { enabled: true },
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     // Prime plugin discovery before the bundle exists so command loading proves
     // it sees the current filesystem state instead of a stale cached snapshot.
@@ -292,7 +292,7 @@ describe("buildWorkspaceSkillCommandSpecs", () => {
       config,
     });
 
-    const pluginRoot = path.join(workspaceDir, ".NexisClaw", "extensions", "compound-bundle");
+    const pluginRoot = path.join(workspaceDir, ".GreenchClaw", "extensions", "compound-bundle");
     await fs.mkdir(path.join(pluginRoot, ".claude-plugin"), { recursive: true });
     await fs.mkdir(path.join(pluginRoot, "commands"), { recursive: true });
     await fs.writeFile(

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   externalCliDiscoveryForProviderAuth,
   ensureAuthProfileStore,
@@ -11,7 +11,7 @@ import { normalizeProviderId } from "./model-selection.js";
 
 export function hasAuthForModelProvider(params: {
   provider: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   workspaceDir?: string;
   agentDir?: string;
   env?: NodeJS.ProcessEnv;
@@ -47,7 +47,7 @@ export function hasAuthForModelProvider(params: {
 }
 
 export function createProviderAuthChecker(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   workspaceDir?: string;
   agentDir?: string;
   env?: NodeJS.ProcessEnv;

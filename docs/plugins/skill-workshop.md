@@ -623,7 +623,7 @@ Reasons the poor version should not be saved:
 Check whether the plugin is loaded:
 
 ```bash
-NexisClaw plugins list --enabled
+GreenchClaw plugins list --enabled
 ```
 
 Check proposal counts from an agent/tool context:
@@ -646,15 +646,15 @@ Inspect quarantined proposals:
 
 Common symptoms:
 
-| Symptom                               | Likely cause                                                                        | Check                                                                |
-| ------------------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Tool is unavailable                   | Plugin entry is not enabled                                                         | `plugins.entries.skill-workshop.enabled` and `NexisClaw plugins list` |
-| No automatic proposal appears         | `autoCapture: false`, `reviewMode: "off"`, or thresholds not met                    | Config, proposal status, Gateway logs                                |
-| Heuristic did not capture             | User wording did not match correction patterns                                      | Use explicit `skill_workshop.suggest` or enable LLM reviewer         |
-| Reviewer did not create a proposal    | Reviewer returned `none`, invalid JSON, or timed out                                | Gateway logs, `reviewTimeoutMs`, thresholds                          |
-| Proposal is not applied               | `approvalPolicy: "pending"`                                                         | `list_pending`, then `apply`                                         |
-| Proposal disappeared from pending     | Duplicate proposal reused, max pending pruning, or was applied/rejected/quarantined | `status`, `list_pending` with status filters, `list_quarantine`      |
-| Skill file exists but model misses it | Skill snapshot not refreshed or skill gating excludes it                            | `NexisClaw skills` status and workspace skill eligibility             |
+| Symptom                               | Likely cause                                                                        | Check                                                                   |
+| ------------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Tool is unavailable                   | Plugin entry is not enabled                                                         | `plugins.entries.skill-workshop.enabled` and `GreenchClaw plugins list` |
+| No automatic proposal appears         | `autoCapture: false`, `reviewMode: "off"`, or thresholds not met                    | Config, proposal status, Gateway logs                                   |
+| Heuristic did not capture             | User wording did not match correction patterns                                      | Use explicit `skill_workshop.suggest` or enable LLM reviewer            |
+| Reviewer did not create a proposal    | Reviewer returned `none`, invalid JSON, or timed out                                | Gateway logs, `reviewTimeoutMs`, thresholds                             |
+| Proposal is not applied               | `approvalPolicy: "pending"`                                                         | `list_pending`, then `apply`                                            |
+| Proposal disappeared from pending     | Duplicate proposal reused, max pending pruning, or was applied/rejected/quarantined | `status`, `list_pending` with status filters, `list_quarantine`         |
+| Skill file exists but model misses it | Skill snapshot not refreshed or skill gating excludes it                            | `GreenchClaw skills` status and workspace skill eligibility             |
 
 Relevant logs:
 
@@ -676,7 +676,7 @@ Repo-backed QA scenarios:
 Run the deterministic coverage:
 
 ```bash
-pnpm NexisClaw qa suite \
+pnpm GreenchClaw qa suite \
   --scenario skill-workshop-animated-gif-autocreate \
   --scenario skill-workshop-pending-approval \
   --concurrency 1
@@ -685,7 +685,7 @@ pnpm NexisClaw qa suite \
 Run reviewer coverage:
 
 ```bash
-pnpm NexisClaw qa suite \
+pnpm GreenchClaw qa suite \
   --scenario skill-workshop-reviewer-autonomous \
   --concurrency 1
 ```

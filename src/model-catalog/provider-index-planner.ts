@@ -1,5 +1,5 @@
 import { normalizeModelCatalogProviderRows } from "./normalize.js";
-import type { NexisClawProviderIndex } from "./provider-index/index.js";
+import type { GreenchClawProviderIndex } from "./provider-index/index.js";
 import { normalizeModelCatalogProviderId } from "./refs.js";
 import type { ModelCatalogProvider, NormalizedModelCatalogRow } from "./types.js";
 
@@ -25,7 +25,7 @@ function withPreviewStatusDefaults(providerCatalog: ModelCatalogProvider): Model
 }
 
 export function planProviderIndexModelCatalogRows(params: {
-  index: NexisClawProviderIndex;
+  index: GreenchClawProviderIndex;
   providerFilter?: string;
 }): ProviderIndexModelCatalogPlan {
   const providerFilter = params.providerFilter

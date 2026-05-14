@@ -1,23 +1,23 @@
-import { resolveApprovalApprovers } from "NexisClaw/plugin-sdk/approval-auth-runtime";
+import { resolveApprovalApprovers } from "GreenchClaw/plugin-sdk/approval-auth-runtime";
 import {
   createChannelExecApprovalProfile,
   isChannelExecApprovalClientEnabledFromConfig,
   isChannelExecApprovalTargetRecipient,
   matchesApprovalRequestFilters,
-} from "NexisClaw/plugin-sdk/approval-client-runtime";
-import { resolveApprovalRequestChannelAccountId } from "NexisClaw/plugin-sdk/approval-native-runtime";
+} from "GreenchClaw/plugin-sdk/approval-client-runtime";
+import { resolveApprovalRequestChannelAccountId } from "GreenchClaw/plugin-sdk/approval-native-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "NexisClaw/plugin-sdk/approval-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { TelegramExecApprovalConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/approval-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { TelegramExecApprovalConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-runtime";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/routing";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { listTelegramAccountIds, resolveTelegramAccount } from "./accounts.js";
 import { resolveTelegramInlineButtonsConfigScope } from "./inline-buttons.js";
 import { normalizeTelegramChatId, resolveTelegramTargetChatType } from "./targets.js";
@@ -35,13 +35,13 @@ function normalizeTelegramDirectApproverId(value: string | number): string | und
   return chatId;
 }
 
-function resolveTelegramOwnerApprovers(cfg: NexisClawConfig): Array<string | number> {
+function resolveTelegramOwnerApprovers(cfg: GreenchClawConfig): Array<string | number> {
   const ownerAllowFrom = cfg.commands?.ownerAllowFrom;
   return Array.isArray(ownerAllowFrom) ? ownerAllowFrom : [];
 }
 
 export function resolveTelegramExecApprovalConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): TelegramExecApprovalConfig | undefined {
   const account = resolveTelegramAccount(params);
@@ -55,7 +55,7 @@ export function resolveTelegramExecApprovalConfig(params: {
 }
 
 export function getTelegramExecApprovalApprovers(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): string[] {
   return resolveApprovalApprovers({
@@ -66,7 +66,7 @@ export function getTelegramExecApprovalApprovers(params: {
 }
 
 export function isTelegramExecApprovalTargetRecipient(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   senderId?: string | null;
   accountId?: string | null;
 }): boolean {
@@ -84,7 +84,7 @@ export function isTelegramExecApprovalTargetRecipient(params: {
 }
 
 function countTelegramExecApprovalEligibleAccounts(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): number {
   return listTelegramAccountIds(params.cfg).filter((accountId) => {
@@ -122,7 +122,7 @@ function isTargetForwardingMode(mode?: string): boolean {
 }
 
 function matchesExplicitTelegramForwardTargetAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): boolean | undefined {
@@ -154,7 +154,7 @@ function matchesExplicitTelegramForwardTargetAccount(params: {
 }
 
 function matchesTelegramRequestAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): boolean {
@@ -204,7 +204,7 @@ export const shouldHandleTelegramExecApprovalRequest =
   telegramExecApprovalProfile.shouldHandleRequest;
 
 export function shouldInjectTelegramExecApprovalButtons(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   to: string;
 }): boolean {
@@ -223,7 +223,7 @@ export function shouldInjectTelegramExecApprovalButtons(params: {
 }
 
 function resolveExecApprovalButtonsExplicitlyDisabled(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): boolean {
   const capabilities = resolveTelegramAccount(params).config.capabilities;
@@ -231,7 +231,7 @@ function resolveExecApprovalButtonsExplicitlyDisabled(params: {
 }
 
 export function shouldEnableTelegramExecApprovalButtons(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   to: string;
 }): boolean {
@@ -242,7 +242,7 @@ export function shouldEnableTelegramExecApprovalButtons(params: {
 }
 
 export function shouldSuppressLocalTelegramExecApprovalPrompt(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   payload: ReplyPayload;
 }): boolean {
@@ -250,7 +250,7 @@ export function shouldSuppressLocalTelegramExecApprovalPrompt(params: {
 }
 
 export function isTelegramExecApprovalHandlerConfigured(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): boolean {
   return isChannelExecApprovalClientEnabledFromConfig({

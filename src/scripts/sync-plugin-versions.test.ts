@@ -16,23 +16,23 @@ describe("syncPluginVersions", () => {
     cleanupTempDirs(tempDirs);
   });
 
-  it("preserves workspace NexisClaw devDependencies and plugin host floors", () => {
-    const rootDir = makeTempDir(tempDirs, "NexisClaw-sync-plugin-versions-");
+  it("preserves workspace GreenchClaw devDependencies and plugin host floors", () => {
+    const rootDir = makeTempDir(tempDirs, "GreenchClaw-sync-plugin-versions-");
 
     writeJson(path.join(rootDir, "package.json"), {
-      name: "NexisClaw",
+      name: "GreenchClaw",
       version: "2026.4.1",
     });
     writeJson(path.join(rootDir, "extensions/imessage/package.json"), {
-      name: "@NexisClaw/imessage",
+      name: "@GreenchClaw/imessage",
       version: "2026.3.30",
       devDependencies: {
-        NexisClaw: "workspace:*",
+        GreenchClaw: "workspace:*",
       },
       peerDependencies: {
-        NexisClaw: ">=2026.3.30",
+        GreenchClaw: ">=2026.3.30",
       },
-      NexisClaw: {
+      GreenchClaw: {
         install: {
           minHostVersion: ">=2026.3.30",
         },
@@ -40,7 +40,7 @@ describe("syncPluginVersions", () => {
           pluginApi: ">=2026.3.30",
         },
         build: {
-          NexisClawVersion: "2026.3.30",
+          GreenchClawVersion: "2026.3.30",
         },
       },
     });
@@ -52,7 +52,7 @@ describe("syncPluginVersions", () => {
       version?: string;
       devDependencies?: Record<string, string>;
       peerDependencies?: Record<string, string>;
-      NexisClaw?: {
+      GreenchClaw?: {
         install?: {
           minHostVersion?: string;
         };
@@ -60,34 +60,34 @@ describe("syncPluginVersions", () => {
           pluginApi?: string;
         };
         build?: {
-          NexisClawVersion?: string;
+          GreenchClawVersion?: string;
         };
       };
     };
 
-    expect(summary.updated).toContain("@NexisClaw/imessage");
+    expect(summary.updated).toContain("@GreenchClaw/imessage");
     expect(updatedPackage.version).toBe("2026.4.1");
-    expect(updatedPackage.devDependencies?.NexisClaw).toBe("workspace:*");
-    expect(updatedPackage.peerDependencies?.NexisClaw).toBe(">=2026.4.1");
-    expect(updatedPackage.NexisClaw?.install?.minHostVersion).toBe(">=2026.3.30");
-    expect(updatedPackage.NexisClaw?.compat?.pluginApi).toBe(">=2026.4.1");
-    expect(updatedPackage.NexisClaw?.build?.NexisClawVersion).toBe("2026.4.1");
+    expect(updatedPackage.devDependencies?.GreenchClaw).toBe("workspace:*");
+    expect(updatedPackage.peerDependencies?.GreenchClaw).toBe(">=2026.4.1");
+    expect(updatedPackage.GreenchClaw?.install?.minHostVersion).toBe(">=2026.3.30");
+    expect(updatedPackage.GreenchClaw?.compat?.pluginApi).toBe(">=2026.4.1");
+    expect(updatedPackage.GreenchClaw?.build?.GreenchClawVersion).toBe("2026.4.1");
   });
 
   it("reports pending version sync without writing in check mode", () => {
-    const rootDir = makeTempDir(tempDirs, "NexisClaw-sync-plugin-versions-check-");
+    const rootDir = makeTempDir(tempDirs, "GreenchClaw-sync-plugin-versions-check-");
 
     writeJson(path.join(rootDir, "package.json"), {
-      name: "NexisClaw",
+      name: "GreenchClaw",
       version: "2026.4.2",
     });
     writeJson(path.join(rootDir, "extensions/discord/package.json"), {
-      name: "@NexisClaw/discord",
+      name: "@GreenchClaw/discord",
       version: "2026.4.1",
       peerDependencies: {
-        NexisClaw: ">=2026.4.1",
+        GreenchClaw: ">=2026.4.1",
       },
-      NexisClaw: {
+      GreenchClaw: {
         compat: {
           pluginApi: ">=2026.4.1",
         },
@@ -100,28 +100,28 @@ describe("syncPluginVersions", () => {
     ) as {
       version?: string;
       peerDependencies?: Record<string, string>;
-      NexisClaw?: {
+      GreenchClaw?: {
         compat?: {
           pluginApi?: string;
         };
       };
     };
 
-    expect(summary.updated).toEqual(["@NexisClaw/discord"]);
+    expect(summary.updated).toEqual(["@GreenchClaw/discord"]);
     expect(unchangedPackage.version).toBe("2026.4.1");
-    expect(unchangedPackage.peerDependencies?.NexisClaw).toBe(">=2026.4.1");
-    expect(unchangedPackage.NexisClaw?.compat?.pluginApi).toBe(">=2026.4.1");
+    expect(unchangedPackage.peerDependencies?.GreenchClaw).toBe(">=2026.4.1");
+    expect(unchangedPackage.GreenchClaw?.compat?.pluginApi).toBe(">=2026.4.1");
   });
 
   it("uses the base release version for beta changelog entries", () => {
-    const rootDir = makeTempDir(tempDirs, "NexisClaw-sync-plugin-versions-beta-changelog-");
+    const rootDir = makeTempDir(tempDirs, "GreenchClaw-sync-plugin-versions-beta-changelog-");
 
     writeJson(path.join(rootDir, "package.json"), {
-      name: "NexisClaw",
+      name: "GreenchClaw",
       version: "2026.5.3-beta.1",
     });
     writeJson(path.join(rootDir, "extensions/matrix/package.json"), {
-      name: "@NexisClaw/matrix",
+      name: "@GreenchClaw/matrix",
       version: "2026.5.3-beta.1",
     });
     fs.mkdirSync(path.join(rootDir, "extensions/matrix"), { recursive: true });
@@ -134,7 +134,7 @@ describe("syncPluginVersions", () => {
     const summary = syncPluginVersions(rootDir);
     const changelog = fs.readFileSync(path.join(rootDir, "extensions/matrix/CHANGELOG.md"), "utf8");
 
-    expect(summary.changelogged).toEqual(["@NexisClaw/matrix"]);
+    expect(summary.changelogged).toEqual(["@GreenchClaw/matrix"]);
     expect(changelog).toContain("## 2026.5.3\n\n### Changes\n- Version alignment");
     expect(changelog).not.toContain("## 2026.5.3-beta.1");
 

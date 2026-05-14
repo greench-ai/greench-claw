@@ -1,5 +1,5 @@
 ---
-summary: "Adds the WhatsApp channel surface for sending and receiving NexisClaw messages."
+summary: "Adds the WhatsApp channel surface for sending and receiving GreenchClaw messages."
 read_when:
   - You are installing, configuring, or auditing the whatsapp plugin
 title: "WhatsApp plugin"
@@ -7,11 +7,11 @@ title: "WhatsApp plugin"
 
 # WhatsApp plugin
 
-Adds the WhatsApp channel surface for sending and receiving NexisClaw messages.
+Adds the WhatsApp channel surface for sending and receiving GreenchClaw messages.
 
 ## Distribution
 
-- Package: `@NexisClaw/whatsapp`
+- Package: `@GreenchClaw/whatsapp`
 - Install route: npm; ClawHub
 
 ## Surface

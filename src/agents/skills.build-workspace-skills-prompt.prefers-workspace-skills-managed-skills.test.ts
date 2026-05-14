@@ -4,14 +4,14 @@ import { withEnv } from "../test-utils/env.js";
 import { createFixtureSuite } from "../test-utils/fixture-suite.js";
 import { writeSkill } from "./skills.e2e-test-helpers.js";
 import { createSyntheticSourceInfo } from "./skills/skill-contract.js";
-import type { NexisClawSkillMetadata, SkillEntry } from "./skills/types.js";
+import type { GreenchClawSkillMetadata, SkillEntry } from "./skills/types.js";
 import { buildWorkspaceSkillsPrompt } from "./skills/workspace.js";
 
 vi.mock("./skills/plugin-skills.js", () => ({
   resolvePluginSkillDirs: () => [],
 }));
 
-const fixtureSuite = createFixtureSuite("NexisClaw-skills-prompt-suite-");
+const fixtureSuite = createFixtureSuite("GreenchClaw-skills-prompt-suite-");
 
 beforeAll(async () => {
   await fixtureSuite.setup();
@@ -24,7 +24,7 @@ afterAll(async () => {
 function createSkillEntry(params: {
   name: string;
   description?: string;
-  metadata?: NexisClawSkillMetadata;
+  metadata?: GreenchClawSkillMetadata;
 }): SkillEntry {
   const filePath = `/skills/${params.name}/SKILL.md`;
   return {

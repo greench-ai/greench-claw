@@ -1,10 +1,10 @@
-import { createLazyRuntimeModule } from "NexisClaw/plugin-sdk/lazy-runtime";
+import { createLazyRuntimeModule } from "GreenchClaw/plugin-sdk/lazy-runtime";
 import {
   buildTokenChannelStatusSummary,
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
   createDependentCredentialStatusIssueCollector,
-} from "NexisClaw/plugin-sdk/status-helpers";
+} from "GreenchClaw/plugin-sdk/status-helpers";
 import { hasLineCredentials } from "./account-helpers.js";
 import { DEFAULT_ACCOUNT_ID, type ChannelPlugin, type ResolvedLineAccount } from "./channel-api.js";
 

@@ -1,13 +1,13 @@
 import {
   getProviderHttpMocks,
   installProviderHttpMockCleanup,
-} from "NexisClaw/plugin-sdk/provider-http-test-mocks";
+} from "GreenchClaw/plugin-sdk/provider-http-test-mocks";
 import {
   expectDashscopeVideoTaskPoll,
   expectExplicitVideoGenerationCapabilities,
   expectSuccessfulDashscopeVideoResult,
   mockSuccessfulDashscopeVideoTask,
-} from "NexisClaw/plugin-sdk/provider-test-contracts";
+} from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { beforeAll, describe, expect, it } from "vitest";
 
 const { postJsonRequestMock, fetchWithTimeoutMock } = getProviderHttpMocks();

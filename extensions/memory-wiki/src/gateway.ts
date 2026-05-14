@@ -1,5 +1,5 @@
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import type { NexisClawConfig, NexisClawPluginApi } from "../api.js";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import type { GreenchClawConfig, GreenchClawPluginApi } from "../api.js";
 import { applyMemoryWikiMutation, normalizeMemoryWikiMutationInput } from "./apply.js";
 import { compileMemoryWikiVault } from "./compile.js";
 import {
@@ -29,7 +29,7 @@ const WRITE_SCOPE = "operator.write" as const;
 const ADMIN_SCOPE = "operator.admin" as const;
 const LOCAL_FILE_INGEST_SCOPE = ADMIN_SCOPE;
 type GatewayMethodContext = Parameters<
-  Parameters<NexisClawPluginApi["registerGatewayMethod"]>[1]
+  Parameters<GreenchClawPluginApi["registerGatewayMethod"]>[1]
 >[0];
 type GatewayRespond = GatewayMethodContext["respond"];
 
@@ -90,15 +90,15 @@ function respondError(respond: GatewayRespond, error: unknown) {
 
 async function syncImportedSourcesIfNeeded(
   config: ResolvedMemoryWikiConfig,
-  appConfig?: NexisClawConfig,
+  appConfig?: GreenchClawConfig,
 ) {
   await syncMemoryWikiImportedSources({ config, appConfig });
 }
 
 export function registerMemoryWikiGatewayMethods(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   config: ResolvedMemoryWikiConfig;
-  appConfig?: NexisClawConfig;
+  appConfig?: GreenchClawConfig;
 }) {
   const { api, config, appConfig } = params;
 

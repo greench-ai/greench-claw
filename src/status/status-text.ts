@@ -20,7 +20,7 @@ import { resolveSelectedAndActiveModel } from "../auto-reply/model-runtime.js";
 import type { ThinkLevel } from "../auto-reply/thinking.js";
 import { toAgentModelListLike } from "../config/model-input.js";
 import type { SessionEntry } from "../config/sessions.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { formatDurationCompact } from "../infra/format-time/format-duration.ts";
 import {
   formatUsageWindowSummary,
@@ -84,7 +84,7 @@ function loadStatusQueueRuntime(): Promise<typeof import("./status-queue.runtime
 }
 
 function resolveStatusRuntimeContextTokens(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   provider: string;
   model: string;
 }): number | undefined {
@@ -129,7 +129,7 @@ function formatSessionTaskLine(sessionKey: string): string | undefined {
 }
 
 async function resolveStatusHarnessId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   provider: string;
   model: string;
   agentId: string;

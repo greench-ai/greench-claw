@@ -29,21 +29,24 @@ describe("assertNotRoot", () => {
     expect(exitSpy).toHaveBeenCalledWith(1);
   });
 
-  it("does not exit when uid is 0 and NEXISCLAW_ALLOW_ROOT=1", () => {
+  it("does not exit when uid is 0 and GREENCHCLAW_ALLOW_ROOT=1", () => {
     process.getuid = () => 0;
-    assertNotRoot({ NEXISCLAW_ALLOW_ROOT: "1" });
+    assertNotRoot({ GREENCHCLAW_ALLOW_ROOT: "1" });
     expect(exitSpy).not.toHaveBeenCalled();
   });
 
-  it("does not exit when uid is 0 and NEXISCLAW_CLI_CONTAINER_BYPASS=1 with container hint", () => {
+  it("does not exit when uid is 0 and GREENCHCLAW_CLI_CONTAINER_BYPASS=1 with container hint", () => {
     process.getuid = () => 0;
-    assertNotRoot({ NEXISCLAW_CLI_CONTAINER_BYPASS: "1", NEXISCLAW_CONTAINER_HINT: "my-container" });
+    assertNotRoot({
+      GREENCHCLAW_CLI_CONTAINER_BYPASS: "1",
+      GREENCHCLAW_CONTAINER_HINT: "my-container",
+    });
     expect(exitSpy).not.toHaveBeenCalled();
   });
 
-  it("exits when uid is 0 and NEXISCLAW_CLI_CONTAINER_BYPASS=1 without container hint", () => {
+  it("exits when uid is 0 and GREENCHCLAW_CLI_CONTAINER_BYPASS=1 without container hint", () => {
     process.getuid = () => 0;
-    assertNotRoot({ NEXISCLAW_CLI_CONTAINER_BYPASS: "1" });
+    assertNotRoot({ GREENCHCLAW_CLI_CONTAINER_BYPASS: "1" });
     expect(exitSpy).toHaveBeenCalledWith(1);
   });
 
@@ -67,10 +70,10 @@ describe("assertNotRoot", () => {
     expect(exitSpy).not.toHaveBeenCalled();
   });
 
-  it("does not exit when euid is 0 but NEXISCLAW_ALLOW_ROOT=1", () => {
+  it("does not exit when euid is 0 but GREENCHCLAW_ALLOW_ROOT=1", () => {
     process.getuid = () => 1000;
     process.geteuid = () => 0;
-    assertNotRoot({ NEXISCLAW_ALLOW_ROOT: "1" });
+    assertNotRoot({ GREENCHCLAW_ALLOW_ROOT: "1" });
     expect(exitSpy).not.toHaveBeenCalled();
   });
 
@@ -80,11 +83,11 @@ describe("assertNotRoot", () => {
     expect(exitSpy).not.toHaveBeenCalled();
   });
 
-  it("error message mentions NEXISCLAW_ALLOW_ROOT", () => {
+  it("error message mentions GREENCHCLAW_ALLOW_ROOT", () => {
     process.getuid = () => 0;
     assertNotRoot({});
     const output = stderrSpy.mock.calls.map((c) => String(c[0])).join("");
-    expect(output).toContain("NEXISCLAW_ALLOW_ROOT");
+    expect(output).toContain("GREENCHCLAW_ALLOW_ROOT");
   });
 
   it("error message mentions running as a non-root user", () => {
@@ -92,6 +95,6 @@ describe("assertNotRoot", () => {
     assertNotRoot({});
     const output = stderrSpy.mock.calls.map((c) => String(c[0])).join("");
     expect(output).toContain("service user");
-    expect(output).toContain("sudo -u <service-user> -H NexisClaw");
+    expect(output).toContain("sudo -u <service-user> -H GreenchClaw");
   });
 });

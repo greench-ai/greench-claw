@@ -7,7 +7,7 @@ import {
   setProviderWebSearchPluginConfigValue,
   setTopLevelCredentialValue,
 } from "../agents/tools/web-search-provider-config.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { WebSearchProviderPlugin } from "../plugins/types.js";
 
 export type WebSearchProviderContractCredential =
@@ -73,9 +73,9 @@ function createConfiguredCredentialFields(
   const field = configuredCredential.field ?? "apiKey";
 
   return {
-    getConfiguredCredentialValue: (config?: NexisClawConfig) =>
+    getConfiguredCredentialValue: (config?: GreenchClawConfig) =>
       resolveProviderWebSearchPluginConfig(config, configuredCredential.pluginId)?.[field],
-    setConfiguredCredentialValue: (configTarget: NexisClawConfig, value: unknown) => {
+    setConfiguredCredentialValue: (configTarget: GreenchClawConfig, value: unknown) => {
       setProviderWebSearchPluginConfigValue(
         configTarget,
         configuredCredential.pluginId,

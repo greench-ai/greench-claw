@@ -1,10 +1,10 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   createAccountScopedConversationBindingManager,
   resetAccountScopedConversationBindingsForTests,
   type AccountScopedConversationBindingManager,
   type BindingTargetKind,
-} from "NexisClaw/plugin-sdk/thread-bindings-runtime";
+} from "GreenchClaw/plugin-sdk/thread-bindings-runtime";
 
 type IMessageBindingTargetKind = "subagent" | "acp";
 
@@ -12,7 +12,7 @@ type IMessageConversationBindingManager =
   AccountScopedConversationBindingManager<IMessageBindingTargetKind>;
 
 const IMESSAGE_CONVERSATION_BINDINGS_STATE_KEY = Symbol.for(
-  "NexisClaw.imessageConversationBindingsState",
+  "GreenchClaw.imessageConversationBindingsState",
 );
 
 function toSessionBindingTargetKind(raw: IMessageBindingTargetKind): BindingTargetKind {
@@ -25,7 +25,7 @@ function toIMessageTargetKind(raw: BindingTargetKind): IMessageBindingTargetKind
 
 export function createIMessageConversationBindingManager(params: {
   accountId?: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): IMessageConversationBindingManager {
   return createAccountScopedConversationBindingManager({
     channel: "imessage",

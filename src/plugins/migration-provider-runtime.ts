@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { getLoadedRuntimePluginRegistry } from "./active-runtime-registry.js";
 import {
   withBundledPluginAllowlistCompat,
@@ -17,9 +17,9 @@ function findMigrationProviderById(
 }
 
 function resolveMigrationProviderConfig(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   bundledCompatPluginIds: readonly string[];
-}): NexisClawConfig | undefined {
+}): GreenchClawConfig | undefined {
   const allowlistCompat = withBundledPluginAllowlistCompat({
     config: params.cfg,
     pluginIds: [...params.bundledCompatPluginIds],
@@ -56,7 +56,7 @@ function mergeMigrationProviders(
 
 export function ensureStandaloneMigrationProviderRegistryLoaded(
   params: {
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
   } = {},
 ): void {
   const resolution = resolveManifestContractRuntimePluginResolution({
@@ -83,7 +83,7 @@ export function ensureStandaloneMigrationProviderRegistryLoaded(
 
 export function resolvePluginMigrationProvider(params: {
   providerId: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): MigrationProviderPlugin | undefined {
   const activeRegistry = getLoadedRuntimePluginRegistry();
   const activeProvider = findMigrationProviderById(
@@ -111,7 +111,7 @@ export function resolvePluginMigrationProvider(params: {
 
 export function resolvePluginMigrationProviders(
   params: {
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
   } = {},
 ): MigrationProviderPlugin[] {
   const activeRegistry = getLoadedRuntimePluginRegistry();

@@ -1,8 +1,8 @@
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createBundledBrowserPluginFixture } from "../../test/helpers/browser-bundled-plugin-fixture.js";
-import type { NexisClawConfig } from "../config/config.js";
-import { clearPluginLoaderCache, loadNexisClawPlugins } from "./loader.js";
+import type { GreenchClawConfig } from "../config/config.js";
+import { clearPluginLoaderCache, loadGreenchClawPlugins } from "./loader.js";
 import { resetPluginRuntimeStateForTest } from "./runtime.js";
 
 function resetPluginState() {
@@ -15,7 +15,7 @@ describe("registerPluginCliCommands browser plugin integration", () => {
 
   beforeEach(() => {
     bundledFixture = createBundledBrowserPluginFixture();
-    vi.stubEnv("NEXISCLAW_BUNDLED_PLUGINS_DIR", bundledFixture.rootDir);
+    vi.stubEnv("GREENCHCLAW_BUNDLED_PLUGINS_DIR", bundledFixture.rootDir);
     resetPluginState();
   });
 
@@ -27,17 +27,17 @@ describe("registerPluginCliCommands browser plugin integration", () => {
   });
 
   it("registers the browser command from the bundled browser plugin", () => {
-    const registry = loadNexisClawPlugins({
+    const registry = loadGreenchClawPlugins({
       config: {
         plugins: {
           allow: ["browser"],
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       cache: false,
       env: {
         ...process.env,
-        NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-        NEXISCLAW_BUNDLED_PLUGINS_DIR:
+        GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR:
           bundledFixture?.rootDir ?? path.join(process.cwd(), "extensions"),
       } as NodeJS.ProcessEnv,
     });
@@ -46,7 +46,7 @@ describe("registerPluginCliCommands browser plugin integration", () => {
   });
 
   it("omits the browser command when the bundled browser plugin is disabled", () => {
-    const registry = loadNexisClawPlugins({
+    const registry = loadGreenchClawPlugins({
       config: {
         plugins: {
           allow: ["browser"],
@@ -56,12 +56,12 @@ describe("registerPluginCliCommands browser plugin integration", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       cache: false,
       env: {
         ...process.env,
-        NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-        NEXISCLAW_BUNDLED_PLUGINS_DIR:
+        GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR:
           bundledFixture?.rootDir ?? path.join(process.cwd(), "extensions"),
       } as NodeJS.ProcessEnv,
     });

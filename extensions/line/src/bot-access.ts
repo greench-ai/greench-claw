@@ -1,4 +1,4 @@
-import { firstDefined } from "NexisClaw/plugin-sdk/allow-from";
+import { firstDefined } from "GreenchClaw/plugin-sdk/allow-from";
 
 export type NormalizedAllowFrom = {
   entries: string[];

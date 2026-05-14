@@ -51,7 +51,7 @@ function createCurrentSnapshot(params: {
     plugins: [
       {
         pluginId: "openai",
-        manifestPath: `/tmp/openai-${params.manifestHash}/NexisClaw.plugin.json`,
+        manifestPath: `/tmp/openai-${params.manifestHash}/GreenchClaw.plugin.json`,
         manifestHash: params.manifestHash,
         source: `/tmp/openai-${params.manifestHash}/index.ts`,
         rootDir: `/tmp/openai-${params.manifestHash}`,

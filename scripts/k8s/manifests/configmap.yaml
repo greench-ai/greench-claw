@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: NexisClaw-config
+  name: GreenchClaw-config
   labels:
-    app: NexisClaw
+    app: GreenchClaw
 data:
-  NexisClaw.json: |
+  GreenchClaw.json: |
     {
       "gateway": {
         "mode": "local",
@@ -20,19 +20,19 @@ data:
       },
       "agents": {
         "defaults": {
-          "workspace": "~/.NexisClaw/workspace"
+          "workspace": "~/.GreenchClaw/workspace"
         },
         "list": [
           {
             "id": "default",
-            "name": "NexisClaw Assistant",
-            "workspace": "~/.NexisClaw/workspace"
+            "name": "GreenchClaw Assistant",
+            "workspace": "~/.GreenchClaw/workspace"
           }
         ]
       },
       "cron": { "enabled": false }
     }
   AGENTS.md: |
-    # NexisClaw Assistant
+    # GreenchClaw Assistant
 
     You are a helpful AI assistant running in Kubernetes.

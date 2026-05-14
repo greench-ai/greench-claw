@@ -1,4 +1,4 @@
-import type { PinnedDispatcherPolicy } from "NexisClaw/plugin-sdk/ssrf-dispatcher";
+import type { PinnedDispatcherPolicy } from "GreenchClaw/plugin-sdk/ssrf-dispatcher";
 import type { SsrFPolicy } from "../../runtime-api.js";
 
 export type MatrixResolvedConfig = {

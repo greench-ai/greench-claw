@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import type { AssistantMessage } from "@earendil-works/pi-ai";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { buildAttemptReplayMetadata } from "../pi-embedded-runner/run/incomplete-turn.js";
 import type { EmbeddedRunAttemptResult } from "../pi-embedded-runner/run/types.js";
 
@@ -32,7 +32,7 @@ export async function cleanupEmbeddedPiRunnerTestWorkspace(
   await fs.rm(workspace.tempRoot, { recursive: true, force: true });
 }
 
-export function createEmbeddedPiRunnerOpenAiConfig(modelIds: string[]): NexisClawConfig {
+export function createEmbeddedPiRunnerOpenAiConfig(modelIds: string[]): GreenchClawConfig {
   return {
     models: {
       providers: {

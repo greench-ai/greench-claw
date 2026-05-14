@@ -1,4 +1,4 @@
-import { resolveChannelGroupPolicy } from "NexisClaw/plugin-sdk/channel-policy";
+import { resolveChannelGroupPolicy } from "GreenchClaw/plugin-sdk/channel-policy";
 import { describe, expect, it } from "vitest";
 import { resolveIrcGroupMatch, resolveIrcRequireMention } from "./policy.js";
 

@@ -1,16 +1,16 @@
 {
-  "name": "@NexisClaw/llm-task",
+  "name": "@GreenchClaw/llm-task",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw JSON-only LLM task plugin",
+  "description": "GreenchClaw JSON-only LLM task plugin",
   "type": "module",
   "dependencies": {
     "typebox": "1.1.38"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

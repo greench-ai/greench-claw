@@ -1,4 +1,4 @@
-import { createPluginRuntimeMock } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { createPluginRuntimeMock } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { describe, expect, it, vi } from "vitest";
 import { setQaChannelRuntime } from "../api.js";
 import { handleQaInbound, isHttpMediaUrl } from "./inbound.js";
@@ -19,8 +19,8 @@ function createQaInboundParams(
       enabled: true,
       configured: true,
       baseUrl: "http://127.0.0.1:43123",
-      botUserId: "NexisClaw",
-      botDisplayName: "NexisClaw QA",
+      botUserId: "GreenchClaw",
+      botDisplayName: "GreenchClaw QA",
       pollTimeoutMs: 250,
       config: {
         allowFrom: ["*"],
@@ -59,7 +59,7 @@ describe("isHttpMediaUrl", () => {
 describe("handleQaInbound", () => {
   it("marks group messages that match configured mention patterns", async () => {
     const runtime = createPluginRuntimeMock();
-    vi.mocked(runtime.channel.mentions.buildMentionRegexes).mockReturnValue([/\b@?NexisClaw\b/i]);
+    vi.mocked(runtime.channel.mentions.buildMentionRegexes).mockReturnValue([/\b@?GreenchClaw\b/i]);
     setQaChannelRuntime(runtime);
 
     await handleQaInbound(
@@ -72,7 +72,7 @@ describe("handleQaInbound", () => {
           },
           senderId: "alice",
           senderName: "Alice",
-          text: "@NexisClaw ping",
+          text: "@GreenchClaw ping",
         },
       }),
     );
@@ -146,7 +146,7 @@ describe("handleQaInbound", () => {
 
   it("skips configured group messages that miss mention activation", async () => {
     const runtime = createPluginRuntimeMock();
-    vi.mocked(runtime.channel.mentions.buildMentionRegexes).mockReturnValue([/\b@?NexisClaw\b/i]);
+    vi.mocked(runtime.channel.mentions.buildMentionRegexes).mockReturnValue([/\b@?GreenchClaw\b/i]);
     setQaChannelRuntime(runtime);
 
     await handleQaInbound(

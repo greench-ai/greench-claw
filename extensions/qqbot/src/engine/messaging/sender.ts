@@ -55,11 +55,11 @@ export { UploadDailyLimitExceededError } from "../api/media-chunked.js";
 // ============ Plugin User-Agent ============
 
 let _pluginVersion = "unknown";
-let _NexisClawVersion = "unknown";
+let _GreenchClawVersion = "unknown";
 
 /** Build the User-Agent string from the current plugin and framework versions. */
 function buildUserAgent(): string {
-  return `QQBotPlugin/${_pluginVersion} (Node/${process.versions.node}; ${os.platform()}; NexisClaw/${_NexisClawVersion})`;
+  return `QQBotPlugin/${_pluginVersion} (Node/${process.versions.node}; ${os.platform()}; GreenchClaw/${_GreenchClawVersion})`;
 }
 
 /** Return the current User-Agent string. */
@@ -71,19 +71,19 @@ export function getPluginUserAgent(): string {
  * Initialize sender with the plugin version.
  * Must be called once during startup before any API calls.
  */
-export function initSender(options: { pluginVersion?: string; NexisClawVersion?: string }): void {
+export function initSender(options: { pluginVersion?: string; GreenchClawVersion?: string }): void {
   if (options.pluginVersion) {
     _pluginVersion = options.pluginVersion;
   }
-  if (options.NexisClawVersion) {
-    _NexisClawVersion = options.NexisClawVersion;
+  if (options.GreenchClawVersion) {
+    _GreenchClawVersion = options.GreenchClawVersion;
   }
 }
 
-/** Update the NexisClaw framework version in the User-Agent (called after runtime injection). */
-export function setNexisClawVersion(version: string): void {
+/** Update the GreenchClaw framework version in the User-Agent (called after runtime injection). */
+export function setGreenchClawVersion(version: string): void {
   if (version) {
-    _NexisClawVersion = version;
+    _GreenchClawVersion = version;
   }
 }
 

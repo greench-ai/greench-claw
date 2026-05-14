@@ -9,7 +9,7 @@ import type {
   ChannelStatusIssue,
 } from "./channel-contract.js";
 import type { ChannelPlugin } from "./channel-core.js";
-import type { NexisClawConfig } from "./config-types.js";
+import type { GreenchClawConfig } from "./config-types.js";
 import {
   createLazyFacadeObjectValue,
   loadBundledPluginPublicSurfaceModuleSync,
@@ -17,13 +17,13 @@ import {
 import { getRuntimeConfig, getRuntimeConfigSnapshot } from "./runtime-config-snapshot.js";
 
 /**
- * @deprecated Compatibility facade for the `NexisClaw/plugin-sdk/discord` subpath.
+ * @deprecated Compatibility facade for the `GreenchClaw/plugin-sdk/discord` subpath.
  * New channel plugins should use generic channel SDK subpaths.
  */
 export type { ChannelMessageActionAdapter, ChannelMessageActionName } from "./channel-contract.js";
 export type { ChannelPlugin } from "./channel-core.js";
-export type { NexisClawConfig } from "./config-types.js";
-export type { NexisClawPluginApi, PluginRuntime } from "./channel-plugin-common.js";
+export type { GreenchClawConfig } from "./config-types.js";
+export type { GreenchClawPluginApi, PluginRuntime } from "./channel-plugin-common.js";
 
 export {
   DEFAULT_ACCOUNT_ID,
@@ -43,7 +43,9 @@ export {
 } from "./channel-status.js";
 export { DiscordConfigSchema } from "./bundled-channel-config-schema.js";
 
-export type DiscordAccountConfig = NonNullable<NonNullable<NexisClawConfig["channels"]>["discord"]>;
+export type DiscordAccountConfig = NonNullable<
+  NonNullable<GreenchClawConfig["channels"]>["discord"]
+>;
 
 export type DiscordComponentMessageSpec = {
   text?: string;
@@ -63,7 +65,7 @@ export type DiscordComponentBuildResult = {
 };
 
 export type DiscordComponentSendOpts = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   accountId?: string;
   replyTo?: string;
   files?: unknown;
@@ -107,7 +109,7 @@ export type ThreadBindingRecord = {
 };
 
 type DirectoryConfigParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 };
 
@@ -135,8 +137,8 @@ type DiscordApiFacadeModule = {
   collectDiscordStatusIssues: (accounts: ChannelAccountSnapshot[]) => ChannelStatusIssue[];
   buildDiscordComponentMessage: BuildDiscordComponentMessage;
   discordOnboardingAdapter?: NonNullable<ChannelPlugin<ResolvedDiscordAccount>["setup"]>;
-  inspectDiscordAccount: (params: { cfg: NexisClawConfig; accountId?: string | null }) => unknown;
-  listDiscordAccountIds: (cfg: NexisClawConfig) => string[];
+  inspectDiscordAccount: (params: { cfg: GreenchClawConfig; accountId?: string | null }) => unknown;
+  listDiscordAccountIds: (cfg: GreenchClawConfig) => string[];
   listDiscordDirectoryGroupsFromConfig: (
     params: DirectoryConfigParams,
   ) => unknown[] | Promise<unknown[]>;
@@ -146,9 +148,9 @@ type DiscordApiFacadeModule = {
   looksLikeDiscordTargetId: (raw: string) => boolean;
   normalizeDiscordMessagingTarget: (raw: string) => string | undefined;
   normalizeDiscordOutboundTarget: (to?: string) => DiscordOutboundTargetResolution;
-  resolveDefaultDiscordAccountId: (cfg: NexisClawConfig) => string;
+  resolveDefaultDiscordAccountId: (cfg: GreenchClawConfig) => string;
   resolveDiscordAccount: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string | null;
   }) => ResolvedDiscordAccount;
   resolveDiscordGroupRequireMention: (params: ChannelGroupContext) => boolean | undefined;
@@ -159,7 +161,7 @@ type DiscordRuntimeFacadeModule = {
   editDiscordComponentMessage: EditDiscordComponentMessage;
   registerBuiltDiscordComponentMessage: RegisterBuiltDiscordComponentMessage;
   autoBindSpawnedDiscordSubagent: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string;
     channel?: string;
     to?: string;
@@ -170,7 +172,7 @@ type DiscordRuntimeFacadeModule = {
     boundBy?: string;
   }) => Promise<ThreadBindingRecord | null>;
   collectDiscordAuditChannelIds: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string | null;
   }) => unknown;
   listThreadBindingsBySessionKey: (params: {
@@ -202,7 +204,7 @@ function loadDiscordRuntimeFacadeModule(): DiscordRuntimeFacadeModule {
   });
 }
 
-function resolveCompatRuntimeConfig(params: { cfg?: NexisClawConfig }): NexisClawConfig {
+function resolveCompatRuntimeConfig(params: { cfg?: GreenchClawConfig }): GreenchClawConfig {
   return params.cfg ?? getRuntimeConfigSnapshot() ?? getRuntimeConfig();
 }
 
@@ -223,13 +225,13 @@ export const buildDiscordComponentMessage: DiscordApiFacadeModule["buildDiscordC
     )) as DiscordApiFacadeModule["buildDiscordComponentMessage"];
 
 export function inspectDiscordAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): unknown {
   return loadDiscordApiFacadeModule().inspectDiscordAccount(params);
 }
 
-export function listDiscordAccountIds(cfg: NexisClawConfig): string[] {
+export function listDiscordAccountIds(cfg: GreenchClawConfig): string[] {
   return loadDiscordApiFacadeModule().listDiscordAccountIds(cfg);
 }
 
@@ -257,12 +259,12 @@ export function normalizeDiscordOutboundTarget(to?: string): DiscordOutboundTarg
   return loadDiscordApiFacadeModule().normalizeDiscordOutboundTarget(to);
 }
 
-export function resolveDefaultDiscordAccountId(cfg: NexisClawConfig): string {
+export function resolveDefaultDiscordAccountId(cfg: GreenchClawConfig): string {
   return loadDiscordApiFacadeModule().resolveDefaultDiscordAccountId(cfg);
 }
 
 export function resolveDiscordAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): ResolvedDiscordAccount {
   return loadDiscordApiFacadeModule().resolveDiscordAccount(params);
@@ -279,7 +281,7 @@ export function resolveDiscordGroupToolPolicy(params: ChannelGroupContext): unkn
 }
 
 export function collectDiscordAuditChannelIds(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): unknown {
   return loadDiscordRuntimeFacadeModule().collectDiscordAuditChannelIds(params);
@@ -298,7 +300,7 @@ export const registerBuiltDiscordComponentMessage: DiscordRuntimeFacadeModule["r
     )) as DiscordRuntimeFacadeModule["registerBuiltDiscordComponentMessage"];
 
 export async function autoBindSpawnedDiscordSubagent(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   accountId?: string;
   channel?: string;
   to?: string;

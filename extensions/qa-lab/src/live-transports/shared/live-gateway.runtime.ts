@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   startQaGatewayChild,
   type QaCliBackendAuthMode,
@@ -42,7 +42,7 @@ function omitMemoryCoreEntry<T extends Record<string, unknown> | undefined>(entr
   return rest as T;
 }
 
-function prepareLiveTransportGatewayConfig(cfg: NexisClawConfig): NexisClawConfig {
+function prepareLiveTransportGatewayConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   const defaults = cfg.agents?.defaults ?? {};
   return {
     ...cfg,
@@ -87,7 +87,7 @@ export async function startQaLiveLaneGateway(params: {
     requiredPluginIds: readonly string[];
     createGatewayConfig: (params: {
       baseUrl: string;
-    }) => Pick<NexisClawConfig, "channels" | "messages">;
+    }) => Pick<GreenchClawConfig, "channels" | "messages">;
   };
   transportBaseUrl: string;
   controlUiAllowedOrigins?: string[];
@@ -98,7 +98,7 @@ export async function startQaLiveLaneGateway(params: {
   thinkingDefault?: QaThinkingLevel;
   claudeCliAuthMode?: QaCliBackendAuthMode;
   controlUiEnabled?: boolean;
-  mutateConfig?: (cfg: NexisClawConfig) => NexisClawConfig;
+  mutateConfig?: (cfg: GreenchClawConfig) => GreenchClawConfig;
 }) {
   const mock = await startQaProviderServer(params.providerMode);
   try {

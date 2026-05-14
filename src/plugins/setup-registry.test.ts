@@ -48,7 +48,7 @@ function forceNodeRuntimeVersionsForTest(): () => void {
 }
 
 function makeTempDir(): string {
-  return makeTrackedTempDir("NexisClaw-setup-registry", tempDirs);
+  return makeTrackedTempDir("GreenchClaw-setup-registry", tempDirs);
 }
 
 function writeSetupApiStub(pluginRoot: string): void {

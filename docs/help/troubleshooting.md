@@ -1,7 +1,7 @@
 ---
-summary: "Symptom first troubleshooting hub for NexisClaw"
+summary: "Symptom first troubleshooting hub for GreenchClaw"
 read_when:
-  - NexisClaw is not working and you need the fastest path to a fix
+  - GreenchClaw is not working and you need the fastest path to a fix
   - You want a triage flow before diving into deep runbooks
 title: "General troubleshooting"
 ---
@@ -13,26 +13,26 @@ If you only have 2 minutes, use this page as a triage front door.
 Run this exact ladder in order:
 
 ```bash
-NexisClaw status
-NexisClaw status --all
-NexisClaw gateway probe
-NexisClaw gateway status
-NexisClaw doctor
-NexisClaw channels status --probe
-NexisClaw logs --follow
+GreenchClaw status
+GreenchClaw status --all
+GreenchClaw gateway probe
+GreenchClaw gateway status
+GreenchClaw doctor
+GreenchClaw channels status --probe
+GreenchClaw logs --follow
 ```
 
 Good output in one line:
 
-- `NexisClaw status` → shows configured channels and no obvious auth errors.
-- `NexisClaw status --all` → full report is present and shareable.
-- `NexisClaw gateway probe` → expected gateway target is reachable (`Reachable: yes`). `Capability: ...` tells you what auth level the probe could prove, and `Read probe: limited - missing scope: operator.read` is degraded diagnostics, not a connect failure.
-- `NexisClaw gateway status` → `Runtime: running`, `Connectivity probe: ok`, and a plausible `Capability: ...` line. Use `--require-rpc` if you need read-scope RPC proof too.
-- `NexisClaw doctor` → no blocking config/service errors.
-- `NexisClaw channels status --probe` → reachable gateway returns live per-account
+- `GreenchClaw status` → shows configured channels and no obvious auth errors.
+- `GreenchClaw status --all` → full report is present and shareable.
+- `GreenchClaw gateway probe` → expected gateway target is reachable (`Reachable: yes`). `Capability: ...` tells you what auth level the probe could prove, and `Read probe: limited - missing scope: operator.read` is degraded diagnostics, not a connect failure.
+- `GreenchClaw gateway status` → `Runtime: running`, `Connectivity probe: ok`, and a plausible `Capability: ...` line. Use `--require-rpc` if you need read-scope RPC proof too.
+- `GreenchClaw doctor` → no blocking config/service errors.
+- `GreenchClaw channels status --probe` → reachable gateway returns live per-account
   transport state plus probe/audit results such as `works` or `audit ok`; if the
   gateway is unreachable, the command falls back to config-only summaries.
-- `NexisClaw logs --follow` → steady activity, no repeating fatal errors.
+- `GreenchClaw logs --follow` → steady activity, no repeating fatal errors.
 
 ## Anthropic long context 429
 
@@ -40,39 +40,39 @@ If you see:
 `HTTP 429: rate_limit_error: Extra usage is required for long context requests`,
 go to [/gateway/troubleshooting#anthropic-429-extra-usage-required-for-long-context](/gateway/troubleshooting#anthropic-429-extra-usage-required-for-long-context).
 
-## Local OpenAI-compatible backend works directly but fails in NexisClaw
+## Local OpenAI-compatible backend works directly but fails in GreenchClaw
 
 If your local or self-hosted `/v1` backend answers small direct
-`/v1/chat/completions` probes but fails on `NexisClaw infer model run` or normal
+`/v1/chat/completions` probes but fails on `GreenchClaw infer model run` or normal
 agent turns:
 
 1. If the error mentions `messages[].content` expecting a string, set
    `models.providers.<provider>.models[].compat.requiresStringContent: true`.
-2. If the backend still fails only on NexisClaw agent turns, set
+2. If the backend still fails only on GreenchClaw agent turns, set
    `models.providers.<provider>.models[].compat.supportsTools: false` and retry.
-3. If tiny direct calls still work but larger NexisClaw prompts crash the
+3. If tiny direct calls still work but larger GreenchClaw prompts crash the
    backend, treat the remaining issue as an upstream model/server limitation and
    continue in the deep runbook:
    [/gateway/troubleshooting#local-openai-compatible-backend-passes-direct-probes-but-agent-runs-fail](/gateway/troubleshooting#local-openai-compatible-backend-passes-direct-probes-but-agent-runs-fail)
 
-## Plugin install fails with missing NexisClaw extensions
+## Plugin install fails with missing GreenchClaw extensions
 
-If install fails with `package.json missing NexisClaw.extensions`, the plugin package
-is using an old shape that NexisClaw no longer accepts.
+If install fails with `package.json missing GreenchClaw.extensions`, the plugin package
+is using an old shape that GreenchClaw no longer accepts.
 
 Fix in the plugin package:
 
-1. Add `NexisClaw.extensions` to `package.json`.
+1. Add `GreenchClaw.extensions` to `package.json`.
 2. Point entries at built runtime files (usually `./dist/index.js`).
-3. Republish the plugin and run `NexisClaw plugins install <package>` again.
+3. Republish the plugin and run `GreenchClaw plugins install <package>` again.
 
 Example:
 
 ```json
 {
-  "name": "@NexisClaw/my-plugin",
+  "name": "@GreenchClaw/my-plugin",
   "version": "1.2.3",
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": ["./dist/index.js"]
   }
 }
@@ -82,7 +82,7 @@ Reference: [Plugin architecture](/plugins/architecture)
 
 ## Plugin present but blocked by suspicious ownership
 
-If `NexisClaw doctor`, setup, or startup warnings show:
+If `GreenchClaw doctor`, setup, or startup warnings show:
 
 ```text
 blocked plugin candidate: suspicious ownership (... uid=1000, expected uid=0 or root)
@@ -90,23 +90,23 @@ plugin present but blocked
 ```
 
 the plugin files are owned by a different Unix user than the process loading
-them. Do not remove the plugin config. Fix the file ownership or run NexisClaw as
+them. Do not remove the plugin config. Fix the file ownership or run GreenchClaw as
 the same user that owns the state directory.
 
 Docker installs normally run as `node` (uid `1000`). For the default Docker
 setup, repair the host bind mounts:
 
 ```bash
-sudo chown -R 1000:1000 /path/to/NexisClaw-config /path/to/NexisClaw-workspace
-NexisClaw doctor --fix
+sudo chown -R 1000:1000 /path/to/GreenchClaw-config /path/to/GreenchClaw-workspace
+GreenchClaw doctor --fix
 ```
 
-If you intentionally run NexisClaw as root, repair the managed plugin root to
+If you intentionally run GreenchClaw as root, repair the managed plugin root to
 root ownership instead:
 
 ```bash
-sudo chown -R root:root /path/to/NexisClaw-config/npm
-NexisClaw doctor --fix
+sudo chown -R root:root /path/to/GreenchClaw-config/npm
+GreenchClaw doctor --fix
 ```
 
 Deeper docs:
@@ -118,7 +118,7 @@ Deeper docs:
 
 ```mermaid
 flowchart TD
-  A[NexisClaw is not working] --> B{What breaks first}
+  A[GreenchClaw is not working] --> B{What breaks first}
   B --> C[No replies]
   B --> D[Dashboard or Control UI will not connect]
   B --> E[Gateway will not start or service not running]
@@ -139,11 +139,11 @@ flowchart TD
 <AccordionGroup>
   <Accordion title="No replies">
     ```bash
-    NexisClaw status
-    NexisClaw gateway status
-    NexisClaw channels status --probe
-    NexisClaw pairing list --channel <channel> [--account <id>]
-    NexisClaw logs --follow
+    GreenchClaw status
+    GreenchClaw gateway status
+    GreenchClaw channels status --probe
+    GreenchClaw pairing list --channel <channel> [--account <id>]
+    GreenchClaw logs --follow
     ```
 
     Good output looks like:
@@ -170,16 +170,16 @@ flowchart TD
 
   <Accordion title="Dashboard or Control UI will not connect">
     ```bash
-    NexisClaw status
-    NexisClaw gateway status
-    NexisClaw logs --follow
-    NexisClaw doctor
-    NexisClaw channels status --probe
+    GreenchClaw status
+    GreenchClaw gateway status
+    GreenchClaw logs --follow
+    GreenchClaw doctor
+    GreenchClaw channels status --probe
     ```
 
     Good output looks like:
 
-    - `Dashboard: http://...` is shown in `NexisClaw gateway status`
+    - `Dashboard: http://...` is shown in `GreenchClaw gateway status`
     - `Connectivity probe: ok`
     - `Capability: read-only`, `write-capable`, or `admin-capable`
     - No auth loop in logs
@@ -212,11 +212,11 @@ flowchart TD
 
   <Accordion title="Gateway will not start or service installed but not running">
     ```bash
-    NexisClaw status
-    NexisClaw gateway status
-    NexisClaw logs --follow
-    NexisClaw doctor
-    NexisClaw channels status --probe
+    GreenchClaw status
+    GreenchClaw gateway status
+    GreenchClaw logs --follow
+    GreenchClaw doctor
+    GreenchClaw channels status --probe
     ```
 
     Good output looks like:
@@ -242,11 +242,11 @@ flowchart TD
 
   <Accordion title="Channel connects but messages do not flow">
     ```bash
-    NexisClaw status
-    NexisClaw gateway status
-    NexisClaw logs --follow
-    NexisClaw doctor
-    NexisClaw channels status --probe
+    GreenchClaw status
+    GreenchClaw gateway status
+    GreenchClaw logs --follow
+    GreenchClaw doctor
+    GreenchClaw channels status --probe
     ```
 
     Good output looks like:
@@ -270,12 +270,12 @@ flowchart TD
 
   <Accordion title="Cron or heartbeat did not fire or did not deliver">
     ```bash
-    NexisClaw status
-    NexisClaw gateway status
-    NexisClaw cron status
-    NexisClaw cron list
-    NexisClaw cron runs --id <jobId> --limit 20
-    NexisClaw logs --follow
+    GreenchClaw status
+    GreenchClaw gateway status
+    GreenchClaw cron status
+    GreenchClaw cron list
+    GreenchClaw cron runs --id <jobId> --limit 20
+    GreenchClaw logs --follow
     ```
 
     Good output looks like:
@@ -304,11 +304,11 @@ flowchart TD
 
   <Accordion title="Node is paired but tool fails camera canvas screen exec">
     ```bash
-    NexisClaw status
-    NexisClaw gateway status
-    NexisClaw nodes status
-    NexisClaw nodes describe --node <idOrNameOrIp>
-    NexisClaw logs --follow
+    GreenchClaw status
+    GreenchClaw gateway status
+    GreenchClaw nodes status
+    GreenchClaw nodes describe --node <idOrNameOrIp>
+    GreenchClaw logs --follow
     ```
 
     Good output looks like:
@@ -334,10 +334,10 @@ flowchart TD
 
   <Accordion title="Exec suddenly asks for approval">
     ```bash
-    NexisClaw config get tools.exec.host
-    NexisClaw config get tools.exec.security
-    NexisClaw config get tools.exec.ask
-    NexisClaw gateway restart
+    GreenchClaw config get tools.exec.host
+    GreenchClaw config get tools.exec.security
+    GreenchClaw config get tools.exec.ask
+    GreenchClaw gateway restart
     ```
 
     What changed:
@@ -352,10 +352,10 @@ flowchart TD
     Restore current default no-approval behavior:
 
     ```bash
-    NexisClaw config set tools.exec.host gateway
-    NexisClaw config set tools.exec.security full
-    NexisClaw config set tools.exec.ask off
-    NexisClaw gateway restart
+    GreenchClaw config set tools.exec.host gateway
+    GreenchClaw config set tools.exec.security full
+    GreenchClaw config set tools.exec.ask off
+    GreenchClaw gateway restart
     ```
 
     Safer alternatives:
@@ -380,17 +380,17 @@ flowchart TD
 
   <Accordion title="Browser tool fails">
     ```bash
-    NexisClaw status
-    NexisClaw gateway status
-    NexisClaw browser status
-    NexisClaw logs --follow
-    NexisClaw doctor
+    GreenchClaw status
+    GreenchClaw gateway status
+    GreenchClaw browser status
+    GreenchClaw logs --follow
+    GreenchClaw doctor
     ```
 
     Good output looks like:
 
     - Browser status shows `running: true` and a chosen browser/profile.
-    - `NexisClaw` starts, or `user` can see local Chrome tabs.
+    - `GreenchClaw` starts, or `user` can see local Chrome tabs.
 
     Common log signatures:
 
@@ -402,7 +402,7 @@ flowchart TD
     - `No Chrome tabs found for profile="user"` → the Chrome MCP attach profile has no open local Chrome tabs.
     - `Remote CDP for profile "<name>" is not reachable` → the configured remote CDP endpoint is not reachable from this host.
     - `Browser attachOnly is enabled ... not reachable` or `Browser attachOnly is enabled and CDP websocket ... is not reachable` → attach-only profile has no live CDP target.
-    - stale viewport / dark-mode / locale / offline overrides on attach-only or remote CDP profiles → run `NexisClaw browser stop --browser-profile <name>` to close the active control session and release emulation state without restarting the gateway.
+    - stale viewport / dark-mode / locale / offline overrides on attach-only or remote CDP profiles → run `GreenchClaw browser stop --browser-profile <name>` to close the active control session and release emulation state without restarting the gateway.
 
     Deep pages:
 

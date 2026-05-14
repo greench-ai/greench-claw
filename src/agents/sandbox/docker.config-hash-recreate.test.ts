@@ -58,7 +58,7 @@ function spawnDockerProcess(command: string, args: string[]) {
   } else if (
     args[0] === "inspect" &&
     args[1] === "-f" &&
-    args[2]?.includes('index .Config.Labels "NexisClaw.configHash"')
+    args[2]?.includes('index .Config.Labels "GreenchClaw.configHash"')
   ) {
     stdout = `${spawnState.labelHash}\n`;
   } else if (
@@ -117,9 +117,9 @@ function createSandboxConfig(
     backend: "docker",
     scope: "shared",
     workspaceAccess,
-    workspaceRoot: "~/.NexisClaw/sandboxes",
+    workspaceRoot: "~/.GreenchClaw/sandboxes",
     docker: {
-      image: "NexisClaw-sandbox:test",
+      image: "GreenchClaw-sandbox:test",
       containerPrefix: "oc-test-",
       workdir: "/workspace",
       readOnlyRoot: true,
@@ -134,15 +134,15 @@ function createSandboxConfig(
     },
     ssh: {
       command: "ssh",
-      workspaceRoot: "/tmp/NexisClaw-sandboxes",
+      workspaceRoot: "/tmp/GreenchClaw-sandboxes",
       strictHostKeyChecking: true,
       updateHostKeys: true,
     },
     browser: {
       enabled: false,
-      image: "NexisClaw-browser:test",
+      image: "GreenchClaw-browser:test",
       containerPrefix: "oc-browser-",
-      network: "NexisClaw-sandbox-browser",
+      network: "GreenchClaw-sandbox-browser",
       cdpPort: 9222,
       vncPort: 5900,
       noVncPort: 6080,
@@ -240,7 +240,7 @@ describe("ensureSandboxContainer config-hash recreation", () => {
     if (!createCall) {
       throw new Error("expected recreated docker create call");
     }
-    expect(createCall.args).toContain(`NexisClaw.configHash=${newHash}`);
+    expect(createCall.args).toContain(`GreenchClaw.configHash=${newHash}`);
     const registryUpdate = registryMocks.updateRegistry.mock.calls.at(-1)?.[0];
     expect(registryUpdate?.containerName).toBe("oc-test-shared");
     expect(registryUpdate?.configHash).toBe(newHash);
@@ -273,7 +273,7 @@ describe("ensureSandboxContainer config-hash recreation", () => {
     });
 
     const createCall = await ensureSandboxCreateCallForTest({ cfg, workspaceDir });
-    expect(createCall.args).toContain(`NexisClaw.configHash=${expectedHash}`);
+    expect(createCall.args).toContain(`GreenchClaw.configHash=${expectedHash}`);
 
     const bindArgs = collectDockerFlagValues(createCall.args, "-v");
     const workspaceMountIdx = bindArgs.indexOf("/tmp/workspace:/workspace:z");
@@ -314,7 +314,7 @@ describe("ensureSandboxContainer config-hash recreation", () => {
 
     const createCall = await ensureSandboxCreateCallForTest({ cfg, workspaceDir });
     expect(createCall.args).toContain(
-      `NexisClaw.mountFormatVersion=${SANDBOX_MOUNT_FORMAT_VERSION}`,
+      `GreenchClaw.mountFormatVersion=${SANDBOX_MOUNT_FORMAT_VERSION}`,
     );
   });
 });

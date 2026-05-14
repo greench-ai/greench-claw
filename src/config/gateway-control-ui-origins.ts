@@ -1,5 +1,5 @@
 import { DEFAULT_GATEWAY_PORT } from "./paths.js";
-import type { NexisClawConfig } from "./types.NexisClaw.js";
+import type { GreenchClawConfig } from "./types.GreenchClaw.js";
 
 export type GatewayNonLoopbackBindMode = "lan" | "tailnet" | "custom" | "auto";
 
@@ -44,7 +44,7 @@ export function buildDefaultControlUiAllowedOrigins(params: {
 }
 
 export function ensureControlUiAllowedOriginsForNonLoopbackBind(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   opts?: {
     defaultPort?: number;
     requireControlUiEnabled?: boolean;
@@ -62,7 +62,7 @@ export function ensureControlUiAllowedOriginsForNonLoopbackBind(
     isContainerEnvironment?: () => boolean;
   },
 ): {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   seededOrigins: string[] | null;
   bind: GatewayNonLoopbackBindMode | null;
 } {

@@ -1,4 +1,4 @@
-import { getSessionBindingService } from "NexisClaw/plugin-sdk/session-binding-runtime";
+import { getSessionBindingService } from "GreenchClaw/plugin-sdk/session-binding-runtime";
 import {
   resolveMatrixApprovalReactionTargetWithPersistence,
   unregisterMatrixApprovalReactionTarget,

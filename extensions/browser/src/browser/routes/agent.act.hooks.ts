@@ -138,7 +138,7 @@ export function registerBrowserAgentActHookRoutes(
               profile: profileCtx.profile,
               targetId: tab.targetId,
               fn: `() => {
-              const state = (window.__NexisClawDialogHook ??= {});
+              const state = (window.__GreenchClawDialogHook ??= {});
               if (!state.originals) {
                 state.originals = {
                   alert: window.alert.bind(window),
@@ -151,7 +151,7 @@ export function registerBrowserAgentActHookRoutes(
                 window.alert = originals.alert;
                 window.confirm = originals.confirm;
                 window.prompt = originals.prompt;
-                delete window.__NexisClawDialogHook;
+                delete window.__GreenchClawDialogHook;
               };
               window.alert = (...args) => {
                 try {

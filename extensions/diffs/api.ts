@@ -1,10 +1,10 @@
-export type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+export type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 export {
   definePluginEntry,
   type AnyAgentTool,
-  type NexisClawPluginApi,
-  type NexisClawPluginConfigSchema,
-  type NexisClawPluginToolContext,
+  type GreenchClawPluginApi,
+  type GreenchClawPluginConfigSchema,
+  type GreenchClawPluginToolContext,
   type PluginLogger,
-} from "NexisClaw/plugin-sdk/plugin-entry";
-export { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
+export { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveGatewayCredentialsWithSecretInputs } from "./credentials-secret-inputs.js";
 import type {
   ExplicitGatewayAuth,
@@ -10,7 +10,7 @@ import type {
 import { resolveGatewayCredentialsFromConfig } from "./credentials.js";
 
 export type GatewayConnectionAuthOptions = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   explicitAuth?: ExplicitGatewayAuth;
   urlOverride?: string;
@@ -25,7 +25,7 @@ export type GatewayConnectionAuthOptions = {
 };
 
 function toGatewayCredentialOptions(
-  params: Omit<GatewayConnectionAuthOptions, "config"> & { cfg: NexisClawConfig },
+  params: Omit<GatewayConnectionAuthOptions, "config"> & { cfg: GreenchClawConfig },
 ) {
   return {
     cfg: params.cfg,
@@ -53,7 +53,7 @@ export async function resolveGatewayConnectionAuth(
 }
 
 export function resolveGatewayConnectionAuthFromConfig(
-  params: Omit<GatewayConnectionAuthOptions, "config"> & { cfg: NexisClawConfig },
+  params: Omit<GatewayConnectionAuthOptions, "config"> & { cfg: GreenchClawConfig },
 ): { token?: string; password?: string } {
   return resolveGatewayCredentialsFromConfig(toGatewayCredentialOptions(params));
 }

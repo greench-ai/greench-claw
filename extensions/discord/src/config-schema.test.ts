@@ -107,7 +107,7 @@ describe("discord config schema", () => {
         enabled: true,
         allowFrom: ["steipete"],
         groupEnabled: true,
-        groupChannels: ["NexisClaw-dm"],
+        groupChannels: ["GreenchClaw-dm"],
       },
       actions: {
         emojiUploads: true,
@@ -116,7 +116,7 @@ describe("discord config schema", () => {
       },
       guilds: {
         "123": {
-          slug: "friends-of-NexisClaw",
+          slug: "friends-of-GreenchClaw",
           requireMention: false,
           users: ["steipete"],
           channels: {
@@ -128,11 +128,11 @@ describe("discord config schema", () => {
 
     expect(cfg.enabled).toBe(true);
     expect(cfg.dm?.groupEnabled).toBe(true);
-    expect(cfg.dm?.groupChannels).toEqual(["NexisClaw-dm"]);
+    expect(cfg.dm?.groupChannels).toEqual(["GreenchClaw-dm"]);
     expect(cfg.actions?.emojiUploads).toBe(true);
     expect(cfg.actions?.stickerUploads).toBe(false);
     expect(cfg.actions?.channels).toBe(true);
-    expect(cfg.guilds?.["123"]?.slug).toBe("friends-of-NexisClaw");
+    expect(cfg.guilds?.["123"]?.slug).toBe("friends-of-GreenchClaw");
     expect(cfg.guilds?.["123"]?.channels?.general?.enabled).toBe(true);
     expect(cfg.guilds?.["123"]?.channels?.general?.autoThread).toBe(true);
   });
@@ -327,7 +327,7 @@ describe("discord config schema", () => {
     },
     {
       name: "activityUrl without streaming type",
-      config: { activity: "Live", activityUrl: "https://twitch.tv/NexisClaw" },
+      config: { activity: "Live", activityUrl: "https://twitch.tv/GreenchClaw" },
     },
     {
       name: "auto presence min update interval above check interval",

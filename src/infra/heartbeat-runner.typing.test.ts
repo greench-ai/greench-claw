@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChannelPlugin } from "../channels/plugins/types.public.js";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { setActivePluginRegistry } from "../plugins/runtime.js";
 import { createOutboundTestPlugin, createTestRegistry } from "../test-utils/channel-plugins.js";
 import { runHeartbeatOnce } from "./heartbeat-runner.js";
@@ -33,9 +33,9 @@ function installHeartbeatTypingPlugin(params: {
 function createHeartbeatConfig(params: {
   tmpDir: string;
   storePath: string;
-  session?: NexisClawConfig["session"];
+  session?: GreenchClawConfig["session"];
   channelHeartbeat?: Record<string, unknown>;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   return {
     agents: {
       defaults: {
@@ -53,10 +53,10 @@ function createHeartbeatConfig(params: {
       store: params.storePath,
       ...params.session,
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-async function seedTelegramSession(storePath: string, cfg: NexisClawConfig) {
+async function seedTelegramSession(storePath: string, cfg: GreenchClawConfig) {
   await seedMainSessionStore(storePath, cfg, {
     lastChannel: "telegram",
     lastProvider: "telegram",
@@ -66,7 +66,7 @@ async function seedTelegramSession(storePath: string, cfg: NexisClawConfig) {
 
 function expectTypingCall(
   mock: ReturnType<typeof vi.fn>,
-  expected: { cfg: NexisClawConfig; to: string },
+  expected: { cfg: GreenchClawConfig; to: string },
 ) {
   const call = mock.mock.calls.at(0);
   if (!call) {

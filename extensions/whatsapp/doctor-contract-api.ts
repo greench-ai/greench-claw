@@ -1,4 +1,4 @@
-import type { ChannelDoctorLegacyConfigRule } from "NexisClaw/plugin-sdk/channel-contract";
+import type { ChannelDoctorLegacyConfigRule } from "GreenchClaw/plugin-sdk/channel-contract";
 
 export { normalizeCompatibilityConfig } from "./src/doctor-contract.js";
 

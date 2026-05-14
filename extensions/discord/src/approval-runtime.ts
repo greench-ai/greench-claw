@@ -2,13 +2,13 @@ export {
   isChannelExecApprovalClientEnabledFromConfig,
   matchesApprovalRequestFilters,
   getExecApprovalReplyMetadata,
-} from "NexisClaw/plugin-sdk/approval-client-runtime";
-export { resolveApprovalApprovers } from "NexisClaw/plugin-sdk/approval-auth-runtime";
+} from "GreenchClaw/plugin-sdk/approval-client-runtime";
+export { resolveApprovalApprovers } from "GreenchClaw/plugin-sdk/approval-auth-runtime";
 export {
   createApproverRestrictedNativeApprovalCapability,
   splitChannelApprovalCapability,
-} from "NexisClaw/plugin-sdk/approval-delivery-runtime";
+} from "GreenchClaw/plugin-sdk/approval-delivery-runtime";
 export {
   createChannelApproverDmTargetResolver,
   createChannelNativeOriginTargetResolver,
-} from "NexisClaw/plugin-sdk/approval-native-runtime";
+} from "GreenchClaw/plugin-sdk/approval-native-runtime";

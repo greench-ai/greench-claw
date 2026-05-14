@@ -1,7 +1,10 @@
 import type { proto } from "baileys";
 import { extractMessageContent, getContentType, normalizeMessageContent } from "baileys";
-import { formatLocationText, type NormalizedLocation } from "NexisClaw/plugin-sdk/channel-inbound";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import {
+  formatLocationText,
+  type NormalizedLocation,
+} from "GreenchClaw/plugin-sdk/channel-inbound";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import { resolveComparableIdentity, type WhatsAppReplyContext } from "../identity.js";
 import { jidToE164 } from "../text-runtime.js";
 import { parseVcard } from "../vcard.js";

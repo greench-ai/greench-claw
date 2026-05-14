@@ -1,5 +1,5 @@
-import { logVerbose, retryAsync, warn } from "NexisClaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import { logVerbose, retryAsync, warn } from "GreenchClaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { resolveTelegramApiBase, shouldRetryTelegramTransportFallback } from "../fetch.js";
 import { fetchRemoteMedia, MediaFetchError, saveMediaBuffer } from "../telegram-media.runtime.js";
 

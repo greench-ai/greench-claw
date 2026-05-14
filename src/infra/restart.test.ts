@@ -6,7 +6,7 @@ const resolveLsofCommandSyncMock = vi.hoisted(() => vi.fn());
 const resolveGatewayPortMock = vi.hoisted(() => vi.fn());
 
 vi.mock("node:child_process", async () => {
-  const { mockNodeChildProcessSpawnSync } = await import("NexisClaw/plugin-sdk/test-node-mocks");
+  const { mockNodeChildProcessSpawnSync } = await import("GreenchClaw/plugin-sdk/test-node-mocks");
   return mockNodeChildProcessSpawnSync(spawnSyncMock);
 });
 
@@ -25,7 +25,7 @@ vi.mock("../config/paths.js", async () => {
 let __testing: typeof import("./restart-stale-pids.js").__testing;
 let cleanStaleGatewayProcessesSync: typeof import("./restart-stale-pids.js").cleanStaleGatewayProcessesSync;
 let findGatewayPidsOnPortSync: typeof import("./restart-stale-pids.js").findGatewayPidsOnPortSync;
-let triggerNexisClawRestart: typeof import("./restart.js").triggerNexisClawRestart;
+let triggerGreenchClawRestart: typeof import("./restart.js").triggerGreenchClawRestart;
 
 let currentTimeMs = 0;
 const envSnapshot = captureFullEnv();
@@ -34,7 +34,7 @@ const originalPlatformDescriptor = Object.getOwnPropertyDescriptor(process, "pla
 beforeAll(async () => {
   ({ __testing, cleanStaleGatewayProcessesSync, findGatewayPidsOnPortSync } =
     await import("./restart-stale-pids.js"));
-  ({ triggerNexisClawRestart } = await import("./restart.js"));
+  ({ triggerGreenchClawRestart } = await import("./restart.js"));
 });
 
 beforeEach(() => {
@@ -80,7 +80,7 @@ function requireFirstSpawnSyncCall(): [unknown, unknown, unknown] {
 }
 
 describe.runIf(process.platform !== "win32")("findGatewayPidsOnPortSync", () => {
-  it("parses lsof output and filters non-NexisClaw/current processes", () => {
+  it("parses lsof output and filters non-GreenchClaw/current processes", () => {
     const gatewayPidA = process.pid + 1000;
     const gatewayPidB = process.pid + 2000;
     const foreignPid = process.pid + 3000;
@@ -89,13 +89,13 @@ describe.runIf(process.platform !== "win32")("findGatewayPidsOnPortSync", () => 
       status: 0,
       stdout: [
         `p${process.pid}`,
-        "cNexisClaw",
+        "cGreenchClaw",
         `p${gatewayPidA}`,
-        "cNexisClaw-gateway",
+        "cGreenchClaw-gateway",
         `p${foreignPid}`,
         "cnode",
         `p${gatewayPidB}`,
-        "cNexisClaw",
+        "cGreenchClaw",
       ].join("\n"),
     });
 
@@ -137,7 +137,9 @@ describe.runIf(process.platform !== "win32")("cleanStaleGatewayProcessesSync", (
       .mockReturnValueOnce({
         error: undefined,
         status: 0,
-        stdout: [`p${stalePidA}`, "cNexisClaw", `p${stalePidB}`, "cNexisClaw-gateway"].join("\n"),
+        stdout: [`p${stalePidA}`, "cGreenchClaw", `p${stalePidB}`, "cGreenchClaw-gateway"].join(
+          "\n",
+        ),
       })
       .mockReturnValue({
         error: undefined,
@@ -162,7 +164,7 @@ describe.runIf(process.platform !== "win32")("cleanStaleGatewayProcessesSync", (
       .mockReturnValueOnce({
         error: undefined,
         status: 0,
-        stdout: [`p${stalePid}`, "cNexisClaw"].join("\n"),
+        stdout: [`p${stalePid}`, "cGreenchClaw"].join("\n"),
       })
       .mockReturnValue({
         error: undefined,
@@ -202,13 +204,13 @@ describe.runIf(process.platform !== "win32")("cleanStaleGatewayProcessesSync", (
   });
 });
 
-describe("triggerNexisClawRestart", () => {
+describe("triggerGreenchClawRestart", () => {
   it("does not kickstart after bootstrap registers an unloaded LaunchAgent", () => {
     setPlatform("darwin");
     delete process.env.VITEST;
     delete process.env.NODE_ENV;
     process.env.HOME = "/Users/test";
-    process.env.NEXISCLAW_PROFILE = "default";
+    process.env.GREENCHCLAW_PROFILE = "default";
     const uid = typeof process.getuid === "function" ? process.getuid() : 501;
     spawnSyncMock.mockImplementation((command: string, args: string[]) => {
       if (command === "/usr/sbin/lsof") {
@@ -223,14 +225,14 @@ describe("triggerNexisClawRestart", () => {
       return { error: undefined, status: 1, stdout: "" };
     });
 
-    const result = triggerNexisClawRestart();
+    const result = triggerGreenchClawRestart();
 
     expect(result).toEqual({
       ok: true,
       method: "launchctl",
       tried: [
-        `launchctl kickstart -k gui/${uid}/ai.NexisClaw.gateway`,
-        `launchctl bootstrap gui/${uid} /Users/test/Library/LaunchAgents/ai.NexisClaw.gateway.plist`,
+        `launchctl kickstart -k gui/${uid}/ai.GreenchClaw.gateway`,
+        `launchctl bootstrap gui/${uid} /Users/test/Library/LaunchAgents/ai.GreenchClaw.gateway.plist`,
       ],
     });
   });
@@ -240,7 +242,7 @@ describe("triggerNexisClawRestart", () => {
     delete process.env.VITEST;
     delete process.env.NODE_ENV;
     process.env.HOME = "/Users/test";
-    process.env.NEXISCLAW_PROFILE = "default";
+    process.env.GREENCHCLAW_PROFILE = "default";
     const uid = typeof process.getuid === "function" ? process.getuid() : 501;
     spawnSyncMock.mockImplementation((command: string, args: string[]) => {
       if (command === "/usr/sbin/lsof") {
@@ -258,15 +260,15 @@ describe("triggerNexisClawRestart", () => {
       return { error: undefined, status: 1, stdout: "" };
     });
 
-    const result = triggerNexisClawRestart();
+    const result = triggerGreenchClawRestart();
 
     expect(result).toEqual({
       ok: true,
       method: "launchctl",
       tried: [
-        `launchctl kickstart -k gui/${uid}/ai.NexisClaw.gateway`,
-        `launchctl bootstrap gui/${uid} /Users/test/Library/LaunchAgents/ai.NexisClaw.gateway.plist`,
-        `launchctl kickstart gui/${uid}/ai.NexisClaw.gateway`,
+        `launchctl kickstart -k gui/${uid}/ai.GreenchClaw.gateway`,
+        `launchctl bootstrap gui/${uid} /Users/test/Library/LaunchAgents/ai.GreenchClaw.gateway.plist`,
+        `launchctl kickstart gui/${uid}/ai.GreenchClaw.gateway`,
       ],
     });
   });

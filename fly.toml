@@ -1,7 +1,7 @@
-# NexisClaw Fly.io deployment configuration
+# GreenchClaw Fly.io deployment configuration
 # See https://fly.io/docs/reference/configuration/
 
-app = "NexisClaw"
+app = "GreenchClaw"
 primary_region = "iad" # change to your closest region
 
 [build]
@@ -30,5 +30,5 @@ size = "shared-cpu-2x"
 memory = "2048mb"
 
 [mounts]
-source = "NexisClaw_data"
+source = "GreenchClaw_data"
 destination = "/data"

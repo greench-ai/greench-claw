@@ -27,7 +27,7 @@ describe("toSafeImportPath", () => {
       "file:///C:/Users/alice/plugin/index.mjs",
     );
     expect(toSafeImportPath("./relative/index.mjs")).toBe("./relative/index.mjs");
-    expect(toSafeImportPath("@NexisClaw/plugin")).toBe("@NexisClaw/plugin");
+    expect(toSafeImportPath("@GreenchClaw/plugin")).toBe("@GreenchClaw/plugin");
   });
 
   it("does not rewrite non-Windows paths", () => {

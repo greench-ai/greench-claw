@@ -2,15 +2,15 @@ import {
   expectStopPendingUntilAbort,
   startAccountAndTrackLifecycle,
   waitForStartedMocks,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import {
   createPluginSetupWizardAdapter,
   createPluginSetupWizardStatus,
   createTestWizardPrompter,
   promptSetupWizardAllowFrom,
   runSetupWizardConfigure,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import type { WizardPrompter } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import type { WizardPrompter } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 import {
   listIrcAccountIds,
@@ -72,9 +72,9 @@ function buildAccount(): ResolvedIrcAccount {
     host: "irc.example.com",
     port: 6697,
     tls: true,
-    nick: "NexisClaw",
-    username: "NexisClaw",
-    realname: "NexisClaw",
+    nick: "GreenchClaw",
+    username: "GreenchClaw",
+    realname: "GreenchClaw",
     password: "",
     passwordSource: "none",
     config: {} as ResolvedIrcAccount["config"],
@@ -214,7 +214,7 @@ describe("irc setup", () => {
     expect(
       updateIrcAccountConfig(cfg, "work", {
         host: "irc.libera.chat",
-        nick: "NexisClaw-work",
+        nick: "GreenchClaw-work",
       }),
     ).toStrictEqual({
       channels: {
@@ -222,7 +222,7 @@ describe("irc setup", () => {
           accounts: {
             work: {
               host: "irc.libera.chat",
-              nick: "NexisClaw-work",
+              nick: "GreenchClaw-work",
             },
           },
         },
@@ -238,7 +238,7 @@ describe("irc setup", () => {
         cfg,
         "default",
         "allowlist",
-        ["NexisClaw", "#ops", "NexisClaw", "*"],
+        ["GreenchClaw", "#ops", "GreenchClaw", "*"],
         (raw) => {
           const trimmed = raw.trim();
           if (!trimmed) {
@@ -256,7 +256,7 @@ describe("irc setup", () => {
           enabled: true,
           groupPolicy: "allowlist",
           groups: {
-            "#NexisClaw": {},
+            "#GreenchClaw": {},
             "#ops": {},
             "*": {},
           },
@@ -285,7 +285,7 @@ describe("irc setup", () => {
 
     expect(
       validateInput({
-        input: { host: "", nick: "NexisClaw" },
+        input: { host: "", nick: "GreenchClaw" },
       } as never),
     ).toBe("IRC requires host.");
 
@@ -297,7 +297,7 @@ describe("irc setup", () => {
 
     expect(
       validateInput({
-        input: { host: "irc.libera.chat", nick: "NexisClaw" },
+        input: { host: "irc.libera.chat", nick: "GreenchClaw" },
       } as never),
     ).toBeNull();
 
@@ -310,11 +310,11 @@ describe("irc setup", () => {
           host: " irc.libera.chat ",
           port: "7000",
           tls: true,
-          nick: " NexisClaw ",
+          nick: " GreenchClaw ",
           username: " claw ",
-          realname: " NexisClaw Bot ",
+          realname: " GreenchClaw Bot ",
           password: " secret ",
-          channels: ["#NexisClaw"],
+          channels: ["#GreenchClaw"],
         },
       } as never),
     ).toEqual({
@@ -325,11 +325,11 @@ describe("irc setup", () => {
           host: "irc.libera.chat",
           port: 7000,
           tls: true,
-          nick: "NexisClaw",
+          nick: "GreenchClaw",
           username: "claw",
-          realname: "NexisClaw Bot",
+          realname: "GreenchClaw Bot",
           password: "secret",
-          channels: ["#NexisClaw"],
+          channels: ["#GreenchClaw"],
         },
       },
     });
@@ -345,19 +345,19 @@ describe("irc setup", () => {
           return "6697";
         }
         if (message === "IRC nick") {
-          return "NexisClaw-bot";
+          return "GreenchClaw-bot";
         }
         if (message === "IRC username") {
-          return "NexisClaw";
+          return "GreenchClaw";
         }
         if (message === "IRC real name") {
-          return "NexisClaw Bot";
+          return "GreenchClaw Bot";
         }
         if (message.startsWith("Auto-join IRC channels")) {
-          return "#NexisClaw, #ops";
+          return "#GreenchClaw, #ops";
         }
         if (message.startsWith("IRC channels allowlist")) {
-          return "#NexisClaw, #ops";
+          return "#GreenchClaw, #ops";
         }
         throw new Error(`Unexpected prompt: ${message}`);
       }) as WizardPrompter["text"],
@@ -382,11 +382,11 @@ describe("irc setup", () => {
     expect(result.accountId).toBe("default");
     expect(result.cfg.channels?.irc?.enabled).toBe(true);
     expect(result.cfg.channels?.irc?.host).toBe("irc.libera.chat");
-    expect(result.cfg.channels?.irc?.nick).toBe("NexisClaw-bot");
+    expect(result.cfg.channels?.irc?.nick).toBe("GreenchClaw-bot");
     expect(result.cfg.channels?.irc?.tls).toBe(true);
-    expect(result.cfg.channels?.irc?.channels).toEqual(["#NexisClaw", "#ops"]);
+    expect(result.cfg.channels?.irc?.channels).toEqual(["#GreenchClaw", "#ops"]);
     expect(result.cfg.channels?.irc?.groupPolicy).toBe("allowlist");
-    expect(Object.keys(result.cfg.channels?.irc?.groups ?? {})).toEqual(["#NexisClaw", "#ops"]);
+    expect(Object.keys(result.cfg.channels?.irc?.groups ?? {})).toEqual(["#GreenchClaw", "#ops"]);
   });
 
   it("writes DM allowFrom to top-level config for non-default account prompts", async () => {
@@ -411,7 +411,7 @@ describe("irc setup", () => {
           accounts: {
             work: {
               host: "irc.libera.chat",
-              nick: "NexisClaw-work",
+              nick: "GreenchClaw-work",
             },
           },
         },

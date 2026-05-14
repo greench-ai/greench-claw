@@ -1,28 +1,28 @@
 {
   "entries": [
     {
-      "name": "@NexisClaw/acpx",
-      "description": "NexisClaw ACP runtime backend",
+      "name": "@GreenchClaw/acpx",
+      "description": "GreenchClaw ACP runtime backend",
       "source": "official",
       "kind": "plugin",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
           "id": "acpx",
           "label": "ACPX Runtime"
         },
         "install": {
-          "npmSpec": "@NexisClaw/acpx",
+          "npmSpec": "@GreenchClaw/acpx",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@NexisClaw/brave-plugin",
-      "description": "NexisClaw Brave plugin",
+      "name": "@GreenchClaw/brave-plugin",
+      "description": "GreenchClaw Brave plugin",
       "source": "official",
       "kind": "plugin",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
           "id": "brave",
           "label": "Brave"
@@ -37,134 +37,134 @@
             "envVars": ["BRAVE_API_KEY"],
             "placeholder": "BSA...",
             "signupUrl": "https://api-dashboard.search.brave.com/app/keys",
-            "docsUrl": "https://docs.NexisClaw.ai/tools/brave-search",
+            "docsUrl": "https://docs.GreenchClaw.ai/tools/brave-search",
             "credentialPath": "plugins.entries.brave.config.webSearch.apiKey",
             "autoDetectOrder": 10
           }
         ],
         "install": {
-          "npmSpec": "@NexisClaw/brave-plugin",
+          "npmSpec": "@GreenchClaw/brave-plugin",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@NexisClaw/diagnostics-otel",
-      "description": "NexisClaw diagnostics OpenTelemetry exporter",
+      "name": "@GreenchClaw/diagnostics-otel",
+      "description": "GreenchClaw diagnostics OpenTelemetry exporter",
       "source": "official",
       "kind": "plugin",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
           "id": "diagnostics-otel",
           "label": "Diagnostics OpenTelemetry"
         },
         "install": {
-          "clawhubSpec": "clawhub:@NexisClaw/diagnostics-otel",
-          "npmSpec": "@NexisClaw/diagnostics-otel",
+          "clawhubSpec": "clawhub:@GreenchClaw/diagnostics-otel",
+          "npmSpec": "@GreenchClaw/diagnostics-otel",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@NexisClaw/diagnostics-prometheus",
-      "description": "NexisClaw diagnostics Prometheus exporter",
+      "name": "@GreenchClaw/diagnostics-prometheus",
+      "description": "GreenchClaw diagnostics Prometheus exporter",
       "source": "official",
       "kind": "plugin",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
           "id": "diagnostics-prometheus",
           "label": "Diagnostics Prometheus"
         },
         "install": {
-          "clawhubSpec": "clawhub:@NexisClaw/diagnostics-prometheus",
-          "npmSpec": "@NexisClaw/diagnostics-prometheus",
+          "clawhubSpec": "clawhub:@GreenchClaw/diagnostics-prometheus",
+          "npmSpec": "@GreenchClaw/diagnostics-prometheus",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@NexisClaw/diffs",
-      "description": "NexisClaw diff viewer plugin",
+      "name": "@GreenchClaw/diffs",
+      "description": "GreenchClaw diff viewer plugin",
       "source": "official",
       "kind": "plugin",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
           "id": "diffs",
           "label": "Diffs"
         },
         "install": {
-          "npmSpec": "@NexisClaw/diffs",
+          "npmSpec": "@GreenchClaw/diffs",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.30"
         }
       }
     },
     {
-      "name": "@NexisClaw/google-meet",
-      "description": "NexisClaw Google Meet participant plugin",
+      "name": "@GreenchClaw/google-meet",
+      "description": "GreenchClaw Google Meet participant plugin",
       "source": "official",
       "kind": "plugin",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
           "id": "google-meet",
           "label": "Google Meet"
         },
         "install": {
-          "npmSpec": "@NexisClaw/google-meet",
+          "npmSpec": "@GreenchClaw/google-meet",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.20"
         }
       }
     },
     {
-      "name": "@NexisClaw/lobster",
+      "name": "@GreenchClaw/lobster",
       "description": "Lobster workflow tool plugin (typed pipelines + resumable approvals)",
       "source": "official",
       "kind": "plugin",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
           "id": "lobster",
           "label": "Lobster"
         },
         "install": {
-          "npmSpec": "@NexisClaw/lobster",
+          "npmSpec": "@GreenchClaw/lobster",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
         }
       }
     },
     {
-      "name": "@NexisClaw/memory-lancedb",
-      "description": "NexisClaw LanceDB-backed long-term memory plugin with auto-recall/capture",
+      "name": "@GreenchClaw/memory-lancedb",
+      "description": "GreenchClaw LanceDB-backed long-term memory plugin with auto-recall/capture",
       "source": "official",
       "kind": "plugin",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
           "id": "memory-lancedb",
           "label": "Memory LanceDB"
         },
         "install": {
-          "npmSpec": "@NexisClaw/memory-lancedb",
+          "npmSpec": "@GreenchClaw/memory-lancedb",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }
       }
     },
     {
-      "name": "@NexisClaw/voice-call",
-      "description": "NexisClaw voice-call plugin",
+      "name": "@GreenchClaw/voice-call",
+      "description": "GreenchClaw voice-call plugin",
       "source": "official",
       "kind": "plugin",
-      "NexisClaw": {
+      "GreenchClaw": {
         "plugin": {
           "id": "voice-call",
           "label": "Voice Call"
         },
         "install": {
-          "npmSpec": "@NexisClaw/voice-call",
+          "npmSpec": "@GreenchClaw/voice-call",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.10"
         }

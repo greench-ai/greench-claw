@@ -1,12 +1,12 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import {
   registerProviderPlugin,
   requireRegisteredProvider,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import * as providerAuth from "NexisClaw/plugin-sdk/provider-auth-runtime";
-import * as providerHttp from "NexisClaw/plugin-sdk/provider-http";
-import type { ProviderPlugin } from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import * as providerAuth from "GreenchClaw/plugin-sdk/provider-auth-runtime";
+import * as providerHttp from "GreenchClaw/plugin-sdk/provider-http";
+import type { ProviderPlugin } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildOpenAIImageGenerationProvider } from "./image-generation-provider.js";
 import plugin from "./index.js";
@@ -22,9 +22,9 @@ const runtimeMocks = vi.hoisted(() => ({
   refreshOpenAICodexToken: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/runtime-env")>(
-    "NexisClaw/plugin-sdk/runtime-env",
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/runtime-env")>(
+    "GreenchClaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -303,7 +303,7 @@ describe("openai plugin", () => {
               },
             },
           },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
       }),
     ).rejects.toThrow("Blocked hostname or private/internal/special-use IP address");
 

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { shouldRouteOpenAIPiThroughCodexAuthProvider } from "../openai-codex-routing.js";
 import { normalizeEmbeddedAgentRuntime } from "../pi-embedded-runner/runtime.js";
 import { resolveProviderIdForAuth } from "../provider-auth-aliases.js";
@@ -22,7 +22,7 @@ export function buildAgentRuntimeAuthPlan(params: {
   authProfileMode?: string;
   sessionAuthProfileId?: string;
   sessionAuthProfileCandidateIds?: string[];
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   harnessId?: string;
   harnessRuntime?: string;

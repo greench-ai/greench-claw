@@ -1,7 +1,7 @@
 import { ChannelType } from "discord-api-types/v10";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { createDiscordRestClient } from "../client.js";
 import { createChannelWebhook, getChannel } from "../internal/discord.js";
 import { sendMessageDiscord, sendWebhookMessageDiscord } from "../send.js";
@@ -139,7 +139,7 @@ export function isDiscordThreadGoneError(err: unknown): boolean {
 }
 
 export async function maybeSendBindingMessage(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   record: ThreadBindingRecord;
   text: string;
   preferWebhook?: boolean;
@@ -175,7 +175,7 @@ export async function maybeSendBindingMessage(params: {
 }
 
 export async function createWebhookForChannel(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   token?: string;
   channelId: string;
@@ -188,7 +188,7 @@ export async function createWebhookForChannel(params: {
     }).rest;
     const created = await createChannelWebhook(rest, params.channelId, {
       body: {
-        name: "NexisClaw Agents",
+        name: "GreenchClaw Agents",
       },
     });
     const webhookId = normalizeOptionalString(created?.id) ?? "";
@@ -240,7 +240,7 @@ export function findReusableWebhook(params: { accountId: string; channelId: stri
 }
 
 export async function resolveChannelIdForBinding(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   token?: string;
   threadId: string;
@@ -280,7 +280,7 @@ export async function resolveChannelIdForBinding(params: {
 }
 
 export async function createThreadForBinding(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   token?: string;
   channelId: string;

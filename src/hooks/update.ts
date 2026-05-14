@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   expectedIntegrityForUpdate,
   readInstalledPackageVersion,
@@ -26,7 +26,7 @@ export type HookPackUpdateOutcome = {
 };
 
 export type HookPackUpdateSummary = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   changed: boolean;
   outcomes: HookPackUpdateOutcome[];
 };
@@ -66,7 +66,7 @@ function createHookPackUpdateIntegrityDriftHandler(params: {
 }
 
 export async function updateNpmInstalledHookPacks(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   logger?: HookPackUpdateLogger;
   hookIds?: string[];
   dryRun?: boolean;

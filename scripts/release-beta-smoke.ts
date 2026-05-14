@@ -22,7 +22,7 @@ Options:
   --model <provider/model>     Parallels agent-turn model. Default: openai/gpt-5.4
   --provider-mode <mode>       Telegram workflow provider mode. Default: mock-openai
   --ref <ref>                  GitHub workflow dispatch ref. Default: main
-  --repo <owner/repo>          GitHub repo. Default: NexisClaw/NexisClaw
+  --repo <owner/repo>          GitHub repo. Default: GreenchClaw/GreenchClaw
   --skip-parallels             Only run Telegram workflow
   --skip-telegram              Only run Parallels beta validation
   -h, --help                   Show help
@@ -35,7 +35,7 @@ function parseArgs(argv: string[]): Options {
     model: "openai/gpt-5.4",
     providerMode: "mock-openai",
     ref: "main",
-    repo: "NexisClaw/NexisClaw",
+    repo: "GreenchClaw/GreenchClaw",
     skipParallels: false,
     skipTelegram: false,
   };
@@ -105,27 +105,27 @@ function shellQuote(value: string): string {
 const TELEGRAM_BETA_WORKFLOW_FILE = "npm-telegram-beta-e2e.yml";
 
 function resolveBetaVersion(beta: string): string {
-  const value = beta.trim().replace(/^NexisClaw@/, "");
+  const value = beta.trim().replace(/^GreenchClaw@/, "");
   if (/^\d{4}\.\d+\.\d+-beta\.\d+$/u.test(value)) {
     return value;
   }
   if (value === "beta") {
-    return run("npm", ["view", "NexisClaw@beta", "version"], { capture: true }).trim();
+    return run("npm", ["view", "GreenchClaw@beta", "version"], { capture: true }).trim();
   }
   const betaMatch = /^(?:beta)?(\d+)$/u.exec(value);
   if (!betaMatch) {
-    return run("npm", ["view", `NexisClaw@${value}`, "version"], { capture: true }).trim();
+    return run("npm", ["view", `GreenchClaw@${value}`, "version"], { capture: true }).trim();
   }
   const suffix = `-beta.${betaMatch[1]}`;
   const versions = JSON.parse(
-    run("npm", ["view", "NexisClaw", "versions", "--json"], { capture: true }),
+    run("npm", ["view", "GreenchClaw", "versions", "--json"], { capture: true }),
   ) as string[];
   const match = versions
     .filter((version) => version.endsWith(suffix))
     .toSorted((a, b) => a.localeCompare(b, undefined, { numeric: true }))
     .at(-1);
   if (!match) {
-    throw new Error(`no NexisClaw registry version found for ${beta}`);
+    throw new Error(`no GreenchClaw registry version found for ${beta}`);
   }
   return match;
 }
@@ -344,7 +344,7 @@ function findFile(root: string, basename: string): string {
 async function main(): Promise<void> {
   const options = parseArgs(process.argv.slice(2));
   const version = resolveBetaVersion(options.beta);
-  const packageSpec = `NexisClaw@${version}`;
+  const packageSpec = `GreenchClaw@${version}`;
   console.log(`Resolved beta target: ${packageSpec}`);
 
   if (!options.skipParallels) {

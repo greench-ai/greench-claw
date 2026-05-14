@@ -1,11 +1,11 @@
-import { readConfiguredProviderCatalogEntries } from "NexisClaw/plugin-sdk/provider-catalog-shared";
-import { defineSingleProviderPluginEntry } from "NexisClaw/plugin-sdk/provider-entry";
-import { PASSTHROUGH_GEMINI_REPLAY_HOOKS } from "NexisClaw/plugin-sdk/provider-model-shared";
+import { readConfiguredProviderCatalogEntries } from "GreenchClaw/plugin-sdk/provider-catalog-shared";
+import { defineSingleProviderPluginEntry } from "GreenchClaw/plugin-sdk/provider-entry";
+import { PASSTHROUGH_GEMINI_REPLAY_HOOKS } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import {
   createOpenRouterSystemCacheWrapper,
   createOpenRouterWrapper,
   isProxyReasoningUnsupported,
-} from "NexisClaw/plugin-sdk/provider-stream";
+} from "GreenchClaw/plugin-sdk/provider-stream";
 import { buildDeepInfraImageGenerationProvider } from "./image-generation-provider.js";
 import { deepinfraMediaUnderstandingProvider } from "./media-understanding-provider.js";
 import { deepinfraMemoryEmbeddingProviderAdapter } from "./memory-embedding-adapter.js";

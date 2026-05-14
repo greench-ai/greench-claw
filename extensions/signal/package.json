@@ -1,16 +1,16 @@
 {
-  "name": "@NexisClaw/signal",
+  "name": "@GreenchClaw/signal",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw Signal channel plugin",
+  "description": "GreenchClaw Signal channel plugin",
   "type": "module",
   "dependencies": {
     "ws": "8.20.0"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ],

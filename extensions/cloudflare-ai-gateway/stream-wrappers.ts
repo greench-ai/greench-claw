@@ -1,7 +1,7 @@
 import type { StreamFn } from "@earendil-works/pi-agent-core";
-import type { ProviderWrapStreamFnContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import { createAnthropicThinkingPrefillPayloadWrapper } from "NexisClaw/plugin-sdk/provider-stream-shared";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
+import type { ProviderWrapStreamFnContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createAnthropicThinkingPrefillPayloadWrapper } from "GreenchClaw/plugin-sdk/provider-stream-shared";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
 
 const log = createSubsystemLogger("cloudflare-ai-gateway-stream");
 

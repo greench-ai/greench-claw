@@ -1,8 +1,8 @@
 import {
   applyProviderConfigWithModelCatalogPreset,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   buildZaiCatalogModels,
   resolveZaiBaseUrl,
@@ -11,17 +11,17 @@ import {
 
 export const ZAI_DEFAULT_MODEL_REF = `zai/${ZAI_DEFAULT_MODEL_ID}`;
 
-function resolveZaiPresetBaseUrl(cfg: NexisClawConfig, endpoint?: string): string {
+function resolveZaiPresetBaseUrl(cfg: GreenchClawConfig, endpoint?: string): string {
   const existingProvider = cfg.models?.providers?.zai;
   const existingBaseUrl = normalizeOptionalString(existingProvider?.baseUrl) ?? "";
   return endpoint ? resolveZaiBaseUrl(endpoint) : existingBaseUrl || resolveZaiBaseUrl();
 }
 
 function applyZaiPreset(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params?: { endpoint?: string; modelId?: string },
   primaryModelRef?: string,
-): NexisClawConfig {
+): GreenchClawConfig {
   const modelId = normalizeOptionalString(params?.modelId) ?? ZAI_DEFAULT_MODEL_ID;
   const modelRef = `zai/${modelId}`;
   return applyProviderConfigWithModelCatalogPreset(cfg, {
@@ -35,16 +35,16 @@ function applyZaiPreset(
 }
 
 export function applyZaiProviderConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params?: { endpoint?: string; modelId?: string },
-): NexisClawConfig {
+): GreenchClawConfig {
   return applyZaiPreset(cfg, params);
 }
 
 export function applyZaiConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params?: { endpoint?: string; modelId?: string },
-): NexisClawConfig {
+): GreenchClawConfig {
   const modelId = normalizeOptionalString(params?.modelId) ?? ZAI_DEFAULT_MODEL_ID;
   const modelRef = modelId === ZAI_DEFAULT_MODEL_ID ? ZAI_DEFAULT_MODEL_REF : `zai/${modelId}`;
   return applyZaiPreset(cfg, params, modelRef);

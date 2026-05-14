@@ -2,8 +2,8 @@ import {
   resolveAgentEffectiveModelPrimary,
   resolveDefaultAgentId,
   setAgentEffectiveModelPrimary,
-} from "NexisClaw/plugin-sdk/agent-runtime";
-import type { MigrationItem, MigrationProviderContext } from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
+import type { MigrationItem, MigrationProviderContext } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { readString } from "./helpers.js";
 import {
   HERMES_REASON_ALREADY_CONFIGURED,

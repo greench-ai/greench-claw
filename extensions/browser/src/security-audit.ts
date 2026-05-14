@@ -1,8 +1,11 @@
-import type { NexisClawPluginSecurityAuditContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import { hasConfiguredSecretInput } from "NexisClaw/plugin-sdk/secret-input";
-import { formatCliCommand } from "NexisClaw/plugin-sdk/setup-tools";
-import { isPrivateNetworkOptInEnabled, isPrivateIpAddress } from "NexisClaw/plugin-sdk/ssrf-policy";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawPluginSecurityAuditContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { hasConfiguredSecretInput } from "GreenchClaw/plugin-sdk/secret-input";
+import { formatCliCommand } from "GreenchClaw/plugin-sdk/setup-tools";
+import {
+  isPrivateNetworkOptInEnabled,
+  isPrivateIpAddress,
+} from "GreenchClaw/plugin-sdk/ssrf-policy";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { redactCdpUrl, resolveBrowserConfig, resolveProfile } from "./browser/config.js";
 import { resolveBrowserControlAuth } from "./browser/control-auth.js";
 import { hasNonEmptyString } from "./record-shared.js";
@@ -18,7 +21,7 @@ function isTrustedPrivateHostname(hostname: string): boolean {
   return normalized.length > 0 && BLOCKED_HOSTNAMES.has(normalized);
 }
 
-export function collectBrowserSecurityAuditFindings(ctx: NexisClawPluginSecurityAuditContext) {
+export function collectBrowserSecurityAuditFindings(ctx: GreenchClawPluginSecurityAuditContext) {
   const findings: Array<{
     checkId: string;
     severity: "warn" | "critical";
@@ -36,7 +39,7 @@ export function collectBrowserSecurityAuditFindings(ctx: NexisClawPluginSecurity
       severity: "warn" as const,
       title: "Browser control config looks invalid",
       detail: String(err),
-      remediation: `Fix browser.cdpUrl in ${ctx.configPath} and re-run "${formatCliCommand("NexisClaw security audit --deep")}".`,
+      remediation: `Fix browser.cdpUrl in ${ctx.configPath} and re-run "${formatCliCommand("GreenchClaw security audit --deep")}".`,
     });
     return findings;
   }
@@ -49,7 +52,7 @@ export function collectBrowserSecurityAuditFindings(ctx: NexisClawPluginSecurity
   const explicitAuthMode = ctx.config.gateway?.auth?.mode;
   const tokenConfigured =
     Boolean(browserAuth.token) ||
-    hasNonEmptyString(ctx.env.NEXISCLAW_GATEWAY_TOKEN) ||
+    hasNonEmptyString(ctx.env.GREENCHCLAW_GATEWAY_TOKEN) ||
     hasConfiguredSecretInput(ctx.config.gateway?.auth?.token, ctx.config.secrets?.defaults);
   const passwordCanWin =
     explicitAuthMode === "password" ||
@@ -60,7 +63,7 @@ export function collectBrowserSecurityAuditFindings(ctx: NexisClawPluginSecurity
   const passwordConfigured =
     Boolean(browserAuth.password) ||
     (passwordCanWin &&
-      (hasNonEmptyString(ctx.env.NEXISCLAW_GATEWAY_PASSWORD) ||
+      (hasNonEmptyString(ctx.env.GREENCHCLAW_GATEWAY_PASSWORD) ||
         hasConfiguredSecretInput(
           ctx.config.gateway?.auth?.password,
           ctx.config.secrets?.defaults,

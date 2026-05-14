@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveGatewayConnectionAuth } from "./connection-auth.js";
 import { buildGatewayConnectionDetailsWithResolvers } from "./connection-details.js";
 import type { ExplicitGatewayAuth } from "./credentials.js";
@@ -7,14 +7,14 @@ export function resolveGatewayUrlOverrideSource(urlSource: string): "cli" | "env
   if (urlSource === "cli --url") {
     return "cli";
   }
-  if (urlSource === "env NEXISCLAW_GATEWAY_URL") {
+  if (urlSource === "env GREENCHCLAW_GATEWAY_URL") {
     return "env";
   }
   return undefined;
 }
 
 export async function resolveGatewayClientBootstrap(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   gatewayUrl?: string;
   explicitAuth?: ExplicitGatewayAuth;
   env?: NodeJS.ProcessEnv;

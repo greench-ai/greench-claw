@@ -1,4 +1,4 @@
-import { createNonExitingRuntimeEnv } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import { createNonExitingRuntimeEnv } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const resolveMatrixTargetsMock = vi.hoisted(() => vi.fn(async () => []));

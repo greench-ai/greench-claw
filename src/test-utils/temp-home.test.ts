@@ -17,12 +17,12 @@ describe("createTempHomeEnv", () => {
   it("sets home env vars and restores them on cleanup", async () => {
     const previousHome = process.env.HOME;
     const previousUserProfile = process.env.USERPROFILE;
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
 
-    const tempHome = await createTempHomeEnv("NexisClaw-temp-home-");
+    const tempHome = await createTempHomeEnv("GreenchClaw-temp-home-");
     expect(process.env.HOME).toBe(tempHome.home);
     expect(process.env.USERPROFILE).toBe(tempHome.home);
-    expect(process.env.NEXISCLAW_STATE_DIR).toBe(path.join(tempHome.home, ".NexisClaw"));
+    expect(process.env.GREENCHCLAW_STATE_DIR).toBe(path.join(tempHome.home, ".GreenchClaw"));
     const homeStat = await fs.stat(tempHome.home);
     expect(homeStat.isDirectory()).toBe(true);
 
@@ -30,7 +30,7 @@ describe("createTempHomeEnv", () => {
 
     expect(process.env.HOME).toBe(previousHome);
     expect(process.env.USERPROFILE).toBe(previousUserProfile);
-    expect(process.env.NEXISCLAW_STATE_DIR).toBe(previousStateDir);
+    expect(process.env.GREENCHCLAW_STATE_DIR).toBe(previousStateDir);
     await expectPathMissing(tempHome.home);
   });
 });

@@ -1,7 +1,7 @@
 import {
   createResolvedApproverActionAuthAdapter,
   resolveApprovalApprovers,
-} from "NexisClaw/plugin-sdk/approval-auth-runtime";
+} from "GreenchClaw/plugin-sdk/approval-auth-runtime";
 import { normalizeMatrixApproverId } from "./approval-ids.js";
 import { resolveMatrixAccount } from "./matrix/accounts.js";
 import type { CoreConfig } from "./types.js";

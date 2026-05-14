@@ -7,10 +7,10 @@ import {
   resolveStorePath,
 } from "../../config/sessions.js";
 import type { SessionAcpMeta } from "../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 
 export async function persistAcpDispatchTranscript(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   promptText: string;
   finalText: string;

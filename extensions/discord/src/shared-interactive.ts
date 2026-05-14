@@ -1,12 +1,12 @@
 import {
   presentationToInteractiveControlsReply,
   reduceInteractiveReply,
-} from "NexisClaw/plugin-sdk/interactive-runtime";
+} from "GreenchClaw/plugin-sdk/interactive-runtime";
 import type {
   InteractiveButtonStyle,
   InteractiveReply,
   MessagePresentation,
-} from "NexisClaw/plugin-sdk/interactive-runtime";
+} from "GreenchClaw/plugin-sdk/interactive-runtime";
 import type {
   DiscordComponentButtonSpec,
   DiscordComponentButtonStyle,

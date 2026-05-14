@@ -1,7 +1,7 @@
 import { resolveDefaultAgentId } from "../agents/agent-scope.js";
 import type { ChatType } from "../channels/chat-type.js";
 import { normalizeChatType } from "../channels/chat-type.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { shouldLogVerbose } from "../globals.js";
 import { logDebug } from "../logger.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
@@ -31,7 +31,7 @@ export type RoutePeer = {
 };
 
 export type ResolveAgentRouteInput = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: string;
   accountId?: string | null;
   peer?: RoutePeer | null;
@@ -113,20 +113,20 @@ export function buildAgentSessionKey(params: {
   });
 }
 
-function listAgents(cfg: NexisClawConfig) {
+function listAgents(cfg: GreenchClawConfig) {
   const agents = cfg.agents?.list;
   return Array.isArray(agents) ? agents : [];
 }
 
 type AgentLookupCache = {
-  agentsRef: NexisClawConfig["agents"] | undefined;
+  agentsRef: GreenchClawConfig["agents"] | undefined;
   byNormalizedId: Map<string, string>;
   fallbackDefaultAgentId: string;
 };
 
-const agentLookupCacheByCfg = new WeakMap<NexisClawConfig, AgentLookupCache>();
+const agentLookupCacheByCfg = new WeakMap<GreenchClawConfig, AgentLookupCache>();
 
-function resolveAgentLookupCache(cfg: NexisClawConfig): AgentLookupCache {
+function resolveAgentLookupCache(cfg: GreenchClawConfig): AgentLookupCache {
   const agentsRef = cfg.agents;
   const existing = agentLookupCacheByCfg.get(cfg);
   if (existing && existing.agentsRef === agentsRef) {
@@ -150,7 +150,7 @@ function resolveAgentLookupCache(cfg: NexisClawConfig): AgentLookupCache {
   return next;
 }
 
-export function pickFirstExistingAgentId(cfg: NexisClawConfig, agentId: string): string {
+export function pickFirstExistingAgentId(cfg: GreenchClawConfig, agentId: string): string {
   const lookup = resolveAgentLookupCache(cfg);
   const trimmed = (agentId ?? "").trim();
   if (!trimmed) {
@@ -195,20 +195,20 @@ type BindingScope = {
 };
 
 type EvaluatedBindingsCache = {
-  bindingsRef: NexisClawConfig["bindings"];
+  bindingsRef: GreenchClawConfig["bindings"];
   byChannel: Map<string, EvaluatedBindingsByChannel>;
   byChannelAccount: Map<string, EvaluatedBinding[]>;
   byChannelAccountIndex: Map<string, EvaluatedBindingsIndex>;
 };
 
-const evaluatedBindingsCacheByCfg = new WeakMap<NexisClawConfig, EvaluatedBindingsCache>();
+const evaluatedBindingsCacheByCfg = new WeakMap<GreenchClawConfig, EvaluatedBindingsCache>();
 const MAX_EVALUATED_BINDINGS_CACHE_KEYS = 2000;
 const resolvedRouteCacheByCfg = new WeakMap<
-  NexisClawConfig,
+  GreenchClawConfig,
   {
-    bindingsRef: NexisClawConfig["bindings"];
-    agentsRef: NexisClawConfig["agents"];
-    sessionRef: NexisClawConfig["session"];
+    bindingsRef: GreenchClawConfig["bindings"];
+    agentsRef: GreenchClawConfig["agents"];
+    sessionRef: GreenchClawConfig["session"];
     byKey: Map<string, ResolvedAgentRoute>;
   }
 >();
@@ -237,7 +237,7 @@ function resolveAccountPatternKey(accountPattern: string): string {
 }
 
 function buildEvaluatedBindingsByChannel(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ): Map<string, EvaluatedBindingsByChannel> {
   const byChannel = new Map<string, EvaluatedBindingsByChannel>();
   let order = 0;
@@ -421,7 +421,7 @@ function buildEvaluatedBindingsIndex(bindings: EvaluatedBinding[]): EvaluatedBin
 }
 
 function getEvaluatedBindingsForChannelAccount(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   channel: string,
   accountId: string,
 ): EvaluatedBinding[] {
@@ -464,7 +464,7 @@ function getEvaluatedBindingsForChannelAccount(
 }
 
 function getEvaluatedBindingIndexForChannelAccount(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   channel: string,
   accountId: string,
 ): EvaluatedBindingsIndex {
@@ -518,7 +518,7 @@ function normalizeBindingMatch(
   };
 }
 
-function resolveRouteCacheForConfig(cfg: NexisClawConfig): Map<string, ResolvedAgentRoute> {
+function resolveRouteCacheForConfig(cfg: GreenchClawConfig): Map<string, ResolvedAgentRoute> {
   const existing = resolvedRouteCacheByCfg.get(cfg);
   if (
     existing &&

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import {
   loadInstalledPluginIndexInstallRecords,
@@ -65,9 +65,9 @@ export function writePersistedInstalledPluginIndexInstallRecordsSync(
 }
 
 export function withPluginInstallRecords(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   records: Record<string, PluginInstallRecord>,
-): NexisClawConfig {
+): GreenchClawConfig {
   return {
     ...config,
     plugins: {
@@ -77,7 +77,7 @@ export function withPluginInstallRecords(
   };
 }
 
-export function withoutPluginInstallRecords(config: NexisClawConfig): NexisClawConfig {
+export function withoutPluginInstallRecords(config: GreenchClawConfig): GreenchClawConfig {
   if (!config.plugins?.installs) {
     return config;
   }

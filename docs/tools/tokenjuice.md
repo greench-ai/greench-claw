@@ -2,7 +2,7 @@
 summary: "Compact noisy exec and bash tool results with an optional bundled plugin"
 title: "Tokenjuice"
 read_when:
-  - You want shorter `exec` or `bash` tool results in NexisClaw
+  - You want shorter `exec` or `bash` tool results in GreenchClaw
   - You want to enable the bundled tokenjuice plugin
   - You need to understand what tokenjuice changes and what it leaves raw
 ---
@@ -13,8 +13,8 @@ tool results after the command has already run.
 It changes the returned `tool_result`, not the command itself. Tokenjuice does
 not rewrite shell input, rerun commands, or change exit codes.
 
-Today this applies to PI embedded runs and NexisClaw dynamic tools in the Codex
-app-server harness. Tokenjuice hooks NexisClaw's tool-result middleware and
+Today this applies to PI embedded runs and GreenchClaw dynamic tools in the Codex
+app-server harness. Tokenjuice hooks GreenchClaw's tool-result middleware and
 trims the output before it goes back into the active harness session.
 
 ## Enable the plugin
@@ -22,17 +22,17 @@ trims the output before it goes back into the active harness session.
 Fast path:
 
 ```bash
-NexisClaw config set plugins.entries.tokenjuice.enabled true
+GreenchClaw config set plugins.entries.tokenjuice.enabled true
 ```
 
 Equivalent:
 
 ```bash
-NexisClaw plugins enable tokenjuice
+GreenchClaw plugins enable tokenjuice
 ```
 
-NexisClaw already ships the plugin. There is no separate `plugins install`
-or `tokenjuice install NexisClaw` step.
+GreenchClaw already ships the plugin. There is no separate `plugins install`
+or `tokenjuice install GreenchClaw` step.
 
 If you prefer editing config directly:
 
@@ -65,13 +65,13 @@ If you prefer editing config directly:
 ## Disable the plugin
 
 ```bash
-NexisClaw config set plugins.entries.tokenjuice.enabled false
+GreenchClaw config set plugins.entries.tokenjuice.enabled false
 ```
 
 Or:
 
 ```bash
-NexisClaw plugins disable tokenjuice
+GreenchClaw plugins disable tokenjuice
 ```
 
 ## Related

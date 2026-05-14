@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
-import { stringEnum } from "NexisClaw/plugin-sdk/channel-actions";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { stringEnum } from "GreenchClaw/plugin-sdk/channel-actions";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { Static, Type } from "typebox";
-import type { AnyAgentTool, NexisClawPluginApi, NexisClawPluginToolContext } from "../api.js";
+import type { AnyAgentTool, GreenchClawPluginApi, GreenchClawPluginToolContext } from "../api.js";
 import { PlaywrightDiffScreenshotter, type DiffScreenshotter } from "./browser.js";
 import { resolveDiffImageRenderOptions } from "./config.js";
 import { renderDiffDocument } from "./render.js";
@@ -154,12 +154,12 @@ type DiffsToolRawParams = DiffsToolParams & {
 };
 
 export function createDiffsTool(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   store: DiffArtifactStore;
   defaults: DiffToolDefaults;
   viewerBaseUrl?: string;
   screenshotter?: DiffScreenshotter;
-  context?: NexisClawPluginToolContext;
+  context?: GreenchClawPluginToolContext;
 }): AnyAgentTool {
   return {
     name: "diffs",
@@ -434,7 +434,7 @@ async function renderDiffArtifactFile(params: {
 }
 
 function buildArtifactContext(
-  context: NexisClawPluginToolContext | undefined,
+  context: GreenchClawPluginToolContext | undefined,
 ): DiffArtifactContext | undefined {
   if (!context) {
     return undefined;

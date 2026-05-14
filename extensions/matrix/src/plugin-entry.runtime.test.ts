@@ -30,13 +30,13 @@ function writeFixtureFile(fixtureRoot: string, relativePath: string, value: stri
   fs.writeFileSync(fullPath, value, "utf8");
 }
 
-function writeNexisClawPackageFixture(fixtureRoot: string) {
+function writeGreenchClawPackageFixture(fixtureRoot: string) {
   writeFixtureFile(
     fixtureRoot,
     "package.json",
     JSON.stringify(
       {
-        name: "NexisClaw",
+        name: "GreenchClaw",
         type: "module",
         exports: {
           "./plugin-sdk": "./dist/plugin-sdk/index.js",
@@ -46,7 +46,7 @@ function writeNexisClawPackageFixture(fixtureRoot: string) {
       2,
     ) + "\n",
   );
-  writeFixtureFile(fixtureRoot, "NexisClaw.mjs", "export {};\n");
+  writeFixtureFile(fixtureRoot, "GreenchClaw.mjs", "export {};\n");
   writeFixtureFile(fixtureRoot, "dist/plugin-sdk/index.js", "export {};\n");
 }
 
@@ -89,7 +89,7 @@ afterEach(() => {
 it("loads the source-checkout runtime wrapper through native ESM import", async () => {
   const fixtureRoot = makeFixtureRoot(".tmp-matrix-source-runtime-");
 
-  writeNexisClawPackageFixture(fixtureRoot);
+  writeGreenchClawPackageFixture(fixtureRoot);
   writeSourceRuntimeWrapperFixture(fixtureRoot);
 
   expectRuntimeWrapperExports(
@@ -100,7 +100,7 @@ it("loads the source-checkout runtime wrapper through native ESM import", async 
 it("loads the packaged runtime wrapper without recursing through the stable root alias", async () => {
   const fixtureRoot = makeFixtureRoot(".tmp-matrix-runtime-");
 
-  writeNexisClawPackageFixture(fixtureRoot);
+  writeGreenchClawPackageFixture(fixtureRoot);
   writeFixtureFile(
     fixtureRoot,
     "dist/plugin-entry.runtime-C88YIa_v.js",
@@ -125,7 +125,7 @@ it("loads the packaged runtime wrapper without recursing through the stable root
 it("does not load when only a TypeScript Matrix runtime shim exists", async () => {
   const fixtureRoot = makeFixtureRoot(".tmp-matrix-runtime-ts-only-");
 
-  writeNexisClawPackageFixture(fixtureRoot);
+  writeGreenchClawPackageFixture(fixtureRoot);
   writeSourceRuntimeWrapperFixture(fixtureRoot, { runtimeExtension: ".ts" });
 
   await expect(

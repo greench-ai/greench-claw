@@ -2,4 +2,4 @@ export {
   getRealtimeVoiceProvider,
   listRealtimeVoiceProviders,
   resolveConfiguredRealtimeVoiceProvider,
-} from "NexisClaw/plugin-sdk/realtime-voice";
+} from "GreenchClaw/plugin-sdk/realtime-voice";

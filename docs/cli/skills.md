@@ -1,5 +1,5 @@
 ---
-summary: "CLI reference for `NexisClaw skills` (search/install/update/list/info/check)"
+summary: "CLI reference for `GreenchClaw skills` (search/install/update/list/info/check)"
 read_when:
   - You want to see which skills are available and ready to run
   - You want to search, install, or update skills from ClawHub
@@ -7,7 +7,7 @@ read_when:
 title: "Skills"
 ---
 
-# `NexisClaw skills`
+# `GreenchClaw skills`
 
 Inspect local skills and install/update skills from ClawHub.
 
@@ -20,26 +20,26 @@ Related:
 ## Commands
 
 ```bash
-NexisClaw skills search "calendar"
-NexisClaw skills search --limit 20 --json
-NexisClaw skills install <slug>
-NexisClaw skills install <slug> --version <version>
-NexisClaw skills install <slug> --force
-NexisClaw skills install <slug> --agent <id>
-NexisClaw skills update <slug>
-NexisClaw skills update --all
-NexisClaw skills update --all --agent <id>
-NexisClaw skills list
-NexisClaw skills list --eligible
-NexisClaw skills list --json
-NexisClaw skills list --verbose
-NexisClaw skills list --agent <id>
-NexisClaw skills info <name>
-NexisClaw skills info <name> --json
-NexisClaw skills info <name> --agent <id>
-NexisClaw skills check
-NexisClaw skills check --agent <id>
-NexisClaw skills check --json
+GreenchClaw skills search "calendar"
+GreenchClaw skills search --limit 20 --json
+GreenchClaw skills install <slug>
+GreenchClaw skills install <slug> --version <version>
+GreenchClaw skills install <slug> --force
+GreenchClaw skills install <slug> --agent <id>
+GreenchClaw skills update <slug>
+GreenchClaw skills update --all
+GreenchClaw skills update --all --agent <id>
+GreenchClaw skills list
+GreenchClaw skills list --eligible
+GreenchClaw skills list --json
+GreenchClaw skills list --verbose
+GreenchClaw skills list --agent <id>
+GreenchClaw skills info <name>
+GreenchClaw skills info <name> --json
+GreenchClaw skills info <name> --agent <id>
+GreenchClaw skills check
+GreenchClaw skills check --agent <id>
+GreenchClaw skills check --json
 ```
 
 `search`/`install`/`update` use ClawHub directly and install into the active

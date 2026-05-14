@@ -1,10 +1,10 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   normalizePluginsConfig,
   resolveEffectiveEnableState,
   resolvePluginConfigObject,
-} from "NexisClaw/plugin-sdk/plugin-config-runtime";
-import { isTruthyEnvValue } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/plugin-config-runtime";
+import { isTruthyEnvValue } from "GreenchClaw/plugin-sdk/runtime-env";
 
 export type CanvasHostConfig = {
   enabled?: boolean;
@@ -62,7 +62,7 @@ export function parseCanvasPluginConfig(value: unknown): CanvasPluginConfig {
   return host ? { host } : {};
 }
 
-export function isCanvasPluginEnabled(config?: NexisClawConfig): boolean {
+export function isCanvasPluginEnabled(config?: GreenchClawConfig): boolean {
   if (!config) {
     return true;
   }
@@ -76,7 +76,7 @@ export function isCanvasPluginEnabled(config?: NexisClawConfig): boolean {
 }
 
 export function resolveCanvasHostConfig(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   pluginConfig?: Record<string, unknown>;
 }): CanvasHostConfig {
   const pluginConfig =
@@ -85,8 +85,8 @@ export function resolveCanvasHostConfig(params: {
   return parsedPluginConfig.host ?? {};
 }
 
-export function isCanvasHostEnabled(config?: NexisClawConfig): boolean {
-  if (isTruthyEnvValue(process.env.NEXISCLAW_SKIP_CANVAS_HOST)) {
+export function isCanvasHostEnabled(config?: GreenchClawConfig): boolean {
+  if (isTruthyEnvValue(process.env.GREENCHCLAW_SKIP_CANVAS_HOST)) {
     return false;
   }
   if (!isCanvasPluginEnabled(config)) {
@@ -109,7 +109,7 @@ export const canvasConfigSchema: CanvasPluginConfigSchema = {
     },
     "host.root": {
       label: "Canvas Host Root Directory",
-      help: "Directory to serve. Defaults to the NexisClaw state canvas directory.",
+      help: "Directory to serve. Defaults to the GreenchClaw state canvas directory.",
       advanced: true,
     },
     "host.port": {

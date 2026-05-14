@@ -1,9 +1,9 @@
-import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import { formatAllowFromLowercase } from "NexisClaw/plugin-sdk/allow-from";
-import { adaptScopedAccountAccessor } from "NexisClaw/plugin-sdk/channel-config-helpers";
-import { createScopedChannelConfigAdapter } from "NexisClaw/plugin-sdk/channel-config-helpers";
-import type { ChannelDoctorAdapter } from "NexisClaw/plugin-sdk/channel-contract";
+import { describeAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import { formatAllowFromLowercase } from "GreenchClaw/plugin-sdk/allow-from";
+import { adaptScopedAccountAccessor } from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import { createScopedChannelConfigAdapter } from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import type { ChannelDoctorAdapter } from "GreenchClaw/plugin-sdk/channel-contract";
 import { inspectDiscordAccount } from "./account-inspect.js";
 import {
   isDiscordAccountEnabledForRuntime,
@@ -19,7 +19,7 @@ import { getChatChannelMeta, type ChannelPlugin } from "./channel-api.js";
 import { DiscordChannelConfigSchema } from "./config-schema.js";
 import { normalizeCompatibilityConfig } from "./doctor-contract.js";
 import { DISCORD_LEGACY_CONFIG_RULES } from "./doctor-shared.js";
-import type { NexisClawConfig } from "./runtime-api.js";
+import type { GreenchClawConfig } from "./runtime-api.js";
 import {
   collectRuntimeConfigAssignments,
   secretTargetRegistryEntries,
@@ -65,7 +65,7 @@ const discordDoctor: ChannelDoctorAdapter = {
 };
 
 function resolveDiscordConfigAccessorAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): DiscordConfigAccessorAccount {
   const accountId = normalizeAccountId(

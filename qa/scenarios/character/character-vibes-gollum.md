@@ -87,7 +87,7 @@ execution:
       - internal error
       - tool failed
       - /var/folders
-      - NexisClaw-qa-suite
+      - GreenchClaw-qa-suite
 ```
 
 ```yaml qa-flow

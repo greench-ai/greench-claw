@@ -1,5 +1,8 @@
-import type { DirectoryConfigParams } from "NexisClaw/plugin-sdk/directory-runtime";
-import { buildMessagingTarget, type MessagingTarget } from "NexisClaw/plugin-sdk/messaging-targets";
+import type { DirectoryConfigParams } from "GreenchClaw/plugin-sdk/directory-runtime";
+import {
+  buildMessagingTarget,
+  type MessagingTarget,
+} from "GreenchClaw/plugin-sdk/messaging-targets";
 import { resolveDiscordAccount, resolveDiscordAccountAllowFrom } from "./accounts.js";
 import { rememberDiscordDirectoryUser } from "./directory-cache.js";
 import { listDiscordDirectoryPeersLive } from "./directory-live.js";

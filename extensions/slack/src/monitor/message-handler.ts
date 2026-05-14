@@ -1,8 +1,8 @@
 import {
   createChannelInboundDebouncer,
   shouldDebounceTextInbound,
-} from "NexisClaw/plugin-sdk/channel-inbound";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+} from "GreenchClaw/plugin-sdk/channel-inbound";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import type { ResolvedSlackAccount } from "../accounts.js";
 import type { SlackMessageEvent } from "../types.js";
 import { stripSlackMentionsForCommandDetection } from "./commands.js";

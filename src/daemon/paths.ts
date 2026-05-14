@@ -32,12 +32,12 @@ function resolveUserPathWithHome(input: string, home?: string): string {
 }
 
 export function resolveGatewayStateDir(env: Record<string, string | undefined>): string {
-  const override = normalizeOptionalString(env.NEXISCLAW_STATE_DIR);
+  const override = normalizeOptionalString(env.GREENCHCLAW_STATE_DIR);
   if (override) {
     const home = override.startsWith("~") ? resolveHomeDir(env) : undefined;
     return resolveUserPathWithHome(override, home);
   }
   const home = resolveHomeDir(env);
-  const suffix = resolveGatewayProfileSuffix(env.NEXISCLAW_PROFILE);
-  return path.join(home, `.NexisClaw${suffix}`);
+  const suffix = resolveGatewayProfileSuffix(env.GREENCHCLAW_PROFILE);
+  return path.join(home, `.GreenchClaw${suffix}`);
 }

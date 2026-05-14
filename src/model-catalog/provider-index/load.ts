@@ -1,9 +1,9 @@
-import { normalizeNexisClawProviderIndex } from "./normalize.js";
-import { NEXISCLAW_PROVIDER_INDEX } from "./NexisClaw-provider-index.js";
-import type { NexisClawProviderIndex } from "./types.js";
+import { GREENCHCLAW_PROVIDER_INDEX } from "./GreenchClaw-provider-index.js";
+import { normalizeGreenchClawProviderIndex } from "./normalize.js";
+import type { GreenchClawProviderIndex } from "./types.js";
 
-export function loadNexisClawProviderIndex(
-  source: unknown = NEXISCLAW_PROVIDER_INDEX,
-): NexisClawProviderIndex {
-  return normalizeNexisClawProviderIndex(source) ?? { version: 1, providers: {} };
+export function loadGreenchClawProviderIndex(
+  source: unknown = GREENCHCLAW_PROVIDER_INDEX,
+): GreenchClawProviderIndex {
+  return normalizeGreenchClawProviderIndex(source) ?? { version: 1, providers: {} };
 }

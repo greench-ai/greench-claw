@@ -1,6 +1,6 @@
-# NexisClaw iOS Versioning
+# GreenchClaw iOS Versioning
 
-NexisClaw iOS uses a **pinned CalVer release version** instead of reading the current gateway version automatically on every build.
+GreenchClaw iOS uses a **pinned CalVer release version** instead of reading the current gateway version automatically on every build.
 
 ## Goals
 

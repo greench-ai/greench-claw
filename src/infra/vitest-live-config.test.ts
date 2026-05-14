@@ -24,7 +24,7 @@ describe("live vitest config", () => {
       BUNDLED_PLUGIN_LIVE_TEST_GLOB,
     ]);
     expect(normalizeConfigPaths(liveConfig.test?.setupFiles)).toContain(
-      "test/setup-NexisClaw-runtime.ts",
+      "test/setup-GreenchClaw-runtime.ts",
     );
   });
 });

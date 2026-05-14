@@ -63,19 +63,19 @@ describe("channel registry helpers", () => {
     const line = formatChannelSelectionLine(telegram, formatTestLink);
     expect(line).not.toContain("Docs:");
     expect(line).toContain("/channels/telegram");
-    expect(line).toContain("https://NexisClaw.ai");
+    expect(line).toContain("https://GreenchClaw.ai");
   });
 
   it("prefers the pinned channel registry when resolving registered plugin channels", () => {
-    const startupRegistry = createRegistryWithRegisteredChannel("NexisClaw-weixin", ["weixin"]);
+    const startupRegistry = createRegistryWithRegisteredChannel("GreenchClaw-weixin", ["weixin"]);
     setActivePluginRegistry(startupRegistry);
     pinActivePluginChannelRegistry(startupRegistry);
 
     const replacementRegistry = createRegistryWithRegisteredChannel("qqbot", ["qq"]);
     setActivePluginRegistry(replacementRegistry);
 
-    expect(listRegisteredChannelPluginIds()).toEqual(["NexisClaw-weixin"]);
-    expect(normalizeAnyChannelId("weixin")).toBe("NexisClaw-weixin");
+    expect(listRegisteredChannelPluginIds()).toEqual(["GreenchClaw-weixin"]);
+    expect(normalizeAnyChannelId("weixin")).toBe("GreenchClaw-weixin");
     expect(getRegisteredChannelPluginMeta("OPENCLAW-WEIXIN")?.aliases).toEqual(["weixin"]);
   });
 

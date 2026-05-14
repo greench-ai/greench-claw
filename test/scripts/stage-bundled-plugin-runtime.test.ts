@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { stageBundledPluginRuntime } from "../../scripts/stage-bundled-plugin-runtime.mjs";
 
 async function withTempDir(run: (dir: string) => Promise<void>) {
-  const dir = await fs.promises.mkdtemp(path.join(os.tmpdir(), "NexisClaw-stage-runtime-"));
+  const dir = await fs.promises.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-stage-runtime-"));
   try {
     await run(dir);
   } finally {

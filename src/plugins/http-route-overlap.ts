@@ -1,9 +1,9 @@
 import { canonicalizePathVariant } from "../gateway/security-path.js";
-import type { NexisClawPluginHttpRouteMatch } from "./types.js";
+import type { GreenchClawPluginHttpRouteMatch } from "./types.js";
 
 type PluginHttpRouteLike = {
   path: string;
-  match: NexisClawPluginHttpRouteMatch;
+  match: GreenchClawPluginHttpRouteMatch;
 };
 
 function prefixMatchPath(pathname: string, prefix: string): boolean {
@@ -37,7 +37,7 @@ function doPluginHttpRoutesOverlap(
 export function findOverlappingPluginHttpRoute<
   T extends {
     path: string;
-    match: NexisClawPluginHttpRouteMatch;
+    match: GreenchClawPluginHttpRouteMatch;
   },
 >(routes: readonly T[], candidate: PluginHttpRouteLike): T | undefined {
   return routes.find((route) => doPluginHttpRoutesOverlap(route, candidate));

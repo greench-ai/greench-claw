@@ -1,11 +1,11 @@
-import type { NexisClawConfig, ReplyToMode } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveChannelModelOverride } from "NexisClaw/plugin-sdk/model-session-runtime";
-import { buildAgentSessionKey } from "NexisClaw/plugin-sdk/routing";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import type { GreenchClawConfig, ReplyToMode } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveChannelModelOverride } from "GreenchClaw/plugin-sdk/model-session-runtime";
+import { buildAgentSessionKey } from "GreenchClaw/plugin-sdk/routing";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   normalizeOptionalString,
   normalizeOptionalStringifiedId,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   ChannelType,
   createThread,
@@ -78,7 +78,7 @@ export async function resolveDiscordAutoThreadReplyPlan(
     replyToMode: ReplyToMode;
     agentId: string;
     channel: string;
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     threadParentInheritanceEnabled?: boolean;
   },
 ): Promise<DiscordAutoThreadReplyPlan> {
@@ -219,7 +219,7 @@ export async function maybeCreateDiscordAutoThread(
 }
 
 function resolveDiscordThreadTitleModelRef(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel?: string;
   agentId: string;
   threadId: string;
@@ -258,7 +258,7 @@ async function maybeRenameDiscordAutoThread(params: {
   modelRef?: string;
   channelName?: string;
   channelDescription?: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
 }): Promise<void> {
   try {

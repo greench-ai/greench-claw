@@ -2,12 +2,12 @@ import {
   buildChannelOutboundSessionRoute,
   buildThreadAwareOutboundSessionRoute,
   createChatChannelPlugin,
-} from "NexisClaw/plugin-sdk/channel-core";
+} from "GreenchClaw/plugin-sdk/channel-core";
 import {
   createMessageReceiptFromOutboundResults,
   defineChannelMessageAdapter,
-} from "NexisClaw/plugin-sdk/channel-message";
-import { getChatChannelMeta } from "NexisClaw/plugin-sdk/channel-plugin-common";
+} from "GreenchClaw/plugin-sdk/channel-message";
+import { getChatChannelMeta } from "GreenchClaw/plugin-sdk/channel-plugin-common";
 import {
   DEFAULT_ACCOUNT_ID,
   listQaChannelAccountIds,

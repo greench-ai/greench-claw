@@ -2,8 +2,8 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import type {
   DiagnosticEventMetadata,
   DiagnosticEventPayload,
-  NexisClawPluginHttpRouteHandler,
-  NexisClawPluginService,
+  GreenchClawPluginHttpRouteHandler,
+  GreenchClawPluginService,
 } from "../api.js";
 import { redactSensitiveText } from "../api.js";
 
@@ -48,7 +48,7 @@ const BYTE_BUCKETS = [
 ];
 const LOW_CARDINALITY_VALUE_RE = /^[A-Za-z0-9_.:-]{1,120}$/u;
 const MAX_PROMETHEUS_SERIES = 2048;
-const DROPPED_SERIES_COUNTER_NAME = "NexisClaw_prometheus_series_dropped_total";
+const DROPPED_SERIES_COUNTER_NAME = "GreenchClaw_prometheus_series_dropped_total";
 
 function lowCardinalityLabel(value: string | undefined, fallback = "unknown"): string {
   if (!value) {
@@ -399,7 +399,7 @@ function recordModelUsage(
       return;
     }
     store.counter(
-      "NexisClaw_model_tokens_total",
+      "GreenchClaw_model_tokens_total",
       "Model tokens reported by diagnostic usage events.",
       {
         ...labels,
@@ -409,7 +409,7 @@ function recordModelUsage(
     );
     if (tokenType === "input" || tokenType === "output") {
       store.histogram(
-        "NexisClaw_gen_ai_client_token_usage",
+        "GreenchClaw_gen_ai_client_token_usage",
         "GenAI token usage distribution for input and output tokens.",
         {
           model: labels.model,
@@ -430,13 +430,13 @@ function recordModelUsage(
   recordTokens("total", usage.total);
 
   store.counter(
-    "NexisClaw_model_cost_usd_total",
+    "GreenchClaw_model_cost_usd_total",
     "Estimated model cost in USD reported by diagnostic usage events.",
     labels,
     numericValue(evt.costUsd) ?? 0,
   );
   store.histogram(
-    "NexisClaw_model_usage_duration_seconds",
+    "GreenchClaw_model_usage_duration_seconds",
     "Model usage event duration in seconds.",
     labels,
     seconds(evt.durationMs),
@@ -458,13 +458,13 @@ function recordDiagnosticEvent(
       return;
     case "run.completed":
       store.histogram(
-        "NexisClaw_run_duration_seconds",
+        "GreenchClaw_run_duration_seconds",
         "Agent run duration in seconds.",
         runLabels(evt),
         seconds(evt.durationMs),
       );
       store.counter(
-        "NexisClaw_run_completed_total",
+        "GreenchClaw_run_completed_total",
         "Agent runs completed by outcome.",
         runLabels(evt),
       );
@@ -472,13 +472,13 @@ function recordDiagnosticEvent(
     case "model.call.completed":
     case "model.call.error":
       store.histogram(
-        "NexisClaw_model_call_duration_seconds",
+        "GreenchClaw_model_call_duration_seconds",
         "Provider model call duration in seconds.",
         modelCallLabels(evt),
         seconds(evt.durationMs),
       );
       store.counter(
-        "NexisClaw_model_call_total",
+        "GreenchClaw_model_call_total",
         "Provider model calls completed by outcome.",
         modelCallLabels(evt),
       );
@@ -486,13 +486,13 @@ function recordDiagnosticEvent(
     case "tool.execution.completed":
     case "tool.execution.error":
       store.histogram(
-        "NexisClaw_tool_execution_duration_seconds",
+        "GreenchClaw_tool_execution_duration_seconds",
         "Tool execution duration in seconds.",
         toolExecutionLabels(evt),
         seconds(evt.durationMs),
       );
       store.counter(
-        "NexisClaw_tool_execution_total",
+        "GreenchClaw_tool_execution_total",
         "Tool executions completed by outcome.",
         toolExecutionLabels(evt),
       );
@@ -500,25 +500,29 @@ function recordDiagnosticEvent(
     case "harness.run.completed":
     case "harness.run.error":
       store.histogram(
-        "NexisClaw_harness_run_duration_seconds",
+        "GreenchClaw_harness_run_duration_seconds",
         "Agent harness run duration in seconds.",
         harnessLabels(evt),
         seconds(evt.durationMs),
       );
       store.counter(
-        "NexisClaw_harness_run_total",
+        "GreenchClaw_harness_run_total",
         "Agent harness runs completed by outcome.",
         harnessLabels(evt),
       );
       return;
     case "message.processed":
-      store.counter("NexisClaw_message_processed_total", "Inbound messages processed by outcome.", {
-        channel: lowCardinalityLabel(evt.channel),
-        outcome: evt.outcome,
-        reason: lowCardinalityLabel(evt.reason, "none"),
-      });
+      store.counter(
+        "GreenchClaw_message_processed_total",
+        "Inbound messages processed by outcome.",
+        {
+          channel: lowCardinalityLabel(evt.channel),
+          outcome: evt.outcome,
+          reason: lowCardinalityLabel(evt.reason, "none"),
+        },
+      );
       store.histogram(
-        "NexisClaw_message_processed_duration_seconds",
+        "GreenchClaw_message_processed_duration_seconds",
         "Inbound message processing duration in seconds.",
         {
           channel: lowCardinalityLabel(evt.channel),
@@ -530,7 +534,7 @@ function recordDiagnosticEvent(
       return;
     case "message.delivery.started":
       store.counter(
-        "NexisClaw_message_delivery_started_total",
+        "GreenchClaw_message_delivery_started_total",
         "Outbound message delivery attempts started.",
         {
           channel: lowCardinalityLabel(evt.channel),
@@ -541,7 +545,7 @@ function recordDiagnosticEvent(
     case "message.delivery.completed":
     case "message.delivery.error":
       store.counter(
-        "NexisClaw_message_delivery_total",
+        "GreenchClaw_message_delivery_total",
         "Outbound message delivery attempts by outcome.",
         {
           channel: lowCardinalityLabel(evt.channel),
@@ -554,7 +558,7 @@ function recordDiagnosticEvent(
         },
       );
       store.histogram(
-        "NexisClaw_message_delivery_duration_seconds",
+        "GreenchClaw_message_delivery_duration_seconds",
         "Outbound message delivery duration in seconds.",
         {
           channel: lowCardinalityLabel(evt.channel),
@@ -569,15 +573,19 @@ function recordDiagnosticEvent(
       );
       return;
     case "talk.event":
-      store.counter("NexisClaw_talk_event_total", "Talk events emitted by type.", talkLabels(evt));
+      store.counter(
+        "GreenchClaw_talk_event_total",
+        "Talk events emitted by type.",
+        talkLabels(evt),
+      );
       store.histogram(
-        "NexisClaw_talk_event_duration_seconds",
+        "GreenchClaw_talk_event_duration_seconds",
         "Talk event duration in seconds when reported.",
         talkLabels(evt),
         seconds(evt.durationMs),
       );
       store.histogram(
-        "NexisClaw_talk_audio_bytes",
+        "GreenchClaw_talk_audio_bytes",
         "Talk audio frame byte lengths.",
         talkLabels(evt),
         numericValue(evt.byteLength),
@@ -587,12 +595,12 @@ function recordDiagnosticEvent(
     case "session.recovery.requested":
     case "session.recovery.completed":
       store.counter(
-        "NexisClaw_session_recovery_total",
+        "GreenchClaw_session_recovery_total",
         "Session recovery observations by status and action.",
         sessionRecoveryLabels(evt),
       );
       store.histogram(
-        "NexisClaw_session_recovery_age_seconds",
+        "GreenchClaw_session_recovery_age_seconds",
         "Age of sessions selected for recovery in seconds.",
         sessionRecoveryLabels(evt),
         seconds(evt.ageMs),
@@ -601,7 +609,7 @@ function recordDiagnosticEvent(
     case "queue.lane.enqueue":
     case "queue.lane.dequeue":
       store.gauge(
-        "NexisClaw_queue_lane_size",
+        "GreenchClaw_queue_lane_size",
         "Current diagnostic queue lane size.",
         {
           lane: lowCardinalityLabel(evt.lane),
@@ -610,7 +618,7 @@ function recordDiagnosticEvent(
       );
       if (evt.type === "queue.lane.dequeue") {
         store.histogram(
-          "NexisClaw_queue_lane_wait_seconds",
+          "GreenchClaw_queue_lane_wait_seconds",
           "Queue lane wait time in seconds.",
           { lane: lowCardinalityLabel(evt.lane) },
           seconds(evt.waitMs),
@@ -618,13 +626,13 @@ function recordDiagnosticEvent(
       }
       return;
     case "session.state":
-      store.counter("NexisClaw_session_state_total", "Session state observations.", {
+      store.counter("GreenchClaw_session_state_total", "Session state observations.", {
         reason: lowCardinalityLabel(evt.reason, "none"),
         state: evt.state,
       });
       if (evt.queueDepth !== undefined) {
         store.gauge(
-          "NexisClaw_session_queue_depth",
+          "GreenchClaw_session_queue_depth",
           "Latest observed session queue depth.",
           {
             state: evt.state,
@@ -635,25 +643,25 @@ function recordDiagnosticEvent(
       return;
     case "diagnostic.memory.sample":
       store.gauge(
-        "NexisClaw_memory_bytes",
+        "GreenchClaw_memory_bytes",
         "Latest process memory usage by memory kind.",
         { kind: "rss" },
         evt.memory.rssBytes,
       );
       store.gauge(
-        "NexisClaw_memory_bytes",
+        "GreenchClaw_memory_bytes",
         "Latest process memory usage by memory kind.",
         { kind: "heap_total" },
         evt.memory.heapTotalBytes,
       );
       store.gauge(
-        "NexisClaw_memory_bytes",
+        "GreenchClaw_memory_bytes",
         "Latest process memory usage by memory kind.",
         { kind: "heap_used" },
         evt.memory.heapUsedBytes,
       );
       store.histogram(
-        "NexisClaw_memory_rss_bytes",
+        "GreenchClaw_memory_rss_bytes",
         "RSS memory sample distribution in bytes.",
         {},
         numericValue(evt.memory.rssBytes),
@@ -662,7 +670,7 @@ function recordDiagnosticEvent(
       return;
     case "diagnostic.memory.pressure":
       store.counter(
-        "NexisClaw_memory_pressure_total",
+        "GreenchClaw_memory_pressure_total",
         "Memory pressure events by level and reason.",
         {
           level: evt.level,
@@ -674,19 +682,23 @@ function recordDiagnosticEvent(
     case "diagnostic.liveness.warning":
       return;
     case "telemetry.exporter":
-      store.counter("NexisClaw_telemetry_exporter_total", "Telemetry exporter lifecycle events.", {
-        exporter: lowCardinalityLabel(evt.exporter),
-        reason: lowCardinalityLabel(evt.reason, "none"),
-        signal: evt.signal,
-        status: evt.status,
-      });
+      store.counter(
+        "GreenchClaw_telemetry_exporter_total",
+        "Telemetry exporter lifecycle events.",
+        {
+          exporter: lowCardinalityLabel(evt.exporter),
+          reason: lowCardinalityLabel(evt.reason, "none"),
+          signal: evt.signal,
+          status: evt.status,
+        },
+      );
       return;
     default:
       return;
   }
 }
 
-function createMetricsHandler(store: PrometheusMetricStore): NexisClawPluginHttpRouteHandler {
+function createMetricsHandler(store: PrometheusMetricStore): GreenchClawPluginHttpRouteHandler {
   return (req: IncomingMessage, res: ServerResponse) => {
     if (req.method !== "GET" && req.method !== "HEAD") {
       res.statusCode = 405;
@@ -742,7 +754,7 @@ export function createDiagnosticsPrometheusExporter() {
       unsubscribe = undefined;
       store.reset();
     },
-  } satisfies NexisClawPluginService;
+  } satisfies GreenchClawPluginService;
 
   return {
     handler: createMetricsHandler(store),

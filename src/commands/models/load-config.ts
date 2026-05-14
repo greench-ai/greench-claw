@@ -4,13 +4,13 @@ import {
   getRuntimeConfig,
   getRuntimeConfigSourceSnapshot,
   setRuntimeConfigSnapshot,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   getModelsCommandSecretTargetIds,
 } from "./load-config.runtime.js";
 
 export type LoadedModelsConfig = {
-  sourceConfig: NexisClawConfig;
-  resolvedConfig: NexisClawConfig;
+  sourceConfig: GreenchClawConfig;
+  resolvedConfig: GreenchClawConfig;
   diagnostics: string[];
 };
 
@@ -42,6 +42,6 @@ export async function loadModelsConfigWithSource(params: {
 export async function loadModelsConfig(params: {
   commandName: string;
   runtime?: RuntimeEnv;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   return (await loadModelsConfigWithSource(params)).resolvedConfig;
 }

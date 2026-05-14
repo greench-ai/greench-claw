@@ -1,14 +1,14 @@
-import { coerceNativeSetting, normalizeAllowFromList } from "NexisClaw/plugin-sdk/channel-policy";
-import { readChannelAllowFromStore } from "NexisClaw/plugin-sdk/conversation-runtime";
+import { coerceNativeSetting, normalizeAllowFromList } from "GreenchClaw/plugin-sdk/channel-policy";
+import { readChannelAllowFromStore } from "GreenchClaw/plugin-sdk/conversation-runtime";
 import {
   resolveNativeCommandsEnabled,
   resolveNativeSkillsEnabled,
-} from "NexisClaw/plugin-sdk/native-command-config-runtime";
+} from "GreenchClaw/plugin-sdk/native-command-config-runtime";
 import type { ResolvedSlackAccount } from "./accounts.js";
-import type { NexisClawConfig } from "./runtime-api.js";
+import type { GreenchClawConfig } from "./runtime-api.js";
 
 export async function collectSlackSecurityAuditFindings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   account: ResolvedSlackAccount;
 }) {

@@ -11,8 +11,8 @@ Adds media understanding provider support. Adds realtime transcription provider 
 
 ## Distribution
 
-- Package: `@NexisClaw/elevenlabs-speech`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/elevenlabs-speech`
+- Install route: included in GreenchClaw
 
 ## Surface
 

@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Duplex } from "node:stream";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import { isCanvasHostEnabled, resolveCanvasHostConfig } from "./config.js";
 import { A2UI_PATH, CANVAS_HOST_PATH, CANVAS_WS_PATH, handleA2uiHttpRequest } from "./host/a2ui.js";
 import { createCanvasHostHandler, type CanvasHostHandler } from "./host/server.js";
@@ -13,7 +13,7 @@ export type CanvasHttpRouteHandler = {
 };
 
 export function createCanvasHttpRouteHandler(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   pluginConfig?: Record<string, unknown>;
   runtime: RuntimeEnv;
   allowInTests?: boolean;

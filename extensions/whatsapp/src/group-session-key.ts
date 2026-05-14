@@ -3,7 +3,7 @@ import {
   normalizeAccountId,
   resolveThreadSessionKeys,
   type ResolvedAgentRoute,
-} from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/routing";
 
 function resolveWhatsAppGroupAccountThreadId(accountId: string): string {
   return `whatsapp-account-${normalizeAccountId(accountId)}`;

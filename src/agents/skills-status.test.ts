@@ -202,7 +202,7 @@ describe("buildWorkspaceSkillStatus", () => {
   });
 
   it("classifies a mixed broken skill pack without flattening visibility reasons", () => {
-    const missingBin = "NexisClaw-test-definitely-missing-skill-bin";
+    const missingBin = "GreenchClaw-test-definitely-missing-skill-bin";
     const report = buildWorkspaceSkillStatus("/tmp/ws", {
       agentId: "specialist",
       config: {
@@ -240,7 +240,7 @@ describe("buildWorkspaceSkillStatus", () => {
             install: [
               {
                 kind: "node",
-                package: "@NexisClaw/missing-skill-bin",
+                package: "@GreenchClaw/missing-skill-bin",
                 bins: [missingBin],
               },
             ],
@@ -248,8 +248,8 @@ describe("buildWorkspaceSkillStatus", () => {
         }),
         createEntry("needs-env", {
           metadata: {
-            primaryEnv: "NEXISCLAW_TEST_MISSING_SKILL_KEY",
-            requires: { env: ["NEXISCLAW_TEST_MISSING_SKILL_KEY"] },
+            primaryEnv: "GREENCHCLAW_TEST_MISSING_SKILL_KEY",
+            requires: { env: ["GREENCHCLAW_TEST_MISSING_SKILL_KEY"] },
           },
         }),
         createEntry("prompt-hidden", {
@@ -266,7 +266,7 @@ describe("buildWorkspaceSkillStatus", () => {
         }),
         createEntry("agent-filtered"),
         createEntry("disabled"),
-        createEntry("bundled-blocked", { source: "NexisClaw-bundled" }),
+        createEntry("bundled-blocked", { source: "GreenchClaw-bundled" }),
       ],
     });
 
@@ -302,18 +302,18 @@ describe("buildWorkspaceSkillStatus", () => {
       {
         kind: "node",
         id: "node-0",
-        label: "Install @NexisClaw/missing-skill-bin (pnpm)",
+        label: "Install @GreenchClaw/missing-skill-bin (pnpm)",
         bins: [missingBin],
       },
     ]);
     const needsEnv = requireSkillStatus(byName, "needs-env");
     expect(needsEnv.eligible).toBe(false);
-    expect(needsEnv.primaryEnv).toBe("NEXISCLAW_TEST_MISSING_SKILL_KEY");
+    expect(needsEnv.primaryEnv).toBe("GREENCHCLAW_TEST_MISSING_SKILL_KEY");
     expect(needsEnv.missing).toStrictEqual({
       anyBins: [],
       bins: [],
       config: [],
-      env: ["NEXISCLAW_TEST_MISSING_SKILL_KEY"],
+      env: ["GREENCHCLAW_TEST_MISSING_SKILL_KEY"],
       os: [],
     });
     expectStatusFlags(requireSkillStatus(byName, "prompt-hidden"), {

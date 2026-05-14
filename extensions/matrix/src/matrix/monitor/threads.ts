@@ -1,4 +1,4 @@
-import { resolveThreadSessionKeys } from "NexisClaw/plugin-sdk/routing";
+import { resolveThreadSessionKeys } from "GreenchClaw/plugin-sdk/routing";
 import type { MatrixRawEvent, RoomMessageEventContent } from "./types.js";
 import { RelationType } from "./types.js";
 

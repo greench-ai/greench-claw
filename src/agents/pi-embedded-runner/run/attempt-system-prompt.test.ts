@@ -10,7 +10,7 @@ beforeEach(async () => {
 
 const baseProviderTransform = {
   provider: "openai",
-  workspaceDir: "/tmp/NexisClaw",
+  workspaceDir: "/tmp/GreenchClaw",
   context: {
     provider: "openai",
     modelId: "gpt-5.5",
@@ -29,7 +29,7 @@ describe("buildAttemptSystemPrompt", () => {
       systemPromptOverrideText: "Custom override prompt.",
       transformProviderSystemPrompt,
       embeddedSystemPrompt: {
-        workspaceDir: "/tmp/NexisClaw",
+        workspaceDir: "/tmp/GreenchClaw",
         reasoningTagHint: false,
         runtimeInfo: {
           host: "test-host",
@@ -45,11 +45,11 @@ describe("buildAttemptSystemPrompt", () => {
         bootstrapTruncationNotice: "Bootstrap context was truncated.",
         contextFiles: [
           {
-            path: "/tmp/NexisClaw/BOOTSTRAP.md",
+            path: "/tmp/GreenchClaw/BOOTSTRAP.md",
             content: "Reply with BOOTSTRAP_OK.",
           },
           {
-            path: "/tmp/NexisClaw/USER.md",
+            path: "/tmp/GreenchClaw/USER.md",
             content: "User profile should stay in normal prompt context only.",
           },
         ],
@@ -64,7 +64,7 @@ describe("buildAttemptSystemPrompt", () => {
     expect(result.systemPrompt).toContain("## Bootstrap Context Notice");
     expect(result.systemPrompt).toContain("Bootstrap context was truncated.");
     expect(result.systemPrompt).toContain("# Project Context");
-    expect(result.systemPrompt).toContain("## /tmp/NexisClaw/BOOTSTRAP.md");
+    expect(result.systemPrompt).toContain("## /tmp/GreenchClaw/BOOTSTRAP.md");
     expect(result.systemPrompt).toContain("Reply with BOOTSTRAP_OK.");
     expect(result.systemPrompt).not.toContain("USER.md");
   });
@@ -75,7 +75,7 @@ describe("buildAttemptSystemPrompt", () => {
       systemPromptOverrideText: "Custom override prompt.",
       transformProviderSystemPrompt,
       embeddedSystemPrompt: {
-        workspaceDir: "/tmp/NexisClaw",
+        workspaceDir: "/tmp/GreenchClaw",
         reasoningTagHint: false,
         runtimeInfo: {
           host: "test-host",
@@ -107,7 +107,7 @@ describe("buildAttemptSystemPrompt", () => {
       isRawModelRun: true,
       transformProviderSystemPrompt,
       embeddedSystemPrompt: {
-        workspaceDir: "/tmp/NexisClaw",
+        workspaceDir: "/tmp/GreenchClaw",
         reasoningTagHint: false,
         runtimeInfo: {
           host: "test-host",
@@ -122,7 +122,7 @@ describe("buildAttemptSystemPrompt", () => {
         bootstrapMode: "full",
         contextFiles: [
           {
-            path: "/tmp/NexisClaw/BOOTSTRAP.md",
+            path: "/tmp/GreenchClaw/BOOTSTRAP.md",
             content: "Reply with BOOTSTRAP_OK.",
           },
         ],

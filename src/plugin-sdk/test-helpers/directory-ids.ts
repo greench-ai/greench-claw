@@ -1,9 +1,9 @@
 import { expect } from "vitest";
 import type { ChannelDirectoryEntry } from "../channel-contract.js";
-import type { NexisClawConfig } from "../config-types.js";
+import type { GreenchClawConfig } from "../config-types.js";
 
 export type DirectoryListFn = (params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string;
   query?: string | null;
   limit?: number | null;
@@ -11,7 +11,7 @@ export type DirectoryListFn = (params: {
 
 export async function expectDirectoryIds(
   listFn: DirectoryListFn,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   expected: string[],
   options?: { sorted?: boolean },
 ) {

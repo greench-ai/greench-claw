@@ -4,7 +4,7 @@ import { getActiveEmbeddedRunCount } from "../agents/pi-embedded-runner/run-stat
 import { getTotalPendingReplies } from "../auto-reply/reply/dispatcher-registry.js";
 import type { CliDeps } from "../cli/deps.types.js";
 import { isRestartEnabled } from "../config/commands.flags.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import type { HeartbeatRunner } from "../infra/heartbeat-runner.js";
 import { resetDirectoryCache } from "../infra/outbound/target-resolver.js";
@@ -99,7 +99,7 @@ type GatewayReloadHandlerParams = {
   startChannel: (name: ChannelKind) => Promise<void>;
   stopChannel: (name: ChannelKind) => Promise<void>;
   reloadPlugins: (params: {
-    nextConfig: NexisClawConfig;
+    nextConfig: GreenchClawConfig;
     changedPaths: readonly string[];
     beforeReplace: (channels: ReadonlySet<ChannelKind>) => Promise<void>;
   }) => Promise<GatewayPluginReloadResult>;
@@ -111,7 +111,7 @@ type GatewayReloadHandlerParams = {
   logChannels: { info: (msg: string) => void; error: (msg: string) => void };
   logCron: { error: (msg: string) => void };
   logReload: GatewayReloadLog;
-  createHealthMonitor: (config: NexisClawConfig) => ChannelHealthMonitor | null;
+  createHealthMonitor: (config: GreenchClawConfig) => ChannelHealthMonitor | null;
   onCronRestart?: () => void;
 };
 
@@ -120,8 +120,8 @@ type ManagedGatewayConfigReloaderParams = Omit<
   "createHealthMonitor" | "logReload"
 > & {
   minimalTestGateway: boolean;
-  initialConfig: NexisClawConfig;
-  initialCompareConfig?: NexisClawConfig;
+  initialConfig: GreenchClawConfig;
+  initialCompareConfig?: GreenchClawConfig;
   initialInternalWriteHash: string | null;
   watchPath: string;
   readSnapshot: typeof import("../config/config.js").readConfigFileSnapshot;
@@ -132,7 +132,7 @@ type ManagedGatewayConfigReloaderParams = Omit<
   };
   channelManager: GatewayChannelManager;
   activateRuntimeSecrets: ActivateRuntimeSecrets;
-  resolveSharedGatewaySessionGenerationForConfig: (config: NexisClawConfig) => string | undefined;
+  resolveSharedGatewaySessionGenerationForConfig: (config: GreenchClawConfig) => string | undefined;
   sharedGatewaySessionGenerationState: SharedGatewaySessionGenerationState;
   clients: Iterable<SharedGatewayAuthClient>;
 };
@@ -189,7 +189,7 @@ export function createGatewayReloadHandlers(params: GatewayReloadHandlerParams) 
   };
   const waitForActiveWorkBeforeChannelReload = async (
     channels: Iterable<ChannelKind>,
-    nextConfig: NexisClawConfig,
+    nextConfig: GreenchClawConfig,
   ) => {
     const initial = getActiveCounts();
     if (initial.totalActive <= 0) {
@@ -237,7 +237,7 @@ export function createGatewayReloadHandlers(params: GatewayReloadHandlerParams) 
     }
   };
 
-  const applyHotReload = async (plan: GatewayReloadPlan, nextConfig: NexisClawConfig) => {
+  const applyHotReload = async (plan: GatewayReloadPlan, nextConfig: GreenchClawConfig) => {
     setGatewaySigusr1RestartPolicy({ allowExternal: isRestartEnabled(nextConfig) });
     const state = params.getState();
     const nextState = { ...state };
@@ -276,8 +276,8 @@ export function createGatewayReloadHandlers(params: GatewayReloadHandlerParams) 
     const channelsStoppedBeforePluginReload = new Set<ChannelKind>();
     let activePluginChannelsAfterReload: ReadonlySet<ChannelKind> | null = null;
     const shouldSkipChannelRestart = () =>
-      isTruthyEnvValue(process.env.NEXISCLAW_SKIP_CHANNELS) ||
-      isTruthyEnvValue(process.env.NEXISCLAW_SKIP_PROVIDERS);
+      isTruthyEnvValue(process.env.GREENCHCLAW_SKIP_CHANNELS) ||
+      isTruthyEnvValue(process.env.GREENCHCLAW_SKIP_PROVIDERS);
     if (plan.reloadPlugins) {
       const stopChannelsBeforePluginReplace = async (channels: ReadonlySet<ChannelKind>) => {
         for (const channel of channels) {
@@ -347,14 +347,14 @@ export function createGatewayReloadHandlers(params: GatewayReloadHandlerParams) 
         cfg: nextConfig,
         log: params.logHooks,
         onSkipped: () =>
-          params.logHooks.info("skipping gmail watcher restart (NEXISCLAW_SKIP_GMAIL_WATCHER=1)"),
+          params.logHooks.info("skipping gmail watcher restart (GREENCHCLAW_SKIP_GMAIL_WATCHER=1)"),
       });
     }
 
     if (channelsToRestart.size > 0) {
       if (shouldSkipChannelRestart()) {
         params.logChannels.info(
-          "skipping channel reload (NEXISCLAW_SKIP_CHANNELS=1 or NEXISCLAW_SKIP_PROVIDERS=1)",
+          "skipping channel reload (GREENCHCLAW_SKIP_CHANNELS=1 or GREENCHCLAW_SKIP_PROVIDERS=1)",
         );
       } else {
         if (!plan.reloadPlugins) {
@@ -389,7 +389,10 @@ export function createGatewayReloadHandlers(params: GatewayReloadHandlerParams) 
 
   let restartPending = false;
 
-  const requestGatewayRestart = (plan: GatewayReloadPlan, nextConfig: NexisClawConfig): boolean => {
+  const requestGatewayRestart = (
+    plan: GatewayReloadPlan,
+    nextConfig: GreenchClawConfig,
+  ): boolean => {
     setGatewaySigusr1RestartPolicy({ allowExternal: isRestartEnabled(nextConfig) });
     const reasons = plan.restartReasons.length
       ? plan.restartReasons.join(", ")

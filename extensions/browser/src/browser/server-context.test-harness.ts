@@ -8,13 +8,13 @@ export function makeBrowserProfile(
   overrides: Partial<ResolvedBrowserProfile> = {},
 ): ResolvedBrowserProfile {
   return {
-    name: "NexisClaw",
+    name: "GreenchClaw",
     cdpUrl: "http://127.0.0.1:18800",
     cdpHost: "127.0.0.1",
     cdpIsLoopback: true,
     cdpPort: 18800,
     color: "#FF4500",
-    driver: "NexisClaw",
+    driver: "GreenchClaw",
     headless: false,
     attachOnly: false,
     ...overrides,
@@ -70,14 +70,14 @@ export function makeBrowserServerState(params?: {
 }
 
 export function mockLaunchedChrome(
-  launchNexisClawChrome: { mockResolvedValue: (value: RunningChrome) => unknown },
+  launchGreenchClawChrome: { mockResolvedValue: (value: RunningChrome) => unknown },
   pid: number,
 ) {
   const proc = new EventEmitter() as unknown as ChildProcessWithoutNullStreams;
-  launchNexisClawChrome.mockResolvedValue({
+  launchGreenchClawChrome.mockResolvedValue({
     pid,
     exe: { kind: "chromium", path: "/usr/bin/chromium" },
-    userDataDir: "/tmp/NexisClaw-test",
+    userDataDir: "/tmp/GreenchClaw-test",
     cdpPort: 18800,
     startedAt: Date.now(),
     proc,

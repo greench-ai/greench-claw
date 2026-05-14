@@ -2,7 +2,7 @@ import type {
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/config-contracts";
 import { firstDefined } from "./bot-access.js";
 
 export function resolveTelegramGroupPromptSettings(params: {

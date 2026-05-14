@@ -1,6 +1,6 @@
 import type { Command } from "commander";
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import type { ChannelSetupInput } from "NexisClaw/plugin-sdk/setup";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import type { ChannelSetupInput } from "GreenchClaw/plugin-sdk/setup";
 import { resolveMatrixAccount, resolveMatrixAccountConfig } from "./matrix/accounts.js";
 import { listMatrixOwnDevices, pruneMatrixStaleGatewayDevices } from "./matrix/actions/devices.js";
 import { updateMatrixOwnProfile } from "./matrix/actions/profile.js";
@@ -25,7 +25,7 @@ import { resolveMatrixRoomKeyBackupIssue } from "./matrix/backup-health.js";
 import { resolveMatrixAuthContext } from "./matrix/client.js";
 import { setMatrixSdkConsoleLogging, setMatrixSdkLogMode } from "./matrix/client/logging.js";
 import { resolveMatrixConfigPath, updateMatrixAccountConfig } from "./matrix/config-update.js";
-import { isNexisClawManagedMatrixDevice } from "./matrix/device-health.js";
+import { isGreenchClawManagedMatrixDevice } from "./matrix/device-health.js";
 import type { MatrixDirectRoomCandidate } from "./matrix/direct-management.js";
 import { formatMatrixErrorMessage } from "./matrix/errors.js";
 import { applyMatrixProfileUpdate, type MatrixProfileUpdateResult } from "./profile-update.js";
@@ -172,7 +172,7 @@ function formatMatrixCliRecoveryKeyStdinCommand(command: string, accountId?: str
 
 function formatMatrixCliCommandParts(parts: string[], accountId?: string): string {
   const normalizedAccountId = normalizeAccountId(accountId);
-  const command = ["NexisClaw", "matrix", ...parts];
+  const command = ["GreenchClaw", "matrix", ...parts];
   if (normalizedAccountId !== "default") {
     const optionTerminatorIndex = command.indexOf("--");
     if (optionTerminatorIndex >= 0) {
@@ -248,7 +248,7 @@ type MatrixCliAccountAddResult = {
   encryptionEnabled: boolean;
   deviceHealth: {
     currentDeviceId: string | null;
-    staleNexisClawDeviceIds: string[];
+    staleGreenchClawDeviceIds: string[];
     error?: string;
   };
   verificationBootstrap: {
@@ -396,20 +396,20 @@ async function addMatrixAccount(params: {
 
   let deviceHealth: MatrixCliAccountAddResult["deviceHealth"] = {
     currentDeviceId: null,
-    staleNexisClawDeviceIds: [],
+    staleGreenchClawDeviceIds: [],
   };
   try {
     const addedDevices = await listMatrixOwnDevices({ accountId, cfg: updated });
     deviceHealth = {
       currentDeviceId: addedDevices.find((device) => device.current)?.deviceId ?? null,
-      staleNexisClawDeviceIds: addedDevices
-        .filter((device) => !device.current && isNexisClawManagedMatrixDevice(device.displayName))
+      staleGreenchClawDeviceIds: addedDevices
+        .filter((device) => !device.current && isGreenchClawManagedMatrixDevice(device.displayName))
         .map((device) => device.deviceId),
     };
   } catch (err) {
     deviceHealth = {
       currentDeviceId: null,
-      staleNexisClawDeviceIds: [],
+      staleGreenchClawDeviceIds: [],
       error: toErrorMessage(err),
     };
   }
@@ -972,7 +972,7 @@ function printMatrixVerificationSummary(summary: MatrixCliVerificationSummary): 
   console.log(`Other user: ${sanitizeMatrixCliText(summary.otherUserId)}`);
   console.log(`Other device: ${sanitizeMatrixCliText(summary.otherDeviceId ?? "unknown")}`);
   console.log(`Self-verification: ${summary.isSelfVerification ? "yes" : "no"}`);
-  console.log(`Initiated by NexisClaw: ${summary.initiatedByMe ? "yes" : "no"}`);
+  console.log(`Initiated by GreenchClaw: ${summary.initiatedByMe ? "yes" : "no"}`);
   console.log(`Phase: ${sanitizeMatrixCliText(summary.phaseName)}`);
   console.log(`Pending: ${summary.pending ? "yes" : "no"}`);
   console.log(`Completed: ${summary.completed ? "yes" : "no"}`);
@@ -1244,7 +1244,7 @@ function buildVerificationGuidance(
   }
   if (status.serverDeviceKnown === false) {
     nextSteps.add(
-      `This Matrix device is no longer listed on the homeserver. Create a new NexisClaw Matrix device with ${formatMatrixCliCommand("account add --homeserver <url> --user-id <@user:server> --password <password> --device-name NexisClaw-Gateway", accountId)}. If you use token auth, create a fresh Matrix access token in your Matrix client or admin UI, then run ${formatMatrixCliCommand("account add --homeserver <url> --access-token <token>", accountId)}.`,
+      `This Matrix device is no longer listed on the homeserver. Create a new GreenchClaw Matrix device with ${formatMatrixCliCommand("account add --homeserver <url> --user-id <@user:server> --password <password> --device-name GreenchClaw-Gateway", accountId)}. If you use token auth, create a fresh Matrix access token in your Matrix client or admin UI, then run ${formatMatrixCliCommand("account add --homeserver <url> --access-token <token>", accountId)}.`,
     );
   }
   for (const step of buildBackupGuidance(backup, accountId, {
@@ -1383,7 +1383,7 @@ export function registerMatrixCli(params: { program: Command }): void {
   const root = params.program
     .command("matrix")
     .description("Matrix channel utilities")
-    .addHelpText("after", () => "\nDocs: https://docs.NexisClaw.ai/channels/matrix\n");
+    .addHelpText("after", () => "\nDocs: https://docs.GreenchClaw.ai/channels/matrix\n");
 
   const account = root.command("account").description("Manage matrix channel accounts");
 
@@ -1479,12 +1479,12 @@ export function registerMatrixCli(params: { program: Command }): void {
               console.error(
                 `Matrix device health warning: ${formatMatrixCliText(result.deviceHealth.error)}`,
               );
-            } else if (result.deviceHealth.staleNexisClawDeviceIds.length > 0) {
-              const staleDeviceIds = result.deviceHealth.staleNexisClawDeviceIds
+            } else if (result.deviceHealth.staleGreenchClawDeviceIds.length > 0) {
+              const staleDeviceIds = result.deviceHealth.staleGreenchClawDeviceIds
                 .map((deviceId) => formatMatrixCliText(deviceId))
                 .join(", ");
               console.log(
-                `Matrix device hygiene warning: stale NexisClaw devices detected (${staleDeviceIds}). Run ${formatMatrixCliCommand("devices prune-stale", result.accountId)}.`,
+                `Matrix device hygiene warning: stale GreenchClaw devices detected (${staleDeviceIds}). Run ${formatMatrixCliCommand("devices prune-stale", result.accountId)}.`,
               );
             }
             if (result.profile.attempted) {
@@ -1501,7 +1501,7 @@ export function registerMatrixCli(params: { program: Command }): void {
                 }
               }
             }
-            const bindHint = `NexisClaw agents bind --agent <id> --bind matrix:${result.accountId}`;
+            const bindHint = `GreenchClaw agents bind --agent <id> --bind matrix:${result.accountId}`;
             console.log(`Bind this account to an agent: ${bindHint}`);
           },
           errorPrefix: "Account setup failed",
@@ -2262,7 +2262,7 @@ export function registerMatrixCli(params: { program: Command }): void {
 
   devices
     .command("prune-stale")
-    .description("Delete stale NexisClaw-managed devices for this account")
+    .description("Delete stale GreenchClaw-managed devices for this account")
     .option("--account <id>", "Account ID (for multi-account setups)")
     .option("--verbose", "Show detailed diagnostics")
     .option("--json", "Output as JSON")
@@ -2275,7 +2275,7 @@ export function registerMatrixCli(params: { program: Command }): void {
         onText: (result, verbose) => {
           printAccountLabel(accountId);
           console.log(
-            `Deleted stale NexisClaw devices: ${
+            `Deleted stale GreenchClaw devices: ${
               result.deletedDeviceIds.length
                 ? result.deletedDeviceIds
                     .map((deviceId) => formatMatrixCliText(deviceId))

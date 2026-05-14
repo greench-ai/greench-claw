@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 
 const callGateway = vi.hoisted(() => vi.fn());
 const note = vi.hoisted(() => vi.fn());
@@ -22,7 +22,7 @@ vi.mock("./health.js", () => ({
 import { checkGatewayHealth, probeGatewayMemoryStatus } from "./doctor-gateway-health.js";
 
 describe("checkGatewayHealth", () => {
-  const cfg = {} as NexisClawConfig;
+  const cfg = {} as GreenchClawConfig;
 
   beforeEach(() => {
     callGateway.mockReset();
@@ -49,7 +49,7 @@ describe("checkGatewayHealth", () => {
       timeoutMs: 6000,
     });
     expect(runtime.error).not.toHaveBeenCalled();
-    expect(note.mock.calls.map(([, title]) => title)).not.toContain("NexisClaw version mismatch");
+    expect(note.mock.calls.map(([, title]) => title)).not.toContain("GreenchClaw version mismatch");
   });
 
   it("notes CLI and gateway version mismatch when the gateway reports another runtime version", async () => {
@@ -61,23 +61,23 @@ describe("checkGatewayHealth", () => {
     ).resolves.toEqual({ healthOk: true, status: { runtimeVersion: "2026.4.23" } });
 
     const mismatchNotes = note.mock.calls
-      .filter(([, title]) => title === "NexisClaw version mismatch")
+      .filter(([, title]) => title === "GreenchClaw version mismatch")
       .map(([message]) => String(message));
     expect(
       mismatchNotes.some((message) =>
-        message.includes("the running Gateway is NexisClaw 2026.4.23"),
+        message.includes("the running Gateway is GreenchClaw 2026.4.23"),
       ),
     ).toBe(true);
     expect(mismatchNotes.some((message) => message.includes("That usually means"))).toBe(false);
     expect(
       mismatchNotes.some((message) =>
-        message.includes("Check `NexisClaw --version`, `which NexisClaw`"),
+        message.includes("Check `GreenchClaw --version`, `which GreenchClaw`"),
       ),
     ).toBe(true);
     expect(
       mismatchNotes.some((message) =>
         message.includes(
-          "If this mismatch is unexpected, update PATH so `NexisClaw` points to the version you want",
+          "If this mismatch is unexpected, update PATH so `GreenchClaw` points to the version you want",
         ),
       ),
     ).toBe(true);
@@ -99,7 +99,7 @@ describe("checkGatewayHealth", () => {
 });
 
 describe("probeGatewayMemoryStatus", () => {
-  const cfg = {} as NexisClawConfig;
+  const cfg = {} as GreenchClawConfig;
 
   beforeEach(() => {
     callGateway.mockReset();
@@ -147,7 +147,7 @@ describe("probeGatewayMemoryStatus", () => {
         ok: false,
         checked: false,
         error:
-          "memory embedding readiness not checked; run `NexisClaw memory status --deep` to probe",
+          "memory embedding readiness not checked; run `GreenchClaw memory status --deep` to probe",
       },
     });
 

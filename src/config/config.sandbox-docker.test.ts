@@ -68,7 +68,10 @@ describe("sandbox docker config", () => {
         defaults: {
           sandbox: {
             docker: {
-              binds: ["D:/data/NexisClaw/src:/src:ro", "D:\\data\\NexisClaw\\output:/output:rw"],
+              binds: [
+                "D:/data/GreenchClaw/src:/src:ro",
+                "D:\\data\\GreenchClaw\\output:/output:rw",
+              ],
             },
           },
         },
@@ -77,8 +80,8 @@ describe("sandbox docker config", () => {
     expect(res.ok).toBe(true);
     if (res.ok) {
       expect(res.config.agents?.defaults?.sandbox?.docker?.binds).toEqual([
-        "D:/data/NexisClaw/src:/src:ro",
-        "D:\\data\\NexisClaw\\output:/output:rw",
+        "D:/data/GreenchClaw/src:/src:ro",
+        "D:\\data\\GreenchClaw\\output:/output:rw",
       ]);
     }
   });
@@ -333,16 +336,16 @@ describe("sandbox browser binds config", () => {
       globalBrowser: {},
       agentBrowser: {},
     });
-    expect(resolved.network).toBe("NexisClaw-sandbox-browser");
+    expect(resolved.network).toBe("GreenchClaw-sandbox-browser");
   });
 
   it("prefers agent browser network over global browser network", () => {
     const resolved = resolveSandboxBrowserConfig({
       scope: "agent",
-      globalBrowser: { network: "NexisClaw-sandbox-browser-global" },
-      agentBrowser: { network: "NexisClaw-sandbox-browser-agent" },
+      globalBrowser: { network: "GreenchClaw-sandbox-browser-global" },
+      agentBrowser: { network: "GreenchClaw-sandbox-browser-agent" },
     });
-    expect(resolved.network).toBe("NexisClaw-sandbox-browser-agent");
+    expect(resolved.network).toBe("GreenchClaw-sandbox-browser-agent");
   });
 
   it("merges cdpSourceRange with agent override", () => {

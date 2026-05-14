@@ -1,16 +1,16 @@
 import path from "node:path";
 import { loginOpenAICodex, type OAuthCredentials } from "@earendil-works/pi-ai/oauth";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import type { ProviderAuthContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import { ensureGlobalUndiciEnvProxyDispatcher } from "NexisClaw/plugin-sdk/runtime-env";
-import { formatCliCommand } from "NexisClaw/plugin-sdk/setup-tools";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import type { ProviderAuthContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { ensureGlobalUndiciEnvProxyDispatcher } from "GreenchClaw/plugin-sdk/runtime-env";
+import { formatCliCommand } from "GreenchClaw/plugin-sdk/setup-tools";
 
 const manualInputPromptMessage = "Paste the authorization code (or full redirect URL):";
-const openAICodexOAuthOriginator = "NexisClaw";
+const openAICodexOAuthOriginator = "GreenchClaw";
 const localManualFallbackDelayMs = 15_000;
 const localManualFallbackGraceMs = 1_000;
 const openAIAuthProbeUrl =
-  "https://auth.openai.com/oauth/authorize?response_type=code&client_id=NexisClaw-preflight&redirect_uri=http%3A%2F%2Flocalhost%3A1455%2Fauth%2Fcallback&scope=openid+profile+email";
+  "https://auth.openai.com/oauth/authorize?response_type=code&client_id=GreenchClaw-preflight&redirect_uri=http%3A%2F%2Flocalhost%3A1455%2Fauth%2Fcallback&scope=openid+profile+email";
 
 const tlsCertErrorCodes = new Set([
   "UNABLE_TO_GET_ISSUER_CERT_LOCALLY",
@@ -177,7 +177,7 @@ function rewriteOpenAICodexOAuthError(error: unknown): Error {
       "unsupported_region",
       [
         "OpenAI rejected the token exchange for this country, region, or network route.",
-        "If you normally use a proxy, verify HTTPS_PROXY, HTTP_PROXY, or ALL_PROXY is set for the NexisClaw process and then retry `NexisClaw models auth login --provider openai-codex`.",
+        "If you normally use a proxy, verify HTTPS_PROXY, HTTP_PROXY, or ALL_PROXY is set for the GreenchClaw process and then retry `GreenchClaw models auth login --provider openai-codex`.",
       ].join(" "),
       error,
     );
@@ -342,7 +342,10 @@ export async function loginOpenAICodexOAuth(params: {
     stopProgress("OpenAI OAuth failed");
     const rewrittenError = rewriteOpenAICodexOAuthError(err);
     runtime.error(String(rewrittenError));
-    await prompter.note("Trouble with OAuth? See https://docs.NexisClaw.ai/start/faq", "OAuth help");
+    await prompter.note(
+      "Trouble with OAuth? See https://docs.GreenchClaw.ai/start/faq",
+      "OAuth help",
+    );
     throw rewrittenError;
   } finally {
     markLoginSettled();

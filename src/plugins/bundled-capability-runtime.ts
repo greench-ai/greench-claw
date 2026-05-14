@@ -8,7 +8,7 @@ import {
 } from "./bundled-compat.js";
 import { resolveBundledPluginRepoEntryPath } from "./bundled-plugin-metadata.js";
 import { createCapturedPluginRegistration } from "./captured-registration.js";
-import { discoverNexisClawPlugins } from "./discovery.js";
+import { discoverGreenchClawPlugins } from "./discovery.js";
 import type { PluginLoadOptions } from "./loader.js";
 import { loadPluginManifestRegistry } from "./manifest-registry.js";
 import { unwrapDefaultModuleExport } from "./module-export.js";
@@ -28,7 +28,7 @@ import {
   findUndeclaredPluginToolNames,
   normalizePluginToolContractNames,
 } from "./tool-contracts.js";
-import type { NexisClawPluginDefinition, NexisClawPluginModule } from "./types.js";
+import type { GreenchClawPluginDefinition, GreenchClawPluginModule } from "./types.js";
 
 const log = createSubsystemLogger("plugins");
 
@@ -56,8 +56,8 @@ export function buildVitestCapabilityShimAliasMap(): Record<string, string> {
     CAPABILITY_VITEST_SHIM_ALIASES.flatMap(({ subpath, target }) => {
       const targetPath = fileURLToPath(target);
       return [
-        [`NexisClaw/plugin-sdk/${subpath}`, targetPath],
-        [`@NexisClaw/plugin-sdk/${subpath}`, targetPath],
+        [`GreenchClaw/plugin-sdk/${subpath}`, targetPath],
+        [`@GreenchClaw/plugin-sdk/${subpath}`, targetPath],
       ];
     }),
   );
@@ -73,8 +73,8 @@ function applyVitestCapabilityAliasOverrides(params: {
   }
 
   const {
-    "NexisClaw/plugin-sdk": _ignoredLegacyRootAlias,
-    "@NexisClaw/plugin-sdk": _ignoredScopedRootAlias,
+    "GreenchClaw/plugin-sdk": _ignoredLegacyRootAlias,
+    "@GreenchClaw/plugin-sdk": _ignoredScopedRootAlias,
     ...scopedAliasMap
   } = params.aliasMap;
   return {
@@ -109,17 +109,17 @@ export function buildBundledCapabilityRuntimeConfig(
 }
 
 function resolvePluginModuleExport(moduleExport: unknown): {
-  definition?: NexisClawPluginDefinition;
-  register?: NexisClawPluginDefinition["register"];
+  definition?: GreenchClawPluginDefinition;
+  register?: GreenchClawPluginDefinition["register"];
 } {
   const resolved = unwrapDefaultModuleExport(moduleExport);
   if (typeof resolved === "function") {
     return {
-      register: resolved as NexisClawPluginDefinition["register"],
+      register: resolved as GreenchClawPluginDefinition["register"],
     };
   }
   if (resolved && typeof resolved === "object") {
-    const definition = resolved as NexisClawPluginDefinition;
+    const definition = resolved as GreenchClawPluginDefinition;
     return {
       definition,
       register: definition.register ?? definition.activate,
@@ -233,7 +233,7 @@ export function loadBundledCapabilityRuntimeRegistry(params: {
     });
   };
 
-  const discovery = discoverNexisClawPlugins({
+  const discovery = discoverGreenchClawPlugins({
     env,
   });
   const manifestRegistry = loadPluginManifestRegistry({
@@ -296,9 +296,9 @@ export function loadBundledCapabilityRuntimeRegistry(params: {
     const safeSource = opened.path;
     fs.closeSync(opened.fd);
 
-    let mod: NexisClawPluginModule | null = null;
+    let mod: GreenchClawPluginModule | null = null;
     try {
-      mod = getModuleLoader(safeSource)(safeSource) as NexisClawPluginModule;
+      mod = getModuleLoader(safeSource)(safeSource) as GreenchClawPluginModule;
     } catch (error) {
       recordCapabilityLoadError(registry, record, String(error));
       continue;

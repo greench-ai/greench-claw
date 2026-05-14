@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawPluginNodeInvokePolicyContext } from "NexisClaw/plugin-sdk/plugin-entry";
+import type { GreenchClawPluginNodeInvokePolicyContext } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { afterAll, afterEach, describe, expect, it, vi } from "vitest";
 import { createFileTransferNodeInvokePolicy } from "./node-invoke-policy.js";
 
@@ -66,12 +66,12 @@ function createCtx(overrides: {
   command?: string;
   params?: Record<string, unknown>;
   pluginConfig?: Record<string, unknown>;
-  approvals?: NexisClawPluginNodeInvokePolicyContext["approvals"];
+  approvals?: GreenchClawPluginNodeInvokePolicyContext["approvals"];
 }) {
-  const invokeNode = vi.fn<NexisClawPluginNodeInvokePolicyContext["invokeNode"]>(
+  const invokeNode = vi.fn<GreenchClawPluginNodeInvokePolicyContext["invokeNode"]>(
     async ({
       params,
-    }: Parameters<NexisClawPluginNodeInvokePolicyContext["invokeNode"]>[0] = {}) => ({
+    }: Parameters<GreenchClawPluginNodeInvokePolicyContext["invokeNode"]>[0] = {}) => ({
       ok: true,
       payload: {
         ok: true,
@@ -125,7 +125,7 @@ function expectResultFields(result: unknown, fields: Record<string, unknown>) {
 }
 
 function requireInvokeParams(
-  invokeNode: ReturnType<typeof vi.fn<NexisClawPluginNodeInvokePolicyContext["invokeNode"]>>,
+  invokeNode: ReturnType<typeof vi.fn<GreenchClawPluginNodeInvokePolicyContext["invokeNode"]>>,
   callIndex: number,
 ) {
   const call = (invokeNode.mock.calls as unknown[][])[callIndex]?.[0];

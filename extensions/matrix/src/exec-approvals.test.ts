@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   getMatrixExecApprovalApprovers,
@@ -28,15 +28,17 @@ afterEach(() => {
 });
 
 function createTempDir(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-matrix-exec-approvals-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-matrix-exec-approvals-"));
   tempDirs.push(dir);
   return dir;
 }
 
 function buildConfig(
-  execApprovals?: NonNullable<NonNullable<NexisClawConfig["channels"]>["matrix"]>["execApprovals"],
-  channelOverrides?: Partial<NonNullable<NonNullable<NexisClawConfig["channels"]>["matrix"]>>,
-): NexisClawConfig {
+  execApprovals?: NonNullable<
+    NonNullable<GreenchClawConfig["channels"]>["matrix"]
+  >["execApprovals"],
+  channelOverrides?: Partial<NonNullable<NonNullable<GreenchClawConfig["channels"]>["matrix"]>>,
+): GreenchClawConfig {
   return {
     channels: {
       matrix: {
@@ -47,7 +49,7 @@ function buildConfig(
         execApprovals,
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function matrixAccount(
@@ -70,7 +72,7 @@ function buildMultiAccountMatrixConfig(params: {
   opsExecApprovals?: MatrixExecApprovalConfig;
   defaultOverrides?: Partial<MatrixAccountConfig>;
   opsOverrides?: Partial<MatrixAccountConfig>;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   return {
     ...(params.sessionStorePath ? { session: { store: params.sessionStorePath } } : {}),
     channels: {
@@ -95,7 +97,7 @@ function buildMultiAccountMatrixConfig(params: {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function makeForeignChannelApprovalRequest(params: {
@@ -183,7 +185,7 @@ describe("matrix exec approvals", () => {
           ],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(isMatrixExecApprovalTargetRecipient({ cfg, senderId: "@target:example.org" })).toBe(
       true,

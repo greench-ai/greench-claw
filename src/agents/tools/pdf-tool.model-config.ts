@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   providerSupportsNativePdfDocument,
   resolveAutoMediaKeyProviders,
@@ -15,7 +15,7 @@ import { hasAuthForProvider, resolveDefaultModelRef } from "./model-config.helpe
 import { coercePdfModelConfig } from "./pdf-tool.helpers.js";
 
 function resolveImageCandidateRefs(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentDir: string;
   workspaceDir?: string;
   authStore?: AuthProfileStore;
@@ -52,7 +52,7 @@ function resolveImageCandidateRefs(params: {
 }
 
 export function resolvePdfModelConfigForTool(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentDir: string;
   workspaceDir?: string;
   authStore?: AuthProfileStore;

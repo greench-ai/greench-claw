@@ -22,7 +22,7 @@ function createIndex(pluginId: string): InstalledPluginIndex {
     plugins: [
       {
         pluginId,
-        manifestPath: `/plugins/${pluginId}/NexisClaw.plugin.json`,
+        manifestPath: `/plugins/${pluginId}/GreenchClaw.plugin.json`,
         manifestHash: `${pluginId}-manifest-hash`,
         rootDir: `/plugins/${pluginId}`,
         origin: "global",
@@ -42,14 +42,14 @@ function createIndex(pluginId: string): InstalledPluginIndex {
 describe("plugin control-plane context", () => {
   it("resolves env-sensitive discovery roots and load paths before fingerprinting", () => {
     const config = { plugins: { load: { paths: ["~/plugins", "/opt/shared"] } } };
-    const envA = { HOME: "/home/a", NEXISCLAW_HOME: "/NexisClaw/a" } as NodeJS.ProcessEnv;
-    const envB = { HOME: "/home/b", NEXISCLAW_HOME: "/NexisClaw/b" } as NodeJS.ProcessEnv;
+    const envA = { HOME: "/home/a", GREENCHCLAW_HOME: "/GreenchClaw/a" } as NodeJS.ProcessEnv;
+    const envB = { HOME: "/home/b", GREENCHCLAW_HOME: "/GreenchClaw/b" } as NodeJS.ProcessEnv;
 
     const contextA = resolvePluginDiscoveryContext({ config, env: envA });
     const contextB = resolvePluginDiscoveryContext({ config, env: envB });
 
-    expect(contextA.loadPaths).toEqual(["/NexisClaw/a/plugins", "/opt/shared"]);
-    expect(contextB.loadPaths).toEqual(["/NexisClaw/b/plugins", "/opt/shared"]);
+    expect(contextA.loadPaths).toEqual(["/GreenchClaw/a/plugins", "/opt/shared"]);
+    expect(contextB.loadPaths).toEqual(["/GreenchClaw/b/plugins", "/opt/shared"]);
     expect(resolvePluginDiscoveryFingerprint({ config, env: envA })).not.toBe(
       resolvePluginDiscoveryFingerprint({ config, env: envB }),
     );
@@ -59,7 +59,7 @@ describe("plugin control-plane context", () => {
     const config = { plugins: { allow: ["demo"] } };
     const base = resolvePluginControlPlaneFingerprint({
       config,
-      env: { HOME: "/home/a", NEXISCLAW_HOME: "/NexisClaw/a" } as NodeJS.ProcessEnv,
+      env: { HOME: "/home/a", GREENCHCLAW_HOME: "/GreenchClaw/a" } as NodeJS.ProcessEnv,
       index: createIndex("demo"),
       activationFingerprint: "activation-a",
     });
@@ -67,7 +67,7 @@ describe("plugin control-plane context", () => {
     expect(
       resolvePluginControlPlaneFingerprint({
         config,
-        env: { HOME: "/home/a", NEXISCLAW_HOME: "/NexisClaw/a" } as NodeJS.ProcessEnv,
+        env: { HOME: "/home/a", GREENCHCLAW_HOME: "/GreenchClaw/a" } as NodeJS.ProcessEnv,
         index: createIndex("other"),
         activationFingerprint: "activation-a",
       }),
@@ -75,7 +75,7 @@ describe("plugin control-plane context", () => {
     expect(
       resolvePluginControlPlaneFingerprint({
         config,
-        env: { HOME: "/home/a", NEXISCLAW_HOME: "/NexisClaw/a" } as NodeJS.ProcessEnv,
+        env: { HOME: "/home/a", GREENCHCLAW_HOME: "/GreenchClaw/a" } as NodeJS.ProcessEnv,
         index: createIndex("demo"),
         activationFingerprint: "activation-b",
       }),
@@ -83,7 +83,7 @@ describe("plugin control-plane context", () => {
     expect(
       resolvePluginControlPlaneFingerprint({
         config: { plugins: { deny: ["demo"] } },
-        env: { HOME: "/home/a", NEXISCLAW_HOME: "/NexisClaw/a" } as NodeJS.ProcessEnv,
+        env: { HOME: "/home/a", GREENCHCLAW_HOME: "/GreenchClaw/a" } as NodeJS.ProcessEnv,
         index: createIndex("demo"),
         activationFingerprint: "activation-a",
       }),
@@ -95,8 +95,8 @@ describe("plugin control-plane context", () => {
       config: { plugins: { load: { paths: ["/opt/plugins"] } } },
       env: {
         HOME: "/home/a",
-        NEXISCLAW_HOME: "/NexisClaw/a",
-        NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+        GREENCHCLAW_HOME: "/GreenchClaw/a",
+        GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1",
       } as NodeJS.ProcessEnv,
       inventoryFingerprint: "inventory",
       policyHash: "policy",
@@ -106,8 +106,8 @@ describe("plugin control-plane context", () => {
       discovery: {
         loadPaths: ["/opt/plugins"],
         roots: {
-          stock: path.join(os.tmpdir(), "NexisClaw-empty-bundled-plugins"),
-          global: "/NexisClaw/a/.NexisClaw/extensions",
+          stock: path.join(os.tmpdir(), "GreenchClaw-empty-bundled-plugins"),
+          global: "/GreenchClaw/a/.GreenchClaw/extensions",
           workspace: undefined,
         },
       },

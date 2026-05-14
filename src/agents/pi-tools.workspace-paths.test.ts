@@ -3,9 +3,9 @@ import os from "node:os";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import "./test-helpers/fast-coding-tools.js";
-import "./test-helpers/fast-NexisClaw-tools.js";
-import type { NexisClawConfig } from "../config/config.js";
-import { createNexisClawCodingTools } from "./pi-tools.js";
+import "./test-helpers/fast-GreenchClaw-tools.js";
+import type { GreenchClawConfig } from "../config/config.js";
+import { createGreenchClawCodingTools } from "./pi-tools.js";
 import { createHostSandboxFsBridge } from "./test-helpers/host-sandbox-fs-bridge.js";
 import { expectReadWriteEditTools, getTextContent } from "./test-helpers/pi-tools-fs-helpers.js";
 import { createPiToolsSandboxContext } from "./test-helpers/pi-tools-sandbox-context.js";
@@ -25,7 +25,7 @@ async function withTempDir<T>(prefix: string, fn: (dir: string) => Promise<T>) {
 }
 
 function createExecTool(workspaceDir: string) {
-  const tools = createNexisClawCodingTools({
+  const tools = createGreenchClawCodingTools({
     workspaceDir,
     exec: { host: "gateway", ask: "off", security: "full" },
   });
@@ -59,11 +59,11 @@ async function expectExecCwdResolvesTo(
 
 describe("workspace path resolution", () => {
   it("resolves relative read/write/edit paths against workspaceDir even after cwd changes", async () => {
-    await withTempDir("NexisClaw-ws-", async (workspaceDir) => {
-      await withTempDir("NexisClaw-cwd-", async (otherDir) => {
+    await withTempDir("GreenchClaw-ws-", async (workspaceDir) => {
+      await withTempDir("GreenchClaw-cwd-", async (otherDir) => {
         const cwdSpy = vi.spyOn(process, "cwd").mockReturnValue(otherDir);
         try {
-          const tools = createNexisClawCodingTools({ workspaceDir });
+          const tools = createGreenchClawCodingTools({ workspaceDir });
           const { readTool, writeTool, editTool } = expectReadWriteEditTools(tools);
 
           const readFile = "read.txt";
@@ -84,10 +84,10 @@ describe("workspace path resolution", () => {
           await fs.writeFile(path.join(workspaceDir, editFile), "hello world", "utf8");
           await editTool.execute("ws-edit", {
             path: editFile,
-            edits: [{ oldText: "world", newText: "NexisClaw" }],
+            edits: [{ oldText: "world", newText: "GreenchClaw" }],
           });
           expect(await fs.readFile(path.join(workspaceDir, editFile), "utf8")).toBe(
-            "hello NexisClaw",
+            "hello GreenchClaw",
           );
         } finally {
           cwdSpy.mockRestore();
@@ -97,14 +97,14 @@ describe("workspace path resolution", () => {
   });
 
   it("allows deletion edits with empty newText", async () => {
-    await withTempDir("NexisClaw-ws-", async (workspaceDir) => {
-      await withTempDir("NexisClaw-cwd-", async (otherDir) => {
+    await withTempDir("GreenchClaw-ws-", async (workspaceDir) => {
+      await withTempDir("GreenchClaw-cwd-", async (otherDir) => {
         const testFile = "delete.txt";
         await fs.writeFile(path.join(workspaceDir, testFile), "hello world", "utf8");
 
         const cwdSpy = vi.spyOn(process, "cwd").mockReturnValue(otherDir);
         try {
-          const tools = createNexisClawCodingTools({ workspaceDir });
+          const tools = createGreenchClawCodingTools({ workspaceDir });
           const { editTool } = expectReadWriteEditTools(tools);
 
           await editTool.execute("ws-edit-delete", {
@@ -121,14 +121,14 @@ describe("workspace path resolution", () => {
   });
 
   it("supports multi-edit edits[] payloads", async () => {
-    await withTempDir("NexisClaw-ws-", async (workspaceDir) => {
-      await withTempDir("NexisClaw-cwd-", async (otherDir) => {
+    await withTempDir("GreenchClaw-ws-", async (workspaceDir) => {
+      await withTempDir("GreenchClaw-cwd-", async (otherDir) => {
         const testFile = "batch.txt";
         await fs.writeFile(path.join(workspaceDir, testFile), "alpha beta gamma delta", "utf8");
 
         const cwdSpy = vi.spyOn(process, "cwd").mockReturnValue(otherDir);
         try {
-          const tools = createNexisClawCodingTools({ workspaceDir });
+          const tools = createGreenchClawCodingTools({ workspaceDir });
           const { editTool } = expectReadWriteEditTools(tools);
 
           await editTool.execute("ws-edit-batch", {
@@ -150,15 +150,15 @@ describe("workspace path resolution", () => {
   });
 
   it("defaults exec cwd to workspaceDir when workdir is omitted", async () => {
-    await withTempDir("NexisClaw-ws-", async (workspaceDir) => {
+    await withTempDir("GreenchClaw-ws-", async (workspaceDir) => {
       const execTool = createExecTool(workspaceDir);
       await expectExecCwdResolvesTo(execTool, "ws-exec", { command: "echo ok" }, workspaceDir);
     });
   });
 
   it("lets exec workdir override the workspace default", async () => {
-    await withTempDir("NexisClaw-ws-", async (workspaceDir) => {
-      await withTempDir("NexisClaw-override-", async (overrideDir) => {
+    await withTempDir("GreenchClaw-ws-", async (workspaceDir) => {
+      await withTempDir("GreenchClaw-override-", async (overrideDir) => {
         const execTool = createExecTool(workspaceDir);
         await expectExecCwdResolvesTo(
           execTool,
@@ -171,12 +171,15 @@ describe("workspace path resolution", () => {
   });
 
   it("rejects @-prefixed absolute paths outside workspace when workspaceOnly is enabled", async () => {
-    await withTempDir("NexisClaw-ws-", async (workspaceDir) => {
-      const cfg: NexisClawConfig = { tools: { fs: { workspaceOnly: true } } };
-      const tools = createNexisClawCodingTools({ workspaceDir, config: cfg });
+    await withTempDir("GreenchClaw-ws-", async (workspaceDir) => {
+      const cfg: GreenchClawConfig = { tools: { fs: { workspaceOnly: true } } };
+      const tools = createGreenchClawCodingTools({ workspaceDir, config: cfg });
       const { readTool } = expectReadWriteEditTools(tools);
 
-      const outsideAbsolute = path.resolve(path.parse(workspaceDir).root, "outside-NexisClaw.txt");
+      const outsideAbsolute = path.resolve(
+        path.parse(workspaceDir).root,
+        "outside-GreenchClaw.txt",
+      );
       await expect(
         readTool.execute("ws-read-at-prefix", { path: `@${outsideAbsolute}` }),
       ).rejects.toThrow(/Path escapes sandbox root/i);
@@ -187,9 +190,9 @@ describe("workspace path resolution", () => {
     if (process.platform === "win32") {
       return;
     }
-    await withTempDir("NexisClaw-ws-", async (workspaceDir) => {
-      const cfg: NexisClawConfig = { tools: { fs: { workspaceOnly: true } } };
-      const tools = createNexisClawCodingTools({ workspaceDir, config: cfg });
+    await withTempDir("GreenchClaw-ws-", async (workspaceDir) => {
+      const cfg: GreenchClawConfig = { tools: { fs: { workspaceOnly: true } } };
+      const tools = createGreenchClawCodingTools({ workspaceDir, config: cfg });
       const { readTool, writeTool } = expectReadWriteEditTools(tools);
       const outsidePath = path.join(
         path.dirname(workspaceDir),
@@ -226,8 +229,8 @@ describe("workspace path resolution", () => {
 
 describe("sandboxed workspace paths", () => {
   it("uses sandbox workspace for relative read/write/edit", async () => {
-    await withTempDir("NexisClaw-sandbox-", async (sandboxDir) => {
-      await withTempDir("NexisClaw-workspace-", async (workspaceDir) => {
+    await withTempDir("GreenchClaw-sandbox-", async (sandboxDir) => {
+      await withTempDir("GreenchClaw-workspace-", async (workspaceDir) => {
         const sandbox = createPiToolsSandboxContext({
           workspaceDir: sandboxDir,
           agentWorkspaceDir: workspaceDir,
@@ -240,7 +243,7 @@ describe("sandboxed workspace paths", () => {
         await fs.writeFile(path.join(sandboxDir, testFile), "sandbox read", "utf8");
         await fs.writeFile(path.join(workspaceDir, testFile), "workspace read", "utf8");
 
-        const tools = createNexisClawCodingTools({ workspaceDir, sandbox });
+        const tools = createGreenchClawCodingTools({ workspaceDir, sandbox });
         const { readTool, writeTool, editTool } = expectReadWriteEditTools(tools);
 
         const result = await readTool?.execute("sbx-read", { path: testFile });

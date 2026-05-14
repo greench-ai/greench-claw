@@ -1,12 +1,12 @@
 ---
 summary: "Zalo personal account support via native zca-js (QR login), capabilities, and configuration"
 read_when:
-  - Setting up Zalo Personal for NexisClaw
+  - Setting up Zalo Personal for GreenchClaw
   - Debugging Zalo Personal login or message flow
 title: "Zalo personal"
 ---
 
-Status: experimental. This integration automates a **personal Zalo account** via native `zca-js` inside NexisClaw.
+Status: experimental. This integration automates a **personal Zalo account** via native `zca-js` inside GreenchClaw.
 
 <Warning>
 This is an unofficial integration and may result in account suspension or ban. Use at your own risk.
@@ -14,15 +14,15 @@ This is an unofficial integration and may result in account suspension or ban. U
 
 ## Bundled plugin
 
-Zalo Personal ships as a bundled plugin in current NexisClaw releases, so normal
+Zalo Personal ships as a bundled plugin in current GreenchClaw releases, so normal
 packaged builds do not need a separate install.
 
 If you are on an older build or a custom install that excludes Zalo Personal,
 install the npm package directly:
 
-- Install via CLI: `NexisClaw plugins install @NexisClaw/zalouser`
-- Pinned version: `NexisClaw plugins install @NexisClaw/zalouser@2026.5.2`
-- Or from a source checkout: `NexisClaw plugins install ./path/to/local/zalouser-plugin`
+- Install via CLI: `GreenchClaw plugins install @GreenchClaw/zalouser`
+- Pinned version: `GreenchClaw plugins install @GreenchClaw/zalouser@2026.5.2`
+- Or from a source checkout: `GreenchClaw plugins install ./path/to/local/zalouser-plugin`
 - Details: [Plugins](/tools/plugin)
 
 No external `zca`/`openzca` CLI binary is required.
@@ -30,10 +30,10 @@ No external `zca`/`openzca` CLI binary is required.
 ## Quick setup (beginner)
 
 1. Ensure the Zalo Personal plugin is available.
-   - Current packaged NexisClaw releases already bundle it.
+   - Current packaged GreenchClaw releases already bundle it.
    - Older/custom installs can add it manually with the commands above.
 2. Login (QR, on the Gateway machine):
-   - `NexisClaw channels login --channel zalouser`
+   - `GreenchClaw channels login --channel zalouser`
    - Scan the QR code with the Zalo mobile app.
 3. Enable the channel:
 
@@ -67,9 +67,9 @@ Channel id is `zalouser` to make it explicit this automates a **personal Zalo us
 Use the directory CLI to discover peers/groups and their IDs:
 
 ```bash
-NexisClaw directory self --channel zalouser
-NexisClaw directory peers list --channel zalouser --query "name"
-NexisClaw directory groups list --channel zalouser --query "work"
+GreenchClaw directory self --channel zalouser
+GreenchClaw directory peers list --channel zalouser --query "name"
+GreenchClaw directory groups list --channel zalouser --query "work"
 ```
 
 ## Limits
@@ -87,8 +87,8 @@ If a raw name remains in config, startup resolves it only when `channels.zalouse
 
 Approve via:
 
-- `NexisClaw pairing list zalouser`
-- `NexisClaw pairing approve zalouser <code>`
+- `GreenchClaw pairing list zalouser`
+- `GreenchClaw pairing approve zalouser <code>`
 
 ## Group access (optional)
 
@@ -99,7 +99,7 @@ Approve via:
   - `channels.zalouser.groupAllowFrom` (controls which senders in allowed groups can trigger the bot; static sender access groups can be referenced with `accessGroup:<name>`)
 - Block all groups: `channels.zalouser.groupPolicy = "disabled"`.
 - The configure wizard can prompt for group allowlists.
-- On startup, NexisClaw resolves group/user names in allowlists to IDs and logs the mapping only when `channels.zalouser.dangerouslyAllowNameMatching: true` is enabled.
+- On startup, GreenchClaw resolves group/user names in allowlists to IDs and logs the mapping only when `channels.zalouser.dangerouslyAllowNameMatching: true` is enabled.
 - Group allowlist matching is ID-only by default. Unresolved names are ignored for auth unless `channels.zalouser.dangerouslyAllowNameMatching: true` is enabled.
 - `channels.zalouser.dangerouslyAllowNameMatching: true` is a break-glass compatibility mode that re-enables mutable startup name resolution and runtime group-name matching.
 - If `groupAllowFrom` is unset, runtime falls back to `allowFrom` for group sender checks.
@@ -129,7 +129,7 @@ Example:
 - This applies both to allowlisted groups and open group mode.
 - Quoting a bot message counts as an implicit mention for group activation.
 - Authorized control commands (for example `/new`) can bypass mention gating.
-- When a group message is skipped because mention is required, NexisClaw stores it as pending group history and includes it on the next processed group message.
+- When a group message is skipped because mention is required, GreenchClaw stores it as pending group history and includes it on the next processed group message.
 - Group history limit defaults to `messages.groupChat.historyLimit` (fallback `50`). You can override per account with `channels.zalouser.historyLimit`.
 
 Example:
@@ -150,7 +150,7 @@ Example:
 
 ## Multi-account
 
-Accounts map to `zalouser` profiles in NexisClaw state. Example:
+Accounts map to `zalouser` profiles in GreenchClaw state. Example:
 
 ```json5
 {
@@ -168,18 +168,18 @@ Accounts map to `zalouser` profiles in NexisClaw state. Example:
 
 ## Typing, reactions, and delivery acknowledgements
 
-- NexisClaw sends a typing event before dispatching a reply (best-effort).
+- GreenchClaw sends a typing event before dispatching a reply (best-effort).
 - Message reaction action `react` is supported for `zalouser` in channel actions.
   - Use `remove: true` to remove a specific reaction emoji from a message.
   - Reaction semantics: [Reactions](/tools/reactions)
-- For inbound messages that include event metadata, NexisClaw sends delivered + seen acknowledgements (best-effort).
+- For inbound messages that include event metadata, GreenchClaw sends delivered + seen acknowledgements (best-effort).
 
 ## Troubleshooting
 
 **Login doesn't stick:**
 
-- `NexisClaw channels status --probe`
-- Re-login: `NexisClaw channels logout --channel zalouser && NexisClaw channels login --channel zalouser`
+- `GreenchClaw channels status --probe`
+- Re-login: `GreenchClaw channels logout --channel zalouser && GreenchClaw channels login --channel zalouser`
 
 **Allowlist/group name didn't resolve:**
 
@@ -188,7 +188,7 @@ Accounts map to `zalouser` profiles in NexisClaw state. Example:
 **Upgraded from old CLI-based setup:**
 
 - Remove any old external `zca` process assumptions.
-- The channel now runs fully in NexisClaw without external CLI binaries.
+- The channel now runs fully in GreenchClaw without external CLI binaries.
 
 ## Related
 

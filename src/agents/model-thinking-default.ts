@@ -1,5 +1,5 @@
 import { resolveThinkingDefaultForModel } from "../auto-reply/thinking.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
@@ -12,7 +12,7 @@ import { buildConfiguredModelCatalog } from "./model-selection-shared.js";
 type ThinkLevel = "off" | "minimal" | "low" | "medium" | "high" | "xhigh" | "adaptive" | "max";
 
 export function resolveThinkingDefault(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   provider: string;
   model: string;
   catalog?: ModelCatalogEntry[];
@@ -80,7 +80,7 @@ export function resolveThinkingDefault(params: {
 }
 
 export async function resolveThinkingDefaultWithRuntimeCatalog(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   provider: string;
   model: string;
   loadModelCatalog: () => Promise<ModelCatalogEntry[]>;

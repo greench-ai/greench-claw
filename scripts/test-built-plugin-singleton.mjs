@@ -12,15 +12,15 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const smokeEntryPath = path.join(repoRoot, "dist", "plugins", "build-smoke-entry.js");
 assert.ok(fs.existsSync(smokeEntryPath), `missing build output: ${smokeEntryPath}`);
 
-const { clearPluginCommands, getPluginCommandSpecs, loadNexisClawPlugins, matchPluginCommand } =
+const { clearPluginCommands, getPluginCommandSpecs, loadGreenchClawPlugins, matchPluginCommand } =
   await import(pathToFileURL(smokeEntryPath).href);
 
-assert.equal(typeof loadNexisClawPlugins, "function", "built loader export missing");
+assert.equal(typeof loadGreenchClawPlugins, "function", "built loader export missing");
 assert.equal(typeof clearPluginCommands, "function", "clearPluginCommands missing");
 assert.equal(typeof getPluginCommandSpecs, "function", "getPluginCommandSpecs missing");
 assert.equal(typeof matchPluginCommand, "function", "matchPluginCommand missing");
 
-const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-build-smoke-"));
+const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-build-smoke-"));
 const pluginId = "build-smoke-plugin";
 const distPluginDir = path.join(repoRoot, "dist", "extensions", pluginId);
 const runtimePluginDir = path.join(repoRoot, "dist-runtime", "extensions", pluginId);
@@ -47,9 +47,9 @@ fs.writeFileSync(
   path.join(distPluginDir, "package.json"),
   JSON.stringify(
     {
-      name: "@NexisClaw/build-smoke-plugin",
+      name: "@GreenchClaw/build-smoke-plugin",
       type: "module",
-      NexisClaw: {
+      GreenchClaw: {
         extensions: ["./index.js"],
       },
     },
@@ -59,7 +59,7 @@ fs.writeFileSync(
   "utf8",
 );
 fs.writeFileSync(
-  path.join(distPluginDir, "NexisClaw.plugin.json"),
+  path.join(distPluginDir, "GreenchClaw.plugin.json"),
   JSON.stringify(
     {
       id: pluginId,
@@ -77,7 +77,7 @@ fs.writeFileSync(
 fs.writeFileSync(
   path.join(distPluginDir, "index.js"),
   [
-    "import sdk from 'NexisClaw/plugin-sdk';",
+    "import sdk from 'GreenchClaw/plugin-sdk';",
     "const { emptyPluginConfigSchema } = sdk;",
     "",
     "export default {",
@@ -112,12 +112,12 @@ assert.equal(
 
 clearPluginCommands();
 
-const registry = loadNexisClawPlugins({
+const registry = loadGreenchClawPlugins({
   cache: false,
   workspaceDir: tempRoot,
   env: {
     ...process.env,
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "dist-runtime", "extensions"),
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "dist-runtime", "extensions"),
   },
   config: {
     plugins: {

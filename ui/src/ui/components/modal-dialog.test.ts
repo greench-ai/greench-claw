@@ -2,7 +2,7 @@
 
 import { html, nothing, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { type NexisClawModalDialog } from "./modal-dialog.ts";
+import { type GreenchClawModalDialog } from "./modal-dialog.ts";
 import "./modal-dialog.ts";
 
 let container: HTMLDivElement;
@@ -45,7 +45,7 @@ function restoreDescriptor(name: "showModal" | "close", descriptor?: PropertyDes
 async function renderModal() {
   render(
     html`
-      <NexisClaw-modal-dialog
+      <GreenchClaw-modal-dialog
         label="Confirm action"
         description="Review the operation before continuing."
       >
@@ -55,14 +55,14 @@ async function renderModal() {
           <button id="first-action">First</button>
           <button id="last-action">Last</button>
         </section>
-      </NexisClaw-modal-dialog>
+      </GreenchClaw-modal-dialog>
     `,
     container,
   );
-  const modal = container.querySelector<NexisClawModalDialog>("NexisClaw-modal-dialog");
+  const modal = container.querySelector<GreenchClawModalDialog>("GreenchClaw-modal-dialog");
   expect(modal).toBeInstanceOf(HTMLElement);
   if (!modal) {
-    throw new Error("Expected NexisClaw-modal-dialog");
+    throw new Error("Expected GreenchClaw-modal-dialog");
   }
   await modal.updateComplete;
   await nextFrame();
@@ -74,7 +74,7 @@ async function renderModal() {
   return { modal, dialog };
 }
 
-function expectShadowElement(modal: NexisClawModalDialog, id: string): HTMLElement {
+function expectShadowElement(modal: GreenchClawModalDialog, id: string): HTMLElement {
   const element = modal.shadowRoot?.getElementById(id);
   if (!(element instanceof HTMLElement)) {
     throw new Error(`Expected shadow element #${id}`);
@@ -82,7 +82,7 @@ function expectShadowElement(modal: NexisClawModalDialog, id: string): HTMLEleme
   return element;
 }
 
-describe("NexisClaw-modal-dialog", () => {
+describe("GreenchClaw-modal-dialog", () => {
   beforeEach(() => {
     installDialogPolyfill();
     container = document.createElement("div");
@@ -105,14 +105,14 @@ describe("NexisClaw-modal-dialog", () => {
     expect(dialog.getAttribute("aria-modal")).toBe("true");
     const labelId = dialog.getAttribute("aria-labelledby");
     const descriptionId = dialog.getAttribute("aria-describedby");
-    expect(labelId).toBe("NexisClaw-modal-dialog-label");
-    expect(descriptionId).toBe("NexisClaw-modal-dialog-description");
+    expect(labelId).toBe("GreenchClaw-modal-dialog-label");
+    expect(descriptionId).toBe("GreenchClaw-modal-dialog-description");
     expect(dialog.getRootNode()).toBe(modal.shadowRoot);
     expect(dialog.ownerDocument.querySelector(`#${labelId}`)).toBeNull();
-    expect(expectShadowElement(modal, "NexisClaw-modal-dialog-label").textContent).toBe(
+    expect(expectShadowElement(modal, "GreenchClaw-modal-dialog-label").textContent).toBe(
       "Confirm action",
     );
-    expect(expectShadowElement(modal, "NexisClaw-modal-dialog-description").textContent).toBe(
+    expect(expectShadowElement(modal, "GreenchClaw-modal-dialog-description").textContent).toBe(
       "Review the operation before continuing.",
     );
   });

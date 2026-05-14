@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   DEFAULT_CACHE_TTL_MINUTES,
   DEFAULT_SEARCH_COUNT,
@@ -12,7 +12,7 @@ import {
   withTrustedWebSearchEndpoint,
   wrapWebContent,
   writeCache,
-} from "NexisClaw/plugin-sdk/provider-web-search";
+} from "GreenchClaw/plugin-sdk/provider-web-search";
 import { resolveDdgRegion, resolveDdgSafeSearch, type DdgSafeSearch } from "./config.js";
 
 const DDG_HTML_ENDPOINT = "https://html.duckduckgo.com/html";
@@ -113,7 +113,7 @@ function parseDuckDuckGoHtml(html: string): DuckDuckGoResult[] {
 }
 
 export async function runDuckDuckGoSearch(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   query: string;
   count?: number;
   region?: string;

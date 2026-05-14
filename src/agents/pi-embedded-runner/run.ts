@@ -61,7 +61,7 @@ import {
   resolveAuthProfileOrder,
   shouldPreferExplicitConfigApiKeyAuth,
 } from "../model-auth.js";
-import { ensureNexisClawModelsJson } from "../models-config.js";
+import { ensureGreenchClawModelsJson } from "../models-config.js";
 import {
   retireSessionMcpRuntime,
   retireSessionMcpRuntimeForSessionKey,
@@ -313,7 +313,7 @@ function buildTraceToolSummary(params: {
  * The return value is normalized: whitespace-only inputs collapse to undefined, and
  * successful resolution returns a trimmed session key. This is a read-only lookup
  * with no side effects.
- * See: https://github.com/NexisClaw/NexisClaw/issues/60552
+ * See: https://github.com/GreenchClaw/GreenchClaw/issues/60552
  */
 function backfillSessionKey(params: {
   config: RunEmbeddedPiAgentParams["config"];
@@ -571,7 +571,7 @@ export async function runEmbeddedPiAgent(
         dynamicModelResolution.model || pluginHarnessOwnsTransport
           ? dynamicModelResolution
           : await (async () => {
-              await ensureNexisClawModelsJson(params.config, agentDir, {
+              await ensureGreenchClawModelsJson(params.config, agentDir, {
                 workspaceDir: resolvedWorkspace,
               });
               return await resolveModelAsync(provider, modelId, agentDir, params.config, {

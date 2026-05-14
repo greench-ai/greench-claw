@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   getDiscordExecApprovalApprovers,
@@ -7,9 +7,11 @@ import {
 } from "./exec-approvals.js";
 
 function buildConfig(
-  execApprovals?: NonNullable<NonNullable<NexisClawConfig["channels"]>["discord"]>["execApprovals"],
-  channelOverrides?: Partial<NonNullable<NonNullable<NexisClawConfig["channels"]>["discord"]>>,
-): NexisClawConfig {
+  execApprovals?: NonNullable<
+    NonNullable<GreenchClawConfig["channels"]>["discord"]
+  >["execApprovals"],
+  channelOverrides?: Partial<NonNullable<NonNullable<GreenchClawConfig["channels"]>["discord"]>>,
+): GreenchClawConfig {
   return {
     channels: {
       discord: {
@@ -18,7 +20,7 @@ function buildConfig(
         execApprovals,
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 describe("discord exec approvals", () => {
@@ -39,7 +41,7 @@ describe("discord exec approvals", () => {
         cfg: {
           ...buildConfig(),
           commands: { ownerAllowFrom: ["discord:789"] },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
       }),
     ).toBe(false);
     expect(
@@ -80,7 +82,7 @@ describe("discord exec approvals", () => {
     const cfg = {
       ...buildConfig(),
       commands: { ownerAllowFrom: ["discord:123", "user:456", "789"] },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(getDiscordExecApprovalApprovers({ cfg })).toEqual(["123", "456", "789"]);
     expect(isDiscordExecApprovalApprover({ cfg, senderId: "456" })).toBe(true);

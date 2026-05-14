@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { setActivePluginRegistry } from "../plugins/runtime.js";
 import { createChannelTestPluginBase, createTestRegistry } from "../test-utils/channel-plugins.js";
 
 type TestChannelGroupContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   groupId?: string | null;
   groupChannel?: string | null;
   groupSpace?: string | null;

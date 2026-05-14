@@ -13,7 +13,7 @@ type CodexTrajectoryRecorder = NonNullable<ReturnType<typeof createCodexTrajecto
 const tempDirs: string[] = [];
 
 function makeTempDir(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-codex-trajectory-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-codex-trajectory-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -91,7 +91,7 @@ describe("Codex trajectory recorder", () => {
         sessionId: "../evil/session",
         model: { api: "responses" },
       } as never,
-      env: { NEXISCLAW_TRAJECTORY_DIR: tmpDir },
+      env: { GREENCHCLAW_TRAJECTORY_DIR: tmpDir },
     });
 
     const trajectoryRecorder = expectTrajectoryRecorder(recorder);
@@ -110,7 +110,7 @@ describe("Codex trajectory recorder", () => {
         sessionId: "session-1",
         model: { api: "responses" },
       } as never,
-      env: { NEXISCLAW_TRAJECTORY: "0" },
+      env: { GREENCHCLAW_TRAJECTORY: "0" },
     });
 
     expect(recorder).toBeNull();

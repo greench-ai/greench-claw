@@ -76,7 +76,7 @@ function formatMigrationItem(item: MigrationItem): string {
 export function assertConflictFreePlan(plan: MigrationPlan, providerId: string): void {
   if (plan.summary.conflicts > 0) {
     throw new Error(
-      `Migration has ${formatCount(plan.summary.conflicts, "conflict")}. Re-run with --overwrite after reviewing NexisClaw migrate plan ${providerId}.`,
+      `Migration has ${formatCount(plan.summary.conflicts, "conflict")}. Re-run with --overwrite after reviewing GreenchClaw migrate plan ${providerId}.`,
     );
   }
 }
@@ -94,7 +94,7 @@ export function writeApplyResult(
   if (result.backupPath) {
     runtime.log(`Backup: ${result.backupPath}`);
   } else if (!opts.noBackup) {
-    runtime.log("Backup: skipped (no existing NexisClaw state found)");
+    runtime.log("Backup: skipped (no existing GreenchClaw state found)");
   }
   if (result.reportDir) {
     runtime.log(`Report: ${result.reportDir}`);

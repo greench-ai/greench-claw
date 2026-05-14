@@ -1,6 +1,6 @@
 // Public API-key onboarding helpers for provider plugins.
 
-export type { NexisClawConfig } from "../config/config.js";
+export type { GreenchClawConfig } from "../config/config.js";
 export type { SecretInput } from "../config/types.secrets.js";
 
 export { upsertAuthProfile } from "../agents/auth-profiles/profiles.js";

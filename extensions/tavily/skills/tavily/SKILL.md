@@ -2,7 +2,7 @@
 name: tavily
 description: Tavily web search, content extraction, and research tools.
 metadata:
-  { "NexisClaw": { "emoji": "🔍", "requires": { "config": ["plugins.entries.tavily.enabled"] } } }
+  { "GreenchClaw": { "emoji": "🔍", "requires": { "config": ["plugins.entries.tavily.enabled"] } } }
 ---
 
 # Tavily Tools

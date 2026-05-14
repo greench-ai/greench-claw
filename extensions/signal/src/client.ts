@@ -1,8 +1,8 @@
 import { Buffer } from "node:buffer";
 import http, { type ClientRequest, type IncomingMessage } from "node:http";
 import https from "node:https";
-import { generateSecureUuid } from "NexisClaw/plugin-sdk/core";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { generateSecureUuid } from "GreenchClaw/plugin-sdk/core";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 
 export type SignalRpcOptions = {
   baseUrl: string;

@@ -47,7 +47,7 @@ describe("shared/node-match", () => {
     ).toBe("mac-studio");
   });
 
-  it("prefers a unique current NexisClaw client over a legacy clawdbot client", () => {
+  it("prefers a unique current GreenchClaw client over a legacy clawdbot client", () => {
     expect(
       resolveNodeIdFromCandidates(
         [
@@ -60,7 +60,7 @@ describe("shared/node-match", () => {
           {
             nodeId: "current-mac",
             displayName: "Peter’s Mac Studio",
-            clientId: "NexisClaw-macos",
+            clientId: "GreenchClaw-macos",
             connected: false,
           },
         ],
@@ -118,20 +118,20 @@ describe("shared/node-match", () => {
           {
             nodeId: "other-mac",
             displayName: "Peter’s Mac Studio",
-            clientId: "NexisClaw-macos",
+            clientId: "GreenchClaw-macos",
             connected: true,
           },
           {
             nodeId: "third-mac",
             displayName: "Peter’s Mac Studio",
-            clientId: "NexisClaw-macos",
+            clientId: "GreenchClaw-macos",
             connected: true,
           },
         ],
         "Peter's Mac Studio",
       ),
     ).toThrow(
-      /ambiguous node: Peter's Mac Studio.*node=other-mac.*client=NexisClaw-macos.*node=third-mac.*client=NexisClaw-macos/,
+      /ambiguous node: Peter's Mac Studio.*node=other-mac.*client=GreenchClaw-macos.*node=third-mac.*client=GreenchClaw-macos/,
     );
   });
 

@@ -1,7 +1,7 @@
-import { isLoopbackHost } from "NexisClaw/plugin-sdk/gateway-runtime";
+import { isLoopbackHost } from "GreenchClaw/plugin-sdk/gateway-runtime";
 
 export const QA_CREDENTIALS_DEFAULT_ENDPOINT_PREFIX = "/qa-credentials/v1";
-const QA_CREDENTIALS_ALLOW_INSECURE_HTTP_ENV_KEY = "NEXISCLAW_QA_ALLOW_INSECURE_HTTP";
+const QA_CREDENTIALS_ALLOW_INSECURE_HTTP_ENV_KEY = "GREENCHCLAW_QA_ALLOW_INSECURE_HTTP";
 
 type ErrorFactory = (message: string) => Error;
 
@@ -42,7 +42,7 @@ export function normalizeQaCredentialConvexSiteUrl(params: {
     url = new URL(params.raw);
   } catch {
     throw toError(
-      `NEXISCLAW_QA_CONVEX_SITE_URL must be a valid URL, got "${params.raw || "<empty>"}".`,
+      `GREENCHCLAW_QA_CONVEX_SITE_URL must be a valid URL, got "${params.raw || "<empty>"}".`,
     );
   }
   if (url.protocol === "https:") {
@@ -50,14 +50,14 @@ export function normalizeQaCredentialConvexSiteUrl(params: {
     return text.endsWith("/") ? text.slice(0, -1) : text;
   }
   if (url.protocol !== "http:") {
-    throw toError("NEXISCLAW_QA_CONVEX_SITE_URL must use https://.");
+    throw toError("GREENCHCLAW_QA_CONVEX_SITE_URL must use https://.");
   }
   const allowInsecureHttp = isQaCredentialTruthyOptIn(
     params.env[QA_CREDENTIALS_ALLOW_INSECURE_HTTP_ENV_KEY],
   );
   if (!allowInsecureHttp || !isLoopbackHost(url.hostname)) {
     throw toError(
-      `NEXISCLAW_QA_CONVEX_SITE_URL must use https://. http:// is only allowed for loopback hosts when ${QA_CREDENTIALS_ALLOW_INSECURE_HTTP_ENV_KEY}=1.`,
+      `GREENCHCLAW_QA_CONVEX_SITE_URL must use https://. http:// is only allowed for loopback hosts when ${QA_CREDENTIALS_ALLOW_INSECURE_HTTP_ENV_KEY}=1.`,
     );
   }
   const text = url.toString();

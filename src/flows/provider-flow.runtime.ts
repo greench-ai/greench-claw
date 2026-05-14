@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import * as providerWizard from "../plugins/provider-wizard.js";
 import type { ProviderModelPickerEntry } from "../plugins/provider-wizard.js";
 import * as providersRuntime from "../plugins/providers.runtime.js";
@@ -18,7 +18,7 @@ type ProviderModelPickerFlowContribution = FlowContribution & {
 };
 
 function resolveProviderDocsById(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): Map<string, string> {
@@ -38,7 +38,7 @@ function resolveProviderDocsById(params?: {
 }
 
 export function resolveProviderModelPickerFlowEntries(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): ProviderModelPickerFlowEntry[] {
@@ -48,7 +48,7 @@ export function resolveProviderModelPickerFlowEntries(params?: {
 }
 
 export function resolveProviderModelPickerFlowContributions(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 }): ProviderModelPickerFlowContribution[] {

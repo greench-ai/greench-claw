@@ -9,7 +9,7 @@ import {
 
 async function withStateDirFixture(run: (root: string) => Promise<void>): Promise<void> {
   try {
-    await withTempDir({ prefix: "NexisClaw-state-dir-" }, async (root) => {
+    await withTempDir({ prefix: "GreenchClaw-state-dir-" }, async (root) => {
       await run(root);
     });
   } finally {
@@ -45,13 +45,13 @@ describe("legacy state dir auto-migration", () => {
     });
   });
 
-  it("skips state-dir migration when NEXISCLAW_STATE_DIR is explicitly set", async () => {
+  it("skips state-dir migration when GREENCHCLAW_STATE_DIR is explicitly set", async () => {
     await withStateDirFixture(async (root) => {
       const legacyDir = path.join(root, ".clawdbot");
       fs.mkdirSync(legacyDir, { recursive: true });
 
       const result = await autoMigrateLegacyStateDir({
-        env: { NEXISCLAW_STATE_DIR: path.join(root, "custom-state") } as NodeJS.ProcessEnv,
+        env: { GREENCHCLAW_STATE_DIR: path.join(root, "custom-state") } as NodeJS.ProcessEnv,
         homedir: () => root,
       });
 

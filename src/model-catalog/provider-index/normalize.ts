@@ -8,21 +8,21 @@ import { normalizeModelCatalog } from "../normalize.js";
 import { normalizeModelCatalogProviderId } from "../refs.js";
 import type { ModelCatalogProvider } from "../types.js";
 import type {
-  NexisClawProviderIndex,
-  NexisClawProviderIndexPluginInstall,
-  NexisClawProviderIndexPlugin,
-  NexisClawProviderIndexProviderAuthChoice,
-  NexisClawProviderIndexProvider,
+  GreenchClawProviderIndex,
+  GreenchClawProviderIndexPluginInstall,
+  GreenchClawProviderIndexPlugin,
+  GreenchClawProviderIndexProviderAuthChoice,
+  GreenchClawProviderIndexProvider,
 } from "./types.js";
 
-const NEXISCLAW_PROVIDER_INDEX_VERSION = 1;
+const GREENCHCLAW_PROVIDER_INDEX_VERSION = 1;
 
 function normalizeSafeKey(value: unknown): string {
   const key = normalizeOptionalString(value) ?? "";
   return key && !isBlockedObjectKey(key) ? key : "";
 }
 
-function normalizeInstall(value: unknown): NexisClawProviderIndexPluginInstall | undefined {
+function normalizeInstall(value: unknown): GreenchClawProviderIndexPluginInstall | undefined {
   if (!isRecord(value)) {
     return undefined;
   }
@@ -50,7 +50,7 @@ function normalizeInstall(value: unknown): NexisClawProviderIndexPluginInstall |
   };
 }
 
-function normalizePlugin(value: unknown): NexisClawProviderIndexPlugin | undefined {
+function normalizePlugin(value: unknown): GreenchClawProviderIndexPlugin | undefined {
   if (!isRecord(value)) {
     return undefined;
   }
@@ -93,7 +93,7 @@ function normalizePreviewCatalog(params: {
 
 function normalizeOnboardingScopes(
   value: unknown,
-): NexisClawProviderIndexProviderAuthChoice["onboardingScopes"] | undefined {
+): GreenchClawProviderIndexProviderAuthChoice["onboardingScopes"] | undefined {
   const scopes = normalizeTrimmedStringList(value).filter(
     (scope): scope is "text-inference" | "image-generation" =>
       scope === "text-inference" || scope === "image-generation",
@@ -103,7 +103,7 @@ function normalizeOnboardingScopes(
 
 function normalizeAssistantVisibility(
   value: unknown,
-): NexisClawProviderIndexProviderAuthChoice["assistantVisibility"] | undefined {
+): GreenchClawProviderIndexProviderAuthChoice["assistantVisibility"] | undefined {
   return value === "visible" || value === "manual-only" ? value : undefined;
 }
 
@@ -115,7 +115,7 @@ function normalizeAuthChoice(params: {
   providerId: string;
   providerName: string;
   value: unknown;
-}): NexisClawProviderIndexProviderAuthChoice | undefined {
+}): GreenchClawProviderIndexProviderAuthChoice | undefined {
   if (!isRecord(params.value)) {
     return undefined;
   }
@@ -158,20 +158,20 @@ function normalizeAuthChoices(params: {
   providerId: string;
   providerName: string;
   value: unknown;
-}): readonly NexisClawProviderIndexProviderAuthChoice[] | undefined {
+}): readonly GreenchClawProviderIndexProviderAuthChoice[] | undefined {
   if (!Array.isArray(params.value)) {
     return undefined;
   }
   const choices = params.value
     .map((value) => normalizeAuthChoice({ ...params, value }))
-    .filter((choice): choice is NexisClawProviderIndexProviderAuthChoice => Boolean(choice));
+    .filter((choice): choice is GreenchClawProviderIndexProviderAuthChoice => Boolean(choice));
   return choices.length > 0 ? choices : undefined;
 }
 
 function normalizeProvider(
   rawProviderId: string,
   value: unknown,
-): NexisClawProviderIndexProvider | undefined {
+): GreenchClawProviderIndexProvider | undefined {
   if (!isRecord(value)) {
     return undefined;
   }
@@ -210,14 +210,16 @@ function normalizeProvider(
   };
 }
 
-export function normalizeNexisClawProviderIndex(value: unknown): NexisClawProviderIndex | undefined {
-  if (!isRecord(value) || value.version !== NEXISCLAW_PROVIDER_INDEX_VERSION) {
+export function normalizeGreenchClawProviderIndex(
+  value: unknown,
+): GreenchClawProviderIndex | undefined {
+  if (!isRecord(value) || value.version !== GREENCHCLAW_PROVIDER_INDEX_VERSION) {
     return undefined;
   }
   if (!isRecord(value.providers)) {
     return undefined;
   }
-  const providers: Record<string, NexisClawProviderIndexProvider> = {};
+  const providers: Record<string, GreenchClawProviderIndexProvider> = {};
   for (const [rawProviderId, rawProvider] of Object.entries(value.providers)) {
     const providerId = normalizeModelCatalogProviderId(rawProviderId);
     if (!providerId || isBlockedObjectKey(providerId)) {
@@ -229,7 +231,7 @@ export function normalizeNexisClawProviderIndex(value: unknown): NexisClawProvid
     }
   }
   return {
-    version: NEXISCLAW_PROVIDER_INDEX_VERSION,
+    version: GREENCHCLAW_PROVIDER_INDEX_VERSION,
     providers: Object.fromEntries(
       Object.entries(providers).toSorted(([left], [right]) => left.localeCompare(right)),
     ),

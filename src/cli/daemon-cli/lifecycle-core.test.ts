@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import {
   defaultRuntime,
   resetLifecycleRuntimeLogs,
@@ -9,7 +9,7 @@ import {
   stubEmptyGatewayEnv,
 } from "./test-helpers/lifecycle-core-harness.js";
 
-const loadConfig = vi.fn<() => NexisClawConfig>(() => ({
+const loadConfig = vi.fn<() => GreenchClawConfig>(() => ({
   gateway: {
     auth: {
       token: "config-token",
@@ -78,7 +78,7 @@ function stubServiceGatewayTokenEnv() {
   service.readCommand.mockResolvedValue({
     programArguments: [],
     environment: {
-      NEXISCLAW_GATEWAY_TOKEN: "service-token",
+      GREENCHCLAW_GATEWAY_TOKEN: "service-token",
       SERVICE_GATEWAY_TOKEN: "service-token",
     },
   });
@@ -104,28 +104,28 @@ describe("runServiceRestart token drift", () => {
     clearGatewayRestartIntentSync.mockClear();
     service.readCommand.mockResolvedValue({
       programArguments: [],
-      environment: { NEXISCLAW_GATEWAY_TOKEN: "service-token" },
+      environment: { GREENCHCLAW_GATEWAY_TOKEN: "service-token" },
     });
     stubEmptyGatewayEnv();
   });
 
   it("prints the container restart hint when restart is requested for a not-loaded service", async () => {
     service.isLoaded.mockResolvedValue(false);
-    vi.stubEnv("NEXISCLAW_CONTAINER_HINT", "NexisClaw-demo-container");
+    vi.stubEnv("GREENCHCLAW_CONTAINER_HINT", "GreenchClaw-demo-container");
 
     await runServiceRestart({
       serviceNoun: "Gateway",
       service,
       renderStartHints: () => [
-        "Restart the container or the service that manages it for NexisClaw-demo-container.",
-        "NexisClaw gateway install",
+        "Restart the container or the service that manages it for GreenchClaw-demo-container.",
+        "GreenchClaw gateway install",
       ],
       opts: { json: false },
     });
 
     expect(runtimeLogs).toContain("Gateway service not loaded.");
     expect(runtimeLogs).toContain(
-      "Start with: Restart the container or the service that manages it for NexisClaw-demo-container.",
+      "Start with: Restart the container or the service that manages it for GreenchClaw-demo-container.",
     );
   });
 
@@ -149,9 +149,9 @@ describe("runServiceRestart token drift", () => {
     });
     service.readCommand.mockResolvedValue({
       programArguments: [],
-      environment: { NEXISCLAW_GATEWAY_TOKEN: "env-token" },
+      environment: { GREENCHCLAW_GATEWAY_TOKEN: "env-token" },
     });
-    vi.stubEnv("NEXISCLAW_GATEWAY_TOKEN", "env-token");
+    vi.stubEnv("GREENCHCLAW_GATEWAY_TOKEN", "env-token");
 
     await runServiceRestart(createServiceRunArgs(true));
 
@@ -401,13 +401,13 @@ describe("runServiceRestart token drift", () => {
 
   it("repairs stale loaded services during start before reporting success", async () => {
     service.readCommand.mockResolvedValue({
-      programArguments: ["NexisClaw", "gateway"],
-      environment: { NEXISCLAW_SERVICE_VERSION: "2026.4.24" },
+      programArguments: ["GreenchClaw", "gateway"],
+      environment: { GREENCHCLAW_SERVICE_VERSION: "2026.4.24" },
     });
     const repairLoadedService = vi.fn(async () => ({
       result: "started" as const,
       message: "Gateway service definition repaired and started.",
-      warnings: ["service was installed by NexisClaw 2026.4.24, current CLI is 2026.5.2"],
+      warnings: ["service was installed by GreenchClaw 2026.4.24, current CLI is 2026.5.2"],
       loaded: true,
     }));
 
@@ -429,14 +429,14 @@ describe("runServiceRestart token drift", () => {
     }>();
     expect(payload.result).toBe("started");
     expect(payload.message).toBe("Gateway service definition repaired and started.");
-    expect(payload.warnings?.[0]).toContain("service was installed by NexisClaw");
+    expect(payload.warnings?.[0]).toContain("service was installed by GreenchClaw");
     expect(payload.service?.loaded).toBe(true);
   });
 
   it("fails start with an install hint when a stale loaded service has no repair callback", async () => {
     service.readCommand.mockResolvedValue({
-      programArguments: ["NexisClaw", "gateway"],
-      environment: { NEXISCLAW_SERVICE_VERSION: "2026.4.24" },
+      programArguments: ["GreenchClaw", "gateway"],
+      environment: { GREENCHCLAW_SERVICE_VERSION: "2026.4.24" },
     });
 
     await expect(runServiceStart(createServiceRunArgs())).rejects.toThrow("__exit__:1");
@@ -444,7 +444,7 @@ describe("runServiceRestart token drift", () => {
     const payload = readJsonLog<{ ok?: boolean; error?: string; hints?: string[] }>();
     expect(payload.ok).toBe(false);
     expect(payload.error).toContain("service needs repair");
-    expect(payload.hints).toEqual(["NexisClaw gateway install --force"]);
+    expect(payload.hints).toEqual(["GreenchClaw gateway install --force"]);
     expect(service.restart).not.toHaveBeenCalled();
   });
 
@@ -466,7 +466,7 @@ describe("runServiceRestart token drift", () => {
     await runServiceStart({
       serviceNoun: "Gateway",
       service,
-      renderStartHints: () => ["NexisClaw gateway install"],
+      renderStartHints: () => ["GreenchClaw gateway install"],
       opts: { json: true },
     });
 
@@ -478,10 +478,10 @@ describe("runServiceRestart token drift", () => {
     }>();
     expect(payload.ok).toBe(true);
     expect(payload.result).toBe("not-loaded");
-    expect(payload.hints?.includes("NexisClaw gateway install")).toBe(true);
+    expect(payload.hints?.includes("GreenchClaw gateway install")).toBe(true);
     expect(
       payload.hintItems?.some(
-        (item) => item.kind === "install" && item.text === "NexisClaw gateway install",
+        (item) => item.kind === "install" && item.text === "GreenchClaw gateway install",
       ),
     ).toBe(true);
     expect(service.restart).not.toHaveBeenCalled();

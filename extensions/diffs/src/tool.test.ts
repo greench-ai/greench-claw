@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawPluginApi, NexisClawPluginToolContext } from "../api.js";
+import type { GreenchClawPluginApi, GreenchClawPluginToolContext } from "../api.js";
 import type { DiffScreenshotter } from "./browser.js";
 import { DEFAULT_DIFFS_TOOL_DEFAULTS } from "./config.js";
 import { DiffArtifactStore } from "./store.js";
@@ -15,7 +15,7 @@ describe("diffs tool", () => {
   let cleanupRootDir: () => Promise<void>;
 
   beforeEach(async () => {
-    ({ store, cleanup: cleanupRootDir } = await createDiffStoreHarness("NexisClaw-diffs-tool-"));
+    ({ store, cleanup: cleanupRootDir } = await createDiffStoreHarness("GreenchClaw-diffs-tool-"));
   });
 
   afterEach(async () => {
@@ -46,11 +46,11 @@ describe("diffs tool", () => {
   it("uses configured viewerBaseUrl when tool input omits baseUrl", async () => {
     const tool = createDiffsTool({
       api: createApi({
-        viewerBaseUrl: "https://example.com/NexisClaw/",
+        viewerBaseUrl: "https://example.com/GreenchClaw/",
       }),
       store,
       defaults: DEFAULT_DIFFS_TOOL_DEFAULTS,
-      viewerBaseUrl: "https://example.com/NexisClaw",
+      viewerBaseUrl: "https://example.com/GreenchClaw",
     });
 
     const result = await tool.execute?.("tool-viewer-config", {
@@ -61,21 +61,21 @@ describe("diffs tool", () => {
     });
 
     expect(readTextContent(result, 0)).toContain(
-      "https://example.com/NexisClaw/plugins/diffs/view/",
+      "https://example.com/GreenchClaw/plugins/diffs/view/",
     );
     expect(String((result?.details as Record<string, unknown>).viewerUrl)).toContain(
-      "https://example.com/NexisClaw/plugins/diffs/view/",
+      "https://example.com/GreenchClaw/plugins/diffs/view/",
     );
   });
 
   it("prefers per-call baseUrl over configured viewerBaseUrl", async () => {
     const tool = createDiffsTool({
       api: createApi({
-        viewerBaseUrl: "https://example.com/NexisClaw",
+        viewerBaseUrl: "https://example.com/GreenchClaw",
       }),
       store,
       defaults: DEFAULT_DIFFS_TOOL_DEFAULTS,
-      viewerBaseUrl: "https://example.com/NexisClaw",
+      viewerBaseUrl: "https://example.com/GreenchClaw",
     });
 
     const result = await tool.execute?.("tool-viewer-override", {
@@ -495,7 +495,7 @@ describe("diffs tool", () => {
   });
 });
 
-function createApi(pluginConfig?: Record<string, unknown>): NexisClawPluginApi {
+function createApi(pluginConfig?: Record<string, unknown>): GreenchClawPluginApi {
   return createTestPluginApi({
     id: "diffs",
     name: "Diffs",
@@ -508,7 +508,7 @@ function createApi(pluginConfig?: Record<string, unknown>): NexisClawPluginApi {
       },
     },
     pluginConfig,
-    runtime: {} as NexisClawPluginApi["runtime"],
+    runtime: {} as GreenchClawPluginApi["runtime"],
   });
 }
 
@@ -516,7 +516,7 @@ function createToolWithScreenshotter(
   store: DiffArtifactStore,
   screenshotter: DiffScreenshotter,
   defaults = DEFAULT_DIFFS_TOOL_DEFAULTS,
-  context: NexisClawPluginToolContext = {
+  context: GreenchClawPluginToolContext = {
     agentId: "main",
     sessionId: "session-123",
     messageChannel: "discord",

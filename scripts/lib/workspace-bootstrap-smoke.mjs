@@ -53,11 +53,11 @@ export function createWorkspaceBootstrapSmokeEnv(env, homeDir, overrides = {}) {
     PATH: safePath,
     HOME: homeDir,
     USERPROFILE: homeDir,
-    NEXISCLAW_HOME: homeDir,
-    NEXISCLAW_NO_ONBOARD: "1",
-    NEXISCLAW_SUPPRESS_NOTES: "1",
-    NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-    NEXISCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
+    GREENCHCLAW_HOME: homeDir,
+    GREENCHCLAW_NO_ONBOARD: "1",
+    GREENCHCLAW_SUPPRESS_NOTES: "1",
+    GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+    GREENCHCLAW_DISABLE_BUNDLED_ENTRY_SOURCE_FALLBACK: "1",
     AWS_EC2_METADATA_DISABLED: "true",
     AWS_SHARED_CREDENTIALS_FILE: join(homeDir, ".aws", "credentials"),
     AWS_CONFIG_FILE: join(homeDir, ".aws", "config"),
@@ -91,7 +91,7 @@ function describeExecFailure(error) {
 }
 
 export function runInstalledWorkspaceBootstrapSmoke(params) {
-  const tempRoot = mkdtempSync(join(tmpdir(), "NexisClaw-workspace-bootstrap-smoke-"));
+  const tempRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-workspace-bootstrap-smoke-"));
   const homeDir = join(tempRoot, "home");
   const cwd = join(tempRoot, "cwd");
   mkdirSync(homeDir, { recursive: true });
@@ -103,7 +103,7 @@ export function runInstalledWorkspaceBootstrapSmoke(params) {
       execFileSync(
         process.execPath,
         [
-          join(params.packageRoot, "NexisClaw.mjs"),
+          join(params.packageRoot, "GreenchClaw.mjs"),
           "agent",
           "--message",
           "workspace bootstrap smoke",
@@ -133,7 +133,7 @@ export function runInstalledWorkspaceBootstrapSmoke(params) {
       );
     }
 
-    const workspaceDir = join(homeDir, ".NexisClaw", "workspace");
+    const workspaceDir = join(homeDir, ".GreenchClaw", "workspace");
     const missingFiles = collectMissingBootstrapWorkspaceFiles(workspaceDir);
     if (missingFiles.length > 0) {
       const outputDetails = combinedOutput.length > 0 ? `\nCommand output:\n${combinedOutput}` : "";

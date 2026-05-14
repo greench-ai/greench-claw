@@ -3,11 +3,11 @@ import { captureFullEnv } from "../test-utils/env.js";
 import { SUPERVISOR_HINT_ENV_VARS } from "./supervisor-markers.js";
 
 const spawnMock = vi.hoisted(() => vi.fn());
-const triggerNexisClawRestartMock = vi.hoisted(() => vi.fn());
+const triggerGreenchClawRestartMock = vi.hoisted(() => vi.fn());
 const isContainerEnvironmentMock = vi.hoisted(() => vi.fn(() => false));
 
 vi.mock("node:child_process", async () => {
-  const { mockNodeBuiltinModule } = await import("NexisClaw/plugin-sdk/test-node-mocks");
+  const { mockNodeBuiltinModule } = await import("GreenchClaw/plugin-sdk/test-node-mocks");
   return mockNodeBuiltinModule(
     () => vi.importActual<typeof import("node:child_process")>("node:child_process"),
     {
@@ -16,7 +16,7 @@ vi.mock("node:child_process", async () => {
   );
 });
 vi.mock("./restart.js", () => ({
-  triggerNexisClawRestart: (...args: unknown[]) => triggerNexisClawRestartMock(...args),
+  triggerGreenchClawRestart: (...args: unknown[]) => triggerGreenchClawRestartMock(...args),
 }));
 vi.mock("./container-environment.js", () => ({
   isContainerEnvironment: () => isContainerEnvironmentMock(),
@@ -47,7 +47,7 @@ afterEach(() => {
   process.argv = [...originalArgv];
   process.execArgv = [...originalExecArgv];
   spawnMock.mockClear();
-  triggerNexisClawRestartMock.mockClear();
+  triggerGreenchClawRestartMock.mockClear();
   isContainerEnvironmentMock.mockReset();
   isContainerEnvironmentMock.mockReturnValue(false);
   if (originalPlatformDescriptor) {
@@ -66,49 +66,49 @@ function expectLaunchdSupervisedWithoutKickstart(params?: { launchJobLabel?: str
   if (params?.launchJobLabel) {
     process.env.LAUNCH_JOB_LABEL = params.launchJobLabel;
   }
-  process.env.NEXISCLAW_LAUNCHD_LABEL = "ai.NexisClaw.gateway";
+  process.env.GREENCHCLAW_LAUNCHD_LABEL = "ai.GreenchClaw.gateway";
   const result = restartGatewayProcessWithFreshPid();
   expect(result).toEqual({ mode: "supervised" });
-  expect(triggerNexisClawRestartMock).not.toHaveBeenCalled();
+  expect(triggerGreenchClawRestartMock).not.toHaveBeenCalled();
   expect(spawnMock).not.toHaveBeenCalled();
 }
 
 describe("restartGatewayProcessWithFreshPid", () => {
-  it("returns disabled when NEXISCLAW_NO_RESPAWN is set", () => {
-    process.env.NEXISCLAW_NO_RESPAWN = "1";
+  it("returns disabled when GREENCHCLAW_NO_RESPAWN is set", () => {
+    process.env.GREENCHCLAW_NO_RESPAWN = "1";
     const result = restartGatewayProcessWithFreshPid();
     expect(result.mode).toBe("disabled");
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
-  it("keeps NEXISCLAW_NO_RESPAWN ahead of inherited supervisor hints", () => {
+  it("keeps GREENCHCLAW_NO_RESPAWN ahead of inherited supervisor hints", () => {
     clearSupervisorHints();
     setPlatform("darwin");
-    process.env.NEXISCLAW_NO_RESPAWN = "1";
-    process.env.LAUNCH_JOB_LABEL = "ai.NexisClaw.gateway";
+    process.env.GREENCHCLAW_NO_RESPAWN = "1";
+    process.env.LAUNCH_JOB_LABEL = "ai.GreenchClaw.gateway";
 
     const result = restartGatewayProcessWithFreshPid();
 
     expect(result).toEqual({ mode: "disabled" });
-    expect(triggerNexisClawRestartMock).not.toHaveBeenCalled();
+    expect(triggerGreenchClawRestartMock).not.toHaveBeenCalled();
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
   it("returns supervised when launchd hints are present on macOS (no kickstart)", () => {
     clearSupervisorHints();
-    expectLaunchdSupervisedWithoutKickstart({ launchJobLabel: "ai.NexisClaw.gateway" });
+    expectLaunchdSupervisedWithoutKickstart({ launchJobLabel: "ai.GreenchClaw.gateway" });
   });
 
   it("returns supervised on macOS when launchd label is set (no kickstart)", () => {
-    expectLaunchdSupervisedWithoutKickstart({ launchJobLabel: "ai.NexisClaw.gateway" });
+    expectLaunchdSupervisedWithoutKickstart({ launchJobLabel: "ai.GreenchClaw.gateway" });
   });
 
-  it("launchd supervisor never returns failed regardless of triggerNexisClawRestart outcome", () => {
+  it("launchd supervisor never returns failed regardless of triggerGreenchClawRestart outcome", () => {
     clearSupervisorHints();
     setPlatform("darwin");
-    process.env.NEXISCLAW_LAUNCHD_LABEL = "ai.NexisClaw.gateway";
-    // Even if triggerNexisClawRestart *would* fail, launchd path must not call it.
-    triggerNexisClawRestartMock.mockReturnValue({
+    process.env.GREENCHCLAW_LAUNCHD_LABEL = "ai.GreenchClaw.gateway";
+    // Even if triggerGreenchClawRestart *would* fail, launchd path must not call it.
+    triggerGreenchClawRestartMock.mockReturnValue({
       ok: false,
       method: "launchctl",
       detail: "Bootstrap failed: 5: Input/output error",
@@ -116,33 +116,33 @@ describe("restartGatewayProcessWithFreshPid", () => {
     const result = restartGatewayProcessWithFreshPid();
     expect(result.mode).toBe("supervised");
     expect(result.mode).not.toBe("failed");
-    expect(triggerNexisClawRestartMock).not.toHaveBeenCalled();
+    expect(triggerGreenchClawRestartMock).not.toHaveBeenCalled();
   });
 
   it("does not schedule kickstart on non-darwin platforms", () => {
     setPlatform("linux");
     process.env.INVOCATION_ID = "abc123";
-    process.env.NEXISCLAW_LAUNCHD_LABEL = "ai.NexisClaw.gateway";
+    process.env.GREENCHCLAW_LAUNCHD_LABEL = "ai.GreenchClaw.gateway";
 
     const result = restartGatewayProcessWithFreshPid();
 
     expect(result.mode).toBe("supervised");
-    expect(triggerNexisClawRestartMock).not.toHaveBeenCalled();
+    expect(triggerGreenchClawRestartMock).not.toHaveBeenCalled();
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
   it("returns supervised when XPC_SERVICE_NAME is set by launchd", () => {
     clearSupervisorHints();
     setPlatform("darwin");
-    process.env.XPC_SERVICE_NAME = "ai.NexisClaw.gateway";
+    process.env.XPC_SERVICE_NAME = "ai.GreenchClaw.gateway";
     const result = restartGatewayProcessWithFreshPid();
     expect(result.mode).toBe("supervised");
-    expect(triggerNexisClawRestartMock).not.toHaveBeenCalled();
+    expect(triggerGreenchClawRestartMock).not.toHaveBeenCalled();
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
   it("spawns detached child with current exec argv", () => {
-    delete process.env.NEXISCLAW_NO_RESPAWN;
+    delete process.env.GREENCHCLAW_NO_RESPAWN;
     clearSupervisorHints();
     setPlatform("linux");
     process.execArgv = ["--import", "tsx"];
@@ -163,43 +163,43 @@ describe("restartGatewayProcessWithFreshPid", () => {
     );
   });
 
-  it("returns supervised when NEXISCLAW_LAUNCHD_LABEL is set (stock launchd plist)", () => {
+  it("returns supervised when GREENCHCLAW_LAUNCHD_LABEL is set (stock launchd plist)", () => {
     clearSupervisorHints();
     expectLaunchdSupervisedWithoutKickstart();
   });
 
-  it("returns supervised when NEXISCLAW_SYSTEMD_UNIT is set", () => {
+  it("returns supervised when GREENCHCLAW_SYSTEMD_UNIT is set", () => {
     clearSupervisorHints();
     setPlatform("linux");
-    process.env.NEXISCLAW_SYSTEMD_UNIT = "NexisClaw-gateway.service";
+    process.env.GREENCHCLAW_SYSTEMD_UNIT = "GreenchClaw-gateway.service";
     const result = restartGatewayProcessWithFreshPid();
     expect(result.mode).toBe("supervised");
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
-  it("returns supervised when NexisClaw gateway task markers are set on Windows", () => {
+  it("returns supervised when GreenchClaw gateway task markers are set on Windows", () => {
     clearSupervisorHints();
     setPlatform("win32");
-    process.env.NEXISCLAW_SERVICE_MARKER = "NexisClaw";
-    process.env.NEXISCLAW_SERVICE_KIND = "gateway";
-    triggerNexisClawRestartMock.mockReturnValue({ ok: true, method: "schtasks" });
+    process.env.GREENCHCLAW_SERVICE_MARKER = "GreenchClaw";
+    process.env.GREENCHCLAW_SERVICE_KIND = "gateway";
+    triggerGreenchClawRestartMock.mockReturnValue({ ok: true, method: "schtasks" });
     const result = restartGatewayProcessWithFreshPid();
     expect(result.mode).toBe("supervised");
-    expect(triggerNexisClawRestartMock).toHaveBeenCalledOnce();
+    expect(triggerGreenchClawRestartMock).toHaveBeenCalledOnce();
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
   it("keeps generic service markers out of non-Windows supervisor detection", () => {
     clearSupervisorHints();
     setPlatform("linux");
-    process.env.NEXISCLAW_SERVICE_MARKER = "NexisClaw";
-    process.env.NEXISCLAW_SERVICE_KIND = "gateway";
+    process.env.GREENCHCLAW_SERVICE_MARKER = "GreenchClaw";
+    process.env.GREENCHCLAW_SERVICE_KIND = "gateway";
     spawnMock.mockReturnValue({ pid: 4242, unref: vi.fn() });
 
     const result = restartGatewayProcessWithFreshPid();
 
     expect(result).toEqual({ mode: "spawned", pid: 4242 });
-    expect(triggerNexisClawRestartMock).not.toHaveBeenCalled();
+    expect(triggerGreenchClawRestartMock).not.toHaveBeenCalled();
   });
 
   it("returns disabled on Windows without Scheduled Task markers", () => {
@@ -214,7 +214,7 @@ describe("restartGatewayProcessWithFreshPid", () => {
   });
 
   it("returns disabled in containers so PID 1 stays alive for in-process restart", () => {
-    delete process.env.NEXISCLAW_NO_RESPAWN;
+    delete process.env.GREENCHCLAW_NO_RESPAWN;
     clearSupervisorHints();
     setPlatform("linux");
     isContainerEnvironmentMock.mockReturnValue(true);
@@ -231,20 +231,20 @@ describe("restartGatewayProcessWithFreshPid", () => {
   it("ignores node task script hints for gateway restart detection on Windows", () => {
     clearSupervisorHints();
     setPlatform("win32");
-    process.env.NEXISCLAW_TASK_SCRIPT = "C:\\NexisClaw\\node.cmd";
-    process.env.NEXISCLAW_TASK_SCRIPT_NAME = "node.cmd";
-    process.env.NEXISCLAW_SERVICE_MARKER = "NexisClaw";
-    process.env.NEXISCLAW_SERVICE_KIND = "node";
+    process.env.GREENCHCLAW_TASK_SCRIPT = "C:\\GreenchClaw\\node.cmd";
+    process.env.GREENCHCLAW_TASK_SCRIPT_NAME = "node.cmd";
+    process.env.GREENCHCLAW_SERVICE_MARKER = "GreenchClaw";
+    process.env.GREENCHCLAW_SERVICE_KIND = "node";
 
     const result = restartGatewayProcessWithFreshPid();
 
     expect(result.mode).toBe("disabled");
-    expect(triggerNexisClawRestartMock).not.toHaveBeenCalled();
+    expect(triggerGreenchClawRestartMock).not.toHaveBeenCalled();
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
   it("returns failed when spawn throws", () => {
-    delete process.env.NEXISCLAW_NO_RESPAWN;
+    delete process.env.GREENCHCLAW_NO_RESPAWN;
     clearSupervisorHints();
     setPlatform("linux");
 
@@ -258,13 +258,13 @@ describe("restartGatewayProcessWithFreshPid", () => {
 });
 
 describe("respawnGatewayProcessForUpdate", () => {
-  it("keeps NEXISCLAW_NO_RESPAWN semantics for update restarts", () => {
+  it("keeps GREENCHCLAW_NO_RESPAWN semantics for update restarts", () => {
     clearSupervisorHints();
-    process.env.NEXISCLAW_NO_RESPAWN = "1";
+    process.env.GREENCHCLAW_NO_RESPAWN = "1";
 
     const result = respawnGatewayProcessForUpdate();
 
-    expect(result).toEqual({ mode: "disabled", detail: "NEXISCLAW_NO_RESPAWN" });
+    expect(result).toEqual({ mode: "disabled", detail: "GREENCHCLAW_NO_RESPAWN" });
     expect(spawnMock).not.toHaveBeenCalled();
   });
 
@@ -274,7 +274,7 @@ describe("respawnGatewayProcessForUpdate", () => {
     process.execArgv = [];
     process.argv = [
       "C:\\Program Files\\node.exe",
-      "C:\\NexisClaw\\dist\\index.js",
+      "C:\\GreenchClaw\\dist\\index.js",
       "gateway",
       "run",
     ];
@@ -286,7 +286,7 @@ describe("respawnGatewayProcessForUpdate", () => {
     expect(result.pid).toBe(5151);
     expect(spawnMock).toHaveBeenCalledWith(
       process.execPath,
-      ["C:\\NexisClaw\\dist\\index.js", "gateway", "run"],
+      ["C:\\GreenchClaw\\dist\\index.js", "gateway", "run"],
       {
         detached: true,
         env: process.env,

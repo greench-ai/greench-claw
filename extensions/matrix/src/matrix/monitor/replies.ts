@@ -1,8 +1,13 @@
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { getMatrixRuntime } from "../../runtime.js";
 import type { MatrixClient } from "../sdk.js";
 import { chunkMatrixText, sendMessageMatrix } from "../send.js";
-import type { MarkdownTableMode, NexisClawConfig, ReplyPayload, RuntimeEnv } from "./runtime-api.js";
+import type {
+  MarkdownTableMode,
+  GreenchClawConfig,
+  ReplyPayload,
+  RuntimeEnv,
+} from "./runtime-api.js";
 
 const THINKING_TAG_RE = /<\s*\/?\s*(?:think(?:ing)?|thought|antthinking)\b[^<>]*>/gi;
 const THINKING_BLOCK_RE =
@@ -30,7 +35,7 @@ function shouldSuppressReasoningReplyText(text?: string): boolean {
 }
 
 export async function deliverMatrixReplies(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   replies: ReplyPayload[];
   roomId: string;
   client: MatrixClient;

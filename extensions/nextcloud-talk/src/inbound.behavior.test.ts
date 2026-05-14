@@ -1,4 +1,4 @@
-import { createPluginRuntimeMock } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { createPluginRuntimeMock } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { PluginRuntime, RuntimeEnv } from "../runtime-api.js";
 import type { ResolvedNextcloudTalkAccount } from "./accounts.js";
@@ -200,7 +200,7 @@ describe("nextcloud-talk inbound behavior", () => {
 
   it("drops unmentioned group traffic before dispatch", async () => {
     installRuntime({
-      buildMentionRegexes: vi.fn(() => [/@NexisClaw/i]),
+      buildMentionRegexes: vi.fn(() => [/@GreenchClaw/i]),
       matchesMentionPatterns: vi.fn(() => false),
     });
     createChannelPairingControllerMock.mockReturnValue({
@@ -233,7 +233,7 @@ describe("nextcloud-talk inbound behavior", () => {
   });
 
   it("blocks unauthorized group text control commands even when room sender access allows chat", async () => {
-    const buildMentionRegexes = vi.fn(() => [/@NexisClaw/i]);
+    const buildMentionRegexes = vi.fn(() => [/@GreenchClaw/i]);
     const coreRuntime = installRuntime({
       buildMentionRegexes,
       hasControlCommand: vi.fn(() => true),
@@ -251,7 +251,7 @@ describe("nextcloud-talk inbound behavior", () => {
         roomToken: "room-group",
         roomName: "Ops",
         isGroupChat: true,
-        text: "/NexisClaw reload",
+        text: "/GreenchClaw reload",
       }),
       account: createAccount({
         config: {

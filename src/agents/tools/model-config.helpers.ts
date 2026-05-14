@@ -4,7 +4,7 @@ import {
   resolveAgentModelTimeoutMsValue,
 } from "../../config/model-input.js";
 import type { AgentModelConfig } from "../../config/types.agents-shared.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   externalCliDiscoveryForProviderAuth,
   ensureAuthProfileStore,
@@ -24,7 +24,10 @@ export function hasToolModelConfig(model: ToolModelConfig | undefined): boolean 
   );
 }
 
-export function resolveDefaultModelRef(cfg?: NexisClawConfig): { provider: string; model: string } {
+export function resolveDefaultModelRef(cfg?: GreenchClawConfig): {
+  provider: string;
+  model: string;
+} {
   if (cfg) {
     const resolved = resolveConfiguredModelRef({
       cfg,

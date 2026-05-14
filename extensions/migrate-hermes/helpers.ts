@@ -4,9 +4,9 @@ import path from "node:path";
 import {
   markMigrationItemError,
   MIGRATION_REASON_MISSING_SOURCE_OR_TARGET,
-} from "NexisClaw/plugin-sdk/migration";
-import type { MigrationItem } from "NexisClaw/plugin-sdk/plugin-entry";
-import { appendRegularFile, pathExists } from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/migration";
+import type { MigrationItem } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { appendRegularFile, pathExists } from "GreenchClaw/plugin-sdk/security-runtime";
 import { parse as parseYaml } from "yaml";
 
 export function resolveHomePath(input: string): string {

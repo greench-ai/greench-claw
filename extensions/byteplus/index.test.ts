@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { registerSingleProviderPlugin } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import { registerSingleProviderPlugin } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 import { BYTEPLUS_CODING_MODEL_CATALOG, BYTEPLUS_MODEL_CATALOG } from "./models.js";
@@ -33,7 +33,7 @@ describe("byteplus plugin", () => {
 
   it("declares its coding provider auth alias in the manifest", () => {
     const pluginJson = JSON.parse(
-      readFileSync(resolve(import.meta.dirname, "NexisClaw.plugin.json"), "utf-8"),
+      readFileSync(resolve(import.meta.dirname, "GreenchClaw.plugin.json"), "utf-8"),
     );
 
     expect(pluginJson.providerAuthAliases).toEqual({

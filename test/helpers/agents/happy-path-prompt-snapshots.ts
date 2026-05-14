@@ -14,13 +14,13 @@ import {
 import { buildReplyPromptBodies } from "../../../src/auto-reply/reply/prompt-prelude.js";
 import type { TemplateContext } from "../../../src/auto-reply/templating.js";
 import { SILENT_REPLY_TOKEN } from "../../../src/auto-reply/tokens.js";
-import type { NexisClawConfig } from "../../../src/config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../src/config/types.GreenchClaw.js";
 import type {
   AnyAgentTool,
   EmbeddedRunAttemptParams,
 } from "../../../src/plugin-sdk/agent-harness-runtime.js";
 import { normalizeAgentRuntimeTools } from "../../../src/plugin-sdk/agent-harness-runtime.js";
-import { createNexisClawCodingTools } from "../../../src/plugin-sdk/agent-harness.js";
+import { createGreenchClawCodingTools } from "../../../src/plugin-sdk/agent-harness.js";
 import { loadBundledPluginTestApiSync } from "../../../src/test-utils/bundled-plugin-public-surface.js";
 
 export const CODEX_RUNTIME_HAPPY_PATH_PROMPT_SNAPSHOT_DIR =
@@ -28,9 +28,9 @@ export const CODEX_RUNTIME_HAPPY_PATH_PROMPT_SNAPSHOT_DIR =
 export const CODEX_MODEL_PROMPT_FIXTURE_DIR =
   "test/fixtures/agents/prompt-snapshots/codex-model-catalog";
 
-const WORKSPACE_DIR = "/tmp/NexisClaw-happy-path/workspace";
-const AGENT_DIR = "/tmp/NexisClaw-happy-path/agent";
-const SESSION_FILE = "/tmp/NexisClaw-happy-path/session.jsonl";
+const WORKSPACE_DIR = "/tmp/GreenchClaw-happy-path/workspace";
+const AGENT_DIR = "/tmp/GreenchClaw-happy-path/agent";
+const SESSION_FILE = "/tmp/GreenchClaw-happy-path/session.jsonl";
 const MODEL_ID = "gpt-5.5";
 const CODEX_PROMPT_PERSONALITY = "pragmatic";
 const CODEX_MODEL_PROMPT_FIXTURE_PATH = path.join(
@@ -131,7 +131,7 @@ const CODEX_WORKSPACE_BOOTSTRAP_CONTEXT_FILES = [
 ] as const;
 
 const CODEX_WORKSPACE_BOOTSTRAP_INSTRUCTIONS = [
-  "NexisClaw loaded these user-editable workspace files. Treat them as project/user context. Codex loads AGENTS.md natively, so AGENTS.md is not repeated here.",
+  "GreenchClaw loaded these user-editable workspace files. Treat them as project/user context. Codex loads AGENTS.md natively, so AGENTS.md is not repeated here.",
   "",
   "# Project Context",
   "",
@@ -152,7 +152,7 @@ const CODEX_WORKSPACE_BOOTSTRAP_CONFIG = {
   instructions: CODEX_WORKSPACE_BOOTSTRAP_INSTRUCTIONS,
 };
 
-const baseConfig: NexisClawConfig = {
+const baseConfig: GreenchClawConfig = {
   messages: {
     visibleReplies: "message_tool",
     groupChat: {
@@ -186,7 +186,7 @@ const baseConfig: NexisClawConfig = {
   },
 };
 
-const dynamicToolsConfig: NexisClawConfig = {
+const dynamicToolsConfig: GreenchClawConfig = {
   ...baseConfig,
   plugins: {
     enabled: true,
@@ -319,7 +319,7 @@ function createDynamicTools(params: {
   ctx: TemplateContext;
   trigger: "user" | "heartbeat";
 }): CodexDynamicToolSpec[] {
-  const tools = createNexisClawCodingTools({
+  const tools = createGreenchClawCodingTools({
     agentId: "main",
     workspaceDir: WORKSPACE_DIR,
     agentDir: AGENT_DIR,
@@ -395,10 +395,10 @@ function createScenarios(): PromptScenario[] {
     SenderId: "424242",
     SenderName: "Pash",
     SenderUsername: "pash",
-    GroupSubject: "NexisClaw maintainers",
+    GroupSubject: "GreenchClaw maintainers",
     GroupChannel: "#agent-sandbox",
-    GroupSpace: "NexisClaw",
-    ConversationLabel: "NexisClaw/#agent-sandbox",
+    GroupSpace: "GreenchClaw",
+    ConversationLabel: "GreenchClaw/#agent-sandbox",
     WasMentioned: true,
     InboundHistory: [
       {
@@ -407,10 +407,10 @@ function createScenarios(): PromptScenario[] {
       },
       {
         sender: "Pash",
-        body: "@NexisClaw please verify the Codex happy path too.",
+        body: "@GreenchClaw please verify the Codex happy path too.",
       },
     ],
-    Body: "@NexisClaw can you audit whether this prompt path has conflicting silence instructions?",
+    Body: "@GreenchClaw can you audit whether this prompt path has conflicting silence instructions?",
     BodyStripped: "can you audit whether this prompt path has conflicting silence instructions?",
   };
   const heartbeatCtx: TemplateContext = {
@@ -429,7 +429,7 @@ function createScenarios(): PromptScenario[] {
       title: "Telegram Direct Codex Message Tool Turn",
       notes: [
         "Default happy path: OpenAI model through the Codex harness/runtime, Telegram direct conversation, and message-tool-only visible replies.",
-        "A quiet turn is represented by not calling `message(action=send)`; the normal final assistant text is private to NexisClaw/Codex.",
+        "A quiet turn is represented by not calling `message(action=send)`; the normal final assistant text is private to GreenchClaw/Codex.",
       ],
       trigger: "user",
       ctx: telegramDirectCtx,
@@ -585,7 +585,7 @@ function renderModelBoundPromptLayers(params: {
   return [
     "## Reconstructed Model-Bound Prompt Layers",
     "",
-    "This is the deterministic model-bound layer stack NexisClaw can snapshot for the Codex happy path. It uses a pinned Codex `gpt-5.5` prompt fixture generated from Codex's model catalog/cache shape, then adds the Codex permission developer text, simulated NexisClaw workspace bootstrap config instructions, NexisClaw developer instructions, turn-scoped collaboration-mode instructions when NexisClaw provides them, turn input, and the NexisClaw dynamic tool catalog. Codex can still add runtime-owned context such as native workspace `AGENTS.md`, environment context, memories, app/plugin instructions, and built-in collaboration-mode instructions inside the Codex runtime.",
+    "This is the deterministic model-bound layer stack GreenchClaw can snapshot for the Codex happy path. It uses a pinned Codex `gpt-5.5` prompt fixture generated from Codex's model catalog/cache shape, then adds the Codex permission developer text, simulated GreenchClaw workspace bootstrap config instructions, GreenchClaw developer instructions, turn-scoped collaboration-mode instructions when GreenchClaw provides them, turn input, and the GreenchClaw dynamic tool catalog. Codex can still add runtime-owned context such as native workspace `AGENTS.md`, environment context, memories, app/plugin instructions, and built-in collaboration-mode instructions inside the Codex runtime.",
     "",
     "### Layer Metadata",
     "",
@@ -642,11 +642,11 @@ function renderModelBoundPromptLayers(params: {
     "",
     markdownFence("text", CODEX_YOLO_PERMISSION_INSTRUCTIONS),
     "",
-    "### User: Codex Config Instructions (NexisClaw Workspace Bootstrap Context)",
+    "### User: Codex Config Instructions (GreenchClaw Workspace Bootstrap Context)",
     "",
     markdownFence("text", codexConfigInstructions),
     "",
-    "### Developer: NexisClaw Runtime Instructions",
+    "### Developer: GreenchClaw Runtime Instructions",
     "",
     markdownFence("text", openClawDeveloperInstructions),
     "",
@@ -694,7 +694,7 @@ function renderScenarioSnapshot(scenario: PromptScenario): string {
     "## Scope",
     "",
     ...scenario.notes.map((note) => `- ${note}`),
-    "- This captures the NexisClaw-owned Codex app-server inputs and reconstructs the stable Codex model/permission layers from committed Codex prompt fixtures.",
+    "- This captures the GreenchClaw-owned Codex app-server inputs and reconstructs the stable Codex model/permission layers from committed Codex prompt fixtures.",
     "- This also simulates workspace bootstrap files forwarded through Codex `config.instructions`: `SOUL.md`, `TOOLS.md`, and `HEARTBEAT.md`.",
     "",
     "## Scenario Metadata",
@@ -718,7 +718,7 @@ function renderScenarioSnapshot(scenario: PromptScenario): string {
       }),
     ),
     "",
-    "## Effective NexisClaw Config",
+    "## Effective GreenchClaw Config",
     "",
     markdownFence("json", stableJson(baseConfig)),
     "",
@@ -758,17 +758,17 @@ function renderReadme(scenarios: PromptScenario[]): string {
     '- `messages.visibleReplies: "message_tool"`, which is the Codex-harness default for visible source replies.',
     "- Telegram direct chat, Discord group chat, and a heartbeat turn with `heartbeat_respond` available through searchable dynamic tools.",
     "",
-    "The Markdown files show selected app-server thread/turn params plus a reconstructed model-bound prompt layer stack: Codex `gpt-5.5` model instructions from a pinned Codex model catalog fixture, Codex permission developer instructions for the happy-path yolo profile, simulated NexisClaw workspace bootstrap config instructions, NexisClaw developer instructions, user turn input, and references to the complete dynamic tool catalog.",
+    "The Markdown files show selected app-server thread/turn params plus a reconstructed model-bound prompt layer stack: Codex `gpt-5.5` model instructions from a pinned Codex model catalog fixture, Codex permission developer instructions for the happy-path yolo profile, simulated GreenchClaw workspace bootstrap config instructions, GreenchClaw developer instructions, user turn input, and references to the complete dynamic tool catalog.",
     "",
-    "The workspace bootstrap simulation includes dummy `SOUL.md`, `TOOLS.md`, and `HEARTBEAT.md` contents so prompt reviewers can see how those NexisClaw project/user context files are forwarded to Codex. `AGENTS.md` is intentionally not repeated here because Codex loads it natively.",
+    "The workspace bootstrap simulation includes dummy `SOUL.md`, `TOOLS.md`, and `HEARTBEAT.md` contents so prompt reviewers can see how those GreenchClaw project/user context files are forwarded to Codex. `AGENTS.md` is intentionally not repeated here because Codex loads it natively.",
     "",
-    "The tool catalog is pinned to the canonical happy-path NexisClaw tools so optional locally installed plugin tools do not create fixture churn.",
+    "The tool catalog is pinned to the canonical happy-path GreenchClaw tools so optional locally installed plugin tools do not create fixture churn.",
     "",
     "The Codex model prompt fixture is generated from the same Codex model catalog/cache shape that the Codex runtime uses for remote model metadata. Regenerate it from Codex's runtime cache or, when present, a local Codex checkout with:",
     "",
     markdownFence("sh", "pnpm prompt:snapshots:sync-codex-model"),
     "",
-    "These snapshots are still not a byte-for-byte raw OpenAI request capture. Codex-owned native `AGENTS.md`, environment context, memories, app/plugin instructions, and built-in collaboration-mode instructions can be added inside the Codex runtime after NexisClaw sends thread and turn params.",
+    "These snapshots are still not a byte-for-byte raw OpenAI request capture. Codex-owned native `AGENTS.md`, environment context, memories, app/plugin instructions, and built-in collaboration-mode instructions can be added inside the Codex runtime after GreenchClaw sends thread and turn params.",
     "",
     "Regenerate with:",
     "",

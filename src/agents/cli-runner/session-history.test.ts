@@ -86,9 +86,9 @@ describe("loadCliSessionHistoryMessages", () => {
   });
 
   it("reads the canonical session transcript instead of an arbitrary external path", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-state-"));
-    const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-outside-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-state-"));
+    const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-outside-"));
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
     createSessionTranscript({
       rootDir: stateDir,
       sessionId: "session-test",
@@ -117,8 +117,8 @@ describe("loadCliSessionHistoryMessages", () => {
   });
 
   it("keeps only the newest bounded history window", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-state-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-state-"));
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
     const sessionFile = createSessionTranscript({
       rootDir: stateDir,
       sessionId: "session-bounded",
@@ -147,9 +147,9 @@ describe("loadCliSessionHistoryMessages", () => {
   });
 
   it("rejects symlinked transcripts instead of following them outside the sessions directory", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-state-"));
-    const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-outside-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-state-"));
+    const outsideDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-outside-"));
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
     const canonicalSessionFile = path.join(
       stateDir,
       "agents",
@@ -182,8 +182,8 @@ describe("loadCliSessionHistoryMessages", () => {
   });
 
   it("drops oversized transcript files instead of loading them into hook payloads", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-state-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-state-"));
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
     const sessionFile = path.join(
       stateDir,
       "agents",
@@ -209,9 +209,9 @@ describe("loadCliSessionHistoryMessages", () => {
   });
 
   it("honors custom session store roots when resolving hook history transcripts", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-state-"));
-    const customStoreDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-store-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-state-"));
+    const customStoreDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-store-"));
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
     const storePath = path.join(customStoreDir, "sessions.json");
     fs.writeFileSync(storePath, "{}", "utf-8");
     const sessionFile = createSessionTranscript({
@@ -248,8 +248,8 @@ describe("loadCliSessionReseedMessages", () => {
   });
 
   it("does not reseed fresh CLI sessions from raw transcript history before compaction", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-state-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-state-"));
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
     const sessionFile = createSessionTranscript({
       rootDir: stateDir,
       sessionId: "session-no-compaction",
@@ -271,8 +271,8 @@ describe("loadCliSessionReseedMessages", () => {
   });
 
   it("reseeds safe invalidated sessions from a bounded raw message tail when explicitly opted in", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-state-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-state-"));
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
     const sessionFile = createSessionTranscript({
       rootDir: stateDir,
       sessionId: "session-opt-in-raw-tail",
@@ -306,8 +306,8 @@ describe("loadCliSessionReseedMessages", () => {
   });
 
   it("does not raw-reseed auth-boundary invalidations even when opted in", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-state-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-state-"));
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
     const sessionFile = createSessionTranscript({
       rootDir: stateDir,
       sessionId: "session-auth-boundary",
@@ -341,8 +341,8 @@ describe("loadCliSessionReseedMessages", () => {
   });
 
   it("reseeds fresh CLI sessions from the latest compaction summary and post-compaction tail", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-cli-state-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-cli-state-"));
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
     const sessionFile = createSessionTranscript({
       rootDir: stateDir,
       sessionId: "session-compacted",
@@ -397,7 +397,7 @@ describe("loadCliSessionReseedMessages", () => {
 });
 
 describe("buildCliSessionHistoryPrompt", () => {
-  it("renders NexisClaw transcript history around the next user message", () => {
+  it("renders GreenchClaw transcript history around the next user message", () => {
     const prompt = buildCliSessionHistoryPrompt({
       messages: [
         { role: "user", content: "old ask" },
@@ -427,7 +427,7 @@ describe("buildCliSessionHistoryPrompt", () => {
       maxHistoryChars: 20,
     });
 
-    expect(prompt).toContain("[NexisClaw reseed history truncated]");
+    expect(prompt).toContain("[GreenchClaw reseed history truncated]");
     expect(prompt).toContain("<next_user_message>\ncurrent ask must survive\n</next_user_message>");
     expect(prompt).not.toContain("x".repeat(80));
   });

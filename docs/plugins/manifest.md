@@ -1,12 +1,12 @@
 ---
 summary: "Plugin manifest + JSON schema requirements (strict config validation)"
 read_when:
-  - You are building an NexisClaw plugin
+  - You are building an GreenchClaw plugin
   - You need to ship a plugin config schema or debug plugin validation errors
 title: "Plugin manifest"
 ---
 
-This page is for the **native NexisClaw plugin manifest** only.
+This page is for the **native GreenchClaw plugin manifest** only.
 
 For compatible bundle layouts, see [Plugin bundles](/plugins/bundles).
 
@@ -17,16 +17,16 @@ Compatible bundle formats use different manifest files:
   layout without a manifest
 - Cursor bundle: `.cursor-plugin/plugin.json`
 
-NexisClaw auto-detects those bundle layouts too, but they are not validated
-against the `NexisClaw.plugin.json` schema described here.
+GreenchClaw auto-detects those bundle layouts too, but they are not validated
+against the `GreenchClaw.plugin.json` schema described here.
 
-For compatible bundles, NexisClaw currently reads bundle metadata plus declared
+For compatible bundles, GreenchClaw currently reads bundle metadata plus declared
 skill roots, Claude command roots, Claude bundle `settings.json` defaults,
 Claude bundle LSP defaults, and supported hook packs when the layout matches
-NexisClaw runtime expectations.
+GreenchClaw runtime expectations.
 
-Every native NexisClaw plugin **must** ship a `NexisClaw.plugin.json` file in the
-**plugin root**. NexisClaw uses this manifest to validate configuration
+Every native GreenchClaw plugin **must** ship a `GreenchClaw.plugin.json` file in the
+**plugin root**. GreenchClaw uses this manifest to validate configuration
 **without executing plugin code**. Missing or invalid manifests are treated as
 plugin errors and block config validation.
 
@@ -36,7 +36,7 @@ For the native capability model and current external-compatibility guidance:
 
 ## What this file does
 
-`NexisClaw.plugin.json` is the metadata NexisClaw reads **before it loads your
+`GreenchClaw.plugin.json` is the metadata GreenchClaw reads **before it loads your
 plugin code**. Everything below must be cheap enough to inspect without booting
 plugin runtime.
 
@@ -47,7 +47,7 @@ plugin runtime.
 - activation hints for control-plane surfaces
 - shorthand model-family ownership
 - static capability-ownership snapshots (`contracts`)
-- QA runner metadata the shared `NexisClaw qa` host can inspect
+- QA runner metadata the shared `GreenchClaw qa` host can inspect
 - channel-specific config metadata merged into catalog and validation surfaces
 
 **Do not use it for:** registering runtime behavior, declaring code entrypoints,
@@ -167,13 +167,13 @@ or npm install metadata. Those belong in your plugin code and `package.json`.
 | `syntheticAuthRefs`                  | No       | `string[]`                       | Provider or CLI backend refs whose plugin-owned synthetic auth hook should be probed during cold model discovery before runtime loads.                                                                                              |
 | `nonSecretAuthMarkers`               | No       | `string[]`                       | Bundled-plugin-owned placeholder API key values that represent non-secret local, OAuth, or ambient credential state.                                                                                                                |
 | `commandAliases`                     | No       | `object[]`                       | Command names owned by this plugin that should produce plugin-aware config and CLI diagnostics before runtime loads.                                                                                                                |
-| `providerAuthEnvVars`                | No       | `Record<string, string[]>`       | Deprecated compatibility env metadata for provider auth/status lookup. Prefer `setup.providers[].envVars` for new plugins; NexisClaw still reads this during the deprecation window.                                                 |
+| `providerAuthEnvVars`                | No       | `Record<string, string[]>`       | Deprecated compatibility env metadata for provider auth/status lookup. Prefer `setup.providers[].envVars` for new plugins; GreenchClaw still reads this during the deprecation window.                                              |
 | `providerAuthAliases`                | No       | `Record<string, string>`         | Provider ids that should reuse another provider id for auth lookup, for example a coding provider that shares the base provider API key and auth profiles.                                                                          |
-| `channelEnvVars`                     | No       | `Record<string, string[]>`       | Cheap channel env metadata that NexisClaw can inspect without loading plugin code. Use this for env-driven channel setup or auth surfaces that generic startup/config helpers should see.                                            |
+| `channelEnvVars`                     | No       | `Record<string, string[]>`       | Cheap channel env metadata that GreenchClaw can inspect without loading plugin code. Use this for env-driven channel setup or auth surfaces that generic startup/config helpers should see.                                         |
 | `providerAuthChoices`                | No       | `object[]`                       | Cheap auth-choice metadata for onboarding pickers, preferred-provider resolution, and simple CLI flag wiring.                                                                                                                       |
 | `activation`                         | No       | `object`                         | Cheap activation planner metadata for startup, provider, command, channel, route, and capability-triggered loading. Metadata only; plugin runtime still owns actual behavior.                                                       |
 | `setup`                              | No       | `object`                         | Cheap setup/onboarding descriptors that discovery and setup surfaces can inspect without loading plugin runtime.                                                                                                                    |
-| `qaRunners`                          | No       | `object[]`                       | Cheap QA runner descriptors used by the shared `NexisClaw qa` host before plugin runtime loads.                                                                                                                                      |
+| `qaRunners`                          | No       | `object[]`                       | Cheap QA runner descriptors used by the shared `GreenchClaw qa` host before plugin runtime loads.                                                                                                                                   |
 | `contracts`                          | No       | `object`                         | Static capability ownership snapshot for external auth hooks, speech, realtime transcription, realtime voice, media-understanding, image-generation, music-generation, video-generation, web-fetch, web search, and tool ownership. |
 | `mediaUnderstandingProviderMetadata` | No       | `Record<string, object>`         | Cheap media-understanding defaults for provider ids declared in `contracts.mediaUnderstandingProviders`.                                                                                                                            |
 | `imageGenerationProviderMetadata`    | No       | `Record<string, object>`         | Cheap image-generation auth metadata for provider ids declared in `contracts.imageGenerationProviders`, including provider-owned auth aliases and base-url guards.                                                                  |
@@ -191,7 +191,7 @@ or npm install metadata. Those belong in your plugin code and `package.json`.
 
 The generation provider metadata fields describe static auth signals for
 providers declared in the matching `contracts.*GenerationProviders` list.
-NexisClaw reads these fields before provider runtime loads so core tools can
+GreenchClaw reads these fields before provider runtime loads so core tools can
 decide whether a generation provider is available without importing every
 provider plugin.
 
@@ -286,7 +286,7 @@ Each `providerBaseUrl` guard supports:
 
 `toolMetadata` uses the same `configSignals` and `authSignals` shapes as
 generation provider metadata, keyed by tool name. `contracts.tools` declares
-ownership. `toolMetadata` declares cheap availability evidence so NexisClaw can
+ownership. `toolMetadata` declares cheap availability evidence so GreenchClaw can
 avoid importing a plugin runtime just to have its tool factory return `null`.
 
 ```json
@@ -316,7 +316,7 @@ avoid importing a plugin runtime just to have its tool factory return `null`.
 }
 ```
 
-If a tool has no `toolMetadata`, NexisClaw preserves the existing behavior and
+If a tool has no `toolMetadata`, GreenchClaw preserves the existing behavior and
 loads the owning plugin when the tool contract matches policy. For hot-path
 tools whose factory depends on auth/config, plugin authors should declare
 `toolMetadata` instead of making core import runtime to ask.
@@ -324,7 +324,7 @@ tools whose factory depends on auth/config, plugin authors should declare
 ## providerAuthChoices reference
 
 Each `providerAuthChoices` entry describes one onboarding or auth choice.
-NexisClaw reads this before provider runtime loads.
+GreenchClaw reads this before provider runtime loads.
 Provider setup lists use these manifest choices, descriptor-derived setup
 choices, and install-catalog metadata without loading provider runtime.
 
@@ -333,7 +333,7 @@ choices, and install-catalog metadata without loading provider runtime.
 | `provider`            | Yes      | `string`                                        | Provider id this choice belongs to.                                                                      |
 | `method`              | Yes      | `string`                                        | Auth method id to dispatch to.                                                                           |
 | `choiceId`            | Yes      | `string`                                        | Stable auth-choice id used by onboarding and CLI flows.                                                  |
-| `choiceLabel`         | No       | `string`                                        | User-facing label. If omitted, NexisClaw falls back to `choiceId`.                                        |
+| `choiceLabel`         | No       | `string`                                        | User-facing label. If omitted, GreenchClaw falls back to `choiceId`.                                     |
 | `choiceHint`          | No       | `string`                                        | Short helper text for the picker.                                                                        |
 | `assistantPriority`   | No       | `number`                                        | Lower values sort earlier in assistant-driven interactive pickers.                                       |
 | `assistantVisibility` | No       | `"visible"` \| `"manual-only"`                  | Hide the choice from assistant pickers while still allowing manual CLI selection.                        |
@@ -350,7 +350,7 @@ choices, and install-catalog metadata without loading provider runtime.
 ## commandAliases reference
 
 Use `commandAliases` when a plugin owns a runtime command name that users may
-mistakenly put in `plugins.allow` or try to run as a root CLI command. NexisClaw
+mistakenly put in `plugins.allow` or try to run as a root CLI command. GreenchClaw
 uses this metadata for diagnostics without importing plugin runtime code.
 
 ```json
@@ -455,7 +455,7 @@ that best describes ownership.
 ## qaRunners reference
 
 Use `qaRunners` when a plugin contributes one or more transport runners beneath
-the shared `NexisClaw qa` root. Keep this metadata cheap and static; the plugin
+the shared `GreenchClaw qa` root. Keep this metadata cheap and static; the plugin
 runtime still owns actual CLI registration through a lightweight
 `runtime-api.ts` surface that exports `qaRunnerCliRegistrations`.
 
@@ -472,7 +472,7 @@ runtime still owns actual CLI registration through a lightweight
 
 | Field         | Required | Type     | What it means                                                      |
 | ------------- | -------- | -------- | ------------------------------------------------------------------ |
-| `commandName` | Yes      | `string` | Subcommand mounted beneath `NexisClaw qa`, for example `matrix`.    |
+| `commandName` | Yes      | `string` | Subcommand mounted beneath `GreenchClaw qa`, for example `matrix`. |
 | `description` | No       | `string` | Fallback help text used when the shared host needs a stub command. |
 
 ## setup reference
@@ -516,22 +516,22 @@ narrows the candidate plugin and setup still needs richer setup-time runtime
 hooks, set `requiresRuntime: true` and keep `setup-api` in place as the
 fallback execution path.
 
-NexisClaw also includes `setup.providers[].envVars` in generic provider auth and
+GreenchClaw also includes `setup.providers[].envVars` in generic provider auth and
 env-var lookups. `providerAuthEnvVars` remains supported through a compatibility
 adapter during the deprecation window, but non-bundled plugins that still use it
 receive a manifest diagnostic. New plugins should put setup/status env metadata
 on `setup.providers[].envVars`.
 
-NexisClaw can also derive simple setup choices from `setup.providers[].authMethods`
+GreenchClaw can also derive simple setup choices from `setup.providers[].authMethods`
 when no setup entry is available, or when `setup.requiresRuntime: false`
 declares setup runtime unnecessary. Explicit `providerAuthChoices` entries stay
 preferred for custom labels, CLI flags, onboarding scope, and assistant metadata.
 
 Set `requiresRuntime: false` only when those descriptors are sufficient for the
-setup surface. NexisClaw treats explicit `false` as a descriptor-only contract
-and will not execute `setup-api` or `NexisClaw.setupEntry` for setup lookup. If
+setup surface. GreenchClaw treats explicit `false` as a descriptor-only contract
+and will not execute `setup-api` or `GreenchClaw.setupEntry` for setup lookup. If
 a descriptor-only plugin still ships one of those setup runtime entries,
-NexisClaw reports an additive diagnostic and continues ignoring it. Omitted
+GreenchClaw reports an additive diagnostic and continues ignoring it. Omitted
 `requiresRuntime` keeps legacy fallback behavior so existing plugins that added
 descriptors without the flag do not break.
 
@@ -610,7 +610,7 @@ Each field hint can include:
 
 ## contracts reference
 
-Use `contracts` only for static capability ownership metadata that NexisClaw can
+Use `contracts` only for static capability ownership metadata that GreenchClaw can
 read without importing the plugin runtime.
 
 ```json
@@ -649,7 +649,7 @@ Each list is optional:
 | `videoGenerationProviders`       | `string[]` | Video-generation provider ids this plugin owns.                       |
 | `webFetchProviders`              | `string[]` | Web-fetch provider ids this plugin owns.                              |
 | `webSearchProviders`             | `string[]` | Web-search provider ids this plugin owns.                             |
-| `migrationProviders`             | `string[]` | Import provider ids this plugin owns for `NexisClaw migrate`.          |
+| `migrationProviders`             | `string[]` | Import provider ids this plugin owns for `GreenchClaw migrate`.       |
 | `tools`                          | `string[]` | Agent tool names this plugin owns.                                    |
 
 `contracts.embeddedExtensionFactories` is retained for bundled Codex
@@ -720,7 +720,7 @@ when `setup.requiresRuntime: false` declares setup runtime unnecessary.
 
 `channelConfigs` is plugin manifest metadata, not a new top-level user config
 section. Users still configure channel instances under `channels.<channel-id>`.
-NexisClaw reads manifest metadata to decide which plugin owns that configured
+GreenchClaw reads manifest metadata to decide which plugin owns that configured
 channel before plugin runtime code executes.
 
 For a channel plugin, `configSchema` and `channelConfigs` describe different
@@ -730,14 +730,14 @@ paths:
 - `channelConfigs.<channel-id>.schema` validates `channels.<channel-id>`
 
 Non-bundled plugins that declare `channels[]` should also declare matching
-`channelConfigs` entries. Without them, NexisClaw can still load the plugin, but
+`channelConfigs` entries. Without them, GreenchClaw can still load the plugin, but
 cold-path config schema, setup, and Control UI surfaces cannot know the
 channel-owned option shape until plugin runtime executes.
 
 `channelConfigs.<channel-id>.commands.nativeCommandsAutoEnabled` and
 `nativeSkillsAutoEnabled` can declare static `auto` defaults for command config
 checks that run before channel runtime loads. Bundled channels can also publish
-the same defaults through `package.json#NexisClaw.channel.commands` alongside
+the same defaults through `package.json#GreenchClaw.channel.commands` alongside
 their other package-owned channel catalog metadata.
 
 ```json
@@ -806,11 +806,11 @@ keeps the same channel id for config compatibility.
 }
 ```
 
-When `channels.chat` is configured, NexisClaw considers both the channel id and
+When `channels.chat` is configured, GreenchClaw considers both the channel id and
 the preferred plugin id. If the lower-priority plugin was only selected because
-it is bundled or enabled by default, NexisClaw disables it in the effective
+it is bundled or enabled by default, GreenchClaw disables it in the effective
 runtime config so one plugin owns the channel and its tools. Explicit user
-selection still wins: if the user explicitly enables both plugins, NexisClaw
+selection still wins: if the user explicitly enables both plugins, GreenchClaw
 preserves that choice and reports duplicate channel/tool diagnostics instead of
 silently changing the requested plugin set.
 
@@ -819,7 +819,7 @@ It is not a general priority field and it does not rename user config keys.
 
 ## modelSupport reference
 
-Use `modelSupport` when NexisClaw should infer your provider plugin from
+Use `modelSupport` when GreenchClaw should infer your provider plugin from
 shorthand model ids like `gpt-5.5` or `claude-sonnet-4.6` before plugin runtime
 loads.
 
@@ -832,7 +832,7 @@ loads.
 }
 ```
 
-NexisClaw applies this precedence:
+GreenchClaw applies this precedence:
 
 - explicit `provider/model` refs use the owning `providers` manifest metadata
 - `modelPatterns` beat `modelPrefixes`
@@ -849,7 +849,7 @@ Fields:
 
 ## modelCatalog reference
 
-Use `modelCatalog` when NexisClaw should know provider model metadata before
+Use `modelCatalog` when GreenchClaw should know provider model metadata before
 loading plugin runtime. This is the manifest-owned source for fixed catalog
 rows, provider aliases, suppression rules, and discovery mode. Runtime refresh
 still belongs in provider runtime code, but the manifest tells core when runtime
@@ -913,7 +913,7 @@ Top-level fields:
 
 `aliases` participates in provider ownership lookup for model-catalog planning.
 Alias targets must be top-level providers owned by the same plugin. When a
-provider-filtered list uses an alias, NexisClaw can read the owning manifest and
+provider-filtered list uses an alias, GreenchClaw can read the owning manifest and
 apply alias API/base URL overrides without loading provider runtime.
 Aliases do not expand unfiltered catalog listings; broad lists emit the owning
 canonical provider rows only.
@@ -934,25 +934,25 @@ Provider fields:
 
 Model fields:
 
-| Field           | Type                                                           | What it means                                                               |
-| --------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `id`            | `string`                                                       | Provider-local model id, without the `provider/` prefix.                    |
-| `name`          | `string`                                                       | Optional display name.                                                      |
-| `api`           | `ModelApi`                                                     | Optional per-model API override.                                            |
-| `baseUrl`       | `string`                                                       | Optional per-model base URL override.                                       |
-| `headers`       | `Record<string, string>`                                       | Optional per-model static headers.                                          |
-| `input`         | `Array<"text" \| "image" \| "document" \| "audio" \| "video">` | Modalities the model accepts.                                               |
-| `reasoning`     | `boolean`                                                      | Whether the model exposes reasoning behavior.                               |
-| `contextWindow` | `number`                                                       | Native provider context window.                                             |
-| `contextTokens` | `number`                                                       | Optional effective runtime context cap when different from `contextWindow`. |
-| `maxTokens`     | `number`                                                       | Maximum output tokens when known.                                           |
-| `cost`          | `object`                                                       | Optional USD per million token pricing, including optional `tieredPricing`. |
-| `compat`        | `object`                                                       | Optional compatibility flags matching NexisClaw model config compatibility.  |
-| `status`        | `"available"` \| `"preview"` \| `"deprecated"` \| `"disabled"` | Listing status. Suppress only when the row must not appear at all.          |
-| `statusReason`  | `string`                                                       | Optional reason shown with non-available status.                            |
-| `replaces`      | `string[]`                                                     | Older provider-local model ids this model supersedes.                       |
-| `replacedBy`    | `string`                                                       | Replacement provider-local model id for deprecated rows.                    |
-| `tags`          | `string[]`                                                     | Stable tags used by pickers and filters.                                    |
+| Field           | Type                                                           | What it means                                                                 |
+| --------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `id`            | `string`                                                       | Provider-local model id, without the `provider/` prefix.                      |
+| `name`          | `string`                                                       | Optional display name.                                                        |
+| `api`           | `ModelApi`                                                     | Optional per-model API override.                                              |
+| `baseUrl`       | `string`                                                       | Optional per-model base URL override.                                         |
+| `headers`       | `Record<string, string>`                                       | Optional per-model static headers.                                            |
+| `input`         | `Array<"text" \| "image" \| "document" \| "audio" \| "video">` | Modalities the model accepts.                                                 |
+| `reasoning`     | `boolean`                                                      | Whether the model exposes reasoning behavior.                                 |
+| `contextWindow` | `number`                                                       | Native provider context window.                                               |
+| `contextTokens` | `number`                                                       | Optional effective runtime context cap when different from `contextWindow`.   |
+| `maxTokens`     | `number`                                                       | Maximum output tokens when known.                                             |
+| `cost`          | `object`                                                       | Optional USD per million token pricing, including optional `tieredPricing`.   |
+| `compat`        | `object`                                                       | Optional compatibility flags matching GreenchClaw model config compatibility. |
+| `status`        | `"available"` \| `"preview"` \| `"deprecated"` \| `"disabled"` | Listing status. Suppress only when the row must not appear at all.            |
+| `statusReason`  | `string`                                                       | Optional reason shown with non-available status.                              |
+| `replaces`      | `string[]`                                                     | Older provider-local model ids this model supersedes.                         |
+| `replacedBy`    | `string`                                                       | Replacement provider-local model id for deprecated rows.                      |
+| `tags`          | `string[]`                                                     | Stable tags used by pickers and filters.                                      |
 
 Suppression fields:
 
@@ -968,7 +968,7 @@ Do not put runtime-only data in `modelCatalog`. Use `static` only when manifest
 rows are complete enough for provider-filtered list and picker surfaces to skip
 registry/runtime discovery. Use `refreshable` when manifest rows are useful
 listable seeds or supplements but a refresh/cache can add more rows later;
-refreshable rows are not authoritative by themselves. Use `runtime` when NexisClaw
+refreshable rows are not authoritative by themselves. Use `runtime` when GreenchClaw
 must load provider runtime to know the list.
 
 ## modelIdNormalization reference
@@ -1087,15 +1087,15 @@ Provider fields:
 
 Source fields:
 
-| Field                      | Type               | What it means                                                                                                        |
-| -------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| `provider`                 | `string`           | External catalog provider id when it differs from the NexisClaw provider id, for example `z-ai` for a `zai` provider. |
-| `passthroughProviderModel` | `boolean`          | Treat slash-containing model ids as nested provider/model refs, useful for proxy providers such as OpenRouter.       |
-| `modelIdTransforms`        | `"version-dots"[]` | Extra external catalog model-id variants. `version-dots` tries dotted version ids like `claude-opus-4.6`.            |
+| Field                      | Type               | What it means                                                                                                           |
+| -------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| `provider`                 | `string`           | External catalog provider id when it differs from the GreenchClaw provider id, for example `z-ai` for a `zai` provider. |
+| `passthroughProviderModel` | `boolean`          | Treat slash-containing model ids as nested provider/model refs, useful for proxy providers such as OpenRouter.          |
+| `modelIdTransforms`        | `"version-dots"[]` | Extra external catalog model-id variants. `version-dots` tries dotted version ids like `claude-opus-4.6`.               |
 
-### NexisClaw Provider Index
+### GreenchClaw Provider Index
 
-The NexisClaw Provider Index is NexisClaw-owned preview metadata for providers
+The GreenchClaw Provider Index is GreenchClaw-owned preview metadata for providers
 whose plugins may not be installed yet. It is not part of a plugin manifest.
 Plugin manifests remain the installed-plugin authority. The Provider Index is
 the internal fallback contract that future installable-provider and pre-install
@@ -1106,7 +1106,7 @@ Catalog authority order:
 1. User config.
 2. Installed plugin manifest `modelCatalog`.
 3. Model catalog cache from explicit refresh.
-4. NexisClaw Provider Index preview rows.
+4. GreenchClaw Provider Index preview rows.
 
 The Provider Index must not contain secrets, enabled state, runtime hooks, or
 live account-specific model data. Its preview catalogs use the same
@@ -1124,7 +1124,7 @@ expected integrity, and cheap auth-choice labels are enough to show an
 installable setup option. Once the plugin is installed, its manifest wins and
 the Provider Index entry is ignored for that provider.
 
-Legacy top-level capability keys are deprecated. Use `NexisClaw doctor --fix` to
+Legacy top-level capability keys are deprecated. Use `GreenchClaw doctor --fix` to
 move `speechProviders`, `realtimeTranscriptionProviders`,
 `realtimeVoiceProviders`, `mediaUnderstandingProviders`,
 `imageGenerationProviders`, `videoGenerationProviders`,
@@ -1136,49 +1136,49 @@ ownership.
 
 The two files serve different jobs:
 
-| File                   | Use it for                                                                                                                       |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `NexisClaw.plugin.json` | Discovery, config validation, auth-choice metadata, and UI hints that must exist before plugin code runs                         |
-| `package.json`         | npm metadata, dependency installation, and the `NexisClaw` block used for entrypoints, install gating, setup, or catalog metadata |
+| File                      | Use it for                                                                                                                          |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `GreenchClaw.plugin.json` | Discovery, config validation, auth-choice metadata, and UI hints that must exist before plugin code runs                            |
+| `package.json`            | npm metadata, dependency installation, and the `GreenchClaw` block used for entrypoints, install gating, setup, or catalog metadata |
 
 If you are unsure where a piece of metadata belongs, use this rule:
 
-- if NexisClaw must know it before loading plugin code, put it in `NexisClaw.plugin.json`
+- if GreenchClaw must know it before loading plugin code, put it in `GreenchClaw.plugin.json`
 - if it is about packaging, entry files, or npm install behavior, put it in `package.json`
 
 ### package.json fields that affect discovery
 
 Some pre-runtime plugin metadata intentionally lives in `package.json` under the
-`NexisClaw` block instead of `NexisClaw.plugin.json`.
-`NexisClaw.bundle` and `NexisClaw.bundle.json` are not NexisClaw plugin contracts;
-native plugins must use `NexisClaw.plugin.json` plus the supported
-`package.json#NexisClaw` fields below.
+`GreenchClaw` block instead of `GreenchClaw.plugin.json`.
+`GreenchClaw.bundle` and `GreenchClaw.bundle.json` are not GreenchClaw plugin contracts;
+native plugins must use `GreenchClaw.plugin.json` plus the supported
+`package.json#GreenchClaw` fields below.
 
 Important examples:
 
-| Field                                                                                      | What it means                                                                                                                                                                        |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `NexisClaw.extensions`                                                                      | Declares native plugin entrypoints. Must stay inside the plugin package directory.                                                                                                   |
-| `NexisClaw.runtimeExtensions`                                                               | Declares built JavaScript runtime entrypoints for installed packages. Must stay inside the plugin package directory.                                                                 |
-| `NexisClaw.setupEntry`                                                                      | Lightweight setup-only entrypoint used during onboarding, deferred channel startup, and read-only channel status/SecretRef discovery. Must stay inside the plugin package directory. |
-| `NexisClaw.runtimeSetupEntry`                                                               | Declares the built JavaScript setup entrypoint for installed packages. Requires `setupEntry`, must exist, and must stay inside the plugin package directory.                         |
-| `NexisClaw.channel`                                                                         | Cheap channel catalog metadata like labels, docs paths, aliases, and selection copy.                                                                                                 |
-| `NexisClaw.channel.commands`                                                                | Static native command and native skill auto-default metadata used by config, audit, and command-list surfaces before channel runtime loads.                                          |
-| `NexisClaw.channel.configuredState`                                                         | Lightweight configured-state checker metadata that can answer "does env-only setup already exist?" without loading the full channel runtime.                                         |
-| `NexisClaw.channel.persistedAuthState`                                                      | Lightweight persisted-auth checker metadata that can answer "is anything already signed in?" without loading the full channel runtime.                                               |
-| `NexisClaw.install.clawhubSpec` / `NexisClaw.install.npmSpec` / `NexisClaw.install.localPath` | Install/update hints for bundled and externally published plugins.                                                                                                                   |
-| `NexisClaw.install.defaultChoice`                                                           | Preferred install path when multiple install sources are available.                                                                                                                  |
-| `NexisClaw.install.minHostVersion`                                                          | Minimum supported NexisClaw host version, using a semver floor like `>=2026.3.22` or `>=2026.5.1-beta.1`.                                                                             |
-| `NexisClaw.install.expectedIntegrity`                                                       | Expected npm dist integrity string such as `sha512-...`; install and update flows verify the fetched artifact against it.                                                            |
-| `NexisClaw.install.allowInvalidConfigRecovery`                                              | Allows a narrow bundled-plugin reinstall recovery path when config is invalid.                                                                                                       |
-| `NexisClaw.startup.deferConfiguredChannelFullLoadUntilAfterListen`                          | Lets setup-only channel surfaces load before the full channel plugin during startup.                                                                                                 |
+| Field                                                                                               | What it means                                                                                                                                                                        |
+| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GreenchClaw.extensions`                                                                            | Declares native plugin entrypoints. Must stay inside the plugin package directory.                                                                                                   |
+| `GreenchClaw.runtimeExtensions`                                                                     | Declares built JavaScript runtime entrypoints for installed packages. Must stay inside the plugin package directory.                                                                 |
+| `GreenchClaw.setupEntry`                                                                            | Lightweight setup-only entrypoint used during onboarding, deferred channel startup, and read-only channel status/SecretRef discovery. Must stay inside the plugin package directory. |
+| `GreenchClaw.runtimeSetupEntry`                                                                     | Declares the built JavaScript setup entrypoint for installed packages. Requires `setupEntry`, must exist, and must stay inside the plugin package directory.                         |
+| `GreenchClaw.channel`                                                                               | Cheap channel catalog metadata like labels, docs paths, aliases, and selection copy.                                                                                                 |
+| `GreenchClaw.channel.commands`                                                                      | Static native command and native skill auto-default metadata used by config, audit, and command-list surfaces before channel runtime loads.                                          |
+| `GreenchClaw.channel.configuredState`                                                               | Lightweight configured-state checker metadata that can answer "does env-only setup already exist?" without loading the full channel runtime.                                         |
+| `GreenchClaw.channel.persistedAuthState`                                                            | Lightweight persisted-auth checker metadata that can answer "is anything already signed in?" without loading the full channel runtime.                                               |
+| `GreenchClaw.install.clawhubSpec` / `GreenchClaw.install.npmSpec` / `GreenchClaw.install.localPath` | Install/update hints for bundled and externally published plugins.                                                                                                                   |
+| `GreenchClaw.install.defaultChoice`                                                                 | Preferred install path when multiple install sources are available.                                                                                                                  |
+| `GreenchClaw.install.minHostVersion`                                                                | Minimum supported GreenchClaw host version, using a semver floor like `>=2026.3.22` or `>=2026.5.1-beta.1`.                                                                          |
+| `GreenchClaw.install.expectedIntegrity`                                                             | Expected npm dist integrity string such as `sha512-...`; install and update flows verify the fetched artifact against it.                                                            |
+| `GreenchClaw.install.allowInvalidConfigRecovery`                                                    | Allows a narrow bundled-plugin reinstall recovery path when config is invalid.                                                                                                       |
+| `GreenchClaw.startup.deferConfiguredChannelFullLoadUntilAfterListen`                                | Lets setup-only channel surfaces load before the full channel plugin during startup.                                                                                                 |
 
 Manifest metadata decides which provider/channel/setup choices appear in
-onboarding before runtime loads. `package.json#NexisClaw.install` tells
+onboarding before runtime loads. `package.json#GreenchClaw.install` tells
 onboarding how to fetch or enable that plugin when the user picks one of those
-choices. Do not move install hints into `NexisClaw.plugin.json`.
+choices. Do not move install hints into `GreenchClaw.plugin.json`.
 
-`NexisClaw.install.minHostVersion` is enforced during install and manifest
+`GreenchClaw.install.minHostVersion` is enforced during install and manifest
 registry loading for non-bundled plugin sources. Invalid values are rejected;
 newer-but-valid values skip external plugins on older hosts. Bundled source
 plugins are assumed to be co-versioned with the host checkout.
@@ -1189,7 +1189,7 @@ records ClawHub artifact facts after install. `npmSpec` remains the compatibilit
 fallback for packages that have not moved to ClawHub yet.
 
 Exact npm version pinning already lives in `npmSpec`, for example
-`"npmSpec": "@wecom/wecom-NexisClaw-plugin@1.2.3"`. Official external catalog
+`"npmSpec": "@wecom/wecom-GreenchClaw-plugin@1.2.3"`. Official external catalog
 entries should pair exact specs with `expectedIntegrity` so update flows fail
 closed if the fetched npm artifact no longer matches the pinned release.
 Interactive onboarding still offers trusted registry npm specs, including bare
@@ -1201,29 +1201,29 @@ When `expectedIntegrity` is present,
 install/update flows enforce it; when it is omitted, the registry resolution is
 recorded without an integrity pin.
 
-Channel plugins should provide `NexisClaw.setupEntry` when status, channel list,
+Channel plugins should provide `GreenchClaw.setupEntry` when status, channel list,
 or SecretRef scans need to identify configured accounts without loading the full
 runtime. The setup entry should expose channel metadata plus setup-safe config,
 status, and secrets adapters; keep network clients, gateway listeners, and
 transport runtimes in the main extension entrypoint.
 
 Runtime entrypoint fields do not override package-boundary checks for source
-entrypoint fields. For example, `NexisClaw.runtimeExtensions` cannot make an
-escaping `NexisClaw.extensions` path loadable.
+entrypoint fields. For example, `GreenchClaw.runtimeExtensions` cannot make an
+escaping `GreenchClaw.extensions` path loadable.
 
-`NexisClaw.install.allowInvalidConfigRecovery` is intentionally narrow. It does
+`GreenchClaw.install.allowInvalidConfigRecovery` is intentionally narrow. It does
 not make arbitrary broken configs installable. Today it only allows install
 flows to recover from specific stale bundled-plugin upgrade failures, such as a
 missing bundled plugin path or a stale `channels.<id>` entry for that same
 bundled plugin. Unrelated config errors still block install and send operators
-to `NexisClaw doctor --fix`.
+to `GreenchClaw doctor --fix`.
 
-`NexisClaw.channel.persistedAuthState` is package metadata for a tiny checker
+`GreenchClaw.channel.persistedAuthState` is package metadata for a tiny checker
 module:
 
 ```json
 {
-  "NexisClaw": {
+  "GreenchClaw": {
     "channel": {
       "id": "whatsapp",
       "persistedAuthState": {
@@ -1242,12 +1242,12 @@ repair runtime dependencies, or decide whether a channel runtime should load.
 The target export should be a small function that reads persisted state only; do
 not route it through the full channel runtime barrel.
 
-`NexisClaw.channel.configuredState` follows the same shape for cheap env-only
+`GreenchClaw.channel.configuredState` follows the same shape for cheap env-only
 configured checks:
 
 ```json
 {
-  "NexisClaw": {
+  "GreenchClaw": {
     "channel": {
       "id": "telegram",
       "configuredState": {
@@ -1266,13 +1266,13 @@ hook instead.
 
 ## Discovery precedence (duplicate plugin ids)
 
-NexisClaw discovers plugins from several roots (bundled, global install, workspace, explicit config-selected paths). If two discoveries share the same `id`, only the **highest-precedence** manifest is kept; lower-precedence duplicates are dropped instead of loading beside it.
+GreenchClaw discovers plugins from several roots (bundled, global install, workspace, explicit config-selected paths). If two discoveries share the same `id`, only the **highest-precedence** manifest is kept; lower-precedence duplicates are dropped instead of loading beside it.
 
 Precedence, highest to lowest:
 
 1. **Config-selected** — a path explicitly pinned in `plugins.entries.<id>`
-2. **Bundled** — plugins shipped with NexisClaw
-3. **Global install** — plugins installed into the global NexisClaw plugin root
+2. **Bundled** — plugins shipped with GreenchClaw
+3. **Global install** — plugins installed into the global GreenchClaw plugin root
 4. **Workspace** — plugins discovered relative to the current workspace
 
 Implications:
@@ -1287,7 +1287,7 @@ Implications:
 - **Every plugin must ship a JSON Schema**, even if it accepts no config.
 - An empty schema is acceptable (for example, `{ "type": "object", "additionalProperties": false }`).
 - Schemas are validated at config read/write time, not at runtime.
-- When extending or forking a bundled plugin with new config keys, update that plugin's `NexisClaw.plugin.json` `configSchema` at the same time. Bundled plugin schemas are strict, so adding `plugins.entries.<id>.config.myNewKey` in user config without adding `myNewKey` to `configSchema.properties` will be rejected before the plugin runtime loads.
+- When extending or forking a bundled plugin with new config keys, update that plugin's `GreenchClaw.plugin.json` `configSchema` at the same time. Bundled plugin schemas are strict, so adding `plugins.entries.<id>.config.myNewKey` in user config without adding `myNewKey` to `configSchema.properties` will be rejected before the plugin runtime loads.
 
 Example schema extension:
 
@@ -1320,13 +1320,13 @@ See [Configuration reference](/gateway/configuration) for the full `plugins.*` s
 
 ## Notes
 
-- The manifest is **required for native NexisClaw plugins**, including local filesystem loads. Runtime still loads the plugin module separately; the manifest is only for discovery + validation.
+- The manifest is **required for native GreenchClaw plugins**, including local filesystem loads. Runtime still loads the plugin module separately; the manifest is only for discovery + validation.
 - Native manifests are parsed with JSON5, so comments, trailing commas, and unquoted keys are accepted as long as the final value is still an object.
 - Only documented manifest fields are read by the manifest loader. Avoid custom top-level keys.
 - `channels`, `providers`, `cliBackends`, and `skills` can all be omitted when a plugin does not need them.
 - `providerCatalogEntry` must stay lightweight and should not import broad runtime code; use it for static provider catalog metadata or narrow discovery descriptors, not request-time execution. `providerDiscoveryEntry` is the legacy spelling and still works for existing plugins.
 - Exclusive plugin kinds are selected through `plugins.slots.*`: `kind: "memory"` via `plugins.slots.memory`, `kind: "context-engine"` via `plugins.slots.contextEngine` (default `legacy`).
-- Declare exclusive plugin kind in this manifest. Runtime-entry `NexisClawPluginDefinition.kind` is deprecated and remains only as a compatibility fallback for older plugins.
+- Declare exclusive plugin kind in this manifest. Runtime-entry `GreenchClawPluginDefinition.kind` is deprecated and remains only as a compatibility fallback for older plugins.
 - Env-var metadata (`setup.providers[].envVars`, deprecated `providerAuthEnvVars`, and `channelEnvVars`) is declarative only. Status, audit, cron delivery validation, and other read-only surfaces still apply plugin trust and effective activation policy before treating an env var as configured.
 - For runtime wizard metadata that requires provider code, see [Provider runtime hooks](/plugins/architecture-internals#provider-runtime-hooks).
 - If your plugin depends on native modules, document the build steps and any package-manager allowlist requirements (for example, pnpm `allow-build-scripts` + `pnpm rebuild <package>`).

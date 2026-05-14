@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { isRecord } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { isRecord } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 type MutableRecord = Record<string, unknown>;
 
@@ -14,8 +14,8 @@ function mergeHostConfig(params: {
   return Object.assign({}, params.legacyHost, params.existingHost);
 }
 
-export function migrateLegacyCanvasHostConfig(config: NexisClawConfig): {
-  config: NexisClawConfig;
+export function migrateLegacyCanvasHostConfig(config: GreenchClawConfig): {
+  config: GreenchClawConfig;
   changes: string[];
 } | null {
   const legacyHost = readRecord((config as { canvasHost?: unknown }).canvasHost);
@@ -41,7 +41,7 @@ export function migrateLegacyCanvasHostConfig(config: NexisClawConfig): {
   };
   plugins.entries = entries;
 
-  const next = { ...config, plugins } as NexisClawConfig & { canvasHost?: unknown };
+  const next = { ...config, plugins } as GreenchClawConfig & { canvasHost?: unknown };
   delete next.canvasHost;
 
   return {

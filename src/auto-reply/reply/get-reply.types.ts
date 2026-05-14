@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { GetReplyOptions } from "../get-reply-options.types.js";
 import type { ReplyPayload } from "../reply-payload.js";
 import type { MsgContext } from "../templating.js";
@@ -6,5 +6,5 @@ import type { MsgContext } from "../templating.js";
 export type GetReplyFromConfig = (
   ctx: MsgContext,
   opts?: GetReplyOptions,
-  configOverride?: NexisClawConfig,
+  configOverride?: GreenchClawConfig,
 ) => Promise<ReplyPayload | ReplyPayload[] | undefined>;

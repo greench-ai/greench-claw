@@ -1,10 +1,10 @@
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { resolveUserPath } from "../../../utils.js";
 import type { OnboardOptions } from "../../onboard-types.js";
 
 export function resolveNonInteractiveWorkspaceDir(params: {
   opts: OnboardOptions;
-  baseConfig: NexisClawConfig;
+  baseConfig: GreenchClawConfig;
   defaultWorkspaceDir: string;
 }) {
   const raw = (

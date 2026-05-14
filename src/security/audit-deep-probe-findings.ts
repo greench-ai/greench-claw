@@ -12,7 +12,7 @@ export function collectDeepProbeFindings(params: {
       severity: "warn",
       title: "Gateway probe failed (deep)",
       detail: params.deep.gateway.error ?? "gateway unreachable",
-      remediation: `Run "${formatCliCommand("NexisClaw status --all")}" to debug connectivity/auth, then re-run "${formatCliCommand("NexisClaw security audit --deep")}".`,
+      remediation: `Run "${formatCliCommand("GreenchClaw status --all")}" to debug connectivity/auth, then re-run "${formatCliCommand("GreenchClaw security audit --deep")}".`,
     });
   }
   if (params.authWarning) {
@@ -21,7 +21,7 @@ export function collectDeepProbeFindings(params: {
       severity: "warn",
       title: "Gateway probe auth SecretRef is unavailable",
       detail: params.authWarning,
-      remediation: `Set NEXISCLAW_GATEWAY_TOKEN/NEXISCLAW_GATEWAY_PASSWORD in this shell or resolve the external secret provider, then re-run "${formatCliCommand("NexisClaw security audit --deep")}".`,
+      remediation: `Set GREENCHCLAW_GATEWAY_TOKEN/GREENCHCLAW_GATEWAY_PASSWORD in this shell or resolve the external secret provider, then re-run "${formatCliCommand("GreenchClaw security audit --deep")}".`,
     });
   }
   return findings;

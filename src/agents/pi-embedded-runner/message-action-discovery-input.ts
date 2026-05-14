@@ -1,7 +1,7 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 
 export function buildEmbeddedMessageActionDiscoveryInput(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   channel: string;
   currentChannelId?: string | null;
   currentThreadTs?: string | null;

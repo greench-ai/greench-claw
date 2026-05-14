@@ -1,12 +1,12 @@
 import type {
   ChannelDoctorConfigMutation,
   ChannelDoctorLegacyConfigRule,
-} from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   hasLegacyFlatAllowPrivateNetworkAlias,
   migrateLegacyFlatAllowPrivateNetworkAlias,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { isRecord } from "./record-shared.js";
 
 function hasLegacyMatrixRoomAllowAlias(value: unknown): boolean {
@@ -122,43 +122,43 @@ export const legacyConfigRules: ChannelDoctorLegacyConfigRule[] = [
   {
     path: ["channels", "matrix"],
     message:
-      'channels.matrix.allowPrivateNetwork is legacy; use channels.matrix.network.dangerouslyAllowPrivateNetwork instead. Run "NexisClaw doctor --fix".',
+      'channels.matrix.allowPrivateNetwork is legacy; use channels.matrix.network.dangerouslyAllowPrivateNetwork instead. Run "GreenchClaw doctor --fix".',
     match: (value) => hasLegacyFlatAllowPrivateNetworkAlias(isRecord(value) ? value : {}),
   },
   {
     path: ["channels", "matrix", "accounts"],
     message:
-      'channels.matrix.accounts.<id>.allowPrivateNetwork is legacy; use channels.matrix.accounts.<id>.network.dangerouslyAllowPrivateNetwork instead. Run "NexisClaw doctor --fix".',
+      'channels.matrix.accounts.<id>.allowPrivateNetwork is legacy; use channels.matrix.accounts.<id>.network.dangerouslyAllowPrivateNetwork instead. Run "GreenchClaw doctor --fix".',
     match: hasLegacyMatrixAccountPrivateNetworkAliases,
   },
   {
     path: ["channels", "matrix", "groups"],
     message:
-      'channels.matrix.groups.<room>.allow is legacy; use channels.matrix.groups.<room>.enabled instead. Run "NexisClaw doctor --fix".',
+      'channels.matrix.groups.<room>.allow is legacy; use channels.matrix.groups.<room>.enabled instead. Run "GreenchClaw doctor --fix".',
     match: hasLegacyMatrixRoomMapAllowAliases,
   },
   {
     path: ["channels", "matrix", "rooms"],
     message:
-      'channels.matrix.rooms.<room>.allow is legacy; use channels.matrix.rooms.<room>.enabled instead. Run "NexisClaw doctor --fix".',
+      'channels.matrix.rooms.<room>.allow is legacy; use channels.matrix.rooms.<room>.enabled instead. Run "GreenchClaw doctor --fix".',
     match: hasLegacyMatrixRoomMapAllowAliases,
   },
   {
     path: ["channels", "matrix", "accounts"],
     message:
-      'channels.matrix.accounts.<id>.{groups,rooms}.<room>.allow is legacy; use channels.matrix.accounts.<id>.{groups,rooms}.<room>.enabled instead. Run "NexisClaw doctor --fix".',
+      'channels.matrix.accounts.<id>.{groups,rooms}.<room>.allow is legacy; use channels.matrix.accounts.<id>.{groups,rooms}.<room>.enabled instead. Run "GreenchClaw doctor --fix".',
     match: hasLegacyMatrixAccountRoomAllowAliases,
   },
   {
     path: ["channels", "matrix"],
     message:
-      'channels.matrix.dm.policy "trusted" is legacy; use "allowlist" (with allowFrom entries) or "pairing" instead. Run "NexisClaw doctor --fix".',
+      'channels.matrix.dm.policy "trusted" is legacy; use "allowlist" (with allowFrom entries) or "pairing" instead. Run "GreenchClaw doctor --fix".',
     match: hasLegacyTrustedDmPolicy,
   },
   {
     path: ["channels", "matrix", "accounts"],
     message:
-      'channels.matrix.accounts.<id>.dm.policy "trusted" is legacy; use "allowlist" (with allowFrom entries) or "pairing" instead. Run "NexisClaw doctor --fix".',
+      'channels.matrix.accounts.<id>.dm.policy "trusted" is legacy; use "allowlist" (with allowFrom entries) or "pairing" instead. Run "GreenchClaw doctor --fix".',
     match: hasLegacyMatrixAccountTrustedDmPolicies,
   },
 ];
@@ -166,7 +166,7 @@ export const legacyConfigRules: ChannelDoctorLegacyConfigRule[] = [
 export function normalizeCompatibilityConfig({
   cfg,
 }: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): ChannelDoctorConfigMutation {
   const channels = isRecord(cfg.channels) ? cfg.channels : null;
   const matrix = isRecord(channels?.matrix) ? channels.matrix : null;
@@ -279,7 +279,7 @@ export function normalizeCompatibilityConfig({
       ...cfg,
       channels: {
         ...cfg.channels,
-        matrix: updatedMatrix as NonNullable<NexisClawConfig["channels"]>["matrix"],
+        matrix: updatedMatrix as NonNullable<GreenchClawConfig["channels"]>["matrix"],
       },
     },
     changes,

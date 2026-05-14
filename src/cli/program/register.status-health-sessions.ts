@@ -66,21 +66,21 @@ export function registerStatusHealthSessionsCommands(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["NexisClaw status", "Show channel health + session summary."],
-          ["NexisClaw status --all", "Full diagnosis (read-only)."],
-          ["NexisClaw status --json", "Machine-readable output."],
-          ["NexisClaw status --usage", "Show model provider usage/quota snapshots."],
+          ["GreenchClaw status", "Show channel health + session summary."],
+          ["GreenchClaw status --all", "Full diagnosis (read-only)."],
+          ["GreenchClaw status --json", "Machine-readable output."],
+          ["GreenchClaw status --usage", "Show model provider usage/quota snapshots."],
           [
-            "NexisClaw status --deep",
+            "GreenchClaw status --deep",
             "Run channel probes (WA + Telegram + Discord + Slack + Signal).",
           ],
-          ["NexisClaw status --deep --timeout 5000", "Tighten probe timeout."],
+          ["GreenchClaw status --deep --timeout 5000", "Tighten probe timeout."],
         ])}`,
     )
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/status", "docs.NexisClaw.ai/cli/status")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/status", "docs.GreenchClaw.ai/cli/status")}\n`,
     )
     .action(async (opts) => {
       await runWithVerboseAndTimeout(opts, async ({ verbose, timeoutMs }) => {
@@ -108,7 +108,7 @@ export function registerStatusHealthSessionsCommands(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/health", "docs.NexisClaw.ai/cli/health")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/health", "docs.GreenchClaw.ai/cli/health")}\n`,
     )
     .action(async (opts) => {
       await runWithVerboseAndTimeout(opts, async ({ verbose, timeoutMs }) => {
@@ -137,13 +137,13 @@ export function registerStatusHealthSessionsCommands(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["NexisClaw sessions", "List all sessions."],
-          ["NexisClaw sessions --agent work", "List sessions for one agent."],
-          ["NexisClaw sessions --all-agents", "Aggregate sessions across agents."],
-          ["NexisClaw sessions --active 120", "Only last 2 hours."],
-          ["NexisClaw sessions --limit 25", "Show the newest 25 sessions."],
-          ["NexisClaw sessions --json", "Machine-readable output."],
-          ["NexisClaw sessions --store ./tmp/sessions.json", "Use a specific session store."],
+          ["GreenchClaw sessions", "List all sessions."],
+          ["GreenchClaw sessions --agent work", "List sessions for one agent."],
+          ["GreenchClaw sessions --all-agents", "Aggregate sessions across agents."],
+          ["GreenchClaw sessions --active 120", "Only last 2 hours."],
+          ["GreenchClaw sessions --limit 25", "Show the newest 25 sessions."],
+          ["GreenchClaw sessions --json", "Machine-readable output."],
+          ["GreenchClaw sessions --store ./tmp/sessions.json", "Use a specific session store."],
         ])}\n\n${theme.muted(
           "Shows token usage per session when the agent reports it; set agents.defaults.contextTokens to cap the window and show %.",
         )}`,
@@ -151,7 +151,7 @@ export function registerStatusHealthSessionsCommands(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/sessions", "docs.NexisClaw.ai/cli/sessions")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/sessions", "docs.GreenchClaw.ai/cli/sessions")}\n`,
     )
     .action(async (opts) => {
       setVerbose(Boolean(opts.verbose));
@@ -193,20 +193,20 @@ export function registerStatusHealthSessionsCommands(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["NexisClaw sessions cleanup --dry-run", "Preview stale/cap cleanup."],
+          ["GreenchClaw sessions cleanup --dry-run", "Preview stale/cap cleanup."],
           [
-            "NexisClaw sessions cleanup --dry-run --fix-missing",
+            "GreenchClaw sessions cleanup --dry-run --fix-missing",
             "Also preview pruning entries with missing transcript files.",
           ],
           [
-            "NexisClaw sessions cleanup --dry-run --fix-dm-scope",
+            "GreenchClaw sessions cleanup --dry-run --fix-dm-scope",
             "Preview stale direct-DM rows after returning dmScope to main.",
           ],
-          ["NexisClaw sessions cleanup --enforce", "Apply maintenance now."],
-          ["NexisClaw sessions cleanup --agent work --dry-run", "Preview one agent store."],
-          ["NexisClaw sessions cleanup --all-agents --dry-run", "Preview all agent stores."],
+          ["GreenchClaw sessions cleanup --enforce", "Apply maintenance now."],
+          ["GreenchClaw sessions cleanup --agent work --dry-run", "Preview one agent store."],
+          ["GreenchClaw sessions cleanup --all-agents --dry-run", "Preview all agent stores."],
           [
-            "NexisClaw sessions cleanup --enforce --store ./tmp/sessions.json",
+            "GreenchClaw sessions cleanup --enforce --store ./tmp/sessions.json",
             "Use a specific store.",
           ],
         ])}`,
@@ -242,7 +242,7 @@ export function registerStatusHealthSessionsCommands(program: Command) {
     .command("export-trajectory")
     .description("Export a redacted trajectory bundle for a stored session")
     .option("--session-key <key>", "Session key to export")
-    .option("--output <path>", "Output directory name inside .NexisClaw/trajectory-exports")
+    .option("--output <path>", "Output directory name inside .GreenchClaw/trajectory-exports")
     .option("--workspace <path>", "Workspace root for the export (default: current directory)")
     .option("--store <path>", "Path to session store (default: resolved from session key)")
     .option("--agent <id>", "Agent id for resolving the default session store")
@@ -283,10 +283,10 @@ export function registerStatusHealthSessionsCommands(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["NexisClaw commitments", "List pending inferred follow-ups."],
-          ["NexisClaw commitments --all", "List all inferred follow-ups."],
-          ["NexisClaw commitments --agent work", "List one agent's inferred follow-ups."],
-          ["NexisClaw commitments dismiss cm_abc123", "Dismiss a follow-up."],
+          ["GreenchClaw commitments", "List pending inferred follow-ups."],
+          ["GreenchClaw commitments --all", "List all inferred follow-ups."],
+          ["GreenchClaw commitments --agent work", "List one agent's inferred follow-ups."],
+          ["GreenchClaw commitments dismiss cm_abc123", "Dismiss a follow-up."],
         ])}`,
     )
     .action(async (opts) => {

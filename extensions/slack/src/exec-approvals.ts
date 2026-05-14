@@ -1,11 +1,11 @@
-import { resolveApprovalApprovers } from "NexisClaw/plugin-sdk/approval-auth-runtime";
+import { resolveApprovalApprovers } from "GreenchClaw/plugin-sdk/approval-auth-runtime";
 import {
   createChannelExecApprovalProfile,
   isChannelExecApprovalTargetRecipient,
-} from "NexisClaw/plugin-sdk/approval-client-runtime";
-import { doesApprovalRequestMatchChannelAccount } from "NexisClaw/plugin-sdk/approval-native-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { normalizeStringifiedOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/approval-client-runtime";
+import { doesApprovalRequestMatchChannelAccount } from "GreenchClaw/plugin-sdk/approval-native-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { normalizeStringifiedOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveSlackAccount } from "./accounts.js";
 
 export function normalizeSlackApproverId(value: string | number): string | undefined {
@@ -24,7 +24,7 @@ export function normalizeSlackApproverId(value: string | number): string | undef
   return /^[UW][A-Z0-9]+$/i.test(trimmed) ? trimmed : undefined;
 }
 
-function resolveSlackOwnerApprovers(cfg: NexisClawConfig): string[] {
+function resolveSlackOwnerApprovers(cfg: GreenchClawConfig): string[] {
   const ownerAllowFrom = cfg.commands?.ownerAllowFrom;
   if (!Array.isArray(ownerAllowFrom) || ownerAllowFrom.length === 0) {
     return [];
@@ -35,7 +35,7 @@ function resolveSlackOwnerApprovers(cfg: NexisClawConfig): string[] {
   });
 }
 export function getSlackExecApprovalApprovers(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): string[] {
   const account = resolveSlackAccount(params).config;
@@ -46,7 +46,7 @@ export function getSlackExecApprovalApprovers(params: {
 }
 
 export function isSlackExecApprovalTargetRecipient(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   senderId?: string | null;
   accountId?: string | null;
 }): boolean {

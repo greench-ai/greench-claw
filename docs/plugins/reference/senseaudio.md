@@ -11,8 +11,8 @@ Adds media understanding provider support.
 
 ## Distribution
 
-- Package: `@NexisClaw/senseaudio-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/senseaudio-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

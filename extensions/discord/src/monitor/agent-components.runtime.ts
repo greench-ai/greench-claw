@@ -3,12 +3,12 @@ export {
   parsePluginBindingApprovalCustomId,
   recordInboundSession,
   resolvePluginConversationBindingApproval,
-} from "NexisClaw/plugin-sdk/conversation-runtime";
-export { dispatchPluginInteractiveHandler } from "NexisClaw/plugin-sdk/plugin-runtime";
+} from "GreenchClaw/plugin-sdk/conversation-runtime";
+export { dispatchPluginInteractiveHandler } from "GreenchClaw/plugin-sdk/plugin-runtime";
 export {
   createReplyReferencePlanner,
   dispatchReplyWithBufferedBlockDispatcher,
   finalizeInboundContext,
   resolveChunkMode,
   resolveTextChunkLimit,
-} from "NexisClaw/plugin-sdk/reply-runtime";
+} from "GreenchClaw/plugin-sdk/reply-runtime";

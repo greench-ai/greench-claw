@@ -18,7 +18,7 @@ export type {
   VideoGenerationSourceAsset,
   VideoGenerationTransformCapabilities,
 } from "../video-generation/types.js";
-export type { NexisClawConfig } from "../config/types.NexisClaw.js";
+export type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 export { describeFailoverError, isFailoverError } from "../agents/failover-error.js";
 export {

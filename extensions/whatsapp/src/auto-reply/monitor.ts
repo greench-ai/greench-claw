@@ -1,20 +1,20 @@
-import { resolveAccountEntry } from "NexisClaw/plugin-sdk/account-core";
-import { resolveInboundDebounceMs } from "NexisClaw/plugin-sdk/channel-inbound-debounce";
-import { formatCliCommand } from "NexisClaw/plugin-sdk/cli-runtime";
-import { hasControlCommand } from "NexisClaw/plugin-sdk/command-detection";
-import { drainPendingDeliveries } from "NexisClaw/plugin-sdk/delivery-queue-runtime";
-import { DEFAULT_GROUP_HISTORY_LIMIT } from "NexisClaw/plugin-sdk/reply-history";
-import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { registerUnhandledRejectionHandler } from "NexisClaw/plugin-sdk/runtime-env";
-import { getChildLogger } from "NexisClaw/plugin-sdk/runtime-env";
+import { resolveAccountEntry } from "GreenchClaw/plugin-sdk/account-core";
+import { resolveInboundDebounceMs } from "GreenchClaw/plugin-sdk/channel-inbound-debounce";
+import { formatCliCommand } from "GreenchClaw/plugin-sdk/cli-runtime";
+import { hasControlCommand } from "GreenchClaw/plugin-sdk/command-detection";
+import { drainPendingDeliveries } from "GreenchClaw/plugin-sdk/delivery-queue-runtime";
+import { DEFAULT_GROUP_HISTORY_LIMIT } from "GreenchClaw/plugin-sdk/reply-history";
+import { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { registerUnhandledRejectionHandler } from "GreenchClaw/plugin-sdk/runtime-env";
+import { getChildLogger } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   defaultRuntime,
   formatDurationPrecise,
   warn,
   type RuntimeEnv,
-} from "NexisClaw/plugin-sdk/runtime-env";
-import { enqueueSystemEvent } from "NexisClaw/plugin-sdk/system-event-runtime";
+} from "GreenchClaw/plugin-sdk/runtime-env";
+import { enqueueSystemEvent } from "GreenchClaw/plugin-sdk/system-event-runtime";
 import { resolveWhatsAppAccount, resolveWhatsAppMediaMaxBytes } from "../accounts.js";
 import { WHATSAPP_AUTH_UNSTABLE_CODE, WhatsAppAuthUnstableError } from "../auth-store.js";
 import {
@@ -174,7 +174,7 @@ async function clearTerminalWebAuthState(params: {
       "web reconnect: failed clearing cached auth after terminal close",
     );
     params.runtime.error(
-      `WhatsApp Web cleanup failed after terminal close (status ${params.statusLabel}). Run \`${formatCliCommand("NexisClaw channels logout --channel whatsapp")}\`, then relink with \`${formatCliCommand("NexisClaw channels login --channel whatsapp")}\`.`,
+      `WhatsApp Web cleanup failed after terminal close (status ${params.statusLabel}). Run \`${formatCliCommand("GreenchClaw channels logout --channel whatsapp")}\`, then relink with \`${formatCliCommand("GreenchClaw channels login --channel whatsapp")}\`.`,
     );
   }
 }
@@ -423,7 +423,7 @@ export async function monitorWebChannel(
               "web reconnect: 428 during opening; max attempts reached",
             );
             runtime.error(
-              `WhatsApp Web connection closed during setup (status 428) after ${retryDecision.reconnectAttempts}/${reconnectPolicy.maxAttempts} attempts. Relink with \`${formatCliCommand("NexisClaw channels login --channel whatsapp")}\` if the issue persists.`,
+              `WhatsApp Web connection closed during setup (status 428) after ${retryDecision.reconnectAttempts}/${reconnectPolicy.maxAttempts} attempts. Relink with \`${formatCliCommand("GreenchClaw channels login --channel whatsapp")}\` if the issue persists.`,
             );
             await controller.shutdown();
             break;
@@ -602,7 +602,7 @@ export async function monitorWebChannel(
             log: reconnectLogger,
           });
           runtime.error(
-            `WhatsApp session logged out. Run \`${formatCliCommand("NexisClaw channels login --channel whatsapp")}\` to relink.`,
+            `WhatsApp session logged out. Run \`${formatCliCommand("GreenchClaw channels login --channel whatsapp")}\` to relink.`,
           );
         } else if (decision.healthState === "conflict") {
           await clearTerminalWebAuthState({
@@ -621,7 +621,7 @@ export async function monitorWebChannel(
             "web reconnect: non-retryable close status; stopping monitor",
           );
           runtime.error(
-            `WhatsApp Web connection closed (status ${decision.normalized.statusLabel}: session conflict). Resolve conflicting WhatsApp Web sessions, then relink with \`${formatCliCommand("NexisClaw channels login --channel whatsapp")}\`. Stopping web monitoring.`,
+            `WhatsApp Web connection closed (status ${decision.normalized.statusLabel}: session conflict). Resolve conflicting WhatsApp Web sessions, then relink with \`${formatCliCommand("GreenchClaw channels login --channel whatsapp")}\`. Stopping web monitoring.`,
           );
         } else {
           reconnectLogger.warn(

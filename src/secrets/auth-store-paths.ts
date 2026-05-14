@@ -2,10 +2,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { listAgentIds, resolveAgentDir } from "../agents/agent-scope.js";
 import { resolveAuthStorePath } from "../agents/auth-profiles/paths.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveUserPath } from "../utils.js";
 
-export function listAuthProfileStorePaths(config: NexisClawConfig, stateDir: string): string[] {
+export function listAuthProfileStorePaths(config: GreenchClawConfig, stateDir: string): string[] {
   const paths = new Set<string>();
   // Scope default auth store discovery to the provided stateDir instead of
   // ambient process env, so scans do not include unrelated host-global stores.

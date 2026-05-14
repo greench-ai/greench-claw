@@ -1,5 +1,5 @@
-import { createDangerousNameMatchingMutableAllowlistWarningCollector } from "NexisClaw/plugin-sdk/channel-policy";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { createDangerousNameMatchingMutableAllowlistWarningCollector } from "GreenchClaw/plugin-sdk/channel-policy";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 function asObjectRecord(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" && !Array.isArray(value)

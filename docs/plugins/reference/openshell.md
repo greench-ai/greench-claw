@@ -11,8 +11,8 @@ Sandbox backend powered by OpenShell with mirrored local workspaces and SSH-base
 
 ## Distribution
 
-- Package: `@NexisClaw/openshell-sandbox`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/openshell-sandbox`
+- Install route: included in GreenchClaw
 
 ## Surface
 

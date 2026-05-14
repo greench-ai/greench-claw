@@ -1,4 +1,4 @@
-import { writeJsonFileAtomically } from "NexisClaw/plugin-sdk/json-store";
+import { writeJsonFileAtomically } from "GreenchClaw/plugin-sdk/json-store";
 import { createAsyncLock, type AsyncLock } from "./async-lock.js";
 import { loadMatrixCredentials, resolveMatrixCredentialsPath } from "./credentials-read.js";
 import type { MatrixStoredCredentials } from "./credentials-read.js";

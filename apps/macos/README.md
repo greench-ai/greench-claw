@@ -1,4 +1,4 @@
-# NexisClaw macOS app (dev + signing)
+# GreenchClaw macOS app (dev + signing)
 
 ## Quick dev run
 
@@ -20,7 +20,7 @@ scripts/restart-mac.sh --sign      # force code signing (requires cert)
 scripts/package-mac-app.sh
 ```
 
-Creates `dist/NexisClaw.app` and signs it via `scripts/codesign-mac-app.sh`.
+Creates `dist/GreenchClaw.app` and signs it via `scripts/codesign-mac-app.sh`.
 
 ## Signing behavior
 

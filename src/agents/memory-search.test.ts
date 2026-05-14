@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   clearMemoryEmbeddingProviders,
   registerMemoryEmbeddingProvider,
 } from "../plugins/memory-embedding-providers.js";
 import { resolveMemorySearchConfig, resolveMemorySearchSyncConfig } from "./memory-search.js";
 
-const asConfig = (cfg: NexisClawConfig): NexisClawConfig => cfg;
+const asConfig = (cfg: GreenchClawConfig): GreenchClawConfig => cfg;
 
 function registerBaseMemoryEmbeddingProviders(options?: { includeGemini?: boolean }): void {
   registerMemoryEmbeddingProvider({
@@ -70,7 +70,7 @@ describe("memory search config", () => {
     clearMemoryEmbeddingProviders();
   });
 
-  function configWithDefaultProvider(provider: string): NexisClawConfig {
+  function configWithDefaultProvider(provider: string): GreenchClawConfig {
     return asConfig({
       agents: {
         defaults: {

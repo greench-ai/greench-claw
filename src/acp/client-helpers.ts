@@ -159,7 +159,7 @@ export function resolveAcpClientSpawnEnv(
   options: AcpClientSpawnEnvOptions = {},
 ): NodeJS.ProcessEnv {
   const env = omitEnvKeysCaseInsensitive(baseEnv, options.stripKeys ?? []);
-  env.NEXISCLAW_SHELL = "acp-client";
+  env.GREENCHCLAW_SHELL = "acp-client";
   return env;
 }
 
@@ -221,7 +221,7 @@ export function resolveAcpClientSpawnInvocation(
     platform: runtime.platform,
     env: runtime.env,
     execPath: runtime.execPath,
-    packageName: "NexisClaw",
+    packageName: "GreenchClaw",
   });
   const resolved = materializeWindowsSpawnProgram(program, params.serverArgs);
   return {

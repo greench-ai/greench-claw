@@ -1,7 +1,7 @@
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { resolveAgentWorkspaceDir } from "../agents/agent-scope.js";
 import type { ChannelConfiguredBindingProvider, ChannelPlugin } from "../channels/plugins/types.js";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { setActivePluginRegistry } from "../plugins/runtime.js";
 import { createChannelTestPluginBase, createTestRegistry } from "../test-utils/channel-plugins.js";
 import { buildConfiguredAcpSessionKey } from "./persistent-bindings.types.js";
@@ -16,7 +16,7 @@ let persistentBindingsResolveModule: Pick<
   "resolveConfiguredAcpBindingRecord" | "resolveConfiguredAcpBindingSpecBySessionKey"
 >;
 
-type ConfiguredBinding = NonNullable<NexisClawConfig["bindings"]>[number];
+type ConfiguredBinding = NonNullable<GreenchClawConfig["bindings"]>[number];
 type BindingRecordInput = Parameters<
   PersistentBindingsModule["resolveConfiguredAcpBindingRecord"]
 >[0];
@@ -26,7 +26,7 @@ const baseCfg = {
   agents: {
     list: [{ id: "codex" }, { id: "claude" }],
   },
-} satisfies NexisClawConfig;
+} satisfies GreenchClawConfig;
 
 const defaultDiscordConversationId = "1478836151241412759";
 const defaultDiscordAccountId = "default";
@@ -259,13 +259,13 @@ function createConfiguredBindingTestPlugin(
 
 function createCfgWithBindings(
   bindings: ConfiguredBinding[],
-  overrides?: Partial<NexisClawConfig>,
-): NexisClawConfig {
+  overrides?: Partial<GreenchClawConfig>,
+): GreenchClawConfig {
   return {
     ...baseCfg,
     ...overrides,
     bindings,
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function createDiscordBinding(params: {
@@ -324,7 +324,7 @@ function createFeishuBinding(params: {
   } as ConfiguredBinding;
 }
 
-function resolveBindingRecord(cfg: NexisClawConfig, overrides: Partial<BindingRecordInput> = {}) {
+function resolveBindingRecord(cfg: GreenchClawConfig, overrides: Partial<BindingRecordInput> = {}) {
   return persistentBindings.resolveConfiguredAcpBindingRecord({
     cfg,
     channel: "discord",
@@ -335,7 +335,7 @@ function resolveBindingRecord(cfg: NexisClawConfig, overrides: Partial<BindingRe
 }
 
 function resolveDiscordBindingSpecBySession(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   conversationId = defaultDiscordConversationId,
 ) {
   const resolved = resolveBindingRecord(cfg, { conversationId });
@@ -383,7 +383,7 @@ describe("resolveConfiguredAcpBindingRecord", () => {
       createDiscordBinding({
         agentId: "codex",
         conversationId: defaultDiscordConversationId,
-        acp: { cwd: "/repo/NexisClaw" },
+        acp: { cwd: "/repo/GreenchClaw" },
       }),
     ]);
     const resolved = resolveBindingRecord(cfg);
@@ -707,7 +707,7 @@ describe("resolveConfiguredAcpBindingRecord", () => {
       ],
       {
         agents: {
-          list: [{ id: "codex", workspace: "/workspace/NexisClaw" }, { id: "claude" }],
+          list: [{ id: "codex", workspace: "/workspace/GreenchClaw" }, { id: "claude" }],
         },
       },
     );

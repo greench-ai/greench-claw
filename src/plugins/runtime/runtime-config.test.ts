@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 
 const getRuntimeConfigMock = vi.fn();
 const mutateConfigFileMock = vi.fn();
@@ -48,7 +48,7 @@ describe("createRuntimeConfig", () => {
 
   it("routes deprecated writeConfigFile through replaceConfigFile with afterWrite", async () => {
     const configApi = createRuntimeConfig();
-    const nextConfig = { plugins: { entries: {} } } as NexisClawConfig;
+    const nextConfig = { plugins: { entries: {} } } as GreenchClawConfig;
 
     await configApi.writeConfigFile(nextConfig);
 
@@ -64,7 +64,7 @@ describe("createRuntimeConfig", () => {
 
   it("preserves explicit afterWrite intent for deprecated writeConfigFile", async () => {
     const configApi = createRuntimeConfig();
-    const nextConfig = { plugins: { entries: {} } } as NexisClawConfig;
+    const nextConfig = { plugins: { entries: {} } } as GreenchClawConfig;
 
     await configApi.writeConfigFile(nextConfig, {
       afterWrite: { mode: "none", reason: "test-controlled" },

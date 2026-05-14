@@ -1,6 +1,9 @@
 import { ChannelType } from "discord-api-types/v10";
-import type { DiscordAccountConfig, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { buildPluginBindingApprovalCustomId } from "NexisClaw/plugin-sdk/conversation-runtime";
+import type {
+  DiscordAccountConfig,
+  GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { buildPluginBindingApprovalCustomId } from "GreenchClaw/plugin-sdk/conversation-runtime";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { type DiscordComponentEntry, type DiscordModalEntry } from "../components.js";
 import type {
@@ -28,7 +31,7 @@ type CreateDiscordComponentModal =
 type CreateDiscordComponentStringSelect =
   typeof import("./agent-components.js").createDiscordComponentStringSelect;
 type DispatchReplyWithBufferedBlockDispatcherFn =
-  typeof import("NexisClaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithBufferedBlockDispatcher;
+  typeof import("GreenchClaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithBufferedBlockDispatcher;
 type DispatchReplyWithBufferedBlockDispatcherResult = Awaited<
   ReturnType<DispatchReplyWithBufferedBlockDispatcherFn>
 >;
@@ -89,14 +92,14 @@ function discordTestSendResult(messageId: string, channelId = "dm-channel") {
 
 describe("discord component interactions", () => {
   let editDiscordComponentMessageMock: ReturnType<typeof vi.spyOn>;
-  const createCfg = (): NexisClawConfig =>
+  const createCfg = (): GreenchClawConfig =>
     ({
       channels: {
         discord: {
           replyToMode: "first",
         },
       },
-    }) as NexisClawConfig;
+    }) as GreenchClawConfig;
 
   const createDiscordConfig = (overrides?: Partial<DiscordAccountConfig>): DiscordAccountConfig =>
     ({
@@ -227,7 +230,7 @@ describe("discord component interactions", () => {
         cfg: {
           commands: { useAccessGroups: true },
           channels: { discord: { replyToMode: "first" } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         allowFrom,
       }),
     );
@@ -310,7 +313,7 @@ describe("discord component interactions", () => {
       );
     recordInboundSessionMock.mockClear().mockResolvedValue(undefined);
     readSessionUpdatedAtMock.mockClear().mockReturnValue(undefined);
-    resolveStorePathMock.mockClear().mockReturnValue("/tmp/NexisClaw-sessions-test.json");
+    resolveStorePathMock.mockClear().mockReturnValue("/tmp/GreenchClaw-sessions-test.json");
     dispatchPluginInteractiveHandlerMock.mockReset().mockResolvedValue({
       matched: false,
       handled: false,
@@ -461,7 +464,7 @@ describe("discord component interactions", () => {
       createComponentContext({
         cfg: {
           channels: { discord: { replyToMode: "first", groupPolicy: "allowlist" } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         discordConfig: createDiscordConfig({ groupPolicy: "allowlist" }),
         guildEntries: {},
       }),
@@ -533,7 +536,7 @@ describe("discord component interactions", () => {
       createComponentContext({
         cfg: {
           channels: { discord: { replyToMode: "first", groupPolicy: "allowlist" } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         discordConfig: createDiscordConfig({ groupPolicy: "allowlist" }),
         guildEntries: params.guildEntries,
       }),
@@ -575,7 +578,7 @@ describe("discord component interactions", () => {
         cfg: {
           commands: { useAccessGroups: true },
           channels: { discord: { replyToMode: "first" } },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         allowFrom: params.allowFrom,
       }),
     );

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolveNexisClawPackageRootSync } from "../../infra/NexisClaw-root.js";
+import { resolveGreenchClawPackageRootSync } from "../../infra/GreenchClaw-root.js";
 
 function looksLikeSkillsDir(dir: string): boolean {
   try {
@@ -36,7 +36,7 @@ export type BundledSkillsResolveOptions = {
 export function resolveBundledSkillsDir(
   opts: BundledSkillsResolveOptions = {},
 ): string | undefined {
-  const override = process.env.NEXISCLAW_BUNDLED_SKILLS_DIR?.trim();
+  const override = process.env.GREENCHCLAW_BUNDLED_SKILLS_DIR?.trim();
   if (override) {
     return override;
   }
@@ -59,7 +59,7 @@ export function resolveBundledSkillsDir(
     const moduleDir = path.dirname(fileURLToPath(moduleUrl));
     const argv1 = opts.argv1 ?? process.argv[1];
     const cwd = opts.cwd ?? process.cwd();
-    const packageRoot = resolveNexisClawPackageRootSync({
+    const packageRoot = resolveGreenchClawPackageRootSync({
       argv1,
       moduleUrl,
       cwd,

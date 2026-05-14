@@ -14,10 +14,10 @@ import { createDiagnosticLogRecordCapture } from "./test-helpers/diagnostic-log-
 const secret = "sk-testsecret1234567890abcd";
 const TRACE_ID = "4bf92f3577b34da6a3ce929d0e0e4736";
 const SPAN_ID = "00f067aa0ba902b7";
-const logPathTracker = createSuiteLogPathTracker("NexisClaw-log-redaction-");
-const originalConfigPath = process.env.NEXISCLAW_CONFIG_PATH;
+const logPathTracker = createSuiteLogPathTracker("GreenchClaw-log-redaction-");
+const originalConfigPath = process.env.GREENCHCLAW_CONFIG_PATH;
 const originalHome = process.env.HOME;
-const originalTestFileLog = process.env.NEXISCLAW_TEST_FILE_LOG;
+const originalTestFileLog = process.env.GREENCHCLAW_TEST_FILE_LOG;
 
 beforeAll(async () => {
   await logPathTracker.setup();
@@ -25,9 +25,9 @@ beforeAll(async () => {
 
 afterEach(() => {
   if (originalConfigPath === undefined) {
-    delete process.env.NEXISCLAW_CONFIG_PATH;
+    delete process.env.GREENCHCLAW_CONFIG_PATH;
   } else {
-    process.env.NEXISCLAW_CONFIG_PATH = originalConfigPath;
+    process.env.GREENCHCLAW_CONFIG_PATH = originalConfigPath;
   }
   if (originalHome === undefined) {
     delete process.env.HOME;
@@ -35,9 +35,9 @@ afterEach(() => {
     process.env.HOME = originalHome;
   }
   if (originalTestFileLog === undefined) {
-    delete process.env.NEXISCLAW_TEST_FILE_LOG;
+    delete process.env.GREENCHCLAW_TEST_FILE_LOG;
   } else {
-    process.env.NEXISCLAW_TEST_FILE_LOG = originalTestFileLog;
+    process.env.GREENCHCLAW_TEST_FILE_LOG = originalTestFileLog;
   }
   resetDiagnosticTraceContextForTest();
   resetLogger();
@@ -107,7 +107,7 @@ describe("file log redaction", () => {
         },
       }),
     );
-    process.env.NEXISCLAW_CONFIG_PATH = configPath;
+    process.env.GREENCHCLAW_CONFIG_PATH = configPath;
     setLoggerOverride({ level: "info", file: logPath });
 
     getLogger().info({
@@ -136,8 +136,8 @@ describe("file log redaction", () => {
         },
       }),
     );
-    process.env.NEXISCLAW_CONFIG_PATH = configPath;
-    process.env.NEXISCLAW_TEST_FILE_LOG = "1";
+    process.env.GREENCHCLAW_CONFIG_PATH = configPath;
+    process.env.GREENCHCLAW_TEST_FILE_LOG = "1";
 
     getLogger().info({ message: "configured log path works" });
 
@@ -149,8 +149,8 @@ describe("file log redaction", () => {
     const home = path.join(path.dirname(logPathTracker.nextPath()), "home");
     process.env.HOME = home;
 
-    expect(loggerTest.resolveActiveLogFile("~/custom-NexisClaw.log")).toBe(
-      path.join(home, "custom-NexisClaw.log"),
+    expect(loggerTest.resolveActiveLogFile("~/custom-GreenchClaw.log")).toBe(
+      path.join(home, "custom-GreenchClaw.log"),
     );
   });
 

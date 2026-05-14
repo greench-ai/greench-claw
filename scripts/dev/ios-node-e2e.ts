@@ -29,16 +29,16 @@ type NodeListNode = NonNullable<NodeListPayload["nodes"]>[number];
 
 const { get: getArg, has: hasFlag } = createArgReader();
 
-const urlRaw = getArg("--url") ?? process.env.NEXISCLAW_GATEWAY_URL;
-const token = getArg("--token") ?? process.env.NEXISCLAW_GATEWAY_TOKEN;
+const urlRaw = getArg("--url") ?? process.env.GREENCHCLAW_GATEWAY_URL;
+const token = getArg("--token") ?? process.env.GREENCHCLAW_GATEWAY_TOKEN;
 const nodeHint = getArg("--node");
-const dangerous = hasFlag("--dangerous") || process.env.NEXISCLAW_RUN_DANGEROUS === "1";
+const dangerous = hasFlag("--dangerous") || process.env.GREENCHCLAW_RUN_DANGEROUS === "1";
 const jsonOut = hasFlag("--json");
 
 if (!urlRaw || !token) {
   writeStderrLine(
     "Usage: bun scripts/dev/ios-node-e2e.ts --url <wss://host[:port]> --token <gateway.auth.token> [--node <id|name-substring>] [--dangerous] [--json]\n" +
-      "Or set env: NEXISCLAW_GATEWAY_URL / NEXISCLAW_GATEWAY_TOKEN",
+      "Or set env: GREENCHCLAW_GATEWAY_URL / GREENCHCLAW_GATEWAY_TOKEN",
   );
   process.exit(1);
 }
@@ -101,11 +101,11 @@ async function main() {
     maxProtocol: 3,
     client: {
       id: "cli",
-      displayName: "NexisClaw ios node e2e",
+      displayName: "GreenchClaw ios node e2e",
       version: "dev",
       platform: "dev",
       mode: "cli",
-      instanceId: "NexisClaw-dev-ios-node-e2e",
+      instanceId: "GreenchClaw-dev-ios-node-e2e",
     },
     locale: "en-US",
     userAgent: "ios-node-e2e",
@@ -161,7 +161,7 @@ async function main() {
     {
       id: "system.notify",
       command: "system.notify",
-      params: { title: "NexisClaw E2E", body: `ios-node-e2e @ ${isoNow()}`, delivery: "system" },
+      params: { title: "GreenchClaw E2E", body: `ios-node-e2e @ ${isoNow()}`, delivery: "system" },
     },
     {
       id: "contacts.search",

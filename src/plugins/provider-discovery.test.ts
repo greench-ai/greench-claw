@@ -21,13 +21,13 @@ afterEach(() => {
 });
 
 function makeTempDir() {
-  return makeTrackedTempDir("NexisClaw-provider-discovery", tempDirs);
+  return makeTrackedTempDir("GreenchClaw-provider-discovery", tempDirs);
 }
 
 function hermeticEnv(overrides: NodeJS.ProcessEnv = {}): NodeJS.ProcessEnv {
   return {
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-    NEXISCLAW_VERSION: "2026.4.25",
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+    GREENCHCLAW_VERSION: "2026.4.25",
     VITEST: "true",
     ...overrides,
   };
@@ -44,7 +44,7 @@ function createProviderContributionCandidate(params: {
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(rootDir, "NexisClaw.plugin.json"),
+    path.join(rootDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: params.pluginId ?? "demo",
       configSchema: { type: "object" },

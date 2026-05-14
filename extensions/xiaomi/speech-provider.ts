@@ -1,17 +1,17 @@
-import { transcodeAudioBufferToOpus } from "NexisClaw/plugin-sdk/media-runtime";
-import { assertOkOrThrowProviderError } from "NexisClaw/plugin-sdk/provider-http";
-import { normalizeResolvedSecretInputString } from "NexisClaw/plugin-sdk/secret-input";
+import { transcodeAudioBufferToOpus } from "GreenchClaw/plugin-sdk/media-runtime";
+import { assertOkOrThrowProviderError } from "GreenchClaw/plugin-sdk/provider-http";
+import { normalizeResolvedSecretInputString } from "GreenchClaw/plugin-sdk/secret-input";
 import type {
   SpeechDirectiveTokenParseContext,
   SpeechProviderConfig,
   SpeechProviderOverrides,
   SpeechProviderPlugin,
-} from "NexisClaw/plugin-sdk/speech-core";
-import { asObject, trimToUndefined } from "NexisClaw/plugin-sdk/speech-core";
+} from "GreenchClaw/plugin-sdk/speech-core";
+import { asObject, trimToUndefined } from "GreenchClaw/plugin-sdk/speech-core";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
 
 const DEFAULT_XIAOMI_TTS_BASE_URL = "https://api.xiaomimimo.com/v1";
 const DEFAULT_XIAOMI_TTS_MODEL = "mimo-v2.5-tts";

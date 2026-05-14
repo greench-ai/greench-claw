@@ -520,7 +520,7 @@ describe("subagent-orphan-recovery", () => {
 
     vi.mocked(sessionUtils.readSessionMessagesAsync).mockResolvedValue([
       { role: "user", content: "Update the config" },
-      { role: "assistant", content: "I've modified NexisClaw.json to add the new setting." },
+      { role: "assistant", content: "I've modified GreenchClaw.json to add the new setting." },
     ]);
 
     const activeRuns = createActiveRuns(createTestRunRecord());

@@ -1,8 +1,8 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { discoverOpenAICompatibleLocalModels } from "NexisClaw/plugin-sdk/provider-setup";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { discoverOpenAICompatibleLocalModels } from "GreenchClaw/plugin-sdk/provider-setup";
 import { SGLANG_DEFAULT_BASE_URL, SGLANG_PROVIDER_LABEL } from "./defaults.js";
 
-type ModelsConfig = NonNullable<NexisClawConfig["models"]>;
+type ModelsConfig = NonNullable<GreenchClawConfig["models"]>;
 type ProviderConfig = NonNullable<ModelsConfig["providers"]>[string];
 
 export async function buildSglangProvider(params?: {

@@ -2,22 +2,22 @@ import {
   createChannelApprovalCapability,
   createApproverRestrictedNativeApprovalCapability,
   splitChannelApprovalCapability,
-} from "NexisClaw/plugin-sdk/approval-delivery-runtime";
-import { createLazyChannelApprovalNativeRuntimeAdapter } from "NexisClaw/plugin-sdk/approval-handler-adapter-runtime";
-import type { ChannelApprovalNativeRuntimeAdapter } from "NexisClaw/plugin-sdk/approval-handler-runtime";
+} from "GreenchClaw/plugin-sdk/approval-delivery-runtime";
+import { createLazyChannelApprovalNativeRuntimeAdapter } from "GreenchClaw/plugin-sdk/approval-handler-adapter-runtime";
+import type { ChannelApprovalNativeRuntimeAdapter } from "GreenchClaw/plugin-sdk/approval-handler-runtime";
 import {
   createChannelNativeOriginTargetResolver,
   resolveApprovalRequestSessionConversation,
-} from "NexisClaw/plugin-sdk/approval-native-runtime";
+} from "GreenchClaw/plugin-sdk/approval-native-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "NexisClaw/plugin-sdk/approval-runtime";
-import type { ChannelApprovalCapability } from "NexisClaw/plugin-sdk/channel-contract";
+} from "GreenchClaw/plugin-sdk/approval-runtime";
+import type { ChannelApprovalCapability } from "GreenchClaw/plugin-sdk/channel-contract";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalStringifiedId,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { getMatrixApprovalAuthApprovers, matrixApprovalAuth } from "./approval-auth.js";
 import { normalizeMatrixApproverId } from "./approval-ids.js";
 import {

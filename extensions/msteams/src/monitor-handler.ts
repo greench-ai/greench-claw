@@ -1,7 +1,7 @@
 import path from "node:path";
-import { resolveThreadSessionKeys } from "NexisClaw/plugin-sdk/routing";
-import { appendRegularFile } from "NexisClaw/plugin-sdk/security-runtime";
-import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { resolveThreadSessionKeys } from "GreenchClaw/plugin-sdk/routing";
+import { appendRegularFile } from "GreenchClaw/plugin-sdk/security-runtime";
+import { normalizeOptionalLowercaseString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { formatUnknownError } from "./errors.js";
 import { buildFeedbackEvent, runFeedbackReflection } from "./feedback-reflection.js";
 import { respondToMSTeamsFileConsentInvoke } from "./file-consent-invoke.js";

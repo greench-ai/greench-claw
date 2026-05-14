@@ -1,7 +1,7 @@
 import {
   expectProviderOnboardAllowlistAlias,
   expectProviderOnboardPrimaryAndFallbacks,
-} from "NexisClaw/plugin-sdk/provider-test-contracts";
+} from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { describe, it } from "vitest";
 import { applyOpencodeZenConfig, applyOpencodeZenProviderConfig } from "./onboard.js";
 

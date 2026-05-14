@@ -52,5 +52,5 @@ export function resetSlackSlashMocks() {
   mocks.finalizeInboundContextMock.mockReset().mockImplementation((ctx: unknown) => ctx);
   mocks.resolveConversationLabelMock.mockReset().mockReturnValue(undefined);
   mocks.recordSessionMetaFromInboundMock.mockReset().mockResolvedValue(undefined);
-  mocks.resolveStorePathMock.mockReset().mockReturnValue("/tmp/NexisClaw-sessions.json");
+  mocks.resolveStorePathMock.mockReset().mockReturnValue("/tmp/GreenchClaw-sessions.json");
 }

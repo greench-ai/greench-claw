@@ -1,14 +1,14 @@
-import type { AllowlistMatch } from "NexisClaw/plugin-sdk/allow-from";
+import type { AllowlistMatch } from "GreenchClaw/plugin-sdk/allow-from";
 import {
   buildChannelKeyCandidates,
   resolveChannelEntryMatchWithFallback,
   resolveChannelMatchConfig,
   type ChannelMatchSource,
-} from "NexisClaw/plugin-sdk/channel-targets";
+} from "GreenchClaw/plugin-sdk/channel-targets";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { Guild, User } from "../internal/discord.js";
 import { formatDiscordUserTag } from "./format.js";
 

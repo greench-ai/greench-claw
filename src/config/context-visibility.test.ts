@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "./config.js";
+import type { GreenchClawConfig } from "./config.js";
 import {
   resolveChannelContextVisibilityMode,
   resolveDefaultContextVisibility,
@@ -45,7 +45,7 @@ describe("resolveChannelContextVisibilityMode", () => {
           },
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
     expect(
       resolveChannelContextVisibilityMode({
         cfg,
@@ -66,7 +66,7 @@ describe("resolveChannelContextVisibilityMode", () => {
           channels: {
             defaults: { contextVisibility: "allowlist_quote" },
           },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
         channel: "signal",
       }),
     ).toBe("allowlist_quote");

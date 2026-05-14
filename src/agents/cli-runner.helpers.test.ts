@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { ImageContent } from "@earendil-works/pi-ai";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { resolvePreferredNexisClawTmpDir } from "../infra/tmp-NexisClaw-dir.js";
+import { resolvePreferredGreenchClawTmpDir } from "../infra/tmp-GreenchClaw-dir.js";
 import { MAX_IMAGE_BYTES } from "../media/constants.js";
 import { escapeRegExp } from "../shared/regexp.js";
 import {
@@ -157,10 +157,15 @@ describe("buildCliArgs", () => {
         baseArgs: ["exec", "--json"],
         modelId: "gpt-5.4",
         systemPrompt: "Stable prefix",
-        systemPromptFilePath: "/tmp/NexisClaw/system-prompt.md",
+        systemPromptFilePath: "/tmp/GreenchClaw/system-prompt.md",
         useResume: false,
       }),
-    ).toEqual(["exec", "--json", "-c", 'model_instructions_file="/tmp/NexisClaw/system-prompt.md"']);
+    ).toEqual([
+      "exec",
+      "--json",
+      "-c",
+      'model_instructions_file="/tmp/GreenchClaw/system-prompt.md"',
+    ]);
   });
 
   it("passes Claude system prompts through its file flag", () => {
@@ -173,10 +178,10 @@ describe("buildCliArgs", () => {
         baseArgs: ["-p"],
         modelId: "claude-sonnet-4-6",
         systemPrompt: "Stable prefix",
-        systemPromptFilePath: "/tmp/NexisClaw/system-prompt.md",
+        systemPromptFilePath: "/tmp/GreenchClaw/system-prompt.md",
         useResume: false,
       }),
-    ).toEqual(["-p", "--append-system-prompt-file", "/tmp/NexisClaw/system-prompt.md"]);
+    ).toEqual(["-p", "--append-system-prompt-file", "/tmp/GreenchClaw/system-prompt.md"]);
   });
 
   it("replaces prompt placeholders before falling back to a trailing positional prompt", () => {
@@ -205,7 +210,7 @@ describe("buildCliArgs", () => {
 describe("writeCliImages", () => {
   it("uses stable hashed file paths so repeated image hydration reuses the same path", async () => {
     const workspaceDir = await fs.mkdtemp(
-      path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-cli-write-images-"),
+      path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-cli-write-images-"),
     );
     const image: ImageContent = {
       type: "image",
@@ -228,7 +233,7 @@ describe("writeCliImages", () => {
       expect(first.paths).toStrictEqual([
         expect.stringMatching(
           new RegExp(
-            `^${escapeRegExp(`${resolvePreferredNexisClawTmpDir()}/NexisClaw-cli-images/`)}.*\\.png$`,
+            `^${escapeRegExp(`${resolvePreferredGreenchClawTmpDir()}/GreenchClaw-cli-images/`)}.*\\.png$`,
           ),
         ),
       ]);
@@ -242,7 +247,7 @@ describe("writeCliImages", () => {
 
   it("uses the shared media extension map for image formats beyond the tiny builtin list", async () => {
     const workspaceDir = await fs.mkdtemp(
-      path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-cli-write-heic-"),
+      path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-cli-write-heic-"),
     );
     const image: ImageContent = {
       type: "image",
@@ -266,7 +271,7 @@ describe("writeCliImages", () => {
 
   it("hydrates prompt media refs into codex image args through the helper seams", async () => {
     const tempDir = await fs.mkdtemp(
-      path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-cli-prompt-image-"),
+      path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-cli-prompt-image-"),
     );
     const sourceImage = path.join(tempDir, "bb-image.png");
     await fs.writeFile(
@@ -306,7 +311,7 @@ describe("writeCliImages", () => {
         "--json",
         "describe the attached image",
         "--image",
-        expect.stringContaining("NexisClaw-cli-images"),
+        expect.stringContaining("GreenchClaw-cli-images"),
       ]);
       expect(argv[4]).not.toBe(sourceImage);
 
@@ -318,7 +323,7 @@ describe("writeCliImages", () => {
 
   it("appends hydrated prompt media refs for stdin backends through the helper seams", async () => {
     const tempDir = await fs.mkdtemp(
-      path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-cli-prompt-image-generic-"),
+      path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-cli-prompt-image-generic-"),
     );
     const sourceImage = path.join(tempDir, "claude-image.png");
     await fs.writeFile(
@@ -341,7 +346,7 @@ describe("writeCliImages", () => {
       });
       const promptWithImages = prepared.prompt;
 
-      expect(promptWithImages).toContain("NexisClaw-cli-images");
+      expect(promptWithImages).toContain("GreenchClaw-cli-images");
       expect(promptWithImages).toContain(prepared.imagePaths?.[0] ?? "");
       expect(promptWithImages.trimEnd().endsWith(prepared.imagePaths?.[0] ?? "")).toBe(true);
 
@@ -353,7 +358,7 @@ describe("writeCliImages", () => {
 
   it("appends Gemini prompt refs with @-prefixed image paths", async () => {
     const tempDir = await fs.mkdtemp(
-      path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-cli-prompt-image-gemini-"),
+      path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-cli-prompt-image-gemini-"),
     );
     const explicitImage: ImageContent = {
       type: "image",
@@ -377,9 +382,9 @@ describe("writeCliImages", () => {
       expect(prepared.prompt).toContain("\n\n@");
       expect(prepared.prompt).toContain(prepared.imagePaths?.[0] ?? "");
       expect(prepared.prompt.trimEnd().endsWith(`@${prepared.imagePaths?.[0] ?? ""}`)).toBe(true);
-      expect(prepared.imagePaths?.[0]?.startsWith(path.join(tempDir, ".NexisClaw-cli-images"))).toBe(
-        true,
-      );
+      expect(
+        prepared.imagePaths?.[0]?.startsWith(path.join(tempDir, ".GreenchClaw-cli-images")),
+      ).toBe(true);
 
       const argv = buildCliArgs({
         backend: {
@@ -404,7 +409,7 @@ describe("writeCliImages", () => {
 
   it("prefers explicit images over prompt refs through the helper seams", async () => {
     const tempDir = await fs.mkdtemp(
-      path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-cli-explicit-images-"),
+      path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-cli-explicit-images-"),
     );
     const sourceImage = path.join(tempDir, "ignored-prompt-image.png");
     await fs.writeFile(
@@ -445,7 +450,7 @@ describe("writeCliImages", () => {
       });
 
       expect(argv.reduce((count, arg) => count + (arg === "--image" ? 1 : 0), 0)).toBe(1);
-      expect(argv[argv.indexOf("--image") + 1]).toContain("NexisClaw-cli-images");
+      expect(argv[argv.indexOf("--image") + 1]).toContain("GreenchClaw-cli-images");
       await expect(fs.readFile(prepared.imagePaths?.[0] ?? "")).resolves.toEqual(
         Buffer.from(explicitImage.data, "base64"),
       );
@@ -468,7 +473,7 @@ describe("writeCliSystemPromptFile", () => {
     });
 
     try {
-      expect(written.filePath).toContain("NexisClaw-cli-system-prompt-");
+      expect(written.filePath).toContain("GreenchClaw-cli-system-prompt-");
       await expect(fs.readFile(written.filePath ?? "", "utf-8")).resolves.toBe(
         "Stable prefix\nDynamic suffix",
       );

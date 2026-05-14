@@ -1,12 +1,12 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import type {
   DmPolicy,
   GroupPolicy,
   SignalReactionNotificationMode,
-} from "NexisClaw/plugin-sdk/config-contracts";
-import type { HistoryEntry } from "NexisClaw/plugin-sdk/reply-history";
-import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import type { HistoryEntry } from "GreenchClaw/plugin-sdk/reply-history";
+import type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-runtime";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import type { SignalSender } from "../identity.js";
 
 export type SignalEnvelope = {
@@ -77,7 +77,7 @@ export type SignalReceivePayload = {
 
 export type SignalEventHandlerDeps = {
   runtime: RuntimeEnv;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   baseUrl: string;
   account?: string;
   accountUuid?: string;
@@ -105,7 +105,7 @@ export type SignalEventHandlerDeps = {
     maxBytes: number;
   }) => Promise<{ path: string; contentType?: string } | null>;
   deliverReplies: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     replies: ReplyPayload[];
     target: string;
     baseUrl: string;

@@ -1,5 +1,5 @@
 ---
-summary: "Adds MiniMax, MiniMax Portal model provider support to NexisClaw."
+summary: "Adds MiniMax, MiniMax Portal model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the minimax plugin
 title: "MiniMax plugin"
@@ -7,12 +7,12 @@ title: "MiniMax plugin"
 
 # MiniMax plugin
 
-Adds MiniMax, MiniMax Portal model provider support to NexisClaw.
+Adds MiniMax, MiniMax Portal model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/minimax-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/minimax-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

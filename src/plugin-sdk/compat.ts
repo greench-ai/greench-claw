@@ -1,6 +1,6 @@
 /**
  * @deprecated Legacy compat surface for external plugins that still depend on
- * older broad plugin-sdk imports. Use focused NexisClaw/plugin-sdk subpaths
+ * older broad plugin-sdk imports. Use focused GreenchClaw/plugin-sdk subpaths
  * instead.
  */
 
@@ -22,15 +22,15 @@ import {
 const shouldWarnCompatImport =
   process.env.VITEST !== "true" &&
   process.env.NODE_ENV !== "test" &&
-  process.env.NEXISCLAW_SUPPRESS_PLUGIN_SDK_COMPAT_WARNING !== "1";
+  process.env.GREENCHCLAW_SUPPRESS_PLUGIN_SDK_COMPAT_WARNING !== "1";
 
 if (shouldWarnCompatImport) {
   process.emitWarning(
-    "NexisClaw/plugin-sdk/compat is deprecated for new plugins. Migrate to focused NexisClaw/plugin-sdk/<subpath> imports. See https://docs.NexisClaw.ai/plugins/sdk-migration",
+    "GreenchClaw/plugin-sdk/compat is deprecated for new plugins. Migrate to focused GreenchClaw/plugin-sdk/<subpath> imports. See https://docs.GreenchClaw.ai/plugins/sdk-migration",
     {
-      code: "NEXISCLAW_PLUGIN_SDK_COMPAT_DEPRECATED",
+      code: "GREENCHCLAW_PLUGIN_SDK_COMPAT_DEPRECATED",
       detail:
-        "Bundled plugins must use scoped plugin-sdk subpaths. External plugins may keep compat temporarily while migrating. Migration guide: https://docs.NexisClaw.ai/plugins/sdk-migration",
+        "Bundled plugins must use scoped plugin-sdk subpaths. External plugins may keep compat temporarily while migrating. Migration guide: https://docs.GreenchClaw.ai/plugins/sdk-migration",
     },
   );
 }
@@ -63,7 +63,7 @@ export { createAccountStatusSink } from "./channel-lifecycle.core.js";
 export { createPluginRuntimeStore } from "./runtime-store.js";
 export { KeyedAsyncQueue } from "./keyed-async-queue.js";
 export { normalizeAccountId } from "./account-id.js";
-export { resolvePreferredNexisClawTmpDir } from "./temp-path.js";
+export { resolvePreferredGreenchClawTmpDir } from "./temp-path.js";
 
 export {
   createHybridChannelConfigAdapter,
@@ -84,27 +84,27 @@ export * from "./reply-history.js";
 export * from "./directory-runtime.js";
 export { mapAllowlistResolutionInputs } from "./allow-from.js";
 
-/** @deprecated Use `NexisClaw/plugin-sdk/channel-message`. */
+/** @deprecated Use `GreenchClaw/plugin-sdk/channel-message`. */
 export const createChannelReplyPipeline = createChannelReplyPipelineCompat;
-/** @deprecated Use `NexisClaw/plugin-sdk/channel-message`. */
+/** @deprecated Use `GreenchClaw/plugin-sdk/channel-message`. */
 export const createReplyPrefixContext = createReplyPrefixContextCompat;
-/** @deprecated Use `NexisClaw/plugin-sdk/channel-message`. */
+/** @deprecated Use `GreenchClaw/plugin-sdk/channel-message`. */
 export const createReplyPrefixOptions = createReplyPrefixOptionsCompat;
-/** @deprecated Use `NexisClaw/plugin-sdk/channel-message`. */
+/** @deprecated Use `GreenchClaw/plugin-sdk/channel-message`. */
 export const createTypingCallbacks = createTypingCallbacksCompat;
-/** @deprecated Use `NexisClaw/plugin-sdk/channel-message`. */
+/** @deprecated Use `GreenchClaw/plugin-sdk/channel-message`. */
 export const resolveChannelSourceReplyDeliveryMode = resolveChannelSourceReplyDeliveryModeCompat;
-/** @deprecated Use `NexisClaw/plugin-sdk/channel-message`. */
+/** @deprecated Use `GreenchClaw/plugin-sdk/channel-message`. */
 export type ChannelReplyPipeline = ChannelReplyPipelineCompat;
-/** @deprecated Use `NexisClaw/plugin-sdk/channel-message`. */
+/** @deprecated Use `GreenchClaw/plugin-sdk/channel-message`. */
 export type CreateTypingCallbacksParams = CreateTypingCallbacksParamsCompat;
-/** @deprecated Use `NexisClaw/plugin-sdk/channel-message`. */
+/** @deprecated Use `GreenchClaw/plugin-sdk/channel-message`. */
 export type ReplyPrefixContext = ReplyPrefixContextCompat;
-/** @deprecated Use `NexisClaw/plugin-sdk/channel-message`. */
+/** @deprecated Use `GreenchClaw/plugin-sdk/channel-message`. */
 export type ReplyPrefixContextBundle = ReplyPrefixContextBundleCompat;
-/** @deprecated Use `NexisClaw/plugin-sdk/channel-message`. */
+/** @deprecated Use `GreenchClaw/plugin-sdk/channel-message`. */
 export type ReplyPrefixOptions = ReplyPrefixOptionsCompat;
-/** @deprecated Use `NexisClaw/plugin-sdk/channel-message`. */
+/** @deprecated Use `GreenchClaw/plugin-sdk/channel-message`. */
 export type SourceReplyDeliveryMode = SourceReplyDeliveryModeCompat;
-/** @deprecated Use `NexisClaw/plugin-sdk/channel-message`. */
+/** @deprecated Use `GreenchClaw/plugin-sdk/channel-message`. */
 export type TypingCallbacks = TypingCallbacksCompat;

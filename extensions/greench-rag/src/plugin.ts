@@ -1,237 +1,118 @@
 /**
- * GreenchRAG — RAG pipeline plugin for GreenchClaw.
+ * GreenchRAG — document RAG pipeline.
  *
- * Features:
- * - Document parsing: PDF, DOCX, TXT, MD
- * - Text chunking with token-based overlap
- * - Ollama embedding (nomic-embed-text)
- * - Qdrant vector storage
- * - Semantic search
- * - Chat with RAG context
+ * Tools (registered synchronously, execute lazily):
+ *   rag_index   — parse + chunk + embed + store a document
+ *   rag_search  — semantic search across indexed documents
+ *   rag_list    — list indexed documents
+ *   rag_delete  — remove a document from the index
  */
 
-import crypto from "node:crypto";
-import fs from "node:fs/promises";
-import path from "node:path";
-import { pipeline } from "node:stream/promises";
 import { definePluginEntry, type GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
 
-// ── Types ────────────────────────────────────────────────────────────────────
-
-interface Chunk {
-  chunk_id: string;
-  text: string;
-  start_char: number;
-  end_char: number;
-}
-
-interface StoredChunk {
-  text: string;
-  doc_id: string;
-  doc_title: string;
-  chunk_index: number;
-  score: number;
-}
-
-interface DocumentMeta {
-  doc_id: string;
-  title: string;
-  file_type: string;
-  chunk_count: number;
-  uploaded_at: string;
-  metadata: Record<string, unknown>;
-}
+// ── RAG Config ────────────────────────────────────────────────────────────────
 
 interface RAGConfig {
-  qdrant: {
-    host: string;
-    port: number;
-    collection: string;
-  };
-  ollama: {
-    baseUrl: string;
-    embeddingModel: string;
-  };
-  chunking: {
-    chunkSize: number; // tokens
-    chunkOverlap: number; // tokens
-  };
+  qdrant: { host: string; port: number; collection: string };
+  ollama: { baseUrl: string; embeddingModel: string };
+  chunking: { chunkSize: number; chunkOverlap: number };
 }
 
-// ── Defaults ─────────────────────────────────────────────────────────────────
+const EMBEDDING_DIMS = 768;
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
-const DEFAULT_QDRANT_HOST = "localhost";
-const DEFAULT_QDRANT_PORT = 6333;
-const DEFAULT_COLLECTION = "greench_documents";
-const DEFAULT_OLLAMA_URL = "http://localhost:11434";
-const DEFAULT_EMBEDDING_MODEL = "nomic-embed-text:v1.5";
-const DEFAULT_CHUNK_SIZE = 500; // tokens
-const DEFAULT_CHUNK_OVERLAP = 100; // tokens
-const EMBEDDING_DIMS = 768; // nomic-embed-text dims
-
-// ── Config resolution ────────────────────────────────────────────────────────
-
-function resolveConfig(api: GreenchClawPluginApi): RAGConfig {
-  const raw = api.config.plugins?.entries?.["greench-rag"];
+function getRAGConfig(api: GreenchClawPluginApi): RAGConfig {
+  const raw = (api.config.plugins?.entries as Record<string, unknown> | undefined)?.["greench-rag"];
   const cfg = (
     raw && typeof raw === "object" && "config" in raw
       ? (raw as { config: Record<string, unknown> }).config
       : raw
   ) as Record<string, unknown> | undefined;
-
-  const qdrant = (cfg?.qdrant as Record<string, unknown> | undefined) ?? {};
-  const ollama = (cfg?.ollama as Record<string, unknown> | undefined) ?? {};
-  const chunking = (cfg?.chunking as Record<string, unknown> | undefined) ?? {};
-
   return {
     qdrant: {
-      host: String(qdrant.host ?? DEFAULT_QDRANT_HOST),
-      port: Number(qdrant.port ?? DEFAULT_QDRANT_PORT),
-      collection: String(qdrant.collection ?? DEFAULT_COLLECTION),
+      host: String(cfg?.qdrant?.host ?? "localhost"),
+      port: Number(cfg?.qdrant?.port ?? 6333),
+      collection: String(cfg?.qdrant?.collection ?? "greench_documents"),
     },
     ollama: {
-      baseUrl: String(ollama.baseUrl ?? DEFAULT_OLLAMA_URL),
-      embeddingModel: String(ollama.embeddingModel ?? DEFAULT_EMBEDDING_MODEL),
+      baseUrl: String(cfg?.ollama?.baseUrl ?? "http://localhost:11434"),
+      embeddingModel: String(cfg?.ollama?.embeddingModel ?? "nomic-embed-text:v1.5"),
     },
     chunking: {
-      chunkSize: Number(chunking.chunkSize ?? DEFAULT_CHUNK_SIZE),
-      chunkOverlap: Number(chunking.chunkOverlap ?? DEFAULT_CHUNK_OVERLAP),
+      chunkSize: Number(cfg?.chunking?.chunkSize ?? 500),
+      chunkOverlap: Number(cfg?.chunking?.chunkOverlap ?? 100),
     },
   };
 }
 
-// ── Document Parsers ──────────────────────────────────────────────────────────
+// ── Document Parsing ─────────────────────────────────────────────────────────
 
-async function parsePDF(buffer: Buffer): Promise<string> {
-  // Lazy-load pdfjs-dist to avoid heavy import at startup
-  const pdfjsLib = await import("pdfjs-dist");
-  pdfjsLib.GlobalWorkerOptions.workerSrc = "";
-
-  const loadingTask = pdfjsLib.getDocument({ data: buffer.slice(0) });
-  const pdf = await loadingTask.promise;
-  const texts: string[] = [];
-
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const content = await page.getTextContent();
-    const pageText = content.items
-      .map((item: unknown) => {
-        const it = item as { str?: string };
-        return it.str ?? "";
-      })
-      .join(" ");
-    if (pageText.trim()) texts.push(pageText);
+async function parseDocument(buffer: Buffer, fileType: string): Promise<string> {
+  if (fileType === "pdf") {
+    const { getDocument } = await import("pdfjs-dist");
+    const data = new Uint8Array(buffer);
+    const pdf = await getDocument({ data }).promise;
+    const parts: string[] = [];
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      parts.push(content.items.map((item: { str?: string }) => item.str ?? "").join(" "));
+    }
+    return parts.join("\n\n");
+  } else if (fileType === "docx" || fileType === "doc") {
+    const { extractSingleImage } = await import("mammoth");
+    const result = await extractSingleImage({ buffer });
+    return result.value;
+  } else {
+    return buffer.toString("utf-8");
   }
-
-  return texts.join("\n\n");
-}
-
-async function parseDOCX(buffer: Buffer): Promise<string> {
-  const mammoth = await import("mammoth");
-  const result = await mammoth.extractRawText({ buffer });
-  return result.value;
-}
-
-function parseTXT(buffer: Buffer): string {
-  return buffer.toString("utf-8");
-}
-
-async function parseFile(buffer: Buffer, mimeType: string): Promise<string> {
-  if (mimeType === "application/pdf" || mimeType.endsWith("/pdf")) {
-    return parsePDF(buffer);
-  }
-
-  if (
-    mimeType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-    mimeType === "application/vnd.ms-word.document" ||
-    mimeType.endsWith("/wordprocessingml")
-  ) {
-    return parseDOCX(buffer);
-  }
-
-  if (
-    mimeType === "text/plain" ||
-    mimeType === "text/markdown" ||
-    mimeType === "text/x-markdown" ||
-    mimeType === "text/csv"
-  ) {
-    return parseTXT(buffer);
-  }
-
-  // Fallback: try UTF-8 decode
-  return parseTXT(buffer);
 }
 
 // ── Chunking ─────────────────────────────────────────────────────────────────
 
-function chunkText(
-  text: string,
-  chunkSize: number = DEFAULT_CHUNK_SIZE,
-  overlap: number = DEFAULT_CHUNK_OVERLAP,
-): Chunk[] {
-  // 1 token ≈ 4 chars
-  const charLimit = chunkSize * 4;
-  const overlapChars = overlap * 4;
+interface Chunk {
+  text: string;
+  chunk_id: string;
+}
 
+function chunkText(text: string, chunkSize: number, chunkOverlap: number): Chunk[] {
   const chunks: Chunk[] = [];
   let start = 0;
-  const textLen = text.length;
-
-  while (start < textLen) {
-    const end = start + charLimit;
-    const chunkText = text.slice(start, end).trim();
-
-    if (chunkText) {
-      chunks.push({
-        chunk_id: `chunk_${chunks.length}`,
-        text: chunkText,
-        start_char: start,
-        end_char: Math.min(end, textLen),
-      });
-    }
-
-    start = start + charLimit - overlapChars;
-    if (start >= textLen) break;
+  let id = 0;
+  while (start < text.length) {
+    const end = start + chunkSize;
+    const chunk = text.slice(start, end).trim();
+    if (chunk) chunks.push({ text: chunk, chunk_id: `chunk_${id++}` });
+    start += chunkSize - chunkOverlap;
   }
-
   return chunks;
 }
 
-// ── Embedding ────────────────────────────────────────────────────────────────
+// ── Ollama Embedding ────────────────────────────────────────────────────────
 
 async function embedTexts(texts: string[], baseUrl: string, model: string): Promise<number[][]> {
-  const embeddings: number[][] = [];
-
+  const results: number[][] = [];
   for (const text of texts) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30_000);
-
-    try {
-      const response = await fetch(`${baseUrl}/api/embeddings`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model, prompt: text }),
-        signal: controller.signal,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Ollama embedding failed: ${response.status} ${response.statusText}`);
-      }
-
-      const data = (await response.json()) as { embedding?: number[] };
-      if (!data.embedding) {
-        throw new Error("No embedding returned from Ollama");
-      }
-      embeddings.push(data.embedding);
-    } finally {
-      clearTimeout(timeout);
+    const resp = await fetch(`${baseUrl}/api/embeddings`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model, prompt: text }),
+      signal: AbortSignal.timeout(60_000),
+    });
+    if (!resp.ok) throw new Error(`Embedding failed: ${resp.status}`);
+    const data = (await resp.json()) as { embedding?: number[] };
+    results.push(data.embedding ?? []);
+    if (results[results.length - 1].length !== EMBEDDING_DIMS) {
+      // Pad or truncate to expected dimensions
+      const vec = results[results.length - 1];
+      while (vec.length < EMBEDDING_DIMS) vec.push(0);
+      if (vec.length > EMBEDDING_DIMS) vec.length = EMBEDDING_DIMS;
     }
   }
-
-  return embeddings;
+  return results;
 }
 
-// ── Qdrant REST API Client ────────────────────────────────────────────────────
+// ── Qdrant REST API ─────────────────────────────────────────────────────────
 
 function qdrantUrl(cfg: RAGConfig, path: string): string {
   return `http://${cfg.qdrant.host}:${cfg.qdrant.port}${path}`;
@@ -240,15 +121,9 @@ function qdrantUrl(cfg: RAGConfig, path: string): string {
 async function qdrantRequest<T>(url: string, opts: RequestInit = {}): Promise<T> {
   const resp = await fetch(url, {
     ...opts,
-    headers: {
-      "Content-Type": "application/json",
-      ...opts.headers,
-    },
+    headers: { "Content-Type": "application/json", ...opts.headers },
   });
-  if (!resp.ok) {
-    const text = await resp.text().catch(() => "");
-    throw new Error(`Qdrant ${resp.status}: ${text}`);
-  }
+  if (!resp.ok) throw new Error(`Qdrant ${resp.status}: ${await resp.text().catch(() => "")}`);
   return resp.json() as Promise<T>;
 }
 
@@ -261,16 +136,11 @@ async function ensureCollection(cfg: RAGConfig): Promise<void> {
     if (!exists) {
       await qdrantRequest(qdrantUrl(cfg, `/collections/${cfg.qdrant.collection}`), {
         method: "PUT",
-        body: JSON.stringify({
-          vectors: {
-            size: EMBEDDING_DIMS,
-            distance: "Cosine",
-          },
-        }),
+        body: JSON.stringify({ vectors: { size: EMBEDDING_DIMS, distance: "Cosine" } }),
       });
     }
   } catch {
-    // Collection may already exist
+    // May already exist
   }
 }
 
@@ -285,11 +155,7 @@ async function qdrantUpsert(
   });
 }
 
-async function qdrantSearch(
-  cfg: RAGConfig,
-  queryVector: number[],
-  limit: number,
-): Promise<Array<{ id: number; score: number; payload: Record<string, unknown> }>> {
+async function qdrantSearch(cfg: RAGConfig, queryVector: number[], limit: number) {
   await ensureCollection(cfg);
   const data = await qdrantRequest<{
     result: Array<{ id: number; score: number; payload: Record<string, unknown> }>;
@@ -307,62 +173,57 @@ async function qdrantDelete(cfg: RAGConfig, points: number[]): Promise<void> {
   });
 }
 
-// ── Document metadata store (file-based) ─────────────────────────────────────
+// ── In-memory Doc Metadata Store ─────────────────────────────────────────────
 
-function getMetaPath(api: GreenchClawPluginApi): string {
-  return path.join(
-    api.runtime.state.resolveStateDir(),
-    "plugins",
-    "greench-rag",
-    "documents_meta.json",
-  );
-}
+const docMetadata = new Map<string, { title: string; file_type: string; chunk_count: number }>();
 
-async function loadMeta(api: GreenchClawPluginApi): Promise<Record<string, DocumentMeta>> {
+// ── RAG Operations ──────────────────────────────────────────────────────────
+
+async function indexDocument(
+  api: GreenchClawPluginApi,
+  args: { file_path: string },
+): Promise<{ success: boolean; output: string; error: string | null }> {
+  const cfg = getRAGConfig(api);
+  const { readFileSync } = await import("node:fs");
+  const { basename, extname } = await import("node:path");
+  const crypto = await import("node:crypto");
+
+  let filePath = args.file_path;
+  const fileType = extname(filePath).replace(".", "") || "txt";
+  const title = basename(filePath);
+
+  let buffer: Buffer;
   try {
-    const content = await fs.readFile(getMetaPath(api), "utf-8");
-    return JSON.parse(content);
-  } catch {
-    return {};
+    const stat = readFileSync(filePath);
+    if (stat.size > MAX_FILE_SIZE) {
+      return {
+        success: false,
+        output: "",
+        error: `File too large (max ${MAX_FILE_SIZE / 1024 / 1024}MB)`,
+      };
+    }
+    buffer = stat;
+  } catch (err) {
+    return { success: false, output: "", error: `Could not read file: ${err}` };
   }
-}
 
-async function saveMeta(
-  api: GreenchClawPluginApi,
-  meta: Record<string, DocumentMeta>,
-): Promise<void> {
-  const dir = path.dirname(getMetaPath(api));
-  await fs.mkdir(dir, { recursive: true });
-  await fs.writeFile(getMetaPath(api), JSON.stringify(meta, null, 2), "utf-8");
-}
-
-// ── RAG Core Operations ──────────────────────────────────────────────────────
-
-async function ingestDocument(
-  api: GreenchClawPluginApi,
-  docId: string,
-  title: string,
-  fileType: string,
-  buffer: Buffer,
-  mimeType: string,
-): Promise<{ chunks_stored: number }> {
-  const cfg = resolveConfig(api);
-
-  // Parse
-  const text = await parseFile(buffer, mimeType);
-
+  const text = await parseDocument(buffer, fileType);
   if (!text.trim()) {
-    throw new Error("Document is empty after parsing");
+    return { success: false, output: "", error: "Document is empty" };
   }
 
-  // Chunk
   const chunks = chunkText(text, cfg.chunking.chunkSize, cfg.chunking.chunkOverlap);
+  if (!chunks.length) {
+    return { success: false, output: "", error: "No text chunks generated" };
+  }
 
-  // Embed
-  const texts = chunks.map((c) => c.text);
-  const vectors = await embedTexts(texts, cfg.ollama.baseUrl, cfg.ollama.embeddingModel);
+  const docId = crypto.randomUUID();
+  const vectors = await embedTexts(
+    chunks.map((c) => c.text),
+    cfg.ollama.baseUrl,
+    cfg.ollama.embeddingModel,
+  );
 
-  // Store in Qdrant via REST API
   const points = chunks.map((chunk, i) => ({
     id: Math.abs(
       parseInt(crypto.createHash("sha1").update(`${docId}_${i}`).digest("hex").slice(0, 16), 16),
@@ -379,231 +240,171 @@ async function ingestDocument(
   }));
 
   await qdrantUpsert(cfg, points);
+  docMetadata.set(docId, { title, file_type: fileType, chunk_count: chunks.length });
 
-  // Save metadata
-  const meta = await loadMeta(api);
-  meta[docId] = {
-    doc_id: docId,
-    title,
-    file_type: fileType,
-    chunk_count: chunks.length,
-    uploaded_at: new Date().toISOString(),
-    metadata: {},
+  return {
+    success: true,
+    output: `Indexed "${title}" — ${chunks.length} chunks stored in Qdrant collection "${cfg.qdrant.collection}"`,
+    error: null,
   };
-  await saveMeta(api, meta);
-
-  return { chunks_stored: chunks.length };
 }
 
-async function searchChunks(
+async function searchDocuments(
   api: GreenchClawPluginApi,
-  query: string,
-  topK: number = 5,
-): Promise<StoredChunk[]> {
-  const cfg = resolveConfig(api);
+  args: { query: string; top_k?: number },
+): Promise<{ success: boolean; output: string; error: string | null }> {
+  const cfg = getRAGConfig(api);
+  const topK = args.top_k ?? 5;
 
-  // Embed query
-  const vectors = await embedTexts([query], cfg.ollama.baseUrl, cfg.ollama.embeddingModel);
-  const queryVector = vectors[0];
+  const vectors = await embedTexts([args.query], cfg.ollama.baseUrl, cfg.ollama.embeddingModel);
 
-  const results = await qdrantSearch(cfg, queryVector, topK);
+  const results = await qdrantSearch(cfg, vectors[0], topK);
+  if (!results.length) {
+    return { success: true, output: "No results found.", error: null };
+  }
 
-  return results.map((r) => ({
-    text: (r.payload.text as string) ?? "",
-    doc_id: (r.payload.doc_id as string) ?? "",
-    doc_title: (r.payload.doc_title as string) ?? "",
-    chunk_index: (r.payload.chunk_index as number) ?? 0,
-    score: r.score,
-  }));
+  const lines = results.map(
+    (r, i) =>
+      `[${i + 1}] ${(r.payload.doc_title as string) ?? "?"} (score: ${r.score.toFixed(3)})\n${(r.payload.text as string) ?? ""}`,
+  );
+
+  return { success: true, output: lines.join("\n\n"), error: null };
 }
 
-async function listDocuments(api: GreenchClawPluginApi): Promise<DocumentMeta[]> {
-  const meta = await loadMeta(api);
-  return Object.values(meta);
+async function listDocuments(
+  _api: GreenchClawPluginApi,
+  _args: Record<string, unknown>,
+): Promise<{ success: boolean; output: string; error: string | null }> {
+  if (!docMetadata.size) {
+    return { success: true, output: "No documents indexed yet.", error: null };
+  }
+  const lines = [...docMetadata.entries()].map(
+    ([id, meta]) =>
+      `${meta.title} (${meta.file_type}) — ${meta.chunk_count} chunks [${id.slice(0, 8)}]`,
+  );
+  return { success: true, output: lines.join("\n"), error: null };
 }
 
-async function deleteDocument(api: GreenchClawPluginApi, docId: string): Promise<boolean> {
-  const cfg = resolveConfig(api);
-  const meta = await loadMeta(api);
+async function deleteDocument(
+  api: GreenchClawPluginApi,
+  args: { doc_id: string },
+): Promise<{ success: boolean; output: string; error: string | null }> {
+  const cfg = getRAGConfig(api);
+  const { doc_id } = args;
+  const crypto = await import("node:crypto");
 
-  if (!meta[docId]) return false;
+  const meta = docMetadata.get(doc_id);
+  if (!meta) {
+    return { success: false, output: "", error: `Document ID "${doc_id}" not found` };
+  }
 
-  const chunkCount = meta[docId].chunk_count;
-
-  // Delete all chunk points for this doc
+  const chunkCount = meta.chunk_count;
   const pointIds = Array.from({ length: chunkCount }, (_, i) =>
     Math.abs(
-      parseInt(crypto.createHash("sha1").update(`${docId}_${i}`).digest("hex").slice(0, 16), 16),
+      parseInt(crypto.createHash("sha1").update(`${doc_id}_${i}`).digest("hex").slice(0, 16), 16),
     ),
   );
 
   await qdrantDelete(cfg, pointIds);
+  docMetadata.delete(doc_id);
 
-  delete meta[docId];
-  await saveMeta(api, meta);
-  return true;
-}
-
-// ── Build RAG Context ────────────────────────────────────────────────────────
-
-function buildRAGContext(chunks: StoredChunk[]): string {
-  if (!chunks.length) return "";
-  return chunks.map((c) => `[Document: ${c.doc_title}]\n${c.text}`).join("\n\n---\n\n");
-}
-
-// ── Plugin Tools ─────────────────────────────────────────────────────────────
-
-function buildTools(api: GreenchClawPluginApi) {
-  return [
-    {
-      name: "rag_search",
-      description:
-        "Search indexed documents using semantic similarity. Returns relevant text chunks from uploaded PDFs, DOCX, TXT, and MD files.",
-      inputSchema: {
-        type: "object" as const,
-        properties: {
-          query: { type: "string" as const, description: "Search query" },
-          top_k: {
-            type: "number" as const,
-            description: "Max results to return (default 5)",
-            default: 5,
-          },
-        },
-        required: ["query" as const],
-      },
-      async run(args: { query: string; top_k?: number }) {
-        try {
-          const chunks = await searchChunks(api, args.query, args.top_k ?? 5);
-          if (!chunks.length) {
-            return { success: true, output: "No documents found matching the query.", error: null };
-          }
-          const lines = chunks.map(
-            (c, i) => `[${i + 1}] ${c.doc_title} (score: ${c.score.toFixed(3)})\n${c.text}`,
-          );
-          return {
-            success: true,
-            output: `Found ${chunks.length} result(s):\n\n${lines.join("\n\n")}`,
-            error: null,
-          };
-        } catch (err) {
-          const msg = err instanceof Error ? err.message : String(err);
-          return { success: false, output: "", error: msg };
-        }
-      },
-    },
-    {
-      name: "rag_list",
-      description: "List all indexed documents in the RAG store.",
-      inputSchema: {
-        type: "object" as const,
-        properties: {},
-      },
-      async run() {
-        try {
-          const docs = await listDocuments(api);
-          if (!docs.length) {
-            return { success: true, output: "No documents indexed yet.", error: null };
-          }
-          const lines = docs.map(
-            (d) => `- ${d.title} (${d.chunk_count} chunks, uploaded ${d.uploaded_at})`,
-          );
-          return { success: true, output: lines.join("\n"), error: null };
-        } catch (err) {
-          const msg = err instanceof Error ? err.message : String(err);
-          return { success: false, output: "", error: msg };
-        }
-      },
-    },
-    {
-      name: "rag_delete",
-      description: "Delete an indexed document by its ID.",
-      inputSchema: {
-        type: "object" as const,
-        properties: {
-          doc_id: { type: "string" as const, description: "Document ID to delete" },
-        },
-        required: ["doc_id" as const],
-      },
-      async run(args: { doc_id: string }) {
-        try {
-          const deleted = await deleteDocument(api, args.doc_id);
-          return {
-            success: true,
-            output: deleted
-              ? `Document '${args.doc_id}' deleted.`
-              : `Document '${args.doc_id}' not found.`,
-            error: null,
-          };
-        } catch (err) {
-          const msg = err instanceof Error ? err.message : String(err);
-          return { success: false, output: "", error: msg };
-        }
-      },
-    },
-  ];
-}
-
-// ── Plugin Registration ────────────────────────────────────────────────────────
-
-let _registeredTools: unknown[] = [];
-
-async function registerRAGPlugin(api: GreenchClawPluginApi): Promise<void> {
-  const tools = buildTools(api);
-  _registeredTools = tools;
-
-  api.logger.info?.("greench-rag: registering tools", { count: tools.length });
-
-  // Register tools with the agent tool catalog
-  for (const tool of tools) {
-    try {
-      api.runtime.agent.tools.register?.({
-        id: tool.name,
-        description: tool.description,
-        inputSchema: tool.inputSchema,
-        async handler(args: Record<string, unknown>) {
-          const result = await tool.run(args as Parameters<typeof tool.run>[0]);
-          return result;
-        },
-      });
-    } catch (err) {
-      api.logger.error?.("greench-rag: failed to register tool", {
-        tool: tool.name,
-        error: String(err),
-      });
-    }
-  }
+  return {
+    success: true,
+    output: `Deleted document "${meta.title}" and ${chunkCount} chunks`,
+    error: null,
+  };
 }
 
 // ── Plugin Entry ─────────────────────────────────────────────────────────────
-
-let _pluginApi: GreenchClawPluginApi | null = null;
 
 export default definePluginEntry({
   id: "greench-rag",
   name: "GreenchRAG",
   description:
-    "RAG pipeline — upload PDFs, DOCX, TXT, MD files, semantic search, and chat with document context.",
-  async register(api: GreenchClawPluginApi) {
-    _pluginApi = api;
-    await registerRAGPlugin(api);
-    api.logger.info?.("greench-rag: plugin registered");
-  },
-  async onAgentToolCall(toolName: string, args: Record<string, unknown>) {
-    // Route tool calls to our handlers
-    const tool = _registeredTools.find((t) => (t as { name: string }).name === toolName);
-    if (!tool) return undefined;
-    return (tool as { run: (args: Record<string, unknown>) => unknown }).run(args);
+    "Document RAG pipeline — parse, chunk, embed, and search PDFs, DOCX, and TXT files via Qdrant + Ollama.",
+  register(api: GreenchClawPluginApi) {
+    api.registerTool(
+      () => ({
+        name: "rag_index",
+        description:
+          "Index a document (PDF, DOCX, or TXT) for semantic search. Parses, chunks, embeds via Ollama, and stores in Qdrant.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            file_path: { type: "string", description: "Absolute path to the document file" },
+          },
+          required: ["file_path"],
+        },
+        execute: async (toolCallId, toolParams) => {
+          return indexDocument(api, toolParams as { file_path: string });
+        },
+      }),
+      { names: ["rag_index"] },
+    );
+
+    api.registerTool(
+      () => ({
+        name: "rag_search",
+        description: "Semantic search across indexed documents.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            query: { type: "string", description: "Search query" },
+            top_k: { type: "number", description: "Max results (default 5)" },
+          },
+          required: ["query"],
+        },
+        execute: async (_toolCallId, toolParams) => {
+          return searchDocuments(api, toolParams as { query: string; top_k?: number });
+        },
+      }),
+      { names: ["rag_search"] },
+    );
+
+    api.registerTool(
+      () => ({
+        name: "rag_list",
+        description: "List all indexed documents.",
+        inputSchema: { type: "object", properties: {} },
+        execute: async () => listDocuments(api, {}),
+      }),
+      { names: ["rag_list"] },
+    );
+
+    api.registerTool(
+      () => ({
+        name: "rag_delete",
+        description: "Delete an indexed document by its doc_id.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            doc_id: { type: "string", description: "Document ID returned from rag_index" },
+          },
+          required: ["doc_id"],
+        },
+        execute: async (_toolCallId, toolParams) => {
+          return deleteDocument(api, toolParams as { doc_id: string });
+        },
+      }),
+      { names: ["rag_delete"] },
+    );
+
+    api.logger.info?.("greench-rag: registered");
   },
   tools: {
-    rag_search: {
-      description:
-        "Search indexed documents using semantic similarity. Returns relevant text chunks from uploaded PDFs, DOCX, TXT, and MD files.",
+    rag_index: {
+      description: "Index a document for semantic search.",
       inputSchema: {
         type: "object",
-        properties: {
-          query: { type: "string", description: "Search query" },
-          top_k: { type: "number", description: "Max results (default 5)", default: 5 },
-        },
+        properties: { file_path: { type: "string" } },
+        required: ["file_path"],
+      },
+    },
+    rag_search: {
+      description: "Search indexed documents.",
+      inputSchema: {
+        type: "object",
+        properties: { query: { type: "string" }, top_k: { type: "number" } },
         required: ["query"],
       },
     },
@@ -617,33 +418,6 @@ export default definePluginEntry({
         type: "object",
         properties: { doc_id: { type: "string" } },
         required: ["doc_id"],
-      },
-    },
-  },
-  configSchema: {
-    type: "object",
-    properties: {
-      qdrant: {
-        type: "object",
-        properties: {
-          host: { type: "string", default: "localhost" },
-          port: { type: "number", default: 6333 },
-          collection: { type: "string", default: "greench_documents" },
-        },
-      },
-      ollama: {
-        type: "object",
-        properties: {
-          baseUrl: { type: "string", default: "http://localhost:11434" },
-          embeddingModel: { type: "string", default: "nomic-embed-text:v1.5" },
-        },
-      },
-      chunking: {
-        type: "object",
-        properties: {
-          chunkSize: { type: "number", default: 500 },
-          chunkOverlap: { type: "number", default: 100 },
-        },
       },
     },
   },

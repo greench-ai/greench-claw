@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   isDiagnosticFlagEnabled,
   matchesDiagnosticFlag,
@@ -10,9 +10,9 @@ describe("resolveDiagnosticFlags", () => {
   it("normalizes and dedupes config and env flags", () => {
     const cfg = {
       diagnostics: { flags: [" Telegram.Http ", "cache.*", "CACHE.*"] },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const env = {
-      NEXISCLAW_DIAGNOSTICS: " foo, Cache.*  telegram.http  ",
+      GREENCHCLAW_DIAGNOSTICS: " foo, Cache.*  telegram.http  ",
     } as NodeJS.ProcessEnv;
 
     expect(resolveDiagnosticFlags(cfg, env)).toEqual(["telegram.http", "cache.*", "foo"]);
@@ -21,11 +21,11 @@ describe("resolveDiagnosticFlags", () => {
   it("treats blank env values as no extra flags", () => {
     const cfg = {
       diagnostics: { flags: ["telegram.http"] },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(
       resolveDiagnosticFlags(cfg, {
-        NEXISCLAW_DIAGNOSTICS: "   ",
+        GREENCHCLAW_DIAGNOSTICS: "   ",
       } as NodeJS.ProcessEnv),
     ).toEqual(["telegram.http"]);
   });
@@ -33,12 +33,12 @@ describe("resolveDiagnosticFlags", () => {
   it("treats false-like env values as disable overrides", () => {
     const cfg = {
       diagnostics: { flags: ["telegram.http"] },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     for (const raw of ["0", "false", "off", "none"]) {
       expect(
         resolveDiagnosticFlags(cfg, {
-          NEXISCLAW_DIAGNOSTICS: raw,
+          GREENCHCLAW_DIAGNOSTICS: raw,
         } as NodeJS.ProcessEnv),
       ).toStrictEqual([]);
     }
@@ -65,9 +65,9 @@ describe("isDiagnosticFlagEnabled", () => {
   it("resolves config and env together before matching", () => {
     const cfg = {
       diagnostics: { flags: ["gateway.*"] },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const env = {
-      NEXISCLAW_DIAGNOSTICS: "telegram.http",
+      GREENCHCLAW_DIAGNOSTICS: "telegram.http",
     } as NodeJS.ProcessEnv;
 
     expect(isDiagnosticFlagEnabled("gateway.ws", cfg, env)).toBe(true);

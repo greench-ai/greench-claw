@@ -1,6 +1,6 @@
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/channel-plugin-common";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/channel-plugin-common";
 
-export function registerMatrixCliMetadata(api: NexisClawPluginApi) {
+export function registerMatrixCliMetadata(api: GreenchClawPluginApi) {
   api.registerCli(
     async ({ program }) => {
       const { registerMatrixCli } = await import("./cli.js");

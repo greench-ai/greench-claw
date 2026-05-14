@@ -6,10 +6,10 @@ import { normalizeCompatibilityConfigValues } from "../commands/doctor-legacy-co
 import { VERSION } from "../version.js";
 import { createConfigIO } from "./io.js";
 import { normalizeExecSafeBinProfilesInConfig } from "./normalize-exec-safe-bin.js";
-import type { NexisClawConfig } from "./types.NexisClaw.js";
+import type { GreenchClawConfig } from "./types.GreenchClaw.js";
 
 async function withTempHome(run: (home: string) => Promise<void>): Promise<void> {
-  const home = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-config-"));
+  const home = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-config-"));
   try {
     await run(home);
   } finally {
@@ -19,9 +19,9 @@ async function withTempHome(run: (home: string) => Promise<void>): Promise<void>
 
 async function writeConfig(
   home: string,
-  dirname: ".NexisClaw",
+  dirname: ".GreenchClaw",
   port: number,
-  filename: string = "NexisClaw.json",
+  filename: string = "GreenchClaw.json",
 ) {
   const dir = path.join(home, dirname);
   await fs.mkdir(dir, { recursive: true });
@@ -38,42 +38,44 @@ function createIoForHome(home: string, env: NodeJS.ProcessEnv = {} as NodeJS.Pro
 }
 
 describe("config io paths", () => {
-  it("uses ~/.NexisClaw/NexisClaw.json when config exists", async () => {
+  it("uses ~/.GreenchClaw/GreenchClaw.json when config exists", async () => {
     await withTempHome(async (home) => {
-      const configPath = await writeConfig(home, ".NexisClaw", 19001);
+      const configPath = await writeConfig(home, ".GreenchClaw", 19001);
       const io = createIoForHome(home);
       expect(io.configPath).toBe(configPath);
     });
   });
 
-  it("defaults to ~/.NexisClaw/NexisClaw.json when config is missing", async () => {
+  it("defaults to ~/.GreenchClaw/GreenchClaw.json when config is missing", async () => {
     await withTempHome(async (home) => {
       const io = createIoForHome(home);
-      expect(io.configPath).toBe(path.join(home, ".NexisClaw", "NexisClaw.json"));
+      expect(io.configPath).toBe(path.join(home, ".GreenchClaw", "GreenchClaw.json"));
     });
   });
 
-  it("uses NEXISCLAW_HOME for default config path", async () => {
+  it("uses GREENCHCLAW_HOME for default config path", async () => {
     await withTempHome(async (home) => {
       const io = createConfigIO({
-        env: { NEXISCLAW_HOME: path.join(home, "svc-home") } as NodeJS.ProcessEnv,
+        env: { GREENCHCLAW_HOME: path.join(home, "svc-home") } as NodeJS.ProcessEnv,
         homedir: () => path.join(home, "ignored-home"),
       });
-      expect(io.configPath).toBe(path.join(home, "svc-home", ".NexisClaw", "NexisClaw.json"));
+      expect(io.configPath).toBe(path.join(home, "svc-home", ".GreenchClaw", "GreenchClaw.json"));
     });
   });
 
-  it("honors explicit NEXISCLAW_CONFIG_PATH override", async () => {
+  it("honors explicit GREENCHCLAW_CONFIG_PATH override", async () => {
     await withTempHome(async (home) => {
-      const customPath = await writeConfig(home, ".NexisClaw", 20002, "custom.json");
-      const io = createIoForHome(home, { NEXISCLAW_CONFIG_PATH: customPath } as NodeJS.ProcessEnv);
+      const customPath = await writeConfig(home, ".GreenchClaw", 20002, "custom.json");
+      const io = createIoForHome(home, {
+        GREENCHCLAW_CONFIG_PATH: customPath,
+      } as NodeJS.ProcessEnv);
       expect(io.configPath).toBe(customPath);
     });
   });
 
   it("logs validation warnings with real line breaks", async () => {
     await withTempHome(async (home) => {
-      const configPath = path.join(home, ".NexisClaw", "NexisClaw.json");
+      const configPath = path.join(home, ".GreenchClaw", "GreenchClaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
@@ -112,9 +114,9 @@ describe("config io paths", () => {
     });
   });
 
-  it("explains what to check when config was written by a newer NexisClaw", async () => {
+  it("explains what to check when config was written by a newer GreenchClaw", async () => {
     await withTempHome(async (home) => {
-      const configPath = path.join(home, ".NexisClaw", "NexisClaw.json");
+      const configPath = path.join(home, ".GreenchClaw", "GreenchClaw.json");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
         configPath,
@@ -142,9 +144,9 @@ describe("config io paths", () => {
 
       expect(logger.warn).toHaveBeenCalledWith(
         [
-          `Your NexisClaw config was written by version 9999.1.1, but this command is running ${VERSION}.`,
-          "Check: `NexisClaw --version`, `which NexisClaw`, and `NexisClaw gateway status --deep`.",
-          "If unexpected, update PATH so `NexisClaw` points to the version you want, or reinstall the Gateway service from that same NexisClaw install.",
+          `Your GreenchClaw config was written by version 9999.1.1, but this command is running ${VERSION}.`,
+          "Check: `GreenchClaw --version`, `which GreenchClaw`, and `GreenchClaw gateway status --deep`.",
+          "If unexpected, update PATH so `GreenchClaw` points to the version you want, or reinstall the Gateway service from that same GreenchClaw install.",
         ].join("\n"),
       );
     });
@@ -212,7 +214,7 @@ describe("config io paths", () => {
           },
         },
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     expect(migrated.config.channels?.whatsapp?.accounts?.default).toEqual({
       dmPolicy: "allowlist",
       allowFrom: ["+15550001111"],

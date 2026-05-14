@@ -1,12 +1,15 @@
 import { randomUUID, createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { readJsonFileWithFallback, writeJsonFileAtomically } from "NexisClaw/plugin-sdk/json-store";
+import {
+  readJsonFileWithFallback,
+  writeJsonFileAtomically,
+} from "GreenchClaw/plugin-sdk/json-store";
 
-export const NEXISCLAW_ACPX_LEASE_ID_ENV = "NEXISCLAW_ACPX_LEASE_ID";
-export const NEXISCLAW_GATEWAY_INSTANCE_ID_ENV = "NEXISCLAW_GATEWAY_INSTANCE_ID";
-export const NEXISCLAW_ACPX_LEASE_ID_ARG = "--NexisClaw-acpx-lease-id";
-export const NEXISCLAW_GATEWAY_INSTANCE_ID_ARG = "--NexisClaw-gateway-instance-id";
+export const GREENCHCLAW_ACPX_LEASE_ID_ENV = "GREENCHCLAW_ACPX_LEASE_ID";
+export const GREENCHCLAW_GATEWAY_INSTANCE_ID_ENV = "GREENCHCLAW_GATEWAY_INSTANCE_ID";
+export const GREENCHCLAW_ACPX_LEASE_ID_ARG = "--GreenchClaw-acpx-lease-id";
+export const GREENCHCLAW_GATEWAY_INSTANCE_ID_ARG = "--GreenchClaw-gateway-instance-id";
 
 export type AcpxProcessLeaseState = "open" | "closing" | "closed" | "lost";
 
@@ -158,12 +161,12 @@ export function withAcpxLeaseEnvironment(params: {
   }
   return [
     "env",
-    `${NEXISCLAW_ACPX_LEASE_ID_ENV}=${quoteEnvValue(params.leaseId)}`,
-    `${NEXISCLAW_GATEWAY_INSTANCE_ID_ENV}=${quoteEnvValue(params.gatewayInstanceId)}`,
+    `${GREENCHCLAW_ACPX_LEASE_ID_ENV}=${quoteEnvValue(params.leaseId)}`,
+    `${GREENCHCLAW_GATEWAY_INSTANCE_ID_ENV}=${quoteEnvValue(params.gatewayInstanceId)}`,
     params.command,
-    NEXISCLAW_ACPX_LEASE_ID_ARG,
+    GREENCHCLAW_ACPX_LEASE_ID_ARG,
     quoteEnvValue(params.leaseId),
-    NEXISCLAW_GATEWAY_INSTANCE_ID_ARG,
+    GREENCHCLAW_GATEWAY_INSTANCE_ID_ARG,
     quoteEnvValue(params.gatewayInstanceId),
   ].join(" ");
 }

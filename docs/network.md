@@ -7,19 +7,19 @@ read_when:
 title: "Network"
 ---
 
-This hub links the core docs for how NexisClaw connects, pairs, and secures
+This hub links the core docs for how GreenchClaw connects, pairs, and secures
 devices across localhost, LAN, and tailnet.
 
 ## Core model
 
-Most operations flow through the Gateway (`NexisClaw gateway`), a single long-running process that owns channel connections and the WebSocket control plane.
+Most operations flow through the Gateway (`GreenchClaw gateway`), a single long-running process that owns channel connections and the WebSocket control plane.
 
 - **Loopback first**: the Gateway WS defaults to `ws://127.0.0.1:18789`.
   Non-loopback binds require a valid gateway auth path: shared-secret
   token/password auth, or a correctly configured non-loopback
   `trusted-proxy` deployment.
 - **One Gateway per host** is recommended. For isolation, run multiple gateways with isolated profiles and ports ([Multiple Gateways](/gateway/multiple-gateways)).
-- **Canvas host** is served on the same port as the Gateway (`/__NexisClaw__/canvas/`, `/__NexisClaw__/a2ui/`), protected by Gateway auth when bound beyond loopback.
+- **Canvas host** is served on the same port as the Gateway (`/__GreenchClaw__/canvas/`, `/__GreenchClaw__/a2ui/`), protected by Gateway auth when bound beyond loopback.
 - **Remote access** is typically SSH tunnel or Tailscale VPN ([Remote Access](/gateway/remote)).
 
 Key references:
@@ -40,7 +40,7 @@ Local trust:
 
 - Direct local loopback connects can be auto-approved for pairing to keep
   same-host UX smooth.
-- NexisClaw also has a narrow backend/container-local self-connect path for
+- GreenchClaw also has a narrow backend/container-local self-connect path for
   trusted shared-secret helper flows.
 - Tailnet and LAN clients, including same-host tailnet binds, still require
   explicit pairing approval.

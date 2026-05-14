@@ -307,7 +307,7 @@ async function prepareAgentCommandExecution(
     const knownAgents = listAgentIds(cfg);
     if (!knownAgents.includes(agentIdOverride)) {
       throw new Error(
-        `Unknown agent id "${agentIdOverrideRaw}". Use "${formatCliCommand("NexisClaw agents list")}" to see configured agents.`,
+        `Unknown agent id "${agentIdOverrideRaw}". Use "${formatCliCommand("GreenchClaw agents list")}" to see configured agents.`,
       );
     }
   }

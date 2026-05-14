@@ -1,13 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
 import { expect } from "vitest";
-import type { NexisClawConfig } from "../../../../config/config.js";
+import type { GreenchClawConfig } from "../../../../config/config.js";
 import {
   getSessionBindingService,
   type SessionBindingCapabilities,
   type SessionBindingRecord,
 } from "../../../../infra/outbound/session-binding-service.js";
-import { resolvePreferredNexisClawTmpDir } from "../../../../infra/tmp-NexisClaw-dir.js";
+import { resolvePreferredGreenchClawTmpDir } from "../../../../infra/tmp-GreenchClaw-dir.js";
 import { setActivePluginRegistry } from "../../../../plugins/runtime.js";
 import { createTestRegistry } from "../../../../test-utils/channel-plugins.js";
 import { createChannelConversationBindingManager } from "../../conversation-bindings.js";
@@ -31,7 +31,7 @@ type SessionBindingContractEntry = {
 const contractApiPromises = new Map<string, Promise<Record<string, unknown>>>();
 
 const matrixSessionBindingStateDir = fs.mkdtempSync(
-  path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-matrix-session-binding-contract-"),
+  path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-matrix-session-binding-contract-"),
 );
 const matrixSessionBindingAuth = {
   accountId: "ops",
@@ -119,7 +119,7 @@ async function createContractMatrixThreadBindingManager() {
 
 const baseSessionBindingCfg = {
   session: { mainKey: "main", scope: "per-sender" },
-} satisfies NexisClawConfig;
+} satisfies GreenchClawConfig;
 
 type ChannelConversationBindingManagerFactory = NonNullable<
   NonNullable<ChannelPlugin["conversationBindings"]>["createManager"]
@@ -128,7 +128,7 @@ type ChannelConversationBindingManagerFactory = NonNullable<
 type DiscordContractApi = {
   createThreadBindingManager: (params: {
     accountId: string;
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
     persist: boolean;
     enableSweeper: boolean;
   }) => unknown;
@@ -140,7 +140,7 @@ type DiscordContractApi = {
 type FeishuContractApi = {
   createFeishuThreadBindingManager: (params: {
     accountId?: string;
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
   }) => unknown;
   feishuThreadBindingTesting: {
     resetFeishuThreadBindingsForTests: () => void;

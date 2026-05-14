@@ -1,7 +1,7 @@
 import { realpathSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { createSafeNpmInstallEnv } from "../infra/safe-package-install.js";
@@ -11,7 +11,7 @@ import {
   resolveDefaultPluginNpmDir,
   resolvePluginInstallDir,
 } from "./install-paths.js";
-import { relinkNexisClawPeerDependenciesInManagedNpmRoot } from "./plugin-peer-link.js";
+import { relinkGreenchClawPeerDependenciesInManagedNpmRoot } from "./plugin-peer-link.js";
 import { defaultSlotIdForKey } from "./slots.js";
 
 export type UninstallActions = {
@@ -90,7 +90,7 @@ export function formatUninstallSlotResetPreview(slotKey: "memory" | "contextEngi
 export type UninstallPluginResult =
   | {
       ok: true;
-      config: NexisClawConfig;
+      config: GreenchClawConfig;
       pluginId: string;
       actions: UninstallActions;
       warnings: string[];
@@ -114,7 +114,7 @@ export type PluginUninstallDirectoryRemoval = {
 export type PluginUninstallPlanResult =
   | {
       ok: true;
-      config: NexisClawConfig;
+      config: GreenchClawConfig;
       pluginId: string;
       actions: UninstallActions;
       directoryRemoval: PluginUninstallDirectoryRemoval | null;
@@ -342,10 +342,10 @@ function isPathInsideOrEqual(parent: string, child: string): boolean {
  * and owned channel config.
  */
 export function removePluginFromConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   pluginId: string,
   opts?: { channelIds?: string[] },
-): { config: NexisClawConfig; actions: Omit<UninstallActions, "directory"> } {
+): { config: GreenchClawConfig; actions: Omit<UninstallActions, "directory"> } {
   const actions = createEmptyConfigUninstallActions();
 
   const pluginsConfig = cfg.plugins ?? {};
@@ -474,17 +474,17 @@ export function removePluginFromConfig(
     }
   }
 
-  const config: NexisClawConfig = {
+  const config: GreenchClawConfig = {
     ...cfg,
     plugins: Object.keys(cleanedPlugins).length > 0 ? cleanedPlugins : undefined,
-    channels: channels as NexisClawConfig["channels"],
+    channels: channels as GreenchClawConfig["channels"],
   };
 
   return { config, actions };
 }
 
 export type UninstallPluginParams = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   pluginId: string;
   channelIds?: string[];
   deleteFiles?: boolean;
@@ -633,7 +633,7 @@ export async function applyPluginUninstallDirectoryRemoval(
       );
     }
     try {
-      await relinkNexisClawPeerDependenciesInManagedNpmRoot({
+      await relinkGreenchClawPeerDependenciesInManagedNpmRoot({
         npmRoot: removal.cleanup.npmRoot,
         logger: {
           warn: (message) => warnings.push(message),

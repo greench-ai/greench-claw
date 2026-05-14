@@ -4,7 +4,7 @@ import {
   getRuntimeConfig,
   getRuntimeConfigSourceSnapshot,
   projectConfigOntoRuntimeSourceSnapshot,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "../config/config.js";
 import { createConfigRuntimeEnv } from "../config/env-vars.js";
 import { privateFileStore } from "../infra/private-file-store.js";
@@ -17,7 +17,7 @@ import {
   resolveDefaultAgentId,
 } from "./agent-scope.js";
 import { MODELS_JSON_STATE } from "./models-config-state.js";
-import { planNexisClawModelsJson } from "./models-config.plan.js";
+import { planGreenchClawModelsJson } from "./models-config.plan.js";
 import { stableStringify } from "./stable-stringify.js";
 
 export { resetModelsJsonReadyCacheForTest } from "./models-config-state.js";
@@ -32,8 +32,8 @@ async function readFileMtimeMs(pathname: string): Promise<number | null> {
 }
 
 async function buildModelsJsonFingerprint(params: {
-  config: NexisClawConfig;
-  sourceConfigForSecrets: NexisClawConfig;
+  config: GreenchClawConfig;
+  sourceConfigForSecrets: GreenchClawConfig;
   agentDir: string;
   workspaceDir?: string;
   pluginMetadataSnapshot?: Pick<PluginMetadataSnapshot, "index">;
@@ -106,9 +106,9 @@ export async function writeModelsFileAtomicForModelsJson(
   await privateFileStore(path.dirname(targetPath)).writeText(path.basename(targetPath), contents);
 }
 
-function resolveModelsConfigInput(config?: NexisClawConfig): {
-  config: NexisClawConfig;
-  sourceConfigForSecrets: NexisClawConfig;
+function resolveModelsConfigInput(config?: GreenchClawConfig): {
+  config: GreenchClawConfig;
+  sourceConfigForSecrets: GreenchClawConfig;
 } {
   const runtimeSource = getRuntimeConfigSourceSnapshot();
   if (!config) {
@@ -152,8 +152,8 @@ async function withModelsJsonWriteLock<T>(targetPath: string, run: () => Promise
   }
 }
 
-export async function ensureNexisClawModelsJson(
-  config?: NexisClawConfig,
+export async function ensureGreenchClawModelsJson(
+  config?: GreenchClawConfig,
   agentDirOverride?: string,
   options: {
     pluginMetadataSnapshot?: Pick<PluginMetadataSnapshot, "index" | "manifestRegistry" | "owners">;
@@ -207,7 +207,7 @@ export async function ensureNexisClawModelsJson(
     // are available to provider discovery without mutating process.env.
     const env = createConfigRuntimeEnv(cfg);
     const existingModelsFile = await readExistingModelsFile(targetPath);
-    const plan = await planNexisClawModelsJson({
+    const plan = await planGreenchClawModelsJson({
       cfg,
       sourceConfigForSecrets: resolved.sourceConfigForSecrets,
       agentDir,

@@ -1,4 +1,4 @@
-import type { NexisClawPluginApi } from "../api.js";
+import type { GreenchClawPluginApi } from "../api.js";
 import { resolveDefaultAgentId } from "../api.js";
 import type { SkillWorkshopConfig } from "./config.js";
 import { applyProposalToWorkspace, prepareProposalWrite } from "./skills.js";
@@ -10,7 +10,10 @@ type ToolContext = {
   agentId?: string;
 };
 
-export function resolveWorkspaceDir(params: { api: NexisClawPluginApi; ctx?: ToolContext }): string {
+export function resolveWorkspaceDir(params: {
+  api: GreenchClawPluginApi;
+  ctx?: ToolContext;
+}): string {
   return (
     params.ctx?.workspaceDir ||
     params.api.runtime.agent.resolveAgentWorkspaceDir(
@@ -21,7 +24,7 @@ export function resolveWorkspaceDir(params: { api: NexisClawPluginApi; ctx?: Too
 }
 
 export function createStoreForContext(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   ctx?: ToolContext;
   config: SkillWorkshopConfig;
 }): SkillWorkshopStore {

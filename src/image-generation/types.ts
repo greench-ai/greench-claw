@@ -1,5 +1,5 @@
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { SsrFPolicy } from "../infra/net/ssrf.js";
 import type { MediaNormalizationEntry } from "../media-generation/normalization.types.js";
 
@@ -55,7 +55,7 @@ export type ImageGenerationSourceImage = {
 };
 
 export type ImageGenerationProviderConfiguredContext = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentDir?: string;
 };
 
@@ -63,7 +63,7 @@ export type ImageGenerationRequest = {
   provider: string;
   model: string;
   prompt: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir?: string;
   authStore?: AuthProfileStore;
   timeoutMs?: number;

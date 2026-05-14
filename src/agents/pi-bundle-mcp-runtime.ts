@@ -11,7 +11,7 @@ import type {
   jsonSchemaValidator,
 } from "@modelcontextprotocol/sdk/validation/types.js";
 import type { ErrorObject, ValidateFunction } from "ajv";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { logWarn } from "../logger.js";
 import { resolveGlobalSingleton } from "../shared/global-singleton.js";
 import { redactSensitiveUrlLikeString } from "../shared/net/redact-sensitive-url.js";
@@ -43,7 +43,7 @@ type CreateSessionMcpRuntime = (
 ) => SessionMcpRuntime;
 
 const require = createRequire(import.meta.url);
-const SESSION_MCP_RUNTIME_MANAGER_KEY = Symbol.for("NexisClaw.sessionMcpRuntimeManager");
+const SESSION_MCP_RUNTIME_MANAGER_KEY = Symbol.for("GreenchClaw.sessionMcpRuntimeManager");
 const DRAFT_2020_12_SCHEMA = "https://json-schema.org/draft/2020-12/schema";
 const DEFAULT_SESSION_MCP_RUNTIME_IDLE_TTL_MS = 10 * 60 * 1000;
 const SESSION_MCP_RUNTIME_SWEEP_INTERVAL_MS = 60 * 1000;
@@ -145,7 +145,7 @@ function createCatalogFingerprint(servers: Record<string, unknown>): string {
 
 function loadSessionMcpConfig(params: {
   workspaceDir: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   logDiagnostics?: boolean;
 }): {
   loaded: LoadedMcpConfig;
@@ -170,7 +170,7 @@ function createDisposedError(sessionId: string): Error {
   return new Error(`bundle-mcp runtime disposed for session ${sessionId}`);
 }
 
-function resolveSessionMcpRuntimeIdleTtlMs(cfg?: NexisClawConfig): number {
+function resolveSessionMcpRuntimeIdleTtlMs(cfg?: GreenchClawConfig): number {
   const raw = cfg?.mcp?.sessionIdleTtlMs;
   if (typeof raw === "number" && Number.isFinite(raw) && raw >= 0) {
     return Math.floor(raw);
@@ -182,7 +182,7 @@ export function createSessionMcpRuntime(params: {
   sessionId: string;
   sessionKey?: string;
   workspaceDir: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): SessionMcpRuntime {
   const { loaded, fingerprint: configFingerprint } = loadSessionMcpConfig({
     workspaceDir: params.workspaceDir,
@@ -240,7 +240,7 @@ export function createSessionMcpRuntime(params: {
 
           const client = new Client(
             {
-              name: "NexisClaw-bundle-mcp",
+              name: "GreenchClaw-bundle-mcp",
               version: "0.0.0",
             },
             {
@@ -585,7 +585,7 @@ export async function getOrCreateSessionMcpRuntime(params: {
   sessionId: string;
   sessionKey?: string;
   workspaceDir: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): Promise<SessionMcpRuntime> {
   return await getSessionMcpRuntimeManager().getOrCreate(params);
 }

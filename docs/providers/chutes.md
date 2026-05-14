@@ -2,13 +2,13 @@
 summary: "Chutes setup (OAuth or API key, model discovery, aliases)"
 title: "Chutes"
 read_when:
-  - You want to use Chutes with NexisClaw
+  - You want to use Chutes with GreenchClaw
   - You need the OAuth or API key setup path
   - You want the default model, aliases, or discovery behavior
 ---
 
 [Chutes](https://chutes.ai) exposes open-source model catalogs through an
-OpenAI-compatible API. NexisClaw supports both browser OAuth and direct API-key
+OpenAI-compatible API. GreenchClaw supports both browser OAuth and direct API-key
 auth for the bundled `chutes` provider.
 
 | Property | Value                        |
@@ -25,10 +25,10 @@ auth for the bundled `chutes` provider.
     <Steps>
       <Step title="Run the OAuth onboarding flow">
         ```bash
-        NexisClaw onboard --auth-choice chutes
+        GreenchClaw onboard --auth-choice chutes
         ```
-        NexisClaw launches the browser flow locally, or shows a URL + redirect-paste
-        flow on remote/headless hosts. OAuth tokens auto-refresh through NexisClaw auth
+        GreenchClaw launches the browser flow locally, or shows a URL + redirect-paste
+        flow on remote/headless hosts. OAuth tokens auto-refresh through GreenchClaw auth
         profiles.
       </Step>
       <Step title="Verify the default model">
@@ -46,7 +46,7 @@ auth for the bundled `chutes` provider.
       </Step>
       <Step title="Run the API key onboarding flow">
         ```bash
-        NexisClaw onboard --auth-choice chutes-api-key
+        GreenchClaw onboard --auth-choice chutes-api-key
         ```
       </Step>
       <Step title="Verify the default model">
@@ -66,13 +66,13 @@ Both auth paths register the bundled Chutes catalog and set the default model to
 
 ## Discovery behavior
 
-When Chutes auth is available, NexisClaw queries the Chutes catalog with that
-credential and uses the discovered models. If discovery fails, NexisClaw falls
+When Chutes auth is available, GreenchClaw queries the Chutes catalog with that
+credential and uses the discovered models. If discovery fails, GreenchClaw falls
 back to a bundled static catalog so onboarding and startup still work.
 
 ## Default aliases
 
-NexisClaw registers three convenience aliases for the bundled Chutes catalog:
+GreenchClaw registers three convenience aliases for the bundled Chutes catalog:
 
 | Alias           | Target model                                          |
 | --------------- | ----------------------------------------------------- |

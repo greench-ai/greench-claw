@@ -1,4 +1,4 @@
-import type { NexisClawPluginApi } from "../runtime-api.js";
+import type { GreenchClawPluginApi } from "../runtime-api.js";
 
 type ToolContextLike = {
   agentAccountId?: string;
@@ -37,10 +37,10 @@ function asToolLike(tool: unknown, fallbackName?: string): ToolLike {
   };
 }
 
-export function createToolFactoryHarness(cfg: NexisClawPluginApi["config"]) {
+export function createToolFactoryHarness(cfg: GreenchClawPluginApi["config"]) {
   const registered: RegisteredTool[] = [];
 
-  const api: Pick<NexisClawPluginApi, "config" | "logger" | "registerTool"> = {
+  const api: Pick<GreenchClawPluginApi, "config" | "logger" | "registerTool"> = {
     config: cfg,
     logger: {
       info: () => {},
@@ -73,7 +73,7 @@ export function createToolFactoryHarness(cfg: NexisClawPluginApi["config"]) {
   };
 
   return {
-    api: api as NexisClawPluginApi,
+    api: api as GreenchClawPluginApi,
     resolveTool,
   };
 }

@@ -1,12 +1,12 @@
 ---
-summary: "Messaging platforms NexisClaw can connect to"
+summary: "Messaging platforms GreenchClaw can connect to"
 read_when:
-  - You want to choose a chat channel for NexisClaw
+  - You want to choose a chat channel for GreenchClaw
   - You need a quick overview of supported messaging platforms
 title: "Chat channels"
 ---
 
-NexisClaw can talk to you on any chat app you already use. Each channel connects via the Gateway.
+GreenchClaw can talk to you on any chat app you already use. Each channel connects via the Gateway.
 Text is supported everywhere; media and reactions vary by channel.
 
 ## Delivery notes
@@ -24,7 +24,7 @@ Text is supported everywhere; media and reactions vary by channel.
 - [Discord](/channels/discord) - Discord Bot API + Gateway; supports servers, channels, and DMs.
 - [Feishu](/channels/feishu) - Feishu/Lark bot via WebSocket (bundled plugin).
 - [Google Chat](/channels/googlechat) - Google Chat API app via HTTP webhook (downloadable plugin).
-- [iMessage](/channels/imessage) - Native macOS integration via the `imsg` bridge on a signed-in Mac (or SSH wrapper when the Gateway runs elsewhere), including private API actions for replies, tapbacks, effects, attachments, and group management. Preferred for new NexisClaw iMessage setups when host permissions and Messages access fit.
+- [iMessage](/channels/imessage) - Native macOS integration via the `imsg` bridge on a signed-in Mac (or SSH wrapper when the Gateway runs elsewhere), including private API actions for replies, tapbacks, effects, attachments, and group management. Preferred for new GreenchClaw iMessage setups when host permissions and Messages access fit.
 - [IRC](/channels/irc) - Classic IRC servers; channels + DMs with pairing/allowlist controls.
 - [LINE](/channels/line) - LINE Messaging API bot (downloadable plugin).
 - [Matrix](/channels/matrix) - Matrix protocol (downloadable plugin).
@@ -49,7 +49,7 @@ Text is supported everywhere; media and reactions vary by channel.
 
 ## Notes
 
-- Channels can run simultaneously; configure multiple and NexisClaw will route per chat.
+- Channels can run simultaneously; configure multiple and GreenchClaw will route per chat.
 - Fastest setup is usually **Telegram** (simple bot token). WhatsApp requires QR pairing and
   stores more state on disk.
 - Group behavior varies by channel; see [Groups](/channels/groups).

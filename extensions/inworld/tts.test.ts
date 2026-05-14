@@ -4,8 +4,8 @@ const { fetchWithSsrFGuardMock } = vi.hoisted(() => ({
   fetchWithSsrFGuardMock: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/ssrf-runtime")>();
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("GreenchClaw/plugin-sdk/ssrf-runtime")>();
   return {
     ...actual,
     fetchWithSsrFGuard: fetchWithSsrFGuardMock,
@@ -71,7 +71,7 @@ const guardedSuccessReleaseCases = [
 ];
 
 afterAll(() => {
-  vi.doUnmock("NexisClaw/plugin-sdk/ssrf-runtime");
+  vi.doUnmock("GreenchClaw/plugin-sdk/ssrf-runtime");
   vi.resetModules();
 });
 

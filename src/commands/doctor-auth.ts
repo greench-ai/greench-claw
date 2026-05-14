@@ -16,7 +16,7 @@ import {
   classifyOAuthRefreshFailure,
   type OAuthRefreshFailureReason,
 } from "../agents/auth-profiles/oauth-refresh-failure.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { note } from "../terminal/note.js";
 import { isRecord } from "../utils.js";
@@ -28,7 +28,7 @@ const CODEX_OAUTH_WARNING_TITLE = "Codex OAuth";
 const OPENAI_BASE_URL = "https://api.openai.com/v1";
 const LEGACY_CODEX_APIS = new Set(["openai-responses", "openai-completions"]);
 
-function hasConfiguredCodexOAuthProfile(cfg: NexisClawConfig): boolean {
+function hasConfiguredCodexOAuthProfile(cfg: GreenchClawConfig): boolean {
   return Object.values(cfg.auth?.profiles ?? {}).some(
     (profile) => profile.provider === CODEX_PROVIDER_ID && profile.mode === "oauth",
   );
@@ -97,7 +97,7 @@ function buildCodexProviderOverrideWarning(providerOverride: unknown): string {
   return lines.join("\n");
 }
 
-export function noteLegacyCodexProviderOverride(cfg: NexisClawConfig): void {
+export function noteLegacyCodexProviderOverride(cfg: GreenchClawConfig): void {
   const providerOverride = cfg.models?.providers?.[CODEX_PROVIDER_ID];
   if (!providerOverride) {
     return;
@@ -170,7 +170,7 @@ export function formatOAuthRefreshFailureDoctorLine(params: {
 
 async function resolveAuthIssueHint(
   issue: AuthIssue,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   store: ReturnType<typeof ensureAuthProfileStore>,
 ): Promise<string | null> {
   if (issue.reasonCode === "invalid_expires") {
@@ -192,7 +192,7 @@ async function resolveAuthIssueHint(
 
 async function formatAuthIssueLine(
   issue: AuthIssue,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   store: ReturnType<typeof ensureAuthProfileStore>,
 ): Promise<string> {
   const remaining =
@@ -203,7 +203,7 @@ async function formatAuthIssueLine(
 }
 
 export async function noteAuthProfileHealth(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prompter: DoctorPrompter;
   allowKeychainPrompt: boolean;
 }): Promise<void> {

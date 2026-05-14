@@ -2,7 +2,7 @@ import {
   ensureMemoryIndexSchema,
   loadSqliteVecExtension,
   requireNodeSqlite,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 import { describe, expect, it, vi } from "vitest";
 import { bm25RankToScore, buildFtsQuery } from "./hybrid.js";
 import { searchKeyword, searchVector } from "./manager-search.js";

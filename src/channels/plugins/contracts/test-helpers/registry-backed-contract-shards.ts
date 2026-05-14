@@ -1,4 +1,4 @@
-import { expectChannelPluginContract } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { expectChannelPluginContract } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { describe, it } from "vitest";
 import { getBundledChannelPluginAsync } from "./bundled-channel-plugin-loader.js";
 import { channelPluginSurfaceKeys } from "./manifest.js";

@@ -3,17 +3,17 @@ import type { Bot } from "grammy";
 import {
   appendSessionTranscriptMessage,
   emitSessionTranscriptUpdate,
-} from "NexisClaw/plugin-sdk/agent-harness-runtime";
+} from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import {
   DEFAULT_TIMING,
   logAckFailure,
   logTypingFailure,
   removeAckReactionAfterReply,
-} from "NexisClaw/plugin-sdk/channel-feedback";
+} from "GreenchClaw/plugin-sdk/channel-feedback";
 import {
   createChannelMessageReplyPipeline,
   deriveDurableFinalDeliveryRequirements,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 import {
   createChannelProgressDraftGate,
   formatChannelProgressDraftLine,
@@ -23,30 +23,30 @@ import {
   resolveChannelProgressDraftMaxLines,
   resolveChannelStreamingBlockEnabled,
   resolveChannelStreamingPreviewToolProgress,
-} from "NexisClaw/plugin-sdk/channel-streaming";
-import { isAbortRequestText } from "NexisClaw/plugin-sdk/command-primitives-runtime";
+} from "GreenchClaw/plugin-sdk/channel-streaming";
+import { isAbortRequestText } from "GreenchClaw/plugin-sdk/command-primitives-runtime";
 import type {
-  NexisClawConfig,
+  GreenchClawConfig,
   ReplyToMode,
   TelegramAccountConfig,
-} from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { runInboundReplyTurn } from "NexisClaw/plugin-sdk/inbound-reply-dispatch";
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { runInboundReplyTurn } from "GreenchClaw/plugin-sdk/inbound-reply-dispatch";
 import {
   createOutboundPayloadPlan,
   projectOutboundPayloadPlanForDelivery,
-} from "NexisClaw/plugin-sdk/outbound-runtime";
-import { chunkMarkdownTextWithMode } from "NexisClaw/plugin-sdk/reply-chunking";
-import { clearHistoryEntriesIfEnabled } from "NexisClaw/plugin-sdk/reply-history";
-import { resolveSendableOutboundReplyParts } from "NexisClaw/plugin-sdk/reply-payload";
-import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-payload";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/outbound-runtime";
+import { chunkMarkdownTextWithMode } from "GreenchClaw/plugin-sdk/reply-chunking";
+import { clearHistoryEntriesIfEnabled } from "GreenchClaw/plugin-sdk/reply-history";
+import { resolveSendableOutboundReplyParts } from "GreenchClaw/plugin-sdk/reply-payload";
+import type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-payload";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   createSubsystemLogger,
   danger,
   logVerbose,
   sleepWithAbort,
-} from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/runtime-env";
 import { resolveTelegramConfigReasoningDefault } from "./agent-config.js";
 import type { TelegramBotDeps } from "./bot-deps.js";
 import type { TelegramMessageContext } from "./bot-message-context.js";
@@ -129,7 +129,7 @@ function resolveDraftPartialText(
   return nextText;
 }
 
-async function resolveStickerVisionSupport(cfg: NexisClawConfig, agentId: string) {
+async function resolveStickerVisionSupport(cfg: GreenchClawConfig, agentId: string) {
   try {
     const catalog = await loadModelCatalog({ config: cfg });
     const defaultModel = resolveDefaultModelForAgent({ cfg, agentId });
@@ -146,7 +146,7 @@ async function resolveStickerVisionSupport(cfg: NexisClawConfig, agentId: string
 type DispatchTelegramMessageParams = {
   context: TelegramMessageContext;
   bot: Bot;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   runtime: RuntimeEnv;
   replyToMode: ReplyToMode;
   streamMode: TelegramStreamMode;
@@ -236,7 +236,7 @@ export function resetTelegramReplyFenceForTests(): void {
 }
 
 function resolveTelegramReasoningLevel(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey?: string;
   agentId: string;
   telegramDeps: TelegramBotDeps;
@@ -281,7 +281,7 @@ function resolveTelegramMirroredTranscriptText(
 }
 
 async function mirrorTelegramAssistantReplyToTranscript(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   route: TelegramMessageContext["route"];
   sessionKey: string;
   telegramDeps: TelegramBotDeps;
@@ -317,7 +317,7 @@ async function mirrorTelegramAssistantReplyToTranscript(params: {
     role: "assistant" as const,
     content: [{ type: "text" as const, text }],
     api: "openai-responses",
-    provider: "NexisClaw",
+    provider: "GreenchClaw",
     model: "delivery-mirror",
     usage: {
       input: 0,

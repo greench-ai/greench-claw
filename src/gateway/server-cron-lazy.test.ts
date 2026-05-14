@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { CliDeps } from "../cli/deps.types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { CronServiceContract } from "../cron/service-contract.js";
 import type { GatewayCronState } from "./server-cron.js";
 
@@ -111,7 +111,7 @@ describe("createLazyGatewayCronState", () => {
   });
 
   it("preserves the startup cron enabled flag without loading cron runtime", () => {
-    vi.stubEnv("NEXISCLAW_SKIP_CRON", "1");
+    vi.stubEnv("GREENCHCLAW_SKIP_CRON", "1");
 
     const lazy = createLazyGatewayCronState(createParams());
 
@@ -120,11 +120,11 @@ describe("createLazyGatewayCronState", () => {
   });
 });
 
-function createParams(overrides: Partial<NexisClawConfig> = {}) {
+function createParams(overrides: Partial<GreenchClawConfig> = {}) {
   return {
     cfg: {
       ...overrides,
-    } as NexisClawConfig,
+    } as GreenchClawConfig,
     deps: {} as CliDeps,
     broadcast: vi.fn(),
   };
@@ -133,7 +133,7 @@ function createParams(overrides: Partial<NexisClawConfig> = {}) {
 function createCronState(cron: CronServiceContract): GatewayCronState {
   return {
     cron,
-    storePath: "/tmp/NexisClaw-cron.json",
+    storePath: "/tmp/GreenchClaw-cron.json",
     cronEnabled: true,
   } as GatewayCronState;
 }

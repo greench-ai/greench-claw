@@ -1,8 +1,11 @@
 import path from "node:path";
 import { Readable } from "node:stream";
-import type { DiscordAccountConfig, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
+import type {
+  DiscordAccountConfig,
+  GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
 import { resolveDiscordVoiceIngressContext, runDiscordVoiceAgentTurn } from "./ingress.js";
 import { formatVoiceIngressPrompt } from "./prompt.js";
 import { loadDiscordVoiceSdk } from "./sdk-runtime.js";
@@ -31,7 +34,7 @@ export async function processDiscordVoiceSegment(params: {
   wavPath: string;
   userId: string;
   durationSeconds: number;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   discordConfig: DiscordAccountConfig;
   runtime: RuntimeEnv;
   ownerAllowFrom?: string[];

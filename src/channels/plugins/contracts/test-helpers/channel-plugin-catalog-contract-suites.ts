@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { resolvePreferredNexisClawTmpDir } from "../../../../infra/tmp-NexisClaw-dir.js";
+import { resolvePreferredGreenchClawTmpDir } from "../../../../infra/tmp-GreenchClaw-dir.js";
 import { listChannelPluginCatalogEntries } from "../../catalog.js";
 
 function createCatalogEntry(params: {
@@ -13,7 +13,7 @@ function createCatalogEntry(params: {
 }) {
   return {
     name: params.packageName,
-    NexisClaw: {
+    GreenchClaw: {
       channel: {
         id: params.channelId,
         label: params.label,
@@ -51,7 +51,7 @@ function writeDiscoveredChannelPlugin(params: {
     path.join(pluginDir, "package.json"),
     JSON.stringify({
       name: params.packageName,
-      NexisClaw: {
+      GreenchClaw: {
         extensions: ["./index.js"],
         channel: {
           id: "demo-channel",
@@ -68,7 +68,7 @@ function writeDiscoveredChannelPlugin(params: {
     "utf8",
   );
   fs.writeFileSync(
-    path.join(pluginDir, "NexisClaw.plugin.json"),
+    path.join(pluginDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: params.pluginId,
       configSchema: {},
@@ -123,13 +123,13 @@ export function describeChannelPluginCatalogEntriesContract() {
         name: "includes external catalog entries",
         setup: () => {
           const dir = fs.mkdtempSync(
-            path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-catalog-"),
+            path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-catalog-"),
           );
           const catalogPath = path.join(dir, "catalog.json");
           writeCatalogFile(
             catalogPath,
             createCatalogEntry({
-              packageName: "@NexisClaw/demo-channel",
+              packageName: "@GreenchClaw/demo-channel",
               channelId: "demo-channel",
               label: "Demo Channel",
               blurb: "Demo entry",
@@ -147,7 +147,7 @@ export function describeChannelPluginCatalogEntriesContract() {
         name: "preserves plugin ids when they differ from channel ids",
         setup: () => {
           const stateDir = fs.mkdtempSync(
-            path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-channel-catalog-state-"),
+            path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-channel-catalog-state-"),
           );
           writeDiscoveredChannelPlugin({
             stateDir,
@@ -160,8 +160,8 @@ export function describeChannelPluginCatalogEntriesContract() {
             channelId: "demo-channel",
             env: {
               ...process.env,
-              NEXISCLAW_STATE_DIR: stateDir,
-              NEXISCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+              GREENCHCLAW_STATE_DIR: stateDir,
+              GREENCHCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
             },
             expected: { pluginId: "@vendor/demo-runtime" },
           };
@@ -171,7 +171,7 @@ export function describeChannelPluginCatalogEntriesContract() {
         name: "keeps discovered plugins ahead of external catalog overrides",
         setup: () => {
           const stateDir = fs.mkdtempSync(
-            path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-catalog-state-"),
+            path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-catalog-state-"),
           );
           const catalogPath = path.join(stateDir, "catalog.json");
           writeDiscoveredChannelPlugin({
@@ -195,9 +195,9 @@ export function describeChannelPluginCatalogEntriesContract() {
             catalogPaths: [catalogPath],
             env: {
               ...process.env,
-              NEXISCLAW_STATE_DIR: stateDir,
+              GREENCHCLAW_STATE_DIR: stateDir,
               CLAWDBOT_STATE_DIR: undefined,
-              NEXISCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+              GREENCHCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
             },
             expected: {
               install: { npmSpec: "@vendor/demo-channel-plugin" },
@@ -211,7 +211,7 @@ export function describeChannelPluginCatalogEntriesContract() {
         name: "accepts rich external manifest entries with pinned npm metadata",
         setup: () => {
           const dir = fs.mkdtempSync(
-            path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-catalog-rich-"),
+            path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-catalog-rich-"),
           );
           const catalogPath = path.join(dir, "catalog.json");
           fs.writeFileSync(
@@ -220,15 +220,15 @@ export function describeChannelPluginCatalogEntriesContract() {
               $schema: "./manifest.schema.json",
               schemaVersion: 1,
               description:
-                "Extension manifest. Declares plugin packages that NexisClaw can discover during onboarding and install on demand via `NexisClaw plugins install`.",
+                "Extension manifest. Declares plugin packages that GreenchClaw can discover during onboarding and install on demand via `GreenchClaw plugins install`.",
               entries: [
                 {
-                  name: "@wecom/wecom-NexisClaw-plugin",
+                  name: "@wecom/wecom-GreenchClaw-plugin",
                   description:
-                    "NexisClaw WeCom (企业微信) channel plugin — community maintained, published on npm.",
+                    "GreenchClaw WeCom (企业微信) channel plugin — community maintained, published on npm.",
                   source: "external",
                   kind: "channel",
-                  NexisClaw: {
+                  GreenchClaw: {
                     channel: {
                       id: "wecom",
                       label: "WeCom",
@@ -241,7 +241,7 @@ export function describeChannelPluginCatalogEntriesContract() {
                       order: 45,
                     },
                     install: {
-                      npmSpec: "@wecom/wecom-NexisClaw-plugin@1.2.3",
+                      npmSpec: "@wecom/wecom-GreenchClaw-plugin@1.2.3",
                       defaultChoice: "npm",
                       minHostVersion: ">=2026.4.10",
                       expectedIntegrity: "sha512-wecom",
@@ -265,7 +265,7 @@ export function describeChannelPluginCatalogEntriesContract() {
                 blurb: "企业微信 (WeCom) bot & conversation channel.",
               },
               install: {
-                npmSpec: "@wecom/wecom-NexisClaw-plugin@1.2.3",
+                npmSpec: "@wecom/wecom-GreenchClaw-plugin@1.2.3",
                 defaultChoice: "npm",
                 minHostVersion: ">=2026.4.10",
                 expectedIntegrity: "sha512-wecom",
@@ -273,8 +273,8 @@ export function describeChannelPluginCatalogEntriesContract() {
               installSource: {
                 defaultChoice: "npm",
                 npm: {
-                  spec: "@wecom/wecom-NexisClaw-plugin@1.2.3",
-                  packageName: "@wecom/wecom-NexisClaw-plugin",
+                  spec: "@wecom/wecom-GreenchClaw-plugin@1.2.3",
+                  packageName: "@wecom/wecom-GreenchClaw-plugin",
                   selector: "1.2.3",
                   selectorKind: "exact-version",
                   exactVersion: true,
@@ -291,12 +291,12 @@ export function describeChannelPluginCatalogEntriesContract() {
         name: "pins bare external prerelease package specs to the entry version",
         setup: () => {
           const dir = fs.mkdtempSync(
-            path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-catalog-prerelease-"),
+            path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-catalog-prerelease-"),
           );
           const catalogPath = path.join(dir, "catalog.json");
           writeCatalogFile(catalogPath, {
             ...createCatalogEntry({
-              packageName: "@NexisClaw/prerelease-demo-channel",
+              packageName: "@GreenchClaw/prerelease-demo-channel",
               channelId: "prerelease-demo",
               label: "Prerelease Demo",
               blurb: "Prerelease package pinning fixture",
@@ -307,11 +307,11 @@ export function describeChannelPluginCatalogEntriesContract() {
             channelId: "prerelease-demo",
             catalogPaths: [catalogPath],
             expected: {
-              install: { npmSpec: "@NexisClaw/prerelease-demo-channel@2026.5.3-beta.1" },
+              install: { npmSpec: "@GreenchClaw/prerelease-demo-channel@2026.5.3-beta.1" },
               installSource: {
                 npm: {
-                  spec: "@NexisClaw/prerelease-demo-channel@2026.5.3-beta.1",
-                  packageName: "@NexisClaw/prerelease-demo-channel",
+                  spec: "@GreenchClaw/prerelease-demo-channel@2026.5.3-beta.1",
+                  packageName: "@GreenchClaw/prerelease-demo-channel",
                   selector: "2026.5.3-beta.1",
                   selectorKind: "exact-version",
                   exactVersion: true,
@@ -325,7 +325,7 @@ export function describeChannelPluginCatalogEntriesContract() {
         name: "accepts external manifest entries with ClawHub-only install metadata",
         setup: () => {
           const dir = fs.mkdtempSync(
-            path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-catalog-clawhub-"),
+            path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-catalog-clawhub-"),
           );
           const catalogPath = path.join(dir, "catalog.json");
           fs.writeFileSync(
@@ -334,12 +334,12 @@ export function describeChannelPluginCatalogEntriesContract() {
               $schema: "./manifest.schema.json",
               schemaVersion: 1,
               description:
-                "Extension manifest. Declares plugin packages that NexisClaw can discover during onboarding and install on demand via `NexisClaw plugins install`.",
+                "Extension manifest. Declares plugin packages that GreenchClaw can discover during onboarding and install on demand via `GreenchClaw plugins install`.",
               entries: [
                 {
                   source: "external",
                   kind: "channel",
-                  NexisClaw: {
+                  GreenchClaw: {
                     channel: {
                       id: "clawhub-chat",
                       label: "ClawHub Chat",
@@ -352,7 +352,7 @@ export function describeChannelPluginCatalogEntriesContract() {
                       order: 47,
                     },
                     install: {
-                      clawhubSpec: "clawhub:NexisClaw/clawhub-chat@2026.5.2",
+                      clawhubSpec: "clawhub:GreenchClaw/clawhub-chat@2026.5.2",
                       defaultChoice: "clawhub",
                       minHostVersion: ">=2026.5.1",
                     },
@@ -375,15 +375,15 @@ export function describeChannelPluginCatalogEntriesContract() {
                 blurb: "ClawHub-backed chat channel.",
               },
               install: {
-                clawhubSpec: "clawhub:NexisClaw/clawhub-chat@2026.5.2",
+                clawhubSpec: "clawhub:GreenchClaw/clawhub-chat@2026.5.2",
                 defaultChoice: "clawhub",
                 minHostVersion: ">=2026.5.1",
               },
               installSource: {
                 defaultChoice: "clawhub",
                 clawhub: {
-                  spec: "clawhub:NexisClaw/clawhub-chat@2026.5.2",
-                  packageName: "NexisClaw/clawhub-chat",
+                  spec: "clawhub:GreenchClaw/clawhub-chat@2026.5.2",
+                  packageName: "GreenchClaw/clawhub-chat",
                   version: "2026.5.2",
                   exactVersion: true,
                 },
@@ -397,7 +397,7 @@ export function describeChannelPluginCatalogEntriesContract() {
         name: "accepts rich external manifest entries for yuanbao with pinned npm metadata",
         setup: () => {
           const dir = fs.mkdtempSync(
-            path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-catalog-yuanbao-"),
+            path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-catalog-yuanbao-"),
           );
           const catalogPath = path.join(dir, "catalog.json");
           fs.writeFileSync(
@@ -406,17 +406,17 @@ export function describeChannelPluginCatalogEntriesContract() {
               $schema: "./manifest.schema.json",
               schemaVersion: 1,
               description:
-                "Extension manifest. Declares plugin packages that NexisClaw can discover during onboarding and install on demand via `NexisClaw plugins install`.",
+                "Extension manifest. Declares plugin packages that GreenchClaw can discover during onboarding and install on demand via `GreenchClaw plugins install`.",
               entries: [
                 {
-                  name: "NexisClaw-plugin-yuanbao",
+                  name: "GreenchClaw-plugin-yuanbao",
                   description:
-                    "NexisClaw Yuanbao (元宝) channel plugin — community maintained, published on npm.",
+                    "GreenchClaw Yuanbao (元宝) channel plugin — community maintained, published on npm.",
                   source: "external",
                   kind: "channel",
-                  NexisClaw: {
+                  GreenchClaw: {
                     channel: {
-                      id: "NexisClaw-plugin-yuanbao",
+                      id: "GreenchClaw-plugin-yuanbao",
                       label: "Yuanbao",
                       selectionLabel: "Yuanbao (Tencent Yuanbao)",
                       detailLabel: "Yuanbao",
@@ -427,7 +427,7 @@ export function describeChannelPluginCatalogEntriesContract() {
                       order: 78,
                     },
                     install: {
-                      npmSpec: "NexisClaw-plugin-yuanbao@1.0.0",
+                      npmSpec: "GreenchClaw-plugin-yuanbao@1.0.0",
                       defaultChoice: "npm",
                       minHostVersion: ">=2026.4.10",
                       expectedIntegrity: "sha512-yuanbao",
@@ -438,10 +438,10 @@ export function describeChannelPluginCatalogEntriesContract() {
             }),
           );
           return {
-            channelId: "NexisClaw-plugin-yuanbao",
+            channelId: "GreenchClaw-plugin-yuanbao",
             catalogPaths: [catalogPath],
             expected: {
-              id: "NexisClaw-plugin-yuanbao",
+              id: "GreenchClaw-plugin-yuanbao",
               meta: {
                 label: "Yuanbao",
                 selectionLabel: "Yuanbao (Tencent Yuanbao)",
@@ -451,7 +451,7 @@ export function describeChannelPluginCatalogEntriesContract() {
                 blurb: "Tencent Yuanbao AI assistant conversation channel.",
               },
               install: {
-                npmSpec: "NexisClaw-plugin-yuanbao@1.0.0",
+                npmSpec: "GreenchClaw-plugin-yuanbao@1.0.0",
                 defaultChoice: "npm",
                 minHostVersion: ">=2026.4.10",
                 expectedIntegrity: "sha512-yuanbao",
@@ -480,13 +480,13 @@ export function describeChannelPluginCatalogPathResolutionContract() {
         name: "uses the provided env for external catalog path resolution",
         setup: () => {
           const home = fs.mkdtempSync(
-            path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-catalog-home-"),
+            path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-catalog-home-"),
           );
           const catalogPath = path.join(home, "catalog.json");
           writeCatalogFile(
             catalogPath,
             createCatalogEntry({
-              packageName: "@NexisClaw/env-demo-channel",
+              packageName: "@GreenchClaw/env-demo-channel",
               channelId: "env-demo-channel",
               label: "Env Demo Channel",
               blurb: "Env demo entry",
@@ -496,8 +496,8 @@ export function describeChannelPluginCatalogPathResolutionContract() {
           return {
             env: {
               ...process.env,
-              NEXISCLAW_PLUGIN_CATALOG_PATHS: "~/catalog.json",
-              NEXISCLAW_HOME: home,
+              GREENCHCLAW_PLUGIN_CATALOG_PATHS: "~/catalog.json",
+              GREENCHCLAW_HOME: home,
               HOME: home,
             },
             expectedId: "env-demo-channel",
@@ -508,14 +508,14 @@ export function describeChannelPluginCatalogPathResolutionContract() {
         name: "uses the provided env for default catalog paths",
         setup: () => {
           const stateDir = fs.mkdtempSync(
-            path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-catalog-state-"),
+            path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-catalog-state-"),
           );
           const catalogPath = path.join(stateDir, "plugins", "catalog.json");
           fs.mkdirSync(path.dirname(catalogPath), { recursive: true });
           writeCatalogFile(
             catalogPath,
             createCatalogEntry({
-              packageName: "@NexisClaw/default-env-demo",
+              packageName: "@GreenchClaw/default-env-demo",
               channelId: "default-env-demo",
               label: "Default Env Demo",
               blurb: "Default env demo entry",
@@ -524,7 +524,7 @@ export function describeChannelPluginCatalogPathResolutionContract() {
           return {
             env: {
               ...process.env,
-              NEXISCLAW_STATE_DIR: stateDir,
+              GREENCHCLAW_STATE_DIR: stateDir,
             },
             expectedId: "default-env-demo",
           };

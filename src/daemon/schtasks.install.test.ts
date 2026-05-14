@@ -33,10 +33,10 @@ describe("installScheduledTask", () => {
   async function withUserProfileDir(
     run: (tmpDir: string, env: Record<string, string>) => Promise<void>,
   ) {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-schtasks-install-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-schtasks-install-"));
     const env = {
       USERPROFILE: tmpDir,
-      NEXISCLAW_PROFILE: "default",
+      GREENCHCLAW_PROFILE: "default",
     };
     try {
       await run(tmpDir, env);
@@ -56,11 +56,11 @@ describe("installScheduledTask", () => {
 
   function expectInitialTaskQueries(): void {
     expect(schtasksCalls[0]).toEqual(["/Query"]);
-    expect(schtasksCalls[1]).toEqual(["/Query", "/TN", "NexisClaw Gateway"]);
+    expect(schtasksCalls[1]).toEqual(["/Query", "/TN", "GreenchClaw Gateway"]);
   }
 
   function expectTaskRunCall(index: number): void {
-    expect(schtasksCalls[index]).toEqual(["/Run", "/TN", "NexisClaw Gateway"]);
+    expect(schtasksCalls[index]).toEqual(["/Run", "/TN", "GreenchClaw Gateway"]);
   }
 
   it("writes quoted set assignments and escapes metacharacters", async () => {
@@ -133,9 +133,9 @@ describe("installScheduledTask", () => {
       });
 
       expect(schtasksCalls[0]).toEqual(["/Query"]);
-      expect(schtasksCalls[1]).toEqual(["/Query", "/TN", "NexisClaw Gateway"]);
+      expect(schtasksCalls[1]).toEqual(["/Query", "/TN", "GreenchClaw Gateway"]);
       expect(schtasksCalls[2]?.[0]).toBe("/Change");
-      expect(schtasksCalls[3]).toEqual(["/Run", "/TN", "NexisClaw Gateway"]);
+      expect(schtasksCalls[3]).toEqual(["/Run", "/TN", "GreenchClaw Gateway"]);
     });
   });
 
@@ -242,13 +242,13 @@ describe("installScheduledTask", () => {
         programArguments: ["node", "gateway.js"],
         environment: {
           PATH: "C:\\Windows\\System32;C:\\Program Files\\Docker\\Docker\\resources\\bin",
-          NEXISCLAW_GATEWAY_PORT: "18789",
+          GREENCHCLAW_GATEWAY_PORT: "18789",
         },
       });
 
       const script = await fs.readFile(scriptPath, "utf8");
       expect(script).not.toContain('set "PATH=');
-      expect(script).toContain('set "NEXISCLAW_GATEWAY_PORT=18789"');
+      expect(script).toContain('set "GREENCHCLAW_GATEWAY_PORT=18789"');
     });
   });
 
@@ -259,7 +259,7 @@ describe("installScheduledTask", () => {
         stdout: new PassThrough(),
         programArguments: ["node", "gateway.js"],
         environment: {
-          NEXISCLAW_SERVICE_MANAGED_ENV_KEYS: "TAVILY_API_KEY",
+          GREENCHCLAW_SERVICE_MANAGED_ENV_KEYS: "TAVILY_API_KEY",
           TAVILY_API_KEY: "old-inline-value",
         },
       });
@@ -268,11 +268,11 @@ describe("installScheduledTask", () => {
       expect(command).toStrictEqual({
         programArguments: ["node", "gateway.js"],
         environment: {
-          NEXISCLAW_SERVICE_MANAGED_ENV_KEYS: "TAVILY_API_KEY",
+          GREENCHCLAW_SERVICE_MANAGED_ENV_KEYS: "TAVILY_API_KEY",
           TAVILY_API_KEY: "old-inline-value",
         },
         environmentValueSources: {
-          NEXISCLAW_SERVICE_MANAGED_ENV_KEYS: "inline",
+          GREENCHCLAW_SERVICE_MANAGED_ENV_KEYS: "inline",
           TAVILY_API_KEY: "inline",
         },
         sourcePath: scriptPath,

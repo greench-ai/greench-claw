@@ -4,7 +4,7 @@ import {
   resolveSetupWizardGroupAllowlist,
   runSetupWizardFinalize,
   runSetupWizardPrepare,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it, vi } from "vitest";
 import {
   createAllowlistSetupWizardProxy,

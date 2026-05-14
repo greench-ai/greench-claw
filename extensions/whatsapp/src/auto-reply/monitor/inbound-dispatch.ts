@@ -1,6 +1,6 @@
-import { deliverInboundReplyWithMessageSendContext } from "NexisClaw/plugin-sdk/channel-message";
-import { hasVisibleInboundReplyDispatch } from "NexisClaw/plugin-sdk/inbound-reply-dispatch";
-import type { FinalizedMsgContext } from "NexisClaw/plugin-sdk/reply-runtime";
+import { deliverInboundReplyWithMessageSendContext } from "GreenchClaw/plugin-sdk/channel-message";
+import { hasVisibleInboundReplyDispatch } from "GreenchClaw/plugin-sdk/inbound-reply-dispatch";
+import type { FinalizedMsgContext } from "GreenchClaw/plugin-sdk/reply-runtime";
 import {
   type DeliverableWhatsAppOutboundPayload,
   normalizeWhatsAppOutboundPayload,

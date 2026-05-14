@@ -1,14 +1,14 @@
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 
 export type DoctorConfigMutationState = {
-  cfg: NexisClawConfig;
-  candidate: NexisClawConfig;
+  cfg: GreenchClawConfig;
+  candidate: GreenchClawConfig;
   pendingChanges: boolean;
   fixHints: string[];
 };
 
 export type DoctorConfigMutationResult = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   changes: string[];
 };
 

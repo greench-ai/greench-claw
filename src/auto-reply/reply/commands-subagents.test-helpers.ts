@@ -1,5 +1,5 @@
 import type { SubagentRunRecord } from "../../agents/subagent-registry.types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { handleSubagentsSendAction } from "./commands-subagents/action-send.js";
 import type { InlineDirectives } from "./directive-handling.js";
 
@@ -17,7 +17,7 @@ function buildSubagentRun(): SubagentRunRecord {
 }
 
 export function buildSubagentsSendContext(params?: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   handledPrefix?: string;
   requesterKey?: string;
   runs?: SubagentRunRecord[];
@@ -30,7 +30,7 @@ export function buildSubagentsSendContext(params?: {
         ({
           commands: { text: true },
           channels: { whatsapp: { allowFrom: ["*"] } },
-        } as NexisClawConfig),
+        } as GreenchClawConfig),
       ctx: {},
       command: {
         channel: "whatsapp",

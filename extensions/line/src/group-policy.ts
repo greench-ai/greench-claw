@@ -1,8 +1,8 @@
-import { resolveChannelGroupRequireMention } from "NexisClaw/plugin-sdk/channel-policy";
-import { resolveExactLineGroupConfigKey, type NexisClawConfig } from "./channel-api.js";
+import { resolveChannelGroupRequireMention } from "GreenchClaw/plugin-sdk/channel-policy";
+import { resolveExactLineGroupConfigKey, type GreenchClawConfig } from "./channel-api.js";
 
 type LineGroupContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   groupId?: string | null;
 };

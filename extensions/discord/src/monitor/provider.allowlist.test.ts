@@ -1,5 +1,5 @@
-import type { DiscordAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { createNonExitingRuntimeEnv } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import type { DiscordAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { createNonExitingRuntimeEnv } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as resolveChannelsModule from "../resolve-channels.js";
 import * as resolveUsersModule from "../resolve-users.js";

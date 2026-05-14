@@ -1,10 +1,10 @@
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawPluginApi, NexisClawPluginToolContext } from "../runtime-api.js";
+import type { GreenchClawPluginApi, GreenchClawPluginToolContext } from "../runtime-api.js";
 import { createLobsterTool } from "./lobster-tool.js";
 import { createFakeTaskFlow } from "./taskflow-test-helpers.js";
 
-function fakeApi(overrides: Partial<NexisClawPluginApi> = {}): NexisClawPluginApi {
+function fakeApi(overrides: Partial<GreenchClawPluginApi> = {}): GreenchClawPluginApi {
   return createTestPluginApi({
     id: "lobster",
     name: "lobster",
@@ -15,7 +15,9 @@ function fakeApi(overrides: Partial<NexisClawPluginApi> = {}): NexisClawPluginAp
   });
 }
 
-function fakeCtx(overrides: Partial<NexisClawPluginToolContext> = {}): NexisClawPluginToolContext {
+function fakeCtx(
+  overrides: Partial<GreenchClawPluginToolContext> = {},
+): GreenchClawPluginToolContext {
   return {
     config: {},
     workspaceDir: "/tmp",
@@ -337,7 +339,7 @@ describe("lobster plugin tool", () => {
 
   it("can be gated off in sandboxed contexts", () => {
     const api = fakeApi();
-    const factoryTool = (ctx: NexisClawPluginToolContext) => {
+    const factoryTool = (ctx: GreenchClawPluginToolContext) => {
       if (ctx.sandboxed) {
         return null;
       }

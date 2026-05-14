@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import { isLiveTestEnabled } from "../agents/live-test-helpers.js";
 import type { ChannelOutboundContext } from "../channels/plugins/types.public.js";
 import { clearConfigCache, clearRuntimeConfigSnapshot } from "../config/config.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import { getSessionBindingService } from "../infra/outbound/session-binding-service.js";
 import { resolveBundledPluginWorkspaceSourcePath } from "../plugins/bundled-plugin-metadata.js";
@@ -26,7 +26,7 @@ import { renderCatFacePngBase64 } from "./live-image-probe.js";
 import { startGatewayServer } from "./server.js";
 
 const LIVE = isLiveTestEnabled();
-const CODEX_BIND_LIVE = isTruthyEnvValue(process.env.NEXISCLAW_LIVE_CODEX_BIND);
+const CODEX_BIND_LIVE = isTruthyEnvValue(process.env.GREENCHCLAW_LIVE_CODEX_BIND);
 const describeLive = LIVE && CODEX_BIND_LIVE ? describe : describe.skip;
 const CODEX_BIND_TIMEOUT_MS = 10 * 60_000;
 const CODEX_BIND_REQUEST_TIMEOUT_MS = 180_000;
@@ -292,10 +292,10 @@ async function writePluginBindingApproval(params: {
   channel: string;
   accountId: string;
 }): Promise<void> {
-  const NexisClawDir = path.join(params.homeDir, ".NexisClaw");
-  await fs.mkdir(NexisClawDir, { recursive: true });
+  const GreenchClawDir = path.join(params.homeDir, ".GreenchClaw");
+  await fs.mkdir(GreenchClawDir, { recursive: true });
   await fs.writeFile(
-    path.join(NexisClawDir, "plugin-binding-approvals.json"),
+    path.join(GreenchClawDir, "plugin-binding-approvals.json"),
     `${JSON.stringify(
       {
         version: 1,
@@ -323,7 +323,7 @@ async function writeGatewayConfig(params: {
   token: string;
   workspace: string;
 }): Promise<void> {
-  const cfg: NexisClawConfig = {
+  const cfg: GreenchClawConfig = {
     gateway: {
       mode: "local",
       port: params.port,
@@ -364,20 +364,20 @@ describeLive("gateway live (native Codex conversation binding)", () => {
     async () => {
       const previous = {
         codexHome: process.env.CODEX_HOME,
-        configPath: process.env.NEXISCLAW_CONFIG_PATH,
-        gatewayToken: process.env.NEXISCLAW_GATEWAY_TOKEN,
+        configPath: process.env.GREENCHCLAW_CONFIG_PATH,
+        gatewayToken: process.env.GREENCHCLAW_GATEWAY_TOKEN,
         home: process.env.HOME,
-        skipCanvas: process.env.NEXISCLAW_SKIP_CANVAS_HOST,
-        skipChannels: process.env.NEXISCLAW_SKIP_CHANNELS,
-        skipCron: process.env.NEXISCLAW_SKIP_CRON,
-        skipGmail: process.env.NEXISCLAW_SKIP_GMAIL_WATCHER,
-        stateDir: process.env.NEXISCLAW_STATE_DIR,
+        skipCanvas: process.env.GREENCHCLAW_SKIP_CANVAS_HOST,
+        skipChannels: process.env.GREENCHCLAW_SKIP_CHANNELS,
+        skipCron: process.env.GREENCHCLAW_SKIP_CRON,
+        skipGmail: process.env.GREENCHCLAW_SKIP_GMAIL_WATCHER,
+        stateDir: process.env.GREENCHCLAW_STATE_DIR,
       };
-      const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-live-codex-bind-"));
+      const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-live-codex-bind-"));
       const tempHome = path.join(tempRoot, "home");
       const stateDir = path.join(tempRoot, "state");
       const workspace = path.join(tempRoot, "workspace");
-      const configPath = path.join(tempRoot, "NexisClaw.json");
+      const configPath = path.join(tempRoot, "GreenchClaw.json");
       const token = `test-${randomUUID()}`;
       const port = await getFreeGatewayPort();
       const sessionKey = "main";
@@ -385,7 +385,7 @@ describeLive("gateway live (native Codex conversation binding)", () => {
       const slackUserId = `U${randomUUID().replace(/-/g, "").slice(0, 10).toUpperCase()}`;
       const conversationId = `user:${slackUserId}`;
       const bindModel =
-        process.env.NEXISCLAW_LIVE_CODEX_BIND_MODEL?.trim() || DEFAULT_CODEX_BIND_MODEL;
+        process.env.GREENCHCLAW_LIVE_CODEX_BIND_MODEL?.trim() || DEFAULT_CODEX_BIND_MODEL;
       const outboundReplies: CapturedOutboundReply[] = [];
 
       await fs.mkdir(workspace, { recursive: true });
@@ -414,13 +414,13 @@ describeLive("gateway live (native Codex conversation binding)", () => {
         delete process.env.CODEX_HOME;
       }
       process.env.HOME = tempHome;
-      process.env.NEXISCLAW_CONFIG_PATH = configPath;
-      process.env.NEXISCLAW_GATEWAY_TOKEN = token;
-      process.env.NEXISCLAW_SKIP_CANVAS_HOST = "1";
-      process.env.NEXISCLAW_SKIP_CHANNELS = "1";
-      process.env.NEXISCLAW_SKIP_CRON = "1";
-      process.env.NEXISCLAW_SKIP_GMAIL_WATCHER = "1";
-      process.env.NEXISCLAW_STATE_DIR = stateDir;
+      process.env.GREENCHCLAW_CONFIG_PATH = configPath;
+      process.env.GREENCHCLAW_GATEWAY_TOKEN = token;
+      process.env.GREENCHCLAW_SKIP_CANVAS_HOST = "1";
+      process.env.GREENCHCLAW_SKIP_CHANNELS = "1";
+      process.env.GREENCHCLAW_SKIP_CRON = "1";
+      process.env.GREENCHCLAW_SKIP_GMAIL_WATCHER = "1";
+      process.env.GREENCHCLAW_STATE_DIR = stateDir;
 
       const server = await startGatewayServer(port, {
         bind: "loopback",
@@ -565,14 +565,14 @@ describeLive("gateway live (native Codex conversation binding)", () => {
         await server.close();
         await fs.rm(tempRoot, { recursive: true, force: true });
         restoreEnvVar("CODEX_HOME", previous.codexHome);
-        restoreEnvVar("NEXISCLAW_CONFIG_PATH", previous.configPath);
-        restoreEnvVar("NEXISCLAW_GATEWAY_TOKEN", previous.gatewayToken);
+        restoreEnvVar("GREENCHCLAW_CONFIG_PATH", previous.configPath);
+        restoreEnvVar("GREENCHCLAW_GATEWAY_TOKEN", previous.gatewayToken);
         restoreEnvVar("HOME", previous.home);
-        restoreEnvVar("NEXISCLAW_SKIP_CANVAS_HOST", previous.skipCanvas);
-        restoreEnvVar("NEXISCLAW_SKIP_CHANNELS", previous.skipChannels);
-        restoreEnvVar("NEXISCLAW_SKIP_CRON", previous.skipCron);
-        restoreEnvVar("NEXISCLAW_SKIP_GMAIL_WATCHER", previous.skipGmail);
-        restoreEnvVar("NEXISCLAW_STATE_DIR", previous.stateDir);
+        restoreEnvVar("GREENCHCLAW_SKIP_CANVAS_HOST", previous.skipCanvas);
+        restoreEnvVar("GREENCHCLAW_SKIP_CHANNELS", previous.skipChannels);
+        restoreEnvVar("GREENCHCLAW_SKIP_CRON", previous.skipCron);
+        restoreEnvVar("GREENCHCLAW_SKIP_GMAIL_WATCHER", previous.skipGmail);
+        restoreEnvVar("GREENCHCLAW_STATE_DIR", previous.stateDir);
       }
     },
     CODEX_BIND_TIMEOUT_MS,

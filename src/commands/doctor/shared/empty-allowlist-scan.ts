@@ -1,5 +1,5 @@
 import type { ChannelDoctorEmptyAllowlistAccountContext } from "../../../channels/plugins/types.adapters.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import type { DoctorAccountRecord, DoctorAllowFromList } from "../types.js";
 import { collectEmptyAllowlistPolicyWarningsForAccount } from "./empty-allowlist-policy.js";
 import { asObjectRecord } from "./object.js";
@@ -20,7 +20,7 @@ function isDisabledRecord(value: unknown): boolean {
 }
 
 export function scanEmptyAllowlistPolicyWarnings(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params: ScanEmptyAllowlistPolicyWarningsParams,
 ): string[] {
   const channels = cfg.channels;

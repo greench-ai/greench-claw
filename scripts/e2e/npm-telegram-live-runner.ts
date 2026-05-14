@@ -18,33 +18,33 @@ function splitCsv(value: string | undefined) {
 }
 
 function resolveCredentialSource(env: NodeJS.ProcessEnv) {
-  return env.NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE ?? env.NEXISCLAW_QA_CREDENTIAL_SOURCE;
+  return env.GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE ?? env.GREENCHCLAW_QA_CREDENTIAL_SOURCE;
 }
 
 function resolveCredentialRole(env: NodeJS.ProcessEnv) {
-  return env.NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE ?? env.NEXISCLAW_QA_CREDENTIAL_ROLE;
+  return env.GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE ?? env.GREENCHCLAW_QA_CREDENTIAL_ROLE;
 }
 
-async function resolveTrustedNexisClawCommand(rawCommand: string) {
+async function resolveTrustedGreenchClawCommand(rawCommand: string) {
   if (!path.isAbsolute(rawCommand)) {
-    throw new Error("NEXISCLAW_NPM_TELEGRAM_SUT_COMMAND must be an absolute path.");
+    throw new Error("GREENCHCLAW_NPM_TELEGRAM_SUT_COMMAND must be an absolute path.");
   }
   const commandName = path.basename(rawCommand);
-  if (commandName !== "NexisClaw" && commandName !== "NexisClaw.cmd") {
+  if (commandName !== "GreenchClaw" && commandName !== "GreenchClaw.cmd") {
     throw new Error(
-      `NEXISCLAW_NPM_TELEGRAM_SUT_COMMAND must point to NexisClaw; got: ${commandName}`,
+      `GREENCHCLAW_NPM_TELEGRAM_SUT_COMMAND must point to GreenchClaw; got: ${commandName}`,
     );
   }
   const npmPrefix = process.env.NPM_CONFIG_PREFIX?.trim();
   if (!npmPrefix) {
-    throw new Error("Missing NPM_CONFIG_PREFIX for installed NexisClaw command validation.");
+    throw new Error("Missing NPM_CONFIG_PREFIX for installed GreenchClaw command validation.");
   }
   const [realCommand, realPrefix] = await Promise.all([
     fs.realpath(rawCommand),
     fs.realpath(npmPrefix),
   ]);
   if (realCommand !== realPrefix && !realCommand.startsWith(`${realPrefix}${path.sep}`)) {
-    throw new Error("NEXISCLAW_NPM_TELEGRAM_SUT_COMMAND must resolve inside NPM_CONFIG_PREFIX.");
+    throw new Error("GREENCHCLAW_NPM_TELEGRAM_SUT_COMMAND must resolve inside NPM_CONFIG_PREFIX.");
   }
   return rawCommand;
 }
@@ -52,27 +52,27 @@ async function resolveTrustedNexisClawCommand(rawCommand: string) {
 async function main() {
   const { runTelegramQaLive } =
     await import("../../extensions/qa-lab/src/live-transports/telegram/telegram-live.runtime.ts");
-  const rawSutNexisClawCommand = process.env.NEXISCLAW_NPM_TELEGRAM_SUT_COMMAND?.trim();
-  if (!rawSutNexisClawCommand) {
-    throw new Error("Missing NEXISCLAW_NPM_TELEGRAM_SUT_COMMAND.");
+  const rawSutGreenchClawCommand = process.env.GREENCHCLAW_NPM_TELEGRAM_SUT_COMMAND?.trim();
+  if (!rawSutGreenchClawCommand) {
+    throw new Error("Missing GREENCHCLAW_NPM_TELEGRAM_SUT_COMMAND.");
   }
-  const sutNexisClawCommand = await resolveTrustedNexisClawCommand(rawSutNexisClawCommand);
+  const sutGreenchClawCommand = await resolveTrustedGreenchClawCommand(rawSutGreenchClawCommand);
 
-  const repoRoot = path.resolve(process.env.NEXISCLAW_NPM_TELEGRAM_REPO_ROOT ?? process.cwd());
+  const repoRoot = path.resolve(process.env.GREENCHCLAW_NPM_TELEGRAM_REPO_ROOT ?? process.cwd());
   const outputDir =
-    process.env.NEXISCLAW_NPM_TELEGRAM_OUTPUT_DIR?.trim() ||
+    process.env.GREENCHCLAW_NPM_TELEGRAM_OUTPUT_DIR?.trim() ||
     path.join(repoRoot, ".artifacts", "qa-e2e", `npm-telegram-live-${Date.now().toString(36)}`);
   const result = await runTelegramQaLive({
     repoRoot,
     outputDir,
-    sutNexisClawCommand,
+    sutGreenchClawCommand,
     preflightInstalledOnboarding: true,
-    providerMode: process.env.NEXISCLAW_NPM_TELEGRAM_PROVIDER_MODE,
-    primaryModel: process.env.NEXISCLAW_NPM_TELEGRAM_MODEL,
-    alternateModel: process.env.NEXISCLAW_NPM_TELEGRAM_ALT_MODEL,
-    fastMode: parseBoolean(process.env.NEXISCLAW_NPM_TELEGRAM_FAST),
-    scenarioIds: splitCsv(process.env.NEXISCLAW_NPM_TELEGRAM_SCENARIOS),
-    sutAccountId: process.env.NEXISCLAW_NPM_TELEGRAM_SUT_ACCOUNT,
+    providerMode: process.env.GREENCHCLAW_NPM_TELEGRAM_PROVIDER_MODE,
+    primaryModel: process.env.GREENCHCLAW_NPM_TELEGRAM_MODEL,
+    alternateModel: process.env.GREENCHCLAW_NPM_TELEGRAM_ALT_MODEL,
+    fastMode: parseBoolean(process.env.GREENCHCLAW_NPM_TELEGRAM_FAST),
+    scenarioIds: splitCsv(process.env.GREENCHCLAW_NPM_TELEGRAM_SCENARIOS),
+    sutAccountId: process.env.GREENCHCLAW_NPM_TELEGRAM_SUT_ACCOUNT,
     credentialSource: resolveCredentialSource(process.env),
     credentialRole: resolveCredentialRole(process.env),
   });
@@ -81,7 +81,7 @@ async function main() {
   process.stdout.write(`Package Telegram QA summary: ${result.summaryPath}\n`);
   process.stdout.write(`Package Telegram QA observed messages: ${result.observedMessagesPath}\n`);
   if (
-    !parseBoolean(process.env.NEXISCLAW_NPM_TELEGRAM_ALLOW_FAILURES) &&
+    !parseBoolean(process.env.GREENCHCLAW_NPM_TELEGRAM_ALLOW_FAILURES) &&
     result.scenarios.some((scenario) => scenario.status === "fail")
   ) {
     process.exitCode = 1;

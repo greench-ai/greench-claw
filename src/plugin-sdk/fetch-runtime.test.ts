@@ -22,7 +22,7 @@ describe("plugin SDK fetch runtime", () => {
       "http_proxy",
       "https_proxy",
       "all_proxy",
-      "NEXISCLAW_DEBUG_PROXY_ENABLED",
+      "GREENCHCLAW_DEBUG_PROXY_ENABLED",
     ]) {
       delete env[key];
     }

@@ -91,7 +91,7 @@ export async function minimaxUnderstandImage(params: {
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
-      "MM-API-Source": "NexisClaw",
+      "MM-API-Source": "GreenchClaw",
     },
     signal: AbortSignal.timeout(timeoutMs),
     body: JSON.stringify({

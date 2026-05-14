@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { MsgContext } from "NexisClaw/plugin-sdk/reply-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { MsgContext } from "GreenchClaw/plugin-sdk/reply-runtime";
 import { formatError } from "../../session.js";
 import { resolveStorePath, updateLastRoute } from "../config.runtime.js";
 
@@ -15,7 +15,7 @@ export function trackBackgroundTask(
 }
 
 export function updateLastRouteInBackground(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   backgroundTasks: Set<Promise<unknown>>;
   storeAgentId: string;
   sessionKey: string;

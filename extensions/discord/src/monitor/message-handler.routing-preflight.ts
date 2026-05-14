@@ -1,4 +1,4 @@
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import { resolveDiscordConversationIdentity } from "../conversation-identity.js";
 import type { User } from "../internal/discord.js";
 import type { DiscordMessagePreflightParams } from "./message-handler.preflight.types.js";
@@ -10,11 +10,11 @@ import {
 } from "./route-resolution.js";
 
 let conversationRuntimePromise:
-  | Promise<typeof import("NexisClaw/plugin-sdk/conversation-binding-runtime")>
+  | Promise<typeof import("GreenchClaw/plugin-sdk/conversation-binding-runtime")>
   | undefined;
 
 async function loadConversationRuntime() {
-  conversationRuntimePromise ??= import("NexisClaw/plugin-sdk/conversation-binding-runtime");
+  conversationRuntimePromise ??= import("GreenchClaw/plugin-sdk/conversation-binding-runtime");
   return await conversationRuntimePromise;
 }
 

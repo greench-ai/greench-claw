@@ -10,7 +10,7 @@ const sendCardFeishuMock = vi.hoisted(() =>
 );
 const getMessageFeishuMock = vi.hoisted(() => vi.fn());
 
-const originalStateDir = process.env.NEXISCLAW_STATE_DIR;
+const originalStateDir = process.env.GREENCHCLAW_STATE_DIR;
 
 vi.mock("./bot.js", () => {
   return {
@@ -65,15 +65,15 @@ describe("Feishu bot menu handler", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env.NEXISCLAW_STATE_DIR = `/tmp/NexisClaw-feishu-bot-menu-test-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    process.env.GREENCHCLAW_STATE_DIR = `/tmp/GreenchClaw-feishu-bot-menu-test-${Date.now()}-${Math.random().toString(36).slice(2)}`;
   });
 
   afterEach(() => {
     if (originalStateDir === undefined) {
-      delete process.env.NEXISCLAW_STATE_DIR;
+      delete process.env.GREENCHCLAW_STATE_DIR;
       return;
     }
-    process.env.NEXISCLAW_STATE_DIR = originalStateDir;
+    process.env.GREENCHCLAW_STATE_DIR = originalStateDir;
   });
 
   it("opens the quick-action launcher card at the webhook/event layer", async () => {

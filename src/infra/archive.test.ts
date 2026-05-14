@@ -12,7 +12,7 @@ import {
   resolvePackedRootDir,
 } from "./archive.js";
 
-const fixtureRootTracker = createSuiteTempRootTracker({ prefix: "NexisClaw-archive-" });
+const fixtureRootTracker = createSuiteTempRootTracker({ prefix: "GreenchClaw-archive-" });
 const directorySymlinkType = process.platform === "win32" ? "junction" : undefined;
 const ARCHIVE_EXTRACT_TIMEOUT_MS = 15_000;
 

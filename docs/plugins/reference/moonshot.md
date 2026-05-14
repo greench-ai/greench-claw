@@ -1,5 +1,5 @@
 ---
-summary: "Adds Moonshot model provider support to NexisClaw."
+summary: "Adds Moonshot model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the moonshot plugin
 title: "Moonshot plugin"
@@ -7,12 +7,12 @@ title: "Moonshot plugin"
 
 # Moonshot plugin
 
-Adds Moonshot model provider support to NexisClaw.
+Adds Moonshot model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/moonshot-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/moonshot-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

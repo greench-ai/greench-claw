@@ -1,6 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { readJsonFileWithFallback, writeJsonFileAtomically } from "NexisClaw/plugin-sdk/json-store";
+import {
+  readJsonFileWithFallback,
+  writeJsonFileAtomically,
+} from "GreenchClaw/plugin-sdk/json-store";
 
 export type MemoryWikiImportedSourceGroup = "bridge" | "unsafe-local";
 
@@ -24,7 +27,7 @@ const EMPTY_STATE: MemoryWikiImportedSourceState = {
 };
 
 function resolveMemoryWikiSourceSyncStatePath(vaultRoot: string): string {
-  return path.join(vaultRoot, ".NexisClaw-wiki", "source-sync.json");
+  return path.join(vaultRoot, ".GreenchClaw-wiki", "source-sync.json");
 }
 
 export async function readMemoryWikiSourceSyncState(

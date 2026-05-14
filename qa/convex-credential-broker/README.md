@@ -45,33 +45,33 @@ npx convex deploy
 
 4. In Convex deployment environment variables, set:
 
-- `NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER`
-- `NEXISCLAW_QA_CONVEX_SECRET_CI`
+- `GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER`
+- `GREENCHCLAW_QA_CONVEX_SECRET_CI`
 
 Client URL policy:
 
-- `NEXISCLAW_QA_CONVEX_SITE_URL` must use `https://` in normal use.
-- Local development may use loopback `http://` only when `NEXISCLAW_QA_ALLOW_INSECURE_HTTP=1`.
+- `GREENCHCLAW_QA_CONVEX_SITE_URL` must use `https://` in normal use.
+- Local development may use loopback `http://` only when `GREENCHCLAW_QA_ALLOW_INSECURE_HTTP=1`.
 
 ## Manage credentials from qa-lab CLI
 
 Maintainers can manage rows without using the Convex dashboard:
 
 ```bash
-pnpm NexisClaw qa credentials add \
+pnpm GreenchClaw qa credentials add \
   --kind telegram \
   --payload-file qa/telegram-credential.json
 
-pnpm NexisClaw qa credentials add \
+pnpm GreenchClaw qa credentials add \
   --kind discord \
   --payload-file qa/discord-credential.json
 
-pnpm NexisClaw qa credentials list --kind telegram
+pnpm GreenchClaw qa credentials list --kind telegram
 
-pnpm NexisClaw qa credentials remove --credential-id <credential-id>
+pnpm GreenchClaw qa credentials remove --credential-id <credential-id>
 ```
 
-Admin endpoints require `NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER`.
+Admin endpoints require `GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER`.
 
 ## Local request examples
 

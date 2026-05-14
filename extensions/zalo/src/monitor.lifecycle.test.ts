@@ -2,9 +2,9 @@ import {
   createEmptyPluginRegistry,
   createRuntimeEnv,
   setActivePluginRegistry,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import type { ResolvedZaloAccount } from "./accounts.js";
 
 const getWebhookInfoMock = vi.fn(async () => ({ ok: true, result: { url: "" } }));
@@ -36,7 +36,7 @@ const TEST_ACCOUNT = {
   config: {},
 } as unknown as ResolvedZaloAccount;
 
-const TEST_CONFIG = {} as NexisClawConfig;
+const TEST_CONFIG = {} as GreenchClawConfig;
 
 async function settleLifecycleWork(): Promise<void> {
   for (let i = 0; i < 6; i += 1) {

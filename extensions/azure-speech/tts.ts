@@ -1,10 +1,10 @@
-import { assertOkOrThrowProviderError } from "NexisClaw/plugin-sdk/provider-http";
-import type { SpeechVoiceOption } from "NexisClaw/plugin-sdk/speech-core";
-import { trimToUndefined } from "NexisClaw/plugin-sdk/speech-core";
+import { assertOkOrThrowProviderError } from "GreenchClaw/plugin-sdk/provider-http";
+import type { SpeechVoiceOption } from "GreenchClaw/plugin-sdk/speech-core";
+import { trimToUndefined } from "GreenchClaw/plugin-sdk/speech-core";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
 
 export const DEFAULT_AZURE_SPEECH_VOICE = "en-US-JennyNeural";
 export const DEFAULT_AZURE_SPEECH_LANG = "en-US";
@@ -187,7 +187,7 @@ export async function azureSpeechTTS(params: {
         "Content-Type": "application/ssml+xml",
         "Ocp-Apim-Subscription-Key": params.apiKey,
         "X-Microsoft-OutputFormat": outputFormat,
-        "User-Agent": "NexisClaw",
+        "User-Agent": "GreenchClaw",
       },
       body: buildAzureSpeechSsml({
         text: params.text,

@@ -92,19 +92,19 @@ function resolveChannelConfigSchemaModulePath(rootDir: string): string | null {
 }
 
 function resolvePackageChannelMeta(source: BundledPluginSource) {
-  const NexisClawMeta =
+  const GreenchClawMeta =
     source.packageJson &&
     typeof source.packageJson === "object" &&
     !Array.isArray(source.packageJson) &&
-    "NexisClaw" in source.packageJson
-      ? (source.packageJson.NexisClaw as Record<string, unknown> | undefined)
+    "GreenchClaw" in source.packageJson
+      ? (source.packageJson.GreenchClaw as Record<string, unknown> | undefined)
       : undefined;
   const channelMeta =
-    NexisClawMeta &&
-    typeof NexisClawMeta.channel === "object" &&
-    NexisClawMeta.channel &&
-    !Array.isArray(NexisClawMeta.channel)
-      ? (NexisClawMeta.channel as Record<string, unknown>)
+    GreenchClawMeta &&
+    typeof GreenchClawMeta.channel === "object" &&
+    GreenchClawMeta.channel &&
+    !Array.isArray(GreenchClawMeta.channel)
+      ? (GreenchClawMeta.channel as Record<string, unknown>)
       : undefined;
   return channelMeta;
 }

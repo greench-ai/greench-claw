@@ -1,14 +1,14 @@
 import type { Message, UserFromGetMe } from "@grammyjs/types";
-import { parseExecApprovalCommandText } from "NexisClaw/plugin-sdk/approval-reply-runtime";
+import { parseExecApprovalCommandText } from "GreenchClaw/plugin-sdk/approval-reply-runtime";
 import {
   listChatCommands,
   maybeResolveTextAlias,
   normalizeCommandBody,
-} from "NexisClaw/plugin-sdk/command-auth-native";
+} from "GreenchClaw/plugin-sdk/command-auth-native";
 import {
   isAbortRequestText,
   isBtwRequestText,
-} from "NexisClaw/plugin-sdk/command-primitives-runtime";
+} from "GreenchClaw/plugin-sdk/command-primitives-runtime";
 import { resolveTelegramForumThreadId } from "./bot/helpers.js";
 
 type TelegramSequentialKeyContext = {

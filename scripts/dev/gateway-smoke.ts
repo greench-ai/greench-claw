@@ -9,13 +9,13 @@ function writeStderrLine(message: string): void {
 }
 
 const { get: getArg } = createArgReader();
-const urlRaw = getArg("--url") ?? process.env.NEXISCLAW_GATEWAY_URL;
-const token = getArg("--token") ?? process.env.NEXISCLAW_GATEWAY_TOKEN;
+const urlRaw = getArg("--url") ?? process.env.GREENCHCLAW_GATEWAY_URL;
+const token = getArg("--token") ?? process.env.GREENCHCLAW_GATEWAY_TOKEN;
 
 if (!urlRaw || !token) {
   writeStderrLine(
     "Usage: bun scripts/dev/gateway-smoke.ts --url <wss://host[:port]> --token <gateway.auth.token>\n" +
-      "Or set env: NEXISCLAW_GATEWAY_URL / NEXISCLAW_GATEWAY_TOKEN",
+      "Or set env: GREENCHCLAW_GATEWAY_URL / GREENCHCLAW_GATEWAY_TOKEN",
   );
   process.exit(1);
 }
@@ -39,12 +39,12 @@ async function main() {
     minProtocol: 3,
     maxProtocol: 3,
     client: {
-      id: "NexisClaw-ios",
-      displayName: "NexisClaw gateway smoke test",
+      id: "GreenchClaw-ios",
+      displayName: "GreenchClaw gateway smoke test",
       version: "dev",
       platform: "dev",
       mode: "ui",
-      instanceId: "NexisClaw-dev-smoke",
+      instanceId: "GreenchClaw-dev-smoke",
     },
     locale: "en-US",
     userAgent: "gateway-smoke",

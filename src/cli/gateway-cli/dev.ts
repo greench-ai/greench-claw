@@ -33,7 +33,7 @@ async function loadDevTemplate(name: string, fallback: string): Promise<string> 
 
 const resolveDevWorkspaceDir = (env: NodeJS.ProcessEnv = process.env): string => {
   const baseDir = resolveDefaultAgentWorkspaceDir(env, os.homedir);
-  const profile = normalizeOptionalLowercaseString(env.NEXISCLAW_PROFILE);
+  const profile = normalizeOptionalLowercaseString(env.GREENCHCLAW_PROFILE);
   if (profile === "dev") {
     return baseDir;
   }
@@ -61,7 +61,7 @@ async function ensureDevWorkspace(dir: string) {
   const [agents, soul, tools, identity, user] = await Promise.all([
     loadDevTemplate(
       "AGENTS.dev.md",
-      `# AGENTS.md - NexisClaw Dev Workspace\n\nDefault dev workspace for NexisClaw gateway --dev.\n`,
+      `# AGENTS.md - GreenchClaw Dev Workspace\n\nDefault dev workspace for GreenchClaw gateway --dev.\n`,
     ),
     loadDevTemplate(
       "SOUL.dev.md",

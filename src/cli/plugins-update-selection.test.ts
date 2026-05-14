@@ -20,18 +20,18 @@ describe("resolvePluginUpdateSelection", () => {
     expect(
       resolvePluginUpdateSelection({
         installs: {
-          "NexisClaw-codex-app-server": createNpmInstall({
-            spec: "NexisClaw-codex-app-server",
-            installPath: "/tmp/NexisClaw-codex-app-server",
-            resolvedName: "NexisClaw-codex-app-server",
+          "GreenchClaw-codex-app-server": createNpmInstall({
+            spec: "GreenchClaw-codex-app-server",
+            installPath: "/tmp/GreenchClaw-codex-app-server",
+            resolvedName: "GreenchClaw-codex-app-server",
           }),
         },
-        rawId: "NexisClaw-codex-app-server@beta",
+        rawId: "GreenchClaw-codex-app-server@beta",
       }),
     ).toEqual({
-      pluginIds: ["NexisClaw-codex-app-server"],
+      pluginIds: ["GreenchClaw-codex-app-server"],
       specOverrides: {
-        "NexisClaw-codex-app-server": "NexisClaw-codex-app-server@beta",
+        "GreenchClaw-codex-app-server": "GreenchClaw-codex-app-server@beta",
       },
     });
   });
@@ -41,17 +41,17 @@ describe("resolvePluginUpdateSelection", () => {
       resolvePluginUpdateSelection({
         installs: {
           "voice-call": createNpmInstall({
-            spec: "@NexisClaw/voice-call",
+            spec: "@GreenchClaw/voice-call",
             installPath: "/tmp/voice-call",
-            resolvedName: "@NexisClaw/voice-call",
+            resolvedName: "@GreenchClaw/voice-call",
           }),
         },
-        rawId: "@NexisClaw/voice-call@beta",
+        rawId: "@GreenchClaw/voice-call@beta",
       }),
     ).toEqual({
       pluginIds: ["voice-call"],
       specOverrides: {
-        "voice-call": "@NexisClaw/voice-call@beta",
+        "voice-call": "@GreenchClaw/voice-call@beta",
       },
     });
   });
@@ -60,18 +60,18 @@ describe("resolvePluginUpdateSelection", () => {
     expect(
       resolvePluginUpdateSelection({
         installs: {
-          "NexisClaw-codex-app-server": createNpmInstall({
-            spec: "NexisClaw-codex-app-server",
-            installPath: "/tmp/NexisClaw-codex-app-server",
-            resolvedName: "NexisClaw-codex-app-server",
+          "GreenchClaw-codex-app-server": createNpmInstall({
+            spec: "GreenchClaw-codex-app-server",
+            installPath: "/tmp/GreenchClaw-codex-app-server",
+            resolvedName: "GreenchClaw-codex-app-server",
           }),
         },
-        rawId: "NexisClaw-codex-app-server@0.2.0-beta.4",
+        rawId: "GreenchClaw-codex-app-server@0.2.0-beta.4",
       }),
     ).toEqual({
-      pluginIds: ["NexisClaw-codex-app-server"],
+      pluginIds: ["GreenchClaw-codex-app-server"],
       specOverrides: {
-        "NexisClaw-codex-app-server": "NexisClaw-codex-app-server@0.2.0-beta.4",
+        "GreenchClaw-codex-app-server": "GreenchClaw-codex-app-server@0.2.0-beta.4",
       },
     });
   });
@@ -80,16 +80,16 @@ describe("resolvePluginUpdateSelection", () => {
     expect(
       resolvePluginUpdateSelection({
         installs: {
-          "NexisClaw-codex-app-server": createNpmInstall({
-            spec: "NexisClaw-codex-app-server@beta",
-            installPath: "/tmp/NexisClaw-codex-app-server",
-            resolvedName: "NexisClaw-codex-app-server",
+          "GreenchClaw-codex-app-server": createNpmInstall({
+            spec: "GreenchClaw-codex-app-server@beta",
+            installPath: "/tmp/GreenchClaw-codex-app-server",
+            resolvedName: "GreenchClaw-codex-app-server",
           }),
         },
-        rawId: "NexisClaw-codex-app-server",
+        rawId: "GreenchClaw-codex-app-server",
       }),
     ).toEqual({
-      pluginIds: ["NexisClaw-codex-app-server"],
+      pluginIds: ["GreenchClaw-codex-app-server"],
     });
   });
 

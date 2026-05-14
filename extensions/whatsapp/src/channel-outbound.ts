@@ -2,8 +2,8 @@ import {
   createMessageReceiptFromOutboundResults,
   defineChannelMessageAdapter,
   type ChannelMessageSendResult,
-} from "NexisClaw/plugin-sdk/channel-message";
-import { chunkText } from "NexisClaw/plugin-sdk/reply-chunking";
+} from "GreenchClaw/plugin-sdk/channel-message";
+import { chunkText } from "GreenchClaw/plugin-sdk/reply-chunking";
 import { createWhatsAppOutboundBase } from "./outbound-base.js";
 import { normalizeWhatsAppPayloadTextPreservingIndentation } from "./outbound-media-contract.js";
 import { resolveWhatsAppOutboundTarget } from "./resolve-outbound-target.js";

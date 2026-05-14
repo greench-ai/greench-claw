@@ -1,4 +1,4 @@
-import type { MediaUnderstandingProvider } from "NexisClaw/plugin-sdk/media-understanding";
+import type { MediaUnderstandingProvider } from "GreenchClaw/plugin-sdk/media-understanding";
 import { transcribeDeepgramAudio } from "./audio.js";
 
 export const deepgramMediaUnderstandingProvider: MediaUnderstandingProvider = {

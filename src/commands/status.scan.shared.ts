@@ -1,5 +1,5 @@
 import { existsSync } from "node:fs";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { buildGatewayConnectionDetailsWithResolvers } from "../gateway/connection-details.js";
 import { normalizeControlUiBasePath } from "../gateway/control-ui-shared.js";
 import { resolveGatewayProbeTarget } from "../gateway/probe-target.js";
@@ -70,7 +70,7 @@ type StatusMemorySearchManager = {
 };
 
 type StatusMemorySearchManagerResolver = (params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   purpose: "status";
 }) => Promise<{
@@ -110,7 +110,7 @@ function shouldTryLocalStatusRpcFallback(params: {
 }
 
 async function applyLocalStatusRpcFallback(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   gatewayMode: "local" | "remote";
   gatewayUrl: string;
   gatewayProbe: GatewayProbeResult | null;
@@ -158,7 +158,7 @@ async function applyLocalStatusRpcFallback(params: {
   };
 }
 
-function hasExplicitMemorySearchConfig(cfg: NexisClawConfig, agentId: string): boolean {
+function hasExplicitMemorySearchConfig(cfg: GreenchClawConfig, agentId: string): boolean {
   if (
     cfg.agents?.defaults &&
     Object.prototype.hasOwnProperty.call(cfg.agents.defaults, "memorySearch")
@@ -171,7 +171,7 @@ function hasExplicitMemorySearchConfig(cfg: NexisClawConfig, agentId: string): b
   );
 }
 
-export function resolveMemoryPluginStatus(cfg: NexisClawConfig): MemoryPluginStatus {
+export function resolveMemoryPluginStatus(cfg: GreenchClawConfig): MemoryPluginStatus {
   const pluginsEnabled = cfg.plugins?.enabled !== false;
   if (!pluginsEnabled) {
     return { enabled: false, slot: null, reason: "plugins disabled" };
@@ -184,7 +184,7 @@ export function resolveMemoryPluginStatus(cfg: NexisClawConfig): MemoryPluginSta
 }
 
 export async function resolveGatewayProbeSnapshot(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   opts: {
     timeoutMs?: number;
     all?: boolean;
@@ -283,10 +283,13 @@ export function buildTailscaleHttpsUrl(params: {
 }
 
 export async function resolveSharedMemoryStatusSnapshot(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentStatus: { defaultId?: string | null };
   memoryPlugin: MemoryPluginStatus;
-  resolveMemoryConfig: (cfg: NexisClawConfig, agentId: string) => { store: { path: string } } | null;
+  resolveMemoryConfig: (
+    cfg: GreenchClawConfig,
+    agentId: string,
+  ) => { store: { path: string } } | null;
   getMemorySearchManager: StatusMemorySearchManagerResolver;
   requireDefaultStore?: (agentId: string) => string | null;
 }): Promise<MemoryStatusSnapshot | null> {
@@ -322,7 +325,7 @@ export async function resolveSharedMemoryStatusSnapshot(params: {
 
 async function resolveMemoryManagerStatusSnapshot(
   params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     getMemorySearchManager: StatusMemorySearchManagerResolver;
   },
   agentId: string,

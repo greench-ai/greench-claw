@@ -19,24 +19,24 @@ function requireSpawnCall(
 describe("parseCliContainerArgs", () => {
   it("extracts a root --container flag before the command", () => {
     expect(
-      parseCliContainerArgs(["node", "NexisClaw", "--container", "demo", "status", "--deep"]),
+      parseCliContainerArgs(["node", "GreenchClaw", "--container", "demo", "status", "--deep"]),
     ).toEqual({
       ok: true,
       container: "demo",
-      argv: ["node", "NexisClaw", "status", "--deep"],
+      argv: ["node", "GreenchClaw", "status", "--deep"],
     });
   });
 
   it("accepts the equals form", () => {
-    expect(parseCliContainerArgs(["node", "NexisClaw", "--container=demo", "health"])).toEqual({
+    expect(parseCliContainerArgs(["node", "GreenchClaw", "--container=demo", "health"])).toEqual({
       ok: true,
       container: "demo",
-      argv: ["node", "NexisClaw", "health"],
+      argv: ["node", "GreenchClaw", "health"],
     });
   });
 
   it("rejects a missing container value", () => {
-    expect(parseCliContainerArgs(["node", "NexisClaw", "--container"])).toEqual({
+    expect(parseCliContainerArgs(["node", "GreenchClaw", "--container"])).toEqual({
       ok: false,
       error: "--container requires a value",
     });
@@ -44,7 +44,7 @@ describe("parseCliContainerArgs", () => {
 
   it("does not consume an adjacent flag as the container value", () => {
     expect(
-      parseCliContainerArgs(["node", "NexisClaw", "--container", "--no-color", "status"]),
+      parseCliContainerArgs(["node", "GreenchClaw", "--container", "--no-color", "status"]),
     ).toEqual({
       ok: false,
       error: "--container requires a value",
@@ -52,20 +52,20 @@ describe("parseCliContainerArgs", () => {
   });
 
   it("leaves argv unchanged when the flag is absent", () => {
-    expect(parseCliContainerArgs(["node", "NexisClaw", "status"])).toEqual({
+    expect(parseCliContainerArgs(["node", "GreenchClaw", "status"])).toEqual({
       ok: true,
       container: null,
-      argv: ["node", "NexisClaw", "status"],
+      argv: ["node", "GreenchClaw", "status"],
     });
   });
 
   it("extracts --container after the command like other root options", () => {
     expect(
-      parseCliContainerArgs(["node", "NexisClaw", "status", "--container", "demo", "--deep"]),
+      parseCliContainerArgs(["node", "GreenchClaw", "status", "--container", "demo", "--deep"]),
     ).toEqual({
       ok: true,
       container: "demo",
-      argv: ["node", "NexisClaw", "status", "--deep"],
+      argv: ["node", "GreenchClaw", "status", "--deep"],
     });
   });
 
@@ -73,7 +73,7 @@ describe("parseCliContainerArgs", () => {
     expect(
       parseCliContainerArgs([
         "node",
-        "NexisClaw",
+        "GreenchClaw",
         "nodes",
         "run",
         "--",
@@ -88,7 +88,7 @@ describe("parseCliContainerArgs", () => {
       container: null,
       argv: [
         "node",
-        "NexisClaw",
+        "GreenchClaw",
         "nodes",
         "run",
         "--",
@@ -103,14 +103,14 @@ describe("parseCliContainerArgs", () => {
 });
 
 describe("resolveCliContainerTarget", () => {
-  it("uses argv first and falls back to NEXISCLAW_CONTAINER", () => {
+  it("uses argv first and falls back to GREENCHCLAW_CONTAINER", () => {
     expect(
-      resolveCliContainerTarget(["node", "NexisClaw", "--container", "demo", "status"], {}),
+      resolveCliContainerTarget(["node", "GreenchClaw", "--container", "demo", "status"], {}),
     ).toBe("demo");
-    expect(resolveCliContainerTarget(["node", "NexisClaw", "status"], {})).toBeNull();
+    expect(resolveCliContainerTarget(["node", "GreenchClaw", "status"], {})).toBeNull();
     expect(
-      resolveCliContainerTarget(["node", "NexisClaw", "status"], {
-        NEXISCLAW_CONTAINER: "demo",
+      resolveCliContainerTarget(["node", "GreenchClaw", "status"], {
+        GREENCHCLAW_CONTAINER: "demo",
       } as NodeJS.ProcessEnv),
     ).toBe("demo");
   });
@@ -118,13 +118,13 @@ describe("resolveCliContainerTarget", () => {
 
 describe("maybeRunCliInContainer", () => {
   it("passes through when no container target is provided", () => {
-    expect(maybeRunCliInContainer(["node", "NexisClaw", "status"], { env: {} })).toEqual({
+    expect(maybeRunCliInContainer(["node", "GreenchClaw", "status"], { env: {} })).toEqual({
       handled: false,
-      argv: ["node", "NexisClaw", "status"],
+      argv: ["node", "GreenchClaw", "status"],
     });
   });
 
-  it("uses NEXISCLAW_CONTAINER when the flag is absent", () => {
+  it("uses GREENCHCLAW_CONTAINER when the flag is absent", () => {
     const spawnSync = vi
       .fn()
       .mockReturnValueOnce({
@@ -141,8 +141,8 @@ describe("maybeRunCliInContainer", () => {
       });
 
     expect(
-      maybeRunCliInContainer(["node", "NexisClaw", "status"], {
-        env: { NEXISCLAW_CONTAINER: "demo" } as NodeJS.ProcessEnv,
+      maybeRunCliInContainer(["node", "GreenchClaw", "status"], {
+        env: { GREENCHCLAW_CONTAINER: "demo" } as NodeJS.ProcessEnv,
         spawnSync,
       }),
     ).toEqual({
@@ -157,17 +157,17 @@ describe("maybeRunCliInContainer", () => {
         "exec",
         "-i",
         "--env",
-        "NEXISCLAW_CONTAINER_HINT=demo",
+        "GREENCHCLAW_CONTAINER_HINT=demo",
         "--env",
-        "NEXISCLAW_CLI_CONTAINER_BYPASS=1",
+        "GREENCHCLAW_CLI_CONTAINER_BYPASS=1",
         "demo",
-        "NexisClaw",
+        "GreenchClaw",
         "status",
       ],
       {
         stdio: "inherit",
         env: {
-          NEXISCLAW_CONTAINER: "",
+          GREENCHCLAW_CONTAINER: "",
         },
       },
     );
@@ -189,14 +189,14 @@ describe("maybeRunCliInContainer", () => {
         stdout: "",
       });
 
-    maybeRunCliInContainer(["node", "NexisClaw", "status"], {
+    maybeRunCliInContainer(["node", "GreenchClaw", "status"], {
       env: {
-        NEXISCLAW_CONTAINER: "demo",
-        NEXISCLAW_PROFILE: "work",
-        NEXISCLAW_GATEWAY_PORT: "19001",
-        NEXISCLAW_GATEWAY_URL: "ws://127.0.0.1:18789",
-        NEXISCLAW_GATEWAY_TOKEN: "token",
-        NEXISCLAW_GATEWAY_PASSWORD: "password",
+        GREENCHCLAW_CONTAINER: "demo",
+        GREENCHCLAW_PROFILE: "work",
+        GREENCHCLAW_GATEWAY_PORT: "19001",
+        GREENCHCLAW_GATEWAY_URL: "ws://127.0.0.1:18789",
+        GREENCHCLAW_GATEWAY_TOKEN: "token",
+        GREENCHCLAW_GATEWAY_PASSWORD: "password",
       } as NodeJS.ProcessEnv,
       spawnSync,
     });
@@ -208,17 +208,17 @@ describe("maybeRunCliInContainer", () => {
         "exec",
         "-i",
         "--env",
-        "NEXISCLAW_CONTAINER_HINT=demo",
+        "GREENCHCLAW_CONTAINER_HINT=demo",
         "--env",
-        "NEXISCLAW_CLI_CONTAINER_BYPASS=1",
+        "GREENCHCLAW_CLI_CONTAINER_BYPASS=1",
         "demo",
-        "NexisClaw",
+        "GreenchClaw",
         "status",
       ],
       {
         stdio: "inherit",
         env: {
-          NEXISCLAW_CONTAINER: "",
+          GREENCHCLAW_CONTAINER: "",
         },
       },
     );
@@ -240,10 +240,10 @@ describe("maybeRunCliInContainer", () => {
         stdout: "",
       });
 
-    maybeRunCliInContainer(["node", "NexisClaw", "status"], {
+    maybeRunCliInContainer(["node", "GreenchClaw", "status"], {
       env: {
-        NEXISCLAW_CONTAINER: "demo",
-        NEXISCLAW_PROXY_URL: " http://proxy.internal:3128 ",
+        GREENCHCLAW_CONTAINER: "demo",
+        GREENCHCLAW_PROXY_URL: " http://proxy.internal:3128 ",
       } as NodeJS.ProcessEnv,
       spawnSync,
     });
@@ -255,20 +255,20 @@ describe("maybeRunCliInContainer", () => {
         "exec",
         "-i",
         "--env",
-        "NEXISCLAW_CONTAINER_HINT=demo",
+        "GREENCHCLAW_CONTAINER_HINT=demo",
         "--env",
-        "NEXISCLAW_CLI_CONTAINER_BYPASS=1",
+        "GREENCHCLAW_CLI_CONTAINER_BYPASS=1",
         "--env",
-        "NEXISCLAW_PROXY_URL=http://proxy.internal:3128",
+        "GREENCHCLAW_PROXY_URL=http://proxy.internal:3128",
         "demo",
-        "NexisClaw",
+        "GreenchClaw",
         "status",
       ],
       {
         stdio: "inherit",
         env: {
-          NEXISCLAW_CONTAINER: "",
-          NEXISCLAW_PROXY_URL: " http://proxy.internal:3128 ",
+          GREENCHCLAW_CONTAINER: "",
+          GREENCHCLAW_PROXY_URL: " http://proxy.internal:3128 ",
         },
       },
     );
@@ -294,10 +294,10 @@ describe("maybeRunCliInContainer", () => {
       });
 
     expect(() =>
-      maybeRunCliInContainer(["node", "NexisClaw", "status"], {
+      maybeRunCliInContainer(["node", "GreenchClaw", "status"], {
         env: {
-          NEXISCLAW_CONTAINER: "demo",
-          NEXISCLAW_PROXY_URL: ` ${proxyUrl} `,
+          GREENCHCLAW_CONTAINER: "demo",
+          GREENCHCLAW_PROXY_URL: ` ${proxyUrl} `,
         } as NodeJS.ProcessEnv,
         spawnSync,
       }),
@@ -320,10 +320,10 @@ describe("maybeRunCliInContainer", () => {
 
     let message = "";
     try {
-      maybeRunCliInContainer(["node", "NexisClaw", "status"], {
+      maybeRunCliInContainer(["node", "GreenchClaw", "status"], {
         env: {
-          NEXISCLAW_CONTAINER: "demo",
-          NEXISCLAW_PROXY_URL:
+          GREENCHCLAW_CONTAINER: "demo",
+          GREENCHCLAW_PROXY_URL:
             "http://proxy-user:proxy-secret@127.1:3128?token=proxy-query-secret#proxy-fragment-secret",
         } as NodeJS.ProcessEnv,
         spawnSync,
@@ -332,7 +332,7 @@ describe("maybeRunCliInContainer", () => {
       message = err instanceof Error ? err.message : String(err);
     }
 
-    expect(message).toContain("NEXISCLAW_PROXY_URL=http://redacted:redacted@127.0.0.1:3128/");
+    expect(message).toContain("GREENCHCLAW_PROXY_URL=http://redacted:redacted@127.0.0.1:3128/");
     expect(message).not.toContain("proxy-user");
     expect(message).not.toContain("proxy-secret");
     expect(message).not.toContain("proxy-query-secret");
@@ -358,18 +358,18 @@ describe("maybeRunCliInContainer", () => {
         stdout: "",
       });
 
-    maybeRunCliInContainer(["node", "NexisClaw", "status"], {
+    maybeRunCliInContainer(["node", "GreenchClaw", "status"], {
       env: {
-        NEXISCLAW_CONTAINER: "demo",
-        NEXISCLAW_PROXY_URL: " http://127.0.0.1:3128 ",
-        NEXISCLAW_CONTAINER_ALLOW_LOOPBACK_PROXY_URL: "1",
+        GREENCHCLAW_CONTAINER: "demo",
+        GREENCHCLAW_PROXY_URL: " http://127.0.0.1:3128 ",
+        GREENCHCLAW_CONTAINER_ALLOW_LOOPBACK_PROXY_URL: "1",
       } as NodeJS.ProcessEnv,
       spawnSync,
     });
 
     const podmanCall = requireSpawnCall(spawnSync, 2);
     expect(podmanCall[0]).toBe("podman");
-    expect(podmanCall[1]).toContain("NEXISCLAW_PROXY_URL=http://127.0.0.1:3128");
+    expect(podmanCall[1]).toContain("GREENCHCLAW_PROXY_URL=http://127.0.0.1:3128");
     if (podmanCall[2] === undefined) {
       throw new Error("Expected podman spawn options");
     }
@@ -392,7 +392,7 @@ describe("maybeRunCliInContainer", () => {
       });
 
     expect(
-      maybeRunCliInContainer(["node", "NexisClaw", "--container", "demo", "status"], {
+      maybeRunCliInContainer(["node", "GreenchClaw", "--container", "demo", "status"], {
         env: {},
         spawnSync,
       }),
@@ -414,16 +414,16 @@ describe("maybeRunCliInContainer", () => {
         "exec",
         "-i",
         "--env",
-        "NEXISCLAW_CONTAINER_HINT=demo",
+        "GREENCHCLAW_CONTAINER_HINT=demo",
         "--env",
-        "NEXISCLAW_CLI_CONTAINER_BYPASS=1",
+        "GREENCHCLAW_CLI_CONTAINER_BYPASS=1",
         "demo",
-        "NexisClaw",
+        "GreenchClaw",
         "status",
       ],
       {
         stdio: "inherit",
-        env: { NEXISCLAW_CONTAINER: "" },
+        env: { GREENCHCLAW_CONTAINER: "" },
       },
     );
   });
@@ -445,8 +445,8 @@ describe("maybeRunCliInContainer", () => {
       });
 
     expect(
-      maybeRunCliInContainer(["node", "NexisClaw", "--container", "demo", "health"], {
-        env: { USER: "NexisClaw" } as NodeJS.ProcessEnv,
+      maybeRunCliInContainer(["node", "GreenchClaw", "--container", "demo", "health"], {
+        env: { USER: "GreenchClaw" } as NodeJS.ProcessEnv,
         spawnSync,
       }),
     ).toEqual({
@@ -467,16 +467,16 @@ describe("maybeRunCliInContainer", () => {
         "exec",
         "-i",
         "-e",
-        "NEXISCLAW_CONTAINER_HINT=demo",
+        "GREENCHCLAW_CONTAINER_HINT=demo",
         "-e",
-        "NEXISCLAW_CLI_CONTAINER_BYPASS=1",
+        "GREENCHCLAW_CLI_CONTAINER_BYPASS=1",
         "demo",
-        "NexisClaw",
+        "GreenchClaw",
         "health",
       ],
       {
         stdio: "inherit",
-        env: { USER: "NexisClaw", NEXISCLAW_CONTAINER: "" },
+        env: { USER: "GreenchClaw", GREENCHCLAW_CONTAINER: "" },
       },
     );
   });
@@ -502,7 +502,7 @@ describe("maybeRunCliInContainer", () => {
       });
 
     expect(
-      maybeRunCliInContainer(["node", "NexisClaw", "--container", "demo", "status"], {
+      maybeRunCliInContainer(["node", "GreenchClaw", "--container", "demo", "status"], {
         env: { USER: "somalley" } as NodeJS.ProcessEnv,
         spawnSync,
       }),
@@ -530,16 +530,16 @@ describe("maybeRunCliInContainer", () => {
         "exec",
         "-i",
         "-e",
-        "NEXISCLAW_CONTAINER_HINT=demo",
+        "GREENCHCLAW_CONTAINER_HINT=demo",
         "-e",
-        "NEXISCLAW_CLI_CONTAINER_BYPASS=1",
+        "GREENCHCLAW_CLI_CONTAINER_BYPASS=1",
         "demo",
-        "NexisClaw",
+        "GreenchClaw",
         "status",
       ],
       {
         stdio: "inherit",
-        env: { USER: "somalley", NEXISCLAW_CONTAINER: "" },
+        env: { USER: "somalley", GREENCHCLAW_CONTAINER: "" },
       },
     );
     expect(spawnSync).toHaveBeenCalledTimes(3);
@@ -558,7 +558,7 @@ describe("maybeRunCliInContainer", () => {
       });
 
     expect(() =>
-      maybeRunCliInContainer(["node", "NexisClaw", "--container", "demo", "status"], {
+      maybeRunCliInContainer(["node", "GreenchClaw", "--container", "demo", "status"], {
         env: { USER: "somalley" } as NodeJS.ProcessEnv,
         spawnSync,
       }),
@@ -596,7 +596,7 @@ describe("maybeRunCliInContainer", () => {
       });
 
     expect(() =>
-      maybeRunCliInContainer(["node", "NexisClaw", "--container", "demo", "status"], {
+      maybeRunCliInContainer(["node", "GreenchClaw", "--container", "demo", "status"], {
         env: { USER: "somalley" } as NodeJS.ProcessEnv,
         spawnSync,
       }),
@@ -621,7 +621,7 @@ describe("maybeRunCliInContainer", () => {
         stdout: "",
       });
 
-    maybeRunCliInContainer(["node", "NexisClaw", "--container", "demo", "setup"], {
+    maybeRunCliInContainer(["node", "GreenchClaw", "--container", "demo", "setup"], {
       env: {},
       spawnSync,
       stdinIsTTY: true,
@@ -636,21 +636,21 @@ describe("maybeRunCliInContainer", () => {
         "-i",
         "-t",
         "--env",
-        "NEXISCLAW_CONTAINER_HINT=demo",
+        "GREENCHCLAW_CONTAINER_HINT=demo",
         "--env",
-        "NEXISCLAW_CLI_CONTAINER_BYPASS=1",
+        "GREENCHCLAW_CLI_CONTAINER_BYPASS=1",
         "demo",
-        "NexisClaw",
+        "GreenchClaw",
         "setup",
       ],
       {
         stdio: "inherit",
-        env: { NEXISCLAW_CONTAINER: "" },
+        env: { GREENCHCLAW_CONTAINER: "" },
       },
     );
   });
 
-  it("prefers --container over NEXISCLAW_CONTAINER", () => {
+  it("prefers --container over GREENCHCLAW_CONTAINER", () => {
     const spawnSync = vi
       .fn()
       .mockReturnValueOnce({
@@ -667,8 +667,8 @@ describe("maybeRunCliInContainer", () => {
       });
 
     expect(
-      maybeRunCliInContainer(["node", "NexisClaw", "--container", "flag-demo", "health"], {
-        env: { NEXISCLAW_CONTAINER: "env-demo" } as NodeJS.ProcessEnv,
+      maybeRunCliInContainer(["node", "GreenchClaw", "--container", "flag-demo", "health"], {
+        env: { GREENCHCLAW_CONTAINER: "env-demo" } as NodeJS.ProcessEnv,
         spawnSync,
       }),
     ).toEqual({
@@ -691,7 +691,7 @@ describe("maybeRunCliInContainer", () => {
     });
 
     expect(() =>
-      maybeRunCliInContainer(["node", "NexisClaw", "--container", "demo", "status"], {
+      maybeRunCliInContainer(["node", "GreenchClaw", "--container", "demo", "status"], {
         env: {},
         spawnSync,
       }),
@@ -700,12 +700,12 @@ describe("maybeRunCliInContainer", () => {
 
   it("skips recursion when the bypass env is set", () => {
     expect(
-      maybeRunCliInContainer(["node", "NexisClaw", "--container", "demo", "status"], {
-        env: { NEXISCLAW_CLI_CONTAINER_BYPASS: "1" } as NodeJS.ProcessEnv,
+      maybeRunCliInContainer(["node", "GreenchClaw", "--container", "demo", "status"], {
+        env: { GREENCHCLAW_CLI_CONTAINER_BYPASS: "1" } as NodeJS.ProcessEnv,
       }),
     ).toEqual({
       handled: false,
-      argv: ["node", "NexisClaw", "--container", "demo", "status"],
+      argv: ["node", "GreenchClaw", "--container", "demo", "status"],
     });
   });
 
@@ -716,12 +716,12 @@ describe("maybeRunCliInContainer", () => {
     });
 
     expect(() =>
-      maybeRunCliInContainer(["node", "NexisClaw", "--container", "demo", "update"], {
+      maybeRunCliInContainer(["node", "GreenchClaw", "--container", "demo", "update"], {
         env: {},
         spawnSync,
       }),
     ).toThrow(
-      "NexisClaw update is not supported with --container; rebuild or restart the container image instead.",
+      "GreenchClaw update is not supported with --container; rebuild or restart the container image instead.",
     );
     expect(spawnSync).not.toHaveBeenCalled();
   });
@@ -733,12 +733,15 @@ describe("maybeRunCliInContainer", () => {
     });
 
     expect(() =>
-      maybeRunCliInContainer(["node", "NexisClaw", "--container", "demo", "--no-color", "update"], {
-        env: {},
-        spawnSync,
-      }),
+      maybeRunCliInContainer(
+        ["node", "GreenchClaw", "--container", "demo", "--no-color", "update"],
+        {
+          env: {},
+          spawnSync,
+        },
+      ),
     ).toThrow(
-      "NexisClaw update is not supported with --container; rebuild or restart the container image instead.",
+      "GreenchClaw update is not supported with --container; rebuild or restart the container image instead.",
     );
     expect(spawnSync).not.toHaveBeenCalled();
   });
@@ -750,12 +753,12 @@ describe("maybeRunCliInContainer", () => {
     });
 
     expect(() =>
-      maybeRunCliInContainer(["node", "NexisClaw", "--container", "demo", "--update"], {
+      maybeRunCliInContainer(["node", "GreenchClaw", "--container", "demo", "--update"], {
         env: {},
         spawnSync,
       }),
     ).toThrow(
-      "NexisClaw update is not supported with --container; rebuild or restart the container image instead.",
+      "GreenchClaw update is not supported with --container; rebuild or restart the container image instead.",
     );
     expect(spawnSync).not.toHaveBeenCalled();
   });

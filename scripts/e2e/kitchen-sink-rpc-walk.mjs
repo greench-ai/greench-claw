@@ -7,8 +7,9 @@ import { setTimeout as delay } from "node:timers/promises";
 import { pathToFileURL } from "node:url";
 
 const PLUGIN_SPEC =
-  process.env.NEXISCLAW_KITCHEN_SINK_NPM_SPEC || "npm:@NexisClaw/kitchen-sink@latest";
-const PLUGIN_ID = process.env.NEXISCLAW_KITCHEN_SINK_PLUGIN_ID || "NexisClaw-kitchen-sink-fixture";
+  process.env.GREENCHCLAW_KITCHEN_SINK_NPM_SPEC || "npm:@GreenchClaw/kitchen-sink@latest";
+const PLUGIN_ID =
+  process.env.GREENCHCLAW_KITCHEN_SINK_PLUGIN_ID || "GreenchClaw-kitchen-sink-fixture";
 const CHANNEL_ID = "kitchen-sink-channel";
 const CHANNEL_ACCOUNT_ID = "local";
 const TOKEN = "kitchen-sink-rpc-token";
@@ -17,13 +18,13 @@ const EXPECTED_COMMANDS = ["kitchen", "kitchen-sink"];
 const EXPECTED_TOOLS = ["kitchen_sink_text", "kitchen_sink_search", "kitchen_sink_image_job"];
 const EXPECTED_PROVIDERS = ["kitchen-sink-provider", "kitchen-sink-llm"];
 const EXPECTED_SPEECH_PROVIDERS = ["kitchen-sink-speech", "kitchen-sink-speech-provider"];
-const READY_TIMEOUT_MS = readPositiveInt(process.env.NEXISCLAW_KITCHEN_SINK_RPC_READY_MS, 240000);
+const READY_TIMEOUT_MS = readPositiveInt(process.env.GREENCHCLAW_KITCHEN_SINK_RPC_READY_MS, 240000);
 const COMMAND_TIMEOUT_MS = readPositiveInt(
-  process.env.NEXISCLAW_KITCHEN_SINK_RPC_COMMAND_MS,
+  process.env.GREENCHCLAW_KITCHEN_SINK_RPC_COMMAND_MS,
   180000,
 );
-const RPC_TIMEOUT_MS = readPositiveInt(process.env.NEXISCLAW_KITCHEN_SINK_RPC_CALL_MS, 60000);
-const MAX_RSS_MIB = readPositiveInt(process.env.NEXISCLAW_KITCHEN_SINK_MAX_RSS_MIB, 2048);
+const RPC_TIMEOUT_MS = readPositiveInt(process.env.GREENCHCLAW_KITCHEN_SINK_RPC_CALL_MS, 60000);
+const MAX_RSS_MIB = readPositiveInt(process.env.GREENCHCLAW_KITCHEN_SINK_MAX_RSS_MIB, 2048);
 
 let callGatewayModulePromise;
 
@@ -32,12 +33,12 @@ function readPositiveInt(raw, fallback) {
   return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 }
 
-function resolveNexisClawRunner() {
-  if (process.env.NEXISCLAW_ENTRY) {
+function resolveGreenchClawRunner() {
+  if (process.env.GREENCHCLAW_ENTRY) {
     return {
       command: "node",
-      baseArgs: [process.env.NEXISCLAW_ENTRY],
-      label: process.env.NEXISCLAW_ENTRY,
+      baseArgs: [process.env.GREENCHCLAW_ENTRY],
+      label: process.env.GREENCHCLAW_ENTRY,
     };
   }
   for (const candidate of ["dist/index.mjs", "dist/index.js"]) {
@@ -46,26 +47,26 @@ function resolveNexisClawRunner() {
       return { command: "node", baseArgs: [resolved], label: resolved };
     }
   }
-  return { command: "pnpm", baseArgs: ["NexisClaw"], label: "pnpm NexisClaw" };
+  return { command: "pnpm", baseArgs: ["GreenchClaw"], label: "pnpm GreenchClaw" };
 }
 
 function makeEnv() {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-kitchen-sink-rpc-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-kitchen-sink-rpc-"));
   const home = path.join(root, "home");
-  const stateDir = path.join(home, ".NexisClaw");
+  const stateDir = path.join(home, ".GreenchClaw");
   fs.mkdirSync(stateDir, { recursive: true });
   return {
     root,
     env: {
       ...process.env,
       HOME: home,
-      NEXISCLAW_HOME: stateDir,
-      NEXISCLAW_STATE_DIR: stateDir,
-      NEXISCLAW_CONFIG_PATH: path.join(stateDir, "NexisClaw.json"),
-      NEXISCLAW_NO_ONBOARD: "1",
-      NEXISCLAW_SKIP_PROVIDERS: "0",
-      NEXISCLAW_KITCHEN_SINK_PERSONALITY:
-        process.env.NEXISCLAW_KITCHEN_SINK_PERSONALITY || "conformance",
+      GREENCHCLAW_HOME: stateDir,
+      GREENCHCLAW_STATE_DIR: stateDir,
+      GREENCHCLAW_CONFIG_PATH: path.join(stateDir, "GreenchClaw.json"),
+      GREENCHCLAW_NO_ONBOARD: "1",
+      GREENCHCLAW_SKIP_PROVIDERS: "0",
+      GREENCHCLAW_KITCHEN_SINK_PERSONALITY:
+        process.env.GREENCHCLAW_KITCHEN_SINK_PERSONALITY || "conformance",
     },
   };
 }
@@ -118,7 +119,7 @@ function runCommand(command, args, options = {}) {
   });
 }
 
-async function runNexisClaw(runner, args, env, options = {}) {
+async function runGreenchClaw(runner, args, env, options = {}) {
   return runCommand(runner.command, [...runner.baseArgs, ...args], {
     env,
     timeoutMs: options.timeoutMs ?? COMMAND_TIMEOUT_MS,
@@ -199,8 +200,8 @@ function unwrapRpcPayload(raw) {
 async function rpcCall(method, params, options) {
   const { callGateway } = await loadCallGatewayModule();
   const payload = await callGateway({
-    config: readJson(options.env.NEXISCLAW_CONFIG_PATH),
-    configPath: options.env.NEXISCLAW_CONFIG_PATH,
+    config: readJson(options.env.GREENCHCLAW_CONFIG_PATH),
+    configPath: options.env.GREENCHCLAW_CONFIG_PATH,
     url: `ws://127.0.0.1:${options.port}`,
     token: TOKEN,
     method,
@@ -260,7 +261,7 @@ async function fetchJson(url) {
 }
 
 function configureKitchenSink(env, port) {
-  const configPath = env.NEXISCLAW_CONFIG_PATH;
+  const configPath = env.GREENCHCLAW_CONFIG_PATH;
   const config = fs.existsSync(configPath) ? readJson(configPath) : {};
   config.gateway = {
     ...config.gateway,
@@ -283,7 +284,7 @@ function configureKitchenSink(env, port) {
         enabled: true,
         config: {
           ...config.plugins?.entries?.[PLUGIN_ID]?.config,
-          personality: env.NEXISCLAW_KITCHEN_SINK_PERSONALITY,
+          personality: env.GREENCHCLAW_KITCHEN_SINK_PERSONALITY,
         },
         hooks: {
           ...config.plugins?.entries?.[PLUGIN_ID]?.hooks,
@@ -531,17 +532,17 @@ function isNonEmptyString(value) {
 }
 
 async function main() {
-  const runner = resolveNexisClawRunner();
-  const port = readPositiveInt(process.env.NEXISCLAW_KITCHEN_SINK_RPC_PORT, 19173);
+  const runner = resolveGreenchClawRunner();
+  const port = readPositiveInt(process.env.GREENCHCLAW_KITCHEN_SINK_RPC_PORT, 19173);
   const { root, env } = makeEnv();
   const logPath = path.join(root, "gateway.log");
 
   console.log(`Kitchen Sink RPC walk using ${PLUGIN_SPEC} via ${runner.label}`);
-  await runNexisClaw(runner, ["plugins", "install", PLUGIN_SPEC], env, { timeoutMs: 240000 });
+  await runGreenchClaw(runner, ["plugins", "install", PLUGIN_SPEC], env, { timeoutMs: 240000 });
   configureKitchenSink(env, port);
-  await runNexisClaw(runner, ["plugins", "enable", PLUGIN_ID], env, { timeoutMs: 60000 });
+  await runGreenchClaw(runner, ["plugins", "enable", PLUGIN_ID], env, { timeoutMs: 60000 });
   const inspect = parseJsonOutput(
-    (await runNexisClaw(runner, ["plugins", "inspect", PLUGIN_ID, "--runtime", "--json"], env))
+    (await runGreenchClaw(runner, ["plugins", "inspect", PLUGIN_ID, "--runtime", "--json"], env))
       .stdout,
   );
   if (inspect?.plugin?.status !== "loaded") {

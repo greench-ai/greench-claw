@@ -13,7 +13,7 @@ export { wrapExternalContent } from "./sdk-security-runtime.js";
 export {
   normalizeOptionalString,
   readStringValue,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 export { BrowserToolSchema } from "./browser-tool.schema.js";
 export {
   browserAct,

@@ -36,7 +36,7 @@ const {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", () => ({
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", () => ({
   registerUnhandledRejectionHandler: registerUnhandledRejectionHandlerMock,
 }));
 

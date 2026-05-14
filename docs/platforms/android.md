@@ -8,7 +8,7 @@ title: "Android app"
 ---
 
 <Note>
-The Android app has not been publicly released yet. The source code is available in the [NexisClaw repository](https://github.com/NexisClaw/NexisClaw) under `apps/android`. You can build it yourself using Java 17 and the Android SDK (`./gradlew :app:assemblePlayDebug`). See [apps/android/README.md](https://github.com/NexisClaw/NexisClaw/blob/main/apps/android/README.md) for build instructions.
+The Android app has not been publicly released yet. The source code is available in the [GreenchClaw repository](https://github.com/GreenchClaw/GreenchClaw) under `apps/android`. You can build it yourself using Java 17 and the Android SDK (`./gradlew :app:assemblePlayDebug`). See [apps/android/README.md](https://github.com/GreenchClaw/GreenchClaw/blob/main/apps/android/README.md) for build instructions.
 </Note>
 
 ## Support snapshot
@@ -43,12 +43,12 @@ For Tailscale or public hosts, Android requires a secure endpoint:
   - Same Tailscale tailnet using Wide-Area Bonjour / unicast DNS-SD (see below), **or**
   - Manual gateway host/port (fallback)
 - Tailnet/public mobile pairing does **not** use raw tailnet IP `ws://` endpoints. Use Tailscale Serve or another `wss://` URL instead.
-- You can run the CLI (`NexisClaw`) on the gateway machine (or via SSH).
+- You can run the CLI (`GreenchClaw`) on the gateway machine (or via SSH).
 
 ### 1) Start the Gateway
 
 ```bash
-NexisClaw gateway --port 18789 --verbose
+GreenchClaw gateway --port 18789 --verbose
 ```
 
 Confirm in logs you see something like:
@@ -58,7 +58,7 @@ Confirm in logs you see something like:
 For remote Android access over Tailscale, prefer Serve/Funnel instead of a raw tailnet bind:
 
 ```bash
-NexisClaw gateway --tailscale serve
+GreenchClaw gateway --tailscale serve
 ```
 
 This gives Android a secure `wss://` / `https://` endpoint. A plain `gateway.bind: "tailnet"` setup is not enough for first-time remote Android pairing unless you also terminate TLS separately.
@@ -68,7 +68,7 @@ This gives Android a secure `wss://` / `https://` endpoint. A plain `gateway.bin
 From the gateway machine:
 
 ```bash
-dns-sd -B _NexisClaw-gw._tcp local.
+dns-sd -B _GreenchClaw-gw._tcp local.
 ```
 
 More debugging notes: [Bonjour](/gateway/bonjour).
@@ -76,7 +76,7 @@ More debugging notes: [Bonjour](/gateway/bonjour).
 If you also configured a wide-area discovery domain, compare against:
 
 ```bash
-NexisClaw gateway discover --json
+GreenchClaw gateway discover --json
 ```
 
 That shows `local.` plus the configured wide-area domain in one pass and uses the resolved
@@ -88,7 +88,7 @@ Android NSD/mDNS discovery won't cross networks. If your Android node and the ga
 
 Discovery alone is not sufficient for tailnet/public Android pairing. The discovered route still needs a secure endpoint (`wss://` or Tailscale Serve):
 
-1. Set up a DNS-SD zone (example `NexisClaw.internal.`) on the gateway host and publish `_NexisClaw-gw._tcp` records.
+1. Set up a DNS-SD zone (example `GreenchClaw.internal.`) on the gateway host and publish `_GreenchClaw-gw._tcp` records.
 2. Configure Tailscale split DNS for your chosen domain pointing at that DNS server.
 
 Details and example CoreDNS config: [Bonjour](/gateway/bonjour).
@@ -123,9 +123,9 @@ compatible but does not count as a durable last-seen update.
 On the gateway machine:
 
 ```bash
-NexisClaw devices list
-NexisClaw devices approve <requestId>
-NexisClaw devices reject <requestId>
+GreenchClaw devices list
+GreenchClaw devices approve <requestId>
+GreenchClaw devices reject <requestId>
 ```
 
 Pairing details: [Pairing](/channels/pairing).
@@ -154,13 +154,13 @@ public-key change still require manual approval.
 - Via nodes status:
 
   ```bash
-  NexisClaw nodes status
+  GreenchClaw nodes status
   ```
 
 - Via Gateway:
 
   ```bash
-  NexisClaw gateway call node.list --params "{}"
+  GreenchClaw gateway call node.list --params "{}"
   ```
 
 ### 6) Chat + history
@@ -187,18 +187,18 @@ If you want the node to show real HTML/CSS/JS that the agent can edit on disk, p
 Nodes load canvas from the Gateway HTTP server (same port as `gateway.port`, default `18789`).
 </Note>
 
-1. Create `~/.NexisClaw/workspace/canvas/index.html` on the gateway host.
+1. Create `~/.GreenchClaw/workspace/canvas/index.html` on the gateway host.
 
 2. Navigate the node to it (LAN):
 
 ```bash
-NexisClaw nodes invoke --node "<Android Node>" --command canvas.navigate --params '{"url":"http://<gateway-hostname>.local:18789/__NexisClaw__/canvas/"}'
+GreenchClaw nodes invoke --node "<Android Node>" --command canvas.navigate --params '{"url":"http://<gateway-hostname>.local:18789/__GreenchClaw__/canvas/"}'
 ```
 
-Tailnet (optional): if both devices are on Tailscale, use a MagicDNS name or tailnet IP instead of `.local`, e.g. `http://<gateway-magicdns>:18789/__NexisClaw__/canvas/`.
+Tailnet (optional): if both devices are on Tailscale, use a MagicDNS name or tailnet IP instead of `.local`, e.g. `http://<gateway-magicdns>:18789/__GreenchClaw__/canvas/`.
 
 This server injects a live-reload client into HTML and reloads on file changes.
-The A2UI host lives at `http://<gateway-host>:18789/__NexisClaw__/a2ui/`.
+The A2UI host lives at `http://<gateway-host>:18789/__GreenchClaw__/a2ui/`.
 
 Canvas commands (foreground only):
 
@@ -230,9 +230,9 @@ See [Camera node](/nodes/camera) for parameters and CLI helpers.
 
 ## Assistant entrypoints
 
-Android supports launching NexisClaw from the system assistant trigger (Google
+Android supports launching GreenchClaw from the system assistant trigger (Google
 Assistant). When configured, holding the home button or saying "Hey Google, ask
-NexisClaw..." opens the app and hands the prompt into the chat composer.
+GreenchClaw..." opens the app and hands the prompt into the chat composer.
 
 This uses Android **App Actions** metadata declared in the app manifest. No
 extra configuration is needed on the gateway side -- the assistant intent is
@@ -240,7 +240,7 @@ handled entirely by the Android app and forwarded as a normal chat message.
 
 <Note>
 App Actions availability depends on the device, Google Play Services version,
-and whether the user has set NexisClaw as the default assistant app.
+and whether the user has set GreenchClaw as the default assistant app.
 </Note>
 
 ## Notification forwarding

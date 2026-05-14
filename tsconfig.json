@@ -22,14 +22,14 @@
     "types": ["node"],
     "useDefineForClassFields": false,
     "paths": {
-      "NexisClaw/extension-api": ["./src/extensionAPI.ts"],
-      "NexisClaw/plugin-sdk": ["./src/plugin-sdk/index.ts"],
-      "NexisClaw/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
-      "@NexisClaw/sdk": ["./packages/sdk/src/index.ts"],
-      "@NexisClaw/plugin-sdk": ["./src/plugin-sdk/index.ts"],
-      "@NexisClaw/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
-      "NexisClaw/plugin-sdk/account-id": ["./src/plugin-sdk/account-id.ts"],
-      "@NexisClaw/*": ["./extensions/*"]
+      "GreenchClaw/extension-api": ["./src/extensionAPI.ts"],
+      "GreenchClaw/plugin-sdk": ["./src/plugin-sdk/index.ts"],
+      "GreenchClaw/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
+      "@GreenchClaw/sdk": ["./packages/sdk/src/index.ts"],
+      "@GreenchClaw/plugin-sdk": ["./src/plugin-sdk/index.ts"],
+      "@GreenchClaw/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
+      "GreenchClaw/plugin-sdk/account-id": ["./src/plugin-sdk/account-id.ts"],
+      "@GreenchClaw/*": ["./extensions/*"]
     }
   },
   "include": ["src/**/*", "ui/**/*", "extensions/**/*", "packages/**/*"],

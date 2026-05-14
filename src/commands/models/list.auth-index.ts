@@ -17,7 +17,7 @@ import {
 import { resolveProviderAuthAliasMap } from "../../agents/provider-auth-aliases.js";
 import { normalizeProviderIdForAuth } from "../../agents/provider-id.js";
 import { resolveAgentModelPrimaryValue } from "../../config/model-input.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { loadPluginRegistrySnapshotWithMetadata } from "../../plugins/plugin-registry.js";
 
 export type ModelListAuthIndex = {
@@ -26,7 +26,7 @@ export type ModelListAuthIndex = {
 };
 
 export type CreateModelListAuthIndexParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   authStore: AuthProfileStore;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
@@ -42,7 +42,7 @@ function normalizeAuthProvider(
 }
 
 function listValidatedSyntheticAuthProviderRefs(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;
 }): readonly string[] {

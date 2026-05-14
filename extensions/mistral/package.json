@@ -1,13 +1,13 @@
 {
-  "name": "@NexisClaw/mistral-provider",
+  "name": "@GreenchClaw/mistral-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw Mistral provider plugin",
+  "description": "GreenchClaw Mistral provider plugin",
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

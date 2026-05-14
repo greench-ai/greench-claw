@@ -3,5 +3,5 @@ export {
   getRuntimeConfig,
   getRuntimeConfigSourceSnapshot,
   setRuntimeConfigSnapshot,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "../../config/config.js";

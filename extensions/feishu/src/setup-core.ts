@@ -1,16 +1,16 @@
 import {
   DEFAULT_ACCOUNT_ID,
   type ChannelSetupAdapter,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/setup";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/setup";
 import { resolveDefaultFeishuAccountId } from "./accounts.js";
 import type { FeishuConfig } from "./types.js";
 
 export function setFeishuNamedAccountEnabled(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
   enabled: boolean,
-): NexisClawConfig {
+): GreenchClawConfig {
   const feishuCfg = cfg.channels?.feishu as FeishuConfig | undefined;
   return {
     ...cfg,

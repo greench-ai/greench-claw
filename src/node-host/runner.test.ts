@@ -52,7 +52,7 @@ vi.mock("../infra/machine-name.js", () => ({
 }));
 
 vi.mock("../infra/path-env.js", () => ({
-  ensureNexisClawCliOnPath: vi.fn(),
+  ensureGreenchClawCliOnPath: vi.fn(),
 }));
 
 vi.mock("./config.js", () => ({

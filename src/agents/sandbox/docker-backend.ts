@@ -14,7 +14,7 @@ import {
 } from "./docker.js";
 
 function resolveConfiguredDockerRuntimeImage(params: {
-  config: CreateSandboxBackendParams["cfg"] | import("../../config/config.js").NexisClawConfig;
+  config: CreateSandboxBackendParams["cfg"] | import("../../config/config.js").GreenchClawConfig;
   agentId?: string;
   configLabelKind?: string;
 }): string {
@@ -100,7 +100,7 @@ export function runDockerSandboxShellCommand(
     "sh",
     "-c",
     params.script,
-    "NexisClaw-sandbox-fs",
+    "GreenchClaw-sandbox-fs",
   ];
   if (params.args?.length) {
     dockerArgs.push(...params.args);

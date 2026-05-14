@@ -6,7 +6,7 @@
 set -euo pipefail
 
 # Configuration
-SUBSYSTEM="ai.NexisClaw"
+SUBSYSTEM="ai.GreenchClaw"
 DEFAULT_LEVEL="info"
 
 # Colors for output
@@ -49,17 +49,17 @@ STYLE_JSON=false
 # Function to show usage
 show_usage() {
     cat << EOF
-clawlog - NexisClaw Logging Utility
+clawlog - GreenchClaw Logging Utility
 
 USAGE:
     clawlog [OPTIONS]
 
 DESCRIPTION:
-    View NexisClaw logs with full details (bypasses Apple's privacy redaction).
+    View GreenchClaw logs with full details (bypasses Apple's privacy redaction).
     Requires sudo access configured for /usr/bin/log command.
 
 LOG FLOW ARCHITECTURE:
-    NexisClaw logs flow through the macOS unified log (subsystem: ai.NexisClaw).
+    GreenchClaw logs flow through the macOS unified log (subsystem: ai.GreenchClaw).
 
 LOG CATEGORIES (examples):
     • voicewake           - Voice wake detection/test harness

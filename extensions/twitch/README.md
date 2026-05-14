@@ -1,17 +1,17 @@
-# @NexisClaw/twitch
+# @GreenchClaw/twitch
 
-Twitch channel plugin for NexisClaw.
+Twitch channel plugin for GreenchClaw.
 
 ## Install (local checkout)
 
 ```bash
-NexisClaw plugins install ./path/to/local/twitch-plugin
+GreenchClaw plugins install ./path/to/local/twitch-plugin
 ```
 
 ## Install (npm)
 
 ```bash
-NexisClaw plugins install @NexisClaw/twitch
+GreenchClaw plugins install @GreenchClaw/twitch
 ```
 
 Onboarding: select Twitch and confirm the install prompt to fetch the plugin automatically.
@@ -27,7 +27,7 @@ Minimal config (simplified single-account):
   channels: {
     twitch: {
       enabled: true,
-      username: "NexisClaw",
+      username: "GreenchClaw",
       accessToken: "oauth:abc123...", // OAuth Access Token (add oauth: prefix)
       clientId: "xyz789...", // Client ID from Token Generator
       channel: "vevisk", // Channel to join (required)
@@ -52,13 +52,13 @@ Multi-account config (advanced):
       enabled: true,
       accounts: {
         default: {
-          username: "NexisClaw",
+          username: "GreenchClaw",
           accessToken: "oauth:abc123...",
           clientId: "xyz789...",
           channel: "vevisk",
         },
         channel2: {
-          username: "NexisClaw",
+          username: "GreenchClaw",
           accessToken: "oauth:def456...",
           clientId: "uvw012...",
           channel: "secondchannel",
@@ -80,7 +80,7 @@ Multi-account config (advanced):
 
 ## Full documentation
 
-See https://docs.NexisClaw.ai/channels/twitch for:
+See https://docs.GreenchClaw.ai/channels/twitch for:
 
 - Token refresh setup
 - Access control patterns

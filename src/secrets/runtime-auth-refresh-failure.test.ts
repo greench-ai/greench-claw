@@ -45,7 +45,7 @@ describe("secrets runtime snapshot auth refresh failure", () => {
     if (os.platform() === "win32") {
       return;
     }
-    await withTempHome("NexisClaw-secrets-runtime-refresh-fail-", async (home) => {
+    await withTempHome("GreenchClaw-secrets-runtime-refresh-fail-", async (home) => {
       const { secretFile, agentDir } = await createOpenAIFileRuntimeFixture(home);
 
       let loadAuthStoreCalls = 0;

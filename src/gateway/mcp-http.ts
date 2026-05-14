@@ -37,8 +37,8 @@ let activeMcpLoopbackServerPromise: Promise<McpLoopbackServer> | null = null;
 
 function shouldLogMcpLoopbackTraffic(): boolean {
   return (
-    isTruthyEnvValue(process.env.NEXISCLAW_CLI_BACKEND_LOG_OUTPUT) ||
-    isTruthyEnvValue(process.env.NEXISCLAW_LIVE_CLI_BACKEND_DEBUG)
+    isTruthyEnvValue(process.env.GREENCHCLAW_CLI_BACKEND_LOG_OUTPUT) ||
+    isTruthyEnvValue(process.env.GREENCHCLAW_LIVE_CLI_BACKEND_DEBUG)
   );
 }
 

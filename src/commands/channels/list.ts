@@ -252,7 +252,7 @@ export async function channelsListCommand(
       theme.muted(
         showAll
           ? "- no chat channels found"
-          : "- no configured chat channels (run `NexisClaw channels list --all` to see installable channels)",
+          : "- no configured chat channels (run `GreenchClaw channels list --all` to see installable channels)",
       ),
     );
   } else {
@@ -280,7 +280,7 @@ export async function channelsListCommand(
   runtime.log("");
   runtime.log(
     theme.muted(
-      "Model provider usage moved out of `channels list` — see `NexisClaw status` or `NexisClaw models list`.",
+      "Model provider usage moved out of `channels list` — see `GreenchClaw status` or `GreenchClaw models list`.",
     ),
   );
   runtime.log(`Docs: ${formatDocsLink("/gateway/configuration", "gateway/configuration")}`);

@@ -1,5 +1,5 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 export default definePluginEntry({
   id: "acpx",

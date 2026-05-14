@@ -70,7 +70,7 @@ afterEach(async () => {
 
 describe("reconcileSessionStoreCompactionCountAfterSuccess", () => {
   it("raises the stored compaction count to the observed value", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-compaction-reconcile-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-compaction-reconcile-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionKey = "main";
     await seedSessionStore({
@@ -92,7 +92,7 @@ describe("reconcileSessionStoreCompactionCountAfterSuccess", () => {
   });
 
   it("does not double count when the store is already at or above the observed value", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-compaction-idempotent-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-compaction-idempotent-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionKey = "main";
     await seedSessionStore({
@@ -116,7 +116,7 @@ describe("reconcileSessionStoreCompactionCountAfterSuccess", () => {
 
 describe("compaction lifecycle logging", () => {
   it("logs lifecycle events at info level for gateway watch visibility", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-compaction-log-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-compaction-log-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionKey = "main";
     await seedSessionStore({
@@ -166,7 +166,7 @@ describe("compaction lifecycle logging", () => {
   });
 
   it("logs manual compaction as incomplete when no result is produced", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-compaction-incomplete-log-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-compaction-incomplete-log-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionKey = "main";
     await seedSessionStore({
@@ -216,7 +216,7 @@ describe("compaction lifecycle logging", () => {
   });
 
   it("defaults legacy synthetic compaction events to threshold logs", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-compaction-legacy-log-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-compaction-legacy-log-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionKey = "main";
     await seedSessionStore({
@@ -266,7 +266,7 @@ describe("compaction lifecycle logging", () => {
 
 describe("handleCompactionEnd", () => {
   it("reconciles the session store after a successful compaction end event", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-compaction-handler-"));
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-compaction-handler-"));
     const storePath = path.join(tmp, "sessions.json");
     const sessionKey = "main";
     await seedSessionStore({

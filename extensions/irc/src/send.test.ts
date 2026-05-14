@@ -1,5 +1,5 @@
-import { verifyChannelMessageAdapterCapabilityProofs } from "NexisClaw/plugin-sdk/channel-message";
-import { createSendCfgThreadingRuntime } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { verifyChannelMessageAdapterCapabilityProofs } from "GreenchClaw/plugin-sdk/channel-message";
+import { createSendCfgThreadingRuntime } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { IrcClient } from "./client.js";
 import { clearIrcRuntime, setIrcRuntime } from "./runtime.js";
@@ -41,19 +41,18 @@ vi.mock("./protocol.js", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/plugin-config-runtime", async () => {
-  const original = (await vi.importActual("NexisClaw/plugin-sdk/plugin-config-runtime")) as Record<
-    string,
-    unknown
-  >;
+vi.mock("GreenchClaw/plugin-sdk/plugin-config-runtime", async () => {
+  const original = (await vi.importActual(
+    "GreenchClaw/plugin-sdk/plugin-config-runtime",
+  )) as Record<string, unknown>;
   return {
     ...original,
     resolveMarkdownTableMode: hoisted.resolveMarkdownTableMode,
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/text-chunking", async () => {
-  const original = (await vi.importActual("NexisClaw/plugin-sdk/text-chunking")) as Record<
+vi.mock("GreenchClaw/plugin-sdk/text-chunking", async () => {
+  const original = (await vi.importActual("GreenchClaw/plugin-sdk/text-chunking")) as Record<
     string,
     unknown
   >;
@@ -83,8 +82,8 @@ afterAll(() => {
   vi.doUnmock("./client.js");
   vi.doUnmock("./connect-options.js");
   vi.doUnmock("./protocol.js");
-  vi.doUnmock("NexisClaw/plugin-sdk/plugin-config-runtime");
-  vi.doUnmock("NexisClaw/plugin-sdk/text-chunking");
+  vi.doUnmock("GreenchClaw/plugin-sdk/plugin-config-runtime");
+  vi.doUnmock("GreenchClaw/plugin-sdk/text-chunking");
   vi.resetModules();
 });
 
@@ -103,7 +102,7 @@ describe("sendMessageIrc cfg threading", () => {
       channels: {
         irc: {
           host: "irc.example.com",
-          nick: "NexisClaw",
+          nick: "GreenchClaw",
           accounts: {
             work: {
               host: "irc.example.com",
@@ -182,7 +181,7 @@ describe("sendMessageIrc cfg threading", () => {
       channels: {
         irc: {
           host: "irc.example.com",
-          nick: "NexisClaw",
+          nick: "GreenchClaw",
         },
       },
     } as unknown as CoreConfig;
@@ -211,7 +210,7 @@ describe("sendMessageIrc cfg threading", () => {
       channels: {
         irc: {
           host: "irc.example.com",
-          nick: "NexisClaw",
+          nick: "GreenchClaw",
         },
       },
     } as unknown as CoreConfig;
@@ -262,7 +261,7 @@ describe("sendMessageIrc cfg threading", () => {
       channels: {
         irc: {
           host: "irc.example.com",
-          nick: "NexisClaw",
+          nick: "GreenchClaw",
         },
       },
     } as unknown as CoreConfig;

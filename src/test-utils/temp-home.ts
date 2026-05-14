@@ -9,7 +9,7 @@ const HOME_ENV_KEYS = [
   "USERPROFILE",
   "HOMEDRIVE",
   "HOMEPATH",
-  "NEXISCLAW_STATE_DIR",
+  "GREENCHCLAW_STATE_DIR",
 ] as const;
 
 export type TempHomeEnv = {
@@ -46,12 +46,12 @@ export async function createTempHomeEnv(prefix: string): Promise<TempHomeEnv> {
   const home = path.join(prefixRoot, `home-${String(nextHomeIndex)}`);
   nextHomeIndex += 1;
   await fs.rm(home, { recursive: true, force: true });
-  await fs.mkdir(path.join(home, ".NexisClaw"), { recursive: true });
+  await fs.mkdir(path.join(home, ".GreenchClaw"), { recursive: true });
 
   const snapshot = captureEnv([...HOME_ENV_KEYS]);
   process.env.HOME = home;
   process.env.USERPROFILE = home;
-  process.env.NEXISCLAW_STATE_DIR = path.join(home, ".NexisClaw");
+  process.env.GREENCHCLAW_STATE_DIR = path.join(home, ".GreenchClaw");
 
   if (process.platform === "win32") {
     const match = home.match(/^([A-Za-z]:)(.*)$/);

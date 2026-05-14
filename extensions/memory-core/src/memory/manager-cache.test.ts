@@ -12,7 +12,7 @@ type TestEntry = {
 };
 
 function createTestCache(): ManagedCache<TestEntry> {
-  return resolveSingletonManagedCache<TestEntry>(Symbol("NexisClaw.manager-cache.test"));
+  return resolveSingletonManagedCache<TestEntry>(Symbol("GreenchClaw.manager-cache.test"));
 }
 
 function createEntry(id: string): TestEntry {
@@ -50,7 +50,7 @@ describe("manager cache", () => {
   });
 
   it("repairs an invalid singleton cache shape", async () => {
-    const cacheKey = Symbol("NexisClaw.manager-cache.corrupt-test");
+    const cacheKey = Symbol("GreenchClaw.manager-cache.corrupt-test");
     (globalThis as Record<PropertyKey, unknown>)[cacheKey] = {};
 
     const cache = resolveSingletonManagedCache<TestEntry>(cacheKey);

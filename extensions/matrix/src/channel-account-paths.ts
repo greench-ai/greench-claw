@@ -1,6 +1,6 @@
-import { createPairingPrefixStripper } from "NexisClaw/plugin-sdk/channel-pairing";
-import { PAIRING_APPROVED_MESSAGE } from "NexisClaw/plugin-sdk/channel-status";
-import type { PinnedDispatcherPolicy, SsrFPolicy } from "NexisClaw/plugin-sdk/ssrf-dispatcher";
+import { createPairingPrefixStripper } from "GreenchClaw/plugin-sdk/channel-pairing";
+import { PAIRING_APPROVED_MESSAGE } from "GreenchClaw/plugin-sdk/channel-status";
+import type { PinnedDispatcherPolicy, SsrFPolicy } from "GreenchClaw/plugin-sdk/ssrf-dispatcher";
 import { formatMatrixErrorMessage } from "./matrix/errors.js";
 import type { MatrixProbe } from "./matrix/probe.js";
 import type { CoreConfig } from "./types.js";

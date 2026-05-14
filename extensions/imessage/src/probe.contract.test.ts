@@ -1,4 +1,4 @@
-import type { BaseProbeResult } from "NexisClaw/plugin-sdk/channel-contract";
+import type { BaseProbeResult } from "GreenchClaw/plugin-sdk/channel-contract";
 import { describe, expectTypeOf, it } from "vitest";
 import type { IMessageProbe } from "./probe.js";
 

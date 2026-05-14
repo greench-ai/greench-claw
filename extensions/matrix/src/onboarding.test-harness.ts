@@ -1,5 +1,5 @@
-import type { OutputRuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
-import type { ChannelSetupWizardAdapter } from "NexisClaw/plugin-sdk/setup";
+import type { OutputRuntimeEnv } from "GreenchClaw/plugin-sdk/runtime";
+import type { ChannelSetupWizardAdapter } from "GreenchClaw/plugin-sdk/setup";
 import { afterEach, vi } from "vitest";
 import type { RuntimeEnv, WizardPrompter } from "../runtime-api.js";
 import type { CoreConfig } from "./types.js";
@@ -273,7 +273,7 @@ export function createMatrixUpdateKeepCredentialsPrompter(params?: {
     },
     text: {
       "Matrix homeserver URL": params?.homeserver ?? "https://matrix.example.org",
-      "Matrix device name (optional)": params?.deviceName ?? "NexisClaw Gateway",
+      "Matrix device name (optional)": params?.deviceName ?? "GreenchClaw Gateway",
     },
     confirm: {
       "Matrix credentials already configured. Keep them?": true,

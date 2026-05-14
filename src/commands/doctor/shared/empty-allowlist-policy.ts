@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { getDoctorChannelCapabilities } from "../channel-capabilities.js";
 import type { DoctorAccountRecord, DoctorAllowFromList } from "../types.js";
 import { hasAllowFromEntries } from "./allowlist.js";
@@ -7,7 +7,7 @@ import { shouldSkipChannelDoctorDefaultEmptyGroupAllowlistWarning } from "./chan
 type CollectEmptyAllowlistPolicyWarningsParams = {
   account: DoctorAccountRecord;
   channelName?: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   doctorFixCommand: string;
   parent?: DoctorAccountRecord;
   prefix: string;

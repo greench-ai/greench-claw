@@ -1,7 +1,7 @@
-import type { ChannelOutboundPayloadHint } from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { DiscordExecApprovalConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
+import type { ChannelOutboundPayloadHint } from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { DiscordExecApprovalConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-dispatch-runtime";
 import { resolveDiscordAccount } from "./accounts.js";
 import {
   getExecApprovalReplyMetadata,
@@ -27,7 +27,7 @@ function normalizeDiscordApproverId(value: string): string | undefined {
   }
 }
 
-function resolveDiscordOwnerApprovers(cfg: NexisClawConfig): string[] {
+function resolveDiscordOwnerApprovers(cfg: GreenchClawConfig): string[] {
   const ownerAllowFrom = cfg.commands?.ownerAllowFrom;
   if (!Array.isArray(ownerAllowFrom) || ownerAllowFrom.length === 0) {
     return [];
@@ -39,7 +39,7 @@ function resolveDiscordOwnerApprovers(cfg: NexisClawConfig): string[] {
 }
 
 export function getDiscordExecApprovalApprovers(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   configOverride?: DiscordExecApprovalConfig | null;
 }): string[] {
@@ -53,7 +53,7 @@ export function getDiscordExecApprovalApprovers(params: {
 }
 
 export function isDiscordExecApprovalClientEnabled(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   configOverride?: DiscordExecApprovalConfig | null;
 }): boolean {
@@ -69,7 +69,7 @@ export function isDiscordExecApprovalClientEnabled(params: {
 }
 
 export function isDiscordExecApprovalApprover(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   senderId?: string | null;
   configOverride?: DiscordExecApprovalConfig | null;
@@ -86,7 +86,7 @@ export function isDiscordExecApprovalApprover(params: {
 }
 
 export function shouldSuppressLocalDiscordExecApprovalPrompt(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   payload: ReplyPayload;
   hint?: ChannelOutboundPayloadHint;

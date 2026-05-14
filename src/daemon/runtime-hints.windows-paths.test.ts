@@ -1,12 +1,12 @@
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 const resolveGatewayLogPathsMock = vi.fn(() => ({
-  logDir: "C:\\tmp\\NexisClaw-state\\logs",
-  stdoutPath: "C:\\tmp\\NexisClaw-state\\logs\\gateway.log",
-  stderrPath: "C:\\tmp\\NexisClaw-state\\logs\\gateway.err.log",
+  logDir: "C:\\tmp\\GreenchClaw-state\\logs",
+  stdoutPath: "C:\\tmp\\GreenchClaw-state\\logs\\gateway.log",
+  stderrPath: "C:\\tmp\\GreenchClaw-state\\logs\\gateway.err.log",
 }));
 const resolveGatewayRestartLogPathMock = vi.fn(
-  () => "C:\\tmp\\NexisClaw-state\\logs\\gateway-restart.log",
+  () => "C:\\tmp\\GreenchClaw-state\\logs\\gateway-restart.log",
 );
 
 vi.mock("./restart-logs.js", () => ({
@@ -25,13 +25,13 @@ describe("buildPlatformRuntimeLogHints", () => {
     expect(
       buildPlatformRuntimeLogHints({
         platform: "darwin",
-        systemdServiceName: "NexisClaw-gateway",
-        windowsTaskName: "NexisClaw Gateway",
+        systemdServiceName: "GreenchClaw-gateway",
+        windowsTaskName: "GreenchClaw Gateway",
       }),
     ).toEqual([
-      "Launchd stdout (if installed): /tmp/NexisClaw-state/logs/gateway.log",
+      "Launchd stdout (if installed): /tmp/GreenchClaw-state/logs/gateway.log",
       "Launchd stderr (if installed): suppressed",
-      "Restart attempts: /tmp/NexisClaw-state/logs/gateway-restart.log",
+      "Restart attempts: /tmp/GreenchClaw-state/logs/gateway-restart.log",
     ]);
   });
 });

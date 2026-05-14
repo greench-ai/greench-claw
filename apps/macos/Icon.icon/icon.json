@@ -6,8 +6,8 @@
     {
       "layers" : [
         {
-          "image-name" : "NexisClaw-mac.png",
-          "name" : "NexisClaw-mac",
+          "image-name" : "GreenchClaw-mac.png",
+          "name" : "GreenchClaw-mac",
           "position" : {
             "scale" : 1.07,
             "translation-in-points" : [

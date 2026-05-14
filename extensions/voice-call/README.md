@@ -1,6 +1,6 @@
-# @NexisClaw/voice-call
+# @GreenchClaw/voice-call
 
-Official Voice Call plugin for **NexisClaw**.
+Official Voice Call plugin for **GreenchClaw**.
 
 Providers:
 
@@ -9,15 +9,15 @@ Providers:
 - **Plivo** (Voice API + XML transfer + GetInput speech)
 - **Mock** (dev/no network)
 
-Docs: `https://docs.NexisClaw.ai/plugins/voice-call`
-Plugin system: `https://docs.NexisClaw.ai/plugin`
+Docs: `https://docs.GreenchClaw.ai/plugins/voice-call`
+Plugin system: `https://docs.GreenchClaw.ai/plugin`
 
 ## Install (local dev)
 
-### Option A: install via NexisClaw (recommended)
+### Option A: install via GreenchClaw (recommended)
 
 ```bash
-NexisClaw plugins install @NexisClaw/voice-call
+GreenchClaw plugins install @GreenchClaw/voice-call
 ```
 
 Restart the Gateway afterwards.
@@ -25,7 +25,7 @@ Restart the Gateway afterwards.
 ### Option B: copy into your global extensions folder (dev)
 
 ```bash
-PLUGIN_HOME=~/.NexisClaw/extensions
+PLUGIN_HOME=~/.GreenchClaw/extensions
 mkdir -p "$PLUGIN_HOME"
 cp -R <local-plugin-checkout> "$PLUGIN_HOME/voice-call"
 cd "$PLUGIN_HOME/voice-call" && pnpm install
@@ -102,35 +102,35 @@ Notes:
 - Twilio/Telnyx/Plivo require a **publicly reachable** webhook URL.
 - `mock` is a local dev provider (no network calls).
 - Telnyx requires `telnyx.publicKey` (or `TELNYX_PUBLIC_KEY`) unless `skipSignatureVerification` is true.
-- If older configs still use `provider: "log"`, `twilio.from`, or legacy `streaming.*` OpenAI keys, run `NexisClaw doctor --fix` to rewrite them.
-- advanced webhook, streaming, and tunnel notes: `https://docs.NexisClaw.ai/plugins/voice-call`
+- If older configs still use `provider: "log"`, `twilio.from`, or legacy `streaming.*` OpenAI keys, run `GreenchClaw doctor --fix` to rewrite them.
+- advanced webhook, streaming, and tunnel notes: `https://docs.GreenchClaw.ai/plugins/voice-call`
 - `responseModel` is optional. When unset, voice responses use the runtime default model.
 - `sessionScope` defaults to `per-phone`, preserving caller memory across calls. Use `per-call` for reception, booking, IVR, and bridge flows where each carrier call should start fresh.
-- `realtime.consultThinkingLevel` is optional. When set, it overrides the thinking level used by the model behind realtime `NexisClaw_agent_consult` calls.
-- `realtime.consultFastMode` is optional. When set, it toggles fast mode for realtime `NexisClaw_agent_consult` calls.
+- `realtime.consultThinkingLevel` is optional. When set, it overrides the thinking level used by the model behind realtime `GreenchClaw_agent_consult` calls.
+- `realtime.consultFastMode` is optional. When set, it toggles fast mode for realtime `GreenchClaw_agent_consult` calls.
 
 ## Stale call reaper
 
 See the plugin docs for recommended ranges and production examples:
-`https://docs.NexisClaw.ai/plugins/voice-call#stale-call-reaper`
+`https://docs.GreenchClaw.ai/plugins/voice-call#stale-call-reaper`
 
 ## TTS for calls
 
 Voice Call uses the core `messages.tts` configuration for
 streaming speech on calls. Override examples and provider caveats live here:
-`https://docs.NexisClaw.ai/plugins/voice-call#tts-for-calls`
+`https://docs.GreenchClaw.ai/plugins/voice-call#tts-for-calls`
 
 ## CLI
 
 ```bash
-NexisClaw voicecall call --to "+15555550123" --message "Hello from NexisClaw"
-NexisClaw voicecall continue --call-id <id> --message "Any questions?"
-NexisClaw voicecall speak --call-id <id> --message "One moment"
-NexisClaw voicecall end --call-id <id>
-NexisClaw voicecall status --json
-NexisClaw voicecall status --call-id <id>
-NexisClaw voicecall tail
-NexisClaw voicecall expose --mode funnel
+GreenchClaw voicecall call --to "+15555550123" --message "Hello from GreenchClaw"
+GreenchClaw voicecall continue --call-id <id> --message "Any questions?"
+GreenchClaw voicecall speak --call-id <id> --message "One moment"
+GreenchClaw voicecall end --call-id <id>
+GreenchClaw voicecall status --json
+GreenchClaw voicecall status --call-id <id>
+GreenchClaw voicecall tail
+GreenchClaw voicecall expose --mode funnel
 ```
 
 ## Tool

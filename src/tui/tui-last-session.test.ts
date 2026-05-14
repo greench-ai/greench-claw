@@ -14,7 +14,7 @@ import {
 const tempDirs: string[] = [];
 
 async function makeTempStateDir() {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-tui-last-session-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-tui-last-session-"));
   tempDirs.push(dir);
   return dir;
 }

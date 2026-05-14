@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   DEFAULT_MEMORY_DREAMING_FREQUENCY as DEFAULT_MEMORY_DREAMING_CRON_EXPR,
   DEFAULT_MEMORY_DEEP_DREAMING_LIMIT as DEFAULT_MEMORY_DREAMING_LIMIT,
@@ -18,10 +18,10 @@ import {
   resolveMemoryCorePluginConfig,
   resolveMemoryDeepDreamingConfig,
   resolveMemoryDreamingWorkspaces,
-} from "NexisClaw/plugin-sdk/memory-core-host-status";
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { peekSystemEventEntries } from "NexisClaw/plugin-sdk/system-event-runtime";
+} from "GreenchClaw/plugin-sdk/memory-core-host-status";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { peekSystemEventEntries } from "GreenchClaw/plugin-sdk/system-event-runtime";
 import { writeDeepDreamingReport } from "./dreaming-markdown.js";
 import {
   generateAndAppendDreamNarrative,
@@ -45,7 +45,7 @@ const STARTUP_CRON_RETRY_DELAY_MS = 5_000;
 const STARTUP_CRON_RETRY_MAX_ATTEMPTS = 12;
 const HEARTBEAT_ISOLATED_SESSION_SUFFIX = ":heartbeat";
 
-type Logger = Pick<NexisClawPluginApi["logger"], "info" | "warn" | "error">;
+type Logger = Pick<GreenchClawPluginApi["logger"], "info" | "warn" | "error">;
 
 type CronSchedule = { kind: "cron"; expr: string; tz?: string };
 type CronPayload =
@@ -386,7 +386,7 @@ function hasPendingManagedDreamingCronEvent(sessionKey?: string): boolean {
 
 export function resolveShortTermPromotionDreamingConfig(params: {
   pluginConfig?: Record<string, unknown>;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): ShortTermPromotionDreamingConfig {
   const resolved = resolveMemoryDeepDreamingConfig(params);
   return {
@@ -494,7 +494,7 @@ export async function runShortTermDreamingPromotionIfTriggered(params: {
   cleanedBody: string;
   trigger?: string;
   workspaceDir?: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   config: ShortTermPromotionDreamingConfig;
   logger: Logger;
   subagent?: Parameters<typeof generateAndAppendDreamNarrative>[0]["subagent"];
@@ -675,7 +675,7 @@ export async function runShortTermDreamingPromotionIfTriggered(params: {
   return { handled: true, reason: "memory-core: short-term dreaming processed" };
 }
 
-export function registerShortTermPromotionDreaming(api: NexisClawPluginApi): void {
+export function registerShortTermPromotionDreaming(api: GreenchClawPluginApi): void {
   let resolveStartupCron: (() => CronServiceLike | null) | null = null;
   // Hold a live reference to the gateway context so we can retry cron resolution at runtime.
   // The startup capture may fail if the cron service isn't available yet (race condition in
@@ -691,8 +691,8 @@ export function registerShortTermPromotionDreaming(api: NexisClawPluginApi): voi
   let startupCronRetryAttempts = 0;
   let disposed = false;
 
-  const resolveCurrentConfig = (): NexisClawConfig =>
-    (api.runtime.config?.current?.() ?? api.config) as NexisClawConfig;
+  const resolveCurrentConfig = (): GreenchClawConfig =>
+    (api.runtime.config?.current?.() ?? api.config) as GreenchClawConfig;
 
   const resolveCurrentDreamingConfig = (): ShortTermPromotionDreamingConfig => {
     const cfg = resolveCurrentConfig();
@@ -746,7 +746,7 @@ export function registerShortTermPromotionDreaming(api: NexisClawPluginApi): voi
 
   const reconcileManagedDreamingCron = async (params: {
     reason: "startup" | "runtime";
-    startupConfig?: NexisClawConfig;
+    startupConfig?: GreenchClawConfig;
     startupCron?: (() => CronServiceLike | null) | null;
   }): Promise<ShortTermPromotionDreamingConfig> => {
     const startupCfg =

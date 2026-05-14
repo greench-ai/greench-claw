@@ -1,7 +1,7 @@
-import { formatInboundEnvelope } from "NexisClaw/plugin-sdk/channel-inbound";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { formatInboundEnvelope } from "GreenchClaw/plugin-sdk/channel-inbound";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import type { SlackMonitorContext } from "../context.js";
 
@@ -37,7 +37,7 @@ export async function resolveSlackDmHistoryContext(params: {
   currentMessageTs?: string;
   limit: number;
   envelopeOptions: ReturnType<
-    typeof import("NexisClaw/plugin-sdk/channel-inbound").resolveEnvelopeFormatOptions
+    typeof import("GreenchClaw/plugin-sdk/channel-inbound").resolveEnvelopeFormatOptions
   >;
 }): Promise<{ body: string | undefined; inboundHistory: SlackDmHistoryEntry[] | undefined }> {
   const maxMessages = Math.max(0, Math.floor(params.limit));

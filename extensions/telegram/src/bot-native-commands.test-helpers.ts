@@ -1,8 +1,8 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ChannelGroupPolicy } from "NexisClaw/plugin-sdk/config-contracts";
-import type { TelegramAccountConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { MockFn } from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ChannelGroupPolicy } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { TelegramAccountConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { MockFn } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import { vi } from "vitest";
 import type { RegisterTelegramNativeCommandsParams } from "./bot-native-commands.js";
 import { registerTelegramNativeCommands } from "./bot-native-commands.js";
@@ -13,7 +13,7 @@ type MatchPluginCommandFn = typeof import("./bot-native-commands.runtime.js").ma
 type ExecutePluginCommandFn =
   typeof import("./bot-native-commands.runtime.js").executePluginCommand;
 type DispatchReplyWithBufferedBlockDispatcherFn =
-  typeof import("NexisClaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithBufferedBlockDispatcher;
+  typeof import("GreenchClaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithBufferedBlockDispatcher;
 type DispatchReplyWithBufferedBlockDispatcherResult = Awaited<
   ReturnType<DispatchReplyWithBufferedBlockDispatcherFn>
 >;
@@ -41,7 +41,7 @@ const pluginCommandMocks = vi.hoisted(() => ({
   matchPluginCommand: vi.fn<MatchPluginCommandFn>(() => null),
   executePluginCommand: vi.fn<ExecutePluginCommandFn>(async () => ({ text: "ok" })),
 }));
-vi.mock("NexisClaw/plugin-sdk/plugin-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/plugin-runtime", () => ({
   getPluginCommandSpecs: pluginCommandMocks.getPluginCommandSpecs,
   matchPluginCommand: pluginCommandMocks.matchPluginCommand,
   executePluginCommand: pluginCommandMocks.executePluginCommand,
@@ -88,11 +88,11 @@ vi.mock("./bot-native-commands.delivery.runtime.js", () => ({
   deliverReplies: deliveryMocks.deliverReplies,
   emitTelegramMessageSentHooks: vi.fn(),
 }));
-vi.mock("NexisClaw/plugin-sdk/reply-dispatch-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/reply-dispatch-runtime", () => ({
   dispatchReplyWithBufferedBlockDispatcher:
     replyPipelineMocks.dispatchReplyWithBufferedBlockDispatcher,
 }));
-vi.mock("NexisClaw/plugin-sdk/conversation-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/conversation-runtime", () => ({
   readChannelAllowFromStore: vi.fn(async () => []),
   resolveConfiguredBindingRoute: vi.fn(({ route }: { route: unknown }) => ({
     route,
@@ -113,7 +113,7 @@ vi.mock("./bot/delivery.js", () => ({ deliverReplies: deliveryMocks.deliverRepli
 vi.mock("./bot/delivery.replies.js", () => ({ deliverReplies: deliveryMocks.deliverReplies }));
 
 export function createNativeCommandsHarness(params?: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   runtime?: RuntimeEnv;
   telegramCfg?: TelegramAccountConfig;
   allowFrom?: string[];
@@ -129,7 +129,7 @@ export function createNativeCommandsHarness(params?: {
   const setMyCommands: AnyAsyncMock = vi.fn(async () => undefined);
   const log: AnyMock = vi.fn();
   const telegramDeps = {
-    getRuntimeConfig: vi.fn(() => params?.cfg ?? ({} as NexisClawConfig)),
+    getRuntimeConfig: vi.fn(() => params?.cfg ?? ({} as GreenchClawConfig)),
     readChannelAllowFromStore: vi.fn(async () => params?.storeAllowFrom ?? []),
     dispatchReplyWithBufferedBlockDispatcher:
       replyPipelineMocks.dispatchReplyWithBufferedBlockDispatcher,
@@ -149,7 +149,7 @@ export function createNativeCommandsHarness(params?: {
 
   registerTelegramNativeCommands({
     bot,
-    cfg: params?.cfg ?? ({} as NexisClawConfig),
+    cfg: params?.cfg ?? ({} as GreenchClawConfig),
     runtime: params?.runtime ?? ({ log } as unknown as RuntimeEnv),
     accountId: "default",
     telegramCfg: params?.telegramCfg ?? ({} as TelegramAccountConfig),

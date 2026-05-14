@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { collectChannelRouteTargets } from "./channel-route-targets.js";
 
-function targetMap(cfg: NexisClawConfig): Map<string, string[]> {
+function targetMap(cfg: GreenchClawConfig): Map<string, string[]> {
   return new Map(
     collectChannelRouteTargets(cfg).map((target) => [target.agentId, target.channels]),
   );

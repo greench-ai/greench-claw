@@ -1,5 +1,5 @@
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { MemoryCitationsMode } from "../config/types.memory.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import type { MemorySearchManager } from "../memory-host-sdk/host/types.js";
 
 export type MemoryPromptSectionBuilder = (params: {
@@ -75,7 +75,7 @@ export type MemoryFlushPlan = {
 };
 
 export type MemoryFlushPlanResolver = (params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   nowMs?: number;
 }) => MemoryFlushPlan | null;
 
@@ -96,7 +96,7 @@ export type MemoryRuntimeBackendConfig =
 
 export type MemoryPluginRuntime = {
   getMemorySearchManager(params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     agentId: string;
     purpose?: "default" | "status" | "cli";
   }): Promise<{
@@ -104,7 +104,7 @@ export type MemoryPluginRuntime = {
     error?: string;
   }>;
   resolveMemoryBackendConfig(params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     agentId: string;
   }): MemoryRuntimeBackendConfig;
   closeAllMemorySearchManagers?(): Promise<void>;
@@ -122,7 +122,7 @@ export type MemoryPluginPublicArtifact = {
 };
 
 export type MemoryPluginPublicArtifactsProvider = {
-  listArtifacts(params: { cfg: NexisClawConfig }): Promise<MemoryPluginPublicArtifact[]>;
+  listArtifacts(params: { cfg: GreenchClawConfig }): Promise<MemoryPluginPublicArtifact[]>;
 };
 
 export type MemoryPluginCapability = {
@@ -254,7 +254,7 @@ export function registerMemoryFlushPlanResolverForPlugin(
 }
 
 export function resolveMemoryFlushPlan(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   nowMs?: number;
 }): MemoryFlushPlan | null {
   return memoryPluginState.capability?.capability.flushPlanResolver?.(params) ?? null;
@@ -294,7 +294,7 @@ function cloneMemoryPublicArtifact(
 }
 
 export async function listActiveMemoryPublicArtifacts(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): Promise<MemoryPluginPublicArtifact[]> {
   const artifacts =
     (await memoryPluginState.capability?.capability.publicArtifacts?.listArtifacts(params)) ?? [];

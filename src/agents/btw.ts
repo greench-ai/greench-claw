@@ -11,7 +11,7 @@ import type { GetReplyOptions } from "../auto-reply/get-reply-options.types.js";
 import type { ReplyPayload } from "../auto-reply/reply-payload.js";
 import type { ReasoningLevel, ThinkLevel } from "../auto-reply/thinking.js";
 import type { SessionEntry as StoredSessionEntry } from "../config/sessions.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { prepareProviderRuntimeAuth } from "../plugins/provider-runtime.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 import { resolveAgentWorkspaceDir, resolveSessionAgentId } from "./agent-scope.js";
@@ -23,7 +23,7 @@ import {
   type ImageSanitizationLimits,
 } from "./image-sanitization.js";
 import { getApiKeyForModel, requireApiKey } from "./model-auth.js";
-import { ensureNexisClawModelsJson } from "./models-config.js";
+import { ensureGreenchClawModelsJson } from "./models-config.js";
 import { listOpenAIAuthProfileProvidersForAgentRuntime } from "./openai-codex-routing.js";
 import { EmbeddedBlockChunker, type BlockReplyChunking } from "./pi-embedded-block-chunker.js";
 import { resolveModelWithRegistry } from "./pi-embedded-runner/model.js";
@@ -214,7 +214,7 @@ async function toSimpleContextMessages(params: {
 }
 
 async function resolveRuntimeModel(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   provider: string;
   model: string;
   agentId?: string;
@@ -231,7 +231,7 @@ async function resolveRuntimeModel(params: {
   authProfileIdSource?: "auto" | "user";
 }> {
   const modelsOptions = params.workspaceDir ? { workspaceDir: params.workspaceDir } : undefined;
-  await ensureNexisClawModelsJson(params.cfg, params.agentDir, modelsOptions);
+  await ensureGreenchClawModelsJson(params.cfg, params.agentDir, modelsOptions);
   const authStorage = discoverAuthStorage(params.agentDir);
   const modelRegistry = discoverModels(authStorage, params.agentDir);
   const model = resolveModelWithRegistry({
@@ -272,7 +272,7 @@ async function resolveRuntimeModel(params: {
 }
 
 type RunBtwSideQuestionParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir: string;
   provider: string;
   model: string;

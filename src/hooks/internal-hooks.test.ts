@@ -18,7 +18,7 @@ import {
   type MessageSentHookContext,
 } from "./internal-hooks.js";
 
-const INTERNAL_HOOK_HANDLERS_KEY = Symbol.for("NexisClaw.internalHookHandlers");
+const INTERNAL_HOOK_HANDLERS_KEY = Symbol.for("GreenchClaw.internalHookHandlers");
 
 describe("hooks", () => {
   beforeEach(() => {

@@ -1,8 +1,8 @@
 import {
   defineBundledChannelEntry,
   loadBundledEntryExportSync,
-} from "NexisClaw/plugin-sdk/channel-entry-contract";
-import type { NexisClawConfig, PluginRuntime, ResolvedNostrAccount } from "./api.js";
+} from "GreenchClaw/plugin-sdk/channel-entry-contract";
+import type { GreenchClawConfig, PluginRuntime, ResolvedNostrAccount } from "./api.js";
 
 function createNostrProfileHttpHandler() {
   return loadBundledEntryExportSync<
@@ -46,13 +46,13 @@ export default defineBundledChannelEntry({
     const httpHandler = createNostrProfileHttpHandler()({
       getConfigProfile: (accountId: string) => {
         const runtime = getNostrRuntime();
-        const cfg = runtime.config.current() as NexisClawConfig;
+        const cfg = runtime.config.current() as GreenchClawConfig;
         const account = resolveNostrAccount({ cfg, accountId });
         return account.profile;
       },
       updateConfigProfile: async (_accountId: string, profile: unknown) => {
         const runtime = getNostrRuntime();
-        const cfg = runtime.config.current() as NexisClawConfig;
+        const cfg = runtime.config.current() as GreenchClawConfig;
 
         const channels = (cfg.channels ?? {}) as Record<string, unknown>;
         const nostrConfig = (channels.nostr ?? {}) as Record<string, unknown>;
@@ -73,7 +73,7 @@ export default defineBundledChannelEntry({
       },
       getAccountInfo: (accountId: string) => {
         const runtime = getNostrRuntime();
-        const cfg = runtime.config.current() as NexisClawConfig;
+        const cfg = runtime.config.current() as GreenchClawConfig;
         const account = resolveNostrAccount({ cfg, accountId });
         if (!account.configured || !account.publicKey) {
           return null;

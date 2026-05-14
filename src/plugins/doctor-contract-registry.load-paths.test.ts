@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { findLegacyConfigIssues } from "../config/legacy.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import {
   applyPluginDoctorCompatibilityMigrations,
   clearPluginDoctorContractRegistryCache,
@@ -15,7 +15,7 @@ const tempDirs: string[] = [];
 
 function makeTempDir(): string {
   const dir = fs.mkdtempSync(
-    path.join(fs.realpathSync(os.tmpdir()), "NexisClaw-doctor-contract-load-paths-"),
+    path.join(fs.realpathSync(os.tmpdir()), "GreenchClaw-doctor-contract-load-paths-"),
   );
   tempDirs.push(dir);
   return dir;
@@ -25,17 +25,17 @@ function makeHermeticDoctorEnv(stateDir: string): NodeJS.ProcessEnv {
   return {
     ...process.env,
     HOME: stateDir,
-    NEXISCLAW_HOME: stateDir,
-    NEXISCLAW_STATE_DIR: stateDir,
-    NEXISCLAW_CONFIG_PATH: path.join(stateDir, "NexisClaw.json"),
-    NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+    GREENCHCLAW_HOME: stateDir,
+    GREENCHCLAW_STATE_DIR: stateDir,
+    GREENCHCLAW_CONFIG_PATH: path.join(stateDir, "GreenchClaw.json"),
+    GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1",
   };
 }
 
 function writeDoctorPlugin(pluginRoot: string, pluginId: string): void {
   fs.mkdirSync(pluginRoot, { recursive: true });
   fs.writeFileSync(
-    path.join(pluginRoot, "NexisClaw.plugin.json"),
+    path.join(pluginRoot, "GreenchClaw.plugin.json"),
     JSON.stringify(
       {
         id: pluginId,
@@ -97,7 +97,7 @@ module.exports = {
 function writeDoctorSessionOwnerPlugin(pluginRoot: string, pluginId: string): void {
   fs.mkdirSync(pluginRoot, { recursive: true });
   fs.writeFileSync(
-    path.join(pluginRoot, "NexisClaw.plugin.json"),
+    path.join(pluginRoot, "GreenchClaw.plugin.json"),
     JSON.stringify(
       {
         id: pluginId,
@@ -131,7 +131,7 @@ module.exports = {
   );
 }
 
-function createDoctorPluginConfig(pluginRoot: string, pluginId: string): NexisClawConfig {
+function createDoctorPluginConfig(pluginRoot: string, pluginId: string): GreenchClawConfig {
   return {
     plugins: {
       load: { paths: [pluginRoot] },
@@ -147,7 +147,7 @@ function createDoctorPluginConfig(pluginRoot: string, pluginId: string): NexisCl
   };
 }
 
-function readPluginLlmPolicy(config: NexisClawConfig, pluginId: string): Record<string, unknown> {
+function readPluginLlmPolicy(config: GreenchClawConfig, pluginId: string): Record<string, unknown> {
   const entry = config.plugins?.entries?.[pluginId] as { llm?: unknown } | undefined;
   return entry?.llm && typeof entry.llm === "object" && !Array.isArray(entry.llm)
     ? (entry.llm as Record<string, unknown>)

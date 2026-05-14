@@ -22,7 +22,7 @@ export type AcpStreamConfig = {
   maxSessionUpdateChars?: number;
   /**
    * Per-sessionUpdate visibility overrides.
-   * Keys not listed here fall back to NexisClaw defaults.
+   * Keys not listed here fall back to GreenchClaw defaults.
    */
   tagVisibility?: Partial<Record<AcpSessionUpdateTag, boolean>>;
 };

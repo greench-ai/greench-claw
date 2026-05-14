@@ -1,4 +1,4 @@
-import { buildChannelConfigSchema } from "NexisClaw/plugin-sdk/channel-config-primitives";
+import { buildChannelConfigSchema } from "GreenchClaw/plugin-sdk/channel-config-primitives";
 import { MattermostConfigSchema } from "./config-schema-core.js";
 import { mattermostChannelConfigUiHints } from "./config-ui-hints.js";
 

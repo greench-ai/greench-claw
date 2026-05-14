@@ -13,7 +13,7 @@ function resolveTeamsSdkVersion(): string {
   }
 }
 
-function resolveNexisClawVersion(): string {
+function resolveGreenchClawVersion(): string {
   try {
     return getMSTeamsRuntime().version;
   } catch {
@@ -23,10 +23,10 @@ function resolveNexisClawVersion(): string {
 
 /**
  * Build a combined User-Agent string that preserves the Teams SDK identity
- * and appends the NexisClaw version.
+ * and appends the GreenchClaw version.
  *
- * Format: "teams.ts[apps]/<sdk-version> NexisClaw/<NexisClaw-version>"
- * Example: "teams.ts[apps]/2.0.5 NexisClaw/2026.3.22"
+ * Format: "teams.ts[apps]/<sdk-version> GreenchClaw/<GreenchClaw-version>"
+ * Example: "teams.ts[apps]/2.0.5 GreenchClaw/2026.3.22"
  *
  * This lets the Teams backend track SDK usage while also identifying the
  * host application.
@@ -40,7 +40,7 @@ export function buildUserAgent(): string {
   if (cachedUserAgent) {
     return cachedUserAgent;
   }
-  cachedUserAgent = `teams.ts[apps]/${resolveTeamsSdkVersion()} NexisClaw/${resolveNexisClawVersion()}`;
+  cachedUserAgent = `teams.ts[apps]/${resolveTeamsSdkVersion()} GreenchClaw/${resolveGreenchClawVersion()}`;
   return cachedUserAgent;
 }
 

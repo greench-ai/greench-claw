@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   activateSecretsRuntimeSnapshot,
   clearSecretsRuntimeSnapshot,
@@ -9,8 +9,8 @@ import {
 import type { GatewayReloadPlan } from "./config-reload.js";
 import { createGatewayAuxHandlers } from "./server-aux-handlers.js";
 
-function asConfig(value: unknown): NexisClawConfig {
-  return value as NexisClawConfig;
+function asConfig(value: unknown): GreenchClawConfig {
+  return value as GreenchClawConfig;
 }
 
 function createReloadPlan(overrides?: Partial<GatewayReloadPlan>): GatewayReloadPlan {
@@ -31,7 +31,7 @@ function createReloadPlan(overrides?: Partial<GatewayReloadPlan>): GatewayReload
   };
 }
 
-function createSnapshot(config: NexisClawConfig): PreparedSecretsRuntimeSnapshot {
+function createSnapshot(config: GreenchClawConfig): PreparedSecretsRuntimeSnapshot {
   return {
     sourceConfig: asConfig({}),
     config,
@@ -62,20 +62,20 @@ async function invokeSecretsReload(params: {
 }
 
 // Other gateway test helpers (e.g. test-helpers.mocks.ts, test-helpers.server.ts)
-// set NEXISCLAW_SKIP_CHANNELS / NEXISCLAW_SKIP_PROVIDERS at module load. When a
+// set GREENCHCLAW_SKIP_CHANNELS / GREENCHCLAW_SKIP_PROVIDERS at module load. When a
 // shared vitest worker imports those helpers before this file's tests run,
 // the leaked env vars route the secrets.reload skip-mode branch and prevent
 // the channel restart loop from firing. Reset them before every test so this
 // suite is independent of worker import order.
 beforeEach(() => {
-  delete process.env.NEXISCLAW_SKIP_CHANNELS;
-  delete process.env.NEXISCLAW_SKIP_PROVIDERS;
+  delete process.env.GREENCHCLAW_SKIP_CHANNELS;
+  delete process.env.GREENCHCLAW_SKIP_PROVIDERS;
 });
 
 afterEach(() => {
   clearSecretsRuntimeSnapshot();
-  delete process.env.NEXISCLAW_SKIP_CHANNELS;
-  delete process.env.NEXISCLAW_SKIP_PROVIDERS;
+  delete process.env.GREENCHCLAW_SKIP_CHANNELS;
+  delete process.env.GREENCHCLAW_SKIP_PROVIDERS;
 });
 
 describe("gateway aux handlers", () => {
@@ -411,7 +411,7 @@ describe("gateway aux handlers", () => {
       createReloadPlan({
         restartChannels: new Set(["slack"]),
       });
-    process.env.NEXISCLAW_SKIP_CHANNELS = "1";
+    process.env.GREENCHCLAW_SKIP_CHANNELS = "1";
     activateSecretsRuntimeSnapshot(
       createSnapshot(
         asConfig({

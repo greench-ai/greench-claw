@@ -27,7 +27,7 @@ function readSlashCommandAuthList(value: unknown): SlashCommandAuthEntry[] | und
 }
 
 /**
- * Resolve the command-specific QQBot allowlist from the root NexisClaw config.
+ * Resolve the command-specific QQBot allowlist from the root GreenchClaw config.
  *
  * `commands.allowFrom.qqbot` takes precedence over the global
  * `commands.allowFrom["*"]`, matching the framework command authorization

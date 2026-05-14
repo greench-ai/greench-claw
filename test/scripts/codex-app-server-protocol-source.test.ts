@@ -5,22 +5,22 @@ import { resolveCodexAppServerProtocolSource } from "../../scripts/lib/codex-app
 import { createScriptTestHarness } from "./test-helpers.js";
 
 const { createTempDir } = createScriptTestHarness();
-const originalNexisClawCodexRepo = process.env.NEXISCLAW_CODEX_REPO;
+const originalGreenchClawCodexRepo = process.env.GREENCHCLAW_CODEX_REPO;
 
 afterEach(() => {
-  if (originalNexisClawCodexRepo === undefined) {
-    delete process.env.NEXISCLAW_CODEX_REPO;
+  if (originalGreenchClawCodexRepo === undefined) {
+    delete process.env.GREENCHCLAW_CODEX_REPO;
   } else {
-    process.env.NEXISCLAW_CODEX_REPO = originalNexisClawCodexRepo;
+    process.env.GREENCHCLAW_CODEX_REPO = originalGreenchClawCodexRepo;
   }
 });
 
 describe("codex app-server protocol source resolver", () => {
-  it("uses NEXISCLAW_CODEX_REPO when provided", async () => {
-    const root = createTempDir("NexisClaw-protocol-source-root-");
-    const codexRepo = createTempDir("NexisClaw-protocol-source-codex-");
+  it("uses GREENCHCLAW_CODEX_REPO when provided", async () => {
+    const root = createTempDir("GreenchClaw-protocol-source-root-");
+    const codexRepo = createTempDir("GreenchClaw-protocol-source-codex-");
     createProtocolSchema(codexRepo);
-    process.env.NEXISCLAW_CODEX_REPO = codexRepo;
+    process.env.GREENCHCLAW_CODEX_REPO = codexRepo;
 
     await expect(resolveCodexAppServerProtocolSource(root)).resolves.toEqual({
       codexRepo,
@@ -29,20 +29,20 @@ describe("codex app-server protocol source resolver", () => {
   });
 
   it("finds the primary checkout sibling from a git worktree", async () => {
-    const parentDir = createTempDir("NexisClaw-protocol-source-parent-");
-    const primaryNexisClaw = path.join(parentDir, "NexisClaw");
+    const parentDir = createTempDir("GreenchClaw-protocol-source-parent-");
+    const primaryGreenchClaw = path.join(parentDir, "GreenchClaw");
     const codexRepo = path.join(parentDir, "codex");
-    const worktreeRoot = createTempDir("NexisClaw-protocol-source-worktree-");
-    fs.mkdirSync(path.join(primaryNexisClaw, ".git", "worktrees", "codex-harness"), {
+    const worktreeRoot = createTempDir("GreenchClaw-protocol-source-worktree-");
+    fs.mkdirSync(path.join(primaryGreenchClaw, ".git", "worktrees", "codex-harness"), {
       recursive: true,
     });
     fs.mkdirSync(worktreeRoot, { recursive: true });
     fs.writeFileSync(
       path.join(worktreeRoot, ".git"),
-      `gitdir: ${path.join(primaryNexisClaw, ".git", "worktrees", "codex-harness")}\n`,
+      `gitdir: ${path.join(primaryGreenchClaw, ".git", "worktrees", "codex-harness")}\n`,
     );
     createProtocolSchema(codexRepo);
-    delete process.env.NEXISCLAW_CODEX_REPO;
+    delete process.env.GREENCHCLAW_CODEX_REPO;
 
     await expect(resolveCodexAppServerProtocolSource(worktreeRoot)).resolves.toEqual({
       codexRepo,

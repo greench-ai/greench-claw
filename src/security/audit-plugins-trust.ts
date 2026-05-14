@@ -4,7 +4,7 @@ import { listReadOnlyChannelPluginsForConfig } from "../channels/plugins/read-on
 import type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
 import { inspectReadOnlyChannelAccount } from "../channels/read-only-account-inspect.js";
 import { resolveNativeSkillsEnabled } from "../config/commands.js";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { AgentToolsConfig } from "../config/types.tools.js";
 import { readInstalledPackageVersion } from "../infra/package-update-utils.js";
 import { normalizePluginsConfig } from "../plugins/config-state.js";
@@ -47,11 +47,11 @@ async function loadPluginTrustPolicyDeps(): Promise<PluginTrustPolicyDeps> {
 }
 
 function readChannelCommandSetting(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   channelId: string,
   key: "native" | "nativeSkills",
 ): unknown {
-  const channelCfg = cfg.channels?.[channelId as keyof NonNullable<NexisClawConfig["channels"]>];
+  const channelCfg = cfg.channels?.[channelId as keyof NonNullable<GreenchClawConfig["channels"]>];
   if (!channelCfg || typeof channelCfg !== "object" || Array.isArray(channelCfg)) {
     return undefined;
   }
@@ -63,7 +63,7 @@ function readChannelCommandSetting(
 }
 
 async function isChannelPluginConfigured(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   plugin: ChannelPlugin,
 ): Promise<boolean> {
   const accountIds = plugin.config.listAccountIds(cfg);
@@ -150,7 +150,7 @@ async function listInstalledPluginDirs(params: {
 }
 
 function resolveToolPolicies(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   deps: PluginTrustPolicyDeps;
   agentTools?: AgentToolsConfig;
   sandboxMode?: "off" | "non-main" | "all";
@@ -180,7 +180,7 @@ function normalizePluginIdSet(entries: string[]): Set<string> {
 }
 
 function resolveEnabledExtensionPluginIds(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   pluginDirs: string[];
 }): string[] {
   const normalized = normalizePluginsConfig(params.cfg.plugins);
@@ -275,7 +275,7 @@ function isPinnedRegistrySpec(spec: string): boolean {
 }
 
 export async function collectPluginsTrustFindings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   stateDir: string;
 }): Promise<SecurityAuditFinding[]> {
   const findings: SecurityAuditFinding[] = [];
@@ -399,7 +399,7 @@ export async function collectPluginsTrustFindings(params: {
           sandboxMode,
           agentId: context.agentId,
         });
-        const broadPolicy = deps.isToolAllowedByPolicies("__NexisClaw_plugin_probe__", policies);
+        const broadPolicy = deps.isToolAllowedByPolicies("__GreenchClaw_plugin_probe__", policies);
         const explicitPluginAllow =
           !restrictiveProfile &&
           (hasExplicitPluginAllow({
@@ -498,7 +498,7 @@ export async function collectPluginsTrustFindings(params: {
         title: "Plugin index records drift from installed package versions",
         detail: `Detected plugin install metadata drift:\n${pluginVersionDrift.map((entry) => `- ${entry}`).join("\n")}`,
         remediation:
-          "Run `NexisClaw plugins update --all` (or reinstall affected plugins) to refresh install metadata.",
+          "Run `GreenchClaw plugins update --all` (or reinstall affected plugins) to refresh install metadata.",
       });
     }
   }
@@ -560,7 +560,7 @@ export async function collectPluginsTrustFindings(params: {
         title: "Hook install records drift from installed package versions",
         detail: `Detected hook install metadata drift:\n${hookVersionDrift.map((entry) => `- ${entry}`).join("\n")}`,
         remediation:
-          "Run `NexisClaw hooks update --all` (or reinstall affected hooks) to refresh install metadata.",
+          "Run `GreenchClaw hooks update --all` (or reinstall affected hooks) to refresh install metadata.",
       });
     }
   }

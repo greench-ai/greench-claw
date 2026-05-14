@@ -1,13 +1,13 @@
 ---
-summary: "Runway video generation setup in NexisClaw"
+summary: "Runway video generation setup in GreenchClaw"
 title: "Runway"
 read_when:
-  - You want to use Runway video generation in NexisClaw
+  - You want to use Runway video generation in GreenchClaw
   - You need the Runway API key/env setup
   - You want to make Runway the default video provider
 ---
 
-NexisClaw ships a bundled `runway` provider for hosted video generation. The plugin is enabled by default and registers the `runway` provider against the `videoGenerationProviders` contract.
+GreenchClaw ships a bundled `runway` provider for hosted video generation. The plugin is enabled by default and registers the `runway` provider against the `videoGenerationProviders` contract.
 
 | Property        | Value                                                             |
 | --------------- | ----------------------------------------------------------------- |
@@ -24,12 +24,12 @@ NexisClaw ships a bundled `runway` provider for hosted video generation. The plu
 <Steps>
   <Step title="Set the API key">
     ```bash
-    NexisClaw onboard --auth-choice runway-api-key
+    GreenchClaw onboard --auth-choice runway-api-key
     ```
   </Step>
   <Step title="Set Runway as the default video provider">
     ```bash
-    NexisClaw config set agents.defaults.videoGenerationModel.primary "runway/gen4.5"
+    GreenchClaw config set agents.defaults.videoGenerationModel.primary "runway/gen4.5"
     ```
   </Step>
   <Step title="Generate a video">
@@ -59,7 +59,7 @@ Local image and video references are supported via data URIs.
 </Warning>
 
 <Note>
-  Picking a Runway model id from the wrong column produces an explicit error before the API request leaves NexisClaw. The provider validates `model` against the mode's allowlist (`TEXT_ONLY_MODELS`, `IMAGE_MODELS`, `VIDEO_MODELS`) in `extensions/runway/video-generation-provider.ts`.
+  Picking a Runway model id from the wrong column produces an explicit error before the API request leaves GreenchClaw. The provider validates `model` against the mode's allowlist (`TEXT_ONLY_MODELS`, `IMAGE_MODELS`, `VIDEO_MODELS`) in `extensions/runway/video-generation-provider.ts`.
 </Note>
 
 ## Configuration
@@ -80,12 +80,12 @@ Local image and video references are supported via data URIs.
 
 <AccordionGroup>
   <Accordion title="Environment variable aliases">
-    NexisClaw recognizes both `RUNWAYML_API_SECRET` (canonical) and `RUNWAY_API_KEY`.
+    GreenchClaw recognizes both `RUNWAYML_API_SECRET` (canonical) and `RUNWAY_API_KEY`.
     Either variable will authenticate the Runway provider.
   </Accordion>
 
   <Accordion title="Task polling">
-    Runway uses a task-based API. After submitting a generation request, NexisClaw
+    Runway uses a task-based API. After submitting a generation request, GreenchClaw
     polls `GET /v1/tasks/{id}` until the video is ready. No additional
     configuration is needed for the polling behavior.
   </Accordion>

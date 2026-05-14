@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import { writeJsonFileAtomically } from "NexisClaw/plugin-sdk/json-store";
+import { writeJsonFileAtomically } from "GreenchClaw/plugin-sdk/json-store";
 
 /** Default cooldown between reflections per session (5 minutes). */
 export const DEFAULT_COOLDOWN_MS = 300_000;

@@ -2,13 +2,13 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolveNexisClawPackageRootSync } from "../infra/NexisClaw-root.js";
+import { resolveGreenchClawPackageRootSync } from "../infra/GreenchClaw-root.js";
 import { isPathInside } from "../infra/path-guards.js";
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
 import { resolveUserPath } from "../utils.js";
 
-const DISABLED_BUNDLED_PLUGINS_DIR = path.join(os.tmpdir(), "NexisClaw-empty-bundled-plugins");
-const TEST_TRUST_BUNDLED_PLUGINS_DIR_ENV = "NEXISCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR";
+const DISABLED_BUNDLED_PLUGINS_DIR = path.join(os.tmpdir(), "GreenchClaw-empty-bundled-plugins");
+const TEST_TRUST_BUNDLED_PLUGINS_DIR_ENV = "GREENCHCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR";
 let bundledPluginsDirOverrideForTest: string | undefined;
 const bundledPluginsDirCache = new Map<string, string | undefined>();
 
@@ -18,7 +18,7 @@ export type SourceCheckoutDependencyDiagnostic = {
 };
 
 export function areBundledPluginsDisabled(env: NodeJS.ProcessEnv = process.env): boolean {
-  const raw = normalizeOptionalLowercaseString(env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS);
+  const raw = normalizeOptionalLowercaseString(env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS);
   return raw === "1" || raw === "true";
 }
 
@@ -62,7 +62,7 @@ function hasUsableBundledPluginTree(pluginsDir: string): boolean {
       const pluginDir = path.join(pluginsDir, entry.name);
       return (
         fs.existsSync(path.join(pluginDir, "package.json")) ||
-        fs.existsSync(path.join(pluginDir, "NexisClaw.plugin.json"))
+        fs.existsSync(path.join(pluginDir, "GreenchClaw.plugin.json"))
       );
     });
   } catch {
@@ -94,8 +94,8 @@ function trustedBundledPluginRootsForPackageRoot(packageRoot: string): string[] 
 }
 
 function resolvePackageRootsForBundledPlugins(): string[] {
-  const argvRoot = resolveNexisClawPackageRootSync({ argv1: process.argv[1] });
-  const moduleRoot = resolveNexisClawPackageRootSync({ moduleUrl: import.meta.url });
+  const argvRoot = resolveGreenchClawPackageRootSync({ argv1: process.argv[1] });
+  const moduleRoot = resolveGreenchClawPackageRootSync({ moduleUrl: import.meta.url });
   return [argvRoot, moduleRoot].filter(
     (entry, index, all): entry is string => Boolean(entry) && all.indexOf(entry) === index,
   );
@@ -121,7 +121,7 @@ export function resolveSourceCheckoutDependencyDiagnostic(
     return {
       source: packageRoot,
       message:
-        "NexisClaw source checkout detected without pnpm workspace dependencies; run `pnpm install` from the repo root so bundled plugins can load package-local dependencies.",
+        "GreenchClaw source checkout detected without pnpm workspace dependencies; run `pnpm install` from the repo root so bundled plugins can load package-local dependencies.",
     };
   }
   return null;
@@ -133,7 +133,7 @@ function resolveTrustedExistingOverride(resolvedOverride: string): string | null
     return null;
   }
 
-  const modulePackageRoot = resolveNexisClawPackageRootSync({ moduleUrl: import.meta.url });
+  const modulePackageRoot = resolveGreenchClawPackageRootSync({ moduleUrl: import.meta.url });
   const packageRoots = modulePackageRoot ? [modulePackageRoot] : [];
   const trustedRoots = packageRoots
     .flatMap((packageRoot) => trustedBundledPluginRootsForPackageRoot(packageRoot))
@@ -197,8 +197,8 @@ function resolveBundledDirFromPackageRoot(packageRoot: string): string | undefin
 
 function createBundledPluginsDirCacheKey(env: NodeJS.ProcessEnv): string {
   return JSON.stringify({
-    disabled: env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS ?? "",
-    override: env.NEXISCLAW_BUNDLED_PLUGINS_DIR ?? "",
+    disabled: env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS ?? "",
+    override: env.GREENCHCLAW_BUNDLED_PLUGINS_DIR ?? "",
     trustOverride: env[TEST_TRUST_BUNDLED_PLUGINS_DIR_ENV] ?? "",
     processTrustOverride: process.env[TEST_TRUST_BUNDLED_PLUGINS_DIR_ENV] ?? "",
     vitest: env.VITEST ?? "",
@@ -206,7 +206,7 @@ function createBundledPluginsDirCacheKey(env: NodeJS.ProcessEnv): string {
     nodeEnv: process.env.NODE_ENV ?? "",
     argv1: process.argv[1] ?? "",
     execPath: process.execPath,
-    openClawHome: env.NEXISCLAW_HOME ?? "",
+    openClawHome: env.GREENCHCLAW_HOME ?? "",
     home: env.HOME ?? "",
     userProfile: env.USERPROFILE ?? "",
     testOverride: bundledPluginsDirOverrideForTest ?? "",
@@ -222,7 +222,7 @@ function resolveBundledPluginsDirUncached(env: NodeJS.ProcessEnv): string | unde
     return bundledPluginsDirOverrideForTest;
   }
 
-  const override = env.NEXISCLAW_BUNDLED_PLUGINS_DIR?.trim();
+  const override = env.GREENCHCLAW_BUNDLED_PLUGINS_DIR?.trim();
   let rejectedExistingOverride: string | null = null;
   if (override) {
     const resolvedOverride = resolveUserPath(override, env);
@@ -239,7 +239,7 @@ function resolveBundledPluginsDirUncached(env: NodeJS.ProcessEnv): string | unde
   }
 
   try {
-    const argvRoot = resolveNexisClawPackageRootSync({ argv1: process.argv[1] });
+    const argvRoot = resolveGreenchClawPackageRootSync({ argv1: process.argv[1] });
     const rejectedOverrideUsesArgvRoot = Boolean(
       argvRoot &&
       rejectedExistingOverride &&
@@ -249,7 +249,7 @@ function resolveBundledPluginsDirUncached(env: NodeJS.ProcessEnv): string | unde
       }),
     );
     const safeArgvRoot = rejectedOverrideUsesArgvRoot ? null : argvRoot;
-    const moduleRoot = resolveNexisClawPackageRootSync({ moduleUrl: import.meta.url });
+    const moduleRoot = resolveGreenchClawPackageRootSync({ moduleUrl: import.meta.url });
     const packageRoots = [safeArgvRoot, moduleRoot].filter(
       (entry, index, all): entry is string => Boolean(entry) && all.indexOf(entry) === index,
     );

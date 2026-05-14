@@ -7,7 +7,7 @@ export type HookInstallSpec = {
   bins?: string[];
 };
 
-export type NexisClawHookMetadata = {
+export type GreenchClawHookMetadata = {
   always?: boolean;
   hookKey?: string;
   emoji?: string;
@@ -35,7 +35,11 @@ export type ParsedHookFrontmatter = Record<string, string>;
 export type Hook = {
   name: string;
   description: string;
-  source: "NexisClaw-bundled" | "NexisClaw-managed" | "NexisClaw-workspace" | "NexisClaw-plugin";
+  source:
+    | "GreenchClaw-bundled"
+    | "GreenchClaw-managed"
+    | "GreenchClaw-workspace"
+    | "GreenchClaw-plugin";
   pluginId?: string;
   filePath: string; // Path to HOOK.md
   baseDir: string; // Directory containing hook
@@ -47,7 +51,7 @@ export type HookSource = Hook["source"];
 export type HookEntry = {
   hook: Hook;
   frontmatter: ParsedHookFrontmatter;
-  metadata?: NexisClawHookMetadata;
+  metadata?: GreenchClawHookMetadata;
   invocation?: HookInvocationPolicy;
 };
 

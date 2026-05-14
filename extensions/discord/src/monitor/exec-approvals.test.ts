@@ -1,12 +1,12 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ButtonInteraction, ComponentData } from "../internal/discord.js";
 
 const resolveApprovalOverGatewayMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/approval-gateway-runtime", async (importOriginal) => {
+vi.mock("GreenchClaw/plugin-sdk/approval-gateway-runtime", async (importOriginal) => {
   const actual =
-    await importOriginal<typeof import("NexisClaw/plugin-sdk/approval-gateway-runtime")>();
+    await importOriginal<typeof import("GreenchClaw/plugin-sdk/approval-gateway-runtime")>();
   return {
     ...actual,
     resolveApprovalOverGateway: resolveApprovalOverGatewayMock,
@@ -22,8 +22,10 @@ import {
 } from "./exec-approvals.js";
 
 function buildConfig(
-  execApprovals?: NonNullable<NonNullable<NexisClawConfig["channels"]>["discord"]>["execApprovals"],
-): NexisClawConfig {
+  execApprovals?: NonNullable<
+    NonNullable<GreenchClawConfig["channels"]>["discord"]
+  >["execApprovals"],
+): GreenchClawConfig {
   return {
     channels: {
       discord: {
@@ -31,7 +33,7 @@ function buildConfig(
         execApprovals,
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function createInteraction(overrides?: Partial<ButtonInteraction>): ButtonInteraction {

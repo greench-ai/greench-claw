@@ -9,7 +9,7 @@ Manage sandbox runtimes for isolated agent execution.
 
 ## Overview
 
-NexisClaw can run agents in isolated sandbox runtimes for security. The `sandbox` commands help you inspect and recreate those runtimes after updates or configuration changes.
+GreenchClaw can run agents in isolated sandbox runtimes for security. The `sandbox` commands help you inspect and recreate those runtimes after updates or configuration changes.
 
 Today that usually means:
 
@@ -20,30 +20,30 @@ Today that usually means:
 For `ssh` and OpenShell `remote`, recreate matters more than with Docker:
 
 - the remote workspace is canonical after the initial seed
-- `NexisClaw sandbox recreate` deletes that canonical remote workspace for the selected scope
+- `GreenchClaw sandbox recreate` deletes that canonical remote workspace for the selected scope
 - next use seeds it again from the current local workspace
 
 ## Commands
 
-### `NexisClaw sandbox explain`
+### `GreenchClaw sandbox explain`
 
 Inspect the **effective** sandbox mode/scope/workspace access, sandbox tool policy, and elevated gates (with fix-it config key paths).
 
 ```bash
-NexisClaw sandbox explain
-NexisClaw sandbox explain --session agent:main:main
-NexisClaw sandbox explain --agent work
-NexisClaw sandbox explain --json
+GreenchClaw sandbox explain
+GreenchClaw sandbox explain --session agent:main:main
+GreenchClaw sandbox explain --agent work
+GreenchClaw sandbox explain --json
 ```
 
-### `NexisClaw sandbox list`
+### `GreenchClaw sandbox list`
 
 List all sandbox runtimes with their status and configuration.
 
 ```bash
-NexisClaw sandbox list
-NexisClaw sandbox list --browser  # List only browser containers
-NexisClaw sandbox list --json     # JSON output
+GreenchClaw sandbox list
+GreenchClaw sandbox list --browser  # List only browser containers
+GreenchClaw sandbox list --json     # JSON output
 ```
 
 **Output includes:**
@@ -55,16 +55,16 @@ NexisClaw sandbox list --json     # JSON output
 - Idle time (time since last use)
 - Associated session/agent
 
-### `NexisClaw sandbox recreate`
+### `GreenchClaw sandbox recreate`
 
 Remove sandbox runtimes to force recreation with updated config.
 
 ```bash
-NexisClaw sandbox recreate --all                # Recreate all containers
-NexisClaw sandbox recreate --session main       # Specific session
-NexisClaw sandbox recreate --agent mybot        # Specific agent
-NexisClaw sandbox recreate --browser            # Only browser containers
-NexisClaw sandbox recreate --all --force        # Skip confirmation
+GreenchClaw sandbox recreate --all                # Recreate all containers
+GreenchClaw sandbox recreate --session main       # Specific session
+GreenchClaw sandbox recreate --agent mybot        # Specific agent
+GreenchClaw sandbox recreate --browser            # Only browser containers
+GreenchClaw sandbox recreate --all --force        # Skip confirmation
 ```
 
 **Options:**
@@ -85,14 +85,14 @@ Runtimes are automatically recreated when the agent is next used.
 
 ```bash
 # Pull new image
-docker pull NexisClaw-sandbox:latest
-docker tag NexisClaw-sandbox:latest NexisClaw-sandbox:bookworm-slim
+docker pull GreenchClaw-sandbox:latest
+docker tag GreenchClaw-sandbox:latest GreenchClaw-sandbox:bookworm-slim
 
 # Update config to use new image
 # Edit config: agents.defaults.sandbox.docker.image (or agents.list[].sandbox.docker.image)
 
 # Recreate containers
-NexisClaw sandbox recreate --all
+GreenchClaw sandbox recreate --all
 ```
 
 ### After changing sandbox configuration
@@ -101,7 +101,7 @@ NexisClaw sandbox recreate --all
 # Edit config: agents.defaults.sandbox.* (or agents.list[].sandbox.*)
 
 # Recreate to apply new config
-NexisClaw sandbox recreate --all
+GreenchClaw sandbox recreate --all
 ```
 
 ### After changing SSH target or SSH auth material
@@ -114,7 +114,7 @@ NexisClaw sandbox recreate --all
 # - agents.defaults.sandbox.ssh.identityFile / certificateFile / knownHostsFile
 # - agents.defaults.sandbox.ssh.identityData / certificateData / knownHostsData
 
-NexisClaw sandbox recreate --all
+GreenchClaw sandbox recreate --all
 ```
 
 For the core `ssh` backend, recreate deletes the per-scope remote workspace root
@@ -129,7 +129,7 @@ on the SSH target. The next run seeds it again from the local workspace.
 # - plugins.entries.openshell.config.mode
 # - plugins.entries.openshell.config.policy
 
-NexisClaw sandbox recreate --all
+GreenchClaw sandbox recreate --all
 ```
 
 For OpenShell `remote` mode, recreate deletes the canonical remote workspace
@@ -138,16 +138,16 @@ for that scope. The next run seeds it again from the local workspace.
 ### After changing setupCommand
 
 ```bash
-NexisClaw sandbox recreate --all
+GreenchClaw sandbox recreate --all
 # or just one agent:
-NexisClaw sandbox recreate --agent family
+GreenchClaw sandbox recreate --agent family
 ```
 
 ### For a specific agent only
 
 ```bash
 # Update only one agent's containers
-NexisClaw sandbox recreate --agent alfred
+GreenchClaw sandbox recreate --agent alfred
 ```
 
 ## Why this is needed
@@ -158,24 +158,24 @@ When you update sandbox configuration:
 - Runtimes are only pruned after 24h of inactivity.
 - Regularly-used agents keep old runtimes alive indefinitely.
 
-Use `NexisClaw sandbox recreate` to force removal of old runtimes. They are recreated automatically with current settings when next needed.
+Use `GreenchClaw sandbox recreate` to force removal of old runtimes. They are recreated automatically with current settings when next needed.
 
 <Tip>
-Prefer `NexisClaw sandbox recreate` over manual backend-specific cleanup. It uses the Gateway's runtime registry and avoids mismatches when scope or session keys change.
+Prefer `GreenchClaw sandbox recreate` over manual backend-specific cleanup. It uses the Gateway's runtime registry and avoids mismatches when scope or session keys change.
 </Tip>
 
 ## Registry migration
 
-NexisClaw stores sandbox runtime metadata as one JSON shard per container/browser entry under the sandbox state directory. Older installs may still have monolithic legacy files:
+GreenchClaw stores sandbox runtime metadata as one JSON shard per container/browser entry under the sandbox state directory. Older installs may still have monolithic legacy files:
 
-- `~/.NexisClaw/sandbox/containers.json`
-- `~/.NexisClaw/sandbox/browsers.json`
+- `~/.GreenchClaw/sandbox/containers.json`
+- `~/.GreenchClaw/sandbox/browsers.json`
 
-Regular sandbox runtime reads do not rewrite those files. Run `NexisClaw doctor --fix` to migrate valid legacy entries into the sharded registry directories. Invalid legacy files are quarantined so one bad old registry cannot hide current runtime entries.
+Regular sandbox runtime reads do not rewrite those files. Run `GreenchClaw doctor --fix` to migrate valid legacy entries into the sharded registry directories. Invalid legacy files are quarantined so one bad old registry cannot hide current runtime entries.
 
 ## Configuration
 
-Sandbox settings live in `~/.NexisClaw/NexisClaw.json` under `agents.defaults.sandbox` (per-agent overrides go in `agents.list[].sandbox`):
+Sandbox settings live in `~/.GreenchClaw/GreenchClaw.json` under `agents.defaults.sandbox` (per-agent overrides go in `agents.list[].sandbox`):
 
 ```jsonc
 {
@@ -186,8 +186,8 @@ Sandbox settings live in `~/.NexisClaw/NexisClaw.json` under `agents.defaults.sa
         "backend": "docker", // docker, ssh, openshell
         "scope": "agent", // session, agent, shared
         "docker": {
-          "image": "NexisClaw-sandbox:bookworm-slim",
-          "containerPrefix": "NexisClaw-sbx-",
+          "image": "GreenchClaw-sandbox:bookworm-slim",
+          "containerPrefix": "GreenchClaw-sbx-",
           // ... more Docker options
         },
         "prune": {

@@ -1,4 +1,4 @@
-import { loadNexisClawPlugins } from "./loader.js";
+import { loadGreenchClawPlugins } from "./loader.js";
 import type { PluginLoadOptions } from "./loader.js";
 import { type PluginManifestRecord } from "./manifest-registry.js";
 import type { PluginWebSearchProviderEntry } from "./types.js";
@@ -35,7 +35,7 @@ function resolveWebSearchCandidatePluginIds(params: {
 }
 
 function mapRegistryWebSearchProviders(params: {
-  registry: ReturnType<typeof loadNexisClawPlugins>;
+  registry: ReturnType<typeof loadGreenchClawPlugins>;
   onlyPluginIds?: readonly string[];
 }): PluginWebSearchProviderEntry[] {
   return mapRegistryProviders({

@@ -1,5 +1,5 @@
 ---
-summary: "Adds Kimi, Kimi Coding model provider support to NexisClaw."
+summary: "Adds Kimi, Kimi Coding model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the kimi plugin
 title: "Kimi plugin"
@@ -7,12 +7,12 @@ title: "Kimi plugin"
 
 # Kimi plugin
 
-Adds Kimi, Kimi Coding model provider support to NexisClaw.
+Adds Kimi, Kimi Coding model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/kimi-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/kimi-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

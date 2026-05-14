@@ -1,15 +1,15 @@
 import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
-} from "NexisClaw/plugin-sdk/channel-ingress-runtime";
-import { resolveInboundMentionDecision } from "NexisClaw/plugin-sdk/channel-mention-gating";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
+import { resolveInboundMentionDecision } from "GreenchClaw/plugin-sdk/channel-mention-gating";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   buildPendingHistoryContextFromMap,
   clearHistoryEntriesIfEnabled,
   recordPendingHistoryEntryIfEnabled,
   type HistoryEntry as SdkHistoryEntry,
-} from "NexisClaw/plugin-sdk/reply-history";
+} from "GreenchClaw/plugin-sdk/reply-history";
 import { resolveQQBotEffectivePolicies } from "../engine/access/resolve-policy.js";
 import { normalizeQQBotAllowFrom, normalizeQQBotSenderId } from "../engine/access/sender-match.js";
 import type { HistoryPort, HistoryEntryLike } from "../engine/adapter/history.port.js";
@@ -92,7 +92,7 @@ export function createSdkAccessAdapter(): AccessPort {
         channelId: "qqbot",
         accountId: input.accountId,
         identity: qqbotIngressIdentity,
-        cfg: input.cfg as NexisClawConfig,
+        cfg: input.cfg as GreenchClawConfig,
       }).message({
         subject: { stableId: input.senderId },
         conversation: {
@@ -144,7 +144,7 @@ async function resolveQQBotSlashCommandAuthorized(params: {
     channelId: "qqbot",
     accountId: params.accountId,
     identity: qqbotIngressIdentity,
-    cfg: params.cfg as NexisClawConfig,
+    cfg: params.cfg as GreenchClawConfig,
   }).message({
     subject: { stableId: params.senderId },
     conversation: {

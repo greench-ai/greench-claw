@@ -22,13 +22,13 @@ describe("pinIosVersion", () => {
   it("pins an explicit iOS release version and syncs generated artifacts", () => {
     const rootDir = writeIosFixture({
       version: "2026.4.6",
-      changelog: `# NexisClaw iOS Changelog
+      changelog: `# GreenchClaw iOS Changelog
 
 ## Unreleased
 
 - Draft release notes.
 `,
-      prefix: "NexisClaw-ios-pin-",
+      prefix: "GreenchClaw-ios-pin-",
     });
 
     const result = pinIosVersion({
@@ -47,7 +47,7 @@ describe("pinIosVersion", () => {
     );
     expect(
       fs.readFileSync(path.join(rootDir, "apps", "ios", "Config", "Version.xcconfig"), "utf8"),
-    ).toContain("NEXISCLAW_MARKETING_VERSION = 2026.4.7");
+    ).toContain("GREENCHCLAW_MARKETING_VERSION = 2026.4.7");
     expect(
       fs.readFileSync(
         path.join(rootDir, "apps", "ios", "fastlane", "metadata", "en-US", "release_notes.txt"),
@@ -61,13 +61,13 @@ describe("pinIosVersion", () => {
     const rootDir = writeIosFixture({
       version: "2026.4.6",
       packageVersion: "2026.4.10-beta.3",
-      changelog: `# NexisClaw iOS Changelog
+      changelog: `# GreenchClaw iOS Changelog
 
 ## Unreleased
 
 - Candidate release notes.
 `,
-      prefix: "NexisClaw-ios-pin-",
+      prefix: "GreenchClaw-ios-pin-",
     });
 
     const result = pinIosVersion({
@@ -86,7 +86,7 @@ describe("pinIosVersion", () => {
   it("can skip syncing checked-in artifacts when requested", () => {
     const rootDir = writeIosFixture({
       version: "2026.4.6",
-      changelog: `# NexisClaw iOS Changelog
+      changelog: `# GreenchClaw iOS Changelog
 
 ## Unreleased
 
@@ -94,7 +94,7 @@ describe("pinIosVersion", () => {
 `,
       versionXcconfig: "stale\n",
       releaseNotes: "stale\n",
-      prefix: "NexisClaw-ios-pin-",
+      prefix: "GreenchClaw-ios-pin-",
     });
 
     const result = pinIosVersion({

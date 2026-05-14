@@ -9,7 +9,7 @@ import {
   resolveDefaultUnitCoverageIncludePatterns,
 } from "./vitest/vitest.unit.config.ts";
 
-const patternFiles = createPatternFileHelper("NexisClaw-vitest-unit-config-");
+const patternFiles = createPatternFileHelper("GreenchClaw-vitest-unit-config-");
 
 function requireTestConfig<T extends { test?: unknown }>(config: T): NonNullable<T["test"]> {
   if (!config.test) {
@@ -37,7 +37,7 @@ describe("loadIncludePatternsFromEnv", () => {
 
     expect(
       loadIncludePatternsFromEnv({
-        NEXISCLAW_VITEST_INCLUDE_FILE: filePath,
+        GREENCHCLAW_VITEST_INCLUDE_FILE: filePath,
       }),
     ).toEqual(["src/infra/update-runner.test.ts", "ui/src/ui/views/chat.test.ts"]);
   });
@@ -58,7 +58,7 @@ describe("loadExtraExcludePatternsFromEnv", () => {
 
     expect(
       loadExtraExcludePatternsFromEnv({
-        NEXISCLAW_VITEST_EXTRA_EXCLUDE_FILE: filePath,
+        GREENCHCLAW_VITEST_EXTRA_EXCLUDE_FILE: filePath,
       }),
     ).toEqual(["src/infra/update-runner.test.ts", "ui/src/ui/views/chat.test.ts"]);
   });
@@ -70,7 +70,7 @@ describe("loadExtraExcludePatternsFromEnv", () => {
 
     expect(() =>
       loadExtraExcludePatternsFromEnv({
-        NEXISCLAW_VITEST_EXTRA_EXCLUDE_FILE: filePath,
+        GREENCHCLAW_VITEST_EXTRA_EXCLUDE_FILE: filePath,
       }),
     ).toThrow(/JSON array/u);
   });
@@ -110,12 +110,12 @@ describe("unit vitest config", () => {
     expect(testConfig.passWithNoTests).toBe(true);
   });
 
-  it("adds the NexisClaw runtime setup hooks on top of the base setup", () => {
+  it("adds the GreenchClaw runtime setup hooks on top of the base setup", () => {
     const unitConfig = createUnitVitestConfig({});
     const testConfig = requireTestConfig(unitConfig);
     expect(normalizeConfigPaths(testConfig.setupFiles)).toEqual([
       "test/setup.ts",
-      "test/setup-NexisClaw-runtime.ts",
+      "test/setup-GreenchClaw-runtime.ts",
     ]);
   });
 

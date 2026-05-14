@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { InstalledPluginIndex, InstalledPluginIndexRecord } from "./installed-plugin-index.js";
 import type { PluginManifestRecord, PluginManifestRegistry } from "./manifest-registry.js";
 
 const listPotentialConfiguredChannelIds = vi.hoisted(() => vi.fn());
 const listExplicitlyDisabledChannelIdsForConfig = vi.hoisted(() =>
-  vi.fn((config: NexisClawConfig) => {
+  vi.fn((config: GreenchClawConfig) => {
     return Object.entries(config.channels ?? {})
       .filter(([, value]) => {
         return (
@@ -86,7 +86,7 @@ function withManifestLoadPaths<T extends { id: string }>(
   return {
     rootDir: `/tmp/plugins/${plugin.id}`,
     source: `/tmp/plugins/${plugin.id}/index.ts`,
-    manifestPath: `/tmp/plugins/${plugin.id}/NexisClaw.plugin.json`,
+    manifestPath: `/tmp/plugins/${plugin.id}/GreenchClaw.plugin.json`,
     skills: [],
     hooks: [],
     ...plugin,
@@ -432,7 +432,7 @@ function filterManifestRegistryForInstalledIndex(params: {
 
 function createPluginPlanningTestEnv(overrides: NodeJS.ProcessEnv = {}): NodeJS.ProcessEnv {
   return {
-    NEXISCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY: "1",
+    GREENCHCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY: "1",
     ...overrides,
   };
 }
@@ -447,8 +447,8 @@ function useManifestRegistryFixture(
 }
 
 function expectStartupPluginIds(params: {
-  config: NexisClawConfig;
-  activationSourceConfig?: NexisClawConfig;
+  config: GreenchClawConfig;
+  activationSourceConfig?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   expected: readonly string[];
 }) {
@@ -467,8 +467,8 @@ function expectStartupPluginIds(params: {
 }
 
 function expectStartupPluginIdsCase(params: {
-  config: NexisClawConfig;
-  activationSourceConfig?: NexisClawConfig;
+  config: GreenchClawConfig;
+  activationSourceConfig?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   expected: readonly string[];
 }) {
@@ -476,7 +476,7 @@ function expectStartupPluginIdsCase(params: {
 }
 
 function resolveConfiguredDeferredChannelPluginIdsForFixture(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): string[] {
   const manifestRegistry = loadPluginManifestRegistry() as PluginManifestRegistry;
@@ -604,26 +604,28 @@ function createStartupConfig(params: {
             },
           }
         : {}),
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 describe("resolveGatewayStartupPluginIds", () => {
   beforeEach(() => {
-    listPotentialConfiguredChannelIds.mockReset().mockImplementation((config: NexisClawConfig) => {
-      if (Object.prototype.hasOwnProperty.call(config, "channels")) {
-        return Object.keys(config.channels ?? {});
-      }
-      return ["demo-channel"];
-    });
+    listPotentialConfiguredChannelIds
+      .mockReset()
+      .mockImplementation((config: GreenchClawConfig) => {
+        if (Object.prototype.hasOwnProperty.call(config, "channels")) {
+          return Object.keys(config.channels ?? {});
+        }
+        return ["demo-channel"];
+      });
     listPotentialConfiguredChannelPresenceSignals
       .mockReset()
-      .mockImplementation((config: NexisClawConfig) => {
+      .mockImplementation((config: GreenchClawConfig) => {
         return listPotentialConfiguredChannelIds(config).map((channelId: string) => ({
           channelId,
           source: "config",
         }));
       });
-    hasPotentialConfiguredChannels.mockReset().mockImplementation((config: NexisClawConfig) => {
+    hasPotentialConfiguredChannels.mockReset().mockImplementation((config: GreenchClawConfig) => {
       if (Object.prototype.hasOwnProperty.call(config, "channels")) {
         return Object.keys(config.channels ?? {}).length > 0;
       }
@@ -649,7 +651,7 @@ describe("resolveGatewayStartupPluginIds", () => {
     ],
     [
       "keeps bundled startup sidecars with enabledByDefault at idle startup",
-      {} as NexisClawConfig,
+      {} as GreenchClawConfig,
       ["demo-channel", "browser", "memory-core"],
     ],
     [
@@ -664,7 +666,7 @@ describe("resolveGatewayStartupPluginIds", () => {
       {
         channels: {},
         messages: { tts: { provider: "microsoft" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       ["browser", "microsoft", "memory-core"],
     ],
     [
@@ -672,7 +674,7 @@ describe("resolveGatewayStartupPluginIds", () => {
       {
         channels: {},
         messages: { tts: { providers: { "tts-local-cli": { command: "say" } } } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       ["browser", "tts-local-cli", "memory-core"],
     ],
     [
@@ -680,7 +682,7 @@ describe("resolveGatewayStartupPluginIds", () => {
       {
         channels: {},
         messages: { tts: { provider: "edge" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       ["browser", "microsoft", "memory-core"],
     ],
     [
@@ -698,7 +700,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       ["browser", "microsoft", "memory-core"],
     ],
     [
@@ -718,7 +720,7 @@ describe("resolveGatewayStartupPluginIds", () => {
         agents: {
           list: [{ id: "reader", tts: { persona: "narrator" } }],
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       ["browser", "microsoft", "memory-core"],
     ],
     [
@@ -737,7 +739,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       ["demo-channel", "browser", "microsoft", "memory-core"],
     ],
     [
@@ -760,7 +762,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       ["demo-channel", "browser", "microsoft", "memory-core"],
     ],
     [
@@ -773,7 +775,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             providers: { microsoft: { enabled: false } },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -782,7 +784,7 @@ describe("resolveGatewayStartupPluginIds", () => {
         channels: {},
         messages: { tts: { provider: "microsoft" } },
         plugins: { entries: { microsoft: { enabled: false } } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -803,7 +805,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       ["browser", "openai", "google", "memory-core"],
     ],
     [
@@ -816,7 +818,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           },
         },
         plugins: { entries: { google: { enabled: false } } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       ["browser", "memory-core"],
     ],
     [
@@ -829,7 +831,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           },
         },
         plugins: { allow: ["browser"] },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       ["browser"],
     ],
     [
@@ -875,7 +877,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expectStartupPluginIdsCase({
       config: effectiveConfig,
@@ -895,7 +897,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const runtimeConfig = {
       ...activationSourceConfig,
       plugins: {
@@ -911,7 +913,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expectStartupPluginIdsCase({
       config: runtimeConfig,
@@ -1085,7 +1087,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const runtimeConfig = {
       channels: {},
       plugins: {
@@ -1102,7 +1104,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expectStartupPluginIdsCase({
       config: runtimeConfig,
@@ -1118,7 +1120,7 @@ describe("resolveGatewayStartupPluginIds", () => {
         defaultProfile: "docker-cdp",
       },
       channels: {},
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
     const effectiveConfig = {
       ...rawConfig,
       plugins: {
@@ -1128,7 +1130,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           },
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     expectStartupPluginIdsCase({
       config: effectiveConfig,
@@ -1174,7 +1176,7 @@ describe("resolveGatewayStartupPluginIds", () => {
       { channelId: "demo-channel", source: "env" },
     ]);
 
-    const config = {} as NexisClawConfig;
+    const config = {} as GreenchClawConfig;
 
     expectStartupPluginIdsCase({
       config,
@@ -1206,7 +1208,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           plugins: {
             allow: ["workspace-demo-channel-plugin"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         env: createPluginPlanningTestEnv(),
       }),
     ).toEqual(["workspace-demo-channel-plugin"]);
@@ -1223,7 +1225,7 @@ describe("resolveGatewayStartupPluginIds", () => {
         plugins: {
           allow: ["browser"],
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       env: createPluginPlanningTestEnv(),
       expected: ["demo-channel", "browser"],
     });
@@ -1238,7 +1240,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             token: "stale",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       env: createPluginPlanningTestEnv(),
       expected: ["browser", "memory-core"],
     });
@@ -1247,16 +1249,16 @@ describe("resolveGatewayStartupPluginIds", () => {
   it("does not treat persisted auth alone as gateway startup intent", () => {
     listPotentialConfiguredChannelIds.mockImplementation(
       (
-        _config: NexisClawConfig,
+        _config: GreenchClawConfig,
         _env: NodeJS.ProcessEnv,
         options?: { includePersistedAuthState?: boolean },
       ) => (options?.includePersistedAuthState === false ? [] : ["demo-channel"]),
     );
 
     expectStartupPluginIdsCase({
-      config: {} as NexisClawConfig,
+      config: {} as GreenchClawConfig,
       env: createPluginPlanningTestEnv({
-        NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-with-persisted-demo-channel",
+        GREENCHCLAW_STATE_DIR: "/tmp/GreenchClaw-with-persisted-demo-channel",
       }),
       expected: ["browser", "memory-core"],
     });
@@ -1266,7 +1268,7 @@ describe("resolveGatewayStartupPluginIds", () => {
     useManifestRegistryFixture(createManifestRegistryFixtureWithWorkspaceDemoChannel());
     listPotentialConfiguredChannelIds.mockImplementation(
       (
-        _config: NexisClawConfig,
+        _config: GreenchClawConfig,
         _env: NodeJS.ProcessEnv,
         options?: { includePersistedAuthState?: boolean },
       ) => (options?.includePersistedAuthState === false ? [] : ["demo-channel"]),
@@ -1278,9 +1280,9 @@ describe("resolveGatewayStartupPluginIds", () => {
           plugins: {
             allow: ["workspace-demo-channel-plugin"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         env: createPluginPlanningTestEnv({
-          NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-with-persisted-demo-channel",
+          GREENCHCLAW_STATE_DIR: "/tmp/GreenchClaw-with-persisted-demo-channel",
         }),
       }),
     ).toStrictEqual([]);
@@ -1297,7 +1299,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             token: "configured",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       env: createPluginPlanningTestEnv(),
       index,
       manifestRegistry: registry,
@@ -1323,7 +1325,7 @@ describe("resolveGatewayStartupPluginIds", () => {
           plugins: {
             allow: ["workspace-demo-channel-plugin"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         env: createPluginPlanningTestEnv(),
       }),
     ).toStrictEqual([]);
@@ -1431,7 +1433,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             codex: { enabled: true },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       expected: ["demo-channel", "browser", "codex", "memory-core"],
     });
   });
@@ -1456,7 +1458,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       expected: ["demo-channel", "browser", "memory-core"],
     });
   });
@@ -1476,7 +1478,7 @@ describe("resolveGatewayStartupPluginIds", () => {
       config: createStartupConfig({
         enabledPluginIds: ["codex"],
       }),
-      env: { NEXISCLAW_AGENT_RUNTIME: "codex" },
+      env: { GREENCHCLAW_AGENT_RUNTIME: "codex" },
       expected: ["demo-channel", "browser", "memory-core"],
     });
   });
@@ -1508,7 +1510,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             "demo-provider-plugin": { enabled: true },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       expected: ["demo-channel", "browser", "demo-provider-plugin", "memory-core"],
     });
   });
@@ -1523,7 +1525,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       expected: ["demo-channel", "browser", "anthropic", "memory-core"],
     });
   });
@@ -1559,7 +1561,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       expected: ["demo-channel", "browser", "memory-core"],
     });
   });
@@ -1581,7 +1583,7 @@ describe("resolveGatewayStartupPluginIds", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       expected: ["demo-channel", "browser", "memory-core"],
     });
   });
@@ -1589,21 +1591,23 @@ describe("resolveGatewayStartupPluginIds", () => {
 
 describe("resolveConfiguredChannelPluginIds", () => {
   beforeEach(() => {
-    listPotentialConfiguredChannelIds.mockReset().mockImplementation((config: NexisClawConfig) => {
-      if (Object.prototype.hasOwnProperty.call(config, "channels")) {
-        return Object.keys(config.channels ?? {});
-      }
-      return [];
-    });
+    listPotentialConfiguredChannelIds
+      .mockReset()
+      .mockImplementation((config: GreenchClawConfig) => {
+        if (Object.prototype.hasOwnProperty.call(config, "channels")) {
+          return Object.keys(config.channels ?? {});
+        }
+        return [];
+      });
     listPotentialConfiguredChannelPresenceSignals
       .mockReset()
-      .mockImplementation((config: NexisClawConfig) => {
+      .mockImplementation((config: GreenchClawConfig) => {
         return listPotentialConfiguredChannelIds(config).map((channelId: string) => ({
           channelId,
           source: "config",
         }));
       });
-    hasPotentialConfiguredChannels.mockReset().mockImplementation((config: NexisClawConfig) => {
+    hasPotentialConfiguredChannels.mockReset().mockImplementation((config: GreenchClawConfig) => {
       if (Object.prototype.hasOwnProperty.call(config, "channels")) {
         return Object.keys(config.channels ?? {}).length > 0;
       }
@@ -1649,7 +1653,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
           plugins: {
             allow: ["browser"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -1666,7 +1670,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
           plugins: {
             deny: ["activation-only-channel-plugin"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: process.env,
       }),
@@ -1683,7 +1687,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
           plugins: {
             enabled: false,
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: process.env,
       }),
@@ -1750,7 +1754,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",
@@ -1773,7 +1777,7 @@ describe("resolveConfiguredChannelPluginIds", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: process.env,
       }),
@@ -1802,7 +1806,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["memory-core"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_CHANNEL_TOKEN: "token",
@@ -1817,7 +1821,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["memory-core"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_CHANNEL_TOKEN: "token",
@@ -1839,7 +1843,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["memory-core"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_CHANNEL_TOKEN: "token",
@@ -1873,7 +1877,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_CHANNEL_TOKEN: "token",
@@ -1892,7 +1896,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               enabled: true,
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -1915,7 +1919,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               enabled: true,
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -1931,7 +1935,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           token: "stale-token",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(listExplicitConfiguredChannelIdsForConfig(config)).toStrictEqual([]);
     expect(
@@ -1972,7 +1976,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(
       resolveConfiguredChannelPresencePolicy({
@@ -2017,7 +2021,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {},
       }),
@@ -2036,7 +2040,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",
@@ -2056,7 +2060,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
       plugins: {
         allow: ["browser"],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(
       resolveConfiguredChannelPresencePolicy({
@@ -2098,7 +2102,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               token: "configured",
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -2123,7 +2127,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             enabled: false,
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -2141,7 +2145,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             deny: ["demo-channel"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {},
         includePersistedAuthState: false,
@@ -2163,7 +2167,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
             enabled: false,
           },
         },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
     ).toEqual(["demo-channel"]);
   });
 
@@ -2189,7 +2193,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_CHANNEL_TOKEN: "ambient",
@@ -2216,7 +2220,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["demo-other-channel"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           DEMO_CHANNEL_TOKEN: "ambient",
@@ -2241,7 +2245,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           ACTIVATION_ONLY_CHANNEL_TOKEN: "ambient",
@@ -2266,7 +2270,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",
@@ -2279,7 +2283,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
   it("ignores manifest env vars from untrusted external plugins", () => {
     expect(
       listConfiguredChannelIdsForReadOnlyScope({
-        config: {} as NexisClawConfig,
+        config: {} as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",
@@ -2290,7 +2294,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
 
     expect(
       hasConfiguredChannelsForReadOnlyScope({
-        config: {} as NexisClawConfig,
+        config: {} as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",
@@ -2307,7 +2311,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["ambient-env-channel-plugin"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           HOME: "/tmp/user",
@@ -2326,7 +2330,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           external_env_channel_token: "token",
@@ -2356,7 +2360,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",
@@ -2390,7 +2394,7 @@ describe("listConfiguredChannelIdsForReadOnlyScope", () => {
           plugins: {
             allow: ["external-env-channel-plugin"],
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         workspaceDir: "/tmp",
         env: {
           EXTERNAL_ENV_CHANNEL_TOKEN: "token",

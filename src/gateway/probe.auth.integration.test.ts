@@ -24,9 +24,9 @@ function requireGatewayToken(): string {
 }
 
 function statePath(...parts: string[]): string {
-  const stateDir = process.env.NEXISCLAW_STATE_DIR;
+  const stateDir = process.env.GREENCHCLAW_STATE_DIR;
   if (!stateDir) {
-    throw new Error("expected NEXISCLAW_STATE_DIR");
+    throw new Error("expected GREENCHCLAW_STATE_DIR");
   }
   return path.join(stateDir, ...parts);
 }

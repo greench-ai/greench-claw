@@ -29,7 +29,7 @@ describe("resetCommand", () => {
 
     expect(
       cleanupCommandLogMessages(runtime).some((message) =>
-        message.includes("NexisClaw backup create"),
+        message.includes("GreenchClaw backup create"),
       ),
     ).toBe(true);
   });
@@ -44,7 +44,7 @@ describe("resetCommand", () => {
 
     expect(
       cleanupCommandLogMessages(runtime).some((message) =>
-        message.includes("NexisClaw backup create"),
+        message.includes("GreenchClaw backup create"),
       ),
     ).toBe(false);
   });

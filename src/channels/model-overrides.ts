@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   parseRawSessionConversationRef,
   parseThreadSessionSuffix,
@@ -31,7 +31,7 @@ export type ChannelModelOverride = {
 type ChannelModelByChannelConfig = Record<string, Record<string, string>>;
 
 type ChannelModelOverrideParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel?: string | null;
   groupId?: string | null;
   groupChatType?: string | null;

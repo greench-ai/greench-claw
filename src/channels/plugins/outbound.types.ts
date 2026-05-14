@@ -1,6 +1,6 @@
 import type { ReplyPayload } from "../../auto-reply/reply-payload.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { ReplyToMode } from "../../config/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import type { OutboundDeliveryResult } from "../../infra/outbound/deliver-types.js";
 import type { OutboundDeliveryFormattingOptions } from "../../infra/outbound/formatting.js";
 import type { OutboundIdentity } from "../../infra/outbound/identity-types.js";
@@ -14,7 +14,7 @@ import type {
 } from "./types.core.js";
 
 export type ChannelOutboundContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   to: string;
   text: string;
   mediaUrl?: string;
@@ -92,7 +92,7 @@ export type ChannelOutboundChunkContext = {
 
 export type ChannelOutboundNormalizePayloadParams = {
   payload: ReplyPayload;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 };
 
@@ -112,24 +112,24 @@ export type ChannelOutboundAdapter = {
   sendTextOnlyErrorPayloads?: boolean;
   shouldSkipPlainTextSanitization?: (params: { payload: ReplyPayload }) => boolean;
   resolveEffectiveTextChunkLimit?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string | null;
     fallbackLimit?: number;
   }) => number | undefined;
   shouldSuppressLocalPayloadPrompt?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string | null;
     payload: ReplyPayload;
     hint?: ChannelOutboundPayloadHint;
   }) => boolean;
   beforeDeliverPayload?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     target: ChannelOutboundTargetRef;
     payload: ReplyPayload;
     hint?: ChannelOutboundPayloadHint;
   }) => Promise<void> | void;
   afterDeliverPayload?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     target: ChannelOutboundTargetRef;
     payload: ReplyPayload;
     results: readonly OutboundDeliveryResult[];
@@ -142,7 +142,7 @@ export type ChannelOutboundAdapter = {
     ctx: ChannelOutboundPayloadContext;
   }) => Promise<ReplyPayload | null> | ReplyPayload | null;
   pinDeliveredMessage?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     target: ChannelOutboundTargetRef;
     messageId: string;
     pin: ReplyPayloadDeliveryPin;
@@ -165,7 +165,7 @@ export type ChannelOutboundAdapter = {
     targetThreadId?: string;
   }) => boolean;
   resolveTarget?: (params: {
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
     to?: string;
     allowFrom?: string[];
     accountId?: string | null;

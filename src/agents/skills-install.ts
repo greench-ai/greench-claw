@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveBrewExecutable as defaultResolveBrewExecutable } from "../infra/brew.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import {
@@ -29,7 +29,7 @@ export type SkillInstallRequest = InstallSafetyOverrides & {
   skillName: string;
   installId: string;
   timeoutMs?: number;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 };
 export type { SkillInstallResult } from "./skills-install.types.js";
 
@@ -122,9 +122,9 @@ function resolveDefaultNodeInstallStateDir({
   platform?: NodeJS.Platform;
 } = {}): string {
   if (platform !== "win32" && getuid?.() === 0) {
-    return path.join(path.parse(cwd).root, "var", "lib", "NexisClaw");
+    return path.join(path.parse(cwd).root, "var", "lib", "GreenchClaw");
   }
-  return path.join(homedir(), ".NexisClaw");
+  return path.join(homedir(), ".GreenchClaw");
 }
 
 async function buildNodeInstallEnv(prefs: SkillsInstallPreferences): Promise<NodeJS.ProcessEnv> {
@@ -494,7 +494,11 @@ export async function installSkill(params: SkillInstallRequest): Promise<SkillIn
   }
   // Warn when install is triggered from a non-bundled source.
   // Workspace/project/personal agent skills can contain attacker-controlled metadata.
-  const trustedInstallSources = new Set(["NexisClaw-bundled", "NexisClaw-managed", "NexisClaw-extra"]);
+  const trustedInstallSources = new Set([
+    "GreenchClaw-bundled",
+    "GreenchClaw-managed",
+    "GreenchClaw-extra",
+  ]);
   if (!trustedInstallSources.has(skillSource)) {
     warnings.push(
       `WARNING: Skill "${params.skillName}" install triggered from non-bundled source "${skillSource}". Verify the install recipe is trusted.`,

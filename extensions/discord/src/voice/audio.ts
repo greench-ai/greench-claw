@@ -1,10 +1,10 @@
 import fs from "node:fs/promises";
 import { createRequire } from "node:module";
 import type { Readable } from "node:stream";
-import { resamplePcm } from "NexisClaw/plugin-sdk/realtime-voice";
-import { logVerbose, shouldLogVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { tempWorkspace, resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+import { resamplePcm } from "GreenchClaw/plugin-sdk/realtime-voice";
+import { logVerbose, shouldLogVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { tempWorkspace, resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 
 const require = createRequire(import.meta.url);
 
@@ -98,7 +98,7 @@ function resolveOpusDecoderFactory(params: {
 }
 
 export function resolveOpusDecoderPreference(
-  value = process.env.NEXISCLAW_DISCORD_OPUS_DECODER,
+  value = process.env.GREENCHCLAW_DISCORD_OPUS_DECODER,
 ): OpusDecoderPreference {
   const normalized = value?.trim().toLowerCase();
   if (normalized === "native" || normalized === "@discordjs/opus") {
@@ -228,7 +228,7 @@ export async function writeVoiceWavFile(
   pcm: Buffer,
 ): Promise<{ path: string; durationSeconds: number }> {
   const workspace = await tempWorkspace({
-    rootDir: resolvePreferredNexisClawTmpDir(),
+    rootDir: resolvePreferredGreenchClawTmpDir(),
     prefix: "discord-voice-",
   });
   const wav = buildWavBuffer(pcm);

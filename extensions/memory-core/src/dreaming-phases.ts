@@ -9,16 +9,16 @@ import {
   normalizeSessionTranscriptPathForComparison,
   parseUsageCountedSessionIdFromFileName,
   sessionPathForFile,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-qmd";
-import type { MemorySearchResult } from "NexisClaw/plugin-sdk/memory-core-host-runtime-files";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-qmd";
+import type { MemorySearchResult } from "GreenchClaw/plugin-sdk/memory-core-host-runtime-files";
 import {
   formatMemoryDreamingDay,
   resolveMemoryDreamingWorkspaces,
   resolveMemoryLightDreamingConfig,
   resolveMemoryRemDreamingConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-status";
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
-import { appendRegularFile, privateFileStore } from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/memory-core-host-status";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { appendRegularFile, privateFileStore } from "GreenchClaw/plugin-sdk/security-runtime";
 import { writeDailyDreamingPhaseBlock } from "./dreaming-markdown.js";
 import {
   generateAndAppendDreamNarrative,
@@ -34,7 +34,7 @@ import {
   type ShortTermRecallEntry,
 } from "./short-term-promotion.js";
 
-type Logger = Pick<NexisClawPluginApi["logger"], "info" | "warn" | "error">;
+type Logger = Pick<GreenchClawPluginApi["logger"], "info" | "warn" | "error">;
 type DreamingHostConfig = unknown;
 type DreamingPhaseStorageConfig = {
   timezone?: string;
@@ -71,8 +71,8 @@ type RunPhaseIfTriggeredParams = {
       config: RemDreamingConfig;
     }
 );
-const LIGHT_SLEEP_EVENT_TEXT = "__NexisClaw_memory_core_light_sleep__";
-const REM_SLEEP_EVENT_TEXT = "__NexisClaw_memory_core_rem_sleep__";
+const LIGHT_SLEEP_EVENT_TEXT = "__GreenchClaw_memory_core_light_sleep__";
+const REM_SLEEP_EVENT_TEXT = "__GreenchClaw_memory_core_rem_sleep__";
 const MEMORY_DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
 const DAILY_MEMORY_FILENAME_RE = /^(\d{4}-\d{2}-\d{2})\.md$/;
 const DAILY_INGESTION_STATE_RELATIVE_PATH = path.join("memory", ".dreams", "daily-ingestion.json");
@@ -100,13 +100,13 @@ const GENERIC_DAY_HEADING_RE =
 const MANAGED_DAILY_DREAMING_BLOCKS = [
   {
     heading: "## Light Sleep",
-    startMarker: "<!-- NexisClaw:dreaming:light:start -->",
-    endMarker: "<!-- NexisClaw:dreaming:light:end -->",
+    startMarker: "<!-- GreenchClaw:dreaming:light:start -->",
+    endMarker: "<!-- GreenchClaw:dreaming:light:end -->",
   },
   {
     heading: "## REM Sleep",
-    startMarker: "<!-- NexisClaw:dreaming:rem:start -->",
-    endMarker: "<!-- NexisClaw:dreaming:rem:end -->",
+    startMarker: "<!-- GreenchClaw:dreaming:rem:start -->",
+    endMarker: "<!-- GreenchClaw:dreaming:rem:end -->",
   },
 ] as const;
 

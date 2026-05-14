@@ -1,31 +1,31 @@
-import { formatCliCommand, parseDurationMs } from "NexisClaw/plugin-sdk/cli-runtime";
+import { formatCliCommand, parseDurationMs } from "GreenchClaw/plugin-sdk/cli-runtime";
 import type {
-  NexisClawPluginApi,
+  GreenchClawPluginApi,
   ProviderAuthContext,
   ProviderAuthMethodNonInteractiveContext,
   ProviderResolveDynamicModelContext,
   ProviderNormalizeResolvedModelContext,
   ProviderRuntimeModel,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import {
   applyAuthProfileConfig,
   type AuthProfileStore,
   buildTokenProfileId,
   createProviderApiKeyAuthMethod,
   listProfilesForProvider,
-  type NexisClawConfig as ProviderAuthConfig,
+  type GreenchClawConfig as ProviderAuthConfig,
   type ProviderAuthResult,
   suggestOAuthProfileIdForLegacyDefault,
   upsertAuthProfile,
   validateAnthropicSetupToken,
-} from "NexisClaw/plugin-sdk/provider-auth";
+} from "GreenchClaw/plugin-sdk/provider-auth";
 import {
   cloneFirstTemplateModel,
   type ProviderPlugin,
   resolveClaudeThinkingProfile,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
-import { fetchClaudeUsage } from "NexisClaw/plugin-sdk/provider-usage";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { fetchClaudeUsage } from "GreenchClaw/plugin-sdk/provider-usage";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import * as claudeCliAuth from "./cli-auth-seam.js";
 import { buildAnthropicCliBackend } from "./cli-backend.js";
 import { buildAnthropicCliMigrationResult } from "./cli-migration.js";
@@ -68,10 +68,10 @@ const ANTHROPIC_MODERN_MODEL_PREFIXES = [
   "claude-haiku-4-5",
 ] as const;
 const ANTHROPIC_SETUP_TOKEN_NOTE_LINES = [
-  "Anthropic setup-token auth is supported in NexisClaw.",
-  "NexisClaw prefers Claude CLI reuse when it is available on the host.",
-  "Anthropic staff told us this NexisClaw path is allowed again.",
-  `If you want a direct API billing path instead, use ${formatCliCommand("NexisClaw models auth login --provider anthropic --method api-key --set-default")} or ${formatCliCommand("NexisClaw models auth login --provider anthropic --method cli --set-default")}.`,
+  "Anthropic setup-token auth is supported in GreenchClaw.",
+  "GreenchClaw prefers Claude CLI reuse when it is available on the host.",
+  "Anthropic staff told us this GreenchClaw path is allowed again.",
+  `If you want a direct API billing path instead, use ${formatCliCommand("GreenchClaw models auth login --provider anthropic --method api-key --set-default")} or ${formatCliCommand("GreenchClaw models auth login --provider anthropic --method cli --set-default")}.`,
 ] as const;
 
 const CLAUDE_CLI_CANONICAL_ALLOWLIST_REFS = CLAUDE_CLI_DEFAULT_ALLOWLIST_REFS.map((ref) =>
@@ -390,7 +390,7 @@ function buildAnthropicAuthDoctorHint(params: {
     }`,
     `- auth store oauth profiles: ${storeOauthProfiles || "(none)"}`,
     `- suggested profile: ${suggested}`,
-    `Fix: run "${formatCliCommand("NexisClaw doctor --yes")}"`,
+    `Fix: run "${formatCliCommand("GreenchClaw doctor --yes")}"`,
   ].join("\n");
 }
 
@@ -597,7 +597,7 @@ export function buildAnthropicProvider(): ProviderPlugin {
   };
 }
 
-export function registerAnthropicPlugin(api: NexisClawPluginApi): void {
+export function registerAnthropicPlugin(api: GreenchClawPluginApi): void {
   api.registerCliBackend(buildAnthropicCliBackend());
   api.registerProvider(buildAnthropicProvider());
   api.registerMediaUnderstandingProvider(anthropicMediaUnderstandingProvider);

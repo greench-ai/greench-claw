@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   normalizeResolvedSecretInputString,
   normalizeSecretInput,
-} from "NexisClaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 export const DEFAULT_TAVILY_BASE_URL = "https://api.tavily.com";
 export const DEFAULT_TAVILY_SEARCH_TIMEOUT_SECONDS = 30;
@@ -23,7 +23,7 @@ type PluginEntryConfig = {
   };
 };
 
-export function resolveTavilySearchConfig(cfg?: NexisClawConfig): TavilySearchConfig {
+export function resolveTavilySearchConfig(cfg?: GreenchClawConfig): TavilySearchConfig {
   const pluginConfig = cfg?.plugins?.entries?.tavily?.config as PluginEntryConfig;
   const pluginWebSearch = pluginConfig?.webSearch;
   if (pluginWebSearch && typeof pluginWebSearch === "object" && !Array.isArray(pluginWebSearch)) {
@@ -41,7 +41,7 @@ function normalizeConfiguredSecret(value: unknown, path: string): string | undef
   );
 }
 
-export function resolveTavilyApiKey(cfg?: NexisClawConfig): string | undefined {
+export function resolveTavilyApiKey(cfg?: GreenchClawConfig): string | undefined {
   const search = resolveTavilySearchConfig(cfg);
   return (
     normalizeConfiguredSecret(search?.apiKey, "plugins.entries.tavily.config.webSearch.apiKey") ||
@@ -50,7 +50,7 @@ export function resolveTavilyApiKey(cfg?: NexisClawConfig): string | undefined {
   );
 }
 
-export function resolveTavilyBaseUrl(cfg?: NexisClawConfig): string {
+export function resolveTavilyBaseUrl(cfg?: GreenchClawConfig): string {
   const search = resolveTavilySearchConfig(cfg);
   const configured =
     (normalizeOptionalString(search?.baseUrl) ?? "") ||

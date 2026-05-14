@@ -2,7 +2,7 @@ import {
   hashText,
   normalizeExtraMemoryPaths,
   type MemorySource,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 
 export type MemoryIndexMeta = {
   model: string;

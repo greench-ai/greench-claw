@@ -29,14 +29,14 @@ export function registerNodeCli(program: Command) {
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
           [
-            "NexisClaw node run --host 127.0.0.1 --port 18789",
+            "GreenchClaw node run --host 127.0.0.1 --port 18789",
             "Run the node host in the foreground.",
           ],
-          ["NexisClaw node status", "Check node host service status."],
-          ["NexisClaw node install", "Install the node host service."],
-          ["NexisClaw node start", "Start the installed node host service."],
-          ["NexisClaw node restart", "Restart the installed node host service."],
-        ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/node", "docs.NexisClaw.ai/cli/node")}\n`,
+          ["GreenchClaw node status", "Check node host service status."],
+          ["GreenchClaw node install", "Install the node host service."],
+          ["GreenchClaw node start", "Start the installed node host service."],
+          ["GreenchClaw node restart", "Restart the installed node host service."],
+        ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/node", "docs.GreenchClaw.ai/cli/node")}\n`,
     );
 
   node
@@ -54,7 +54,7 @@ export function registerNodeCli(program: Command) {
         normalizeOptionalString(opts.host as string | undefined) ||
         existing?.gateway?.host ||
         "127.0.0.1";
-      const port = parsePortWithFallback(opts.port, existing?.gateway?.port ?? 19500);
+      const port = parsePortWithFallback(opts.port, existing?.gateway?.port ?? 18420);
       await runNodeHost({
         gatewayHost: host,
         gatewayPort: port,

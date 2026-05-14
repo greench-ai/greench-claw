@@ -1,57 +1,57 @@
 ---
 summary: "How the installer scripts work (install.sh, install-cli.sh, install.ps1), flags, and automation"
 read_when:
-  - You want to understand `NexisClaw.ai/install.sh`
+  - You want to understand `GreenchClaw.ai/install.sh`
   - You want to automate installs (CI / headless)
   - You want to install from a GitHub checkout
 title: "Installer internals"
 ---
 
-NexisClaw ships three installer scripts, served from `NexisClaw.ai`.
+GreenchClaw ships three installer scripts, served from `GreenchClaw.ai`.
 
-| Script                             | Platform             | What it does                                                                                                   |
-| ---------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------- |
-| [`install.sh`](#installsh)         | macOS / Linux / WSL  | Installs Node if needed, installs NexisClaw via npm (default) or git, and can run onboarding.                   |
-| [`install-cli.sh`](#install-clish) | macOS / Linux / WSL  | Installs Node + NexisClaw into a local prefix (`~/.NexisClaw`) with npm or git checkout modes. No root required. |
-| [`install.ps1`](#installps1)       | Windows (PowerShell) | Installs Node if needed, installs NexisClaw via npm (default) or git, and can run onboarding.                   |
+| Script                             | Platform             | What it does                                                                                                         |
+| ---------------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| [`install.sh`](#installsh)         | macOS / Linux / WSL  | Installs Node if needed, installs GreenchClaw via npm (default) or git, and can run onboarding.                      |
+| [`install-cli.sh`](#install-clish) | macOS / Linux / WSL  | Installs Node + GreenchClaw into a local prefix (`~/.GreenchClaw`) with npm or git checkout modes. No root required. |
+| [`install.ps1`](#installps1)       | Windows (PowerShell) | Installs Node if needed, installs GreenchClaw via npm (default) or git, and can run onboarding.                      |
 
 ## Quick commands
 
 <Tabs>
   <Tab title="install.sh">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install.sh | bash
     ```
 
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --help
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install.sh | bash -s -- --help
     ```
 
   </Tab>
   <Tab title="install-cli.sh">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install-cli.sh | bash
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install-cli.sh | bash
     ```
 
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install-cli.sh | bash -s -- --help
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install-cli.sh | bash -s -- --help
     ```
 
   </Tab>
   <Tab title="install.ps1">
     ```powershell
-    iwr -useb https://NexisClaw.ai/install.ps1 | iex
+    iwr -useb https://GreenchClaw.ai/install.ps1 | iex
     ```
 
     ```powershell
-    & ([scriptblock]::Create((iwr -useb https://NexisClaw.ai/install.ps1))) -Tag beta -NoOnboard -DryRun
+    & ([scriptblock]::Create((iwr -useb https://GreenchClaw.ai/install.ps1))) -Tag beta -NoOnboard -DryRun
     ```
 
   </Tab>
 </Tabs>
 
 <Note>
-If install succeeds but `NexisClaw` is not found in a new terminal, see [Node.js troubleshooting](/install/node#troubleshooting).
+If install succeeds but `GreenchClaw` is not found in a new terminal, see [Node.js troubleshooting](/install/node#troubleshooting).
 </Note>
 
 ---
@@ -71,19 +71,19 @@ Recommended for most interactive installs on macOS/Linux/WSL.
     Supports macOS and Linux (including WSL). If macOS is detected, installs Homebrew if missing.
   </Step>
   <Step title="Ensure Node.js 24 by default">
-    Checks Node version and installs Node 24 if needed (Homebrew on macOS, NodeSource setup scripts on Linux apt/dnf/yum). NexisClaw still supports Node 22 LTS, currently `22.16+`, for compatibility.
+    Checks Node version and installs Node 24 if needed (Homebrew on macOS, NodeSource setup scripts on Linux apt/dnf/yum). GreenchClaw still supports Node 22 LTS, currently `22.16+`, for compatibility.
   </Step>
   <Step title="Ensure Git">
     Installs Git if missing.
   </Step>
-  <Step title="Install NexisClaw">
+  <Step title="Install GreenchClaw">
     - `npm` method (default): global npm install
-    - `git` method: clone/update repo, install deps with pnpm, build, then install wrapper at `~/.local/bin/NexisClaw`
+    - `git` method: clone/update repo, install deps with pnpm, build, then install wrapper at `~/.local/bin/GreenchClaw`
 
   </Step>
   <Step title="Post-install tasks">
-    - Refreshes a loaded gateway service best-effort (`NexisClaw gateway install --force`, then restart)
-    - Runs `NexisClaw doctor --non-interactive` on upgrades and git installs (best effort)
+    - Refreshes a loaded gateway service best-effort (`GreenchClaw gateway install --force`, then restart)
+    - Runs `GreenchClaw doctor --non-interactive` on upgrades and git installs (best effort)
     - Attempts onboarding when appropriate (TTY available, onboarding not disabled, and bootstrap/config checks pass)
     - Defaults `SHARP_IGNORE_GLOBAL_LIBVIPS=1`
 
@@ -92,7 +92,7 @@ Recommended for most interactive installs on macOS/Linux/WSL.
 
 ### Source checkout detection
 
-If run inside an NexisClaw checkout (`package.json` + `pnpm-workspace.yaml`), the script offers:
+If run inside an GreenchClaw checkout (`package.json` + `pnpm-workspace.yaml`), the script offers:
 
 - use checkout (`git`), or
 - use global install (`npm`)
@@ -106,27 +106,27 @@ The script exits with code `2` for invalid method selection or invalid `--instal
 <Tabs>
   <Tab title="Default">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install.sh | bash
     ```
   </Tab>
   <Tab title="Skip onboarding">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --no-onboard
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install.sh | bash -s -- --no-onboard
     ```
   </Tab>
   <Tab title="Git install">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --install-method git
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install.sh | bash -s -- --install-method git
     ```
   </Tab>
   <Tab title="GitHub main via npm">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --version main
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install.sh | bash -s -- --version main
     ```
   </Tab>
   <Tab title="Dry run">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --dry-run
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install.sh | bash -s -- --dry-run
     ```
   </Tab>
 </Tabs>
@@ -134,39 +134,39 @@ The script exits with code `2` for invalid method selection or invalid `--instal
 <AccordionGroup>
   <Accordion title="Flags reference">
 
-| Flag                                  | Description                                                |
-| ------------------------------------- | ---------------------------------------------------------- |
-| `--install-method npm\|git`           | Choose install method (default: `npm`). Alias: `--method`  |
-| `--npm`                               | Shortcut for npm method                                    |
-| `--git`                               | Shortcut for git method. Alias: `--github`                 |
-| `--version <version\|dist-tag\|spec>` | npm version, dist-tag, or package spec (default: `latest`) |
-| `--beta`                              | Use beta dist-tag if available, else fallback to `latest`  |
-| `--git-dir <path>`                    | Checkout directory (default: `~/NexisClaw`). Alias: `--dir` |
-| `--no-git-update`                     | Skip `git pull` for existing checkout                      |
-| `--no-prompt`                         | Disable prompts                                            |
-| `--no-onboard`                        | Skip onboarding                                            |
-| `--onboard`                           | Enable onboarding                                          |
-| `--dry-run`                           | Print actions without applying changes                     |
-| `--verbose`                           | Enable debug output (`set -x`, npm notice-level logs)      |
-| `--help`                              | Show usage (`-h`)                                          |
+| Flag                                  | Description                                                   |
+| ------------------------------------- | ------------------------------------------------------------- |
+| `--install-method npm\|git`           | Choose install method (default: `npm`). Alias: `--method`     |
+| `--npm`                               | Shortcut for npm method                                       |
+| `--git`                               | Shortcut for git method. Alias: `--github`                    |
+| `--version <version\|dist-tag\|spec>` | npm version, dist-tag, or package spec (default: `latest`)    |
+| `--beta`                              | Use beta dist-tag if available, else fallback to `latest`     |
+| `--git-dir <path>`                    | Checkout directory (default: `~/GreenchClaw`). Alias: `--dir` |
+| `--no-git-update`                     | Skip `git pull` for existing checkout                         |
+| `--no-prompt`                         | Disable prompts                                               |
+| `--no-onboard`                        | Skip onboarding                                               |
+| `--onboard`                           | Enable onboarding                                             |
+| `--dry-run`                           | Print actions without applying changes                        |
+| `--verbose`                           | Enable debug output (`set -x`, npm notice-level logs)         |
+| `--help`                              | Show usage (`-h`)                                             |
 
   </Accordion>
 
   <Accordion title="Environment variables reference">
 
-| Variable                                                | Description                                   |
-| ------------------------------------------------------- | --------------------------------------------- |
-| `NEXISCLAW_INSTALL_METHOD=git\|npm`                      | Install method                                |
-| `NEXISCLAW_VERSION=latest\|next\|main\|<semver>\|<spec>` | npm version, dist-tag, or package spec        |
-| `NEXISCLAW_BETA=0\|1`                                    | Use beta if available                         |
-| `NEXISCLAW_GIT_DIR=<path>`                               | Checkout directory                            |
-| `NEXISCLAW_GIT_UPDATE=0\|1`                              | Toggle git updates                            |
-| `NEXISCLAW_NO_PROMPT=1`                                  | Disable prompts                               |
-| `NEXISCLAW_NO_ONBOARD=1`                                 | Skip onboarding                               |
-| `NEXISCLAW_DRY_RUN=1`                                    | Dry run mode                                  |
-| `NEXISCLAW_VERBOSE=1`                                    | Debug mode                                    |
-| `NEXISCLAW_NPM_LOGLEVEL=error\|warn\|notice`             | npm log level                                 |
-| `SHARP_IGNORE_GLOBAL_LIBVIPS=0\|1`                      | Control sharp/libvips behavior (default: `1`) |
+| Variable                                                   | Description                                   |
+| ---------------------------------------------------------- | --------------------------------------------- |
+| `GREENCHCLAW_INSTALL_METHOD=git\|npm`                      | Install method                                |
+| `GREENCHCLAW_VERSION=latest\|next\|main\|<semver>\|<spec>` | npm version, dist-tag, or package spec        |
+| `GREENCHCLAW_BETA=0\|1`                                    | Use beta if available                         |
+| `GREENCHCLAW_GIT_DIR=<path>`                               | Checkout directory                            |
+| `GREENCHCLAW_GIT_UPDATE=0\|1`                              | Toggle git updates                            |
+| `GREENCHCLAW_NO_PROMPT=1`                                  | Disable prompts                               |
+| `GREENCHCLAW_NO_ONBOARD=1`                                 | Skip onboarding                               |
+| `GREENCHCLAW_DRY_RUN=1`                                    | Dry run mode                                  |
+| `GREENCHCLAW_VERBOSE=1`                                    | Debug mode                                    |
+| `GREENCHCLAW_NPM_LOGLEVEL=error\|warn\|notice`             | npm log level                                 |
+| `SHARP_IGNORE_GLOBAL_LIBVIPS=0\|1`                         | Control sharp/libvips behavior (default: `1`) |
 
   </Accordion>
 </AccordionGroup>
@@ -179,7 +179,7 @@ The script exits with code `2` for invalid method selection or invalid `--instal
 
 <Info>
 Designed for environments where you want everything under a local prefix
-(default `~/.NexisClaw`) and no system Node dependency. Supports npm installs
+(default `~/.GreenchClaw`) and no system Node dependency. Supports npm installs
 by default, plus git-checkout installs under the same prefix flow.
 </Info>
 
@@ -192,14 +192,14 @@ by default, plus git-checkout installs under the same prefix flow.
   <Step title="Ensure Git">
     If Git is missing, attempts install via apt/dnf/yum on Linux or Homebrew on macOS.
   </Step>
-  <Step title="Install NexisClaw under prefix">
-    - `npm` method (default): installs under the prefix with npm, then writes wrapper to `<prefix>/bin/NexisClaw`
-    - `git` method: clones/updates a checkout (default `~/NexisClaw`) and still writes the wrapper to `<prefix>/bin/NexisClaw`
+  <Step title="Install GreenchClaw under prefix">
+    - `npm` method (default): installs under the prefix with npm, then writes wrapper to `<prefix>/bin/GreenchClaw`
+    - `git` method: clones/updates a checkout (default `~/GreenchClaw`) and still writes the wrapper to `<prefix>/bin/GreenchClaw`
 
   </Step>
   <Step title="Refresh loaded gateway service">
     If a gateway service is already loaded from that same prefix, the script runs
-    `NexisClaw gateway install --force`, then `NexisClaw gateway restart`, and
+    `GreenchClaw gateway install --force`, then `GreenchClaw gateway restart`, and
     probes gateway health best-effort.
   </Step>
 </Steps>
@@ -209,27 +209,27 @@ by default, plus git-checkout installs under the same prefix flow.
 <Tabs>
   <Tab title="Default">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install-cli.sh | bash
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install-cli.sh | bash
     ```
   </Tab>
   <Tab title="Custom prefix + version">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install-cli.sh | bash -s -- --prefix /opt/NexisClaw --version latest
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install-cli.sh | bash -s -- --prefix /opt/GreenchClaw --version latest
     ```
   </Tab>
   <Tab title="Git install">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install-cli.sh | bash -s -- --install-method git --git-dir ~/NexisClaw
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install-cli.sh | bash -s -- --install-method git --git-dir ~/GreenchClaw
     ```
   </Tab>
   <Tab title="Automation JSON output">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install-cli.sh | bash -s -- --json --prefix /opt/NexisClaw
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install-cli.sh | bash -s -- --json --prefix /opt/GreenchClaw
     ```
   </Tab>
   <Tab title="Run onboarding">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install-cli.sh | bash -s -- --onboard
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install-cli.sh | bash -s -- --onboard
     ```
   </Tab>
 </Tabs>
@@ -239,15 +239,15 @@ by default, plus git-checkout installs under the same prefix flow.
 
 | Flag                        | Description                                                                     |
 | --------------------------- | ------------------------------------------------------------------------------- |
-| `--prefix <path>`           | Install prefix (default: `~/.NexisClaw`)                                         |
+| `--prefix <path>`           | Install prefix (default: `~/.GreenchClaw`)                                      |
 | `--install-method npm\|git` | Choose install method (default: `npm`). Alias: `--method`                       |
 | `--npm`                     | Shortcut for npm method                                                         |
 | `--git`, `--github`         | Shortcut for git method                                                         |
-| `--git-dir <path>`          | Git checkout directory (default: `~/NexisClaw`). Alias: `--dir`                  |
-| `--version <ver>`           | NexisClaw version or dist-tag (default: `latest`)                                |
+| `--git-dir <path>`          | Git checkout directory (default: `~/GreenchClaw`). Alias: `--dir`               |
+| `--version <ver>`           | GreenchClaw version or dist-tag (default: `latest`)                             |
 | `--node-version <ver>`      | Node version (default: `22.22.0`)                                               |
 | `--json`                    | Emit NDJSON events                                                              |
-| `--onboard`                 | Run `NexisClaw onboard` after install                                            |
+| `--onboard`                 | Run `GreenchClaw onboard` after install                                         |
 | `--no-onboard`              | Skip onboarding (default)                                                       |
 | `--set-npm-prefix`          | On Linux, force npm prefix to `~/.npm-global` if current prefix is not writable |
 | `--help`                    | Show usage (`-h`)                                                               |
@@ -256,17 +256,17 @@ by default, plus git-checkout installs under the same prefix flow.
 
   <Accordion title="Environment variables reference">
 
-| Variable                                    | Description                                   |
-| ------------------------------------------- | --------------------------------------------- |
-| `NEXISCLAW_PREFIX=<path>`                    | Install prefix                                |
-| `NEXISCLAW_INSTALL_METHOD=git\|npm`          | Install method                                |
-| `NEXISCLAW_VERSION=<ver>`                    | NexisClaw version or dist-tag                  |
-| `NEXISCLAW_NODE_VERSION=<ver>`               | Node version                                  |
-| `NEXISCLAW_GIT_DIR=<path>`                   | Git checkout directory for git installs       |
-| `NEXISCLAW_GIT_UPDATE=0\|1`                  | Toggle git updates for existing checkouts     |
-| `NEXISCLAW_NO_ONBOARD=1`                     | Skip onboarding                               |
-| `NEXISCLAW_NPM_LOGLEVEL=error\|warn\|notice` | npm log level                                 |
-| `SHARP_IGNORE_GLOBAL_LIBVIPS=0\|1`          | Control sharp/libvips behavior (default: `1`) |
+| Variable                                       | Description                                   |
+| ---------------------------------------------- | --------------------------------------------- |
+| `GREENCHCLAW_PREFIX=<path>`                    | Install prefix                                |
+| `GREENCHCLAW_INSTALL_METHOD=git\|npm`          | Install method                                |
+| `GREENCHCLAW_VERSION=<ver>`                    | GreenchClaw version or dist-tag               |
+| `GREENCHCLAW_NODE_VERSION=<ver>`               | Node version                                  |
+| `GREENCHCLAW_GIT_DIR=<path>`                   | Git checkout directory for git installs       |
+| `GREENCHCLAW_GIT_UPDATE=0\|1`                  | Toggle git updates for existing checkouts     |
+| `GREENCHCLAW_NO_ONBOARD=1`                     | Skip onboarding                               |
+| `GREENCHCLAW_NPM_LOGLEVEL=error\|warn\|notice` | npm log level                                 |
+| `SHARP_IGNORE_GLOBAL_LIBVIPS=0\|1`             | Control sharp/libvips behavior (default: `1`) |
 
   </Accordion>
 </AccordionGroup>
@@ -286,15 +286,15 @@ by default, plus git-checkout installs under the same prefix flow.
   <Step title="Ensure Node.js 24 by default">
     If missing, attempts install via winget, then Chocolatey, then Scoop. Node 22 LTS, currently `22.16+`, remains supported for compatibility.
   </Step>
-  <Step title="Install NexisClaw">
+  <Step title="Install GreenchClaw">
     - `npm` method (default): global npm install using selected `-Tag`, launched from a writable installer temp directory so shells opened in protected folders such as `C:\` still work
-    - `git` method: clone/update repo, install/build with pnpm, and install wrapper at `%USERPROFILE%\.local\bin\NexisClaw.cmd`
+    - `git` method: clone/update repo, install/build with pnpm, and install wrapper at `%USERPROFILE%\.local\bin\GreenchClaw.cmd`
 
   </Step>
   <Step title="Post-install tasks">
     - Adds needed bin directory to user PATH when possible
-    - Refreshes a loaded gateway service best-effort (`NexisClaw gateway install --force`, then restart)
-    - Runs `NexisClaw doctor --non-interactive` on upgrades and git installs (best effort)
+    - Refreshes a loaded gateway service best-effort (`GreenchClaw gateway install --force`, then restart)
+    - Runs `GreenchClaw doctor --non-interactive` on upgrades and git installs (best effort)
 
   </Step>
   <Step title="Handle failures">
@@ -307,34 +307,34 @@ by default, plus git-checkout installs under the same prefix flow.
 <Tabs>
   <Tab title="Default">
     ```powershell
-    iwr -useb https://NexisClaw.ai/install.ps1 | iex
+    iwr -useb https://GreenchClaw.ai/install.ps1 | iex
     ```
   </Tab>
   <Tab title="Git install">
     ```powershell
-    & ([scriptblock]::Create((iwr -useb https://NexisClaw.ai/install.ps1))) -InstallMethod git
+    & ([scriptblock]::Create((iwr -useb https://GreenchClaw.ai/install.ps1))) -InstallMethod git
     ```
   </Tab>
   <Tab title="GitHub main via npm">
     ```powershell
-    & ([scriptblock]::Create((iwr -useb https://NexisClaw.ai/install.ps1))) -Tag main
+    & ([scriptblock]::Create((iwr -useb https://GreenchClaw.ai/install.ps1))) -Tag main
     ```
   </Tab>
   <Tab title="Custom git directory">
     ```powershell
-    & ([scriptblock]::Create((iwr -useb https://NexisClaw.ai/install.ps1))) -InstallMethod git -GitDir "C:\NexisClaw"
+    & ([scriptblock]::Create((iwr -useb https://GreenchClaw.ai/install.ps1))) -InstallMethod git -GitDir "C:\GreenchClaw"
     ```
   </Tab>
   <Tab title="Dry run">
     ```powershell
-    & ([scriptblock]::Create((iwr -useb https://NexisClaw.ai/install.ps1))) -DryRun
+    & ([scriptblock]::Create((iwr -useb https://GreenchClaw.ai/install.ps1))) -DryRun
     ```
   </Tab>
   <Tab title="Debug trace">
     ```powershell
     # install.ps1 has no dedicated -Verbose flag yet.
     Set-PSDebug -Trace 1
-    & ([scriptblock]::Create((iwr -useb https://NexisClaw.ai/install.ps1))) -NoOnboard
+    & ([scriptblock]::Create((iwr -useb https://GreenchClaw.ai/install.ps1))) -NoOnboard
     Set-PSDebug -Trace 0
     ```
   </Tab>
@@ -347,7 +347,7 @@ by default, plus git-checkout installs under the same prefix flow.
 | --------------------------- | ---------------------------------------------------------- |
 | `-InstallMethod npm\|git`   | Install method (default: `npm`)                            |
 | `-Tag <tag\|version\|spec>` | npm dist-tag, version, or package spec (default: `latest`) |
-| `-GitDir <path>`            | Checkout directory (default: `%USERPROFILE%\NexisClaw`)     |
+| `-GitDir <path>`            | Checkout directory (default: `%USERPROFILE%\GreenchClaw`)  |
 | `-NoOnboard`                | Skip onboarding                                            |
 | `-NoGitUpdate`              | Skip `git pull`                                            |
 | `-DryRun`                   | Print actions only                                         |
@@ -356,13 +356,13 @@ by default, plus git-checkout installs under the same prefix flow.
 
   <Accordion title="Environment variables reference">
 
-| Variable                           | Description        |
-| ---------------------------------- | ------------------ |
-| `NEXISCLAW_INSTALL_METHOD=git\|npm` | Install method     |
-| `NEXISCLAW_GIT_DIR=<path>`          | Checkout directory |
-| `NEXISCLAW_NO_ONBOARD=1`            | Skip onboarding    |
-| `NEXISCLAW_GIT_UPDATE=0`            | Disable git pull   |
-| `NEXISCLAW_DRY_RUN=1`               | Dry run mode       |
+| Variable                              | Description        |
+| ------------------------------------- | ------------------ |
+| `GREENCHCLAW_INSTALL_METHOD=git\|npm` | Install method     |
+| `GREENCHCLAW_GIT_DIR=<path>`          | Checkout directory |
+| `GREENCHCLAW_NO_ONBOARD=1`            | Skip onboarding    |
+| `GREENCHCLAW_GIT_UPDATE=0`            | Disable git pull   |
+| `GREENCHCLAW_DRY_RUN=1`               | Dry run mode       |
 
   </Accordion>
 </AccordionGroup>
@@ -380,23 +380,23 @@ Use non-interactive flags/env vars for predictable runs.
 <Tabs>
   <Tab title="install.sh (non-interactive npm)">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --no-prompt --no-onboard
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install.sh | bash -s -- --no-prompt --no-onboard
     ```
   </Tab>
   <Tab title="install.sh (non-interactive git)">
     ```bash
-    NEXISCLAW_INSTALL_METHOD=git NEXISCLAW_NO_PROMPT=1 \
-      curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash
+    GREENCHCLAW_INSTALL_METHOD=git GREENCHCLAW_NO_PROMPT=1 \
+      curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install.sh | bash
     ```
   </Tab>
   <Tab title="install-cli.sh (JSON)">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install-cli.sh | bash -s -- --json --prefix /opt/NexisClaw
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install-cli.sh | bash -s -- --json --prefix /opt/GreenchClaw
     ```
   </Tab>
   <Tab title="install.ps1 (skip onboarding)">
     ```powershell
-    & ([scriptblock]::Create((iwr -useb https://NexisClaw.ai/install.ps1))) -NoOnboard
+    & ([scriptblock]::Create((iwr -useb https://GreenchClaw.ai/install.ps1))) -NoOnboard
     ```
   </Tab>
 </Tabs>
@@ -418,7 +418,7 @@ Use non-interactive flags/env vars for predictable runs.
     The scripts default `SHARP_IGNORE_GLOBAL_LIBVIPS=1` to avoid sharp building against system libvips. To override:
 
     ```bash
-    SHARP_IGNORE_GLOBAL_LIBVIPS=0 curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash
+    SHARP_IGNORE_GLOBAL_LIBVIPS=0 curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install.sh | bash
     ```
 
   </Accordion>
@@ -427,7 +427,7 @@ Use non-interactive flags/env vars for predictable runs.
     Install Git for Windows, reopen PowerShell, rerun installer.
   </Accordion>
 
-  <Accordion title='Windows: "NexisClaw is not recognized"'>
+  <Accordion title='Windows: "GreenchClaw is not recognized"'>
     Run `npm config get prefix` and add that directory to your user PATH (no `\bin` suffix needed on Windows), then reopen PowerShell.
   </Accordion>
 
@@ -437,13 +437,13 @@ Use non-interactive flags/env vars for predictable runs.
 
     ```powershell
     Set-PSDebug -Trace 1
-    & ([scriptblock]::Create((iwr -useb https://NexisClaw.ai/install.ps1))) -NoOnboard
+    & ([scriptblock]::Create((iwr -useb https://GreenchClaw.ai/install.ps1))) -NoOnboard
     Set-PSDebug -Trace 0
     ```
 
   </Accordion>
 
-  <Accordion title="NexisClaw not found after install">
+  <Accordion title="GreenchClaw not found after install">
     Usually a PATH issue. See [Node.js troubleshooting](/install/node#troubleshooting).
   </Accordion>
 </AccordionGroup>

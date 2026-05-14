@@ -13,29 +13,29 @@ import {
 } from "./chrome.executables.js";
 import {
   clearStaleChromeSingletonLocks,
-  decorateNexisClawProfile,
+  decorateGreenchClawProfile,
   diagnoseChromeCdp,
   ensureProfileCleanExit,
   findChromeExecutableLinux,
   findChromeExecutableMac,
   findChromeExecutableWindows,
   formatChromeCdpDiagnostic,
-  buildNexisClawChromeLaunchArgs,
+  buildGreenchClawChromeLaunchArgs,
   getChromeWebSocketUrl,
   isProfileDecorated,
   isChromeCdpReady,
   isChromeReachable,
   resolveBrowserExecutableForPlatform,
-  stopNexisClawChrome,
+  stopGreenchClawChrome,
 } from "./chrome.js";
 import {
-  DEFAULT_NEXISCLAW_BROWSER_COLOR,
-  DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME,
+  DEFAULT_GREENCHCLAW_BROWSER_COLOR,
+  DEFAULT_GREENCHCLAW_BROWSER_PROFILE_NAME,
 } from "./constants.js";
 import { BrowserCdpEndpointBlockedError } from "./errors.js";
 import { DEFAULT_DOWNLOAD_DIR } from "./paths.js";
 
-type StopChromeTarget = Parameters<typeof stopNexisClawChrome>[0];
+type StopChromeTarget = Parameters<typeof stopGreenchClawChrome>[0];
 type ChromeCdpDiagnostic = Awaited<ReturnType<typeof diagnoseChromeCdp>>;
 
 function expectFailedChromeCdpDiagnostic(
@@ -114,7 +114,7 @@ async function withMockChromeCdpServer(params: {
 }
 
 async function stopChromeWithProc(proc: ReturnType<typeof makeChromeTestProc>, timeoutMs: number) {
-  await stopNexisClawChrome(
+  await stopGreenchClawChrome(
     {
       proc,
       cdpPort: 12345,
@@ -142,7 +142,7 @@ describe("browser chrome profile decoration", () => {
   };
 
   beforeAll(async () => {
-    fixtureRoot = await fsp.mkdtemp(path.join(os.tmpdir(), "NexisClaw-chrome-suite-"));
+    fixtureRoot = await fsp.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-chrome-suite-"));
   });
 
   beforeEach(() => {
@@ -162,14 +162,14 @@ describe("browser chrome profile decoration", () => {
 
   it("writes expected name + signed ARGB seed to Chrome prefs", async () => {
     const userDataDir = await createUserDataDir();
-    decorateNexisClawProfile(userDataDir, { color: DEFAULT_NEXISCLAW_BROWSER_COLOR });
+    decorateGreenchClawProfile(userDataDir, { color: DEFAULT_GREENCHCLAW_BROWSER_COLOR });
 
     const expectedSignedArgb = ((0xff << 24) | 0xff4500) >> 0;
 
     const def = await readDefaultProfileFromLocalState(userDataDir);
 
-    expect(def.name).toBe(DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME);
-    expect(def.shortcut_name).toBe(DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME);
+    expect(def.name).toBe(DEFAULT_GREENCHCLAW_BROWSER_PROFILE_NAME);
+    expect(def.shortcut_name).toBe(DEFAULT_GREENCHCLAW_BROWSER_PROFILE_NAME);
     expect(def.profile_color_seed).toBe(expectedSignedArgb);
     expect(def.profile_highlight_color).toBe(expectedSignedArgb);
     expect(def.default_avatar_fill_color).toBe(expectedSignedArgb);
@@ -187,7 +187,7 @@ describe("browser chrome profile decoration", () => {
     expect(prefs.savefile).toBeUndefined();
 
     const marker = await fsp.readFile(
-      path.join(userDataDir, ".NexisClaw-profile-decorated"),
+      path.join(userDataDir, ".GreenchClaw-profile-decorated"),
       "utf-8",
     );
     expect(marker.trim()).toMatch(/^\d+$/);
@@ -195,8 +195,8 @@ describe("browser chrome profile decoration", () => {
 
   it("writes managed download prefs when a download dir is provided", async () => {
     const userDataDir = await createUserDataDir();
-    decorateNexisClawProfile(userDataDir, {
-      color: DEFAULT_NEXISCLAW_BROWSER_COLOR,
+    decorateGreenchClawProfile(userDataDir, {
+      color: DEFAULT_GREENCHCLAW_BROWSER_COLOR,
       downloadDir: DEFAULT_DOWNLOAD_DIR,
     });
 
@@ -211,8 +211,8 @@ describe("browser chrome profile decoration", () => {
     expect(
       isProfileDecorated(
         userDataDir,
-        DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME,
-        DEFAULT_NEXISCLAW_BROWSER_COLOR,
+        DEFAULT_GREENCHCLAW_BROWSER_PROFILE_NAME,
+        DEFAULT_GREENCHCLAW_BROWSER_COLOR,
         DEFAULT_DOWNLOAD_DIR,
       ),
     ).toBe(true);
@@ -220,13 +220,13 @@ describe("browser chrome profile decoration", () => {
 
   it("treats missing managed download prefs as undecorated when required", async () => {
     const userDataDir = await createUserDataDir();
-    decorateNexisClawProfile(userDataDir, { color: DEFAULT_NEXISCLAW_BROWSER_COLOR });
+    decorateGreenchClawProfile(userDataDir, { color: DEFAULT_GREENCHCLAW_BROWSER_COLOR });
 
     expect(
       isProfileDecorated(
         userDataDir,
-        DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME,
-        DEFAULT_NEXISCLAW_BROWSER_COLOR,
+        DEFAULT_GREENCHCLAW_BROWSER_PROFILE_NAME,
+        DEFAULT_GREENCHCLAW_BROWSER_COLOR,
         DEFAULT_DOWNLOAD_DIR,
       ),
     ).toBe(false);
@@ -234,10 +234,10 @@ describe("browser chrome profile decoration", () => {
 
   it("best-effort writes name when color is invalid", async () => {
     const userDataDir = await createUserDataDir();
-    decorateNexisClawProfile(userDataDir, { color: "lobster-orange" });
+    decorateGreenchClawProfile(userDataDir, { color: "lobster-orange" });
     const def = await readDefaultProfileFromLocalState(userDataDir);
 
-    expect(def.name).toBe(DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME);
+    expect(def.name).toBe(DEFAULT_GREENCHCLAW_BROWSER_PROFILE_NAME);
     expect(def.profile_color_seed).toBeUndefined();
   });
 
@@ -251,7 +251,7 @@ describe("browser chrome profile decoration", () => {
       "utf-8",
     );
 
-    decorateNexisClawProfile(userDataDir, { color: DEFAULT_NEXISCLAW_BROWSER_COLOR });
+    decorateGreenchClawProfile(userDataDir, { color: DEFAULT_GREENCHCLAW_BROWSER_COLOR });
 
     const localState = await readJson(path.join(userDataDir, "Local State"));
     expect(typeof localState.profile).toBe("object");
@@ -270,12 +270,12 @@ describe("browser chrome profile decoration", () => {
 
   it("is idempotent when rerun on an existing profile", async () => {
     const userDataDir = await createUserDataDir();
-    decorateNexisClawProfile(userDataDir, { color: DEFAULT_NEXISCLAW_BROWSER_COLOR });
-    decorateNexisClawProfile(userDataDir, { color: DEFAULT_NEXISCLAW_BROWSER_COLOR });
+    decorateGreenchClawProfile(userDataDir, { color: DEFAULT_GREENCHCLAW_BROWSER_COLOR });
+    decorateGreenchClawProfile(userDataDir, { color: DEFAULT_GREENCHCLAW_BROWSER_COLOR });
 
     const prefs = await readJson(path.join(userDataDir, "Default", "Preferences"));
     const profile = prefs.profile as Record<string, unknown>;
-    expect(profile.name).toBe(DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME);
+    expect(profile.name).toBe(DEFAULT_GREENCHCLAW_BROWSER_PROFILE_NAME);
   });
 
   it("clears stale singleton artifacts when the lock points at another host", async () => {
@@ -386,7 +386,7 @@ describe("browser chrome helpers", () => {
   });
 
   it("finds Playwright-managed Linux Chromium", () => {
-    const browserPath = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-ms-playwright-"));
+    const browserPath = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-ms-playwright-"));
     const executablePath = path.join(browserPath, "chromium-1217", "chrome-linux64", "chrome");
     vi.stubEnv("PLAYWRIGHT_BROWSERS_PATH", browserPath);
     fs.mkdirSync(path.dirname(executablePath), { recursive: true });
@@ -826,20 +826,20 @@ describe("browser chrome helpers", () => {
     );
   });
 
-  it("stopNexisClawChrome no-ops when process is already killed", async () => {
+  it("stopGreenchClawChrome no-ops when process is already killed", async () => {
     const proc = makeChromeTestProc({ killed: true });
     await stopChromeWithProc(proc, 10);
     expect(proc.kill).not.toHaveBeenCalled();
   });
 
-  it("stopNexisClawChrome sends SIGTERM and returns once CDP is down", async () => {
+  it("stopGreenchClawChrome sends SIGTERM and returns once CDP is down", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("down")));
     const proc = makeChromeTestProc();
     await stopChromeWithProc(proc, 10);
     expect(proc.kill).toHaveBeenCalledWith("SIGTERM");
   });
 
-  it("stopNexisClawChrome escalates to SIGKILL when CDP stays reachable", async () => {
+  it("stopGreenchClawChrome escalates to SIGKILL when CDP stays reachable", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
@@ -903,7 +903,7 @@ describe("chrome executables", () => {
 
 describe("browser chrome launch args", () => {
   it("does not force an about:blank tab at startup", () => {
-    const args = buildNexisClawChromeLaunchArgs({
+    const args = buildGreenchClawChromeLaunchArgs({
       resolved: {
         enabled: true,
         controlPort: 18791,
@@ -930,27 +930,27 @@ describe("browser chrome launch args", () => {
           maxTabsPerSession: 8,
           sweepMinutes: 5,
         },
-        defaultProfile: "NexisClaw",
+        defaultProfile: "GreenchClaw",
         profiles: {
-          NexisClaw: { cdpPort: 18800, color: "#FF4500" },
+          GreenchClaw: { cdpPort: 18800, color: "#FF4500" },
         },
       },
       profile: {
-        name: "NexisClaw",
+        name: "GreenchClaw",
         cdpUrl: "http://127.0.0.1:18800",
         cdpPort: 18800,
         cdpHost: "127.0.0.1",
         cdpIsLoopback: true,
         color: "#FF4500",
-        driver: "NexisClaw",
+        driver: "GreenchClaw",
         headless: false,
         attachOnly: false,
       },
-      userDataDir: "/tmp/NexisClaw-test-user-data",
+      userDataDir: "/tmp/GreenchClaw-test-user-data",
     });
 
     expect(args).not.toContain("about:blank");
     expect(args).toContain("--remote-debugging-port=18800");
-    expect(args).toContain("--user-data-dir=/tmp/NexisClaw-test-user-data");
+    expect(args).toContain("--user-data-dir=/tmp/GreenchClaw-test-user-data");
   });
 });

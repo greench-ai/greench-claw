@@ -2,7 +2,7 @@ import type { ChildProcess } from "node:child_process";
 import { EventEmitter } from "node:events";
 import process from "node:process";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { NEXISCLAW_CLI_ENV_VALUE } from "../infra/NexisClaw-exec-env.js";
+import { GREENCHCLAW_CLI_ENV_VALUE } from "../infra/GreenchClaw-exec-env.js";
 
 const spawnMock = vi.hoisted(() => vi.fn());
 
@@ -104,18 +104,18 @@ describe("runCommandWithTimeout", () => {
     const resolved = resolveCommandEnv({
       argv: ["node", "script.js"],
       baseEnv: {
-        NEXISCLAW_BASE_ENV: "base",
-        NEXISCLAW_TO_REMOVE: undefined,
+        GREENCHCLAW_BASE_ENV: "base",
+        GREENCHCLAW_TO_REMOVE: undefined,
       },
       env: {
-        NEXISCLAW_TEST_ENV: "ok",
+        GREENCHCLAW_TEST_ENV: "ok",
       },
     });
 
-    expect(resolved.NEXISCLAW_BASE_ENV).toBe("base");
-    expect(resolved.NEXISCLAW_TEST_ENV).toBe("ok");
-    expect(resolved.NEXISCLAW_TO_REMOVE).toBeUndefined();
-    expect(resolved.NEXISCLAW_CLI).toBe(NEXISCLAW_CLI_ENV_VALUE);
+    expect(resolved.GREENCHCLAW_BASE_ENV).toBe("base");
+    expect(resolved.GREENCHCLAW_TEST_ENV).toBe("ok");
+    expect(resolved.GREENCHCLAW_TO_REMOVE).toBeUndefined();
+    expect(resolved.GREENCHCLAW_CLI).toBe(GREENCHCLAW_CLI_ENV_VALUE);
   });
 
   it("suppresses npm fund prompts for npm argv", () => {

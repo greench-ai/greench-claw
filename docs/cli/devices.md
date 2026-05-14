@@ -1,31 +1,31 @@
 ---
-summary: "CLI reference for `NexisClaw devices` (device pairing + token rotation/revocation)"
+summary: "CLI reference for `GreenchClaw devices` (device pairing + token rotation/revocation)"
 read_when:
   - You are approving device pairing requests
   - You need to rotate or revoke device tokens
 title: "Devices"
 ---
 
-# `NexisClaw devices`
+# `GreenchClaw devices`
 
 Manage device pairing requests and device-scoped tokens.
 
 ## Commands
 
-### `NexisClaw devices list`
+### `GreenchClaw devices list`
 
 List pending pairing requests and paired devices.
 
 ```
-NexisClaw devices list
-NexisClaw devices list --json
+GreenchClaw devices list
+GreenchClaw devices list --json
 ```
 
 Pending request output shows the requested access next to the device's current
 approved access when the device is already paired. This makes scope/role
 upgrades explicit instead of looking like the pairing was lost.
 
-### `NexisClaw devices remove <deviceId>`
+### `GreenchClaw devices remove <deviceId>`
 
 Remove one paired device entry.
 
@@ -34,35 +34,35 @@ remove only **their own** device entry. Removing some other device requires
 `operator.admin`.
 
 ```
-NexisClaw devices remove <deviceId>
-NexisClaw devices remove <deviceId> --json
+GreenchClaw devices remove <deviceId>
+GreenchClaw devices remove <deviceId> --json
 ```
 
-### `NexisClaw devices clear --yes [--pending]`
+### `GreenchClaw devices clear --yes [--pending]`
 
 Clear paired devices in bulk.
 
 ```
-NexisClaw devices clear --yes
-NexisClaw devices clear --yes --pending
-NexisClaw devices clear --yes --pending --json
+GreenchClaw devices clear --yes
+GreenchClaw devices clear --yes --pending
+GreenchClaw devices clear --yes --pending --json
 ```
 
-### `NexisClaw devices approve [requestId] [--latest]`
+### `GreenchClaw devices approve [requestId] [--latest]`
 
 Approve a pending device pairing request by exact `requestId`. If `requestId`
-is omitted or `--latest` is passed, NexisClaw only prints the selected pending
+is omitted or `--latest` is passed, GreenchClaw only prints the selected pending
 request and exits; rerun approval with the exact request ID after verifying
 the details.
 
 <Note>
-If a device retries pairing with changed auth details (role, scopes, or public key), NexisClaw supersedes the previous pending entry and issues a new `requestId`. Run `NexisClaw devices list` right before approval to use the current ID.
+If a device retries pairing with changed auth details (role, scopes, or public key), GreenchClaw supersedes the previous pending entry and issues a new `requestId`. Run `GreenchClaw devices list` right before approval to use the current ID.
 </Note>
 
 If the device is already paired and asks for broader scopes or a broader role,
-NexisClaw keeps the existing approval in place and creates a new pending upgrade
-request. Review the `Requested` vs `Approved` columns in `NexisClaw devices list`
-or use `NexisClaw devices approve --latest` to preview the exact upgrade before
+GreenchClaw keeps the existing approval in place and creates a new pending upgrade
+request. Review the `Requested` vs `Approved` columns in `GreenchClaw devices list`
+or use `GreenchClaw devices approve --latest` to preview the exact upgrade before
 approving it.
 
 If the Gateway is explicitly configured with
@@ -72,20 +72,20 @@ is disabled by default and never applies to operator/browser clients or upgrade
 requests.
 
 ```
-NexisClaw devices approve
-NexisClaw devices approve <requestId>
-NexisClaw devices approve --latest
+GreenchClaw devices approve
+GreenchClaw devices approve <requestId>
+GreenchClaw devices approve --latest
 ```
 
-### `NexisClaw devices reject <requestId>`
+### `GreenchClaw devices reject <requestId>`
 
 Reject a pending device pairing request.
 
 ```
-NexisClaw devices reject <requestId>
+GreenchClaw devices reject <requestId>
 ```
 
-### `NexisClaw devices rotate --device <id> --role <role> [--scope <scope...>]`
+### `GreenchClaw devices rotate --device <id> --role <role> [--scope <scope...>]`
 
 Rotate a device token for a specific role (optionally updating scopes).
 The target role must already exist in that device's approved pairing contract;
@@ -99,7 +99,7 @@ scopes; rotation cannot mint or preserve a broader operator token than the
 caller already has.
 
 ```
-NexisClaw devices rotate --device <deviceId> --role operator --scope operator.read --scope operator.write
+GreenchClaw devices rotate --device <deviceId> --role operator --scope operator.read --scope operator.write
 ```
 
 Returns rotation metadata as JSON. If the caller is rotating its own token while
@@ -107,7 +107,7 @@ authenticated with that device token, the response also includes the replacement
 token so the client can persist it before reconnecting. Shared/admin rotations
 do not echo the bearer token.
 
-### `NexisClaw devices revoke --device <id> --role <role>`
+### `GreenchClaw devices revoke --device <id> --role <role>`
 
 Revoke a device token for a specific role.
 
@@ -117,7 +117,7 @@ The target token scope set must also fit within the caller session's own
 operator scopes; pairing-only callers cannot revoke admin/write operator tokens.
 
 ```
-NexisClaw devices revoke --device <deviceId> --role node
+GreenchClaw devices revoke --device <deviceId> --role node
 ```
 
 Returns the revoke result as JSON.
@@ -162,27 +162,27 @@ Use this when Control UI or other clients keep failing with `AUTH_TOKEN_MISMATCH
 1. Confirm current gateway token source:
 
 ```bash
-NexisClaw config get gateway.auth.token
+GreenchClaw config get gateway.auth.token
 ```
 
 2. List paired devices and identify the affected device id:
 
 ```bash
-NexisClaw devices list
+GreenchClaw devices list
 ```
 
 3. Rotate operator token for the affected device:
 
 ```bash
-NexisClaw devices rotate --device <deviceId> --role operator
+GreenchClaw devices rotate --device <deviceId> --role operator
 ```
 
 4. If rotation is not enough, remove stale pairing and approve again:
 
 ```bash
-NexisClaw devices remove <deviceId>
-NexisClaw devices list
-NexisClaw devices approve <requestId>
+GreenchClaw devices remove <deviceId>
+GreenchClaw devices list
+GreenchClaw devices approve <requestId>
 ```
 
 5. Retry client connection with the current shared token/password.

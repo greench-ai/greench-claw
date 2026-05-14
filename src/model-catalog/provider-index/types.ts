@@ -1,6 +1,6 @@
 import type { ModelCatalogProvider } from "../types.js";
 
-export type NexisClawProviderIndexPluginInstall = {
+export type GreenchClawProviderIndexPluginInstall = {
   clawhubSpec?: string;
   npmSpec?: string;
   defaultChoice?: "clawhub" | "npm";
@@ -8,14 +8,14 @@ export type NexisClawProviderIndexPluginInstall = {
   expectedIntegrity?: string;
 };
 
-export type NexisClawProviderIndexPlugin = {
+export type GreenchClawProviderIndexPlugin = {
   id: string;
   package?: string;
   source?: string;
-  install?: NexisClawProviderIndexPluginInstall;
+  install?: GreenchClawProviderIndexPluginInstall;
 };
 
-export type NexisClawProviderIndexProviderAuthChoice = {
+export type GreenchClawProviderIndexProviderAuthChoice = {
   method: string;
   choiceId: string;
   choiceLabel: string;
@@ -32,17 +32,17 @@ export type NexisClawProviderIndexProviderAuthChoice = {
   onboardingScopes?: readonly ("text-inference" | "image-generation")[];
 };
 
-export type NexisClawProviderIndexProvider = {
+export type GreenchClawProviderIndexProvider = {
   id: string;
   name: string;
-  plugin: NexisClawProviderIndexPlugin;
+  plugin: GreenchClawProviderIndexPlugin;
   docs?: string;
   categories?: readonly string[];
-  authChoices?: readonly NexisClawProviderIndexProviderAuthChoice[];
+  authChoices?: readonly GreenchClawProviderIndexProviderAuthChoice[];
   previewCatalog?: ModelCatalogProvider;
 };
 
-export type NexisClawProviderIndex = {
+export type GreenchClawProviderIndex = {
   version: number;
-  providers: Readonly<Record<string, NexisClawProviderIndexProvider>>;
+  providers: Readonly<Record<string, GreenchClawProviderIndexProvider>>;
 };

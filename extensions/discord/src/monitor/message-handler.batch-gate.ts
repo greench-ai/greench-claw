@@ -1,6 +1,6 @@
-import type { ReplyToMode } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ReplyThreadingPolicy } from "NexisClaw/plugin-sdk/reply-reference";
-import { resolveBatchedReplyThreadingPolicy } from "NexisClaw/plugin-sdk/reply-reference";
+import type { ReplyToMode } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ReplyThreadingPolicy } from "GreenchClaw/plugin-sdk/reply-reference";
+import { resolveBatchedReplyThreadingPolicy } from "GreenchClaw/plugin-sdk/reply-reference";
 
 type ReplyThreadingContext = {
   ReplyThreading?: ReplyThreadingPolicy;

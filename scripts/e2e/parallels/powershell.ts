@@ -63,11 +63,11 @@ export function windowsModelProviderTimeoutScript(modelId: string): string {
       },
     },
   ]);
-  return `$providerTimeoutBatchPath = Join-Path ([System.IO.Path]::GetTempPath()) 'NexisClaw-provider-timeout.batch.json'
+  return `$providerTimeoutBatchPath = Join-Path ([System.IO.Path]::GetTempPath()) 'GreenchClaw-provider-timeout.batch.json'
 @'
 ${batchJson}
 '@ | Set-Content -Path $providerTimeoutBatchPath -Encoding UTF8
-Invoke-NexisClaw config set --batch-file $providerTimeoutBatchPath --strict-json
+Invoke-GreenchClaw config set --batch-file $providerTimeoutBatchPath --strict-json
 $providerTimeoutExit = $LASTEXITCODE
 Remove-Item $providerTimeoutBatchPath -Force -ErrorAction SilentlyContinue
 if ($providerTimeoutExit -ne 0) { throw "model provider timeout config set failed" }`;
@@ -79,28 +79,28 @@ export function windowsAgentTurnConfigPatchScript(modelId: string): string {
     modelId,
     operations: batchJson ? (JSON.parse(batchJson) as unknown) : [],
   });
-  return `$agentTurnConfigPatchPath = $env:NEXISCLAW_CONFIG_PATH
-if (-not $agentTurnConfigPatchPath) { $agentTurnConfigPatchPath = Join-Path $env:USERPROFILE '.NexisClaw\\NexisClaw.json' }
-$agentTurnVersionText = Invoke-NexisClaw --version 2>$null | Out-String
+  return `$agentTurnConfigPatchPath = $env:GREENCHCLAW_CONFIG_PATH
+if (-not $agentTurnConfigPatchPath) { $agentTurnConfigPatchPath = Join-Path $env:USERPROFILE '.GreenchClaw\\GreenchClaw.json' }
+$agentTurnVersionText = Invoke-GreenchClaw --version 2>$null | Out-String
 $agentTurnRuntimePolicySupported = $false
-if ($agentTurnVersionText -match 'NexisClaw\\s+(\\d{4})\\.(\\d{1,2})\\.(\\d{1,2})') {
+if ($agentTurnVersionText -match 'GreenchClaw\\s+(\\d{4})\\.(\\d{1,2})\\.(\\d{1,2})') {
   $agentTurnYear = [int]$Matches[1]
   $agentTurnMonth = [int]$Matches[2]
   $agentTurnDay = [int]$Matches[3]
   $agentTurnRuntimePolicySupported = ($agentTurnYear -gt 2026) -or ($agentTurnYear -eq 2026 -and (($agentTurnMonth -gt 5) -or ($agentTurnMonth -eq 5 -and $agentTurnDay -ge 9)))
 }
-$env:NEXISCLAW_PARALLELS_AGENT_CONFIG_PATCH = @'
+$env:GREENCHCLAW_PARALLELS_AGENT_CONFIG_PATCH = @'
 ${payloadJson}
 '@
-$env:NEXISCLAW_PARALLELS_AGENT_CONFIG_PATH = $agentTurnConfigPatchPath
-$env:NEXISCLAW_PARALLELS_AGENT_RUNTIME_POLICY_SUPPORTED = if ($agentTurnRuntimePolicySupported) { '1' } else { '0' }
-$agentTurnConfigPatchScriptPath = Join-Path ([System.IO.Path]::GetTempPath()) 'NexisClaw-agent-turn-config-patch.cjs'
+$env:GREENCHCLAW_PARALLELS_AGENT_CONFIG_PATH = $agentTurnConfigPatchPath
+$env:GREENCHCLAW_PARALLELS_AGENT_RUNTIME_POLICY_SUPPORTED = if ($agentTurnRuntimePolicySupported) { '1' } else { '0' }
+$agentTurnConfigPatchScriptPath = Join-Path ([System.IO.Path]::GetTempPath()) 'GreenchClaw-agent-turn-config-patch.cjs'
 @'
 const fs = require("node:fs");
 const path = require("node:path");
-const configPath = process.env.NEXISCLAW_PARALLELS_AGENT_CONFIG_PATH;
-const payload = JSON.parse(process.env.NEXISCLAW_PARALLELS_AGENT_CONFIG_PATCH || "{}");
-const canWriteAgentRuntime = process.env.NEXISCLAW_PARALLELS_AGENT_RUNTIME_POLICY_SUPPORTED === "1";
+const configPath = process.env.GREENCHCLAW_PARALLELS_AGENT_CONFIG_PATH;
+const payload = JSON.parse(process.env.GREENCHCLAW_PARALLELS_AGENT_CONFIG_PATCH || "{}");
+const canWriteAgentRuntime = process.env.GREENCHCLAW_PARALLELS_AGENT_RUNTIME_POLICY_SUPPORTED === "1";
 function readJsonFile(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8").replace(/^\\uFEFF/u, ""));
 }
@@ -155,20 +155,20 @@ fs.writeFileSync(configPath, JSON.stringify(cfg, null, 2) + "\\n", { mode: 0o600
 node.exe $agentTurnConfigPatchScriptPath
 $agentTurnConfigPatchExit = $LASTEXITCODE
 Remove-Item $agentTurnConfigPatchScriptPath -Force -ErrorAction SilentlyContinue
-Remove-Item Env:NEXISCLAW_PARALLELS_AGENT_CONFIG_PATCH -Force -ErrorAction SilentlyContinue
-Remove-Item Env:NEXISCLAW_PARALLELS_AGENT_CONFIG_PATH -Force -ErrorAction SilentlyContinue
-Remove-Item Env:NEXISCLAW_PARALLELS_AGENT_RUNTIME_POLICY_SUPPORTED -Force -ErrorAction SilentlyContinue
+Remove-Item Env:GREENCHCLAW_PARALLELS_AGENT_CONFIG_PATCH -Force -ErrorAction SilentlyContinue
+Remove-Item Env:GREENCHCLAW_PARALLELS_AGENT_CONFIG_PATH -Force -ErrorAction SilentlyContinue
+Remove-Item Env:GREENCHCLAW_PARALLELS_AGENT_RUNTIME_POLICY_SUPPORTED -Force -ErrorAction SilentlyContinue
 if ($agentTurnConfigPatchExit -ne 0) { throw "agent turn config patch failed" }`;
 }
 
-export const windowsNexisClawResolver = String.raw`function Resolve-NexisClawCommand {
-  if ($script:NexisClawResolvedCommand) { return $script:NexisClawResolvedCommand }
+export const windowsGreenchClawResolver = String.raw`function Resolve-GreenchClawCommand {
+  if ($script:GreenchClawResolvedCommand) { return $script:GreenchClawResolvedCommand }
   $shimCandidates = @()
   if ($env:APPDATA) {
-    $shimCandidates += Join-Path $env:APPDATA 'npm\NexisClaw.cmd'
-    $shimCandidates += Join-Path $env:APPDATA 'npm\NexisClaw.ps1'
+    $shimCandidates += Join-Path $env:APPDATA 'npm\GreenchClaw.cmd'
+    $shimCandidates += Join-Path $env:APPDATA 'npm\GreenchClaw.ps1'
   }
-  foreach ($name in @('NexisClaw.cmd', 'NexisClaw.ps1', 'NexisClaw')) {
+  foreach ($name in @('GreenchClaw.cmd', 'GreenchClaw.ps1', 'GreenchClaw')) {
     $command = Get-Command $name -ErrorAction SilentlyContinue | Select-Object -First 1
     if ($command -and $command.Source) { $shimCandidates += $command.Source }
   }
@@ -177,42 +177,42 @@ export const windowsNexisClawResolver = String.raw`function Resolve-NexisClawCom
     $npmPrefix = (& npm.cmd prefix -g 2>$null | Select-Object -First 1)
   } catch {}
   if ($npmPrefix) {
-    $shimCandidates += Join-Path $npmPrefix 'NexisClaw.cmd'
-    $shimCandidates += Join-Path $npmPrefix 'NexisClaw.ps1'
+    $shimCandidates += Join-Path $npmPrefix 'GreenchClaw.cmd'
+    $shimCandidates += Join-Path $npmPrefix 'GreenchClaw.ps1'
   }
   foreach ($candidate in $shimCandidates) {
     if ($candidate -and (Test-Path $candidate)) {
-      $script:NexisClawResolvedCommand = @{ Kind = 'shim'; Path = $candidate }
-      return $script:NexisClawResolvedCommand
+      $script:GreenchClawResolvedCommand = @{ Kind = 'shim'; Path = $candidate }
+      return $script:GreenchClawResolvedCommand
     }
   }
   $entryCandidates = @()
   if ($env:APPDATA) {
-    $entryCandidates += Join-Path $env:APPDATA 'npm\node_modules\NexisClaw\NexisClaw.mjs'
+    $entryCandidates += Join-Path $env:APPDATA 'npm\node_modules\GreenchClaw\GreenchClaw.mjs'
   }
   if ($npmPrefix) {
-    $entryCandidates += Join-Path $npmPrefix 'node_modules\NexisClaw\NexisClaw.mjs'
+    $entryCandidates += Join-Path $npmPrefix 'node_modules\GreenchClaw\GreenchClaw.mjs'
   }
   foreach ($candidate in $entryCandidates) {
     if ($candidate -and (Test-Path $candidate)) {
-      $script:NexisClawResolvedCommand = @{ Kind = 'node'; Path = $candidate }
-      return $script:NexisClawResolvedCommand
+      $script:GreenchClawResolvedCommand = @{ Kind = 'node'; Path = $candidate }
+      return $script:GreenchClawResolvedCommand
     }
   }
-  throw 'NexisClaw command not found in PATH, APPDATA npm, or npm global prefix'
+  throw 'GreenchClaw command not found in PATH, APPDATA npm, or npm global prefix'
 }
-function Invoke-NexisClaw {
-  param([Parameter(ValueFromRemainingArguments = $true)][string[]] $NexisClawArgs)
-  $command = Resolve-NexisClawCommand
+function Invoke-GreenchClaw {
+  param([Parameter(ValueFromRemainingArguments = $true)][string[]] $GreenchClawArgs)
+  $command = Resolve-GreenchClawCommand
   $previousErrorActionPreference = $ErrorActionPreference
   $previousNativeErrorActionPreference = $PSNativeCommandUseErrorActionPreference
   $ErrorActionPreference = 'Continue'
   $PSNativeCommandUseErrorActionPreference = $false
   try {
     if ($command.Kind -eq 'node') {
-      & node.exe $command.Path @NexisClawArgs
+      & node.exe $command.Path @GreenchClawArgs
     } else {
-      & $command.Path @NexisClawArgs
+      & $command.Path @GreenchClawArgs
     }
   } finally {
     $ErrorActionPreference = $previousErrorActionPreference

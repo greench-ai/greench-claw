@@ -1,13 +1,13 @@
-import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
+import { describeAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
 import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
-} from "NexisClaw/plugin-sdk/channel-config-helpers";
-import { createRestrictSendersChannelSecurity } from "NexisClaw/plugin-sdk/channel-policy";
-import { createChannelPluginBase, getChatChannelMeta } from "NexisClaw/plugin-sdk/core";
-import type { ChannelPlugin } from "NexisClaw/plugin-sdk/core";
-import { normalizeStringifiedOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { normalizeE164 } from "NexisClaw/plugin-sdk/text-utility-runtime";
+} from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import { createRestrictSendersChannelSecurity } from "GreenchClaw/plugin-sdk/channel-policy";
+import { createChannelPluginBase, getChatChannelMeta } from "GreenchClaw/plugin-sdk/core";
+import type { ChannelPlugin } from "GreenchClaw/plugin-sdk/core";
+import { normalizeStringifiedOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeE164 } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import {
   listSignalAccountIds,
   resolveDefaultSignalAccountId,

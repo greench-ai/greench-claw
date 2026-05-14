@@ -1,6 +1,6 @@
-import { resolveDirectStatusReplyForSession } from "NexisClaw/plugin-sdk/command-status-runtime";
-import * as pluginRuntime from "NexisClaw/plugin-sdk/plugin-runtime";
-import { dispatchReplyWithDispatcher } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
+import { resolveDirectStatusReplyForSession } from "GreenchClaw/plugin-sdk/command-status-runtime";
+import * as pluginRuntime from "GreenchClaw/plugin-sdk/plugin-runtime";
+import { dispatchReplyWithDispatcher } from "GreenchClaw/plugin-sdk/reply-dispatch-runtime";
 import { resolveDiscordNativeInteractionRouteState } from "./native-command-route.js";
 
 export const nativeCommandRuntime = {

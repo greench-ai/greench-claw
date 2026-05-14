@@ -2,7 +2,7 @@ import { mkdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { requireNodeSqlite } from "../infra/node-sqlite.js";
-import { withNexisClawTestState } from "../test-utils/NexisClaw-test-state.js";
+import { withGreenchClawTestState } from "../test-utils/GreenchClaw-test-state.js";
 import { createManagedTaskFlow, resetTaskFlowRegistryForTests } from "./task-flow-registry.js";
 import {
   createTaskRecord,
@@ -19,7 +19,7 @@ import {
 } from "./task-registry.store.js";
 import type { TaskRecord } from "./task-registry.types.js";
 
-const ORIGINAL_STATE_DIR = process.env.NEXISCLAW_STATE_DIR;
+const ORIGINAL_STATE_DIR = process.env.GREENCHCLAW_STATE_DIR;
 
 function requireFirstUpsertParams(upsertTaskWithDeliveryState: ReturnType<typeof vi.fn>): {
   task?: { taskId?: string };
@@ -58,9 +58,9 @@ function createStoredTask(): TaskRecord {
 describe("task-registry store runtime", () => {
   afterEach(() => {
     if (ORIGINAL_STATE_DIR === undefined) {
-      delete process.env.NEXISCLAW_STATE_DIR;
+      delete process.env.GREENCHCLAW_STATE_DIR;
     } else {
-      process.env.NEXISCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
+      process.env.GREENCHCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
     }
     resetTaskRegistryForTests();
     resetTaskFlowRegistryForTests({ persist: false });
@@ -300,8 +300,8 @@ describe("task-registry store runtime", () => {
     if (process.platform === "win32") {
       return;
     }
-    await withNexisClawTestState(
-      { layout: "state-only", prefix: "NexisClaw-task-store-" },
+    await withGreenchClawTestState(
+      { layout: "state-only", prefix: "GreenchClaw-task-store-" },
       async () => {
         createTaskRecord({
           runtime: "cron",
@@ -324,8 +324,8 @@ describe("task-registry store runtime", () => {
   });
 
   it("migrates legacy ownerless cron rows to system scope", async () => {
-    await withNexisClawTestState(
-      { layout: "state-only", prefix: "NexisClaw-task-store-legacy-" },
+    await withGreenchClawTestState(
+      { layout: "state-only", prefix: "GreenchClaw-task-store-legacy-" },
       async () => {
         const sqlitePath = resolveTaskRegistrySqlitePath(process.env);
         mkdirSync(path.dirname(sqlitePath), { recursive: true });
@@ -408,8 +408,8 @@ describe("task-registry store runtime", () => {
   });
 
   it("keeps legacy requester_session_key rows writable after restore", async () => {
-    await withNexisClawTestState(
-      { layout: "state-only", prefix: "NexisClaw-task-store-legacy-write-" },
+    await withGreenchClawTestState(
+      { layout: "state-only", prefix: "GreenchClaw-task-store-legacy-write-" },
       async () => {
         const sqlitePath = resolveTaskRegistrySqlitePath(process.env);
         mkdirSync(path.dirname(sqlitePath), { recursive: true });

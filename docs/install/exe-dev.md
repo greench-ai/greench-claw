@@ -1,22 +1,22 @@
 ---
-summary: "Run NexisClaw Gateway on exe.dev (VM + HTTPS proxy) for remote access"
+summary: "Run GreenchClaw Gateway on exe.dev (VM + HTTPS proxy) for remote access"
 read_when:
   - You want a cheap always-on Linux host for the Gateway
   - You want remote Control UI access without running your own VPS
 title: "exe.dev"
 ---
 
-Goal: NexisClaw Gateway running on an exe.dev VM, reachable from your laptop via: `https://<vm-name>.exe.xyz`
+Goal: GreenchClaw Gateway running on an exe.dev VM, reachable from your laptop via: `https://<vm-name>.exe.xyz`
 
 This page assumes exe.dev's default **exeuntu** image. If you picked a different distro, map packages accordingly.
 
 ## Beginner quick path
 
-1. [https://exe.new/NexisClaw](https://exe.new/NexisClaw)
+1. [https://exe.new/GreenchClaw](https://exe.new/GreenchClaw)
 2. Fill in your auth key/token as needed
 3. Click on "Agent" next to your VM and wait for Shelley to finish provisioning
 4. Open `https://<vm-name>.exe.xyz/` and authenticate with the configured shared secret (this guide uses token auth by default, but password auth works too if you switch `gateway.auth.mode`)
-5. Approve any pending device pairing requests with `NexisClaw devices approve <requestId>`
+5. Approve any pending device pairing requests with `GreenchClaw devices approve <requestId>`
 
 ## What you need
 
@@ -25,11 +25,11 @@ This page assumes exe.dev's default **exeuntu** image. If you picked a different
 
 ## Automated install with Shelley
 
-Shelley, [exe.dev](https://exe.dev)'s agent, can install NexisClaw instantly with our
+Shelley, [exe.dev](https://exe.dev)'s agent, can install GreenchClaw instantly with our
 prompt. The prompt used is as below:
 
 ```
-Set up NexisClaw (https://docs.NexisClaw.ai/install) on this VM. Use the non-interactive and accept-risk flags for NexisClaw onboarding. Add the supplied auth or token as needed. Configure nginx to forward from the default port 18789 to the root location on the default enabled site config, making sure to enable Websocket support. Pairing is done by "NexisClaw devices list" and "NexisClaw devices approve <request id>". Make sure the dashboard shows that NexisClaw's health is OK. exe.dev handles forwarding from port 8000 to port 80/443 and HTTPS for us, so the final "reachable" should be <vm-name>.exe.xyz, without port specification.
+Set up GreenchClaw (https://docs.GreenchClaw.ai/install) on this VM. Use the non-interactive and accept-risk flags for GreenchClaw onboarding. Add the supplied auth or token as needed. Configure nginx to forward from the default port 18789 to the root location on the default enabled site config, making sure to enable Websocket support. Pairing is done by "GreenchClaw devices list" and "GreenchClaw devices approve <request id>". Make sure the dashboard shows that GreenchClaw's health is OK. exe.dev handles forwarding from port 8000 to port 80/443 and HTTPS for us, so the final "reachable" should be <vm-name>.exe.xyz, without port specification.
 ```
 
 ## Manual installation
@@ -49,7 +49,7 @@ ssh <vm-name>.exe.xyz
 ```
 
 <Tip>
-Keep this VM **stateful**. NexisClaw stores `NexisClaw.json`, per-agent `auth-profiles.json`, sessions, and channel/provider state under `~/.NexisClaw/`, plus the workspace under `~/.NexisClaw/workspace/`.
+Keep this VM **stateful**. GreenchClaw stores `GreenchClaw.json`, per-agent `auth-profiles.json`, sessions, and channel/provider state under `~/.GreenchClaw/`, plus the workspace under `~/.GreenchClaw/workspace/`.
 </Tip>
 
 ## 2) Install prerequisites (on the VM)
@@ -59,15 +59,15 @@ sudo apt-get update
 sudo apt-get install -y git curl jq ca-certificates openssl
 ```
 
-## 3) Install NexisClaw
+## 3) Install GreenchClaw
 
-Run the NexisClaw install script:
+Run the GreenchClaw install script:
 
 ```bash
-curl -fsSL https://NexisClaw.ai/install.sh | bash
+curl -fsSL https://GreenchClaw.ai/install.sh | bash
 ```
 
-## 4) Setup nginx to proxy NexisClaw to port 8000
+## 4) Setup nginx to proxy GreenchClaw to port 8000
 
 Edit `/etc/nginx/sites-enabled/default` with
 
@@ -102,25 +102,25 @@ server {
 ```
 
 Overwrite forwarding headers instead of preserving client-supplied chains.
-NexisClaw trusts forwarded IP metadata only from explicitly configured proxies,
+GreenchClaw trusts forwarded IP metadata only from explicitly configured proxies,
 and append-style `X-Forwarded-For` chains are treated as a hardening risk.
 
-## 5) Access NexisClaw and grant privileges
+## 5) Access GreenchClaw and grant privileges
 
 Access `https://<vm-name>.exe.xyz/` (see the Control UI output from onboarding). If it prompts for auth, paste the
 configured shared secret from the VM. This guide uses token auth, so retrieve `gateway.auth.token`
-with `NexisClaw config get gateway.auth.token` (or generate one with `NexisClaw doctor --generate-gateway-token`).
-If you changed the gateway to password auth, use `gateway.auth.password` / `NEXISCLAW_GATEWAY_PASSWORD` instead.
-Approve devices with `NexisClaw devices list` and `NexisClaw devices approve <requestId>`. When in doubt, use Shelley from your browser!
+with `GreenchClaw config get gateway.auth.token` (or generate one with `GreenchClaw doctor --generate-gateway-token`).
+If you changed the gateway to password auth, use `gateway.auth.password` / `GREENCHCLAW_GATEWAY_PASSWORD` instead.
+Approve devices with `GreenchClaw devices list` and `GreenchClaw devices approve <requestId>`. When in doubt, use Shelley from your browser!
 
 ## Remote channel setup
 
-For remote hosts, prefer one `config patch` call over many SSH calls to `config set`. Keep real tokens in the VM environment or `~/.NexisClaw/.env`, and put only SecretRefs in `NexisClaw.json`.
+For remote hosts, prefer one `config patch` call over many SSH calls to `config set`. Keep real tokens in the VM environment or `~/.GreenchClaw/.env`, and put only SecretRefs in `GreenchClaw.json`.
 
 On the VM, make the service environment contain the secrets it needs:
 
 ```bash
-cat >> ~/.NexisClaw/.env <<'EOF'
+cat >> ~/.GreenchClaw/.env <<'EOF'
 SLACK_BOT_TOKEN=xoxb-...
 SLACK_APP_TOKEN=xapp-...
 DISCORD_BOT_TOKEN=...
@@ -131,7 +131,7 @@ EOF
 From your local machine, create a patch file and pipe it to the VM:
 
 ```json5
-// NexisClaw.remote.patch.json5
+// GreenchClaw.remote.patch.json5
 {
   secrets: {
     providers: {
@@ -167,15 +167,15 @@ From your local machine, create a patch file and pipe it to the VM:
 ```
 
 ```bash
-ssh <vm-name>.exe.xyz 'NexisClaw config patch --stdin --dry-run' < ./NexisClaw.remote.patch.json5
-ssh <vm-name>.exe.xyz 'NexisClaw config patch --stdin' < ./NexisClaw.remote.patch.json5
-ssh <vm-name>.exe.xyz 'NexisClaw gateway restart && NexisClaw health'
+ssh <vm-name>.exe.xyz 'GreenchClaw config patch --stdin --dry-run' < ./GreenchClaw.remote.patch.json5
+ssh <vm-name>.exe.xyz 'GreenchClaw config patch --stdin' < ./GreenchClaw.remote.patch.json5
+ssh <vm-name>.exe.xyz 'GreenchClaw gateway restart && GreenchClaw health'
 ```
 
 Use `--replace-path` when a nested allowlist should become exactly the patch value, for example when replacing a Discord channel allowlist:
 
 ```bash
-ssh <vm-name>.exe.xyz 'NexisClaw config patch --stdin --replace-path "channels.discord.guilds[\"123\"].channels"' < ./discord.patch.json5
+ssh <vm-name>.exe.xyz 'GreenchClaw config patch --stdin --replace-path "channels.discord.guilds[\"123\"].channels"' < ./discord.patch.json5
 ```
 
 ## Remote access
@@ -187,10 +187,10 @@ with email auth.
 ## Updating
 
 ```bash
-npm i -g NexisClaw@latest
-NexisClaw doctor
-NexisClaw gateway restart
-NexisClaw health
+npm i -g GreenchClaw@latest
+GreenchClaw doctor
+GreenchClaw gateway restart
+GreenchClaw health
 ```
 
 Guide: [Updating](/install/updating)

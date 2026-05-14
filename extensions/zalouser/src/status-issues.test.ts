@@ -1,4 +1,4 @@
-import { expectOpenDmPolicyConfigIssue } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { expectOpenDmPolicyConfigIssue } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { describe, expect, it } from "vitest";
 import { collectZalouserStatusIssues } from "./status-issues.js";
 

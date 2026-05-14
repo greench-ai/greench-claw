@@ -48,7 +48,7 @@ describe("secrets runtime snapshot matrix shadowing", () => {
       env: {
         MATRIX_OPS_ACCESS_TOKEN: "ops-token",
       },
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: () => loadAuthStoreWithProfiles({}),
     });
 
@@ -131,7 +131,7 @@ describe("secrets runtime snapshot matrix shadowing", () => {
     const snapshot = await prepareSecretsRuntimeSnapshot({
       config: asConfig(config),
       env,
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: () => loadAuthStoreWithProfiles({}),
     });
 
@@ -215,7 +215,7 @@ describe("secrets runtime snapshot matrix shadowing", () => {
     const snapshot = await prepareSecretsRuntimeSnapshot({
       config: asConfig(config),
       env,
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: () => loadAuthStoreWithProfiles({}),
     });
 

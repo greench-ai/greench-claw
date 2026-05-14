@@ -1,5 +1,5 @@
 import type { ReplyToMode } from "../../config/types.base.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { ChannelThreadingAdapter } from "./types.core.js";
 
 type ReplyToModeResolver = NonNullable<ChannelThreadingAdapter["resolveReplyToMode"]>;
@@ -18,7 +18,7 @@ export function createTopLevelChannelReplyToModeResolver(channelId: string): Rep
 }
 
 export function createScopedAccountReplyToModeResolver<TAccount>(params: {
-  resolveAccount: (cfg: NexisClawConfig, accountId?: string | null) => TAccount;
+  resolveAccount: (cfg: GreenchClawConfig, accountId?: string | null) => TAccount;
   resolveReplyToMode: (
     account: TAccount,
     chatType?: string | null,

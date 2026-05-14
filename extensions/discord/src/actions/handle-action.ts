@@ -3,15 +3,15 @@ import {
   readNumberParam,
   readStringArrayParam,
   readStringParam,
-} from "NexisClaw/plugin-sdk/agent-runtime";
-import { readBooleanParam } from "NexisClaw/plugin-sdk/boolean-param";
-import { resolveReactionMessageId } from "NexisClaw/plugin-sdk/channel-actions";
-import type { ChannelMessageActionContext } from "NexisClaw/plugin-sdk/channel-contract";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
+import { readBooleanParam } from "GreenchClaw/plugin-sdk/boolean-param";
+import { resolveReactionMessageId } from "GreenchClaw/plugin-sdk/channel-actions";
+import type { ChannelMessageActionContext } from "GreenchClaw/plugin-sdk/channel-contract";
 import {
   normalizeInteractiveReply,
   normalizeMessagePresentation,
-} from "NexisClaw/plugin-sdk/interactive-runtime";
-import { normalizeOptionalStringifiedId } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/interactive-runtime";
+import { normalizeOptionalStringifiedId } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { handleDiscordAction } from "../../action-runtime-api.js";
 import {
   buildDiscordInteractiveComponents,

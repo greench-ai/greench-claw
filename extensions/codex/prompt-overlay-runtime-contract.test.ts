@@ -3,7 +3,7 @@ import {
   GPT5_CONTRACT_MODEL_ID,
   NON_GPT5_CONTRACT_MODEL_ID,
   sharedGpt5PersonalityConfig,
-} from "NexisClaw/plugin-sdk/agent-runtime-test-contracts";
+} from "GreenchClaw/plugin-sdk/agent-runtime-test-contracts";
 import { describe, expect, it } from "vitest";
 import { buildCodexProvider } from "./provider.js";
 

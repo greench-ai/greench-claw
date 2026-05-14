@@ -2,7 +2,7 @@ import os from "node:os";
 import path from "node:path";
 import { assertConfigWriteAllowedInCurrentMode, readConfigFileSnapshot } from "../config/config.js";
 import { resolveStateDir } from "../config/paths.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   tracePluginLifecyclePhase,
   tracePluginLifecyclePhaseAsync,
@@ -59,7 +59,7 @@ export async function runPluginUninstallCommand(
     () => readConfigFileSnapshot(),
     { command: "uninstall" },
   );
-  const sourceConfig = (snapshot.sourceConfig ?? snapshot.config) as NexisClawConfig;
+  const sourceConfig = (snapshot.sourceConfig ?? snapshot.config) as GreenchClawConfig;
   const installRecords = await tracePluginLifecyclePhaseAsync(
     "install records load",
     () => loadInstalledPluginIndexInstallRecords(),

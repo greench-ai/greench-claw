@@ -12,8 +12,8 @@ import type {
   EnvironmentsListResult,
   GatewayEvent,
   GatewayRequestOptions,
-  NexisClawEvent,
-  NexisClawTransport,
+  GreenchClawEvent,
+  GreenchClawTransport,
   RunCreateParams,
   RunResult,
   RunTimestamp,
@@ -32,16 +32,16 @@ const MAX_REPLAY_RUNS = 100;
 const MAX_REPLAY_EVENTS_PER_RUN = 500;
 const MAX_NORMALIZED_REPLAY_EVENTS = 2000;
 
-export type NexisClawOptions = {
+export type GreenchClawOptions = {
   gateway?: "auto" | (string & {});
   url?: string;
   token?: string;
   password?: string;
   requestTimeoutMs?: number;
-  transport?: NexisClawTransport;
+  transport?: GreenchClawTransport;
 };
 
-function resolveGatewayUrl(options: NexisClawOptions): string | undefined {
+function resolveGatewayUrl(options: GreenchClawOptions): string | undefined {
   if (options.url) {
     return options.url;
   }
@@ -156,7 +156,7 @@ function assertNoUnsupportedRunOptions(params: AgentRunParams): void {
     return;
   }
   throw new Error(
-    `NexisClaw Gateway does not support per-run SDK option${
+    `GreenchClaw Gateway does not support per-run SDK option${
       unsupported.length === 1 ? "" : "s"
     } yet: ${unsupported.join(", ")}`,
   );
@@ -183,7 +183,7 @@ function buildAgentParams(params: AgentRunParams): Record<string, unknown> {
 }
 
 function unsupportedGatewayApi(api: string): never {
-  throw new Error(`${api} is not supported by the current NexisClaw Gateway yet`);
+  throw new Error(`${api} is not supported by the current GreenchClaw Gateway yet`);
 }
 
 type ChatProjectionState = "delta" | "final";
@@ -211,7 +211,7 @@ function requireArtifactQueryScope(api: string, params: unknown): ArtifactQuery 
   return params;
 }
 
-function readChatProjection(event: NexisClawEvent): ChatProjection | undefined {
+function readChatProjection(event: GreenchClawEvent): ChatProjection | undefined {
   const raw = event.raw;
   if (event.type !== "raw" || raw?.event !== "chat") {
     return undefined;
@@ -240,11 +240,11 @@ function readChatProjectionText(payload: Record<string, unknown>): string | unde
   return text.length > 0 ? text : undefined;
 }
 
-function isAssistantRunEvent(event: NexisClawEvent): boolean {
+function isAssistantRunEvent(event: GreenchClawEvent): boolean {
   return event.type === "assistant.delta" || event.type === "assistant.message";
 }
 
-function isTerminalRunEvent(event: NexisClawEvent): boolean {
+function isTerminalRunEvent(event: GreenchClawEvent): boolean {
   return (
     event.type === "run.completed" ||
     event.type === "run.failed" ||
@@ -254,10 +254,10 @@ function isTerminalRunEvent(event: NexisClawEvent): boolean {
 }
 
 function normalizeChatProjectionEvent(
-  event: NexisClawEvent,
+  event: GreenchClawEvent,
   projection: ChatProjection,
   previousText: string | undefined,
-): NexisClawEvent {
+): GreenchClawEvent {
   const text = readChatProjectionText(projection.payload);
   const isReplacement = Boolean(
     previousText && text !== undefined && !text.startsWith(previousText),
@@ -278,7 +278,7 @@ function normalizeChatProjectionEvent(
   };
 }
 
-export class NexisClaw {
+export class GreenchClaw {
   readonly agents: AgentsNamespace;
   readonly sessions: SessionsNamespace;
   readonly runs: RunsNamespace;
@@ -289,16 +289,16 @@ export class NexisClaw {
   readonly approvals: ApprovalsNamespace;
   readonly environments: EnvironmentsNamespace;
 
-  private readonly transport: NexisClawTransport;
-  private readonly normalizedEvents = new EventHub<NexisClawEvent>({
+  private readonly transport: GreenchClawTransport;
+  private readonly normalizedEvents = new EventHub<GreenchClawEvent>({
     replayLimit: MAX_NORMALIZED_REPLAY_EVENTS,
   });
-  private readonly replayByRunId = new Map<string, NexisClawEvent[]>();
+  private readonly replayByRunId = new Map<string, GreenchClawEvent[]>();
   private connected = false;
   private eventPumpPromise: Promise<void> | null = null;
   private eventPumpReady: Promise<void> | null = null;
 
-  constructor(options: NexisClawOptions = {}) {
+  constructor(options: GreenchClawOptions = {}) {
     this.transport =
       options.transport ??
       new GatewayClientTransport({
@@ -348,14 +348,14 @@ export class NexisClaw {
     return await this.transport.request<T>(method, params, options);
   }
 
-  events(filter?: (event: NexisClawEvent) => boolean): AsyncIterable<NexisClawEvent> {
+  events(filter?: (event: GreenchClawEvent) => boolean): AsyncIterable<GreenchClawEvent> {
     return this.iterateEvents(filter);
   }
 
   runEvents(
     runId: string,
-    filter?: (event: NexisClawEvent) => boolean,
-  ): AsyncIterable<NexisClawEvent> {
+    filter?: (event: GreenchClawEvent) => boolean,
+  ): AsyncIterable<GreenchClawEvent> {
     return this.iterateRunEvents(runId, filter);
   }
 
@@ -364,8 +364,8 @@ export class NexisClaw {
   }
 
   private async *iterateEvents(
-    filter?: (event: NexisClawEvent) => boolean,
-  ): AsyncIterable<NexisClawEvent> {
+    filter?: (event: GreenchClawEvent) => boolean,
+  ): AsyncIterable<GreenchClawEvent> {
     await this.connect();
     for await (const event of this.normalizedEvents.stream(filter)) {
       yield event;
@@ -374,14 +374,14 @@ export class NexisClaw {
 
   private async *iterateRunEvents(
     runId: string,
-    filter?: (event: NexisClawEvent) => boolean,
-  ): AsyncIterable<NexisClawEvent> {
+    filter?: (event: GreenchClawEvent) => boolean,
+  ): AsyncIterable<GreenchClawEvent> {
     await this.connect();
     const replayEvents = this.replaySnapshot(runId);
     let hasCanonicalAssistantRunEvent = replayEvents.some(isAssistantRunEvent);
     let hasTerminalRunEvent = replayEvents.some(isTerminalRunEvent);
     let previousChatProjectionText: string | undefined;
-    const toRunStreamEvent = (event: NexisClawEvent): NexisClawEvent | undefined => {
+    const toRunStreamEvent = (event: GreenchClawEvent): GreenchClawEvent | undefined => {
       const chatProjection = readChatProjection(event);
       if (chatProjection?.state === "delta") {
         if (hasCanonicalAssistantRunEvent) {
@@ -413,7 +413,7 @@ export class NexisClaw {
       }
       return event;
     };
-    const matches = (event: NexisClawEvent) => event.runId === runId;
+    const matches = (event: GreenchClawEvent) => event.runId === runId;
     const liveSource = this.normalizedEvents.stream(matches, { replay: true });
     const live = liveSource[Symbol.asyncIterator]();
     let nextLive = live.next();
@@ -493,7 +493,7 @@ export class NexisClaw {
     return this.eventPumpReady;
   }
 
-  private recordReplayEvent(event: NexisClawEvent): void {
+  private recordReplayEvent(event: GreenchClawEvent): void {
     if (!event.runId) {
       return;
     }
@@ -514,14 +514,14 @@ export class NexisClaw {
     }
   }
 
-  private replaySnapshot(runId: string): NexisClawEvent[] {
+  private replaySnapshot(runId: string): GreenchClawEvent[] {
     return [...(this.replayByRunId.get(runId) ?? [])];
   }
 }
 
 export class Agent {
   constructor(
-    private readonly client: NexisClaw,
+    private readonly client: GreenchClaw,
     readonly id: string,
   ) {}
 
@@ -541,12 +541,12 @@ export class Agent {
 
 export class Run {
   constructor(
-    private readonly client: NexisClaw,
+    private readonly client: GreenchClaw,
     readonly id: string,
     readonly sessionKey?: string,
   ) {}
 
-  events(filter?: (event: NexisClawEvent) => boolean): AsyncIterable<NexisClawEvent> {
+  events(filter?: (event: GreenchClawEvent) => boolean): AsyncIterable<GreenchClawEvent> {
     return this.client.runEvents(this.id, filter);
   }
 
@@ -587,7 +587,7 @@ export class Run {
 
 export class Session {
   constructor(
-    private readonly client: NexisClaw,
+    private readonly client: GreenchClaw,
     readonly key: string,
     readonly info?: unknown,
   ) {}
@@ -621,7 +621,7 @@ export class Session {
 }
 
 export class AgentsNamespace {
-  constructor(private readonly client: NexisClaw) {}
+  constructor(private readonly client: GreenchClaw) {}
 
   async list(params?: Record<string, unknown>): Promise<unknown> {
     return await this.client.request("agents.list", params);
@@ -645,7 +645,7 @@ export class AgentsNamespace {
 }
 
 export class SessionsNamespace {
-  constructor(private readonly client: NexisClaw) {}
+  constructor(private readonly client: GreenchClaw) {}
 
   async list(params?: Record<string, unknown>): Promise<unknown> {
     return await this.client.request("sessions.list", params);
@@ -677,7 +677,7 @@ export class SessionsNamespace {
 }
 
 export class RunsNamespace {
-  constructor(private readonly client: NexisClaw) {}
+  constructor(private readonly client: GreenchClaw) {}
 
   async create(params: RunCreateParams): Promise<Run> {
     const raw = await this.client.request("agent", buildAgentParams(params), {
@@ -696,7 +696,7 @@ export class RunsNamespace {
     return new Run(this.client, runId);
   }
 
-  events(runId: string): AsyncIterable<NexisClawEvent> {
+  events(runId: string): AsyncIterable<GreenchClawEvent> {
     return new Run(this.client, runId).events();
   }
 
@@ -711,7 +711,7 @@ export class RunsNamespace {
 
 class RpcNamespace {
   constructor(
-    protected readonly client: NexisClaw,
+    protected readonly client: GreenchClaw,
     private readonly prefix: string,
   ) {}
 
@@ -725,7 +725,7 @@ class RpcNamespace {
 }
 
 export class TasksNamespace extends RpcNamespace {
-  constructor(client: NexisClaw) {
+  constructor(client: GreenchClaw) {
     super(client, "tasks");
   }
 
@@ -746,7 +746,7 @@ export class TasksNamespace extends RpcNamespace {
 }
 
 export class ModelsNamespace extends RpcNamespace {
-  constructor(client: NexisClaw) {
+  constructor(client: GreenchClaw) {
     super(client, "models");
   }
 
@@ -760,7 +760,7 @@ export class ModelsNamespace extends RpcNamespace {
 }
 
 export class ToolsNamespace extends RpcNamespace {
-  constructor(client: NexisClaw) {
+  constructor(client: GreenchClaw) {
     super(client, "tools");
   }
 
@@ -785,7 +785,7 @@ export class ToolsNamespace extends RpcNamespace {
 }
 
 export class ArtifactsNamespace extends RpcNamespace {
-  constructor(client: NexisClaw) {
+  constructor(client: GreenchClaw) {
     super(client, "artifacts");
   }
 
@@ -809,7 +809,7 @@ export class ArtifactsNamespace extends RpcNamespace {
 }
 
 export class ApprovalsNamespace {
-  constructor(private readonly client: NexisClaw) {}
+  constructor(private readonly client: GreenchClaw) {}
 
   async list(params?: unknown): Promise<unknown> {
     return await this.client.request("exec.approval.list", params);
@@ -821,7 +821,7 @@ export class ApprovalsNamespace {
 }
 
 export class EnvironmentsNamespace extends RpcNamespace {
-  constructor(client: NexisClaw) {
+  constructor(client: GreenchClaw) {
     super(client, "environments");
   }
 

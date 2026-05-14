@@ -1,7 +1,7 @@
-import type { NexisClawConfig, ReplyToMode } from "NexisClaw/plugin-sdk/config-contracts";
-import type { SessionBindingRecord } from "NexisClaw/plugin-sdk/conversation-runtime";
-import type { HistoryEntry } from "NexisClaw/plugin-sdk/reply-history";
-import type { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import type { GreenchClawConfig, ReplyToMode } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { SessionBindingRecord } from "GreenchClaw/plugin-sdk/conversation-runtime";
+import type { HistoryEntry } from "GreenchClaw/plugin-sdk/reply-history";
+import type { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
 import type { ChannelType, Client, User } from "../internal/discord.js";
 import type { DiscordChannelConfigResolved, DiscordGuildEntryResolved } from "./allow-list.js";
 import type { DiscordChannelInfo } from "./message-utils.js";
@@ -11,15 +11,15 @@ import type { DiscordSenderIdentity } from "./sender-identity.js";
 export type { DiscordSenderIdentity } from "./sender-identity.js";
 import type { DiscordThreadChannel } from "./threading.js";
 
-type LoadedConfig = NexisClawConfig;
-export type RuntimeEnv = import("NexisClaw/plugin-sdk/runtime-env").RuntimeEnv;
+type LoadedConfig = GreenchClawConfig;
+export type RuntimeEnv = import("GreenchClaw/plugin-sdk/runtime-env").RuntimeEnv;
 
 export type DiscordMessageEvent = import("./listeners.js").DiscordMessageEvent;
 
 type DiscordMessagePreflightSharedFields = {
   cfg: LoadedConfig;
   discordConfig: NonNullable<
-    import("NexisClaw/plugin-sdk/config-contracts").NexisClawConfig["channels"]
+    import("GreenchClaw/plugin-sdk/config-contracts").GreenchClawConfig["channels"]
   >["discord"];
   accountId: string;
   token: string;

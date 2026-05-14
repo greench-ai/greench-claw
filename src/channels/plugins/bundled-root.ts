@@ -1,10 +1,10 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolveNexisClawPackageRootSync } from "../../infra/NexisClaw-root.js";
+import { resolveGreenchClawPackageRootSync } from "../../infra/GreenchClaw-root.js";
 import { resolveBundledPluginsDir } from "../../plugins/bundled-dir.js";
 
-const NEXISCLAW_PACKAGE_ROOT =
-  resolveNexisClawPackageRootSync({
+const GREENCHCLAW_PACKAGE_ROOT =
+  resolveGreenchClawPackageRootSync({
     argv1: process.argv[1],
     cwd: process.cwd(),
     moduleUrl: import.meta.url.startsWith("file:") ? import.meta.url : undefined,
@@ -34,8 +34,8 @@ export function resolveBundledChannelRootScope(
   const bundledPluginsDir = resolveBundledPluginsDir(env);
   if (!bundledPluginsDir) {
     return {
-      packageRoot: NEXISCLAW_PACKAGE_ROOT,
-      cacheKey: NEXISCLAW_PACKAGE_ROOT,
+      packageRoot: GREENCHCLAW_PACKAGE_ROOT,
+      cacheKey: GREENCHCLAW_PACKAGE_ROOT,
     };
   }
   const resolvedPluginsDir = path.resolve(bundledPluginsDir);

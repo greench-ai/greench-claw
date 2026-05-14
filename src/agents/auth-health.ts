@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   DEFAULT_OAUTH_REFRESH_MARGIN_MS,
   type AuthCredentialReasonCode,
@@ -113,7 +113,7 @@ function buildProfileHealth(params: {
   credential: AuthProfileCredential;
   runtimeCredential?: AuthProfileCredential;
   store: AuthProfileStore;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   now: number;
   warnAfterMs: number;
 }): AuthProfileHealth {
@@ -202,7 +202,7 @@ function buildProfileHealth(params: {
 
 export function buildAuthHealthSummary(params: {
   store: AuthProfileStore;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   warnAfterMs?: number;
   providers?: string[];
   runtimeCredentialsByProvider?: ReadonlyMap<string, AuthProfileCredential>;

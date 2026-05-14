@@ -1,9 +1,9 @@
-import { bundledPluginFile } from "NexisClaw/plugin-sdk/test-fixtures";
+import { bundledPluginFile } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it } from "vitest";
 import { createPatternFileHelper } from "./helpers/pattern-file.js";
 import { loadIncludePatternsFromEnv } from "./vitest/vitest.extensions.config.ts";
 
-const patternFiles = createPatternFileHelper("NexisClaw-vitest-extensions-config-");
+const patternFiles = createPatternFileHelper("GreenchClaw-vitest-extensions-config-");
 
 afterEach(() => {
   patternFiles.cleanup();
@@ -24,7 +24,7 @@ describe("extensions vitest include patterns", () => {
 
     expect(
       loadIncludePatternsFromEnv({
-        NEXISCLAW_VITEST_INCLUDE_FILE: filePath,
+        GREENCHCLAW_VITEST_INCLUDE_FILE: filePath,
       }),
     ).toEqual([
       bundledPluginFile("feishu", "index.test.ts"),
@@ -39,7 +39,7 @@ describe("extensions vitest include patterns", () => {
 
     expect(() =>
       loadIncludePatternsFromEnv({
-        NEXISCLAW_VITEST_INCLUDE_FILE: filePath,
+        GREENCHCLAW_VITEST_INCLUDE_FILE: filePath,
       }),
     ).toThrow(/JSON array/u);
   });

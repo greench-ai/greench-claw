@@ -1,4 +1,4 @@
-import type { ConfigFileSnapshot, ConfigValidationIssue } from "./types.NexisClaw.js";
+import type { ConfigFileSnapshot, ConfigValidationIssue } from "./types.GreenchClaw.js";
 
 const PLUGIN_ENTRY_PATH_PREFIX = "plugins.entries.";
 const PLUGIN_POLICY_PATHS = new Set(["plugins.allow", "plugins.deny"]);

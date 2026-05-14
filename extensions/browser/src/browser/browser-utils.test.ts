@@ -230,14 +230,14 @@ describe("fetchBrowserJson loopback auth (bridge auth registry)", () => {
 describe("browser server-context listKnownProfileNames", () => {
   it("includes configured and runtime-only profile names", () => {
     const resolved = resolveBrowserConfig({
-      defaultProfile: "NexisClaw",
+      defaultProfile: "GreenchClaw",
       profiles: {
-        NexisClaw: { cdpPort: 18800, color: "#FF4500" },
+        GreenchClaw: { cdpPort: 18800, color: "#FF4500" },
       },
     });
-    const NexisClaw = resolveProfile(resolved, "NexisClaw");
-    if (!NexisClaw) {
-      throw new Error("expected NexisClaw profile");
+    const GreenchClaw = resolveProfile(resolved, "GreenchClaw");
+    if (!GreenchClaw) {
+      throw new Error("expected GreenchClaw profile");
     }
 
     const state: BrowserServerState = {
@@ -248,13 +248,17 @@ describe("browser server-context listKnownProfileNames", () => {
         [
           "stale-removed",
           {
-            profile: { ...NexisClaw, name: "stale-removed" },
+            profile: { ...GreenchClaw, name: "stale-removed" },
             running: null,
           },
         ],
       ]),
     };
 
-    expect(listKnownProfileNames(state).toSorted()).toEqual(["NexisClaw", "stale-removed", "user"]);
+    expect(listKnownProfileNames(state).toSorted()).toEqual([
+      "GreenchClaw",
+      "stale-removed",
+      "user",
+    ]);
   });
 });

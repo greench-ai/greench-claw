@@ -4,7 +4,7 @@ export function createProcessVitestConfig(env?: Record<string, string | undefine
   const config = createScopedVitestConfig(["src/process/**/*.test.ts"], {
     dir: "src",
     env,
-    includeNexisClawRuntimeSetup: false,
+    includeGreenchClawRuntimeSetup: false,
     name: "process",
     passWithNoTests: true,
   });

@@ -4,8 +4,8 @@ import {
   resolveCronStyleNow,
   SILENT_REPLY_TOKEN,
   type MemoryFlushPlan,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-runtime-core";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/memory-core-host-runtime-core";
 
 export const DEFAULT_MEMORY_FLUSH_SOFT_TOKENS = 4000;
 export const DEFAULT_MEMORY_FLUSH_FORCE_TRANSCRIPT_BYTES = 2 * 1024 * 1024;
@@ -94,7 +94,7 @@ function appendCurrentTimeLine(text: string, timeLine: string): string {
 
 export function buildMemoryFlushPlan(
   params: {
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
     nowMs?: number;
   } = {},
 ): MemoryFlushPlan | null {

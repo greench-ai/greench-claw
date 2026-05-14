@@ -3,9 +3,9 @@ import {
   readNumberParam,
   readStringArrayParam,
   readStringParam,
-} from "NexisClaw/plugin-sdk/agent-runtime";
-import type { ChannelMessageActionContext } from "NexisClaw/plugin-sdk/channel-contract";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
+import type { ChannelMessageActionContext } from "GreenchClaw/plugin-sdk/channel-contract";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { handleDiscordAction } from "../../action-runtime-api.js";
 import {
   isDiscordModerationAction,

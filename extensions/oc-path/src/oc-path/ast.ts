@@ -5,7 +5,7 @@
  * rules). Byte-fidelity: `emitMd(parse(raw)) === raw`; `raw` on the
  * root preserves the original bytes for round-trip.
  *
- * @module @NexisClaw/oc-path/ast
+ * @module @GreenchClaw/oc-path/ast
  */
 
 /** Parser diagnostic. Severity `warning` for recoverable input; never throws. */

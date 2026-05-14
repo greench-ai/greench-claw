@@ -19,10 +19,10 @@ function envWith(overrides: Record<string, string | undefined>): NodeJS.ProcessE
 }
 
 describe("oauth paths", () => {
-  it("prefers NEXISCLAW_OAUTH_DIR over NEXISCLAW_STATE_DIR", () => {
+  it("prefers GREENCHCLAW_OAUTH_DIR over GREENCHCLAW_STATE_DIR", () => {
     const env = {
-      NEXISCLAW_OAUTH_DIR: "/custom/oauth",
-      NEXISCLAW_STATE_DIR: "/custom/state",
+      GREENCHCLAW_OAUTH_DIR: "/custom/oauth",
+      GREENCHCLAW_STATE_DIR: "/custom/state",
     } as NodeJS.ProcessEnv;
 
     expect(resolveOAuthDir(env, "/custom/state")).toBe(path.resolve("/custom/oauth"));
@@ -31,9 +31,9 @@ describe("oauth paths", () => {
     );
   });
 
-  it("derives oauth path from NEXISCLAW_STATE_DIR when unset", () => {
+  it("derives oauth path from GREENCHCLAW_STATE_DIR when unset", () => {
     const env = {
-      NEXISCLAW_STATE_DIR: "/custom/state",
+      GREENCHCLAW_STATE_DIR: "/custom/state",
     } as NodeJS.ProcessEnv;
 
     expect(resolveOAuthDir(env, "/custom/state")).toBe(path.join("/custom/state", "credentials"));
@@ -46,7 +46,10 @@ describe("oauth paths", () => {
 describe("gateway port resolution", () => {
   it("prefers numeric env values over config", () => {
     expect(
-      resolveGatewayPort({ gateway: { port: 19002 } }, envWith({ NEXISCLAW_GATEWAY_PORT: "19001" })),
+      resolveGatewayPort(
+        { gateway: { port: 19002 } },
+        envWith({ GREENCHCLAW_GATEWAY_PORT: "19001" }),
+      ),
     ).toBe(19001);
   });
 
@@ -54,7 +57,7 @@ describe("gateway port resolution", () => {
     expect(
       resolveGatewayPort(
         { gateway: { port: 19002 } },
-        envWith({ NEXISCLAW_GATEWAY_PORT: "127.0.0.1:18789" }),
+        envWith({ GREENCHCLAW_GATEWAY_PORT: "127.0.0.1:18789" }),
       ),
     ).toBe(18789);
   });
@@ -63,7 +66,7 @@ describe("gateway port resolution", () => {
     expect(
       resolveGatewayPort(
         { gateway: { port: 19002 } },
-        envWith({ NEXISCLAW_GATEWAY_PORT: "[::1]:28789" }),
+        envWith({ GREENCHCLAW_GATEWAY_PORT: "[::1]:28789" }),
       ),
     ).toBe(28789);
   });
@@ -81,61 +84,64 @@ describe("gateway port resolution", () => {
     expect(
       resolveGatewayPort(
         { gateway: { port: 19003 } },
-        envWith({ NEXISCLAW_GATEWAY_PORT: "127.0.0.1:not-a-port" }),
+        envWith({ GREENCHCLAW_GATEWAY_PORT: "127.0.0.1:not-a-port" }),
       ),
     ).toBe(19003);
   });
 
   it("falls back when malformed IPv6 inputs do not provide an explicit port", () => {
     expect(
-      resolveGatewayPort({ gateway: { port: 19003 } }, envWith({ NEXISCLAW_GATEWAY_PORT: "::1" })),
+      resolveGatewayPort(
+        { gateway: { port: 19003 } },
+        envWith({ GREENCHCLAW_GATEWAY_PORT: "::1" }),
+      ),
     ).toBe(19003);
-    expect(resolveGatewayPort({}, envWith({ NEXISCLAW_GATEWAY_PORT: "2001:db8::1" }))).toBe(
+    expect(resolveGatewayPort({}, envWith({ GREENCHCLAW_GATEWAY_PORT: "2001:db8::1" }))).toBe(
       DEFAULT_GATEWAY_PORT,
     );
   });
 
   it("falls back to the default port when env is invalid and config is unset", () => {
-    expect(resolveGatewayPort({}, envWith({ NEXISCLAW_GATEWAY_PORT: "127.0.0.1:not-a-port" }))).toBe(
-      DEFAULT_GATEWAY_PORT,
-    );
+    expect(
+      resolveGatewayPort({}, envWith({ GREENCHCLAW_GATEWAY_PORT: "127.0.0.1:not-a-port" })),
+    ).toBe(DEFAULT_GATEWAY_PORT);
   });
 });
 
 describe("state + config path candidates", () => {
-  function expectNexisClawHomeDefaults(env: NodeJS.ProcessEnv): void {
-    const configuredHome = env.NEXISCLAW_HOME;
+  function expectGreenchClawHomeDefaults(env: NodeJS.ProcessEnv): void {
+    const configuredHome = env.GREENCHCLAW_HOME;
     if (!configuredHome) {
-      throw new Error("NEXISCLAW_HOME must be set for this assertion helper");
+      throw new Error("GREENCHCLAW_HOME must be set for this assertion helper");
     }
     const resolvedHome = path.resolve(configuredHome);
-    expect(resolveStateDir(env)).toBe(path.join(resolvedHome, ".NexisClaw"));
+    expect(resolveStateDir(env)).toBe(path.join(resolvedHome, ".GreenchClaw"));
 
     const candidates = resolveDefaultConfigCandidates(env);
-    expect(candidates[0]).toBe(path.join(resolvedHome, ".NexisClaw", "NexisClaw.json"));
+    expect(candidates[0]).toBe(path.join(resolvedHome, ".GreenchClaw", "GreenchClaw.json"));
   }
 
-  it("uses NEXISCLAW_STATE_DIR when set", () => {
+  it("uses GREENCHCLAW_STATE_DIR when set", () => {
     const env = {
-      NEXISCLAW_STATE_DIR: "/new/state",
+      GREENCHCLAW_STATE_DIR: "/new/state",
     } as NodeJS.ProcessEnv;
 
     expect(resolveStateDir(env, () => "/home/test")).toBe(path.resolve("/new/state"));
   });
 
-  it("uses NEXISCLAW_HOME for default state/config locations", () => {
+  it("uses GREENCHCLAW_HOME for default state/config locations", () => {
     const env = {
-      NEXISCLAW_HOME: "/srv/NexisClaw-home",
+      GREENCHCLAW_HOME: "/srv/GreenchClaw-home",
     } as NodeJS.ProcessEnv;
-    expectNexisClawHomeDefaults(env);
+    expectGreenchClawHomeDefaults(env);
   });
 
-  it("prefers NEXISCLAW_HOME over HOME for default state/config locations", () => {
+  it("prefers GREENCHCLAW_HOME over HOME for default state/config locations", () => {
     const env = {
-      NEXISCLAW_HOME: "/srv/NexisClaw-home",
+      GREENCHCLAW_HOME: "/srv/GreenchClaw-home",
       HOME: "/home/other",
     } as NodeJS.ProcessEnv;
-    expectNexisClawHomeDefaults(env);
+    expectGreenchClawHomeDefaults(env);
   });
 
   it("orders default config candidates in a stable order", () => {
@@ -143,25 +149,25 @@ describe("state + config path candidates", () => {
     const resolvedHome = path.resolve(home);
     const candidates = resolveDefaultConfigCandidates({} as NodeJS.ProcessEnv, () => home);
     const expected = [
-      path.join(resolvedHome, ".NexisClaw", "NexisClaw.json"),
-      path.join(resolvedHome, ".NexisClaw", "clawdbot.json"),
-      path.join(resolvedHome, ".clawdbot", "NexisClaw.json"),
+      path.join(resolvedHome, ".GreenchClaw", "GreenchClaw.json"),
+      path.join(resolvedHome, ".GreenchClaw", "clawdbot.json"),
+      path.join(resolvedHome, ".clawdbot", "GreenchClaw.json"),
       path.join(resolvedHome, ".clawdbot", "clawdbot.json"),
     ];
     expect(candidates).toEqual(expected);
   });
 
-  it("prefers ~/.NexisClaw when it exists and legacy dir is missing", async () => {
-    await withTempDir({ prefix: "NexisClaw-state-" }, async (root) => {
-      const newDir = path.join(root, ".NexisClaw");
+  it("prefers ~/.GreenchClaw when it exists and legacy dir is missing", async () => {
+    await withTempDir({ prefix: "GreenchClaw-state-" }, async (root) => {
+      const newDir = path.join(root, ".GreenchClaw");
       await fs.mkdir(newDir, { recursive: true });
       const resolved = resolveStateDir({} as NodeJS.ProcessEnv, () => root);
       expect(resolved).toBe(newDir);
     });
   });
 
-  it("falls back to existing legacy state dir when ~/.NexisClaw is missing", async () => {
-    await withTempDir({ prefix: "NexisClaw-state-legacy-" }, async (root) => {
+  it("falls back to existing legacy state dir when ~/.GreenchClaw is missing", async () => {
+    await withTempDir({ prefix: "GreenchClaw-state-legacy-" }, async (root) => {
       const legacyDir = path.join(root, ".clawdbot");
       await fs.mkdir(legacyDir, { recursive: true });
       const resolved = resolveStateDir({} as NodeJS.ProcessEnv, () => root);
@@ -170,10 +176,10 @@ describe("state + config path candidates", () => {
   });
 
   it("CONFIG_PATH prefers existing config when present", async () => {
-    await withTempDir({ prefix: "NexisClaw-config-" }, async (root) => {
-      const legacyDir = path.join(root, ".NexisClaw");
+    await withTempDir({ prefix: "GreenchClaw-config-" }, async (root) => {
+      const legacyDir = path.join(root, ".GreenchClaw");
       await fs.mkdir(legacyDir, { recursive: true });
-      const legacyPath = path.join(legacyDir, "NexisClaw.json");
+      const legacyPath = path.join(legacyDir, "GreenchClaw.json");
       await fs.writeFile(legacyPath, "{}", "utf-8");
 
       const resolved = resolveConfigPathCandidate({} as NodeJS.ProcessEnv, () => root);
@@ -182,16 +188,16 @@ describe("state + config path candidates", () => {
   });
 
   it("respects state dir overrides when config is missing", async () => {
-    await withTempDir({ prefix: "NexisClaw-config-override-" }, async (root) => {
-      const legacyDir = path.join(root, ".NexisClaw");
+    await withTempDir({ prefix: "GreenchClaw-config-override-" }, async (root) => {
+      const legacyDir = path.join(root, ".GreenchClaw");
       await fs.mkdir(legacyDir, { recursive: true });
-      const legacyConfig = path.join(legacyDir, "NexisClaw.json");
+      const legacyConfig = path.join(legacyDir, "GreenchClaw.json");
       await fs.writeFile(legacyConfig, "{}", "utf-8");
 
       const overrideDir = path.join(root, "override");
-      const env = { NEXISCLAW_STATE_DIR: overrideDir } as NodeJS.ProcessEnv;
+      const env = { GREENCHCLAW_STATE_DIR: overrideDir } as NodeJS.ProcessEnv;
       const resolved = resolveConfigPath(env, overrideDir, () => root);
-      expect(resolved).toBe(path.join(overrideDir, "NexisClaw.json"));
+      expect(resolved).toBe(path.join(overrideDir, "GreenchClaw.json"));
     });
   });
 });
@@ -199,32 +205,32 @@ describe("state + config path candidates", () => {
 describe("resolveIncludeRoots", () => {
   const HOME = path.parse(process.cwd()).root + "fakehome";
 
-  it("returns an empty list when NEXISCLAW_INCLUDE_ROOTS is unset or blank", () => {
+  it("returns an empty list when GREENCHCLAW_INCLUDE_ROOTS is unset or blank", () => {
     expect(resolveIncludeRoots(envWith({}), () => HOME)).toStrictEqual([]);
-    expect(resolveIncludeRoots(envWith({ NEXISCLAW_INCLUDE_ROOTS: "" }), () => HOME)).toStrictEqual(
-      [],
-    );
     expect(
-      resolveIncludeRoots(envWith({ NEXISCLAW_INCLUDE_ROOTS: "   " }), () => HOME),
+      resolveIncludeRoots(envWith({ GREENCHCLAW_INCLUDE_ROOTS: "" }), () => HOME),
+    ).toStrictEqual([]);
+    expect(
+      resolveIncludeRoots(envWith({ GREENCHCLAW_INCLUDE_ROOTS: "   " }), () => HOME),
     ).toStrictEqual([]);
   });
 
   it("splits on the platform path delimiter and resolves each entry to an absolute path", () => {
     const a = path.resolve(path.parse(process.cwd()).root, "shared", "a");
     const b = path.resolve(path.parse(process.cwd()).root, "shared", "b");
-    const env = envWith({ NEXISCLAW_INCLUDE_ROOTS: [a, b].join(path.delimiter) });
+    const env = envWith({ GREENCHCLAW_INCLUDE_ROOTS: [a, b].join(path.delimiter) });
     expect(resolveIncludeRoots(env, () => HOME)).toEqual([a, b]);
   });
 
   it("expands a leading tilde in each entry using the resolved home dir", () => {
-    const env = envWith({ NEXISCLAW_INCLUDE_ROOTS: "~/share/NexisClaw" });
-    expect(resolveIncludeRoots(env, () => HOME)).toEqual([path.join(HOME, "share", "NexisClaw")]);
+    const env = envWith({ GREENCHCLAW_INCLUDE_ROOTS: "~/share/GreenchClaw" });
+    expect(resolveIncludeRoots(env, () => HOME)).toEqual([path.join(HOME, "share", "GreenchClaw")]);
   });
 
   it("drops empty entries and preserves de-duplicated order for repeated roots", () => {
     const a = path.resolve(path.parse(process.cwd()).root, "shared", "a");
     const env = envWith({
-      NEXISCLAW_INCLUDE_ROOTS: ["", a, "  ", a].join(path.delimiter),
+      GREENCHCLAW_INCLUDE_ROOTS: ["", a, "  ", a].join(path.delimiter),
     });
     expect(resolveIncludeRoots(env, () => HOME)).toEqual([a]);
   });

@@ -3,9 +3,9 @@ import {
   type BindingTargetKind,
   type SessionBindingAdapter,
   type SessionBindingRecord,
-} from "NexisClaw/plugin-sdk/conversation-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/conversation-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveDiscordChannelId } from "../target-parsing.js";
 import { resolveChannelIdForBinding } from "./thread-bindings.discord-api.js";
 import { resolveBindingRecordKey } from "./thread-bindings.state.js";
@@ -111,7 +111,7 @@ export function createThreadBindingSessionAdapter(params: {
   accountId: string;
   manager: ThreadBindingManager;
   defaults: ThreadBindingDefaults;
-  resolveCurrentCfg: () => NexisClawConfig;
+  resolveCurrentCfg: () => GreenchClawConfig;
   resolveCurrentToken: () => string | undefined;
 }): SessionBindingAdapter {
   const toRecord = (entry: ThreadBindingRecord) => toSessionBindingRecord(entry, params.defaults);

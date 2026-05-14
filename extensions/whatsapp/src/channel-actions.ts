@@ -3,11 +3,11 @@ import {
   resolveWhatsAppAccount,
   createActionGate,
   type ChannelMessageActionName,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   resolveWhatsAppReactionLevel,
 } from "./channel-actions.runtime.js";
 
-function areWhatsAppAgentReactionsEnabled(params: { cfg: NexisClawConfig; accountId?: string }) {
+function areWhatsAppAgentReactionsEnabled(params: { cfg: GreenchClawConfig; accountId?: string }) {
   if (!params.cfg.channels?.whatsapp) {
     return false;
   }
@@ -21,7 +21,7 @@ function areWhatsAppAgentReactionsEnabled(params: { cfg: NexisClawConfig; accoun
   }).agentReactionsEnabled;
 }
 
-function hasAnyWhatsAppAccountWithAgentReactionsEnabled(cfg: NexisClawConfig) {
+function hasAnyWhatsAppAccountWithAgentReactionsEnabled(cfg: GreenchClawConfig) {
   if (!cfg.channels?.whatsapp) {
     return false;
   }
@@ -38,7 +38,7 @@ function hasAnyWhatsAppAccountWithAgentReactionsEnabled(cfg: NexisClawConfig) {
 }
 
 export function resolveWhatsAppAgentReactionGuidance(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string;
 }) {
   if (!params.cfg.channels?.whatsapp) {
@@ -59,7 +59,7 @@ export function resolveWhatsAppAgentReactionGuidance(params: {
 }
 
 export function describeWhatsAppMessageActions(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): { actions: ChannelMessageActionName[] } | null {
   if (!params.cfg.channels?.whatsapp) {

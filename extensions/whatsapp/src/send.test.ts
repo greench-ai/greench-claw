@@ -2,9 +2,9 @@ import crypto from "node:crypto";
 import fsSync from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { redactIdentifier } from "NexisClaw/plugin-sdk/logging-core";
-import { MEDIA_FFMPEG_MAX_AUDIO_DURATION_SECS } from "NexisClaw/plugin-sdk/media-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { redactIdentifier } from "GreenchClaw/plugin-sdk/logging-core";
+import { MEDIA_FFMPEG_MAX_AUDIO_DURATION_SECS } from "GreenchClaw/plugin-sdk/media-runtime";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { WhatsAppSendKind, WhatsAppSendResult } from "./inbound/send-result.js";
 import type { ActiveWebListener } from "./inbound/types.js";
@@ -18,10 +18,10 @@ const loadWebMediaMock = vi.fn();
 let sendMessageWhatsApp: typeof import("./send.js").sendMessageWhatsApp;
 let sendPollWhatsApp: typeof import("./send.js").sendPollWhatsApp;
 let sendReactionWhatsApp: typeof import("./send.js").sendReactionWhatsApp;
-let resetLogger: typeof import("NexisClaw/plugin-sdk/runtime-env").resetLogger;
-let setLoggerOverride: typeof import("NexisClaw/plugin-sdk/runtime-env").setLoggerOverride;
+let resetLogger: typeof import("GreenchClaw/plugin-sdk/runtime-env").resetLogger;
+let setLoggerOverride: typeof import("GreenchClaw/plugin-sdk/runtime-env").setLoggerOverride;
 
-const WHATSAPP_TEST_CFG: NexisClawConfig = {
+const WHATSAPP_TEST_CFG: GreenchClawConfig = {
   channels: { whatsapp: {} },
 };
 
@@ -61,9 +61,9 @@ vi.mock("./outbound-media.runtime.js", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/media-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/media-runtime")>(
-    "NexisClaw/plugin-sdk/media-runtime",
+vi.mock("GreenchClaw/plugin-sdk/media-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/media-runtime")>(
+    "GreenchClaw/plugin-sdk/media-runtime",
   );
   return {
     ...actual,
@@ -87,7 +87,7 @@ describe("web outbound", () => {
 
   beforeAll(async () => {
     ({ sendMessageWhatsApp, sendPollWhatsApp, sendReactionWhatsApp } = await import("./send.js"));
-    ({ resetLogger, setLoggerOverride } = await import("NexisClaw/plugin-sdk/runtime-env"));
+    ({ resetLogger, setLoggerOverride } = await import("GreenchClaw/plugin-sdk/runtime-env"));
   });
 
   beforeEach(() => {
@@ -183,7 +183,7 @@ describe("web outbound", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     expect(result).toEqual({
@@ -473,7 +473,7 @@ describe("web outbound", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await sendMessageWhatsApp("+1555", "pic", {
       verbose: false,
@@ -511,7 +511,7 @@ describe("web outbound", () => {
   });
 
   it("redacts recipients and poll text in outbound logs", async () => {
-    const logPath = path.join(os.tmpdir(), `NexisClaw-outbound-${crypto.randomUUID()}.log`);
+    const logPath = path.join(os.tmpdir(), `GreenchClaw-outbound-${crypto.randomUUID()}.log`);
     setLoggerOverride({ level: "trace", file: logPath });
 
     await sendPollWhatsApp(

@@ -1,8 +1,8 @@
-import { buildChannelTurnContext } from "NexisClaw/plugin-sdk/channel-inbound";
+import { buildChannelTurnContext } from "GreenchClaw/plugin-sdk/channel-inbound";
 import {
   clearRuntimeConfigSnapshot,
   setRuntimeConfigSnapshot,
-} from "NexisClaw/plugin-sdk/runtime-config-snapshot";
+} from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
 import { vi, type Mock } from "vitest";
 
 type AsyncUnknownMock = Mock<(...args: unknown[]) => Promise<unknown>>;
@@ -32,7 +32,7 @@ export const telegramRouteTestSessionRuntime: NonNullable<
   resolveInboundLastRouteSessionKey: ({ route, sessionKey }) =>
     route.lastRoutePolicy === "main" ? route.mainSessionKey : sessionKey,
   resolvePinnedMainDmOwnerFromAllowlist: () => null,
-  resolveStorePath: () => "/tmp/NexisClaw/session-store.json",
+  resolveStorePath: () => "/tmp/GreenchClaw/session-store.json",
 };
 
 export async function loadTelegramMessageContextRouteHarness() {

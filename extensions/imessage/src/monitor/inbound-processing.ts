@@ -7,28 +7,32 @@ import {
   matchesMentionPatterns,
   resolveEnvelopeFormatOptions,
   resolveInboundMentionDecision,
-} from "NexisClaw/plugin-sdk/channel-inbound";
+} from "GreenchClaw/plugin-sdk/channel-inbound";
 import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
-} from "NexisClaw/plugin-sdk/channel-ingress-runtime";
+} from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
 import {
   resolveChannelGroupPolicy,
   resolveChannelGroupRequireMention,
-} from "NexisClaw/plugin-sdk/channel-policy";
-import { hasControlCommand } from "NexisClaw/plugin-sdk/command-auth-native";
-import type { DmPolicy, GroupPolicy, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveChannelContextVisibilityMode } from "NexisClaw/plugin-sdk/context-visibility-runtime";
+} from "GreenchClaw/plugin-sdk/channel-policy";
+import { hasControlCommand } from "GreenchClaw/plugin-sdk/command-auth-native";
+import type {
+  DmPolicy,
+  GroupPolicy,
+  GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveChannelContextVisibilityMode } from "GreenchClaw/plugin-sdk/context-visibility-runtime";
 import {
   buildPendingHistoryContextFromMap,
   recordPendingHistoryEntryIfEnabled,
   type HistoryEntry,
-} from "NexisClaw/plugin-sdk/reply-history";
-import { finalizeInboundContext } from "NexisClaw/plugin-sdk/reply-runtime";
-import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
-import { evaluateSupplementalContextVisibility } from "NexisClaw/plugin-sdk/security-runtime";
-import { sanitizeTerminalText } from "NexisClaw/plugin-sdk/text-chunking";
-import { truncateUtf16Safe } from "NexisClaw/plugin-sdk/text-utility-runtime";
+} from "GreenchClaw/plugin-sdk/reply-history";
+import { finalizeInboundContext } from "GreenchClaw/plugin-sdk/reply-runtime";
+import { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
+import { evaluateSupplementalContextVisibility } from "GreenchClaw/plugin-sdk/security-runtime";
+import { sanitizeTerminalText } from "GreenchClaw/plugin-sdk/text-chunking";
+import { truncateUtf16Safe } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import { resolveIMessageConversationRoute } from "../conversation-route.js";
 import {
   isKnownFromMeIMessageMessageId,
@@ -384,7 +388,7 @@ type IMessageInboundDecision =
   | IMessageInboundDispatchDecision;
 
 export async function resolveIMessageInboundDecision(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   message: IMessagePayload;
   opts?: Pick<MonitorIMessageOpts, "requireMention">;
@@ -839,7 +843,7 @@ export async function resolveIMessageInboundDecision(params: {
 }
 
 export function buildIMessageInboundContext(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   decision: IMessageInboundDispatchDecision;
   message: IMessagePayload;
   envelopeOptions?: EnvelopeFormatOptions;

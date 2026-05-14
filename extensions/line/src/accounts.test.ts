@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   resolveLineAccount,
@@ -14,7 +14,7 @@ describe("LINE accounts", () => {
   const tempDirs: string[] = [];
 
   const createSecretFile = (fileName: string, contents: string) => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-line-account-"));
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-line-account-"));
     tempDirs.push(dir);
     const filePath = path.join(dir, fileName);
     fs.writeFileSync(filePath, contents, "utf8");
@@ -35,7 +35,7 @@ describe("LINE accounts", () => {
 
   describe("resolveLineAccount", () => {
     it("resolves account from config", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         channels: {
           line: {
             enabled: true,
@@ -60,7 +60,7 @@ describe("LINE accounts", () => {
       vi.stubEnv("LINE_CHANNEL_ACCESS_TOKEN", "env-token");
       vi.stubEnv("LINE_CHANNEL_SECRET", "env-secret");
 
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         channels: {
           line: {
             enabled: true,
@@ -76,7 +76,7 @@ describe("LINE accounts", () => {
     });
 
     it("resolves named account", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         channels: {
           line: {
             enabled: true,
@@ -102,7 +102,7 @@ describe("LINE accounts", () => {
     });
 
     it("uses configured defaultAccount when accountId is omitted", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         channels: {
           line: {
             defaultAccount: "business",
@@ -128,7 +128,7 @@ describe("LINE accounts", () => {
     });
 
     it("returns empty token when not configured", () => {
-      const cfg: NexisClawConfig = {};
+      const cfg: GreenchClawConfig = {};
 
       const account = resolveLineAccount({ cfg });
 
@@ -138,7 +138,7 @@ describe("LINE accounts", () => {
     });
 
     it("resolves default account credentials from files", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         channels: {
           line: {
             tokenFile: createSecretFile("token.txt", "file-token\n"),
@@ -155,7 +155,7 @@ describe("LINE accounts", () => {
     });
 
     it("resolves named account credentials from account-level files", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         channels: {
           line: {
             accounts: {
@@ -176,7 +176,7 @@ describe("LINE accounts", () => {
     });
 
     it.runIf(process.platform !== "win32")("rejects symlinked token and secret files", () => {
-      const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-line-account-"));
+      const dir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-line-account-"));
       tempDirs.push(dir);
       const tokenFile = path.join(dir, "token.txt");
       const tokenLink = path.join(dir, "token-link.txt");
@@ -187,7 +187,7 @@ describe("LINE accounts", () => {
       fs.symlinkSync(tokenFile, tokenLink);
       fs.symlinkSync(secretFile, secretLink);
 
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         channels: {
           line: {
             tokenFile: tokenLink,
@@ -217,7 +217,7 @@ describe("LINE accounts", () => {
               },
             },
           },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
         expected: "business",
       },
       {
@@ -231,7 +231,7 @@ describe("LINE accounts", () => {
               },
             },
           },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
         expected: "business-ops",
       },
       {
@@ -244,7 +244,7 @@ describe("LINE accounts", () => {
               },
             },
           },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
         expected: "business",
       },
       {
@@ -258,7 +258,7 @@ describe("LINE accounts", () => {
               },
             },
           },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
         expected: "business",
       },
       {
@@ -272,7 +272,7 @@ describe("LINE accounts", () => {
               },
             },
           },
-        } satisfies NexisClawConfig,
+        } satisfies GreenchClawConfig,
         expected: DEFAULT_ACCOUNT_ID,
       },
     ])("$name", ({ cfg, expected }) => {

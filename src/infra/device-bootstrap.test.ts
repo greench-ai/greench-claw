@@ -17,7 +17,7 @@ import {
 import { loadOrCreateDeviceIdentity, publicKeyRawBase64UrlFromPem } from "./device-identity.js";
 
 const tempDirs = createTrackedTempDirs();
-const createTempDir = () => tempDirs.make("NexisClaw-device-bootstrap-test-");
+const createTempDir = () => tempDirs.make("GreenchClaw-device-bootstrap-test-");
 
 function resolveBootstrapPath(baseDir: string): string {
   return path.join(baseDir, "devices", "bootstrap.json");

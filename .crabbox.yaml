@@ -1,4 +1,4 @@
-profile: NexisClaw-check
+profile: GreenchClaw-check
 provider: aws
 class: standard
 capacity:
@@ -18,7 +18,7 @@ actions:
   ref: main
   runnerLabels:
     - crabbox
-    - NexisClaw
+    - GreenchClaw
   runnerVersion: latest
   ephemeral: true
 aws:
@@ -40,7 +40,7 @@ env:
   allow:
     - CI
     - NODE_OPTIONS
-    - NEXISCLAW_*
+    - GREENCHCLAW_*
 ssh:
   user: crabbox
   port: "2222"

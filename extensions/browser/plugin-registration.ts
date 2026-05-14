@@ -1,17 +1,17 @@
 import type {
   AnyAgentTool,
-  NexisClawPluginApi,
-  NexisClawPluginNodeHostCommand,
-  NexisClawPluginSecurityAuditCollector,
-  NexisClawPluginService,
-  NexisClawPluginToolContext,
-  NexisClawPluginToolFactory,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+  GreenchClawPluginApi,
+  GreenchClawPluginNodeHostCommand,
+  GreenchClawPluginSecurityAuditCollector,
+  GreenchClawPluginService,
+  GreenchClawPluginToolContext,
+  GreenchClawPluginToolFactory,
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import { BrowserToolSchema } from "./src/browser-tool.schema.js";
 
 const BROWSER_CLI_DESCRIPTOR = {
   name: "browser",
-  description: "Manage NexisClaw's dedicated browser (Chrome/Chromium)",
+  description: "Manage GreenchClaw's dedicated browser (Chrome/Chromium)",
   hasSubcommands: true,
 };
 
@@ -27,8 +27,8 @@ function createLazyBrowserTool(opts?: {
     label: "Browser",
     name: "browser",
     description: [
-      "Control the browser via NexisClaw's browser control server (status/start/stop/profiles/tabs/open/snapshot/screenshot/actions).",
-      "Browser choice: omit profile by default for the isolated NexisClaw-managed browser (`NexisClaw`).",
+      "Control the browser via GreenchClaw's browser control server (status/start/stop/profiles/tabs/open/snapshot/screenshot/actions).",
+      "Browser choice: omit profile by default for the isolated GreenchClaw-managed browser (`GreenchClaw`).",
       'For the logged-in user browser, use profile="user". A supported Chromium-based browser (v144+) must be running on the selected host or browser node. Use only when existing logins/cookies matter and the user is present.',
       'For profile="user" or other existing-session profiles, omit timeoutMs on act:type, evaluate, hover, scrollIntoView, drag, select, and fill; that driver rejects per-call timeout overrides for those actions.',
       'When a node-hosted browser proxy is available, the tool may auto-route to it. Pin a node with node=<id|name> or target="node".',
@@ -50,7 +50,7 @@ function createLazyBrowserTool(opts?: {
 
 export const browserPluginReload = { restartPrefixes: ["browser"] };
 
-export const browserPluginNodeHostCommands: NexisClawPluginNodeHostCommand[] = [
+export const browserPluginNodeHostCommands: GreenchClawPluginNodeHostCommand[] = [
   {
     command: "browser.proxy",
     cap: "browser",
@@ -61,15 +61,15 @@ export const browserPluginNodeHostCommands: NexisClawPluginNodeHostCommand[] = [
   },
 ];
 
-export const browserSecurityAuditCollectors: NexisClawPluginSecurityAuditCollector[] = [
+export const browserSecurityAuditCollectors: GreenchClawPluginSecurityAuditCollector[] = [
   async (ctx) => {
     const { collectBrowserSecurityAuditFindings } = await import("./register.runtime.js");
     return collectBrowserSecurityAuditFindings(ctx);
   },
 ];
 
-function createLazyBrowserPluginService(): NexisClawPluginService {
-  let service: NexisClawPluginService | null = null;
+function createLazyBrowserPluginService(): GreenchClawPluginService {
+  let service: GreenchClawPluginService | null = null;
   const loadService = async () => {
     if (!service) {
       const { createBrowserPluginService } = await import("./register.runtime.js");
@@ -92,13 +92,13 @@ function createLazyBrowserPluginService(): NexisClawPluginService {
   };
 }
 
-export function registerBrowserPlugin(api: NexisClawPluginApi) {
-  api.registerTool(((ctx: NexisClawPluginToolContext) =>
+export function registerBrowserPlugin(api: GreenchClawPluginApi) {
+  api.registerTool(((ctx: GreenchClawPluginToolContext) =>
     createLazyBrowserTool({
       sandboxBridgeUrl: ctx.browser?.sandboxBridgeUrl,
       allowHostControl: ctx.browser?.allowHostControl,
       agentSessionKey: ctx.sessionKey,
-    })) as NexisClawPluginToolFactory);
+    })) as GreenchClawPluginToolFactory);
   api.registerCli(
     async ({ program }) => {
       const { registerBrowserCli } = await import("./src/cli/browser-cli.js");

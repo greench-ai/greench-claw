@@ -1,19 +1,13 @@
 /**
- * GreenchBrain — semantic memory (brain) plugin using Qdrant.
+ * GreenchBrain — semantic memory brain using Qdrant.
  *
- * Provides persistent, searchable memory for the agent:
- * - add_memory(text, user_id, metadata)
- * - search_memories(query, user_id, limit)
- * - get_memories(user_id)
- * - delete_memory(memory_id, user_id)
- *
- * Uses a dedicated Qdrant collection (greench_brain) with Ollama embeddings.
+ * Tools: brain_add | brain_search | brain_list | brain_delete
  */
 
 import crypto from "node:crypto";
 import { definePluginEntry, type GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
 
-// ── Config ────────────────────────────────────────────────────────────────────
+// ── Config ───────────────────────────────────────────────────────────────────
 
 interface BrainConfig {
   qdrantHost: string;
@@ -31,9 +25,39 @@ const DEFAULT_BRAIN_CONFIG: BrainConfig = {
   collection: "greench_brain",
 };
 
-// ── Qdrant helpers ────────────────────────────────────────────────────────────
+function getBrainConfig(api: GreenchClawPluginApi): BrainConfig {
+  const raw = (api.config.plugins?.entries as Record<string, unknown> | undefined)?.[
+    "greench-brain"
+  ];
+  const cfg = (
+    raw && typeof raw === "object" && "config" in raw
+      ? (raw as { config: Record<string, unknown> }).config
+      : raw
+  ) as Record<string, unknown> | undefined;
+  return {
+    qdrantHost: String(cfg?.qdrantHost ?? DEFAULT_BRAIN_CONFIG.qdrantHost),
+    qdrantPort: Number(cfg?.qdrantPort ?? DEFAULT_BRAIN_CONFIG.qdrantPort),
+    ollamaUrl: String(cfg?.ollamaUrl ?? DEFAULT_BRAIN_CONFIG.ollamaUrl),
+    embeddingModel: String(cfg?.embeddingModel ?? DEFAULT_BRAIN_CONFIG.embeddingModel),
+    collection: String(cfg?.collection ?? DEFAULT_BRAIN_CONFIG.collection),
+  };
+}
 
-// ── Qdrant REST API (no extra deps) ─────────────────────────────────────────
+// ── Ollama Embedding ─────────────────────────────────────────────────────────
+
+async function embedText(text: string, baseUrl: string, model: string): Promise<number[]> {
+  const resp = await fetch(`${baseUrl}/api/embeddings`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ model, prompt: text }),
+    signal: AbortSignal.timeout(30_000),
+  });
+  if (!resp.ok) throw new Error(`Embedding failed: ${resp.status}`);
+  const data = (await resp.json()) as { embedding?: number[] };
+  return data.embedding ?? [];
+}
+
+// ── Qdrant REST API ──────────────────────────────────────────────────────────
 
 function qdrantUrl(cfg: BrainConfig, path: string): string {
   return `http://${cfg.qdrantHost}:${cfg.qdrantPort}${path}`;
@@ -121,26 +145,6 @@ async function brainDeletePoint(cfg: BrainConfig, pointId: number): Promise<void
   });
 }
 
-// ── Memory Store (file-based metadata) ──────────────────────────────────────
-
-async function embedText(text: string, baseUrl: string, model: string): Promise<number[]> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 30_000);
-  try {
-    const resp = await fetch(`${baseUrl}/api/embeddings`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model, prompt: text }),
-      signal: controller.signal,
-    });
-    if (!resp.ok) throw new Error(`Embedding failed: ${resp.status}`);
-    const data = (await resp.json()) as { embedding?: number[] };
-    return data.embedding ?? [];
-  } finally {
-    clearTimeout(timeout);
-  }
-}
-
 // ── Brain Operations ─────────────────────────────────────────────────────────
 
 async function brainAddMemory(
@@ -175,15 +179,7 @@ async function brainSearch(
   query: string,
   userId: string = "default",
   limit: number = 10,
-): Promise<
-  Array<{
-    memory_id: string;
-    text: string;
-    score: number;
-    metadata: Record<string, unknown>;
-    created_at: string;
-  }>
-> {
+) {
   const cfg = getBrainConfig(api);
   const queryVector = await embedText(query, cfg.ollamaUrl, cfg.embeddingModel);
   const results = await doBrainSearch(cfg, queryVector, userId, limit);
@@ -200,14 +196,7 @@ async function brainGetAll(
   api: GreenchClawPluginApi,
   userId: string = "default",
   limit: number = 100,
-): Promise<
-  Array<{
-    memory_id: string;
-    text: string;
-    metadata: Record<string, unknown>;
-    created_at: string;
-  }>
-> {
+) {
   const cfg = getBrainConfig(api);
   const results = await brainFetchAll(cfg, userId, limit);
   return results.map((r) => ({
@@ -235,182 +224,163 @@ async function brainDeleteMemory(
   }
 }
 
-// ── Config ────────────────────────────────────────────────────────────────────
-
-function getBrainConfig(api: GreenchClawPluginApi): BrainConfig {
-  const raw = (api.config.plugins?.entries as Record<string, unknown> | undefined)?.[
-    "greench-brain"
-  ];
-  const cfg = (
-    raw && typeof raw === "object" && "config" in raw
-      ? (raw as { config: Record<string, unknown> }).config
-      : raw
-  ) as Record<string, unknown> | undefined;
-
-  return {
-    qdrantHost: String(cfg?.qdrantHost ?? DEFAULT_BRAIN_CONFIG.qdrantHost),
-    qdrantPort: Number(cfg?.qdrantPort ?? DEFAULT_BRAIN_CONFIG.qdrantPort),
-    ollamaUrl: String(cfg?.ollamaUrl ?? DEFAULT_BRAIN_CONFIG.ollamaUrl),
-    embeddingModel: String(cfg?.embeddingModel ?? DEFAULT_BRAIN_CONFIG.embeddingModel),
-    collection: String(cfg?.collection ?? DEFAULT_BRAIN_CONFIG.collection),
-  };
-}
-
-// ── Plugin Tools ─────────────────────────────────────────────────────────────
-
-function buildTools(api: GreenchClawPluginApi) {
-  return [
-    {
-      name: "brain_add",
-      description: "Add a memory to the agent's brain.",
-      inputSchema: {
-        type: "object",
-        properties: {
-          text: { type: "string", description: "Memory text to store" },
-          user_id: {
-            type: "string",
-            description: "User ID (default: default)",
-            default: "default",
-          },
-          metadata: {
-            type: "object",
-            description: "Optional metadata (key-value pairs)",
-            additionalProperties: true,
-          },
-        },
-        required: ["text"],
-      },
-      async run(args: { text: string; user_id?: string; metadata?: Record<string, unknown> }) {
-        try {
-          const result = await brainAddMemory(
-            api,
-            args.text,
-            args.user_id ?? "default",
-            args.metadata ?? {},
-          );
-          return {
-            success: true,
-            output: `Memory added: ${result.memory_id}`,
-            error: null,
-          };
-        } catch (err) {
-          return { success: false, output: "", error: String(err) };
-        }
-      },
-    },
-    {
-      name: "brain_search",
-      description: "Search the agent's brain for relevant memories.",
-      inputSchema: {
-        type: "object",
-        properties: {
-          query: { type: "string", description: "Search query" },
-          user_id: { type: "string", description: "User ID (default: default)" },
-          limit: { type: "number", description: "Max results (default 10)" },
-        },
-        required: ["query"],
-      },
-      async run(args: { query: string; user_id?: string; limit?: number }) {
-        try {
-          const results = await brainSearch(
-            api,
-            args.query,
-            args.user_id ?? "default",
-            args.limit ?? 10,
-          );
-          if (!results.length) {
-            return { success: true, output: "No memories found.", error: null };
-          }
-          const lines = results.map(
-            (r, i) =>
-              `[${i + 1}] (score: ${r.score.toFixed(3)}) ${r.text}${Object.keys(r.metadata).length ? ` | ${JSON.stringify(r.metadata)}` : ""}`,
-          );
-          return { success: true, output: lines.join("\n\n"), error: null };
-        } catch (err) {
-          return { success: false, output: "", error: String(err) };
-        }
-      },
-    },
-    {
-      name: "brain_list",
-      description: "List all memories in the brain.",
-      inputSchema: {
-        type: "object",
-        properties: {
-          user_id: { type: "string" },
-          limit: { type: "number" },
-        },
-      },
-      async run(args: { user_id?: string; limit?: number }) {
-        try {
-          const memories = await brainGetAll(api, args.user_id ?? "default", args.limit ?? 100);
-          if (!memories.length) {
-            return { success: true, output: "No memories stored.", error: null };
-          }
-          const lines = memories.map((m, i) => `[${i + 1}] ${m.text}`);
-          return { success: true, output: lines.join("\n"), error: null };
-        } catch (err) {
-          return { success: false, output: "", error: String(err) };
-        }
-      },
-    },
-    {
-      name: "brain_delete",
-      description: "Delete a specific memory by ID.",
-      inputSchema: {
-        type: "object",
-        properties: {
-          memory_id: { type: "string" },
-          user_id: { type: "string" },
-        },
-        required: ["memory_id"],
-      },
-      async run(args: { memory_id: string; user_id?: string }) {
-        try {
-          const deleted = await brainDeleteMemory(api, args.memory_id, args.user_id ?? "default");
-          return {
-            success: true,
-            output: deleted ? `Memory '${args.memory_id}' deleted.` : `Memory not found.`,
-            error: null,
-          };
-        } catch (err) {
-          return { success: false, output: "", error: String(err) };
-        }
-      },
-    },
-  ];
-}
-
 // ── Plugin Entry ─────────────────────────────────────────────────────────────
 
 export default definePluginEntry({
   id: "greench-brain",
   name: "GreenchBrain",
   description: "Semantic memory brain — persistent, searchable memory using Qdrant.",
-  async register(api: GreenchClawPluginApi) {
-    const tools = buildTools(api);
-    for (const tool of tools) {
-      try {
-        api.runtime.agent.tools.register?.({
-          id: tool.name,
-          description: tool.description,
-          inputSchema: tool.inputSchema,
-          async handler(args: Record<string, unknown>) {
-            return tool.run(args as Parameters<typeof tool.run>[0]);
+  register(api: GreenchClawPluginApi) {
+    const makeTool = (
+      name: string,
+      desc: string,
+      schema: Record<string, unknown>,
+      execute: (
+        _id: unknown,
+        p: Record<string, unknown>,
+      ) => Promise<{ success: boolean; output: string; error: string | null }>,
+    ) => ({
+      name,
+      description: desc,
+      inputSchema: schema,
+      execute: async (toolCallId: unknown, toolParams: Record<string, unknown>) =>
+        execute(toolCallId, toolParams),
+    });
+
+    api.registerTool(
+      () =>
+        makeTool(
+          "brain_add",
+          "Add a memory to the brain.",
+          {
+            type: "object",
+            properties: {
+              text: { type: "string" },
+              user_id: { type: "string", default: "default" },
+              metadata: { type: "object", additionalProperties: true },
+            },
+            required: ["text"],
           },
-        });
-      } catch (err) {
-        api.logger.error?.("greench-brain: failed to register tool", {
-          tool: tool.name,
-          error: String(err),
-        });
-      }
-    }
-    api.logger.info?.("greench-brain: registered", { count: tools.length });
+          async (_id, params) => {
+            try {
+              const result = await brainAddMemory(
+                api,
+                String(params.text ?? ""),
+                String(params.user_id ?? "default"),
+                (params.metadata as Record<string, unknown>) ?? {},
+              );
+              return { success: true, output: `Memory added: ${result.memory_id}`, error: null };
+            } catch (err) {
+              return { success: false, output: "", error: String(err) };
+            }
+          },
+        ),
+      { names: ["brain_add"] },
+    );
+
+    api.registerTool(
+      () =>
+        makeTool(
+          "brain_search",
+          "Search the brain for relevant memories.",
+          {
+            type: "object",
+            properties: {
+              query: { type: "string" },
+              user_id: { type: "string" },
+              limit: { type: "number" },
+            },
+            required: ["query"],
+          },
+          async (_id, params) => {
+            try {
+              const results = await brainSearch(
+                api,
+                String(params.query ?? ""),
+                String(params.user_id ?? "default"),
+                Number(params.limit ?? 10),
+              );
+              if (!results.length)
+                return { success: true, output: "No memories found.", error: null };
+              const lines = results.map(
+                (r, i) =>
+                  `[${i + 1}] (score: ${r.score.toFixed(3)}) ${r.text}${Object.keys(r.metadata).length ? ` | ${JSON.stringify(r.metadata)}` : ""}`,
+              );
+              return { success: true, output: lines.join("\n\n"), error: null };
+            } catch (err) {
+              return { success: false, output: "", error: String(err) };
+            }
+          },
+        ),
+      { names: ["brain_search"] },
+    );
+
+    api.registerTool(
+      () =>
+        makeTool(
+          "brain_list",
+          "List all memories in the brain.",
+          {
+            type: "object",
+            properties: { user_id: { type: "string" }, limit: { type: "number" } },
+          },
+          async (_id, params) => {
+            try {
+              const memories = await brainGetAll(
+                api,
+                String(params.user_id ?? "default"),
+                Number(params.limit ?? 100),
+              );
+              if (!memories.length)
+                return { success: true, output: "No memories stored.", error: null };
+              return {
+                success: true,
+                output: memories.map((m, i) => `[${i + 1}] ${m.text}`).join("\n"),
+                error: null,
+              };
+            } catch (err) {
+              return { success: false, output: "", error: String(err) };
+            }
+          },
+        ),
+      { names: ["brain_list"] },
+    );
+
+    api.registerTool(
+      () =>
+        makeTool(
+          "brain_delete",
+          "Delete a specific memory by ID.",
+          {
+            type: "object",
+            properties: { memory_id: { type: "string" }, user_id: { type: "string" } },
+            required: ["memory_id"],
+          },
+          async (_id, params) => {
+            try {
+              const deleted = await brainDeleteMemory(
+                api,
+                String(params.memory_id),
+                String(params.user_id ?? "default"),
+              );
+              return {
+                success: true,
+                output: deleted ? `Deleted "${params.memory_id}".` : "Not found.",
+                error: null,
+              };
+            } catch (err) {
+              return { success: false, output: "", error: String(err) };
+            }
+          },
+        ),
+      { names: ["brain_delete"] },
+    );
+
+    api.logger.info?.("greench-brain: registered");
   },
   tools: {
     brain_add: {
-      description: "Add a memory to the brain.",
+      description: "Add a memory.",
       inputSchema: {
         type: "object",
         properties: {
@@ -422,7 +392,7 @@ export default definePluginEntry({
       },
     },
     brain_search: {
-      description: "Search brain memories.",
+      description: "Search memories.",
       inputSchema: {
         type: "object",
         properties: {
@@ -447,16 +417,6 @@ export default definePluginEntry({
         properties: { memory_id: { type: "string" }, user_id: { type: "string" } },
         required: ["memory_id"],
       },
-    },
-  },
-  configSchema: {
-    type: "object",
-    properties: {
-      qdrantHost: { type: "string", default: "localhost" },
-      qdrantPort: { type: "number", default: 6333 },
-      ollamaUrl: { type: "string", default: "http://localhost:11434" },
-      embeddingModel: { type: "string", default: "nomic-embed-text:v1.5" },
-      collection: { type: "string", default: "greench_brain" },
     },
   },
 });

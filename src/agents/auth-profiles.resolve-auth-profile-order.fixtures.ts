@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { AuthProfileStore } from "./auth-profiles.js";
 
 export const ANTHROPIC_STORE: AuthProfileStore = {
@@ -17,7 +17,7 @@ export const ANTHROPIC_STORE: AuthProfileStore = {
   },
 };
 
-export const ANTHROPIC_CFG: NexisClawConfig = {
+export const ANTHROPIC_CFG: GreenchClawConfig = {
   auth: {
     profiles: {
       "anthropic:default": { provider: "anthropic", mode: "api_key" },

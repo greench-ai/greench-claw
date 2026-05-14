@@ -5,7 +5,7 @@ read_when: "You hit 'sandbox jail' or see a tool/elevated refusal and want the e
 status: active
 ---
 
-NexisClaw has three related (but different) controls:
+GreenchClaw has three related (but different) controls:
 
 1. **Sandbox** (`agents.defaults.sandbox.*` / `agents.list[].sandbox.*`) decides **where tools run** (sandbox backend vs host).
 2. **Tool policy** (`tools.*`, `tools.sandbox.tools.*`, `agents.list[].tools.*`) decides **which tools are available/allowed**.
@@ -13,13 +13,13 @@ NexisClaw has three related (but different) controls:
 
 ## Quick debug
 
-Use the inspector to see what NexisClaw is _actually_ doing:
+Use the inspector to see what GreenchClaw is _actually_ doing:
 
 ```bash
-NexisClaw sandbox explain
-NexisClaw sandbox explain --session agent:main:main
-NexisClaw sandbox explain --agent work
-NexisClaw sandbox explain --json
+GreenchClaw sandbox explain
+GreenchClaw sandbox explain --session agent:main:main
+GreenchClaw sandbox explain --agent work
+GreenchClaw sandbox explain --json
 ```
 
 It prints:
@@ -44,7 +44,7 @@ See [Sandboxing](/gateway/sandboxing) for the full matrix (scope, workspace moun
 - `docker.binds` _pierces_ the sandbox filesystem: whatever you mount is visible inside the container with the mode you set (`:ro` or `:rw`).
 - Default is read-write if you omit the mode; prefer `:ro` for source/secrets.
 - `scope: "shared"` ignores per-agent binds (only global binds apply).
-- NexisClaw validates bind sources twice: first on the normalized source path, then again after resolving through the deepest existing ancestor. Symlink-parent escapes do not bypass blocked-path or allowed-root checks.
+- GreenchClaw validates bind sources twice: first on the normalized source path, then again after resolving through the deepest existing ancestor. Symlink-parent escapes do not bypass blocked-path or allowed-root checks.
 - Non-existent leaf paths are still checked safely. If `/workspace/alias-out/new-file` resolves through a symlinked parent to a blocked path or outside the configured allowed roots, the bind is rejected.
 - Binding `/var/run/docker.sock` effectively hands host control to the sandbox; only do this intentionally.
 - Workspace access (`workspaceAccess: "ro"`/`"rw"`) is independent of bind modes.
@@ -99,7 +99,7 @@ Available groups:
 - `group:nodes`: `nodes`
 - `group:agents`: `agents_list`, `update_plan`
 - `group:media`: `image`, `image_generate`, `music_generate`, `video_generate`, `tts`
-- `group:NexisClaw`: all built-in NexisClaw tools (excludes provider plugins)
+- `group:GreenchClaw`: all built-in GreenchClaw tools (excludes provider plugins)
 
 ## Elevated: exec-only "run on host"
 

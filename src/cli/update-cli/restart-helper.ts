@@ -35,27 +35,27 @@ function powerShellSingleQuote(value: string): string {
 }
 
 function resolveSystemdUnit(env: NodeJS.ProcessEnv): string {
-  const override = normalizeOptionalString(env.NEXISCLAW_SYSTEMD_UNIT);
+  const override = normalizeOptionalString(env.GREENCHCLAW_SYSTEMD_UNIT);
   if (override) {
     return override.endsWith(".service") ? override : `${override}.service`;
   }
-  return `${resolveGatewaySystemdServiceName(env.NEXISCLAW_PROFILE)}.service`;
+  return `${resolveGatewaySystemdServiceName(env.GREENCHCLAW_PROFILE)}.service`;
 }
 
 function resolveLaunchdLabel(env: NodeJS.ProcessEnv): string {
-  const override = normalizeOptionalString(env.NEXISCLAW_LAUNCHD_LABEL);
+  const override = normalizeOptionalString(env.GREENCHCLAW_LAUNCHD_LABEL);
   if (override) {
     return override;
   }
-  return resolveGatewayLaunchAgentLabel(env.NEXISCLAW_PROFILE);
+  return resolveGatewayLaunchAgentLabel(env.GREENCHCLAW_PROFILE);
 }
 
 function resolveWindowsTaskName(env: NodeJS.ProcessEnv): string {
-  const override = env.NEXISCLAW_WINDOWS_TASK_NAME?.trim();
+  const override = env.GREENCHCLAW_WINDOWS_TASK_NAME?.trim();
   if (override) {
     return override;
   }
-  return resolveGatewayWindowsTaskName(env.NEXISCLAW_PROFILE);
+  return resolveGatewayWindowsTaskName(env.GREENCHCLAW_PROFILE);
 }
 
 /**
@@ -80,33 +80,33 @@ export async function prepareRestartScript(
       const unitName = resolveSystemdUnit(env);
       const escaped = shellEscape(unitName);
       const logSetup = renderPosixRestartLogSetup({ ...process.env, ...env });
-      filename = `NexisClaw-restart-${timestamp}.sh`;
+      filename = `GreenchClaw-restart-${timestamp}.sh`;
       scriptContent = `#!/bin/sh
 # Standalone restart script — survives parent process termination.
 # Wait briefly to ensure file locks are released after update.
 sleep 1
 exec 3>&2
 ${logSetup}
-printf '[%s] NexisClaw restart attempt source=update target=%s\\n' "$(date -u +%FT%TZ)" '${escaped}' >&2
+printf '[%s] GreenchClaw restart attempt source=update target=%s\\n' "$(date -u +%FT%TZ)" '${escaped}' >&2
 if systemctl --user is-active --quiet '${escaped}' || systemctl --user is-enabled --quiet '${escaped}'; then
   if systemctl --user restart '${escaped}'; then
     status=0
-    printf '[%s] NexisClaw restart done source=update\\n' "$(date -u +%FT%TZ)" >&2
+    printf '[%s] GreenchClaw restart done source=update\\n' "$(date -u +%FT%TZ)" >&2
   else
     status=$?
-    printf '[%s] NexisClaw restart failed source=update status=%s\\n' "$(date -u +%FT%TZ)" "$status" >&2
+    printf '[%s] GreenchClaw restart failed source=update status=%s\\n' "$(date -u +%FT%TZ)" "$status" >&2
   fi
 elif systemctl is-active --quiet '${escaped}' || systemctl is-enabled --quiet '${escaped}'; then
   status=78
-  printf '[%s] system-scoped NexisClaw gateway unit detected; update cannot restart it without sudo. Run: sudo systemctl restart %s\\n' "$(date -u +%FT%TZ)" '${escaped}' >&2
-  printf '[%s] system-scoped NexisClaw gateway unit detected; update cannot restart it without sudo. Run: sudo systemctl restart %s\\n' "$(date -u +%FT%TZ)" '${escaped}' >&3 2>/dev/null || true
+  printf '[%s] system-scoped GreenchClaw gateway unit detected; update cannot restart it without sudo. Run: sudo systemctl restart %s\\n' "$(date -u +%FT%TZ)" '${escaped}' >&2
+  printf '[%s] system-scoped GreenchClaw gateway unit detected; update cannot restart it without sudo. Run: sudo systemctl restart %s\\n' "$(date -u +%FT%TZ)" '${escaped}' >&3 2>/dev/null || true
 else
   if systemctl --user restart '${escaped}'; then
     status=0
-    printf '[%s] NexisClaw restart done source=update\\n' "$(date -u +%FT%TZ)" >&2
+    printf '[%s] GreenchClaw restart done source=update\\n' "$(date -u +%FT%TZ)" >&2
   else
     status=$?
-    printf '[%s] NexisClaw restart failed source=update status=%s\\n' "$(date -u +%FT%TZ)" "$status" >&2
+    printf '[%s] GreenchClaw restart failed source=update status=%s\\n' "$(date -u +%FT%TZ)" "$status" >&2
   fi
 fi
 # Self-cleanup
@@ -125,7 +125,7 @@ exit "$status"
       const plistPath = path.join(home, "Library", "LaunchAgents", `${label}.plist`);
       const escapedPlistPath = shellEscape(plistPath);
       const logSetup = renderPosixRestartLogSetup({ ...process.env, ...env });
-      filename = `NexisClaw-restart-${timestamp}.sh`;
+      filename = `GreenchClaw-restart-${timestamp}.sh`;
       scriptContent = `#!/bin/sh
 # Standalone restart script — survives parent process termination.
 # Wait briefly to ensure file locks are released after update.
@@ -134,7 +134,7 @@ sleep 1
 # audit trail. Log setup is best-effort: restart must still run if the log path
 # is temporarily unavailable.
 ${logSetup}
-printf '[%s] NexisClaw restart attempt source=update target=%s\\n' "$(date -u +%FT%TZ)" '${shellEscapeRestartLogValue(label)}' >&2
+printf '[%s] GreenchClaw restart attempt source=update target=%s\\n' "$(date -u +%FT%TZ)" '${shellEscapeRestartLogValue(label)}' >&2
 # Try kickstart first (works when the service is still registered).
 # If it fails (e.g. after bootout), clear any persisted disabled state,
 # then re-register via bootstrap. Bootstrap loads RunAtLoad agents, so the
@@ -152,11 +152,11 @@ if ! launchctl kickstart -k 'gui/${uid}/${escaped}'; then
   fi
 fi
 if [ "$status" -eq 0 ]; then
-  printf '[%s] NexisClaw restart done source=update\\n' "$(date -u +%FT%TZ)" >&2
+  printf '[%s] GreenchClaw restart done source=update\\n' "$(date -u +%FT%TZ)" >&2
 else
-  printf '[%s] NexisClaw restart failed source=update status=%s\\n' "$(date -u +%FT%TZ)" "$status" >&2
+  printf '[%s] GreenchClaw restart failed source=update status=%s\\n' "$(date -u +%FT%TZ)" "$status" >&2
 fi
-# Self-cleanup (log is retained under the NexisClaw state logs directory).
+# Self-cleanup (log is retained under the GreenchClaw state logs directory).
 rm -f "$0"
 exit "$status"
 `;
@@ -170,14 +170,14 @@ exit "$status"
       const restartLogPath = resolveGatewayRestartLogPath({ ...process.env, ...env });
       const quotedLogPath = powerShellSingleQuote(restartLogPath);
       const quotedTaskName = powerShellSingleQuote(taskName);
-      filename = `NexisClaw-restart-${timestamp}.cmd`;
+      filename = `GreenchClaw-restart-${timestamp}.cmd`;
       scriptContent = `@echo off
 REM Standalone restart script - survives parent process termination.
 REM Keep this as a cmd wrapper so Group Policy script execution policies
 REM cannot block the update restart handoff before schtasks.exe runs.
 setlocal
-set "NEXISCLAW_RESTART_SCRIPT=%~f0"
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$p=$env:NEXISCLAW_RESTART_SCRIPT; $s=Get-Content -Raw -LiteralPath $p; $m='# POWERSHELL'; $i=$s.IndexOf($m); if ($i -lt 0) { exit 1 }; Invoke-Expression $s.Substring($i)"
+set "GREENCHCLAW_RESTART_SCRIPT=%~f0"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$p=$env:GREENCHCLAW_RESTART_SCRIPT; $s=Get-Content -Raw -LiteralPath $p; $m='# POWERSHELL'; $i=$s.IndexOf($m); if ($i -lt 0) { exit 1 }; Invoke-Expression $s.Substring($i)"
 set "status=%ERRORLEVEL%"
 del "%~f0" >nul 2>&1
 exit /b %status%
@@ -190,7 +190,7 @@ $logPath = ${quotedLogPath}
 try {
   $logDir = Split-Path -Parent $logPath
   New-Item -ItemType Directory -Path $logDir -Force | Out-Null
-  Add-Content -LiteralPath $logPath -Value "[$(Get-Date -Format o)] NexisClaw restart log initialized"
+  Add-Content -LiteralPath $logPath -Value "[$(Get-Date -Format o)] GreenchClaw restart log initialized"
 } catch {
   # Restart should still run if log setup is unavailable.
 }
@@ -203,7 +203,7 @@ function Write-RestartLog {
   }
 }
 
-function Join-NexisClawProcessArguments {
+function Join-GreenchClawProcessArguments {
   param([string[]]$Arguments)
   ($Arguments | ForEach-Object {
     if ($_ -match "\\s") {
@@ -214,7 +214,7 @@ function Join-NexisClawProcessArguments {
   }) -join " "
 }
 
-function Invoke-NexisClawSchtasksWithTimeout {
+function Invoke-GreenchClawSchtasksWithTimeout {
   param(
     [string[]]$Arguments,
     [int]$TimeoutSeconds
@@ -223,7 +223,7 @@ function Invoke-NexisClawSchtasksWithTimeout {
   try {
     $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
     $startInfo.FileName = "schtasks.exe"
-    $startInfo.Arguments = Join-NexisClawProcessArguments -Arguments $Arguments
+    $startInfo.Arguments = Join-GreenchClawProcessArguments -Arguments $Arguments
     $startInfo.UseShellExecute = $false
     $startInfo.RedirectStandardOutput = $true
     $startInfo.RedirectStandardError = $true
@@ -233,7 +233,7 @@ function Invoke-NexisClawSchtasksWithTimeout {
         $process.Kill()
       } catch {
       }
-      Write-RestartLog "NexisClaw restart schtasks timeout source=update args=$($Arguments -join ' ')"
+      Write-RestartLog "GreenchClaw restart schtasks timeout source=update args=$($Arguments -join ' ')"
       return 124
     }
     $stdout = $process.StandardOutput.ReadToEnd()
@@ -246,12 +246,12 @@ function Invoke-NexisClawSchtasksWithTimeout {
     }
     return $process.ExitCode
   } catch {
-    Write-RestartLog "NexisClaw restart schtasks failed source=update args=$($Arguments -join ' ') error=$($_.Exception.Message)"
+    Write-RestartLog "GreenchClaw restart schtasks failed source=update args=$($Arguments -join ' ') error=$($_.Exception.Message)"
     return 1
   }
 }
 
-function Get-NexisClawScheduledTaskState {
+function Get-GreenchClawScheduledTaskState {
   param([string]$TaskName)
   try {
     $task = Get-ScheduledTask -TaskName $TaskName -ErrorAction Stop
@@ -274,7 +274,7 @@ function Get-NexisClawScheduledTaskState {
   return "Unknown"
 }
 
-function Get-NexisClawListenerPids {
+function Get-GreenchClawListenerPids {
   param([int]$Port)
   $listenerPids = @()
 
@@ -302,39 +302,39 @@ function Get-NexisClawListenerPids {
   $listenerPids | Sort-Object -Unique
 }
 
-function Invoke-NexisClawStartupLauncher {
-  $launcherPath = Join-Path $env:USERPROFILE ".NexisClaw\\gateway.cmd"
+function Invoke-GreenchClawStartupLauncher {
+  $launcherPath = Join-Path $env:USERPROFILE ".GreenchClaw\\gateway.cmd"
   if (-not (Test-Path -LiteralPath $launcherPath)) {
-    Write-RestartLog "NexisClaw restart startup launcher missing source=update path=$launcherPath"
+    Write-RestartLog "GreenchClaw restart startup launcher missing source=update path=$launcherPath"
     return 1
   }
 
   try {
     Start-Process -FilePath $launcherPath -WindowStyle Hidden | Out-Null
-    Write-RestartLog "NexisClaw restart launched startup fallback source=update path=$launcherPath"
+    Write-RestartLog "GreenchClaw restart launched startup fallback source=update path=$launcherPath"
     return 0
   } catch {
-    Write-RestartLog "NexisClaw restart startup fallback failed source=update error=$($_.Exception.Message)"
+    Write-RestartLog "GreenchClaw restart startup fallback failed source=update error=$($_.Exception.Message)"
     return 1
   }
 }
 
 $taskName = ${quotedTaskName}
 $port = ${port}
-Write-RestartLog "NexisClaw restart attempt source=update target=$taskName"
+Write-RestartLog "GreenchClaw restart attempt source=update target=$taskName"
 
-$taskState = Get-NexisClawScheduledTaskState -TaskName $taskName
+$taskState = Get-GreenchClawScheduledTaskState -TaskName $taskName
 if ($taskState -eq "Running") {
-  $endStatus = Invoke-NexisClawSchtasksWithTimeout -Arguments @("/End", "/TN", $taskName) -TimeoutSeconds 10
+  $endStatus = Invoke-GreenchClawSchtasksWithTimeout -Arguments @("/End", "/TN", $taskName) -TimeoutSeconds 10
   if ($endStatus -ne 0) {
-    Write-RestartLog "NexisClaw restart schtasks end did not complete cleanly source=update status=$endStatus"
+    Write-RestartLog "GreenchClaw restart schtasks end did not complete cleanly source=update status=$endStatus"
   }
 } else {
-  Write-RestartLog "NexisClaw restart skipped schtasks end source=update state=$taskState"
+  Write-RestartLog "GreenchClaw restart skipped schtasks end source=update state=$taskState"
 }
 
 for ($attempt = 1; $attempt -le 10; $attempt++) {
-  $listeners = @(Get-NexisClawListenerPids -Port $port)
+  $listeners = @(Get-GreenchClawListenerPids -Port $port)
   if ($listeners.Count -eq 0) {
     break
   }
@@ -343,9 +343,9 @@ for ($attempt = 1; $attempt -le 10; $attempt++) {
     foreach ($listenerPid in $listeners) {
       try {
         Stop-Process -Id $listenerPid -Force -ErrorAction Stop
-        Write-RestartLog "NexisClaw restart killed stale listener source=update pid=$listenerPid"
+        Write-RestartLog "GreenchClaw restart killed stale listener source=update pid=$listenerPid"
       } catch {
-        Write-RestartLog "NexisClaw restart failed to kill stale listener source=update pid=$listenerPid error=$($_.Exception.Message)"
+        Write-RestartLog "GreenchClaw restart failed to kill stale listener source=update pid=$listenerPid error=$($_.Exception.Message)"
       }
     }
     break
@@ -354,14 +354,14 @@ for ($attempt = 1; $attempt -le 10; $attempt++) {
   Start-Sleep -Seconds 1
 }
 
-$status = Invoke-NexisClawSchtasksWithTimeout -Arguments @("/Run", "/TN", $taskName) -TimeoutSeconds 30
+$status = Invoke-GreenchClawSchtasksWithTimeout -Arguments @("/Run", "/TN", $taskName) -TimeoutSeconds 30
 if ($status -ne 0) {
-  $status = Invoke-NexisClawStartupLauncher
+  $status = Invoke-GreenchClawStartupLauncher
 }
 if ($status -eq 0) {
-  Write-RestartLog "NexisClaw restart done source=update"
+  Write-RestartLog "GreenchClaw restart done source=update"
 } else {
-  Write-RestartLog "NexisClaw restart failed source=update status=$status"
+  Write-RestartLog "GreenchClaw restart failed source=update status=$status"
 }
 
 exit $status

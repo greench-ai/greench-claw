@@ -1,18 +1,18 @@
 ---
-summary: "Install and use Codex, Claude, and Cursor bundles as NexisClaw plugins"
+summary: "Install and use Codex, Claude, and Cursor bundles as GreenchClaw plugins"
 read_when:
   - You want to install a Codex, Claude, or Cursor-compatible bundle
-  - You need to understand how NexisClaw maps bundle content into native features
+  - You need to understand how GreenchClaw maps bundle content into native features
   - You are debugging bundle detection or missing capabilities
 title: "Plugin bundles"
 ---
 
-NexisClaw can install plugins from three external ecosystems: **Codex**, **Claude**,
+GreenchClaw can install plugins from three external ecosystems: **Codex**, **Claude**,
 and **Cursor**. These are called **bundles** — content and metadata packs that
-NexisClaw maps into native features like skills, hooks, and MCP tools.
+GreenchClaw maps into native features like skills, hooks, and MCP tools.
 
 <Info>
-  Bundles are **not** the same as native NexisClaw plugins. Native plugins run
+  Bundles are **not** the same as native GreenchClaw plugins. Native plugins run
   in-process and can register any capability. Bundles are content packs with
   selective feature mapping and a narrower trust boundary.
 </Info>
@@ -20,7 +20,7 @@ NexisClaw maps into native features like skills, hooks, and MCP tools.
 ## Why bundles exist
 
 Many useful plugins are published in Codex, Claude, or Cursor format. Instead
-of requiring authors to rewrite them as native NexisClaw plugins, NexisClaw
+of requiring authors to rewrite them as native GreenchClaw plugins, GreenchClaw
 detects these formats and maps their supported content into the native feature
 set. This means you can install a Claude command pack or a Codex skill bundle
 and use it immediately.
@@ -31,22 +31,22 @@ and use it immediately.
   <Step title="Install from a directory, archive, or marketplace">
     ```bash
     # Local directory
-    NexisClaw plugins install ./my-bundle
+    GreenchClaw plugins install ./my-bundle
 
     # Archive
-    NexisClaw plugins install ./my-bundle.tgz
+    GreenchClaw plugins install ./my-bundle.tgz
 
     # Claude marketplace
-    NexisClaw plugins marketplace list <marketplace-name>
-    NexisClaw plugins install <plugin-name>@<marketplace-name>
+    GreenchClaw plugins marketplace list <marketplace-name>
+    GreenchClaw plugins install <plugin-name>@<marketplace-name>
     ```
 
   </Step>
 
   <Step title="Verify detection">
     ```bash
-    NexisClaw plugins list
-    NexisClaw plugins inspect <id>
+    GreenchClaw plugins list
+    GreenchClaw plugins inspect <id>
     ```
 
     Bundles show as `Format: bundle` with a subtype of `codex`, `claude`, or `cursor`.
@@ -55,7 +55,7 @@ and use it immediately.
 
   <Step title="Restart and use">
     ```bash
-    NexisClaw gateway restart
+    GreenchClaw gateway restart
     ```
 
     Mapped features (skills, hooks, MCP tools, LSP defaults) are available in the next session.
@@ -63,34 +63,34 @@ and use it immediately.
   </Step>
 </Steps>
 
-## What NexisClaw maps from bundles
+## What GreenchClaw maps from bundles
 
-Not every bundle feature runs in NexisClaw today. Here is what works and what
+Not every bundle feature runs in GreenchClaw today. Here is what works and what
 is detected but not yet wired.
 
 ### Supported now
 
 | Feature       | How it maps                                                                                 | Applies to     |
 | ------------- | ------------------------------------------------------------------------------------------- | -------------- |
-| Skill content | Bundle skill roots load as normal NexisClaw skills                                           | All formats    |
+| Skill content | Bundle skill roots load as normal GreenchClaw skills                                        | All formats    |
 | Commands      | `commands/` and `.cursor/commands/` treated as skill roots                                  | Claude, Cursor |
-| Hook packs    | NexisClaw-style `HOOK.md` + `handler.ts` layouts                                             | Codex          |
+| Hook packs    | GreenchClaw-style `HOOK.md` + `handler.ts` layouts                                          | Codex          |
 | MCP tools     | Bundle MCP config merged into embedded Pi settings; supported stdio and HTTP servers loaded | All formats    |
 | LSP servers   | Claude `.lsp.json` and manifest-declared `lspServers` merged into embedded Pi LSP defaults  | Claude         |
 | Settings      | Claude `settings.json` imported as embedded Pi defaults                                     | Claude         |
 
 #### Skill content
 
-- bundle skill roots load as normal NexisClaw skill roots
+- bundle skill roots load as normal GreenchClaw skill roots
 - Claude `commands` roots are treated as additional skill roots
 - Cursor `.cursor/commands` roots are treated as additional skill roots
 
-This means Claude markdown command files work through the normal NexisClaw skill
+This means Claude markdown command files work through the normal GreenchClaw skill
 loader. Cursor command markdown works through the same path.
 
 #### Hook packs
 
-- bundle hook roots work **only** when they use the normal NexisClaw hook-pack
+- bundle hook roots work **only** when they use the normal GreenchClaw hook-pack
   layout. Today this is primarily the Codex-compatible case:
   - `HOOK.md`
   - `handler.ts` or `handler.js`
@@ -98,9 +98,9 @@ loader. Cursor command markdown works through the same path.
 #### MCP for Pi
 
 - enabled bundles can contribute MCP server config
-- NexisClaw merges bundle MCP config into the effective embedded Pi settings as
+- GreenchClaw merges bundle MCP config into the effective embedded Pi settings as
   `mcpServers`
-- NexisClaw exposes supported bundle MCP tools during embedded Pi agent turns by
+- GreenchClaw exposes supported bundle MCP tools during embedded Pi agent turns by
   launching stdio servers or connecting to HTTP servers
 - the `coding` and `messaging` tool profiles include bundle MCP tools by
   default; use `tools.deny: ["bundle-mcp"]` to opt out for an agent or gateway
@@ -148,8 +148,8 @@ MCP servers can use stdio or HTTP transport:
 }
 ```
 
-- `transport` may be set to `"streamable-http"` or `"sse"`; when omitted, NexisClaw uses `sse`
-- `type: "http"` is a CLI-native downstream shape; use `transport: "streamable-http"` in NexisClaw config. `NexisClaw mcp set` and `NexisClaw doctor --fix` normalize the common alias.
+- `transport` may be set to `"streamable-http"` or `"sse"`; when omitted, GreenchClaw uses `sse`
+- `type: "http"` is a CLI-native downstream shape; use `transport: "streamable-http"` in GreenchClaw config. `GreenchClaw mcp set` and `GreenchClaw doctor --fix` normalize the common alias.
 - only `http:` and `https:` URL schemes are allowed
 - `headers` values support `${ENV_VAR}` interpolation
 - a server entry with both `command` and `url` is rejected
@@ -160,7 +160,7 @@ MCP servers can use stdio or HTTP transport:
 
 ##### Tool naming
 
-NexisClaw registers bundle MCP tools with provider-safe names in the form
+GreenchClaw registers bundle MCP tools with provider-safe names in the form
 `serverName__toolName`. For example, a server keyed `"vigil-harbor"` exposing a
 `memory_search` tool registers as `vigil-harbor__memory_search`.
 
@@ -181,7 +181,7 @@ NexisClaw registers bundle MCP tools with provider-safe names in the form
 
 - Claude `settings.json` is imported as default embedded Pi settings when the
   bundle is enabled
-- NexisClaw sanitizes shell override keys before applying them
+- GreenchClaw sanitizes shell override keys before applying them
 
 Sanitized keys:
 
@@ -191,14 +191,14 @@ Sanitized keys:
 #### Embedded Pi LSP
 
 - enabled Claude bundles can contribute LSP server config
-- NexisClaw loads `.lsp.json` plus any manifest-declared `lspServers` paths
+- GreenchClaw loads `.lsp.json` plus any manifest-declared `lspServers` paths
 - bundle LSP config is merged into the effective embedded Pi LSP defaults
 - only supported stdio-backed LSP servers are runnable today; unsupported
-  transports still show up in `NexisClaw plugins inspect <id>`
+  transports still show up in `GreenchClaw plugins inspect <id>`
 
 ### Detected but not executed
 
-These are recognized and shown in diagnostics, but NexisClaw does not run them:
+These are recognized and shown in diagnostics, but GreenchClaw does not run them:
 
 - Claude `agents`, `hooks.json` automation, `outputStyles`
 - Cursor `.cursor/agents`, `.cursor/hooks.json`, `.cursor/rules`
@@ -212,7 +212,7 @@ These are recognized and shown in diagnostics, but NexisClaw does not run them:
 
     Optional content: `skills/`, `hooks/`, `.mcp.json`, `.app.json`
 
-    Codex bundles fit NexisClaw best when they use skill roots and NexisClaw-style
+    Codex bundles fit GreenchClaw best when they use skill roots and GreenchClaw-style
     hook-pack directories (`HOOK.md` + `handler.ts`).
 
   </Accordion>
@@ -247,23 +247,23 @@ These are recognized and shown in diagnostics, but NexisClaw does not run them:
 
 ## Detection precedence
 
-NexisClaw checks for native plugin format first:
+GreenchClaw checks for native plugin format first:
 
-1. `NexisClaw.plugin.json` or valid `package.json` with `NexisClaw.extensions` — treated as **native plugin**
+1. `GreenchClaw.plugin.json` or valid `package.json` with `GreenchClaw.extensions` — treated as **native plugin**
 2. Bundle markers (`.codex-plugin/`, `.claude-plugin/`, or default Claude/Cursor layout) — treated as **bundle**
 
-If a directory contains both, NexisClaw uses the native path. This prevents
+If a directory contains both, GreenchClaw uses the native path. This prevents
 dual-format packages from being partially installed as bundles.
 
 ## Runtime dependencies and cleanup
 
 - Third-party compatible bundles do not get startup `npm install` repair. They
-  should be installed through `NexisClaw plugins install` and ship everything
+  should be installed through `GreenchClaw plugins install` and ship everything
   they need in the installed plugin directory.
-- NexisClaw-owned bundled plugins are either shipped lightweight in core or
+- GreenchClaw-owned bundled plugins are either shipped lightweight in core or
   downloadable through the plugin installer. Gateway startup never runs a
   package manager for them.
-- `NexisClaw doctor --fix` removes legacy staged dependency directories and can
+- `GreenchClaw doctor --fix` removes legacy staged dependency directories and can
   recover downloadable plugins that are missing from the local plugin index when
   config references them.
 
@@ -271,7 +271,7 @@ dual-format packages from being partially installed as bundles.
 
 Bundles have a narrower trust boundary than native plugins:
 
-- NexisClaw does **not** load arbitrary bundle runtime modules in-process
+- GreenchClaw does **not** load arbitrary bundle runtime modules in-process
 - Skills and hook-pack paths must stay inside the plugin root (boundary-checked)
 - Settings files are read with the same boundary checks
 - Supported stdio MCP servers may be launched as subprocesses
@@ -283,7 +283,7 @@ bundles as trusted content for the features they do expose.
 
 <AccordionGroup>
   <Accordion title="Bundle is detected but capabilities do not run">
-    Run `NexisClaw plugins inspect <id>`. If a capability is listed but marked as
+    Run `GreenchClaw plugins inspect <id>`. If a capability is listed but marked as
     not wired, that is a product limit — not a broken install.
   </Accordion>
 
@@ -293,13 +293,13 @@ bundles as trusted content for the features they do expose.
   </Accordion>
 
   <Accordion title="Claude settings do not apply">
-    Only embedded Pi settings from `settings.json` are supported. NexisClaw does
+    Only embedded Pi settings from `settings.json` are supported. GreenchClaw does
     not treat bundle settings as raw config patches.
   </Accordion>
 
   <Accordion title="Claude hooks do not execute">
     `hooks/hooks.json` is detect-only. If you need runnable hooks, use the
-    NexisClaw hook-pack layout or ship a native plugin.
+    GreenchClaw hook-pack layout or ship a native plugin.
   </Accordion>
 </AccordionGroup>
 

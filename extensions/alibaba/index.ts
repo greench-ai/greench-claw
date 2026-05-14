@@ -1,4 +1,4 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { buildAlibabaVideoGenerationProvider } from "./video-generation-provider.js";
 
 export default definePluginEntry({

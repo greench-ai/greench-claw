@@ -1,4 +1,4 @@
-import type { MockFn } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import type { MockFn } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { vi } from "vitest";
 
 type DiscordWebMediaMockFactoryResult = {

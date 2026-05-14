@@ -2,13 +2,13 @@ import type {
   WebContentExtractionRequest,
   WebContentExtractionResult,
   WebContentExtractorPlugin,
-} from "NexisClaw/plugin-sdk/web-content-extractor";
+} from "GreenchClaw/plugin-sdk/web-content-extractor";
 import {
   htmlToMarkdown,
   normalizeWhitespace,
   sanitizeHtml,
   stripInvisibleUnicode,
-} from "NexisClaw/plugin-sdk/web-content-extractor";
+} from "GreenchClaw/plugin-sdk/web-content-extractor";
 
 const READABILITY_MAX_HTML_CHARS = 1_000_000;
 const READABILITY_MAX_ESTIMATED_NESTING_DEPTH = 3_000;

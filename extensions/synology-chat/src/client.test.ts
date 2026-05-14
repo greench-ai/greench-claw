@@ -20,7 +20,7 @@ vi.mock("node:http", () => {
   return { default: { request: httpRequest, get: httpGet }, request: httpRequest, get: httpGet };
 });
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", () => ({
   formatErrorMessage: (err: unknown) => (err instanceof Error ? err.message : String(err)),
   resolvePinnedHostnameWithPolicy: ssrfMocks.resolvePinnedHostnameWithPolicy,
 }));

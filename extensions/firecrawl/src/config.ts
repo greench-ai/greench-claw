@@ -1,6 +1,9 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { canResolveEnvSecretRefInReadOnlyPath } from "NexisClaw/plugin-sdk/extension-shared";
-import { resolveSecretInputString, normalizeSecretInput } from "NexisClaw/plugin-sdk/secret-input";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { canResolveEnvSecretRefInReadOnlyPath } from "GreenchClaw/plugin-sdk/extension-shared";
+import {
+  resolveSecretInputString,
+  normalizeSecretInput,
+} from "GreenchClaw/plugin-sdk/secret-input";
 
 export const DEFAULT_FIRECRAWL_BASE_URL = "https://api.firecrawl.dev";
 export const DEFAULT_FIRECRAWL_SEARCH_TIMEOUT_SECONDS = 30;
@@ -8,13 +11,13 @@ export const DEFAULT_FIRECRAWL_SCRAPE_TIMEOUT_SECONDS = 60;
 export const DEFAULT_FIRECRAWL_MAX_AGE_MS = 172_800_000;
 const FIRECRAWL_API_KEY_ENV_VAR = "FIRECRAWL_API_KEY";
 
-type WebSearchConfig = NonNullable<NexisClawConfig["tools"]>["web"] extends infer Web
+type WebSearchConfig = NonNullable<GreenchClawConfig["tools"]>["web"] extends infer Web
   ? Web extends { search?: infer Search }
     ? Search
     : undefined
   : undefined;
 
-type WebFetchConfig = NonNullable<NexisClawConfig["tools"]>["web"] extends infer Web
+type WebFetchConfig = NonNullable<GreenchClawConfig["tools"]>["web"] extends infer Web
   ? Web extends { fetch?: infer Fetch }
     ? Fetch
     : undefined
@@ -53,7 +56,7 @@ type FirecrawlFetchConfig =
     }
   | undefined;
 
-function resolveSearchConfig(cfg?: NexisClawConfig): WebSearchConfig {
+function resolveSearchConfig(cfg?: GreenchClawConfig): WebSearchConfig {
   const search = cfg?.tools?.web?.search;
   if (!search || typeof search !== "object") {
     return undefined;
@@ -61,7 +64,7 @@ function resolveSearchConfig(cfg?: NexisClawConfig): WebSearchConfig {
   return search;
 }
 
-function resolveFetchConfig(cfg?: NexisClawConfig): WebFetchConfig {
+function resolveFetchConfig(cfg?: GreenchClawConfig): WebFetchConfig {
   const fetch = cfg?.tools?.web?.fetch;
   if (!fetch || typeof fetch !== "object") {
     return undefined;
@@ -69,7 +72,7 @@ function resolveFetchConfig(cfg?: NexisClawConfig): WebFetchConfig {
   return fetch;
 }
 
-export function resolveFirecrawlSearchConfig(cfg?: NexisClawConfig): FirecrawlSearchConfig {
+export function resolveFirecrawlSearchConfig(cfg?: GreenchClawConfig): FirecrawlSearchConfig {
   const pluginConfig = cfg?.plugins?.entries?.firecrawl?.config as PluginEntryConfig;
   const pluginWebSearch = pluginConfig?.webSearch;
   if (pluginWebSearch && typeof pluginWebSearch === "object" && !Array.isArray(pluginWebSearch)) {
@@ -86,7 +89,7 @@ export function resolveFirecrawlSearchConfig(cfg?: NexisClawConfig): FirecrawlSe
   return firecrawl as FirecrawlSearchConfig;
 }
 
-function resolveFirecrawlFetchConfig(cfg?: NexisClawConfig): FirecrawlFetchConfig {
+function resolveFirecrawlFetchConfig(cfg?: GreenchClawConfig): FirecrawlFetchConfig {
   const pluginConfig = cfg?.plugins?.entries?.firecrawl?.config as PluginEntryConfig;
   const pluginWebFetch = pluginConfig?.webFetch;
   if (pluginWebFetch && typeof pluginWebFetch === "object" && !Array.isArray(pluginWebFetch)) {
@@ -111,7 +114,7 @@ type ConfiguredSecretResolution =
 function resolveConfiguredSecret(
   value: unknown,
   path: string,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
 ): ConfiguredSecretResolution {
   const resolved = resolveSecretInputString({
     value,
@@ -146,7 +149,7 @@ function resolveConfiguredSecret(
   return envValue ? { status: "available", value: envValue } : { status: "missing" };
 }
 
-export function resolveFirecrawlApiKey(cfg?: NexisClawConfig): string | undefined {
+export function resolveFirecrawlApiKey(cfg?: GreenchClawConfig): string | undefined {
   const pluginConfig = cfg?.plugins?.entries?.firecrawl?.config as PluginEntryConfig;
   const search = resolveFirecrawlSearchConfig(cfg);
   const fetch = resolveFirecrawlFetchConfig(cfg);
@@ -184,7 +187,7 @@ export function resolveFirecrawlApiKey(cfg?: NexisClawConfig): string | undefine
   return normalizeSecretInput(process.env[FIRECRAWL_API_KEY_ENV_VAR]) || undefined;
 }
 
-export function resolveFirecrawlBaseUrl(cfg?: NexisClawConfig): string {
+export function resolveFirecrawlBaseUrl(cfg?: GreenchClawConfig): string {
   const search = resolveFirecrawlSearchConfig(cfg);
   const fetch = resolveFirecrawlFetchConfig(cfg);
   const configured =
@@ -195,7 +198,10 @@ export function resolveFirecrawlBaseUrl(cfg?: NexisClawConfig): string {
   return configured || DEFAULT_FIRECRAWL_BASE_URL;
 }
 
-export function resolveFirecrawlOnlyMainContent(cfg?: NexisClawConfig, override?: boolean): boolean {
+export function resolveFirecrawlOnlyMainContent(
+  cfg?: GreenchClawConfig,
+  override?: boolean,
+): boolean {
   if (typeof override === "boolean") {
     return override;
   }
@@ -206,7 +212,7 @@ export function resolveFirecrawlOnlyMainContent(cfg?: NexisClawConfig, override?
   return true;
 }
 
-export function resolveFirecrawlMaxAgeMs(cfg?: NexisClawConfig, override?: number): number {
+export function resolveFirecrawlMaxAgeMs(cfg?: GreenchClawConfig, override?: number): number {
   if (typeof override === "number" && Number.isFinite(override) && override >= 0) {
     return Math.floor(override);
   }
@@ -222,7 +228,7 @@ export function resolveFirecrawlMaxAgeMs(cfg?: NexisClawConfig, override?: numbe
 }
 
 export function resolveFirecrawlScrapeTimeoutSeconds(
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
   override?: number,
 ): number {
   if (typeof override === "number" && Number.isFinite(override) && override > 0) {

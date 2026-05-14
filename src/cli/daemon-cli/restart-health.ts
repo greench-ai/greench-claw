@@ -1,6 +1,6 @@
 import type { PluginHealthErrorSummary } from "../../commands/health.types.js";
 import { createConfigIO } from "../../config/io.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { GatewayServiceRuntime } from "../../daemon/service-runtime.js";
 import type { GatewayService } from "../../daemon/service.js";
 import { resolveGatewayProbeAuthSafeWithSecretInputs } from "../../gateway/probe-auth.js";
@@ -239,9 +239,11 @@ async function confirmGatewayReachable(params: {
   auth?: GatewayRestartProbeAuth;
   env?: NodeJS.ProcessEnv;
 }): Promise<GatewayReachability> {
-  const token = normalizeOptionalString(params.auth?.token ?? process.env.NEXISCLAW_GATEWAY_TOKEN);
+  const token = normalizeOptionalString(
+    params.auth?.token ?? process.env.GREENCHCLAW_GATEWAY_TOKEN,
+  );
   const password = normalizeOptionalString(
-    params.auth?.password ?? process.env.NEXISCLAW_GATEWAY_PASSWORD,
+    params.auth?.password ?? process.env.GREENCHCLAW_GATEWAY_PASSWORD,
   );
   const probe = await probeGateway({
     url: `ws://127.0.0.1:${params.port}`,
@@ -276,7 +278,7 @@ async function resolveGatewayRestartProbeAuth(
     pluginValidation: "skip",
   })
     .readBestEffortConfig()
-    .catch((): NexisClawConfig => ({}));
+    .catch((): GreenchClawConfig => ({}));
   const resolved = await resolveGatewayProbeAuthSafeWithSecretInputs({
     cfg,
     mode: "local",

@@ -1,8 +1,8 @@
-import { createActionGate } from "NexisClaw/plugin-sdk/channel-actions";
+import { createActionGate } from "GreenchClaw/plugin-sdk/channel-actions";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageActionName,
-} from "NexisClaw/plugin-sdk/channel-contract";
+} from "GreenchClaw/plugin-sdk/channel-contract";
 import { resolveIMessageAccount } from "./accounts.js";
 import { IMESSAGE_ACTION_NAMES, IMESSAGE_ACTIONS } from "./actions-contract.js";
 import { getCachedIMessagePrivateApiStatus } from "./private-api-status.js";

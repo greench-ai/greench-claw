@@ -1,6 +1,6 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { MsgContext } from "../auto-reply/templating.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import {
   withBundledPluginAllowlistCompat,
   withBundledPluginEnablementCompat,
@@ -66,7 +66,7 @@ let runCapability: typeof import("./runner.js").runCapability;
 
 function setCompatibleActiveMediaUnderstandingRegistry(
   pluginRegistry: ReturnType<typeof createEmptyPluginRegistry>,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ) {
   const pluginIds = loadPluginManifestRegistry({
     config: cfg,
@@ -140,7 +140,7 @@ describe("runCapability image skip", () => {
     const ctx: MsgContext = { MediaPath: "/tmp/image.png", MediaType: "image/png" };
     const media = normalizeMediaAttachments(ctx);
     const cache = createMediaAttachmentCache(media);
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
 
     try {
       const result = await runCapability({
@@ -172,13 +172,13 @@ describe("runCapability image skip", () => {
   it("uses explicit media image models instead of native vision skip", async () => {
     await withMediaFixture(
       {
-        filePrefix: "NexisClaw-image-explicit-vision",
+        filePrefix: "GreenchClaw-image-explicit-vision",
         extension: "png",
         mediaType: "image/png",
         fileContents: Buffer.from("image"),
       },
       async ({ ctx, media, cache }) => {
-        const cfg = {} as NexisClawConfig;
+        const cfg = {} as GreenchClawConfig;
 
         const result = await runCapability({
           capability: "image",
@@ -218,14 +218,14 @@ describe("runCapability image skip", () => {
   it("lets per-request image prompts override entry prompts", async () => {
     await withMediaFixture(
       {
-        filePrefix: "NexisClaw-image-request-prompt",
+        filePrefix: "GreenchClaw-image-request-prompt",
         extension: "png",
         mediaType: "image/png",
         fileContents: Buffer.from("image"),
       },
       async ({ ctx, media, cache }) => {
         let seenPrompt: string | undefined;
-        const cfg = {} as NexisClawConfig;
+        const cfg = {} as GreenchClawConfig;
 
         const result = await runCapability({
           capability: "image",
@@ -273,7 +273,7 @@ describe("runCapability image skip", () => {
           imageModel: { primary: "openrouter/google/gemini-2.5-flash" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await expect(
       resolveAutoImageModel({
@@ -302,7 +302,7 @@ describe("runCapability image skip", () => {
       },
     ];
     vi.stubEnv("MINIMAX_API_KEY", "test-minimax-key");
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
     const pluginRegistry = createEmptyPluginRegistry();
     pluginRegistry.mediaUnderstandingProviders.push({
       pluginId: "minimax",
@@ -335,7 +335,7 @@ describe("runCapability image skip", () => {
 
   it("uses active OpenRouter image models for auto image resolution", async () => {
     vi.stubEnv("OPENROUTER_API_KEY", "test-openrouter-key");
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
     const pluginRegistry = createEmptyPluginRegistry();
     pluginRegistry.mediaUnderstandingProviders.push({
       pluginId: "openrouter",
@@ -368,7 +368,7 @@ describe("runCapability image skip", () => {
     let seenModel: string | undefined;
     await withMediaFixture(
       {
-        filePrefix: "NexisClaw-image-openrouter",
+        filePrefix: "GreenchClaw-image-openrouter",
         extension: "png",
         mediaType: "image/png",
         fileContents: Buffer.from("image"),
@@ -383,7 +383,7 @@ describe("runCapability image skip", () => {
               },
             },
           },
-        } as unknown as NexisClawConfig;
+        } as unknown as GreenchClawConfig;
 
         const result = await runCapability({
           capability: "image",
@@ -420,7 +420,7 @@ describe("runCapability image skip", () => {
   it("skips configured image providers without an auto-resolvable model", async () => {
     await withMediaFixture(
       {
-        filePrefix: "NexisClaw-image-custom-skip",
+        filePrefix: "GreenchClaw-image-custom-skip",
         extension: "png",
         mediaType: "image/png",
         fileContents: Buffer.from("image"),
@@ -435,7 +435,7 @@ describe("runCapability image skip", () => {
               },
             },
           },
-        } as unknown as NexisClawConfig;
+        } as unknown as GreenchClawConfig;
 
         const result = await runCapability({
           capability: "image",

@@ -12,7 +12,7 @@ import {
 describe("schtasks runtime parsing", () => {
   it.each(["Ready", "Running"])("parses %s status", (status) => {
     const output = [
-      "TaskName: \\NexisClaw Gateway",
+      "TaskName: \\GreenchClaw Gateway",
       `Status: ${status}`,
       "Last Run Time: 1/8/2026 1:23:45 AM",
       "Last Run Result: 0x0",
@@ -26,7 +26,7 @@ describe("schtasks runtime parsing", () => {
 
   it("parses 'Last Result' key variant (without 'Run') (#47726)", () => {
     const output = [
-      "TaskName: \\NexisClaw Gateway",
+      "TaskName: \\GreenchClaw Gateway",
       "Status: Running",
       "Last Run Time: 2026/3/16 8:34:15",
       "Last Result: 267009",
@@ -126,28 +126,28 @@ describe("scheduled task runtime derivation", () => {
 describe("resolveTaskScriptPath", () => {
   it.each([
     {
-      name: "uses default path when NEXISCLAW_PROFILE is unset",
+      name: "uses default path when GREENCHCLAW_PROFILE is unset",
       env: { USERPROFILE: "C:\\Users\\test" },
-      expected: path.join("C:\\Users\\test", ".NexisClaw", "gateway.cmd"),
+      expected: path.join("C:\\Users\\test", ".GreenchClaw", "gateway.cmd"),
     },
     {
-      name: "uses profile-specific path when NEXISCLAW_PROFILE is set to a custom value",
-      env: { USERPROFILE: "C:\\Users\\test", NEXISCLAW_PROFILE: "jbphoenix" },
-      expected: path.join("C:\\Users\\test", ".NexisClaw-jbphoenix", "gateway.cmd"),
+      name: "uses profile-specific path when GREENCHCLAW_PROFILE is set to a custom value",
+      env: { USERPROFILE: "C:\\Users\\test", GREENCHCLAW_PROFILE: "jbphoenix" },
+      expected: path.join("C:\\Users\\test", ".GreenchClaw-jbphoenix", "gateway.cmd"),
     },
     {
-      name: "prefers NEXISCLAW_STATE_DIR over profile-derived defaults",
+      name: "prefers GREENCHCLAW_STATE_DIR over profile-derived defaults",
       env: {
         USERPROFILE: "C:\\Users\\test",
-        NEXISCLAW_PROFILE: "rescue",
-        NEXISCLAW_STATE_DIR: "C:\\State\\NexisClaw",
+        GREENCHCLAW_PROFILE: "rescue",
+        GREENCHCLAW_STATE_DIR: "C:\\State\\GreenchClaw",
       },
-      expected: path.join("C:\\State\\NexisClaw", "gateway.cmd"),
+      expected: path.join("C:\\State\\GreenchClaw", "gateway.cmd"),
     },
     {
       name: "falls back to HOME when USERPROFILE is not set",
-      env: { HOME: "/home/test", NEXISCLAW_PROFILE: "default" },
-      expected: path.join("/home/test", ".NexisClaw", "gateway.cmd"),
+      env: { HOME: "/home/test", GREENCHCLAW_PROFILE: "default" },
+      expected: path.join("/home/test", ".GreenchClaw", "gateway.cmd"),
     },
   ])("$name", ({ env, expected }) => {
     expect(resolveTaskScriptPath(env)).toBe(expected);
@@ -164,12 +164,12 @@ describe("readScheduledTaskCommand", () => {
     },
     run: (env: Record<string, string | undefined>) => Promise<void>,
   ) {
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-schtasks-test-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-schtasks-test-"));
     try {
       const extraEnv = typeof options.env === "function" ? options.env(tmpDir) : options.env;
       const env = {
         USERPROFILE: tmpDir,
-        NEXISCLAW_PROFILE: "default",
+        GREENCHCLAW_PROFILE: "default",
         ...extraEnv,
       };
       if (options.scriptLines) {
@@ -221,10 +221,10 @@ describe("readScheduledTaskCommand", () => {
       {
         scriptLines: [
           "@echo off",
-          "rem NexisClaw Gateway",
-          "cd /d C:\\Projects\\NexisClaw",
+          "rem GreenchClaw Gateway",
+          "cd /d C:\\Projects\\GreenchClaw",
           "set NODE_ENV=production",
-          "set NEXISCLAW_PORT=18789",
+          "set GREENCHCLAW_PORT=18789",
           "node gateway.js --verbose",
         ],
       },
@@ -232,14 +232,14 @@ describe("readScheduledTaskCommand", () => {
         const result = await readScheduledTaskCommand(env);
         expect(result).toEqual({
           programArguments: ["node", "gateway.js", "--verbose"],
-          workingDirectory: "C:\\Projects\\NexisClaw",
+          workingDirectory: "C:\\Projects\\GreenchClaw",
           environment: {
             NODE_ENV: "production",
-            NEXISCLAW_PORT: "18789",
+            GREENCHCLAW_PORT: "18789",
           },
           environmentValueSources: {
             NODE_ENV: "inline",
-            NEXISCLAW_PORT: "inline",
+            GREENCHCLAW_PORT: "inline",
           },
           sourcePath: resolveTaskScriptPath(env),
         });
@@ -252,7 +252,7 @@ describe("readScheduledTaskCommand", () => {
       {
         scriptLines: [
           "@echo off",
-          '"C:\\Program Files\\nodejs\\node.exe" C:\\Users\\test\\AppData\\Roaming\\npm\\node_modules\\NexisClaw\\dist\\index.js gateway --port 18789',
+          '"C:\\Program Files\\nodejs\\node.exe" C:\\Users\\test\\AppData\\Roaming\\npm\\node_modules\\GreenchClaw\\dist\\index.js gateway --port 18789',
         ],
       },
       async (env) => {
@@ -260,7 +260,7 @@ describe("readScheduledTaskCommand", () => {
         expect(result).toEqual({
           programArguments: [
             "C:\\Program Files\\nodejs\\node.exe",
-            "C:\\Users\\test\\AppData\\Roaming\\npm\\node_modules\\NexisClaw\\dist\\index.js",
+            "C:\\Users\\test\\AppData\\Roaming\\npm\\node_modules\\GreenchClaw\\dist\\index.js",
             "gateway",
             "--port",
             "18789",
@@ -276,15 +276,15 @@ describe("readScheduledTaskCommand", () => {
       {
         scriptLines: [
           "@echo off",
-          '"\\\\fileserver\\NexisClaw Share\\node.exe" "\\\\fileserver\\NexisClaw Share\\dist\\index.js" gateway --port 18789',
+          '"\\\\fileserver\\GreenchClaw Share\\node.exe" "\\\\fileserver\\GreenchClaw Share\\dist\\index.js" gateway --port 18789',
         ],
       },
       async (env) => {
         const result = await readScheduledTaskCommand(env);
         expect(result).toEqual({
           programArguments: [
-            "\\\\fileserver\\NexisClaw Share\\node.exe",
-            "\\\\fileserver\\NexisClaw Share\\dist\\index.js",
+            "\\\\fileserver\\GreenchClaw Share\\node.exe",
+            "\\\\fileserver\\GreenchClaw Share\\dist\\index.js",
             "gateway",
             "--port",
             "18789",
@@ -295,10 +295,10 @@ describe("readScheduledTaskCommand", () => {
     );
   });
 
-  it("reads script from NEXISCLAW_STATE_DIR override", async () => {
+  it("reads script from GREENCHCLAW_STATE_DIR override", async () => {
     await withScheduledTaskScript(
       {
-        env: (tmpDir) => ({ NEXISCLAW_STATE_DIR: path.join(tmpDir, "custom-state") }),
+        env: (tmpDir) => ({ GREENCHCLAW_STATE_DIR: path.join(tmpDir, "custom-state") }),
         scriptLines: ["@echo off", "node gateway.js --from-state-dir"],
       },
       async (env) => {

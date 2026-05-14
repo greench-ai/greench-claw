@@ -1,16 +1,22 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveMemoryDreamingConfig } from "NexisClaw/plugin-sdk/memory-core-host-status";
-import type { NexisClawPluginApi, PluginCommandContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveMemoryDreamingConfig } from "GreenchClaw/plugin-sdk/memory-core-host-status";
+import type {
+  GreenchClawPluginApi,
+  PluginCommandContext,
+} from "GreenchClaw/plugin-sdk/plugin-entry";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { asRecord } from "./dreaming-shared.js";
 import { resolveShortTermPromotionDreamingConfig } from "./dreaming.js";
 
-function resolveMemoryCorePluginConfig(cfg: NexisClawConfig): Record<string, unknown> {
+function resolveMemoryCorePluginConfig(cfg: GreenchClawConfig): Record<string, unknown> {
   const entry = asRecord(cfg.plugins?.entries?.["memory-core"]);
   return asRecord(entry?.config) ?? {};
 }
 
-function updateDreamingEnabledInConfig(cfg: NexisClawConfig, enabled: boolean): NexisClawConfig {
+function updateDreamingEnabledInConfig(
+  cfg: GreenchClawConfig,
+  enabled: boolean,
+): GreenchClawConfig {
   const entries = { ...cfg.plugins?.entries };
   const existingEntry = asRecord(entries["memory-core"]) ?? {};
   const existingConfig = asRecord(existingEntry.config) ?? {};
@@ -47,7 +53,7 @@ function formatPhaseGuide(): string {
   ].join("\n");
 }
 
-function formatStatus(cfg: NexisClawConfig): string {
+function formatStatus(cfg: GreenchClawConfig): string {
   const pluginConfig = resolveMemoryCorePluginConfig(cfg);
   const dreaming = resolveMemoryDreamingConfig({
     pluginConfig,
@@ -80,13 +86,13 @@ function requiresAdminToMutateDreaming(gatewayClientScopes?: readonly string[]):
   return Array.isArray(gatewayClientScopes) && !gatewayClientScopes.includes("operator.admin");
 }
 
-export async function handleDreamingCommand(api: NexisClawPluginApi, ctx: PluginCommandContext) {
+export async function handleDreamingCommand(api: GreenchClawPluginApi, ctx: PluginCommandContext) {
   const args = ctx.args?.trim() ?? "";
   const [firstToken = ""] = args
     .split(/\s+/)
     .filter(Boolean)
     .map((token) => normalizeLowercaseStringOrEmpty(token));
-  const currentConfig = api.runtime.config.current() as NexisClawConfig;
+  const currentConfig = api.runtime.config.current() as GreenchClawConfig;
 
   if (!firstToken || firstToken === "help" || firstToken === "options" || firstToken === "phases") {
     return { text: formatUsage(formatStatus(currentConfig)) };
@@ -116,7 +122,7 @@ export async function handleDreamingCommand(api: NexisClawPluginApi, ctx: Plugin
   return { text: formatUsage(formatStatus(currentConfig)) };
 }
 
-export function registerDreamingCommand(api: NexisClawPluginApi): void {
+export function registerDreamingCommand(api: GreenchClawPluginApi): void {
   api.registerCommand({
     name: "dreaming",
     description: "Enable or disable memory dreaming.",

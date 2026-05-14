@@ -1,4 +1,4 @@
-import type { MockFn } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import type { MockFn } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { beforeEach, vi } from "vitest";
 import type { SignalDaemonExitEvent, SignalDaemonHandle } from "./daemon.js";
 
@@ -28,7 +28,7 @@ const signalCheckMock = vi.hoisted(() => vi.fn()) as unknown as MockFn;
 const signalRpcRequestMock = vi.hoisted(() => vi.fn()) as unknown as MockFn;
 const spawnSignalDaemonMock = vi.hoisted(() => vi.fn()) as unknown as MockFn;
 const signalToolResultSessionStorePath = vi.hoisted(
-  () => `/tmp/NexisClaw-signal-tool-result-sessions-${process.pid}.json`,
+  () => `/tmp/GreenchClaw-signal-tool-result-sessions-${process.pid}.json`,
 );
 
 export function getSignalToolResultTestMocks(): SignalToolResultTestMocks {
@@ -93,20 +93,20 @@ export function createMockSignalDaemonHandle(
 
 // Use importActual so shared-worker mocks from earlier test files do not leak
 // into this harness's partial overrides.
-vi.mock("NexisClaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("GreenchClaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot")
-  >("NexisClaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("GreenchClaw/plugin-sdk/runtime-config-snapshot")
+  >("GreenchClaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: () => config,
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/session-store-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/session-store-runtime")>(
-    "NexisClaw/plugin-sdk/session-store-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/session-store-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/session-store-runtime")
+  >("GreenchClaw/plugin-sdk/session-store-runtime");
   return {
     ...actual,
     resolveStorePath: vi.fn(() => signalToolResultSessionStorePath),
@@ -116,9 +116,9 @@ vi.mock("NexisClaw/plugin-sdk/session-store-runtime", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/reply-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/reply-runtime")>(
-    "NexisClaw/plugin-sdk/reply-runtime",
+vi.mock("GreenchClaw/plugin-sdk/reply-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/reply-runtime")>(
+    "GreenchClaw/plugin-sdk/reply-runtime",
   );
   return {
     ...actual,
@@ -156,10 +156,10 @@ vi.mock("./send.js", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/conversation-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/conversation-runtime")>(
-    "NexisClaw/plugin-sdk/conversation-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/conversation-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/conversation-runtime")
+  >("GreenchClaw/plugin-sdk/conversation-runtime");
   return {
     ...actual,
     readChannelAllowFromStore: (...args: unknown[]) => readAllowFromStoreMock(...args),
@@ -167,9 +167,9 @@ vi.mock("NexisClaw/plugin-sdk/conversation-runtime", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/security-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/security-runtime")>(
-    "NexisClaw/plugin-sdk/security-runtime",
+vi.mock("GreenchClaw/plugin-sdk/security-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/security-runtime")>(
+    "GreenchClaw/plugin-sdk/security-runtime",
   );
   return {
     ...actual,
@@ -197,10 +197,10 @@ vi.mock("./daemon.js", async (importOriginal) => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/system-event-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/system-event-runtime")>(
-    "NexisClaw/plugin-sdk/system-event-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/system-event-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/system-event-runtime")
+  >("GreenchClaw/plugin-sdk/system-event-runtime");
   return {
     ...actual,
     enqueueSystemEvent: (...args: Parameters<typeof actual.enqueueSystemEvent>) => {
@@ -210,15 +210,15 @@ vi.mock("NexisClaw/plugin-sdk/system-event-runtime", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/transport-ready-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/transport-ready-runtime", () => ({
   waitForTransportReady: (...args: unknown[]) => waitForTransportReadyMock(...args),
 }));
 
 export function installSignalToolResultTestHooks() {
   beforeEach(async () => {
     const [{ resetInboundDedupe }, { resetSystemEventsForTest }] = await Promise.all([
-      import("NexisClaw/plugin-sdk/reply-runtime"),
-      import("NexisClaw/plugin-sdk/system-event-runtime"),
+      import("GreenchClaw/plugin-sdk/reply-runtime"),
+      import("GreenchClaw/plugin-sdk/system-event-runtime"),
     ]);
     resetInboundDedupe();
     config = {

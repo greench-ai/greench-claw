@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import type { Command } from "commander";
 import JSON5 from "json5";
-import { readBestEffortConfig, type NexisClawConfig } from "../config/config.js";
+import { readBestEffortConfig, type GreenchClawConfig } from "../config/config.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import {
   collectExecPolicyScopeSnapshots,
@@ -33,10 +33,10 @@ type ExecApprovalsSnapshot = {
 };
 
 type ConfigSnapshotLike = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 };
 type ConfigLoadResult = {
-  config: NexisClawConfig | null;
+  config: GreenchClawConfig | null;
   timedOut: boolean;
 };
 type ApprovalsTargetSource = "gateway" | "node" | "local";
@@ -483,7 +483,7 @@ export function registerExecApprovalsCli(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/approvals", "docs.NexisClaw.ai/cli/approvals")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/approvals", "docs.GreenchClaw.ai/cli/approvals")}\n`,
     );
 
   const getCmd = approvals
@@ -560,18 +560,18 @@ export function registerExecApprovalsCli(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatExample(
-          'NexisClaw approvals allowlist add "~/Projects/**/bin/rg"',
+          'GreenchClaw approvals allowlist add "~/Projects/**/bin/rg"',
           "Allowlist a local binary pattern for the main agent.",
         )}\n${formatExample(
-          'NexisClaw approvals allowlist add --agent main --node <id|name|ip> "/usr/bin/uptime"',
+          'GreenchClaw approvals allowlist add --agent main --node <id|name|ip> "/usr/bin/uptime"',
           "Allowlist on a specific node/agent.",
         )}\n${formatExample(
-          'NexisClaw approvals allowlist add --agent "*" "/usr/bin/uname"',
+          'GreenchClaw approvals allowlist add --agent "*" "/usr/bin/uname"',
           "Allowlist for all agents (wildcard).",
         )}\n${formatExample(
-          'NexisClaw approvals allowlist remove "~/Projects/**/bin/rg"',
+          'GreenchClaw approvals allowlist remove "~/Projects/**/bin/rg"',
           "Remove an allowlist pattern.",
-        )}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/approvals", "docs.NexisClaw.ai/cli/approvals")}\n`,
+        )}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/approvals", "docs.GreenchClaw.ai/cli/approvals")}\n`,
     );
 
   registerAllowlistMutationCommand({

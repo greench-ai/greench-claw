@@ -1,6 +1,6 @@
 ---
 name: discord-clawd
-description: Use to talk to the Discord-backed NexisClaw agent/session; not for archive search.
+description: Use to talk to the Discord-backed GreenchClaw agent/session; not for archive search.
 ---
 
 # Discord Clawd
@@ -11,18 +11,18 @@ For Discord archive/history/search, use `$discrawl` instead.
 
 ## Transport
 
-Use the NexisClaw relay helper:
+Use the GreenchClaw relay helper:
 
 ```bash
 cd ~/Projects/agent-scripts
-python3 skills/NexisClaw-relay/scripts/NexisClaw_relay.py targets
-python3 skills/NexisClaw-relay/scripts/NexisClaw_relay.py resolve --target maintainers
+python3 skills/GreenchClaw-relay/scripts/GreenchClaw_relay.py targets
+python3 skills/GreenchClaw-relay/scripts/GreenchClaw_relay.py resolve --target maintainers
 ```
 
 If the target alias exists, prefer a private ask first:
 
 ```bash
-python3 skills/NexisClaw-relay/scripts/NexisClaw_relay.py ask \
+python3 skills/GreenchClaw-relay/scripts/GreenchClaw_relay.py ask \
   --target maintainers \
   --message "Reply with exactly OK."
 ```

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { collectChannelDoctorStaleConfigMutations } from "../commands/doctor/shared/channel-doctor.js";
 import { assertConfigWriteAllowedInCurrentMode, readConfigFileSnapshot } from "../config/config.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { installHooksFromNpmSpec, installHooksFromPath } from "../hooks/install.js";
 import { resolveArchiveKind } from "../infra/archive.js";
 import { parseClawHubPluginSpec } from "../infra/clawhub.js";
@@ -127,9 +127,9 @@ function hasValidBundledPluginConfig(params: {
 }
 
 function prepareConfigForDisabledBundledInstall(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   pluginId: string,
-): NexisClawConfig {
+): GreenchClawConfig {
   const entries = config.plugins?.entries ?? {};
   const { [pluginId]: _removedEntry, ...nextEntries } = entries;
   return {
@@ -158,7 +158,7 @@ async function installBundledPluginSource(params: {
     : prepareConfigForDisabledBundledInstall(params.snapshot.config, params.bundledSource.pluginId);
   const configWarning = shouldEnable
     ? ""
-    : `Installed bundled plugin "${params.bundledSource.pluginId}" without enabling it because it requires configuration first. Configure it, then run \`NexisClaw plugins enable ${params.bundledSource.pluginId}\`.`;
+    : `Installed bundled plugin "${params.bundledSource.pluginId}" without enabling it because it requires configuration first. Configure it, then run \`GreenchClaw plugins enable ${params.bundledSource.pluginId}\`.`;
   await persistPluginInstall({
     snapshot: {
       config: configBase,
@@ -507,13 +507,13 @@ async function loadConfigFromSnapshotForInstall(
 ): Promise<ConfigSnapshotForInstallPersist> {
   if (resolvePluginInstallInvalidConfigPolicy(request) !== "allow-plugin-recovery") {
     throw buildInvalidPluginInstallConfigError(
-      "Config invalid; run `NexisClaw doctor --fix` before installing plugins.",
+      "Config invalid; run `GreenchClaw doctor --fix` before installing plugins.",
     );
   }
   const parsed = (snapshot.parsed ?? {}) as Record<string, unknown>;
   if (!snapshot.exists || Object.keys(parsed).length === 0) {
     throw buildInvalidPluginInstallConfigError(
-      "Config file could not be parsed; run `NexisClaw doctor` to repair it.",
+      "Config file could not be parsed; run `GreenchClaw doctor` to repair it.",
     );
   }
   if (
@@ -523,7 +523,7 @@ async function loadConfigFromSnapshotForInstall(
   ) {
     const pluginLabel = request.bundledPluginId ?? "the requested plugin";
     throw buildInvalidPluginInstallConfigError(
-      `Config invalid outside the plugin recovery path for ${pluginLabel}; run \`NexisClaw doctor --fix\` before reinstalling it.`,
+      `Config invalid outside the plugin recovery path for ${pluginLabel}; run \`GreenchClaw doctor --fix\` before reinstalling it.`,
     );
   }
   let nextConfig = snapshot.config;
@@ -589,13 +589,13 @@ export async function runPluginInstallCommand(params: {
   if (opts.marketplace) {
     if (opts.link) {
       runtime.error(
-        `--link is not supported with --marketplace. Remove --link, or install a local path with ${formatCliCommand("NexisClaw plugins install --link <path>")}.`,
+        `--link is not supported with --marketplace. Remove --link, or install a local path with ${formatCliCommand("GreenchClaw plugins install --link <path>")}.`,
       );
       return runtime.exit(1);
     }
     if (opts.pin) {
       runtime.error(
-        `--pin is not supported with --marketplace. Use ${formatCliCommand("NexisClaw plugins install <plugin> --marketplace <name>")} without --pin.`,
+        `--pin is not supported with --marketplace. Use ${formatCliCommand("GreenchClaw plugins install <plugin> --marketplace <name>")} without --pin.`,
       );
       return runtime.exit(1);
     }
@@ -604,25 +604,25 @@ export async function runPluginInstallCommand(params: {
   const gitSpec = parseGitPluginSpec(raw);
   if (gitPrefix && !gitSpec) {
     runtime.error(
-      `Unsupported git plugin spec: ${raw}. Use ${formatCliCommand("NexisClaw plugins install git:<repo>@<ref>")}.`,
+      `Unsupported git plugin spec: ${raw}. Use ${formatCliCommand("GreenchClaw plugins install git:<repo>@<ref>")}.`,
     );
     return runtime.exit(1);
   }
   if (gitSpec && opts.link) {
     runtime.error(
-      `--link is not supported with git: installs. Use ${formatCliCommand("NexisClaw plugins install git:<repo>@<ref>")} for Git installs or ${formatCliCommand("NexisClaw plugins install --link <path>")} for local paths.`,
+      `--link is not supported with git: installs. Use ${formatCliCommand("GreenchClaw plugins install git:<repo>@<ref>")} for Git installs or ${formatCliCommand("GreenchClaw plugins install --link <path>")} for local paths.`,
     );
     return runtime.exit(1);
   }
   if (gitSpec && opts.pin) {
     runtime.error(
-      `--pin is not supported with git: installs. Pin the ref in the spec instead, for example ${formatCliCommand("NexisClaw plugins install git:<repo>@<ref>")}.`,
+      `--pin is not supported with git: installs. Pin the ref in the spec instead, for example ${formatCliCommand("GreenchClaw plugins install git:<repo>@<ref>")}.`,
     );
     return runtime.exit(1);
   }
   if (opts.link && opts.force) {
     runtime.error(
-      `--force is not supported with --link. Linked plugins point at the source path directly; remove --force and re-run ${formatCliCommand("NexisClaw plugins install --link <path>")}.`,
+      `--force is not supported with --link. Linked plugins point at the source path directly; remove --force and re-run ${formatCliCommand("GreenchClaw plugins install --link <path>")}.`,
     );
     return runtime.exit(1);
   }
@@ -780,7 +780,7 @@ export async function runPluginInstallCommand(params: {
 
   if (opts.link) {
     runtime.error(
-      `--link requires a local path. Run ${formatCliCommand("NexisClaw plugins install --link <path>")}.`,
+      `--link requires a local path. Run ${formatCliCommand("GreenchClaw plugins install --link <path>")}.`,
     );
     return runtime.exit(1);
   }
@@ -789,7 +789,7 @@ export async function runPluginInstallCommand(params: {
   if (npmPrefixSpec !== null) {
     if (!npmPrefixSpec) {
       runtime.error(
-        `Unsupported npm plugin spec: missing package. Use ${formatCliCommand("NexisClaw plugins install npm:<package>")}.`,
+        `Unsupported npm plugin spec: missing package. Use ${formatCliCommand("GreenchClaw plugins install npm:<package>")}.`,
       );
       return runtime.exit(1);
     }
@@ -826,7 +826,7 @@ export async function runPluginInstallCommand(params: {
   if (npmPackPath !== null) {
     if (!npmPackPath) {
       runtime.error(
-        `Unsupported npm-pack plugin spec: missing archive path. Use ${formatCliCommand("NexisClaw plugins install npm-pack:<path-to.tgz>")}.`,
+        `Unsupported npm-pack plugin spec: missing archive path. Use ${formatCliCommand("GreenchClaw plugins install npm-pack:<path-to.tgz>")}.`,
       );
       return runtime.exit(1);
     }
@@ -872,7 +872,7 @@ export async function runPluginInstallCommand(params: {
     ])
   ) {
     runtime.error(
-      `Plugin path not found: ${resolved}. Check the path, or install from npm with ${formatCliCommand("NexisClaw plugins install npm:<package>")}.`,
+      `Plugin path not found: ${resolved}. Check the path, or install from npm with ${formatCliCommand("GreenchClaw plugins install npm:<package>")}.`,
     );
     return runtime.exit(1);
   }

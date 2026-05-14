@@ -44,12 +44,12 @@ type SecretsRuntimeEnvSnapshot = ReturnType<typeof captureEnv>;
 
 function beginSecretsRuntimeIsolationForTest(): SecretsRuntimeEnvSnapshot {
   const envSnapshot = captureEnv([
-    "NEXISCLAW_BUNDLED_PLUGINS_DIR",
-    "NEXISCLAW_DISABLE_BUNDLED_PLUGINS",
-    "NEXISCLAW_VERSION",
+    "GREENCHCLAW_BUNDLED_PLUGINS_DIR",
+    "GREENCHCLAW_DISABLE_BUNDLED_PLUGINS",
+    "GREENCHCLAW_VERSION",
   ]);
-  delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
-  delete process.env.NEXISCLAW_VERSION;
+  delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
+  delete process.env.GREENCHCLAW_VERSION;
   return envSnapshot;
 }
 
@@ -79,8 +79,8 @@ describe("secrets runtime snapshot core lanes", () => {
   async function prepareOpenAiRuntimeSnapshot(params?: { includeAuthStoreRefs?: boolean }) {
     return withEnvAsync(
       {
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-        NEXISCLAW_VERSION: undefined,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+        GREENCHCLAW_VERSION: undefined,
       },
       async () =>
         prepareSecretsRuntimeSnapshot({
@@ -96,7 +96,7 @@ describe("secrets runtime snapshot core lanes", () => {
             },
           }),
           env: { OPENAI_API_KEY: "sk-runtime" },
-          agentDirs: ["/tmp/NexisClaw-agent-main"],
+          agentDirs: ["/tmp/GreenchClaw-agent-main"],
           includeAuthStoreRefs: params?.includeAuthStoreRefs,
           loadablePluginOrigins: new Map(),
           loadAuthStore: () =>
@@ -207,7 +207,7 @@ describe("secrets runtime snapshot core lanes", () => {
         OPENAI_API_KEY: "sk-env-openai",
         GITHUB_TOKEN: "ghp-env-token",
       },
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadablePluginOrigins: new Map(),
       loadAuthStore: () =>
         loadAuthStoreWithProfiles({
@@ -227,9 +227,9 @@ describe("secrets runtime snapshot core lanes", () => {
     });
 
     const warningPaths = snapshot.warnings.map((warning) => warning.path);
-    expect(warningPaths).toContain("/tmp/NexisClaw-agent-main.auth-profiles.openai:default.key");
+    expect(warningPaths).toContain("/tmp/GreenchClaw-agent-main.auth-profiles.openai:default.key");
     expect(warningPaths).toContain(
-      "/tmp/NexisClaw-agent-main.auth-profiles.github-copilot:default.token",
+      "/tmp/GreenchClaw-agent-main.auth-profiles.github-copilot:default.token",
     );
     const openAiProfile = snapshot.authStores[0]?.store.profiles["openai:default"] as
       | Record<string, unknown>
@@ -249,7 +249,7 @@ describe("secrets runtime snapshot core lanes", () => {
       env: {
         OPENAI_API_KEY: "sk-env-openai",
       },
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadablePluginOrigins: new Map(),
       loadAuthStore: () =>
         loadAuthStoreWithProfiles({
@@ -284,7 +284,7 @@ describe("secrets runtime snapshot core lanes", () => {
     const prepared = await prepareOpenAiRuntimeSnapshot();
     activateSecretsRuntimeSnapshot(prepared);
 
-    const runtimeProfile = ensureAuthProfileStore("/tmp/NexisClaw-agent-main").profiles[
+    const runtimeProfile = ensureAuthProfileStore("/tmp/GreenchClaw-agent-main").profiles[
       "openai:default"
     ] as Record<string, unknown> | undefined;
     expect(runtimeProfile?.type).toBe("api_key");

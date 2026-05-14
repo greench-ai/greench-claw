@@ -1,10 +1,10 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { MSTeamsConfigSchema } from "../config-api.js";
 import { msTeamsApprovalAuth } from "./approval-auth.js";
 import { msteamsPlugin } from "./channel.js";
 
-function createConfiguredMSTeamsCfg(): NexisClawConfig {
+function createConfiguredMSTeamsCfg(): GreenchClawConfig {
   return {
     channels: {
       msteams: {

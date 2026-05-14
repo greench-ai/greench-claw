@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import {
   resolveAgentDirMock,
   resolveSessionAgentIdMock,
@@ -19,7 +19,7 @@ function buildParams(commandBody: string) {
   const cfg = {
     commands: { text: true },
     channels: { whatsapp: { allowFrom: ["*"] } },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
   return buildCommandTestParams(commandBody, cfg, undefined, { workspaceDir: "/tmp/workspace" });
 }
 
@@ -55,7 +55,7 @@ describe("handleBtwCommand", () => {
     runBtwSideQuestionMock.mockReset();
     resolveAgentDirMock.mockReset();
     resolveAgentDirMock.mockImplementation(
-      (_cfg: unknown, agentId: string) => `/tmp/workspace/.NexisClaw/agents/${agentId}/agent`,
+      (_cfg: unknown, agentId: string) => `/tmp/workspace/.GreenchClaw/agents/${agentId}/agent`,
     );
     resolveSessionAgentIdMock.mockReset();
     resolveSessionAgentIdMock.mockReturnValue("main");

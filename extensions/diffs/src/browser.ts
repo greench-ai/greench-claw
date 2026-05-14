@@ -1,10 +1,10 @@
 import { constants as fsConstants } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { writeExternalFileWithinRoot } from "NexisClaw/plugin-sdk/security-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { writeExternalFileWithinRoot } from "GreenchClaw/plugin-sdk/security-runtime";
 import { chromium } from "playwright-core";
-import type { NexisClawConfig } from "../api.js";
+import type { GreenchClawConfig } from "../api.js";
 import type { DiffRenderOptions, DiffTheme } from "./types.js";
 import { VIEWER_ASSET_PREFIX, getServedViewerAsset } from "./viewer-assets.js";
 
@@ -48,10 +48,10 @@ let sharedBrowserState: SharedBrowserState | null = null;
 let executablePathCache: ExecutablePathCache | null = null;
 
 export class PlaywrightDiffScreenshotter implements DiffScreenshotter {
-  private readonly config: NexisClawConfig;
+  private readonly config: GreenchClawConfig;
   private readonly browserIdleMs: number;
 
-  constructor(params: { config: NexisClawConfig; browserIdleMs?: number }) {
+  constructor(params: { config: GreenchClawConfig; browserIdleMs?: number }) {
     this.config = params.config;
     this.browserIdleMs = params.browserIdleMs ?? DEFAULT_BROWSER_IDLE_MS;
   }
@@ -116,14 +116,17 @@ export class PlaywrightDiffScreenshotter implements DiffScreenshotter {
         await page.setContent(injectBaseHref(params.html), { waitUntil: "load" });
         await page.waitForFunction(
           () => {
-            if (document.documentElement.dataset.NexisClawDiffsReady === "true") {
+            if (document.documentElement.dataset.GreenchClawDiffsReady === "true") {
               return true;
             }
-            return [...document.querySelectorAll("[data-NexisClaw-diff-host]")].every((element) => {
-              return (
-                element instanceof HTMLElement && element.shadowRoot?.querySelector("[data-diffs]")
-              );
-            });
+            return [...document.querySelectorAll("[data-GreenchClaw-diff-host]")].every(
+              (element) => {
+                return (
+                  element instanceof HTMLElement &&
+                  element.shadowRoot?.querySelector("[data-diffs]")
+                );
+              },
+            );
           },
           {
             timeout: 10_000,
@@ -305,11 +308,13 @@ function injectBaseHref(html: string): string {
   return html.replace("<head>", `<head><base href="${LOCAL_VIEWER_BASE_HREF}" />`);
 }
 
-async function resolveBrowserExecutablePath(config: NexisClawConfig): Promise<string | undefined> {
+async function resolveBrowserExecutablePath(
+  config: GreenchClawConfig,
+): Promise<string | undefined> {
   const cacheKey = JSON.stringify({
     configPath: config.browser?.executablePath?.trim() || "",
     env: [
-      process.env.NEXISCLAW_BROWSER_EXECUTABLE_PATH ?? "",
+      process.env.GREENCHCLAW_BROWSER_EXECUTABLE_PATH ?? "",
       process.env.BROWSER_EXECUTABLE_PATH ?? "",
       process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ?? "",
     ],
@@ -334,7 +339,7 @@ async function resolveBrowserExecutablePath(config: NexisClawConfig): Promise<st
 }
 
 async function resolveBrowserExecutablePathUncached(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
 ): Promise<string | undefined> {
   const configPath = config.browser?.executablePath?.trim();
   if (configPath) {
@@ -343,7 +348,7 @@ async function resolveBrowserExecutablePathUncached(
   }
 
   const envCandidates = [
-    process.env.NEXISCLAW_BROWSER_EXECUTABLE_PATH,
+    process.env.GREENCHCLAW_BROWSER_EXECUTABLE_PATH,
     process.env.BROWSER_EXECUTABLE_PATH,
     process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
   ]
@@ -366,7 +371,7 @@ async function resolveBrowserExecutablePathUncached(
 }
 
 async function acquireSharedBrowser(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   idleMs: number;
 }): Promise<BrowserLease> {
   const executablePath = await resolveBrowserExecutablePath(params.config);

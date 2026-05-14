@@ -1,13 +1,16 @@
 import path from "node:path";
-import { buildModelAliasIndex, resolveModelRefFromString } from "NexisClaw/plugin-sdk/agent-runtime";
+import {
+  buildModelAliasIndex,
+  resolveModelRefFromString,
+} from "GreenchClaw/plugin-sdk/agent-runtime";
 import {
   type JsonSchemaObject,
   validateJsonSchemaValue,
-} from "NexisClaw/plugin-sdk/json-schema-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/json-schema-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { Type } from "typebox";
-import { resolvePreferredNexisClawTmpDir, withTempWorkspace } from "../api.js";
-import type { NexisClawPluginApi } from "../api.js";
+import { resolvePreferredGreenchClawTmpDir, withTempWorkspace } from "../api.js";
+import type { GreenchClawPluginApi } from "../api.js";
 
 function stripCodeFences(s: string): string {
   const trimmed = s.trim();
@@ -45,7 +48,7 @@ function stripDuplicateProviderPrefix(provider: string | undefined, model: strin
 }
 
 function resolveLlmTaskModelRef(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   provider?: string;
   rawModel?: string;
 }): { provider?: string; model?: string } {
@@ -104,7 +107,7 @@ type LlmTaskParams = {
   timeoutMs?: unknown;
 };
 
-type ThinkingPolicy = ReturnType<NexisClawPluginApi["runtime"]["agent"]["resolveThinkingPolicy"]>;
+type ThinkingPolicy = ReturnType<GreenchClawPluginApi["runtime"]["agent"]["resolveThinkingPolicy"]>;
 
 function formatThinkingPolicy(policy: ThinkingPolicy): string {
   return policy.levels.map((level) => level.label).join(", ");
@@ -112,17 +115,17 @@ function formatThinkingPolicy(policy: ThinkingPolicy): string {
 
 function supportsThinkingPolicyLevel(
   policy: ThinkingPolicy,
-  level: ReturnType<NexisClawPluginApi["runtime"]["agent"]["normalizeThinkingLevel"]>,
+  level: ReturnType<GreenchClawPluginApi["runtime"]["agent"]["normalizeThinkingLevel"]>,
 ): boolean {
   return !!level && policy.levels.some((entry) => entry.id === level);
 }
 
-export function createLlmTaskTool(api: NexisClawPluginApi) {
+export function createLlmTaskTool(api: GreenchClawPluginApi) {
   return {
     name: "llm-task",
     label: "LLM Task",
     description:
-      "Run a generic JSON-only LLM task and return schema-validated JSON. Designed for orchestration from Lobster workflows via NexisClaw.invoke.",
+      "Run a generic JSON-only LLM task and return schema-validated JSON. Designed for orchestration from Lobster workflows via GreenchClaw.invoke.",
     parameters: Type.Object({
       prompt: Type.String({ description: "Task instruction for the LLM." }),
       input: Type.Optional(Type.Unknown({ description: "Optional input payload for the task." })),
@@ -197,8 +200,9 @@ export function createLlmTaskTool(api: NexisClawPluginApi) {
 
       const thinkingRaw =
         typeof params.thinking === "string" && params.thinking.trim() ? params.thinking : undefined;
-      let thinkLevel: ReturnType<NexisClawPluginApi["runtime"]["agent"]["normalizeThinkingLevel"]> =
-        undefined;
+      let thinkLevel: ReturnType<
+        GreenchClawPluginApi["runtime"]["agent"]["normalizeThinkingLevel"]
+      > = undefined;
       if (thinkingRaw) {
         const thinkingPolicy = api.runtime.agent.resolveThinkingPolicy({ provider, model });
         const thinkingLevelsHint = formatThinkingPolicy(thinkingPolicy);
@@ -253,7 +257,7 @@ export function createLlmTaskTool(api: NexisClawPluginApi) {
       const fullPrompt = `${system}\n\nTASK:\n${prompt}\n\nINPUT_JSON:\n${inputJson}\n`;
 
       return await withTempWorkspace(
-        { rootDir: resolvePreferredNexisClawTmpDir(), prefix: "NexisClaw-llm-task-" },
+        { rootDir: resolvePreferredGreenchClawTmpDir(), prefix: "GreenchClaw-llm-task-" },
         async ({ dir: tmpDir }) => {
           const sessionId = `llm-task-${Date.now()}`;
           const sessionFile = path.join(tmpDir, "session.json");

@@ -46,7 +46,7 @@ export function parseDiscordModalCustomId(id: string): string | null {
 }
 
 function isDiscordComponentWildcardRegistrationId(id: string): boolean {
-  return /^__NexisClaw_discord_component_[a-z_]+_wildcard__$/.test(id);
+  return /^__GreenchClaw_discord_component_[a-z_]+_wildcard__$/.test(id);
 }
 
 export function parseDiscordComponentCustomIdForInteraction(id: string): ComponentParserResult {

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import {
   buildCapabilityProviderMaps,
   normalizeCapabilityProviderId,
@@ -7,8 +7,8 @@ import type { SpeechProviderPlugin } from "../plugins/types.js";
 import type { SpeechProviderId } from "./provider-types.js";
 
 export type SpeechProviderRegistryResolver = {
-  getProvider: (providerId: string, cfg?: NexisClawConfig) => SpeechProviderPlugin | undefined;
-  listProviders: (cfg?: NexisClawConfig) => SpeechProviderPlugin[];
+  getProvider: (providerId: string, cfg?: GreenchClawConfig) => SpeechProviderPlugin | undefined;
+  listProviders: (cfg?: GreenchClawConfig) => SpeechProviderPlugin[];
 };
 
 export function normalizeSpeechProviderId(
@@ -18,16 +18,16 @@ export function normalizeSpeechProviderId(
 }
 
 export function createSpeechProviderRegistry(resolver: SpeechProviderRegistryResolver) {
-  const buildResolvedProviderMaps = (cfg?: NexisClawConfig) =>
+  const buildResolvedProviderMaps = (cfg?: GreenchClawConfig) =>
     buildCapabilityProviderMaps(resolver.listProviders(cfg));
 
-  const listProviders = (cfg?: NexisClawConfig): SpeechProviderPlugin[] => [
+  const listProviders = (cfg?: GreenchClawConfig): SpeechProviderPlugin[] => [
     ...buildResolvedProviderMaps(cfg).canonical.values(),
   ];
 
   const getProvider = (
     providerId: string | undefined,
-    cfg?: NexisClawConfig,
+    cfg?: GreenchClawConfig,
   ): SpeechProviderPlugin | undefined => {
     const normalized = normalizeSpeechProviderId(providerId);
     if (!normalized) {
@@ -41,7 +41,7 @@ export function createSpeechProviderRegistry(resolver: SpeechProviderRegistryRes
 
   const canonicalizeProviderId = (
     providerId: string | undefined,
-    cfg?: NexisClawConfig,
+    cfg?: GreenchClawConfig,
   ): SpeechProviderId | undefined => {
     const normalized = normalizeSpeechProviderId(providerId);
     if (!normalized) {

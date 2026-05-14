@@ -1,15 +1,15 @@
-import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
-import { createHybridChannelConfigAdapter } from "NexisClaw/plugin-sdk/channel-config-helpers";
-import { createChatChannelPlugin, type ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import { createChannelMessageAdapterFromOutbound } from "NexisClaw/plugin-sdk/channel-message";
-import type { ChannelOutboundAdapter } from "NexisClaw/plugin-sdk/channel-send-result";
-import { createLazyRuntimeModule } from "NexisClaw/plugin-sdk/lazy-runtime";
-import { createRuntimeOutboundDelegates } from "NexisClaw/plugin-sdk/outbound-runtime";
+import { describeAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
+import { createHybridChannelConfigAdapter } from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import { createChatChannelPlugin, type ChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import { createChannelMessageAdapterFromOutbound } from "GreenchClaw/plugin-sdk/channel-message";
+import type { ChannelOutboundAdapter } from "GreenchClaw/plugin-sdk/channel-send-result";
+import { createLazyRuntimeModule } from "GreenchClaw/plugin-sdk/lazy-runtime";
+import { createRuntimeOutboundDelegates } from "GreenchClaw/plugin-sdk/outbound-runtime";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
+} from "GreenchClaw/plugin-sdk/status-helpers";
 import { tlonChannelConfigSchema } from "./config-schema.js";
 import { tlonDoctor } from "./doctor.js";
 import { resolveTlonOutboundSessionRoute } from "./session-route.js";

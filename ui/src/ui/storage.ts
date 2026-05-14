@@ -1,9 +1,9 @@
-const SETTINGS_KEY_PREFIX = "NexisClaw.control.settings.v1:";
-const LEGACY_SETTINGS_KEY = "NexisClaw.control.settings.v1";
-const LOCAL_USER_IDENTITY_KEY = "NexisClaw.control.user.v1";
-const LOCAL_ASSISTANT_IDENTITY_KEY = "NexisClaw.control.assistant.v1";
-const LEGACY_TOKEN_SESSION_KEY = "NexisClaw.control.token.v1";
-const TOKEN_SESSION_KEY_PREFIX = "NexisClaw.control.token.v1:";
+const SETTINGS_KEY_PREFIX = "GreenchClaw.control.settings.v1:";
+const LEGACY_SETTINGS_KEY = "GreenchClaw.control.settings.v1";
+const LOCAL_USER_IDENTITY_KEY = "GreenchClaw.control.user.v1";
+const LOCAL_ASSISTANT_IDENTITY_KEY = "GreenchClaw.control.assistant.v1";
+const LEGACY_TOKEN_SESSION_KEY = "GreenchClaw.control.token.v1";
+const TOKEN_SESSION_KEY_PREFIX = "GreenchClaw.control.token.v1:";
 const MAX_SCOPED_SESSION_ENTRIES = 10;
 
 function settingsKeyForGateway(gatewayUrl: string): string {
@@ -87,7 +87,7 @@ function deriveDefaultGatewayUrl(): { pageUrl: string; effectiveUrl: string } {
   const proto = location.protocol === "https:" ? "wss" : "ws";
   const configured =
     typeof window !== "undefined" &&
-    normalizeOptionalString(window.__NEXISCLAW_CONTROL_UI_BASE_PATH__);
+    normalizeOptionalString(window.__GREENCHCLAW_CONTROL_UI_BASE_PATH__);
   const basePath = configured
     ? normalizeBasePath(configured)
     : inferBasePathFromPathname(location.pathname);
@@ -352,7 +352,7 @@ function persistSettings(next: UiSettings) {
     const raw =
       storage?.getItem(scopedKey) ??
       storage?.getItem(SETTINGS_KEY_PREFIX + "default") ??
-      storage?.getItem("NexisClaw.control.settings.v1");
+      storage?.getItem("GreenchClaw.control.settings.v1");
     if (raw) {
       const parsed = JSON.parse(raw) as PersistedUiSettings;
       if (parsed.sessionsByGateway && typeof parsed.sessionsByGateway === "object") {

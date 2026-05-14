@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { noteChromeMcpBrowserReadiness } from "./doctor-browser.js";
 
 const loadBundledPluginPublicSurfaceModuleSync = vi.hoisted(() => vi.fn());
@@ -27,7 +27,7 @@ describe("doctor browser facade", () => {
       noteChromeMcpBrowserReadiness: delegate,
     });
 
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       browser: {
         defaultProfile: "user",
       },

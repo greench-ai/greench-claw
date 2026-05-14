@@ -1,7 +1,7 @@
 import {
   createModelCatalogPresetAppliers,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildSyntheticModelDefinition,
   SYNTHETIC_BASE_URL,
@@ -13,7 +13,7 @@ export { SYNTHETIC_DEFAULT_MODEL_REF };
 
 const syntheticPresetAppliers = createModelCatalogPresetAppliers({
   primaryModelRef: SYNTHETIC_DEFAULT_MODEL_REF,
-  resolveParams: (_cfg: NexisClawConfig) => ({
+  resolveParams: (_cfg: GreenchClawConfig) => ({
     providerId: "synthetic",
     api: "anthropic-messages",
     baseUrl: SYNTHETIC_BASE_URL,
@@ -22,10 +22,10 @@ const syntheticPresetAppliers = createModelCatalogPresetAppliers({
   }),
 });
 
-export function applySyntheticProviderConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applySyntheticProviderConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return syntheticPresetAppliers.applyProviderConfig(cfg);
 }
 
-export function applySyntheticConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applySyntheticConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return syntheticPresetAppliers.applyConfig(cfg);
 }

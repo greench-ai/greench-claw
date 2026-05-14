@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
 
 export type GatewayProbeTargetResolution = {
@@ -7,7 +7,7 @@ export type GatewayProbeTargetResolution = {
   remoteUrlMissing: boolean;
 };
 
-export function resolveGatewayProbeTarget(cfg: NexisClawConfig): GatewayProbeTargetResolution {
+export function resolveGatewayProbeTarget(cfg: GreenchClawConfig): GatewayProbeTargetResolution {
   const gatewayMode = cfg.gateway?.mode === "remote" ? "remote" : "local";
   const remoteUrlRaw = normalizeOptionalString(cfg.gateway?.remote?.url) ?? "";
   const remoteUrlMissing = gatewayMode === "remote" && !remoteUrlRaw;

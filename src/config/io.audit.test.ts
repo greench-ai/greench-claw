@@ -40,7 +40,7 @@ function createAuditRecordBase(configPath: string) {
 
 function createRenameAuditRecord(home: string) {
   return finalizeConfigWriteAuditRecord({
-    base: createAuditRecordBase(path.join(home, ".NexisClaw", "NexisClaw.json")),
+    base: createAuditRecordBase(path.join(home, ".GreenchClaw", "GreenchClaw.json")),
     result: "rename",
     nextMetadata: {
       dev: "12",
@@ -54,7 +54,7 @@ function createRenameAuditRecord(home: string) {
 }
 
 function readAuditLog(home: string): unknown[] {
-  const auditPath = path.join(home, ".NexisClaw", "logs", "config-audit.jsonl");
+  const auditPath = path.join(home, ".GreenchClaw", "logs", "config-audit.jsonl");
   return fs
     .readFileSync(auditPath, "utf-8")
     .trim()
@@ -70,7 +70,7 @@ function requireAuditRecord(value: unknown): Record<string, unknown> {
 }
 
 describe("config io audit helpers", () => {
-  const suiteRootTracker = createSuiteTempRootTracker({ prefix: "NexisClaw-config-audit-" });
+  const suiteRootTracker = createSuiteTempRootTracker({ prefix: "GreenchClaw-config-audit-" });
 
   beforeAll(async () => {
     await suiteRootTracker.setup();
@@ -86,34 +86,34 @@ describe("config io audit helpers", () => {
       {
         HOME: "undefined",
         USERPROFILE: "null",
-        NEXISCLAW_HOME: "undefined",
+        GREENCHCLAW_HOME: "undefined",
       } as NodeJS.ProcessEnv,
       () => home,
     );
-    expect(auditPath).toBe(path.join(home, ".NexisClaw", "logs", "config-audit.jsonl"));
+    expect(auditPath).toBe(path.join(home, ".GreenchClaw", "logs", "config-audit.jsonl"));
     expect(auditPath.startsWith(path.resolve("undefined"))).toBe(false);
   });
 
   it("formats overwrite warnings with hash transition and backup path", () => {
     expect(
       formatConfigOverwriteLogMessage({
-        configPath: "/tmp/NexisClaw.json",
+        configPath: "/tmp/GreenchClaw.json",
         previousHash: "prev-hash",
         nextHash: "next-hash",
         changedPathCount: 3,
       }),
     ).toBe(
-      "Config overwrite: /tmp/NexisClaw.json (sha256 prev-hash -> next-hash, backup=/tmp/NexisClaw.json.bak, changedPaths=3)",
+      "Config overwrite: /tmp/GreenchClaw.json (sha256 prev-hash -> next-hash, backup=/tmp/GreenchClaw.json.bak, changedPaths=3)",
     );
   });
 
   it("captures watch markers and next stat metadata for successful writes", () => {
     const base = createConfigWriteAuditRecordBase({
-      configPath: "/tmp/NexisClaw.json",
+      configPath: "/tmp/GreenchClaw.json",
       env: {
-        NEXISCLAW_WATCH_MODE: "1",
-        NEXISCLAW_WATCH_SESSION: "watch-session-1",
-        NEXISCLAW_WATCH_COMMAND: "gateway --force",
+        GREENCHCLAW_WATCH_MODE: "1",
+        GREENCHCLAW_WATCH_SESSION: "watch-session-1",
+        GREENCHCLAW_WATCH_COMMAND: "gateway --force",
       } as NodeJS.ProcessEnv,
       existsBefore: true,
       previousHash: "prev-hash",
@@ -139,7 +139,7 @@ describe("config io audit helpers", () => {
         pid: 101,
         ppid: 99,
         cwd: "/work",
-        argv: ["node", "NexisClaw"],
+        argv: ["node", "GreenchClaw"],
         execArgv: ["--loader"],
       },
     });
@@ -167,7 +167,7 @@ describe("config io audit helpers", () => {
   });
 
   it("drops next-file metadata and preserves error details for failed writes", () => {
-    const base = createAuditRecordBase("/tmp/NexisClaw.json");
+    const base = createAuditRecordBase("/tmp/GreenchClaw.json");
     const err = Object.assign(new Error("disk full"), { code: "ENOSPC" });
     const record = finalizeConfigWriteAuditRecord({
       base,
@@ -206,7 +206,7 @@ describe("config io audit helpers", () => {
     const home = await suiteRootTracker.make("append-redacted");
     const record = finalizeConfigWriteAuditRecord({
       base: {
-        ...createAuditRecordBase(path.join(home, ".NexisClaw", "NexisClaw.json")),
+        ...createAuditRecordBase(path.join(home, ".GreenchClaw", "GreenchClaw.json")),
         suspicious: [
           "provider returned ya29.fake-access-token-with-enough-length",
           "plugin returned AIzaSyD-very-real-looking-google-api-key-123",
@@ -224,7 +224,7 @@ describe("config io audit helpers", () => {
     });
 
     const raw = fs.readFileSync(
-      path.join(home, ".NexisClaw", "logs", "config-audit.jsonl"),
+      path.join(home, ".GreenchClaw", "logs", "config-audit.jsonl"),
       "utf-8",
     );
     expect(raw).not.toContain("AIzaSyD-very-real-looking");
@@ -235,7 +235,7 @@ describe("config io audit helpers", () => {
   it("redacts argv values that follow known secret flag names", () => {
     const argv = [
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "gateway",
       "--token",
       "super-secret-gateway-token-12345",
@@ -247,7 +247,7 @@ describe("config io audit helpers", () => {
     const result = redactConfigAuditArgv(argv);
     expect(result).toEqual([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "gateway",
       "--token",
       "***",
@@ -259,21 +259,21 @@ describe("config io audit helpers", () => {
   });
 
   it("redacts the value half of `--flag=value` for secret flags", () => {
-    const argv = ["NexisClaw", "--token=ghp_realgithubtoken1234567890ABCD", "--port=8080"];
-    expect(redactConfigAuditArgv(argv)).toEqual(["NexisClaw", "--token=***", "--port=8080"]);
+    const argv = ["GreenchClaw", "--token=ghp_realgithubtoken1234567890ABCD", "--port=8080"];
+    expect(redactConfigAuditArgv(argv)).toEqual(["GreenchClaw", "--token=***", "--port=8080"]);
   });
 
   it("redacts standalone token shapes via the shared logging redaction patterns", () => {
     const argv = [
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "ghp_realgithubtoken1234567890ABCD",
       "AIzaSyD-very-real-looking-google-api-key-123",
       "987654321:AAAAAAAAAAAAAAAAAAAAAAAAAAAA",
     ];
     const result = redactConfigAuditArgv(argv);
     expect(result[0]).toBe("node");
-    expect(result[1]).toBe("NexisClaw");
+    expect(result[1]).toBe("GreenchClaw");
     for (const masked of result.slice(2)) {
       expect(masked).not.toContain("ghp_realgithubtoken");
       expect(masked).not.toContain("AIzaSyD-very-real-looking");
@@ -282,14 +282,14 @@ describe("config io audit helpers", () => {
   });
 
   it("leaves non-secret arguments untouched", () => {
-    const argv = ["node", "NexisClaw", "gateway", "--port", "8080", "--bind", "lan"];
+    const argv = ["node", "GreenchClaw", "gateway", "--port", "8080", "--bind", "lan"];
     expect(redactConfigAuditArgv(argv)).toEqual(argv);
   });
 
   it("redacts unknown but credential-suffixed flags via the heuristic classifier", () => {
     const argv = [
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "--custom-api-key",
       "real-tenant-key-AB12CD34EF56GH78",
       "--alibaba-model-studio-api-key=plain-value-xyz-12345",
@@ -300,7 +300,7 @@ describe("config io audit helpers", () => {
     const result = redactConfigAuditArgv(argv);
     expect(result).toEqual([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "--custom-api-key",
       "***",
       "--alibaba-model-studio-api-key=***",
@@ -313,7 +313,7 @@ describe("config io audit helpers", () => {
   it("redacts key-valued secret flags (Nostr --private-key, Matrix --recovery-key)", () => {
     const argv = [
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "channels",
       "add",
       "--channel",
@@ -325,7 +325,7 @@ describe("config io audit helpers", () => {
     const result = redactConfigAuditArgv(argv);
     expect(result).toEqual([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "channels",
       "add",
       "--channel",
@@ -339,7 +339,7 @@ describe("config io audit helpers", () => {
   it("redacts unknown *-key flags via the heuristic classifier (private/signing/master/etc.)", () => {
     const argv = [
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "--my-plugin-private-key",
       "tenant-private-key-material-zzz",
       "--rotated-signing-key=PEM-LIKE-MATERIAL",
@@ -349,7 +349,7 @@ describe("config io audit helpers", () => {
     const result = redactConfigAuditArgv(argv);
     expect(result).toEqual([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "--my-plugin-private-key",
       "***",
       "--rotated-signing-key=***",
@@ -359,24 +359,24 @@ describe("config io audit helpers", () => {
   });
 
   it("masks the next arg after a secret flag even when it looks like another option", () => {
-    const argv = ["NexisClaw", "--token", "--port", "8080"];
-    expect(redactConfigAuditArgv(argv)).toEqual(["NexisClaw", "--token", "***", "8080"]);
+    const argv = ["GreenchClaw", "--token", "--port", "8080"];
+    expect(redactConfigAuditArgv(argv)).toEqual(["GreenchClaw", "--token", "***", "8080"]);
   });
 
   it("redacts dash-leading secret values after bare secret flags", () => {
-    const argv = ["NexisClaw", "--password", "-secret-value"];
-    expect(redactConfigAuditArgv(argv)).toEqual(["NexisClaw", "--password", "***"]);
+    const argv = ["GreenchClaw", "--password", "-secret-value"];
+    expect(redactConfigAuditArgv(argv)).toEqual(["GreenchClaw", "--password", "***"]);
   });
 
   it("does not mask when a secret flag is the final arg with no value", () => {
-    const argv = ["NexisClaw", "--token"];
-    expect(redactConfigAuditArgv(argv)).toEqual(["NexisClaw", "--token"]);
+    const argv = ["GreenchClaw", "--token"];
+    expect(redactConfigAuditArgv(argv)).toEqual(["GreenchClaw", "--token"]);
   });
 
   it("caps caller-supplied processInfo argv at 8 entries before redaction", () => {
     const longArgv = [
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "--api-key",
       "secret",
       "--port",
@@ -387,7 +387,7 @@ describe("config io audit helpers", () => {
       "this-must-not-land-in-audit-1234567890",
     ];
     const base = createConfigWriteAuditRecordBase({
-      configPath: "/tmp/NexisClaw.json",
+      configPath: "/tmp/GreenchClaw.json",
       env: {} as NodeJS.ProcessEnv,
       existsBefore: true,
       previousHash: "prev",
@@ -424,7 +424,7 @@ describe("config io audit helpers", () => {
 
   it("redacts processInfo.argv when explicitly supplied to createConfigWriteAuditRecordBase", () => {
     const base = createConfigWriteAuditRecordBase({
-      configPath: "/tmp/NexisClaw.json",
+      configPath: "/tmp/GreenchClaw.json",
       env: {} as NodeJS.ProcessEnv,
       existsBefore: true,
       previousHash: "prev",
@@ -450,11 +450,11 @@ describe("config io audit helpers", () => {
         pid: 1,
         ppid: 1,
         cwd: "/work",
-        argv: ["node", "NexisClaw", "--token", "leaked-but-not-anymore-12345"],
+        argv: ["node", "GreenchClaw", "--token", "leaked-but-not-anymore-12345"],
         execArgv: [],
       },
     });
-    expect(base.argv).toEqual(["node", "NexisClaw", "--token", "***"]);
+    expect(base.argv).toEqual(["node", "GreenchClaw", "--token", "***"]);
   });
 
   it("also accepts flattened audit record params from legacy call sites", async () => {

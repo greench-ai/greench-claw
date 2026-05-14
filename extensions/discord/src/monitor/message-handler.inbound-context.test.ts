@@ -1,5 +1,5 @@
-import { expectChannelInboundContextContract as expectInboundContextContract } from "NexisClaw/plugin-sdk/channel-contract-testing";
-import { finalizeInboundContext } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
+import { expectChannelInboundContextContract as expectInboundContextContract } from "GreenchClaw/plugin-sdk/channel-contract-testing";
+import { finalizeInboundContext } from "GreenchClaw/plugin-sdk/reply-dispatch-runtime";
 import { describe, expect, it } from "vitest";
 import { buildDiscordInboundAccessContext } from "./inbound-context.js";
 import { buildFinalizedDiscordDirectInboundContext } from "./inbound-context.test-helpers.js";

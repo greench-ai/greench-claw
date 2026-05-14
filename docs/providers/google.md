@@ -2,7 +2,7 @@
 summary: "Google Gemini setup (API key + OAuth, image generation, media understanding, TTS, web search)"
 title: "Google (Gemini)"
 read_when:
-  - You want to use Google Gemini models with NexisClaw
+  - You want to use Google Gemini models with GreenchClaw
   - You need the API key or OAuth auth flow
 ---
 
@@ -27,13 +27,13 @@ Choose your preferred auth method and follow the setup steps.
     <Steps>
       <Step title="Run onboarding">
         ```bash
-        NexisClaw onboard --auth-choice gemini-api-key
+        GreenchClaw onboard --auth-choice gemini-api-key
         ```
 
         Or pass the key directly:
 
         ```bash
-        NexisClaw onboard --non-interactive \
+        GreenchClaw onboard --non-interactive \
           --mode local \
           --auth-choice gemini-api-key \
           --gemini-api-key "$GEMINI_API_KEY"
@@ -52,7 +52,7 @@ Choose your preferred auth method and follow the setup steps.
       </Step>
       <Step title="Verify the model is available">
         ```bash
-        NexisClaw models list --provider google
+        GreenchClaw models list --provider google
         ```
       </Step>
     </Steps>
@@ -83,17 +83,17 @@ Choose your preferred auth method and follow the setup steps.
         npm install -g @google/gemini-cli
         ```
 
-        NexisClaw supports both Homebrew installs and global npm installs, including
+        GreenchClaw supports both Homebrew installs and global npm installs, including
         common Windows/npm layouts.
       </Step>
       <Step title="Log in via OAuth">
         ```bash
-        NexisClaw models auth login --provider google-gemini-cli --set-default
+        GreenchClaw models auth login --provider google-gemini-cli --set-default
         ```
       </Step>
       <Step title="Verify the model is available">
         ```bash
-        NexisClaw models list --provider google
+        GreenchClaw models list --provider google
         ```
       </Step>
     </Steps>
@@ -102,12 +102,12 @@ Choose your preferred auth method and follow the setup steps.
     - Runtime: `google-gemini-cli`
     - Alias: `gemini-cli`
 
-    Gemini 3.1 Pro's Gemini API model id is `gemini-3.1-pro-preview`. NexisClaw accepts the shorter `google/gemini-3.1-pro` as a convenience alias and normalizes it before provider calls.
+    Gemini 3.1 Pro's Gemini API model id is `gemini-3.1-pro-preview`. GreenchClaw accepts the shorter `google/gemini-3.1-pro` as a convenience alias and normalizes it before provider calls.
 
     **Environment variables:**
 
-    - `NEXISCLAW_GEMINI_OAUTH_CLIENT_ID`
-    - `NEXISCLAW_GEMINI_OAUTH_CLIENT_SECRET`
+    - `GREENCHCLAW_GEMINI_OAUTH_CLIENT_ID`
+    - `GREENCHCLAW_GEMINI_OAUTH_CLIENT_SECRET`
 
     (Or the `GEMINI_CLI_*` variants.)
 
@@ -175,17 +175,17 @@ Gemini web search reuses `models.providers.google.baseUrl`. See
 [Gemini search](/tools/gemini-search) for the provider-specific tool behavior.
 
 <Tip>
-Gemini 3 models use `thinkingLevel` rather than `thinkingBudget`. NexisClaw maps
+Gemini 3 models use `thinkingLevel` rather than `thinkingBudget`. GreenchClaw maps
 Gemini 3, Gemini 3.1, and `gemini-*-latest` alias reasoning controls to
 `thinkingLevel` so default/low-latency runs do not send disabled
 `thinkingBudget` values.
 
 `/think adaptive` keeps Google's dynamic thinking semantics instead of choosing
-a fixed NexisClaw level. Gemini 3 and Gemini 3.1 omit a fixed `thinkingLevel` so
+a fixed GreenchClaw level. Gemini 3 and Gemini 3.1 omit a fixed `thinkingLevel` so
 Google can choose the level; Gemini 2.5 sends Google's dynamic sentinel
 `thinkingBudget: -1`.
 
-Gemma 4 models (for example `gemma-4-26b-a4b-it`) support thinking mode. NexisClaw
+Gemma 4 models (for example `gemma-4-26b-a4b-it`) support thinking mode. GreenchClaw
 rewrites `thinkingBudget` to a supported Google `thinkingLevel` for Gemma 4.
 Setting thinking to `off` preserves thinking disabled instead of mapping to
 `MINIMAL`.
@@ -382,9 +382,9 @@ Example Voice Call realtime config:
 
 <Note>
 Google Live API uses bidirectional audio and function calling over a WebSocket.
-NexisClaw adapts telephony/Meet bridge audio to Gemini's PCM Live API stream and
+GreenchClaw adapts telephony/Meet bridge audio to Gemini's PCM Live API stream and
 keeps tool calls on the shared realtime voice contract. Leave `temperature`
-unset unless you need sampling changes; NexisClaw omits non-positive values
+unset unless you need sampling changes; GreenchClaw omits non-positive values
 because Google Live can return transcripts without audio for `temperature: 0`.
 Gemini API transcription is enabled without `languageCodes`; the current Google
 SDK rejects language-code hints on this API path.
@@ -407,14 +407,14 @@ WebSocket endpoint, sends the initial setup payload, and waits for
 
 <AccordionGroup>
   <Accordion title="Direct Gemini cache reuse">
-    For direct Gemini API runs (`api: "google-generative-ai"`), NexisClaw
+    For direct Gemini API runs (`api: "google-generative-ai"`), GreenchClaw
     passes a configured `cachedContent` handle through to Gemini requests.
 
     - Configure per-model or global params with either
       `cachedContent` or legacy `cached_content`
     - If both are present, `cachedContent` wins
     - Example value: `cachedContents/prebuilt-context`
-    - Gemini cache-hit usage is normalized into NexisClaw `cacheRead` from
+    - Gemini cache-hit usage is normalized into GreenchClaw `cacheRead` from
       upstream `cachedContentTokenCount`
 
     ```json5
@@ -436,20 +436,20 @@ WebSocket endpoint, sends the initial setup payload, and waits for
   </Accordion>
 
   <Accordion title="Gemini CLI JSON usage notes">
-    When using the `google-gemini-cli` OAuth provider, NexisClaw normalizes
+    When using the `google-gemini-cli` OAuth provider, GreenchClaw normalizes
     the CLI JSON output as follows:
 
     - Reply text comes from the CLI JSON `response` field.
     - Usage falls back to `stats` when the CLI leaves `usage` empty.
-    - `stats.cached` is normalized into NexisClaw `cacheRead`.
-    - If `stats.input` is missing, NexisClaw derives input tokens from
+    - `stats.cached` is normalized into GreenchClaw `cacheRead`.
+    - If `stats.input` is missing, GreenchClaw derives input tokens from
       `stats.input_tokens - stats.cached`.
 
   </Accordion>
 
   <Accordion title="Environment and daemon setup">
     If the Gateway runs as a daemon (launchd/systemd), make sure `GEMINI_API_KEY`
-    is available to that process (for example, in `~/.NexisClaw/.env` or via
+    is available to that process (for example, in `~/.GreenchClaw/.env` or via
     `env.shellEnv`).
   </Accordion>
 </AccordionGroup>

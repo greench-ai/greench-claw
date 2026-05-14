@@ -4,10 +4,10 @@ import {
   pathExists,
   splitSetupEntries,
   type DmPolicy,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/setup";
-import type { ChannelSetupWizard } from "NexisClaw/plugin-sdk/setup";
-import { formatCliCommand, formatDocsLink } from "NexisClaw/plugin-sdk/setup-tools";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/setup";
+import type { ChannelSetupWizard } from "GreenchClaw/plugin-sdk/setup";
+import { formatCliCommand, formatDocsLink } from "GreenchClaw/plugin-sdk/setup-tools";
 import {
   resolveDefaultWhatsAppAccountId,
   resolveWhatsAppAccount,
@@ -21,7 +21,7 @@ import { whatsappSetupAdapter } from "./setup-core.js";
 
 type SetupPrompter = Parameters<NonNullable<ChannelSetupWizard["finalize"]>>[0]["prompter"];
 type SetupRuntime = Parameters<NonNullable<ChannelSetupWizard["finalize"]>>[0]["runtime"];
-type WhatsAppConfig = NonNullable<NonNullable<NexisClawConfig["channels"]>["whatsapp"]>;
+type WhatsAppConfig = NonNullable<NonNullable<GreenchClawConfig["channels"]>["whatsapp"]>;
 type WhatsAppAccountConfig = NonNullable<NonNullable<WhatsAppConfig["accounts"]>[string]>;
 
 function trimPromptText(value: string | null | undefined): string {
@@ -32,7 +32,7 @@ function isDefaultWhatsAppAccountKey(accountId: string): boolean {
   return accountId.trim().toLowerCase() === DEFAULT_ACCOUNT_ID;
 }
 
-function shouldWriteDefaultWhatsAppAccountConfigAtAccountScope(cfg: NexisClawConfig): boolean {
+function shouldWriteDefaultWhatsAppAccountConfigAtAccountScope(cfg: GreenchClawConfig): boolean {
   const accounts = cfg.channels?.whatsapp?.accounts;
   if (!accounts) {
     return false;
@@ -43,7 +43,7 @@ function shouldWriteDefaultWhatsAppAccountConfigAtAccountScope(cfg: NexisClawCon
   return Object.keys(accounts).some((accountId) => !isDefaultWhatsAppAccountKey(accountId));
 }
 
-function resolveDefaultWhatsAppAccountWriteKey(cfg: NexisClawConfig): string {
+function resolveDefaultWhatsAppAccountWriteKey(cfg: GreenchClawConfig): string {
   const accounts = cfg.channels?.whatsapp?.accounts;
   if (!accounts) {
     return DEFAULT_ACCOUNT_ID;
@@ -52,7 +52,7 @@ function resolveDefaultWhatsAppAccountWriteKey(cfg: NexisClawConfig): string {
   return match ?? DEFAULT_ACCOUNT_ID;
 }
 
-function resolveWhatsAppConfigPathPrefix(cfg: NexisClawConfig, accountId: string): string {
+function resolveWhatsAppConfigPathPrefix(cfg: GreenchClawConfig, accountId: string): string {
   if (
     accountId === DEFAULT_ACCOUNT_ID &&
     shouldWriteDefaultWhatsAppAccountConfigAtAccountScope(cfg)
@@ -65,11 +65,11 @@ function resolveWhatsAppConfigPathPrefix(cfg: NexisClawConfig, accountId: string
 }
 
 function mergeWhatsAppConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
   patch: Partial<WhatsAppAccountConfig>,
   options?: { unsetOnUndefined?: string[] },
-): NexisClawConfig {
+): GreenchClawConfig {
   const channelConfig: WhatsAppConfig = { ...cfg.channels?.whatsapp };
   const mutableChannelConfig = channelConfig as Record<string, unknown>;
   const targetPathPrefix = resolveWhatsAppConfigPathPrefix(cfg, accountId);
@@ -131,30 +131,30 @@ function mergeWhatsAppConfig(
 }
 
 function setWhatsAppDmPolicy(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
   dmPolicy: DmPolicy,
-): NexisClawConfig {
+): GreenchClawConfig {
   return mergeWhatsAppConfig(cfg, accountId, { dmPolicy });
 }
 
 function setWhatsAppAllowFrom(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
   allowFrom?: string[],
-): NexisClawConfig {
+): GreenchClawConfig {
   return mergeWhatsAppConfig(cfg, accountId, { allowFrom }, { unsetOnUndefined: ["allowFrom"] });
 }
 
 function setWhatsAppSelfChatMode(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
   selfChatMode: boolean,
-): NexisClawConfig {
+): GreenchClawConfig {
   return mergeWhatsAppConfig(cfg, accountId, { selfChatMode });
 }
 
-async function detectWhatsAppLinked(cfg: NexisClawConfig, accountId: string): Promise<boolean> {
+async function detectWhatsAppLinked(cfg: GreenchClawConfig, accountId: string): Promise<boolean> {
   const { authDir } = resolveWhatsAppAuthDir({ cfg, accountId });
   const credsPath = path.join(authDir, "creds.json");
   return await pathExists(credsPath);
@@ -167,7 +167,7 @@ async function promptWhatsAppOwnerAllowFrom(params: {
   const { prompter, existingAllowFrom } = params;
 
   await prompter.note(
-    "We need the sender/owner number so NexisClaw can allowlist you.",
+    "We need the sender/owner number so GreenchClaw can allowlist you.",
     "WhatsApp number",
   );
   const entry = await prompter.text({
@@ -199,13 +199,13 @@ async function promptWhatsAppOwnerAllowFrom(params: {
 }
 
 async function applyWhatsAppOwnerAllowlist(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   existingAllowFrom: string[];
   messageLines: string[];
   prompter: SetupPrompter;
   title: string;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   const { normalized, allowFrom } = await promptWhatsAppOwnerAllowFrom({
     prompter: params.prompter,
     existingAllowFrom: params.existingAllowFrom,
@@ -241,11 +241,11 @@ function parseWhatsAppAllowFromEntries(raw: string): { entries: string[]; invali
 }
 
 async function promptWhatsAppDmAccess(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   forceAllowFrom: boolean;
   prompter: SetupPrompter;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   const accountId = params.accountId.trim() || DEFAULT_ACCOUNT_ID;
   const account = resolveWhatsAppAccount({ cfg: params.cfg, accountId });
   const existingPolicy = account.dmPolicy ?? "pairing";
@@ -284,7 +284,7 @@ async function promptWhatsAppDmAccess(params: {
     message: "WhatsApp phone setup",
     options: [
       { value: "personal", label: "This is my personal phone number" },
-      { value: "separate", label: "Separate phone just for NexisClaw" },
+      { value: "separate", label: "Separate phone just for GreenchClaw" },
     ],
   });
 
@@ -383,7 +383,7 @@ async function promptWhatsAppDmAccess(params: {
 }
 
 export async function finalizeWhatsAppSetup(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   forceAllowFrom: boolean;
   prompter: SetupPrompter;
@@ -433,7 +433,7 @@ export async function finalizeWhatsAppSetup(params: {
     }
   } else if (!linked) {
     await params.prompter.note(
-      `Run \`${formatCliCommand("NexisClaw channels login")}\` later to link WhatsApp.`,
+      `Run \`${formatCliCommand("GreenchClaw channels login")}\` later to link WhatsApp.`,
       "WhatsApp",
     );
   }

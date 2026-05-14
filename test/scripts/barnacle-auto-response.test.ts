@@ -44,8 +44,8 @@ function pr(title: string, body = blankTemplateBody) {
 function realBehaviorProofBody(evidence: string, overrides: Record<string, string> = {}) {
   const fields = {
     behavior: "Gateway status now reports the Discord channel as ready.",
-    environment: "macOS 15.4, Node 24, local NexisClaw gateway, redacted Discord token.",
-    steps: "pnpm NexisClaw gateway restart and pnpm NexisClaw gateway status",
+    environment: "macOS 15.4, Node 24, local GreenchClaw gateway, redacted Discord token.",
+    steps: "pnpm GreenchClaw gateway restart and pnpm GreenchClaw gateway status",
     evidence,
     observedResult: "The gateway stayed connected and Discord reported ready.",
     notTested: "No known gaps.",
@@ -77,8 +77,8 @@ function barnacleContext(
 ) {
   return {
     repo: {
-      owner: "NexisClaw",
-      repo: "NexisClaw",
+      owner: "GreenchClaw",
+      repo: "GreenchClaw",
     },
     payload: {
       action: options.action ?? "opened",
@@ -106,8 +106,8 @@ function barnacleIssueContext(
 ) {
   return {
     repo: {
-      owner: "NexisClaw",
-      repo: "NexisClaw",
+      owner: "GreenchClaw",
+      repo: "GreenchClaw",
     },
     payload: {
       action: options.action ?? "opened",
@@ -115,7 +115,7 @@ function barnacleIssueContext(
       sender: options.sender,
       issue: {
         number: 456,
-        title: "NexisClaw issue",
+        title: "GreenchClaw issue",
         body: "",
         author_association: "CONTRIBUTOR",
         user: {
@@ -224,8 +224,8 @@ function barnacleGithub(
 
 function expectedIssueUpdate(issue_number: number, state: string) {
   return {
-    owner: "NexisClaw",
-    repo: "NexisClaw",
+    owner: "GreenchClaw",
+    repo: "GreenchClaw",
     issue_number,
     state,
   };
@@ -233,8 +233,8 @@ function expectedIssueUpdate(issue_number: number, state: string) {
 
 function expectedRemoveLabel(issue_number: number, name: string) {
   return {
-    owner: "NexisClaw",
-    repo: "NexisClaw",
+    owner: "GreenchClaw",
+    repo: "GreenchClaw",
     issue_number,
     name,
   };
@@ -242,8 +242,8 @@ function expectedRemoveLabel(issue_number: number, name: string) {
 
 function expectedAddLabels(issue_number: number, labels: string[]) {
   return {
-    owner: "NexisClaw",
-    repo: "NexisClaw",
+    owner: "GreenchClaw",
+    repo: "GreenchClaw",
     issue_number,
     labels,
   };
@@ -391,7 +391,7 @@ describe("barnacle-auto-response", () => {
       pr(
         "Fix duplicate plugin auto-enable entries",
         [
-          "- Problem: NexisClaw doctor --fix adds duplicate installed plugin entries",
+          "- Problem: GreenchClaw doctor --fix adds duplicate installed plugin entries",
           "- Why it matters: users get noisy config churn",
           "- What changed: respect manifest-provided channel auto-loads",
           "",
@@ -573,13 +573,22 @@ describe("barnacle-auto-response", () => {
 
   it("does not close automation PRs for the active PR limit", async () => {
     for (const automationPullRequest of [
-      { head: { ref: "clawsweeper/NexisClaw-NexisClaw-73880" }, login: "app/NexisClaw-clawsweeper" },
-      { headRefName: "clawsweeper/NexisClaw-NexisClaw-73880", login: "app/NexisClaw-clawsweeper" },
+      {
+        head: { ref: "clawsweeper/GreenchClaw-GreenchClaw-73880" },
+        login: "app/GreenchClaw-clawsweeper",
+      },
+      {
+        headRefName: "clawsweeper/GreenchClaw-GreenchClaw-73880",
+        login: "app/GreenchClaw-clawsweeper",
+      },
       {
         head: { ref: "clownfish/ghcrawl-156993-autonomous-smoke" },
-        login: "app/NexisClaw-clownfish",
+        login: "app/GreenchClaw-clownfish",
       },
-      { headRefName: "clownfish/ghcrawl-156993-autonomous-smoke", login: "app/NexisClaw-clownfish" },
+      {
+        headRefName: "clownfish/ghcrawl-156993-autonomous-smoke",
+        login: "app/GreenchClaw-clownfish",
+      },
     ]) {
       const { calls, github } = barnacleGithub([]);
       const { login, ...pullRequest } = automationPullRequest;
@@ -799,7 +808,7 @@ describe("barnacle-auto-response", () => {
         {
           action: "labeled",
           label: { name: PROOF_SUFFICIENT_LABEL },
-          sender: { login: "NexisClaw-clawsweeper[bot]", type: "Bot" },
+          sender: { login: "GreenchClaw-clawsweeper[bot]", type: "Bot" },
         },
       ),
       core: {
@@ -811,7 +820,7 @@ describe("barnacle-auto-response", () => {
   });
 
   it("actions manually applied candidate labels", async () => {
-    const { calls, github } = barnacleGithub([file("extensions/example/NexisClaw.plugin.json")]);
+    const { calls, github } = barnacleGithub([file("extensions/example/GreenchClaw.plugin.json")]);
 
     await runBarnacleAutoResponse({
       github,
@@ -853,14 +862,14 @@ describe("barnacle-auto-response", () => {
   });
 
   it("keeps bot-applied candidate labels passive", async () => {
-    const { calls, github } = barnacleGithub([file("extensions/example/NexisClaw.plugin.json")]);
+    const { calls, github } = barnacleGithub([file("extensions/example/GreenchClaw.plugin.json")]);
 
     await runBarnacleAutoResponse({
       github,
       context: barnacleContext({}, [candidateLabels.externalPluginCandidate], {
         action: "labeled",
         label: { name: candidateLabels.externalPluginCandidate },
-        sender: { login: "NexisClaw-bot[bot]", type: "Bot" },
+        sender: { login: "GreenchClaw-bot[bot]", type: "Bot" },
       }),
       core: {
         info: () => undefined,

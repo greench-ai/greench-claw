@@ -1,6 +1,6 @@
-import { buildManifestModelProviderConfig } from "NexisClaw/plugin-sdk/provider-catalog-shared";
-import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
-import manifest from "./NexisClaw.plugin.json" with { type: "json" };
+import { buildManifestModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-catalog-shared";
+import type { ModelDefinitionConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import manifest from "./GreenchClaw.plugin.json" with { type: "json" };
 
 const DEEPSEEK_MANIFEST_PROVIDER = buildManifestModelProviderConfig({
   providerId: "deepseek",

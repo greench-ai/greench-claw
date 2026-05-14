@@ -11,7 +11,7 @@ Read-only diff viewer and file renderer for agents.
 
 ## Distribution
 
-- Package: `@NexisClaw/diffs`
+- Package: `@GreenchClaw/diffs`
 - Install route: npm; ClawHub
 
 ## Surface

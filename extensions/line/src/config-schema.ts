@@ -1,8 +1,8 @@
 import {
   buildChannelConfigSchema,
   requireOpenAllowFrom,
-} from "NexisClaw/plugin-sdk/channel-config-schema";
-import { requireChannelOpenAllowFrom } from "NexisClaw/plugin-sdk/extension-shared";
+} from "GreenchClaw/plugin-sdk/channel-config-schema";
+import { requireChannelOpenAllowFrom } from "GreenchClaw/plugin-sdk/extension-shared";
 import { z } from "zod";
 
 const DmPolicySchema = z.enum(["open", "allowlist", "pairing", "disabled"]);

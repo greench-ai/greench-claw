@@ -1,6 +1,6 @@
 import { getBootstrapChannelPlugin } from "../../../channels/plugins/bootstrap-registry.js";
 import { loadBundledChannelDoctorContractApi } from "../../../channels/plugins/doctor-contract-api.js";
-import type { NexisClawConfig } from "../../../config/types.js";
+import type { GreenchClawConfig } from "../../../config/types.js";
 import {
   applyPluginDoctorCompatibilityMigrations,
   collectRelevantDoctorPluginIds,
@@ -8,12 +8,12 @@ import {
 import { isRecord } from "./legacy-config-record-shared.js";
 
 type ChannelDoctorCompatibilityMutation = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   changes: string[];
 };
 
 type ChannelDoctorCompatibilityNormalizer = (params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }) => ChannelDoctorCompatibilityMutation;
 
 function collectRelevantDoctorChannelIds(raw: unknown): string[] {
@@ -56,7 +56,7 @@ export function applyChannelDoctorCompatibilityMigrations(cfg: Record<string, un
   next: Record<string, unknown>;
   changes: string[];
 } {
-  let nextCfg = cfg as NexisClawConfig;
+  let nextCfg = cfg as GreenchClawConfig;
   const changes: string[] = [];
   const unresolvedChannelIds: string[] = [];
 
@@ -77,7 +77,7 @@ export function applyChannelDoctorCompatibilityMigrations(cfg: Record<string, un
   const pluginIds = collectPluginDoctorCompatibilityIds({ raw: cfg, unresolvedChannelIds });
   if (pluginIds.length > 0) {
     const compat = applyPluginDoctorCompatibilityMigrations(nextCfg, {
-      config: cfg as NexisClawConfig,
+      config: cfg as GreenchClawConfig,
       pluginIds,
     });
     nextCfg = compat.config;
@@ -85,7 +85,7 @@ export function applyChannelDoctorCompatibilityMigrations(cfg: Record<string, un
   }
 
   return {
-    next: nextCfg as NexisClawConfig & Record<string, unknown>,
+    next: nextCfg as GreenchClawConfig & Record<string, unknown>,
     changes,
   };
 }

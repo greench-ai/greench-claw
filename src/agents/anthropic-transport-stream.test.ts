@@ -402,7 +402,7 @@ describe("anthropic transport stream", () => {
     );
 
     expect(result.stopReason).toBe("error");
-    expect(result.errorMessage).toBe("NexisClaw transport error: malformed_streaming_fragment");
+    expect(result.errorMessage).toBe("GreenchClaw transport error: malformed_streaming_fragment");
   });
 
   it("preserves Anthropic OAuth identity and tool-name remapping with transport overrides", async () => {

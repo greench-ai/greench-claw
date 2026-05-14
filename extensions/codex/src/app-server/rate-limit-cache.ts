@@ -1,7 +1,7 @@
 import type { JsonValue } from "./protocol.js";
 
 const DEFAULT_CODEX_RATE_LIMIT_CACHE_MAX_AGE_MS = 10 * 60_000;
-const CODEX_RATE_LIMIT_CACHE_STATE = Symbol.for("NexisClaw.codexRateLimitCacheState");
+const CODEX_RATE_LIMIT_CACHE_STATE = Symbol.for("GreenchClaw.codexRateLimitCacheState");
 
 type CodexRateLimitCacheState = {
   value?: JsonValue;

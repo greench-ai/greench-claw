@@ -85,7 +85,7 @@ describe("requireValidConfigSnapshot", () => {
       [
         "Plugin compatibility: 1 notice.",
         "- legacy-plugin still uses legacy before_agent_start; keep regression coverage on this plugin, and prefer before_model_resolve/before_prompt_build for new work.",
-        "Review: NexisClaw doctor",
+        "Review: GreenchClaw doctor",
       ].join("\n"),
     );
   });

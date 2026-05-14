@@ -1,11 +1,11 @@
-import { resolveMarkdownTableMode } from "NexisClaw/plugin-sdk/markdown-table-runtime";
+import { resolveMarkdownTableMode } from "GreenchClaw/plugin-sdk/markdown-table-runtime";
 import {
   buildOutboundMediaLoadOptions,
   isGifMedia,
   kindFromMime,
   normalizePollInput,
-} from "NexisClaw/plugin-sdk/media-runtime";
-import type { MockFn } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/media-runtime";
+import type { MockFn } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { beforeEach, vi } from "vitest";
 
 const { botApi, botConfigUseSpy, botCtorSpy } = vi.hoisted(() => ({
@@ -50,7 +50,7 @@ const { probeVideoDimensions } = vi.hoisted(() => ({
 const { loadConfig, resolveStorePath } = vi.hoisted(() => ({
   loadConfig: vi.fn(() => ({})),
   resolveStorePath: vi.fn(
-    (storePath?: string) => storePath ?? "/tmp/NexisClaw-telegram-send-tests.json",
+    (storePath?: string) => storePath ?? "/tmp/GreenchClaw-telegram-send-tests.json",
   ),
 }));
 
@@ -99,7 +99,7 @@ type TelegramSendTestMocks = {
   probeVideoDimensions: MockFn;
 };
 
-vi.mock("NexisClaw/plugin-sdk/web-media", () => ({
+vi.mock("GreenchClaw/plugin-sdk/web-media", () => ({
   loadWebMedia,
 }));
 
@@ -147,10 +147,10 @@ vi.mock("undici", () => ({
   setGlobalDispatcher: undiciSetGlobalDispatcher,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/plugin-config-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/plugin-config-runtime")>(
-    "NexisClaw/plugin-sdk/plugin-config-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/plugin-config-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/plugin-config-runtime")
+  >("GreenchClaw/plugin-sdk/plugin-config-runtime");
   return {
     ...actual,
     requireRuntimeConfig: vi.fn((cfg: unknown) => cfg ?? loadConfig()),
@@ -192,7 +192,7 @@ export function getTelegramSendTestMocks(): TelegramSendTestMocks {
 export function installTelegramSendTestHooks() {
   beforeEach(() => {
     loadConfig.mockReturnValue({});
-    resolveStorePath.mockReturnValue("/tmp/NexisClaw-telegram-send-tests.json");
+    resolveStorePath.mockReturnValue("/tmp/GreenchClaw-telegram-send-tests.json");
     loadWebMedia.mockReset();
     probeVideoDimensions.mockReset();
     probeVideoDimensions.mockResolvedValue(undefined);

@@ -1,6 +1,6 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
-import { createProviderApiKeyAuthMethod } from "NexisClaw/plugin-sdk/provider-auth-api-key";
-import { ensureModelAllowlistEntry } from "NexisClaw/plugin-sdk/provider-onboard";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "GreenchClaw/plugin-sdk/provider-auth-api-key";
+import { ensureModelAllowlistEntry } from "GreenchClaw/plugin-sdk/provider-onboard";
 import { BYTEPLUS_CODING_MODEL_CATALOG, BYTEPLUS_MODEL_CATALOG } from "./models.js";
 import { buildBytePlusCodingProvider, buildBytePlusProvider } from "./provider-catalog.js";
 import { buildBytePlusVideoGenerationProvider } from "./video-generation-provider.js";

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { ChannelPlugin } from "../../channels/plugins/types.js";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
 import {
   createChannelTestPluginBase,
@@ -230,7 +230,7 @@ describe("runMessageAction context isolation", () => {
             token: "forum-test",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       action: "send" as const,
       actionParams: {
         message: "hi",
@@ -302,7 +302,7 @@ describe("runMessageAction context isolation", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       actionParams: {
         channel: "workspace",
         target: "channel:C99999999",
@@ -323,7 +323,7 @@ describe("runMessageAction context isolation", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       actionParams: {
         channel: "workspace",
         target: "channel:C99999999",
@@ -361,7 +361,7 @@ describe("runMessageAction context isolation", () => {
             },
           ],
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       agentId: "sandbox",
       actionParams: {
         channel: "workspace",

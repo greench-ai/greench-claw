@@ -1,9 +1,9 @@
 ---
 name: voice-call
-description: Start voice calls via the NexisClaw voice-call plugin.
+description: Start voice calls via the GreenchClaw voice-call plugin.
 metadata:
   {
-    "NexisClaw":
+    "GreenchClaw":
       {
         "emoji": "📞",
         "skillKey": "voice-call",
@@ -19,8 +19,8 @@ Use the voice-call plugin to start or inspect calls (Twilio, Telnyx, Plivo, or m
 ## CLI
 
 ```bash
-NexisClaw voicecall call --to "+15555550123" --message "Hello from NexisClaw"
-NexisClaw voicecall status --call-id <id>
+GreenchClaw voicecall call --to "+15555550123" --message "Hello from GreenchClaw"
+GreenchClaw voicecall status --call-id <id>
 ```
 
 ## Tool

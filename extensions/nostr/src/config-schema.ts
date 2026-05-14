@@ -2,8 +2,8 @@ import {
   AllowFromListSchema,
   DmPolicySchema,
   MarkdownConfigSchema,
-} from "NexisClaw/plugin-sdk/channel-config-primitives";
-import { buildSecretInputSchema } from "NexisClaw/plugin-sdk/secret-input";
+} from "GreenchClaw/plugin-sdk/channel-config-primitives";
+import { buildSecretInputSchema } from "GreenchClaw/plugin-sdk/secret-input";
 import { z } from "zod";
 
 /**

@@ -1,7 +1,7 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createEmptyPluginRegistry } from "../plugins/registry-empty.js";
 import { setActivePluginRegistry } from "../plugins/runtime.js";
-import type { createNexisClawCodingTools } from "./pi-tools.js";
+import type { createGreenchClawCodingTools } from "./pi-tools.js";
 import type { AnyAgentTool } from "./tools/common.js";
 
 function mockTool(params: {
@@ -25,7 +25,7 @@ const effectiveInventoryState = vi.hoisted(() => ({
   pluginMeta: {} as Record<string, { pluginId: string } | undefined>,
   channelMeta: {} as Record<string, { channelId: string } | undefined>,
   effectivePolicy: {} as { profile?: string; providerProfile?: string },
-  createToolsMock: vi.fn<typeof createNexisClawCodingTools>(
+  createToolsMock: vi.fn<typeof createGreenchClawCodingTools>(
     (_options) =>
       [
         mockTool({ name: "exec", label: "Exec", description: "Run shell commands" }),
@@ -45,7 +45,7 @@ vi.mock("./agent-scope.js", async () => {
 });
 
 vi.mock("./pi-tools.js", () => ({
-  createNexisClawCodingTools: (options?: Parameters<typeof createNexisClawCodingTools>[0]) =>
+  createGreenchClawCodingTools: (options?: Parameters<typeof createGreenchClawCodingTools>[0]) =>
     effectiveInventoryState.createToolsMock(options),
 }));
 
@@ -82,7 +82,7 @@ async function loadHarness(options?: {
   effectiveInventoryState.effectivePolicy = options?.effectivePolicy ?? {};
   effectiveInventoryState.createToolsMock =
     options?.createToolsMock ??
-    vi.fn<typeof createNexisClawCodingTools>((_options) => effectiveInventoryState.tools);
+    vi.fn<typeof createGreenchClawCodingTools>((_options) => effectiveInventoryState.tools);
   return {
     resolveEffectiveToolInventory,
     createToolsMock: effectiveInventoryState.createToolsMock,
@@ -102,7 +102,7 @@ describe("resolveEffectiveToolInventory", () => {
     effectiveInventoryState.pluginMeta = {};
     effectiveInventoryState.channelMeta = {};
     effectiveInventoryState.effectivePolicy = {};
-    effectiveInventoryState.createToolsMock = vi.fn<typeof createNexisClawCodingTools>(
+    effectiveInventoryState.createToolsMock = vi.fn<typeof createGreenchClawCodingTools>(
       (_options) => effectiveInventoryState.tools,
     );
     setActivePluginRegistry(createEmptyPluginRegistry());
@@ -366,7 +366,7 @@ describe("resolveEffectiveToolInventory", () => {
   });
 
   it("passes resolved model compat into effective tool creation", async () => {
-    const createToolsMock = vi.fn<typeof createNexisClawCodingTools>(() => [
+    const createToolsMock = vi.fn<typeof createGreenchClawCodingTools>(() => [
       mockTool({ name: "exec", label: "Exec", description: "Run shell commands" }),
     ]);
     const { resolveEffectiveToolInventory } = await loadHarness({

@@ -10,7 +10,7 @@ import {
   type CompactionProvider,
 } from "./compaction-provider.js";
 
-const REGISTRY_KEY = Symbol.for("NexisClaw.compactionProviderRegistryState");
+const REGISTRY_KEY = Symbol.for("GreenchClaw.compactionProviderRegistryState");
 
 /** Reset the process-global registry between tests. */
 afterEach(() => {

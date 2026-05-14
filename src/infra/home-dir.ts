@@ -22,7 +22,7 @@ function resolveRawOsHomeDir(env: NodeJS.ProcessEnv, homedir: () => string): str
 }
 
 function resolveRawHomeDir(env: NodeJS.ProcessEnv, homedir: () => string): string | undefined {
-  const explicitHome = normalize(env.NEXISCLAW_HOME);
+  const explicitHome = normalize(env.GREENCHCLAW_HOME);
   if (!explicitHome) {
     return resolveRawOsHomeDir(env, homedir);
   }

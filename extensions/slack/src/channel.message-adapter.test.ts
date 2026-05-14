@@ -2,10 +2,10 @@ import {
   verifyChannelMessageAdapterCapabilityProofs,
   verifyChannelMessageLiveCapabilityAdapterProofs,
   verifyChannelMessageLiveFinalizerProofs,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { slackPlugin } from "./channel.js";
-import type { NexisClawConfig } from "./runtime-api.js";
+import type { GreenchClawConfig } from "./runtime-api.js";
 
 const cfg = {
   channels: {
@@ -14,7 +14,7 @@ const cfg = {
       appToken: "xapp-test",
     },
   },
-} as NexisClawConfig;
+} as GreenchClawConfig;
 
 type SlackMessageAdapter = NonNullable<typeof slackPlugin.message>;
 type SlackMessageSender = NonNullable<SlackMessageAdapter["send"]>;

@@ -2,7 +2,7 @@ import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
   type ResolvedChannelMessageIngress,
-} from "NexisClaw/plugin-sdk/channel-ingress-runtime";
+} from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
 import { normalizeMatrixAllowList, resolveMatrixAllowListMatch } from "./allowlist.js";
 
 type MatrixMonitorAccessState = {

@@ -1,4 +1,7 @@
-import { readJsonFileWithFallback, writeJsonFileAtomically } from "NexisClaw/plugin-sdk/json-store";
+import {
+  readJsonFileWithFallback,
+  writeJsonFileAtomically,
+} from "GreenchClaw/plugin-sdk/json-store";
 import { createAsyncLock } from "../async-lock.js";
 import { resolveMatrixStateFilePath } from "../client/storage.js";
 import type { MatrixAuth } from "../client/types.js";

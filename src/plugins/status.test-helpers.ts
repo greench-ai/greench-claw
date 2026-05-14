@@ -108,7 +108,7 @@ export function createCustomHook(params: {
       hook: {
         name: params.name ?? "legacy",
         description: "",
-        source: "NexisClaw-plugin",
+        source: "GreenchClaw-plugin",
         pluginId: params.pluginId,
         filePath: `/tmp/${params.pluginId}/HOOK.md`,
         baseDir: `/tmp/${params.pluginId}`,

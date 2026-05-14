@@ -34,7 +34,7 @@ const mockReadWindowsProcessArgsResult = vi.hoisted(() =>
 const mockReadFileSync = vi.hoisted(() => vi.fn());
 
 vi.mock("node:fs", async () => {
-  const { mockNodeBuiltinModule } = await import("NexisClaw/plugin-sdk/test-node-mocks");
+  const { mockNodeBuiltinModule } = await import("GreenchClaw/plugin-sdk/test-node-mocks");
   return mockNodeBuiltinModule(
     () => vi.importActual<typeof import("node:fs")>("node:fs"),
     (actual) => ({
@@ -51,7 +51,7 @@ vi.mock("node:fs", async () => {
 });
 
 vi.mock("node:child_process", async () => {
-  const { mockNodeBuiltinModule } = await import("NexisClaw/plugin-sdk/test-node-mocks");
+  const { mockNodeBuiltinModule } = await import("GreenchClaw/plugin-sdk/test-node-mocks");
   return mockNodeBuiltinModule(
     () => vi.importActual<typeof import("node:child_process")>("node:child_process"),
     {
@@ -133,9 +133,9 @@ function createLsofResult(overrides: Partial<MockLsofResult> = {}): MockLsofResu
   };
 }
 
-function createNexisClawBusyResult(pid: number, overrides: Partial<MockLsofResult> = {}) {
+function createGreenchClawBusyResult(pid: number, overrides: Partial<MockLsofResult> = {}) {
   return createLsofResult({
-    stdout: lsofOutput([{ pid, cmd: "NexisClaw-gateway" }]),
+    stdout: lsofOutput([{ pid, cmd: "GreenchClaw-gateway" }]),
     ...overrides,
   });
 }
@@ -154,7 +154,7 @@ function installInitialBusyPoll(
   mockSpawnSync.mockImplementation(() => {
     call += 1;
     if (call === 1) {
-      return createNexisClawBusyResult(stalePid);
+      return createGreenchClawBusyResult(stalePid);
     }
     return resolvePoll(call);
   });
@@ -265,14 +265,14 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       expectWarningContaining("lsof failed during initial stale-pid scan");
     });
 
-    it("parses NexisClaw-gateway pids and excludes the current process", () => {
+    it("parses GreenchClaw-gateway pids and excludes the current process", () => {
       const stalePid = process.pid + 1;
       mockSpawnSync.mockReturnValue({
         error: null,
         status: 0,
         stdout: lsofOutput([
-          { pid: stalePid, cmd: "NexisClaw-gateway" },
-          { pid: process.pid, cmd: "NexisClaw-gateway" },
+          { pid: stalePid, cmd: "GreenchClaw-gateway" },
+          { pid: process.pid, cmd: "GreenchClaw-gateway" },
         ]),
         stderr: "",
       });
@@ -281,14 +281,14 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       expect(pids).not.toContain(process.pid);
     });
 
-    it("verifies argv when lsof reports the node process name instead of NexisClaw", () => {
+    it("verifies argv when lsof reports the node process name instead of GreenchClaw", () => {
       const stalePid = process.pid + 101;
       mockSpawnSync.mockImplementation((command: unknown) => {
         if (command === "ps") {
           return {
             error: null,
             status: 0,
-            stdout: "node /opt/NexisClaw/dist/entry.js gateway\n",
+            stdout: "node /opt/GreenchClaw/dist/entry.js gateway\n",
             stderr: "",
           };
         }
@@ -307,7 +307,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
     });
 
     it("excludes ancestor pids so a sidecar cannot kill its parent gateway — regression for #68451", () => {
-      // Regression: NexisClaw-weixin sidecar (child of the gateway) invoked
+      // Regression: GreenchClaw-weixin sidecar (child of the gateway) invoked
       // cleanStaleGatewayProcessesSync during init. lsof reported the parent
       // gateway on port 18789, its PID was not process.pid, so the cleanup
       // SIGTERM'd it — the supervisor restarted the gateway, re-spawned the
@@ -324,8 +324,8 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
         error: null,
         status: 0,
         stdout: lsofOutput([
-          { pid: parentGatewayPid, cmd: "NexisClaw-gateway" },
-          { pid: unrelatedStalePid, cmd: "NexisClaw-gateway" },
+          { pid: parentGatewayPid, cmd: "GreenchClaw-gateway" },
+          { pid: unrelatedStalePid, cmd: "GreenchClaw-gateway" },
         ]),
         stderr: "",
       });
@@ -351,7 +351,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
         const benignStalePid = process.pid + 2005;
         mockReadFileSync.mockImplementation((path: unknown): string => {
           if (path === `/proc/${directParentPid}/status`) {
-            return `Name:\tNexisClaw-gateway\nPid:\t${directParentPid}\nPPid:\t${grandparentPid}\n`;
+            return `Name:\tGreenchClaw-gateway\nPid:\t${directParentPid}\nPPid:\t${grandparentPid}\n`;
           }
           if (path === `/proc/${grandparentPid}/status`) {
             return `Name:\tsystemd\nPid:\t${grandparentPid}\nPPid:\t0\n`;
@@ -364,9 +364,9 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
           error: null,
           status: 0,
           stdout: lsofOutput([
-            { pid: directParentPid, cmd: "NexisClaw-gateway" },
-            { pid: grandparentPid, cmd: "NexisClaw-gateway" },
-            { pid: benignStalePid, cmd: "NexisClaw-gateway" },
+            { pid: directParentPid, cmd: "GreenchClaw-gateway" },
+            { pid: grandparentPid, cmd: "GreenchClaw-gateway" },
+            { pid: benignStalePid, cmd: "GreenchClaw-gateway" },
           ]),
           stderr: "",
         });
@@ -390,8 +390,8 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
         error: null,
         status: 0,
         stdout: lsofOutput([
-          { pid: 1, cmd: "NexisClaw-gateway" },
-          { pid: benignStalePid, cmd: "NexisClaw-gateway" },
+          { pid: 1, cmd: "GreenchClaw-gateway" },
+          { pid: benignStalePid, cmd: "GreenchClaw-gateway" },
         ]),
         stderr: "",
       });
@@ -427,8 +427,8 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
           error: null,
           status: 0,
           stdout: lsofOutput([
-            { pid: pluginHostPid, cmd: "NexisClaw-gateway" },
-            { pid: gatewayGrandparentPid, cmd: "NexisClaw-gateway" },
+            { pid: pluginHostPid, cmd: "GreenchClaw-gateway" },
+            { pid: gatewayGrandparentPid, cmd: "GreenchClaw-gateway" },
           ]),
           stderr: "",
         });
@@ -442,7 +442,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       },
     );
 
-    it("excludes pids whose command does not include 'NexisClaw'", () => {
+    it("excludes pids whose command does not include 'GreenchClaw'", () => {
       const otherPid = process.pid + 2;
       mockSpawnSync.mockReturnValue({
         error: null,
@@ -467,7 +467,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       // (once for the IPv4 socket, once for IPv6). Without dedup, terminateStaleProcessesSync
       // sends SIGTERM twice and returns killed=[pid, pid], corrupting the count.
       const stalePid = process.pid + 600;
-      const stdout = `p${stalePid}\ncNexisClaw-gateway\np${stalePid}\ncNexisClaw-gateway\n`;
+      const stdout = `p${stalePid}\ncGreenchClaw-gateway\np${stalePid}\ncGreenchClaw-gateway\n`;
       mockSpawnSync.mockReturnValue({ error: null, status: 0, stdout, stderr: "" });
       const result = findGatewayPidsOnPortSync(18789);
       expect(result).toEqual([stalePid]); // deduped — not [pid, pid]
@@ -496,7 +496,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       try {
         mockReadWindowsListeningPids.mockReturnValue([stalePid]);
         // Simulate a verified gateway process (must pass real isGatewayArgv)
-        mockReadWindowsProcessArgs.mockReturnValue(["NexisClaw", "gateway"]);
+        mockReadWindowsProcessArgs.mockReturnValue(["GreenchClaw", "gateway"]);
         expect(findGatewayPidsOnPortSync(18789)).toEqual([stalePid]);
         expect(mockReadWindowsListeningPids).toHaveBeenCalledWith(18789, undefined);
         expect(mockReadWindowsProcessArgs).toHaveBeenCalledWith(stalePid, undefined);
@@ -520,7 +520,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       Object.defineProperty(process, "platform", { value: "win32", configurable: true });
       try {
         mockReadWindowsListeningPids.mockReturnValue([parentGatewayPid, unrelatedStalePid]);
-        mockReadWindowsProcessArgs.mockReturnValue(["NexisClaw", "gateway"]);
+        mockReadWindowsProcessArgs.mockReturnValue(["GreenchClaw", "gateway"]);
         const pids = withStubbedPpid(parentGatewayPid, () => findGatewayPidsOnPortSync(18789));
         expect(pids).not.toContain(parentGatewayPid);
         expect(pids).toContain(unrelatedStalePid);
@@ -544,15 +544,15 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       expect(findGatewayPidsOnPortSync(18789)).toStrictEqual([]);
     });
 
-    it("parses multiple NexisClaw pids from a single lsof output block", () => {
+    it("parses multiple GreenchClaw pids from a single lsof output block", () => {
       const pid1 = process.pid + 10;
       const pid2 = process.pid + 11;
       mockSpawnSync.mockReturnValue({
         error: null,
         status: 0,
         stdout: lsofOutput([
-          { pid: pid1, cmd: "NexisClaw-gateway" },
-          { pid: pid2, cmd: "NexisClaw-gateway" },
+          { pid: pid1, cmd: "GreenchClaw-gateway" },
+          { pid: pid2, cmd: "GreenchClaw-gateway" },
         ]),
         stderr: "",
       });
@@ -561,9 +561,9 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       expect(result).toContain(pid2);
     });
 
-    it("returns [] when status 0 but only non-NexisClaw pids present", () => {
+    it("returns [] when status 0 but only non-GreenchClaw pids present", () => {
       // Port may be bound by an unrelated process. findGatewayPidsOnPortSync
-      // only tracks NexisClaw processes — non-NexisClaw listeners are ignored.
+      // only tracks GreenchClaw processes — non-GreenchClaw listeners are ignored.
       const otherPid = process.pid + 50;
       mockSpawnSync.mockReturnValue({
         error: null,
@@ -625,7 +625,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       const getCallCount = installInitialBusyPoll(stalePid, (call) => {
         if (call === 2) {
           // First waitForPortFreeSync poll — status 0, port busy (should parse inline, not spawn again)
-          return createNexisClawBusyResult(stalePid);
+          return createGreenchClawBusyResult(stalePid);
         }
         // Port free on third call
         return createLsofResult();
@@ -640,15 +640,15 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       expect(getCallCount()).toBe(3);
     });
 
-    it("lsof status 1 with non-empty NexisClaw stdout is treated as busy, not free (Linux container edge case)", () => {
+    it("lsof status 1 with non-empty GreenchClaw stdout is treated as busy, not free (Linux container edge case)", () => {
       // On Linux containers with restricted /proc (AppArmor, seccomp, user namespaces),
       // lsof can exit 1 AND still emit output for processes it could read.
-      // status 1 + non-empty NexisClaw stdout must not be treated as port-free.
+      // status 1 + non-empty GreenchClaw stdout must not be treated as port-free.
       const stalePid = process.pid + 601;
       const getCallCount = installInitialBusyPoll(stalePid, (call) => {
         if (call === 2) {
-          // status 1 + NexisClaw pid in stdout — container-restricted lsof reports partial results
-          return createNexisClawBusyResult(stalePid, {
+          // status 1 + GreenchClaw pid in stdout — container-restricted lsof reports partial results
+          return createGreenchClawBusyResult(stalePid, {
             status: 1,
             stderr: "lsof: WARNING: can't stat() fuse",
           });
@@ -679,7 +679,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
         return {
           error: null,
           status: 0,
-          stdout: lsofOutput([{ pid: stalePid, cmd: "NexisClaw-gateway" }]),
+          stdout: lsofOutput([{ pid: stalePid, cmd: "GreenchClaw-gateway" }]),
           stderr: "",
         };
       });
@@ -730,7 +730,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
           return {
             error: null,
             status: 0,
-            stdout: lsofOutput([{ pid: stalePid, cmd: "NexisClaw-gateway" }]),
+            stdout: lsofOutput([{ pid: stalePid, cmd: "GreenchClaw-gateway" }]),
             stderr: "",
           };
         }
@@ -760,7 +760,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
           return {
             error: null,
             status: 0,
-            stdout: lsofOutput([{ pid: stalePid, cmd: "NexisClaw-gateway" }]),
+            stdout: lsofOutput([{ pid: stalePid, cmd: "GreenchClaw-gateway" }]),
             stderr: "",
           };
         }
@@ -769,7 +769,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
           return {
             error: null,
             status: 0,
-            stdout: lsofOutput([{ pid: stalePid, cmd: "NexisClaw-gateway" }]),
+            stdout: lsofOutput([{ pid: stalePid, cmd: "GreenchClaw-gateway" }]),
             stderr: "",
           };
         }
@@ -844,7 +844,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       installInitialBusyPoll(stalePid, () => {
         // Advance clock by PORT_FREE_TIMEOUT_MS + 1ms on first poll to trip the deadline.
         fakeNow += 2001;
-        return createNexisClawBusyResult(stalePid);
+        return createGreenchClawBusyResult(stalePid);
       });
 
       vi.spyOn(process, "kill").mockReturnValue(true);
@@ -932,10 +932,10 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       Object.defineProperty(process, "platform", { value: "win32", configurable: true });
       try {
         mockReadWindowsListeningPids.mockReturnValue([stalePid]);
-        mockReadWindowsProcessArgs.mockReturnValue(["NexisClaw", "gateway"]);
+        mockReadWindowsProcessArgs.mockReturnValue(["GreenchClaw", "gateway"]);
         mockReadWindowsProcessArgsResult.mockReturnValue({
           ok: true,
-          args: ["NexisClaw", "gateway"],
+          args: ["GreenchClaw", "gateway"],
         });
         mockSpawnSync.mockReturnValue({
           error: null,
@@ -1040,10 +1040,10 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
         let fakeNow = 0;
         __testing.setDateNowOverride(() => fakeNow);
         mockReadWindowsListeningPids.mockReturnValue([stalePid]);
-        mockReadWindowsProcessArgs.mockReturnValue(["NexisClaw", "gateway"]);
+        mockReadWindowsProcessArgs.mockReturnValue(["GreenchClaw", "gateway"]);
         mockReadWindowsProcessArgsResult.mockReturnValue({
           ok: true,
-          args: ["NexisClaw", "gateway"],
+          args: ["GreenchClaw", "gateway"],
         });
         mockReadWindowsListeningPidsResult.mockImplementation((_port, timeoutMs) => {
           if (timeoutMs === 400) {
@@ -1091,10 +1091,10 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
         let fakeNow = 0;
         __testing.setDateNowOverride(() => fakeNow);
         mockReadWindowsListeningPidsResult.mockReturnValue({ ok: true, pids: [stalePid] });
-        mockReadWindowsProcessArgs.mockReturnValue(["NexisClaw", "gateway"]);
+        mockReadWindowsProcessArgs.mockReturnValue(["GreenchClaw", "gateway"]);
         mockReadWindowsProcessArgsResult.mockReturnValue({
           ok: true,
-          args: ["NexisClaw", "gateway"],
+          args: ["GreenchClaw", "gateway"],
         });
         mockSpawnSync
           .mockReturnValueOnce({
@@ -1142,13 +1142,13 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
   // parsePidsFromLsofOutput — branch-coverage for mid-loop && short-circuits
   // -------------------------------------------------------------------------
   describe("parsePidsFromLsofOutput — branch coverage (lines 67-69)", () => {
-    it("skips a mid-loop entry when the command does not include 'NexisClaw'", () => {
-      // Exercises the false branch of currentCmd.toLowerCase().includes("NexisClaw")
-      // inside the mid-loop flush: a non-NexisClaw cmd between two entries must not
-      // be pushed, but the following NexisClaw entry still must be.
+    it("skips a mid-loop entry when the command does not include 'GreenchClaw'", () => {
+      // Exercises the false branch of currentCmd.toLowerCase().includes("GreenchClaw")
+      // inside the mid-loop flush: a non-GreenchClaw cmd between two entries must not
+      // be pushed, but the following GreenchClaw entry still must be.
       const stalePid = process.pid + 700;
-      // Mixed output: non-NexisClaw entry first, then NexisClaw entry
-      const stdout = `p${process.pid + 699}\ncnginx\np${stalePid}\ncNexisClaw-gateway\n`;
+      // Mixed output: non-GreenchClaw entry first, then GreenchClaw entry
+      const stdout = `p${process.pid + 699}\ncnginx\np${stalePid}\ncGreenchClaw-gateway\n`;
       mockSpawnSync.mockReturnValue({ error: null, status: 0, stdout, stderr: "" });
       const result = findGatewayPidsOnPortSync(18789);
       expect(result).toContain(stalePid);
@@ -1160,7 +1160,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       // (no 'c' line between them) — the first PID must be skipped, the second handled.
       const stalePid = process.pid + 701;
       // Two consecutive p-lines: first has no c-line before the next p-line
-      const stdout = `p${process.pid + 702}\np${stalePid}\ncNexisClaw-gateway\n`;
+      const stdout = `p${process.pid + 702}\np${stalePid}\ncGreenchClaw-gateway\n`;
       mockSpawnSync.mockReturnValue({ error: null, status: 0, stdout, stderr: "" });
       const result = findGatewayPidsOnPortSync(18789);
       expect(result).toContain(stalePid);
@@ -1171,8 +1171,8 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       // false branch: a malformed 'p' line (e.g. 'p0' or 'pNaN') must not corrupt
       // currentPid and must not end up in the returned pids array.
       const stalePid = process.pid + 703;
-      // p0 is invalid (not > 0); the following valid NexisClaw entry must still be found.
-      const stdout = `p0\ncNexisClaw-gateway\np${stalePid}\ncNexisClaw-gateway\n`;
+      // p0 is invalid (not > 0); the following valid GreenchClaw entry must still be found.
+      const stdout = `p0\ncGreenchClaw-gateway\np${stalePid}\ncGreenchClaw-gateway\n`;
       mockSpawnSync.mockReturnValue({ error: null, status: 0, stdout, stderr: "" });
       const result = findGatewayPidsOnPortSync(18789);
       expect(result).toContain(stalePid);
@@ -1185,7 +1185,7 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
       // must not throw or corrupt the pid list. Unknown lines are just skipped.
       const stalePid = process.pid + 704;
       // Intersperse an 'f' line (file descriptor marker) — not a 'p' or 'c' line
-      const stdout = `p${stalePid}\nf8\ncNexisClaw-gateway\n`;
+      const stdout = `p${stalePid}\nf8\ncGreenchClaw-gateway\n`;
       mockSpawnSync.mockReturnValue({ error: null, status: 0, stdout, stderr: "" });
       const result = findGatewayPidsOnPortSync(18789);
       // The 'f' line must not corrupt parsing; stalePid must still be found
@@ -1195,23 +1195,23 @@ describe.skipIf(isWindows)("restart-stale-pids", () => {
   });
 
   // -------------------------------------------------------------------------
-  // pollPortOnce branch — status 1 + non-empty stdout with zero NexisClaw pids
+  // pollPortOnce branch — status 1 + non-empty stdout with zero GreenchClaw pids
   // -------------------------------------------------------------------------
-  describe("pollPortOnce — status 1 + non-empty non-NexisClaw stdout (line 145)", () => {
-    it("treats status 1 + non-NexisClaw stdout as port-free (not an NexisClaw process)", () => {
-      // status 1 + non-empty stdout where no NexisClaw pids are present:
+  describe("pollPortOnce — status 1 + non-empty non-GreenchClaw stdout (line 145)", () => {
+    it("treats status 1 + non-GreenchClaw stdout as port-free (not an GreenchClaw process)", () => {
+      // status 1 + non-empty stdout where no GreenchClaw pids are present:
       // the port may be held by an unrelated process. From our perspective
-      // (we only kill NexisClaw pids) it is effectively free.
+      // (we only kill GreenchClaw pids) it is effectively free.
       const stalePid = process.pid + 800;
       const getCallCount = installInitialBusyPoll(stalePid, () => {
-        // status 1 + non-NexisClaw output — should be treated as free:true for our purposes
+        // status 1 + non-GreenchClaw output — should be treated as free:true for our purposes
         return createLsofResult({
           status: 1,
           stdout: lsofOutput([{ pid: process.pid + 801, cmd: "caddy" }]),
         });
       });
       vi.spyOn(process, "kill").mockReturnValue(true);
-      // No NexisClaw pids in status-1 output means the port is free for this cleanup.
+      // No GreenchClaw pids in status-1 output means the port is free for this cleanup.
       expect(cleanStaleGatewayProcessesSync()).toContain(stalePid);
       // Completed with one argv verification after the status-1 poll output:
       // initial lsof + poll lsof + ps argv check.

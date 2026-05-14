@@ -1,9 +1,9 @@
-import { mapAllowFromEntries } from "NexisClaw/plugin-sdk/channel-config-helpers";
+import { mapAllowFromEntries } from "GreenchClaw/plugin-sdk/channel-config-helpers";
 import { normalizeChatType, type ChatType } from "../../channels/chat-type.js";
 import type { ChannelOutboundTargetMode } from "../../channels/plugins/types.core.js";
 import type { SessionEntry } from "../../config/sessions.js";
 import type { AgentDefaultsConfig } from "../../config/types.agent-defaults.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { normalizeAccountId } from "../../routing/session-key.js";
 import {
   deliveryContextFromSession,
@@ -56,7 +56,7 @@ export function resolveOutboundTarget(params: {
   channel: GatewayMessageChannel;
   to?: string;
   allowFrom?: string[];
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   accountId?: string | null;
   mode?: ChannelOutboundTargetMode;
 }): OutboundTargetResolution {
@@ -82,7 +82,7 @@ export function resolveOutboundTarget(params: {
 }
 
 export function resolveHeartbeatDeliveryTarget(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   entry?: SessionEntry;
   heartbeat?: AgentDefaultsConfig["heartbeat"];
   turnSource?: DeliveryContext;
@@ -299,7 +299,7 @@ function resolveHeartbeatDeliveryChatType(params: {
 }
 
 function shouldReuseHeartbeatRouteThreadId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   target: HeartbeatTarget;
   heartbeat?: AgentDefaultsConfig["heartbeat"];
   turnSource?: DeliveryContext;
@@ -357,7 +357,7 @@ function resolveHeartbeatSenderId(params: {
 }
 
 export function resolveHeartbeatSenderContext(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   entry?: SessionEntry;
   delivery: OutboundTarget;
 }): HeartbeatSenderContext {

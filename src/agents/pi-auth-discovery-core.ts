@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { tryReadJsonSync } from "../infra/json-files.js";
 import { replaceFileAtomicSync } from "../infra/replace-file.js";
 import { isRecord } from "../utils.js";
@@ -12,7 +12,7 @@ import { resolveEnvApiKey } from "./model-auth-env.js";
 import type { PiCredentialMap } from "./pi-auth-credentials.js";
 
 export type PiDiscoveryAuthLookupOptions = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
 };
@@ -58,7 +58,7 @@ export function addEnvBackedPiCredentials(
 }
 
 export function scrubLegacyStaticAuthJsonEntriesForDiscovery(pathname: string): void {
-  if (process.env.NEXISCLAW_AUTH_STORE_READONLY === "1") {
+  if (process.env.GREENCHCLAW_AUTH_STORE_READONLY === "1") {
     return;
   }
   if (!fs.existsSync(pathname)) {

@@ -2,9 +2,9 @@ import {
   createAccountListHelpers,
   normalizeAccountId,
   resolveMergedAccountConfig,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/account-resolution";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/account-resolution";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { SignalAccountConfig } from "./account-types.js";
 
 export type ResolvedSignalAccount = {
@@ -20,7 +20,7 @@ const { listAccountIds, resolveDefaultAccountId } = createAccountListHelpers("si
 export const listSignalAccountIds = listAccountIds;
 export const resolveDefaultSignalAccountId = resolveDefaultAccountId;
 
-function mergeSignalAccountConfig(cfg: NexisClawConfig, accountId: string): SignalAccountConfig {
+function mergeSignalAccountConfig(cfg: GreenchClawConfig, accountId: string): SignalAccountConfig {
   return resolveMergedAccountConfig<SignalAccountConfig>({
     channelConfig: cfg.channels?.signal as SignalAccountConfig | undefined,
     accounts: cfg.channels?.signal?.accounts as
@@ -31,7 +31,7 @@ function mergeSignalAccountConfig(cfg: NexisClawConfig, accountId: string): Sign
 }
 
 export function resolveSignalAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): ResolvedSignalAccount {
   const accountId = normalizeAccountId(
@@ -62,7 +62,7 @@ export function resolveSignalAccount(params: {
   };
 }
 
-export function listEnabledSignalAccounts(cfg: NexisClawConfig): ResolvedSignalAccount[] {
+export function listEnabledSignalAccounts(cfg: GreenchClawConfig): ResolvedSignalAccount[] {
   return listSignalAccountIds(cfg)
     .map((accountId) => resolveSignalAccount({ cfg, accountId }))
     .filter((account) => account.enabled);

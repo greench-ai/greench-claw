@@ -9,31 +9,31 @@ sidebarTitle: "Agent workspace"
 
 The workspace is the agent's home. It is the only working directory used for file tools and for workspace context. Keep it private and treat it as memory.
 
-This is separate from `~/.NexisClaw/`, which stores config, credentials, and sessions.
+This is separate from `~/.GreenchClaw/`, which stores config, credentials, and sessions.
 
 <Warning>
 The workspace is the **default cwd**, not a hard sandbox. Tools resolve relative paths against the workspace, but absolute paths can still reach elsewhere on the host unless sandboxing is enabled. If you need isolation, use [`agents.defaults.sandbox`](/gateway/sandboxing) (and/or per-agent sandbox config).
 
-When sandboxing is enabled and `workspaceAccess` is not `"rw"`, tools operate inside a sandbox workspace under `~/.NexisClaw/sandboxes`, not your host workspace.
+When sandboxing is enabled and `workspaceAccess` is not `"rw"`, tools operate inside a sandbox workspace under `~/.GreenchClaw/sandboxes`, not your host workspace.
 </Warning>
 
 ## Default location
 
-- Default: `~/.NexisClaw/workspace`
-- If `NEXISCLAW_PROFILE` is set and not `"default"`, the default becomes `~/.NexisClaw/workspace-<profile>`.
-- Override in `~/.NexisClaw/NexisClaw.json`:
+- Default: `~/.GreenchClaw/workspace`
+- If `GREENCHCLAW_PROFILE` is set and not `"default"`, the default becomes `~/.GreenchClaw/workspace-<profile>`.
+- Override in `~/.GreenchClaw/GreenchClaw.json`:
 
 ```json5
 {
   agents: {
     defaults: {
-      workspace: "~/.NexisClaw/workspace",
+      workspace: "~/.GreenchClaw/workspace",
     },
   },
 }
 ```
 
-`NexisClaw onboard`, `NexisClaw configure`, or `NexisClaw setup` will create the workspace and seed the bootstrap files if they are missing.
+`GreenchClaw onboard`, `GreenchClaw configure`, or `GreenchClaw setup` will create the workspace and seed the bootstrap files if they are missing.
 
 <Note>
 Sandbox seed copies only accept regular in-workspace files; symlink/hardlink aliases that resolve outside the source workspace are ignored.
@@ -47,17 +47,17 @@ If you already manage the workspace files yourself, you can disable bootstrap fi
 
 ## Extra workspace folders
 
-Older installs may have created `~/NexisClaw`. Keeping multiple workspace directories around can cause confusing auth or state drift, because only one workspace is active at a time.
+Older installs may have created `~/GreenchClaw`. Keeping multiple workspace directories around can cause confusing auth or state drift, because only one workspace is active at a time.
 
 <Note>
-**Recommendation:** keep a single active workspace. If you no longer use the extra folders, archive or move them to Trash (for example `trash ~/NexisClaw`). If you intentionally keep multiple workspaces, make sure `agents.defaults.workspace` points to the active one.
+**Recommendation:** keep a single active workspace. If you no longer use the extra folders, archive or move them to Trash (for example `trash ~/GreenchClaw`). If you intentionally keep multiple workspaces, make sure `agents.defaults.workspace` points to the active one.
 
-`NexisClaw doctor` warns when it detects extra workspace directories.
+`GreenchClaw doctor` warns when it detects extra workspace directories.
 </Note>
 
 ## Workspace file map
 
-These are the standard files NexisClaw expects inside the workspace:
+These are the standard files GreenchClaw expects inside the workspace:
 
 <AccordionGroup>
   <Accordion title="AGENTS.md - operating instructions">
@@ -99,19 +99,19 @@ These are the standard files NexisClaw expects inside the workspace:
 </AccordionGroup>
 
 <Note>
-If any bootstrap file is missing, NexisClaw injects a "missing file" marker into the session and continues. Large bootstrap files are truncated when injected; adjust limits with `agents.defaults.bootstrapMaxChars` (default: 12000) and `agents.defaults.bootstrapTotalMaxChars` (default: 60000). `NexisClaw setup` can recreate missing defaults without overwriting existing files.
+If any bootstrap file is missing, GreenchClaw injects a "missing file" marker into the session and continues. Large bootstrap files are truncated when injected; adjust limits with `agents.defaults.bootstrapMaxChars` (default: 12000) and `agents.defaults.bootstrapTotalMaxChars` (default: 60000). `GreenchClaw setup` can recreate missing defaults without overwriting existing files.
 </Note>
 
 ## What is NOT in the workspace
 
-These live under `~/.NexisClaw/` and should NOT be committed to the workspace repo:
+These live under `~/.GreenchClaw/` and should NOT be committed to the workspace repo:
 
-- `~/.NexisClaw/NexisClaw.json` (config)
-- `~/.NexisClaw/agents/<agentId>/agent/auth-profiles.json` (model auth profiles: OAuth + API keys)
-- `~/.NexisClaw/agents/<agentId>/agent/codex-home/` (per-agent Codex runtime account, config, skills, plugins, and native thread state)
-- `~/.NexisClaw/credentials/` (channel/provider state plus legacy OAuth import data)
-- `~/.NexisClaw/agents/<agentId>/sessions/` (session transcripts + metadata)
-- `~/.NexisClaw/skills/` (managed skills)
+- `~/.GreenchClaw/GreenchClaw.json` (config)
+- `~/.GreenchClaw/agents/<agentId>/agent/auth-profiles.json` (model auth profiles: OAuth + API keys)
+- `~/.GreenchClaw/agents/<agentId>/agent/codex-home/` (per-agent Codex runtime account, config, skills, plugins, and native thread state)
+- `~/.GreenchClaw/credentials/` (channel/provider state plus legacy OAuth import data)
+- `~/.GreenchClaw/agents/<agentId>/sessions/` (session transcripts + metadata)
+- `~/.GreenchClaw/skills/` (managed skills)
 
 If you need to migrate sessions or config, copy them separately and keep them out of version control.
 
@@ -126,7 +126,7 @@ Run these steps on the machine where the Gateway runs (that is where the workspa
     If git is installed, brand-new workspaces are initialized automatically. If this workspace is not already a repo, run:
 
     ```bash
-    cd ~/.NexisClaw/workspace
+    cd ~/.GreenchClaw/workspace
     git init
     git add AGENTS.md SOUL.md TOOLS.md IDENTITY.md USER.md HEARTBEAT.md memory/
     git commit -m "Add agent workspace"
@@ -150,7 +150,7 @@ Run these steps on the machine where the Gateway runs (that is where the workspa
       <Tab title="GitHub CLI (gh)">
         ```bash
         gh auth login
-        gh repo create NexisClaw-workspace --private --source . --remote origin --push
+        gh repo create GreenchClaw-workspace --private --source . --remote origin --push
         ```
       </Tab>
       <Tab title="GitLab web UI">
@@ -184,10 +184,10 @@ Run these steps on the machine where the Gateway runs (that is where the workspa
 Even in a private repo, avoid storing secrets in the workspace:
 
 - API keys, OAuth tokens, passwords, or private credentials.
-- Anything under `~/.NexisClaw/`.
+- Anything under `~/.GreenchClaw/`.
 - Raw dumps of chats or sensitive attachments.
 
-If you must store sensitive references, use placeholders and keep the real secret elsewhere (password manager, environment variables, or `~/.NexisClaw/`).
+If you must store sensitive references, use placeholders and keep the real secret elsewhere (password manager, environment variables, or `~/.GreenchClaw/`).
 </Warning>
 
 Suggested `.gitignore` starter:
@@ -204,16 +204,16 @@ Suggested `.gitignore` starter:
 
 <Steps>
   <Step title="Clone the repo">
-    Clone the repo to the desired path (default `~/.NexisClaw/workspace`).
+    Clone the repo to the desired path (default `~/.GreenchClaw/workspace`).
   </Step>
   <Step title="Update config">
-    Set `agents.defaults.workspace` to that path in `~/.NexisClaw/NexisClaw.json`.
+    Set `agents.defaults.workspace` to that path in `~/.GreenchClaw/GreenchClaw.json`.
   </Step>
   <Step title="Seed missing files">
-    Run `NexisClaw setup --workspace <path>` to seed any missing files.
+    Run `GreenchClaw setup --workspace <path>` to seed any missing files.
   </Step>
   <Step title="Copy sessions (optional)">
-    If you need sessions, copy `~/.NexisClaw/agents/<agentId>/sessions/` from the old machine separately.
+    If you need sessions, copy `~/.GreenchClaw/agents/<agentId>/sessions/` from the old machine separately.
   </Step>
 </Steps>
 

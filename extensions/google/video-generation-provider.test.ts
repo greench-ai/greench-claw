@@ -1,6 +1,6 @@
 import { writeFile } from "node:fs/promises";
 import path from "node:path";
-import { mockPinnedHostnameResolution } from "NexisClaw/plugin-sdk/test-env";
+import { mockPinnedHostnameResolution } from "GreenchClaw/plugin-sdk/test-env";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const { createGoogleGenAIMock, downloadMock, generateVideosMock, getVideosOperationMock } =
@@ -28,8 +28,8 @@ vi.mock("./google-genai-runtime.js", () => ({
   createGoogleGenAI: createGoogleGenAIMock,
 }));
 
-import * as providerAuthRuntime from "NexisClaw/plugin-sdk/provider-auth-runtime";
-import { expectExplicitVideoGenerationCapabilities } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import * as providerAuthRuntime from "GreenchClaw/plugin-sdk/provider-auth-runtime";
+import { expectExplicitVideoGenerationCapabilities } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { buildGoogleVideoGenerationProvider } from "./video-generation-provider.js";
 
 type MockWithCalls = {

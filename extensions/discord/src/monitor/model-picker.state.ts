@@ -1,6 +1,6 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ModelsProviderData } from "NexisClaw/plugin-sdk/models-provider-runtime";
-import { normalizeProviderId } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ModelsProviderData } from "GreenchClaw/plugin-sdk/models-provider-runtime";
+import { normalizeProviderId } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import type { ComponentData } from "../internal/discord.js";
 
 export const DISCORD_MODEL_PICKER_CUSTOM_ID_KEY = "mdlpk";
@@ -69,11 +69,11 @@ export type DiscordModelPickerModelPage = DiscordModelPickerPage<string> & {
 };
 
 let modelsProviderRuntimePromise:
-  | Promise<typeof import("NexisClaw/plugin-sdk/models-provider-runtime")>
+  | Promise<typeof import("GreenchClaw/plugin-sdk/models-provider-runtime")>
   | undefined;
 
 async function loadModelsProviderRuntime() {
-  modelsProviderRuntimePromise ??= import("NexisClaw/plugin-sdk/models-provider-runtime");
+  modelsProviderRuntimePromise ??= import("GreenchClaw/plugin-sdk/models-provider-runtime");
   return await modelsProviderRuntimePromise;
 }
 
@@ -167,7 +167,7 @@ function paginateItems<T>(params: {
 }
 
 export async function loadDiscordModelPickerData(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId?: string,
 ): Promise<ModelsProviderData> {
   const { buildModelsProviderData } = await loadModelsProviderRuntime();

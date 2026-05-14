@@ -11,8 +11,8 @@ Adds agent-callable tools.
 
 ## Distribution
 
-- Package: `@NexisClaw/browser-plugin`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/browser-plugin`
+- Install route: included in GreenchClaw
 
 ## Surface
 

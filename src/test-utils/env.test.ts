@@ -19,8 +19,8 @@ function restoreEnvKey(key: string, previous: string | undefined): void {
 
 describe("env test utils", () => {
   it("captureEnv restores mutated keys", () => {
-    const keyA = "NEXISCLAW_ENV_TEST_A";
-    const keyB = "NEXISCLAW_ENV_TEST_B";
+    const keyA = "GREENCHCLAW_ENV_TEST_A";
+    const keyB = "GREENCHCLAW_ENV_TEST_B";
     const snapshot = captureEnv([keyA, keyB]);
     const prevA = process.env[keyA];
     const prevB = process.env[keyB];
@@ -34,7 +34,7 @@ describe("env test utils", () => {
   });
 
   it("captureFullEnv restores added keys and baseline values", () => {
-    const key = "NEXISCLAW_ENV_TEST_ADDED";
+    const key = "GREENCHCLAW_ENV_TEST_ADDED";
     const prevHome = process.env.HOME;
     const snapshot = captureFullEnv();
     process.env[key] = "1";
@@ -47,7 +47,7 @@ describe("env test utils", () => {
   });
 
   it("withEnv applies values only inside callback", () => {
-    const key = "NEXISCLAW_ENV_TEST_SYNC";
+    const key = "GREENCHCLAW_ENV_TEST_SYNC";
     const prev = process.env[key];
 
     const seen = withEnv({ [key]: "inside" }, () => process.env[key]);
@@ -57,7 +57,7 @@ describe("env test utils", () => {
   });
 
   it("withEnv restores values when callback throws", () => {
-    const key = "NEXISCLAW_ENV_TEST_SYNC_THROW";
+    const key = "GREENCHCLAW_ENV_TEST_SYNC_THROW";
     const prev = process.env[key];
 
     expect(() =>
@@ -71,7 +71,7 @@ describe("env test utils", () => {
   });
 
   it("withEnv can delete a key only inside callback", () => {
-    const key = "NEXISCLAW_ENV_TEST_SYNC_DELETE";
+    const key = "GREENCHCLAW_ENV_TEST_SYNC_DELETE";
     const prev = process.env[key];
     process.env[key] = "outer";
 
@@ -83,7 +83,7 @@ describe("env test utils", () => {
   });
 
   it("withEnvAsync restores values when callback throws", async () => {
-    const key = "NEXISCLAW_ENV_TEST_ASYNC";
+    const key = "GREENCHCLAW_ENV_TEST_ASYNC";
     const prev = process.env[key];
 
     await expect(
@@ -97,7 +97,7 @@ describe("env test utils", () => {
   });
 
   it("withEnvAsync applies values only inside async callback", async () => {
-    const key = "NEXISCLAW_ENV_TEST_ASYNC_OK";
+    const key = "GREENCHCLAW_ENV_TEST_ASYNC_OK";
     const prev = process.env[key];
 
     const seen = await withEnvAsync({ [key]: "inside" }, async () => process.env[key]);
@@ -107,7 +107,7 @@ describe("env test utils", () => {
   });
 
   it("withEnvAsync can delete a key only inside callback", async () => {
-    const key = "NEXISCLAW_ENV_TEST_ASYNC_DELETE";
+    const key = "GREENCHCLAW_ENV_TEST_ASYNC_DELETE";
     const prev = process.env[key];
     process.env[key] = "outer";
 
@@ -119,58 +119,58 @@ describe("env test utils", () => {
   });
 
   it("createPathResolutionEnv clears leaked path overrides before applying explicit ones", () => {
-    const homeDir = path.join(path.sep, "tmp", "NexisClaw-home");
+    const homeDir = path.join(path.sep, "tmp", "GreenchClaw-home");
     const resolvedHomeDir = path.resolve(homeDir);
-    const previousNexisClawHome = process.env.NEXISCLAW_HOME;
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    const previousBundledDir = process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
-    process.env.NEXISCLAW_HOME = "/srv/NexisClaw-home";
-    process.env.NEXISCLAW_STATE_DIR = "/srv/NexisClaw-state";
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = "/srv/NexisClaw-bundled";
+    const previousGreenchClawHome = process.env.GREENCHCLAW_HOME;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    const previousBundledDir = process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
+    process.env.GREENCHCLAW_HOME = "/srv/GreenchClaw-home";
+    process.env.GREENCHCLAW_STATE_DIR = "/srv/GreenchClaw-state";
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = "/srv/GreenchClaw-bundled";
 
     try {
       const env = createPathResolutionEnv(homeDir, {
-        NEXISCLAW_STATE_DIR: "~/state",
+        GREENCHCLAW_STATE_DIR: "~/state",
       });
 
       expect(env.HOME).toBe(resolvedHomeDir);
-      expect(env.NEXISCLAW_HOME).toBeUndefined();
-      expect(env.NEXISCLAW_BUNDLED_PLUGINS_DIR).toBeUndefined();
-      expect(env.NEXISCLAW_STATE_DIR).toBe("~/state");
+      expect(env.GREENCHCLAW_HOME).toBeUndefined();
+      expect(env.GREENCHCLAW_BUNDLED_PLUGINS_DIR).toBeUndefined();
+      expect(env.GREENCHCLAW_STATE_DIR).toBe("~/state");
     } finally {
-      restoreEnvKey("NEXISCLAW_HOME", previousNexisClawHome);
-      restoreEnvKey("NEXISCLAW_STATE_DIR", previousStateDir);
-      restoreEnvKey("NEXISCLAW_BUNDLED_PLUGINS_DIR", previousBundledDir);
+      restoreEnvKey("GREENCHCLAW_HOME", previousGreenchClawHome);
+      restoreEnvKey("GREENCHCLAW_STATE_DIR", previousStateDir);
+      restoreEnvKey("GREENCHCLAW_BUNDLED_PLUGINS_DIR", previousBundledDir);
     }
   });
 
   it("withPathResolutionEnv only applies the explicit path env inside the callback", () => {
-    const homeDir = path.join(path.sep, "tmp", "NexisClaw-home");
+    const homeDir = path.join(path.sep, "tmp", "GreenchClaw-home");
     const resolvedHomeDir = path.resolve(homeDir);
-    const previousNexisClawHome = process.env.NEXISCLAW_HOME;
-    process.env.NEXISCLAW_HOME = "/srv/NexisClaw-home";
+    const previousGreenchClawHome = process.env.GREENCHCLAW_HOME;
+    process.env.GREENCHCLAW_HOME = "/srv/GreenchClaw-home";
 
     try {
       const seen = withPathResolutionEnv(
         homeDir,
-        { NEXISCLAW_BUNDLED_PLUGINS_DIR: "~/bundled" },
+        { GREENCHCLAW_BUNDLED_PLUGINS_DIR: "~/bundled" },
         (env) => ({
           processHome: process.env.HOME,
-          processNexisClawHome: process.env.NEXISCLAW_HOME,
-          processBundledDir: process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR,
-          envBundledDir: env.NEXISCLAW_BUNDLED_PLUGINS_DIR,
+          processGreenchClawHome: process.env.GREENCHCLAW_HOME,
+          processBundledDir: process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR,
+          envBundledDir: env.GREENCHCLAW_BUNDLED_PLUGINS_DIR,
         }),
       );
 
       expect(seen).toEqual({
         processHome: resolvedHomeDir,
-        processNexisClawHome: undefined,
+        processGreenchClawHome: undefined,
         processBundledDir: "~/bundled",
         envBundledDir: "~/bundled",
       });
-      expect(process.env.NEXISCLAW_HOME).toBe("/srv/NexisClaw-home");
+      expect(process.env.GREENCHCLAW_HOME).toBe("/srv/GreenchClaw-home");
     } finally {
-      restoreEnvKey("NEXISCLAW_HOME", previousNexisClawHome);
+      restoreEnvKey("GREENCHCLAW_HOME", previousGreenchClawHome);
     }
   });
 });

@@ -15,7 +15,7 @@ minimumReleaseAgeExclude:
   - "axios"
   - "basic-ftp"
   - "hono"
-  - "NexisClaw"
+  - "GreenchClaw"
   - "protobufjs"
   - "vite"
   - "@cloudflare/workers-types"
@@ -66,7 +66,7 @@ overrides:
   uuid: 14.0.0
 
 allowBuilds:
-  "@NexisClaw/fs-safe": true
+  "@GreenchClaw/fs-safe": true
   "@google/genai": true
   "@lydell/node-pty": true
   "@matrix-org/matrix-sdk-crypto-nodejs": true
@@ -83,7 +83,7 @@ allowBuilds:
   protobufjs: true
   sharp: true
   tree-sitter-bash: false
-  NexisClaw: true
+  GreenchClaw: true
 
 packageExtensions:
   "@earendil-works/pi-coding-agent":

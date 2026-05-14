@@ -34,11 +34,11 @@ vi.mock("../../plugins/official-external-plugin-repair-hints.js", () => ({
           pluginId: channelId,
           channelId,
           label: "Feishu",
-          installSpec: "@NexisClaw/feishu",
-          installCommand: "NexisClaw plugins install @NexisClaw/feishu",
-          doctorFixCommand: "NexisClaw doctor --fix",
+          installSpec: "@GreenchClaw/feishu",
+          installCommand: "GreenchClaw plugins install @GreenchClaw/feishu",
+          doctorFixCommand: "GreenchClaw doctor --fix",
           repairHint:
-            "Install the official external plugin with: NexisClaw plugins install @NexisClaw/feishu, or run: NexisClaw doctor --fix.",
+            "Install the official external plugin with: GreenchClaw plugins install @GreenchClaw/feishu, or run: GreenchClaw doctor --fix.",
         }
       : null,
 }));
@@ -107,7 +107,7 @@ describe("buildChannelsTable", () => {
           enabled: true,
           state: "warn",
           detail:
-            "plugin not installed - run NexisClaw plugins install @NexisClaw/feishu or NexisClaw doctor --fix",
+            "plugin not installed - run GreenchClaw plugins install @GreenchClaw/feishu or GreenchClaw doctor --fix",
         },
       ],
       details: [],

@@ -3,13 +3,13 @@ import type { ModelRegistry } from "@earendil-works/pi-coding-agent";
 import { resolveDefaultAgentDir } from "../../agents/agent-scope.js";
 import { shouldSuppressBuiltInModel } from "../../agents/model-suppression.js";
 import { discoverAuthStorage, discoverModels } from "../../agents/pi-model-discovery.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { loadModelRegistry } from "./list.registry.js";
 import type { ConfiguredEntry } from "./list.types.js";
 import { modelKey } from "./shared.js";
 
 export async function loadListModelRegistry(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   opts?: {
     providerFilter?: string;
     normalizeModels?: boolean;
@@ -27,7 +27,7 @@ export async function loadListModelRegistry(
 function findConfiguredRegistryModel(params: {
   registry: ModelRegistry;
   entry: ConfiguredEntry;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): Model<Api> | undefined {
   const model = params.registry.find(params.entry.ref.provider, params.entry.ref.model);
   if (!model) {
@@ -47,7 +47,7 @@ function findConfiguredRegistryModel(params: {
 }
 
 export function loadConfiguredListModelRegistry(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   entries: ConfiguredEntry[],
   opts?: { providerFilter?: string; workspaceDir?: string },
 ) {

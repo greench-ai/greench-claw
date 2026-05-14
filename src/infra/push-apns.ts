@@ -67,8 +67,8 @@ export type ApnsPushResult = {
 type ApnsPushAlertResult = ApnsPushResult;
 type ApnsPushWakeResult = ApnsPushResult;
 
-const EXEC_APPROVAL_GENERIC_ALERT_BODY = "Open NexisClaw to review this request.";
-const EXEC_APPROVAL_NOTIFICATION_CATEGORY = "NexisClaw.exec-approval";
+const EXEC_APPROVAL_GENERIC_ALERT_BODY = "Open GreenchClaw to review this request.";
+const EXEC_APPROVAL_NOTIFICATION_CATEGORY = "GreenchClaw.exec-approval";
 
 type ApnsPushType = "alert" | "background";
 
@@ -590,18 +590,18 @@ export function shouldClearStoredApnsRegistration(params: {
 export async function resolveApnsAuthConfigFromEnv(
   env: NodeJS.ProcessEnv = process.env,
 ): Promise<ApnsAuthConfigResolution> {
-  const teamId = normalizeNonEmptyString(env.NEXISCLAW_APNS_TEAM_ID);
-  const keyId = normalizeNonEmptyString(env.NEXISCLAW_APNS_KEY_ID);
+  const teamId = normalizeNonEmptyString(env.GREENCHCLAW_APNS_TEAM_ID);
+  const keyId = normalizeNonEmptyString(env.GREENCHCLAW_APNS_KEY_ID);
   if (!teamId || !keyId) {
     return {
       ok: false,
-      error: "APNs auth missing: set NEXISCLAW_APNS_TEAM_ID and NEXISCLAW_APNS_KEY_ID",
+      error: "APNs auth missing: set GREENCHCLAW_APNS_TEAM_ID and GREENCHCLAW_APNS_KEY_ID",
     };
   }
 
   const inlineKeyRaw =
-    normalizeNonEmptyString(env.NEXISCLAW_APNS_PRIVATE_KEY_P8) ??
-    normalizeNonEmptyString(env.NEXISCLAW_APNS_PRIVATE_KEY);
+    normalizeNonEmptyString(env.GREENCHCLAW_APNS_PRIVATE_KEY_P8) ??
+    normalizeNonEmptyString(env.GREENCHCLAW_APNS_PRIVATE_KEY);
   if (inlineKeyRaw) {
     return {
       ok: true,
@@ -613,12 +613,12 @@ export async function resolveApnsAuthConfigFromEnv(
     };
   }
 
-  const keyPath = normalizeNonEmptyString(env.NEXISCLAW_APNS_PRIVATE_KEY_PATH);
+  const keyPath = normalizeNonEmptyString(env.GREENCHCLAW_APNS_PRIVATE_KEY_PATH);
   if (!keyPath) {
     return {
       ok: false,
       error:
-        "APNs private key missing: set NEXISCLAW_APNS_PRIVATE_KEY_P8 or NEXISCLAW_APNS_PRIVATE_KEY_PATH",
+        "APNs private key missing: set GREENCHCLAW_APNS_PRIVATE_KEY_P8 or GREENCHCLAW_APNS_PRIVATE_KEY_PATH",
     };
   }
   try {
@@ -635,7 +635,7 @@ export async function resolveApnsAuthConfigFromEnv(
     const message = formatErrorMessage(err);
     return {
       ok: false,
-      error: `failed reading NEXISCLAW_APNS_PRIVATE_KEY_PATH (${keyPath}): ${message}`,
+      error: `failed reading GREENCHCLAW_APNS_PRIVATE_KEY_PATH (${keyPath}): ${message}`,
     };
   }
 }
@@ -878,7 +878,7 @@ function createAlertPayload(params: { nodeId: string; title: string; body: strin
       },
       sound: "default",
     },
-    NexisClaw: toPushMetadata({
+    GreenchClaw: toPushMetadata({
       kind: "push.test",
       nodeId: params.nodeId,
     }),
@@ -890,7 +890,7 @@ function createBackgroundPayload(params: { nodeId: string; wakeReason?: string }
     aps: {
       "content-available": 1,
     },
-    NexisClaw: toPushMetadata({
+    GreenchClaw: toPushMetadata({
       kind: "node.wake",
       reason: params.wakeReason ?? "node.invoke",
       nodeId: params.nodeId,
@@ -913,7 +913,7 @@ function createExecApprovalAlertPayload(params: { nodeId: string; approvalId: st
       category: EXEC_APPROVAL_NOTIFICATION_CATEGORY,
       "content-available": 1,
     },
-    NexisClaw: {
+    GreenchClaw: {
       kind: "exec.approval.requested",
       approvalId: params.approvalId,
       ts: Date.now(),
@@ -926,7 +926,7 @@ function createExecApprovalResolvedPayload(params: { nodeId: string; approvalId:
     aps: {
       "content-available": 1,
     },
-    NexisClaw: {
+    GreenchClaw: {
       kind: "exec.approval.resolved",
       approvalId: params.approvalId,
       ts: Date.now(),

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { RuntimeEnv } from "../runtime.js";
 import {
   requireValidConfigFileSnapshot as requireValidConfigFileSnapshotBase,
@@ -13,6 +13,6 @@ export async function requireValidConfigFileSnapshot(runtime: RuntimeEnv) {
   return await requireValidConfigFileSnapshotBase(runtime);
 }
 
-export async function requireValidConfig(runtime: RuntimeEnv): Promise<NexisClawConfig | null> {
+export async function requireValidConfig(runtime: RuntimeEnv): Promise<GreenchClawConfig | null> {
   return await requireValidConfigSnapshot(runtime);
 }

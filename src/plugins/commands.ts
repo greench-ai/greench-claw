@@ -6,7 +6,7 @@
  */
 
 import { resolveConversationBindingContext } from "../channels/conversation-binding-context.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { ADMIN_SCOPE, isOperatorScope } from "../gateway/operator-scopes.js";
 import { logVerbose } from "../globals.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
@@ -34,7 +34,7 @@ import {
 } from "./conversation-binding.js";
 import { getActivePluginChannelRegistry } from "./runtime.js";
 import type {
-  NexisClawPluginCommandDefinition,
+  GreenchClawPluginCommandDefinition,
   PluginCommandContext,
   PluginCommandResult,
 } from "./types.js";
@@ -133,7 +133,7 @@ function sanitizeArgs(args: string | undefined): string | undefined {
 }
 
 function resolveBindingConversationFromCommand(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   channel: string;
   senderId?: string;
   from?: string;
@@ -155,7 +155,7 @@ function resolveBindingConversationFromCommand(params: {
     return null;
   }
   return resolveConversationBindingContext({
-    cfg: params.config ?? ({} as NexisClawConfig),
+    cfg: params.config ?? ({} as GreenchClawConfig),
     channel: params.channel,
     accountId: params.accountId,
     threadId: params.messageThreadId,
@@ -186,7 +186,7 @@ export async function executePluginCommand(params: {
   sessionId?: PluginCommandContext["sessionId"];
   sessionFile?: PluginCommandContext["sessionFile"];
   commandBody: string;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   from?: PluginCommandContext["from"];
   to?: PluginCommandContext["to"];
   accountId?: PluginCommandContext["accountId"];
@@ -386,7 +386,7 @@ export function listPluginCommands(): Array<{
   }));
 }
 
-function listPluginInvocationNames(command: NexisClawPluginCommandDefinition): string[] {
+function listPluginInvocationNames(command: GreenchClawPluginCommandDefinition): string[] {
   return listPluginInvocationKeys(command);
 }
 

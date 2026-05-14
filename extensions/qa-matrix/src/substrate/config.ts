@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import type { MatrixQaProvisionedTopology } from "./topology.js";
 
 type MatrixQaReplyToMode = "off" | "first" | "all" | "batched";
@@ -142,7 +142,7 @@ type MatrixQaGroupSnapshot = {
 };
 
 type MatrixQaGroupEntry = Omit<MatrixQaGroupSnapshot, "roomId">;
-type MatrixQaChannelConfig = NonNullable<NexisClawConfig["channels"]>["matrix"];
+type MatrixQaChannelConfig = NonNullable<GreenchClawConfig["channels"]>["matrix"];
 type MatrixQaChannelAccountConfig = NonNullable<
   NonNullable<MatrixQaChannelConfig>["accounts"]
 >[string];
@@ -555,7 +555,7 @@ export function summarizeMatrixQaConfigSnapshot(snapshot: MatrixQaConfigSnapshot
 }
 
 export function buildMatrixQaConfig(
-  baseCfg: NexisClawConfig,
+  baseCfg: GreenchClawConfig,
   params: {
     driverAccessToken?: string;
     driverUserId: string;
@@ -569,7 +569,7 @@ export function buildMatrixQaConfig(
     sutUserId: string;
     topology: MatrixQaProvisionedTopology;
   },
-): NexisClawConfig {
+): GreenchClawConfig {
   const pluginAllow = [...new Set([...(baseCfg.plugins?.allow ?? []), "matrix"])];
   const snapshot = buildMatrixQaConfigSnapshot({
     driverUserId: params.driverUserId,

@@ -1,11 +1,11 @@
 import { ApplicationCommandOptionType } from "discord-api-types/v10";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   resolveCommandArgChoices,
   type ChatCommandDefinition,
-} from "NexisClaw/plugin-sdk/native-command-registry";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/native-command-registry";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { AutocompleteInteraction, CommandOptions } from "../internal/discord.js";
 
 const log = createSubsystemLogger("discord/native-command");
@@ -56,7 +56,7 @@ function resolveDiscordCommandLogLabel(command: ChatCommandDefinition): string {
 
 export function buildDiscordCommandOptions(params: {
   command: ChatCommandDefinition;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   authorizeChoiceContext?: (interaction: AutocompleteInteraction) => Promise<boolean>;
   resolveChoiceContext?: (
     interaction: AutocompleteInteraction,

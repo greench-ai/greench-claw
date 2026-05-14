@@ -11,8 +11,8 @@ Extract text and fallback page images from local document attachments.
 
 ## Distribution
 
-- Package: `@NexisClaw/document-extract-plugin`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/document-extract-plugin`
+- Install route: included in GreenchClaw
 
 ## Surface
 

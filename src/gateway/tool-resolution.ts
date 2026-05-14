@@ -1,5 +1,5 @@
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
-import { createNexisClawTools } from "../agents/NexisClaw-tools.js";
+import { createGreenchClawTools } from "../agents/GreenchClaw-tools.js";
 import {
   resolveEffectiveToolPolicy,
   resolveGroupToolPolicy,
@@ -20,7 +20,7 @@ import {
   resolveToolProfilePolicy,
 } from "../agents/tool-policy.js";
 import type { AnyAgentTool } from "../agents/tools/common.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { logWarn } from "../logger.js";
 import { getPluginToolMeta } from "../plugins/tools.js";
 import { DEFAULT_GATEWAY_HTTP_TOOL_DENY } from "../security/dangerous-tools.js";
@@ -28,7 +28,7 @@ import { DEFAULT_GATEWAY_HTTP_TOOL_DENY } from "../security/dangerous-tools.js";
 type GatewayScopedToolSurface = "http" | "loopback";
 
 export function resolveGatewayScopedTools(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   messageProvider?: string;
   accountId?: string;
@@ -86,7 +86,7 @@ export function resolveGatewayScopedTools(params: {
     agentId ?? resolveDefaultAgentId(params.cfg),
   );
 
-  const allTools = createNexisClawTools({
+  const allTools = createGreenchClawTools({
     agentSessionKey: params.sessionKey,
     agentChannel: params.messageProvider ?? undefined,
     agentAccountId: params.accountId,

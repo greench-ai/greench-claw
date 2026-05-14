@@ -19,13 +19,13 @@ describe("buildImportUrl", () => {
   });
 
   it("returns bare URL for bundled hooks (no query string)", () => {
-    const url = buildImportUrl(tmpFile, "NexisClaw-bundled");
+    const url = buildImportUrl(tmpFile, "GreenchClaw-bundled");
     expect(url).not.toContain("?t=");
     expect(url).toMatch(/^file:\/\//);
   });
 
   it("appends mtime-based cache buster for workspace hooks", () => {
-    const url = buildImportUrl(tmpFile, "NexisClaw-workspace");
+    const url = buildImportUrl(tmpFile, "GreenchClaw-workspace");
     expect(url).toMatch(/\?t=[\d.]+&s=\d+/);
 
     const { mtimeMs, size } = fs.statSync(tmpFile);
@@ -34,29 +34,29 @@ describe("buildImportUrl", () => {
   });
 
   it("appends mtime-based cache buster for managed hooks", () => {
-    const url = buildImportUrl(tmpFile, "NexisClaw-managed");
+    const url = buildImportUrl(tmpFile, "GreenchClaw-managed");
     expect(url).toMatch(/\?t=[\d.]+&s=\d+/);
   });
 
   it("appends mtime-based cache buster for plugin hooks", () => {
-    const url = buildImportUrl(tmpFile, "NexisClaw-plugin");
+    const url = buildImportUrl(tmpFile, "GreenchClaw-plugin");
     expect(url).toMatch(/\?t=[\d.]+&s=\d+/);
   });
 
   it("returns same URL for bundled hooks across calls (cacheable)", () => {
-    const url1 = buildImportUrl(tmpFile, "NexisClaw-bundled");
-    const url2 = buildImportUrl(tmpFile, "NexisClaw-bundled");
+    const url1 = buildImportUrl(tmpFile, "GreenchClaw-bundled");
+    const url2 = buildImportUrl(tmpFile, "GreenchClaw-bundled");
     expect(url1).toBe(url2);
   });
 
   it("returns same URL for workspace hooks when file is unchanged", () => {
-    const url1 = buildImportUrl(tmpFile, "NexisClaw-workspace");
-    const url2 = buildImportUrl(tmpFile, "NexisClaw-workspace");
+    const url1 = buildImportUrl(tmpFile, "GreenchClaw-workspace");
+    const url2 = buildImportUrl(tmpFile, "GreenchClaw-workspace");
     expect(url1).toBe(url2);
   });
 
   it("falls back to Date.now() when file does not exist", () => {
-    const url = buildImportUrl("/nonexistent/handler.js", "NexisClaw-workspace");
+    const url = buildImportUrl("/nonexistent/handler.js", "GreenchClaw-workspace");
     expect(url).toMatch(/\?t=\d+/);
   });
 });

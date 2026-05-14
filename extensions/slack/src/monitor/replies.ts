@@ -1,17 +1,17 @@
-import type { MarkdownTableMode, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { MarkdownTableMode, GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   chunkMarkdownTextWithMode,
   isSilentReplyText,
   SILENT_REPLY_TOKEN,
   type ChunkMode,
-} from "NexisClaw/plugin-sdk/reply-chunking";
+} from "GreenchClaw/plugin-sdk/reply-chunking";
 import {
   deliverTextOrMediaReply,
   resolveSendableOutboundReplyParts,
   type ReplyPayload,
-} from "NexisClaw/plugin-sdk/reply-payload";
-import { createReplyReferencePlanner } from "NexisClaw/plugin-sdk/reply-reference";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/reply-payload";
+import { createReplyReferencePlanner } from "GreenchClaw/plugin-sdk/reply-reference";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import { markdownToSlackMrkdwnChunks } from "../format.js";
 import { SLACK_TEXT_LIMIT } from "../limits.js";
 import { resolveSlackReplyBlocks } from "../reply-blocks.js";
@@ -33,7 +33,7 @@ export function resolveDeliveredSlackReplyThreadTs(params: {
 }
 
 export async function deliverReplies(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   replies: ReplyPayload[];
   target: string;
   token: string;

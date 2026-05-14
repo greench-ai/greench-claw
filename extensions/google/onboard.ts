@@ -1,7 +1,7 @@
 import {
   applyAgentDefaultModelPrimary,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 
 export const GOOGLE_GEMINI_DEFAULT_MODEL = "google/gemini-3.1-pro-preview";
 const RETIRED_GOOGLE_GEMINI_MODEL_REFS = new Set([
@@ -22,7 +22,7 @@ function isRetiredGeminiModelRef(value: unknown): boolean {
   return modelRef.endsWith("/gemini-3-pro") || modelRef.endsWith("/gemini-3-pro-preview");
 }
 
-function hasRetiredGeminiDefaultModelRefs(cfg: NexisClawConfig): boolean {
+function hasRetiredGeminiDefaultModelRefs(cfg: GreenchClawConfig): boolean {
   const defaults = cfg.agents?.defaults;
   const model = defaults?.model as unknown;
   if (model && typeof model === "object") {
@@ -55,8 +55,8 @@ function hasRetiredGeminiDefaultModelRefs(cfg: NexisClawConfig): boolean {
   );
 }
 
-export function applyGoogleGeminiModelDefault(cfg: NexisClawConfig): {
-  next: NexisClawConfig;
+export function applyGoogleGeminiModelDefault(cfg: GreenchClawConfig): {
+  next: GreenchClawConfig;
   changed: boolean;
 } {
   const current = cfg.agents?.defaults?.model as unknown;

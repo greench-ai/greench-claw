@@ -1,6 +1,6 @@
 import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { checkQmdBinaryAvailability as checkQmdBinaryAvailabilityFn } from "../memory-host-sdk/engine-qmd.js";
 import type { DoctorPrompter } from "./doctor-prompter.js";
 
@@ -146,7 +146,7 @@ function firstNoteMessage(): string {
 }
 
 describe("noteMemorySearchHealth", () => {
-  const cfg = {} as NexisClawConfig;
+  const cfg = {} as GreenchClawConfig;
 
   async function expectNoWarningWithConfiguredRemoteApiKey(provider: string) {
     resolveMemorySearchConfig.mockReturnValue({
@@ -173,7 +173,7 @@ describe("noteMemorySearchHealth", () => {
     hasAnyAuthProfileStoreSource.mockReturnValue(true);
     getActiveMemorySearchManager.mockReset();
     resolveActiveMemoryBackendConfig.mockReset();
-    resolveActiveMemoryBackendConfig.mockImplementation(({ cfg }: { cfg: NexisClawConfig }) =>
+    resolveActiveMemoryBackendConfig.mockImplementation(({ cfg }: { cfg: GreenchClawConfig }) =>
       cfg.memory?.backend === "qmd"
         ? { backend: "qmd", qmd: cfg.memory.qmd ?? {} }
         : { backend: "builtin" },
@@ -332,7 +332,7 @@ describe("noteMemorySearchHealth", () => {
   });
 
   it("does not warn when QMD backend is active", async () => {
-    const qmdCfg = { memory: { backend: "qmd", qmd: { command: "qmd" } } } as NexisClawConfig;
+    const qmdCfg = { memory: { backend: "qmd", qmd: { command: "qmd" } } } as GreenchClawConfig;
     resolveMemorySearchConfig.mockReturnValue({
       provider: "auto",
       local: {},
@@ -350,7 +350,7 @@ describe("noteMemorySearchHealth", () => {
   });
 
   it("warns when QMD backend is active but the qmd binary is unavailable", async () => {
-    const qmdCfg = { memory: { backend: "qmd", qmd: { command: "qmd" } } } as NexisClawConfig;
+    const qmdCfg = { memory: { backend: "qmd", qmd: { command: "qmd" } } } as GreenchClawConfig;
     checkQmdBinaryAvailability.mockResolvedValueOnce({
       available: false,
       error: "spawn qmd ENOENT",
@@ -515,11 +515,11 @@ describe("noteMemorySearchHealth", () => {
   });
 
   it("does not warn when key-optional provider (lmstudio) probe was skipped (skipped: true)", async () => {
-    // When `NexisClaw doctor` runs without --deep, the probe is skipped and returns
+    // When `GreenchClaw doctor` runs without --deep, the probe is skipped and returns
     // { checked: false, ready: false, skipped: true }. This must NOT produce a
     // false-positive warning — it means readiness was never checked, not that
     // embeddings are unavailable.
-    // Regression test for: https://github.com/NexisClaw/NexisClaw/issues/74608
+    // Regression test for: https://github.com/GreenchClaw/GreenchClaw/issues/74608
     resolveMemorySearchConfig.mockReturnValue({
       provider: "lmstudio",
       local: {},
@@ -551,7 +551,7 @@ describe("noteMemorySearchHealth", () => {
   it("warns for key-optional provider (lmstudio) when gateway probe timed out", async () => {
     // A gateway timeout sets checked: false but skipped: false/absent. This is a
     // real diagnostic signal — embeddings may be unavailable — so we should warn.
-    // Regression guard: https://github.com/NexisClaw/NexisClaw/issues/74608
+    // Regression guard: https://github.com/GreenchClaw/GreenchClaw/issues/74608
     resolveMemorySearchConfig.mockReturnValue({
       provider: "lmstudio",
       local: {},
@@ -603,8 +603,8 @@ describe("noteMemorySearchHealth", () => {
 
     const message = firstNoteMessage();
     expect(message).toContain("Gateway memory probe for default agent is not ready");
-    expect(message).toContain("NexisClaw configure --section model");
-    expect(message).not.toContain("NexisClaw auth add --provider");
+    expect(message).toContain("GreenchClaw configure --section model");
+    expect(message).not.toContain("GreenchClaw auth add --provider");
   });
 
   it("warns in auto mode when no local modelPath and no API keys are configured", async () => {
@@ -622,7 +622,7 @@ describe("noteMemorySearchHealth", () => {
     expect(note).toHaveBeenCalledTimes(1);
     const message = firstNoteMessage();
     expect(message).toContain("needs at least one embedding provider");
-    expect(message).toContain("NexisClaw configure --section model");
+    expect(message).toContain("GreenchClaw configure --section model");
   });
 
   it("does not probe unrelated embedding providers in auto mode", async () => {
@@ -709,7 +709,7 @@ describe("noteMemorySearchHealth", () => {
 });
 
 describe("memory recall doctor integration", () => {
-  const cfg = {} as NexisClawConfig;
+  const cfg = {} as GreenchClawConfig;
 
   beforeEach(() => {
     note.mockClear();
@@ -836,7 +836,8 @@ describe("memory recall doctor integration", () => {
     });
     repairDreamingArtifacts.mockResolvedValueOnce({
       changed: true,
-      archiveDir: "/tmp/agent-default/workspace/.NexisClaw-repair/dreaming/2026-04-11T21-35-00-000Z",
+      archiveDir:
+        "/tmp/agent-default/workspace/.GreenchClaw-repair/dreaming/2026-04-11T21-35-00-000Z",
       archivedDreamsDiary: false,
       archivedSessionCorpus: true,
       archivedSessionIngestion: true,
@@ -861,7 +862,7 @@ describe("memory recall doctor integration", () => {
 
 describe("detectLegacyWorkspaceDirs", () => {
   it("returns active workspace and no legacy dirs", () => {
-    const workspaceDir = "/home/user/NexisClaw";
+    const workspaceDir = "/home/user/GreenchClaw";
     const detection = detectLegacyWorkspaceDirs({ workspaceDir });
     expect(detection.activeWorkspace).toBe(path.resolve(workspaceDir));
     expect(detection.legacyDirs).toStrictEqual([]);

@@ -1,29 +1,29 @@
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import type {
   ProviderAuthContext,
   ProviderAuthResult,
   ProviderResolveDynamicModelContext,
   ProviderRuntimeModel,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import {
   CODEX_CLI_PROFILE_ID,
   createProviderApiKeyAuthMethod,
   ensureAuthProfileStoreForLocalUpdate,
   listProfilesForProvider,
   type OAuthCredential,
-} from "NexisClaw/plugin-sdk/provider-auth";
-import { buildOauthProviderAuthResult } from "NexisClaw/plugin-sdk/provider-auth";
+} from "GreenchClaw/plugin-sdk/provider-auth";
+import { buildOauthProviderAuthResult } from "GreenchClaw/plugin-sdk/provider-auth";
 import {
   DEFAULT_CONTEXT_TOKENS,
   normalizeModelCompat,
   normalizeProviderId,
   type ProviderPlugin,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
-import { fetchCodexUsage } from "NexisClaw/plugin-sdk/provider-usage";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { fetchCodexUsage } from "GreenchClaw/plugin-sdk/provider-usage";
 import {
   normalizeLowercaseStringOrEmpty,
   readStringValue,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   OPENAI_CODEX_DEVICE_PAIRING_HINT,
   OPENAI_CODEX_DEVICE_PAIRING_LABEL,
@@ -453,7 +453,7 @@ async function runOpenAICodexDeviceCode(ctx: ProviderAuthContext) {
     spin.stop("OpenAI device code failed");
     ctx.runtime.error(formatErrorMessage(error));
     await ctx.prompter.note(
-      "Trouble with device code login? See https://docs.NexisClaw.ai/start/faq",
+      "Trouble with device code login? See https://docs.GreenchClaw.ai/start/faq",
       "OAuth help",
     );
     throw error;
@@ -464,7 +464,7 @@ function buildOpenAICodexAuthDoctorHint(ctx: { profileId?: string }) {
   if (ctx.profileId !== CODEX_CLI_PROFILE_ID) {
     return undefined;
   }
-  return "Deprecated profile. Run `NexisClaw models auth login --provider openai-codex` or `NexisClaw configure`.";
+  return "Deprecated profile. Run `GreenchClaw models auth login --provider openai-codex` or `GreenchClaw configure`.";
 }
 
 export function buildOpenAICodexProviderPlugin(): ProviderPlugin {

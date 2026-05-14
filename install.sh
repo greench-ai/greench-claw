@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================
-# NexisClaw — One-shot installer — NexisClaw
+# GreenchClaw — One-shot installer — GreenchClaw
 # Usage: bash install.sh
 # ============================================================
 
@@ -8,10 +8,10 @@
 # set -e removed: sudo without password in piped install fails silently instead of aborting
 
 REPO="https://github.com/greench-ai/nexisclaw.git"
-INSTALL_DIR="$HOME/NexisClaw"
+INSTALL_DIR="$HOME/GreenchClaw"
 BIN_DIR="$HOME/bin"
-CONFIG_DIR="$HOME/.NexisClaw"
-GATEWAY_PORT=19500
+CONFIG_DIR="$HOME/.GreenchClaw"
+GATEWAY_PORT=18420
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -224,12 +224,12 @@ install_binary() {
 
   mkdir -p "$BIN_DIR"
 
-  cat > "$BIN_DIR/NexisClaw" << EOF
+  cat > "$BIN_DIR/GreenchClaw" << EOF
 #!/bin/bash
-exec node $INSTALL_DIR/NexisClaw.mjs "\$@"
+exec node $INSTALL_DIR/GreenchClaw.mjs "\$@"
 EOF
-  chmod +x "$BIN_DIR/NexisClaw"
-  success "Binary installed at $BIN_DIR/NexisClaw"
+  chmod +x "$BIN_DIR/GreenchClaw"
+  success "Binary installed at $BIN_DIR/GreenchClaw"
 
   # PATH
   if ! grep -q '"$HOME/bin"' "$HOME/.bashrc" 2>/dev/null && \
@@ -239,9 +239,9 @@ EOF
   fi
 
   # Remove any conflicting alias
-  if grep -q 'alias NexisClaw=' "$HOME/.bashrc" 2>/dev/null; then
-    sed -i '/alias NexisClaw=/d' "$HOME/.bashrc"
-    warn "Removed old NexisClaw alias from ~/.bashrc"
+  if grep -q 'alias GreenchClaw=' "$HOME/.bashrc" 2>/dev/null; then
+    sed -i '/alias GreenchClaw=/d' "$HOME/.bashrc"
+    warn "Removed old GreenchClaw alias from ~/.bashrc"
   fi
 
   export PATH="$BIN_DIR:$PATH"
@@ -254,8 +254,8 @@ setup_config() {
   mkdir -p "$CONFIG_DIR/workspace/skills"
   mkdir -p "$INSTALL_DIR/library"
 
-  if [ ! -f "$CONFIG_DIR/NexisClaw.json" ]; then
-    cat > "$CONFIG_DIR/NexisClaw.json" << EOF
+  if [ ! -f "$CONFIG_DIR/GreenchClaw.json" ]; then
+    cat > "$CONFIG_DIR/GreenchClaw.json" << EOF
 {
   "gateway": {
     "port": $GATEWAY_PORT,
@@ -273,7 +273,7 @@ setup_config() {
   }
 }
 EOF
-    success "Config created at $CONFIG_DIR/NexisClaw.json"
+    success "Config created at $CONFIG_DIR/GreenchClaw.json"
   else
     success "Config already exists — skipped"
   fi
@@ -310,7 +310,7 @@ setup_api_key() {
   echo ""
   echo -e "  ${BOLD}Anthropic API key${NC} required to run the AI agent."
   echo -e "  Get one at: ${BLUE}https://console.anthropic.com${NC}"
-  echo -e "  Leave blank to skip (configure later: NexisClaw secrets configure)"
+  echo -e "  Leave blank to skip (configure later: GreenchClaw secrets configure)"
   echo ""
   read -rsp "  Paste API key (hidden): " API_KEY
   echo ""
@@ -324,7 +324,7 @@ setup_api_key() {
       success "API key saved to ~/.bashrc"
     fi
   else
-    warn "Skipped — run 'NexisClaw secrets configure' later"
+    warn "Skipped — run 'GreenchClaw secrets configure' later"
   fi
 }
 
@@ -332,23 +332,23 @@ setup_api_key() {
 setup_service() {
   header "Gateway Service"
 
-  "$BIN_DIR/NexisClaw" gateway install 2>/dev/null || true
+  "$BIN_DIR/GreenchClaw" gateway install 2>/dev/null || true
 
   if command -v systemctl &>/dev/null; then
     systemctl --user daemon-reload 2>/dev/null || true
     # Enable lingering so service survives logout (useful for VPS/Pi)
     loginctl enable-linger "$USER" 2>/dev/null || true
-    systemctl --user enable NexisClaw-gateway.service 2>/dev/null || true
-    systemctl --user start NexisClaw-gateway.service 2>/dev/null || true
+    systemctl --user enable GreenchClaw-gateway.service 2>/dev/null || true
+    systemctl --user start GreenchClaw-gateway.service 2>/dev/null || true
     sleep 2
 
-    if systemctl --user is-active NexisClaw-gateway.service &>/dev/null; then
+    if systemctl --user is-active GreenchClaw-gateway.service &>/dev/null; then
       success "Gateway running on port $GATEWAY_PORT (systemd service)"
     else
-      warn "Service not active — try: NexisClaw gateway start"
+      warn "Service not active — try: GreenchClaw gateway start"
     fi
   else
-    warn "systemd not available — start manually: NexisClaw gateway"
+    warn "systemd not available — start manually: GreenchClaw gateway"
   fi
 }
 
@@ -356,7 +356,7 @@ setup_service() {
 setup_cron() {
   header "Cron Jobs"
 
-  count=$("$BIN_DIR/NexisClaw" cron list 2>/dev/null | grep -cE "evoclaw|memory-save|library-update" 2>/dev/null || echo 0)
+  count=$("$BIN_DIR/GreenchClaw" cron list 2>/dev/null | grep -cE "evoclaw|memory-save|library-update" 2>/dev/null || echo 0)
 EXISTING=${count//[^0-9]/}
 
   if [ "${EXISTING:-0}" -ge 3 ]; then
@@ -364,19 +364,19 @@ EXISTING=${count//[^0-9]/}
     return
   fi
 
-  "$BIN_DIR/NexisClaw" cron add --name "evoclaw-heartbeat" \
+  "$BIN_DIR/GreenchClaw" cron add --name "evoclaw-heartbeat" \
     --cron "*/15 * * * *" --session isolated \
     --message "Run skill: evoclaw/heartbeat" 2>/dev/null \
     && success "Cron: evoclaw-heartbeat (every 15 min)" \
     || warn "Could not add evoclaw-heartbeat (add manually after gateway starts)"
 
-  "$BIN_DIR/NexisClaw" cron add --name "memory-save" \
+  "$BIN_DIR/GreenchClaw" cron add --name "memory-save" \
     --cron "*/30 * * * *" --session isolated \
     --message "Run skill: memory-save/run" 2>/dev/null \
     && success "Cron: memory-save (every 30 min)" \
     || warn "Could not add memory-save"
 
-  "$BIN_DIR/NexisClaw" cron add --name "library-update" \
+  "$BIN_DIR/GreenchClaw" cron add --name "library-update" \
     --cron "0 * * * *" --session isolated \
     --message "Run skill: library-update/run" 2>/dev/null \
     && success "Cron: library-update (every hour)" \
@@ -388,23 +388,23 @@ print_summary() {
   header "Installation Complete"
 
   echo ""
-  echo -e "  ${GREEN}${BOLD}NexisClaw is ready!${NC}"
+  echo -e "  ${GREEN}${BOLD}GreenchClaw is ready!${NC}"
   echo ""
-  echo -e "  ${BOLD}Version:${NC}  $("$BIN_DIR/NexisClaw" --version 2>/dev/null || echo 'NexisClaw 1.0.0')"
+  echo -e "  ${BOLD}Version:${NC}  $("$BIN_DIR/GreenchClaw" --version 2>/dev/null || echo 'GreenchClaw 1.0.0')"
   echo -e "  ${BOLD}Gateway:${NC}  http://localhost:$GATEWAY_PORT"
-  echo -e "  ${BOLD}Config:${NC}   $CONFIG_DIR/NexisClaw.json"
+  echo -e "  ${BOLD}Config:${NC}   $CONFIG_DIR/GreenchClaw.json"
   echo -e "  ${BOLD}Skills:${NC}   $(ls $CONFIG_DIR/workspace/skills/ 2>/dev/null | wc -l | tr -d ' ') installed"
   echo ""
   echo -e "  ${BOLD}Next steps:${NC}"
   echo -e "  1. Reload shell:       ${BLUE}source ~/.bashrc${NC}"
-  echo -e "  2. Open dashboard:     ${BLUE}NexisClaw dashboard${NC}"
-  echo -e "  3. Run onboarding:     ${BLUE}NexisClaw onboard${NC}"
+  echo -e "  2. Open dashboard:     ${BLUE}GreenchClaw dashboard${NC}"
+  echo -e "  3. Run onboarding:     ${BLUE}GreenchClaw onboard${NC}"
   echo ""
   echo -e "  ${BOLD}Useful commands:${NC}"
-  echo -e "  ${BLUE}NexisClaw gateway status${NC}      — check gateway"
-  echo -e "  ${BLUE}NexisClaw secrets configure${NC}   — set API keys"
-  echo -e "  ${BLUE}NexisClaw models${NC}              — configure models (Ollama etc)"
-  echo -e "  ${BLUE}NexisClaw doctor --fix${NC}        — fix config issues"
+  echo -e "  ${BLUE}GreenchClaw gateway status${NC}      — check gateway"
+  echo -e "  ${BLUE}GreenchClaw secrets configure${NC}   — set API keys"
+  echo -e "  ${BLUE}GreenchClaw models${NC}              — configure models (Ollama etc)"
+  echo -e "  ${BLUE}GreenchClaw doctor --fix${NC}        — fix config issues"
   echo ""
   echo -e "  ${BOLD}Docs:${NC}"
   echo -e "  $INSTALL_DIR/docs/install.md"
@@ -415,7 +415,7 @@ print_summary() {
 # ── Main ──────────────────────────────────────────────────────
 main() {
   echo ""
-  echo -e "${BOLD}  ⚔  NexisClaw Installer${NC}"
+  echo -e "${BOLD}  ⚔  GreenchClaw Installer${NC}"
   echo ""
 
   # Non-interactive flags
@@ -457,10 +457,10 @@ main() {
   echo ""
   if [ -t 0 ] && [ -t 1 ]; then
     # Real TTY — safe to run onboard interactively
-    info "Launching NexisClaw onboarding..."
+    info "Launching GreenchClaw onboarding..."
     echo ""
     cd "$INSTALL_DIR"
-    exec "$BIN_DIR/NexisClaw" onboard
+    exec "$BIN_DIR/GreenchClaw" onboard
   else
     # No TTY (piped or SSH without -t) — install is done, onboard needs a real terminal
     echo ""
@@ -469,10 +469,10 @@ main() {
     echo -e "  ${YELLOW}⚠️  Onboarding requires a real terminal.${NC}"
     echo ""
     echo -e "  Reconnect with SSH -t to continue:"
-    echo -e "    ${BLUE}ssh -t $USER@$(hostname) 'source ~/.bashrc && NexisClaw onboard'${NC}"
+    echo -e "    ${BLUE}ssh -t $USER@$(hostname) 'source ~/.bashrc && GreenchClaw onboard'${NC}"
     echo ""
     echo -e "  Or open a second terminal on this machine and run:"
-    echo -e "    ${BLUE}source ~/.bashrc && NexisClaw onboard${NC}"
+    echo -e "    ${BLUE}source ~/.bashrc && GreenchClaw onboard${NC}"
     echo ""
   fi
 }

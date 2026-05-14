@@ -3,7 +3,7 @@ import {
   type OwnerDisplaySecretRuntimeState,
   retainGeneratedOwnerDisplaySecret,
 } from "./io.owner-display-secret.js";
-import type { NexisClawConfig } from "./types.NexisClaw.js";
+import type { GreenchClawConfig } from "./types.GreenchClaw.js";
 
 function createState(): OwnerDisplaySecretRuntimeState {
   return {
@@ -14,13 +14,13 @@ function createState(): OwnerDisplaySecretRuntimeState {
 describe("retainGeneratedOwnerDisplaySecret", () => {
   it("keeps generated owner display secrets in runtime state without persisting config", () => {
     const state = createState();
-    const configPath = "/tmp/NexisClaw.json";
+    const configPath = "/tmp/GreenchClaw.json";
     const config = {
       commands: {
         ownerDisplay: "hash",
         ownerDisplaySecret: "generated-owner-secret",
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const result = retainGeneratedOwnerDisplaySecret({
       config,
@@ -35,14 +35,14 @@ describe("retainGeneratedOwnerDisplaySecret", () => {
 
   it("clears pending state when no generated secret is present", () => {
     const state = createState();
-    const configPath = "/tmp/NexisClaw.json";
+    const configPath = "/tmp/GreenchClaw.json";
     state.pendingByPath.set(configPath, "stale-secret");
     const config = {
       commands: {
         ownerDisplay: "hash",
         ownerDisplaySecret: "existing-secret",
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const result = retainGeneratedOwnerDisplaySecret({
       config,

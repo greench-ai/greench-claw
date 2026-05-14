@@ -1,8 +1,8 @@
-import { definePluginEntry, type NexisClawPluginApi } from "./api.js";
+import { definePluginEntry, type GreenchClawPluginApi } from "./api.js";
 import { resolveWebhooksPluginConfig } from "./src/config.js";
 import { createTaskFlowWebhookRequestHandler, type TaskFlowWebhookTarget } from "./src/http.js";
 
-function registerWebhookRoutes(api: NexisClawPluginApi): void {
+function registerWebhookRoutes(api: GreenchClawPluginApi): void {
   const routes = resolveWebhooksPluginConfig({
     pluginConfig: api.pluginConfig,
   });
@@ -46,8 +46,8 @@ export default definePluginEntry({
   id: "webhooks",
   name: "Webhooks",
   description:
-    "Authenticated inbound webhooks that bind external automation to NexisClaw TaskFlows.",
-  register(api: NexisClawPluginApi) {
+    "Authenticated inbound webhooks that bind external automation to GreenchClaw TaskFlows.",
+  register(api: GreenchClawPluginApi) {
     registerWebhookRoutes(api);
   },
 });

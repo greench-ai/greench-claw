@@ -1,11 +1,11 @@
 {
-  "name": "@NexisClaw/qqbot",
+  "name": "@GreenchClaw/qqbot",
   "version": "2026.5.12-beta.1",
   "private": false,
-  "description": "NexisClaw QQ Bot channel plugin",
+  "description": "GreenchClaw QQ Bot channel plugin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NexisClaw/NexisClaw"
+    "url": "https://github.com/GreenchClaw/GreenchClaw"
   },
   "type": "module",
   "dependencies": {
@@ -16,19 +16,19 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*",
+    "@GreenchClaw/plugin-sdk": "workspace:*",
     "@types/ws": "8.18.1",
-    "NexisClaw": "workspace:*"
+    "GreenchClaw": "workspace:*"
   },
   "peerDependencies": {
-    "NexisClaw": ">=2026.5.12-beta.1"
+    "GreenchClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "NexisClaw": {
+    "GreenchClaw": {
       "optional": true
     }
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ],
@@ -44,7 +44,7 @@
       "systemImage": "bubble.left.and.bubble.right"
     },
     "install": {
-      "npmSpec": "@NexisClaw/qqbot",
+      "npmSpec": "@GreenchClaw/qqbot",
       "localPath": "extensions/qqbot",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
@@ -53,7 +53,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "NexisClawVersion": "2026.5.12-beta.1"
+      "GreenchClawVersion": "2026.5.12-beta.1"
     },
     "release": {
       "publishToClawHub": true,

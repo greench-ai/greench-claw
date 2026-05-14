@@ -1,10 +1,10 @@
 {
-  "name": "@NexisClaw/twitch",
+  "name": "@GreenchClaw/twitch",
   "version": "2026.5.12-beta.1",
-  "description": "NexisClaw Twitch channel plugin",
+  "description": "GreenchClaw Twitch channel plugin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/NexisClaw/NexisClaw"
+    "url": "https://github.com/GreenchClaw/GreenchClaw"
   },
   "type": "module",
   "dependencies": {
@@ -14,15 +14,15 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ],
     "setupEntry": "./setup-entry.ts",
     "install": {
-      "npmSpec": "@NexisClaw/twitch",
+      "npmSpec": "@GreenchClaw/twitch",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },
@@ -30,7 +30,7 @@
       "pluginApi": ">=2026.5.12-beta.1"
     },
     "build": {
-      "NexisClawVersion": "2026.5.12-beta.1"
+      "GreenchClawVersion": "2026.5.12-beta.1"
     },
     "channel": {
       "id": "twitch",

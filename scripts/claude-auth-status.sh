@@ -1,11 +1,11 @@
 #!/bin/bash
 # Claude Code Authentication Status Checker
-# Checks both Claude Code and NexisClaw auth status
+# Checks both Claude Code and GreenchClaw auth status
 
 set -euo pipefail
 
 CLAUDE_CREDS="$HOME/.claude/.credentials.json"
-NEXISCLAW_AUTH="$HOME/.NexisClaw/agents/main/agent/auth-profiles.json"
+GREENCHCLAW_AUTH="$HOME/.GreenchClaw/agents/main/agent/auth-profiles.json"
 
 # Colors for terminal output
 RED='\033[0;31m'
@@ -17,7 +17,7 @@ NC='\033[0m' # No Color
 OUTPUT_MODE="${1:-full}"
 
 fetch_models_status_json() {
-    NexisClaw models status --json 2>/dev/null || true
+    GreenchClaw models status --json 2>/dev/null || true
 }
 
 STATUS_JSON="$(fetch_models_status_json)"
@@ -103,7 +103,7 @@ check_claude_code_auth() {
     calc_status_from_expires "$expires_at"
 }
 
-check_NexisClaw_auth() {
+check_GreenchClaw_auth() {
     if [ "$USE_JSON" -eq 1 ]; then
         local api_keys
         api_keys=$(json_anthropic_api_key_count)
@@ -122,7 +122,7 @@ check_NexisClaw_auth() {
         return $?
     fi
 
-    if [ ! -f "$NEXISCLAW_AUTH" ]; then
+    if [ ! -f "$GREENCHCLAW_AUTH" ]; then
         echo "MISSING"
         return 1
     fi
@@ -131,7 +131,7 @@ check_NexisClaw_auth() {
     expires=$(jq -r '
         [.profiles | to_entries[] | select(.value.provider == "anthropic") | .value.expires]
         | max // 0
-    ' "$NEXISCLAW_AUTH" 2>/dev/null || echo "0")
+    ' "$GREENCHCLAW_AUTH" 2>/dev/null || echo "0")
 
     calc_status_from_expires "$expires"
 }
@@ -139,26 +139,26 @@ check_NexisClaw_auth() {
 # JSON output mode
 if [ "$OUTPUT_MODE" = "json" ]; then
     claude_status=$(check_claude_code_auth 2>/dev/null || true)
-    NexisClaw_status=$(check_NexisClaw_auth 2>/dev/null || true)
+    GreenchClaw_status=$(check_GreenchClaw_auth 2>/dev/null || true)
 
     claude_expires=0
-    NexisClaw_expires=0
+    GreenchClaw_expires=0
     if [ "$USE_JSON" -eq 1 ]; then
         claude_expires=$(json_expires_for_claude_cli)
-        NexisClaw_expires=$(json_expires_for_anthropic_any)
+        GreenchClaw_expires=$(json_expires_for_anthropic_any)
     else
         claude_expires=$(jq -r '.claudeAiOauth.expiresAt // 0' "$CLAUDE_CREDS" 2>/dev/null || echo "0")
-        NexisClaw_expires=$(jq -r '.profiles["anthropic:default"].expires // 0' "$NEXISCLAW_AUTH" 2>/dev/null || echo "0")
+        GreenchClaw_expires=$(jq -r '.profiles["anthropic:default"].expires // 0' "$GREENCHCLAW_AUTH" 2>/dev/null || echo "0")
     fi
 
     jq -n \
         --arg cs "$claude_status" \
         --arg ce "$claude_expires" \
-        --arg bs "$NexisClaw_status" \
-        --arg be "$NexisClaw_expires" \
+        --arg bs "$GreenchClaw_status" \
+        --arg be "$GreenchClaw_expires" \
         '{
             claude_code: {status: $cs, expires_at_ms: ($ce | tonumber)},
-            NexisClaw: {status: $bs, expires_at_ms: ($be | tonumber)},
+            GreenchClaw: {status: $bs, expires_at_ms: ($be | tonumber)},
             needs_reauth: (($cs | startswith("EXPIRED") or startswith("EXPIRING") or startswith("MISSING")) or ($bs | startswith("EXPIRED") or startswith("EXPIRING") or startswith("MISSING")))
         }'
     exit 0
@@ -167,19 +167,19 @@ fi
 # Simple output mode (for scripts/widgets)
 if [ "$OUTPUT_MODE" = "simple" ]; then
     claude_status=$(check_claude_code_auth 2>/dev/null || true)
-    NexisClaw_status=$(check_NexisClaw_auth 2>/dev/null || true)
+    GreenchClaw_status=$(check_GreenchClaw_auth 2>/dev/null || true)
 
     if [[ "$claude_status" == EXPIRED* ]] || [[ "$claude_status" == MISSING* ]]; then
         echo "CLAUDE_EXPIRED"
         exit 1
-    elif [[ "$NexisClaw_status" == EXPIRED* ]] || [[ "$NexisClaw_status" == MISSING* ]]; then
-        echo "NEXISCLAW_EXPIRED"
+    elif [[ "$GreenchClaw_status" == EXPIRED* ]] || [[ "$GreenchClaw_status" == MISSING* ]]; then
+        echo "GREENCHCLAW_EXPIRED"
         exit 1
     elif [[ "$claude_status" == EXPIRING* ]]; then
         echo "CLAUDE_EXPIRING"
         exit 2
-    elif [[ "$NexisClaw_status" == EXPIRING* ]]; then
-        echo "NEXISCLAW_EXPIRING"
+    elif [[ "$GreenchClaw_status" == EXPIRING* ]]; then
+        echo "GREENCHCLAW_EXPIRING"
         exit 2
     else
         echo "OK"
@@ -228,7 +228,7 @@ else
 fi
 
 echo ""
-echo "NexisClaw Auth (~/.NexisClaw/agents/main/agent/auth-profiles.json):"
+echo "GreenchClaw Auth (~/.GreenchClaw/agents/main/agent/auth-profiles.json):"
 if [ "$USE_JSON" -eq 1 ]; then
     best_profile=$(json_best_anthropic_profile)
     expires=$(json_expires_for_anthropic_any)
@@ -239,11 +239,11 @@ else
         | map(select(.value.provider == "anthropic"))
         | sort_by(.value.expires) | reverse
         | .[0].key // "none"
-    ' "$NEXISCLAW_AUTH" 2>/dev/null || echo "none")
+    ' "$GREENCHCLAW_AUTH" 2>/dev/null || echo "none")
     expires=$(jq -r '
         [.profiles | to_entries[] | select(.value.provider == "anthropic") | .value.expires]
         | max // 0
-    ' "$NEXISCLAW_AUTH" 2>/dev/null || echo "0")
+    ' "$GREENCHCLAW_AUTH" 2>/dev/null || echo "0")
     api_keys=0
 fi
 
@@ -253,7 +253,7 @@ if [ "$expires" -le 0 ] && [ "$api_keys" -gt 0 ]; then
     echo -e "  Status: ${GREEN}OK${NC} (API key)"
 elif [ "$expires" -le 0 ]; then
     echo -e "  Status: ${RED}NOT FOUND${NC}"
-    echo "  Note: Run 'NexisClaw doctor --yes' to sync from Claude Code"
+    echo "  Note: Run 'GreenchClaw doctor --yes' to sync from Claude Code"
 else
     now_ms=$(( $(date +%s) * 1000 ))
     diff_ms=$((expires - now_ms))
@@ -262,7 +262,7 @@ else
 
     if [ "$diff_ms" -lt 0 ]; then
         echo -e "  Status: ${RED}EXPIRED${NC}"
-        echo "  Note: Run 'NexisClaw doctor --yes' to sync from Claude Code"
+        echo "  Note: Run 'GreenchClaw doctor --yes' to sync from Claude Code"
     elif [ "$diff_ms" -lt 3600000 ]; then
         echo -e "  Status: ${YELLOW}EXPIRING SOON (${mins}m remaining)${NC}"
     else
@@ -273,8 +273,8 @@ fi
 
 echo ""
 echo "=== Service Status ==="
-if systemctl --user is-active NexisClaw >/dev/null 2>&1; then
-    echo -e "NexisClaw service: ${GREEN}running${NC}"
+if systemctl --user is-active GreenchClaw >/dev/null 2>&1; then
+    echo -e "GreenchClaw service: ${GREEN}running${NC}"
 else
-    echo -e "NexisClaw service: ${RED}NOT running${NC}"
+    echo -e "GreenchClaw service: ${RED}NOT running${NC}"
 fi

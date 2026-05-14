@@ -22,7 +22,7 @@ afterEach(async () => {
 
 function seedRunningProfileState(
   state: ReturnType<typeof makeState>,
-  profileName = "NexisClaw",
+  profileName = "GreenchClaw",
 ): void {
   (state.profiles as Map<string, unknown>).set(profileName, {
     profile: { name: profileName },
@@ -89,11 +89,11 @@ async function openManagedTabWithRunningProfile(params: {
   url?: string;
 }) {
   global.fetch = withBrowserFetchPreconnect(params.fetchMock);
-  const state = makeState("NexisClaw");
+  const state = makeState("GreenchClaw");
   seedRunningProfileState(state);
   const ctx = createTestBrowserRouteContext({ getState: () => state });
-  const NexisClaw = ctx.forProfile("NexisClaw");
-  return await NexisClaw.openTab(params.url ?? "http://127.0.0.1:3009");
+  const GreenchClaw = ctx.forProfile("GreenchClaw");
+  return await GreenchClaw.openTab(params.url ?? "http://127.0.0.1:3009");
 }
 
 describe("browser server-context tab selection state", () => {
@@ -122,13 +122,13 @@ describe("browser server-context tab selection state", () => {
     });
 
     global.fetch = withBrowserFetchPreconnect(fetchMock);
-    const state = makeState("NexisClaw");
+    const state = makeState("GreenchClaw");
     const ctx = createTestBrowserRouteContext({ getState: () => state });
-    const NexisClaw = ctx.forProfile("NexisClaw");
+    const GreenchClaw = ctx.forProfile("GreenchClaw");
 
-    const opened = await NexisClaw.openTab("http://127.0.0.1:8080");
+    const opened = await GreenchClaw.openTab("http://127.0.0.1:8080");
     expect(opened.targetId).toBe("CREATED");
-    expect(state.profiles.get("NexisClaw")?.lastTargetId).toBe("CREATED");
+    expect(state.profiles.get("GreenchClaw")?.lastTargetId).toBe("CREATED");
     expect(createTargetViaCdp).toHaveBeenCalledWith({
       cdpUrl: "http://127.0.0.1:18800",
       url: "http://127.0.0.1:8080",
@@ -166,12 +166,12 @@ describe("browser server-context tab selection state", () => {
     });
 
     global.fetch = withBrowserFetchPreconnect(fetchMock);
-    const state = makeState("NexisClaw");
+    const state = makeState("GreenchClaw");
     state.resolved.ssrfPolicy = {};
     const ctx = createTestBrowserRouteContext({ getState: () => state });
-    const NexisClaw = ctx.forProfile("NexisClaw");
+    const GreenchClaw = ctx.forProfile("GreenchClaw");
 
-    const selected = await NexisClaw.ensureTabAvailable();
+    const selected = await GreenchClaw.ensureTabAvailable();
     expect(selected.targetId).toBe("CREATED");
     expect(createTargetViaCdp).toHaveBeenCalledWith({
       cdpUrl: "http://127.0.0.1:18800",
@@ -225,13 +225,13 @@ describe("browser server-context tab selection state", () => {
     });
 
     global.fetch = withBrowserFetchPreconnect(fetchMock);
-    const state = makeState("NexisClaw");
+    const state = makeState("GreenchClaw");
     const ctx = createTestBrowserRouteContext({ getState: () => state });
-    const NexisClaw = ctx.forProfile("NexisClaw");
+    const GreenchClaw = ctx.forProfile("GreenchClaw");
 
-    const selected = await NexisClaw.ensureTabAvailable();
+    const selected = await GreenchClaw.ensureTabAvailable();
     expect(selected.targetId).toBe("REAL");
-    expect(state.profiles.get("NexisClaw")?.lastTargetId).toBe("REAL");
+    expect(state.profiles.get("GreenchClaw")?.lastTargetId).toBe("REAL");
     expect(createTargetViaCdp).toHaveBeenCalledWith({
       cdpUrl: "http://127.0.0.1:18800",
       url: "about:blank",
@@ -288,12 +288,12 @@ describe("browser server-context tab selection state", () => {
     });
 
     global.fetch = withBrowserFetchPreconnect(fetchMock);
-    const state = makeState("NexisClaw");
+    const state = makeState("GreenchClaw");
     seedRunningProfileState(state);
     const ctx = createTestBrowserRouteContext({ getState: () => state });
-    const NexisClaw = ctx.forProfile("NexisClaw");
+    const GreenchClaw = ctx.forProfile("GreenchClaw");
 
-    const opened = await NexisClaw.openTab("http://127.0.0.1:3009");
+    const opened = await GreenchClaw.openTab("http://127.0.0.1:3009");
     expect(opened.targetId).toBe("NEW");
   });
 
@@ -308,12 +308,12 @@ describe("browser server-context tab selection state", () => {
     });
 
     global.fetch = withBrowserFetchPreconnect(fetchMock);
-    const state = makeState("NexisClaw");
+    const state = makeState("GreenchClaw");
     state.resolved.attachOnly = true;
     const ctx = createTestBrowserRouteContext({ getState: () => state });
-    const NexisClaw = ctx.forProfile("NexisClaw");
+    const GreenchClaw = ctx.forProfile("GreenchClaw");
 
-    const opened = await NexisClaw.openTab("http://127.0.0.1:3009");
+    const opened = await GreenchClaw.openTab("http://127.0.0.1:3009");
     expect(opened.targetId).toBe("NEW");
     expect(fetchCallUrls(fetchMock).some((url) => url.includes("/json/close/"))).toBe(false);
   });
@@ -352,11 +352,11 @@ describe("browser server-context tab selection state", () => {
     });
 
     global.fetch = withBrowserFetchPreconnect(fetchMock);
-    const state = makeState("NexisClaw");
+    const state = makeState("GreenchClaw");
     const ctx = createTestBrowserRouteContext({ getState: () => state });
-    const NexisClaw = ctx.forProfile("NexisClaw");
+    const GreenchClaw = ctx.forProfile("GreenchClaw");
 
-    await expect(NexisClaw.openTab("file:///etc/passwd")).rejects.toBeInstanceOf(
+    await expect(GreenchClaw.openTab("file:///etc/passwd")).rejects.toBeInstanceOf(
       InvalidBrowserNavigationUrlError,
     );
     expect(fetchMock).not.toHaveBeenCalled();
@@ -373,12 +373,12 @@ describe("browser server-context tab selection state", () => {
       type: "page",
     });
 
-    const state = makeState("NexisClaw");
+    const state = makeState("GreenchClaw");
     state.resolved.ssrfPolicy = {};
     const ctx = createTestBrowserRouteContext({ getState: () => state });
-    const NexisClaw = ctx.forProfile("NexisClaw");
+    const GreenchClaw = ctx.forProfile("GreenchClaw");
 
-    const opened = await NexisClaw.openTab("https://example.com");
+    const opened = await GreenchClaw.openTab("https://example.com");
     expect(opened.targetId).toBe("NEW");
     const jsonNewEndpoint = "http://127.0.0.1:18800/json/new?https%3A%2F%2Fexample.com";
     expect(fetchJsonCall(fetchJson, 0)).toEqual([

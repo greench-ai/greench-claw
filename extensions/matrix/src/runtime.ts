@@ -1,4 +1,4 @@
-import { createPluginRuntimeStore } from "NexisClaw/plugin-sdk/runtime-store";
+import { createPluginRuntimeStore } from "GreenchClaw/plugin-sdk/runtime-store";
 import type { PluginRuntime } from "./runtime-api.js";
 
 const {

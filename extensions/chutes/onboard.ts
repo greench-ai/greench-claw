@@ -1,8 +1,8 @@
 import {
   applyAgentDefaultModelPrimary,
   applyProviderConfigWithModelCatalogPreset,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   CHUTES_BASE_URL,
   CHUTES_DEFAULT_MODEL_REF,
@@ -16,7 +16,7 @@ export { CHUTES_DEFAULT_MODEL_REF };
  * Apply Chutes provider configuration without changing the default model.
  * Registers all catalog models and sets provider aliases (chutes-fast, etc.).
  */
-export function applyChutesProviderConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyChutesProviderConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return applyProviderConfigWithModelCatalogPreset(cfg, {
     providerId: "chutes",
     api: "openai-completions",
@@ -37,7 +37,7 @@ export function applyChutesProviderConfig(cfg: NexisClawConfig): NexisClawConfig
 /**
  * Apply Chutes provider configuration AND set Chutes as the default model.
  */
-export function applyChutesConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyChutesConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   const next = applyChutesProviderConfig(cfg);
   return {
     ...next,
@@ -58,6 +58,6 @@ export function applyChutesConfig(cfg: NexisClawConfig): NexisClawConfig {
   };
 }
 
-export function applyChutesApiKeyConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyChutesApiKeyConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return applyAgentDefaultModelPrimary(applyChutesProviderConfig(cfg), CHUTES_DEFAULT_MODEL_REF);
 }

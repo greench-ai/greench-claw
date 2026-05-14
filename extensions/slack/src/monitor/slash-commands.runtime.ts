@@ -4,17 +4,18 @@ import {
   listNativeCommandSpecsForConfig as listNativeCommandSpecsForConfigImpl,
   parseCommandArgs as parseCommandArgsImpl,
   resolveCommandArgMenu as resolveCommandArgMenuImpl,
-} from "NexisClaw/plugin-sdk/command-auth-native";
+} from "GreenchClaw/plugin-sdk/command-auth-native";
 
 type BuildCommandTextFromArgs =
-  typeof import("NexisClaw/plugin-sdk/command-auth-native").buildCommandTextFromArgs;
+  typeof import("GreenchClaw/plugin-sdk/command-auth-native").buildCommandTextFromArgs;
 type FindCommandByNativeName =
-  typeof import("NexisClaw/plugin-sdk/command-auth-native").findCommandByNativeName;
+  typeof import("GreenchClaw/plugin-sdk/command-auth-native").findCommandByNativeName;
 type ListNativeCommandSpecsForConfig =
-  typeof import("NexisClaw/plugin-sdk/command-auth-native").listNativeCommandSpecsForConfig;
-type ParseCommandArgs = typeof import("NexisClaw/plugin-sdk/command-auth-native").parseCommandArgs;
+  typeof import("GreenchClaw/plugin-sdk/command-auth-native").listNativeCommandSpecsForConfig;
+type ParseCommandArgs =
+  typeof import("GreenchClaw/plugin-sdk/command-auth-native").parseCommandArgs;
 type ResolveCommandArgMenu =
-  typeof import("NexisClaw/plugin-sdk/command-auth-native").resolveCommandArgMenu;
+  typeof import("GreenchClaw/plugin-sdk/command-auth-native").resolveCommandArgMenu;
 
 export function buildCommandTextFromArgs(
   ...args: Parameters<BuildCommandTextFromArgs>

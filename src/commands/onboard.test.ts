@@ -24,7 +24,7 @@ vi.mock("../config/config.js", () => ({
 }));
 
 vi.mock("./onboard-helpers.js", () => ({
-  DEFAULT_WORKSPACE: "~/.NexisClaw/workspace",
+  DEFAULT_WORKSPACE: "~/.GreenchClaw/workspace",
   handleReset: mocks.handleReset,
 }));
 
@@ -69,7 +69,7 @@ describe("setupWizardCommand", () => {
 
     expect(runtime.error).toHaveBeenCalledOnce();
     expect(runtime.error).toHaveBeenCalledWith(
-      `Invalid --secret-input-mode. Use "plaintext" or "ref", or run ${formatCliCommand("NexisClaw onboard")} for the interactive setup.`,
+      `Invalid --secret-input-mode. Use "plaintext" or "ref", or run ${formatCliCommand("GreenchClaw onboard")} for the interactive setup.`,
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(mocks.runInteractiveSetup).not.toHaveBeenCalled();
@@ -85,10 +85,10 @@ describe("setupWizardCommand", () => {
 
       expect(runtime.log).toHaveBeenCalledWith(
         [
-          "Windows detected - NexisClaw runs great on WSL2!",
+          "Windows detected - GreenchClaw runs great on WSL2!",
           "Native Windows might be trickier.",
           "Quick setup: wsl --install (one command, one reboot)",
-          "Guide: https://docs.NexisClaw.ai/windows",
+          "Guide: https://docs.GreenchClaw.ai/windows",
         ].join("\n"),
       );
     } finally {
@@ -117,7 +117,7 @@ describe("setupWizardCommand", () => {
       config: {
         agents: {
           defaults: {
-            workspace: "/tmp/NexisClaw-custom-workspace",
+            workspace: "/tmp/GreenchClaw-custom-workspace",
           },
         },
       },
@@ -132,7 +132,7 @@ describe("setupWizardCommand", () => {
 
     expect(mocks.handleReset).toHaveBeenCalledWith(
       "config+creds+sessions",
-      path.resolve("/tmp/NexisClaw-custom-workspace"),
+      path.resolve("/tmp/GreenchClaw-custom-workspace"),
       runtime,
     );
   });
@@ -164,7 +164,7 @@ describe("setupWizardCommand", () => {
 
     expect(runtime.error).toHaveBeenCalledOnce();
     expect(runtime.error).toHaveBeenCalledWith(
-      `Invalid --reset-scope. Use "config", "config+creds+sessions", or "full". Run ${formatCliCommand("NexisClaw onboard --reset --reset-scope config")} for a config-only reset.`,
+      `Invalid --reset-scope. Use "config", "config+creds+sessions", or "full". Run ${formatCliCommand("GreenchClaw onboard --reset --reset-scope config")} for a config-only reset.`,
     );
     expect(runtime.exit).toHaveBeenCalledWith(1);
     expect(mocks.handleReset).not.toHaveBeenCalled();

@@ -1,2 +1,5 @@
-export { enqueueSystemEvent } from "NexisClaw/plugin-sdk/system-event-runtime";
-export { readSessionUpdatedAt, resolveStorePath } from "NexisClaw/plugin-sdk/session-store-runtime";
+export { enqueueSystemEvent } from "GreenchClaw/plugin-sdk/system-event-runtime";
+export {
+  readSessionUpdatedAt,
+  resolveStorePath,
+} from "GreenchClaw/plugin-sdk/session-store-runtime";

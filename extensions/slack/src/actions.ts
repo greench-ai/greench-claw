@@ -1,7 +1,7 @@
 import type { Block, KnownBlock, WebClient } from "@slack/web-api";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { requireRuntimeConfig } from "NexisClaw/plugin-sdk/plugin-config-runtime";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { requireRuntimeConfig } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import { resolveSlackAccount } from "./accounts.js";
 import { validateSlackBlocksArray } from "./blocks-input.js";
 import { createSlackWebClient, getSlackWriteClient } from "./client.js";
@@ -12,7 +12,7 @@ import { sendMessageSlack } from "./send.js";
 import { resolveSlackBotToken } from "./token.js";
 
 export type SlackActionClientOpts = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   accountId?: string;
   token?: string;
   client?: WebClient;
@@ -43,7 +43,7 @@ export type SlackPin = {
   file?: { id?: string; name?: string };
 };
 
-function resolveToken(explicit?: string, accountId?: string, cfg?: NexisClawConfig): string {
+function resolveToken(explicit?: string, accountId?: string, cfg?: GreenchClawConfig): string {
   if (explicit?.trim()) {
     const token = resolveSlackBotToken(explicit);
     if (token) {
@@ -198,7 +198,7 @@ export async function sendSlackMessage(
   to: string,
   content: string,
   opts: Omit<SlackActionClientOpts, "cfg"> & {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     mediaUrl?: string;
     mediaAccess?: {
       localRoots?: readonly string[];

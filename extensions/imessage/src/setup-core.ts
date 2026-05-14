@@ -2,7 +2,7 @@ import type {
   ChannelSetupAdapter,
   ChannelSetupWizard,
   ChannelSetupWizardTextInput,
-} from "NexisClaw/plugin-sdk/setup-runtime";
+} from "GreenchClaw/plugin-sdk/setup-runtime";
 import {
   createCliPathTextInput,
   createDelegatedSetupWizardProxy,
@@ -14,11 +14,11 @@ import {
   promptParsedAllowFromForAccount,
   setAccountAllowFromForChannel,
   setSetupChannelEnabled,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   type WizardPrompter,
-} from "NexisClaw/plugin-sdk/setup-runtime";
-import { formatDocsLink } from "NexisClaw/plugin-sdk/setup-tools";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/setup-runtime";
+import { formatDocsLink } from "GreenchClaw/plugin-sdk/setup-tools";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveDefaultIMessageAccountId, resolveIMessageAccount } from "./accounts.js";
 import { normalizeIMessageHandle } from "./targets.js";
 
@@ -68,10 +68,10 @@ function buildIMessageSetupPatch(input: {
 }
 
 async function promptIMessageAllowFrom(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prompter: WizardPrompter;
   accountId?: string;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   return promptParsedAllowFromForAccount({
     cfg: params.cfg,
     accountId: params.accountId,
@@ -108,7 +108,7 @@ export const imessageDmPolicy = {
   channel,
   policyKey: "channels.imessage.dmPolicy",
   allowFromKey: "channels.imessage.allowFrom",
-  resolveConfigKeys: (_cfg: NexisClawConfig, accountId?: string) => {
+  resolveConfigKeys: (_cfg: GreenchClawConfig, accountId?: string) => {
     const targetAccountId = accountId ?? resolveDefaultIMessageAccountId(_cfg);
     return targetAccountId !== "default"
       ? {
@@ -120,12 +120,12 @@ export const imessageDmPolicy = {
           allowFromKey: "channels.imessage.allowFrom",
         };
   },
-  getCurrent: (cfg: NexisClawConfig, accountId?: string) => {
+  getCurrent: (cfg: GreenchClawConfig, accountId?: string) => {
     const targetAccountId = accountId ?? resolveDefaultIMessageAccountId(cfg);
     return resolveIMessageAccount({ cfg, accountId: targetAccountId }).config.dmPolicy ?? "pairing";
   },
   setPolicy: (
-    cfg: NexisClawConfig,
+    cfg: GreenchClawConfig,
     policy: "pairing" | "allowlist" | "open" | "disabled",
     accountId?: string,
   ) => {
@@ -149,7 +149,7 @@ export const imessageDmPolicy = {
   promptAllowFrom: promptIMessageAllowFrom,
 };
 
-function resolveIMessageCliPath(params: { cfg: NexisClawConfig; accountId: string }) {
+function resolveIMessageCliPath(params: { cfg: GreenchClawConfig; accountId: string }) {
   return resolveIMessageAccount(params).config.cliPath ?? "imsg";
 }
 
@@ -169,10 +169,10 @@ export function createIMessageCliPathTextInput(
 export const imessageCompletionNote = {
   title: "iMessage next steps",
   lines: [
-    "Run NexisClaw on the Mac signed into Messages, or set cliPath to an SSH wrapper that runs imsg on that Mac.",
+    "Run GreenchClaw on the Mac signed into Messages, or set cliPath to an SSH wrapper that runs imsg on that Mac.",
     "Linux/Windows hosts cannot run the default local imsg path directly.",
-    "Run `imsg launch`, then `NexisClaw channels status --probe` to verify private API actions.",
-    "Ensure NexisClaw has Full Disk Access to Messages DB.",
+    "Run `imsg launch`, then `GreenchClaw channels status --probe` to verify private API actions.",
+    "Ensure GreenchClaw has Full Disk Access to Messages DB.",
     "Grant Automation permission for Messages when prompted.",
     "List chats with: imsg chats --limit 20",
     `Docs: ${formatDocsLink("/imessage", "imessage")}`,
@@ -191,7 +191,7 @@ export const imessageSetupStatusBase = {
   unconfiguredHint: "imsg missing",
   configuredScore: 1,
   unconfiguredScore: 0,
-  resolveConfigured: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId?: string }) =>
+  resolveConfigured: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId?: string }) =>
     resolveIMessageAccount({ cfg, accountId }).configured,
 };
 
@@ -218,6 +218,6 @@ export function createIMessageSetupWizardProxy(loadWizard: () => Promise<Channel
     ],
     completionNote: imessageCompletionNote,
     dmPolicy: imessageDmPolicy,
-    disable: (cfg: NexisClawConfig) => setSetupChannelEnabled(cfg, channel, false),
+    disable: (cfg: GreenchClawConfig) => setSetupChannelEnabled(cfg, channel, false),
   });
 }

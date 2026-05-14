@@ -10,20 +10,20 @@ import {
   resolveAgentEffectiveModelPrimary,
   resolveAgentWorkspaceDir,
   resolveDefaultModelForAgent,
-} from "NexisClaw/plugin-sdk/agent-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   resolveLivePluginConfigObject,
   resolvePluginConfigObject,
-} from "NexisClaw/plugin-sdk/plugin-config-runtime";
-import { definePluginEntry, type NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
-import { parseAgentSessionKey, parseThreadSessionSuffix } from "NexisClaw/plugin-sdk/routing";
-import { isPathInside, replaceFileAtomic } from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-config-runtime";
+import { definePluginEntry, type GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { parseAgentSessionKey, parseThreadSessionSuffix } from "GreenchClaw/plugin-sdk/routing";
+import { isPathInside, replaceFileAtomic } from "GreenchClaw/plugin-sdk/security-runtime";
 import {
   resolveSessionStoreEntry,
   updateSessionStore,
-} from "NexisClaw/plugin-sdk/session-store-runtime";
-import { tempWorkspace, resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+} from "GreenchClaw/plugin-sdk/session-store-runtime";
+import { tempWorkspace, resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 
 const DEFAULT_TIMEOUT_MS = 15_000;
 const DEFAULT_AGENT_ID = "main";
@@ -466,13 +466,16 @@ function isReservedActiveMemoryToolsAllowEntry(value: string): boolean {
   return normalized.startsWith("group:") || ACTIVE_MEMORY_RESERVED_TOOLS_ALLOW.has(normalized);
 }
 
-function resolveDefaultToolsAllow(cfg: NexisClawConfig | undefined): string[] {
+function resolveDefaultToolsAllow(cfg: GreenchClawConfig | undefined): string[] {
   return cfg?.plugins?.slots?.memory === "memory-lancedb"
     ? [...LANCEDB_ACTIVE_MEMORY_TOOLS_ALLOW]
     : [...DEFAULT_ACTIVE_MEMORY_TOOLS_ALLOW];
 }
 
-function resolveToolsAllow(params: { pluginToolsAllow: unknown; cfg?: NexisClawConfig }): string[] {
+function resolveToolsAllow(params: {
+  pluginToolsAllow: unknown;
+  cfg?: GreenchClawConfig;
+}): string[] {
   return (
     normalizeConfiguredToolsAllow(params.pluginToolsAllow) ?? resolveDefaultToolsAllow(params.cfg)
   );
@@ -513,7 +516,7 @@ function toSafeTranscriptAgentDirName(agentId: string): string {
   return encoded ? encoded : "unknown-agent";
 }
 
-function resolvePersistentTranscriptBaseDir(api: NexisClawPluginApi, agentId: string): string {
+function resolvePersistentTranscriptBaseDir(api: GreenchClawPluginApi, agentId: string): string {
   return path.join(
     api.runtime.state.resolveStateDir(),
     "plugins",
@@ -532,7 +535,7 @@ function requireTransientWorkspaceDir(tempDir: string | undefined): string {
 }
 
 function resolveCanonicalSessionKeyFromSessionId(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   agentId: string;
   sessionId?: string;
 }): string | undefined {
@@ -611,7 +614,7 @@ function isMissingRegisteredMemoryToolsError(
 }
 
 function resolveRecallRunChannelContext(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   agentId: string;
   sessionKey?: string;
   sessionId?: string;
@@ -704,7 +707,7 @@ function resolveRecallRunChannelContext(params: {
   }
 }
 
-function resolveToggleStatePath(api: NexisClawPluginApi): string {
+function resolveToggleStatePath(api: GreenchClawPluginApi): string {
   return path.join(
     api.runtime.state.resolveStateDir(),
     "plugins",
@@ -756,7 +759,7 @@ async function writeToggleStore(statePath: string, store: ActiveMemoryToggleStor
 }
 
 async function isSessionActiveMemoryDisabled(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   sessionKey?: string;
 }): Promise<boolean> {
   const sessionKey = params.sessionKey?.trim();
@@ -775,7 +778,7 @@ async function isSessionActiveMemoryDisabled(params: {
 }
 
 async function setSessionActiveMemoryDisabled(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   sessionKey: string;
   disabled: boolean;
 }): Promise<void> {
@@ -793,7 +796,7 @@ async function setSessionActiveMemoryDisabled(params: {
 }
 
 function resolveCommandSessionKey(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   config: ResolvedActiveRecallPluginConfig;
   sessionKey?: string;
   sessionId?: string;
@@ -831,7 +834,7 @@ function formatActiveMemoryCommandHelp(): string {
   ].join("\n");
 }
 
-function isActiveMemoryGloballyEnabled(cfg: NexisClawConfig): boolean {
+function isActiveMemoryGloballyEnabled(cfg: GreenchClawConfig): boolean {
   const entry = asRecord(cfg.plugins?.entries?.["active-memory"]);
   if (entry?.enabled === false) {
     return false;
@@ -841,9 +844,9 @@ function isActiveMemoryGloballyEnabled(cfg: NexisClawConfig): boolean {
 }
 
 function updateActiveMemoryGlobalEnabledInConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   enabled: boolean,
-): NexisClawConfig {
+): GreenchClawConfig {
   const entries = { ...cfg.plugins?.entries };
   const existingEntry = asRecord(entries["active-memory"]) ?? {};
   const existingConfig = asRecord(existingEntry.config) ?? {};
@@ -874,7 +877,7 @@ const ACTIVE_MEMORY_GLOBAL_MUTATION_ADMIN_REQUIRED_TEXT =
 
 function normalizePluginConfig(
   pluginConfig: unknown,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
 ): ResolvedActiveRecallPluginConfig {
   const raw = (
     pluginConfig && typeof pluginConfig === "object" ? pluginConfig : {}
@@ -950,9 +953,9 @@ function normalizePluginConfig(
 }
 
 function applyActiveMemoryRuntimeConfigSnapshot(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   pluginConfig: ResolvedActiveRecallPluginConfig,
-): NexisClawConfig {
+): GreenchClawConfig {
   const existingEntry = asRecord(cfg.plugins?.entries?.["active-memory"]);
   const existingPluginConfig = asRecord(existingEntry?.config);
   return {
@@ -1536,7 +1539,7 @@ function sanitizeDebugText(text: string): string {
 }
 
 async function persistPluginStatusLines(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   agentId: string;
   sessionKey?: string;
   statusLine?: string;
@@ -2398,7 +2401,7 @@ function parseModelCandidate(modelRef: string | undefined, defaultProvider = DEF
 }
 
 function getModelRef(
-  api: NexisClawPluginApi,
+  api: GreenchClawPluginApi,
   agentId: string,
   config: ResolvedActiveRecallPluginConfig,
   ctx?: {
@@ -2430,7 +2433,7 @@ function getModelRef(
 }
 
 async function runRecallSubagent(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   config: ResolvedActiveRecallPluginConfig;
   agentId: string;
   sessionKey?: string;
@@ -2476,8 +2479,8 @@ async function runRecallSubagent(params: {
   const transientWorkspace = params.config.persistTranscripts
     ? undefined
     : await tempWorkspace({
-        rootDir: resolvePreferredNexisClawTmpDir(),
-        prefix: "NexisClaw-active-memory-",
+        rootDir: resolvePreferredGreenchClawTmpDir(),
+        prefix: "GreenchClaw-active-memory-",
       });
   const tempDir = transientWorkspace?.dir;
   const persistedDir = params.config.persistTranscripts
@@ -2594,7 +2597,7 @@ async function runRecallSubagent(params: {
 }
 
 async function maybeResolveActiveRecall(params: {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   config: ResolvedActiveRecallPluginConfig;
   agentId: string;
   sessionKey?: string;
@@ -2889,15 +2892,15 @@ export default definePluginEntry({
   id: "active-memory",
   name: "Active Memory",
   description: "Proactively surfaces relevant memory before eligible conversational replies.",
-  register(api: NexisClawPluginApi) {
-    const readCurrentConfig = (): NexisClawConfig | undefined => {
+  register(api: GreenchClawPluginApi) {
+    const readCurrentConfig = (): GreenchClawConfig | undefined => {
       try {
         return (
-          (api.runtime.config?.current?.() as NexisClawConfig | undefined) ??
-          (api.config as NexisClawConfig | undefined)
+          (api.runtime.config?.current?.() as GreenchClawConfig | undefined) ??
+          (api.config as GreenchClawConfig | undefined)
         );
       } catch {
-        return api.config as NexisClawConfig | undefined;
+        return api.config as GreenchClawConfig | undefined;
       }
     };
     let config = normalizePluginConfig(api.pluginConfig, readCurrentConfig());
@@ -2923,7 +2926,7 @@ export default definePluginEntry({
     const refreshLiveConfigFromRuntime = () => {
       const livePluginConfig = resolveLivePluginConfigObject(
         api.runtime.config?.current
-          ? () => api.runtime.config.current() as NexisClawConfig
+          ? () => api.runtime.config.current() as GreenchClawConfig
           : undefined,
         "active-memory",
         api.pluginConfig as Record<string, unknown>,
@@ -2945,7 +2948,7 @@ export default definePluginEntry({
           return { text: formatActiveMemoryCommandHelp() };
         }
         if (isGlobal) {
-          const currentConfig = api.runtime.config.current() as NexisClawConfig;
+          const currentConfig = api.runtime.config.current() as GreenchClawConfig;
           if (action === "status") {
             return {
               text: `Active Memory: ${isActiveMemoryGloballyEnabled(currentConfig) ? "on" : "off"} globally.`,

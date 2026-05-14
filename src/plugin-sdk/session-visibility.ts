@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { callGateway as defaultCallGateway } from "../gateway/call.js";
 import { resolveAgentIdFromSessionKey } from "../routing/session-key.js";
 import {
@@ -65,7 +65,7 @@ export async function listSpawnedSessionKeys(params: {
   }
 }
 
-export function resolveSessionToolsVisibility(cfg: NexisClawConfig): SessionToolsVisibility {
+export function resolveSessionToolsVisibility(cfg: GreenchClawConfig): SessionToolsVisibility {
   const raw = (cfg.tools as { sessions?: { visibility?: unknown } } | undefined)?.sessions
     ?.visibility;
   const value = normalizeLowercaseStringOrEmpty(raw);
@@ -76,7 +76,7 @@ export function resolveSessionToolsVisibility(cfg: NexisClawConfig): SessionTool
 }
 
 export function resolveEffectiveSessionToolsVisibility(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sandboxed: boolean;
 }): SessionToolsVisibility {
   const visibility = resolveSessionToolsVisibility(params.cfg);
@@ -90,11 +90,11 @@ export function resolveEffectiveSessionToolsVisibility(params: {
   return visibility;
 }
 
-export function resolveSandboxSessionToolsVisibility(cfg: NexisClawConfig): "spawned" | "all" {
+export function resolveSandboxSessionToolsVisibility(cfg: GreenchClawConfig): "spawned" | "all" {
   return cfg.agents?.defaults?.sandbox?.sessionToolsVisibility ?? "spawned";
 }
 
-export function createAgentToAgentPolicy(cfg: NexisClawConfig): AgentToAgentPolicy {
+export function createAgentToAgentPolicy(cfg: GreenchClawConfig): AgentToAgentPolicy {
   const routingA2A = cfg.tools?.agentToAgent;
   const enabled = routingA2A?.enabled === true;
   const allowPatterns = Array.isArray(routingA2A?.allow) ? routingA2A.allow : [];

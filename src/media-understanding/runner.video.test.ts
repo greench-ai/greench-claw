@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { withTempDir } from "../test-helpers/temp-dir.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import { runCapability } from "./runner.js";
@@ -37,8 +37,8 @@ describe("runCapability video provider wiring", () => {
     let seenBaseUrl: string | undefined;
     let seenHeaders: Record<string, string> | undefined;
 
-    await withTempDir({ prefix: "NexisClaw-video-auth-" }, async (isolatedAgentDir) => {
-      await withVideoFixture("NexisClaw-video-merge", async ({ ctx, media, cache }) => {
+    await withTempDir({ prefix: "GreenchClaw-video-auth-" }, async (isolatedAgentDir) => {
+      await withVideoFixture("GreenchClaw-video-merge", async ({ ctx, media, cache }) => {
         const cfg = {
           models: {
             providers: {
@@ -68,7 +68,7 @@ describe("runCapability video provider wiring", () => {
               },
             },
           },
-        } as unknown as NexisClawConfig;
+        } as unknown as GreenchClawConfig;
 
         const result = await runCapability({
           capability: "video",
@@ -107,68 +107,71 @@ describe("runCapability video provider wiring", () => {
   });
 
   it("auto-selects moonshot for video when google is unavailable", async () => {
-    await withTempDir({ prefix: "NexisClaw-video-agent-" }, async (isolatedAgentDir) => {
+    await withTempDir({ prefix: "GreenchClaw-video-agent-" }, async (isolatedAgentDir) => {
       await withEnvAsync(
         {
           GEMINI_API_KEY: undefined,
           GOOGLE_API_KEY: undefined,
           MOONSHOT_API_KEY: undefined,
-          NEXISCLAW_AGENT_DIR: isolatedAgentDir,
+          GREENCHCLAW_AGENT_DIR: isolatedAgentDir,
           PI_CODING_AGENT_DIR: isolatedAgentDir,
         },
         async () => {
-          await withVideoFixture("NexisClaw-video-auto-moonshot", async ({ ctx, media, cache }) => {
-            const cfg = {
-              models: {
-                providers: {
-                  moonshot: {
-                    auth: "api-key",
-                    apiKey: "moonshot-key", // pragma: allowlist secret
-                    models: [],
+          await withVideoFixture(
+            "GreenchClaw-video-auto-moonshot",
+            async ({ ctx, media, cache }) => {
+              const cfg = {
+                models: {
+                  providers: {
+                    moonshot: {
+                      auth: "api-key",
+                      apiKey: "moonshot-key", // pragma: allowlist secret
+                      models: [],
+                    },
                   },
                 },
-              },
-              tools: {
-                media: {
-                  video: {
-                    enabled: true,
+                tools: {
+                  media: {
+                    video: {
+                      enabled: true,
+                    },
                   },
                 },
-              },
-            } as unknown as NexisClawConfig;
+              } as unknown as GreenchClawConfig;
 
-            const result = await runCapability({
-              capability: "video",
-              cfg,
-              ctx,
-              agentDir: isolatedAgentDir,
-              attachments: cache,
-              media,
-              providerRegistry: new Map([
-                [
-                  "google",
-                  {
-                    id: "google",
-                    capabilities: ["video"],
-                    describeVideo: async () => ({ text: "google" }),
-                  },
-                ],
-                [
-                  "moonshot",
-                  {
-                    id: "moonshot",
-                    capabilities: ["video"],
-                    describeVideo: async () => ({ text: "moonshot", model: "kimi-k2.5" }),
-                  },
-                ],
-              ]),
-            });
+              const result = await runCapability({
+                capability: "video",
+                cfg,
+                ctx,
+                agentDir: isolatedAgentDir,
+                attachments: cache,
+                media,
+                providerRegistry: new Map([
+                  [
+                    "google",
+                    {
+                      id: "google",
+                      capabilities: ["video"],
+                      describeVideo: async () => ({ text: "google" }),
+                    },
+                  ],
+                  [
+                    "moonshot",
+                    {
+                      id: "moonshot",
+                      capabilities: ["video"],
+                      describeVideo: async () => ({ text: "moonshot", model: "kimi-k2.5" }),
+                    },
+                  ],
+                ]),
+              });
 
-            expect(result.decision.outcome).toBe("success");
-            const output = requireCapabilityOutput(result, 0);
-            expect(output.provider).toBe("moonshot");
-            expect(output.text).toBe("moonshot");
-          });
+              expect(result.decision.outcome).toBe("success");
+              const output = requireCapabilityOutput(result, 0);
+              expect(output.provider).toBe("moonshot");
+              expect(output.text).toBe("moonshot");
+            },
+          );
         },
       );
     });

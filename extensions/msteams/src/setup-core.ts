@@ -1,12 +1,12 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   createStandardChannelSetupStatus,
   DEFAULT_ACCOUNT_ID,
   type ChannelSetupAdapter,
   type ChannelSetupWizard,
   type WizardPrompter,
-} from "NexisClaw/plugin-sdk/setup";
-import { formatDocsLink } from "NexisClaw/plugin-sdk/setup-tools";
+} from "GreenchClaw/plugin-sdk/setup";
+import { formatDocsLink } from "GreenchClaw/plugin-sdk/setup-tools";
 import { normalizeSecretInputString } from "./secret-input.js";
 import { hasConfiguredMSTeamsCredentials, resolveMSTeamsCredentials } from "./token.js";
 
@@ -102,7 +102,7 @@ export function createMSTeamsSetupWizardBase(): Pick<
         normalizeSecretInputString(process.env.MSTEAMS_TENANT_ID),
       );
 
-      let next: NexisClawConfig = cfg;
+      let next: GreenchClawConfig = cfg;
       let appId: string | null = null;
       let appPassword: string | null = null;
       let tenantId: string | null = null;

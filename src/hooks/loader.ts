@@ -7,7 +7,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { openRootFile } from "../infra/boundary-file-read.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
@@ -24,7 +24,7 @@ import { loadWorkspaceHookEntries } from "./workspace.js";
 
 const log = createSubsystemLogger("hooks:loader");
 const LOADED_INTERNAL_HOOK_REGISTRATIONS_KEY = Symbol.for(
-  "NexisClaw.loadedInternalHookRegistrations",
+  "GreenchClaw.loadedInternalHookRegistrations",
 );
 const loadedHookRegistrations = resolveGlobalSingleton<
   Array<{ event: string; handler: InternalHookHandler }>
@@ -35,13 +35,13 @@ function safeLogValue(value: string): string {
 }
 
 function maybeWarnTrustedHookSource(source: string): void {
-  if (source === "NexisClaw-workspace") {
+  if (source === "GreenchClaw-workspace") {
     log.warn(
       "Loading workspace hook code into the gateway process. Workspace hooks are trusted local code.",
     );
     return;
   }
-  if (source === "NexisClaw-managed") {
+  if (source === "GreenchClaw-managed") {
     log.warn(
       "Loading managed hook code into the gateway process. Managed hooks are trusted local code.",
     );
@@ -65,7 +65,7 @@ function resetLoadedInternalHooks(): void {
  * 1. Directory-based discovery (bundled, managed, workspace)
  * 2. Legacy config handlers (backwards compatibility)
  *
- * @param cfg - NexisClaw configuration
+ * @param cfg - GreenchClaw configuration
  * @param workspaceDir - Workspace directory for hook discovery
  * @returns Number of handlers successfully loaded
  *
@@ -78,7 +78,7 @@ function resetLoadedInternalHooks(): void {
  * ```
  */
 export async function loadInternalHooks(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   workspaceDir: string,
   opts?: {
     managedHooksDir?: string;
@@ -233,7 +233,7 @@ export async function loadInternalHooks(
       );
 
       // Legacy handlers are always workspace-relative, so use mtime-based cache busting
-      const importUrl = buildImportUrl(safeModulePath, "NexisClaw-workspace");
+      const importUrl = buildImportUrl(safeModulePath, "GreenchClaw-workspace");
       const mod = (await import(importUrl)) as Record<string, unknown>;
 
       // Get the handler function

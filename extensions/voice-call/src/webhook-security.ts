@@ -1,8 +1,8 @@
 import crypto from "node:crypto";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { isLoopbackHost } from "NexisClaw/plugin-sdk/gateway-runtime";
-import { safeEqualSecret } from "NexisClaw/plugin-sdk/security-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { isLoopbackHost } from "GreenchClaw/plugin-sdk/gateway-runtime";
+import { safeEqualSecret } from "GreenchClaw/plugin-sdk/security-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { getHeader } from "./http-headers.js";
 import type { WebhookContext } from "./types.js";
 

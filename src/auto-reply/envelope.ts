@@ -1,7 +1,7 @@
 import { resolveUserTimezone } from "../agents/date-time.js";
 import { normalizeChatType } from "../channels/chat-type.js";
 import { resolveSenderLabel, type SenderLabelParams } from "../channels/sender-label.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   resolveTimezone,
   formatUtcTimestamp,
@@ -66,7 +66,7 @@ function sanitizeEnvelopeHeaderPart(value: string): string {
     .trim();
 }
 
-export function resolveEnvelopeFormatOptions(cfg?: NexisClawConfig): EnvelopeFormatOptions {
+export function resolveEnvelopeFormatOptions(cfg?: GreenchClawConfig): EnvelopeFormatOptions {
   const defaults = cfg?.agents?.defaults;
   return {
     timezone: defaults?.envelopeTimezone,

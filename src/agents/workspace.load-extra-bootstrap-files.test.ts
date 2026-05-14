@@ -15,7 +15,7 @@ describe("loadExtraBootstrapFiles", () => {
   };
 
   beforeAll(async () => {
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-extra-bootstrap-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-extra-bootstrap-"));
   });
 
   afterAll(async () => {

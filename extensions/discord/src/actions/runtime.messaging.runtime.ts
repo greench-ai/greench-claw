@@ -1,5 +1,5 @@
 import { readDiscordComponentSpec } from "../components.js";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import { sendDiscordComponentMessage } from "../send.components.js";
 import {
   createThreadDiscord,
@@ -53,7 +53,7 @@ export const discordMessagingActionRuntime = {
 
 async function resolveDiscordReactionTargetChannelId(params: {
   target: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string;
 }): Promise<string> {
   try {

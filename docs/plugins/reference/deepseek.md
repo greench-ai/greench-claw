@@ -1,5 +1,5 @@
 ---
-summary: "Adds DeepSeek model provider support to NexisClaw."
+summary: "Adds DeepSeek model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the deepseek plugin
 title: "DeepSeek plugin"
@@ -7,12 +7,12 @@ title: "DeepSeek plugin"
 
 # DeepSeek plugin
 
-Adds DeepSeek model provider support to NexisClaw.
+Adds DeepSeek model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/deepseek-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/deepseek-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

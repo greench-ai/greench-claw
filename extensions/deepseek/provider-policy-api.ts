@@ -1,5 +1,5 @@
-import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-types";
+import type { ModelDefinitionConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-types";
 import { DEEPSEEK_MODEL_CATALOG } from "./models.js";
 import { resolveDeepSeekV4ThinkingProfile } from "./thinking.js";
 

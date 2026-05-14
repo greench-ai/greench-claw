@@ -1,4 +1,4 @@
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
 
 export const whatsappLog = createSubsystemLogger("gateway/channels/whatsapp");
 export const whatsappInboundLog = whatsappLog.child("inbound");

@@ -1,13 +1,13 @@
-import { importFreshModule } from "NexisClaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { describe, expect, it } from "vitest";
 import { validateConfigObjectRaw } from "./validation.js";
 
 describe("web search Codex native config validation", () => {
   it("accepts tools.web.search.openaiCodex", async () => {
-    const { NexisClawSchema: freshNexisClawSchema } = await importFreshModule<
+    const { GreenchClawSchema: freshGreenchClawSchema } = await importFreshModule<
       typeof import("./zod-schema.js")
     >(import.meta.url, "./zod-schema.js?scope=web-search-codex");
-    const result = freshNexisClawSchema.safeParse({
+    const result = freshGreenchClawSchema.safeParse({
       tools: {
         web: {
           search: {

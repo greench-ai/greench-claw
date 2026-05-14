@@ -7,9 +7,9 @@ const resolveThreadTsMock = vi.fn(async ({ message }: { message: Record<string, 
 }));
 const { createSlackMessageHandler } = await import("./message-handler.js");
 
-vi.mock("NexisClaw/plugin-sdk/channel-inbound", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/channel-inbound")>(
-    "NexisClaw/plugin-sdk/channel-inbound",
+vi.mock("GreenchClaw/plugin-sdk/channel-inbound", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/channel-inbound")>(
+    "GreenchClaw/plugin-sdk/channel-inbound",
   );
   return {
     ...actual,

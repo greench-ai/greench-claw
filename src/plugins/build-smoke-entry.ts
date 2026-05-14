@@ -4,4 +4,4 @@ export {
   getPluginCommandSpecs,
   matchPluginCommand,
 } from "./commands.js";
-export { loadNexisClawPlugins } from "./loader.js";
+export { loadGreenchClawPlugins } from "./loader.js";

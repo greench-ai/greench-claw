@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `NexisClaw voicecall` (voice-call plugin command surface)"
+summary: "CLI reference for `GreenchClaw voicecall` (voice-call plugin command surface)"
 read_when:
   - You use the voice-call plugin and want every CLI entry point
   - You need flag tables and defaults for setup, smoke, call, continue, speak, dtmf, end, status, tail, latency, expose, and start
 title: "Voicecall"
 ---
 
-# `NexisClaw voicecall`
+# `GreenchClaw voicecall`
 
 `voicecall` is a plugin-provided command. It only appears when the voice-call plugin is installed and enabled.
 
@@ -15,18 +15,18 @@ When the Gateway is running, operational commands (`call`, `start`, `continue`, 
 ## Subcommands
 
 ```bash
-NexisClaw voicecall setup    [--json]
-NexisClaw voicecall smoke    [-t <phone>] [--message <text>] [--mode <m>] [--yes] [--json]
-NexisClaw voicecall call     -m <text> [-t <phone>] [--mode <m>]
-NexisClaw voicecall start    --to <phone> [--message <text>] [--mode <m>]
-NexisClaw voicecall continue --call-id <id> --message <text>
-NexisClaw voicecall speak    --call-id <id> --message <text>
-NexisClaw voicecall dtmf     --call-id <id> --digits <digits>
-NexisClaw voicecall end      --call-id <id>
-NexisClaw voicecall status   [--call-id <id>] [--json]
-NexisClaw voicecall tail     [--file <path>] [--since <n>] [--poll <ms>]
-NexisClaw voicecall latency  [--file <path>] [--last <n>]
-NexisClaw voicecall expose   [--mode <m>] [--path <p>] [--port <port>] [--serve-path <p>]
+GreenchClaw voicecall setup    [--json]
+GreenchClaw voicecall smoke    [-t <phone>] [--message <text>] [--mode <m>] [--yes] [--json]
+GreenchClaw voicecall call     -m <text> [-t <phone>] [--mode <m>]
+GreenchClaw voicecall start    --to <phone> [--message <text>] [--mode <m>]
+GreenchClaw voicecall continue --call-id <id> --message <text>
+GreenchClaw voicecall speak    --call-id <id> --message <text>
+GreenchClaw voicecall dtmf     --call-id <id> --digits <digits>
+GreenchClaw voicecall end      --call-id <id>
+GreenchClaw voicecall status   [--call-id <id>] [--json]
+GreenchClaw voicecall tail     [--file <path>] [--since <n>] [--poll <ms>]
+GreenchClaw voicecall latency  [--file <path>] [--last <n>]
+GreenchClaw voicecall expose   [--mode <m>] [--path <p>] [--port <port>] [--serve-path <p>]
 ```
 
 | Subcommand | Description                                                     |
@@ -51,26 +51,26 @@ NexisClaw voicecall expose   [--mode <m>] [--path <p>] [--port <port>] [--serve-
 Prints human-readable readiness checks by default. Pass `--json` for scripts.
 
 ```bash
-NexisClaw voicecall setup
-NexisClaw voicecall setup --json
+GreenchClaw voicecall setup
+GreenchClaw voicecall setup --json
 ```
 
 ### `smoke`
 
 Runs the same readiness checks. It will not place a real phone call unless both `--to` and `--yes` are present.
 
-| Flag               | Default                           | Description                             |
-| ------------------ | --------------------------------- | --------------------------------------- |
-| `-t, --to <phone>` | (none)                            | Phone number to call for a live smoke.  |
-| `--message <text>` | `NexisClaw voice call smoke test.` | Message to speak during the smoke call. |
-| `--mode <mode>`    | `notify`                          | Call mode: `notify` or `conversation`.  |
-| `--yes`            | `false`                           | Actually place the live outbound call.  |
-| `--json`           | `false`                           | Print machine-readable JSON.            |
+| Flag               | Default                              | Description                             |
+| ------------------ | ------------------------------------ | --------------------------------------- |
+| `-t, --to <phone>` | (none)                               | Phone number to call for a live smoke.  |
+| `--message <text>` | `GreenchClaw voice call smoke test.` | Message to speak during the smoke call. |
+| `--mode <mode>`    | `notify`                             | Call mode: `notify` or `conversation`.  |
+| `--yes`            | `false`                              | Actually place the live outbound call.  |
+| `--json`           | `false`                              | Print machine-readable JSON.            |
 
 ```bash
-NexisClaw voicecall smoke
-NexisClaw voicecall smoke --to "+15555550123"        # dry run
-NexisClaw voicecall smoke --to "+15555550123" --yes  # live notify call
+GreenchClaw voicecall smoke
+GreenchClaw voicecall smoke --to "+15555550123"        # dry run
+GreenchClaw voicecall smoke --to "+15555550123" --yes  # live notify call
 ```
 
 <Note>
@@ -90,8 +90,8 @@ Initiate an outbound voice call.
 | `--mode <mode>`        | no       | `conversation`    | Call mode: `notify` (hang up after message) or `conversation` (stay open). |
 
 ```bash
-NexisClaw voicecall call --to "+15555550123" --message "Hello"
-NexisClaw voicecall call -m "Heads up" --mode notify
+GreenchClaw voicecall call --to "+15555550123" --message "Hello"
+GreenchClaw voicecall call -m "Heads up" --mode notify
 ```
 
 ### `start`
@@ -149,9 +149,9 @@ Inspect active calls.
 | `--json`         | `false` | Print machine-readable JSON. |
 
 ```bash
-NexisClaw voicecall status
-NexisClaw voicecall status --json
-NexisClaw voicecall status --call-id <id>
+GreenchClaw voicecall status
+GreenchClaw voicecall status --json
+GreenchClaw voicecall status --call-id <id>
 ```
 
 ## Logs and metrics
@@ -189,9 +189,9 @@ Enable, disable, or change the Tailscale serve/funnel configuration for the voic
 | `--serve-path <path>` | config `serve.path` or `/voice/webhook`   | Local webhook path.                             |
 
 ```bash
-NexisClaw voicecall expose --mode serve
-NexisClaw voicecall expose --mode funnel
-NexisClaw voicecall expose --mode off
+GreenchClaw voicecall expose --mode serve
+GreenchClaw voicecall expose --mode funnel
+GreenchClaw voicecall expose --mode off
 ```
 
 <Warning>

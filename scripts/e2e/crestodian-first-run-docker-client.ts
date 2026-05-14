@@ -6,7 +6,7 @@ import os from "node:os";
 import path from "node:path";
 import { runCli, shouldStartCrestodianForBareRoot } from "../../dist/cli/run-main.js";
 import { clearConfigCache } from "../../dist/config/config.js";
-import type { NexisClawConfig } from "../../dist/config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../dist/config/types.GreenchClaw.js";
 import { runCrestodian } from "../../dist/crestodian/crestodian.js";
 import type { RuntimeEnv } from "../../dist/runtime.js";
 
@@ -64,21 +64,21 @@ function renderCommandTemplate(template: string, vars: Record<string, string>): 
 async function main() {
   const spec = await readFirstRunSpec();
   const stateDir =
-    process.env.NEXISCLAW_STATE_DIR ??
-    (await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-crestodian-first-run-")));
-  const configPath = process.env.NEXISCLAW_CONFIG_PATH ?? path.join(stateDir, "NexisClaw.json");
-  process.env.NEXISCLAW_STATE_DIR = stateDir;
-  process.env.NEXISCLAW_CONFIG_PATH = configPath;
+    process.env.GREENCHCLAW_STATE_DIR ??
+    (await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-crestodian-first-run-")));
+  const configPath = process.env.GREENCHCLAW_CONFIG_PATH ?? path.join(stateDir, "GreenchClaw.json");
+  process.env.GREENCHCLAW_STATE_DIR = stateDir;
+  process.env.GREENCHCLAW_CONFIG_PATH = configPath;
   await fs.rm(stateDir, { recursive: true, force: true });
   await fs.mkdir(stateDir, { recursive: true });
   clearConfigCache();
 
   assert(
-    shouldStartCrestodianForBareRoot(["node", "NexisClaw"]),
-    "bare NexisClaw invocation did not route to Crestodian",
+    shouldStartCrestodianForBareRoot(["node", "GreenchClaw"]),
+    "bare GreenchClaw invocation did not route to Crestodian",
   );
   process.exitCode = undefined;
-  await runCli(["node", "NexisClaw", "onboard", "--modern", "--non-interactive", "--json"]);
+  await runCli(["node", "GreenchClaw", "onboard", "--modern", "--non-interactive", "--json"]);
   assert(
     process.exitCode === undefined || process.exitCode === 0,
     "modern onboard overview exited nonzero",
@@ -123,7 +123,7 @@ async function main() {
     );
   }
 
-  const config = JSON.parse(await fs.readFile(configPath, "utf8")) as NexisClawConfig;
+  const config = JSON.parse(await fs.readFile(configPath, "utf8")) as GreenchClawConfig;
   assert(
     config.agents?.defaults?.workspace === spec.dockerDefaultWorkspace,
     "first-run setup did not write default workspace",

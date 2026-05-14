@@ -31,7 +31,7 @@ import type { PluginConfigUiHint } from "./manifest-types.js";
 import { createPluginCacheKey, PluginLruCache } from "./plugin-cache-primitives.js";
 import type { PluginKind } from "./plugin-kind.types.js";
 
-export const PLUGIN_MANIFEST_FILENAME = "NexisClaw.plugin.json";
+export const PLUGIN_MANIFEST_FILENAME = "GreenchClaw.plugin.json";
 export const PLUGIN_MANIFEST_FILENAMES = [PLUGIN_MANIFEST_FILENAME] as const;
 export const MAX_PLUGIN_MANIFEST_BYTES = 256 * 1024;
 const MAX_PLUGIN_MANIFEST_LOAD_CACHE_ENTRIES = 512;
@@ -231,7 +231,7 @@ export type PluginManifestSetup = {
 };
 
 export type PluginManifestQaRunner = {
-  /** Subcommand mounted beneath `NexisClaw qa`, for example `matrix`. */
+  /** Subcommand mounted beneath `GreenchClaw qa`, for example `matrix`. */
   commandName: string;
   /** Optional user-facing help text for fallback host stubs. */
   description?: string;
@@ -1699,7 +1699,7 @@ export function loadPluginManifest(
   });
 }
 
-// package.json "NexisClaw" metadata (used for setup/catalog)
+// package.json "GreenchClaw" metadata (used for setup/catalog)
 export type PluginPackageChannel = {
   id?: string;
   label?: string;
@@ -1766,7 +1766,7 @@ export type PluginPackageInstall = {
   allowInvalidConfigRecovery?: boolean;
 };
 
-export type NexisClawPackageStartup = {
+export type GreenchClawPackageStartup = {
   /**
    * Opt-in for channel plugins whose `setupEntry` fully covers the gateway
    * startup surface needed before the server starts listening.
@@ -1774,25 +1774,25 @@ export type NexisClawPackageStartup = {
   deferConfiguredChannelFullLoadUntilAfterListen?: boolean;
 };
 
-export type NexisClawPackageSetupFeatures = {
+export type GreenchClawPackageSetupFeatures = {
   configPromotion?: boolean;
   legacyStateMigrations?: boolean;
   legacySessionSurfaces?: boolean;
 };
 
-export type NexisClawPackageManifest = {
+export type GreenchClawPackageManifest = {
   extensions?: string[];
   runtimeExtensions?: string[];
   setupEntry?: string;
   runtimeSetupEntry?: string;
-  setupFeatures?: NexisClawPackageSetupFeatures;
+  setupFeatures?: GreenchClawPackageSetupFeatures;
   plugin?: {
     id?: string;
     label?: string;
   };
   channel?: PluginPackageChannel;
   install?: PluginPackageInstall;
-  startup?: NexisClawPackageStartup;
+  startup?: GreenchClawPackageStartup;
 };
 
 export const DEFAULT_PLUGIN_ENTRY_CANDIDATES = [
@@ -1815,11 +1815,11 @@ export type PackageManifest = {
   description?: string;
   dependencies?: Record<string, string>;
   optionalDependencies?: Record<string, string>;
-} & Partial<Record<ManifestKey, NexisClawPackageManifest>>;
+} & Partial<Record<ManifestKey, GreenchClawPackageManifest>>;
 
 export function getPackageManifestMetadata(
   manifest: PackageManifest | undefined,
-): NexisClawPackageManifest | undefined {
+): GreenchClawPackageManifest | undefined {
   if (!manifest) {
     return undefined;
   }

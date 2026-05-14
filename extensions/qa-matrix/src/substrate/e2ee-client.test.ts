@@ -14,18 +14,18 @@ describe("matrix qa e2ee client storage", () => {
   it("shares persisted crypto and sync state by actor account", () => {
     const first = __testing.buildMatrixQaE2eeStoragePaths({
       actorId: "driver",
-      outputDir: "/tmp/NexisClaw/.artifacts/qa-e2e/matrix-run",
+      outputDir: "/tmp/GreenchClaw/.artifacts/qa-e2e/matrix-run",
       scenarioId: "matrix-e2ee-basic-reply",
     });
     const second = __testing.buildMatrixQaE2eeStoragePaths({
       actorId: "driver",
-      outputDir: "/tmp/NexisClaw/.artifacts/qa-e2e/matrix-run",
+      outputDir: "/tmp/GreenchClaw/.artifacts/qa-e2e/matrix-run",
       scenarioId: "matrix-e2ee-qr-verification",
     });
 
     expect(first.accountDir).toBe(
       path.join(
-        "/tmp/NexisClaw/.artifacts/qa-e2e/matrix-run",
+        "/tmp/GreenchClaw/.artifacts/qa-e2e/matrix-run",
         "matrix-e2ee",
         "accounts",
         "driver",

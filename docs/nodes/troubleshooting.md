@@ -11,19 +11,19 @@ Use this page when a node is visible in status but node tools fail.
 ## Command ladder
 
 ```bash
-NexisClaw status
-NexisClaw gateway status
-NexisClaw logs --follow
-NexisClaw doctor
-NexisClaw channels status --probe
+GreenchClaw status
+GreenchClaw gateway status
+GreenchClaw logs --follow
+GreenchClaw doctor
+GreenchClaw channels status --probe
 ```
 
 Then run node specific checks:
 
 ```bash
-NexisClaw nodes status
-NexisClaw nodes describe --node <idOrNameOrIp>
-NexisClaw approvals get --node <idOrNameOrIp>
+GreenchClaw nodes status
+GreenchClaw nodes describe --node <idOrNameOrIp>
+GreenchClaw approvals get --node <idOrNameOrIp>
 ```
 
 Healthy signals:
@@ -39,9 +39,9 @@ Healthy signals:
 Quick check and fix:
 
 ```bash
-NexisClaw nodes describe --node <idOrNameOrIp>
-NexisClaw nodes canvas snapshot --node <idOrNameOrIp>
-NexisClaw logs --follow
+GreenchClaw nodes describe --node <idOrNameOrIp>
+GreenchClaw nodes canvas snapshot --node <idOrNameOrIp>
+GreenchClaw logs --follow
 ```
 
 If you see `NODE_BACKGROUND_UNAVAILABLE`, bring the node app to the foreground and retry.
@@ -66,17 +66,17 @@ These are different gates:
 Quick checks:
 
 ```bash
-NexisClaw devices list
-NexisClaw nodes status
-NexisClaw approvals get --node <idOrNameOrIp>
-NexisClaw approvals allowlist add --node <idOrNameOrIp> "/usr/bin/uname"
+GreenchClaw devices list
+GreenchClaw nodes status
+GreenchClaw approvals get --node <idOrNameOrIp>
+GreenchClaw approvals allowlist add --node <idOrNameOrIp> "/usr/bin/uname"
 ```
 
 If pairing is missing, approve the node device first.
 If `nodes describe` is missing a command, check the gateway node command policy and whether the node actually declared that command on connect.
 If pairing is fine but `system.run` fails, fix exec approvals/allowlist on that node.
 
-Node pairing is an identity/trust gate, not a per-command approval surface. For `system.run`, the per-node policy lives in that node's exec approvals file (`NexisClaw approvals get --node ...`), not in the gateway pairing record.
+Node pairing is an identity/trust gate, not a per-command approval surface. For `system.run`, the per-node policy lives in that node's exec approvals file (`GreenchClaw approvals get --node ...`), not in the gateway pairing record.
 
 For approval-backed `host=node` runs, the gateway also binds execution to the
 prepared canonical `systemRunPlan`. If a later caller mutates command/cwd or
@@ -99,10 +99,10 @@ run as an approval mismatch instead of trusting the edited payload.
 ## Fast recovery loop
 
 ```bash
-NexisClaw nodes status
-NexisClaw nodes describe --node <idOrNameOrIp>
-NexisClaw approvals get --node <idOrNameOrIp>
-NexisClaw logs --follow
+GreenchClaw nodes status
+GreenchClaw nodes describe --node <idOrNameOrIp>
+GreenchClaw approvals get --node <idOrNameOrIp>
+GreenchClaw logs --follow
 ```
 
 If still stuck:

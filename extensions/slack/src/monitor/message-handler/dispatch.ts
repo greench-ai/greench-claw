@@ -1,4 +1,4 @@
-import { resolveHumanDelayConfig } from "NexisClaw/plugin-sdk/agent-runtime";
+import { resolveHumanDelayConfig } from "GreenchClaw/plugin-sdk/agent-runtime";
 import {
   createStatusReactionController,
   DEFAULT_TIMING,
@@ -6,13 +6,13 @@ import {
   logTypingFailure,
   removeAckReactionAfterReply,
   type StatusReactionAdapter,
-} from "NexisClaw/plugin-sdk/channel-feedback";
+} from "GreenchClaw/plugin-sdk/channel-feedback";
 import {
   createChannelMessageReplyPipeline,
   defineFinalizableLivePreviewAdapter,
   deliverWithFinalizableLivePreviewAdapter,
   resolveChannelMessageSourceReplyDeliveryMode,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 import {
   buildChannelProgressDraftLine,
   buildChannelProgressDraftLineForEntry,
@@ -27,21 +27,21 @@ import {
   resolveChannelStreamingPreviewToolProgress,
   resolveChannelStreamingSuppressDefaultToolProgressMessages,
   type ChannelProgressDraftLine,
-} from "NexisClaw/plugin-sdk/channel-streaming";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+} from "GreenchClaw/plugin-sdk/channel-streaming";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import {
   type ChannelTurnRecordOptions,
   hasVisibleInboundReplyDispatch,
   runInboundReplyTurn,
-} from "NexisClaw/plugin-sdk/inbound-reply-dispatch";
-import { resolveAgentOutboundIdentity } from "NexisClaw/plugin-sdk/outbound-runtime";
-import { clearHistoryEntriesIfEnabled } from "NexisClaw/plugin-sdk/reply-history";
-import { resolveSendableOutboundReplyParts } from "NexisClaw/plugin-sdk/reply-payload";
-import type { ReplyDispatchKind, ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
-import { resolveInboundLastRouteSessionKey } from "NexisClaw/plugin-sdk/routing";
-import { danger, logVerbose, shouldLogVerbose, sleep } from "NexisClaw/plugin-sdk/runtime-env";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "NexisClaw/plugin-sdk/security-runtime";
-import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/inbound-reply-dispatch";
+import { resolveAgentOutboundIdentity } from "GreenchClaw/plugin-sdk/outbound-runtime";
+import { clearHistoryEntriesIfEnabled } from "GreenchClaw/plugin-sdk/reply-history";
+import { resolveSendableOutboundReplyParts } from "GreenchClaw/plugin-sdk/reply-payload";
+import type { ReplyDispatchKind, ReplyPayload } from "GreenchClaw/plugin-sdk/reply-runtime";
+import { resolveInboundLastRouteSessionKey } from "GreenchClaw/plugin-sdk/routing";
+import { danger, logVerbose, shouldLogVerbose, sleep } from "GreenchClaw/plugin-sdk/runtime-env";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "GreenchClaw/plugin-sdk/security-runtime";
+import { normalizeOptionalLowercaseString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { reactSlackMessage, removeSlackReaction } from "../../actions.js";
 import { createSlackDraftStream } from "../../draft-stream.js";
 import { formatSlackError } from "../../errors.js";

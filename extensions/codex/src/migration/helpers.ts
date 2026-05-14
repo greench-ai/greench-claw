@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { readJsonFileWithFallback } from "NexisClaw/plugin-sdk/json-store";
-import { pathExists } from "NexisClaw/plugin-sdk/security-runtime";
+import { readJsonFileWithFallback } from "GreenchClaw/plugin-sdk/json-store";
+import { pathExists } from "GreenchClaw/plugin-sdk/security-runtime";
 
 export async function exists(filePath: string): Promise<boolean> {
   return await pathExists(filePath);

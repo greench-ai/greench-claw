@@ -10,8 +10,8 @@ import {
   type ChannelSetupDmPolicy,
   type ChannelSetupWizard,
   type DmPolicy,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/setup";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/setup";
 import {
   checkZcaAuthenticated,
   listZalouserAccountIds,
@@ -42,11 +42,11 @@ function parseZalouserEntries(raw: string): string[] {
 }
 
 function setZalouserAccountScopedConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
   defaultPatch: Record<string, unknown>,
   accountPatch: Record<string, unknown> = defaultPatch,
-): NexisClawConfig {
+): GreenchClawConfig {
   return patchScopedAccountConfig({
     cfg,
     channelKey: channel,
@@ -57,10 +57,10 @@ function setZalouserAccountScopedConfig(
 }
 
 function setZalouserDmPolicy(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
   policy: DmPolicy,
-): NexisClawConfig {
+): GreenchClawConfig {
   const resolvedAccountId = normalizeAccountId(accountId) ?? DEFAULT_ACCOUNT_ID;
   const resolved = resolveZalouserAccountSync({ cfg, accountId: resolvedAccountId });
   return setZalouserAccountScopedConfig(
@@ -78,20 +78,20 @@ function setZalouserDmPolicy(
 }
 
 function setZalouserGroupPolicy(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
   groupPolicy: "open" | "allowlist" | "disabled",
-): NexisClawConfig {
+): GreenchClawConfig {
   return setZalouserAccountScopedConfig(cfg, accountId, {
     groupPolicy,
   });
 }
 
 function setZalouserGroupAllowlist(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
   groupKeys: string[],
-): NexisClawConfig {
+): GreenchClawConfig {
   const groups = Object.fromEntries(
     groupKeys.map((key) => [key, { enabled: true, requireMention: true }]),
   );
@@ -100,8 +100,8 @@ function setZalouserGroupAllowlist(
   });
 }
 
-function ensureZalouserPluginEnabled(cfg: NexisClawConfig): NexisClawConfig {
-  const next: NexisClawConfig = {
+function ensureZalouserPluginEnabled(cfg: GreenchClawConfig): GreenchClawConfig {
+  const next: GreenchClawConfig = {
     ...cfg,
     plugins: {
       ...cfg.plugins,
@@ -143,10 +143,10 @@ async function noteZalouserHelp(
 }
 
 async function promptZalouserAllowFrom(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prompter: Parameters<NonNullable<ChannelSetupDmPolicy["promptAllowFrom"]>>[0]["prompter"];
   accountId: string;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   const { cfg, prompter, accountId } = params;
   const resolved = resolveZalouserAccountSync({ cfg, accountId });
   const existingAllowFrom = resolved.config.allowFrom ?? [];
@@ -163,7 +163,7 @@ async function promptZalouserAllowFrom(params: {
         [
           "No DM allowlist entries added yet.",
           "Direct chats will stay blocked until you add people later.",
-          `Tip: use \`${formatCliCommand("NexisClaw directory peers list --channel zalouser")}\` to look up people after onboarding.`,
+          `Tip: use \`${formatCliCommand("GreenchClaw directory peers list --channel zalouser")}\` to look up people after onboarding.`,
         ].join("\n"),
         ZALOUSER_ALLOWLIST_TITLE,
       );
@@ -241,10 +241,10 @@ const zalouserDmPolicy: ChannelSetupDmPolicy = {
 };
 
 async function promptZalouserQuickstartDmPolicy(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prompter: Parameters<NonNullable<ChannelSetupWizard["prepare"]>>[0]["prompter"];
   accountId: string;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   const { cfg, prompter, accountId } = params;
   const resolved = resolveZalouserAccountSync({ cfg, accountId });
   const existingPolicy = resolved.config.dmPolicy ?? "pairing";
@@ -417,7 +417,7 @@ export const zalouserSetupWizard: ChannelSetupWizard = {
           [
             "No group allowlist entries added yet.",
             "Group chats will stay blocked until you add groups later.",
-            `Tip: use \`${formatCliCommand("NexisClaw directory groups list --channel zalouser")}\` after onboarding to find group IDs.`,
+            `Tip: use \`${formatCliCommand("GreenchClaw directory groups list --channel zalouser")}\` after onboarding to find group IDs.`,
             "Mention requirement stays on by default for groups you allow later.",
           ].join("\n"),
           ZALOUSER_GROUPS_TITLE,

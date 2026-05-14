@@ -1,5 +1,5 @@
 import { normalizeConfiguredMcpServers } from "../config/mcp-config-normalize.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   loadEnabledBundleMcpConfig,
   type BundleMcpConfig,
@@ -14,7 +14,7 @@ type MergedBundleMcpConfig = {
 
 type BundleMcpServerMapper = (server: BundleMcpServerConfig, name: string) => BundleMcpServerConfig;
 
-const NEXISCLAW_TRANSPORT_TO_CLI_BUNDLE_TYPE: Record<string, string> = {
+const GREENCHCLAW_TRANSPORT_TO_CLI_BUNDLE_TYPE: Record<string, string> = {
   "streamable-http": "http",
   http: "http",
   sse: "sse",
@@ -22,10 +22,10 @@ const NEXISCLAW_TRANSPORT_TO_CLI_BUNDLE_TYPE: Record<string, string> = {
 };
 
 /**
- * User config stores NexisClaw MCP transport names, while CLI backends such as
+ * User config stores GreenchClaw MCP transport names, while CLI backends such as
  * Claude Code and Gemini expect a downstream `type` field. Keep this adapter
  * out of the generic merge path because embedded Pi still consumes the raw
- * NexisClaw `transport` shape directly.
+ * GreenchClaw `transport` shape directly.
  */
 export function toCliBundleMcpServerConfig(server: BundleMcpServerConfig): BundleMcpServerConfig {
   const next = { ...server } as Record<string, unknown>;
@@ -35,7 +35,7 @@ export function toCliBundleMcpServerConfig(server: BundleMcpServerConfig): Bundl
     return next as BundleMcpServerConfig;
   }
   if (typeof rawTransport === "string") {
-    const mapped = NEXISCLAW_TRANSPORT_TO_CLI_BUNDLE_TYPE[rawTransport];
+    const mapped = GREENCHCLAW_TRANSPORT_TO_CLI_BUNDLE_TYPE[rawTransport];
     if (mapped) {
       next.type = mapped;
     }
@@ -45,7 +45,7 @@ export function toCliBundleMcpServerConfig(server: BundleMcpServerConfig): Bundl
 
 export function loadMergedBundleMcpConfig(params: {
   workspaceDir: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   mapConfiguredServer?: BundleMcpServerMapper;
 }): MergedBundleMcpConfig {
   const bundleMcp = loadEnabledBundleMcpConfig({
@@ -57,7 +57,7 @@ export function loadMergedBundleMcpConfig(params: {
 
   return {
     config: {
-      // NexisClaw config is the owner-managed layer, so it overrides bundle defaults.
+      // GreenchClaw config is the owner-managed layer, so it overrides bundle defaults.
       mcpServers: {
         ...bundleMcp.config.mcpServers,
         ...Object.fromEntries(

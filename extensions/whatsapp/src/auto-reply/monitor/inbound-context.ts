@@ -1,7 +1,7 @@
 import {
   evaluateSupplementalContextVisibility,
   filterSupplementalContextItems,
-} from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/security-runtime";
 import {
   getComparableIdentityValues,
   getReplyContext,

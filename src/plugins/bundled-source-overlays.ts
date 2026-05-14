@@ -45,7 +45,7 @@ function isFilesystemMountPoint(targetPath: string): boolean {
 }
 
 function sourceOverlaysDisabled(env: NodeJS.ProcessEnv): boolean {
-  const raw = normalizeOptionalLowercaseString(env.NEXISCLAW_DISABLE_BUNDLED_SOURCE_OVERLAYS);
+  const raw = normalizeOptionalLowercaseString(env.GREENCHCLAW_DISABLE_BUNDLED_SOURCE_OVERLAYS);
   return raw === "1" || raw === "true";
 }
 

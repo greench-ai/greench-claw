@@ -151,7 +151,7 @@ describe("talk realtime gateway relay", () => {
         bridgeRequest?.onToolCall?.({
           itemId: "item-1",
           callId: "call-1",
-          name: "NexisClaw_agent_consult",
+          name: "GreenchClaw_agent_consult",
           args: { question: "what now" },
         });
       }),
@@ -272,7 +272,7 @@ describe("talk realtime gateway relay", () => {
       type: "toolCall",
       itemId: "item-1",
       callId: "call-1",
-      name: "NexisClaw_agent_consult",
+      name: "GreenchClaw_agent_consult",
       args: { question: "what now" },
     });
     expectRecordFields(toolCallPayload.talkEvent, {

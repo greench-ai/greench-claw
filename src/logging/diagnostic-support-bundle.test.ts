@@ -14,7 +14,7 @@ describe("diagnostic support bundle helpers", () => {
   let tempDir: string;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-support-bundle-"));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-support-bundle-"));
   });
 
   afterEach(() => {

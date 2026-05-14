@@ -219,11 +219,11 @@ describe("createReplyMediaPathNormalizer", () => {
   });
 
   it("stages absolute workspace media paths so the PR scenario now works", async () => {
-    const absolutePath = "/Users/peter/.NexisClaw/workspace/exports/images/chart.png";
+    const absolutePath = "/Users/peter/.GreenchClaw/workspace/exports/images/chart.png";
     const normalize = createReplyMediaPathNormalizer({
       cfg: { agents: { defaults: { mediaMaxMb: 8 } } },
       sessionKey: "session-key",
-      workspaceDir: "/Users/peter/.NexisClaw/workspace",
+      workspaceDir: "/Users/peter/.GreenchClaw/workspace",
     });
 
     const result = await normalize({
@@ -235,7 +235,7 @@ describe("createReplyMediaPathNormalizer", () => {
   });
 
   it("prefers channel account media limits when staging reply attachments", async () => {
-    const absolutePath = "/Users/peter/.NexisClaw/workspace/exports/images/chart.png";
+    const absolutePath = "/Users/peter/.GreenchClaw/workspace/exports/images/chart.png";
     const normalize = createReplyMediaPathNormalizer({
       cfg: {
         channels: {
@@ -251,7 +251,7 @@ describe("createReplyMediaPathNormalizer", () => {
         agents: { defaults: { mediaMaxMb: 8 } },
       },
       sessionKey: undefined,
-      workspaceDir: "/Users/peter/.NexisClaw/workspace",
+      workspaceDir: "/Users/peter/.GreenchClaw/workspace",
       messageProvider: "whatsapp",
       accountId: "work",
     });
@@ -298,7 +298,7 @@ describe("createReplyMediaPathNormalizer", () => {
   });
 
   it("keeps managed generated media under the shared media root", async () => {
-    vi.stubEnv("NEXISCLAW_STATE_DIR", "/Users/peter/.NexisClaw");
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", "/Users/peter/.GreenchClaw");
     const normalize = createReplyMediaPathNormalizer({
       cfg: {},
       sessionKey: "session-key",
@@ -306,11 +306,11 @@ describe("createReplyMediaPathNormalizer", () => {
     });
 
     const result = await normalize({
-      mediaUrls: ["/Users/peter/.NexisClaw/media/tool-image-generation/generated.png"],
+      mediaUrls: ["/Users/peter/.GreenchClaw/media/tool-image-generation/generated.png"],
     });
 
-    expectMedia(result, "/Users/peter/.NexisClaw/media/tool-image-generation/generated.png", [
-      "/Users/peter/.NexisClaw/media/tool-image-generation/generated.png",
+    expectMedia(result, "/Users/peter/.GreenchClaw/media/tool-image-generation/generated.png", [
+      "/Users/peter/.GreenchClaw/media/tool-image-generation/generated.png",
     ]);
     expect(resolveOutboundAttachmentFromUrl).not.toHaveBeenCalled();
   });
@@ -320,7 +320,7 @@ describe("createReplyMediaPathNormalizer", () => {
       workspaceDir: "/tmp/sandboxes/session-1",
       containerWorkdir: "/workspace",
     });
-    vi.stubEnv("NEXISCLAW_STATE_DIR", "/Users/peter/.NexisClaw");
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", "/Users/peter/.GreenchClaw");
     const normalize = createReplyMediaPathNormalizer({
       cfg: {},
       sessionKey: "session-key",
@@ -328,11 +328,11 @@ describe("createReplyMediaPathNormalizer", () => {
     });
 
     const result = await normalize({
-      mediaUrls: ["/Users/peter/.NexisClaw/media/outbound/generated.png"],
+      mediaUrls: ["/Users/peter/.GreenchClaw/media/outbound/generated.png"],
     });
 
-    expectMedia(result, "/Users/peter/.NexisClaw/media/outbound/generated.png", [
-      "/Users/peter/.NexisClaw/media/outbound/generated.png",
+    expectMedia(result, "/Users/peter/.GreenchClaw/media/outbound/generated.png", [
+      "/Users/peter/.GreenchClaw/media/outbound/generated.png",
     ]);
     expect(resolveOutboundAttachmentFromUrl).not.toHaveBeenCalled();
   });
@@ -341,15 +341,15 @@ describe("createReplyMediaPathNormalizer", () => {
     if (process.platform === "win32") {
       return;
     }
-    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-reply-media-state-"));
-    const outsideDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-reply-media-outside-"));
+    const stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-reply-media-state-"));
+    const outsideDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-reply-media-outside-"));
     const outsideFile = path.join(outsideDir, "secret.png");
     const symlinkPath = path.join(stateDir, "media", "outbound", "linked-secret.png");
     try {
       await fs.mkdir(path.dirname(symlinkPath), { recursive: true });
       await fs.writeFile(outsideFile, "secret", "utf8");
       await fs.symlink(outsideFile, symlinkPath);
-      vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
+      vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
       const normalize = createReplyMediaPathNormalizer({
         cfg: {},
         sessionKey: "session-key",

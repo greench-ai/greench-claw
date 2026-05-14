@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   getActiveDiagnosticsTimelineSpan,
   measureDiagnosticsTimelineSpanSync,
@@ -71,7 +71,7 @@ export function isPluginMetadataSnapshotCompatible(params: {
     PluginMetadataSnapshot,
     "configFingerprint" | "index" | "policyHash" | "workspaceDir"
   >;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   workspaceDir?: string;
   index?: InstalledPluginIndex;

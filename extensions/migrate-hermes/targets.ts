@@ -3,8 +3,8 @@ import {
   resolveAgentConfig,
   resolveAgentWorkspaceDir,
   resolveDefaultAgentId,
-} from "NexisClaw/plugin-sdk/agent-runtime";
-import type { MigrationProviderContext } from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
+import type { MigrationProviderContext } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { resolveHomePath } from "./helpers.js";
 
 export type PlannedTargets = {

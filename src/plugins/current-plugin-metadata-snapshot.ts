@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   clearCurrentPluginMetadataSnapshotState,
   getCurrentPluginMetadataSnapshotState,
@@ -12,7 +12,7 @@ import {
 import type { PluginMetadataSnapshot } from "./plugin-metadata-snapshot.types.js";
 
 export function resolvePluginMetadataControlPlaneFingerprint(
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
   options: Omit<ResolvePluginControlPlaneContextParams, "config"> = {},
 ): string {
   return resolvePluginControlPlaneFingerprint({
@@ -26,8 +26,8 @@ export function resolvePluginMetadataControlPlaneFingerprint(
 export function setCurrentPluginMetadataSnapshot(
   snapshot: PluginMetadataSnapshot | undefined,
   options: {
-    config?: NexisClawConfig;
-    compatibleConfigs?: readonly NexisClawConfig[];
+    config?: GreenchClawConfig;
+    compatibleConfigs?: readonly GreenchClawConfig[];
     env?: NodeJS.ProcessEnv;
     workspaceDir?: string;
   } = {},
@@ -66,7 +66,7 @@ export function clearCurrentPluginMetadataSnapshot(): void {
 
 export function getCurrentPluginMetadataSnapshot(
   params: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     env?: NodeJS.ProcessEnv;
     workspaceDir?: string;
     allowWorkspaceScopedSnapshot?: boolean;

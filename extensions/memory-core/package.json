@@ -1,8 +1,8 @@
 {
-  "name": "@NexisClaw/memory-core",
+  "name": "@GreenchClaw/memory-core",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw core memory search plugin",
+  "description": "GreenchClaw core memory search plugin",
   "type": "module",
   "dependencies": {
     "chokidar": "5.0.0",
@@ -10,18 +10,18 @@
     "typebox": "1.1.38"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*",
-    "NexisClaw": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*",
+    "GreenchClaw": "workspace:*"
   },
   "peerDependencies": {
-    "NexisClaw": ">=2026.5.12-beta.1"
+    "GreenchClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "NexisClaw": {
+    "GreenchClaw": {
       "optional": true
     }
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

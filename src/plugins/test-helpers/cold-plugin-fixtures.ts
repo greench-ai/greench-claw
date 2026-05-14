@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 
 type ColdPluginFixture = {
   authChoiceId: string;
@@ -36,10 +36,10 @@ export function createColdPluginFixture(options: ColdPluginFixtureOptions): Cold
     path.join(options.rootDir, "package.json"),
     JSON.stringify(
       {
-        name: options.packageName ?? "@example/NexisClaw-cold-control-plane",
+        name: options.packageName ?? "@example/GreenchClaw-cold-control-plane",
         version: options.packageVersion ?? "1.0.0",
         ...options.packageJson,
-        NexisClaw: { extensions: ["./index.cjs"] },
+        GreenchClaw: { extensions: ["./index.cjs"] },
       },
       null,
       2,
@@ -47,7 +47,7 @@ export function createColdPluginFixture(options: ColdPluginFixtureOptions): Cold
     "utf8",
   );
   fs.writeFileSync(
-    path.join(options.rootDir, "NexisClaw.plugin.json"),
+    path.join(options.rootDir, "GreenchClaw.plugin.json"),
     JSON.stringify(
       {
         id: pluginId,
@@ -97,7 +97,7 @@ export function createColdPluginFixture(options: ColdPluginFixtureOptions): Cold
   };
 }
 
-export function createColdPluginConfig(pluginDir: string, pluginId: string): NexisClawConfig {
+export function createColdPluginConfig(pluginDir: string, pluginId: string): GreenchClawConfig {
   return {
     plugins: {
       load: { paths: [pluginDir] },
@@ -114,11 +114,11 @@ export function createColdPluginHermeticEnv(
 ): NodeJS.ProcessEnv {
   return {
     ...process.env,
-    NEXISCLAW_HOME: path.join(homeDir, "home"),
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: options.bundledPluginsDir,
-    NEXISCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY:
+    GREENCHCLAW_HOME: path.join(homeDir, "home"),
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: options.bundledPluginsDir,
+    GREENCHCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY:
       options.disablePersistedRegistry === false ? undefined : "1",
-    NEXISCLAW_VERSION: "2026.4.25",
+    GREENCHCLAW_VERSION: "2026.4.25",
     VITEST: "true",
   };
 }

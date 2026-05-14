@@ -2,16 +2,16 @@ import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 
 const EXACT_SEMVER_VERSION_RE =
   /^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z.-]+))?(?:\+([0-9A-Za-z.-]+))?$/;
-const NEXISCLAW_STABLE_CORRECTION_VERSION_RE =
+const GREENCHCLAW_STABLE_CORRECTION_VERSION_RE =
   /^(?<year>\d{4})\.(?<month>[1-9]\d?)\.(?<day>[1-9]\d?)-(?<correction>[1-9]\d*)$/;
-const NEXISCLAW_STABLE_VERSION_RE = /^(?<year>\d{4})\.(?<month>[1-9]\d?)\.(?<day>[1-9]\d?)$/;
-const NEXISCLAW_ALPHA_VERSION_RE =
+const GREENCHCLAW_STABLE_VERSION_RE = /^(?<year>\d{4})\.(?<month>[1-9]\d?)\.(?<day>[1-9]\d?)$/;
+const GREENCHCLAW_ALPHA_VERSION_RE =
   /^(?<year>\d{4})\.(?<month>[1-9]\d?)\.(?<day>[1-9]\d?)-alpha\.(?<alpha>[1-9]\d*)$/;
-const NEXISCLAW_BETA_VERSION_RE =
+const GREENCHCLAW_BETA_VERSION_RE =
   /^(?<year>\d{4})\.(?<month>[1-9]\d?)\.(?<day>[1-9]\d?)-beta\.(?<beta>[1-9]\d*)$/;
 const DIST_TAG_RE = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 
-type NexisClawReleaseVersion = {
+type GreenchClawReleaseVersion = {
   channel: "alpha" | "beta" | "stable";
   dateTime: number;
   alphaNumber?: number;
@@ -90,7 +90,7 @@ function parseRegistryNpmSpecInternal(
         selector,
         selectorKind: "exact-version",
         selectorIsPrerelease:
-          Boolean(exactVersionMatch[4]) && !isNexisClawStableCorrectionVersion(selector),
+          Boolean(exactVersionMatch[4]) && !isGreenchClawStableCorrectionVersion(selector),
       },
     };
   }
@@ -126,13 +126,13 @@ export function isExactSemverVersion(value: string): boolean {
   return EXACT_SEMVER_VERSION_RE.test(value.trim());
 }
 
-function parseNexisClawReleaseVersion(value: string): NexisClawReleaseVersion | null {
+function parseGreenchClawReleaseVersion(value: string): GreenchClawReleaseVersion | null {
   const trimmed = value.trim();
   const candidates = [
-    { match: NEXISCLAW_STABLE_VERSION_RE.exec(trimmed), channel: "stable" as const },
-    { match: NEXISCLAW_STABLE_CORRECTION_VERSION_RE.exec(trimmed), channel: "stable" as const },
-    { match: NEXISCLAW_ALPHA_VERSION_RE.exec(trimmed), channel: "alpha" as const },
-    { match: NEXISCLAW_BETA_VERSION_RE.exec(trimmed), channel: "beta" as const },
+    { match: GREENCHCLAW_STABLE_VERSION_RE.exec(trimmed), channel: "stable" as const },
+    { match: GREENCHCLAW_STABLE_CORRECTION_VERSION_RE.exec(trimmed), channel: "stable" as const },
+    { match: GREENCHCLAW_ALPHA_VERSION_RE.exec(trimmed), channel: "alpha" as const },
+    { match: GREENCHCLAW_BETA_VERSION_RE.exec(trimmed), channel: "beta" as const },
   ];
   const candidate = candidates.find((entry) => entry.match?.groups);
   if (!candidate?.match?.groups) {
@@ -176,14 +176,14 @@ function parseNexisClawReleaseVersion(value: string): NexisClawReleaseVersion | 
   };
 }
 
-export function isNexisClawStableCorrectionVersion(value: string): boolean {
-  const parsed = parseNexisClawReleaseVersion(value);
+export function isGreenchClawStableCorrectionVersion(value: string): boolean {
+  const parsed = parseGreenchClawReleaseVersion(value);
   return parsed?.channel === "stable" && parsed.correctionNumber !== undefined;
 }
 
-export function compareNexisClawReleaseVersions(left: string, right: string): number | null {
-  const parsedLeft = parseNexisClawReleaseVersion(left);
-  const parsedRight = parseNexisClawReleaseVersion(right);
+export function compareGreenchClawReleaseVersions(left: string, right: string): number | null {
+  const parsedLeft = parseGreenchClawReleaseVersion(left);
+  const parsedRight = parseGreenchClawReleaseVersion(right);
   if (!parsedLeft || !parsedRight) {
     return null;
   }
@@ -206,7 +206,7 @@ export function compareNexisClawReleaseVersions(left: string, right: string): nu
 export function isPrereleaseSemverVersion(value: string): boolean {
   const trimmed = value.trim();
   const match = EXACT_SEMVER_VERSION_RE.exec(trimmed);
-  return Boolean(match?.[4]) && !isNexisClawStableCorrectionVersion(trimmed);
+  return Boolean(match?.[4]) && !isGreenchClawStableCorrectionVersion(trimmed);
 }
 
 export function isPrereleaseResolutionAllowed(params: {

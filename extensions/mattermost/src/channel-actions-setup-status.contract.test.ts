@@ -2,8 +2,8 @@ import {
   installChannelActionsContractSuite,
   installChannelSetupContractSuite,
   installChannelStatusContractSuite,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect } from "vitest";
 import { mattermostPlugin, mattermostSetupPlugin } from "../channel-plugin-api.js";
 
@@ -22,7 +22,7 @@ describe("mattermost actions contract", () => {
               baseUrl: "https://chat.example.com",
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         expectedActions: ["send", "react"],
         expectedCapabilities: ["presentation"],
       },
@@ -37,7 +37,7 @@ describe("mattermost actions contract", () => {
               actions: { reactions: false },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         expectedActions: ["send"],
         expectedCapabilities: ["presentation"],
       },
@@ -49,7 +49,7 @@ describe("mattermost actions contract", () => {
               enabled: true,
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         expectedActions: [],
         expectedCapabilities: [],
       },
@@ -63,7 +63,7 @@ describe("mattermost setup contract", () => {
     cases: [
       {
         name: "default account stores token and normalized base URL",
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         input: {
           botToken: "test-token",
           httpUrl: "https://chat.example.com/",
@@ -81,7 +81,7 @@ describe("mattermost setup contract", () => {
       },
       {
         name: "missing credentials are rejected",
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         input: {
           httpUrl: "",
         },
@@ -106,7 +106,7 @@ describe("mattermost status contract", () => {
               baseUrl: "https://chat.example.com",
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         runtime: {
           accountId: "default",
           connected: true,

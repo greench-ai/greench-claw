@@ -1,6 +1,6 @@
-import type { ChatCommandDefinition } from "NexisClaw/plugin-sdk/command-auth";
-import * as commandRegistryModule from "NexisClaw/plugin-sdk/command-auth";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { ChatCommandDefinition } from "GreenchClaw/plugin-sdk/command-auth";
+import * as commandRegistryModule from "GreenchClaw/plugin-sdk/command-auth";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   createDiscordCommandArgFallbackButton,
@@ -34,13 +34,13 @@ function createCommandDefinition(): ChatCommandDefinition {
 }
 
 function createContext(
-  discordConfig: NonNullable<NexisClawConfig["channels"]>["discord"],
+  discordConfig: NonNullable<GreenchClawConfig["channels"]>["discord"],
 ): CommandArgContext {
   const cfg = {
     channels: {
       discord: discordConfig,
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
   return {
     cfg,
     discordConfig,

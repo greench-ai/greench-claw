@@ -1,35 +1,35 @@
 import type { Message, ReactionTypeEmoji } from "@grammyjs/types";
-import { parseExecApprovalCommandText } from "NexisClaw/plugin-sdk/approval-reply-runtime";
-import { resolveChannelConfigWrites } from "NexisClaw/plugin-sdk/channel-config-helpers";
-import { shouldDebounceTextInbound } from "NexisClaw/plugin-sdk/channel-inbound";
+import { parseExecApprovalCommandText } from "GreenchClaw/plugin-sdk/approval-reply-runtime";
+import { resolveChannelConfigWrites } from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import { shouldDebounceTextInbound } from "GreenchClaw/plugin-sdk/channel-inbound";
 import {
   createInboundDebouncer,
   resolveInboundDebounceMs,
-} from "NexisClaw/plugin-sdk/channel-inbound-debounce";
-import { resolveStoredModelOverride } from "NexisClaw/plugin-sdk/command-auth-native";
-import { buildCommandsMessagePaginated } from "NexisClaw/plugin-sdk/command-status";
-import type { DmPolicy, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-inbound-debounce";
+import { resolveStoredModelOverride } from "GreenchClaw/plugin-sdk/command-auth-native";
+import { buildCommandsMessagePaginated } from "GreenchClaw/plugin-sdk/command-status";
+import type { DmPolicy, GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import type {
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramTopicConfig,
-} from "NexisClaw/plugin-sdk/config-contracts";
-import { replaceConfigFile } from "NexisClaw/plugin-sdk/config-mutation";
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { replaceConfigFile } from "GreenchClaw/plugin-sdk/config-mutation";
 import {
   buildPluginBindingResolvedText,
   parsePluginBindingApprovalCustomId,
   resolvePluginConversationBindingApproval,
-} from "NexisClaw/plugin-sdk/conversation-runtime";
-import { applyModelOverrideToSessionEntry } from "NexisClaw/plugin-sdk/model-session-runtime";
-import { formatModelsAvailableHeader } from "NexisClaw/plugin-sdk/models-provider-runtime";
-import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
-import { resolveThreadSessionKeys } from "NexisClaw/plugin-sdk/routing";
-import { danger, logVerbose, warn } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { applyModelOverrideToSessionEntry } from "GreenchClaw/plugin-sdk/model-session-runtime";
+import { formatModelsAvailableHeader } from "GreenchClaw/plugin-sdk/models-provider-runtime";
+import { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
+import { resolveThreadSessionKeys } from "GreenchClaw/plugin-sdk/routing";
+import { danger, logVerbose, warn } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   loadSessionStore,
   resolveSessionStoreEntry,
   updateSessionStore,
-} from "NexisClaw/plugin-sdk/session-store-runtime";
+} from "GreenchClaw/plugin-sdk/session-store-runtime";
 import { expandTelegramAllowFromWithAccessGroups } from "./access-groups.js";
 import { resolveTelegramAccount, resolveTelegramMediaRuntimeOptions } from "./accounts.js";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
@@ -482,7 +482,7 @@ export const registerTelegramHandlers = ({
     messageThreadId?: number;
     resolvedThreadId?: number;
     senderId?: string | number;
-    runtimeCfg?: NexisClawConfig;
+    runtimeCfg?: GreenchClawConfig;
   }): {
     agentId: string;
     sessionEntry: ReturnType<typeof resolveSessionStoreEntry>["existing"];
@@ -1119,7 +1119,7 @@ export const registerTelegramHandlers = ({
     senderId: string;
     senderUsername: string;
     context: TelegramEventAuthorizationContext;
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
   }): Promise<boolean> => {
     const { chatId, isGroup, senderId, senderUsername, context, cfg } = params;
     const dmAllowFrom = context.groupAllowOverride ?? allowFrom;
@@ -2134,7 +2134,7 @@ export const registerTelegramHandlers = ({
               : `changed to <b>${escapeHtml(selection.provider)}/${escapeHtml(selection.model)}</b>`;
             const scopeText = isDefaultSelection
               ? "Session selection cleared. Runtime unchanged. New replies use the agent's configured default."
-              : `Session-only model selection. Runtime unchanged. Use /model ${escapeHtml(selection.provider)}/${escapeHtml(selection.model)} --runtime &lt;runtime&gt; to switch harnesses. The agent default in NexisClaw.json is unchanged; /reset or a new session may return to that default.`;
+              : `Session-only model selection. Runtime unchanged. Use /model ${escapeHtml(selection.provider)}/${escapeHtml(selection.model)} --runtime &lt;runtime&gt; to switch harnesses. The agent default in GreenchClaw.json is unchanged; /reset or a new session may return to that default.`;
             await editMessageWithButtons(
               `✅ Model ${actionText}\n\n${scopeText}`,
               [], // Empty buttons = remove inline keyboard

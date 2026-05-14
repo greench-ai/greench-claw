@@ -1,7 +1,7 @@
 import {
   createPluginRegistryFixture,
   registerTestPlugin,
-} from "NexisClaw/plugin-sdk/plugin-test-contracts";
+} from "GreenchClaw/plugin-sdk/plugin-test-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CronServiceContract } from "../../cron/service-contract.js";
 import type { CronJob, CronJobCreate } from "../../cron/types.js";
@@ -21,12 +21,12 @@ import {
   schedulePluginSessionTurn,
   unschedulePluginSessionTurnsByTag,
 } from "../host-hook-scheduled-turns.js";
-import { clearPluginLoaderCache, loadNexisClawPlugins } from "../loader.js";
+import { clearPluginLoaderCache, loadGreenchClawPlugins } from "../loader.js";
 import { makeTempDir, writePlugin } from "../loader.test-fixtures.js";
 import { createEmptyPluginRegistry } from "../registry-empty.js";
 import { setActivePluginRegistry } from "../runtime.js";
 import { createPluginRecord } from "../status.test-helpers.js";
-import type { NexisClawPluginApi } from "../types.js";
+import type { GreenchClawPluginApi } from "../types.js";
 
 const workflowMocks = vi.hoisted(() => ({
   cronAdd: vi.fn(),
@@ -89,7 +89,7 @@ function createMockCronService(): CronServiceContract {
     stop: vi.fn(),
     status: vi.fn(async () => ({
       enabled: true,
-      storePath: "/tmp/NexisClaw-test-cron.json",
+      storePath: "/tmp/GreenchClaw-test-cron.json",
       jobs: 0,
       nextWakeAtMs: null,
     })),
@@ -514,11 +514,11 @@ describe("plugin scheduled turns", () => {
 
     const registry = withEnv(
       {
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
-        NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+        GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
       },
       () =>
-        loadNexisClawPlugins({
+        loadGreenchClawPlugins({
           cache: false,
           hostServices: { cron },
           config: {
@@ -651,11 +651,11 @@ describe("plugin scheduled turns", () => {
 
     const registry = withEnv(
       {
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
-        NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+        GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
       },
       () =>
-        loadNexisClawPlugins({
+        loadGreenchClawPlugins({
           cache: false,
           hostServices: { cron },
           config: {
@@ -1040,7 +1040,7 @@ describe("plugin scheduled turns", () => {
   it("wires schedule and unschedule through the plugin API with stale-registry protection", async () => {
     workflowMocks.cronAdd.mockResolvedValue(makeCronJob({ id: "job-live" }));
     const { config, registry } = createPluginRegistryFixture({}, { hostServices: { cron } });
-    let capturedApi: NexisClawPluginApi | undefined;
+    let capturedApi: GreenchClawPluginApi | undefined;
     registerTestPlugin({
       registry,
       config,
@@ -1123,7 +1123,7 @@ describe("plugin scheduled turns", () => {
       },
     };
     const { config, registry } = createPluginRegistryFixture({}, { hostServices });
-    let capturedApi: NexisClawPluginApi | undefined;
+    let capturedApi: GreenchClawPluginApi | undefined;
     registerTestPlugin({
       registry,
       config,

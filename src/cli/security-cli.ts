@@ -40,19 +40,25 @@ export function registerSecurityCli(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["NexisClaw security audit", "Run a local security audit."],
+          ["GreenchClaw security audit", "Run a local security audit."],
           [
-            "NexisClaw security audit --deep",
+            "GreenchClaw security audit --deep",
             "Include best-effort live Gateway probes and plugin-owned security audit collectors.",
           ],
-          ["NexisClaw security audit --deep --token <token>", "Use explicit token for deep probe."],
           [
-            "NexisClaw security audit --deep --password <password>",
+            "GreenchClaw security audit --deep --token <token>",
+            "Use explicit token for deep probe.",
+          ],
+          [
+            "GreenchClaw security audit --deep --password <password>",
             "Use explicit password for deep probe.",
           ],
-          ["NexisClaw security audit --fix", "Apply safe remediations and file-permission fixes."],
-          ["NexisClaw security audit --json", "Output machine-readable JSON."],
-        ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/security", "docs.NexisClaw.ai/cli/security")}\n`,
+          [
+            "GreenchClaw security audit --fix",
+            "Apply safe remediations and file-permission fixes.",
+          ],
+          ["GreenchClaw security audit --json", "Output machine-readable JSON."],
+        ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/security", "docs.GreenchClaw.ai/cli/security")}\n`,
     );
 
   security
@@ -102,15 +108,15 @@ export function registerSecurityCli(program: Command) {
       const muted = (text: string) => (rich ? theme.muted(text) : text);
 
       const lines: string[] = [];
-      lines.push(heading("NexisClaw security audit"));
+      lines.push(heading("GreenchClaw security audit"));
       lines.push(muted(`Summary: ${formatSummary(report.summary)}`));
-      lines.push(muted(`Run deeper: ${formatCliCommand("NexisClaw security audit --deep")}`));
+      lines.push(muted(`Run deeper: ${formatCliCommand("GreenchClaw security audit --deep")}`));
       for (const diagnostic of secretDiagnostics) {
         lines.push(muted(`[secrets] ${diagnostic}`));
       }
 
       if (opts.fix) {
-        lines.push(muted(`Fix: ${formatCliCommand("NexisClaw security audit --fix")}`));
+        lines.push(muted(`Fix: ${formatCliCommand("GreenchClaw security audit --fix")}`));
         if (!fixResult) {
           lines.push(muted("Fixes: failed to apply (unexpected error)"));
         } else if (

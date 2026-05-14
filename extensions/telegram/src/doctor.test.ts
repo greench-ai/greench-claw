@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   collectTelegramInvalidAllowFromWarnings,
@@ -20,7 +20,7 @@ const listTelegramAccountIdsMock = vi.hoisted(() => vi.fn());
 const inspectTelegramAccountMock = vi.hoisted(() => vi.fn());
 const lookupTelegramChatIdMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/runtime", () => {
+vi.mock("GreenchClaw/plugin-sdk/runtime", () => {
   return {
     getChannelsCommandSecretTargetIds: () => ["channels"],
     resolveCommandSecretRefsViaGateway: resolveCommandSecretRefsViaGatewayMock,
@@ -169,7 +169,7 @@ describe("telegram doctor", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     expect(hits).toEqual([
       { path: "channels.telegram.allowFrom", entry: "@top" },
@@ -216,7 +216,7 @@ describe("telegram doctor", () => {
           allowFrom: ["@testuser"],
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     expect(result.config.channels?.telegram?.allowFrom).toEqual(["111"]);
     expect(result.changes[0]).toContain("@testuser");
@@ -229,7 +229,7 @@ describe("telegram doctor", () => {
           allowFrom: [-1001234567890],
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     expect(result.config.channels?.telegram?.allowFrom).toEqual([-1001234567890]);
     expect(result.changes).toEqual([
@@ -274,7 +274,7 @@ describe("telegram doctor", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig);
+    } as unknown as GreenchClawConfig);
 
     expect(result.config.channels?.telegram?.accounts?.inactive?.allowFrom).toEqual(["@testuser"]);
     expect(result.changes).toEqual([
@@ -286,11 +286,11 @@ describe("telegram doctor", () => {
   it("formats invalid allowFrom warnings", () => {
     const warnings = collectTelegramInvalidAllowFromWarnings({
       hits: [{ path: "channels.telegram.allowFrom", entry: "@top" }],
-      doctorFixCommand: "NexisClaw doctor --fix",
+      doctorFixCommand: "GreenchClaw doctor --fix",
     });
 
     expect(warnings[0]).toContain("invalid sender entries");
-    expect(warnings[1]).toContain("NexisClaw doctor --fix");
+    expect(warnings[1]).toContain("GreenchClaw doctor --fix");
   });
 
   it("warns and repairs Telegram apiRoot values that include the bot endpoint", () => {
@@ -305,7 +305,7 @@ describe("telegram doctor", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const hits = scanTelegramBotEndpointApiRoots(cfg);
     expect(hits.map((hit) => hit.path)).toEqual([
@@ -313,7 +313,7 @@ describe("telegram doctor", () => {
       "channels.telegram.accounts.work.apiRoot",
     ]);
     expect(
-      collectTelegramApiRootWarnings({ hits, doctorFixCommand: "NexisClaw doctor --fix" }),
+      collectTelegramApiRootWarnings({ hits, doctorFixCommand: "GreenchClaw doctor --fix" }),
     ).toContain(
       "- channels.telegram.apiRoot points at a full Telegram bot endpoint; apiRoot must be the Bot API root only. This can make startup calls like deleteWebhook, deleteMyCommands, and setMyCommands fail with 404 even when direct curl commands work.",
     );
@@ -336,7 +336,7 @@ describe("telegram doctor", () => {
           replyToMode: "first",
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const hits = scanTelegramSelectedQuoteToolProgressWarnings(cfg);
     expect(hits).toEqual([{ path: "channels.telegram", replyToMode: "first" }]);
@@ -348,7 +348,7 @@ describe("telegram doctor", () => {
     expect(warnings[1]).toContain("streaming.preview.toolProgress: false");
     const collectedWarnings = await telegramDoctor.collectPreviewWarnings?.({
       cfg,
-      doctorFixCommand: "NexisClaw doctor --fix",
+      doctorFixCommand: "GreenchClaw doctor --fix",
     });
     expect(collectedWarnings?.some((warning) => warning.includes("selected quote replies"))).toBe(
       true,
@@ -363,7 +363,7 @@ describe("telegram doctor", () => {
           accounts: {},
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     expect(scanTelegramSelectedQuoteToolProgressWarnings(cfg)).toEqual([
       { path: "channels.telegram", replyToMode: "all" },
@@ -384,7 +384,7 @@ describe("telegram doctor", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     expect(scanTelegramSelectedQuoteToolProgressWarnings(cfg)).toEqual([
       { path: "channels.telegram.accounts.work", replyToMode: "batched" },
@@ -403,7 +403,7 @@ describe("telegram doctor", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     expect(scanTelegramSelectedQuoteToolProgressWarnings(cfg)).toStrictEqual([]);
   });
@@ -417,7 +417,7 @@ describe("telegram doctor", () => {
             streaming: false,
           },
         },
-      } as unknown as NexisClawConfig),
+      } as unknown as GreenchClawConfig),
     ).toStrictEqual([]);
 
     expect(
@@ -432,7 +432,7 @@ describe("telegram doctor", () => {
             blockStreamingDefault: "on",
           },
         },
-      } as unknown as NexisClawConfig),
+      } as unknown as GreenchClawConfig),
     ).toStrictEqual([]);
   });
 
@@ -443,12 +443,12 @@ describe("telegram doctor", () => {
           apiRoot: "https://api.telegram.org/bot123456:ABC",
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     expect(
       await telegramDoctor.collectPreviewWarnings?.({
         cfg,
-        doctorFixCommand: "NexisClaw doctor --fix",
+        doctorFixCommand: "GreenchClaw doctor --fix",
       }),
     ).toContain(
       "- channels.telegram.apiRoot points at a full Telegram bot endpoint; apiRoot must be the Bot API root only. This can make startup calls like deleteWebhook, deleteMyCommands, and setMyCommands fail with 404 even when direct curl commands work.",
@@ -456,7 +456,7 @@ describe("telegram doctor", () => {
 
     const repaired = await telegramDoctor.repairConfig?.({
       cfg,
-      doctorFixCommand: "NexisClaw doctor --fix",
+      doctorFixCommand: "GreenchClaw doctor --fix",
     });
     expect(repaired?.config.channels?.telegram?.apiRoot).toBe("https://api.telegram.org");
     expect(repaired?.changes).toEqual([
@@ -471,7 +471,7 @@ describe("telegram doctor", () => {
           allowFrom: ["123"],
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     inspectTelegramAccountMock.mockReturnValueOnce({
       enabled: true,
@@ -508,7 +508,7 @@ describe("telegram doctor", () => {
     expect(
       await telegramDoctor.collectPreviewWarnings?.({
         cfg,
-        doctorFixCommand: "NexisClaw doctor --fix",
+        doctorFixCommand: "GreenchClaw doctor --fix",
         env: {},
       }),
     ).toContain(missingEnvWarning);
@@ -525,7 +525,7 @@ describe("telegram doctor", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     expect(collectTelegramMissingEnvTokenWarnings({ cfg, env: {} })).toStrictEqual([]);
   });

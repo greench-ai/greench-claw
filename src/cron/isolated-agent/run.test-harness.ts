@@ -512,17 +512,17 @@ export function resetRunCronIsolatedAgentTurnHarness(): void {
 }
 
 export function clearFastTestEnv(): string | undefined {
-  const previousFastTestEnv = process.env.NEXISCLAW_TEST_FAST;
-  delete process.env.NEXISCLAW_TEST_FAST;
+  const previousFastTestEnv = process.env.GREENCHCLAW_TEST_FAST;
+  delete process.env.GREENCHCLAW_TEST_FAST;
   return previousFastTestEnv;
 }
 
 export function restoreFastTestEnv(previousFastTestEnv: string | undefined): void {
   if (previousFastTestEnv == null) {
-    delete process.env.NEXISCLAW_TEST_FAST;
+    delete process.env.GREENCHCLAW_TEST_FAST;
     return;
   }
-  process.env.NEXISCLAW_TEST_FAST = previousFastTestEnv;
+  process.env.GREENCHCLAW_TEST_FAST = previousFastTestEnv;
 }
 
 export async function loadRunCronIsolatedAgentTurn() {

@@ -1,4 +1,4 @@
-import type { ChannelDoctorLegacyConfigRule } from "NexisClaw/plugin-sdk/channel-contract";
+import type { ChannelDoctorLegacyConfigRule } from "GreenchClaw/plugin-sdk/channel-contract";
 
 // Runtime config loading already normalizes these aliases without rewriting the
 // source file. Keep doctor non-destructive so downgrade paths remain recoverable.

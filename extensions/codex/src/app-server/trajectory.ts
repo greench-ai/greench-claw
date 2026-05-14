@@ -1,15 +1,15 @@
 import nodeFs from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolveUserPath } from "NexisClaw/plugin-sdk/agent-harness-runtime";
+import { resolveUserPath } from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import type {
   EmbeddedRunAttemptParams,
   EmbeddedRunAttemptResult,
-} from "NexisClaw/plugin-sdk/agent-harness-runtime";
+} from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import {
   appendRegularFile,
   resolveRegularFileAppendFlags,
-} from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/security-runtime";
 
 type CodexTrajectoryRecorder = {
   filePath: string;
@@ -120,7 +120,7 @@ function writeTrajectoryPointerBestEffort(params: {
         fd,
         `${JSON.stringify(
           {
-            traceSchema: "NexisClaw-trajectory-pointer",
+            traceSchema: "GreenchClaw-trajectory-pointer",
             schemaVersion: 1,
             sessionId: params.sessionId,
             runtimeFile: params.filePath,
@@ -168,7 +168,7 @@ export function createCodexTrajectoryRecorder(
     filePath,
     recordEvent: (type, data) => {
       const event = {
-        traceSchema: "NexisClaw-trajectory",
+        traceSchema: "GreenchClaw-trajectory",
         schemaVersion: 1,
         traceId: params.attempt.sessionId,
         source: "runtime",
@@ -243,7 +243,7 @@ export function recordCodexTrajectoryCompletion(
 }
 
 function parseTrajectoryEnabled(env: NodeJS.ProcessEnv): boolean {
-  const value = env.NEXISCLAW_TRAJECTORY?.trim().toLowerCase();
+  const value = env.GREENCHCLAW_TRAJECTORY?.trim().toLowerCase();
   if (value === "1" || value === "true" || value === "yes" || value === "on") {
     return true;
   }
@@ -258,7 +258,7 @@ function resolveTrajectoryFilePath(params: {
   sessionFile: string;
   sessionId: string;
 }): string {
-  const dirOverride = params.env.NEXISCLAW_TRAJECTORY_DIR?.trim();
+  const dirOverride = params.env.GREENCHCLAW_TRAJECTORY_DIR?.trim();
   if (dirOverride) {
     return resolveContainedPath(
       resolveUserPath(dirOverride),

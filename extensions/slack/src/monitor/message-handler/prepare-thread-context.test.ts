@@ -1,6 +1,6 @@
 import type { App } from "@slack/bolt";
-import { resolveEnvelopeFormatOptions } from "NexisClaw/plugin-sdk/channel-inbound";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveEnvelopeFormatOptions } from "GreenchClaw/plugin-sdk/channel-inbound";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import type { SlackMessageEvent } from "../../types.js";
 import { resolveSlackThreadContextData } from "./prepare-thread-context.js";
@@ -11,7 +11,7 @@ import {
 } from "./prepare.test-helpers.js";
 
 describe("resolveSlackThreadContextData", () => {
-  const storeFixture = createSlackSessionStoreFixture("NexisClaw-slack-thread-context-");
+  const storeFixture = createSlackSessionStoreFixture("GreenchClaw-slack-thread-context-");
 
   beforeAll(() => {
     storeFixture.setup();
@@ -25,7 +25,7 @@ describe("resolveSlackThreadContextData", () => {
     return createInboundSlackTestContext({
       cfg: {
         channels: { slack: { enabled: true, replyToMode: "all", groupPolicy: "open" } },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       appClient: { conversations: { replies: params.replies } } as App["client"],
       defaultRequireMention: false,
       replyToMode: "all",
@@ -75,7 +75,7 @@ describe("resolveSlackThreadContextData", () => {
       allowFromLower: params.allowFromLower,
       allowNameMatching: params.allowNameMatching,
       contextVisibilityMode: "allowlist",
-      envelopeOptions: resolveEnvelopeFormatOptions({} as NexisClawConfig),
+      envelopeOptions: resolveEnvelopeFormatOptions({} as GreenchClawConfig),
       effectiveDirectMedia: null,
     });
 
@@ -213,7 +213,7 @@ describe("resolveSlackThreadContextData", () => {
       allowFromLower: ["u1"],
       allowNameMatching: false,
       contextVisibilityMode: "allowlist",
-      envelopeOptions: resolveEnvelopeFormatOptions({} as NexisClawConfig),
+      envelopeOptions: resolveEnvelopeFormatOptions({} as GreenchClawConfig),
       effectiveDirectMedia: null,
     });
 
@@ -259,7 +259,7 @@ describe("resolveSlackThreadContextData", () => {
       allowFromLower: ["u1"],
       allowNameMatching: false,
       contextVisibilityMode: "allowlist",
-      envelopeOptions: resolveEnvelopeFormatOptions({} as NexisClawConfig),
+      envelopeOptions: resolveEnvelopeFormatOptions({} as GreenchClawConfig),
       effectiveDirectMedia: null,
     });
 
@@ -360,7 +360,7 @@ describe("resolveSlackThreadContextData", () => {
       allowFromLower: [],
       allowNameMatching: false,
       contextVisibilityMode: "all",
-      envelopeOptions: resolveEnvelopeFormatOptions({} as NexisClawConfig),
+      envelopeOptions: resolveEnvelopeFormatOptions({} as GreenchClawConfig),
       effectiveDirectMedia: null,
     });
 

@@ -1,21 +1,21 @@
 ---
-summary: "Create your first NexisClaw plugin in minutes"
+summary: "Create your first GreenchClaw plugin in minutes"
 title: "Building plugins"
 sidebarTitle: "Getting Started"
 read_when:
-  - You want to create a new NexisClaw plugin
+  - You want to create a new GreenchClaw plugin
   - You need a quick-start for plugin development
-  - You are adding a new channel, provider, tool, or other capability to NexisClaw
+  - You are adding a new channel, provider, tool, or other capability to GreenchClaw
 ---
 
-Plugins extend NexisClaw with new capabilities: channels, model providers,
+Plugins extend GreenchClaw with new capabilities: channels, model providers,
 speech, realtime transcription, realtime voice, media understanding, image
 generation, video generation, web fetch, web search, agent tools, or any
 combination.
 
-You do not need to add your plugin to the NexisClaw repository. Publish to
+You do not need to add your plugin to the GreenchClaw repository. Publish to
 [ClawHub](/clawhub) and users install with
-`NexisClaw plugins install clawhub:<package-name>`. Bare package specs still
+`GreenchClaw plugins install clawhub:<package-name>`. Bare package specs still
 install from npm during the launch cutover.
 
 ## Prerequisites
@@ -23,20 +23,20 @@ install from npm during the launch cutover.
 - Node >= 22 and a package manager (npm or pnpm)
 - Familiarity with TypeScript (ESM)
 - For in-repo plugins: repository cloned and `pnpm install` done. Source
-  checkout plugin development is pnpm-only because NexisClaw loads bundled
+  checkout plugin development is pnpm-only because GreenchClaw loads bundled
   plugins from the `extensions/*` workspace packages.
 
 ## What kind of plugin?
 
 <CardGroup cols={3}>
   <Card title="Channel plugin" icon="messages-square" href="/plugins/sdk-channel-plugins">
-    Connect NexisClaw to a messaging platform (Discord, IRC, etc.)
+    Connect GreenchClaw to a messaging platform (Discord, IRC, etc.)
   </Card>
   <Card title="Provider plugin" icon="cpu" href="/plugins/sdk-provider-plugins">
     Add a model provider (LLM, proxy, or custom endpoint)
   </Card>
   <Card title="CLI backend plugin" icon="terminal" href="/plugins/cli-backend-plugins">
-    Map a local AI CLI into NexisClaw's text fallback runner
+    Map a local AI CLI into GreenchClaw's text fallback runner
   </Card>
   <Card title="Tool / hook plugin" icon="wrench" href="/plugins/hooks">
     Register agent tools, event hooks, or services - continue below
@@ -45,7 +45,7 @@ install from npm during the launch cutover.
 
 For a channel plugin that isn't guaranteed to be installed when onboarding/setup
 runs, use `createOptionalChannelSetupSurface(...)` from
-`NexisClaw/plugin-sdk/channel-setup`. It produces a setup adapter + wizard pair
+`GreenchClaw/plugin-sdk/channel-setup`. It produces a setup adapter + wizard pair
 that advertises the install requirement and fails closed on real config writes
 until the plugin is installed.
 
@@ -59,28 +59,28 @@ and provider plugins have dedicated guides linked above.
     <CodeGroup>
     ```json package.json
     {
-      "name": "@myorg/NexisClaw-my-plugin",
+      "name": "@myorg/GreenchClaw-my-plugin",
       "version": "1.0.0",
       "type": "module",
-      "NexisClaw": {
+      "GreenchClaw": {
         "extensions": ["./index.ts"],
         "compat": {
           "pluginApi": ">=2026.3.24-beta.2",
           "minGatewayVersion": "2026.3.24-beta.2"
         },
         "build": {
-          "NexisClawVersion": "2026.3.24-beta.2",
+          "GreenchClawVersion": "2026.3.24-beta.2",
           "pluginSdkVersion": "2026.3.24-beta.2"
         }
       }
     }
     ```
 
-    ```json NexisClaw.plugin.json
+    ```json GreenchClaw.plugin.json
     {
       "id": "my-plugin",
       "name": "My Plugin",
-      "description": "Adds a custom tool to NexisClaw",
+      "description": "Adds a custom tool to GreenchClaw",
       "contracts": {
         "tools": ["my_tool"]
       },
@@ -96,7 +96,7 @@ and provider plugins have dedicated guides linked above.
     </CodeGroup>
 
     Every plugin needs a manifest, even with no config. Runtime-registered tools
-    must be listed in `contracts.tools` so NexisClaw can discover the owning
+    must be listed in `contracts.tools` so GreenchClaw can discover the owning
     plugin without loading every plugin runtime. Plugins should also declare
     `activation.onStartup` intentionally. This example sets it to `true`. See
     [Manifest](/plugins/manifest) for the full schema. The canonical ClawHub
@@ -108,13 +108,13 @@ and provider plugins have dedicated guides linked above.
 
     ```typescript
     // index.ts
-    import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
+    import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
     import { Type } from "@sinclair/typebox";
 
     export default definePluginEntry({
       id: "my-plugin",
       name: "My Plugin",
-      description: "Adds a custom tool to NexisClaw",
+      description: "Adds a custom tool to GreenchClaw",
       register(api) {
         api.registerTool({
           name: "my_tool",
@@ -141,10 +141,10 @@ and provider plugins have dedicated guides linked above.
     ```bash
     clawhub package publish your-org/your-plugin --dry-run
     clawhub package publish your-org/your-plugin
-    NexisClaw plugins install clawhub:@myorg/NexisClaw-my-plugin
+    GreenchClaw plugins install clawhub:@myorg/GreenchClaw-my-plugin
     ```
 
-    Bare package specs like `@myorg/NexisClaw-my-plugin` install from npm during
+    Bare package specs like `@myorg/GreenchClaw-my-plugin` install from npm during
     the launch cutover. Use `clawhub:` when you want ClawHub resolution.
 
     **In-repo plugins:** place under the bundled plugin workspace tree - automatically discovered.
@@ -188,7 +188,7 @@ Bundled plugins can use `api.registerAgentToolResultMiddleware(...)` when they
 need async tool-result rewriting before the model sees the output. Declare the
 targeted runtimes in `contracts.agentToolResultMiddleware`, for example
 `["pi", "codex"]`. This is a trusted bundled-plugin seam; external
-plugins should prefer regular NexisClaw plugin hooks unless NexisClaw grows an
+plugins should prefer regular GreenchClaw plugin hooks unless GreenchClaw grows an
 explicit trust policy for this capability.
 
 If your plugin registers custom gateway RPC methods, keep them on a
@@ -208,10 +208,10 @@ Hook guard semantics to keep in mind:
 - `message_received`: prefer the typed `threadId` field when you need inbound thread/topic routing. Keep `metadata` for channel-specific extras.
 - `message_sending`: prefer typed `replyToId` / `threadId` routing fields over channel-specific metadata keys.
 
-The `/approve` command handles both exec and plugin approvals with bounded fallback: when an exec approval id is not found, NexisClaw retries the same id through plugin approvals. Plugin approval forwarding can be configured independently via `approvals.plugin` in config.
+The `/approve` command handles both exec and plugin approvals with bounded fallback: when an exec approval id is not found, GreenchClaw retries the same id through plugin approvals. Plugin approval forwarding can be configured independently via `approvals.plugin` in config.
 
 If custom approval plumbing needs to detect that same bounded fallback case,
-prefer `isApprovalNotFoundError` from `NexisClaw/plugin-sdk/error-runtime`
+prefer `isApprovalNotFoundError` from `GreenchClaw/plugin-sdk/error-runtime`
 instead of matching approval-expiry strings manually.
 
 See [Plugin hooks](/plugins/hooks) for examples and the hook reference.
@@ -253,7 +253,7 @@ Tool factories receive a runtime-supplied context object. Use
 model for the current turn. The object can include `provider`, `modelId`, and
 `modelRef`. Treat it as informational runtime metadata, not as a security
 boundary against the local operator, installed plugin code, or a modified
-NexisClaw runtime. For sensitive local tools, keep an explicit plugin or operator
+GreenchClaw runtime. For sensitive local tools, keep an explicit plugin or operator
 opt-in and fail closed when the active model metadata is missing or unsuitable.
 
 Every tool registered with `api.registerTool(...)` must also be declared in the
@@ -272,12 +272,12 @@ plugin manifest:
 }
 ```
 
-NexisClaw captures and caches the validated descriptor from the registered tool,
+GreenchClaw captures and caches the validated descriptor from the registered tool,
 so plugins do not duplicate `description` or schema data in the manifest. The
 manifest contract only declares ownership and discovery; execution still calls
 the live registered tool implementation.
 Set `toolMetadata.<tool>.optional: true` for tools registered with
-`api.registerTool(..., { optional: true })` so NexisClaw can avoid loading that
+`api.registerTool(..., { optional: true })` so GreenchClaw can avoid loading that
 plugin runtime until the tool is explicitly allowlisted.
 
 Users enable optional tools in config:
@@ -295,8 +295,8 @@ Users enable optional tools in config:
 
 ## Registering CLI commands
 
-Plugins can add root `NexisClaw` command groups with `api.registerCli`. Provide
-`descriptors` for every top-level command root so NexisClaw can show and route
+Plugins can add root `GreenchClaw` command groups with `api.registerCli`. Provide
+`descriptors` for every top-level command root so GreenchClaw can show and route
 the command without eagerly loading every plugin runtime.
 
 ```typescript
@@ -330,20 +330,20 @@ register(api) {
 After install, verify the runtime registration and execute the command:
 
 ```bash
-NexisClaw plugins inspect demo-plugin --runtime --json
-NexisClaw demo-plugin ping
+GreenchClaw plugins inspect demo-plugin --runtime --json
+GreenchClaw demo-plugin ping
 ```
 
 ## Import conventions
 
-Always import from focused `NexisClaw/plugin-sdk/<subpath>` paths:
+Always import from focused `GreenchClaw/plugin-sdk/<subpath>` paths:
 
 ```typescript
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
-import { createPluginRuntimeStore } from "NexisClaw/plugin-sdk/runtime-store";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createPluginRuntimeStore } from "GreenchClaw/plugin-sdk/runtime-store";
 
 // Wrong: monolithic root (deprecated, will be removed)
-import { ... } from "NexisClaw/plugin-sdk";
+import { ... } from "GreenchClaw/plugin-sdk";
 ```
 
 For the full subpath reference, see [SDK Overview](/plugins/sdk-overview).
@@ -359,16 +359,16 @@ barrels unless the seam is truly generic. Current bundled examples:
 - OpenRouter: provider builder plus onboarding/config helpers
 
 If a helper is only useful inside one bundled provider package, keep it on that
-package-root seam instead of promoting it into `NexisClaw/plugin-sdk/*`.
+package-root seam instead of promoting it into `GreenchClaw/plugin-sdk/*`.
 
-Some generated `NexisClaw/plugin-sdk/<bundled-id>` helper seams still exist for
+Some generated `GreenchClaw/plugin-sdk/<bundled-id>` helper seams still exist for
 bundled-plugin maintenance when they have tracked owner usage. Treat those as
 reserved surfaces, not as the default pattern for new third-party plugins.
 
 ## Pre-submission checklist
 
-<Check>**package.json** has correct `NexisClaw` metadata</Check>
-<Check>**NexisClaw.plugin.json** manifest is present and valid</Check>
+<Check>**package.json** has correct `GreenchClaw` metadata</Check>
+<Check>**GreenchClaw.plugin.json** manifest is present and valid</Check>
 <Check>Entry point uses `defineChannelPluginEntry` or `definePluginEntry`</Check>
 <Check>All imports use focused `plugin-sdk/<subpath>` paths</Check>
 <Check>Internal imports use local modules, not SDK self-imports</Check>
@@ -377,7 +377,7 @@ reserved surfaces, not as the default pattern for new third-party plugins.
 
 ## Beta release testing
 
-1. Watch for GitHub release tags on [NexisClaw/NexisClaw](https://github.com/NexisClaw/NexisClaw/releases) and subscribe via `Watch` > `Releases`. Beta tags look like `v2026.3.N-beta.1`. You can also turn on notifications for the official NexisClaw X account [@NexisClaw](https://x.com/NexisClaw) for release announcements.
+1. Watch for GitHub release tags on [GreenchClaw/GreenchClaw](https://github.com/GreenchClaw/GreenchClaw/releases) and subscribe via `Watch` > `Releases`. Beta tags look like `v2026.3.N-beta.1`. You can also turn on notifications for the official GreenchClaw X account [@GreenchClaw](https://x.com/GreenchClaw) for release announcements.
 2. Test your plugin against the beta tag as soon as it appears. The window before stable is typically only a few hours.
 3. Post in your plugin's thread in the `plugin-forum` Discord channel after testing with either `all good` or what broke. If you do not have a thread yet, create one.
 4. If something breaks, open or update an issue titled `Beta blocker: <plugin-name> - <summary>` and apply the `beta-blocker` label. Put the issue link in your thread.

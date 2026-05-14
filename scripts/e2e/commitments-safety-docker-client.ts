@@ -25,17 +25,17 @@ function assert(condition: unknown, message: string): asserts condition {
 }
 
 async function withStateDir<T>(name: string, fn: (stateDir: string) => Promise<T>): Promise<T> {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), `NexisClaw-${name}-`));
-  const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), `GreenchClaw-${name}-`));
+  const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
   try {
-    process.env.NEXISCLAW_STATE_DIR = root;
+    process.env.GREENCHCLAW_STATE_DIR = root;
     return await fn(root);
   } finally {
     resetCommitmentExtractionRuntimeForTests();
     if (previousStateDir === undefined) {
-      delete process.env.NEXISCLAW_STATE_DIR;
+      delete process.env.GREENCHCLAW_STATE_DIR;
     } else {
-      process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+      process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
     }
     await fs.rm(root, { recursive: true, force: true });
   }

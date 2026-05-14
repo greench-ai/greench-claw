@@ -244,10 +244,12 @@ export function buildStatusSecurityAuditLines(params: {
     }
   }
   lines.push(
-    params.theme.muted(`Full report: ${params.formatCliCommand("NexisClaw security audit")}`),
+    params.theme.muted(`Full report: ${params.formatCliCommand("GreenchClaw security audit")}`),
   );
   lines.push(
-    params.theme.muted(`Deep probe: ${params.formatCliCommand("NexisClaw security audit --deep")}`),
+    params.theme.muted(
+      `Deep probe: ${params.formatCliCommand("GreenchClaw security audit --deep")}`,
+    ),
   );
   return lines;
 }
@@ -362,17 +364,17 @@ export function buildStatusFooterLines(params: {
   gatewayReachable: boolean;
 }) {
   return [
-    "FAQ: https://docs.NexisClaw.ai/faq",
-    "Troubleshooting: https://docs.NexisClaw.ai/troubleshooting",
+    "FAQ: https://docs.GreenchClaw.ai/faq",
+    "Troubleshooting: https://docs.GreenchClaw.ai/troubleshooting",
     ...(params.updateHint ? ["", params.warn(params.updateHint)] : []),
     "Next steps:",
-    `  Need to share?      ${params.formatCliCommand("NexisClaw status --all")}`,
-    `  Need to debug live? ${params.formatCliCommand("NexisClaw logs --follow")}`,
+    `  Need to share?      ${params.formatCliCommand("GreenchClaw status --all")}`,
+    `  Need to debug live? ${params.formatCliCommand("GreenchClaw logs --follow")}`,
     params.nodeOnlyGateway
-      ? `  Need node service?  ${params.formatCliCommand("NexisClaw node status")}`
+      ? `  Need node service?  ${params.formatCliCommand("GreenchClaw node status")}`
       : params.gatewayReachable
-        ? `  Need to test channels? ${params.formatCliCommand("NexisClaw status --deep")}`
-        : `  Fix reachability first: ${params.formatCliCommand("NexisClaw gateway probe")}`,
+        ? `  Need to test channels? ${params.formatCliCommand("GreenchClaw status --deep")}`
+        : `  Fix reachability first: ${params.formatCliCommand("GreenchClaw gateway probe")}`,
   ];
 }
 
@@ -424,12 +426,12 @@ export function buildStatusPairingRecoveryLines(params: {
     ...(params.pairingRecovery.requestId
       ? [
           params.muted(
-            `Recovery: ${params.formatCliCommand(`NexisClaw devices approve ${params.pairingRecovery.requestId}`)}`,
+            `Recovery: ${params.formatCliCommand(`GreenchClaw devices approve ${params.pairingRecovery.requestId}`)}`,
           ),
         ]
       : []),
-    params.muted(`Fallback: ${params.formatCliCommand("NexisClaw devices approve --latest")}`),
-    params.muted(`Inspect: ${params.formatCliCommand("NexisClaw devices list")}`),
+    params.muted(`Fallback: ${params.formatCliCommand("GreenchClaw devices approve --latest")}`),
+    params.muted(`Inspect: ${params.formatCliCommand("GreenchClaw devices list")}`),
   ];
 }
 

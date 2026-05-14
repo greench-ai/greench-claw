@@ -1,7 +1,7 @@
 import { isDeepStrictEqual } from "node:util";
 import { replaceConfigFile } from "../config/config.js";
 import type { ConfigWriteOptions } from "../config/io.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import {
   loadInstalledPluginIndexInstallRecords,
@@ -18,13 +18,13 @@ function mergeUnsetPaths(
   return merged.length > 0 ? merged : undefined;
 }
 
-type ConfigCommit = (config: NexisClawConfig, writeOptions?: ConfigWriteOptions) => Promise<void>;
+type ConfigCommit = (config: GreenchClawConfig, writeOptions?: ConfigWriteOptions) => Promise<void>;
 const PLUGIN_SOURCE_CHANGED_RESTART_REASON = "plugin source changed";
 
 async function commitPluginInstallRecordsWithWriter(params: {
   previousInstallRecords?: Record<string, PluginInstallRecord>;
   nextInstallRecords: Record<string, PluginInstallRecord>;
-  nextConfig: NexisClawConfig;
+  nextConfig: GreenchClawConfig;
   writeOptions?: ConfigWriteOptions;
   commit: ConfigCommit;
 }): Promise<void> {
@@ -61,7 +61,7 @@ async function commitPluginInstallRecordsWithWriter(params: {
 export async function commitPluginInstallRecordsWithConfig(params: {
   previousInstallRecords?: Record<string, PluginInstallRecord>;
   nextInstallRecords: Record<string, PluginInstallRecord>;
-  nextConfig: NexisClawConfig;
+  nextConfig: GreenchClawConfig;
   baseHash?: string;
   writeOptions?: ConfigWriteOptions;
 }): Promise<void> {
@@ -78,11 +78,11 @@ export async function commitPluginInstallRecordsWithConfig(params: {
 }
 
 export async function commitConfigWriteWithPendingPluginInstalls(params: {
-  nextConfig: NexisClawConfig;
+  nextConfig: GreenchClawConfig;
   writeOptions?: ConfigWriteOptions;
   commit: ConfigCommit;
 }): Promise<{
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   installRecords: Record<string, PluginInstallRecord>;
   movedInstallRecords: boolean;
 }> {
@@ -121,11 +121,11 @@ export async function commitConfigWriteWithPendingPluginInstalls(params: {
 }
 
 export async function commitConfigWithPendingPluginInstalls(params: {
-  nextConfig: NexisClawConfig;
+  nextConfig: GreenchClawConfig;
   baseHash?: string;
   writeOptions?: ConfigWriteOptions;
 }): Promise<{
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   installRecords: Record<string, PluginInstallRecord>;
   movedInstallRecords: boolean;
 }> {

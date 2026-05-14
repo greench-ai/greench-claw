@@ -1,22 +1,22 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   resolveGatewayCredentialsFromConfig,
   resolveGatewayCredentialsFromValues,
 } from "./credentials.js";
 
-function cfg(input: Partial<NexisClawConfig>): NexisClawConfig {
-  return input as NexisClawConfig;
+function cfg(input: Partial<GreenchClawConfig>): GreenchClawConfig {
+  return input as GreenchClawConfig;
 }
 
 type ResolveFromConfigInput = Parameters<typeof resolveGatewayCredentialsFromConfig>[0];
-type GatewayConfig = NonNullable<NexisClawConfig["gateway"]>;
+type GatewayConfig = NonNullable<GreenchClawConfig["gateway"]>;
 
 const DEFAULT_GATEWAY_AUTH = { token: "config-token", password: "config-password" }; // pragma: allowlist secret
 const DEFAULT_REMOTE_AUTH = { token: "remote-token", password: "remote-password" }; // pragma: allowlist secret
 const DEFAULT_GATEWAY_ENV = {
-  NEXISCLAW_GATEWAY_TOKEN: "env-token",
-  NEXISCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
+  GREENCHCLAW_GATEWAY_TOKEN: "env-token",
+  GREENCHCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
 } as NodeJS.ProcessEnv;
 
 function resolveGatewayCredentialsFor(
@@ -65,7 +65,7 @@ function resolveLocalModeWithUnresolvedPassword(mode: "none" | "trusted-proxy") 
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig,
+    } as unknown as GreenchClawConfig,
     env: {} as NodeJS.ProcessEnv,
   });
 }
@@ -100,7 +100,7 @@ function expectUnresolvedLocalAuthSecretRefFailure(params: {
             default: { source: "env" },
           },
         },
-      } as unknown as NexisClawConfig,
+      } as unknown as GreenchClawConfig,
       env: {} as NodeJS.ProcessEnv,
     }),
   ).toThrow(params.errorPath);
@@ -164,9 +164,9 @@ describe("resolveGatewayCredentialsFromConfig", () => {
         },
       }),
       env: {
-        NEXISCLAW_GATEWAY_TOKEN: "env-token",
-        NEXISCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
-        NEXISCLAW_SERVICE_KIND: "gateway",
+        GREENCHCLAW_GATEWAY_TOKEN: "env-token",
+        GREENCHCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
+        GREENCHCLAW_SERVICE_KIND: "gateway",
       } as NodeJS.ProcessEnv,
     });
     expect(resolved).toEqual({
@@ -225,12 +225,12 @@ describe("resolveGatewayCredentialsFromConfig", () => {
           mode: "local",
           auth: {
             mode: "token",
-            token: "${NEXISCLAW_GATEWAY_TOKEN}",
+            token: "${GREENCHCLAW_GATEWAY_TOKEN}",
           },
         },
       }),
       env: {
-        NEXISCLAW_GATEWAY_TOKEN: "env-token",
+        GREENCHCLAW_GATEWAY_TOKEN: "env-token",
       } as NodeJS.ProcessEnv,
     });
 
@@ -248,7 +248,7 @@ describe("resolveGatewayCredentialsFromConfig", () => {
             mode: "local",
             auth: {
               mode: "token",
-              token: "${NEXISCLAW_GATEWAY_TOKEN}",
+              token: "${GREENCHCLAW_GATEWAY_TOKEN}",
             },
           },
         }),
@@ -413,7 +413,7 @@ describe("resolveGatewayCredentialsFromConfig", () => {
         },
       }),
       env: {
-        NEXISCLAW_GATEWAY_TOKEN: "env-token",
+        GREENCHCLAW_GATEWAY_TOKEN: "env-token",
       } as NodeJS.ProcessEnv,
       remoteTokenFallback: "remote-only",
     });
@@ -437,7 +437,7 @@ describe("resolveGatewayCredentialsFromConfig", () => {
               default: { source: "env" },
             },
           },
-        } as unknown as NexisClawConfig,
+        } as unknown as GreenchClawConfig,
         env: {} as NodeJS.ProcessEnv,
         remoteTokenFallback: "remote-only",
       }),
@@ -461,7 +461,7 @@ describe("resolveGatewayCredentialsFromConfig", () => {
           default: { source: "env" },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
   }
 
   it("ignores unresolved local token ref in remote-only mode when local auth mode is token", () => {
@@ -505,7 +505,7 @@ describe("resolveGatewayCredentialsFromConfig", () => {
             default: { source: "env" },
           },
         },
-      } as unknown as NexisClawConfig,
+      } as unknown as GreenchClawConfig,
       env: {} as NodeJS.ProcessEnv,
     });
     expect(resolved).toEqual({
@@ -531,7 +531,7 @@ describe("resolveGatewayCredentialsFromConfig", () => {
               default: { source: "env" },
             },
           },
-        } as unknown as NexisClawConfig,
+        } as unknown as GreenchClawConfig,
         env: {} as NodeJS.ProcessEnv,
         remotePasswordFallback: "remote-only", // pragma: allowlist secret
       }),
@@ -545,8 +545,8 @@ describe("resolveGatewayCredentialsFromValues", () => {
       configToken: "config-token",
       configPassword: "config-password", // pragma: allowlist secret
       env: {
-        NEXISCLAW_GATEWAY_TOKEN: "env-token",
-        NEXISCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
+        GREENCHCLAW_GATEWAY_TOKEN: "env-token",
+        GREENCHCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
       } as NodeJS.ProcessEnv,
       tokenPrecedence: "config-first",
       passwordPrecedence: "config-first", // pragma: allowlist secret
@@ -562,8 +562,8 @@ describe("resolveGatewayCredentialsFromValues", () => {
       configToken: "config-token",
       configPassword: "config-password", // pragma: allowlist secret
       env: {
-        NEXISCLAW_GATEWAY_TOKEN: "env-token",
-        NEXISCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
+        GREENCHCLAW_GATEWAY_TOKEN: "env-token",
+        GREENCHCLAW_GATEWAY_PASSWORD: "env-password", // pragma: allowlist secret
       } as NodeJS.ProcessEnv,
     });
     expect(resolved).toEqual({
@@ -574,8 +574,8 @@ describe("resolveGatewayCredentialsFromValues", () => {
 
   it("rejects unresolved env var placeholders in config credentials", () => {
     const resolved = resolveGatewayCredentialsFromValues({
-      configToken: "${NEXISCLAW_GATEWAY_TOKEN}",
-      configPassword: "${NEXISCLAW_GATEWAY_PASSWORD}",
+      configToken: "${GREENCHCLAW_GATEWAY_TOKEN}",
+      configPassword: "${GREENCHCLAW_GATEWAY_PASSWORD}",
       env: {} as NodeJS.ProcessEnv,
       tokenPrecedence: "config-first",
       passwordPrecedence: "config-first", // pragma: allowlist secret

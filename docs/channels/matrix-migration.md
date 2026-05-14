@@ -1,5 +1,5 @@
 ---
-summary: "How NexisClaw upgrades the previous Matrix plugin in place, including encrypted-state recovery limits and manual recovery steps."
+summary: "How GreenchClaw upgrades the previous Matrix plugin in place, including encrypted-state recovery limits and manual recovery steps."
 read_when:
   - Upgrading an existing Matrix installation
   - Migrating encrypted Matrix history and device state
@@ -10,28 +10,28 @@ Upgrade from the previous public `matrix` plugin to the current implementation.
 
 For most users, the upgrade is in place:
 
-- the plugin stays `@NexisClaw/matrix`
+- the plugin stays `@GreenchClaw/matrix`
 - the channel stays `matrix`
 - your config stays under `channels.matrix`
-- cached credentials stay under `~/.NexisClaw/credentials/matrix/`
-- runtime state stays under `~/.NexisClaw/matrix/`
+- cached credentials stay under `~/.GreenchClaw/credentials/matrix/`
+- runtime state stays under `~/.GreenchClaw/matrix/`
 
 You do not need to rename config keys or reinstall the plugin under a new name.
 
 ## What the migration does automatically
 
-When the gateway starts, and when you run [`NexisClaw doctor --fix`](/gateway/doctor), NexisClaw tries to repair old Matrix state automatically.
-Before any actionable Matrix migration step mutates on-disk state, NexisClaw creates or reuses a focused recovery snapshot.
+When the gateway starts, and when you run [`GreenchClaw doctor --fix`](/gateway/doctor), GreenchClaw tries to repair old Matrix state automatically.
+Before any actionable Matrix migration step mutates on-disk state, GreenchClaw creates or reuses a focused recovery snapshot.
 
-When you use `NexisClaw update`, the exact trigger depends on how NexisClaw is installed:
+When you use `GreenchClaw update`, the exact trigger depends on how GreenchClaw is installed:
 
-- source installs run `NexisClaw doctor --fix` during the update flow, then restart the gateway by default
+- source installs run `GreenchClaw doctor --fix` during the update flow, then restart the gateway by default
 - package-manager installs update the package, run a non-interactive doctor pass, then rely on the default gateway restart so startup can finish Matrix migration
-- if you use `NexisClaw update --no-restart`, startup-backed Matrix migration is deferred until you later run `NexisClaw doctor --fix` and restart the gateway
+- if you use `GreenchClaw update --no-restart`, startup-backed Matrix migration is deferred until you later run `GreenchClaw doctor --fix` and restart the gateway
 
 Automatic migration covers:
 
-- creating or reusing a pre-migration snapshot under `~/Backups/NexisClaw-migrations/`
+- creating or reusing a pre-migration snapshot under `~/Backups/GreenchClaw-migrations/`
 - reusing your cached Matrix credentials
 - keeping the same account selection and `channels.matrix` config
 - moving the oldest flat Matrix sync store into the current account-scoped location
@@ -43,14 +43,14 @@ Automatic migration covers:
 
 Snapshot details:
 
-- NexisClaw writes a marker file at `~/.NexisClaw/matrix/migration-snapshot.json` after a successful snapshot so later startup and repair passes can reuse the same archive.
+- GreenchClaw writes a marker file at `~/.GreenchClaw/matrix/migration-snapshot.json` after a successful snapshot so later startup and repair passes can reuse the same archive.
 - These automatic Matrix migration snapshots back up config + state only (`includeWorkspace: false`).
-- If Matrix only has warning-only migration state, for example because `userId` or `accessToken` is still missing, NexisClaw does not create the snapshot yet because no Matrix mutation is actionable.
-- If the snapshot step fails, NexisClaw skips Matrix migration for that run instead of mutating state without a recovery point.
+- If Matrix only has warning-only migration state, for example because `userId` or `accessToken` is still missing, GreenchClaw does not create the snapshot yet because no Matrix mutation is actionable.
+- If the snapshot step fails, GreenchClaw skips Matrix migration for that run instead of mutating state without a recovery point.
 
 About multi-account upgrades:
 
-- the oldest flat Matrix store (`~/.NexisClaw/matrix/bot-storage.json` and `~/.NexisClaw/matrix/crypto/`) came from a single-store layout, so NexisClaw can only migrate it into one resolved Matrix account target
+- the oldest flat Matrix store (`~/.GreenchClaw/matrix/bot-storage.json` and `~/.GreenchClaw/matrix/crypto/`) came from a single-store layout, so GreenchClaw can only migrate it into one resolved Matrix account target
 - already account-scoped legacy Matrix stores are detected and prepared per configured Matrix account
 
 ## What the migration cannot do automatically
@@ -59,7 +59,7 @@ The previous public Matrix plugin did **not** automatically create Matrix room-k
 
 That means some encrypted installs can only be migrated partially.
 
-NexisClaw cannot automatically recover:
+GreenchClaw cannot automatically recover:
 
 - local-only room keys that were never backed up
 - encrypted state when the target Matrix account cannot be resolved yet because `homeserver`, `userId`, or `accessToken` are still unavailable
@@ -69,18 +69,18 @@ NexisClaw cannot automatically recover:
 
 Current warning scope:
 
-- custom Matrix plugin path installs are surfaced by both gateway startup and `NexisClaw doctor`
+- custom Matrix plugin path installs are surfaced by both gateway startup and `GreenchClaw doctor`
 
 If your old installation had local-only encrypted history that was never backed up, some older encrypted messages may remain unreadable after the upgrade.
 
 ## Recommended upgrade flow
 
-1. Update NexisClaw and the Matrix plugin normally.
-   Prefer plain `NexisClaw update` without `--no-restart` so startup can finish the Matrix migration immediately.
+1. Update GreenchClaw and the Matrix plugin normally.
+   Prefer plain `GreenchClaw update` without `--no-restart` so startup can finish the Matrix migration immediately.
 2. Run:
 
    ```bash
-   NexisClaw doctor --fix
+   GreenchClaw doctor --fix
    ```
 
    If Matrix has actionable migration work, doctor will create or reuse the pre-migration snapshot first and print the archive path.
@@ -89,31 +89,31 @@ If your old installation had local-only encrypted history that was never backed 
 4. Check current verification and backup state:
 
    ```bash
-   NexisClaw matrix verify status
-   NexisClaw matrix verify backup status
+   GreenchClaw matrix verify status
+   GreenchClaw matrix verify backup status
    ```
 
 5. Put the recovery key for the Matrix account you are repairing in an account-specific environment variable. For a single default account, `MATRIX_RECOVERY_KEY` is fine. For multiple accounts, use one variable per account, for example `MATRIX_RECOVERY_KEY_ASSISTANT`, and add `--account assistant` to the command.
 
-6. If NexisClaw tells you a recovery key is needed, run the command for the matching account:
+6. If GreenchClaw tells you a recovery key is needed, run the command for the matching account:
 
    ```bash
-   printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify backup restore --recovery-key-stdin
-   printf '%s\n' "$MATRIX_RECOVERY_KEY_ASSISTANT" | NexisClaw matrix verify backup restore --recovery-key-stdin --account assistant
+   printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify backup restore --recovery-key-stdin
+   printf '%s\n' "$MATRIX_RECOVERY_KEY_ASSISTANT" | GreenchClaw matrix verify backup restore --recovery-key-stdin --account assistant
    ```
 
 7. If this device is still unverified, run the command for the matching account:
 
    ```bash
-   printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify device --recovery-key-stdin
-   printf '%s\n' "$MATRIX_RECOVERY_KEY_ASSISTANT" | NexisClaw matrix verify device --recovery-key-stdin --account assistant
+   printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify device --recovery-key-stdin
+   printf '%s\n' "$MATRIX_RECOVERY_KEY_ASSISTANT" | GreenchClaw matrix verify device --recovery-key-stdin --account assistant
    ```
 
    If the recovery key is accepted and backup is usable, but `Cross-signing verified`
    is still `no`, complete self-verification from another Matrix client:
 
    ```bash
-   NexisClaw matrix verify self
+   GreenchClaw matrix verify self
    ```
 
    Accept the request in another Matrix client, compare the emoji or decimals,
@@ -123,25 +123,25 @@ If your old installation had local-only encrypted history that was never backed 
 8. If you are intentionally abandoning unrecoverable old history and want a fresh backup baseline for future messages, run:
 
    ```bash
-   NexisClaw matrix verify backup reset --yes
+   GreenchClaw matrix verify backup reset --yes
    ```
 
 9. If no server-side key backup exists yet, create one for future recoveries:
 
    ```bash
-   NexisClaw matrix verify bootstrap
+   GreenchClaw matrix verify bootstrap
    ```
 
 ## How encrypted migration works
 
 Encrypted migration is a two-stage process:
 
-1. Startup or `NexisClaw doctor --fix` creates or reuses the pre-migration snapshot if encrypted migration is actionable.
-2. Startup or `NexisClaw doctor --fix` inspects the old Matrix crypto store through the active Matrix plugin install.
-3. If a backup decryption key is found, NexisClaw writes it into the new recovery-key flow and marks room-key restore as pending.
-4. On the next Matrix startup, NexisClaw restores backed-up room keys into the new crypto store automatically.
+1. Startup or `GreenchClaw doctor --fix` creates or reuses the pre-migration snapshot if encrypted migration is actionable.
+2. Startup or `GreenchClaw doctor --fix` inspects the old Matrix crypto store through the active Matrix plugin install.
+3. If a backup decryption key is found, GreenchClaw writes it into the new recovery-key flow and marks room-key restore as pending.
+4. On the next Matrix startup, GreenchClaw restores backed-up room keys into the new crypto store automatically.
 
-If the old store reports room keys that were never backed up, NexisClaw warns instead of pretending recovery succeeded.
+If the old store reports room keys that were never backed up, GreenchClaw warns instead of pretending recovery succeeded.
 
 ## Common messages and what they mean
 
@@ -154,85 +154,85 @@ If the old store reports room keys that were never backed up, NexisClaw warns in
 
 `Matrix migration snapshot created before applying Matrix upgrades.`
 
-- Meaning: NexisClaw created a recovery archive before mutating Matrix state.
+- Meaning: GreenchClaw created a recovery archive before mutating Matrix state.
 - What to do: keep the printed archive path until you confirm migration succeeded.
 
 `Matrix migration snapshot reused before applying Matrix upgrades.`
 
-- Meaning: NexisClaw found an existing Matrix migration snapshot marker and reused that archive instead of creating a duplicate backup.
+- Meaning: GreenchClaw found an existing Matrix migration snapshot marker and reused that archive instead of creating a duplicate backup.
 - What to do: keep the printed archive path until you confirm migration succeeded.
 
 `Legacy Matrix state detected at ... but channels.matrix is not configured yet.`
 
-- Meaning: old Matrix state exists, but NexisClaw cannot map it to a current Matrix account because Matrix is not configured.
-- What to do: configure `channels.matrix`, then rerun `NexisClaw doctor --fix` or restart the gateway.
+- Meaning: old Matrix state exists, but GreenchClaw cannot map it to a current Matrix account because Matrix is not configured.
+- What to do: configure `channels.matrix`, then rerun `GreenchClaw doctor --fix` or restart the gateway.
 
 `Legacy Matrix state detected at ... but the new account-scoped target could not be resolved yet (need homeserver, userId, and access token for channels.matrix...).`
 
-- Meaning: NexisClaw found old state, but it still cannot determine the exact current account/device root.
-- What to do: start the gateway once with a working Matrix login, or rerun `NexisClaw doctor --fix` after cached credentials exist.
+- Meaning: GreenchClaw found old state, but it still cannot determine the exact current account/device root.
+- What to do: start the gateway once with a working Matrix login, or rerun `GreenchClaw doctor --fix` after cached credentials exist.
 
 `Legacy Matrix state detected at ... but multiple Matrix accounts are configured and channels.matrix.defaultAccount is not set.`
 
-- Meaning: NexisClaw found one shared flat Matrix store, but it refuses to guess which named Matrix account should receive it.
-- What to do: set `channels.matrix.defaultAccount` to the intended account, then rerun `NexisClaw doctor --fix` or restart the gateway.
+- Meaning: GreenchClaw found one shared flat Matrix store, but it refuses to guess which named Matrix account should receive it.
+- What to do: set `channels.matrix.defaultAccount` to the intended account, then rerun `GreenchClaw doctor --fix` or restart the gateway.
 
 `Matrix legacy sync store not migrated because the target already exists (...)`
 
-- Meaning: the new account-scoped location already has a sync or crypto store, so NexisClaw did not overwrite it automatically.
+- Meaning: the new account-scoped location already has a sync or crypto store, so GreenchClaw did not overwrite it automatically.
 - What to do: verify that the current account is the correct one before manually removing or moving the conflicting target.
 
 `Failed migrating Matrix legacy sync store (...)` or `Failed migrating Matrix legacy crypto store (...)`
 
-- Meaning: NexisClaw tried to move old Matrix state but the filesystem operation failed.
-- What to do: inspect filesystem permissions and disk state, then rerun `NexisClaw doctor --fix`.
+- Meaning: GreenchClaw tried to move old Matrix state but the filesystem operation failed.
+- What to do: inspect filesystem permissions and disk state, then rerun `GreenchClaw doctor --fix`.
 
 `Legacy Matrix encrypted state detected at ... but channels.matrix is not configured yet.`
 
-- Meaning: NexisClaw found an old encrypted Matrix store, but there is no current Matrix config to attach it to.
-- What to do: configure `channels.matrix`, then rerun `NexisClaw doctor --fix` or restart the gateway.
+- Meaning: GreenchClaw found an old encrypted Matrix store, but there is no current Matrix config to attach it to.
+- What to do: configure `channels.matrix`, then rerun `GreenchClaw doctor --fix` or restart the gateway.
 
 `Legacy Matrix encrypted state detected at ... but the account-scoped target could not be resolved yet (need homeserver, userId, and access token for channels.matrix...).`
 
-- Meaning: the encrypted store exists, but NexisClaw cannot safely decide which current account/device it belongs to.
-- What to do: start the gateway once with a working Matrix login, or rerun `NexisClaw doctor --fix` after cached credentials are available.
+- Meaning: the encrypted store exists, but GreenchClaw cannot safely decide which current account/device it belongs to.
+- What to do: start the gateway once with a working Matrix login, or rerun `GreenchClaw doctor --fix` after cached credentials are available.
 
 `Legacy Matrix encrypted state detected at ... but multiple Matrix accounts are configured and channels.matrix.defaultAccount is not set.`
 
-- Meaning: NexisClaw found one shared flat legacy crypto store, but it refuses to guess which named Matrix account should receive it.
-- What to do: set `channels.matrix.defaultAccount` to the intended account, then rerun `NexisClaw doctor --fix` or restart the gateway.
+- Meaning: GreenchClaw found one shared flat legacy crypto store, but it refuses to guess which named Matrix account should receive it.
+- What to do: set `channels.matrix.defaultAccount` to the intended account, then rerun `GreenchClaw doctor --fix` or restart the gateway.
 
 `Matrix migration warnings are present, but no on-disk Matrix mutation is actionable yet. No pre-migration snapshot was needed.`
 
-- Meaning: NexisClaw detected old Matrix state, but the migration is still blocked on missing identity or credential data.
-- What to do: finish Matrix login or config setup, then rerun `NexisClaw doctor --fix` or restart the gateway.
+- Meaning: GreenchClaw detected old Matrix state, but the migration is still blocked on missing identity or credential data.
+- What to do: finish Matrix login or config setup, then rerun `GreenchClaw doctor --fix` or restart the gateway.
 
-`Legacy Matrix encrypted state was detected, but the Matrix plugin helper is unavailable. Install or repair @NexisClaw/matrix so NexisClaw can inspect the old rust crypto store before upgrading.`
+`Legacy Matrix encrypted state was detected, but the Matrix plugin helper is unavailable. Install or repair @GreenchClaw/matrix so GreenchClaw can inspect the old rust crypto store before upgrading.`
 
-- Meaning: NexisClaw found old encrypted Matrix state, but it could not load the helper entrypoint from the Matrix plugin that normally inspects that store.
-- What to do: reinstall or repair the Matrix plugin (`NexisClaw plugins install @NexisClaw/matrix`, or `NexisClaw plugins install ./path/to/local/matrix-plugin` for a repo checkout), then rerun `NexisClaw doctor --fix` or restart the gateway.
+- Meaning: GreenchClaw found old encrypted Matrix state, but it could not load the helper entrypoint from the Matrix plugin that normally inspects that store.
+- What to do: reinstall or repair the Matrix plugin (`GreenchClaw plugins install @GreenchClaw/matrix`, or `GreenchClaw plugins install ./path/to/local/matrix-plugin` for a repo checkout), then rerun `GreenchClaw doctor --fix` or restart the gateway.
 
-`Matrix plugin helper path is unsafe: ... Reinstall @NexisClaw/matrix and try again.`
+`Matrix plugin helper path is unsafe: ... Reinstall @GreenchClaw/matrix and try again.`
 
-- Meaning: NexisClaw found a helper file path that escapes the plugin root or fails plugin boundary checks, so it refused to import it.
-- What to do: reinstall the Matrix plugin from a trusted path, then rerun `NexisClaw doctor --fix` or restart the gateway.
+- Meaning: GreenchClaw found a helper file path that escapes the plugin root or fails plugin boundary checks, so it refused to import it.
+- What to do: reinstall the Matrix plugin from a trusted path, then rerun `GreenchClaw doctor --fix` or restart the gateway.
 
 `- Failed creating a Matrix migration snapshot before repair: ...`
 
-`- Skipping Matrix migration changes for now. Resolve the snapshot failure, then rerun "NexisClaw doctor --fix".`
+`- Skipping Matrix migration changes for now. Resolve the snapshot failure, then rerun "GreenchClaw doctor --fix".`
 
-- Meaning: NexisClaw refused to mutate Matrix state because it could not create the recovery snapshot first.
-- What to do: resolve the backup error, then rerun `NexisClaw doctor --fix` or restart the gateway.
+- Meaning: GreenchClaw refused to mutate Matrix state because it could not create the recovery snapshot first.
+- What to do: resolve the backup error, then rerun `GreenchClaw doctor --fix` or restart the gateway.
 
 `Failed migrating legacy Matrix client storage: ...`
 
-- Meaning: the Matrix client-side fallback found old flat storage, but the move failed. NexisClaw now aborts that fallback instead of silently starting with a fresh store.
+- Meaning: the Matrix client-side fallback found old flat storage, but the move failed. GreenchClaw now aborts that fallback instead of silently starting with a fresh store.
 - What to do: inspect filesystem permissions or conflicts, keep the old state intact, and retry after fixing the error.
 
 `Matrix is installed from a custom path: ...`
 
 - Meaning: Matrix is pinned to a path install, so mainline updates do not automatically replace it with the repo's standard Matrix package.
-- What to do: reinstall with `NexisClaw plugins install @NexisClaw/matrix` when you want to return to the default Matrix plugin.
+- What to do: reinstall with `GreenchClaw plugins install @GreenchClaw/matrix` when you want to return to the default Matrix plugin.
 
 ### Encrypted-state recovery messages
 
@@ -246,19 +246,19 @@ If the old store reports room keys that were never backed up, NexisClaw warns in
 - Meaning: some old room keys existed only in the old local store and had never been uploaded to Matrix backup.
 - What to do: expect some old encrypted history to remain unavailable unless you can recover those keys manually from another verified client.
 
-`Legacy Matrix encrypted state for account "..." has backed-up room keys, but no local backup decryption key was found. Ask the operator to run "NexisClaw matrix verify backup restore --recovery-key-stdin" after upgrade if they have the recovery key.`
+`Legacy Matrix encrypted state for account "..." has backed-up room keys, but no local backup decryption key was found. Ask the operator to run "GreenchClaw matrix verify backup restore --recovery-key-stdin" after upgrade if they have the recovery key.`
 
-- Meaning: backup exists, but NexisClaw could not recover the recovery key automatically.
-- What to do: run `printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify backup restore --recovery-key-stdin`.
+- Meaning: backup exists, but GreenchClaw could not recover the recovery key automatically.
+- What to do: run `printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify backup restore --recovery-key-stdin`.
 
 `Failed inspecting legacy Matrix encrypted state for account "..." (...): ...`
 
-- Meaning: NexisClaw found the old encrypted store, but it could not inspect it safely enough to prepare recovery.
-- What to do: rerun `NexisClaw doctor --fix`. If it repeats, keep the old state directory intact and recover using another verified Matrix client plus `printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify backup restore --recovery-key-stdin`.
+- Meaning: GreenchClaw found the old encrypted store, but it could not inspect it safely enough to prepare recovery.
+- What to do: rerun `GreenchClaw doctor --fix`. If it repeats, keep the old state directory intact and recover using another verified Matrix client plus `printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify backup restore --recovery-key-stdin`.
 
 `Legacy Matrix backup key was found for account "...", but .../recovery-key.json already contains a different recovery key. Leaving the existing file unchanged.`
 
-- Meaning: NexisClaw detected a backup key conflict and refused to overwrite the current recovery-key file automatically.
+- Meaning: GreenchClaw detected a backup key conflict and refused to overwrite the current recovery-key file automatically.
 - What to do: verify which recovery key is correct before retrying any restore command.
 
 `Legacy Matrix encrypted state for account "..." cannot be fully converted automatically because the old rust crypto store does not expose all local room keys for export.`
@@ -269,39 +269,39 @@ If the old store reports room keys that were never backed up, NexisClaw warns in
 `matrix: failed restoring room keys from legacy encrypted-state backup: ...`
 
 - Meaning: the new plugin attempted restore but Matrix returned an error.
-- What to do: run `NexisClaw matrix verify backup status`, then retry with `printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify backup restore --recovery-key-stdin` if needed.
+- What to do: run `GreenchClaw matrix verify backup status`, then retry with `printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify backup restore --recovery-key-stdin` if needed.
 
 ### Manual recovery messages
 
-`Backup key is not loaded on this device. Run 'NexisClaw matrix verify backup restore' to load it and restore old room keys.`
+`Backup key is not loaded on this device. Run 'GreenchClaw matrix verify backup restore' to load it and restore old room keys.`
 
-- Meaning: NexisClaw knows you should have a backup key, but it is not active on this device.
-- What to do: run `NexisClaw matrix verify backup restore`, or set `MATRIX_RECOVERY_KEY` and run `printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify backup restore --recovery-key-stdin` if needed.
+- Meaning: GreenchClaw knows you should have a backup key, but it is not active on this device.
+- What to do: run `GreenchClaw matrix verify backup restore`, or set `MATRIX_RECOVERY_KEY` and run `printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify backup restore --recovery-key-stdin` if needed.
 
-`Store a recovery key with 'NexisClaw matrix verify device --recovery-key-stdin', then run 'NexisClaw matrix verify backup restore'.`
+`Store a recovery key with 'GreenchClaw matrix verify device --recovery-key-stdin', then run 'GreenchClaw matrix verify backup restore'.`
 
 - Meaning: this device does not currently have the recovery key stored.
-- What to do: set `MATRIX_RECOVERY_KEY`, run `printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify device --recovery-key-stdin`, then restore the backup.
+- What to do: set `MATRIX_RECOVERY_KEY`, run `printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify device --recovery-key-stdin`, then restore the backup.
 
-`Backup key mismatch on this device. Re-run 'NexisClaw matrix verify device --recovery-key-stdin' with the matching recovery key.`
+`Backup key mismatch on this device. Re-run 'GreenchClaw matrix verify device --recovery-key-stdin' with the matching recovery key.`
 
 - Meaning: the stored key does not match the active Matrix backup.
-- What to do: set `MATRIX_RECOVERY_KEY` to the correct key and run `printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify device --recovery-key-stdin`.
+- What to do: set `MATRIX_RECOVERY_KEY` to the correct key and run `printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify device --recovery-key-stdin`.
 
 If you accept losing unrecoverable old encrypted history, you can instead reset the
-current backup baseline with `NexisClaw matrix verify backup reset --yes`. When the
+current backup baseline with `GreenchClaw matrix verify backup reset --yes`. When the
 stored backup secret is broken, that reset may also recreate secret storage so the
 new backup key can load correctly after restart.
 
-`Backup trust chain is not verified on this device. Re-run 'NexisClaw matrix verify device --recovery-key-stdin'.`
+`Backup trust chain is not verified on this device. Re-run 'GreenchClaw matrix verify device --recovery-key-stdin'.`
 
 - Meaning: the backup exists, but this device does not trust the cross-signing chain strongly enough yet.
-- What to do: set `MATRIX_RECOVERY_KEY` and run `printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify device --recovery-key-stdin`.
+- What to do: set `MATRIX_RECOVERY_KEY` and run `printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify device --recovery-key-stdin`.
 
 `Matrix recovery key is required`
 
 - Meaning: you tried a recovery step without supplying a recovery key when one was required.
-- What to do: rerun the command with `--recovery-key-stdin`, for example `printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify device --recovery-key-stdin`.
+- What to do: rerun the command with `--recovery-key-stdin`, for example `printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify device --recovery-key-stdin`.
 
 `Invalid Matrix recovery key: ...`
 
@@ -310,41 +310,41 @@ new backup key can load correctly after restart.
 
 `Matrix recovery key was applied, but this device still lacks full Matrix identity trust.`
 
-- Meaning: NexisClaw could apply the recovery key, but Matrix still has not
+- Meaning: GreenchClaw could apply the recovery key, but Matrix still has not
   established full cross-signing identity trust for this device. Check the
   command output for `Recovery key accepted`, `Backup usable`,
   `Cross-signing verified`, and `Device verified by owner`.
-- What to do: run `NexisClaw matrix verify self`, accept the request in another
+- What to do: run `GreenchClaw matrix verify self`, accept the request in another
   Matrix client, compare the SAS, and type `yes` only when it matches. The
   command waits for full Matrix identity trust before reporting success. Use
-  `printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify bootstrap --recovery-key-stdin --force-reset-cross-signing`
+  `printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify bootstrap --recovery-key-stdin --force-reset-cross-signing`
   only when you intentionally want to replace the current cross-signing identity.
 
 `Matrix key backup is not active on this device after loading from secret storage.`
 
 - Meaning: secret storage did not produce an active backup session on this device.
-- What to do: verify the device first, then recheck with `NexisClaw matrix verify backup status`.
+- What to do: verify the device first, then recheck with `GreenchClaw matrix verify backup status`.
 
-`Matrix crypto backend cannot load backup keys from secret storage. Verify this device with 'NexisClaw matrix verify device --recovery-key-stdin' first.`
+`Matrix crypto backend cannot load backup keys from secret storage. Verify this device with 'GreenchClaw matrix verify device --recovery-key-stdin' first.`
 
 - Meaning: this device cannot restore from secret storage until device verification is complete.
-- What to do: run `printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify device --recovery-key-stdin` first.
+- What to do: run `printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify device --recovery-key-stdin` first.
 
 ### Custom plugin install messages
 
 `Matrix is installed from a custom path that no longer exists: ...`
 
 - Meaning: your plugin install record points at a local path that is gone.
-- What to do: reinstall with `NexisClaw plugins install @NexisClaw/matrix`, or if you are running from a repo checkout, `NexisClaw plugins install ./path/to/local/matrix-plugin`.
+- What to do: reinstall with `GreenchClaw plugins install @GreenchClaw/matrix`, or if you are running from a repo checkout, `GreenchClaw plugins install ./path/to/local/matrix-plugin`.
 
 ## If encrypted history still does not come back
 
 Run these checks in order:
 
 ```bash
-NexisClaw matrix verify status --verbose
-NexisClaw matrix verify backup status --verbose
-printf '%s\n' "$MATRIX_RECOVERY_KEY" | NexisClaw matrix verify backup restore --recovery-key-stdin --verbose
+GreenchClaw matrix verify status --verbose
+GreenchClaw matrix verify backup status --verbose
+printf '%s\n' "$MATRIX_RECOVERY_KEY" | GreenchClaw matrix verify backup restore --recovery-key-stdin --verbose
 ```
 
 If the backup restores successfully but some old rooms are still missing history, those missing keys were probably never backed up by the previous plugin.
@@ -354,9 +354,9 @@ If the backup restores successfully but some old rooms are still missing history
 If you accept losing unrecoverable old encrypted history and only want a clean backup baseline going forward, run these commands in order:
 
 ```bash
-NexisClaw matrix verify backup reset --yes
-NexisClaw matrix verify backup status --verbose
-NexisClaw matrix verify status
+GreenchClaw matrix verify backup reset --yes
+GreenchClaw matrix verify backup status --verbose
+GreenchClaw matrix verify status
 ```
 
 If the device is still unverified after that, finish verification from your Matrix client by comparing the SAS emoji or decimal codes and confirming that they match.

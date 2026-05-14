@@ -1,8 +1,8 @@
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
 import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
-} from "NexisClaw/plugin-sdk/channel-config-helpers";
+} from "GreenchClaw/plugin-sdk/channel-config-helpers";
 import {
   listMatrixAccountIds,
   resolveDefaultMatrixAccountId,

@@ -1,4 +1,4 @@
-import { importFreshModule } from "NexisClaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 type LoggerModule = typeof import("./logger.js");
@@ -8,24 +8,26 @@ const originalGetBuiltinModule = (
 ).getBuiltinModule;
 
 async function importBrowserSafeLogger(params?: {
-  resolvePreferredNexisClawTmpDir?: ReturnType<typeof vi.fn>;
+  resolvePreferredGreenchClawTmpDir?: ReturnType<typeof vi.fn>;
 }): Promise<{
   module: LoggerModule;
-  resolvePreferredNexisClawTmpDir: ReturnType<typeof vi.fn>;
+  resolvePreferredGreenchClawTmpDir: ReturnType<typeof vi.fn>;
 }> {
-  const resolvePreferredNexisClawTmpDir =
-    params?.resolvePreferredNexisClawTmpDir ??
+  const resolvePreferredGreenchClawTmpDir =
+    params?.resolvePreferredGreenchClawTmpDir ??
     vi.fn(() => {
-      throw new Error("resolvePreferredNexisClawTmpDir should not run during browser-safe import");
+      throw new Error(
+        "resolvePreferredGreenchClawTmpDir should not run during browser-safe import",
+      );
     });
 
-  vi.doMock("../infra/tmp-NexisClaw-dir.js", async () => {
-    const actual = await vi.importActual<typeof import("../infra/tmp-NexisClaw-dir.js")>(
-      "../infra/tmp-NexisClaw-dir.js",
+  vi.doMock("../infra/tmp-GreenchClaw-dir.js", async () => {
+    const actual = await vi.importActual<typeof import("../infra/tmp-GreenchClaw-dir.js")>(
+      "../infra/tmp-GreenchClaw-dir.js",
     );
     return {
       ...actual,
-      resolvePreferredNexisClawTmpDir,
+      resolvePreferredGreenchClawTmpDir,
     };
   });
 
@@ -38,12 +40,12 @@ async function importBrowserSafeLogger(params?: {
     import.meta.url,
     "./logger.js?scope=browser-safe",
   );
-  return { module, resolvePreferredNexisClawTmpDir };
+  return { module, resolvePreferredGreenchClawTmpDir };
 }
 
 describe("logging/logger browser-safe import", () => {
   afterEach(() => {
-    vi.doUnmock("../infra/tmp-NexisClaw-dir.js");
+    vi.doUnmock("../infra/tmp-GreenchClaw-dir.js");
     Object.defineProperty(process, "getBuiltinModule", {
       configurable: true,
       value: originalGetBuiltinModule,
@@ -51,23 +53,23 @@ describe("logging/logger browser-safe import", () => {
   });
 
   it("does not resolve the preferred temp dir at import time when node fs is unavailable", async () => {
-    const { module, resolvePreferredNexisClawTmpDir } = await importBrowserSafeLogger();
+    const { module, resolvePreferredGreenchClawTmpDir } = await importBrowserSafeLogger();
 
-    expect(resolvePreferredNexisClawTmpDir).not.toHaveBeenCalled();
-    expect(module.DEFAULT_LOG_DIR).toBe("/tmp/NexisClaw");
-    expect(module.DEFAULT_LOG_FILE).toBe("/tmp/NexisClaw/NexisClaw.log");
+    expect(resolvePreferredGreenchClawTmpDir).not.toHaveBeenCalled();
+    expect(module.DEFAULT_LOG_DIR).toBe("/tmp/GreenchClaw");
+    expect(module.DEFAULT_LOG_FILE).toBe("/tmp/GreenchClaw/GreenchClaw.log");
   });
 
   it("disables file logging when imported in a browser-like environment", async () => {
-    const { module, resolvePreferredNexisClawTmpDir } = await importBrowserSafeLogger();
+    const { module, resolvePreferredGreenchClawTmpDir } = await importBrowserSafeLogger();
 
     expect(module.getResolvedLoggerSettings()).toStrictEqual({
       level: "silent",
-      file: "/tmp/NexisClaw/NexisClaw.log",
+      file: "/tmp/GreenchClaw/GreenchClaw.log",
       maxFileBytes: 100 * 1024 * 1024,
     });
     expect(module.isFileLogLevelEnabled("info")).toBe(false);
     expect(module.getLogger().info("browser-safe")).toBeUndefined();
-    expect(resolvePreferredNexisClawTmpDir).not.toHaveBeenCalled();
+    expect(resolvePreferredGreenchClawTmpDir).not.toHaveBeenCalled();
   });
 });

@@ -1,12 +1,12 @@
-import { resolveLivePluginConfigObject } from "NexisClaw/plugin-sdk/plugin-config-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { escapeRegExp } from "NexisClaw/plugin-sdk/text-utility-runtime";
+import { resolveLivePluginConfigObject } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { escapeRegExp } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import {
   definePluginEntry,
   fetchWithSsrFGuard,
   ssrfPolicyFromDangerouslyAllowPrivateNetwork,
-  type NexisClawConfig,
-  type NexisClawPluginApi,
+  type GreenchClawConfig,
+  type GreenchClawPluginApi,
 } from "./api.js";
 
 type ThreadOwnershipConfig = {
@@ -14,7 +14,7 @@ type ThreadOwnershipConfig = {
   abTestChannels?: string[];
 };
 
-type AgentEntry = NonNullable<NonNullable<NexisClawConfig["agents"]>["list"]>[number];
+type AgentEntry = NonNullable<NonNullable<GreenchClawConfig["agents"]>["list"]>[number];
 type ThreadOwnershipMessageSendingResult = { cancel: true } | undefined;
 
 // In-memory set of {channel}:{thread} keys where this agent was @-mentioned.
@@ -58,7 +58,7 @@ function containsAgentNameMention(text: string, agentName: string): boolean {
   return new RegExp(`(^|[^\\w])@${escapeRegExp(trimmedName)}(?=$|[^\\w])`, "i").test(text);
 }
 
-function resolveOwnershipAgent(config: NexisClawConfig): { id: string; name: string } {
+function resolveOwnershipAgent(config: GreenchClawConfig): { id: string; name: string } {
   const list = Array.isArray(config.agents?.list)
     ? config.agents.list.filter(
         (entry): entry is AgentEntry => entry !== null && typeof entry === "object",
@@ -78,12 +78,12 @@ export default definePluginEntry({
   id: "thread-ownership",
   name: "Thread Ownership",
   description: "Slack thread claim coordination for multi-agent setups",
-  register(api: NexisClawPluginApi) {
+  register(api: GreenchClawPluginApi) {
     const resolveCurrentState = () => {
-      const currentConfig = (api.runtime.config?.current?.() ?? api.config) as NexisClawConfig;
+      const currentConfig = (api.runtime.config?.current?.() ?? api.config) as GreenchClawConfig;
       const livePluginCfg = resolveLivePluginConfigObject(
         api.runtime.config?.current
-          ? () => api.runtime.config.current() as NexisClawConfig
+          ? () => api.runtime.config.current() as GreenchClawConfig
           : undefined,
         "thread-ownership",
         isThreadOwnershipConfig(api.pluginConfig)

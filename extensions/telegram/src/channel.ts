@@ -1,40 +1,40 @@
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
 import {
   buildDmGroupAccountAllowlistAdapter,
   createNestedAllowlistOverrideResolver,
-} from "NexisClaw/plugin-sdk/allowlist-config-edit";
-import type { ChannelMessageActionAdapter } from "NexisClaw/plugin-sdk/channel-contract";
+} from "GreenchClaw/plugin-sdk/allowlist-config-edit";
+import type { ChannelMessageActionAdapter } from "GreenchClaw/plugin-sdk/channel-contract";
 import {
   buildChannelOutboundSessionRoute,
   buildThreadAwareOutboundSessionRoute,
   clearAccountEntryFields,
   createChatChannelPlugin,
-} from "NexisClaw/plugin-sdk/channel-core";
-import { createAccountStatusSink } from "NexisClaw/plugin-sdk/channel-lifecycle";
-import { createChannelMessageAdapterFromOutbound } from "NexisClaw/plugin-sdk/channel-message";
-import { createPairingPrefixStripper } from "NexisClaw/plugin-sdk/channel-pairing";
+} from "GreenchClaw/plugin-sdk/channel-core";
+import { createAccountStatusSink } from "GreenchClaw/plugin-sdk/channel-lifecycle";
+import { createChannelMessageAdapterFromOutbound } from "GreenchClaw/plugin-sdk/channel-message";
+import { createPairingPrefixStripper } from "GreenchClaw/plugin-sdk/channel-pairing";
 import {
   PAIRING_APPROVED_MESSAGE,
   buildTokenChannelStatusSummary,
   projectCredentialSnapshotFields,
   resolveConfiguredFromCredentialStatuses,
-} from "NexisClaw/plugin-sdk/channel-status";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { createChannelDirectoryAdapter } from "NexisClaw/plugin-sdk/directory-runtime";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+} from "GreenchClaw/plugin-sdk/channel-status";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { createChannelDirectoryAdapter } from "GreenchClaw/plugin-sdk/directory-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import {
   resolveOutboundSendDep,
   type OutboundSendDeps,
-} from "NexisClaw/plugin-sdk/outbound-send-deps";
-import { type RoutePeer } from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/outbound-send-deps";
+import { type RoutePeer } from "GreenchClaw/plugin-sdk/routing";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
+} from "GreenchClaw/plugin-sdk/status-helpers";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveTelegramAccount, type ResolvedTelegramAccount } from "./accounts.js";
 import { resolveTelegramAutoThreadId } from "./action-threading.js";
 import { lookupTelegramChatId } from "./api-fetch.js";
@@ -191,7 +191,7 @@ const telegramChannelOutbound = createTelegramOutboundAdapter({
   preferFinalAssistantVisibleText: true,
 });
 
-const telegramMessageAdapter = createChannelMessageAdapterFromOutbound<NexisClawConfig>({
+const telegramMessageAdapter = createChannelMessageAdapterFromOutbound<GreenchClawConfig>({
   id: "telegram",
   live: {
     capabilities: {
@@ -457,7 +457,7 @@ function shouldStripTelegramThreadFromAnnounceOrigin(params: {
 }
 
 function resolveTelegramOutboundSessionRoute(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   accountId?: string | null;
   target: string;
@@ -519,7 +519,7 @@ function resolveTelegramOutboundSessionRoute(params: {
 }
 
 async function resolveTelegramTargets(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   inputs: string[];
   kind: "user" | "group";
@@ -949,7 +949,7 @@ export const telegramPlugin = createChatChannelPlugin({
       },
       logoutAccount: async ({ accountId, cfg }) => {
         const envToken = process.env.TELEGRAM_BOT_TOKEN?.trim() ?? "";
-        const nextCfg = { ...cfg } as NexisClawConfig;
+        const nextCfg = { ...cfg } as GreenchClawConfig;
         const nextTelegram = cfg.channels?.telegram ? { ...cfg.channels.telegram } : undefined;
         let cleared = false;
         let changed = false;

@@ -1,4 +1,4 @@
-import { hasOutboundReplyContent } from "NexisClaw/plugin-sdk/reply-payload";
+import { hasOutboundReplyContent } from "GreenchClaw/plugin-sdk/reply-payload";
 import type { ReplyPayload } from "./types.js";
 
 export function resolveHeartbeatReplyPayload(

@@ -3,9 +3,9 @@ import type {
   ProviderResolveWebSocketSessionPolicyContext,
   ProviderTransportTurnState,
   ProviderWebSocketSessionPolicy,
-} from "NexisClaw/plugin-sdk/plugin-entry";
-import { normalizeProviderId } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
+import { normalizeProviderId } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { isOpenAIApiBaseUrl, isOpenAICodexBaseUrl } from "./base-url.js";
 
 const DEFAULT_OPENAI_WS_DEGRADE_COOLDOWN_MS = 60_000;
@@ -60,7 +60,7 @@ function resolveSessionHeaders(params: {
   }
   return {
     "x-client-request-id": sessionId,
-    "x-NexisClaw-session-id": sessionId,
+    "x-GreenchClaw-session-id": sessionId,
   };
 }
 
@@ -82,14 +82,14 @@ export function resolveOpenAITransportTurnState(
   return {
     headers: {
       ...sessionHeaders,
-      "x-NexisClaw-turn-id": turnId,
-      "x-NexisClaw-turn-attempt": attempt,
+      "x-GreenchClaw-turn-id": turnId,
+      "x-GreenchClaw-turn-attempt": attempt,
     },
     metadata: {
-      NexisClaw_session_id: sessionHeaders["x-NexisClaw-session-id"] ?? "",
-      NexisClaw_turn_id: turnId,
-      NexisClaw_turn_attempt: attempt,
-      NexisClaw_transport: ctx.transport,
+      GreenchClaw_session_id: sessionHeaders["x-GreenchClaw-session-id"] ?? "",
+      GreenchClaw_turn_id: turnId,
+      GreenchClaw_turn_attempt: attempt,
+      GreenchClaw_transport: ctx.transport,
     },
   };
 }

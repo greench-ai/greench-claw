@@ -11,8 +11,8 @@ Fetch, list, and write files on paired nodes via dedicated node commands. Bypass
 
 ## Distribution
 
-- Package: `@NexisClaw/file-transfer`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/file-transfer`
+- Install route: included in GreenchClaw
 
 ## Surface
 

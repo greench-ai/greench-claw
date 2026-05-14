@@ -19,7 +19,7 @@ type SynologyChatConfigFields = {
 
 export type SynologyWebhookPathSource = "default" | "inherited-base" | "explicit";
 
-/** Raw channel config from NexisClaw.json channels.synology-chat */
+/** Raw channel config from GreenchClaw.json channels.synology-chat */
 export interface SynologyChatChannelConfig extends SynologyChatConfigFields {
   accounts?: Record<string, SynologyChatAccountRaw>;
 }

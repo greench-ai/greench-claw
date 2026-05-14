@@ -20,13 +20,13 @@ function quote(value: string): string {
 
 function resolveHelpCommand(argv: string[] | undefined, options?: { root?: boolean }): string {
   if (options?.root || !argv) {
-    return formatCliCommand("NexisClaw --help");
+    return formatCliCommand("GreenchClaw --help");
   }
   const commandPath = getCommandPathWithRootOptions(argv, 2);
   if (commandPath.length === 0) {
-    return formatCliCommand("NexisClaw --help");
+    return formatCliCommand("GreenchClaw --help");
   }
-  return formatCliCommand(`NexisClaw ${commandPath.join(" ")} --help`);
+  return formatCliCommand(`GreenchClaw ${commandPath.join(" ")} --help`);
 }
 
 function lines(...items: Array<string | undefined>): string {
@@ -38,7 +38,7 @@ function formatHelpHint(argv: string[] | undefined, options?: { root?: boolean }
 }
 
 function formatDocsHint(): string {
-  return `${theme.muted("Docs:")} ${formatDocsLink("/cli", "docs.NexisClaw.ai/cli")}`;
+  return `${theme.muted("Docs:")} ${formatDocsLink("/cli", "docs.GreenchClaw.ai/cli")}`;
 }
 
 export function formatCliParseErrorOutput(
@@ -50,9 +50,9 @@ export function formatCliParseErrorOutput(
   if (unknownCommand) {
     const command = unknownCommand[1] ?? "";
     return lines(
-      theme.error(`NexisClaw does not know the command ${quote(command)}.`),
+      theme.error(`GreenchClaw does not know the command ${quote(command)}.`),
       formatHelpHint(options.argv, { root: true }),
-      `${theme.muted("Plugin command?")} ${theme.command(formatCliCommand("NexisClaw plugins list"))}`,
+      `${theme.muted("Plugin command?")} ${theme.command(formatCliCommand("GreenchClaw plugins list"))}`,
       formatDocsHint(),
     );
   }
@@ -61,7 +61,7 @@ export function formatCliParseErrorOutput(
   if (unknownOption) {
     const option = unknownOption[1] ?? "";
     return lines(
-      theme.error(`NexisClaw does not recognize option ${quote(option)}.`),
+      theme.error(`GreenchClaw does not recognize option ${quote(option)}.`),
       formatHelpHint(options.argv),
     );
   }
@@ -89,7 +89,7 @@ export function formatCliParseErrorOutput(
   }
 
   return lines(
-    theme.error(`NexisClaw could not parse this command: ${message}`),
+    theme.error(`GreenchClaw could not parse this command: ${message}`),
     formatHelpHint(options.argv),
   );
 }

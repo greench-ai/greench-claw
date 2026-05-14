@@ -1,5 +1,5 @@
-import { resolveStableChannelMessageIngress } from "NexisClaw/plugin-sdk/channel-ingress-runtime";
-import type { GroupPolicy, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveStableChannelMessageIngress } from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
+import type { GroupPolicy, GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it, vi } from "vitest";
 import { normalizeZaloAllowEntry, resolveZaloRuntimeGroupPolicy } from "./group-access.js";
 import type { ZaloAccountConfig } from "./types.js";
@@ -55,7 +55,7 @@ const groupPolicyCases: Array<[string, ZaloAccountConfig, string, boolean, strin
 
 async function resolveAccess(
   params: {
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
     accountConfig?: ZaloAccountConfig;
     providerConfigPresent?: boolean;
     defaultGroupPolicy?: GroupPolicy;

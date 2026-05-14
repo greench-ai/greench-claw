@@ -1,6 +1,6 @@
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { applyPluginAutoEnable } from "../../config/plugin-auto-enable.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { resolveRuntimePluginRegistry } from "../../plugins/loader.js";
 import {
   getActivePluginChannelRegistry,
@@ -16,7 +16,7 @@ export function resetOutboundChannelBootstrapStateForTests(): void {
 
 export function bootstrapOutboundChannelPlugin(params: {
   channel: DeliverableMessageChannel;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): void {
   const cfg = params.cfg;
   if (!cfg) {

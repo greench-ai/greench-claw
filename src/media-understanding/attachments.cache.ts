@@ -250,7 +250,7 @@ export class MediaAttachmentCache {
     });
     const extension = path.extname(bufferResult.fileName || "") || "";
     const tmpPath = buildRandomTempFilePath({
-      prefix: "NexisClaw-media",
+      prefix: "GreenchClaw-media",
       extension,
     });
     await fs.writeFile(tmpPath, bufferResult.buffer);

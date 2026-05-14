@@ -38,8 +38,8 @@ function createAuditContext(params: {
     includeChannelSecurity: true,
     deep: false,
     deepTimeoutMs: 5000,
-    stateDir: "/tmp/NexisClaw-test-state",
-    configPath: "/tmp/NexisClaw-test-config.json",
+    stateDir: "/tmp/GreenchClaw-test-state",
+    configPath: "/tmp/GreenchClaw-test-config.json",
     plugins: params.plugins,
     loadPluginSecurityCollectors: true,
     configSnapshot: null,
@@ -187,8 +187,8 @@ describe("security audit read-only plugin scope", () => {
       env: {},
       includeFilesystem: false,
       includeChannelSecurity: false,
-      stateDir: "/tmp/NexisClaw-test-state",
-      configPath: "/tmp/NexisClaw-test-config.json",
+      stateDir: "/tmp/GreenchClaw-test-state",
+      configPath: "/tmp/GreenchClaw-test-config.json",
     });
 
     expect(getActivePluginRegistryMock).not.toHaveBeenCalled();

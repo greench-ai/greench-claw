@@ -1,8 +1,8 @@
 import {
   tempWorkspace,
-  resolvePreferredNexisClawTmpDir,
+  resolvePreferredGreenchClawTmpDir,
   type TempWorkspace,
-} from "NexisClaw/plugin-sdk/temp-path";
+} from "GreenchClaw/plugin-sdk/temp-path";
 
 export function createTempDirHarness() {
   const tempDirs: TempWorkspace[] = [];
@@ -13,7 +13,7 @@ export function createTempDirHarness() {
     },
     async makeTempDir(prefix: string) {
       const dir = await tempWorkspace({
-        rootDir: resolvePreferredNexisClawTmpDir(),
+        rootDir: resolvePreferredGreenchClawTmpDir(),
         prefix,
       });
       tempDirs.push(dir);

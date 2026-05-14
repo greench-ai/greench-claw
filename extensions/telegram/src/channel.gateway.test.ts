@@ -1,8 +1,8 @@
 import {
   createPluginRuntimeMock,
   createStartAccountContext,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { telegramPlugin } from "./channel.js";
 import type { TelegramMonitorFn } from "./monitor.types.js";
@@ -32,7 +32,7 @@ function installTelegramRuntime() {
 function createTelegramConfig(
   accountId = "default",
   telegramOverrides: Record<string, unknown> = {},
-): NexisClawConfig {
+): GreenchClawConfig {
   if (accountId === "default") {
     return {
       channels: {
@@ -41,7 +41,7 @@ function createTelegramConfig(
           ...telegramOverrides,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
   }
 
   return {
@@ -55,7 +55,7 @@ function createTelegramConfig(
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function startTelegramAccount(
@@ -164,8 +164,8 @@ describe("telegramPlugin gateway startup", () => {
     const botInfo = {
       id: 123456,
       is_bot: true,
-      first_name: "NexisClaw",
-      username: "NexisClaw_bot",
+      first_name: "GreenchClaw",
+      username: "GreenchClaw_bot",
       can_join_groups: true,
       can_read_all_group_messages: false,
       can_manage_bots: false,

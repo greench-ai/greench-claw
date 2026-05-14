@@ -1,18 +1,18 @@
-export type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
-export type { NexisClawConfig, GroupPolicy } from "NexisClaw/plugin-sdk/config-contracts";
-export type { MarkdownTableMode } from "NexisClaw/plugin-sdk/config-contracts";
-export type { BaseTokenResolution } from "NexisClaw/plugin-sdk/channel-contract";
+export type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-runtime";
+export type { GreenchClawConfig, GroupPolicy } from "GreenchClaw/plugin-sdk/config-contracts";
+export type { MarkdownTableMode } from "GreenchClaw/plugin-sdk/config-contracts";
+export type { BaseTokenResolution } from "GreenchClaw/plugin-sdk/channel-contract";
 export type {
   BaseProbeResult,
   ChannelAccountSnapshot,
   ChannelMessageActionAdapter,
   ChannelMessageActionName,
   ChannelStatusIssue,
-} from "NexisClaw/plugin-sdk/channel-contract";
-export type { SecretInput } from "NexisClaw/plugin-sdk/secret-input";
-export type { ChannelPlugin, PluginRuntime, WizardPrompter } from "NexisClaw/plugin-sdk/core";
-export type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
-export type { OutboundReplyPayload } from "NexisClaw/plugin-sdk/reply-payload";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+export type { SecretInput } from "GreenchClaw/plugin-sdk/secret-input";
+export type { ChannelPlugin, PluginRuntime, WizardPrompter } from "GreenchClaw/plugin-sdk/core";
+export type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime";
+export type { OutboundReplyPayload } from "GreenchClaw/plugin-sdk/reply-payload";
 export {
   DEFAULT_ACCOUNT_ID,
   buildChannelConfigSchema,
@@ -22,7 +22,7 @@ export {
   normalizeAccountId,
   readStringParam,
   resolveClientIp,
-} from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/core";
 export {
   applyAccountNameToChannelSection,
   applySetupAccountConfigPatch,
@@ -32,39 +32,39 @@ export {
   promptSingleChannelSecretInput,
   runSingleChannelSecretStep,
   setTopLevelChannelDmPolicyWithAllowFrom,
-} from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/setup";
 export {
   buildSecretInputSchema,
   hasConfiguredSecretInput,
   normalizeResolvedSecretInputString,
   normalizeSecretInputString,
-} from "NexisClaw/plugin-sdk/secret-input";
+} from "GreenchClaw/plugin-sdk/secret-input";
 export {
   buildTokenChannelStatusSummary,
   PAIRING_APPROVED_MESSAGE,
-} from "NexisClaw/plugin-sdk/channel-status";
-export { buildBaseAccountStatusSnapshot } from "NexisClaw/plugin-sdk/status-helpers";
-export { chunkTextForOutbound } from "NexisClaw/plugin-sdk/text-chunking";
+} from "GreenchClaw/plugin-sdk/channel-status";
+export { buildBaseAccountStatusSnapshot } from "GreenchClaw/plugin-sdk/status-helpers";
+export { chunkTextForOutbound } from "GreenchClaw/plugin-sdk/text-chunking";
 export {
   formatAllowFromLowercase,
   isNormalizedSenderAllowed,
-} from "NexisClaw/plugin-sdk/allow-from";
-export { addWildcardAllowFrom } from "NexisClaw/plugin-sdk/setup";
-export { resolveOpenProviderRuntimeGroupPolicy } from "NexisClaw/plugin-sdk/runtime-group-policy";
+} from "GreenchClaw/plugin-sdk/allow-from";
+export { addWildcardAllowFrom } from "GreenchClaw/plugin-sdk/setup";
+export { resolveOpenProviderRuntimeGroupPolicy } from "GreenchClaw/plugin-sdk/runtime-group-policy";
 export {
   warnMissingProviderGroupPolicyFallbackOnce,
   resolveDefaultGroupPolicy,
-} from "NexisClaw/plugin-sdk/runtime-group-policy";
-export { createChannelPairingController } from "NexisClaw/plugin-sdk/channel-pairing";
-export { createChannelMessageReplyPipeline } from "NexisClaw/plugin-sdk/channel-message";
-export { logTypingFailure } from "NexisClaw/plugin-sdk/channel-feedback";
+} from "GreenchClaw/plugin-sdk/runtime-group-policy";
+export { createChannelPairingController } from "GreenchClaw/plugin-sdk/channel-pairing";
+export { createChannelMessageReplyPipeline } from "GreenchClaw/plugin-sdk/channel-message";
+export { logTypingFailure } from "GreenchClaw/plugin-sdk/channel-feedback";
 export {
   deliverTextOrMediaReply,
   isNumericTargetId,
   sendPayloadWithChunkedTextAndMedia,
-} from "NexisClaw/plugin-sdk/reply-payload";
-export { resolveInboundRouteEnvelopeBuilderWithRuntime } from "NexisClaw/plugin-sdk/inbound-envelope";
-export { waitForAbortSignal } from "NexisClaw/plugin-sdk/runtime";
+} from "GreenchClaw/plugin-sdk/reply-payload";
+export { resolveInboundRouteEnvelopeBuilderWithRuntime } from "GreenchClaw/plugin-sdk/inbound-envelope";
+export { waitForAbortSignal } from "GreenchClaw/plugin-sdk/runtime";
 export {
   applyBasicWebhookRequestGuards,
   createFixedWindowRateLimiter,
@@ -78,8 +78,8 @@ export {
   WEBHOOK_ANOMALY_COUNTER_DEFAULTS,
   WEBHOOK_RATE_LIMIT_DEFAULTS,
   withResolvedWebhookRequestPipeline,
-} from "NexisClaw/plugin-sdk/webhook-ingress";
+} from "GreenchClaw/plugin-sdk/webhook-ingress";
 export type {
   RegisterWebhookPluginRouteOptions,
   RegisterWebhookTargetOptions,
-} from "NexisClaw/plugin-sdk/webhook-ingress";
+} from "GreenchClaw/plugin-sdk/webhook-ingress";

@@ -2,18 +2,20 @@ import {
   listNativeCommandSpecsForConfig,
   listSkillCommandsForAgents,
   type NativeCommandSpec,
-} from "NexisClaw/plugin-sdk/command-auth-native";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { danger, warn, type RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/command-auth-native";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { danger, warn, type RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 export type GetPluginCommandSpecs =
-  typeof import("NexisClaw/plugin-sdk/plugin-runtime").getPluginCommandSpecs;
+  typeof import("GreenchClaw/plugin-sdk/plugin-runtime").getPluginCommandSpecs;
 
-let pluginRuntimePromise: Promise<typeof import("NexisClaw/plugin-sdk/plugin-runtime")> | undefined;
+let pluginRuntimePromise:
+  | Promise<typeof import("GreenchClaw/plugin-sdk/plugin-runtime")>
+  | undefined;
 
 async function loadPluginRuntime() {
-  const promise = pluginRuntimePromise ?? import("NexisClaw/plugin-sdk/plugin-runtime");
+  const promise = pluginRuntimePromise ?? import("GreenchClaw/plugin-sdk/plugin-runtime");
   pluginRuntimePromise = promise;
   try {
     return await promise;
@@ -28,7 +30,7 @@ async function loadPluginRuntime() {
 async function appendPluginCommandSpecs(params: {
   commandSpecs: NativeCommandSpec[];
   runtime: RuntimeEnv;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   getPluginCommandSpecs?: GetPluginCommandSpecs;
 }): Promise<NativeCommandSpec[]> {
   const merged = [...params.commandSpecs];
@@ -61,7 +63,7 @@ async function appendPluginCommandSpecs(params: {
 }
 
 export async function resolveDiscordProviderCommandSpecs(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   runtime: RuntimeEnv;
   nativeEnabled: boolean;
   nativeSkillsEnabled: boolean;

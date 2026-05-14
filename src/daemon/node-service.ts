@@ -14,13 +14,13 @@ function withNodeServiceEnv(
 ): Record<string, string | undefined> {
   return {
     ...env,
-    NEXISCLAW_LAUNCHD_LABEL: resolveNodeLaunchAgentLabel(),
-    NEXISCLAW_SYSTEMD_UNIT: resolveNodeSystemdServiceName(),
-    NEXISCLAW_WINDOWS_TASK_NAME: resolveNodeWindowsTaskName(),
-    NEXISCLAW_TASK_SCRIPT_NAME: NODE_WINDOWS_TASK_SCRIPT_NAME,
-    NEXISCLAW_LOG_PREFIX: "node",
-    NEXISCLAW_SERVICE_MARKER: NODE_SERVICE_MARKER,
-    NEXISCLAW_SERVICE_KIND: NODE_SERVICE_KIND,
+    GREENCHCLAW_LAUNCHD_LABEL: resolveNodeLaunchAgentLabel(),
+    GREENCHCLAW_SYSTEMD_UNIT: resolveNodeSystemdServiceName(),
+    GREENCHCLAW_WINDOWS_TASK_NAME: resolveNodeWindowsTaskName(),
+    GREENCHCLAW_TASK_SCRIPT_NAME: NODE_WINDOWS_TASK_SCRIPT_NAME,
+    GREENCHCLAW_LOG_PREFIX: "node",
+    GREENCHCLAW_SERVICE_MARKER: NODE_SERVICE_MARKER,
+    GREENCHCLAW_SERVICE_KIND: NODE_SERVICE_KIND,
   };
 }
 
@@ -30,13 +30,13 @@ function withNodeInstallEnv(args: GatewayServiceInstallArgs): GatewayServiceInst
     env: withNodeServiceEnv(args.env),
     environment: {
       ...args.environment,
-      NEXISCLAW_LAUNCHD_LABEL: resolveNodeLaunchAgentLabel(),
-      NEXISCLAW_SYSTEMD_UNIT: resolveNodeSystemdServiceName(),
-      NEXISCLAW_WINDOWS_TASK_NAME: resolveNodeWindowsTaskName(),
-      NEXISCLAW_TASK_SCRIPT_NAME: NODE_WINDOWS_TASK_SCRIPT_NAME,
-      NEXISCLAW_LOG_PREFIX: "node",
-      NEXISCLAW_SERVICE_MARKER: NODE_SERVICE_MARKER,
-      NEXISCLAW_SERVICE_KIND: NODE_SERVICE_KIND,
+      GREENCHCLAW_LAUNCHD_LABEL: resolveNodeLaunchAgentLabel(),
+      GREENCHCLAW_SYSTEMD_UNIT: resolveNodeSystemdServiceName(),
+      GREENCHCLAW_WINDOWS_TASK_NAME: resolveNodeWindowsTaskName(),
+      GREENCHCLAW_TASK_SCRIPT_NAME: NODE_WINDOWS_TASK_SCRIPT_NAME,
+      GREENCHCLAW_LOG_PREFIX: "node",
+      GREENCHCLAW_SERVICE_MARKER: NODE_SERVICE_MARKER,
+      GREENCHCLAW_SERVICE_KIND: NODE_SERVICE_KIND,
     },
   };
 }

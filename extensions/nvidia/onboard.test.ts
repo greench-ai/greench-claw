@@ -1,7 +1,7 @@
 import {
   expectProviderOnboardMergedLegacyConfig,
   expectProviderOnboardPrimaryModel,
-} from "NexisClaw/plugin-sdk/provider-test-contracts";
+} from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { describe, expect, it } from "vitest";
 import { applyNvidiaConfig, applyNvidiaProviderConfig } from "./onboard.js";
 

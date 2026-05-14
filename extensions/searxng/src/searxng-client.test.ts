@@ -1,4 +1,4 @@
-import type { LookupFn } from "NexisClaw/plugin-sdk/ssrf-runtime";
+import type { LookupFn } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const endpointMockState = vi.hoisted(() => ({
@@ -6,8 +6,9 @@ const endpointMockState = vi.hoisted(() => ({
   responses: [] as Response[],
 }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-web-search", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/provider-web-search")>();
+vi.mock("GreenchClaw/plugin-sdk/provider-web-search", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("GreenchClaw/plugin-sdk/provider-web-search")>();
   const runEndpoint = async (
     params: { url: string; timeoutSeconds: number; init: RequestInit },
     run: (response: Response) => Promise<unknown>,
@@ -48,12 +49,12 @@ describe("searxng client", () => {
     expect(
       __testing.buildSearxngSearchUrl({
         baseUrl: "https://search.example.com/searxng",
-        query: "NexisClaw",
+        query: "GreenchClaw",
         categories: "general,news",
         language: "en",
       }),
     ).toBe(
-      "https://search.example.com/searxng/search?q=NexisClaw&format=json&categories=general%2Cnews&language=en",
+      "https://search.example.com/searxng/search?q=GreenchClaw&format=json&categories=general%2Cnews&language=en",
     );
   });
 
@@ -127,7 +128,7 @@ describe("searxng client", () => {
 
     const result = await runSearxngSearch({
       baseUrl: "http://127.0.0.1:8888",
-      query: "NexisClaw",
+      query: "GreenchClaw",
       categories: "general",
       count: 5,
     });
@@ -136,7 +137,7 @@ describe("searxng client", () => {
     const { tookMs, ...stableResult } = result;
     expect(typeof tookMs).toBe("number");
     expect(stableResult).toEqual({
-      query: "NexisClaw",
+      query: "GreenchClaw",
       provider: "searxng",
       count: 0,
       externalContent: {

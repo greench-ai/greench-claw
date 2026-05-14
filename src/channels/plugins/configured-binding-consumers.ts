@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type {
   CompiledConfiguredBinding,
   ConfiguredBindingRecordResolution,
@@ -16,7 +16,7 @@ export type ConfiguredBindingConsumer = {
   id: string;
   supports: (binding: ConfiguredBindingRuleConfig) => boolean;
   buildTargetFactory: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     binding: ConfiguredBindingRuleConfig;
     channel: string;
     agentId: string;

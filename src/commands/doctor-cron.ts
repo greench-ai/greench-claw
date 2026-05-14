@@ -1,7 +1,7 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveCronStorePath, loadCronStore, saveCronStore } from "../cron/store.js";
 import type { CronJob } from "../cron/types.js";
 import {
@@ -199,8 +199,8 @@ export async function noteLegacyWhatsAppCrontabHealthCheck(
   note(
     [
       "Legacy WhatsApp crontab health check detected.",
-      "`~/.NexisClaw/bin/ensure-whatsapp.sh` is not maintained by current NexisClaw and can misreport `Gateway inactive` from cron when the systemd user bus environment is missing.",
-      `Remove the stale crontab entry with ${formatCliCommand("crontab -e")}; use ${formatCliCommand("NexisClaw channels status --probe")}, ${formatCliCommand("NexisClaw doctor")}, and ${formatCliCommand("NexisClaw gateway status")} for current health checks.`,
+      "`~/.GreenchClaw/bin/ensure-whatsapp.sh` is not maintained by current GreenchClaw and can misreport `Gateway inactive` from cron when the systemd user bus environment is missing.",
+      `Remove the stale crontab entry with ${formatCliCommand("crontab -e")}; use ${formatCliCommand("GreenchClaw channels status --probe")}, ${formatCliCommand("GreenchClaw doctor")}, and ${formatCliCommand("GreenchClaw gateway status")} for current health checks.`,
       `Matched ${pluralize(legacyLines.length, "entry")}.`,
     ].join("\n"),
     "Cron",
@@ -208,7 +208,7 @@ export async function noteLegacyWhatsAppCrontabHealthCheck(
 }
 
 export async function maybeRepairLegacyCronStore(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   options: DoctorOptions;
   prompter: Pick<DoctorPrompter, "confirm">;
 }) {
@@ -242,7 +242,7 @@ export async function maybeRepairLegacyCronStore(params: {
     [
       `Legacy cron job storage detected at ${shortenHomePath(storePath)}.`,
       ...previewLines,
-      `Repair with ${formatCliCommand("NexisClaw doctor --fix")} to normalize the store before the next scheduler run.`,
+      `Repair with ${formatCliCommand("GreenchClaw doctor --fix")} to normalize the store before the next scheduler run.`,
     ].join("\n"),
     "Cron",
   );

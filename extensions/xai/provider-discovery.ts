@@ -1,5 +1,5 @@
-import type { ProviderPlugin } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { readProviderEnvValue } from "NexisClaw/plugin-sdk/provider-web-search";
+import type { ProviderPlugin } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { readProviderEnvValue } from "GreenchClaw/plugin-sdk/provider-web-search";
 import { resolveFallbackXaiAuth } from "./src/tool-auth-shared.js";
 
 const PROVIDER_ID = "xai";

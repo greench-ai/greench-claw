@@ -7,9 +7,9 @@ install_update_restart_systemctl_shim() {
 #!/usr/bin/env bash
 set -euo pipefail
 
-log_file="${NEXISCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_LOG:-/tmp/NexisClaw-systemctl-shim.log}"
-pid_file="${NEXISCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_PID_FILE:-/tmp/NexisClaw-systemctl-shim.pid}"
-daemon_log="${NEXISCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_DAEMON_LOG:-/tmp/NexisClaw-systemctl-shim-gateway.log}"
+log_file="${GREENCHCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_LOG:-/tmp/GreenchClaw-systemctl-shim.log}"
+pid_file="${GREENCHCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_PID_FILE:-/tmp/GreenchClaw-systemctl-shim.pid}"
+daemon_log="${GREENCHCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_DAEMON_LOG:-/tmp/GreenchClaw-systemctl-shim-gateway.log}"
 printf '%s\n' "$*" >>"$log_file"
 
 filtered=()
@@ -53,7 +53,7 @@ stop_gateway() {
 }
 
 unit_path() {
-  printf '%s/.config/systemd/user/NexisClaw-gateway.service\n' "${HOME:?missing HOME}"
+  printf '%s/.config/systemd/user/GreenchClaw-gateway.service\n' "${HOME:?missing HOME}"
 }
 
 load_unit_environment() {
@@ -145,9 +145,9 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 
-const stateDir = process.env.NEXISCLAW_STATE_DIR;
+const stateDir = process.env.GREENCHCLAW_STATE_DIR;
 if (!stateDir) {
-  throw new Error("missing NEXISCLAW_STATE_DIR");
+  throw new Error("missing GREENCHCLAW_STATE_DIR");
 }
 
 const base64UrlEncode = (buf) =>
@@ -202,7 +202,7 @@ writeJson(path.join(stateDir, "devices", "paired.json"), {
     publicKey: publicKeyRaw,
     displayName: "upgrade survivor restart probe",
     platform: process.platform,
-    clientId: "NexisClaw-cli",
+    clientId: "GreenchClaw-cli",
     clientMode: "probe",
     role: "operator",
     roles: ["operator"],
@@ -225,8 +225,8 @@ NODE
 }
 
 write_update_restart_service_auth_env() {
-  mkdir -p "$NEXISCLAW_STATE_DIR"
-  local dotenv_path="$NEXISCLAW_STATE_DIR/.env"
+  mkdir -p "$GREENCHCLAW_STATE_DIR"
+  local dotenv_path="$GREENCHCLAW_STATE_DIR/.env"
   local tmp_path="$dotenv_path.tmp.$$"
   if [ -f "$dotenv_path" ]; then
     grep -v '^GATEWAY_AUTH_TOKEN_REF=' "$dotenv_path" >"$tmp_path" || true
@@ -235,7 +235,7 @@ write_update_restart_service_auth_env() {
   fi
   printf 'GATEWAY_AUTH_TOKEN_REF=%s\n' "$GATEWAY_AUTH_TOKEN_REF" >>"$tmp_path"
   mv "$tmp_path" "$dotenv_path"
-  printf 'GATEWAY_AUTH_TOKEN_REF=%s\n' "$GATEWAY_AUTH_TOKEN_REF" >"$NEXISCLAW_STATE_DIR/gateway.systemd.env"
+  printf 'GATEWAY_AUTH_TOKEN_REF=%s\n' "$GATEWAY_AUTH_TOKEN_REF" >"$GREENCHCLAW_STATE_DIR/gateway.systemd.env"
 }
 
 prepare_update_restart_probe_current_install() {
@@ -248,17 +248,17 @@ prepare_update_restart_probe_current_install() {
   install_update_restart_systemctl_shim
   seed_update_restart_probe_device_auth
   start_epoch="$(node -e "process.stdout.write(String(Date.now()))")"
-  env -u NEXISCLAW_GATEWAY_TOKEN -u NEXISCLAW_GATEWAY_PASSWORD NexisClaw gateway --port "$port" --bind loopback --allow-unconfigured >"$log_file" 2>&1 &
+  env -u GREENCHCLAW_GATEWAY_TOKEN -u GREENCHCLAW_GATEWAY_PASSWORD GreenchClaw gateway --port "$port" --bind loopback --allow-unconfigured >"$log_file" 2>&1 &
   gateway_pid="$!"
-  printf '%s\n' "$gateway_pid" >"$NEXISCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_PID_FILE"
-  NexisClaw_e2e_wait_gateway_ready "$gateway_pid" "$log_file" 360
+  printf '%s\n' "$gateway_pid" >"$GREENCHCLAW_UPGRADE_SURVIVOR_SYSTEMCTL_SHIM_PID_FILE"
+  GreenchClaw_e2e_wait_gateway_ready "$gateway_pid" "$log_file" 360
   ready_epoch="$(node -e "process.stdout.write(String(Date.now()))")"
   start_seconds=$(((ready_epoch - start_epoch + 999) / 1000))
   write_update_restart_service_auth_env
-  if ! env -u NEXISCLAW_GATEWAY_TOKEN -u NEXISCLAW_GATEWAY_PASSWORD NexisClaw gateway install --force --json >"$NEXISCLAW_UPGRADE_SURVIVOR_BASELINE_SERVICE_INSTALL_JSON" 2>"$NEXISCLAW_UPGRADE_SURVIVOR_BASELINE_SERVICE_INSTALL_ERR"; then
+  if ! env -u GREENCHCLAW_GATEWAY_TOKEN -u GREENCHCLAW_GATEWAY_PASSWORD GreenchClaw gateway install --force --json >"$GREENCHCLAW_UPGRADE_SURVIVOR_BASELINE_SERVICE_INSTALL_JSON" 2>"$GREENCHCLAW_UPGRADE_SURVIVOR_BASELINE_SERVICE_INSTALL_ERR"; then
     echo "gateway service install failed" >&2
-    cat "$NEXISCLAW_UPGRADE_SURVIVOR_BASELINE_SERVICE_INSTALL_ERR" >&2 || true
-    cat "$NEXISCLAW_UPGRADE_SURVIVOR_BASELINE_SERVICE_INSTALL_JSON" >&2 || true
+    cat "$GREENCHCLAW_UPGRADE_SURVIVOR_BASELINE_SERVICE_INSTALL_ERR" >&2 || true
+    cat "$GREENCHCLAW_UPGRADE_SURVIVOR_BASELINE_SERVICE_INSTALL_JSON" >&2 || true
     return 1
   fi
 }

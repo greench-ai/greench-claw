@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 export { shouldRequireGatewayTokenForInstall } from "../gateway/auth-install-policy.js";
 import { resolveGatewayAuthToken } from "../gateway/auth-token-resolution.js";
 
 export async function resolveGatewayAuthTokenForService(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env: NodeJS.ProcessEnv,
 ): Promise<{ token?: string; unavailableReason?: string }> {
   const resolved = await resolveGatewayAuthToken({

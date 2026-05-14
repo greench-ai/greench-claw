@@ -20,5 +20,5 @@ export function normalizeEmbeddedAgentRuntime(raw: string | undefined): Embedded
 export function resolveEmbeddedAgentRuntime(
   env: NodeJS.ProcessEnv = process.env,
 ): EmbeddedAgentRuntime {
-  return normalizeEmbeddedAgentRuntime(env.NEXISCLAW_AGENT_RUNTIME?.trim());
+  return normalizeEmbeddedAgentRuntime(env.GREENCHCLAW_AGENT_RUNTIME?.trim());
 }

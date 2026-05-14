@@ -1,12 +1,12 @@
 ---
-summary: "Get NexisClaw installed and run your first chat in minutes."
+summary: "Get GreenchClaw installed and run your first chat in minutes."
 read_when:
   - First time setup from zero
   - You want the fastest path to a working chat
 title: "Getting started"
 ---
 
-Install NexisClaw, run onboarding, and chat with your AI assistant — all in
+Install GreenchClaw, run onboarding, and chat with your AI assistant — all in
 about 5 minutes. By the end you will have a running Gateway, configured auth,
 and a working chat session.
 
@@ -25,11 +25,11 @@ Need to install Node? See [Node setup](/install/node).
 ## Quick setup
 
 <Steps>
-  <Step title="Install NexisClaw">
+  <Step title="Install GreenchClaw">
     <Tabs>
       <Tab title="macOS / Linux">
         ```bash
-        curl -fsSL https://NexisClaw.ai/install.sh | bash
+        curl -fsSL https://GreenchClaw.ai/install.sh | bash
         ```
         <img
   src="/assets/install-script.svg"
@@ -39,7 +39,7 @@ Need to install Node? See [Node setup](/install/node).
       </Tab>
       <Tab title="Windows (PowerShell)">
         ```powershell
-        iwr -useb https://NexisClaw.ai/install.ps1 | iex
+        iwr -useb https://GreenchClaw.ai/install.ps1 | iex
         ```
       </Tab>
     </Tabs>
@@ -51,7 +51,7 @@ Need to install Node? See [Node setup](/install/node).
   </Step>
   <Step title="Run onboarding">
     ```bash
-    NexisClaw onboard --install-daemon
+    GreenchClaw onboard --install-daemon
     ```
 
     The wizard walks you through choosing a model provider, setting an API key,
@@ -62,7 +62,7 @@ Need to install Node? See [Node setup](/install/node).
   </Step>
   <Step title="Verify the Gateway is running">
     ```bash
-    NexisClaw gateway status
+    GreenchClaw gateway status
     ```
 
     You should see the Gateway listening on port 18789.
@@ -70,7 +70,7 @@ Need to install Node? See [Node setup](/install/node).
   </Step>
   <Step title="Open the dashboard">
     ```bash
-    NexisClaw dashboard
+    GreenchClaw dashboard
     ```
 
     This opens the Control UI in your browser. If it loads, everything is working.
@@ -92,7 +92,7 @@ Need to install Node? See [Node setup](/install/node).
   assets and `index.html`.
 
 ```bash
-mkdir -p "$HOME/.NexisClaw/control-ui-custom"
+mkdir -p "$HOME/.GreenchClaw/control-ui-custom"
 # Copy your built static files into that directory.
 ```
 
@@ -103,7 +103,7 @@ Then set:
   "gateway": {
     "controlUi": {
       "enabled": true,
-      "root": "$HOME/.NexisClaw/control-ui-custom"
+      "root": "$HOME/.GreenchClaw/control-ui-custom"
     }
   }
 }
@@ -112,8 +112,8 @@ Then set:
 Restart the gateway and reopen the dashboard:
 
 ```bash
-NexisClaw gateway restart
-NexisClaw dashboard
+GreenchClaw gateway restart
+GreenchClaw dashboard
 ```
 
 </Accordion>
@@ -136,11 +136,11 @@ NexisClaw dashboard
 </Columns>
 
 <Accordion title="Advanced: environment variables">
-  If you run NexisClaw as a service account or want custom paths:
+  If you run GreenchClaw as a service account or want custom paths:
 
-- `NEXISCLAW_HOME` — home directory for internal path resolution
-- `NEXISCLAW_STATE_DIR` — override the state directory
-- `NEXISCLAW_CONFIG_PATH` — override the config file path
+- `GREENCHCLAW_HOME` — home directory for internal path resolution
+- `GREENCHCLAW_STATE_DIR` — override the state directory
+- `GREENCHCLAW_CONFIG_PATH` — override the config file path
 
 Full reference: [Environment variables](/help/environment).
 </Accordion>

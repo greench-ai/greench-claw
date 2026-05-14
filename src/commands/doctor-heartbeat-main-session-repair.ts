@@ -9,7 +9,7 @@ import {
 } from "../config/sessions/paths.js";
 import { updateSessionStore } from "../config/sessions/store.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { parseAgentSessionKey } from "../sessions/session-key-utils.js";
 import { asNullableObjectRecord } from "../shared/record-coerce.js";
 import type { note } from "../terminal/note.js";
@@ -234,7 +234,7 @@ export function clearTuiLastSessionPointers(params: {
 }
 
 export async function repairHeartbeatPoisonedMainSession(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   store: Record<string, SessionEntry>;
   absoluteStorePath: string;
   stateDir: string;

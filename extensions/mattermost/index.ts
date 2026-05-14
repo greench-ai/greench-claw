@@ -1,14 +1,17 @@
 import {
   defineBundledChannelEntry,
   loadBundledEntryExportSync,
-} from "NexisClaw/plugin-sdk/channel-entry-contract";
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/channel-entry-contract";
+} from "GreenchClaw/plugin-sdk/channel-entry-contract";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/channel-entry-contract";
 
-function registerSlashCommandRoute(api: NexisClawPluginApi): void {
-  const register = loadBundledEntryExportSync<(api: NexisClawPluginApi) => void>(import.meta.url, {
-    specifier: "./slash-route-api.js",
-    exportName: "registerSlashCommandRoute",
-  });
+function registerSlashCommandRoute(api: GreenchClawPluginApi): void {
+  const register = loadBundledEntryExportSync<(api: GreenchClawPluginApi) => void>(
+    import.meta.url,
+    {
+      specifier: "./slash-route-api.js",
+      exportName: "registerSlashCommandRoute",
+    },
+  );
   register(api);
 }
 

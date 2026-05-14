@@ -1,5 +1,5 @@
-import { createFinalizableDraftLifecycle } from "NexisClaw/plugin-sdk/channel-lifecycle";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { createFinalizableDraftLifecycle } from "GreenchClaw/plugin-sdk/channel-lifecycle";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import {
   createChannelMessage,
   deleteChannelMessage,

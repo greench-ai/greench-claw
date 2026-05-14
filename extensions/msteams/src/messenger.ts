@@ -2,15 +2,15 @@ import {
   isSilentReplyText,
   SILENT_REPLY_TOKEN,
   type ChunkMode,
-} from "NexisClaw/plugin-sdk/reply-chunking";
+} from "GreenchClaw/plugin-sdk/reply-chunking";
 import {
   resolveSendableOutboundReplyParts,
   type ReplyPayload,
-} from "NexisClaw/plugin-sdk/reply-payload";
-import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { sleep } from "NexisClaw/plugin-sdk/text-utility-runtime";
-import { loadWebMedia } from "NexisClaw/plugin-sdk/web-media";
-import type { MarkdownTableMode, MSTeamsReplyStyle, NexisClawConfig } from "../runtime-api.js";
+} from "GreenchClaw/plugin-sdk/reply-payload";
+import { normalizeOptionalLowercaseString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { sleep } from "GreenchClaw/plugin-sdk/text-utility-runtime";
+import { loadWebMedia } from "GreenchClaw/plugin-sdk/web-media";
+import type { MarkdownTableMode, MSTeamsReplyStyle, GreenchClawConfig } from "../runtime-api.js";
 import type { MSTeamsAccessTokenProvider } from "./attachments/types.js";
 import type { StoredConversationReference } from "./conversation-store.js";
 import { classifyMSTeamsSendError } from "./errors.js";
@@ -239,7 +239,7 @@ export function renderReplyPayloadsToMessages(
   const tableMode =
     options.tableMode ??
     getMSTeamsRuntime().channel.text.resolveMarkdownTableMode({
-      cfg: getMSTeamsRuntime().config.current() as NexisClawConfig,
+      cfg: getMSTeamsRuntime().config.current() as GreenchClawConfig,
       channel: "msteams",
     });
 

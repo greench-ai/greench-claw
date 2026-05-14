@@ -1,4 +1,4 @@
-import type { NexisClawPluginApi } from "./types.js";
+import type { GreenchClawPluginApi } from "./types.js";
 
 type FunctionPropertyNames<T> = Extract<
   {
@@ -7,7 +7,7 @@ type FunctionPropertyNames<T> = Extract<
   string
 >;
 
-export type PluginApiMethodName = FunctionPropertyNames<NexisClawPluginApi>;
+export type PluginApiMethodName = FunctionPropertyNames<GreenchClawPluginApi>;
 
 export type PluginApiLifecyclePolicy = {
   phase: "registration" | "runtime";

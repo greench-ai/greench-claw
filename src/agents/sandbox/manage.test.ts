@@ -68,11 +68,11 @@ describe("listSandboxBrowsers", () => {
             scope: "session",
             workspaceAccess: "none",
             docker: {
-              image: "NexisClaw-sandbox:bookworm-slim",
+              image: "GreenchClaw-sandbox:bookworm-slim",
             },
             browser: {
               enabled: true,
-              image: "NexisClaw-sandbox-browser:bookworm-slim",
+              image: "GreenchClaw-sandbox-browser:bookworm-slim",
             },
           },
         },
@@ -93,7 +93,7 @@ describe("listSandboxBrowsers", () => {
     });
     backendMocks.describeRuntime.mockResolvedValue({
       running: true,
-      actualConfigLabel: "NexisClaw-sandbox-browser:bookworm-slim",
+      actualConfigLabel: "GreenchClaw-sandbox-browser:bookworm-slim",
       configLabelMatch: true,
     });
   });
@@ -107,7 +107,7 @@ describe("listSandboxBrowsers", () => {
     expect(describeInput?.agentId).toBe("coder");
     expect(describeInput?.entry?.configLabelKind).toBe("BrowserImage");
     expect(results).toHaveLength(1);
-    expect(results[0]?.image).toBe("NexisClaw-sandbox-browser:bookworm-slim");
+    expect(results[0]?.image).toBe("GreenchClaw-sandbox-browser:bookworm-slim");
     expect(results[0]?.running).toBe(true);
     expect(results[0]?.imageMatch).toBe(true);
   });

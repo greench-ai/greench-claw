@@ -73,13 +73,15 @@ describe("bundled plugin build entries", () => {
 
     expect(artifacts).toContain("dist/extensions/image-generation-core/package.json");
     expect(artifacts).toContain("dist/extensions/image-generation-core/runtime-api.js");
-    expect(artifacts).not.toContain("dist/extensions/image-generation-core/NexisClaw.plugin.json");
+    expect(artifacts).not.toContain(
+      "dist/extensions/image-generation-core/GreenchClaw.plugin.json",
+    );
     expect(artifacts).toContain("dist/extensions/media-understanding-core/runtime-api.js");
     expect(artifacts).not.toContain(
-      "dist/extensions/media-understanding-core/NexisClaw.plugin.json",
+      "dist/extensions/media-understanding-core/GreenchClaw.plugin.json",
     );
     expect(artifacts).toContain("dist/extensions/speech-core/runtime-api.js");
-    expect(artifacts).not.toContain("dist/extensions/speech-core/NexisClaw.plugin.json");
+    expect(artifacts).not.toContain("dist/extensions/speech-core/GreenchClaw.plugin.json");
   });
 
   it("packs the Matrix packaged runtime shim", () => {

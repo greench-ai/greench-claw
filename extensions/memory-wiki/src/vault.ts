@@ -3,8 +3,8 @@ import path from "node:path";
 import {
   replaceManagedMarkdownBlock,
   withTrailingNewline,
-} from "NexisClaw/plugin-sdk/memory-host-markdown";
-import { FsSafeError, pathExists, root as fsRoot } from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/memory-host-markdown";
+import { FsSafeError, pathExists, root as fsRoot } from "GreenchClaw/plugin-sdk/security-runtime";
 import type { ResolvedMemoryWikiConfig } from "./config.js";
 import { appendMemoryWikiLog } from "./log.js";
 
@@ -16,9 +16,9 @@ export const WIKI_VAULT_DIRECTORIES = [
   "reports",
   "_attachments",
   "_views",
-  ".NexisClaw-wiki",
-  ".NexisClaw-wiki/locks",
-  ".NexisClaw-wiki/cache",
+  ".GreenchClaw-wiki",
+  ".GreenchClaw-wiki/locks",
+  ".GreenchClaw-wiki/cache",
 ] as const;
 
 type InitializeMemoryWikiVaultResult = {
@@ -33,8 +33,8 @@ function buildIndexMarkdown(): string {
     replaceManagedMarkdownBlock({
       original: "# Wiki Index\n",
       heading: "## Generated",
-      startMarker: "<!-- NexisClaw:wiki:index:start -->",
-      endMarker: "<!-- NexisClaw:wiki:index:end -->",
+      startMarker: "<!-- GreenchClaw:wiki:index:start -->",
+      endMarker: "<!-- GreenchClaw:wiki:index:end -->",
       body: "- No compiled pages yet.",
     }),
   );
@@ -48,7 +48,7 @@ function buildAgentsMarkdown(): string {
 - Preserve human notes outside managed markers.
 - Prefer source-backed claims over wiki-to-wiki citation loops.
 - Prefer structured \`claims\` with evidence over burying key beliefs only in prose.
-- Use \`.NexisClaw-wiki/cache/agent-digest.json\` and \`claims.jsonl\` for machine reads; markdown pages are the human view.
+- Use \`.GreenchClaw-wiki/cache/agent-digest.json\` and \`claims.jsonl\` for machine reads; markdown pages are the human view.
 `);
 }
 
@@ -56,7 +56,7 @@ function buildWikiOverviewMarkdown(config: ResolvedMemoryWikiConfig): string {
   return withTrailingNewline(`\
 # Memory Wiki
 
-This vault is maintained by the NexisClaw memory-wiki plugin.
+This vault is maintained by the GreenchClaw memory-wiki plugin.
 
 - Vault mode: \`${config.vaultMode}\`
 - Render mode: \`${config.vault.renderMode}\`
@@ -65,11 +65,11 @@ This vault is maintained by the NexisClaw memory-wiki plugin.
 ## Architecture
 - Raw sources remain the evidence layer.
 - Wiki pages are the human-readable synthesis layer.
-- \`.NexisClaw-wiki/cache/agent-digest.json\` is the agent-facing compiled digest.
+- \`.GreenchClaw-wiki/cache/agent-digest.json\` is the agent-facing compiled digest.
 
 ## Notes
-<!-- NexisClaw:human:start -->
-<!-- NexisClaw:human:end -->
+<!-- GreenchClaw:human:start -->
+<!-- GreenchClaw:human:end -->
 `);
 }
 
@@ -123,7 +123,7 @@ export async function initializeMemoryWikiVault(
   );
   await writeFileIfMissing(
     rootDir,
-    ".NexisClaw-wiki/state.json",
+    ".GreenchClaw-wiki/state.json",
     withTrailingNewline(
       JSON.stringify(
         {
@@ -137,7 +137,7 @@ export async function initializeMemoryWikiVault(
     ),
     createdFiles,
   );
-  await writeFileIfMissing(rootDir, ".NexisClaw-wiki/log.jsonl", "", createdFiles);
+  await writeFileIfMissing(rootDir, ".GreenchClaw-wiki/log.jsonl", "", createdFiles);
 
   if (createdDirectories.length > 0 || createdFiles.length > 0) {
     await appendMemoryWikiLog(rootDir, {

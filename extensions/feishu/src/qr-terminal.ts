@@ -1,1 +1,1 @@
-export { renderQrTerminal } from "NexisClaw/plugin-sdk/media-runtime";
+export { renderQrTerminal } from "GreenchClaw/plugin-sdk/media-runtime";

@@ -1,22 +1,22 @@
 ---
-summary: "NexisClaw CLI index: command list, global flags, and links to per-command pages"
+summary: "GreenchClaw CLI index: command list, global flags, and links to per-command pages"
 read_when:
-  - Finding the right `NexisClaw` subcommand
+  - Finding the right `GreenchClaw` subcommand
   - Looking up global flags or output styling rules
 title: "CLI reference"
 ---
 
-`NexisClaw` is the main CLI entry point. Each core command has either a
+`GreenchClaw` is the main CLI entry point. Each core command has either a
 dedicated reference page or is documented with the command it aliases; this
 index lists the commands, the global flags, and the output styling rules that
 apply across the CLI.
 
 Use the setup commands by intent:
 
-- `NexisClaw setup` creates the baseline config and workspace without walking the full guided onboarding flow.
-- `NexisClaw onboard` is the full guided first-run path for gateway, model auth, workspace, channels, skills, and health.
-- `NexisClaw configure` changes targeted parts of an existing setup, such as model auth, gateway, channels, plugins, or skills.
-- `NexisClaw channels add` configures channel accounts after the baseline exists; run it without flags for guided channel setup or with channel-specific flags for scripts.
+- `GreenchClaw setup` creates the baseline config and workspace without walking the full guided onboarding flow.
+- `GreenchClaw onboard` is the full guided first-run path for gateway, model auth, workspace, channels, skills, and health.
+- `GreenchClaw configure` changes targeted parts of an existing setup, such as model auth, gateway, channels, plugins, or skills.
+- `GreenchClaw channels add` configures channel accounts after the baseline exists; run it without flags for guided channel setup or with channel-specific flags for scripts.
 
 ## Command pages
 
@@ -39,14 +39,14 @@ Use the setup commands by intent:
 
 ## Global flags
 
-| Flag                    | Purpose                                                               |
-| ----------------------- | --------------------------------------------------------------------- |
-| `--dev`                 | Isolate state under `~/.NexisClaw-dev` and shift default ports         |
-| `--profile <name>`      | Isolate state under `~/.NexisClaw-<name>`                              |
-| `--container <name>`    | Target a named container for execution                                |
-| `--no-color`            | Disable ANSI colors (`NO_COLOR=1` is also respected)                  |
-| `--update`              | Shorthand for [`NexisClaw update`](/cli/update) (source installs only) |
-| `-V`, `--version`, `-v` | Print version and exit                                                |
+| Flag                    | Purpose                                                                  |
+| ----------------------- | ------------------------------------------------------------------------ |
+| `--dev`                 | Isolate state under `~/.GreenchClaw-dev` and shift default ports         |
+| `--profile <name>`      | Isolate state under `~/.GreenchClaw-<name>`                              |
+| `--container <name>`    | Target a named container for execution                                   |
+| `--no-color`            | Disable ANSI colors (`NO_COLOR=1` is also respected)                     |
+| `--update`              | Shorthand for [`GreenchClaw update`](/cli/update) (source installs only) |
+| `-V`, `--version`, `-v` | Print version and exit                                                   |
 
 ## Output modes
 
@@ -63,7 +63,7 @@ Palette source of truth: `src/terminal/palette.ts`.
 <Accordion title="Full command tree">
 
 ```
-NexisClaw [--dev] [--profile <name>] <command>
+GreenchClaw [--dev] [--profile <name>] <command>
   crestodian
   setup
   onboard
@@ -364,7 +364,7 @@ NexisClaw [--dev] [--profile <name>] <command>
   terminal (alias: tui --local)
 ```
 
-Plugins can add additional top-level commands (for example `NexisClaw voicecall`).
+Plugins can add additional top-level commands (for example `GreenchClaw voicecall`).
 
 </Accordion>
 
@@ -381,7 +381,7 @@ Highlights:
 
 ## Usage tracking
 
-`NexisClaw status --usage` and the Control UI surface provider usage/quota when
+`GreenchClaw status --usage` and the Control UI surface provider usage/quota when
 OAuth/API credentials are available. Data comes directly from provider usage
 endpoints and is normalized to `X% left`. Providers with current usage
 windows: Anthropic, GitHub Copilot, Gemini CLI, OpenAI Codex, MiniMax,

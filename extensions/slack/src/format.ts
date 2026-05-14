@@ -1,10 +1,10 @@
-import type { MarkdownTableMode } from "NexisClaw/plugin-sdk/config-contracts";
+import type { MarkdownTableMode } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   markdownToIR,
   type MarkdownLinkSpan,
   renderMarkdownIRChunksWithinLimit,
-} from "NexisClaw/plugin-sdk/text-chunking";
-import { renderMarkdownWithMarkers } from "NexisClaw/plugin-sdk/text-chunking";
+} from "GreenchClaw/plugin-sdk/text-chunking";
+import { renderMarkdownWithMarkers } from "GreenchClaw/plugin-sdk/text-chunking";
 
 // Escape special characters for Slack mrkdwn format.
 // Preserve Slack's angle-bracket tokens so mentions and links stay intact.

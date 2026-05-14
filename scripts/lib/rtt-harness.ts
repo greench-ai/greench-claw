@@ -63,19 +63,19 @@ type TelegramQaSummary = {
   }>;
 };
 
-const NEXISCLAW_PACKAGE_SPEC_RE =
-  /^NexisClaw@(main|alpha|beta|latest|[0-9]{4}\.[1-9][0-9]*\.[1-9][0-9]*(-[1-9][0-9]*|-(alpha|beta)\.[1-9][0-9]*)?)$/u;
+const GREENCHCLAW_PACKAGE_SPEC_RE =
+  /^GreenchClaw@(main|alpha|beta|latest|[0-9]{4}\.[1-9][0-9]*\.[1-9][0-9]*(-[1-9][0-9]*|-(alpha|beta)\.[1-9][0-9]*)?)$/u;
 
 const REQUIRED_TELEGRAM_ENV = [
-  "NEXISCLAW_QA_TELEGRAM_GROUP_ID",
-  "NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN",
-  "NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN",
+  "GREENCHCLAW_QA_TELEGRAM_GROUP_ID",
+  "GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN",
+  "GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN",
 ] as const;
 
-export function validateNexisClawPackageSpec(spec: string) {
-  if (!NEXISCLAW_PACKAGE_SPEC_RE.test(spec)) {
+export function validateGreenchClawPackageSpec(spec: string) {
+  if (!GREENCHCLAW_PACKAGE_SPEC_RE.test(spec)) {
     throw new Error(
-      `Package spec must be NexisClaw@main, NexisClaw@alpha, NexisClaw@beta, NexisClaw@latest, or an exact NexisClaw release version; got: ${spec}`,
+      `Package spec must be GreenchClaw@main, GreenchClaw@alpha, GreenchClaw@beta, GreenchClaw@latest, or an exact GreenchClaw release version; got: ${spec}`,
     );
   }
   return spec;
@@ -129,17 +129,17 @@ export function createHarnessEnv(params: {
 }) {
   return {
     ...params.baseEnv,
-    NEXISCLAW_NPM_TELEGRAM_PACKAGE_SPEC: params.spec,
-    ...(params.packageTgz ? { NEXISCLAW_NPM_TELEGRAM_PACKAGE_TGZ: params.packageTgz } : {}),
-    NEXISCLAW_NPM_TELEGRAM_PACKAGE_LABEL: `${params.spec} (${params.version})`,
-    NEXISCLAW_NPM_TELEGRAM_PROVIDER_MODE: params.providerMode,
-    NEXISCLAW_NPM_TELEGRAM_SCENARIOS: params.scenarios.join(","),
-    NEXISCLAW_NPM_TELEGRAM_OUTPUT_DIR: params.rawOutputDir,
-    NEXISCLAW_NPM_TELEGRAM_FAST: params.baseEnv.NEXISCLAW_NPM_TELEGRAM_FAST ?? "1",
-    NEXISCLAW_NPM_TELEGRAM_WARM_SAMPLES: String(params.samples),
-    NEXISCLAW_NPM_TELEGRAM_SAMPLE_TIMEOUT_MS: String(params.sampleTimeoutMs),
-    NEXISCLAW_QA_TELEGRAM_CANARY_TIMEOUT_MS: String(params.timeoutMs),
-    NEXISCLAW_QA_TELEGRAM_SCENARIO_TIMEOUT_MS: String(params.timeoutMs),
+    GREENCHCLAW_NPM_TELEGRAM_PACKAGE_SPEC: params.spec,
+    ...(params.packageTgz ? { GREENCHCLAW_NPM_TELEGRAM_PACKAGE_TGZ: params.packageTgz } : {}),
+    GREENCHCLAW_NPM_TELEGRAM_PACKAGE_LABEL: `${params.spec} (${params.version})`,
+    GREENCHCLAW_NPM_TELEGRAM_PROVIDER_MODE: params.providerMode,
+    GREENCHCLAW_NPM_TELEGRAM_SCENARIOS: params.scenarios.join(","),
+    GREENCHCLAW_NPM_TELEGRAM_OUTPUT_DIR: params.rawOutputDir,
+    GREENCHCLAW_NPM_TELEGRAM_FAST: params.baseEnv.GREENCHCLAW_NPM_TELEGRAM_FAST ?? "1",
+    GREENCHCLAW_NPM_TELEGRAM_WARM_SAMPLES: String(params.samples),
+    GREENCHCLAW_NPM_TELEGRAM_SAMPLE_TIMEOUT_MS: String(params.sampleTimeoutMs),
+    GREENCHCLAW_QA_TELEGRAM_CANARY_TIMEOUT_MS: String(params.timeoutMs),
+    GREENCHCLAW_QA_TELEGRAM_SCENARIO_TIMEOUT_MS: String(params.timeoutMs),
   };
 }
 
@@ -155,7 +155,7 @@ export async function assertHarnessRoot(harnessRoot: string) {
   try {
     await fs.access(scriptPath);
   } catch {
-    throw new Error(`Missing NexisClaw Telegram npm harness: ${scriptPath}`);
+    throw new Error(`Missing GreenchClaw Telegram npm harness: ${scriptPath}`);
   }
 }
 
@@ -185,7 +185,7 @@ export async function resolveMainVersion(harnessRoot: string) {
     await fs.readFile(path.join(harnessRoot, "package.json"), "utf8"),
   ) as { version?: unknown };
   if (typeof packageJson.version !== "string" || packageJson.version.trim().length === 0) {
-    throw new Error("NexisClaw package.json must contain a non-empty version.");
+    throw new Error("GreenchClaw package.json must contain a non-empty version.");
   }
   const { stdout } = await execFileAsync("git", ["rev-parse", "--short=10", "HEAD"], {
     cwd: harnessRoot,

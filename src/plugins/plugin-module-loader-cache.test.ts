@@ -1,4 +1,4 @@
-import { importFreshModule } from "NexisClaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PluginModuleLoaderFactory } from "./plugin-module-loader-cache.js";
 
@@ -147,7 +147,7 @@ describe("getCachedPluginModuleLoader", () => {
       cache,
       modulePath: "/repo/extensions/demo/index.ts",
       importerUrl: "file:///repo/src/plugins/setup-registry.ts",
-      argvEntry: "/repo/NexisClaw.mjs",
+      argvEntry: "/repo/GreenchClaw.mjs",
       loaderFilename: "file:///repo/src/plugins/source-loader.ts",
     } as const;
 
@@ -202,7 +202,7 @@ describe("getCachedPluginModuleLoader", () => {
       cache,
       modulePath: "/repo/dist/extensions/demo/api.ts",
       importerUrl: "file:///repo/src/plugins/public-surface-loader.ts",
-      argvEntry: "/repo/NexisClaw.mjs",
+      argvEntry: "/repo/GreenchClaw.mjs",
       preferBuiltDist: true,
       loaderFilename: "file:///repo/src/plugins/public-surface-loader.ts",
     });
@@ -210,7 +210,7 @@ describe("getCachedPluginModuleLoader", () => {
       cache,
       modulePath: "/repo/dist/extensions/demo/api.ts",
       importerUrl: "file:///repo/src/plugins/public-surface-loader.ts",
-      argvEntry: "/repo/NexisClaw.mjs",
+      argvEntry: "/repo/GreenchClaw.mjs",
       preferBuiltDist: true,
       loaderFilename: "file:///repo/src/plugins/bundled-channel-config-metadata.ts",
     });
@@ -549,23 +549,23 @@ describe("getCachedPluginModuleLoader", () => {
     const cache = new Map();
     const loader = getCachedPluginModuleLoader({
       cache,
-      modulePath: "C:\\Users\\alice\\NexisClaw\\dist\\extensions\\feishu\\api.js",
-      importerUrl: "file:///C:/Users/alice/NexisClaw/dist/src/plugins/public-surface-loader.js",
-      loaderFilename: "C:\\Users\\alice\\NexisClaw\\dist\\extensions\\feishu\\api.js",
+      modulePath: "C:\\Users\\alice\\GreenchClaw\\dist\\extensions\\feishu\\api.js",
+      importerUrl: "file:///C:/Users/alice/GreenchClaw/dist/src/plugins/public-surface-loader.js",
+      loaderFilename: "C:\\Users\\alice\\GreenchClaw\\dist\\extensions\\feishu\\api.js",
       tryNative: true,
       createLoader: asPluginModuleLoaderFactory(createJiti),
     });
 
-    loader("C:\\Users\\alice\\NexisClaw\\dist\\extensions\\feishu\\api.js");
+    loader("C:\\Users\\alice\\GreenchClaw\\dist\\extensions\\feishu\\api.js");
 
     expectJitiOptions(
       createJiti,
       0,
-      "file:///C:/Users/alice/NexisClaw/dist/extensions/feishu/api.js",
+      "file:///C:/Users/alice/GreenchClaw/dist/extensions/feishu/api.js",
       { tryNative: true },
     );
     expect(fromSourceTransformer).toHaveBeenCalledWith(
-      "file:///C:/Users/alice/NexisClaw/dist/extensions/feishu/api.js",
+      "file:///C:/Users/alice/GreenchClaw/dist/extensions/feishu/api.js",
     );
   });
 
@@ -587,7 +587,7 @@ describe("getCachedPluginModuleLoader", () => {
       modulePath: "/repo/dist/extensions/demo/api.js",
       importerUrl: "file:///repo/src/plugins/bundled-capability-runtime.ts",
       loaderFilename: "file:///repo/src/plugins/bundled-capability-runtime.ts",
-      aliasMap: { "NexisClaw/plugin-sdk": "/repo/shim.js" },
+      aliasMap: { "GreenchClaw/plugin-sdk": "/repo/shim.js" },
       tryNative: false,
       createLoader: asPluginModuleLoaderFactory(createJiti),
     });
@@ -626,21 +626,26 @@ describe("getCachedPluginModuleLoader", () => {
     const cache = new Map();
     const loader = getCachedPluginModuleLoader({
       cache,
-      modulePath: "C:\\Users\\alice\\NexisClaw\\extensions\\feishu\\api.ts",
-      importerUrl: "file:///C:/Users/alice/NexisClaw/src/plugins/loader.ts",
-      loaderFilename: "C:\\Users\\alice\\NexisClaw\\extensions\\feishu\\api.ts",
+      modulePath: "C:\\Users\\alice\\GreenchClaw\\extensions\\feishu\\api.ts",
+      importerUrl: "file:///C:/Users/alice/GreenchClaw/src/plugins/loader.ts",
+      loaderFilename: "C:\\Users\\alice\\GreenchClaw\\extensions\\feishu\\api.ts",
       tryNative: false,
       createLoader: asPluginModuleLoaderFactory(createJiti),
     });
 
-    loader("C:\\Users\\alice\\NexisClaw\\extensions\\feishu\\api.ts");
+    loader("C:\\Users\\alice\\GreenchClaw\\extensions\\feishu\\api.ts");
 
     expect(nativeStub).not.toHaveBeenCalled();
-    expectJitiOptions(createJiti, 0, "file:///C:/Users/alice/NexisClaw/extensions/feishu/api.ts", {
-      tryNative: false,
-    });
+    expectJitiOptions(
+      createJiti,
+      0,
+      "file:///C:/Users/alice/GreenchClaw/extensions/feishu/api.ts",
+      {
+        tryNative: false,
+      },
+    );
     expect(fromSourceTransformer).toHaveBeenCalledWith(
-      "file:///C:/Users/alice/NexisClaw/extensions/feishu/api.ts",
+      "file:///C:/Users/alice/GreenchClaw/extensions/feishu/api.ts",
     );
   });
 

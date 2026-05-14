@@ -1,17 +1,17 @@
 import fs from "node:fs";
 import path from "node:path";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import { resolveUserPath } from "NexisClaw/plugin-sdk/account-resolution";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveOAuthDir } from "NexisClaw/plugin-sdk/state-paths";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import { resolveUserPath } from "GreenchClaw/plugin-sdk/account-resolution";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveOAuthDir } from "GreenchClaw/plugin-sdk/state-paths";
 import { hasWebCredsSync } from "./src/creds-files.js";
 
 type WhatsAppAuthPresenceParams =
   | {
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       env?: NodeJS.ProcessEnv;
     }
-  | NexisClawConfig;
+  | GreenchClawConfig;
 
 function addAccountAuthDirs(
   authDirs: Set<string>,
@@ -28,7 +28,7 @@ function addAccountAuthDirs(
 }
 
 function listWhatsAppAuthDirs(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): readonly string[] {
   const oauthDir = resolveOAuthDir(env);

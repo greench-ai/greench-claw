@@ -1,11 +1,11 @@
-import type { ProviderResolveDynamicModelContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import { defineSingleProviderPluginEntry } from "NexisClaw/plugin-sdk/provider-entry";
+import type { ProviderResolveDynamicModelContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { defineSingleProviderPluginEntry } from "GreenchClaw/plugin-sdk/provider-entry";
 import {
   cloneFirstTemplateModel,
   DEFAULT_CONTEXT_TOKENS,
   normalizeModelCompat,
   OPENAI_COMPATIBLE_REPLAY_HOOKS,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
 import { isFireworksKimiModelId } from "./model-id.js";
 import { applyFireworksConfig, FIREWORKS_DEFAULT_MODEL_REF } from "./onboard.js";
 import {

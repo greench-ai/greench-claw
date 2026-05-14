@@ -51,7 +51,7 @@ type SharedServiceEnvironmentFields = {
 };
 
 export const SERVICE_PROXY_ENV_KEYS = [
-  "NEXISCLAW_PROXY_URL",
+  "GREENCHCLAW_PROXY_URL",
   "HTTP_PROXY",
   "HTTPS_PROXY",
   "NO_PROXY",
@@ -65,8 +65,8 @@ export const SERVICE_PROXY_ENV_KEYS = [
 function readServiceProxyEnvironment(
   env: Record<string, string | undefined>,
 ): Record<string, string | undefined> {
-  const proxyUrl = normalizeOptionalString(env.NEXISCLAW_PROXY_URL);
-  return proxyUrl ? { NEXISCLAW_PROXY_URL: proxyUrl } : {};
+  const proxyUrl = normalizeOptionalString(env.GREENCHCLAW_PROXY_URL);
+  return proxyUrl ? { GREENCHCLAW_PROXY_URL: proxyUrl } : {};
 }
 
 function normalizeServicePathDir(dir: string | undefined): string | undefined {
@@ -407,22 +407,22 @@ export function buildServiceEnvironment(params: {
     extraPathDirs,
     params.execPath,
   );
-  const profile = env.NEXISCLAW_PROFILE;
-  const wrapperPath = normalizeOptionalString(env.NEXISCLAW_WRAPPER);
+  const profile = env.GREENCHCLAW_PROFILE;
+  const wrapperPath = normalizeOptionalString(env.GREENCHCLAW_WRAPPER);
   const resolvedLaunchdLabel =
     launchdLabel || (platform === "darwin" ? resolveGatewayLaunchAgentLabel(profile) : undefined);
   const systemdUnit = `${resolveGatewaySystemdServiceName(profile)}.service`;
   return {
     ...buildCommonServiceEnvironment(env, sharedEnv),
-    NEXISCLAW_PROFILE: profile,
-    NEXISCLAW_WRAPPER: wrapperPath,
-    NEXISCLAW_GATEWAY_PORT: String(port),
-    NEXISCLAW_LAUNCHD_LABEL: resolvedLaunchdLabel,
-    NEXISCLAW_SYSTEMD_UNIT: systemdUnit,
-    NEXISCLAW_WINDOWS_TASK_NAME: resolveGatewayWindowsTaskName(profile),
-    NEXISCLAW_SERVICE_MARKER: GATEWAY_SERVICE_MARKER,
-    NEXISCLAW_SERVICE_KIND: GATEWAY_SERVICE_KIND,
-    NEXISCLAW_SERVICE_VERSION: VERSION,
+    GREENCHCLAW_PROFILE: profile,
+    GREENCHCLAW_WRAPPER: wrapperPath,
+    GREENCHCLAW_GATEWAY_PORT: String(port),
+    GREENCHCLAW_LAUNCHD_LABEL: resolvedLaunchdLabel,
+    GREENCHCLAW_SYSTEMD_UNIT: systemdUnit,
+    GREENCHCLAW_WINDOWS_TASK_NAME: resolveGatewayWindowsTaskName(profile),
+    GREENCHCLAW_SERVICE_MARKER: GATEWAY_SERVICE_MARKER,
+    GREENCHCLAW_SERVICE_KIND: GATEWAY_SERVICE_KIND,
+    GREENCHCLAW_SERVICE_VERSION: VERSION,
   };
 }
 
@@ -440,20 +440,20 @@ export function buildNodeServiceEnvironment(params: {
     extraPathDirs,
     params.execPath,
   );
-  const gatewayToken = normalizeOptionalString(env.NEXISCLAW_GATEWAY_TOKEN);
-  const allowInsecurePrivateWs = normalizeOptionalString(env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS);
+  const gatewayToken = normalizeOptionalString(env.GREENCHCLAW_GATEWAY_TOKEN);
+  const allowInsecurePrivateWs = normalizeOptionalString(env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS);
   return {
     ...buildCommonServiceEnvironment(env, sharedEnv),
-    NEXISCLAW_GATEWAY_TOKEN: gatewayToken,
-    NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS: allowInsecurePrivateWs,
-    NEXISCLAW_LAUNCHD_LABEL: resolveNodeLaunchAgentLabel(),
-    NEXISCLAW_SYSTEMD_UNIT: resolveNodeSystemdServiceName(),
-    NEXISCLAW_WINDOWS_TASK_NAME: resolveNodeWindowsTaskName(),
-    NEXISCLAW_TASK_SCRIPT_NAME: NODE_WINDOWS_TASK_SCRIPT_NAME,
-    NEXISCLAW_LOG_PREFIX: "node",
-    NEXISCLAW_SERVICE_MARKER: NODE_SERVICE_MARKER,
-    NEXISCLAW_SERVICE_KIND: NODE_SERVICE_KIND,
-    NEXISCLAW_SERVICE_VERSION: VERSION,
+    GREENCHCLAW_GATEWAY_TOKEN: gatewayToken,
+    GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS: allowInsecurePrivateWs,
+    GREENCHCLAW_LAUNCHD_LABEL: resolveNodeLaunchAgentLabel(),
+    GREENCHCLAW_SYSTEMD_UNIT: resolveNodeSystemdServiceName(),
+    GREENCHCLAW_WINDOWS_TASK_NAME: resolveNodeWindowsTaskName(),
+    GREENCHCLAW_TASK_SCRIPT_NAME: NODE_WINDOWS_TASK_SCRIPT_NAME,
+    GREENCHCLAW_LOG_PREFIX: "node",
+    GREENCHCLAW_SERVICE_MARKER: NODE_SERVICE_MARKER,
+    GREENCHCLAW_SERVICE_KIND: NODE_SERVICE_KIND,
+    GREENCHCLAW_SERVICE_VERSION: VERSION,
   };
 }
 
@@ -466,8 +466,8 @@ function buildCommonServiceEnvironment(
     TMPDIR: sharedEnv.tmpDir,
     NODE_EXTRA_CA_CERTS: sharedEnv.nodeCaCerts,
     NODE_USE_SYSTEM_CA: sharedEnv.nodeUseSystemCa,
-    NEXISCLAW_STATE_DIR: sharedEnv.stateDir,
-    NEXISCLAW_CONFIG_PATH: sharedEnv.configPath,
+    GREENCHCLAW_STATE_DIR: sharedEnv.stateDir,
+    GREENCHCLAW_CONFIG_PATH: sharedEnv.configPath,
     ...sharedEnv.proxyEnv,
   };
   if (sharedEnv.minimalPath) {
@@ -496,8 +496,8 @@ function resolveSharedServiceEnvironmentFields(
   extraPathDirs: string[] | undefined,
   execPath?: string,
 ): SharedServiceEnvironmentFields {
-  const stateDir = env.NEXISCLAW_STATE_DIR;
-  const configPath = env.NEXISCLAW_CONFIG_PATH;
+  const stateDir = env.GREENCHCLAW_STATE_DIR;
+  const configPath = env.GREENCHCLAW_CONFIG_PATH;
   const tmpDir = resolveServiceTmpDir(env, platform);
   // On macOS, launchd services don't inherit the shell environment, so Node's undici/fetch
   // cannot locate the system CA bundle. Default to /etc/ssl/cert.pem so TLS verification

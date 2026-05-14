@@ -612,7 +612,7 @@ function renderMessageMeta(meta: GroupMeta | null) {
   `;
 }
 
-const SKIP_DELETE_CONFIRM_KEY = "NexisClaw:skipDeleteConfirm";
+const SKIP_DELETE_CONFIRM_KEY = "GreenchClaw:skipDeleteConfirm";
 
 type DeleteConfirmSide = "left" | "right";
 
@@ -800,7 +800,7 @@ function renderReplyPill(replyTarget: NormalizedMessage["replyTarget"]) {
 
 function isLocalAssistantAttachmentSource(source: string): boolean {
   const trimmed = source.trim();
-  if (/^\/(?:__NexisClaw__|media|api\/chat\/media\/outgoing)\//.test(trimmed)) {
+  if (/^\/(?:__GreenchClaw__|media|api\/chat\/media\/outgoing)\//.test(trimmed)) {
     return false;
   }
   return (
@@ -904,7 +904,7 @@ function buildAssistantAttachmentUrl(
   if (normalizedMediaTicket) {
     params.set("mediaTicket", normalizedMediaTicket);
   }
-  return `${normalizedBasePath}/__NexisClaw__/assistant-media?${params.toString()}`;
+  return `${normalizedBasePath}/__GreenchClaw__/assistant-media?${params.toString()}`;
 }
 
 function isManagedOutgoingImageSource(source: string): boolean {
@@ -967,7 +967,7 @@ async function resolveManagedOutgoingImageBlobUrl(
         headers.set("Authorization", `Bearer ${authToken}`);
       }
       if (requesterSessionKey) {
-        headers.set("x-NexisClaw-requester-session-key", requesterSessionKey);
+        headers.set("x-GreenchClaw-requester-session-key", requesterSessionKey);
       }
       const res = await fetch(fetchUrl, {
         method: "GET",

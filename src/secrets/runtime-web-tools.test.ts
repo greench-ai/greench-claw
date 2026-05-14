@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type {
   PluginWebFetchProviderEntry,
   PluginWebSearchProviderEntry,
@@ -115,8 +115,8 @@ vi.mock("../plugins/installed-plugin-index-records.js", async () => {
   };
 });
 
-function asConfig(value: unknown): NexisClawConfig {
-  return value as NexisClawConfig;
+function asConfig(value: unknown): GreenchClawConfig {
+  return value as GreenchClawConfig;
 }
 
 function providerPluginId(provider: ProviderUnderTest): string {
@@ -145,7 +145,7 @@ function ensureRecord(target: Record<string, unknown>, key: string): Record<stri
 }
 
 function setConfiguredProviderKey(
-  configTarget: NexisClawConfig,
+  configTarget: GreenchClawConfig,
   pluginId: string,
   value: unknown,
 ): void {
@@ -157,7 +157,7 @@ function setConfiguredProviderKey(
   webSearch.apiKey = value;
 }
 
-function setConfiguredFetchProviderKey(configTarget: NexisClawConfig, value: unknown): void {
+function setConfiguredFetchProviderKey(configTarget: GreenchClawConfig, value: unknown): void {
   const plugins = ensureRecord(configTarget as Record<string, unknown>, "plugins");
   const entries = ensureRecord(plugins, "entries");
   const pluginEntry = ensureRecord(entries, "firecrawl");
@@ -262,7 +262,7 @@ function buildTestWebFetchProviders(): PluginWebFetchProviderEntry[] {
   ];
 }
 
-async function runRuntimeWebTools(params: { config: NexisClawConfig; env?: NodeJS.ProcessEnv }) {
+async function runRuntimeWebTools(params: { config: GreenchClawConfig; env?: NodeJS.ProcessEnv }) {
   const sourceConfig = structuredClone(params.config);
   const resolvedConfig = structuredClone(params.config);
   const context = createResolverContext({
@@ -280,7 +280,7 @@ async function runRuntimeWebTools(params: { config: NexisClawConfig; env?: NodeJ
 function createProviderSecretRefConfig(
   provider: ProviderUnderTest,
   envRefId: string,
-): NexisClawConfig {
+): GreenchClawConfig {
   return asConfig({
     tools: {
       web: {
@@ -305,7 +305,7 @@ function createProviderSecretRefConfig(
   });
 }
 
-function readProviderKey(config: NexisClawConfig, provider: ProviderUnderTest): unknown {
+function readProviderKey(config: GreenchClawConfig, provider: ProviderUnderTest): unknown {
   const pluginConfig = config.plugins?.entries?.[providerPluginId(provider)]?.config as
     | { webSearch?: { apiKey?: unknown } }
     | undefined;
@@ -1265,7 +1265,7 @@ describe("runtime web tools resolution", () => {
     loadInstalledPluginIndexInstallRecordsSyncMock.mockReturnValue({
       "external-search": {
         source: "npm",
-        spec: "@NexisClaw/external-search",
+        spec: "@GreenchClaw/external-search",
       },
     });
 
@@ -1313,7 +1313,7 @@ describe("runtime web tools resolution", () => {
     loadInstalledPluginIndexInstallRecordsSyncMock.mockReturnValue({
       "external-fetch": {
         source: "npm",
-        spec: "@NexisClaw/external-fetch",
+        spec: "@GreenchClaw/external-fetch",
       },
     });
 
@@ -1598,7 +1598,7 @@ describe("runtime web tools resolution", () => {
 
     beforeEach(() => {
       loadInstalledPluginIndexInstallRecordsSyncMock.mockReturnValue({
-        brave: { source: "npm", spec: "@NexisClaw/brave-search" },
+        brave: { source: "npm", spec: "@GreenchClaw/brave-search" },
       });
       resolveManifestContractOwnerPluginIdMock.mockImplementation(externalBraveImpl);
     });

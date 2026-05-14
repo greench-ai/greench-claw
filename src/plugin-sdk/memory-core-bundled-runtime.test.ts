@@ -100,10 +100,10 @@ describe("plugin-sdk memory-core bundled runtime", () => {
 
   it("delegates previewRemHarness through the bundled api surface", async () => {
     const module = await import("./memory-core-bundled-runtime.js");
-    const preview = { workspaceDir: "/tmp/NexisClaw" };
+    const preview = { workspaceDir: "/tmp/GreenchClaw" };
     previewRemHarnessImpl.mockResolvedValueOnce(preview);
 
-    const params = { workspaceDir: "/tmp/NexisClaw", candidateLimit: 3 };
+    const params = { workspaceDir: "/tmp/GreenchClaw", candidateLimit: 3 };
     const result = await module.previewRemHarness(params);
 
     expect(result).toBe(preview);

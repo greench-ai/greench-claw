@@ -4,7 +4,7 @@ import path from "node:path";
 const command = process.argv[2];
 const readJson = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
 const agentTurnTimeoutSeconds = Number.parseInt(
-  process.env.NEXISCLAW_LIVE_PLUGIN_TOOL_TIMEOUT_SECONDS ?? "300",
+  process.env.GREENCHCLAW_LIVE_PLUGIN_TOOL_TIMEOUT_SECONDS ?? "300",
   10,
 );
 
@@ -17,11 +17,11 @@ function requireEnv(name) {
 }
 
 function stateDir() {
-  return process.env.NEXISCLAW_STATE_DIR || path.join(process.env.HOME, ".NexisClaw");
+  return process.env.GREENCHCLAW_STATE_DIR || path.join(process.env.HOME, ".GreenchClaw");
 }
 
 function configPath() {
-  return process.env.NEXISCLAW_CONFIG_PATH || path.join(stateDir(), "NexisClaw.json");
+  return process.env.GREENCHCLAW_CONFIG_PATH || path.join(stateDir(), "GreenchClaw.json");
 }
 
 function realPathMaybe(filePath) {
@@ -55,8 +55,8 @@ function installRecords() {
 
 function pluginInstallPath() {
   const pluginId = requireEnv("PLUGIN_ID");
-  const inspect = fs.existsSync("/tmp/NexisClaw-plugin-inspect.json")
-    ? readJson("/tmp/NexisClaw-plugin-inspect.json")
+  const inspect = fs.existsSync("/tmp/GreenchClaw-plugin-inspect.json")
+    ? readJson("/tmp/GreenchClaw-plugin-inspect.json")
     : {};
   const record = installRecords()[pluginId] || inspect.install;
   if (!record) {
@@ -82,9 +82,9 @@ function writeFixture() {
     name: pluginName,
     version,
     dependencies: { slugify: "^1.6.6" },
-    NexisClaw: { extensions: ["./index.js"] },
+    GreenchClaw: { extensions: ["./index.js"] },
   });
-  writeJson(path.join(dir, "NexisClaw.plugin.json"), {
+  writeJson(path.join(dir, "GreenchClaw.plugin.json"), {
     id: pluginId,
     name: "E2E Slug Tool",
     description: "Docker E2E plugin tool fixture",
@@ -218,12 +218,12 @@ function assertInstalled() {
   }
   assertPathInside(npmRoot, slugifyPackageJson, "slugify dependency");
 
-  const list = readJson("/tmp/NexisClaw-plugins-list.json");
+  const list = readJson("/tmp/GreenchClaw-plugins-list.json");
   const plugin = (list.plugins || []).find((entry) => entry.id === pluginId);
   if (!plugin || plugin.enabled !== true || plugin.status !== "loaded") {
     throw new Error(`fixture plugin was not enabled+loaded: ${JSON.stringify(plugin)}`);
   }
-  const inspect = readJson("/tmp/NexisClaw-plugin-inspect.json");
+  const inspect = readJson("/tmp/GreenchClaw-plugin-inspect.json");
   const toolNames = Array.isArray(inspect.tools)
     ? inspect.tools.flatMap((entry) => (Array.isArray(entry?.names) ? entry.names : []))
     : [];
@@ -235,9 +235,9 @@ function assertInstalled() {
 function assertAgentTurn() {
   const expected = requireEnv("EXPECTED_SLUG");
   const toolName = requireEnv("TOOL_NAME");
-  const stdout = fs.readFileSync("/tmp/NexisClaw-agent.json", "utf8");
-  const stderr = fs.existsSync("/tmp/NexisClaw-agent.err")
-    ? fs.readFileSync("/tmp/NexisClaw-agent.err", "utf8")
+  const stdout = fs.readFileSync("/tmp/GreenchClaw-agent.json", "utf8");
+  const stderr = fs.existsSync("/tmp/GreenchClaw-agent.err")
+    ? fs.readFileSync("/tmp/GreenchClaw-agent.err", "utf8")
     : "";
   const response = JSON.parse(stdout);
   const text = (response.payloads || []).map((payload) => payload?.text || "").join("\n");

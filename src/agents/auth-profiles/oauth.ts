@@ -5,7 +5,7 @@ import {
   type OAuthProvider,
 } from "@earendil-works/pi-ai/oauth";
 import { getRuntimeConfig } from "../../config/config.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { coerceSecretRef } from "../../config/types.secrets.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import {
@@ -78,7 +78,7 @@ const isCompatibleModeType = (mode: string | undefined, type: string | undefined
 };
 
 function isProfileConfigCompatible(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   profileId: string;
   provider: string;
   mode: "api_key" | "token" | "oauth";
@@ -97,7 +97,7 @@ function isProfileConfigCompatible(params: {
 async function buildOAuthApiKey(
   provider: string,
   credentials: OAuthCredential,
-  context: { cfg?: NexisClawConfig },
+  context: { cfg?: GreenchClawConfig },
 ): Promise<string> {
   const formatted = await formatProviderAuthProfileApiKeyWithPlugin({
     provider,
@@ -129,13 +129,13 @@ export function isRefreshTokenReusedError(error: unknown): boolean {
 }
 
 type ResolveApiKeyForProfileParams = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   store: AuthProfileStore;
   profileId: string;
   agentDir?: string;
 };
 
-type SecretDefaults = NonNullable<NexisClawConfig["secrets"]>["defaults"];
+type SecretDefaults = NonNullable<GreenchClawConfig["secrets"]>["defaults"];
 
 async function refreshOAuthCredential(
   credential: OAuthCredential,
@@ -232,7 +232,7 @@ async function resolveProfileSecretString(params: {
   value: string | undefined;
   valueRef: unknown;
   refDefaults: SecretDefaults | undefined;
-  configForRefResolution: NexisClawConfig;
+  configForRefResolution: GreenchClawConfig;
   cache: SecretRefResolveCache;
   inlineFailureMessage: string;
   refFailureMessage: string;

@@ -7,8 +7,8 @@ export function createSandboxTestContext(params?: {
   const overrides = params?.overrides ?? {};
   const { docker: _unusedDockerOverrides, ...sandboxOverrides } = overrides;
   const docker = {
-    image: "NexisClaw-sandbox:bookworm-slim",
-    containerPrefix: "NexisClaw-sbx-",
+    image: "GreenchClaw-sandbox:bookworm-slim",
+    containerPrefix: "GreenchClaw-sbx-",
     network: "none",
     user: "1000:1000",
     workdir: "/workspace",
@@ -33,9 +33,9 @@ export function createSandboxTestContext(params?: {
     workspaceDir: "/tmp/workspace",
     agentWorkspaceDir: "/tmp/workspace",
     workspaceAccess: "rw",
-    runtimeId: "NexisClaw-sbx-test",
-    runtimeLabel: "NexisClaw-sbx-test",
-    containerName: "NexisClaw-sbx-test",
+    runtimeId: "GreenchClaw-sbx-test",
+    runtimeLabel: "GreenchClaw-sbx-test",
+    containerName: "GreenchClaw-sbx-test",
     containerWorkdir: "/workspace",
     tools: { allow: ["*"], deny: [] },
     browserAllowHostControl: false,

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizePluginsConfig, resolveEffectiveEnableState } from "../plugins/config-state.js";
 import * as providerAuthChoices from "../plugins/provider-auth-choices.js";
 import * as providerInstallCatalog from "../plugins/provider-install-catalog.js";
@@ -32,7 +32,7 @@ function includesProviderFlowScope(
 }
 
 function resolveInstallCatalogProviderSetupFlowContributions(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   scope?: ProviderFlowScope;
@@ -89,7 +89,7 @@ function resolveInstallCatalogProviderSetupFlowContributions(params?: {
 }
 
 function resolveManifestProviderSetupFlowContributions(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   scope?: ProviderFlowScope;
@@ -136,7 +136,7 @@ function resolveManifestProviderSetupFlowContributions(params?: {
 }
 
 export function resolveProviderSetupFlowContributions(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   scope?: ProviderFlowScope;

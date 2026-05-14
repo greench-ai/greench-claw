@@ -10,28 +10,28 @@ import type {
   Usage,
 } from "@earendil-works/pi-ai";
 import { createAssistantMessageEventStream, streamSimple } from "@earendil-works/pi-ai";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import type {
-  NexisClawConfig,
+  GreenchClawConfig,
   ProviderRuntimeModel,
   ProviderWrapStreamFnContext,
-} from "NexisClaw/plugin-sdk/plugin-entry";
-import { isNonSecretApiKeyMarker } from "NexisClaw/plugin-sdk/provider-auth";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
+import { isNonSecretApiKeyMarker } from "GreenchClaw/plugin-sdk/provider-auth";
 import {
   DEFAULT_CONTEXT_TOKENS,
   normalizeProviderId,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
 import {
   createMoonshotThinkingWrapper,
   resolveMoonshotThinkingType,
   streamWithPayloadPatch,
-} from "NexisClaw/plugin-sdk/provider-stream-shared";
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/provider-stream-shared";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   readStringValue,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { OLLAMA_DEFAULT_BASE_URL } from "./defaults.js";
 import { normalizeOllamaWireModelId } from "./model-id.js";
 import {
@@ -108,7 +108,7 @@ export function resolveOllamaBaseUrlForRun(params: {
 }
 
 export function resolveConfiguredOllamaProviderConfig(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   providerId?: string;
 }) {
   const providerId = params.providerId?.trim();
@@ -168,7 +168,7 @@ export function isOllamaCompatProvider(model: {
 }
 
 export function resolveOllamaCompatNumCtxEnabled(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   providerId?: string;
 }): boolean {
   return resolveConfiguredOllamaProviderConfig(params)?.injectNumCtxForOpenAICompat ?? true;
@@ -176,7 +176,7 @@ export function resolveOllamaCompatNumCtxEnabled(params: {
 
 export function shouldInjectOllamaCompatNumCtx(params: {
   model: { api?: string; provider?: string; baseUrl?: string };
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   providerId?: string;
 }): boolean {
   if (params.model.api !== "openai-completions") {

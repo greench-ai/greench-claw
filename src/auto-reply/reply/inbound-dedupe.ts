@@ -16,8 +16,8 @@ const DEFAULT_INBOUND_DEDUPE_MAX = 5000;
  * Keep inbound dedupe shared across bundled chunks so the same provider
  * message cannot bypass dedupe by entering through a different chunk copy.
  */
-const INBOUND_DEDUPE_CACHE_KEY = Symbol.for("NexisClaw.inboundDedupeCache");
-const INBOUND_DEDUPE_INFLIGHT_KEY = Symbol.for("NexisClaw.inboundDedupeInflight");
+const INBOUND_DEDUPE_CACHE_KEY = Symbol.for("GreenchClaw.inboundDedupeCache");
+const INBOUND_DEDUPE_INFLIGHT_KEY = Symbol.for("GreenchClaw.inboundDedupeInflight");
 
 const inboundDedupeCache: DedupeCache = resolveGlobalDedupeCache(INBOUND_DEDUPE_CACHE_KEY, {
   ttlMs: DEFAULT_INBOUND_DEDUPE_TTL_MS,

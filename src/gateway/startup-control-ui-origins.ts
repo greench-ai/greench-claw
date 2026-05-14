@@ -2,15 +2,15 @@ import {
   ensureControlUiAllowedOriginsForNonLoopbackBind,
   type GatewayNonLoopbackBindMode,
 } from "../config/gateway-control-ui-origins.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isContainerEnvironment } from "./net.js";
 
 export async function maybeSeedControlUiAllowedOriginsAtStartup(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   log: { info: (msg: string) => void; warn: (msg: string) => void };
   runtimeBind?: unknown;
   runtimePort?: unknown;
-}): Promise<{ config: NexisClawConfig; seededAllowedOrigins: boolean }> {
+}): Promise<{ config: GreenchClawConfig; seededAllowedOrigins: boolean }> {
   const seeded = ensureControlUiAllowedOriginsForNonLoopbackBind(params.config, {
     isContainerEnvironment,
     runtimeBind: params.runtimeBind,

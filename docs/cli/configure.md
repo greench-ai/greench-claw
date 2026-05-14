@@ -1,29 +1,29 @@
 ---
-summary: "CLI reference for `NexisClaw configure` (interactive configuration prompts)"
+summary: "CLI reference for `GreenchClaw configure` (interactive configuration prompts)"
 read_when:
   - You want to tweak credentials, devices, or agent defaults interactively
 title: "Configure"
 ---
 
-# `NexisClaw configure`
+# `GreenchClaw configure`
 
 Interactive prompt for targeted changes to an existing setup: credentials, devices, agent defaults, gateway, channels, plugins, skills, and health checks.
 
-Use `NexisClaw onboard` for the full guided first-run journey, `NexisClaw setup` for the baseline config/workspace only, and `NexisClaw channels add` when you only need channel account setup.
+Use `GreenchClaw onboard` for the full guided first-run journey, `GreenchClaw setup` for the baseline config/workspace only, and `GreenchClaw channels add` when you only need channel account setup.
 
 <Note>
 The **Model** section includes a multi-select for the `agents.defaults.models` allowlist (what shows up in `/model` and the model picker). Provider-scoped setup choices merge their selected models into the existing allowlist instead of replacing unrelated providers already in the config.
 
-Re-running provider auth from configure preserves an existing `agents.defaults.model.primary`, even when the provider's auth step returns a config patch with its own recommended default model. That means adding or reauthing xAI, OpenRouter, or another provider should make the new model available without taking over from your current primary model. Use `NexisClaw models auth login --provider <id> --set-default` or `NexisClaw models set <model>` when you intentionally want to change the default model.
+Re-running provider auth from configure preserves an existing `agents.defaults.model.primary`, even when the provider's auth step returns a config patch with its own recommended default model. That means adding or reauthing xAI, OpenRouter, or another provider should make the new model available without taking over from your current primary model. Use `GreenchClaw models auth login --provider <id> --set-default` or `GreenchClaw models set <model>` when you intentionally want to change the default model.
 </Note>
 
 When configure starts from a provider auth choice, the default-model and allowlist pickers prefer that provider automatically. For paired providers such as Volcengine and BytePlus, the same preference also matches their coding-plan variants (`volcengine-plan/*`, `byteplus-plan/*`). If the preferred-provider filter would produce an empty list, configure falls back to the unfiltered catalog instead of showing a blank picker.
 
 <Tip>
-`NexisClaw config` without a subcommand opens the same wizard. Use `NexisClaw config get|set|unset` for non-interactive edits.
+`GreenchClaw config` without a subcommand opens the same wizard. Use `GreenchClaw config get|set|unset` for non-interactive edits.
 </Tip>
 
-For web search, `NexisClaw configure --section web` lets you choose a provider
+For web search, `GreenchClaw configure --section web` lets you choose a provider
 and configure its credentials. Some providers also show provider-specific
 follow-up prompts:
 
@@ -65,10 +65,10 @@ Notes:
 ## Examples
 
 ```bash
-NexisClaw configure
-NexisClaw configure --section web
-NexisClaw configure --section model --section channels
-NexisClaw configure --section gateway --section daemon
+GreenchClaw configure
+GreenchClaw configure --section web
+GreenchClaw configure --section model --section channels
+GreenchClaw configure --section gateway --section daemon
 ```
 
 ## Related

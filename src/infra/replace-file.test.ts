@@ -8,7 +8,7 @@ describe("movePathWithCopyFallback", () => {
   it.runIf(process.platform !== "win32")(
     "rejects hardlinked source files when requested",
     async () => {
-      await withTempDir({ prefix: "NexisClaw-replace-file-" }, async (root) => {
+      await withTempDir({ prefix: "GreenchClaw-replace-file-" }, async (root) => {
         const sourceDir = path.join(root, "source");
         const targetDir = path.join(root, "target");
         const sourceFile = path.join(sourceDir, "file.txt");

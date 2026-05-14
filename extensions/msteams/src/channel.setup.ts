@@ -1,8 +1,8 @@
-import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
-import { formatAllowFromLowercase } from "NexisClaw/plugin-sdk/allow-from";
-import { createTopLevelChannelConfigAdapter } from "NexisClaw/plugin-sdk/channel-config-helpers";
-import type { ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { describeAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
+import { formatAllowFromLowercase } from "GreenchClaw/plugin-sdk/allow-from";
+import { createTopLevelChannelConfigAdapter } from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import type { ChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { MSTeamsChannelConfigSchema } from "./config-schema.js";
 import { msteamsSetupAdapter } from "./setup-core.js";
 import { msteamsSetupWizard } from "./setup-surface.js";
@@ -25,7 +25,7 @@ const meta = {
   order: 60,
 } as const;
 
-const resolveMSTeamsChannelConfig = (cfg: NexisClawConfig) => ({
+const resolveMSTeamsChannelConfig = (cfg: GreenchClawConfig) => ({
   allowFrom: cfg.channels?.msteams?.allowFrom,
   defaultTo: cfg.channels?.msteams?.defaultTo,
 });

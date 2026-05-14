@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 
-const [, , wrapperPath, npmBin, logPath = `${process.env.HOME}/NexisClaw-wrapper-argv.log`] =
+const [, , wrapperPath, npmBin, logPath = `${process.env.HOME}/GreenchClaw-wrapper-argv.log`] =
   process.argv;
 
 if (!wrapperPath || !npmBin || !logPath || logPath.startsWith("undefined/")) {

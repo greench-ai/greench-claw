@@ -1,10 +1,10 @@
-import { ToolAuthorizationError } from "NexisClaw/plugin-sdk/channel-actions";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { ToolAuthorizationError } from "GreenchClaw/plugin-sdk/channel-actions";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { resolveWhatsAppAccount } from "./accounts.js";
 import { resolveWhatsAppOutboundTarget } from "./resolve-outbound-target.js";
 
 export function resolveAuthorizedWhatsAppOutboundTarget(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   chatJid: string;
   accountId?: string;
   actionLabel: string;

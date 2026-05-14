@@ -1,12 +1,12 @@
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import * as providerAuth from "NexisClaw/plugin-sdk/provider-auth-runtime";
+import * as providerAuth from "GreenchClaw/plugin-sdk/provider-auth-runtime";
 import {
-  type NexisClawConfig,
+  type GreenchClawConfig,
   resolveAgentModelPrimaryValue,
-} from "NexisClaw/plugin-sdk/provider-onboard";
-import { captureEnv } from "NexisClaw/plugin-sdk/test-env";
+} from "GreenchClaw/plugin-sdk/provider-onboard";
+import { captureEnv } from "GreenchClaw/plugin-sdk/test-env";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   applyDeepInfraProviderConfig,
@@ -18,7 +18,7 @@ import { DEEPINFRA_DEFAULT_MODEL_ID } from "./provider-models.js";
 
 const { resolveEnvApiKey } = providerAuth;
 
-const emptyCfg: NexisClawConfig = {};
+const emptyCfg: GreenchClawConfig = {};
 
 describe("DeepInfra provider config", () => {
   describe("constants", () => {
@@ -55,7 +55,7 @@ describe("DeepInfra provider config", () => {
     });
 
     it("preserves existing alias if already set", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             models: {
@@ -70,7 +70,7 @@ describe("DeepInfra provider config", () => {
     });
 
     it("does not change the default model selection", () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             model: { primary: "openai/gpt-5" },
@@ -135,7 +135,7 @@ describe("DeepInfra provider config", () => {
     });
 
     it("resolves the deepinfra api key via resolveApiKeyForProvider", async () => {
-      const agentDir = mkdtempSync(join(tmpdir(), "NexisClaw-test-"));
+      const agentDir = mkdtempSync(join(tmpdir(), "GreenchClaw-test-"));
       const envSnapshot = captureEnv(["DEEPINFRA_API_KEY"]);
       process.env.DEEPINFRA_API_KEY = "deepinfra-provider-test-key";
 

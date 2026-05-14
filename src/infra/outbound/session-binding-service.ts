@@ -122,7 +122,7 @@ function resolveAdapterCapabilities(
   };
 }
 
-const SESSION_BINDING_ADAPTERS_KEY = Symbol.for("NexisClaw.sessionBinding.adapters");
+const SESSION_BINDING_ADAPTERS_KEY = Symbol.for("GreenchClaw.sessionBinding.adapters");
 
 type SessionBindingAdapterRegistration = {
   adapter: SessionBindingAdapter;

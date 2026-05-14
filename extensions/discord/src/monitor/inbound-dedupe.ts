@@ -1,4 +1,7 @@
-import { createClaimableDedupe, type ClaimableDedupe } from "NexisClaw/plugin-sdk/persistent-dedupe";
+import {
+  createClaimableDedupe,
+  type ClaimableDedupe,
+} from "GreenchClaw/plugin-sdk/persistent-dedupe";
 import type { DiscordMessageEvent } from "./listeners.js";
 import { resolveDiscordMessageChannelId } from "./message-utils.js";
 

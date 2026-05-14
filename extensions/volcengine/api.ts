@@ -1,4 +1,4 @@
-import type { ModelCompatConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { ModelCompatConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
 
 export const VOLCENGINE_UNSUPPORTED_TOOL_SCHEMA_KEYWORDS = [
   "minLength",

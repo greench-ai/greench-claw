@@ -2,7 +2,7 @@
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-  NexisClawConfig,
+  GreenchClawConfig,
 } from "../config/types.js";
 import {
   createLazyFacadeValue as createLazyFacadeRuntimeValue,
@@ -81,7 +81,7 @@ type FacadeModule = {
   }) => Promise<FetchLmstudioModelsResult>;
   mapLmstudioWireEntry: (entry: LmstudioModelWire) => LmstudioModelBase | null;
   discoverLmstudioModels: (params?: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     baseUrl?: string;
     apiKey?: string;
     headers?: Record<string, string>;
@@ -93,18 +93,18 @@ type FacadeModule = {
     headers?: Record<string, string>;
   }) => Record<string, string> | undefined;
   resolveLmstudioConfiguredApiKey: (params: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     env?: NodeJS.ProcessEnv;
     path?: string;
   }) => Promise<string | undefined>;
   resolveLmstudioProviderHeaders: (params: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     env?: NodeJS.ProcessEnv;
     headers?: unknown;
     path?: string;
   }) => Promise<Record<string, string> | undefined>;
   resolveLmstudioRequestContext: (params: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     env?: NodeJS.ProcessEnv;
     headers?: unknown;
     providerHeaders?: unknown;
@@ -114,7 +114,7 @@ type FacadeModule = {
     headers?: Record<string, string>;
   }>;
   resolveLmstudioRuntimeApiKey: (params: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     agentDir?: string;
     env?: NodeJS.ProcessEnv;
     headers?: unknown;

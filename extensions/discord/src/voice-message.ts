@@ -13,19 +13,19 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import {
   parseFfprobeCodecAndSampleRate,
   runFfmpeg,
   runFfprobe,
-} from "NexisClaw/plugin-sdk/media-runtime";
-import { MEDIA_FFMPEG_MAX_AUDIO_DURATION_SECS } from "NexisClaw/plugin-sdk/media-runtime";
-import { unlinkIfExists } from "NexisClaw/plugin-sdk/media-runtime";
-import type { RetryRunner } from "NexisClaw/plugin-sdk/retry-runtime";
-import { writeExternalFileWithinRoot } from "NexisClaw/plugin-sdk/security-runtime";
-import { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+} from "GreenchClaw/plugin-sdk/media-runtime";
+import { MEDIA_FFMPEG_MAX_AUDIO_DURATION_SECS } from "GreenchClaw/plugin-sdk/media-runtime";
+import { unlinkIfExists } from "GreenchClaw/plugin-sdk/media-runtime";
+import type { RetryRunner } from "GreenchClaw/plugin-sdk/retry-runtime";
+import { writeExternalFileWithinRoot } from "GreenchClaw/plugin-sdk/security-runtime";
+import { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 import { DiscordError, RateLimitError, type RequestClient } from "./internal/discord.js";
 import { readDiscordMessage, readRetryAfter } from "./internal/rest-errors.js";
 
@@ -115,7 +115,7 @@ export async function generateWaveform(filePath: string): Promise<string> {
  * Generate waveform by extracting raw PCM data and sampling amplitudes
  */
 async function generateWaveformFromPcm(filePath: string): Promise<string> {
-  const tempDir = resolvePreferredNexisClawTmpDir();
+  const tempDir = resolvePreferredGreenchClawTmpDir();
   const tempPcm = path.join(tempDir, `waveform-${crypto.randomUUID()}.raw`);
 
   try {
@@ -230,7 +230,7 @@ export async function ensureOggOpus(filePath: string): Promise<{ path: string; c
   // Convert to OGG/Opus
   // Always resample to 48kHz to ensure Discord voice messages play at correct speed
   // (Discord expects 48kHz; lower sample rates like 24kHz from some TTS providers cause 0.5x playback)
-  const tempDir = resolvePreferredNexisClawTmpDir();
+  const tempDir = resolvePreferredGreenchClawTmpDir();
   const outputPath = path.join(tempDir, `voice-${crypto.randomUUID()}.ogg`);
 
   await runFfmpegToOutput({

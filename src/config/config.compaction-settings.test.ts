@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { applyCompactionDefaults } from "./defaults.js";
-import type { NexisClawConfig } from "./types.js";
+import type { GreenchClawConfig } from "./types.js";
 
 function materializeCompactionConfig(
-  compaction: NonNullable<NonNullable<NexisClawConfig["agents"]>["defaults"]>["compaction"],
+  compaction: NonNullable<NonNullable<GreenchClawConfig["agents"]>["defaults"]>["compaction"],
 ) {
   const cfg = applyCompactionDefaults({
     agents: {

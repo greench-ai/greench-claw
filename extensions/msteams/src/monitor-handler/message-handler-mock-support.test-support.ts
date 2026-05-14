@@ -12,7 +12,7 @@ export function getRuntimeApiMockState() {
   return runtimeApiMockState;
 }
 
-vi.mock("NexisClaw/plugin-sdk/inbound-reply-dispatch", () => {
+vi.mock("GreenchClaw/plugin-sdk/inbound-reply-dispatch", () => {
   return {
     dispatchReplyFromConfigWithSettledDispatcher:
       runtimeApiMockState.dispatchReplyFromConfigWithSettledDispatcher,

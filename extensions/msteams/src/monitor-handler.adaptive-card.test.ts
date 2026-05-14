@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig, RuntimeEnv } from "../runtime-api.js";
+import type { GreenchClawConfig, RuntimeEnv } from "../runtime-api.js";
 import type { MSTeamsConversationStore } from "./conversation-store.js";
 import {
   type MSTeamsActivityHandler,
@@ -17,7 +17,7 @@ const runtimeApiMockState = vi.hoisted(() => ({
   })),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/inbound-reply-dispatch", () => {
+vi.mock("GreenchClaw/plugin-sdk/inbound-reply-dispatch", () => {
   return {
     dispatchReplyFromConfigWithSettledDispatcher:
       runtimeApiMockState.dispatchReplyFromConfigWithSettledDispatcher,
@@ -36,7 +36,7 @@ function createDeps(): MSTeamsMessageHandlerDeps {
   installMSTeamsTestRuntime();
 
   return {
-    cfg: {} as NexisClawConfig,
+    cfg: {} as GreenchClawConfig,
     runtime: { error: vi.fn() } as unknown as RuntimeEnv,
     appId: "test-app",
     adapter: {} as MSTeamsMessageHandlerDeps["adapter"],

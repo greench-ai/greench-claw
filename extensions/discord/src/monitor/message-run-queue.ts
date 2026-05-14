@@ -1,6 +1,6 @@
-import { createChannelRunQueue } from "NexisClaw/plugin-sdk/channel-lifecycle";
-import type { ClaimableDedupe } from "NexisClaw/plugin-sdk/persistent-dedupe";
-import { danger } from "NexisClaw/plugin-sdk/runtime-env";
+import { createChannelRunQueue } from "GreenchClaw/plugin-sdk/channel-lifecycle";
+import type { ClaimableDedupe } from "GreenchClaw/plugin-sdk/persistent-dedupe";
+import { danger } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   commitDiscordInboundReplay,
   createDiscordInboundReplayGuard,

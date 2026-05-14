@@ -1,11 +1,11 @@
 import fs from "node:fs/promises";
-import { embeddedAgentLog } from "NexisClaw/plugin-sdk/agent-harness-runtime";
+import { embeddedAgentLog } from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import {
   ensureAuthProfileStore,
   resolveDefaultAgentDir,
   resolveProviderIdForAuth,
   type AuthProfileStore,
-} from "NexisClaw/plugin-sdk/agent-runtime";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
 import {
   CODEX_PLUGINS_MARKETPLACE_NAME,
   normalizeCodexServiceTier,

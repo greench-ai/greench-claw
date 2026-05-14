@@ -1,15 +1,15 @@
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
 import {
   buildChannelOutboundSessionRoute,
   buildThreadAwareOutboundSessionRoute,
   type ChannelOutboundSessionRouteParams,
-} from "NexisClaw/plugin-sdk/channel-core";
-import { parseThreadSessionSuffix } from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/channel-core";
+import { parseThreadSessionSuffix } from "GreenchClaw/plugin-sdk/routing";
 import {
   loadSessionStore,
   resolveSessionStoreEntry,
   resolveStorePath,
-} from "NexisClaw/plugin-sdk/session-store-runtime";
+} from "GreenchClaw/plugin-sdk/session-store-runtime";
 import { resolveMatrixAccountConfig } from "./matrix/account-config.js";
 import { resolveDefaultMatrixAccountId } from "./matrix/accounts.js";
 import { resolveMatrixStoredSessionMeta } from "./matrix/session-store-metadata.js";

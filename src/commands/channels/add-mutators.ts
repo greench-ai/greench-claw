@@ -1,18 +1,18 @@
 import { getChannelPlugin } from "../../channels/plugins/index.js";
 import type { ChannelPlugin } from "../../channels/plugins/types.plugin.js";
 import type { ChannelId, ChannelSetupInput } from "../../channels/plugins/types.public.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { normalizeAccountId } from "../../routing/session-key.js";
 
 type ChatChannel = ChannelId;
 
 export function applyAccountName(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: ChatChannel;
   accountId: string;
   name?: string;
   plugin?: ChannelPlugin;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   const accountId = normalizeAccountId(params.accountId);
   const plugin = params.plugin ?? getChannelPlugin(params.channel);
   const apply = plugin?.setup?.applyAccountName;
@@ -20,12 +20,12 @@ export function applyAccountName(params: {
 }
 
 export function applyChannelAccountConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: ChatChannel;
   accountId: string;
   input: ChannelSetupInput;
   plugin?: ChannelPlugin;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   const accountId = normalizeAccountId(params.accountId);
   const plugin = params.plugin ?? getChannelPlugin(params.channel);
   const apply = plugin?.setup?.applyAccountConfig;

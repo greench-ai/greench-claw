@@ -33,7 +33,7 @@ export function installConnectedControlUiServerSuite(
   });
 
   beforeEach(() => {
-    process.env.NEXISCLAW_GATEWAY_TOKEN = token;
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = token;
     testState.gatewayAuth = { mode: "token", token };
   });
 

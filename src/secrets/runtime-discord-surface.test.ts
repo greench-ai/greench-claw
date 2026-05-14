@@ -29,7 +29,7 @@ describe("secrets runtime snapshot discord surface", () => {
           },
         }),
         env: {},
-        agentDirs: ["/tmp/NexisClaw-agent-main"],
+        agentDirs: ["/tmp/GreenchClaw-agent-main"],
         loadAuthStore: () => loadAuthStoreWithProfiles({}),
       }),
     ).rejects.toThrow('Environment variable "MISSING_DISCORD_BASE_TOKEN" is missing or empty.');
@@ -55,7 +55,7 @@ describe("secrets runtime snapshot discord surface", () => {
         },
       }),
       env: {},
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: () => loadAuthStoreWithProfiles({}),
     });
 
@@ -84,7 +84,7 @@ describe("secrets runtime snapshot discord surface", () => {
         },
       }),
       env: {},
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: () => loadAuthStoreWithProfiles({}),
     });
 
@@ -140,7 +140,7 @@ describe("secrets runtime snapshot discord surface", () => {
         },
       }),
       env: {},
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: () => loadAuthStoreWithProfiles({}),
     });
 
@@ -232,7 +232,7 @@ describe("secrets runtime snapshot discord surface", () => {
         DISCORD_BASE_PK_TOKEN: "base-pk-token",
         DISCORD_ENABLED_OVERRIDE_TTS_OPENAI: "enabled-override-tts-openai",
       },
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: () => loadAuthStoreWithProfiles({}),
     });
 
@@ -311,7 +311,7 @@ describe("secrets runtime snapshot discord surface", () => {
       env: {
         DISCORD_ENABLED_ONLY_TTS_OPENAI: "enabled-only-tts-openai",
       },
-      agentDirs: ["/tmp/NexisClaw-agent-main"],
+      agentDirs: ["/tmp/GreenchClaw-agent-main"],
       loadAuthStore: () => loadAuthStoreWithProfiles({}),
     });
 
@@ -368,7 +368,7 @@ describe("secrets runtime snapshot discord surface", () => {
         env: {
           DISCORD_BASE_TTS_OK: "base-tts-openai",
         },
-        agentDirs: ["/tmp/NexisClaw-agent-main"],
+        agentDirs: ["/tmp/GreenchClaw-agent-main"],
         loadAuthStore: () => loadAuthStoreWithProfiles({}),
       }),
     ).rejects.toThrow(

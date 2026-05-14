@@ -1,6 +1,6 @@
 import { messagingApi } from "@line/bot-sdk";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { withTimeout } from "NexisClaw/plugin-sdk/text-utility-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { withTimeout } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import type { LineProbeResult } from "./types.js";
 
 export async function probeLineBot(

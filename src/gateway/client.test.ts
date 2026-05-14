@@ -200,7 +200,7 @@ function expectSecurityConnectError(
 ) {
   const error = onConnectError.mock.calls.at(0)?.[0] as Error;
   expect(error.message).toContain("SECURITY ERROR");
-  expect(error.message).toContain("NexisClaw doctor --fix");
+  expect(error.message).toContain("GreenchClaw doctor --fix");
   if (params?.expectTailscaleHint) {
     expect(error.message).toContain("Tailscale Serve/Funnel");
   }
@@ -212,9 +212,9 @@ beforeAll(async () => {
 
 describe("GatewayClient security checks", () => {
   const envSnapshot = captureEnv([
-    "NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS",
-    "NEXISCLAW_PROXY_ACTIVE",
-    "NEXISCLAW_PROXY_LOOPBACK_MODE",
+    "GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS",
+    "GREENCHCLAW_PROXY_ACTIVE",
+    "GREENCHCLAW_PROXY_LOOPBACK_MODE",
     "HTTP_PROXY",
     "GLOBAL_AGENT_HTTP_PROXY",
     "GLOBAL_AGENT_FORCE_GLOBAL_AGENT",
@@ -222,9 +222,9 @@ describe("GatewayClient security checks", () => {
 
   beforeEach(() => {
     envSnapshot.restore();
-    delete process.env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS;
-    delete process.env.NEXISCLAW_PROXY_ACTIVE;
-    delete process.env.NEXISCLAW_PROXY_LOOPBACK_MODE;
+    delete process.env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS;
+    delete process.env.GREENCHCLAW_PROXY_ACTIVE;
+    delete process.env.GREENCHCLAW_PROXY_LOOPBACK_MODE;
     delete process.env.HTTP_PROXY;
     delete process.env.GLOBAL_AGENT_HTTP_PROXY;
     delete process.env.GLOBAL_AGENT_FORCE_GLOBAL_AGENT;
@@ -234,9 +234,9 @@ describe("GatewayClient security checks", () => {
 
   afterEach(() => {
     envSnapshot.restore();
-    delete process.env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS;
-    delete process.env.NEXISCLAW_PROXY_ACTIVE;
-    delete process.env.NEXISCLAW_PROXY_LOOPBACK_MODE;
+    delete process.env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS;
+    delete process.env.GREENCHCLAW_PROXY_ACTIVE;
+    delete process.env.GREENCHCLAW_PROXY_LOOPBACK_MODE;
     delete process.env.HTTP_PROXY;
     delete process.env.GLOBAL_AGENT_HTTP_PROXY;
     delete process.env.GLOBAL_AGENT_FORCE_GLOBAL_AGENT;
@@ -287,8 +287,8 @@ describe("GatewayClient security checks", () => {
   });
 
   it("bootstraps inherited managed proxy routing before proxy-mode loopback WebSocket creation", () => {
-    process.env.NEXISCLAW_PROXY_ACTIVE = "1";
-    process.env.NEXISCLAW_PROXY_LOOPBACK_MODE = "proxy";
+    process.env.GREENCHCLAW_PROXY_ACTIVE = "1";
+    process.env.GREENCHCLAW_PROXY_LOOPBACK_MODE = "proxy";
     process.env.HTTP_PROXY = "http://127.0.0.1:3128";
     process.env.GLOBAL_AGENT_HTTP_PROXY = "http://127.0.0.1:3128";
     const onConnectError = vi.fn();
@@ -374,8 +374,8 @@ describe("GatewayClient security checks", () => {
     client.stop();
   });
 
-  it("allows ws:// to private addresses only with NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
-    process.env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
+  it("allows ws:// to private addresses only with GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
+    process.env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
     const onConnectError = vi.fn();
     const client = new GatewayClient({
       url: "ws://192.168.1.100:18789",
@@ -389,11 +389,11 @@ describe("GatewayClient security checks", () => {
     client.stop();
   });
 
-  it("allows ws:// hostnames with NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
-    process.env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
+  it("allows ws:// hostnames with GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1", () => {
+    process.env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
     const onConnectError = vi.fn();
     const client = new GatewayClient({
-      url: "ws://NexisClaw-gateway.ai:18789",
+      url: "ws://GreenchClaw-gateway.ai:18789",
       onConnectError,
     });
 
@@ -1005,7 +1005,7 @@ describe("GatewayClient connect auth payload", () => {
     });
     const env = {
       ...process.env,
-      NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-client-service-state",
+      GREENCHCLAW_STATE_DIR: "/tmp/GreenchClaw-client-service-state",
     } as NodeJS.ProcessEnv;
     const client = new GatewayClient({
       url: "ws://127.0.0.1:18789",

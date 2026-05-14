@@ -1,5 +1,5 @@
 ---
-summary: "Adds Google, Google Gemini CLI, Google Vertex model provider support to NexisClaw."
+summary: "Adds Google, Google Gemini CLI, Google Vertex model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the google plugin
 title: "Google plugin"
@@ -7,12 +7,12 @@ title: "Google plugin"
 
 # Google plugin
 
-Adds Google, Google Gemini CLI, Google Vertex model provider support to NexisClaw.
+Adds Google, Google Gemini CLI, Google Vertex model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/google-plugin`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/google-plugin`
+- Install route: included in GreenchClaw
 
 ## Surface
 

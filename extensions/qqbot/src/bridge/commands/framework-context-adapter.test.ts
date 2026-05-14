@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { PluginCommandContext } from "NexisClaw/plugin-sdk/plugin-entry";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { PluginCommandContext } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { describe, expect, it } from "vitest";
 import { buildFrameworkSlashContext } from "./framework-context-adapter.js";
 
@@ -10,7 +10,7 @@ function createCommandContext(isAuthorizedSender: boolean): PluginCommandContext
     isAuthorizedSender,
     args: "on",
     commandBody: "/bot-streaming on",
-    config: {} as NexisClawConfig,
+    config: {} as GreenchClawConfig,
     from: "qqbot:c2c:SENDER_OPENID",
     requestConversationBinding: async () => undefined,
     detachConversationBinding: async () => ({ removed: false }),

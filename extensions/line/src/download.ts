@@ -1,7 +1,7 @@
 import { messagingApi } from "@line/bot-sdk";
-import { saveMediaBuffer } from "NexisClaw/plugin-sdk/media-store";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { lowercasePreservingWhitespace } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { saveMediaBuffer } from "GreenchClaw/plugin-sdk/media-store";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { lowercasePreservingWhitespace } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 interface DownloadResult {
   path: string;

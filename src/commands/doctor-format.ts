@@ -59,14 +59,16 @@ export function buildGatewayRuntimeHints(
     return hints;
   }
   if (runtime.cachedLabel && platform === "darwin") {
-    const label = resolveGatewayLaunchAgentLabel(env.NEXISCLAW_PROFILE);
+    const label = resolveGatewayLaunchAgentLabel(env.GREENCHCLAW_PROFILE);
     hints.push(
       `LaunchAgent label cached but plist missing. Clear with: launchctl bootout gui/$UID/${label}`,
     );
-    hints.push(`Then reinstall: ${formatCliCommand("NexisClaw gateway install", env)}`);
+    hints.push(`Then reinstall: ${formatCliCommand("GreenchClaw gateway install", env)}`);
   }
   if (runtime.missingUnit) {
-    hints.push(`Service not installed. Run: ${formatCliCommand("NexisClaw gateway install", env)}`);
+    hints.push(
+      `Service not installed. Run: ${formatCliCommand("GreenchClaw gateway install", env)}`,
+    );
     if (fileLog) {
       hints.push(`File logs: ${fileLog}`);
     }
@@ -74,7 +76,7 @@ export function buildGatewayRuntimeHints(
   }
   if (runtime.missingSupervision && platform === "darwin") {
     hints.push(
-      `LaunchAgent installed but not loaded. Run: ${formatCliCommand("NexisClaw gateway restart", env)}`,
+      `LaunchAgent installed but not loaded. Run: ${formatCliCommand("GreenchClaw gateway restart", env)}`,
     );
     if (fileLog) {
       hints.push(`File logs: ${fileLog}`);
@@ -90,8 +92,8 @@ export function buildGatewayRuntimeHints(
       ...buildPlatformRuntimeLogHints({
         platform,
         env,
-        systemdServiceName: resolveGatewaySystemdServiceName(env.NEXISCLAW_PROFILE),
-        windowsTaskName: resolveGatewayWindowsTaskName(env.NEXISCLAW_PROFILE),
+        systemdServiceName: resolveGatewaySystemdServiceName(env.GREENCHCLAW_PROFILE),
+        windowsTaskName: resolveGatewayWindowsTaskName(env.GREENCHCLAW_PROFILE),
       }),
     );
   }

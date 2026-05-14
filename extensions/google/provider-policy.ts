@@ -1,4 +1,4 @@
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-types";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-types";
 import { normalizeAntigravityModelId, normalizeGoogleModelId } from "./model-id.js";
 
 type GoogleApiCarrier = {

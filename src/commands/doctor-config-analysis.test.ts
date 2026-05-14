@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { resolveAgentModelFallbackValues } from "../config/model-input.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   collectImplicitFallbackClobberWarnings,
   formatConfigPath,
@@ -37,13 +37,13 @@ describe("doctor config analysis helpers", () => {
 });
 
 describe("collectImplicitFallbackClobberWarnings", () => {
-  function buildConfig(overrides: { defaults?: unknown; list?: unknown[] }): NexisClawConfig {
+  function buildConfig(overrides: { defaults?: unknown; list?: unknown[] }): GreenchClawConfig {
     return {
       agents: {
         defaults: { model: overrides.defaults },
         list: overrides.list,
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
   }
 
   it("returns empty when defaults has no fallbacks", () => {
@@ -98,7 +98,7 @@ describe("collectImplicitFallbackClobberWarnings", () => {
         defaults: { model: { primary: "openai/gpt-5.5", fallbacks: ["openai/gpt-5.4"] } },
         list: { ops: { id: "ops", model: "openai/gpt-5.3" } },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     expect(collectImplicitFallbackClobberWarnings(cfg)).toEqual([]);
   });

@@ -6,25 +6,25 @@ import {
   validateExternalCodePluginPackageJson,
 } from "./index.js";
 
-describe("@NexisClaw/plugin-package-contract", () => {
-  it("normalizes the NexisClaw compatibility block for external plugins", () => {
+describe("@GreenchClaw/plugin-package-contract", () => {
+  it("normalizes the GreenchClaw compatibility block for external plugins", () => {
     expect(
       normalizeExternalPluginCompatibility({
         version: "1.2.3",
-        NexisClaw: {
+        GreenchClaw: {
           compat: {
             pluginApi: ">=2026.3.24-beta.2",
             minGatewayVersion: "2026.3.24-beta.2",
           },
           build: {
-            NexisClawVersion: "2026.3.24-beta.2",
+            GreenchClawVersion: "2026.3.24-beta.2",
             pluginSdkVersion: "0.9.0",
           },
         },
       }),
     ).toEqual({
       pluginApiRange: ">=2026.3.24-beta.2",
-      builtWithNexisClawVersion: "2026.3.24-beta.2",
+      builtWithGreenchClawVersion: "2026.3.24-beta.2",
       pluginSdkVersion: "0.9.0",
       minGatewayVersion: "2026.3.24-beta.2",
     });
@@ -34,7 +34,7 @@ describe("@NexisClaw/plugin-package-contract", () => {
     expect(
       normalizeExternalPluginCompatibility({
         version: "1.2.3",
-        NexisClaw: {
+        GreenchClaw: {
           compat: {
             pluginApi: ">=1.0.0",
           },
@@ -45,40 +45,40 @@ describe("@NexisClaw/plugin-package-contract", () => {
       }),
     ).toEqual({
       pluginApiRange: ">=1.0.0",
-      builtWithNexisClawVersion: "1.2.3",
+      builtWithGreenchClawVersion: "1.2.3",
       minGatewayVersion: "2026.3.24-beta.2",
     });
   });
 
   it("lists the required external code-plugin fields", () => {
     expect(EXTERNAL_CODE_PLUGIN_REQUIRED_FIELD_PATHS).toEqual([
-      "NexisClaw.compat.pluginApi",
-      "NexisClaw.build.NexisClawVersion",
+      "GreenchClaw.compat.pluginApi",
+      "GreenchClaw.build.GreenchClawVersion",
     ]);
   });
 
   it("reports missing required fields with stable field paths", () => {
     const packageJson = {
-      NexisClaw: {
+      GreenchClaw: {
         compat: {},
         build: {},
       },
     };
 
     expect(listMissingExternalCodePluginFieldPaths(packageJson)).toEqual([
-      "NexisClaw.compat.pluginApi",
-      "NexisClaw.build.NexisClawVersion",
+      "GreenchClaw.compat.pluginApi",
+      "GreenchClaw.build.GreenchClawVersion",
     ]);
     expect(validateExternalCodePluginPackageJson(packageJson).issues).toEqual([
       {
-        fieldPath: "NexisClaw.compat.pluginApi",
+        fieldPath: "GreenchClaw.compat.pluginApi",
         message:
-          "NexisClaw.compat.pluginApi is required for external code plugins published to ClawHub.",
+          "GreenchClaw.compat.pluginApi is required for external code plugins published to ClawHub.",
       },
       {
-        fieldPath: "NexisClaw.build.NexisClawVersion",
+        fieldPath: "GreenchClaw.build.GreenchClawVersion",
         message:
-          "NexisClaw.build.NexisClawVersion is required for external code plugins published to ClawHub.",
+          "GreenchClaw.build.GreenchClawVersion is required for external code plugins published to ClawHub.",
       },
     ]);
   });

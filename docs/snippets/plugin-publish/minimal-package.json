@@ -1,15 +1,15 @@
 {
-  "name": "@myorg/NexisClaw-my-plugin",
+  "name": "@myorg/GreenchClaw-my-plugin",
   "version": "1.0.0",
   "type": "module",
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": ["./index.ts"],
     "compat": {
       "pluginApi": ">=2026.3.24-beta.2",
       "minGatewayVersion": "2026.3.24-beta.2"
     },
     "build": {
-      "NexisClawVersion": "2026.3.24-beta.2",
+      "GreenchClawVersion": "2026.3.24-beta.2",
       "pluginSdkVersion": "2026.3.24-beta.2"
     }
   }

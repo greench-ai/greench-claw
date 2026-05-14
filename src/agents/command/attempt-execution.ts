@@ -8,7 +8,7 @@ import {
   resolveSessionTranscriptFile,
 } from "../../config/sessions/transcript.js";
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { emitAgentEvent } from "../../infra/agent-events.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import { annotateInterSessionPromptText } from "../../sessions/input-provenance.js";
@@ -89,7 +89,7 @@ type PersistTextTurnTranscriptParams = {
   sessionAgentId: string;
   threadId?: string | number;
   sessionCwd: string;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   embeddedAssistantGapFill?: boolean;
   assistant: {
     api: string;
@@ -119,7 +119,7 @@ function resolveProfileProviderFromStore(params: {
 }
 
 function resolveHarnessAuthProfileSelection(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   agentDir: string;
   workspaceDir: string;
   provider: string;
@@ -292,13 +292,13 @@ export async function persistAcpTurnTranscript(params: {
   sessionAgentId: string;
   threadId?: string | number;
   sessionCwd: string;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
 }): Promise<SessionEntry | undefined> {
   return await persistTextTurnTranscript({
     ...params,
     assistant: {
       api: "openai-responses",
-      provider: "NexisClaw",
+      provider: "GreenchClaw",
       model: "acp-runtime",
     },
   });
@@ -316,7 +316,7 @@ export async function persistCliTurnTranscript(params: {
   sessionAgentId: string;
   threadId?: string | number;
   sessionCwd: string;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   embeddedAssistantGapFill?: boolean;
 }): Promise<SessionEntry | undefined> {
   const replyText = resolveCliTranscriptReplyText(params.result);
@@ -351,7 +351,7 @@ export function runAgentAttempt(params: {
   providerOverride: string;
   modelOverride: string;
   originalProvider: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionEntry: SessionEntry | undefined;
   sessionId: string;
   sessionKey: string | undefined;

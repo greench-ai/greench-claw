@@ -6,11 +6,11 @@ title: "Groups"
 sidebarTitle: "Groups"
 ---
 
-NexisClaw treats group chats consistently across surfaces: Discord, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, Zalo.
+GreenchClaw treats group chats consistently across surfaces: Discord, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, Zalo.
 
 ## Beginner intro (2 minutes)
 
-NexisClaw "lives" on your own messaging accounts. There is no separate WhatsApp bot user. If **you** are in a group, NexisClaw can see that group and respond there.
+GreenchClaw "lives" on your own messaging accounts. There is no separate WhatsApp bot user. If **you** are in a group, GreenchClaw can see that group and respond there.
 
 Default behavior:
 
@@ -18,7 +18,7 @@ Default behavior:
 - Replies require a mention unless you explicitly disable mention gating.
 - Normal final replies in groups/channels are private by default. Visible room output uses the `message` tool.
 
-Translation: allowlisted senders can trigger NexisClaw by mentioning it.
+Translation: allowlisted senders can trigger GreenchClaw by mentioning it.
 
 <Note>
 **TL;DR**
@@ -40,8 +40,8 @@ otherwise -> reply
 
 ## Visible replies
 
-For group/channel rooms, NexisClaw defaults to `messages.groupChat.visibleReplies: "message_tool"`.
-`NexisClaw doctor --fix` writes this default into configured-channel configs that omit it.
+For group/channel rooms, GreenchClaw defaults to `messages.groupChat.visibleReplies: "message_tool"`.
+`GreenchClaw doctor --fix` writes this default into configured-channel configs that omit it.
 That means the agent still processes the turn and can update memory/session state, but its normal final answer is not automatically posted back into the room. To speak visibly, the agent uses `message(action=send)`.
 
 This default depends on a model/runtime that reliably calls tools. If logs show
@@ -52,9 +52,9 @@ group/channel sessions, or set
 `messages.groupChat.visibleReplies: "automatic"` to restore legacy visible
 final replies.
 
-If the message tool is unavailable under the active tool policy, NexisClaw falls
+If the message tool is unavailable under the active tool policy, GreenchClaw falls
 back to automatic visible replies instead of silently suppressing the response.
-`NexisClaw doctor` warns about this mismatch.
+`GreenchClaw doctor` warns about this mismatch.
 
 For direct chats and any other source turn, use `messages.visibleReplies: "message_tool"` to apply the same tool-only visible-reply behavior globally. Harnesses can also choose this as their unset default; the Codex harness does this for Codex-mode direct chats. `messages.groupChat.visibleReplies` remains the more specific override for group/channel rooms.
 
@@ -96,7 +96,7 @@ Two different controls are involved in group safety:
 - **Trigger authorization**: who can trigger the agent (`groupPolicy`, `groups`, `groupAllowFrom`, channel-specific allowlists).
 - **Context visibility**: what supplemental context is injected into the model (reply text, quotes, thread history, forwarded metadata).
 
-By default, NexisClaw prioritizes normal chat behavior and keeps context mostly as received. This means allowlists primarily decide who can trigger actions, not a universal redaction boundary for every quoted or historical snippet.
+By default, GreenchClaw prioritizes normal chat behavior and keeps context mostly as received. This means allowlists primarily decide who can trigger actions, not a universal redaction boundary for every quoted or historical snippet.
 
 <AccordionGroup>
   <Accordion title="Current behavior is channel-specific">
@@ -333,7 +333,7 @@ Replying to a bot message counts as an implicit mention when the channel support
       {
         id: "main",
         groupChat: {
-          mentionPatterns: ["@NexisClaw", "NexisClaw", "\\+15555550123"],
+          mentionPatterns: ["@GreenchClaw", "GreenchClaw", "\\+15555550123"],
           historyLimit: 50,
         },
       },
@@ -362,7 +362,7 @@ Replying to a bot message counts as an implicit mention when the channel support
 Some channel configs support restricting which tools are available **inside a specific group/room/channel**.
 
 - `tools`: allow/deny tools for the whole group.
-- `toolsBySender`: per-sender overrides within the group. Use explicit key prefixes: `channel:<channelId>:<senderId>`, `id:<senderId>`, `e164:<phone>`, `username:<handle>`, `name:<displayName>`, and `"*"` wildcard. Channel ids use canonical NexisClaw channel ids; aliases such as `teams` normalize to `msteams`. Legacy unprefixed keys are still accepted and matched as `id:` only.
+- `toolsBySender`: per-sender overrides within the group. Use explicit key prefixes: `channel:<channelId>:<senderId>`, `id:<senderId>`, `e164:<phone>`, `username:<handle>`, `name:<displayName>`, and `"*"` wildcard. Channel ids use canonical GreenchClaw channel ids; aliases such as `teams` normalize to `msteams`. Legacy unprefixed keys are still accepted and matched as `id:` only.
 
 Resolution order (most specific wins):
 

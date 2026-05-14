@@ -112,7 +112,7 @@ describe("qa suite runtime agent process helpers", () => {
         repoRoot: "/repo",
         gateway: {
           tempRoot: "/tmp/runtime",
-          runtimeEnv: { PATH: "/usr/bin", NEXISCLAW_STATE_DIR: "/tmp/default-state" },
+          runtimeEnv: { PATH: "/usr/bin", GREENCHCLAW_STATE_DIR: "/tmp/default-state" },
         },
         primaryModel: "openai/gpt-5.5",
         alternateModel: "openai/gpt-5.5-mini",
@@ -121,8 +121,8 @@ describe("qa suite runtime agent process helpers", () => {
       ["crestodian", "-m", "overview"],
       {
         env: {
-          NEXISCLAW_STATE_DIR: "/tmp/isolated-state",
-          NEXISCLAW_CONFIG_PATH: "/tmp/isolated-state/NexisClaw.json",
+          GREENCHCLAW_STATE_DIR: "/tmp/isolated-state",
+          GREENCHCLAW_CONFIG_PATH: "/tmp/isolated-state/GreenchClaw.json",
         },
       },
     );
@@ -142,8 +142,8 @@ describe("qa suite runtime agent process helpers", () => {
     ]);
     const spawnEnv = (spawnCall?.[2] as { env?: Record<string, string> } | undefined)?.env;
     expect(spawnEnv?.PATH).toBe("/usr/bin");
-    expect(spawnEnv?.NEXISCLAW_STATE_DIR).toBe("/tmp/isolated-state");
-    expect(spawnEnv?.NEXISCLAW_CONFIG_PATH).toBe("/tmp/isolated-state/NexisClaw.json");
+    expect(spawnEnv?.GREENCHCLAW_STATE_DIR).toBe("/tmp/isolated-state");
+    expect(spawnEnv?.GREENCHCLAW_CONFIG_PATH).toBe("/tmp/isolated-state/GreenchClaw.json");
   });
 
   it("parses json qa cli output when requested", async () => {
@@ -280,7 +280,7 @@ describe("qa suite runtime agent process helpers", () => {
       name: "Memory Dreaming Promotion",
       payload: {
         kind: "systemEvent",
-        text: "__NexisClaw_memory_core_short_term_promotion_dream__",
+        text: "__GreenchClaw_memory_core_short_term_promotion_dream__",
       },
     };
     const current = {
@@ -288,7 +288,7 @@ describe("qa suite runtime agent process helpers", () => {
       name: "Memory Dreaming Promotion",
       payload: {
         kind: "agentTurn",
-        message: "__NexisClaw_memory_core_short_term_promotion_dream__",
+        message: "__GreenchClaw_memory_core_short_term_promotion_dream__",
         lightContext: true,
       },
       sessionTarget: "isolated",

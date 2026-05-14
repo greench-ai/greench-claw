@@ -1,4 +1,4 @@
-import { defineBundledChannelEntry } from "NexisClaw/plugin-sdk/channel-entry-contract";
+import { defineBundledChannelEntry } from "GreenchClaw/plugin-sdk/channel-entry-contract";
 
 export default defineBundledChannelEntry({
   id: "whatsapp",

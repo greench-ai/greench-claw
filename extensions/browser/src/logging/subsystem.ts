@@ -1,1 +1,1 @@
-export { createSubsystemLogger } from "NexisClaw/plugin-sdk/logging-core";
+export { createSubsystemLogger } from "GreenchClaw/plugin-sdk/logging-core";

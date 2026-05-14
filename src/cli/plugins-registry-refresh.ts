@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { loadInstalledPluginIndexInstallRecords } from "../plugins/installed-plugin-index-records.js";
 import type { InstalledPluginIndexRefreshReason } from "../plugins/installed-plugin-index.js";
@@ -10,7 +10,7 @@ export type PluginRegistryRefreshLogger = {
 };
 
 export async function refreshPluginRegistryAfterConfigMutation(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   reason: InstalledPluginIndexRefreshReason;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;

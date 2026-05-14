@@ -83,7 +83,7 @@ function createCatalogEntry(id: string, label: string): ChannelPluginCatalogEntr
   return {
     id,
     label,
-    pluginId: `@NexisClaw/${id}`,
+    pluginId: `@GreenchClaw/${id}`,
     origin: "official",
     meta: {
       id,
@@ -92,7 +92,7 @@ function createCatalogEntry(id: string, label: string): ChannelPluginCatalogEntr
       docsPath: `/channels/${id}`,
       blurb: label,
     },
-    install: { npmSpec: `@NexisClaw/${id}` },
+    install: { npmSpec: `@GreenchClaw/${id}` },
   } as unknown as ChannelPluginCatalogEntry;
 }
 

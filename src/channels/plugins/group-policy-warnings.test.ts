@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   collectAllowlistProviderGroupPolicyWarnings,
   collectAllowlistProviderRestrictSendersWarnings,
@@ -49,13 +49,13 @@ describe("group policy warning builders", () => {
   });
 
   it("projects cfg-only warning collector inputs", () => {
-    const collect = projectConfigWarningCollector<{ cfg: NexisClawConfig; accountId: string }>(
+    const collect = projectConfigWarningCollector<{ cfg: GreenchClawConfig; accountId: string }>(
       ({ cfg }) => [cfg.channels ? "configured" : "none"],
     );
 
     expect(
       collect({
-        cfg: { channels: { slack: {} } } as NexisClawConfig,
+        cfg: { channels: { slack: {} } } as GreenchClawConfig,
         accountId: "acct-1",
       }),
     ).toEqual(["configured"]);
@@ -63,14 +63,14 @@ describe("group policy warning builders", () => {
 
   it("projects cfg+accountId warning collector inputs", () => {
     const collect = projectConfigAccountIdWarningCollector<{
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       accountId?: string | null;
       account: { accountId: string };
     }>(({ accountId }) => [accountId ?? "default"]);
 
     expect(
       collect({
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         accountId: "acct-1",
         account: { accountId: "ignored" },
       }),
@@ -90,16 +90,16 @@ describe("group policy warning builders", () => {
     const collect = projectAccountConfigWarningCollector<
       { accountId: string },
       Record<string, unknown>,
-      { account: { accountId: string }; cfg: NexisClawConfig }
+      { account: { accountId: string }; cfg: GreenchClawConfig }
     >(
-      (cfg: NexisClawConfig) => cfg.channels ?? {},
+      (cfg: GreenchClawConfig) => cfg.channels ?? {},
       ({ account, cfg }) => [account.accountId, Object.keys(cfg).join(",") || "none"],
     );
 
     expect(
       collect({
         account: { accountId: "acct-1" },
-        cfg: { channels: { slack: {} } } as NexisClawConfig,
+        cfg: { channels: { slack: {} } } as GreenchClawConfig,
       }),
     ).toEqual(["acct-1", "slack"]);
   });

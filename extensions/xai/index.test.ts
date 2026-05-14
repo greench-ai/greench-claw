@@ -1,9 +1,9 @@
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import {
   registerProviderPlugin,
   registerSingleProviderPlugin,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 import setupPlugin from "./setup-api.js";
@@ -33,7 +33,7 @@ function createProviderModel(overrides: {
   };
 }
 
-type XaiAutoEnableProbe = Parameters<NexisClawPluginApi["registerAutoEnableProbe"]>[0];
+type XaiAutoEnableProbe = Parameters<GreenchClawPluginApi["registerAutoEnableProbe"]>[0];
 
 function registerXaiAutoEnableProbe(): XaiAutoEnableProbe {
   const probes: XaiAutoEnableProbe[] = [];

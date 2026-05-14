@@ -1,5 +1,5 @@
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import setupPlugin from "./setup-api.js";
 
@@ -12,13 +12,13 @@ vi.mock("./register.runtime.js", () => ({
   createAcpxRuntimeService: createAcpxRuntimeServiceMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/acp-runtime-backend", () => ({
+vi.mock("GreenchClaw/plugin-sdk/acp-runtime-backend", () => ({
   tryDispatchAcpReplyHook: tryDispatchAcpReplyHookMock,
 }));
 
 import plugin from "./index.js";
 
-type AcpxAutoEnableProbe = Parameters<NexisClawPluginApi["registerAutoEnableProbe"]>[0];
+type AcpxAutoEnableProbe = Parameters<GreenchClawPluginApi["registerAutoEnableProbe"]>[0];
 
 function registerAcpxAutoEnableProbe(): AcpxAutoEnableProbe {
   const probes: AcpxAutoEnableProbe[] = [];

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import type { ProviderRuntimeModel } from "../../../plugins/provider-runtime-model.types.js";
 import type { AgentRuntimePlan } from "../../runtime-plan/types.js";
 import { resolveTranscriptPolicy, type TranscriptPolicy } from "../../transcript-policy.js";
@@ -18,7 +18,7 @@ export function resolveAttemptTranscriptPolicy(params: {
   runtimePlanModelContext: AttemptRuntimeModelContext;
   provider: string;
   modelId: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): TranscriptPolicy {
   return (

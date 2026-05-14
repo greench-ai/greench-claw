@@ -30,25 +30,33 @@ describe("waitForever", () => {
 
 describe("shouldSkipRespawnForArgv", () => {
   it.each([
-    { argv: ["node", "NexisClaw", "--help"] },
-    { argv: ["node", "NexisClaw", "-V"] },
-    { argv: ["node", "NexisClaw", "tui"] },
-    { argv: ["node", "NexisClaw", "terminal"] },
-    { argv: ["node", "NexisClaw", "chat"] },
-    { argv: ["node", "NexisClaw", "gateway"] },
-    { argv: ["node", "NexisClaw", "gateway", "--port", "14720", "--bind", "loopback"] },
-    { argv: ["node", "NexisClaw", "gateway", "run", "--port=14720", "--bind", "loopback"] },
+    { argv: ["node", "GreenchClaw", "--help"] },
+    { argv: ["node", "GreenchClaw", "-V"] },
+    { argv: ["node", "GreenchClaw", "tui"] },
+    { argv: ["node", "GreenchClaw", "terminal"] },
+    { argv: ["node", "GreenchClaw", "chat"] },
+    { argv: ["node", "GreenchClaw", "gateway"] },
+    { argv: ["node", "GreenchClaw", "gateway", "--port", "14720", "--bind", "loopback"] },
+    { argv: ["node", "GreenchClaw", "gateway", "run", "--port=14720", "--bind", "loopback"] },
     {
-      argv: ["node", "NexisClaw", "--profile", "server", "gateway", "run", "--allow-unconfigured"],
+      argv: [
+        "node",
+        "GreenchClaw",
+        "--profile",
+        "server",
+        "gateway",
+        "run",
+        "--allow-unconfigured",
+      ],
     },
   ] as const)("skips respawn for argv %j", ({ argv }) => {
     expect(shouldSkipRespawnForArgv([...argv]), argv.join(" ")).toBe(true);
   });
 
   it.each([
-    { argv: ["node", "NexisClaw", "status"] },
-    { argv: ["node", "NexisClaw", "gateway", "status"] },
-    { argv: ["node", "NexisClaw", "gateway", "call", "health"] },
+    { argv: ["node", "GreenchClaw", "status"] },
+    { argv: ["node", "GreenchClaw", "gateway", "status"] },
+    { argv: ["node", "GreenchClaw", "gateway", "call", "health"] },
   ] as const)("keeps respawn path for argv %j", ({ argv }) => {
     expect(shouldSkipRespawnForArgv([...argv]), argv.join(" ")).toBe(false);
   });
@@ -56,18 +64,18 @@ describe("shouldSkipRespawnForArgv", () => {
 
 describe("shouldSkipStartupEnvironmentRespawnForArgv", () => {
   it.each([
-    { argv: ["node", "NexisClaw", "--help"] },
-    { argv: ["node", "NexisClaw", "gateway"] },
-    { argv: ["node", "NexisClaw", "gateway", "run", "--port=14720"] },
+    { argv: ["node", "GreenchClaw", "--help"] },
+    { argv: ["node", "GreenchClaw", "gateway"] },
+    { argv: ["node", "GreenchClaw", "gateway", "run", "--port=14720"] },
   ] as const)("skips startup env respawn for argv %j", ({ argv }) => {
     expect(shouldSkipStartupEnvironmentRespawnForArgv([...argv]), argv.join(" ")).toBe(true);
   });
 
   it.each([
-    { argv: ["node", "NexisClaw", "tui"] },
-    { argv: ["node", "NexisClaw", "terminal"] },
-    { argv: ["node", "NexisClaw", "chat"] },
-    { argv: ["node", "NexisClaw", "status"] },
+    { argv: ["node", "GreenchClaw", "tui"] },
+    { argv: ["node", "GreenchClaw", "terminal"] },
+    { argv: ["node", "GreenchClaw", "chat"] },
+    { argv: ["node", "GreenchClaw", "status"] },
   ] as const)("allows startup env respawn for argv %j", ({ argv }) => {
     expect(shouldSkipStartupEnvironmentRespawnForArgv([...argv]), argv.join(" ")).toBe(false);
   });
@@ -79,10 +87,12 @@ describe("dns cli", () => {
     try {
       const program = new Command();
       registerDnsCli(program);
-      await program.parseAsync(["dns", "setup", "--domain", "NexisClaw.internal"], { from: "user" });
+      await program.parseAsync(["dns", "setup", "--domain", "GreenchClaw.internal"], {
+        from: "user",
+      });
       const output = log.mock.calls.map((call) => call.join(" ")).join("\\n");
       expect(output).toContain("DNS setup");
-      expect(output).toContain("NexisClaw.internal");
+      expect(output).toContain("GreenchClaw.internal");
     } finally {
       log.mockRestore();
     }

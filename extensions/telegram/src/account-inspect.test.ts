@@ -1,15 +1,15 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { withEnv } from "NexisClaw/plugin-sdk/test-env";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { withEnv } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import { inspectTelegramAccount } from "./account-inspect.js";
 
 describe("inspectTelegramAccount SecretRef resolution", () => {
   it("resolves default env SecretRef templates in read-only status paths", () => {
     withEnv({ TG_STATUS_TOKEN: "123:token" }, () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         channels: {
           telegram: {
             botToken: "${TG_STATUS_TOKEN}",
@@ -26,7 +26,7 @@ describe("inspectTelegramAccount SecretRef resolution", () => {
 
   it("respects env provider allowlists in read-only status paths", () => {
     withEnv({ TG_NOT_ALLOWED: "123:token" }, () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         secrets: {
           defaults: {
             env: "secure-env",
@@ -54,7 +54,7 @@ describe("inspectTelegramAccount SecretRef resolution", () => {
 
   it("does not read env values for non-env providers", () => {
     withEnv({ TG_EXEC_PROVIDER: "123:token" }, () => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         secrets: {
           defaults: {
             env: "exec-provider",
@@ -83,13 +83,13 @@ describe("inspectTelegramAccount SecretRef resolution", () => {
   it.runIf(process.platform !== "win32")(
     "treats symlinked token files as configured_unavailable",
     () => {
-      const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-telegram-inspect-"));
+      const dir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-telegram-inspect-"));
       const tokenFile = path.join(dir, "token.txt");
       const tokenLink = path.join(dir, "token-link.txt");
       fs.writeFileSync(tokenFile, "123:token\n", "utf8");
       fs.symlinkSync(tokenFile, tokenLink);
 
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         channels: {
           telegram: {
             tokenFile: tokenLink,

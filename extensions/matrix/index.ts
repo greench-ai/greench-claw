@@ -1,7 +1,7 @@
 import {
   defineBundledChannelEntry,
-  type NexisClawPluginApi,
-} from "NexisClaw/plugin-sdk/channel-entry-contract";
+  type GreenchClawPluginApi,
+} from "GreenchClaw/plugin-sdk/channel-entry-contract";
 import { registerMatrixCliMetadata } from "./cli-metadata.js";
 import { registerMatrixSubagentHooks } from "./subagent-hooks-api.js";
 
@@ -14,7 +14,7 @@ function loadMatrixHandlersRuntimeModule() {
   return matrixHandlersRuntimePromise;
 }
 
-export function registerMatrixFullRuntime(api: NexisClawPluginApi): void {
+export function registerMatrixFullRuntime(api: GreenchClawPluginApi): void {
   api.registerGatewayMethod("matrix.verify.recoveryKey", async (ctx) => {
     const { handleVerifyRecoveryKey } = await loadMatrixHandlersRuntimeModule();
     await handleVerifyRecoveryKey(ctx);

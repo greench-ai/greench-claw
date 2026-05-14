@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { parseStandalonePlainTextToolCallBlocks } from "NexisClaw/plugin-sdk/tool-payload";
+import { parseStandalonePlainTextToolCallBlocks } from "GreenchClaw/plugin-sdk/tool-payload";
 
 type LmstudioPlainTextToolCallBlock = {
   arguments: Record<string, unknown>;

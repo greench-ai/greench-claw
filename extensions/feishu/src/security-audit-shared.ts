@@ -1,5 +1,5 @@
-import { hasConfiguredSecretInput } from "NexisClaw/plugin-sdk/secret-input";
-import type { NexisClawConfig } from "../runtime-api.js";
+import { hasConfiguredSecretInput } from "GreenchClaw/plugin-sdk/secret-input";
+import type { GreenchClawConfig } from "../runtime-api.js";
 
 function asRecord(value: unknown): Record<string, unknown> | undefined {
   return value && typeof value === "object" && !Array.isArray(value)
@@ -11,7 +11,7 @@ function hasNonEmptyString(value: unknown): boolean {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function isFeishuDocToolEnabled(cfg: NexisClawConfig): boolean {
+function isFeishuDocToolEnabled(cfg: GreenchClawConfig): boolean {
   const channels = asRecord(cfg.channels);
   const feishu = asRecord(channels?.feishu);
   if (!feishu || feishu.enabled === false) {
@@ -51,7 +51,7 @@ function isFeishuDocToolEnabled(cfg: NexisClawConfig): boolean {
   return false;
 }
 
-export function collectFeishuSecurityAuditFindings(params: { cfg: NexisClawConfig }) {
+export function collectFeishuSecurityAuditFindings(params: { cfg: GreenchClawConfig }) {
   if (!isFeishuDocToolEnabled(params.cfg)) {
     return [];
   }

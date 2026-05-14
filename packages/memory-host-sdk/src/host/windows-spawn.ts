@@ -1,9 +1,9 @@
 export {
   materializeWindowsSpawnProgram,
   resolveWindowsSpawnProgram,
-} from "./NexisClaw-runtime-io.js";
+} from "./GreenchClaw-runtime-io.js";
 export type {
   ResolveWindowsSpawnProgramParams,
   WindowsSpawnInvocation,
   WindowsSpawnProgram,
-} from "./NexisClaw-runtime-io.js";
+} from "./GreenchClaw-runtime-io.js";

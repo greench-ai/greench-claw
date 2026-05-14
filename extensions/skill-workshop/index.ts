@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveLivePluginConfigObject } from "NexisClaw/plugin-sdk/plugin-config-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveLivePluginConfigObject } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
 import { definePluginEntry, resolveDefaultAgentId } from "./api.js";
 import { resolveConfig } from "./src/config.js";
 import { buildWorkshopGuidance } from "./src/prompt.js";
@@ -17,7 +17,7 @@ export default definePluginEntry({
     const resolveCurrentConfig = () => {
       const runtimePluginConfig = resolveLivePluginConfigObject(
         api.runtime.config?.current
-          ? () => api.runtime.config.current() as NexisClawConfig
+          ? () => api.runtime.config.current() as GreenchClawConfig
           : undefined,
         "skill-workshop",
         api.pluginConfig as Record<string, unknown>,

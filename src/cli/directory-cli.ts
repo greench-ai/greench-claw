@@ -77,19 +77,22 @@ export function registerDirectoryCli(program: Command) {
       "after",
       () =>
         `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-          ["NexisClaw directory self --channel slack", "Show the connected account identity."],
+          ["GreenchClaw directory self --channel slack", "Show the connected account identity."],
           [
-            'NexisClaw directory peers list --channel slack --query "alice"',
+            'GreenchClaw directory peers list --channel slack --query "alice"',
             "Search contact/user IDs by name.",
           ],
-          ["NexisClaw directory groups list --channel discord", "List available groups/channels."],
           [
-            "NexisClaw directory groups members --channel discord --group-id <id>",
+            "GreenchClaw directory groups list --channel discord",
+            "List available groups/channels.",
+          ],
+          [
+            "GreenchClaw directory groups members --channel discord --group-id <id>",
             "List members for a specific group.",
           ],
         ])}\n\n${theme.muted("Docs:")} ${formatDocsLink(
           "/cli/directory",
-          "docs.NexisClaw.ai/cli/directory",
+          "docs.GreenchClaw.ai/cli/directory",
         )}\n`,
     )
     .action(() => {

@@ -1,10 +1,14 @@
-import type { ChannelSetupAdapter } from "NexisClaw/plugin-sdk/channel-setup";
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/routing";
+import type { ChannelSetupAdapter } from "GreenchClaw/plugin-sdk/channel-setup";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/routing";
 import {
   hasConfiguredSecretInput,
   normalizeSecretInputString,
-} from "NexisClaw/plugin-sdk/secret-input";
-import type { ChannelSetupDmPolicy, ChannelSetupWizard, DmPolicy } from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/secret-input";
+import type {
+  ChannelSetupDmPolicy,
+  ChannelSetupWizard,
+  DmPolicy,
+} from "GreenchClaw/plugin-sdk/setup";
 import {
   createStandardChannelSetupStatus,
   createTopLevelChannelDmPolicy,
@@ -14,7 +18,7 @@ import {
   parseSetupEntriesWithParser,
   patchTopLevelChannelConfigSection,
   splitSetupEntries,
-} from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/setup";
 import { DEFAULT_RELAYS } from "./default-relays.js";
 import { getPublicKeyFromPrivate, normalizePubkey } from "./nostr-key-utils.js";
 import { resolveDefaultNostrAccountId, resolveNostrAccount } from "./types.js";

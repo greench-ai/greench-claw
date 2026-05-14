@@ -22,7 +22,7 @@ describe("legacy root entry", () => {
       "Hello operator",
     );
 
-    await runLegacyCliEntry(["NexisClaw", "status"], { runCli });
-    expect(runCli).toHaveBeenCalledWith(["NexisClaw", "status"]);
+    await runLegacyCliEntry(["GreenchClaw", "status"], { runCli });
+    expect(runCli).toHaveBeenCalledWith(["GreenchClaw", "status"]);
   });
 });

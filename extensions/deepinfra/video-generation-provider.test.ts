@@ -1,8 +1,8 @@
 import {
   getProviderHttpMocks,
   installProviderHttpMockCleanup,
-} from "NexisClaw/plugin-sdk/provider-http-test-mocks";
-import { expectExplicitVideoGenerationCapabilities } from "NexisClaw/plugin-sdk/provider-test-contracts";
+} from "GreenchClaw/plugin-sdk/provider-http-test-mocks";
+import { expectExplicitVideoGenerationCapabilities } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 
 const { postJsonRequestMock, resolveProviderHttpRequestConfigMock } = getProviderHttpMocks();

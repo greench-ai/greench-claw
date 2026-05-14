@@ -1,5 +1,5 @@
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 export function formatMatrixErrorMessage(err: unknown): string {
   return formatErrorMessage(err);

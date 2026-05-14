@@ -64,14 +64,14 @@ describe("redactSensitiveStatusSummary", () => {
         },
       },
       sessions: {
-        paths: ["/tmp/NexisClaw/sessions.json"],
+        paths: ["/tmp/GreenchClaw/sessions.json"],
         count: 1,
         defaults: { model: "gpt-5", contextTokens: 200_000 },
         recent: [createRecentSessionRow()],
         byAgent: [
           {
             agentId: "main",
-            path: "/tmp/NexisClaw/main-sessions.json",
+            path: "/tmp/GreenchClaw/main-sessions.json",
             count: 1,
             recent: [createRecentSessionRow()],
           },

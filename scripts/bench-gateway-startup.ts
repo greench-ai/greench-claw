@@ -100,13 +100,13 @@ const GATEWAY_CASES: readonly GatewayBenchCase[] = [
   {
     id: "skipChannels",
     name: "gateway, skip channels",
-    env: { NEXISCLAW_SKIP_CHANNELS: "1" },
+    env: { GREENCHCLAW_SKIP_CHANNELS: "1" },
     config: BASE_CONFIG,
   },
   {
     id: "oneInternalHook",
     name: "gateway, one configured internal hook",
-    env: { NEXISCLAW_SKIP_CHANNELS: "1" },
+    env: { GREENCHCLAW_SKIP_CHANNELS: "1" },
     config: {
       ...BASE_CONFIG,
       hooks: {
@@ -121,7 +121,7 @@ const GATEWAY_CASES: readonly GatewayBenchCase[] = [
   {
     id: "allInternalHooks",
     name: "gateway, all internal hooks",
-    env: { NEXISCLAW_SKIP_CHANNELS: "1" },
+    env: { GREENCHCLAW_SKIP_CHANNELS: "1" },
     config: {
       ...BASE_CONFIG,
       hooks: {
@@ -134,14 +134,14 @@ const GATEWAY_CASES: readonly GatewayBenchCase[] = [
   {
     id: "fiftyPlugins",
     name: "gateway, 50 manifest plugins",
-    env: { NEXISCLAW_SKIP_CHANNELS: "1" },
+    env: { GREENCHCLAW_SKIP_CHANNELS: "1" },
     pluginCount: 50,
     config: BASE_CONFIG,
   },
   {
     id: "fiftyStartupLazyPlugins",
     name: "gateway, 50 startup-lazy manifest plugins",
-    env: { NEXISCLAW_SKIP_CHANNELS: "1" },
+    env: { GREENCHCLAW_SKIP_CHANNELS: "1" },
     pluginActivationOnStartup: false,
     pluginCount: 50,
     config: BASE_CONFIG,
@@ -213,7 +213,7 @@ function parseOptions(): CliOptions {
 }
 
 function printUsage(): void {
-  console.log(`NexisClaw Gateway startup benchmark
+  console.log(`GreenchClaw Gateway startup benchmark
 
 Usage:
   pnpm test:startup:gateway -- [options]
@@ -446,7 +446,7 @@ function writePluginFixtures(root: string, count: number, activationOnStartup?: 
     const entry = path.join(pluginDir, "index.cjs");
     writeFileSync(entry, `module.exports = { id: ${JSON.stringify(id)}, register() {} };\n`);
     writeFileSync(
-      path.join(pluginDir, "NexisClaw.plugin.json"),
+      path.join(pluginDir, "GreenchClaw.plugin.json"),
       `${JSON.stringify(
         {
           id,
@@ -480,7 +480,7 @@ function writeConfig(root: string, benchCase: GatewayBenchCase): string {
         : {}),
     },
   };
-  const configPath = path.join(root, "NexisClaw.json");
+  const configPath = path.join(root, "GreenchClaw.json");
   writeFileSync(configPath, `${JSON.stringify(config, null, 2)}\n`);
   return configPath;
 }
@@ -494,21 +494,21 @@ function sanitizedEnv(
     CI: process.env.CI ?? "1",
     HOME: root,
     LANG: process.env.LANG ?? "en_US.UTF-8",
-    LOGNAME: process.env.LOGNAME ?? "NexisClaw-bench",
+    LOGNAME: process.env.LOGNAME ?? "GreenchClaw-bench",
     NO_COLOR: "1",
     PATH: process.env.PATH,
     SHELL: process.env.SHELL,
     TMPDIR: process.env.TMPDIR,
-    USER: process.env.USER ?? "NexisClaw-bench",
+    USER: process.env.USER ?? "GreenchClaw-bench",
     npm_config_update_notifier: "false",
-    NEXISCLAW_CONFIG: configPath,
-    NEXISCLAW_CONFIG_PATH: configPath,
-    NEXISCLAW_GATEWAY_STARTUP_TRACE: "1",
-    NEXISCLAW_HOME: root,
-    NEXISCLAW_LOCAL_CHECK: "0",
-    NEXISCLAW_NO_RESPAWN: "1",
-    NEXISCLAW_STATE_DIR: path.join(root, "state"),
-    NEXISCLAW_TEST_DISABLE_UPDATE_CHECK: "1",
+    GREENCHCLAW_CONFIG: configPath,
+    GREENCHCLAW_CONFIG_PATH: configPath,
+    GREENCHCLAW_GATEWAY_STARTUP_TRACE: "1",
+    GREENCHCLAW_HOME: root,
+    GREENCHCLAW_LOCAL_CHECK: "0",
+    GREENCHCLAW_NO_RESPAWN: "1",
+    GREENCHCLAW_STATE_DIR: path.join(root, "state"),
+    GREENCHCLAW_TEST_DISABLE_UPDATE_CHECK: "1",
     ...benchCase.env,
   };
   return env;
@@ -679,7 +679,7 @@ async function runGatewaySample(options: {
   sampleIndex: number;
   timeoutMs: number;
 }): Promise<GatewaySample> {
-  const root = mkdtempSync(path.join(tmpdir(), "NexisClaw-gateway-bench-"));
+  const root = mkdtempSync(path.join(tmpdir(), "GreenchClaw-gateway-bench-"));
   const port = await getFreePort();
   const configPath = writeConfig(root, options.benchCase);
   const env = sanitizedEnv(root, configPath, options.benchCase);
@@ -699,7 +699,7 @@ async function runGatewaySample(options: {
           "--cpu-prof-dir",
           options.cpuProfDir,
           "--cpu-prof-name",
-          `NexisClaw-gateway-${options.benchCase.id}-${options.sampleIndex}-${Date.now()}.cpuprofile`,
+          `GreenchClaw-gateway-${options.benchCase.id}-${options.sampleIndex}-${Date.now()}.cpuprofile`,
         ]
       : []),
     options.entry,

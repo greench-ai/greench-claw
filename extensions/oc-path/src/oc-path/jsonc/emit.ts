@@ -8,7 +8,7 @@
  * that need pre-existing detection opt in via
  * `acceptPreExistingSentinel: false`.
  *
- * @module @NexisClaw/oc-path/jsonc/emit
+ * @module @GreenchClaw/oc-path/jsonc/emit
  */
 
 import { OcEmitSentinelError, REDACTED_SENTINEL } from "../sentinel.js";
@@ -33,7 +33,9 @@ export function emitJsonc(ast: JsoncAst, opts: JsoncEmitOptions = {}): string {
   }
 
   // Render mode loses comments; walks leaves for caller-injected sentinel.
-  if (ast.root === null) {return "";}
+  if (ast.root === null) {
+    return "";
+  }
   return renderValue(ast.root, guardPath, []);
 }
 

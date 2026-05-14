@@ -1,5 +1,8 @@
-import { assertOkOrThrowProviderError, postJsonRequest } from "NexisClaw/plugin-sdk/provider-http";
-import { trimToUndefined } from "NexisClaw/plugin-sdk/speech";
+import {
+  assertOkOrThrowProviderError,
+  postJsonRequest,
+} from "GreenchClaw/plugin-sdk/provider-http";
+import { trimToUndefined } from "GreenchClaw/plugin-sdk/speech";
 import { XAI_BASE_URL } from "./api.js";
 export { XAI_BASE_URL };
 

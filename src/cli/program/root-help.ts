@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { getPluginCliCommandDescriptors } from "../../plugins/cli.js";
 import type { PluginLoadOptions } from "../../plugins/loader.js";
 import { VERSION } from "../../version.js";
@@ -12,7 +12,7 @@ import { configureProgramHelp } from "./help.js";
 import { getSubCliEntries } from "./subcli-descriptors.js";
 
 export type RootHelpRenderOptions = Pick<PluginLoadOptions, "pluginSdkResolution"> & {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   includePluginDescriptors?: boolean;
 };

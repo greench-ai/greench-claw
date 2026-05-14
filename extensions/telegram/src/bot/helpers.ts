@@ -1,20 +1,20 @@
 import type { Chat, Message } from "@grammyjs/types";
-import { formatLocationText } from "NexisClaw/plugin-sdk/channel-inbound";
+import { formatLocationText } from "GreenchClaw/plugin-sdk/channel-inbound";
 import {
   resolveCommandAuthorization,
   type CommandAuthorization,
-} from "NexisClaw/plugin-sdk/command-auth-native";
+} from "GreenchClaw/plugin-sdk/command-auth-native";
 import type {
-  NexisClawConfig,
+  GreenchClawConfig,
   TelegramAccountConfig,
   TelegramDirectConfig,
   TelegramGroupConfig,
   TelegramDmThreadReplies,
   TelegramTopicConfig,
-} from "NexisClaw/plugin-sdk/config-contracts";
-import { readChannelAllowFromStore } from "NexisClaw/plugin-sdk/conversation-runtime";
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/routing";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { readChannelAllowFromStore } from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/routing";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { expandTelegramAllowFromWithAccessGroups } from "../access-groups.js";
 import { firstDefined, normalizeAllowFrom, type NormalizedAllowFrom } from "../bot-access.js";
 import { normalizeTelegramReplyToMessageId } from "../outbound-params.js";
@@ -174,7 +174,7 @@ export function withResolvedTelegramForumFlag<T extends { chat: object }>(
 }
 
 export async function resolveTelegramGroupAllowFromContext(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   chatId: string | number;
   accountId?: string;
   senderId?: string;
@@ -384,7 +384,7 @@ export function buildTelegramGroupFrom(chatId: number | string, messageThreadId?
   return `telegram:group:${buildTelegramGroupPeerId(chatId, messageThreadId)}`;
 }
 
-export function isTelegramCommandsAllowFromConfigured(cfg: NexisClawConfig): boolean {
+export function isTelegramCommandsAllowFromConfigured(cfg: GreenchClawConfig): boolean {
   const commandsAllowFrom = cfg.commands?.allowFrom;
   return (
     commandsAllowFrom != null &&
@@ -394,7 +394,7 @@ export function isTelegramCommandsAllowFromConfigured(cfg: NexisClawConfig): boo
 }
 
 export function resolveTelegramCommandAuthorization(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   chatId: number;
   isGroup: boolean;

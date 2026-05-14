@@ -1,5 +1,5 @@
 import type { webhook } from "@line/bot-sdk";
-import type { HistoryEntry } from "NexisClaw/plugin-sdk/reply-history";
+import type { HistoryEntry } from "GreenchClaw/plugin-sdk/reply-history";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { LineAccountConfig } from "./types.js";
 
@@ -8,11 +8,11 @@ type PostbackEvent = webhook.PostbackEvent;
 
 // Avoid pulling in globals/pairing/media dependencies; this suite only asserts
 // allowlist/groupPolicy gating and message-context wiring.
-vi.mock("NexisClaw/plugin-sdk/channel-inbound", () => ({
+vi.mock("GreenchClaw/plugin-sdk/channel-inbound", () => ({
   buildMentionRegexes: () => [],
   matchesMentionPatterns: () => false,
 }));
-vi.mock("NexisClaw/plugin-sdk/channel-pairing", () => ({
+vi.mock("GreenchClaw/plugin-sdk/channel-pairing", () => ({
   createChannelPairingChallengeIssuer:
     ({ upsertPairingRequest }: { upsertPairingRequest: (args: unknown) => Promise<unknown> }) =>
     async ({ senderId, onCreated }: { senderId: string; onCreated?: () => void }) => {
@@ -20,7 +20,7 @@ vi.mock("NexisClaw/plugin-sdk/channel-pairing", () => ({
       onCreated?.();
     },
 }));
-vi.mock("NexisClaw/plugin-sdk/command-auth", () => ({
+vi.mock("GreenchClaw/plugin-sdk/command-auth", () => ({
   hasControlCommand: (text: string) => text.trim().startsWith("!"),
   resolveControlCommandGate: ({
     hasControlCommand,
@@ -33,7 +33,7 @@ vi.mock("NexisClaw/plugin-sdk/command-auth", () => ({
       hasControlCommand && authorizers.some((entry) => entry.allowed || !entry.configured),
   }),
 }));
-vi.mock("NexisClaw/plugin-sdk/runtime-group-policy", () => ({
+vi.mock("GreenchClaw/plugin-sdk/runtime-group-policy", () => ({
   resolveAllowlistProviderRuntimeGroupPolicy: ({
     groupPolicy,
     defaultGroupPolicy,
@@ -48,11 +48,11 @@ vi.mock("NexisClaw/plugin-sdk/runtime-group-policy", () => ({
     cfg.channels?.line?.groupPolicy ?? "open",
   warnMissingProviderGroupPolicyFallbackOnce: () => {},
 }));
-vi.mock("NexisClaw/plugin-sdk/runtime-env", () => ({
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", () => ({
   danger: (text: string) => text,
   logVerbose: () => {},
 }));
-vi.mock("NexisClaw/plugin-sdk/reply-history", () => ({
+vi.mock("GreenchClaw/plugin-sdk/reply-history", () => ({
   DEFAULT_GROUP_HISTORY_LIMIT: 20,
   clearHistoryEntriesIfEnabled: ({
     historyMap,
@@ -78,7 +78,7 @@ vi.mock("NexisClaw/plugin-sdk/reply-history", () => ({
     historyMap.set(historyKey, [...existing, entry].slice(-limit));
   },
 }));
-vi.mock("NexisClaw/plugin-sdk/routing", () => ({
+vi.mock("GreenchClaw/plugin-sdk/routing", () => ({
   resolveAgentRoute: () => ({ agentId: "default" }),
 }));
 
@@ -87,7 +87,7 @@ const { readAllowFromStoreMock, upsertPairingRequestMock } = vi.hoisted(() => ({
   upsertPairingRequestMock: vi.fn(async (_args: unknown) => ({ code: "CODE", created: true })),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/conversation-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/conversation-runtime", () => ({
   resolvePairingIdLabel: () => "lineUserId",
   readChannelAllowFromStore: readAllowFromStoreMock,
   upsertChannelPairingRequest: upsertPairingRequestMock,
@@ -282,14 +282,14 @@ describe("handleLineWebhookEvents", () => {
   });
 
   afterAll(() => {
-    vi.doUnmock("NexisClaw/plugin-sdk/channel-inbound");
-    vi.doUnmock("NexisClaw/plugin-sdk/channel-pairing");
-    vi.doUnmock("NexisClaw/plugin-sdk/command-auth");
-    vi.doUnmock("NexisClaw/plugin-sdk/runtime-group-policy");
-    vi.doUnmock("NexisClaw/plugin-sdk/runtime-env");
-    vi.doUnmock("NexisClaw/plugin-sdk/reply-history");
-    vi.doUnmock("NexisClaw/plugin-sdk/routing");
-    vi.doUnmock("NexisClaw/plugin-sdk/conversation-runtime");
+    vi.doUnmock("GreenchClaw/plugin-sdk/channel-inbound");
+    vi.doUnmock("GreenchClaw/plugin-sdk/channel-pairing");
+    vi.doUnmock("GreenchClaw/plugin-sdk/command-auth");
+    vi.doUnmock("GreenchClaw/plugin-sdk/runtime-group-policy");
+    vi.doUnmock("GreenchClaw/plugin-sdk/runtime-env");
+    vi.doUnmock("GreenchClaw/plugin-sdk/reply-history");
+    vi.doUnmock("GreenchClaw/plugin-sdk/routing");
+    vi.doUnmock("GreenchClaw/plugin-sdk/conversation-runtime");
     vi.doUnmock("./download.js");
     vi.doUnmock("./send.js");
     vi.doUnmock("./bot-message-context.js");

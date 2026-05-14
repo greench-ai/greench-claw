@@ -40,7 +40,7 @@ function createMediaFailureHarness() {
       channel: "matrix",
       matchedBy: "binding.account",
     }),
-    resolveStorePath: () => "/tmp/NexisClaw-test-session.json",
+    resolveStorePath: () => "/tmp/GreenchClaw-test-session.json",
     readSessionUpdatedAt: () => 123,
     getRoomInfo: async () => ({
       name: "Media Room",

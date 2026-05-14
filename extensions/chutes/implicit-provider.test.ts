@@ -1,5 +1,5 @@
-import { registerSingleProviderPlugin } from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { resolveOAuthApiKeyMarker } from "NexisClaw/plugin-sdk/provider-auth";
+import { registerSingleProviderPlugin } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { resolveOAuthApiKeyMarker } from "GreenchClaw/plugin-sdk/provider-auth";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import plugin from "./index.js";
 import { CHUTES_BASE_URL } from "./models.js";

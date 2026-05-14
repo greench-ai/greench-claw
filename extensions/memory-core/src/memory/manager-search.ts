@@ -1,9 +1,9 @@
 import type { DatabaseSync } from "node:sqlite";
-import { truncateUtf16Safe } from "NexisClaw/plugin-sdk/memory-core-host-engine-foundation";
+import { truncateUtf16Safe } from "GreenchClaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   cosineSimilarity,
   parseEmbedding,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 
 const vectorToBlob = (embedding: number[]): Buffer =>
   Buffer.from(new Float32Array(embedding).buffer);

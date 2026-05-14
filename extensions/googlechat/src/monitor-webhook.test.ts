@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import type { FixedWindowRateLimiter } from "NexisClaw/plugin-sdk/webhook-ingress";
+import type { FixedWindowRateLimiter } from "GreenchClaw/plugin-sdk/webhook-ingress";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { WebhookTarget } from "./monitor-types.js";
 import type { GoogleChatEvent } from "./types.js";
@@ -9,11 +9,11 @@ const resolveWebhookTargetWithAuthOrReject = vi.hoisted(() => vi.fn());
 const withResolvedWebhookRequestPipeline = vi.hoisted(() => vi.fn());
 const verifyGoogleChatRequest = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/webhook-request-guards", () => ({
+vi.mock("GreenchClaw/plugin-sdk/webhook-request-guards", () => ({
   readJsonWebhookBodyOrReject,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/webhook-targets", () => ({
+vi.mock("GreenchClaw/plugin-sdk/webhook-targets", () => ({
   resolveWebhookTargetWithAuthOrReject,
   withResolvedWebhookRequestPipeline,
 }));
@@ -117,8 +117,8 @@ describe("googlechat monitor webhook", () => {
   });
 
   afterAll(() => {
-    vi.doUnmock("NexisClaw/plugin-sdk/webhook-request-guards");
-    vi.doUnmock("NexisClaw/plugin-sdk/webhook-targets");
+    vi.doUnmock("GreenchClaw/plugin-sdk/webhook-request-guards");
+    vi.doUnmock("GreenchClaw/plugin-sdk/webhook-targets");
     vi.doUnmock("./auth.js");
     vi.resetModules();
   });

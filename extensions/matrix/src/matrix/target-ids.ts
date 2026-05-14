@@ -1,4 +1,4 @@
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 type MatrixTarget = { kind: "room"; id: string } | { kind: "user"; id: string };
 const MATRIX_PREFIX = "matrix:";

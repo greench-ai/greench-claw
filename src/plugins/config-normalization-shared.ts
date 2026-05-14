@@ -1,5 +1,5 @@
 import { normalizeChatChannelId } from "../channels/ids.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
@@ -220,7 +220,7 @@ function normalizePluginEntries(
 }
 
 export function normalizePluginsConfigWithResolver(
-  config?: NexisClawConfig["plugins"],
+  config?: GreenchClawConfig["plugins"],
   normalizePluginId: NormalizePluginId = identityNormalizePluginId,
 ): NormalizedPluginsConfig {
   const memorySlot = normalizeSlotValue(config?.slots?.memory);
@@ -237,7 +237,7 @@ export function normalizePluginsConfigWithResolver(
   };
 }
 
-export function hasExplicitPluginConfig(plugins?: NexisClawConfig["plugins"]): boolean {
+export function hasExplicitPluginConfig(plugins?: GreenchClawConfig["plugins"]): boolean {
   if (!plugins) {
     return false;
   }
@@ -263,7 +263,7 @@ export function hasExplicitPluginConfig(plugins?: NexisClawConfig["plugins"]): b
 }
 
 export function isBundledChannelEnabledByChannelConfig(
-  cfg: NexisClawConfig | undefined,
+  cfg: GreenchClawConfig | undefined,
   pluginId: string,
 ): boolean {
   if (!cfg) {

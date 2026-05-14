@@ -1,7 +1,7 @@
-import { expectPairingReplyText } from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
-import { normalizeE164 } from "NexisClaw/plugin-sdk/text-utility-runtime";
+import { expectPairingReplyText } from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
+import { normalizeE164 } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import { describe, expect, it, vi } from "vitest";
 import {
   createSignalToolResultConfig,
@@ -31,7 +31,7 @@ type MonitorSignalProviderOptions = NonNullable<Parameters<typeof monitorSignalP
 
 async function runMonitorWithMocks(opts: MonitorSignalProviderOptions) {
   return monitorSignalProvider({
-    config: config as NexisClawConfig,
+    config: config as GreenchClawConfig,
     waitForTransportReady:
       waitForTransportReadyMock as MonitorSignalProviderOptions["waitForTransportReady"],
     ...opts,
@@ -63,7 +63,7 @@ async function receiveSignalPayloads(params: {
 
 function hasQueuedReactionEventFor(sender: string) {
   const route = resolveAgentRoute({
-    cfg: config as NexisClawConfig,
+    cfg: config as GreenchClawConfig,
     channel: "signal",
     accountId: "default",
     peer: { kind: "direct", id: normalizeE164(sender) },

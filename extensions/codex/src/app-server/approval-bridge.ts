@@ -2,7 +2,7 @@ import {
   type AgentApprovalEventData,
   formatApprovalDisplayPath,
   type EmbeddedRunAttemptParams,
-} from "NexisClaw/plugin-sdk/agent-harness-runtime";
+} from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import { formatCodexDisplayText } from "../command-formatters.js";
 import {
   approvalRequestExplicitlyUnavailable,
@@ -316,7 +316,7 @@ function requestedPermissions(requestParams: JsonObject | undefined): JsonObject
 function unsupportedApprovalResponse(): JsonValue {
   return {
     decision: "decline",
-    reason: "NexisClaw codex app-server bridge does not grant native approvals yet.",
+    reason: "GreenchClaw codex app-server bridge does not grant native approvals yet.",
   };
 }
 

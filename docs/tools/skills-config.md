@@ -7,7 +7,7 @@ title: "Skills config"
 ---
 
 Most skills loader/install configuration lives under `skills` in
-`~/.NexisClaw/NexisClaw.json`. Agent-specific skill visibility lives under
+`~/.GreenchClaw/GreenchClaw.json`. Agent-specific skill visibility lives under
 `agents.defaults.skills` and `agents.list[].skills`.
 
 ```json5
@@ -84,7 +84,7 @@ Rules:
 
 ## Fields
 
-- Built-in skill roots always include `~/.NexisClaw/skills`, `~/.agents/skills`,
+- Built-in skill roots always include `~/.GreenchClaw/skills`, `~/.agents/skills`,
   `<workspace>/.agents/skills`, and `<workspace>/skills`.
 - `allowBundled`: optional allowlist for **bundled** skills only. When set, only
   bundled skills in the list are eligible (managed, agent, and workspace skills unaffected).
@@ -99,7 +99,7 @@ Rules:
 - `install.nodeManager`: node installer preference (`npm` | `pnpm` | `yarn` | `bun`, default: npm).
   This only affects **skill installs**; the Gateway runtime should still be Node
   (Bun not recommended for WhatsApp/Telegram).
-  - `NexisClaw setup --node-manager` is narrower and currently accepts `npm`,
+  - `GreenchClaw setup --node-manager` is narrower and currently accepts `npm`,
     `pnpm`, or `bun`. Set `skills.install.nodeManager: "yarn"` manually if you
     want Yarn-backed skill installs.
 - `install.allowUploadedArchives`: allow trusted `operator.admin` Gateway
@@ -116,7 +116,7 @@ Rules:
 
 By default, each skill root is a containment boundary. If a skill folder under
 `~/.agents/skills` is a symlink that resolves outside `~/.agents/skills`,
-NexisClaw skips it and logs `Skipping escaped skill path outside its configured
+GreenchClaw skips it and logs `Skipping escaped skill path outside its configured
 root`.
 
 Keep the symlink layout and allow only the trusted target root:
@@ -149,9 +149,9 @@ Per-skill fields:
 ## Notes
 
 - Keys under `entries` map to the skill name by default. If a skill defines
-  `metadata.NexisClaw.skillKey`, use that key instead.
+  `metadata.GreenchClaw.skillKey`, use that key instead.
 - Load precedence is `<workspace>/skills` → `<workspace>/.agents/skills` →
-  `~/.agents/skills` → `~/.NexisClaw/skills` → bundled skills →
+  `~/.agents/skills` → `~/.GreenchClaw/skills` → bundled skills →
   `skills.load.extraDirs`.
 - Changes to skills are picked up on the next agent turn when the watcher is enabled.
 

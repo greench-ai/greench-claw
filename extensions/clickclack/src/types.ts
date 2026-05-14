@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
 export type ClickClackAccountConfig = {
   name?: string;
@@ -24,8 +24,8 @@ export type ClickClackConfig = ClickClackAccountConfig & {
   defaultAccount?: string;
 };
 
-export type CoreConfig = NexisClawConfig & {
-  channels?: NexisClawConfig["channels"] & {
+export type CoreConfig = GreenchClawConfig & {
+  channels?: GreenchClawConfig["channels"] & {
     clickclack?: ClickClackConfig;
   };
 };

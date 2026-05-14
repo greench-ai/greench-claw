@@ -42,8 +42,8 @@ function requireFirstPostTranscriptionCall(): {
   };
 }
 
-vi.mock("NexisClaw/plugin-sdk/provider-http", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/provider-http")>();
+vi.mock("GreenchClaw/plugin-sdk/provider-http", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("GreenchClaw/plugin-sdk/provider-http")>();
   return {
     ...actual,
     postTranscriptionRequest: postTranscriptionRequestMock,

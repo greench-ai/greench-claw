@@ -3,8 +3,8 @@ import { collectWhatsAppStatusIssues } from "./status-issues.js";
 
 describe("collectWhatsAppStatusIssues", () => {
   beforeEach(() => {
-    vi.stubEnv("NEXISCLAW_CONTAINER_HINT", "");
-    vi.stubEnv("NEXISCLAW_PROFILE", "");
+    vi.stubEnv("GREENCHCLAW_CONTAINER_HINT", "");
+    vi.stubEnv("GREENCHCLAW_PROFILE", "");
   });
 
   afterEach(() => {
@@ -26,7 +26,7 @@ describe("collectWhatsAppStatusIssues", () => {
         accountId: "default",
         kind: "auth",
         message: "Not linked (no WhatsApp Web session).",
-        fix: "Run: NexisClaw channels login (scan QR on the gateway host).",
+        fix: "Run: GreenchClaw channels login (scan QR on the gateway host).",
       },
     ]);
   });
@@ -70,7 +70,7 @@ describe("collectWhatsAppStatusIssues", () => {
         accountId: "work",
         kind: "runtime",
         message: "Linked but disconnected (reconnectAttempts=2): socket closed",
-        fix: "Run: NexisClaw doctor (or restart the gateway). If it persists, relink via channels login and check logs.",
+        fix: "Run: GreenchClaw doctor (or restart the gateway). If it persists, relink via channels login and check logs.",
       },
     ]);
   });
@@ -94,7 +94,7 @@ describe("collectWhatsAppStatusIssues", () => {
         accountId: "default",
         kind: "runtime",
         message: "Linked but stale (last inbound 2m ago).",
-        fix: "Run: NexisClaw doctor (or restart the gateway). If it persists, relink via channels login and check logs.",
+        fix: "Run: GreenchClaw doctor (or restart the gateway). If it persists, relink via channels login and check logs.",
       },
     ]);
   });
@@ -124,7 +124,7 @@ describe("collectWhatsAppStatusIssues", () => {
         kind: "runtime",
         message:
           "Linked but recently reconnected (reconnectAttempts=3): status=408 Request Time-out Connection was lost",
-        fix: "Watch: NexisClaw logs --follow and run NexisClaw channels status --probe if disconnects continue. If it keeps flapping, restart the gateway or relink via channels login.",
+        fix: "Watch: GreenchClaw logs --follow and run GreenchClaw channels status --probe if disconnects continue. If it keeps flapping, restart the gateway or relink via channels login.",
       },
     ]);
   });

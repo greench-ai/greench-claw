@@ -1,6 +1,6 @@
 import http from "node:http";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { getFreePort, installGatewayTestHooks, startGatewayServer } from "./test-helpers.js";
 
 const webFetchProviderDiscovery = vi.hoisted(() => ({
@@ -70,15 +70,15 @@ async function requestHealthz(port: number): Promise<{ status: number; body: str
   });
 }
 
-async function writeConfig(config: NexisClawConfig): Promise<void> {
+async function writeConfig(config: GreenchClawConfig): Promise<void> {
   const { writeConfigFile } = await import("../config/config.js");
   await writeConfigFile(config);
 }
 
 describe("gateway startup web fetch config", () => {
   it("binds HTTP with credential-free tools.web.fetch config without fetch provider discovery", async () => {
-    const previousMinimal = process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY;
-    process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY = "0";
+    const previousMinimal = process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY;
+    process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY = "0";
     let server: Awaited<ReturnType<typeof startGatewayServer>> | undefined;
     try {
       await writeConfig({
@@ -101,7 +101,7 @@ describe("gateway startup web fetch config", () => {
             },
           },
         },
-      } as NexisClawConfig);
+      } as GreenchClawConfig);
 
       const port = await getFreePort();
       server = await startGatewayServer(port, {
@@ -119,9 +119,9 @@ describe("gateway startup web fetch config", () => {
         await server.close();
       }
       if (previousMinimal === undefined) {
-        delete process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY;
+        delete process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY;
       } else {
-        process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY = previousMinimal;
+        process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY = previousMinimal;
       }
     }
   });

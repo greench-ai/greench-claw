@@ -13,13 +13,13 @@ type EvaluatedModules = {
   idToModuleMap: Map<string, EvaluatedModuleNode>;
 };
 
-const SHARED_TEST_SETUP = Symbol.for("NexisClaw.sharedTestSetup");
+const SHARED_TEST_SETUP = Symbol.for("GreenchClaw.sharedTestSetup");
 
 function getSharedTestHome(): string | undefined {
   const globalState = globalThis as typeof globalThis & {
     [SHARED_TEST_SETUP]?: { tempHome?: string };
   };
-  return globalState[SHARED_TEST_SETUP]?.tempHome ?? process.env.NEXISCLAW_TEST_HOME;
+  return globalState[SHARED_TEST_SETUP]?.tempHome ?? process.env.GREENCHCLAW_TEST_HOME;
 }
 
 function resetEvaluatedModules(modules: EvaluatedModules, resetMocks: boolean) {
@@ -49,10 +49,10 @@ function restoreSharedTestHomeAfterEnvUnstub(testHomeRaw: string | undefined): v
 
   process.env.HOME = testHome;
   process.env.USERPROFILE = testHome;
-  process.env.NEXISCLAW_TEST_HOME = testHome;
-  delete process.env.NEXISCLAW_CONFIG_PATH;
-  delete process.env.NEXISCLAW_STATE_DIR;
-  delete process.env.NEXISCLAW_AGENT_DIR;
+  process.env.GREENCHCLAW_TEST_HOME = testHome;
+  delete process.env.GREENCHCLAW_CONFIG_PATH;
+  delete process.env.GREENCHCLAW_STATE_DIR;
+  delete process.env.GREENCHCLAW_AGENT_DIR;
   delete process.env.PI_CODING_AGENT_DIR;
   process.env.XDG_CONFIG_HOME = path.join(testHome, ".config");
   process.env.XDG_DATA_HOME = path.join(testHome, ".local", "share");
@@ -60,11 +60,11 @@ function restoreSharedTestHomeAfterEnvUnstub(testHomeRaw: string | undefined): v
   process.env.XDG_CACHE_HOME = path.join(testHome, ".cache");
 }
 
-export default class NexisClawNonIsolatedRunner extends TestRunner {
+export default class GreenchClawNonIsolatedRunner extends TestRunner {
   override onCollectStart(file: { filepath: string }) {
     super.onCollectStart(file);
     restoreSharedTestHomeAfterEnvUnstub(getSharedTestHome());
-    const orderLogPath = process.env.NEXISCLAW_VITEST_FILE_ORDER_LOG?.trim();
+    const orderLogPath = process.env.GREENCHCLAW_VITEST_FILE_ORDER_LOG?.trim();
     if (orderLogPath) {
       fs.appendFileSync(orderLogPath, `START ${file.filepath}\n`);
     }
@@ -76,7 +76,7 @@ export default class NexisClawNonIsolatedRunner extends TestRunner {
       return;
     }
 
-    const orderLogPath = process.env.NEXISCLAW_VITEST_FILE_ORDER_LOG?.trim();
+    const orderLogPath = process.env.GREENCHCLAW_VITEST_FILE_ORDER_LOG?.trim();
     if (orderLogPath) {
       fs.appendFileSync(orderLogPath, `END ${suite.filepath}\n`);
     }

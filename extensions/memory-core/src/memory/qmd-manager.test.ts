@@ -25,9 +25,9 @@ const { withFileLockMock } = vi.hoisted(() => ({
     async <T>(_filePath: string, _options: unknown, fn: () => Promise<T>) => await fn(),
   ),
 }));
-const MEMORY_EMBEDDING_PROVIDERS_KEY = Symbol.for("NexisClaw.memoryEmbeddingProviders");
-const MCPORTER_STATE_KEY = Symbol.for("NexisClaw.mcporterState");
-const QMD_EMBED_QUEUE_KEY = Symbol.for("NexisClaw.qmdEmbedQueueTail");
+const MEMORY_EMBEDDING_PROVIDERS_KEY = Symbol.for("GreenchClaw.memoryEmbeddingProviders");
+const MCPORTER_STATE_KEY = Symbol.for("GreenchClaw.mcporterState");
+const QMD_EMBED_QUEUE_KEY = Symbol.for("GreenchClaw.qmdEmbedQueueTail");
 
 interface MockChild extends EventEmitter {
   stdout: EventEmitter;
@@ -83,10 +83,10 @@ function isMcporterCommand(cmd: unknown): boolean {
   return /(^|[\\/])mcporter(?:\.cmd)?$/i.test(cmd);
 }
 
-vi.mock("NexisClaw/plugin-sdk/memory-core-host-engine-foundation", async () => {
+vi.mock("GreenchClaw/plugin-sdk/memory-core-host-engine-foundation", async () => {
   const actual = await vi.importActual<
-    typeof import("NexisClaw/plugin-sdk/memory-core-host-engine-foundation")
-  >("NexisClaw/plugin-sdk/memory-core-host-engine-foundation");
+    typeof import("GreenchClaw/plugin-sdk/memory-core-host-engine-foundation")
+  >("GreenchClaw/plugin-sdk/memory-core-host-engine-foundation");
   return {
     ...actual,
     createSubsystemLogger: () => {
@@ -114,9 +114,9 @@ vi.mock("chokidar", () => ({
   watch: watchMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/file-lock", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/file-lock")>(
-    "NexisClaw/plugin-sdk/file-lock",
+vi.mock("GreenchClaw/plugin-sdk/file-lock", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/file-lock")>(
+    "GreenchClaw/plugin-sdk/file-lock",
   );
   return {
     ...actual,
@@ -125,11 +125,11 @@ vi.mock("NexisClaw/plugin-sdk/file-lock", async () => {
 });
 
 import { spawn as mockedSpawn } from "node:child_process";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/memory-core-host-engine-foundation";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   requireNodeSqlite,
   resolveMemoryBackendConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 import { QmdMemoryManager } from "./qmd-manager.js";
 
 const spawnMock = mockedSpawn as unknown as Mock;
@@ -143,7 +143,7 @@ describe("QmdMemoryManager", () => {
   let tmpRoot: string;
   let workspaceDir: string;
   let stateDir: string;
-  let cfg: NexisClawConfig;
+  let cfg: GreenchClawConfig;
   const agentId = "main";
   const openManagers = new Set<QmdMemoryManager>();
   let embedStartupJitterSpy: { mockRestore: () => void } | null = null;
@@ -202,7 +202,7 @@ describe("QmdMemoryManager", () => {
 
   async function createManager(params?: {
     mode?: "full" | "status" | "cli";
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
   }) {
     const cfgToUse = params?.cfg ?? cfg;
     const resolved = resolveMemoryBackendConfig({ cfg: cfgToUse, agentId });
@@ -239,7 +239,7 @@ describe("QmdMemoryManager", () => {
     // Only workspace must exist for configured collection paths; state paths are
     // created lazily by manager code when needed.
     await fs.mkdir(workspaceDir, { recursive: true });
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     // Keep the default Windows path unresolved for most tests so spawn mocks can
     // match the logical package command. Tests that verify wrapper resolution
     // install explicit shim fixtures inline.
@@ -264,7 +264,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     seedMemoryEmbeddingProviders();
     embedStartupJitterSpy = vi
       .spyOn(
@@ -286,7 +286,7 @@ describe("QmdMemoryManager", () => {
     embedStartupJitterSpy?.mockRestore();
     embedStartupJitterSpy = null;
     vi.useRealTimers();
-    delete process.env.NEXISCLAW_STATE_DIR;
+    delete process.env.GREENCHCLAW_STATE_DIR;
     if (originalPath === undefined) {
       delete process.env.PATH;
     } else {
@@ -349,7 +349,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       const child = createMockChild({ autoClose: false });
@@ -393,7 +393,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     let releaseUpdate: (() => void) | null = null;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
@@ -448,7 +448,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { manager } = await createManager({ mode: "full" });
     expect(watchMock).toHaveBeenCalledTimes(1);
@@ -493,7 +493,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     let releaseUpdate: (() => void) | null = null;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
@@ -526,7 +526,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { manager } = await createManager({ mode: "status" });
     expect(spawnMock).not.toHaveBeenCalled();
@@ -544,7 +544,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { manager } = await createManager({ mode: "cli" });
 
@@ -573,7 +573,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const updateSpawned = createDeferred<void>();
     let releaseUpdate: (() => void) | null = null;
@@ -617,7 +617,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "collection" && args[1] === "list") {
@@ -654,7 +654,7 @@ describe("QmdMemoryManager", () => {
           sessions: { enabled: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const sessionCollectionName = `sessions-${devAgentId}`;
     const wrongSessionsPath = path.join(stateDir, "agents", agentId, "qmd", "sessions");
@@ -715,7 +715,7 @@ describe("QmdMemoryManager", () => {
           sessions: { enabled: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const sessionCollectionName = `sessions-${agentId}`;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
@@ -753,7 +753,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "collection" && args[1] === "list") {
@@ -802,7 +802,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const legacyCollections = new Map<
       string,
@@ -886,7 +886,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const listedCollections = new Map<
       string,
@@ -964,7 +964,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const listedCollections = new Map<
       string,
@@ -1044,7 +1044,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "collection" && args[1] === "list") {
@@ -1078,7 +1078,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     let staleCollectionExists = true;
     const removeCalls: string[] = [];
@@ -1152,7 +1152,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const removed: string[] = [];
     const added = new Map<string, string>();
@@ -1216,7 +1216,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const removed: string[] = [];
     const added = new Map<string, string>();
@@ -1281,7 +1281,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const addFlagCalls: string[] = [];
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
@@ -1321,7 +1321,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const removeCalls: string[] = [];
     const addCalls: string[] = [];
@@ -1377,7 +1377,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const differentPath = path.join(tmpRoot, "other-memory");
     await fs.mkdir(differentPath, { recursive: true });
@@ -1429,7 +1429,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "update") {
         return createMockChild({ autoClose: false });
@@ -1459,7 +1459,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     let updateCalls = 0;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
@@ -1514,7 +1514,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     let updateCalls = 0;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
@@ -1569,7 +1569,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     let updateCalls = 0;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
@@ -1624,7 +1624,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "update") {
@@ -1659,7 +1659,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "update") {
@@ -1700,7 +1700,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
         const child = createMockChild({ autoClose: false });
@@ -1751,7 +1751,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const expectedDocId = "abc123";
     let missingCollectionSeen = false;
@@ -1883,7 +1883,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
         const child = createMockChild({ autoClose: false });
@@ -1930,7 +1930,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
         const child = createMockChild({ autoClose: false });
@@ -1964,7 +1964,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
         const child = createMockChild({ autoClose: false });
@@ -1999,7 +1999,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "query") {
         const child = createMockChild({ autoClose: false });
@@ -2033,7 +2033,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
         const child = createMockChild({ autoClose: false });
@@ -2087,7 +2087,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const firstUpdateSpawned = createDeferred<void>();
     let updateCalls = 0;
@@ -2139,7 +2139,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const firstUpdateSpawned = createDeferred<void>();
     const secondUpdateSpawned = createDeferred<void>();
@@ -2205,7 +2205,7 @@ describe("QmdMemoryManager", () => {
           ],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
@@ -2247,7 +2247,7 @@ describe("QmdMemoryManager", () => {
           ],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "--help") {
@@ -2305,7 +2305,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "--help") {
@@ -2354,7 +2354,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
@@ -2395,7 +2395,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: sharedMirrorDir, pattern: "**/*.md", name: "notion-mirror" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
@@ -2437,7 +2437,7 @@ describe("QmdMemoryManager", () => {
           ],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "query") {
@@ -2483,7 +2483,7 @@ describe("QmdMemoryManager", () => {
           ],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
@@ -2532,7 +2532,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((cmd: string, args: string[]) => {
       const child = createMockChild({ autoClose: false });
@@ -2576,7 +2576,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((cmd: string, args: string[]) => {
       const child = createMockChild({ autoClose: false });
@@ -2623,7 +2623,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     let callCount = 0;
     spawnMock.mockImplementation((cmd: string, args: string[]) => {
@@ -2683,7 +2683,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     let expectedLimit = 0;
     spawnMock.mockImplementation((cmd: string, args: string[]) => {
@@ -2724,7 +2724,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((cmd: string, args: string[]) => {
       const child = createMockChild({ autoClose: false });
@@ -2798,7 +2798,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((cmd: string, args: string[]) => {
       const child = createMockChild({ autoClose: false });
@@ -2871,7 +2871,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((cmd: string, args: string[]) => {
       const child = createMockChild({ autoClose: false });
@@ -2912,7 +2912,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const selectors: string[] = [];
     let expectedLimit = 0;
@@ -2966,7 +2966,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const selectors: string[] = [];
     const collections: string[] = [];
@@ -3012,7 +3012,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const selectors: string[] = [];
     let firstQueryCall = true;
@@ -3065,7 +3065,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const selectors: string[] = [];
     let firstQueryCall = true;
@@ -3150,7 +3150,7 @@ describe("QmdMemoryManager", () => {
             mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       spawnMock.mockImplementation((_cmd: string, args: string[]) => {
         const child = createMockChild({ autoClose: false });
@@ -3201,7 +3201,7 @@ describe("QmdMemoryManager", () => {
             mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
           },
         },
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       let firstCallCommand: string | null = null;
       spawnMock.mockImplementation((cmd: string, args: string[]) => {
@@ -3254,7 +3254,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((cmd: string, args: string[]) => {
       const child = createMockChild({ autoClose: false });
@@ -3297,7 +3297,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     let daemonAttempts = 0;
     spawnMock.mockImplementation((cmd: string, args: string[]) => {
@@ -3341,7 +3341,7 @@ describe("QmdMemoryManager", () => {
           mcporter: { enabled: true, serverName: "qmd", startDaemon: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((cmd: string, args: string[]) => {
       const child = createMockChild({ autoClose: false });
@@ -3381,7 +3381,7 @@ describe("QmdMemoryManager", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { manager } = await createManager();
 
@@ -3405,7 +3405,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search" && args.includes("workspace-main")) {
@@ -3491,7 +3491,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "embed") {
         return createMockChild({ autoClose: false });
@@ -3528,7 +3528,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { manager } = await createManager({ mode: "full" });
 
@@ -3566,7 +3566,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { manager } = await createManager({ mode: "full" });
 
@@ -3598,7 +3598,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { manager } = await createManager({ mode: "full" });
 
@@ -3630,7 +3630,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { manager } = await createManager({ mode: "full" });
 
@@ -3671,7 +3671,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { manager } = await createManager({ mode: "full" });
 
@@ -3703,7 +3703,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const embedChildren: MockChild[] = [];
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "embed") {
@@ -3779,7 +3779,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const sessionsDir = path.join(stateDir, "agents", agentId, "sessions");
     await fs.mkdir(sessionsDir, { recursive: true });
@@ -3849,7 +3849,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const sessionsDir = path.join(stateDir, "agents", agentId, "sessions");
     await fs.mkdir(sessionsDir, { recursive: true });
@@ -3915,7 +3915,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { manager } = await createManager({ mode: "status" });
     await manager.sync({ reason: "manual", force: true });
@@ -3944,7 +3944,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     let updateCalls = 0;
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
@@ -4017,7 +4017,7 @@ describe("QmdMemoryManager", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const { manager } = await createManager();
 
     const isAllowed = (key?: string) =>
@@ -4046,7 +4046,7 @@ describe("QmdMemoryManager", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const { manager } = await createManager();
 
     logWarnMock.mockClear();
@@ -4218,7 +4218,7 @@ describe("QmdMemoryManager", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { manager } = await createManager();
 
@@ -4391,7 +4391,7 @@ describe("QmdMemoryManager", () => {
           ],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const duplicateDocid = "dup-123";
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
@@ -4458,7 +4458,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
@@ -4513,7 +4513,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search") {
@@ -4607,7 +4607,7 @@ describe("QmdMemoryManager", () => {
           paths: [{ path: workspaceDir, pattern: "**/*.md", name: "workspace" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search" && args.includes("workspace-main")) {
@@ -4685,7 +4685,7 @@ describe("QmdMemoryManager", () => {
           ],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     spawnMock.mockImplementation((_cmd: string, args: string[]) => {
       if (args[0] === "search" && args.includes("workspace-main")) {
@@ -4848,7 +4848,7 @@ describe("QmdMemoryManager", () => {
           ...cfg.memory,
           qmd: { ...cfg.memory?.qmd, searchMode: "query" },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     await expect(manager.probeVectorAvailability()).resolves.toBe(false);
@@ -4882,7 +4882,7 @@ describe("QmdMemoryManager", () => {
           ...cfg.memory,
           qmd: { ...cfg.memory?.qmd, searchMode: "query" },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     await expect(manager.probeVectorAvailability()).resolves.toBe(true);
@@ -4921,7 +4921,7 @@ describe("QmdMemoryManager", () => {
           ...cfg.memory,
           qmd: { ...cfg.memory?.qmd, searchMode: "query" },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     await expect(manager.probeVectorAvailability()).resolves.toBe(true);
@@ -4945,7 +4945,7 @@ describe("QmdMemoryManager", () => {
           ...cfg.memory,
           qmd: { ...cfg.memory?.qmd, searchMode: "query" },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     await expect(manager.probeVectorAvailability()).resolves.toBe(false);
@@ -4966,7 +4966,7 @@ describe("QmdMemoryManager", () => {
           ...cfg.memory,
           qmd: { ...cfg.memory?.qmd, searchMode: "search" },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
     const baselineCalls = spawnMock.mock.calls.length;
 

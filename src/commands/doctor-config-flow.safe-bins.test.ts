@@ -66,20 +66,20 @@ describe("doctor config flow safe bins", () => {
           },
         },
       }),
-      doctorFixCommand: "NexisClaw doctor --fix",
+      doctorFixCommand: "GreenchClaw doctor --fix",
     });
 
     expect(warnings.join("\n")).toContain(
       "tools.exec.safeBins includes interpreter/runtime 'python3'",
     );
-    expect(warnings.join("\n")).toContain("NexisClaw doctor --fix");
+    expect(warnings.join("\n")).toContain("GreenchClaw doctor --fix");
   });
 
   it("hints safeBinTrustedDirs when safeBins resolve outside default trusted dirs", async () => {
     if (process.platform === "win32") {
       return;
     }
-    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-doctor-safe-bins-"));
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-doctor-safe-bins-"));
     const binPath = path.join(dir, "mydoctorbin");
     try {
       await fs.writeFile(binPath, "#!/bin/sh\necho ok\n", "utf-8");

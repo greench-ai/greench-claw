@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type {
   AgentToolResultMiddleware,
   AgentToolResultMiddlewareOptions,
@@ -23,13 +23,13 @@ import type {
   AnyAgentTool,
   AgentHarness,
   CliBackendPlugin,
-  NexisClawPluginApi,
+  GreenchClawPluginApi,
   ImageGenerationProviderPlugin,
   MediaUnderstandingProviderPlugin,
   MigrationProviderPlugin,
   MusicGenerationProviderPlugin,
-  NexisClawPluginCliCommandDescriptor,
-  NexisClawPluginCliRegistrar,
+  GreenchClawPluginCliCommandDescriptor,
+  GreenchClawPluginCliRegistrar,
   PluginTextTransformRegistration,
   ProviderPlugin,
   RealtimeTranscriptionProviderPlugin,
@@ -42,14 +42,14 @@ import type {
 } from "./types.js";
 
 type CapturedPluginCliRegistration = {
-  register: NexisClawPluginCliRegistrar;
+  register: GreenchClawPluginCliRegistrar;
   parentPath: string[];
   commands: string[];
-  descriptors: NexisClawPluginCliCommandDescriptor[];
+  descriptors: GreenchClawPluginCliCommandDescriptor[];
 };
 
 export type CapturedPluginRegistration = {
-  api: NexisClawPluginApi;
+  api: GreenchClawPluginApi;
   providers: ProviderPlugin[];
   agentHarnesses: AgentHarness[];
   cliRegistrars: CapturedPluginCliRegistration[];
@@ -81,10 +81,10 @@ export type CapturedPluginRegistration = {
 };
 
 export function createCapturedPluginRegistration(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   id?: string;
   name?: string;
-  registrationMode?: NexisClawPluginApi["registrationMode"];
+  registrationMode?: GreenchClawPluginApi["registrationMode"];
   source?: string;
 }): CapturedPluginRegistration {
   const providers: ProviderPlugin[] = [];
@@ -160,7 +160,7 @@ export function createCapturedPluginRegistration(params?: {
       name: pluginName,
       source: pluginSource,
       registrationMode: params?.registrationMode ?? "full",
-      config: params?.config ?? ({} as NexisClawConfig),
+      config: params?.config ?? ({} as GreenchClawConfig),
       runtime: {} as PluginRuntime,
       logger: noopLogger,
       resolvePath: (input) => input,
@@ -311,7 +311,7 @@ export function createCapturedPluginRegistration(params?: {
 
 export function capturePluginRegistration(
   params: NonNullable<Parameters<typeof createCapturedPluginRegistration>[0]> & {
-    register(api: NexisClawPluginApi): void;
+    register(api: GreenchClawPluginApi): void;
   },
 ): CapturedPluginRegistration {
   const captured = createCapturedPluginRegistration(params);

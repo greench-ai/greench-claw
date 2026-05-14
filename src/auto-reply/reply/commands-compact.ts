@@ -1,5 +1,5 @@
 import { resolveAgentDir, resolveSessionAgentId } from "../../agents/agent-scope.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { logVerbose } from "../../globals.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 import {
@@ -19,7 +19,7 @@ function loadCompactRuntime(): Promise<typeof import("./commands-compact.runtime
 function extractCompactInstructions(params: {
   rawBody?: string;
   ctx: import("../templating.js").MsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
   isGroup: boolean;
 }): string | undefined {

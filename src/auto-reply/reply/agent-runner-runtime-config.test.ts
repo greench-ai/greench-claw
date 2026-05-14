@@ -3,11 +3,11 @@ import {
   clearRuntimeConfigSnapshot,
   setRuntimeConfigSnapshot,
 } from "../../config/runtime-snapshot.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { buildEmbeddedRunBaseParams } from "./agent-runner-run-params.js";
 import type { FollowupRun } from "./queue.js";
 
-function makeRun(config: NexisClawConfig): FollowupRun["run"] {
+function makeRun(config: GreenchClawConfig): FollowupRun["run"] {
   return {
     sessionId: "session-1",
     agentId: "agent-1",
@@ -37,7 +37,7 @@ afterEach(() => {
 
 describe("buildEmbeddedRunBaseParams runtime config", () => {
   it("keeps an already-resolved run config instead of reverting to a stale runtime snapshot", () => {
-    const staleSnapshot: NexisClawConfig = {
+    const staleSnapshot: GreenchClawConfig = {
       models: {
         providers: {
           openai: {
@@ -52,7 +52,7 @@ describe("buildEmbeddedRunBaseParams runtime config", () => {
         },
       },
     };
-    const resolvedRunConfig: NexisClawConfig = {
+    const resolvedRunConfig: GreenchClawConfig = {
       models: {
         providers: {
           openai: {

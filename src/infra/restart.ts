@@ -296,8 +296,8 @@ export function emitGatewayRestart(reasonOverride?: string): boolean {
       process.emit("SIGUSR1");
     } else if (process.platform === "win32") {
       // On Windows with no SIGUSR1 listener, fall back to task-scheduler handoff.
-      // triggerNexisClawRestart() uses schtasks to restart the gateway.
-      const result = triggerNexisClawRestart();
+      // triggerGreenchClawRestart() uses schtasks to restart the gateway.
+      const result = triggerGreenchClawRestart();
       if (!result.ok) {
         // Roll back the cycle marker so future restart requests can still proceed.
         rollBackGatewayRestartEmission();
@@ -560,7 +560,7 @@ function normalizeSystemdUnit(raw?: string, profile?: string): string {
   return unit.endsWith(".service") ? unit : `${unit}.service`;
 }
 
-export function triggerNexisClawRestart(): RestartAttempt {
+export function triggerGreenchClawRestart(): RestartAttempt {
   if (process.env.VITEST || process.env.NODE_ENV === "test") {
     return { ok: true, method: "supervisor", detail: "test mode" };
   }
@@ -570,8 +570,8 @@ export function triggerNexisClawRestart(): RestartAttempt {
   const tried: string[] = [];
   if (process.platform === "linux") {
     const unit = normalizeSystemdUnit(
-      process.env.NEXISCLAW_SYSTEMD_UNIT,
-      process.env.NEXISCLAW_PROFILE,
+      process.env.GREENCHCLAW_SYSTEMD_UNIT,
+      process.env.GREENCHCLAW_PROFILE,
     );
     const userArgs = ["--user", "restart", unit];
     tried.push(`systemctl ${userArgs.join(" ")}`);
@@ -611,8 +611,8 @@ export function triggerNexisClawRestart(): RestartAttempt {
   }
 
   const label =
-    process.env.NEXISCLAW_LAUNCHD_LABEL ||
-    resolveGatewayLaunchAgentLabel(process.env.NEXISCLAW_PROFILE);
+    process.env.GREENCHCLAW_LAUNCHD_LABEL ||
+    resolveGatewayLaunchAgentLabel(process.env.GREENCHCLAW_PROFILE);
   const uid = typeof process.getuid === "function" ? process.getuid() : undefined;
   const domain = uid !== undefined ? `gui/${uid}` : "gui/501";
   const target = `${domain}/${label}`;

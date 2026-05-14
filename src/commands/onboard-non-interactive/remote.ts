@@ -1,7 +1,7 @@
 import { formatCliCommand } from "../../cli/command-format.js";
 import { replaceConfigFile } from "../../config/config.js";
 import { logConfigUpdated } from "../../config/logging.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { type RuntimeEnv, writeRuntimeJson } from "../../runtime.js";
 import { normalizeOptionalString } from "../../shared/string-coerce.js";
 import { applySkipBootstrapConfig } from "../onboard-config.js";
@@ -11,7 +11,7 @@ import type { OnboardOptions } from "../onboard-types.js";
 export async function runNonInteractiveRemoteSetup(params: {
   opts: OnboardOptions;
   runtime: RuntimeEnv;
-  baseConfig: NexisClawConfig;
+  baseConfig: GreenchClawConfig;
   baseHash?: string;
 }) {
   const { opts, runtime, baseConfig, baseHash } = params;
@@ -20,13 +20,13 @@ export async function runNonInteractiveRemoteSetup(params: {
   const remoteUrl = normalizeOptionalString(opts.remoteUrl);
   if (!remoteUrl) {
     runtime.error(
-      `Missing --remote-url for remote mode. Example: ${formatCliCommand("NexisClaw onboard --non-interactive --mode remote --remote-url ws://127.0.0.1:3000")}.`,
+      `Missing --remote-url for remote mode. Example: ${formatCliCommand("GreenchClaw onboard --non-interactive --mode remote --remote-url ws://127.0.0.1:3000")}.`,
     );
     runtime.exit(1);
     return;
   }
 
-  let nextConfig: NexisClawConfig = {
+  let nextConfig: GreenchClawConfig = {
     ...baseConfig,
     gateway: {
       ...baseConfig.gateway,
@@ -59,7 +59,7 @@ export async function runNonInteractiveRemoteSetup(params: {
     runtime.log(`Remote gateway: ${remoteUrl}`);
     runtime.log(`Auth: ${payload.auth}`);
     runtime.log(
-      `Tip: run \`${formatCliCommand("NexisClaw configure --section web")}\` to store your Brave API key for web_search. Docs: https://docs.NexisClaw.ai/tools/web`,
+      `Tip: run \`${formatCliCommand("GreenchClaw configure --section web")}\` to store your Brave API key for web_search. Docs: https://docs.GreenchClaw.ai/tools/web`,
     );
   }
 }

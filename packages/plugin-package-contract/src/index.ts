@@ -2,7 +2,7 @@ export type JsonObject = Record<string, unknown>;
 
 export type ExternalPluginCompatibility = {
   pluginApiRange?: string;
-  builtWithNexisClawVersion?: string;
+  builtWithGreenchClawVersion?: string;
   pluginSdkVersion?: string;
   minGatewayVersion?: string;
 };
@@ -18,8 +18,8 @@ export type ExternalCodePluginValidationResult = {
 };
 
 export const EXTERNAL_CODE_PLUGIN_REQUIRED_FIELD_PATHS = [
-  "NexisClaw.compat.pluginApi",
-  "NexisClaw.build.NexisClawVersion",
+  "GreenchClaw.compat.pluginApi",
+  "GreenchClaw.build.GreenchClawVersion",
 ] as const;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -34,19 +34,19 @@ function normalizeOptionalString(value: unknown): string | undefined {
   return trimmed ? trimmed : undefined;
 }
 
-function readNexisClawBlock(packageJson: unknown) {
+function readGreenchClawBlock(packageJson: unknown) {
   const root = isRecord(packageJson) ? packageJson : undefined;
-  const NexisClaw = isRecord(root?.NexisClaw) ? root.NexisClaw : undefined;
-  const compat = isRecord(NexisClaw?.compat) ? NexisClaw.compat : undefined;
-  const build = isRecord(NexisClaw?.build) ? NexisClaw.build : undefined;
-  const install = isRecord(NexisClaw?.install) ? NexisClaw.install : undefined;
-  return { root, NexisClaw, compat, build, install };
+  const GreenchClaw = isRecord(root?.GreenchClaw) ? root.GreenchClaw : undefined;
+  const compat = isRecord(GreenchClaw?.compat) ? GreenchClaw.compat : undefined;
+  const build = isRecord(GreenchClaw?.build) ? GreenchClaw.build : undefined;
+  const install = isRecord(GreenchClaw?.install) ? GreenchClaw.install : undefined;
+  return { root, GreenchClaw, compat, build, install };
 }
 
 export function normalizeExternalPluginCompatibility(
   packageJson: unknown,
 ): ExternalPluginCompatibility | undefined {
-  const { root, compat, build, install } = readNexisClawBlock(packageJson);
+  const { root, compat, build, install } = readGreenchClawBlock(packageJson);
   const version = normalizeOptionalString(root?.version);
   const minHostVersion = normalizeOptionalString(install?.minHostVersion);
   const compatibility: ExternalPluginCompatibility = {};
@@ -61,9 +61,9 @@ export function normalizeExternalPluginCompatibility(
     compatibility.minGatewayVersion = minGatewayVersion;
   }
 
-  const builtWithNexisClawVersion = normalizeOptionalString(build?.NexisClawVersion) ?? version;
-  if (builtWithNexisClawVersion) {
-    compatibility.builtWithNexisClawVersion = builtWithNexisClawVersion;
+  const builtWithGreenchClawVersion = normalizeOptionalString(build?.GreenchClawVersion) ?? version;
+  if (builtWithGreenchClawVersion) {
+    compatibility.builtWithGreenchClawVersion = builtWithGreenchClawVersion;
   }
 
   const pluginSdkVersion = normalizeOptionalString(build?.pluginSdkVersion);
@@ -75,13 +75,13 @@ export function normalizeExternalPluginCompatibility(
 }
 
 export function listMissingExternalCodePluginFieldPaths(packageJson: unknown): string[] {
-  const { compat, build } = readNexisClawBlock(packageJson);
+  const { compat, build } = readGreenchClawBlock(packageJson);
   const missing: string[] = [];
   if (!normalizeOptionalString(compat?.pluginApi)) {
-    missing.push("NexisClaw.compat.pluginApi");
+    missing.push("GreenchClaw.compat.pluginApi");
   }
-  if (!normalizeOptionalString(build?.NexisClawVersion)) {
-    missing.push("NexisClaw.build.NexisClawVersion");
+  if (!normalizeOptionalString(build?.GreenchClawVersion)) {
+    missing.push("GreenchClaw.build.GreenchClawVersion");
   }
   return missing;
 }

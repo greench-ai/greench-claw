@@ -157,11 +157,11 @@ describe("resolveInstallableChannelPlugin", () => {
 
   it("returns an existing plugin that lacks the requested capability without reinstalling", async () => {
     const catalogEntry = createCatalogEntry({
-      id: "NexisClaw-weixin",
-      pluginId: "@tencent-weixin/NexisClaw-weixin",
+      id: "GreenchClaw-weixin",
+      pluginId: "@tencent-weixin/GreenchClaw-weixin",
       origin: "bundled",
     });
-    const installedPlugin = createPlugin("NexisClaw-weixin");
+    const installedPlugin = createPlugin("GreenchClaw-weixin");
 
     mocks.listChannelPluginCatalogEntries.mockReturnValue([catalogEntry]);
     mocks.getChannelPlugin.mockReturnValue(installedPlugin);
@@ -169,7 +169,7 @@ describe("resolveInstallableChannelPlugin", () => {
     const result = await resolveInstallableChannelPlugin({
       cfg: { plugins: { enabled: true } },
       runtime: {} as never,
-      rawChannel: "NexisClaw-weixin",
+      rawChannel: "GreenchClaw-weixin",
       allowInstall: true,
       supports: (plugin) => Boolean(plugin.directory),
     });
@@ -182,11 +182,11 @@ describe("resolveInstallableChannelPlugin", () => {
 
   it("returns a scoped installed plugin that lacks the requested capability without reinstalling", async () => {
     const catalogEntry = createCatalogEntry({
-      id: "NexisClaw-weixin",
-      pluginId: "@tencent-weixin/NexisClaw-weixin",
+      id: "GreenchClaw-weixin",
+      pluginId: "@tencent-weixin/GreenchClaw-weixin",
       origin: "bundled",
     });
-    const scopedPlugin = createPlugin("NexisClaw-weixin");
+    const scopedPlugin = createPlugin("GreenchClaw-weixin");
 
     mocks.listChannelPluginCatalogEntries.mockReturnValue([catalogEntry]);
     mocks.loadChannelSetupPluginRegistrySnapshotForChannel.mockReturnValue({
@@ -197,7 +197,7 @@ describe("resolveInstallableChannelPlugin", () => {
     const result = await resolveInstallableChannelPlugin({
       cfg: { plugins: { enabled: true } },
       runtime: {} as never,
-      rawChannel: "NexisClaw-weixin",
+      rawChannel: "GreenchClaw-weixin",
       allowInstall: true,
       supports: (plugin) => Boolean(plugin.directory),
     });

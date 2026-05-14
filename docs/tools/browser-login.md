@@ -8,7 +8,7 @@ title: "Browser login"
 
 ## Manual login (recommended)
 
-When a site requires login, **sign in manually** in the **host** browser profile (the NexisClaw browser).
+When a site requires login, **sign in manually** in the **host** browser profile (the GreenchClaw browser).
 
 Do **not** give the model your credentials. Automated logins often trigger anti-bot defenses and can lock the account.
 
@@ -16,11 +16,11 @@ Back to the main browser docs: [Browser](/tools/browser).
 
 ## Which Chrome profile is used?
 
-NexisClaw controls a **dedicated Chrome profile** (named `NexisClaw`, orange-tinted UI). This is separate from your daily browser profile.
+GreenchClaw controls a **dedicated Chrome profile** (named `GreenchClaw`, orange-tinted UI). This is separate from your daily browser profile.
 
 For agent browser tool calls:
 
-- Default choice: the agent should use its isolated `NexisClaw` browser.
+- Default choice: the agent should use its isolated `GreenchClaw` browser.
 - Use `profile="user"` only when existing logged-in sessions matter and the user is at the computer to click/approve any attach prompt.
 - If you have multiple user-browser profiles, specify the profile explicitly instead of guessing.
 
@@ -30,11 +30,11 @@ Two easy ways to access it:
 2. **Open it via CLI**:
 
 ```bash
-NexisClaw browser start
-NexisClaw browser open https://x.com
+GreenchClaw browser start
+GreenchClaw browser open https://x.com
 ```
 
-If you have multiple profiles, pass `--browser-profile <name>` (the default is `NexisClaw`).
+If you have multiple profiles, pass `--browser-profile <name>` (the default is `GreenchClaw`).
 
 ## X/Twitter: recommended flow
 
@@ -65,7 +65,7 @@ If the agent is sandboxed, the browser tool defaults to the sandbox. To allow ho
 Then open the host browser yourself (CLI invocations always run against the host browser):
 
 ```bash
-NexisClaw browser open https://x.com --browser-profile NexisClaw
+GreenchClaw browser open https://x.com --browser-profile GreenchClaw
 ```
 
 The agent's `browser` tool calls can then target the host once `sandbox.browser.allowHostControl: true` is set. Alternatively, disable sandboxing for the agent that posts updates.

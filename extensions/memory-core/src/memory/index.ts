@@ -3,7 +3,7 @@ export type {
   MemoryEmbeddingProbeResult,
   MemorySearchManager,
   MemorySearchResult,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 export {
   closeAllMemorySearchManagers,
   getMemorySearchManager,

@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   collectInstalledSkillsCodeSafetyFindings,
   collectPluginsCodeSafetyFindings,
@@ -51,7 +51,7 @@ describe("audit-extra async code safety", () => {
       path.join(pluginDir, "package.json"),
       JSON.stringify({
         name: "evil-plugin",
-        NexisClaw: { extensions: [".hidden/index.js"] },
+        GreenchClaw: { extensions: [".hidden/index.js"] },
       }),
     );
 
@@ -72,7 +72,7 @@ description: test skill
   };
 
   beforeAll(async () => {
-    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-security-audit-async-"));
+    fixtureRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-security-audit-async-"));
     const codeSafetyFixture = await createSharedCodeSafetyFixture();
     sharedCodeSafetyStateDir = codeSafetyFixture.stateDir;
     sharedCodeSafetyWorkspaceDir = codeSafetyFixture.workspaceDir;
@@ -121,7 +121,7 @@ description: test skill
       };
     });
 
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       agents: { defaults: { workspace: sharedCodeSafetyWorkspaceDir } },
     };
     const [pluginFindings, skillFindings] = await Promise.all([
@@ -154,7 +154,7 @@ description: test skill
       path.join(pluginDir, "package.json"),
       JSON.stringify({
         name: "escape-plugin",
-        NexisClaw: { extensions: ["../outside.js"] },
+        GreenchClaw: { extensions: ["../outside.js"] },
       }),
     );
     await fs.writeFile(path.join(pluginDir, "index.js"), "export {};");
@@ -191,7 +191,7 @@ description: test skill
       const tmpDir = await makeTmpDir("audit-scanner-install-debris");
       for (const name of [
         "demo",
-        ".NexisClaw-install-backups",
+        ".GreenchClaw-install-backups",
         "node_modules",
         "old-plugin.backup-20260502",
         "old-plugin.disabled.20260502",
@@ -211,7 +211,7 @@ description: test skill
         "plugin code-safety",
       );
       expect(codeSafetyFinding.title).toContain('Plugin "demo"');
-      expect(findings.map((f) => f.title).join("\n")).not.toContain(".NexisClaw-install-backups");
+      expect(findings.map((f) => f.title).join("\n")).not.toContain(".GreenchClaw-install-backups");
     } finally {
       scanSpy.mockRestore();
     }
@@ -255,7 +255,7 @@ description: test skill
         path.join(pluginDir, "package.json"),
         JSON.stringify({
           name: "scanfail-plugin",
-          NexisClaw: { extensions: ["index.js"] },
+          GreenchClaw: { extensions: ["index.js"] },
         }),
       );
       await fs.writeFile(path.join(pluginDir, "index.js"), "export {};");

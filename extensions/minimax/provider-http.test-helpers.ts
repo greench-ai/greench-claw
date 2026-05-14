@@ -1,4 +1,4 @@
-import type { resolveProviderHttpRequestConfig } from "NexisClaw/plugin-sdk/provider-http";
+import type { resolveProviderHttpRequestConfig } from "GreenchClaw/plugin-sdk/provider-http";
 import { afterEach, vi, type Mock } from "vitest";
 
 type ResolveProviderHttpRequestConfigParams = Parameters<
@@ -37,11 +37,11 @@ const minimaxProviderHttpMocks = vi.hoisted(() => ({
   })),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-auth-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/provider-auth-runtime", () => ({
   resolveApiKeyForProvider: minimaxProviderHttpMocks.resolveApiKeyForProviderMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-http", () => ({
+vi.mock("GreenchClaw/plugin-sdk/provider-http", () => ({
   assertOkOrThrowHttpError: minimaxProviderHttpMocks.assertOkOrThrowHttpErrorMock,
   createProviderOperationDeadline: ({
     label,

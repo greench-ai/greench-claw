@@ -5,7 +5,7 @@ Skills own workflows; root owns hard policy and routing.
 
 ## Start
 
-- Repo: `https://github.com/NexisClaw/NexisClaw`
+- Repo: `https://github.com/GreenchClaw/GreenchClaw`
 - Replies: repo-root refs only: `extensions/telegram/src/index.ts:80`. No absolute paths, no `~/`.
 - Docs/user-visible work: `pnpm docs:list`, then read relevant docs only.
 - Fix/triage answers need source, tests, current/shipped behavior, and dependency contract proof.
@@ -20,18 +20,18 @@ Skills own workflows; root owns hard policy and routing.
 ## Map
 
 - Core TS: `src/`, `ui/`, `packages/`; plugins: `extensions/`; SDK: `src/plugin-sdk/*`; channels: `src/channels/*`; loader: `src/plugins/*`; protocol: `src/gateway/protocol/*`; docs/apps: `docs/`, `apps/`.
-- Installers: sibling `../NexisClaw.ai`.
+- Installers: sibling `../GreenchClaw.ai`.
 - Scoped guides: `extensions/`, `src/{plugin-sdk,channels,plugins,gateway,gateway/protocol,agents}/`, `test/helpers*/`, `docs/`, `ui/`, `scripts/`.
 
 ## Architecture
 
 - Core stays plugin-agnostic. No bundled ids/defaults/policy in core when manifest/registry/capability contracts work.
-- Plugins cross into core only via `NexisClaw/plugin-sdk/*`, manifest metadata, injected runtime helpers, documented barrels (`api.ts`, `runtime-api.ts`).
+- Plugins cross into core only via `GreenchClaw/plugin-sdk/*`, manifest metadata, injected runtime helpers, documented barrels (`api.ts`, `runtime-api.ts`).
 - Plugin prod code: no core `src/**`, `src/plugin-sdk-internal/**`, other plugin `src/**`, or relative outside package.
 - Core/tests: no deep plugin internals (`extensions/*/src/**`, `onboard.js`). Use public barrels, SDK facade, generic contracts.
 - Owner boundary: owner-specific repair/detection/onboarding/auth/defaults/provider behavior lives in owner plugin. Shared/core gets generic seams only.
 - Dependency ownership follows runtime ownership: plugin-only deps stay plugin-local; root deps only for core imports or intentionally internalized bundled plugin runtime.
-- Legacy config repair belongs in `NexisClaw doctor --fix`, not startup/load-time core migrations. Runtime paths use canonical contracts.
+- Legacy config repair belongs in `GreenchClaw doctor --fix`, not startup/load-time core migrations. Runtime paths use canonical contracts.
 - New seams: backward-compatible, documented, versioned. Third-party plugins exist.
 - Channels are implementation under `src/channels/**`; plugin authors get SDK seams. Providers own auth/catalog/runtime hooks; core owns generic loop.
 - Hot paths should carry prepared facts forward: provider id, model ref, channel id, target, capability family, attachment class. Do not rediscover with broad plugin/provider/channel/capability loaders.
@@ -45,7 +45,7 @@ Skills own workflows; root owns hard policy and routing.
 - Runtime: Node 22+. Keep Node + Bun paths working.
 - Package manager/runtime: repo defaults only. No swaps without approval.
 - Install: `pnpm install` (keep Bun lock/patches aligned if touched).
-- CLI: `pnpm NexisClaw ...` or `pnpm dev`; build: `pnpm build`.
+- CLI: `pnpm GreenchClaw ...` or `pnpm dev`; build: `pnpm build`.
 - Tests: `pnpm test <path-or-filter> [vitest args...]`, `pnpm test:changed`, `pnpm test:serial`, `pnpm test:coverage`; never raw `vitest`.
 - Checks: `pnpm check:changed`; lanes: `pnpm changed:lanes --json`; staged: `pnpm check:changed --staged`; full: `pnpm check`.
 - Extension tests: `pnpm test:extensions`, `pnpm test extensions`, `pnpm test extensions/<id>`.
@@ -55,7 +55,7 @@ Skills own workflows; root owns hard policy and routing.
 
 ## Validation
 
-- Use `$NexisClaw-testing` for test/CI choice and `$crabbox` for remote/full/E2E proof.
+- Use `$GreenchClaw-testing` for test/CI choice and `$crabbox` for remote/full/E2E proof.
 - Small/narrow tests, lints, format checks, and type probes are fine locally.
 - Full suites, broad changed gates, Docker/package/E2E/live/cross-OS proof, or anything that bogs down the Mac: Crabbox/Testbox.
 - One/few files local. If a local command fans out, stop and move broad proof to Crabbox/Testbox.
@@ -66,7 +66,7 @@ Skills own workflows; root owns hard policy and routing.
 
 ## GitHub / PRs
 
-- Use `$NexisClaw-pr-maintainer` immediately for maintainer-side NexisClaw issue/PR review, triage, duplicates, labels, comments, close, land, or evidence. Contributor PR creation/refresh follows the requested contributor workflow; linked refs alone do not require maintainer archive tooling.
+- Use `$GreenchClaw-pr-maintainer` immediately for maintainer-side GreenchClaw issue/PR review, triage, duplicates, labels, comments, close, land, or evidence. Contributor PR creation/refresh follows the requested contributor workflow; linked refs alone do not require maintainer archive tooling.
 - PR refs: `gh pr view/diff` or `gh api`, not web search. Prefer `gitcrawl` for maintainer discovery; missing/stale `gitcrawl` falls through to live `gh`, not contributor setup. Verify live with `gh` before mutation.
 - Bare issue/PR URL/number means review/report in chat. Suggest comment/close/merge when appropriate; mutate only when asked.
 - No unsolicited PR comments/reviews/labels/retitles/rebases/fixups/landing. Exception: close/duplicate action that needs a reason comment after explicit close/sweep/landing request.
@@ -95,7 +95,7 @@ Skills own workflows; root owns hard policy and routing.
 - Classes: no prototype mixins/mutations. Prefer inheritance/composition. Tests prefer per-instance stubs.
 - Comments: brief, only non-obvious logic.
 - Split files around ~700 LOC when clarity/testability improves.
-- Naming: **NexisClaw** product/docs; `NexisClaw` CLI/package/path/config.
+- Naming: **GreenchClaw** product/docs; `GreenchClaw` CLI/package/path/config.
 - English: American spelling.
 
 ## Tests
@@ -103,21 +103,21 @@ Skills own workflows; root owns hard policy and routing.
 - Vitest. Colocated `*.test.ts`; e2e `*.e2e.test.ts`; example models `sonnet-4.6`, `gpt-5.5`; test GPT with 5.5 preferred, 5.4 ok; no GPT-4.x agent-smoke defaults.
 - Prefer behavior tests over workflow/docs string greps. Put operator policy reminders in AGENTS/docs.
 - Clean timers/env/globals/mocks/sockets/temp dirs/module state; `--isolate=false` safe.
-- Prefer injection and narrow `*.runtime.ts` mocks over broad barrels or `NexisClaw/plugin-sdk/*`.
+- Prefer injection and narrow `*.runtime.ts` mocks over broad barrels or `GreenchClaw/plugin-sdk/*`.
 - Do not edit baseline/inventory/ignore/snapshot/expected-failure files to silence checks without explicit approval.
-- Do not run independent `pnpm test`/Vitest commands concurrently in one worktree; Vitest cache races with `ENOTEMPTY`. Group one command or use distinct `NEXISCLAW_VITEST_FS_MODULE_CACHE_PATH`.
-- Test workers max 16. Memory pressure: `NEXISCLAW_VITEST_MAX_WORKERS=1 pnpm test`.
-- Live: `NEXISCLAW_LIVE_TEST=1 pnpm test:live`; verbose `NEXISCLAW_LIVE_TEST_QUIET=0`.
+- Do not run independent `pnpm test`/Vitest commands concurrently in one worktree; Vitest cache races with `ENOTEMPTY`. Group one command or use distinct `GREENCHCLAW_VITEST_FS_MODULE_CACHE_PATH`.
+- Test workers max 16. Memory pressure: `GREENCHCLAW_VITEST_MAX_WORKERS=1 pnpm test`.
+- Live: `GREENCHCLAW_LIVE_TEST=1 pnpm test:live`; verbose `GREENCHCLAW_LIVE_TEST_QUIET=0`.
 - Guide: `docs/reference/test.md`.
 
 ## Docs / Changelog
 
-- Use `$NexisClaw-docs` for docs writing/review. Docs change with behavior/API.
+- Use `$GreenchClaw-docs` for docs writing/review. Docs change with behavior/API.
 - Codex harness upgrade (`extensions/codex/package.json` `@openai/codex`): refresh `docs/plugins/codex-harness.md` model snapshot from the new harness `model/list`.
-- Docs final answers: include relevant full `https://docs.NexisClaw.ai/...` URL(s). If issue/PR work too, GitHub URL last.
+- Docs final answers: include relevant full `https://docs.GreenchClaw.ai/...` URL(s). If issue/PR work too, GitHub URL last.
 - Changelog entries: active version `### Changes`/`### Fixes`; single-line bullets only.
 - Contributor PR authors should not edit `CHANGELOG.md`; maintainer/AI adds entries during landing/merge.
-- Contributor-facing changelog entries thank credited human `@author`. Never thank bots, `@NexisClaw`, `@clawsweeper`, or `@steipete`; if unknown, omit thanks.
+- Contributor-facing changelog entries thank credited human `@author`. Never thank bots, `@GreenchClaw`, `@clawsweeper`, or `@steipete`; if unknown, omit thanks.
 
 ## Git
 
@@ -133,12 +133,12 @@ Skills own workflows; root owns hard policy and routing.
 ## Security / Release
 
 - Never commit real phone numbers, videos, credentials, live config.
-- Secrets: channel/provider creds in `~/.NexisClaw/credentials/`; model auth profiles in `~/.NexisClaw/agents/<agentId>/agent/auth-profiles.json`.
+- Secrets: channel/provider creds in `~/.GreenchClaw/credentials/`; model auth profiles in `~/.GreenchClaw/agents/<agentId>/agent/auth-profiles.json`.
 - Env keys: check `~/.profile`; redact output.
 - Dependency patches/overrides/vendor changes need explicit approval. `pnpm-workspace.yaml` patched dependencies use exact versions only.
 - Carbon pins owner-only: do not change `@buape/carbon` unless Shadow (`@thewilloftheshadow`, verified by `gh`) asks.
-- Releases/publish/version bumps need explicit approval. Use `$NexisClaw-release-maintainer`.
-- GHSA/advisories: `$NexisClaw-ghsa-maintainer` / `$security-triage`. Secret scanning: `$NexisClaw-secret-scanning-maintainer`.
+- Releases/publish/version bumps need explicit approval. Use `$GreenchClaw-release-maintainer`.
+- GHSA/advisories: `$GreenchClaw-ghsa-maintainer` / `$security-triage`. Secret scanning: `$GreenchClaw-secret-scanning-maintainer`.
 - Beta tag/version match: `vYYYY.M.D-beta.N` -> npm `YYYY.M.D-beta.N --tag beta`.
 
 ## Platform / Ops
@@ -146,13 +146,13 @@ Skills own workflows; root owns hard policy and routing.
 - Before simulator/emulator testing, check real iOS/Android devices.
 - "restart iOS/Android apps" = rebuild/reinstall/relaunch, not kill/launch.
 - SwiftUI: Observation (`@Observable`, `@Bindable`) over new `ObservableObject`.
-- Mac gateway: dev watch = `pnpm gateway:watch`; managed installs = `NexisClaw gateway restart/status --deep`; logs = `./scripts/clawlog.sh`. No launchd/ad-hoc tmux.
-- Version bump surfaces live in `$NexisClaw-release-maintainer`.
-- Parallels: `$NexisClaw-parallels-smoke`; Discord roundtrip: `$parallels-discord-roundtrip`.
+- Mac gateway: dev watch = `pnpm gateway:watch`; managed installs = `GreenchClaw gateway restart/status --deep`; logs = `./scripts/clawlog.sh`. No launchd/ad-hoc tmux.
+- Version bump surfaces live in `$GreenchClaw-release-maintainer`.
+- Parallels: `$GreenchClaw-parallels-smoke`; Discord roundtrip: `$parallels-discord-roundtrip`.
 - Crabbox/WebVNC human demos: keep remote desktop visible/windowed; no fullscreen remote browser unless video/capture-style output.
 - ClawSweeper ops: `$clawsweeper`. Deployed hook sessions may post one concise `#clawsweeper` note only when surprising/actionable/risky; if using message tool, reply exactly `NO_REPLY`.
 - Memory wiki prompt digest stays tiny; prefer `wiki_search` / `wiki_get`; verify contact data before use; source-class provenance for generated people facts.
-- Rebrand/migration/config warnings: run `NexisClaw doctor`.
+- Rebrand/migration/config warnings: run `GreenchClaw doctor`.
 - Never edit `node_modules`.
 - Local-only `.agents` ignores: `.git/info/exclude`, not repo `.gitignore`.
 - Provider tool schemas: prefer flat string enum helpers over `Type.Union([Type.Literal(...)])`; some providers reject `anyOf`.

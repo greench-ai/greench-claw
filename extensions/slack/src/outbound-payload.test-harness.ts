@@ -1,5 +1,5 @@
-import { primeChannelOutboundSendMock } from "NexisClaw/plugin-sdk/channel-contract-testing";
-import type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-runtime";
+import { primeChannelOutboundSendMock } from "GreenchClaw/plugin-sdk/channel-contract-testing";
+import type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-runtime";
 import { vi, type Mock } from "vitest";
 import { slackOutbound } from "./outbound-adapter.js";
 

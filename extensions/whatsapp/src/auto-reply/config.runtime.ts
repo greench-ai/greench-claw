@@ -8,9 +8,9 @@ export {
   resolveThreadFlag,
   resolveChannelResetConfig,
   updateLastRoute,
-} from "NexisClaw/plugin-sdk/session-store-runtime";
+} from "GreenchClaw/plugin-sdk/session-store-runtime";
 export {
   getRuntimeConfig,
   getRuntimeConfigSourceSnapshot,
-} from "NexisClaw/plugin-sdk/runtime-config-snapshot";
-export { resolveChannelContextVisibilityMode } from "NexisClaw/plugin-sdk/context-visibility-runtime";
+} from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
+export { resolveChannelContextVisibilityMode } from "GreenchClaw/plugin-sdk/context-visibility-runtime";

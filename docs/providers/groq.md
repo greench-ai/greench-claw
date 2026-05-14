@@ -2,12 +2,12 @@
 summary: "Groq setup (auth + model selection + Whisper transcription)"
 title: "Groq"
 read_when:
-  - You want to use Groq with NexisClaw
+  - You want to use Groq with GreenchClaw
   - You need the API key env var or CLI auth choice
   - You are configuring Whisper audio transcription on Groq
 ---
 
-[Groq](https://groq.com) provides ultra-fast inference on open-weight models (Llama, Gemma, Kimi, Qwen, GPT OSS, and more) using custom LPU hardware. NexisClaw includes a bundled Groq plugin that registers both an OpenAI-compatible chat provider and an audio media-understanding provider.
+[Groq](https://groq.com) provides ultra-fast inference on open-weight models (Llama, Gemma, Kimi, Qwen, GPT OSS, and more) using custom LPU hardware. GreenchClaw includes a bundled Groq plugin that registers both an OpenAI-compatible chat provider and an audio media-understanding provider.
 
 | Property               | Value                                    |
 | ---------------------- | ---------------------------------------- |
@@ -30,7 +30,7 @@ read_when:
     <CodeGroup>
 
 ```bash Onboarding
-NexisClaw onboard --auth-choice groq-api-key
+GreenchClaw onboard --auth-choice groq-api-key
 ```
 
 ```bash Env only
@@ -53,7 +53,7 @@ export GROQ_API_KEY=gsk_...
   </Step>
   <Step title="Verify the catalog is reachable">
     ```bash
-    NexisClaw models list --provider groq
+    GreenchClaw models list --provider groq
     ```
   </Step>
 </Steps>
@@ -73,7 +73,7 @@ export GROQ_API_KEY=gsk_...
 
 ## Built-in catalog
 
-NexisClaw ships a manifest-backed Groq catalog with both reasoning and non-reasoning entries. Run `NexisClaw models list --provider groq` to see the bundled rows for your installed version, or check [console.groq.com/docs/models](https://console.groq.com/docs/models) for Groq's authoritative list.
+GreenchClaw ships a manifest-backed Groq catalog with both reasoning and non-reasoning entries. Run `GreenchClaw models list --provider groq` to see the bundled rows for your installed version, or check [console.groq.com/docs/models](https://console.groq.com/docs/models) for Groq's authoritative list.
 
 | Model ref                                            | Name                          | Reasoning | Input        | Context |
 | ---------------------------------------------------- | ----------------------------- | --------- | ------------ | ------- |
@@ -97,18 +97,18 @@ NexisClaw ships a manifest-backed Groq catalog with both reasoning and non-reaso
 | `groq/groq/compound-mini`                            | Compound Mini                 | yes       | text         | 131,072 |
 
 <Tip>
-  The catalog evolves with each NexisClaw release. `NexisClaw models list --provider groq` shows the rows known to your installed version; cross-check with [console.groq.com/docs/models](https://console.groq.com/docs/models) for newly-added or deprecated models.
+  The catalog evolves with each GreenchClaw release. `GreenchClaw models list --provider groq` shows the rows known to your installed version; cross-check with [console.groq.com/docs/models](https://console.groq.com/docs/models) for newly-added or deprecated models.
 </Tip>
 
 ## Reasoning models
 
-NexisClaw maps its shared `/think` levels to Groq's model-specific `reasoning_effort` values:
+GreenchClaw maps its shared `/think` levels to Groq's model-specific `reasoning_effort` values:
 
 - For `qwen/qwen3-32b`, disabled thinking sends `none` and enabled thinking sends `default`.
-- For Groq GPT OSS reasoning models (`openai/gpt-oss-*`), NexisClaw sends `low`, `medium`, or `high` based on `/think` level. Disabled thinking omits `reasoning_effort` because those models do not support a disabled value.
+- For Groq GPT OSS reasoning models (`openai/gpt-oss-*`), GreenchClaw sends `low`, `medium`, or `high` based on `/think` level. Disabled thinking omits `reasoning_effort` because those models do not support a disabled value.
 - DeepSeek R1 Distill, Qwen QwQ, and Compound use Groq's native reasoning surface; `/think` controls visibility but the model always reasons.
 
-See [Thinking modes](/tools/thinking) for the shared `/think` levels and how NexisClaw translates them per provider.
+See [Thinking modes](/tools/thinking) for the shared `/think` levels and how GreenchClaw translates them per provider.
 
 ## Audio transcription
 
@@ -141,13 +141,13 @@ To make Groq the default audio backend:
     If the Gateway runs as a managed service (launchd, systemd, Docker), `GROQ_API_KEY` must be visible to that process — not just to your interactive shell.
 
     <Warning>
-      A key sitting only in `~/.profile` will not help a launchd or systemd daemon unless that environment is imported there too. Set the key in `~/.NexisClaw/.env` or via `env.shellEnv` to make it readable from the gateway process.
+      A key sitting only in `~/.profile` will not help a launchd or systemd daemon unless that environment is imported there too. Set the key in `~/.GreenchClaw/.env` or via `env.shellEnv` to make it readable from the gateway process.
     </Warning>
 
   </Accordion>
 
   <Accordion title="Custom Groq model ids">
-    NexisClaw accepts any Groq model id at runtime. Use the exact id shown by Groq and prefix it with `groq/`. The bundled catalog covers the common cases; uncatalogued ids fall through to the default OpenAI-compatible template.
+    GreenchClaw accepts any Groq model id at runtime. Use the exact id shown by Groq and prefix it with `groq/`. The bundled catalog covers the common cases; uncatalogued ids fall through to the default OpenAI-compatible template.
 
     ```json5
     {

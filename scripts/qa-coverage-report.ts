@@ -21,7 +21,7 @@ function parseArgs(args: string[]): Options {
     switch (arg) {
       case "--help":
       case "-h":
-        process.stdout.write(`Usage: NexisClaw qa coverage [options]
+        process.stdout.write(`Usage: GreenchClaw qa coverage [options]
 
 Options:
   --json                Print machine-readable JSON

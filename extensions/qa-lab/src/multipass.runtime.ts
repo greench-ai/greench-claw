@@ -3,16 +3,16 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import { access, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { sleep } from "NexisClaw/plugin-sdk/runtime-env";
-import { appendRegularFile } from "NexisClaw/plugin-sdk/security-runtime";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+import { sleep } from "GreenchClaw/plugin-sdk/runtime-env";
+import { appendRegularFile } from "GreenchClaw/plugin-sdk/security-runtime";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 import type { QaProviderMode } from "./model-selection.js";
 import { resolveQaForwardedLiveEnv, resolveQaLiveProviderConfigPath } from "./providers/env.js";
 import { DEFAULT_QA_LIVE_PROVIDER_MODE, getQaProvider } from "./providers/index.js";
 
-const MULTIPASS_MOUNTED_REPO_PATH = "/workspace/NexisClaw-host";
-const MULTIPASS_GUEST_REPO_PATH = "/workspace/NexisClaw";
-const MULTIPASS_GUEST_CODEX_HOME_PATH = "/workspace/NexisClaw-codex-home";
+const MULTIPASS_MOUNTED_REPO_PATH = "/workspace/GreenchClaw-host";
+const MULTIPASS_GUEST_REPO_PATH = "/workspace/GreenchClaw";
+const MULTIPASS_GUEST_CODEX_HOME_PATH = "/workspace/GreenchClaw-codex-home";
 const MULTIPASS_GUEST_PACKAGES = [
   "build-essential",
   "ca-certificates",
@@ -259,12 +259,12 @@ export function createQaMultipassPlan(params: {
     liveProviderConfig && fs.existsSync(liveProviderConfig.path)
       ? liveProviderConfig.path
       : undefined;
-  const vmName = `NexisClaw-qa-${createVmSuffix()}`;
+  const vmName = `GreenchClaw-qa-${createVmSuffix()}`;
   const guestOutputDir = resolveGuestMountedPath(params.repoRoot, outputDir);
   const qaCommand = appendScenarioArgs(
     [
       "pnpm",
-      "NexisClaw",
+      "GreenchClaw",
       "qa",
       "suite",
       "--transport",
@@ -336,15 +336,15 @@ export function renderQaMultipassGuestScript(
       .filter(
         ([key]) =>
           key !== "CODEX_HOME" &&
-          key !== "NEXISCLAW_CONFIG_PATH" &&
-          key !== "NEXISCLAW_QA_LIVE_PROVIDER_CONFIG_PATH",
+          key !== "GREENCHCLAW_CONFIG_PATH" &&
+          key !== "GREENCHCLAW_QA_LIVE_PROVIDER_CONFIG_PATH",
       )
       .map(([key, value]) => `${key}=${shellQuote(redactSecrets ? "<redacted>" : value)}`),
     ...(plan.guestCodexHomePath ? [`CODEX_HOME=${shellQuote(plan.guestCodexHomePath)}`] : []),
     ...(plan.guestLiveProviderConfigPath
       ? [
-          `NEXISCLAW_CONFIG_PATH=${shellQuote(plan.guestLiveProviderConfigPath)}`,
-          `NEXISCLAW_QA_LIVE_PROVIDER_CONFIG_PATH=${shellQuote(plan.guestLiveProviderConfigPath)}`,
+          `GREENCHCLAW_CONFIG_PATH=${shellQuote(plan.guestLiveProviderConfigPath)}`,
+          `GREENCHCLAW_QA_LIVE_PROVIDER_CONFIG_PATH=${shellQuote(plan.guestLiveProviderConfigPath)}`,
         ]
       : []),
     plan.qaCommand.map(shellQuote).join(" "),
@@ -560,7 +560,7 @@ export async function runQaMultipass(params: {
   await mkdir(plan.outputDir, { recursive: true });
   await writeFile(
     plan.hostLogPath,
-    `# NexisClaw QA Multipass host log\nvmName=${plan.vmName}\noutputDir=${plan.outputDir}\n\n`,
+    `# GreenchClaw QA Multipass host log\nvmName=${plan.vmName}\noutputDir=${plan.outputDir}\n\n`,
     "utf8",
   );
   await writeFile(
@@ -582,13 +582,13 @@ export async function runQaMultipass(params: {
       );
     }
     throw new Error(
-      `Multipass is not installed on this host. Install it with '${resolveMultipassInstallHint()}', then rerun 'pnpm NexisClaw qa suite --runner multipass'.`,
+      `Multipass is not installed on this host. Install it with '${resolveMultipassInstallHint()}', then rerun 'pnpm GreenchClaw qa suite --runner multipass'.`,
       { cause: error },
     );
   }
 
   const hostTransferDirPath = await fs.promises.mkdtemp(
-    path.join(resolvePreferredNexisClawTmpDir(), `${plan.vmName}-qa-suite-`),
+    path.join(resolvePreferredGreenchClawTmpDir(), `${plan.vmName}-qa-suite-`),
   );
   const hostTransferScriptPath = path.join(hostTransferDirPath, "guest-run.sh");
   await writeFile(hostTransferScriptPath, renderQaMultipassGuestScript(plan), {

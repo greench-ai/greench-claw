@@ -9,7 +9,7 @@ vi.mock("../plugins/bundled-dir.js", async (importOriginal) => {
   return {
     ...actual,
     resolveBundledPluginsDir: (env: NodeJS.ProcessEnv = process.env) =>
-      env.NEXISCLAW_BUNDLED_PLUGINS_DIR,
+      env.GREENCHCLAW_BUNDLED_PLUGINS_DIR,
   };
 });
 
@@ -18,7 +18,7 @@ const tempDirs: string[] = [];
 function makeTempDir(): string {
   const trustedRoot = path.resolve("dist-runtime", "extensions");
   fs.mkdirSync(trustedRoot, { recursive: true });
-  const dir = fs.mkdtempSync(path.join(trustedRoot, ".NexisClaw-plugin-prefer-over-"));
+  const dir = fs.mkdtempSync(path.join(trustedRoot, ".GreenchClaw-plugin-prefer-over-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -29,7 +29,7 @@ function writeBundledChannelPackage(rootDir: string, channelId: string): void {
   fs.writeFileSync(
     path.join(pluginDir, "package.json"),
     JSON.stringify({
-      NexisClaw: {
+      GreenchClaw: {
         channel: {
           id: channelId,
           label: "Cache Drift",
@@ -42,7 +42,7 @@ function writeBundledChannelPackage(rootDir: string, channelId: string): void {
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(pluginDir, "NexisClaw.plugin.json"),
+    path.join(pluginDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: channelId,
       configSchema: { type: "object" },
@@ -81,12 +81,12 @@ describe("plugin auto-enable preferOver", () => {
     const channelId = "cache-drift-channel";
     writeBundledChannelPackage(rootDir, channelId);
 
-    vi.stubEnv("NEXISCLAW_BUNDLED_PLUGINS_DIR", rootDir);
+    vi.stubEnv("GREENCHCLAW_BUNDLED_PLUGINS_DIR", rootDir);
     await setBundledPluginsDirFixture(rootDir);
     const { normalizeChatChannelId } = await import("../channels/ids.js");
     expect(normalizeChatChannelId(channelId)).toBe(channelId);
 
-    vi.stubEnv("NEXISCLAW_BUNDLED_PLUGINS_DIR", path.join(rootDir, "missing"));
+    vi.stubEnv("GREENCHCLAW_BUNDLED_PLUGINS_DIR", path.join(rootDir, "missing"));
     await setBundledPluginsDirFixture(undefined);
     const { materializePluginAutoEnableCandidates } = await import("./plugin-auto-enable.js");
 
@@ -110,8 +110,8 @@ describe("plugin auto-enable preferOver", () => {
         },
       ],
       env: {
-        NEXISCLAW_STATE_DIR: path.join(rootDir, "state"),
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: path.join(rootDir, "missing"),
+        GREENCHCLAW_STATE_DIR: path.join(rootDir, "state"),
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: path.join(rootDir, "missing"),
       },
       manifestRegistry: EMPTY_MANIFEST_REGISTRY,
     });

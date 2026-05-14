@@ -2,7 +2,7 @@ import {
   buildChannelOutboundSessionRoute,
   stripChannelTargetPrefix,
   type ChannelOutboundSessionRouteParams,
-} from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/core";
 
 export function resolveNostrOutboundSessionRoute(params: ChannelOutboundSessionRouteParams) {
   const target = stripChannelTargetPrefix(params.target, "nostr");

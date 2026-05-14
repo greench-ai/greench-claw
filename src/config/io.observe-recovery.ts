@@ -17,7 +17,7 @@ import {
   isPluginLocalInvalidConfigSnapshot,
   shouldAttemptLastKnownGoodRecovery,
 } from "./recovery-policy.js";
-import type { ConfigFileSnapshot } from "./types.NexisClaw.js";
+import type { ConfigFileSnapshot } from "./types.GreenchClaw.js";
 
 export type ObserveRecoveryDeps = {
   fs: {

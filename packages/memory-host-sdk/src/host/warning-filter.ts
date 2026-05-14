@@ -1,2 +1,2 @@
-export { installProcessWarningFilter, shouldIgnoreWarning } from "./NexisClaw-runtime-io.js";
-export type { ProcessWarning } from "./NexisClaw-runtime-io.js";
+export { installProcessWarningFilter, shouldIgnoreWarning } from "./GreenchClaw-runtime-io.js";
+export type { ProcessWarning } from "./GreenchClaw-runtime-io.js";

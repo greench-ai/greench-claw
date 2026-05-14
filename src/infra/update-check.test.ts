@@ -29,7 +29,7 @@ describe("compareSemverStrings", () => {
     expect(compareSemverStrings("1.0.0", "1.0.0.beta.1")).toBe(1);
   });
 
-  it("treats NexisClaw stable correction releases as newer than their base release", () => {
+  it("treats GreenchClaw stable correction releases as newer than their base release", () => {
     expect(compareSemverStrings("2026.5.3", "2026.5.3-1")).toBe(-1);
     expect(compareSemverStrings("2026.5.3-1", "2026.5.3")).toBe(1);
     expect(compareSemverStrings("2026.5.3-2", "2026.5.3-1")).toBe(1);
@@ -195,7 +195,7 @@ describe("formatGitInstallLabel", () => {
 
 describe("checkDepsStatus", () => {
   it("reports unknown, missing, stale, and ok states from lockfile markers", async () => {
-    await withTempDir({ prefix: "NexisClaw-update-check-" }, async (base) => {
+    await withTempDir({ prefix: "GreenchClaw-update-check-" }, async (base) => {
       await expect(checkDepsStatus({ root: base, manager: "unknown" })).resolves.toEqual({
         manager: "unknown",
         status: "unknown",
@@ -245,7 +245,7 @@ describe("checkUpdateStatus", () => {
   });
 
   it("detects package installs for non-git roots", async () => {
-    await withTempDir({ prefix: "NexisClaw-update-check-" }, async (root) => {
+    await withTempDir({ prefix: "GreenchClaw-update-check-" }, async (root) => {
       await fs.writeFile(
         path.join(root, "package.json"),
         JSON.stringify({ packageManager: "npm@10.0.0" }),
@@ -270,13 +270,13 @@ describe("checkUpdateStatus", () => {
   });
 
   it("treats symlinked git installs as git roots", async () => {
-    await withTempDir({ prefix: "NexisClaw-update-check-git-" }, async (base) => {
+    await withTempDir({ prefix: "GreenchClaw-update-check-git-" }, async (base) => {
       const repoRoot = path.join(base, "repo");
-      const linkedRoot = path.join(base, "linked-NexisClaw");
+      const linkedRoot = path.join(base, "linked-GreenchClaw");
       await fs.mkdir(repoRoot, { recursive: true });
       await fs.writeFile(
         path.join(repoRoot, "package.json"),
-        JSON.stringify({ name: "NexisClaw", packageManager: "pnpm@10.0.0" }),
+        JSON.stringify({ name: "GreenchClaw", packageManager: "pnpm@10.0.0" }),
         "utf8",
       );
       await runCommandWithTimeout(["git", "init"], { cwd: repoRoot, timeoutMs: 1000 });

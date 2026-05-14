@@ -2,20 +2,20 @@ import type {
   GeneratedImageAsset,
   ImageGenerationProvider,
   ImageGenerationRequest,
-} from "NexisClaw/plugin-sdk/image-generation";
+} from "GreenchClaw/plugin-sdk/image-generation";
 import {
   generatedImageAssetFromBase64,
   generatedImageAssetFromDataUrl,
   toImageDataUrl,
-} from "NexisClaw/plugin-sdk/image-generation";
-import { isProviderApiKeyConfigured } from "NexisClaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
+} from "GreenchClaw/plugin-sdk/image-generation";
+import { isProviderApiKeyConfigured } from "GreenchClaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "GreenchClaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   postJsonRequest,
   resolveProviderHttpRequestConfig,
-} from "NexisClaw/plugin-sdk/provider-http";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/provider-http";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { OPENROUTER_BASE_URL } from "./provider-catalog.js";
 
 const DEFAULT_MODEL = "google/gemini-3.1-flash-image-preview";
@@ -228,8 +228,8 @@ export function buildOpenRouterImageGenerationProvider(): ImageGenerationProvide
           allowPrivateNetwork: false,
           defaultHeaders: {
             Authorization: `Bearer ${auth.apiKey}`,
-            "HTTP-Referer": "https://NexisClaw.ai",
-            "X-OpenRouter-Title": "NexisClaw",
+            "HTTP-Referer": "https://GreenchClaw.ai",
+            "X-OpenRouter-Title": "GreenchClaw",
           },
           provider: "openrouter",
           capability: "image",

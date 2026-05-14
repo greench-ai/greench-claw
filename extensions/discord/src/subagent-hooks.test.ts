@@ -1,8 +1,8 @@
 import {
   getRequiredHookHandler,
   registerHookHandlersForTest,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/core";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 type ThreadBindingRecord = {
@@ -83,7 +83,7 @@ function registerHandlersForTest(
     },
   },
 ) {
-  return registerHookHandlersForTest<NexisClawPluginApi>({
+  return registerHookHandlersForTest<GreenchClawPluginApi>({
     config,
     register: registerDiscordSubagentHooks,
   });

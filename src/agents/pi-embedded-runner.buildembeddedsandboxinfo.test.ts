@@ -8,16 +8,16 @@ function createSandboxContext(overrides?: Partial<SandboxContext>): SandboxConte
     enabled: true,
     backendId: "docker",
     sessionKey: "session:test",
-    workspaceDir: "/tmp/NexisClaw-sandbox",
-    agentWorkspaceDir: "/tmp/NexisClaw-workspace",
+    workspaceDir: "/tmp/GreenchClaw-sandbox",
+    agentWorkspaceDir: "/tmp/GreenchClaw-workspace",
     workspaceAccess: "none",
-    runtimeId: "NexisClaw-sbx-test",
-    runtimeLabel: "NexisClaw-sbx-test",
-    containerName: "NexisClaw-sbx-test",
+    runtimeId: "GreenchClaw-sbx-test",
+    runtimeLabel: "GreenchClaw-sbx-test",
+    containerName: "GreenchClaw-sbx-test",
     containerWorkdir: "/workspace",
     docker: {
-      image: "NexisClaw-sandbox:bookworm-slim",
-      containerPrefix: "NexisClaw-sbx-",
+      image: "GreenchClaw-sandbox:bookworm-slim",
+      containerPrefix: "GreenchClaw-sbx-",
       workdir: "/workspace",
       readOnlyRoot: true,
       tmpfs: ["/tmp"],
@@ -34,7 +34,7 @@ function createSandboxContext(overrides?: Partial<SandboxContext>): SandboxConte
     browser: {
       bridgeUrl: "http://localhost:9222",
       noVncUrl: "http://localhost:6080",
-      containerName: "NexisClaw-sbx-browser-test",
+      containerName: "GreenchClaw-sbx-browser-test",
     },
   } satisfies SandboxContext;
   return { ...base, ...overrides };
@@ -50,7 +50,7 @@ describe("buildEmbeddedSandboxInfo", () => {
 
     expect(buildEmbeddedSandboxInfo(sandbox)).toEqual({
       enabled: true,
-      workspaceDir: "/tmp/NexisClaw-sandbox",
+      workspaceDir: "/tmp/GreenchClaw-sandbox",
       containerWorkspaceDir: "/workspace",
       workspaceAccess: "none",
       agentWorkspaceMount: undefined,
@@ -73,7 +73,7 @@ describe("buildEmbeddedSandboxInfo", () => {
       }),
     ).toEqual({
       enabled: true,
-      workspaceDir: "/tmp/NexisClaw-sandbox",
+      workspaceDir: "/tmp/GreenchClaw-sandbox",
       containerWorkspaceDir: "/workspace",
       workspaceAccess: "none",
       agentWorkspaceMount: undefined,
@@ -99,7 +99,7 @@ describe("buildEmbeddedSandboxInfo", () => {
       }),
     ).toEqual({
       enabled: true,
-      workspaceDir: "/tmp/NexisClaw-sandbox",
+      workspaceDir: "/tmp/GreenchClaw-sandbox",
       containerWorkspaceDir: "/workspace",
       workspaceAccess: "none",
       agentWorkspaceMount: undefined,

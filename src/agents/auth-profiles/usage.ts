@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { normalizeProviderId } from "../provider-id.js";
 import { resolveProviderRequestHeaders } from "../provider-request-config.js";
 import { logAuthProfileFailureStateChange } from "./state-observation.js";
@@ -397,7 +397,7 @@ const DISABLED_FAILURE_BACKOFF_POLICIES = {
 } as const satisfies Record<DisabledFailureReason, DisabledFailureBackoffPolicy>;
 
 function resolveAuthCooldownConfig(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   providerId: string;
 }): ResolvedAuthCooldownConfig {
   const defaults = {
@@ -650,7 +650,7 @@ export async function markAuthProfileFailure(params: {
   store: AuthProfileStore;
   profileId: string;
   reason: AuthProfileFailureReason;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentDir?: string;
   runId?: string;
   modelId?: string;

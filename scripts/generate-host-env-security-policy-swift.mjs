@@ -21,7 +21,7 @@ const outputPath = path.join(
   "apps",
   "macos",
   "Sources",
-  "NexisClaw",
+  "GreenchClaw",
   "HostEnvSecurityPolicy.generated.swift",
 );
 

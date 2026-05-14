@@ -1,5 +1,5 @@
 ---
-summary: "Adds Vercel AI Gateway model provider support to NexisClaw."
+summary: "Adds Vercel AI Gateway model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the vercel-ai-gateway plugin
 title: "Vercel AI Gateway plugin"
@@ -7,12 +7,12 @@ title: "Vercel AI Gateway plugin"
 
 # Vercel AI Gateway plugin
 
-Adds Vercel AI Gateway model provider support to NexisClaw.
+Adds Vercel AI Gateway model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/vercel-ai-gateway-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/vercel-ai-gateway-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

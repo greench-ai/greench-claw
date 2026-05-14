@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { createFixtureSuite } from "../test-utils/fixture-suite.js";
 import { NON_ENV_SECRETREF_MARKER } from "./model-auth-markers.js";
 import {
@@ -22,7 +22,7 @@ vi.mock("./model-auth-env-vars.js", () => ({
 }));
 
 vi.mock("../plugins/provider-runtime.js", () => ({
-  applyProviderConfigDefaultsWithPlugin: (config: NexisClawConfig) => config,
+  applyProviderConfigDefaultsWithPlugin: (config: GreenchClawConfig) => config,
   applyProviderNativeStreamingUsageCompatWithPlugin: () => undefined,
   normalizeProviderConfigWithPlugin: () => undefined,
   resolveProviderConfigApiKeyWithPlugin: () => undefined,
@@ -44,19 +44,19 @@ installModelsConfigTestHooks();
 let clearConfigCache: typeof import("../config/io.js").clearConfigCache;
 let clearRuntimeConfigSnapshot: typeof import("../config/io.js").clearRuntimeConfigSnapshot;
 let setRuntimeConfigSnapshot: typeof import("../config/io.js").setRuntimeConfigSnapshot;
-let ensureNexisClawModelsJson: typeof import("./models-config.js").ensureNexisClawModelsJson;
+let ensureGreenchClawModelsJson: typeof import("./models-config.js").ensureGreenchClawModelsJson;
 let resetModelsJsonReadyCacheForTest: typeof import("./models-config.js").resetModelsJsonReadyCacheForTest;
-let planNexisClawModelsJsonWithDeps: typeof import("./models-config.plan.js").planNexisClawModelsJsonWithDeps;
+let planGreenchClawModelsJsonWithDeps: typeof import("./models-config.plan.js").planGreenchClawModelsJsonWithDeps;
 let readGeneratedModelsJson: typeof import("./models-config.test-utils.js").readGeneratedModelsJson;
-const fixtureSuite = createFixtureSuite("NexisClaw-models-runtime-source-");
+const fixtureSuite = createFixtureSuite("GreenchClaw-models-runtime-source-");
 
 beforeAll(async () => {
   await fixtureSuite.setup();
   ({ clearConfigCache, clearRuntimeConfigSnapshot, setRuntimeConfigSnapshot } =
     await import("../config/io.js"));
-  ({ ensureNexisClawModelsJson, resetModelsJsonReadyCacheForTest } =
+  ({ ensureGreenchClawModelsJson, resetModelsJsonReadyCacheForTest } =
     await import("./models-config.js"));
-  ({ planNexisClawModelsJsonWithDeps } = await import("./models-config.plan.js"));
+  ({ planGreenchClawModelsJsonWithDeps } = await import("./models-config.plan.js"));
   ({ readGeneratedModelsJson } = await import("./models-config.test-utils.js"));
 });
 
@@ -70,7 +70,7 @@ afterAll(async () => {
   await fixtureSuite.cleanup();
 });
 
-function createOpenAiApiKeySourceConfig(): NexisClawConfig {
+function createOpenAiApiKeySourceConfig(): GreenchClawConfig {
   return {
     models: {
       providers: {
@@ -85,7 +85,7 @@ function createOpenAiApiKeySourceConfig(): NexisClawConfig {
   };
 }
 
-function createOpenAiApiKeyRuntimeConfig(): NexisClawConfig {
+function createOpenAiApiKeyRuntimeConfig(): GreenchClawConfig {
   return {
     models: {
       providers: {
@@ -100,7 +100,7 @@ function createOpenAiApiKeyRuntimeConfig(): NexisClawConfig {
   };
 }
 
-function createOpenAiHeaderSourceConfig(): NexisClawConfig {
+function createOpenAiHeaderSourceConfig(): GreenchClawConfig {
   return {
     models: {
       providers: {
@@ -126,7 +126,7 @@ function createOpenAiHeaderSourceConfig(): NexisClawConfig {
   };
 }
 
-function createOpenAiHeaderRuntimeConfig(): NexisClawConfig {
+function createOpenAiHeaderRuntimeConfig(): GreenchClawConfig {
   return {
     models: {
       providers: {
@@ -144,7 +144,7 @@ function createOpenAiHeaderRuntimeConfig(): NexisClawConfig {
   };
 }
 
-function createOpenAiSourceConfigWithHeadersAndApiKey(): NexisClawConfig {
+function createOpenAiSourceConfigWithHeadersAndApiKey(): GreenchClawConfig {
   const config = createOpenAiHeaderSourceConfig();
   config.models!.providers!.openai.apiKey = {
     source: "env",
@@ -154,13 +154,13 @@ function createOpenAiSourceConfigWithHeadersAndApiKey(): NexisClawConfig {
   return config;
 }
 
-function createOpenAiRuntimeConfigWithHeadersAndApiKey(): NexisClawConfig {
+function createOpenAiRuntimeConfigWithHeadersAndApiKey(): GreenchClawConfig {
   const config = createOpenAiHeaderRuntimeConfig();
   config.models!.providers!.openai.apiKey = "sk-runtime-resolved"; // pragma: allowlist secret
   return config;
 }
 
-function withGatewayTokenMode(config: NexisClawConfig): NexisClawConfig {
+function withGatewayTokenMode(config: GreenchClawConfig): GreenchClawConfig {
   return {
     ...config,
     gateway: {
@@ -183,14 +183,14 @@ async function expectGeneratedProviderApiKey(
 }
 
 async function planGeneratedProviders(params: {
-  config: NexisClawConfig;
-  sourceConfigForSecrets: NexisClawConfig;
+  config: GreenchClawConfig;
+  sourceConfigForSecrets: GreenchClawConfig;
 }) {
-  const plan = await planNexisClawModelsJsonWithDeps(
+  const plan = await planGreenchClawModelsJsonWithDeps(
     {
       cfg: params.config,
       sourceConfigForSecrets: params.sourceConfigForSecrets,
-      agentDir: "/tmp/NexisClaw-models-plan",
+      agentDir: "/tmp/GreenchClaw-models-plan",
       env: {},
       existingRaw: "",
       existingParsed: null,
@@ -220,7 +220,7 @@ function expectOpenAiHeaderMarkers(
 
 describe("models-config runtime source snapshot", () => {
   it("uses runtime source snapshot markers when passed the active runtime config", () => {
-    const sourceConfig: NexisClawConfig = {
+    const sourceConfig: GreenchClawConfig = {
       models: {
         providers: {
           openai: createOpenAiApiKeySourceConfig().models!.providers!.openai,
@@ -233,7 +233,7 @@ describe("models-config runtime source snapshot", () => {
         },
       },
     };
-    const runtimeConfig: NexisClawConfig = {
+    const runtimeConfig: GreenchClawConfig = {
       models: {
         providers: {
           openai: createOpenAiApiKeyRuntimeConfig().models!.providers!.openai,
@@ -260,7 +260,7 @@ describe("models-config runtime source snapshot", () => {
       unsetEnv(MODELS_CONFIG_IMPLICIT_ENV_VARS);
       const sourceConfig = createOpenAiApiKeySourceConfig();
       const runtimeConfig = createOpenAiApiKeyRuntimeConfig();
-      const clonedRuntimeConfig: NexisClawConfig = {
+      const clonedRuntimeConfig: GreenchClawConfig = {
         ...runtimeConfig,
         agents: {
           defaults: {
@@ -271,7 +271,7 @@ describe("models-config runtime source snapshot", () => {
 
       try {
         setRuntimeConfigSnapshot(runtimeConfig, sourceConfig);
-        await ensureNexisClawModelsJson(clonedRuntimeConfig, agentDir);
+        await ensureGreenchClawModelsJson(clonedRuntimeConfig, agentDir);
         await expectGeneratedProviderApiKey(agentDir, "openai", "OPENAI_API_KEY"); // pragma: allowlist secret
       } finally {
         clearRuntimeConfigSnapshot();
@@ -286,7 +286,7 @@ describe("models-config runtime source snapshot", () => {
       unsetEnv(MODELS_CONFIG_IMPLICIT_ENV_VARS);
       const sourceConfig = createOpenAiApiKeySourceConfig();
       const runtimeConfig = createOpenAiApiKeyRuntimeConfig();
-      const firstCandidate: NexisClawConfig = {
+      const firstCandidate: GreenchClawConfig = {
         ...runtimeConfig,
         models: {
           providers: {
@@ -294,13 +294,13 @@ describe("models-config runtime source snapshot", () => {
               ...runtimeConfig.models!.providers!.openai,
               baseUrl: "https://api.openai.com/v1",
               headers: {
-                "X-NexisClaw-Test": "one",
+                "X-GreenchClaw-Test": "one",
               },
             },
           },
         },
       };
-      const secondCandidate: NexisClawConfig = {
+      const secondCandidate: GreenchClawConfig = {
         ...runtimeConfig,
         models: {
           providers: {
@@ -308,7 +308,7 @@ describe("models-config runtime source snapshot", () => {
               ...runtimeConfig.models!.providers!.openai,
               baseUrl: "https://mirror.example/v1",
               headers: {
-                "X-NexisClaw-Test": "two",
+                "X-GreenchClaw-Test": "two",
               },
             },
           },
@@ -317,7 +317,7 @@ describe("models-config runtime source snapshot", () => {
 
       try {
         setRuntimeConfigSnapshot(runtimeConfig, sourceConfig);
-        await ensureNexisClawModelsJson(firstCandidate, agentDir);
+        await ensureGreenchClawModelsJson(firstCandidate, agentDir);
         let parsed = await readGeneratedModelsJson<{
           providers: Record<
             string,
@@ -326,10 +326,10 @@ describe("models-config runtime source snapshot", () => {
         }>(agentDir);
         expect(parsed.providers.openai?.baseUrl).toBe("https://api.openai.com/v1");
         expect(parsed.providers.openai?.apiKey).toBe("OPENAI_API_KEY"); // pragma: allowlist secret
-        expect(parsed.providers.openai?.headers?.["X-NexisClaw-Test"]).toBe("one");
+        expect(parsed.providers.openai?.headers?.["X-GreenchClaw-Test"]).toBe("one");
 
         // Header changes still rewrite models.json, but merge mode preserves the existing baseUrl.
-        await ensureNexisClawModelsJson(secondCandidate, agentDir);
+        await ensureGreenchClawModelsJson(secondCandidate, agentDir);
         parsed = await readGeneratedModelsJson<{
           providers: Record<
             string,
@@ -338,7 +338,7 @@ describe("models-config runtime source snapshot", () => {
         }>(agentDir);
         expect(parsed.providers.openai?.baseUrl).toBe("https://api.openai.com/v1");
         expect(parsed.providers.openai?.apiKey).toBe("OPENAI_API_KEY"); // pragma: allowlist secret
-        expect(parsed.providers.openai?.headers?.["X-NexisClaw-Test"]).toBe("two");
+        expect(parsed.providers.openai?.headers?.["X-GreenchClaw-Test"]).toBe("two");
       } finally {
         clearRuntimeConfigSnapshot();
         clearConfigCache();

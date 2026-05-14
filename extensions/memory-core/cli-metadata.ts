@@ -1,4 +1,4 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/core";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/core";
 
 export default definePluginEntry({
   id: "memory-core",

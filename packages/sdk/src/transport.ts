@@ -1,10 +1,10 @@
 import { GatewayClient } from "../../../src/gateway/client.js";
 import { EventHub } from "./event-hub.js";
 import type {
-  ConnectableNexisClawTransport,
+  ConnectableGreenchClawTransport,
   GatewayEvent,
   GatewayRequestOptions,
-  NexisClawTransport,
+  GreenchClawTransport,
 } from "./types.js";
 
 type GatewayClientLike = {
@@ -66,7 +66,7 @@ function toGatewayEvent(event: unknown): GatewayEvent {
   };
 }
 
-export class GatewayClientTransport implements ConnectableNexisClawTransport {
+export class GatewayClientTransport implements ConnectableGreenchClawTransport {
   private readonly eventsHub = new EventHub<GatewayEvent>({
     replayLimit: RAW_EVENT_REPLAY_LIMIT,
   });
@@ -148,7 +148,7 @@ export class GatewayClientTransport implements ConnectableNexisClawTransport {
 }
 
 export function isConnectableTransport(
-  transport: NexisClawTransport,
-): transport is ConnectableNexisClawTransport {
+  transport: GreenchClawTransport,
+): transport is ConnectableGreenchClawTransport {
   return typeof (transport as { connect?: unknown }).connect === "function";
 }

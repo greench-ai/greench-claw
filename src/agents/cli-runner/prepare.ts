@@ -62,9 +62,9 @@ const prepareDeps = {
   getActiveMcpLoopbackRuntime,
   ensureMcpLoopbackServer,
   createMcpLoopbackServerConfig,
-  resolveNexisClawReferencePaths: async (
-    params: Parameters<typeof import("../docs-path.js").resolveNexisClawReferencePaths>[0],
-  ) => (await import("../docs-path.js")).resolveNexisClawReferencePaths(params),
+  resolveGreenchClawReferencePaths: async (
+    params: Parameters<typeof import("../docs-path.js").resolveGreenchClawReferencePaths>[0],
+  ) => (await import("../docs-path.js")).resolveGreenchClawReferencePaths(params),
   // Surfaced as a dep so tests can stub the on-disk Claude CLI transcript probe
   // without touching ~/.claude/projects.
   claudeCliSessionTranscriptHasContent,
@@ -207,14 +207,14 @@ export async function prepareCliRunContext(
       : undefined,
     env: mcpLoopbackRuntime
       ? {
-          NEXISCLAW_MCP_TOKEN:
+          GREENCHCLAW_MCP_TOKEN:
             params.senderIsOwner === true
               ? mcpLoopbackRuntime.ownerToken
               : mcpLoopbackRuntime.nonOwnerToken,
-          NEXISCLAW_MCP_AGENT_ID: sessionAgentId ?? "",
-          NEXISCLAW_MCP_ACCOUNT_ID: params.agentAccountId ?? "",
-          NEXISCLAW_MCP_SESSION_KEY: params.sessionKey ?? "",
-          NEXISCLAW_MCP_MESSAGE_CHANNEL: params.messageChannel ?? params.messageProvider ?? "",
+          GREENCHCLAW_MCP_AGENT_ID: sessionAgentId ?? "",
+          GREENCHCLAW_MCP_ACCOUNT_ID: params.agentAccountId ?? "",
+          GREENCHCLAW_MCP_SESSION_KEY: params.sessionKey ?? "",
+          GREENCHCLAW_MCP_MESSAGE_CHANNEL: params.messageChannel ?? params.messageProvider ?? "",
         }
       : undefined,
     warn: (message) => cliBackendLog.warn(message),
@@ -303,7 +303,7 @@ export async function prepareCliRunContext(
     );
   }
   let openClawHistoryMessages: unknown[] | undefined;
-  const loadNexisClawHistoryMessages = async () => {
+  const loadGreenchClawHistoryMessages = async () => {
     openClawHistoryMessages ??= await loadCliSessionHistoryMessages({
       sessionId: params.sessionId,
       sessionFile: params.sessionFile,
@@ -318,7 +318,7 @@ export async function prepareCliRunContext(
     agentId: sessionAgentId,
     defaultAgentId,
   });
-  const openClawReferences = await prepareDeps.resolveNexisClawReferencePaths({
+  const openClawReferences = await prepareDeps.resolveGreenchClawReferencePaths({
     workspaceDir,
     argv1: process.argv[1],
     cwd: process.cwd(),
@@ -369,7 +369,7 @@ export async function prepareCliRunContext(
     const hookResult = await resolvePromptBuildHookResult({
       config: params.config ?? getRuntimeConfig(),
       prompt: params.prompt,
-      messages: await loadNexisClawHistoryMessages(),
+      messages: await loadGreenchClawHistoryMessages(),
       hookCtx: {
         runId: params.runId,
         agentId: sessionAgentId,
@@ -416,9 +416,9 @@ export async function prepareCliRunContext(
   const rawTranscriptReseedReason = reusableCliSession.sessionId
     ? "session-expired"
     : reusableCliSession.invalidatedReason;
-  const shouldPrepareNexisClawHistoryPrompt =
+  const shouldPrepareGreenchClawHistoryPrompt =
     !reusableCliSession.sessionId || allowRawTranscriptReseed;
-  const openClawHistoryPrompt = shouldPrepareNexisClawHistoryPrompt
+  const openClawHistoryPrompt = shouldPrepareGreenchClawHistoryPrompt
     ? buildCliSessionHistoryPrompt({
         messages: await loadCliSessionReseedMessages({
           sessionId: params.sessionId,

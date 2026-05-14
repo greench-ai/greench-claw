@@ -1,5 +1,5 @@
-import type { ChannelMessageActionAdapter } from "NexisClaw/plugin-sdk/channel-contract";
-import type { PluginRuntime } from "NexisClaw/plugin-sdk/channel-core";
+import type { ChannelMessageActionAdapter } from "GreenchClaw/plugin-sdk/channel-contract";
+import type { PluginRuntime } from "GreenchClaw/plugin-sdk/channel-core";
 import type { TelegramMonitorFn } from "./monitor.types.js";
 
 export type TelegramProbeFn = typeof import("./probe.js").probeTelegram;

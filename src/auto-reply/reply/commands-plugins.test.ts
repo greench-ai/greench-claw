@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { handlePluginsCommand } from "./commands-plugins.js";
 import { buildPluginsCommandParams } from "./commands.test-harness.js";
 
@@ -68,7 +68,7 @@ vi.mock("../../plugins/status.js", () => ({
 }));
 
 vi.mock("../../plugins/toggle-config.js", () => ({
-  setPluginEnabledInConfig: vi.fn((config: NexisClawConfig, id: string, enabled: boolean) => ({
+  setPluginEnabledInConfig: vi.fn((config: GreenchClawConfig, id: string, enabled: boolean) => ({
     ...config,
     plugins: {
       ...config.plugins,
@@ -88,7 +88,7 @@ vi.mock("../../utils.js", async () => {
   };
 });
 
-function buildCfg(): NexisClawConfig {
+function buildCfg(): GreenchClawConfig {
   return {
     plugins: { enabled: true },
     commands: { text: true, plugins: true },
@@ -99,7 +99,7 @@ const WRITE_GATEWAY_SCOPES = ["operator.admin", "operator.write", "operator.pair
 
 function buildPluginsParams(
   commandBodyNormalized: string,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   options?: { gatewayClientScopes?: string[] },
 ) {
   return buildPluginsCommandParams({
@@ -157,7 +157,7 @@ describe("handlePluginsCommand", () => {
     vi.clearAllMocks();
     readConfigFileSnapshotMock.mockResolvedValue({
       valid: true,
-      path: "/tmp/NexisClaw.json",
+      path: "/tmp/GreenchClaw.json",
       sourceConfig: buildCfg(),
       resolved: buildCfg(),
       hash: "config-1",
@@ -174,7 +174,7 @@ describe("handlePluginsCommand", () => {
           id: "superpowers",
           name: "superpowers",
           status: "disabled",
-          format: "NexisClaw",
+          format: "GreenchClaw",
           bundleFormat: "claude",
         },
       ],
@@ -186,7 +186,7 @@ describe("handlePluginsCommand", () => {
           id: "superpowers",
           name: "superpowers",
           status: "disabled",
-          format: "NexisClaw",
+          format: "GreenchClaw",
           bundleFormat: "claude",
         },
       ],
@@ -273,8 +273,8 @@ describe("handlePluginsCommand", () => {
   });
 
   it("refuses plugin enablement in Nix mode before reading or replacing config", async () => {
-    const previousNixMode = process.env.NEXISCLAW_NIX_MODE;
-    process.env.NEXISCLAW_NIX_MODE = "1";
+    const previousNixMode = process.env.GREENCHCLAW_NIX_MODE;
+    process.env.GREENCHCLAW_NIX_MODE = "1";
     try {
       const params = buildPluginsParams("/plugins enable superpowers", buildCfg(), {
         gatewayClientScopes: WRITE_GATEWAY_SCOPES,
@@ -282,16 +282,16 @@ describe("handlePluginsCommand", () => {
       params.command.senderIsOwner = true;
 
       const result = await handlePluginsCommand(params, true);
-      expect(result?.reply?.text).toContain("NEXISCLAW_NIX_MODE=1");
-      expect(result?.reply?.text).toContain("nix-NexisClaw#quick-start");
+      expect(result?.reply?.text).toContain("GREENCHCLAW_NIX_MODE=1");
+      expect(result?.reply?.text).toContain("nix-GreenchClaw#quick-start");
       expect(readConfigFileSnapshotMock).not.toHaveBeenCalled();
       expect(replaceConfigFileMock).not.toHaveBeenCalled();
       expect(refreshPluginRegistryAfterConfigMutationMock).not.toHaveBeenCalled();
     } finally {
       if (previousNixMode === undefined) {
-        delete process.env.NEXISCLAW_NIX_MODE;
+        delete process.env.GREENCHCLAW_NIX_MODE;
       } else {
-        process.env.NEXISCLAW_NIX_MODE = previousNixMode;
+        process.env.GREENCHCLAW_NIX_MODE = previousNixMode;
       }
     }
   });
@@ -304,7 +304,7 @@ describe("handlePluginsCommand", () => {
           id: "superpowers",
           name: "Super Powers",
           status: "disabled",
-          format: "NexisClaw",
+          format: "GreenchClaw",
           bundleFormat: "claude",
         },
       ],

@@ -1,4 +1,4 @@
-import { defineSingleProviderPluginEntry } from "NexisClaw/plugin-sdk/provider-entry";
+import { defineSingleProviderPluginEntry } from "GreenchClaw/plugin-sdk/provider-entry";
 import { applyTogetherConfig, TOGETHER_DEFAULT_MODEL_REF } from "./onboard.js";
 import { buildTogetherProvider } from "./provider-catalog.js";
 import { buildTogetherVideoGenerationProvider } from "./video-generation-provider.js";

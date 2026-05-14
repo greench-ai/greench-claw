@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import {
   type DeliverFn,
   drainPendingDeliveries,
@@ -18,7 +18,7 @@ import {
   installDeliveryQueueTmpDirHooks,
 } from "./delivery-queue.test-helpers.js";
 
-const stubCfg = {} as NexisClawConfig;
+const stubCfg = {} as GreenchClawConfig;
 const NO_LISTENER_ERROR = "No active DirectChat listener";
 
 function normalizeReconnectAccountIdForTest(accountId?: string | null): string {
@@ -500,7 +500,7 @@ describe("drainPendingDeliveries for reconnect", () => {
   });
 
   it("skips entries that an in-flight live delivery has actively claimed", async () => {
-    // Regression for NexisClaw/NexisClaw#70386: a reconnect drain that runs
+    // Regression for GreenchClaw/GreenchClaw#70386: a reconnect drain that runs
     // while the live send is still writing to the adapter must not re-drive
     // the same entry. The live delivery path holds an in-memory active claim
     // for `queueId` across its send; drain honors that claim via the same

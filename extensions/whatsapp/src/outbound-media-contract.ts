@@ -1,8 +1,14 @@
 import path from "node:path";
-import { MEDIA_FFMPEG_MAX_AUDIO_DURATION_SECS, runFfmpeg } from "NexisClaw/plugin-sdk/media-runtime";
-import { sanitizeForPlainText } from "NexisClaw/plugin-sdk/outbound-runtime";
-import { writeExternalFileWithinRoot } from "NexisClaw/plugin-sdk/security-runtime";
-import { resolvePreferredNexisClawTmpDir, withTempWorkspace } from "NexisClaw/plugin-sdk/temp-path";
+import {
+  MEDIA_FFMPEG_MAX_AUDIO_DURATION_SECS,
+  runFfmpeg,
+} from "GreenchClaw/plugin-sdk/media-runtime";
+import { sanitizeForPlainText } from "GreenchClaw/plugin-sdk/outbound-runtime";
+import { writeExternalFileWithinRoot } from "GreenchClaw/plugin-sdk/security-runtime";
+import {
+  resolvePreferredGreenchClawTmpDir,
+  withTempWorkspace,
+} from "GreenchClaw/plugin-sdk/temp-path";
 import { formatError } from "./session-errors.js";
 import {
   sanitizeAssistantVisibleText,
@@ -185,7 +191,7 @@ async function transcodeToWhatsAppVoiceOpus(params: {
   fileName: string;
 }): Promise<Buffer> {
   return await withTempWorkspace(
-    { rootDir: resolvePreferredNexisClawTmpDir(), prefix: "whatsapp-voice-" },
+    { rootDir: resolvePreferredGreenchClawTmpDir(), prefix: "whatsapp-voice-" },
     async (workspace) => {
       const ext = path.extname(params.fileName).toLowerCase();
       const inputExt = ext && ext.length <= 12 ? ext : ".audio";

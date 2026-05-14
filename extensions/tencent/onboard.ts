@@ -1,8 +1,8 @@
 import {
   applyAgentDefaultModelPrimary,
   applyProviderConfigWithModelCatalog,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildTokenHubModelDefinition,
   TOKENHUB_BASE_URL,
@@ -14,7 +14,7 @@ import {
 
 export const TOKENHUB_DEFAULT_MODEL_REF = `${TOKENHUB_PROVIDER_ID}/hy3-preview`;
 
-function applyTokenHubProviderConfig(cfg: NexisClawConfig): NexisClawConfig {
+function applyTokenHubProviderConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[TOKENHUB_DEFAULT_MODEL_REF] = {
     ...models[TOKENHUB_DEFAULT_MODEL_REF],
@@ -30,7 +30,7 @@ function applyTokenHubProviderConfig(cfg: NexisClawConfig): NexisClawConfig {
   });
 }
 
-export function applyTokenHubConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyTokenHubConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return applyAgentDefaultModelPrimary(
     applyTokenHubProviderConfig(cfg),
     TOKENHUB_DEFAULT_MODEL_REF,

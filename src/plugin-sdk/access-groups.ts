@@ -4,12 +4,12 @@ import {
 } from "../channels/allow-from.js";
 import type { ChannelId } from "../channels/plugins/types.public.js";
 import type { AccessGroupConfig } from "../config/types.access-groups.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 export { ACCESS_GROUP_ALLOW_FROM_PREFIX, parseAccessGroupAllowFromEntry };
 
 export type AccessGroupMembershipResolver = (params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   name: string;
   group: AccessGroupConfig;
   channel: ChannelId;
@@ -124,7 +124,7 @@ export async function resolveAccessGroupAllowFromState(params: {
 }
 
 export async function resolveAccessGroupAllowFromMatches(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   allowFrom: Array<string | number> | null | undefined;
   channel: ChannelId;
   accountId: string;
@@ -154,7 +154,7 @@ export async function resolveAccessGroupAllowFromMatches(params: {
 }
 
 export async function expandAllowFromWithAccessGroups(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   allowFrom: Array<string | number> | null | undefined;
   channel: ChannelId;
   accountId: string;

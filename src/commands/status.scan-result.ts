@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { collectChannelStatusIssues as collectChannelStatusIssuesFn } from "../infra/channels-status-issues.js";
 import { resolveOsSummary } from "../infra/os-summary.js";
 import type { UpdateCheckResult } from "../infra/update-check.js";
@@ -14,8 +14,8 @@ import type {
 import type { getStatusSummary as getStatusSummaryFn } from "./status.summary.js";
 
 export type StatusScanResult = {
-  cfg: NexisClawConfig;
-  sourceConfig: NexisClawConfig;
+  cfg: GreenchClawConfig;
+  sourceConfig: GreenchClawConfig;
   secretDiagnostics: string[];
   osSummary: ReturnType<typeof resolveOsSummary>;
   tailscaleMode: string;
@@ -43,8 +43,8 @@ export type StatusScanResult = {
 };
 
 export function buildStatusScanResult(params: {
-  cfg: NexisClawConfig;
-  sourceConfig: NexisClawConfig;
+  cfg: GreenchClawConfig;
+  sourceConfig: GreenchClawConfig;
   secretDiagnostics: string[];
   osSummary: ReturnType<typeof resolveOsSummary>;
   tailscaleMode: string;

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { SkillConfig } from "../../config/types.skills.js";
 import {
   evaluateRuntimeEligibility,
@@ -19,12 +19,15 @@ const DEFAULT_CONFIG_VALUES: Record<string, boolean> = {
 
 export { hasBinary, resolveConfigPath, resolveRuntimePlatform };
 
-export function isConfigPathTruthy(config: NexisClawConfig | undefined, pathStr: string): boolean {
+export function isConfigPathTruthy(
+  config: GreenchClawConfig | undefined,
+  pathStr: string,
+): boolean {
   return isConfigPathTruthyWithDefaults(config, pathStr, DEFAULT_CONFIG_VALUES);
 }
 
 export function resolveSkillConfig(
-  config: NexisClawConfig | undefined,
+  config: GreenchClawConfig | undefined,
   skillKey: string,
 ): SkillConfig | undefined {
   const skills = config?.skills?.entries;
@@ -49,13 +52,13 @@ function normalizeAllowlist(input: unknown): string[] | undefined {
   return normalized.length > 0 ? normalized : undefined;
 }
 
-const BUNDLED_SOURCES = new Set(["NexisClaw-bundled"]);
+const BUNDLED_SOURCES = new Set(["GreenchClaw-bundled"]);
 
 function isBundledSkill(entry: SkillEntry): boolean {
   return BUNDLED_SOURCES.has(resolveSkillSource(entry.skill));
 }
 
-export function resolveBundledAllowlist(config?: NexisClawConfig): string[] | undefined {
+export function resolveBundledAllowlist(config?: GreenchClawConfig): string[] | undefined {
   return normalizeAllowlist(config?.skills?.allowBundled);
 }
 
@@ -72,7 +75,7 @@ export function isBundledSkillAllowed(entry: SkillEntry, allowlist?: string[]): 
 
 export function shouldIncludeSkill(params: {
   entry: SkillEntry;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   eligibility?: SkillEligibilityContext;
 }): boolean {
   const { entry, config, eligibility } = params;

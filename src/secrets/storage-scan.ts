@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { listAgentIds, resolveAgentDir } from "../agents/agent-scope.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { resolveUserPath } from "../utils.js";
 import { listAuthProfileStorePaths as listAuthProfileStorePathsFromAuthStorePaths } from "./auth-store-paths.js";
@@ -15,7 +15,7 @@ export function parseEnvAssignmentValue(raw: string): string {
   return parseEnvValue(raw);
 }
 
-export function listAuthProfileStorePaths(config: NexisClawConfig, stateDir: string): string[] {
+export function listAuthProfileStorePaths(config: GreenchClawConfig, stateDir: string): string[] {
   return listAuthProfileStorePathsFromAuthStorePaths(config, stateDir);
 }
 
@@ -38,7 +38,7 @@ export function listLegacyAuthJsonPaths(stateDir: string): string[] {
 }
 
 function resolveActiveAgentDir(stateDir: string, env: NodeJS.ProcessEnv = process.env): string {
-  const override = env.NEXISCLAW_AGENT_DIR?.trim() || env.PI_CODING_AGENT_DIR?.trim();
+  const override = env.GREENCHCLAW_AGENT_DIR?.trim() || env.PI_CODING_AGENT_DIR?.trim();
   if (override) {
     return resolveUserPath(override);
   }
@@ -46,7 +46,7 @@ function resolveActiveAgentDir(stateDir: string, env: NodeJS.ProcessEnv = proces
 }
 
 export function listAgentModelsJsonPaths(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   stateDir: string,
   env: NodeJS.ProcessEnv = process.env,
 ): string[] {

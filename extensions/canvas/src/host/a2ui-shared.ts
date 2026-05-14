@@ -1,10 +1,10 @@
-import { lowercasePreservingWhitespace } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { lowercasePreservingWhitespace } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
-export const A2UI_PATH = "/__NexisClaw__/a2ui";
+export const A2UI_PATH = "/__GreenchClaw__/a2ui";
 
-export const CANVAS_HOST_PATH = "/__NexisClaw__/canvas";
+export const CANVAS_HOST_PATH = "/__GreenchClaw__/canvas";
 
-export const CANVAS_WS_PATH = "/__NexisClaw__/ws";
+export const CANVAS_WS_PATH = "/__GreenchClaw__/ws";
 
 export function isA2uiPath(pathname: string): boolean {
   return pathname === A2UI_PATH || pathname.startsWith(`${A2UI_PATH}/`);
@@ -16,9 +16,9 @@ export function injectCanvasLiveReload(html: string): string {
 (() => {
   // Cross-platform action bridge helper.
   // Works on:
-  // - iOS: window.webkit.messageHandlers.NexisClawCanvasA2UIAction.postMessage(...)
-  // - Android: window.NexisClawCanvasA2UIAction.postMessage(...)
-  const handlerNames = ["NexisClawCanvasA2UIAction"];
+  // - iOS: window.webkit.messageHandlers.GreenchClawCanvasA2UIAction.postMessage(...)
+  // - Android: window.GreenchClawCanvasA2UIAction.postMessage(...)
+  const handlerNames = ["GreenchClawCanvasA2UIAction"];
   function postToNode(payload) {
     try {
       const raw = typeof payload === "string" ? payload : JSON.stringify(payload);
@@ -45,11 +45,11 @@ export function injectCanvasLiveReload(html: string): string {
     const action = { ...userAction, id };
     return postToNode({ userAction: action });
   }
-  globalThis.NexisClaw = globalThis.NexisClaw ?? {};
-  globalThis.NexisClaw.postMessage = postToNode;
-  globalThis.NexisClaw.sendUserAction = sendUserAction;
-  globalThis.NexisClawPostMessage = postToNode;
-  globalThis.NexisClawSendUserAction = sendUserAction;
+  globalThis.GreenchClaw = globalThis.GreenchClaw ?? {};
+  globalThis.GreenchClaw.postMessage = postToNode;
+  globalThis.GreenchClaw.sendUserAction = sendUserAction;
+  globalThis.GreenchClawPostMessage = postToNode;
+  globalThis.GreenchClawSendUserAction = sendUserAction;
 
   try {
     const cap = new URLSearchParams(location.search).get("oc_cap");

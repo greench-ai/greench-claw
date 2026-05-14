@@ -1,7 +1,7 @@
 import {
   createCapturedPluginRegistration,
   registerSingleProviderPlugin,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it } from "vitest";
 import deepinfraPlugin from "./index.js";
 
@@ -51,7 +51,7 @@ describe("deepinfra augmentModelCatalog", () => {
 });
 
 describe("deepinfra capability registration", () => {
-  it("registers all DeepInfra-backed NexisClaw provider surfaces", () => {
+  it("registers all DeepInfra-backed GreenchClaw provider surfaces", () => {
     const captured = createCapturedPluginRegistration();
     deepinfraPlugin.register(captured.api);
 

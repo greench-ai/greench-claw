@@ -1,12 +1,12 @@
 ---
-summary: "How NexisClaw summarizes long conversations to stay within model limits"
+summary: "How GreenchClaw summarizes long conversations to stay within model limits"
 read_when:
   - You want to understand auto-compaction and /compact
   - You are debugging long sessions hitting context limits
 title: "Compaction"
 ---
 
-Every model has a context window: the maximum number of tokens it can process. When a conversation approaches that limit, NexisClaw **compacts** older messages into a summary so the chat can continue.
+Every model has a context window: the maximum number of tokens it can process. When a conversation approaches that limit, GreenchClaw **compacts** older messages into a summary so the chat can continue.
 
 ## How it works
 
@@ -14,13 +14,13 @@ Every model has a context window: the maximum number of tokens it can process. W
 2. The summary is saved in the session transcript.
 3. Recent messages are kept intact.
 
-When NexisClaw splits history into compaction chunks, it keeps assistant tool calls paired with their matching `toolResult` entries. If a split point lands inside a tool block, NexisClaw moves the boundary so the pair stays together and the current unsummarized tail is preserved.
+When GreenchClaw splits history into compaction chunks, it keeps assistant tool calls paired with their matching `toolResult` entries. If a split point lands inside a tool block, GreenchClaw moves the boundary so the pair stays together and the current unsummarized tail is preserved.
 
 The full conversation history stays on disk. Compaction only changes what the model sees on the next turn.
 
 ## Auto-compaction
 
-Auto-compaction is on by default. It runs when the session nears the context limit, or when the model returns a context-overflow error (in which case NexisClaw compacts and retries).
+Auto-compaction is on by default. It runs when the session nears the context limit, or when the model returns a context-overflow error (in which case GreenchClaw compacts and retries).
 
 You will see:
 
@@ -29,12 +29,12 @@ You will see:
 - `/status` showing `🧹 Compactions: <count>`.
 
 <Info>
-Before compacting, NexisClaw automatically reminds the agent to save important notes to [memory](/concepts/memory) files. This prevents context loss.
+Before compacting, GreenchClaw automatically reminds the agent to save important notes to [memory](/concepts/memory) files. This prevents context loss.
 </Info>
 
 <AccordionGroup>
   <Accordion title="Recognized overflow signatures">
-    NexisClaw detects context overflow from these provider error patterns:
+    GreenchClaw detects context overflow from these provider error patterns:
 
     - `request_too_large`
     - `context length exceeded`
@@ -58,7 +58,7 @@ When `agents.defaults.compaction.keepRecentTokens` is set, manual compaction hon
 
 ## Configuration
 
-Configure compaction under `agents.defaults.compaction` in your `NexisClaw.json`. The most common knobs are listed below; for the full reference, see [Session management deep dive](/reference/session-management-compaction).
+Configure compaction under `agents.defaults.compaction` in your `GreenchClaw.json`. The most common knobs are listed below; for the full reference, see [Session management deep dive](/reference/session-management-compaction).
 
 ### Using a different model
 
@@ -90,7 +90,7 @@ This works with local models too, for example a second Ollama model dedicated to
 }
 ```
 
-When unset, compaction starts with the active session model. If summarization fails with a model-fallback-eligible provider error, NexisClaw retries that compaction attempt through the session's existing model fallback chain. The fallback choice is temporary and is not written back to session state. An explicit `agents.defaults.compaction.model` override remains exact and does not inherit the session fallback chain.
+When unset, compaction starts with the active session model. If summarization fails with a model-fallback-eligible provider error, GreenchClaw retries that compaction attempt through the session's existing model fallback chain. The fallback choice is temporary and is not written back to session state. An explicit `agents.defaults.compaction.model` override remains exact and does not inherit the session fallback chain.
 
 ### Identifier preservation
 
@@ -98,7 +98,7 @@ Compaction summarization preserves opaque identifiers by default (`identifierPol
 
 ### Active transcript byte guard
 
-When `agents.defaults.compaction.maxActiveTranscriptBytes` is set, NexisClaw triggers normal local compaction before a run if the active JSONL reaches that size. This is useful for long-running sessions where provider-side context management may keep model context healthy while the local transcript keeps growing. It does not split raw JSONL bytes; it asks the normal compaction pipeline to create a semantic summary.
+When `agents.defaults.compaction.maxActiveTranscriptBytes` is set, GreenchClaw triggers normal local compaction before a run if the active JSONL reaches that size. This is useful for long-running sessions where provider-side context management may keep model context healthy while the local transcript keeps growing. It does not split raw JSONL bytes; it asks the normal compaction pipeline to create a semantic summary.
 
 <Warning>
 The byte guard requires `truncateAfterCompaction: true`. Without transcript rotation, the active file would not shrink and the guard remains inactive.
@@ -106,13 +106,13 @@ The byte guard requires `truncateAfterCompaction: true`. Without transcript rota
 
 ### Successor transcripts
 
-When `agents.defaults.compaction.truncateAfterCompaction` is enabled, NexisClaw does not rewrite the existing transcript in place. It creates a new active successor transcript from the compaction summary, preserved state, and unsummarized tail, then keeps the previous JSONL as the archived checkpoint source.
+When `agents.defaults.compaction.truncateAfterCompaction` is enabled, GreenchClaw does not rewrite the existing transcript in place. It creates a new active successor transcript from the compaction summary, preserved state, and unsummarized tail, then keeps the previous JSONL as the archived checkpoint source.
 Successor transcripts also drop exact duplicate long user turns that arrive
 inside a short retry window, so channel retry storms are not carried into the
 next active transcript after compaction.
 
-Pre-compaction checkpoints are retained only while they stay below NexisClaw's
-checkpoint size cap; oversized active transcripts still compact, but NexisClaw
+Pre-compaction checkpoints are retained only while they stay below GreenchClaw's
+checkpoint size cap; oversized active transcripts still compact, but GreenchClaw
 skips the large debug snapshot instead of doubling disk usage.
 
 ### Compaction notices
@@ -133,7 +133,7 @@ By default, compaction runs silently. Set `notifyUser` to show brief status mess
 
 ### Memory flush
 
-Before compaction, NexisClaw can run a **silent memory flush** turn to store durable notes to disk. Set `agents.defaults.compaction.memoryFlush.model` when this housekeeping turn should use a local model instead of the active conversation model:
+Before compaction, GreenchClaw can run a **silent memory flush** turn to store durable notes to disk. Set `agents.defaults.compaction.memoryFlush.model` when this housekeeping turn should use a local model instead of the active conversation model:
 
 ```json
 {
@@ -153,7 +153,7 @@ The memory-flush model override is exact and does not inherit the active session
 
 ## Pluggable compaction providers
 
-Plugins can register a custom compaction provider via `registerCompactionProvider()` on the plugin API. When a provider is registered and configured, NexisClaw delegates summarization to it instead of the built-in LLM pipeline.
+Plugins can register a custom compaction provider via `registerCompactionProvider()` on the plugin API. When a provider is registered and configured, GreenchClaw delegates summarization to it instead of the built-in LLM pipeline.
 
 To use a registered provider, set its id in your config:
 
@@ -169,10 +169,10 @@ To use a registered provider, set its id in your config:
 }
 ```
 
-Setting a `provider` automatically forces `mode: "safeguard"`. Providers receive the same compaction instructions and identifier-preservation policy as the built-in path, and NexisClaw still preserves recent-turn and split-turn suffix context after provider output.
+Setting a `provider` automatically forces `mode: "safeguard"`. Providers receive the same compaction instructions and identifier-preservation policy as the built-in path, and GreenchClaw still preserves recent-turn and split-turn suffix context after provider output.
 
 <Note>
-If the provider fails or returns an empty result, NexisClaw falls back to built-in LLM summarization.
+If the provider fails or returns an empty result, GreenchClaw falls back to built-in LLM summarization.
 </Note>
 
 ## Compaction vs pruning

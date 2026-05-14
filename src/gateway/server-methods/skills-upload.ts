@@ -4,7 +4,7 @@ import {
   type SkillArchiveInstallFailureKind,
   validateRequestedSkillSlug,
 } from "../../agents/skills-archive-install.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import {
   ErrorCodes,
@@ -29,7 +29,7 @@ type UploadInstallErrorCode = typeof ErrorCodes.INVALID_REQUEST | typeof ErrorCo
 const UPLOADED_SKILL_ARCHIVES_DISABLED_MESSAGE =
   "Uploaded skill archive installs are disabled by skills.install.allowUploadedArchives";
 
-export function areUploadedSkillArchivesEnabled(config: NexisClawConfig): boolean {
+export function areUploadedSkillArchivesEnabled(config: GreenchClawConfig): boolean {
   return config.skills?.install?.allowUploadedArchives === true;
 }
 

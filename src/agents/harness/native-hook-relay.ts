@@ -9,8 +9,8 @@ import {
 } from "node:http";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
-import { resolveNexisClawPackageRootSync } from "../../infra/NexisClaw-root.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
+import { resolveGreenchClawPackageRootSync } from "../../infra/GreenchClaw-root.js";
 import { privateFileStoreSync } from "../../infra/private-file-store.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import { PluginApprovalResolutions } from "../../plugins/types.js";
@@ -74,7 +74,7 @@ export type NativeHookRelayRegistration = {
   agentId?: string;
   sessionId: string;
   sessionKey?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   runId: string;
   allowedEvents: readonly NativeHookRelayEvent[];
   expiresAtMs: number;
@@ -92,7 +92,7 @@ export type RegisterNativeHookRelayParams = {
   agentId?: string;
   sessionId: string;
   sessionKey?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   runId: string;
   allowedEvents?: readonly NativeHookRelayEvent[];
   ttlMs?: number;
@@ -277,7 +277,7 @@ const nativeHookRelayProviderAdapters: Record<
               ? { behavior: "allow" }
               : {
                   behavior: "deny",
-                  message: message?.trim() || "Denied by NexisClaw",
+                  message: message?.trim() || "Denied by GreenchClaw",
                 },
         },
       })}\n`,
@@ -351,10 +351,10 @@ export function buildNativeHookRelayCommand(params: {
   nodeExecutable?: string;
 }): string {
   const timeoutMs = normalizePositiveInteger(params.timeoutMs, DEFAULT_RELAY_TIMEOUT_MS);
-  const executable = params.executable ?? resolveNexisClawCliExecutable();
+  const executable = params.executable ?? resolveGreenchClawCliExecutable();
   const argv =
-    executable === "NexisClaw"
-      ? ["NexisClaw"]
+    executable === "GreenchClaw"
+      ? ["GreenchClaw"]
       : [params.nodeExecutable ?? process.execPath, executable];
   return shellQuoteArgs([
     ...argv,
@@ -794,7 +794,7 @@ function isRetryableNativeHookRelayBridgeError(error: unknown): boolean {
 
 function nativeHookRelayBridgeDir(): string {
   const uid = typeof process.getuid === "function" ? process.getuid() : "nouid";
-  return path.join(tmpdir(), `NexisClaw-native-hook-relays-${uid}`);
+  return path.join(tmpdir(), `GreenchClaw-native-hook-relays-${uid}`);
 }
 
 function ensureNativeHookRelayBridgeDir(): string {
@@ -882,7 +882,7 @@ async function runNativeHookRelayPreToolUse(params: {
     return params.adapter.renderPreToolUseBlockResponse(outcome.reason);
   }
   // Codex PreToolUse supports block/allow, not argument mutation. If an
-  // NexisClaw plugin returns adjusted params here, we intentionally ignore them.
+  // GreenchClaw plugin returns adjusted params here, we intentionally ignore them.
   return params.adapter.renderNoopResponse(params.invocation.event);
 }
 
@@ -1041,7 +1041,7 @@ function nativeHookRelayPermissionAllowAlwaysKey(params: {
   request: NativeHookRelayPermissionApprovalRequest;
 }): string {
   const hash = createHash("sha256");
-  hash.update("NexisClaw:native-hook-relay:permission-allow-always:v2");
+  hash.update("GreenchClaw:native-hook-relay:permission-allow-always:v2");
   hash.update("\0");
   hash.update(params.registration.relayId);
   hash.update("\0");
@@ -1378,7 +1378,7 @@ async function requestNativeHookRelayPermissionApproval(
     "plugin.approval.request",
     { timeoutMs: timeoutMs + 10_000 },
     {
-      pluginId: `NexisClaw-native-hook-relay-${request.provider}`,
+      pluginId: `GreenchClaw-native-hook-relay-${request.provider}`,
       title: truncateText(
         `${nativeHookRelayProviderDisplayName(request.provider)} permission request`,
         MAX_APPROVAL_TITLE_LENGTH,
@@ -1522,19 +1522,19 @@ function truncateText(value: string, maxLength: number): string {
   return `${value.slice(0, Math.max(0, maxLength - 3))}...`;
 }
 
-function resolveNexisClawCliExecutable(): string {
-  const envPath = process.env.NEXISCLAW_CLI_PATH?.trim();
+function resolveGreenchClawCliExecutable(): string {
+  const envPath = process.env.GREENCHCLAW_CLI_PATH?.trim();
   if (envPath && existsSync(envPath)) {
     return envPath;
   }
-  const packageRoot = resolveNexisClawPackageRootSync({
+  const packageRoot = resolveGreenchClawPackageRootSync({
     moduleUrl: import.meta.url,
     argv1: process.argv[1],
     cwd: process.cwd(),
   });
   if (packageRoot) {
     for (const candidate of [
-      path.join(packageRoot, "NexisClaw.mjs"),
+      path.join(packageRoot, "GreenchClaw.mjs"),
       path.join(packageRoot, "dist", "entry.js"),
       path.join(packageRoot, "scripts", "run-node.mjs"),
     ]) {
@@ -1550,7 +1550,7 @@ function resolveNexisClawCliExecutable(): string {
       return resolved;
     }
   }
-  throw new Error("Cannot resolve NexisClaw CLI executable path for native hook relay");
+  throw new Error("Cannot resolve GreenchClaw CLI executable path for native hook relay");
 }
 
 function normalizeAllowedEvents(

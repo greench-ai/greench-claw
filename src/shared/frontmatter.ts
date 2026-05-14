@@ -20,7 +20,7 @@ export function parseFrontmatterBool(value: string | undefined, fallback: boolea
   return parsed === undefined ? fallback : parsed;
 }
 
-export function resolveNexisClawManifestBlock(params: {
+export function resolveGreenchClawManifestBlock(params: {
   frontmatter: Record<string, unknown>;
   key?: string;
 }): Record<string, unknown> | undefined {
@@ -48,16 +48,16 @@ export function resolveNexisClawManifestBlock(params: {
   }
 }
 
-export type NexisClawManifestRequires = {
+export type GreenchClawManifestRequires = {
   bins: string[];
   anyBins: string[];
   env: string[];
   config: string[];
 };
 
-export function resolveNexisClawManifestRequires(
+export function resolveGreenchClawManifestRequires(
   metadataObj: Record<string, unknown>,
-): NexisClawManifestRequires | undefined {
+): GreenchClawManifestRequires | undefined {
   const requiresRaw =
     typeof metadataObj.requires === "object" && metadataObj.requires !== null
       ? (metadataObj.requires as Record<string, unknown>)
@@ -73,7 +73,7 @@ export function resolveNexisClawManifestRequires(
   };
 }
 
-export function resolveNexisClawManifestInstall<T>(
+export function resolveGreenchClawManifestInstall<T>(
   metadataObj: Record<string, unknown>,
   parseInstallSpec: (input: unknown) => T | undefined,
 ): T[] {
@@ -83,11 +83,11 @@ export function resolveNexisClawManifestInstall<T>(
     .filter((entry): entry is T => Boolean(entry));
 }
 
-export function resolveNexisClawManifestOs(metadataObj: Record<string, unknown>): string[] {
+export function resolveGreenchClawManifestOs(metadataObj: Record<string, unknown>): string[] {
   return normalizeStringList(metadataObj.os);
 }
 
-export type ParsedNexisClawManifestInstallBase = {
+export type ParsedGreenchClawManifestInstallBase = {
   raw: Record<string, unknown>;
   kind: string;
   id?: string;
@@ -95,10 +95,10 @@ export type ParsedNexisClawManifestInstallBase = {
   bins?: string[];
 };
 
-export function parseNexisClawManifestInstallBase(
+export function parseGreenchClawManifestInstallBase(
   input: unknown,
   allowedKinds: readonly string[],
-): ParsedNexisClawManifestInstallBase | undefined {
+): ParsedGreenchClawManifestInstallBase | undefined {
   if (!input || typeof input !== "object") {
     return undefined;
   }
@@ -110,7 +110,7 @@ export function parseNexisClawManifestInstallBase(
     return undefined;
   }
 
-  const spec: ParsedNexisClawManifestInstallBase = {
+  const spec: ParsedGreenchClawManifestInstallBase = {
     raw,
     kind,
   };
@@ -127,9 +127,9 @@ export function parseNexisClawManifestInstallBase(
   return spec;
 }
 
-export function applyNexisClawManifestInstallCommonFields<
+export function applyGreenchClawManifestInstallCommonFields<
   T extends { id?: string; label?: string; bins?: string[] },
->(spec: T, parsed: Pick<ParsedNexisClawManifestInstallBase, "id" | "label" | "bins">): T {
+>(spec: T, parsed: Pick<ParsedGreenchClawManifestInstallBase, "id" | "label" | "bins">): T {
   if (parsed.id) {
     spec.id = parsed.id;
   }

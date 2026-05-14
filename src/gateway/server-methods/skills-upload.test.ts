@@ -43,7 +43,7 @@ vi.mock("../../infra/replace-file.js", async (importOriginal) => {
       if (
         replaceFileState.publishFailures === 0 &&
         replaceFileState.publishFailureTarget &&
-        options.from.includes(".NexisClaw-install-stage-") &&
+        options.from.includes(".GreenchClaw-install-stage-") &&
         options.to === replaceFileState.publishFailureTarget
       ) {
         replaceFileState.publishFailures += 1;
@@ -67,12 +67,12 @@ async function makeHarness(): Promise<{
   stateDir: string;
   workspaceDir: string;
 }> {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-skill-upload-handler-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-skill-upload-handler-"));
   tempDirs.push(root);
   const stateDir = path.join(root, "state");
   const workspaceDir = path.join(root, "workspace");
   await fs.mkdir(workspaceDir, { recursive: true });
-  vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
+  vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
   agentScopeState.workspaceDir = workspaceDir;
   vi.resetModules();
   const { skillsHandlers } = await import("./skills.js");

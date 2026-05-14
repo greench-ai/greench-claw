@@ -4,7 +4,7 @@ import type { PluginManifestRegistry } from "./manifest-registry.js";
 const mocks = vi.hoisted(() => {
   const loadManifestRegistry = vi.fn();
   return {
-    discoverNexisClawPlugins: vi.fn(() => ({ candidates: [], diagnostics: [] })),
+    discoverGreenchClawPlugins: vi.fn(() => ({ candidates: [], diagnostics: [] })),
     loadBundledManifestRegistry: vi.fn(),
     loadPluginManifestRegistryForInstalledIndex: loadManifestRegistry,
     loadPluginManifestRegistryForPluginRegistry: loadManifestRegistry,
@@ -13,7 +13,7 @@ const mocks = vi.hoisted(() => {
 });
 
 vi.mock("./discovery.js", () => ({
-  discoverNexisClawPlugins: mocks.discoverNexisClawPlugins,
+  discoverGreenchClawPlugins: mocks.discoverGreenchClawPlugins,
 }));
 
 vi.mock("./manifest-registry.js", () => ({
@@ -45,7 +45,7 @@ function createPluginRecord(
 ): PluginManifestRecord {
   return {
     rootDir: `/tmp/${overrides.id}`,
-    manifestPath: `/tmp/${overrides.id}/NexisClaw.plugin.json`,
+    manifestPath: `/tmp/${overrides.id}/GreenchClaw.plugin.json`,
     channelConfigs: undefined,
     providerAuthEnvVars: undefined,
     configUiHints: undefined,
@@ -72,7 +72,7 @@ function createPluginRecord(
     skills: [],
     settingsFiles: undefined,
     hooks: [],
-    source: `/tmp/${overrides.id}/NexisClaw.plugin.json`,
+    source: `/tmp/${overrides.id}/GreenchClaw.plugin.json`,
     setupSource: undefined,
     startupDeferConfiguredChannelFullLoadUntilAfterListen: undefined,
     channelCatalogMeta: undefined,
@@ -82,8 +82,8 @@ function createPluginRecord(
 
 describe("resolvePluginConfigContractsById", () => {
   beforeEach(() => {
-    mocks.discoverNexisClawPlugins.mockReset();
-    mocks.discoverNexisClawPlugins.mockReturnValue({ candidates: [], diagnostics: [] });
+    mocks.discoverGreenchClawPlugins.mockReset();
+    mocks.discoverGreenchClawPlugins.mockReturnValue({ candidates: [], diagnostics: [] });
     mocks.loadBundledManifestRegistry.mockReset();
     mocks.loadBundledManifestRegistry.mockReturnValue(createRegistry([]));
     mocks.loadPluginManifestRegistryForInstalledIndex.mockReset();

@@ -1,55 +1,73 @@
 import {
   defineBundledChannelEntry,
   loadBundledEntryExportSync,
-} from "NexisClaw/plugin-sdk/channel-entry-contract";
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/channel-entry-contract";
+} from "GreenchClaw/plugin-sdk/channel-entry-contract";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/channel-entry-contract";
 import { registerFeishuSubagentHooks } from "./subagent-hooks-api.js";
 
-function registerFeishuDocTools(api: NexisClawPluginApi) {
-  const register = loadBundledEntryExportSync<(api: NexisClawPluginApi) => void>(import.meta.url, {
-    specifier: "./api.js",
-    exportName: "registerFeishuDocTools",
-  });
+function registerFeishuDocTools(api: GreenchClawPluginApi) {
+  const register = loadBundledEntryExportSync<(api: GreenchClawPluginApi) => void>(
+    import.meta.url,
+    {
+      specifier: "./api.js",
+      exportName: "registerFeishuDocTools",
+    },
+  );
   register(api);
 }
 
-function registerFeishuChatTools(api: NexisClawPluginApi) {
-  const register = loadBundledEntryExportSync<(api: NexisClawPluginApi) => void>(import.meta.url, {
-    specifier: "./api.js",
-    exportName: "registerFeishuChatTools",
-  });
+function registerFeishuChatTools(api: GreenchClawPluginApi) {
+  const register = loadBundledEntryExportSync<(api: GreenchClawPluginApi) => void>(
+    import.meta.url,
+    {
+      specifier: "./api.js",
+      exportName: "registerFeishuChatTools",
+    },
+  );
   register(api);
 }
 
-function registerFeishuWikiTools(api: NexisClawPluginApi) {
-  const register = loadBundledEntryExportSync<(api: NexisClawPluginApi) => void>(import.meta.url, {
-    specifier: "./api.js",
-    exportName: "registerFeishuWikiTools",
-  });
+function registerFeishuWikiTools(api: GreenchClawPluginApi) {
+  const register = loadBundledEntryExportSync<(api: GreenchClawPluginApi) => void>(
+    import.meta.url,
+    {
+      specifier: "./api.js",
+      exportName: "registerFeishuWikiTools",
+    },
+  );
   register(api);
 }
 
-function registerFeishuDriveTools(api: NexisClawPluginApi) {
-  const register = loadBundledEntryExportSync<(api: NexisClawPluginApi) => void>(import.meta.url, {
-    specifier: "./api.js",
-    exportName: "registerFeishuDriveTools",
-  });
+function registerFeishuDriveTools(api: GreenchClawPluginApi) {
+  const register = loadBundledEntryExportSync<(api: GreenchClawPluginApi) => void>(
+    import.meta.url,
+    {
+      specifier: "./api.js",
+      exportName: "registerFeishuDriveTools",
+    },
+  );
   register(api);
 }
 
-function registerFeishuPermTools(api: NexisClawPluginApi) {
-  const register = loadBundledEntryExportSync<(api: NexisClawPluginApi) => void>(import.meta.url, {
-    specifier: "./api.js",
-    exportName: "registerFeishuPermTools",
-  });
+function registerFeishuPermTools(api: GreenchClawPluginApi) {
+  const register = loadBundledEntryExportSync<(api: GreenchClawPluginApi) => void>(
+    import.meta.url,
+    {
+      specifier: "./api.js",
+      exportName: "registerFeishuPermTools",
+    },
+  );
   register(api);
 }
 
-function registerFeishuBitableTools(api: NexisClawPluginApi) {
-  const register = loadBundledEntryExportSync<(api: NexisClawPluginApi) => void>(import.meta.url, {
-    specifier: "./api.js",
-    exportName: "registerFeishuBitableTools",
-  });
+function registerFeishuBitableTools(api: GreenchClawPluginApi) {
+  const register = loadBundledEntryExportSync<(api: GreenchClawPluginApi) => void>(
+    import.meta.url,
+    {
+      specifier: "./api.js",
+      exportName: "registerFeishuBitableTools",
+    },
+  );
   register(api);
 }
 

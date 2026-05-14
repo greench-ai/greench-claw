@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { RuntimeEnv } from "../../runtime.js";
 import type { ChannelId } from "./channel-id.types.js";
 import type { ChannelPairingAdapter } from "./pairing.types.js";
@@ -27,7 +27,7 @@ export function requirePairingAdapter(channelId: ChannelId): ChannelPairingAdapt
 export async function notifyPairingApproved(params: {
   channelId: ChannelId;
   id: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   runtime?: RuntimeEnv;
   /** Extension channels can pass their adapter directly to bypass registry lookup. */
   pairingAdapter?: ChannelPairingAdapter;

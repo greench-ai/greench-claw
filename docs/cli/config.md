@@ -1,21 +1,21 @@
 ---
-summary: "CLI reference for `NexisClaw config` (get/set/patch/unset/file/schema/validate)"
+summary: "CLI reference for `GreenchClaw config` (get/set/patch/unset/file/schema/validate)"
 read_when:
   - You want to read or edit config non-interactively
 title: "Config"
 sidebarTitle: "Config"
 ---
 
-Config helpers for non-interactive edits in `NexisClaw.json`: get/set/patch/unset/file/schema/validate values by path and print the active config file. Run without a subcommand to open the configure wizard (same as `NexisClaw configure`).
+Config helpers for non-interactive edits in `GreenchClaw.json`: get/set/patch/unset/file/schema/validate values by path and print the active config file. Run without a subcommand to open the configure wizard (same as `GreenchClaw configure`).
 
 <Note>
-When `NEXISCLAW_NIX_MODE=1`, NexisClaw treats `NexisClaw.json` as immutable. Read-only commands such as `config get`, `config file`, `config schema`, and `config validate` still work, but config writers refuse. Agents should edit the Nix source for the install instead; for the first-party nix-NexisClaw distribution, use [nix-NexisClaw Quick Start](https://github.com/NexisClaw/nix-NexisClaw#quick-start) and set values under `programs.NexisClaw.config` or `instances.<name>.config`.
+When `GREENCHCLAW_NIX_MODE=1`, GreenchClaw treats `GreenchClaw.json` as immutable. Read-only commands such as `config get`, `config file`, `config schema`, and `config validate` still work, but config writers refuse. Agents should edit the Nix source for the install instead; for the first-party nix-GreenchClaw distribution, use [nix-GreenchClaw Quick Start](https://github.com/GreenchClaw/nix-GreenchClaw#quick-start) and set values under `programs.GreenchClaw.config` or `instances.<name>.config`.
 </Note>
 
 ## Root options
 
 <ParamField path="--section <section>" type="string">
-  Repeatable guided-setup section filter when you run `NexisClaw config` without a subcommand.
+  Repeatable guided-setup section filter when you run `GreenchClaw config` without a subcommand.
 </ParamField>
 
 Supported guided sections: `workspace`, `model`, `web`, `gateway`, `daemon`, `channels`, `plugins`, `skills`, `health`.
@@ -23,28 +23,28 @@ Supported guided sections: `workspace`, `model`, `web`, `gateway`, `daemon`, `ch
 ## Examples
 
 ```bash
-NexisClaw config file
-NexisClaw config --section model
-NexisClaw config --section gateway --section daemon
-NexisClaw config schema
-NexisClaw config get browser.executablePath
-NexisClaw config set browser.executablePath "/usr/bin/google-chrome"
-NexisClaw config set browser.profiles.work.executablePath "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-NexisClaw config set agents.defaults.heartbeat.every "2h"
-NexisClaw config set agents.list[0].tools.exec.node "node-id-or-name"
-NexisClaw config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
-NexisClaw config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN
-NexisClaw config set secrets.providers.vaultfile --provider-source file --provider-path /etc/NexisClaw/secrets.json --provider-mode json
-NexisClaw config patch --file ./NexisClaw.patch.json5 --dry-run
-NexisClaw config unset plugins.entries.brave.config.webSearch.apiKey
-NexisClaw config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN --dry-run
-NexisClaw config validate
-NexisClaw config validate --json
+GreenchClaw config file
+GreenchClaw config --section model
+GreenchClaw config --section gateway --section daemon
+GreenchClaw config schema
+GreenchClaw config get browser.executablePath
+GreenchClaw config set browser.executablePath "/usr/bin/google-chrome"
+GreenchClaw config set browser.profiles.work.executablePath "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+GreenchClaw config set agents.defaults.heartbeat.every "2h"
+GreenchClaw config set agents.list[0].tools.exec.node "node-id-or-name"
+GreenchClaw config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
+GreenchClaw config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN
+GreenchClaw config set secrets.providers.vaultfile --provider-source file --provider-path /etc/GreenchClaw/secrets.json --provider-mode json
+GreenchClaw config patch --file ./GreenchClaw.patch.json5 --dry-run
+GreenchClaw config unset plugins.entries.brave.config.webSearch.apiKey
+GreenchClaw config set channels.discord.token --ref-provider default --ref-source env --ref-id DISCORD_BOT_TOKEN --dry-run
+GreenchClaw config validate
+GreenchClaw config validate --json
 ```
 
 ### `config schema`
 
-Print the generated JSON schema for `NexisClaw.json` to stdout as JSON.
+Print the generated JSON schema for `GreenchClaw.json` to stdout as JSON.
 
 <AccordionGroup>
   <Accordion title="What it includes">
@@ -62,13 +62,13 @@ Print the generated JSON schema for `NexisClaw.json` to stdout as JSON.
 </AccordionGroup>
 
 ```bash
-NexisClaw config schema
+GreenchClaw config schema
 ```
 
 Pipe it into a file when you want to inspect or validate it with other tools:
 
 ```bash
-NexisClaw config schema > NexisClaw.schema.json
+GreenchClaw config schema > GreenchClaw.schema.json
 ```
 
 ### Paths
@@ -76,15 +76,15 @@ NexisClaw config schema > NexisClaw.schema.json
 Paths use dot or bracket notation:
 
 ```bash
-NexisClaw config get agents.defaults.workspace
-NexisClaw config get agents.list[0].id
+GreenchClaw config get agents.defaults.workspace
+GreenchClaw config get agents.list[0].id
 ```
 
 Use the agent list index to target a specific agent:
 
 ```bash
-NexisClaw config get agents.list
-NexisClaw config set agents.list[1].tools.exec.node "node-id-or-name"
+GreenchClaw config get agents.list
+GreenchClaw config set agents.list[1].tools.exec.node "node-id-or-name"
 ```
 
 ## Values
@@ -92,9 +92,9 @@ NexisClaw config set agents.list[1].tools.exec.node "node-id-or-name"
 Values are parsed as JSON5 when possible; otherwise they are treated as strings. Use `--strict-json` to require JSON5 parsing. `--json` remains supported as a legacy alias.
 
 ```bash
-NexisClaw config set agents.defaults.heartbeat.every "0m"
-NexisClaw config set gateway.port 19001 --strict-json
-NexisClaw config set channels.whatsapp.groups '["*"]' --strict-json
+GreenchClaw config set agents.defaults.heartbeat.every "0m"
+GreenchClaw config set gateway.port 19001 --strict-json
+GreenchClaw config set channels.whatsapp.groups '["*"]' --strict-json
 ```
 
 `config get <path> --json` prints the raw value as JSON instead of terminal-formatted text.
@@ -106,25 +106,25 @@ Object assignment replaces the target path by default. Protected map/list paths 
 Use `--merge` when adding entries to those maps:
 
 ```bash
-NexisClaw config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
-NexisClaw config set models.providers.ollama.models '[{"id":"llama3.2","name":"Llama 3.2"}]' --strict-json --merge
+GreenchClaw config set agents.defaults.models '{"openai/gpt-5.4":{}}' --strict-json --merge
+GreenchClaw config set models.providers.ollama.models '[{"id":"llama3.2","name":"Llama 3.2"}]' --strict-json --merge
 ```
 
 Use `--replace` only when you intentionally want the provided value to become the complete target value.
 
 ## `config set` modes
 
-`NexisClaw config set` supports four assignment styles:
+`GreenchClaw config set` supports four assignment styles:
 
 <Tabs>
   <Tab title="Value mode">
     ```bash
-    NexisClaw config set <path> <value>
+    GreenchClaw config set <path> <value>
     ```
   </Tab>
   <Tab title="SecretRef builder mode">
     ```bash
-    NexisClaw config set channels.discord.token \
+    GreenchClaw config set channels.discord.token \
       --ref-provider default \
       --ref-source env \
       --ref-id DISCORD_BOT_TOKEN
@@ -134,9 +134,9 @@ Use `--replace` only when you intentionally want the provided value to become th
     Provider builder mode targets `secrets.providers.<alias>` paths only:
 
     ```bash
-    NexisClaw config set secrets.providers.vault \
+    GreenchClaw config set secrets.providers.vault \
       --provider-source exec \
-      --provider-command /usr/local/bin/NexisClaw-vault \
+      --provider-command /usr/local/bin/GreenchClaw-vault \
       --provider-arg read \
       --provider-arg openai/api-key \
       --provider-timeout-ms 5000
@@ -145,7 +145,7 @@ Use `--replace` only when you intentionally want the provided value to become th
   </Tab>
   <Tab title="Batch mode">
     ```bash
-    NexisClaw config set --batch-json '[
+    GreenchClaw config set --batch-json '[
       {
         "path": "secrets.providers.default",
         "provider": { "source": "env" }
@@ -158,7 +158,7 @@ Use `--replace` only when you intentionally want the provided value to become th
     ```
 
     ```bash
-    NexisClaw config set --batch-file ./config-set.batch.json --dry-run
+    GreenchClaw config set --batch-file ./config-set.batch.json --dry-run
     ```
 
   </Tab>
@@ -175,15 +175,15 @@ Batch parsing always uses the batch payload (`--batch-json`/`--batch-file`) as t
 Use `config patch` when you want to paste or pipe a config-shaped patch instead of running many path-based `config set` commands. The input is a JSON5 object. Objects merge recursively, arrays and scalar values replace the target value, and `null` deletes the target path.
 
 ```bash
-NexisClaw config patch --file ./NexisClaw.patch.json5 --dry-run
-NexisClaw config patch --file ./NexisClaw.patch.json5
+GreenchClaw config patch --file ./GreenchClaw.patch.json5 --dry-run
+GreenchClaw config patch --file ./GreenchClaw.patch.json5
 ```
 
 You can also pipe a patch over stdin, which is useful for remote setup scripts:
 
 ```bash
-ssh NexisClaw-host 'NexisClaw config patch --stdin --dry-run' < ./NexisClaw.patch.json5
-ssh NexisClaw-host 'NexisClaw config patch --stdin' < ./NexisClaw.patch.json5
+ssh GreenchClaw-host 'GreenchClaw config patch --stdin --dry-run' < ./GreenchClaw.patch.json5
+ssh GreenchClaw-host 'GreenchClaw config patch --stdin' < ./GreenchClaw.patch.json5
 ```
 
 Example patch:
@@ -221,7 +221,7 @@ Example patch:
 Use `--replace-path <path>` when one object or array must become exactly the provided value instead of being recursively patched:
 
 ```bash
-NexisClaw config patch --file ./discord.patch.json5 --replace-path 'channels.discord.guilds["123"].channels'
+GreenchClaw config patch --file ./discord.patch.json5 --replace-path 'channels.discord.guilds["123"].channels'
 ```
 
 `--dry-run` runs schema and SecretRef resolvability checks without writing. Exec-backed SecretRefs are skipped by default during dry-run; add `--allow-exec` when you intentionally want dry-run to execute provider commands.
@@ -229,12 +229,12 @@ NexisClaw config patch --file ./discord.patch.json5 --replace-path 'channels.dis
 JSON path/value mode remains supported for both SecretRefs and providers:
 
 ```bash
-NexisClaw config set channels.discord.token \
+GreenchClaw config set channels.discord.token \
   '{"source":"env","provider":"default","id":"DISCORD_BOT_TOKEN"}' \
   --strict-json
 
-NexisClaw config set secrets.providers.vaultfile \
-  '{"source":"file","path":"/etc/NexisClaw/secrets.json","mode":"json"}' \
+GreenchClaw config set secrets.providers.vaultfile \
+  '{"source":"file","path":"/etc/GreenchClaw/secrets.json","mode":"json"}' \
   --strict-json
 ```
 
@@ -277,9 +277,9 @@ Provider builder targets must use `secrets.providers.<alias>` as the path.
 Hardened exec provider example:
 
 ```bash
-NexisClaw config set secrets.providers.vault \
+GreenchClaw config set secrets.providers.vault \
   --provider-source exec \
-  --provider-command /usr/local/bin/NexisClaw-vault \
+  --provider-command /usr/local/bin/GreenchClaw-vault \
   --provider-arg read \
   --provider-arg openai/api-key \
   --provider-json-only \
@@ -290,23 +290,23 @@ NexisClaw config set secrets.providers.vault \
 
 ## Dry run
 
-Use `--dry-run` to validate changes without writing `NexisClaw.json`.
+Use `--dry-run` to validate changes without writing `GreenchClaw.json`.
 
 ```bash
-NexisClaw config set channels.discord.token \
+GreenchClaw config set channels.discord.token \
   --ref-provider default \
   --ref-source env \
   --ref-id DISCORD_BOT_TOKEN \
   --dry-run
 
-NexisClaw config set channels.discord.token \
+GreenchClaw config set channels.discord.token \
   --ref-provider default \
   --ref-source env \
   --ref-id DISCORD_BOT_TOKEN \
   --dry-run \
   --json
 
-NexisClaw config set channels.discord.token \
+GreenchClaw config set channels.discord.token \
   --ref-provider vault \
   --ref-source exec \
   --ref-id discord/token \
@@ -370,7 +370,7 @@ NexisClaw config set channels.discord.token \
     {
       "ok": true,
       "operations": 1,
-      "configPath": "~/.NexisClaw/NexisClaw.json",
+      "configPath": "~/.GreenchClaw/GreenchClaw.json",
       "inputModes": ["builder"],
       "checks": {
         "schema": false,
@@ -387,7 +387,7 @@ NexisClaw config set channels.discord.token \
     {
       "ok": false,
       "operations": 1,
-      "configPath": "~/.NexisClaw/NexisClaw.json",
+      "configPath": "~/.GreenchClaw/GreenchClaw.json",
       "inputModes": ["builder"],
       "checks": {
         "schema": false,
@@ -421,35 +421,35 @@ NexisClaw config set channels.discord.token \
 
 ## Write safety
 
-`NexisClaw config set` and other NexisClaw-owned config writers validate the full post-change config before committing it to disk. If the new payload fails schema validation or looks like a destructive clobber, the active config is left alone and the rejected payload is saved beside it as `NexisClaw.json.rejected.*`.
+`GreenchClaw config set` and other GreenchClaw-owned config writers validate the full post-change config before committing it to disk. If the new payload fails schema validation or looks like a destructive clobber, the active config is left alone and the rejected payload is saved beside it as `GreenchClaw.json.rejected.*`.
 
 <Warning>
-The active config path must be a regular file. Symlinked `NexisClaw.json` layouts are unsupported for writes; use `NEXISCLAW_CONFIG_PATH` to point directly at the real file instead.
+The active config path must be a regular file. Symlinked `GreenchClaw.json` layouts are unsupported for writes; use `GREENCHCLAW_CONFIG_PATH` to point directly at the real file instead.
 </Warning>
 
 Prefer CLI writes for small edits:
 
 ```bash
-NexisClaw config set gateway.reload.mode hybrid --dry-run
-NexisClaw config set gateway.reload.mode hybrid
-NexisClaw config validate
+GreenchClaw config set gateway.reload.mode hybrid --dry-run
+GreenchClaw config set gateway.reload.mode hybrid
+GreenchClaw config validate
 ```
 
 If a write is rejected, inspect the saved payload and fix the full config shape:
 
 ```bash
-CONFIG="$(NexisClaw config file)"
+CONFIG="$(GreenchClaw config file)"
 ls -lt "$CONFIG".rejected.* 2>/dev/null | head
-NexisClaw config validate
+GreenchClaw config validate
 ```
 
-Direct editor writes are still allowed, but the running Gateway treats them as untrusted until they validate. Invalid direct edits fail startup or are skipped by hot reload; Gateway does not rewrite `NexisClaw.json`. Run `NexisClaw doctor --fix` to repair prefixed/clobbered config or restore the last-known-good copy. See [Gateway troubleshooting](/gateway/troubleshooting#gateway-rejected-invalid-config).
+Direct editor writes are still allowed, but the running Gateway treats them as untrusted until they validate. Invalid direct edits fail startup or are skipped by hot reload; Gateway does not rewrite `GreenchClaw.json`. Run `GreenchClaw doctor --fix` to repair prefixed/clobbered config or restore the last-known-good copy. See [Gateway troubleshooting](/gateway/troubleshooting#gateway-rejected-invalid-config).
 
 Whole-file recovery is reserved for doctor repair. Plugin schema changes or `minHostVersion` skew stay loud instead of rolling back unrelated user settings such as models, providers, auth profiles, channels, gateway exposure, tools, memory, browser, or cron config.
 
 ## Subcommands
 
-- `config file`: Print the active config file path (resolved from `NEXISCLAW_CONFIG_PATH` or default location). The path should name a regular file, not a symlink.
+- `config file`: Print the active config file path (resolved from `GREENCHCLAW_CONFIG_PATH` or default location). The path should name a regular file, not a symlink.
 
 Restart the gateway after edits.
 
@@ -458,27 +458,27 @@ Restart the gateway after edits.
 Validate the current config against the active schema without starting the gateway.
 
 ```bash
-NexisClaw config validate
-NexisClaw config validate --json
+GreenchClaw config validate
+GreenchClaw config validate --json
 ```
 
-After `NexisClaw config validate` is passing, you can use the local TUI to have an embedded agent compare the active config against the docs while you validate each change from the same terminal:
+After `GreenchClaw config validate` is passing, you can use the local TUI to have an embedded agent compare the active config against the docs while you validate each change from the same terminal:
 
 <Note>
-If validation is already failing, start with `NexisClaw configure` or `NexisClaw doctor --fix`. `NexisClaw chat` does not bypass the invalid-config guard.
+If validation is already failing, start with `GreenchClaw configure` or `GreenchClaw doctor --fix`. `GreenchClaw chat` does not bypass the invalid-config guard.
 </Note>
 
 ```bash
-NexisClaw chat
+GreenchClaw chat
 ```
 
 Then inside the TUI:
 
 ```text
-!NexisClaw config file
-!NexisClaw docs gateway auth token secretref
-!NexisClaw config validate
-!NexisClaw doctor
+!GreenchClaw config file
+!GreenchClaw docs gateway auth token secretref
+!GreenchClaw config validate
+!GreenchClaw doctor
 ```
 
 Typical repair loop:
@@ -488,13 +488,13 @@ Typical repair loop:
     Ask the agent to compare your current config with the relevant docs page and suggest the smallest fix.
   </Step>
   <Step title="Apply targeted edits">
-    Apply targeted edits with `NexisClaw config set` or `NexisClaw configure`.
+    Apply targeted edits with `GreenchClaw config set` or `GreenchClaw configure`.
   </Step>
   <Step title="Re-validate">
-    Rerun `NexisClaw config validate` after each change.
+    Rerun `GreenchClaw config validate` after each change.
   </Step>
   <Step title="Doctor for runtime issues">
-    If validation passes but the runtime is still unhealthy, run `NexisClaw doctor` or `NexisClaw doctor --fix` for migration and repair help.
+    If validation passes but the runtime is still unhealthy, run `GreenchClaw doctor` or `GreenchClaw doctor --fix` for migration and repair help.
   </Step>
 </Steps>
 

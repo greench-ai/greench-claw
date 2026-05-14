@@ -35,16 +35,18 @@ describe("plugin-sdk browser facades", () => {
 
     const browserProfiles = await import("./browser-profiles.js");
     const cfg = { enabled: true } as unknown as import("../config/config.js").BrowserConfig;
-    const rootConfig = { gateway: { port: 18789 } } as import("../config/config.js").NexisClawConfig;
+    const rootConfig = {
+      gateway: { port: 18789 },
+    } as import("../config/config.js").GreenchClawConfig;
 
     expect(browserProfiles.resolveBrowserConfig(cfg, rootConfig)).toBe(resolvedConfig);
-    expect(browserProfiles.resolveProfile(resolvedConfig, "NexisClaw")).toBe(resolvedProfile);
+    expect(browserProfiles.resolveProfile(resolvedConfig, "GreenchClaw")).toBe(resolvedProfile);
     expect(loadBundledPluginPublicSurfaceModuleSync).toHaveBeenCalledWith({
       dirName: "browser",
       artifactBasename: "browser-profiles.js",
     });
     expect(resolveBrowserConfig).toHaveBeenCalledWith(cfg, rootConfig);
-    expect(resolveProfile).toHaveBeenCalledWith(resolvedConfig, "NexisClaw");
+    expect(resolveProfile).toHaveBeenCalledWith(resolvedConfig, "GreenchClaw");
   });
 
   it("hard-fails when browser profile facade is unavailable", async () => {
@@ -81,7 +83,7 @@ describe("plugin-sdk browser facades", () => {
     const controlAuth = await import("./browser-control-auth.js");
     const cfg = {
       gateway: { auth: { token: "token-1" } },
-    } as import("../config/config.js").NexisClawConfig;
+    } as import("../config/config.js").GreenchClawConfig;
     const env = {} as NodeJS.ProcessEnv;
 
     expect(controlAuth.resolveBrowserControlAuth(cfg, env)).toBe(resolvedAuth);

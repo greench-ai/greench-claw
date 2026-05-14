@@ -1,4 +1,4 @@
-import { readResponseWithLimit as readSharedResponseWithLimit } from "NexisClaw/plugin-sdk/response-limit-runtime";
+import { readResponseWithLimit as readSharedResponseWithLimit } from "GreenchClaw/plugin-sdk/response-limit-runtime";
 
 export async function readResponseWithLimit(
   res: Response,

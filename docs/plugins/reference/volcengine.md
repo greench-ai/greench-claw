@@ -1,5 +1,5 @@
 ---
-summary: "Adds Volcengine, Volcengine Plan model provider support to NexisClaw."
+summary: "Adds Volcengine, Volcengine Plan model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the volcengine plugin
 title: "Volcengine plugin"
@@ -7,12 +7,12 @@ title: "Volcengine plugin"
 
 # Volcengine plugin
 
-Adds Volcengine, Volcengine Plan model provider support to NexisClaw.
+Adds Volcengine, Volcengine Plan model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/volcengine-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/volcengine-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

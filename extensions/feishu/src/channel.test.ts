@@ -1,5 +1,5 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import { feishuPlugin } from "./channel.js";
 import { looksLikeFeishuId, normalizeFeishuTarget, resolveReceiveIdType } from "./targets.js";
 
@@ -55,7 +55,7 @@ vi.mock("./channel.runtime.js", () => ({
   },
 }));
 
-function getDescribedActions(cfg: NexisClawConfig, accountId?: string): string[] {
+function getDescribedActions(cfg: GreenchClawConfig, accountId?: string): string[] {
   return [...(feishuPlugin.actions?.describeMessageTool?.({ cfg, accountId })?.actions ?? [])];
 }
 
@@ -111,7 +111,7 @@ describe("feishuPlugin.status.probeAccount", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const account = feishuPlugin.config.resolveAccount(cfg, "main");
     probeFeishuMock.mockResolvedValueOnce({ ok: true, appId: "cli_main" });
@@ -155,7 +155,7 @@ describe("feishuPlugin.pairing.notifyApproval", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await feishuPlugin.pairing?.notifyApproval?.({
       cfg,
@@ -220,7 +220,7 @@ describe("feishuPlugin actions", () => {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -256,7 +256,7 @@ describe("feishuPlugin actions", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(getDescribedActions(disabledCfg)).toEqual([
       "send",
@@ -294,7 +294,7 @@ describe("feishuPlugin actions", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(getDescribedActions(cfg, "default")).toEqual([
       "send",

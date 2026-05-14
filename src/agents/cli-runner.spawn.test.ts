@@ -287,7 +287,7 @@ describe("runCliAgent spawn path", () => {
     expect(allArgs).toContain("You are a helpful assistant.");
   });
 
-  it("includes the NexisClaw skills prompt in CLI system prompts", () => {
+  it("includes the GreenchClaw skills prompt in CLI system prompts", () => {
     const systemPrompt = buildSystemPrompt({
       workspaceDir: "/tmp",
       modelDisplay: "claude-cli/sonnet",
@@ -344,7 +344,7 @@ describe("runCliAgent spawn path", () => {
     supervisorSpawnMock.mockImplementationOnce(async (...args: unknown[]) => {
       const input = (args[0] ?? {}) as { argv?: string[] };
       systemPromptPath = requireArgAfter(input.argv, "--append-system-prompt-file");
-      expect(systemPromptPath).toContain("NexisClaw-cli-system-prompt-");
+      expect(systemPromptPath).toContain("GreenchClaw-cli-system-prompt-");
       await expect(fs.readFile(systemPromptPath, "utf-8")).resolves.toBe(
         "You are a helpful assistant.",
       );
@@ -419,8 +419,8 @@ describe("runCliAgent spawn path", () => {
     expect(requireArgAfter(input.argv, "--effort")).toBe("high");
   });
 
-  it("passes NexisClaw skills to Claude as a session plugin", async () => {
-    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-cli-skills-"));
+  it("passes GreenchClaw skills to Claude as a session plugin", async () => {
+    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-cli-skills-"));
     const skillDir = path.join(workspaceDir, "skills", "weather");
     await fs.mkdir(skillDir, { recursive: true });
     await fs.writeFile(
@@ -443,7 +443,7 @@ describe("runCliAgent spawn path", () => {
       const manifest = JSON.parse(
         await fs.readFile(path.join(pluginDir, ".claude-plugin", "plugin.json"), "utf-8"),
       ) as { name?: string; skills?: string };
-      expect(manifest.name).toBe("NexisClaw-skills");
+      expect(manifest.name).toBe("GreenchClaw-skills");
       expect(manifest.skills).toBe("./skills");
       await expect(
         fs.readFile(path.join(pluginDir, "skills", "weather", "SKILL.md"), "utf-8"),
@@ -551,7 +551,7 @@ describe("runCliAgent spawn path", () => {
 
   it("ignores legacy claudeSessionId on the compat wrapper", () => {
     const params = buildRunClaudeCliAgentParams({
-      sessionId: "NexisClaw-session",
+      sessionId: "GreenchClaw-session",
       sessionFile: "/tmp/session.jsonl",
       workspaceDir: "/tmp",
       prompt: "hi",
@@ -569,7 +569,7 @@ describe("runCliAgent spawn path", () => {
 
   it("forwards senderIsOwner through the compat wrapper", () => {
     const params = buildRunClaudeCliAgentParams({
-      sessionId: "NexisClaw-session",
+      sessionId: "GreenchClaw-session",
       sessionKey: "agent:main:matrix:room:123",
       sessionFile: "/tmp/session.jsonl",
       workspaceDir: "/tmp",
@@ -585,7 +585,7 @@ describe("runCliAgent spawn path", () => {
 
   it("forwards channel context through the compat wrapper", () => {
     const params = buildRunClaudeCliAgentParams({
-      sessionId: "NexisClaw-session",
+      sessionId: "GreenchClaw-session",
       sessionFile: "/tmp/session.jsonl",
       workspaceDir: "/tmp",
       prompt: "hi",
@@ -601,7 +601,7 @@ describe("runCliAgent spawn path", () => {
 
   it("forwards static extra system prompt through the compat wrapper", () => {
     const params = buildRunClaudeCliAgentParams({
-      sessionId: "NexisClaw-session",
+      sessionId: "GreenchClaw-session",
       sessionFile: "/tmp/session.jsonl",
       workspaceDir: "/tmp",
       prompt: "hi",
@@ -617,7 +617,7 @@ describe("runCliAgent spawn path", () => {
 
   it("forwards cron jobId through the compat wrapper", () => {
     const params = buildRunClaudeCliAgentParams({
-      sessionId: "NexisClaw-session",
+      sessionId: "GreenchClaw-session",
       sessionFile: "/tmp/session.jsonl",
       workspaceDir: "/tmp",
       prompt: "hi",
@@ -1445,7 +1445,7 @@ describe("runCliAgent spawn path", () => {
         "--resume",
         "claude-session",
         "--session-id",
-        "NexisClaw-session",
+        "GreenchClaw-session",
         "--append-system-prompt",
         "old prompt",
         "--append-system-prompt-file",
@@ -1459,7 +1459,7 @@ describe("runCliAgent spawn path", () => {
     expect(args).toContain("--resume");
     expect(args).toContain("claude-session");
     expect(args).not.toContain("--session-id");
-    expect(args).not.toContain("NexisClaw-session");
+    expect(args).not.toContain("GreenchClaw-session");
     expect(args).not.toContain("--append-system-prompt-file");
     expect(args).not.toContain("/tmp/system-prompt.md");
     expect(args).not.toContain("--append-system-prompt");
@@ -1817,7 +1817,7 @@ describe("runCliAgent spawn path", () => {
   });
 
   it("restarts Claude live sessions when selected skills change", async () => {
-    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-live-skills-"));
+    const workspaceDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-live-skills-"));
     const weatherDir = path.join(workspaceDir, "skills", "weather");
     const gitDir = path.join(workspaceDir, "skills", "git");
     await fs.mkdir(weatherDir, { recursive: true });
@@ -2199,7 +2199,7 @@ describe("runCliAgent spawn path", () => {
 
   it("can preserve selected clearEnv keys for live CLI backend probes", async () => {
     try {
-      process.env.NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV = '["SAFE_CLEAR"]';
+      process.env.GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV = '["SAFE_CLEAR"]';
       process.env.SAFE_CLEAR = "from-base";
       mockSuccessfulCliRun();
       await executePreparedCliRun(
@@ -2220,7 +2220,7 @@ describe("runCliAgent spawn path", () => {
       expect(input.env?.SAFE_CLEAR).toBe("from-base");
       expect(input.env?.SAFE_DROP).toBeUndefined();
     } finally {
-      delete process.env.NEXISCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV;
+      delete process.env.GREENCHCLAW_LIVE_CLI_BACKEND_PRESERVE_ENV;
       delete process.env.SAFE_CLEAR;
     }
   });
@@ -2382,7 +2382,7 @@ describe("runCliAgent spawn path", () => {
 
   it("loads workspace bootstrap files into the Claude CLI system prompt", async () => {
     const workspaceDir = await fs.mkdtemp(
-      path.join(os.tmpdir(), "NexisClaw-cli-bootstrap-context-"),
+      path.join(os.tmpdir(), "GreenchClaw-cli-bootstrap-context-"),
     );
 
     await fs.writeFile(

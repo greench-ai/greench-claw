@@ -69,13 +69,13 @@ function createManagedProfileState(profileOverrides?: Record<string, unknown>) {
     forProfile: () =>
       ({
         profile: {
-          name: "NexisClaw",
-          driver: "NexisClaw",
+          name: "GreenchClaw",
+          driver: "GreenchClaw",
           cdpPort: 18800,
           cdpUrl: "http://127.0.0.1:18800",
           cdpHost: "127.0.0.1",
           cdpIsLoopback: true,
-          userDataDir: "/tmp/NexisClaw-profile",
+          userDataDir: "/tmp/GreenchClaw-profile",
           color: "#FF4500",
           headless: false,
           headlessSource: "default",
@@ -113,13 +113,13 @@ async function callStartRoute(params: {
 }) {
   const ensureBrowserAvailable = vi.fn(async () => {});
   const profile = {
-    name: "NexisClaw",
-    driver: "NexisClaw",
+    name: "GreenchClaw",
+    driver: "GreenchClaw",
     cdpPort: 18800,
     cdpUrl: "http://127.0.0.1:18800",
     cdpHost: "127.0.0.1",
     cdpIsLoopback: true,
-    userDataDir: "/tmp/NexisClaw-profile",
+    userDataDir: "/tmp/GreenchClaw-profile",
     color: "#FF4500",
     headless: false,
     headlessSource: "default",
@@ -161,13 +161,13 @@ describe("basic browser routes", () => {
     delete process.env.WAYLAND_DISPLAY;
     try {
       const response = await callBasicRouteWithState({
-        query: { profile: "NexisClaw" },
+        query: { profile: "GreenchClaw" },
         state: createManagedProfileState(),
       });
 
       expect(response.statusCode).toBe(200);
       const body = responseBodyRecord(response);
-      expect(body.profile).toBe("NexisClaw");
+      expect(body.profile).toBe("GreenchClaw");
       expect(body.headless).toBe(true);
       expect(body.headlessSource).toBe("linux-display-fallback");
     } finally {
@@ -188,12 +188,12 @@ describe("basic browser routes", () => {
   it("reports request-local headless source for tracked local launches", async () => {
     const state = createManagedProfileState();
     const profile = (state.forProfile() as { profile: unknown }).profile as never;
-    state.profiles.set("NexisClaw", {
+    state.profiles.set("GreenchClaw", {
       profile,
       running: {
         pid: 222,
         exe: { kind: "chromium", path: "/usr/bin/chromium" },
-        userDataDir: "/tmp/NexisClaw-profile",
+        userDataDir: "/tmp/GreenchClaw-profile",
         cdpPort: 18800,
         startedAt: Date.now(),
         proc: {} as never,
@@ -203,13 +203,13 @@ describe("basic browser routes", () => {
     });
 
     const response = await callBasicRouteWithState({
-      query: { profile: "NexisClaw" },
+      query: { profile: "GreenchClaw" },
       state,
     });
 
     expect(response.statusCode).toBe(200);
     const body = responseBodyRecord(response);
-    expect(body.profile).toBe("NexisClaw");
+    expect(body.profile).toBe("GreenchClaw");
     expect(body.pid).toBe(222);
     expect(body.chosenBrowser).toBe("chromium");
     expect(body.headless).toBe(true);
@@ -218,9 +218,9 @@ describe("basic browser routes", () => {
 
   it("redacts CDP URL credentials from status responses", async () => {
     const response = await callBasicRouteWithState({
-      query: { profile: "NexisClaw" },
+      query: { profile: "GreenchClaw" },
       state: createManagedProfileState({
-        cdpUrl: "http://NexisClaw:relay-token@127.0.0.1:18800",
+        cdpUrl: "http://GreenchClaw:relay-token@127.0.0.1:18800",
       }),
     });
 
@@ -268,7 +268,7 @@ describe("basic browser routes", () => {
     });
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual({ ok: true, profile: "NexisClaw" });
+    expect(response.body).toEqual({ ok: true, profile: "GreenchClaw" });
     expect(ensureBrowserAvailable).toHaveBeenCalledWith({ headless: true });
   });
 
@@ -300,7 +300,7 @@ describe("basic browser routes", () => {
 
     expect(response.statusCode).toBe(400);
     expect(responseBodyRecord(response).error).toBe(
-      'Headless start override is only supported for locally launched NexisClaw profiles. Profile "chrome-live" is attach-only, remote, or existing-session.',
+      'Headless start override is only supported for locally launched GreenchClaw profiles. Profile "chrome-live" is attach-only, remote, or existing-session.',
     );
     expect(ensureBrowserAvailable).not.toHaveBeenCalled();
   });

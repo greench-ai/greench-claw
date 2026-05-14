@@ -2,13 +2,13 @@ import {
   ensureAuthProfileStore,
   findPersistedAuthProfileCredential,
 } from "../../agents/auth-profiles/store.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { normalizeOptionalString } from "../../shared/string-coerce.js";
 
 export function resolveProfileOverride(params: {
   rawProfile?: string;
   provider: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentDir?: string;
 }): { profileId?: string; error?: string } {
   const raw = normalizeOptionalString(params.rawProfile);

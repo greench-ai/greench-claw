@@ -1,7 +1,7 @@
 import {
   createPluginRegistryFixture,
   registerVirtualTestPlugin,
-} from "NexisClaw/plugin-sdk/plugin-test-contracts";
+} from "GreenchClaw/plugin-sdk/plugin-test-contracts";
 import { describe, expect, it } from "vitest";
 import { buildPluginShapeSummary } from "../inspect-shape.js";
 

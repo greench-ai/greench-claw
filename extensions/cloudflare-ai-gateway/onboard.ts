@@ -1,8 +1,8 @@
 import {
   applyAgentDefaultModelPrimary,
   applyProviderConfigWithDefaultModel,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildCloudflareAiGatewayModelDefinition,
   CLOUDFLARE_AI_GATEWAY_DEFAULT_MODEL_REF,
@@ -37,9 +37,9 @@ export function buildCloudflareAiGatewayConfigPatch(params: {
 }
 
 export function applyCloudflareAiGatewayProviderConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params?: { accountId?: string; gatewayId?: string },
-): NexisClawConfig {
+): GreenchClawConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[CLOUDFLARE_AI_GATEWAY_DEFAULT_MODEL_REF] = {
     ...models[CLOUDFLARE_AI_GATEWAY_DEFAULT_MODEL_REF],
@@ -81,9 +81,9 @@ export function applyCloudflareAiGatewayProviderConfig(
 }
 
 export function applyCloudflareAiGatewayConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params?: { accountId?: string; gatewayId?: string },
-): NexisClawConfig {
+): GreenchClawConfig {
   return applyAgentDefaultModelPrimary(
     applyCloudflareAiGatewayProviderConfig(cfg, params),
     CLOUDFLARE_AI_GATEWAY_DEFAULT_MODEL_REF,

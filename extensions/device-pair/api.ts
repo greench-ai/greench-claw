@@ -6,15 +6,15 @@ export {
   listDevicePairing,
   revokeDeviceBootstrapToken,
   type DeviceBootstrapProfile,
-} from "NexisClaw/plugin-sdk/device-bootstrap";
-export { definePluginEntry, type NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/device-bootstrap";
+export { definePluginEntry, type GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
 export {
   resolveGatewayBindUrl,
   resolveGatewayPort,
   resolveTailnetHostWithRunner,
-} from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/core";
 export {
-  resolvePreferredNexisClawTmpDir,
+  resolvePreferredGreenchClawTmpDir,
   runPluginCommandWithTimeout,
-} from "NexisClaw/plugin-sdk/sandbox";
+} from "GreenchClaw/plugin-sdk/sandbox";
 export { renderQrPngBase64, renderQrPngDataUrl, writeQrPngTempFile } from "./qr-image.js";

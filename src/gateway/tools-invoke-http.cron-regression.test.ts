@@ -55,7 +55,7 @@ vi.mock("../plugins/tools.js", () => ({
   getPluginToolMeta: noPluginToolMeta,
 }));
 
-vi.mock("../agents/NexisClaw-tools.js", () => {
+vi.mock("../agents/GreenchClaw-tools.js", () => {
   const tools = [
     {
       name: "cron",
@@ -69,7 +69,7 @@ vi.mock("../agents/NexisClaw-tools.js", () => {
     },
   ];
   return {
-    createNexisClawTools: () => tools,
+    createGreenchClawTools: () => tools,
   };
 });
 
@@ -122,7 +122,7 @@ async function invoke(tool: string, scopes = "operator.write") {
     headers: {
       "content-type": "application/json",
       authorization: `Bearer ${TEST_GATEWAY_TOKEN}`,
-      "x-NexisClaw-scopes": scopes,
+      "x-GreenchClaw-scopes": scopes,
     },
     body: JSON.stringify({ tool, action: "status", args: {}, sessionKey: "main" }),
   });

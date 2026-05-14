@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createWizardPrompter as buildWizardPrompter } from "../../test/helpers/wizard-prompter.js";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { PluginWebSearchProviderEntry } from "../plugins/types.js";
 import type { RuntimeEnv } from "../runtime.js";
 
@@ -45,16 +45,16 @@ const resolveSetupSecretInputString = vi.hoisted(() =>
   vi.fn<() => Promise<string | undefined>>(async () => undefined),
 );
 const resolveExistingKey = vi.hoisted(() =>
-  vi.fn<(config: NexisClawConfig, provider: string) => string | undefined>(() => undefined),
+  vi.fn<(config: GreenchClawConfig, provider: string) => string | undefined>(() => undefined),
 );
 const hasExistingKey = vi.hoisted(() =>
-  vi.fn<(config: NexisClawConfig, provider: string) => boolean>(() => false),
+  vi.fn<(config: GreenchClawConfig, provider: string) => boolean>(() => false),
 );
 const hasKeyInEnv = vi.hoisted(() =>
   vi.fn<(entry: Pick<PluginWebSearchProviderEntry, "envVars">) => boolean>(() => false),
 );
 const listConfiguredWebSearchProviders = vi.hoisted(() =>
-  vi.fn<(params?: { config?: NexisClawConfig }) => PluginWebSearchProviderEntry[]>(() => []),
+  vi.fn<(params?: { config?: GreenchClawConfig }) => PluginWebSearchProviderEntry[]>(() => []),
 );
 
 vi.mock("../commands/onboard-helpers.js", () => ({
@@ -187,7 +187,7 @@ function expectFirstOnboardingInstallPlanCallOmitsToken() {
 }
 
 type AdvancedFinalizeArgs = {
-  nextConfig?: NexisClawConfig;
+  nextConfig?: GreenchClawConfig;
   prompter?: ReturnType<typeof buildWizardPrompter>;
   runtime?: RuntimeEnv;
   installDaemon?: boolean;
@@ -200,7 +200,7 @@ function createLaterPrompter() {
   });
 }
 
-function createEnabledFirecrawlSearchConfig(): NexisClawConfig {
+function createEnabledFirecrawlSearchConfig(): GreenchClawConfig {
   return {
     tools: {
       web: {
@@ -299,8 +299,8 @@ describe("finalizeSetupWizard", () => {
   });
 
   it("resolves gateway password SecretRef for probe but omits auth from TUI hatch", async () => {
-    const previous = process.env.NEXISCLAW_GATEWAY_PASSWORD;
-    process.env.NEXISCLAW_GATEWAY_PASSWORD = "resolved-gateway-password"; // pragma: allowlist secret
+    const previous = process.env.GREENCHCLAW_GATEWAY_PASSWORD;
+    process.env.GREENCHCLAW_GATEWAY_PASSWORD = "resolved-gateway-password"; // pragma: allowlist secret
     resolveSetupSecretInputString.mockResolvedValueOnce("resolved-gateway-password");
     const select = vi.fn(async (params: { message: string }) => {
       if (params.message === "How do you want to hatch your agent?") {
@@ -332,7 +332,7 @@ describe("finalizeSetupWizard", () => {
               password: {
                 source: "env",
                 provider: "default",
-                id: "NEXISCLAW_GATEWAY_PASSWORD",
+                id: "GREENCHCLAW_GATEWAY_PASSWORD",
               },
             },
           },
@@ -358,9 +358,9 @@ describe("finalizeSetupWizard", () => {
       });
     } finally {
       if (previous === undefined) {
-        delete process.env.NEXISCLAW_GATEWAY_PASSWORD;
+        delete process.env.GREENCHCLAW_GATEWAY_PASSWORD;
       } else {
-        process.env.NEXISCLAW_GATEWAY_PASSWORD = previous;
+        process.env.GREENCHCLAW_GATEWAY_PASSWORD = previous;
       }
     }
 
@@ -491,7 +491,7 @@ describe("finalizeSetupWizard", () => {
             token: {
               source: "env",
               provider: "default",
-              id: "NEXISCLAW_GATEWAY_TOKEN",
+              id: "GREENCHCLAW_GATEWAY_TOKEN",
             },
           },
         },
@@ -637,7 +637,7 @@ describe("finalizeSetupWizard", () => {
   });
 
   it("uses the setup token for health checks to avoid local env token drift", async () => {
-    vi.stubEnv("NEXISCLAW_GATEWAY_TOKEN", "env-token");
+    vi.stubEnv("GREENCHCLAW_GATEWAY_TOKEN", "env-token");
     const prompter = createLaterPrompter();
 
     await finalizeSetupWizard({
@@ -675,7 +675,7 @@ describe("finalizeSetupWizard", () => {
       json?: boolean;
       timeoutMs?: number;
       token?: string;
-      config?: NexisClawConfig;
+      config?: GreenchClawConfig;
     };
     expect(healthArgs.json).toBe(false);
     expect(healthArgs.timeoutMs).toBe(10_000);
@@ -686,7 +686,7 @@ describe("finalizeSetupWizard", () => {
   });
 
   it("uses the resolved setup password for health checks", async () => {
-    vi.stubEnv("NEXISCLAW_GATEWAY_PASSWORD", "env-password");
+    vi.stubEnv("GREENCHCLAW_GATEWAY_PASSWORD", "env-password");
     resolveSetupSecretInputString.mockResolvedValueOnce("session-password");
     const prompter = createLaterPrompter();
 
@@ -707,7 +707,7 @@ describe("finalizeSetupWizard", () => {
             password: {
               source: "env",
               provider: "default",
-              id: "NEXISCLAW_GATEWAY_PASSWORD",
+              id: "GREENCHCLAW_GATEWAY_PASSWORD",
             },
           },
         },
@@ -738,7 +738,7 @@ describe("finalizeSetupWizard", () => {
       timeoutMs?: number;
       token?: string;
       password?: string;
-      config?: NexisClawConfig;
+      config?: GreenchClawConfig;
     };
     expect(healthArgs.json).toBe(false);
     expect(healthArgs.timeoutMs).toBe(10_000);

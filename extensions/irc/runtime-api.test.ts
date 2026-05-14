@@ -1,4 +1,4 @@
-import { runDirectImportSmoke } from "NexisClaw/plugin-sdk/plugin-test-contracts";
+import { runDirectImportSmoke } from "GreenchClaw/plugin-sdk/plugin-test-contracts";
 import { describe, expect, it } from "vitest";
 
 describe("irc bundled api seams", () => {

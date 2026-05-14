@@ -2,23 +2,23 @@ import { createHash } from "node:crypto";
 import type { Dirent } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { createAsyncLock } from "NexisClaw/plugin-sdk/async-lock-runtime";
+import { createAsyncLock } from "GreenchClaw/plugin-sdk/async-lock-runtime";
 import {
   extractErrorCode,
   formatErrorMessage,
   RequestScopedSubagentRuntimeError,
   readErrorName,
   SUBAGENT_RUNTIME_REQUEST_SCOPE_ERROR_CODE,
-} from "NexisClaw/plugin-sdk/error-runtime";
-import { resolveGlobalMap } from "NexisClaw/plugin-sdk/global-singleton";
-import { resolveStateDir } from "NexisClaw/plugin-sdk/memory-core-host-runtime-core";
-import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
-import { pathExists, replaceFileAtomic } from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/error-runtime";
+import { resolveGlobalMap } from "GreenchClaw/plugin-sdk/global-singleton";
+import { resolveStateDir } from "GreenchClaw/plugin-sdk/memory-core-host-runtime-core";
+import { getRuntimeConfig } from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
+import { pathExists, replaceFileAtomic } from "GreenchClaw/plugin-sdk/security-runtime";
 import {
   loadSessionStore,
   resolveStorePath,
   updateSessionStore,
-} from "NexisClaw/plugin-sdk/session-store-runtime";
+} from "GreenchClaw/plugin-sdk/session-store-runtime";
 
 // ── Types ──────────────────────────────────────────────────────────────
 
@@ -102,10 +102,10 @@ const DREAMING_TRANSCRIPT_RUN_MARKER = '"runId":"dreaming-narrative-';
 const DREAMING_ORPHAN_MIN_AGE_MS = 300_000;
 const SAFE_SESSION_ID_RE = /^[a-z0-9][a-z0-9._-]{0,127}$/i;
 const DREAMS_FILENAMES = ["DREAMS.md", "dreams.md"] as const;
-const DIARY_START_MARKER = "<!-- NexisClaw:dreaming:diary:start -->";
-const DIARY_END_MARKER = "<!-- NexisClaw:dreaming:diary:end -->";
-const BACKFILL_ENTRY_MARKER = "NexisClaw:dreaming:backfill-entry";
-const DREAMS_FILE_LOCKS_KEY = Symbol.for("NexisClaw.memoryCore.dreamingNarrative.fileLocks");
+const DIARY_START_MARKER = "<!-- GreenchClaw:dreaming:diary:start -->";
+const DIARY_END_MARKER = "<!-- GreenchClaw:dreaming:diary:end -->";
+const BACKFILL_ENTRY_MARKER = "GreenchClaw:dreaming:backfill-entry";
+const DREAMS_FILE_LOCKS_KEY = Symbol.for("GreenchClaw.memoryCore.dreamingNarrative.fileLocks");
 
 type DreamsFileLockEntry = {
   withLock: ReturnType<typeof createAsyncLock>;

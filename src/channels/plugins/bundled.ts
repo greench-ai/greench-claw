@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import type {
@@ -361,7 +361,7 @@ function listBundledChannelPluginIdsForRoot(
 
 function shouldIncludeBundledChannelSetupFeatureForConfig(params: {
   metadata: BundledChannelPluginMetadata;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): boolean {
   if (!params.config) {
     return true;
@@ -402,7 +402,7 @@ function shouldIncludeBundledChannelSetupFeatureForConfig(params: {
 function listBundledChannelPluginIdsForSetupFeature(
   rootScope: BundledChannelRootScope,
   feature: keyof NonNullable<BundledChannelSetupEntryRuntimeContract["features"]>,
-  options: { config?: NexisClawConfig } = {},
+  options: { config?: GreenchClawConfig } = {},
 ): readonly ChannelId[] {
   const hinted = listBundledChannelMetadata(rootScope)
     .filter(
@@ -700,7 +700,7 @@ export function listBundledChannelSetupPlugins(): readonly ChannelPlugin[] {
 
 export function listBundledChannelSetupPluginsByFeature(
   feature: keyof NonNullable<BundledChannelSetupEntryRuntimeContract["features"]>,
-  options: { config?: NexisClawConfig } = {},
+  options: { config?: GreenchClawConfig } = {},
 ): readonly ChannelPlugin[] {
   const { rootScope, loadContext } = resolveActiveBundledChannelLoadScope();
   return listBundledChannelPluginIdsForSetupFeature(rootScope, feature, {
@@ -717,7 +717,7 @@ export function listBundledChannelSetupPluginsByFeature(
 
 export function listBundledChannelLegacySessionSurfaces(
   options: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
   } = {},
 ): readonly BundledChannelLegacySessionSurface[] {
   const { rootScope, loadContext } = resolveActiveBundledChannelLoadScope();
@@ -739,7 +739,7 @@ export function listBundledChannelLegacySessionSurfaces(
 
 export function listBundledChannelLegacyStateMigrationDetectors(
   options: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
   } = {},
 ): readonly BundledChannelLegacyStateMigrationDetector[] {
   const { rootScope, loadContext } = resolveActiveBundledChannelLoadScope();

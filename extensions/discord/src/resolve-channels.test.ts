@@ -1,4 +1,4 @@
-import { withFetchPreconnect } from "NexisClaw/plugin-sdk/test-env";
+import { withFetchPreconnect } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import { resolveDiscordChannelAllowlist } from "./resolve-channels.js";
 import { jsonResponse, urlToString } from "./test-http-helpers.js";

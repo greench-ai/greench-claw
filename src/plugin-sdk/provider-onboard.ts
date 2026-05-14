@@ -9,15 +9,15 @@ import {
   normalizeAgentModelRefForConfig,
 } from "../config/model-input.js";
 import type { AgentModelEntryConfig } from "../config/types.agent-defaults.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type {
   ModelApi,
   ModelDefinitionConfig,
   ModelProviderConfig,
 } from "../config/types.models.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 import { resolvePrimaryStringValue } from "../shared/string-coerce.js";
 
-export type { NexisClawConfig, ModelApi, ModelDefinitionConfig, ModelProviderConfig };
+export type { GreenchClawConfig, ModelApi, ModelDefinitionConfig, ModelProviderConfig };
 export {
   resolveAgentModelFallbackValues,
   resolveAgentModelPrimaryValue,
@@ -38,8 +38,8 @@ const LEGACY_OPENCODE_ZEN_DEFAULT_MODELS = new Set([
 export const OPENCODE_ZEN_DEFAULT_MODEL = "opencode/claude-opus-4-6";
 
 export type ProviderOnboardPresetAppliers<TArgs extends unknown[]> = {
-  applyProviderConfig: (cfg: NexisClawConfig, ...args: TArgs) => NexisClawConfig;
-  applyConfig: (cfg: NexisClawConfig, ...args: TArgs) => NexisClawConfig;
+  applyProviderConfig: (cfg: GreenchClawConfig, ...args: TArgs) => GreenchClawConfig;
+  applyConfig: (cfg: GreenchClawConfig, ...args: TArgs) => GreenchClawConfig;
 };
 
 function extractAgentDefaultModelFallbacks(model: unknown): string[] | undefined {
@@ -128,7 +128,7 @@ function normalizeModelProvidersForConfig(
 }
 
 function resolveProviderModelMergeState(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   providerId: string,
 ): ProviderModelMergeState {
   const providers = { ...cfg.models?.providers } as Record<string, ModelProviderConfig>;
@@ -174,7 +174,7 @@ function buildProviderConfig(params: {
 }
 
 function applyProviderConfigWithMergedModels(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params: {
     agentModels: Record<string, AgentModelEntryConfig>;
     providerId: string;
@@ -184,7 +184,7 @@ function applyProviderConfigWithMergedModels(
     mergedModels: ModelDefinitionConfig[];
     fallbackModels: ModelDefinitionConfig[];
   },
-): NexisClawConfig {
+): GreenchClawConfig {
   const mergedModels = normalizeProviderModelsForConfig(params.providerId, params.mergedModels);
   const fallbackModels = normalizeProviderModelsForConfig(params.providerId, params.fallbackModels);
   params.providerState.providers[params.providerId] = buildProviderConfig({
@@ -207,10 +207,10 @@ function createProviderPresetAppliers<
   },
 >(params: {
   resolveParams: (
-    cfg: NexisClawConfig,
+    cfg: GreenchClawConfig,
     ...args: TArgs
   ) => Omit<TParams, "primaryModelRef"> | null | undefined;
-  applyPreset: (cfg: NexisClawConfig, preset: TParams) => NexisClawConfig;
+  applyPreset: (cfg: GreenchClawConfig, preset: TParams) => GreenchClawConfig;
   primaryModelRef: string;
 }): ProviderOnboardPresetAppliers<TArgs> {
   return {
@@ -248,12 +248,12 @@ export function withAgentModelAliases(
 }
 
 export function applyOnboardAuthAgentModelsAndProviders(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params: {
     agentModels: Record<string, AgentModelEntryConfig>;
     providers: Record<string, ModelProviderConfig>;
   },
-): NexisClawConfig {
+): GreenchClawConfig {
   const mergedAgentModels = normalizeAgentModelMapForConfig({
     ...cfg.agents?.defaults?.models,
     ...params.agentModels,
@@ -275,9 +275,9 @@ export function applyOnboardAuthAgentModelsAndProviders(
 }
 
 export function applyAgentDefaultModelPrimary(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   primary: string,
-): NexisClawConfig {
+): GreenchClawConfig {
   const defaults = cfg.agents?.defaults;
   const existingFallbacks = extractAgentDefaultModelFallbacks(cfg.agents?.defaults?.model);
   const normalizedFallbacks = existingFallbacks?.map((fallback) =>
@@ -310,8 +310,8 @@ export function applyAgentDefaultModelPrimary(
   };
 }
 
-export function applyOpencodeZenModelDefault(cfg: NexisClawConfig): {
-  next: NexisClawConfig;
+export function applyOpencodeZenModelDefault(cfg: GreenchClawConfig): {
+  next: GreenchClawConfig;
   changed: boolean;
 } {
   const current = resolvePrimaryStringValue(cfg.agents?.defaults?.model);
@@ -329,7 +329,7 @@ export function applyOpencodeZenModelDefault(cfg: NexisClawConfig): {
 }
 
 export function applyProviderConfigWithDefaultModels(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params: {
     agentModels: Record<string, AgentModelEntryConfig>;
     providerId: string;
@@ -338,7 +338,7 @@ export function applyProviderConfigWithDefaultModels(
     defaultModels: ModelDefinitionConfig[];
     defaultModelId?: string;
   },
-): NexisClawConfig {
+): GreenchClawConfig {
   const providerState = resolveProviderModelMergeState(cfg, params.providerId);
   const defaultModels = params.defaultModels;
   const defaultModelId = params.defaultModelId ?? defaultModels[0]?.id;
@@ -363,7 +363,7 @@ export function applyProviderConfigWithDefaultModels(
 }
 
 export function applyProviderConfigWithDefaultModel(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params: {
     agentModels: Record<string, AgentModelEntryConfig>;
     providerId: string;
@@ -372,7 +372,7 @@ export function applyProviderConfigWithDefaultModel(
     defaultModel: ModelDefinitionConfig;
     defaultModelId?: string;
   },
-): NexisClawConfig {
+): GreenchClawConfig {
   return applyProviderConfigWithDefaultModels(cfg, {
     agentModels: params.agentModels,
     providerId: params.providerId,
@@ -384,7 +384,7 @@ export function applyProviderConfigWithDefaultModel(
 }
 
 export function applyProviderConfigWithDefaultModelPreset(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params: {
     providerId: string;
     api: ModelApi;
@@ -394,7 +394,7 @@ export function applyProviderConfigWithDefaultModelPreset(
     aliases?: readonly AgentModelAliasEntry[];
     primaryModelRef?: string;
   },
-): NexisClawConfig {
+): GreenchClawConfig {
   const next = applyProviderConfigWithDefaultModel(cfg, {
     agentModels: withAgentModelAliases(cfg.agents?.defaults?.models, params.aliases ?? []),
     providerId: params.providerId,
@@ -410,7 +410,7 @@ export function applyProviderConfigWithDefaultModelPreset(
 
 export function createDefaultModelPresetAppliers<TArgs extends unknown[]>(params: {
   resolveParams: (
-    cfg: NexisClawConfig,
+    cfg: GreenchClawConfig,
     ...args: TArgs
   ) =>
     | Omit<Parameters<typeof applyProviderConfigWithDefaultModelPreset>[1], "primaryModelRef">
@@ -426,7 +426,7 @@ export function createDefaultModelPresetAppliers<TArgs extends unknown[]>(params
 }
 
 export function applyProviderConfigWithDefaultModelsPreset(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params: {
     providerId: string;
     api: ModelApi;
@@ -436,7 +436,7 @@ export function applyProviderConfigWithDefaultModelsPreset(
     aliases?: readonly AgentModelAliasEntry[];
     primaryModelRef?: string;
   },
-): NexisClawConfig {
+): GreenchClawConfig {
   const next = applyProviderConfigWithDefaultModels(cfg, {
     agentModels: withAgentModelAliases(cfg.agents?.defaults?.models, params.aliases ?? []),
     providerId: params.providerId,
@@ -452,7 +452,7 @@ export function applyProviderConfigWithDefaultModelsPreset(
 
 export function createDefaultModelsPresetAppliers<TArgs extends unknown[]>(params: {
   resolveParams: (
-    cfg: NexisClawConfig,
+    cfg: GreenchClawConfig,
     ...args: TArgs
   ) =>
     | Omit<Parameters<typeof applyProviderConfigWithDefaultModelsPreset>[1], "primaryModelRef">
@@ -468,7 +468,7 @@ export function createDefaultModelsPresetAppliers<TArgs extends unknown[]>(param
 }
 
 export function applyProviderConfigWithModelCatalog(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params: {
     agentModels: Record<string, AgentModelEntryConfig>;
     providerId: string;
@@ -476,7 +476,7 @@ export function applyProviderConfigWithModelCatalog(
     baseUrl: string;
     catalogModels: ModelDefinitionConfig[];
   },
-): NexisClawConfig {
+): GreenchClawConfig {
   const providerState = resolveProviderModelMergeState(cfg, params.providerId);
   const catalogModels = params.catalogModels;
   const mergedModels =
@@ -500,7 +500,7 @@ export function applyProviderConfigWithModelCatalog(
 }
 
 export function applyProviderConfigWithModelCatalogPreset(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params: {
     providerId: string;
     api: ModelApi;
@@ -509,7 +509,7 @@ export function applyProviderConfigWithModelCatalogPreset(
     aliases?: readonly AgentModelAliasEntry[];
     primaryModelRef?: string;
   },
-): NexisClawConfig {
+): GreenchClawConfig {
   const next = applyProviderConfigWithModelCatalog(cfg, {
     agentModels: withAgentModelAliases(cfg.agents?.defaults?.models, params.aliases ?? []),
     providerId: params.providerId,
@@ -524,7 +524,7 @@ export function applyProviderConfigWithModelCatalogPreset(
 
 export function createModelCatalogPresetAppliers<TArgs extends unknown[]>(params: {
   resolveParams: (
-    cfg: NexisClawConfig,
+    cfg: GreenchClawConfig,
     ...args: TArgs
   ) =>
     | Omit<Parameters<typeof applyProviderConfigWithModelCatalogPreset>[1], "primaryModelRef">
@@ -540,9 +540,9 @@ export function createModelCatalogPresetAppliers<TArgs extends unknown[]>(params
 }
 
 export function ensureModelAllowlistEntry(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   modelRef: string;
   defaultProvider?: string;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   return ensureStaticModelAllowlistEntry(params);
 }

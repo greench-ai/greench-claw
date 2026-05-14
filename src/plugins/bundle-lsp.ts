@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { applyMergePatch } from "../config/merge-patch.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { readRootJsonObjectSync } from "../infra/json-files.js";
 import { isRecord } from "../utils.js";
 import {
@@ -143,7 +143,7 @@ export function inspectBundleLspRuntimeSupport(params: {
 
 export function loadEnabledBundleLspConfig(params: {
   workspaceDir: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): { config: BundleLspConfig; diagnostics: Array<{ pluginId: string; message: string }> } {
   return loadEnabledBundleConfig({
     workspaceDir: params.workspaceDir,

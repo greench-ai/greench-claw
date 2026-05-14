@@ -96,7 +96,7 @@ describe("formatMediaUnderstandingBody", () => {
           kind: "audio.transcription",
           attachmentIndex: 0,
           text: "first clip was silent",
-          provider: "NexisClaw",
+          provider: "GreenchClaw",
         },
         {
           kind: "audio.transcription",

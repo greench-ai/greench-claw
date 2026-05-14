@@ -50,7 +50,7 @@ function createContext(params: {
       customModelId: params.modelId,
     },
     runtime: createRuntime() as never,
-    agentDir: "/tmp/NexisClaw-self-hosted-test-agent",
+    agentDir: "/tmp/GreenchClaw-self-hosted-test-agent",
     resolveApiKey: vi.fn<ProviderAuthMethodNonInteractiveContext["resolveApiKey"]>(
       async () => resolved,
     ),

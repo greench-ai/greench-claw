@@ -1,7 +1,7 @@
 /**
  * OpenResponses HTTP Handler
  *
- * Implements the OpenResponses `/v1/responses` endpoint for NexisClaw Gateway.
+ * Implements the OpenResponses `/v1/responses` endpoint for GreenchClaw Gateway.
  *
  * @see https://www.open-responses.com/
  */
@@ -123,7 +123,7 @@ function createResponseSessionScope(params: {
   return normalizeResponseSessionScope({
     authSubject: resolveResponseSessionAuthSubject({ req: params.req, auth: params.auth }),
     agentId: params.agentId,
-    requestedSessionKey: getHeader(params.req, "x-NexisClaw-session-key"),
+    requestedSessionKey: getHeader(params.req, "x-GreenchClaw-session-key"),
   });
 }
 
@@ -759,7 +759,7 @@ export async function handleOpenResponsesHttpRequest(
               .map((p) => (typeof p.text === "string" ? p.text : ""))
               .filter(Boolean)
               .join("\n\n")
-          : "No response from NexisClaw.";
+          : "No response from GreenchClaw.";
 
       const response = createResponseResource({
         id: responseId,
@@ -958,7 +958,7 @@ export async function handleOpenResponsesHttpRequest(
     if (evt.stream === "lifecycle") {
       const phase = evt.data?.phase;
       if (phase === "end" || phase === "error") {
-        const finalText = accumulatedText || "No response from NexisClaw.";
+        const finalText = accumulatedText || "No response from GreenchClaw.";
         const finalStatus = phase === "error" ? "failed" : "completed";
         requestFinalize(finalStatus, finalText);
       }
@@ -1108,7 +1108,7 @@ export async function handleOpenResponsesHttpRequest(
                 .map((p) => (typeof p.text === "string" ? p.text : ""))
                 .filter(Boolean)
                 .join("\n\n")
-            : "No response from NexisClaw.";
+            : "No response from GreenchClaw.";
 
         accumulatedText = content;
         sawAssistantDelta = true;

@@ -17,7 +17,7 @@ import { refreshPluginRegistryAfterConfigMutation } from "../../cli/plugins-regi
 import {
   readConfigFileSnapshot,
   replaceConfigFile,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "../../config/config.js";
 import { danger } from "../../globals.js";
 import { formatErrorMessage } from "../../infra/errors.js";
@@ -137,7 +137,7 @@ function renderDisplayLine(line: ChannelCapabilitiesDisplayLine) {
 
 async function resolveChannelReports(params: {
   plugin: ChannelPlugin;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   timeoutMs: number;
   accountOverride?: string;
   target?: string;
@@ -233,7 +233,7 @@ export async function channelsCapabilitiesCommand(
   if (opts.account && (!rawChannel || rawChannel === "all")) {
     runtime.error(
       danger(
-        `--account requires a specific --channel. Run ${formatCliCommand("NexisClaw channels list")} to choose one.`,
+        `--account requires a specific --channel. Run ${formatCliCommand("GreenchClaw channels list")} to choose one.`,
       ),
     );
     runtime.exit(1);
@@ -242,7 +242,7 @@ export async function channelsCapabilitiesCommand(
   if (rawTarget && (!rawChannel || rawChannel === "all")) {
     runtime.error(
       danger(
-        `--target requires a specific --channel. Run ${formatCliCommand("NexisClaw channels list")} to choose one.`,
+        `--target requires a specific --channel. Run ${formatCliCommand("GreenchClaw channels list")} to choose one.`,
       ),
     );
     runtime.exit(1);

@@ -25,18 +25,18 @@ function requireMockArg(mock: { mock: { calls: unknown[][] } }, label: string): 
 }
 
 describe("readServiceStatusSummary", () => {
-  it("marks NexisClaw-managed services as installed", async () => {
+  it("marks GreenchClaw-managed services as installed", async () => {
     const summary = await readServiceStatusSummary(
       createService({
         isLoaded: vi.fn(async () => true),
-        readCommand: vi.fn(async () => ({ programArguments: ["NexisClaw", "gateway", "run"] })),
+        readCommand: vi.fn(async () => ({ programArguments: ["GreenchClaw", "gateway", "run"] })),
         readRuntime: vi.fn(async () => ({ status: "running" })),
       }),
       "Daemon",
     );
 
     expect(summary.installed).toBe(true);
-    expect(summary.managedByNexisClaw).toBe(true);
+    expect(summary.managedByGreenchClaw).toBe(true);
     expect(summary.externallyManaged).toBe(false);
     expect(summary.loadedText).toBe("enabled");
   });
@@ -50,7 +50,7 @@ describe("readServiceStatusSummary", () => {
     );
 
     expect(summary.installed).toBe(true);
-    expect(summary.managedByNexisClaw).toBe(false);
+    expect(summary.managedByGreenchClaw).toBe(false);
     expect(summary.externallyManaged).toBe(true);
     expect(summary.loadedText).toBe("running (externally managed)");
   });
@@ -59,25 +59,26 @@ describe("readServiceStatusSummary", () => {
     const summary = await readServiceStatusSummary(createService({}), "Daemon");
 
     expect(summary.installed).toBe(false);
-    expect(summary.managedByNexisClaw).toBe(false);
+    expect(summary.managedByGreenchClaw).toBe(false);
     expect(summary.externallyManaged).toBe(false);
     expect(summary.loadedText).toBe("disabled");
   });
 
   it("passes command environment to runtime and loaded checks", async () => {
     const isLoaded = vi.fn(async ({ env }: GatewayServiceEnvArgs) => {
-      return env?.NEXISCLAW_GATEWAY_PORT === "18789";
+      return env?.GREENCHCLAW_GATEWAY_PORT === "18789";
     });
     const readRuntime = vi.fn(async (env?: NodeJS.ProcessEnv) => ({
-      status: env?.NEXISCLAW_GATEWAY_PORT === "18789" ? ("running" as const) : ("unknown" as const),
+      status:
+        env?.GREENCHCLAW_GATEWAY_PORT === "18789" ? ("running" as const) : ("unknown" as const),
     }));
 
     const summary = await readServiceStatusSummary(
       createService({
         isLoaded,
         readCommand: vi.fn(async () => ({
-          programArguments: ["NexisClaw", "gateway", "run", "--port", "18789"],
-          environment: { NEXISCLAW_GATEWAY_PORT: "18789" },
+          programArguments: ["GreenchClaw", "gateway", "run", "--port", "18789"],
+          environment: { GREENCHCLAW_GATEWAY_PORT: "18789" },
         })),
         readRuntime,
       }),
@@ -85,27 +86,27 @@ describe("readServiceStatusSummary", () => {
     );
 
     const loadedArgs = requireMockArg(isLoaded, "isLoaded") as GatewayServiceEnvArgs;
-    expect(loadedArgs?.env?.NEXISCLAW_GATEWAY_PORT).toBe("18789");
+    expect(loadedArgs?.env?.GREENCHCLAW_GATEWAY_PORT).toBe("18789");
     const runtimeEnv = requireMockArg(readRuntime, "readRuntime") as NodeJS.ProcessEnv;
-    expect(runtimeEnv?.NEXISCLAW_GATEWAY_PORT).toBe("18789");
+    expect(runtimeEnv?.GREENCHCLAW_GATEWAY_PORT).toBe("18789");
     expect(summary.installed).toBe(true);
     expect(summary.loaded).toBe(true);
     expect(summary.runtime?.status).toBe("running");
   });
 
   it("includes service layout diagnostics and flags source checkout entrypoints", async () => {
-    await withTempDir({ prefix: "NexisClaw-status-service-layout-" }, async (root) => {
+    await withTempDir({ prefix: "GreenchClaw-status-service-layout-" }, async (root) => {
       await fs.mkdir(path.join(root, ".git"), { recursive: true });
       await fs.mkdir(path.join(root, "src"), { recursive: true });
       await fs.mkdir(path.join(root, "extensions"), { recursive: true });
       await fs.mkdir(path.join(root, "dist"), { recursive: true });
       await fs.writeFile(
         path.join(root, "package.json"),
-        JSON.stringify({ name: "NexisClaw", version: "0.0.0-test" }),
+        JSON.stringify({ name: "GreenchClaw", version: "0.0.0-test" }),
         "utf8",
       );
       const entrypoint = path.join(root, "dist", "index.js");
-      const serviceFile = path.join(root, "NexisClaw-gateway.service");
+      const serviceFile = path.join(root, "GreenchClaw-gateway.service");
       await fs.writeFile(entrypoint, "export {};\n", "utf8");
       await fs.writeFile(serviceFile, "[Service]\n", "utf8");
       const realRoot = await fs.realpath(root);
@@ -127,7 +128,7 @@ describe("readServiceStatusSummary", () => {
         throw new Error("Expected service layout diagnostics");
       }
       expect(layout.sourcePath).toBe(serviceFile);
-      expect(layout.sourcePathReal).toBe(path.join(realRoot, "NexisClaw-gateway.service"));
+      expect(layout.sourcePathReal).toBe(path.join(realRoot, "GreenchClaw-gateway.service"));
       expect(layout.entrypoint).toBe(entrypoint);
       expect(layout.entrypointReal).toBe(path.join(realRoot, "dist", "index.js"));
       expect(layout.packageRoot).toBe(realRoot);

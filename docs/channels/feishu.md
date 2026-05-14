@@ -15,20 +15,20 @@ Feishu/Lark is an all-in-one collaboration platform where teams chat, share docu
 ## Quick start
 
 <Note>
-Requires NexisClaw 2026.4.25 or above. Run `NexisClaw --version` to check. Upgrade with `NexisClaw update`.
+Requires GreenchClaw 2026.4.25 or above. Run `GreenchClaw --version` to check. Upgrade with `GreenchClaw update`.
 </Note>
 
 <Steps>
   <Step title="Run the channel setup wizard">
   ```bash
-  NexisClaw channels login --channel feishu
+  GreenchClaw channels login --channel feishu
   ```
   Choose manual setup to paste an App ID and App Secret from Feishu Open Platform, or choose QR setup to create a bot automatically. If the domestic Feishu mobile app does not react to the QR code, rerun setup and choose manual setup.
   </Step>
   
   <Step title="After setup completes, restart the gateway to apply the changes">
   ```bash
-  NexisClaw gateway restart
+  GreenchClaw gateway restart
   ```
   </Step>
 </Steps>
@@ -49,8 +49,8 @@ Configure `dmPolicy` to control who can DM the bot:
 **Approve a pairing request:**
 
 ```bash
-NexisClaw pairing list feishu
-NexisClaw pairing approve feishu <CODE>
+GreenchClaw pairing list feishu
+GreenchClaw pairing approve feishu <CODE>
 ```
 
 ### Group chats
@@ -168,13 +168,13 @@ Open the group in Feishu/Lark, click the menu icon in the top-right corner, and 
 Start the gateway, send a DM to the bot, then check the logs:
 
 ```bash
-NexisClaw logs --follow
+GreenchClaw logs --follow
 ```
 
 Look for `open_id` in the log output. You can also check pending pairing requests:
 
 ```bash
-NexisClaw pairing list feishu
+GreenchClaw pairing list feishu
 ```
 
 ---
@@ -200,7 +200,7 @@ Feishu/Lark does not support native slash-command menus, so send these as plain 
 1. Ensure the bot is added to the group
 2. Ensure you @mention the bot (required by default)
 3. Verify `groupPolicy` is not `"disabled"`
-4. Check logs: `NexisClaw logs --follow`
+4. Check logs: `GreenchClaw logs --follow`
 
 ### Bot does not receive messages
 
@@ -208,12 +208,12 @@ Feishu/Lark does not support native slash-command menus, so send these as plain 
 2. Ensure event subscription includes `im.message.receive_v1`
 3. Ensure **persistent connection** (WebSocket) is selected
 4. Ensure all required permission scopes are granted
-5. Ensure the gateway is running: `NexisClaw gateway status`
-6. Check logs: `NexisClaw logs --follow`
+5. Ensure the gateway is running: `GreenchClaw gateway status`
+6. Check logs: `GreenchClaw logs --follow`
 
 ### QR setup does not react in the Feishu mobile app
 
-1. Rerun setup: `NexisClaw channels login --channel feishu`
+1. Rerun setup: `GreenchClaw channels login --channel feishu`
 2. Choose manual setup
 3. In Feishu Open Platform, create a self-built app and copy its App ID and App Secret
 4. Paste those credentials into the setup wizard
@@ -222,7 +222,7 @@ Feishu/Lark does not support native slash-command menus, so send these as plain 
 
 1. Reset the App Secret in Feishu Open Platform / Lark Developer
 2. Update the value in your config
-3. Restart the gateway: `NexisClaw gateway restart`
+3. Restart the gateway: `GreenchClaw gateway restart`
 
 ---
 
@@ -322,7 +322,7 @@ Feishu/Lark supports ACP for DMs and group thread messages. Feishu/Lark ACP is t
             agent: "codex",
             backend: "acpx",
             mode: "persistent",
-            cwd: "/workspace/NexisClaw",
+            cwd: "/workspace/GreenchClaw",
           },
         },
       },
@@ -452,7 +452,7 @@ Full configuration: [Gateway configuration](/gateway/configuration)
 - ✅ Stickers
 
 Inbound Feishu/Lark audio messages are normalized as media placeholders instead
-of raw `file_key` JSON. When `tools.media.audio` is configured, NexisClaw
+of raw `file_key` JSON. When `tools.media.audio` is configured, GreenchClaw
 downloads the voice-note resource and runs shared audio transcription before the
 agent turn, so the agent receives the spoken transcript. If Feishu includes
 transcript text directly in the audio payload, that text is used without another
@@ -476,7 +476,7 @@ is sent directly as native audio. MP3/WAV/M4A and other likely audio formats are
 transcoded to 48kHz Ogg/Opus with `ffmpeg` only when the reply requests voice
 delivery (`audioAsVoice` / message tool `asVoice`, including TTS voice-note
 replies). Ordinary MP3 attachments stay regular files. If `ffmpeg` is missing or
-conversion fails, NexisClaw falls back to a file attachment and logs the reason.
+conversion fails, GreenchClaw falls back to a file attachment and logs the reason.
 
 ### Threads and replies
 
@@ -486,9 +486,9 @@ conversion fails, NexisClaw falls back to a file attachment and logs the reason.
 
 For `groupSessionScope: "group_topic"` and `"group_topic_sender"`, native
 Feishu/Lark topic groups use the event `thread_id` (`omt_*`) as the canonical
-topic session key. If a native topic starter event omits `thread_id`, NexisClaw
+topic session key. If a native topic starter event omits `thread_id`, GreenchClaw
 hydrates it from Feishu before routing the turn. Normal group replies that
-NexisClaw turns into threads keep using the reply root message ID (`om_*`) so the
+GreenchClaw turns into threads keep using the reply root message ID (`om_*`) so the
 first turn and follow-up turn stay in the same session.
 
 ---

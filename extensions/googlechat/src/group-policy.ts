@@ -1,8 +1,8 @@
-import { resolveChannelGroupRequireMention } from "NexisClaw/plugin-sdk/channel-policy";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/core";
+import { resolveChannelGroupRequireMention } from "GreenchClaw/plugin-sdk/channel-policy";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/core";
 
 type GoogleChatGroupContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   groupId?: string | null;
 };

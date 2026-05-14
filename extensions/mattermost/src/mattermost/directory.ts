@@ -1,5 +1,5 @@
-import { isPrivateNetworkOptInEnabled } from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { isPrivateNetworkOptInEnabled } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { listMattermostAccountIds, resolveMattermostAccount } from "./accounts.js";
 import {
   createMattermostClient,
@@ -8,10 +8,10 @@ import {
   type MattermostClient,
   type MattermostUser,
 } from "./client.js";
-import type { ChannelDirectoryEntry, NexisClawConfig, RuntimeEnv } from "./runtime-api.js";
+import type { ChannelDirectoryEntry, GreenchClawConfig, RuntimeEnv } from "./runtime-api.js";
 
 export type MattermostDirectoryParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   query?: string | null;
   limit?: number | null;
@@ -19,7 +19,7 @@ export type MattermostDirectoryParams = {
 };
 
 function buildClient(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): MattermostClient | null {
   const account = resolveMattermostAccount({ cfg: params.cfg, accountId: params.accountId });

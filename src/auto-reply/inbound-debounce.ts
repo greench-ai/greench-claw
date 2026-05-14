@@ -1,5 +1,5 @@
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { InboundDebounceByProvider } from "../config/types.messages.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
 
 const resolveMs = (value: unknown): number | undefined => {
   if (typeof value !== "number" || !Number.isFinite(value)) {
@@ -19,7 +19,7 @@ const resolveChannelOverride = (params: {
 };
 
 export function resolveInboundDebounceMs(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: string;
   overrideMs?: number;
 }): number {

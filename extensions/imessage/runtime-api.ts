@@ -1,23 +1,23 @@
-import type { NexisClawConfig as RuntimeApiNexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig as RuntimeApiGreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
 export {
   DEFAULT_ACCOUNT_ID,
   getChatChannelMeta,
   type ChannelPlugin,
-} from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/core";
 export { buildChannelConfigSchema, IMessageConfigSchema } from "./config-api.js";
-export { PAIRING_APPROVED_MESSAGE } from "NexisClaw/plugin-sdk/channel-status";
+export { PAIRING_APPROVED_MESSAGE } from "GreenchClaw/plugin-sdk/channel-status";
 export {
   buildComputedAccountStatusSnapshot,
   collectStatusIssuesFromLastError,
-} from "NexisClaw/plugin-sdk/status-helpers";
-export { formatTrimmedAllowFromEntries } from "NexisClaw/plugin-sdk/channel-config-helpers";
+} from "GreenchClaw/plugin-sdk/status-helpers";
+export { formatTrimmedAllowFromEntries } from "GreenchClaw/plugin-sdk/channel-config-helpers";
 export {
   resolveIMessageConfigAllowFrom,
   resolveIMessageConfigDefaultTo,
 } from "./src/config-accessors.js";
 export { looksLikeIMessageTargetId, normalizeIMessageMessagingTarget } from "./src/normalize.js";
-export { resolveChannelMediaMaxBytes } from "NexisClaw/plugin-sdk/media-runtime";
+export { resolveChannelMediaMaxBytes } from "GreenchClaw/plugin-sdk/media-runtime";
 export {
   resolveIMessageGroupRequireMention,
   resolveIMessageGroupToolPolicy,
@@ -32,6 +32,6 @@ export { imessageMessageActions } from "./src/actions.js";
 export { setIMessageRuntime } from "./src/runtime.js";
 export { chunkTextForOutbound } from "./src/channel-api.js";
 export type IMessageAccountConfig = Omit<
-  NonNullable<NonNullable<RuntimeApiNexisClawConfig["channels"]>["imessage"]>,
+  NonNullable<NonNullable<RuntimeApiGreenchClawConfig["channels"]>["imessage"]>,
   "accounts" | "defaultAccount"
 >;

@@ -18,29 +18,29 @@ function expectCatalogEntry(id: string): OfficialExternalPluginCatalogEntry {
 describe("official external plugin catalog", () => {
   it("resolves third-party channel lookup aliases to published plugin ids", () => {
     const wecomByChannel = expectCatalogEntry("wecom");
-    const wecomByPlugin = expectCatalogEntry("wecom-NexisClaw-plugin");
+    const wecomByPlugin = expectCatalogEntry("wecom-GreenchClaw-plugin");
     const yuanbaoByChannel = expectCatalogEntry("yuanbao");
 
-    expect(resolveOfficialExternalPluginId(wecomByChannel)).toBe("wecom-NexisClaw-plugin");
-    expect(resolveOfficialExternalPluginId(wecomByPlugin)).toBe("wecom-NexisClaw-plugin");
+    expect(resolveOfficialExternalPluginId(wecomByChannel)).toBe("wecom-GreenchClaw-plugin");
+    expect(resolveOfficialExternalPluginId(wecomByPlugin)).toBe("wecom-GreenchClaw-plugin");
     expect(resolveOfficialExternalPluginInstall(wecomByChannel)?.npmSpec).toBe(
-      "@wecom/wecom-NexisClaw-plugin@2026.4.23",
+      "@wecom/wecom-GreenchClaw-plugin@2026.4.23",
     );
-    expect(resolveOfficialExternalPluginId(yuanbaoByChannel)).toBe("NexisClaw-plugin-yuanbao");
+    expect(resolveOfficialExternalPluginId(yuanbaoByChannel)).toBe("GreenchClaw-plugin-yuanbao");
     expect(resolveOfficialExternalPluginInstall(yuanbaoByChannel)?.npmSpec).toBe(
-      "NexisClaw-plugin-yuanbao@2.13.1",
+      "GreenchClaw-plugin-yuanbao@2.13.1",
     );
   });
 
   it("keeps official launch package specs on the production package names", () => {
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("acpx"))?.npmSpec).toBe(
-      "@NexisClaw/acpx",
+      "@GreenchClaw/acpx",
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("googlechat"))?.npmSpec).toBe(
-      "@NexisClaw/googlechat",
+      "@GreenchClaw/googlechat",
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("line"))?.npmSpec).toBe(
-      "@NexisClaw/line",
+      "@GreenchClaw/line",
     );
   });
 
@@ -56,8 +56,8 @@ describe("official external plugin catalog", () => {
     expect(ids.has("matrix")).toBe(true);
     expect(ids.has("mattermost")).toBe(false);
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("matrix"))).toEqual({
-      clawhubSpec: "clawhub:@NexisClaw/matrix",
-      npmSpec: "@NexisClaw/matrix",
+      clawhubSpec: "clawhub:@GreenchClaw/matrix",
+      npmSpec: "@GreenchClaw/matrix",
       defaultChoice: "clawhub",
       minHostVersion: ">=2026.4.10",
       allowInvalidConfigRecovery: true,

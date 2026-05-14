@@ -1,7 +1,7 @@
 import type { Command } from "commander";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { getRuntimeConfig, readConfigFileSnapshot, replaceConfigFile } from "../config/config.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   buildWorkspaceHookStatus,
   type HookStatusEntry,
@@ -45,7 +45,7 @@ function mergeHookEntries(pluginEntries: HookEntry[], workspaceEntries: HookEntr
   return resolveHookEntries([...pluginEntries, ...workspaceEntries]);
 }
 
-function buildHooksReport(config: NexisClawConfig): HookStatusReport {
+function buildHooksReport(config: GreenchClawConfig): HookStatusReport {
   const workspaceDir = resolveAgentWorkspaceDir(config, resolveDefaultAgentId(config));
   const workspaceEntries = loadWorkspaceHookEntries(workspaceDir, { config });
   const pluginReport = buildPluginDiagnosticsReport({ config, workspaceDir });
@@ -75,11 +75,11 @@ function resolveHookForToggle(
 }
 
 function buildConfigWithHookEnabled(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   hookName: string;
   enabled: boolean;
   ensureHooksEnabled?: boolean;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   const entries = { ...params.config.hooks?.internal?.entries };
   entries[params.hookName] = { ...entries[params.hookName], enabled: params.enabled };
 
@@ -194,7 +194,7 @@ export function formatHooksList(report: HookStatusReport, opts: HooksListOptions
 
   if (hooks.length === 0) {
     const message = opts.eligible
-      ? `No eligible hooks found. Run \`${formatCliCommand("NexisClaw hooks list")}\` to see all hooks.`
+      ? `No eligible hooks found. Run \`${formatCliCommand("GreenchClaw hooks list")}\` to see all hooks.`
       : "No hooks found.";
     return message;
   }
@@ -250,7 +250,7 @@ export function formatHookInfo(
     if (opts.json) {
       return JSON.stringify({ error: "not found", hook: hookName }, null, 2);
     }
-    return `Hook "${hookName}" not found. Run \`${formatCliCommand("NexisClaw hooks list")}\` to see available hooks.`;
+    return `Hook "${hookName}" not found. Run \`${formatCliCommand("GreenchClaw hooks list")}\` to see available hooks.`;
   }
 
   if (opts.json) {
@@ -418,7 +418,7 @@ export function formatHooksCheck(report: HookStatusReport, opts: HooksCheckOptio
 
 export async function enableHook(hookName: string): Promise<void> {
   const snapshot = await readConfigFileSnapshot();
-  const config = (snapshot.sourceConfig ?? snapshot.config) as NexisClawConfig;
+  const config = (snapshot.sourceConfig ?? snapshot.config) as GreenchClawConfig;
   const hook = resolveHookForToggle(buildHooksReport(config), hookName, { requireEligible: true });
   const nextConfig = buildConfigWithHookEnabled({
     config,
@@ -438,7 +438,7 @@ export async function enableHook(hookName: string): Promise<void> {
 
 export async function disableHook(hookName: string): Promise<void> {
   const snapshot = await readConfigFileSnapshot();
-  const config = (snapshot.sourceConfig ?? snapshot.config) as NexisClawConfig;
+  const config = (snapshot.sourceConfig ?? snapshot.config) as GreenchClawConfig;
   const hook = resolveHookForToggle(buildHooksReport(config), hookName);
   const nextConfig = buildConfigWithHookEnabled({ config, hookName, enabled: false });
 
@@ -458,7 +458,7 @@ export function registerHooksCli(program: Command): void {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/hooks", "docs.NexisClaw.ai/cli/hooks")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/hooks", "docs.GreenchClaw.ai/cli/hooks")}\n`,
     );
 
   hooks
@@ -532,26 +532,26 @@ export function registerHooksCli(program: Command): void {
 
   hooks
     .command("install")
-    .description("Deprecated: install a hook pack via `NexisClaw plugins install`")
+    .description("Deprecated: install a hook pack via `GreenchClaw plugins install`")
     .argument("<path-or-spec>", "Path to a hook pack or npm package spec")
     .option("-l, --link", "Link a local path instead of copying", false)
     .option("--pin", "Record npm installs as exact resolved <name>@<version>", false)
     .action(async (raw: string, opts: { link?: boolean; pin?: boolean }) => {
       defaultRuntime.log(
-        theme.warn("`NexisClaw hooks install` is deprecated; use `NexisClaw plugins install`."),
+        theme.warn("`GreenchClaw hooks install` is deprecated; use `GreenchClaw plugins install`."),
       );
       await runPluginInstallCommand({ raw, opts });
     });
 
   hooks
     .command("update")
-    .description("Deprecated: update hook packs via `NexisClaw plugins update`")
+    .description("Deprecated: update hook packs via `GreenchClaw plugins update`")
     .argument("[id]", "Hook pack id (omit with --all)")
     .option("--all", "Update all tracked hooks", false)
     .option("--dry-run", "Show what would change without writing", false)
     .action(async (id: string | undefined, opts: HooksUpdateOptions) => {
       defaultRuntime.log(
-        theme.warn("`NexisClaw hooks update` is deprecated; use `NexisClaw plugins update`."),
+        theme.warn("`GreenchClaw hooks update` is deprecated; use `GreenchClaw plugins update`."),
       );
       await runPluginUpdateCommand({ id, opts });
     });

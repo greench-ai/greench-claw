@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { handleSlackAction, slackActionRuntime } from "./action-runtime.js";
 import { parseSlackBlocksInput } from "./blocks-input.js";
@@ -20,7 +20,7 @@ const sendSlackMessage = vi.fn(async (..._args: unknown[]) => ({ channelId: "C12
 const unpinSlackMessage = vi.fn(async (..._args: unknown[]) => ({}));
 
 describe("handleSlackAction", () => {
-  function slackConfig(overrides?: Record<string, unknown>): NexisClawConfig {
+  function slackConfig(overrides?: Record<string, unknown>): GreenchClawConfig {
     return {
       channels: {
         slack: {
@@ -28,7 +28,7 @@ describe("handleSlackAction", () => {
           ...overrides,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
   }
 
   function createReplyToFirstContext(hasRepliedRef: { value: boolean }) {
@@ -41,7 +41,7 @@ describe("handleSlackAction", () => {
   }
 
   function createReplyToFirstScenario() {
-    const cfg = { channels: { slack: { botToken: "tok" } } } as NexisClawConfig;
+    const cfg = { channels: { slack: { botToken: "tok" } } } as GreenchClawConfig;
     sendSlackMessage.mockClear();
     const hasRepliedRef = { value: false };
     const context = createReplyToFirstContext(hasRepliedRef);
@@ -123,7 +123,7 @@ describe("handleSlackAction", () => {
     return requireRecord(options, "Slack send options");
   }
 
-  function expectLastSlackSend(content: string, cfg: NexisClawConfig, threadTs?: string) {
+  function expectLastSlackSend(content: string, cfg: GreenchClawConfig, threadTs?: string) {
     expectSlackSendCall(sendSlackMessage.mock.calls.length - 1, "channel:C123", content, {
       cfg,
       mediaUrl: undefined,
@@ -137,7 +137,7 @@ describe("handleSlackAction", () => {
   }
 
   async function sendSecondMessageAndExpectNoThread(params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     context: ReturnType<typeof createReplyToFirstContext>;
   }) {
     await handleSlackAction(
@@ -148,7 +148,7 @@ describe("handleSlackAction", () => {
     expectLastSlackSend("Second", params.cfg);
   }
 
-  async function resolveReadToken(cfg: NexisClawConfig): Promise<string | undefined> {
+  async function resolveReadToken(cfg: GreenchClawConfig): Promise<string | undefined> {
     readSlackMessages.mockClear();
     readSlackMessages.mockResolvedValueOnce({ messages: [], hasMore: false });
     await handleSlackAction({ action: "readMessages", channelId: "C1" }, cfg);
@@ -156,7 +156,7 @@ describe("handleSlackAction", () => {
     return typeof token === "string" ? token : undefined;
   }
 
-  async function resolveSendToken(cfg: NexisClawConfig): Promise<string | undefined> {
+  async function resolveSendToken(cfg: GreenchClawConfig): Promise<string | undefined> {
     sendSlackMessage.mockClear();
     await handleSlackAction({ action: "sendMessage", to: "channel:C1", content: "Hello" }, cfg);
     const token = requireRecordArg(sendSlackMessage, "sendSlackMessage", 0, 2).token;
@@ -342,7 +342,7 @@ describe("handleSlackAction", () => {
 
   it("returns non-image downloadFile results as file metadata instead of image content", async () => {
     downloadSlackFile.mockResolvedValueOnce({
-      path: "/tmp/NexisClaw-media/report.pdf",
+      path: "/tmp/GreenchClaw-media/report.pdf",
       contentType: "application/pdf",
       placeholder: "[Slack file: report.pdf (fileId: F123)]",
     });
@@ -358,17 +358,17 @@ describe("handleSlackAction", () => {
     expect(result.content).toHaveLength(1);
     const firstContent = requireRecord(result.content[0], "first content item");
     expect(firstContent.type).toBe("text");
-    expect(String(firstContent.text)).toContain("/tmp/NexisClaw-media/report.pdf");
+    expect(String(firstContent.text)).toContain("/tmp/GreenchClaw-media/report.pdf");
     expect(result.content.some((entry) => entry.type === "image")).toBe(false);
     const details = requireDetails(result);
     expectRecordFields(details, {
       ok: true,
       fileId: "F123",
-      path: "/tmp/NexisClaw-media/report.pdf",
+      path: "/tmp/GreenchClaw-media/report.pdf",
       contentType: "application/pdf",
     });
     expect(details.media).toEqual({
-      mediaUrl: "/tmp/NexisClaw-media/report.pdf",
+      mediaUrl: "/tmp/GreenchClaw-media/report.pdf",
       contentType: "application/pdf",
     });
   });
@@ -884,7 +884,7 @@ describe("handleSlackAction", () => {
           },
         },
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
     expect(token).toBe("xoxp-user");
   });
 

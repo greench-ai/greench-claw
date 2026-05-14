@@ -55,7 +55,7 @@ type DiscordUser = {
 
 const execFileAsync = promisify(execFile);
 
-type DriverMode = "token" | "webhook" | "NexisClaw";
+type DriverMode = "token" | "webhook" | "GreenchClaw";
 
 type Args = {
   channelId: string;
@@ -70,7 +70,7 @@ type Args = {
   mentionUserId?: string;
   instruction?: string;
   threadBindingsPath: string;
-  NexisClawBin: string;
+  GreenchClawBin: string;
   json: boolean;
 };
 
@@ -134,14 +134,14 @@ function parseNumber(value: string | undefined, fallback: number): number {
 }
 
 function resolveStateDir(): string {
-  const override = process.env.NEXISCLAW_STATE_DIR?.trim();
+  const override = process.env.GREENCHCLAW_STATE_DIR?.trim();
   if (override) {
     return override.startsWith("~")
       ? path.resolve(process.env.HOME || "", override.slice(1))
       : path.resolve(override);
   }
-  const home = process.env.NEXISCLAW_HOME?.trim() || process.env.HOME || "";
-  return path.join(home, ".NexisClaw");
+  const home = process.env.GREENCHCLAW_HOME?.trim() || process.env.HOME || "";
+  return path.join(home, ".GreenchClaw");
 }
 
 function resolveArg(flag: string): string | undefined {
@@ -164,13 +164,13 @@ function hasFlag(flag: string): boolean {
 function usage(): string {
   return (
     "Usage: bun scripts/dev/discord-acp-plain-language-smoke.ts " +
-    "--channel <discord-channel-id> [--token <driver-token> | --driver webhook --bot-token <bot-token> | --driver NexisClaw] [options]\n\n" +
+    "--channel <discord-channel-id> [--token <driver-token> | --driver webhook --bot-token <bot-token> | --driver GreenchClaw] [options]\n\n" +
     "Manual live smoke only (not CI). Sends a plain-language instruction in Discord and verifies:\n" +
-    "1) NexisClaw spawned an ACP thread binding\n" +
+    "1) GreenchClaw spawned an ACP thread binding\n" +
     "2) agent replied in that bound thread with the expected ACK token\n\n" +
     "Options:\n" +
     "  --channel <id>               Parent Discord channel id (required)\n" +
-    "  --driver <token|webhook|NexisClaw> Driver transport mode (default: token)\n" +
+    "  --driver <token|webhook|GreenchClaw> Driver transport mode (default: token)\n" +
     "  --token <token>              Driver Discord token (required for driver=token)\n" +
     "  --token-prefix <prefix>      Auth prefix for --token (default: Bot)\n" +
     "  --bot-token <token>          Bot token for webhook driver mode\n" +
@@ -181,71 +181,77 @@ function usage(): string {
     "  --timeout-ms <n>             Total timeout in ms (default: 240000)\n" +
     "  --poll-ms <n>                Poll interval in ms (default: 1500)\n" +
     "  --thread-bindings-path <p>   Override thread-bindings json path\n" +
-    "  --NexisClaw-bin <path>        NexisClaw CLI binary for driver=NexisClaw (default: NexisClaw)\n" +
+    "  --GreenchClaw-bin <path>        GreenchClaw CLI binary for driver=GreenchClaw (default: GreenchClaw)\n" +
     "  --json                       Emit JSON output\n" +
     "\n" +
     "Environment fallbacks:\n" +
-    "  NEXISCLAW_DISCORD_SMOKE_CHANNEL_ID\n" +
-    "  NEXISCLAW_DISCORD_SMOKE_DRIVER\n" +
-    "  NEXISCLAW_DISCORD_SMOKE_DRIVER_TOKEN\n" +
-    "  NEXISCLAW_DISCORD_SMOKE_DRIVER_TOKEN_PREFIX\n" +
-    "  NEXISCLAW_DISCORD_SMOKE_BOT_TOKEN\n" +
-    "  NEXISCLAW_DISCORD_SMOKE_BOT_TOKEN_PREFIX\n" +
-    "  NEXISCLAW_DISCORD_SMOKE_AGENT\n" +
-    "  NEXISCLAW_DISCORD_SMOKE_MENTION_USER_ID\n" +
-    "  NEXISCLAW_DISCORD_SMOKE_TIMEOUT_MS\n" +
-    "  NEXISCLAW_DISCORD_SMOKE_POLL_MS\n" +
-    "  NEXISCLAW_DISCORD_SMOKE_THREAD_BINDINGS_PATH\n" +
-    "  NEXISCLAW_DISCORD_SMOKE_NEXISCLAW_BIN"
+    "  GREENCHCLAW_DISCORD_SMOKE_CHANNEL_ID\n" +
+    "  GREENCHCLAW_DISCORD_SMOKE_DRIVER\n" +
+    "  GREENCHCLAW_DISCORD_SMOKE_DRIVER_TOKEN\n" +
+    "  GREENCHCLAW_DISCORD_SMOKE_DRIVER_TOKEN_PREFIX\n" +
+    "  GREENCHCLAW_DISCORD_SMOKE_BOT_TOKEN\n" +
+    "  GREENCHCLAW_DISCORD_SMOKE_BOT_TOKEN_PREFIX\n" +
+    "  GREENCHCLAW_DISCORD_SMOKE_AGENT\n" +
+    "  GREENCHCLAW_DISCORD_SMOKE_MENTION_USER_ID\n" +
+    "  GREENCHCLAW_DISCORD_SMOKE_TIMEOUT_MS\n" +
+    "  GREENCHCLAW_DISCORD_SMOKE_POLL_MS\n" +
+    "  GREENCHCLAW_DISCORD_SMOKE_THREAD_BINDINGS_PATH\n" +
+    "  GREENCHCLAW_DISCORD_SMOKE_GREENCHCLAW_BIN"
   );
 }
 
 function parseArgs(): Args {
-  const channelId = resolveArg("--channel") || process.env.NEXISCLAW_DISCORD_SMOKE_CHANNEL_ID || "";
+  const channelId =
+    resolveArg("--channel") || process.env.GREENCHCLAW_DISCORD_SMOKE_CHANNEL_ID || "";
   const driverModeRaw =
-    resolveArg("--driver") || process.env.NEXISCLAW_DISCORD_SMOKE_DRIVER || "token";
+    resolveArg("--driver") || process.env.GREENCHCLAW_DISCORD_SMOKE_DRIVER || "token";
   const normalizedDriverMode = driverModeRaw.trim().toLowerCase();
   const driverMode: DriverMode =
     normalizedDriverMode === "webhook"
       ? "webhook"
-      : normalizedDriverMode === "NexisClaw"
-        ? "NexisClaw"
+      : normalizedDriverMode === "GreenchClaw"
+        ? "GreenchClaw"
         : normalizedDriverMode === "token"
           ? "token"
           : "token";
   const driverToken =
-    resolveArg("--token") || process.env.NEXISCLAW_DISCORD_SMOKE_DRIVER_TOKEN || "";
+    resolveArg("--token") || process.env.GREENCHCLAW_DISCORD_SMOKE_DRIVER_TOKEN || "";
   const driverTokenPrefix =
-    resolveArg("--token-prefix") || process.env.NEXISCLAW_DISCORD_SMOKE_DRIVER_TOKEN_PREFIX || "Bot";
+    resolveArg("--token-prefix") ||
+    process.env.GREENCHCLAW_DISCORD_SMOKE_DRIVER_TOKEN_PREFIX ||
+    "Bot";
   const botToken =
     resolveArg("--bot-token") ||
-    process.env.NEXISCLAW_DISCORD_SMOKE_BOT_TOKEN ||
+    process.env.GREENCHCLAW_DISCORD_SMOKE_BOT_TOKEN ||
     process.env.DISCORD_BOT_TOKEN ||
     "";
   const botTokenPrefix =
     resolveArg("--bot-token-prefix") ||
-    process.env.NEXISCLAW_DISCORD_SMOKE_BOT_TOKEN_PREFIX ||
+    process.env.GREENCHCLAW_DISCORD_SMOKE_BOT_TOKEN_PREFIX ||
     "Bot";
-  const targetAgent = resolveArg("--agent") || process.env.NEXISCLAW_DISCORD_SMOKE_AGENT || "codex";
+  const targetAgent =
+    resolveArg("--agent") || process.env.GREENCHCLAW_DISCORD_SMOKE_AGENT || "codex";
   const mentionUserId =
-    resolveArg("--mention") || process.env.NEXISCLAW_DISCORD_SMOKE_MENTION_USER_ID || undefined;
+    resolveArg("--mention") || process.env.GREENCHCLAW_DISCORD_SMOKE_MENTION_USER_ID || undefined;
   const instruction =
-    resolveArg("--instruction") || process.env.NEXISCLAW_DISCORD_SMOKE_INSTRUCTION || undefined;
+    resolveArg("--instruction") || process.env.GREENCHCLAW_DISCORD_SMOKE_INSTRUCTION || undefined;
   const timeoutMs = parseNumber(
-    resolveArg("--timeout-ms") || process.env.NEXISCLAW_DISCORD_SMOKE_TIMEOUT_MS,
+    resolveArg("--timeout-ms") || process.env.GREENCHCLAW_DISCORD_SMOKE_TIMEOUT_MS,
     240_000,
   );
   const pollMs = parseNumber(
-    resolveArg("--poll-ms") || process.env.NEXISCLAW_DISCORD_SMOKE_POLL_MS,
+    resolveArg("--poll-ms") || process.env.GREENCHCLAW_DISCORD_SMOKE_POLL_MS,
     1_500,
   );
   const defaultBindingsPath = path.join(resolveStateDir(), "discord", "thread-bindings.json");
   const threadBindingsPath =
     resolveArg("--thread-bindings-path") ||
-    process.env.NEXISCLAW_DISCORD_SMOKE_THREAD_BINDINGS_PATH ||
+    process.env.GREENCHCLAW_DISCORD_SMOKE_THREAD_BINDINGS_PATH ||
     defaultBindingsPath;
-  const NexisClawBin =
-    resolveArg("--NexisClaw-bin") || process.env.NEXISCLAW_DISCORD_SMOKE_NEXISCLAW_BIN || "NexisClaw";
+  const GreenchClawBin =
+    resolveArg("--GreenchClaw-bin") ||
+    process.env.GREENCHCLAW_DISCORD_SMOKE_GREENCHCLAW_BIN ||
+    "GreenchClaw";
   const json = hasFlag("--json");
 
   if (!channelId) {
@@ -271,34 +277,37 @@ function parseArgs(): Args {
     mentionUserId,
     instruction,
     threadBindingsPath,
-    NexisClawBin,
+    GreenchClawBin,
     json,
   };
 }
 
-async function NexisClawCliJson<T>(params: { NexisClawBin: string; args: string[] }): Promise<T> {
-  const result = await execFileAsync(params.NexisClawBin, params.args, {
+async function GreenchClawCliJson<T>(params: {
+  GreenchClawBin: string;
+  args: string[];
+}): Promise<T> {
+  const result = await execFileAsync(params.GreenchClawBin, params.args, {
     maxBuffer: 8 * 1024 * 1024,
     env: process.env,
   });
   const stdout = (result.stdout || "").trim();
   if (!stdout) {
-    throw new Error(`NexisClaw ${params.args.join(" ")} returned empty stdout`);
+    throw new Error(`GreenchClaw ${params.args.join(" ")} returned empty stdout`);
   }
   return JSON.parse(stdout) as T;
 }
 
 async function readMessagesWithOpenclaw(params: {
-  NexisClawBin: string;
+  GreenchClawBin: string;
   target: string;
   limit: number;
 }): Promise<DiscordMessage[]> {
-  const response = await NexisClawCliJson<{
+  const response = await GreenchClawCliJson<{
     payload?: {
       messages?: DiscordMessage[];
     };
   }>({
-    NexisClawBin: params.NexisClawBin,
+    GreenchClawBin: params.GreenchClawBin,
     args: [
       "message",
       "read",
@@ -475,9 +484,9 @@ async function loadParentRecentMessages(params: {
   args: Args;
   readAuthHeader: string;
 }): Promise<DiscordMessage[]> {
-  if (params.args.driverMode === "NexisClaw") {
+  if (params.args.driverMode === "GreenchClaw") {
     return await readMessagesWithOpenclaw({
-      NexisClawBin: params.args.NexisClawBin,
+      GreenchClawBin: params.args.GreenchClawBin,
       target: params.args.channelId,
       limit: 20,
     });
@@ -609,7 +618,7 @@ async function run(): Promise<SuccessResult | FailureResult> {
         path: `/channels/${encodeURIComponent(args.channelId)}/webhooks`,
         authHeader: botAuthHeader,
         body: {
-          name: `NexisClaw-acp-smoke-${smokeId.slice(-8)}`,
+          name: `GreenchClaw-acp-smoke-${smokeId.slice(-8)}`,
         },
       });
       if (!webhook.id || !webhook.token) {
@@ -639,14 +648,14 @@ async function run(): Promise<SuccessResult | FailureResult> {
       senderAuthorId = sent.author?.id;
     } else {
       setupStage = "send-message";
-      const sent = await NexisClawCliJson<{
+      const sent = await GreenchClawCliJson<{
         payload?: {
           result?: {
             messageId?: string;
           };
         };
       }>({
-        NexisClawBin: args.NexisClawBin,
+        GreenchClawBin: args.GreenchClawBin,
         args: [
           "message",
           "send",
@@ -661,7 +670,7 @@ async function run(): Promise<SuccessResult | FailureResult> {
       });
       sentMessageId = sent.payload?.result?.messageId || "";
       if (!sentMessageId) {
-        throw new Error("NexisClaw message send did not return payload.result.messageId");
+        throw new Error("GreenchClaw message send did not return payload.result.messageId");
       }
     }
   } catch (err) {
@@ -727,9 +736,9 @@ async function run(): Promise<SuccessResult | FailureResult> {
     while (Date.now() < deadline && !ackMessage) {
       try {
         const threadMessages =
-          args.driverMode === "NexisClaw"
+          args.driverMode === "GreenchClaw"
             ? await readMessagesWithOpenclaw({
-                NexisClawBin: args.NexisClawBin,
+                GreenchClawBin: args.GreenchClawBin,
                 target: threadId,
                 limit: 50,
               })
@@ -766,7 +775,7 @@ async function run(): Promise<SuccessResult | FailureResult> {
         ok: false,
         stage: "wait-ack",
         smokeId,
-        error: `Thread bound (${threadId}) but timed out waiting for ACK token "${ackToken}" from NexisClaw.`,
+        error: `Thread bound (${threadId}) but timed out waiting for ACK token "${ackToken}" from GreenchClaw.`,
         diagnostics: {
           bindingCandidates: [
             {

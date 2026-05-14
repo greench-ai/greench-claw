@@ -1,5 +1,5 @@
-import type { GatewayRequestHandlerOptions } from "NexisClaw/plugin-sdk/gateway-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { GatewayRequestHandlerOptions } from "GreenchClaw/plugin-sdk/gateway-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { formatMatrixErrorMessage } from "./matrix/errors.js";
 
 type MatrixVerificationRuntime = typeof import("./matrix/actions/verification.js");

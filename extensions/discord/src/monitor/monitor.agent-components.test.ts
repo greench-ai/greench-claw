@@ -1,8 +1,11 @@
 import { ChannelType } from "discord-api-types/v10";
-import { expectPairingReplyText } from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { DiscordAccountConfig, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { buildAgentSessionKey } from "NexisClaw/plugin-sdk/routing";
-import { peekSystemEvents, resetSystemEventsForTest } from "NexisClaw/plugin-sdk/test-fixtures";
+import { expectPairingReplyText } from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type {
+  DiscordAccountConfig,
+  GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { buildAgentSessionKey } from "GreenchClaw/plugin-sdk/routing";
+import { peekSystemEvents, resetSystemEventsForTest } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type {
   ButtonInteraction,
@@ -36,7 +39,7 @@ describe("agent components", () => {
     peer: { kind: "group", id: "group-dm-channel" },
   });
 
-  const createCfg = (): NexisClawConfig => ({}) as NexisClawConfig;
+  const createCfg = (): GreenchClawConfig => ({}) as GreenchClawConfig;
   const createBaseDmInteraction = (overrides: Record<string, unknown> = {}) => {
     const reply = vi.fn().mockResolvedValue(undefined);
     const defer = vi.fn().mockResolvedValue(undefined);
@@ -172,7 +175,7 @@ describe("agent components", () => {
       channel: "discord",
       idLine: "Your Discord user id: 123456789",
     });
-    expect(pairingText).toContain(`NexisClaw pairing approve discord ${code}`);
+    expect(pairingText).toContain(`GreenchClaw pairing approve discord ${code}`);
     expect(peekSystemEvents(defaultDmSessionKey)).toStrictEqual([]);
     expect(readAllowFromStoreMock).toHaveBeenCalledWith("discord", "default");
   });

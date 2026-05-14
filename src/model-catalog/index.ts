@@ -5,7 +5,7 @@ export {
   normalizeModelCatalogProviderId,
 } from "./refs.js";
 export { normalizeModelCatalog, normalizeModelCatalogRows } from "./normalize.js";
-export { loadNexisClawProviderIndex } from "./provider-index/index.js";
+export { loadGreenchClawProviderIndex } from "./provider-index/index.js";
 export {
   planManifestModelCatalogRows,
   planManifestModelCatalogSuppressions,
@@ -29,4 +29,4 @@ export type {
   UnifiedModelCatalogKind,
   UnifiedModelCatalogSource,
 } from "./types.js";
-export type { NexisClawProviderIndexProvider } from "./provider-index/index.js";
+export type { GreenchClawProviderIndexProvider } from "./provider-index/index.js";

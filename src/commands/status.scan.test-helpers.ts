@@ -1,6 +1,6 @@
 import type { Mock } from "vitest";
 import { vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 
 type UnknownMock = Mock<(...args: unknown[]) => unknown>;
 type ResolveConfigPathMock = Mock<() => string>;
@@ -25,7 +25,9 @@ type StatusScanSharedMocks = {
 
 export function createStatusScanSharedMocks(configPathLabel: string): StatusScanSharedMocks {
   return {
-    resolveConfigPath: vi.fn(() => `/tmp/NexisClaw-${configPathLabel}-missing-${process.pid}.json`),
+    resolveConfigPath: vi.fn(
+      () => `/tmp/GreenchClaw-${configPathLabel}-missing-${process.pid}.json`,
+    ),
     hasPotentialConfiguredChannels: vi.fn(),
     hasConfiguredChannelsForReadOnlyScope: vi.fn(),
     readBestEffortConfig: vi.fn(),
@@ -186,12 +188,12 @@ export async function loadStatusScanModuleForTest(
   }));
   vi.doMock("../plugins/channel-plugin-ids.js", () => ({
     hasConfiguredChannelsForReadOnlyScope: (params: {
-      config: NexisClawConfig;
+      config: GreenchClawConfig;
       env?: NodeJS.ProcessEnv;
       includePersistedAuthState?: boolean;
     }) => mocks.hasConfiguredChannelsForReadOnlyScope(params),
     listConfiguredChannelIdsForReadOnlyScope: (params: {
-      config: NexisClawConfig;
+      config: GreenchClawConfig;
       env?: NodeJS.ProcessEnv;
       includePersistedAuthState?: boolean;
     }) =>
@@ -275,14 +277,14 @@ export async function loadStatusScanModuleForTest(
   return await import("./status.scan.js");
 }
 
-export function createStatusScanConfig<T extends object = NexisClawConfig>(
+export function createStatusScanConfig<T extends object = GreenchClawConfig>(
   overrides: T = {} as T,
-): NexisClawConfig & T {
+): GreenchClawConfig & T {
   return {
     session: {},
     gateway: {},
     ...overrides,
-  } as NexisClawConfig & T;
+  } as GreenchClawConfig & T;
 }
 
 export function createStatusSummary(
@@ -362,7 +364,7 @@ function createStatusGatewayProbeFailure() {
   };
 }
 
-export function createStatusMemorySearchConfig(): NexisClawConfig {
+export function createStatusMemorySearchConfig(): GreenchClawConfig {
   return createStatusScanConfig({
     agents: {
       defaults: {
@@ -390,8 +392,8 @@ export function applyStatusScanDefaults(
   mocks: StatusScanSharedMocks,
   options: {
     hasConfiguredChannels?: boolean;
-    sourceConfig?: NexisClawConfig;
-    resolvedConfig?: NexisClawConfig;
+    sourceConfig?: GreenchClawConfig;
+    resolvedConfig?: GreenchClawConfig;
     summary?: ReturnType<typeof createStatusSummary>;
     update?: ReturnType<typeof createStatusUpdateResult> | false;
     gatewayProbe?: ReturnType<typeof createStatusGatewayProbeFailure> | false;
@@ -404,7 +406,7 @@ export function applyStatusScanDefaults(
   mocks.hasPotentialConfiguredChannels.mockReturnValue(options.hasConfiguredChannels ?? false);
   mocks.hasConfiguredChannelsForReadOnlyScope.mockImplementation((rawParams: unknown) => {
     const params = rawParams as {
-      config: NexisClawConfig;
+      config: GreenchClawConfig;
       env?: NodeJS.ProcessEnv;
       includePersistedAuthState?: boolean;
     };

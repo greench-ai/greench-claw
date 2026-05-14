@@ -1,5 +1,8 @@
-import { DEFAULT_ACCOUNT_ID, type NexisClawConfig } from "NexisClaw/plugin-sdk/account-resolution";
-import { registerPluginHttpRoute } from "NexisClaw/plugin-sdk/webhook-ingress";
+import {
+  DEFAULT_ACCOUNT_ID,
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/account-resolution";
+import { registerPluginHttpRoute } from "GreenchClaw/plugin-sdk/webhook-ingress";
 import { listAccountIds, resolveAccount } from "./accounts.js";
 import { dispatchSynologyChatInboundTurn } from "./inbound-turn.js";
 import type { ResolvedSynologyChatAccount } from "./types.js";
@@ -69,7 +72,7 @@ function createUnknownArgsLogAdapter(
 }
 
 function collectSynologyGatewayStartupIssues(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   account: ResolvedSynologyChatAccount;
   accountId: string;
 }): SynologyGatewayStartupIssue[] {
@@ -143,7 +146,7 @@ function collectSynologyGatewayStartupIssues(params: {
 }
 
 export function collectSynologyGatewayRoutingWarnings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   account: ResolvedSynologyChatAccount;
 }): string[] {
   return collectSynologyGatewayStartupIssues({
@@ -159,7 +162,7 @@ export function collectSynologyGatewayRoutingWarnings(params: {
 }
 
 export function validateSynologyGatewayAccountStartup(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   account: ResolvedSynologyChatAccount;
   accountId: string;
   log?: SynologyGatewayLog;

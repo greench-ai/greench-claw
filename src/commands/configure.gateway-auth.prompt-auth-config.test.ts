@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { NormalizedModelCatalogRow } from "../model-catalog/index.js";
 import type { RuntimeEnv } from "../runtime.js";
 import type { WizardPrompter } from "../wizard/prompts.js";
@@ -9,7 +9,7 @@ const mocks = vi.hoisted(() => ({
   applyAuthChoice: vi.fn(),
   promptModelAllowlist: vi.fn(),
   promptDefaultModel: vi.fn(),
-  applyPrimaryModel: vi.fn((cfg: NexisClawConfig, model: string) => ({
+  applyPrimaryModel: vi.fn((cfg: GreenchClawConfig, model: string) => ({
     ...cfg,
     agents: {
       ...cfg.agents,
@@ -20,7 +20,7 @@ const mocks = vi.hoisted(() => ({
     },
   })),
   applyModelAllowlist: vi.fn(
-    (cfg: NexisClawConfig, models: string[], opts: { scopeKeys?: string[] } = {}) => {
+    (cfg: GreenchClawConfig, models: string[], opts: { scopeKeys?: string[] } = {}) => {
       const defaults = cfg.agents?.defaults;
       const normalized = normalizeTestModelKeys(models);
       const scopeKeys = opts.scopeKeys ? normalizeTestModelKeys(opts.scopeKeys) : [];
@@ -69,7 +69,7 @@ const mocks = vi.hoisted(() => ({
     },
   ),
   applyModelFallbacksFromSelection: vi.fn(
-    (cfg: NexisClawConfig, selection: string[], opts: { scopeKeys?: string[] } = {}) => {
+    (cfg: GreenchClawConfig, selection: string[], opts: { scopeKeys?: string[] } = {}) => {
       const defaults = cfg.agents?.defaults;
       const existingModel = defaults?.model;
       const primary =
@@ -465,7 +465,7 @@ describe("promptAuthConfig", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     mocks.applyAuthChoice.mockResolvedValue({ config: existingConfig });
     mocks.promptModelAllowlist.mockResolvedValue({ models: undefined });
     mocks.resolveProviderPluginChoice.mockReturnValue(null);
@@ -491,7 +491,7 @@ describe("promptAuthConfig", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     mocks.applyAuthChoice.mockResolvedValue({
       config: {
         ...existingConfig,

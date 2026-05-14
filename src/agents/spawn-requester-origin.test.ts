@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { AgentBindingMatch } from "../config/types.agents.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveRequesterOriginForChild } from "./spawn-requester-origin.js";
 
 describe("resolveRequesterOriginForChild", () => {
@@ -9,7 +9,7 @@ describe("resolveRequesterOriginForChild", () => {
   }
 
   function resolveAccount(params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     targetAgentId?: string;
     requesterAgentId?: string;
     requesterChannel: string;
@@ -53,7 +53,7 @@ describe("resolveRequesterOriginForChild", () => {
             accountId: "bot-alpha-qa",
           }),
         ],
-      } as NexisClawConfig;
+      } as GreenchClawConfig;
 
       expectOrigin(
         resolveRequesterOriginForChild({
@@ -195,7 +195,7 @@ describe("resolveRequesterOriginForChild", () => {
   ] as const)("selects target account: $name", (scenario) => {
     expect(
       resolveAccount({
-        cfg: { bindings: [...scenario.bindings] } as NexisClawConfig,
+        cfg: { bindings: [...scenario.bindings] } as GreenchClawConfig,
         requesterChannel: scenario.requesterChannel,
         requesterAccountId: scenario.requesterAccountId,
         requesterAgentId: scenario.requesterAgentId,
@@ -221,7 +221,7 @@ describe("resolveRequesterOriginForChild", () => {
           accountId: "bot-alpha-teams",
         }),
       ],
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expectOrigin(
       resolveRequesterOriginForChild({
@@ -253,7 +253,7 @@ describe("resolveRequesterOriginForChild", () => {
           accountId: "bot-alpha-qa",
         }),
       ],
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expectOrigin(
       resolveRequesterOriginForChild({
@@ -295,7 +295,7 @@ describe("resolveRequesterOriginForChild", () => {
           accountId: "bot-alpha-current-guild",
         }),
       ],
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expectOrigin(
       resolveRequesterOriginForChild({
@@ -328,7 +328,7 @@ describe("resolveRequesterOriginForChild", () => {
           accountId: "bot-alpha-line",
         }),
       ],
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expectOrigin(
       resolveRequesterOriginForChild({

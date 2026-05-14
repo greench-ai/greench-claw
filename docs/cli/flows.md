@@ -1,21 +1,21 @@
 ---
-summary: "Redirect: flow commands live under `NexisClaw tasks flow`"
+summary: "Redirect: flow commands live under `GreenchClaw tasks flow`"
 read_when:
-  - You encounter `NexisClaw flows` in older docs or release notes
+  - You encounter `GreenchClaw flows` in older docs or release notes
   - You want a quick TaskFlow inspection reference
 title: "Flows (redirect)"
 ---
 
-# `NexisClaw tasks flow`
+# `GreenchClaw tasks flow`
 
-There is no top-level `NexisClaw flows` command. Durable TaskFlow inspection lives under `NexisClaw tasks flow`.
+There is no top-level `GreenchClaw flows` command. Durable TaskFlow inspection lives under `GreenchClaw tasks flow`.
 
 ## Subcommands
 
 ```bash
-NexisClaw tasks flow list   [--json] [--status <name>]
-NexisClaw tasks flow show   <lookup> [--json]
-NexisClaw tasks flow cancel <lookup>
+GreenchClaw tasks flow list   [--json] [--status <name>]
+GreenchClaw tasks flow show   <lookup> [--json]
+GreenchClaw tasks flow cancel <lookup>
 ```
 
 | Subcommand | Description                | Arguments / options                                                                   |
@@ -35,12 +35,12 @@ NexisClaw tasks flow cancel <lookup>
 ## Examples
 
 ```bash
-NexisClaw tasks flow list
-NexisClaw tasks flow list --status running
-NexisClaw tasks flow list --json
-NexisClaw tasks flow show flow_abc123
-NexisClaw tasks flow show flow_abc123 --json
-NexisClaw tasks flow cancel flow_abc123
+GreenchClaw tasks flow list
+GreenchClaw tasks flow list --status running
+GreenchClaw tasks flow list --json
+GreenchClaw tasks flow show flow_abc123
+GreenchClaw tasks flow show flow_abc123 --json
+GreenchClaw tasks flow cancel flow_abc123
 ```
 
 For full TaskFlow concepts and authoring see [TaskFlow](/automation/taskflow). For the parent `tasks` command see [tasks CLI reference](/cli/tasks).

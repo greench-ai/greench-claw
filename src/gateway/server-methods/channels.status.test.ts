@@ -14,7 +14,7 @@ vi.mock("../../config/config.js", () => ({
   getRuntimeConfig: mocks.getRuntimeConfig,
   readConfigFileSnapshot: vi.fn(async () => ({
     config: {},
-    path: "NexisClaw.config.json",
+    path: "GreenchClaw.config.json",
     raw: "{}",
   })),
 }));

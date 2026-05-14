@@ -7,7 +7,7 @@ import {
   type SessionAcpMeta,
   type SessionEntry,
 } from "../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { parseAgentSessionKey } from "../../routing/session-key.js";
 import { normalizeLowercaseStringOrEmpty } from "../../shared/string-coerce.js";
 
@@ -21,7 +21,7 @@ function loadSessionStoreRuntime() {
 }
 
 export type AcpSessionStoreEntry = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   storePath: string;
   sessionKey: string;
   storeSessionKey: string;
@@ -52,8 +52,8 @@ function resolveStoreSessionKey(store: Record<string, SessionEntry>, sessionKey:
 
 export function resolveSessionStorePathForAcp(params: {
   sessionKey: string;
-  cfg?: NexisClawConfig;
-}): { cfg: NexisClawConfig; storePath: string } {
+  cfg?: GreenchClawConfig;
+}): { cfg: GreenchClawConfig; storePath: string } {
   const cfg = params.cfg ?? getRuntimeConfig();
   const parsed = parseAgentSessionKey(params.sessionKey);
   const storePath = resolveStorePath(cfg.session?.store, {
@@ -64,7 +64,7 @@ export function resolveSessionStorePathForAcp(params: {
 
 export function readAcpSessionEntry(params: {
   sessionKey: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): AcpSessionStoreEntry | null {
   const sessionKey = params.sessionKey.trim();
   if (!sessionKey) {
@@ -96,7 +96,7 @@ export function readAcpSessionEntry(params: {
 }
 
 export async function listAcpSessionEntries(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): Promise<AcpSessionStoreEntry[]> {
   const cfg = params.cfg ?? getRuntimeConfig();
@@ -134,7 +134,7 @@ export async function listAcpSessionEntries(params: {
 
 export async function upsertAcpSessionMeta(params: {
   sessionKey: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   mutate: (
     current: SessionAcpMeta | undefined,
     entry: SessionEntry | undefined,

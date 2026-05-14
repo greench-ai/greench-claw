@@ -6,7 +6,7 @@ import {
   removeCommandGroupNames,
   type CommandGroupEntry,
 } from "../cli/program/register-command-groups.js";
-import type { NexisClawPluginCliCommandDescriptor, PluginLogger } from "./types.js";
+import type { GreenchClawPluginCliCommandDescriptor, PluginLogger } from "./types.js";
 
 export type PluginCliCommandGroupEntry = CommandGroupEntry & {
   pluginId: string;
@@ -20,7 +20,7 @@ function canRegisterPluginCliLazily(entry: PluginCliCommandGroupEntry): boolean 
     return false;
   }
   const descriptorNames = new Set(
-    (entry.placeholders as readonly NexisClawPluginCliCommandDescriptor[]).map(
+    (entry.placeholders as readonly GreenchClawPluginCliCommandDescriptor[]).map(
       (descriptor) => descriptor.name,
     ),
   );

@@ -3,7 +3,7 @@ import { DISCORD_VOICE_SPOKEN_OUTPUT_CONTRACT, formatVoiceIngressPrompt } from "
 
 describe("formatVoiceIngressPrompt", () => {
   it("formats speaker-labeled voice input with the spoken-output contract", () => {
-    expect(DISCORD_VOICE_SPOKEN_OUTPUT_CONTRACT).toContain("NexisClaw's Discord voice interface");
+    expect(DISCORD_VOICE_SPOKEN_OUTPUT_CONTRACT).toContain("GreenchClaw's Discord voice interface");
     expect(DISCORD_VOICE_SPOKEN_OUTPUT_CONTRACT).toContain(
       "repair obvious transcription artifacts",
     );

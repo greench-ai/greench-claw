@@ -3,7 +3,7 @@ name: sherpa-onnx-tts
 description: Local text-to-speech via sherpa-onnx (offline, no cloud)
 metadata:
   {
-    "NexisClaw":
+    "GreenchClaw":
       {
         "emoji": "🔉",
         "os": ["darwin", "linux", "win32"],
@@ -63,16 +63,16 @@ Local TTS using the sherpa-onnx offline CLI.
 
 ## Install
 
-1. Download the runtime for your OS (extracts into `$NEXISCLAW_STATE_DIR/tools/sherpa-onnx-tts/runtime`, default `~/.NexisClaw/tools/sherpa-onnx-tts/runtime`)
-2. Download a voice model (extracts into `$NEXISCLAW_STATE_DIR/tools/sherpa-onnx-tts/models`, default `~/.NexisClaw/tools/sherpa-onnx-tts/models`)
+1. Download the runtime for your OS (extracts into `$GREENCHCLAW_STATE_DIR/tools/sherpa-onnx-tts/runtime`, default `~/.GreenchClaw/tools/sherpa-onnx-tts/runtime`)
+2. Download a voice model (extracts into `$GREENCHCLAW_STATE_DIR/tools/sherpa-onnx-tts/models`, default `~/.GreenchClaw/tools/sherpa-onnx-tts/models`)
 
 Resolve the active state directory first:
 
 ```bash
-STATE_DIR="${NEXISCLAW_STATE_DIR:-$HOME/.NexisClaw}"
+STATE_DIR="${GREENCHCLAW_STATE_DIR:-$HOME/.GreenchClaw}"
 ```
 
-Then write those resolved paths into the active NexisClaw config file (`$NEXISCLAW_CONFIG_PATH`, default `~/.NexisClaw/NexisClaw.json`):
+Then write those resolved paths into the active GreenchClaw config file (`$GREENCHCLAW_CONFIG_PATH`, default `~/.GreenchClaw/GreenchClaw.json`):
 
 ```json5
 {

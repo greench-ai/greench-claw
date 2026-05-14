@@ -1,5 +1,5 @@
 import type { SessionEntry } from "../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
 import {
   isConfiguredAwsSdkAuthProfileForProvider,
@@ -18,7 +18,7 @@ function loadSessionStoreRuntime() {
 }
 
 function isProfileForProvider(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   providers: readonly string[];
   profileId: string;
   store: ReturnType<typeof ensureAuthProfileStore>;
@@ -81,7 +81,7 @@ export async function clearSessionAuthProfileOverride(params: {
 }
 
 export async function resolveSessionAuthProfileOverride(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   provider: string;
   agentDir: string;
   sessionEntry?: SessionEntry;

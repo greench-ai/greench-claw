@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { readMemoryHostEvents } from "NexisClaw/plugin-sdk/memory-host-events";
+import { readMemoryHostEvents } from "GreenchClaw/plugin-sdk/memory-host-events";
 import { describe, expect, it } from "vitest";
 import { writeDailyDreamingPhaseBlock } from "./dreaming-markdown.js";
 import {

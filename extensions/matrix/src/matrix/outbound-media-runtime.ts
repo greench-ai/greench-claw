@@ -1,1 +1,1 @@
-export { loadOutboundMediaFromUrl } from "NexisClaw/plugin-sdk/outbound-media";
+export { loadOutboundMediaFromUrl } from "GreenchClaw/plugin-sdk/outbound-media";

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { handleBashCommand } from "./commands-bash.js";
 import type { HandleCommandsParams } from "./commands-types.js";
 
@@ -21,7 +21,7 @@ function buildBashParams(commandBodyNormalized: string): HandleCommandsParams {
     cfg: {
       commands: { bash: true, text: true },
       whatsapp: { allowFrom: ["*"] },
-    } as NexisClawConfig,
+    } as GreenchClawConfig,
     ctx: {
       Provider: "whatsapp",
       Surface: "whatsapp",

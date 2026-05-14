@@ -2,6 +2,6 @@ import path from "node:path";
 
 export function setTempStateDir(workspaceDir: string): string {
   const stateDir = path.join(workspaceDir, "state");
-  process.env.NEXISCLAW_STATE_DIR = stateDir;
+  process.env.GREENCHCLAW_STATE_DIR = stateDir;
   return stateDir;
 }

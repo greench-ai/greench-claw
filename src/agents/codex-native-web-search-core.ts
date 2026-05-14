@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isRecord } from "../utils.js";
 import { externalCliDiscoveryForProviderAuth } from "./auth-profiles/external-cli-discovery.js";
 import { listProfilesForProvider } from "./auth-profiles/profile-list.js";
@@ -43,7 +43,7 @@ function hasCodexNativeWebSearchTool(tools: unknown): boolean {
 }
 
 export function hasAvailableCodexAuth(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentDir?: string;
 }): boolean {
   if (
@@ -77,7 +77,7 @@ export function hasAvailableCodexAuth(params: {
 }
 
 export function resolveCodexNativeSearchActivation(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   modelProvider?: string;
   modelApi?: string;
   agentDir?: string;
@@ -146,7 +146,7 @@ export function resolveCodexNativeSearchActivation(params: {
 }
 
 export function buildCodexNativeWebSearchTool(
-  config: NexisClawConfig | undefined,
+  config: GreenchClawConfig | undefined,
 ): Record<string, unknown> {
   const nativeConfig = resolveCodexNativeWebSearchConfig(config);
   const tool: Record<string, unknown> = {
@@ -176,7 +176,7 @@ export function buildCodexNativeWebSearchTool(
 
 export function patchCodexNativeWebSearchPayload(params: {
   payload: unknown;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): CodexNativeSearchPayloadPatchResult {
   if (!isRecord(params.payload)) {
     return { status: "payload_not_object" };
@@ -194,7 +194,7 @@ export function patchCodexNativeWebSearchPayload(params: {
 }
 
 export function shouldSuppressManagedWebSearchTool(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   modelProvider?: string;
   modelApi?: string;
   agentDir?: string;

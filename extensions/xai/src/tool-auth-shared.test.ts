@@ -1,4 +1,4 @@
-import { NON_ENV_SECRETREF_MARKER } from "NexisClaw/plugin-sdk/provider-auth-runtime";
+import { NON_ENV_SECRETREF_MARKER } from "GreenchClaw/plugin-sdk/provider-auth-runtime";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   isXaiToolEnabled,

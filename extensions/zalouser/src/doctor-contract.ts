@@ -1,10 +1,10 @@
 import type {
   ChannelDoctorConfigMutation,
   ChannelDoctorLegacyConfigRule,
-} from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
-type ZalouserChannelsConfig = NonNullable<NexisClawConfig["channels"]>;
+type ZalouserChannelsConfig = NonNullable<GreenchClawConfig["channels"]>;
 
 function asObjectRecord(value: unknown): Record<string, unknown> | null {
   return value && typeof value === "object" && !Array.isArray(value)
@@ -61,7 +61,7 @@ function normalizeZalouserGroupAllowAliases(params: {
   return { groups: nextGroups, changed };
 }
 
-function normalizeZalouserCompatibilityConfig(cfg: NexisClawConfig): ChannelDoctorConfigMutation {
+function normalizeZalouserCompatibilityConfig(cfg: GreenchClawConfig): ChannelDoctorConfigMutation {
   const channels = asObjectRecord(cfg.channels);
   const zalouser = asObjectRecord(channels?.zalouser);
   if (!zalouser) {
@@ -138,19 +138,19 @@ export const legacyConfigRules: ChannelDoctorLegacyConfigRule[] = [
   {
     path: ["channels", "zalouser", "groups"],
     message:
-      'channels.zalouser.groups.<id>.allow is legacy; use channels.zalouser.groups.<id>.enabled instead. Run "NexisClaw doctor --fix".',
+      'channels.zalouser.groups.<id>.allow is legacy; use channels.zalouser.groups.<id>.enabled instead. Run "GreenchClaw doctor --fix".',
     match: hasLegacyZalouserGroupAllowAliases,
   },
   {
     path: ["channels", "zalouser", "accounts"],
     message:
-      'channels.zalouser.accounts.<id>.groups.<id>.allow is legacy; use channels.zalouser.accounts.<id>.groups.<id>.enabled instead. Run "NexisClaw doctor --fix".',
+      'channels.zalouser.accounts.<id>.groups.<id>.allow is legacy; use channels.zalouser.accounts.<id>.groups.<id>.enabled instead. Run "GreenchClaw doctor --fix".',
     match: hasLegacyZalouserAccountGroupAllowAliases,
   },
 ];
 
 export function normalizeCompatibilityConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): ChannelDoctorConfigMutation {
   return normalizeZalouserCompatibilityConfig(params.cfg);
 }

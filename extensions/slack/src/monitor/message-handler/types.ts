@@ -1,5 +1,5 @@
-import type { FinalizedMsgContext } from "NexisClaw/plugin-sdk/reply-runtime";
-import type { ResolvedAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import type { FinalizedMsgContext } from "GreenchClaw/plugin-sdk/reply-runtime";
+import type { ResolvedAgentRoute } from "GreenchClaw/plugin-sdk/routing";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import type { SlackMessageEvent } from "../../types.js";
 import type { SlackChannelConfigResolved } from "../channel-config.js";

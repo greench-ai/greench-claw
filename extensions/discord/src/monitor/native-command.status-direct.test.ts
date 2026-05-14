@@ -1,5 +1,5 @@
 import { ChannelType } from "discord-api-types/v10";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createMockCommandInteraction as createInteraction } from "./native-command.test-helpers.js";
 import { createNoopThreadBindingManager } from "./thread-bindings.js";
@@ -10,10 +10,10 @@ const runtimeModuleMocks = vi.hoisted(() => ({
   resolveDirectStatusReplyForSession: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/reply-dispatch-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/reply-dispatch-runtime")>(
-    "NexisClaw/plugin-sdk/reply-dispatch-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/reply-dispatch-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/reply-dispatch-runtime")
+  >("GreenchClaw/plugin-sdk/reply-dispatch-runtime");
   return {
     ...actual,
     dispatchReplyWithDispatcher: (...args: unknown[]) =>
@@ -21,19 +21,19 @@ vi.mock("NexisClaw/plugin-sdk/reply-dispatch-runtime", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/command-status-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/command-status-runtime", () => ({
   resolveDirectStatusReplyForSession: (...args: unknown[]) =>
     runtimeModuleMocks.resolveDirectStatusReplyForSession(...args),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/web-media", () => ({
+vi.mock("GreenchClaw/plugin-sdk/web-media", () => ({
   loadWebMedia: (...args: unknown[]) => runtimeModuleMocks.loadWebMedia(...args),
 }));
 
 let createDiscordNativeCommand: typeof import("./native-command.js").createDiscordNativeCommand;
 let discordNativeCommandTesting: typeof import("./native-command.js").__testing;
 
-function createConfig(params?: { requireMention?: boolean }): NexisClawConfig {
+function createConfig(params?: { requireMention?: boolean }): GreenchClawConfig {
   return {
     commands: {
       useAccessGroups: false,
@@ -54,10 +54,10 @@ function createConfig(params?: { requireMention?: boolean }): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-async function createStatusCommand(cfg: NexisClawConfig) {
+async function createStatusCommand(cfg: GreenchClawConfig) {
   return createDiscordNativeCommand({
     command: {
       name: "status",
@@ -115,7 +115,7 @@ function firstMockArg(mock: MockWithCalls, label: string) {
 }
 
 function firstStatusCall(): {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   channel: string;
   isGroup: boolean;
@@ -126,7 +126,7 @@ function firstStatusCall(): {
     "resolveDirectStatusReplyForSession",
   );
   return call as {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     sessionKey: string;
     channel: string;
     isGroup: boolean;
@@ -158,10 +158,10 @@ describe("discord native /status", () => {
       fileName: "status.png",
     });
     discordNativeCommandTesting.setDispatchReplyWithDispatcher(
-      runtimeModuleMocks.dispatchReplyWithDispatcher as typeof import("NexisClaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithDispatcher,
+      runtimeModuleMocks.dispatchReplyWithDispatcher as typeof import("GreenchClaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithDispatcher,
     );
     discordNativeCommandTesting.setMatchPluginCommand(
-      (() => null) as typeof import("NexisClaw/plugin-sdk/plugin-runtime").matchPluginCommand,
+      (() => null) as typeof import("GreenchClaw/plugin-sdk/plugin-runtime").matchPluginCommand,
     );
     setDefaultRouteState();
   });
@@ -194,9 +194,9 @@ describe("discord native /status", () => {
         handler: async () => ({ text: "plugin status" }),
       },
       args: undefined,
-    })) as typeof import("NexisClaw/plugin-sdk/plugin-runtime").matchPluginCommand);
+    })) as typeof import("GreenchClaw/plugin-sdk/plugin-runtime").matchPluginCommand);
     discordNativeCommandTesting.setExecutePluginCommand(
-      executePluginCommand as typeof import("NexisClaw/plugin-sdk/plugin-runtime").executePluginCommand,
+      executePluginCommand as typeof import("GreenchClaw/plugin-sdk/plugin-runtime").executePluginCommand,
     );
     const cfg = createConfig();
     const command = await createStatusCommand(cfg);

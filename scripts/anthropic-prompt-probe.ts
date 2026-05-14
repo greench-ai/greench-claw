@@ -1,10 +1,10 @@
 import { spawn } from "node:child_process";
 // Live prompt probe for Anthropic setup-token and Claude CLI prompt-path debugging.
 // Usage:
-// NEXISCLAW_PROMPT_TRANSPORT=direct|gateway
-// NEXISCLAW_PROMPT_MODE=extra|override
-// NEXISCLAW_PROMPT_TEXT='...'
-// NEXISCLAW_PROMPT_CAPTURE=1
+// GREENCHCLAW_PROMPT_TRANSPORT=direct|gateway
+// GREENCHCLAW_PROMPT_MODE=extra|override
+// GREENCHCLAW_PROMPT_TEXT='...'
+// GREENCHCLAW_PROMPT_CAPTURE=1
 // pnpm probe:anthropic:prompt
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
@@ -20,25 +20,26 @@ import { callGateway } from "../src/gateway/call.js";
 import { extractPayloadText } from "../src/gateway/test-helpers.agent-results.js";
 import { getFreePortBlockWithPermissionFallback } from "../src/test-utils/ports.js";
 
-const TRANSPORT = process.env.NEXISCLAW_PROMPT_TRANSPORT?.trim() === "direct" ? "direct" : "gateway";
+const TRANSPORT =
+  process.env.GREENCHCLAW_PROMPT_TRANSPORT?.trim() === "direct" ? "direct" : "gateway";
 const GATEWAY_PROMPT_MODE =
-  process.env.NEXISCLAW_PROMPT_MODE?.trim() === "override" ? "override" : "extra";
-const PROMPT_TEXT = process.env.NEXISCLAW_PROMPT_TEXT?.trim() ?? "";
-const PROMPT_LIST_JSON = process.env.NEXISCLAW_PROMPT_LIST_JSON?.trim() ?? "";
-const USER_PROMPT = process.env.NEXISCLAW_USER_PROMPT?.trim() || "is clawd here?";
-const ENABLE_CAPTURE = process.env.NEXISCLAW_PROMPT_CAPTURE === "1";
-const INCLUDE_RAW = process.env.NEXISCLAW_PROMPT_INCLUDE_RAW === "1";
+  process.env.GREENCHCLAW_PROMPT_MODE?.trim() === "override" ? "override" : "extra";
+const PROMPT_TEXT = process.env.GREENCHCLAW_PROMPT_TEXT?.trim() ?? "";
+const PROMPT_LIST_JSON = process.env.GREENCHCLAW_PROMPT_LIST_JSON?.trim() ?? "";
+const USER_PROMPT = process.env.GREENCHCLAW_USER_PROMPT?.trim() || "is clawd here?";
+const ENABLE_CAPTURE = process.env.GREENCHCLAW_PROMPT_CAPTURE === "1";
+const INCLUDE_RAW = process.env.GREENCHCLAW_PROMPT_INCLUDE_RAW === "1";
 const CLAUDE_BIN = process.env.CLAUDE_BIN?.trim() || "claude";
-const NODE_BIN = process.env.NEXISCLAW_NODE_BIN?.trim() || process.execPath;
-const TIMEOUT_MS = Number(process.env.NEXISCLAW_PROMPT_TIMEOUT_MS ?? "45000");
-const GATEWAY_TIMEOUT_MS = Number(process.env.NEXISCLAW_PROMPT_GATEWAY_TIMEOUT_MS ?? "120000");
-const SETUP_TOKEN_RAW = process.env.NEXISCLAW_LIVE_SETUP_TOKEN?.trim() ?? "";
-const SETUP_TOKEN_VALUE = process.env.NEXISCLAW_LIVE_SETUP_TOKEN_VALUE?.trim() ?? "";
-const SETUP_TOKEN_PROFILE = process.env.NEXISCLAW_LIVE_SETUP_TOKEN_PROFILE?.trim() ?? "";
+const NODE_BIN = process.env.GREENCHCLAW_NODE_BIN?.trim() || process.execPath;
+const TIMEOUT_MS = Number(process.env.GREENCHCLAW_PROMPT_TIMEOUT_MS ?? "45000");
+const GATEWAY_TIMEOUT_MS = Number(process.env.GREENCHCLAW_PROMPT_GATEWAY_TIMEOUT_MS ?? "120000");
+const SETUP_TOKEN_RAW = process.env.GREENCHCLAW_LIVE_SETUP_TOKEN?.trim() ?? "";
+const SETUP_TOKEN_VALUE = process.env.GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE?.trim() ?? "";
+const SETUP_TOKEN_PROFILE = process.env.GREENCHCLAW_LIVE_SETUP_TOKEN_PROFILE?.trim() ?? "";
 const DIRECT_CLAUDE_ARGS = ["-p", "--append-system-prompt"];
 
 if (!PROMPT_TEXT && !PROMPT_LIST_JSON) {
-  throw new Error("missing NEXISCLAW_PROMPT_TEXT or NEXISCLAW_PROMPT_LIST_JSON");
+  throw new Error("missing GREENCHCLAW_PROMPT_TEXT or GREENCHCLAW_PROMPT_LIST_JSON");
 }
 
 type CaptureSummary = {
@@ -200,7 +201,7 @@ function resolveSetupTokenSource(): TokenSource {
   const match = pickSetupTokenProfile(candidates);
   if (!match) {
     throw new Error(
-      "no Anthropics setup-token profile found; set NEXISCLAW_LIVE_SETUP_TOKEN_VALUE or NEXISCLAW_LIVE_SETUP_TOKEN_PROFILE",
+      "no Anthropics setup-token profile found; set GREENCHCLAW_LIVE_SETUP_TOKEN_VALUE or GREENCHCLAW_LIVE_SETUP_TOKEN_PROFILE",
     );
   }
   return { profileId: match.id, token: validateSetupToken(match.token) };
@@ -365,7 +366,7 @@ async function getFreePort(): Promise<number> {
 }
 
 async function runDirectPrompt(prompt: string): Promise<PromptResult> {
-  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-direct-prompt-probe-"));
+  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-direct-prompt-probe-"));
   const proxyPort = ENABLE_CAPTURE ? await getFreePort() : undefined;
   const proxy =
     ENABLE_CAPTURE && proxyPort
@@ -425,23 +426,23 @@ async function startGatewayProcess(params: {
   const logFile = await fs.open(params.logPath, "a");
   const child = spawn(
     NODE_BIN,
-    ["NexisClaw.mjs", "gateway", "--port", String(params.port), "--bind", "loopback", "--force"],
+    ["GreenchClaw.mjs", "gateway", "--port", String(params.port), "--bind", "loopback", "--force"],
     {
       cwd: process.cwd(),
       env: {
         ...process.env,
-        NEXISCLAW_CONFIG_PATH: params.configPath,
-        NEXISCLAW_STATE_DIR: params.stateDir,
-        NEXISCLAW_AGENT_DIR: params.agentDir,
-        NEXISCLAW_GATEWAY_TOKEN: params.gatewayToken,
-        NEXISCLAW_SKIP_CHANNELS: "1",
-        NEXISCLAW_SKIP_GMAIL_WATCHER: "1",
-        NEXISCLAW_SKIP_CANVAS_HOST: "1",
-        NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
-        NEXISCLAW_DISABLE_BONJOUR: "1",
-        NEXISCLAW_SKIP_CRON: "1",
-        NEXISCLAW_TEST_MINIMAL_GATEWAY: "1",
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: params.bundledPluginsDir,
+        GREENCHCLAW_CONFIG_PATH: params.configPath,
+        GREENCHCLAW_STATE_DIR: params.stateDir,
+        GREENCHCLAW_AGENT_DIR: params.agentDir,
+        GREENCHCLAW_GATEWAY_TOKEN: params.gatewayToken,
+        GREENCHCLAW_SKIP_CHANNELS: "1",
+        GREENCHCLAW_SKIP_GMAIL_WATCHER: "1",
+        GREENCHCLAW_SKIP_CANVAS_HOST: "1",
+        GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER: "1",
+        GREENCHCLAW_DISABLE_BONJOUR: "1",
+        GREENCHCLAW_SKIP_CRON: "1",
+        GREENCHCLAW_TEST_MINIMAL_GATEWAY: "1",
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: params.bundledPluginsDir,
         ANTHROPIC_API_KEY: "",
         ANTHROPIC_API_KEY_OLD: "",
       },
@@ -490,11 +491,11 @@ async function readLogTail(logPath: string): Promise<string> {
 
 async function runGatewayPrompt(prompt: string): Promise<PromptResult> {
   const tokenSource = resolveSetupTokenSource();
-  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-gateway-prompt-probe-"));
+  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-gateway-prompt-probe-"));
   const stateDir = path.join(tmpDir, "state");
   const agentDir = path.join(stateDir, "agents", "main", "agent");
   const bundledPluginsDir = path.join(tmpDir, "bundled-plugins-empty");
-  const configPath = path.join(tmpDir, "NexisClaw.json");
+  const configPath = path.join(tmpDir, "GreenchClaw.json");
   const logPath = path.join(tmpDir, "gateway.log");
   const gatewayToken = `gw-${randomUUID()}`;
   const port = await getFreePort();

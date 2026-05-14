@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { runPluginSetupConfigMigrations } from "../../../plugins/setup-registry.js";
 import { migrateLegacySecretRefEnvMarkers } from "../../../secrets/legacy-secretref-env-marker.js";
 import { applyChannelDoctorCompatibilityMigrations } from "./channel-legacy-config-migrate.js";
@@ -8,8 +8,8 @@ import {
   normalizeLegacyOpenAICodexModelsAddMetadata,
 } from "./legacy-config-core-normalizers.js";
 
-export function normalizeCompatibilityConfigValues(cfg: NexisClawConfig): {
-  config: NexisClawConfig;
+export function normalizeCompatibilityConfigValues(cfg: GreenchClawConfig): {
+  config: GreenchClawConfig;
   changes: string[];
 } {
   const changes: string[] = [];

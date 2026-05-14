@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { loadChannelSecretContractApi } from "./channel-contract-api.js";
 import { getPath } from "./path-utils.js";
 import { getCoreSecretTargetRegistry, getSecretTargetRegistry } from "./target-registry-data.js";
@@ -25,14 +25,14 @@ let compiledSecretTargetRegistryState: {
   targetsByType: Map<string, CompiledTargetRegistryEntry[]>;
 } | null = null;
 
-let compiledCoreNexisClawTargetState: {
+let compiledCoreGreenchClawTargetState: {
   knownTargetIds: Set<string>;
   openClawCompiledSecretTargets: CompiledTargetRegistryEntry[];
   openClawTargetsById: Map<string, CompiledTargetRegistryEntry[]>;
   targetsByType: Map<string, CompiledTargetRegistryEntry[]>;
 } | null = null;
 
-const compiledChannelNexisClawTargets = new Map<string, CompiledTargetRegistryEntry[] | null>();
+const compiledChannelGreenchClawTargets = new Map<string, CompiledTargetRegistryEntry[] | null>();
 
 function buildTargetTypeIndex(
   compiledSecretTargetRegistry: CompiledTargetRegistryEntry[],
@@ -76,7 +76,7 @@ function getCompiledSecretTargetRegistryState() {
   }
   const compiledSecretTargetRegistry = getSecretTargetRegistry().map(compileTargetRegistryEntry);
   const openClawCompiledSecretTargets = compiledSecretTargetRegistry.filter(
-    (entry) => entry.configFile === "NexisClaw.json",
+    (entry) => entry.configFile === "GreenchClaw.json",
   );
   const authProfilesCompiledSecretTargets = compiledSecretTargetRegistry.filter(
     (entry) => entry.configFile === "auth-profiles.json",
@@ -93,41 +93,41 @@ function getCompiledSecretTargetRegistryState() {
   return compiledSecretTargetRegistryState;
 }
 
-function getCompiledCoreNexisClawTargetState() {
-  if (compiledCoreNexisClawTargetState) {
-    return compiledCoreNexisClawTargetState;
+function getCompiledCoreGreenchClawTargetState() {
+  if (compiledCoreGreenchClawTargetState) {
+    return compiledCoreGreenchClawTargetState;
   }
   const openClawCompiledSecretTargets = getCoreSecretTargetRegistry()
-    .filter((entry) => entry.configFile === "NexisClaw.json")
+    .filter((entry) => entry.configFile === "GreenchClaw.json")
     .map(compileTargetRegistryEntry);
-  compiledCoreNexisClawTargetState = {
+  compiledCoreGreenchClawTargetState = {
     knownTargetIds: new Set(openClawCompiledSecretTargets.map((entry) => entry.id)),
     openClawCompiledSecretTargets,
     openClawTargetsById: buildConfigTargetIdIndex(openClawCompiledSecretTargets),
     targetsByType: buildTargetTypeIndex(openClawCompiledSecretTargets),
   };
-  return compiledCoreNexisClawTargetState;
+  return compiledCoreGreenchClawTargetState;
 }
 
-function getCompiledChannelNexisClawTargets(
+function getCompiledChannelGreenchClawTargets(
   channelId: string,
 ): CompiledTargetRegistryEntry[] | null {
   const normalizedChannelId = channelId.trim();
   if (!normalizedChannelId) {
     return null;
   }
-  if (compiledChannelNexisClawTargets.has(normalizedChannelId)) {
-    return compiledChannelNexisClawTargets.get(normalizedChannelId) ?? null;
+  if (compiledChannelGreenchClawTargets.has(normalizedChannelId)) {
+    return compiledChannelGreenchClawTargets.get(normalizedChannelId) ?? null;
   }
   const compiledEntries =
     loadChannelSecretContractApi({
       channelId: normalizedChannelId,
-      config: {} as NexisClawConfig,
+      config: {} as GreenchClawConfig,
       env: process.env,
     })
-      ?.secretTargetRegistryEntries?.filter((entry) => entry.configFile === "NexisClaw.json")
+      ?.secretTargetRegistryEntries?.filter((entry) => entry.configFile === "GreenchClaw.json")
       .map(compileTargetRegistryEntry) ?? null;
-  compiledChannelNexisClawTargets.set(normalizedChannelId, compiledEntries);
+  compiledChannelGreenchClawTargets.set(normalizedChannelId, compiledEntries);
   return compiledEntries;
 }
 
@@ -264,7 +264,7 @@ export function resolvePlanTargetAgainstRegistry(candidate: {
   providerId?: string;
   accountId?: string;
 }): ResolvedPlanTarget | null {
-  const coreEntries = getCompiledCoreNexisClawTargetState().targetsByType.get(candidate.type);
+  const coreEntries = getCompiledCoreGreenchClawTargetState().targetsByType.get(candidate.type);
   if (coreEntries) {
     return resolvePlanTargetAgainstEntries(candidate, coreEntries);
   }
@@ -313,7 +313,7 @@ function resolvePlanTargetAgainstEntries(
 }
 
 export function resolveConfigSecretTargetByPath(pathSegments: string[]): ResolvedPlanTarget | null {
-  for (const entry of getCompiledCoreNexisClawTargetState().openClawCompiledSecretTargets) {
+  for (const entry of getCompiledCoreGreenchClawTargetState().openClawCompiledSecretTargets) {
     if (!entry.includeInPlan) {
       continue;
     }
@@ -330,7 +330,7 @@ export function resolveConfigSecretTargetByPath(pathSegments: string[]): Resolve
 
   const explicitChannelId = pathSegments[0] === "channels" ? (pathSegments[1]?.trim() ?? "") : "";
   const explicitChannelEntries = explicitChannelId
-    ? getCompiledChannelNexisClawTargets(explicitChannelId)
+    ? getCompiledChannelGreenchClawTargets(explicitChannelId)
     : null;
   for (const entry of explicitChannelEntries ?? []) {
     if (!entry.includeInPlan) {
@@ -365,22 +365,22 @@ export function resolveConfigSecretTargetByPath(pathSegments: string[]): Resolve
 }
 
 export function discoverConfigSecretTargets(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
 ): DiscoveredConfigSecretTarget[] {
   return discoverConfigSecretTargetsByIds(config);
 }
 
 export function discoverConfigSecretTargetsByIds(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   targetIds?: Iterable<string>,
 ): DiscoveredConfigSecretTarget[] {
   const allowedTargetIds = normalizeAllowedTargetIds(targetIds);
   const registryState =
     allowedTargetIds !== null &&
     Array.from(allowedTargetIds).every((targetId) =>
-      getCompiledCoreNexisClawTargetState().knownTargetIds.has(targetId),
+      getCompiledCoreGreenchClawTargetState().knownTargetIds.has(targetId),
     )
-      ? getCompiledCoreNexisClawTargetState()
+      ? getCompiledCoreGreenchClawTargetState()
       : getCompiledSecretTargetRegistryState();
   const discoveryEntries = resolveDiscoveryEntries({
     allowedTargetIds,

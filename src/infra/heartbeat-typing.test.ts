@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { ChannelPlugin } from "../channels/plugins/types.public.js";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { createHeartbeatTypingCallbacks } from "./heartbeat-typing.js";
 
 async function withFakeTimers(run: () => Promise<void>) {
@@ -23,7 +23,7 @@ describe("createHeartbeatTypingCallbacks", () => {
       } satisfies Pick<ChannelPlugin, "heartbeat">;
 
       const callbacks = createHeartbeatTypingCallbacks({
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         target: {
           channel: "telegram",
           to: "123",

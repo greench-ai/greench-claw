@@ -1,8 +1,8 @@
-import type { CliBackendPlugin } from "NexisClaw/plugin-sdk/cli-backend";
+import type { CliBackendPlugin } from "GreenchClaw/plugin-sdk/cli-backend";
 import {
   CLI_FRESH_WATCHDOG_DEFAULTS,
   CLI_RESUME_WATCHDOG_DEFAULTS,
-} from "NexisClaw/plugin-sdk/cli-backend";
+} from "GreenchClaw/plugin-sdk/cli-backend";
 
 const CODEX_CLI_DEFAULT_MODEL_REF = "codex-cli/gpt-5.5";
 const CODEX_CLI_NPM_PACKAGE = "@openai/codex@0.129.0";

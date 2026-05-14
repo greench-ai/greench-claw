@@ -20,7 +20,7 @@ function createJsonResponse(body: unknown, init?: { status?: number }) {
 describe("loginOpenAICodexDeviceCode", () => {
   it("requests a device code, polls for authorization, and exchanges OAuth tokens", async () => {
     vi.useFakeTimers();
-    vi.stubEnv("NEXISCLAW_VERSION", "2026.3.22");
+    vi.stubEnv("GREENCHCLAW_VERSION", "2026.3.22");
     try {
       const fetchMock = vi
         .fn<typeof fetch>()
@@ -79,9 +79,9 @@ describe("loginOpenAICodexDeviceCode", () => {
       expect(userCodeRequest?.[1]?.method).toBe("POST");
       expect(userCodeRequest?.[1]?.headers).toEqual({
         "Content-Type": "application/json",
-        originator: "NexisClaw",
+        originator: "GreenchClaw",
         version: "2026.3.22",
-        "User-Agent": "NexisClaw/2026.3.22",
+        "User-Agent": "GreenchClaw/2026.3.22",
       });
 
       const deviceTokenRequest = fetchMock.mock.calls.at(1);
@@ -89,9 +89,9 @@ describe("loginOpenAICodexDeviceCode", () => {
       expect(deviceTokenRequest?.[1]?.method).toBe("POST");
       expect(deviceTokenRequest?.[1]?.headers).toEqual({
         "Content-Type": "application/json",
-        originator: "NexisClaw",
+        originator: "GreenchClaw",
         version: "2026.3.22",
-        "User-Agent": "NexisClaw/2026.3.22",
+        "User-Agent": "GreenchClaw/2026.3.22",
       });
 
       const oauthTokenRequest = fetchMock.mock.calls.at(3);
@@ -99,9 +99,9 @@ describe("loginOpenAICodexDeviceCode", () => {
       expect(oauthTokenRequest?.[1]?.method).toBe("POST");
       expect(oauthTokenRequest?.[1]?.headers).toEqual({
         "Content-Type": "application/x-www-form-urlencoded",
-        originator: "NexisClaw",
+        originator: "GreenchClaw",
         version: "2026.3.22",
-        "User-Agent": "NexisClaw/2026.3.22",
+        "User-Agent": "GreenchClaw/2026.3.22",
       });
       expect(onVerification).toHaveBeenCalledWith({
         verificationUrl: "https://auth.openai.com/codex/device",

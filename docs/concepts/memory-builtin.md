@@ -39,7 +39,7 @@ To set a provider explicitly:
 Without an embedding provider, only keyword search is available.
 
 To force the built-in local embedding provider, install the optional
-`node-llama-cpp` runtime package next to NexisClaw, then point `local.modelPath`
+`node-llama-cpp` runtime package next to GreenchClaw, then point `local.modelPath`
 at a GGUF file:
 
 ```json5
@@ -75,16 +75,16 @@ order shown. Set `memorySearch.provider` to override.
 
 ## How indexing works
 
-NexisClaw indexes `MEMORY.md` and `memory/*.md` into chunks (~400 tokens with
+GreenchClaw indexes `MEMORY.md` and `memory/*.md` into chunks (~400 tokens with
 80-token overlap) and stores them in a per-agent SQLite database.
 
-- **Index location:** `~/.NexisClaw/memory/<agentId>.sqlite`
+- **Index location:** `~/.GreenchClaw/memory/<agentId>.sqlite`
 - **Storage maintenance:** SQLite WAL sidecars are bounded with periodic and
   shutdown checkpoints.
 - **File watching:** changes to memory files trigger a debounced reindex (1.5s).
 - **Auto-reindex:** when the embedding provider, model, or chunking config
   changes, the entire index is rebuilt automatically.
-- **Reindex on demand:** `NexisClaw memory index --force`
+- **Reindex on demand:** `GreenchClaw memory index --force`
 
 <Info>
 You can also index Markdown files outside the workspace with
@@ -109,25 +109,25 @@ automatic user modeling.
 
 ## Troubleshooting
 
-**Memory search disabled?** Check `NexisClaw memory status`. If no provider is
+**Memory search disabled?** Check `GreenchClaw memory status`. If no provider is
 detected, set one explicitly or add an API key.
 
 **Local provider not detected?** Confirm the local path exists and run:
 
 ```bash
-NexisClaw memory status --deep --agent main
-NexisClaw memory index --force --agent main
+GreenchClaw memory status --deep --agent main
+GreenchClaw memory index --force --agent main
 ```
 
 Both standalone CLI commands and the Gateway use the same `local` provider id.
 If the provider is set to `auto`, local embeddings are considered first only
 when `memorySearch.local.modelPath` points to an existing local file.
 
-**Stale results?** Run `NexisClaw memory index --force` to rebuild. The watcher
+**Stale results?** Run `GreenchClaw memory index --force` to rebuild. The watcher
 may miss changes in rare edge cases.
 
-**sqlite-vec not loading?** NexisClaw falls back to in-process cosine similarity
-automatically. `NexisClaw memory status --deep` reports the local vector store
+**sqlite-vec not loading?** GreenchClaw falls back to in-process cosine similarity
+automatically. `GreenchClaw memory status --deep` reports the local vector store
 separately from the embedding provider, so `Vector store: unavailable` points
 at sqlite-vec loading while `Embeddings: unavailable` points at provider/auth
 or model readiness. Check logs for the specific load error.

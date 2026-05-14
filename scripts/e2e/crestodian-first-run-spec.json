@@ -2,12 +2,12 @@
   "stateDirName": "crestodian-ring-zero-state",
   "defaultWorkspaceName": "crestodian-main-workspace",
   "agentWorkspaceName": "crestodian-reef-workspace",
-  "dockerDefaultWorkspace": "/tmp/NexisClaw-first-run",
-  "dockerAgentWorkspace": "/tmp/NexisClaw-reef",
+  "dockerDefaultWorkspace": "/tmp/GreenchClaw-first-run",
+  "dockerAgentWorkspace": "/tmp/GreenchClaw-reef",
   "agentId": "reef",
   "model": "openai/gpt-5.2",
   "discordEnv": "DISCORD_BOT_TOKEN",
-  "discordToken": "NexisClaw-crestodian-discord-e2e-token",
+  "discordToken": "GreenchClaw-crestodian-discord-e2e-token",
   "commands": [
     {
       "id": "setup",

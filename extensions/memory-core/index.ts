@@ -3,14 +3,14 @@ import {
   resolveMemorySearchConfig,
   resolveSessionAgentIds,
   type MemoryPluginRuntime,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-runtime-core";
-import { resolveMemoryBackendConfig } from "NexisClaw/plugin-sdk/memory-core-host-runtime-files";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/memory-core-host-runtime-core";
+import { resolveMemoryBackendConfig } from "GreenchClaw/plugin-sdk/memory-core-host-runtime-files";
 import {
   definePluginEntry,
   type AnyAgentTool,
-  type NexisClawPluginToolContext,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+  type GreenchClawPluginToolContext,
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import type { TSchema } from "typebox";
 import { registerShortTermPromotionDreaming } from "./src/dreaming.js";
 import { buildMemoryFlushPlan } from "./src/flush-plan.js";
@@ -21,8 +21,8 @@ type MemoryToolsModule = typeof import("./src/tools.js");
 type RuntimeProviderModule = typeof import("./src/runtime-provider.js");
 
 type MemoryToolOptions = {
-  config?: NexisClawConfig;
-  getConfig?: () => NexisClawConfig | undefined;
+  config?: GreenchClawConfig;
+  getConfig?: () => GreenchClawConfig | undefined;
   agentId?: string;
   agentSessionKey?: string;
   sandboxed?: boolean;
@@ -41,7 +41,7 @@ function loadRuntimeProviderModule(): Promise<RuntimeProviderModule> {
   return runtimeProviderModulePromise;
 }
 
-function getToolConfig(options: MemoryToolOptions): NexisClawConfig | undefined {
+function getToolConfig(options: MemoryToolOptions): GreenchClawConfig | undefined {
   return options.getConfig?.() ?? options.config;
 }
 
@@ -143,7 +143,7 @@ function createLazyMemoryGetTool(options: MemoryToolOptions): AnyAgentTool | nul
   });
 }
 
-function resolveMemoryToolOptions(ctx: NexisClawPluginToolContext): MemoryToolOptions {
+function resolveMemoryToolOptions(ctx: GreenchClawPluginToolContext): MemoryToolOptions {
   const getConfig = () => ctx.getRuntimeConfig?.() ?? ctx.runtimeConfig ?? ctx.config;
   return {
     config: getConfig(),

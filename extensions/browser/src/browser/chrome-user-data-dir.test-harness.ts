@@ -9,7 +9,9 @@ type ChromeUserDataDirRef = {
 
 export function installChromeUserDataDirHooks(chromeUserDataDir: ChromeUserDataDirRef): void {
   beforeAll(async () => {
-    chromeUserDataDir.dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-chrome-user-data-"));
+    chromeUserDataDir.dir = await fs.mkdtemp(
+      path.join(os.tmpdir(), "GreenchClaw-chrome-user-data-"),
+    );
   });
 
   afterAll(async () => {

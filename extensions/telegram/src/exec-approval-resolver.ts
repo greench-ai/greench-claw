@@ -1,9 +1,9 @@
-import { resolveApprovalOverGateway } from "NexisClaw/plugin-sdk/approval-gateway-runtime";
-import type { ExecApprovalReplyDecision } from "NexisClaw/plugin-sdk/approval-reply-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveApprovalOverGateway } from "GreenchClaw/plugin-sdk/approval-gateway-runtime";
+import type { ExecApprovalReplyDecision } from "GreenchClaw/plugin-sdk/approval-reply-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
 export type ResolveTelegramExecApprovalParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   approvalId: string;
   decision: ExecApprovalReplyDecision;
   senderId?: string | null;

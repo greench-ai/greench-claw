@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { ToolLoopDetectionConfig } from "../config/types.tools.js";
 import { resolveAgentConfig } from "./agent-scope.js";
 
 export function resolveToolLoopDetectionConfig(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentId?: string;
 }): ToolLoopDetectionConfig | undefined {
   const global = params.cfg?.tools?.loopDetection;

@@ -1,12 +1,12 @@
 ---
-summary: "NexisClaw macOS companion app (menu bar + gateway broker)"
+summary: "GreenchClaw macOS companion app (menu bar + gateway broker)"
 read_when:
   - Implementing macOS app features
   - Changing gateway lifecycle or node bridging on macOS
 title: "macOS app"
 ---
 
-The macOS app is the **menu-bar companion** for NexisClaw. It owns permissions,
+The macOS app is the **menu-bar companion** for GreenchClaw. It owns permissions,
 manages/attaches to the Gateway locally (launchd or manual), and exposes macOS
 capabilities to the agent as a node.
 
@@ -19,12 +19,12 @@ capabilities to the agent as a node.
 - Exposes macOS-only tools (Canvas, Camera, Screen Recording, `system.run`).
 - Starts the local node host service in **remote** mode (launchd), and stops it in **local** mode.
 - Optionally hosts **PeekabooBridge** for UI automation.
-- Installs the global CLI (`NexisClaw`) on request via npm, pnpm, or bun (the app prefers npm, then pnpm, then bun; Node remains the recommended Gateway runtime).
+- Installs the global CLI (`GreenchClaw`) on request via npm, pnpm, or bun (the app prefers npm, then pnpm, then bun; Node remains the recommended Gateway runtime).
 
 ## Local vs remote mode
 
 - **Local** (default): the app attaches to a running local Gateway if present;
-  otherwise it enables the launchd service via `NexisClaw gateway install`.
+  otherwise it enables the launchd service via `GreenchClaw gateway install`.
 - **Remote**: the app connects to a Gateway over SSH/Tailscale and never starts
   a local process.
   The app starts the local **node host service** so the remote Gateway can reach this Mac.
@@ -34,18 +34,18 @@ capabilities to the agent as a node.
 
 ## Launchd control
 
-The app manages a per-user LaunchAgent labeled `ai.NexisClaw.gateway`
-(or `ai.NexisClaw.<profile>` when using `--profile`/`NEXISCLAW_PROFILE`; legacy `com.NexisClaw.*` still unloads).
+The app manages a per-user LaunchAgent labeled `ai.GreenchClaw.gateway`
+(or `ai.GreenchClaw.<profile>` when using `--profile`/`GREENCHCLAW_PROFILE`; legacy `com.GreenchClaw.*` still unloads).
 
 ```bash
-launchctl kickstart -k gui/$UID/ai.NexisClaw.gateway
-launchctl bootout gui/$UID/ai.NexisClaw.gateway
+launchctl kickstart -k gui/$UID/ai.GreenchClaw.gateway
+launchctl bootout gui/$UID/ai.GreenchClaw.gateway
 ```
 
-Replace the label with `ai.NexisClaw.<profile>` when running a named profile.
+Replace the label with `ai.GreenchClaw.<profile>` when running a named profile.
 
 If the LaunchAgent isn't installed, enable it from the app or run
-`NexisClaw gateway install`.
+`GreenchClaw gateway install`.
 
 ## Node capabilities (mac)
 
@@ -78,7 +78,7 @@ Gateway -> Node Service (WS)
 Security + ask + allowlist are stored locally on the Mac in:
 
 ```
-~/.NexisClaw/exec-approvals.json
+~/.GreenchClaw/exec-approvals.json
 ```
 
 Example:
@@ -111,14 +111,14 @@ Notes:
 
 ## Deep links
 
-The app registers the `NexisClaw://` URL scheme for local actions.
+The app registers the `GreenchClaw://` URL scheme for local actions.
 
-### `NexisClaw://agent`
+### `GreenchClaw://agent`
 
 Triggers a Gateway `agent` request.
 
 ```bash
-open 'NexisClaw://agent?message=Hello%20from%20deep%20link'
+open 'GreenchClaw://agent?message=Hello%20from%20deep%20link'
 ```
 
 Query parameters:
@@ -138,24 +138,24 @@ Safety:
 
 ## Onboarding flow (typical)
 
-1. Install and launch **NexisClaw.app**.
+1. Install and launch **GreenchClaw.app**.
 2. Complete the permissions checklist (TCC prompts).
 3. Ensure **Local** mode is active and the Gateway is running.
 4. Install the CLI if you want terminal access.
 
 ## State dir placement (macOS)
 
-Avoid putting your NexisClaw state dir in iCloud or other cloud-synced folders.
+Avoid putting your GreenchClaw state dir in iCloud or other cloud-synced folders.
 Sync-backed paths can add latency and occasionally cause file-lock/sync races for
 sessions and credentials.
 
 Prefer a local non-synced state path such as:
 
 ```bash
-NEXISCLAW_STATE_DIR=~/.NexisClaw
+GREENCHCLAW_STATE_DIR=~/.GreenchClaw
 ```
 
-If `NexisClaw doctor` detects state under:
+If `GreenchClaw doctor` detects state under:
 
 - `~/Library/Mobile Documents/com~apple~CloudDocs/...`
 - `~/Library/CloudStorage/...`
@@ -165,7 +165,7 @@ it will warn and recommend moving back to a local path.
 ## Build and dev workflow (native)
 
 - `cd apps/macos && swift build`
-- `swift run NexisClaw` (or Xcode)
+- `swift run GreenchClaw` (or Xcode)
 - Package app: `scripts/package-mac-app.sh`
 
 ## Debug gateway connectivity (macOS CLI)
@@ -175,8 +175,8 @@ logic that the macOS app uses, without launching the app.
 
 ```bash
 cd apps/macos
-swift run NexisClaw-mac connect --json
-swift run NexisClaw-mac discover --timeout 3000 --json
+swift run GreenchClaw-mac connect --json
+swift run GreenchClaw-mac discover --timeout 3000 --json
 ```
 
 Connect options:
@@ -194,7 +194,7 @@ Discovery options:
 - `--json`: structured output for diffing
 
 <Tip>
-Compare against `NexisClaw gateway discover --json` to see whether the macOS app's discovery pipeline (`local.` plus the configured wide-area domain, with wide-area and Tailscale Serve fallbacks) differs from the Node CLI's `dns-sd` based discovery.
+Compare against `GreenchClaw gateway discover --json` to see whether the macOS app's discovery pipeline (`local.` plus the configured wide-area domain, with wide-area and Tailscale Serve fallbacks) differs from the Node CLI's `dns-sd` based discovery.
 </Tip>
 
 ## Remote connection plumbing (SSH tunnels)

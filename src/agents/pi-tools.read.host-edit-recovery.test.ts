@@ -104,7 +104,7 @@ describe("edit tool recovery hardening", () => {
   }
 
   it("adds current file contents to exact-match mismatch errors", async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-edit-recovery-"));
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-edit-recovery-"));
     const filePath = path.join(tmpDir, "demo.txt");
     await fs.writeFile(filePath, "actual current content", "utf-8");
 
@@ -127,7 +127,7 @@ describe("edit tool recovery hardening", () => {
   });
 
   it("recovers success after a post-write throw when CRLF output contains newText and oldText is only a substring", async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-edit-recovery-"));
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-edit-recovery-"));
     const filePath = path.join(tmpDir, "demo.txt");
     await fs.writeFile(filePath, 'const value = "foo";\r\n', "utf-8");
 
@@ -157,7 +157,7 @@ describe("edit tool recovery hardening", () => {
   });
 
   it("does not recover false success when the file never changed", async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-edit-recovery-"));
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-edit-recovery-"));
     const filePath = path.join(tmpDir, "demo.txt");
     await fs.writeFile(filePath, "replacement already present", "utf-8");
 
@@ -181,7 +181,7 @@ describe("edit tool recovery hardening", () => {
   });
 
   it("recovers deletion edits when the file changed and oldText is gone", async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-edit-recovery-"));
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-edit-recovery-"));
     const filePath = path.join(tmpDir, "demo.txt");
     await fs.writeFile(filePath, "before delete me after\n", "utf-8");
 
@@ -203,7 +203,7 @@ describe("edit tool recovery hardening", () => {
   });
 
   it("recovers multi-edit payloads after a post-write throw", async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-edit-recovery-"));
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-edit-recovery-"));
     const filePath = path.join(tmpDir, "demo.txt");
     await fs.writeFile(filePath, "alpha beta gamma delta\n", "utf-8");
 
@@ -230,19 +230,19 @@ describe("edit tool recovery hardening", () => {
     expectRecoveredText(result, `Successfully replaced 2 block(s) in ${filePath}.`);
   });
 
-  it("recovers tilde paths against the OS home even when NEXISCLAW_HOME differs", async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-edit-recovery-"));
+  it("recovers tilde paths against the OS home even when GREENCHCLAW_HOME differs", async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-edit-recovery-"));
     const osHome = path.join(tmpDir, "home");
-    const NexisClawHome = path.join(tmpDir, "NexisClaw-home");
+    const GreenchClawHome = path.join(tmpDir, "GreenchClaw-home");
     await fs.mkdir(osHome, { recursive: true });
-    await fs.mkdir(NexisClawHome, { recursive: true });
+    await fs.mkdir(GreenchClawHome, { recursive: true });
 
     const previousHome = process.env.HOME;
     const previousUserProfile = process.env.USERPROFILE;
-    const previousOpenclawHome = process.env.NEXISCLAW_HOME;
+    const previousOpenclawHome = process.env.GREENCHCLAW_HOME;
     process.env.HOME = osHome;
     process.env.USERPROFILE = osHome;
-    process.env.NEXISCLAW_HOME = NexisClawHome;
+    process.env.GREENCHCLAW_HOME = GreenchClawHome;
 
     try {
       const filePath = path.join(osHome, "demo.txt");
@@ -263,7 +263,7 @@ describe("edit tool recovery hardening", () => {
       );
 
       expectRecoveredText(result, "Successfully replaced text in ~/demo.txt.");
-      await expectPathMissing(path.join(NexisClawHome, "demo.txt"));
+      await expectPathMissing(path.join(GreenchClawHome, "demo.txt"));
     } finally {
       if (previousHome === undefined) {
         delete process.env.HOME;
@@ -276,15 +276,15 @@ describe("edit tool recovery hardening", () => {
         process.env.USERPROFILE = previousUserProfile;
       }
       if (previousOpenclawHome === undefined) {
-        delete process.env.NEXISCLAW_HOME;
+        delete process.env.GREENCHCLAW_HOME;
       } else {
-        process.env.NEXISCLAW_HOME = previousOpenclawHome;
+        process.env.GREENCHCLAW_HOME = previousOpenclawHome;
       }
     }
   });
 
   it("applies the same recovery path to sandboxed edit tools", async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-edit-recovery-"));
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-edit-recovery-"));
     const filePath = path.join(tmpDir, "demo.txt");
     const files = new Map<string, string>([[filePath, "before old text after\n"]]);
 

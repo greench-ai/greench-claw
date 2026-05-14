@@ -3,12 +3,12 @@ import {
   listCombinedAccountIds,
   normalizeAccountId,
   resolveMergedAccountConfig,
-} from "NexisClaw/plugin-sdk/account-resolution";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/account-resolution";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   hasLegacyFlatAllowPrivateNetworkAlias,
   isPrivateNetworkOptInEnabled,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
 
 type TlonAccountConfig = {
   name?: string;
@@ -53,12 +53,12 @@ export type TlonResolvedAccount = {
   ownerShip: string | null;
 };
 
-function resolveTlonChannelConfig(cfg: NexisClawConfig): TlonAccountConfig | undefined {
+function resolveTlonChannelConfig(cfg: GreenchClawConfig): TlonAccountConfig | undefined {
   return cfg.channels?.tlon as TlonAccountConfig | undefined;
 }
 
 function resolveMergedTlonAccountConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
 ): Record<string, unknown> & TlonAccountConfig {
   const channel = resolveTlonChannelConfig(cfg);
@@ -76,7 +76,7 @@ function resolveMergedTlonAccountConfig(
 }
 
 export function resolveTlonAccount(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId?: string | null,
 ): TlonResolvedAccount {
   const resolvedAccountId = normalizeAccountId(accountId);
@@ -148,7 +148,7 @@ export function resolveTlonAccount(
   };
 }
 
-export function listTlonAccountIds(cfg: NexisClawConfig): string[] {
+export function listTlonAccountIds(cfg: GreenchClawConfig): string[] {
   const base = resolveTlonChannelConfig(cfg);
   if (!base) {
     return [];

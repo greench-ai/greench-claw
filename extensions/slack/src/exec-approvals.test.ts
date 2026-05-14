@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import {
   getSlackExecApprovalApprovers,
@@ -13,9 +13,9 @@ import {
 } from "./exec-approvals.js";
 
 function buildConfig(
-  execApprovals?: NonNullable<NonNullable<NexisClawConfig["channels"]>["slack"]>["execApprovals"],
-  channelOverrides?: Partial<NonNullable<NonNullable<NexisClawConfig["channels"]>["slack"]>>,
-): NexisClawConfig {
+  execApprovals?: NonNullable<NonNullable<GreenchClawConfig["channels"]>["slack"]>["execApprovals"],
+  channelOverrides?: Partial<NonNullable<NonNullable<GreenchClawConfig["channels"]>["slack"]>>,
+): GreenchClawConfig {
   return {
     channels: {
       slack: {
@@ -25,7 +25,7 @@ function buildConfig(
         execApprovals,
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 describe("slack exec approvals", () => {
@@ -46,7 +46,7 @@ describe("slack exec approvals", () => {
         cfg: {
           ...buildConfig(),
           commands: { ownerAllowFrom: ["slack:U123OWNER"] },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
       }),
     ).toBe(false);
     expect(
@@ -90,7 +90,7 @@ describe("slack exec approvals", () => {
     const cfg = {
       ...buildConfig({ enabled: true }),
       commands: { ownerAllowFrom: ["slack:U123", "user:U456", "<@U789>"] },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(getSlackExecApprovalApprovers({ cfg })).toEqual(["U123", "U456", "U789"]);
     expect(isSlackExecApprovalApprover({ cfg, senderId: "U456" })).toBe(true);
@@ -120,7 +120,7 @@ describe("slack exec approvals", () => {
           ],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(isSlackExecApprovalTargetRecipient({ cfg, senderId: "U123TARGET" })).toBe(true);
     expect(isSlackExecApprovalTargetRecipient({ cfg, senderId: "U999OTHER" })).toBe(false);

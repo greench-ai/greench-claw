@@ -8,13 +8,17 @@ import { stripInlineStatus } from "./reply-inline.js";
 import { buildTestCtx } from "./test-ctx.js";
 import type { TypingController } from "./typing.js";
 
-const { buildStatusReplyMock, createNexisClawToolsMock, getChannelPluginMock, handleCommandsMock } =
-  vi.hoisted(() => ({
-    buildStatusReplyMock: vi.fn(),
-    createNexisClawToolsMock: vi.fn(),
-    getChannelPluginMock: vi.fn(),
-    handleCommandsMock: vi.fn(),
-  }));
+const {
+  buildStatusReplyMock,
+  createGreenchClawToolsMock,
+  getChannelPluginMock,
+  handleCommandsMock,
+} = vi.hoisted(() => ({
+  buildStatusReplyMock: vi.fn(),
+  createGreenchClawToolsMock: vi.fn(),
+  getChannelPluginMock: vi.fn(),
+  handleCommandsMock: vi.fn(),
+}));
 
 type HandleInlineActionsInput = Parameters<
   typeof import("./get-reply-inline-actions.js").handleInlineActions
@@ -25,8 +29,8 @@ vi.mock("./commands.runtime.js", () => ({
   buildStatusReply: (...args: unknown[]) => buildStatusReplyMock(...args),
 }));
 
-vi.mock("../../agents/NexisClaw-tools.runtime.js", () => ({
-  createNexisClawTools: (...args: unknown[]) => createNexisClawToolsMock(...args),
+vi.mock("../../agents/GreenchClaw-tools.runtime.js", () => ({
+  createGreenchClawTools: (...args: unknown[]) => createGreenchClawToolsMock(...args),
 }));
 
 vi.mock("../../channels/plugins/index.js", () => ({
@@ -171,10 +175,10 @@ describe("handleInlineActions", () => {
     handleCommandsMock.mockReset();
     handleCommandsMock.mockResolvedValue({ shouldContinue: true, reply: undefined });
     getChannelPluginMock.mockReset();
-    createNexisClawToolsMock.mockReset();
+    createGreenchClawToolsMock.mockReset();
     buildStatusReplyMock.mockReset();
     buildStatusReplyMock.mockResolvedValue({ text: "status" });
-    createNexisClawToolsMock.mockReturnValue([]);
+    createGreenchClawToolsMock.mockReturnValue([]);
     getChannelPluginMock.mockImplementation((channelId?: string) =>
       channelId === "whatsapp"
         ? { commands: { skipWhenConfigEmpty: true } }
@@ -579,7 +583,7 @@ describe("handleInlineActions", () => {
   it("passes requesterAgentIdOverride into inline tool runtimes", async () => {
     const typing = createTypingController();
     const toolExecute = vi.fn(async () => ({ text: "spawned" }));
-    createNexisClawToolsMock.mockReturnValue([
+    createGreenchClawToolsMock.mockReturnValue([
       {
         name: "sessions_spawn",
         execute: toolExecute,
@@ -628,7 +632,7 @@ describe("handleInlineActions", () => {
 
     expect(result).toEqual({ kind: "reply", reply: { text: "✅ Done." } });
     expect(
-      mockObjectArg(createNexisClawToolsMock, "createNexisClawTools").requesterAgentIdOverride,
+      mockObjectArg(createGreenchClawToolsMock, "createGreenchClawTools").requesterAgentIdOverride,
     ).toBe("named-worker");
     expect(toolExecute).toHaveBeenCalledTimes(1);
   });
@@ -636,7 +640,7 @@ describe("handleInlineActions", () => {
   it("passes senderIsOwner into inline tool runtimes before owner-only filtering", async () => {
     const typing = createTypingController();
     const toolExecute = vi.fn(async () => ({ text: "updated" }));
-    createNexisClawToolsMock.mockReturnValue([
+    createGreenchClawToolsMock.mockReturnValue([
       {
         name: "message",
         execute: toolExecute,
@@ -683,7 +687,9 @@ describe("handleInlineActions", () => {
     );
 
     expect(result).toEqual({ kind: "reply", reply: { text: "✅ Done." } });
-    expect(mockObjectArg(createNexisClawToolsMock, "createNexisClawTools").senderIsOwner).toBe(true);
+    expect(mockObjectArg(createGreenchClawToolsMock, "createGreenchClawTools").senderIsOwner).toBe(
+      true,
+    );
     const toolCall = mockCallArgs(toolExecute, "toolExecute");
     expect(toolCall?.[0]).toMatch(/^cmd_/);
     expect(toolCall?.[1]).toEqual({
@@ -705,7 +711,7 @@ describe("handleInlineActions", () => {
         reason: "denied by policy",
       },
     }));
-    createNexisClawToolsMock.mockReturnValue([
+    createGreenchClawToolsMock.mockReturnValue([
       {
         name: "message",
         execute: toolExecute,
@@ -774,7 +780,7 @@ describe("handleInlineActions", () => {
       kind: "reply",
       reply: { text: "❌ Tool call blocked: denied by policy" },
     });
-    const toolsArgs = mockObjectArg(createNexisClawToolsMock, "createNexisClawTools");
+    const toolsArgs = mockObjectArg(createGreenchClawToolsMock, "createGreenchClawTools");
     expect(toolsArgs.sessionId).toBe("target-session");
     expect(toolsArgs.currentChannelId).toBe("whatsapp");
     const blockedToolCall = mockCallArgs(toolExecute, "toolExecute");

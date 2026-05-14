@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isRecord } from "../utils.js";
 import { enablePluginInConfig } from "./enable.js";
 import type { PluginPackageInstall } from "./manifest.js";
@@ -46,7 +46,7 @@ function pathSegments(path: string): string[] {
     .filter((segment) => segment.length > 0);
 }
 
-function getConfigPath(config: NexisClawConfig | undefined, path: string): unknown {
+function getConfigPath(config: GreenchClawConfig | undefined, path: string): unknown {
   let current: unknown = config;
   for (const segment of pathSegments(path)) {
     if (!isRecord(current)) {
@@ -57,7 +57,7 @@ function getConfigPath(config: NexisClawConfig | undefined, path: string): unkno
   return current;
 }
 
-function setConfigPath(target: NexisClawConfig, path: string, value: unknown): void {
+function setConfigPath(target: GreenchClawConfig, path: string, value: unknown): void {
   const segments = pathSegments(path);
   let current: Record<string, unknown> = target as Record<string, unknown>;
   for (const segment of segments.slice(0, -1)) {
@@ -115,12 +115,12 @@ function buildProviderEntry(params: {
     setCredentialValue: (searchConfigTarget: Record<string, unknown>, value: unknown) => {
       searchConfigTarget.apiKey = value;
     },
-    getConfiguredCredentialValue: (config?: NexisClawConfig) =>
+    getConfiguredCredentialValue: (config?: GreenchClawConfig) =>
       getConfigPath(config, credentialPath),
-    setConfiguredCredentialValue: (configTarget: NexisClawConfig, value: unknown) => {
+    setConfiguredCredentialValue: (configTarget: GreenchClawConfig, value: unknown) => {
       setConfigPath(configTarget, credentialPath, value);
     },
-    applySelectionConfig: (config: NexisClawConfig) =>
+    applySelectionConfig: (config: GreenchClawConfig) =>
       enablePluginInConfig(config, params.pluginId).config,
     createTool: () => null,
   };

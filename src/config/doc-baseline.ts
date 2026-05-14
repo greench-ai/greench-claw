@@ -3,7 +3,7 @@ import fsSync from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { resolveNexisClawPackageRootSync } from "../infra/NexisClaw-root.js";
+import { resolveGreenchClawPackageRootSync } from "../infra/GreenchClaw-root.js";
 import { replaceFileAtomicSync } from "../infra/replace-file.js";
 import type { ConfigSchemaResponse } from "./schema.js";
 import { schemaHasChildren } from "./schema.shared.js";
@@ -101,13 +101,13 @@ const uiHintIndexCache = new WeakMap<
 const schemaHasChildrenCache = new WeakMap<JsonSchemaObject, boolean>();
 
 function logConfigDocBaselineDebug(message: string): void {
-  if (process.env.NEXISCLAW_CONFIG_DOC_BASELINE_DEBUG === "1") {
+  if (process.env.GREENCHCLAW_CONFIG_DOC_BASELINE_DEBUG === "1") {
     console.error(`[config-doc-baseline] ${message}`);
   }
 }
 
 function resolveRepoRoot(): string {
-  const fromPackage = resolveNexisClawPackageRootSync({
+  const fromPackage = resolveGreenchClawPackageRootSync({
     cwd: path.dirname(fileURLToPath(import.meta.url)),
     moduleUrl: import.meta.url,
   });
@@ -360,8 +360,8 @@ async function loadBundledConfigSchemaResponse(): Promise<ConfigSchemaResponse> 
   const env = {
     ...process.env,
     HOME: os.tmpdir(),
-    NEXISCLAW_STATE_DIR: path.join(os.tmpdir(), "NexisClaw-config-doc-baseline-state"),
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "extensions"),
+    GREENCHCLAW_STATE_DIR: path.join(os.tmpdir(), "GreenchClaw-config-doc-baseline-state"),
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: path.join(repoRoot, "extensions"),
   };
 
   const manifestRegistry = runtime.loadPluginManifestRegistry({

@@ -18,7 +18,7 @@ describe("cleanupLegacyPluginDependencyState", () => {
   let tempDir: string;
 
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-plugin-deps-cleanup-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-plugin-deps-cleanup-"));
   });
 
   afterEach(async () => {
@@ -44,13 +44,13 @@ describe("cleanupLegacyPluginDependencyState", () => {
       "dist",
       "extensions",
       "demo",
-      ".NexisClaw-runtime-deps-stamp.json",
+      ".GreenchClaw-runtime-deps-stamp.json",
     );
     const legacyManifest = path.join(
       packageRoot,
       "extensions",
       "demo",
-      ".NexisClaw-runtime-deps.json",
+      ".GreenchClaw-runtime-deps.json",
     );
     const thirdPartyNodeModules = path.join(
       stateDir,
@@ -70,8 +70,8 @@ describe("cleanupLegacyPluginDependencyState", () => {
     await fs.mkdir(path.join(stateDirectory, "plugin-runtime-deps"), { recursive: true });
 
     const env = {
-      NEXISCLAW_STATE_DIR: stateDir,
-      NEXISCLAW_PLUGIN_STAGE_DIR: explicitStageDir,
+      GREENCHCLAW_STATE_DIR: stateDir,
+      GREENCHCLAW_PLUGIN_STAGE_DIR: explicitStageDir,
       STATE_DIRECTORY: stateDirectory,
     };
     const targets = await __testing.collectLegacyPluginDependencyTargets(env, { packageRoot });
@@ -100,12 +100,12 @@ describe("cleanupLegacyPluginDependencyState", () => {
 
   it("removes dangling global plugin-runtime symlinks that point at legacy runtime deps", async () => {
     const stateDir = path.join(tempDir, "state");
-    const packageRoot = path.join(tempDir, "prefix", "lib", "node_modules", "NexisClaw");
+    const packageRoot = path.join(tempDir, "prefix", "lib", "node_modules", "GreenchClaw");
     const nodeModulesRoot = path.dirname(packageRoot);
     const legacyRuntimeRoot = path.join(stateDir, "plugin-runtime-deps");
     const legacyTarget = path.join(
       legacyRuntimeRoot,
-      "NexisClaw-2026.4.29-slack",
+      "GreenchClaw-2026.4.29-slack",
       "node_modules",
       "@slack",
       "web-api",
@@ -125,7 +125,7 @@ describe("cleanupLegacyPluginDependencyState", () => {
     await fs.symlink(liveTarget, liveLink, "dir");
 
     const result = await cleanupLegacyPluginDependencyState({
-      env: { NEXISCLAW_STATE_DIR: stateDir },
+      env: { GREENCHCLAW_STATE_DIR: stateDir },
       packageRoot,
     });
 

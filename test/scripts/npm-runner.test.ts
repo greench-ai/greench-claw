@@ -136,6 +136,6 @@ describe("resolveNpmRunner", () => {
         existsSync: () => false,
         platform: "win32",
       }),
-    ).toThrow("NexisClaw refuses to shell out to bare npm on Windows");
+    ).toThrow("GreenchClaw refuses to shell out to bare npm on Windows");
   });
 });

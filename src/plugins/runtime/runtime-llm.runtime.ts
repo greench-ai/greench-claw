@@ -2,7 +2,7 @@ import type { Api, Message } from "@earendil-works/pi-ai";
 import { normalizeModelRef } from "../../agents/model-selection.js";
 import type { NormalizedUsage, UsageLike } from "../../agents/usage.js";
 import { normalizeUsage } from "../../agents/usage.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { getChildLogger } from "../../logging.js";
 import { normalizeAgentId } from "../../routing/session-key.js";
 import { normalizeOptionalString } from "../../shared/string-coerce.js";
@@ -33,7 +33,7 @@ export type RuntimeLlmAuthority = {
 };
 
 export type CreateRuntimeLlmOptions = {
-  getConfig?: () => NexisClawConfig | undefined;
+  getConfig?: () => GreenchClawConfig | undefined;
   authority?: RuntimeLlmAuthority;
   logger?: RuntimeLogger;
 };
@@ -84,7 +84,7 @@ function resolveTrustedCaller(authority?: RuntimeLlmAuthority): LlmCompleteCalle
   return normalizeCaller(authority?.caller);
 }
 
-function resolveRuntimeConfig(options: CreateRuntimeLlmOptions): NexisClawConfig {
+function resolveRuntimeConfig(options: CreateRuntimeLlmOptions): GreenchClawConfig {
   const cfg = options.getConfig?.();
   if (!cfg) {
     throw new Error("Plugin LLM completion requires an injected runtime config scope.");
@@ -94,7 +94,7 @@ function resolveRuntimeConfig(options: CreateRuntimeLlmOptions): NexisClawConfig
 
 async function resolveAgentId(params: {
   request: LlmCompleteParams;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   authority?: RuntimeLlmAuthority;
   allowAgentIdOverride: boolean;
 }): Promise<string> {
@@ -187,7 +187,7 @@ function readExplicitCostUsd(raw: unknown): number | undefined {
 function buildUsage(params: {
   rawUsage: unknown;
   normalized: NormalizedUsage | undefined;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   provider: string;
   model: string;
 }): LlmCompleteUsage {
@@ -282,7 +282,7 @@ function resolvePluginPolicyId(
 }
 
 function resolvePluginLlmOverridePolicy(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   pluginId: string | undefined,
 ): RuntimeLlmOverridePolicy | undefined {
   if (!pluginId) {

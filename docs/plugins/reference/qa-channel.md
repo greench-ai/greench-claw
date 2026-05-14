@@ -1,5 +1,5 @@
 ---
-summary: "Adds the QA Channel surface for sending and receiving NexisClaw messages."
+summary: "Adds the QA Channel surface for sending and receiving GreenchClaw messages."
 read_when:
   - You are installing, configuring, or auditing the qa-channel plugin
 title: "QA Channel plugin"
@@ -7,11 +7,11 @@ title: "QA Channel plugin"
 
 # QA Channel plugin
 
-Adds the QA Channel surface for sending and receiving NexisClaw messages.
+Adds the QA Channel surface for sending and receiving GreenchClaw messages.
 
 ## Distribution
 
-- Package: `@NexisClaw/qa-channel`
+- Package: `@GreenchClaw/qa-channel`
 - Install route: source checkout only
 
 ## Surface

@@ -1,8 +1,8 @@
-import { createChatChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import { createPairingPrefixStripper } from "NexisClaw/plugin-sdk/channel-pairing";
-import { createRestrictSendersChannelSecurity } from "NexisClaw/plugin-sdk/channel-policy";
-import { createEmptyChannelDirectoryAdapter } from "NexisClaw/plugin-sdk/directory-runtime";
-import { createLazyRuntimeModule } from "NexisClaw/plugin-sdk/lazy-runtime";
+import { createChatChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import { createPairingPrefixStripper } from "GreenchClaw/plugin-sdk/channel-pairing";
+import { createRestrictSendersChannelSecurity } from "GreenchClaw/plugin-sdk/channel-policy";
+import { createEmptyChannelDirectoryAdapter } from "GreenchClaw/plugin-sdk/directory-runtime";
+import { createLazyRuntimeModule } from "GreenchClaw/plugin-sdk/lazy-runtime";
 import { resolveLineAccount } from "./accounts.js";
 import { lineBindingsAdapter } from "./bindings.js";
 import { type ChannelPlugin, type ResolvedLineAccount } from "./channel-api.js";
@@ -29,7 +29,7 @@ const lineSecurityAdapter = createRestrictSendersChannelSecurity<ResolvedLineAcc
   groupAllowFromPath: "channels.line.groupAllowFrom",
   mentionGated: false,
   policyPathSuffix: "dmPolicy",
-  approveHint: "NexisClaw pairing approve line <code>",
+  approveHint: "GreenchClaw pairing approve line <code>",
   normalizeDmEntry: (raw) => raw.replace(/^line:(?:user:)?/i, ""),
 });
 
@@ -130,7 +130,7 @@ export const linePlugin: ChannelPlugin<ResolvedLineAccount> = createChatChannelP
   pairing: {
     text: {
       idLabel: "lineUserId",
-      message: "NexisClaw: your access has been approved.",
+      message: "GreenchClaw: your access has been approved.",
       normalizeAllowEntry: createPairingPrefixStripper(/^line:(?:user:)?/i),
       notify: async ({ cfg, id, message }) => {
         const account = (getLineRuntime().channel.line?.resolveLineAccount ?? resolveLineAccount)({

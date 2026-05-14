@@ -1,4 +1,4 @@
-import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalLowercaseString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { SlackMessageEvent } from "../types.js";
 
 type SlackChatType = "direct" | "group" | "channel";

@@ -35,7 +35,7 @@ function expectProfileFields(profile: unknown, expected: Record<string, unknown>
 describe("saveAuthProfileStore", () => {
   it("strips plaintext when keyRef/tokenRef are present", async () => {
     const structuredCloneSpy = vi.spyOn(globalThis, "structuredClone");
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-auth-save-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-auth-save-"));
     try {
       const store: AuthProfileStore = {
         version: 1,
@@ -92,7 +92,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("refreshes the runtime snapshot when a saved store rotates oauth tokens", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-auth-save-runtime-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-auth-save-runtime-"));
     try {
       replaceRuntimeAuthProfileStoreSnapshots([
         {
@@ -151,7 +151,7 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("writes runtime scheduling state to auth-state.json only", async () => {
-    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-auth-save-state-"));
+    const agentDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-auth-save-state-"));
     try {
       const store: AuthProfileStore = {
         version: 1,
@@ -208,12 +208,12 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("does not persist unchanged inherited main OAuth when saving secondary local updates", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-auth-save-inherited-"));
-    const stateDir = path.join(root, ".NexisClaw");
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-auth-save-inherited-"));
+    const stateDir = path.join(root, ".GreenchClaw");
     const childAgentDir = path.join(stateDir, "agents", "worker", "agent");
     const childAuthPath = resolveAuthStorePath(childAgentDir);
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
-    vi.stubEnv("NEXISCLAW_AGENT_DIR", "");
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("GREENCHCLAW_AGENT_DIR", "");
     try {
       saveAuthProfileStore({
         version: 1,
@@ -278,12 +278,12 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("does not persist stale inherited main OAuth after main refreshes", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-auth-save-stale-inherited-"));
-    const stateDir = path.join(root, ".NexisClaw");
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-auth-save-stale-inherited-"));
+    const stateDir = path.join(root, ".GreenchClaw");
     const childAgentDir = path.join(stateDir, "agents", "worker", "agent");
     const childAuthPath = resolveAuthStorePath(childAgentDir);
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
-    vi.stubEnv("NEXISCLAW_AGENT_DIR", "");
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("GREENCHCLAW_AGENT_DIR", "");
     try {
       saveAuthProfileStore({
         version: 1,
@@ -351,12 +351,12 @@ describe("saveAuthProfileStore", () => {
   });
 
   it("preserves inherited main OAuth in active secondary runtime snapshots", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-auth-save-snapshot-"));
-    const stateDir = path.join(root, ".NexisClaw");
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-auth-save-snapshot-"));
+    const stateDir = path.join(root, ".GreenchClaw");
     const childAgentDir = path.join(stateDir, "agents", "worker", "agent");
     const childAuthPath = resolveAuthStorePath(childAgentDir);
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
-    vi.stubEnv("NEXISCLAW_AGENT_DIR", "");
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("GREENCHCLAW_AGENT_DIR", "");
     try {
       saveAuthProfileStore({
         version: 1,

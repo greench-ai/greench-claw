@@ -114,21 +114,26 @@ describe("command-registry", () => {
 
   it("registers doctor placeholder for doctor primary command", () => {
     const program = createProgram();
-    registerCoreCliCommands(program, testProgramContext, ["node", "NexisClaw", "doctor"]);
+    registerCoreCliCommands(program, testProgramContext, ["node", "GreenchClaw", "doctor"]);
 
     expect(namesOf(program)).toEqual(["doctor"]);
   });
 
   it("narrows to the primary command when command help is requested", () => {
     const program = createProgram();
-    registerCoreCliCommands(program, testProgramContext, ["node", "NexisClaw", "doctor", "--help"]);
+    registerCoreCliCommands(program, testProgramContext, [
+      "node",
+      "GreenchClaw",
+      "doctor",
+      "--help",
+    ]);
 
     expect(namesOf(program)).toEqual(["doctor"]);
   });
 
   it("keeps all placeholders for root help", () => {
     const program = createProgram();
-    registerCoreCliCommands(program, testProgramContext, ["node", "NexisClaw", "--help"]);
+    registerCoreCliCommands(program, testProgramContext, ["node", "GreenchClaw", "--help"]);
 
     const names = namesOf(program);
     expect(names).toContain("doctor");
@@ -151,10 +156,10 @@ describe("command-registry", () => {
 
   it("registers grouped core entry placeholders without duplicate command errors", async () => {
     const program = createProgram();
-    registerCoreCliCommands(program, testProgramContext, ["node", "NexisClaw", "vitest"]);
+    registerCoreCliCommands(program, testProgramContext, ["node", "GreenchClaw", "vitest"]);
     program.exitOverride();
-    await withProcessArgv(["node", "NexisClaw", "status"], async () => {
-      await program.parseAsync(["node", "NexisClaw", "status"]);
+    await withProcessArgv(["node", "GreenchClaw", "status"], async () => {
+      await program.parseAsync(["node", "GreenchClaw", "status"]);
     });
 
     const names = namesOf(program);
@@ -181,7 +186,7 @@ describe("command-registry", () => {
 
   it("replaces placeholders when loading a grouped entry by secondary command name", async () => {
     const program = createProgram();
-    registerCoreCliCommands(program, testProgramContext, ["node", "NexisClaw", "doctor"]);
+    registerCoreCliCommands(program, testProgramContext, ["node", "GreenchClaw", "doctor"]);
     expect(namesOf(program)).toEqual(["doctor"]);
 
     const found = await registerCoreCliByName(program, testProgramContext, "dashboard");

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it } from "vitest";
 import { buildTelegramThreadingToolContext } from "./threading-tool-context.js";
 
@@ -7,7 +7,7 @@ describe("buildTelegramThreadingToolContext", () => {
     const hasRepliedRef = { value: false };
     expect(
       buildTelegramThreadingToolContext({
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         accountId: "default",
         context: {
           To: "telegram:-1001:topic:77",
@@ -26,7 +26,7 @@ describe("buildTelegramThreadingToolContext", () => {
   it("parses topic thread state from target grammar when MessageThreadId is absent", () => {
     expect(
       buildTelegramThreadingToolContext({
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         accountId: "default",
         context: {
           To: "telegram:-1001:topic:77",

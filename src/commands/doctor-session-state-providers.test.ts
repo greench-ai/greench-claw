@@ -82,7 +82,7 @@ describe("doctor session state provider routes", () => {
         },
       },
       sessionKey: "agent:main:telegram:direct:1",
-      env: { NEXISCLAW_AGENT_RUNTIME: "codex-cli" },
+      env: { GREENCHCLAW_AGENT_RUNTIME: "codex-cli" },
     });
     expect(route.runtime).toBe("codex");
   });

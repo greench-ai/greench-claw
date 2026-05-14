@@ -1,16 +1,16 @@
 import path from "node:path";
-import { verifyChannelMessageAdapterCapabilityProofs } from "NexisClaw/plugin-sdk/channel-message";
+import { verifyChannelMessageAdapterCapabilityProofs } from "GreenchClaw/plugin-sdk/channel-message";
 import {
   createPluginRuntimeMock,
   createStartAccountContext,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { PluginRuntime } from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { PluginRuntime } from "GreenchClaw/plugin-sdk/core";
 import {
   createTestRegistry,
   resetPluginRuntimeStateForTest,
   setActivePluginRegistry,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { extractToolPayload } from "NexisClaw/plugin-sdk/tool-payload";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { extractToolPayload } from "GreenchClaw/plugin-sdk/tool-payload";
 import { afterEach, describe, expect, it } from "vitest";
 import { createQaBusState, startQaBusServer } from "../../qa-lab/bus-api.js";
 import { qaChannelPlugin, setQaChannelRuntime } from "../api.js";
@@ -42,7 +42,7 @@ function createMockQaRuntime(params?: {
     channel: {
       mentions: {
         buildMentionRegexes() {
-          return [/^@NexisClaw\b/i];
+          return [/^@GreenchClaw\b/i];
         },
         matchesMentionPatterns(text: string, patterns: RegExp[]) {
           return patterns.some((pattern) => pattern.test(text));
@@ -130,8 +130,8 @@ function createQaChannelConfig(params: { baseUrl: string; allowFrom?: string[] }
     channels: {
       "qa-channel": {
         baseUrl: params.baseUrl,
-        botUserId: "NexisClaw",
-        botDisplayName: "NexisClaw QA",
+        botUserId: "GreenchClaw",
+        botDisplayName: "GreenchClaw QA",
         allowFrom: params.allowFrom,
       },
     },
@@ -338,12 +338,12 @@ describe("qa-channel plugin", () => {
           conversation: { id: "qa-room", kind: "group", title: "QA Room" },
           senderId: "alice",
           senderName: "Alice",
-          text: "@NexisClaw hello",
+          text: "@GreenchClaw hello",
         });
 
         const outbound = await harness.state.waitFor({
           kind: "message-text",
-          textIncludes: "qa-echo: @NexisClaw hello",
+          textIncludes: "qa-echo: @GreenchClaw hello",
           direction: "outbound",
           timeoutMs: 15_000,
         });

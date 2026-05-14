@@ -1,4 +1,4 @@
-import type { ChannelAccountSnapshot } from "NexisClaw/plugin-sdk/channel-contract";
+import type { ChannelAccountSnapshot } from "GreenchClaw/plugin-sdk/channel-contract";
 import { describe, expect, it } from "vitest";
 import { collectDiscordStatusIssues } from "./status-issues.js";
 

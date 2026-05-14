@@ -1,7 +1,7 @@
-import type { PluginRuntime } from "NexisClaw/plugin-sdk/core";
-import { createPluginRuntimeStore } from "NexisClaw/plugin-sdk/runtime-store";
+import type { PluginRuntime } from "GreenchClaw/plugin-sdk/core";
+import { createPluginRuntimeStore } from "GreenchClaw/plugin-sdk/runtime-store";
 import type { GatewayPluginRuntime } from "../engine/gateway/types.js";
-import { setNexisClawVersion } from "../engine/messaging/sender.js";
+import { setGreenchClawVersion } from "../engine/messaging/sender.js";
 
 // Single plugin runtime per process — concurrent multi-tenant qqbot runtimes are not supported.
 const { setRuntime: _setRuntime, getRuntime: getQQBotRuntime } =
@@ -14,7 +14,7 @@ const { setRuntime: _setRuntime, getRuntime: getQQBotRuntime } =
 function setQQBotRuntime(runtime: PluginRuntime): void {
   _setRuntime(runtime);
   // Inject the framework version into the User-Agent string (same as standalone).
-  setNexisClawVersion(runtime.version);
+  setGreenchClawVersion(runtime.version);
 }
 
 export { getQQBotRuntime, setQQBotRuntime };

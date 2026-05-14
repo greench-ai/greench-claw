@@ -11,7 +11,7 @@ Adds web search provider support.
 
 ## Distribution
 
-- Package: `@NexisClaw/brave-plugin`
+- Package: `@GreenchClaw/brave-plugin`
 - Install route: npm; ClawHub
 
 ## Surface

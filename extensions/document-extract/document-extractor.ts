@@ -5,7 +5,7 @@ import type {
   DocumentExtractionRequest,
   DocumentExtractionResult,
   DocumentExtractorPlugin,
-} from "NexisClaw/plugin-sdk/document-extractor";
+} from "GreenchClaw/plugin-sdk/document-extractor";
 import type * as PdfJsLegacy from "pdfjs-dist/legacy/build/pdf.mjs";
 
 type CanvasLike = {

@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/provider-auth";
-import { CUSTOM_LOCAL_AUTH_MARKER } from "NexisClaw/plugin-sdk/provider-auth";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/provider-auth";
+import { CUSTOM_LOCAL_AUTH_MARKER } from "GreenchClaw/plugin-sdk/provider-auth";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { LMSTUDIO_LOCAL_API_KEY_PLACEHOLDER } from "./defaults.js";
 import {
@@ -11,8 +11,9 @@ import {
 
 const resolveApiKeyForProviderMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/provider-auth-runtime", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/provider-auth-runtime")>();
+vi.mock("GreenchClaw/plugin-sdk/provider-auth-runtime", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("GreenchClaw/plugin-sdk/provider-auth-runtime")>();
   return {
     ...actual,
     resolveApiKeyForProvider: (...args: unknown[]) => resolveApiKeyForProviderMock(...args),
@@ -20,7 +21,7 @@ vi.mock("NexisClaw/plugin-sdk/provider-auth-runtime", async (importOriginal) => 
 });
 
 afterAll(() => {
-  vi.doUnmock("NexisClaw/plugin-sdk/provider-auth-runtime");
+  vi.doUnmock("GreenchClaw/plugin-sdk/provider-auth-runtime");
   vi.resetModules();
 });
 
@@ -28,7 +29,7 @@ function buildLmstudioConfig(overrides?: {
   apiKey?: unknown;
   headers?: unknown;
   auth?: "api-key";
-}): NexisClawConfig {
+}): GreenchClawConfig {
   return {
     models: {
       providers: {
@@ -42,7 +43,7 @@ function buildLmstudioConfig(overrides?: {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 describe("lmstudio-runtime", () => {

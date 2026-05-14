@@ -201,13 +201,13 @@ describe("extractApplyPatchTargetPaths", () => {
   });
 
   it("can resolve paths with the same cwd semantics as apply_patch execution", () => {
-    const cwd = path.join(os.tmpdir(), "NexisClaw-derived-paths");
+    const cwd = path.join(os.tmpdir(), "GreenchClaw-derived-paths");
     const patch = [
       "*** Begin Patch",
       "*** Add File: @src/../resolved.ts",
       "+x",
       "*** Update File: ~/renamed-source.ts",
-      "*** Move to: /tmp/NexisClaw-target.ts",
+      "*** Move to: /tmp/GreenchClaw-target.ts",
       "@@",
       "+y",
       "*** End Patch",
@@ -215,7 +215,7 @@ describe("extractApplyPatchTargetPaths", () => {
     expect(extractApplyPatchTargetPaths(patch, { cwd })).toEqual([
       path.join(cwd, "resolved.ts"),
       path.join(os.homedir(), "renamed-source.ts"),
-      path.join("/tmp", "NexisClaw-target.ts"),
+      path.join("/tmp", "GreenchClaw-target.ts"),
     ]);
   });
 

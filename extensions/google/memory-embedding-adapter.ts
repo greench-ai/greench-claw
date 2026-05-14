@@ -4,7 +4,7 @@ import {
   mapBatchEmbeddingsByIndex,
   sanitizeEmbeddingCacheHeaders,
   type MemoryEmbeddingProviderAdapter,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
 import { runGeminiEmbeddingBatches } from "./embedding-batch.js";
 import {
   buildGeminiEmbeddingRequest,

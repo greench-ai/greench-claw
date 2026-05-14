@@ -1,7 +1,7 @@
 import { resolveAgentWorkspaceDir } from "../../agents/agent-scope.js";
 import type { ReplyPayload } from "../../auto-reply/reply-payload.js";
 import { createReplyMediaPathNormalizer } from "../../auto-reply/reply/reply-media-paths.runtime.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { isAudioFileName } from "../../media/mime.js";
 import { resolveSendableOutboundReplyParts } from "../../plugin-sdk/reply-payload.js";
 
@@ -14,7 +14,7 @@ function shouldPreserveDisplayMediaUrl(mediaUrl: string): boolean {
 }
 
 export async function normalizeWebchatReplyMediaPathsForDisplay(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   agentId: string;
   workspaceDir?: string;

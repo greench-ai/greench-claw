@@ -1,5 +1,5 @@
 ---
-summary: "Adds ComfyUI model provider support to NexisClaw."
+summary: "Adds ComfyUI model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the comfy plugin
 title: "ComfyUI plugin"
@@ -7,12 +7,12 @@ title: "ComfyUI plugin"
 
 # ComfyUI plugin
 
-Adds ComfyUI model provider support to NexisClaw.
+Adds ComfyUI model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/comfy-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/comfy-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

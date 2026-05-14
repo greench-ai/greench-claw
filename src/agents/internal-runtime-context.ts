@@ -1,18 +1,19 @@
-export const INTERNAL_RUNTIME_CONTEXT_BEGIN = "<<<BEGIN_NEXISCLAW_INTERNAL_CONTEXT>>>";
-export const INTERNAL_RUNTIME_CONTEXT_END = "<<<END_NEXISCLAW_INTERNAL_CONTEXT>>>";
+export const INTERNAL_RUNTIME_CONTEXT_BEGIN = "<<<BEGIN_GREENCHCLAW_INTERNAL_CONTEXT>>>";
+export const INTERNAL_RUNTIME_CONTEXT_END = "<<<END_GREENCHCLAW_INTERNAL_CONTEXT>>>";
 
-const ESCAPED_INTERNAL_RUNTIME_CONTEXT_BEGIN = "[[NEXISCLAW_INTERNAL_CONTEXT_BEGIN]]";
-const ESCAPED_INTERNAL_RUNTIME_CONTEXT_END = "[[NEXISCLAW_INTERNAL_CONTEXT_END]]";
+const ESCAPED_INTERNAL_RUNTIME_CONTEXT_BEGIN = "[[GREENCHCLAW_INTERNAL_CONTEXT_BEGIN]]";
+const ESCAPED_INTERNAL_RUNTIME_CONTEXT_END = "[[GREENCHCLAW_INTERNAL_CONTEXT_END]]";
 
-export const NEXISCLAW_RUNTIME_CONTEXT_NOTICE =
+export const GREENCHCLAW_RUNTIME_CONTEXT_NOTICE =
   "This context is runtime-generated, not user-authored. Keep internal details private.";
-export const NEXISCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER =
-  "NexisClaw runtime context for the immediately preceding user message.";
-export const NEXISCLAW_RUNTIME_EVENT_HEADER = "NexisClaw runtime event.";
-export const NEXISCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE = "NexisClaw.runtime-context";
+export const GREENCHCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER =
+  "GreenchClaw runtime context for the immediately preceding user message.";
+export const GREENCHCLAW_RUNTIME_EVENT_HEADER = "GreenchClaw runtime event.";
+export const GREENCHCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE = "GreenchClaw.runtime-context";
 
 const LEGACY_INTERNAL_CONTEXT_HEADER =
-  ["NexisClaw runtime context (internal):", NEXISCLAW_RUNTIME_CONTEXT_NOTICE, ""].join("\n") + "\n";
+  ["GreenchClaw runtime context (internal):", GREENCHCLAW_RUNTIME_CONTEXT_NOTICE, ""].join("\n") +
+  "\n";
 
 const LEGACY_INTERNAL_EVENT_MARKER = "[Internal task completion event]";
 const LEGACY_INTERNAL_EVENT_SEPARATOR = "\n\n---\n\n";
@@ -159,7 +160,8 @@ function stripLegacyInternalRuntimeContext(text: string): string {
 
 function isRuntimeContextPromptHeader(line: string): boolean {
   return (
-    line === NEXISCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER || line === NEXISCLAW_RUNTIME_EVENT_HEADER
+    line === GREENCHCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER ||
+    line === GREENCHCLAW_RUNTIME_EVENT_HEADER
   );
 }
 
@@ -173,7 +175,7 @@ function stripRuntimeContextPromptPreface(text: string): string {
     const nextLine = lines[index + 1] ?? "";
     if (
       isRuntimeContextPromptHeader(line.trim()) &&
-      nextLine.trim() === NEXISCLAW_RUNTIME_CONTEXT_NOTICE
+      nextLine.trim() === GREENCHCLAW_RUNTIME_CONTEXT_NOTICE
     ) {
       changed = true;
       index += 1;
@@ -215,27 +217,27 @@ export function hasInternalRuntimeContext(text: string): boolean {
     findDelimitedTokenIndex(text, INTERNAL_RUNTIME_CONTEXT_BEGIN, 0) !== -1 ||
     text.includes(LEGACY_INTERNAL_CONTEXT_HEADER) ||
     text.includes(
-      `${NEXISCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER}\n${NEXISCLAW_RUNTIME_CONTEXT_NOTICE}`,
+      `${GREENCHCLAW_NEXT_TURN_RUNTIME_CONTEXT_HEADER}\n${GREENCHCLAW_RUNTIME_CONTEXT_NOTICE}`,
     ) ||
-    text.includes(`${NEXISCLAW_RUNTIME_EVENT_HEADER}\n${NEXISCLAW_RUNTIME_CONTEXT_NOTICE}`)
+    text.includes(`${GREENCHCLAW_RUNTIME_EVENT_HEADER}\n${GREENCHCLAW_RUNTIME_CONTEXT_NOTICE}`)
   );
 }
 
-function isNexisClawRuntimeContextCustomMessage(message: unknown): boolean {
+function isGreenchClawRuntimeContextCustomMessage(message: unknown): boolean {
   if (!message || typeof message !== "object") {
     return false;
   }
   const candidate = message as { role?: unknown; customType?: unknown };
   return (
-    candidate.role === "custom" && candidate.customType === NEXISCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE
+    candidate.role === "custom" && candidate.customType === GREENCHCLAW_RUNTIME_CONTEXT_CUSTOM_TYPE
   );
 }
 
 export function stripRuntimeContextCustomMessages<T>(messages: T[]): T[] {
-  if (!messages.some(isNexisClawRuntimeContextCustomMessage)) {
+  if (!messages.some(isGreenchClawRuntimeContextCustomMessage)) {
     return messages;
   }
-  return messages.filter((message) => !isNexisClawRuntimeContextCustomMessage(message));
+  return messages.filter((message) => !isGreenchClawRuntimeContextCustomMessage(message));
 }
 
 function isUserMessage(message: unknown): boolean {
@@ -246,14 +248,14 @@ function isUserMessage(message: unknown): boolean {
 
 /** Removes stale runtime-context custom messages while preserving current-turn context. */
 export function stripHistoricalRuntimeContextCustomMessages<T>(messages: T[]): T[] {
-  if (!messages.some(isNexisClawRuntimeContextCustomMessage)) {
+  if (!messages.some(isGreenchClawRuntimeContextCustomMessage)) {
     return messages;
   }
   const lastUserIndex = messages.findLastIndex(isUserMessage);
   if (lastUserIndex === -1) {
-    return messages.filter((message) => !isNexisClawRuntimeContextCustomMessage(message));
+    return messages.filter((message) => !isGreenchClawRuntimeContextCustomMessage(message));
   }
   return messages.filter(
-    (message, index) => !isNexisClawRuntimeContextCustomMessage(message) || index > lastUserIndex,
+    (message, index) => !isGreenchClawRuntimeContextCustomMessage(message) || index > lastUserIndex,
   );
 }

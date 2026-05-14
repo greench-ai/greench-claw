@@ -1,9 +1,9 @@
-import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-model-types";
+import type { ModelDefinitionConfig } from "GreenchClaw/plugin-sdk/provider-model-types";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { isHuggingfaceModelDiscoveryTestEnvironment } from "./model-discovery-env.js";
 
 export const HUGGINGFACE_BASE_URL = "https://router.huggingface.co/v1";

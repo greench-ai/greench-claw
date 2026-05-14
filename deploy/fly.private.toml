@@ -1,4 +1,4 @@
-# NexisClaw Fly.io PRIVATE deployment configuration
+# GreenchClaw Fly.io PRIVATE deployment configuration
 # Use this template for hardened deployments with no public IP exposure.
 #
 # This config is suitable when:
@@ -9,7 +9,7 @@
 #
 # See https://fly.io/docs/reference/configuration/
 
-app = "my-NexisClaw" # change to your app name
+app = "my-GreenchClaw" # change to your app name
 primary_region = "iad" # change to your closest region
 
 [build]
@@ -35,5 +35,5 @@ size = "shared-cpu-2x"
 memory = "2048mb"
 
 [mounts]
-source = "NexisClaw_data"
+source = "GreenchClaw_data"
 destination = "/data"

@@ -1,4 +1,4 @@
-import { expectExplicitVideoGenerationCapabilities } from "NexisClaw/plugin-sdk/provider-test-contracts";
+import { expectExplicitVideoGenerationCapabilities } from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   buildComfyConfig,

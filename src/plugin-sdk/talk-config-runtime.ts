@@ -1,2 +1,2 @@
 export { resolveActiveTalkProviderConfig } from "../config/talk.js";
-export type { NexisClawConfig } from "../config/types.js";
+export type { GreenchClawConfig } from "../config/types.js";

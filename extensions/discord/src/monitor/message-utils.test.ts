@@ -10,9 +10,9 @@ import { ChannelType, type Client, type Message } from "../internal/discord.js";
 const fetchRemoteMedia = vi.fn();
 const saveMediaBuffer = vi.fn();
 
-vi.mock("NexisClaw/plugin-sdk/media-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/media-runtime")>(
-    "NexisClaw/plugin-sdk/media-runtime",
+vi.mock("GreenchClaw/plugin-sdk/media-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/media-runtime")>(
+    "GreenchClaw/plugin-sdk/media-runtime",
   );
   return {
     ...actual,
@@ -21,9 +21,9 @@ vi.mock("NexisClaw/plugin-sdk/media-runtime", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/runtime-env")>(
-    "NexisClaw/plugin-sdk/runtime-env",
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/runtime-env")>(
+    "GreenchClaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,

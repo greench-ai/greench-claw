@@ -1,4 +1,4 @@
-import { sanitizeForPlainText } from "NexisClaw/plugin-sdk/outbound-runtime";
+import { sanitizeForPlainText } from "GreenchClaw/plugin-sdk/outbound-runtime";
 import { chunkTextForOutbound } from "./channel-api.js";
 
 export const ircOutboundBaseAdapter = {

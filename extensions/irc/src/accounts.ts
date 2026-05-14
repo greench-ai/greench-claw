@@ -1,15 +1,15 @@
-import { createAccountListHelpers } from "NexisClaw/plugin-sdk/account-helpers";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import { resolveMergedAccountConfig } from "NexisClaw/plugin-sdk/account-resolution";
+import { createAccountListHelpers } from "GreenchClaw/plugin-sdk/account-helpers";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import { resolveMergedAccountConfig } from "GreenchClaw/plugin-sdk/account-resolution";
 import {
   parseOptionalDelimitedEntries,
   tryReadSecretFileSync,
-} from "NexisClaw/plugin-sdk/channel-core";
-import { normalizeResolvedSecretInputString } from "NexisClaw/plugin-sdk/secret-input";
+} from "GreenchClaw/plugin-sdk/channel-core";
+import { normalizeResolvedSecretInputString } from "GreenchClaw/plugin-sdk/secret-input";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { CoreConfig, IrcAccountConfig, IrcNickServConfig } from "./types.js";
 
 const TRUTHY_ENV = new Set(["true", "1", "yes", "on"]);
@@ -164,12 +164,12 @@ export function resolveIrcAccount(params: {
       merged.username?.trim() ||
       (accountId === DEFAULT_ACCOUNT_ID ? process.env.IRC_USERNAME?.trim() : "") ||
       nick ||
-      "NexisClaw"
+      "GreenchClaw"
     ).trim();
     const realname = (
       merged.realname?.trim() ||
       (accountId === DEFAULT_ACCOUNT_ID ? process.env.IRC_REALNAME?.trim() : "") ||
-      "NexisClaw"
+      "GreenchClaw"
     ).trim();
 
     const passwordResolution = resolvePassword(accountId, merged);

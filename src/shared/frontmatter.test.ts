@@ -1,19 +1,19 @@
 import { describe, expect, it, test } from "vitest";
 import {
-  applyNexisClawManifestInstallCommonFields,
+  applyGreenchClawManifestInstallCommonFields,
   getFrontmatterString,
   normalizeStringList,
   parseFrontmatterBool,
-  parseNexisClawManifestInstallBase,
-  resolveNexisClawManifestBlock,
-  resolveNexisClawManifestInstall,
-  resolveNexisClawManifestOs,
-  resolveNexisClawManifestRequires,
+  parseGreenchClawManifestInstallBase,
+  resolveGreenchClawManifestBlock,
+  resolveGreenchClawManifestInstall,
+  resolveGreenchClawManifestOs,
+  resolveGreenchClawManifestRequires,
 } from "./frontmatter.js";
 
 function expectInstallBase(
-  parsed: ReturnType<typeof parseNexisClawManifestInstallBase>,
-): NonNullable<ReturnType<typeof parseNexisClawManifestInstallBase>> {
+  parsed: ReturnType<typeof parseGreenchClawManifestInstallBase>,
+): NonNullable<ReturnType<typeof parseGreenchClawManifestInstallBase>> {
   if (parsed === undefined) {
     throw new Error("Expected manifest install base");
   }
@@ -39,28 +39,28 @@ describe("shared/frontmatter", () => {
     expect(parseFrontmatterBool("maybe", false)).toBe(false);
   });
 
-  test("resolveNexisClawManifestBlock reads current manifest keys and custom metadata fields", () => {
+  test("resolveGreenchClawManifestBlock reads current manifest keys and custom metadata fields", () => {
     expect(
-      resolveNexisClawManifestBlock({
+      resolveGreenchClawManifestBlock({
         frontmatter: {
-          metadata: "{ NexisClaw: { foo: 1, bar: 'baz' } }",
+          metadata: "{ GreenchClaw: { foo: 1, bar: 'baz' } }",
         },
       }),
     ).toEqual({ foo: 1, bar: "baz" });
 
     expect(
-      resolveNexisClawManifestBlock({
+      resolveGreenchClawManifestBlock({
         frontmatter: {
-          pluginMeta: "{ NexisClaw: { foo: 2 } }",
+          pluginMeta: "{ GreenchClaw: { foo: 2 } }",
         },
         key: "pluginMeta",
       }),
     ).toEqual({ foo: 2 });
   });
 
-  test("resolveNexisClawManifestBlock reads legacy manifest keys", () => {
+  test("resolveGreenchClawManifestBlock reads legacy manifest keys", () => {
     expect(
-      resolveNexisClawManifestBlock({
+      resolveGreenchClawManifestBlock({
         frontmatter: {
           metadata: "{ clawdbot: { requires: { bins: ['op'] }, install: [] } }",
         },
@@ -68,54 +68,54 @@ describe("shared/frontmatter", () => {
     ).toEqual({ requires: { bins: ["op"] }, install: [] });
   });
 
-  test("resolveNexisClawManifestBlock prefers current manifest keys over legacy keys", () => {
+  test("resolveGreenchClawManifestBlock prefers current manifest keys over legacy keys", () => {
     expect(
-      resolveNexisClawManifestBlock({
+      resolveGreenchClawManifestBlock({
         frontmatter: {
           metadata:
-            "{ NexisClaw: { requires: { bins: ['current'] } }, clawdbot: { requires: { bins: ['legacy'] } } }",
+            "{ GreenchClaw: { requires: { bins: ['current'] } }, clawdbot: { requires: { bins: ['legacy'] } } }",
         },
       }),
     ).toEqual({ requires: { bins: ["current"] } });
   });
 
-  test("resolveNexisClawManifestBlock returns undefined for invalid input", () => {
-    expect(resolveNexisClawManifestBlock({ frontmatter: {} })).toBeUndefined();
+  test("resolveGreenchClawManifestBlock returns undefined for invalid input", () => {
+    expect(resolveGreenchClawManifestBlock({ frontmatter: {} })).toBeUndefined();
     expect(
-      resolveNexisClawManifestBlock({ frontmatter: { metadata: "not-json5" } }),
+      resolveGreenchClawManifestBlock({ frontmatter: { metadata: "not-json5" } }),
     ).toBeUndefined();
-    expect(resolveNexisClawManifestBlock({ frontmatter: { metadata: "123" } })).toBeUndefined();
-    expect(resolveNexisClawManifestBlock({ frontmatter: { metadata: "[]" } })).toBeUndefined();
+    expect(resolveGreenchClawManifestBlock({ frontmatter: { metadata: "123" } })).toBeUndefined();
+    expect(resolveGreenchClawManifestBlock({ frontmatter: { metadata: "[]" } })).toBeUndefined();
     expect(
-      resolveNexisClawManifestBlock({ frontmatter: { metadata: "{ nope: { a: 1 } }" } }),
+      resolveGreenchClawManifestBlock({ frontmatter: { metadata: "{ nope: { a: 1 } }" } }),
     ).toBeUndefined();
   });
 
   it("normalizes manifest requirement and os lists", () => {
     expect(
-      resolveNexisClawManifestRequires({
+      resolveGreenchClawManifestRequires({
         requires: {
           bins: "bun, node",
           anyBins: [" ffmpeg ", ""],
-          env: ["NEXISCLAW_TOKEN", " NEXISCLAW_URL "],
+          env: ["GREENCHCLAW_TOKEN", " GREENCHCLAW_URL "],
           config: null,
         },
       }),
     ).toEqual({
       bins: ["bun", "node"],
       anyBins: ["ffmpeg"],
-      env: ["NEXISCLAW_TOKEN", "NEXISCLAW_URL"],
+      env: ["GREENCHCLAW_TOKEN", "GREENCHCLAW_URL"],
       config: [],
     });
-    expect(resolveNexisClawManifestRequires({})).toBeUndefined();
-    expect(resolveNexisClawManifestOs({ os: [" darwin ", "linux", ""] })).toEqual([
+    expect(resolveGreenchClawManifestRequires({})).toBeUndefined();
+    expect(resolveGreenchClawManifestOs({ os: [" darwin ", "linux", ""] })).toEqual([
       "darwin",
       "linux",
     ]);
   });
 
   it("parses and applies install common fields", () => {
-    const parsed = parseNexisClawManifestInstallBase(
+    const parsed = parseGreenchClawManifestInstallBase(
       {
         type: " Brew ",
         id: "brew.git",
@@ -137,9 +137,9 @@ describe("shared/frontmatter", () => {
       label: "Git",
       bins: ["git", "git"],
     });
-    expect(parseNexisClawManifestInstallBase({ kind: "bad" }, ["brew"])).toBeUndefined();
+    expect(parseGreenchClawManifestInstallBase({ kind: "bad" }, ["brew"])).toBeUndefined();
     expect(
-      applyNexisClawManifestInstallCommonFields<{
+      applyGreenchClawManifestInstallCommonFields<{
         extra: boolean;
         id?: string;
         label?: string;
@@ -154,7 +154,7 @@ describe("shared/frontmatter", () => {
   });
 
   it("prefers explicit kind, ignores invalid common fields, and leaves missing ones untouched", () => {
-    const parsed = parseNexisClawManifestInstallBase(
+    const parsed = parseGreenchClawManifestInstallBase(
       {
         kind: " npm ",
         type: "brew",
@@ -176,7 +176,7 @@ describe("shared/frontmatter", () => {
       kind: "npm",
     });
     expect(
-      applyNexisClawManifestInstallCommonFields(
+      applyGreenchClawManifestInstallCommonFields(
         { id: "keep", label: "Keep", bins: ["bun"] },
         parsed!,
       ),
@@ -189,7 +189,7 @@ describe("shared/frontmatter", () => {
 
   it("maps install entries through the parser and filters rejected specs", () => {
     expect(
-      resolveNexisClawManifestInstall(
+      resolveGreenchClawManifestInstall(
         {
           install: [{ id: "keep" }, { id: "drop" }, "bad"],
         },

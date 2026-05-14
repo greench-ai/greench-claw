@@ -1,17 +1,17 @@
 {
-  "name": "@NexisClaw/openshell-sandbox",
+  "name": "@GreenchClaw/openshell-sandbox",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw OpenShell sandbox backend",
+  "description": "GreenchClaw OpenShell sandbox backend",
   "type": "module",
   "dependencies": {
     "openshell": "0.1.0",
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   __resetDiscordDirectoryCacheForTest,
@@ -99,7 +99,7 @@ describe("resolveDiscordChannelId", () => {
 });
 
 describe("resolveDiscordTarget", () => {
-  const cfg = { channels: { discord: {} } } as NexisClawConfig;
+  const cfg = { channels: { discord: {} } } as GreenchClawConfig;
 
   beforeEach(() => {
     vi.restoreAllMocks();
@@ -147,7 +147,7 @@ describe("resolveDiscordTarget", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expectTargetFields(
       await resolveDiscordTarget("123", { cfg, accountId: "default" }, { defaultKind: "channel" }),
@@ -167,7 +167,7 @@ describe("resolveDiscordTarget", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expectTargetFields(
       await resolveDiscordTarget("456", { cfg, accountId: "default" }, { defaultKind: "channel" }),
@@ -187,7 +187,7 @@ describe("resolveDiscordTarget", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expectTargetFields(
       await resolveDiscordTarget("456", { cfg, accountId: "default" }, { defaultKind: "channel" }),
@@ -207,7 +207,7 @@ describe("resolveDiscordTarget", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expectTargetFields(
       await resolveDiscordTarget("456", { cfg, accountId: "work" }, { defaultKind: "channel" }),
@@ -231,7 +231,7 @@ describe("resolveDiscordTarget", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     vi.spyOn(directoryLive, "listDiscordDirectoryPeersLive").mockResolvedValueOnce([
       { kind: "user", id: "user:999", name: "Jane" } as const,

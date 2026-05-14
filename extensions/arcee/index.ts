@@ -1,10 +1,10 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
-import { createProviderApiKeyAuthMethod } from "NexisClaw/plugin-sdk/provider-auth-api-key";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "GreenchClaw/plugin-sdk/provider-auth-api-key";
 import {
   readConfiguredProviderCatalogEntries,
   type ProviderCatalogContext,
-} from "NexisClaw/plugin-sdk/provider-catalog-shared";
-import { OPENAI_COMPATIBLE_REPLAY_HOOKS } from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/provider-catalog-shared";
+import { OPENAI_COMPATIBLE_REPLAY_HOOKS } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import {
   applyArceeConfig,
   applyArceeOpenRouterConfig,

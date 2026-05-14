@@ -52,7 +52,7 @@ export function registerSystemCli(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/system", "docs.NexisClaw.ai/cli/system")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/system", "docs.GreenchClaw.ai/cli/system")}\n`,
     );
 
   addGatewayClientOptions(
@@ -73,7 +73,7 @@ export function registerSystemCli(program: Command) {
         const text = normalizeOptionalString(opts.text) ?? "";
         if (!text) {
           throw new Error(
-            `--text is required. Example: ${formatCliCommand('NexisClaw system event --text "deploy finished"')}.`,
+            `--text is required. Example: ${formatCliCommand('GreenchClaw system event --text "deploy finished"')}.`,
           );
         }
         const mode = normalizeWakeMode(opts.mode);

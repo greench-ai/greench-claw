@@ -1,12 +1,12 @@
-import { spawn as startNexisClawCliProcess } from "node:child_process";
+import { spawn as startGreenchClawCliProcess } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { existsSync } from "node:fs";
 import { chmod, mkdir, mkdtemp, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { redactSensitiveText } from "NexisClaw/plugin-sdk/logging-core";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { redactSensitiveText } from "GreenchClaw/plugin-sdk/logging-core";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 
 export type MatrixQaCliRunResult = {
   args: string[];
@@ -57,10 +57,10 @@ export function redactMatrixQaCliOutput(text: string): string {
 }
 
 export function formatMatrixQaCliCommand(args: string[]) {
-  return `NexisClaw ${redactMatrixQaCliArgs(args).join(" ")}`;
+  return `GreenchClaw ${redactMatrixQaCliArgs(args).join(" ")}`;
 }
 
-export function resolveMatrixQaNexisClawCliEntryPath(cwd: string): string {
+export function resolveMatrixQaGreenchClawCliEntryPath(cwd: string): string {
   const mjsEntryPath = path.join(cwd, "dist", "index.mjs");
   if (existsSync(mjsEntryPath)) {
     return mjsEntryPath;
@@ -91,7 +91,7 @@ function formatMatrixQaCliExitError(result: MatrixQaCliRunResult) {
     .join("\n");
 }
 
-export function startMatrixQaNexisClawCli(params: {
+export function startMatrixQaGreenchClawCli(params: {
   allowNonZero?: boolean;
   args: string[];
   cwd?: string;
@@ -100,7 +100,7 @@ export function startMatrixQaNexisClawCli(params: {
   timeoutMs: number;
 }): MatrixQaCliSession {
   const cwd = params.cwd ?? process.cwd();
-  const distEntryPath = resolveMatrixQaNexisClawCliEntryPath(cwd);
+  const distEntryPath = resolveMatrixQaGreenchClawCliEntryPath(cwd);
   const stdout: Buffer[] = [];
   const stderr: Buffer[] = [];
   let closed = false;
@@ -113,7 +113,7 @@ export function startMatrixQaNexisClawCli(params: {
       }
     | undefined;
 
-  const child = startNexisClawCliProcess(process.execPath, [distEntryPath, ...params.args], {
+  const child = startGreenchClawCliProcess(process.execPath, [distEntryPath, ...params.args], {
     cwd,
     env: params.env,
     stdio: ["pipe", "pipe", "pipe"],
@@ -254,7 +254,7 @@ export function startMatrixQaNexisClawCli(params: {
   };
 }
 
-export async function runMatrixQaNexisClawCli(params: {
+export async function runMatrixQaGreenchClawCli(params: {
   allowNonZero?: boolean;
   args: string[];
   cwd?: string;
@@ -262,7 +262,7 @@ export async function runMatrixQaNexisClawCli(params: {
   stdin?: string;
   timeoutMs: number;
 }): Promise<MatrixQaCliRunResult> {
-  return await startMatrixQaNexisClawCli(params).wait();
+  return await startMatrixQaGreenchClawCli(params).wait();
 }
 
 async function assertMatrixQaPrivatePathMode(pathToCheck: string, label: string) {
@@ -275,7 +275,7 @@ async function assertMatrixQaPrivatePathMode(pathToCheck: string, label: string)
   }
 }
 
-export async function createMatrixQaNexisClawCliRuntime(params: {
+export async function createMatrixQaGreenchClawCliRuntime(params: {
   accountId: string;
   accessToken: string;
   artifactLabel: string;
@@ -287,7 +287,7 @@ export async function createMatrixQaNexisClawCliRuntime(params: {
   userId: string;
 }) {
   const rootDir = await mkdtemp(
-    path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-matrix-cli-qa-"),
+    path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-matrix-cli-qa-"),
   );
   const artifactDir = path.join(
     params.outputDir,
@@ -345,9 +345,9 @@ export async function createMatrixQaNexisClawCliRuntime(params: {
     ...params.runtimeEnv,
     FORCE_COLOR: "0",
     NO_COLOR: "1",
-    NEXISCLAW_CONFIG_PATH: configPath,
-    NEXISCLAW_DISABLE_AUTO_UPDATE: "1",
-    NEXISCLAW_STATE_DIR: stateDir,
+    GREENCHCLAW_CONFIG_PATH: configPath,
+    GREENCHCLAW_DISABLE_AUTO_UPDATE: "1",
+    GREENCHCLAW_STATE_DIR: stateDir,
   };
   return {
     artifactDir,
@@ -359,7 +359,7 @@ export async function createMatrixQaNexisClawCliRuntime(params: {
       args: string[],
       opts: { allowNonZero?: boolean; stdin?: string; timeoutMs: number },
     ): Promise<MatrixQaCliRunResult> =>
-      await runMatrixQaNexisClawCli({
+      await runMatrixQaGreenchClawCli({
         allowNonZero: opts.allowNonZero,
         args,
         env,
@@ -367,7 +367,7 @@ export async function createMatrixQaNexisClawCliRuntime(params: {
         timeoutMs: opts.timeoutMs,
       }),
     start: (args: string[], opts: { allowNonZero?: boolean; timeoutMs: number }) =>
-      startMatrixQaNexisClawCli({
+      startMatrixQaGreenchClawCli({
         allowNonZero: opts.allowNonZero,
         args,
         env,

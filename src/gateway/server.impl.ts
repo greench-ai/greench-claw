@@ -21,7 +21,7 @@ import { isNixMode } from "../config/paths.js";
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
 import { applyConfigOverrides } from "../config/runtime-overrides.js";
 import { resolveMainSessionKey } from "../config/sessions.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   isDiagnosticsEnabled,
   setDiagnosticsEnabledForProcess,
@@ -31,7 +31,7 @@ import {
   isDiagnosticsTimelineEnabled,
 } from "../infra/diagnostics-timeline.js";
 import { isTruthyEnvValue, isVitestRuntimeEnv, logAcceptedEnvOption } from "../infra/env.js";
-import { ensureNexisClawCliOnPath } from "../infra/path-env.js";
+import { ensureGreenchClawCliOnPath } from "../infra/path-env.js";
 import { setGatewaySigusr1RestartPolicy, setPreRestartDeferralCheck } from "../infra/restart.js";
 import { enqueueSystemEvent } from "../infra/system-events.js";
 import type { VoiceWakeRoutingConfig } from "../infra/voicewake-routing.js";
@@ -96,7 +96,7 @@ export async function __resetModelCatalogCacheForTest(): Promise<void> {
   await resetModelCatalogCacheForTest();
 }
 
-ensureNexisClawCliOnPath();
+ensureGreenchClawCliOnPath();
 
 const MAX_MEDIA_TTL_HOURS = 24 * 7;
 const POST_READY_MAINTENANCE_DELAY_MS = 250;
@@ -198,8 +198,8 @@ const logSecrets = log.child("secrets");
 const gatewayRuntime = runtimeForLogger(log);
 
 function createGatewayStartupTrace() {
-  const logEnabled = isTruthyEnvValue(process.env.NEXISCLAW_GATEWAY_STARTUP_TRACE);
-  let timelineConfig: NexisClawConfig | undefined;
+  const logEnabled = isTruthyEnvValue(process.env.GREENCHCLAW_GATEWAY_STARTUP_TRACE);
+  let timelineConfig: GreenchClawConfig | undefined;
   let eventLoopDelay: ReturnType<typeof monitorEventLoopDelay> | undefined;
   const timelineOptions = () => ({
     ...(timelineConfig ? { config: timelineConfig } : {}),
@@ -207,7 +207,7 @@ function createGatewayStartupTrace() {
   });
   const eventLoopTimelineEnabled = () =>
     isDiagnosticsTimelineEnabled(timelineOptions()) &&
-    isTruthyEnvValue(process.env.NEXISCLAW_DIAGNOSTICS_EVENT_LOOP);
+    isTruthyEnvValue(process.env.GREENCHCLAW_DIAGNOSTICS_EVENT_LOOP);
   const ensureEventLoopDelay = () => {
     if (eventLoopDelay || (!logEnabled && !eventLoopTimelineEnabled())) {
       return;
@@ -294,7 +294,7 @@ function createGatewayStartupTrace() {
     }
   };
   return {
-    setConfig(config: NexisClawConfig) {
+    setConfig(config: GreenchClawConfig) {
       timelineConfig = config;
       ensureEventLoopDelay();
     },
@@ -397,12 +397,12 @@ function formatRuntimeGatewayAuthTokenWarning(): string {
   const base =
     "Gateway auth token was missing. Generated a runtime token for this startup without changing config; restart will generate a different token.";
   if (!isNixMode) {
-    return `${base} Persist one with \`NexisClaw config set gateway.auth.mode token\` and \`NexisClaw config set gateway.auth.token <token>\`.`;
+    return `${base} Persist one with \`GreenchClaw config set gateway.auth.mode token\` and \`GreenchClaw config set gateway.auth.token <token>\`.`;
   }
   return [
     base,
-    "In Nix mode, set gateway.auth.token in your Nix-managed NexisClaw config and rebuild.",
-    "For the first-party Nix flow, see https://github.com/NexisClaw/nix-NexisClaw#quick-start and https://docs.NexisClaw.ai/install/nix.",
+    "In Nix mode, set gateway.auth.token in your Nix-managed GreenchClaw config and rebuild.",
+    "For the first-party Nix flow, see https://github.com/GreenchClaw/nix-GreenchClaw#quick-start and https://docs.GreenchClaw.ai/install/nix.",
   ].join(" ");
 }
 
@@ -498,7 +498,7 @@ export type GatewayServerOptions = {
   startupStartedAt?: number;
   /**
    * Config snapshot already read by the CLI gateway preflight. Passing it avoids
-   * reparsing NexisClaw.json during server startup.
+   * reparsing GreenchClaw.json during server startup.
    */
   startupConfigSnapshotRead?: ReadConfigFileSnapshotWithPluginMetadataResult;
 };
@@ -518,16 +518,16 @@ export async function startGatewayServer(
   bootstrapGatewayNetworkRuntime();
 
   const minimalTestGateway =
-    isVitestRuntimeEnv() && process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY === "1";
+    isVitestRuntimeEnv() && process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY === "1";
 
   // Ensure all default port derivations (browser/canvas) see the actual runtime port.
-  process.env.NEXISCLAW_GATEWAY_PORT = String(port);
+  process.env.GREENCHCLAW_GATEWAY_PORT = String(port);
   logAcceptedEnvOption({
-    key: "NEXISCLAW_RAW_STREAM",
+    key: "GREENCHCLAW_RAW_STREAM",
     description: "raw stream logging enabled",
   });
   logAcceptedEnvOption({
-    key: "NEXISCLAW_RAW_STREAM_PATH",
+    key: "GREENCHCLAW_RAW_STREAM_PATH",
     description: "raw stream log path override",
   });
   const startupTrace = createGatewayStartupTrace();
@@ -556,7 +556,7 @@ export async function startGatewayServer(
   const emitSecretsStateEvent = (
     code: "SECRETS_RELOADER_DEGRADED" | "SECRETS_RELOADER_RECOVERED",
     message: string,
-    cfg: NexisClawConfig,
+    cfg: GreenchClawConfig,
   ) => {
     enqueueSystemEvent(`[${code}] ${message}`, {
       sessionKey: resolveMainSessionKey(cfg),
@@ -570,7 +570,7 @@ export async function startGatewayServer(
     emitStateEvent: emitSecretsStateEvent,
   });
 
-  let cfgAtStart: NexisClawConfig;
+  let cfgAtStart: GreenchClawConfig;
   let startupInternalWriteHash: string | null = null;
   let startupLastGoodSnapshot = configSnapshot;
   const startupActivationSourceConfig = configSnapshot.sourceConfig;
@@ -718,7 +718,7 @@ export async function startGatewayServer(
       env: process.env,
       tailscaleMode,
     });
-  const resolveSharedGatewaySessionGenerationForConfig = (config: NexisClawConfig) =>
+  const resolveSharedGatewaySessionGenerationForConfig = (config: GreenchClawConfig) =>
     resolveSharedGatewaySessionGeneration(
       resolveGatewayAuth({
         authConfig: config.gateway?.auth,
@@ -802,8 +802,8 @@ export async function startGatewayServer(
     getStartupPendingReason: () => startupPendingReason,
     getEventLoopHealth: readinessEventLoopHealth.snapshot,
     shouldSkipChannelReadiness: () =>
-      isTruthyEnvValue(process.env.NEXISCLAW_SKIP_CHANNELS) ||
-      isTruthyEnvValue(process.env.NEXISCLAW_SKIP_PROVIDERS),
+      isTruthyEnvValue(process.env.GREENCHCLAW_SKIP_CHANNELS) ||
+      isTruthyEnvValue(process.env.GREENCHCLAW_SKIP_PROVIDERS),
   });
   log.info("starting HTTP server...");
   const {
@@ -1131,7 +1131,7 @@ export async function startGatewayServer(
         ]),
       );
     const reloadAttachedGatewayPlugins = async (params: {
-      nextConfig: NexisClawConfig;
+      nextConfig: GreenchClawConfig;
       changedPaths: readonly string[];
       beforeReplace: (channels: ReadonlySet<ChannelId>) => Promise<void>;
     }): Promise<GatewayPluginReloadResult> => {
@@ -1254,7 +1254,7 @@ export async function startGatewayServer(
       nodeUnsubscribeAll,
       hasConnectedTalkNode: hasTalkNodeConnected,
       clients,
-      enforceSharedGatewayAuthGenerationForConfigWrite: (nextConfig: NexisClawConfig) => {
+      enforceSharedGatewayAuthGenerationForConfigWrite: (nextConfig: GreenchClawConfig) => {
         enforceSharedGatewaySessionGenerationForConfigWrite({
           state: sharedGatewaySessionGenerationState,
           nextConfig,

@@ -377,7 +377,7 @@ describe("validateTalkClientToolCallParams", () => {
         sessionKey: "agent:main:main",
         relaySessionId: "relay-1",
         callId: "call-1",
-        name: "NexisClaw_agent_consult",
+        name: "GreenchClaw_agent_consult",
         args: { question: "what now" },
       }),
     ).toBe(true);

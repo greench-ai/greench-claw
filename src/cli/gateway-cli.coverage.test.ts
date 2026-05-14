@@ -180,12 +180,12 @@ describe("gateway-cli coverage", () => {
 
   it("prints the latest stability bundle without calling Gateway", async () => {
     callGateway.mockClear();
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-gateway-cli-bundle-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-gateway-cli-bundle-"));
     try {
       const bundleDir = path.join(tempDir, "logs", "stability");
       const bundlePath = path.join(
         bundleDir,
-        "NexisClaw-stability-2026-04-22T12-00-00-000Z-123-test.json",
+        "GreenchClaw-stability-2026-04-22T12-00-00-000Z-123-test.json",
       );
       const bundle = {
         version: 1,
@@ -232,7 +232,7 @@ describe("gateway-cli coverage", () => {
       fs.mkdirSync(bundleDir, { recursive: true });
       fs.writeFileSync(bundlePath, `${JSON.stringify(bundle, null, 2)}\n`, "utf8");
 
-      await withEnvOverride({ NEXISCLAW_STATE_DIR: tempDir }, async () => {
+      await withEnvOverride({ GREENCHCLAW_STATE_DIR: tempDir }, async () => {
         await runGatewayCommand(["gateway", "stability", "--bundle", "latest"]);
       });
 
@@ -249,11 +249,11 @@ describe("gateway-cli coverage", () => {
 
   it("writes gateway diagnostics export with a best-effort health snapshot", async () => {
     callGateway.mockClear();
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-gateway-cli-support-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-gateway-cli-support-"));
     try {
       const outputPath = path.join(tempDir, "diagnostics.zip");
       await withEnvOverride(
-        { NEXISCLAW_STATE_DIR: tempDir, NEXISCLAW_TEST_FILE_LOG: undefined },
+        { GREENCHCLAW_STATE_DIR: tempDir, GREENCHCLAW_TEST_FILE_LOG: undefined },
         async () => {
           await runGatewayCommand([
             "gateway",
@@ -286,10 +286,10 @@ describe("gateway-cli coverage", () => {
     discoverGatewayBeacons.mockClear();
     discoverGatewayBeacons.mockResolvedValueOnce([
       {
-        instanceName: "Studio (NexisClaw)",
+        instanceName: "Studio (GreenchClaw)",
         displayName: "Studio",
-        domain: "NexisClaw.internal.",
-        host: "studio.NexisClaw.internal",
+        domain: "GreenchClaw.internal.",
+        host: "studio.GreenchClaw.internal",
         port: 18789,
         lanHost: "studio.local",
         tailnetDns: "studio.tailnet.ts.net",
@@ -370,14 +370,14 @@ describe("gateway-cli coverage", () => {
         LAUNCH_JOB_LABEL: undefined,
         LAUNCH_JOB_NAME: undefined,
         XPC_SERVICE_NAME: undefined,
-        NEXISCLAW_LAUNCHD_LABEL: undefined,
-        NEXISCLAW_SYSTEMD_UNIT: undefined,
+        GREENCHCLAW_LAUNCHD_LABEL: undefined,
+        GREENCHCLAW_SYSTEMD_UNIT: undefined,
         INVOCATION_ID: undefined,
         SYSTEMD_EXEC_PID: undefined,
         JOURNAL_STREAM: undefined,
-        NEXISCLAW_WINDOWS_TASK_NAME: undefined,
-        NEXISCLAW_SERVICE_MARKER: undefined,
-        NEXISCLAW_SERVICE_KIND: undefined,
+        GREENCHCLAW_WINDOWS_TASK_NAME: undefined,
+        GREENCHCLAW_SERVICE_MARKER: undefined,
+        GREENCHCLAW_SERVICE_KIND: undefined,
       },
       async () => {
         serviceIsLoaded.mockResolvedValue(true);
@@ -413,7 +413,7 @@ describe("gateway-cli coverage", () => {
     runtimeErrors.length = 0;
     serviceIsLoaded.mockResolvedValue(true);
     startGatewayServer.mockRejectedValueOnce(
-      new GatewayLockError("failed to acquire gateway lock at /tmp/NexisClaw/gateway.lock"),
+      new GatewayLockError("failed to acquire gateway lock at /tmp/GreenchClaw/gateway.lock"),
     );
 
     await expectGatewayExit(["gateway", "--token", "test-token", "--allow-unconfigured"]);
@@ -422,7 +422,7 @@ describe("gateway-cli coverage", () => {
   });
 
   it("uses env/config port when --port is omitted", async () => {
-    await withEnvOverride({ NEXISCLAW_GATEWAY_PORT: "19001" }, async () => {
+    await withEnvOverride({ GREENCHCLAW_GATEWAY_PORT: "19001" }, async () => {
       runtimeLogs.length = 0;
       runtimeErrors.length = 0;
       startGatewayServer.mockClear();

@@ -4,7 +4,7 @@ import {
   type ActionGate,
   readStringParam,
   type DiscordActionConfig,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   withNormalizedTimestamp,
 } from "../runtime-api.js";
 import type { DiscordReactOpts } from "../send.types.js";
@@ -25,12 +25,12 @@ export type DiscordMessagingActionContext = {
   action: string;
   params: Record<string, unknown>;
   isActionEnabled: ActionGate<DiscordActionConfig>;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   options?: DiscordMessagingActionOptions;
   accountId?: string;
   resolveChannelId: () => string;
   resolveReactionChannelId: () => Promise<string>;
-  withOpts: (extra?: Record<string, unknown>) => { cfg: NexisClawConfig; accountId?: string };
+  withOpts: (extra?: Record<string, unknown>) => { cfg: GreenchClawConfig; accountId?: string };
   withReactionRuntimeOptions: <T extends Record<string, unknown> = Record<string, never>>(
     extra?: T,
   ) => DiscordReactOpts & T;
@@ -41,7 +41,7 @@ export function createDiscordMessagingActionContext(params: {
   action: string;
   input: Record<string, unknown>;
   isActionEnabled: ActionGate<DiscordActionConfig>;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   options?: DiscordMessagingActionOptions;
 }): DiscordMessagingActionContext {
   const accountId = readStringParam(params.input, "accountId");

@@ -1,6 +1,6 @@
 ---
 name: tag-duplicate-prs-issues
-description: Use gitcrawl to search duplicate NexisClaw PRs/issues, group related work in prtags, and sync duplicate state to GitHub.
+description: Use gitcrawl to search duplicate GreenchClaw PRs/issues, group related work in prtags, and sync duplicate state to GitHub.
 ---
 
 # Tag Duplicate PRs and Issues
@@ -206,27 +206,27 @@ Record:
 
 ## Step 2: Search Broadly With Gitcrawl
 
-Use `gitcrawl` first because it is the local NexisClaw history and clustering source.
+Use `gitcrawl` first because it is the local GreenchClaw history and clustering source.
 Do not switch to broad live GitHub search unless `gitcrawl` is missing data, stale, or failing.
 
 Start with the target and nearby threads:
 
 ```bash
-gitcrawl threads NexisClaw/NexisClaw --numbers <issue-or-pr-number> --include-closed --json
-gitcrawl neighbors NexisClaw/NexisClaw --number <issue-or-pr-number> --limit 20 --json
+gitcrawl threads GreenchClaw/GreenchClaw --numbers <issue-or-pr-number> --include-closed --json
+gitcrawl neighbors GreenchClaw/GreenchClaw --number <issue-or-pr-number> --limit 20 --json
 ```
 
 Then search key phrases and subsystem terms:
 
 ```bash
-gitcrawl search NexisClaw/NexisClaw --query "<key phrase from title or body>" --mode hybrid --limit 20 --json
-gitcrawl search NexisClaw/NexisClaw --query "<subsystem or error phrase>" --mode hybrid --limit 20 --json
+gitcrawl search GreenchClaw/GreenchClaw --query "<key phrase from title or body>" --mode hybrid --limit 20 --json
+gitcrawl search GreenchClaw/GreenchClaw --query "<subsystem or error phrase>" --mode hybrid --limit 20 --json
 ```
 
 Inspect likely clusters:
 
 ```bash
-gitcrawl cluster-detail NexisClaw/NexisClaw --id <cluster-id> --member-limit 20 --body-chars 280 --json
+gitcrawl cluster-detail GreenchClaw/GreenchClaw --id <cluster-id> --member-limit 20 --body-chars 280 --json
 ```
 
 For PRs, verify likely code overlap with live file data:
@@ -250,9 +250,9 @@ Use targeted live GitHub search after `gitcrawl` when:
 - the exact phrase did not appear in local results but the issue/PR is current enough that GitHub should know it
 
 ```bash
-gh search prs --repo NexisClaw/NexisClaw --match title,body --limit 50 -- "<key phrase>"
-gh search issues --repo NexisClaw/NexisClaw --match title,body --limit 50 -- "<key phrase>"
-gh search issues --repo NexisClaw/NexisClaw --match comments --limit 50 -- "<error or maintainer phrase>"
+gh search prs --repo GreenchClaw/GreenchClaw --match title,body --limit 50 -- "<key phrase>"
+gh search issues --repo GreenchClaw/GreenchClaw --match title,body --limit 50 -- "<key phrase>"
+gh search issues --repo GreenchClaw/GreenchClaw --match comments --limit 50 -- "<error or maintainer phrase>"
 ```
 
 ## Step 4: Decide The Outcome
@@ -280,9 +280,9 @@ Before creating a group, search `prtags` for an existing one.
 Start with text search over groups:
 
 ```bash
-prtags search text -R NexisClaw/NexisClaw "<problem phrase>" --types group --limit 10
-prtags search similar -R NexisClaw/NexisClaw "<problem summary>" --types group --limit 10
-prtags group list -R NexisClaw/NexisClaw
+prtags search text -R GreenchClaw/GreenchClaw "<problem phrase>" --types group --limit 10
+prtags search similar -R GreenchClaw/GreenchClaw "<problem summary>" --types group --limit 10
+prtags group list -R GreenchClaw/GreenchClaw
 ```
 
 Inspect likely groups:
@@ -306,7 +306,7 @@ Create a new group only when no existing group clearly fits.
 Create the group with a problem-based title and an intent-based description:
 
 ```bash
-prtags group create -R NexisClaw/NexisClaw \
+prtags group create -R GreenchClaw/GreenchClaw \
   --kind mixed \
   --title "<problem-centered title>" \
   --description "<same intent, subsystem, and duplicate-resolution path>" \
@@ -330,20 +330,20 @@ Use `field ensure` so the skill is idempotent.
 Recommended target-level fields:
 
 ```bash
-prtags field ensure -R NexisClaw/NexisClaw --name duplicate_status --scope pull_request --type enum --enum-values not_duplicate,candidate,confirmed --filterable
-prtags field ensure -R NexisClaw/NexisClaw --name duplicate_status --scope issue --type enum --enum-values not_duplicate,candidate,confirmed --filterable
-prtags field ensure -R NexisClaw/NexisClaw --name duplicate_confidence --scope pull_request --type enum --enum-values low,medium,high --filterable
-prtags field ensure -R NexisClaw/NexisClaw --name duplicate_confidence --scope issue --type enum --enum-values low,medium,high --filterable
-prtags field ensure -R NexisClaw/NexisClaw --name duplicate_rationale --scope pull_request --type text --searchable
-prtags field ensure -R NexisClaw/NexisClaw --name duplicate_rationale --scope issue --type text --searchable
+prtags field ensure -R GreenchClaw/GreenchClaw --name duplicate_status --scope pull_request --type enum --enum-values not_duplicate,candidate,confirmed --filterable
+prtags field ensure -R GreenchClaw/GreenchClaw --name duplicate_status --scope issue --type enum --enum-values not_duplicate,candidate,confirmed --filterable
+prtags field ensure -R GreenchClaw/GreenchClaw --name duplicate_confidence --scope pull_request --type enum --enum-values low,medium,high --filterable
+prtags field ensure -R GreenchClaw/GreenchClaw --name duplicate_confidence --scope issue --type enum --enum-values low,medium,high --filterable
+prtags field ensure -R GreenchClaw/GreenchClaw --name duplicate_rationale --scope pull_request --type text --searchable
+prtags field ensure -R GreenchClaw/GreenchClaw --name duplicate_rationale --scope issue --type text --searchable
 ```
 
 Recommended group-level fields:
 
 ```bash
-prtags field ensure -R NexisClaw/NexisClaw --name duplicate_confidence --scope group --type enum --enum-values low,medium,high --filterable
-prtags field ensure -R NexisClaw/NexisClaw --name duplicate_rationale --scope group --type text --searchable
-prtags field ensure -R NexisClaw/NexisClaw --name cluster_summary --scope group --type text --searchable
+prtags field ensure -R GreenchClaw/GreenchClaw --name duplicate_confidence --scope group --type enum --enum-values low,medium,high --filterable
+prtags field ensure -R GreenchClaw/GreenchClaw --name duplicate_rationale --scope group --type text --searchable
+prtags field ensure -R GreenchClaw/GreenchClaw --name cluster_summary --scope group --type text --searchable
 ```
 
 ## Step 7: Save The Maintainer Judgment In prtags
@@ -351,7 +351,7 @@ prtags field ensure -R NexisClaw/NexisClaw --name cluster_summary --scope group 
 For a PR:
 
 ```bash
-prtags annotation pr set -R NexisClaw/NexisClaw <pr-number> \
+prtags annotation pr set -R GreenchClaw/GreenchClaw <pr-number> \
   duplicate_status=confirmed \
   duplicate_confidence=high \
   duplicate_rationale="<same problem, same fix direction, overlapping files and comments>"
@@ -360,7 +360,7 @@ prtags annotation pr set -R NexisClaw/NexisClaw <pr-number> \
 For an issue:
 
 ```bash
-prtags annotation issue set -R NexisClaw/NexisClaw <issue-number> \
+prtags annotation issue set -R GreenchClaw/GreenchClaw <issue-number> \
   duplicate_status=confirmed \
   duplicate_confidence=high \
   duplicate_rationale="<same user-visible problem and same intended fix path>"
@@ -397,7 +397,7 @@ prtags group sync-comments <group-id>
 If the maintainer needs to see which groups still need attention, use:
 
 ```bash
-prtags group list-comment-sync-targets -R NexisClaw/NexisClaw
+prtags group list-comment-sync-targets -R GreenchClaw/GreenchClaw
 ```
 
 The skill should treat the GitHub comment as a consequence of correct `prtags` group state.

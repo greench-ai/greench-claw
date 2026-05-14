@@ -2,7 +2,7 @@ import {
   resolveAckReaction,
   shouldAckReaction as shouldAckReactionGate,
   type AckReactionScope,
-} from "NexisClaw/plugin-sdk/channel-feedback";
+} from "GreenchClaw/plugin-sdk/channel-feedback";
 import {
   buildMentionRegexes,
   formatInboundEnvelope,
@@ -10,26 +10,26 @@ import {
   logInboundDrop,
   matchesMentionWithExplicit,
   resolveEnvelopeFormatOptions,
-} from "NexisClaw/plugin-sdk/channel-inbound";
-import { resolveChannelMessageSourceReplyDeliveryMode } from "NexisClaw/plugin-sdk/channel-message";
-import { hasControlCommand } from "NexisClaw/plugin-sdk/command-detection";
-import { shouldHandleTextCommands } from "NexisClaw/plugin-sdk/command-surface";
-import { ensureConfiguredBindingRouteReady } from "NexisClaw/plugin-sdk/conversation-runtime";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { finalizeInboundContext } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
+} from "GreenchClaw/plugin-sdk/channel-inbound";
+import { resolveChannelMessageSourceReplyDeliveryMode } from "GreenchClaw/plugin-sdk/channel-message";
+import { hasControlCommand } from "GreenchClaw/plugin-sdk/command-detection";
+import { shouldHandleTextCommands } from "GreenchClaw/plugin-sdk/command-surface";
+import { ensureConfiguredBindingRouteReady } from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { finalizeInboundContext } from "GreenchClaw/plugin-sdk/reply-dispatch-runtime";
 import {
   buildPendingHistoryContextFromMap,
   recordPendingHistoryEntryIfEnabled,
-} from "NexisClaw/plugin-sdk/reply-history";
-import type { FinalizedMsgContext } from "NexisClaw/plugin-sdk/reply-runtime";
-import { resolveInboundLastRouteSessionKey } from "NexisClaw/plugin-sdk/routing";
-import { logVerbose, shouldLogVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/reply-history";
+import type { FinalizedMsgContext } from "GreenchClaw/plugin-sdk/reply-runtime";
+import { resolveInboundLastRouteSessionKey } from "GreenchClaw/plugin-sdk/routing";
+import { logVerbose, shouldLogVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "GreenchClaw/plugin-sdk/security-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { enqueueSystemEvent } from "NexisClaw/plugin-sdk/system-event-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { enqueueSystemEvent } from "GreenchClaw/plugin-sdk/system-event-runtime";
 import { resolveSlackReplyToMode } from "../../account-reply-mode.js";
 import type { ResolvedSlackAccount } from "../../accounts.js";
 import { reactSlackMessage } from "../../actions.js";

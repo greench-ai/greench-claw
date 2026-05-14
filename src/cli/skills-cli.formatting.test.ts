@@ -14,10 +14,10 @@ describe("skills-cli (e2e)", () => {
   let envSnapshot: ReturnType<typeof captureEnv>;
 
   beforeAll(() => {
-    envSnapshot = captureEnv(["NEXISCLAW_BUNDLED_SKILLS_DIR"]);
-    tempWorkspaceDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-skills-test-"));
-    tempBundledDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-bundled-skills-test-"));
-    process.env.NEXISCLAW_BUNDLED_SKILLS_DIR = tempBundledDir;
+    envSnapshot = captureEnv(["GREENCHCLAW_BUNDLED_SKILLS_DIR"]);
+    tempWorkspaceDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-skills-test-"));
+    tempBundledDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-bundled-skills-test-"));
+    process.env.GREENCHCLAW_BUNDLED_SKILLS_DIR = tempBundledDir;
   });
 
   afterAll(() => {
@@ -40,7 +40,7 @@ describe("skills-cli (e2e)", () => {
           description: "Capture UI screenshots",
           filePath,
           baseDir,
-          source: "NexisClaw-bundled",
+          source: "GreenchClaw-bundled",
         }),
         frontmatter: {},
         metadata: { emoji: "📸" },
@@ -80,7 +80,7 @@ describe("skills-cli (e2e)", () => {
           modelVisible: true,
           userInvocable: true,
           commandVisible: true,
-          source: "NexisClaw-bundled",
+          source: "GreenchClaw-bundled",
           bundled: true,
           missing: {
             bins: [],

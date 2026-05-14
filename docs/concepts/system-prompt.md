@@ -1,14 +1,14 @@
 ---
-summary: "What the NexisClaw system prompt contains and how it is assembled"
+summary: "What the GreenchClaw system prompt contains and how it is assembled"
 read_when:
   - Editing system prompt text, tools list, or time/heartbeat sections
   - Changing workspace bootstrap or skills injection behavior
 title: "System prompt"
 ---
 
-NexisClaw builds a custom system prompt for every agent run. The prompt is **NexisClaw-owned** and does not use the pi-coding-agent default prompt.
+GreenchClaw builds a custom system prompt for every agent run. The prompt is **GreenchClaw-owned** and does not use the pi-coding-agent default prompt.
 
-The prompt is assembled by NexisClaw and injected into each agent run.
+The prompt is assembled by GreenchClaw and injected into each agent run.
 
 Prompt assembly has three layers:
 
@@ -25,7 +25,7 @@ This keeps exported/debug prompt surfaces aligned with live runs without
 turning every runtime-specific detail into one monolithic builder.
 
 Provider plugins can contribute cache-aware prompt guidance without replacing
-the full NexisClaw-owned prompt. The provider runtime can:
+the full GreenchClaw-owned prompt. The provider runtime can:
 
 - replace a small set of named core sections (`interaction_style`,
   `tool_call_style`, `execution_bias`)
@@ -51,16 +51,16 @@ The prompt is intentionally compact and uses fixed sections:
   results, check mutable state live, and verify before finalizing.
 - **Safety**: short guardrail reminder to avoid power-seeking behavior or bypassing oversight.
 - **Skills** (when available): tells the model how to load skill instructions on demand.
-- **NexisClaw Control**: tells the model to prefer the `gateway` tool for
+- **GreenchClaw Control**: tells the model to prefer the `gateway` tool for
   config/restart work and to avoid inventing CLI commands.
-- **NexisClaw Self-Update**: how to inspect config safely with
+- **GreenchClaw Self-Update**: how to inspect config safely with
   `config.schema.lookup`, patch config with `config.patch`, replace the full
   config with `config.apply`, and run `update.run` only on explicit user
   request. The owner-only `gateway` tool also refuses to rewrite
   `tools.exec.ask` / `tools.exec.security`, including legacy `tools.bash.*`
   aliases that normalize to those protected exec paths.
 - **Workspace**: working directory (`agents.defaults.workspace`).
-- **Documentation**: local path to NexisClaw docs/source and when to read them.
+- **Documentation**: local path to GreenchClaw docs/source and when to read them.
 - **Workspace Files (injected)**: indicates bootstrap files are included below.
 - **Sandbox** (when enabled): indicates sandboxed runtime, sandbox paths, and whether elevated exec is available.
 - **Current Date & Time**: time zone only (cache-stable; the live clock comes from `session_status`).
@@ -69,7 +69,7 @@ The prompt is intentionally compact and uses fixed sections:
 - **Runtime**: host, OS, node, model, repo root (when detected), thinking level (one line).
 - **Reasoning**: current visibility level + /reasoning toggle hint.
 
-NexisClaw keeps large stable content, including **Project Context**, above the
+GreenchClaw keeps large stable content, including **Project Context**, above the
 internal prompt cache boundary. Volatile channel/session sections such as
 Control UI embed guidance, **Messaging**, **Voice**, **Group Chat Context**,
 **Reactions**, **Heartbeats**, and **Runtime** are appended below that boundary
@@ -113,11 +113,11 @@ manual approval is the only path.
 
 ## Prompt modes
 
-NexisClaw can render smaller system prompts for sub-agents. The runtime sets a
+GreenchClaw can render smaller system prompts for sub-agents. The runtime sets a
 `promptMode` for each run (not a user-facing config):
 
 - `full` (default): includes all sections above.
-- `minimal`: used for sub-agents; omits **Memory Recall**, **NexisClaw
+- `minimal`: used for sub-agents; omits **Memory Recall**, **GreenchClaw
   Self-Update**, **Model Aliases**, **User Identity**, **Assistant Output Directives**,
   **Messaging**, **Silent Replies**, and **Heartbeats**. Tooling, **Safety**,
   **Skills** when supplied, Workspace, Sandbox, Current Date & Time (when
@@ -127,21 +127,21 @@ NexisClaw can render smaller system prompts for sub-agents. The runtime sets a
 When `promptMode=minimal`, extra injected prompts are labeled **Subagent
 Context** instead of **Group Chat Context**.
 
-For channel auto-reply runs, NexisClaw can omit the generic **Silent Replies**
+For channel auto-reply runs, GreenchClaw can omit the generic **Silent Replies**
 section when the direct/group chat context already includes the resolved
 conversation-specific `NO_REPLY` behavior. This avoids repeating token mechanics
 in both the global system prompt and channel context.
 
 ## Prompt snapshots
 
-NexisClaw keeps committed prompt snapshots for the Codex runtime happy path under
+GreenchClaw keeps committed prompt snapshots for the Codex runtime happy path under
 `test/fixtures/agents/prompt-snapshots/codex-runtime-happy-path/`. They render
 selected app-server thread/turn params plus a reconstructed model-bound prompt
 layer stack for Telegram direct, Discord group, and heartbeat turns. That stack
 includes a pinned Codex `gpt-5.5` model prompt fixture generated from Codex's
 model catalog/cache shape, the Codex happy-path permission developer text,
-NexisClaw developer instructions, turn-scoped collaboration-mode instructions
-when NexisClaw provides them, user turn input, and references to the dynamic tool
+GreenchClaw developer instructions, turn-scoped collaboration-mode instructions
+when GreenchClaw provides them, user turn input, and references to the dynamic tool
 specs.
 
 Refresh the pinned Codex model prompt fixture with
@@ -156,7 +156,7 @@ or `models.json` file.
 These snapshots are still not a byte-for-byte raw OpenAI request capture. Codex
 can add runtime-owned workspace context such as `AGENTS.md`, environment
 context, memories, app/plugin instructions, and built-in Default
-collaboration-mode instructions inside the Codex runtime after NexisClaw sends
+collaboration-mode instructions inside the Codex runtime after GreenchClaw sends
 thread and turn params.
 
 Regenerate them with `pnpm prompt:snapshots:gen` and verify drift with
@@ -188,7 +188,7 @@ curated long-term summary; detailed daily notes belong in `memory/*.md` where
 the bootstrap file limits below.
 
 When a session runs on the native Codex harness, Codex loads `AGENTS.md`
-through its own project-doc discovery. NexisClaw still resolves the remaining
+through its own project-doc discovery. GreenchClaw still resolves the remaining
 bootstrap files and forwards them as Codex config instructions, so `SOUL.md`,
 `TOOLS.md`, `IDENTITY.md`, `USER.md`, `HEARTBEAT.md`, `BOOTSTRAP.md`, and
 `MEMORY.md` keep the same workspace-context role without duplicating
@@ -202,7 +202,7 @@ Large files are truncated with a marker. The max per-file size is controlled by
 `agents.defaults.bootstrapMaxChars` (default: 12000). Total injected bootstrap
 content across files is capped by `agents.defaults.bootstrapTotalMaxChars`
 (default: 60000). Missing files inject a short missing-file marker. When truncation
-occurs, NexisClaw can inject a concise system-prompt warning notice; control this with
+occurs, GreenchClaw can inject a concise system-prompt warning notice; control this with
 `agents.defaults.bootstrapPromptTruncationWarning` (`off`, `once`, `always`;
 default: `once`). Detailed raw/injected counts stay in diagnostics such as
 `/context`, `/status`, doctor, and logs.
@@ -243,7 +243,7 @@ See [Date & Time](/date-time) for full behavior details.
 
 ## Skills
 
-When eligible skills exist, NexisClaw injects a compact **available skills list**
+When eligible skills exist, GreenchClaw injects a compact **available skills list**
 (`formatSkillsForPrompt`) that includes the **file path** for each skill. The
 prompt instructs the model to use `read` to load the SKILL.md at the listed
 location (workspace, managed, or bundled). If no skills are eligible, the
@@ -285,17 +285,17 @@ as `memory_get`, live tool results, and post-compaction AGENTS.md refreshes.
 ## Documentation
 
 The system prompt includes a **Documentation** section. When local docs are available, it
-points to the local NexisClaw docs directory (`docs/` in a Git checkout or the bundled npm
+points to the local GreenchClaw docs directory (`docs/` in a Git checkout or the bundled npm
 package docs). If local docs are unavailable, it falls back to
-[https://docs.NexisClaw.ai](https://docs.NexisClaw.ai).
+[https://docs.GreenchClaw.ai](https://docs.GreenchClaw.ai).
 
-The same section also includes the NexisClaw source location. Git checkouts expose the local
+The same section also includes the GreenchClaw source location. Git checkouts expose the local
 source root so the agent can inspect code directly. Package installs include the GitHub
 source URL and tell the agent to review source there whenever the docs are incomplete or
 stale. The prompt also notes the public docs mirror, community Discord, and ClawHub
 ([https://clawhub.ai](https://clawhub.ai)) for skills discovery. It tells the model to
-consult docs first for NexisClaw behavior, commands, configuration, or architecture, and to
-run `NexisClaw status` itself when possible (asking the user only when it lacks access).
+consult docs first for GreenchClaw behavior, commands, configuration, or architecture, and to
+run `GreenchClaw status` itself when possible (asking the user only when it lacks access).
 For configuration specifically, it points agents to the `gateway` tool action
 `config.schema.lookup` for exact field-level docs and constraints, then to
 `docs/gateway/configuration.md` and `docs/gateway/configuration-reference.md`

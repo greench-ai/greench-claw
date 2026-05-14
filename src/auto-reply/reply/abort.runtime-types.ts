@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { FinalizedMsgContext } from "../templating.js";
 
 export type FastAbortResult = {
@@ -9,7 +9,7 @@ export type FastAbortResult = {
 
 export type TryFastAbortFromMessage = (params: {
   ctx: FinalizedMsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }) => Promise<FastAbortResult>;
 
 export type FormatAbortReplyText = (stoppedSubagents?: number) => string;

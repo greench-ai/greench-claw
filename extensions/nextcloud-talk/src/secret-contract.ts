@@ -5,14 +5,14 @@ import {
   type ChannelAccountEntry,
   type ResolverContext,
   type SecretDefaults,
-} from "NexisClaw/plugin-sdk/channel-secret-basic-runtime";
+} from "GreenchClaw/plugin-sdk/channel-secret-basic-runtime";
 
-export const secretTargetRegistryEntries: import("NexisClaw/plugin-sdk/channel-secret-basic-runtime").SecretTargetRegistryEntry[] =
+export const secretTargetRegistryEntries: import("GreenchClaw/plugin-sdk/channel-secret-basic-runtime").SecretTargetRegistryEntry[] =
   [
     {
       id: "channels.nextcloud-talk.accounts.*.apiPassword",
       targetType: "channels.nextcloud-talk.accounts.*.apiPassword",
-      configFile: "NexisClaw.json",
+      configFile: "GreenchClaw.json",
       pathPattern: "channels.nextcloud-talk.accounts.*.apiPassword",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -23,7 +23,7 @@ export const secretTargetRegistryEntries: import("NexisClaw/plugin-sdk/channel-s
     {
       id: "channels.nextcloud-talk.accounts.*.botSecret",
       targetType: "channels.nextcloud-talk.accounts.*.botSecret",
-      configFile: "NexisClaw.json",
+      configFile: "GreenchClaw.json",
       pathPattern: "channels.nextcloud-talk.accounts.*.botSecret",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -34,7 +34,7 @@ export const secretTargetRegistryEntries: import("NexisClaw/plugin-sdk/channel-s
     {
       id: "channels.nextcloud-talk.apiPassword",
       targetType: "channels.nextcloud-talk.apiPassword",
-      configFile: "NexisClaw.json",
+      configFile: "GreenchClaw.json",
       pathPattern: "channels.nextcloud-talk.apiPassword",
       secretShape: "secret_input",
       expectedResolvedValue: "string",
@@ -45,7 +45,7 @@ export const secretTargetRegistryEntries: import("NexisClaw/plugin-sdk/channel-s
     {
       id: "channels.nextcloud-talk.botSecret",
       targetType: "channels.nextcloud-talk.botSecret",
-      configFile: "NexisClaw.json",
+      configFile: "GreenchClaw.json",
       pathPattern: "channels.nextcloud-talk.botSecret",
       secretShape: "secret_input",
       expectedResolvedValue: "string",

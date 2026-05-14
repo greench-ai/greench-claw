@@ -1,13 +1,13 @@
 // Private runtime barrel for the bundled Signal extension.
 // Prefer narrower SDK subpaths plus local extension seams over the legacy signal barrel.
 
-export type { ChannelMessageActionAdapter } from "NexisClaw/plugin-sdk/channel-contract";
+export type { ChannelMessageActionAdapter } from "GreenchClaw/plugin-sdk/channel-contract";
 export { buildChannelConfigSchema, SignalConfigSchema } from "../config-api.js";
-export { PAIRING_APPROVED_MESSAGE } from "NexisClaw/plugin-sdk/channel-status";
-import type { NexisClawConfig as RuntimeNexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-export type { RuntimeNexisClawConfig as NexisClawConfig };
-export type { NexisClawPluginApi, PluginRuntime } from "NexisClaw/plugin-sdk/core";
-export type { ChannelPlugin } from "NexisClaw/plugin-sdk/core";
+export { PAIRING_APPROVED_MESSAGE } from "GreenchClaw/plugin-sdk/channel-status";
+import type { GreenchClawConfig as RuntimeGreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+export type { RuntimeGreenchClawConfig as GreenchClawConfig };
+export type { GreenchClawPluginApi, PluginRuntime } from "GreenchClaw/plugin-sdk/core";
+export type { ChannelPlugin } from "GreenchClaw/plugin-sdk/core";
 export {
   DEFAULT_ACCOUNT_ID,
   applyAccountNameToChannelSection,
@@ -18,22 +18,22 @@ export {
   migrateBaseNameToDefaultAccount,
   normalizeAccountId,
   setAccountEnabledInConfigSection,
-} from "NexisClaw/plugin-sdk/core";
-export { resolveChannelMediaMaxBytes } from "NexisClaw/plugin-sdk/media-runtime";
-export { formatCliCommand, formatDocsLink } from "NexisClaw/plugin-sdk/setup-tools";
-export { chunkText } from "NexisClaw/plugin-sdk/reply-runtime";
-export { detectBinary } from "NexisClaw/plugin-sdk/setup-tools";
+} from "GreenchClaw/plugin-sdk/core";
+export { resolveChannelMediaMaxBytes } from "GreenchClaw/plugin-sdk/media-runtime";
+export { formatCliCommand, formatDocsLink } from "GreenchClaw/plugin-sdk/setup-tools";
+export { chunkText } from "GreenchClaw/plugin-sdk/reply-runtime";
+export { detectBinary } from "GreenchClaw/plugin-sdk/setup-tools";
 export {
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
-} from "NexisClaw/plugin-sdk/runtime-group-policy";
+} from "GreenchClaw/plugin-sdk/runtime-group-policy";
 export {
   buildBaseAccountStatusSnapshot,
   buildBaseChannelStatusSummary,
   collectStatusIssuesFromLastError,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
-export { normalizeE164 } from "NexisClaw/plugin-sdk/text-utility-runtime";
+} from "GreenchClaw/plugin-sdk/status-helpers";
+export { normalizeE164 } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 export { looksLikeSignalTargetId, normalizeSignalMessagingTarget } from "./normalize.js";
 export {
   listEnabledSignalAccounts,

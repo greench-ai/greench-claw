@@ -1,14 +1,14 @@
 ---
-summary: "CLI reference for `NexisClaw tui` (Gateway-backed or local embedded terminal UI)"
+summary: "CLI reference for `GreenchClaw tui` (Gateway-backed or local embedded terminal UI)"
 read_when:
   - You want a terminal UI for the Gateway (remote-friendly)
   - You want to pass url/token/session from scripts
   - You want to run the TUI in local embedded mode without a Gateway
-  - You want to use NexisClaw chat or NexisClaw tui --local
+  - You want to use GreenchClaw chat or GreenchClaw tui --local
 title: "TUI"
 ---
 
-# `NexisClaw tui`
+# `GreenchClaw tui`
 
 Open the terminal UI connected to the Gateway, or run it in local embedded
 mode.
@@ -32,11 +32,11 @@ Related:
 | `--timeout-ms <ms>`   | `agents.defaults.timeoutSeconds`          | Agent timeout. Invalid values log a warning and are ignored.                       |
 | `--history-limit <n>` | `200`                                     | History entries to load on attach.                                                 |
 
-Aliases: `NexisClaw chat` and `NexisClaw terminal` invoke the same command with `--local` implied.
+Aliases: `GreenchClaw chat` and `GreenchClaw terminal` invoke the same command with `--local` implied.
 
 Notes:
 
-- `chat` and `terminal` are aliases for `NexisClaw tui --local`.
+- `chat` and `terminal` are aliases for `GreenchClaw tui --local`.
 - `--local` cannot be combined with `--url`, `--token`, or `--password`.
 - `tui` resolves configured gateway auth SecretRefs for token/password auth when possible (`env`/`file`/`exec` providers).
 - When launched from inside a configured agent workspace directory, TUI auto-selects that agent for the session key default (unless `--session` is explicitly `agent:<id>:...`).
@@ -47,14 +47,14 @@ Notes:
 ## Examples
 
 ```bash
-NexisClaw chat
-NexisClaw tui --local
-NexisClaw tui
-NexisClaw tui --url ws://127.0.0.1:18789 --token <token>
-NexisClaw tui --session main --deliver
-NexisClaw chat --message "Compare my config to the docs and tell me what to fix"
+GreenchClaw chat
+GreenchClaw tui --local
+GreenchClaw tui
+GreenchClaw tui --url ws://127.0.0.1:18789 --token <token>
+GreenchClaw tui --session main --deliver
+GreenchClaw chat --message "Compare my config to the docs and tell me what to fix"
 # when run inside an agent workspace, infers that agent automatically
-NexisClaw tui --session bugfix
+GreenchClaw tui --session bugfix
 ```
 
 ## Config repair loop
@@ -63,25 +63,25 @@ Use local mode when the current config already validates and you want the
 embedded agent to inspect it, compare it against the docs, and help repair it
 from the same terminal:
 
-If `NexisClaw config validate` is already failing, use `NexisClaw configure` or
-`NexisClaw doctor --fix` first. `NexisClaw chat` does not bypass the invalid-
+If `GreenchClaw config validate` is already failing, use `GreenchClaw configure` or
+`GreenchClaw doctor --fix` first. `GreenchClaw chat` does not bypass the invalid-
 config guard.
 
 ```bash
-NexisClaw chat
+GreenchClaw chat
 ```
 
 Then inside the TUI:
 
 ```text
-!NexisClaw config file
-!NexisClaw docs gateway auth token secretref
-!NexisClaw config validate
-!NexisClaw doctor
+!GreenchClaw config file
+!GreenchClaw docs gateway auth token secretref
+!GreenchClaw config validate
+!GreenchClaw doctor
 ```
 
-Apply targeted fixes with `NexisClaw config set` or `NexisClaw configure`, then
-rerun `NexisClaw config validate`. See [TUI](/web/tui) and [Config](/cli/config).
+Apply targeted fixes with `GreenchClaw config set` or `GreenchClaw configure`, then
+rerun `GreenchClaw config validate`. See [TUI](/web/tui) and [Config](/cli/config).
 
 ## Related
 

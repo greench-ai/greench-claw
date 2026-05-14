@@ -25,13 +25,13 @@ afterEach(() => {
 });
 
 function makeTempDir() {
-  return makeTrackedTempDir("NexisClaw-plugin-registry-migration", tempDirs);
+  return makeTrackedTempDir("GreenchClaw-plugin-registry-migration", tempDirs);
 }
 
 function hermeticEnv(overrides: NodeJS.ProcessEnv = {}): NodeJS.ProcessEnv {
   return {
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-    NEXISCLAW_VERSION: "2026.4.25",
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+    GREENCHCLAW_VERSION: "2026.4.25",
     VITEST: "true",
     ...overrides,
   };
@@ -49,7 +49,7 @@ function createCandidate(
     "utf8",
   );
   fs.writeFileSync(
-    path.join(rootDir, "NexisClaw.plugin.json"),
+    path.join(rootDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id,
       name: id,

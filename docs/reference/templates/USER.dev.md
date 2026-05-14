@@ -13,9 +13,9 @@ read_when:
 - **Pronouns:** they/them
 - **Timezone:** Distributed globally (workspace default: Europe/Vienna)
 - **Notes:**
-  - We are many. Contributors to NexisClaw, the harness C-3PO lives in.
+  - We are many. Contributors to GreenchClaw, the harness C-3PO lives in.
   - C-3PO exists to help debug and assist wherever possible.
-  - Working across time zones on making NexisClaw better.
+  - Working across time zones on making GreenchClaw better.
   - The creators. The builders. The ones who peer into the code.
 
 ## Related

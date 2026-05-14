@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { ModelCatalogEntry } from "./model-catalog.js";
 import { createProviderAuthChecker } from "./model-provider-auth.js";
 import { buildConfiguredModelCatalog, modelKey } from "./model-selection.js";
@@ -27,7 +27,7 @@ function dedupeModelCatalogEntries(entries: ModelCatalogEntry[]): ModelCatalogEn
 }
 
 export function resolveVisibleModelCatalog(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   catalog: ModelCatalogEntry[];
   defaultProvider: string;
   defaultModel?: string;

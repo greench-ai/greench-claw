@@ -1,13 +1,13 @@
 const port = process.env.PORT;
-const token = process.env.NEXISCLAW_GATEWAY_TOKEN;
+const token = process.env.GREENCHCLAW_GATEWAY_TOKEN;
 const backendModel = process.env.MODEL_REF || "openai/gpt-5.4-mini";
 const timeoutSeconds = Number.parseInt(
-  process.env.NEXISCLAW_OPENAI_CHAT_TOOLS_TIMEOUT_SECONDS ?? "180",
+  process.env.GREENCHCLAW_OPENAI_CHAT_TOOLS_TIMEOUT_SECONDS ?? "180",
   10,
 );
 
 if (!port || !token) {
-  throw new Error("missing PORT/NEXISCLAW_GATEWAY_TOKEN");
+  throw new Error("missing PORT/GREENCHCLAW_GATEWAY_TOKEN");
 }
 
 const controller = new AbortController();
@@ -18,10 +18,10 @@ const response = await fetch(`http://127.0.0.1:${port}/v1/chat/completions`, {
   headers: {
     authorization: `Bearer ${token}`,
     "content-type": "application/json",
-    "x-NexisClaw-model": backendModel,
+    "x-GreenchClaw-model": backendModel,
   },
   body: JSON.stringify({
-    model: "NexisClaw",
+    model: "GreenchClaw",
     stream: false,
     messages: [
       {

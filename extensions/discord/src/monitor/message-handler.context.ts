@@ -1,17 +1,20 @@
 import {
   formatInboundEnvelope,
   resolveEnvelopeFormatOptions,
-} from "NexisClaw/plugin-sdk/channel-inbound";
-import { resolveChannelContextVisibilityMode } from "NexisClaw/plugin-sdk/context-visibility-runtime";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "NexisClaw/plugin-sdk/conversation-runtime";
-import { isDangerousNameMatchingEnabled } from "NexisClaw/plugin-sdk/dangerous-name-runtime";
-import { finalizeInboundContext } from "NexisClaw/plugin-sdk/reply-dispatch-runtime";
-import { buildPendingHistoryContextFromMap } from "NexisClaw/plugin-sdk/reply-history";
-import { buildAgentSessionKey, resolveThreadSessionKeys } from "NexisClaw/plugin-sdk/routing";
-import { danger, logVerbose, shouldLogVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { evaluateSupplementalContextVisibility } from "NexisClaw/plugin-sdk/security-runtime";
-import { readSessionUpdatedAt, resolveStorePath } from "NexisClaw/plugin-sdk/session-store-runtime";
-import { truncateUtf16Safe } from "NexisClaw/plugin-sdk/text-utility-runtime";
+} from "GreenchClaw/plugin-sdk/channel-inbound";
+import { resolveChannelContextVisibilityMode } from "GreenchClaw/plugin-sdk/context-visibility-runtime";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { isDangerousNameMatchingEnabled } from "GreenchClaw/plugin-sdk/dangerous-name-runtime";
+import { finalizeInboundContext } from "GreenchClaw/plugin-sdk/reply-dispatch-runtime";
+import { buildPendingHistoryContextFromMap } from "GreenchClaw/plugin-sdk/reply-history";
+import { buildAgentSessionKey, resolveThreadSessionKeys } from "GreenchClaw/plugin-sdk/routing";
+import { danger, logVerbose, shouldLogVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { evaluateSupplementalContextVisibility } from "GreenchClaw/plugin-sdk/security-runtime";
+import {
+  readSessionUpdatedAt,
+  resolveStorePath,
+} from "GreenchClaw/plugin-sdk/session-store-runtime";
+import { truncateUtf16Safe } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import { resolveDiscordConversationIdentity } from "../conversation-identity.js";
 import { ChannelType } from "../internal/discord.js";
 import { normalizeDiscordAllowList, normalizeDiscordSlug } from "./allow-list.js";

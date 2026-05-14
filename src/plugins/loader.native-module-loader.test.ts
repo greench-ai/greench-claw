@@ -1,13 +1,13 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { importFreshModule } from "NexisClaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const tempDirs: string[] = [];
 
 function makeTempDir() {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-plugin-loader-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-plugin-loader-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -15,7 +15,7 @@ function makeTempDir() {
 function writeBundledPluginFixture(id: string) {
   const pluginRoot = makeTempDir();
   fs.writeFileSync(
-    path.join(pluginRoot, "NexisClaw.plugin.json"),
+    path.join(pluginRoot, "GreenchClaw.plugin.json"),
     JSON.stringify(
       {
         id,
@@ -46,7 +46,7 @@ function writePackagedPluginFixture(id: string) {
       {
         name: id,
         type: "commonjs",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: ["./index.cjs"],
         },
       },
@@ -56,7 +56,7 @@ function writePackagedPluginFixture(id: string) {
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(pluginRoot, "NexisClaw.plugin.json"),
+    path.join(pluginRoot, "GreenchClaw.plugin.json"),
     JSON.stringify(
       {
         id,
@@ -82,7 +82,7 @@ function writePackagedPluginFixture(id: string) {
 afterEach(() => {
   vi.resetModules();
   vi.doUnmock("./plugin-module-loader-cache.js");
-  delete process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR;
+  delete process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR;
   for (const dir of tempDirs.splice(0)) {
     fs.rmSync(dir, { recursive: true, force: true });
   }
@@ -115,15 +115,15 @@ describe("createPluginModuleLoader", () => {
   it("loads bundled JavaScript without creating a module loader", async () => {
     const sourceLoaderCalls = mockSourceLoaderCalls();
 
-    const { loadNexisClawPlugins } = await importFreshModule<typeof import("./loader.js")>(
+    const { loadGreenchClawPlugins } = await importFreshModule<typeof import("./loader.js")>(
       import.meta.url,
       "./loader.js?scope=native-module-loader",
     );
 
     const pluginRoot = writeBundledPluginFixture("demo");
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = pluginRoot;
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = pluginRoot;
 
-    loadNexisClawPlugins({
+    loadGreenchClawPlugins({
       cache: false,
       workspaceDir: pluginRoot,
       onlyPluginIds: ["demo"],
@@ -144,15 +144,15 @@ describe("createPluginModuleLoader", () => {
   it("loads packaged JavaScript without creating a module loader", async () => {
     const sourceLoaderCalls = mockSourceLoaderCalls();
 
-    const { loadNexisClawPlugins } = await importFreshModule<typeof import("./loader.js")>(
+    const { loadGreenchClawPlugins } = await importFreshModule<typeof import("./loader.js")>(
       import.meta.url,
       "./loader.js?scope=packaged-native-module-loader",
     );
 
     const pluginRoot = writePackagedPluginFixture("npm-demo");
-    process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = makeTempDir();
+    process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = makeTempDir();
 
-    const registry = loadNexisClawPlugins({
+    const registry = loadGreenchClawPlugins({
       cache: false,
       config: {
         plugins: {

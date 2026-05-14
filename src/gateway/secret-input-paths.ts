@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 export type SupportedGatewaySecretInputPath =
   | "gateway.auth.token"
@@ -20,7 +20,7 @@ export function isSupportedGatewaySecretInputPath(
 }
 
 export function readGatewaySecretInputValue(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   path: SupportedGatewaySecretInputPath,
 ): unknown {
   if (path === "gateway.auth.token") {
@@ -36,7 +36,7 @@ export function readGatewaySecretInputValue(
 }
 
 export function assignResolvedGatewaySecretInput(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   path: SupportedGatewaySecretInputPath;
   value: string | undefined;
 }): void {

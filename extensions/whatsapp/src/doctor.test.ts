@@ -27,7 +27,7 @@ describe("whatsapp doctor compatibility", () => {
           whatsapp: {
             accounts: {
               work: {
-                authDir: "/tmp/NexisClaw-wa-auth",
+                authDir: "/tmp/GreenchClaw-wa-auth",
               },
             },
           },

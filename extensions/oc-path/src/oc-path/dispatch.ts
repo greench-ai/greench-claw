@@ -7,7 +7,7 @@
  * while addressing and mutation dispatch are universal once callers
  * have an AST carrying its `kind` discriminator.
  *
- * @module @NexisClaw/oc-path/dispatch
+ * @module @GreenchClaw/oc-path/dispatch
  */
 
 export type OcKind = "md" | "jsonc" | "jsonl";

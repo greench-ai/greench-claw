@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import {
   type MSTeamsActivityHandler,
   type MSTeamsMessageHandlerDeps,
@@ -184,7 +184,7 @@ function createBlockedSigninScenarios() {
             allowFrom: ["owner-aad"],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       context: {
         userAadId: "blocked-dm-aad",
       },
@@ -206,7 +206,7 @@ function createBlockedSigninScenarios() {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       context: {
         userAadId: "blocked-channel-aad",
         conversationType: "channel" as const,
@@ -225,7 +225,7 @@ function createBlockedSigninScenarios() {
             groupAllowFrom: ["owner-aad"],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       context: {
         userAadId: "blocked-group-aad",
         conversationType: "groupChat" as const,

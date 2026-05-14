@@ -319,7 +319,7 @@ describe("config schema regressions", () => {
       discovery: {
         wideArea: {
           enabled: true,
-          domain: "NexisClaw.internal",
+          domain: "GreenchClaw.internal",
         },
       },
     });

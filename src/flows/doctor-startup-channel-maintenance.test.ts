@@ -21,7 +21,7 @@ describe("doctor startup channel maintenance", () => {
 
     await maybeRunDoctorStartupChannelMaintenance({
       cfg,
-      env: { NEXISCLAW_TEST: "1" },
+      env: { GREENCHCLAW_TEST: "1" },
       runChannelPluginStartupMaintenance: async (input) => {
         calls.push(input);
       },
@@ -32,7 +32,7 @@ describe("doctor startup channel maintenance", () => {
     expect(calls).toHaveLength(1);
     const [call] = calls as Array<{
       cfg: typeof cfg;
-      env: { NEXISCLAW_TEST: string };
+      env: { GREENCHCLAW_TEST: string };
       log: { info: (message: string) => void; warn: (message: string) => void };
       trigger: string;
       logPrefix: string;
@@ -41,7 +41,7 @@ describe("doctor startup channel maintenance", () => {
       throw new Error("Expected startup maintenance call");
     }
     expect(call.cfg).toBe(cfg);
-    expect(call.env).toEqual({ NEXISCLAW_TEST: "1" });
+    expect(call.env).toEqual({ GREENCHCLAW_TEST: "1" });
     expect(call.trigger).toBe("doctor-fix");
     expect(call.logPrefix).toBe("doctor");
     expect(call.log.info).toBeTypeOf("function");

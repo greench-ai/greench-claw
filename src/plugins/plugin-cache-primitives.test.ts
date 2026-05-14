@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   PluginLruCache,
   createConfigScopedPromiseLoader,
@@ -50,7 +50,7 @@ describe("PluginLruCache", () => {
 describe("resolveConfigScopedRuntimeCacheValue", () => {
   it("caches values by config object and key", () => {
     const cache: ConfigScopedRuntimeCache<string[]> = new WeakMap();
-    const config = {} as NexisClawConfig;
+    const config = {} as GreenchClawConfig;
     const load = vi.fn(() => ["loaded"]);
 
     expect(resolveConfigScopedRuntimeCacheValue({ cache, config, key: "demo", load })).toEqual([
@@ -73,7 +73,7 @@ describe("resolveConfigScopedRuntimeCacheValue", () => {
 
   it("caches undefined values by key", () => {
     const cache: ConfigScopedRuntimeCache<string | undefined> = new WeakMap();
-    const config = {} as NexisClawConfig;
+    const config = {} as GreenchClawConfig;
     const load = vi.fn(() => undefined);
 
     expect(resolveConfigScopedRuntimeCacheValue({ cache, config, key: "missing", load })).toBe(
@@ -100,9 +100,9 @@ describe("createConfigScopedPromiseLoader", () => {
   });
 
   it("caches loads by config object", async () => {
-    const firstConfig = { plugins: { load: { disabled: true } } } as NexisClawConfig;
-    const secondConfig = { plugins: { load: { disabled: false } } } as NexisClawConfig;
-    const load = vi.fn(async (config?: NexisClawConfig) =>
+    const firstConfig = { plugins: { load: { disabled: true } } } as GreenchClawConfig;
+    const secondConfig = { plugins: { load: { disabled: false } } } as GreenchClawConfig;
+    const load = vi.fn(async (config?: GreenchClawConfig) =>
       config === firstConfig ? "first" : "second",
     );
     const loader = createConfigScopedPromiseLoader(load);
@@ -115,7 +115,7 @@ describe("createConfigScopedPromiseLoader", () => {
   });
 
   it("evicts rejected loads so retries can recover", async () => {
-    const config = {} as NexisClawConfig;
+    const config = {} as GreenchClawConfig;
     let calls = 0;
     const loader = createConfigScopedPromiseLoader(async () => {
       calls += 1;
@@ -131,10 +131,10 @@ describe("createConfigScopedPromiseLoader", () => {
   });
 
   it("clears default and config-scoped entries", async () => {
-    const config = {} as NexisClawConfig;
+    const config = {} as GreenchClawConfig;
     let calls = 0;
     const loader = createConfigScopedPromiseLoader(
-      async (owner?: NexisClawConfig) => `${owner ? "config" : "default"}-${++calls}`,
+      async (owner?: GreenchClawConfig) => `${owner ? "config" : "default"}-${++calls}`,
     );
 
     await expect(loader.load()).resolves.toBe("default-1");

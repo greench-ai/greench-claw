@@ -1,11 +1,11 @@
-import { resolveHumanDelayConfig } from "NexisClaw/plugin-sdk/agent-runtime";
-import { createChannelMessageReplyPipeline } from "NexisClaw/plugin-sdk/channel-message";
-import { resolveChannelStreamingBlockEnabled } from "NexisClaw/plugin-sdk/channel-streaming";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { getAgentScopedMediaLocalRoots } from "NexisClaw/plugin-sdk/media-runtime";
-import { resolveChunkMode, resolveTextChunkLimit } from "NexisClaw/plugin-sdk/reply-chunking";
-import type { createSubsystemLogger } from "NexisClaw/plugin-sdk/runtime-env";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { resolveHumanDelayConfig } from "GreenchClaw/plugin-sdk/agent-runtime";
+import { createChannelMessageReplyPipeline } from "GreenchClaw/plugin-sdk/channel-message";
+import { resolveChannelStreamingBlockEnabled } from "GreenchClaw/plugin-sdk/channel-streaming";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { getAgentScopedMediaLocalRoots } from "GreenchClaw/plugin-sdk/media-runtime";
+import { resolveChunkMode, resolveTextChunkLimit } from "GreenchClaw/plugin-sdk/reply-chunking";
+import type { createSubsystemLogger } from "GreenchClaw/plugin-sdk/runtime-env";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import { resolveDiscordMaxLinesPerMessage } from "../accounts.js";
 import type {
   ButtonInteraction,
@@ -29,7 +29,7 @@ type NativeCommandEffectiveRoute = {
 };
 
 export async function dispatchDiscordNativeAgentReply(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   discordConfig: DiscordConfig;
   accountId: string;
   interaction: CommandInteraction | ButtonInteraction | StringSelectMenuInteraction;

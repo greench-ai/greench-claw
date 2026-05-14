@@ -1,4 +1,4 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { deepgramMediaUnderstandingProvider } from "./media-understanding-provider.js";
 import { buildDeepgramRealtimeTranscriptionProvider } from "./realtime-transcription-provider.js";
 

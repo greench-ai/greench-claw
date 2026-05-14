@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { loadBundledPluginPublicSurfaceModuleSync } from "../plugin-sdk/facade-loader.js";
 import { note } from "../terminal/note.js";
 
@@ -16,7 +16,10 @@ type BrowserDoctorDeps = {
 };
 
 type BrowserDoctorSurface = {
-  noteChromeMcpBrowserReadiness: (cfg: NexisClawConfig, deps?: BrowserDoctorDeps) => Promise<void>;
+  noteChromeMcpBrowserReadiness: (
+    cfg: GreenchClawConfig,
+    deps?: BrowserDoctorDeps,
+  ) => Promise<void>;
 };
 
 function loadBrowserDoctorSurface(): BrowserDoctorSurface {
@@ -26,7 +29,10 @@ function loadBrowserDoctorSurface(): BrowserDoctorSurface {
   });
 }
 
-export async function noteChromeMcpBrowserReadiness(cfg: NexisClawConfig, deps?: BrowserDoctorDeps) {
+export async function noteChromeMcpBrowserReadiness(
+  cfg: GreenchClawConfig,
+  deps?: BrowserDoctorDeps,
+) {
   try {
     await loadBrowserDoctorSurface().noteChromeMcpBrowserReadiness(cfg, deps);
   } catch (error) {

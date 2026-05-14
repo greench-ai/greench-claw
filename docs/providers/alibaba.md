@@ -1,12 +1,12 @@
 ---
-summary: "Alibaba Model Studio Wan video generation in NexisClaw"
+summary: "Alibaba Model Studio Wan video generation in GreenchClaw"
 title: "Alibaba Model Studio"
 read_when:
-  - You want to use Alibaba Wan video generation in NexisClaw
+  - You want to use Alibaba Wan video generation in GreenchClaw
   - You need Model Studio or DashScope API key setup for video generation
 ---
 
-NexisClaw ships a bundled `alibaba` plugin that registers a video-generation provider for Wan models on Alibaba Model Studio (the international name for DashScope). The plugin is enabled by default; you only need to set an API key.
+GreenchClaw ships a bundled `alibaba` plugin that registers a video-generation provider for Wan models on Alibaba Model Studio (the international name for DashScope). The plugin is enabled by default; you only need to set an API key.
 
 | Property         | Value                                                                           |
 | ---------------- | ------------------------------------------------------------------------------- |
@@ -25,13 +25,13 @@ NexisClaw ships a bundled `alibaba` plugin that registers a video-generation pro
     Use onboarding to store the key against the `alibaba` provider:
 
     ```bash
-    NexisClaw onboard --auth-choice alibaba-model-studio-api-key
+    GreenchClaw onboard --auth-choice alibaba-model-studio-api-key
     ```
 
     Or pass the key directly during install/onboarding:
 
     ```bash
-    NexisClaw onboard --alibaba-model-studio-api-key <your-key>
+    GreenchClaw onboard --alibaba-model-studio-api-key <your-key>
     ```
 
     Or export any of the accepted env vars before starting the Gateway:
@@ -58,10 +58,10 @@ NexisClaw ships a bundled `alibaba` plugin that registers a video-generation pro
   </Step>
   <Step title="Verify the provider is configured">
     ```bash
-    NexisClaw models list --provider alibaba
+    GreenchClaw models list --provider alibaba
     ```
 
-    The list should include all five bundled Wan models. If `MODELSTUDIO_API_KEY` is unresolved, `NexisClaw models status --json` reports the missing credential under `auth.unusableProfiles`.
+    The list should include all five bundled Wan models. If `MODELSTUDIO_API_KEY` is unresolved, `GreenchClaw models status --json` reports the missing credential under `auth.unusableProfiles`.
 
   </Step>
 </Steps>
@@ -119,13 +119,13 @@ When a request omits `durationSeconds`, the provider sends DashScope's accepted 
   </Accordion>
 
   <Accordion title="Auth env priority">
-    NexisClaw resolves the Alibaba API key from environment variables in this order, taking the first non-empty value:
+    GreenchClaw resolves the Alibaba API key from environment variables in this order, taking the first non-empty value:
 
     1. `MODELSTUDIO_API_KEY`
     2. `DASHSCOPE_API_KEY`
     3. `QWEN_API_KEY`
 
-    Configured `auth.profiles` entries (set via `NexisClaw models auth login`) override env-var resolution. See [Auth profiles in the models FAQ](/help/faq-models#what-is-an-auth-profile) for profile rotation, cooldown, and override mechanics.
+    Configured `auth.profiles` entries (set via `GreenchClaw models auth login`) override env-var resolution. See [Auth profiles in the models FAQ](/help/faq-models#what-is-an-auth-profile) for profile rotation, cooldown, and override mechanics.
 
   </Accordion>
 

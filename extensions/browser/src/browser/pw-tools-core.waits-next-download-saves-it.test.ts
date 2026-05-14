@@ -10,7 +10,7 @@ import {
 } from "./pw-tools-core.test-harness.js";
 
 const tmpDirMocks = vi.hoisted(() => ({
-  resolvePreferredNexisClawTmpDir: vi.fn(() => "/tmp/NexisClaw"),
+  resolvePreferredGreenchClawTmpDir: vi.fn(() => "/tmp/GreenchClaw"),
 }));
 const chromeMocks = vi.hoisted(() => ({
   getChromeWebSocketUrl: vi.fn(async () => "ws://127.0.0.1/devtools/browser/mock"),
@@ -28,7 +28,7 @@ let mod: Pick<
   "downloadViaPlaywright" | "waitForDownloadViaPlaywright"
 > &
   Pick<typeof import("./pw-tools-core.responses.js"), "responseBodyViaPlaywright">;
-let tmpDirModule: typeof import("../infra/tmp-NexisClaw-dir.js");
+let tmpDirModule: typeof import("../infra/tmp-GreenchClaw-dir.js");
 
 describe("pw-tools-core", () => {
   installPwToolsCoreTestHooks();
@@ -36,9 +36,9 @@ describe("pw-tools-core", () => {
   beforeAll(async () => {
     vi.doMock("./pw-session.js", () => sessionMocks);
     vi.doMock("./chrome.js", () => chromeMocks);
-    tmpDirModule = await import("../infra/tmp-NexisClaw-dir.js");
-    vi.spyOn(tmpDirModule, "resolvePreferredNexisClawTmpDir").mockImplementation(
-      tmpDirMocks.resolvePreferredNexisClawTmpDir,
+    tmpDirModule = await import("../infra/tmp-GreenchClaw-dir.js");
+    vi.spyOn(tmpDirModule, "resolvePreferredGreenchClawTmpDir").mockImplementation(
+      tmpDirMocks.resolvePreferredGreenchClawTmpDir,
     );
     const [downloads, responses] = await Promise.all([
       import("./pw-tools-core.downloads.js"),
@@ -61,11 +61,11 @@ describe("pw-tools-core", () => {
     for (const fn of Object.values(clientFetchMocks)) {
       fn.mockClear();
     }
-    tmpDirMocks.resolvePreferredNexisClawTmpDir.mockReturnValue("/tmp/NexisClaw");
+    tmpDirMocks.resolvePreferredGreenchClawTmpDir.mockReturnValue("/tmp/GreenchClaw");
   });
 
   async function withTempDir<T>(run: (tempDir: string) => Promise<T>): Promise<T> {
-    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-browser-download-test-"));
+    const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-browser-download-test-"));
     try {
       return await run(tempDir);
     } finally {
@@ -381,39 +381,39 @@ describe("pw-tools-core", () => {
   );
 
   it("uses preferred tmp dir when waiting for download without explicit path", async () => {
-    tmpDirMocks.resolvePreferredNexisClawTmpDir.mockReturnValue("/tmp/NexisClaw-preferred");
+    tmpDirMocks.resolvePreferredGreenchClawTmpDir.mockReturnValue("/tmp/GreenchClaw-preferred");
     const { res, outPath } = await waitForImplicitDownloadOutput({
       downloadUrl: "https://example.com/file.bin",
       suggestedFilename: "file.bin",
     });
     expect(typeof outPath).toBe("string");
     const expectedRootedDownloadsDir = path.resolve(
-      path.join(path.sep, "tmp", "NexisClaw-preferred", "downloads"),
+      path.join(path.sep, "tmp", "GreenchClaw-preferred", "downloads"),
     );
-    const expectedDownloadsTail = `${path.join("tmp", "NexisClaw-preferred", "downloads")}${path.sep}`;
+    const expectedDownloadsTail = `${path.join("tmp", "GreenchClaw-preferred", "downloads")}${path.sep}`;
     expect(path.dirname(outPath)).not.toBe(expectedRootedDownloadsDir);
     expect(path.basename(outPath)).toContain(path.basename(res.path));
     expect(path.basename(outPath)).toMatch(/\.part$/);
     await expect(fs.readFile(res.path, "utf8")).resolves.toBe("download-content");
     expect(path.normalize(res.path)).toContain(path.normalize(expectedDownloadsTail));
-    expect(tmpDirMocks.resolvePreferredNexisClawTmpDir).toHaveBeenCalled();
+    expect(tmpDirMocks.resolvePreferredGreenchClawTmpDir).toHaveBeenCalled();
   });
 
   it("sanitizes suggested download filenames to prevent traversal escapes", async () => {
-    tmpDirMocks.resolvePreferredNexisClawTmpDir.mockReturnValue("/tmp/NexisClaw-preferred");
+    tmpDirMocks.resolvePreferredGreenchClawTmpDir.mockReturnValue("/tmp/GreenchClaw-preferred");
     const { res, outPath } = await waitForImplicitDownloadOutput({
       downloadUrl: "https://example.com/evil",
       suggestedFilename: "../../../../etc/passwd",
     });
     expect(typeof outPath).toBe("string");
     expect(path.dirname(outPath)).not.toBe(
-      path.resolve(path.join(path.sep, "tmp", "NexisClaw-preferred", "downloads")),
+      path.resolve(path.join(path.sep, "tmp", "GreenchClaw-preferred", "downloads")),
     );
     expect(path.basename(outPath)).toContain(path.basename(res.path));
     expect(path.basename(outPath)).toMatch(/\.part$/);
     await expect(fs.readFile(res.path, "utf8")).resolves.toBe("download-content");
     expect(path.normalize(res.path)).toContain(
-      path.normalize(`${path.join("tmp", "NexisClaw-preferred", "downloads")}${path.sep}`),
+      path.normalize(`${path.join("tmp", "GreenchClaw-preferred", "downloads")}${path.sep}`),
     );
   });
 
@@ -424,7 +424,7 @@ describe("pw-tools-core", () => {
         const outsideDir = path.join(tempDir, "outside");
         await fs.mkdir(outsideDir, { recursive: true });
         await fs.symlink(outsideDir, path.join(tempDir, "downloads"));
-        tmpDirMocks.resolvePreferredNexisClawTmpDir.mockReturnValue(tempDir);
+        tmpDirMocks.resolvePreferredGreenchClawTmpDir.mockReturnValue(tempDir);
 
         const harness = createDownloadEventHarness();
         const saveAs = vi.fn(async (outPath: string) => {

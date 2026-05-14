@@ -1,24 +1,24 @@
 ---
 summary: "CLI reference and security model for Crestodian, the configless-safe setup and repair helper"
 read_when:
-  - You run NexisClaw with no command and want to understand Crestodian
-  - You need a configless-safe way to inspect or repair NexisClaw
+  - You run GreenchClaw with no command and want to understand Crestodian
+  - You need a configless-safe way to inspect or repair GreenchClaw
   - You are designing or enabling message-channel rescue mode
 title: "Crestodian"
 ---
 
-# `NexisClaw crestodian`
+# `GreenchClaw crestodian`
 
-Crestodian is NexisClaw's local setup, repair, and configuration helper. It is
+Crestodian is GreenchClaw's local setup, repair, and configuration helper. It is
 designed to stay reachable when the normal agent path is broken.
 
-Running `NexisClaw` with no command starts Crestodian in an interactive terminal.
-Running `NexisClaw crestodian` starts the same helper explicitly.
+Running `GreenchClaw` with no command starts Crestodian in an interactive terminal.
+Running `GreenchClaw crestodian` starts the same helper explicitly.
 
 ## What Crestodian shows
 
 On startup, interactive Crestodian opens the same TUI shell used by
-`NexisClaw tui`, with a Crestodian chat backend. The chat log starts with a short
+`GreenchClaw tui`, with a Crestodian chat backend. The chat log starts with a short
 greeting:
 
 - when to start Crestodian
@@ -34,23 +34,23 @@ and editor controls.
 Use `status` for the detailed inventory with config path, docs/source paths,
 local CLI probes, API-key presence, agents, model, and Gateway details.
 
-Crestodian uses the same NexisClaw reference discovery as regular agents. In a Git checkout,
+Crestodian uses the same GreenchClaw reference discovery as regular agents. In a Git checkout,
 it points itself at local `docs/` and the local source tree. In an npm package install, it
 uses the bundled package docs and links to
-[https://github.com/NexisClaw/NexisClaw](https://github.com/NexisClaw/NexisClaw), with explicit
+[https://github.com/GreenchClaw/GreenchClaw](https://github.com/GreenchClaw/GreenchClaw), with explicit
 guidance to review source whenever the docs are not enough.
 
 ## Examples
 
 ```bash
-NexisClaw
-NexisClaw crestodian
-NexisClaw crestodian --json
-NexisClaw crestodian --message "models"
-NexisClaw crestodian --message "validate config"
-NexisClaw crestodian --message "setup workspace ~/Projects/work model openai/gpt-5.5" --yes
-NexisClaw crestodian --message "set default model openai/gpt-5.5" --yes
-NexisClaw onboard --modern
+GreenchClaw
+GreenchClaw crestodian
+GreenchClaw crestodian --json
+GreenchClaw crestodian --message "models"
+GreenchClaw crestodian --message "validate config"
+GreenchClaw crestodian --message "setup workspace ~/Projects/work model openai/gpt-5.5" --yes
+GreenchClaw crestodian --message "set default model openai/gpt-5.5" --yes
+GreenchClaw onboard --modern
 ```
 
 Inside the Crestodian TUI:
@@ -64,7 +64,7 @@ validate config
 setup
 setup workspace ~/Projects/work model openai/gpt-5.5
 config set gateway.port 19001
-config set-ref gateway.auth.token env NEXISCLAW_GATEWAY_TOKEN
+config set-ref gateway.auth.token env GREENCHCLAW_GATEWAY_TOKEN
 gateway status
 restart gateway
 agents
@@ -73,8 +73,8 @@ models
 set default model openai/gpt-5.5
 plugins list
 plugins search slack
-plugin install clawhub:NexisClaw-codex-app-server
-plugin uninstall NexisClaw-codex-app-server
+plugin install clawhub:GreenchClaw-codex-app-server
+plugin uninstall GreenchClaw-codex-app-server
 talk to work agent
 talk to agent for ~/Projects/work
 audit
@@ -85,14 +85,14 @@ quit
 
 Crestodian's startup path is deliberately small. It can run when:
 
-- `NexisClaw.json` is missing
-- `NexisClaw.json` is invalid
+- `GreenchClaw.json` is missing
+- `GreenchClaw.json` is invalid
 - the Gateway is down
 - plugin command registration is unavailable
 - no agent has been configured yet
 
-`NexisClaw --help` and `NexisClaw --version` still use the normal fast paths.
-Noninteractive `NexisClaw` exits with a short message instead of printing root
+`GreenchClaw --help` and `GreenchClaw --version` still use the normal fast paths.
+Noninteractive `GreenchClaw` exits with a short message instead of printing root
 help, because the no-command product is Crestodian.
 
 ## Operations and approval
@@ -129,13 +129,13 @@ you pass `--yes` for a direct command:
 Applied writes are recorded in:
 
 ```text
-~/.NexisClaw/audit/crestodian.jsonl
+~/.GreenchClaw/audit/crestodian.jsonl
 ```
 
 Discovery is not audited. Only applied operations and writes are logged.
 
-`NexisClaw onboard --modern` starts Crestodian as the modern onboarding preview.
-Plain `NexisClaw onboard` still runs classic onboarding.
+`GreenchClaw onboard --modern` starts Crestodian as the modern onboarding preview.
+Plain `GreenchClaw onboard` still runs classic onboarding.
 
 ## Setup bootstrap
 
@@ -165,8 +165,8 @@ model unset. Install or log into Codex/Claude Code, or expose
 
 Crestodian always starts in deterministic mode. For fuzzy commands that the
 deterministic parser does not understand, local Crestodian can make one bounded
-planner turn through NexisClaw's normal runtime paths. It first uses the
-configured NexisClaw model. If no configured model is usable yet, it can fall
+planner turn through GreenchClaw's normal runtime paths. It first uses the
+configured GreenchClaw model. If no configured model is usable yet, it can fall
 back to local runtimes already present on the machine:
 
 - Claude Code CLI: `claude-cli/claude-opus-4-7`
@@ -194,7 +194,7 @@ talk to work agent
 switch to main agent
 ```
 
-`NexisClaw tui`, `NexisClaw chat`, and `NexisClaw terminal` still open the normal
+`GreenchClaw tui`, `GreenchClaw chat`, and `GreenchClaw terminal` still open the normal
 agent TUI directly. They do not start Crestodian.
 
 After switching into the normal TUI, use `/crestodian` to return to Crestodian.
@@ -221,11 +221,11 @@ Operator flow:
 
 ```text
 You, in a trusted owner DM: /crestodian status
-NexisClaw: Crestodian rescue mode. Gateway reachable: no. Config valid: no.
+GreenchClaw: Crestodian rescue mode. Gateway reachable: no. Config valid: no.
 You: /crestodian restart gateway
-NexisClaw: Plan: restart the Gateway. Reply /crestodian yes to apply.
+GreenchClaw: Plan: restart the Gateway. Reply /crestodian yes to apply.
 You: /crestodian yes
-NexisClaw: Applied. Audit entry written.
+GreenchClaw: Applied. Audit entry written.
 ```
 
 Agent creation can also be queued from the local prompt or rescue mode:
@@ -252,7 +252,7 @@ Security contract for remote rescue:
   because it downloads executable code. Plugin uninstall can be allowed as an
   approved repair operation when rescue policy permits persistent writes.
 - Remote rescue cannot open the local TUI or switch into an interactive agent
-  session. Use local `NexisClaw` for agent handoff.
+  session. Use local `GreenchClaw` for agent handoff.
 - Persistent writes still require approval, even in rescue mode.
 - Audit every applied rescue operation. Message-channel rescue records channel,
   account, sender, and source-address metadata. Config-mutating operations also
@@ -315,13 +315,13 @@ Fresh configless setup through Crestodian is covered by:
 pnpm test:docker:crestodian-first-run
 ```
 
-That lane starts with an empty state dir, routes bare `NexisClaw` to Crestodian,
+That lane starts with an empty state dir, routes bare `GreenchClaw` to Crestodian,
 sets the default model, creates an additional agent, configures Discord through
 a plugin enablement plus token SecretRef, validates config, and checks the audit
 log. QA Lab also has a repo-backed scenario for the same Ring 0 flow:
 
 ```bash
-pnpm NexisClaw qa suite --scenario crestodian-ring-zero-setup
+pnpm GreenchClaw qa suite --scenario crestodian-ring-zero-setup
 ```
 
 ## Related

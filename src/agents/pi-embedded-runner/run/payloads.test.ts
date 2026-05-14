@@ -114,7 +114,7 @@ describe("buildEmbeddedRunPayloads tool-error warnings", () => {
   it("does not replay raw-looking accumulated tool output when final answer text is available", () => {
     const payloads = buildPayloads({
       assistantTexts: [
-        "/root/NexisClaw/src/gateway/protocol/schema/protocol-schemas.ts:181:  PluginControlUiDescriptorSchema,",
+        "/root/GreenchClaw/src/gateway/protocol/schema/protocol-schemas.ts:181:  PluginControlUiDescriptorSchema,",
         "The schema export is fixed.",
       ],
       lastAssistant: {
@@ -322,12 +322,12 @@ describe("buildEmbeddedRunPayloads tool-error warnings", () => {
 
   it("strips NO_REPLY text but keeps voice media directives", () => {
     const payloads = buildPayloads({
-      assistantTexts: ["NO_REPLY\nMEDIA:/tmp/NexisClaw/tts-a/voice-a.opus\n[[audio_as_voice]]"],
+      assistantTexts: ["NO_REPLY\nMEDIA:/tmp/GreenchClaw/tts-a/voice-a.opus\n[[audio_as_voice]]"],
     });
 
     expect(payloads).toHaveLength(1);
-    expect(payloads[0]?.mediaUrl).toBe("/tmp/NexisClaw/tts-a/voice-a.opus");
-    expect(payloads[0]?.mediaUrls).toEqual(["/tmp/NexisClaw/tts-a/voice-a.opus"]);
+    expect(payloads[0]?.mediaUrl).toBe("/tmp/GreenchClaw/tts-a/voice-a.opus");
+    expect(payloads[0]?.mediaUrls).toEqual(["/tmp/GreenchClaw/tts-a/voice-a.opus"]);
     expect(payloads[0]?.audioAsVoice).toBe(true);
     expect(payloads[0]?.text).toBeUndefined();
   });

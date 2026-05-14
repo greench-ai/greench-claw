@@ -1,7 +1,7 @@
 import type { AgentMessage } from "@earendil-works/pi-agent-core";
 import type { TextContent } from "@earendil-works/pi-ai";
 import { SessionManager } from "@earendil-works/pi-coding-agent";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { emitSessionTranscriptUpdate } from "../../sessions/transcript-events.js";
 import { normalizeLowercaseStringOrEmpty } from "../../shared/string-coerce.js";
@@ -223,7 +223,7 @@ export function calculateMaxToolResultCharsWithCap(
 
 export function resolveLiveToolResultMaxChars(params: {
   contextWindowTokens: number;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   agentId?: string | null;
 }): number {
   const configuredCap =

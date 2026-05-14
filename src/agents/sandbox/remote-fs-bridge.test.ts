@@ -25,11 +25,15 @@ function createLocalRemoteRuntime(params: {
             encoding: "buffer",
             stdio: ["pipe", "pipe", "pipe"],
           })
-        : spawnSync("sh", ["-c", command.script, "NexisClaw-sandbox-fs", ...(command.args ?? [])], {
-            input: command.stdin,
-            encoding: "buffer",
-            stdio: ["pipe", "pipe", "pipe"],
-          });
+        : spawnSync(
+            "sh",
+            ["-c", command.script, "GreenchClaw-sandbox-fs", ...(command.args ?? [])],
+            {
+              input: command.stdin,
+              encoding: "buffer",
+              stdio: ["pipe", "pipe", "pipe"],
+            },
+          );
       const stdout = Buffer.isBuffer(result.stdout)
         ? result.stdout
         : Buffer.from(result.stdout ?? []);
@@ -70,7 +74,7 @@ describe("remote sandbox fs bridge", () => {
   it.runIf(process.platform !== "win32")(
     "reads files with the pinned mutation helper",
     async () => {
-      await withTempDir("NexisClaw-remote-fs-bridge-", async (stateDir) => {
+      await withTempDir("GreenchClaw-remote-fs-bridge-", async (stateDir) => {
         const workspaceDir = path.join(stateDir, "workspace");
         await fs.mkdir(workspaceDir, { recursive: true });
         await fs.writeFile(path.join(workspaceDir, "note.txt"), "hello", "utf8");
@@ -102,7 +106,7 @@ describe("remote sandbox fs bridge", () => {
   it.runIf(process.platform !== "win32")(
     "rejects mount-root reads before invoking the mutation helper",
     async () => {
-      await withTempDir("NexisClaw-remote-fs-bridge-", async (stateDir) => {
+      await withTempDir("GreenchClaw-remote-fs-bridge-", async (stateDir) => {
         const workspaceDir = path.join(stateDir, "workspace");
         await fs.mkdir(workspaceDir, { recursive: true });
 
@@ -127,7 +131,7 @@ describe("remote sandbox fs bridge", () => {
   );
 
   it.runIf(process.platform !== "win32")("rejects symlink escapes while reading", async () => {
-    await withTempDir("NexisClaw-remote-fs-bridge-", async (stateDir) => {
+    await withTempDir("GreenchClaw-remote-fs-bridge-", async (stateDir) => {
       const workspaceDir = path.join(stateDir, "workspace");
       const outsideDir = path.join(stateDir, "outside");
       await fs.mkdir(workspaceDir, { recursive: true });
@@ -146,7 +150,7 @@ describe("remote sandbox fs bridge", () => {
   it.runIf(process.platform !== "win32")(
     "rejects final-component symlinks even when they stay inside the workspace",
     async () => {
-      await withTempDir("NexisClaw-remote-fs-bridge-", async (stateDir) => {
+      await withTempDir("GreenchClaw-remote-fs-bridge-", async (stateDir) => {
         const workspaceDir = path.join(stateDir, "workspace");
         await fs.mkdir(workspaceDir, { recursive: true });
         await fs.writeFile(path.join(workspaceDir, "note.txt"), "hello", "utf8");

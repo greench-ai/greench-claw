@@ -1,15 +1,15 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
 import {
   resolveOAuthApiKeyMarker,
   type ProviderAuthContext,
   type ProviderAuthResult,
-} from "NexisClaw/plugin-sdk/provider-auth";
-import { buildOauthProviderAuthResult } from "NexisClaw/plugin-sdk/provider-auth";
-import { createProviderApiKeyAuthMethod } from "NexisClaw/plugin-sdk/provider-auth-api-key";
+} from "GreenchClaw/plugin-sdk/provider-auth";
+import { buildOauthProviderAuthResult } from "GreenchClaw/plugin-sdk/provider-auth";
+import { createProviderApiKeyAuthMethod } from "GreenchClaw/plugin-sdk/provider-auth-api-key";
 import {
   normalizeOptionalString,
   readStringValue,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { loginChutes } from "./oauth.js";
 import {
   CHUTES_DEFAULT_MODEL_REF,

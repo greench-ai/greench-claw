@@ -3,13 +3,13 @@ import { randomUUID } from "node:crypto";
 import {
   isProviderAuthProfileConfigured,
   resolveProviderAuthProfileApiKey,
-} from "NexisClaw/plugin-sdk/provider-auth";
-import { resolveProviderRequestHeaders } from "NexisClaw/plugin-sdk/provider-http";
+} from "GreenchClaw/plugin-sdk/provider-auth";
+import { resolveProviderRequestHeaders } from "GreenchClaw/plugin-sdk/provider-http";
 import {
   captureWsEvent,
   createDebugProxyWebSocketAgent,
   resolveDebugProxySettings,
-} from "NexisClaw/plugin-sdk/proxy-capture";
+} from "GreenchClaw/plugin-sdk/proxy-capture";
 import type {
   RealtimeVoiceAudioFormat,
   RealtimeVoiceBargeInOptions,
@@ -21,15 +21,15 @@ import type {
   RealtimeVoiceProviderPlugin,
   RealtimeVoiceTool,
   RealtimeVoiceToolResultOptions,
-} from "NexisClaw/plugin-sdk/realtime-voice";
+} from "GreenchClaw/plugin-sdk/realtime-voice";
 import {
   REALTIME_VOICE_AUDIO_FORMAT_G711_ULAW_8KHZ,
   REALTIME_VOICE_AUDIO_FORMAT_PCM16_24KHZ,
-} from "NexisClaw/plugin-sdk/realtime-voice";
+} from "GreenchClaw/plugin-sdk/realtime-voice";
 import {
   normalizeResolvedSecretInputString,
   normalizeSecretInputString,
-} from "NexisClaw/plugin-sdk/secret-input";
+} from "GreenchClaw/plugin-sdk/secret-input";
 import WebSocket from "ws";
 import {
   asFiniteNumber,

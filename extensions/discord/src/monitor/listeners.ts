@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { danger } from "NexisClaw/plugin-sdk/runtime-env";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { danger } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   type Client,
   InteractionCreateListener,
@@ -13,7 +13,7 @@ import { setPresence } from "./presence-cache.js";
 import { isThreadArchived } from "./thread-bindings.discord-api.js";
 import { closeDiscordThreadSessions } from "./thread-session-close.js";
 
-type Logger = ReturnType<typeof import("NexisClaw/plugin-sdk/runtime-env").createSubsystemLogger>;
+type Logger = ReturnType<typeof import("GreenchClaw/plugin-sdk/runtime-env").createSubsystemLogger>;
 
 export type DiscordMessageEvent = Parameters<MessageCreateListener["handle"]>[0];
 export type DiscordInteractionEvent = Parameters<InteractionCreateListener["handle"]>[0];
@@ -108,7 +108,7 @@ type ThreadUpdateEvent = Parameters<ThreadUpdateListener["handle"]>[0];
 
 export class DiscordThreadUpdateListener extends ThreadUpdateListener {
   constructor(
-    private cfg: NexisClawConfig,
+    private cfg: GreenchClawConfig,
     private accountId: string,
     private logger?: Logger,
   ) {

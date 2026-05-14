@@ -63,10 +63,10 @@ function requireFirstRunCommandCall(): RunCommandCall {
 
 describe("handleReset", () => {
   it("uses active profile paths for destructive reset targets", async () => {
-    const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-reset-profile-"));
-    const profileStateDir = path.join(homeDir, ".NexisClaw-work");
-    const defaultStateDir = path.join(homeDir, ".NexisClaw");
-    const profileConfigPath = path.join(profileStateDir, "NexisClaw.json");
+    const homeDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-reset-profile-"));
+    const profileStateDir = path.join(homeDir, ".GreenchClaw-work");
+    const defaultStateDir = path.join(homeDir, ".GreenchClaw");
+    const profileConfigPath = path.join(profileStateDir, "GreenchClaw.json");
     const profileCredentialsDir = path.join(profileStateDir, "credentials");
     const profileSessionsDir = path.join(profileStateDir, "agents", "main", "sessions");
     const workspaceDir = path.join(profileStateDir, "workspace");
@@ -79,10 +79,10 @@ describe("handleReset", () => {
     fs.writeFileSync(profileConfigPath, "{}\n");
 
     vi.stubEnv("HOME", homeDir);
-    vi.stubEnv("NEXISCLAW_HOME", homeDir);
-    vi.stubEnv("NEXISCLAW_PROFILE", "work");
-    vi.stubEnv("NEXISCLAW_STATE_DIR", profileStateDir);
-    vi.stubEnv("NEXISCLAW_CONFIG_PATH", profileConfigPath);
+    vi.stubEnv("GREENCHCLAW_HOME", homeDir);
+    vi.stubEnv("GREENCHCLAW_PROFILE", "work");
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", profileStateDir);
+    vi.stubEnv("GREENCHCLAW_CONFIG_PATH", profileConfigPath);
 
     const runtime = { log: vi.fn() } as unknown as RuntimeEnv;
 

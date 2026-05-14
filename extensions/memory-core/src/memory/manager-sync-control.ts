@@ -1,10 +1,10 @@
 import type { DatabaseSync } from "node:sqlite";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import {
   createSubsystemLogger,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-foundation";
-import type { MemorySyncProgressUpdate } from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-foundation";
+import type { MemorySyncProgressUpdate } from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 
 const log = createSubsystemLogger("memory");
 
@@ -170,7 +170,7 @@ export function enqueueMemoryTargetedSessionSync(
 export function _createMemorySyncControlConfigForTests(
   workspaceDir: string,
   indexPath: string,
-): NexisClawConfig {
+): GreenchClawConfig {
   return {
     agents: {
       defaults: {
@@ -186,5 +186,5 @@ export function _createMemorySyncControlConfigForTests(
       },
       list: [{ id: "main", default: true }],
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }

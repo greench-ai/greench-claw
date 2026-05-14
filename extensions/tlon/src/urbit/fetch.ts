@@ -2,7 +2,7 @@ import {
   fetchWithSsrFGuard,
   type LookupFn,
   type SsrFPolicy,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { validateUrbitBaseUrl } from "./base-url.js";
 import { UrbitUrlError } from "./errors.js";
 

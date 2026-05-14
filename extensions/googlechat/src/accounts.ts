@@ -2,13 +2,16 @@ import {
   createAccountListHelpers,
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   resolveAccountEntry,
   resolveMergedAccountConfig,
-} from "NexisClaw/plugin-sdk/account-resolution";
-import { safeParseJsonWithSchema, safeParseWithSchema } from "NexisClaw/plugin-sdk/extension-shared";
-import { isSecretRef } from "NexisClaw/plugin-sdk/secret-input";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/account-resolution";
+import {
+  safeParseJsonWithSchema,
+  safeParseWithSchema,
+} from "GreenchClaw/plugin-sdk/extension-shared";
+import { isSecretRef } from "GreenchClaw/plugin-sdk/secret-input";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { z } from "zod";
 import type { GoogleChatAccountConfig } from "./types.config.js";
 
@@ -39,7 +42,7 @@ const {
 export { listGoogleChatAccountIds, resolveDefaultGoogleChatAccountId };
 
 function mergeGoogleChatAccountConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
 ): GoogleChatAccountConfig {
   const raw = cfg.channels?.["googlechat"] ?? {};
@@ -67,7 +70,7 @@ function mergeGoogleChatAccountConfig(
 }
 
 export function resolveGoogleChatConfigAccessorAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): GoogleChatConfigAccessorAccount {
   const accountId = normalizeAccountId(
@@ -139,7 +142,7 @@ function resolveCredentialsFromConfig(params: {
 }
 
 export function resolveGoogleChatAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): ResolvedGoogleChatAccount {
   const accountId = normalizeAccountId(
@@ -162,7 +165,7 @@ export function resolveGoogleChatAccount(params: {
   };
 }
 
-export function listEnabledGoogleChatAccounts(cfg: NexisClawConfig): ResolvedGoogleChatAccount[] {
+export function listEnabledGoogleChatAccounts(cfg: GreenchClawConfig): ResolvedGoogleChatAccount[] {
   return listGoogleChatAccountIds(cfg)
     .map((accountId) => resolveGoogleChatAccount({ cfg, accountId }))
     .filter((account) => account.enabled);

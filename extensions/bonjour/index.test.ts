@@ -1,4 +1,4 @@
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { afterAll, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -16,7 +16,7 @@ vi.mock("./src/advertiser.js", () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/runtime", () => {
+vi.mock("GreenchClaw/plugin-sdk/runtime", () => {
   mocks.runtimeModuleLoaded();
   return {
     registerUncaughtExceptionHandler: mocks.registerUncaughtExceptionHandler,
@@ -28,7 +28,7 @@ const { default: bonjourPlugin } = await import("./index.js");
 
 afterAll(() => {
   vi.doUnmock("./src/advertiser.js");
-  vi.doUnmock("NexisClaw/plugin-sdk/runtime");
+  vi.doUnmock("GreenchClaw/plugin-sdk/runtime");
   vi.resetModules();
 });
 
@@ -75,7 +75,7 @@ describe("bonjour plugin entry", () => {
         canvasPort: 9876,
         sshPort: 22,
         tailnetDns: "dev.tailnet.ts.net",
-        cliPath: "/usr/local/bin/NexisClaw",
+        cliPath: "/usr/local/bin/GreenchClaw",
         minimal: false,
       }),
     ).resolves.toEqual({ stop });
@@ -84,14 +84,14 @@ describe("bonjour plugin entry", () => {
     expect(mocks.runtimeModuleLoaded).toHaveBeenCalledTimes(1);
     expect(mocks.startGatewayBonjourAdvertiser).toHaveBeenCalledWith(
       {
-        instanceName: "Dev Box (NexisClaw)",
+        instanceName: "Dev Box (GreenchClaw)",
         gatewayPort: 3210,
         gatewayTlsEnabled: true,
         gatewayTlsFingerprintSha256: "abc123",
         canvasPort: 9876,
         sshPort: 22,
         tailnetDns: "dev.tailnet.ts.net",
-        cliPath: "/usr/local/bin/NexisClaw",
+        cliPath: "/usr/local/bin/GreenchClaw",
         minimal: false,
       },
       {

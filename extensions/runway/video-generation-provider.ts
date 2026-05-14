@@ -1,6 +1,6 @@
-import { extensionForMime } from "NexisClaw/plugin-sdk/media-mime";
-import { isProviderApiKeyConfigured } from "NexisClaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
+import { extensionForMime } from "GreenchClaw/plugin-sdk/media-mime";
+import { isProviderApiKeyConfigured } from "GreenchClaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "GreenchClaw/plugin-sdk/provider-auth-runtime";
 import {
   assertOkOrThrowHttpError,
   createProviderOperationDeadline,
@@ -9,18 +9,18 @@ import {
   resolveProviderOperationTimeoutMs,
   resolveProviderHttpRequestConfig,
   waitProviderOperationPollInterval,
-} from "NexisClaw/plugin-sdk/provider-http";
+} from "GreenchClaw/plugin-sdk/provider-http";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type {
   GeneratedVideoAsset,
   VideoGenerationProvider,
   VideoGenerationRequest,
   VideoGenerationResult,
   VideoGenerationSourceAsset,
-} from "NexisClaw/plugin-sdk/video-generation";
+} from "GreenchClaw/plugin-sdk/video-generation";
 
 const DEFAULT_RUNWAY_BASE_URL = "https://api.dev.runwayml.com";
 const DEFAULT_RUNWAY_MODEL = "gen4.5";

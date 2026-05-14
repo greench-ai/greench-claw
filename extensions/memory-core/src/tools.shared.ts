@@ -4,9 +4,9 @@ import {
   resolveSessionAgentIds,
   type MemoryCorpusSearchResult,
   type AnyAgentTool,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-runtime-core";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/memory-core-host-runtime-core";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { Type } from "typebox";
 
 type MemoryToolRuntime = typeof import("./tools.runtime.js");
@@ -14,8 +14,8 @@ type MemorySearchManagerResult = Awaited<
   ReturnType<(typeof import("./memory/index.js"))["getMemorySearchManager"]>
 >;
 type MemoryToolOptions = {
-  config?: NexisClawConfig;
-  getConfig?: () => NexisClawConfig | undefined;
+  config?: GreenchClawConfig;
+  getConfig?: () => GreenchClawConfig | undefined;
   agentId?: string;
   agentSessionKey?: string;
 };
@@ -67,7 +67,7 @@ function resolveMemoryToolContext(options: MemoryToolOptions) {
 }
 
 export async function getMemoryManagerContext(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
 }): Promise<
   | {
@@ -81,7 +81,7 @@ export async function getMemoryManagerContext(params: {
 }
 
 export async function getMemoryManagerContextWithPurpose(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   purpose?: "default" | "status" | "cli";
 }): Promise<
@@ -107,7 +107,7 @@ export function createMemoryTool(params: {
   name: string;
   description: string;
   parameters: typeof MemorySearchSchema | typeof MemoryGetSchema;
-  execute: (ctx: { cfg: NexisClawConfig; agentId: string }) => AnyAgentTool["execute"];
+  execute: (ctx: { cfg: GreenchClawConfig; agentId: string }) => AnyAgentTool["execute"];
 }): AnyAgentTool | null {
   const ctx = resolveMemoryToolContext(params.options);
   if (!ctx) {

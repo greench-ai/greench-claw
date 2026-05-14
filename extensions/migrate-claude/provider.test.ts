@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { redactMigrationPlan } from "NexisClaw/plugin-sdk/migration";
+import { redactMigrationPlan } from "GreenchClaw/plugin-sdk/migration";
 import { afterEach, describe, expect, it } from "vitest";
 import { resolveHomePath } from "./helpers.js";
 import { buildClaudeMigrationProvider } from "./provider.js";
@@ -35,16 +35,16 @@ describe("Claude migration provider", () => {
     expect(provider.label).toBe("Claude");
   });
 
-  it("resolves tilde source paths against the OS home when NEXISCLAW_HOME is set", () => {
-    const previous = process.env.NEXISCLAW_HOME;
-    process.env.NEXISCLAW_HOME = path.join(path.sep, "tmp", "NexisClaw-home");
+  it("resolves tilde source paths against the OS home when GREENCHCLAW_HOME is set", () => {
+    const previous = process.env.GREENCHCLAW_HOME;
+    process.env.GREENCHCLAW_HOME = path.join(path.sep, "tmp", "GreenchClaw-home");
     try {
       expect(resolveHomePath("~/.claude")).toBe(path.join(os.homedir(), ".claude"));
     } finally {
       if (previous === undefined) {
-        delete process.env.NEXISCLAW_HOME;
+        delete process.env.GREENCHCLAW_HOME;
       } else {
-        process.env.NEXISCLAW_HOME = previous;
+        process.env.GREENCHCLAW_HOME = previous;
       }
     }
   });

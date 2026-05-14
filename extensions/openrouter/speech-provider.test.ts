@@ -13,7 +13,7 @@ const { assertOkOrThrowHttpErrorMock, postJsonRequestMock, resolveProviderHttpRe
     })),
   }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-http", () => ({
+vi.mock("GreenchClaw/plugin-sdk/provider-http", () => ({
   assertOkOrThrowHttpError: assertOkOrThrowHttpErrorMock,
   postJsonRequest: postJsonRequestMock,
   resolveProviderHttpRequestConfig: resolveProviderHttpRequestConfigMock,
@@ -138,8 +138,8 @@ describe("openrouter speech provider", () => {
       defaultHeaders: {
         Authorization: "Bearer sk-openrouter",
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://NexisClaw.ai",
-        "X-OpenRouter-Title": "NexisClaw",
+        "HTTP-Referer": "https://GreenchClaw.ai",
+        "X-OpenRouter-Title": "GreenchClaw",
       },
       provider: "openrouter",
       capability: "audio",
@@ -151,8 +151,8 @@ describe("openrouter speech provider", () => {
     expect(Object.fromEntries(headers.entries())).toEqual({
       authorization: "Bearer sk-openrouter",
       "content-type": "application/json",
-      "http-referer": "https://NexisClaw.ai",
-      "x-openrouter-title": "NexisClaw",
+      "http-referer": "https://GreenchClaw.ai",
+      "x-openrouter-title": "GreenchClaw",
     });
     expect(request).toEqual({
       url: "https://openrouter.ai/api/v1/audio/speech",

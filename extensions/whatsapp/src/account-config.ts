@@ -3,16 +3,16 @@ import {
   mergeAccountConfig,
   resolveAccountEntry,
   resolveMergedAccountConfig,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/account-core";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/account-core";
 import {
   resolveChannelStreamingBlockEnabled,
   resolveChannelStreamingChunkMode,
-} from "NexisClaw/plugin-sdk/channel-streaming";
+} from "GreenchClaw/plugin-sdk/channel-streaming";
 import type { WhatsAppAccountConfig } from "./account-types.js";
 
 function resolveWhatsAppDefaultAccountSharedConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ): Partial<WhatsAppAccountConfig> | undefined {
   const defaultAccount = resolveAccountEntry(cfg.channels?.whatsapp?.accounts, DEFAULT_ACCOUNT_ID);
   if (!defaultAccount) {
@@ -29,14 +29,14 @@ function resolveWhatsAppDefaultAccountSharedConfig(
 }
 
 function _resolveWhatsAppAccountConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
 ): WhatsAppAccountConfig | undefined {
   return resolveAccountEntry(cfg.channels?.whatsapp?.accounts, accountId);
 }
 
 function resolveMergedNamedWhatsAppAccountConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
 }): WhatsAppAccountConfig {
   const rootCfg = params.cfg.channels?.whatsapp;
@@ -53,7 +53,7 @@ function resolveMergedNamedWhatsAppAccountConfig(params: {
 }
 
 export function resolveMergedWhatsAppAccountConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): WhatsAppAccountConfig & { accountId: string } {
   const rootCfg = params.cfg.channels?.whatsapp;

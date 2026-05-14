@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   resolveExternalCliAuthScopeFromConfig,
   type ExternalCliAuthScope,
@@ -8,23 +8,23 @@ export type ExternalCliAuthDiscovery =
   | {
       mode: "none";
       allowKeychainPrompt?: false;
-      config?: NexisClawConfig;
+      config?: GreenchClawConfig;
     }
   | {
       mode: "existing";
       allowKeychainPrompt?: boolean;
-      config?: NexisClawConfig;
+      config?: GreenchClawConfig;
     }
   | {
       mode: "scoped";
       allowKeychainPrompt?: boolean;
-      config?: NexisClawConfig;
+      config?: GreenchClawConfig;
       providerIds?: Iterable<string>;
       profileIds?: Iterable<string>;
     };
 
 type ProviderAuthDiscoveryParams = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   provider: string;
   profileId?: string;
   preferredProfile?: string;
@@ -32,12 +32,12 @@ type ProviderAuthDiscoveryParams = {
 };
 
 type ConfigStatusDiscoveryParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   allowKeychainPrompt?: false;
 };
 
 type ProviderSetDiscoveryParams = {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   providers: Iterable<string>;
   allowKeychainPrompt?: false;
 };
@@ -49,7 +49,7 @@ function normalizeStringList(values: Iterable<string | undefined>): string[] {
 }
 
 export function externalCliDiscoveryNone(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): ExternalCliAuthDiscovery {
   return {
     mode: "none",
@@ -59,7 +59,7 @@ export function externalCliDiscoveryNone(params?: {
 }
 
 export function externalCliDiscoveryExisting(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   allowKeychainPrompt?: boolean;
 }): ExternalCliAuthDiscovery {
   return {
@@ -72,7 +72,7 @@ export function externalCliDiscoveryExisting(params?: {
 }
 
 export function externalCliDiscoveryScoped(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   providerIds?: Iterable<string>;
   profileIds?: Iterable<string>;
   allowKeychainPrompt?: boolean;
@@ -126,7 +126,7 @@ export function externalCliDiscoveryForProviders(
 }
 
 function externalCliDiscoveryFromScope(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   scope: ExternalCliAuthScope | undefined;
   allowKeychainPrompt: false;
 }): ExternalCliAuthDiscovery {

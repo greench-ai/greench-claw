@@ -1,13 +1,13 @@
 {
-  "name": "@NexisClaw/nvidia-provider",
+  "name": "@GreenchClaw/nvidia-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw NVIDIA provider plugin",
+  "description": "GreenchClaw NVIDIA provider plugin",
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

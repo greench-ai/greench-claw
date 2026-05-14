@@ -3,13 +3,13 @@ import {
   type SessionStoreSelectionOptions,
   type SessionStoreTarget,
 } from "../config/sessions.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import type { RuntimeEnv } from "../runtime.js";
 export { resolveSessionStoreTargets, type SessionStoreSelectionOptions, type SessionStoreTarget };
 
 export function resolveSessionStoreTargetsOrExit(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   opts: SessionStoreSelectionOptions;
   runtime: RuntimeEnv;
 }): SessionStoreTarget[] | null {

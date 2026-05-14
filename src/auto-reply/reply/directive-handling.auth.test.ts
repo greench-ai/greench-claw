@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AuthProfileStore } from "../../agents/auth-profiles.js";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 
 let mockStore: AuthProfileStore;
 let mockOrder: string[];
@@ -9,7 +9,7 @@ const resolveEnvApiKeyMock = vi.hoisted(() =>
     (
       _provider?: string,
       _env?: NodeJS.ProcessEnv,
-      _options?: { config?: NexisClawConfig; workspaceDir?: string },
+      _options?: { config?: GreenchClawConfig; workspaceDir?: string },
     ) => null as { apiKey: string; source: string } | null,
   ),
 );
@@ -29,7 +29,7 @@ vi.mock("../../agents/auth-profiles.js", () => ({
     provider,
     profileId,
   }: {
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
     provider: string;
     profileId: string;
   }) => {
@@ -66,7 +66,7 @@ vi.mock("../../agents/model-auth.js", () => ({
   resolveEnvApiKey: (
     provider?: string,
     env?: NodeJS.ProcessEnv,
-    options?: { config?: NexisClawConfig; workspaceDir?: string },
+    options?: { config?: GreenchClawConfig; workspaceDir?: string },
   ) => resolveEnvApiKeyMock(provider, env, options),
 }));
 
@@ -87,7 +87,7 @@ async function resolveRefOnlyAuthLabel(params: {
 
   return resolveAuthLabel(
     params.provider,
-    {} as NexisClawConfig,
+    {} as GreenchClawConfig,
     "/tmp/models.json",
     undefined,
     params.mode,
@@ -166,7 +166,7 @@ describe("resolveAuthLabel ref-aware labels", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       "/tmp/models.json",
       undefined,
       "compact",
@@ -199,7 +199,7 @@ describe("resolveAuthLabel ref-aware labels", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       "/tmp/models.json",
       undefined,
       "verbose",
@@ -210,7 +210,7 @@ describe("resolveAuthLabel ref-aware labels", () => {
   });
 
   it("passes workspace scope to env auth labels", async () => {
-    const cfg = { plugins: { allow: ["workspace-auth-label"] } } as NexisClawConfig;
+    const cfg = { plugins: { allow: ["workspace-auth-label"] } } as GreenchClawConfig;
     resolveEnvApiKeyMock.mockReturnValue({
       apiKey: "workspace-local-credentials",
       source: "workspace credentials",

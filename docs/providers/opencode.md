@@ -1,19 +1,19 @@
 ---
-summary: "Use OpenCode Zen and Go catalogs with NexisClaw"
+summary: "Use OpenCode Zen and Go catalogs with GreenchClaw"
 read_when:
   - You want OpenCode-hosted model access
   - You want to pick between the Zen and Go catalogs
 title: "OpenCode"
 ---
 
-OpenCode exposes two hosted catalogs in NexisClaw:
+OpenCode exposes two hosted catalogs in GreenchClaw:
 
 | Catalog | Prefix            | Runtime provider |
 | ------- | ----------------- | ---------------- |
 | **Zen** | `opencode/...`    | `opencode`       |
 | **Go**  | `opencode-go/...` | `opencode-go`    |
 
-Both catalogs use the same OpenCode API key. NexisClaw keeps the runtime provider ids
+Both catalogs use the same OpenCode API key. GreenchClaw keeps the runtime provider ids
 split so upstream per-model routing stays correct, but onboarding and docs treat them
 as one OpenCode setup.
 
@@ -26,23 +26,23 @@ as one OpenCode setup.
     <Steps>
       <Step title="Run onboarding">
         ```bash
-        NexisClaw onboard --auth-choice opencode-zen
+        GreenchClaw onboard --auth-choice opencode-zen
         ```
 
         Or pass the key directly:
 
         ```bash
-        NexisClaw onboard --opencode-zen-api-key "$OPENCODE_API_KEY"
+        GreenchClaw onboard --opencode-zen-api-key "$OPENCODE_API_KEY"
         ```
       </Step>
       <Step title="Set a Zen model as the default">
         ```bash
-        NexisClaw config set agents.defaults.model.primary "opencode/claude-opus-4-6"
+        GreenchClaw config set agents.defaults.model.primary "opencode/claude-opus-4-6"
         ```
       </Step>
       <Step title="Verify models are available">
         ```bash
-        NexisClaw models list --provider opencode
+        GreenchClaw models list --provider opencode
         ```
       </Step>
     </Steps>
@@ -55,23 +55,23 @@ as one OpenCode setup.
     <Steps>
       <Step title="Run onboarding">
         ```bash
-        NexisClaw onboard --auth-choice opencode-go
+        GreenchClaw onboard --auth-choice opencode-go
         ```
 
         Or pass the key directly:
 
         ```bash
-        NexisClaw onboard --opencode-go-api-key "$OPENCODE_API_KEY"
+        GreenchClaw onboard --opencode-go-api-key "$OPENCODE_API_KEY"
         ```
       </Step>
       <Step title="Set a Go model as the default">
         ```bash
-        NexisClaw config set agents.defaults.model.primary "opencode-go/kimi-k2.6"
+        GreenchClaw config set agents.defaults.model.primary "opencode-go/kimi-k2.6"
         ```
       </Step>
       <Step title="Verify models are available">
         ```bash
-        NexisClaw models list --provider opencode-go
+        GreenchClaw models list --provider opencode-go
         ```
       </Step>
     </Steps>
@@ -122,7 +122,7 @@ as one OpenCode setup.
   </Accordion>
 
   <Accordion title="Gemini replay behavior">
-    Gemini-backed OpenCode refs stay on the proxy-Gemini path, so NexisClaw keeps
+    Gemini-backed OpenCode refs stay on the proxy-Gemini path, so GreenchClaw keeps
     Gemini thought-signature sanitation there without enabling native Gemini
     replay validation or bootstrap rewrites.
   </Accordion>

@@ -1,7 +1,7 @@
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { buildWorkspaceSkillStatus } from "../agents/skills-status.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   buildPluginCompatibilityWarnings,
   buildPluginRegistrySnapshotReport,
@@ -43,8 +43,8 @@ function noteFlowRecoveryHints() {
     [
       ...suspicious.slice(0, 5),
       suspicious.length > 5 ? `...and ${suspicious.length - 5} more.` : null,
-      `Inspect: ${formatCliCommand("NexisClaw tasks flow show <flow-id>")}`,
-      `Cancel: ${formatCliCommand("NexisClaw tasks flow cancel <flow-id>")}`,
+      `Inspect: ${formatCliCommand("GreenchClaw tasks flow show <flow-id>")}`,
+      `Cancel: ${formatCliCommand("GreenchClaw tasks flow cancel <flow-id>")}`,
     ]
       .filter((line): line is string => Boolean(line))
       .join("\n"),
@@ -52,7 +52,7 @@ function noteFlowRecoveryHints() {
   );
 }
 
-export function noteWorkspaceStatus(cfg: NexisClawConfig) {
+export function noteWorkspaceStatus(cfg: GreenchClawConfig) {
   const workspaceDir = resolveAgentWorkspaceDir(cfg, resolveDefaultAgentId(cfg));
   const legacyWorkspace = detectLegacyWorkspaceDirs({ workspaceDir });
   if (legacyWorkspace.legacyDirs.length > 0) {

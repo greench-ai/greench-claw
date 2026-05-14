@@ -1,4 +1,7 @@
-import type { AccessGroupsConfig, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type {
+  AccessGroupsConfig,
+  GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it, vi } from "vitest";
 import { handleSignalDirectMessageAccess, resolveSignalAccessState } from "./access-policy.js";
 
@@ -37,7 +40,7 @@ async function resolveGroupAccess(params: {
 
 function accessGroupsConfig(
   accessGroups: AccessGroupsConfig | undefined,
-): Pick<NexisClawConfig, "accessGroups"> | undefined {
+): Pick<GreenchClawConfig, "accessGroups"> | undefined {
   return accessGroups ? { accessGroups } : undefined;
 }
 

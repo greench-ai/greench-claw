@@ -11,7 +11,7 @@ import {
 import { FIELD_LABELS } from "./schema.labels.js";
 import { asSchemaObject, cloneSchema } from "./schema.shared.js";
 import { applyDerivedTags } from "./schema.tags.js";
-import { NexisClawSchema } from "./zod-schema.js";
+import { GreenchClawSchema } from "./zod-schema.js";
 
 type ConfigSchema = Record<string, unknown>;
 
@@ -229,18 +229,18 @@ function computeBaseConfigSchemaStablePayload(): BaseConfigSchemaStablePayload {
       version: baseConfigSchemaStablePayload.version,
     };
   }
-  const schema = NexisClawSchema.toJSONSchema({
+  const schema = GreenchClawSchema.toJSONSchema({
     target: "draft-07",
     unrepresentable: "any",
   });
-  schema.title = "NexisClawConfig";
+  schema.title = "GreenchClawConfig";
   const schemaRoot = asJsonSchemaObject(schema);
   if (schemaRoot) {
     applyFieldDocumentation(schemaRoot, buildFieldDocumentation());
   }
-  const baseHints = mapSensitivePaths(NexisClawSchema, "", buildBaseHints());
+  const baseHints = mapSensitivePaths(GreenchClawSchema, "", buildBaseHints());
   const sensitiveUrlPaths = collectMatchingSchemaPaths(
-    NexisClawSchema,
+    GreenchClawSchema,
     "",
     isSensitiveUrlConfigPath,
   );

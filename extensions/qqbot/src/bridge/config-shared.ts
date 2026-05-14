@@ -1,10 +1,10 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   applyAccountNameToChannelSection,
   deleteAccountFromConfigSection,
   setAccountEnabledInConfigSection,
-} from "NexisClaw/plugin-sdk/core";
-import type { ChannelSetupInput } from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/core";
+import type { ChannelSetupInput } from "GreenchClaw/plugin-sdk/setup";
 import {
   describeAccount as engineDescribeAccount,
   formatAllowFrom as engineFormatAllowFrom,
@@ -39,15 +39,15 @@ function validateQQBotSetupInput(params: {
 }
 
 function applyQQBotSetupAccountConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   input: ChannelSetupInput;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   return engineApplySetupAccountConfig(
     params.cfg as unknown as Record<string, unknown>,
     params.accountId,
     params.input,
-  ) as NexisClawConfig;
+  ) as GreenchClawConfig;
 }
 
 function isQQBotConfigured(account: ResolvedQQBotAccount | undefined): boolean {
@@ -65,16 +65,16 @@ function formatQQBotAllowFrom(params: {
 }
 
 export const qqbotConfigAdapter = {
-  listAccountIds: (cfg: NexisClawConfig) => listQQBotAccountIds(cfg),
-  resolveAccount: (cfg: NexisClawConfig, accountId?: string | null) =>
+  listAccountIds: (cfg: GreenchClawConfig) => listQQBotAccountIds(cfg),
+  resolveAccount: (cfg: GreenchClawConfig, accountId?: string | null) =>
     resolveQQBotAccount(cfg, accountId, { allowUnresolvedSecretRef: true }),
-  defaultAccountId: (cfg: NexisClawConfig) => resolveDefaultQQBotAccountId(cfg),
+  defaultAccountId: (cfg: GreenchClawConfig) => resolveDefaultQQBotAccountId(cfg),
   setAccountEnabled: ({
     cfg,
     accountId,
     enabled,
   }: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     enabled: boolean;
   }) =>
@@ -85,7 +85,7 @@ export const qqbotConfigAdapter = {
       enabled,
       allowTopLevel: true,
     }),
-  deleteAccount: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId: string }) =>
+  deleteAccount: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId: string }) =>
     deleteAccountFromConfigSection({
       cfg,
       sectionKey: "qqbot",
@@ -94,21 +94,21 @@ export const qqbotConfigAdapter = {
     }),
   isConfigured: isQQBotConfigured,
   describeAccount: describeQQBotAccount,
-  resolveAllowFrom: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId?: string | null }) =>
+  resolveAllowFrom: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId?: string | null }) =>
     resolveQQBotAccount(cfg, accountId, { allowUnresolvedSecretRef: true }).config?.allowFrom,
   formatAllowFrom: ({ allowFrom }: { allowFrom: Array<string | number> | undefined | null }) =>
     formatQQBotAllowFrom({ allowFrom }),
 };
 
 export const qqbotSetupAdapterShared = {
-  resolveAccountId: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId?: string | null }) =>
+  resolveAccountId: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId?: string | null }) =>
     normalizeLowercaseStringOrEmpty(accountId) || resolveDefaultQQBotAccountId(cfg),
   applyAccountName: ({
     cfg,
     accountId,
     name,
   }: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     name?: string;
   }) =>
@@ -125,7 +125,7 @@ export const qqbotSetupAdapterShared = {
     accountId,
     input,
   }: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     input: ChannelSetupInput;
   }) => applyQQBotSetupAccountConfig({ cfg, accountId, input }),

@@ -2,4 +2,4 @@ export {
   createReplyDispatcherWithTyping,
   dispatchInboundMessage,
   settleReplyDispatcher,
-} from "NexisClaw/plugin-sdk/reply-runtime";
+} from "GreenchClaw/plugin-sdk/reply-runtime";

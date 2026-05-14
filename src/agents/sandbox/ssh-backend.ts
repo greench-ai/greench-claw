@@ -59,7 +59,7 @@ export const sshSandboxBackendManager: SandboxBackendManager = {
           "/bin/sh",
           "-c",
           'if [ -d "$1" ]; then printf "1\\n"; else printf "0\\n"; fi',
-          "NexisClaw-sandbox-check",
+          "GreenchClaw-sandbox-check",
           runtimePaths.runtimeRootDir,
         ]),
       });
@@ -89,7 +89,7 @@ export const sshSandboxBackendManager: SandboxBackendManager = {
           "/bin/sh",
           "-c",
           'rm -rf -- "$1"',
-          "NexisClaw-sandbox-remove",
+          "GreenchClaw-sandbox-remove",
           runtimePaths.runtimeRootDir,
         ]),
         allowFailure: true,
@@ -206,7 +206,7 @@ class SshSandboxBackendImpl {
           "/bin/sh",
           "-c",
           'if [ -d "$1" ]; then printf "1\\n"; else printf "0\\n"; fi',
-          "NexisClaw-sandbox-check",
+          "GreenchClaw-sandbox-check",
           this.params.runtimePaths.runtimeRootDir,
         ]),
       });
@@ -245,7 +245,7 @@ class SshSandboxBackendImpl {
         "/bin/sh",
         "-c",
         'mkdir -p -- "$1" && find "$1" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +',
-        "NexisClaw-sandbox-clear",
+        "GreenchClaw-sandbox-clear",
         remoteDir,
       ]),
     });
@@ -268,7 +268,7 @@ class SshSandboxBackendImpl {
           "/bin/sh",
           "-c",
           params.script,
-          "NexisClaw-sandbox-fs",
+          "GreenchClaw-sandbox-fs",
           ...(params.args ?? []),
         ]),
         stdin: params.stdin,
@@ -302,5 +302,5 @@ function buildSshSandboxRuntimeId(scopeKey: string): string {
     (acc, char) => ((acc * 33) ^ char.charCodeAt(0)) >>> 0,
     5381,
   );
-  return `NexisClaw-ssh-${safe || "session"}-${hash.toString(16).slice(0, 8)}`;
+  return `GreenchClaw-ssh-${safe || "session"}-${hash.toString(16).slice(0, 8)}`;
 }

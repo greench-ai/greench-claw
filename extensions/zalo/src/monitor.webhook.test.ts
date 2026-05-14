@@ -2,10 +2,10 @@ import type { RequestListener } from "node:http";
 import {
   createEmptyPluginRegistry,
   setActivePluginRegistry,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { withServer } from "NexisClaw/plugin-sdk/test-env";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { withServer } from "GreenchClaw/plugin-sdk/test-env";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig, PluginRuntime } from "../runtime-api.js";
+import type { GreenchClawConfig, PluginRuntime } from "../runtime-api.js";
 import { handleZaloWebhookRequest } from "./monitor.js";
 import type { ZaloRuntimeEnv } from "./monitor.types.js";
 import {
@@ -52,14 +52,14 @@ function registerTarget(params: {
   secret?: string;
   statusSink?: (patch: { lastInboundAt?: number; lastOutboundAt?: number }) => void;
   account?: ResolvedZaloAccount;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   core?: PluginRuntime;
   runtime?: Partial<ZaloRuntimeEnv>;
 }): () => void {
   return registerZaloWebhookTarget({
     token: "tok",
     account: params.account ?? DEFAULT_ACCOUNT,
-    config: params.config ?? ({} as NexisClawConfig),
+    config: params.config ?? ({} as GreenchClawConfig),
     runtime: (params.runtime ?? {}) as ZaloRuntimeEnv,
     core: params.core ?? ({} as PluginRuntime),
     secret: params.secret ?? "secret",
@@ -685,7 +685,7 @@ describe("handleZaloWebhookRequest", () => {
         gateway: {
           trustedProxies: ["127.0.0.1"],
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     try {

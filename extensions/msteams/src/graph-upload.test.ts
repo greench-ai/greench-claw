@@ -1,4 +1,4 @@
-import { withFetchPreconnect } from "NexisClaw/plugin-sdk/test-env";
+import { withFetchPreconnect } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it, vi } from "vitest";
 import { buildTeamsFileInfoCard } from "./graph-chat.js";
 import { resolveGraphChatId, uploadToOneDrive, uploadToSharePoint } from "./graph-upload.js";
@@ -19,7 +19,7 @@ function expectGraphUploadFetch(fetchFn: ReturnType<typeof vi.fn>, expectedUrl: 
   expect(init?.method).toBe("PUT");
   expect(init?.headers?.Authorization).toBe("Bearer graph-token");
   expect(init?.headers?.["Content-Type"]).toBe("application/octet-stream");
-  expect(init?.headers?.["User-Agent"]).toMatch(/^teams\.ts\[apps\]\/.+ NexisClaw\/.+$/);
+  expect(init?.headers?.["User-Agent"]).toMatch(/^teams\.ts\[apps\]\/.+ GreenchClaw\/.+$/);
 }
 
 describe("graph upload helpers", () => {
@@ -48,7 +48,7 @@ describe("graph upload helpers", () => {
 
     expectGraphUploadFetch(
       fetchFn,
-      "https://graph.microsoft.com/v1.0/me/drive/root:/NexisClawShared/a.txt:/content",
+      "https://graph.microsoft.com/v1.0/me/drive/root:/GreenchClawShared/a.txt:/content",
     );
     expect(result).toEqual({
       id: "item-1",
@@ -79,7 +79,7 @@ describe("graph upload helpers", () => {
 
     expectGraphUploadFetch(
       fetchFn,
-      "https://graph.microsoft.com/v1.0/sites/site-123/drive/root:/NexisClawShared/b.txt:/content",
+      "https://graph.microsoft.com/v1.0/sites/site-123/drive/root:/GreenchClawShared/b.txt:/content",
     );
     expect(result).toEqual({
       id: "item-2",
@@ -145,7 +145,7 @@ describe("resolveGraphChatId", () => {
     expect(fetchFn).toHaveBeenCalledTimes(1);
     const [callUrlRaw, init] = requireFetchCall(fetchFn);
     expect(init?.headers?.Authorization).toBe("Bearer graph-token");
-    expect(init?.headers?.["User-Agent"]).toMatch(/^teams\.ts\[apps\]\/.+ NexisClaw\/.+$/);
+    expect(init?.headers?.["User-Agent"]).toMatch(/^teams\.ts\[apps\]\/.+ GreenchClaw\/.+$/);
     const callUrl = new URL(callUrlRaw);
     expect(callUrl.origin).toBe("https://graph.microsoft.com");
     expect(callUrl.pathname).toBe("/v1.0/me/chats");

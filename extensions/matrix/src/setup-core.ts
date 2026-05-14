@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   DEFAULT_ACCOUNT_ID,
   type DmPolicy,
@@ -6,7 +6,7 @@ import {
   prepareScopedSetupConfig,
   type ChannelSetupAdapter,
   type ChannelSetupWizardAdapter,
-} from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/setup";
 import { resolveDefaultMatrixAccountId, resolveMatrixAccountConfig } from "./matrix/accounts.js";
 import { resolveMatrixConfigFieldPath, updateMatrixAccountConfig } from "./matrix/config-update.js";
 import { applyMatrixSetupAccountConfig, validateMatrixSetupInput } from "./setup-config.js";
@@ -93,7 +93,7 @@ export function createMatrixSetupWizardProxy(
           accountId: resolveMatrixSetupWizardAccountId(cfg as CoreConfig, accountId),
         }).dm?.policy ?? "pairing",
       setPolicy: (cfg, policy, accountId) =>
-        setMatrixDmPolicy(cfg as CoreConfig, policy, accountId) as NexisClawConfig,
+        setMatrixDmPolicy(cfg as CoreConfig, policy, accountId) as GreenchClawConfig,
       promptAllowFrom: async (params) => {
         const promptAllowFrom = (await loadWizard()).dmPolicy?.promptAllowFrom;
         return promptAllowFrom ? await promptAllowFrom(params) : params.cfg;

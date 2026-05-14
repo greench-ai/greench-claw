@@ -1,4 +1,4 @@
-import type { TelegramNetworkConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { TelegramNetworkConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { resolveTelegramApiBase, resolveTelegramFetch } from "./fetch.js";
 import { makeProxyFetch } from "./proxy.js";
 

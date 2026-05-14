@@ -1,13 +1,13 @@
 import {
   definePluginEntry,
-  NexisClawConfig,
-  type NexisClawPluginApi,
+  GreenchClawConfig,
+  type GreenchClawPluginApi,
   type ProviderAuthContext,
   type ProviderAuthMethodNonInteractiveContext,
   type ProviderAuthResult,
   type ProviderRuntimeModel,
-} from "NexisClaw/plugin-sdk/plugin-entry";
-import { CUSTOM_LOCAL_AUTH_MARKER } from "NexisClaw/plugin-sdk/provider-auth";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
+import { CUSTOM_LOCAL_AUTH_MARKER } from "GreenchClaw/plugin-sdk/provider-auth";
 import { lmstudioMemoryEmbeddingProviderAdapter } from "./memory-embedding-adapter.js";
 import {
   LMSTUDIO_DEFAULT_API_KEY_ENV_VAR,
@@ -25,7 +25,7 @@ const PROVIDER_ID = "lmstudio";
 // Intentional: dynamic models are cached per LM Studio endpoint (`baseUrl`) only.
 const cachedDynamicModels = new Map<string, ProviderRuntimeModel[]>();
 
-function resolveLmstudioAugmentedCatalogEntries(config: NexisClawConfig | undefined) {
+function resolveLmstudioAugmentedCatalogEntries(config: GreenchClawConfig | undefined) {
   if (!config) {
     return [];
   }
@@ -52,7 +52,7 @@ export default definePluginEntry({
   id: PROVIDER_ID,
   name: "LM Studio Provider",
   description: "Bundled LM Studio provider plugin",
-  register(api: NexisClawPluginApi) {
+  register(api: GreenchClawPluginApi) {
     api.registerMemoryEmbeddingProvider(lmstudioMemoryEmbeddingProviderAdapter);
     api.registerProvider({
       id: PROVIDER_ID,

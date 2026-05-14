@@ -8,7 +8,7 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const extensionsRoot = path.join(repoRoot, "extensions");
 
 const WILDCARD_PLUGIN_SDK_REEXPORT_PATTERN =
-  /^\s*export\s+(?:type\s+)?\*\s+from\s+["']NexisClaw\/plugin-sdk\//u;
+  /^\s*export\s+(?:type\s+)?\*\s+from\s+["']GreenchClaw\/plugin-sdk\//u;
 
 async function listExtensionApiFiles(rootDir = extensionsRoot) {
   const entries = await fs.readdir(rootDir, { withFileTypes: true });

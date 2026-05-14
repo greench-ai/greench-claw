@@ -165,11 +165,11 @@ function assertUpdate(channel) {
 }
 
 function assertConfigChannel(channel) {
-  const config = readJson(path.join(process.env.HOME, ".NexisClaw", "NexisClaw.json"));
+  const config = readJson(path.join(process.env.HOME, ".GreenchClaw", "GreenchClaw.json"));
   if (config.update?.channel === channel) {
     return;
   }
-  if (process.env.NEXISCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT === "1") {
+  if (process.env.GREENCHCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT === "1") {
     console.log(
       `legacy package did not persist update.channel ${channel}; got ${JSON.stringify(config.update?.channel)}`,
     );
@@ -189,10 +189,10 @@ function assertStatusKind(kind) {
 
 switch (command) {
   case "prepare-git-fixture":
-    prepareGitFixture(args[0] ?? "/tmp/NexisClaw-git");
+    prepareGitFixture(args[0] ?? "/tmp/GreenchClaw-git");
     break;
   case "write-control-ui":
-    writeControlUi(args[0] ?? "/tmp/NexisClaw-git");
+    writeControlUi(args[0] ?? "/tmp/GreenchClaw-git");
     break;
   case "assert-update":
     assertUpdate(args[0]);

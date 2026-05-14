@@ -1,6 +1,6 @@
 import { formatCliCommand } from "../cli/command-format.js";
 import { resolveGatewayPort } from "../config/config.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   resolveGatewayLaunchAgentLabel,
   resolveNodeLaunchAgentLabel,
@@ -103,16 +103,16 @@ async function maybeRepairLaunchAgentBootstrap(params: {
 
 function renderBlockingSystemGatewayServices(services: ExtraGatewayService[]): string {
   return [
-    "System-level NexisClaw gateway service detected while the user gateway service is not installed.",
+    "System-level GreenchClaw gateway service detected while the user gateway service is not installed.",
     ...services.map((svc) => `- ${svc.label} (${svc.detail})`),
-    "NexisClaw will not install a second user-level gateway service automatically.",
-    "Run `NexisClaw gateway status --deep` or `NexisClaw doctor --deep` to inspect duplicate services.",
+    "GreenchClaw will not install a second user-level gateway service automatically.",
+    "Run `GreenchClaw gateway status --deep` or `GreenchClaw doctor --deep` to inspect duplicate services.",
     `Set ${SERVICE_REPAIR_POLICY_ENV}=external if a system supervisor owns the gateway lifecycle.`,
   ].join("\n");
 }
 
 export async function maybeRepairGatewayDaemon(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   runtime: RuntimeEnv;
   prompter: DoctorPrompter;
   options: DoctorOptions;
@@ -164,7 +164,7 @@ export async function maybeRepairGatewayDaemon(params: {
     await maybeRepairLaunchAgentBootstrap({
       env: {
         ...process.env,
-        NEXISCLAW_LAUNCHD_LABEL: resolveNodeLaunchAgentLabel(),
+        GREENCHCLAW_LAUNCHD_LABEL: resolveNodeLaunchAgentLabel(),
       },
       title: "Node",
       runtime: params.runtime,
@@ -231,7 +231,7 @@ export async function maybeRepairGatewayDaemon(params: {
       );
       if (!install) {
         note(
-          `Run ${formatCliCommand("NexisClaw gateway install")} when you want to install the gateway service.`,
+          `Run ${formatCliCommand("GreenchClaw gateway install")} when you want to install the gateway service.`,
           "Gateway",
         );
       }
@@ -331,9 +331,9 @@ export async function maybeRepairGatewayDaemon(params: {
   }
 
   if (process.platform === "darwin") {
-    const label = resolveGatewayLaunchAgentLabel(process.env.NEXISCLAW_PROFILE);
+    const label = resolveGatewayLaunchAgentLabel(process.env.GREENCHCLAW_PROFILE);
     note(
-      `LaunchAgent loaded; stopping requires "${formatCliCommand("NexisClaw gateway stop")}" or launchctl bootout gui/$UID/${label}.`,
+      `LaunchAgent loaded; stopping requires "${formatCliCommand("GreenchClaw gateway stop")}" or launchctl bootout gui/$UID/${label}.`,
       "Gateway",
     );
   }

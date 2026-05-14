@@ -1,5 +1,5 @@
-export { asNullableRecord as asRecord } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-export { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+export { asNullableRecord as asRecord } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+export { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 
 export function normalizeTrimmedString(value: unknown): string | undefined {
   if (typeof value !== "string") {

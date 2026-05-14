@@ -1,7 +1,7 @@
 import type { Command } from "commander";
 import { hasFlag } from "../argv.js";
 
-const jsonModeSymbol = Symbol("NexisClaw.cli.jsonMode");
+const jsonModeSymbol = Symbol("GreenchClaw.cli.jsonMode");
 
 type JsonMode = "output" | "parse-only";
 type JsonModeCommand = Command & {

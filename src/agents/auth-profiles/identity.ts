@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { normalizeOptionalString } from "../../shared/string-coerce.js";
 import type { AuthProfileStore } from "./types.js";
 
@@ -25,7 +25,7 @@ export function buildAuthProfileId(params: {
 }
 
 export function resolveAuthProfileMetadata(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   store?: AuthProfileStore;
   profileId: string;
 }): { displayName?: string; email?: string } {

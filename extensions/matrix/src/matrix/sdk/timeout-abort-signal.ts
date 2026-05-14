@@ -1,1 +1,1 @@
-export { buildTimeoutAbortSignal } from "NexisClaw/plugin-sdk/extension-shared";
+export { buildTimeoutAbortSignal } from "GreenchClaw/plugin-sdk/extension-shared";

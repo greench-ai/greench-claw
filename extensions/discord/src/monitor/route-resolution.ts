@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { SessionBindingRecord } from "NexisClaw/plugin-sdk/conversation-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { SessionBindingRecord } from "GreenchClaw/plugin-sdk/conversation-runtime";
 import {
   deriveLastRoutePolicy,
   isAcpSessionKey,
@@ -8,8 +8,8 @@ import {
   resolveAgentRoute,
   type ResolvedAgentRoute,
   type RoutePeer,
-} from "NexisClaw/plugin-sdk/routing";
-import { resolveAgentIdFromSessionKey } from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/routing";
+import { resolveAgentIdFromSessionKey } from "GreenchClaw/plugin-sdk/routing";
 
 export function buildDiscordRoutePeer(params: {
   isDirectMessage: boolean;
@@ -26,7 +26,7 @@ export function buildDiscordRoutePeer(params: {
 }
 
 export function resolveDiscordConversationRoute(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   guildId?: string | null;
   memberRoleIds?: string[];
@@ -47,7 +47,7 @@ export function resolveDiscordConversationRoute(params: {
 }
 
 export function resolveDiscordBoundConversationRoute(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   guildId?: string | null;
   memberRoleIds?: string[];

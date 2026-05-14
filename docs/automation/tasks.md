@@ -34,7 +34,7 @@ Not every agent run creates a task. Heartbeat turns and normal interactive chat 
 - Isolated cron runs and subagent completions best-effort clean up tracked browser tabs/processes for their child session before final cleanup bookkeeping.
 - Isolated cron delivery suppresses stale interim parent replies while descendant subagent work is still draining, and it prefers final descendant output when that arrives before delivery.
 - Completion notifications are delivered directly to a channel or queued for the next heartbeat.
-- `NexisClaw tasks list` shows all tasks; `NexisClaw tasks audit` surfaces issues.
+- `GreenchClaw tasks list` shows all tasks; `GreenchClaw tasks audit` surfaces issues.
 - Terminal records are kept for 7 days, then automatically pruned.
 
 ## Quick start
@@ -43,66 +43,66 @@ Not every agent run creates a task. Heartbeat turns and normal interactive chat 
   <Tab title="List and filter">
     ```bash
     # List all tasks (newest first)
-    NexisClaw tasks list
+    GreenchClaw tasks list
 
     # Filter by runtime or status
-    NexisClaw tasks list --runtime acp
-    NexisClaw tasks list --status running
+    GreenchClaw tasks list --runtime acp
+    GreenchClaw tasks list --status running
     ```
 
   </Tab>
   <Tab title="Inspect">
     ```bash
     # Show details for a specific task (by ID, run ID, or session key)
-    NexisClaw tasks show <lookup>
+    GreenchClaw tasks show <lookup>
     ```
   </Tab>
   <Tab title="Cancel and notify">
     ```bash
     # Cancel a running task (kills the child session)
-    NexisClaw tasks cancel <lookup>
+    GreenchClaw tasks cancel <lookup>
 
     # Change notification policy for a task
-    NexisClaw tasks notify <lookup> state_changes
+    GreenchClaw tasks notify <lookup> state_changes
     ```
 
   </Tab>
   <Tab title="Audit and maintenance">
     ```bash
     # Run a health audit
-    NexisClaw tasks audit
+    GreenchClaw tasks audit
 
     # Preview or apply maintenance
-    NexisClaw tasks maintenance
-    NexisClaw tasks maintenance --apply
+    GreenchClaw tasks maintenance
+    GreenchClaw tasks maintenance --apply
     ```
 
   </Tab>
   <Tab title="Task flow">
     ```bash
     # Inspect TaskFlow state
-    NexisClaw tasks flow list
-    NexisClaw tasks flow show <lookup>
-    NexisClaw tasks flow cancel <lookup>
+    GreenchClaw tasks flow list
+    GreenchClaw tasks flow show <lookup>
+    GreenchClaw tasks flow cancel <lookup>
     ```
   </Tab>
 </Tabs>
 
 ## What creates a task
 
-| Source                 | Runtime type | When a task record is created                          | Default notify policy |
-| ---------------------- | ------------ | ------------------------------------------------------ | --------------------- |
-| ACP background runs    | `acp`        | Spawning a child ACP session                           | `done_only`           |
-| Subagent orchestration | `subagent`   | Spawning a subagent via `sessions_spawn`               | `done_only`           |
-| Cron jobs (all types)  | `cron`       | Every cron execution (main-session and isolated)       | `silent`              |
-| CLI operations         | `cli`        | `NexisClaw agent` commands that run through the gateway | `silent`              |
-| Agent media jobs       | `cli`        | Session-backed `music_generate`/`video_generate` runs  | `silent`              |
+| Source                 | Runtime type | When a task record is created                             | Default notify policy |
+| ---------------------- | ------------ | --------------------------------------------------------- | --------------------- |
+| ACP background runs    | `acp`        | Spawning a child ACP session                              | `done_only`           |
+| Subagent orchestration | `subagent`   | Spawning a subagent via `sessions_spawn`                  | `done_only`           |
+| Cron jobs (all types)  | `cron`       | Every cron execution (main-session and isolated)          | `silent`              |
+| CLI operations         | `cli`        | `GreenchClaw agent` commands that run through the gateway | `silent`              |
+| Agent media jobs       | `cli`        | Session-backed `music_generate`/`video_generate` runs     | `silent`              |
 
 <AccordionGroup>
   <Accordion title="Notify defaults for cron and media">
     Main-session cron tasks use `silent` notify policy by default - they create records for tracking but do not generate notifications. Isolated cron tasks also default to `silent` but are more visible because they run in their own session.
 
-    Session-backed `music_generate` and `video_generate` runs also use `silent` notify policy. They still create task records, but completion is handed back to the original agent session as an internal wake so the agent can write the follow-up message and attach the finished media itself. Group/channel completions follow the normal visible-reply policy, so the agent uses the message tool when source delivery requires it. If the completion agent fails to produce message-tool delivery evidence in a tool-only route, NexisClaw sends the completion fallback directly to the original channel instead of leaving the media private.
+    Session-backed `music_generate` and `video_generate` runs also use `silent` notify policy. They still create task records, but completion is handed back to the original agent session as an internal wake so the agent can write the follow-up message and attach the finished media itself. Group/channel completions follow the normal visible-reply policy, so the agent uses the message tool when source delivery requires it. If the completion agent fails to produce message-tool delivery evidence in a tool-only route, GreenchClaw sends the completion fallback directly to the original channel instead of leaving the media private.
 
   </Accordion>
   <Accordion title="Concurrent video_generate guardrail">
@@ -137,7 +137,7 @@ stateDiagram-v2
 | `succeeded` | Completed successfully                                                     |
 | `failed`    | Completed with an error                                                    |
 | `timed_out` | Exceeded the configured timeout                                            |
-| `cancelled` | Stopped by the operator via `NexisClaw tasks cancel`                        |
+| `cancelled` | Stopped by the operator via `GreenchClaw tasks cancel`                     |
 | `lost`      | The runtime lost authoritative backing state after a 5-minute grace period |
 
 Transitions happen automatically - when the associated agent run ends, the task status updates to match.
@@ -154,15 +154,15 @@ Agent run completion is authoritative for active task records. A successful deta
 - CLI tasks: tasks with a run id/source id use the live run context, so
   lingering child-session or chat-session rows do not keep them alive after the
   gateway-owned run disappears. Legacy CLI tasks without run identity still fall
-  back to the child session. Gateway-backed `NexisClaw agent` runs also finalize
+  back to the child session. Gateway-backed `GreenchClaw agent` runs also finalize
   from their run result, so completed runs do not sit active until the sweeper
   marks them `lost`.
 
 ## Delivery and notifications
 
-When a task reaches a terminal state, NexisClaw notifies you. There are two delivery paths:
+When a task reaches a terminal state, GreenchClaw notifies you. There are two delivery paths:
 
-**Direct delivery** - if the task has a channel target (the `requesterOrigin`), the completion message goes straight to that channel (Telegram, Discord, Slack, etc.). Group and channel task completions are instead routed through the requester session so the parent agent can write the visible reply. For subagent completions, NexisClaw also preserves bound thread/topic routing when available and can fill a missing `to` / account from the requester session's stored route (`lastChannel` / `lastTo` / `lastAccountId`) before giving up on direct delivery.
+**Direct delivery** - if the task has a channel target (the `requesterOrigin`), the completion message goes straight to that channel (Telegram, Discord, Slack, etc.). Group and channel task completions are instead routed through the requester session so the parent agent can write the visible reply. For subagent completions, GreenchClaw also preserves bound thread/topic routing when available and can fill a missing `to` / account from the requester session's stored route (`lastChannel` / `lastTo` / `lastAccountId`) before giving up on direct delivery.
 
 **Session-queued delivery** - if direct delivery fails or no origin is set, the update is queued as a system event in the requester's session and surfaces on the next heartbeat.
 
@@ -185,7 +185,7 @@ Control how much you hear about each task:
 Change the policy while a task is running:
 
 ```bash
-NexisClaw tasks notify <lookup> state_changes
+GreenchClaw tasks notify <lookup> state_changes
 ```
 
 ## CLI reference
@@ -193,7 +193,7 @@ NexisClaw tasks notify <lookup> state_changes
 <AccordionGroup>
   <Accordion title="tasks list">
     ```bash
-    NexisClaw tasks list [--runtime <acp|subagent|cron|cli>] [--status <status>] [--json]
+    GreenchClaw tasks list [--runtime <acp|subagent|cron|cli>] [--status <status>] [--json]
     ```
 
     Output columns: Task ID, Kind, Status, Delivery, Run ID, Child Session, Summary.
@@ -201,7 +201,7 @@ NexisClaw tasks notify <lookup> state_changes
   </Accordion>
   <Accordion title="tasks show">
     ```bash
-    NexisClaw tasks show <lookup>
+    GreenchClaw tasks show <lookup>
     ```
 
     The lookup token accepts a task ID, run ID, or session key. Shows the full record including timing, delivery state, error, and terminal summary.
@@ -209,7 +209,7 @@ NexisClaw tasks notify <lookup> state_changes
   </Accordion>
   <Accordion title="tasks cancel">
     ```bash
-    NexisClaw tasks cancel <lookup>
+    GreenchClaw tasks cancel <lookup>
     ```
 
     For ACP and subagent tasks, this kills the child session. For CLI-tracked tasks, cancellation is recorded in the task registry (there is no separate child runtime handle). Status transitions to `cancelled` and a delivery notification is sent when applicable.
@@ -217,15 +217,15 @@ NexisClaw tasks notify <lookup> state_changes
   </Accordion>
   <Accordion title="tasks notify">
     ```bash
-    NexisClaw tasks notify <lookup> <done_only|state_changes|silent>
+    GreenchClaw tasks notify <lookup> <done_only|state_changes|silent>
     ```
   </Accordion>
   <Accordion title="tasks audit">
     ```bash
-    NexisClaw tasks audit [--json]
+    GreenchClaw tasks audit [--json]
     ```
 
-    Surfaces operational issues. Findings also appear in `NexisClaw status` when issues are detected.
+    Surfaces operational issues. Findings also appear in `GreenchClaw status` when issues are detected.
 
     | Finding                   | Severity   | Trigger                                                                                                      |
     | ------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------ |
@@ -239,8 +239,8 @@ NexisClaw tasks notify <lookup> state_changes
   </Accordion>
   <Accordion title="tasks maintenance">
     ```bash
-    NexisClaw tasks maintenance [--json]
-    NexisClaw tasks maintenance --apply [--json]
+    GreenchClaw tasks maintenance [--json]
+    GreenchClaw tasks maintenance --apply [--json]
     ```
 
     Use this to preview or apply reconciliation, cleanup stamping, and pruning for tasks, Task Flow state, and stale cron run session registry rows.
@@ -260,14 +260,14 @@ NexisClaw tasks notify <lookup> state_changes
     - Subagent completion delivery prefers the latest visible assistant text; if that is empty it falls back to sanitized latest tool/toolResult text, and timeout-only tool-call runs can collapse to a short partial-progress summary. Terminal failed runs announce failure status without replaying captured reply text.
     - Cleanup failures do not mask the real task outcome.
 
-    When applying maintenance, NexisClaw also removes stale `cron:<jobId>:run:<uuid>` session registry rows older than 7 days, while preserving rows for currently running cron jobs and leaving non-cron session rows untouched.
+    When applying maintenance, GreenchClaw also removes stale `cron:<jobId>:run:<uuid>` session registry rows older than 7 days, while preserving rows for currently running cron jobs and leaving non-cron session rows untouched.
 
   </Accordion>
   <Accordion title="tasks flow list | show | cancel">
     ```bash
-    NexisClaw tasks flow list [--status <status>] [--json]
-    NexisClaw tasks flow show <lookup> [--json]
-    NexisClaw tasks flow cancel <lookup>
+    GreenchClaw tasks flow list [--status <status>] [--json]
+    GreenchClaw tasks flow show <lookup> [--json]
+    GreenchClaw tasks flow cancel <lookup>
     ```
 
     Use these when the orchestrating Task Flow is the thing you care about rather than one individual background task record.
@@ -281,11 +281,11 @@ Use `/tasks` in any chat session to see background tasks linked to that session.
 
 When the current session has no visible linked tasks, `/tasks` falls back to agent-local task counts so you still get an overview without leaking other-session details.
 
-For the full operator ledger, use the CLI: `NexisClaw tasks list`.
+For the full operator ledger, use the CLI: `GreenchClaw tasks list`.
 
 ## Status integration (task pressure)
 
-`NexisClaw status` includes an at-a-glance task summary:
+`GreenchClaw status` includes an at-a-glance task summary:
 
 ```
 Tasks: 3 queued · 2 running · 1 issues
@@ -306,7 +306,7 @@ Both `/status` and the `session_status` tool use a cleanup-aware task snapshot: 
 Task records persist in SQLite at:
 
 ```
-$NEXISCLAW_STATE_DIR/tasks/runs.sqlite
+$GREENCHCLAW_STATE_DIR/tasks/runs.sqlite
 ```
 
 The registry loads into memory at gateway start and syncs writes to SQLite for durability across restarts.
@@ -340,13 +340,13 @@ A sweeper runs every **60 seconds** and handles four things:
 
 <AccordionGroup>
   <Accordion title="Tasks and Task Flow">
-    [Task Flow](/automation/taskflow) is the flow orchestration layer above background tasks. A single flow may coordinate multiple tasks over its lifetime using managed or mirrored sync modes. Use `NexisClaw tasks` to inspect individual task records and `NexisClaw tasks flow` to inspect the orchestrating flow.
+    [Task Flow](/automation/taskflow) is the flow orchestration layer above background tasks. A single flow may coordinate multiple tasks over its lifetime using managed or mirrored sync modes. Use `GreenchClaw tasks` to inspect individual task records and `GreenchClaw tasks flow` to inspect the orchestrating flow.
 
     See [Task Flow](/automation/taskflow) for details.
 
   </Accordion>
   <Accordion title="Tasks and cron">
-    A cron job **definition** lives in `~/.NexisClaw/cron/jobs.json`; runtime execution state lives beside it in `~/.NexisClaw/cron/jobs-state.json`. **Every** cron execution creates a task record - both main-session and isolated. Main-session cron tasks default to `silent` notify policy so they track without generating notifications.
+    A cron job **definition** lives in `~/.GreenchClaw/cron/jobs.json`; runtime execution state lives beside it in `~/.GreenchClaw/cron/jobs-state.json`. **Every** cron execution creates a task record - both main-session and isolated. Main-session cron tasks default to `silent` notify policy so they track without generating notifications.
 
     See [Cron Jobs](/automation/cron-jobs).
 

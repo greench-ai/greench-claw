@@ -15,7 +15,7 @@ const optionalBundledClusters = [
 
 export const optionalBundledClusterSet = new Set(optionalBundledClusters);
 
-const OPTIONAL_BUNDLED_BUILD_ENV = "NEXISCLAW_INCLUDE_OPTIONAL_BUNDLED";
+const OPTIONAL_BUNDLED_BUILD_ENV = "GREENCHCLAW_INCLUDE_OPTIONAL_BUNDLED";
 
 function isOptionalBundledCluster(cluster) {
   return optionalBundledClusterSet.has(cluster);
@@ -29,8 +29,8 @@ function shouldIncludeOptionalBundledClusters(env = process.env) {
 
 function hasReleasedBundledInstall(packageJson) {
   return (
-    typeof packageJson?.NexisClaw?.install?.npmSpec === "string" &&
-    packageJson.NexisClaw.install.npmSpec.trim().length > 0
+    typeof packageJson?.GreenchClaw?.install?.npmSpec === "string" &&
+    packageJson.GreenchClaw.install.npmSpec.trim().length > 0
   );
 }
 

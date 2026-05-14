@@ -1,6 +1,6 @@
 import { join } from "node:path";
-import { withTempHome as withTempHomeBase } from "NexisClaw/plugin-sdk/test-env";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import { withTempHome as withTempHomeBase } from "GreenchClaw/plugin-sdk/test-env";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { MsgContext, TemplateContext } from "./templating.js";
 
 export async function withSandboxMediaTempHome<T>(
@@ -27,12 +27,12 @@ export function createSandboxMediaContexts(mediaPath: string): {
   return { ctx, sessionCtx: { ...ctx } };
 }
 
-export function createSandboxMediaStageConfig(home: string): NexisClawConfig {
+export function createSandboxMediaStageConfig(home: string): GreenchClawConfig {
   return {
     agents: {
       defaults: {
         model: "anthropic/claude-opus-4-6",
-        workspace: join(home, "NexisClaw"),
+        workspace: join(home, "GreenchClaw"),
         sandbox: {
           mode: "non-main",
           workspaceRoot: join(home, "sandboxes"),
@@ -41,5 +41,5 @@ export function createSandboxMediaStageConfig(home: string): NexisClawConfig {
     },
     channels: { whatsapp: { allowFrom: ["*"] } },
     session: { store: join(home, "sessions.json") },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }

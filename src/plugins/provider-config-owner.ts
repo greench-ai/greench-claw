@@ -1,9 +1,9 @@
 import { normalizeProviderId } from "../agents/provider-id.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 export function resolveProviderConfigApiOwnerHint(params: {
   provider: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): string | undefined {
   const providers = params.config?.models?.providers;
   if (!providers) {

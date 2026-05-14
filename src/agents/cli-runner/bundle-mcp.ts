@@ -3,8 +3,8 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { applyMergePatch } from "../../config/merge-patch.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { CliBackendConfig } from "../../config/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import { tryReadJson } from "../../infra/json-files.js";
 import { extractMcpServerMap, type BundleMcpConfig } from "../../plugins/bundle-mcp.js";
 import type { CliBundleMcpMode } from "../../plugins/types.js";
@@ -44,26 +44,26 @@ function sortJsonValue(value: unknown): unknown {
   );
 }
 
-function normalizeNexisClawLoopbackUrl(value: string): string {
+function normalizeGreenchClawLoopbackUrl(value: string): string {
   const match =
     /^(http:\/\/(?:127\.0\.0\.1|localhost|\[::1\])):\d+(\/mcp)$/.exec(value.trim()) ?? undefined;
   if (!match) {
     return value;
   }
-  return `${match[1]}:<NexisClaw-loopback>${match[2]}`;
+  return `${match[1]}:<GreenchClaw-loopback>${match[2]}`;
 }
 
 function canonicalizeBundleMcpConfigForResume(config: BundleMcpConfig): BundleMcpConfig {
   const canonicalServers = Object.fromEntries(
     Object.entries(config.mcpServers).map(([name, server]) => {
-      if (name !== "NexisClaw" || typeof server.url !== "string") {
+      if (name !== "GreenchClaw" || typeof server.url !== "string") {
         return [name, sortJsonValue(server)];
       }
       return [
         name,
         sortJsonValue({
           ...server,
-          url: normalizeNexisClawLoopbackUrl(server.url),
+          url: normalizeGreenchClawLoopbackUrl(server.url),
         }),
       ];
     }),
@@ -115,7 +115,7 @@ async function prepareModeSpecificBundleMcpConfig(params: {
     };
   }
 
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-cli-mcp-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-cli-mcp-"));
   const mcpConfigPath = path.join(tempDir, "mcp.json");
   await fs.writeFile(mcpConfigPath, serializedConfig, "utf-8");
   return {
@@ -141,7 +141,7 @@ export async function prepareCliBundleMcpConfig(params: {
   mode?: CliBundleMcpMode;
   backend: CliBackendConfig;
   workspaceDir: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   additionalConfig?: BundleMcpConfig;
   env?: Record<string, string>;
   warn?: (message: string) => void;

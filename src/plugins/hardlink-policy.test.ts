@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { isNixStorePluginRoot, shouldRejectHardlinkedPluginFiles } from "./hardlink-policy.js";
 
-const nixEnv: NodeJS.ProcessEnv = { NEXISCLAW_NIX_MODE: "1" };
+const nixEnv: NodeJS.ProcessEnv = { GREENCHCLAW_NIX_MODE: "1" };
 
 describe("plugin hardlink policy", () => {
   it("does not reject bundled plugin files", () => {
@@ -24,7 +24,7 @@ describe("plugin hardlink policy", () => {
     ).toBe(true);
   });
 
-  it("does not treat NEXISCLAW_NIX_MODE as enough by itself", () => {
+  it("does not treat GREENCHCLAW_NIX_MODE as enough by itself", () => {
     expect(
       shouldRejectHardlinkedPluginFiles({
         origin: "config",
@@ -37,12 +37,12 @@ describe("plugin hardlink policy", () => {
   it.runIf(process.platform !== "win32")(
     "does not reject hardlinked external plugin files when Nix mode loads from the Nix store",
     () => {
-      expect(isNixStorePluginRoot("/nix/store/abc-NexisClaw-plugin")).toBe(true);
-      expect(isNixStorePluginRoot("/tmp/nix/store/abc-NexisClaw-plugin")).toBe(false);
+      expect(isNixStorePluginRoot("/nix/store/abc-GreenchClaw-plugin")).toBe(true);
+      expect(isNixStorePluginRoot("/tmp/nix/store/abc-GreenchClaw-plugin")).toBe(false);
       expect(
         shouldRejectHardlinkedPluginFiles({
           origin: "config",
-          rootDir: "/nix/store/abc-NexisClaw-plugin",
+          rootDir: "/nix/store/abc-GreenchClaw-plugin",
           env: nixEnv,
         }),
       ).toBe(false);

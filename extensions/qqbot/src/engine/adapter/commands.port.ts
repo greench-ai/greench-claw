@@ -5,7 +5,7 @@
  * Eliminates global `register*` singletons in `slash-commands-impl.ts`.
  */
 
-import type { PluginRuntime } from "NexisClaw/plugin-sdk/core";
+import type { PluginRuntime } from "GreenchClaw/plugin-sdk/core";
 
 /** Runtime getter shape for the `/bot-approve` command. */
 export type ApproveRuntimeGetter = () => {

@@ -1,9 +1,9 @@
 import {
   createResolvedApproverActionAuthAdapter,
   resolveApprovalApprovers,
-} from "NexisClaw/plugin-sdk/approval-auth-runtime";
-import { normalizeOptionalLowercaseString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import type { NexisClawConfig } from "../runtime-api.js";
+} from "GreenchClaw/plugin-sdk/approval-auth-runtime";
+import { normalizeOptionalLowercaseString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import { normalizeMSTeamsMessagingTarget } from "./resolve-allowlist.js";
 
 const MSTEAMS_ID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -20,7 +20,7 @@ function normalizeMSTeamsApproverId(value: string | number): string | undefined 
   return MSTEAMS_ID_RE.test(id) ? id : undefined;
 }
 
-function resolveMSTeamsChannelConfig(cfg: NexisClawConfig) {
+function resolveMSTeamsChannelConfig(cfg: GreenchClawConfig) {
   return cfg.channels?.msteams;
 }
 

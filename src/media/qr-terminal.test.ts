@@ -18,8 +18,8 @@ describe("renderQrTerminal", () => {
   });
 
   it("delegates terminal rendering to qrcode", async () => {
-    await expect(renderQrTerminal("NexisClaw")).resolves.toBe("ASCII-QR");
-    expect(toString).toHaveBeenCalledWith("NexisClaw", {
+    await expect(renderQrTerminal("GreenchClaw")).resolves.toBe("ASCII-QR");
+    expect(toString).toHaveBeenCalledWith("GreenchClaw", {
       small: false,
       type: "terminal",
     });

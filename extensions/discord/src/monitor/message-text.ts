@@ -1,5 +1,5 @@
 import { ComponentType } from "discord-api-types/v10";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { Message } from "../internal/discord.js";
 import {
   formatDiscordSnapshotAuthor,

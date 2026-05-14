@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveProviderSyntheticAuthWithPlugin } from "../plugins/provider-runtime.js";
 import type { AuthProfileStore } from "./auth-profiles/types.js";
 import {
@@ -47,7 +47,7 @@ function resolveAuthProfileStoreInput(input: AuthProfileStoreInput) {
 export function createProviderApiKeyResolver(
   env: NodeJS.ProcessEnv,
   authStoreInput: AuthProfileStoreInput,
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
 ): ProviderApiKeyResolver {
   return (provider: string): { apiKey: string | undefined; discoveryApiKey?: string } => {
     const authProvider = resolveProviderIdForAuth(provider, { config, env });
@@ -85,7 +85,7 @@ export function createProviderApiKeyResolver(
 export function createProviderAuthResolver(
   env: NodeJS.ProcessEnv,
   authStoreInput: AuthProfileStoreInput,
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
 ): ProviderAuthResolver {
   return (provider: string, options?: { oauthMarker?: string }) => {
     const authProvider = resolveProviderIdForAuth(provider, { config, env });
@@ -163,7 +163,7 @@ export function createProviderAuthResolver(
   };
 }
 
-function resolveConfigBackedProviderAuth(params: { provider: string; config?: NexisClawConfig }):
+function resolveConfigBackedProviderAuth(params: { provider: string; config?: GreenchClawConfig }):
   | {
       apiKey: string;
       discoveryApiKey?: string;

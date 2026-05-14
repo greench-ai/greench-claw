@@ -2,13 +2,13 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { collectCodexNativeAssetWarnings, scanCodexNativeAssets } from "./codex-native-assets.js";
 
 const tempRoots = new Set<string>();
 
 async function makeTempRoot(): Promise<string> {
-  const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-doctor-codex-assets-"));
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-doctor-codex-assets-"));
   tempRoots.add(root);
   return root;
 }
@@ -18,7 +18,7 @@ async function writeFile(filePath: string, content = ""): Promise<void> {
   await fs.writeFile(filePath, content, "utf8");
 }
 
-function codexConfig(): NexisClawConfig {
+function codexConfig(): GreenchClawConfig {
   return {
     plugins: {
       entries: {
@@ -32,7 +32,7 @@ function codexConfig(): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function hasAsset(hits: Array<{ kind: string; path: string }>, kind: string, assetPath: string) {
@@ -100,7 +100,7 @@ describe("scanCodexNativeAssets", () => {
 
     await expect(
       scanCodexNativeAssets({
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         env: { CODEX_HOME: codexHome, HOME: root },
       }),
     ).resolves.toStrictEqual([]);
@@ -120,10 +120,10 @@ describe("collectCodexNativeAssetWarnings", () => {
 
     expect(warnings).toStrictEqual([
       [
-        "- Personal Codex CLI assets were found, but native Codex-mode NexisClaw agents use isolated per-agent Codex homes.",
+        "- Personal Codex CLI assets were found, but native Codex-mode GreenchClaw agents use isolated per-agent Codex homes.",
         `- Sources: ${codexHome} and ${path.join(root, ".agents", "skills")} (1 skill, 0 plugins, 0 config files, 0 hook files).`,
         "- These assets will not be loaded by the Codex app-server child unless you intentionally promote them.",
-        "- Run `NexisClaw migrate codex --dry-run` to inventory them. Applying that migration copies skills into the current NexisClaw agent workspace; Codex plugins, hooks, and config stay manual-review only.",
+        "- Run `GreenchClaw migrate codex --dry-run` to inventory them. Applying that migration copies skills into the current GreenchClaw agent workspace; Codex plugins, hooks, and config stay manual-review only.",
       ].join("\n"),
     ]);
   });

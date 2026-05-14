@@ -20,7 +20,7 @@ const runtimeStub = {
     resizeToJpeg: async () => Buffer.from(""),
   },
   state: {
-    resolveStateDir: () => "/tmp/NexisClaw-matrix-test",
+    resolveStateDir: () => "/tmp/GreenchClaw-matrix-test",
   },
   channel: {
     text: {

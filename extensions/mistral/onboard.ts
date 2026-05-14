@@ -1,7 +1,7 @@
 import {
   createDefaultModelPresetAppliers,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildMistralModelDefinition,
   MISTRAL_BASE_URL,
@@ -12,7 +12,7 @@ export const MISTRAL_DEFAULT_MODEL_REF = `mistral/${MISTRAL_DEFAULT_MODEL_ID}`;
 
 const mistralPresetAppliers = createDefaultModelPresetAppliers({
   primaryModelRef: MISTRAL_DEFAULT_MODEL_REF,
-  resolveParams: (_cfg: NexisClawConfig) => ({
+  resolveParams: (_cfg: GreenchClawConfig) => ({
     providerId: "mistral",
     api: "openai-completions",
     baseUrl: MISTRAL_BASE_URL,
@@ -22,10 +22,10 @@ const mistralPresetAppliers = createDefaultModelPresetAppliers({
   }),
 });
 
-export function applyMistralProviderConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyMistralProviderConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return mistralPresetAppliers.applyProviderConfig(cfg);
 }
 
-export function applyMistralConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyMistralConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return mistralPresetAppliers.applyConfig(cfg);
 }

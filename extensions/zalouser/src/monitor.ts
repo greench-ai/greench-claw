@@ -1,37 +1,37 @@
-import { mergeAllowlist, summarizeMapping } from "NexisClaw/plugin-sdk/allow-from";
+import { mergeAllowlist, summarizeMapping } from "GreenchClaw/plugin-sdk/allow-from";
 import {
   implicitMentionKindWhen,
   resolveInboundMentionDecision,
-} from "NexisClaw/plugin-sdk/channel-inbound";
-import { resolveStableChannelMessageIngress } from "NexisClaw/plugin-sdk/channel-ingress-runtime";
-import { createChannelPairingController } from "NexisClaw/plugin-sdk/channel-pairing";
-import type { MarkdownTableMode, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { KeyedAsyncQueue } from "NexisClaw/plugin-sdk/core";
-import { isDangerousNameMatchingEnabled } from "NexisClaw/plugin-sdk/dangerous-name-runtime";
-import { createDeferred } from "NexisClaw/plugin-sdk/extension-shared";
+} from "GreenchClaw/plugin-sdk/channel-inbound";
+import { resolveStableChannelMessageIngress } from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
+import { createChannelPairingController } from "GreenchClaw/plugin-sdk/channel-pairing";
+import type { MarkdownTableMode, GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { KeyedAsyncQueue } from "GreenchClaw/plugin-sdk/core";
+import { isDangerousNameMatchingEnabled } from "GreenchClaw/plugin-sdk/dangerous-name-runtime";
+import { createDeferred } from "GreenchClaw/plugin-sdk/extension-shared";
 import {
   DEFAULT_GROUP_HISTORY_LIMIT,
   type HistoryEntry,
   buildPendingHistoryContextFromMap,
   clearHistoryEntriesIfEnabled,
   recordPendingHistoryEntryIfEnabled,
-} from "NexisClaw/plugin-sdk/reply-history";
+} from "GreenchClaw/plugin-sdk/reply-history";
 import {
   deliverTextOrMediaReply,
   resolveSendableOutboundReplyParts,
   type OutboundReplyPayload,
-} from "NexisClaw/plugin-sdk/reply-payload";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
+} from "GreenchClaw/plugin-sdk/reply-payload";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime";
 import {
   resolveDefaultGroupPolicy,
   resolveOpenProviderRuntimeGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "NexisClaw/plugin-sdk/runtime-group-policy";
+} from "GreenchClaw/plugin-sdk/runtime-group-policy";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
   normalizeStringEntries,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   buildZalouserGroupCandidates,
   findZalouserGroupEntry,
@@ -55,7 +55,7 @@ import {
 
 export type ZalouserMonitorOptions = {
   account: ResolvedZalouserAccount;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   runtime: RuntimeEnv;
   abortSignal: AbortSignal;
   statusSink?: (patch: { lastInboundAt?: number; lastOutboundAt?: number }) => void;
@@ -134,7 +134,7 @@ function resolveInboundQueueKey(message: ZaloInboundMessage): string {
   return `direct:${senderId || threadId}`;
 }
 
-function resolveZalouserDmSessionScope(config: NexisClawConfig) {
+function resolveZalouserDmSessionScope(config: GreenchClawConfig) {
   const configured = config.session?.dmScope;
   return configured === "main" || !configured ? "per-channel-peer" : configured;
 }
@@ -175,7 +175,7 @@ function senderScopedZalouserGroupPolicy(params: {
 
 function resolveZalouserInboundSessionKey(params: {
   core: ZalouserCoreRuntime;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   route: { agentId: string; accountId: string; sessionKey: string };
   storePath: string;
   isGroup: boolean;
@@ -267,7 +267,7 @@ async function sendZalouserDeliveryAcks(params: {
 async function processMessage(
   message: ZaloInboundMessage,
   account: ResolvedZalouserAccount,
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   core: ZalouserCoreRuntime,
   runtime: RuntimeEnv,
   historyState: ZalouserGroupHistoryState,
@@ -764,7 +764,7 @@ async function deliverZalouserReply(params: {
   isGroup: boolean;
   runtime: RuntimeEnv;
   core: ZalouserCoreRuntime;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   accountId?: string;
   tableMode?: MarkdownTableMode;
 }): Promise<{ visibleReplySent: boolean }> {
@@ -1030,7 +1030,7 @@ export const __testing = {
   processMessage: async (params: {
     message: ZaloInboundMessage;
     account: ResolvedZalouserAccount;
-    config: NexisClawConfig;
+    config: GreenchClawConfig;
     runtime: RuntimeEnv;
     historyState?: {
       historyLimit?: number;

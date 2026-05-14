@@ -28,7 +28,7 @@ import {
   type PluginToolDescriptorConfigCacheKeyMemo,
   writeCachedPluginToolDescriptors,
 } from "./tool-descriptor-cache.js";
-import type { NexisClawPluginToolContext } from "./types.js";
+import type { GreenchClawPluginToolContext } from "./types.js";
 
 export {
   resetPluginToolDescriptorCache,
@@ -237,7 +237,7 @@ function createPluginToolFactoryTiming(params: {
 
 function resolvePluginToolFactoryEntry(params: {
   entry: PluginToolRegistration;
-  ctx: NexisClawPluginToolContext;
+  ctx: GreenchClawPluginToolContext;
   declaredNames: string[];
   factoryTimingStartedAt: number;
   logError: (message: string) => void;
@@ -503,7 +503,7 @@ function readPluginCacheSource(plugin: PluginManifestRecord): string {
 
 function buildPluginDescriptorCacheKey(params: {
   plugin: PluginManifestRecord;
-  ctx: NexisClawPluginToolContext;
+  ctx: GreenchClawPluginToolContext;
   currentRuntimeConfig?: PluginLoadOptions["config"] | null;
   configCacheKeyMemo?: PluginToolDescriptorConfigCacheKeyMemo;
 }): string {
@@ -530,7 +530,7 @@ function cachedDescriptorsCoverToolNames(params: {
 
 function createCachedDescriptorPluginTool(params: {
   descriptor: CachedPluginToolDescriptor;
-  ctx: NexisClawPluginToolContext;
+  ctx: GreenchClawPluginToolContext;
   loadContext: ReturnType<typeof resolvePluginRuntimeLoadContext>;
   runtimeOptions: PluginLoadOptions["runtimeOptions"];
 }): AnyAgentTool {
@@ -619,7 +619,7 @@ function resolveCachedPluginTools(params: {
   onlyPluginIds: readonly string[];
   existing: Set<string>;
   existingNormalized: Set<string>;
-  ctx: NexisClawPluginToolContext;
+  ctx: GreenchClawPluginToolContext;
   loadContext: ReturnType<typeof resolvePluginRuntimeLoadContext>;
   runtimeOptions: PluginLoadOptions["runtimeOptions"];
   currentRuntimeConfig?: PluginLoadOptions["config"] | null;
@@ -811,7 +811,7 @@ function registryHasScopedPluginTools(
 }
 
 function resolvePluginToolLoadState(params: {
-  context: NexisClawPluginToolContext;
+  context: GreenchClawPluginToolContext;
   toolAllowlist?: string[];
   toolDenylist?: string[];
   allowGatewaySubagentBinding?: boolean;
@@ -867,7 +867,7 @@ function resolvePluginToolLoadState(params: {
 }
 
 export function ensureStandalonePluginToolRegistryLoaded(params: {
-  context: NexisClawPluginToolContext;
+  context: GreenchClawPluginToolContext;
   toolAllowlist?: string[];
   toolDenylist?: string[];
   allowGatewaySubagentBinding?: boolean;
@@ -886,7 +886,7 @@ export function ensureStandalonePluginToolRegistryLoaded(params: {
 }
 
 export function resolvePluginTools(params: {
-  context: NexisClawPluginToolContext;
+  context: GreenchClawPluginToolContext;
   existingToolNames?: Set<string>;
   toolAllowlist?: string[];
   toolDenylist?: string[];

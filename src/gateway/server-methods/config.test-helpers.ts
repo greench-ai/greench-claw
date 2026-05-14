@@ -1,5 +1,5 @@
 import { vi, type Mock } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { GatewayRequestHandlerOptions } from "./types.js";
 
 type UnknownMock = Mock<(...args: unknown[]) => unknown>;
@@ -25,10 +25,10 @@ function createGatewayLog(): GatewayLogMocks {
   };
 }
 
-export function createConfigWriteSnapshot(config: NexisClawConfig) {
+export function createConfigWriteSnapshot(config: GreenchClawConfig) {
   return {
     snapshot: {
-      path: "/tmp/NexisClaw.json",
+      path: "/tmp/GreenchClaw.json",
       exists: true,
       raw: JSON.stringify(config, null, 2),
       parsed: config,

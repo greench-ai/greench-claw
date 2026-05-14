@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import type { probeGatewayMemoryStatus } from "../commands/doctor-gateway-health.js";
 import type { DoctorOptions, DoctorPrompter } from "../commands/doctor-prompter.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { buildGatewayConnectionDetails } from "../gateway/call.js";
 import type { RuntimeEnv } from "../runtime.js";
 import type { FlowContribution } from "./types.js";
@@ -9,7 +9,7 @@ import type { FlowContribution } from "./types.js";
 type DoctorFlowMode = "local" | "remote";
 
 type DoctorConfigResult = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   path?: string;
   shouldWriteConfig?: boolean;
   sourceConfigValid?: boolean;
@@ -22,8 +22,8 @@ type DoctorHealthFlowContext = {
   options: DoctorOptions;
   prompter: DoctorPrompter;
   configResult: DoctorConfigResult;
-  cfg: NexisClawConfig;
-  cfgForPersistence: NexisClawConfig;
+  cfg: GreenchClawConfig;
+  cfgForPersistence: GreenchClawConfig;
   sourceConfigValid: boolean;
   configPath: string;
   env?: NodeJS.ProcessEnv;
@@ -39,12 +39,12 @@ type DoctorHealthContribution = FlowContribution & {
   run: (ctx: DoctorHealthFlowContext) => Promise<void>;
 };
 
-function resolveDoctorMode(cfg: NexisClawConfig): DoctorFlowMode {
+function resolveDoctorMode(cfg: GreenchClawConfig): DoctorFlowMode {
   return cfg.gateway?.mode === "remote" ? "remote" : "local";
 }
 
 const UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE_ENV =
-  "NEXISCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE";
+  "GREENCHCLAW_UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE";
 
 function isTruthyEnvValue(value: string | undefined): boolean {
   if (!value) {
@@ -57,7 +57,7 @@ function isTruthyEnvValue(value: string | undefined): boolean {
 export function shouldSkipLegacyUpdateDoctorConfigWrite(params: {
   env: NodeJS.ProcessEnv;
 }): boolean {
-  if (!isTruthyEnvValue(params.env.NEXISCLAW_UPDATE_IN_PROGRESS)) {
+  if (!isTruthyEnvValue(params.env.GREENCHCLAW_UPDATE_IN_PROGRESS)) {
     return false;
   }
   if (isTruthyEnvValue(params.env[UPDATE_PARENT_SUPPORTS_DOCTOR_CONFIG_WRITE_ENV])) {
@@ -93,11 +93,11 @@ async function runGatewayConfigHealth(ctx: DoctorHealthFlowContext): Promise<voi
   if (!ctx.cfg.gateway?.mode) {
     const lines = [
       "gateway.mode is unset; gateway start will be blocked.",
-      `Fix: run ${formatCliCommand("NexisClaw configure")} and set Gateway mode (local/remote).`,
-      `Or set directly: ${formatCliCommand("NexisClaw config set gateway.mode local")}`,
+      `Fix: run ${formatCliCommand("GreenchClaw configure")} and set Gateway mode (local/remote).`,
+      `Or set directly: ${formatCliCommand("GreenchClaw config set gateway.mode local")}`,
     ];
     if (!fs.existsSync(ctx.configPath)) {
-      lines.push(`Missing config: run ${formatCliCommand("NexisClaw setup")} first.`);
+      lines.push(`Missing config: run ${formatCliCommand("GreenchClaw setup")} first.`);
     }
     note(lines.join("\n"), "Gateway");
   }
@@ -106,8 +106,8 @@ async function runGatewayConfigHealth(ctx: DoctorHealthFlowContext): Promise<voi
       [
         "gateway.auth.token and gateway.auth.password are both configured while gateway.auth.mode is unset.",
         "Set an explicit mode to avoid ambiguous auth selection and startup/runtime failures.",
-        `Set token mode: ${formatCliCommand("NexisClaw config set gateway.auth.mode token")}`,
-        `Set password mode: ${formatCliCommand("NexisClaw config set gateway.auth.mode password")}`,
+        `Set token mode: ${formatCliCommand("GreenchClaw config set gateway.auth.mode token")}`,
+        `Set password mode: ${formatCliCommand("GreenchClaw config set gateway.auth.mode password")}`,
       ].join("\n"),
       "Gateway auth",
     );
@@ -607,7 +607,7 @@ async function runWriteConfigHealth(ctx: DoctorHealthFlowContext): Promise<void>
     return;
   }
   if (!ctx.prompter.shouldRepair) {
-    ctx.runtime.log(`Run "${formatCliCommand("NexisClaw doctor --fix")}" to apply changes.`);
+    ctx.runtime.log(`Run "${formatCliCommand("GreenchClaw doctor --fix")}" to apply changes.`);
   }
 }
 

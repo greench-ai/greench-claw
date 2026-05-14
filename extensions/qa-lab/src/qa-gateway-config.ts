@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import {
   defaultQaModelForMode,
   normalizeQaProviderMode,
@@ -54,7 +54,7 @@ export function buildQaGatewayConfig(params: {
   liveProviderConfigs?: Record<string, ModelProviderConfig>;
   fastMode?: boolean;
   thinkingDefault?: QaThinkingLevel;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   const providerBaseUrl = params.providerBaseUrl ?? "http://127.0.0.1:44080/v1";
   const providerMode = normalizeQaProviderMode(params.providerMode ?? DEFAULT_QA_PROVIDER_MODE);
   const provider = getQaProvider(providerMode);
@@ -248,5 +248,5 @@ export function buildQaGatewayConfig(params: {
     },
     ...(params.transportConfig?.channels ? { channels: params.transportConfig.channels } : {}),
     ...(params.transportConfig?.messages ? { messages: params.transportConfig.messages } : {}),
-  } satisfies NexisClawConfig;
+  } satisfies GreenchClawConfig;
 }

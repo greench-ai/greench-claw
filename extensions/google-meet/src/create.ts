@@ -1,5 +1,5 @@
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { GoogleMeetConfig, GoogleMeetMode, GoogleMeetTransport } from "./config.js";
 import {
   createGoogleMeetSpace,
@@ -89,7 +89,7 @@ function hasGoogleMeetOAuth(config: GoogleMeetConfig, raw: Record<string, unknow
 
 export async function createMeetFromParams(params: {
   config: GoogleMeetConfig;
-  runtime: NexisClawPluginApi["runtime"];
+  runtime: GreenchClawPluginApi["runtime"];
   raw: Record<string, unknown>;
 }) {
   if (hasGoogleMeetOAuth(params.config, params.raw)) {
@@ -132,7 +132,7 @@ export async function createMeetFromParams(params: {
 
 export async function createAndJoinMeetFromParams(params: {
   config: GoogleMeetConfig;
-  runtime: NexisClawPluginApi["runtime"];
+  runtime: GreenchClawPluginApi["runtime"];
   raw: Record<string, unknown>;
   ensureRuntime: () => Promise<GoogleMeetRuntime>;
 }) {
@@ -151,7 +151,8 @@ export async function createAndJoinMeetFromParams(params: {
   return {
     ...created,
     joined: true,
-    nextAction: "Share meetingUri with participants; the NexisClaw agent has started the join flow.",
+    nextAction:
+      "Share meetingUri with participants; the GreenchClaw agent has started the join flow.",
     join,
   };
 }

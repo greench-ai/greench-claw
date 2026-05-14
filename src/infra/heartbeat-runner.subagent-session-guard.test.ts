@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { resolveMainSessionKey } from "../config/sessions.js";
 import { runHeartbeatOnce } from "./heartbeat-runner.js";
 import { installHeartbeatRunnerTestRuntime } from "./heartbeat-runner.test-harness.js";
@@ -19,7 +19,7 @@ function requireFirstMockCall<T>(mock: { mock: { calls: T[][] } }, label: string
 describe("runHeartbeatOnce", () => {
   it("falls back to the main session when a subagent session key is forced", async () => {
     await withTempHeartbeatSandbox(async ({ tmpDir, storePath, replySpy }) => {
-      const cfg: NexisClawConfig = {
+      const cfg: GreenchClawConfig = {
         agents: {
           defaults: {
             workspace: tmpDir,

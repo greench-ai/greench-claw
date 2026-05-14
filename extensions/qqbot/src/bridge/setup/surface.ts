@@ -1,8 +1,8 @@
 import {
   createStandardChannelSetupStatus,
   setSetupChannelEnabled,
-} from "NexisClaw/plugin-sdk/setup";
-import type { ChannelSetupWizard } from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/setup";
+import type { ChannelSetupWizard } from "GreenchClaw/plugin-sdk/setup";
 import { isAccountConfigured } from "../../engine/config/resolve.js";
 import { listQQBotAccountIds, resolveQQBotAccount } from "../config.js";
 import { finalizeQQBotSetup } from "./finalize.js";

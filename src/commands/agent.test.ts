@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { withTempHome as withTempHomeBase } from "NexisClaw/plugin-sdk/test-env";
+import { withTempHome as withTempHomeBase } from "GreenchClaw/plugin-sdk/test-env";
 import { beforeEach, describe, expect, it, type MockInstance, vi } from "vitest";
 import "./agent-command.test-mocks.js";
 import { __testing as acpManagerTesting } from "../acp/control-plane/manager.js";
@@ -12,7 +12,7 @@ import { runEmbeddedPiAgent } from "../agents/pi-embedded.js";
 import { BASE_THINKING_LEVELS } from "../auto-reply/thinking.shared.js";
 import * as runtimeSnapshotModule from "../config/runtime-snapshot.js";
 import { clearSessionStoreCacheForTest } from "../config/sessions/store.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   emitAgentEvent,
   onAgentEvent,
@@ -147,7 +147,7 @@ vi.mock("../agents/command/delivery.runtime.js", () => {
   return {
     deliverAgentCommandResult: vi.fn(
       async (params: {
-        cfg: NexisClawConfig;
+        cfg: GreenchClawConfig;
         deps: {
           sendMessageTelegram?: (
             to: string,
@@ -208,7 +208,7 @@ vi.mock("../config/sessions/transcript-resolve.runtime.js", () => {
     return normalizedParts.join(separator);
   };
   const resolveSessionFile = (sessionId: string, agentId: string, sessionsDir?: string): string =>
-    joinPath(sessionsDir ?? ".NexisClaw", "agents", agentId, "sessions", `${sessionId}.jsonl`);
+    joinPath(sessionsDir ?? ".GreenchClaw", "agents", agentId, "sessions", `${sessionId}.jsonl`);
 
   return {
     resolveSessionTranscriptFile: vi.fn(
@@ -249,7 +249,7 @@ const runtime = createThrowingTestRuntime();
 
 async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
   return withTempHomeBase(fn, {
-    prefix: "NexisClaw-agent-",
+    prefix: "GreenchClaw-agent-",
     skipHomeCleanup: true,
     skipSessionCleanup: true,
   });
@@ -258,8 +258,8 @@ async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
 function mockConfig(
   home: string,
   storePath: string,
-  agentOverrides?: Partial<NonNullable<NonNullable<NexisClawConfig["agents"]>["defaults"]>>,
-  telegramOverrides?: Partial<NonNullable<NonNullable<NexisClawConfig["channels"]>["telegram"]>>,
+  agentOverrides?: Partial<NonNullable<NonNullable<GreenchClawConfig["agents"]>["defaults"]>>,
+  telegramOverrides?: Partial<NonNullable<NonNullable<GreenchClawConfig["channels"]>["telegram"]>>,
   agentsList?: Array<{ id: string; default?: boolean }>,
 ) {
   const cfg = {
@@ -267,7 +267,7 @@ function mockConfig(
       defaults: {
         model: { primary: "anthropic/claude-opus-4-6" },
         models: { "anthropic/claude-opus-4-6": {} },
-        workspace: path.join(home, "NexisClaw"),
+        workspace: path.join(home, "GreenchClaw"),
         ...agentOverrides,
       },
       list: agentsList,
@@ -276,7 +276,7 @@ function mockConfig(
     channels: {
       telegram: telegramOverrides ? { ...telegramOverrides } : undefined,
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
   configIoMocks.loadConfig.mockReturnValue(cfg);
   return cfg;
 }
@@ -359,7 +359,7 @@ beforeEach(() => {
   vi.mocked(loadModelCatalog).mockResolvedValue([]);
   vi.mocked(modelSelectionModule.isCliProvider).mockImplementation(() => false);
   configIoMocks.readConfigFileSnapshotForWrite.mockResolvedValue({
-    snapshot: { valid: false, resolved: {} as NexisClawConfig },
+    snapshot: { valid: false, resolved: {} as GreenchClawConfig },
     writeOptions: {},
   });
 });
@@ -385,7 +385,7 @@ describe("agentCommand", () => {
       expect(registryLoad?.scope).toBe("all");
       expect(registryLoad?.config).toBeTypeOf("object");
       expect(registryLoad?.activationSourceConfig).toBeTypeOf("object");
-      expect(registryLoad?.workspaceDir).toBe(path.join(home, "NexisClaw"));
+      expect(registryLoad?.workspaceDir).toBe(path.join(home, "GreenchClaw"));
       expect(registryLoad?.onlyPluginIds).toEqual(["codex"]);
       expectLastRunProviderModel("openai", "gpt-5.2");
     });

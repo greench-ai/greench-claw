@@ -1,7 +1,7 @@
 import {
   createDefaultModelPresetAppliers,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildMoonshotProvider,
   MOONSHOT_BASE_URL,
@@ -12,7 +12,7 @@ export const MOONSHOT_DEFAULT_MODEL_REF = `moonshot/${MOONSHOT_DEFAULT_MODEL_ID}
 
 const moonshotPresetAppliers = createDefaultModelPresetAppliers<[string]>({
   primaryModelRef: MOONSHOT_DEFAULT_MODEL_REF,
-  resolveParams: (_cfg: NexisClawConfig, baseUrl: string) => {
+  resolveParams: (_cfg: GreenchClawConfig, baseUrl: string) => {
     const defaultModel = buildMoonshotProvider().models[0];
     if (!defaultModel) {
       return null;
@@ -29,10 +29,10 @@ const moonshotPresetAppliers = createDefaultModelPresetAppliers<[string]>({
   },
 });
 
-export function applyMoonshotConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyMoonshotConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return moonshotPresetAppliers.applyConfig(cfg, MOONSHOT_BASE_URL);
 }
 
-export function applyMoonshotConfigCn(cfg: NexisClawConfig): NexisClawConfig {
+export function applyMoonshotConfigCn(cfg: GreenchClawConfig): GreenchClawConfig {
   return moonshotPresetAppliers.applyConfig(cfg, MOONSHOT_CN_BASE_URL);
 }

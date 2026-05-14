@@ -1,9 +1,9 @@
 import { EventEmitter } from "node:events";
 import type { IncomingMessage } from "node:http";
-import { createRuntimeTaskFlow } from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { createMockServerResponse } from "NexisClaw/plugin-sdk/test-env";
+import { createRuntimeTaskFlow } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { createMockServerResponse } from "GreenchClaw/plugin-sdk/test-env";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import { createTaskFlowWebhookRequestHandler, type TaskFlowWebhookTarget } from "./http.js";
 
 const hoisted = vi.hoisted(() => {
@@ -42,7 +42,7 @@ function createJsonRequest(params: {
   req.url = params.path;
   req.headers = {
     "content-type": "application/json",
-    ...(params.secret ? { "x-NexisClaw-webhook-secret": params.secret } : {}),
+    ...(params.secret ? { "x-GreenchClaw-webhook-secret": params.secret } : {}),
   };
   req.socket = { remoteAddress: "127.0.0.1" } as MockIncomingMessage["socket"];
   req.destroyed = false;
@@ -80,7 +80,7 @@ function createHandler(): {
   const targetsByPath = new Map<string, TaskFlowWebhookTarget[]>([[target.path, [target]]]);
   return {
     handler: createTaskFlowWebhookRequestHandler({
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       targetsByPath,
     }),
     target,
@@ -90,7 +90,7 @@ function createHandler(): {
 
 function createHandlerWithTarget(
   target: TaskFlowWebhookTarget,
-  cfg: NexisClawConfig = {} as NexisClawConfig,
+  cfg: GreenchClawConfig = {} as GreenchClawConfig,
 ): ReturnType<typeof createTaskFlowWebhookRequestHandler> {
   const targetsByPath = new Map<string, TaskFlowWebhookTarget[]>([[target.path, [target]]]);
   return createTaskFlowWebhookRequestHandler({
@@ -149,7 +149,7 @@ describe("createTaskFlowWebhookRequestHandler", () => {
       secretInput: {
         source: "env",
         provider: "default",
-        id: "NEXISCLAW_WEBHOOK_SECRET",
+        id: "GREENCHCLAW_WEBHOOK_SECRET",
       },
       secretConfigPath: "plugins.entries.webhooks.routes.cached.secret",
       defaultControllerId: "webhooks/cached",

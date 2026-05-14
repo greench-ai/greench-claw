@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { SecretInput } from "../config/types.secrets.js";
 import { isSecureWebSocketUrl } from "../gateway/net.js";
 import { discoverGatewayBeacons, type GatewayBonjourBeacon } from "../infra/bonjour-discovery.js";
@@ -35,22 +35,22 @@ function validateGatewayWebSocketUrl(value: string): string | undefined {
   }
   if (
     !isSecureWebSocketUrl(trimmed, {
-      allowPrivateWs: process.env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS === "1",
+      allowPrivateWs: process.env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS === "1",
     })
   ) {
     return (
       "Use wss:// for remote hosts, or ws://127.0.0.1/localhost via SSH tunnel. " +
-      "Break-glass: NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1 for trusted private networks."
+      "Break-glass: GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1 for trusted private networks."
     );
   }
   return undefined;
 }
 
 export async function promptRemoteGatewayConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   prompter: WizardPrompter,
   options?: { secretInputMode?: SecretInputMode },
-): Promise<NexisClawConfig> {
+): Promise<GreenchClawConfig> {
   let selectedBeacon: GatewayBonjourBeacon | null = null;
   let suggestedUrl = cfg.gateway?.remote?.url ?? DEFAULT_GATEWAY_URL;
   let discoveryTlsFingerprint: string | undefined;
@@ -68,7 +68,7 @@ export async function promptRemoteGatewayConfig(
     await prompter.note(
       [
         "Bonjour discovery requires dns-sd (macOS) or avahi-browse (Linux).",
-        "Docs: https://docs.NexisClaw.ai/gateway/discovery",
+        "Docs: https://docs.GreenchClaw.ai/gateway/discovery",
       ].join("\n"),
       "Discovery",
     );
@@ -143,7 +143,7 @@ export async function promptRemoteGatewayConfig(
           [
             "Start a tunnel before using the CLI:",
             `ssh -N -L 18789:127.0.0.1:18789 <user>@${host}${target.sshPort ? ` -p ${target.sshPort}` : ""}`,
-            "Docs: https://docs.NexisClaw.ai/gateway/remote",
+            "Docs: https://docs.GreenchClaw.ai/gateway/remote",
           ].join("\n"),
           "SSH tunnel",
         );
@@ -178,7 +178,7 @@ export async function promptRemoteGatewayConfig(
       copy: {
         modeMessage: "How do you want to provide this gateway token?",
         plaintextLabel: "Enter token now",
-        plaintextHint: "Stores the token directly in NexisClaw config",
+        plaintextHint: "Stores the token directly in GreenchClaw config",
       },
     });
     if (selectedMode === "ref") {
@@ -186,10 +186,10 @@ export async function promptRemoteGatewayConfig(
         provider: "gateway-remote-token",
         config: cfg,
         prompter,
-        preferredEnvVar: "NEXISCLAW_GATEWAY_TOKEN",
+        preferredEnvVar: "GREENCHCLAW_GATEWAY_TOKEN",
         copy: {
           sourceMessage: "Where is this gateway token stored?",
-          envVarPlaceholder: "NEXISCLAW_GATEWAY_TOKEN",
+          envVarPlaceholder: "GREENCHCLAW_GATEWAY_TOKEN",
         },
       });
       token = resolved.ref;
@@ -221,7 +221,7 @@ export async function promptRemoteGatewayConfig(
       copy: {
         modeMessage: "How do you want to provide this gateway password?",
         plaintextLabel: "Enter password now",
-        plaintextHint: "Stores the password directly in NexisClaw config",
+        plaintextHint: "Stores the password directly in GreenchClaw config",
       },
     });
     if (selectedMode === "ref") {
@@ -229,10 +229,10 @@ export async function promptRemoteGatewayConfig(
         provider: "gateway-remote-password",
         config: cfg,
         prompter,
-        preferredEnvVar: "NEXISCLAW_GATEWAY_PASSWORD",
+        preferredEnvVar: "GREENCHCLAW_GATEWAY_PASSWORD",
         copy: {
           sourceMessage: "Where is this gateway password stored?",
-          envVarPlaceholder: "NEXISCLAW_GATEWAY_PASSWORD",
+          envVarPlaceholder: "GREENCHCLAW_GATEWAY_PASSWORD",
         },
       });
       password = resolved.ref;

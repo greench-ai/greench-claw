@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-extract_NexisClaw_semver() {
+extract_GreenchClaw_semver() {
   local raw="${1:-}"
   raw="${raw//$'\r'/}"
   if [[ "$raw" =~ v?([0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?(\+[0-9A-Za-z.-]+)?) ]]; then

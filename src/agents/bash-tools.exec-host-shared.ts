@@ -395,12 +395,12 @@ export function buildHeadlessExecApprovalDeniedMessage(params: {
   return [
     `exec denied: ${runLabel} cannot wait for interactive exec approval.`,
     `Effective host exec policy: security=${params.security} ask=${params.ask} askFallback=${params.askFallback}`,
-    "Stricter values from tools.exec and ~/.NexisClaw/exec-approvals.json both apply.",
+    "Stricter values from tools.exec and ~/.GreenchClaw/exec-approvals.json both apply.",
     "Fix one of these:",
     '- align both files to security="full" and ask="off" for trusted local automation',
     "- keep allowlist mode and add an explicit allowlist entry for this command",
     "- enable Web UI, terminal UI, or chat exec approvals and rerun interactively",
-    'Tip: run "NexisClaw doctor" and "NexisClaw approvals get --gateway" to inspect the effective policy.',
+    'Tip: run "GreenchClaw doctor" and "GreenchClaw approvals get --gateway" to inspect the effective policy.',
   ].join("\n");
 }
 

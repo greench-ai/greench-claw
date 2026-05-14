@@ -12,8 +12,8 @@ describe("detectMacCloudSyncedStateDir", () => {
       "Library",
       "Mobile Documents",
       "com~apple~CloudDocs",
-      "NexisClaw",
-      ".NexisClaw",
+      "GreenchClaw",
+      ".GreenchClaw",
     );
 
     const result = detectMacCloudSyncedStateDir(stateDir, {
@@ -28,7 +28,14 @@ describe("detectMacCloudSyncedStateDir", () => {
   });
 
   it("detects state dir under Library/CloudStorage", () => {
-    const stateDir = path.join(home, "Library", "CloudStorage", "Dropbox", "NexisClaw", ".NexisClaw");
+    const stateDir = path.join(
+      home,
+      "Library",
+      "CloudStorage",
+      "Dropbox",
+      "GreenchClaw",
+      ".GreenchClaw",
+    );
 
     const result = detectMacCloudSyncedStateDir(stateDir, {
       platform: "darwin",
@@ -42,14 +49,14 @@ describe("detectMacCloudSyncedStateDir", () => {
   });
 
   it("detects cloud-synced target when state dir resolves via symlink", () => {
-    const symlinkPath = "/tmp/NexisClaw-state";
+    const symlinkPath = "/tmp/GreenchClaw-state";
     const resolvedCloudPath = path.join(
       home,
       "Library",
       "CloudStorage",
       "OneDrive-Personal",
-      "NexisClaw",
-      ".NexisClaw",
+      "GreenchClaw",
+      ".GreenchClaw",
     );
 
     const result = detectMacCloudSyncedStateDir(symlinkPath, {
@@ -70,10 +77,10 @@ describe("detectMacCloudSyncedStateDir", () => {
       "Library",
       "CloudStorage",
       "OneDrive-Personal",
-      "NexisClaw",
-      ".NexisClaw",
+      "GreenchClaw",
+      ".GreenchClaw",
     );
-    const resolvedLocalPath = path.join(home, ".NexisClaw");
+    const resolvedLocalPath = path.join(home, ".GreenchClaw");
 
     const result = detectMacCloudSyncedStateDir(symlinkPath, {
       platform: "darwin",
@@ -84,10 +91,10 @@ describe("detectMacCloudSyncedStateDir", () => {
     expect(result).toBeNull();
   });
 
-  it("anchors cloud detection to OS homedir when NEXISCLAW_HOME is overridden", () => {
-    const stateDir = path.join(home, "Library", "CloudStorage", "iCloud Drive", ".NexisClaw");
-    const originalNexisClawHome = process.env.NEXISCLAW_HOME;
-    process.env.NEXISCLAW_HOME = "/tmp/NexisClaw-home-override";
+  it("anchors cloud detection to OS homedir when GREENCHCLAW_HOME is overridden", () => {
+    const stateDir = path.join(home, "Library", "CloudStorage", "iCloud Drive", ".GreenchClaw");
+    const originalGreenchClawHome = process.env.GREENCHCLAW_HOME;
+    process.env.GREENCHCLAW_HOME = "/tmp/GreenchClaw-home-override";
     const homedirSpy = vi.spyOn(os, "homedir").mockReturnValue(home);
     try {
       const result = detectMacCloudSyncedStateDir(stateDir, {
@@ -100,10 +107,10 @@ describe("detectMacCloudSyncedStateDir", () => {
       });
     } finally {
       homedirSpy.mockRestore();
-      if (originalNexisClawHome === undefined) {
-        delete process.env.NEXISCLAW_HOME;
+      if (originalGreenchClawHome === undefined) {
+        delete process.env.GREENCHCLAW_HOME;
       } else {
-        process.env.NEXISCLAW_HOME = originalNexisClawHome;
+        process.env.GREENCHCLAW_HOME = originalGreenchClawHome;
       }
     }
   });
@@ -114,8 +121,8 @@ describe("detectMacCloudSyncedStateDir", () => {
       "Library",
       "Mobile Documents",
       "com~apple~CloudDocs",
-      "NexisClaw",
-      ".NexisClaw",
+      "GreenchClaw",
+      ".GreenchClaw",
     );
 
     const result = detectMacCloudSyncedStateDir(stateDir, {

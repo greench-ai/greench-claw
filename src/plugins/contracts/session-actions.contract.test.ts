@@ -1,7 +1,7 @@
 import {
   createPluginRegistryFixture,
   registerTestPlugin,
-} from "NexisClaw/plugin-sdk/plugin-test-contracts";
+} from "GreenchClaw/plugin-sdk/plugin-test-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { APPROVALS_SCOPE, READ_SCOPE, WRITE_SCOPE } from "../../gateway/operator-scopes.js";
 import { handleGatewayRequest } from "../../gateway/server-methods.js";
@@ -12,7 +12,7 @@ import { createEmptyPluginRegistry } from "../registry-empty.js";
 import { createPluginRegistry } from "../registry.js";
 import { setActivePluginRegistry } from "../runtime.js";
 import { createPluginRecord } from "../status.test-helpers.js";
-import type { NexisClawPluginApi } from "../types.js";
+import type { GreenchClawPluginApi } from "../types.js";
 
 const MAIN_SESSION_KEY = "agent:main:main";
 
@@ -129,7 +129,7 @@ function requireObservedEvent(
 function registerActionFixture(params: {
   id: string;
   name?: string;
-  register: (api: NexisClawPluginApi) => void;
+  register: (api: GreenchClawPluginApi) => void;
 }) {
   const { config, registry } = createPluginRegistryFixture();
   registerTestPlugin({
@@ -672,8 +672,8 @@ describe("plugin session actions", () => {
     const observed: unknown[] = [];
     const unsubscribe = onAgentEvent((event) => observed.push(event));
     const { config, registry } = createPluginRegistryFixture();
-    let bundledApi: NexisClawPluginApi | undefined;
-    let workspaceApi: NexisClawPluginApi | undefined;
+    let bundledApi: GreenchClawPluginApi | undefined;
+    let workspaceApi: GreenchClawPluginApi | undefined;
     registerTestPlugin({
       registry,
       config,
@@ -776,7 +776,7 @@ describe("plugin session actions", () => {
     const observed: unknown[] = [];
     const unsubscribe = onAgentEvent((event) => observed.push(event));
     const { config, registry } = createPluginRegistryFixture();
-    let capturedApi: NexisClawPluginApi | undefined;
+    let capturedApi: GreenchClawPluginApi | undefined;
     registerTestPlugin({
       registry,
       config,
@@ -810,7 +810,7 @@ describe("plugin session actions", () => {
         },
         runtime: {} as never,
       });
-      let neverActiveApi: NexisClawPluginApi | undefined;
+      let neverActiveApi: GreenchClawPluginApi | undefined;
       registerTestPlugin({
         registry: neverActiveRegistry,
         config,
@@ -841,7 +841,7 @@ describe("plugin session actions", () => {
         runtime: {} as never,
         activateGlobalSideEffects: false,
       });
-      let inactiveApi: NexisClawPluginApi | undefined;
+      let inactiveApi: GreenchClawPluginApi | undefined;
       registerTestPlugin({
         registry: inactiveRegistry,
         config,
@@ -872,7 +872,7 @@ describe("plugin session actions", () => {
     const observed: unknown[] = [];
     const unsubscribe = onAgentEvent((event) => observed.push(event));
     const { config, registry } = createPluginRegistryFixture();
-    let capturedApi: NexisClawPluginApi | undefined;
+    let capturedApi: GreenchClawPluginApi | undefined;
     registerTestPlugin({
       registry,
       config,

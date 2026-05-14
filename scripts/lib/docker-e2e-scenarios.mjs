@@ -8,11 +8,11 @@ const LIVE_CLI_TIMEOUT_MS = 20 * 60 * 1000;
 const LIVE_PROFILE_TIMEOUT_MS = 30 * 60 * 1000;
 const OPENWEBUI_TIMEOUT_MS = 20 * 60 * 1000;
 const RELEASE_OPENWEBUI_COMMAND =
-  "NEXISCLAW_OPENWEBUI_MODEL=openai/gpt-5.4-mini OPENWEBUI_SMOKE_MODE=models NEXISCLAW_OPENWEBUI_PROVIDER_TIMEOUT_SECONDS=300 NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openwebui";
+  "GREENCHCLAW_OPENWEBUI_MODEL=openai/gpt-5.4-mini OPENWEBUI_SMOKE_MODE=models GREENCHCLAW_OPENWEBUI_PROVIDER_TIMEOUT_SECONDS=300 GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openwebui";
 export const BUNDLED_PLUGIN_INSTALL_UNINSTALL_SHARDS = 24;
-const upgradeSurvivorCommand = "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:upgrade-survivor";
+const upgradeSurvivorCommand = "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:upgrade-survivor";
 const updateRestartAuthCommand =
-  "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-restart-auth";
+  "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-restart-auth";
 
 const LIVE_RETRY_PATTERNS = [
   /529\b/i,
@@ -25,8 +25,8 @@ const LIVE_RETRY_PATTERNS = [
 
 function liveDockerScriptCommand(script, envPrefix = "", options = {}) {
   const prefix = envPrefix ? `${envPrefix} ` : "";
-  const skipBuild = options.skipBuild === false ? "" : "NEXISCLAW_SKIP_DOCKER_BUILD=1 ";
-  return `${prefix}${skipBuild}bash -c 'harness="\${NEXISCLAW_DOCKER_E2E_TRUSTED_HARNESS_DIR:-}"; if [ -z "$harness" ]; then if [ -d .release-harness/scripts ]; then harness=.release-harness; else harness=.; fi; fi; NEXISCLAW_LIVE_DOCKER_REPO_ROOT="\${NEXISCLAW_DOCKER_E2E_REPO_ROOT:-$PWD}" bash "$harness/scripts/${script}"'`;
+  const skipBuild = options.skipBuild === false ? "" : "GREENCHCLAW_SKIP_DOCKER_BUILD=1 ";
+  return `${prefix}${skipBuild}bash -c 'harness="\${GREENCHCLAW_DOCKER_E2E_TRUSTED_HARNESS_DIR:-}"; if [ -z "$harness" ]; then if [ -d .release-harness/scripts ]; then harness=.release-harness; else harness=.; fi; fi; GREENCHCLAW_LIVE_DOCKER_REPO_ROOT="\${GREENCHCLAW_DOCKER_E2E_REPO_ROOT:-$PWD}" bash "$harness/scripts/${script}"'`;
 }
 
 function lane(name, command, options = {}) {
@@ -115,7 +115,7 @@ const bundledPluginInstallUninstallLanes = Array.from(
   (_, index) =>
     lane(
       `bundled-plugin-install-uninstall-${index}`,
-      `NEXISCLAW_BUNDLED_PLUGIN_SWEEP_TOTAL=${BUNDLED_PLUGIN_INSTALL_UNINSTALL_SHARDS} NEXISCLAW_BUNDLED_PLUGIN_SWEEP_INDEX=${index} NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:bundled-plugin-install-uninstall`,
+      `GREENCHCLAW_BUNDLED_PLUGIN_SWEEP_TOTAL=${BUNDLED_PLUGIN_INSTALL_UNINSTALL_SHARDS} GREENCHCLAW_BUNDLED_PLUGIN_SWEEP_INDEX=${index} GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:bundled-plugin-install-uninstall`,
       {
         estimateSeconds: 120,
         resources: ["npm"],
@@ -128,7 +128,7 @@ const bundledPluginInstallUninstallLanes = Array.from(
 function livePluginToolLane() {
   return liveLane(
     "live-plugin-tool",
-    "NEXISCLAW_LIVE_PLUGIN_TOOL_TIMEOUT_SECONDS=300 NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:live-plugin-tool",
+    "GREENCHCLAW_LIVE_PLUGIN_TOOL_TIMEOUT_SECONDS=300 GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:live-plugin-tool",
     {
       cacheKey: "plugin-tool",
       e2eImageKind: "bare",
@@ -144,7 +144,7 @@ function livePluginToolLane() {
 function liveOpenAiChatToolsLane() {
   return liveLane(
     "openai-chat-tools",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-chat-tools",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-chat-tools",
     {
       e2eImageKind: "functional",
       needsLiveImage: false,
@@ -167,7 +167,7 @@ export const mainLanes = [
     "live-gateway",
     liveDockerScriptCommand(
       "test-live-gateway-models-docker.sh",
-      "NEXISCLAW_IMAGE=NexisClaw:local-live-gateway NEXISCLAW_DOCKER_BUILD_EXTENSIONS=matrix NEXISCLAW_LIVE_GATEWAY_PROVIDERS=claude-cli,codex-cli,google-gemini-cli",
+      "GREENCHCLAW_IMAGE=GreenchClaw:local-live-gateway GREENCHCLAW_DOCKER_BUILD_EXTENSIONS=matrix GREENCHCLAW_LIVE_GATEWAY_PROVIDERS=claude-cli,codex-cli,google-gemini-cli",
       { skipBuild: false },
     ),
     {
@@ -180,7 +180,7 @@ export const mainLanes = [
     "live-cli-backend-claude",
     liveDockerScriptCommand(
       "test-live-cli-backend-docker.sh",
-      "NEXISCLAW_LIVE_CLI_BACKEND_MODEL=claude-cli/claude-sonnet-4-6",
+      "GREENCHCLAW_LIVE_CLI_BACKEND_MODEL=claude-cli/claude-sonnet-4-6",
     ),
     {
       cacheKey: "cli-backend-claude",
@@ -194,7 +194,7 @@ export const mainLanes = [
     "live-cli-backend-gemini",
     liveDockerScriptCommand(
       "test-live-cli-backend-docker.sh",
-      "NEXISCLAW_LIVE_CLI_BACKEND_MODEL=google-gemini-cli/gemini-3-flash-preview",
+      "GREENCHCLAW_LIVE_CLI_BACKEND_MODEL=google-gemini-cli/gemini-3-flash-preview",
     ),
     {
       cacheKey: "cli-backend-gemini",
@@ -204,7 +204,7 @@ export const mainLanes = [
       weight: 3,
     },
   ),
-  liveLane("openwebui", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openwebui", {
+  liveLane("openwebui", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openwebui", {
     e2eImageKind: "functional",
     needsLiveImage: false,
     provider: "openai",
@@ -212,69 +212,80 @@ export const mainLanes = [
     timeoutMs: OPENWEBUI_TIMEOUT_MS,
     weight: 5,
   }),
-  serviceLane("onboard", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:onboard", {
+  serviceLane("onboard", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:onboard", {
     stateScenario: "empty",
     weight: 2,
   }),
-  npmLane("codex-on-demand", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:codex-on-demand", {
+  npmLane("codex-on-demand", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:codex-on-demand", {
     resources: ["service"],
     stateScenario: "empty",
     weight: 3,
   }),
   npmLane(
     "npm-onboard-channel-agent",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
     { resources: ["service"], stateScenario: "empty", weight: 3 },
   ),
   npmLane(
     "npm-onboard-discord-channel-agent",
-    "NEXISCLAW_NPM_ONBOARD_CHANNEL=discord NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
+    "GREENCHCLAW_NPM_ONBOARD_CHANNEL=discord GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
     { resources: ["service"], stateScenario: "empty", weight: 3 },
   ),
   npmLane(
     "npm-onboard-slack-channel-agent",
-    "NEXISCLAW_NPM_ONBOARD_CHANNEL=slack NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
+    "GREENCHCLAW_NPM_ONBOARD_CHANNEL=slack GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
     { resources: ["service"], stateScenario: "empty", weight: 3 },
   ),
-  serviceLane("gateway-network", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:gateway-network"),
+  serviceLane(
+    "gateway-network",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:gateway-network",
+  ),
   serviceLane(
     "agents-delete-shared-workspace",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:agents-delete-shared-workspace",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:agents-delete-shared-workspace",
     { stateScenario: "empty" },
   ),
-  serviceLane("mcp-channels", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:mcp-channels", {
+  serviceLane("mcp-channels", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:mcp-channels", {
     resources: ["npm"],
     stateScenario: "empty",
     weight: 3,
   }),
-  lane("pi-bundle-mcp-tools", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:pi-bundle-mcp-tools", {
+  lane(
+    "pi-bundle-mcp-tools",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:pi-bundle-mcp-tools",
+    {
+      stateScenario: "empty",
+    },
+  ),
+  lane("crestodian-rescue", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:crestodian-rescue", {
     stateScenario: "empty",
   }),
-  lane("crestodian-rescue", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:crestodian-rescue", {
-    stateScenario: "empty",
-  }),
-  lane("crestodian-planner", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:crestodian-planner", {
-    stateScenario: "empty",
-  }),
+  lane(
+    "crestodian-planner",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:crestodian-planner",
+    {
+      stateScenario: "empty",
+    },
+  ),
   serviceLane(
     "cron-mcp-cleanup",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
     { resources: ["npm"], stateScenario: "empty", weight: 3 },
   ),
-  npmLane("doctor-switch", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:doctor-switch", {
+  npmLane("doctor-switch", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:doctor-switch", {
     stateScenario: "empty",
     weight: 3,
   }),
   npmLane(
     "update-channel-switch",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-channel-switch",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-channel-switch",
     {
       stateScenario: "update-stable",
       timeoutMs: 30 * 60 * 1000,
       weight: 3,
     },
   ),
-  npmLane("skill-install", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:skill-install", {
+  npmLane("skill-install", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:skill-install", {
     retryPatterns: LIVE_RETRY_PATTERNS,
     retries: 1,
     stateScenario: "empty",
@@ -288,7 +299,7 @@ export const mainLanes = [
   }),
   npmLane(
     "published-upgrade-survivor",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:published-upgrade-survivor",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:published-upgrade-survivor",
     {
       stateScenario: "upgrade-survivor",
       timeoutMs: 25 * 60 * 1000,
@@ -300,37 +311,41 @@ export const mainLanes = [
     timeoutMs: 25 * 60 * 1000,
     weight: 3,
   }),
-  npmLane("update-migration", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-migration", {
+  npmLane("update-migration", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-migration", {
     stateScenario: "upgrade-survivor",
     timeoutMs: 30 * 60 * 1000,
     weight: 3,
   }),
-  lane("plugins", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugins", {
+  lane("plugins", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugins", {
     resources: ["npm", "service"],
     stateScenario: "empty",
     weight: 6,
   }),
-  lane("kitchen-sink-plugin", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:kitchen-sink-plugin", {
-    resources: ["npm"],
-    stateScenario: "empty",
-    weight: 3,
-  }),
+  lane(
+    "kitchen-sink-plugin",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:kitchen-sink-plugin",
+    {
+      resources: ["npm"],
+      stateScenario: "empty",
+      weight: 3,
+    },
+  ),
   ...bundledPluginInstallUninstallLanes,
   lane(
     "plugins-offline",
-    "NEXISCLAW_PLUGINS_E2E_CLAWHUB=0 NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugins",
+    "GREENCHCLAW_PLUGINS_E2E_CLAWHUB=0 GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugins",
     {
       resources: ["npm", "service"],
       stateScenario: "empty",
       weight: 6,
     },
   ),
-  npmLane("plugin-update", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugin-update", {
+  npmLane("plugin-update", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugin-update", {
     stateScenario: "empty",
   }),
   npmLane(
     "update-corrupt-plugin",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-corrupt-plugin",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-corrupt-plugin",
     {
       stateScenario: "empty",
       timeoutMs: 30 * 60 * 1000,
@@ -339,37 +354,41 @@ export const mainLanes = [
   ),
   npmLane(
     "plugin-lifecycle-matrix",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugin-lifecycle-matrix",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugin-lifecycle-matrix",
     {
       stateScenario: "empty",
       timeoutMs: 12 * 60 * 1000,
     },
   ),
-  serviceLane("config-reload", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:config-reload", {
+  serviceLane("config-reload", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:config-reload", {
     stateScenario: "empty",
   }),
-  lane("openai-image-auth", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-image-auth", {
+  lane("openai-image-auth", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-image-auth", {
     stateScenario: "empty",
   }),
   lane(
     "crestodian-first-run",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:crestodian-first-run",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:crestodian-first-run",
     { stateScenario: "empty" },
   ),
   lane(
     "session-runtime-context",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:session-runtime-context",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:session-runtime-context",
   ),
-  lane("commitments-safety", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:commitments-safety", {
-    stateScenario: "empty",
-  }),
+  lane(
+    "commitments-safety",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:commitments-safety",
+    {
+      stateScenario: "empty",
+    },
+  ),
   lane("qr", "pnpm test:docker:qr"),
 ];
 
 export const tailLanes = [
   serviceLane(
     "openai-web-search-minimal",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-web-search-minimal",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-web-search-minimal",
     { stateScenario: "empty", timeoutMs: 8 * 60 * 1000 },
   ),
   liveLane("live-codex-harness", liveDockerScriptCommand("test-live-codex-harness-docker.sh"), {
@@ -383,7 +402,7 @@ export const tailLanes = [
     "live-codex-bind",
     liveDockerScriptCommand(
       "test-live-codex-harness-docker.sh",
-      "NEXISCLAW_LIVE_CODEX_BIND=1 NEXISCLAW_LIVE_CODEX_TEST_FILES=src/gateway/gateway-codex-bind.live.test.ts",
+      "GREENCHCLAW_LIVE_CODEX_BIND=1 GREENCHCLAW_LIVE_CODEX_TEST_FILES=src/gateway/gateway-codex-bind.live.test.ts",
     ),
     {
       cacheKey: "codex-harness",
@@ -395,7 +414,7 @@ export const tailLanes = [
   ),
   liveLane(
     "live-codex-npm-plugin",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:live-codex-npm-plugin",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:live-codex-npm-plugin",
     {
       cacheKey: "codex-npm-plugin",
       e2eImageKind: "bare",
@@ -411,7 +430,7 @@ export const tailLanes = [
     "live-cli-backend-codex",
     liveDockerScriptCommand(
       "test-live-cli-backend-docker.sh",
-      "NEXISCLAW_LIVE_CLI_BACKEND_AUTH=api-key NEXISCLAW_LIVE_CLI_BACKEND_MODEL=codex-cli/gpt-5.4",
+      "GREENCHCLAW_LIVE_CLI_BACKEND_AUTH=api-key GREENCHCLAW_LIVE_CLI_BACKEND_MODEL=codex-cli/gpt-5.4",
     ),
     {
       cacheKey: "cli-backend-codex",
@@ -423,7 +442,10 @@ export const tailLanes = [
   ),
   liveLane(
     "live-acp-bind-claude",
-    liveDockerScriptCommand("test-live-acp-bind-docker.sh", "NEXISCLAW_LIVE_ACP_BIND_AGENT=claude"),
+    liveDockerScriptCommand(
+      "test-live-acp-bind-docker.sh",
+      "GREENCHCLAW_LIVE_ACP_BIND_AGENT=claude",
+    ),
     {
       cacheKey: "acp-bind-claude",
       provider: "claude-cli",
@@ -434,7 +456,10 @@ export const tailLanes = [
   ),
   liveLane(
     "live-acp-bind-codex",
-    liveDockerScriptCommand("test-live-acp-bind-docker.sh", "NEXISCLAW_LIVE_ACP_BIND_AGENT=codex"),
+    liveDockerScriptCommand(
+      "test-live-acp-bind-docker.sh",
+      "GREENCHCLAW_LIVE_ACP_BIND_AGENT=codex",
+    ),
     {
       cacheKey: "acp-bind-codex",
       provider: "codex-cli",
@@ -447,7 +472,7 @@ export const tailLanes = [
     "live-acp-bind-droid",
     liveDockerScriptCommand(
       "test-live-acp-bind-docker.sh",
-      "NEXISCLAW_LIVE_ACP_BIND_AGENT=droid NEXISCLAW_LIVE_ACP_BIND_REQUIRE_TRANSCRIPT=1",
+      "GREENCHCLAW_LIVE_ACP_BIND_AGENT=droid GREENCHCLAW_LIVE_ACP_BIND_REQUIRE_TRANSCRIPT=1",
     ),
     {
       cacheKey: "acp-bind-droid",
@@ -459,7 +484,10 @@ export const tailLanes = [
   ),
   liveLane(
     "live-acp-bind-gemini",
-    liveDockerScriptCommand("test-live-acp-bind-docker.sh", "NEXISCLAW_LIVE_ACP_BIND_AGENT=gemini"),
+    liveDockerScriptCommand(
+      "test-live-acp-bind-docker.sh",
+      "GREENCHCLAW_LIVE_ACP_BIND_AGENT=gemini",
+    ),
     {
       cacheKey: "acp-bind-gemini",
       provider: "google-gemini-cli",
@@ -472,7 +500,7 @@ export const tailLanes = [
     "live-acp-bind-opencode",
     liveDockerScriptCommand(
       "test-live-acp-bind-docker.sh",
-      "NEXISCLAW_LIVE_ACP_BIND_AGENT=opencode NEXISCLAW_LIVE_ACP_BIND_REQUIRE_TRANSCRIPT=1",
+      "GREENCHCLAW_LIVE_ACP_BIND_AGENT=opencode GREENCHCLAW_LIVE_ACP_BIND_REQUIRE_TRANSCRIPT=1",
     ),
     {
       cacheKey: "acp-bind-opencode",
@@ -485,7 +513,7 @@ export const tailLanes = [
 ];
 
 const releasePathPluginRuntimeLanes = [
-  lane("plugins", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugins", {
+  lane("plugins", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugins", {
     resources: ["npm", "service"],
     stateScenario: "empty",
     weight: 6,
@@ -493,7 +521,7 @@ const releasePathPluginRuntimeLanes = [
   ...bundledPluginInstallUninstallLanes,
   serviceLane(
     "cron-mcp-cleanup",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
     {
       resources: ["npm"],
       stateScenario: "empty",
@@ -502,14 +530,14 @@ const releasePathPluginRuntimeLanes = [
   ),
   serviceLane(
     "openai-web-search-minimal",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-web-search-minimal",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-web-search-minimal",
     { stateScenario: "empty", timeoutMs: 8 * 60 * 1000 },
   ),
   livePluginToolLane(),
 ];
 
 const releasePathPluginRuntimePluginLanes = [
-  lane("plugins", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugins", {
+  lane("plugins", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugins", {
     resources: ["npm", "service"],
     stateScenario: "empty",
     weight: 6,
@@ -519,7 +547,7 @@ const releasePathPluginRuntimePluginLanes = [
 const releasePathPluginRuntimeServiceLanes = [
   serviceLane(
     "cron-mcp-cleanup",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
     {
       resources: ["npm"],
       stateScenario: "empty",
@@ -528,7 +556,7 @@ const releasePathPluginRuntimeServiceLanes = [
   ),
   serviceLane(
     "openai-web-search-minimal",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-web-search-minimal",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-web-search-minimal",
     { stateScenario: "empty", timeoutMs: 8 * 60 * 1000 },
   ),
   livePluginToolLane(),
@@ -540,7 +568,7 @@ const releasePathPluginRuntimeCoreLanes = [
 ];
 
 const releasePathBundledChannelLanes = [
-  npmLane("plugin-update", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugin-update", {
+  npmLane("plugin-update", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugin-update", {
     stateScenario: "empty",
   }),
 ];
@@ -548,7 +576,7 @@ const releasePathBundledChannelLanes = [
 const releasePathPackageInstallOpenAiLanes = [
   npmLane(
     "install-e2e-openai",
-    "NEXISCLAW_INSTALL_TAG=beta NEXISCLAW_E2E_MODELS=openai NEXISCLAW_INSTALL_E2E_IMAGE=NexisClaw-install-e2e-openai:local NEXISCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE=0 NEXISCLAW_INSTALL_E2E_OPENAI_MODEL=openai/gpt-5.4-mini NEXISCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS=120 NEXISCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS=120 pnpm test:install:e2e",
+    "GREENCHCLAW_INSTALL_TAG=beta GREENCHCLAW_E2E_MODELS=openai GREENCHCLAW_INSTALL_E2E_IMAGE=GreenchClaw-install-e2e-openai:local GREENCHCLAW_INSTALL_E2E_AGENT_TOOL_SMOKE=0 GREENCHCLAW_INSTALL_E2E_OPENAI_MODEL=openai/gpt-5.4-mini GREENCHCLAW_INSTALL_E2E_AGENT_TURN_TIMEOUT_SECONDS=120 GREENCHCLAW_INSTALL_E2E_OPENAI_PROVIDER_TIMEOUT_SECONDS=120 pnpm test:install:e2e",
     {
       resources: ["service"],
       timeoutMs: 15 * 60 * 1000,
@@ -556,7 +584,7 @@ const releasePathPackageInstallOpenAiLanes = [
     },
   ),
   liveOpenAiChatToolsLane(),
-  npmLane("codex-on-demand", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:codex-on-demand", {
+  npmLane("codex-on-demand", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:codex-on-demand", {
     resources: ["service"],
     stateScenario: "empty",
     timeoutMs: 30 * 60 * 1000,
@@ -567,7 +595,7 @@ const releasePathPackageInstallOpenAiLanes = [
 const releasePathPackageInstallAnthropicLanes = [
   npmLane(
     "install-e2e-anthropic",
-    "NEXISCLAW_INSTALL_TAG=beta NEXISCLAW_E2E_MODELS=anthropic NEXISCLAW_INSTALL_E2E_IMAGE=NexisClaw-install-e2e-anthropic:local pnpm test:install:e2e",
+    "GREENCHCLAW_INSTALL_TAG=beta GREENCHCLAW_E2E_MODELS=anthropic GREENCHCLAW_INSTALL_E2E_IMAGE=GreenchClaw-install-e2e-anthropic:local pnpm test:install:e2e",
     {
       resources: ["service"],
       weight: 3,
@@ -578,33 +606,33 @@ const releasePathPackageInstallAnthropicLanes = [
 const releasePathPackageUpdateCoreLanes = [
   npmLane(
     "npm-onboard-channel-agent",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
     { resources: ["service"], stateScenario: "empty", weight: 3 },
   ),
   npmLane(
     "npm-onboard-discord-channel-agent",
-    "NEXISCLAW_NPM_ONBOARD_CHANNEL=discord NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
+    "GREENCHCLAW_NPM_ONBOARD_CHANNEL=discord GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
     { resources: ["service"], stateScenario: "empty", weight: 3 },
   ),
   npmLane(
     "npm-onboard-slack-channel-agent",
-    "NEXISCLAW_NPM_ONBOARD_CHANNEL=slack NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
+    "GREENCHCLAW_NPM_ONBOARD_CHANNEL=slack GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:npm-onboard-channel-agent",
     { resources: ["service"], stateScenario: "empty", weight: 3 },
   ),
-  npmLane("doctor-switch", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:doctor-switch", {
+  npmLane("doctor-switch", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:doctor-switch", {
     stateScenario: "empty",
     weight: 3,
   }),
   npmLane(
     "update-channel-switch",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-channel-switch",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-channel-switch",
     {
       stateScenario: "update-stable",
       timeoutMs: 30 * 60 * 1000,
       weight: 3,
     },
   ),
-  npmLane("skill-install", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:skill-install", {
+  npmLane("skill-install", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:skill-install", {
     retryPatterns: LIVE_RETRY_PATTERNS,
     retries: 1,
     stateScenario: "empty",
@@ -618,7 +646,7 @@ const releasePathPackageUpdateCoreLanes = [
   }),
   npmLane(
     "published-upgrade-survivor",
-    "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:published-upgrade-survivor",
+    "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:published-upgrade-survivor",
     {
       stateScenario: "upgrade-survivor",
       timeoutMs: 25 * 60 * 1000,
@@ -634,28 +662,35 @@ const releasePathPackageUpdateCoreLanes = [
 
 const primaryReleasePathChunks = {
   core: [
-    lane("qr", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:qr"),
-    serviceLane("onboard", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:onboard", {
+    lane("qr", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:qr"),
+    serviceLane("onboard", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:onboard", {
       stateScenario: "empty",
       weight: 2,
     }),
-    serviceLane("gateway-network", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:gateway-network"),
-    serviceLane("config-reload", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:config-reload", {
+    serviceLane(
+      "gateway-network",
+      "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:gateway-network",
+    ),
+    serviceLane("config-reload", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:config-reload", {
       stateScenario: "empty",
     }),
     lane(
       "session-runtime-context",
-      "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:session-runtime-context",
+      "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:session-runtime-context",
     ),
-    lane("commitments-safety", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:commitments-safety", {
-      stateScenario: "empty",
-    }),
+    lane(
+      "commitments-safety",
+      "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:commitments-safety",
+      {
+        stateScenario: "empty",
+      },
+    ),
     lane(
       "pi-bundle-mcp-tools",
-      "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:pi-bundle-mcp-tools",
+      "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:pi-bundle-mcp-tools",
       { stateScenario: "empty" },
     ),
-    serviceLane("mcp-channels", "NEXISCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:mcp-channels", {
+    serviceLane("mcp-channels", "GREENCHCLAW_SKIP_DOCKER_BUILD=1 pnpm test:docker:mcp-channels", {
       resources: ["npm"],
       stateScenario: "empty",
       weight: 3,
@@ -740,7 +775,7 @@ export function releasePathChunkLanes(chunk, options = {}) {
   const base = primaryReleasePathChunks[chunk] ?? legacyReleasePathChunks[chunk];
   if (!base) {
     throw new Error(
-      `NEXISCLAW_DOCKER_ALL_CHUNK must be one of: ${[
+      `GREENCHCLAW_DOCKER_ALL_CHUNK must be one of: ${[
         ...Object.keys(primaryReleasePathChunks),
         ...Object.keys(legacyReleasePathChunks),
       ].join(", ")}. Got: ${JSON.stringify(chunk)}`,

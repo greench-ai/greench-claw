@@ -568,10 +568,10 @@ describe("dreaming controller", () => {
       config: {
         plugins: {
           slots: {
-            memory: "memos-local-NexisClaw-plugin",
+            memory: "memos-local-GreenchClaw-plugin",
           },
           entries: {
-            "memos-local-NexisClaw-plugin": {
+            "memos-local-GreenchClaw-plugin": {
               config: {
                 dreaming: {
                   enabled: true,
@@ -593,7 +593,7 @@ describe("dreaming controller", () => {
     expect(getConfigPatchRawPayload(request)).toEqual({
       plugins: {
         entries: {
-          "memos-local-NexisClaw-plugin": {
+          "memos-local-GreenchClaw-plugin": {
             config: {
               dreaming: {
                 enabled: false,
@@ -686,10 +686,10 @@ describe("dreaming controller", () => {
       resolveConfiguredDreaming({
         plugins: {
           slots: {
-            memory: "memos-local-NexisClaw-plugin",
+            memory: "memos-local-GreenchClaw-plugin",
           },
           entries: {
-            "memos-local-NexisClaw-plugin": {
+            "memos-local-GreenchClaw-plugin": {
               config: {
                 dreaming: {
                   enabled: true,
@@ -707,7 +707,7 @@ describe("dreaming controller", () => {
         },
       }),
     ).toEqual({
-      pluginId: "memos-local-NexisClaw-plugin",
+      pluginId: "memos-local-GreenchClaw-plugin",
       enabled: true,
     });
   });
@@ -912,7 +912,7 @@ describe("dreaming controller", () => {
         return {
           action: "repairDreamingArtifacts",
           changed: true,
-          archiveDir: "/tmp/NexisClaw/.NexisClaw-repair/dreaming/2026-04-11T22-10-00-000Z",
+          archiveDir: "/tmp/GreenchClaw/.GreenchClaw-repair/dreaming/2026-04-11T22-10-00-000Z",
           archivedSessionCorpus: true,
           archivedSessionIngestion: true,
         };
@@ -933,10 +933,10 @@ describe("dreaming controller", () => {
     expect(state.dreamDiaryContent).toBe("keep existing diary");
     expect(state.dreamDiaryActionMessage).toEqual({
       kind: "success",
-      text: "Dream cache repair complete: archived session corpus, archived ingestion state. Archive: /tmp/NexisClaw/.NexisClaw-repair/dreaming/2026-04-11T22-10-00-000Z",
+      text: "Dream cache repair complete: archived session corpus, archived ingestion state. Archive: /tmp/GreenchClaw/.GreenchClaw-repair/dreaming/2026-04-11T22-10-00-000Z",
     });
     expect(state.dreamDiaryActionArchivePath).toBe(
-      "/tmp/NexisClaw/.NexisClaw-repair/dreaming/2026-04-11T22-10-00-000Z",
+      "/tmp/GreenchClaw/.GreenchClaw-repair/dreaming/2026-04-11T22-10-00-000Z",
     );
     expect(state.dreamDiaryActionLoading).toBe(false);
   });
@@ -980,7 +980,7 @@ describe("dreaming controller", () => {
   it("copies the dreaming repair archive path", async () => {
     const { state } = createState();
     state.dreamDiaryActionArchivePath =
-      "/tmp/NexisClaw/.NexisClaw-repair/dreaming/2026-04-11T22-10-00-000Z";
+      "/tmp/GreenchClaw/.GreenchClaw-repair/dreaming/2026-04-11T22-10-00-000Z";
     const writeText = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal("navigator", { clipboard: { writeText } } as unknown as Navigator);
 
@@ -988,7 +988,7 @@ describe("dreaming controller", () => {
 
     expect(ok).toBe(true);
     expect(writeText).toHaveBeenCalledWith(
-      "/tmp/NexisClaw/.NexisClaw-repair/dreaming/2026-04-11T22-10-00-000Z",
+      "/tmp/GreenchClaw/.GreenchClaw-repair/dreaming/2026-04-11T22-10-00-000Z",
     );
     expect(state.dreamDiaryActionMessage).toEqual({
       kind: "success",

@@ -30,16 +30,16 @@ export function createBackupTestRuntime(): RuntimeEnv {
 
 export async function resetBackupTempHome(tempHome: { home: string }) {
   await fs.rm(tempHome.home, { recursive: true, force: true });
-  await fs.mkdir(path.join(tempHome.home, ".NexisClaw"), { recursive: true });
-  delete process.env.NEXISCLAW_CONFIG_PATH;
+  await fs.mkdir(path.join(tempHome.home, ".GreenchClaw"), { recursive: true });
+  delete process.env.GREENCHCLAW_CONFIG_PATH;
 }
 
 export async function mockStateOnlyBackupPlan(stateDir: string) {
-  await fs.writeFile(path.join(stateDir, "NexisClaw.json"), JSON.stringify({}), "utf8");
+  await fs.writeFile(path.join(stateDir, "GreenchClaw.json"), JSON.stringify({}), "utf8");
   vi.spyOn(backupShared, "resolveBackupPlanFromDisk").mockResolvedValue(
     await resolveBackupPlanFromPaths({
       stateDir,
-      configPath: path.join(stateDir, "NexisClaw.json"),
+      configPath: path.join(stateDir, "GreenchClaw.json"),
       oauthDir: path.join(stateDir, "credentials"),
       includeWorkspace: false,
       configInsideState: true,

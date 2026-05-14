@@ -1,4 +1,4 @@
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import { buildLitellmModelDefinition, LITELLM_BASE_URL } from "./onboard.js";
 
 export function buildLitellmProvider(): ModelProviderConfig {

@@ -1,11 +1,11 @@
 import { resolveToolsBySender } from "../config/group-policy.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveAgentConfig } from "./agent-scope.js";
 import { pickSandboxToolPolicy } from "./sandbox-tool-policy.js";
 import type { SandboxToolPolicy } from "./sandbox/types.js";
 
 type SenderToolPolicyParams = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentId?: string;
   messageProvider?: string | null;
   senderId?: string | null;

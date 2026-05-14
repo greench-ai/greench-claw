@@ -208,7 +208,7 @@ export async function main(argv = process.argv.slice(2), runtimeEnv = process.en
   }
 
   const releaseLock =
-    env.NEXISCLAW_OXLINT_SKIP_LOCK === "1"
+    env.GREENCHCLAW_OXLINT_SKIP_LOCK === "1"
       ? () => {}
       : shouldAcquireLocalHeavyCheckLockForOxlint(finalArgs, {
             cwd: process.cwd(),
@@ -223,7 +223,7 @@ export async function main(argv = process.argv.slice(2), runtimeEnv = process.en
 
   try {
     if (
-      env.NEXISCLAW_OXLINT_SKIP_PREPARE !== "1" &&
+      env.GREENCHCLAW_OXLINT_SKIP_PREPARE !== "1" &&
       shouldPrepareExtensionPackageBoundaryArtifacts(finalArgs)
     ) {
       await prepareExtensionPackageBoundaryArtifacts(env);

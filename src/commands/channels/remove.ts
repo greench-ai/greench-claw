@@ -9,7 +9,7 @@ import {
 } from "../../cli/error-format.js";
 import { commitConfigWithPendingPluginInstalls } from "../../cli/plugins-install-record-commit.js";
 import { refreshPluginRegistryAfterConfigMutation } from "../../cli/plugins-registry-refresh.js";
-import { replaceConfigFile, type NexisClawConfig } from "../../config/config.js";
+import { replaceConfigFile, type GreenchClawConfig } from "../../config/config.js";
 import { callGateway } from "../../gateway/call.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "../../routing/session-key.js";
@@ -27,7 +27,7 @@ export type ChannelsRemoveOptions = {
 };
 
 function listAccountIds(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   channel: ChatChannel,
   plugin?: ChannelPlugin,
 ): string[] {
@@ -39,7 +39,7 @@ function listAccountIds(
 }
 
 async function stopGatewayRuntimeBeforeRemove(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: ChatChannel;
   accountId: string;
   plugin: ChannelPlugin;
@@ -77,7 +77,7 @@ export async function channelsRemoveCommand(
     return;
   }
   const baseHash = configSnapshot.hash;
-  let cfg = (configSnapshot.sourceConfig ?? configSnapshot.config) as NexisClawConfig;
+  let cfg = (configSnapshot.sourceConfig ?? configSnapshot.config) as GreenchClawConfig;
 
   const useWizard = shouldUseWizard(params);
   const prompter = useWizard ? createClackPrompter() : null;
@@ -127,7 +127,7 @@ export async function channelsRemoveCommand(
   } else {
     if (!rawChannel) {
       runtime.error(
-        `Missing channel. Use ${formatCliCommand("NexisClaw channels remove --channel <name>")} or run ${formatCliCommand("NexisClaw channels status")} to inspect configured channels.`,
+        `Missing channel. Use ${formatCliCommand("GreenchClaw channels remove --channel <name>")} or run ${formatCliCommand("GreenchClaw channels status")} to inspect configured channels.`,
       );
       runtime.exit(1);
       return;
@@ -172,7 +172,7 @@ export async function channelsRemoveCommand(
   if (!plugin) {
     if (resolvedPluginState?.catalogEntry) {
       runtime.error(
-        `Channel plugin "${resolvedPluginState.catalogEntry.id}" is not installed. Run ${formatCliCommand(`NexisClaw channels add --channel ${resolvedPluginState.catalogEntry.id}`)} first.`,
+        `Channel plugin "${resolvedPluginState.catalogEntry.id}" is not installed. Run ${formatCliCommand(`GreenchClaw channels add --channel ${resolvedPluginState.catalogEntry.id}`)} first.`,
       );
       runtime.exit(1);
       return;
@@ -199,7 +199,7 @@ export async function channelsRemoveCommand(
   if (deleteConfig) {
     if (!plugin.config.deleteAccount) {
       runtime.error(
-        `${formatUnsupportedChannelActionMessage({ channel, action: "delete" })} Use ${formatCliCommand("NexisClaw channels remove --channel " + channel)} to disable it without deleting config.`,
+        `${formatUnsupportedChannelActionMessage({ channel, action: "delete" })} Use ${formatCliCommand("GreenchClaw channels remove --channel " + channel)} to disable it without deleting config.`,
       );
       runtime.exit(1);
       return;
@@ -216,7 +216,7 @@ export async function channelsRemoveCommand(
   } else {
     if (!plugin.config.setAccountEnabled) {
       runtime.error(
-        `${formatUnsupportedChannelActionMessage({ channel, action: "disable" })} Use ${formatCliCommand("NexisClaw channels remove --channel " + channel + " --delete")} only if you want to remove config.`,
+        `${formatUnsupportedChannelActionMessage({ channel, action: "disable" })} Use ${formatCliCommand("GreenchClaw channels remove --channel " + channel + " --delete")} only if you want to remove config.`,
       );
       runtime.exit(1);
       return;

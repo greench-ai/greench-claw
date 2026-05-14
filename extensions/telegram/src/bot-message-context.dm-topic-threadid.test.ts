@@ -20,7 +20,7 @@ vi.mock("./bot-message-context.body.js", () => ({
 }));
 
 let buildTelegramMessageContextForTest: typeof import("./bot-message-context.test-harness.js").buildTelegramMessageContextForTest;
-let clearRuntimeConfigSnapshot: typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot").clearRuntimeConfigSnapshot;
+let clearRuntimeConfigSnapshot: typeof import("GreenchClaw/plugin-sdk/runtime-config-snapshot").clearRuntimeConfigSnapshot;
 
 describe("buildTelegramMessageContext DM topic threadId in deliveryContext (#8891)", () => {
   async function buildCtx(params: {
@@ -78,7 +78,7 @@ describe("buildTelegramMessageContext DM topic threadId in deliveryContext (#889
   });
 
   it("builds Telegram payloads through the shared channel turn context", async () => {
-    const { buildChannelTurnContext } = await import("NexisClaw/plugin-sdk/channel-inbound");
+    const { buildChannelTurnContext } = await import("GreenchClaw/plugin-sdk/channel-inbound");
     const buildChannelTurnContextMock = vi.fn(buildChannelTurnContext);
 
     const ctx = await buildCtx({

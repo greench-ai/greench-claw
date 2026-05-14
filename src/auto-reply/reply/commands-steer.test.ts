@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { buildCommandTestParams } from "./commands.test-harness.js";
 
 const steerRuntimeMocks = vi.hoisted(() => ({
@@ -16,7 +16,7 @@ const { handleSteerCommand } = await import("./commands-steer.js");
 const baseCfg = {
   commands: { text: true },
   session: { mainKey: "main", scope: "per-sender" },
-} as NexisClawConfig;
+} as GreenchClawConfig;
 
 function buildParams(commandBody: string) {
   return buildCommandTestParams(commandBody, baseCfg);

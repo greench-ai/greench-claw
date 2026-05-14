@@ -1,4 +1,4 @@
-import type { EmbeddedRunAttemptParams } from "NexisClaw/plugin-sdk/agent-harness-runtime";
+import type { EmbeddedRunAttemptParams } from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import { describe, expect, it } from "vitest";
 import {
   buildThreadResumeParams,

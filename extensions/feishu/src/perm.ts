@@ -1,5 +1,5 @@
 import type * as Lark from "@larksuiteoapi/node-sdk";
-import type { NexisClawPluginApi } from "../runtime-api.js";
+import type { GreenchClawPluginApi } from "../runtime-api.js";
 import { listEnabledFeishuAccounts } from "./accounts.js";
 import { FeishuPermSchema, type FeishuPermParams } from "./perm-schema.js";
 import { createFeishuToolClient, resolveAnyEnabledFeishuToolsConfig } from "./tool-account.js";
@@ -112,7 +112,7 @@ async function removeMember(
 
 // ============ Tool Registration ============
 
-export function registerFeishuPermTools(api: NexisClawPluginApi) {
+export function registerFeishuPermTools(api: GreenchClawPluginApi) {
   if (!api.config) {
     return;
   }

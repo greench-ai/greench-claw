@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { requireRuntimeConfig } from "NexisClaw/plugin-sdk/plugin-config-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { requireRuntimeConfig } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
 import { resolveDiscordAccount } from "./accounts.js";
 import { parseAndResolveDiscordTarget } from "./target-resolver.js";
 import type { DiscordTargetParseOptions } from "./targets.js";
@@ -16,7 +16,7 @@ type DiscordRecipient =
 
 export async function parseAndResolveRecipient(
   raw: string,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId?: string,
   parseOptions: DiscordTargetParseOptions = {},
 ): Promise<DiscordRecipient> {

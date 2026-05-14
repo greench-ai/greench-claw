@@ -1,5 +1,5 @@
 import type { AssistantMessage } from "@earendil-works/pi-ai";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { generateSecureToken } from "../../../infra/secure-random.js";
 import { extractAssistantTextForPhase } from "../../../shared/chat-message-content.js";
 import { resolveAgentConfig } from "../../agent-scope-config.js";
@@ -34,15 +34,15 @@ const DEFAULT_OVERLOAD_FAILOVER_BACKOFF_MS = 0;
 const DEFAULT_MAX_OVERLOAD_PROFILE_ROTATIONS = 1;
 const DEFAULT_MAX_RATE_LIMIT_PROFILE_ROTATIONS = 1;
 
-export function resolveOverloadFailoverBackoffMs(cfg?: NexisClawConfig): number {
+export function resolveOverloadFailoverBackoffMs(cfg?: GreenchClawConfig): number {
   return cfg?.auth?.cooldowns?.overloadedBackoffMs ?? DEFAULT_OVERLOAD_FAILOVER_BACKOFF_MS;
 }
 
-export function resolveOverloadProfileRotationLimit(cfg?: NexisClawConfig): number {
+export function resolveOverloadProfileRotationLimit(cfg?: GreenchClawConfig): number {
   return cfg?.auth?.cooldowns?.overloadedProfileRotations ?? DEFAULT_MAX_OVERLOAD_PROFILE_ROTATIONS;
 }
 
-export function resolveRateLimitProfileRotationLimit(cfg?: NexisClawConfig): number {
+export function resolveRateLimitProfileRotationLimit(cfg?: GreenchClawConfig): number {
   return (
     cfg?.auth?.cooldowns?.rateLimitedProfileRotations ?? DEFAULT_MAX_RATE_LIMIT_PROFILE_ROTATIONS
   );
@@ -74,7 +74,7 @@ const MAX_RUN_RETRY_ITERATIONS = 160;
 // Defensive guard for the outer run loop across all retry branches.
 export function resolveMaxRunRetryIterations(
   profileCandidateCount: number,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
   agentId?: string,
 ): number {
   const configRetries =

@@ -1,13 +1,13 @@
-import { CUSTOM_LOCAL_AUTH_MARKER } from "NexisClaw/plugin-sdk/provider-auth";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/provider-auth";
-import type { ModelDefinitionConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { resolveAgentModelPrimaryValue } from "NexisClaw/plugin-sdk/provider-onboard";
+import { CUSTOM_LOCAL_AUTH_MARKER } from "GreenchClaw/plugin-sdk/provider-auth";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/provider-auth";
+import type { ModelDefinitionConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { resolveAgentModelPrimaryValue } from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   SELF_HOSTED_DEFAULT_CONTEXT_WINDOW,
   type ProviderAuthMethodNonInteractiveContext,
   type ProviderCatalogContext,
-} from "NexisClaw/plugin-sdk/provider-setup";
-import type { WizardPrompter } from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/provider-setup";
+import type { WizardPrompter } from "GreenchClaw/plugin-sdk/setup";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   LMSTUDIO_DEFAULT_API_KEY_ENV_VAR,
@@ -30,8 +30,8 @@ vi.mock("./models.fetch.js", () => ({
   ensureLmstudioModelLoaded: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-auth", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/provider-auth")>();
+vi.mock("GreenchClaw/plugin-sdk/provider-auth", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("GreenchClaw/plugin-sdk/provider-auth")>();
   return {
     ...actual,
     removeProviderAuthProfilesWithLock: (...args: unknown[]) =>
@@ -39,8 +39,8 @@ vi.mock("NexisClaw/plugin-sdk/provider-auth", async (importOriginal) => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/provider-setup", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/provider-setup")>();
+vi.mock("GreenchClaw/plugin-sdk/provider-setup", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("GreenchClaw/plugin-sdk/provider-setup")>();
   return {
     ...actual,
     configureOpenAICompatibleSelfHostedProviderNonInteractive: (...args: unknown[]) =>
@@ -50,8 +50,8 @@ vi.mock("NexisClaw/plugin-sdk/provider-setup", async (importOriginal) => {
 
 afterAll(() => {
   vi.doUnmock("./models.fetch.js");
-  vi.doUnmock("NexisClaw/plugin-sdk/provider-auth");
-  vi.doUnmock("NexisClaw/plugin-sdk/provider-setup");
+  vi.doUnmock("GreenchClaw/plugin-sdk/provider-auth");
+  vi.doUnmock("GreenchClaw/plugin-sdk/provider-setup");
   vi.resetModules();
 });
 
@@ -67,7 +67,7 @@ function createModel(id: string, name = id): ModelDefinitionConfig {
   };
 }
 
-function buildConfig(): NexisClawConfig {
+function buildConfig(): GreenchClawConfig {
   return {
     models: {
       providers: {
@@ -83,13 +83,13 @@ function buildConfig(): NexisClawConfig {
 }
 
 function buildDiscoveryContext(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   apiKey?: string;
   discoveryApiKey?: string;
   env?: NodeJS.ProcessEnv;
 }): ProviderCatalogContext {
   return {
-    config: params?.config ?? ({} as NexisClawConfig),
+    config: params?.config ?? ({} as GreenchClawConfig),
     env: params?.env ?? {},
     resolveProviderApiKey: () => ({
       apiKey: params?.apiKey,
@@ -105,7 +105,7 @@ function buildDiscoveryContext(params?: {
 }
 
 function buildNonInteractiveContext(params?: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   customBaseUrl?: string;
   customApiKey?: string;
   lmstudioApiKey?: string;
@@ -353,7 +353,7 @@ describe("lmstudio setup", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       customBaseUrl: "http://localhost:1234/api/v1/",
       customModelId: "qwen3-8b-instruct",
     });
@@ -468,7 +468,7 @@ describe("lmstudio setup", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       customBaseUrl: "http://localhost:1234/api/v1/",
       customApiKey: "",
       customModelId: "qwen3-8b-instruct",
@@ -539,7 +539,7 @@ describe("lmstudio setup", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       customBaseUrl: "http://localhost:1234/api/v1/",
       customApiKey: "",
       customModelId: "qwen3-8b-instruct",
@@ -599,7 +599,7 @@ describe("lmstudio setup", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       customBaseUrl: "http://localhost:1234/api/v1/",
       customApiKey: "",
       customModelId: "qwen3-8b-instruct",
@@ -673,7 +673,7 @@ describe("lmstudio setup", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       customBaseUrl: "http://localhost:1234/api/v1/",
       customModelId: "qwen3-8b-instruct",
       lmstudioApiKey: "fresh-cli-key",
@@ -819,7 +819,7 @@ describe("lmstudio setup", () => {
   });
 
   it("interactive Docker setup defaults to the host LM Studio endpoint", async () => {
-    vi.stubEnv("NEXISCLAW_DOCKER_SETUP", "1");
+    vi.stubEnv("GREENCHCLAW_DOCKER_SETUP", "1");
     const { prompter, text } = createQueuedWizardPrompterHarness([
       "http://host.docker.internal:1234",
       "",
@@ -866,7 +866,7 @@ describe("lmstudio setup", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const { prompter } = createQueuedWizardPrompterHarness([
       "http://localhost:1234/api/v1/",
       "",
@@ -949,7 +949,7 @@ describe("lmstudio setup", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const promptText = vi
       .fn()
       .mockResolvedValueOnce("http://localhost:1234/api/v1/")
@@ -988,7 +988,7 @@ describe("lmstudio setup", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const promptText = vi
       .fn()
       .mockResolvedValueOnce("http://localhost:1234/api/v1/")
@@ -1033,7 +1033,7 @@ describe("lmstudio setup", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const promptText = vi
       .fn()
       .mockResolvedValueOnce("http://localhost:1234/api/v1/")
@@ -1152,7 +1152,7 @@ describe("lmstudio setup", () => {
                 },
               },
             },
-          } as NexisClawConfig,
+          } as GreenchClawConfig,
         }),
       );
 
@@ -1197,7 +1197,7 @@ describe("lmstudio setup", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         env: {
           LMSTUDIO_DISCOVERY_TOKEN: "secretref-lmstudio-key",
           LMSTUDIO_PROXY_TOKEN: "proxy-token-from-env",
@@ -1236,7 +1236,7 @@ describe("lmstudio setup", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         env: {},
       }),
     );
@@ -1263,7 +1263,7 @@ describe("lmstudio setup", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         env: {},
       }),
     );
@@ -1290,7 +1290,7 @@ describe("lmstudio setup", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
       }),
     );
 
@@ -1321,7 +1321,7 @@ describe("lmstudio setup", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
       }),
     );
 
@@ -1355,7 +1355,7 @@ describe("lmstudio setup", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
       }),
     );
 
@@ -1382,7 +1382,7 @@ describe("lmstudio setup", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
       }),
     );
 
@@ -1415,7 +1415,7 @@ describe("lmstudio setup", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
       }),
     );
 
@@ -1463,7 +1463,7 @@ describe("lmstudio setup", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       customBaseUrl: "http://localhost:1234/api/v1/",
       customModelId: "qwen3-8b-instruct",
     });

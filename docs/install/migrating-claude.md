@@ -1,15 +1,15 @@
 ---
-summary: "Move Claude Code and Claude Desktop local state into NexisClaw with a previewed import"
+summary: "Move Claude Code and Claude Desktop local state into GreenchClaw with a previewed import"
 read_when:
   - You are coming from Claude Code or Claude Desktop and want to keep instructions, MCP servers, and skills
-  - You need to understand what NexisClaw imports automatically and what stays archive-only
+  - You need to understand what GreenchClaw imports automatically and what stays archive-only
 title: "Migrating from Claude"
 ---
 
-NexisClaw imports local Claude state through the bundled Claude migration provider. The provider previews every item before changing state, redacts secrets in plans and reports, and creates a verified backup before apply.
+GreenchClaw imports local Claude state through the bundled Claude migration provider. The provider previews every item before changing state, redacts secrets in plans and reports, and creates a verified backup before apply.
 
 <Note>
-Onboarding imports require a fresh NexisClaw setup. If you already have local NexisClaw state, reset config, credentials, sessions, and the workspace first, or use `NexisClaw migrate` directly with `--overwrite` after reviewing the plan.
+Onboarding imports require a fresh GreenchClaw setup. If you already have local GreenchClaw state, reset config, credentials, sessions, and the workspace first, or use `GreenchClaw migrate` directly with `--overwrite` after reviewing the plan.
 </Note>
 
 ## Two ways to import
@@ -19,22 +19,22 @@ Onboarding imports require a fresh NexisClaw setup. If you already have local Ne
     The wizard offers Claude when it detects local Claude state.
 
     ```bash
-    NexisClaw onboard --flow import
+    GreenchClaw onboard --flow import
     ```
 
     Or point at a specific source:
 
     ```bash
-    NexisClaw onboard --import-from claude --import-source ~/.claude
+    GreenchClaw onboard --import-from claude --import-source ~/.claude
     ```
 
   </Tab>
   <Tab title="CLI">
-    Use `NexisClaw migrate` for scripted or repeatable runs. See [`NexisClaw migrate`](/cli/migrate) for the full reference.
+    Use `GreenchClaw migrate` for scripted or repeatable runs. See [`GreenchClaw migrate`](/cli/migrate) for the full reference.
 
     ```bash
-    NexisClaw migrate claude --dry-run
-    NexisClaw migrate apply claude --yes
+    GreenchClaw migrate claude --dry-run
+    GreenchClaw migrate apply claude --yes
     ```
 
     Add `--from <path>` to import a specific Claude Code home or project root.
@@ -46,7 +46,7 @@ Onboarding imports require a fresh NexisClaw setup. If you already have local Ne
 
 <AccordionGroup>
   <Accordion title="Instructions and memory">
-    - Project `CLAUDE.md` and `.claude/CLAUDE.md` content is copied or appended into the NexisClaw agent workspace `AGENTS.md`.
+    - Project `CLAUDE.md` and `.claude/CLAUDE.md` content is copied or appended into the GreenchClaw agent workspace `AGENTS.md`.
     - User `~/.claude/CLAUDE.md` content is appended into workspace `USER.md`.
 
   </Accordion>
@@ -54,15 +54,15 @@ Onboarding imports require a fresh NexisClaw setup. If you already have local Ne
     MCP server definitions are imported from project `.mcp.json`, Claude Code `~/.claude.json`, and Claude Desktop `claude_desktop_config.json` when present.
   </Accordion>
   <Accordion title="Skills and commands">
-    - Claude skills with a `SKILL.md` file are copied into the NexisClaw workspace skills directory.
-    - Claude command Markdown files under `.claude/commands/` or `~/.claude/commands/` are converted into NexisClaw skills with `disable-model-invocation: true`.
+    - Claude skills with a `SKILL.md` file are copied into the GreenchClaw workspace skills directory.
+    - Claude command Markdown files under `.claude/commands/` or `~/.claude/commands/` are converted into GreenchClaw skills with `disable-model-invocation: true`.
 
   </Accordion>
 </AccordionGroup>
 
 ## What stays archive-only
 
-The provider copies these into the migration report for manual review, but does **not** load them into live NexisClaw config:
+The provider copies these into the migration report for manual review, but does **not** load them into live GreenchClaw config:
 
 - Claude hooks
 - Claude permissions and broad tool allowlists
@@ -73,20 +73,20 @@ The provider copies these into the migration report for manual review, but does 
 - Claude Code caches, plans, and project history directories
 - Claude Desktop extensions and OS-stored credentials
 
-NexisClaw refuses to execute hooks, trust permission allowlists, or decode opaque OAuth and Desktop credential state automatically. Move what you need by hand after reviewing the archive.
+GreenchClaw refuses to execute hooks, trust permission allowlists, or decode opaque OAuth and Desktop credential state automatically. Move what you need by hand after reviewing the archive.
 
 ## Source selection
 
-Without `--from`, NexisClaw inspects the default Claude Code home at `~/.claude`, the sampled Claude Code `~/.claude.json` state file, and the Claude Desktop MCP config on macOS.
+Without `--from`, GreenchClaw inspects the default Claude Code home at `~/.claude`, the sampled Claude Code `~/.claude.json` state file, and the Claude Desktop MCP config on macOS.
 
-When `--from` points at a project root, NexisClaw imports only that project's Claude files such as `CLAUDE.md`, `.claude/settings.json`, `.claude/commands/`, `.claude/skills/`, and `.mcp.json`. It does not read your global Claude home during a project-root import.
+When `--from` points at a project root, GreenchClaw imports only that project's Claude files such as `CLAUDE.md`, `.claude/settings.json`, `.claude/commands/`, `.claude/skills/`, and `.mcp.json`. It does not read your global Claude home during a project-root import.
 
 ## Recommended flow
 
 <Steps>
   <Step title="Preview the plan">
     ```bash
-    NexisClaw migrate claude --dry-run
+    GreenchClaw migrate claude --dry-run
     ```
 
     The plan lists everything that will change, including conflicts, skipped items, and sensitive values redacted from nested MCP `env` or `headers` fields.
@@ -94,15 +94,15 @@ When `--from` points at a project root, NexisClaw imports only that project's Cl
   </Step>
   <Step title="Apply with backup">
     ```bash
-    NexisClaw migrate apply claude --yes
+    GreenchClaw migrate apply claude --yes
     ```
 
-    NexisClaw creates and verifies a backup before applying.
+    GreenchClaw creates and verifies a backup before applying.
 
   </Step>
   <Step title="Run doctor">
     ```bash
-    NexisClaw doctor
+    GreenchClaw doctor
     ```
 
     [Doctor](/gateway/doctor) checks for config or state issues after the import.
@@ -110,8 +110,8 @@ When `--from` points at a project root, NexisClaw imports only that project's Cl
   </Step>
   <Step title="Restart and verify">
     ```bash
-    NexisClaw gateway restart
-    NexisClaw status
+    GreenchClaw gateway restart
+    GreenchClaw status
     ```
 
     Confirm the gateway is healthy and your imported instructions, MCP servers, and skills are loaded.
@@ -127,13 +127,13 @@ Apply refuses to continue when the plan reports conflicts (a file or config valu
 Rerun with `--overwrite` only when replacing the existing target is intentional. Providers may still write item-level backups for overwritten files in the migration report directory.
 </Warning>
 
-For a fresh NexisClaw install, conflicts are unusual. They typically appear when you re-run the import on a setup that already has user edits.
+For a fresh GreenchClaw install, conflicts are unusual. They typically appear when you re-run the import on a setup that already has user edits.
 
 ## JSON output for automation
 
 ```bash
-NexisClaw migrate claude --dry-run --json
-NexisClaw migrate apply claude --json --yes
+GreenchClaw migrate claude --dry-run --json
+GreenchClaw migrate apply claude --json --yes
 ```
 
 With `--json` and no `--yes`, apply prints the plan and does not mutate state. This is the safest mode for CI and shared scripts.
@@ -145,19 +145,19 @@ With `--json` and no `--yes`, apply prints the plan and does not mutate state. T
     Pass `--from /actual/path` (CLI) or `--import-source /actual/path` (onboarding).
   </Accordion>
   <Accordion title="Onboarding refuses to import on an existing setup">
-    Onboarding imports require a fresh setup. Either reset state and re-onboard, or use `NexisClaw migrate apply claude` directly, which supports `--overwrite` and explicit backup control.
+    Onboarding imports require a fresh setup. Either reset state and re-onboard, or use `GreenchClaw migrate apply claude` directly, which supports `--overwrite` and explicit backup control.
   </Accordion>
   <Accordion title="MCP servers from Claude Desktop did not import">
-    Claude Desktop reads `claude_desktop_config.json` from a platform-specific path. Point `--from` at that file's directory if NexisClaw did not detect it automatically.
+    Claude Desktop reads `claude_desktop_config.json` from a platform-specific path. Point `--from` at that file's directory if GreenchClaw did not detect it automatically.
   </Accordion>
   <Accordion title="Claude commands became skills with model invocation disabled">
-    By design. Claude commands are user-triggered, so NexisClaw imports them as skills with `disable-model-invocation: true`. Edit each skill's frontmatter if you want the agent to invoke them automatically.
+    By design. Claude commands are user-triggered, so GreenchClaw imports them as skills with `disable-model-invocation: true`. Edit each skill's frontmatter if you want the agent to invoke them automatically.
   </Accordion>
 </AccordionGroup>
 
 ## Related
 
-- [`NexisClaw migrate`](/cli/migrate): full CLI reference, plugin contract, and JSON shapes.
+- [`GreenchClaw migrate`](/cli/migrate): full CLI reference, plugin contract, and JSON shapes.
 - [Migration guide](/install/migrating): all migration paths.
 - [Migrating from Hermes](/install/migrating-hermes): the other cross-system import path.
 - [Onboarding](/cli/onboard): wizard flow and non-interactive flags.

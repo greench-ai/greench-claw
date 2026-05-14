@@ -3,4 +3,4 @@ export {
   listRuntimeVideoGenerationProviders,
   type GenerateVideoParams,
   type GenerateVideoRuntimeResult,
-} from "NexisClaw/plugin-sdk/video-generation-runtime";
+} from "GreenchClaw/plugin-sdk/video-generation-runtime";

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   normalizeModelCatalogProviderId,
   planManifestModelCatalogRows,
@@ -16,7 +16,7 @@ import {
 type ManifestCatalogRowsForListMode = "static-authoritative" | "supplemental";
 
 function loadManifestCatalogRowsForPluginIds(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   index: PluginRegistrySnapshot;
   registry: PluginManifestRegistry;
@@ -54,7 +54,7 @@ function loadManifestCatalogRowsForPluginIds(params: {
 }
 
 function resolveConventionModelCatalogPluginIds(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   index: PluginRegistrySnapshot;
   providerFilter: string;
 }): readonly string[] {
@@ -76,7 +76,7 @@ function resolveConventionModelCatalogPluginIds(params: {
 }
 
 function resolveDeclaredModelCatalogPluginIds(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   index: PluginRegistrySnapshot;
   providerFilter: string;
 }): readonly string[] {
@@ -89,7 +89,7 @@ function resolveDeclaredModelCatalogPluginIds(params: {
 }
 
 function loadManifestCatalogRowsForList(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   providerFilter?: string;
   env?: NodeJS.ProcessEnv;
   mode?: ManifestCatalogRowsForListMode;
@@ -144,7 +144,7 @@ function loadManifestCatalogRowsForList(params: {
 }
 
 export function loadStaticManifestCatalogRowsForList(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   providerFilter?: string;
   env?: NodeJS.ProcessEnv;
 }): readonly NormalizedModelCatalogRow[] {
@@ -155,7 +155,7 @@ export function loadStaticManifestCatalogRowsForList(params: {
 }
 
 export function loadSupplementalManifestCatalogRowsForList(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   providerFilter?: string;
   env?: NodeJS.ProcessEnv;
 }): readonly NormalizedModelCatalogRow[] {

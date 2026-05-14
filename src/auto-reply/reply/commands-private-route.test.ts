@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ChannelPlugin } from "../../channels/plugins/types.public.js";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import type { ExecApprovalRequest } from "../../infra/exec-approvals.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../../plugins/runtime.js";
 import {
@@ -39,7 +39,7 @@ function createOwnerDerivedApprovalChannelPlugin(params: {
   id: "telegram";
   ownerPrefixes: string[];
 }): ChannelPlugin {
-  const resolveOwnerTargets = (cfg: NexisClawConfig) =>
+  const resolveOwnerTargets = (cfg: GreenchClawConfig) =>
     (cfg.commands?.ownerAllowFrom ?? [])
       .map((owner) => String(owner))
       .flatMap((owner) => {
@@ -89,7 +89,7 @@ function registerApprovalChannelPlugins(plugins: ChannelPlugin[]) {
   );
 }
 
-function buildCommandParams(cfg: NexisClawConfig): HandleCommandsParams {
+function buildCommandParams(cfg: GreenchClawConfig): HandleCommandsParams {
   return {
     cfg,
     ctx: {
@@ -129,7 +129,7 @@ function buildApprovalRequest(): ExecApprovalRequest {
   return {
     id: "diagnostics-private-route",
     request: {
-      command: "NexisClaw gateway diagnostics export --json",
+      command: "GreenchClaw gateway diagnostics export --json",
       sessionKey: "agent:main:discord:channel:1487138064806449297",
       turnSourceChannel: "discord",
       turnSourceTo: "channel:1487138064806449297",
@@ -162,7 +162,7 @@ describe("resolvePrivateCommandRouteTargets", () => {
         commands: {
           ownerAllowFrom: ["telegram:849985193", "discord:493655423946194964"],
         },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
       request: buildApprovalRequest(),
     });
 
@@ -205,7 +205,7 @@ describe("resolvePrivateCommandRouteTargets", () => {
             "whatsapp:+15555550100",
           ],
         },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
       request: buildApprovalRequest(),
     });
 
@@ -232,7 +232,7 @@ describe("resolvePrivateCommandRouteTargets", () => {
         commands: {
           ownerAllowFrom: ["telegram:849985193"],
         },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
       request: buildApprovalRequest(),
     });
 
@@ -268,7 +268,7 @@ describe("resolvePrivateCommandRouteTargets", () => {
             botToken: "test-token",
           },
         },
-      } as NexisClawConfig),
+      } as GreenchClawConfig),
       request: buildApprovalRequest(),
     });
 

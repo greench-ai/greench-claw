@@ -24,7 +24,7 @@ function appendClawHubHint(output: string, json?: boolean): string {
   if (json) {
     return output;
   }
-  return `${output}\n\nTip: use \`NexisClaw skills search\`, \`NexisClaw skills install\`, and \`NexisClaw skills update\` for ClawHub-backed skills.`;
+  return `${output}\n\nTip: use \`GreenchClaw skills search\`, \`GreenchClaw skills install\`, and \`GreenchClaw skills update\` for ClawHub-backed skills.`;
 }
 
 function formatSkillStatus(skill: SkillStatusEntry): string {
@@ -130,7 +130,7 @@ export function formatSkillsList(report: SkillStatusReport, opts: SkillsListOpti
 
   if (skills.length === 0) {
     const message = opts.eligible
-      ? `No eligible skills found. Run \`${formatCliCommand("NexisClaw skills list")}\` to see all skills.`
+      ? `No eligible skills found. Run \`${formatCliCommand("GreenchClaw skills list")}\` to see all skills.`
       : "No skills found.";
     return appendClawHubHint(message, opts.json);
   }
@@ -185,7 +185,7 @@ export function formatSkillInfo(
       return JSON.stringify({ error: "not found", skill: skillName }, null, 2);
     }
     return appendClawHubHint(
-      `Skill "${skillName}" not found. Run \`${formatCliCommand("NexisClaw skills list")}\` to see available skills.`,
+      `Skill "${skillName}" not found. Run \`${formatCliCommand("GreenchClaw skills list")}\` to see available skills.`,
       opts.json,
     );
   }
@@ -300,10 +300,10 @@ export function formatSkillInfo(
       `  Save via UI: ${theme.muted("Control UI → Skills → ")}${safeName}${theme.muted(" → Save key")}`,
     );
     lines.push(
-      `  Save via CLI: ${formatCliCommand(`NexisClaw config set skills.entries.${safeSkillKey}.apiKey YOUR_KEY`)}`,
+      `  Save via CLI: ${formatCliCommand(`GreenchClaw config set skills.entries.${safeSkillKey}.apiKey YOUR_KEY`)}`,
     );
     lines.push(
-      `  Stored in: ${theme.muted("$NEXISCLAW_CONFIG_PATH")} ${theme.muted("(default: ~/.NexisClaw/NexisClaw.json)")}`,
+      `  Stored in: ${theme.muted("$GREENCHCLAW_CONFIG_PATH")} ${theme.muted("(default: ~/.GreenchClaw/GreenchClaw.json)")}`,
     );
   }
 

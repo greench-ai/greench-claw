@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { stripModelSpecialTokens } from "./pi-embedded-utils.js";
 
 /**
- * @see https://github.com/NexisClaw/NexisClaw/issues/40020
+ * @see https://github.com/GreenchClaw/GreenchClaw/issues/40020
  */
 describe("stripModelSpecialTokens", () => {
   it("strips tokens and inserts space between adjacent words", () => {

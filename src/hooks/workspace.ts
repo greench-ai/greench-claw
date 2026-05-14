@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { MANIFEST_KEY } from "../compat/legacy-names.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { openRootFileSync } from "../infra/boundary-file-read.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { isPathInsideWithRealpath } from "../security/scan-paths.js";
@@ -10,7 +10,7 @@ import { resolveBundledHooksDir } from "./bundled-dir.js";
 import {
   parseFrontmatter,
   resolveHookInvocationPolicy,
-  resolveNexisClawMetadata,
+  resolveGreenchClawMetadata,
 } from "./frontmatter.js";
 import { resolvePluginHookDirs } from "./plugin-hooks.js";
 import { resolveHookEntries } from "./policy.js";
@@ -216,7 +216,7 @@ export function loadHookEntriesFromDir(params: {
         pluginId: params.pluginId,
       },
       frontmatter,
-      metadata: resolveNexisClawMetadata(frontmatter),
+      metadata: resolveGreenchClawMetadata(frontmatter),
       invocation: resolveHookInvocationPolicy(frontmatter),
     };
     return entry;
@@ -226,7 +226,7 @@ export function loadHookEntriesFromDir(params: {
 function discoverWorkspaceHookEntries(
   workspaceDir: string,
   opts?: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     managedHooksDir?: string;
     bundledHooksDir?: string;
   },
@@ -246,30 +246,30 @@ function discoverWorkspaceHookEntries(
   const bundledHooks = bundledHooksDir
     ? loadHookEntriesFromDir({
         dir: bundledHooksDir,
-        source: "NexisClaw-bundled",
+        source: "GreenchClaw-bundled",
       })
     : [];
   const extraHooks = extraDirs.flatMap((dir) => {
     const resolved = resolveUserPath(dir);
     return loadHookEntriesFromDir({
       dir: resolved,
-      source: "NexisClaw-managed",
+      source: "GreenchClaw-managed",
     });
   });
   const pluginHooks = pluginHookDirs.flatMap(({ dir, pluginId }) =>
     loadHookEntriesFromDir({
       dir,
-      source: "NexisClaw-plugin",
+      source: "GreenchClaw-plugin",
       pluginId,
     }),
   );
   const managedHooks = loadHookEntriesFromDir({
     dir: managedHooksDir,
-    source: "NexisClaw-managed",
+    source: "GreenchClaw-managed",
   });
   const workspaceHooks = loadHookEntriesFromDir({
     dir: workspaceHooksDir,
-    source: "NexisClaw-workspace",
+    source: "GreenchClaw-workspace",
   });
 
   return [...extraHooks, ...bundledHooks, ...pluginHooks, ...managedHooks, ...workspaceHooks];
@@ -278,7 +278,7 @@ function discoverWorkspaceHookEntries(
 export function loadWorkspaceHookEntries(
   workspaceDir: string,
   opts?: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     managedHooksDir?: string;
     bundledHooksDir?: string;
     entries?: HookEntry[];

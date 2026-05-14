@@ -3,11 +3,11 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
-import { startWhatsAppQaDriverSession } from "@NexisClaw/whatsapp/api.js";
-import { normalizeE164 } from "NexisClaw/plugin-sdk/account-resolution";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+import { startWhatsAppQaDriverSession } from "@GreenchClaw/whatsapp/api.js";
+import { normalizeE164 } from "GreenchClaw/plugin-sdk/account-resolution";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 import { z } from "zod";
 import { startQaGatewayChild } from "../../gateway-child.js";
 import { DEFAULT_QA_LIVE_PROVIDER_MODE } from "../../providers/index.js";
@@ -140,13 +140,13 @@ type WhatsAppCredentialLease = Awaited<
 >;
 type WhatsAppCredentialHeartbeat = ReturnType<typeof startQaCredentialLeaseHeartbeat>;
 
-const WHATSAPP_QA_CAPTURE_CONTENT_ENV = "NEXISCLAW_QA_WHATSAPP_CAPTURE_CONTENT";
-const QA_REDACT_PUBLIC_METADATA_ENV = "NEXISCLAW_QA_REDACT_PUBLIC_METADATA";
+const WHATSAPP_QA_CAPTURE_CONTENT_ENV = "GREENCHCLAW_QA_WHATSAPP_CAPTURE_CONTENT";
+const QA_REDACT_PUBLIC_METADATA_ENV = "GREENCHCLAW_QA_REDACT_PUBLIC_METADATA";
 const WHATSAPP_QA_ENV_KEYS = [
-  "NEXISCLAW_QA_WHATSAPP_DRIVER_PHONE_E164",
-  "NEXISCLAW_QA_WHATSAPP_SUT_PHONE_E164",
-  "NEXISCLAW_QA_WHATSAPP_DRIVER_AUTH_ARCHIVE_BASE64",
-  "NEXISCLAW_QA_WHATSAPP_SUT_AUTH_ARCHIVE_BASE64",
+  "GREENCHCLAW_QA_WHATSAPP_DRIVER_PHONE_E164",
+  "GREENCHCLAW_QA_WHATSAPP_SUT_PHONE_E164",
+  "GREENCHCLAW_QA_WHATSAPP_DRIVER_AUTH_ARCHIVE_BASE64",
+  "GREENCHCLAW_QA_WHATSAPP_SUT_AUTH_ARCHIVE_BASE64",
 ] as const;
 
 const whatsappQaCredentialPayloadSchema = z.object({
@@ -183,7 +183,7 @@ const WHATSAPP_QA_SCENARIOS: WhatsAppQaScenarioDefinition[] = [
       configMode: "pairing",
       expectReply: true,
       input: `Do not run the agent for this pairing QA marker ${randomUUID().slice(0, 8)}`,
-      matchText: /NexisClaw: access not configured|Pairing code:/iu,
+      matchText: /GreenchClaw: access not configured|Pairing code:/iu,
       target: "dm",
     }),
   },
@@ -199,7 +199,7 @@ const WHATSAPP_QA_SCENARIOS: WhatsAppQaScenarioDefinition[] = [
       return {
         configMode: "allowlist",
         expectReply: true,
-        input: `NexisClawqa reply with only this exact marker: ${replyToken}`,
+        input: `GreenchClawqa reply with only this exact marker: ${replyToken}`,
         matchText: replyToken,
         quietInput: `This group message is intentionally unmentioned. If you respond, include ${quietToken}.`,
         quietMatchText: quietToken,
@@ -232,7 +232,7 @@ function inferWhatsAppCredentialSource(
   env: NodeJS.ProcessEnv = process.env,
 ): "convex" | "env" {
   const normalized =
-    value?.trim().toLowerCase() || env.NEXISCLAW_QA_CREDENTIAL_SOURCE?.trim().toLowerCase();
+    value?.trim().toLowerCase() || env.GREENCHCLAW_QA_CREDENTIAL_SOURCE?.trim().toLowerCase();
   return normalized === "convex" ? "convex" : "env";
 }
 
@@ -276,16 +276,16 @@ function validateWhatsAppQaRuntimeEnv(
 function resolveWhatsAppQaRuntimeEnv(env: NodeJS.ProcessEnv = process.env): WhatsAppQaRuntimeEnv {
   return validateWhatsAppQaRuntimeEnv(
     {
-      driverPhoneE164: resolveEnvValue(env, "NEXISCLAW_QA_WHATSAPP_DRIVER_PHONE_E164"),
-      sutPhoneE164: resolveEnvValue(env, "NEXISCLAW_QA_WHATSAPP_SUT_PHONE_E164"),
+      driverPhoneE164: resolveEnvValue(env, "GREENCHCLAW_QA_WHATSAPP_DRIVER_PHONE_E164"),
+      sutPhoneE164: resolveEnvValue(env, "GREENCHCLAW_QA_WHATSAPP_SUT_PHONE_E164"),
       driverAuthArchiveBase64: resolveEnvValue(
         env,
-        "NEXISCLAW_QA_WHATSAPP_DRIVER_AUTH_ARCHIVE_BASE64",
+        "GREENCHCLAW_QA_WHATSAPP_DRIVER_AUTH_ARCHIVE_BASE64",
       ),
-      sutAuthArchiveBase64: resolveEnvValue(env, "NEXISCLAW_QA_WHATSAPP_SUT_AUTH_ARCHIVE_BASE64"),
-      groupJid: env.NEXISCLAW_QA_WHATSAPP_GROUP_JID?.trim() || undefined,
+      sutAuthArchiveBase64: resolveEnvValue(env, "GREENCHCLAW_QA_WHATSAPP_SUT_AUTH_ARCHIVE_BASE64"),
+      groupJid: env.GREENCHCLAW_QA_WHATSAPP_GROUP_JID?.trim() || undefined,
     },
-    "NEXISCLAW_QA_WHATSAPP",
+    "GREENCHCLAW_QA_WHATSAPP",
   );
 }
 
@@ -303,7 +303,7 @@ function findScenarios(ids?: string[]) {
 }
 
 function buildWhatsAppQaConfig(
-  baseCfg: NexisClawConfig,
+  baseCfg: GreenchClawConfig,
   params: {
     allowFrom: string[];
     authDir: string;
@@ -311,7 +311,7 @@ function buildWhatsAppQaConfig(
     groupJid?: string;
     sutAccountId: string;
   },
-): NexisClawConfig {
+): GreenchClawConfig {
   const pluginAllow = [...new Set([...(baseCfg.plugins?.allow ?? []), "whatsapp"])];
   return {
     ...baseCfg,
@@ -356,7 +356,7 @@ function buildWhatsAppQaConfig(
               mentionPatterns: [
                 ...new Set([
                   ...(baseCfg.messages?.groupChat?.mentionPatterns ?? []),
-                  "\\bNexisClawqa\\b",
+                  "\\bGreenchClawqa\\b",
                 ]),
               ],
             },
@@ -740,7 +740,7 @@ export async function runWhatsAppQaLive(params: {
     };
     runtimeEnv = credentialLease.payload;
     tempAuthRoot = await fs.mkdtemp(
-      path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-whatsapp-qa-"),
+      path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-whatsapp-qa-"),
     );
     const [driverAuthDir, sutAuthDir] = await Promise.all([
       unpackWhatsAppAuthArchive({

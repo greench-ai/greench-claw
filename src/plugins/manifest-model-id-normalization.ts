@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeLowercaseStringOrEmpty } from "../shared/string-coerce.js";
 import { getCurrentPluginMetadataSnapshot } from "./current-plugin-metadata-snapshot.js";
 import type { PluginManifestRecord } from "./manifest-registry.js";
@@ -10,7 +10,7 @@ import {
 import { getActivePluginRegistryWorkspaceDirFromState } from "./runtime-state.js";
 
 type ManifestModelIdNormalizationLookupParams = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   plugins?: readonly Pick<PluginManifestRecord, "modelIdNormalization">[];
@@ -97,7 +97,7 @@ function formatPrefixedModelId(prefix: string, modelId: string): string {
 
 export function normalizeProviderModelIdWithManifest(params: {
   provider: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   plugins?: readonly Pick<PluginManifestRecord, "modelIdNormalization">[];

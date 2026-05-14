@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { MigrationProviderContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/provider-auth";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+import type { MigrationProviderContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/provider-auth";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 
 const tempRoots = new Set<string>();
 
@@ -15,7 +15,7 @@ const logger = {
 
 export async function makeTempRoot() {
   const root = await fs.mkdtemp(
-    path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-migrate-claude-"),
+    path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-migrate-claude-"),
   );
   tempRoots.add(root);
   return root;
@@ -34,11 +34,11 @@ export async function writeFile(filePath: string, content: string) {
 }
 
 export function makeConfigRuntime(
-  config: NexisClawConfig,
-  onWrite?: (next: NexisClawConfig) => void,
+  config: GreenchClawConfig,
+  onWrite?: (next: GreenchClawConfig) => void,
 ): NonNullable<MigrationProviderContext["runtime"]> {
-  const commitConfig = (next: NexisClawConfig) => {
-    for (const key of Object.keys(config) as Array<keyof NexisClawConfig>) {
+  const commitConfig = (next: GreenchClawConfig) => {
+    for (const key of Object.keys(config) as Array<keyof GreenchClawConfig>) {
       delete config[key];
     }
     Object.assign(config, next);
@@ -53,12 +53,12 @@ export function makeConfigRuntime(
         mutate,
       }: {
         afterWrite?: unknown;
-        mutate: (draft: NexisClawConfig, context: unknown) => Promise<unknown> | void;
+        mutate: (draft: GreenchClawConfig, context: unknown) => Promise<unknown> | void;
       }) => {
         const next = structuredClone(config);
         const result = await mutate(next, {
           snapshot: {
-            path: "/tmp/NexisClaw.json",
+            path: "/tmp/GreenchClaw.json",
             exists: true,
             raw: "{}",
             parsed: {},
@@ -86,7 +86,7 @@ export function makeConfigRuntime(
         nextConfig,
       }: {
         afterWrite?: unknown;
-        nextConfig: NexisClawConfig;
+        nextConfig: GreenchClawConfig;
       }) => {
         commitConfig(nextConfig);
         return {
@@ -103,7 +103,7 @@ export function makeContext(params: {
   source: string;
   stateDir: string;
   workspaceDir: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   includeSecrets?: boolean;
   overwrite?: boolean;
   reportDir?: string;
@@ -117,7 +117,7 @@ export function makeContext(params: {
           workspace: params.workspaceDir,
         },
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
   return {
     config,
     stateDir: params.stateDir,

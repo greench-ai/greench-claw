@@ -1,6 +1,6 @@
 import type { Api, Model } from "@earendil-works/pi-ai";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import type {
   EmbeddedRunAttemptParams,
   EmbeddedRunAttemptResult,
@@ -24,7 +24,7 @@ vi.mock("./builtin-pi.js", () => ({
   }),
 }));
 
-const originalRuntime = process.env.NEXISCLAW_AGENT_RUNTIME;
+const originalRuntime = process.env.GREENCHCLAW_AGENT_RUNTIME;
 
 beforeEach(() => {
   clearAgentHarnesses();
@@ -34,13 +34,13 @@ afterEach(() => {
   clearAgentHarnesses();
   piRunAttempt.mockClear();
   if (originalRuntime == null) {
-    delete process.env.NEXISCLAW_AGENT_RUNTIME;
+    delete process.env.GREENCHCLAW_AGENT_RUNTIME;
   } else {
-    process.env.NEXISCLAW_AGENT_RUNTIME = originalRuntime;
+    process.env.GREENCHCLAW_AGENT_RUNTIME = originalRuntime;
   }
 });
 
-function createAttemptParams(config?: NexisClawConfig): EmbeddedRunAttemptParams {
+function createAttemptParams(config?: GreenchClawConfig): EmbeddedRunAttemptParams {
   return {
     prompt: "hello",
     sessionId: "session-1",
@@ -114,7 +114,7 @@ function registerSuccessfulCodexHarness(): void {
   );
 }
 
-function providerRuntimeConfig(provider: string, runtime: string): NexisClawConfig {
+function providerRuntimeConfig(provider: string, runtime: string): GreenchClawConfig {
   return {
     models: {
       providers: {
@@ -125,14 +125,14 @@ function providerRuntimeConfig(provider: string, runtime: string): NexisClawConf
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function agentModelRuntimeConfig(
   modelRef: string,
   runtime: string,
   agentId?: string,
-): NexisClawConfig {
+): GreenchClawConfig {
   if (agentId) {
     return {
       agents: {
@@ -141,7 +141,7 @@ function agentModelRuntimeConfig(
           { id: agentId, models: { [modelRef]: { agentRuntime: { id: runtime } } } },
         ],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
   }
   return {
     agents: {
@@ -151,12 +151,12 @@ function agentModelRuntimeConfig(
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 describe("runAgentHarnessAttempt", () => {
   it("fails when a forced plugin harness is unavailable and fallback is omitted", async () => {
-    process.env.NEXISCLAW_AGENT_RUNTIME = "codex";
+    process.env.GREENCHCLAW_AGENT_RUNTIME = "codex";
 
     await expect(
       runAgentHarnessAttempt(createAttemptParams(providerRuntimeConfig("codex", "codex"))),
@@ -377,7 +377,7 @@ describe("selectAgentHarness", () => {
           agentRuntime: { id: "codex" },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(
       selectAgentHarness({
@@ -390,7 +390,7 @@ describe("selectAgentHarness", () => {
 
   it("ignores legacy agent CLI runtime aliases for OpenAI agent model runs", async () => {
     registerSuccessfulCodexHarness();
-    const config: NexisClawConfig = {
+    const config: GreenchClawConfig = {
       agents: {
         defaults: {
           agentRuntime: { id: "claude-cli" },
@@ -423,7 +423,7 @@ describe("selectAgentHarness", () => {
   });
 
   it("ignores env-forced PI for OpenAI default runtime selection", () => {
-    process.env.NEXISCLAW_AGENT_RUNTIME = "pi";
+    process.env.GREENCHCLAW_AGENT_RUNTIME = "pi";
     registerFailingCodexHarness();
 
     expect(

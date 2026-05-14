@@ -1,12 +1,15 @@
-import { createUnionActionGate } from "NexisClaw/plugin-sdk/channel-actions";
+import { createUnionActionGate } from "GreenchClaw/plugin-sdk/channel-actions";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageActionName,
   ChannelMessageToolDiscovery,
-} from "NexisClaw/plugin-sdk/channel-contract";
-import type { DiscordActionConfig, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { extractToolSend } from "NexisClaw/plugin-sdk/tool-send";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+import type {
+  DiscordActionConfig,
+  GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { extractToolSend } from "GreenchClaw/plugin-sdk/tool-send";
 import { inspectDiscordAccount } from "./account-inspect.js";
 import { createDiscordActionGate, listDiscordAccountIds } from "./accounts.js";
 import { readDiscordComponentSpec } from "./components.js";
@@ -20,13 +23,13 @@ async function loadDiscordChannelActionsRuntime() {
   return await discordChannelActionsRuntimePromise;
 }
 
-function listDiscoverableDiscordAccounts(cfg: NexisClawConfig) {
+function listDiscoverableDiscordAccounts(cfg: GreenchClawConfig) {
   return listDiscordAccountIds(cfg)
     .map((accountId) => inspectDiscordAccount({ cfg, accountId }))
     .filter((account) => account.enabled && account.configured);
 }
 
-function resolveDiscordActionDiscovery(cfg: NexisClawConfig) {
+function resolveDiscordActionDiscovery(cfg: GreenchClawConfig) {
   const accounts = listDiscoverableDiscordAccounts(cfg);
   if (accounts.length === 0) {
     return null;
@@ -44,7 +47,7 @@ function resolveDiscordActionDiscovery(cfg: NexisClawConfig) {
 }
 
 function resolveScopedDiscordActionDiscovery(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }) {
   if (!params.accountId) {

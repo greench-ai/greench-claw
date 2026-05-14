@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { MUSIC_GENERATION_TASK_KIND } from "../music-generation-task-status.js";
 import {
   createMediaGenerationTaskLifecycle,
@@ -36,7 +36,7 @@ export const failMusicGenerationTaskRun = (
 ) => musicGenerationTaskLifecycle.failTaskRun(...params);
 
 export async function wakeMusicGenerationTaskCompletion(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   handle: MusicGenerationTaskHandle | null;
   status: "ok" | "error";
   statusLabel: string;

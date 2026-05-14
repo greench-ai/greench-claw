@@ -79,7 +79,7 @@ export function getUsedPorts(
 }
 
 export const PROFILE_COLORS = [
-  "#FF4500", // Orange-red (NexisClaw default)
+  "#FF4500", // Orange-red (GreenchClaw default)
   "#0066CC", // Blue
   "#00AA00", // Green
   "#9933FF", // Purple

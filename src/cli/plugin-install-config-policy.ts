@@ -42,7 +42,7 @@ function readBundledInstallRecoveryMetadata(rootDir: string): {
   const manifest = loadPluginManifest(rootDir, false);
   const pluginId = manifest.ok ? manifest.manifest.id : undefined;
   const parsed = tryReadJsonSync<{
-    NexisClaw?: {
+    GreenchClaw?: {
       install?: {
         allowInvalidConfigRecovery?: boolean;
       };
@@ -50,7 +50,7 @@ function readBundledInstallRecoveryMetadata(rootDir: string): {
   }>(packageJsonPath);
   return {
     ...(pluginId ? { pluginId } : {}),
-    allowInvalidConfigRecovery: parsed?.NexisClaw?.install?.allowInvalidConfigRecovery === true,
+    allowInvalidConfigRecovery: parsed?.GreenchClaw?.install?.allowInvalidConfigRecovery === true,
   };
 }
 

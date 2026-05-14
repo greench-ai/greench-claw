@@ -9,7 +9,7 @@ title: "BTW side questions"
 `/btw` lets you ask a quick side question about the **current session** without
 turning that question into normal conversation history. `/side` is an alias.
 
-It is modeled after Claude Code's `/btw` behavior, but adapted to NexisClaw's
+It is modeled after Claude Code's `/btw` behavior, but adapted to GreenchClaw's
 Gateway and multi-channel architecture.
 
 ## What it does
@@ -20,7 +20,7 @@ When you send:
 /btw what changed?
 ```
 
-NexisClaw:
+GreenchClaw:
 
 1. snapshots the current session context,
 2. runs a separate ephemeral side query,
@@ -61,7 +61,7 @@ It is intentionally **ephemeral**.
 
 BTW uses the current session as **background context only**.
 
-If the main run is currently active, NexisClaw snapshots the current message
+If the main run is currently active, GreenchClaw snapshots the current message
 state and includes the in-flight main prompt as background context, while
 explicitly telling the model:
 

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveConversationIdFromTargets } from "../infra/outbound/conversation-id.js";
 import { normalizeConversationTargetRef } from "../infra/outbound/session-binding-normalization.js";
 import { stringifyRouteThreadId } from "../plugin-sdk/channel-route.js";
@@ -40,7 +40,7 @@ type ConversationResolution = {
 };
 
 export type ResolveCommandConversationResolutionInput = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel?: string | null;
   accountId?: string | null;
   chatType?: string | null;
@@ -58,7 +58,7 @@ export type ResolveCommandConversationResolutionInput = {
 };
 
 type ResolveInboundConversationResolutionInput = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel?: string | null;
   accountId?: string | null;
   to?: string | null;
@@ -156,7 +156,7 @@ function normalizeResolutionTarget(params: {
 function resolveBindingAccountId(params: {
   rawAccountId?: string | null;
   plugin?: ChannelPlugin;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): string {
   return (
     normalizeOptionalString(params.rawAccountId) ||

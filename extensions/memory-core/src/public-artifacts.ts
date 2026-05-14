@@ -1,10 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolveMemoryDreamingWorkspaces } from "NexisClaw/plugin-sdk/memory-core-host-status";
-import type { MemoryPluginPublicArtifact } from "NexisClaw/plugin-sdk/memory-host-core";
-import { resolveMemoryHostEventLogPath } from "NexisClaw/plugin-sdk/memory-host-events";
-import { pathExists } from "NexisClaw/plugin-sdk/security-runtime";
-import type { NexisClawConfig } from "../api.js";
+import { resolveMemoryDreamingWorkspaces } from "GreenchClaw/plugin-sdk/memory-core-host-status";
+import type { MemoryPluginPublicArtifact } from "GreenchClaw/plugin-sdk/memory-host-core";
+import { resolveMemoryHostEventLogPath } from "GreenchClaw/plugin-sdk/memory-host-events";
+import { pathExists } from "GreenchClaw/plugin-sdk/security-runtime";
+import type { GreenchClawConfig } from "../api.js";
 
 async function listMarkdownFilesRecursive(rootDir: string): Promise<string[]> {
   const entries = await fs.readdir(rootDir, { withFileTypes: true }).catch(() => []);
@@ -80,7 +80,7 @@ async function collectWorkspaceArtifacts(params: {
 }
 
 export async function listMemoryCorePublicArtifacts(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): Promise<MemoryPluginPublicArtifact[]> {
   const workspaces = resolveMemoryDreamingWorkspaces(params.cfg);
   const artifacts: MemoryPluginPublicArtifact[] = [];

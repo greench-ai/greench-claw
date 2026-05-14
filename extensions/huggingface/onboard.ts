@@ -1,7 +1,7 @@
 import {
   createModelCatalogPresetAppliers,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildHuggingfaceModelDefinition,
   HUGGINGFACE_BASE_URL,
@@ -12,7 +12,7 @@ export const HUGGINGFACE_DEFAULT_MODEL_REF = "huggingface/deepseek-ai/DeepSeek-R
 
 const huggingfacePresetAppliers = createModelCatalogPresetAppliers({
   primaryModelRef: HUGGINGFACE_DEFAULT_MODEL_REF,
-  resolveParams: (_cfg: NexisClawConfig) => ({
+  resolveParams: (_cfg: GreenchClawConfig) => ({
     providerId: "huggingface",
     api: "openai-completions",
     baseUrl: HUGGINGFACE_BASE_URL,
@@ -21,6 +21,6 @@ const huggingfacePresetAppliers = createModelCatalogPresetAppliers({
   }),
 });
 
-export function applyHuggingfaceConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyHuggingfaceConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return huggingfacePresetAppliers.applyConfig(cfg);
 }

@@ -1,5 +1,5 @@
 ---
-summary: "Adds Vydra model provider support to NexisClaw."
+summary: "Adds Vydra model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the vydra plugin
 title: "Vydra plugin"
@@ -7,12 +7,12 @@ title: "Vydra plugin"
 
 # Vydra plugin
 
-Adds Vydra model provider support to NexisClaw.
+Adds Vydra model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/vydra-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/vydra-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

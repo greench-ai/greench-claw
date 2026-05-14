@@ -18,9 +18,9 @@ provider id `opencode-go` so upstream per-model routing stays correct.
 
 ## Built-in catalog
 
-NexisClaw sources most Go catalog rows from the bundled pi model registry and
+GreenchClaw sources most Go catalog rows from the bundled pi model registry and
 supplements current upstream rows while the registry catches up. Run
-`NexisClaw models list --provider opencode-go` for the current model list.
+`GreenchClaw models list --provider opencode-go` for the current model list.
 
 The provider includes:
 
@@ -46,17 +46,17 @@ The provider includes:
     <Steps>
       <Step title="Run onboarding">
         ```bash
-        NexisClaw onboard --auth-choice opencode-go
+        GreenchClaw onboard --auth-choice opencode-go
         ```
       </Step>
       <Step title="Set a Go model as default">
         ```bash
-        NexisClaw config set agents.defaults.model.primary "opencode-go/kimi-k2.6"
+        GreenchClaw config set agents.defaults.model.primary "opencode-go/kimi-k2.6"
         ```
       </Step>
       <Step title="Verify models are available">
         ```bash
-        NexisClaw models list --provider opencode-go
+        GreenchClaw models list --provider opencode-go
         ```
       </Step>
     </Steps>
@@ -66,12 +66,12 @@ The provider includes:
     <Steps>
       <Step title="Pass the key directly">
         ```bash
-        NexisClaw onboard --opencode-go-api-key "$OPENCODE_API_KEY"
+        GreenchClaw onboard --opencode-go-api-key "$OPENCODE_API_KEY"
         ```
       </Step>
       <Step title="Verify models are available">
         ```bash
-        NexisClaw models list --provider opencode-go
+        GreenchClaw models list --provider opencode-go
         ```
       </Step>
     </Steps>
@@ -91,7 +91,7 @@ The provider includes:
 
 <AccordionGroup>
   <Accordion title="Routing behavior">
-    NexisClaw handles per-model routing automatically when the model ref uses
+    GreenchClaw handles per-model routing automatically when the model ref uses
     `opencode-go/...`. No additional provider config is required.
   </Accordion>
 

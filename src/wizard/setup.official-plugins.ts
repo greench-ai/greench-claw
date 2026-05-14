@@ -1,5 +1,5 @@
 import { ensureOnboardingPluginInstalled } from "../commands/onboarding-plugin-install.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginPackageInstall } from "../plugins/manifest.js";
 import {
   getOfficialExternalPluginCatalogManifest,
@@ -21,7 +21,7 @@ export type OfficialPluginOnboardingInstallEntry = {
   trustedSourceLinkedOfficialInstall?: boolean;
 };
 
-function isInstalledOrConfigured(config: NexisClawConfig, pluginId: string): boolean {
+function isInstalledOrConfigured(config: GreenchClawConfig, pluginId: string): boolean {
   return Boolean(config.plugins?.entries?.[pluginId] || config.plugins?.installs?.[pluginId]);
 }
 
@@ -60,7 +60,7 @@ export const __testing = {
 };
 
 export function resolveOfficialPluginOnboardingInstallEntries(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
 }): OfficialPluginOnboardingInstallEntry[] {
   const entries: OfficialPluginOnboardingInstallEntry[] = [];
   for (const entry of listOfficialExternalPluginCatalogEntries()) {
@@ -84,11 +84,11 @@ export function resolveOfficialPluginOnboardingInstallEntries(params: {
 }
 
 export async function setupOfficialPluginInstalls(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   prompter: WizardPrompter;
   runtime: RuntimeEnv;
   workspaceDir?: string;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   const installEntries = resolveOfficialPluginOnboardingInstallEntries({
     config: params.config,
   });

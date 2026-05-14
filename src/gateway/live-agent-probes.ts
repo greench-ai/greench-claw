@@ -89,46 +89,46 @@ export function buildLiveCronProbeMessage(params: {
   const claudeLike = isClaudeLikeLiveAgent(params.agent);
   if (params.attempt === 0) {
     return (
-      "Use the NexisClaw MCP tool `NexisClaw-tools/cron` (server `NexisClaw-tools`, tool `cron`). " +
-      "If the harness shows Claude-style MCP names, use `mcp__NexisClaw-tools__cron` or `mcp__NexisClaw_tools__cron`. " +
+      "Use the GreenchClaw MCP tool `GreenchClaw-tools/cron` (server `GreenchClaw-tools`, tool `cron`). " +
+      "If the harness shows Claude-style MCP names, use `mcp__GreenchClaw-tools__cron` or `mcp__GreenchClaw_tools__cron`. " +
       `Call it with JSON arguments ${params.argsJson}. ` +
       "Preserve the JSON exactly, including job.sessionTarget and job.sessionKey; do not omit, rename, or flatten those fields. " +
-      "Do the actual tool call; I will verify externally with the NexisClaw cron CLI. " +
+      "Do the actual tool call; I will verify externally with the GreenchClaw cron CLI. " +
       `After the cron job is created, reply exactly: ${params.exactReply}`
     );
   }
   if (claudeLike) {
     return (
-      "Retry the NexisClaw MCP tool `NexisClaw-tools/cron` now. " +
-      "If the harness shows Claude-style MCP names, use `mcp__NexisClaw-tools__cron` or `mcp__NexisClaw_tools__cron`. " +
+      "Retry the GreenchClaw MCP tool `GreenchClaw-tools/cron` now. " +
+      "If the harness shows Claude-style MCP names, use `mcp__GreenchClaw-tools__cron` or `mcp__GreenchClaw_tools__cron`. " +
       `Use these exact JSON arguments: ${params.argsJson}. ` +
       "Preserve job.sessionTarget and job.sessionKey exactly as provided. " +
       `If the cron job is created, reply exactly: ${params.exactReply}. ` +
       "If the tool call is cancelled, the job is not created, or you cannot confirm creation, " +
       "reply briefly saying that and ask me to retry. No markdown. " +
-      "I will verify externally with the NexisClaw cron CLI."
+      "I will verify externally with the GreenchClaw cron CLI."
     );
   }
   return (
-    "Your previous NexisClaw cron MCP tool call was cancelled before the job was created. " +
-    "Retry the NexisClaw MCP tool `NexisClaw-tools/cron` now. " +
-    "If the harness shows Claude-style MCP names, use `mcp__NexisClaw-tools__cron` or `mcp__NexisClaw_tools__cron`. " +
+    "Your previous GreenchClaw cron MCP tool call was cancelled before the job was created. " +
+    "Retry the GreenchClaw MCP tool `GreenchClaw-tools/cron` now. " +
+    "If the harness shows Claude-style MCP names, use `mcp__GreenchClaw-tools__cron` or `mcp__GreenchClaw_tools__cron`. " +
     `Use these exact JSON arguments: ${params.argsJson}. ` +
     "Preserve job.sessionTarget and job.sessionKey exactly as provided. " +
     `If the cron job is created, reply exactly: ${params.exactReply}. ` +
     "If the tool call is cancelled, the job is not created, or you cannot confirm creation, " +
     "reply briefly saying that and ask me to retry. No markdown. " +
-    "I will verify externally with the NexisClaw cron CLI."
+    "I will verify externally with the GreenchClaw cron CLI."
   );
 }
 
-export async function runNexisClawCliJson<T>(args: string[], env: NodeJS.ProcessEnv): Promise<T> {
+export async function runGreenchClawCliJson<T>(args: string[], env: NodeJS.ProcessEnv): Promise<T> {
   const childEnv = { ...env };
   delete childEnv.VITEST;
   delete childEnv.VITEST_MODE;
   delete childEnv.VITEST_POOL_ID;
   delete childEnv.VITEST_WORKER_ID;
-  const { stdout, stderr } = await execFileAsync(process.execPath, ["NexisClaw.mjs", ...args], {
+  const { stdout, stderr } = await execFileAsync(process.execPath, ["GreenchClaw.mjs", ...args], {
     cwd: process.cwd(),
     env: childEnv,
     timeout: 30_000,
@@ -138,7 +138,7 @@ export async function runNexisClawCliJson<T>(args: string[], env: NodeJS.Process
   if (!trimmed) {
     throw new Error(
       [
-        `NexisClaw ${args.join(" ")} produced no JSON stdout`,
+        `GreenchClaw ${args.join(" ")} produced no JSON stdout`,
         stderr.trim() ? `stderr: ${stderr.trim()}` : undefined,
       ]
         .filter(Boolean)
@@ -150,7 +150,7 @@ export async function runNexisClawCliJson<T>(args: string[], env: NodeJS.Process
   } catch (error) {
     throw new Error(
       [
-        `NexisClaw ${args.join(" ")} returned invalid JSON`,
+        `GreenchClaw ${args.join(" ")} returned invalid JSON`,
         `stdout: ${trimmed}`,
         stderr.trim() ? `stderr: ${stderr.trim()}` : undefined,
         error instanceof Error ? `cause: ${error.message}` : undefined,
@@ -169,7 +169,7 @@ export async function assertCronJobVisibleViaCli(params: {
   expectedName: string;
   expectedMessage: string;
 }): Promise<CronListJob | undefined> {
-  const cronList = await runNexisClawCliJson<CronListCliResult>(
+  const cronList = await runGreenchClawCliJson<CronListCliResult>(
     [
       "cron",
       "list",

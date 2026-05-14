@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { inspectDiscordAccount } from "./account-inspect.js";
 import {
   auditDiscordChannelPermissionsWithFetcher,
@@ -8,7 +8,7 @@ import {
 import { fetchChannelPermissionsDiscord } from "./send.js";
 
 export function collectDiscordAuditChannelIds(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }) {
   const account = inspectDiscordAccount({
@@ -19,7 +19,7 @@ export function collectDiscordAuditChannelIds(params: {
 }
 
 export async function auditDiscordChannelPermissions(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   token: string;
   accountId?: string | null;
   channelIds: string[];

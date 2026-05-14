@@ -1,4 +1,4 @@
-import { defineSingleProviderPluginEntry } from "NexisClaw/plugin-sdk/provider-entry";
+import { defineSingleProviderPluginEntry } from "GreenchClaw/plugin-sdk/provider-entry";
 import { applyNvidiaConfig, NVIDIA_DEFAULT_MODEL_REF } from "./onboard.js";
 import { buildNvidiaProvider } from "./provider-catalog.js";
 

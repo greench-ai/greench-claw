@@ -3,7 +3,7 @@ import { formatCliCommand } from "../../cli/command-format.js";
 import { logConfigUpdated } from "../../config/logging.js";
 import { resolveAgentModelFallbackValues, toAgentModelListLike } from "../../config/model-input.js";
 import type { AgentModelEntryConfig } from "../../config/types.agent-defaults.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { type RuntimeEnv, writeRuntimeJson } from "../../runtime.js";
 import { loadModelsConfig } from "./load-config.js";
 import {
@@ -21,18 +21,18 @@ type DefaultsFallbackKey = "model" | "imageModel";
 
 function listCommandForFallbackKey(key: DefaultsFallbackKey): string {
   return key === "imageModel"
-    ? "NexisClaw models image-fallbacks list"
-    : "NexisClaw models fallbacks list";
+    ? "GreenchClaw models image-fallbacks list"
+    : "GreenchClaw models fallbacks list";
 }
 
-function getFallbacks(cfg: NexisClawConfig, key: DefaultsFallbackKey): string[] {
+function getFallbacks(cfg: GreenchClawConfig, key: DefaultsFallbackKey): string[] {
   return resolveAgentModelFallbackValues(cfg.agents?.defaults?.[key]);
 }
 
 function patchDefaultsFallbacks(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params: { key: DefaultsFallbackKey; fallbacks: string[]; models?: Record<string, unknown> },
-): NexisClawConfig {
+): GreenchClawConfig {
   const existing = toAgentModelListLike(cfg.agents?.defaults?.[params.key]);
   return {
     ...cfg,

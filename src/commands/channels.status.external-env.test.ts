@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   cleanupPluginLoaderFixturesForTest,
   EMPTY_PLUGIN_SCHEMA,
@@ -15,7 +15,7 @@ import { createCapturingTestRuntime } from "./test-runtime-config-helpers.js";
 
 const mocks = vi.hoisted(() => ({
   callGateway: vi.fn(),
-  readConfigFileSnapshot: vi.fn(async () => ({ path: "/tmp/NexisClaw.json" })),
+  readConfigFileSnapshot: vi.fn(async () => ({ path: "/tmp/GreenchClaw.json" })),
   requireValidConfigSnapshot: vi.fn(),
   resolveCommandConfigWithSecrets: vi.fn(),
 }));
@@ -55,9 +55,9 @@ function writeExternalEnvChannelPlugin() {
     path.join(pluginDir, "package.json"),
     JSON.stringify(
       {
-        name: "@example/NexisClaw-external-env-channel",
+        name: "@example/GreenchClaw-external-env-channel",
         version: "1.0.0",
-        NexisClaw: {
+        GreenchClaw: {
           extensions: ["./index.cjs"],
         },
       },
@@ -67,7 +67,7 @@ function writeExternalEnvChannelPlugin() {
     "utf-8",
   );
   fs.writeFileSync(
-    path.join(pluginDir, "NexisClaw.plugin.json"),
+    path.join(pluginDir, "GreenchClaw.plugin.json"),
     JSON.stringify(
       {
         id: "external-env-channel-plugin",
@@ -110,7 +110,7 @@ describe("channelsStatusCommand external env-only channel fallback", () => {
         load: { paths: [pluginDir] },
         allow: ["external-env-channel-plugin"],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     mocks.requireValidConfigSnapshot.mockResolvedValue(config);
     mocks.resolveCommandConfigWithSecrets.mockResolvedValue({
       resolvedConfig: config,

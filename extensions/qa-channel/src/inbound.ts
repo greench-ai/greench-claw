@@ -1,11 +1,11 @@
-import { resolveStableChannelMessageIngress } from "NexisClaw/plugin-sdk/channel-ingress-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveInboundRouteEnvelopeBuilderWithRuntime } from "NexisClaw/plugin-sdk/inbound-envelope";
+import { resolveStableChannelMessageIngress } from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveInboundRouteEnvelopeBuilderWithRuntime } from "GreenchClaw/plugin-sdk/inbound-envelope";
 import {
   buildAgentMediaPayload,
   saveMediaBuffer,
   saveMediaSource,
-} from "NexisClaw/plugin-sdk/media-runtime";
+} from "GreenchClaw/plugin-sdk/media-runtime";
 import { buildQaTarget, sendQaBusMessage, type QaBusMessage } from "./bus-client.js";
 import { getQaChannelRuntime } from "./runtime.js";
 import type { CoreConfig, ResolvedQaChannelAccount } from "./types.js";
@@ -83,7 +83,7 @@ export async function handleQaInbound(params: {
     threadId: inbound.threadId,
   });
   const { route, buildEnvelope } = resolveInboundRouteEnvelopeBuilderWithRuntime({
-    cfg: params.config as NexisClawConfig,
+    cfg: params.config as GreenchClawConfig,
     channel: params.channelId,
     accountId: params.account.accountId,
     peer: {
@@ -103,7 +103,7 @@ export async function handleQaInbound(params: {
     ? runtime.channel.mentions.matchesMentionPatterns(
         inbound.text,
         runtime.channel.mentions.buildMentionRegexes(
-          params.config as NexisClawConfig,
+          params.config as GreenchClawConfig,
           route.agentId,
         ),
       )
@@ -196,7 +196,7 @@ export async function handleQaInbound(params: {
   });
 
   await runtime.channel.turn.runAssembled({
-    cfg: params.config as NexisClawConfig,
+    cfg: params.config as GreenchClawConfig,
     channel: params.channelId,
     accountId: params.account.accountId,
     agentId: route.agentId,

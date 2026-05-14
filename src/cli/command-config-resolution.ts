@@ -1,12 +1,12 @@
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import type { RuntimeEnv } from "../runtime.js";
 import {
   type CommandSecretResolutionMode,
   resolveCommandSecretRefsViaGateway,
 } from "./command-secret-gateway.js";
 
-export async function resolveCommandConfigWithSecrets<TConfig extends NexisClawConfig>(params: {
+export async function resolveCommandConfigWithSecrets<TConfig extends GreenchClawConfig>(params: {
   config: TConfig;
   commandName: string;
   targetIds: Set<string>;

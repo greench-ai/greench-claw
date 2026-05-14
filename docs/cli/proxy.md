@@ -1,19 +1,19 @@
 ---
-summary: "CLI reference for `NexisClaw proxy`, including operator-managed proxy validation and the local debug proxy capture inspector"
+summary: "CLI reference for `GreenchClaw proxy`, including operator-managed proxy validation and the local debug proxy capture inspector"
 read_when:
   - You need to validate operator-managed proxy routing before deployment
-  - You need to capture NexisClaw transport traffic locally for debugging
+  - You need to capture GreenchClaw transport traffic locally for debugging
   - You want to inspect debug proxy sessions, blobs, or built-in query presets
 title: "Proxy"
 ---
 
-# `NexisClaw proxy`
+# `GreenchClaw proxy`
 
 Validate operator-managed proxy routing, or run the local explicit debug proxy
 and inspect captured traffic.
 
 Use `validate` to preflight an operator-managed forward proxy before enabling
-NexisClaw proxy routing. The other commands are debugging tools for
+GreenchClaw proxy routing. The other commands are debugging tools for
 transport-level investigation: they can start a local proxy, run a child command
 with capture enabled, list capture sessions, query common traffic patterns, read
 captured blobs, and purge local capture data.
@@ -21,20 +21,20 @@ captured blobs, and purge local capture data.
 ## Commands
 
 ```bash
-NexisClaw proxy start [--host <host>] [--port <port>]
-NexisClaw proxy run [--host <host>] [--port <port>] -- <cmd...>
-NexisClaw proxy validate [--json] [--proxy-url <url>] [--allowed-url <url>] [--denied-url <url>] [--apns-reachable] [--apns-authority <url>] [--timeout-ms <ms>]
-NexisClaw proxy coverage
-NexisClaw proxy sessions [--limit <count>]
-NexisClaw proxy query --preset <name> [--session <id>]
-NexisClaw proxy blob --id <blobId>
-NexisClaw proxy purge
+GreenchClaw proxy start [--host <host>] [--port <port>]
+GreenchClaw proxy run [--host <host>] [--port <port>] -- <cmd...>
+GreenchClaw proxy validate [--json] [--proxy-url <url>] [--allowed-url <url>] [--denied-url <url>] [--apns-reachable] [--apns-authority <url>] [--timeout-ms <ms>]
+GreenchClaw proxy coverage
+GreenchClaw proxy sessions [--limit <count>]
+GreenchClaw proxy query --preset <name> [--session <id>]
+GreenchClaw proxy blob --id <blobId>
+GreenchClaw proxy purge
 ```
 
 ## Validate
 
-`NexisClaw proxy validate` checks the effective operator-managed proxy URL from
-`--proxy-url`, config, or `NEXISCLAW_PROXY_URL`. It reports a config problem when
+`GreenchClaw proxy validate` checks the effective operator-managed proxy URL from
+`--proxy-url`, config, or `GREENCHCLAW_PROXY_URL`. It reports a config problem when
 no proxy is enabled and configured; use `--proxy-url` for a one-off preflight
 before changing config. By default it verifies that a public destination succeeds
 through the proxy and that the proxy cannot reach a temporary loopback canary.
@@ -60,7 +60,7 @@ semantics.
 
 ## Query presets
 
-`NexisClaw proxy query --preset <name>` accepts:
+`GreenchClaw proxy query --preset <name>` accepts:
 
 - `double-sends`
 - `retry-storms`
@@ -73,9 +73,9 @@ semantics.
 
 - `start` defaults to `127.0.0.1` unless `--host` is set.
 - `run` starts a local debug proxy and then runs the command after `--`.
-- The debug proxy's direct upstream forwarding opens upstream sockets for diagnostics. When NexisClaw managed proxy mode is active, direct forwarding for proxy requests and CONNECT tunnels is disabled by default; set `NEXISCLAW_DEBUG_PROXY_ALLOW_DIRECT_CONNECT_WITH_MANAGED_PROXY=1` only for approved local diagnostics.
+- The debug proxy's direct upstream forwarding opens upstream sockets for diagnostics. When GreenchClaw managed proxy mode is active, direct forwarding for proxy requests and CONNECT tunnels is disabled by default; set `GREENCHCLAW_DEBUG_PROXY_ALLOW_DIRECT_CONNECT_WITH_MANAGED_PROXY=1` only for approved local diagnostics.
 - `validate` exits with code 1 when proxy config or destination checks fail.
-- Captures are local debugging data; use `NexisClaw proxy purge` when finished.
+- Captures are local debugging data; use `GreenchClaw proxy purge` when finished.
 
 ## Related
 

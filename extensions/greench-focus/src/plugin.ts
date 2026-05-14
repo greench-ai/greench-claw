@@ -1,156 +1,73 @@
 /**
- * GreenchFocus — focus modes for task-specific agent behavior.
- *
- * Modes: copilot, academic, writing, coding, agent
- * Each mode applies a specific behavioral modifier to the agent's system prompt.
+ * GreenchFocus — focus modes that shape agent behavior.
  */
 
 import { definePluginEntry, type GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
 
-// ── Focus Mode Definitions ────────────────────────────────────────────────────
+// ── Mode Definitions ─────────────────────────────────────────────────────────
 
 interface FocusMode {
+  id: string;
   name: string;
+  emoji: string;
   description: string;
-  modifier: string; // appended to system prompt
-  rag_boost: boolean; // whether to boost RAG retrieval
+  systemPromptSuffix: string;
+  relevantTools: string[];
 }
 
-const FOCUS_MODES: Record<string, FocusMode> = {
-  copilot: {
+const FOCUS_MODES: FocusMode[] = [
+  {
+    id: "copilot",
     name: "Copilot",
-    description: "General-purpose coding and assistance. Balanced reasoning and speed.",
-    modifier: `You are in **Copilot** mode — a balanced, general-purpose assistant.
-- Reason through problems step by step
-- Provide clear, concise explanations
-- Prioritize practical, working solutions
-- Be helpful but not verbose`,
-    rag_boost: false,
+    emoji: "🤖",
+    description: "Pair programmer. Short explanations, code snippets.",
+    systemPromptSuffix:
+      "\n\n[Focus: Copilot] Keep responses short and code-focused. Prefer snippets over prose.",
+    relevantTools: ["read_file", "grep", "bash", "agent_run"],
   },
-  academic: {
+  {
+    id: "academic",
     name: "Academic",
-    description: "Research, analysis, and rigorous technical writing.",
-    modifier: `You are in **Academic** mode — precise, rigorous, and thorough.
-- Cite sources and distinguish facts from speculation
-- Consider edge cases and counter-arguments
-- Structure responses with clear logical flow
-- Use precise terminology and define ambiguous terms
-- Prefer depth over breadth`,
-    rag_boost: true,
+    emoji: "📚",
+    description: "Deep research. Structured, nuanced, thorough.",
+    systemPromptSuffix:
+      "\n\n[Focus: Academic] Prioritize depth, accuracy, and structured analysis. Cite sources.",
+    relevantTools: ["web_search", "fetch_url", "wikipedia", "brain_search"],
   },
-  writing: {
+  {
+    id: "writing",
     name: "Writing",
-    description: "Creative writing, prose, and content creation.",
-    modifier: `You are in **Writing** mode — creative and expressive.
-- Write with varied sentence structure and rhythm
-- Use vivid, specific language over generic descriptions
-- Match or adapt to the user's tone and style
-- Prioritize readability and flow
-- Don't be afraid of first-person perspective or strong voice`,
-    rag_boost: false,
+    emoji: "✍️",
+    description: "Prose-first. Flowing text, minimal bullet points.",
+    systemPromptSuffix: "\n\n[Focus: Writing] Prioritize flowing prose. Match the user's voice.",
+    relevantTools: ["brain_search", "read_file"],
   },
-  coding: {
+  {
+    id: "coding",
     name: "Coding",
-    description: "Software development — debugging, architecture, and implementation.",
-    modifier: `You are in **Coding** mode — precise and engineer-focused.
-- Provide working, well-structured code
-- Include type annotations and clear naming
-- Explain the "why" behind architectural decisions
-- Reference relevant docs or best practices
-- Spot potential bugs, security issues, and performance problems
-- Prefer clarity over clever tricks`,
-    rag_boost: true,
+    emoji: "💻",
+    description: "Clean code, architecture, tests, precise explanations.",
+    systemPromptSuffix:
+      "\n\n[Focus: Coding] Prioritize correct, maintainable code. Name things well.",
+    relevantTools: ["read_file", "grep", "ls", "bash", "agent_run"],
   },
-  agent: {
+  {
+    id: "agent",
     name: "Agent",
-    description: "Autonomous problem-solving — plans, executes, and iterates independently.",
-    modifier: `You are in **Agent** mode — autonomous and self-directed.
-- Think step-by-step before acting
-- Break complex tasks into subtasks
-- Execute tools to gather information and take action
-- Monitor progress and adapt strategy
-- Report back with clear status updates
-- Know when to ask clarifying questions vs. proceed autonomously`,
-    rag_boost: false,
+    emoji: "🚀",
+    description: "Autonomous execution. Report back only when done.",
+    systemPromptSuffix: "\n\n[Focus: Agent] Make decisions without asking. Execute fully.",
+    relevantTools: ["agent_run", "bash", "web_search", "read_file"],
   },
-};
+];
 
-const DEFAULT_MODE = "copilot";
+let activeMode: FocusMode | null = null;
 
-// ── Focus Mode Store ──────────────────────────────────────────────────────────
-
-let _currentMode: string = DEFAULT_MODE;
-
-function getCurrentMode(): string {
-  return _currentMode;
-}
-
-function setCurrentMode(mode: string): boolean {
-  if (!FOCUS_MODES[mode]) return false;
-  _currentMode = mode;
-  return true;
-}
-
-// ── Plugin Tools ─────────────────────────────────────────────────────────────
-
-function buildTools() {
-  return [
-    {
-      name: "focus_mode",
-      description: "Get or set the current focus mode.",
-      inputSchema: {
-        type: "object",
-        properties: {
-          mode: {
-            type: "string",
-            enum: Object.keys(FOCUS_MODES),
-            description: `Focus mode to switch to. Options: ${Object.keys(FOCUS_MODES).join(", ")}`,
-          },
-        },
-      },
-      async run(args: { mode?: string }) {
-        if (!args.mode) {
-          const current = FOCUS_MODES[getCurrentMode()];
-          const available = Object.entries(FOCUS_MODES)
-            .map(([k, v]) => `  • ${k}: ${v.description}`)
-            .join("\n");
-          return {
-            success: true,
-            output: `Current mode: ${getCurrentMode()}\n\nAvailable modes:\n${available}`,
-            error: null,
-          };
-        }
-
-        if (!setCurrentMode(args.mode)) {
-          return {
-            success: false,
-            output: "",
-            error: `Unknown focus mode: ${args.mode}. Available: ${Object.keys(FOCUS_MODES).join(", ")}`,
-          };
-        }
-
-        const mode = FOCUS_MODES[args.mode];
-        return {
-          success: true,
-          output: `Switched to **${mode.name}** mode.\n\n${mode.description}\n\n${mode.modifier}`,
-          error: null,
-        };
-      },
-    },
-    {
-      name: "focus_modes_list",
-      description: "List all available focus modes and their descriptions.",
-      inputSchema: { type: "object", properties: {} },
-      async run() {
-        const current = getCurrentMode();
-        const lines = Object.entries(FOCUS_MODES).map(([key, mode]) => {
-          const marker = key === current ? " ← active" : "";
-          return `**${key}**${marker}: ${mode.description}`;
-        });
-        return { success: true, output: lines.join("\n"), error: null };
-      },
-    },
-  ];
+function makeResult(
+  text: string,
+  details: Record<string, unknown> = {},
+): { content: Array<{ type: "text"; text: string }>; details: Record<string, unknown> } {
+  return { content: [{ type: "text" as const, text }], details };
 }
 
 // ── Plugin Entry ─────────────────────────────────────────────────────────────
@@ -158,50 +75,83 @@ function buildTools() {
 export default definePluginEntry({
   id: "greench-focus",
   name: "GreenchFocus",
-  description: "Focus modes — behavioral presets for different task types.",
-  async register(api: GreenchClawPluginApi) {
-    const tools = buildTools();
-    for (const tool of tools) {
-      try {
-        api.runtime.agent.tools.register?.({
-          id: tool.name,
-          description: tool.description,
-          inputSchema: tool.inputSchema,
-          async handler(args: Record<string, unknown>) {
-            return tool.run(args as Parameters<typeof tool.run>[0]);
+  description: "Focus modes — copilot / academic / writing / coding / agent.",
+  register(api: GreenchClawPluginApi) {
+    api.registerTool(
+      () => ({
+        name: "focus_mode",
+        description: "Set or clear the active focus mode.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            mode: {
+              type: "string",
+              enum: ["copilot", "academic", "writing", "coding", "agent", "off"],
+            },
           },
-        });
-      } catch (err) {
-        api.logger.error?.("greench-focus: failed to register tool", {
-          tool: tool.name,
-          error: String(err),
-        });
-      }
-    }
+          required: ["mode"],
+        },
+        execute: async (_toolCallId, toolParams) => {
+          const { mode } = toolParams as { mode: string };
+          if (mode === "off") {
+            activeMode = null;
+            return makeResult("Focus mode cleared.");
+          }
+          const m = FOCUS_MODES.find((f) => f.id === mode);
+          if (!m)
+            return makeResult(
+              `Unknown mode. Available: ${FOCUS_MODES.map((f) => f.id).join(", ")}`,
+              { success: false },
+            );
+          activeMode = m;
+          return makeResult(
+            `${m.emoji} Focus mode: **${m.name}**\n\n${m.description}\n\nRelevant tools: ${m.relevantTools.join(", ")}`,
+            { mode: m.id },
+          );
+        },
+      }),
+      { names: ["focus_mode"] },
+    );
 
-    // Also expose a method to get the current focus mode modifier for system prompt injection
-    api.runtime.config.mutate?.((cfg) => {
-      // Inject focus mode modifier into agent system prompt
-      return cfg;
+    api.registerTool(
+      () => ({
+        name: "focus_modes_list",
+        description: "List all available focus modes.",
+        inputSchema: { type: "object", properties: {} },
+        execute: async () => {
+          const cur = activeMode?.id ?? "none";
+          const lines = FOCUS_MODES.map(
+            (m) =>
+              `${m.id === cur ? "→" : " "} **${m.emoji} ${m.name}** (\`${m.id}\`)\n   ${m.description}\n   tools: ${m.relevantTools.join(", ")}`,
+          );
+          return makeResult(`**Focus Modes** (current: ${cur})\n\n${lines.join("\n\n")}`, {
+            current: cur,
+          });
+        },
+      }),
+      { names: ["focus_modes_list"] },
+    );
+
+    api.logger.info?.("greench-focus: registered", {
+      modes: FOCUS_MODES.map((m) => m.id).join(", "),
     });
-
-    api.logger.info?.("greench-focus: registered", { mode: getCurrentMode() });
   },
   tools: {
     focus_mode: {
-      description: "Get or set the current focus mode.",
+      description: "Set focus mode.",
       inputSchema: {
         type: "object",
         properties: {
           mode: {
             type: "string",
-            enum: ["copilot", "academic", "writing", "coding", "agent"],
+            enum: ["copilot", "academic", "writing", "coding", "agent", "off"],
           },
         },
+        required: ["mode"],
       },
     },
     focus_modes_list: {
-      description: "List all focus modes.",
+      description: "List modes.",
       inputSchema: { type: "object", properties: {} },
     },
   },

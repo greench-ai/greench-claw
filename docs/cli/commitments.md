@@ -1,10 +1,10 @@
 ---
-summary: "CLI reference for `NexisClaw commitments` (inspect and dismiss inferred follow-ups)"
+summary: "CLI reference for `GreenchClaw commitments` (inspect and dismiss inferred follow-ups)"
 read_when:
   - You want to inspect inferred follow-up commitments
   - You want to dismiss pending check-ins
   - You are auditing what heartbeat may deliver
-title: "`NexisClaw commitments`"
+title: "`GreenchClaw commitments`"
 ---
 
 List and manage inferred follow-up commitments.
@@ -13,14 +13,14 @@ Commitments are opt-in, short-lived follow-up memories created from
 conversation context. See [Inferred commitments](/concepts/commitments) for the
 conceptual guide.
 
-With no subcommand, `NexisClaw commitments` lists pending commitments.
+With no subcommand, `GreenchClaw commitments` lists pending commitments.
 
 ## Usage
 
 ```bash
-NexisClaw commitments [--all] [--agent <id>] [--status <status>] [--json]
-NexisClaw commitments list [--all] [--agent <id>] [--status <status>] [--json]
-NexisClaw commitments dismiss <id...> [--json]
+GreenchClaw commitments [--all] [--agent <id>] [--status <status>] [--json]
+GreenchClaw commitments list [--all] [--agent <id>] [--status <status>] [--json]
+GreenchClaw commitments dismiss <id...> [--json]
 ```
 
 ## Options
@@ -36,37 +36,37 @@ NexisClaw commitments dismiss <id...> [--json]
 List pending commitments:
 
 ```bash
-NexisClaw commitments
+GreenchClaw commitments
 ```
 
 List every stored commitment:
 
 ```bash
-NexisClaw commitments --all
+GreenchClaw commitments --all
 ```
 
 Filter to one agent:
 
 ```bash
-NexisClaw commitments --agent main
+GreenchClaw commitments --agent main
 ```
 
 Find snoozed commitments:
 
 ```bash
-NexisClaw commitments --status snoozed
+GreenchClaw commitments --status snoozed
 ```
 
 Dismiss one or more commitments:
 
 ```bash
-NexisClaw commitments dismiss cm_abc123 cm_def456
+GreenchClaw commitments dismiss cm_abc123 cm_def456
 ```
 
 Export as JSON:
 
 ```bash
-NexisClaw commitments --all --json
+GreenchClaw commitments --all --json
 ```
 
 ## Output

@@ -1,43 +1,43 @@
-import { describeWebhookAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
-import { formatAllowFromLowercase } from "NexisClaw/plugin-sdk/allow-from";
+import { describeWebhookAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
+import { formatAllowFromLowercase } from "GreenchClaw/plugin-sdk/allow-from";
 import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
   createScopedDmSecurityResolver,
   mapAllowFromEntries,
-} from "NexisClaw/plugin-sdk/channel-config-helpers";
-import type { ChannelAccountSnapshot } from "NexisClaw/plugin-sdk/channel-contract";
+} from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import type { ChannelAccountSnapshot } from "GreenchClaw/plugin-sdk/channel-contract";
 import {
   buildChannelConfigSchema,
   createChatChannelPlugin,
   type ChannelPlugin,
-} from "NexisClaw/plugin-sdk/channel-core";
-import { defineChannelMessageAdapter } from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-core";
+import { defineChannelMessageAdapter } from "GreenchClaw/plugin-sdk/channel-message";
 import {
   buildOpenGroupPolicyRestrictSendersWarning,
   buildOpenGroupPolicyWarning,
   createOpenProviderGroupPolicyWarningCollector,
-} from "NexisClaw/plugin-sdk/channel-policy";
+} from "GreenchClaw/plugin-sdk/channel-policy";
 import {
   createEmptyChannelResult,
   createRawChannelSendResultAdapter,
-} from "NexisClaw/plugin-sdk/channel-send-result";
-import { buildTokenChannelStatusSummary } from "NexisClaw/plugin-sdk/channel-status";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { createStaticReplyToModeResolver } from "NexisClaw/plugin-sdk/conversation-runtime";
-import { createChannelDirectoryAdapter } from "NexisClaw/plugin-sdk/directory-runtime";
-import { listResolvedDirectoryUserEntriesFromAllowFrom } from "NexisClaw/plugin-sdk/directory-runtime";
-import { createLazyRuntimeModule } from "NexisClaw/plugin-sdk/lazy-runtime";
+} from "GreenchClaw/plugin-sdk/channel-send-result";
+import { buildTokenChannelStatusSummary } from "GreenchClaw/plugin-sdk/channel-status";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { createStaticReplyToModeResolver } from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { createChannelDirectoryAdapter } from "GreenchClaw/plugin-sdk/directory-runtime";
+import { listResolvedDirectoryUserEntriesFromAllowFrom } from "GreenchClaw/plugin-sdk/directory-runtime";
+import { createLazyRuntimeModule } from "GreenchClaw/plugin-sdk/lazy-runtime";
 import {
   isNumericTargetId,
   sendPayloadWithChunkedTextAndMedia,
-} from "NexisClaw/plugin-sdk/reply-payload";
+} from "GreenchClaw/plugin-sdk/reply-payload";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
-import { chunkTextForOutbound } from "NexisClaw/plugin-sdk/text-chunking";
+} from "GreenchClaw/plugin-sdk/status-helpers";
+import { chunkTextForOutbound } from "GreenchClaw/plugin-sdk/text-chunking";
 import {
   listZaloAccountIds,
   resolveDefaultZaloAccountId,
@@ -154,7 +154,7 @@ const resolveZaloDmPolicy = createScopedDmSecurityResolver<ResolvedZaloAccount>(
 });
 
 const collectZaloSecurityWarnings = createOpenProviderGroupPolicyWarningCollector<{
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   account: ResolvedZaloAccount;
 }>({
   providerConfigPresent: (cfg) => cfg.channels?.zalo !== undefined,

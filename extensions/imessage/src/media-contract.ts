@@ -1,11 +1,11 @@
-import { mergeInboundPathRoots } from "NexisClaw/plugin-sdk/channel-inbound-roots";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { mergeInboundPathRoots } from "GreenchClaw/plugin-sdk/channel-inbound-roots";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { resolveIMessageAccount } from "./accounts.js";
 
 export const DEFAULT_IMESSAGE_ATTACHMENT_ROOTS = ["/Users/*/Library/Messages/Attachments"] as const;
 
 export function resolveIMessageAttachmentRoots(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): string[] {
   const account = resolveIMessageAccount(params);
@@ -17,7 +17,7 @@ export function resolveIMessageAttachmentRoots(params: {
 }
 
 export function resolveIMessageRemoteAttachmentRoots(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): string[] {
   const account = resolveIMessageAccount(params);

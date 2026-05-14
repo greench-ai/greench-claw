@@ -1,7 +1,7 @@
 import { ServerResponse, type IncomingMessage } from "node:http";
 import { PassThrough } from "node:stream";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/core";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/core";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ResolvedMattermostAccount } from "./accounts.js";
 
@@ -234,7 +234,7 @@ describe("slash-http cfg threading", () => {
           botToken: "exec:secret-ref",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const handler = createSlashCommandHttpHandler({
       account: accountFixture,
       cfg,
@@ -288,7 +288,7 @@ describe("slash-http cfg threading", () => {
 
     const handler = createSlashCommandHttpHandler({
       account: accountFixture,
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       runtime: {} as RuntimeEnv,
       registeredCommands: [
         {
@@ -323,7 +323,7 @@ describe("slash-http cfg threading", () => {
     });
     const handler = createSlashCommandHttpHandler({
       account: accountFixture,
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       runtime: {} as RuntimeEnv,
       registeredCommands: [
         {
@@ -368,7 +368,7 @@ describe("slash-http cfg threading", () => {
 
     const handler = createSlashCommandHttpHandler({
       account: accountFixture,
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       runtime: {} as RuntimeEnv,
       registeredCommands: [
         {

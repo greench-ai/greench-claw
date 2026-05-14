@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   __testing,
@@ -13,7 +13,7 @@ describe("buildMistralRealtimeTranscriptionProvider", () => {
   it("normalizes nested provider config", () => {
     const provider = buildMistralRealtimeTranscriptionProvider();
     const resolved = provider.resolveConfig?.({
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       rawConfig: {
         providers: {
           mistral: {

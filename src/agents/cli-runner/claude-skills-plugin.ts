@@ -1,12 +1,12 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { resolvePreferredNexisClawTmpDir } from "../../infra/tmp-NexisClaw-dir.js";
+import { resolvePreferredGreenchClawTmpDir } from "../../infra/tmp-GreenchClaw-dir.js";
 import { normalizeLowercaseStringOrEmpty } from "../../shared/string-coerce.js";
 import type { SkillSnapshot } from "../skills.js";
 import { cliBackendLog } from "./log.js";
 
 const CLAUDE_CLI_BACKEND_ID = "claude-cli";
-const NEXISCLAW_CLAUDE_PLUGIN_NAME = "NexisClaw-skills";
+const GREENCHCLAW_CLAUDE_PLUGIN_NAME = "GreenchClaw-skills";
 
 type MaterializedSkill = {
   name: string;
@@ -89,18 +89,18 @@ export async function prepareClaudeCliSkillsPlugin(params: {
   }
 
   const tempDir = await fs.mkdtemp(
-    path.join(resolvePreferredNexisClawTmpDir(), "NexisClaw-claude-skills-"),
+    path.join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-claude-skills-"),
   );
-  const pluginDir = path.join(tempDir, NEXISCLAW_CLAUDE_PLUGIN_NAME);
+  const pluginDir = path.join(tempDir, GREENCHCLAW_CLAUDE_PLUGIN_NAME);
   const manifestDir = path.join(pluginDir, ".claude-plugin");
   const skillsDir = path.join(pluginDir, "skills");
   await fs.mkdir(manifestDir, { recursive: true, mode: 0o700 });
   await fs.mkdir(skillsDir, { recursive: true, mode: 0o700 });
 
   const manifest = {
-    name: NEXISCLAW_CLAUDE_PLUGIN_NAME,
+    name: GREENCHCLAW_CLAUDE_PLUGIN_NAME,
     version: "0.0.0",
-    description: "Session-scoped NexisClaw skills selected for this agent run.",
+    description: "Session-scoped GreenchClaw skills selected for this agent run.",
     skills: "./skills",
   };
   await fs.writeFile(

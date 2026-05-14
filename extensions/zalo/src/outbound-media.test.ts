@@ -1,11 +1,11 @@
 import { stat } from "node:fs/promises";
 import { join } from "node:path";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const loadOutboundMediaFromUrlMock = vi.fn();
 
-vi.mock("NexisClaw/plugin-sdk/outbound-media", () => ({
+vi.mock("GreenchClaw/plugin-sdk/outbound-media", () => ({
   loadOutboundMediaFromUrl: (...args: unknown[]) => loadOutboundMediaFromUrlMock(...args),
 }));
 
@@ -41,7 +41,7 @@ describe("zalo outbound hosted media", () => {
     });
   });
 
-  it("loads outbound media under NexisClaw control and returns a hosted URL", async () => {
+  it("loads outbound media under GreenchClaw control and returns a hosted URL", async () => {
     const hostedUrl = await prepareHostedZaloMediaUrl({
       mediaUrl: "https://example.com/photo.png",
       webhookUrl: "https://gateway.example.com/zalo-webhook",
@@ -90,7 +90,7 @@ describe("zalo outbound hosted media", () => {
     expect(id).toHaveLength(24);
     expect(/^[0-9a-f]+$/.test(id)).toBe(true);
 
-    const storageDir = join(resolvePreferredNexisClawTmpDir(), "NexisClaw-zalo-outbound-media");
+    const storageDir = join(resolvePreferredGreenchClawTmpDir(), "GreenchClaw-zalo-outbound-media");
     const [dirStats, metadataStats, bufferStats] = await Promise.all([
       stat(storageDir),
       stat(join(storageDir, `${id}.json`)),

@@ -26,6 +26,6 @@ export {
   getFeishuThreadBindingManager,
 } from "./src/thread-bindings.js";
 export { __testing as feishuThreadBindingTesting } from "./src/thread-bindings.js";
-export { createClackPrompter } from "NexisClaw/plugin-sdk/setup-runtime";
+export { createClackPrompter } from "GreenchClaw/plugin-sdk/setup-runtime";
 
 export const feishuSessionBindingAdapterChannels = ["feishu"] as const;

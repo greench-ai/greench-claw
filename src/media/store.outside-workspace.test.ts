@@ -48,7 +48,7 @@ describe("media store outside-workspace mapping", () => {
 
   beforeAll(async () => {
     ({ SaveMediaSourceError, saveMediaSource } = await import("./store.js"));
-    tempHome = await createTempHomeEnv("NexisClaw-media-store-test-home-");
+    tempHome = await createTempHomeEnv("GreenchClaw-media-store-test-home-");
     home = tempHome.home;
   });
 

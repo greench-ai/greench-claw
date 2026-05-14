@@ -4,7 +4,7 @@ import { planCrestodianCommandWithConfiguredModel } from "./assistant.js";
 describe("Crestodian configured-model planner", () => {
   it("skips the configured model path when no config file exists", async () => {
     const readConfigFileSnapshot = vi.fn(async () => ({
-      path: "/tmp/NexisClaw.json",
+      path: "/tmp/GreenchClaw.json",
       exists: false,
       raw: null,
       parsed: {},
@@ -24,7 +24,7 @@ describe("Crestodian configured-model planner", () => {
         input: "please set up my model",
         overview: {
           config: {
-            path: "/tmp/NexisClaw.json",
+            path: "/tmp/GreenchClaw.json",
             exists: false,
             valid: true,
             issues: [],
@@ -43,8 +43,8 @@ describe("Crestodian configured-model planner", () => {
             reachable: false,
           },
           references: {
-            docsUrl: "https://docs.NexisClaw.ai",
-            sourceUrl: "https://github.com/NexisClaw/NexisClaw",
+            docsUrl: "https://docs.GreenchClaw.ai",
+            sourceUrl: "https://github.com/GreenchClaw/GreenchClaw",
           },
         },
         deps: {

@@ -18,7 +18,7 @@ Broadcast Groups enable multiple agents to process and respond to the same messa
 
 Current scope: **WhatsApp only** (web channel).
 
-Broadcast groups are evaluated after channel allowlists and group activation rules. In WhatsApp groups, this means broadcasts happen when NexisClaw would normally reply (for example: on mention, depending on your group settings).
+Broadcast groups are evaluated after channel allowlists and group activation rules. In WhatsApp groups, this means broadcasts happen when GreenchClaw would normally reply (for example: on mention, depending on your group settings).
 
 ## Use cases
 
@@ -83,7 +83,7 @@ Add a top-level `broadcast` section (next to `bindings`). Keys are WhatsApp peer
 }
 ```
 
-**Result:** When NexisClaw would reply in this chat, it will run all three agents.
+**Result:** When GreenchClaw would reply in this chat, it will run all three agents.
 
 ### Processing strategy
 
@@ -206,7 +206,7 @@ In group `120363403215116621@g.us` with agents `["alfred", "baerbel"]`:
     ```
     Session: agent:alfred:whatsapp:group:120363403215116621@g.us
     History: [user message, alfred's previous responses]
-    Workspace: /Users/user/NexisClaw-alfred/
+    Workspace: /Users/user/GreenchClaw-alfred/
     Tools: read, write, exec
     ```
   </Tab>
@@ -214,7 +214,7 @@ In group `120363403215116621@g.us` with agents `["alfred", "baerbel"]`:
     ```
     Session: agent:baerbel:whatsapp:group:120363403215116621@g.us
     History: [user message, baerbel's previous responses]
-    Workspace: /Users/user/NexisClaw-baerbel/
+    Workspace: /Users/user/GreenchClaw-baerbel/
     Tools: read only
     ```
   </Tab>
@@ -338,7 +338,7 @@ Broadcast groups work alongside existing routing:
     **Debug:**
 
     ```bash
-    tail -f ~/.NexisClaw/logs/gateway.log | grep broadcast
+    tail -f ~/.GreenchClaw/logs/gateway.log | grep broadcast
     ```
 
   </Accordion>
@@ -430,7 +430,7 @@ Broadcast groups work alongside existing routing:
 ### Config schema
 
 ```typescript
-interface NexisClawConfig {
+interface GreenchClawConfig {
   broadcast?: {
     strategy?: "parallel" | "sequential";
     [peerId: string]: string[];

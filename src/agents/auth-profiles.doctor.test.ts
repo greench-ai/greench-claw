@@ -14,7 +14,7 @@ describe("formatAuthDoctorHint", () => {
       provider: "qwen-portal",
     });
 
-    expect(hint).toContain("NexisClaw onboard --auth-choice qwen-api-key");
+    expect(hint).toContain("GreenchClaw onboard --auth-choice qwen-api-key");
     expect(hint).toContain("qwen-api-key-cn");
     expect(hint).not.toContain("--provider qwen");
   });

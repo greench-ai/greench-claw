@@ -1,7 +1,7 @@
 import {
   isMissingEmbeddingApiKeyError,
   type MemoryEmbeddingProviderAdapter,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
 import {
   createBedrockEmbeddingProvider,
   DEFAULT_BEDROCK_EMBEDDING_MODEL,

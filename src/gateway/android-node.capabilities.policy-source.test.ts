@@ -25,9 +25,9 @@ describe("shouldFetchRemotePolicyConfig", () => {
   });
 
   it("returns true for env and cli overrides", () => {
-    expect(shouldFetchRemotePolicyConfig(details({ urlSource: "env NEXISCLAW_GATEWAY_URL" }))).toBe(
-      true,
-    );
+    expect(
+      shouldFetchRemotePolicyConfig(details({ urlSource: "env GREENCHCLAW_GATEWAY_URL" })),
+    ).toBe(true);
     expect(shouldFetchRemotePolicyConfig(details({ urlSource: "cli --url" }))).toBe(true);
   });
 

@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -65,7 +65,7 @@ describe("memory-wiki cli metadata entry", () => {
     await register({
       program,
       config: appConfig,
-      workspaceDir: "/tmp/NexisClaw",
+      workspaceDir: "/tmp/GreenchClaw",
       logger: api.logger,
     });
 

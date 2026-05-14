@@ -1,12 +1,12 @@
 import {
   parseAgentSessionKey,
   type MemoryCitationsMode,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-runtime-core";
-import type { MemorySearchResult } from "NexisClaw/plugin-sdk/memory-core-host-runtime-files";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/memory-core-host-runtime-core";
+import type { MemorySearchResult } from "GreenchClaw/plugin-sdk/memory-core-host-runtime-files";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
-export function resolveMemoryCitationsMode(cfg: NexisClawConfig): MemoryCitationsMode {
+export function resolveMemoryCitationsMode(cfg: GreenchClawConfig): MemoryCitationsMode {
   const mode = cfg.memory?.citations;
   if (mode === "on" || mode === "off" || mode === "auto") {
     return mode;

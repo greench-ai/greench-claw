@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { withNexisClawTestState } from "../test-utils/NexisClaw-test-state.js";
+import { withGreenchClawTestState } from "../test-utils/GreenchClaw-test-state.js";
 import { createRunningTaskRun } from "./task-executor.js";
 import {
   createFlowRecord,
@@ -19,15 +19,15 @@ import {
   resetTaskRegistryForTests,
 } from "./task-registry.js";
 
-const ORIGINAL_STATE_DIR = process.env.NEXISCLAW_STATE_DIR;
+const ORIGINAL_STATE_DIR = process.env.GREENCHCLAW_STATE_DIR;
 
 async function withTaskFlowMaintenanceStateDir(
   run: (root: string) => Promise<void>,
 ): Promise<void> {
-  await withNexisClawTestState(
+  await withGreenchClawTestState(
     {
       layout: "state-only",
-      prefix: "NexisClaw-task-flow-maintenance-",
+      prefix: "GreenchClaw-task-flow-maintenance-",
     },
     async (state) => {
       resetTaskRegistryDeliveryRuntimeForTests();
@@ -47,9 +47,9 @@ async function withTaskFlowMaintenanceStateDir(
 describe("task-flow-registry maintenance", () => {
   afterEach(() => {
     if (ORIGINAL_STATE_DIR === undefined) {
-      delete process.env.NEXISCLAW_STATE_DIR;
+      delete process.env.GREENCHCLAW_STATE_DIR;
     } else {
-      process.env.NEXISCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
+      process.env.GREENCHCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
     }
     resetTaskRegistryDeliveryRuntimeForTests();
     resetTaskRegistryForTests();

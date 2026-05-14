@@ -92,7 +92,7 @@ type ReplyRunState = {
   waitersByKey: Map<string, Set<ReplyRunWaiter>>;
 };
 
-const REPLY_RUN_STATE_KEY = Symbol.for("NexisClaw.replyRunRegistry");
+const REPLY_RUN_STATE_KEY = Symbol.for("GreenchClaw.replyRunRegistry");
 
 const replyRunState = resolveGlobalSingleton<ReplyRunState>(REPLY_RUN_STATE_KEY, () => ({
   activeRunsByKey: new Map<string, ReplyOperation>(),

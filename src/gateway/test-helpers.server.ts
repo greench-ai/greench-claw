@@ -64,20 +64,20 @@ async function getServerModule() {
 const GATEWAY_TEST_ENV_KEYS = [
   "HOME",
   "USERPROFILE",
-  "NEXISCLAW_STATE_DIR",
-  "NEXISCLAW_CONFIG_PATH",
-  "NEXISCLAW_AGENT_DIR",
+  "GREENCHCLAW_STATE_DIR",
+  "GREENCHCLAW_CONFIG_PATH",
+  "GREENCHCLAW_AGENT_DIR",
   "PI_CODING_AGENT_DIR",
-  "NEXISCLAW_GATEWAY_TOKEN",
-  "NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER",
-  "NEXISCLAW_SKIP_GMAIL_WATCHER",
-  "NEXISCLAW_SKIP_CANVAS_HOST",
-  "NEXISCLAW_BUNDLED_PLUGINS_DIR",
-  "NEXISCLAW_DISABLE_BUNDLED_PLUGINS",
-  "NEXISCLAW_SKIP_CHANNELS",
-  "NEXISCLAW_SKIP_PROVIDERS",
-  "NEXISCLAW_SKIP_CRON",
-  "NEXISCLAW_TEST_MINIMAL_GATEWAY",
+  "GREENCHCLAW_GATEWAY_TOKEN",
+  "GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER",
+  "GREENCHCLAW_SKIP_GMAIL_WATCHER",
+  "GREENCHCLAW_SKIP_CANVAS_HOST",
+  "GREENCHCLAW_BUNDLED_PLUGINS_DIR",
+  "GREENCHCLAW_DISABLE_BUNDLED_PLUGINS",
+  "GREENCHCLAW_SKIP_CHANNELS",
+  "GREENCHCLAW_SKIP_PROVIDERS",
+  "GREENCHCLAW_SKIP_CRON",
+  "GREENCHCLAW_TEST_MINIMAL_GATEWAY",
 ] as const;
 
 let gatewayEnvSnapshot: ReturnType<typeof captureEnv> | undefined;
@@ -124,11 +124,11 @@ function hasUnsyncedGatewayTestSessionConfig(): boolean {
 
 async function persistTestSessionConfig(): Promise<void> {
   const configPaths = new Set<string>();
-  if (process.env.NEXISCLAW_CONFIG_PATH) {
-    configPaths.add(process.env.NEXISCLAW_CONFIG_PATH);
+  if (process.env.GREENCHCLAW_CONFIG_PATH) {
+    configPaths.add(process.env.GREENCHCLAW_CONFIG_PATH);
   }
-  if (process.env.NEXISCLAW_STATE_DIR) {
-    configPaths.add(path.join(process.env.NEXISCLAW_STATE_DIR, "NexisClaw.json"));
+  if (process.env.GREENCHCLAW_STATE_DIR) {
+    configPaths.add(path.join(process.env.GREENCHCLAW_STATE_DIR, "GreenchClaw.json"));
   }
   const parsedConfigs = new Map<string, Record<string, unknown>>();
   let preservedTemplateStore: string | undefined;
@@ -224,27 +224,27 @@ export async function writeSessionStore(params: {
 
 async function setupGatewayTestHome() {
   gatewayEnvSnapshot = captureEnv([...GATEWAY_TEST_ENV_KEYS]);
-  tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-gateway-home-"));
+  tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-gateway-home-"));
   process.env.HOME = tempHome;
   process.env.USERPROFILE = tempHome;
-  process.env.NEXISCLAW_STATE_DIR = path.join(tempHome, ".NexisClaw");
-  delete process.env.NEXISCLAW_CONFIG_PATH;
-  delete process.env.NEXISCLAW_AGENT_DIR;
+  process.env.GREENCHCLAW_STATE_DIR = path.join(tempHome, ".GreenchClaw");
+  delete process.env.GREENCHCLAW_CONFIG_PATH;
+  delete process.env.GREENCHCLAW_AGENT_DIR;
   delete process.env.PI_CODING_AGENT_DIR;
 }
 
 function applyGatewaySkipEnv() {
-  process.env.NEXISCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
-  process.env.NEXISCLAW_SKIP_GMAIL_WATCHER = "1";
-  process.env.NEXISCLAW_SKIP_CANVAS_HOST = "1";
-  process.env.NEXISCLAW_SKIP_CHANNELS = "1";
-  process.env.NEXISCLAW_SKIP_PROVIDERS = "1";
-  process.env.NEXISCLAW_SKIP_CRON = "1";
-  process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY = "1";
-  process.env.NEXISCLAW_DISABLE_BUNDLED_PLUGINS = "1";
-  process.env.NEXISCLAW_BUNDLED_PLUGINS_DIR = tempHome
-    ? path.join(tempHome, "NexisClaw-test-no-bundled-extensions")
-    : "NexisClaw-test-no-bundled-extensions";
+  process.env.GREENCHCLAW_SKIP_BROWSER_CONTROL_SERVER = "1";
+  process.env.GREENCHCLAW_SKIP_GMAIL_WATCHER = "1";
+  process.env.GREENCHCLAW_SKIP_CANVAS_HOST = "1";
+  process.env.GREENCHCLAW_SKIP_CHANNELS = "1";
+  process.env.GREENCHCLAW_SKIP_PROVIDERS = "1";
+  process.env.GREENCHCLAW_SKIP_CRON = "1";
+  process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY = "1";
+  process.env.GREENCHCLAW_DISABLE_BUNDLED_PLUGINS = "1";
+  process.env.GREENCHCLAW_BUNDLED_PLUGINS_DIR = tempHome
+    ? path.join(tempHome, "GreenchClaw-test-no-bundled-extensions")
+    : "GreenchClaw-test-no-bundled-extensions";
 }
 
 async function resetGatewayTestState(options: { uniqueConfigRoot: boolean }) {
@@ -255,10 +255,10 @@ async function resetGatewayTestState(options: { uniqueConfigRoot: boolean }) {
     throw new Error("resetGatewayTestState called before temp home was initialized");
   }
   applyGatewaySkipEnv();
-  delete process.env.NEXISCLAW_GATEWAY_TOKEN;
+  delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
   resetTaskRegistryForTests({ persist: false });
   resetTaskFlowRegistryForTests({ persist: false });
-  const stateDir = process.env.NEXISCLAW_STATE_DIR;
+  const stateDir = process.env.GREENCHCLAW_STATE_DIR;
   if (stateDir) {
     await fs.rm(stateDir, {
       recursive: true,
@@ -269,7 +269,7 @@ async function resetGatewayTestState(options: { uniqueConfigRoot: boolean }) {
     await fs.mkdir(stateDir, { recursive: true });
   }
   if (options.uniqueConfigRoot) {
-    const suiteRoot = path.join(tempHome, ".NexisClaw-test-suite");
+    const suiteRoot = path.join(tempHome, ".GreenchClaw-test-suite");
     await fs.mkdir(suiteRoot, { recursive: true });
     tempConfigRoot = path.join(suiteRoot, `case-${suiteConfigRootSeq++}`);
     await fs.rm(tempConfigRoot, {
@@ -280,7 +280,7 @@ async function resetGatewayTestState(options: { uniqueConfigRoot: boolean }) {
     });
     await fs.mkdir(tempConfigRoot, { recursive: true });
   } else {
-    tempConfigRoot = path.join(tempHome, ".NexisClaw-test");
+    tempConfigRoot = path.join(tempHome, ".GreenchClaw-test");
     await fs.rm(tempConfigRoot, {
       recursive: true,
       force: true,
@@ -290,7 +290,7 @@ async function resetGatewayTestState(options: { uniqueConfigRoot: boolean }) {
     await fs.mkdir(tempConfigRoot, { recursive: true });
   }
   setTestConfigRoot(tempConfigRoot);
-  tempControlUiRoot = path.join(tempHome, ".NexisClaw-test-control-ui");
+  tempControlUiRoot = path.join(tempHome, ".GreenchClaw-test-control-ui");
   await fs.rm(tempControlUiRoot, {
     recursive: true,
     force: true,
@@ -300,7 +300,7 @@ async function resetGatewayTestState(options: { uniqueConfigRoot: boolean }) {
   await fs.mkdir(tempControlUiRoot, { recursive: true });
   await fs.writeFile(
     path.join(tempControlUiRoot, "index.html"),
-    "<!doctype html><title>NexisClaw-test-control-ui</title>\n",
+    "<!doctype html><title>GreenchClaw-test-control-ui</title>\n",
     "utf-8",
   );
   setTestConfigRoot(tempConfigRoot);
@@ -394,7 +394,7 @@ async function resetGatewayTestRuntimeOnly() {
   vi.useRealTimers();
   setLoggerOverride({ level: "silent", consoleLevel: "silent" });
   applyGatewaySkipEnv();
-  delete process.env.NEXISCLAW_GATEWAY_TOKEN;
+  delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
   resetConfigRuntimeState();
   resetTestPluginRegistry();
   clearGatewaySubagentRuntime();
@@ -510,8 +510,8 @@ type GatewayTestMessage = {
   [key: string]: unknown;
 };
 
-const CONNECT_CHALLENGE_NONCE_KEY = "__NexisClawTestConnectChallengeNonce";
-const CONNECT_CHALLENGE_TRACKED_KEY = "__NexisClawTestConnectChallengeTracked";
+const CONNECT_CHALLENGE_NONCE_KEY = "__GreenchClawTestConnectChallengeNonce";
+const CONNECT_CHALLENGE_TRACKED_KEY = "__GreenchClawTestConnectChallengeTracked";
 type TrackedWs = WebSocket & Record<string, unknown>;
 
 export function getTrackedConnectChallengeNonce(ws: WebSocket): string | undefined {
@@ -587,7 +587,7 @@ export async function startGatewayServer(port: number, opts?: GatewayServerOptio
     opts?.controlUiEnabled === undefined ? { ...opts, controlUiEnabled: false } : opts;
   if (
     resolvedOpts?.controlUiEnabled === true &&
-    process.env.NEXISCLAW_TEST_MINIMAL_GATEWAY === "1" &&
+    process.env.GREENCHCLAW_TEST_MINIMAL_GATEWAY === "1" &&
     tempControlUiRoot &&
     typeof (testState.gatewayControlUi as { root?: unknown } | undefined)?.root !== "string"
   ) {
@@ -720,8 +720,8 @@ export async function createGatewaySuiteHarness(opts?: {
 
 export async function startServer(token?: string, opts?: GatewayServerOptions) {
   let port = await getFreePort();
-  const envSnapshot = captureEnv(["NEXISCLAW_GATEWAY_TOKEN"]);
-  const prev = process.env.NEXISCLAW_GATEWAY_TOKEN;
+  const envSnapshot = captureEnv(["GREENCHCLAW_GATEWAY_TOKEN"]);
+  const prev = process.env.GREENCHCLAW_GATEWAY_TOKEN;
   if (typeof token === "string") {
     testState.gatewayAuth = { mode: "token", token };
   }
@@ -731,9 +731,9 @@ export async function startServer(token?: string, opts?: GatewayServerOptions) {
       ? (testState.gatewayAuth as { token?: string }).token
       : undefined);
   if (fallbackToken === undefined) {
-    delete process.env.NEXISCLAW_GATEWAY_TOKEN;
+    delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
   } else {
-    process.env.NEXISCLAW_GATEWAY_TOKEN = fallbackToken;
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = fallbackToken;
   }
 
   const resolvedGatewayOpts: GatewayServerOptions =
@@ -792,7 +792,7 @@ function resolveDefaultTestDeviceIdentityPath(params: {
       "_",
     ),
   );
-  const suiteRoot = process.env.NEXISCLAW_STATE_DIR ?? process.env.HOME ?? os.tmpdir();
+  const suiteRoot = process.env.GREENCHCLAW_STATE_DIR ?? process.env.HOME ?? os.tmpdir();
   return path.join(suiteRoot, "test-device-identities", `${safe}.json`);
 }
 
@@ -889,13 +889,13 @@ export async function connectReq(
       ? undefined
       : typeof (testState.gatewayAuth as { token?: unknown } | undefined)?.token === "string"
         ? ((testState.gatewayAuth as { token?: string }).token ?? undefined)
-        : process.env.NEXISCLAW_GATEWAY_TOKEN;
+        : process.env.GREENCHCLAW_GATEWAY_TOKEN;
   const defaultPassword =
     opts?.skipDefaultAuth === true
       ? undefined
       : typeof (testState.gatewayAuth as { password?: unknown } | undefined)?.password === "string"
         ? ((testState.gatewayAuth as { password?: string }).password ?? undefined)
-        : process.env.NEXISCLAW_GATEWAY_PASSWORD;
+        : process.env.GREENCHCLAW_GATEWAY_PASSWORD;
   const token = opts?.token ?? defaultToken;
   const bootstrapToken = normalizeOptionalString(opts?.bootstrapToken);
   const deviceToken = normalizeOptionalString(opts?.deviceToken);

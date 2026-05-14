@@ -1,12 +1,12 @@
 import {
   channelIngressRoutes,
   resolveStableChannelMessageIngress,
-} from "NexisClaw/plugin-sdk/channel-ingress-runtime";
-import { resolveInboundRouteEnvelopeBuilderWithRuntime } from "NexisClaw/plugin-sdk/inbound-envelope";
+} from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
+import { resolveInboundRouteEnvelopeBuilderWithRuntime } from "GreenchClaw/plugin-sdk/inbound-envelope";
 import {
   normalizeOptionalString,
   normalizeStringEntries,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   GROUP_POLICY_BLOCKED_LABEL,
   resolveAllowlistProviderRuntimeGroupPolicy,
@@ -16,7 +16,7 @@ import {
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
   type GroupPolicy,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   type OutboundReplyPayload,
   type RuntimeEnv,
 } from "../runtime-api.js";
@@ -150,10 +150,13 @@ export async function handleNextcloudTalkInbound(params: {
   });
   const roomConfig = roomMatch.roomConfig;
   const allowTextCommands = core.channel.commands.shouldHandleTextCommands({
-    cfg: config as NexisClawConfig,
+    cfg: config as GreenchClawConfig,
     surface: CHANNEL_ID,
   });
-  const hasControlCommand = core.channel.text.hasControlCommand(rawBody, config as NexisClawConfig);
+  const hasControlCommand = core.channel.text.hasControlCommand(
+    rawBody,
+    config as GreenchClawConfig,
+  );
   const shouldRequireMention = isGroup
     ? resolveNextcloudTalkRequireMention({
         roomConfig,
@@ -166,7 +169,7 @@ export async function handleNextcloudTalkInbound(params: {
         ((config.channels as Record<string, unknown> | undefined)?.[CHANNEL_ID] ?? undefined) !==
         undefined,
       groupPolicy: account.config.groupPolicy,
-      defaultGroupPolicy: resolveDefaultGroupPolicy(config as NexisClawConfig),
+      defaultGroupPolicy: resolveDefaultGroupPolicy(config as GreenchClawConfig),
     });
   const allowFrom = normalizeStringEntries(account.config.allowFrom);
   const outerGroupAllowFrom = account.config.groupAllowFrom?.length
@@ -183,7 +186,7 @@ export async function handleNextcloudTalkInbound(params: {
         sensitivity: "pii",
         entryIdPrefix: "nextcloud-talk-entry",
       },
-      cfg: config as NexisClawConfig,
+      cfg: config as GreenchClawConfig,
       readStoreAllowFrom: async () =>
         await pairing.readStoreForDmPolicy(CHANNEL_ID, account.accountId),
       subject: { stableId: senderId },
@@ -289,7 +292,7 @@ export async function handleNextcloudTalkInbound(params: {
     return;
   }
 
-  const mentionRegexes = core.channel.mentions.buildMentionRegexes(config as NexisClawConfig);
+  const mentionRegexes = core.channel.mentions.buildMentionRegexes(config as GreenchClawConfig);
   const wasMentioned = mentionRegexes.length
     ? core.channel.mentions.matchesMentionPatterns(rawBody, mentionRegexes)
     : false;
@@ -302,7 +305,7 @@ export async function handleNextcloudTalkInbound(params: {
     return;
   }
   const { route, buildEnvelope } = resolveInboundRouteEnvelopeBuilderWithRuntime({
-    cfg: config as NexisClawConfig,
+    cfg: config as GreenchClawConfig,
     channel: CHANNEL_ID,
     accountId: account.accountId,
     peer: {
@@ -351,7 +354,7 @@ export async function handleNextcloudTalkInbound(params: {
   });
 
   await core.channel.turn.runAssembled({
-    cfg: config as NexisClawConfig,
+    cfg: config as GreenchClawConfig,
     channel: CHANNEL_ID,
     accountId: account.accountId,
     agentId: route.agentId,

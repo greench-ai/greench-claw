@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { ensureAuthProfileStore } from "./auth-profiles/store.js";
 import { normalizeConfiguredProviderCatalogModelId } from "./model-ref-shared.js";
 import {
@@ -15,7 +15,7 @@ import {
 } from "./models-config.providers.secret-helpers.js";
 import { enforceSourceManagedProviderSecrets } from "./models-config.providers.source-managed.js";
 
-type ModelsConfig = NonNullable<NexisClawConfig["models"]>;
+type ModelsConfig = NonNullable<GreenchClawConfig["models"]>;
 type ProviderModelConfig = NonNullable<
   NonNullable<ModelsConfig["providers"]>[string]["models"]
 >[number];

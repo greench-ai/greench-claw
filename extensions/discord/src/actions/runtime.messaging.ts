@@ -1,5 +1,5 @@
 import type { AgentToolResult } from "@earendil-works/pi-agent-core";
-import type { ActionGate, DiscordActionConfig, NexisClawConfig } from "../runtime-api.js";
+import type { ActionGate, DiscordActionConfig, GreenchClawConfig } from "../runtime-api.js";
 import { handleDiscordMessageManagementAction } from "./runtime.messaging.messages.js";
 import { handleDiscordReactionMessagingAction } from "./runtime.messaging.reactions.js";
 import { handleDiscordMessageSendAction } from "./runtime.messaging.send.js";
@@ -13,7 +13,7 @@ export async function handleDiscordMessagingAction(
   action: string,
   params: Record<string, unknown>,
   isActionEnabled: ActionGate<DiscordActionConfig>,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   options?: DiscordMessagingActionOptions,
 ): Promise<AgentToolResult<unknown>> {
   if (!cfg) {

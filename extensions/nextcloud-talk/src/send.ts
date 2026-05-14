@@ -1,4 +1,4 @@
-import { createMessageReceiptFromOutboundResults } from "NexisClaw/plugin-sdk/channel-message";
+import { createMessageReceiptFromOutboundResults } from "GreenchClaw/plugin-sdk/channel-message";
 import { stripNextcloudTalkTargetPrefix } from "./normalize.js";
 import {
   convertMarkdownTables,

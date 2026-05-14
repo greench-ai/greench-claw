@@ -1,7 +1,7 @@
-import { createSubsystemLogger, formatDurationSeconds } from "NexisClaw/plugin-sdk/runtime-env";
+import { createSubsystemLogger, formatDurationSeconds } from "GreenchClaw/plugin-sdk/runtime-env";
 
 export type DiscordListenerLogger = ReturnType<
-  typeof import("NexisClaw/plugin-sdk/runtime-env").createSubsystemLogger
+  typeof import("GreenchClaw/plugin-sdk/runtime-env").createSubsystemLogger
 >;
 
 const DISCORD_SLOW_LISTENER_THRESHOLD_MS = 30_000;

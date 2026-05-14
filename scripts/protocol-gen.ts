@@ -14,8 +14,8 @@ async function writeJsonSchema() {
 
   const rootSchema = {
     $schema: "http://json-schema.org/draft-07/schema#",
-    $id: "https://NexisClaw.ai/protocol.schema.json",
-    title: "NexisClaw Gateway Protocol",
+    $id: "https://GreenchClaw.ai/protocol.schema.json",
+    title: "GreenchClaw Gateway Protocol",
     description: "Handshake, request/response, and event frames for the Gateway WebSocket.",
     oneOf: [
       { $ref: "#/definitions/RequestFrame" },

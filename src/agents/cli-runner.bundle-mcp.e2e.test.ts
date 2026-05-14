@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { captureEnv } from "../test-utils/env.js";
 import {
   writeBundleProbeMcpServer,
@@ -89,16 +89,16 @@ describe("runCliAgent bundle MCP e2e", () => {
       const envSnapshot = captureEnv([
         "HOME",
         "USERPROFILE",
-        "NEXISCLAW_HOME",
-        "NEXISCLAW_STATE_DIR",
-        "NEXISCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY",
+        "GREENCHCLAW_HOME",
+        "GREENCHCLAW_STATE_DIR",
+        "GREENCHCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY",
       ]);
-      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-cli-bundle-mcp-"));
+      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-cli-bundle-mcp-"));
       process.env.HOME = tempHome;
       process.env.USERPROFILE = tempHome;
-      delete process.env.NEXISCLAW_HOME;
-      delete process.env.NEXISCLAW_STATE_DIR;
-      process.env.NEXISCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY = "1";
+      delete process.env.GREENCHCLAW_HOME;
+      delete process.env.GREENCHCLAW_STATE_DIR;
+      process.env.GREENCHCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY = "1";
       resetGlobalHookRunner();
 
       const workspaceDir = path.join(tempHome, "workspace");
@@ -106,14 +106,14 @@ describe("runCliAgent bundle MCP e2e", () => {
       const binDir = path.join(tempHome, "bin");
       const serverScriptPath = path.join(tempHome, "mcp", "bundle-probe.mjs");
       const fakeClaudePath = path.join(binDir, "fake-claude.mjs");
-      const pluginRoot = path.join(tempHome, ".NexisClaw", "extensions", "bundle-probe");
+      const pluginRoot = path.join(tempHome, ".GreenchClaw", "extensions", "bundle-probe");
       await fs.mkdir(workspaceDir, { recursive: true });
       await writeBundleProbeMcpServer(serverScriptPath);
       await writeFakeClaudeCli(fakeClaudePath);
       await writeClaudeBundle({ pluginRoot, serverScriptPath });
       installTestClaudeBackend({ commandPath: fakeClaudePath });
 
-      const config: NexisClawConfig = {
+      const config: GreenchClawConfig = {
         agents: {
           defaults: {
             workspace: workspaceDir,
@@ -162,16 +162,16 @@ describe("runCliAgent bundle MCP e2e", () => {
       const envSnapshot = captureEnv([
         "HOME",
         "USERPROFILE",
-        "NEXISCLAW_HOME",
-        "NEXISCLAW_STATE_DIR",
-        "NEXISCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY",
+        "GREENCHCLAW_HOME",
+        "GREENCHCLAW_STATE_DIR",
+        "GREENCHCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY",
       ]);
-      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-cli-live-cleanup-"));
+      const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-cli-live-cleanup-"));
       process.env.HOME = tempHome;
       process.env.USERPROFILE = tempHome;
-      delete process.env.NEXISCLAW_HOME;
-      delete process.env.NEXISCLAW_STATE_DIR;
-      process.env.NEXISCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY = "1";
+      delete process.env.GREENCHCLAW_HOME;
+      delete process.env.GREENCHCLAW_STATE_DIR;
+      process.env.GREENCHCLAW_DISABLE_PERSISTED_PLUGIN_REGISTRY = "1";
       resetGlobalHookRunner();
       await closeMcpLoopbackServer();
 
@@ -181,14 +181,14 @@ describe("runCliAgent bundle MCP e2e", () => {
       const serverScriptPath = path.join(tempHome, "mcp", "bundle-probe.mjs");
       const fakeClaudePath = path.join(binDir, "fake-live-claude.mjs");
       const fakeClaudePidPath = path.join(tempHome, "fake-live-claude.pid");
-      const pluginRoot = path.join(tempHome, ".NexisClaw", "extensions", "bundle-probe");
+      const pluginRoot = path.join(tempHome, ".GreenchClaw", "extensions", "bundle-probe");
       await fs.mkdir(workspaceDir, { recursive: true });
       await writeBundleProbeMcpServer(serverScriptPath);
       await writeFakeClaudeLiveCli({ filePath: fakeClaudePath, pidPath: fakeClaudePidPath });
       await writeClaudeBundle({ pluginRoot, serverScriptPath });
       installTestClaudeBackend({ commandPath: fakeClaudePath, liveSession: "claude-stdio" });
 
-      const config: NexisClawConfig = {
+      const config: GreenchClawConfig = {
         agents: {
           defaults: {
             workspace: workspaceDir,

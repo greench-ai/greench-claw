@@ -1,11 +1,11 @@
 import type {
   ChannelDoctorConfigMutation,
   ChannelDoctorLegacyConfigRule,
-} from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { asObjectRecord } from "NexisClaw/plugin-sdk/runtime-doctor";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { asObjectRecord } from "GreenchClaw/plugin-sdk/runtime-doctor";
 
-type GoogleChatChannelsConfig = NonNullable<NexisClawConfig["channels"]>;
+type GoogleChatChannelsConfig = NonNullable<GreenchClawConfig["channels"]>;
 
 function hasLegacyGoogleChatStreamMode(value: unknown): boolean {
   return asObjectRecord(value)?.streamMode !== undefined;
@@ -105,13 +105,13 @@ export const legacyConfigRules: ChannelDoctorLegacyConfigRule[] = [
   {
     path: ["channels", "googlechat"],
     message:
-      'channels.googlechat.groups.<id>.allow is legacy; use channels.googlechat.groups.<id>.enabled instead. Run "NexisClaw doctor --fix".',
+      'channels.googlechat.groups.<id>.allow is legacy; use channels.googlechat.groups.<id>.enabled instead. Run "GreenchClaw doctor --fix".',
     match: hasLegacyGoogleChatGroupAllowAlias,
   },
   {
     path: ["channels", "googlechat", "accounts"],
     message:
-      'channels.googlechat.accounts.<id>.groups.<id>.allow is legacy; use channels.googlechat.accounts.<id>.groups.<id>.enabled instead. Run "NexisClaw doctor --fix".',
+      'channels.googlechat.accounts.<id>.groups.<id>.allow is legacy; use channels.googlechat.accounts.<id>.groups.<id>.enabled instead. Run "GreenchClaw doctor --fix".',
     match: (value) => hasLegacyAccountAliases(value, hasLegacyGoogleChatGroupAllowAlias),
   },
 ];
@@ -119,7 +119,7 @@ export const legacyConfigRules: ChannelDoctorLegacyConfigRule[] = [
 export function normalizeCompatibilityConfig({
   cfg,
 }: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): ChannelDoctorConfigMutation {
   const rawEntry = asObjectRecord(
     (cfg.channels as Record<string, unknown> | undefined)?.googlechat,

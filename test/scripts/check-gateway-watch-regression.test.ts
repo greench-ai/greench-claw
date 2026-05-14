@@ -41,7 +41,7 @@ describe("check-gateway-watch-regression", () => {
   });
 
   it("refreshes runtime postbuild stamps after build stamps", () => {
-    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-gateway-watch-stamps-"));
+    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-gateway-watch-stamps-"));
     try {
       fs.mkdirSync(path.join(rootDir, ".git"), { recursive: true });
       writeBuildAndRuntimePostBuildStamps({ cwd: rootDir });

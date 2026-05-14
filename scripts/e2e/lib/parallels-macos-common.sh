@@ -45,7 +45,7 @@ parallels_macos_desktop_user_exec_with_secret_file() {
   shift 7
 
   local secret_path
-  secret_path="/tmp/NexisClaw-secret-${api_key_env:-env}-$RANDOM-$RANDOM"
+  secret_path="/tmp/GreenchClaw-secret-${api_key_env:-env}-$RANDOM-$RANDOM"
 
   if [[ -n "$api_key_env" && -n "$api_key_value" ]]; then
     if [[ "$user_flag" == "current-user" ]]; then
@@ -59,17 +59,17 @@ parallels_macos_desktop_user_exec_with_secret_file() {
 
   local wrapper
   local wrapper_path
-  wrapper_path="/tmp/NexisClaw-secret-env-wrapper-$RANDOM-$RANDOM.sh"
+  wrapper_path="/tmp/GreenchClaw-secret-env-wrapper-$RANDOM-$RANDOM.sh"
   wrapper='#!/bin/bash
 set -e
 cleanup() {
-  rm -f "${NEXISCLAW_WRAPPER_FILE:-}"
+  rm -f "${GREENCHCLAW_WRAPPER_FILE:-}"
 }
 trap cleanup EXIT
-if [ -n "${NEXISCLAW_SECRET_ENV_NAME:-}" ] && [ -n "${NEXISCLAW_SECRET_FILE:-}" ] && [ -f "$NEXISCLAW_SECRET_FILE" ]; then
-  secret_value="$(cat "$NEXISCLAW_SECRET_FILE")"
-  rm -f "$NEXISCLAW_SECRET_FILE"
-  export "${NEXISCLAW_SECRET_ENV_NAME}=${secret_value}"
+if [ -n "${GREENCHCLAW_SECRET_ENV_NAME:-}" ] && [ -n "${GREENCHCLAW_SECRET_FILE:-}" ] && [ -f "$GREENCHCLAW_SECRET_FILE" ]; then
+  secret_value="$(cat "$GREENCHCLAW_SECRET_FILE")"
+  rm -f "$GREENCHCLAW_SECRET_FILE"
+  export "${GREENCHCLAW_SECRET_ENV_NAME}=${secret_value}"
 fi
 "$@"
 '
@@ -85,9 +85,9 @@ fi
   if [[ "$user_flag" == "current-user" ]]; then
     prlctl exec "$vm_name" --current-user /usr/bin/env \
       "PATH=$path_value" \
-      "NEXISCLAW_SECRET_ENV_NAME=$api_key_env" \
-      "NEXISCLAW_SECRET_FILE=$secret_path" \
-      "NEXISCLAW_WRAPPER_FILE=$wrapper_path" \
+      "GREENCHCLAW_SECRET_ENV_NAME=$api_key_env" \
+      "GREENCHCLAW_SECRET_FILE=$secret_path" \
+      "GREENCHCLAW_WRAPPER_FILE=$wrapper_path" \
       /bin/bash "$wrapper_path" "$@"
     return
   fi
@@ -97,9 +97,9 @@ fi
     "USER=$user_name" \
     "LOGNAME=$user_name" \
     "PATH=$path_value" \
-    "NEXISCLAW_SECRET_ENV_NAME=$api_key_env" \
-    "NEXISCLAW_SECRET_FILE=$secret_path" \
-    "NEXISCLAW_WRAPPER_FILE=$wrapper_path" \
+    "GREENCHCLAW_SECRET_ENV_NAME=$api_key_env" \
+    "GREENCHCLAW_SECRET_FILE=$secret_path" \
+    "GREENCHCLAW_WRAPPER_FILE=$wrapper_path" \
     /bin/bash "$wrapper_path" "$@"
 }
 

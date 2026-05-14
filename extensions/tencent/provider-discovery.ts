@@ -1,4 +1,4 @@
-import type { ProviderPlugin } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { ProviderPlugin } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import { buildTokenHubProvider } from "./provider-catalog.js";
 
 const tencentProviderDiscovery: ProviderPlugin = {

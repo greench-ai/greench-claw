@@ -11,24 +11,24 @@ describe("resolveBundledSkillsDir", () => {
   let envSnapshot: ReturnType<typeof captureEnv>;
 
   beforeEach(() => {
-    envSnapshot = captureEnv(["NEXISCLAW_BUNDLED_SKILLS_DIR"]);
+    envSnapshot = captureEnv(["GREENCHCLAW_BUNDLED_SKILLS_DIR"]);
   });
 
   afterEach(() => {
     envSnapshot.restore();
   });
 
-  it("returns NEXISCLAW_BUNDLED_SKILLS_DIR override when set", async () => {
-    const overrideDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-bundled-override-"));
-    process.env.NEXISCLAW_BUNDLED_SKILLS_DIR = ` ${overrideDir} `;
+  it("returns GREENCHCLAW_BUNDLED_SKILLS_DIR override when set", async () => {
+    const overrideDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-bundled-override-"));
+    process.env.GREENCHCLAW_BUNDLED_SKILLS_DIR = ` ${overrideDir} `;
     expect(resolveBundledSkillsDir()).toBe(overrideDir);
   });
 
   it("resolves bundled skills under a flattened dist layout", async () => {
-    delete process.env.NEXISCLAW_BUNDLED_SKILLS_DIR;
+    delete process.env.GREENCHCLAW_BUNDLED_SKILLS_DIR;
 
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-bundled-"));
-    await fs.writeFile(path.join(root, "package.json"), JSON.stringify({ name: "NexisClaw" }));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-bundled-"));
+    await fs.writeFile(path.join(root, "package.json"), JSON.stringify({ name: "GreenchClaw" }));
 
     await writeSkill({
       dir: path.join(root, "skills", "peekaboo"),

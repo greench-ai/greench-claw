@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { withTempHome, writeStateDirDotEnv } from "../config/test-helpers.js";
 import { withEnvAsync } from "../test-utils/env.js";
 import {
@@ -18,7 +18,7 @@ describe("resolveGatewayAuthTokenForService", () => {
             token: "config-token",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {} as NodeJS.ProcessEnv,
     );
 
@@ -42,7 +42,7 @@ describe("resolveGatewayAuthTokenForService", () => {
             default: { source: "env" },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {
         CUSTOM_GATEWAY_TOKEN: "resolved-token",
       } as NodeJS.ProcessEnv,
@@ -64,7 +64,7 @@ describe("resolveGatewayAuthTokenForService", () => {
             default: { source: "env" },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {
         CUSTOM_GATEWAY_TOKEN: "resolved-token",
       } as NodeJS.ProcessEnv,
@@ -73,7 +73,7 @@ describe("resolveGatewayAuthTokenForService", () => {
     expect(resolved).toEqual({ token: "resolved-token" });
   });
 
-  it("falls back to NEXISCLAW_GATEWAY_TOKEN when SecretRef is unresolved", async () => {
+  it("falls back to GREENCHCLAW_GATEWAY_TOKEN when SecretRef is unresolved", async () => {
     const resolved = await resolveGatewayAuthTokenForService(
       {
         gateway: {
@@ -90,16 +90,16 @@ describe("resolveGatewayAuthTokenForService", () => {
             default: { source: "env" },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {
-        NEXISCLAW_GATEWAY_TOKEN: "env-fallback-token",
+        GREENCHCLAW_GATEWAY_TOKEN: "env-fallback-token",
       } as NodeJS.ProcessEnv,
     );
 
     expect(resolved).toEqual({ token: "env-fallback-token" });
   });
 
-  it("falls back to NEXISCLAW_GATEWAY_TOKEN when SecretRef resolves to empty", async () => {
+  it("falls back to GREENCHCLAW_GATEWAY_TOKEN when SecretRef resolves to empty", async () => {
     const resolved = await resolveGatewayAuthTokenForService(
       {
         gateway: {
@@ -116,10 +116,10 @@ describe("resolveGatewayAuthTokenForService", () => {
             default: { source: "env" },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {
         CUSTOM_GATEWAY_TOKEN: "   ",
-        NEXISCLAW_GATEWAY_TOKEN: "env-fallback-token",
+        GREENCHCLAW_GATEWAY_TOKEN: "env-fallback-token",
       } as NodeJS.ProcessEnv,
     );
 
@@ -143,7 +143,7 @@ describe("resolveGatewayAuthTokenForService", () => {
             default: { source: "env" },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {} as NodeJS.ProcessEnv,
     );
 
@@ -163,7 +163,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
             mode: "token",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {} as NodeJS.ProcessEnv,
     );
     expect(required).toBe(true);
@@ -177,7 +177,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
             mode: "password",
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {} as NodeJS.ProcessEnv,
     );
     expect(required).toBe(false);
@@ -193,7 +193,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
             gateway: {
               auth: {},
             },
-          } as NexisClawConfig,
+          } as GreenchClawConfig,
           process.env,
         );
         expect(required).toBe(true);
@@ -218,7 +218,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
             default: { source: "env" },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {} as NodeJS.ProcessEnv,
     );
     expect(required).toBe(false);
@@ -232,10 +232,10 @@ describe("shouldRequireGatewayTokenForInstall", () => {
         },
         env: {
           vars: {
-            NEXISCLAW_GATEWAY_PASSWORD: "configured-password", // pragma: allowlist secret
+            GREENCHCLAW_GATEWAY_PASSWORD: "configured-password", // pragma: allowlist secret
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {} as NodeJS.ProcessEnv,
     );
     expect(required).toBe(false);
@@ -243,7 +243,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
 
   it("does not require token in inferred mode when password env exists in state-dir .env", async () => {
     await withTempHome(async (_home) => {
-      await writeStateDirDotEnv("NEXISCLAW_GATEWAY_PASSWORD=dotenv-password\n", {
+      await writeStateDirDotEnv("GREENCHCLAW_GATEWAY_PASSWORD=dotenv-password\n", {
         env: process.env,
       });
 
@@ -252,7 +252,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
           gateway: {
             auth: {},
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         process.env,
       );
       expect(required).toBe(false);
@@ -265,7 +265,7 @@ describe("shouldRequireGatewayTokenForInstall", () => {
         gateway: {
           auth: {},
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       {} as NodeJS.ProcessEnv,
     );
     expect(required).toBe(true);

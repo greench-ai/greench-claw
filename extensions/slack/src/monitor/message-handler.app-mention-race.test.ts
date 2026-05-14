@@ -8,9 +8,9 @@ const prepareSlackMessageMock =
   >();
 const dispatchPreparedSlackMessageMock = vi.fn<(prepared: unknown) => Promise<void>>();
 
-vi.mock("NexisClaw/plugin-sdk/channel-inbound", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/channel-inbound")>(
-    "NexisClaw/plugin-sdk/channel-inbound",
+vi.mock("GreenchClaw/plugin-sdk/channel-inbound", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/channel-inbound")>(
+    "GreenchClaw/plugin-sdk/channel-inbound",
   );
   return {
     ...actual,

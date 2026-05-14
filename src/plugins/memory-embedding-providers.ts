@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { SecretInput } from "../config/types.secrets.js";
 import type { EmbeddingInput } from "../memory-host-sdk/host/embedding-inputs.js";
 
@@ -35,7 +35,7 @@ export type MemoryEmbeddingProvider = {
 };
 
 export type MemoryEmbeddingProviderCreateOptions = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   agentDir?: string;
   provider?: string;
   fallback?: string;
@@ -88,7 +88,7 @@ export type RegisteredMemoryEmbeddingProvider = {
   ownerPluginId?: string;
 };
 
-const MEMORY_EMBEDDING_PROVIDERS_KEY = Symbol.for("NexisClaw.memoryEmbeddingProviders");
+const MEMORY_EMBEDDING_PROVIDERS_KEY = Symbol.for("GreenchClaw.memoryEmbeddingProviders");
 
 function getMemoryEmbeddingProviders(): Map<string, RegisteredMemoryEmbeddingProvider> {
   const globalStore = globalThis as Record<PropertyKey, unknown>;

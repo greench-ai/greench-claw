@@ -1,5 +1,5 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
-import { createProviderApiKeyAuthMethod } from "NexisClaw/plugin-sdk/provider-auth-api-key";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createProviderApiKeyAuthMethod } from "GreenchClaw/plugin-sdk/provider-auth-api-key";
 import { buildComfyImageGenerationProvider } from "./image-generation-provider.js";
 import { buildComfyMusicGenerationProvider } from "./music-generation-provider.js";
 import { buildComfyVideoGenerationProvider } from "./video-generation-provider.js";

@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../../../config/types.js";
+import type { GreenchClawConfig } from "../../../config/types.js";
 import { LEGACY_CONFIG_MIGRATIONS_RUNTIME_TTS } from "./legacy-config-migrations.runtime.tts.js";
 import { normalizeLegacyTalkConfig } from "./legacy-talk-config-normalizer.js";
 
 function migrateLegacyConfig(raw: unknown): {
-  config: NexisClawConfig | null;
+  config: GreenchClawConfig | null;
   changes: string[];
 } {
   if (!raw || typeof raw !== "object") {
@@ -18,7 +18,7 @@ function migrateLegacyConfig(raw: unknown): {
   if (changes.length === 0) {
     return { config: null, changes };
   }
-  return { config: next as NexisClawConfig | null, changes };
+  return { config: next as GreenchClawConfig | null, changes };
 }
 
 describe("legacy migrate provider-shaped config", () => {

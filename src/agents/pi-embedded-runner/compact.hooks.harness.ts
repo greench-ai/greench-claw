@@ -94,7 +94,7 @@ function createDefaultSessionMessages(): unknown[] {
 }
 export const sessionMessages: unknown[] = createDefaultSessionMessages();
 export const sessionAbortCompactionMock: Mock<(reason?: unknown) => void> = vi.fn();
-export const createNexisClawCodingToolsMock = vi.fn(() => []);
+export const createGreenchClawCodingToolsMock = vi.fn(() => []);
 export const resolveEmbeddedAgentStreamFnMock: Mock<
   (params?: unknown) => MockEmbeddedAgentStreamFn
 > = vi.fn((_params?: unknown) => vi.fn());
@@ -306,8 +306,8 @@ export function resetCompactHooksHarnessMocks(): void {
 
   triggerInternalHook.mockReset();
   resetCompactSessionStateMocks();
-  createNexisClawCodingToolsMock.mockReset();
-  createNexisClawCodingToolsMock.mockReturnValue([]);
+  createGreenchClawCodingToolsMock.mockReset();
+  createGreenchClawCodingToolsMock.mockReturnValue([]);
 }
 
 export async function loadCompactHooksHarness(): Promise<{
@@ -429,7 +429,7 @@ export async function loadCompactHooksHarness(): Promise<{
   }));
 
   vi.doMock("../models-config.js", () => ({
-    ensureNexisClawModelsJson: vi.fn(async () => {}),
+    ensureGreenchClawModelsJson: vi.fn(async () => {}),
   }));
 
   vi.doMock("../model-auth.js", () => ({
@@ -501,7 +501,7 @@ export async function loadCompactHooksHarness(): Promise<{
   }));
 
   vi.doMock("../docs-path.js", () => ({
-    resolveNexisClawReferencePaths: vi.fn(async () => ({
+    resolveGreenchClawReferencePaths: vi.fn(async () => ({
       docsPath: undefined,
       sourcePath: undefined,
     })),
@@ -513,7 +513,7 @@ export async function loadCompactHooksHarness(): Promise<{
   }));
 
   vi.doMock("../pi-tools.js", () => ({
-    createNexisClawCodingTools: createNexisClawCodingToolsMock,
+    createGreenchClawCodingTools: createGreenchClawCodingToolsMock,
     resolveProcessToolScopeKey: ({
       scopeKey,
       sessionKey,

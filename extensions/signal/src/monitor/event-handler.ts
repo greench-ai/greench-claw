@@ -1,5 +1,5 @@
-import { resolveHumanDelayConfig } from "NexisClaw/plugin-sdk/agent-runtime";
-import { logTypingFailure } from "NexisClaw/plugin-sdk/channel-feedback";
+import { resolveHumanDelayConfig } from "GreenchClaw/plugin-sdk/agent-runtime";
+import { logTypingFailure } from "GreenchClaw/plugin-sdk/channel-feedback";
 import {
   buildMentionRegexes,
   createChannelInboundDebouncer,
@@ -9,38 +9,41 @@ import {
   resolveInboundMentionDecision,
   resolveEnvelopeFormatOptions,
   shouldDebounceTextInbound,
-} from "NexisClaw/plugin-sdk/channel-inbound";
-import { logInboundDrop } from "NexisClaw/plugin-sdk/channel-inbound";
-import { createChannelMessageReplyPipeline } from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-inbound";
+import { logInboundDrop } from "GreenchClaw/plugin-sdk/channel-inbound";
+import { createChannelMessageReplyPipeline } from "GreenchClaw/plugin-sdk/channel-message";
 import {
   resolveChannelGroupPolicy,
   resolveChannelGroupRequireMention,
-} from "NexisClaw/plugin-sdk/channel-policy";
-import { hasControlCommand } from "NexisClaw/plugin-sdk/command-auth-native";
-import { recordInboundSession } from "NexisClaw/plugin-sdk/conversation-runtime";
+} from "GreenchClaw/plugin-sdk/channel-policy";
+import { hasControlCommand } from "GreenchClaw/plugin-sdk/command-auth-native";
+import { recordInboundSession } from "GreenchClaw/plugin-sdk/conversation-runtime";
 import {
   createInternalHookEvent,
   fireAndForgetHook,
   toInternalMessageReceivedContext,
   triggerInternalHook,
-} from "NexisClaw/plugin-sdk/hook-runtime";
-import { runInboundReplyTurn } from "NexisClaw/plugin-sdk/inbound-reply-dispatch";
-import { kindFromMime } from "NexisClaw/plugin-sdk/media-runtime";
+} from "GreenchClaw/plugin-sdk/hook-runtime";
+import { runInboundReplyTurn } from "GreenchClaw/plugin-sdk/inbound-reply-dispatch";
+import { kindFromMime } from "GreenchClaw/plugin-sdk/media-runtime";
 import {
   buildPendingHistoryContextFromMap,
   recordPendingHistoryEntryIfEnabled,
-} from "NexisClaw/plugin-sdk/reply-history";
-import { dispatchInboundMessage } from "NexisClaw/plugin-sdk/reply-runtime";
-import { finalizeInboundContext } from "NexisClaw/plugin-sdk/reply-runtime";
-import { createReplyDispatcherWithTyping } from "NexisClaw/plugin-sdk/reply-runtime";
-import { settleReplyDispatcher } from "NexisClaw/plugin-sdk/reply-runtime";
-import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
-import { danger, logVerbose, shouldLogVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { resolvePinnedMainDmOwnerFromAllowlist } from "NexisClaw/plugin-sdk/security-runtime";
-import { readSessionUpdatedAt, resolveStorePath } from "NexisClaw/plugin-sdk/session-store-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { enqueueSystemEvent } from "NexisClaw/plugin-sdk/system-event-runtime";
-import { normalizeE164 } from "NexisClaw/plugin-sdk/text-utility-runtime";
+} from "GreenchClaw/plugin-sdk/reply-history";
+import { dispatchInboundMessage } from "GreenchClaw/plugin-sdk/reply-runtime";
+import { finalizeInboundContext } from "GreenchClaw/plugin-sdk/reply-runtime";
+import { createReplyDispatcherWithTyping } from "GreenchClaw/plugin-sdk/reply-runtime";
+import { settleReplyDispatcher } from "GreenchClaw/plugin-sdk/reply-runtime";
+import { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
+import { danger, logVerbose, shouldLogVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { resolvePinnedMainDmOwnerFromAllowlist } from "GreenchClaw/plugin-sdk/security-runtime";
+import {
+  readSessionUpdatedAt,
+  resolveStorePath,
+} from "GreenchClaw/plugin-sdk/session-store-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { enqueueSystemEvent } from "GreenchClaw/plugin-sdk/system-event-runtime";
+import { normalizeE164 } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 import {
   formatSignalPairingIdLine,
   formatSignalSenderDisplay,

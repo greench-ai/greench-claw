@@ -1,4 +1,4 @@
-import { buildAgentSessionKey } from "NexisClaw/plugin-sdk/routing";
+import { buildAgentSessionKey } from "GreenchClaw/plugin-sdk/routing";
 
 const CHANNEL_ID = "synology-chat";
 

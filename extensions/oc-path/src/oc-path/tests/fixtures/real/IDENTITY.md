@@ -4,7 +4,7 @@ Example Org / Platform Team
 
 ## Team
 
-NexisClaw infrastructure & tooling
+GreenchClaw infrastructure & tooling
 
 ## Trust Level
 

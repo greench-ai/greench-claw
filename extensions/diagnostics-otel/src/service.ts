@@ -19,7 +19,7 @@ import type {
   DiagnosticEventMetadata,
   DiagnosticEventPayload,
   DiagnosticTraceContext,
-  NexisClawPluginService,
+  GreenchClawPluginService,
 } from "../api.js";
 import {
   isValidDiagnosticSpanId,
@@ -28,18 +28,18 @@ import {
   redactSensitiveText,
 } from "../api.js";
 
-const DEFAULT_SERVICE_NAME = "NexisClaw";
+const DEFAULT_SERVICE_NAME = "GreenchClaw";
 const DROPPED_OTEL_ATTRIBUTE_KEYS = new Set([
-  "NexisClaw.callId",
-  "NexisClaw.chatId",
-  "NexisClaw.messageId",
-  "NexisClaw.parentSpanId",
-  "NexisClaw.runId",
-  "NexisClaw.sessionId",
-  "NexisClaw.sessionKey",
-  "NexisClaw.spanId",
-  "NexisClaw.toolCallId",
-  "NexisClaw.traceId",
+  "GreenchClaw.callId",
+  "GreenchClaw.chatId",
+  "GreenchClaw.messageId",
+  "GreenchClaw.parentSpanId",
+  "GreenchClaw.runId",
+  "GreenchClaw.sessionId",
+  "GreenchClaw.sessionKey",
+  "GreenchClaw.spanId",
+  "GreenchClaw.toolCallId",
+  "GreenchClaw.traceId",
 ]);
 const LOW_CARDINALITY_VALUE_RE = /^[A-Za-z0-9_.:-]{1,120}$/u;
 const MAX_OTEL_CONTENT_ATTRIBUTE_CHARS = 4 * 1024;
@@ -51,7 +51,7 @@ const LOG_RECORD_EXPORT_FAILURE_REPORT_INTERVAL_MS = 60_000;
 const OTEL_LOG_RAW_ATTRIBUTE_KEY_RE = /^[A-Za-z0-9_.:-]{1,64}$/u;
 const OTEL_LOG_ATTRIBUTE_KEY_RE = /^[A-Za-z0-9_.:-]{1,96}$/u;
 const BLOCKED_OTEL_LOG_ATTRIBUTE_KEYS = new Set(["__proto__", "prototype", "constructor"]);
-const PRELOADED_OTEL_SDK_ENV = "NEXISCLAW_OTEL_PRELOADED";
+const PRELOADED_OTEL_SDK_ENV = "GREENCHCLAW_OTEL_PRELOADED";
 const OTEL_EXPORTER_OTLP_ENDPOINT_ENV = "OTEL_EXPORTER_OTLP_ENDPOINT";
 const OTEL_EXPORTER_OTLP_TRACES_ENDPOINT_ENV = "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT";
 const OTEL_EXPORTER_OTLP_METRICS_ENDPOINT_ENV = "OTEL_EXPORTER_OTLP_METRICS_ENDPOINT";
@@ -243,11 +243,11 @@ function assignModelCallSizeTimingAttrs(
     timeToFirstByteMs?: number;
   },
 ): void {
-  assignPositiveNumberAttr(attrs, "NexisClaw.model_call.request_bytes", evt.requestPayloadBytes);
-  assignPositiveNumberAttr(attrs, "NexisClaw.model_call.response_bytes", evt.responseStreamBytes);
+  assignPositiveNumberAttr(attrs, "GreenchClaw.model_call.request_bytes", evt.requestPayloadBytes);
+  assignPositiveNumberAttr(attrs, "GreenchClaw.model_call.response_bytes", evt.responseStreamBytes);
   assignPositiveNumberAttr(
     attrs,
-    "NexisClaw.model_call.time_to_first_byte_ms",
+    "GreenchClaw.model_call.time_to_first_byte_ms",
     evt.timeToFirstByteMs,
   );
 }
@@ -285,8 +285,8 @@ function addUpstreamRequestIdSpanEvent(
   if (boundedHash === "unknown") {
     return;
   }
-  span.addEvent?.("NexisClaw.provider.request", {
-    "NexisClaw.upstreamRequestIdHash": boundedHash,
+  span.addEvent?.("GreenchClaw.provider.request", {
+    "GreenchClaw.upstreamRequestIdHash": boundedHash,
   });
 }
 
@@ -364,17 +364,21 @@ function assignOtelModelContentAttributes(
   policy: OtelContentCapturePolicy,
 ): void {
   if (policy.inputMessages) {
-    assignOtelContentAttribute(attributes, "NexisClaw.content.input_messages", event.inputMessages);
+    assignOtelContentAttribute(
+      attributes,
+      "GreenchClaw.content.input_messages",
+      event.inputMessages,
+    );
   }
   if (policy.outputMessages) {
     assignOtelContentAttribute(
       attributes,
-      "NexisClaw.content.output_messages",
+      "GreenchClaw.content.output_messages",
       event.outputMessages,
     );
   }
   if (policy.systemPrompt) {
-    assignOtelContentAttribute(attributes, "NexisClaw.content.system_prompt", event.systemPrompt);
+    assignOtelContentAttribute(attributes, "GreenchClaw.content.system_prompt", event.systemPrompt);
   }
 }
 
@@ -384,10 +388,10 @@ function assignOtelToolContentAttributes(
   policy: OtelContentCapturePolicy,
 ): void {
   if (policy.toolInputs) {
-    assignOtelContentAttribute(attributes, "NexisClaw.content.tool_input", event.toolInput);
+    assignOtelContentAttribute(attributes, "GreenchClaw.content.tool_input", event.toolInput);
   }
   if (policy.toolOutputs) {
-    assignOtelContentAttribute(attributes, "NexisClaw.content.tool_output", event.toolOutput);
+    assignOtelContentAttribute(attributes, "GreenchClaw.content.tool_output", event.toolOutput);
   }
 }
 
@@ -470,7 +474,7 @@ function assignOtelLogEventAttributes(
     if (!OTEL_LOG_RAW_ATTRIBUTE_KEY_RE.test(key)) {
       continue;
     }
-    assignOtelLogAttribute(attributes, `NexisClaw.${key}`, eventAttributes[rawKey]);
+    assignOtelLogAttribute(attributes, `GreenchClaw.${key}`, eventAttributes[rawKey]);
   }
 }
 
@@ -507,19 +511,19 @@ function addTraceAttributes(
   if (!normalized) {
     return;
   }
-  attributes["NexisClaw.traceId"] = normalized.traceId;
+  attributes["GreenchClaw.traceId"] = normalized.traceId;
   if (normalized.spanId) {
-    attributes["NexisClaw.spanId"] = normalized.spanId;
+    attributes["GreenchClaw.spanId"] = normalized.spanId;
   }
   if (normalized.parentSpanId) {
-    attributes["NexisClaw.parentSpanId"] = normalized.parentSpanId;
+    attributes["GreenchClaw.parentSpanId"] = normalized.parentSpanId;
   }
   if (normalized.traceFlags) {
-    attributes["NexisClaw.traceFlags"] = normalized.traceFlags;
+    attributes["GreenchClaw.traceFlags"] = normalized.traceFlags;
   }
 }
 
-export function createDiagnosticsOtelService(): NexisClawPluginService {
+export function createDiagnosticsOtelService(): GreenchClawPluginService {
   let sdk: NodeSDK | null = null;
   let logProvider: LoggerProvider | null = null;
   let unsubscribe: (() => void) | null = null;
@@ -701,8 +705,8 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         FATAL: 21 as SeverityNumber,
       };
 
-      const meter = metrics.getMeter("NexisClaw");
-      const tracer = trace.getTracer("NexisClaw");
+      const meter = metrics.getMeter("GreenchClaw");
+      const tracer = trace.getTracer("GreenchClaw");
       const activeTrustedSpans = new Map<string, ReturnType<typeof tracer.startSpan>>();
       const activeTrustedSpanAliases = new Map<string, ReturnType<typeof tracer.startSpan>>();
       const pendingTrustedRunFinalizers = new Map<string, ReturnType<typeof setImmediate>>();
@@ -722,7 +726,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         activeTrustedSpanAliases.clear();
       };
 
-      const tokensCounter = meter.createCounter("NexisClaw.tokens", {
+      const tokensCounter = meter.createCounter("GreenchClaw.tokens", {
         unit: "1",
         description: "Token usage by type",
       });
@@ -743,228 +747,240 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           },
         },
       );
-      const costCounter = meter.createCounter("NexisClaw.cost.usd", {
+      const costCounter = meter.createCounter("GreenchClaw.cost.usd", {
         unit: "1",
         description: "Estimated model cost (USD)",
       });
-      const durationHistogram = meter.createHistogram("NexisClaw.run.duration_ms", {
+      const durationHistogram = meter.createHistogram("GreenchClaw.run.duration_ms", {
         unit: "ms",
         description: "Agent run duration",
       });
-      const harnessDurationHistogram = meter.createHistogram("NexisClaw.harness.duration_ms", {
+      const harnessDurationHistogram = meter.createHistogram("GreenchClaw.harness.duration_ms", {
         unit: "ms",
         description: "Agent harness lifecycle duration",
       });
-      const contextHistogram = meter.createHistogram("NexisClaw.context.tokens", {
+      const contextHistogram = meter.createHistogram("GreenchClaw.context.tokens", {
         unit: "1",
         description: "Context window size and usage",
       });
-      const webhookReceivedCounter = meter.createCounter("NexisClaw.webhook.received", {
+      const webhookReceivedCounter = meter.createCounter("GreenchClaw.webhook.received", {
         unit: "1",
         description: "Webhook requests received",
       });
-      const webhookErrorCounter = meter.createCounter("NexisClaw.webhook.error", {
+      const webhookErrorCounter = meter.createCounter("GreenchClaw.webhook.error", {
         unit: "1",
         description: "Webhook processing errors",
       });
-      const webhookDurationHistogram = meter.createHistogram("NexisClaw.webhook.duration_ms", {
+      const webhookDurationHistogram = meter.createHistogram("GreenchClaw.webhook.duration_ms", {
         unit: "ms",
         description: "Webhook processing duration",
       });
-      const messageQueuedCounter = meter.createCounter("NexisClaw.message.queued", {
+      const messageQueuedCounter = meter.createCounter("GreenchClaw.message.queued", {
         unit: "1",
         description: "Messages queued for processing",
       });
-      const messageProcessedCounter = meter.createCounter("NexisClaw.message.processed", {
+      const messageProcessedCounter = meter.createCounter("GreenchClaw.message.processed", {
         unit: "1",
         description: "Messages processed by outcome",
       });
-      const messageDurationHistogram = meter.createHistogram("NexisClaw.message.duration_ms", {
+      const messageDurationHistogram = meter.createHistogram("GreenchClaw.message.duration_ms", {
         unit: "ms",
         description: "Message processing duration",
       });
       const messageDeliveryStartedCounter = meter.createCounter(
-        "NexisClaw.message.delivery.started",
+        "GreenchClaw.message.delivery.started",
         {
           unit: "1",
           description: "Outbound message delivery attempts started",
         },
       );
       const messageDeliveryDurationHistogram = meter.createHistogram(
-        "NexisClaw.message.delivery.duration_ms",
+        "GreenchClaw.message.delivery.duration_ms",
         {
           unit: "ms",
           description: "Outbound message delivery duration",
         },
       );
-      const queueDepthHistogram = meter.createHistogram("NexisClaw.queue.depth", {
+      const queueDepthHistogram = meter.createHistogram("GreenchClaw.queue.depth", {
         unit: "1",
         description: "Queue depth on enqueue/dequeue",
       });
-      const queueWaitHistogram = meter.createHistogram("NexisClaw.queue.wait_ms", {
+      const queueWaitHistogram = meter.createHistogram("GreenchClaw.queue.wait_ms", {
         unit: "ms",
         description: "Queue wait time before execution",
       });
-      const laneEnqueueCounter = meter.createCounter("NexisClaw.queue.lane.enqueue", {
+      const laneEnqueueCounter = meter.createCounter("GreenchClaw.queue.lane.enqueue", {
         unit: "1",
         description: "Command queue lane enqueue events",
       });
-      const laneDequeueCounter = meter.createCounter("NexisClaw.queue.lane.dequeue", {
+      const laneDequeueCounter = meter.createCounter("GreenchClaw.queue.lane.dequeue", {
         unit: "1",
         description: "Command queue lane dequeue events",
       });
-      const sessionStateCounter = meter.createCounter("NexisClaw.session.state", {
+      const sessionStateCounter = meter.createCounter("GreenchClaw.session.state", {
         unit: "1",
         description: "Session state transitions",
       });
-      const sessionStuckCounter = meter.createCounter("NexisClaw.session.stuck", {
+      const sessionStuckCounter = meter.createCounter("GreenchClaw.session.stuck", {
         unit: "1",
         description: "Sessions stuck in processing",
       });
-      const sessionStuckAgeHistogram = meter.createHistogram("NexisClaw.session.stuck_age_ms", {
+      const sessionStuckAgeHistogram = meter.createHistogram("GreenchClaw.session.stuck_age_ms", {
         unit: "ms",
         description: "Age of stuck sessions",
       });
       const sessionRecoveryRequestedCounter = meter.createCounter(
-        "NexisClaw.session.recovery.requested",
+        "GreenchClaw.session.recovery.requested",
         {
           unit: "1",
           description: "Session recovery attempts requested",
         },
       );
       const sessionRecoveryCompletedCounter = meter.createCounter(
-        "NexisClaw.session.recovery.completed",
+        "GreenchClaw.session.recovery.completed",
         {
           unit: "1",
           description: "Session recovery attempts completed",
         },
       );
       const sessionRecoveryAgeHistogram = meter.createHistogram(
-        "NexisClaw.session.recovery.age_ms",
+        "GreenchClaw.session.recovery.age_ms",
         {
           unit: "ms",
           description: "Age of sessions selected for recovery",
         },
       );
-      const talkEventCounter = meter.createCounter("NexisClaw.talk.event", {
+      const talkEventCounter = meter.createCounter("GreenchClaw.talk.event", {
         unit: "1",
         description: "Talk events emitted by type",
       });
-      const talkEventDurationHistogram = meter.createHistogram("NexisClaw.talk.event.duration_ms", {
-        unit: "ms",
-        description: "Talk event duration when reported",
-      });
-      const talkAudioBytesHistogram = meter.createHistogram("NexisClaw.talk.audio.bytes", {
+      const talkEventDurationHistogram = meter.createHistogram(
+        "GreenchClaw.talk.event.duration_ms",
+        {
+          unit: "ms",
+          description: "Talk event duration when reported",
+        },
+      );
+      const talkAudioBytesHistogram = meter.createHistogram("GreenchClaw.talk.audio.bytes", {
         unit: "By",
         description: "Talk audio frame byte lengths",
       });
-      const runAttemptCounter = meter.createCounter("NexisClaw.run.attempt", {
+      const runAttemptCounter = meter.createCounter("GreenchClaw.run.attempt", {
         unit: "1",
         description: "Run attempts",
       });
-      const toolLoopCounter = meter.createCounter("NexisClaw.tool.loop", {
+      const toolLoopCounter = meter.createCounter("GreenchClaw.tool.loop", {
         unit: "1",
         description: "Detected repetitive tool-call loop events",
       });
-      const modelCallDurationHistogram = meter.createHistogram("NexisClaw.model_call.duration_ms", {
-        unit: "ms",
-        description: "Model call duration",
-      });
+      const modelCallDurationHistogram = meter.createHistogram(
+        "GreenchClaw.model_call.duration_ms",
+        {
+          unit: "ms",
+          description: "Model call duration",
+        },
+      );
       const modelCallRequestBytesHistogram = meter.createHistogram(
-        "NexisClaw.model_call.request_bytes",
+        "GreenchClaw.model_call.request_bytes",
         {
           unit: "By",
           description: "UTF-8 byte size of sanitized model request payloads",
         },
       );
       const modelCallResponseBytesHistogram = meter.createHistogram(
-        "NexisClaw.model_call.response_bytes",
+        "GreenchClaw.model_call.response_bytes",
         {
           unit: "By",
           description: "UTF-8 byte size of streamed model response events",
         },
       );
       const modelCallTimeToFirstByteHistogram = meter.createHistogram(
-        "NexisClaw.model_call.time_to_first_byte_ms",
+        "GreenchClaw.model_call.time_to_first_byte_ms",
         {
           unit: "ms",
           description: "Elapsed time before the first streamed model response event",
         },
       );
       const toolExecutionDurationHistogram = meter.createHistogram(
-        "NexisClaw.tool.execution.duration_ms",
+        "GreenchClaw.tool.execution.duration_ms",
         {
           unit: "ms",
           description: "Tool execution duration",
         },
       );
-      const execProcessDurationHistogram = meter.createHistogram("NexisClaw.exec.duration_ms", {
+      const execProcessDurationHistogram = meter.createHistogram("GreenchClaw.exec.duration_ms", {
         unit: "ms",
         description: "Exec process duration",
       });
-      const memoryRssHistogram = meter.createHistogram("NexisClaw.memory.rss_bytes", {
+      const memoryRssHistogram = meter.createHistogram("GreenchClaw.memory.rss_bytes", {
         unit: "By",
         description: "Resident set size reported by diagnostic memory samples",
       });
-      const memoryHeapUsedHistogram = meter.createHistogram("NexisClaw.memory.heap_used_bytes", {
+      const memoryHeapUsedHistogram = meter.createHistogram("GreenchClaw.memory.heap_used_bytes", {
         unit: "By",
         description: "Heap used bytes reported by diagnostic memory samples",
       });
-      const memoryHeapTotalHistogram = meter.createHistogram("NexisClaw.memory.heap_total_bytes", {
-        unit: "By",
-        description: "Heap total bytes reported by diagnostic memory samples",
-      });
-      const memoryExternalHistogram = meter.createHistogram("NexisClaw.memory.external_bytes", {
+      const memoryHeapTotalHistogram = meter.createHistogram(
+        "GreenchClaw.memory.heap_total_bytes",
+        {
+          unit: "By",
+          description: "Heap total bytes reported by diagnostic memory samples",
+        },
+      );
+      const memoryExternalHistogram = meter.createHistogram("GreenchClaw.memory.external_bytes", {
         unit: "By",
         description: "External memory bytes reported by diagnostic memory samples",
       });
       const memoryArrayBuffersHistogram = meter.createHistogram(
-        "NexisClaw.memory.array_buffers_bytes",
+        "GreenchClaw.memory.array_buffers_bytes",
         {
           unit: "By",
           description: "ArrayBuffer bytes reported by diagnostic memory samples",
         },
       );
-      const memoryPressureCounter = meter.createCounter("NexisClaw.memory.pressure", {
+      const memoryPressureCounter = meter.createCounter("GreenchClaw.memory.pressure", {
         unit: "1",
         description: "Diagnostic memory pressure events",
       });
-      const livenessWarningCounter = meter.createCounter("NexisClaw.liveness.warning", {
+      const livenessWarningCounter = meter.createCounter("GreenchClaw.liveness.warning", {
         unit: "1",
         description: "Diagnostic liveness warning events",
       });
       const livenessEventLoopDelayP99Histogram = meter.createHistogram(
-        "NexisClaw.liveness.event_loop_delay_p99_ms",
+        "GreenchClaw.liveness.event_loop_delay_p99_ms",
         {
           unit: "ms",
           description: "P99 event-loop delay reported by diagnostic liveness warnings",
         },
       );
       const livenessEventLoopDelayMaxHistogram = meter.createHistogram(
-        "NexisClaw.liveness.event_loop_delay_max_ms",
+        "GreenchClaw.liveness.event_loop_delay_max_ms",
         {
           unit: "ms",
           description: "Maximum event-loop delay reported by diagnostic liveness warnings",
         },
       );
       const livenessEventLoopUtilizationHistogram = meter.createHistogram(
-        "NexisClaw.liveness.event_loop_utilization",
+        "GreenchClaw.liveness.event_loop_utilization",
         {
           unit: "1",
           description: "Event-loop utilization reported by diagnostic liveness warnings",
         },
       );
       const livenessCpuCoreRatioHistogram = meter.createHistogram(
-        "NexisClaw.liveness.cpu_core_ratio",
+        "GreenchClaw.liveness.cpu_core_ratio",
         {
           unit: "1",
           description: "CPU core ratio reported by diagnostic liveness warnings",
         },
       );
-      const telemetryExporterCounter = meter.createCounter("NexisClaw.telemetry.exporter.events", {
-        unit: "1",
-        description: "Diagnostic telemetry exporter lifecycle and failure events",
-      });
+      const telemetryExporterCounter = meter.createCounter(
+        "GreenchClaw.telemetry.exporter.events",
+        {
+          unit: "1",
+          description: "Diagnostic telemetry exporter lifecycle and failure events",
+        },
+      );
 
       let recordLogRecord:
         | ((
@@ -988,20 +1004,20 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           resource,
           processors: [logProcessor],
         });
-        const otelLogger = logProvider.getLogger("NexisClaw");
+        const otelLogger = logProvider.getLogger("GreenchClaw");
         recordLogRecord = (evt, metadata) => {
           try {
             const logLevelName = evt.level || "INFO";
             const severityNumber = logSeverityMap[logLevelName] ?? (9 as SeverityNumber);
             const attributes = Object.create(null) as Record<string, string | number | boolean>;
-            assignOtelLogAttribute(attributes, "NexisClaw.log.level", logLevelName);
+            assignOtelLogAttribute(attributes, "GreenchClaw.log.level", logLevelName);
             if (evt.loggerName) {
-              assignOtelLogAttribute(attributes, "NexisClaw.logger", evt.loggerName);
+              assignOtelLogAttribute(attributes, "GreenchClaw.logger", evt.loggerName);
             }
             if (evt.loggerParents?.length) {
               assignOtelLogAttribute(
                 attributes,
-                "NexisClaw.logger.parents",
+                "GreenchClaw.logger.parents",
                 evt.loggerParents.join("."),
               );
             }
@@ -1163,16 +1179,16 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         },
       ) => {
         if (evt.provider) {
-          spanAttrs["NexisClaw.provider"] = evt.provider;
+          spanAttrs["GreenchClaw.provider"] = evt.provider;
         }
         if (evt.model) {
-          spanAttrs["NexisClaw.model"] = evt.model;
+          spanAttrs["GreenchClaw.model"] = evt.model;
         }
         if (evt.channel) {
-          spanAttrs["NexisClaw.channel"] = evt.channel;
+          spanAttrs["GreenchClaw.channel"] = evt.channel;
         }
         if (evt.trigger) {
-          spanAttrs["NexisClaw.trigger"] = evt.trigger;
+          spanAttrs["GreenchClaw.trigger"] = evt.trigger;
         }
       };
 
@@ -1186,8 +1202,8 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           return {};
         }
         return {
-          "NexisClaw.tool.params.kind": summary.kind,
-          ...("length" in summary ? { "NexisClaw.tool.params.length": summary.length } : {}),
+          "GreenchClaw.tool.params.kind": summary.kind,
+          ...("length" in summary ? { "GreenchClaw.tool.params.length": summary.length } : {}),
         };
       };
 
@@ -1196,10 +1212,10 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         metadata: DiagnosticEventMetadata,
       ) => {
         const attrs = {
-          "NexisClaw.channel": evt.channel ?? "unknown",
-          "NexisClaw.agent": lowCardinalityAttr(evt.agentId),
-          "NexisClaw.provider": evt.provider ?? "unknown",
-          "NexisClaw.model": evt.model ?? "unknown",
+          "GreenchClaw.channel": evt.channel ?? "unknown",
+          "GreenchClaw.agent": lowCardinalityAttr(evt.agentId),
+          "GreenchClaw.provider": evt.provider ?? "unknown",
+          "GreenchClaw.model": evt.model ?? "unknown",
         };
         const genAiAttrs: Record<string, string> = {
           "gen_ai.operation.name": "chat",
@@ -1209,30 +1225,30 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
 
         const usage = evt.usage;
         if (usage.input) {
-          tokensCounter.add(usage.input, { ...attrs, "NexisClaw.token": "input" });
+          tokensCounter.add(usage.input, { ...attrs, "GreenchClaw.token": "input" });
           genAiTokenUsageHistogram.record(usage.input, {
             ...genAiAttrs,
             "gen_ai.token.type": "input",
           });
         }
         if (usage.output) {
-          tokensCounter.add(usage.output, { ...attrs, "NexisClaw.token": "output" });
+          tokensCounter.add(usage.output, { ...attrs, "GreenchClaw.token": "output" });
           genAiTokenUsageHistogram.record(usage.output, {
             ...genAiAttrs,
             "gen_ai.token.type": "output",
           });
         }
         if (usage.cacheRead) {
-          tokensCounter.add(usage.cacheRead, { ...attrs, "NexisClaw.token": "cache_read" });
+          tokensCounter.add(usage.cacheRead, { ...attrs, "GreenchClaw.token": "cache_read" });
         }
         if (usage.cacheWrite) {
-          tokensCounter.add(usage.cacheWrite, { ...attrs, "NexisClaw.token": "cache_write" });
+          tokensCounter.add(usage.cacheWrite, { ...attrs, "GreenchClaw.token": "cache_write" });
         }
         if (usage.promptTokens) {
-          tokensCounter.add(usage.promptTokens, { ...attrs, "NexisClaw.token": "prompt" });
+          tokensCounter.add(usage.promptTokens, { ...attrs, "GreenchClaw.token": "prompt" });
         }
         if (usage.total) {
-          tokensCounter.add(usage.total, { ...attrs, "NexisClaw.token": "total" });
+          tokensCounter.add(usage.total, { ...attrs, "GreenchClaw.token": "total" });
         }
 
         if (evt.costUsd) {
@@ -1244,13 +1260,13 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         if (evt.context?.limit) {
           contextHistogram.record(evt.context.limit, {
             ...attrs,
-            "NexisClaw.context": "limit",
+            "GreenchClaw.context": "limit",
           });
         }
         if (evt.context?.used) {
           contextHistogram.record(evt.context.used, {
             ...attrs,
-            "NexisClaw.context": "used",
+            "GreenchClaw.context": "used",
           });
         }
 
@@ -1262,11 +1278,11 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           (usage.input ?? 0) + (usage.cacheRead ?? 0) + (usage.cacheWrite ?? 0);
         const spanAttrs: Record<string, string | number> = {
           ...attrs,
-          "NexisClaw.tokens.input": usage.input ?? 0,
-          "NexisClaw.tokens.output": usage.output ?? 0,
-          "NexisClaw.tokens.cache_read": usage.cacheRead ?? 0,
-          "NexisClaw.tokens.cache_write": usage.cacheWrite ?? 0,
-          "NexisClaw.tokens.total": usage.total ?? 0,
+          "GreenchClaw.tokens.input": usage.input ?? 0,
+          "GreenchClaw.tokens.output": usage.output ?? 0,
+          "GreenchClaw.tokens.cache_read": usage.cacheRead ?? 0,
+          "GreenchClaw.tokens.cache_write": usage.cacheWrite ?? 0,
+          "GreenchClaw.tokens.total": usage.total ?? 0,
         };
         assignGenAiSpanIdentityAttrs(spanAttrs, evt);
         assignPositiveNumberAttr(spanAttrs, "gen_ai.usage.input_tokens", genAiInputTokens);
@@ -1282,7 +1298,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           usage.cacheWrite,
         );
 
-        const span = spanWithDuration("NexisClaw.model.usage", spanAttrs, evt.durationMs, {
+        const span = spanWithDuration("GreenchClaw.model.usage", spanAttrs, evt.durationMs, {
           parentContext: activeTrustedParentContext(evt, metadata),
           endTimeMs: evt.ts,
         });
@@ -1293,8 +1309,8 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         evt: Extract<DiagnosticEventPayload, { type: "webhook.received" }>,
       ) => {
         const attrs = {
-          "NexisClaw.channel": evt.channel ?? "unknown",
-          "NexisClaw.webhook": evt.updateType ?? "unknown",
+          "GreenchClaw.channel": evt.channel ?? "unknown",
+          "GreenchClaw.webhook": evt.updateType ?? "unknown",
         };
         webhookReceivedCounter.add(1, attrs);
       };
@@ -1303,8 +1319,8 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         evt: Extract<DiagnosticEventPayload, { type: "webhook.processed" }>,
       ) => {
         const attrs = {
-          "NexisClaw.channel": lowCardinalityAttr(evt.channel),
-          "NexisClaw.webhook": lowCardinalityAttr(evt.updateType),
+          "GreenchClaw.channel": lowCardinalityAttr(evt.channel),
+          "GreenchClaw.webhook": lowCardinalityAttr(evt.updateType),
         };
         if (typeof evt.durationMs === "number") {
           webhookDurationHistogram.record(evt.durationMs, attrs);
@@ -1313,7 +1329,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           return;
         }
         const spanAttrs: Record<string, string | number> = { ...attrs };
-        const span = spanWithDuration("NexisClaw.webhook.processed", spanAttrs, evt.durationMs);
+        const span = spanWithDuration("GreenchClaw.webhook.processed", spanAttrs, evt.durationMs);
         span.end();
       };
 
@@ -1321,8 +1337,8 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         evt: Extract<DiagnosticEventPayload, { type: "webhook.error" }>,
       ) => {
         const attrs = {
-          "NexisClaw.channel": lowCardinalityAttr(evt.channel),
-          "NexisClaw.webhook": lowCardinalityAttr(evt.updateType),
+          "GreenchClaw.channel": lowCardinalityAttr(evt.channel),
+          "GreenchClaw.webhook": lowCardinalityAttr(evt.updateType),
         };
         webhookErrorCounter.add(1, attrs);
         if (!tracesEnabled) {
@@ -1331,9 +1347,9 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         const redactedError = redactSensitiveText(evt.error);
         const spanAttrs: Record<string, string | number> = {
           ...attrs,
-          "NexisClaw.error": redactedError,
+          "GreenchClaw.error": redactedError,
         };
-        const span = tracer.startSpan("NexisClaw.webhook.error", {
+        const span = tracer.startSpan("GreenchClaw.webhook.error", {
           attributes: spanAttrs,
         });
         span.setStatus({ code: SpanStatusCode.ERROR, message: redactedError });
@@ -1344,8 +1360,8 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         evt: Extract<DiagnosticEventPayload, { type: "message.queued" }>,
       ) => {
         const attrs = {
-          "NexisClaw.channel": lowCardinalityAttr(evt.channel),
-          "NexisClaw.source": lowCardinalityAttr(evt.source),
+          "GreenchClaw.channel": lowCardinalityAttr(evt.channel),
+          "GreenchClaw.source": lowCardinalityAttr(evt.source),
         };
         messageQueuedCounter.add(1, attrs);
         if (typeof evt.queueDepth === "number") {
@@ -1357,8 +1373,8 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         evt: Extract<DiagnosticEventPayload, { type: "message.processed" }>,
       ) => {
         const attrs = {
-          "NexisClaw.channel": lowCardinalityAttr(evt.channel),
-          "NexisClaw.outcome": evt.outcome ?? "unknown",
+          "GreenchClaw.channel": lowCardinalityAttr(evt.channel),
+          "GreenchClaw.outcome": evt.outcome ?? "unknown",
         };
         messageProcessedCounter.add(1, attrs);
         if (typeof evt.durationMs === "number") {
@@ -1369,9 +1385,9 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         }
         const spanAttrs: Record<string, string | number> = { ...attrs };
         if (evt.reason) {
-          spanAttrs["NexisClaw.reason"] = lowCardinalityAttr(evt.reason, "unknown");
+          spanAttrs["GreenchClaw.reason"] = lowCardinalityAttr(evt.reason, "unknown");
         }
-        const span = spanWithDuration("NexisClaw.message.processed", spanAttrs, evt.durationMs);
+        const span = spanWithDuration("GreenchClaw.message.processed", spanAttrs, evt.durationMs);
         if (evt.outcome === "error" && evt.error) {
           span.setStatus({ code: SpanStatusCode.ERROR, message: redactSensitiveText(evt.error) });
         }
@@ -1381,8 +1397,8 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
       const messageDeliveryAttrs = (
         evt: MessageDeliveryDiagnosticEvent,
       ): Record<string, string> => ({
-        "NexisClaw.channel": lowCardinalityAttr(evt.channel),
-        "NexisClaw.delivery.kind": lowCardinalityAttr(evt.deliveryKind, "other"),
+        "GreenchClaw.channel": lowCardinalityAttr(evt.channel),
+        "GreenchClaw.delivery.kind": lowCardinalityAttr(evt.deliveryKind, "other"),
       });
 
       const recordMessageDeliveryStarted = (
@@ -1396,17 +1412,17 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
       ) => {
         const attrs = {
           ...messageDeliveryAttrs(evt),
-          "NexisClaw.outcome": "completed",
+          "GreenchClaw.outcome": "completed",
         };
         messageDeliveryDurationHistogram.record(evt.durationMs, attrs);
         if (!tracesEnabled) {
           return;
         }
         const span = spanWithDuration(
-          "NexisClaw.message.delivery",
+          "GreenchClaw.message.delivery",
           {
             ...attrs,
-            "NexisClaw.delivery.result_count": evt.resultCount,
+            "GreenchClaw.delivery.result_count": evt.resultCount,
           },
           evt.durationMs,
           { endTimeMs: evt.ts },
@@ -1419,14 +1435,14 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
       ) => {
         const attrs = {
           ...messageDeliveryAttrs(evt),
-          "NexisClaw.outcome": "error",
-          "NexisClaw.errorCategory": lowCardinalityAttr(evt.errorCategory, "other"),
+          "GreenchClaw.outcome": "error",
+          "GreenchClaw.errorCategory": lowCardinalityAttr(evt.errorCategory, "other"),
         };
         messageDeliveryDurationHistogram.record(evt.durationMs, attrs);
         if (!tracesEnabled) {
           return;
         }
-        const span = spanWithDuration("NexisClaw.message.delivery", attrs, evt.durationMs, {
+        const span = spanWithDuration("GreenchClaw.message.delivery", attrs, evt.durationMs, {
           endTimeMs: evt.ts,
         });
         span.setStatus({
@@ -1448,7 +1464,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         const span = trackTrustedSpan(
           evt,
           metadata,
-          spanWithDuration("NexisClaw.run", spanAttrs, undefined, {
+          spanWithDuration("GreenchClaw.run", spanAttrs, undefined, {
             parentContext: activeTrustedParentContext(evt, metadata),
             startTimeMs: evt.ts,
           }),
@@ -1462,7 +1478,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
       const recordLaneEnqueue = (
         evt: Extract<DiagnosticEventPayload, { type: "queue.lane.enqueue" }>,
       ) => {
-        const attrs = { "NexisClaw.lane": evt.lane };
+        const attrs = { "GreenchClaw.lane": evt.lane };
         laneEnqueueCounter.add(1, attrs);
         queueDepthHistogram.record(evt.queueSize, attrs);
       };
@@ -1470,7 +1486,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
       const recordLaneDequeue = (
         evt: Extract<DiagnosticEventPayload, { type: "queue.lane.dequeue" }>,
       ) => {
-        const attrs = { "NexisClaw.lane": evt.lane };
+        const attrs = { "GreenchClaw.lane": evt.lane };
         laneDequeueCounter.add(1, attrs);
         queueDepthHistogram.record(evt.queueSize, attrs);
         if (typeof evt.waitMs === "number") {
@@ -1481,9 +1497,9 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
       const recordSessionState = (
         evt: Extract<DiagnosticEventPayload, { type: "session.state" }>,
       ) => {
-        const attrs: Record<string, string> = { "NexisClaw.state": evt.state };
+        const attrs: Record<string, string> = { "GreenchClaw.state": evt.state };
         if (evt.reason) {
-          attrs["NexisClaw.reason"] = redactSensitiveText(evt.reason);
+          attrs["GreenchClaw.reason"] = redactSensitiveText(evt.reason);
         }
         sessionStateCounter.add(1, attrs);
       };
@@ -1491,7 +1507,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
       const recordSessionStuck = (
         evt: Extract<DiagnosticEventPayload, { type: "session.stuck" }>,
       ) => {
-        const attrs: Record<string, string> = { "NexisClaw.state": evt.state };
+        const attrs: Record<string, string> = { "GreenchClaw.state": evt.state };
         sessionStuckCounter.add(1, attrs);
         if (typeof evt.ageMs === "number") {
           sessionStuckAgeHistogram.record(evt.ageMs, attrs);
@@ -1500,20 +1516,20 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           return;
         }
         const spanAttrs: Record<string, string | number> = { ...attrs };
-        spanAttrs["NexisClaw.queueDepth"] = evt.queueDepth ?? 0;
-        spanAttrs["NexisClaw.ageMs"] = evt.ageMs;
-        const span = tracer.startSpan("NexisClaw.session.stuck", { attributes: spanAttrs });
+        spanAttrs["GreenchClaw.queueDepth"] = evt.queueDepth ?? 0;
+        spanAttrs["GreenchClaw.ageMs"] = evt.ageMs;
+        const span = tracer.startSpan("GreenchClaw.session.stuck", { attributes: spanAttrs });
         span.setStatus({ code: SpanStatusCode.ERROR, message: "session stuck" });
         span.end();
       };
 
       const sessionRecoveryAttrs = (evt: SessionRecoveryDiagnosticEvent) => {
-        const attrs: Record<string, string> = { "NexisClaw.state": evt.state };
+        const attrs: Record<string, string> = { "GreenchClaw.state": evt.state };
         if (evt.reason) {
-          attrs["NexisClaw.reason"] = redactSensitiveText(evt.reason);
+          attrs["GreenchClaw.reason"] = redactSensitiveText(evt.reason);
         }
         if (evt.activeWorkKind) {
-          attrs["NexisClaw.active_work_kind"] = evt.activeWorkKind;
+          attrs["GreenchClaw.active_work_kind"] = evt.activeWorkKind;
         }
         return attrs;
       };
@@ -1522,7 +1538,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         evt: Extract<DiagnosticEventPayload, { type: "session.recovery.requested" }>,
       ) => {
         const attrs = sessionRecoveryAttrs(evt);
-        attrs["NexisClaw.action"] = evt.allowActiveAbort ? "abort" : "recover";
+        attrs["GreenchClaw.action"] = evt.allowActiveAbort ? "abort" : "recover";
         sessionRecoveryRequestedCounter.add(1, attrs);
         sessionRecoveryAgeHistogram.record(evt.ageMs, attrs);
       };
@@ -1531,21 +1547,21 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         evt: Extract<DiagnosticEventPayload, { type: "session.recovery.completed" }>,
       ) => {
         const attrs = sessionRecoveryAttrs(evt);
-        attrs["NexisClaw.status"] = evt.status;
-        attrs["NexisClaw.action"] = lowCardinalityAttr(evt.action, "unknown");
+        attrs["GreenchClaw.status"] = evt.status;
+        attrs["GreenchClaw.action"] = lowCardinalityAttr(evt.action, "unknown");
         if (evt.outcomeReason) {
-          attrs["NexisClaw.reason"] = redactSensitiveText(evt.outcomeReason);
+          attrs["GreenchClaw.reason"] = redactSensitiveText(evt.outcomeReason);
         }
         sessionRecoveryCompletedCounter.add(1, attrs);
         sessionRecoveryAgeHistogram.record(evt.ageMs, attrs);
       };
 
       const talkEventAttrs = (evt: TalkDiagnosticEvent): Record<string, string> => ({
-        "NexisClaw.talk.brain": lowCardinalityAttr(evt.brain),
-        "NexisClaw.talk.event_type": lowCardinalityAttr(evt.talkEventType),
-        "NexisClaw.talk.mode": lowCardinalityAttr(evt.mode),
-        "NexisClaw.talk.provider": lowCardinalityAttr(evt.provider),
-        "NexisClaw.talk.transport": lowCardinalityAttr(evt.transport),
+        "GreenchClaw.talk.brain": lowCardinalityAttr(evt.brain),
+        "GreenchClaw.talk.event_type": lowCardinalityAttr(evt.talkEventType),
+        "GreenchClaw.talk.mode": lowCardinalityAttr(evt.mode),
+        "GreenchClaw.talk.provider": lowCardinalityAttr(evt.provider),
+        "GreenchClaw.talk.transport": lowCardinalityAttr(evt.transport),
       });
 
       const recordTalkEvent = (evt: TalkDiagnosticEvent, metadata: DiagnosticEventMetadata) => {
@@ -1563,19 +1579,19 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
       };
 
       const recordRunAttempt = (evt: Extract<DiagnosticEventPayload, { type: "run.attempt" }>) => {
-        runAttemptCounter.add(1, { "NexisClaw.attempt": evt.attempt });
+        runAttemptCounter.add(1, { "GreenchClaw.attempt": evt.attempt });
       };
 
       const toolLoopAttrs = (
         evt: Extract<DiagnosticEventPayload, { type: "tool.loop" }>,
       ): Record<string, string | number> => ({
-        "NexisClaw.toolName": lowCardinalityAttr(evt.toolName, "tool"),
-        "NexisClaw.loop.level": evt.level,
-        "NexisClaw.loop.action": evt.action,
-        "NexisClaw.loop.detector": evt.detector,
-        "NexisClaw.loop.count": evt.count,
+        "GreenchClaw.toolName": lowCardinalityAttr(evt.toolName, "tool"),
+        "GreenchClaw.loop.level": evt.level,
+        "GreenchClaw.loop.action": evt.action,
+        "GreenchClaw.loop.detector": evt.detector,
+        "GreenchClaw.loop.count": evt.count,
         ...(evt.pairedToolName
-          ? { "NexisClaw.loop.paired_tool": lowCardinalityAttr(evt.pairedToolName, "tool") }
+          ? { "GreenchClaw.loop.paired_tool": lowCardinalityAttr(evt.pairedToolName, "tool") }
           : {}),
       });
 
@@ -1585,7 +1601,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         if (!tracesEnabled) {
           return;
         }
-        const span = spanWithDuration("NexisClaw.tool.loop", attrs, 0, { endTimeMs: evt.ts });
+        const span = spanWithDuration("GreenchClaw.tool.loop", attrs, 0, { endTimeMs: evt.ts });
         if (evt.level === "critical" || evt.action === "block") {
           span.setStatus({
             code: SpanStatusCode.ERROR,
@@ -1619,8 +1635,8 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         evt: Extract<DiagnosticEventPayload, { type: "diagnostic.memory.pressure" }>,
       ) => {
         const attrs = {
-          "NexisClaw.memory.level": evt.level,
-          "NexisClaw.memory.reason": evt.reason,
+          "GreenchClaw.memory.level": evt.level,
+          "GreenchClaw.memory.reason": evt.reason,
         };
         memoryPressureCounter.add(1, attrs);
         recordMemoryUsageMetrics(evt, attrs);
@@ -1629,20 +1645,20 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         }
         const spanAttrs: Record<string, string | number | boolean> = {
           ...attrs,
-          "NexisClaw.memory.rss_bytes": evt.memory.rssBytes,
-          "NexisClaw.memory.heap_used_bytes": evt.memory.heapUsedBytes,
-          "NexisClaw.memory.heap_total_bytes": evt.memory.heapTotalBytes,
-          "NexisClaw.memory.external_bytes": evt.memory.externalBytes,
-          "NexisClaw.memory.array_buffers_bytes": evt.memory.arrayBuffersBytes,
+          "GreenchClaw.memory.rss_bytes": evt.memory.rssBytes,
+          "GreenchClaw.memory.heap_used_bytes": evt.memory.heapUsedBytes,
+          "GreenchClaw.memory.heap_total_bytes": evt.memory.heapTotalBytes,
+          "GreenchClaw.memory.external_bytes": evt.memory.externalBytes,
+          "GreenchClaw.memory.array_buffers_bytes": evt.memory.arrayBuffersBytes,
           ...(evt.thresholdBytes !== undefined
-            ? { "NexisClaw.memory.threshold_bytes": evt.thresholdBytes }
+            ? { "GreenchClaw.memory.threshold_bytes": evt.thresholdBytes }
             : {}),
           ...(evt.rssGrowthBytes !== undefined
-            ? { "NexisClaw.memory.rss_growth_bytes": evt.rssGrowthBytes }
+            ? { "GreenchClaw.memory.rss_growth_bytes": evt.rssGrowthBytes }
             : {}),
-          ...(evt.windowMs !== undefined ? { "NexisClaw.memory.window_ms": evt.windowMs } : {}),
+          ...(evt.windowMs !== undefined ? { "GreenchClaw.memory.window_ms": evt.windowMs } : {}),
         };
-        const span = spanWithDuration("NexisClaw.memory.pressure", spanAttrs, 0, {
+        const span = spanWithDuration("GreenchClaw.memory.pressure", spanAttrs, 0, {
           endTimeMs: evt.ts,
         });
         if (evt.level === "critical") {
@@ -1659,29 +1675,29 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         metadata: DiagnosticEventMetadata,
       ) => {
         const attrs: Record<string, string | number> = {
-          "NexisClaw.outcome": evt.outcome,
-          "NexisClaw.provider": evt.provider ?? "unknown",
-          "NexisClaw.model": evt.model ?? "unknown",
+          "GreenchClaw.outcome": evt.outcome,
+          "GreenchClaw.provider": evt.provider ?? "unknown",
+          "GreenchClaw.model": evt.model ?? "unknown",
         };
         if (evt.channel) {
-          attrs["NexisClaw.channel"] = evt.channel;
+          attrs["GreenchClaw.channel"] = evt.channel;
         }
         if (evt.blockedBy) {
-          attrs["NexisClaw.blocked_by"] = lowCardinalityAttr(evt.blockedBy, "unknown");
+          attrs["GreenchClaw.blocked_by"] = lowCardinalityAttr(evt.blockedBy, "unknown");
         }
         durationHistogram.record(evt.durationMs, attrs);
         if (!tracesEnabled) {
           return;
         }
         const spanAttrs: Record<string, string | number | boolean> = {
-          "NexisClaw.outcome": evt.outcome,
+          "GreenchClaw.outcome": evt.outcome,
         };
         addRunAttrs(spanAttrs, evt);
         if (evt.blockedBy) {
-          spanAttrs["NexisClaw.blocked_by"] = lowCardinalityAttr(evt.blockedBy, "unknown");
+          spanAttrs["GreenchClaw.blocked_by"] = lowCardinalityAttr(evt.blockedBy, "unknown");
         }
         if (evt.errorCategory) {
-          spanAttrs["NexisClaw.errorCategory"] = lowCardinalityAttr(evt.errorCategory, "other");
+          spanAttrs["GreenchClaw.errorCategory"] = lowCardinalityAttr(evt.errorCategory, "other");
         }
         const trustedTrace = trustedTraceContext(evt, metadata);
         const trackedSpan = trustedTrace?.spanId
@@ -1689,7 +1705,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           : undefined;
         const span =
           trackedSpan ??
-          spanWithDuration("NexisClaw.run", spanAttrs, evt.durationMs, {
+          spanWithDuration("GreenchClaw.run", spanAttrs, evt.durationMs, {
             parentContext: activeTrustedParentContext(evt, metadata),
             endTimeMs: evt.ts,
           });
@@ -1713,16 +1729,16 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
       };
 
       const harnessRunMetricAttrs = (evt: HarnessRunDiagnosticEvent) => ({
-        "NexisClaw.harness.id": lowCardinalityAttr(evt.harnessId, "unknown"),
-        "NexisClaw.harness.plugin": lowCardinalityAttr(evt.pluginId),
+        "GreenchClaw.harness.id": lowCardinalityAttr(evt.harnessId, "unknown"),
+        "GreenchClaw.harness.plugin": lowCardinalityAttr(evt.pluginId),
         ...(evt.type === "harness.run.started"
           ? {}
           : {
-              "NexisClaw.outcome": evt.type === "harness.run.error" ? "error" : evt.outcome,
+              "GreenchClaw.outcome": evt.type === "harness.run.error" ? "error" : evt.outcome,
             }),
-        "NexisClaw.provider": lowCardinalityAttr(evt.provider, "unknown"),
-        "NexisClaw.model": lowCardinalityAttr(evt.model, "unknown"),
-        ...(evt.channel ? { "NexisClaw.channel": lowCardinalityAttr(evt.channel) } : {}),
+        "GreenchClaw.provider": lowCardinalityAttr(evt.provider, "unknown"),
+        "GreenchClaw.model": lowCardinalityAttr(evt.model, "unknown"),
+        ...(evt.channel ? { "GreenchClaw.channel": lowCardinalityAttr(evt.channel) } : {}),
       });
 
       const recordHarnessRunStarted = (
@@ -1735,7 +1751,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         trackTrustedSpan(
           evt,
           metadata,
-          spanWithDuration("NexisClaw.harness.run", harnessRunMetricAttrs(evt), undefined, {
+          spanWithDuration("GreenchClaw.harness.run", harnessRunMetricAttrs(evt), undefined, {
             parentContext: activeTrustedParentContext(evt, metadata),
             startTimeMs: evt.ts,
           }),
@@ -1754,21 +1770,21 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           ...harnessRunMetricAttrs(evt),
         };
         if (evt.resultClassification) {
-          spanAttrs["NexisClaw.harness.result_classification"] = lowCardinalityAttr(
+          spanAttrs["GreenchClaw.harness.result_classification"] = lowCardinalityAttr(
             evt.resultClassification,
           );
         }
         if (typeof evt.yieldDetected === "boolean") {
-          spanAttrs["NexisClaw.harness.yield_detected"] = evt.yieldDetected;
+          spanAttrs["GreenchClaw.harness.yield_detected"] = evt.yieldDetected;
         }
         if (evt.itemLifecycle) {
-          spanAttrs["NexisClaw.harness.items.started"] = evt.itemLifecycle.startedCount;
-          spanAttrs["NexisClaw.harness.items.completed"] = evt.itemLifecycle.completedCount;
-          spanAttrs["NexisClaw.harness.items.active"] = evt.itemLifecycle.activeCount;
+          spanAttrs["GreenchClaw.harness.items.started"] = evt.itemLifecycle.startedCount;
+          spanAttrs["GreenchClaw.harness.items.completed"] = evt.itemLifecycle.completedCount;
+          spanAttrs["GreenchClaw.harness.items.active"] = evt.itemLifecycle.activeCount;
         }
         const span =
           takeTrackedTrustedSpan(evt, metadata) ??
-          spanWithDuration("NexisClaw.harness.run", spanAttrs, evt.durationMs, {
+          spanWithDuration("GreenchClaw.harness.run", spanAttrs, evt.durationMs, {
             parentContext: activeTrustedParentContext(evt, metadata),
             endTimeMs: evt.ts,
           });
@@ -1789,8 +1805,8 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         const errorType = lowCardinalityAttr(evt.errorCategory, "other");
         const attrs = {
           ...harnessRunMetricAttrs(evt),
-          "NexisClaw.harness.phase": evt.phase,
-          "NexisClaw.errorCategory": errorType,
+          "GreenchClaw.harness.phase": evt.phase,
+          "GreenchClaw.errorCategory": errorType,
         };
         harnessDurationHistogram.record(evt.durationMs, attrs);
         if (!tracesEnabled) {
@@ -1799,11 +1815,11 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         const spanAttrs: Record<string, string | number | boolean> = {
           ...attrs,
           "error.type": errorType,
-          ...(evt.cleanupFailed ? { "NexisClaw.harness.cleanup_failed": true } : {}),
+          ...(evt.cleanupFailed ? { "GreenchClaw.harness.cleanup_failed": true } : {}),
         };
         const span =
           takeTrackedTrustedSpan(evt, metadata) ??
-          spanWithDuration("NexisClaw.harness.run", spanAttrs, evt.durationMs, {
+          spanWithDuration("GreenchClaw.harness.run", spanAttrs, evt.durationMs, {
             parentContext: activeTrustedParentContext(evt, metadata),
             endTimeMs: evt.ts,
           });
@@ -1823,22 +1839,22 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           return;
         }
         const spanAttrs: Record<string, string | number | boolean> = {
-          "NexisClaw.context.message_count": evt.messageCount,
-          "NexisClaw.context.history_text_chars": evt.historyTextChars,
-          "NexisClaw.context.history_image_blocks": evt.historyImageBlocks,
-          "NexisClaw.context.max_message_text_chars": evt.maxMessageTextChars,
-          "NexisClaw.context.system_prompt_chars": evt.systemPromptChars,
-          "NexisClaw.context.prompt_chars": evt.promptChars,
-          "NexisClaw.context.prompt_images": evt.promptImages,
+          "GreenchClaw.context.message_count": evt.messageCount,
+          "GreenchClaw.context.history_text_chars": evt.historyTextChars,
+          "GreenchClaw.context.history_image_blocks": evt.historyImageBlocks,
+          "GreenchClaw.context.max_message_text_chars": evt.maxMessageTextChars,
+          "GreenchClaw.context.system_prompt_chars": evt.systemPromptChars,
+          "GreenchClaw.context.prompt_chars": evt.promptChars,
+          "GreenchClaw.context.prompt_images": evt.promptImages,
         };
         addRunAttrs(spanAttrs, evt);
         if (evt.contextTokenBudget !== undefined) {
-          spanAttrs["NexisClaw.context.token_budget"] = evt.contextTokenBudget;
+          spanAttrs["GreenchClaw.context.token_budget"] = evt.contextTokenBudget;
         }
         if (evt.reserveTokens !== undefined) {
-          spanAttrs["NexisClaw.context.reserve_tokens"] = evt.reserveTokens;
+          spanAttrs["GreenchClaw.context.reserve_tokens"] = evt.reserveTokens;
         }
-        const span = spanWithDuration("NexisClaw.context.assembled", spanAttrs, 0, {
+        const span = spanWithDuration("GreenchClaw.context.assembled", spanAttrs, 0, {
           parentContext: activeTrustedParentContext(evt, metadata),
           endTimeMs: evt.ts,
         });
@@ -1853,30 +1869,30 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           return;
         }
         const spanAttrs: Record<string, string | number | boolean> = {
-          "NexisClaw.failover.reason": lowCardinalityAttr(evt.reason, "unknown"),
+          "GreenchClaw.failover.reason": lowCardinalityAttr(evt.reason, "unknown"),
         };
         if (evt.fromProvider) {
-          spanAttrs["NexisClaw.provider"] = evt.fromProvider;
+          spanAttrs["GreenchClaw.provider"] = evt.fromProvider;
         }
         if (evt.fromModel) {
-          spanAttrs["NexisClaw.model"] = evt.fromModel;
+          spanAttrs["GreenchClaw.model"] = evt.fromModel;
         }
         if (evt.toProvider) {
-          spanAttrs["NexisClaw.failover.to_provider"] = evt.toProvider;
+          spanAttrs["GreenchClaw.failover.to_provider"] = evt.toProvider;
         }
         if (evt.toModel) {
-          spanAttrs["NexisClaw.failover.to_model"] = evt.toModel;
+          spanAttrs["GreenchClaw.failover.to_model"] = evt.toModel;
         }
         if (evt.lane) {
-          spanAttrs["NexisClaw.lane"] = lowCardinalityAttr(evt.lane, "unknown");
+          spanAttrs["GreenchClaw.lane"] = lowCardinalityAttr(evt.lane, "unknown");
         }
         if (evt.suspended !== undefined) {
-          spanAttrs["NexisClaw.failover.suspended"] = evt.suspended;
+          spanAttrs["GreenchClaw.failover.suspended"] = evt.suspended;
         }
         if (evt.cascadeDepth !== undefined) {
-          spanAttrs["NexisClaw.failover.cascade_depth"] = evt.cascadeDepth;
+          spanAttrs["GreenchClaw.failover.cascade_depth"] = evt.cascadeDepth;
         }
-        const span = spanWithDuration("NexisClaw.model.failover", spanAttrs, 0, {
+        const span = spanWithDuration("GreenchClaw.model.failover", spanAttrs, 0, {
           parentContext: activeTrustedParentContext(evt, metadata),
           endTimeMs: evt.ts,
         });
@@ -1884,10 +1900,10 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
       };
 
       const modelCallMetricAttrs = (evt: ModelCallLifecycleDiagnosticEvent) => ({
-        "NexisClaw.provider": evt.provider,
-        "NexisClaw.model": evt.model,
-        "NexisClaw.api": lowCardinalityAttr(evt.api),
-        "NexisClaw.transport": lowCardinalityAttr(evt.transport),
+        "GreenchClaw.provider": evt.provider,
+        "GreenchClaw.model": evt.model,
+        "GreenchClaw.api": lowCardinalityAttr(evt.api),
+        "GreenchClaw.transport": lowCardinalityAttr(evt.transport),
       });
       const genAiModelCallMetricAttrs = (
         evt: ModelCallLifecycleDiagnosticEvent,
@@ -1924,20 +1940,20 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           return;
         }
         const spanAttrs: Record<string, string | number | boolean> = {
-          "NexisClaw.provider": evt.provider,
-          "NexisClaw.model": evt.model,
+          "GreenchClaw.provider": evt.provider,
+          "GreenchClaw.model": evt.model,
         };
         assignGenAiModelCallAttrs(spanAttrs, evt);
         if (evt.api) {
-          spanAttrs["NexisClaw.api"] = evt.api;
+          spanAttrs["GreenchClaw.api"] = evt.api;
         }
         if (evt.transport) {
-          spanAttrs["NexisClaw.transport"] = evt.transport;
+          spanAttrs["GreenchClaw.transport"] = evt.transport;
         }
         trackTrustedSpan(
           evt,
           metadata,
-          spanWithDuration("NexisClaw.model.call", spanAttrs, undefined, {
+          spanWithDuration("GreenchClaw.model.call", spanAttrs, undefined, {
             parentContext: activeTrustedParentContext(evt, metadata),
             startTimeMs: evt.ts,
           }),
@@ -1959,15 +1975,15 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           return;
         }
         const spanAttrs: Record<string, string | number | boolean> = {
-          "NexisClaw.provider": evt.provider,
-          "NexisClaw.model": evt.model,
+          "GreenchClaw.provider": evt.provider,
+          "GreenchClaw.model": evt.model,
         };
         assignGenAiModelCallAttrs(spanAttrs, evt);
         if (evt.api) {
-          spanAttrs["NexisClaw.api"] = evt.api;
+          spanAttrs["GreenchClaw.api"] = evt.api;
         }
         if (evt.transport) {
-          spanAttrs["NexisClaw.transport"] = evt.transport;
+          spanAttrs["GreenchClaw.transport"] = evt.transport;
         }
         assignModelCallSizeTimingAttrs(spanAttrs, evt);
         assignOtelModelContentAttributes(
@@ -1977,7 +1993,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         );
         const span =
           takeTrackedTrustedSpan(evt, metadata) ??
-          spanWithDuration("NexisClaw.model.call", spanAttrs, evt.durationMs, {
+          spanWithDuration("GreenchClaw.model.call", spanAttrs, evt.durationMs, {
             parentContext: activeTrustedParentContext(evt, metadata),
             endTimeMs: evt.ts,
           });
@@ -1993,9 +2009,9 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         const errorType = lowCardinalityAttr(evt.errorCategory, "other");
         const metricAttrs = {
           ...modelCallMetricAttrs(evt),
-          "NexisClaw.errorCategory": errorType,
+          "GreenchClaw.errorCategory": errorType,
           ...(evt.failureKind
-            ? { "NexisClaw.failureKind": lowCardinalityAttr(evt.failureKind, "other") }
+            ? { "GreenchClaw.failureKind": lowCardinalityAttr(evt.failureKind, "other") }
             : {}),
         };
         modelCallDurationHistogram.record(evt.durationMs, metricAttrs);
@@ -2008,20 +2024,20 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           return;
         }
         const spanAttrs: Record<string, string | number | boolean> = {
-          "NexisClaw.provider": evt.provider,
-          "NexisClaw.model": evt.model,
-          "NexisClaw.errorCategory": errorType,
+          "GreenchClaw.provider": evt.provider,
+          "GreenchClaw.model": evt.model,
+          "GreenchClaw.errorCategory": errorType,
           "error.type": errorType,
         };
         if (evt.failureKind) {
-          spanAttrs["NexisClaw.failureKind"] = lowCardinalityAttr(evt.failureKind, "other");
+          spanAttrs["GreenchClaw.failureKind"] = lowCardinalityAttr(evt.failureKind, "other");
         }
         assignGenAiModelCallAttrs(spanAttrs, evt);
         if (evt.api) {
-          spanAttrs["NexisClaw.api"] = evt.api;
+          spanAttrs["GreenchClaw.api"] = evt.api;
         }
         if (evt.transport) {
-          spanAttrs["NexisClaw.transport"] = evt.transport;
+          spanAttrs["GreenchClaw.transport"] = evt.transport;
         }
         assignModelCallSizeTimingAttrs(spanAttrs, evt);
         assignOtelModelContentAttributes(
@@ -2031,7 +2047,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         );
         const span =
           takeTrackedTrustedSpan(evt, metadata) ??
-          spanWithDuration("NexisClaw.model.call", spanAttrs, evt.durationMs, {
+          spanWithDuration("GreenchClaw.model.call", spanAttrs, evt.durationMs, {
             parentContext: activeTrustedParentContext(evt, metadata),
             endTimeMs: evt.ts,
           });
@@ -2056,7 +2072,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           }
         >,
       ): Record<string, string | number | boolean> => ({
-        "NexisClaw.toolName": evt.toolName,
+        "GreenchClaw.toolName": evt.toolName,
         "gen_ai.tool.name": evt.toolName,
         ...paramsSummaryAttrs(evt.paramsSummary),
       });
@@ -2071,7 +2087,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         trackTrustedSpan(
           evt,
           metadata,
-          spanWithDuration("NexisClaw.tool.execution", toolExecutionBaseAttrs(evt), undefined, {
+          spanWithDuration("GreenchClaw.tool.execution", toolExecutionBaseAttrs(evt), undefined, {
             parentContext: activeTrustedParentContext(evt, metadata),
             startTimeMs: evt.ts,
           }),
@@ -2083,7 +2099,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         metadata: DiagnosticEventMetadata,
       ) => {
         const attrs = {
-          "NexisClaw.toolName": evt.toolName,
+          "GreenchClaw.toolName": evt.toolName,
           ...paramsSummaryAttrs(evt.paramsSummary),
         };
         toolExecutionDurationHistogram.record(evt.durationMs, attrs);
@@ -2101,7 +2117,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         );
         const span =
           takeTrackedTrustedSpan(evt, metadata) ??
-          spanWithDuration("NexisClaw.tool.execution", spanAttrs, evt.durationMs, {
+          spanWithDuration("GreenchClaw.tool.execution", spanAttrs, evt.durationMs, {
             parentContext: activeTrustedParentContext(evt, metadata),
             endTimeMs: evt.ts,
           });
@@ -2114,8 +2130,8 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         metadata: DiagnosticEventMetadata,
       ) => {
         const attrs = {
-          "NexisClaw.toolName": evt.toolName,
-          "NexisClaw.errorCategory": lowCardinalityAttr(evt.errorCategory, "other"),
+          "GreenchClaw.toolName": evt.toolName,
+          "GreenchClaw.errorCategory": lowCardinalityAttr(evt.errorCategory, "other"),
           ...paramsSummaryAttrs(evt.paramsSummary),
         };
         toolExecutionDurationHistogram.record(evt.durationMs, attrs);
@@ -2124,11 +2140,11 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         }
         const spanAttrs: Record<string, string | number | boolean> = {
           ...toolExecutionBaseAttrs(evt),
-          "NexisClaw.errorCategory": lowCardinalityAttr(evt.errorCategory, "other"),
+          "GreenchClaw.errorCategory": lowCardinalityAttr(evt.errorCategory, "other"),
         };
         addRunAttrs(spanAttrs, evt);
         if (evt.errorCode) {
-          spanAttrs["NexisClaw.errorCode"] = lowCardinalityAttr(evt.errorCode, "other");
+          spanAttrs["GreenchClaw.errorCode"] = lowCardinalityAttr(evt.errorCode, "other");
         }
         assignOtelToolContentAttributes(
           spanAttrs,
@@ -2137,7 +2153,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         );
         const span =
           takeTrackedTrustedSpan(evt, metadata) ??
-          spanWithDuration("NexisClaw.tool.execution", spanAttrs, evt.durationMs, {
+          spanWithDuration("GreenchClaw.tool.execution", spanAttrs, evt.durationMs, {
             parentContext: activeTrustedParentContext(evt, metadata),
             endTimeMs: evt.ts,
           });
@@ -2158,11 +2174,11 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         }
         const spanAttrs: Record<string, string | number | boolean> = {
           ...toolExecutionBaseAttrs(evt),
-          "NexisClaw.outcome": "blocked",
-          "NexisClaw.deniedReason": lowCardinalityAttr(evt.deniedReason, "other"),
+          "GreenchClaw.outcome": "blocked",
+          "GreenchClaw.deniedReason": lowCardinalityAttr(evt.deniedReason, "other"),
         };
         addRunAttrs(spanAttrs, evt);
-        const span = spanWithDuration("NexisClaw.tool.execution", spanAttrs, 0, {
+        const span = spanWithDuration("GreenchClaw.tool.execution", spanAttrs, 0, {
           parentContext: activeTrustedParentContext(evt, metadata),
           endTimeMs: evt.ts,
         });
@@ -2174,12 +2190,12 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         evt: Extract<DiagnosticEventPayload, { type: "exec.process.completed" }>,
       ) => {
         const attrs: Record<string, string | number> = {
-          "NexisClaw.exec.target": evt.target,
-          "NexisClaw.exec.mode": evt.mode,
-          "NexisClaw.outcome": evt.outcome,
+          "GreenchClaw.exec.target": evt.target,
+          "GreenchClaw.exec.mode": evt.mode,
+          "GreenchClaw.outcome": evt.outcome,
         };
         if (evt.failureKind) {
-          attrs["NexisClaw.failureKind"] = evt.failureKind;
+          attrs["GreenchClaw.failureKind"] = evt.failureKind;
         }
         execProcessDurationHistogram.record(evt.durationMs, attrs);
         if (!tracesEnabled) {
@@ -2188,19 +2204,19 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
 
         const spanAttrs: Record<string, string | number | boolean> = {
           ...attrs,
-          "NexisClaw.exec.command_length": evt.commandLength,
+          "GreenchClaw.exec.command_length": evt.commandLength,
         };
         if (typeof evt.exitCode === "number") {
-          spanAttrs["NexisClaw.exec.exit_code"] = evt.exitCode;
+          spanAttrs["GreenchClaw.exec.exit_code"] = evt.exitCode;
         }
         if (evt.exitSignal) {
-          spanAttrs["NexisClaw.exec.exit_signal"] = lowCardinalityAttr(evt.exitSignal, "other");
+          spanAttrs["GreenchClaw.exec.exit_signal"] = lowCardinalityAttr(evt.exitSignal, "other");
         }
         if (evt.timedOut !== undefined) {
-          spanAttrs["NexisClaw.exec.timed_out"] = evt.timedOut;
+          spanAttrs["GreenchClaw.exec.timed_out"] = evt.timedOut;
         }
 
-        const span = spanWithDuration("NexisClaw.exec", spanAttrs, evt.durationMs, {
+        const span = spanWithDuration("GreenchClaw.exec", spanAttrs, evt.durationMs, {
           endTimeMs: evt.ts,
         });
         if (evt.outcome === "failed") {
@@ -2215,7 +2231,7 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
       const recordHeartbeat = (
         evt: Extract<DiagnosticEventPayload, { type: "diagnostic.heartbeat" }>,
       ) => {
-        queueDepthHistogram.record(evt.queued, { "NexisClaw.channel": "heartbeat" });
+        queueDepthHistogram.record(evt.queued, { "GreenchClaw.channel": "heartbeat" });
       };
 
       const recordLivenessWarning = (
@@ -2223,10 +2239,10 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
       ) => {
         const reason = evt.reasons.join(":");
         const attrs = {
-          "NexisClaw.liveness.reason": lowCardinalityAttr(reason, "unknown"),
+          "GreenchClaw.liveness.reason": lowCardinalityAttr(reason, "unknown"),
         };
         livenessWarningCounter.add(1, attrs);
-        queueDepthHistogram.record(evt.queued, { "NexisClaw.channel": "liveness" });
+        queueDepthHistogram.record(evt.queued, { "GreenchClaw.channel": "liveness" });
         if (evt.eventLoopDelayP99Ms !== undefined) {
           livenessEventLoopDelayP99Histogram.record(evt.eventLoopDelayP99Ms, attrs);
         }
@@ -2244,33 +2260,33 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
         }
         const spanAttrs: Record<string, string | number> = {
           ...attrs,
-          "NexisClaw.liveness.active": evt.active,
-          "NexisClaw.liveness.waiting": evt.waiting,
-          "NexisClaw.liveness.queued": evt.queued,
-          "NexisClaw.liveness.interval_ms": evt.intervalMs,
+          "GreenchClaw.liveness.active": evt.active,
+          "GreenchClaw.liveness.waiting": evt.waiting,
+          "GreenchClaw.liveness.queued": evt.queued,
+          "GreenchClaw.liveness.interval_ms": evt.intervalMs,
           ...(evt.eventLoopDelayP99Ms !== undefined
-            ? { "NexisClaw.liveness.event_loop_delay_p99_ms": evt.eventLoopDelayP99Ms }
+            ? { "GreenchClaw.liveness.event_loop_delay_p99_ms": evt.eventLoopDelayP99Ms }
             : {}),
           ...(evt.eventLoopDelayMaxMs !== undefined
-            ? { "NexisClaw.liveness.event_loop_delay_max_ms": evt.eventLoopDelayMaxMs }
+            ? { "GreenchClaw.liveness.event_loop_delay_max_ms": evt.eventLoopDelayMaxMs }
             : {}),
           ...(evt.eventLoopUtilization !== undefined
-            ? { "NexisClaw.liveness.event_loop_utilization": evt.eventLoopUtilization }
+            ? { "GreenchClaw.liveness.event_loop_utilization": evt.eventLoopUtilization }
             : {}),
           ...(evt.cpuUserMs !== undefined
-            ? { "NexisClaw.liveness.cpu_user_ms": evt.cpuUserMs }
+            ? { "GreenchClaw.liveness.cpu_user_ms": evt.cpuUserMs }
             : {}),
           ...(evt.cpuSystemMs !== undefined
-            ? { "NexisClaw.liveness.cpu_system_ms": evt.cpuSystemMs }
+            ? { "GreenchClaw.liveness.cpu_system_ms": evt.cpuSystemMs }
             : {}),
           ...(evt.cpuTotalMs !== undefined
-            ? { "NexisClaw.liveness.cpu_total_ms": evt.cpuTotalMs }
+            ? { "GreenchClaw.liveness.cpu_total_ms": evt.cpuTotalMs }
             : {}),
           ...(evt.cpuCoreRatio !== undefined
-            ? { "NexisClaw.liveness.cpu_core_ratio": evt.cpuCoreRatio }
+            ? { "GreenchClaw.liveness.cpu_core_ratio": evt.cpuCoreRatio }
             : {}),
         };
-        const span = spanWithDuration("NexisClaw.liveness.warning", spanAttrs, 0, {
+        const span = spanWithDuration("GreenchClaw.liveness.warning", spanAttrs, 0, {
           endTimeMs: evt.ts,
         });
         span.setStatus({
@@ -2287,23 +2303,25 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           return;
         }
         const spanAttrs: Record<string, string | number> = {
-          "NexisClaw.phase": lowCardinalityAttr(evt.name, "unknown"),
-          ...(evt.cpuUserMs !== undefined ? { "NexisClaw.phase.cpu_user_ms": evt.cpuUserMs } : {}),
+          "GreenchClaw.phase": lowCardinalityAttr(evt.name, "unknown"),
+          ...(evt.cpuUserMs !== undefined
+            ? { "GreenchClaw.phase.cpu_user_ms": evt.cpuUserMs }
+            : {}),
           ...(evt.cpuSystemMs !== undefined
-            ? { "NexisClaw.phase.cpu_system_ms": evt.cpuSystemMs }
+            ? { "GreenchClaw.phase.cpu_system_ms": evt.cpuSystemMs }
             : {}),
           ...(evt.cpuTotalMs !== undefined
-            ? { "NexisClaw.phase.cpu_total_ms": evt.cpuTotalMs }
+            ? { "GreenchClaw.phase.cpu_total_ms": evt.cpuTotalMs }
             : {}),
           ...(evt.cpuCoreRatio !== undefined
-            ? { "NexisClaw.phase.cpu_core_ratio": evt.cpuCoreRatio }
+            ? { "GreenchClaw.phase.cpu_core_ratio": evt.cpuCoreRatio }
             : {}),
         };
         for (const [key, value] of Object.entries(evt.details ?? {})) {
-          spanAttrs[`NexisClaw.phase.detail.${key}`] =
+          spanAttrs[`GreenchClaw.phase.detail.${key}`] =
             typeof value === "boolean" ? String(value) : value;
         }
-        const span = spanWithDuration("NexisClaw.diagnostic.phase", spanAttrs, evt.durationMs, {
+        const span = spanWithDuration("GreenchClaw.diagnostic.phase", spanAttrs, evt.durationMs, {
           endTimeMs: evt.ts,
         });
         span.end(evt.ts);
@@ -2317,12 +2335,12 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
           return;
         }
         telemetryExporterCounter.add(1, {
-          "NexisClaw.exporter": lowCardinalityAttr(evt.exporter, "unknown"),
-          "NexisClaw.signal": evt.signal,
-          "NexisClaw.status": evt.status,
-          ...(evt.reason ? { "NexisClaw.reason": evt.reason } : {}),
+          "GreenchClaw.exporter": lowCardinalityAttr(evt.exporter, "unknown"),
+          "GreenchClaw.signal": evt.signal,
+          "GreenchClaw.status": evt.status,
+          ...(evt.reason ? { "GreenchClaw.reason": evt.reason } : {}),
           ...(evt.errorCategory
-            ? { "NexisClaw.errorCategory": lowCardinalityAttr(evt.errorCategory, "other") }
+            ? { "GreenchClaw.errorCategory": lowCardinalityAttr(evt.errorCategory, "other") }
             : {}),
         });
       };
@@ -2484,5 +2502,5 @@ export function createDiagnosticsOtelService(): NexisClawPluginService {
     async stop() {
       await stopStarted();
     },
-  } satisfies NexisClawPluginService;
+  } satisfies GreenchClawPluginService;
 }

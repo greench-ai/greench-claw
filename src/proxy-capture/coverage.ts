@@ -182,9 +182,9 @@ export function maybeWarnAboutDebugProxyCoverage(
     return;
   }
   warn(
-    `[NexisClaw proxy] debug proxy coverage: ${summary.captured}/${summary.total} captured, ${summary.proxyOnly} proxy-only, ${summary.uncovered} uncovered.`,
+    `[GreenchClaw proxy] debug proxy coverage: ${summary.captured}/${summary.total} captured, ${summary.proxyOnly} proxy-only, ${summary.uncovered} uncovered.`,
   );
   warn(
-    `[NexisClaw proxy] remaining gaps: ${partial.map((entry) => entry.id).join(", ")}. Run \`NexisClaw proxy coverage\` for details.`,
+    `[GreenchClaw proxy] remaining gaps: ${partial.map((entry) => entry.id).join(", ")}. Run \`GreenchClaw proxy coverage\` for details.`,
   );
 }

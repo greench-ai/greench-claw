@@ -1,5 +1,5 @@
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import type { MemorySyncProgressUpdate } from "NexisClaw/plugin-sdk/memory-core-host-engine-storage";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import type { MemorySyncProgressUpdate } from "GreenchClaw/plugin-sdk/memory-core-host-engine-storage";
 
 type TargetedSyncProgress = {
   completed: number;

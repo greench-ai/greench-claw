@@ -3,7 +3,7 @@ import {
   listPotentialConfiguredChannelIds,
 } from "../channels/config-presence.js";
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
 import {
   listExplicitConfiguredChannelIdsForConfig,
@@ -16,8 +16,8 @@ import { passesManifestOwnerBasePolicy } from "./manifest-owner-policy.js";
 import { defaultSlotIdForKey } from "./slots.js";
 
 function collectConfiguredChannelIds(
-  config: NexisClawConfig,
-  activationSourceConfig: NexisClawConfig,
+  config: GreenchClawConfig,
+  activationSourceConfig: GreenchClawConfig,
   env: NodeJS.ProcessEnv,
 ): string[] {
   const disabled = new Set([
@@ -40,7 +40,7 @@ function collectConfiguredChannelIds(
 }
 
 function collectBundledChannelOwnerPluginIds(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   channelIds: readonly string[];
   env: NodeJS.ProcessEnv;
   workspaceDir?: string;
@@ -58,9 +58,9 @@ function collectBundledChannelOwnerPluginIds(params: {
   const env = params.bundledPluginsDir
     ? {
         ...params.env,
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: params.bundledPluginsDir,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: params.bundledPluginsDir,
         ...(params.env.VITEST || process.env.VITEST
-          ? { NEXISCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1" }
+          ? { GREENCHCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1" }
           : {}),
       }
     : params.env;
@@ -95,7 +95,7 @@ function collectBundledChannelOwnerPluginIds(params: {
   return [...pluginIds].toSorted((left, right) => left.localeCompare(right));
 }
 
-function collectExplicitEffectivePluginIds(config: NexisClawConfig): string[] {
+function collectExplicitEffectivePluginIds(config: GreenchClawConfig): string[] {
   const plugins = normalizePluginsConfig(config.plugins);
   if (!plugins.enabled) {
     return [];
@@ -121,7 +121,7 @@ function collectExplicitEffectivePluginIds(config: NexisClawConfig): string[] {
   return [...ids].toSorted((left, right) => left.localeCompare(right));
 }
 
-function collectSelectedContextEnginePluginIds(config: NexisClawConfig): string[] {
+function collectSelectedContextEnginePluginIds(config: GreenchClawConfig): string[] {
   const plugins = normalizePluginsConfig(config.plugins);
   if (!plugins.enabled) {
     return [];
@@ -140,7 +140,7 @@ function collectSelectedContextEnginePluginIds(config: NexisClawConfig): string[
 }
 
 export function resolveEffectivePluginIds(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   workspaceDir?: string;
   bundledPluginsDir?: string;

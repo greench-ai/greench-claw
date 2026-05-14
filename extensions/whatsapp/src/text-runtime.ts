@@ -3,8 +3,8 @@ export {
   sanitizeAssistantVisibleText,
   sanitizeAssistantVisibleTextWithProfile,
   stripToolCallXmlTags,
-} from "NexisClaw/plugin-sdk/text-chunking";
-export { normalizeE164, resolveUserPath, sleep } from "NexisClaw/plugin-sdk/text-utility-runtime";
+} from "GreenchClaw/plugin-sdk/text-chunking";
+export { normalizeE164, resolveUserPath, sleep } from "GreenchClaw/plugin-sdk/text-utility-runtime";
 export {
   assertWebChannel,
   isSelfChatMode,

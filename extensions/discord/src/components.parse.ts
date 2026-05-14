@@ -1,5 +1,5 @@
 import { ButtonStyle, TextInputStyle } from "discord-api-types/v10";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type {
   DiscordComponentBlock,
   DiscordComponentButtonSpec,

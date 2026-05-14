@@ -2,10 +2,10 @@ import {
   createPluginSetupWizardConfigure,
   createTestWizardPrompter,
   runSetupWizardConfigure,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import type { WizardPrompter } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import type { WizardPrompter } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import { nostrSetupWizard } from "./setup-surface.js";
 import {
   TEST_HEX_PRIVATE_KEY,
@@ -23,7 +23,7 @@ function normalizeNostrTestEntry(entry: string): string {
 }
 
 function resolveNostrTestDmPolicy(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   account: ReturnType<typeof resolveNostrAccount>;
 }) {
   return {
@@ -48,7 +48,7 @@ const nostrTestPlugin = {
   },
   config: {
     listAccountIds: listNostrAccountIds,
-    resolveAccount: (cfg: NexisClawConfig, accountId?: string | null) =>
+    resolveAccount: (cfg: GreenchClawConfig, accountId?: string | null) =>
       resolveNostrAccount({ cfg, accountId }),
   },
   messaging: {
@@ -86,7 +86,7 @@ const nostrTestPlugin = {
       cfg,
       accountId,
     }: {
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       accountId?: string;
       input: unknown;
     }) => accountId?.trim() || resolveDefaultNostrAccountId(cfg),
@@ -307,7 +307,7 @@ describe("nostr setup wizard", () => {
 
     const result = await runSetupWizardConfigure({
       configure: nostrConfigure,
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       prompter,
       options: {},
     });
@@ -333,7 +333,7 @@ describe("nostr setup wizard", () => {
 
     const result = await runSetupWizardConfigure({
       configure: nostrConfigure,
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       prompter,
       options: {},
       accountOverrides: {
@@ -349,7 +349,7 @@ describe("nostr setup wizard", () => {
   it("uses configured defaultAccount when setup accountId is omitted", () => {
     expect(
       nostrTestPlugin.setup?.resolveAccountId?.({
-        cfg: createConfiguredNostrCfg({ defaultAccount: "work" }) as NexisClawConfig,
+        cfg: createConfiguredNostrCfg({ defaultAccount: "work" }) as GreenchClawConfig,
         accountId: undefined,
         input: {},
       } as never),

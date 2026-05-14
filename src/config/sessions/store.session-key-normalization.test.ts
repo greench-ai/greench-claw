@@ -27,7 +27,7 @@ function createInboundContext(): MsgContext {
 
 describe("session store key normalization", () => {
   const suiteRootTracker = createSuiteTempRootTracker({
-    prefix: "NexisClaw-session-key-normalize-",
+    prefix: "GreenchClaw-session-key-normalize-",
   });
   let tempDir = "";
   let storePath = "";

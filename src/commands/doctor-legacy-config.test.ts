@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { normalizeLegacyStreamingAliases } from "../config/channel-compat-normalization.js";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { normalizeLegacyBrowserConfig } from "./doctor/shared/legacy-config-core-normalizers.js";
 
-function asLegacyConfig(value: unknown): NexisClawConfig {
-  return value as NexisClawConfig;
+function asLegacyConfig(value: unknown): GreenchClawConfig {
+  return value as GreenchClawConfig;
 }
 
 function getLegacyProperty(value: unknown, key: string): unknown {

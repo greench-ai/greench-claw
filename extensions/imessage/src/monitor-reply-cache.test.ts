@@ -10,7 +10,7 @@ import {
   resolveIMessageMessageId,
 } from "./monitor-reply-cache.js";
 
-// Isolate from any live ~/.NexisClaw/imessage/reply-cache.jsonl that the
+// Isolate from any live ~/.GreenchClaw/imessage/reply-cache.jsonl that the
 // developer might have from a running gateway. Without this, the on-disk
 // hydrate path picks up production data and tests get cross-pollinated.
 //
@@ -20,15 +20,15 @@ import {
 let tempStateDir: string;
 let priorStateDir: string | undefined;
 beforeAll(() => {
-  tempStateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-imsg-reply-cache-"));
-  priorStateDir = process.env.NEXISCLAW_STATE_DIR;
-  process.env.NEXISCLAW_STATE_DIR = tempStateDir;
+  tempStateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-imsg-reply-cache-"));
+  priorStateDir = process.env.GREENCHCLAW_STATE_DIR;
+  process.env.GREENCHCLAW_STATE_DIR = tempStateDir;
 });
 afterAll(() => {
   if (priorStateDir === undefined) {
-    delete process.env.NEXISCLAW_STATE_DIR;
+    delete process.env.GREENCHCLAW_STATE_DIR;
   } else {
-    process.env.NEXISCLAW_STATE_DIR = priorStateDir;
+    process.env.GREENCHCLAW_STATE_DIR = priorStateDir;
   }
   fs.rmSync(tempStateDir, { recursive: true, force: true });
 });
@@ -36,7 +36,7 @@ afterAll(() => {
 beforeEach(() => {
   _resetIMessageShortIdState();
   // Belt-and-suspenders: also nuke the persisted file directly. The
-  // _reset helper does this when NEXISCLAW_STATE_DIR is set, but explicitly
+  // _reset helper does this when GREENCHCLAW_STATE_DIR is set, but explicitly
   // clearing here protects the test from any future refactor of _reset's
   // gating logic.
   try {
@@ -272,7 +272,7 @@ describe("findLatestIMessageEntryForChat", () => {
 
   it("never crosses account boundaries", () => {
     // Diagnostic: verify the temp-dir env stub is actually visible.
-    expect(process.env.NEXISCLAW_STATE_DIR).toBe(tempStateDir);
+    expect(process.env.GREENCHCLAW_STATE_DIR).toBe(tempStateDir);
     const cachePath = path.join(tempStateDir, "imessage", "reply-cache.jsonl");
     expect(fs.existsSync(cachePath)).toBe(false);
 
@@ -409,7 +409,7 @@ describe("hydrate-on-resolve (post-restart short-id persistence)", () => {
 
     // Simulate a restart: clear the in-memory state but leave the JSONL on
     // disk. _resetIMessageShortIdState only deletes the persisted file when
-    // NEXISCLAW_STATE_DIR is set, so we have to keep the file ourselves
+    // GREENCHCLAW_STATE_DIR is set, so we have to keep the file ourselves
     // since this test runs under the suite's temp state dir.
     const cachePath = path.join(tempStateDir, "imessage", "reply-cache.jsonl");
     const persisted = fs.readFileSync(cachePath, "utf8");

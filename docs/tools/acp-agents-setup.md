@@ -2,7 +2,7 @@
 summary: "Setting up ACP agents: acpx harness config, plugin setup, permissions"
 read_when:
   - Installing or configuring the acpx harness for Claude Code / Codex / Gemini CLI
-  - Enabling the plugin-tools or NexisClaw-tools MCP bridge
+  - Enabling the plugin-tools or GreenchClaw-tools MCP bridge
   - Configuring ACP permission modes
 title: "ACP agents — setup"
 ---
@@ -16,7 +16,7 @@ app-server runtime config, use [Codex harness](/plugins/codex-harness). For
 OpenAI API keys or Codex OAuth model-provider config, use
 [OpenAI](/providers/openai).
 
-Codex has two NexisClaw routes:
+Codex has two GreenchClaw routes:
 
 | Route                      | Config/command                                         | Setup page                              |
 | -------------------------- | ------------------------------------------------------ | --------------------------------------- |
@@ -39,20 +39,20 @@ Current acpx built-in harness aliases:
 - `kilocode`
 - `kimi`
 - `kiro`
-- `NexisClaw`
+- `GreenchClaw`
 - `opencode`
 - `pi`
 - `qwen`
 
-When NexisClaw uses the acpx backend, prefer these values for `agentId` unless your acpx config defines custom agent aliases.
+When GreenchClaw uses the acpx backend, prefer these values for `agentId` unless your acpx config defines custom agent aliases.
 If your local Cursor install still exposes ACP as `agent acp`, override the `cursor` agent command in your acpx config instead of changing the built-in default.
 
-Direct acpx CLI usage can also target arbitrary adapters via `--agent <command>`, but that raw escape hatch is an acpx CLI feature (not the normal NexisClaw `agentId` path).
+Direct acpx CLI usage can also target arbitrary adapters via `--agent <command>`, but that raw escape hatch is an acpx CLI feature (not the normal GreenchClaw `agentId` path).
 
 Model control is adapter-capability dependent. Codex ACP model refs are
-normalized by NexisClaw before startup. Other harnesses need ACP `models` plus
+normalized by GreenchClaw before startup. Other harnesses need ACP `models` plus
 `session/set_model` support; if a harness exposes neither that ACP capability
-nor its own startup model flag, NexisClaw/acpx cannot force a model selection.
+nor its own startup model flag, GreenchClaw/acpx cannot force a model selection.
 
 ## Required config
 
@@ -77,7 +77,7 @@ Core ACP baseline:
       "kilocode",
       "kimi",
       "kiro",
-      "NexisClaw",
+      "GreenchClaw",
       "opencode",
       "pi",
       "qwen",
@@ -126,12 +126,12 @@ See [Configuration Reference](/gateway/configuration-reference).
 
 ## Plugin setup for acpx backend
 
-Packaged installs use the official `@NexisClaw/acpx` runtime plugin for ACP.
+Packaged installs use the official `@GreenchClaw/acpx` runtime plugin for ACP.
 Install and enable it before using ACP harness sessions:
 
 ```bash
-NexisClaw plugins install @NexisClaw/acpx
-NexisClaw config set plugins.entries.acpx.enabled true
+GreenchClaw plugins install @GreenchClaw/acpx
+GreenchClaw config set plugins.entries.acpx.enabled true
 ```
 
 Source checkouts can also use the local workspace plugin after `pnpm install`.
@@ -146,14 +146,14 @@ If you disabled `acpx`, denied it via `plugins.allow` / `plugins.deny`, or want
 to switch back to the packaged plugin, use the explicit package path:
 
 ```bash
-NexisClaw plugins install @NexisClaw/acpx
-NexisClaw config set plugins.entries.acpx.enabled true
+GreenchClaw plugins install @GreenchClaw/acpx
+GreenchClaw config set plugins.entries.acpx.enabled true
 ```
 
 Local workspace install during development:
 
 ```bash
-NexisClaw plugins install ./path/to/local/acpx-plugin
+GreenchClaw plugins install ./path/to/local/acpx-plugin
 ```
 
 Then verify backend health:
@@ -166,7 +166,7 @@ Then verify backend health:
 
 By default, the `acpx` plugin probes the embedded ACP backend during Gateway
 startup and waits for that probe before the gateway `ready` signal. Set
-`NEXISCLAW_ACPX_RUNTIME_STARTUP_PROBE=0` to skip the startup probe and register
+`GREENCHCLAW_ACPX_RUNTIME_STARTUP_PROBE=0` to skip the startup probe and register
 the backend lazily instead. Run `/acp doctor` for an explicit on-demand probe.
 
 Override the command or version in plugin config:
@@ -187,7 +187,7 @@ Override the command or version in plugin config:
 }
 ```
 
-- `command` accepts an absolute path, relative path (resolved from the NexisClaw workspace), or command name.
+- `command` accepts an absolute path, relative path (resolved from the GreenchClaw workspace), or command name.
 - `expectedVersion: "any"` disables strict version matching.
 - Custom `command` paths disable plugin-local auto-install.
 
@@ -215,34 +215,34 @@ or flag value should remain one argv token:
 ```
 
 - `agents.<id>.command` is the executable or existing command string for that ACP agent.
-- `agents.<id>.args` is optional. Each array item is shell-quoted before NexisClaw passes it through the current acpx command-string registry.
+- `agents.<id>.args` is optional. Each array item is shell-quoted before GreenchClaw passes it through the current acpx command-string registry.
 
 See [Plugins](/tools/plugin).
 
 ### Automatic dependency install
 
-When you install NexisClaw globally with `npm install -g NexisClaw`, the acpx
+When you install GreenchClaw globally with `npm install -g GreenchClaw`, the acpx
 runtime dependencies (platform-specific binaries) are installed automatically
 via a postinstall hook. If the automatic install fails, the gateway still starts
-normally and reports the missing dependency through `NexisClaw acp doctor`.
+normally and reports the missing dependency through `GreenchClaw acp doctor`.
 
 ### Plugin tools MCP bridge
 
-By default, ACPX sessions do **not** expose NexisClaw plugin-registered tools to
+By default, ACPX sessions do **not** expose GreenchClaw plugin-registered tools to
 the ACP harness.
 
 If you want ACP agents such as Codex or Claude Code to call installed
-NexisClaw plugin tools such as memory recall/store, enable the dedicated bridge:
+GreenchClaw plugin tools such as memory recall/store, enable the dedicated bridge:
 
 ```bash
-NexisClaw config set plugins.entries.acpx.config.pluginToolsMcpBridge true
+GreenchClaw config set plugins.entries.acpx.config.pluginToolsMcpBridge true
 ```
 
 What this does:
 
-- Injects a built-in MCP server named `NexisClaw-plugin-tools` into ACPX session
+- Injects a built-in MCP server named `GreenchClaw-plugin-tools` into ACPX session
   bootstrap.
-- Exposes plugin tools already registered by installed and enabled NexisClaw
+- Exposes plugin tools already registered by installed and enabled GreenchClaw
   plugins.
 - Keeps the feature explicit and default-off.
 
@@ -251,27 +251,27 @@ Security and trust notes:
 - This expands the ACP harness tool surface.
 - ACP agents get access only to plugin tools already active in the gateway.
 - Treat this as the same trust boundary as letting those plugins execute in
-  NexisClaw itself.
+  GreenchClaw itself.
 - Review installed plugins before enabling it.
 
 Custom `mcpServers` still work as before. The built-in plugin-tools bridge is an
 additional opt-in convenience, not a replacement for generic MCP server config.
 
-### NexisClaw tools MCP bridge
+### GreenchClaw tools MCP bridge
 
-By default, ACPX sessions also do **not** expose built-in NexisClaw tools through
+By default, ACPX sessions also do **not** expose built-in GreenchClaw tools through
 MCP. Enable the separate core-tools bridge when an ACP agent needs selected
 built-in tools such as `cron`:
 
 ```bash
-NexisClaw config set plugins.entries.acpx.config.openClawToolsMcpBridge true
+GreenchClaw config set plugins.entries.acpx.config.openClawToolsMcpBridge true
 ```
 
 What this does:
 
-- Injects a built-in MCP server named `NexisClaw-tools` into ACPX session
+- Injects a built-in MCP server named `GreenchClaw-tools` into ACPX session
   bootstrap.
-- Exposes selected built-in NexisClaw tools. The initial server exposes `cron`.
+- Exposes selected built-in GreenchClaw tools. The initial server exposes `cron`.
 - Keeps core-tool exposure explicit and default-off.
 
 ### Runtime timeout configuration
@@ -282,7 +282,7 @@ ACP startup and initialization. Override it if your host needs a different
 runtime limit:
 
 ```bash
-NexisClaw config set plugins.entries.acpx.config.timeoutSeconds 180
+GreenchClaw config set plugins.entries.acpx.config.timeoutSeconds 180
 ```
 
 Restart the gateway after changing this value.
@@ -295,7 +295,7 @@ the first allowed agent; otherwise it defaults to `codex`. If your deployment
 needs a different ACP agent for health checks, set the probe agent explicitly:
 
 ```bash
-NexisClaw config set plugins.entries.acpx.config.probeAgent claude
+GreenchClaw config set plugins.entries.acpx.config.probeAgent claude
 ```
 
 Restart the gateway after changing this value.
@@ -304,7 +304,7 @@ Restart the gateway after changing this value.
 
 ACP sessions run non-interactively — there is no TTY to approve or deny file-write and shell-exec permission prompts. The acpx plugin provides two config keys that control how permissions are handled:
 
-These ACPX harness permissions are separate from NexisClaw exec approvals and separate from CLI-backend vendor bypass flags such as Claude CLI `--permission-mode bypassPermissions`. ACPX `approve-all` is the harness-level break-glass switch for ACP sessions.
+These ACPX harness permissions are separate from GreenchClaw exec approvals and separate from CLI-backend vendor bypass flags such as Claude CLI `--permission-mode bypassPermissions`. ACPX `approve-all` is the harness-level break-glass switch for ACP sessions.
 
 ### `permissionMode`
 
@@ -330,14 +330,14 @@ Controls what happens when a permission prompt would be shown but no interactive
 Set via plugin config:
 
 ```bash
-NexisClaw config set plugins.entries.acpx.config.permissionMode approve-all
-NexisClaw config set plugins.entries.acpx.config.nonInteractivePermissions fail
+GreenchClaw config set plugins.entries.acpx.config.permissionMode approve-all
+GreenchClaw config set plugins.entries.acpx.config.nonInteractivePermissions fail
 ```
 
 Restart the gateway after changing these values.
 
 <Warning>
-NexisClaw defaults to `permissionMode=approve-reads` and `nonInteractivePermissions=fail`. In non-interactive ACP sessions, any write or exec that triggers a permission prompt can fail with `AcpRuntimeError: Permission prompt unavailable in non-interactive mode`.
+GreenchClaw defaults to `permissionMode=approve-reads` and `nonInteractivePermissions=fail`. In non-interactive ACP sessions, any write or exec that triggers a permission prompt can fail with `AcpRuntimeError: Permission prompt unavailable in non-interactive mode`.
 
 If you need to restrict permissions, set `nonInteractivePermissions` to `deny` so sessions degrade gracefully instead of crashing.
 </Warning>

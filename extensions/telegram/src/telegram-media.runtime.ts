@@ -2,4 +2,4 @@ export {
   fetchRemoteMedia,
   MediaFetchError,
   saveMediaBuffer,
-} from "NexisClaw/plugin-sdk/media-runtime";
+} from "GreenchClaw/plugin-sdk/media-runtime";

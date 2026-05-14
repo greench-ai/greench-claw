@@ -1,4 +1,4 @@
-import { REALTIME_VOICE_AUDIO_FORMAT_PCM16_24KHZ } from "NexisClaw/plugin-sdk/realtime-voice";
+import { REALTIME_VOICE_AUDIO_FORMAT_PCM16_24KHZ } from "GreenchClaw/plugin-sdk/realtime-voice";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { buildOpenAIRealtimeVoiceProvider } from "./realtime-voice-provider.js";
 
@@ -78,11 +78,11 @@ vi.mock("ws", () => ({
   default: FakeWebSocket,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/ssrf-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/ssrf-runtime", () => ({
   fetchWithSsrFGuard: fetchWithSsrFGuardMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-auth", () => ({
+vi.mock("GreenchClaw/plugin-sdk/provider-auth", () => ({
   isProviderAuthProfileConfigured: isProviderAuthProfileConfiguredMock,
   resolveProviderAuthProfileApiKey: resolveProviderAuthProfileApiKeyMock,
 }));
@@ -246,8 +246,8 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
     expect(bridge.supportsToolResultContinuation).toBe(true);
   });
 
-  it("adds NexisClaw attribution headers to native realtime websocket requests", () => {
-    vi.stubEnv("NEXISCLAW_VERSION", "2026.3.22");
+  it("adds GreenchClaw attribution headers to native realtime websocket requests", () => {
+    vi.stubEnv("GREENCHCLAW_VERSION", "2026.3.22");
     const provider = buildOpenAIRealtimeVoiceProvider();
     const bridge = provider.createBridge({
       providerConfig: { apiKey: "sk-test" }, // pragma: allowlist secret
@@ -261,9 +261,9 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
     const socket = FakeWebSocket.instances[0];
     const options = socket?.args[1] as { headers?: Record<string, string> } | undefined;
     expectRecordFields(options?.headers, "websocket headers", {
-      originator: "NexisClaw",
+      originator: "GreenchClaw",
       version: "2026.3.22",
-      "User-Agent": "NexisClaw/2026.3.22",
+      "User-Agent": "GreenchClaw/2026.3.22",
     });
     expect(options?.headers).not.toHaveProperty("OpenAI-Beta");
   });
@@ -379,8 +379,8 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
     bridge.close();
   });
 
-  it("returns browser-safe NexisClaw attribution headers for native WebRTC offers", async () => {
-    vi.stubEnv("NEXISCLAW_VERSION", "2026.3.22");
+  it("returns browser-safe GreenchClaw attribution headers for native WebRTC offers", async () => {
+    vi.stubEnv("GREENCHCLAW_VERSION", "2026.3.22");
     fetchWithSsrFGuardMock.mockResolvedValueOnce({
       response: createJsonResponse({
         client_secret: { value: "client-secret-123" },
@@ -406,9 +406,9 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
     expectRecordFields(requireFetchHeaders(), "fetch headers", {
       Authorization: "Bearer sk-test", // pragma: allowlist secret
       "Content-Type": "application/json",
-      originator: "NexisClaw",
+      originator: "GreenchClaw",
       version: "2026.3.22",
-      "User-Agent": "NexisClaw/2026.3.22",
+      "User-Agent": "GreenchClaw/2026.3.22",
     });
     const body = requireFetchJsonBody();
     const bodySession = requireRecord(body.session, "fetch session");
@@ -439,7 +439,7 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
   });
 
   it("resolves keychain OPENAI_API_KEY refs before creating browser sessions", async () => {
-    vi.stubEnv("OPENAI_API_KEY", "keychain:NexisClaw:OPENAI_REALTIME_BROWSER_TEST");
+    vi.stubEnv("OPENAI_API_KEY", "keychain:GreenchClaw:OPENAI_REALTIME_BROWSER_TEST");
     execFileSyncMock.mockReturnValueOnce("sk-browser-env\n"); // pragma: allowlist secret
     fetchWithSsrFGuardMock.mockResolvedValueOnce({
       response: createJsonResponse({
@@ -461,7 +461,7 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
     expect(execFileSyncMock.mock.calls.at(0)?.[1]).toEqual([
       "find-generic-password",
       "-s",
-      "NexisClaw",
+      "GreenchClaw",
       "-a",
       "OPENAI_REALTIME_BROWSER_TEST",
       "-w",
@@ -476,7 +476,7 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
   });
 
   it("resolves and caches keychain OPENAI_API_KEY refs before creating bridges", () => {
-    vi.stubEnv("OPENAI_API_KEY", "keychain:NexisClaw:OPENAI_REALTIME_BRIDGE_TEST");
+    vi.stubEnv("OPENAI_API_KEY", "keychain:GreenchClaw:OPENAI_REALTIME_BRIDGE_TEST");
     execFileSyncMock.mockReturnValue("sk-bridge-env\n"); // pragma: allowlist secret
     const provider = buildOpenAIRealtimeVoiceProvider();
 
@@ -505,7 +505,7 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
   });
 
   it("does not resolve keychain refs during configured checks", () => {
-    vi.stubEnv("OPENAI_API_KEY", "keychain:NexisClaw:OPENAI_REALTIME_CONFIGURED_TEST");
+    vi.stubEnv("OPENAI_API_KEY", "keychain:GreenchClaw:OPENAI_REALTIME_CONFIGURED_TEST");
     const provider = buildOpenAIRealtimeVoiceProvider();
 
     expect(provider.isConfigured({ providerConfig: {} })).toBe(true);
@@ -571,7 +571,7 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
   });
 
   it("fails closed when keychain refs cannot be resolved", async () => {
-    vi.stubEnv("OPENAI_API_KEY", "keychain:NexisClaw:OPENAI_REALTIME_MISSING_TEST");
+    vi.stubEnv("OPENAI_API_KEY", "keychain:GreenchClaw:OPENAI_REALTIME_MISSING_TEST");
     execFileSyncMock.mockImplementationOnce(() => {
       throw new Error("keychain unavailable");
     });
@@ -1183,7 +1183,7 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
           item: {
             id: "item_tool_1",
             type: "function_call",
-            name: "NexisClaw_agent_consult",
+            name: "GreenchClaw_agent_consult",
             call_id: "call_1",
             arguments: JSON.stringify({ question: "delegate this" }),
           },
@@ -1194,13 +1194,13 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
     expect(onToolCall).toHaveBeenCalledWith({
       itemId: "item_tool_1",
       callId: "call_1",
-      name: "NexisClaw_agent_consult",
+      name: "GreenchClaw_agent_consult",
       args: { question: "delegate this" },
     });
     expect(onEvent).toHaveBeenCalledWith({
       direction: "server",
       type: "conversation.item.done",
-      detail: "function_call name=NexisClaw_agent_consult",
+      detail: "function_call name=GreenchClaw_agent_consult",
     });
   });
 
@@ -1230,7 +1230,7 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
         JSON.stringify({
           type: "response.function_call_arguments.delta",
           item_id: "item_tool_1",
-          name: "NexisClaw_agent_consult",
+          name: "GreenchClaw_agent_consult",
           call_id: "call_1",
           delta: JSON.stringify({ question: "delegate this" }),
         }),
@@ -1242,7 +1242,7 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
         JSON.stringify({
           type: "response.function_call_arguments.done",
           item_id: "item_tool_1",
-          name: "NexisClaw_agent_consult",
+          name: "GreenchClaw_agent_consult",
           call_id: "call_1",
         }),
       ),
@@ -1255,7 +1255,7 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
           item: {
             id: "item_tool_1",
             type: "function_call",
-            name: "NexisClaw_agent_consult",
+            name: "GreenchClaw_agent_consult",
             call_id: "call_1",
             arguments: JSON.stringify({ question: "delegate this" }),
           },
@@ -1267,7 +1267,7 @@ describe("buildOpenAIRealtimeVoiceProvider", () => {
     expect(onToolCall).toHaveBeenCalledWith({
       itemId: "item_tool_1",
       callId: "call_1",
-      name: "NexisClaw_agent_consult",
+      name: "GreenchClaw_agent_consult",
       args: { question: "delegate this" },
     });
   });

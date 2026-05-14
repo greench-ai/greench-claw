@@ -3,7 +3,7 @@ import {
   resolveAgentModelPrimaryValue,
   toAgentModelListLike,
 } from "../config/model-input.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
@@ -204,13 +204,13 @@ export function normalizeStoredOverrideModel(params: {
 export function resolveAllowlistModelKey(
   raw: string,
   defaultProvider: string,
-  cfg?: NexisClawConfig,
+  cfg?: GreenchClawConfig,
 ): string | null {
   return resolveAllowlistModelKeyFromShared({ cfg, raw, defaultProvider });
 }
 
 export function resolveDefaultModelForAgent(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
   allowPluginNormalization?: boolean;
 }): ModelRef {
@@ -243,7 +243,7 @@ export function resolveDefaultModelForAgent(params: {
 
 export async function canonicalizeCaseOnlyCatalogModelRef(params: {
   raw: string | undefined;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   defaultProvider: string;
   loadCatalog: () => Promise<ModelCatalogEntry[]>;
   aliasIndex?: ModelAliasIndex;
@@ -305,7 +305,7 @@ function appendAuthProfileSuffix(modelRef: string, profile: string | undefined):
   return profile ? `${modelRef}@${profile}` : modelRef;
 }
 
-function resolveAllowedFallbacks(params: { cfg: NexisClawConfig; agentId?: string }): string[] {
+function resolveAllowedFallbacks(params: { cfg: GreenchClawConfig; agentId?: string }): string[] {
   if (params.agentId) {
     const override = resolveAgentModelFallbacksOverride(params.cfg, params.agentId);
     if (override !== undefined) {
@@ -316,7 +316,7 @@ function resolveAllowedFallbacks(params: { cfg: NexisClawConfig; agentId?: strin
 }
 
 export function resolveSubagentConfiguredModelSelection(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
 }): string | undefined {
   const agentConfig = resolveAgentConfig(params.cfg, params.agentId);
@@ -348,7 +348,7 @@ function resolveModelThroughAliases(value: string, aliasIndex: ModelAliasIndex):
 }
 
 export function resolveSubagentSpawnModelSelection(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   modelOverride?: unknown;
 }): string {
@@ -372,7 +372,7 @@ export function resolveSubagentSpawnModelSelection(params: {
 }
 
 export function buildAllowedModelSet(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   catalog: ModelCatalogEntry[];
   defaultProvider: string;
   defaultModel?: string;
@@ -395,7 +395,7 @@ export function buildAllowedModelSet(params: {
 }
 
 export function getModelRefStatus(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   catalog: ModelCatalogEntry[];
   ref: ModelRef;
   defaultProvider: string;
@@ -415,7 +415,7 @@ export function getModelRefStatus(params: {
 
 function getModelRefStatusForResolve(
   params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     catalog: ModelCatalogEntry[];
     defaultProvider: string;
     defaultModel?: string;
@@ -432,7 +432,7 @@ function getModelRefStatusForResolve(
 }
 
 export function resolveAllowedModelRef(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   catalog: ModelCatalogEntry[];
   raw: string;
   defaultProvider: string;

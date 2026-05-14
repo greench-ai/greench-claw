@@ -2,27 +2,27 @@ import {
   channelIngressRoutes,
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
-} from "NexisClaw/plugin-sdk/channel-ingress-runtime";
-import { createChannelPairingController } from "NexisClaw/plugin-sdk/channel-pairing";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { isDangerousNameMatchingEnabled } from "NexisClaw/plugin-sdk/dangerous-name-runtime";
-import { resolveInboundRouteEnvelopeBuilderWithRuntime } from "NexisClaw/plugin-sdk/inbound-envelope";
+} from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
+import { createChannelPairingController } from "GreenchClaw/plugin-sdk/channel-pairing";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { isDangerousNameMatchingEnabled } from "GreenchClaw/plugin-sdk/dangerous-name-runtime";
+import { resolveInboundRouteEnvelopeBuilderWithRuntime } from "GreenchClaw/plugin-sdk/inbound-envelope";
 import {
   deliverFormattedTextWithAttachments,
   type OutboundReplyPayload,
-} from "NexisClaw/plugin-sdk/reply-payload";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
+} from "GreenchClaw/plugin-sdk/reply-payload";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime";
 import {
   GROUP_POLICY_BLOCKED_LABEL,
   resolveAllowlistProviderRuntimeGroupPolicy,
   resolveDefaultGroupPolicy,
   warnMissingProviderGroupPolicyFallbackOnce,
-} from "NexisClaw/plugin-sdk/runtime-group-policy";
+} from "GreenchClaw/plugin-sdk/runtime-group-policy";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
   normalizeStringEntries,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { ResolvedIrcAccount } from "./accounts.js";
 import { buildIrcAllowlistCandidates, normalizeIrcAllowEntry } from "./normalize.js";
 import { resolveIrcGroupMatch, resolveIrcRequireMention } from "./policy.js";
@@ -215,11 +215,14 @@ export async function handleIrcInbound(params: {
   });
 
   const allowTextCommands = core.channel.commands.shouldHandleTextCommands({
-    cfg: config as NexisClawConfig,
+    cfg: config as GreenchClawConfig,
     surface: CHANNEL_ID,
   });
-  const hasControlCommand = core.channel.text.hasControlCommand(rawBody, config as NexisClawConfig);
-  const mentionRegexes = core.channel.mentions.buildMentionRegexes(config as NexisClawConfig);
+  const hasControlCommand = core.channel.text.hasControlCommand(
+    rawBody,
+    config as GreenchClawConfig,
+  );
+  const mentionRegexes = core.channel.mentions.buildMentionRegexes(config as GreenchClawConfig);
   const mentionNick = connectedNick?.trim() || account.nick;
   const explicitMentionRegex = mentionNick
     ? new RegExp(`\\b${escapeIrcRegexLiteral(mentionNick)}\\b[:,]?`, "i")
@@ -247,7 +250,7 @@ export async function handleIrcInbound(params: {
     channelId: CHANNEL_ID,
     accountId: account.accountId,
     identity: ircIngressIdentity,
-    cfg: config as NexisClawConfig,
+    cfg: config as GreenchClawConfig,
     readStoreAllowFrom: async () => await pairing.readAllowFromStore(),
   }).message({
     subject: createIrcIngressSubject(message),
@@ -322,7 +325,7 @@ export async function handleIrcInbound(params: {
       access.ingress.decisiveGateId === "command" &&
       access.commandAccess.shouldBlockControlCommand
     ) {
-      const { logInboundDrop } = await import("NexisClaw/plugin-sdk/channel-inbound");
+      const { logInboundDrop } = await import("GreenchClaw/plugin-sdk/channel-inbound");
       logInboundDrop({
         log: (line) => runtime.log?.(line),
         channel: CHANNEL_ID,
@@ -347,7 +350,7 @@ export async function handleIrcInbound(params: {
 
   const peerId = message.isGroup ? message.target : message.senderNick;
   const { route, buildEnvelope } = resolveInboundRouteEnvelopeBuilderWithRuntime({
-    cfg: config as NexisClawConfig,
+    cfg: config as GreenchClawConfig,
     channel: CHANNEL_ID,
     accountId: account.accountId,
     peer: {
@@ -393,7 +396,7 @@ export async function handleIrcInbound(params: {
   });
 
   await core.channel.turn.runAssembled({
-    cfg: config as NexisClawConfig,
+    cfg: config as GreenchClawConfig,
     channel: CHANNEL_ID,
     accountId: account.accountId,
     agentId: route.agentId,

@@ -1,5 +1,5 @@
 import type { SecretInputMode } from "../commands/onboard-types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   DEFAULT_SECRET_PROVIDER_ALIAS,
   type SecretInput,
@@ -23,9 +23,11 @@ import type { FlowContribution, FlowOption } from "./types.js";
 import { sortFlowContributionsByLabel } from "./types.js";
 
 export type SearchProvider = NonNullable<
-  NonNullable<NonNullable<NonNullable<NexisClawConfig["tools"]>["web"]>["search"]>["provider"]
+  NonNullable<NonNullable<NonNullable<GreenchClawConfig["tools"]>["web"]>["search"]>["provider"]
 >;
-type SearchConfig = NonNullable<NonNullable<NonNullable<NexisClawConfig["tools"]>["web"]>["search"]>;
+type SearchConfig = NonNullable<
+  NonNullable<NonNullable<GreenchClawConfig["tools"]>["web"]>["search"]
+>;
 type MutableSearchConfig = SearchConfig & Record<string, unknown>;
 
 type SearchProviderSetupOption = FlowOption & {
@@ -56,7 +58,7 @@ function resolveSearchProviderCredentialLabel(
 }
 
 export function listSearchProviderOptions(
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
 ): readonly PluginWebSearchProviderEntry[] {
   return resolveSearchProviderOptions(config);
 }
@@ -68,7 +70,7 @@ function showsSearchProviderInSetup(
 }
 
 export function resolveSearchProviderOptions(
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
 ): readonly PluginWebSearchProviderEntry[] {
   return resolveSearchProviderSetupContributions(config).map(
     (contribution) => contribution.provider,
@@ -95,7 +97,7 @@ function buildSearchProviderSetupContribution(params: {
 }
 
 function resolveSearchProviderSetupContributions(
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
 ): SearchProviderSetupContribution[] {
   const runtimeProviders = sortWebSearchProviders(
     resolvePluginWebSearchProviders({
@@ -136,7 +138,7 @@ function resolveSearchProviderSetupContributions(
 }
 
 function resolveSearchProviderEntry(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   provider: SearchProvider,
 ): PluginWebSearchProviderEntry | undefined {
   return resolveSearchProviderOptions(config).find((entry) => entry.id === provider);
@@ -153,7 +155,7 @@ function providerNeedsCredential(
 }
 
 function providerIsReady(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   entry: Pick<PluginWebSearchProviderEntry, "id" | "envVars" | "requiresCredential">,
 ): boolean {
   if (!providerNeedsCredential(entry)) {
@@ -162,23 +164,23 @@ function providerIsReady(
   return hasExistingKey(config, entry.id) || hasKeyInEnv(entry);
 }
 
-function rawKeyValue(config: NexisClawConfig, provider: SearchProvider): unknown {
+function rawKeyValue(config: GreenchClawConfig, provider: SearchProvider): unknown {
   const entry = resolveSearchProviderEntry(config, provider);
   return entry?.getConfiguredCredentialValue?.(config);
 }
 
 export function resolveExistingKey(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   provider: SearchProvider,
 ): string | undefined {
   return normalizeSecretInputString(rawKeyValue(config, provider));
 }
 
-export function hasExistingKey(config: NexisClawConfig, provider: SearchProvider): boolean {
+export function hasExistingKey(config: GreenchClawConfig, provider: SearchProvider): boolean {
   return hasConfiguredSecretInput(rawKeyValue(config, provider));
 }
 
-function buildSearchEnvRef(config: NexisClawConfig, provider: SearchProvider): SecretRef {
+function buildSearchEnvRef(config: GreenchClawConfig, provider: SearchProvider): SecretRef {
   const entry =
     resolveSearchProviderEntry(config, provider) ??
     listSearchProviderOptions(config).find((candidate) => candidate.id === provider) ??
@@ -195,7 +197,7 @@ function buildSearchEnvRef(config: NexisClawConfig, provider: SearchProvider): S
 }
 
 function resolveSearchSecretInput(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   provider: SearchProvider,
   key: string,
   secretInputMode?: SecretInputMode,
@@ -208,10 +210,10 @@ function resolveSearchSecretInput(
 }
 
 export function applySearchKey(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   provider: SearchProvider,
   key: SecretInput,
-): NexisClawConfig {
+): GreenchClawConfig {
   const providerEntry = resolveSearchProviderEntry(config, provider);
   if (!providerEntry) {
     return config;
@@ -220,7 +222,7 @@ export function applySearchKey(
   if (!providerEntry.setConfiguredCredentialValue) {
     providerEntry.setCredentialValue(search, key);
   }
-  const nextBase: NexisClawConfig = {
+  const nextBase: GreenchClawConfig = {
     ...config,
     tools: {
       ...config.tools,
@@ -233,9 +235,9 @@ export function applySearchKey(
 }
 
 function applySearchProviderSelectionConfig(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   providerEntry: Pick<PluginWebSearchProviderEntry, "pluginId" | "applySelectionConfig">,
-): NexisClawConfig {
+): GreenchClawConfig {
   if (providerEntry.applySelectionConfig) {
     return providerEntry.applySelectionConfig(config);
   }
@@ -246,9 +248,9 @@ function applySearchProviderSelectionConfig(
 }
 
 export function applySearchProviderSelection(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   provider: SearchProvider,
-): NexisClawConfig {
+): GreenchClawConfig {
   const providerEntry = resolveSearchProviderEntry(config, provider);
   if (!providerEntry) {
     return config;
@@ -258,7 +260,7 @@ export function applySearchProviderSelection(
     provider,
     enabled: true,
   };
-  const nextBase: NexisClawConfig = {
+  const nextBase: GreenchClawConfig = {
     ...config,
     tools: {
       ...config.tools,
@@ -271,12 +273,15 @@ export function applySearchProviderSelection(
   return applySearchProviderSelectionConfig(nextBase, providerEntry);
 }
 
-function preserveDisabledState(original: NexisClawConfig, result: NexisClawConfig): NexisClawConfig {
+function preserveDisabledState(
+  original: GreenchClawConfig,
+  result: GreenchClawConfig,
+): GreenchClawConfig {
   if (original.tools?.web?.search?.enabled !== false) {
     return result;
   }
 
-  const next: NexisClawConfig = {
+  const next: GreenchClawConfig = {
     ...result,
     tools: {
       ...result.tools,
@@ -325,7 +330,7 @@ function preserveDisabledState(original: NexisClawConfig, result: NexisClawConfi
 
   return {
     ...next,
-    plugins: nextPlugins as NexisClawConfig["plugins"],
+    plugins: nextPlugins as GreenchClawConfig["plugins"],
   };
 }
 
@@ -335,13 +340,13 @@ export type SetupSearchOptions = {
 };
 
 async function finalizeSearchProviderSetup(params: {
-  originalConfig: NexisClawConfig;
-  nextConfig: NexisClawConfig;
+  originalConfig: GreenchClawConfig;
+  nextConfig: GreenchClawConfig;
   entry: SearchProviderEntryWithInstall;
   runtime: RuntimeEnv;
   prompter: WizardPrompter;
   opts?: SetupSearchOptions;
-}): Promise<NexisClawConfig> {
+}): Promise<GreenchClawConfig> {
   let next = params.nextConfig;
   const installEntry = params.entry[SEARCH_INSTALL_CATALOG_ENTRY];
   if (installEntry && next.tools?.web?.search?.enabled !== false) {
@@ -381,18 +386,18 @@ async function finalizeSearchProviderSetup(params: {
 }
 
 export async function runSearchSetupFlow(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   runtime: RuntimeEnv,
   prompter: WizardPrompter,
   opts?: SetupSearchOptions,
-): Promise<NexisClawConfig> {
+): Promise<GreenchClawConfig> {
   const providerOptions = resolveSearchProviderOptions(config);
   if (providerOptions.length === 0) {
     await prompter.note(
       [
         "No web search providers are currently available under this plugin policy.",
         "Enable plugins or remove deny rules, then run setup again.",
-        "Docs: https://docs.NexisClaw.ai/tools/web",
+        "Docs: https://docs.GreenchClaw.ai/tools/web",
       ].join("\n"),
       "Web search",
     );
@@ -403,7 +408,7 @@ export async function runSearchSetupFlow(
     [
       "Web search lets your agent look things up online.",
       "Choose a provider. Some providers need an API key, and some work key-free.",
-      "Docs: https://docs.NexisClaw.ai/tools/web",
+      "Docs: https://docs.GreenchClaw.ai/tools/web",
     ].join("\n"),
     "Web search",
   );
@@ -438,7 +443,7 @@ export async function runSearchSetupFlow(
       {
         value: "__skip__" as const,
         label: "Skip for now",
-        hint: "Configure later with NexisClaw configure --section web",
+        hint: "Configure later with GreenchClaw configure --section web",
       },
     ],
     initialValue: defaultProvider,
@@ -478,8 +483,8 @@ export async function runSearchSetupFlow(
     await prompter.note(
       [
         `${entry.label} works without an API key.`,
-        "NexisClaw will enable the plugin and use it as your web_search provider.",
-        `Docs: ${entry.docsUrl ?? "https://docs.NexisClaw.ai/tools/web"}`,
+        "GreenchClaw will enable the plugin and use it as your web_search provider.",
+        `Docs: ${entry.docsUrl ?? "https://docs.GreenchClaw.ai/tools/web"}`,
       ].join("\n"),
       "Web search",
     );
@@ -512,10 +517,10 @@ export async function runSearchSetupFlow(
     const ref = buildSearchEnvRef(config, choice);
     await prompter.note(
       [
-        "Secret references enabled — NexisClaw will store a reference instead of the API key.",
+        "Secret references enabled — GreenchClaw will store a reference instead of the API key.",
         `Env var: ${ref.id}${envAvailable ? " (detected)" : ""}.`,
         ...(envAvailable ? [] : [`Set ${ref.id} in the Gateway environment.`]),
-        "Docs: https://docs.NexisClaw.ai/tools/web",
+        "Docs: https://docs.GreenchClaw.ai/tools/web",
       ].join("\n"),
       "Web search",
     );
@@ -578,7 +583,7 @@ export async function runSearchSetupFlow(
     [
       `No ${credentialLabel} stored — web_search won't work until a key is available.`,
       `Get your key at: ${entry.signupUrl}`,
-      "Docs: https://docs.NexisClaw.ai/tools/web",
+      "Docs: https://docs.GreenchClaw.ai/tools/web",
     ].join("\n"),
     "Web search",
   );

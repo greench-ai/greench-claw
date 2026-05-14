@@ -1,8 +1,8 @@
-import { resolveAgentModelPrimaryValue } from "NexisClaw/plugin-sdk/provider-onboard";
+import { resolveAgentModelPrimaryValue } from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   expectProviderOnboardMergedLegacyConfig,
   expectProviderOnboardPreservesPrimary,
-} from "NexisClaw/plugin-sdk/provider-test-contracts";
+} from "GreenchClaw/plugin-sdk/provider-test-contracts";
 import { describe, expect, it } from "vitest";
 import { buildMinimaxApiModelDefinition } from "./model-definitions.js";
 import { applyMinimaxApiConfig, applyMinimaxApiProviderConfig } from "./onboard.js";

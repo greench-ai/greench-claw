@@ -11,7 +11,7 @@ Join Google Meet calls through Chrome or Twilio transports.
 
 ## Distribution
 
-- Package: `@NexisClaw/google-meet`
+- Package: `@GreenchClaw/google-meet`
 - Install route: npm; ClawHub
 
 ## Surface

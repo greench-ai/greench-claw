@@ -6,7 +6,7 @@ import {
   FsSafeError,
   resolveAbsolutePathForWrite,
   root,
-} from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/security-runtime";
 
 const MAX_CONTENT_BYTES = 16 * 1024 * 1024; // 16 MB
 

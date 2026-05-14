@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import {
   normalizePluginsConfigWithResolver,
@@ -20,7 +20,7 @@ type PluginHookDirEntry = {
 
 export function resolvePluginHookDirs(params: {
   workspaceDir: string | undefined;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): PluginHookDirEntry[] {
   const workspaceDir = (params.workspaceDir ?? "").trim();
   if (!workspaceDir) {

@@ -12,7 +12,7 @@ const gatewayMocks = vi.hoisted(() => ({
   startGatewayClientWhenEventLoopReady: vi.fn(async () => ({ ready: true, aborted: false })),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/gateway-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/gateway-runtime", () => ({
   GatewayClient: vi.fn(function MockGatewayClient(params: { onHelloOk?: () => void }) {
     queueMicrotask(() => params.onHelloOk?.());
     return {
@@ -37,7 +37,7 @@ describe("Google Meet voice-call gateway", () => {
   });
 
   afterAll(() => {
-    vi.doUnmock("NexisClaw/plugin-sdk/gateway-runtime");
+    vi.doUnmock("GreenchClaw/plugin-sdk/gateway-runtime");
     vi.resetModules();
   });
 

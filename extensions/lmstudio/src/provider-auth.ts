@@ -2,8 +2,8 @@ import {
   CUSTOM_LOCAL_AUTH_MARKER,
   hasConfiguredSecretInput,
   normalizeOptionalSecretInput,
-} from "NexisClaw/plugin-sdk/provider-auth";
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/provider-auth";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import { LMSTUDIO_LOCAL_API_KEY_PLACEHOLDER } from "./defaults.js";
 
 export function hasLmstudioAuthorizationHeader(headers: unknown): boolean {

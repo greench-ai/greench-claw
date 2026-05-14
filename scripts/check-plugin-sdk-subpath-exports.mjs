@@ -41,10 +41,10 @@ function readPrivateLocalOnlySubpaths() {
 }
 
 function parsePluginSdkSubpath(specifier) {
-  if (!specifier.startsWith("NexisClaw/plugin-sdk/")) {
+  if (!specifier.startsWith("GreenchClaw/plugin-sdk/")) {
     return null;
   }
-  const subpath = specifier.slice("NexisClaw/plugin-sdk/".length);
+  const subpath = specifier.slice("GreenchClaw/plugin-sdk/".length);
   return subpath || null;
 }
 
@@ -119,12 +119,12 @@ async function collectViolations() {
 async function main() {
   const violations = await collectViolations();
   if (violations.length === 0) {
-    console.log("OK: all referenced NexisClaw/plugin-sdk/<subpath> imports are exported.");
+    console.log("OK: all referenced GreenchClaw/plugin-sdk/<subpath> imports are exported.");
     return;
   }
 
   console.error(
-    "Rule: every referenced NexisClaw/plugin-sdk/<subpath> must exist in the public package exports.",
+    "Rule: every referenced GreenchClaw/plugin-sdk/<subpath> must exist in the public package exports.",
   );
   for (const violation of violations) {
     console.error(

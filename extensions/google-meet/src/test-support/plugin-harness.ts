@@ -1,9 +1,9 @@
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { vi } from "vitest";
 
 type GoogleMeetTestPluginEntry = {
-  register(api: NexisClawPluginApi): void;
+  register(api: GreenchClawPluginApi): void;
 };
 
 export const noopLogger = {
@@ -152,7 +152,7 @@ export function setupGoogleMeetPlugin(
         list: nodesList,
         invoke: nodesInvoke,
       },
-    } as unknown as NexisClawPluginApi["runtime"],
+    } as unknown as GreenchClawPluginApi["runtime"],
     logger: noopLogger,
     registerGatewayMethod: (method: string, handler: unknown) => methods.set(method, handler),
     registerTool: (tool: unknown) => {

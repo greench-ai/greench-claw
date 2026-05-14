@@ -11,8 +11,8 @@ Generic JSON-only LLM tool for structured tasks callable from workflows.
 
 ## Distribution
 
-- Package: `@NexisClaw/llm-task`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/llm-task`
+- Install route: included in GreenchClaw
 
 ## Surface
 

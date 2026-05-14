@@ -1,50 +1,50 @@
 #!/usr/bin/env bash
-# Installs an NexisClaw package candidate in Docker, performs Telegram
+# Installs an GreenchClaw package candidate in Docker, performs Telegram
 # onboarding/doctor recovery, then runs the Telegram QA live harness.
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$ROOT_DIR/scripts/lib/docker-e2e-image.sh"
 
-IMAGE_NAME="$(docker_e2e_resolve_image "NexisClaw-npm-telegram-live-e2e" NEXISCLAW_NPM_TELEGRAM_LIVE_E2E_IMAGE)"
-DOCKER_TARGET="${NEXISCLAW_NPM_TELEGRAM_DOCKER_TARGET:-build}"
-PACKAGE_SPEC="${NEXISCLAW_NPM_TELEGRAM_PACKAGE_SPEC:-NexisClaw@beta}"
-PACKAGE_TGZ="${NEXISCLAW_NPM_TELEGRAM_PACKAGE_TGZ:-${NEXISCLAW_CURRENT_PACKAGE_TGZ:-}}"
-PACKAGE_LABEL="${NEXISCLAW_NPM_TELEGRAM_PACKAGE_LABEL:-}"
-OUTPUT_DIR="${NEXISCLAW_NPM_TELEGRAM_OUTPUT_DIR:-.artifacts/qa-e2e/npm-telegram-live}"
+IMAGE_NAME="$(docker_e2e_resolve_image "GreenchClaw-npm-telegram-live-e2e" GREENCHCLAW_NPM_TELEGRAM_LIVE_E2E_IMAGE)"
+DOCKER_TARGET="${GREENCHCLAW_NPM_TELEGRAM_DOCKER_TARGET:-build}"
+PACKAGE_SPEC="${GREENCHCLAW_NPM_TELEGRAM_PACKAGE_SPEC:-GreenchClaw@beta}"
+PACKAGE_TGZ="${GREENCHCLAW_NPM_TELEGRAM_PACKAGE_TGZ:-${GREENCHCLAW_CURRENT_PACKAGE_TGZ:-}}"
+PACKAGE_LABEL="${GREENCHCLAW_NPM_TELEGRAM_PACKAGE_LABEL:-}"
+OUTPUT_DIR="${GREENCHCLAW_NPM_TELEGRAM_OUTPUT_DIR:-.artifacts/qa-e2e/npm-telegram-live}"
 
 resolve_credential_source() {
-  if [ -n "${NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE:-}" ]; then
-    printf "%s" "$NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE"
+  if [ -n "${GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE:-}" ]; then
+    printf "%s" "$GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE"
     return 0
   fi
-  if [ -n "${NEXISCLAW_QA_CREDENTIAL_SOURCE:-}" ]; then
-    printf "%s" "$NEXISCLAW_QA_CREDENTIAL_SOURCE"
+  if [ -n "${GREENCHCLAW_QA_CREDENTIAL_SOURCE:-}" ]; then
+    printf "%s" "$GREENCHCLAW_QA_CREDENTIAL_SOURCE"
     return 0
   fi
-  if [ -n "${CI:-}" ] && [ -n "${NEXISCLAW_QA_CONVEX_SITE_URL:-}" ]; then
-    if [ -n "${NEXISCLAW_QA_CONVEX_SECRET_CI:-}" ] || [ -n "${NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER:-}" ]; then
+  if [ -n "${CI:-}" ] && [ -n "${GREENCHCLAW_QA_CONVEX_SITE_URL:-}" ]; then
+    if [ -n "${GREENCHCLAW_QA_CONVEX_SECRET_CI:-}" ] || [ -n "${GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER:-}" ]; then
       printf "convex"
     fi
   fi
 }
 
 resolve_credential_role() {
-  if [ -n "${NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE:-}" ]; then
-    printf "%s" "$NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE"
+  if [ -n "${GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE:-}" ]; then
+    printf "%s" "$GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_ROLE"
     return 0
   fi
-  if [ -n "${NEXISCLAW_QA_CREDENTIAL_ROLE:-}" ]; then
-    printf "%s" "$NEXISCLAW_QA_CREDENTIAL_ROLE"
+  if [ -n "${GREENCHCLAW_QA_CREDENTIAL_ROLE:-}" ]; then
+    printf "%s" "$GREENCHCLAW_QA_CREDENTIAL_ROLE"
   fi
 }
 
-validate_NexisClaw_package_spec() {
+validate_GreenchClaw_package_spec() {
   local spec="$1"
-  if [[ "$spec" =~ ^NexisClaw@(alpha|beta|latest|[0-9]{4}\.[1-9][0-9]*\.[1-9][0-9]*(-[1-9][0-9]*|-(alpha|beta)\.[1-9][0-9]*)?)$ ]]; then
+  if [[ "$spec" =~ ^GreenchClaw@(alpha|beta|latest|[0-9]{4}\.[1-9][0-9]*\.[1-9][0-9]*(-[1-9][0-9]*|-(alpha|beta)\.[1-9][0-9]*)?)$ ]]; then
     return 0
   fi
-  echo "NEXISCLAW_NPM_TELEGRAM_PACKAGE_SPEC must be NexisClaw@alpha, NexisClaw@beta, NexisClaw@latest, or an exact NexisClaw release version; got: $spec" >&2
+  echo "GREENCHCLAW_NPM_TELEGRAM_PACKAGE_SPEC must be GreenchClaw@alpha, GreenchClaw@beta, GreenchClaw@latest, or an exact GreenchClaw release version; got: $spec" >&2
   exit 1
 }
 
@@ -54,13 +54,13 @@ resolve_package_tgz() {
     return 0
   fi
   if [ ! -f "$candidate" ]; then
-    echo "NEXISCLAW_NPM_TELEGRAM_PACKAGE_TGZ must point to an existing .tgz file; got: $candidate" >&2
+    echo "GREENCHCLAW_NPM_TELEGRAM_PACKAGE_TGZ must point to an existing .tgz file; got: $candidate" >&2
     exit 1
   fi
   case "$candidate" in
     *.tgz) ;;
     *)
-      echo "NEXISCLAW_NPM_TELEGRAM_PACKAGE_TGZ must point to a .tgz file; got: $candidate" >&2
+      echo "GREENCHCLAW_NPM_TELEGRAM_PACKAGE_TGZ must point to a .tgz file; got: $candidate" >&2
       exit 1
       ;;
   esac
@@ -78,7 +78,7 @@ if [ -n "$resolved_package_tgz" ]; then
   package_install_source="/package-under-test/$(basename "$resolved_package_tgz")"
   package_mount_args=(-v "$resolved_package_tgz:$package_install_source:ro")
 else
-  validate_NexisClaw_package_spec "$PACKAGE_SPEC"
+  validate_GreenchClaw_package_spec "$PACKAGE_SPEC"
 fi
 if [ -z "$PACKAGE_LABEL" ]; then
   if [ -n "$resolved_package_tgz" ]; then
@@ -95,30 +95,30 @@ if [ -z "$credential_role" ] && [ -n "${CI:-}" ] && [ "$credential_source" = "co
 fi
 
 validate_credential_preflight() {
-  if [ "${NEXISCLAW_NPM_TELEGRAM_SKIP_CREDENTIAL_PREFLIGHT:-0}" = "1" ]; then
+  if [ "${GREENCHCLAW_NPM_TELEGRAM_SKIP_CREDENTIAL_PREFLIGHT:-0}" = "1" ]; then
     return 0
   fi
   if [ "$credential_source" = "convex" ]; then
-    if [ -z "${NEXISCLAW_QA_CONVEX_SITE_URL:-}" ]; then
-      echo "Missing required env for Convex credential mode: NEXISCLAW_QA_CONVEX_SITE_URL" >&2
+    if [ -z "${GREENCHCLAW_QA_CONVEX_SITE_URL:-}" ]; then
+      echo "Missing required env for Convex credential mode: GREENCHCLAW_QA_CONVEX_SITE_URL" >&2
       exit 1
     fi
     if [ "$credential_role" = "ci" ]; then
-      if [ -z "${NEXISCLAW_QA_CONVEX_SECRET_CI:-}" ]; then
-        echo "Missing required env for Convex ci credential mode: NEXISCLAW_QA_CONVEX_SECRET_CI" >&2
+      if [ -z "${GREENCHCLAW_QA_CONVEX_SECRET_CI:-}" ]; then
+        echo "Missing required env for Convex ci credential mode: GREENCHCLAW_QA_CONVEX_SECRET_CI" >&2
         exit 1
       fi
       return 0
     fi
     if [ "$credential_role" = "maintainer" ]; then
-      if [ -z "${NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER:-}" ]; then
-        echo "Missing required env for Convex maintainer credential mode: NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER" >&2
+      if [ -z "${GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER:-}" ]; then
+        echo "Missing required env for Convex maintainer credential mode: GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER" >&2
         exit 1
       fi
       return 0
     fi
-    if [ -z "${NEXISCLAW_QA_CONVEX_SECRET_CI:-}" ] && [ -z "${NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER:-}" ]; then
-      echo "Missing required env for Convex credential mode: NEXISCLAW_QA_CONVEX_SECRET_CI or NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER" >&2
+    if [ -z "${GREENCHCLAW_QA_CONVEX_SECRET_CI:-}" ] && [ -z "${GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER:-}" ]; then
+      echo "Missing required env for Convex credential mode: GREENCHCLAW_QA_CONVEX_SECRET_CI or GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER" >&2
       exit 1
     fi
     return 0
@@ -126,9 +126,9 @@ validate_credential_preflight() {
 
   local missing=()
   for key in \
-    NEXISCLAW_QA_TELEGRAM_GROUP_ID \
-    NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN \
-    NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN; do
+    GREENCHCLAW_QA_TELEGRAM_GROUP_ID \
+    GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN \
+    GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN; do
     if [ -z "${!key:-}" ]; then
       missing+=("$key")
     fi
@@ -137,8 +137,8 @@ validate_credential_preflight() {
     {
       echo "Missing required Telegram QA credential env before Docker work: ${missing[*]}"
       echo "Use one of:"
-      echo "  direct Telegram env: NEXISCLAW_QA_TELEGRAM_GROUP_ID, NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN, NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN"
-      echo "  Convex env: NEXISCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE=convex plus NEXISCLAW_QA_CONVEX_SITE_URL and a role secret"
+      echo "  direct Telegram env: GREENCHCLAW_QA_TELEGRAM_GROUP_ID, GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN, GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN"
+      echo "  Convex env: GREENCHCLAW_NPM_TELEGRAM_CREDENTIAL_SOURCE=convex plus GREENCHCLAW_QA_CONVEX_SITE_URL and a role secret"
     } >&2
     exit 1
   fi
@@ -149,16 +149,16 @@ validate_credential_preflight
 docker_e2e_build_or_reuse "$IMAGE_NAME" npm-telegram-live "$ROOT_DIR/scripts/e2e/Dockerfile" "$ROOT_DIR" "$DOCKER_TARGET"
 
 mkdir -p "$ROOT_DIR/.artifacts/qa-e2e"
-run_log="$(mktemp "${TMPDIR:-/tmp}/NexisClaw-npm-telegram-live.XXXXXX")"
+run_log="$(mktemp "${TMPDIR:-/tmp}/GreenchClaw-npm-telegram-live.XXXXXX")"
 npm_prefix_host="$(mktemp -d "$ROOT_DIR/.artifacts/qa-e2e/npm-telegram-live-prefix.XXXXXX")"
 trap 'rm -f "$run_log"; rm -rf "$npm_prefix_host"' EXIT
 
 docker_env=(
   -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0
-  -e NEXISCLAW_NPM_TELEGRAM_PACKAGE_SPEC="$PACKAGE_SPEC"
-  -e NEXISCLAW_NPM_TELEGRAM_PACKAGE_LABEL="$PACKAGE_LABEL"
-  -e NEXISCLAW_NPM_TELEGRAM_OUTPUT_DIR="$OUTPUT_DIR"
-  -e NEXISCLAW_NPM_TELEGRAM_FAST="${NEXISCLAW_NPM_TELEGRAM_FAST:-1}"
+  -e GREENCHCLAW_NPM_TELEGRAM_PACKAGE_SPEC="$PACKAGE_SPEC"
+  -e GREENCHCLAW_NPM_TELEGRAM_PACKAGE_LABEL="$PACKAGE_LABEL"
+  -e GREENCHCLAW_NPM_TELEGRAM_OUTPUT_DIR="$OUTPUT_DIR"
+  -e GREENCHCLAW_NPM_TELEGRAM_FAST="${GREENCHCLAW_NPM_TELEGRAM_FAST:-1}"
 )
 
 forward_env_if_set() {
@@ -169,10 +169,10 @@ forward_env_if_set() {
 }
 
 if [ -n "$credential_source" ]; then
-  docker_env+=(-e NEXISCLAW_QA_CREDENTIAL_SOURCE="$credential_source")
+  docker_env+=(-e GREENCHCLAW_QA_CREDENTIAL_SOURCE="$credential_source")
 fi
 if [ -n "$credential_role" ]; then
-  docker_env+=(-e NEXISCLAW_QA_CREDENTIAL_ROLE="$credential_role")
+  docker_env+=(-e GREENCHCLAW_QA_CREDENTIAL_ROLE="$credential_role")
 fi
 
 for key in \
@@ -180,34 +180,34 @@ for key in \
   ANTHROPIC_API_KEY \
   GEMINI_API_KEY \
   GOOGLE_API_KEY \
-  NEXISCLAW_LIVE_OPENAI_KEY \
-  NEXISCLAW_LIVE_ANTHROPIC_KEY \
-  NEXISCLAW_LIVE_GEMINI_KEY \
-  NEXISCLAW_QA_TELEGRAM_GROUP_ID \
-  NEXISCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN \
-  NEXISCLAW_QA_TELEGRAM_SUT_BOT_TOKEN \
-  NEXISCLAW_QA_CONVEX_SITE_URL \
-  NEXISCLAW_QA_CONVEX_SECRET_CI \
-  NEXISCLAW_QA_CONVEX_SECRET_MAINTAINER \
-  NEXISCLAW_QA_CREDENTIAL_LEASE_TTL_MS \
-  NEXISCLAW_QA_CREDENTIAL_HEARTBEAT_INTERVAL_MS \
-  NEXISCLAW_QA_CREDENTIAL_ACQUIRE_TIMEOUT_MS \
-  NEXISCLAW_QA_CREDENTIAL_HTTP_TIMEOUT_MS \
-  NEXISCLAW_QA_CONVEX_ENDPOINT_PREFIX \
-  NEXISCLAW_QA_CREDENTIAL_OWNER_ID \
-  NEXISCLAW_QA_ALLOW_INSECURE_HTTP \
-  NEXISCLAW_QA_REDACT_PUBLIC_METADATA \
-  NEXISCLAW_QA_TELEGRAM_CAPTURE_CONTENT \
-  NEXISCLAW_QA_TELEGRAM_CANARY_TIMEOUT_MS \
-  NEXISCLAW_QA_TELEGRAM_SCENARIO_TIMEOUT_MS \
-  NEXISCLAW_QA_SUITE_PROGRESS \
-  NEXISCLAW_NPM_TELEGRAM_PROVIDER_MODE \
-  NEXISCLAW_NPM_TELEGRAM_MODEL \
-  NEXISCLAW_NPM_TELEGRAM_ALT_MODEL \
-  NEXISCLAW_NPM_TELEGRAM_SCENARIOS \
-  NEXISCLAW_NPM_TELEGRAM_SKIP_HOTPATH \
-  NEXISCLAW_NPM_TELEGRAM_SUT_ACCOUNT \
-  NEXISCLAW_NPM_TELEGRAM_ALLOW_FAILURES; do
+  GREENCHCLAW_LIVE_OPENAI_KEY \
+  GREENCHCLAW_LIVE_ANTHROPIC_KEY \
+  GREENCHCLAW_LIVE_GEMINI_KEY \
+  GREENCHCLAW_QA_TELEGRAM_GROUP_ID \
+  GREENCHCLAW_QA_TELEGRAM_DRIVER_BOT_TOKEN \
+  GREENCHCLAW_QA_TELEGRAM_SUT_BOT_TOKEN \
+  GREENCHCLAW_QA_CONVEX_SITE_URL \
+  GREENCHCLAW_QA_CONVEX_SECRET_CI \
+  GREENCHCLAW_QA_CONVEX_SECRET_MAINTAINER \
+  GREENCHCLAW_QA_CREDENTIAL_LEASE_TTL_MS \
+  GREENCHCLAW_QA_CREDENTIAL_HEARTBEAT_INTERVAL_MS \
+  GREENCHCLAW_QA_CREDENTIAL_ACQUIRE_TIMEOUT_MS \
+  GREENCHCLAW_QA_CREDENTIAL_HTTP_TIMEOUT_MS \
+  GREENCHCLAW_QA_CONVEX_ENDPOINT_PREFIX \
+  GREENCHCLAW_QA_CREDENTIAL_OWNER_ID \
+  GREENCHCLAW_QA_ALLOW_INSECURE_HTTP \
+  GREENCHCLAW_QA_REDACT_PUBLIC_METADATA \
+  GREENCHCLAW_QA_TELEGRAM_CAPTURE_CONTENT \
+  GREENCHCLAW_QA_TELEGRAM_CANARY_TIMEOUT_MS \
+  GREENCHCLAW_QA_TELEGRAM_SCENARIO_TIMEOUT_MS \
+  GREENCHCLAW_QA_SUITE_PROGRESS \
+  GREENCHCLAW_NPM_TELEGRAM_PROVIDER_MODE \
+  GREENCHCLAW_NPM_TELEGRAM_MODEL \
+  GREENCHCLAW_NPM_TELEGRAM_ALT_MODEL \
+  GREENCHCLAW_NPM_TELEGRAM_SCENARIOS \
+  GREENCHCLAW_NPM_TELEGRAM_SKIP_HOTPATH \
+  GREENCHCLAW_NPM_TELEGRAM_SUT_ACCOUNT \
+  GREENCHCLAW_NPM_TELEGRAM_ALLOW_FAILURES; do
   forward_env_if_set "$key"
 done
 
@@ -223,24 +223,24 @@ run_logged() {
 echo "Running package Telegram live Docker E2E ($PACKAGE_LABEL)..."
 run_logged docker run --rm \
   -e COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
-  -e NEXISCLAW_NPM_TELEGRAM_INSTALL_SOURCE="$package_install_source" \
-  -e NEXISCLAW_NPM_TELEGRAM_PACKAGE_LABEL="$PACKAGE_LABEL" \
+  -e GREENCHCLAW_NPM_TELEGRAM_INSTALL_SOURCE="$package_install_source" \
+  -e GREENCHCLAW_NPM_TELEGRAM_PACKAGE_LABEL="$PACKAGE_LABEL" \
   ${package_mount_args[@]+"${package_mount_args[@]}"} \
   -v "$npm_prefix_host:/npm-global" \
   -i "$IMAGE_NAME" bash -s <<'EOF'
 set -euo pipefail
 
-export HOME="$(mktemp -d "/tmp/NexisClaw-npm-telegram-install.XXXXXX")"
+export HOME="$(mktemp -d "/tmp/GreenchClaw-npm-telegram-install.XXXXXX")"
 export NPM_CONFIG_PREFIX="/npm-global"
 export PATH="$NPM_CONFIG_PREFIX/bin:$PATH"
 
-install_source="${NEXISCLAW_NPM_TELEGRAM_INSTALL_SOURCE:?missing NEXISCLAW_NPM_TELEGRAM_INSTALL_SOURCE}"
-package_label="${NEXISCLAW_NPM_TELEGRAM_PACKAGE_LABEL:-$install_source}"
+install_source="${GREENCHCLAW_NPM_TELEGRAM_INSTALL_SOURCE:?missing GREENCHCLAW_NPM_TELEGRAM_INSTALL_SOURCE}"
+package_label="${GREENCHCLAW_NPM_TELEGRAM_PACKAGE_LABEL:-$install_source}"
 echo "Installing ${package_label} from ${install_source}..."
 npm install -g "$install_source" --no-fund --no-audit
 
-command -v NexisClaw
-NexisClaw --version
+command -v GreenchClaw
+GreenchClaw --version
 EOF
 
 # Mount only QA harness source; the SUT itself, including bundled plugin runtime,
@@ -253,19 +253,19 @@ run_logged docker_e2e_run_with_harness \
   -i "$IMAGE_NAME" bash -s <<'EOF'
 set -euo pipefail
 
-export HOME="$(mktemp -d "/tmp/NexisClaw-npm-telegram-runtime.XXXXXX")"
+export HOME="$(mktemp -d "/tmp/GreenchClaw-npm-telegram-runtime.XXXXXX")"
 export NPM_CONFIG_PREFIX="/npm-global"
 export PATH="$NPM_CONFIG_PREFIX/bin:$PATH"
-export NEXISCLAW_NPM_TELEGRAM_REPO_ROOT="/app"
+export GREENCHCLAW_NPM_TELEGRAM_REPO_ROOT="/app"
 
 dump_hotpath_logs() {
   local status="$1"
   echo "installed-package onboarding recovery hot path failed with exit code $status" >&2
   for file in \
-    /tmp/NexisClaw-npm-telegram-onboard.json \
-    /tmp/NexisClaw-npm-telegram-channel-add.log \
-    /tmp/NexisClaw-npm-telegram-doctor-fix.log \
-    /tmp/NexisClaw-npm-telegram-doctor-check.log; do
+    /tmp/GreenchClaw-npm-telegram-onboard.json \
+    /tmp/GreenchClaw-npm-telegram-channel-add.log \
+    /tmp/GreenchClaw-npm-telegram-doctor-fix.log \
+    /tmp/GreenchClaw-npm-telegram-doctor-check.log; do
     if [ -f "$file" ]; then
       echo "--- $file ---" >&2
       sed -n '1,220p' "$file" >&2 || true
@@ -274,27 +274,27 @@ dump_hotpath_logs() {
 }
 trap 'status=$?; dump_hotpath_logs "$status"; exit "$status"' ERR
 
-command -v NexisClaw
-NexisClaw --version
+command -v GreenchClaw
+GreenchClaw --version
 mkdir -p /app/node_modules
-NexisClaw_package_dir="/npm-global/lib/node_modules/NexisClaw"
-# The mounted QA harness imports NexisClaw/plugin-sdk and package dependencies;
+GreenchClaw_package_dir="/npm-global/lib/node_modules/GreenchClaw"
+# The mounted QA harness imports GreenchClaw/plugin-sdk and package dependencies;
 # point those imports at the installed package without copying source plugins into the test image.
-rm -rf /app/node_modules/NexisClaw
-ln -sfnT "$NexisClaw_package_dir" /app/node_modules/NexisClaw
+rm -rf /app/node_modules/GreenchClaw
+ln -sfnT "$GreenchClaw_package_dir" /app/node_modules/GreenchClaw
 rm -rf /app/dist
-ln -sfnT "$NexisClaw_package_dir/dist" /app/dist
-cp "$NexisClaw_package_dir/package.json" /app/package.json
+ln -sfnT "$GreenchClaw_package_dir/dist" /app/dist
+cp "$GreenchClaw_package_dir/package.json" /app/package.json
 node scripts/e2e/lib/npm-telegram-live/prepare-package.mjs \
   /app/package.json \
-  /app/node_modules/NexisClaw/package.json
-for deps_dir in "$NexisClaw_package_dir/node_modules" /npm-global/lib/node_modules; do
+  /app/node_modules/GreenchClaw/package.json
+for deps_dir in "$GreenchClaw_package_dir/node_modules" /npm-global/lib/node_modules; do
   [ -d "$deps_dir" ] || continue
   for dependency_dir in "$deps_dir"/*; do
     [ -e "$dependency_dir" ] || continue
     dependency_name="$(basename "$dependency_dir")"
     case "$dependency_name" in
-      .bin | NexisClaw)
+      .bin | GreenchClaw)
         continue
         ;;
       @*)
@@ -317,7 +317,7 @@ done
 
 link_installed_package_dependency() {
   local name="$1"
-  local source="/npm-global/lib/node_modules/NexisClaw/node_modules/$name"
+  local source="/npm-global/lib/node_modules/GreenchClaw/node_modules/$name"
   local target="/app/node_modules/$name"
   if [ ! -e "$source" ]; then
     echo "Installed package dependency is missing: $name" >&2
@@ -336,9 +336,9 @@ for dependency in \
   link_installed_package_dependency "$dependency"
 done
 
-if [ "${NEXISCLAW_NPM_TELEGRAM_SKIP_HOTPATH:-0}" != "1" ]; then
+if [ "${GREENCHCLAW_NPM_TELEGRAM_SKIP_HOTPATH:-0}" != "1" ]; then
   echo "Running installed-package onboarding recovery hot path..."
-  OPENAI_API_KEY="${OPENAI_API_KEY:-sk-NexisClaw-npm-telegram-hotpath}" NexisClaw onboard --non-interactive --accept-risk \
+  OPENAI_API_KEY="${OPENAI_API_KEY:-sk-GreenchClaw-npm-telegram-hotpath}" GreenchClaw onboard --non-interactive --accept-risk \
     --mode local \
     --auth-choice openai-api-key \
     --secret-input-mode ref \
@@ -348,14 +348,14 @@ if [ "${NEXISCLAW_NPM_TELEGRAM_SKIP_HOTPATH:-0}" != "1" ]; then
     --skip-ui \
     --skip-skills \
     --skip-health \
-    --json >/tmp/NexisClaw-npm-telegram-onboard.json </dev/null
+    --json >/tmp/GreenchClaw-npm-telegram-onboard.json </dev/null
 
-  NexisClaw channels add --channel telegram --token "123456:NexisClaw-npm-telegram-hotpath" >/tmp/NexisClaw-npm-telegram-channel-add.log 2>&1 </dev/null
-  NexisClaw doctor --fix --non-interactive >/tmp/NexisClaw-npm-telegram-doctor-fix.log 2>&1 </dev/null
-  NexisClaw doctor --non-interactive >/tmp/NexisClaw-npm-telegram-doctor-check.log 2>&1 </dev/null
+  GreenchClaw channels add --channel telegram --token "123456:GreenchClaw-npm-telegram-hotpath" >/tmp/GreenchClaw-npm-telegram-channel-add.log 2>&1 </dev/null
+  GreenchClaw doctor --fix --non-interactive >/tmp/GreenchClaw-npm-telegram-doctor-fix.log 2>&1 </dev/null
+  GreenchClaw doctor --non-interactive >/tmp/GreenchClaw-npm-telegram-doctor-check.log 2>&1 </dev/null
 fi
 
-export NEXISCLAW_NPM_TELEGRAM_SUT_COMMAND="$(command -v NexisClaw)"
+export GREENCHCLAW_NPM_TELEGRAM_SUT_COMMAND="$(command -v GreenchClaw)"
 trap - ERR
 tsx scripts/e2e/npm-telegram-live-runner.ts
 EOF

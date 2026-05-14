@@ -1,8 +1,8 @@
 ---
-summary: "Use DeepInfra's unified API to access the most popular open source and frontier models in NexisClaw"
+summary: "Use DeepInfra's unified API to access the most popular open source and frontier models in GreenchClaw"
 read_when:
   - You want a single API key for the top open source LLMs
-  - You want to run models via DeepInfra's API in NexisClaw
+  - You want to run models via DeepInfra's API in GreenchClaw
 title: "DeepInfra"
 ---
 
@@ -18,7 +18,7 @@ endpoint and API key. It is OpenAI-compatible, so most OpenAI SDKs work by switc
 ## CLI setup
 
 ```bash
-NexisClaw onboard --deepinfra-api-key <key>
+GreenchClaw onboard --deepinfra-api-key <key>
 ```
 
 Or set the environment variable:
@@ -40,12 +40,12 @@ export DEEPINFRA_API_KEY="<your-deepinfra-api-key>" # pragma: allowlist secret
 }
 ```
 
-## Supported NexisClaw surfaces
+## Supported GreenchClaw surfaces
 
 The bundled plugin registers all DeepInfra surfaces that match current
-NexisClaw provider contracts:
+GreenchClaw provider contracts:
 
-| Surface                  | Default model                      | NexisClaw config/tool                                     |
+| Surface                  | Default model                      | GreenchClaw config/tool                                  |
 | ------------------------ | ---------------------------------- | -------------------------------------------------------- |
 | Chat / model provider    | `deepseek-ai/DeepSeek-V3.2`        | `agents.defaults.model`                                  |
 | Image generation/editing | `black-forest-labs/FLUX-1-schnell` | `image_generate`, `agents.defaults.imageGenerationModel` |
@@ -56,12 +56,12 @@ NexisClaw provider contracts:
 | Memory embeddings        | `BAAI/bge-m3`                      | `agents.defaults.memorySearch.provider: "deepinfra"`     |
 
 DeepInfra also exposes reranking, classification, object-detection, and other
-native model types. NexisClaw does not currently have first-class provider
+native model types. GreenchClaw does not currently have first-class provider
 contracts for those categories, so this plugin does not register them yet.
 
 ## Available models
 
-NexisClaw dynamically discovers available DeepInfra models at startup. Use
+GreenchClaw dynamically discovers available DeepInfra models at startup. Use
 `/models deepinfra` to see the full list of models available.
 
 Any model available on [DeepInfra.com](https://deepinfra.com/) can be used with the `deepinfra/` prefix:

@@ -1,5 +1,5 @@
 import http from "node:http";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { fetch as undiciFetch } from "undici";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createDiscordRestClient } from "./client.js";
@@ -7,9 +7,9 @@ import { createDiscordRequestClient } from "./proxy-request-client.js";
 
 const makeProxyFetchMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/fetch-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/fetch-runtime")>(
-    "NexisClaw/plugin-sdk/fetch-runtime",
+vi.mock("GreenchClaw/plugin-sdk/fetch-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/fetch-runtime")>(
+    "GreenchClaw/plugin-sdk/fetch-runtime",
   );
   makeProxyFetchMock.mockImplementation((proxyUrl: string) => {
     if (proxyUrl === "bad-proxy") {
@@ -36,7 +36,7 @@ describe("createDiscordRestClient proxy support", () => {
           proxy: "http://127.0.0.1:8080",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { rest } = createDiscordRestClient({ cfg });
     const requestClient = rest as unknown as {
@@ -56,7 +56,7 @@ describe("createDiscordRestClient proxy support", () => {
           token: "Bot test-token",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { rest } = createDiscordRestClient({ cfg });
     const requestClient = rest as unknown as {
@@ -74,7 +74,7 @@ describe("createDiscordRestClient proxy support", () => {
           proxy: "bad-proxy",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { rest } = createDiscordRestClient({ cfg });
     const requestClient = rest as unknown as {
@@ -93,7 +93,7 @@ describe("createDiscordRestClient proxy support", () => {
           proxy: "http://proxy.test:8080",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { rest } = createDiscordRestClient({ cfg });
     const requestClient = rest as unknown as {
@@ -112,7 +112,7 @@ describe("createDiscordRestClient proxy support", () => {
           proxy: "http://[::1]:8080",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { rest } = createDiscordRestClient({ cfg });
     const requestClient = rest as unknown as {

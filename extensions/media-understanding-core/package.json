@@ -1,14 +1,14 @@
 {
-  "name": "@NexisClaw/media-understanding-core",
+  "name": "@GreenchClaw/media-understanding-core",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw media understanding runtime package",
+  "description": "GreenchClaw media understanding runtime package",
   "type": "module",
   "dependencies": {
     "sharp": "0.34.5"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {}
+  "GreenchClaw": {}
 }

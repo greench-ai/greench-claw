@@ -31,7 +31,7 @@ describe("connect params client id validation", () => {
   );
 
   test("rejects unknown client ids", () => {
-    const ok = validateConnectParams(makeConnectParams("NexisClaw-mobile"));
+    const ok = validateConnectParams(makeConnectParams("GreenchClaw-mobile"));
     expect(ok).toBe(false);
   });
 });

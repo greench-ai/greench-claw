@@ -1,12 +1,12 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const resolveConfiguredBindingRouteMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/conversation-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/conversation-runtime")>(
-    "NexisClaw/plugin-sdk/conversation-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/conversation-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/conversation-runtime")
+  >("GreenchClaw/plugin-sdk/conversation-runtime");
   return {
     ...actual,
     resolveConfiguredBindingRoute: (...args: unknown[]) =>
@@ -29,7 +29,7 @@ function buildCtx(overrides?: {
       channels: {
         slack: { enabled: true, replyToMode },
       },
-    } as NexisClawConfig,
+    } as GreenchClawConfig,
     teamId: "T1",
     threadInheritParent: false,
     threadHistoryScope: "thread",
@@ -392,7 +392,7 @@ describe("thread-level session keys", () => {
       account,
       message: buildChannelMessage({
         channel: "C0AHZFCAS1K",
-        text: "https://github.com/NexisClaw/NexisClaw/issues/50621",
+        text: "https://github.com/GreenchClaw/GreenchClaw/issues/50621",
         ts: "1777244714.000100",
         thread_ts: rootTs,
         parent_user_id: "U1",
@@ -435,7 +435,7 @@ describe("thread-level session keys", () => {
       account,
       message: buildChannelMessage({
         channel: "C0AHZFCAS1K",
-        text: "https://github.com/NexisClaw/NexisClaw/issues/50621",
+        text: "https://github.com/GreenchClaw/GreenchClaw/issues/50621",
         ts: "1777244714.000100",
         thread_ts: rootTs,
       }),

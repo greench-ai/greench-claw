@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import type { collectChannelStatusIssues as collectChannelStatusIssuesFn } from "../infra/channels-status-issues.js";
 import { resolveOsSummary } from "../infra/os-summary.js";
 import type { UpdateCheckResult } from "../infra/update-check.js";
@@ -71,7 +71,7 @@ function loadCommandSecretTargetsModule() {
 }
 
 async function resolveStatusChannelsStatus(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   gatewayReachable: boolean;
   opts: { timeoutMs?: number; all?: boolean };
   gatewayCallOverrides?: GatewayProbeSnapshot["gatewayCallOverrides"];
@@ -97,8 +97,8 @@ export type StatusScanOverviewResult = {
   coldStart: boolean;
   hasConfiguredChannels: boolean;
   skipColdStartNetworkChecks: boolean;
-  cfg: NexisClawConfig;
-  sourceConfig: NexisClawConfig;
+  cfg: GreenchClawConfig;
+  sourceConfig: GreenchClawConfig;
   secretDiagnostics: string[];
   osSummary: ReturnType<typeof resolveOsSummary>;
   tailscaleMode: string;
@@ -129,7 +129,10 @@ export async function collectStatusScanOverview(params: {
   showSecrets: boolean;
   runtime?: RuntimeEnv;
   allowMissingConfigFastPath?: boolean;
-  resolveHasConfiguredChannels?: (cfg: NexisClawConfig, sourceConfig: NexisClawConfig) => boolean;
+  resolveHasConfiguredChannels?: (
+    cfg: GreenchClawConfig,
+    sourceConfig: GreenchClawConfig,
+  ) => boolean;
   includeChannelsData?: boolean;
   includeLiveChannelStatus?: boolean;
   includeChannelSetupRuntimeFallback?: boolean;

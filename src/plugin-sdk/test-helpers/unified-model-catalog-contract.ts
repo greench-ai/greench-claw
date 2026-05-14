@@ -1,6 +1,6 @@
 import { expect } from "vitest";
 import type {
-  NexisClawPluginApi,
+  GreenchClawPluginApi,
   UnifiedModelCatalogEntry,
   UnifiedModelCatalogKind,
   UnifiedModelCatalogProviderPlugin,
@@ -8,7 +8,7 @@ import type {
 import { createCapturedPluginRegistration } from "../plugin-test-runtime.js";
 
 type RegistrablePlugin = {
-  register(api: NexisClawPluginApi): void;
+  register(api: GreenchClawPluginApi): void;
 };
 
 export function expectUnifiedModelCatalogEntries(

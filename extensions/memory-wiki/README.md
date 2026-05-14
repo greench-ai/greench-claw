@@ -1,6 +1,6 @@
-# @NexisClaw/memory-wiki
+# @GreenchClaw/memory-wiki
 
-Persistent wiki compiler and Obsidian-friendly knowledge vault for **NexisClaw**.
+Persistent wiki compiler and Obsidian-friendly knowledge vault for **GreenchClaw**.
 
 This plugin is separate from the active memory plugin. The active memory plugin still handles recall, promotion, and dreaming. `memory-wiki` compiles durable knowledge into a navigable markdown vault with deterministic indexes, provenance, structured claim/evidence metadata, and optional Obsidian CLI workflows.
 
@@ -23,14 +23,14 @@ Put config under `plugins.entries.memory-wiki.config`:
   vaultMode: "isolated",
 
   vault: {
-    path: "~/.NexisClaw/wiki/main",
+    path: "~/.GreenchClaw/wiki/main",
     renderMode: "obsidian", // or "native"
   },
 
   obsidian: {
     enabled: true,
     useOfficialCli: true,
-    vaultName: "NexisClaw Wiki",
+    vaultName: "GreenchClaw Wiki",
     openAfterWrites: false,
   },
 
@@ -88,12 +88,12 @@ The plugin initializes a vault like this:
   reports/
   _attachments/
   _views/
-  .NexisClaw-wiki/
+  .GreenchClaw-wiki/
 ```
 
 Generated content stays inside managed blocks. Human note blocks are preserved.
 
-Key beliefs can live in structured `claims` frontmatter with per-claim evidence, confidence, and status. Compile also emits machine-readable digests under `.NexisClaw-wiki/cache/` so agent/runtime consumers do not have to scrape markdown pages.
+Key beliefs can live in structured `claims` frontmatter with per-claim evidence, confidence, and status. Compile also emits machine-readable digests under `.GreenchClaw-wiki/cache/` so agent/runtime consumers do not have to scrape markdown pages.
 
 When `render.createBacklinks` is enabled, compile adds deterministic `## Related` blocks to pages. Those blocks list source pages, pages that reference the current page, and nearby pages that share the same source ids.
 
@@ -102,32 +102,32 @@ When `render.createDashboards` is enabled, compile also maintains report dashboa
 ## CLI
 
 ```bash
-NexisClaw wiki status
-NexisClaw wiki doctor
-NexisClaw wiki init
-NexisClaw wiki ingest ./notes/alpha.md
-NexisClaw wiki compile
-NexisClaw wiki lint
-NexisClaw wiki search "alpha"
-NexisClaw wiki get entity.alpha --from 1 --lines 80
+GreenchClaw wiki status
+GreenchClaw wiki doctor
+GreenchClaw wiki init
+GreenchClaw wiki ingest ./notes/alpha.md
+GreenchClaw wiki compile
+GreenchClaw wiki lint
+GreenchClaw wiki search "alpha"
+GreenchClaw wiki get entity.alpha --from 1 --lines 80
 
-NexisClaw wiki apply synthesis "Alpha Summary" \
+GreenchClaw wiki apply synthesis "Alpha Summary" \
   --body "Short synthesis body" \
   --source-id source.alpha
 
-NexisClaw wiki apply metadata entity.alpha \
+GreenchClaw wiki apply metadata entity.alpha \
   --source-id source.alpha \
   --status review \
   --question "Still active?"
 
-NexisClaw wiki bridge import
-NexisClaw wiki unsafe-local import
+GreenchClaw wiki bridge import
+GreenchClaw wiki unsafe-local import
 
-NexisClaw wiki obsidian status
-NexisClaw wiki obsidian search "alpha"
-NexisClaw wiki obsidian open syntheses/alpha-summary.md
-NexisClaw wiki obsidian command workspace:quick-switcher
-NexisClaw wiki obsidian daily
+GreenchClaw wiki obsidian status
+GreenchClaw wiki obsidian search "alpha"
+GreenchClaw wiki obsidian open syntheses/alpha-summary.md
+GreenchClaw wiki obsidian command workspace:quick-switcher
+GreenchClaw wiki obsidian daily
 ```
 
 ## Agent tools
@@ -142,7 +142,7 @@ The plugin also registers a non-exclusive memory corpus supplement, so shared `m
 
 `wiki_apply` accepts structured `claims` payloads for synthesis and metadata updates, so the wiki can store claim-level evidence instead of only page-level prose.
 
-When `context.includeCompiledDigestPrompt` is enabled, the memory prompt supplement also appends a compact snapshot from `.NexisClaw-wiki/cache/agent-digest.json`. Legacy prompt assembly sees that automatically, and non-legacy context engines can pick it up when they explicitly consume memory prompt supplements via `buildActiveMemoryPromptSection(...)`.
+When `context.includeCompiledDigestPrompt` is enabled, the memory prompt supplement also appends a compact snapshot from `.GreenchClaw-wiki/cache/agent-digest.json`. Legacy prompt assembly sees that automatically, and non-legacy context engines can pick it up when they explicitly consume memory prompt supplements via `buildActiveMemoryPromptSection(...)`.
 
 ## Gateway RPC
 
@@ -173,5 +173,5 @@ Write methods:
 - `unsafe-local` is intentionally experimental and non-portable.
 - Bridge mode reads the active memory plugin through public seams only.
 - Wiki pages are compiled artifacts, not the ultimate source of truth. Keep provenance attached to raw sources, memory artifacts, and daily notes.
-- The compiled agent digests in `.NexisClaw-wiki/cache/agent-digest.json` and `.NexisClaw-wiki/cache/claims.jsonl` are the stable machine-facing view of the wiki.
+- The compiled agent digests in `.GreenchClaw-wiki/cache/agent-digest.json` and `.GreenchClaw-wiki/cache/claims.jsonl` are the stable machine-facing view of the wiki.
 - Obsidian CLI support requires the official `obsidian` CLI to be installed and available on `PATH`.

@@ -4,4 +4,4 @@ export {
   modelSupportsVision,
   resolveAgentDir,
   resolveDefaultModelForAgent,
-} from "NexisClaw/plugin-sdk/agent-runtime";
+} from "GreenchClaw/plugin-sdk/agent-runtime";

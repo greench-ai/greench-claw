@@ -1,12 +1,12 @@
-import { coerceNativeSetting, normalizeAllowFromList } from "NexisClaw/plugin-sdk/channel-policy";
-import { readChannelAllowFromStore } from "NexisClaw/plugin-sdk/conversation-runtime";
-import { isDangerousNameMatchingEnabled } from "NexisClaw/plugin-sdk/dangerous-name-runtime";
+import { coerceNativeSetting, normalizeAllowFromList } from "GreenchClaw/plugin-sdk/channel-policy";
+import { readChannelAllowFromStore } from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { isDangerousNameMatchingEnabled } from "GreenchClaw/plugin-sdk/dangerous-name-runtime";
 import {
   resolveNativeCommandsEnabled,
   resolveNativeSkillsEnabled,
-} from "NexisClaw/plugin-sdk/native-command-config-runtime";
+} from "GreenchClaw/plugin-sdk/native-command-config-runtime";
 import type { ResolvedDiscordAccount } from "./accounts.js";
-import type { NexisClawConfig } from "./runtime-api.js";
+import type { GreenchClawConfig } from "./runtime-api.js";
 import { isDiscordMutableAllowEntry } from "./security-doctor.js";
 
 function normalizeOptionalString(value: string | null | undefined): string | undefined {
@@ -35,7 +35,7 @@ function addDiscordNameBasedEntries(params: {
 }
 
 export async function collectDiscordSecurityAuditFindings(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   account: ResolvedDiscordAccount;
   orderedAccountIds: string[];
@@ -74,7 +74,7 @@ export async function collectDiscordSecurityAuditFindings(params: {
   addDiscordNameBasedEntries({
     target: discordNameBasedAllowEntries,
     values: storeAllowFrom,
-    source: "~/.NexisClaw/credentials/discord-allowFrom.json",
+    source: "~/.GreenchClaw/credentials/discord-allowFrom.json",
   });
 
   const guildEntries = (discordCfg.guilds as Record<string, unknown> | undefined) ?? {};

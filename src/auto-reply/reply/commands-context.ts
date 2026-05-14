@@ -1,5 +1,5 @@
 import { normalizeAnyChannelId } from "../../channels/registry.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
@@ -12,7 +12,7 @@ import { stripMentions } from "./mentions.js";
 
 export function buildCommandContext(params: {
   ctx: MsgContext;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
   sessionKey?: string;
   isGroup: boolean;

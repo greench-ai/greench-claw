@@ -1,7 +1,7 @@
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
 import {
   DEFAULT_MINIMAX_CONTEXT_WINDOW,
   DEFAULT_MINIMAX_MAX_TOKENS,

@@ -7,7 +7,7 @@ import {
 } from "./service.test-harness.js";
 
 const noopLogger = createNoopLogger();
-const { makeStorePath } = createCronStoreHarness({ prefix: "NexisClaw-cron-" });
+const { makeStorePath } = createCronStoreHarness({ prefix: "GreenchClaw-cron-" });
 installCronTestHooks({
   logger: noopLogger,
   baseTimeIso: "2025-12-13T00:00:00.000Z",

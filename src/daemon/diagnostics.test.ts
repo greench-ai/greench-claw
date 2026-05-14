@@ -14,7 +14,7 @@ afterEach(() => {
 });
 
 function makeTempStateDir(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-daemon-diagnostics-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-daemon-diagnostics-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -22,7 +22,7 @@ function makeTempStateDir(): string {
 describe("readLastGatewayErrorLine", () => {
   it("ignores stale launchd stderr when stderr is suppressed", async () => {
     const stateDir = makeTempStateDir();
-    const env = { NEXISCLAW_STATE_DIR: stateDir };
+    const env = { GREENCHCLAW_STATE_DIR: stateDir };
     const { logDir, stdoutPath, stderrPath } = resolveGatewayLogPaths(env);
     fs.mkdirSync(logDir, { recursive: true });
     fs.writeFileSync(stderrPath, "failed to bind gateway socket stale\n", "utf8");

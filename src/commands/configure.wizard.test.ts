@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 
 const mocks = vi.hoisted(() => {
   const writeConfigFile = vi.fn();
@@ -26,14 +26,14 @@ const mocks = vi.hoisted(() => {
     waitForGatewayReachable: vi.fn(),
     resolveControlUiLinks: vi.fn(),
     summarizeExistingConfig: vi.fn(),
-    promptRemoteGatewayConfig: vi.fn(async (cfg: NexisClawConfig) => ({
+    promptRemoteGatewayConfig: vi.fn(async (cfg: GreenchClawConfig) => ({
       ...cfg,
       gateway: { mode: "remote", remote: { url: "wss://gateway.example.test" } },
     })),
-    isCodexNativeWebSearchRelevant: vi.fn(({ config }: { config: NexisClawConfig }) =>
+    isCodexNativeWebSearchRelevant: vi.fn(({ config }: { config: GreenchClawConfig }) =>
       Boolean(config.auth?.profiles?.["openai-codex:default"]),
     ),
-    setupChannels: vi.fn(async (cfg: NexisClawConfig) => cfg),
+    setupChannels: vi.fn(async (cfg: GreenchClawConfig) => cfg),
   };
 });
 
@@ -46,7 +46,7 @@ vi.mock("@clack/prompts", () => ({
 }));
 
 vi.mock("../config/config.js", () => ({
-  CONFIG_PATH: "~/.NexisClaw/NexisClaw.json",
+  CONFIG_PATH: "~/.GreenchClaw/GreenchClaw.json",
   readConfigFileSnapshot: mocks.readConfigFileSnapshot,
   writeConfigFile: mocks.writeConfigFile,
   replaceConfigFile: mocks.replaceConfigFile,
@@ -66,8 +66,8 @@ vi.mock("../terminal/note.js", () => ({
 }));
 
 vi.mock("./onboard-helpers.js", () => ({
-  DEFAULT_WORKSPACE: "~/.NexisClaw/workspace",
-  applyWizardMetadata: (cfg: NexisClawConfig) => cfg,
+  DEFAULT_WORKSPACE: "~/.GreenchClaw/workspace",
+  applyWizardMetadata: (cfg: GreenchClawConfig) => cfg,
   ensureWorkspaceAndSessions: vi.fn(),
   guardCancel: <T>(value: T) => value,
   printWizardHeader: mocks.printWizardHeader,
@@ -158,7 +158,7 @@ function createSearchProviderOption(overrides: Record<string, unknown>) {
 }
 
 function createEnabledWebSearchConfig(provider: string, pluginEntry: Record<string, unknown>) {
-  return (cfg: NexisClawConfig) => ({
+  return (cfg: GreenchClawConfig) => ({
     ...cfg,
     tools: {
       ...cfg.tools,
@@ -180,7 +180,7 @@ function createEnabledWebSearchConfig(provider: string, pluginEntry: Record<stri
   });
 }
 
-function setupBaseWizardState(config: NexisClawConfig = {}) {
+function setupBaseWizardState(config: GreenchClawConfig = {}) {
   mocks.readConfigFileSnapshot.mockResolvedValue({
     ...EMPTY_CONFIG_SNAPSHOT,
     config,
@@ -264,7 +264,7 @@ describe("runConfigureWizard", () => {
       },
     ]);
     mocks.setupSearch.mockReset();
-    mocks.setupSearch.mockImplementation(async (cfg: NexisClawConfig) => cfg);
+    mocks.setupSearch.mockImplementation(async (cfg: GreenchClawConfig) => cfg);
   });
 
   it("persists gateway.mode=local when only the run mode is selected", async () => {
@@ -319,7 +319,7 @@ describe("runConfigureWizard", () => {
 
   it("persists provider-owned web search config changes returned by setupSearch", async () => {
     setupBaseWizardState();
-    mocks.setupSearch.mockImplementation(async (cfg: NexisClawConfig) =>
+    mocks.setupSearch.mockImplementation(async (cfg: GreenchClawConfig) =>
       createEnabledWebSearchConfig("firecrawl", {
         enabled: true,
         config: { webSearch: { apiKey: "fc-entered-key" } },
@@ -364,7 +364,7 @@ describe("runConfigureWizard", () => {
       [
         "No web search providers are currently available under this plugin policy.",
         "Enable plugins or remove deny rules, then rerun configure.",
-        "Docs: https://docs.NexisClaw.ai/tools/web",
+        "Docs: https://docs.GreenchClaw.ai/tools/web",
       ].join("\n"),
       "Web search",
     );
@@ -418,11 +418,11 @@ describe("runConfigureWizard", () => {
         envVars: [],
         placeholder: "(no key needed)",
         signupUrl: "https://duckduckgo.com/",
-        docsUrl: "https://docs.NexisClaw.ai/tools/web",
+        docsUrl: "https://docs.GreenchClaw.ai/tools/web",
         credentialPath: "",
       }),
     ]);
-    mocks.setupSearch.mockImplementation(async (cfg: NexisClawConfig) =>
+    mocks.setupSearch.mockImplementation(async (cfg: GreenchClawConfig) =>
       createEnabledWebSearchConfig("duckduckgo", {
         enabled: true,
       })(cfg),
@@ -502,7 +502,7 @@ describe("runConfigureWizard", () => {
   });
 
   it("retries without dropping nested plugin config written during wizard flow (issue #64188)", async () => {
-    const baseConfig: NexisClawConfig = {
+    const baseConfig: GreenchClawConfig = {
       plugins: {
         entries: {
           "github-copilot": {
@@ -602,7 +602,7 @@ describe("runConfigureWizard", () => {
     };
     const agents = requireRecord(retryCall.nextConfig.agents, "agents config");
     const defaults = requireRecord(agents.defaults, "agent defaults");
-    expect(String(defaults.workspace)).toContain("/.NexisClaw/workspace");
+    expect(String(defaults.workspace)).toContain("/.GreenchClaw/workspace");
     const githubCopilot = getPluginEntry(retryCall.nextConfig, "github-copilot");
     expect(githubCopilot.enabled).toBe(false);
     const pluginConfig = requireRecord(githubCopilot.config, "github-copilot config");

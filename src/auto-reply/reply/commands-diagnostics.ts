@@ -11,7 +11,7 @@ import type { PluginCommandDiagnosticsSession, PluginCommandResult } from "../..
 import { normalizeOptionalString } from "../../shared/string-coerce.js";
 import type { ReplyPayload } from "../types.js";
 import { rejectNonOwnerCommand } from "./command-gates.js";
-import { buildCurrentNexisClawCliCommand } from "./commands-NexisClaw-cli.js";
+import { buildCurrentGreenchClawCliCommand } from "./commands-GreenchClaw-cli.js";
 import {
   deliverPrivateCommandReply,
   readCommandDeliveryTarget,
@@ -23,8 +23,8 @@ import type { CommandHandler, HandleCommandsParams } from "./commands-types.js";
 
 const DIAGNOSTICS_COMMAND = "/diagnostics";
 const CODEX_DIAGNOSTICS_COMMAND = "/codex diagnostics";
-const DIAGNOSTICS_DOCS_URL = "https://docs.NexisClaw.ai/gateway/diagnostics";
-const GATEWAY_DIAGNOSTICS_EXPORT_JSON_LABEL = "NexisClaw gateway diagnostics export --json";
+const DIAGNOSTICS_DOCS_URL = "https://docs.GreenchClaw.ai/gateway/diagnostics";
+const GATEWAY_DIAGNOSTICS_EXPORT_JSON_LABEL = "GreenchClaw gateway diagnostics export --json";
 const DIAGNOSTICS_EXEC_SCOPE_KEY = "chat:diagnostics";
 const DIAGNOSTICS_PRIVATE_ROUTE_UNAVAILABLE =
   "I couldn't find a private owner approval route for diagnostics. Run /diagnostics from an owner DM so the sensitive diagnostics details are not posted in this chat.";
@@ -267,7 +267,7 @@ function buildDiagnosticsApprovalRequest(params: HandleCommandsParams): ExecAppr
 }
 
 function buildGatewayDiagnosticsExportJsonCommand(): string {
-  return buildCurrentNexisClawCliCommand(["gateway", "diagnostics", "export", "--json"]);
+  return buildCurrentGreenchClawCliCommand(["gateway", "diagnostics", "export", "--json"]);
 }
 
 async function deliverPrivateDiagnosticsReply(params: {
@@ -425,9 +425,9 @@ function hasCodexHarnessMetadata(params: HandleCommandsParams): boolean {
 
 function isCodexDiagnosticsUnavailableText(text: string | undefined): boolean {
   return (
-    text?.startsWith("No Codex thread is attached to this NexisClaw session yet.") === true ||
+    text?.startsWith("No Codex thread is attached to this GreenchClaw session yet.") === true ||
     text?.startsWith(
-      "Cannot send Codex diagnostics because this command did not include an NexisClaw session file.",
+      "Cannot send Codex diagnostics because this command did not include an GreenchClaw session file.",
     ) === true
   );
 }

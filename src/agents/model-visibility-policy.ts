@@ -1,5 +1,5 @@
 import { resolveAgentModelFallbackValues } from "../config/model-input.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveAgentModelFallbacksOverride } from "./agent-scope.js";
 import type { ModelCatalogEntry } from "./model-catalog.types.js";
 import {
@@ -7,7 +7,7 @@ import {
   type ModelVisibilityPolicy,
 } from "./model-selection-shared.js";
 
-function resolveAllowedFallbacks(params: { cfg: NexisClawConfig; agentId?: string }): string[] {
+function resolveAllowedFallbacks(params: { cfg: GreenchClawConfig; agentId?: string }): string[] {
   if (params.agentId) {
     const override = resolveAgentModelFallbacksOverride(params.cfg, params.agentId);
     if (override !== undefined) {
@@ -18,7 +18,7 @@ function resolveAllowedFallbacks(params: { cfg: NexisClawConfig; agentId?: strin
 }
 
 export function createModelVisibilityPolicy(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   catalog: ModelCatalogEntry[];
   defaultProvider: string;
   defaultModel?: string;

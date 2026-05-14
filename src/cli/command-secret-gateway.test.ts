@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   buildTalkTestProviderConfig,
   readTalkTestProviderApiKey as readTalkProviderApiKey,
@@ -36,7 +36,7 @@ beforeEach(() => {
 });
 
 describe("resolveCommandSecretRefsViaGateway", () => {
-  function makeTalkProviderApiKeySecretRefConfig(envKey: string): NexisClawConfig {
+  function makeTalkProviderApiKeySecretRefConfig(envKey: string): GreenchClawConfig {
     return buildTalkTestProviderConfig({ source: "env", provider: "default", id: envKey });
   }
 
@@ -100,7 +100,7 @@ describe("resolveCommandSecretRefsViaGateway", () => {
   it("returns config unchanged when no target SecretRefs are configured", async () => {
     const config = {
       ...buildTalkTestProviderConfig("plain"), // pragma: allowlist secret
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
     const result = await resolveCommandSecretRefsViaGateway({
       config,
       commandName: "memory status",
@@ -125,7 +125,7 @@ describe("resolveCommandSecretRefsViaGateway", () => {
           },
         ],
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const result = await resolveCommandSecretRefsViaGateway({
       config,
@@ -235,7 +235,7 @@ describe("resolveCommandSecretRefsViaGateway", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         commandName: "message",
         targetIds: new Set(["channels.discord.accounts.*.token"]),
         allowedPaths: new Set(["channels.discord.accounts.ops.token"]),
@@ -294,7 +294,7 @@ describe("resolveCommandSecretRefsViaGateway", () => {
               default: { source: "env" },
             },
           },
-        } as unknown as NexisClawConfig,
+        } as unknown as GreenchClawConfig,
         commandName: "memory status",
         targetIds: new Set(["talk.providers.*.apiKey"]),
       });
@@ -351,7 +351,7 @@ describe("resolveCommandSecretRefsViaGateway", () => {
                 },
               },
             },
-          } as unknown as NexisClawConfig,
+          } as unknown as GreenchClawConfig,
           commandName: "agent",
           targetIds: new Set(["plugins.entries.google.config.webSearch.apiKey"]),
         });
@@ -406,7 +406,7 @@ describe("resolveCommandSecretRefsViaGateway", () => {
                 },
               },
             },
-          } as unknown as NexisClawConfig,
+          } as unknown as GreenchClawConfig,
           commandName: "agent",
           targetIds: new Set(["plugins.entries.firecrawl.config.webFetch.apiKey"]),
         });
@@ -464,7 +464,7 @@ describe("resolveCommandSecretRefsViaGateway", () => {
               },
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         commandName: "agent",
         targetIds: new Set(["plugins.entries.google.config.webSearch.apiKey"]),
       });
@@ -619,7 +619,7 @@ describe("resolveCommandSecretRefsViaGateway", () => {
           },
         ],
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const result = await resolveCommandSecretRefsViaGateway({
       config,
@@ -762,7 +762,7 @@ describe("resolveCommandSecretRefsViaGateway", () => {
               password: { source: "env", provider: "default", id: gatewayEnvKey },
             },
           },
-        } as unknown as NexisClawConfig,
+        } as unknown as GreenchClawConfig,
         commandName: "status",
         targetIds: new Set(["talk.providers.*.apiKey"]),
         mode: "read_only_status",

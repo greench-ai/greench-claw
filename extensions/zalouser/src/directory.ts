@@ -1,5 +1,5 @@
 import { resolveZalouserAccountSync } from "./accounts.js";
-import type { ChannelDirectoryEntry, NexisClawConfig } from "./channel-api.js";
+import type { ChannelDirectoryEntry, GreenchClawConfig } from "./channel-api.js";
 import { parseZalouserDirectoryGroupId } from "./session-route.js";
 
 type ZalouserDirectoryDeps = {
@@ -32,7 +32,7 @@ function mapUser(params: {
 
 export async function listZalouserDirectoryGroupMembers(
   params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string;
     groupId: string;
     limit?: number;

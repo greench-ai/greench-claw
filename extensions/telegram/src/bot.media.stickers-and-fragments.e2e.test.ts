@@ -183,7 +183,7 @@ describe("telegram stickers", () => {
             sticker: scenario.sticker,
             date: 1736380800,
           },
-          me: { username: "NexisClaw_bot" },
+          me: { username: "GreenchClaw_bot" },
           getFile: async () => ({ file_path: scenario.filePath }),
         });
 
@@ -220,7 +220,7 @@ describe("telegram text fragments", () => {
             date: 1736380800,
             text: part1,
           },
-          me: { username: "NexisClaw_bot" },
+          me: { username: "GreenchClaw_bot" },
           getFile: async () => ({}),
         });
 
@@ -232,7 +232,7 @@ describe("telegram text fragments", () => {
             date: 1736380801,
             text: part2,
           },
-          me: { username: "NexisClaw_bot" },
+          me: { username: "GreenchClaw_bot" },
           getFile: async () => ({}),
         });
 

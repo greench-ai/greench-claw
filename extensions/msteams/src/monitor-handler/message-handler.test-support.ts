@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import type { NexisClawConfig, PluginRuntime, RuntimeEnv } from "../../runtime-api.js";
+import type { GreenchClawConfig, PluginRuntime, RuntimeEnv } from "../../runtime-api.js";
 import type { MSTeamsMessageHandlerDeps } from "../monitor-handler.js";
 import { installMSTeamsTestRuntime } from "../monitor-handler.test-helpers.js";
 
@@ -15,7 +15,7 @@ type MessageHandlerDepsOptions = {
 };
 
 export function createMessageHandlerDeps(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   options: MessageHandlerDepsOptions = {},
 ) {
   const enqueueSystemEvent = options.enqueueSystemEvent ?? vi.fn();

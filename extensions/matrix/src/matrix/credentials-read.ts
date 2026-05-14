@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   requiresExplicitMatrixDefaultAccount,
   resolveMatrixDefaultOrOnlyAccountId,
@@ -40,12 +40,12 @@ function resolveStateDir(env: NodeJS.ProcessEnv): string {
   } catch {
     // Some config-only helpers read stored credentials before the Matrix plugin
     // runtime is installed. Fall back to the standard state-dir env contract.
-    const override = env.NEXISCLAW_STATE_DIR?.trim();
+    const override = env.GREENCHCLAW_STATE_DIR?.trim();
     if (override) {
       return path.resolve(override);
     }
-    const homeDir = env.NEXISCLAW_HOME?.trim() || env.HOME?.trim() || os.homedir();
-    return path.join(homeDir, ".NexisClaw");
+    const homeDir = env.GREENCHCLAW_HOME?.trim() || env.HOME?.trim() || os.homedir();
+    return path.join(homeDir, ".GreenchClaw");
   }
 }
 
@@ -55,7 +55,7 @@ function resolveLegacyMatrixCredentialsPath(env: NodeJS.ProcessEnv): string {
 
 function shouldReadLegacyCredentialsForAccount(accountId?: string | null): boolean {
   const normalizedAccountId = normalizeAccountId(accountId);
-  const cfg = getMatrixRuntime().config.current() as NexisClawConfig;
+  const cfg = getMatrixRuntime().config.current() as GreenchClawConfig;
   if (!cfg.channels?.matrix || typeof cfg.channels.matrix !== "object") {
     return normalizedAccountId === DEFAULT_ACCOUNT_ID;
   }

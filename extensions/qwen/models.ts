@@ -1,11 +1,11 @@
 import {
   applyProviderNativeStreamingUsageCompat,
   supportsNativeStreamingUsageCompat,
-} from "NexisClaw/plugin-sdk/provider-catalog-shared";
+} from "GreenchClaw/plugin-sdk/provider-catalog-shared";
 import type {
   ModelDefinitionConfig,
   ModelProviderConfig,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
 
 export const QWEN_BASE_URL = "https://coding-intl.dashscope.aliyuncs.com/v1";
 export const QWEN_GLOBAL_BASE_URL = QWEN_BASE_URL;

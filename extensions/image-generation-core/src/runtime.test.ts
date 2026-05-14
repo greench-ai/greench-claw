@@ -5,17 +5,17 @@ const sdkExports = vi.hoisted(() => ({
   listRuntimeImageGenerationProviders: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/image-generation-runtime", () => sdkExports);
+vi.mock("GreenchClaw/plugin-sdk/image-generation-runtime", () => sdkExports);
 
 import {
   generateImage as sdkGenerateImage,
   listRuntimeImageGenerationProviders as sdkListRuntimeImageGenerationProviders,
-} from "NexisClaw/plugin-sdk/image-generation-runtime";
+} from "GreenchClaw/plugin-sdk/image-generation-runtime";
 import { generateImage, listRuntimeImageGenerationProviders } from "./runtime.js";
 
 describe("image-generation-core runtime", () => {
   afterAll(() => {
-    vi.doUnmock("NexisClaw/plugin-sdk/image-generation-runtime");
+    vi.doUnmock("GreenchClaw/plugin-sdk/image-generation-runtime");
     vi.resetModules();
   });
 

@@ -135,17 +135,17 @@ function recoveryHintForGatewayHealthFailure(
 ): string | undefined {
   switch (classification) {
     case "auth-mismatch":
-      return "Fix: run `NexisClaw doctor --fix`.";
+      return "Fix: run `GreenchClaw doctor --fix`.";
     case "module-missing":
-      return "Fix: run `NexisClaw doctor --fix`.";
+      return "Fix: run `GreenchClaw doctor --fix`.";
     case "service-missing":
-      return "Fix: run `NexisClaw gateway install --force`.";
+      return "Fix: run `GreenchClaw gateway install --force`.";
     case "service-stopped":
-      return "Fix: run `NexisClaw gateway restart`.";
+      return "Fix: run `GreenchClaw gateway restart`.";
     case "startup-blocked":
-      return "Fix: run `NexisClaw gateway status --deep`.";
+      return "Fix: run `GreenchClaw gateway status --deep`.";
     case "not-listening":
-      return "Fix: start `NexisClaw gateway run`, or run `NexisClaw gateway restart` for a managed gateway.";
+      return "Fix: start `GreenchClaw gateway run`, or run `GreenchClaw gateway restart` for a managed gateway.";
     default:
       return undefined;
   }

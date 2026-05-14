@@ -5,12 +5,12 @@ import {
   resolveProfilesUnavailableReason,
   type AuthProfileFailureReason,
   type AuthProfileStore,
-} from "NexisClaw/plugin-sdk/agent-runtime";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
 import type {
   DiscordAccountConfig,
   DiscordAutoPresenceConfig,
-} from "NexisClaw/plugin-sdk/config-contracts";
-import { warn } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/config-contracts";
+import { warn } from "GreenchClaw/plugin-sdk/runtime-env";
 import type { Activity, UpdatePresenceData } from "../internal/gateway.js";
 import { resolveDiscordPresenceUpdate } from "./presence.js";
 

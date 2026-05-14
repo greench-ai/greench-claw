@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import {
   deriveAspectRatioFromSize,
   normalizeDurationToClosestMax,
@@ -35,7 +35,7 @@ describe("media-generation runtime shared candidates", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const candidates = resolveCapabilityModelCandidates({
       cfg,
@@ -73,7 +73,7 @@ describe("media-generation runtime shared candidates", () => {
 
   it("auto-detects auth-backed provider defaults when no explicit media model is configured", () => {
     const candidates = resolveCapabilityModelCandidates({
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       modelConfig: undefined,
       parseModelRef,
       listProviders: () => [
@@ -106,7 +106,7 @@ describe("media-generation runtime shared candidates", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       modelConfig: undefined,
       parseModelRef,
       listProviders: () => [
@@ -139,7 +139,7 @@ describe("media-generation runtime shared candidates", () => {
             mediaGenerationAutoProviderFallback: false,
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       modelConfig: {
         primary: "google/gemini-3.1-flash-image-preview",
       },
@@ -168,7 +168,7 @@ describe("media-generation runtime shared candidates", () => {
             mediaGenerationAutoProviderFallback: false,
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       modelConfig: {
         primary: "google/gemini-3.1-flash-image-preview",
         fallbacks: ["fal/fal-ai/flux/dev"],
@@ -189,7 +189,7 @@ describe("media-generation runtime shared candidates", () => {
 
   it("resolves slash-containing provider model IDs from registered provider models", () => {
     const candidates = resolveCapabilityModelCandidates({
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       modelConfig: {
         primary: "openai/gpt-image-2",
       },

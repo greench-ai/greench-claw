@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { getRuntimeConfig } from "../../config/io.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { listDevicePairing } from "../../infra/device-pairing.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import {
@@ -190,7 +190,7 @@ async function resolveDirectNodePushConfig() {
     : { ok: false as const, error: auth.error };
 }
 
-function resolveRelayNodePushConfig(cfg: NexisClawConfig) {
+function resolveRelayNodePushConfig(cfg: GreenchClawConfig) {
   const relay = resolveApnsRelayConfigFromEnv(process.env, cfg.gateway);
   return relay.ok
     ? { ok: true as const, relayConfig: relay.value }
@@ -297,7 +297,7 @@ function listPendingNodeActions(nodeId: string): PendingNodeAction[] {
 function resolveAllowedPendingNodeActions(params: {
   nodeId: string;
   client: { connect?: ConnectParams | null } | null;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): PendingNodeAction[] {
   const pending = listPendingNodeActions(params.nodeId);
   if (pending.length === 0) {
@@ -420,7 +420,7 @@ function emitTalkPttNodeEvent(params: {
 
 export async function maybeWakeNodeWithApns(
   nodeId: string,
-  opts?: { force?: boolean; wakeReason?: string; cfg?: NexisClawConfig },
+  opts?: { force?: boolean; wakeReason?: string; cfg?: GreenchClawConfig },
 ): Promise<NodeWakeAttempt> {
   const state = nodeWakeById.get(nodeId) ?? { lastWakeAtMs: 0 };
   nodeWakeById.set(nodeId, state);
@@ -536,7 +536,7 @@ export async function maybeWakeNodeWithApns(
 
 export async function maybeSendNodeWakeNudge(
   nodeId: string,
-  opts?: { cfg?: NexisClawConfig },
+  opts?: { cfg?: GreenchClawConfig },
 ): Promise<NodeWakeNudgeAttempt> {
   const startedAtMs = Date.now();
   const withDuration = (
@@ -570,8 +570,8 @@ export async function maybeSendNodeWakeNudge(
       result = await sendApnsAlert({
         registration,
         nodeId,
-        title: "NexisClaw needs a quick reopen",
-        body: "Tap to reopen NexisClaw and restore the node connection.",
+        title: "GreenchClaw needs a quick reopen",
+        body: "Tap to reopen GreenchClaw and restore the node connection.",
         relayConfig: relay.relayConfig,
       });
     } else {
@@ -587,8 +587,8 @@ export async function maybeSendNodeWakeNudge(
       result = await sendApnsAlert({
         registration,
         nodeId,
-        title: "NexisClaw needs a quick reopen",
-        body: "Tap to reopen NexisClaw and restore the node connection.",
+        title: "GreenchClaw needs a quick reopen",
+        body: "Tap to reopen GreenchClaw and restore the node connection.",
         auth: auth.auth,
       });
     }

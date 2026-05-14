@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { ResolverContext } from "./runtime-shared.js";
 
 const getBootstrapChannelSecrets = vi.fn();
@@ -52,7 +52,7 @@ describe("runtime channel config collectors", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     collectChannelConfigAssignments({
       config,
@@ -81,7 +81,7 @@ describe("runtime channel config collectors", () => {
       channels: {
         legacy: {},
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     collectChannelConfigAssignments({
       config,

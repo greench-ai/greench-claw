@@ -9,8 +9,8 @@ import { isTruthyEnvValue } from "./infra/env.js";
 import { attachChildProcessBridge } from "./process/child-process-bridge.js";
 
 export const EXPERIMENTAL_WARNING_FLAG = "--disable-warning=ExperimentalWarning";
-export const NEXISCLAW_NODE_OPTIONS_READY = "NEXISCLAW_NODE_OPTIONS_READY";
-export const NEXISCLAW_NODE_EXTRA_CA_CERTS_READY = "NEXISCLAW_NODE_EXTRA_CA_CERTS_READY";
+export const GREENCHCLAW_NODE_OPTIONS_READY = "GREENCHCLAW_NODE_OPTIONS_READY";
+export const GREENCHCLAW_NODE_EXTRA_CA_CERTS_READY = "GREENCHCLAW_NODE_EXTRA_CA_CERTS_READY";
 const CLI_RESPAWN_SIGNAL_EXIT_GRACE_MS = 1_000;
 const CLI_RESPAWN_SIGNAL_FORCE_KILL_GRACE_MS = 1_000;
 
@@ -76,7 +76,7 @@ export function buildCliRespawnPlan(
 
   if (
     shouldSkipStartupEnvironmentRespawnForArgv(argv) ||
-    isTruthyEnvValue(env.NEXISCLAW_NO_RESPAWN)
+    isTruthyEnvValue(env.GREENCHCLAW_NO_RESPAWN)
   ) {
     return null;
   }
@@ -98,20 +98,20 @@ export function buildCliRespawnPlan(
     }).NODE_EXTRA_CA_CERTS;
   if (
     autoNodeExtraCaCerts &&
-    !isTruthyEnvValue(env[NEXISCLAW_NODE_EXTRA_CA_CERTS_READY]) &&
+    !isTruthyEnvValue(env[GREENCHCLAW_NODE_EXTRA_CA_CERTS_READY]) &&
     !env.NODE_EXTRA_CA_CERTS
   ) {
     childEnv.NODE_EXTRA_CA_CERTS = autoNodeExtraCaCerts;
-    childEnv[NEXISCLAW_NODE_EXTRA_CA_CERTS_READY] = "1";
+    childEnv[GREENCHCLAW_NODE_EXTRA_CA_CERTS_READY] = "1";
     needsRespawn = true;
   }
 
   if (
     !shouldSkipRespawnForArgv(argv) &&
-    !isTruthyEnvValue(env[NEXISCLAW_NODE_OPTIONS_READY]) &&
+    !isTruthyEnvValue(env[GREENCHCLAW_NODE_OPTIONS_READY]) &&
     !hasExperimentalWarningSuppressed({ env, execArgv })
   ) {
-    childEnv[NEXISCLAW_NODE_OPTIONS_READY] = "1";
+    childEnv[GREENCHCLAW_NODE_OPTIONS_READY] = "1";
     childExecArgv.unshift(EXPERIMENTAL_WARNING_FLAG);
     needsRespawn = true;
   }
@@ -197,7 +197,7 @@ export function runCliRespawnPlan(
   child.once("error", (error) => {
     clearSignalTimers();
     runtime.writeError(
-      "[NexisClaw] Failed to respawn CLI:",
+      "[GreenchClaw] Failed to respawn CLI:",
       error instanceof Error ? (error.stack ?? error.message) : error,
     );
     runtime.exit(1);

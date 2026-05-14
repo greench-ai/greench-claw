@@ -1,8 +1,8 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 
 export function createPerSenderSessionConfig(
-  overrides: Partial<NonNullable<NexisClawConfig["session"]>> = {},
-): NonNullable<NexisClawConfig["session"]> {
+  overrides: Partial<NonNullable<GreenchClawConfig["session"]>> = {},
+): NonNullable<GreenchClawConfig["session"]> {
   return {
     mainKey: "main",
     scope: "per-sender",

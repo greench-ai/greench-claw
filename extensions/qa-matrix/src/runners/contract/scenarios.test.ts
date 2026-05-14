@@ -14,15 +14,15 @@ const { createMatrixQaE2eeScenarioClient, runMatrixQaE2eeBootstrap, startMatrixQ
 const {
   formatMatrixQaCliCommand,
   redactMatrixQaCliOutput,
-  resolveMatrixQaNexisClawCliEntryPath,
-  runMatrixQaNexisClawCli,
-  startMatrixQaNexisClawCli,
+  resolveMatrixQaGreenchClawCliEntryPath,
+  runMatrixQaGreenchClawCli,
+  startMatrixQaGreenchClawCli,
 } = vi.hoisted(() => ({
-  formatMatrixQaCliCommand: (args: string[]) => `NexisClaw ${args.join(" ")}`,
+  formatMatrixQaCliCommand: (args: string[]) => `GreenchClaw ${args.join(" ")}`,
   redactMatrixQaCliOutput: (text: string) => text,
-  resolveMatrixQaNexisClawCliEntryPath: (cwd: string) => `${cwd}/dist/index.js`,
-  runMatrixQaNexisClawCli: vi.fn(),
-  startMatrixQaNexisClawCli: vi.fn(),
+  resolveMatrixQaGreenchClawCliEntryPath: (cwd: string) => `${cwd}/dist/index.js`,
+  runMatrixQaGreenchClawCli: vi.fn(),
+  startMatrixQaGreenchClawCli: vi.fn(),
 }));
 
 vi.mock("../../substrate/client.js", () => ({
@@ -38,9 +38,9 @@ vi.mock("../../substrate/fault-proxy.js", () => ({
 vi.mock("./scenario-runtime-cli.js", () => ({
   formatMatrixQaCliCommand,
   redactMatrixQaCliOutput,
-  resolveMatrixQaNexisClawCliEntryPath,
-  runMatrixQaNexisClawCli,
-  startMatrixQaNexisClawCli,
+  resolveMatrixQaGreenchClawCliEntryPath,
+  runMatrixQaGreenchClawCli,
+  startMatrixQaGreenchClawCli,
 }));
 
 import {
@@ -265,8 +265,8 @@ describe("matrix live qa scenarios", () => {
     createMatrixQaClient.mockReset();
     createMatrixQaE2eeScenarioClient.mockReset();
     runMatrixQaE2eeBootstrap.mockReset();
-    runMatrixQaNexisClawCli.mockReset();
-    startMatrixQaNexisClawCli.mockReset();
+    runMatrixQaGreenchClawCli.mockReset();
+    startMatrixQaGreenchClawCli.mockReset();
     startMatrixQaFaultProxy.mockReset();
   });
 
@@ -877,7 +877,7 @@ describe("matrix live qa scenarios", () => {
   it("merges default and scenario-requested Matrix topology once per run", () => {
     expect(
       scenarioTesting.buildMatrixQaTopologyForScenarios({
-        defaultRoomName: "NexisClaw Matrix QA run",
+        defaultRoomName: "GreenchClaw Matrix QA run",
         scenarios: [
           MATRIX_QA_SCENARIOS[0],
           {
@@ -914,7 +914,7 @@ describe("matrix live qa scenarios", () => {
           key: "main",
           kind: "group",
           members: ["driver", "observer", "sut"],
-          name: "NexisClaw Matrix QA run",
+          name: "GreenchClaw Matrix QA run",
           requireMention: true,
         },
         {
@@ -937,7 +937,7 @@ describe("matrix live qa scenarios", () => {
   it("rejects conflicting Matrix topology room definitions", () => {
     expect(() =>
       scenarioTesting.buildMatrixQaTopologyForScenarios({
-        defaultRoomName: "NexisClaw Matrix QA run",
+        defaultRoomName: "GreenchClaw Matrix QA run",
         scenarios: [
           {
             id: "matrix-thread-follow-up",
@@ -982,7 +982,7 @@ describe("matrix live qa scenarios", () => {
 
   it("provisions isolated encrypted rooms for each E2EE scenario", () => {
     const topology = scenarioTesting.buildMatrixQaTopologyForScenarios({
-      defaultRoomName: "NexisClaw Matrix QA run",
+      defaultRoomName: "GreenchClaw Matrix QA run",
       scenarios: [
         requireMatrixQaScenario("matrix-e2ee-basic-reply"),
         requireMatrixQaScenario("matrix-e2ee-thread-follow-up"),
@@ -995,7 +995,7 @@ describe("matrix live qa scenarios", () => {
         key: "main",
         kind: "group",
         members: ["driver", "observer", "sut"],
-        name: "NexisClaw Matrix QA run",
+        name: "GreenchClaw Matrix QA run",
         requireMention: true,
       },
       {
@@ -1952,7 +1952,7 @@ describe("matrix live qa scenarios", () => {
         ...matrixQaScenarioContext(),
         driverDeviceId: "DRIVER",
         gatewayRuntimeEnv: {
-          NEXISCLAW_CONFIG_PATH: gatewayConfigPath,
+          GREENCHCLAW_CONFIG_PATH: gatewayConfigPath,
           PATH: process.env.PATH,
         },
         gatewayStateDir: stateRoot,
@@ -2186,7 +2186,7 @@ describe("matrix live qa scenarios", () => {
       const result = await runMatrixQaScenario(scenario, {
         ...matrixQaScenarioContext(),
         gatewayRuntimeEnv: {
-          NEXISCLAW_CONFIG_PATH: gatewayConfigPath,
+          GREENCHCLAW_CONFIG_PATH: gatewayConfigPath,
           PATH: process.env.PATH,
         },
         outputDir,
@@ -4606,7 +4606,7 @@ describe("matrix live qa scenarios", () => {
       });
       const kill = vi.fn();
       const endStdin = vi.fn();
-      startMatrixQaNexisClawCli.mockReturnValue({
+      startMatrixQaGreenchClawCli.mockReturnValue({
         args: ["matrix", "verify", "self", "--account", "cli"],
         endStdin,
         kill,
@@ -4616,10 +4616,10 @@ describe("matrix live qa scenarios", () => {
         writeStdin,
       });
       let cliAccountConfigDuringRun: Record<string, unknown> | null = null;
-      runMatrixQaNexisClawCli.mockImplementation(async ({ args, env, stdin }) => {
-        if (!cliAccountConfigDuringRun && env.NEXISCLAW_CONFIG_PATH) {
+      runMatrixQaGreenchClawCli.mockImplementation(async ({ args, env, stdin }) => {
+        if (!cliAccountConfigDuringRun && env.GREENCHCLAW_CONFIG_PATH) {
           const cliConfig = JSON.parse(
-            await readFile(String(env.NEXISCLAW_CONFIG_PATH), "utf8"),
+            await readFile(String(env.GREENCHCLAW_CONFIG_PATH), "utf8"),
           ) as {
             channels?: {
               matrix?: {
@@ -4685,8 +4685,8 @@ describe("matrix live qa scenarios", () => {
         driverDeviceId: "DRIVERDEVICE",
         driverPassword: "driver-password",
         gatewayRuntimeEnv: {
-          NEXISCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
-          NEXISCLAW_STATE_DIR: "/tmp/gateway-state",
+          GREENCHCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
+          GREENCHCLAW_STATE_DIR: "/tmp/gateway-state",
           PATH: process.env.PATH,
         },
         outputDir,
@@ -4702,19 +4702,13 @@ describe("matrix live qa scenarios", () => {
       expect(artifacts.sasEmoji).toEqual(["🐶 Dog"]);
       expect(artifacts.secondaryDeviceId).toBe("CLIDEVICE");
 
-      expect(startMatrixQaNexisClawCli).toHaveBeenCalledTimes(1);
-      expect(mockObjectArg(startMatrixQaNexisClawCli, "startMatrixQaNexisClawCli").args).toEqual([
-        "matrix",
-        "verify",
-        "self",
-        "--account",
-        "cli",
-        "--timeout-ms",
-        "8000",
-      ]);
-      expect(mockObjectArg(startMatrixQaNexisClawCli, "startMatrixQaNexisClawCli").timeoutMs).toBe(
-        16_000,
-      );
+      expect(startMatrixQaGreenchClawCli).toHaveBeenCalledTimes(1);
+      expect(
+        mockObjectArg(startMatrixQaGreenchClawCli, "startMatrixQaGreenchClawCli").args,
+      ).toEqual(["matrix", "verify", "self", "--account", "cli", "--timeout-ms", "8000"]);
+      expect(
+        mockObjectArg(startMatrixQaGreenchClawCli, "startMatrixQaGreenchClawCli").timeoutMs,
+      ).toBe(16_000);
       expect(waitForOutput).toHaveBeenCalledTimes(2);
       expect(writeStdin).toHaveBeenCalledWith("yes\n");
       expect(endStdin).toHaveBeenCalledTimes(1);
@@ -4722,7 +4716,7 @@ describe("matrix live qa scenarios", () => {
       expect(kill).toHaveBeenCalledTimes(1);
       const registrationRequest = mockObjectArg(registerWithToken, "registerWithToken");
       expect(registrationRequest?.deviceName).toBe(
-        "NexisClaw Matrix QA CLI Self Verification Owner",
+        "GreenchClaw Matrix QA CLI Self Verification Owner",
       );
       if (
         typeof registrationRequest.localpart !== "string" ||
@@ -4737,7 +4731,7 @@ describe("matrix live qa scenarios", () => {
       expect(registrationPassword.startsWith("matrix-qa-")).toBe(true);
       expect(registrationRequest?.registrationToken).toBe("registration-token");
       expect(loginWithPassword).toHaveBeenCalledWith({
-        deviceName: "NexisClaw Matrix QA CLI Self Verification Device",
+        deviceName: "GreenchClaw Matrix QA CLI Self Verification Device",
         password: "cli-owner-password",
         userId: "@cli-owner:matrix-qa.test",
       });
@@ -4747,8 +4741,8 @@ describe("matrix live qa scenarios", () => {
       expect(e2eeClientOptions?.password).toBe("cli-owner-password");
       expect(e2eeClientOptions?.scenarioId).toBe("matrix-e2ee-cli-self-verification");
       expect(e2eeClientOptions?.userId).toBe("@cli-owner:matrix-qa.test");
-      expect(runMatrixQaNexisClawCli).toHaveBeenCalledTimes(2);
-      expect(runMatrixQaNexisClawCli.mock.calls.map(([params]) => params.args)).toEqual([
+      expect(runMatrixQaGreenchClawCli).toHaveBeenCalledTimes(2);
+      expect(runMatrixQaGreenchClawCli.mock.calls.map(([params]) => params.args)).toEqual([
         [
           "matrix",
           "verify",
@@ -4761,12 +4755,12 @@ describe("matrix live qa scenarios", () => {
         ],
         ["matrix", "verify", "status", "--account", "cli", "--json"],
       ]);
-      expect(runMatrixQaNexisClawCli.mock.calls.at(0)?.[0].stdin).toBe("encoded-recovery-key\n");
-      const cliEnv = mockObjectArg(startMatrixQaNexisClawCli, "startMatrixQaNexisClawCli")
+      expect(runMatrixQaGreenchClawCli.mock.calls.at(0)?.[0].stdin).toBe("encoded-recovery-key\n");
+      const cliEnv = mockObjectArg(startMatrixQaGreenchClawCli, "startMatrixQaGreenchClawCli")
         .env as Record<string, unknown>;
-      expect(cliEnv?.NEXISCLAW_STATE_DIR).toContain("NexisClaw-matrix-cli-qa-");
-      expect(cliEnv?.NEXISCLAW_CONFIG_PATH).toContain("NexisClaw-matrix-cli-qa-");
-      const configPath = String(cliEnv?.NEXISCLAW_CONFIG_PATH);
+      expect(cliEnv?.GREENCHCLAW_STATE_DIR).toContain("GreenchClaw-matrix-cli-qa-");
+      expect(cliEnv?.GREENCHCLAW_CONFIG_PATH).toContain("GreenchClaw-matrix-cli-qa-");
+      const configPath = String(cliEnv?.GREENCHCLAW_CONFIG_PATH);
       if (!cliAccountConfigDuringRun) {
         throw new Error("expected CLI account config to be captured");
       }
@@ -4780,7 +4774,7 @@ describe("matrix live qa scenarios", () => {
       expect(cliAccountConfig.startupVerification).toBe("off");
       expect(cliAccountConfig.userId).toBe("@cli-owner:matrix-qa.test");
       await expectPathMissing(configPath);
-      await expectPathMissing(String(cliEnv?.NEXISCLAW_STATE_DIR));
+      await expectPathMissing(String(cliEnv?.GREENCHCLAW_STATE_DIR));
       expect(acceptVerification).toHaveBeenCalledWith("owner-request");
       expect(confirmVerificationSas).toHaveBeenCalledWith("owner-request");
       expect(deleteOwnDevices).toHaveBeenCalledWith(["CLIDEVICE"]);
@@ -4824,10 +4818,10 @@ describe("matrix live qa scenarios", () => {
         password: "cli-add-password",
         userId: "@cli-add:matrix-qa.test",
       });
-      runMatrixQaNexisClawCli.mockImplementation(async ({ args, env }) => {
-        if (env.NEXISCLAW_CONFIG_PATH) {
+      runMatrixQaGreenchClawCli.mockImplementation(async ({ args, env }) => {
+        if (env.GREENCHCLAW_CONFIG_PATH) {
           const initialConfig = JSON.parse(
-            await readFile(String(env.NEXISCLAW_CONFIG_PATH), "utf8"),
+            await readFile(String(env.GREENCHCLAW_CONFIG_PATH), "utf8"),
           ) as {
             channels?: { matrix?: { enabled?: boolean; accounts?: Record<string, unknown> } };
             plugins?: { allow?: string[]; entries?: { matrix?: unknown } };
@@ -4884,8 +4878,8 @@ describe("matrix live qa scenarios", () => {
         driverDeviceId: "DRIVERDEVICE",
         driverPassword: "driver-password",
         gatewayRuntimeEnv: {
-          NEXISCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
-          NEXISCLAW_STATE_DIR: "/tmp/gateway-state",
+          GREENCHCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
+          GREENCHCLAW_STATE_DIR: "/tmp/gateway-state",
           PATH: process.env.PATH,
         },
         outputDir,
@@ -4905,7 +4899,7 @@ describe("matrix live qa scenarios", () => {
       expect(artifacts.verificationBootstrapAttempted).toBe(true);
       expect(artifacts.verificationBootstrapSuccess).toBe(true);
 
-      expect(runMatrixQaNexisClawCli.mock.calls.map(([params]) => params.args)).toEqual([
+      expect(runMatrixQaGreenchClawCli.mock.calls.map(([params]) => params.args)).toEqual([
         [
           "matrix",
           "account",
@@ -4921,7 +4915,7 @@ describe("matrix live qa scenarios", () => {
           "--password",
           "cli-add-password",
           "--device-name",
-          "NexisClaw Matrix QA CLI Account Add E2EE",
+          "GreenchClaw Matrix QA CLI Account Add E2EE",
           "--allow-private-network",
           "--enable-e2ee",
           "--json",
@@ -4929,7 +4923,7 @@ describe("matrix live qa scenarios", () => {
         ["matrix", "verify", "status", "--account", "cli-add-e2ee", "--json"],
       ]);
       expect(mockObjectArg(registerWithToken, "registerWithToken").deviceName).toBe(
-        "NexisClaw Matrix QA CLI Account Add Owner",
+        "GreenchClaw Matrix QA CLI Account Add Owner",
       );
       expect(mockObjectArg(registerWithToken, "registerWithToken").registrationToken).toBe(
         "registration-token",
@@ -4957,10 +4951,10 @@ describe("matrix live qa scenarios", () => {
         userId: "@cli-setup:matrix-qa.test",
       });
       let initialAccountConfig: Record<string, unknown> | null = null;
-      runMatrixQaNexisClawCli.mockImplementation(async ({ args, env }) => {
-        if (!initialAccountConfig && env.NEXISCLAW_CONFIG_PATH) {
+      runMatrixQaGreenchClawCli.mockImplementation(async ({ args, env }) => {
+        if (!initialAccountConfig && env.GREENCHCLAW_CONFIG_PATH) {
           const initialConfig = JSON.parse(
-            await readFile(String(env.NEXISCLAW_CONFIG_PATH), "utf8"),
+            await readFile(String(env.GREENCHCLAW_CONFIG_PATH), "utf8"),
           ) as {
             channels?: {
               matrix?: {
@@ -5030,8 +5024,8 @@ describe("matrix live qa scenarios", () => {
         driverDeviceId: "DRIVERDEVICE",
         driverPassword: "driver-password",
         gatewayRuntimeEnv: {
-          NEXISCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
-          NEXISCLAW_STATE_DIR: "/tmp/gateway-state",
+          GREENCHCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
+          GREENCHCLAW_STATE_DIR: "/tmp/gateway-state",
           PATH: process.env.PATH,
         },
         outputDir,
@@ -5060,12 +5054,12 @@ describe("matrix live qa scenarios", () => {
       expect(capturedInitialAccountConfig.password).toBe("cli-setup-password");
       expect(capturedInitialAccountConfig.startupVerification).toBe("off");
       expect(capturedInitialAccountConfig.userId).toBe("@cli-setup:matrix-qa.test");
-      expect(runMatrixQaNexisClawCli.mock.calls.map(([params]) => params.args)).toEqual([
+      expect(runMatrixQaGreenchClawCli.mock.calls.map(([params]) => params.args)).toEqual([
         ["matrix", "encryption", "setup", "--account", "cli-encryption-setup", "--json"],
         ["matrix", "verify", "status", "--account", "cli-encryption-setup", "--json"],
       ]);
       expect(mockObjectArg(registerWithToken, "registerWithToken").deviceName).toBe(
-        "NexisClaw Matrix QA CLI Encryption Setup Owner",
+        "GreenchClaw Matrix QA CLI Encryption Setup Owner",
       );
       expect(mockObjectArg(registerWithToken, "registerWithToken").registrationToken).toBe(
         "registration-token",
@@ -5101,10 +5095,10 @@ describe("matrix live qa scenarios", () => {
         userId: "@cli-idempotent:matrix-qa.test",
       });
       let initialAccountConfig: Record<string, unknown> | null = null;
-      runMatrixQaNexisClawCli.mockImplementation(async ({ args, env }) => {
-        if (!initialAccountConfig && env.NEXISCLAW_CONFIG_PATH) {
+      runMatrixQaGreenchClawCli.mockImplementation(async ({ args, env }) => {
+        if (!initialAccountConfig && env.GREENCHCLAW_CONFIG_PATH) {
           const initialConfig = JSON.parse(
-            await readFile(String(env.NEXISCLAW_CONFIG_PATH), "utf8"),
+            await readFile(String(env.GREENCHCLAW_CONFIG_PATH), "utf8"),
           ) as {
             channels?: {
               matrix?: {
@@ -5154,8 +5148,8 @@ describe("matrix live qa scenarios", () => {
         driverDeviceId: "DRIVERDEVICE",
         driverPassword: "driver-password",
         gatewayRuntimeEnv: {
-          NEXISCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
-          NEXISCLAW_STATE_DIR: "/tmp/gateway-state",
+          GREENCHCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
+          GREENCHCLAW_STATE_DIR: "/tmp/gateway-state",
           PATH: process.env.PATH,
         },
         outputDir,
@@ -5186,12 +5180,12 @@ describe("matrix live qa scenarios", () => {
       expect(capturedInitialAccountConfig.password).toBe("cli-idempotent-password");
       expect(capturedInitialAccountConfig.startupVerification).toBe("off");
       expect(capturedInitialAccountConfig.userId).toBe("@cli-idempotent:matrix-qa.test");
-      expect(runMatrixQaNexisClawCli.mock.calls.map(([params]) => params.args)).toEqual([
+      expect(runMatrixQaGreenchClawCli.mock.calls.map(([params]) => params.args)).toEqual([
         ["matrix", "encryption", "setup", "--account", "cli-encryption-idempotent", "--json"],
         ["matrix", "encryption", "setup", "--account", "cli-encryption-idempotent", "--json"],
       ]);
       expect(mockObjectArg(registerWithToken, "registerWithToken").deviceName).toBe(
-        "NexisClaw Matrix QA CLI Encryption Idempotent Owner",
+        "GreenchClaw Matrix QA CLI Encryption Idempotent Owner",
       );
       expect(mockObjectArg(registerWithToken, "registerWithToken").registrationToken).toBe(
         "registration-token",
@@ -5258,9 +5252,9 @@ describe("matrix live qa scenarios", () => {
       }));
       const wait = vi
         .fn()
-        .mockRejectedValue(new Error("NexisClaw matrix encryption setup exited 1"));
+        .mockRejectedValue(new Error("GreenchClaw matrix encryption setup exited 1"));
       const kill = vi.fn();
-      startMatrixQaNexisClawCli.mockReturnValue({
+      startMatrixQaGreenchClawCli.mockReturnValue({
         args: ["matrix", "encryption", "setup", "--account", "cli-encryption-failure", "--json"],
         kill,
         output,
@@ -5278,8 +5272,8 @@ describe("matrix live qa scenarios", () => {
         driverDeviceId: "DRIVERDEVICE",
         driverPassword: "driver-password",
         gatewayRuntimeEnv: {
-          NEXISCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
-          NEXISCLAW_STATE_DIR: "/tmp/gateway-state",
+          GREENCHCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
+          GREENCHCLAW_STATE_DIR: "/tmp/gateway-state",
           PATH: process.env.PATH,
         },
         outputDir,
@@ -5317,27 +5311,22 @@ describe("matrix live qa scenarios", () => {
           search: "",
         }),
       ).toBe(true);
-      expect(mockObjectArg(startMatrixQaNexisClawCli, "startMatrixQaNexisClawCli").args).toEqual([
-        "matrix",
-        "encryption",
-        "setup",
-        "--account",
-        "cli-encryption-failure",
-        "--json",
-      ]);
+      expect(
+        mockObjectArg(startMatrixQaGreenchClawCli, "startMatrixQaGreenchClawCli").args,
+      ).toEqual(["matrix", "encryption", "setup", "--account", "cli-encryption-failure", "--json"]);
       expect(
         (
-          mockObjectArg(startMatrixQaNexisClawCli, "startMatrixQaNexisClawCli").env as Record<
+          mockObjectArg(startMatrixQaGreenchClawCli, "startMatrixQaGreenchClawCli").env as Record<
             string,
             unknown
           >
-        ).NEXISCLAW_CONFIG_PATH,
-      ).toContain("NexisClaw-matrix-e2ee-setup-qa-");
+        ).GREENCHCLAW_CONFIG_PATH,
+      ).toContain("GreenchClaw-matrix-e2ee-setup-qa-");
       expect(output).toHaveBeenCalledTimes(1);
       expect(wait).toHaveBeenCalledTimes(1);
       expect(kill).toHaveBeenCalledTimes(1);
       expect(mockObjectArg(registerWithToken, "registerWithToken").deviceName).toBe(
-        "NexisClaw Matrix QA CLI Encryption Failure Owner",
+        "GreenchClaw Matrix QA CLI Encryption Failure Owner",
       );
       expect(mockObjectArg(registerWithToken, "registerWithToken").registrationToken).toBe(
         "registration-token",
@@ -5403,10 +5392,10 @@ describe("matrix live qa scenarios", () => {
         userId: "@cli-recovery:matrix-qa.test",
       });
       let initialAccountConfig: Record<string, unknown> | null = null;
-      runMatrixQaNexisClawCli.mockImplementation(async ({ args, env }) => {
-        if (!initialAccountConfig && env.NEXISCLAW_CONFIG_PATH) {
+      runMatrixQaGreenchClawCli.mockImplementation(async ({ args, env }) => {
+        if (!initialAccountConfig && env.GREENCHCLAW_CONFIG_PATH) {
           const initialConfig = JSON.parse(
-            await readFile(String(env.NEXISCLAW_CONFIG_PATH), "utf8"),
+            await readFile(String(env.GREENCHCLAW_CONFIG_PATH), "utf8"),
           ) as {
             channels?: {
               matrix?: {
@@ -5460,8 +5449,8 @@ describe("matrix live qa scenarios", () => {
         driverDeviceId: "DRIVERDEVICE",
         driverPassword: "driver-password",
         gatewayRuntimeEnv: {
-          NEXISCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
-          NEXISCLAW_STATE_DIR: "/tmp/gateway-state",
+          GREENCHCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
+          GREENCHCLAW_STATE_DIR: "/tmp/gateway-state",
           PATH: process.env.PATH,
         },
         outputDir,
@@ -5499,7 +5488,7 @@ describe("matrix live qa scenarios", () => {
       expect(bootstrapOwnDeviceVerification).toHaveBeenCalledWith({
         allowAutomaticCrossSigningReset: false,
       });
-      expect(runMatrixQaNexisClawCli.mock.calls.map(([params]) => params.args)).toEqual([
+      expect(runMatrixQaGreenchClawCli.mock.calls.map(([params]) => params.args)).toEqual([
         [
           "matrix",
           "encryption",
@@ -5512,7 +5501,7 @@ describe("matrix live qa scenarios", () => {
         ],
       ]);
       expect(mockObjectArg(registerWithToken, "registerWithToken").deviceName).toBe(
-        "NexisClaw Matrix QA CLI Recovery Key Owner",
+        "GreenchClaw Matrix QA CLI Recovery Key Owner",
       );
       expect(mockObjectArg(registerWithToken, "registerWithToken").registrationToken).toBe(
         "registration-token",
@@ -5581,9 +5570,9 @@ describe("matrix live qa scenarios", () => {
       }));
       const wait = vi
         .fn()
-        .mockRejectedValue(new Error("NexisClaw matrix encryption setup exited 1"));
+        .mockRejectedValue(new Error("GreenchClaw matrix encryption setup exited 1"));
       const kill = vi.fn();
-      startMatrixQaNexisClawCli.mockReturnValue({
+      startMatrixQaGreenchClawCli.mockReturnValue({
         args: [
           "matrix",
           "encryption",
@@ -5608,8 +5597,8 @@ describe("matrix live qa scenarios", () => {
         driverDeviceId: "DRIVERDEVICE",
         driverPassword: "driver-password",
         gatewayRuntimeEnv: {
-          NEXISCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
-          NEXISCLAW_STATE_DIR: "/tmp/gateway-state",
+          GREENCHCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
+          GREENCHCLAW_STATE_DIR: "/tmp/gateway-state",
           PATH: process.env.PATH,
         },
         outputDir,
@@ -5631,7 +5620,9 @@ describe("matrix live qa scenarios", () => {
       expect(artifacts.recoveryKeyRejected).toBe(true);
       expect(artifacts.setupSuccess).toBe(false);
 
-      expect(mockObjectArg(startMatrixQaNexisClawCli, "startMatrixQaNexisClawCli").args).toEqual([
+      expect(
+        mockObjectArg(startMatrixQaGreenchClawCli, "startMatrixQaGreenchClawCli").args,
+      ).toEqual([
         "matrix",
         "encryption",
         "setup",
@@ -5645,7 +5636,7 @@ describe("matrix live qa scenarios", () => {
       expect(wait).toHaveBeenCalledTimes(1);
       expect(kill).toHaveBeenCalledTimes(1);
       expect(mockObjectArg(registerWithToken, "registerWithToken").deviceName).toBe(
-        "NexisClaw Matrix QA CLI Invalid Recovery Key Owner",
+        "GreenchClaw Matrix QA CLI Invalid Recovery Key Owner",
       );
       expect(mockObjectArg(registerWithToken, "registerWithToken").registrationToken).toBe(
         "registration-token",
@@ -5679,8 +5670,8 @@ describe("matrix live qa scenarios", () => {
         password: "cli-multi-password",
         userId: "@cli-multi:matrix-qa.test",
       });
-      runMatrixQaNexisClawCli.mockImplementation(async ({ args, env }) => {
-        const configPath = String(env.NEXISCLAW_CONFIG_PATH);
+      runMatrixQaGreenchClawCli.mockImplementation(async ({ args, env }) => {
+        const configPath = String(env.GREENCHCLAW_CONFIG_PATH);
         const config = JSON.parse(await readFile(configPath, "utf8")) as {
           channels: {
             matrix: {
@@ -5735,8 +5726,8 @@ describe("matrix live qa scenarios", () => {
         driverDeviceId: "DRIVERDEVICE",
         driverPassword: "driver-password",
         gatewayRuntimeEnv: {
-          NEXISCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
-          NEXISCLAW_STATE_DIR: "/tmp/gateway-state",
+          GREENCHCLAW_CONFIG_PATH: "/tmp/gateway-config.json",
+          GREENCHCLAW_STATE_DIR: "/tmp/gateway-state",
           PATH: process.env.PATH,
         },
         outputDir,
@@ -5758,11 +5749,11 @@ describe("matrix live qa scenarios", () => {
       expect(artifacts.setupSuccess).toBe(true);
       expect(artifacts.verificationBootstrapSuccess).toBe(true);
 
-      expect(runMatrixQaNexisClawCli.mock.calls.map(([params]) => params.args)).toEqual([
+      expect(runMatrixQaGreenchClawCli.mock.calls.map(([params]) => params.args)).toEqual([
         ["matrix", "encryption", "setup", "--account", "cli-multi-target", "--json"],
       ]);
       expect(mockObjectArg(registerWithToken, "registerWithToken").deviceName).toBe(
-        "NexisClaw Matrix QA CLI Multi Account Owner",
+        "GreenchClaw Matrix QA CLI Multi Account Owner",
       );
       expect(mockObjectArg(registerWithToken, "registerWithToken").registrationToken).toBe(
         "registration-token",
@@ -5878,10 +5869,10 @@ describe("matrix live qa scenarios", () => {
         }),
       };
       createMatrixQaE2eeScenarioClient.mockResolvedValueOnce(driverClient);
-      runMatrixQaNexisClawCli.mockImplementation(async ({ args, env }) => {
+      runMatrixQaGreenchClawCli.mockImplementation(async ({ args, env }) => {
         const joined = args.join(" ");
         if (joined === "matrix encryption setup --account cli-setup-gateway --json") {
-          const configPath = String(env.NEXISCLAW_CONFIG_PATH);
+          const configPath = String(env.GREENCHCLAW_CONFIG_PATH);
           const config = JSON.parse(await readFile(configPath, "utf8")) as {
             channels: {
               matrix: {
@@ -5940,8 +5931,8 @@ describe("matrix live qa scenarios", () => {
         driverDeviceId: "DRIVERDEVICE",
         driverPassword: "driver-password",
         gatewayRuntimeEnv: {
-          NEXISCLAW_CONFIG_PATH: gatewayConfigPath,
-          NEXISCLAW_STATE_DIR: "/tmp/gateway-state",
+          GREENCHCLAW_CONFIG_PATH: gatewayConfigPath,
+          GREENCHCLAW_STATE_DIR: "/tmp/gateway-state",
           PATH: process.env.PATH,
         },
         outputDir,
@@ -6007,21 +5998,21 @@ describe("matrix live qa scenarios", () => {
       expect(finalGatewayAccount?.encryption).toBe(true);
       expect(finalGatewayAccount?.setupBootstrapMarker).toBe("preserved");
 
-      expect(runMatrixQaNexisClawCli.mock.calls.map(([params]) => params.args)).toEqual([
+      expect(runMatrixQaGreenchClawCli.mock.calls.map(([params]) => params.args)).toEqual([
         ["matrix", "encryption", "setup", "--account", "cli-setup-gateway", "--json"],
       ]);
       const registrationRequests = registerWithToken.mock.calls.map(([request]) => request);
       expect(
         registrationRequests.some(
           (request) =>
-            request.deviceName === "NexisClaw Matrix QA CLI Setup Gateway" &&
+            request.deviceName === "GreenchClaw Matrix QA CLI Setup Gateway" &&
             request.registrationToken === "registration-token",
         ),
       ).toBe(true);
       expect(
         registrationRequests.some(
           (request) =>
-            request.deviceName === "NexisClaw Matrix QA CLI Setup Driver" &&
+            request.deviceName === "GreenchClaw Matrix QA CLI Setup Driver" &&
             request.registrationToken === "registration-token",
         ),
       ).toBe(true);

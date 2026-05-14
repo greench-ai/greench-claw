@@ -1,5 +1,5 @@
 ---
-summary: "Imports Claude Code and Claude Desktop instructions, MCP servers, skills, and safe configuration into NexisClaw."
+summary: "Imports Claude Code and Claude Desktop instructions, MCP servers, skills, and safe configuration into GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the migrate-claude plugin
 title: "Migrate Claude plugin"
@@ -7,12 +7,12 @@ title: "Migrate Claude plugin"
 
 # Migrate Claude plugin
 
-Imports Claude Code and Claude Desktop instructions, MCP servers, skills, and safe configuration into NexisClaw.
+Imports Claude Code and Claude Desktop instructions, MCP servers, skills, and safe configuration into GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/migrate-claude`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/migrate-claude`
+- Install route: included in GreenchClaw
 
 ## Surface
 

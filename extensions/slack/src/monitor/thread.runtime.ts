@@ -1,1 +1,1 @@
-export { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+export { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";

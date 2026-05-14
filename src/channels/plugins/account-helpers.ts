@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   resolveAccountEntry,
   resolveNormalizedAccountEntry,
@@ -18,7 +18,7 @@ export function createAccountListHelpers(
     allowUnlistedDefaultAccount?: boolean;
   },
 ) {
-  function resolveConfiguredDefaultAccountId(cfg: NexisClawConfig): string | undefined {
+  function resolveConfiguredDefaultAccountId(cfg: GreenchClawConfig): string | undefined {
     const channel = cfg.channels?.[channelKey] as Record<string, unknown> | undefined;
     const preferred = normalizeOptionalAccountId(
       typeof channel?.defaultAccount === "string" ? channel.defaultAccount : undefined,
@@ -36,7 +36,7 @@ export function createAccountListHelpers(
     return undefined;
   }
 
-  function listConfiguredAccountIds(cfg: NexisClawConfig): string[] {
+  function listConfiguredAccountIds(cfg: GreenchClawConfig): string[] {
     const channel = cfg.channels?.[channelKey];
     const accounts = (channel as Record<string, unknown> | undefined)?.accounts;
     if (!accounts || typeof accounts !== "object") {
@@ -50,14 +50,14 @@ export function createAccountListHelpers(
     return [...new Set(ids.map((id) => normalizeConfiguredAccountId(id)).filter(Boolean))];
   }
 
-  function listAccountIds(cfg: NexisClawConfig): string[] {
+  function listAccountIds(cfg: GreenchClawConfig): string[] {
     return listCombinedAccountIds({
       configuredAccountIds: listConfiguredAccountIds(cfg),
       fallbackAccountIdWhenEmpty: DEFAULT_ACCOUNT_ID,
     });
   }
 
-  function resolveDefaultAccountId(cfg: NexisClawConfig): string {
+  function resolveDefaultAccountId(cfg: GreenchClawConfig): string {
     return resolveListedDefaultAccountId({
       accountIds: listAccountIds(cfg),
       configuredDefaultAccountId: resolveConfiguredDefaultAccountId(cfg),

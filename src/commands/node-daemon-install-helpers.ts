@@ -62,7 +62,7 @@ export async function buildNodeInstallPlan(params: {
     extraPathDirs: resolveDaemonNodeBinDir(nodePath),
   });
   const description = formatNodeServiceDescription({
-    version: environment.NEXISCLAW_SERVICE_VERSION,
+    version: environment.GREENCHCLAW_SERVICE_VERSION,
   });
 
   return { programArguments, workingDirectory, environment, description };

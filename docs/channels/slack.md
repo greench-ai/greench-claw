@@ -32,7 +32,7 @@ Both transports are production-ready and reach feature parity for messaging, sla
 | Horizontal scaling           | One Socket Mode session per app per host; multiple Gateways need separate Slack apps | Stateless POST handler; multiple Gateway replicas can share one app behind a load balancer                     |
 | Multi-account on one Gateway | Supported; each account opens its own WS                                             | Supported; each account needs a unique `webhookPath` (default `/slack/events`) so registrations do not collide |
 | Slash command transport      | Delivered over the WS connection; `slash_commands[].url` is ignored                  | Slack POSTs to `slash_commands[].url`; field is required for the command to dispatch                           |
-| Request signing              | Not used (auth is the App-Level Token)                                               | Slack signs every request; NexisClaw verifies with `signingSecret`                                              |
+| Request signing              | Not used (auth is the App-Level Token)                                               | Slack signs every request; GreenchClaw verifies with `signingSecret`                                           |
 | Recovery on connection drop  | Slack SDK auto-reconnects; the gateway's pong-timeout transport tuning applies       | No persistent connection to drop; retries are per-request from Slack                                           |
 
 <Note>
@@ -54,11 +54,11 @@ Both transports are production-ready and reach feature parity for messaging, sla
 ```json Recommended
 {
   "display_information": {
-    "name": "NexisClaw",
-    "description": "Slack connector for NexisClaw"
+    "name": "GreenchClaw",
+    "description": "Slack connector for GreenchClaw"
   },
   "features": {
-    "bot_user": { "display_name": "NexisClaw", "always_online": true },
+    "bot_user": { "display_name": "GreenchClaw", "always_online": true },
     "app_home": {
       "home_tab_enabled": true,
       "messages_tab_enabled": true,
@@ -66,8 +66,8 @@ Both transports are production-ready and reach feature parity for messaging, sla
     },
     "slash_commands": [
       {
-        "command": "/NexisClaw",
-        "description": "Send a message to NexisClaw",
+        "command": "/GreenchClaw",
+        "description": "Send a message to GreenchClaw",
         "should_escape": false
       }
     ]
@@ -127,11 +127,11 @@ Both transports are production-ready and reach feature parity for messaging, sla
 ```json Minimal
 {
   "display_information": {
-    "name": "NexisClaw",
-    "description": "Slack connector for NexisClaw"
+    "name": "GreenchClaw",
+    "description": "Slack connector for GreenchClaw"
   },
   "features": {
-    "bot_user": { "display_name": "NexisClaw", "always_online": true },
+    "bot_user": { "display_name": "GreenchClaw", "always_online": true },
     "app_home": {
       "home_tab_enabled": true,
       "messages_tab_enabled": true,
@@ -139,8 +139,8 @@ Both transports are production-ready and reach feature parity for messaging, sla
     },
     "slash_commands": [
       {
-        "command": "/NexisClaw",
-        "description": "Send a message to NexisClaw",
+        "command": "/GreenchClaw",
+        "description": "Send a message to GreenchClaw",
         "should_escape": false
       }
     ]
@@ -191,7 +191,7 @@ Both transports are production-ready and reach feature parity for messaging, sla
 
       </Step>
 
-      <Step title="Configure NexisClaw">
+      <Step title="Configure GreenchClaw">
 
         Recommended SecretRef setup:
 
@@ -210,8 +210,8 @@ cat > slack.socket.patch.json5 <<'JSON5'
   },
 }
 JSON5
-NexisClaw config patch --file ./slack.socket.patch.json5 --dry-run
-NexisClaw config patch --file ./slack.socket.patch.json5
+GreenchClaw config patch --file ./slack.socket.patch.json5 --dry-run
+GreenchClaw config patch --file ./slack.socket.patch.json5
 ```
 
         Env fallback (default account only):
@@ -226,7 +226,7 @@ SLACK_BOT_TOKEN=xoxb-...
       <Step title="Start gateway">
 
 ```bash
-NexisClaw gateway
+GreenchClaw gateway
 ```
 
       </Step>
@@ -244,11 +244,11 @@ NexisClaw gateway
 ```json Recommended
 {
   "display_information": {
-    "name": "NexisClaw",
-    "description": "Slack connector for NexisClaw"
+    "name": "GreenchClaw",
+    "description": "Slack connector for GreenchClaw"
   },
   "features": {
-    "bot_user": { "display_name": "NexisClaw", "always_online": true },
+    "bot_user": { "display_name": "GreenchClaw", "always_online": true },
     "app_home": {
       "home_tab_enabled": true,
       "messages_tab_enabled": true,
@@ -256,8 +256,8 @@ NexisClaw gateway
     },
     "slash_commands": [
       {
-        "command": "/NexisClaw",
-        "description": "Send a message to NexisClaw",
+        "command": "/GreenchClaw",
+        "description": "Send a message to GreenchClaw",
         "should_escape": false,
         "url": "https://gateway-host.example.com/slack/events"
       }
@@ -323,11 +323,11 @@ NexisClaw gateway
 ```json Minimal
 {
   "display_information": {
-    "name": "NexisClaw",
-    "description": "Slack connector for NexisClaw"
+    "name": "GreenchClaw",
+    "description": "Slack connector for GreenchClaw"
   },
   "features": {
-    "bot_user": { "display_name": "NexisClaw", "always_online": true },
+    "bot_user": { "display_name": "GreenchClaw", "always_online": true },
     "app_home": {
       "home_tab_enabled": true,
       "messages_tab_enabled": true,
@@ -335,8 +335,8 @@ NexisClaw gateway
     },
     "slash_commands": [
       {
-        "command": "/NexisClaw",
-        "description": "Send a message to NexisClaw",
+        "command": "/GreenchClaw",
+        "description": "Send a message to GreenchClaw",
         "should_escape": false,
         "url": "https://gateway-host.example.com/slack/events"
       }
@@ -387,7 +387,7 @@ NexisClaw gateway
         </Note>
 
         <Info>
-          The three URL fields (`slash_commands[].url`, `event_subscriptions.request_url`, and `interactivity.request_url` / `message_menu_options_url`) all point at the same NexisClaw endpoint. Slack's manifest schema requires them named separately, but NexisClaw routes by payload type so a single `webhookPath` (default `/slack/events`) is enough. Slash commands without `slash_commands[].url` will silently no-op in HTTP mode.
+          The three URL fields (`slash_commands[].url`, `event_subscriptions.request_url`, and `interactivity.request_url` / `message_menu_options_url`) all point at the same GreenchClaw endpoint. Slack's manifest schema requires them named separately, but GreenchClaw routes by payload type so a single `webhookPath` (default `/slack/events`) is enough. Slash commands without `slash_commands[].url` will silently no-op in HTTP mode.
         </Info>
 
         After Slack creates the app:
@@ -397,7 +397,7 @@ NexisClaw gateway
 
       </Step>
 
-      <Step title="Configure NexisClaw">
+      <Step title="Configure GreenchClaw">
 
         Recommended SecretRef setup:
 
@@ -417,8 +417,8 @@ cat > slack.http.patch.json5 <<'JSON5'
   },
 }
 JSON5
-NexisClaw config patch --file ./slack.http.patch.json5 --dry-run
-NexisClaw config patch --file ./slack.http.patch.json5
+GreenchClaw config patch --file ./slack.http.patch.json5 --dry-run
+GreenchClaw config patch --file ./slack.http.patch.json5
 ```
 
         <Note>
@@ -432,7 +432,7 @@ NexisClaw config patch --file ./slack.http.patch.json5
       <Step title="Start gateway">
 
 ```bash
-NexisClaw gateway
+GreenchClaw gateway
 ```
 
       </Step>
@@ -443,7 +443,7 @@ NexisClaw gateway
 
 ## Socket Mode transport tuning
 
-NexisClaw sets the Slack SDK client pong timeout to 15 seconds by default for Socket Mode. Override the transport settings only when you need workspace- or host-specific tuning:
+GreenchClaw sets the Slack SDK client pong timeout to 15 seconds by default for Socket Mode. Override the transport settings only when you need workspace- or host-specific tuning:
 
 ```json5
 {
@@ -471,11 +471,11 @@ Base manifest (Socket Mode default):
 ```json
 {
   "display_information": {
-    "name": "NexisClaw",
-    "description": "Slack connector for NexisClaw"
+    "name": "GreenchClaw",
+    "description": "Slack connector for GreenchClaw"
   },
   "features": {
-    "bot_user": { "display_name": "NexisClaw", "always_online": true },
+    "bot_user": { "display_name": "GreenchClaw", "always_online": true },
     "app_home": {
       "home_tab_enabled": true,
       "messages_tab_enabled": true,
@@ -483,8 +483,8 @@ Base manifest (Socket Mode default):
     },
     "slash_commands": [
       {
-        "command": "/NexisClaw",
-        "description": "Send a message to NexisClaw",
+        "command": "/GreenchClaw",
+        "description": "Send a message to GreenchClaw",
         "should_escape": false
       }
     ]
@@ -548,8 +548,8 @@ For **HTTP Request URLs mode**, replace `settings` with the HTTP variant and add
   "features": {
     "slash_commands": [
       {
-        "command": "/NexisClaw",
-        "description": "Send a message to NexisClaw",
+        "command": "/GreenchClaw",
+        "description": "Send a message to GreenchClaw",
         "should_escape": false,
         "url": "https://gateway-host.example.com/slack/events"
       }
@@ -587,7 +587,7 @@ For **HTTP Request URLs mode**, replace `settings` with the HTTP variant and add
 
 Surface different features that extend the above defaults.
 
-The default manifest enables the Slack App Home **Home** tab and subscribes to `app_home_opened`. When a workspace member opens the Home tab, NexisClaw publishes a safe default Home view with `views.publish`; no conversation payload or private configuration is included. The **Messages** tab remains enabled for Slack DMs.
+The default manifest enables the Slack App Home **Home** tab and subscribes to `app_home_opened`. When a workspace member opens the Home tab, GreenchClaw publishes a safe default Home view with `views.publish`; no conversation payload or private configuration is included. The **Messages** tab remains enabled for Slack DMs.
 
 <AccordionGroup>
   <Accordion title="Optional native slash commands">
@@ -836,9 +836,9 @@ Current Slack message actions include `send`, `upload-file`, `download-file`, `r
     - Named accounts inherit `channels.slack.allowFrom` when their own `allowFrom` is unset.
     - Named accounts do not inherit `channels.slack.accounts.default.allowFrom`.
 
-    Legacy `channels.slack.dm.policy` and `channels.slack.dm.allowFrom` still read for compatibility. `NexisClaw doctor --fix` migrates them to `dmPolicy` and `allowFrom` when it can do so without changing access.
+    Legacy `channels.slack.dm.policy` and `channels.slack.dm.allowFrom` still read for compatibility. `GreenchClaw doctor --fix` migrates them to `dmPolicy` and `allowFrom` when it can do so without changing access.
 
-    Pairing in DMs uses `NexisClaw pairing approve slack <code>`.
+    Pairing in DMs uses `GreenchClaw pairing approve slack <code>`.
 
   </Tab>
 
@@ -918,7 +918,7 @@ Current Slack message actions include `send`, `upload-file`, `download-file`, `r
     - `toolsBySender` key format: `channel:`, `id:`, `e164:`, `username:`, `name:`, or `"*"` wildcard
       (legacy unprefixed keys still map to `id:` only)
 
-    `allowBots` is conservative for channels and private channels: bot-authored room messages are accepted only when the sending bot is explicitly listed in that room's `users` allowlist, or when at least one explicit Slack owner ID from `channels.slack.allowFrom` is currently a room member. Wildcards and display-name owner entries do not satisfy owner presence. Owner presence uses Slack `conversations.members`; make sure the app has the matching read scope for the room type (`channels:read` for public channels, `groups:read` for private channels). If the member lookup fails, NexisClaw drops the bot-authored room message.
+    `allowBots` is conservative for channels and private channels: bot-authored room messages are accepted only when the sending bot is explicitly listed in that room's `users` allowlist, or when at least one explicit Slack owner ID from `channels.slack.allowFrom` is currently a room member. Wildcards and display-name owner entries do not satisfy owner presence. Owner presence uses Slack `conversations.members`; make sure the app has the matching read scope for the room type (`channels:read` for public channels, `groups:read` for private channels). If the member lookup fails, GreenchClaw drops the bot-authored room message.
 
   </Tab>
 </Tabs>
@@ -930,7 +930,7 @@ Current Slack message actions include `send`, `upload-file`, `download-file`, `r
 - With default `session.dmScope=main`, Slack DMs collapse to agent main session.
 - Channel sessions: `agent:<agentId>:slack:channel:<channelId>`.
 - Thread replies can create thread session suffixes (`:thread:<threadTs>`) when applicable.
-- In channels where NexisClaw handles top-level messages without requiring an explicit mention, non-`off` `replyToMode` routes each handled root into `agent:<agentId>:slack:channel:<channelId>:thread:<rootTs>` so the visible Slack thread maps to one NexisClaw session from the first turn.
+- In channels where GreenchClaw handles top-level messages without requiring an explicit mention, non-`off` `replyToMode` routes each handled root into `agent:<agentId>:slack:channel:<channelId>:thread:<rootTs>` so the visible Slack thread maps to one GreenchClaw session from the first turn.
 - `channels.slack.thread.historyScope` default is `thread`; `thread.inheritParent` default is `false`.
 - `channels.slack.thread.initialHistoryLimit` controls how many existing thread messages are fetched when a new thread session starts (default `20`; set `0` to disable).
 - `channels.slack.thread.requireExplicitMention` (default `false`): when `true`, suppress implicit thread mentions so the bot only responds to explicit `@bot` mentions inside threads, even when the bot already participated in the thread. Without this, replies in a bot-participated thread bypass `requireMention` gating.
@@ -948,7 +948,7 @@ Manual reply tags are supported:
 
 For explicit Slack thread replies from the `message` tool, set `replyBroadcast: true` with `action: "send"` and `threadId` or `replyTo` to ask Slack to also broadcast the thread reply to the parent channel. This maps to Slack's `chat.postMessage` `reply_broadcast` flag and is only supported for text or Block Kit sends, not media uploads.
 
-When a `message` tool call runs inside a Slack thread and targets the same channel, NexisClaw normally inherits the current Slack thread according to `replyToMode`. Set `topLevel: true` on `action: "send"` or `action: "upload-file"` to force a new parent-channel message instead. `threadId: null` is accepted as the same top-level opt-out.
+When a `message` tool call runs inside a Slack thread and targets the same channel, GreenchClaw normally inherits the current Slack thread according to `replyToMode`. Set `topLevel: true` on `action: "send"` or `action: "upload-file"` to force a new parent-channel message instead. `threadId: null` is accepted as the same top-level opt-out.
 
 <Note>
 `replyToMode="off"` disables **all** reply threading in Slack, including explicit `[[reply_to_*]]` tags. This differs from Telegram, where explicit tags are still honored in `"off"` mode. Slack threads hide messages from the channel while Telegram replies stay visible inline.
@@ -956,7 +956,7 @@ When a `message` tool call runs inside a Slack thread and targets the same chann
 
 ## Ack reactions
 
-`ackReaction` sends an acknowledgement emoji while NexisClaw is processing an inbound message.
+`ackReaction` sends an acknowledgement emoji while GreenchClaw is processing an inbound message.
 
 Resolution order:
 
@@ -1003,10 +1003,10 @@ Hide raw command/exec text while keeping compact progress lines:
 
 - A reply thread must be available for native text streaming and Slack assistant thread status to appear. Thread selection still follows `replyToMode`.
 - Channel, group-chat, and top-level DM roots can still use the normal draft preview when native streaming is unavailable or no reply thread exists.
-- Top-level Slack DMs stay off-thread by default, so they do not show Slack's thread-style native stream/status preview; NexisClaw posts and edits a draft preview in the DM instead.
+- Top-level Slack DMs stay off-thread by default, so they do not show Slack's thread-style native stream/status preview; GreenchClaw posts and edits a draft preview in the DM instead.
 - Media and non-text payloads fall back to normal delivery.
 - Media/error finals cancel pending preview edits; eligible text/block finals flush only when they can edit the preview in place.
-- If streaming fails mid-reply, NexisClaw falls back to normal delivery for remaining payloads.
+- If streaming fails mid-reply, GreenchClaw falls back to normal delivery for remaining payloads.
 
 Use draft preview instead of Slack native text streaming:
 
@@ -1028,11 +1028,11 @@ Legacy keys:
 - `channels.slack.streamMode` (`replace | status_final | append`) is a legacy runtime alias for `channels.slack.streaming.mode`.
 - boolean `channels.slack.streaming` is a legacy runtime alias for `channels.slack.streaming.mode` and `channels.slack.streaming.nativeTransport`.
 - legacy `channels.slack.nativeStreaming` is a runtime alias for `channels.slack.streaming.nativeTransport`.
-- Run `NexisClaw doctor --fix` to rewrite persisted Slack streaming config to the canonical keys.
+- Run `GreenchClaw doctor --fix` to rewrite persisted Slack streaming config to the canonical keys.
 
 ## Typing reaction fallback
 
-`typingReaction` adds a temporary reaction to the inbound Slack message while NexisClaw is processing a reply, then removes it when the run finishes. This is most useful outside of thread replies, which use a default "is typing..." status indicator.
+`typingReaction` adds a temporary reaction to the inbound Slack message while GreenchClaw is processing a reply, then removes it when the run finishes. This is most useful outside of thread replies, which use a default "is typing..." status indicator.
 
 Resolution order:
 
@@ -1050,7 +1050,7 @@ Notes:
   <Accordion title="Inbound attachments">
     Slack file attachments are downloaded from Slack-hosted private URLs (token-authenticated request flow) and written to the media store when fetch succeeds and size limits permit. File placeholders include the Slack `fileId` so agents can fetch the original file with `download-file`.
 
-    Downloads use bounded idle and total timeouts. If Slack file retrieval stalls or fails, NexisClaw keeps processing the message and falls back to the file placeholder.
+    Downloads use bounded idle and total timeouts. If Slack file retrieval stalls or fails, GreenchClaw keeps processing the message and falls back to the file placeholder.
 
     Runtime inbound size cap defaults to `20MB` unless overridden by `channels.slack.mediaMaxMb`.
 
@@ -1080,12 +1080,12 @@ Notes:
 Slash commands appear in Slack as either a single configured command or multiple native commands. Configure `channels.slack.slashCommand` to change command defaults:
 
 - `enabled: false`
-- `name: "NexisClaw"`
+- `name: "GreenchClaw"`
 - `sessionPrefix: "slack:slash"`
 - `ephemeral: true`
 
 ```txt
-/NexisClaw /help
+/GreenchClaw /help
 ```
 
 Native commands require [additional manifest settings](#additional-manifest-settings) in your Slack app and are enabled with `channels.slack.commands.native: true` or `commands.native: true` in global configurations instead.
@@ -1155,8 +1155,8 @@ These directives compile into Slack Block Kit and route clicks or selections bac
 Notes:
 
 - This is Slack-specific UI. Other channels do not translate Slack Block Kit directives into their own button systems.
-- The interactive callback values are NexisClaw-generated opaque tokens, not raw agent-authored values.
-- If generated interactive blocks would exceed Slack Block Kit limits, NexisClaw falls back to the original text reply instead of sending an invalid blocks payload.
+- The interactive callback values are GreenchClaw-generated opaque tokens, not raw agent-authored values.
+- If generated interactive blocks would exceed Slack Block Kit limits, GreenchClaw falls back to the original text reply instead of sending an invalid blocks payload.
 
 ## Exec approvals in Slack
 
@@ -1167,7 +1167,7 @@ Slack can act as a native approval client with interactive buttons and interacti
 - Approver authorization is still enforced: only users identified as approvers can approve or deny requests through Slack.
 
 This uses the same shared approval button surface as other channels. When `interactivity` is enabled in your Slack app settings, approval prompts render as Block Kit buttons directly in the conversation.
-When those buttons are present, they are the primary approval UX; NexisClaw
+When those buttons are present, they are the primary approval UX; GreenchClaw
 should only include a manual `/approve` command when the tool result says chat
 approvals are unavailable or manual approval is the only path.
 
@@ -1260,9 +1260,9 @@ Primary reference: [Configuration reference - Slack](/gateway/config-channels#sl
     Useful commands:
 
 ```bash
-NexisClaw channels status --probe
-NexisClaw logs --follow
-NexisClaw doctor
+GreenchClaw channels status --probe
+GreenchClaw logs --follow
+GreenchClaw doctor
 ```
 
   </Accordion>
@@ -1278,7 +1278,7 @@ NexisClaw doctor
       recoverable human sender in message metadata
 
 ```bash
-NexisClaw pairing list slack
+GreenchClaw pairing list slack
 ```
 
   </Accordion>
@@ -1286,7 +1286,7 @@ NexisClaw pairing list slack
   <Accordion title="Socket mode not connecting">
     Validate bot + app tokens and Socket Mode enablement in Slack app settings.
 
-    If `NexisClaw channels status --probe --json` shows `botTokenStatus` or
+    If `GreenchClaw channels status --probe --json` shows `botTokenStatus` or
     `appTokenStatus: "configured_unavailable"`, the Slack account is
     configured but the current runtime could not resolve the SecretRef-backed
     value.
@@ -1336,7 +1336,7 @@ Slack can attach downloaded media to the agent turn when Slack file downloads su
 
 When a Slack message with file attachments arrives:
 
-1. NexisClaw downloads the file from Slack's private URL using the bot token (`xoxb-...`).
+1. GreenchClaw downloads the file from Slack's private URL using the bot token (`xoxb-...`).
 2. The file is written to the media store on success.
 3. Downloaded media paths and content types are added to the inbound context.
 4. Image-capable model/tool paths can use image attachments from that context.
@@ -1372,16 +1372,16 @@ When a single Slack message contains multiple file attachments:
 | Expired Slack file URL                 | File skipped; no error shown                                                 | Re-upload the file in Slack                                                |
 | Vision model not configured            | Image attachments are stored as media references, but not analyzed as images | Configure `agents.defaults.imageModel` or use a vision-capable reply model |
 | Very large images (> 20 MB by default) | Skipped per size cap                                                         | Increase `channels.slack.mediaMaxMb` if Slack allows                       |
-| Forwarded/shared attachments           | Text and Slack-hosted image/file media are best-effort                       | Re-share directly in the NexisClaw thread                                   |
+| Forwarded/shared attachments           | Text and Slack-hosted image/file media are best-effort                       | Re-share directly in the GreenchClaw thread                                |
 | PDF attachments                        | Stored as file/media context, not automatically routed through image vision  | Use `download-file` for file metadata or the `pdf` tool for PDF analysis   |
 
 ### Related documentation
 
 - [Media understanding pipeline](/nodes/media-understanding)
 - [PDF tool](/tools/pdf)
-- Epic: [#51349](https://github.com/NexisClaw/NexisClaw/issues/51349) — Slack attachment vision enablement
-- Regression tests: [#51353](https://github.com/NexisClaw/NexisClaw/issues/51353)
-- Live verification: [#51354](https://github.com/NexisClaw/NexisClaw/issues/51354)
+- Epic: [#51349](https://github.com/GreenchClaw/GreenchClaw/issues/51349) — Slack attachment vision enablement
+- Regression tests: [#51353](https://github.com/GreenchClaw/GreenchClaw/issues/51353)
+- Live verification: [#51354](https://github.com/GreenchClaw/GreenchClaw/issues/51354)
 
 ## Related
 

@@ -286,10 +286,10 @@ describe("resolveChannelSetupSelectionContributions", () => {
     expect(note).toHaveBeenCalledWith(
       [
         "Inbound DM safety defaults to pairing: unknown senders get a pairing code first.",
-        "Approve with: NexisClaw pairing approve <channel> <code>",
+        "Approve with: GreenchClaw pairing approve <channel> <code>",
         'Open/public DMs require dmPolicy="open" plus allowFrom=["*"].',
-        'For multi-user DMs, isolate sessions with: NexisClaw config set session.dmScope "per-channel-peer" (or "per-account-channel-peer" for multi-account channels).',
-        "Docs: https://docs.NexisClaw.ai/channels/pairing",
+        'For multi-user DMs, isolate sessions with: GreenchClaw config set session.dmScope "per-channel-peer" (or "per-account-channel-peer" for multi-account channels).',
+        "Docs: https://docs.GreenchClaw.ai/channels/pairing",
         "",
         "bad\\nid: Blurb\\nline",
       ].join("\n"),
@@ -337,7 +337,7 @@ describe("resolveChannelSetupSelectionContributions", () => {
     if (typeof docsLink !== "function") {
       throw new Error("Expected docs link formatter");
     }
-    expect(docsLink("/channels/zalo", "Docs")).toBe("https://docs.NexisClaw.ai/channels/zalo");
+    expect(docsLink("/channels/zalo", "Docs")).toBe("https://docs.GreenchClaw.ai/channels/zalo");
     expect(lines).toEqual(["Zalo\\nBot — Setup\\nhelp"]);
   });
 });

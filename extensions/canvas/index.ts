@@ -1,4 +1,4 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { createDefaultCanvasCliDependencies, registerNodesCanvasCommands } from "./src/cli.js";
 import { canvasConfigSchema, isCanvasHostEnabled } from "./src/config.js";
 import { resolveCanvasHttpPathToLocalPath } from "./src/documents.js";

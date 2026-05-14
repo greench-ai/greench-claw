@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { bundledDistPluginFile } from "NexisClaw/plugin-sdk/test-fixtures";
+import { bundledDistPluginFile } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { stageBundledPluginRuntime } from "../../scripts/stage-bundled-plugin-runtime.mjs";
-import { discoverNexisClawPlugins } from "./discovery.js";
+import { discoverGreenchClawPlugins } from "./discovery.js";
 import { loadPluginManifestRegistry } from "./manifest-registry.js";
 import { cleanupTrackedTempDirs, makeTrackedTempDir } from "./test-helpers/fs-fixtures.js";
 
@@ -94,7 +94,7 @@ afterEach(() => {
 
 describe("stageBundledPluginRuntime", () => {
   it("stages bundled dist plugins as runtime wrappers without linking plugin node_modules", () => {
-    const repoRoot = makeRepoRoot("NexisClaw-stage-bundled-runtime-");
+    const repoRoot = makeRepoRoot("GreenchClaw-stage-bundled-runtime-");
     const distPluginDir = createDistPluginDir(repoRoot, "diffs");
     fs.mkdirSync(path.join(repoRoot, "dist"), { recursive: true });
     fs.mkdirSync(path.join(repoRoot, "dist", "plugin-sdk"), { recursive: true });
@@ -129,19 +129,19 @@ describe("stageBundledPluginRuntime", () => {
     expect(
       fs
         .lstatSync(
-          path.join(repoRoot, "dist", "extensions", "node_modules", "NexisClaw", "plugin-sdk"),
+          path.join(repoRoot, "dist", "extensions", "node_modules", "GreenchClaw", "plugin-sdk"),
         )
         .isSymbolicLink(),
     ).toBe(false);
     expect(
       fs.readFileSync(
-        path.join(repoRoot, "dist", "extensions", "node_modules", "NexisClaw", "package.json"),
+        path.join(repoRoot, "dist", "extensions", "node_modules", "GreenchClaw", "package.json"),
         "utf8",
       ),
     ).toContain('"./plugin-sdk": "./plugin-sdk/index.js"');
     expect(
       fs.readFileSync(
-        path.join(repoRoot, "dist", "extensions", "node_modules", "NexisClaw", "package.json"),
+        path.join(repoRoot, "dist", "extensions", "node_modules", "GreenchClaw", "package.json"),
         "utf8",
       ),
     ).toContain('"./plugin-sdk/*": "./plugin-sdk/*.js"');
@@ -152,18 +152,18 @@ describe("stageBundledPluginRuntime", () => {
           "dist",
           "extensions",
           "node_modules",
-          "NexisClaw",
+          "GreenchClaw",
           "plugin-sdk",
           "channel-entry-contract.js",
         ),
         "utf8",
       ),
     ).toContain("../../../../plugin-sdk/channel-entry-contract.js");
-    expect(fs.existsSync(path.join(runtimePluginDir, "node_modules", "NexisClaw"))).toBe(false);
+    expect(fs.existsSync(path.join(runtimePluginDir, "node_modules", "GreenchClaw"))).toBe(false);
   });
 
   it("keeps extension-local plugin-sdk wrappers resolving canonical dist chunks", async () => {
-    const repoRoot = makeRepoRoot("NexisClaw-stage-bundled-runtime-sdk-wrapper-");
+    const repoRoot = makeRepoRoot("GreenchClaw-stage-bundled-runtime-sdk-wrapper-");
     createDistPluginDir(repoRoot, "diffs");
     setupRepoFiles(repoRoot, {
       "dist/plugin-sdk/channel-entry-contract.js":
@@ -179,7 +179,7 @@ describe("stageBundledPluginRuntime", () => {
       "dist",
       "extensions",
       "node_modules",
-      "NexisClaw",
+      "GreenchClaw",
       "plugin-sdk",
       "channel-entry-contract.js",
     );
@@ -188,7 +188,7 @@ describe("stageBundledPluginRuntime", () => {
   });
 
   it("writes wrappers that forward plugin entry imports into canonical dist files", async () => {
-    const repoRoot = makeRepoRoot("NexisClaw-stage-bundled-runtime-chunks-");
+    const repoRoot = makeRepoRoot("GreenchClaw-stage-bundled-runtime-chunks-");
     createDistPluginDir(repoRoot, "diffs");
     setupRepoFiles(repoRoot, {
       "dist/chunk-abc.js": "export const value = 1;\n",
@@ -210,7 +210,7 @@ describe("stageBundledPluginRuntime", () => {
   });
 
   it("stages root runtime sidecars that bundled plugin boundaries resolve directly", () => {
-    const repoRoot = makeRepoRoot("NexisClaw-stage-bundled-runtime-sidecars-");
+    const repoRoot = makeRepoRoot("GreenchClaw-stage-bundled-runtime-sidecars-");
     createDistPluginDir(repoRoot, "whatsapp");
     setupRepoFiles(repoRoot, {
       [bundledDistPluginFile("whatsapp", "index.js")]: "export default {};\n",
@@ -235,7 +235,7 @@ describe("stageBundledPluginRuntime", () => {
   });
 
   it("keeps plugin command registration on the canonical dist graph when loaded from dist-runtime", async () => {
-    const repoRoot = makeRepoRoot("NexisClaw-stage-bundled-runtime-commands-");
+    const repoRoot = makeRepoRoot("GreenchClaw-stage-bundled-runtime-commands-");
     const distPluginDir = path.join(repoRoot, "dist", "extensions", "demo");
     const distCommandsDir = path.join(repoRoot, "dist", "plugins");
     fs.mkdirSync(distPluginDir, { recursive: true });
@@ -244,7 +244,7 @@ describe("stageBundledPluginRuntime", () => {
     fs.writeFileSync(
       path.join(distCommandsDir, "commands.js"),
       [
-        "const registry = globalThis.__NexisClawTestPluginCommands ??= new Map();",
+        "const registry = globalThis.__GreenchClawTestPluginCommands ??= new Map();",
         "export function registerPluginCommand(pluginId, command) {",
         "  registry.set(`/${command.name.toLowerCase()}`, { ...command, pluginId });",
         "}",
@@ -345,15 +345,15 @@ describe("stageBundledPluginRuntime", () => {
   });
 
   it("copies package metadata files but symlinks other non-js plugin artifacts into the runtime overlay", () => {
-    const repoRoot = makeRepoRoot("NexisClaw-stage-bundled-runtime-assets-");
+    const repoRoot = makeRepoRoot("GreenchClaw-stage-bundled-runtime-assets-");
     createDistPluginDir(repoRoot, "diffs");
     setupRepoFiles(repoRoot, {
       [bundledDistPluginFile("diffs", "package.json")]: JSON.stringify(
-        { name: "@NexisClaw/diffs", NexisClaw: { extensions: ["./index.js"] } },
+        { name: "@GreenchClaw/diffs", GreenchClaw: { extensions: ["./index.js"] } },
         null,
         2,
       ),
-      [bundledDistPluginFile("diffs", "NexisClaw.plugin.json")]: "{}\n",
+      [bundledDistPluginFile("diffs", "GreenchClaw.plugin.json")]: "{}\n",
       [bundledDistPluginFile("diffs", "assets/info.txt")]: "ok\n",
     });
 
@@ -362,7 +362,7 @@ describe("stageBundledPluginRuntime", () => {
     expectRuntimeArtifactText({
       repoRoot,
       pluginId: "diffs",
-      relativePath: "NexisClaw.plugin.json",
+      relativePath: "GreenchClaw.plugin.json",
       expectedText: "{}\n",
       symbolicLink: false,
     });
@@ -385,7 +385,7 @@ describe("stageBundledPluginRuntime", () => {
   });
 
   it("copies bundled plugin skill trees into the runtime overlay", () => {
-    const repoRoot = makeRepoRoot("NexisClaw-stage-bundled-runtime-skills-");
+    const repoRoot = makeRepoRoot("GreenchClaw-stage-bundled-runtime-skills-");
     createDistPluginDir(repoRoot, "feishu");
     setupRepoFiles(repoRoot, {
       [bundledDistPluginFile("feishu", "index.js")]: "export default {}\n",
@@ -414,14 +414,14 @@ describe("stageBundledPluginRuntime", () => {
   });
 
   it("preserves package metadata needed for bundled plugin discovery from dist-runtime", () => {
-    const repoRoot = makeRepoRoot("NexisClaw-stage-bundled-runtime-discovery-");
+    const repoRoot = makeRepoRoot("GreenchClaw-stage-bundled-runtime-discovery-");
     const runtimeExtensionsDir = path.join(repoRoot, "dist-runtime", "extensions");
     createDistPluginDir(repoRoot, "demo");
     setupRepoFiles(repoRoot, {
       [bundledDistPluginFile("demo", "package.json")]: JSON.stringify(
         {
-          name: "@NexisClaw/demo",
-          NexisClaw: {
+          name: "@GreenchClaw/demo",
+          GreenchClaw: {
             extensions: ["./main.js"],
             setupEntry: "./setup.js",
             startup: {
@@ -432,7 +432,7 @@ describe("stageBundledPluginRuntime", () => {
         null,
         2,
       ),
-      [bundledDistPluginFile("demo", "NexisClaw.plugin.json")]: JSON.stringify(
+      [bundledDistPluginFile("demo", "GreenchClaw.plugin.json")]: JSON.stringify(
         {
           id: "demo",
           channels: ["demo"],
@@ -449,10 +449,10 @@ describe("stageBundledPluginRuntime", () => {
 
     const env = {
       ...process.env,
-      NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-      NEXISCLAW_BUNDLED_PLUGINS_DIR: runtimeExtensionsDir,
+      GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+      GREENCHCLAW_BUNDLED_PLUGINS_DIR: runtimeExtensionsDir,
     };
-    const discovery = discoverNexisClawPlugins({
+    const discovery = discoverGreenchClawPlugins({
       env,
     });
     const manifestRegistry = loadPluginManifestRegistry({
@@ -481,7 +481,7 @@ describe("stageBundledPluginRuntime", () => {
   });
 
   it("removes stale runtime plugin directories that are no longer in dist", () => {
-    const repoRoot = makeRepoRoot("NexisClaw-stage-bundled-runtime-stale-");
+    const repoRoot = makeRepoRoot("GreenchClaw-stage-bundled-runtime-stale-");
     const staleRuntimeDir = path.join(repoRoot, "dist-runtime", "extensions", "stale");
     fs.mkdirSync(staleRuntimeDir, { recursive: true });
     fs.writeFileSync(path.join(staleRuntimeDir, "index.js"), "stale\n", "utf8");
@@ -493,7 +493,7 @@ describe("stageBundledPluginRuntime", () => {
   });
 
   it("removes dist-runtime when the built bundled plugin tree is absent", () => {
-    const repoRoot = makeRepoRoot("NexisClaw-stage-bundled-runtime-missing-");
+    const repoRoot = makeRepoRoot("GreenchClaw-stage-bundled-runtime-missing-");
     const runtimeRoot = path.join(repoRoot, "dist-runtime", "extensions", "diffs");
     fs.mkdirSync(runtimeRoot, { recursive: true });
 
@@ -503,7 +503,7 @@ describe("stageBundledPluginRuntime", () => {
   });
 
   it("tolerates EEXIST when an identical runtime symlink is materialized concurrently", () => {
-    const repoRoot = makeRepoRoot("NexisClaw-stage-bundled-runtime-eexist-");
+    const repoRoot = makeRepoRoot("GreenchClaw-stage-bundled-runtime-eexist-");
     createDistPluginDir(repoRoot, "feishu");
     setupRepoFiles(repoRoot, {
       [bundledDistPluginFile("feishu", "index.js")]: "export default {}\n",
@@ -540,7 +540,7 @@ describe("stageBundledPluginRuntime", () => {
   it.each(["EACCES", "ENOSYS"] as const)(
     "falls back to copying runtime assets when Windows symlink creation fails with %s",
     (code) => {
-      const repoRoot = makeRepoRoot("NexisClaw-stage-bundled-runtime-win-copy-");
+      const repoRoot = makeRepoRoot("GreenchClaw-stage-bundled-runtime-win-copy-");
       createDistPluginDir(repoRoot, "feishu");
       setupRepoFiles(repoRoot, {
         [bundledDistPluginFile("feishu", "index.js")]: "export default {}\n",

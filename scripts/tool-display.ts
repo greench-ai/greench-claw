@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
 const outputPath = path.join(
   repoRoot,
-  "apps/shared/NexisClawKit/Sources/NexisClawKit/Resources/tool-display.json",
+  "apps/shared/GreenchClawKit/Sources/GreenchClawKit/Resources/tool-display.json",
 );
 const toolSources = [
   path.join(repoRoot, "src/agents/apply-patch.ts"),

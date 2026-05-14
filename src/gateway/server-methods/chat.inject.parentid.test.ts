@@ -18,7 +18,7 @@ function readTranscriptLines(transcriptPath: string): string[] {
 describe("gateway chat.inject transcript writes", () => {
   it("appends a Pi session entry that includes parentId", async () => {
     const { dir, transcriptPath } = createTranscriptFixtureSync({
-      prefix: "NexisClaw-chat-inject-",
+      prefix: "GreenchClaw-chat-inject-",
       sessionId: "sess-1",
     });
 
@@ -52,7 +52,7 @@ describe("gateway chat.inject transcript writes", () => {
 
   it("uses raw append for oversized append-only transcripts", async () => {
     const { dir, transcriptPath } = createTranscriptFixtureSync({
-      prefix: "NexisClaw-chat-inject-large-",
+      prefix: "GreenchClaw-chat-inject-large-",
       sessionId: "sess-1",
     });
 

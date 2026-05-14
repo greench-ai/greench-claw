@@ -1,10 +1,10 @@
-import { generateHexPkceVerifierChallenge } from "NexisClaw/plugin-sdk/provider-auth";
+import { generateHexPkceVerifierChallenge } from "GreenchClaw/plugin-sdk/provider-auth";
 import {
   generateOAuthState,
   parseOAuthCallbackInput,
   waitForLocalOAuthCallback,
-} from "NexisClaw/plugin-sdk/provider-auth-runtime";
-import { isWSL2Sync } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/provider-auth-runtime";
+import { isWSL2Sync } from "GreenchClaw/plugin-sdk/runtime-env";
 import { resolveOAuthClientConfig } from "./oauth.credentials.js";
 import { AUTH_URL, REDIRECT_URI, SCOPES } from "./oauth.shared.js";
 

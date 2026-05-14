@@ -5,7 +5,7 @@ import type { ChannelPlugin } from "../channels/plugins/types.plugin.js";
 import { createConfigIO, replaceConfigFile } from "../config/config.js";
 import { collectIncludePathsRecursive } from "../config/includes-scan.js";
 import { resolveConfigPath, resolveOAuthDir, resolveStateDir } from "../config/paths.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { runExec } from "../process/exec.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import { createIcaclsResetCommand, formatIcaclsResetCommand, type ExecFn } from "./windows-acl.js";
@@ -190,14 +190,14 @@ async function safeAclReset(params: {
 }
 
 function setGroupPolicyAllowlist(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: string;
   changes: string[];
 }): void {
   if (!params.cfg.channels) {
     return;
   }
-  const section = params.cfg.channels[params.channel as keyof NexisClawConfig["channels"]] as
+  const section = params.cfg.channels[params.channel as keyof GreenchClawConfig["channels"]] as
     | Record<string, unknown>
     | undefined;
   if (!section || typeof section !== "object") {
@@ -231,8 +231,8 @@ function setGroupPolicyAllowlist(params: {
   }
 }
 
-function applyConfigFixes(params: { cfg: NexisClawConfig; env: NodeJS.ProcessEnv }): {
-  cfg: NexisClawConfig;
+function applyConfigFixes(params: { cfg: GreenchClawConfig; env: NodeJS.ProcessEnv }): {
+  cfg: GreenchClawConfig;
   changes: string[];
 } {
   const next = structuredClone(params.cfg ?? {});
@@ -251,11 +251,11 @@ function applyConfigFixes(params: { cfg: NexisClawConfig; env: NodeJS.ProcessEnv
 }
 
 export async function applySecurityFixConfigMutations(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   channelPlugins?: ChannelPlugin[];
 }): Promise<{
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   changes: string[];
 }> {
   const fixed = applyConfigFixes({ cfg: params.cfg, env: params.env });
@@ -271,7 +271,7 @@ export async function applySecurityFixConfigMutations(params: {
 }
 
 async function collectChannelSecurityConfigFixMutation(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   channelPlugins?: ChannelPlugin[];
 }) {
@@ -312,7 +312,7 @@ export async function collectSecurityPermissionTargets(params: {
   env: NodeJS.ProcessEnv;
   stateDir: string;
   configPath: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   includePaths?: readonly string[];
 }): Promise<SecurityPermissionTarget[]> {
   const targets: SecurityPermissionTarget[] = [

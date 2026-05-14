@@ -59,7 +59,7 @@ describe("createQQWSClient", () => {
   it("does not set a ws proxy agent when proxy env is absent", async () => {
     await createQQWSClient({
       gatewayUrl: "wss://qq.example.test/ws",
-      userAgent: "NexisClaw-qqbot-test",
+      userAgent: "GreenchClaw-qqbot-test",
     });
 
     expect(webSocketCtorMock).toHaveBeenCalledTimes(1);
@@ -67,7 +67,7 @@ describe("createQQWSClient", () => {
     expectWebSocketCtorCall([
       "wss://qq.example.test/ws",
       {
-        headers: { "User-Agent": "NexisClaw-qqbot-test" },
+        headers: { "User-Agent": "GreenchClaw-qqbot-test" },
       },
     ]);
   });
@@ -77,7 +77,7 @@ describe("createQQWSClient", () => {
 
     await createQQWSClient({
       gatewayUrl: "wss://qq.example.test/ws",
-      userAgent: "NexisClaw-qqbot-test",
+      userAgent: "GreenchClaw-qqbot-test",
     });
 
     expect(webSocketCtorMock).toHaveBeenCalledTimes(1);
@@ -86,7 +86,7 @@ describe("createQQWSClient", () => {
       "wss://qq.example.test/ws",
       {
         agent: { proxied: true },
-        headers: { "User-Agent": "NexisClaw-qqbot-test" },
+        headers: { "User-Agent": "GreenchClaw-qqbot-test" },
       },
     ]);
   });
@@ -96,7 +96,7 @@ describe("createQQWSClient", () => {
 
     await createQQWSClient({
       gatewayUrl: "wss://qq.example.test/ws",
-      userAgent: "NexisClaw-qqbot-test",
+      userAgent: "GreenchClaw-qqbot-test",
     });
 
     expect(webSocketCtorMock).toHaveBeenCalledTimes(1);
@@ -105,7 +105,7 @@ describe("createQQWSClient", () => {
       "wss://qq.example.test/ws",
       {
         agent: { proxied: true },
-        headers: { "User-Agent": "NexisClaw-qqbot-test" },
+        headers: { "User-Agent": "GreenchClaw-qqbot-test" },
       },
     ]);
   });
@@ -115,7 +115,7 @@ describe("createQQWSClient", () => {
 
     await createQQWSClient({
       gatewayUrl: "wss://qq.example.test/ws",
-      userAgent: "NexisClaw-qqbot-test",
+      userAgent: "GreenchClaw-qqbot-test",
     });
 
     expect(webSocketCtorMock).toHaveBeenCalledTimes(1);
@@ -124,7 +124,7 @@ describe("createQQWSClient", () => {
       "wss://qq.example.test/ws",
       {
         agent: { proxied: true },
-        headers: { "User-Agent": "NexisClaw-qqbot-test" },
+        headers: { "User-Agent": "GreenchClaw-qqbot-test" },
       },
     ]);
   });

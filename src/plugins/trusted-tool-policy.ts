@@ -1,5 +1,5 @@
 import { getRuntimeConfig } from "../config/config.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isPlainObject } from "../utils.js";
 import type {
   PluginHookBeforeToolCallEvent,
@@ -26,7 +26,7 @@ export async function runTrustedToolPolicies(
   event: PluginHookBeforeToolCallEvent,
   ctx: PluginHookToolContext,
   options?: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     deriveEvent?: (
       params: Record<string, unknown>,
     ) => Pick<PluginHookBeforeToolCallEvent, "derivedPaths">;
@@ -37,9 +37,9 @@ export async function runTrustedToolPolicies(
   let hasAdjustedParams = false;
   let approval: PluginHookBeforeToolCallResult["requireApproval"];
   const sessionExtensionStateCache = new Map<string, Record<string, PluginJsonValue> | undefined>();
-  let resolvedSessionConfig: NexisClawConfig | undefined = options?.config;
+  let resolvedSessionConfig: GreenchClawConfig | undefined = options?.config;
   let didResolveSessionConfig = Boolean(options?.config);
-  const resolveSessionConfig = (): NexisClawConfig | undefined => {
+  const resolveSessionConfig = (): GreenchClawConfig | undefined => {
     if (!didResolveSessionConfig) {
       didResolveSessionConfig = true;
       try {

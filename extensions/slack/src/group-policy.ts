@@ -1,11 +1,11 @@
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/account-resolution";
-import type { ChannelGroupContext } from "NexisClaw/plugin-sdk/channel-contract";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/account-resolution";
+import type { ChannelGroupContext } from "GreenchClaw/plugin-sdk/channel-contract";
 import {
   resolveToolsBySender,
   type GroupToolPolicyBySenderConfig,
   type GroupToolPolicyConfig,
-} from "NexisClaw/plugin-sdk/channel-policy";
-import { normalizeHyphenSlug } from "NexisClaw/plugin-sdk/string-normalization-runtime";
+} from "GreenchClaw/plugin-sdk/channel-policy";
+import { normalizeHyphenSlug } from "GreenchClaw/plugin-sdk/string-normalization-runtime";
 import { mergeSlackAccountConfig, resolveDefaultSlackAccountId } from "./accounts.js";
 
 type SlackChannelPolicyEntry = {

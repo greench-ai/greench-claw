@@ -11,16 +11,16 @@ import {
 const tempDirs: string[] = [];
 
 function createIntentEnv(): NodeJS.ProcessEnv {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-restart-intent-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-restart-intent-"));
   tempDirs.push(dir);
   return {
     ...process.env,
-    NEXISCLAW_STATE_DIR: dir,
+    GREENCHCLAW_STATE_DIR: dir,
   };
 }
 
 function intentPath(env: NodeJS.ProcessEnv): string {
-  return path.join(env.NEXISCLAW_STATE_DIR ?? "", "gateway-restart-intent.json");
+  return path.join(env.GREENCHCLAW_STATE_DIR ?? "", "gateway-restart-intent.json");
 }
 
 describe("gateway restart intent", () => {
@@ -84,7 +84,7 @@ describe("gateway restart intent", () => {
 
   it("does not follow an existing intent-path symlink when writing", () => {
     const env = createIntentEnv();
-    const targetPath = path.join(env.NEXISCLAW_STATE_DIR ?? "", "attacker-target.txt");
+    const targetPath = path.join(env.GREENCHCLAW_STATE_DIR ?? "", "attacker-target.txt");
     fs.writeFileSync(targetPath, "keep", "utf8");
     try {
       fs.symlinkSync(targetPath, intentPath(env));

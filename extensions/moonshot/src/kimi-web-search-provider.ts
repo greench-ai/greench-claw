@@ -2,7 +2,7 @@ import {
   createWebSearchProviderContractFields,
   type WebSearchProviderPlugin,
   type WebSearchProviderSetupContext,
-} from "NexisClaw/plugin-sdk/provider-web-search-config-contract";
+} from "GreenchClaw/plugin-sdk/provider-web-search-config-contract";
 
 const KIMI_CREDENTIAL_PATH = "plugins.entries.moonshot.config.webSearch.apiKey";
 type KimiWebSearchProviderRuntime = typeof import("./kimi-web-search-provider.runtime.js");
@@ -49,7 +49,7 @@ export function createKimiWebSearchProvider(): WebSearchProviderPlugin {
     envVars: ["KIMI_API_KEY", "MOONSHOT_API_KEY"],
     placeholder: "sk-...",
     signupUrl: "https://platform.moonshot.cn/",
-    docsUrl: "https://docs.NexisClaw.ai/tools/web",
+    docsUrl: "https://docs.GreenchClaw.ai/tools/web",
     autoDetectOrder: 40,
     credentialPath: KIMI_CREDENTIAL_PATH,
     ...createWebSearchProviderContractFields({

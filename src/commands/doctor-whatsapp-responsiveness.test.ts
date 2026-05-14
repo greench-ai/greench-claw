@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 const noteMock = vi.hoisted(() => vi.fn());
 const spawnSyncMock = vi.hoisted(() => vi.fn());
 
 vi.mock("node:child_process", async () => {
-  const { mockNodeChildProcessSpawnSync } = await import("NexisClaw/plugin-sdk/test-node-mocks");
+  const { mockNodeChildProcessSpawnSync } = await import("GreenchClaw/plugin-sdk/test-node-mocks");
   return mockNodeChildProcessSpawnSync(spawnSyncMock);
 });
 
@@ -25,16 +25,16 @@ describe("doctor WhatsApp responsiveness", () => {
     spawnSyncMock.mockReturnValue({
       status: 0,
       stdout: [
-        " 101 NexisClaw-tui",
-        " 102 /usr/bin/node /usr/lib/node_modules/NexisClaw/dist/index.js gateway --port 18789",
-        " 103 NexisClaw channels",
-        " 104 NexisClaw tui --local",
+        " 101 GreenchClaw-tui",
+        " 102 /usr/bin/node /usr/lib/node_modules/GreenchClaw/dist/index.js gateway --port 18789",
+        " 103 GreenchClaw channels",
+        " 104 GreenchClaw tui --local",
       ].join("\n"),
     });
 
     expect(listLocalTuiProcesses()).toEqual([
-      { pid: 101, command: "NexisClaw-tui" },
-      { pid: 104, command: "NexisClaw tui --local" },
+      { pid: 101, command: "GreenchClaw-tui" },
+      { pid: 104, command: "GreenchClaw tui --local" },
     ]);
   });
 
@@ -60,7 +60,7 @@ describe("doctor WhatsApp responsiveness", () => {
 
     await expect(
       terminateLocalTuiProcesses({
-        processes: [{ pid: 101, command: "NexisClaw-tui" }],
+        processes: [{ pid: 101, command: "GreenchClaw-tui" }],
         controller,
         graceMs: 0,
       }),
@@ -75,7 +75,7 @@ describe("doctor WhatsApp responsiveness", () => {
 
   it("warns and repairs local TUI pressure when WhatsApp is enabled and the gateway is degraded", async () => {
     const terminate = vi.fn().mockResolvedValue({ stopped: [101], failed: [] });
-    const cfg = { channels: { whatsapp: { enabled: true } } } as NexisClawConfig;
+    const cfg = { channels: { whatsapp: { enabled: true } } } as GreenchClawConfig;
 
     await noteWhatsappResponsivenessHealth({
       cfg,
@@ -91,12 +91,12 @@ describe("doctor WhatsApp responsiveness", () => {
         },
       },
       shouldRepair: true,
-      listLocalTuiProcesses: () => [{ pid: 101, command: "NexisClaw-tui" }],
+      listLocalTuiProcesses: () => [{ pid: 101, command: "GreenchClaw-tui" }],
       terminateLocalTuiProcesses: terminate,
     });
 
     expect(terminate).toHaveBeenCalledWith({
-      processes: [{ pid: 101, command: "NexisClaw-tui" }],
+      processes: [{ pid: 101, command: "GreenchClaw-tui" }],
     });
     expect(noteMock).toHaveBeenCalledWith(
       [
@@ -114,7 +114,7 @@ describe("doctor WhatsApp responsiveness", () => {
     const cfg = {
       channels: { whatsapp: { enabled: true } },
       agents: { defaults: { model: { primary: "openai-codex/gpt-5.5" } } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     await noteWhatsappResponsivenessHealth({
       cfg,

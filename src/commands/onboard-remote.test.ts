@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { GatewayBonjourBeacon } from "../infra/bonjour-discovery.js";
 import { captureEnv } from "../test-utils/env.js";
 import type { WizardPrompter } from "../wizard/prompts.js";
@@ -11,7 +11,7 @@ const resolveWideAreaDiscoveryDomain = vi.hoisted(() => vi.fn(() => undefined));
 const detectBinary = vi.hoisted(() => vi.fn<(name: string) => Promise<boolean>>());
 const INSECURE_WS_URL_MESSAGE =
   "Use wss:// for remote hosts, or ws://127.0.0.1/localhost via SSH tunnel. " +
-  "Break-glass: NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1 for trusted private networks.";
+  "Break-glass: GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1 for trusted private networks.";
 
 vi.mock("../infra/bonjour-discovery.js", async () => {
   const actual = await vi.importActual<typeof import("../infra/bonjour-discovery.js")>(
@@ -58,14 +58,14 @@ function createGatewayDiscoveryBeacon(): GatewayBonjourBeacon {
 }
 
 describe("promptRemoteGatewayConfig", () => {
-  const envSnapshot = captureEnv(["NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS"]);
+  const envSnapshot = captureEnv(["GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS"]);
 
   async function runRemotePrompt(params: {
     text: WizardPrompter["text"];
     selectResponses: Partial<Record<string, string>>;
     confirm: boolean;
   }) {
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
     const prompter = createPrompter({
       confirm: vi.fn(async () => params.confirm),
       select: createSelectPrompter(params.selectResponses),
@@ -78,7 +78,7 @@ describe("promptRemoteGatewayConfig", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     envSnapshot.restore();
-    delete process.env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS;
+    delete process.env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS;
     detectBinary.mockResolvedValue(false);
     discoverGatewayBeacons.mockResolvedValue([]);
     resolveWideAreaDiscoveryDomain.mockReturnValue(undefined);
@@ -86,7 +86,7 @@ describe("promptRemoteGatewayConfig", () => {
 
   afterEach(() => {
     envSnapshot.restore();
-    delete process.env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS;
+    delete process.env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS;
   });
 
   it("defaults discovered direct remote URLs to wss://", async () => {
@@ -170,7 +170,7 @@ describe("promptRemoteGatewayConfig", () => {
       text,
     });
 
-    const next = await promptRemoteGatewayConfig({} as NexisClawConfig, prompter);
+    const next = await promptRemoteGatewayConfig({} as GreenchClawConfig, prompter);
 
     expect(next.gateway?.mode).toBe("remote");
     expect(next.gateway?.remote?.url).toBe(manualUrl);
@@ -269,7 +269,7 @@ describe("promptRemoteGatewayConfig", () => {
       text,
     });
 
-    const next = await promptRemoteGatewayConfig({} as NexisClawConfig, prompter);
+    const next = await promptRemoteGatewayConfig({} as GreenchClawConfig, prompter);
 
     expect(next.gateway?.remote?.url).toBe("ws://127.0.0.1:18789");
     expect(vi.mocked(select).mock.calls.map(([params]) => params.message)).not.toContain(
@@ -302,13 +302,13 @@ describe("promptRemoteGatewayConfig", () => {
     expect(next.gateway?.remote?.token).toBeUndefined();
   });
 
-  it("allows ws:// hostname remote URLs when NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1", async () => {
-    process.env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
+  it("allows ws:// hostname remote URLs when GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1", async () => {
+    process.env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS = "1";
     const text: WizardPrompter["text"] = vi.fn(async (params) => {
       if (params.message === "Gateway WebSocket URL") {
-        expect(params.validate?.("ws://NexisClaw-gateway.ai:18789")).toBeUndefined();
+        expect(params.validate?.("ws://GreenchClaw-gateway.ai:18789")).toBeUndefined();
         expect(params.validate?.("ws://1.1.1.1:18789")).toBe(INSECURE_WS_URL_MESSAGE);
-        return "ws://NexisClaw-gateway.ai:18789";
+        return "ws://GreenchClaw-gateway.ai:18789";
       }
       return "";
     }) as WizardPrompter["text"];
@@ -320,17 +320,17 @@ describe("promptRemoteGatewayConfig", () => {
     });
 
     expect(next.gateway?.mode).toBe("remote");
-    expect(next.gateway?.remote?.url).toBe("ws://NexisClaw-gateway.ai:18789");
+    expect(next.gateway?.remote?.url).toBe("ws://GreenchClaw-gateway.ai:18789");
   });
 
   it("supports storing remote auth as an external env secret ref", async () => {
-    process.env.NEXISCLAW_GATEWAY_TOKEN = "remote-token-value";
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = "remote-token-value";
     const text: WizardPrompter["text"] = vi.fn(async (params) => {
       if (params.message === "Gateway WebSocket URL") {
         return "wss://remote.example.com:18789";
       }
       if (params.message === "Environment variable name") {
-        return "NEXISCLAW_GATEWAY_TOKEN";
+        return "GREENCHCLAW_GATEWAY_TOKEN";
       }
       return "";
     }) as WizardPrompter["text"];
@@ -348,7 +348,7 @@ describe("promptRemoteGatewayConfig", () => {
       return (params.options[0]?.value ?? "") as never;
     });
 
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
     const prompter = createPrompter({
       confirm: vi.fn(async () => false),
       select,
@@ -362,7 +362,7 @@ describe("promptRemoteGatewayConfig", () => {
     expect(next.gateway?.remote?.token).toEqual({
       source: "env",
       provider: "default",
-      id: "NEXISCLAW_GATEWAY_TOKEN",
+      id: "GREENCHCLAW_GATEWAY_TOKEN",
     });
   });
 
@@ -393,7 +393,7 @@ describe("promptRemoteGatewayConfig", () => {
 
     const cfg = {
       gateway: { remote: { token: "preexisting-remote-token" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const prompter = createPrompter({ confirm, select, text });
 
     const next = await promptRemoteGatewayConfig(cfg, prompter);
@@ -431,7 +431,7 @@ describe("promptRemoteGatewayConfig", () => {
 
     const cfg = {
       gateway: { remote: { password: "preexisting-remote-password" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const prompter = createPrompter({ confirm, select, text });
 
     const next = await promptRemoteGatewayConfig(cfg, prompter);

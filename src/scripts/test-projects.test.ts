@@ -129,11 +129,11 @@ describe("test-projects args", () => {
   });
 
   it("routes boundary targets to the boundary config", () => {
-    expect(buildVitestRunPlans(["src/infra/NexisClaw-root.test.ts"])).toEqual([
+    expect(buildVitestRunPlans(["src/infra/GreenchClaw-root.test.ts"])).toEqual([
       {
         config: "test/vitest/vitest.boundary.config.ts",
         forwardedArgs: [],
-        includePatterns: ["src/infra/NexisClaw-root.test.ts"],
+        includePatterns: ["src/infra/GreenchClaw-root.test.ts"],
         watchMode: false,
       },
     ]);
@@ -417,11 +417,11 @@ describe("test-projects args", () => {
   });
 
   it("routes infra targets to the infra config", () => {
-    expect(buildVitestRunPlans(["src/infra/NexisClaw-root.test.ts"])).toEqual([
+    expect(buildVitestRunPlans(["src/infra/GreenchClaw-root.test.ts"])).toEqual([
       {
         config: "test/vitest/vitest.boundary.config.ts",
         forwardedArgs: [],
-        includePatterns: ["src/infra/NexisClaw-root.test.ts"],
+        includePatterns: ["src/infra/GreenchClaw-root.test.ts"],
         watchMode: false,
       },
     ]);
@@ -461,27 +461,27 @@ describe("test-projects args", () => {
   it("caps project-level parallelism when the Vitest worker budget is conservative", () => {
     expect(
       resolveParallelFullSuiteConcurrency(58, {
-        NEXISCLAW_VITEST_MAX_WORKERS: "1",
+        GREENCHCLAW_VITEST_MAX_WORKERS: "1",
       }),
     ).toBe(1);
 
     expect(
       resolveParallelFullSuiteConcurrency(58, {
-        NEXISCLAW_TEST_WORKERS: "1",
+        GREENCHCLAW_TEST_WORKERS: "1",
       }),
     ).toBe(1);
   });
 
   it("keeps conservative core full-suite runs on aggregate shards", () => {
-    const originalVitestMaxWorkers = process.env.NEXISCLAW_VITEST_MAX_WORKERS;
-    const originalTestWorkers = process.env.NEXISCLAW_TEST_WORKERS;
-    const originalProjectParallel = process.env.NEXISCLAW_TEST_PROJECTS_PARALLEL;
-    const originalLeafShards = process.env.NEXISCLAW_TEST_PROJECTS_LEAF_SHARDS;
+    const originalVitestMaxWorkers = process.env.GREENCHCLAW_VITEST_MAX_WORKERS;
+    const originalTestWorkers = process.env.GREENCHCLAW_TEST_WORKERS;
+    const originalProjectParallel = process.env.GREENCHCLAW_TEST_PROJECTS_PARALLEL;
+    const originalLeafShards = process.env.GREENCHCLAW_TEST_PROJECTS_LEAF_SHARDS;
     try {
-      process.env.NEXISCLAW_VITEST_MAX_WORKERS = "1";
-      delete process.env.NEXISCLAW_TEST_WORKERS;
-      delete process.env.NEXISCLAW_TEST_PROJECTS_PARALLEL;
-      delete process.env.NEXISCLAW_TEST_PROJECTS_LEAF_SHARDS;
+      process.env.GREENCHCLAW_VITEST_MAX_WORKERS = "1";
+      delete process.env.GREENCHCLAW_TEST_WORKERS;
+      delete process.env.GREENCHCLAW_TEST_PROJECTS_PARALLEL;
+      delete process.env.GREENCHCLAW_TEST_PROJECTS_LEAF_SHARDS;
 
       const configs = buildFullSuiteVitestRunPlans([]).map((plan) => plan.config);
 
@@ -493,24 +493,24 @@ describe("test-projects args", () => {
       expect(configs).not.toContain("test/vitest/vitest.plugins.config.ts");
     } finally {
       if (originalVitestMaxWorkers === undefined) {
-        delete process.env.NEXISCLAW_VITEST_MAX_WORKERS;
+        delete process.env.GREENCHCLAW_VITEST_MAX_WORKERS;
       } else {
-        process.env.NEXISCLAW_VITEST_MAX_WORKERS = originalVitestMaxWorkers;
+        process.env.GREENCHCLAW_VITEST_MAX_WORKERS = originalVitestMaxWorkers;
       }
       if (originalTestWorkers === undefined) {
-        delete process.env.NEXISCLAW_TEST_WORKERS;
+        delete process.env.GREENCHCLAW_TEST_WORKERS;
       } else {
-        process.env.NEXISCLAW_TEST_WORKERS = originalTestWorkers;
+        process.env.GREENCHCLAW_TEST_WORKERS = originalTestWorkers;
       }
       if (originalProjectParallel === undefined) {
-        delete process.env.NEXISCLAW_TEST_PROJECTS_PARALLEL;
+        delete process.env.GREENCHCLAW_TEST_PROJECTS_PARALLEL;
       } else {
-        process.env.NEXISCLAW_TEST_PROJECTS_PARALLEL = originalProjectParallel;
+        process.env.GREENCHCLAW_TEST_PROJECTS_PARALLEL = originalProjectParallel;
       }
       if (originalLeafShards === undefined) {
-        delete process.env.NEXISCLAW_TEST_PROJECTS_LEAF_SHARDS;
+        delete process.env.GREENCHCLAW_TEST_PROJECTS_LEAF_SHARDS;
       } else {
-        process.env.NEXISCLAW_TEST_PROJECTS_LEAF_SHARDS = originalLeafShards;
+        process.env.GREENCHCLAW_TEST_PROJECTS_LEAF_SHARDS = originalLeafShards;
       }
     }
   });
@@ -519,8 +519,8 @@ describe("test-projects args", () => {
     expect(
       resolveParallelFullSuiteConcurrency(58, {
         GITHUB_ACTIONS: "true",
-        NEXISCLAW_TEST_PROJECTS_PARALLEL: "3",
-        NEXISCLAW_VITEST_MAX_WORKERS: "1",
+        GREENCHCLAW_TEST_PROJECTS_PARALLEL: "3",
+        GREENCHCLAW_VITEST_MAX_WORKERS: "1",
       }),
     ).toBe(3);
   });
@@ -530,7 +530,7 @@ describe("test-projects args", () => {
       resolveParallelFullSuiteConcurrency(
         58,
         {
-          NEXISCLAW_TEST_PROJECTS_LEAF_SHARDS: "1",
+          GREENCHCLAW_TEST_PROJECTS_LEAF_SHARDS: "1",
         },
         {
           cpuCount: 8,
@@ -561,10 +561,10 @@ describe("test-projects args", () => {
 
     const firstEnv = specs[0]?.env;
     expect(firstEnv?.KEEP_ME).toBe("1");
-    expect(firstEnv?.NEXISCLAW_VITEST_FS_MODULE_CACHE_PATH).toBe(
+    expect(firstEnv?.GREENCHCLAW_VITEST_FS_MODULE_CACHE_PATH).toBe(
       "/repo/node_modules/.experimental-vitest-cache/0-test-vitest-vitest.gateway.config.ts",
     );
-    expect(specs[1]?.env.NEXISCLAW_VITEST_FS_MODULE_CACHE_PATH).toBe(
+    expect(specs[1]?.env.GREENCHCLAW_VITEST_FS_MODULE_CACHE_PATH).toBe(
       "/repo/node_modules/.experimental-vitest-cache/1-test-vitest-vitest.gateway-server.config.ts",
     );
   });
@@ -581,7 +581,7 @@ describe("test-projects args", () => {
       applyParallelVitestCachePaths(specs, {
         cwd: "/repo",
         env: {
-          NEXISCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/cache",
+          GREENCHCLAW_VITEST_FS_MODULE_CACHE_PATH: "/tmp/cache",
         },
       }),
     ).toBe(specs);
@@ -917,7 +917,7 @@ describe("test-projects args", () => {
     expect(targetArgs).toEqual(["src/plugin-sdk/core.test.ts"]);
     expect(
       resolveChangedTargetArgs(["--changed=origin/main"], process.cwd(), () => changedPaths, {
-        env: { NEXISCLAW_TEST_CHANGED_BROAD: "1" },
+        env: { GREENCHCLAW_TEST_CHANGED_BROAD: "1" },
       }),
     ).toEqual(["src/plugin-sdk/core.test.ts", "extensions"]);
     expect(plans[0]).toEqual({
@@ -991,12 +991,12 @@ describe("test-projects args", () => {
     expect(spec?.includePatterns).toEqual([
       "extensions/discord/src/monitor/message-handler.preflight.test.ts",
     ]);
-    expect(spec?.includeFilePath).toContain("NexisClaw-vitest-include-");
-    expect(spec?.env.NEXISCLAW_VITEST_INCLUDE_FILE).toBe(spec?.includeFilePath);
+    expect(spec?.includeFilePath).toContain("GreenchClaw-vitest-include-");
+    expect(spec?.env.GREENCHCLAW_VITEST_INCLUDE_FILE).toBe(spec?.includeFilePath);
   });
 
   it("skips channel contract configs with no matching external include patterns", () => {
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-contract-include-"));
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-contract-include-"));
     try {
       const includeFile = path.join(tempDir, "include.json");
       fs.writeFileSync(
@@ -1016,7 +1016,7 @@ describe("test-projects args", () => {
         ],
         {
           baseEnv: {
-            NEXISCLAW_VITEST_INCLUDE_FILE: includeFile,
+            GREENCHCLAW_VITEST_INCLUDE_FILE: includeFile,
           } as NodeJS.ProcessEnv,
         },
       );

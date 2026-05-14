@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { resolveDefaultAgentWorkspaceDir } from "../agents/workspace.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isPathInside } from "../infra/path-guards.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { resolveHomeDir, resolveUserPath, shortenHomeInString } from "../utils.js";
@@ -19,7 +19,7 @@ type CleanupResolvedPaths = {
   oauthInsideState: boolean;
 };
 
-function collectWorkspaceDirs(cfg: NexisClawConfig | undefined): string[] {
+function collectWorkspaceDirs(cfg: GreenchClawConfig | undefined): string[] {
   const dirs = new Set<string>();
   const defaults = cfg?.agents?.defaults;
   if (typeof defaults?.workspace === "string" && defaults.workspace.trim()) {
@@ -39,7 +39,7 @@ function collectWorkspaceDirs(cfg: NexisClawConfig | undefined): string[] {
 }
 
 export function buildCleanupPlan(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   stateDir: string;
   configPath: string;
   oauthDir: string;

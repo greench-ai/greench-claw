@@ -2,7 +2,7 @@ import {
   getOAuthApiKey as getOAuthApiKeyFromPi,
   refreshOpenAICodexToken as refreshOpenAICodexTokenFromPi,
 } from "@earendil-works/pi-ai/oauth";
-import { ensureGlobalUndiciEnvProxyDispatcher } from "NexisClaw/plugin-sdk/runtime-env";
+import { ensureGlobalUndiciEnvProxyDispatcher } from "GreenchClaw/plugin-sdk/runtime-env";
 
 type OpenAICodexProviderRuntimeDeps = {
   ensureGlobalUndiciEnvProxyDispatcher: typeof ensureGlobalUndiciEnvProxyDispatcher;

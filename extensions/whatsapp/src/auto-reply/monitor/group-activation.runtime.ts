@@ -1,1 +1,1 @@
-export { normalizeGroupActivation } from "NexisClaw/plugin-sdk/group-activation";
+export { normalizeGroupActivation } from "GreenchClaw/plugin-sdk/group-activation";

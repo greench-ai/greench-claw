@@ -43,45 +43,45 @@ function expectSpawn(mock: unknown, callIndex: number, command: string, args: Ar
 describe("gateway-watch tmux wrapper", () => {
   it("derives stable session names from profile and port", () => {
     expect(resolveGatewayWatchTmuxSessionName({ args: ["gateway", "--force"], env: {} })).toBe(
-      "NexisClaw-gateway-watch-main",
+      "GreenchClaw-gateway-watch-main",
     );
     expect(
       resolveGatewayWatchTmuxSessionName({
         args: ["gateway", "--force", "--port", "19001"],
-        env: { NEXISCLAW_PROFILE: "Dev Profile" },
+        env: { GREENCHCLAW_PROFILE: "Dev Profile" },
       }),
-    ).toBe("NexisClaw-gateway-watch-dev-profile-19001");
+    ).toBe("GreenchClaw-gateway-watch-dev-profile-19001");
     expect(
       resolveGatewayWatchTmuxSessionName({
         args: ["--dev", "gateway", "--port=18789"],
         env: {},
       }),
-    ).toBe("NexisClaw-gateway-watch-dev");
+    ).toBe("GreenchClaw-gateway-watch-dev");
   });
 
   it("builds a login-shell command that runs the raw watcher in the repo", () => {
     const command = buildGatewayWatchTmuxCommand({
       args: ["gateway", "--force", "--raw-stream-path", "a b.jsonl"],
-      cwd: "/repo with spaces/NexisClaw",
+      cwd: "/repo with spaces/GreenchClaw",
       env: {
-        NEXISCLAW_GATEWAY_PORT: "19001",
-        NEXISCLAW_PROFILE: "Dev Profile",
-        NEXISCLAW_TRACE_SYNC_IO: "0",
+        GREENCHCLAW_GATEWAY_PORT: "19001",
+        GREENCHCLAW_PROFILE: "Dev Profile",
+        GREENCHCLAW_TRACE_SYNC_IO: "0",
         SHELL: "/bin/zsh",
       },
       nodePath: "/opt/node",
-      sessionName: "NexisClaw-gateway-watch-main",
+      sessionName: "GreenchClaw-gateway-watch-main",
     });
 
     expect(command).toContain("exec '/bin/zsh' -lc");
-    expect(command).toContain("/repo with spaces/NexisClaw");
-    expect(command).toContain("'NEXISCLAW_GATEWAY_WATCH_TMUX_CHILD=1'");
-    expect(command).toContain("'NEXISCLAW_GATEWAY_WATCH_SESSION=NexisClaw-gateway-watch-main'");
+    expect(command).toContain("/repo with spaces/GreenchClaw");
+    expect(command).toContain("'GREENCHCLAW_GATEWAY_WATCH_TMUX_CHILD=1'");
+    expect(command).toContain("'GREENCHCLAW_GATEWAY_WATCH_SESSION=GreenchClaw-gateway-watch-main'");
     expect(command).toContain("'\\''-u'\\'' '\\''NO_COLOR'\\''");
     expect(command).toContain("'FORCE_COLOR=1'");
-    expect(command).toContain("'NEXISCLAW_GATEWAY_PORT=19001'");
-    expect(command).toContain("'NEXISCLAW_PROFILE=Dev Profile'");
-    expect(command).toContain("'NEXISCLAW_TRACE_SYNC_IO=0'");
+    expect(command).toContain("'GREENCHCLAW_GATEWAY_PORT=19001'");
+    expect(command).toContain("'GREENCHCLAW_PROFILE=Dev Profile'");
+    expect(command).toContain("'GREENCHCLAW_TRACE_SYNC_IO=0'");
     expect(command).toContain("/opt/node");
     expect(command).toContain("scripts/watch-node.mjs");
     expect(command).toContain("gateway");
@@ -111,8 +111,10 @@ describe("gateway-watch tmux wrapper", () => {
 
     expect(code).toBe(0);
     const command = spawnSync.mock.calls.at(1)?.[1]?.[6] as string;
-    expect(command).toContain("'NEXISCLAW_RUN_NODE_CPU_PROF_DIR=.artifacts/gateway-watch-profiles'");
-    expect(command).toContain("'NEXISCLAW_TRACE_SYNC_IO=0'");
+    expect(command).toContain(
+      "'GREENCHCLAW_RUN_NODE_CPU_PROF_DIR=.artifacts/gateway-watch-profiles'",
+    );
+    expect(command).toContain("'GREENCHCLAW_TRACE_SYNC_IO=0'");
     expect(command).not.toContain("--benchmark");
     expect(command).toContain("'gateway'");
     expect(command).toContain("'--force'");
@@ -134,7 +136,7 @@ describe("gateway-watch tmux wrapper", () => {
     const code = runGatewayWatchTmuxMain({
       args: ["gateway", "--force", "--benchmark"],
       cwd: "/repo",
-      env: { NEXISCLAW_TRACE_SYNC_IO: "1", SHELL: "/bin/zsh" },
+      env: { GREENCHCLAW_TRACE_SYNC_IO: "1", SHELL: "/bin/zsh" },
       nodePath: "/node",
       spawnSync,
       stderr: stderr.stream,
@@ -143,11 +145,11 @@ describe("gateway-watch tmux wrapper", () => {
 
     expect(code).toBe(0);
     const command = spawnSync.mock.calls.at(1)?.[1]?.[6] as string;
-    expect(command).toContain("'NEXISCLAW_TRACE_SYNC_IO=1'");
+    expect(command).toContain("'GREENCHCLAW_TRACE_SYNC_IO=1'");
     expect(command).toContain(
-      "'NEXISCLAW_RUN_NODE_OUTPUT_LOG=.artifacts/gateway-watch-profiles/gateway-watch-output.log'",
+      "'GREENCHCLAW_RUN_NODE_OUTPUT_LOG=.artifacts/gateway-watch-profiles/gateway-watch-output.log'",
     );
-    expect(command).toContain("'NEXISCLAW_RUN_NODE_FILTER_SYNC_IO_STDERR=1'");
+    expect(command).toContain("'GREENCHCLAW_RUN_NODE_FILTER_SYNC_IO_STDERR=1'");
     expect(stderr.chunks.join("")).toContain(
       "gateway:watch benchmark trace output: .artifacts/gateway-watch-profiles/gateway-watch-output.log",
     );
@@ -175,7 +177,9 @@ describe("gateway-watch tmux wrapper", () => {
 
     expect(code).toBe(0);
     const command = spawnSync.mock.calls.at(1)?.[1]?.[6] as string;
-    expect(command).toContain("'NEXISCLAW_RUN_NODE_CPU_PROF_DIR=.artifacts/gateway-watch-profiles'");
+    expect(command).toContain(
+      "'GREENCHCLAW_RUN_NODE_CPU_PROF_DIR=.artifacts/gateway-watch-profiles'",
+    );
     expect(command).not.toContain("--benchmark-no-force");
     expect(command).toContain("'gateway'");
     expect(command).not.toContain("'--force'");
@@ -192,7 +196,7 @@ describe("gateway-watch tmux wrapper", () => {
         SHELL: "/bin/zsh",
       },
       nodePath: "/opt/node",
-      sessionName: "NexisClaw-gateway-watch-main",
+      sessionName: "GreenchClaw-gateway-watch-main",
     });
 
     expect(command).toContain("'FORCE_COLOR=0'");
@@ -222,7 +226,7 @@ describe("gateway-watch tmux wrapper", () => {
 
     expect(code).toBe(0);
     expect(
-      expectSpawn(spawnSync, 0, "tmux", ["has-session", "-t", "NexisClaw-gateway-watch-main"])
+      expectSpawn(spawnSync, 0, "tmux", ["has-session", "-t", "GreenchClaw-gateway-watch-main"])
         .encoding,
     ).toBe("utf8");
     const newSessionCall = spawnCall(spawnSync, 1);
@@ -232,7 +236,7 @@ describe("gateway-watch tmux wrapper", () => {
       "new-session",
       "-d",
       "-s",
-      "NexisClaw-gateway-watch-main",
+      "GreenchClaw-gateway-watch-main",
       "-c",
       "/repo",
     ]);
@@ -243,8 +247,8 @@ describe("gateway-watch tmux wrapper", () => {
         "set-option",
         "-q",
         "-t",
-        "NexisClaw-gateway-watch-main",
-        "@NexisClaw.gateway_watch.cwd",
+        "GreenchClaw-gateway-watch-main",
+        "@GreenchClaw.gateway_watch.cwd",
         "/repo",
       ]).encoding,
     ).toBe("utf8");
@@ -252,17 +256,17 @@ describe("gateway-watch tmux wrapper", () => {
       expectSpawn(spawnSync, 3, "tmux", [
         "set-environment",
         "-t",
-        "NexisClaw-gateway-watch-main",
-        "NEXISCLAW_GATEWAY_WATCH_CWD",
+        "GreenchClaw-gateway-watch-main",
+        "GREENCHCLAW_GATEWAY_WATCH_CWD",
         "/repo",
       ]).encoding,
     ).toBe("utf8");
     expect(stderr.chunks.join("")).toContain(
-      "gateway:watch started in tmux session NexisClaw-gateway-watch-main",
+      "gateway:watch started in tmux session GreenchClaw-gateway-watch-main",
     );
-    expect(stdout.chunks.join("")).toContain("tmux attach -t NexisClaw-gateway-watch-main");
+    expect(stdout.chunks.join("")).toContain("tmux attach -t GreenchClaw-gateway-watch-main");
     expect(stdout.chunks.join("")).toContain(
-      "tmux show-options -v -t NexisClaw-gateway-watch-main @NexisClaw.gateway_watch.cwd",
+      "tmux show-options -v -t GreenchClaw-gateway-watch-main @GreenchClaw.gateway_watch.cwd",
     );
   });
 
@@ -291,7 +295,7 @@ describe("gateway-watch tmux wrapper", () => {
 
     expect(code).toBe(0);
     expect(
-      expectSpawn(spawnSync, 4, "tmux", ["attach-session", "-t", "NexisClaw-gateway-watch-main"])
+      expectSpawn(spawnSync, 4, "tmux", ["attach-session", "-t", "GreenchClaw-gateway-watch-main"])
         .stdio,
     ).toBe("inherit");
     expect(stdout.chunks.join("")).not.toContain("tmux attach -t");
@@ -322,7 +326,7 @@ describe("gateway-watch tmux wrapper", () => {
 
     expect(code).toBe(0);
     expect(
-      expectSpawn(spawnSync, 4, "tmux", ["switch-client", "-t", "NexisClaw-gateway-watch-main"])
+      expectSpawn(spawnSync, 4, "tmux", ["switch-client", "-t", "GreenchClaw-gateway-watch-main"])
         .stdio,
     ).toBe("inherit");
   });
@@ -351,7 +355,7 @@ describe("gateway-watch tmux wrapper", () => {
 
     expect(code).toBe(0);
     expect(spawnSync).toHaveBeenCalledTimes(4);
-    expect(stdout.chunks.join("")).toContain("tmux attach -t NexisClaw-gateway-watch-main");
+    expect(stdout.chunks.join("")).toContain("tmux attach -t GreenchClaw-gateway-watch-main");
   });
 
   it("respawns the existing tmux pane on repeated runs", () => {
@@ -367,7 +371,7 @@ describe("gateway-watch tmux wrapper", () => {
     const code = runGatewayWatchTmuxMain({
       args: ["gateway", "--force", "--port=19001"],
       cwd: "/repo",
-      env: { NEXISCLAW_PROFILE: "dev", SHELL: "/bin/zsh" },
+      env: { GREENCHCLAW_PROFILE: "dev", SHELL: "/bin/zsh" },
       nodePath: "/node",
       spawnSync,
       stderr: stderr.stream,
@@ -382,14 +386,14 @@ describe("gateway-watch tmux wrapper", () => {
       "respawn-pane",
       "-k",
       "-t",
-      "NexisClaw-gateway-watch-dev-19001",
+      "GreenchClaw-gateway-watch-dev-19001",
       "-c",
       "/repo",
     ]);
     expect(String(respawnArgs[6])).toContain("scripts/watch-node.mjs");
     expect(requireRecord(respawnCall[2], "spawn options").encoding).toBe("utf8");
     expect(stderr.chunks.join("")).toContain(
-      "gateway:watch restarted in tmux session NexisClaw-gateway-watch-dev-19001",
+      "gateway:watch restarted in tmux session GreenchClaw-gateway-watch-dev-19001",
     );
   });
 
@@ -423,14 +427,14 @@ describe("gateway-watch tmux wrapper", () => {
       "respawn-pane",
       "-k",
       "-t",
-      "NexisClaw-gateway-watch-main",
+      "GreenchClaw-gateway-watch-main",
       "-c",
       "/repo",
     ]);
     expect(String(staleRespawnArgs[6])).toContain("scripts/watch-node.mjs");
     expect(requireRecord(staleRespawnCall[2], "spawn options").encoding).toBe("utf8");
     expect(
-      expectSpawn(spawnSync, 2, "tmux", ["kill-session", "-t", "NexisClaw-gateway-watch-main"])
+      expectSpawn(spawnSync, 2, "tmux", ["kill-session", "-t", "GreenchClaw-gateway-watch-main"])
         .encoding,
     ).toBe("utf8");
     const recreatedCall = spawnCall(spawnSync, 3);
@@ -440,7 +444,7 @@ describe("gateway-watch tmux wrapper", () => {
       "new-session",
       "-d",
       "-s",
-      "NexisClaw-gateway-watch-main",
+      "GreenchClaw-gateway-watch-main",
       "-c",
       "/repo",
     ]);
@@ -454,7 +458,7 @@ describe("gateway-watch tmux wrapper", () => {
     const code = runGatewayWatchTmuxMain({
       args: ["gateway", "--force"],
       cwd: "/repo",
-      env: { NEXISCLAW_GATEWAY_WATCH_TMUX: "0" },
+      env: { GREENCHCLAW_GATEWAY_WATCH_TMUX: "0" },
       nodePath: "/node",
       spawnSync,
     });
@@ -465,7 +469,7 @@ describe("gateway-watch tmux wrapper", () => {
       ["scripts/watch-node.mjs", "gateway", "--force"],
       {
         cwd: "/repo",
-        env: { NEXISCLAW_GATEWAY_WATCH_TMUX: "0" },
+        env: { GREENCHCLAW_GATEWAY_WATCH_TMUX: "0" },
         stdio: "inherit",
       },
     );

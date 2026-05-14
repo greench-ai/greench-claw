@@ -92,7 +92,7 @@ setCliRunnerExecuteTestDeps({
 setCliRunnerPrepareTestDeps({
   makeBootstrapWarn: () => () => {},
   resolveBootstrapContextForRun: hoisted.resolveBootstrapContextForRunMock,
-  resolveNexisClawReferencePaths: async () => ({ docsPath: null, sourcePath: null }),
+  resolveGreenchClawReferencePaths: async () => ({ docsPath: null, sourcePath: null }),
 });
 
 type MockRunExit = {
@@ -154,7 +154,7 @@ export function restoreCliRunnerPrepareTestDeps() {
   setCliRunnerPrepareTestDeps({
     makeBootstrapWarn: () => () => {},
     resolveBootstrapContextForRun: hoisted.resolveBootstrapContextForRunMock,
-    resolveNexisClawReferencePaths: async () => ({ docsPath: null, sourcePath: null }),
+    resolveGreenchClawReferencePaths: async () => ({ docsPath: null, sourcePath: null }),
   });
 }
 

@@ -1,8 +1,11 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { readJsonFileWithFallback, writeJsonFileAtomically } from "NexisClaw/plugin-sdk/json-store";
-import { resolveStateDir } from "NexisClaw/plugin-sdk/state-paths";
+import {
+  readJsonFileWithFallback,
+  writeJsonFileAtomically,
+} from "GreenchClaw/plugin-sdk/json-store";
+import { resolveStateDir } from "GreenchClaw/plugin-sdk/state-paths";
 
 const STORE_VERSION = 2;
 

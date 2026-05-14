@@ -9,7 +9,7 @@ describe("SessionHistorySseState", () => {
       {
         role: "assistant",
         content: [{ type: "text", text: "stale disk message" }],
-        __NexisClaw: { seq: 1 },
+        __GreenchClaw: { seq: 1 },
       },
     ]);
     try {
@@ -19,7 +19,7 @@ describe("SessionHistorySseState", () => {
           {
             role: "assistant",
             content: [{ type: "text", text: "fresh snapshot message" }],
-            __NexisClaw: { seq: 2 },
+            __GreenchClaw: { seq: 2 },
           },
         ],
       });
@@ -29,16 +29,16 @@ describe("SessionHistorySseState", () => {
         (
           state.snapshot().messages[0] as {
             content?: Array<{ text?: string }>;
-            __NexisClaw?: { seq?: number };
+            __GreenchClaw?: { seq?: number };
           }
         ).content?.[0]?.text,
       ).toBe("fresh snapshot message");
       expect(
         (
           state.snapshot().messages[0] as {
-            __NexisClaw?: { seq?: number };
+            __GreenchClaw?: { seq?: number };
           }
-        ).__NexisClaw?.seq,
+        ).__GreenchClaw?.seq,
       ).toBe(2);
 
       const appended = state.appendInlineMessage({
@@ -61,19 +61,19 @@ describe("SessionHistorySseState", () => {
         {
           role: "assistant",
           content: [{ type: "text", text: "first" }],
-          __NexisClaw: { seq: 1 },
+          __GreenchClaw: { seq: 1 },
         },
         {
           role: "assistant",
           content: [{ type: "text", text: "second" }],
-          __NexisClaw: { seq: 2 },
+          __GreenchClaw: { seq: 2 },
         },
       ],
       limit: 1,
     });
 
     expect(snapshot.history.items).toBe(snapshot.history.messages);
-    expect(snapshot.history.messages[0]?.__NexisClaw?.seq).toBe(2);
+    expect(snapshot.history.messages[0]?.__GreenchClaw?.seq).toBe(2);
     expect(snapshot.rawTranscriptSeq).toBe(2);
   });
 
@@ -83,7 +83,7 @@ describe("SessionHistorySseState", () => {
         {
           role: "assistant",
           content: [{ type: "text", text: "tail" }],
-          __NexisClaw: { seq: 99 },
+          __GreenchClaw: { seq: 99 },
         },
       ],
       limit: 1,
@@ -105,7 +105,7 @@ describe("SessionHistorySseState", () => {
           {
             role: "assistant",
             content: [{ type: "text", text: "tail two" }],
-            __NexisClaw: { seq: 8 },
+            __GreenchClaw: { seq: 8 },
           },
         ],
         totalMessages: 8,
@@ -117,7 +117,7 @@ describe("SessionHistorySseState", () => {
           {
             role: "assistant",
             content: [{ type: "text", text: "tail one" }],
-            __NexisClaw: { seq: 7 },
+            __GreenchClaw: { seq: 7 },
           },
         ],
         rawTranscriptSeq: 7,
@@ -125,12 +125,12 @@ describe("SessionHistorySseState", () => {
         limit: 1,
       });
 
-      expect(state.snapshot().messages[0]?.__NexisClaw?.seq).toBe(7);
+      expect(state.snapshot().messages[0]?.__GreenchClaw?.seq).toBe(7);
       const refreshed = await state.refreshAsync();
 
       expect(refreshed.hasMore).toBe(true);
       expect(refreshed.nextCursor).toBe("8");
-      expect(refreshed.messages[0]?.__NexisClaw?.seq).toBe(8);
+      expect(refreshed.messages[0]?.__GreenchClaw?.seq).toBe(8);
       expect(tailReadSpy).toHaveBeenCalledTimes(1);
       expect(fullReadSpy).not.toHaveBeenCalled();
     } finally {
@@ -148,15 +148,15 @@ describe("SessionHistorySseState", () => {
             {
               type: "text",
               text: [
-                "<<<BEGIN_NEXISCLAW_INTERNAL_CONTEXT>>>",
+                "<<<BEGIN_GREENCHCLAW_INTERNAL_CONTEXT>>>",
                 "secret runtime context",
-                "<<<END_NEXISCLAW_INTERNAL_CONTEXT>>>",
+                "<<<END_GREENCHCLAW_INTERNAL_CONTEXT>>>",
                 "",
                 "visible ask",
               ].join("\n"),
             },
           ],
-          __NexisClaw: { seq: 1 },
+          __GreenchClaw: { seq: 1 },
         },
       ],
     });
@@ -180,18 +180,18 @@ describe("SessionHistorySseState", () => {
             {
               type: "text",
               text: [
-                "<<<BEGIN_NEXISCLAW_INTERNAL_CONTEXT>>>",
+                "<<<BEGIN_GREENCHCLAW_INTERNAL_CONTEXT>>>",
                 "subagent completion payload",
-                "<<<END_NEXISCLAW_INTERNAL_CONTEXT>>>",
+                "<<<END_GREENCHCLAW_INTERNAL_CONTEXT>>>",
               ].join("\n"),
             },
           ],
-          __NexisClaw: { seq: 1 },
+          __GreenchClaw: { seq: 1 },
         },
         {
           role: "assistant",
           content: [{ type: "text", text: "visible answer" }],
-          __NexisClaw: { seq: 2 },
+          __GreenchClaw: { seq: 2 },
         },
       ],
     });
@@ -200,7 +200,7 @@ describe("SessionHistorySseState", () => {
       {
         role: "assistant",
         content: [{ type: "text", text: "visible answer" }],
-        __NexisClaw: { seq: 2 },
+        __GreenchClaw: { seq: 2 },
       },
     ]);
   });
@@ -215,10 +215,10 @@ describe("SessionHistorySseState", () => {
               type: "text",
               text: [
                 "[Inter-session message] sourceSession=agent:main:subagent:child sourceChannel=webchat sourceTool=subagent_announce isUser=false",
-                "This content was routed by NexisClaw from another session or internal tool.",
-                "<<<BEGIN_NEXISCLAW_INTERNAL_CONTEXT>>>",
+                "This content was routed by GreenchClaw from another session or internal tool.",
+                "<<<BEGIN_GREENCHCLAW_INTERNAL_CONTEXT>>>",
                 "subagent completion payload",
-                "<<<END_NEXISCLAW_INTERNAL_CONTEXT>>>",
+                "<<<END_GREENCHCLAW_INTERNAL_CONTEXT>>>",
               ].join("\n"),
             },
           ],
@@ -227,12 +227,12 @@ describe("SessionHistorySseState", () => {
             sourceSessionKey: "agent:main:subagent:child",
             sourceTool: "subagent_announce",
           },
-          __NexisClaw: { seq: 1 },
+          __GreenchClaw: { seq: 1 },
         },
         {
           role: "assistant",
           content: [{ type: "text", text: "clean child result" }],
-          __NexisClaw: { seq: 2 },
+          __GreenchClaw: { seq: 2 },
         },
       ],
     });
@@ -241,7 +241,7 @@ describe("SessionHistorySseState", () => {
       {
         role: "assistant",
         content: [{ type: "text", text: "clean child result" }],
-        __NexisClaw: { seq: 2 },
+        __GreenchClaw: { seq: 2 },
       },
     ]);
   });
@@ -252,22 +252,22 @@ describe("SessionHistorySseState", () => {
         {
           role: "user",
           content: `${HEARTBEAT_PROMPT}\nWhen reading HEARTBEAT.md, use workspace file /tmp/HEARTBEAT.md (exact case). Do not read docs/heartbeat.md.`,
-          __NexisClaw: { seq: 1 },
+          __GreenchClaw: { seq: 1 },
         },
         {
           role: "assistant",
           content: [{ type: "text", text: "HEARTBEAT_OK" }],
-          __NexisClaw: { seq: 2 },
+          __GreenchClaw: { seq: 2 },
         },
         {
           role: "user",
           content: HEARTBEAT_PROMPT,
-          __NexisClaw: { seq: 3 },
+          __GreenchClaw: { seq: 3 },
         },
         {
           role: "assistant",
           content: [{ type: "text", text: "Disk usage crossed 95 percent." }],
-          __NexisClaw: { seq: 4 },
+          __GreenchClaw: { seq: 4 },
         },
       ],
     });
@@ -276,7 +276,7 @@ describe("SessionHistorySseState", () => {
       {
         role: "assistant",
         content: [{ type: "text", text: "Disk usage crossed 95 percent." }],
-        __NexisClaw: { seq: 4 },
+        __GreenchClaw: { seq: 4 },
       },
     ]);
     expect(snapshot.rawTranscriptSeq).toBe(4);
@@ -289,7 +289,7 @@ describe("SessionHistorySseState", () => {
         {
           role: "assistant",
           content: [{ type: "text", text: "already visible" }],
-          __NexisClaw: { seq: 1 },
+          __GreenchClaw: { seq: 1 },
         },
       ],
     });
@@ -318,9 +318,9 @@ describe("SessionHistorySseState", () => {
             {
               type: "text",
               text: [
-                "<<<BEGIN_NEXISCLAW_INTERNAL_CONTEXT>>>",
+                "<<<BEGIN_GREENCHCLAW_INTERNAL_CONTEXT>>>",
                 "runtime details",
-                "<<<END_NEXISCLAW_INTERNAL_CONTEXT>>>",
+                "<<<END_GREENCHCLAW_INTERNAL_CONTEXT>>>",
               ].join("\n"),
             },
           ],

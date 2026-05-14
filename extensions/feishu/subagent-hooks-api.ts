@@ -1,4 +1,4 @@
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/channel-entry-contract";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/channel-entry-contract";
 
 type FeishuSubagentHooksModule = typeof import("./src/subagent-hooks.js");
 
@@ -9,7 +9,7 @@ function loadFeishuSubagentHooksModule() {
   return feishuSubagentHooksPromise;
 }
 
-export function registerFeishuSubagentHooks(api: NexisClawPluginApi): void {
+export function registerFeishuSubagentHooks(api: GreenchClawPluginApi): void {
   api.on("subagent_spawning", async (event, ctx) => {
     const { handleFeishuSubagentSpawning } = await loadFeishuSubagentHooksModule();
     return await handleFeishuSubagentSpawning(event, ctx);

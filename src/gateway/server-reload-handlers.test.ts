@@ -160,10 +160,10 @@ describe("gateway restart deferral preflight", () => {
 
 describe("gateway plugin hot reload handlers", () => {
   it("stops removed channel plugins from broad activation before swapping plugin runtime", async () => {
-    const previousSkipChannels = process.env.NEXISCLAW_SKIP_CHANNELS;
-    const previousSkipProviders = process.env.NEXISCLAW_SKIP_PROVIDERS;
-    delete process.env.NEXISCLAW_SKIP_CHANNELS;
-    delete process.env.NEXISCLAW_SKIP_PROVIDERS;
+    const previousSkipChannels = process.env.GREENCHCLAW_SKIP_CHANNELS;
+    const previousSkipProviders = process.env.GREENCHCLAW_SKIP_PROVIDERS;
+    delete process.env.GREENCHCLAW_SKIP_CHANNELS;
+    delete process.env.GREENCHCLAW_SKIP_PROVIDERS;
     const cron = { start: vi.fn(async () => {}), stop: vi.fn() };
     const heartbeatRunner = {
       stop: vi.fn(),
@@ -234,14 +234,14 @@ describe("gateway plugin hot reload handlers", () => {
       );
     } finally {
       if (previousSkipChannels === undefined) {
-        delete process.env.NEXISCLAW_SKIP_CHANNELS;
+        delete process.env.GREENCHCLAW_SKIP_CHANNELS;
       } else {
-        process.env.NEXISCLAW_SKIP_CHANNELS = previousSkipChannels;
+        process.env.GREENCHCLAW_SKIP_CHANNELS = previousSkipChannels;
       }
       if (previousSkipProviders === undefined) {
-        delete process.env.NEXISCLAW_SKIP_PROVIDERS;
+        delete process.env.GREENCHCLAW_SKIP_PROVIDERS;
       } else {
-        process.env.NEXISCLAW_SKIP_PROVIDERS = previousSkipProviders;
+        process.env.GREENCHCLAW_SKIP_PROVIDERS = previousSkipProviders;
       }
     }
 

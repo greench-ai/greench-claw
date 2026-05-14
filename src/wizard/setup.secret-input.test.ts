@@ -1,25 +1,25 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { resolveSetupSecretInputString } from "./setup.secret-input.js";
 
-function makeConfig(): NexisClawConfig {
+function makeConfig(): GreenchClawConfig {
   return {
     secrets: {
       providers: {
         default: { source: "env" },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 describe("resolveSetupSecretInputString", () => {
   it("resolves env-template SecretInput strings", async () => {
     const resolved = await resolveSetupSecretInputString({
       config: makeConfig(),
-      value: "${NEXISCLAW_GATEWAY_PASSWORD}",
+      value: "${GREENCHCLAW_GATEWAY_PASSWORD}",
       path: "gateway.auth.password",
       env: {
-        NEXISCLAW_GATEWAY_PASSWORD: "gateway-secret", // pragma: allowlist secret
+        GREENCHCLAW_GATEWAY_PASSWORD: "gateway-secret", // pragma: allowlist secret
       },
     });
 
@@ -40,12 +40,12 @@ describe("resolveSetupSecretInputString", () => {
     await expect(
       resolveSetupSecretInputString({
         config: makeConfig(),
-        value: "${NEXISCLAW_GATEWAY_PASSWORD}",
+        value: "${GREENCHCLAW_GATEWAY_PASSWORD}",
         path: "gateway.auth.password",
         env: {},
       }),
     ).rejects.toThrow(
-      'gateway.auth.password: failed to resolve SecretRef "env:default:NEXISCLAW_GATEWAY_PASSWORD"',
+      'gateway.auth.password: failed to resolve SecretRef "env:default:GREENCHCLAW_GATEWAY_PASSWORD"',
     );
   });
 });

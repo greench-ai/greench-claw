@@ -58,7 +58,7 @@ describe("config view", () => {
     borderRadius: 50,
     setBorderRadius: vi.fn(),
     gatewayUrl: "",
-    assistantName: "NexisClaw",
+    assistantName: "GreenchClaw",
   });
 
   function findActionButtons(container: HTMLElement): {
@@ -728,7 +728,7 @@ describe("config view", () => {
     const container = document.createElement("div");
     const props: ConfigProps = {
       ...baseProps(),
-      configPath: "/tmp/NexisClaw-a.json5",
+      configPath: "/tmp/GreenchClaw-a.json5",
       formMode: "raw",
       raw: '{\n  token: "TOKEN_A_AFTER"\n}\n',
       originalRaw: '{\n  token: "TOKEN_A_BEFORE"\n}\n',
@@ -766,7 +766,7 @@ describe("config view", () => {
       '"TOKEN_A_AFTER"',
     );
 
-    props.configPath = "/tmp/NexisClaw-b.json5";
+    props.configPath = "/tmp/GreenchClaw-b.json5";
     props.raw = '{\n  token: "TOKEN_B_AFTER"\n}\n';
     props.originalRaw = '{\n  token: "TOKEN_B_BEFORE"\n}\n';
     props.formValue = {
@@ -920,7 +920,7 @@ describe("config view", () => {
     const secretRefValue = {
       channels: {
         discord: {
-          token: { source: "env", provider: "default", id: "__NEXISCLAW_REDACTED__" },
+          token: { source: "env", provider: "default", id: "__GREENCHCLAW_REDACTED__" },
         },
       },
     };

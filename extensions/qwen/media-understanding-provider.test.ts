@@ -1,7 +1,7 @@
 import {
   createRequestCaptureJsonFetch,
   installPinnedHostnameTestHooks,
-} from "NexisClaw/plugin-sdk/test-env";
+} from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import { describeQwenVideo } from "./media-understanding-provider.js";
 

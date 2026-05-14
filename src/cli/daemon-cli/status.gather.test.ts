@@ -57,8 +57,8 @@ const serviceReadCommand = vi.fn<
 >(async (_env?: NodeJS.ProcessEnv) => ({
   programArguments: ["/bin/node", "cli", "gateway", "--port", "19001"],
   environment: {
-    NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-daemon",
-    NEXISCLAW_CONFIG_PATH: "/tmp/NexisClaw-daemon/NexisClaw.json",
+    GREENCHCLAW_STATE_DIR: "/tmp/GreenchClaw-daemon",
+    GREENCHCLAW_CONFIG_PATH: "/tmp/GreenchClaw-daemon/GreenchClaw.json",
   },
 }));
 const resolveGatewayBindHost = vi.fn(
@@ -67,10 +67,10 @@ const resolveGatewayBindHost = vi.fn(
 const pickPrimaryTailnetIPv4 = vi.fn(() => "100.64.0.9");
 const resolveGatewayPort = vi.fn((_cfg?: unknown, _env?: unknown) => 18789);
 const resolveStateDir = vi.fn(
-  (env: NodeJS.ProcessEnv) => env.NEXISCLAW_STATE_DIR ?? "/tmp/NexisClaw-cli",
+  (env: NodeJS.ProcessEnv) => env.GREENCHCLAW_STATE_DIR ?? "/tmp/GreenchClaw-cli",
 );
 const resolveConfigPath = vi.fn((env: NodeJS.ProcessEnv, stateDir: string) => {
-  return env.NEXISCLAW_CONFIG_PATH ?? `${stateDir}/NexisClaw.json`;
+  return env.GREENCHCLAW_CONFIG_PATH ?? `${stateDir}/GreenchClaw.json`;
 });
 const createConfigIOCalls = vi.fn((configPath: string, pluginValidation?: "full" | "skip") => ({
   configPath,
@@ -101,7 +101,7 @@ vi.mock("../../config/config.js", () => ({
     configPath: string;
     pluginValidation?: "full" | "skip";
   }) => {
-    const isDaemon = configPath.includes("/NexisClaw-daemon/");
+    const isDaemon = configPath.includes("/GreenchClaw-daemon/");
     const runtimeConfig = isDaemon ? daemonLoadedConfig : cliLoadedConfig;
     const warnings = isDaemon ? daemonConfigWarnings : cliConfigWarnings;
     createConfigIOCalls(configPath, pluginValidation);
@@ -195,17 +195,17 @@ describe("gatherDaemonStatus", () => {
 
   beforeEach(() => {
     envSnapshot = captureEnv([
-      "NEXISCLAW_STATE_DIR",
-      "NEXISCLAW_CONFIG_PATH",
-      "NEXISCLAW_GATEWAY_TOKEN",
-      "NEXISCLAW_GATEWAY_PASSWORD",
+      "GREENCHCLAW_STATE_DIR",
+      "GREENCHCLAW_CONFIG_PATH",
+      "GREENCHCLAW_GATEWAY_TOKEN",
+      "GREENCHCLAW_GATEWAY_PASSWORD",
       "DAEMON_GATEWAY_TOKEN",
       "DAEMON_GATEWAY_PASSWORD",
     ]);
-    process.env.NEXISCLAW_STATE_DIR = "/tmp/NexisClaw-cli";
-    process.env.NEXISCLAW_CONFIG_PATH = "/tmp/NexisClaw-cli/NexisClaw.json";
-    delete process.env.NEXISCLAW_GATEWAY_TOKEN;
-    delete process.env.NEXISCLAW_GATEWAY_PASSWORD;
+    process.env.GREENCHCLAW_STATE_DIR = "/tmp/GreenchClaw-cli";
+    process.env.GREENCHCLAW_CONFIG_PATH = "/tmp/GreenchClaw-cli/GreenchClaw.json";
+    delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
+    delete process.env.GREENCHCLAW_GATEWAY_PASSWORD;
     delete process.env.DAEMON_GATEWAY_TOKEN;
     delete process.env.DAEMON_GATEWAY_PASSWORD;
     callGatewayStatusProbe.mockClear();
@@ -276,7 +276,7 @@ describe("gatherDaemonStatus", () => {
       configPath?: string;
     };
     expect(probeInput.requireRpc).toBe(true);
-    expect(probeInput.configPath).toBe("/tmp/NexisClaw-daemon/NexisClaw.json");
+    expect(probeInput.configPath).toBe("/tmp/GreenchClaw-daemon/GreenchClaw.json");
   });
 
   it("uses configured handshake timeout as the default daemon probe budget", async () => {
@@ -317,7 +317,9 @@ describe("gatherDaemonStatus", () => {
     });
 
     expect(readConfigFileSnapshotCalls).toHaveBeenCalledTimes(1);
-    expect(readConfigFileSnapshotCalls).toHaveBeenCalledWith("/tmp/NexisClaw-cli/NexisClaw.json");
+    expect(readConfigFileSnapshotCalls).toHaveBeenCalledWith(
+      "/tmp/GreenchClaw-cli/GreenchClaw.json",
+    );
     expect(loadConfigCalls).not.toHaveBeenCalled();
   });
 
@@ -389,14 +391,14 @@ describe("gatherDaemonStatus", () => {
     serviceReadCommand.mockResolvedValueOnce({
       programArguments: ["/bin/node", "cli", "gateway", "--port", "19001"],
       environment: {
-        NEXISCLAW_GATEWAY_PORT: "19001",
-        NEXISCLAW_CONFIG_PATH: "/tmp/NexisClaw-daemon/NexisClaw.json",
-        NEXISCLAW_STATE_DIR: "/tmp/NexisClaw-daemon",
+        GREENCHCLAW_GATEWAY_PORT: "19001",
+        GREENCHCLAW_CONFIG_PATH: "/tmp/GreenchClaw-daemon/GreenchClaw.json",
+        GREENCHCLAW_STATE_DIR: "/tmp/GreenchClaw-daemon",
       } as Record<string, string>,
     });
     serviceReadRuntime.mockImplementationOnce(async (env?: NodeJS.ProcessEnv) => ({
-      status: env?.NEXISCLAW_GATEWAY_PORT === "19001" ? "running" : "unknown",
-      detail: env?.NEXISCLAW_GATEWAY_PORT ?? "missing-port",
+      status: env?.GREENCHCLAW_GATEWAY_PORT === "19001" ? "running" : "unknown",
+      detail: env?.GREENCHCLAW_GATEWAY_PORT ?? "missing-port",
     }));
 
     const status = await gatherDaemonStatus({
@@ -406,7 +408,7 @@ describe("gatherDaemonStatus", () => {
     });
 
     expect(
-      serviceReadRuntime.mock.calls.some(([env]) => env?.NEXISCLAW_GATEWAY_PORT === "19001"),
+      serviceReadRuntime.mock.calls.some(([env]) => env?.GREENCHCLAW_GATEWAY_PORT === "19001"),
     ).toBe(true);
     expect(status.service.runtime?.status).toBe("running");
     expect((status.service.runtime as { detail?: string }).detail).toBe("19001");
@@ -433,8 +435,8 @@ describe("gatherDaemonStatus", () => {
     });
 
     const handoffInput = callArg(readGatewayRestartHandoffSync) as NodeJS.ProcessEnv;
-    expect(handoffInput.NEXISCLAW_STATE_DIR).toBe("/tmp/NexisClaw-daemon");
-    expect(handoffInput.NEXISCLAW_CONFIG_PATH).toBe("/tmp/NexisClaw-daemon/NexisClaw.json");
+    expect(handoffInput.GREENCHCLAW_STATE_DIR).toBe("/tmp/GreenchClaw-daemon");
+    expect(handoffInput.GREENCHCLAW_CONFIG_PATH).toBe("/tmp/GreenchClaw-daemon/GreenchClaw.json");
     expect(status.service.restartHandoff?.reason).toBe("plugin source changed");
     expect(status.service.restartHandoff?.restartKind).toBe("full-process");
     expect(status.service.restartHandoff?.supervisorMode).toBe("launchd");
@@ -451,8 +453,8 @@ describe("gatherDaemonStatus", () => {
   });
 
   it("uses the fast config path for plain same-file status reads", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-status-config-"));
-    const configPath = path.join(tmp, "NexisClaw.json");
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-status-config-"));
+    const configPath = path.join(tmp, "GreenchClaw.json");
     await fs.writeFile(
       configPath,
       JSON.stringify({
@@ -463,13 +465,13 @@ describe("gatherDaemonStatus", () => {
         },
       }),
     );
-    process.env.NEXISCLAW_STATE_DIR = tmp;
-    process.env.NEXISCLAW_CONFIG_PATH = configPath;
+    process.env.GREENCHCLAW_STATE_DIR = tmp;
+    process.env.GREENCHCLAW_CONFIG_PATH = configPath;
     serviceReadCommand.mockResolvedValueOnce({
       programArguments: ["/bin/node", "cli", "gateway", "--port", "19001"],
       environment: {
-        NEXISCLAW_STATE_DIR: tmp,
-        NEXISCLAW_CONFIG_PATH: configPath,
+        GREENCHCLAW_STATE_DIR: tmp,
+        GREENCHCLAW_CONFIG_PATH: configPath,
       },
     });
 
@@ -495,8 +497,8 @@ describe("gatherDaemonStatus", () => {
   });
 
   it("uses full plugin-aware config validation for deep status", async () => {
-    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-status-config-"));
-    const configPath = path.join(tmp, "NexisClaw.json");
+    const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-status-config-"));
+    const configPath = path.join(tmp, "GreenchClaw.json");
     await fs.writeFile(
       configPath,
       JSON.stringify({
@@ -505,8 +507,8 @@ describe("gatherDaemonStatus", () => {
         },
       }),
     );
-    process.env.NEXISCLAW_STATE_DIR = tmp;
-    process.env.NEXISCLAW_CONFIG_PATH = configPath;
+    process.env.GREENCHCLAW_STATE_DIR = tmp;
+    process.env.GREENCHCLAW_CONFIG_PATH = configPath;
     cliLoadedConfig = {
       gateway: {
         bind: "loopback",
@@ -704,8 +706,8 @@ describe("gatherDaemonStatus", () => {
         },
       },
     };
-    process.env.NEXISCLAW_GATEWAY_TOKEN = "env-token";
-    process.env.NEXISCLAW_GATEWAY_PASSWORD = "env-password"; // pragma: allowlist secret
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = "env-token";
+    process.env.GREENCHCLAW_GATEWAY_PASSWORD = "env-password"; // pragma: allowlist secret
 
     await gatherDaemonStatus({
       rpc: {},
@@ -741,7 +743,7 @@ describe("gatherDaemonStatus", () => {
       portUsage: {
         port: 19001,
         status: "busy",
-        listeners: [{ pid: 9000, ppid: 8999, commandLine: "NexisClaw-gateway" }],
+        listeners: [{ pid: 9000, ppid: 8999, commandLine: "GreenchClaw-gateway" }],
         hints: [],
       },
       healthy: false,

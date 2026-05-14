@@ -1,13 +1,13 @@
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { resolvePreferredNexisClawTmpDir } from "NexisClaw/plugin-sdk/temp-path";
+import { resolvePreferredGreenchClawTmpDir } from "GreenchClaw/plugin-sdk/temp-path";
 import { describe, expect, it } from "vitest";
 import {
   formatMatrixQaCliCommand,
   redactMatrixQaCliOutput,
-  resolveMatrixQaNexisClawCliEntryPath,
-  runMatrixQaNexisClawCli,
-  startMatrixQaNexisClawCli,
+  resolveMatrixQaGreenchClawCliEntryPath,
+  runMatrixQaGreenchClawCli,
+  startMatrixQaGreenchClawCli,
 } from "./scenario-runtime-cli.js";
 
 describe("Matrix QA CLI runtime", () => {
@@ -21,13 +21,13 @@ describe("Matrix QA CLI runtime", () => {
         "--recovery-key",
         "abcdef1234567890ghij",
       ]),
-    ).toBe("NexisClaw matrix verify backup restore --recovery-key [REDACTED]");
+    ).toBe("GreenchClaw matrix verify backup restore --recovery-key [REDACTED]");
     expect(formatMatrixQaCliCommand(["matrix", "account", "add", "--access-token=token-123"])).toBe(
-      "NexisClaw matrix account add --access-token=[REDACTED]",
+      "GreenchClaw matrix account add --access-token=[REDACTED]",
     );
     expect(
       formatMatrixQaCliCommand(["matrix", "verify", "device", "abcdef1234567890ghij", "--json"]),
-    ).toBe("NexisClaw matrix verify device [REDACTED] --json");
+    ).toBe("GreenchClaw matrix verify device [REDACTED] --json");
   });
 
   it("redacts Matrix token output before diagnostics and artifacts", () => {
@@ -36,12 +36,16 @@ describe("Matrix QA CLI runtime", () => {
     ).toBe("GET /_matrix/client/v3/sync?access_token=abcdef…ghij");
   });
 
-  it("prefers the ESM NexisClaw CLI entrypoint when present", async () => {
-    const root = await mkdtemp(path.join(resolvePreferredNexisClawTmpDir(), "matrix-qa-cli-entry-"));
+  it("prefers the ESM GreenchClaw CLI entrypoint when present", async () => {
+    const root = await mkdtemp(
+      path.join(resolvePreferredGreenchClawTmpDir(), "matrix-qa-cli-entry-"),
+    );
     try {
       await mkdir(path.join(root, "dist"));
       await writeFile(path.join(root, "dist", "index.mjs"), "");
-      expect(resolveMatrixQaNexisClawCliEntryPath(root)).toBe(path.join(root, "dist", "index.mjs"));
+      expect(resolveMatrixQaGreenchClawCliEntryPath(root)).toBe(
+        path.join(root, "dist", "index.mjs"),
+      );
     } finally {
       await rm(root, { force: true, recursive: true });
     }
@@ -49,7 +53,7 @@ describe("Matrix QA CLI runtime", () => {
 
   it("can preserve expected non-zero CLI output for negative scenarios", async () => {
     const root = await mkdtemp(
-      path.join(resolvePreferredNexisClawTmpDir(), "matrix-qa-cli-nonzero-"),
+      path.join(resolvePreferredGreenchClawTmpDir(), "matrix-qa-cli-nonzero-"),
     );
     try {
       await mkdir(path.join(root, "dist"));
@@ -60,7 +64,7 @@ describe("Matrix QA CLI runtime", () => {
           "process.exit(7);",
         ].join("\n"),
       );
-      const result = await runMatrixQaNexisClawCli({
+      const result = await runMatrixQaGreenchClawCli({
         allowNonZero: true,
         args: ["matrix", "verify", "backup", "restore", "--json"],
         cwd: root,
@@ -75,7 +79,9 @@ describe("Matrix QA CLI runtime", () => {
   });
 
   it("can pass stdin to CLI commands", async () => {
-    const root = await mkdtemp(path.join(resolvePreferredNexisClawTmpDir(), "matrix-qa-cli-stdin-"));
+    const root = await mkdtemp(
+      path.join(resolvePreferredGreenchClawTmpDir(), "matrix-qa-cli-stdin-"),
+    );
     try {
       await mkdir(path.join(root, "dist"));
       await writeFile(
@@ -89,7 +95,7 @@ describe("Matrix QA CLI runtime", () => {
           "});",
         ].join("\n"),
       );
-      const result = await runMatrixQaNexisClawCli({
+      const result = await runMatrixQaGreenchClawCli({
         args: ["matrix", "verify", "backup", "restore", "--recovery-key-stdin", "--json"],
         cwd: root,
         env: process.env,
@@ -104,7 +110,7 @@ describe("Matrix QA CLI runtime", () => {
 
   it("can close stdin after interactive CLI prompts", async () => {
     const root = await mkdtemp(
-      path.join(resolvePreferredNexisClawTmpDir(), "matrix-qa-cli-interactive-"),
+      path.join(resolvePreferredGreenchClawTmpDir(), "matrix-qa-cli-interactive-"),
     );
     try {
       await mkdir(path.join(root, "dist"));
@@ -119,7 +125,7 @@ describe("Matrix QA CLI runtime", () => {
           "});",
         ].join("\n"),
       );
-      const session = startMatrixQaNexisClawCli({
+      const session = startMatrixQaGreenchClawCli({
         args: ["matrix", "verify", "self"],
         cwd: root,
         env: process.env,
@@ -143,7 +149,7 @@ describe("Matrix QA CLI runtime", () => {
 
   it("includes timed-out CLI output in diagnostics", async () => {
     const root = await mkdtemp(
-      path.join(resolvePreferredNexisClawTmpDir(), "matrix-qa-cli-timeout-"),
+      path.join(resolvePreferredGreenchClawTmpDir(), "matrix-qa-cli-timeout-"),
     );
     try {
       await mkdir(path.join(root, "dist"));
@@ -157,7 +163,7 @@ describe("Matrix QA CLI runtime", () => {
       );
 
       await expect(
-        runMatrixQaNexisClawCli({
+        runMatrixQaGreenchClawCli({
           args: ["matrix", "verify", "self"],
           cwd: root,
           env: process.env,
@@ -165,7 +171,7 @@ describe("Matrix QA CLI runtime", () => {
         }),
       ).rejects.toThrow(/stdout:\nwaiting for verification/);
       await expect(
-        runMatrixQaNexisClawCli({
+        runMatrixQaGreenchClawCli({
           args: ["matrix", "verify", "self"],
           cwd: root,
           env: process.env,

@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { pathExists } from "NexisClaw/plugin-sdk/security-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { pathExists } from "GreenchClaw/plugin-sdk/security-runtime";
 import { ensureRepoBoundDirectory, resolveRepoRelativeOutputDir } from "../cli-paths.js";
 import {
   acquireQaCredentialLease,
@@ -128,16 +128,16 @@ const DEFAULT_PROVIDER_MODE = "live-frontier";
 const DEFAULT_MODEL = "openai/gpt-5.4";
 const DEFAULT_SLACK_CHANNEL_ID = "C0AUXUC5AGN";
 const DEFAULT_HYDRATE_MODE: MantisSlackDesktopHydrateMode = "source";
-const CRABBOX_BIN_ENV = "NEXISCLAW_MANTIS_CRABBOX_BIN";
-const CRABBOX_PROVIDER_ENV = "NEXISCLAW_MANTIS_CRABBOX_PROVIDER";
-const CRABBOX_CLASS_ENV = "NEXISCLAW_MANTIS_CRABBOX_CLASS";
-const CRABBOX_LEASE_ID_ENV = "NEXISCLAW_MANTIS_CRABBOX_LEASE_ID";
-const CRABBOX_KEEP_ENV = "NEXISCLAW_MANTIS_KEEP_VM";
-const CRABBOX_IDLE_TIMEOUT_ENV = "NEXISCLAW_MANTIS_CRABBOX_IDLE_TIMEOUT";
-const CRABBOX_TTL_ENV = "NEXISCLAW_MANTIS_CRABBOX_TTL";
-const HYDRATE_MODE_ENV = "NEXISCLAW_MANTIS_HYDRATE_MODE";
-const SLACK_URL_ENV = "NEXISCLAW_MANTIS_SLACK_URL";
-const SLACK_CHANNEL_ID_ENV = "NEXISCLAW_MANTIS_SLACK_CHANNEL_ID";
+const CRABBOX_BIN_ENV = "GREENCHCLAW_MANTIS_CRABBOX_BIN";
+const CRABBOX_PROVIDER_ENV = "GREENCHCLAW_MANTIS_CRABBOX_PROVIDER";
+const CRABBOX_CLASS_ENV = "GREENCHCLAW_MANTIS_CRABBOX_CLASS";
+const CRABBOX_LEASE_ID_ENV = "GREENCHCLAW_MANTIS_CRABBOX_LEASE_ID";
+const CRABBOX_KEEP_ENV = "GREENCHCLAW_MANTIS_KEEP_VM";
+const CRABBOX_IDLE_TIMEOUT_ENV = "GREENCHCLAW_MANTIS_CRABBOX_IDLE_TIMEOUT";
+const CRABBOX_TTL_ENV = "GREENCHCLAW_MANTIS_CRABBOX_TTL";
+const HYDRATE_MODE_ENV = "GREENCHCLAW_MANTIS_HYDRATE_MODE";
+const SLACK_URL_ENV = "GREENCHCLAW_MANTIS_SLACK_URL";
+const SLACK_CHANNEL_ID_ENV = "GREENCHCLAW_MANTIS_SLACK_CHANNEL_ID";
 
 function trimToValue(value: string | undefined) {
   const trimmed = value?.trim();
@@ -235,43 +235,43 @@ function buildCrabboxEnv(env: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
   const next = {
     ...env,
   };
-  if (!trimToValue(next.NEXISCLAW_LIVE_OPENAI_KEY) && trimToValue(next.OPENAI_API_KEY)) {
-    next.NEXISCLAW_LIVE_OPENAI_KEY = next.OPENAI_API_KEY;
+  if (!trimToValue(next.GREENCHCLAW_LIVE_OPENAI_KEY) && trimToValue(next.OPENAI_API_KEY)) {
+    next.GREENCHCLAW_LIVE_OPENAI_KEY = next.OPENAI_API_KEY;
   }
-  if (!trimToValue(next.NEXISCLAW_MANTIS_SLACK_BOT_TOKEN) && trimToValue(next.SLACK_BOT_TOKEN)) {
-    next.NEXISCLAW_MANTIS_SLACK_BOT_TOKEN = next.SLACK_BOT_TOKEN;
-  }
-  if (
-    !trimToValue(next.NEXISCLAW_MANTIS_SLACK_BOT_TOKEN) &&
-    trimToValue(next.NEXISCLAW_QA_SLACK_SUT_BOT_TOKEN)
-  ) {
-    next.NEXISCLAW_MANTIS_SLACK_BOT_TOKEN = next.NEXISCLAW_QA_SLACK_SUT_BOT_TOKEN;
-  }
-  if (!trimToValue(next.NEXISCLAW_MANTIS_SLACK_APP_TOKEN) && trimToValue(next.SLACK_APP_TOKEN)) {
-    next.NEXISCLAW_MANTIS_SLACK_APP_TOKEN = next.SLACK_APP_TOKEN;
+  if (!trimToValue(next.GREENCHCLAW_MANTIS_SLACK_BOT_TOKEN) && trimToValue(next.SLACK_BOT_TOKEN)) {
+    next.GREENCHCLAW_MANTIS_SLACK_BOT_TOKEN = next.SLACK_BOT_TOKEN;
   }
   if (
-    !trimToValue(next.NEXISCLAW_MANTIS_SLACK_APP_TOKEN) &&
-    trimToValue(next.NEXISCLAW_QA_SLACK_SUT_APP_TOKEN)
+    !trimToValue(next.GREENCHCLAW_MANTIS_SLACK_BOT_TOKEN) &&
+    trimToValue(next.GREENCHCLAW_QA_SLACK_SUT_BOT_TOKEN)
   ) {
-    next.NEXISCLAW_MANTIS_SLACK_APP_TOKEN = next.NEXISCLAW_QA_SLACK_SUT_APP_TOKEN;
+    next.GREENCHCLAW_MANTIS_SLACK_BOT_TOKEN = next.GREENCHCLAW_QA_SLACK_SUT_BOT_TOKEN;
+  }
+  if (!trimToValue(next.GREENCHCLAW_MANTIS_SLACK_APP_TOKEN) && trimToValue(next.SLACK_APP_TOKEN)) {
+    next.GREENCHCLAW_MANTIS_SLACK_APP_TOKEN = next.SLACK_APP_TOKEN;
   }
   if (
-    !trimToValue(next.NEXISCLAW_MANTIS_SLACK_CHANNEL_ID) &&
-    trimToValue(next.NEXISCLAW_QA_SLACK_CHANNEL_ID)
+    !trimToValue(next.GREENCHCLAW_MANTIS_SLACK_APP_TOKEN) &&
+    trimToValue(next.GREENCHCLAW_QA_SLACK_SUT_APP_TOKEN)
   ) {
-    next.NEXISCLAW_MANTIS_SLACK_CHANNEL_ID = next.NEXISCLAW_QA_SLACK_CHANNEL_ID;
+    next.GREENCHCLAW_MANTIS_SLACK_APP_TOKEN = next.GREENCHCLAW_QA_SLACK_SUT_APP_TOKEN;
+  }
+  if (
+    !trimToValue(next.GREENCHCLAW_MANTIS_SLACK_CHANNEL_ID) &&
+    trimToValue(next.GREENCHCLAW_QA_SLACK_CHANNEL_ID)
+  ) {
+    next.GREENCHCLAW_MANTIS_SLACK_CHANNEL_ID = next.GREENCHCLAW_QA_SLACK_CHANNEL_ID;
   }
   return next;
 }
 
 function resolveSlackGatewayEnvPayload(env: NodeJS.ProcessEnv): SlackGatewayCredentialPayload {
-  const channelId = trimToValue(env.NEXISCLAW_QA_SLACK_CHANNEL_ID);
-  const sutBotToken = trimToValue(env.NEXISCLAW_QA_SLACK_SUT_BOT_TOKEN);
-  const sutAppToken = trimToValue(env.NEXISCLAW_QA_SLACK_SUT_APP_TOKEN);
+  const channelId = trimToValue(env.GREENCHCLAW_QA_SLACK_CHANNEL_ID);
+  const sutBotToken = trimToValue(env.GREENCHCLAW_QA_SLACK_SUT_BOT_TOKEN);
+  const sutAppToken = trimToValue(env.GREENCHCLAW_QA_SLACK_SUT_APP_TOKEN);
   if (!channelId || !sutBotToken || !sutAppToken) {
     throw new Error(
-      "Gateway setup requires NEXISCLAW_QA_SLACK_CHANNEL_ID, NEXISCLAW_QA_SLACK_SUT_BOT_TOKEN, and NEXISCLAW_QA_SLACK_SUT_APP_TOKEN when using --credential-source env.",
+      "Gateway setup requires GREENCHCLAW_QA_SLACK_CHANNEL_ID, GREENCHCLAW_QA_SLACK_SUT_BOT_TOKEN, and GREENCHCLAW_QA_SLACK_SUT_APP_TOKEN when using --credential-source env.",
     );
   }
   return {
@@ -314,8 +314,8 @@ async function prepareGatewayCredentialEnv(params: {
     return {};
   }
   if (
-    trimToValue(params.env.NEXISCLAW_MANTIS_SLACK_BOT_TOKEN) &&
-    trimToValue(params.env.NEXISCLAW_MANTIS_SLACK_APP_TOKEN)
+    trimToValue(params.env.GREENCHCLAW_MANTIS_SLACK_BOT_TOKEN) &&
+    trimToValue(params.env.GREENCHCLAW_MANTIS_SLACK_APP_TOKEN)
   ) {
     return {};
   }
@@ -329,16 +329,16 @@ async function prepareGatewayCredentialEnv(params: {
   });
   const leaseHeartbeat = startQaCredentialLeaseHeartbeat(credentialLease);
   const payload = credentialLease.payload;
-  params.env.NEXISCLAW_MANTIS_SLACK_BOT_TOKEN = payload.sutBotToken;
-  params.env.NEXISCLAW_MANTIS_SLACK_APP_TOKEN = payload.sutAppToken;
-  params.env.NEXISCLAW_MANTIS_SLACK_CHANNEL_ID =
-    trimToValue(params.env.NEXISCLAW_MANTIS_SLACK_CHANNEL_ID) ?? payload.channelId;
-  params.env.NEXISCLAW_QA_SLACK_CHANNEL_ID =
-    trimToValue(params.env.NEXISCLAW_QA_SLACK_CHANNEL_ID) ?? payload.channelId;
-  params.env.NEXISCLAW_QA_SLACK_SUT_BOT_TOKEN =
-    trimToValue(params.env.NEXISCLAW_QA_SLACK_SUT_BOT_TOKEN) ?? payload.sutBotToken;
-  params.env.NEXISCLAW_QA_SLACK_SUT_APP_TOKEN =
-    trimToValue(params.env.NEXISCLAW_QA_SLACK_SUT_APP_TOKEN) ?? payload.sutAppToken;
+  params.env.GREENCHCLAW_MANTIS_SLACK_BOT_TOKEN = payload.sutBotToken;
+  params.env.GREENCHCLAW_MANTIS_SLACK_APP_TOKEN = payload.sutAppToken;
+  params.env.GREENCHCLAW_MANTIS_SLACK_CHANNEL_ID =
+    trimToValue(params.env.GREENCHCLAW_MANTIS_SLACK_CHANNEL_ID) ?? payload.channelId;
+  params.env.GREENCHCLAW_QA_SLACK_CHANNEL_ID =
+    trimToValue(params.env.GREENCHCLAW_QA_SLACK_CHANNEL_ID) ?? payload.channelId;
+  params.env.GREENCHCLAW_QA_SLACK_SUT_BOT_TOKEN =
+    trimToValue(params.env.GREENCHCLAW_QA_SLACK_SUT_BOT_TOKEN) ?? payload.sutBotToken;
+  params.env.GREENCHCLAW_QA_SLACK_SUT_APP_TOKEN =
+    trimToValue(params.env.GREENCHCLAW_QA_SLACK_SUT_APP_TOKEN) ?? payload.sutAppToken;
   return {
     credentialLease,
     leaseHeartbeat,
@@ -386,8 +386,8 @@ slack_channel_id=${slackChannelId}
 rm -rf "$out"
 mkdir -p "$out"
 export DISPLAY="\${DISPLAY:-:99}"
-if [ -n "\${NEXISCLAW_LIVE_OPENAI_KEY:-}" ] && [ -z "\${OPENAI_API_KEY:-}" ]; then
-  export OPENAI_API_KEY="$NEXISCLAW_LIVE_OPENAI_KEY"
+if [ -n "\${GREENCHCLAW_LIVE_OPENAI_KEY:-}" ] && [ -z "\${OPENAI_API_KEY:-}" ]; then
+  export OPENAI_API_KEY="$GREENCHCLAW_LIVE_OPENAI_KEY"
 fi
 if ! command -v node >/dev/null 2>&1; then
   sudo apt-get update -y >"$out/node-apt.log" 2>&1
@@ -409,11 +409,11 @@ if [ -z "$browser_bin" ]; then
   echo "No browser binary found. Checked BROWSER, CHROME_BIN, google-chrome, chromium, chromium-browser." >&2
   exit 127
 fi
-team_id="\${NEXISCLAW_QA_SLACK_TEAM_ID:-}"
-auth_test_token="\${NEXISCLAW_QA_SLACK_SUT_BOT_TOKEN:-\${NEXISCLAW_MANTIS_SLACK_BOT_TOKEN:-}}"
+team_id="\${GREENCHCLAW_QA_SLACK_TEAM_ID:-}"
+auth_test_token="\${GREENCHCLAW_QA_SLACK_SUT_BOT_TOKEN:-\${GREENCHCLAW_MANTIS_SLACK_BOT_TOKEN:-}}"
 if [ -z "$slack_url_override" ] && [ -z "$team_id" ] && [ -n "$auth_test_token" ]; then
   node --input-type=module >"$out/slack-auth-test.json" 2>"$out/slack-auth-test.err" <<'MANTIS_SLACK_AUTH'
-const token = process.env.NEXISCLAW_QA_SLACK_SUT_BOT_TOKEN || process.env.NEXISCLAW_MANTIS_SLACK_BOT_TOKEN;
+const token = process.env.GREENCHCLAW_QA_SLACK_SUT_BOT_TOKEN || process.env.GREENCHCLAW_MANTIS_SLACK_BOT_TOKEN;
 const response = await fetch("https://slack.com/api/auth.test", {
   method: "POST",
   headers: { authorization: \`Bearer \${token}\` },
@@ -425,16 +425,16 @@ MANTIS_SLACK_AUTH
   team_id="$(node --input-type=module -e 'import fs from "node:fs"; const value = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); process.stdout.write(value.team_id || "");' "$out/slack-auth-test.json" || true)"
 fi
 slack_url="$slack_url_override"
-if [ -z "$slack_url" ] && [ -n "$team_id" ] && [ -n "\${NEXISCLAW_QA_SLACK_CHANNEL_ID:-}" ]; then
-  slack_url="https://app.slack.com/client/$team_id/$NEXISCLAW_QA_SLACK_CHANNEL_ID"
+if [ -z "$slack_url" ] && [ -n "$team_id" ] && [ -n "\${GREENCHCLAW_QA_SLACK_CHANNEL_ID:-}" ]; then
+  slack_url="https://app.slack.com/client/$team_id/$GREENCHCLAW_QA_SLACK_CHANNEL_ID"
 fi
-profile="\${NEXISCLAW_MANTIS_SLACK_BROWSER_PROFILE_DIR:-$HOME/.config/NexisClaw-mantis/slack-chrome-profile}"
+profile="\${GREENCHCLAW_MANTIS_SLACK_BROWSER_PROFILE_DIR:-$HOME/.config/GreenchClaw-mantis/slack-chrome-profile}"
 mkdir -p "$profile"
 if [ "$setup_gateway" = "1" ]; then
-  export SLACK_BOT_TOKEN="\${NEXISCLAW_MANTIS_SLACK_BOT_TOKEN:-\${SLACK_BOT_TOKEN:-}}"
-  export SLACK_APP_TOKEN="\${NEXISCLAW_MANTIS_SLACK_APP_TOKEN:-\${SLACK_APP_TOKEN:-}}"
+  export SLACK_BOT_TOKEN="\${GREENCHCLAW_MANTIS_SLACK_BOT_TOKEN:-\${SLACK_BOT_TOKEN:-}}"
+  export SLACK_APP_TOKEN="\${GREENCHCLAW_MANTIS_SLACK_APP_TOKEN:-\${SLACK_APP_TOKEN:-}}"
   if [ -z "$SLACK_BOT_TOKEN" ] || [ -z "$SLACK_APP_TOKEN" ]; then
-    echo "Gateway setup requires NEXISCLAW_MANTIS_SLACK_BOT_TOKEN and NEXISCLAW_MANTIS_SLACK_APP_TOKEN." >&2
+    echo "Gateway setup requires GREENCHCLAW_MANTIS_SLACK_BOT_TOKEN and GREENCHCLAW_MANTIS_SLACK_APP_TOKEN." >&2
     exit 2
   fi
   if [ -z "$slack_url" ] && [ -n "$team_id" ]; then
@@ -516,8 +516,8 @@ qa_status=0
     exit 3
   fi
   if [ "$setup_gateway" = "1" ]; then
-    export NEXISCLAW_HOME="$HOME/.NexisClaw-mantis/slack-NexisClaw"
-    mkdir -p "$NEXISCLAW_HOME"
+    export GREENCHCLAW_HOME="$HOME/.GreenchClaw-mantis/slack-GreenchClaw"
+    mkdir -p "$GREENCHCLAW_HOME"
     cat >"$out/slack.socket.patch.json5" <<MANTIS_SLACK_PATCH
 {
   gateway: {
@@ -545,20 +545,20 @@ qa_status=0
   },
 }
 MANTIS_SLACK_PATCH
-    pnpm NexisClaw config patch --file "$out/slack.socket.patch.json5" --dry-run
-    pnpm NexisClaw config patch --file "$out/slack.socket.patch.json5"
-    nohup pnpm NexisClaw gateway run --dev --allow-unconfigured --port 38973 --cli-backend-logs </dev/null >"$out/NexisClaw-gateway.log" 2>&1 &
+    pnpm GreenchClaw config patch --file "$out/slack.socket.patch.json5" --dry-run
+    pnpm GreenchClaw config patch --file "$out/slack.socket.patch.json5"
+    nohup pnpm GreenchClaw gateway run --dev --allow-unconfigured --port 38973 --cli-backend-logs </dev/null >"$out/GreenchClaw-gateway.log" 2>&1 &
     gateway_pid="$!"
-    echo "$gateway_pid" >"$out/NexisClaw-gateway.pid"
+    echo "$gateway_pid" >"$out/GreenchClaw-gateway.pid"
     sleep 12
     if ! kill -0 "$gateway_pid" >/dev/null 2>&1; then
-      echo "NexisClaw gateway exited during startup." >&2
+      echo "GreenchClaw gateway exited during startup." >&2
       wait "$gateway_pid" || true
       exit 1
     fi
     disown "$gateway_pid" >/dev/null 2>&1 || true
   else
-    qa_args=(NexisClaw qa slack --repo-root . --output-dir "$out/slack-qa" --provider-mode "$provider_mode" --model "$primary_model" --alt-model "$alternate_model" --credential-source "$credential_source" --credential-role "$credential_role")
+    qa_args=(GreenchClaw qa slack --repo-root . --output-dir "$out/slack-qa" --provider-mode "$provider_mode" --model "$primary_model" --alt-model "$alternate_model" --credential-source "$credential_source" --credential-role "$credential_role")
     if [ "$fast_mode" = "1" ]; then
       qa_args+=(--fast)
     fi
@@ -580,8 +580,8 @@ cat >"$out/remote-metadata.json" <<MANTIS_REMOTE_METADATA
   "display": "$DISPLAY",
   "openedUrl": "$slack_url",
   "gatewaySetup": $setup_gateway,
-  "gatewayAlive": $(if [ "$setup_gateway" = "1" ] && [ -f "$out/NexisClaw-gateway.pid" ] && kill -0 "$(cat "$out/NexisClaw-gateway.pid")" >/dev/null 2>&1; then echo true; else echo false; fi),
-  "gatewayPid": "$(if [ -f "$out/NexisClaw-gateway.pid" ]; then cat "$out/NexisClaw-gateway.pid"; fi)",
+  "gatewayAlive": $(if [ "$setup_gateway" = "1" ] && [ -f "$out/GreenchClaw-gateway.pid" ] && kill -0 "$(cat "$out/GreenchClaw-gateway.pid")" >/dev/null 2>&1; then echo true; else echo false; fi),
+  "gatewayPid": "$(if [ -f "$out/GreenchClaw-gateway.pid" ]; then cat "$out/GreenchClaw-gateway.pid"; fi)",
   "gatewayPort": 38973,
   "qaExitCode": $qa_status,
   "credentialSource": "$credential_source",
@@ -724,14 +724,14 @@ export async function runMantisSlackDesktopSmoke(
   const slackChannelId =
     trimToValue(opts.slackChannelId) ??
     trimToValue(env[SLACK_CHANNEL_ID_ENV]) ??
-    trimToValue(env.NEXISCLAW_QA_SLACK_CHANNEL_ID) ??
+    trimToValue(env.GREENCHCLAW_QA_SLACK_CHANNEL_ID) ??
     DEFAULT_SLACK_CHANNEL_ID;
   const slackUrl = trimToValue(opts.slackUrl) ?? trimToValue(env[SLACK_URL_ENV]);
   const runner = opts.commandRunner ?? defaultCommandRunner;
   const explicitLeaseId = trimToValue(opts.leaseId) ?? trimToValue(env[CRABBOX_LEASE_ID_ENV]);
   const keepLease = opts.keepLease ?? (gatewaySetup || isTruthyOptIn(env[CRABBOX_KEEP_ENV]));
   const createdLease = explicitLeaseId === undefined;
-  const remoteOutputDir = `/tmp/NexisClaw-mantis-slack-desktop-${startedAt
+  const remoteOutputDir = `/tmp/GreenchClaw-mantis-slack-desktop-${startedAt
     .toISOString()
     .replace(/[^0-9A-Za-z]/gu, "-")}`;
   let credentialLease: SlackGatewayCredentialLease | undefined;
@@ -855,7 +855,7 @@ export async function runMantisSlackDesktopSmoke(
       throw remoteRunError;
     }
     if (gatewaySetup && !gatewaySetupCompleted) {
-      throw new Error("Slack desktop gateway setup did not report a live NexisClaw gateway.");
+      throw new Error("Slack desktop gateway setup did not report a live GreenchClaw gateway.");
     }
     summary = {
       artifacts: {

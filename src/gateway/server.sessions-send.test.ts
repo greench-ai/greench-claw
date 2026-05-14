@@ -12,7 +12,7 @@ import {
   testState,
 } from "./test-helpers.js";
 
-const { createNexisClawTools } = await import("../agents/NexisClaw-tools.js");
+const { createGreenchClawTools } = await import("../agents/GreenchClaw-tools.js");
 
 installGatewayTestHooks({ scope: "suite" });
 
@@ -21,7 +21,7 @@ let gatewayPort: number;
 const gatewayToken = "test-gateway-token-1234567890";
 let envSnapshot: ReturnType<typeof captureEnv>;
 
-type SessionSendTool = ReturnType<typeof createNexisClawTools>[number];
+type SessionSendTool = ReturnType<typeof createGreenchClawTools>[number];
 const SESSION_SEND_E2E_TIMEOUT_MS = 10_000;
 let cachedSessionsSendTool: SessionSendTool | null = null;
 
@@ -29,7 +29,7 @@ function getSessionsSendTool(): SessionSendTool {
   if (cachedSessionsSendTool) {
     return cachedSessionsSendTool;
   }
-  const tool = createNexisClawTools().find((candidate) => candidate.name === "sessions_send");
+  const tool = createGreenchClawTools().find((candidate) => candidate.name === "sessions_send");
   if (!tool) {
     throw new Error("missing sessions_send tool");
   }
@@ -76,7 +76,7 @@ async function emitLifecycleAssistantReply(params: {
 }
 
 beforeAll(async () => {
-  envSnapshot = captureEnv(["NEXISCLAW_GATEWAY_PORT", "NEXISCLAW_GATEWAY_TOKEN"]);
+  envSnapshot = captureEnv(["GREENCHCLAW_GATEWAY_PORT", "GREENCHCLAW_GATEWAY_TOKEN"]);
   gatewayPort = await getFreePort();
   const { approveDevicePairing, requestDevicePairing } = await import("../infra/device-pairing.js");
   const { loadOrCreateDeviceIdentity, publicKeyRawBase64UrlFromPem } =
@@ -85,7 +85,7 @@ beforeAll(async () => {
   const pending = await requestDevicePairing({
     deviceId: identity.deviceId,
     publicKey: publicKeyRawBase64UrlFromPem(identity.publicKeyPem),
-    clientId: "NexisClaw-cli",
+    clientId: "GreenchClaw-cli",
     clientMode: "cli",
     role: "operator",
     scopes: ["operator.admin", "operator.read", "operator.write", "operator.approvals"],
@@ -95,15 +95,15 @@ beforeAll(async () => {
     callerScopes: pending.request.scopes ?? ["operator.admin"],
   });
   testState.gatewayAuth = { mode: "token", token: gatewayToken };
-  process.env.NEXISCLAW_GATEWAY_PORT = String(gatewayPort);
-  process.env.NEXISCLAW_GATEWAY_TOKEN = gatewayToken;
+  process.env.GREENCHCLAW_GATEWAY_PORT = String(gatewayPort);
+  process.env.GREENCHCLAW_GATEWAY_TOKEN = gatewayToken;
   server = await startGatewayServer(gatewayPort);
 });
 
 beforeEach(() => {
   testState.gatewayAuth = { mode: "token", token: gatewayToken };
-  process.env.NEXISCLAW_GATEWAY_PORT = String(gatewayPort);
-  process.env.NEXISCLAW_GATEWAY_TOKEN = gatewayToken;
+  process.env.GREENCHCLAW_GATEWAY_PORT = String(gatewayPort);
+  process.env.GREENCHCLAW_GATEWAY_TOKEN = gatewayToken;
 });
 
 afterAll(async () => {
@@ -162,9 +162,9 @@ describe("sessions_send label lookup", () => {
     { timeout: SESSION_SEND_E2E_TIMEOUT_MS },
     async () => {
       // This is an operator feature; enable broader session tool targeting for this test.
-      const configPath = process.env.NEXISCLAW_CONFIG_PATH;
+      const configPath = process.env.GREENCHCLAW_CONFIG_PATH;
       if (!configPath) {
-        throw new Error("NEXISCLAW_CONFIG_PATH missing in gateway test environment");
+        throw new Error("GREENCHCLAW_CONFIG_PATH missing in gateway test environment");
       }
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await fs.writeFile(
@@ -190,7 +190,7 @@ describe("sessions_send label lookup", () => {
         timeoutMs: 5000,
       });
 
-      const tool = createNexisClawTools({
+      const tool = createGreenchClawTools({
         config: {
           tools: {
             sessions: {

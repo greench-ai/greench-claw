@@ -2,7 +2,7 @@ import type {
   ChannelMessageSendCommitContext,
   ChannelMessageUnknownSendReconciliationResult,
 } from "../../channels/message/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../errors.js";
 import { resolveOutboundChannelMessageAdapter } from "./channel-resolution.js";
 import type { OutboundDeliveryResult } from "./deliver-types.js";
@@ -29,7 +29,7 @@ export type RecoverySummary = {
 
 export type DeliverFn = (
   params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
   } & QueuedDeliveryPayload & {
       deliveryQueueId?: string;
       deliveryQueueStateDir?: string;
@@ -122,7 +122,11 @@ export async function withActiveDeliveryClaim<T>(
   }
 }
 
-function buildRecoveryDeliverParams(entry: QueuedDelivery, cfg: NexisClawConfig, stateDir?: string) {
+function buildRecoveryDeliverParams(
+  entry: QueuedDelivery,
+  cfg: GreenchClawConfig,
+  stateDir?: string,
+) {
   return {
     cfg,
     channel: entry.channel,
@@ -151,7 +155,7 @@ function buildRecoveryDeliverParams(entry: QueuedDelivery, cfg: NexisClawConfig,
 
 async function reconcileUnknownQueuedDelivery(opts: {
   entry: QueuedDelivery;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   log: RecoveryLogger;
 }): Promise<ChannelMessageUnknownSendReconciliationResult | null> {
   const adapter = resolveOutboundChannelMessageAdapter({
@@ -210,7 +214,7 @@ function buildReconciledSentResult(
 
 function buildReconciledCommitContext(params: {
   entry: QueuedDelivery;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   result: OutboundDeliveryResult;
 }): ChannelMessageSendCommitContext {
   const payload = params.entry.payloads[0] ?? {};
@@ -267,7 +271,7 @@ function buildReconciledCommitContext(params: {
 
 async function runReconciledSentCommitHooks(params: {
   entry: QueuedDelivery;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   reconciliation: Extract<ChannelMessageUnknownSendReconciliationResult, { status: "sent" }>;
   log: RecoveryLogger;
 }): Promise<void> {
@@ -359,7 +363,7 @@ export function isPermanentDeliveryError(error: string): boolean {
 
 async function drainQueuedEntry(opts: {
   entry: QueuedDelivery;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   deliver: DeliverFn;
   log: RecoveryLogger;
   stateDir?: string;
@@ -476,7 +480,7 @@ async function drainQueuedEntry(opts: {
 export async function drainPendingDeliveries(opts: {
   drainKey: string;
   logLabel: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   log: RecoveryLogger;
   stateDir?: string;
   deliver: DeliverFn;
@@ -588,7 +592,7 @@ export async function drainPendingDeliveries(opts: {
 export async function recoverPendingDeliveries(opts: {
   deliver: DeliverFn;
   log: RecoveryLogger;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   stateDir?: string;
   /** Maximum wall-clock time for recovery in ms. Remaining entries are deferred to next startup. Default: 60 000. */
   maxRecoveryMs?: number;

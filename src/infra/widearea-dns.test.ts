@@ -12,9 +12,9 @@ import {
 } from "./widearea-dns.js";
 
 const baseZoneOpts: WideAreaGatewayZoneOpts = {
-  domain: "NexisClaw.internal.",
+  domain: "GreenchClaw.internal.",
   gatewayPort: 18789,
-  displayName: "Mac Studio (NexisClaw)",
+  displayName: "Mac Studio (GreenchClaw)",
   tailnetIPv4: "100.123.224.76",
   hostLabel: "studio-london",
   instanceLabel: "studio-london",
@@ -44,9 +44,9 @@ afterEach(() => {
 
 describe("wide-area DNS discovery domain helpers", () => {
   it.each([
-    { value: "NexisClaw.internal", expected: "NexisClaw.internal." },
-    { value: "NexisClaw.internal.", expected: "NexisClaw.internal." },
-    { value: "  NexisClaw.internal  ", expected: "NexisClaw.internal." },
+    { value: "GreenchClaw.internal", expected: "GreenchClaw.internal." },
+    { value: "GreenchClaw.internal.", expected: "GreenchClaw.internal." },
+    { value: "  GreenchClaw.internal  ", expected: "GreenchClaw.internal." },
     { value: "", expected: null },
     { value: "   ", expected: null },
     { value: null, expected: null },
@@ -59,7 +59,7 @@ describe("wide-area DNS discovery domain helpers", () => {
     {
       name: "prefers config domain over env",
       params: {
-        env: { NEXISCLAW_WIDE_AREA_DOMAIN: "env.internal" } as NodeJS.ProcessEnv,
+        env: { GREENCHCLAW_WIDE_AREA_DOMAIN: "env.internal" } as NodeJS.ProcessEnv,
         configDomain: "config.internal",
       },
       expected: "config.internal.",
@@ -67,14 +67,14 @@ describe("wide-area DNS discovery domain helpers", () => {
     {
       name: "falls back to env domain",
       params: {
-        env: { NEXISCLAW_WIDE_AREA_DOMAIN: "env.internal" } as NodeJS.ProcessEnv,
+        env: { GREENCHCLAW_WIDE_AREA_DOMAIN: "env.internal" } as NodeJS.ProcessEnv,
       },
       expected: "env.internal.",
     },
     {
       name: "returns null when both sources are blank",
       params: {
-        env: { NEXISCLAW_WIDE_AREA_DOMAIN: "   " } as NodeJS.ProcessEnv,
+        env: { GREENCHCLAW_WIDE_AREA_DOMAIN: "   " } as NodeJS.ProcessEnv,
         configDomain: " ",
       },
       expected: null,
@@ -84,8 +84,8 @@ describe("wide-area DNS discovery domain helpers", () => {
   });
 
   it("builds the default zone path from the normalized domain", () => {
-    expect(getWideAreaZonePath("NexisClaw.internal.")).toBe(
-      path.join(utils.CONFIG_DIR, "dns", "NexisClaw.internal.db"),
+    expect(getWideAreaZonePath("GreenchClaw.internal.")).toBe(
+      path.join(utils.CONFIG_DIR, "dns", "GreenchClaw.internal.db"),
     );
   });
 });
@@ -95,19 +95,19 @@ describe("wide-area DNS-SD zone rendering", () => {
     const txt = renderZoneText({
       tailnetIPv6: "fd7a:115c:a1e0::8801:e04c",
       sshPort: 22,
-      cliPath: "/opt/homebrew/bin/NexisClaw",
+      cliPath: "/opt/homebrew/bin/GreenchClaw",
     });
 
     expectZoneRecords(txt, [
-      `$ORIGIN NexisClaw.internal.`,
+      `$ORIGIN GreenchClaw.internal.`,
       `studio-london IN A 100.123.224.76`,
       `studio-london IN AAAA fd7a:115c:a1e0::8801:e04c`,
-      `_NexisClaw-gw._tcp IN PTR studio-london._NexisClaw-gw._tcp`,
-      `studio-london._NexisClaw-gw._tcp IN SRV 0 0 18789 studio-london`,
-      `displayName=Mac Studio (NexisClaw)`,
+      `_GreenchClaw-gw._tcp IN PTR studio-london._GreenchClaw-gw._tcp`,
+      `studio-london._GreenchClaw-gw._tcp IN SRV 0 0 18789 studio-london`,
+      `displayName=Mac Studio (GreenchClaw)`,
       `gatewayPort=18789`,
       `sshPort=22`,
-      `cliPath=/opt/homebrew/bin/NexisClaw`,
+      `cliPath=/opt/homebrew/bin/GreenchClaw`,
     ]);
   });
 
@@ -120,24 +120,24 @@ describe("wide-area DNS-SD zone rendering", () => {
     {
       name: "includes gateway TLS TXT fields and trims display metadata",
       overrides: {
-        domain: "NexisClaw.internal",
-        displayName: "  Mac Studio (NexisClaw)  ",
+        domain: "GreenchClaw.internal",
+        displayName: "  Mac Studio (GreenchClaw)  ",
         hostLabel: " Studio London ",
         instanceLabel: " Studio London ",
         gatewayTlsEnabled: true,
         gatewayTlsFingerprintSha256: "abc123",
         tailnetDns: " tailnet.ts.net ",
-        cliPath: " /opt/homebrew/bin/NexisClaw ",
+        cliPath: " /opt/homebrew/bin/GreenchClaw ",
       },
       records: [
-        `$ORIGIN NexisClaw.internal.`,
+        `$ORIGIN GreenchClaw.internal.`,
         `studio-london IN A 100.123.224.76`,
-        `studio-london._NexisClaw-gw._tcp IN TXT`,
-        `displayName=Mac Studio (NexisClaw)`,
+        `studio-london._GreenchClaw-gw._tcp IN TXT`,
+        `displayName=Mac Studio (GreenchClaw)`,
         `gatewayTls=1`,
         `gatewayTlsSha256=abc123`,
         `tailnetDns=tailnet.ts.net`,
-        `cliPath=/opt/homebrew/bin/NexisClaw`,
+        `cliPath=/opt/homebrew/bin/GreenchClaw`,
       ],
     },
   ])("$name", ({ overrides, records }) => {
@@ -161,7 +161,7 @@ describe("wide-area DNS zone writes", () => {
     const result = await writeWideAreaGatewayZone(makeZoneOpts());
 
     expect(result).toEqual({
-      zonePath: getWideAreaZonePath("NexisClaw.internal."),
+      zonePath: getWideAreaZonePath("GreenchClaw.internal."),
       changed: false,
     });
     expect(writeSpy).not.toHaveBeenCalled();
@@ -181,7 +181,7 @@ describe("wide-area DNS zone writes", () => {
     );
 
     expect(result).toEqual({
-      zonePath: getWideAreaZonePath("NexisClaw.internal."),
+      zonePath: getWideAreaZonePath("GreenchClaw.internal."),
       changed: true,
     });
     const expectedZoneText = renderWideAreaGatewayZoneText({
@@ -189,7 +189,7 @@ describe("wide-area DNS zone writes", () => {
       serial: 2026031305,
     });
     expect(writeSpy).toHaveBeenCalledWith(
-      getWideAreaZonePath("NexisClaw.internal."),
+      getWideAreaZonePath("GreenchClaw.internal."),
       expectedZoneText,
       "utf-8",
     );

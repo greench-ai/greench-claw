@@ -21,9 +21,9 @@ describe("runtime context prompt submission", () => {
     const effectivePrompt = [
       "visible ask",
       "",
-      "<<<BEGIN_NEXISCLAW_INTERNAL_CONTEXT>>>",
+      "<<<BEGIN_GREENCHCLAW_INTERNAL_CONTEXT>>>",
       "secret runtime context",
-      "<<<END_NEXISCLAW_INTERNAL_CONTEXT>>>",
+      "<<<END_GREENCHCLAW_INTERNAL_CONTEXT>>>",
     ].join("\n");
 
     expect(
@@ -34,7 +34,7 @@ describe("runtime context prompt submission", () => {
     ).toEqual({
       prompt: "visible ask",
       runtimeContext:
-        "<<<BEGIN_NEXISCLAW_INTERNAL_CONTEXT>>>\nsecret runtime context\n<<<END_NEXISCLAW_INTERNAL_CONTEXT>>>",
+        "<<<BEGIN_GREENCHCLAW_INTERNAL_CONTEXT>>>\nsecret runtime context\n<<<END_GREENCHCLAW_INTERNAL_CONTEXT>>>",
     });
   });
 
@@ -57,11 +57,11 @@ describe("runtime context prompt submission", () => {
     });
 
     expect(parts).toEqual({
-      prompt: "Continue the NexisClaw runtime event.",
+      prompt: "Continue the GreenchClaw runtime event.",
       runtimeContext: "internal event",
       runtimeOnly: true,
       runtimeSystemContext: [
-        "NexisClaw runtime event.",
+        "GreenchClaw runtime event.",
         "This context is runtime-generated, not user-authored. Keep internal details private.",
         "",
         "internal event",
@@ -111,15 +111,15 @@ describe("runtime context prompt submission", () => {
 
     expect(sendCustomMessage).toHaveBeenCalledWith(
       {
-        customType: "NexisClaw.runtime-context",
+        customType: "GreenchClaw.runtime-context",
         content: "secret runtime context",
         display: false,
-        details: { source: "NexisClaw-runtime-context" },
+        details: { source: "GreenchClaw-runtime-context" },
       },
       { deliverAs: "nextTurn" },
     );
     expect(sentMessages[0]?.content).not.toContain(
-      "NexisClaw runtime context for the immediately preceding user message.",
+      "GreenchClaw runtime context for the immediately preceding user message.",
     );
     expect(sentMessages[0]?.content).not.toContain("not user-authored");
   });
@@ -128,7 +128,7 @@ describe("runtime context prompt submission", () => {
     const systemContext = buildRuntimeContextSystemContext("secret runtime context");
 
     expect(systemContext).toContain(
-      "NexisClaw runtime context for the immediately preceding user message.",
+      "GreenchClaw runtime context for the immediately preceding user message.",
     );
     expect(systemContext).toContain("not user-authored");
     expect(systemContext).toContain("secret runtime context");
@@ -137,7 +137,9 @@ describe("runtime context prompt submission", () => {
   it("labels runtime-only events as system context", async () => {
     const { buildRuntimeEventSystemContext } = await import("./runtime-context-prompt.js");
 
-    expect(buildRuntimeEventSystemContext("internal event")).toContain("NexisClaw runtime event.");
+    expect(buildRuntimeEventSystemContext("internal event")).toContain(
+      "GreenchClaw runtime event.",
+    );
     expect(buildRuntimeEventSystemContext("internal event")).toContain("not user-authored");
   });
 });

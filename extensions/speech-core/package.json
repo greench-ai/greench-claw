@@ -1,10 +1,10 @@
 {
-  "name": "@NexisClaw/speech-core",
+  "name": "@GreenchClaw/speech-core",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw speech runtime package",
+  "description": "GreenchClaw speech runtime package",
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   }
 }

@@ -1,10 +1,10 @@
 {
-  "name": "@NexisClaw/video-generation-core",
+  "name": "@GreenchClaw/video-generation-core",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw video generation runtime package",
+  "description": "GreenchClaw video generation runtime package",
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   }
 }

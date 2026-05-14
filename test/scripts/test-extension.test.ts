@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
 import path from "node:path";
-import { bundledPluginFile, bundledPluginRoot } from "NexisClaw/plugin-sdk/test-fixtures";
+import { bundledPluginFile, bundledPluginRoot } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { describe, expect, it, vi } from "vitest";
 import {
   detectChangedExtensionIds,
@@ -254,7 +254,7 @@ describe("scripts/test-extension.mjs", () => {
 
   it("can fail safe to all extensions when the base revision is unavailable", () => {
     const extensionIds = listChangedExtensionIds({
-      base: "refs/heads/NexisClaw-test-missing-base",
+      base: "refs/heads/GreenchClaw-test-missing-base",
       unavailableBaseBehavior: "all",
     });
 
@@ -496,7 +496,7 @@ describe("scripts/test-extension.mjs", () => {
         testFileCount: 6,
       },
       {
-        env: { NEXISCLAW_EXTENSION_BATCH_PARALLEL: "2" },
+        env: { GREENCHCLAW_EXTENSION_BATCH_PARALLEL: "2" },
         runGroup,
         vitestArgs: ["--reporter=dot"],
       },
@@ -517,8 +517,8 @@ describe("scripts/test-extension.mjs", () => {
       args: ["--reporter=dot"],
       config: "heavy",
       env: {
-        NEXISCLAW_EXTENSION_BATCH_PARALLEL: "2",
-        NEXISCLAW_VITEST_FS_MODULE_CACHE_PATH: path.join(
+        GREENCHCLAW_EXTENSION_BATCH_PARALLEL: "2",
+        GREENCHCLAW_VITEST_FS_MODULE_CACHE_PATH: path.join(
           process.cwd(),
           "node_modules",
           ".experimental-vitest-cache",
@@ -531,11 +531,15 @@ describe("scripts/test-extension.mjs", () => {
   });
 
   it("keeps extension batch parallelism bounded by group count", () => {
-    expect(resolveExtensionBatchParallelism(3, { NEXISCLAW_EXTENSION_BATCH_PARALLEL: "2" })).toBe(2);
-    expect(resolveExtensionBatchParallelism(1, { NEXISCLAW_EXTENSION_BATCH_PARALLEL: "4" })).toBe(1);
-    expect(resolveExtensionBatchParallelism(3, { NEXISCLAW_EXTENSION_BATCH_PARALLEL: "nope" })).toBe(
+    expect(resolveExtensionBatchParallelism(3, { GREENCHCLAW_EXTENSION_BATCH_PARALLEL: "2" })).toBe(
+      2,
+    );
+    expect(resolveExtensionBatchParallelism(1, { GREENCHCLAW_EXTENSION_BATCH_PARALLEL: "4" })).toBe(
       1,
     );
+    expect(
+      resolveExtensionBatchParallelism(3, { GREENCHCLAW_EXTENSION_BATCH_PARALLEL: "nope" }),
+    ).toBe(1);
   });
 
   it("treats extensions without tests as a no-op by default", () => {

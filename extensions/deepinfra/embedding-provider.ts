@@ -3,7 +3,7 @@ import {
   resolveRemoteEmbeddingClient,
   type MemoryEmbeddingProviderCreateOptions,
   type MemoryEmbeddingProviderCreateResult,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
 import {
   DEEPINFRA_BASE_URL,
   DEFAULT_DEEPINFRA_EMBEDDING_MODEL,

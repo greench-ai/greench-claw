@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { PlivoConfig, WebhookSecurityConfig } from "../config.js";
 import { getHeader } from "../http-headers.js";
 import type {

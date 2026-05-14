@@ -6,7 +6,7 @@ read_when:
 title: "Voice wake"
 ---
 
-NexisClaw treats **wake words as a single global list** owned by the **Gateway**.
+GreenchClaw treats **wake words as a single global list** owned by the **Gateway**.
 
 - There are **no per-node custom wake words**.
 - **Any node/app UI may edit** the list; changes are persisted by the Gateway and broadcast to everyone.
@@ -17,12 +17,12 @@ NexisClaw treats **wake words as a single global list** owned by the **Gateway**
 
 Wake words are stored on the gateway machine at:
 
-- `~/.NexisClaw/settings/voicewake.json`
+- `~/.GreenchClaw/settings/voicewake.json`
 
 Shape:
 
 ```json
-{ "triggers": ["NexisClaw", "claude", "computer"], "updatedAtMs": 1730000000000 }
+{ "triggers": ["GreenchClaw", "claude", "computer"], "updatedAtMs": 1730000000000 }
 ```
 
 ## Protocol

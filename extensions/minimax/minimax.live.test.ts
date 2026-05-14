@@ -1,8 +1,8 @@
 import {
   registerProviderPlugin,
   requireRegisteredProvider,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { isLiveTestEnabled } from "NexisClaw/plugin-sdk/test-env";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { isLiveTestEnabled } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 import { buildMinimaxSpeechProvider } from "./speech-provider.js";
@@ -42,7 +42,7 @@ describeLive("minimax plugin live", () => {
       searchConfig: { apiKey: MINIMAX_SEARCH_KEY, cacheTtlMinutes: 0 },
     } as never);
 
-    const result = await tool?.execute({ query: "NexisClaw GitHub", count: 1 });
+    const result = await tool?.execute({ query: "GreenchClaw GitHub", count: 1 });
 
     expect(result?.provider).toBe("minimax");
     expect(result?.count).toBeGreaterThan(0);
@@ -56,7 +56,7 @@ describeTtsLive("minimax tts live", () => {
     const provider = requireRegisteredProvider(speechProviders, "minimax");
 
     const audioFile = await provider.synthesize({
-      text: "NexisClaw MiniMax text to speech integration test OK.",
+      text: "GreenchClaw MiniMax text to speech integration test OK.",
       cfg: { plugins: { enabled: true } } as never,
       providerConfig: { apiKey: MINIMAX_API_KEY },
       target: "audio-file",
@@ -72,7 +72,7 @@ describeTtsLive("minimax tts live", () => {
     const provider = buildMinimaxSpeechProvider();
 
     const voiceNote = await provider.synthesize({
-      text: "NexisClaw MiniMax voice note test OK.",
+      text: "GreenchClaw MiniMax voice note test OK.",
       cfg: { plugins: { enabled: true } } as never,
       providerConfig: { apiKey: MINIMAX_API_KEY },
       target: "voice-note",
@@ -94,7 +94,7 @@ describeTokenPlanTtsLive("minimax token plan tts live", () => {
       const provider = buildMinimaxSpeechProvider();
 
       const audioFile = await provider.synthesize({
-        text: "NexisClaw MiniMax Token Plan text to speech integration test OK.",
+        text: "GreenchClaw MiniMax Token Plan text to speech integration test OK.",
         cfg: { plugins: { enabled: true } } as never,
         providerConfig: {},
         target: "audio-file",

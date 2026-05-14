@@ -1,4 +1,4 @@
-import type { ChannelConfigUiHint } from "NexisClaw/plugin-sdk/channel-core";
+import type { ChannelConfigUiHint } from "GreenchClaw/plugin-sdk/channel-core";
 
 export const matrixChannelConfigUiHints = {
   dangerouslyAllowNameMatching: {
@@ -11,7 +11,7 @@ export const matrixChannelConfigUiHints = {
   },
   "streaming.progress.labels": {
     label: "Matrix Progress Label Pool",
-    help: 'Candidate labels for streaming.progress.label="auto". Leave unset to use NexisClaw built-in progress labels.',
+    help: 'Candidate labels for streaming.progress.label="auto". Leave unset to use GreenchClaw built-in progress labels.',
   },
   "streaming.progress.maxLines": {
     label: "Matrix Progress Max Lines",

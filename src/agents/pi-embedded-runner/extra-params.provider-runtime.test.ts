@@ -41,7 +41,7 @@ afterEach(() => {
 });
 
 describe("extra-params: provider runtime handoff", () => {
-  it("keeps unsupported upstream transport values out of NexisClaw runtime hooks", () => {
+  it("keeps unsupported upstream transport values out of GreenchClaw runtime hooks", () => {
     const settingsManager = {
       getGlobalSettings: () => ({}),
       getProjectSettings: () => ({}),

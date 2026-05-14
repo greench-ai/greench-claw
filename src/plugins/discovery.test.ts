@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { bundledDistPluginFile } from "NexisClaw/plugin-sdk/test-fixtures";
+import { bundledDistPluginFile } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
-import { discoverNexisClawPlugins } from "./discovery.js";
+import { discoverGreenchClawPlugins } from "./discovery.js";
 import { listBuiltRuntimeEntryCandidates } from "./package-entrypoints.js";
 import {
   cleanupTrackedTempDirs,
@@ -17,14 +17,14 @@ vi.mock("./bundled-dir.js", async (importOriginal) => {
   return {
     ...actual,
     resolveBundledPluginsDir: (env: NodeJS.ProcessEnv = process.env) =>
-      env.NEXISCLAW_BUNDLED_PLUGINS_DIR ?? actual.resolveBundledPluginsDir(env),
+      env.GREENCHCLAW_BUNDLED_PLUGINS_DIR ?? actual.resolveBundledPluginsDir(env),
   };
 });
 
 const tempDirs: string[] = [];
 
 function makeTempDir() {
-  return makeTrackedTempDir("NexisClaw-plugins", tempDirs);
+  return makeTrackedTempDir("GreenchClaw-plugins", tempDirs);
 }
 
 const mkdirSafe = mkdirSafeDir;
@@ -39,11 +39,11 @@ function countMatching<T>(items: readonly T[], predicate: (item: T) => boolean):
   return count;
 }
 
-function withNexisClawPackageArgv<T>(packageRoot: string, fn: () => T): T {
+function withGreenchClawPackageArgv<T>(packageRoot: string, fn: () => T): T {
   mkdirSafe(path.join(packageRoot, "bin"));
-  fs.writeFileSync(path.join(packageRoot, "package.json"), '{"name":"NexisClaw"}\n', "utf-8");
+  fs.writeFileSync(path.join(packageRoot, "package.json"), '{"name":"GreenchClaw"}\n', "utf-8");
   const originalArgv = process.argv;
-  process.argv = [originalArgv[0] ?? "node", path.join(packageRoot, "bin", "NexisClaw")];
+  process.argv = [originalArgv[0] ?? "node", path.join(packageRoot, "bin", "GreenchClaw")];
   try {
     return fn();
   } finally {
@@ -56,7 +56,7 @@ function symlinkDirectory(target: string, linkPath: string): void {
 }
 
 const canCreateDirectorySymlinks = (() => {
-  const probeDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-symlink-probe-"));
+  const probeDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-symlink-probe-"));
   const targetDir = path.join(probeDir, "target");
   const linkDir = path.join(probeDir, "link");
   try {
@@ -91,10 +91,10 @@ function buildDiscoveryEnv(stateDir: string): NodeJS.ProcessEnv {
   const bundledPluginsDir = path.join(stateDir, "empty-bundled-plugins");
   mkdirSafe(bundledPluginsDir);
   return {
-    NEXISCLAW_STATE_DIR: stateDir,
-    NEXISCLAW_HOME: undefined,
-    NEXISCLAW_DISABLE_BUNDLED_PLUGINS: "1",
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
+    GREENCHCLAW_STATE_DIR: stateDir,
+    GREENCHCLAW_HOME: undefined,
+    GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: "1",
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledPluginsDir,
   };
 }
 
@@ -103,11 +103,11 @@ function buildDiscoveryEnvWithOverrides(
   overrides: Partial<NodeJS.ProcessEnv> = {},
 ): NodeJS.ProcessEnv {
   const enablesBundledOverride =
-    Object.prototype.hasOwnProperty.call(overrides, "NEXISCLAW_BUNDLED_PLUGINS_DIR") &&
-    overrides.NEXISCLAW_BUNDLED_PLUGINS_DIR !== undefined;
+    Object.prototype.hasOwnProperty.call(overrides, "GREENCHCLAW_BUNDLED_PLUGINS_DIR") &&
+    overrides.GREENCHCLAW_BUNDLED_PLUGINS_DIR !== undefined;
   return {
     ...buildDiscoveryEnv(stateDir),
-    ...(enablesBundledOverride ? { NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined } : {}),
+    ...(enablesBundledOverride ? { GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined } : {}),
     ...overrides,
   };
 }
@@ -115,20 +115,20 @@ function buildDiscoveryEnvWithOverrides(
 function buildBundledDiscoveryEnv(stateDir: string): NodeJS.ProcessEnv {
   return {
     ...buildDiscoveryEnv(stateDir),
-    NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-    NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
+    GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+    GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
   };
 }
 
 async function discoverWithStateDir(
   stateDir: string,
-  params: Parameters<typeof discoverNexisClawPlugins>[0],
+  params: Parameters<typeof discoverGreenchClawPlugins>[0],
 ) {
-  return discoverNexisClawPlugins({ ...params, env: buildDiscoveryEnv(stateDir) });
+  return discoverGreenchClawPlugins({ ...params, env: buildDiscoveryEnv(stateDir) });
 }
 
-function discoverWithEnv(params: Parameters<typeof discoverNexisClawPlugins>[0]) {
-  return discoverNexisClawPlugins(params);
+function discoverWithEnv(params: Parameters<typeof discoverGreenchClawPlugins>[0]) {
+  return discoverGreenchClawPlugins(params);
 }
 
 function writePluginPackageManifest(params: {
@@ -143,7 +143,7 @@ function writePluginPackageManifest(params: {
     path.join(params.packageDir, "package.json"),
     JSON.stringify({
       name: params.packageName,
-      NexisClaw: {
+      GreenchClaw: {
         extensions: params.extensions,
         ...(params.runtimeExtensions ? { runtimeExtensions: params.runtimeExtensions } : {}),
         ...(params.setupEntry ? { setupEntry: params.setupEntry } : {}),
@@ -156,7 +156,7 @@ function writePluginPackageManifest(params: {
 
 function writePluginManifest(params: { pluginDir: string; id: string }) {
   fs.writeFileSync(
-    path.join(params.pluginDir, "NexisClaw.plugin.json"),
+    path.join(params.pluginDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id: params.id,
       configSchema: { type: "object" },
@@ -353,7 +353,7 @@ function expectCandidateFields(
 }
 
 function expectCandidatePresence(
-  result: Awaited<ReturnType<typeof discoverNexisClawPlugins>>,
+  result: Awaited<ReturnType<typeof discoverGreenchClawPlugins>>,
   params: { present?: readonly string[]; absent?: readonly string[] },
 ) {
   const ids = result.candidates.map((candidate) => candidate.idHint);
@@ -451,7 +451,7 @@ afterEach(() => {
   cleanupTrackedTempDirs(tempDirs);
 });
 
-describe("discoverNexisClawPlugins", () => {
+describe("discoverGreenchClawPlugins", () => {
   it("discovers global and workspace extensions", async () => {
     const stateDir = makeTempDir();
     const workspaceDir = path.join(stateDir, "workspace");
@@ -460,7 +460,7 @@ describe("discoverNexisClawPlugins", () => {
     mkdirSafe(globalExt);
     fs.writeFileSync(path.join(globalExt, "alpha.ts"), "export default function () {}", "utf-8");
 
-    const workspaceExt = path.join(workspaceDir, ".NexisClaw", "extensions");
+    const workspaceExt = path.join(workspaceDir, ".GreenchClaw", "extensions");
     mkdirSafe(workspaceExt);
     fs.writeFileSync(path.join(workspaceExt, "beta.ts"), "export default function () {}", "utf-8");
 
@@ -478,7 +478,7 @@ describe("discoverNexisClawPlugins", () => {
       const linkedPluginDir = path.join(stateDir, "linked-plugin-src");
       createPackagePluginWithEntry({
         packageDir: linkedPluginDir,
-        packageName: "@NexisClaw/linked-plugin",
+        packageName: "@GreenchClaw/linked-plugin",
         pluginId: "linked-plugin",
       });
 
@@ -498,13 +498,13 @@ describe("discoverNexisClawPlugins", () => {
     async () => {
       const stateDir = makeTempDir();
       const workspaceDir = path.join(stateDir, "workspace");
-      const workspaceExt = path.join(workspaceDir, ".NexisClaw", "extensions");
+      const workspaceExt = path.join(workspaceDir, ".GreenchClaw", "extensions");
       mkdirSafe(workspaceExt);
 
       const linkedPluginDir = path.join(stateDir, "workspace-linked-plugin-src");
       createPackagePluginWithEntry({
         packageDir: linkedPluginDir,
-        packageName: "@NexisClaw/workspace-linked-plugin",
+        packageName: "@GreenchClaw/workspace-linked-plugin",
         pluginId: "workspace-linked-plugin",
       });
 
@@ -537,22 +537,22 @@ describe("discoverNexisClawPlugins", () => {
   it("does not recurse arbitrary workspace directories for plugin auto-discovery", () => {
     const stateDir = makeTempDir();
     const workspaceDir = path.join(stateDir, "workspace");
-    const workspaceExt = path.join(workspaceDir, ".NexisClaw", "extensions");
+    const workspaceExt = path.join(workspaceDir, ".GreenchClaw", "extensions");
 
     const expectedWorkspacePluginDir = path.join(workspaceExt, "workspace-plugin");
     createPackagePluginWithEntry({
       packageDir: expectedWorkspacePluginDir,
-      packageName: "@NexisClaw/workspace-plugin",
+      packageName: "@GreenchClaw/workspace-plugin",
       pluginId: "workspace-plugin",
     });
 
     const unrelatedWorkspaceDir = path.join(workspaceDir, "lobster-integrations", "bin");
     createPackagePluginWithEntry({
       packageDir: unrelatedWorkspaceDir,
-      packageName: "@NexisClaw/stray-workspace-plugin",
+      packageName: "@GreenchClaw/stray-workspace-plugin",
     });
 
-    const result = discoverNexisClawPlugins({
+    const result = discoverGreenchClawPlugins({
       workspaceDir,
       env: buildDiscoveryEnv(stateDir),
     });
@@ -568,11 +568,11 @@ describe("discoverNexisClawPlugins", () => {
     const stateDir = makeTempDir();
     const homeDir = makeTempDir();
     const workspaceRoot = path.join(homeDir, "workspace");
-    const workspaceExt = path.join(workspaceRoot, ".NexisClaw", "extensions");
+    const workspaceExt = path.join(workspaceRoot, ".GreenchClaw", "extensions");
     mkdirSafe(workspaceExt);
     fs.writeFileSync(path.join(workspaceExt, "tilde-workspace.ts"), "export default {}", "utf-8");
 
-    const result = discoverNexisClawPlugins({
+    const result = discoverGreenchClawPlugins({
       workspaceDir: "~/workspace",
       env: {
         ...buildDiscoveryEnv(stateDir),
@@ -625,13 +625,17 @@ describe("discoverNexisClawPlugins", () => {
     );
     fs.writeFileSync(
       path.join(extensionDir, "package.json"),
-      '{"name":"@NexisClaw/twitch"}\n',
+      '{"name":"@GreenchClaw/twitch"}\n',
       "utf-8",
     );
-    fs.writeFileSync(path.join(extensionDir, "NexisClaw.plugin.json"), '{"id":"twitch"}\n', "utf-8");
+    fs.writeFileSync(
+      path.join(extensionDir, "GreenchClaw.plugin.json"),
+      '{"id":"twitch"}\n',
+      "utf-8",
+    );
 
-    const result = withNexisClawPackageArgv(packageRoot, () =>
-      discoverNexisClawPlugins({ env: buildDiscoveryEnv(stateDir) }),
+    const result = withGreenchClawPackageArgv(packageRoot, () =>
+      discoverGreenchClawPlugins({ env: buildDiscoveryEnv(stateDir) }),
     );
 
     expect(result.diagnostics.some((entry) => entry.message.includes("pnpm install"))).toBe(false);
@@ -639,7 +643,7 @@ describe("discoverNexisClawPlugins", () => {
 
   it("does not treat repo-level live or test files as plugin entrypoints", () => {
     const stateDir = makeTempDir();
-    const packageRoot = path.join(stateDir, "node_modules", "NexisClaw");
+    const packageRoot = path.join(stateDir, "node_modules", "GreenchClaw");
     const bundledDir = path.join(packageRoot, "dist", "extensions");
     mkdirSafe(bundledDir);
 
@@ -653,12 +657,12 @@ describe("discoverNexisClawPlugins", () => {
     );
     writeStandalonePlugin(path.join(bundledDir, "real-plugin.ts"), "export default {}");
 
-    const { candidates, diagnostics } = withNexisClawPackageArgv(packageRoot, () =>
-      discoverNexisClawPlugins({
+    const { candidates, diagnostics } = withGreenchClawPackageArgv(packageRoot, () =>
+      discoverGreenchClawPlugins({
         env: {
           ...buildDiscoveryEnv(stateDir),
-          NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-          NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+          GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+          GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
         },
       }),
     );
@@ -669,20 +673,20 @@ describe("discoverNexisClawPlugins", () => {
 
   it("ignores packaged bundled plugin paths in configured load paths", () => {
     const stateDir = makeTempDir();
-    const packageRoot = path.join(stateDir, "node_modules", "NexisClaw");
+    const packageRoot = path.join(stateDir, "node_modules", "GreenchClaw");
     const bundledRoot = path.join(packageRoot, "dist", "extensions");
     const bundledPluginDir = path.join(bundledRoot, "feishu");
     mkdirSafe(bundledPluginDir);
     writePluginManifest({ pluginDir: bundledPluginDir, id: "feishu" });
     writePluginEntry(path.join(bundledPluginDir, "index.js"));
 
-    const { candidates, diagnostics } = withNexisClawPackageArgv(packageRoot, () =>
-      discoverNexisClawPlugins({
+    const { candidates, diagnostics } = withGreenchClawPackageArgv(packageRoot, () =>
+      discoverGreenchClawPlugins({
         extraPaths: [bundledPluginDir],
         env: {
           ...buildDiscoveryEnv(stateDir),
-          NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-          NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
+          GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+          GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
         },
       }),
     );
@@ -700,7 +704,7 @@ describe("discoverNexisClawPlugins", () => {
 
   it("ignores legacy bundled plugin load paths that would shadow packaged bundled plugins", () => {
     const stateDir = makeTempDir();
-    const packageRoot = path.join(stateDir, "node_modules", "NexisClaw");
+    const packageRoot = path.join(stateDir, "node_modules", "GreenchClaw");
     const bundledRoot = path.join(packageRoot, "dist-runtime", "extensions");
     const bundledPluginDir = path.join(bundledRoot, "telegram");
     const legacyPluginDir = path.join(packageRoot, "extensions", "telegram");
@@ -712,13 +716,13 @@ describe("discoverNexisClawPlugins", () => {
     writePluginEntry(path.join(bundledPluginDir, "index.js"));
     writePluginEntry(path.join(legacyPluginDir, "index.js"));
 
-    const { candidates, diagnostics } = withNexisClawPackageArgv(packageRoot, () =>
-      discoverNexisClawPlugins({
+    const { candidates, diagnostics } = withGreenchClawPackageArgv(packageRoot, () =>
+      discoverGreenchClawPlugins({
         extraPaths: [legacyPluginDir],
         env: {
           ...buildDiscoveryEnv(stateDir),
-          NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-          NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
+          GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+          GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
         },
       }),
     );
@@ -736,31 +740,31 @@ describe("discoverNexisClawPlugins", () => {
 
   it("discovers bind-mounted bundled source overlays before packaged dist bundles", () => {
     const stateDir = makeTempDir();
-    const packageRoot = path.join(stateDir, "node_modules", "NexisClaw");
+    const packageRoot = path.join(stateDir, "node_modules", "GreenchClaw");
     const bundledRoot = path.join(packageRoot, "dist", "extensions");
     const bundledPluginDir = path.join(bundledRoot, "synology-chat");
     const sourcePluginDir = path.join(packageRoot, "extensions", "synology-chat");
     createPackagePluginWithEntry({
       packageDir: bundledPluginDir,
-      packageName: "@NexisClaw/synology-chat",
+      packageName: "@GreenchClaw/synology-chat",
       pluginId: "synology-chat",
       entryPath: "index.js",
     });
     createPackagePluginWithEntry({
       packageDir: sourcePluginDir,
-      packageName: "@NexisClaw/synology-chat",
+      packageName: "@GreenchClaw/synology-chat",
       pluginId: "synology-chat",
     });
     mockLinuxMountInfo([sourcePluginDir]);
     const sourceEntryPath = path.join(sourcePluginDir, "src", "index.ts");
     const bundledEntryPath = path.join(bundledPluginDir, "index.js");
 
-    const { candidates, diagnostics } = withNexisClawPackageArgv(packageRoot, () =>
-      discoverNexisClawPlugins({
+    const { candidates, diagnostics } = withGreenchClawPackageArgv(packageRoot, () =>
+      discoverGreenchClawPlugins({
         env: {
           ...buildDiscoveryEnv(stateDir),
-          NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-          NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
+          GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+          GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
         },
       }),
     );
@@ -790,30 +794,30 @@ describe("discoverNexisClawPlugins", () => {
 
   it("keeps copied source plugin dirs inert when they are not mounted overlays", () => {
     const stateDir = makeTempDir();
-    const packageRoot = path.join(stateDir, "node_modules", "NexisClaw");
+    const packageRoot = path.join(stateDir, "node_modules", "GreenchClaw");
     const bundledRoot = path.join(packageRoot, "dist", "extensions");
     const bundledPluginDir = path.join(bundledRoot, "synology-chat");
     const sourcePluginDir = path.join(packageRoot, "extensions", "synology-chat");
     createPackagePluginWithEntry({
       packageDir: bundledPluginDir,
-      packageName: "@NexisClaw/synology-chat",
+      packageName: "@GreenchClaw/synology-chat",
       pluginId: "synology-chat",
       entryPath: "index.js",
     });
     createPackagePluginWithEntry({
       packageDir: sourcePluginDir,
-      packageName: "@NexisClaw/synology-chat",
+      packageName: "@GreenchClaw/synology-chat",
       pluginId: "synology-chat",
     });
     mockLinuxMountInfo([]);
     const bundledEntryPath = path.join(bundledPluginDir, "index.js");
 
-    const { candidates, diagnostics } = withNexisClawPackageArgv(packageRoot, () =>
-      discoverNexisClawPlugins({
+    const { candidates, diagnostics } = withGreenchClawPackageArgv(packageRoot, () =>
+      discoverGreenchClawPlugins({
         env: {
           ...buildDiscoveryEnv(stateDir),
-          NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-          NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
+          GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+          GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledRoot,
         },
       }),
     );
@@ -854,7 +858,7 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@NexisClaw/local-source-pack",
+      packageName: "@GreenchClaw/local-source-pack",
       extensions: ["./index.ts"],
     });
     writePluginManifest({ pluginDir, id: "local-source-pack" });
@@ -881,7 +885,7 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@NexisClaw/source-only-pack",
+      packageName: "@GreenchClaw/source-only-pack",
       extensions: ["./src/index.ts"],
     });
     writePluginEntry(path.join(pluginDir, "src", "index.ts"));
@@ -918,7 +922,7 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: sourceDir,
-      packageName: "@NexisClaw/source-path-pack",
+      packageName: "@GreenchClaw/source-path-pack",
       extensions: ["./src/index.ts"],
     });
     writePluginEntry(path.join(sourceDir, "src", "index.ts"));
@@ -957,7 +961,7 @@ describe("discoverNexisClawPlugins", () => {
 
       writePluginPackageManifest({
         packageDir: actualSourceDir,
-        packageName: "@NexisClaw/source-path-symlink-pack",
+        packageName: "@GreenchClaw/source-path-symlink-pack",
         extensions: ["./src/index.ts"],
       });
       writePluginEntry(path.join(actualSourceDir, "src", "index.ts"));
@@ -990,7 +994,7 @@ describe("discoverNexisClawPlugins", () => {
     mkdirSafe(pluginDir);
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
-      JSON.stringify({ name: "@NexisClaw/metadata-only-pack", version: "0.0.1" }),
+      JSON.stringify({ name: "@GreenchClaw/metadata-only-pack", version: "0.0.1" }),
       "utf-8",
     );
     writePluginManifest({ pluginDir, id: "metadata-only-pack" });
@@ -1012,7 +1016,7 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@NexisClaw/missing-runtime-pack",
+      packageName: "@GreenchClaw/missing-runtime-pack",
       extensions: ["./index.ts"],
       runtimeExtensions: ["./dist/index.js"],
     });
@@ -1040,7 +1044,7 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: bundledPluginDir,
-      packageName: "@NexisClaw/discord",
+      packageName: "@GreenchClaw/discord",
       extensions: ["./index.js"],
     });
     writePluginManifest({ pluginDir: bundledPluginDir, id: "discord" });
@@ -1048,15 +1052,15 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: installedPluginDir,
-      packageName: "@NexisClaw/discord",
+      packageName: "@GreenchClaw/discord",
       extensions: ["./src/index.ts"],
     });
     writePluginManifest({ pluginDir: installedPluginDir, id: "discord" });
     writePluginEntry(path.join(installedPluginDir, "src", "index.ts"));
 
-    const result = discoverNexisClawPlugins({
+    const result = discoverGreenchClawPlugins({
       env: buildDiscoveryEnvWithOverrides(stateDir, {
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
       }),
       installRecords: {
         discord: {
@@ -1100,7 +1104,7 @@ describe("discoverNexisClawPlugins", () => {
     writePluginEntry(path.join(packageDir, "dist", "two.js"));
 
     const realpathSync = vi.spyOn(fs, "realpathSync");
-    const { candidates } = discoverNexisClawPlugins({
+    const { candidates } = discoverGreenchClawPlugins({
       env: buildDiscoveryEnv(stateDir),
     });
 
@@ -1131,7 +1135,7 @@ describe("discoverNexisClawPlugins", () => {
       const canonicalPackageDir = fs.realpathSync(realPackageDir);
 
       const realpathSync = vi.spyOn(fs, "realpathSync");
-      const { candidates } = discoverNexisClawPlugins({
+      const { candidates } = discoverGreenchClawPlugins({
         extraPaths: [linkedPackageDir, canonicalPackageDir],
         env: buildDiscoveryEnv(stateDir),
       });
@@ -1157,7 +1161,7 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@NexisClaw/runtime-pack",
+      packageName: "@GreenchClaw/runtime-pack",
       extensions: ["./src/index.ts"],
       runtimeExtensions: ["./dist/index.js"],
       setupEntry: "./src/setup-entry.ts",
@@ -1186,7 +1190,7 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@NexisClaw/missing-runtime-setup-pack",
+      packageName: "@GreenchClaw/missing-runtime-setup-pack",
       extensions: ["./dist/index.js"],
       setupEntry: "./src/setup-entry.ts",
       runtimeSetupEntry: "./dist/setup-entry.js",
@@ -1215,7 +1219,7 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@NexisClaw/missing-setup-pack",
+      packageName: "@GreenchClaw/missing-setup-pack",
       extensions: ["./dist/index.js"],
       setupEntry: "./src/setup-entry.ts",
     });
@@ -1241,7 +1245,7 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@NexisClaw/runtime-mismatch-pack",
+      packageName: "@GreenchClaw/runtime-mismatch-pack",
       extensions: ["./src/one.ts", "./src/two.ts"],
       runtimeExtensions: ["./dist/one.js"],
     });
@@ -1270,7 +1274,7 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@NexisClaw/runtime-blank-pack",
+      packageName: "@GreenchClaw/runtime-blank-pack",
       extensions: ["./src/index.ts"],
       runtimeExtensions: [" "],
     });
@@ -1284,7 +1288,7 @@ describe("discoverNexisClawPlugins", () => {
       result.diagnostics.some(
         (entry) =>
           entry.level === "error" &&
-          entry.message.includes("NexisClaw.runtimeExtensions[0]") &&
+          entry.message.includes("GreenchClaw.runtimeExtensions[0]") &&
           entry.message.includes("non-empty string"),
       ),
     ).toBe(true);
@@ -1298,7 +1302,7 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@NexisClaw/built-peer-pack",
+      packageName: "@GreenchClaw/built-peer-pack",
       extensions: ["src/index.ts"],
       setupEntry: "src/setup-entry.ts",
     });
@@ -1327,7 +1331,7 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@NexisClaw/nested-pack",
+      packageName: "@GreenchClaw/nested-pack",
       extensions: ["./plugin/index.ts"],
     });
     writePluginEntry(path.join(pluginDir, "plugin", "index.ts"));
@@ -1343,19 +1347,19 @@ describe("discoverNexisClawPlugins", () => {
   it("keeps workspace package TypeScript entries unless runtime entries are explicit", () => {
     const stateDir = makeTempDir();
     const workspaceDir = path.join(stateDir, "workspace");
-    const pluginDir = path.join(workspaceDir, ".NexisClaw", "extensions", "workspace-pack");
+    const pluginDir = path.join(workspaceDir, ".GreenchClaw", "extensions", "workspace-pack");
     mkdirSafe(path.join(pluginDir, "src"));
     mkdirSafe(path.join(pluginDir, "dist"));
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@NexisClaw/workspace-pack",
+      packageName: "@GreenchClaw/workspace-pack",
       extensions: ["./src/index.ts"],
     });
     writePluginEntry(path.join(pluginDir, "src", "index.ts"));
     writePluginEntry(path.join(pluginDir, "dist", "index.js"));
 
-    const { candidates } = discoverNexisClawPlugins({
+    const { candidates } = discoverGreenchClawPlugins({
       workspaceDir,
       env: buildDiscoveryEnv(stateDir),
     });
@@ -1372,8 +1376,8 @@ describe("discoverNexisClawPlugins", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@NexisClaw/downloadable",
-        NexisClaw: {
+        name: "@GreenchClaw/downloadable",
+        GreenchClaw: {
           extensions: ["./index.ts"],
         },
       }),
@@ -1382,9 +1386,9 @@ describe("discoverNexisClawPlugins", () => {
     writePluginManifest({ pluginDir, id: "downloadable" });
     writePluginEntry(path.join(pluginDir, "index.ts"));
 
-    const { candidates } = discoverNexisClawPlugins({
+    const { candidates } = discoverGreenchClawPlugins({
       env: buildDiscoveryEnvWithOverrides(stateDir, {
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
       }),
     });
 
@@ -1399,8 +1403,8 @@ describe("discoverNexisClawPlugins", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@NexisClaw/downloadable",
-        NexisClaw: {
+        name: "@GreenchClaw/downloadable",
+        GreenchClaw: {
           extensions: ["./index.ts"],
         },
       }),
@@ -1409,9 +1413,9 @@ describe("discoverNexisClawPlugins", () => {
     writePluginManifest({ pluginDir, id: "downloadable" });
     writePluginEntry(path.join(pluginDir, "index.js"));
 
-    const { candidates, diagnostics } = discoverNexisClawPlugins({
+    const { candidates, diagnostics } = discoverGreenchClawPlugins({
       env: buildDiscoveryEnvWithOverrides(stateDir, {
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
       }),
     });
 
@@ -1425,7 +1429,7 @@ describe("discoverNexisClawPlugins", () => {
 
   it("discovers source-checkout-only bundled plugins alongside built bundled plugins", () => {
     const stateDir = makeTempDir();
-    const packageRoot = path.join(stateDir, "NexisClaw");
+    const packageRoot = path.join(stateDir, "GreenchClaw");
     const bundledDir = path.join(packageRoot, "dist", "extensions");
     const sourceDir = path.join(packageRoot, "extensions");
     const builtPluginDir = path.join(bundledDir, "shipped");
@@ -1440,14 +1444,14 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: builtPluginDir,
-      packageName: "@NexisClaw/shipped",
+      packageName: "@GreenchClaw/shipped",
       extensions: ["./index.js"],
     });
     writePluginManifest({ pluginDir: builtPluginDir, id: "shipped" });
     writePluginEntry(path.join(builtPluginDir, "index.js"));
     writePluginPackageManifest({
       packageDir: sourceBuiltPluginDir,
-      packageName: "@NexisClaw/shipped",
+      packageName: "@GreenchClaw/shipped",
       extensions: ["./index.ts"],
     });
     writePluginManifest({ pluginDir: sourceBuiltPluginDir, id: "shipped" });
@@ -1455,8 +1459,8 @@ describe("discoverNexisClawPlugins", () => {
     fs.writeFileSync(
       path.join(sourceOnlyPluginDir, "package.json"),
       JSON.stringify({
-        name: "@NexisClaw/downloadable",
-        NexisClaw: {
+        name: "@GreenchClaw/downloadable",
+        GreenchClaw: {
           extensions: ["./index.ts"],
         },
       }),
@@ -1465,9 +1469,9 @@ describe("discoverNexisClawPlugins", () => {
     writePluginManifest({ pluginDir: sourceOnlyPluginDir, id: "downloadable" });
     writePluginEntry(path.join(sourceOnlyPluginDir, "index.ts"));
 
-    const { candidates } = discoverNexisClawPlugins({
+    const { candidates } = discoverGreenchClawPlugins({
       env: buildDiscoveryEnvWithOverrides(stateDir, {
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
       }),
     });
 
@@ -1482,11 +1486,11 @@ describe("discoverNexisClawPlugins", () => {
 
   it("does not discover nested node_modules copies under installed plugins", async () => {
     const stateDir = makeTempDir();
-    const pluginDir = path.join(stateDir, "extensions", "opik-NexisClaw");
+    const pluginDir = path.join(stateDir, "extensions", "opik-GreenchClaw");
     const nestedDiffsDir = path.join(
       pluginDir,
       "node_modules",
-      "NexisClaw",
+      "GreenchClaw",
       "dist",
       "extensions",
       "diffs",
@@ -1497,10 +1501,10 @@ describe("discoverNexisClawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@opik/opik-NexisClaw",
+      packageName: "@opik/opik-GreenchClaw",
       extensions: ["./src/index.ts"],
     });
-    writePluginManifest({ pluginDir, id: "opik-NexisClaw" });
+    writePluginManifest({ pluginDir, id: "opik-GreenchClaw" });
     fs.writeFileSync(
       path.join(pluginDir, "src", "index.ts"),
       "export default function () {}",
@@ -1513,8 +1517,8 @@ describe("discoverNexisClawPlugins", () => {
     );
 
     writePluginPackageManifest({
-      packageDir: path.join(pluginDir, "node_modules", "NexisClaw"),
-      packageName: "NexisClaw",
+      packageDir: path.join(pluginDir, "node_modules", "GreenchClaw"),
+      packageName: "GreenchClaw",
       extensions: [`./${bundledDistPluginFile("diffs", "index.js")}`],
     });
     writePluginManifest({ pluginDir: nestedDiffsDir, id: "diffs" });
@@ -1525,15 +1529,15 @@ describe("discoverNexisClawPlugins", () => {
     );
 
     const { candidates } = await discoverWithStateDir(stateDir, {});
-    expectCandidateOrder(candidates, ["opik-NexisClaw"]);
+    expectCandidateOrder(candidates, ["opik-GreenchClaw"]);
   });
 
   it("skips dependency and build directories while scanning workspace roots", () => {
     const stateDir = makeTempDir();
     const workspaceDir = path.join(stateDir, "workspace");
-    const workspaceRoot = path.join(workspaceDir, ".NexisClaw", "extensions");
+    const workspaceRoot = path.join(workspaceDir, ".GreenchClaw", "extensions");
     const workspacePluginDir = path.join(workspaceRoot, "workspace-plugin");
-    const nestedNodeModulesDir = path.join(workspaceRoot, "node_modules", "NexisClaw");
+    const nestedNodeModulesDir = path.join(workspaceRoot, "node_modules", "GreenchClaw");
     const nestedDistDir = path.join(workspaceRoot, "dist", "extensions", "diffs");
     mkdirSafe(path.join(workspacePluginDir, "src"));
     mkdirSafe(path.join(nestedNodeModulesDir, "src"));
@@ -1541,13 +1545,13 @@ describe("discoverNexisClawPlugins", () => {
 
     createPackagePluginWithEntry({
       packageDir: workspacePluginDir,
-      packageName: "@NexisClaw/workspace-plugin",
+      packageName: "@GreenchClaw/workspace-plugin",
       pluginId: "workspace-plugin",
     });
 
     createPackagePluginWithEntry({
       packageDir: nestedNodeModulesDir,
-      packageName: "NexisClaw",
+      packageName: "GreenchClaw",
       pluginId: "node-modules-copy",
     });
 
@@ -1558,7 +1562,7 @@ describe("discoverNexisClawPlugins", () => {
       "utf-8",
     );
 
-    const { candidates } = discoverNexisClawPlugins({
+    const { candidates } = discoverGreenchClawPlugins({
       workspaceDir,
       env: buildDiscoveryEnv(stateDir),
     });
@@ -1573,7 +1577,7 @@ describe("discoverNexisClawPlugins", () => {
         const packageDir = path.join(stateDir, "extensions", "voice-call-pack");
         createPackagePluginWithEntry({
           packageDir,
-          packageName: "@NexisClaw/voice-call",
+          packageName: "@GreenchClaw/voice-call",
           entryPath: "src/index.ts",
         });
         return {};
@@ -1599,8 +1603,8 @@ describe("discoverNexisClawPlugins", () => {
       name: "normalizes bundled speech package ids to canonical plugin ids",
       setup: (stateDir: string) => {
         for (const [dirName, packageName, pluginId] of [
-          ["elevenlabs-speech-pack", "@NexisClaw/elevenlabs-speech", "elevenlabs"],
-          ["microsoft-speech-pack", "@NexisClaw/microsoft-speech", "microsoft"],
+          ["elevenlabs-speech-pack", "@GreenchClaw/elevenlabs-speech", "elevenlabs"],
+          ["microsoft-speech-pack", "@GreenchClaw/microsoft-speech", "microsoft"],
         ] as const) {
           const packageDir = path.join(stateDir, "extensions", dirName);
           createPackagePluginWithEntry({
@@ -1621,7 +1625,7 @@ describe("discoverNexisClawPlugins", () => {
         const packageDir = path.join(stateDir, "packs", "demo-plugin-dir");
         createPackagePluginWithEntry({
           packageDir,
-          packageName: "@NexisClaw/demo-plugin-dir",
+          packageName: "@GreenchClaw/demo-plugin-dir",
           entryPath: "index.js",
         });
         return { extraPaths: [packageDir] };
@@ -1721,7 +1725,7 @@ describe("discoverNexisClawPlugins", () => {
     const result = await discoverWithStateDir(stateDir, setup(stateDir));
     const legacy = findCandidateById(result.candidates, "legacy-with-bad-bundle");
 
-    expect(legacy?.format).toBe("NexisClaw");
+    expect(legacy?.format).toBe("GreenchClaw");
     expect(hasDiagnosticSourceSuffix(result.diagnostics, bundleMarker)).toBe(true);
   });
 
@@ -1735,7 +1739,7 @@ describe("discoverNexisClawPlugins", () => {
         mkdirSafe(globalExt);
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@NexisClaw/escape-pack",
+          packageName: "@GreenchClaw/escape-pack",
           extensions: ["../../outside.js"],
         });
         fs.writeFileSync(outside, "export default function () {}", "utf-8");
@@ -1749,7 +1753,7 @@ describe("discoverNexisClawPlugins", () => {
         mkdirSafe(path.join(globalExt, "src"));
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@NexisClaw/escape-pack",
+          packageName: "@GreenchClaw/escape-pack",
           extensions: ["../src/index.ts"],
         });
         fs.writeFileSync(path.join(globalExt, "src", "index.js"), "export default {}", "utf-8");
@@ -1763,7 +1767,7 @@ describe("discoverNexisClawPlugins", () => {
         mkdirSafe(path.join(globalExt, "dist"));
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@NexisClaw/escape-pack",
+          packageName: "@GreenchClaw/escape-pack",
           extensions: ["../src/index.ts"],
           runtimeExtensions: ["./dist/index.js"],
         });
@@ -1778,7 +1782,7 @@ describe("discoverNexisClawPlugins", () => {
         mkdirSafe(globalExt);
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@NexisClaw/missing-entry-pack",
+          packageName: "@GreenchClaw/missing-entry-pack",
           extensions: ["./missing.ts"],
         });
         return true;
@@ -1802,7 +1806,7 @@ describe("discoverNexisClawPlugins", () => {
         }
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@NexisClaw/pack",
+          packageName: "@GreenchClaw/pack",
           extensions: ["./linked/escape.ts"],
         });
         return true;
@@ -1834,7 +1838,7 @@ describe("discoverNexisClawPlugins", () => {
         }
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@NexisClaw/pack",
+          packageName: "@GreenchClaw/pack",
           extensions: ["./escape.ts"],
         });
         return true;
@@ -1866,7 +1870,7 @@ describe("discoverNexisClawPlugins", () => {
         }
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@NexisClaw/pack",
+          packageName: "@GreenchClaw/pack",
           extensions: ["./escape.ts"],
         });
         return true;
@@ -1899,7 +1903,7 @@ describe("discoverNexisClawPlugins", () => {
         }
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@NexisClaw/pack",
+          packageName: "@GreenchClaw/pack",
           extensions: ["./src/index.ts"],
         });
         return true;
@@ -1921,7 +1925,7 @@ describe("discoverNexisClawPlugins", () => {
     mkdirSafe(path.join(globalExt, "dist"));
     writePluginPackageManifest({
       packageDir: globalExt,
-      packageName: "@NexisClaw/escape-pack",
+      packageName: "@GreenchClaw/escape-pack",
       extensions: ["./dist/index.js"],
       setupEntry: "../src/setup-entry.ts",
       runtimeSetupEntry: "./dist/setup-entry.js",
@@ -1951,8 +1955,8 @@ describe("discoverNexisClawPlugins", () => {
     fs.writeFileSync(
       outsideManifest,
       JSON.stringify({
-        name: "@NexisClaw/pack",
-        NexisClaw: { extensions: ["./entry.ts"] },
+        name: "@GreenchClaw/pack",
+        GreenchClaw: { extensions: ["./entry.ts"] },
       }),
       "utf-8",
     );
@@ -1991,15 +1995,15 @@ describe("discoverNexisClawPlugins", () => {
     "repairs world-writable bundled plugin dirs before loading them",
     async () => {
       const stateDir = makeTempDir();
-      const packageRoot = path.join(stateDir, "node_modules", "NexisClaw");
+      const packageRoot = path.join(stateDir, "node_modules", "GreenchClaw");
       const bundledDir = path.join(packageRoot, "dist", "extensions");
       const packDir = path.join(bundledDir, "demo-pack");
       mkdirSafe(packDir);
       fs.writeFileSync(path.join(packDir, "index.ts"), "export default function () {}", "utf-8");
       fs.chmodSync(packDir, 0o777);
 
-      const result = withNexisClawPackageArgv(packageRoot, () =>
-        discoverNexisClawPlugins({
+      const result = withGreenchClawPackageArgv(packageRoot, () =>
+        discoverGreenchClawPlugins({
           env: { ...process.env, ...buildBundledDiscoveryEnv(stateDir) },
         }),
       );
@@ -2054,10 +2058,10 @@ describe("discoverNexisClawPlugins", () => {
     fs.chmodSync(blockedDir, 0o777);
 
     try {
-      const result = discoverNexisClawPlugins({
+      const result = discoverGreenchClawPlugins({
         env: {
           ...buildDiscoveryEnv(stateDir),
-          NEXISCLAW_PLUGINS_PATHS: blockedDir,
+          GREENCHCLAW_PLUGINS_PATHS: blockedDir,
         },
       });
       const blockedDiagnostics = result.diagnostics.filter(
@@ -2082,7 +2086,7 @@ describe("discoverNexisClawPlugins", () => {
       fs.chmodSync(pluginDir, 0o777);
 
       try {
-        const result = discoverNexisClawPlugins({
+        const result = discoverGreenchClawPlugins({
           extraPaths: [pluginDir],
           env: {
             ...buildDiscoveryEnv(stateDir),
@@ -2123,7 +2127,7 @@ describe("discoverNexisClawPlugins", () => {
 
   it("discovers bundled and global plugins for each workspace-specific scan", () => {
     const stateDir = makeTempDir();
-    const packageRoot = path.join(stateDir, "node_modules", "NexisClaw");
+    const packageRoot = path.join(stateDir, "node_modules", "GreenchClaw");
     const bundledDir = path.join(packageRoot, "dist", "extensions");
     const globalExt = path.join(stateDir, "extensions");
     const workspaceA = path.join(stateDir, "workspace-a");
@@ -2131,31 +2135,31 @@ describe("discoverNexisClawPlugins", () => {
 
     createPackagePluginWithEntry({
       packageDir: path.join(bundledDir, "bundled-plugin"),
-      packageName: "@NexisClaw/bundled-plugin",
+      packageName: "@GreenchClaw/bundled-plugin",
       pluginId: "bundled-plugin",
     });
     createPackagePluginWithEntry({
       packageDir: path.join(globalExt, "global-plugin"),
-      packageName: "@NexisClaw/global-plugin",
+      packageName: "@GreenchClaw/global-plugin",
       pluginId: "global-plugin",
     });
     createPackagePluginWithEntry({
-      packageDir: path.join(workspaceA, ".NexisClaw", "extensions", "workspace-a-plugin"),
-      packageName: "@NexisClaw/workspace-a-plugin",
+      packageDir: path.join(workspaceA, ".GreenchClaw", "extensions", "workspace-a-plugin"),
+      packageName: "@GreenchClaw/workspace-a-plugin",
       pluginId: "workspace-a-plugin",
     });
     createPackagePluginWithEntry({
-      packageDir: path.join(workspaceB, ".NexisClaw", "extensions", "workspace-b-plugin"),
-      packageName: "@NexisClaw/workspace-b-plugin",
+      packageDir: path.join(workspaceB, ".GreenchClaw", "extensions", "workspace-b-plugin"),
+      packageName: "@GreenchClaw/workspace-b-plugin",
       pluginId: "workspace-b-plugin",
     });
 
     const env = {
       ...buildDiscoveryEnv(stateDir),
-      NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-      NEXISCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
+      GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+      GREENCHCLAW_BUNDLED_PLUGINS_DIR: bundledDir,
     };
-    const first = withNexisClawPackageArgv(packageRoot, () =>
+    const first = withGreenchClawPackageArgv(packageRoot, () =>
       discoverWithEnv({ workspaceDir: workspaceA, env }),
     );
     expectCandidatePresence(first, {
@@ -2163,7 +2167,7 @@ describe("discoverNexisClawPlugins", () => {
       absent: ["workspace-b-plugin"],
     });
 
-    const second = withNexisClawPackageArgv(packageRoot, () =>
+    const second = withGreenchClawPackageArgv(packageRoot, () =>
       discoverWithEnv({ workspaceDir: workspaceB, env }),
     );
     expectCandidatePresence(second, {

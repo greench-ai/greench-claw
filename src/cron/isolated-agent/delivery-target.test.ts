@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChannelOutboundAdapter } from "../../channels/plugins/types.js";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import {
   forumMessagingForTest,
   telegramMessagingForTest,
@@ -139,7 +139,7 @@ beforeEach(() => {
           config: {
             listAccountIds: () => [],
             resolveAccount: () => ({}),
-            resolveAllowFrom: ({ cfg }: { cfg: NexisClawConfig }) =>
+            resolveAllowFrom: ({ cfg }: { cfg: GreenchClawConfig }) =>
               (cfg.channels?.alpha as { allowFrom?: string[] } | undefined)?.allowFrom,
           },
         },
@@ -153,15 +153,15 @@ afterEach(() => {
   resetPluginRuntimeStateForTest();
 });
 
-function makeCfg(overrides?: Partial<NexisClawConfig>): NexisClawConfig {
+function makeCfg(overrides?: Partial<GreenchClawConfig>): GreenchClawConfig {
   return {
     bindings: [],
     channels: {},
     ...overrides,
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-function makeForumBoundCfg(accountId = "account-b"): NexisClawConfig {
+function makeForumBoundCfg(accountId = "account-b"): GreenchClawConfig {
   return makeCfg({
     bindings: [
       {
@@ -211,7 +211,7 @@ function setStoredAlphaAllowFrom(allowFrom: string[]) {
 }
 
 async function resolveForAgent(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   target?: { channel?: "last" | "forum" | "alpha"; to?: string };
 }) {
   const channel = params.target ? params.target.channel : DEFAULT_TARGET.channel;
@@ -222,7 +222,7 @@ async function resolveForAgent(params: {
   });
 }
 
-async function resolveLastTarget(cfg: NexisClawConfig) {
+async function resolveLastTarget(cfg: GreenchClawConfig) {
   return resolveForAgent({
     cfg,
     target: { channel: "last", to: undefined },

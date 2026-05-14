@@ -27,7 +27,8 @@ export function registerAcpCli(program: Command) {
     .option("-v, --verbose", "Verbose logging to stderr", false)
     .addHelpText(
       "after",
-      () => `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/acp", "docs.NexisClaw.ai/cli/acp")}\n`,
+      () =>
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/acp", "docs.GreenchClaw.ai/cli/acp")}\n`,
     )
     .action(async (opts) => {
       try {
@@ -58,7 +59,7 @@ export function registerAcpCli(program: Command) {
     .command("client")
     .description("Run an interactive ACP client against the local ACP bridge")
     .option("--cwd <dir>", "Working directory for the ACP session")
-    .option("--server <command>", "ACP server command (default: NexisClaw)")
+    .option("--server <command>", "ACP server command (default: GreenchClaw)")
     .option("--server-args <args...>", "Extra arguments for the ACP server")
     .option("--server-verbose", "Enable verbose logging on the ACP server", false)
     .option("-v, --verbose", "Verbose client logging", false)

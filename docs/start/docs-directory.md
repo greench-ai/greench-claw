@@ -1,5 +1,5 @@
 ---
-summary: "Curated links to the most used NexisClaw docs."
+summary: "Curated links to the most used GreenchClaw docs."
 read_when:
   - You want quick access to key docs pages
 title: "Docs directory"
@@ -21,7 +21,7 @@ For a complete map of the docs, see [Docs hubs](/start/hubs).
 - [Updating and rollback](/install/updating)
 - [Pairing (DM and nodes)](/channels/pairing)
 - [Nix mode](/install/nix)
-- [NexisClaw assistant setup](/start/NexisClaw)
+- [GreenchClaw assistant setup](/start/GreenchClaw)
 - [Skills](/tools/skills)
 - [Skills config](/tools/skills-config)
 - [Workspace templates](/reference/templates/AGENTS)

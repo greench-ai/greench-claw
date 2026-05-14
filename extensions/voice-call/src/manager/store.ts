@@ -3,7 +3,7 @@ import {
   appendRegularFile,
   privateFileStore,
   privateFileStoreSync,
-} from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/security-runtime";
 import { CallRecordSchema, TerminalStates, type CallId, type CallRecord } from "../types.js";
 
 const pendingPersistWrites = new Set<Promise<void>>();

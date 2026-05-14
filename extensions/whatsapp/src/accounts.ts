@@ -4,11 +4,11 @@ import {
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId,
   resolveUserPath,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/account-core";
-import type { DmPolicy, GroupPolicy, ReplyToMode } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveOAuthDir } from "NexisClaw/plugin-sdk/state-paths";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/account-core";
+import type { DmPolicy, GroupPolicy, ReplyToMode } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveOAuthDir } from "GreenchClaw/plugin-sdk/state-paths";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveMergedWhatsAppAccountConfig } from "./account-config.js";
 import {
   listConfiguredAccountIds,
@@ -49,7 +49,7 @@ export type ResolvedWhatsAppAccount = {
 
 export const DEFAULT_WHATSAPP_MEDIA_MAX_MB = 50;
 
-export function listWhatsAppAuthDirs(cfg: NexisClawConfig): string[] {
+export function listWhatsAppAuthDirs(cfg: GreenchClawConfig): string[] {
   const oauthDir = resolveOAuthDir();
   const whatsappDir = path.join(oauthDir, "whatsapp");
   const authDirs = new Set<string>([oauthDir, path.join(whatsappDir, DEFAULT_ACCOUNT_ID)]);
@@ -74,7 +74,7 @@ export function listWhatsAppAuthDirs(cfg: NexisClawConfig): string[] {
   return Array.from(authDirs);
 }
 
-export function hasAnyWhatsAppAuth(cfg: NexisClawConfig): boolean {
+export function hasAnyWhatsAppAuth(cfg: GreenchClawConfig): boolean {
   return listWhatsAppAuthDirs(cfg).some((authDir) => hasWebCredsSync(authDir));
 }
 
@@ -95,7 +95,7 @@ function legacyAuthExists(authDir: string): boolean {
   }
 }
 
-export function resolveWhatsAppAuthDir(params: { cfg: NexisClawConfig; accountId: string }): {
+export function resolveWhatsAppAuthDir(params: { cfg: GreenchClawConfig; accountId: string }): {
   authDir: string;
   isLegacy: boolean;
 } {
@@ -118,7 +118,7 @@ export function resolveWhatsAppAuthDir(params: { cfg: NexisClawConfig; accountId
 }
 
 export function resolveWhatsAppAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): ResolvedWhatsAppAccount {
   const merged = resolveMergedWhatsAppAccountConfig({
@@ -169,7 +169,7 @@ export function resolveWhatsAppMediaMaxBytes(
   return mediaMaxMb * 1024 * 1024;
 }
 
-export function listEnabledWhatsAppAccounts(cfg: NexisClawConfig): ResolvedWhatsAppAccount[] {
+export function listEnabledWhatsAppAccounts(cfg: GreenchClawConfig): ResolvedWhatsAppAccount[] {
   return listWhatsAppAccountIds(cfg)
     .map((accountId) => resolveWhatsAppAccount({ cfg, accountId }))
     .filter((account) => account.enabled);

@@ -2,11 +2,11 @@ import {
   createMessageReceiptFromOutboundResults,
   verifyChannelMessageAdapterCapabilityProofs,
   verifyDurableFinalCapabilityProofs,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 import {
   listImportedBundledPluginFacadeIds,
   resetFacadeRuntimeStateForTest,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { imessagePlugin } from "./channel.js";
 import { createIMessageTestPlugin } from "./imessage.test-plugin.js";

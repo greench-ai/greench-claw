@@ -1,6 +1,6 @@
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
 import type { FallbackAttempt } from "../agents/model-fallback.types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type {
   GeneratedMusicAsset,
   MusicGenerationIgnoredOverride,
@@ -11,7 +11,7 @@ import type {
 } from "./types.js";
 
 export type GenerateMusicParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prompt: string;
   agentDir?: string;
   authStore?: AuthProfileStore;
@@ -38,7 +38,7 @@ export type GenerateMusicRuntimeResult = {
 };
 
 export type ListRuntimeMusicGenerationProvidersParams = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 };
 
 export type RuntimeMusicGenerationProvider = MusicGenerationProvider;

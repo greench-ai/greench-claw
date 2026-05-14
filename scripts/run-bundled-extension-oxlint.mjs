@@ -4,6 +4,6 @@ runExtensionOxlint({
   roots: ["extensions"],
   toolName: "oxlint-bundled-extensions",
   lockName: "oxlint-bundled-extensions",
-  tempDirPrefix: "NexisClaw-bundled-extension-oxlint-",
+  tempDirPrefix: "GreenchClaw-bundled-extension-oxlint-",
   emptyMessage: "No bundled extension files found.",
 });

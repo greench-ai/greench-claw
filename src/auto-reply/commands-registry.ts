@@ -5,7 +5,7 @@ import {
 } from "../agents/model-selection.js";
 import type { SkillCommandSpec } from "../agents/skills.js";
 import { getChannelPlugin, getLoadedChannelPlugin } from "../channels/plugins/index.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
 import { listChatCommands, listChatCommandsForConfig } from "./commands-registry-list.js";
 import { normalizeCommandBody } from "./commands-registry-normalize.js";
@@ -132,7 +132,7 @@ export function listNativeCommandSpecs(params?: {
 }
 
 export function listNativeCommandSpecsForConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   params?: { skillCommands?: SkillCommandSpec[]; provider?: string },
 ): NativeCommandSpec[] {
   return listNativeSpecsFromCommands(listChatCommandsForConfig(cfg, params), params?.provider);
@@ -256,12 +256,12 @@ export function buildCommandTextFromArgs(
   return buildCommandText(commandName, serializeCommandArgs(command, args));
 }
 
-function resolveDefaultCommandContext(cfg?: NexisClawConfig): {
+function resolveDefaultCommandContext(cfg?: GreenchClawConfig): {
   provider: string;
   model: string;
 } {
   const resolved = resolveConfiguredModelRef({
-    cfg: cfg ?? ({} as NexisClawConfig),
+    cfg: cfg ?? ({} as GreenchClawConfig),
     defaultProvider: DEFAULT_PROVIDER,
     defaultModel: DEFAULT_MODEL,
   });
@@ -276,7 +276,7 @@ export type ResolvedCommandArgChoice = { value: string; label: string };
 export function resolveCommandArgChoices(params: {
   command: ChatCommandDefinition;
   arg: CommandArgDefinition;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   provider?: string;
   model?: string;
   catalog?: ThinkingCatalogEntry[];
@@ -308,7 +308,7 @@ export function resolveCommandArgChoices(params: {
 export function resolveCommandArgMenu(params: {
   command: ChatCommandDefinition;
   args?: CommandArgs;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   provider?: string;
   model?: string;
   catalog?: ThinkingCatalogEntry[];

@@ -8,7 +8,7 @@ import {
   makeTempDir,
   packageBuildCommitFromTgz,
   packageVersionFromTgz,
-  packNexisClaw,
+  packGreenchClaw,
   parseMode,
   parseProvider,
   modelProviderConfigBatchJson,
@@ -94,8 +94,8 @@ interface MacosSummary {
 
 const guestPath =
   "/opt/homebrew/bin:/opt/homebrew/opt/node/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin";
-const guestNexisClaw = "/opt/homebrew/bin/NexisClaw";
-const guestNexisClawEntry = "/opt/homebrew/lib/node_modules/NexisClaw/NexisClaw.mjs";
+const guestGreenchClaw = "/opt/homebrew/bin/GreenchClaw";
+const guestGreenchClawEntry = "/opt/homebrew/lib/node_modules/GreenchClaw/GreenchClaw.mjs";
 const guestNode = "/opt/homebrew/bin/node";
 const guestNpm = "/opt/homebrew/bin/npm";
 
@@ -106,7 +106,7 @@ const defaultOptions = (): MacosOptions => ({
   hostIp: undefined,
   hostPort: 18425,
   hostPortExplicit: false,
-  installUrl: "https://NexisClaw.ai/install.sh",
+  installUrl: "https://GreenchClaw.ai/install.sh",
   installVersion: "",
   json: false,
   keepServer: false,
@@ -132,7 +132,7 @@ Options:
   --model <provider/model>    Override the model used for the agent-turn smoke.
   --api-key-env <var>        Host env var name for provider API key.
   --openai-api-key-env <var> Alias for --api-key-env (backward compatible)
-  --install-url <url>        Installer URL for latest release. Default: https://NexisClaw.ai/install.sh
+  --install-url <url>        Installer URL for latest release. Default: https://GreenchClaw.ai/install.sh
   --host-port <port>         Host HTTP port for current-main tgz. Default: 18425
   --host-ip <ip>             Override Parallels host IP.
   --latest-version <ver>     Override npm latest version lookup.
@@ -284,7 +284,7 @@ class MacosSmoke {
   }
 
   async run(): Promise<void> {
-    this.runDir = await makeTempDir("NexisClaw-parallels-macos.");
+    this.runDir = await makeTempDir("GreenchClaw-parallels-macos.");
     this.phases = new PhaseRunner(this.runDir);
     this.guest = new MacosGuest(
       {
@@ -297,7 +297,7 @@ class MacosSmoke {
       this.phases,
     );
     this.discord = this.createDiscordSmoke();
-    this.tgzDir = await makeTempDir("NexisClaw-parallels-macos-tgz.");
+    this.tgzDir = await makeTempDir("GreenchClaw-parallels-macos-tgz.");
     try {
       this.snapshot = resolveSnapshot(this.options.vmName, this.options.snapshotHint);
       this.latestVersion = resolveLatestVersion(this.options.latestVersion);
@@ -322,7 +322,7 @@ class MacosSmoke {
       say(`Run logs: ${this.runDir}`);
 
       if (await this.needsHostTgz()) {
-        this.artifact = await packNexisClaw({
+        this.artifact = await packGreenchClaw({
           destination: this.tgzDir,
           packageSpec: this.options.targetPackageSpec,
           requireControlUi: true,
@@ -420,8 +420,8 @@ class MacosSmoke {
       },
       guest: this.guest,
       guestNode,
-      guestNexisClaw,
-      guestNexisClawEntry,
+      guestGreenchClaw,
+      guestGreenchClawEntry,
       runDir: this.runDir,
       vmName: this.options.vmName,
     });
@@ -462,7 +462,7 @@ class MacosSmoke {
     await this.phase("fresh.restore-snapshot", 780, () => this.restoreSnapshot());
     await this.phase("fresh.reset-state", 180, () => this.resetState());
     await this.phase("fresh.install-main", this.targetInstallsDirectly() ? 420 : 420, () =>
-      this.installMain("NexisClaw-main-fresh.tgz"),
+      this.installMain("GreenchClaw-main-fresh.tgz"),
     );
     this.status.freshVersion = await this.extractLastVersion("fresh.install-main");
     await this.phase("fresh.verify-main-version", 60, () => this.verifyTargetVersion());
@@ -475,7 +475,7 @@ class MacosSmoke {
     this.status.freshDashboard = "pass";
     await this.phase(
       "fresh.first-agent-turn",
-      Number(process.env.NEXISCLAW_PARALLELS_MACOS_AGENT_TIMEOUT_S || 2700),
+      Number(process.env.GREENCHCLAW_PARALLELS_MACOS_AGENT_TIMEOUT_S || 2700),
       () => this.verifyTurn(),
     );
     this.status.freshAgent = "pass";
@@ -508,7 +508,7 @@ class MacosSmoke {
     }
     if (this.options.targetPackageSpec) {
       await this.phase("upgrade.install-main", this.targetInstallsDirectly() ? 420 : 420, () =>
-        this.installMain("NexisClaw-main-upgrade.tgz"),
+        this.installMain("GreenchClaw-main-upgrade.tgz"),
       );
       this.status.upgradeVersion = await this.extractLastVersion("upgrade.install-main");
       await this.phase("upgrade.verify-main-version", 60, () => this.verifyTargetVersion());
@@ -518,7 +518,7 @@ class MacosSmoke {
     } else {
       await this.phase(
         "upgrade.update-dev",
-        Number(process.env.NEXISCLAW_PARALLELS_MACOS_UPDATE_DEV_TIMEOUT_S || 1800),
+        Number(process.env.GREENCHCLAW_PARALLELS_MACOS_UPDATE_DEV_TIMEOUT_S || 1800),
         () => this.runDevChannelUpdate(),
       );
       this.status.upgradeVersion = await this.extractLastVersion("upgrade.update-dev");
@@ -532,7 +532,7 @@ class MacosSmoke {
     this.status.upgradeDashboard = "pass";
     await this.phase(
       "upgrade.first-agent-turn",
-      Number(process.env.NEXISCLAW_PARALLELS_MACOS_AGENT_TIMEOUT_S || 2700),
+      Number(process.env.GREENCHCLAW_PARALLELS_MACOS_AGENT_TIMEOUT_S || 2700),
       () => this.verifyTurn(),
     );
     this.status.upgradeAgent = "pass";
@@ -726,25 +726,25 @@ class MacosSmoke {
   }
 
   private resetState(): void {
-    this.guestSh(String.raw`/usr/bin/pkill -f 'NexisClaw.*gateway run' >/dev/null 2>&1 || true
-/usr/bin/pkill -f 'NexisClaw-gateway' >/dev/null 2>&1 || true
-/usr/bin/pkill -f 'NexisClaw.mjs gateway' >/dev/null 2>&1 || true
+    this.guestSh(String.raw`/usr/bin/pkill -f 'GreenchClaw.*gateway run' >/dev/null 2>&1 || true
+/usr/bin/pkill -f 'GreenchClaw-gateway' >/dev/null 2>&1 || true
+/usr/bin/pkill -f 'GreenchClaw.mjs gateway' >/dev/null 2>&1 || true
 printf 'preflight.user=%s\n' "$(whoami)"
 printf 'preflight.home=%s\n' "$HOME"
 printf 'preflight.path=%s\n' "$PATH"
 printf 'preflight.umask=%s\n' "$(umask)"
 printf 'preflight.npmRoot=%s\n' "$(${guestNpm} root -g 2>/dev/null || true)"
-${guestNpm} uninstall -g NexisClaw >/dev/null 2>&1 || true
-rm -rf "$HOME/.NexisClaw"
-rm -f /tmp/NexisClaw-parallels-macos-gateway.log`);
+${guestNpm} uninstall -g GreenchClaw >/dev/null 2>&1 || true
+rm -rf "$HOME/.GreenchClaw"
+rm -f /tmp/GreenchClaw-parallels-macos-gateway.log`);
   }
 
   private installLatestRelease(): void {
     this.guestSh(
-      `export NEXISCLAW_NO_ONBOARD=1
-curl -fsSL ${shellQuote(this.options.installUrl)} -o /tmp/NexisClaw-install.sh
-bash /tmp/NexisClaw-install.sh --version ${shellQuote(this.installVersion)}
-${guestNexisClaw} --version`,
+      `export GREENCHCLAW_NO_ONBOARD=1
+curl -fsSL ${shellQuote(this.options.installUrl)} -o /tmp/GreenchClaw-install.sh
+bash /tmp/GreenchClaw-install.sh --version ${shellQuote(this.installVersion)}
+${guestGreenchClaw} --version`,
     );
   }
 
@@ -753,7 +753,7 @@ ${guestNexisClaw} --version`,
       this
         .guestSh(`printf 'install-source: registry-spec %s\\n' ${shellQuote(this.options.targetPackageSpec || "")}
 ${guestNpm} install -g ${shellQuote(this.options.targetPackageSpec || "")}
-${guestNexisClaw} --version`);
+${guestGreenchClaw} --version`);
       return;
     }
     if (!this.artifact || !this.server) {
@@ -763,7 +763,7 @@ ${guestNexisClaw} --version`);
     this.guestSh(`printf 'install-source: host-tgz %s\\n' ${shellQuote(tgzUrl)}
 curl -fsSL ${shellQuote(tgzUrl)} -o /tmp/${tempName}
 ${guestNpm} install -g /tmp/${tempName}
-${guestNexisClaw} --version`);
+${guestGreenchClaw} --version`);
   }
 
   private async verifyTargetVersion(): Promise<void> {
@@ -781,7 +781,7 @@ ${guestNexisClaw} --version`);
   }
 
   private verifyVersionContains(needle: string): void {
-    const version = this.guestExec([guestNexisClaw, "--version"]);
+    const version = this.guestExec([guestGreenchClaw, "--version"]);
     if (!version.includes(needle)) {
       throw new Error(`version mismatch: expected substring ${needle}`);
     }
@@ -800,12 +800,12 @@ check_path() {
     exit 1
   fi
 }
-check_path "$root/NexisClaw"
-check_path "$root/NexisClaw/extensions"
-if [ -d "$root/NexisClaw/extensions" ]; then
+check_path "$root/GreenchClaw"
+check_path "$root/GreenchClaw/extensions"
+if [ -d "$root/GreenchClaw/extensions" ]; then
   while IFS= read -r -d '' extension_dir; do
     check_path "$extension_dir"
-  done < <(/usr/bin/find "$root/NexisClaw/extensions" -mindepth 1 -maxdepth 1 -type d -print0)
+  done < <(/usr/bin/find "$root/GreenchClaw/extensions" -mindepth 1 -maxdepth 1 -type d -print0)
 fi`);
   }
 
@@ -814,7 +814,7 @@ fi`);
     this.guestExec([
       "/usr/bin/env",
       `${this.auth.apiKeyEnv}=${this.auth.apiKeyValue}`,
-      guestNexisClaw,
+      guestGreenchClaw,
       "onboard",
       "--non-interactive",
       "--mode",
@@ -841,7 +841,7 @@ fi`);
 
   private ensureGuestPnpm(): void {
     this.guestSh(String.raw`set -eu
-bootstrap_root=/tmp/NexisClaw-smoke-pnpm-bootstrap
+bootstrap_root=/tmp/GreenchClaw-smoke-pnpm-bootstrap
 bootstrap_bin="$bootstrap_root/node_modules/.bin"
 if [ -x "$bootstrap_bin/pnpm" ]; then
   echo "bootstrap-pnpm: reuse"
@@ -860,24 +860,24 @@ mkdir -p "$bootstrap_root"
     const home = this.guestHome();
     this.guestSh(
       `set -eu
-rm -rf ${shellQuote(`${home}/NexisClaw`)}
-export PATH=${shellQuote(`/tmp/NexisClaw-smoke-pnpm-bootstrap/node_modules/.bin:${guestPath}`)}
+rm -rf ${shellQuote(`${home}/GreenchClaw`)}
+export PATH=${shellQuote(`/tmp/GreenchClaw-smoke-pnpm-bootstrap/node_modules/.bin:${guestPath}`)}
 ${guestNode} - <<'JS'
 const fs = require("node:fs");
 const path = require("node:path");
-const configPath = path.join(process.env.HOME || ${JSON.stringify(home)}, ".NexisClaw", "NexisClaw.json");
+const configPath = path.join(process.env.HOME || ${JSON.stringify(home)}, ".GreenchClaw", "GreenchClaw.json");
 const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
 config.update = { ...(config.update || {}), channel: "dev" };
 fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + "\\n");
 JS
-/usr/bin/env NODE_OPTIONS=--max-old-space-size=8192 NEXISCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1 NEXISCLAW_DISABLE_BUNDLED_PLUGINS=1 ${guestNode} ${guestNexisClawEntry} update --channel dev --yes --json
-${guestNode} ${guestNexisClawEntry} --version
-${guestNode} ${guestNexisClawEntry} update status --json`,
+/usr/bin/env NODE_OPTIONS=--max-old-space-size=8192 GREENCHCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS=1 GREENCHCLAW_DISABLE_BUNDLED_PLUGINS=1 ${guestNode} ${guestGreenchClawEntry} update --channel dev --yes --json
+${guestNode} ${guestGreenchClawEntry} --version
+${guestNode} ${guestGreenchClawEntry} update status --json`,
     );
   }
 
   private verifyDevChannelUpdate(): void {
-    const status = this.guestExec([guestNode, guestNexisClawEntry, "update", "status", "--json"]);
+    const status = this.guestExec([guestNode, guestGreenchClawEntry, "update", "status", "--json"]);
     for (const needle of ['"installKind": "git"', '"value": "dev"', '"branch": "main"']) {
       if (!status.includes(needle)) {
         throw new Error(`dev update status missing ${needle}`);
@@ -893,21 +893,21 @@ ${guestNode} ${guestNexisClawEntry} update status --json`,
     this.guestSh(
       `set -euo pipefail
 trap '' HUP
-/usr/bin/pkill -f 'NexisClaw.*gateway run' >/dev/null 2>&1 || true
-/usr/bin/pkill -f 'NexisClaw-gateway' >/dev/null 2>&1 || true
-/usr/bin/pkill -f 'NexisClaw.mjs gateway' >/dev/null 2>&1 || true
+/usr/bin/pkill -f 'GreenchClaw.*gateway run' >/dev/null 2>&1 || true
+/usr/bin/pkill -f 'GreenchClaw-gateway' >/dev/null 2>&1 || true
+/usr/bin/pkill -f 'GreenchClaw.mjs gateway' >/dev/null 2>&1 || true
 /usr/bin/env HOME=${shellQuote(home)} USER=${shellQuote(this.guestUser)} LOGNAME=${shellQuote(this.guestUser)} PATH=${shellQuote(guestPath)} ${shellQuote(
         `${this.auth.apiKeyEnv}=${this.auth.apiKeyValue}`,
-      )} NEXISCLAW_HOME=${shellQuote(home)} NEXISCLAW_STATE_DIR=${shellQuote(`${home}/.NexisClaw`)} NEXISCLAW_CONFIG_PATH=${shellQuote(
-        `${home}/.NexisClaw/NexisClaw.json`,
-      )} ${guestNode} ${guestNexisClawEntry} gateway run --bind loopback --port 18789 --force </dev/null >/tmp/NexisClaw-parallels-macos-gateway.log 2>&1 &
+      )} GREENCHCLAW_HOME=${shellQuote(home)} GREENCHCLAW_STATE_DIR=${shellQuote(`${home}/.GreenchClaw`)} GREENCHCLAW_CONFIG_PATH=${shellQuote(
+        `${home}/.GreenchClaw/GreenchClaw.json`,
+      )} ${guestNode} ${guestGreenchClawEntry} gateway run --bind loopback --port 18789 --force </dev/null >/tmp/GreenchClaw-parallels-macos-gateway.log 2>&1 &
 sleep 1`,
     );
   }
 
   private verifyGateway(): void {
     for (let attempt = 1; attempt <= 8; attempt++) {
-      const result = this.guestNexisClaw(
+      const result = this.guestGreenchClaw(
         ["gateway", "status", "--deep", "--require-rpc", "--timeout", "15000"],
         false,
       );
@@ -923,16 +923,18 @@ sleep 1`,
   }
 
   private showGatewayStatusCompat(): void {
-    const help = this.guestExec([guestNexisClaw, "gateway", "status", "--help"], { check: false });
+    const help = this.guestExec([guestGreenchClaw, "gateway", "status", "--help"], {
+      check: false,
+    });
     const args = help.includes("--require-rpc")
       ? ["gateway", "status", "--deep", "--require-rpc"]
       : ["gateway", "status", "--deep"];
-    if (!this.guestNexisClaw(args, false)) {
+    if (!this.guestGreenchClaw(args, false)) {
       throw new Error("gateway status failed");
     }
   }
 
-  private guestNexisClaw(args: string[], check: boolean): boolean {
+  private guestGreenchClaw(args: string[], check: boolean): boolean {
     const result = run(
       "prlctl",
       [
@@ -949,7 +951,7 @@ sleep 1`,
               `PATH=${guestPath}`,
             ]
           : ["--current-user", "/usr/bin/env", `PATH=${guestPath}`]),
-        guestNexisClaw,
+        guestGreenchClaw,
         ...args,
       ],
       { check: false, quiet: true, timeoutMs: this.remainingPhaseTimeoutMs() },
@@ -957,7 +959,7 @@ sleep 1`,
     this.log(result.stdout);
     this.log(result.stderr);
     if (check && result.status !== 0) {
-      throw new Error(`NexisClaw ${args.join(" ")} failed`);
+      throw new Error(`GreenchClaw ${args.join(" ")} failed`);
     }
     return result.status === 0;
   }
@@ -966,9 +968,9 @@ sleep 1`,
     this.guestSh(String.raw`set -eu
 deadline=$((SECONDS + 120))
 while [ $SECONDS -lt $deadline ]; do
-  if curl -fsSL --connect-timeout 2 --max-time 5 http://127.0.0.1:18789/ >/tmp/NexisClaw-dashboard-smoke.html 2>/dev/null; then
-    grep -F '<title>NexisClaw Control</title>' /tmp/NexisClaw-dashboard-smoke.html >/dev/null &&
-      grep -F '<NexisClaw-app></NexisClaw-app>' /tmp/NexisClaw-dashboard-smoke.html >/dev/null &&
+  if curl -fsSL --connect-timeout 2 --max-time 5 http://127.0.0.1:18789/ >/tmp/GreenchClaw-dashboard-smoke.html 2>/dev/null; then
+    grep -F '<title>GreenchClaw Control</title>' /tmp/GreenchClaw-dashboard-smoke.html >/dev/null &&
+      grep -F '<GreenchClaw-app></GreenchClaw-app>' /tmp/GreenchClaw-dashboard-smoke.html >/dev/null &&
       exit 0
   fi
   sleep 1
@@ -978,7 +980,7 @@ exit 1`);
   }
 
   private verifyTurn(): void {
-    this.guestExec([guestNode, guestNexisClawEntry, "models", "set", this.auth.modelId]);
+    this.guestExec([guestNode, guestGreenchClawEntry, "models", "set", this.auth.modelId]);
     const modelProviderConfigBatch = modelProviderConfigBatchJson(this.auth.modelId, "macos");
     if (modelProviderConfigBatch) {
       this.guestSh(`provider_config_batch="$(mktemp)"
@@ -986,30 +988,30 @@ cat >"$provider_config_batch" <<'JSON'
 ${modelProviderConfigBatch}
 JSON
 ${shellQuote(guestNode)} ${shellQuote(
-        guestNexisClawEntry,
+        guestGreenchClawEntry,
       )} config set --batch-file "$provider_config_batch" --strict-json
 rm -f "$provider_config_batch"`);
     }
     this.guestExec([
       guestNode,
-      guestNexisClawEntry,
+      guestGreenchClawEntry,
       "config",
       "set",
       "agents.defaults.skipBootstrap",
       "true",
       "--strict-json",
     ]);
-    this.guestExec([guestNode, guestNexisClawEntry, "config", "set", "tools.profile", "minimal"]);
+    this.guestExec([guestNode, guestGreenchClawEntry, "config", "set", "tools.profile", "minimal"]);
     this.guestSh(
       `${posixAgentWorkspaceScript("Parallels macOS smoke test assistant.")}
 agent_ok=false
 for attempt in 1 2; do
   session_id="parallels-macos-smoke"
   if [ "$attempt" -gt 1 ]; then session_id="parallels-macos-smoke-retry-$attempt"; fi
-  rm -f "$HOME/.NexisClaw/agents/main/sessions/$session_id.jsonl"
+  rm -f "$HOME/.GreenchClaw/agents/main/sessions/$session_id.jsonl"
   output_file="$(mktemp)"
   set +e
-  /usr/bin/env ${shellQuote(`${this.auth.apiKeyEnv}=${this.auth.apiKeyValue}`)} ${guestNode} ${guestNexisClawEntry} agent --local --agent main --session-id "$session_id" --message ${shellQuote(
+  /usr/bin/env ${shellQuote(`${this.auth.apiKeyEnv}=${this.auth.apiKeyValue}`)} ${guestNode} ${guestGreenchClawEntry} agent --local --agent main --session-id "$session_id" --message ${shellQuote(
     "Reply with exact ASCII text OK only.",
   )} --thinking minimal --timeout ${resolveParallelsModelTimeoutSeconds("macos")} --json >"$output_file" 2>&1
   rc=$?
@@ -1031,7 +1033,7 @@ for attempt in 1 2; do
   fi
 done
 if [ "$agent_ok" != true ]; then
-  echo "NexisClaw agent finished without OK response" >&2
+  echo "GreenchClaw agent finished without OK response" >&2
   exit 1
 fi`,
     );
@@ -1067,7 +1069,7 @@ fi`,
 
   private async extractLastVersion(phaseName: string): Promise<string> {
     const log = await readFile(path.join(this.runDir, `${phaseName}.log`), "utf8").catch(() => "");
-    const matches = [...log.matchAll(/NexisClaw\s+([0-9][^\s]*)/gi)];
+    const matches = [...log.matchAll(/GreenchClaw\s+([0-9][^\s]*)/gi)];
     return matches.at(-1)?.[1] ?? "";
   }
 

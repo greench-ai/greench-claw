@@ -1,5 +1,5 @@
 import { resolveSessionAgentId } from "../../agents/agent-scope.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type {
   PluginHookSessionEndEvent,
   PluginHookSessionEndReason,
@@ -15,7 +15,7 @@ export type SessionHookContext = {
 function buildSessionHookContext(params: {
   sessionId: string;
   sessionKey: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): SessionHookContext {
   return {
     sessionId: params.sessionId,
@@ -27,7 +27,7 @@ function buildSessionHookContext(params: {
 export function buildSessionStartHookPayload(params: {
   sessionId: string;
   sessionKey: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   resumedFrom?: string;
 }): {
   event: PluginHookSessionStartEvent;
@@ -50,7 +50,7 @@ export function buildSessionStartHookPayload(params: {
 export function buildSessionEndHookPayload(params: {
   sessionId: string;
   sessionKey: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   messageCount?: number;
   durationMs?: number;
   reason?: PluginHookSessionEndReason;

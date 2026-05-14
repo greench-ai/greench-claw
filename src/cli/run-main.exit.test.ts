@@ -131,7 +131,7 @@ vi.mock("../infra/env.js", () => ({
 }));
 
 vi.mock("../infra/path-env.js", () => ({
-  ensureNexisClawCliOnPath: ensurePathMock,
+  ensureGreenchClawCliOnPath: ensurePathMock,
 }));
 
 vi.mock("../infra/runtime-guard.js", () => ({
@@ -242,7 +242,7 @@ function makeProxyHandle() {
       no_proxy: undefined,
       NO_PROXY: undefined,
       GLOBAL_AGENT_NO_PROXY: undefined,
-      NEXISCLAW_PROXY_ACTIVE: undefined,
+      GREENCHCLAW_PROXY_ACTIVE: undefined,
     },
     stop: vi.fn(async () => {}),
     kill: vi.fn(),
@@ -268,8 +268,8 @@ describe("runCli exit behavior", () => {
     resolveManifestCommandAliasOwnerMock.mockReturnValue(undefined);
     resolveManifestToolOwnerMock.mockReturnValue(undefined);
     resolveManifestCliCommandSurfaceOwnerMock.mockReturnValue(undefined);
-    delete process.env.NEXISCLAW_DISABLE_CLI_STARTUP_HELP_FAST_PATH;
-    delete process.env.NEXISCLAW_HIDE_BANNER;
+    delete process.env.GREENCHCLAW_DISABLE_CLI_STARTUP_HELP_FAST_PATH;
+    delete process.env.GREENCHCLAW_HIDE_BANNER;
   });
 
   it("does not force process.exit after successful routed command", async () => {
@@ -278,10 +278,10 @@ describe("runCli exit behavior", () => {
       throw new Error(`unexpected process.exit(${String(code)})`);
     }) as typeof process.exit);
 
-    await runCli(["node", "NexisClaw", "status"]);
+    await runCli(["node", "GreenchClaw", "status"]);
 
-    expect(maybeRunCliInContainerMock).toHaveBeenCalledWith(["node", "NexisClaw", "status"]);
-    expect(tryRouteCliMock).toHaveBeenCalledWith(["node", "NexisClaw", "status"]);
+    expect(maybeRunCliInContainerMock).toHaveBeenCalledWith(["node", "GreenchClaw", "status"]);
+    expect(tryRouteCliMock).toHaveBeenCalledWith(["node", "GreenchClaw", "status"]);
     expect(closeActiveMemorySearchManagersMock).not.toHaveBeenCalled();
     expect(disposeRegisteredAgentHarnessesMock).not.toHaveBeenCalled();
     expect(ensureTaskRegistryReadyMock).not.toHaveBeenCalled();
@@ -299,9 +299,9 @@ describe("runCli exit behavior", () => {
       parseAsync,
     });
 
-    await runCli(["node", "NexisClaw", "agent", "--local"]);
+    await runCli(["node", "GreenchClaw", "agent", "--local"]);
 
-    expect(parseAsync).toHaveBeenCalledWith(["node", "NexisClaw", "agent", "--local"]);
+    expect(parseAsync).toHaveBeenCalledWith(["node", "GreenchClaw", "agent", "--local"]);
     expect(disposeRegisteredAgentHarnessesMock).toHaveBeenCalledTimes(1);
   });
 
@@ -317,9 +317,9 @@ describe("runCli exit behavior", () => {
     const pauseSpy = vi.spyOn(process.stdin, "pause").mockImplementation(() => process.stdin);
 
     try {
-      await runCli(["node", "NexisClaw", "channels"]);
+      await runCli(["node", "GreenchClaw", "channels"]);
 
-      expect(parseAsync).toHaveBeenCalledWith(["node", "NexisClaw", "channels"]);
+      expect(parseAsync).toHaveBeenCalledWith(["node", "GreenchClaw", "channels"]);
       expect(pauseSpy).toHaveBeenCalledTimes(1);
     } finally {
       pauseSpy.mockRestore();
@@ -332,23 +332,23 @@ describe("runCli exit behavior", () => {
   });
 
   it("emits the startup banner before gateway foreground fast-path startup", async () => {
-    await runCli(["node", "NexisClaw", "gateway", "--force"]);
+    await runCli(["node", "GreenchClaw", "gateway", "--force"]);
 
     expect(tryRouteCliMock).not.toHaveBeenCalled();
     expect(emitCliBannerMock).toHaveBeenCalledWith("9.9.9-test", {
-      argv: ["node", "NexisClaw", "gateway", "--force"],
+      argv: ["node", "GreenchClaw", "gateway", "--force"],
     });
     expect(addGatewayRunCommandMock).toHaveBeenCalledTimes(2);
     expect(commanderParseAsyncMock).toHaveBeenCalledWith([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "gateway",
       "--force",
     ]);
   });
 
   it("installs console capture before parsing the gateway foreground fast path", async () => {
-    await runCli(["node", "NexisClaw", "gateway", "--force"]);
+    await runCli(["node", "GreenchClaw", "gateway", "--force"]);
 
     expect(enableConsoleCaptureMock).toHaveBeenCalledTimes(1);
     expect(commanderParseAsyncMock).toHaveBeenCalledTimes(1);
@@ -359,13 +359,13 @@ describe("runCli exit behavior", () => {
   });
 
   it("honors banner suppression on the gateway foreground fast path", async () => {
-    process.env.NEXISCLAW_HIDE_BANNER = "1";
+    process.env.GREENCHCLAW_HIDE_BANNER = "1";
 
-    await runCli(["node", "NexisClaw", "gateway"]);
+    await runCli(["node", "GreenchClaw", "gateway"]);
 
     expect(tryRouteCliMock).not.toHaveBeenCalled();
     expect(emitCliBannerMock).not.toHaveBeenCalled();
-    expect(commanderParseAsyncMock).toHaveBeenCalledWith(["node", "NexisClaw", "gateway"]);
+    expect(commanderParseAsyncMock).toHaveBeenCalledWith(["node", "GreenchClaw", "gateway"]);
   });
 
   it("renders browser help from startup metadata without building the full program", async () => {
@@ -374,11 +374,11 @@ describe("runCli exit behavior", () => {
       throw new Error(`unexpected process.exit(${String(code)})`);
     }) as typeof process.exit);
 
-    await runCli(["node", "NexisClaw", "browser", "--help"]);
+    await runCli(["node", "GreenchClaw", "browser", "--help"]);
 
     expect(maybeRunCliInContainerMock).toHaveBeenCalledWith([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "browser",
       "--help",
     ]);
@@ -394,7 +394,7 @@ describe("runCli exit behavior", () => {
   it("keeps root help on the precomputed path without proxy bootstrap", async () => {
     outputPrecomputedRootHelpTextMock.mockReturnValueOnce(true);
 
-    await runCli(["node", "NexisClaw", "--help"]);
+    await runCli(["node", "GreenchClaw", "--help"]);
 
     expect(outputPrecomputedRootHelpTextMock).toHaveBeenCalledTimes(1);
     expect(hasEnvHttpProxyAgentConfiguredMock).not.toHaveBeenCalled();
@@ -407,9 +407,9 @@ describe("runCli exit behavior", () => {
       throw new Error(`unexpected process.exit(${String(code)})`);
     }) as typeof process.exit);
 
-    await runCli(["node", "NexisClaw", "--help"]);
+    await runCli(["node", "GreenchClaw", "--help"]);
 
-    expect(maybeRunCliInContainerMock).toHaveBeenCalledWith(["node", "NexisClaw", "--help"]);
+    expect(maybeRunCliInContainerMock).toHaveBeenCalledWith(["node", "GreenchClaw", "--help"]);
     expect(tryRouteCliMock).not.toHaveBeenCalled();
     expect(outputPrecomputedRootHelpTextMock).toHaveBeenCalledTimes(1);
     expect(outputRootHelpMock).toHaveBeenCalledTimes(1);
@@ -422,57 +422,57 @@ describe("runCli exit behavior", () => {
   it("does not start the managed proxy for local gateway client commands", async () => {
     tryRouteCliMock.mockResolvedValueOnce(true);
 
-    await runCli(["node", "NexisClaw", "status"]);
+    await runCli(["node", "GreenchClaw", "status"]);
 
     expect(startProxyMock).not.toHaveBeenCalled();
     expect(stopProxyMock).not.toHaveBeenCalled();
   });
 
   it.each([
-    ["gateway runtime", ["node", "NexisClaw", "gateway", "run"]],
-    ["bare gateway runtime", ["node", "NexisClaw", "gateway"]],
-    ["node runtime", ["node", "NexisClaw", "node", "run"]],
-    ["local agent runtime", ["node", "NexisClaw", "agent", "--local"]],
-    ["provider inference", ["node", "NexisClaw", "infer", "web", "fetch", "https://example.com"]],
-    ["model command", ["node", "NexisClaw", "models", "auth", "login", "openai"]],
-    ["plugin command", ["node", "NexisClaw", "plugins", "marketplace", "list"]],
-    ["skill command", ["node", "NexisClaw", "skills", "search", "browser"]],
-    ["update command", ["node", "NexisClaw", "update", "check"]],
-    ["channel probe", ["node", "NexisClaw", "channels", "status", "--probe"]],
-    ["channel capabilities probe", ["node", "NexisClaw", "channels", "capabilities"]],
-    ["directory plugin command", ["node", "NexisClaw", "directory", "peers", "list"]],
-    ["message plugin command", ["node", "NexisClaw", "message", "send", "--to", "demo"]],
-    ["metadata-owned plugin command", ["node", "NexisClaw", "googlemeet", "login"]],
+    ["gateway runtime", ["node", "GreenchClaw", "gateway", "run"]],
+    ["bare gateway runtime", ["node", "GreenchClaw", "gateway"]],
+    ["node runtime", ["node", "GreenchClaw", "node", "run"]],
+    ["local agent runtime", ["node", "GreenchClaw", "agent", "--local"]],
+    ["provider inference", ["node", "GreenchClaw", "infer", "web", "fetch", "https://example.com"]],
+    ["model command", ["node", "GreenchClaw", "models", "auth", "login", "openai"]],
+    ["plugin command", ["node", "GreenchClaw", "plugins", "marketplace", "list"]],
+    ["skill command", ["node", "GreenchClaw", "skills", "search", "browser"]],
+    ["update command", ["node", "GreenchClaw", "update", "check"]],
+    ["channel probe", ["node", "GreenchClaw", "channels", "status", "--probe"]],
+    ["channel capabilities probe", ["node", "GreenchClaw", "channels", "capabilities"]],
+    ["directory plugin command", ["node", "GreenchClaw", "directory", "peers", "list"]],
+    ["message plugin command", ["node", "GreenchClaw", "message", "send", "--to", "demo"]],
+    ["metadata-owned plugin command", ["node", "GreenchClaw", "googlemeet", "login"]],
   ])("starts managed proxy routing for %s", (_name, argv) => {
     expect(shouldStartProxyForCli(argv)).toBe(true);
   });
 
   it.each([
-    ["root help", ["node", "NexisClaw", "--help"]],
-    ["root version", ["node", "NexisClaw", "--version"]],
-    ["gateway help", ["node", "NexisClaw", "gateway", "--help"]],
-    ["gateway run help", ["node", "NexisClaw", "gateway", "run", "--help"]],
-    ["status", ["node", "NexisClaw", "status"]],
-    ["health", ["node", "NexisClaw", "health"]],
-    ["gateway status", ["node", "NexisClaw", "gateway", "status"]],
-    ["gateway health", ["node", "NexisClaw", "gateway", "health"]],
-    ["remote agent control-plane", ["node", "NexisClaw", "agent", "run"]],
-    ["chat control-plane", ["node", "NexisClaw", "chat"]],
-    ["terminal control-plane", ["node", "NexisClaw", "terminal"]],
-    ["config", ["node", "NexisClaw", "config", "get", "proxy.enabled"]],
-    ["channels parent help", ["node", "NexisClaw", "channels"]],
-    ["completion", ["node", "NexisClaw", "completion", "zsh"]],
-    ["debug proxy cli", ["node", "NexisClaw", "proxy", "start"]],
-    ["agents list", ["node", "NexisClaw", "agents", "list"]],
-    ["models list", ["node", "NexisClaw", "models", "list"]],
-    ["models status without live probe", ["node", "NexisClaw", "models", "status"]],
-    ["skills check", ["node", "NexisClaw", "skills", "check"]],
-    ["skills info", ["node", "NexisClaw", "skills", "info", "weather"]],
-    ["skills list", ["node", "NexisClaw", "skills", "list"]],
-    ["tasks list", ["node", "NexisClaw", "tasks", "list"]],
-    ["legacy singular tool namespace", ["node", "NexisClaw", "tool", "image_generate"]],
-    ["gateway tools namespace typo", ["node", "NexisClaw", "tools", "effective"]],
-    ["migrate", ["node", "NexisClaw", "migrate"]],
+    ["root help", ["node", "GreenchClaw", "--help"]],
+    ["root version", ["node", "GreenchClaw", "--version"]],
+    ["gateway help", ["node", "GreenchClaw", "gateway", "--help"]],
+    ["gateway run help", ["node", "GreenchClaw", "gateway", "run", "--help"]],
+    ["status", ["node", "GreenchClaw", "status"]],
+    ["health", ["node", "GreenchClaw", "health"]],
+    ["gateway status", ["node", "GreenchClaw", "gateway", "status"]],
+    ["gateway health", ["node", "GreenchClaw", "gateway", "health"]],
+    ["remote agent control-plane", ["node", "GreenchClaw", "agent", "run"]],
+    ["chat control-plane", ["node", "GreenchClaw", "chat"]],
+    ["terminal control-plane", ["node", "GreenchClaw", "terminal"]],
+    ["config", ["node", "GreenchClaw", "config", "get", "proxy.enabled"]],
+    ["channels parent help", ["node", "GreenchClaw", "channels"]],
+    ["completion", ["node", "GreenchClaw", "completion", "zsh"]],
+    ["debug proxy cli", ["node", "GreenchClaw", "proxy", "start"]],
+    ["agents list", ["node", "GreenchClaw", "agents", "list"]],
+    ["models list", ["node", "GreenchClaw", "models", "list"]],
+    ["models status without live probe", ["node", "GreenchClaw", "models", "status"]],
+    ["skills check", ["node", "GreenchClaw", "skills", "check"]],
+    ["skills info", ["node", "GreenchClaw", "skills", "info", "weather"]],
+    ["skills list", ["node", "GreenchClaw", "skills", "list"]],
+    ["tasks list", ["node", "GreenchClaw", "tasks", "list"]],
+    ["legacy singular tool namespace", ["node", "GreenchClaw", "tool", "image_generate"]],
+    ["gateway tools namespace typo", ["node", "GreenchClaw", "tools", "effective"]],
+    ["migrate", ["node", "GreenchClaw", "migrate"]],
   ])("skips managed proxy routing for %s", (_name, argv) => {
     expect(shouldStartProxyForCli(argv)).toBe(false);
   });
@@ -480,7 +480,7 @@ describe("runCli exit behavior", () => {
   it("starts the managed proxy for network-capable commands by default", async () => {
     tryRouteCliMock.mockResolvedValueOnce(true);
 
-    await runCli(["node", "NexisClaw", "plugins", "marketplace", "list"]);
+    await runCli(["node", "GreenchClaw", "plugins", "marketplace", "list"]);
 
     expect(startProxyMock).toHaveBeenCalledWith(undefined);
   });
@@ -488,13 +488,13 @@ describe("runCli exit behavior", () => {
   it("starts the managed proxy for metadata-owned plugin commands by default", async () => {
     tryRouteCliMock.mockResolvedValueOnce(true);
 
-    await runCli(["node", "NexisClaw", "googlemeet", "login"]);
+    await runCli(["node", "GreenchClaw", "googlemeet", "login"]);
 
     expect(startProxyMock).toHaveBeenCalledWith(undefined);
   });
 
   it("rejects unowned command roots before proxy and plugin runtime registration", async () => {
-    await expect(runCli(["node", "NexisClaw", "foo"])).rejects.toThrow(
+    await expect(runCli(["node", "GreenchClaw", "foo"])).rejects.toThrow(
       'No built-in command or plugin CLI metadata owns "foo"',
     );
 
@@ -513,7 +513,7 @@ describe("runCli exit behavior", () => {
 
     let error: unknown;
     try {
-      await runCli(["node", "NexisClaw", "totally-unknown"]);
+      await runCli(["node", "GreenchClaw", "totally-unknown"]);
     } catch (caught) {
       error = caught;
     }
@@ -543,7 +543,7 @@ describe("runCli exit behavior", () => {
       }) => (primaryCommand === "qa" && cfg?.plugins?.allow?.length === 0 ? ["qa-lab"] : []),
     );
 
-    await expect(runCli(["node", "NexisClaw", "qa"])).rejects.toThrow(
+    await expect(runCli(["node", "GreenchClaw", "qa"])).rejects.toThrow(
       'Add "qa-lab" to `plugins.allow` instead of "qa"',
     );
     expect(startProxyMock).not.toHaveBeenCalled();
@@ -558,7 +558,7 @@ describe("runCli exit behavior", () => {
       availability: "loaded",
     });
 
-    await expect(runCli(["node", "NexisClaw", "lcm_recent"])).rejects.toThrow(
+    await expect(runCli(["node", "GreenchClaw", "lcm_recent"])).rejects.toThrow(
       '"lcm_recent" is an agent tool available from the "lossless-claw" plugin',
     );
 
@@ -571,16 +571,16 @@ describe("runCli exit behavior", () => {
     hasEnvHttpProxyAgentConfiguredMock.mockReturnValue(true);
     tryRouteCliMock.mockResolvedValueOnce(true);
 
-    await runCli(["node", "NexisClaw", "skills", "check"]);
+    await runCli(["node", "GreenchClaw", "skills", "check"]);
 
     expect(hasEnvHttpProxyAgentConfiguredMock).not.toHaveBeenCalled();
     expect(ensureGlobalUndiciEnvProxyDispatcherMock).not.toHaveBeenCalled();
   });
 
   it.each([
-    ["auth", ["node", "NexisClaw", "auth", "--help"]],
-    ["tool", ["node", "NexisClaw", "tool", "image_generate"]],
-    ["tools", ["node", "NexisClaw", "tools", "effective"]],
+    ["auth", ["node", "GreenchClaw", "auth", "--help"]],
+    ["tool", ["node", "GreenchClaw", "tool", "image_generate"]],
+    ["tools", ["node", "GreenchClaw", "tools", "effective"]],
   ])("keeps reserved %s command roots out of plugin command discovery", async (_name, argv) => {
     const parseAsync = vi.fn().mockResolvedValueOnce(undefined);
     const program = {
@@ -600,7 +600,7 @@ describe("runCli exit behavior", () => {
   it("fails protected commands when managed proxy activation fails", async () => {
     startProxyMock.mockRejectedValueOnce(new Error("proxy: enabled but no HTTP proxy URL"));
 
-    await expect(runCli(["node", "NexisClaw", "gateway", "run"])).rejects.toThrow(
+    await expect(runCli(["node", "GreenchClaw", "gateway", "run"])).rejects.toThrow(
       "proxy: enabled but no HTTP proxy URL",
     );
 
@@ -613,7 +613,7 @@ describe("runCli exit behavior", () => {
       throw new Error("config parse failed");
     });
 
-    await expect(runCli(["node", "NexisClaw", "gateway", "run"])).rejects.toThrow(
+    await expect(runCli(["node", "GreenchClaw", "gateway", "run"])).rejects.toThrow(
       "config parse failed",
     );
 
@@ -625,7 +625,7 @@ describe("runCli exit behavior", () => {
     const handle = makeProxyHandle();
     startProxyMock.mockResolvedValueOnce(handle);
 
-    await runCli(["node", "NexisClaw", "gateway", "run"]);
+    await runCli(["node", "GreenchClaw", "gateway", "run"]);
 
     expect(startProxyMock).toHaveBeenCalledWith(undefined);
     expect(stopProxyMock).toHaveBeenCalledOnce();
@@ -649,7 +649,7 @@ describe("runCli exit behavior", () => {
     }) as typeof process.exit);
 
     try {
-      const runPromise = runCli(["node", "NexisClaw", "plugins", "marketplace", "list"]);
+      const runPromise = runCli(["node", "GreenchClaw", "plugins", "marketplace", "list"]);
       await vi.waitFor(() => {
         expect(
           processOnceSpy.mock.calls.some(
@@ -692,7 +692,7 @@ describe("runCli exit behavior", () => {
 
     const processOnceSpy = vi.spyOn(process, "once");
     try {
-      const runPromise = runCli(["node", "NexisClaw", "plugins", "marketplace", "list"]);
+      const runPromise = runCli(["node", "GreenchClaw", "plugins", "marketplace", "list"]);
       await vi.waitFor(() => {
         expect(
           processOnceSpy.mock.calls.reduce(
@@ -725,7 +725,7 @@ describe("runCli exit behavior", () => {
     Object.defineProperty(process.stdout, "isTTY", { configurable: true, value: true });
 
     try {
-      await runCli(["node", "NexisClaw"]);
+      await runCli(["node", "GreenchClaw"]);
     } finally {
       if (stdinTty) {
         Object.defineProperty(process.stdin, "isTTY", stdinTty);
@@ -752,7 +752,7 @@ describe("runCli exit behavior", () => {
   it("bootstraps env proxy before modern onboard Crestodian startup", async () => {
     hasEnvHttpProxyAgentConfiguredMock.mockReturnValue(true);
 
-    await runCli(["node", "NexisClaw", "onboard", "--modern", "--json"]);
+    await runCli(["node", "GreenchClaw", "onboard", "--modern", "--json"]);
 
     expect(ensureGlobalUndiciEnvProxyDispatcherMock).toHaveBeenCalledTimes(1);
     expect(runCrestodianMock).toHaveBeenCalledWith({
@@ -770,7 +770,7 @@ describe("runCli exit behavior", () => {
     tryRouteCliMock.mockResolvedValueOnce(true);
     hasMemoryRuntimeMock.mockReturnValue(true);
 
-    await runCli(["node", "NexisClaw", "status"]);
+    await runCli(["node", "GreenchClaw", "status"]);
 
     expect(closeActiveMemorySearchManagersMock).toHaveBeenCalledTimes(1);
   });
@@ -781,7 +781,7 @@ describe("runCli exit behavior", () => {
       throw new Error("stale memory-state chunk");
     });
 
-    await expect(runCli(["node", "NexisClaw", "status"])).resolves.toBeUndefined();
+    await expect(runCli(["node", "GreenchClaw", "status"])).resolves.toBeUndefined();
 
     expect(closeActiveMemorySearchManagersMock).not.toHaveBeenCalled();
   });
@@ -789,11 +789,11 @@ describe("runCli exit behavior", () => {
   it("returns after a handled container-target invocation", async () => {
     maybeRunCliInContainerMock.mockReturnValueOnce({ handled: true, exitCode: 0 });
 
-    await runCli(["node", "NexisClaw", "--container", "demo", "status"]);
+    await runCli(["node", "GreenchClaw", "--container", "demo", "status"]);
 
     expect(maybeRunCliInContainerMock).toHaveBeenCalledWith([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "--container",
       "demo",
       "status",
@@ -807,7 +807,7 @@ describe("runCli exit behavior", () => {
     const exitCode = process.exitCode;
     maybeRunCliInContainerMock.mockReturnValueOnce({ handled: true, exitCode: 7 });
 
-    await runCli(["node", "NexisClaw", "--container", "demo", "status"]);
+    await runCli(["node", "GreenchClaw", "--container", "demo", "status"]);
 
     expect(process.exitCode).toBe(7);
     process.exitCode = exitCode;
@@ -825,10 +825,10 @@ describe("runCli exit behavior", () => {
     };
     buildProgramMock.mockReturnValueOnce(program);
 
-    await expect(runCli(["node", "NexisClaw", "status"])).resolves.toBeUndefined();
+    await expect(runCli(["node", "GreenchClaw", "status"])).resolves.toBeUndefined();
 
     expect(registerSubCliByNameMock.mock.calls).toEqual([
-      [program, "status", ["node", "NexisClaw", "status"]],
+      [program, "status", ["node", "GreenchClaw", "status"]],
     ]);
     expect(process.exitCode).toBe(1);
     process.exitCode = exitCode;
@@ -843,13 +843,13 @@ describe("runCli exit behavior", () => {
     const ctx = { programVersion: "0.0.0-test" };
     getProgramContextMock.mockReturnValueOnce(ctx as never);
 
-    await runCli(["node", "NexisClaw", "doctor", "--help"]);
+    await runCli(["node", "GreenchClaw", "doctor", "--help"]);
 
     expect(registerCoreCliByNameMock.mock.calls).toEqual([
-      [program, ctx, "doctor", ["node", "NexisClaw", "doctor", "--help"]],
+      [program, ctx, "doctor", ["node", "GreenchClaw", "doctor", "--help"]],
     ]);
     expect(registerSubCliByNameMock.mock.calls).toEqual([
-      [program, "doctor", ["node", "NexisClaw", "doctor", "--help"]],
+      [program, "doctor", ["node", "GreenchClaw", "doctor", "--help"]],
     ]);
   });
 
@@ -865,7 +865,7 @@ describe("runCli exit behavior", () => {
       throw new Error(`process.exit(${String(code)})`);
     }) as typeof process.exit);
 
-    await runCli(["node", "NexisClaw", "status"]);
+    await runCli(["node", "GreenchClaw", "status"]);
 
     const handler = processOnSpy.mock.calls.find(([event]) => event === "uncaughtException")?.[1];
     if (typeof handler !== "function") {
@@ -875,9 +875,9 @@ describe("runCli exit behavior", () => {
     try {
       expect(() => handler(new Error("boom"))).toThrow("process.exit(1)");
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "[NexisClaw] NexisClaw hit an unexpected runtime error.",
+        "[GreenchClaw] GreenchClaw hit an unexpected runtime error.",
       );
-      expect(consoleErrorSpy).toHaveBeenCalledWith("[NexisClaw] Reason: boom");
+      expect(consoleErrorSpy).toHaveBeenCalledWith("[GreenchClaw] Reason: boom");
       expect(restoreTerminalStateMock).toHaveBeenCalledWith("uncaught exception", {
         resumeStdinIfPaused: false,
       });
@@ -903,7 +903,7 @@ describe("runCli exit behavior", () => {
       throw new Error(`process.exit(${String(code)})`);
     }) as typeof process.exit);
 
-    await runCli(["node", "NexisClaw", "status"]);
+    await runCli(["node", "GreenchClaw", "status"]);
 
     const handler = processOnSpy.mock.calls.find(([event]) => event === "uncaughtException")?.[1];
     if (typeof handler !== "function") {
@@ -916,7 +916,7 @@ describe("runCli exit behavior", () => {
       });
       expect(handler(hostUnreachable)).toBeUndefined();
       expect(consoleWarnSpy.mock.calls).toEqual([
-        ["[NexisClaw] Non-fatal uncaught exception (continuing):", hostUnreachable.stack],
+        ["[GreenchClaw] Non-fatal uncaught exception (continuing):", hostUnreachable.stack],
       ]);
       expect(restoreTerminalStateMock).not.toHaveBeenCalled();
       expect(exitSpy).not.toHaveBeenCalled();

@@ -1,4 +1,4 @@
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/routing";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/routing";
 import {
   BINDINGS_BY_THREAD_ID,
   ensureBindingsLoaded,

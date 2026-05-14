@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INSTALL_URL="${NEXISCLAW_INSTALL_URL:-https://NexisClaw.bot/install.sh}"
-DEFAULT_PACKAGE="NexisClaw"
-PACKAGE_NAME="${NEXISCLAW_INSTALL_PACKAGE:-$DEFAULT_PACKAGE}"
+INSTALL_URL="${GREENCHCLAW_INSTALL_URL:-https://GreenchClaw.bot/install.sh}"
+DEFAULT_PACKAGE="GreenchClaw"
+PACKAGE_NAME="${GREENCHCLAW_INSTALL_PACKAGE:-$DEFAULT_PACKAGE}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # shellcheck source=../install-sh-common/cli-verify.sh
@@ -37,7 +37,7 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 echo "==> Verify git installed"
 command -v git >/dev/null
 
-EXPECTED_VERSION="${NEXISCLAW_INSTALL_EXPECT_VERSION:-}"
+EXPECTED_VERSION="${GREENCHCLAW_INSTALL_EXPECT_VERSION:-}"
 if [[ -n "$EXPECTED_VERSION" ]]; then
   LATEST_VERSION="$EXPECTED_VERSION"
 else

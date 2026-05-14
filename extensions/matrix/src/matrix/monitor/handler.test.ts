@@ -4,10 +4,10 @@ import path from "node:path";
 import {
   __testing as sessionBindingTesting,
   registerSessionBindingAdapter,
-} from "NexisClaw/plugin-sdk/session-binding-runtime";
+} from "GreenchClaw/plugin-sdk/session-binding-runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { installMatrixMonitorTestRuntime } from "../../test-runtime.js";
-import { MATRIX_NEXISCLAW_FINALIZED_PREVIEW_KEY } from "../send/types.js";
+import { MATRIX_GREENCHCLAW_FINALIZED_PREVIEW_KEY } from "../send/types.js";
 import { createMatrixRoomMessageHandler, MatrixRetryableInboundError } from "./handler.js";
 import {
   createMatrixHandlerTestHarness,
@@ -218,7 +218,7 @@ function expectFinalizedPreviewEdit(eventId: string, text: string) {
       room === "!room:example.org" && editedEventId === eventId && body === text,
   );
   const options = requireRecord(call[3], "edit options");
-  expect(options.extraContent).toEqual({ [MATRIX_NEXISCLAW_FINALIZED_PREVIEW_KEY]: true });
+  expect(options.extraContent).toEqual({ [MATRIX_GREENCHCLAW_FINALIZED_PREVIEW_KEY]: true });
 }
 
 function expectEditLiveFlag(eventId: string, text: string, expected: boolean | undefined) {

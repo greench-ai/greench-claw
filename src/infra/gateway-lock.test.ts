@@ -12,7 +12,7 @@ import { acquireGatewayLock, GatewayLockError, type GatewayLockOptions } from ".
 
 type GatewayLock = NonNullable<Awaited<ReturnType<typeof acquireGatewayLock>>>;
 
-const fixtureRootTracker = createSuiteTempRootTracker({ prefix: "NexisClaw-gateway-lock-" });
+const fixtureRootTracker = createSuiteTempRootTracker({ prefix: "GreenchClaw-gateway-lock-" });
 let fixtureRoot = "";
 const realNow = Date.now.bind(Date);
 
@@ -22,12 +22,12 @@ function resolveTestLockDir() {
 
 async function makeEnv() {
   const dir = await fixtureRootTracker.make("case");
-  const configPath = path.join(dir, "NexisClaw.json");
+  const configPath = path.join(dir, "GreenchClaw.json");
   await fs.writeFile(configPath, "{}", "utf8");
   return {
     ...process.env,
-    NEXISCLAW_STATE_DIR: dir,
-    NEXISCLAW_CONFIG_PATH: configPath,
+    GREENCHCLAW_STATE_DIR: dir,
+    GREENCHCLAW_CONFIG_PATH: configPath,
   };
 }
 
@@ -189,7 +189,7 @@ describe("gateway lock", () => {
 
     const pending = acquireForTest(env, {
       timeoutMs: 15,
-      readProcessCmdline: () => ["NexisClaw", "gateway", "run"],
+      readProcessCmdline: () => ["GreenchClaw", "gateway", "run"],
     });
     await expect(pending).rejects.toBeInstanceOf(GatewayLockError);
 
@@ -285,7 +285,7 @@ describe("gateway lock", () => {
         staleMs: 10_000,
         platform: "darwin",
         port: 18789,
-        readProcessCmdline: () => ["/usr/local/bin/NexisClaw", "gateway", "run"],
+        readProcessCmdline: () => ["/usr/local/bin/GreenchClaw", "gateway", "run"],
       });
       await expect(pending).rejects.toBeInstanceOf(GatewayLockError);
     } finally {
@@ -296,7 +296,7 @@ describe("gateway lock", () => {
   it("returns null when multi-gateway override is enabled", async () => {
     const env = await makeEnv();
     const lock = await acquireGatewayLock({
-      env: { ...env, NEXISCLAW_ALLOW_MULTI_GATEWAY: "1", VITEST: "" },
+      env: { ...env, GREENCHCLAW_ALLOW_MULTI_GATEWAY: "1", VITEST: "" },
       lockDir: resolveTestLockDir(),
     });
     expect(lock).toBeNull();
@@ -357,7 +357,7 @@ describe("gateway lock", () => {
       platform: "win32",
       port: 18789,
       readProcessCmdline: () => [
-        "C:\\Users\\me\\AppData\\Roaming\\npm\\NexisClaw.cmd",
+        "C:\\Users\\me\\AppData\\Roaming\\npm\\GreenchClaw.cmd",
         "gateway",
         "run",
       ],
@@ -420,7 +420,7 @@ describe("gateway lock", () => {
       staleMs: 10_000,
       platform: "darwin",
       port: 18789,
-      readProcessCmdline: () => ["/usr/local/bin/NexisClaw", "gateway", "run", "--port", "18789"],
+      readProcessCmdline: () => ["/usr/local/bin/GreenchClaw", "gateway", "run", "--port", "18789"],
     });
     await expect(pending).rejects.toBeInstanceOf(GatewayLockError);
 

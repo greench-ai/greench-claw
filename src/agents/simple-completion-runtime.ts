@@ -5,7 +5,7 @@ import {
   type ThinkingLevel as SimpleCompletionThinkingLevel,
 } from "@earendil-works/pi-ai";
 import type { ThinkLevel } from "../auto-reply/thinking.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { prepareProviderRuntimeAuth } from "../plugins/provider-runtime.runtime.js";
 import { resolveAgentDir, resolveAgentEffectiveModelPrimary } from "./agent-scope.js";
@@ -72,7 +72,7 @@ export type PreparedSimpleCompletionModelForAgent =
     };
 
 export function resolveSimpleCompletionSelectionForAgent(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   modelRef?: string;
 }): AgentSimpleCompletionSelection | null {
@@ -112,7 +112,7 @@ async function setRuntimeApiKeyForCompletion(params: {
   model: Model<Api>;
   apiKey: string;
   authMode: ResolvedProviderAuth["mode"];
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   workspaceDir?: string;
   profileId?: string;
 }): Promise<CompletionRuntimeCredential> {
@@ -160,7 +160,7 @@ function hasMissingApiKeyAllowance(params: {
 }
 
 export async function prepareSimpleCompletionModel(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   provider: string;
   modelId: string;
   agentDir?: string;
@@ -246,7 +246,7 @@ export async function prepareSimpleCompletionModel(params: {
 }
 
 export async function prepareSimpleCompletionModelForAgent(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   modelRef?: string;
   preferredProfile?: string;
@@ -294,7 +294,7 @@ export async function completeWithPreparedSimpleCompletionModel(params: {
   model: Model<Api>;
   auth: ResolvedProviderAuth;
   context: Parameters<typeof completeSimple>[1];
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   options?: SimpleCompletionModelOptions;
 }) {
   const completionModel = prepareModelForSimpleCompletion({ model: params.model, cfg: params.cfg });

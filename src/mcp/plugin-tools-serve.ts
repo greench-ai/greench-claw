@@ -1,5 +1,5 @@
 /**
- * Standalone MCP server that exposes NexisClaw plugin-registered tools
+ * Standalone MCP server that exposes GreenchClaw plugin-registered tools
  * (e.g. memory-lancedb's memory_recall, memory_store, memory_forget)
  * so ACP sessions running Claude Code can use them.
  *
@@ -17,13 +17,13 @@ import {
 } from "../agents/tool-policy.js";
 import type { AnyAgentTool } from "../agents/tools/common.js";
 import { getRuntimeConfig } from "../config/config.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { routeLogsToStderr } from "../logging/console.js";
 import { ensureStandalonePluginToolRegistryLoaded, resolvePluginTools } from "../plugins/tools.js";
 import { connectToolsMcpServerToStdio, createToolsMcpServer } from "./tools-stdio-server.js";
 
-function resolvePluginToolPolicy(config: NexisClawConfig): {
+function resolvePluginToolPolicy(config: GreenchClawConfig): {
   toolAllowlist?: string[];
   toolDenylist?: string[];
 } {
@@ -40,7 +40,7 @@ function resolvePluginToolPolicy(config: NexisClawConfig): {
   };
 }
 
-function resolveTools(config: NexisClawConfig): AnyAgentTool[] {
+function resolveTools(config: GreenchClawConfig): AnyAgentTool[] {
   const pluginToolPolicy = resolvePluginToolPolicy(config);
   ensureStandalonePluginToolRegistryLoaded({
     context: { config },
@@ -55,13 +55,13 @@ function resolveTools(config: NexisClawConfig): AnyAgentTool[] {
 
 export function createPluginToolsMcpServer(
   params: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     tools?: AnyAgentTool[];
   } = {},
 ): Server {
   const cfg = params.config ?? getRuntimeConfig();
   const tools = params.tools ?? resolveTools(cfg);
-  return createToolsMcpServer({ name: "NexisClaw-plugin-tools", tools });
+  return createToolsMcpServer({ name: "GreenchClaw-plugin-tools", tools });
 }
 
 export async function servePluginToolsMcp(): Promise<void> {

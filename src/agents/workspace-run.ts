@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { logWarn } from "../logger.js";
 import { redactIdentifier } from "../logging/redact-identifier.js";
 import {
@@ -25,7 +25,7 @@ type ResolveRunWorkspaceResult = {
 function resolveRunAgentId(params: {
   sessionKey?: string;
   agentId?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): {
   agentId: string;
   agentIdSource: AgentIdSource;
@@ -75,7 +75,7 @@ export function resolveRunWorkspaceDir(params: {
   workspaceDir: unknown;
   sessionKey?: string;
   agentId?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): ResolveRunWorkspaceResult {
   const env = params.env ?? process.env;

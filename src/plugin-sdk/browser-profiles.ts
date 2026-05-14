@@ -1,17 +1,17 @@
 import path from "node:path";
-import type { BrowserConfig, BrowserProfileConfig, NexisClawConfig } from "../config/config.js";
+import type { BrowserConfig, BrowserProfileConfig, GreenchClawConfig } from "../config/config.js";
 import type { SsrFPolicy } from "../infra/net/ssrf.js";
-import { resolvePreferredNexisClawTmpDir } from "../infra/tmp-NexisClaw-dir.js";
+import { resolvePreferredGreenchClawTmpDir } from "../infra/tmp-GreenchClaw-dir.js";
 import { loadBundledPluginPublicSurfaceModuleSync } from "./facade-loader.js";
 
-export const DEFAULT_NEXISCLAW_BROWSER_ENABLED = true;
+export const DEFAULT_GREENCHCLAW_BROWSER_ENABLED = true;
 export const DEFAULT_BROWSER_EVALUATE_ENABLED = true;
-export const DEFAULT_NEXISCLAW_BROWSER_COLOR = "#FF4500";
-export const DEFAULT_NEXISCLAW_BROWSER_PROFILE_NAME = "NexisClaw";
-export const DEFAULT_BROWSER_DEFAULT_PROFILE_NAME = "NexisClaw";
+export const DEFAULT_GREENCHCLAW_BROWSER_COLOR = "#FF4500";
+export const DEFAULT_GREENCHCLAW_BROWSER_PROFILE_NAME = "GreenchClaw";
+export const DEFAULT_BROWSER_DEFAULT_PROFILE_NAME = "GreenchClaw";
 export const DEFAULT_BROWSER_ACTION_TIMEOUT_MS = 60_000;
 export const DEFAULT_AI_SNAPSHOT_MAX_CHARS = 80_000;
-export const DEFAULT_UPLOAD_DIR = path.join(resolvePreferredNexisClawTmpDir(), "uploads");
+export const DEFAULT_UPLOAD_DIR = path.join(resolvePreferredGreenchClawTmpDir(), "uploads");
 
 export type ResolvedBrowserTabCleanupConfig = {
   enabled: boolean;
@@ -54,7 +54,7 @@ export type ResolvedBrowserProfile = {
   cdpIsLoopback: boolean;
   userDataDir?: string;
   color: string;
-  driver: "NexisClaw" | "existing-session";
+  driver: "GreenchClaw" | "existing-session";
   headless?: boolean;
   attachOnly: boolean;
 };
@@ -62,7 +62,7 @@ export type ResolvedBrowserProfile = {
 type BrowserProfilesSurface = {
   resolveBrowserConfig: (
     cfg: BrowserConfig | undefined,
-    rootConfig?: NexisClawConfig,
+    rootConfig?: GreenchClawConfig,
   ) => ResolvedBrowserConfig;
   resolveProfile: (
     resolved: ResolvedBrowserConfig,
@@ -84,7 +84,7 @@ function loadBrowserProfilesSurface(): BrowserProfilesSurface {
 
 export function resolveBrowserConfig(
   cfg: BrowserConfig | undefined,
-  rootConfig?: NexisClawConfig,
+  rootConfig?: GreenchClawConfig,
 ): ResolvedBrowserConfig {
   return loadBrowserProfilesSurface().resolveBrowserConfig(cfg, rootConfig);
 }

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import { AcpRuntimeError } from "./runtime/errors.js";
 
@@ -8,11 +8,11 @@ const ACP_DISPATCH_DISABLED_MESSAGE =
 
 export type AcpDispatchPolicyState = "enabled" | "acp_disabled" | "dispatch_disabled";
 
-export function isAcpEnabledByPolicy(cfg: NexisClawConfig): boolean {
+export function isAcpEnabledByPolicy(cfg: GreenchClawConfig): boolean {
   return cfg.acp?.enabled !== false;
 }
 
-export function resolveAcpDispatchPolicyState(cfg: NexisClawConfig): AcpDispatchPolicyState {
+export function resolveAcpDispatchPolicyState(cfg: GreenchClawConfig): AcpDispatchPolicyState {
   if (!isAcpEnabledByPolicy(cfg)) {
     return "acp_disabled";
   }
@@ -23,11 +23,11 @@ export function resolveAcpDispatchPolicyState(cfg: NexisClawConfig): AcpDispatch
   return "enabled";
 }
 
-export function isAcpDispatchEnabledByPolicy(cfg: NexisClawConfig): boolean {
+export function isAcpDispatchEnabledByPolicy(cfg: GreenchClawConfig): boolean {
   return resolveAcpDispatchPolicyState(cfg) === "enabled";
 }
 
-export function resolveAcpDispatchPolicyMessage(cfg: NexisClawConfig): string | null {
+export function resolveAcpDispatchPolicyMessage(cfg: GreenchClawConfig): string | null {
   const state = resolveAcpDispatchPolicyState(cfg);
   if (state === "acp_disabled") {
     return ACP_DISABLED_MESSAGE;
@@ -38,7 +38,7 @@ export function resolveAcpDispatchPolicyMessage(cfg: NexisClawConfig): string | 
   return null;
 }
 
-export function resolveAcpDispatchPolicyError(cfg: NexisClawConfig): AcpRuntimeError | null {
+export function resolveAcpDispatchPolicyError(cfg: GreenchClawConfig): AcpRuntimeError | null {
   const message = resolveAcpDispatchPolicyMessage(cfg);
   if (!message) {
     return null;
@@ -46,14 +46,14 @@ export function resolveAcpDispatchPolicyError(cfg: NexisClawConfig): AcpRuntimeE
   return new AcpRuntimeError("ACP_DISPATCH_DISABLED", message);
 }
 
-export function resolveAcpExplicitTurnPolicyError(cfg: NexisClawConfig): AcpRuntimeError | null {
+export function resolveAcpExplicitTurnPolicyError(cfg: GreenchClawConfig): AcpRuntimeError | null {
   if (isAcpEnabledByPolicy(cfg)) {
     return null;
   }
   return new AcpRuntimeError("ACP_DISPATCH_DISABLED", ACP_DISABLED_MESSAGE);
 }
 
-export function isAcpAgentAllowedByPolicy(cfg: NexisClawConfig, agentId: string): boolean {
+export function isAcpAgentAllowedByPolicy(cfg: GreenchClawConfig, agentId: string): boolean {
   const allowed = (cfg.acp?.allowedAgents ?? [])
     .map((entry) => normalizeAgentId(entry))
     .filter(Boolean);
@@ -64,7 +64,7 @@ export function isAcpAgentAllowedByPolicy(cfg: NexisClawConfig, agentId: string)
 }
 
 export function resolveAcpAgentPolicyError(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
 ): AcpRuntimeError | null {
   if (isAcpAgentAllowedByPolicy(cfg, agentId)) {

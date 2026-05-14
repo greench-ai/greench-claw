@@ -1,9 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { withTempHome as withTempHomeBase } from "NexisClaw/plugin-sdk/test-env";
+import { withTempHome as withTempHomeBase } from "GreenchClaw/plugin-sdk/test-env";
 import { resetPluginLoaderTestStateForTest } from "../plugins/loader.test-fixtures.js";
 import { clearPluginSetupRegistryCache } from "../plugins/setup-registry.js";
-import { resetConfigRuntimeState, type NexisClawConfig } from "./config.js";
+import { resetConfigRuntimeState, type GreenchClawConfig } from "./config.js";
 
 function resetConfigTestRuntimeState(): void {
   resetConfigRuntimeState();
@@ -15,16 +15,16 @@ export async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise
   resetConfigTestRuntimeState();
   try {
     return await withTempHomeBase(fn, {
-      prefix: "NexisClaw-config-",
+      prefix: "GreenchClaw-config-",
       env: {
-        NEXISCLAW_CONFIG_PATH: undefined,
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-        NEXISCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
-        NEXISCLAW_PLUGIN_CATALOG_PATHS: undefined,
-        NEXISCLAW_MPM_CATALOG_PATHS: undefined,
-        NEXISCLAW_LOAD_SHELL_ENV: undefined,
-        NEXISCLAW_DEFER_SHELL_ENV_FALLBACK: undefined,
-        NEXISCLAW_SHELL_ENV_TIMEOUT_MS: undefined,
+        GREENCHCLAW_CONFIG_PATH: undefined,
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+        GREENCHCLAW_DISABLE_BUNDLED_PLUGINS: undefined,
+        GREENCHCLAW_PLUGIN_CATALOG_PATHS: undefined,
+        GREENCHCLAW_MPM_CATALOG_PATHS: undefined,
+        GREENCHCLAW_LOAD_SHELL_ENV: undefined,
+        GREENCHCLAW_DEFER_SHELL_ENV_FALLBACK: undefined,
+        GREENCHCLAW_SHELL_ENV_TIMEOUT_MS: undefined,
         ANTHROPIC_API_KEY: undefined,
         ANTHROPIC_OAUTH_TOKEN: undefined,
       },
@@ -34,8 +34,8 @@ export async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise
   }
 }
 
-export async function writeNexisClawConfig(home: string, config: unknown): Promise<string> {
-  const configPath = path.join(home, ".NexisClaw", "NexisClaw.json");
+export async function writeGreenchClawConfig(home: string, config: unknown): Promise<string> {
+  const configPath = path.join(home, ".GreenchClaw", "GreenchClaw.json");
   await fs.mkdir(path.dirname(configPath), { recursive: true });
   await fs.writeFile(configPath, JSON.stringify(config, null, 2), "utf-8");
   return configPath;
@@ -48,9 +48,9 @@ export async function writeStateDirDotEnv(
     stateDir?: string;
   },
 ): Promise<{ dotEnvPath: string; stateDir: string }> {
-  const stateDir = params?.stateDir ?? params?.env?.NEXISCLAW_STATE_DIR?.trim();
+  const stateDir = params?.stateDir ?? params?.env?.GREENCHCLAW_STATE_DIR?.trim();
   if (!stateDir) {
-    throw new Error("Expected NEXISCLAW_STATE_DIR or explicit stateDir for .env test setup");
+    throw new Error("Expected GREENCHCLAW_STATE_DIR or explicit stateDir for .env test setup");
   }
   const dotEnvPath = path.join(stateDir, ".env");
   await fs.mkdir(path.dirname(dotEnvPath), { recursive: true });
@@ -63,7 +63,7 @@ export async function withTempHomeConfig<T>(
   fn: (params: { home: string; configPath: string }) => Promise<T>,
 ): Promise<T> {
   return withTempHome(async (home) => {
-    const configPath = await writeNexisClawConfig(home, config);
+    const configPath = await writeGreenchClawConfig(home, config);
     return fn({ home, configPath });
   });
 }
@@ -99,7 +99,7 @@ export async function withEnvOverride<T>(
 
 export function buildWebSearchProviderConfig(params: {
   provider: NonNullable<
-    NonNullable<NonNullable<NonNullable<NexisClawConfig["tools"]>["web"]>["search"]>["provider"]
+    NonNullable<NonNullable<NonNullable<GreenchClawConfig["tools"]>["web"]>["search"]>["provider"]
   >;
   enabled?: boolean;
   providerConfig?: Record<string, unknown>;

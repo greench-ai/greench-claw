@@ -1,11 +1,11 @@
 import type { WebClient as SlackWebClient } from "@slack/web-api";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { normalizeHostname } from "NexisClaw/plugin-sdk/host-runtime";
-import { resolveRequestUrl } from "NexisClaw/plugin-sdk/request-url";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { normalizeHostname } from "GreenchClaw/plugin-sdk/host-runtime";
+import { resolveRequestUrl } from "GreenchClaw/plugin-sdk/request-url";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { formatSlackFileReference } from "../file-reference.js";
 import type { SlackAttachment, SlackFile } from "../types.js";
 export { MAX_SLACK_MEDIA_FILES, type SlackMediaResult } from "./media-types.js";

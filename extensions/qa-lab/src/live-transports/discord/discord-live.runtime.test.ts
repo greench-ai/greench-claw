@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   LIVE_TRANSPORT_BASELINE_STANDARD_SCENARIO_IDS,
@@ -15,11 +15,11 @@ describe("discord live qa runtime", () => {
   it("resolves required Discord QA env vars", () => {
     expect(
       __testing.resolveDiscordQaRuntimeEnv({
-        NEXISCLAW_QA_DISCORD_GUILD_ID: "123456789012345678",
-        NEXISCLAW_QA_DISCORD_CHANNEL_ID: "223456789012345678",
-        NEXISCLAW_QA_DISCORD_DRIVER_BOT_TOKEN: "driver",
-        NEXISCLAW_QA_DISCORD_SUT_BOT_TOKEN: "sut",
-        NEXISCLAW_QA_DISCORD_SUT_APPLICATION_ID: "323456789012345678",
+        GREENCHCLAW_QA_DISCORD_GUILD_ID: "123456789012345678",
+        GREENCHCLAW_QA_DISCORD_CHANNEL_ID: "223456789012345678",
+        GREENCHCLAW_QA_DISCORD_DRIVER_BOT_TOKEN: "driver",
+        GREENCHCLAW_QA_DISCORD_SUT_BOT_TOKEN: "sut",
+        GREENCHCLAW_QA_DISCORD_SUT_APPLICATION_ID: "323456789012345678",
       }),
     ).toEqual({
       guildId: "123456789012345678",
@@ -33,12 +33,12 @@ describe("discord live qa runtime", () => {
   it("resolves optional Discord QA voice channel env var", () => {
     expect(
       __testing.resolveDiscordQaRuntimeEnv({
-        NEXISCLAW_QA_DISCORD_GUILD_ID: "123456789012345678",
-        NEXISCLAW_QA_DISCORD_CHANNEL_ID: "223456789012345678",
-        NEXISCLAW_QA_DISCORD_VOICE_CHANNEL_ID: "523456789012345678",
-        NEXISCLAW_QA_DISCORD_DRIVER_BOT_TOKEN: "driver",
-        NEXISCLAW_QA_DISCORD_SUT_BOT_TOKEN: "sut",
-        NEXISCLAW_QA_DISCORD_SUT_APPLICATION_ID: "323456789012345678",
+        GREENCHCLAW_QA_DISCORD_GUILD_ID: "123456789012345678",
+        GREENCHCLAW_QA_DISCORD_CHANNEL_ID: "223456789012345678",
+        GREENCHCLAW_QA_DISCORD_VOICE_CHANNEL_ID: "523456789012345678",
+        GREENCHCLAW_QA_DISCORD_DRIVER_BOT_TOKEN: "driver",
+        GREENCHCLAW_QA_DISCORD_SUT_BOT_TOKEN: "sut",
+        GREENCHCLAW_QA_DISCORD_SUT_APPLICATION_ID: "323456789012345678",
       }),
     ).toEqual({
       guildId: "123456789012345678",
@@ -53,24 +53,24 @@ describe("discord live qa runtime", () => {
   it("fails when a required Discord QA env var is missing", () => {
     expect(() =>
       __testing.resolveDiscordQaRuntimeEnv({
-        NEXISCLAW_QA_DISCORD_GUILD_ID: "123456789012345678",
-        NEXISCLAW_QA_DISCORD_CHANNEL_ID: "223456789012345678",
-        NEXISCLAW_QA_DISCORD_DRIVER_BOT_TOKEN: "driver",
-        NEXISCLAW_QA_DISCORD_SUT_BOT_TOKEN: "sut",
+        GREENCHCLAW_QA_DISCORD_GUILD_ID: "123456789012345678",
+        GREENCHCLAW_QA_DISCORD_CHANNEL_ID: "223456789012345678",
+        GREENCHCLAW_QA_DISCORD_DRIVER_BOT_TOKEN: "driver",
+        GREENCHCLAW_QA_DISCORD_SUT_BOT_TOKEN: "sut",
       }),
-    ).toThrow("NEXISCLAW_QA_DISCORD_SUT_APPLICATION_ID");
+    ).toThrow("GREENCHCLAW_QA_DISCORD_SUT_APPLICATION_ID");
   });
 
   it("fails when Discord IDs are not snowflakes", () => {
     expect(() =>
       __testing.resolveDiscordQaRuntimeEnv({
-        NEXISCLAW_QA_DISCORD_GUILD_ID: "qa-guild",
-        NEXISCLAW_QA_DISCORD_CHANNEL_ID: "223456789012345678",
-        NEXISCLAW_QA_DISCORD_DRIVER_BOT_TOKEN: "driver",
-        NEXISCLAW_QA_DISCORD_SUT_BOT_TOKEN: "sut",
-        NEXISCLAW_QA_DISCORD_SUT_APPLICATION_ID: "323456789012345678",
+        GREENCHCLAW_QA_DISCORD_GUILD_ID: "qa-guild",
+        GREENCHCLAW_QA_DISCORD_CHANNEL_ID: "223456789012345678",
+        GREENCHCLAW_QA_DISCORD_DRIVER_BOT_TOKEN: "driver",
+        GREENCHCLAW_QA_DISCORD_SUT_BOT_TOKEN: "sut",
+        GREENCHCLAW_QA_DISCORD_SUT_APPLICATION_ID: "323456789012345678",
       }),
-    ).toThrow("NEXISCLAW_QA_DISCORD_GUILD_ID must be a Discord snowflake.");
+    ).toThrow("GREENCHCLAW_QA_DISCORD_GUILD_ID must be a Discord snowflake.");
   });
 
   it("parses Discord pooled credential payloads", () => {
@@ -106,7 +106,7 @@ describe("discord live qa runtime", () => {
   });
 
   it("injects a temporary Discord account into the QA gateway config", () => {
-    const baseCfg: NexisClawConfig = {
+    const baseCfg: GreenchClawConfig = {
       plugins: {
         allow: ["memory-core", "qa-channel"],
         entries: {
@@ -118,8 +118,8 @@ describe("discord live qa runtime", () => {
         "qa-channel": {
           enabled: true,
           baseUrl: "http://127.0.0.1:43123",
-          botUserId: "NexisClaw",
-          botDisplayName: "NexisClaw QA",
+          botUserId: "GreenchClaw",
+          botDisplayName: "GreenchClaw QA",
           allowFrom: ["*"],
         },
       },

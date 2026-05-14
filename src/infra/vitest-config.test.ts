@@ -24,11 +24,11 @@ describe("resolveLocalVitestMaxWorkers", () => {
     ).toBe(6);
   });
 
-  it("lets NEXISCLAW_VITEST_MAX_WORKERS override the inferred cap", () => {
+  it("lets GREENCHCLAW_VITEST_MAX_WORKERS override the inferred cap", () => {
     expect(
       resolveLocalVitestMaxWorkers(
         {
-          NEXISCLAW_VITEST_MAX_WORKERS: "2",
+          GREENCHCLAW_VITEST_MAX_WORKERS: "2",
         },
         {
           cpuCount: 10,
@@ -40,11 +40,11 @@ describe("resolveLocalVitestMaxWorkers", () => {
     ).toBe(2);
   });
 
-  it("respects the legacy NEXISCLAW_TEST_WORKERS override too", () => {
+  it("respects the legacy GREENCHCLAW_TEST_WORKERS override too", () => {
     expect(
       resolveLocalVitestMaxWorkers(
         {
-          NEXISCLAW_TEST_WORKERS: "3",
+          GREENCHCLAW_TEST_WORKERS: "3",
         },
         {
           cpuCount: 16,
@@ -154,7 +154,7 @@ describe("resolveLocalVitestScheduling", () => {
     expect(
       resolveLocalVitestScheduling(
         {
-          NEXISCLAW_VITEST_DISABLE_SYSTEM_THROTTLE: "1",
+          GREENCHCLAW_VITEST_DISABLE_SYSTEM_THROTTLE: "1",
         },
         {
           cpuCount: 16,
@@ -222,7 +222,7 @@ describe("test scripts", () => {
     };
 
     expect(pkg.scripts?.["test:serial"]).toBe(
-      "NEXISCLAW_TEST_PROJECTS_SERIAL=1 NEXISCLAW_VITEST_MAX_WORKERS=1 node scripts/test-projects.mjs",
+      "GREENCHCLAW_TEST_PROJECTS_SERIAL=1 GREENCHCLAW_VITEST_MAX_WORKERS=1 node scripts/test-projects.mjs",
     );
     expect(pkg.scripts?.["test:fast"]).toBe(
       "node scripts/run-vitest.mjs run --config test/vitest/vitest.unit.config.ts",
@@ -237,7 +237,7 @@ describe("test scripts", () => {
     expect(pkg.scripts?.["test"]).toBe("node scripts/test-projects.mjs");
     expect(pkg.scripts?.["test:force"]).toBe("node --import tsx scripts/test-force.ts");
     expect(pkg.scripts?.["test:gateway"]).toBe(
-      "NEXISCLAW_GATEWAY_PROJECT_SHARDS=1 node scripts/run-vitest.mjs run --config test/vitest/vitest.gateway.config.ts",
+      "GREENCHCLAW_GATEWAY_PROJECT_SHARDS=1 node scripts/run-vitest.mjs run --config test/vitest/vitest.gateway.config.ts",
     );
     expect(pkg.scripts?.["test:single"]).toBeUndefined();
   });

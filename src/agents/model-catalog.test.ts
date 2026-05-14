@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { resetLogger, setLoggerOverride } from "../logging/logger.js";
 
 type PiSdkModule = typeof import("./pi-model-discovery.js");
@@ -12,7 +12,7 @@ let loadModelCatalog: typeof import("./model-catalog.js").loadModelCatalog;
 let modelSupportsInput: typeof import("./model-catalog.js").modelSupportsInput;
 let resetModelCatalogCacheForTest: typeof import("./model-catalog.js").resetModelCatalogCacheForTest;
 let augmentCatalogMock: ReturnType<typeof vi.fn>;
-let ensureNexisClawModelsJsonMock: ReturnType<typeof vi.fn>;
+let ensureGreenchClawModelsJsonMock: ReturnType<typeof vi.fn>;
 let currentPluginMetadataSnapshotMock: ReturnType<typeof vi.fn>;
 let loadPluginMetadataSnapshotMock: ReturnType<typeof vi.fn>;
 let readFileMock: ReturnType<typeof vi.fn>;
@@ -151,12 +151,12 @@ describe("loadModelCatalog", () => {
       ...(await importOriginal<typeof import("node:fs/promises")>()),
       readFile: readFileMock,
     }));
-    ensureNexisClawModelsJsonMock = vi.fn().mockResolvedValue({ agentDir: "/tmp", wrote: false });
+    ensureGreenchClawModelsJsonMock = vi.fn().mockResolvedValue({ agentDir: "/tmp", wrote: false });
     vi.doMock("./models-config.js", () => ({
-      ensureNexisClawModelsJson: ensureNexisClawModelsJsonMock,
+      ensureGreenchClawModelsJson: ensureGreenchClawModelsJsonMock,
     }));
     vi.doMock("./agent-scope.js", () => ({
-      resolveDefaultAgentDir: () => "/tmp/NexisClaw",
+      resolveDefaultAgentDir: () => "/tmp/GreenchClaw",
     }));
     vi.doMock("../plugins/provider-runtime.runtime.js", () => ({
       augmentModelCatalogWithProviderPlugins: vi.fn().mockResolvedValue([]),
@@ -189,7 +189,7 @@ describe("loadModelCatalog", () => {
     readFileMock.mockRejectedValue(
       Object.assign(new Error("models.json missing"), { code: "ENOENT" }),
     );
-    ensureNexisClawModelsJsonMock.mockClear();
+    ensureGreenchClawModelsJsonMock.mockClear();
     augmentCatalogMock.mockClear();
     currentPluginMetadataSnapshotMock.mockReset();
     currentPluginMetadataSnapshotMock.mockReturnValue(emptyPluginMetadataSnapshot());
@@ -217,7 +217,7 @@ describe("loadModelCatalog", () => {
     try {
       const getCallCount = mockCatalogImportFailThenRecover();
 
-      const cfg = {} as NexisClawConfig;
+      const cfg = {} as GreenchClawConfig;
       const first = await loadModelCatalog({ config: cfg });
       expect(first).toStrictEqual([]);
 
@@ -234,7 +234,7 @@ describe("loadModelCatalog", () => {
     const models = [{ id: "existing", name: "Existing", provider: "ollama" }];
     mockPiDiscoveryModels(models);
 
-    const first = await loadModelCatalog({ config: {} as NexisClawConfig });
+    const first = await loadModelCatalog({ config: {} as GreenchClawConfig });
     expect(first).toStrictEqual([
       {
         id: "existing",
@@ -251,7 +251,7 @@ describe("loadModelCatalog", () => {
     resetModelCatalogCacheForTest();
     mockPiDiscoveryModels(models);
 
-    const second = await loadModelCatalog({ config: {} as NexisClawConfig });
+    const second = await loadModelCatalog({ config: {} as GreenchClawConfig });
     expect(second).toStrictEqual([
       {
         id: "existing",
@@ -299,7 +299,7 @@ describe("loadModelCatalog", () => {
           }) as unknown as PiSdkModule,
       );
 
-      const result = await loadModelCatalog({ config: {} as NexisClawConfig });
+      const result = await loadModelCatalog({ config: {} as GreenchClawConfig });
       expect(result).toEqual([{ id: "gpt-4.1", name: "GPT-4.1", provider: "openai" }]);
     } finally {
       setLoggerOverride(null);
@@ -337,13 +337,13 @@ describe("loadModelCatalog", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       readOnly: true,
     });
 
     const entry = requireCatalogEntry(result, "openai", "gpt-test");
     expect(entry.name).toBe("GPT Test");
-    expect(ensureNexisClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureGreenchClawModelsJsonMock).not.toHaveBeenCalled();
     expect(importPiSdk).not.toHaveBeenCalled();
     expect(loadPluginMetadataSnapshotMock).not.toHaveBeenCalled();
   });
@@ -382,7 +382,7 @@ describe("loadModelCatalog", () => {
       }),
     );
 
-    const result = await loadModelCatalog({ config: {} as NexisClawConfig, readOnly: true });
+    const result = await loadModelCatalog({ config: {} as GreenchClawConfig, readOnly: true });
 
     expect(result).toEqual([
       {
@@ -395,7 +395,7 @@ describe("loadModelCatalog", () => {
         compat: undefined,
       },
     ]);
-    expect(ensureNexisClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureGreenchClawModelsJsonMock).not.toHaveBeenCalled();
     expect(augmentCatalogMock).not.toHaveBeenCalled();
   });
 
@@ -444,7 +444,7 @@ describe("loadModelCatalog", () => {
     });
     __setModelCatalogImportForTest(importPiSdk as unknown as () => Promise<PiSdkModule>);
 
-    const result = await loadModelCatalog({ config: {} as NexisClawConfig, readOnly: true });
+    const result = await loadModelCatalog({ config: {} as GreenchClawConfig, readOnly: true });
 
     expect(result).toEqual([
       {
@@ -455,7 +455,7 @@ describe("loadModelCatalog", () => {
         reasoning: false,
       },
     ]);
-    expect(ensureNexisClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureGreenchClawModelsJsonMock).not.toHaveBeenCalled();
     expect(importPiSdk).not.toHaveBeenCalled();
   });
 
@@ -470,7 +470,7 @@ describe("loadModelCatalog", () => {
       }),
     );
 
-    const result = await loadModelCatalog({ config: {} as NexisClawConfig, readOnly: true });
+    const result = await loadModelCatalog({ config: {} as GreenchClawConfig, readOnly: true });
 
     expect(result).toEqual([
       {
@@ -483,7 +483,7 @@ describe("loadModelCatalog", () => {
         compat: undefined,
       },
     ]);
-    expect(ensureNexisClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureGreenchClawModelsJsonMock).not.toHaveBeenCalled();
     expect(augmentCatalogMock).not.toHaveBeenCalled();
   });
 
@@ -502,7 +502,7 @@ describe("loadModelCatalog", () => {
       }),
     );
 
-    const result = await loadModelCatalog({ config: {} as NexisClawConfig, readOnly: true });
+    const result = await loadModelCatalog({ config: {} as GreenchClawConfig, readOnly: true });
 
     expect(result).toEqual([
       {
@@ -524,7 +524,7 @@ describe("loadModelCatalog", () => {
         compat: undefined,
       },
     ]);
-    expect(ensureNexisClawModelsJsonMock).not.toHaveBeenCalled();
+    expect(ensureGreenchClawModelsJsonMock).not.toHaveBeenCalled();
     expect(augmentCatalogMock).not.toHaveBeenCalled();
   });
 
@@ -545,7 +545,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as NexisClawConfig });
+    const result = await loadModelCatalog({ config: {} as GreenchClawConfig });
     expectNoCatalogEntry(result, "openai-codex", "gpt-5.3-codex-spark");
     const entry = requireCatalogEntry(result, "openai-codex", "gpt-5.4");
     expect(entry.name).toBe("GPT-5.3 Codex");
@@ -579,7 +579,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as NexisClawConfig });
+    const result = await loadModelCatalog({ config: {} as GreenchClawConfig });
     expectNoCatalogEntry(result, "openai", "gpt-5.3-codex-spark");
     expectNoCatalogEntry(result, "azure-openai-responses", "gpt-5.3-codex-spark");
     expectNoCatalogEntry(result, "openai-codex", "gpt-5.3-codex-spark");
@@ -621,7 +621,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as NexisClawConfig });
+    const result = await loadModelCatalog({ config: {} as GreenchClawConfig });
     expectNoCatalogEntry(result, "openai-codex", "gpt-5.1-codex-mini");
     expectNoCatalogEntry(result, "openai-codex", "gpt-5.2-codex");
     expectNoCatalogEntry(result, "openai-codex", "gpt-5.3-codex");
@@ -672,7 +672,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as NexisClawConfig });
+    const result = await loadModelCatalog({ config: {} as GreenchClawConfig });
 
     expect(
       result.some((entry) => entry.provider === "openai" && entry.id.startsWith("gpt-5.4")),
@@ -697,7 +697,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as NexisClawConfig });
+    const result = await loadModelCatalog({ config: {} as GreenchClawConfig });
 
     const entry = requireCatalogEntry(result, "kilocode", "google/gemini-3.1-pro-preview");
     expect(entry.name).toBe("Gemini 3 Pro Preview");
@@ -740,7 +740,7 @@ describe("loadModelCatalog", () => {
     };
     currentPluginMetadataSnapshotMock.mockReturnValue(snapshot);
 
-    const result = loadManifestModelCatalog({ config: {} as NexisClawConfig });
+    const result = loadManifestModelCatalog({ config: {} as GreenchClawConfig });
 
     expect(loadPluginMetadataSnapshotMock).not.toHaveBeenCalled();
     expect(augmentCatalogMock).not.toHaveBeenCalled();
@@ -758,7 +758,7 @@ describe("loadModelCatalog", () => {
 
   it("lets read-only manifest catalog reuse the current workspace-scoped snapshot", () => {
     loadManifestModelCatalog({
-      config: {} as NexisClawConfig,
+      config: {} as GreenchClawConfig,
       fallbackToMetadataScan: false,
     });
 
@@ -768,10 +768,10 @@ describe("loadModelCatalog", () => {
   });
 
   it("passes explicit env when checking current manifest catalog snapshot compatibility", () => {
-    const env = { HOME: "/tmp/NexisClaw-model-catalog-env" } as NodeJS.ProcessEnv;
+    const env = { HOME: "/tmp/GreenchClaw-model-catalog-env" } as NodeJS.ProcessEnv;
 
     loadManifestModelCatalog({
-      config: {} as NexisClawConfig,
+      config: {} as GreenchClawConfig,
       env,
       fallbackToMetadataScan: false,
     });
@@ -800,7 +800,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as NexisClawConfig });
+    const result = await loadModelCatalog({ config: {} as GreenchClawConfig });
 
     expect(requireCatalogEntry(result, "ollama", "llama3.2").name).toBe("Llama 3.2");
     expect(
@@ -831,7 +831,7 @@ describe("loadModelCatalog", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     const entry = requireCatalogEntry(result, "modelscope", "Qwen/Qwen3.5-35B-A3B");
@@ -864,7 +864,7 @@ describe("loadModelCatalog", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
 
     const matches = result.filter((entry) => findModelInCatalog([entry], "z-ai", "glm-5"));
@@ -878,7 +878,7 @@ describe("loadModelCatalog", () => {
   it("does not add unrelated models when provider plugins return nothing", async () => {
     mockSingleOpenAiCatalogModel();
 
-    const result = await loadModelCatalog({ config: {} as NexisClawConfig });
+    const result = await loadModelCatalog({ config: {} as GreenchClawConfig });
 
     expect(
       result.some((entry) => entry.provider === "qianfan" && entry.id === "deepseek-v3.2"),
@@ -904,7 +904,7 @@ describe("loadModelCatalog", () => {
       },
     ]);
 
-    const result = await loadModelCatalog({ config: {} as NexisClawConfig });
+    const result = await loadModelCatalog({ config: {} as GreenchClawConfig });
 
     const matches = result.filter(
       (entry) => entry.provider === "kilocode" && entry.id === "kilo/auto",

@@ -1,7 +1,7 @@
 type TraceDetails = Record<string, boolean | number | string | undefined>;
 
 function isPluginLifecycleTraceEnabled(): boolean {
-  const raw = process.env.NEXISCLAW_PLUGIN_LIFECYCLE_TRACE?.trim().toLowerCase();
+  const raw = process.env.GREENCHCLAW_PLUGIN_LIFECYCLE_TRACE?.trim().toLowerCase();
   return raw === "1" || raw === "true" || raw === "yes";
 }
 

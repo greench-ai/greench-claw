@@ -60,9 +60,9 @@ describe("getBlockedBindReason", () => {
     }
   });
 
-  it("still blocks OS-home credential paths when NEXISCLAW_HOME points elsewhere", () => {
+  it("still blocks OS-home credential paths when GREENCHCLAW_HOME points elsewhere", () => {
     vi.stubEnv("HOME", "/home/tester");
-    vi.stubEnv("NEXISCLAW_HOME", "/srv/NexisClaw-home");
+    vi.stubEnv("GREENCHCLAW_HOME", "/srv/GreenchClaw-home");
 
     const reason = expectBlockedTargetReason("/home/tester/.gnupg/secring.gpg:/mnt/gnupg:ro");
     expect(reason?.blockedPath).toBe("/home/tester/.gnupg");
@@ -73,7 +73,7 @@ describe("getBlockedBindReason", () => {
       return;
     }
 
-    const dir = mkdtempSync(join(tmpdir(), "NexisClaw-home-"));
+    const dir = mkdtempSync(join(tmpdir(), "GreenchClaw-home-"));
     const realHome = join(dir, "real-home");
     const aliasHome = join(dir, "alias-home");
     mkdirSync(join(realHome, ".ssh"), { recursive: true });
@@ -91,7 +91,7 @@ describe("validateBindMounts", () => {
   });
 
   it("allows legitimate project directory mounts", () => {
-    const projectRoot = mkdtempSync(join(tmpdir(), "NexisClaw-sbx-safe-"));
+    const projectRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-sbx-safe-"));
     expect(
       validateBindMounts([
         `${join(projectRoot, "source")}:/source:rw`,
@@ -174,20 +174,20 @@ describe("validateBindMounts", () => {
   });
 
   it("allows drive-absolute Windows bind sources", () => {
-    expect(validateBindMounts(["D:/data/NexisClaw/src:/src:ro"])).toBeUndefined();
-    expect(validateBindMounts(["D:\\data\\NexisClaw\\output:/output:rw"])).toBeUndefined();
+    expect(validateBindMounts(["D:/data/GreenchClaw/src:/src:ro"])).toBeUndefined();
+    expect(validateBindMounts(["D:\\data\\GreenchClaw\\output:/output:rw"])).toBeUndefined();
   });
 
   it("compares Windows allowed roots case-insensitively", () => {
     expect(
-      validateBindMounts(["d:/DATA/NexisClaw/src:/src:ro"], {
-        allowedSourceRoots: ["D:/data/NexisClaw"],
+      validateBindMounts(["d:/DATA/GreenchClaw/src:/src:ro"], {
+        allowedSourceRoots: ["D:/data/GreenchClaw"],
       }),
     ).toBeUndefined();
 
     expect(() =>
       validateBindMounts(["D:/other/project:/src:ro"], {
-        allowedSourceRoots: ["d:/data/NexisClaw"],
+        allowedSourceRoots: ["d:/data/GreenchClaw"],
       }),
     ).toThrow(/outside allowed roots/);
   });
@@ -197,7 +197,7 @@ describe("validateBindMounts", () => {
       return;
     }
 
-    const dir = mkdtempSync(join(tmpdir(), "NexisClaw-home-"));
+    const dir = mkdtempSync(join(tmpdir(), "GreenchClaw-home-"));
     const realHome = join(dir, "real-home");
     const aliasHome = join(dir, "alias-home");
     mkdirSync(join(realHome, ".docker"), { recursive: true });
@@ -215,7 +215,7 @@ describe("validateBindMounts", () => {
       return;
     }
 
-    const dir = mkdtempSync(join(tmpdir(), "NexisClaw-sbx-"));
+    const dir = mkdtempSync(join(tmpdir(), "GreenchClaw-sbx-"));
     const link = join(dir, "etc-link");
     symlinkSync("/etc", link);
     const run = () => validateBindMounts([`${link}/passwd:/mnt/passwd:ro`]);
@@ -227,7 +227,7 @@ describe("validateBindMounts", () => {
       // Windows symlink semantics differ; POSIX symlink escape coverage runs on POSIX hosts.
       return;
     }
-    const dir = mkdtempSync(join(tmpdir(), "NexisClaw-sbx-"));
+    const dir = mkdtempSync(join(tmpdir(), "GreenchClaw-sbx-"));
     const workspace = join(dir, "workspace");
     const outside = join(dir, "outside");
     mkdirSync(workspace, { recursive: true });
@@ -247,12 +247,12 @@ describe("validateBindMounts", () => {
       // Symlink setup for blocked POSIX targets like /var/run is POSIX-only.
       return;
     }
-    const dir = mkdtempSync(join(tmpdir(), "NexisClaw-sbx-"));
+    const dir = mkdtempSync(join(tmpdir(), "GreenchClaw-sbx-"));
     const workspace = join(dir, "workspace");
     mkdirSync(workspace, { recursive: true });
     const link = join(workspace, "run-link");
     symlinkSync("/var/run", link);
-    const missingLeaf = join(link, "NexisClaw-not-created");
+    const missingLeaf = join(link, "GreenchClaw-not-created");
     expect(() =>
       validateBindMounts([`${missingLeaf}:/mnt/run:ro`], {
         allowedSourceRoots: [workspace],
@@ -268,8 +268,8 @@ describe("validateBindMounts", () => {
   });
 
   it("blocks bind sources outside allowed roots when allowlist is configured", () => {
-    const allowedRoot = mkdtempSync(join(tmpdir(), "NexisClaw-sbx-allowed-root-"));
-    const externalRoot = mkdtempSync(join(tmpdir(), "NexisClaw-sbx-external-"));
+    const allowedRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-sbx-allowed-root-"));
+    const externalRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-sbx-external-"));
     expect(() =>
       validateBindMounts([`${externalRoot}:/data:ro`], {
         allowedSourceRoots: [allowedRoot],
@@ -278,7 +278,7 @@ describe("validateBindMounts", () => {
   });
 
   it("allows bind sources in allowed roots when allowlist is configured", () => {
-    const projectRoot = mkdtempSync(join(tmpdir(), "NexisClaw-sbx-allowed-"));
+    const projectRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-sbx-allowed-"));
     expect(
       validateBindMounts([`${join(projectRoot, "cache")}:/data:ro`], {
         allowedSourceRoots: [projectRoot],
@@ -287,8 +287,8 @@ describe("validateBindMounts", () => {
   });
 
   it("allows bind sources outside allowed roots with explicit dangerous override", () => {
-    const allowedRoot = mkdtempSync(join(tmpdir(), "NexisClaw-sbx-allowed-root-"));
-    const externalRoot = mkdtempSync(join(tmpdir(), "NexisClaw-sbx-external-"));
+    const allowedRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-sbx-allowed-root-"));
+    const externalRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-sbx-external-"));
     expect(
       validateBindMounts([`${externalRoot}:/data:ro`], {
         allowedSourceRoots: [allowedRoot],
@@ -298,14 +298,14 @@ describe("validateBindMounts", () => {
   });
 
   it("blocks reserved container target paths by default", () => {
-    const projectRoot = mkdtempSync(join(tmpdir(), "NexisClaw-sbx-reserved-default-"));
+    const projectRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-sbx-reserved-default-"));
     expect(() =>
       validateBindMounts([`${projectRoot}:/workspace:rw`, `${projectRoot}:/agent/cache:rw`]),
     ).toThrow(/reserved container path/);
   });
 
   it("allows reserved container target paths with explicit dangerous override", () => {
-    const projectRoot = mkdtempSync(join(tmpdir(), "NexisClaw-sbx-reserved-"));
+    const projectRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-sbx-reserved-"));
     expect(
       validateBindMounts([`${projectRoot}:/workspace:rw`], {
         allowReservedContainerTargets: true,
@@ -370,7 +370,7 @@ describe("validateSeccompProfile", () => {
 
 describe("validateApparmorProfile", () => {
   it("allows named profile/undefined", () => {
-    expect(validateApparmorProfile("NexisClaw-sandbox")).toBeUndefined();
+    expect(validateApparmorProfile("GreenchClaw-sandbox")).toBeUndefined();
     expect(validateApparmorProfile(undefined)).toBeUndefined();
   });
 });
@@ -395,13 +395,13 @@ describe("profile hardening", () => {
 
 describe("validateSandboxSecurity", () => {
   it("passes with safe config", () => {
-    const projectRoot = mkdtempSync(join(tmpdir(), "NexisClaw-sbx-safe-config-"));
+    const projectRoot = mkdtempSync(join(tmpdir(), "GreenchClaw-sbx-safe-config-"));
     expect(
       validateSandboxSecurity({
         binds: [`${projectRoot}:/src:rw`],
         network: "none",
         seccompProfile: "/tmp/seccomp.json",
-        apparmorProfile: "NexisClaw-sandbox",
+        apparmorProfile: "GreenchClaw-sandbox",
       }),
     ).toBeUndefined();
   });

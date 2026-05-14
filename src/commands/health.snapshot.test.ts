@@ -438,7 +438,7 @@ function createIMessageHealthPlugin(): HealthTestPlugin {
       probeAccount: async () => ({
         ok: false,
         error:
-          "imsg cannot access /Users/alice/Library/Messages/chat.db. Grant Full Disk Access to the Gateway/launcher process and restart Gateway. privateApi=/tmp/NexisClaw/private.sock",
+          "imsg cannot access /Users/alice/Library/Messages/chat.db. Grant Full Disk Access to the Gateway/launcher process and restart Gateway. privateApi=/tmp/GreenchClaw/private.sock",
         privateApi: {
           rpcCommand: "imsg rpc --json",
           diagnostics: "sensitive transport details",
@@ -560,7 +560,7 @@ describe("getHealthSnapshot", () => {
     expect(calls.some((call) => call.includes("/getMe"))).toBe(true);
     expect(calls.some((call) => call.includes("/getWebhookInfo"))).toBe(true);
 
-    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-health-"));
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-health-"));
     const tokenFile = path.join(tmpDir, "telegram-token");
     try {
       fs.writeFileSync(tokenFile, "t-file\n", "utf-8");

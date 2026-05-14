@@ -29,10 +29,10 @@ let currentMockSocket:
     }
   | undefined;
 
-vi.mock("NexisClaw/plugin-sdk/runtime-config-snapshot", async () => {
+vi.mock("GreenchClaw/plugin-sdk/runtime-config-snapshot", async () => {
   const actual = await vi.importActual<
-    typeof import("NexisClaw/plugin-sdk/runtime-config-snapshot")
-  >("NexisClaw/plugin-sdk/runtime-config-snapshot");
+    typeof import("GreenchClaw/plugin-sdk/runtime-config-snapshot")
+  >("GreenchClaw/plugin-sdk/runtime-config-snapshot");
   return {
     ...actual,
     getRuntimeConfig: vi.fn().mockReturnValue({
@@ -49,10 +49,10 @@ vi.mock("NexisClaw/plugin-sdk/runtime-config-snapshot", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/conversation-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/conversation-runtime")>(
-    "NexisClaw/plugin-sdk/conversation-runtime",
-  );
+vi.mock("GreenchClaw/plugin-sdk/conversation-runtime", async () => {
+  const actual = await vi.importActual<
+    typeof import("GreenchClaw/plugin-sdk/conversation-runtime")
+  >("GreenchClaw/plugin-sdk/conversation-runtime");
   return {
     ...actual,
     readChannelAllowFromStore(...args: unknown[]) {
@@ -64,9 +64,9 @@ vi.mock("NexisClaw/plugin-sdk/conversation-runtime", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/channel-pairing", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/channel-pairing")>(
-    "NexisClaw/plugin-sdk/channel-pairing",
+vi.mock("GreenchClaw/plugin-sdk/channel-pairing", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/channel-pairing")>(
+    "GreenchClaw/plugin-sdk/channel-pairing",
   );
   return {
     ...actual,
@@ -76,9 +76,9 @@ vi.mock("NexisClaw/plugin-sdk/channel-pairing", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/media-store", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/media-store")>(
-    "NexisClaw/plugin-sdk/media-store",
+vi.mock("GreenchClaw/plugin-sdk/media-store", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/media-store")>(
+    "GreenchClaw/plugin-sdk/media-store",
   );
   return {
     ...actual,
@@ -89,7 +89,7 @@ vi.mock("NexisClaw/plugin-sdk/media-store", async () => {
   };
 });
 
-const HOME = path.join(os.tmpdir(), `NexisClaw-inbound-media-${crypto.randomUUID()}`);
+const HOME = path.join(os.tmpdir(), `GreenchClaw-inbound-media-${crypto.randomUUID()}`);
 const ORIGINAL_HOME = process.env.HOME;
 process.env.HOME = HOME;
 

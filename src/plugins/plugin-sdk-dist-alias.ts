@@ -20,16 +20,16 @@ function writeRuntimeModuleWrapper(sourcePath: string, targetPath: string): void
   fs.writeFileSync(targetPath, content, "utf8");
 }
 
-export function ensureNexisClawPluginSdkAlias(distRoot: string): void {
+export function ensureGreenchClawPluginSdkAlias(distRoot: string): void {
   const pluginSdkDir = path.join(distRoot, "plugin-sdk");
   if (!fs.existsSync(pluginSdkDir)) {
     return;
   }
 
-  const aliasDir = path.join(distRoot, "extensions", "node_modules", "NexisClaw");
+  const aliasDir = path.join(distRoot, "extensions", "node_modules", "GreenchClaw");
   const pluginSdkAliasDir = path.join(aliasDir, "plugin-sdk");
   writeRuntimeJsonFile(path.join(aliasDir, "package.json"), {
-    name: "NexisClaw",
+    name: "GreenchClaw",
     type: "module",
     exports: {
       "./plugin-sdk": "./plugin-sdk/index.js",

@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import path from "node:path";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { resetLogger, setLoggerOverride } from "../logging/logger.js";
 import { createWarnLogCapture } from "../logging/test-helpers/warn-log-capture.js";
 import {
@@ -200,7 +200,7 @@ async function runModelFallbackCase(name: string, run: () => Promise<void>): Pro
   }
 }
 
-function makeFallbacksOnlyCfg(): NexisClawConfig {
+function makeFallbacksOnlyCfg(): GreenchClawConfig {
   return {
     agents: {
       defaults: {
@@ -209,10 +209,10 @@ function makeFallbacksOnlyCfg(): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-function makeProviderFallbackCfg(provider: string): NexisClawConfig {
+function makeProviderFallbackCfg(provider: string): GreenchClawConfig {
   return makeCfg({
     agents: {
       defaults: {
@@ -235,12 +235,12 @@ async function withTempAuthStore<T>(
 }
 
 async function makeAuthTempDir(): Promise<string> {
-  authTempRoot ||= path.join("/tmp", "NexisClaw-auth-suite-mock");
+  authTempRoot ||= path.join("/tmp", "GreenchClaw-auth-suite-mock");
   return path.join(authTempRoot, `case-${++authTempCounter}`);
 }
 
 async function runWithStoredAuth(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   store: AuthProfileStore;
   provider: string;
   run: (provider: string, model: string) => Promise<string>;
@@ -399,7 +399,7 @@ async function expectSkippedUnavailableProvider(params: {
 }
 
 // Issue-backed Anthropic/OpenAI-compatible insufficient_quota payload under HTTP 400:
-// https://github.com/NexisClaw/NexisClaw/issues/23440
+// https://github.com/GreenchClaw/GreenchClaw/issues/23440
 const INSUFFICIENT_QUOTA_PAYLOAD =
   '{"type":"error","error":{"type":"insufficient_quota","message":"Your account has insufficient quota balance to run this request."}}';
 
@@ -408,7 +408,7 @@ describe("runWithModelFallback", () => {
     const run = vi.fn().mockResolvedValue("ok");
 
     const result = await runWithModelFallback({
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       provider: "anthropic-cli",
       model: "claude-opus-4-7",
       run,
@@ -427,13 +427,13 @@ describe("runWithModelFallback", () => {
       cfg: makeCfg(),
       provider: "openai",
       model: "gpt-4.1-mini",
-      agentDir: "/tmp/NexisClaw-no-auth-profiles",
+      agentDir: "/tmp/GreenchClaw-no-auth-profiles",
       run,
     });
 
     expect(result.result).toBe("ok");
     expect(authSourceCheckMock.hasAnyAuthProfileStoreSource).toHaveBeenCalledWith(
-      "/tmp/NexisClaw-no-auth-profiles",
+      "/tmp/GreenchClaw-no-auth-profiles",
     );
     expect(authRuntimeMock.runtime.ensureAuthProfileStore).not.toHaveBeenCalled();
     expect(run).toHaveBeenCalledWith("openai", "gpt-4.1-mini");
@@ -508,7 +508,7 @@ describe("runWithModelFallback", () => {
       },
     ] satisfies Array<{
       name: string;
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       provider: string;
       model: string;
       expected: [string, string];
@@ -1295,7 +1295,7 @@ describe("runWithModelFallback", () => {
   });
 
   it("sanitizes model identifiers in model_not_found warnings", async () => {
-    const warnLogs = createWarnLogCapture("NexisClaw-model-fallback-test");
+    const warnLogs = createWarnLogCapture("GreenchClaw-model-fallback-test");
     try {
       const cfg = makeCfg();
       const run = vi
@@ -1763,7 +1763,7 @@ describe("runWithModelFallback", () => {
         },
       ] satisfies Array<{
         name: string;
-        cfg: NexisClawConfig;
+        cfg: GreenchClawConfig;
         provider: string;
         model: string;
         calls: Array<[string, string]>;
@@ -2073,7 +2073,7 @@ describe("runWithImageModelFallback", () => {
       },
     ] satisfies Array<{
       name: string;
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       modelOverride: string;
       expected: Array<[string, string]>;
     }>;

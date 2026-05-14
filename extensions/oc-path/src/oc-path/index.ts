@@ -1,5 +1,5 @@
 /**
- * `@NexisClaw/oc-path` — substrate package public surface.
+ * `@GreenchClaw/oc-path` — substrate package public surface.
  *
  * **Strategic frame**: workspace files are byte-stable and addressable
  * via the `oc://` scheme — the addressing scheme is universal across
@@ -21,11 +21,11 @@
  * the AST carries its `kind` discriminator and the universal verbs
  * dispatch internally.
  *
- * @module @NexisClaw/oc-path
+ * @module @GreenchClaw/oc-path
  */
 
 /**
- * SDK version this build of `@NexisClaw/oc-path` exposes. Bumped on
+ * SDK version this build of `@GreenchClaw/oc-path` exposes. Bumped on
  * every breaking change to AST shape, OcPath syntax, or universal
  * verbs (`resolveOcPath`, `setOcPath`, `findOcPaths`, `parseXxx`,
  * `emitXxx`). Plugin packs that depend on the substrate declare the
@@ -34,14 +34,7 @@
 export const SDK_VERSION = "0.1.0";
 
 // AST types
-export type {
-  AstBlock,
-  AstItem,
-  Diagnostic,
-  FrontmatterEntry,
-  ParseResult,
-  MdAst,
-} from "./ast.js";
+export type { AstBlock, AstItem, Diagnostic, FrontmatterEntry, ParseResult, MdAst } from "./ast.js";
 export type { JsoncAst, JsoncEntry, JsoncValue } from "./jsonc/ast.js";
 export type { JsonlAst, JsonlLine } from "./jsonl/ast.js";
 

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { SecretRef } from "../../config/types.secrets.js";
 
 export type OAuthProvider = string;
@@ -17,7 +17,7 @@ export type OAuthCredentials = {
 };
 
 export type OAuthCredentialRef = {
-  source: "NexisClaw-credentials";
+  source: "GreenchClaw-credentials";
   provider: "openai-codex";
   id: string;
 };
@@ -38,7 +38,7 @@ export type ApiKeyCredential = {
 export type TokenCredential = {
   /**
    * Static bearer-style token (often OAuth access token / PAT).
-   * Not refreshable by NexisClaw (unlike `type: "oauth"`).
+   * Not refreshable by GreenchClaw (unlike `type: "oauth"`).
    */
   type: "token";
   provider: string;
@@ -127,7 +127,7 @@ export type AuthProfileStateStore = {
 export type AuthProfileStore = AuthProfileSecretsStore & AuthProfileState;
 
 export type AuthProfileIdRepairResult = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   changes: string[];
   migrated: boolean;
   fromProfileId?: string;

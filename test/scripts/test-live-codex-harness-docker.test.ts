@@ -11,9 +11,9 @@ describe("scripts/test-live-codex-harness-docker.sh", () => {
   it("mounts cache and npm tool dirs outside the bind-mounted Docker home", () => {
     const script = fs.readFileSync(SCRIPT_PATH, "utf8");
 
-    expect(script).toContain('DOCKER_CACHE_CONTAINER_DIR="/tmp/NexisClaw-cache"');
-    expect(script).toContain('DOCKER_CLI_TOOLS_CONTAINER_DIR="/tmp/NexisClaw-npm-global"');
-    expect(script).toContain("NexisClaw_live_codex_harness_is_ci()");
+    expect(script).toContain('DOCKER_CACHE_CONTAINER_DIR="/tmp/GreenchClaw-cache"');
+    expect(script).toContain('DOCKER_CLI_TOOLS_CONTAINER_DIR="/tmp/GreenchClaw-npm-global"');
+    expect(script).toContain("GreenchClaw_live_codex_harness_is_ci()");
     expect(script).toContain('[[ -n "${CI:-}" && "${CI:-}" != "false" ]]');
     expect(script).toContain('-e XDG_CACHE_HOME="$DOCKER_CACHE_CONTAINER_DIR"');
     expect(script).toContain('-e NPM_CONFIG_PREFIX="$DOCKER_CLI_TOOLS_CONTAINER_DIR"');
@@ -28,13 +28,13 @@ describe("scripts/test-live-codex-harness-docker.sh", () => {
     const script = fs.readFileSync(SCRIPT_PATH, "utf8");
 
     expect(script).toContain(
-      "NEXISCLAW_LIVE_CODEX_HARNESS_AUTH=codex-auth requires ~/.codex/auth.json before building the live Docker image",
+      "GREENCHCLAW_LIVE_CODEX_HARNESS_AUTH=codex-auth requires ~/.codex/auth.json before building the live Docker image",
     );
     expect(script).toContain(
-      "If this is a Testbox/API-key run, set NEXISCLAW_LIVE_CODEX_HARNESS_AUTH=api-key and run through NexisClaw-testbox-env.",
+      "If this is a Testbox/API-key run, set GREENCHCLAW_LIVE_CODEX_HARNESS_AUTH=api-key and run through GreenchClaw-testbox-env.",
     );
     expect(script.indexOf("requires ~/.codex/auth.json before building")).toBeLessThan(
-      script.indexOf('NEXISCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR"'),
+      script.indexOf('GREENCHCLAW_LIVE_DOCKER_REPO_ROOT="$ROOT_DIR"'),
     );
   });
 });

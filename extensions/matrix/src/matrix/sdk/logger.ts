@@ -1,6 +1,6 @@
 import { format } from "node:util";
-import { redactSensitiveText } from "NexisClaw/plugin-sdk/logging-core";
-import type { RuntimeLogger } from "NexisClaw/plugin-sdk/plugin-runtime";
+import { redactSensitiveText } from "GreenchClaw/plugin-sdk/logging-core";
+import type { RuntimeLogger } from "GreenchClaw/plugin-sdk/plugin-runtime";
 import { getMatrixRuntime } from "../../runtime.js";
 
 type Logger = {

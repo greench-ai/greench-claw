@@ -1,5 +1,5 @@
 import type { Command } from "commander";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { callBrowserRequest, type BrowserParentOpts } from "../browser-cli-shared.js";
 import {
   danger,
@@ -89,7 +89,7 @@ export function registerBrowserFilesAndDownloadsCommands(
     .description("Arm file upload for the next file chooser")
     .argument(
       "<paths...>",
-      "File paths to upload (must be within NexisClaw temp uploads dir, e.g. /tmp/NexisClaw/uploads/file.pdf)",
+      "File paths to upload (must be within GreenchClaw temp uploads dir, e.g. /tmp/GreenchClaw/uploads/file.pdf)",
     )
     .option("--ref <ref>", "Ref id from snapshot to click after arming")
     .option("--input-ref <ref>", "Ref id for <input type=file> to set directly")
@@ -126,7 +126,7 @@ export function registerBrowserFilesAndDownloadsCommands(
     .description("Wait for the next download (and save it)")
     .argument(
       "[path]",
-      "Save path within NexisClaw temp downloads dir (default: /tmp/NexisClaw/downloads/...; fallback: os.tmpdir()/NexisClaw/downloads/...)",
+      "Save path within GreenchClaw temp downloads dir (default: /tmp/GreenchClaw/downloads/...; fallback: os.tmpdir()/GreenchClaw/downloads/...)",
     )
     .option("--target-id <id>", "CDP target id (or unique prefix)")
     .option(
@@ -149,7 +149,7 @@ export function registerBrowserFilesAndDownloadsCommands(
     .argument("<ref>", "Ref id from snapshot to click")
     .argument(
       "<path>",
-      "Save path within NexisClaw temp downloads dir (e.g. report.pdf or /tmp/NexisClaw/downloads/report.pdf)",
+      "Save path within GreenchClaw temp downloads dir (e.g. report.pdf or /tmp/GreenchClaw/downloads/report.pdf)",
     )
     .option("--target-id <id>", "CDP target id (or unique prefix)")
     .option(

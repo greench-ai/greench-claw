@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { logVerbose } from "../../globals.js";
 import { withAcpRuntimeErrorBoundary } from "../runtime/errors.js";
 import {
@@ -14,7 +14,7 @@ import type { SessionAcpMeta, SessionEntry } from "./manager.types.js";
 import { hasLegacyAcpIdentityProjection } from "./manager.utils.js";
 
 export async function reconcileManagerRuntimeSessionIdentifiers(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   runtime: AcpRuntime;
   handle: AcpRuntimeHandle;
@@ -23,7 +23,7 @@ export async function reconcileManagerRuntimeSessionIdentifiers(params: {
   failOnStatusError: boolean;
   setCachedHandle: (sessionKey: string, handle: AcpRuntimeHandle) => void;
   writeSessionMeta: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     sessionKey: string;
     mutate: (
       current: SessionAcpMeta | undefined,

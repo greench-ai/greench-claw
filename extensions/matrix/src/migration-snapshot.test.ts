@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { withTempHome } from "NexisClaw/plugin-sdk/test-env";
+import { withTempHome } from "GreenchClaw/plugin-sdk/test-env";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const legacyCryptoInspectorAvailability = vi.hoisted(() => ({
@@ -37,7 +37,7 @@ function makeMatrixMigrationConfig() {
 }
 
 function seedLegacyMatrixCrypto(home: string) {
-  const stateDir = path.join(home, ".NexisClaw");
+  const stateDir = path.join(home, ".GreenchClaw");
   const { rootDir } = resolveMatrixAccountStorageRoot({
     stateDir,
     ...MATRIX_CREDENTIALS,
@@ -74,8 +74,8 @@ describe("matrix migration snapshots", () => {
 
   it("creates a backup marker after writing a pre-migration snapshot", async () => {
     await withTempHome(async (home) => {
-      fs.writeFileSync(path.join(home, ".NexisClaw", "NexisClaw.json"), "{}\n", "utf8");
-      fs.writeFileSync(path.join(home, ".NexisClaw", "state.txt"), "state\n", "utf8");
+      fs.writeFileSync(path.join(home, ".GreenchClaw", "GreenchClaw.json"), "{}\n", "utf8");
+      fs.writeFileSync(path.join(home, ".GreenchClaw", "state.txt"), "state\n", "utf8");
 
       const result = await maybeCreateMatrixMigrationSnapshot({
         trigger: "unit-test",
@@ -97,7 +97,7 @@ describe("matrix migration snapshots", () => {
 
   it("treats resolvable Matrix legacy state as actionable", async () => {
     await withTempHome(async (home) => {
-      const stateDir = path.join(home, ".NexisClaw");
+      const stateDir = path.join(home, ".GreenchClaw");
       fs.mkdirSync(path.join(stateDir, "matrix"), { recursive: true });
       fs.writeFileSync(
         path.join(stateDir, "matrix", "bot-storage.json"),

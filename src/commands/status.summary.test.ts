@@ -21,7 +21,7 @@ vi.mock("./status.summary.runtime.js", () => ({
       provider: "openai",
       model: "gpt-5.5",
     })),
-    resolveSessionRuntimeLabel: vi.fn(() => "NexisClaw Pi Default"),
+    resolveSessionRuntimeLabel: vi.fn(() => "GreenchClaw Pi Default"),
     resolveContextTokensForModel: vi.fn(() => 200_000),
   },
 }));

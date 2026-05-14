@@ -1,4 +1,4 @@
-import type { ChatType, NexisClawConfig } from "./runtime-api.js";
+import type { ChatType, GreenchClawConfig } from "./runtime-api.js";
 
 export function mapMattermostChannelTypeToChatType(channelType?: string | null): ChatType {
   if (!channelType) {
@@ -26,7 +26,7 @@ export function resolveMattermostTrustedChatKind(params: {
 }
 
 export type MattermostRequireMentionResolverInput = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: "mattermost";
   accountId: string;
   groupId: string;
@@ -35,7 +35,7 @@ export type MattermostRequireMentionResolverInput = {
 
 export type MattermostMentionGateInput = {
   kind: ChatType;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   channelId: string;
   threadRootId?: string;

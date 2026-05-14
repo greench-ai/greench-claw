@@ -1,14 +1,14 @@
 import {
   parsePluginBindingApprovalCustomId,
   resolvePinnedMainDmOwnerFromAllowlist,
-} from "NexisClaw/plugin-sdk/conversation-runtime";
-import { isSingleUseReplyToMode } from "NexisClaw/plugin-sdk/reply-reference";
+} from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { isSingleUseReplyToMode } from "GreenchClaw/plugin-sdk/reply-reference";
 import { vi, type Mock } from "vitest";
 
 type UnknownMock = Mock<(...args: unknown[]) => unknown>;
 type AsyncUnknownMock = Mock<(...args: unknown[]) => Promise<unknown>>;
 type DispatchReplyWithBufferedBlockDispatcherFn =
-  typeof import("NexisClaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithBufferedBlockDispatcher;
+  typeof import("GreenchClaw/plugin-sdk/reply-dispatch-runtime").dispatchReplyWithBufferedBlockDispatcher;
 type DispatchReplyMock = Mock<DispatchReplyWithBufferedBlockDispatcherFn>;
 
 type DiscordComponentRuntimeMocks = {
@@ -163,13 +163,13 @@ export function resetDiscordComponentRuntimeMocks() {
   readSessionUpdatedAtMock.mockClear().mockReturnValue(undefined);
   upsertPairingRequestMock.mockClear().mockResolvedValue({ code: "PAIRCODE", created: true });
   recordInboundSessionMock.mockClear().mockResolvedValue(undefined);
-  resolveStorePathMock.mockClear().mockReturnValue("/tmp/NexisClaw-sessions-test.json");
+  resolveStorePathMock.mockClear().mockReturnValue("/tmp/GreenchClaw-sessions-test.json");
   resolvePluginConversationBindingApprovalMock.mockReset().mockResolvedValue({
     status: "approved",
     binding: {
       bindingId: "binding-1",
-      pluginId: "NexisClaw-codex-app-server",
-      pluginName: "NexisClaw App Server",
+      pluginId: "GreenchClaw-codex-app-server",
+      pluginName: "GreenchClaw App Server",
       pluginRoot: "/plugins/codex",
       channel: "discord",
       accountId: "default",
@@ -178,8 +178,8 @@ export function resetDiscordComponentRuntimeMocks() {
     },
     request: {
       id: "approval-1",
-      pluginId: "NexisClaw-codex-app-server",
-      pluginName: "NexisClaw App Server",
+      pluginId: "GreenchClaw-codex-app-server",
+      pluginName: "GreenchClaw App Server",
       pluginRoot: "/plugins/codex",
       requestedAt: Date.now(),
       conversation: {

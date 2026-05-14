@@ -1,15 +1,15 @@
 ---
-summary: "Start local model servers on demand before NexisClaw model requests"
+summary: "Start local model servers on demand before GreenchClaw model requests"
 read_when:
-  - You want NexisClaw to start a local model server only when its model is selected
+  - You want GreenchClaw to start a local model server only when its model is selected
   - You run ds4, inferrs, vLLM, llama.cpp, MLX, or another OpenAI-compatible local server
   - You need to control cold start, readiness, and idle shutdown for local providers
 title: "Local model services"
 ---
 
-`models.providers.<id>.localService` lets NexisClaw start a provider-owned local
+`models.providers.<id>.localService` lets GreenchClaw start a provider-owned local
 model server on demand. It is provider-level config: when the selected model
-belongs to that provider, NexisClaw probes the service, starts the process if the
+belongs to that provider, GreenchClaw probes the service, starts the process if the
 endpoint is down, waits for readiness, then sends the model request.
 
 Use it for local servers that are expensive to keep running all day, or for
@@ -18,16 +18,16 @@ manual setups where model selection should be enough to bring the backend up.
 ## How it works
 
 1. A model request resolves to a configured provider.
-2. If that provider has `localService`, NexisClaw probes `healthUrl`.
-3. If the probe succeeds, NexisClaw uses the existing server.
-4. If the probe fails, NexisClaw starts `command` with `args`.
-5. NexisClaw polls readiness until `readyTimeoutMs` expires.
+2. If that provider has `localService`, GreenchClaw probes `healthUrl`.
+3. If the probe succeeds, GreenchClaw uses the existing server.
+4. If the probe fails, GreenchClaw starts `command` with `args`.
+5. GreenchClaw polls readiness until `readyTimeoutMs` expires.
 6. The model request is sent through the normal provider transport.
-7. If NexisClaw started the process and `idleStopMs` is positive, the process is
+7. If GreenchClaw started the process and `idleStopMs` is positive, the process is
    stopped after the last in-flight request has been idle for that long.
 
-NexisClaw does not install launchd, systemd, Docker, or a daemon for this. The
-server is a child process of the NexisClaw process that first needed it.
+GreenchClaw does not install launchd, systemd, Docker, or a daemon for this. The
+server is a child process of the GreenchClaw process that first needed it.
 
 ## Config shape
 
@@ -72,14 +72,14 @@ server is a child process of the NexisClaw process that first needed it.
 - `args`: process arguments. No shell expansion, pipes, globbing, or quoting
   rules are applied.
 - `cwd`: optional working directory for the process.
-- `env`: optional environment variables merged over the NexisClaw process
+- `env`: optional environment variables merged over the GreenchClaw process
   environment.
-- `healthUrl`: readiness URL. If omitted, NexisClaw appends `/models` to
+- `healthUrl`: readiness URL. If omitted, GreenchClaw appends `/models` to
   `baseUrl`, so `http://127.0.0.1:8000/v1` becomes
   `http://127.0.0.1:8000/v1/models`.
 - `readyTimeoutMs`: startup readiness deadline. Default: `120000`.
-- `idleStopMs`: idle shutdown delay for NexisClaw-started processes. `0` or
-  omitted keeps the process alive until NexisClaw exits.
+- `idleStopMs`: idle shutdown delay for GreenchClaw-started processes. `0` or
+  omitted keeps the process alive until GreenchClaw exits.
 
 ## Inferrs example
 
@@ -138,7 +138,7 @@ API works with the `inferrs` provider entry.
 ```
 
 Replace `command` with the result of `which inferrs` on the machine running
-NexisClaw.
+GreenchClaw.
 
 ## ds4 example
 
@@ -177,7 +177,7 @@ NexisClaw.
 
 ## Operational notes
 
-- One NexisClaw process manages the child it started. Another NexisClaw process
+- One GreenchClaw process manages the child it started. Another GreenchClaw process
   that sees the same health URL already live will reuse it without adopting it.
 - Startup is serialized per provider command and argument set, so concurrent
   requests do not spawn duplicate servers for the same config.
@@ -195,6 +195,6 @@ NexisClaw.
     Local model setup, provider choices, and safety guidance.
   </Card>
   <Card title="Inferrs" href="/providers/inferrs" icon="cpu">
-    Run NexisClaw through the inferrs OpenAI-compatible local server.
+    Run GreenchClaw through the inferrs OpenAI-compatible local server.
   </Card>
 </CardGroup>

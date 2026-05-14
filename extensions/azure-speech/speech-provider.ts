@@ -1,11 +1,11 @@
-import { normalizeResolvedSecretInputString } from "NexisClaw/plugin-sdk/secret-input";
+import { normalizeResolvedSecretInputString } from "GreenchClaw/plugin-sdk/secret-input";
 import type {
   SpeechDirectiveTokenParseContext,
   SpeechProviderConfig,
   SpeechProviderOverrides,
   SpeechProviderPlugin,
-} from "NexisClaw/plugin-sdk/speech-core";
-import { asFiniteNumber, asObject, trimToUndefined } from "NexisClaw/plugin-sdk/speech-core";
+} from "GreenchClaw/plugin-sdk/speech-core";
+import { asFiniteNumber, asObject, trimToUndefined } from "GreenchClaw/plugin-sdk/speech-core";
 import {
   azureSpeechTTS,
   DEFAULT_AZURE_SPEECH_AUDIO_FORMAT,

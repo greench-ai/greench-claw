@@ -35,7 +35,7 @@ Longer spot-check after that:
 GPT baseline:
 
 ```bash
-pnpm NexisClaw qa suite \
+pnpm GreenchClaw qa suite \
   --provider-mode live-frontier \
   --model openai/gpt-5.5 \
   --alt-model openai/gpt-5.5 \
@@ -48,7 +48,7 @@ pnpm NexisClaw qa suite \
 Claude sweep:
 
 ```bash
-pnpm NexisClaw qa suite \
+pnpm GreenchClaw qa suite \
   --provider-mode live-frontier \
   --model anthropic/claude-sonnet-4-6 \
   --alt-model anthropic/claude-opus-4-6 \
@@ -60,7 +60,7 @@ pnpm NexisClaw qa suite \
 Gemini sweep:
 
 ```bash
-pnpm NexisClaw qa suite \
+pnpm GreenchClaw qa suite \
   --provider-mode live-frontier \
   --model <google-pro-model-ref> \
   --alt-model <google-pro-model-ref> \
@@ -69,7 +69,7 @@ pnpm NexisClaw qa suite \
   --scenario source-docs-discovery-report
 ```
 
-Use the QA Lab runner catalog or `NexisClaw models list --all` to pick the current Google Pro ref.
+Use the QA Lab runner catalog or `GreenchClaw models list --all` to pick the current Google Pro ref.
 
 ## Tuning loop
 
@@ -102,7 +102,7 @@ read QA_KICKOFF_TASK.md, tell me what feels half-baked about this qa mission, an
 GPT manual lane:
 
 ```bash
-pnpm NexisClaw qa manual \
+pnpm GreenchClaw qa manual \
   --provider-mode live-frontier \
   --model openai/gpt-5.5 \
   --alt-model openai/gpt-5.5 \
@@ -113,7 +113,7 @@ pnpm NexisClaw qa manual \
 Claude manual lane:
 
 ```bash
-pnpm NexisClaw qa manual \
+pnpm GreenchClaw qa manual \
   --provider-mode live-frontier \
   --model anthropic/claude-sonnet-4-6 \
   --alt-model anthropic/claude-opus-4-6 \

@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { installedPluginRoot } from "NexisClaw/plugin-sdk/test-fixtures";
+import { installedPluginRoot } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   listOfficialExternalPluginCatalogEntries,
   resolveOfficialExternalPluginId,
@@ -37,10 +37,10 @@ import {
   writePersistedInstalledPluginIndexInstallRecords,
 } from "./plugins-cli-test-helpers.js";
 
-const CLI_STATE_ROOT = "/tmp/NexisClaw-state";
-const ORIGINAL_NEXISCLAW_STATE_DIR = process.env.NEXISCLAW_STATE_DIR;
-const ORIGINAL_NEXISCLAW_NIX_MODE = process.env.NEXISCLAW_NIX_MODE;
-const PROFILE_STATE_ROOT = "/tmp/NexisClaw-ledger-profile";
+const CLI_STATE_ROOT = "/tmp/GreenchClaw-state";
+const ORIGINAL_GREENCHCLAW_STATE_DIR = process.env.GREENCHCLAW_STATE_DIR;
+const ORIGINAL_GREENCHCLAW_NIX_MODE = process.env.GREENCHCLAW_NIX_MODE;
+const PROFILE_STATE_ROOT = "/tmp/GreenchClaw-ledger-profile";
 
 const OFFICIAL_EXTERNAL_NPM_INSTALLS_WITHOUT_INTEGRITY = listOfficialExternalPluginCatalogEntries()
   .map((entry) => {
@@ -60,11 +60,11 @@ function cliInstallPath(pluginId: string): string {
 }
 
 function useProfileExtensionsDir(): string {
-  process.env.NEXISCLAW_STATE_DIR = PROFILE_STATE_ROOT;
+  process.env.GREENCHCLAW_STATE_DIR = PROFILE_STATE_ROOT;
   return path.join(PROFILE_STATE_ROOT, "extensions");
 }
 
-function createEnabledPluginConfig(pluginId: string): NexisClawConfig {
+function createEnabledPluginConfig(pluginId: string): GreenchClawConfig {
   return {
     plugins: {
       entries: {
@@ -73,15 +73,15 @@ function createEnabledPluginConfig(pluginId: string): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-function createEmptyPluginConfig(): NexisClawConfig {
+function createEmptyPluginConfig(): GreenchClawConfig {
   return {
     plugins: {
       entries: {},
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function createClawHubInstallResult(params: {
@@ -138,12 +138,12 @@ function createNpmPackPluginInstallResult(
     targetDir: cliInstallPath(pluginId),
     version: "1.2.3",
     extensions: ["dist/index.js"],
-    manifestName: `@NexisClaw/${pluginId}`,
-    npmTarballName: `NexisClaw-${pluginId}-1.2.3.tgz`,
+    manifestName: `@GreenchClaw/${pluginId}`,
+    npmTarballName: `GreenchClaw-${pluginId}-1.2.3.tgz`,
     npmResolution: {
-      name: `@NexisClaw/${pluginId}`,
+      name: `@GreenchClaw/${pluginId}`,
       version: "1.2.3",
-      resolvedSpec: `@NexisClaw/${pluginId}@1.2.3`,
+      resolvedSpec: `@GreenchClaw/${pluginId}@1.2.3`,
       integrity: "sha512-pack-demo",
       shasum: "packdemosha",
       resolvedAt: "2026-05-06T00:00:00.000Z",
@@ -194,7 +194,7 @@ function primeNpmPluginFallback(pluginId = "demo") {
   return { cfg, enabledCfg };
 }
 
-function createPathHookPackInstalledConfig(tmpRoot: string): NexisClawConfig {
+function createPathHookPackInstalledConfig(tmpRoot: string): GreenchClawConfig {
   return {
     hooks: {
       internal: {
@@ -207,10 +207,10 @@ function createPathHookPackInstalledConfig(tmpRoot: string): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-function createNpmHookPackInstalledConfig(): NexisClawConfig {
+function createNpmHookPackInstalledConfig(): GreenchClawConfig {
   return {
     hooks: {
       internal: {
@@ -222,7 +222,7 @@ function createNpmHookPackInstalledConfig(): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function createHookPackInstallResult(targetDir: string): {
@@ -242,14 +242,14 @@ function createHookPackInstallResult(targetDir: string): {
 }
 
 function primeHookPackNpmFallback() {
-  const cfg = {} as NexisClawConfig;
+  const cfg = {} as GreenchClawConfig;
   const installedCfg = createNpmHookPackInstalledConfig();
 
   loadConfig.mockReturnValue(cfg);
   mockClawHubPackageNotFound("@acme/demo-hooks");
   installPluginFromNpmSpec.mockResolvedValue({
     ok: false,
-    error: "package.json missing NexisClaw.plugin.json",
+    error: "package.json missing GreenchClaw.plugin.json",
   });
   installHooksFromNpmSpec.mockResolvedValue({
     ...createHookPackInstallResult("/tmp/hooks/demo-hooks"),
@@ -269,7 +269,7 @@ function primeBlockedNpmPluginInstall(params: {
   pluginId: string;
   code?: "security_scan_blocked" | "security_scan_failed";
 }) {
-  loadConfig.mockReturnValue({} as NexisClawConfig);
+  loadConfig.mockReturnValue({} as GreenchClawConfig);
   mockClawHubPackageNotFound(params.spec);
   installPluginFromNpmSpec.mockResolvedValue({
     ok: false,
@@ -281,10 +281,10 @@ function primeBlockedNpmPluginInstall(params: {
 function primeHookPackPathFallback(params: {
   tmpRoot: string;
   pluginInstallError: string;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   const installedCfg = createPathHookPackInstalledConfig(params.tmpRoot);
 
-  loadConfig.mockReturnValue({} as NexisClawConfig);
+  loadConfig.mockReturnValue({} as GreenchClawConfig);
   installPluginFromPath.mockResolvedValueOnce({
     ok: false,
     error: params.pluginInstallError,
@@ -380,10 +380,10 @@ function persistedInstallRecord(pluginId: string, callIndex = 0): PersistedInsta
   return record;
 }
 
-function replaceConfigCall(callIndex = 0): { baseHash?: string; nextConfig?: NexisClawConfig } {
+function replaceConfigCall(callIndex = 0): { baseHash?: string; nextConfig?: GreenchClawConfig } {
   return mockCallArg(replaceConfigFile, callIndex) as {
     baseHash?: string;
-    nextConfig?: NexisClawConfig;
+    nextConfig?: GreenchClawConfig;
   };
 }
 
@@ -401,15 +401,15 @@ describe("plugins cli install", () => {
   });
 
   afterEach(() => {
-    if (ORIGINAL_NEXISCLAW_STATE_DIR === undefined) {
-      delete process.env.NEXISCLAW_STATE_DIR;
+    if (ORIGINAL_GREENCHCLAW_STATE_DIR === undefined) {
+      delete process.env.GREENCHCLAW_STATE_DIR;
     } else {
-      process.env.NEXISCLAW_STATE_DIR = ORIGINAL_NEXISCLAW_STATE_DIR;
+      process.env.GREENCHCLAW_STATE_DIR = ORIGINAL_GREENCHCLAW_STATE_DIR;
     }
-    if (ORIGINAL_NEXISCLAW_NIX_MODE === undefined) {
-      delete process.env.NEXISCLAW_NIX_MODE;
+    if (ORIGINAL_GREENCHCLAW_NIX_MODE === undefined) {
+      delete process.env.GREENCHCLAW_NIX_MODE;
     } else {
-      process.env.NEXISCLAW_NIX_MODE = ORIGINAL_NEXISCLAW_NIX_MODE;
+      process.env.GREENCHCLAW_NIX_MODE = ORIGINAL_GREENCHCLAW_NIX_MODE;
     }
   });
 
@@ -429,10 +429,10 @@ describe("plugins cli install", () => {
   });
 
   it("refuses plugin installs in Nix mode before installer side effects", async () => {
-    process.env.NEXISCLAW_NIX_MODE = "1";
+    process.env.GREENCHCLAW_NIX_MODE = "1";
 
     await expect(runPluginsCommand(["plugins", "install", "@acme/demo"])).rejects.toThrow(
-      "NEXISCLAW_NIX_MODE=1",
+      "GREENCHCLAW_NIX_MODE=1",
     );
 
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
@@ -489,7 +489,7 @@ describe("plugins cli install", () => {
       throw invalidConfigErr;
     });
     readConfigFileSnapshot.mockResolvedValue({
-      path: "/tmp/NexisClaw-config.json5",
+      path: "/tmp/GreenchClaw-config.json5",
       exists: true,
       raw: '{ "models": { "default": 123 } }',
       parsed: { models: { default: 123 } },
@@ -505,7 +505,7 @@ describe("plugins cli install", () => {
     await expect(runPluginsCommand(["plugins", "install", "alpha"])).rejects.toThrow("__exit__:1");
 
     expect(runtimeErrors.at(-1)).toContain(
-      "Config invalid; run `NexisClaw doctor --fix` before installing plugins.",
+      "Config invalid; run `GreenchClaw doctor --fix` before installing plugins.",
     );
     expect(installPluginFromMarketplace).not.toHaveBeenCalled();
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
@@ -517,7 +517,7 @@ describe("plugins cli install", () => {
       plugins: {
         entries: {},
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const enabledCfg = {
       plugins: {
         entries: {
@@ -526,7 +526,7 @@ describe("plugins cli install", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     loadConfig.mockReturnValue(cfg);
     installPluginFromMarketplace.mockResolvedValue({
       ok: true,
@@ -578,7 +578,7 @@ describe("plugins cli install", () => {
       plugins: {
         entries: {},
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const enabledCfg = createEnabledPluginConfig("demo");
     loadConfig.mockReturnValue(cfg);
     parseClawHubPluginSpec.mockReturnValue({ name: "demo" });
@@ -660,7 +660,7 @@ describe("plugins cli install", () => {
           paths: ["/existing/plugin"],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     loadConfig.mockReturnValue(cfg);
     findBundledPluginSourceMock.mockReturnValue({
       pluginId,
@@ -679,7 +679,7 @@ describe("plugins cli install", () => {
 
     await runPluginsCommand(["plugins", "install", pluginId]);
 
-    const writtenConfig = writeConfigFile.mock.calls.at(-1)?.[0] as NexisClawConfig;
+    const writtenConfig = writeConfigFile.mock.calls.at(-1)?.[0] as GreenchClawConfig;
     expect(writtenConfig.plugins?.entries?.[pluginId]).toBeUndefined();
     expect(writtenConfig.plugins?.load?.paths).toEqual(["/existing/plugin"]);
     const record = persistedInstallRecord(pluginId);
@@ -703,7 +703,7 @@ describe("plugins cli install", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const enabledCfg = createEnabledPluginConfig(pluginId);
     loadConfig.mockReturnValue(cfg);
     findBundledPluginSourceMock.mockReturnValue({
@@ -734,7 +734,7 @@ describe("plugins cli install", () => {
       plugins: {
         entries: {},
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const enabledCfg = createEnabledPluginConfig("demo");
 
     loadConfig.mockReturnValue(cfg);
@@ -765,7 +765,7 @@ describe("plugins cli install", () => {
       plugins: {
         entries: {},
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const enabledCfg = createEnabledPluginConfig("demo");
 
     loadConfig.mockReturnValue(cfg);
@@ -821,12 +821,12 @@ describe("plugins cli install", () => {
       lookup: { kind: "pluginId", value: "brave" },
     });
     expect(installPluginFromClawHub).not.toHaveBeenCalled();
-    expect(npmInstallCall().spec).toBe("@NexisClaw/brave-plugin");
+    expect(npmInstallCall().spec).toBe("@GreenchClaw/brave-plugin");
     expect(npmInstallCall().expectedPluginId).toBe("brave");
     expect(npmInstallCall().trustedSourceLinkedOfficialInstall).toBe(true);
     const record = persistedInstallRecord("brave");
     expect(record.source).toBe("npm");
-    expect(record.spec).toBe("@NexisClaw/brave-plugin");
+    expect(record.spec).toBe("@GreenchClaw/brave-plugin");
     expect(record.installPath).toBe(cliInstallPath("brave"));
     expect(record.version).toBe("1.2.3");
     expect(writeConfigFile).toHaveBeenCalledWith(enabledCfg);
@@ -834,11 +834,11 @@ describe("plugins cli install", () => {
 
   it("passes third-party external catalog integrity with catalog install trust", async () => {
     const cfg = createEmptyPluginConfig();
-    const enabledCfg = createEnabledPluginConfig("wecom-NexisClaw-plugin");
+    const enabledCfg = createEnabledPluginConfig("wecom-GreenchClaw-plugin");
     loadConfig.mockReturnValue(cfg);
     findBundledPluginSourceMock.mockReturnValue(undefined);
     installPluginFromNpmSpec.mockResolvedValue(
-      createNpmPluginInstallResult("wecom-NexisClaw-plugin"),
+      createNpmPluginInstallResult("wecom-GreenchClaw-plugin"),
     );
     enablePluginInConfig.mockReturnValue({ config: enabledCfg });
     applyExclusiveSlotSelection.mockReturnValue({
@@ -848,8 +848,8 @@ describe("plugins cli install", () => {
 
     await runPluginsCommand(["plugins", "install", "wecom"]);
 
-    expect(npmInstallCall().spec).toBe("@wecom/wecom-NexisClaw-plugin@2026.4.23");
-    expect(npmInstallCall().expectedPluginId).toBe("wecom-NexisClaw-plugin");
+    expect(npmInstallCall().spec).toBe("@wecom/wecom-GreenchClaw-plugin@2026.4.23");
+    expect(npmInstallCall().expectedPluginId).toBe("wecom-GreenchClaw-plugin");
     expect(npmInstallCall().expectedIntegrity).toBe(
       "sha512-bnzfdIEEu1/LFvcdyjaTkyxt27w6c7dqhkPezU62OWaqmcdFsUGR3T55USK/O9pIKsNcnL1Tnu1pqKYCWHFgWQ==",
     );
@@ -888,19 +888,19 @@ describe("plugins cli install", () => {
     findBundledPluginSourceMock.mockReturnValue(undefined);
     installPluginFromNpmSpec.mockResolvedValue({
       ok: false,
-      error: "package.json missing NexisClaw.extensions",
-      code: "missing_NexisClaw_extensions",
+      error: "package.json missing GreenchClaw.extensions",
+      code: "missing_GreenchClaw_extensions",
     });
     installHooksFromNpmSpec.mockResolvedValue({
       ok: false,
       error:
-        "aborted: npm package integrity drift detected for @wecom/wecom-NexisClaw-plugin@2026.4.23",
+        "aborted: npm package integrity drift detected for @wecom/wecom-GreenchClaw-plugin@2026.4.23",
     });
 
     await expect(runPluginsCommand(["plugins", "install", "wecom"])).rejects.toThrow("__exit__:1");
 
     expect(npmInstallCall().trustedSourceLinkedOfficialInstall).toBe(true);
-    expect(hookNpmInstallCall().spec).toBe("@wecom/wecom-NexisClaw-plugin@2026.4.23");
+    expect(hookNpmInstallCall().spec).toBe("@wecom/wecom-GreenchClaw-plugin@2026.4.23");
     expect(hookNpmInstallCall().expectedIntegrity).toBe(
       "sha512-bnzfdIEEu1/LFvcdyjaTkyxt27w6c7dqhkPezU62OWaqmcdFsUGR3T55USK/O9pIKsNcnL1Tnu1pqKYCWHFgWQ==",
     );
@@ -973,7 +973,7 @@ describe("plugins cli install", () => {
   it("installs npm-pack archives through npm install semantics", async () => {
     const cfg = createEmptyPluginConfig();
     const enabledCfg = createEnabledPluginConfig("demo");
-    const archivePath = "/tmp/NexisClaw-demo-1.2.3.tgz";
+    const archivePath = "/tmp/GreenchClaw-demo-1.2.3.tgz";
 
     loadConfig.mockReturnValue(cfg);
     installPluginFromNpmPackArchive.mockResolvedValue(createNpmPackPluginInstallResult("demo"));
@@ -992,7 +992,7 @@ describe("plugins cli install", () => {
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
     const record = persistedInstallRecord("demo");
     expect(record.source).toBe("npm");
-    expect(record.spec).toBe("@NexisClaw/demo@1.2.3");
+    expect(record.spec).toBe("@GreenchClaw/demo@1.2.3");
     expect(record.sourcePath).toBe(archivePath);
     expect(record.installPath).toBe(cliInstallPath("demo"));
     expect(record.version).toBe("1.2.3");
@@ -1000,7 +1000,7 @@ describe("plugins cli install", () => {
     expect(record.artifactFormat).toBe("tgz");
     expect(record.npmIntegrity).toBe("sha512-pack-demo");
     expect(record.npmShasum).toBe("packdemosha");
-    expect(record.npmTarballName).toBe("NexisClaw-demo-1.2.3.tgz");
+    expect(record.npmTarballName).toBe("GreenchClaw-demo-1.2.3.tgz");
     expect(writeConfigFile).toHaveBeenCalledWith(enabledCfg);
   });
 
@@ -1038,9 +1038,9 @@ describe("plugins cli install", () => {
       warnings: [],
     });
 
-    await runPluginsCommand(["plugins", "install", "npm:@NexisClaw/discord"]);
+    await runPluginsCommand(["plugins", "install", "npm:@GreenchClaw/discord"]);
 
-    expect(npmInstallCall().spec).toBe("@NexisClaw/discord");
+    expect(npmInstallCall().spec).toBe("@GreenchClaw/discord");
     expect(npmInstallCall().expectedPluginId).toBe("discord");
     expect(npmInstallCall().trustedSourceLinkedOfficialInstall).toBe(true);
     expect(installPluginFromClawHub).not.toHaveBeenCalled();
@@ -1059,9 +1059,9 @@ describe("plugins cli install", () => {
       warnings: [],
     });
 
-    await runPluginsCommand(["plugins", "install", "@NexisClaw/discord"]);
+    await runPluginsCommand(["plugins", "install", "@GreenchClaw/discord"]);
 
-    expect(npmInstallCall().spec).toBe("@NexisClaw/discord");
+    expect(npmInstallCall().spec).toBe("@GreenchClaw/discord");
     expect(npmInstallCall().expectedPluginId).toBe("discord");
     expect(npmInstallCall().trustedSourceLinkedOfficialInstall).toBe(true);
     expect(installPluginFromClawHub).not.toHaveBeenCalled();
@@ -1069,11 +1069,11 @@ describe("plugins cli install", () => {
 
   it("marks catalog npm package installs with alternate selectors as trusted", async () => {
     const cfg = createEmptyPluginConfig();
-    const enabledCfg = createEnabledPluginConfig("wecom-NexisClaw-plugin");
+    const enabledCfg = createEnabledPluginConfig("wecom-GreenchClaw-plugin");
 
     loadConfig.mockReturnValue(cfg);
     installPluginFromNpmSpec.mockResolvedValue(
-      createNpmPluginInstallResult("wecom-NexisClaw-plugin"),
+      createNpmPluginInstallResult("wecom-GreenchClaw-plugin"),
     );
     enablePluginInConfig.mockReturnValue({ config: enabledCfg });
     recordPluginInstall.mockReturnValue(enabledCfg);
@@ -1082,12 +1082,12 @@ describe("plugins cli install", () => {
       warnings: [],
     });
 
-    await runPluginsCommand(["plugins", "install", "@wecom/wecom-NexisClaw-plugin@latest"]);
+    await runPluginsCommand(["plugins", "install", "@wecom/wecom-GreenchClaw-plugin@latest"]);
 
     // Alternate selectors stay trusted by catalog package name, but must not
     // inherit catalog integrity unless the install spec matches exactly.
-    expect(npmInstallCall().spec).toBe("@wecom/wecom-NexisClaw-plugin@latest");
-    expect(npmInstallCall().expectedPluginId).toBe("wecom-NexisClaw-plugin");
+    expect(npmInstallCall().spec).toBe("@wecom/wecom-GreenchClaw-plugin@latest");
+    expect(npmInstallCall().expectedPluginId).toBe("wecom-GreenchClaw-plugin");
     expect(npmInstallCall().trustedSourceLinkedOfficialInstall).toBe(true);
     expect(npmInstallCall().expectedIntegrity).toBeUndefined();
     expect(installPluginFromClawHub).not.toHaveBeenCalled();
@@ -1137,14 +1137,14 @@ describe("plugins cli install", () => {
   });
 
   it("reports npm install failures without trying ClawHub when npm: prefix is used", async () => {
-    loadConfig.mockReturnValue({} as NexisClawConfig);
+    loadConfig.mockReturnValue({} as GreenchClawConfig);
     installPluginFromNpmSpec.mockResolvedValue({
       ok: false,
       error: "npm install failed",
     });
     installHooksFromNpmSpec.mockResolvedValue({
       ok: false,
-      error: "package.json missing NexisClaw.hooks",
+      error: "package.json missing GreenchClaw.hooks",
     });
 
     await expect(runPluginsCommand(["plugins", "install", "npm:demo"])).rejects.toThrow(
@@ -1156,7 +1156,7 @@ describe("plugins cli install", () => {
   });
 
   it("adds a Git PATH hint when npm plugin dependency install cannot spawn git", async () => {
-    loadConfig.mockReturnValue({} as NexisClawConfig);
+    loadConfig.mockReturnValue({} as GreenchClawConfig);
     installPluginFromNpmSpec.mockResolvedValue({
       ok: false,
       error: [
@@ -1168,11 +1168,11 @@ describe("plugins cli install", () => {
     });
     installHooksFromNpmSpec.mockResolvedValue({
       ok: false,
-      error: "package.json missing NexisClaw.hooks",
+      error: "package.json missing GreenchClaw.hooks",
     });
 
     await expect(
-      runPluginsCommand(["plugins", "install", "npm:@NexisClaw/whatsapp"]),
+      runPluginsCommand(["plugins", "install", "npm:@GreenchClaw/whatsapp"]),
     ).rejects.toThrow("__exit__:1");
 
     expect(installPluginFromClawHub).not.toHaveBeenCalled();
@@ -1184,7 +1184,7 @@ describe("plugins cli install", () => {
   });
 
   it("does not resolve npm: prefixed bundled plugin ids through bundled installs", async () => {
-    loadConfig.mockReturnValue({ plugins: { load: { paths: [] } } } as NexisClawConfig);
+    loadConfig.mockReturnValue({ plugins: { load: { paths: [] } } } as GreenchClawConfig);
     installPluginFromNpmSpec.mockResolvedValue({
       ok: false,
       error: "Package not found on npm: memory-lancedb.",
@@ -1192,7 +1192,7 @@ describe("plugins cli install", () => {
     });
     installHooksFromNpmSpec.mockResolvedValue({
       ok: false,
-      error: "package.json missing NexisClaw.hooks",
+      error: "package.json missing GreenchClaw.hooks",
     });
 
     await expect(runPluginsCommand(["plugins", "install", "npm:memory-lancedb"])).rejects.toThrow(
@@ -1206,7 +1206,7 @@ describe("plugins cli install", () => {
   });
 
   it("rejects empty npm: prefix installs before resolver lookup", async () => {
-    loadConfig.mockReturnValue({} as NexisClawConfig);
+    loadConfig.mockReturnValue({} as GreenchClawConfig);
 
     await expect(runPluginsCommand(["plugins", "install", "npm:"])).rejects.toThrow("__exit__:1");
 
@@ -1245,14 +1245,14 @@ describe("plugins cli install", () => {
   });
 
   it("rejects --pin for git installs and points at git refs", async () => {
-    loadConfig.mockReturnValue({} as NexisClawConfig);
+    loadConfig.mockReturnValue({} as GreenchClawConfig);
 
     await expect(
       runPluginsCommand(["plugins", "install", "git:github.com/acme/demo", "--pin"]),
     ).rejects.toThrow("__exit__:1");
 
     expect(installPluginFromGitSpec).not.toHaveBeenCalled();
-    expect(runtimeErrors.at(-1)).toContain("NexisClaw plugins install git:<repo>@<ref>");
+    expect(runtimeErrors.at(-1)).toContain("GreenchClaw plugins install git:<repo>@<ref>");
   });
 
   it("passes dangerous force unsafe install to marketplace installs", async () => {
@@ -1286,9 +1286,9 @@ describe("plugins cli install", () => {
       plugins: {
         entries: {},
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const enabledCfg = createEnabledPluginConfig("demo");
-    const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-plugin-link-"));
+    const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-plugin-link-"));
 
     loadConfig.mockReturnValue(cfg);
     installPluginFromPath.mockResolvedValueOnce({
@@ -1323,7 +1323,7 @@ describe("plugins cli install", () => {
   });
 
   it("passes dangerous force unsafe install to linked hook-pack probe fallback", async () => {
-    const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-hook-link-"));
+    const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-hook-link-"));
     primeHookPackPathFallback({
       tmpRoot,
       pluginInstallError: "plugin install probe failed",
@@ -1347,10 +1347,10 @@ describe("plugins cli install", () => {
   });
 
   it("does not fall back to hook pack for linked path when a no-flag security scan blocks", async () => {
-    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-link-plugin-"));
+    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-link-plugin-"));
     const pluginInstallError = "plugin blocked by security scan";
 
-    loadConfig.mockReturnValue({} as NexisClawConfig);
+    loadConfig.mockReturnValue({} as GreenchClawConfig);
     installPluginFromPath.mockResolvedValue({
       ok: false,
       error: pluginInstallError,
@@ -1371,7 +1371,7 @@ describe("plugins cli install", () => {
   });
 
   it("passes dangerous force unsafe install to local hook-pack fallback installs", async () => {
-    const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-hook-install-"));
+    const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-hook-install-"));
     primeHookPackPathFallback({
       tmpRoot,
       pluginInstallError: "plugin install failed",
@@ -1395,7 +1395,7 @@ describe("plugins cli install", () => {
 
   it("passes the active profile extensions dir to local path installs", async () => {
     const extensionsDir = useProfileExtensionsDir();
-    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-local-plugin-"));
+    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-local-plugin-"));
     const cfg = createEmptyPluginConfig();
     const enabledCfg = createEnabledPluginConfig("demo");
 
@@ -1433,16 +1433,16 @@ describe("plugins cli install", () => {
   });
 
   it("suggests update or --force when npm plugin install target already exists", async () => {
-    loadConfig.mockReturnValue({} as NexisClawConfig);
+    loadConfig.mockReturnValue({} as GreenchClawConfig);
     mockClawHubPackageNotFound("@example/lossless-claw");
     installPluginFromNpmSpec.mockResolvedValue({
       ok: false,
       error:
-        "plugin already exists: /home/NexisClaw/.NexisClaw/extensions/lossless-claw (delete it first)",
+        "plugin already exists: /home/GreenchClaw/.GreenchClaw/extensions/lossless-claw (delete it first)",
     });
     installHooksFromNpmSpec.mockResolvedValue({
       ok: false,
-      error: "package.json missing NexisClaw.hooks",
+      error: "package.json missing GreenchClaw.hooks",
     });
 
     await expect(
@@ -1450,22 +1450,22 @@ describe("plugins cli install", () => {
     ).rejects.toThrow("__exit__:1");
 
     expect(runtimeErrors.at(-1)).toContain(
-      "Use `NexisClaw plugins update <id-or-npm-spec>` to upgrade the tracked plugin, or rerun install with `--force` to replace it.",
+      "Use `GreenchClaw plugins update <id-or-npm-spec>` to upgrade the tracked plugin, or rerun install with `--force` to replace it.",
     );
     expect(runtimeErrors.at(-1)).not.toContain("Also not a valid hook pack");
   });
 
   it("does not append hook-pack fallback details for managed extensions boundary failures", async () => {
-    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-local-plugin-"));
+    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-local-plugin-"));
 
-    loadConfig.mockReturnValue({} as NexisClawConfig);
+    loadConfig.mockReturnValue({} as GreenchClawConfig);
     installPluginFromPath.mockResolvedValue({
       ok: false,
       error: "Invalid path: must stay within extensions directory",
     });
     installHooksFromPath.mockResolvedValue({
       ok: false,
-      error: "package.json missing NexisClaw.hooks",
+      error: "package.json missing GreenchClaw.hooks",
     });
 
     try {
@@ -1481,7 +1481,7 @@ describe("plugins cli install", () => {
   });
 
   it("passes the install logger to the --link dry-run probe", async () => {
-    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-link-plugin-"));
+    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-link-plugin-"));
     const cfg = {
       plugins: {
         entries: {},
@@ -1489,7 +1489,7 @@ describe("plugins cli install", () => {
           paths: [],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const enabledCfg = createEnabledPluginConfig("demo");
 
     loadConfig.mockReturnValue(cfg);
@@ -1545,10 +1545,10 @@ describe("plugins cli install", () => {
   });
 
   it("does not fall back to hook pack for local path when a no-flag security scan fails", async () => {
-    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-local-plugin-"));
+    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-local-plugin-"));
     const pluginInstallError = "plugin security scan failed";
 
-    loadConfig.mockReturnValue({} as NexisClawConfig);
+    loadConfig.mockReturnValue({} as GreenchClawConfig);
     installPluginFromPath.mockResolvedValue({
       ok: false,
       error: pluginInstallError,
@@ -1569,8 +1569,8 @@ describe("plugins cli install", () => {
   });
 
   it("does not fall back to hook pack for local path when dangerous force unsafe install is set", async () => {
-    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-local-plugin-"));
-    const cfg = {} as NexisClawConfig;
+    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-local-plugin-"));
+    const cfg = {} as GreenchClawConfig;
     const pluginInstallError = "plugin blocked by security scan";
 
     loadConfig.mockReturnValue(cfg);
@@ -1598,8 +1598,8 @@ describe("plugins cli install", () => {
   });
 
   it("does not fall back to hook pack for local path when security scan fails under dangerous force unsafe install", async () => {
-    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-local-plugin-"));
-    const cfg = {} as NexisClawConfig;
+    const localPluginDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-local-plugin-"));
+    const cfg = {} as GreenchClawConfig;
     const pluginInstallError = "plugin security scan failed";
 
     loadConfig.mockReturnValue(cfg);
@@ -1627,7 +1627,7 @@ describe("plugins cli install", () => {
   });
 
   it("does not fall back to hook pack for npm installs when dangerous force unsafe install is set", async () => {
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
     const pluginInstallError = "plugin blocked by security scan";
 
     loadConfig.mockReturnValue(cfg);
@@ -1666,7 +1666,7 @@ describe("plugins cli install", () => {
   });
 
   it("does not fall back to hook pack for npm installs when security scan fails under dangerous force unsafe install", async () => {
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
     const pluginInstallError = "plugin security scan failed";
 
     loadConfig.mockReturnValue(cfg);
@@ -1690,8 +1690,8 @@ describe("plugins cli install", () => {
   });
 
   it("still falls back to local hook pack when dangerous force unsafe install is set for non-security errors", async () => {
-    const localHookDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-local-hook-pack-"));
-    const cfg = {} as NexisClawConfig;
+    const localHookDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-local-hook-pack-"));
+    const cfg = {} as GreenchClawConfig;
     const installedCfg = {
       hooks: {
         internal: {
@@ -1703,13 +1703,13 @@ describe("plugins cli install", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     loadConfig.mockReturnValue(cfg);
     installPluginFromPath.mockResolvedValue({
       ok: false,
-      error: "package.json missing NexisClaw.plugin.json",
-      code: "missing_NexisClaw_extensions",
+      error: "package.json missing GreenchClaw.plugin.json",
+      code: "missing_GreenchClaw_extensions",
     });
     installHooksFromPath.mockResolvedValue({
       ok: true,
@@ -1736,7 +1736,7 @@ describe("plugins cli install", () => {
   });
 
   it("still falls back to npm hook pack when dangerous force unsafe install is set for non-security errors", async () => {
-    const cfg = {} as NexisClawConfig;
+    const cfg = {} as GreenchClawConfig;
     const installedCfg = {
       hooks: {
         internal: {
@@ -1748,7 +1748,7 @@ describe("plugins cli install", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     loadConfig.mockReturnValue(cfg);
     installPluginFromClawHub.mockResolvedValue({
@@ -1758,8 +1758,8 @@ describe("plugins cli install", () => {
     });
     installPluginFromNpmSpec.mockResolvedValue({
       ok: false,
-      error: "package.json missing NexisClaw.plugin.json",
-      code: "missing_NexisClaw_extensions",
+      error: "package.json missing GreenchClaw.plugin.json",
+      code: "missing_GreenchClaw_extensions",
     });
     installHooksFromNpmSpec.mockResolvedValue({
       ok: true,
@@ -1790,7 +1790,7 @@ describe("plugins cli install", () => {
     parseClawHubPluginSpec.mockReturnValue({ name: "demo" });
     installPluginFromClawHub.mockResolvedValue({
       ok: false,
-      error: 'Use "NexisClaw skills install demo" instead.',
+      error: 'Use "GreenchClaw skills install demo" instead.',
       code: "skill_package",
     });
 
@@ -1799,7 +1799,7 @@ describe("plugins cli install", () => {
     );
 
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
-    expect(runtimeErrors.at(-1)).toContain('Use "NexisClaw skills install demo" instead.');
+    expect(runtimeErrors.at(-1)).toContain('Use "GreenchClaw skills install demo" instead.');
   });
 
   it("falls back to installing hook packs from npm specs", async () => {

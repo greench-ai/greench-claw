@@ -5,7 +5,7 @@ read_when:
 title: "OpenAI chat completions"
 ---
 
-NexisClaw's Gateway can serve a small OpenAI-compatible Chat Completions endpoint.
+GreenchClaw's Gateway can serve a small OpenAI-compatible Chat Completions endpoint.
 
 This endpoint is **disabled by default**. Enable it in config first.
 
@@ -19,7 +19,7 @@ When the Gateway's OpenAI-compatible HTTP surface is enabled, it also serves:
 - `POST /v1/embeddings`
 - `POST /v1/responses`
 
-Under the hood, requests are executed as a normal Gateway agent run (same codepath as `NexisClaw agent`), so routing/permissions/config match your Gateway.
+Under the hood, requests are executed as a normal Gateway agent run (same codepath as `GreenchClaw agent`), so routing/permissions/config match your Gateway.
 
 ## Authentication
 
@@ -37,8 +37,8 @@ Common HTTP auth paths:
 
 Notes:
 
-- When `gateway.auth.mode="token"`, use `gateway.auth.token` (or `NEXISCLAW_GATEWAY_TOKEN`).
-- When `gateway.auth.mode="password"`, use `gateway.auth.password` (or `NEXISCLAW_GATEWAY_PASSWORD`).
+- When `gateway.auth.mode="token"`, use `gateway.auth.token` (or `GREENCHCLAW_GATEWAY_TOKEN`).
+- When `gateway.auth.mode="password"`, use `gateway.auth.password` (or `GREENCHCLAW_GATEWAY_PASSWORD`).
 - When `gateway.auth.mode="trusted-proxy"`, the HTTP request must come from a
   configured trusted proxy source; same-host loopback proxies require explicit
   `gateway.auth.trustedProxy.allowLoopback = true`.
@@ -51,9 +51,9 @@ Treat this endpoint as a **full operator-access** surface for the gateway instan
 - HTTP bearer auth here is not a narrow per-user scope model.
 - A valid Gateway token/password for this endpoint should be treated like an owner/operator credential.
 - Requests run through the same control-plane agent path as trusted operator actions.
-- There is no separate non-owner/per-user tool boundary on this endpoint; once a caller passes Gateway auth here, NexisClaw treats that caller as a trusted operator for this gateway.
-- For shared-secret auth modes (`token` and `password`), the endpoint restores the normal full operator defaults even if the caller sends a narrower `x-NexisClaw-scopes` header.
-- Trusted identity-bearing HTTP modes (for example trusted proxy auth or `gateway.auth.mode="none"`) honor `x-NexisClaw-scopes` when present and otherwise fall back to the normal operator default scope set.
+- There is no separate non-owner/per-user tool boundary on this endpoint; once a caller passes Gateway auth here, GreenchClaw treats that caller as a trusted operator for this gateway.
+- For shared-secret auth modes (`token` and `password`), the endpoint restores the normal full operator defaults even if the caller sends a narrower `x-GreenchClaw-scopes` header.
+- Trusted identity-bearing HTTP modes (for example trusted proxy auth or `gateway.auth.mode="none"`) honor `x-GreenchClaw-scopes` when present and otherwise fall back to the normal operator default scope set.
 - If the target agent policy allows sensitive tools, this endpoint can use them.
 - Keep this endpoint on loopback/tailnet/private ingress only; do not expose it directly to the public internet.
 
@@ -61,14 +61,14 @@ Auth matrix:
 
 - `gateway.auth.mode="token"` or `"password"` + `Authorization: Bearer ...`
   - proves possession of the shared gateway operator secret
-  - ignores narrower `x-NexisClaw-scopes`
+  - ignores narrower `x-GreenchClaw-scopes`
   - restores the full default operator scope set:
     `operator.admin`, `operator.approvals`, `operator.pairing`,
     `operator.read`, `operator.talk.secrets`, `operator.write`
   - treats chat turns on this endpoint as owner-sender turns
 - trusted identity-bearing HTTP modes (for example trusted proxy auth, or `gateway.auth.mode="none"` on private ingress)
   - authenticate some outer trusted identity or deployment boundary
-  - honor `x-NexisClaw-scopes` when the header is present
+  - honor `x-GreenchClaw-scopes` when the header is present
   - fall back to the normal operator default scope set when the header is absent
   - only lose owner semantics when the caller explicitly narrows scopes and omits `operator.admin`
 
@@ -76,22 +76,22 @@ See [Security](/gateway/security) and [Remote access](/gateway/remote).
 
 ## Agent-first model contract
 
-NexisClaw treats the OpenAI `model` field as an **agent target**, not a raw provider model id.
+GreenchClaw treats the OpenAI `model` field as an **agent target**, not a raw provider model id.
 
-- `model: "NexisClaw"` routes to the configured default agent.
-- `model: "NexisClaw/default"` also routes to the configured default agent.
-- `model: "NexisClaw/<agentId>"` routes to a specific agent.
+- `model: "GreenchClaw"` routes to the configured default agent.
+- `model: "GreenchClaw/default"` also routes to the configured default agent.
+- `model: "GreenchClaw/<agentId>"` routes to a specific agent.
 
 Optional request headers:
 
-- `x-NexisClaw-model: <provider/model-or-bare-id>` overrides the backend model for the selected agent.
-- `x-NexisClaw-agent-id: <agentId>` remains supported as a compatibility override.
-- `x-NexisClaw-session-key: <sessionKey>` fully controls session routing.
-- `x-NexisClaw-message-channel: <channel>` sets the synthetic ingress channel context for channel-aware prompts and policies.
+- `x-GreenchClaw-model: <provider/model-or-bare-id>` overrides the backend model for the selected agent.
+- `x-GreenchClaw-agent-id: <agentId>` remains supported as a compatibility override.
+- `x-GreenchClaw-session-key: <sessionKey>` fully controls session routing.
+- `x-GreenchClaw-message-channel: <channel>` sets the synthetic ingress channel context for channel-aware prompts and policies.
 
 Compatibility aliases still accepted:
 
-- `model: "NexisClaw:<agentId>"`
+- `model: "GreenchClaw:<agentId>"`
 - `model: "agent:<agentId>"`
 
 ## Enabling the endpoint
@@ -145,9 +145,9 @@ This is the highest-leverage compatibility set for self-hosted frontends and too
 
 <AccordionGroup>
   <Accordion title="What does `/v1/models` return?">
-    An NexisClaw agent-target list.
+    An GreenchClaw agent-target list.
 
-    The returned ids are `NexisClaw`, `NexisClaw/default`, and `NexisClaw/<agentId>` entries.
+    The returned ids are `GreenchClaw`, `GreenchClaw/default`, and `GreenchClaw/<agentId>` entries.
     Use them directly as OpenAI `model` values.
 
   </Accordion>
@@ -157,18 +157,18 @@ This is the highest-leverage compatibility set for self-hosted frontends and too
     Sub-agents remain internal execution topology. They do not appear as pseudo-models.
 
   </Accordion>
-  <Accordion title="Why is `NexisClaw/default` included?">
-    `NexisClaw/default` is the stable alias for the configured default agent.
+  <Accordion title="Why is `GreenchClaw/default` included?">
+    `GreenchClaw/default` is the stable alias for the configured default agent.
 
     That means clients can keep using one predictable id even if the real default agent id changes between environments.
 
   </Accordion>
   <Accordion title="How do I override the backend model?">
-    Use `x-NexisClaw-model`.
+    Use `x-GreenchClaw-model`.
 
     Examples:
-    `x-NexisClaw-model: openai/gpt-5.4`
-    `x-NexisClaw-model: gpt-5.5`
+    `x-GreenchClaw-model: openai/gpt-5.4`
+    `x-GreenchClaw-model: gpt-5.5`
 
     If you omit it, the selected agent runs with its normal configured model choice.
 
@@ -176,8 +176,8 @@ This is the highest-leverage compatibility set for self-hosted frontends and too
   <Accordion title="How do embeddings fit this contract?">
     `/v1/embeddings` uses the same agent-target `model` ids.
 
-    Use `model: "NexisClaw/default"` or `model: "NexisClaw/<agentId>"`.
-    When you need a specific embedding model, send it in `x-NexisClaw-model`.
+    Use `model: "GreenchClaw/default"` or `model: "GreenchClaw/<agentId>"`.
+    When you need a specific embedding model, send it in `x-GreenchClaw-model`.
     Without that header, the request passes through to the selected agent's normal embedding setup.
 
   </Accordion>
@@ -259,13 +259,13 @@ For a basic Open WebUI connection:
 - Base URL: `http://127.0.0.1:18789/v1`
 - Docker on macOS base URL: `http://host.docker.internal:18789/v1`
 - API key: your Gateway bearer token
-- Model: `NexisClaw/default`
+- Model: `GreenchClaw/default`
 
 Expected behavior:
 
-- `GET /v1/models` should list `NexisClaw/default`
-- Open WebUI should use `NexisClaw/default` as the chat model id
-- If you want a specific backend provider/model for that agent, set the agent's normal default model or send `x-NexisClaw-model`
+- `GET /v1/models` should list `GreenchClaw/default`
+- Open WebUI should use `GreenchClaw/default` as the chat model id
+- If you want a specific backend provider/model for that agent, set the agent's normal default model or send `x-GreenchClaw-model`
 
 Quick smoke:
 
@@ -274,7 +274,7 @@ curl -sS http://127.0.0.1:18789/v1/models \
   -H 'Authorization: Bearer YOUR_TOKEN'
 ```
 
-If that returns `NexisClaw/default`, most Open WebUI setups can connect with the same base URL and token.
+If that returns `GreenchClaw/default`, most Open WebUI setups can connect with the same base URL and token.
 
 ## Examples
 
@@ -285,7 +285,7 @@ curl -sS http://127.0.0.1:18789/v1/chat/completions \
   -H 'Authorization: Bearer YOUR_TOKEN' \
   -H 'Content-Type: application/json' \
   -d '{
-    "model": "NexisClaw/default",
+    "model": "GreenchClaw/default",
     "messages": [{"role":"user","content":"hi"}]
   }'
 ```
@@ -296,9 +296,9 @@ Streaming:
 curl -N http://127.0.0.1:18789/v1/chat/completions \
   -H 'Authorization: Bearer YOUR_TOKEN' \
   -H 'Content-Type: application/json' \
-  -H 'x-NexisClaw-model: openai/gpt-5.4' \
+  -H 'x-GreenchClaw-model: openai/gpt-5.4' \
   -d '{
-    "model": "NexisClaw/research",
+    "model": "GreenchClaw/research",
     "stream": true,
     "messages": [{"role":"user","content":"hi"}]
   }'
@@ -314,7 +314,7 @@ curl -sS http://127.0.0.1:18789/v1/models \
 Fetch one model:
 
 ```bash
-curl -sS http://127.0.0.1:18789/v1/models/NexisClaw%2Fdefault \
+curl -sS http://127.0.0.1:18789/v1/models/GreenchClaw%2Fdefault \
   -H 'Authorization: Bearer YOUR_TOKEN'
 ```
 
@@ -324,18 +324,18 @@ Create embeddings:
 curl -sS http://127.0.0.1:18789/v1/embeddings \
   -H 'Authorization: Bearer YOUR_TOKEN' \
   -H 'Content-Type: application/json' \
-  -H 'x-NexisClaw-model: openai/text-embedding-3-small' \
+  -H 'x-GreenchClaw-model: openai/text-embedding-3-small' \
   -d '{
-    "model": "NexisClaw/default",
+    "model": "GreenchClaw/default",
     "input": ["alpha", "beta"]
   }'
 ```
 
 Notes:
 
-- `/v1/models` returns NexisClaw agent targets, not raw provider catalogs.
-- `NexisClaw/default` is always present so one stable id works across environments.
-- Backend provider/model overrides belong in `x-NexisClaw-model`, not the OpenAI `model` field.
+- `/v1/models` returns GreenchClaw agent targets, not raw provider catalogs.
+- `GreenchClaw/default` is always present so one stable id works across environments.
+- Backend provider/model overrides belong in `x-GreenchClaw-model`, not the OpenAI `model` field.
 - `/v1/embeddings` supports `input` as a string or array of strings.
 
 ## Related

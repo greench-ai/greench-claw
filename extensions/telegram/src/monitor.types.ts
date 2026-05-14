@@ -1,15 +1,15 @@
 import type {
   ChannelAccountSnapshot,
   ChannelRuntimeSurface,
-} from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import type { TelegramBotInfo } from "./bot-info.js";
 
 export type MonitorTelegramOpts = {
   token?: string;
   accountId?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   runtime?: RuntimeEnv;
   channelRuntime?: ChannelRuntimeSurface;
   abortSignal?: AbortSignal;

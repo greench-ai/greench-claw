@@ -1,8 +1,8 @@
 import { resolveGlobalSingleton } from "../shared/global-singleton.js";
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
-import type { NexisClawPluginCommandDefinition } from "./types.js";
+import type { GreenchClawPluginCommandDefinition } from "./types.js";
 
-export type RegisteredPluginCommand = NexisClawPluginCommandDefinition & {
+export type RegisteredPluginCommand = GreenchClawPluginCommandDefinition & {
   pluginId: string;
   pluginName?: string;
   pluginRoot?: string;
@@ -13,7 +13,7 @@ type PluginCommandState = {
   registryLocked: boolean;
 };
 
-const PLUGIN_COMMAND_STATE_KEY = Symbol.for("NexisClaw.pluginCommandsState");
+const PLUGIN_COMMAND_STATE_KEY = Symbol.for("GreenchClaw.pluginCommandsState");
 
 const getState = () =>
   resolveGlobalSingleton<PluginCommandState>(PLUGIN_COMMAND_STATE_KEY, () => ({

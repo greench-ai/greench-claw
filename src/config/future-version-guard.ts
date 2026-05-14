@@ -1,9 +1,9 @@
 import { VERSION } from "../version.js";
-import type { ConfigFileSnapshot, NexisClawConfig } from "./types.js";
+import type { ConfigFileSnapshot, GreenchClawConfig } from "./types.js";
 import { shouldWarnOnTouchedVersion } from "./version.js";
 
 export const ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS_ENV =
-  "NEXISCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS";
+  "GREENCHCLAW_ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS";
 
 export type FutureConfigActionBlock = {
   action: string;
@@ -16,7 +16,7 @@ export type FutureConfigActionBlock = {
 type FutureConfigGuardParams = {
   action: string;
   snapshot?: Pick<ConfigFileSnapshot, "config" | "sourceConfig"> | null;
-  config?: Pick<NexisClawConfig, "meta"> | null;
+  config?: Pick<GreenchClawConfig, "meta"> | null;
   currentVersion?: string;
   env?: Record<string, string | undefined>;
 };
@@ -53,9 +53,9 @@ export function resolveFutureConfigActionBlock(
     action: params.action,
     currentVersion,
     touchedVersion,
-    message: `Refusing to ${params.action} because this NexisClaw binary (${currentVersion}) is older than the config last written by NexisClaw ${touchedVersion}.`,
+    message: `Refusing to ${params.action} because this GreenchClaw binary (${currentVersion}) is older than the config last written by GreenchClaw ${touchedVersion}.`,
     hints: [
-      "Run the newer NexisClaw binary on PATH, or reinstall the intended gateway service from the newer install.",
+      "Run the newer GreenchClaw binary on PATH, or reinstall the intended gateway service from the newer install.",
       `Set ${ALLOW_OLDER_BINARY_DESTRUCTIVE_ACTIONS_ENV}=1 only for an intentional downgrade or recovery action.`,
     ],
   };

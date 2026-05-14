@@ -31,7 +31,7 @@ describe("irc protocol", () => {
   });
 
   it("validates targets and rejects control characters", () => {
-    expect(sanitizeIrcTarget("#NexisClaw")).toBe("#NexisClaw");
+    expect(sanitizeIrcTarget("#GreenchClaw")).toBe("#GreenchClaw");
     expect(() => sanitizeIrcTarget("#bad\\nPING")).toThrow(/Invalid IRC target/);
     expect(() => sanitizeIrcTarget(" user")).toThrow(/Invalid IRC target/);
   });

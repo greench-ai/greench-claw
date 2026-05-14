@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type {
   TaskDeliveryState,
   TaskDeliveryStatus,
@@ -100,7 +100,7 @@ export type DetachedTaskDeliveryStatusParams = {
 };
 
 export type DetachedTaskCancelParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   taskId: string;
   reason?: string;
 };

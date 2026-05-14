@@ -1,4 +1,4 @@
-import { chunkMarkdownTextWithMode, type ChunkMode } from "NexisClaw/plugin-sdk/reply-chunking";
+import { chunkMarkdownTextWithMode, type ChunkMode } from "GreenchClaw/plugin-sdk/reply-chunking";
 
 type ChunkDiscordTextOpts = {
   /** Max characters per Discord message. Default: 2000. */

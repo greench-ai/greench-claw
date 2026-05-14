@@ -1,6 +1,6 @@
-name: NexisClaw
+name: GreenchClaw
 options:
-  bundleIdPrefix: ai.NexisClaw
+  bundleIdPrefix: ai.GreenchClaw
   deploymentTarget:
     iOS: "18.0"
   xcodeVersion: "16.0"
@@ -11,32 +11,32 @@ settings:
     ENABLE_APP_INTENTS_METADATA_GENERATION: NO
 
 packages:
-  NexisClawKit:
-    path: ../shared/NexisClawKit
+  GreenchClawKit:
+    path: ../shared/GreenchClawKit
   Swabble:
     path: ../swabble
 
 schemes:
-  NexisClaw:
+  GreenchClaw:
     shared: true
     build:
       targets:
-        NexisClaw: all
+        GreenchClaw: all
     test:
       targets:
-        - NexisClawTests
-        - NexisClawLogicTests
-  NexisClawLogicTests:
+        - GreenchClawTests
+        - GreenchClawLogicTests
+  GreenchClawLogicTests:
     shared: true
     build:
       targets:
-        NexisClawLogicTests: all
+        GreenchClawLogicTests: all
     test:
       targets:
-        - NexisClawLogicTests
+        - GreenchClawLogicTests
 
 targets:
-  NexisClaw:
+  GreenchClaw:
     type: application
     platform: iOS
     configFiles:
@@ -45,16 +45,16 @@ targets:
     sources:
       - path: Sources
     dependencies:
-      - target: NexisClawShareExtension
+      - target: GreenchClawShareExtension
         embed: true
-      - target: NexisClawActivityWidget
+      - target: GreenchClawActivityWidget
         embed: true
-      - target: NexisClawWatchApp
-      - package: NexisClawKit
-      - package: NexisClawKit
-        product: NexisClawChatUI
-      - package: NexisClawKit
-        product: NexisClawProtocol
+      - target: GreenchClawWatchApp
+      - package: GreenchClawKit
+      - package: GreenchClawKit
+        product: GreenchClawChatUI
+      - package: GreenchClawKit
+        product: GreenchClawProtocol
       - package: Swabble
         product: SwabbleKit
       - sdk: AppIntents.framework
@@ -71,7 +71,7 @@ targets:
             exit 1
           fi
           swiftformat --lint --config "$SRCROOT/../../config/swiftformat" \
-            --unexclude "$SRCROOT/Sources,$SRCROOT/ShareExtension,$SRCROOT/ActivityWidget,$SRCROOT/WatchExtension,$SRCROOT/../shared/NexisClawKit,$SRCROOT/../swabble" \
+            --unexclude "$SRCROOT/Sources,$SRCROOT/ShareExtension,$SRCROOT/ActivityWidget,$SRCROOT/WatchExtension,$SRCROOT/../shared/GreenchClawKit,$SRCROOT/../swabble" \
             --filelist "$SRCROOT/SwiftSources.input.xcfilelist"
       - name: SwiftLint
         basedOnDependencyAnalysis: false
@@ -88,11 +88,11 @@ targets:
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_ENTITLEMENTS: Sources/NexisClaw.entitlements
-        CODE_SIGN_STYLE: "$(NEXISCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(NEXISCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: "$(NEXISCLAW_APP_BUNDLE_ID)"
-        PROVISIONING_PROFILE_SPECIFIER: "$(NEXISCLAW_APP_PROFILE)"
+        CODE_SIGN_ENTITLEMENTS: Sources/GreenchClaw.entitlements
+        CODE_SIGN_STYLE: "$(GREENCHCLAW_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(GREENCHCLAW_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(GREENCHCLAW_APP_BUNDLE_ID)"
+        PROVISIONING_PROFILE_SPECIFIER: "$(GREENCHCLAW_APP_PROFILE)"
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
@@ -101,27 +101,27 @@ targets:
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
       configs:
         Debug:
-          NEXISCLAW_PUSH_TRANSPORT: direct
-          NEXISCLAW_PUSH_DISTRIBUTION: local
-          NEXISCLAW_PUSH_RELAY_BASE_URL: ""
-          NEXISCLAW_PUSH_APNS_ENVIRONMENT: sandbox
+          GREENCHCLAW_PUSH_TRANSPORT: direct
+          GREENCHCLAW_PUSH_DISTRIBUTION: local
+          GREENCHCLAW_PUSH_RELAY_BASE_URL: ""
+          GREENCHCLAW_PUSH_APNS_ENVIRONMENT: sandbox
         Release:
-          NEXISCLAW_PUSH_TRANSPORT: direct
-          NEXISCLAW_PUSH_DISTRIBUTION: local
-          NEXISCLAW_PUSH_RELAY_BASE_URL: ""
-          NEXISCLAW_PUSH_APNS_ENVIRONMENT: production
+          GREENCHCLAW_PUSH_TRANSPORT: direct
+          GREENCHCLAW_PUSH_DISTRIBUTION: local
+          GREENCHCLAW_PUSH_RELAY_BASE_URL: ""
+          GREENCHCLAW_PUSH_APNS_ENVIRONMENT: production
     info:
       path: Sources/Info.plist
       properties:
-        CFBundleDisplayName: NexisClaw
+        CFBundleDisplayName: GreenchClaw
         CFBundleIconName: AppIcon
         CFBundleURLTypes:
-          - CFBundleURLName: ai.NexisClaw.ios
+          - CFBundleURLName: ai.GreenchClaw.ios
             CFBundleURLSchemes:
-              - NexisClaw
-        CFBundleShortVersionString: "$(NEXISCLAW_MARKETING_VERSION)"
-        NexisClawCanonicalVersion: "$(NEXISCLAW_IOS_VERSION)"
-        CFBundleVersion: "$(NEXISCLAW_BUILD_VERSION)"
+              - GreenchClaw
+        CFBundleShortVersionString: "$(GREENCHCLAW_MARKETING_VERSION)"
+        GreenchClawCanonicalVersion: "$(GREENCHCLAW_IOS_VERSION)"
+        CFBundleVersion: "$(GREENCHCLAW_BUILD_VERSION)"
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
@@ -129,25 +129,25 @@ targets:
           - audio
           - remote-notification
         BGTaskSchedulerPermittedIdentifiers:
-          - ai.NexisClaw.ios.bgrefresh
-        NSLocalNetworkUsageDescription: NexisClaw discovers and connects to your NexisClaw gateway on the local network.
+          - ai.GreenchClaw.ios.bgrefresh
+        NSLocalNetworkUsageDescription: GreenchClaw discovers and connects to your GreenchClaw gateway on the local network.
         NSAppTransportSecurity:
           NSAllowsArbitraryLoadsInWebContent: true
         NSBonjourServices:
-          - _NexisClaw-gw._tcp
-        NSCameraUsageDescription: NexisClaw can capture photos or short video clips when requested via the gateway.
-        NSLocationWhenInUseUsageDescription: NexisClaw uses your location when you allow location sharing.
-        NSLocationAlwaysAndWhenInUseUsageDescription: NexisClaw can share your location in the background when you enable Always.
-        NSMicrophoneUsageDescription: NexisClaw needs microphone access for voice wake.
-        NSMotionUsageDescription: NexisClaw may use motion data to support device-aware interactions and automations.
-        NSPhotoLibraryUsageDescription: NexisClaw needs photo library access when you choose existing photos to share with your assistant.
-        NSSpeechRecognitionUsageDescription: NexisClaw uses on-device speech recognition for voice wake.
+          - _GreenchClaw-gw._tcp
+        NSCameraUsageDescription: GreenchClaw can capture photos or short video clips when requested via the gateway.
+        NSLocationWhenInUseUsageDescription: GreenchClaw uses your location when you allow location sharing.
+        NSLocationAlwaysAndWhenInUseUsageDescription: GreenchClaw can share your location in the background when you enable Always.
+        NSMicrophoneUsageDescription: GreenchClaw needs microphone access for voice wake.
+        NSMotionUsageDescription: GreenchClaw may use motion data to support device-aware interactions and automations.
+        NSPhotoLibraryUsageDescription: GreenchClaw needs photo library access when you choose existing photos to share with your assistant.
+        NSSpeechRecognitionUsageDescription: GreenchClaw uses on-device speech recognition for voice wake.
         NSSupportsLiveActivities: true
         ITSAppUsesNonExemptEncryption: false
-        NexisClawPushTransport: "$(NEXISCLAW_PUSH_TRANSPORT)"
-        NexisClawPushDistribution: "$(NEXISCLAW_PUSH_DISTRIBUTION)"
-        NexisClawPushRelayBaseURL: "$(NEXISCLAW_PUSH_RELAY_BASE_URL)"
-        NexisClawPushAPNsEnvironment: "$(NEXISCLAW_PUSH_APNS_ENVIRONMENT)"
+        GreenchClawPushTransport: "$(GREENCHCLAW_PUSH_TRANSPORT)"
+        GreenchClawPushDistribution: "$(GREENCHCLAW_PUSH_DISTRIBUTION)"
+        GreenchClawPushRelayBaseURL: "$(GREENCHCLAW_PUSH_RELAY_BASE_URL)"
+        GreenchClawPushAPNsEnvironment: "$(GREENCHCLAW_PUSH_APNS_ENVIRONMENT)"
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationPortraitUpsideDown
@@ -159,7 +159,7 @@ targets:
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
 
-  NexisClawShareExtension:
+  GreenchClawShareExtension:
     type: app-extension
     platform: iOS
     configFiles:
@@ -168,25 +168,25 @@ targets:
     sources:
       - path: ShareExtension
     dependencies:
-      - package: NexisClawKit
+      - package: GreenchClawKit
       - sdk: AppIntents.framework
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(NEXISCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(NEXISCLAW_DEVELOPMENT_TEAM)"
+        CODE_SIGN_STYLE: "$(GREENCHCLAW_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(GREENCHCLAW_DEVELOPMENT_TEAM)"
         ENABLE_APPINTENTS_METADATA: NO
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
-        PRODUCT_BUNDLE_IDENTIFIER: "$(NEXISCLAW_SHARE_BUNDLE_ID)"
-        PROVISIONING_PROFILE_SPECIFIER: "$(NEXISCLAW_SHARE_PROFILE)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(GREENCHCLAW_SHARE_BUNDLE_ID)"
+        PROVISIONING_PROFILE_SPECIFIER: "$(GREENCHCLAW_SHARE_PROFILE)"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
     info:
       path: ShareExtension/Info.plist
       properties:
-        CFBundleDisplayName: NexisClaw Share
-        CFBundleShortVersionString: "$(NEXISCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(NEXISCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: GreenchClaw Share
+        CFBundleShortVersionString: "$(GREENCHCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(GREENCHCLAW_BUILD_VERSION)"
         NSExtension:
           NSExtensionPointIdentifier: com.apple.share-services
           NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).ShareViewController"
@@ -197,7 +197,7 @@ targets:
               NSExtensionActivationSupportsImageWithMaxCount: 10
               NSExtensionActivationSupportsMovieWithMaxCount: 1
 
-  NexisClawActivityWidget:
+  GreenchClawActivityWidget:
     type: app-extension
     platform: iOS
     configFiles:
@@ -205,63 +205,63 @@ targets:
       Release: Signing.xcconfig
     sources:
       - path: ActivityWidget
-      - path: Sources/LiveActivity/NexisClawActivityAttributes.swift
+      - path: Sources/LiveActivity/GreenchClawActivityAttributes.swift
     dependencies:
       - sdk: WidgetKit.framework
       - sdk: ActivityKit.framework
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(NEXISCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(NEXISCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: "$(NEXISCLAW_ACTIVITY_WIDGET_BUNDLE_ID)"
+        CODE_SIGN_STYLE: "$(GREENCHCLAW_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(GREENCHCLAW_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(GREENCHCLAW_ACTIVITY_WIDGET_BUNDLE_ID)"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         SUPPORTS_LIVE_ACTIVITIES: YES
     info:
       path: ActivityWidget/Info.plist
       properties:
-        CFBundleDisplayName: NexisClaw Activity
-        CFBundleShortVersionString: "$(NEXISCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(NEXISCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: GreenchClaw Activity
+        CFBundleShortVersionString: "$(GREENCHCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(GREENCHCLAW_BUILD_VERSION)"
         NSSupportsLiveActivities: true
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
 
-  NexisClawWatchApp:
+  GreenchClawWatchApp:
     type: application.watchapp2
     platform: watchOS
     deploymentTarget: "11.0"
     sources:
       - path: WatchApp
     dependencies:
-      - target: NexisClawWatchExtension
+      - target: GreenchClawWatchExtension
     configFiles:
       Debug: Config/Signing.xcconfig
       Release: Config/Signing.xcconfig
     attributes:
-      DevelopmentTeam: "$(NEXISCLAW_DEVELOPMENT_TEAM)"
-      ProvisioningStyle: "$(NEXISCLAW_CODE_SIGN_STYLE)"
+      DevelopmentTeam: "$(GREENCHCLAW_DEVELOPMENT_TEAM)"
+      ProvisioningStyle: "$(GREENCHCLAW_CODE_SIGN_STYLE)"
     settings:
       base:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(NEXISCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(NEXISCLAW_DEVELOPMENT_TEAM)"
+        CODE_SIGN_STYLE: "$(GREENCHCLAW_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(GREENCHCLAW_DEVELOPMENT_TEAM)"
         ENABLE_APPINTENTS_METADATA: NO
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
-        PRODUCT_BUNDLE_IDENTIFIER: "$(NEXISCLAW_WATCH_APP_BUNDLE_ID)"
-        PROVISIONING_PROFILE_SPECIFIER: "$(NEXISCLAW_WATCH_APP_PROFILE)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(GREENCHCLAW_WATCH_APP_BUNDLE_ID)"
+        PROVISIONING_PROFILE_SPECIFIER: "$(GREENCHCLAW_WATCH_APP_PROFILE)"
     info:
       path: WatchApp/Info.plist
       properties:
-        CFBundleDisplayName: NexisClaw
-        CFBundleShortVersionString: "$(NEXISCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(NEXISCLAW_BUILD_VERSION)"
-        WKCompanionAppBundleIdentifier: "$(NEXISCLAW_APP_BUNDLE_ID)"
+        CFBundleDisplayName: GreenchClaw
+        CFBundleShortVersionString: "$(GREENCHCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(GREENCHCLAW_BUILD_VERSION)"
+        WKCompanionAppBundleIdentifier: "$(GREENCHCLAW_APP_BUNDLE_ID)"
         WKWatchKitApp: true
 
-  NexisClawWatchExtension:
+  GreenchClawWatchExtension:
     type: watchkit2-extension
     platform: watchOS
     deploymentTarget: "11.0"
@@ -275,27 +275,27 @@ targets:
       Debug: Config/Signing.xcconfig
       Release: Config/Signing.xcconfig
     attributes:
-      DevelopmentTeam: "$(NEXISCLAW_DEVELOPMENT_TEAM)"
-      ProvisioningStyle: "$(NEXISCLAW_CODE_SIGN_STYLE)"
+      DevelopmentTeam: "$(GREENCHCLAW_DEVELOPMENT_TEAM)"
+      ProvisioningStyle: "$(GREENCHCLAW_CODE_SIGN_STYLE)"
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(NEXISCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(NEXISCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: "$(NEXISCLAW_WATCH_EXTENSION_BUNDLE_ID)"
-        PROVISIONING_PROFILE_SPECIFIER: "$(NEXISCLAW_WATCH_EXTENSION_PROFILE)"
+        CODE_SIGN_STYLE: "$(GREENCHCLAW_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(GREENCHCLAW_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: "$(GREENCHCLAW_WATCH_EXTENSION_BUNDLE_ID)"
+        PROVISIONING_PROFILE_SPECIFIER: "$(GREENCHCLAW_WATCH_EXTENSION_PROFILE)"
     info:
       path: WatchExtension/Info.plist
       properties:
-        CFBundleDisplayName: NexisClaw
-        CFBundleShortVersionString: "$(NEXISCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(NEXISCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: GreenchClaw
+        CFBundleShortVersionString: "$(GREENCHCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(GREENCHCLAW_BUILD_VERSION)"
         NSExtension:
           NSExtensionAttributes:
-            WKAppBundleIdentifier: "$(NEXISCLAW_WATCH_APP_BUNDLE_ID)"
+            WKAppBundleIdentifier: "$(GREENCHCLAW_WATCH_APP_BUNDLE_ID)"
           NSExtensionPointIdentifier: com.apple.watchkit
 
-  NexisClawTests:
+  GreenchClawTests:
     type: bundle.unit-test
     platform: iOS
     configFiles:
@@ -306,29 +306,29 @@ targets:
         excludes:
           - Logic
     dependencies:
-      - target: NexisClaw
+      - target: GreenchClaw
       - package: Swabble
         product: SwabbleKit
       - sdk: AppIntents.framework
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(NEXISCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(NEXISCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: ai.NexisClaw.ios.tests
+        CODE_SIGN_STYLE: "$(GREENCHCLAW_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(GREENCHCLAW_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: ai.GreenchClaw.ios.tests
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/NexisClaw.app/NexisClaw"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/GreenchClaw.app/GreenchClaw"
         BUNDLE_LOADER: "$(TEST_HOST)"
     info:
       path: Tests/Info.plist
       properties:
-        CFBundleDisplayName: NexisClawTests
-        CFBundleShortVersionString: "$(NEXISCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(NEXISCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: GreenchClawTests
+        CFBundleShortVersionString: "$(GREENCHCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(GREENCHCLAW_BUILD_VERSION)"
 
-  NexisClawLogicTests:
+  GreenchClawLogicTests:
     type: bundle.unit-test
     platform: iOS
     configFiles:
@@ -337,13 +337,13 @@ targets:
     sources:
       - path: Tests/Logic
     dependencies:
-      - package: NexisClawKit
+      - package: GreenchClawKit
     settings:
       base:
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_STYLE: "$(NEXISCLAW_CODE_SIGN_STYLE)"
-        DEVELOPMENT_TEAM: "$(NEXISCLAW_DEVELOPMENT_TEAM)"
-        PRODUCT_BUNDLE_IDENTIFIER: ai.NexisClaw.ios.logic-tests
+        CODE_SIGN_STYLE: "$(GREENCHCLAW_CODE_SIGN_STYLE)"
+        DEVELOPMENT_TEAM: "$(GREENCHCLAW_DEVELOPMENT_TEAM)"
+        PRODUCT_BUNDLE_IDENTIFIER: ai.GreenchClaw.ios.logic-tests
         ENABLE_APP_INTENTS_METADATA_GENERATION: NO
         SWIFT_EMIT_CONST_VALUE_PROTOCOLS: ""
         SWIFT_VERSION: "6.0"
@@ -351,6 +351,6 @@ targets:
     info:
       path: Tests/Info.plist
       properties:
-        CFBundleDisplayName: NexisClawLogicTests
-        CFBundleShortVersionString: "$(NEXISCLAW_MARKETING_VERSION)"
-        CFBundleVersion: "$(NEXISCLAW_BUILD_VERSION)"
+        CFBundleDisplayName: GreenchClawLogicTests
+        CFBundleShortVersionString: "$(GREENCHCLAW_MARKETING_VERSION)"
+        CFBundleVersion: "$(GREENCHCLAW_BUILD_VERSION)"

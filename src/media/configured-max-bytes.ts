@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { maxBytesForKind, type MediaKind } from "./constants.js";
 
 const MB = 1024 * 1024;
 
-export function resolveConfiguredMediaMaxBytes(cfg?: NexisClawConfig): number | undefined {
+export function resolveConfiguredMediaMaxBytes(cfg?: GreenchClawConfig): number | undefined {
   const configured = cfg?.agents?.defaults?.mediaMaxMb;
   if (typeof configured === "number" && Number.isFinite(configured) && configured > 0) {
     return Math.floor(configured * MB);
@@ -11,12 +11,12 @@ export function resolveConfiguredMediaMaxBytes(cfg?: NexisClawConfig): number | 
   return undefined;
 }
 
-export function resolveGeneratedMediaMaxBytes(cfg: NexisClawConfig | undefined, kind: MediaKind) {
+export function resolveGeneratedMediaMaxBytes(cfg: GreenchClawConfig | undefined, kind: MediaKind) {
   return resolveConfiguredMediaMaxBytes(cfg) ?? maxBytesForKind(kind);
 }
 
 export function resolveChannelAccountMediaMaxMb(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel?: string | null;
   accountId?: string | null;
 }): number | undefined {

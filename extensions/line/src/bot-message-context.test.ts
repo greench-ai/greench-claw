@@ -2,13 +2,13 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import type { webhook } from "@line/bot-sdk";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { getSessionBindingService } from "NexisClaw/plugin-sdk/conversation-runtime";
-import { __testing as sessionBindingTesting } from "NexisClaw/plugin-sdk/conversation-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { getSessionBindingService } from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { __testing as sessionBindingTesting } from "GreenchClaw/plugin-sdk/conversation-runtime";
 import {
   createTestRegistry,
   setActivePluginRegistry,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { lineBindingsAdapter } from "./bindings.js";
 import { buildLineMessageContext, buildLinePostbackContext } from "./bot-message-context.js";
@@ -29,7 +29,7 @@ const lineBindingsPlugin = {
 describe("buildLineMessageContext", () => {
   let tmpDir: string;
   let storePath: string;
-  let cfg: NexisClawConfig;
+  let cfg: GreenchClawConfig;
   const account: ResolvedLineAccount = {
     accountId: "default",
     enabled: true,
@@ -82,7 +82,7 @@ describe("buildLineMessageContext", () => {
       ]),
     );
     sessionBindingTesting.resetSessionBindingAdaptersForTests();
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-line-context-"));
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-line-context-"));
     storePath = path.join(tmpDir, "sessions.json");
     cfg = { session: { store: storePath } };
   });
@@ -248,7 +248,7 @@ describe("buildLineMessageContext", () => {
 
   it("group peer binding matches raw groupId without prefix (#21907)", async () => {
     const groupId = "Cc7e3bece1234567890abcdef"; // pragma: allowlist secret
-    const bindingCfg: NexisClawConfig = {
+    const bindingCfg: GreenchClawConfig = {
       session: { store: storePath },
       agents: {
         list: [{ id: "main" }, { id: "line-group-agent" }],
@@ -285,7 +285,7 @@ describe("buildLineMessageContext", () => {
 
   it("room peer binding matches raw roomId without prefix (#21907)", async () => {
     const roomId = "Rr1234567890abcdef";
-    const bindingCfg: NexisClawConfig = {
+    const bindingCfg: GreenchClawConfig = {
       session: { store: storePath },
       agents: {
         list: [{ id: "main" }, { id: "line-room-agent" }],

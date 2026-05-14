@@ -65,15 +65,15 @@ parallels_log_progress_extract() {
 parallels_bash_seed_workspace_snippet() {
   local purpose="$1"
   cat <<EOF
-workspace="\${NEXISCLAW_WORKSPACE_DIR:-\$HOME/.NexisClaw/workspace}"
-mkdir -p "\$workspace/.NexisClaw"
+workspace="\${GREENCHCLAW_WORKSPACE_DIR:-\$HOME/.GreenchClaw/workspace}"
+mkdir -p "\$workspace/.GreenchClaw"
 cat > "\$workspace/IDENTITY.md" <<'IDENTITY_EOF'
 # Identity
 
-- Name: NexisClaw
+- Name: GreenchClaw
 - Purpose: $purpose
 IDENTITY_EOF
-cat > "\$workspace/.NexisClaw/workspace-state.json" <<'STATE_EOF'
+cat > "\$workspace/.GreenchClaw/workspace-state.json" <<'STATE_EOF'
 {
   "version": 1,
   "setupCompletedAt": "2026-01-01T00:00:00.000Z"
@@ -86,16 +86,16 @@ EOF
 parallels_powershell_seed_workspace_snippet() {
   local purpose="$1"
   cat <<EOF
-\$workspace = \$env:NEXISCLAW_WORKSPACE_DIR
+\$workspace = \$env:GREENCHCLAW_WORKSPACE_DIR
 if (-not \$workspace) {
-  \$workspace = Join-Path \$env:USERPROFILE '.NexisClaw\\workspace'
+  \$workspace = Join-Path \$env:USERPROFILE '.GreenchClaw\\workspace'
 }
-\$stateDir = Join-Path \$workspace '.NexisClaw'
+\$stateDir = Join-Path \$workspace '.GreenchClaw'
 New-Item -ItemType Directory -Path \$stateDir -Force | Out-Null
 @'
 # Identity
 
-- Name: NexisClaw
+- Name: GreenchClaw
 - Purpose: $purpose
 '@ | Set-Content -Path (Join-Path \$workspace 'IDENTITY.md') -Encoding UTF8
 @'

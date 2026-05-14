@@ -1,7 +1,7 @@
 import {
   createDefaultModelsPresetAppliers,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 import {
   buildFireworksCatalogModels,
   buildFireworksProvider,
@@ -12,7 +12,7 @@ export const FIREWORKS_DEFAULT_MODEL_REF = `fireworks/${FIREWORKS_DEFAULT_MODEL_
 
 const fireworksPresetAppliers = createDefaultModelsPresetAppliers({
   primaryModelRef: FIREWORKS_DEFAULT_MODEL_REF,
-  resolveParams: (_cfg: NexisClawConfig) => {
+  resolveParams: (_cfg: GreenchClawConfig) => {
     const defaultProvider = buildFireworksProvider();
     return {
       providerId: "fireworks",
@@ -25,6 +25,6 @@ const fireworksPresetAppliers = createDefaultModelsPresetAppliers({
   },
 });
 
-export function applyFireworksConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyFireworksConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return fireworksPresetAppliers.applyConfig(cfg);
 }

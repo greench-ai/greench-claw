@@ -16,15 +16,15 @@ describe("exec security floor", () => {
       "USERPROFILE",
       "HOMEDRIVE",
       "HOMEPATH",
-      "NEXISCLAW_HOME",
-      "NEXISCLAW_STATE_DIR",
+      "GREENCHCLAW_HOME",
+      "GREENCHCLAW_STATE_DIR",
       "SHELL",
     ]);
-    tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-exec-security-floor-"));
+    tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-exec-security-floor-"));
     process.env.HOME = tempRoot;
     process.env.USERPROFILE = tempRoot;
-    process.env.NEXISCLAW_HOME = tempRoot;
-    process.env.NEXISCLAW_STATE_DIR = path.join(tempRoot, "state");
+    process.env.GREENCHCLAW_HOME = tempRoot;
+    process.env.GREENCHCLAW_STATE_DIR = path.join(tempRoot, "state");
     if (process.platform === "win32") {
       const parsed = path.parse(tempRoot);
       process.env.HOMEDRIVE = parsed.root.slice(0, 2);

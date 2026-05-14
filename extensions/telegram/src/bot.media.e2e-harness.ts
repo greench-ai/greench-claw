@@ -1,7 +1,7 @@
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resetInboundDedupe } from "NexisClaw/plugin-sdk/reply-runtime";
-import type { GetReplyOptions, MsgContext } from "NexisClaw/plugin-sdk/reply-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resetInboundDedupe } from "GreenchClaw/plugin-sdk/reply-runtime";
+import type { GetReplyOptions, MsgContext } from "GreenchClaw/plugin-sdk/reply-runtime";
 import { beforeEach, vi, type Mock } from "vitest";
 import type { TelegramBotDeps } from "./bot-deps.js";
 
@@ -9,9 +9,9 @@ type TelegramBotRuntimeForTest = NonNullable<
   Parameters<typeof import("./bot.js").setTelegramBotRuntimeForTest>[0]
 >;
 type DispatchReplyWithBufferedBlockDispatcherFn =
-  typeof import("NexisClaw/plugin-sdk/reply-runtime").dispatchReplyWithBufferedBlockDispatcher;
+  typeof import("GreenchClaw/plugin-sdk/reply-runtime").dispatchReplyWithBufferedBlockDispatcher;
 type DispatchReplyHarnessParams = Parameters<DispatchReplyWithBufferedBlockDispatcherFn>[0];
-type FetchRemoteMediaFn = typeof import("NexisClaw/plugin-sdk/media-runtime").fetchRemoteMedia;
+type FetchRemoteMediaFn = typeof import("GreenchClaw/plugin-sdk/media-runtime").fetchRemoteMedia;
 
 const useSpy: Mock = vi.fn();
 const middlewareUseSpy: Mock = vi.fn();
@@ -148,7 +148,7 @@ export const telegramBotDepsForTest: TelegramBotDeps = {
   getRuntimeConfig: (() =>
     ({
       channels: { telegram: { dmPolicy: "open", allowFrom: ["*"] } },
-    }) as NexisClawConfig) as TelegramBotDeps["getRuntimeConfig"],
+    }) as GreenchClawConfig) as TelegramBotDeps["getRuntimeConfig"],
   resolveStorePath: vi.fn(
     (storePath?: string) => storePath ?? "/tmp/telegram-media-sessions.json",
   ) as TelegramBotDeps["resolveStorePath"],

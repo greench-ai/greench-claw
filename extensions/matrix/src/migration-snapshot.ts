@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { detectLegacyMatrixCrypto } from "./legacy-crypto.js";
 import { detectLegacyMatrixState } from "./legacy-state.js";
 import {
@@ -15,7 +15,7 @@ export type MatrixMigrationStatus = {
 };
 
 export function resolveMatrixMigrationStatus(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): MatrixMigrationStatus {
   const env = params.env ?? process.env;
@@ -33,14 +33,14 @@ export function resolveMatrixMigrationStatus(params: {
 }
 
 export function hasPendingMatrixMigration(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): boolean {
   return resolveMatrixMigrationStatus(params).pending;
 }
 
 export function hasActionableMatrixMigration(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
 }): boolean {
   return resolveMatrixMigrationStatus(params).actionable;

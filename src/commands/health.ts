@@ -12,7 +12,7 @@ import type { ChannelAccountSnapshot } from "../channels/plugins/types.public.js
 import { withProgress } from "../cli/progress.js";
 import { getRuntimeConfig } from "../config/config.js";
 import { resolveStorePath } from "../config/sessions/paths.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { buildGatewayConnectionDetails, callGateway } from "../gateway/call.js";
 import {
   DEFAULT_CHANNEL_CONNECT_GRACE_MS,
@@ -65,7 +65,7 @@ function loadConfigModule(): Promise<ConfigModule> {
 }
 
 const debugHealth = (...args: unknown[]) => {
-  if (isTruthyEnvValue(process.env.NEXISCLAW_DEBUG_HEALTH)) {
+  if (isTruthyEnvValue(process.env.GREENCHCLAW_DEBUG_HEALTH)) {
     console.warn("[health:debug]", ...args);
   }
 };
@@ -162,10 +162,10 @@ function formatModelPricingHealthLine(summary: HealthSummary): string | null {
   return `Model pricing: warning (optional pricing refresh degraded)${detail}`;
 }
 
-const resolveHeartbeatSummary = (cfg: NexisClawConfig, agentId: string) =>
+const resolveHeartbeatSummary = (cfg: GreenchClawConfig, agentId: string) =>
   resolveHeartbeatSummaryForAgent(cfg, agentId);
 
-const resolveAgentOrder = (cfg: NexisClawConfig) => {
+const resolveAgentOrder = (cfg: GreenchClawConfig) => {
   const defaultAgentId = resolveDefaultAgentId(cfg);
   const entries = Array.isArray(cfg.agents?.list) ? cfg.agents.list : [];
   const seen = new Set<string>();
@@ -264,7 +264,7 @@ const hasAccountValue = (account: unknown): boolean => account !== null && accou
 
 function resolveProbeAccountEnabled(params: {
   plugin: ChannelPlugin;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   account: unknown;
   diagnostics: string[];
@@ -286,7 +286,7 @@ function resolveProbeAccountEnabled(params: {
 
 async function resolveProbeAccountConfigured(params: {
   plugin: ChannelPlugin;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   account: unknown;
   diagnostics: string[];
@@ -309,7 +309,7 @@ async function resolveProbeAccountConfigured(params: {
 
 async function resolveHealthAccountContext(params: {
   plugin: ChannelPlugin;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
 }): Promise<{
   probeAccount: unknown;
@@ -595,7 +595,7 @@ export async function healthCommand(
     json?: boolean;
     timeoutMs?: number;
     verbose?: boolean;
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     token?: string;
     password?: string;
   },
@@ -625,7 +625,7 @@ export async function healthCommand(
   if (opts.json) {
     writeRuntimeJson(runtime, summary);
   } else {
-    const debugEnabled = isTruthyEnvValue(process.env.NEXISCLAW_DEBUG_HEALTH);
+    const debugEnabled = isTruthyEnvValue(process.env.GREENCHCLAW_DEBUG_HEALTH);
     const rich = isRich();
     if (opts.verbose) {
       const details = buildGatewayConnectionDetails({ config: cfg });
@@ -862,7 +862,7 @@ export async function healthCommand(
   }
 }
 
-async function readBestEffortHealthConfig(): Promise<NexisClawConfig> {
+async function readBestEffortHealthConfig(): Promise<GreenchClawConfig> {
   const { readBestEffortConfig } = await loadConfigModule();
   return await readBestEffortConfig();
 }

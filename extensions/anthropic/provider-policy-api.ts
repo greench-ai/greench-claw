@@ -1,5 +1,5 @@
-import { resolveClaudeThinkingProfile } from "NexisClaw/plugin-sdk/provider-model-shared";
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-types";
+import { resolveClaudeThinkingProfile } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-types";
 import {
   applyAnthropicConfigDefaults,
   normalizeAnthropicProviderConfigForProvider,

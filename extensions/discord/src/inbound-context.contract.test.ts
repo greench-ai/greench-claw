@@ -1,4 +1,4 @@
-import { expectChannelInboundContextContract } from "NexisClaw/plugin-sdk/channel-contract-testing";
+import { expectChannelInboundContextContract } from "GreenchClaw/plugin-sdk/channel-contract-testing";
 import { describe, it } from "vitest";
 import { buildFinalizedDiscordDirectInboundContext } from "./monitor/inbound-context.test-helpers.js";
 

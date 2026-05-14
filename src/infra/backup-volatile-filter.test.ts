@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { isVolatileBackupPath } from "./backup-volatile-filter.js";
 
-const stateDir = "/opt/NexisClaw/state";
+const stateDir = "/opt/GreenchClaw/state";
 const plan = { stateDirs: [stateDir] };
 
 describe("isVolatileBackupPath", () => {
@@ -56,8 +56,8 @@ describe("isVolatileBackupPath", () => {
   });
 
   it("does not match paths that escape the anchor via `..`", () => {
-    // `/opt/NexisClaw/state/sessions/../config.jsonl` resolves to
-    // `/opt/NexisClaw/state/config.jsonl`, which is NOT inside sessions/.
+    // `/opt/GreenchClaw/state/sessions/../config.jsonl` resolves to
+    // `/opt/GreenchClaw/state/config.jsonl`, which is NOT inside sessions/.
     expect(isVolatileBackupPath(`${stateDir}/sessions/../config.jsonl`, plan)).toBe(false);
     expect(isVolatileBackupPath(`${stateDir}/cron/runs/../jobs.log`, plan)).toBe(false);
     expect(isVolatileBackupPath(`${stateDir}/logs/../notes.jsonl`, plan)).toBe(false);
@@ -90,7 +90,7 @@ describe("isVolatileBackupPath", () => {
   });
 
   it("normalizes Windows-style separators before anchor checks", () => {
-    const winStateDir = "C:\\NexisClaw\\state";
+    const winStateDir = "C:\\GreenchClaw\\state";
     const winPlan = { stateDirs: [winStateDir] };
     expect(isVolatileBackupPath(`${winStateDir}\\sessions\\s-abc\\transcript.jsonl`, winPlan)).toBe(
       true,
@@ -105,7 +105,7 @@ describe("isVolatileBackupPath", () => {
 
   it("matches tar filter paths when node-tar omits the leading slash", () => {
     expect(
-      isVolatileBackupPath("opt/NexisClaw/state/agents/main/sessions/transcript.jsonl", plan),
+      isVolatileBackupPath("opt/GreenchClaw/state/agents/main/sessions/transcript.jsonl", plan),
     ).toBe(true);
   });
 

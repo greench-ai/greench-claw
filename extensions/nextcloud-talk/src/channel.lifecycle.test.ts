@@ -1,9 +1,9 @@
-import { createStartAccountContext } from "NexisClaw/plugin-sdk/channel-test-helpers";
+import { createStartAccountContext } from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import {
   expectStopPendingUntilAbort,
   startAccountAndTrackLifecycle,
   waitForStartedMocks,
-} from "NexisClaw/plugin-sdk/channel-test-helpers";
+} from "GreenchClaw/plugin-sdk/channel-test-helpers";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ResolvedNextcloudTalkAccount } from "./accounts.js";
 

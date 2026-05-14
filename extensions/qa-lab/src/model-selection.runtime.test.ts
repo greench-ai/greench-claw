@@ -8,11 +8,11 @@ const { resolveEnvApiKey, loadAuthProfileStoreForRuntime, listProfilesForProvide
   }),
 );
 
-vi.mock("NexisClaw/plugin-sdk/provider-auth", () => ({
+vi.mock("GreenchClaw/plugin-sdk/provider-auth", () => ({
   resolveEnvApiKey,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/agent-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/agent-runtime", () => ({
   loadAuthProfileStoreForRuntime,
   listProfilesForProvider,
 }));

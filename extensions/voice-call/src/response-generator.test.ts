@@ -37,20 +37,20 @@ function createAgentRuntime(payloads: Array<Record<string, unknown>>) {
     meta: { durationMs: 12, aborted: false },
   }));
   const resolveAgentDir = vi.fn((_cfg: CoreConfig, agentId: string) => {
-    return `/tmp/NexisClaw/agents/${agentId}`;
+    return `/tmp/GreenchClaw/agents/${agentId}`;
   });
   const resolveAgentWorkspaceDir = vi.fn((_cfg: CoreConfig, agentId: string) => {
-    return `/tmp/NexisClaw/workspace/${agentId}`;
+    return `/tmp/GreenchClaw/workspace/${agentId}`;
   });
   const resolveAgentIdentity = vi.fn((_cfg: CoreConfig, agentId: string) => ({
     name: `${agentId} tester`,
   }));
   const resolveStorePath = vi.fn((_store: string | undefined, params: { agentId?: string }) => {
-    return `/tmp/NexisClaw/${params.agentId ?? "main"}/sessions.json`;
+    return `/tmp/GreenchClaw/${params.agentId ?? "main"}/sessions.json`;
   });
   const resolveSessionFilePath = vi.fn(
     (_sessionId: string, _entry: unknown, params: { agentId?: string }) => {
-      return `/tmp/NexisClaw/${params.agentId ?? "main"}/sessions/session.jsonl`;
+      return `/tmp/GreenchClaw/${params.agentId ?? "main"}/sessions/session.jsonl`;
     },
   );
 
@@ -214,7 +214,7 @@ describe("generateVoiceResponse", () => {
       updateSessionStore.mock.calls,
       "session store update",
     );
-    expect(updateSessionStoreCall[0]).toBe("/tmp/NexisClaw/main/sessions.json");
+    expect(updateSessionStoreCall[0]).toBe("/tmp/GreenchClaw/main/sessions.json");
     expect(updateSessionStoreCall[1]).toBeTypeOf("function");
     const args = requireEmbeddedAgentArgs(runEmbeddedPiAgent);
     expect(args.provider).toBe("openai");
@@ -291,11 +291,11 @@ describe("generateVoiceResponse", () => {
       },
     );
     const args = requireEmbeddedAgentArgs(runEmbeddedPiAgent);
-    expect(args.agentDir).toBe("/tmp/NexisClaw/agents/main");
+    expect(args.agentDir).toBe("/tmp/GreenchClaw/agents/main");
     expect(args.agentId).toBe("main");
     expect(args.sandboxSessionKey).toBe("agent:main:voice:15550001111");
-    expect(args.workspaceDir).toBe("/tmp/NexisClaw/workspace/main");
-    expect(args.sessionFile).toBe("/tmp/NexisClaw/main/sessions/session.jsonl");
+    expect(args.workspaceDir).toBe("/tmp/GreenchClaw/workspace/main");
+    expect(args.sessionFile).toBe("/tmp/GreenchClaw/main/sessions/session.jsonl");
   });
 
   it("uses the configured voice response agent workspace", async () => {
@@ -341,11 +341,11 @@ describe("generateVoiceResponse", () => {
       },
     );
     const args = requireEmbeddedAgentArgs(runEmbeddedPiAgent);
-    expect(args.agentDir).toBe("/tmp/NexisClaw/agents/voice");
+    expect(args.agentDir).toBe("/tmp/GreenchClaw/agents/voice");
     expect(args.agentId).toBe("voice");
     expect(args.sandboxSessionKey).toBe("agent:voice:voice:15550001111");
-    expect(args.workspaceDir).toBe("/tmp/NexisClaw/workspace/voice");
-    expect(args.sessionFile).toBe("/tmp/NexisClaw/voice/sessions/session.jsonl");
+    expect(args.workspaceDir).toBe("/tmp/GreenchClaw/workspace/voice");
+    expect(args.sessionFile).toBe("/tmp/GreenchClaw/voice/sessions/session.jsonl");
   });
 
   it("passes the routed voice agent explicit tool allowlist to the embedded run", async () => {

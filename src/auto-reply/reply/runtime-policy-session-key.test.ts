@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { resolveSandboxRuntimeStatus } from "../../agents/sandbox/runtime-status.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { MsgContext } from "../templating.js";
 import { resolveRuntimePolicySessionKey } from "./runtime-policy-session-key.js";
 
 describe("resolveRuntimePolicySessionKey", () => {
-  const cfg: NexisClawConfig = {
+  const cfg: GreenchClawConfig = {
     agents: {
       defaults: {
         sandbox: { mode: "non-main", scope: "agent" },

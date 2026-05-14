@@ -45,7 +45,7 @@ function pickHigherContrastText(r: number, g: number, b: number): boolean {
 }
 
 function isLightBackground(): boolean {
-  const explicit = normalizeOptionalLowercaseString(process.env.NEXISCLAW_THEME);
+  const explicit = normalizeOptionalLowercaseString(process.env.GREENCHCLAW_THEME);
   if (explicit === "light") {
     return true;
   }

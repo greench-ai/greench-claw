@@ -6,7 +6,7 @@
  * that are still tracked as active in the subagent registry) and sends a
  * synthetic resume message to restart their work.
  *
- * @see https://github.com/NexisClaw/NexisClaw/issues/47711
+ * @see https://github.com/GreenchClaw/GreenchClaw/issues/47711
  */
 
 import crypto from "node:crypto";
@@ -255,7 +255,7 @@ export async function recoverOrphanedSubagentSessions(params: {
   const attemptNumber = Math.max(1, params.attemptNumber ?? 1);
   const maxAttempts = Math.max(attemptNumber, params.maxAttempts ?? attemptNumber);
   const notifiedRecoverySessionKeys = params.notifiedRecoverySessionKeys ?? new Set<string>();
-  const configChangePattern = /NexisClaw\.json|NexisClaw gateway restart|config\.patch/i;
+  const configChangePattern = /GreenchClaw\.json|GreenchClaw gateway restart|config\.patch/i;
 
   try {
     const activeRuns = params.getActiveRuns();
@@ -391,7 +391,7 @@ export async function recoverOrphanedSubagentSessions(params: {
           task: runRecord.task,
           lastHumanMessage: extractMessageText(lastHumanMessage),
           configChangeHint: configChangeDetected
-            ? "\n\n[config changes from your previous run were already applied — do not re-modify NexisClaw.json or restart the gateway]"
+            ? "\n\n[config changes from your previous run were already applied — do not re-modify GreenchClaw.json or restart the gateway]"
             : undefined,
           originalRunId: runId,
           originalRun: runRecord,

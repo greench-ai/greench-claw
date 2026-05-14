@@ -1,6 +1,6 @@
 services:
-  NexisClaw-gateway:
-    image: ${NEXISCLAW_IMAGE:-NexisClaw:local}
+  GreenchClaw-gateway:
+    image: ${GREENCHCLAW_IMAGE:-GreenchClaw:local}
     build: .
     env_file:
       - path: .env
@@ -11,16 +11,16 @@ services:
       # Pin container-side workspace and config paths so host values written to
       # `.env` (used by Compose for the bind-mount source below) cannot leak
       # into runtime code that resolves these env vars inside the container.
-      # Without this override, a macOS host path like /Users/<you>/.NexisClaw/...
+      # Without this override, a macOS host path like /Users/<you>/.GreenchClaw/...
       # imported from .env caused first-reply `mkdir '/Users'` EACCES failures
       # in Linux Docker (#77436).
-      NEXISCLAW_CONFIG_DIR: /home/node/.NexisClaw
-      NEXISCLAW_WORKSPACE_DIR: /home/node/.NexisClaw/workspace
-      NEXISCLAW_GATEWAY_TOKEN: ${NEXISCLAW_GATEWAY_TOKEN:-}
-      NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS: ${NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS:-}
+      GREENCHCLAW_CONFIG_DIR: /home/node/.GreenchClaw
+      GREENCHCLAW_WORKSPACE_DIR: /home/node/.GreenchClaw/workspace
+      GREENCHCLAW_GATEWAY_TOKEN: ${GREENCHCLAW_GATEWAY_TOKEN:-}
+      GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS: ${GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS:-}
       # Empty means auto: Bonjour disables itself in detected containers.
       # Set 0 only on host/macvlan/mDNS-capable networks; set 1 to force off.
-      NEXISCLAW_DISABLE_BONJOUR: ${NEXISCLAW_DISABLE_BONJOUR:-}
+      GREENCHCLAW_DISABLE_BONJOUR: ${GREENCHCLAW_DISABLE_BONJOUR:-}
       # OpenTelemetry export is outbound OTLP/HTTP from the Gateway. Prometheus
       # uses the existing authenticated Gateway route; it does not need a port.
       OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
@@ -30,19 +30,19 @@ services:
       OTEL_EXPORTER_OTLP_PROTOCOL: ${OTEL_EXPORTER_OTLP_PROTOCOL:-http/protobuf}
       OTEL_SERVICE_NAME: ${OTEL_SERVICE_NAME:-}
       OTEL_SEMCONV_STABILITY_OPT_IN: ${OTEL_SEMCONV_STABILITY_OPT_IN:-}
-      NEXISCLAW_OTEL_PRELOADED: ${NEXISCLAW_OTEL_PRELOADED:-}
+      GREENCHCLAW_OTEL_PRELOADED: ${GREENCHCLAW_OTEL_PRELOADED:-}
       CLAUDE_AI_SESSION_KEY: ${CLAUDE_AI_SESSION_KEY:-}
       CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY:-}
       CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE:-}
-      TZ: ${NEXISCLAW_TZ:-UTC}
+      TZ: ${GREENCHCLAW_TZ:-UTC}
     volumes:
-      - ${NEXISCLAW_CONFIG_DIR:-${HOME:-/tmp}/.NexisClaw}:/home/node/.NexisClaw
-      - ${NEXISCLAW_WORKSPACE_DIR:-${HOME:-/tmp}/.NexisClaw/workspace}:/home/node/.NexisClaw/workspace
-      - ${NEXISCLAW_AUTH_PROFILE_SECRET_DIR:-${HOME:-/tmp}/.NexisClaw-auth-profile-secrets}:/home/node/.config/NexisClaw
+      - ${GREENCHCLAW_CONFIG_DIR:-${HOME:-/tmp}/.GreenchClaw}:/home/node/.GreenchClaw
+      - ${GREENCHCLAW_WORKSPACE_DIR:-${HOME:-/tmp}/.GreenchClaw/workspace}:/home/node/.GreenchClaw/workspace
+      - ${GREENCHCLAW_AUTH_PROFILE_SECRET_DIR:-${HOME:-/tmp}/.GreenchClaw-auth-profile-secrets}:/home/node/.config/GreenchClaw
       ## Uncomment the lines below to enable sandbox isolation
       ## (agents.defaults.sandbox). Requires Docker CLI in the image
-      ## (build with --build-arg NEXISCLAW_INSTALL_DOCKER_CLI=1) or use
-      ## scripts/docker/setup.sh with NEXISCLAW_SANDBOX=1 for automated setup.
+      ## (build with --build-arg GREENCHCLAW_INSTALL_DOCKER_CLI=1) or use
+      ## scripts/docker/setup.sh with GREENCHCLAW_SANDBOX=1 for automated setup.
       ## Set DOCKER_GID to the host's docker group GID (run: stat -c '%g' /var/run/docker.sock).
       # - /var/run/docker.sock:/var/run/docker.sock
     # group_add:
@@ -58,8 +58,8 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "${NEXISCLAW_GATEWAY_PORT:-19500}:19500"
-      - "${NEXISCLAW_BRIDGE_PORT:-18790}:18790"
+      - "${GREENCHCLAW_GATEWAY_PORT:-18420}:18420"
+      - "${GREENCHCLAW_BRIDGE_PORT:-18790}:18790"
     init: true
     restart: unless-stopped
     command:
@@ -68,9 +68,9 @@ services:
         "dist/index.js",
         "gateway",
         "--bind",
-        "${NEXISCLAW_GATEWAY_BIND:-lan}",
+        "${GREENCHCLAW_GATEWAY_BIND:-lan}",
         "--port",
-        "19500",
+        "18420",
       ]
     healthcheck:
       test:
@@ -78,16 +78,16 @@ services:
           "CMD",
           "node",
           "-e",
-          "fetch('http://127.0.0.1:19500/healthz').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+          "fetch('http://127.0.0.1:18420/healthz').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
         ]
       interval: 30s
       timeout: 5s
       retries: 5
       start_period: 20s
 
-  NexisClaw-cli:
-    image: ${NEXISCLAW_IMAGE:-NexisClaw:local}
-    network_mode: "service:NexisClaw-gateway"
+  GreenchClaw-cli:
+    image: ${GREENCHCLAW_IMAGE:-GreenchClaw:local}
+    network_mode: "service:GreenchClaw-gateway"
     env_file:
       - path: .env
         required: false
@@ -101,22 +101,22 @@ services:
       TERM: xterm-256color
       # Pin container-side workspace and config paths so host values written to
       # `.env` cannot leak into runtime code via the env_file import (#77436).
-      NEXISCLAW_CONFIG_DIR: /home/node/.NexisClaw
-      NEXISCLAW_WORKSPACE_DIR: /home/node/.NexisClaw/workspace
-      NEXISCLAW_GATEWAY_TOKEN: ${NEXISCLAW_GATEWAY_TOKEN:-}
-      NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS: ${NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS:-}
+      GREENCHCLAW_CONFIG_DIR: /home/node/.GreenchClaw
+      GREENCHCLAW_WORKSPACE_DIR: /home/node/.GreenchClaw/workspace
+      GREENCHCLAW_GATEWAY_TOKEN: ${GREENCHCLAW_GATEWAY_TOKEN:-}
+      GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS: ${GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS:-}
       BROWSER: echo
       CLAUDE_AI_SESSION_KEY: ${CLAUDE_AI_SESSION_KEY:-}
       CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY:-}
       CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE:-}
-      TZ: ${NEXISCLAW_TZ:-UTC}
+      TZ: ${GREENCHCLAW_TZ:-UTC}
     volumes:
-      - ${NEXISCLAW_CONFIG_DIR:-${HOME:-/tmp}/.NexisClaw}:/home/node/.NexisClaw
-      - ${NEXISCLAW_WORKSPACE_DIR:-${HOME:-/tmp}/.NexisClaw/workspace}:/home/node/.NexisClaw/workspace
-      - ${NEXISCLAW_AUTH_PROFILE_SECRET_DIR:-${HOME:-/tmp}/.NexisClaw-auth-profile-secrets}:/home/node/.config/NexisClaw
+      - ${GREENCHCLAW_CONFIG_DIR:-${HOME:-/tmp}/.GreenchClaw}:/home/node/.GreenchClaw
+      - ${GREENCHCLAW_WORKSPACE_DIR:-${HOME:-/tmp}/.GreenchClaw/workspace}:/home/node/.GreenchClaw/workspace
+      - ${GREENCHCLAW_AUTH_PROFILE_SECRET_DIR:-${HOME:-/tmp}/.GreenchClaw-auth-profile-secrets}:/home/node/.config/GreenchClaw
     stdin_open: true
     tty: true
     init: true
     entrypoint: ["node", "dist/index.js"]
     depends_on:
-      - NexisClaw-gateway
+      - GreenchClaw-gateway

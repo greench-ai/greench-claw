@@ -5,9 +5,9 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$ROOT_DIR/scripts/lib/docker-e2e-image.sh"
-IMAGE_NAME="$(docker_e2e_resolve_image "NexisClaw-pi-bundle-mcp-tools-e2e" NEXISCLAW_IMAGE)"
-CONTAINER_NAME="NexisClaw-pi-bundle-mcp-tools-e2e-$$"
-RUN_LOG="$(mktemp -t NexisClaw-pi-bundle-mcp-tools-log.XXXXXX)"
+IMAGE_NAME="$(docker_e2e_resolve_image "GreenchClaw-pi-bundle-mcp-tools-e2e" GREENCHCLAW_IMAGE)"
+CONTAINER_NAME="GreenchClaw-pi-bundle-mcp-tools-e2e-$$"
+RUN_LOG="$(mktemp -t GreenchClaw-pi-bundle-mcp-tools-log.XXXXXX)"
 
 cleanup() {
   docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
@@ -16,18 +16,18 @@ cleanup() {
 trap cleanup EXIT
 
 docker_e2e_build_or_reuse "$IMAGE_NAME" pi-bundle-mcp-tools
-NEXISCLAW_TEST_STATE_SCRIPT_B64="$(docker_e2e_test_state_shell_b64 pi-bundle-mcp-tools empty)"
+GREENCHCLAW_TEST_STATE_SCRIPT_B64="$(docker_e2e_test_state_shell_b64 pi-bundle-mcp-tools empty)"
 
 echo "Running in-container Pi bundle MCP tool availability smoke..."
 # Harness files are mounted read-only; the app under test comes from /app/dist.
 set +e
 docker_e2e_run_with_harness \
   --name "$CONTAINER_NAME" \
-  -e "NEXISCLAW_TEST_STATE_SCRIPT_B64=$NEXISCLAW_TEST_STATE_SCRIPT_B64" \
+  -e "GREENCHCLAW_TEST_STATE_SCRIPT_B64=$GREENCHCLAW_TEST_STATE_SCRIPT_B64" \
   "$IMAGE_NAME" \
   bash -lc "set -euo pipefail
-    source scripts/lib/NexisClaw-e2e-instance.sh
-    NexisClaw_e2e_eval_test_state_from_b64 \"\${NEXISCLAW_TEST_STATE_SCRIPT_B64:?missing NEXISCLAW_TEST_STATE_SCRIPT_B64}\"
+    source scripts/lib/GreenchClaw-e2e-instance.sh
+    GreenchClaw_e2e_eval_test_state_from_b64 \"\${GREENCHCLAW_TEST_STATE_SCRIPT_B64:?missing GREENCHCLAW_TEST_STATE_SCRIPT_B64}\"
     tsx scripts/e2e/pi-bundle-mcp-tools-docker-client.ts
   " >"$RUN_LOG" 2>&1
 status=${PIPESTATUS[0]}

@@ -1,5 +1,5 @@
 ---
-summary: "Use OpenShell as a managed sandbox backend for NexisClaw agents"
+summary: "Use OpenShell as a managed sandbox backend for GreenchClaw agents"
 title: OpenShell
 read_when:
   - You want cloud-managed sandboxes instead of local Docker
@@ -7,8 +7,8 @@ read_when:
   - You need to choose between mirror and remote workspace modes
 ---
 
-OpenShell is a managed sandbox backend for NexisClaw. Instead of running Docker
-containers locally, NexisClaw delegates sandbox lifecycle to the `openshell` CLI,
+OpenShell is a managed sandbox backend for GreenchClaw. Instead of running Docker
+containers locally, GreenchClaw delegates sandbox lifecycle to the `openshell` CLI,
 which provisions remote environments with SSH-based command execution.
 
 The OpenShell plugin reuses the same core SSH transport and remote filesystem
@@ -21,7 +21,7 @@ and an optional `mirror` workspace mode.
 - The `openshell` CLI installed and on `PATH` (or set a custom path via
   `plugins.entries.openshell.config.command`)
 - An OpenShell account with sandbox access
-- NexisClaw Gateway running on the host
+- GreenchClaw Gateway running on the host
 
 ## Quick start
 
@@ -44,7 +44,7 @@ and an optional `mirror` workspace mode.
       openshell: {
         enabled: true,
         config: {
-          from: "NexisClaw",
+          from: "GreenchClaw",
           mode: "remote",
         },
       },
@@ -53,14 +53,14 @@ and an optional `mirror` workspace mode.
 }
 ```
 
-2. Restart the Gateway. On the next agent turn, NexisClaw creates an OpenShell
+2. Restart the Gateway. On the next agent turn, GreenchClaw creates an OpenShell
    sandbox and routes tool execution through it.
 
 3. Verify:
 
 ```bash
-NexisClaw sandbox list
-NexisClaw sandbox explain
+GreenchClaw sandbox list
+GreenchClaw sandbox explain
 ```
 
 ## Workspace modes
@@ -74,14 +74,14 @@ workspace to stay canonical**.
 
 Behavior:
 
-- Before `exec`, NexisClaw syncs the local workspace into the OpenShell sandbox.
-- After `exec`, NexisClaw syncs the remote workspace back to the local workspace.
+- Before `exec`, GreenchClaw syncs the local workspace into the OpenShell sandbox.
+- After `exec`, GreenchClaw syncs the remote workspace back to the local workspace.
 - File tools still operate through the sandbox bridge, but the local workspace
   remains the source of truth between turns.
 
 Best for:
 
-- You edit files locally outside NexisClaw and want those changes visible in the
+- You edit files locally outside GreenchClaw and want those changes visible in the
   sandbox automatically.
 - You want the OpenShell sandbox to behave as much like the Docker backend as
   possible.
@@ -96,11 +96,11 @@ Use `plugins.entries.openshell.config.mode: "remote"` when you want the
 
 Behavior:
 
-- When the sandbox is first created, NexisClaw seeds the remote workspace from
+- When the sandbox is first created, GreenchClaw seeds the remote workspace from
   the local workspace once.
 - After that, `exec`, `read`, `write`, `edit`, and `apply_patch` operate
   directly against the remote OpenShell workspace.
-- NexisClaw does **not** sync remote changes back into the local workspace.
+- GreenchClaw does **not** sync remote changes back into the local workspace.
 - Prompt-time media reads still work because file and media tools read through
   the sandbox bridge.
 
@@ -111,7 +111,7 @@ Best for:
 - You do not want host-local edits to silently overwrite remote sandbox state.
 
 <Warning>
-If you edit files on the host outside NexisClaw after the initial seed, the remote sandbox does **not** see those changes. Use `NexisClaw sandbox recreate` to re-seed.
+If you edit files on the host outside GreenchClaw after the initial seed, the remote sandbox does **not** see those changes. Use `GreenchClaw sandbox recreate` to re-seed.
 </Warning>
 
 ### Choosing a mode
@@ -128,20 +128,20 @@ If you edit files on the host outside NexisClaw after the initial seed, the remo
 
 All OpenShell config lives under `plugins.entries.openshell.config`:
 
-| Key                       | Type                     | Default       | Description                                           |
-| ------------------------- | ------------------------ | ------------- | ----------------------------------------------------- |
-| `mode`                    | `"mirror"` or `"remote"` | `"mirror"`    | Workspace sync mode                                   |
-| `command`                 | `string`                 | `"openshell"` | Path or name of the `openshell` CLI                   |
-| `from`                    | `string`                 | `"NexisClaw"`  | Sandbox source for first-time create                  |
-| `gateway`                 | `string`                 | —             | OpenShell gateway name (`--gateway`)                  |
-| `gatewayEndpoint`         | `string`                 | —             | OpenShell gateway endpoint URL (`--gateway-endpoint`) |
-| `policy`                  | `string`                 | —             | OpenShell policy ID for sandbox creation              |
-| `providers`               | `string[]`               | `[]`          | Provider names to attach when sandbox is created      |
-| `gpu`                     | `boolean`                | `false`       | Request GPU resources                                 |
-| `autoProviders`           | `boolean`                | `true`        | Pass `--auto-providers` during sandbox create         |
-| `remoteWorkspaceDir`      | `string`                 | `"/sandbox"`  | Primary writable workspace inside the sandbox         |
-| `remoteAgentWorkspaceDir` | `string`                 | `"/agent"`    | Agent workspace mount path (for read-only access)     |
-| `timeoutSeconds`          | `number`                 | `120`         | Timeout for `openshell` CLI operations                |
+| Key                       | Type                     | Default         | Description                                           |
+| ------------------------- | ------------------------ | --------------- | ----------------------------------------------------- |
+| `mode`                    | `"mirror"` or `"remote"` | `"mirror"`      | Workspace sync mode                                   |
+| `command`                 | `string`                 | `"openshell"`   | Path or name of the `openshell` CLI                   |
+| `from`                    | `string`                 | `"GreenchClaw"` | Sandbox source for first-time create                  |
+| `gateway`                 | `string`                 | —               | OpenShell gateway name (`--gateway`)                  |
+| `gatewayEndpoint`         | `string`                 | —               | OpenShell gateway endpoint URL (`--gateway-endpoint`) |
+| `policy`                  | `string`                 | —               | OpenShell policy ID for sandbox creation              |
+| `providers`               | `string[]`               | `[]`            | Provider names to attach when sandbox is created      |
+| `gpu`                     | `boolean`                | `false`         | Request GPU resources                                 |
+| `autoProviders`           | `boolean`                | `true`          | Pass `--auto-providers` during sandbox create         |
+| `remoteWorkspaceDir`      | `string`                 | `"/sandbox"`    | Primary writable workspace inside the sandbox         |
+| `remoteAgentWorkspaceDir` | `string`                 | `"/agent"`      | Agent workspace mount path (for read-only access)     |
+| `timeoutSeconds`          | `number`                 | `120`           | Timeout for `openshell` CLI operations                |
 
 Sandbox-level settings (`mode`, `scope`, `workspaceAccess`) are configured under
 `agents.defaults.sandbox` as with any backend. See
@@ -166,7 +166,7 @@ Sandbox-level settings (`mode`, `scope`, `workspaceAccess`) are configured under
       openshell: {
         enabled: true,
         config: {
-          from: "NexisClaw",
+          from: "GreenchClaw",
           mode: "remote",
         },
       },
@@ -194,7 +194,7 @@ Sandbox-level settings (`mode`, `scope`, `workspaceAccess`) are configured under
       openshell: {
         enabled: true,
         config: {
-          from: "NexisClaw",
+          from: "GreenchClaw",
           mode: "mirror",
           gpu: true,
           providers: ["openai"],
@@ -231,7 +231,7 @@ Sandbox-level settings (`mode`, `scope`, `workspaceAccess`) are configured under
       openshell: {
         enabled: true,
         config: {
-          from: "NexisClaw",
+          from: "GreenchClaw",
           mode: "remote",
           gateway: "lab",
           gatewayEndpoint: "https://lab.example",
@@ -249,13 +249,13 @@ OpenShell sandboxes are managed through the normal sandbox CLI:
 
 ```bash
 # List all sandbox runtimes (Docker + OpenShell)
-NexisClaw sandbox list
+GreenchClaw sandbox list
 
 # Inspect effective policy
-NexisClaw sandbox explain
+GreenchClaw sandbox explain
 
 # Recreate (deletes remote workspace, re-seeds on next use)
-NexisClaw sandbox recreate --all
+GreenchClaw sandbox recreate --all
 ```
 
 For `remote` mode, **recreate is especially important**: it deletes the canonical
@@ -275,7 +275,7 @@ Recreate after changing any of these:
 - `plugins.entries.openshell.config.policy`
 
 ```bash
-NexisClaw sandbox recreate --all
+GreenchClaw sandbox recreate --all
 ```
 
 ## Security hardening
@@ -293,9 +293,9 @@ the intended remote workspace.
 
 ## How it works
 
-1. NexisClaw calls `openshell sandbox create` (with `--from`, `--gateway`,
+1. GreenchClaw calls `openshell sandbox create` (with `--from`, `--gateway`,
    `--policy`, `--providers`, `--gpu` flags as configured).
-2. NexisClaw calls `openshell sandbox ssh-config <name>` to get SSH connection
+2. GreenchClaw calls `openshell sandbox ssh-config <name>` to get SSH connection
    details for the sandbox.
 3. Core writes the SSH config to a temp file and opens an SSH session using the
    same remote filesystem bridge as the generic SSH backend.
@@ -308,4 +308,4 @@ the intended remote workspace.
 - [Sandboxing](/gateway/sandboxing) -- modes, scopes, and backend comparison
 - [Sandbox vs Tool Policy vs Elevated](/gateway/sandbox-vs-tool-policy-vs-elevated) -- debugging blocked tools
 - [Multi-Agent Sandbox and Tools](/tools/multi-agent-sandbox-tools) -- per-agent overrides
-- [Sandbox CLI](/cli/sandbox) -- `NexisClaw sandbox` commands
+- [Sandbox CLI](/cli/sandbox) -- `GreenchClaw sandbox` commands

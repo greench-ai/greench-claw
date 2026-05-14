@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../../config/config.js";
+import type { GreenchClawConfig } from "../../../config/config.js";
 import type { CodexRuntimePluginInstallResult } from "../../codex-runtime-plugin-install.js";
 import { applyNonInteractivePluginProviderChoice } from "./auth-choice.plugin-providers.js";
 
 const ensureCodexRuntimePluginForModelSelection = vi.hoisted(() =>
   vi.fn(
-    async ({ cfg }: { cfg: NexisClawConfig }): Promise<CodexRuntimePluginInstallResult> => ({
+    async ({ cfg }: { cfg: GreenchClawConfig }): Promise<CodexRuntimePluginInstallResult> => ({
       cfg,
       required: false,
       installed: false,
@@ -100,11 +100,11 @@ describe("applyNonInteractivePluginProviderChoice", () => {
     });
 
     const result = await applyNonInteractivePluginProviderChoice({
-      nextConfig: { agents: { defaults: {} } } as NexisClawConfig,
+      nextConfig: { agents: { defaults: {} } } as GreenchClawConfig,
       authChoice: "provider-plugin:vllm:custom",
       opts: {} as never,
       runtime: runtime as never,
-      baseConfig: { agents: { defaults: {} } } as NexisClawConfig,
+      baseConfig: { agents: { defaults: {} } } as GreenchClawConfig,
       resolveApiKey: vi.fn(),
       toApiKeyCredential: vi.fn(),
     });
@@ -125,11 +125,11 @@ describe("applyNonInteractivePluginProviderChoice", () => {
     const runtime = createRuntime();
 
     const result = await applyNonInteractivePluginProviderChoice({
-      nextConfig: { agents: { defaults: {} } } as NexisClawConfig,
+      nextConfig: { agents: { defaults: {} } } as GreenchClawConfig,
       authChoice: "provider-plugin:workspace-provider:api-key",
       opts: {} as never,
       runtime: runtime as never,
-      baseConfig: { agents: { defaults: {} } } as NexisClawConfig,
+      baseConfig: { agents: { defaults: {} } } as GreenchClawConfig,
       resolveApiKey: vi.fn(),
       toApiKeyCredential: vi.fn(),
     });
@@ -152,11 +152,11 @@ describe("applyNonInteractivePluginProviderChoice", () => {
     } as never);
 
     const result = await applyNonInteractivePluginProviderChoice({
-      nextConfig: { agents: { defaults: {} } } as NexisClawConfig,
+      nextConfig: { agents: { defaults: {} } } as GreenchClawConfig,
       authChoice: "workspace-provider-api-key",
       opts: {} as never,
       runtime: runtime as never,
-      baseConfig: { agents: { defaults: {} } } as NexisClawConfig,
+      baseConfig: { agents: { defaults: {} } } as GreenchClawConfig,
       resolveApiKey: vi.fn(),
       toApiKeyCredential: vi.fn(),
     });
@@ -193,11 +193,11 @@ describe("applyNonInteractivePluginProviderChoice", () => {
     });
 
     const result = await applyNonInteractivePluginProviderChoice({
-      nextConfig: { agents: { defaults: {} } } as NexisClawConfig,
+      nextConfig: { agents: { defaults: {} } } as GreenchClawConfig,
       authChoice: "provider-plugin:demo-provider:custom",
       opts: {} as never,
       runtime: runtime as never,
-      baseConfig: { agents: { defaults: {} } } as NexisClawConfig,
+      baseConfig: { agents: { defaults: {} } } as GreenchClawConfig,
       resolveApiKey: vi.fn(),
       toApiKeyCredential: vi.fn(),
     });
@@ -215,11 +215,11 @@ describe("applyNonInteractivePluginProviderChoice", () => {
     resolvePreferredProviderForAuthChoice.mockResolvedValue(undefined);
 
     await applyNonInteractivePluginProviderChoice({
-      nextConfig: { agents: { defaults: {} } } as NexisClawConfig,
+      nextConfig: { agents: { defaults: {} } } as GreenchClawConfig,
       authChoice: "openai-api-key",
       opts: {} as never,
       runtime: runtime as never,
-      baseConfig: { agents: { defaults: {} } } as NexisClawConfig,
+      baseConfig: { agents: { defaults: {} } } as GreenchClawConfig,
       resolveApiKey: vi.fn(),
       toApiKeyCredential: vi.fn(),
     });
@@ -234,11 +234,11 @@ describe("applyNonInteractivePluginProviderChoice", () => {
     const runtime = createRuntime();
     const selectedConfig = {
       agents: { defaults: { model: { primary: "openai/gpt-5.5" } } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const installedConfig = {
       ...selectedConfig,
       plugins: { entries: { codex: { enabled: true } } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const runNonInteractive = vi.fn(async () => selectedConfig);
     ensureCodexRuntimePluginForModelSelection.mockResolvedValue({
       cfg: installedConfig,
@@ -253,11 +253,11 @@ describe("applyNonInteractivePluginProviderChoice", () => {
     });
 
     const result = await applyNonInteractivePluginProviderChoice({
-      nextConfig: { agents: { defaults: {} } } as NexisClawConfig,
+      nextConfig: { agents: { defaults: {} } } as GreenchClawConfig,
       authChoice: "openai-api-key",
       opts: {} as never,
       runtime: runtime as never,
-      baseConfig: { agents: { defaults: {} } } as NexisClawConfig,
+      baseConfig: { agents: { defaults: {} } } as GreenchClawConfig,
       resolveApiKey: vi.fn(),
       toApiKeyCredential: vi.fn(),
     });

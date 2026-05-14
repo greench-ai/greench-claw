@@ -1,10 +1,10 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { hasConfiguredSecretInput } from "../config/types.secrets.js";
 
 export const EXPLICIT_GATEWAY_AUTH_MODE_REQUIRED_ERROR =
   "Invalid config: gateway.auth.token and gateway.auth.password are both configured, but gateway.auth.mode is unset. Set gateway.auth.mode to token or password.";
 
-export function hasAmbiguousGatewayAuthModeConfig(cfg: NexisClawConfig): boolean {
+export function hasAmbiguousGatewayAuthModeConfig(cfg: GreenchClawConfig): boolean {
   const auth = cfg.gateway?.auth;
   if (!auth) {
     return false;
@@ -18,7 +18,7 @@ export function hasAmbiguousGatewayAuthModeConfig(cfg: NexisClawConfig): boolean
   return tokenConfigured && passwordConfigured;
 }
 
-export function assertExplicitGatewayAuthModeWhenBothConfigured(cfg: NexisClawConfig): void {
+export function assertExplicitGatewayAuthModeWhenBothConfigured(cfg: GreenchClawConfig): void {
   if (!hasAmbiguousGatewayAuthModeConfig(cfg)) {
     return;
   }

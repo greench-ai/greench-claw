@@ -3,7 +3,7 @@ import type {
   ImageGenerationProviderPlugin,
   MediaUnderstandingProviderPlugin,
   MusicGenerationProviderPlugin,
-  NexisClawPluginApi,
+  GreenchClawPluginApi,
   ProviderPlugin,
   RealtimeTranscriptionProviderPlugin,
   SpeechProviderPlugin,
@@ -14,7 +14,7 @@ import type {
 export { createCapturedPluginRegistration };
 
 type RegistrablePlugin = {
-  register(api: NexisClawPluginApi): void;
+  register(api: GreenchClawPluginApi): void;
 };
 
 export type RegisteredProviderCollections = {
@@ -29,7 +29,7 @@ export type RegisteredProviderCollections = {
 };
 
 export async function registerSingleProviderPlugin(params: {
-  register(api: NexisClawPluginApi): void;
+  register(api: GreenchClawPluginApi): void;
 }): Promise<ProviderPlugin> {
   const captured = createCapturedPluginRegistration();
   params.register(captured.api);

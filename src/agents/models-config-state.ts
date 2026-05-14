@@ -1,4 +1,4 @@
-const MODELS_JSON_STATE_KEY = Symbol.for("NexisClaw.modelsJsonState");
+const MODELS_JSON_STATE_KEY = Symbol.for("GreenchClaw.modelsJsonState");
 
 type ModelsJsonState = {
   writeLocks: Map<string, Promise<void>>;

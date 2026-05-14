@@ -2,7 +2,7 @@
 summary: "Together AI setup (auth + model selection)"
 title: "Together AI"
 read_when:
-  - You want to use Together AI with NexisClaw
+  - You want to use Together AI with GreenchClaw
   - You need the API key env var or CLI auth choice
 ---
 
@@ -25,7 +25,7 @@ models including Llama, DeepSeek, Kimi, and more through a unified API.
   </Step>
   <Step title="Run onboarding">
     ```bash
-    NexisClaw onboard --auth-choice together-api-key
+    GreenchClaw onboard --auth-choice together-api-key
     ```
   </Step>
   <Step title="Set a default model">
@@ -44,7 +44,7 @@ models including Llama, DeepSeek, Kimi, and more through a unified API.
 ### Non-interactive example
 
 ```bash
-NexisClaw onboard --non-interactive \
+GreenchClaw onboard --non-interactive \
   --mode local \
   --auth-choice together-api-key \
   --together-api-key "$TOGETHER_API_KEY"
@@ -57,7 +57,7 @@ model.
 
 ## Built-in catalog
 
-NexisClaw ships this bundled Together catalog:
+GreenchClaw ships this bundled Together catalog:
 
 | Model ref                                                    | Name                                   | Input       | Context    | Notes                            |
 | ------------------------------------------------------------ | -------------------------------------- | ----------- | ---------- | -------------------------------- |
@@ -104,18 +104,18 @@ provider selection, and failover behavior.
   <Accordion title="Environment note">
     If the Gateway runs as a daemon (launchd/systemd), make sure
     `TOGETHER_API_KEY` is available to that process (for example, in
-    `~/.NexisClaw/.env` or via `env.shellEnv`).
+    `~/.GreenchClaw/.env` or via `env.shellEnv`).
 
     <Warning>
     Keys set only in your interactive shell are not visible to daemon-managed
-    gateway processes. Use `~/.NexisClaw/.env` or `env.shellEnv` config for
+    gateway processes. Use `~/.GreenchClaw/.env` or `env.shellEnv` config for
     persistent availability.
     </Warning>
 
   </Accordion>
 
   <Accordion title="Troubleshooting">
-    - Verify your key works: `NexisClaw models list --provider together`
+    - Verify your key works: `GreenchClaw models list --provider together`
     - If models are not appearing, confirm the API key is set in the correct
       environment for your Gateway process.
     - Model refs use the form `together/<model-id>`.

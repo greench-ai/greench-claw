@@ -88,7 +88,7 @@ export function buildPluginSdkEntrySources(entries: readonly string[] = pluginSd
 /** List the public package specifiers that should resolve to plugin SDK entrypoints. */
 export function buildPluginSdkSpecifiers() {
   return publicPluginSdkEntrypoints.map((entry) =>
-    entry === "index" ? "NexisClaw/plugin-sdk" : `NexisClaw/plugin-sdk/${entry}`,
+    entry === "index" ? "GreenchClaw/plugin-sdk" : `GreenchClaw/plugin-sdk/${entry}`,
   );
 }
 

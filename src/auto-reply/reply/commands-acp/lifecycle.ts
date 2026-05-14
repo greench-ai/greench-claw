@@ -32,7 +32,7 @@ import {
 } from "../../../channels/thread-bindings-policy.js";
 import { updateSessionStore } from "../../../config/sessions.js";
 import type { SessionAcpMeta } from "../../../config/sessions/types.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../../../infra/errors.js";
 import { normalizeConversationRef } from "../../../infra/outbound/session-binding-normalization.js";
 import {
@@ -99,7 +99,7 @@ async function resolveBoundReplyPayload(params: {
 }
 
 function buildSpawnedAcpBindingMetadata(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: string;
   accountId: string;
   sessionKey: string;
@@ -143,7 +143,7 @@ async function bindSpawnedAcpSession(params: {
   sessionKey: string;
   conversationRef: ConversationRef;
   placement: SessionBindingPlacement;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel: string;
   accountId: string;
   agentId: string;
@@ -431,7 +431,7 @@ async function bindSpawnedAcpSessionToThread(params: {
 }
 
 async function cleanupFailedSpawn(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   shouldDeleteSession: boolean;
   initializedRuntime?: AcpSpawnRuntimeCloseHandle;
@@ -650,7 +650,7 @@ export async function handleAcpSpawnAction(
 
 function resolveAcpSessionForCommandOrStop(params: {
   acpManager: ReturnType<typeof getAcpSessionManager>;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
 }): CommandHandlerResult | null {
   const resolved = params.acpManager.resolveSession({
@@ -738,7 +738,7 @@ export async function handleAcpCancelAction(
 }
 
 async function runAcpSteer(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   instruction: string;
   requestId: string;

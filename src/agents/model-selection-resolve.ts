@@ -1,5 +1,5 @@
 import { resolveAgentModelFallbackValues } from "../config/model-input.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { ModelCatalogEntry } from "./model-catalog.types.js";
 import type { ModelRef } from "./model-selection-normalize.js";
 import {
@@ -19,12 +19,12 @@ export {
 } from "./model-selection-shared.js";
 export type { ModelRefStatus } from "./model-selection-shared.js";
 
-function resolveDefaultFallbackModels(cfg: NexisClawConfig): string[] {
+function resolveDefaultFallbackModels(cfg: GreenchClawConfig): string[] {
   return resolveAgentModelFallbackValues(cfg.agents?.defaults?.model);
 }
 
 export function getModelRefStatus(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   catalog: ModelCatalogEntry[];
   ref: ModelRef;
   defaultProvider: string;
@@ -42,7 +42,7 @@ export function getModelRefStatus(params: {
 }
 
 export function resolveAllowedModelRef(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   catalog: ModelCatalogEntry[];
   raw: string;
   defaultProvider: string;

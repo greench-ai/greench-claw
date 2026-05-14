@@ -37,7 +37,7 @@ export {
   normalizeAccountId,
   normalizeResolvedSecretInputString,
   normalizeSecretInputString,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   type OutboundReplyPayload,
   PAIRING_APPROVED_MESSAGE,
   type PluginRuntime,

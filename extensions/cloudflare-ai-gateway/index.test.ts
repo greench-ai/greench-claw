@@ -1,5 +1,5 @@
 import type { StreamFn } from "@earendil-works/pi-agent-core";
-import { capturePluginRegistration } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+import { capturePluginRegistration } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 

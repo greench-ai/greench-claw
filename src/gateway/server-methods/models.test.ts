@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { ErrorCodes } from "../protocol/index.js";
 import { modelsHandlers } from "./models.js";
 
@@ -53,7 +53,7 @@ describe("models.list", () => {
                 },
               },
             };
-            return config as unknown as NexisClawConfig;
+            return config as unknown as GreenchClawConfig;
           },
           loadGatewayModelCatalog,
           logGateway: {
@@ -103,7 +103,7 @@ describe("models.list", () => {
         client: null,
         isWebchatConnect: () => false,
         context: {
-          getRuntimeConfig: () => ({}) as NexisClawConfig,
+          getRuntimeConfig: () => ({}) as GreenchClawConfig,
           loadGatewayModelCatalog,
           logGateway: {
             debug: vi.fn(),
@@ -151,7 +151,7 @@ describe("models.list", () => {
           vllm: { apiKey: "test-key" },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
 
     const configuredRespond = vi.fn();
     const loadConfiguredCatalog = vi.fn(() => Promise.resolve(catalog));
@@ -228,7 +228,7 @@ describe("models.list", () => {
       client: null,
       isWebchatConnect: () => false,
       context: {
-        getRuntimeConfig: () => ({}) as NexisClawConfig,
+        getRuntimeConfig: () => ({}) as GreenchClawConfig,
         loadGatewayModelCatalog: vi.fn(() => Promise.reject(new Error("catalog failed"))),
         logGateway: {
           debug: vi.fn(),

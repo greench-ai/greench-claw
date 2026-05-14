@@ -1,37 +1,37 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source scripts/lib/NexisClaw-e2e-instance.sh
+source scripts/lib/GreenchClaw-e2e-instance.sh
 
-NexisClaw_e2e_eval_test_state_from_b64 "${NEXISCLAW_TEST_STATE_SCRIPT_B64:?missing NEXISCLAW_TEST_STATE_SCRIPT_B64}"
-NexisClaw_e2e_install_package /tmp/NexisClaw-install.log "mounted NexisClaw package" /tmp/npm-prefix
+GreenchClaw_e2e_eval_test_state_from_b64 "${GREENCHCLAW_TEST_STATE_SCRIPT_B64:?missing GREENCHCLAW_TEST_STATE_SCRIPT_B64}"
+GreenchClaw_e2e_install_package /tmp/GreenchClaw-install.log "mounted GreenchClaw package" /tmp/npm-prefix
 
-package_root="$(NexisClaw_e2e_package_root /tmp/npm-prefix)"
-entry="$(NexisClaw_e2e_package_entrypoint "$package_root")"
+package_root="$(GreenchClaw_e2e_package_root /tmp/npm-prefix)"
+entry="$(GreenchClaw_e2e_package_entrypoint "$package_root")"
 probe="scripts/e2e/lib/plugin-update/probe.mjs"
 package_version="$(node -p "require('$package_root/package.json').version")"
-NEXISCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT="$(node "$probe" legacy-compat "$package_version")"
-export NEXISCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT
+GREENCHCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT="$(node "$probe" legacy-compat "$package_version")"
+export GREENCHCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT
 export NPM_CONFIG_REGISTRY=http://127.0.0.1:4873
 export PATH="/tmp/npm-prefix/bin:$PATH"
 
 node "$probe" seed
 
-node scripts/e2e/lib/plugin-update/registry-server.mjs >/tmp/NexisClaw-e2e-registry.log 2>&1 &
+node scripts/e2e/lib/plugin-update/registry-server.mjs >/tmp/GreenchClaw-e2e-registry.log 2>&1 &
 registry_pid=$!
 trap 'kill "$registry_pid" >/dev/null 2>&1 || true' EXIT
 
 if ! node "$probe" wait-registry; then
   echo "Local npm metadata registry failed to start"
-  cat /tmp/NexisClaw-e2e-registry.log || true
+  cat /tmp/GreenchClaw-e2e-registry.log || true
   exit 1
 fi
 
 before_config_hash=""
-if [ "$NEXISCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT" != "1" ]; then
-  before_config_hash="$(sha256sum "$NEXISCLAW_CONFIG_PATH" | awk '{print $1}')"
+if [ "$GREENCHCLAW_PACKAGE_ACCEPTANCE_LEGACY_COMPAT" != "1" ]; then
+  before_config_hash="$(sha256sum "$GREENCHCLAW_CONFIG_PATH" | awk '{print $1}')"
 fi
-plugin_update_timeout_seconds="${NEXISCLAW_PLUGIN_UPDATE_TIMEOUT_SECONDS:-180}"
+plugin_update_timeout_seconds="${GREENCHCLAW_PLUGIN_UPDATE_TIMEOUT_SECONDS:-180}"
 
 node "$probe" snapshot > /tmp/plugin-update-before.json
 
@@ -44,12 +44,12 @@ if [ "$plugin_update_status" -ne 0 ]; then
   echo "--- plugin update output ---"
   cat /tmp/plugin-update-output.log || true
   echo "--- local registry output ---"
-  cat /tmp/NexisClaw-e2e-registry.log || true
+  cat /tmp/GreenchClaw-e2e-registry.log || true
   exit "$plugin_update_status"
 fi
 
 if [ -n "$before_config_hash" ]; then
-  after_config_hash="$(sha256sum "$NEXISCLAW_CONFIG_PATH" | awk '{print $1}')"
+  after_config_hash="$(sha256sum "$GREENCHCLAW_CONFIG_PATH" | awk '{print $1}')"
   if [ "$before_config_hash" != "$after_config_hash" ]; then
     echo "Config changed unexpectedly for modern package $package_version"
     cat /tmp/plugin-update-output.log

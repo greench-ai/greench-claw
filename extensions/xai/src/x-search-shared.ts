@@ -1,4 +1,7 @@
-import { postTrustedWebToolsJson, wrapWebContent } from "NexisClaw/plugin-sdk/provider-web-search";
+import {
+  postTrustedWebToolsJson,
+  wrapWebContent,
+} from "GreenchClaw/plugin-sdk/provider-web-search";
 import {
   buildXaiResponsesToolBody,
   resolveXaiResponseTextCitationsAndInline,

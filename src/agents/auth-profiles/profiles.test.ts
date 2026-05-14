@@ -123,7 +123,7 @@ function expectOAuthCredentialFields(
   return credential;
 }
 
-function expectNexisClawCredentialsOAuthRef(
+function expectGreenchClawCredentialsOAuthRef(
   credential: Record<string, unknown>,
   provider: string,
 ): void {
@@ -132,17 +132,17 @@ function expectNexisClawCredentialsOAuthRef(
     throw new Error("Expected OAuth credential ref");
   }
   const ref = oauthRef as Record<string, unknown>;
-  expect(ref.source).toBe("NexisClaw-credentials");
+  expect(ref.source).toBe("GreenchClaw-credentials");
   expect(ref.provider).toBe(provider);
   expectOAuthProfileRefId(ref.id);
 }
 
 describe("promoteAuthProfileInOrder", () => {
   it("omits inline openai-codex oauth secrets from persisted auth profile files", () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profile-metadata-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-profile-metadata-"));
     const agentDir = path.join(stateDir, "agents", "main", "agent");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai-codex:default";
@@ -173,7 +173,7 @@ describe("promoteAuthProfileInOrder", () => {
       };
       const credential = persisted.profiles[profileId];
 
-      expectNexisClawCredentialsOAuthRef(
+      expectGreenchClawCredentialsOAuthRef(
         expectOAuthCredentialFields(credential, {
           provider: "openai-codex",
           expires,
@@ -206,21 +206,21 @@ describe("promoteAuthProfileInOrder", () => {
       );
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
   });
 
   it("requires the external oauth profile secret key to recover persisted token material", () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profile-keyed-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-profile-keyed-"));
     const agentDir = path.join(stateDir, "agents", "main", "agent");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    const previousSecretKey = process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
-    process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY = "correct-profile-secret-key";
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    const previousSecretKey = process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
+    process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY = "correct-profile-secret-key";
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai-codex:default";
@@ -246,7 +246,7 @@ describe("promoteAuthProfileInOrder", () => {
       expect(persistedStateTree).not.toContain("keyed-access-token");
       expect(persistedStateTree).not.toContain("keyed-refresh-token");
 
-      process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY = "wrong-profile-secret-key";
+      process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY = "wrong-profile-secret-key";
       clearRuntimeAuthProfileStoreSnapshots();
       {
         const credential = loadAuthProfileStoreWithoutExternalProfiles(agentDir).profiles[
@@ -256,7 +256,7 @@ describe("promoteAuthProfileInOrder", () => {
         expect(credential?.refresh).not.toBe("keyed-refresh-token");
       }
 
-      process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY = "correct-profile-secret-key";
+      process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY = "correct-profile-secret-key";
       clearRuntimeAuthProfileStoreSnapshots();
       expectOAuthCredentialFields(
         loadAuthProfileStoreWithoutExternalProfiles(agentDir).profiles[profileId],
@@ -268,41 +268,41 @@ describe("promoteAuthProfileInOrder", () => {
       );
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       if (previousSecretKey === undefined) {
-        delete process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+        delete process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
       } else {
-        process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
+        process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
       }
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
   });
 
   it("does not create fallback oauth key files under the Vitest NODE_ENV test harness", () => {
-    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profile-test-key-"));
+    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-profile-test-key-"));
     const stateDir = path.join(rootDir, "state");
     const agentDir = path.join(stateDir, "agents", "main", "agent");
     const homeDir = path.join(rootDir, "home");
     const configDir = path.join(rootDir, "config");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    const previousSecretKey = process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    const previousSecretKey = process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
     const previousNodeEnv = process.env.NODE_ENV;
     const previousVitest = process.env.VITEST;
     const previousHome = process.env.HOME;
     const previousXdgConfigHome = process.env.XDG_CONFIG_HOME;
     const previousAppData = process.env.APPDATA;
     const previousUserProfile = process.env.USERPROFILE;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     process.env.NODE_ENV = "test";
     process.env.VITEST = "true";
     process.env.HOME = homeDir;
     process.env.XDG_CONFIG_HOME = configDir;
     process.env.APPDATA = configDir;
     process.env.USERPROFILE = homeDir;
-    delete process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+    delete process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai-codex:default";
@@ -335,14 +335,14 @@ describe("promoteAuthProfileInOrder", () => {
       );
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       if (previousSecretKey === undefined) {
-        delete process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+        delete process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
       } else {
-        process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
+        process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
       }
       if (previousNodeEnv === undefined) {
         delete process.env.NODE_ENV;
@@ -379,27 +379,29 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("does not use the hardcoded oauth key for NODE_ENV test outside the harness", () => {
-    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profile-node-env-test-"));
+    const rootDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "GreenchClaw-auth-profile-node-env-test-"),
+    );
     const stateDir = path.join(rootDir, "state");
     const agentDir = path.join(stateDir, "agents", "main", "agent");
     const homeDir = path.join(rootDir, "home");
     const configDir = path.join(rootDir, "config");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    const previousSecretKey = process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    const previousSecretKey = process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
     const previousNodeEnv = process.env.NODE_ENV;
     const previousVitest = process.env.VITEST;
     const previousHome = process.env.HOME;
     const previousXdgConfigHome = process.env.XDG_CONFIG_HOME;
     const previousAppData = process.env.APPDATA;
     const previousUserProfile = process.env.USERPROFILE;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     process.env.NODE_ENV = "test";
     delete process.env.VITEST;
     process.env.HOME = homeDir;
     process.env.XDG_CONFIG_HOME = configDir;
     process.env.APPDATA = configDir;
     process.env.USERPROFILE = homeDir;
-    delete process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+    delete process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai-codex:default";
@@ -433,14 +435,14 @@ describe("promoteAuthProfileInOrder", () => {
       );
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       if (previousSecretKey === undefined) {
-        delete process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+        delete process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
       } else {
-        process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
+        process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
       }
       if (previousNodeEnv === undefined) {
         delete process.env.NODE_ENV;
@@ -477,24 +479,24 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("persists production oauth profiles on non-macOS without an env secret key", () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profile-prod-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-profile-prod-"));
     const agentDir = path.join(stateDir, "agents", "main", "agent");
     const homeDir = path.join(path.dirname(stateDir), "home");
     const configDir = path.join(path.dirname(stateDir), "external-config");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    const previousSecretKey = process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    const previousSecretKey = process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
     const previousNodeEnv = process.env.NODE_ENV;
     const previousHome = process.env.HOME;
     const previousXdgConfigHome = process.env.XDG_CONFIG_HOME;
     const previousAppData = process.env.APPDATA;
     const previousUserProfile = process.env.USERPROFILE;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     process.env.NODE_ENV = "production";
     process.env.HOME = homeDir;
     process.env.XDG_CONFIG_HOME = configDir;
     process.env.APPDATA = configDir;
     process.env.USERPROFILE = homeDir;
-    delete process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+    delete process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai-codex:default";
@@ -530,14 +532,14 @@ describe("promoteAuthProfileInOrder", () => {
       );
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       if (previousSecretKey === undefined) {
-        delete process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+        delete process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
       } else {
-        process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
+        process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
       }
       if (previousNodeEnv === undefined) {
         delete process.env.NODE_ENV;
@@ -571,25 +573,25 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("keeps fallback oauth key material outside an overlapping state tree", () => {
-    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profile-overlap-"));
+    const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-profile-overlap-"));
     const configDir = path.join(rootDir, "config");
-    const stateDir = path.join(configDir, "NexisClaw");
+    const stateDir = path.join(configDir, "GreenchClaw");
     const homeDir = path.join(rootDir, "home");
     const agentDir = path.join(stateDir, "agents", "main", "agent");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    const previousSecretKey = process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    const previousSecretKey = process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
     const previousNodeEnv = process.env.NODE_ENV;
     const previousHome = process.env.HOME;
     const previousXdgConfigHome = process.env.XDG_CONFIG_HOME;
     const previousAppData = process.env.APPDATA;
     const previousUserProfile = process.env.USERPROFILE;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     process.env.NODE_ENV = "production";
     process.env.HOME = homeDir;
     process.env.XDG_CONFIG_HOME = configDir;
     process.env.APPDATA = configDir;
     process.env.USERPROFILE = homeDir;
-    delete process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+    delete process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai-codex:default";
@@ -612,7 +614,7 @@ describe("promoteAuthProfileInOrder", () => {
 
       const keyPaths = findFilesNamed(rootDir, "auth-profile-secret-key");
       expect(keyPaths).toEqual([
-        path.join(homeDir, ".NexisClaw-auth-profile-secrets", "auth-profile-secret-key"),
+        path.join(homeDir, ".GreenchClaw-auth-profile-secrets", "auth-profile-secret-key"),
       ]);
       expect(keyPaths.every((keyPath) => !isPathInsideOrEqual(stateDir, keyPath))).toBe(true);
       const keyValues = keyPaths.map((keyPath) => fs.readFileSync(keyPath, "utf8").trim());
@@ -624,14 +626,14 @@ describe("promoteAuthProfileInOrder", () => {
       }
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       if (previousSecretKey === undefined) {
-        delete process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+        delete process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
       } else {
-        process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
+        process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
       }
       if (previousNodeEnv === undefined) {
         delete process.env.NODE_ENV;
@@ -663,12 +665,12 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("adopts an atomically-created fallback oauth key when another writer wins creation", () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profile-key-race-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-profile-key-race-"));
     const agentDir = path.join(stateDir, "agents", "main", "agent");
     const homeDir = path.join(path.dirname(stateDir), "home");
     const configDir = path.join(path.dirname(stateDir), "external-config");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    const previousSecretKey = process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    const previousSecretKey = process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
     const previousNodeEnv = process.env.NODE_ENV;
     const previousHome = process.env.HOME;
     const previousXdgConfigHome = process.env.XDG_CONFIG_HOME;
@@ -699,13 +701,13 @@ describe("promoteAuthProfileInOrder", () => {
       }
       return originalOpenSync(file, flags, mode);
     });
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     process.env.NODE_ENV = "production";
     process.env.HOME = homeDir;
     process.env.XDG_CONFIG_HOME = configDir;
     process.env.APPDATA = configDir;
     process.env.USERPROFILE = homeDir;
-    delete process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+    delete process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai-codex:default";
@@ -739,14 +741,14 @@ describe("promoteAuthProfileInOrder", () => {
     } finally {
       openSpy.mockRestore();
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       if (previousSecretKey === undefined) {
-        delete process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+        delete process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
       } else {
-        process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
+        process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
       }
       if (previousNodeEnv === undefined) {
         delete process.env.NODE_ENV;
@@ -780,10 +782,12 @@ describe("promoteAuthProfileInOrder", () => {
   });
 
   it("preserves access-only openai-codex oauth credentials when persisting refs", () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profile-access-only-"));
+    const stateDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "GreenchClaw-auth-profile-access-only-"),
+    );
     const agentDir = path.join(stateDir, "agents", "main", "agent");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai-codex:default";
@@ -808,7 +812,7 @@ describe("promoteAuthProfileInOrder", () => {
         profiles: Record<string, Record<string, unknown>>;
       };
       const credential = persisted.profiles[profileId];
-      expectNexisClawCredentialsOAuthRef(
+      expectGreenchClawCredentialsOAuthRef(
         expectOAuthCredentialFields(credential, {
           provider: "openai-codex",
           expires,
@@ -829,19 +833,19 @@ describe("promoteAuthProfileInOrder", () => {
       );
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
   });
 
   it("removes detached openai-codex oauth secrets when profiles are deleted", () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profile-delete-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-profile-delete-"));
     const agentDir = path.join(stateDir, "agents", "main", "agent");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai-codex:default";
@@ -885,20 +889,20 @@ describe("promoteAuthProfileInOrder", () => {
       expect(fs.readFileSync(resolveAuthStorePath(agentDir), "utf8")).not.toContain(profileId);
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
   });
 
   it("regenerates openai-codex oauth refs for copied profile save targets", () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profile-copy-ref-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-profile-copy-ref-"));
     const mainAgentDir = path.join(stateDir, "agents", "main", "agent");
     const copiedAgentDir = path.join(stateDir, "agents", "copied", "agent");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     try {
       fs.mkdirSync(mainAgentDir, { recursive: true });
       fs.mkdirSync(copiedAgentDir, { recursive: true });
@@ -970,20 +974,20 @@ describe("promoteAuthProfileInOrder", () => {
       );
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
   });
 
   it("does not rewrite inline openai-codex oauth secrets from read-only lookup paths", () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profile-readonly-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-profile-readonly-"));
     const agentDir = path.join(stateDir, "agents", "main", "agent");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    const previousReadOnly = process.env.NEXISCLAW_AUTH_STORE_READONLY;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    const previousReadOnly = process.env.GREENCHCLAW_AUTH_STORE_READONLY;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai-codex:default";
@@ -1016,7 +1020,7 @@ describe("promoteAuthProfileInOrder", () => {
       });
       expect(fs.readFileSync(resolveAuthStorePath(agentDir), "utf8")).toBe(before);
 
-      process.env.NEXISCLAW_AUTH_STORE_READONLY = "1";
+      process.env.GREENCHCLAW_AUTH_STORE_READONLY = "1";
       clearRuntimeAuthProfileStoreSnapshots();
       expectOAuthCredentialFields(
         loadAuthProfileStoreForRuntime(agentDir, { externalCli: { mode: "none" } }).profiles[
@@ -1031,14 +1035,14 @@ describe("promoteAuthProfileInOrder", () => {
       expect(fs.readFileSync(resolveAuthStorePath(agentDir), "utf8")).toBe(before);
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       if (previousReadOnly === undefined) {
-        delete process.env.NEXISCLAW_AUTH_STORE_READONLY;
+        delete process.env.GREENCHCLAW_AUTH_STORE_READONLY;
       } else {
-        process.env.NEXISCLAW_AUTH_STORE_READONLY = previousReadOnly;
+        process.env.GREENCHCLAW_AUTH_STORE_READONLY = previousReadOnly;
       }
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
@@ -1046,14 +1050,14 @@ describe("promoteAuthProfileInOrder", () => {
 
   it("does not repair legacy openai-codex oauth sidecars from read-only lookup paths", () => {
     const stateDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), "NexisClaw-auth-profile-readonly-sidecar-"),
+      path.join(os.tmpdir(), "GreenchClaw-auth-profile-readonly-sidecar-"),
     );
     const agentDir = path.join(stateDir, "agents", "main", "agent");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    const previousSecretKey = process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
-    const previousReadOnly = process.env.NEXISCLAW_AUTH_STORE_READONLY;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
-    process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY = "readonly-sidecar-secret-key";
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    const previousSecretKey = process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
+    const previousReadOnly = process.env.GREENCHCLAW_AUTH_STORE_READONLY;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
+    process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY = "readonly-sidecar-secret-key";
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai-codex:default";
@@ -1089,7 +1093,7 @@ describe("promoteAuthProfileInOrder", () => {
       )}\n`;
       fs.writeFileSync(secretPath, legacySidecar, "utf8");
 
-      process.env.NEXISCLAW_AUTH_STORE_READONLY = "1";
+      process.env.GREENCHCLAW_AUTH_STORE_READONLY = "1";
       clearRuntimeAuthProfileStoreSnapshots();
       expectOAuthCredentialFields(
         loadAuthProfileStoreForRuntime(agentDir, {
@@ -1105,29 +1109,29 @@ describe("promoteAuthProfileInOrder", () => {
       expect(fs.readFileSync(secretPath, "utf8")).toBe(legacySidecar);
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       if (previousSecretKey === undefined) {
-        delete process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY;
+        delete process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY;
       } else {
-        process.env.NEXISCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
+        process.env.GREENCHCLAW_AUTH_PROFILE_SECRET_KEY = previousSecretKey;
       }
       if (previousReadOnly === undefined) {
-        delete process.env.NEXISCLAW_AUTH_STORE_READONLY;
+        delete process.env.GREENCHCLAW_AUTH_STORE_READONLY;
       } else {
-        process.env.NEXISCLAW_AUTH_STORE_READONLY = previousReadOnly;
+        process.env.GREENCHCLAW_AUTH_STORE_READONLY = previousReadOnly;
       }
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
   });
 
   it("rewrites existing inline openai-codex oauth secrets during runtime load", () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-profile-rewrite-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-profile-rewrite-"));
     const agentDir = path.join(stateDir, "agents", "main", "agent");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const profileId = "openai-codex:default";
@@ -1174,7 +1178,7 @@ describe("promoteAuthProfileInOrder", () => {
         order?: Record<string, string[]>;
       };
       const credential = persisted.profiles[profileId];
-      expectNexisClawCredentialsOAuthRef(
+      expectGreenchClawCredentialsOAuthRef(
         expectOAuthCredentialFields(credential, {
           provider: "openai-codex",
           expires,
@@ -1203,9 +1207,9 @@ describe("promoteAuthProfileInOrder", () => {
       );
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
@@ -1213,11 +1217,11 @@ describe("promoteAuthProfileInOrder", () => {
 
   it("does not rewrite inline openai-codex oauth secrets while the auth store lock is held", () => {
     const stateDir = fs.mkdtempSync(
-      path.join(os.tmpdir(), "NexisClaw-auth-profile-locked-rewrite-"),
+      path.join(os.tmpdir(), "GreenchClaw-auth-profile-locked-rewrite-"),
     );
     const agentDir = path.join(stateDir, "agents", "main", "agent");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     let lockFd: number | undefined;
     try {
       fs.mkdirSync(agentDir, { recursive: true });
@@ -1270,19 +1274,19 @@ describe("promoteAuthProfileInOrder", () => {
         fs.rmSync(resolveAuthStoreLockPath(resolveAuthStorePath(agentDir)), { force: true });
       }
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       fs.rmSync(stateDir, { recursive: true, force: true });
     }
   });
 
   it("moves a relogin profile to the front of an existing per-agent provider order", async () => {
-    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-auth-order-promote-"));
+    const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-auth-order-promote-"));
     const agentDir = path.join(stateDir, "agents", "main", "agent");
-    const previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    const previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
     try {
       fs.mkdirSync(agentDir, { recursive: true });
       const newProfileId = "openai-codex:bunsthedev@gmail.com";
@@ -1326,9 +1330,9 @@ describe("promoteAuthProfileInOrder", () => {
       ]);
     } finally {
       if (previousStateDir === undefined) {
-        delete process.env.NEXISCLAW_STATE_DIR;
+        delete process.env.GREENCHCLAW_STATE_DIR;
       } else {
-        process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+        process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
       }
       fs.rmSync(stateDir, { recursive: true, force: true });
     }

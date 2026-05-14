@@ -1,8 +1,8 @@
 import {
   registerSingleProviderPlugin,
   resolveProviderPluginChoice,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { resolveProviderAuthEnvVarCandidates } from "NexisClaw/plugin-sdk/provider-env-vars";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { resolveProviderAuthEnvVarCandidates } from "GreenchClaw/plugin-sdk/provider-env-vars";
 import { describe, expect, it } from "vitest";
 import { runSingleProviderCatalog } from "../test-support/provider-model-test-helpers.js";
 import arceePlugin from "./index.js";

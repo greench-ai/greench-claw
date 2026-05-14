@@ -3,9 +3,9 @@ import path from "node:path";
 import {
   findExistingAncestor,
   pathScope as sdkPathScope,
-} from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/security-runtime";
 
-export { createSubsystemLogger } from "NexisClaw/plugin-sdk/logging-core";
+export { createSubsystemLogger } from "GreenchClaw/plugin-sdk/logging-core";
 export {
   ensurePortAvailable,
   extractErrorCode,
@@ -32,8 +32,8 @@ export {
   writeExternalFileWithinRoot,
   writeViaSiblingTempPath,
   wrapExternalContent,
-} from "NexisClaw/plugin-sdk/security-runtime";
-export type { LookupFn, SsrFPolicy } from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/security-runtime";
+export type { LookupFn, SsrFPolicy } from "GreenchClaw/plugin-sdk/security-runtime";
 
 export async function ensureAbsoluteDirectory(
   dirPath: string,

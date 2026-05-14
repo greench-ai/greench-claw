@@ -1,5 +1,5 @@
 import { resolveConfigPath, resolveGatewayPort } from "../config/paths.js";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
 import { isSecureWebSocketUrl } from "./net.js";
 
@@ -12,14 +12,14 @@ export type GatewayConnectionDetails = {
 };
 
 type GatewayConnectionDetailResolvers = {
-  getRuntimeConfig?: () => NexisClawConfig;
+  getRuntimeConfig?: () => GreenchClawConfig;
   resolveConfigPath?: (env: NodeJS.ProcessEnv) => string;
-  resolveGatewayPort?: (cfg?: NexisClawConfig, env?: NodeJS.ProcessEnv) => number;
+  resolveGatewayPort?: (cfg?: GreenchClawConfig, env?: NodeJS.ProcessEnv) => number;
 };
 
 export function buildGatewayConnectionDetailsWithResolvers(
   options: {
-    config?: NexisClawConfig;
+    config?: GreenchClawConfig;
     url?: string;
     configPath?: string;
     urlSource?: "cli" | "env";
@@ -44,7 +44,7 @@ export function buildGatewayConnectionDetailsWithResolvers(
   const envUrlOverride =
     cliUrlOverride || options.ignoreEnvUrlOverride
       ? undefined
-      : normalizeOptionalString(process.env.NEXISCLAW_GATEWAY_URL);
+      : normalizeOptionalString(process.env.GREENCHCLAW_GATEWAY_URL);
   const urlOverride = cliUrlOverride ?? envUrlOverride;
   const remoteUrl = normalizeOptionalString(remote?.url);
   const remoteMisconfigured = isRemoteMode && !urlOverride && !remoteUrl;
@@ -53,7 +53,7 @@ export function buildGatewayConnectionDetailsWithResolvers(
   const url = urlOverride || remoteUrl || localUrl;
   const urlSource = urlOverride
     ? urlSourceHint === "env"
-      ? "env NEXISCLAW_GATEWAY_URL"
+      ? "env GREENCHCLAW_GATEWAY_URL"
       : "cli --url"
     : remoteUrl
       ? "config gateway.remote.url"
@@ -65,7 +65,7 @@ export function buildGatewayConnectionDetailsWithResolvers(
     ? "Warn: gateway.mode=remote but gateway.remote.url is missing; set gateway.remote.url or switch gateway.mode=local."
     : undefined;
 
-  const allowPrivateWs = process.env.NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS === "1";
+  const allowPrivateWs = process.env.GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS === "1";
   if (!isSecureWebSocketUrl(url, { allowPrivateWs })) {
     throw new Error(
       [
@@ -79,9 +79,9 @@ export function buildGatewayConnectionDetailsWithResolvers(
         "- or use Tailscale Serve/Funnel for HTTPS remote access",
         allowPrivateWs
           ? undefined
-          : "Break-glass (trusted private networks only): set NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1",
-        "Doctor: NexisClaw doctor --fix",
-        "Docs: https://docs.NexisClaw.ai/gateway/remote",
+          : "Break-glass (trusted private networks only): set GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1",
+        "Doctor: GreenchClaw doctor --fix",
+        "Docs: https://docs.GreenchClaw.ai/gateway/remote",
       ].join("\n"),
     );
   }

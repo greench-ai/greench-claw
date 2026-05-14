@@ -6,7 +6,7 @@ import {
   shouldSuppressBuiltInModelFromManifest,
 } from "../../agents/model-suppression.js";
 import { discoverAuthStorage, discoverModels } from "../../agents/pi-model-discovery.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   formatErrorWithStack,
   MODEL_AVAILABILITY_UNAVAILABLE_CODE,
@@ -56,7 +56,7 @@ function validateAvailableModels(availableModels: unknown): Model<Api>[] {
 
 function loadAvailableModels(
   registry: ModelRegistry,
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   opts?: { runtimeSuppression?: boolean },
 ): Model<Api>[] {
   let availableModels: unknown;
@@ -86,7 +86,7 @@ function loadAvailableModels(
 }
 
 export async function loadModelRegistry(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   opts?: {
     providerFilter?: string;
     normalizeModels?: boolean;

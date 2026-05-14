@@ -66,9 +66,9 @@ describe("generic current-conversation bindings", () => {
   let testStateDir = "";
 
   beforeEach(async () => {
-    previousStateDir = process.env.NEXISCLAW_STATE_DIR;
-    testStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-current-bindings-"));
-    process.env.NEXISCLAW_STATE_DIR = testStateDir;
+    previousStateDir = process.env.GREENCHCLAW_STATE_DIR;
+    testStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-current-bindings-"));
+    process.env.GREENCHCLAW_STATE_DIR = testStateDir;
     setMinimalCurrentConversationRegistry();
     __testing.resetCurrentConversationBindingsForTests({
       deletePersistedFile: true,
@@ -80,9 +80,9 @@ describe("generic current-conversation bindings", () => {
       deletePersistedFile: true,
     });
     if (previousStateDir == null) {
-      delete process.env.NEXISCLAW_STATE_DIR;
+      delete process.env.GREENCHCLAW_STATE_DIR;
     } else {
-      process.env.NEXISCLAW_STATE_DIR = previousStateDir;
+      process.env.GREENCHCLAW_STATE_DIR = previousStateDir;
     }
     await fs.rm(testStateDir, { recursive: true, force: true });
   });

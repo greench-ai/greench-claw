@@ -15,9 +15,9 @@ const WS_REJECT_TIMEOUT_MS = 2_000;
 const WS_CONNECT_TIMEOUT_MS = 5_000;
 const HTTP_REQUEST_TIMEOUT_MS = 15_000;
 const SERVER_CLOSE_TIMEOUT_MS = 5_000;
-const A2UI_PATH = "/__NexisClaw__/a2ui";
-const CANVAS_HOST_PATH = "/__NexisClaw__/canvas";
-const CANVAS_WS_PATH = "/__NexisClaw__/ws";
+const A2UI_PATH = "/__GreenchClaw__/a2ui";
+const CANVAS_HOST_PATH = "/__GreenchClaw__/canvas";
+const CANVAS_WS_PATH = "/__GreenchClaw__/ws";
 const CANVAS_CAPABILITY_PATH_PREFIX = PLUGIN_NODE_CAPABILITY_PATH_PREFIX;
 
 type CanvasHostHandler = {
@@ -405,7 +405,7 @@ describe("gateway plugin node capability auth", () => {
           await expectWsRejected(`ws://${host}:${listener.port}${activeWsPath}`, {});
         },
       });
-    }, "NexisClaw-canvas-auth-test-");
+    }, "GreenchClaw-canvas-auth-test-");
   }, 60_000);
 
   test("denies canvas auth when trusted proxy omits forwarded client headers", async () => {

@@ -390,12 +390,12 @@ export function registerGatewayCli(program: Command) {
         "after",
         () =>
           `\n${theme.heading("Examples:")}\n${formatHelpExamples([
-            ["NexisClaw gateway run", "Run the gateway in the foreground."],
-            ["NexisClaw gateway status", "Show service status plus connectivity/capability."],
-            ["NexisClaw gateway discover", "Find local and wide-area gateway beacons."],
-            ["NexisClaw gateway stability", "Show recent stability diagnostics."],
-            ["NexisClaw gateway call health", "Call a gateway RPC method directly."],
-          ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/gateway", "docs.NexisClaw.ai/cli/gateway")}\n`,
+            ["GreenchClaw gateway run", "Run the gateway in the foreground."],
+            ["GreenchClaw gateway status", "Show service status plus connectivity/capability."],
+            ["GreenchClaw gateway discover", "Find local and wide-area gateway beacons."],
+            ["GreenchClaw gateway stability", "Show recent stability diagnostics."],
+            ["GreenchClaw gateway call health", "Call a gateway RPC method directly."],
+          ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/gateway", "docs.GreenchClaw.ai/cli/gateway")}\n`,
       ),
   );
 

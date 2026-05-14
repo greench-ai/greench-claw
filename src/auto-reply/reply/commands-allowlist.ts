@@ -6,7 +6,7 @@ import {
   replaceConfigFile,
   validateConfigObjectWithPlugins,
 } from "../../config/config.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   addChannelAllowFromStoreEntry,
   readChannelAllowFromStore,
@@ -59,7 +59,7 @@ const ACTIONS = new Set(["list", "add", "remove"]);
 const SCOPES = new Set<AllowlistScope>(["dm", "group", "all"]);
 
 function resolveAllowlistAccountId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channelId: ChannelId;
   parsedAccount?: string;
   ctxAccountId?: string;
@@ -170,7 +170,7 @@ function parseAllowlistCommand(raw: string): AllowlistCommand | null {
 }
 
 function normalizeAllowFrom(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channelId: ChannelId;
   accountId?: string | null;
   values: Array<string | number>;
@@ -234,7 +234,7 @@ function mapResolvedAllowlistNames(entries: ResolvedAllowlistName[]): Map<string
 }
 
 async function resolveAllowlistNames(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channelId: ChannelId;
   accountId?: string | null;
   scope: "dm" | "group";
@@ -251,7 +251,7 @@ async function resolveAllowlistNames(params: {
 }
 
 async function readAllowlistConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channelId: ChannelId;
   accountId?: string | null;
 }) {

@@ -1,4 +1,4 @@
-import type { HistoryEntry } from "NexisClaw/plugin-sdk/reply-history";
+import type { HistoryEntry } from "GreenchClaw/plugin-sdk/reply-history";
 import { resolveTimestampMs } from "./format.js";
 import type { DiscordMessagePreflightContext } from "./message-handler.preflight.types.js";
 import { resolveDiscordMessageText } from "./message-utils.js";

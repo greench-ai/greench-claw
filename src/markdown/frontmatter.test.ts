@@ -21,7 +21,7 @@ description: |
 name: session-memory
 metadata:
   {
-    "NexisClaw":
+    "GreenchClaw":
       {
         "emoji": "disk",
         "events": ["command:new"],
@@ -30,20 +30,20 @@ metadata:
 ---
 `;
     const result = parseFrontmatterBlock(content);
-    expect(result.metadata).toBe('{"NexisClaw":{"emoji":"disk","events":["command:new"]}}');
+    expect(result.metadata).toBe('{"GreenchClaw":{"emoji":"disk","events":["command:new"]}}');
 
     const parsed = JSON5.parse(result.metadata);
-    expect(parsed.NexisClaw?.emoji).toBe("disk");
+    expect(parsed.GreenchClaw?.emoji).toBe("disk");
   });
 
   it("preserves inline JSON values", () => {
     const content = `---
 name: inline-json
-metadata: {"NexisClaw": {"events": ["test"]}}
+metadata: {"GreenchClaw": {"events": ["test"]}}
 ---
 `;
     const result = parseFrontmatterBlock(content);
-    expect(result.metadata).toBe('{"NexisClaw": {"events": ["test"]}}');
+    expect(result.metadata).toBe('{"GreenchClaw": {"events": ["test"]}}');
   });
 
   it("stringifies YAML objects and arrays", () => {
@@ -55,7 +55,7 @@ tags:
   - alpha
   - beta
 metadata:
-  NexisClaw:
+  GreenchClaw:
     events:
       - command:new
 ---
@@ -65,7 +65,7 @@ metadata:
     expect(result.retries).toBe("3");
     expect(JSON.parse(result.tags ?? "[]")).toEqual(["alpha", "beta"]);
     const parsed = JSON5.parse(result.metadata ?? "");
-    expect(parsed.NexisClaw?.events).toEqual(["command:new"]);
+    expect(parsed.GreenchClaw?.events).toEqual(["command:new"]);
   });
 
   it("preserves inline description values containing colons", () => {
@@ -91,10 +91,10 @@ description: |-
     const content = `---
 name: sample-skill
 metadata:
-  NexisClaw: true
+  GreenchClaw: true
 ---`;
     const result = parseFrontmatterBlock(content);
-    expect(result.metadata).toBe('{"NexisClaw":true}');
+    expect(result.metadata).toBe('{"GreenchClaw":true}');
   });
 
   it("returns empty when frontmatter is missing", () => {

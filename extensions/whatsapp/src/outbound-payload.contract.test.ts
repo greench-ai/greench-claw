@@ -2,11 +2,11 @@ import {
   installChannelOutboundPayloadContractSuite,
   primeChannelOutboundSendMock,
   type OutboundPayloadHarnessParams,
-} from "NexisClaw/plugin-sdk/channel-contract-testing";
+} from "GreenchClaw/plugin-sdk/channel-contract-testing";
 import {
   verifyChannelMessageAdapterCapabilityProofs,
   verifyDurableFinalCapabilityProofs,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 import { describe, expect, it, vi } from "vitest";
 import { whatsappMessageAdapter } from "./channel-outbound.js";
 import { whatsappOutbound } from "./outbound-adapter.js";

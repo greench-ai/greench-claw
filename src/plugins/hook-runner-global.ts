@@ -16,7 +16,7 @@ type HookRunnerGlobalState = {
   registry: GlobalHookRunnerRegistry | null;
 };
 
-const hookRunnerGlobalStateKey = Symbol.for("NexisClaw.plugins.hook-runner-global-state");
+const hookRunnerGlobalStateKey = Symbol.for("GreenchClaw.plugins.hook-runner-global-state");
 const getState = () =>
   resolveGlobalSingleton<HookRunnerGlobalState>(hookRunnerGlobalStateKey, () => ({
     hookRunner: null,

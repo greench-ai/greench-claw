@@ -6,8 +6,8 @@ import {
   markMigrationItemError,
   MIGRATION_REASON_MISSING_SOURCE_OR_TARGET,
   MIGRATION_REASON_TARGET_EXISTS,
-} from "NexisClaw/plugin-sdk/migration";
-import type { MigrationItem } from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/migration";
+import type { MigrationItem } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { exists, readText, sanitizeName } from "./helpers.js";
 import type { ClaudeSource } from "./source.js";
 import type { PlannedTargets } from "./targets.js";

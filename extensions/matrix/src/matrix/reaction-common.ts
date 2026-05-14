@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 export const MATRIX_ANNOTATION_RELATION_TYPE = "m.annotation";
 export const MATRIX_REACTION_EVENT_TYPE = "m.reaction";

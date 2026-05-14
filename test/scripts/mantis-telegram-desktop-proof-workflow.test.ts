@@ -92,10 +92,10 @@ describe("Mantis Telegram Desktop proof workflow", () => {
     }
   });
 
-  it("uses the NexisClaw Mantis mention as the comment trigger", () => {
+  it("uses the GreenchClaw Mantis mention as the comment trigger", () => {
     const workflow = readFileSync(WORKFLOW, "utf8");
-    expect(workflow).toContain("@NexisClaw-mantis");
-    expect(workflow).toContain("/NexisClaw-mantis");
+    expect(workflow).toContain("@GreenchClaw-mantis");
+    expect(workflow).toContain("/GreenchClaw-mantis");
     expect(workflow).toContain("mantis: telegram-visible-proof");
     expect(workflow).not.toContain("@Mantis");
     expect(workflow).not.toContain("@mantis");
@@ -113,7 +113,7 @@ describe("Mantis Telegram Desktop proof workflow", () => {
   it("installs local proof tools before the Codex agent runs", () => {
     const install = workflowStep("Install local proof tools");
     expect(install.run).toContain("test -f scripts/e2e/telegram-user-driver.py");
-    expect(install.run).toContain("/usr/local/bin/NexisClaw-telegram-user-crabbox-proof");
+    expect(install.run).toContain("/usr/local/bin/GreenchClaw-telegram-user-crabbox-proof");
     expect(install.run).toContain(
       'exec node --import tsx "${GITHUB_WORKSPACE}/scripts/e2e/telegram-user-crabbox-proof.ts" "$@"',
     );
@@ -124,28 +124,28 @@ describe("Mantis Telegram Desktop proof workflow", () => {
     expect(install.run).not.toContain("apt-get install");
 
     const agent = workflowStep("Run Codex Mantis Telegram agent");
-    expect(agent.env?.NEXISCLAW_TELEGRAM_USER_DRIVER_SCRIPT).toBe(
+    expect(agent.env?.GREENCHCLAW_TELEGRAM_USER_DRIVER_SCRIPT).toBe(
       "${{ github.workspace }}/scripts/e2e/telegram-user-driver.py",
     );
-    expect(agent.env?.NEXISCLAW_TELEGRAM_USER_PROOF_CMD).toBe(
-      "/usr/local/bin/NexisClaw-telegram-user-crabbox-proof",
+    expect(agent.env?.GREENCHCLAW_TELEGRAM_USER_PROOF_CMD).toBe(
+      "/usr/local/bin/GreenchClaw-telegram-user-crabbox-proof",
     );
-    expect(agent.env?.NEXISCLAW_TELEGRAM_USER_CRABBOX_BIN).toBe("/usr/local/bin/crabbox");
+    expect(agent.env?.GREENCHCLAW_TELEGRAM_USER_CRABBOX_BIN).toBe("/usr/local/bin/crabbox");
     expect(agent.env?.CRABBOX_COORDINATOR).toContain(
-      "secrets.CRABBOX_COORDINATOR || secrets.NEXISCLAW_QA_MANTIS_CRABBOX_COORDINATOR",
+      "secrets.CRABBOX_COORDINATOR || secrets.GREENCHCLAW_QA_MANTIS_CRABBOX_COORDINATOR",
     );
     expect(agent.env?.CRABBOX_COORDINATOR_TOKEN).toContain(
-      "secrets.CRABBOX_COORDINATOR_TOKEN || secrets.NEXISCLAW_QA_MANTIS_CRABBOX_COORDINATOR_TOKEN",
+      "secrets.CRABBOX_COORDINATOR_TOKEN || secrets.GREENCHCLAW_QA_MANTIS_CRABBOX_COORDINATOR_TOKEN",
     );
 
     const prepare = workflowStep("Prepare Codex user");
     expect(prepare.run).toContain(
-      "NEXISCLAW_TELEGRAM_USER_CRABBOX_BIN NEXISCLAW_TELEGRAM_USER_CRABBOX_PROVIDER NEXISCLAW_TELEGRAM_USER_DRIVER_SCRIPT NEXISCLAW_TELEGRAM_USER_PROOF_CMD",
+      "GREENCHCLAW_TELEGRAM_USER_CRABBOX_BIN GREENCHCLAW_TELEGRAM_USER_CRABBOX_PROVIDER GREENCHCLAW_TELEGRAM_USER_DRIVER_SCRIPT GREENCHCLAW_TELEGRAM_USER_PROOF_CMD",
     );
     expect(prepare.run).toContain("MANTIS_CANDIDATE_TRUST");
 
     const prompt = readFileSync(PROMPT, "utf8");
-    expect(prompt).toContain("$NEXISCLAW_TELEGRAM_USER_PROOF_CMD");
+    expect(prompt).toContain("$GREENCHCLAW_TELEGRAM_USER_PROOF_CMD");
     expect(prompt).toContain("do not run\n   `pnpm qa:telegram-user:crabbox` directly");
   });
 

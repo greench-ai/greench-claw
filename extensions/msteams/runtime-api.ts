@@ -1,36 +1,36 @@
 // Private runtime barrel for the bundled Microsoft Teams extension.
 // Keep this barrel thin and aligned with the local extension surface.
 
-export { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
-export type { AllowlistMatch } from "NexisClaw/plugin-sdk/allow-from";
+export { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
+export type { AllowlistMatch } from "GreenchClaw/plugin-sdk/allow-from";
 export {
   mergeAllowlist,
   resolveAllowlistMatchSimple,
   summarizeMapping,
-} from "NexisClaw/plugin-sdk/allow-from";
+} from "GreenchClaw/plugin-sdk/allow-from";
 export type {
   BaseProbeResult,
   ChannelDirectoryEntry,
   ChannelGroupContext,
   ChannelMessageActionName,
   ChannelOutboundAdapter,
-} from "NexisClaw/plugin-sdk/channel-contract";
-export type { ChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-export { logTypingFailure } from "NexisClaw/plugin-sdk/channel-logging";
-export { createChannelPairingController } from "NexisClaw/plugin-sdk/channel-pairing";
-export { resolveToolsBySender } from "NexisClaw/plugin-sdk/channel-policy";
-export { createChannelMessageReplyPipeline } from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+export type { ChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+export { logTypingFailure } from "GreenchClaw/plugin-sdk/channel-logging";
+export { createChannelPairingController } from "GreenchClaw/plugin-sdk/channel-pairing";
+export { resolveToolsBySender } from "GreenchClaw/plugin-sdk/channel-policy";
+export { createChannelMessageReplyPipeline } from "GreenchClaw/plugin-sdk/channel-message";
 export {
   PAIRING_APPROVED_MESSAGE,
   buildProbeChannelStatusSummary,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/channel-status";
+} from "GreenchClaw/plugin-sdk/channel-status";
 export {
   buildChannelKeyCandidates,
   normalizeChannelSlug,
   resolveChannelEntryMatchWithFallback,
   resolveNestedAllowlistDecision,
-} from "NexisClaw/plugin-sdk/channel-targets";
+} from "GreenchClaw/plugin-sdk/channel-targets";
 export type {
   GroupPolicy,
   GroupToolPolicyConfig,
@@ -39,28 +39,28 @@ export type {
   MSTeamsReplyStyle,
   MSTeamsTeamConfig,
   MarkdownTableMode,
-  NexisClawConfig,
-} from "NexisClaw/plugin-sdk/config-contracts";
-export { isDangerousNameMatchingEnabled } from "NexisClaw/plugin-sdk/dangerous-name-runtime";
-export { resolveDefaultGroupPolicy } from "NexisClaw/plugin-sdk/runtime-group-policy";
-export { withFileLock } from "NexisClaw/plugin-sdk/file-lock";
-export { keepHttpServerTaskAlive } from "NexisClaw/plugin-sdk/channel-lifecycle";
+  GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/config-contracts";
+export { isDangerousNameMatchingEnabled } from "GreenchClaw/plugin-sdk/dangerous-name-runtime";
+export { resolveDefaultGroupPolicy } from "GreenchClaw/plugin-sdk/runtime-group-policy";
+export { withFileLock } from "GreenchClaw/plugin-sdk/file-lock";
+export { keepHttpServerTaskAlive } from "GreenchClaw/plugin-sdk/channel-lifecycle";
 export {
   detectMime,
   extensionForMime,
   extractOriginalFilename,
   getFileExtension,
   resolveChannelMediaMaxBytes,
-} from "NexisClaw/plugin-sdk/media-runtime";
-export { dispatchReplyFromConfigWithSettledDispatcher } from "NexisClaw/plugin-sdk/inbound-reply-dispatch";
-export { loadOutboundMediaFromUrl } from "NexisClaw/plugin-sdk/outbound-media";
-export { buildMediaPayload } from "NexisClaw/plugin-sdk/reply-payload";
-export type { ReplyPayload } from "NexisClaw/plugin-sdk/reply-payload";
-export type { PluginRuntime } from "NexisClaw/plugin-sdk/runtime-store";
-export type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
-export type { SsrFPolicy } from "NexisClaw/plugin-sdk/ssrf-runtime";
-export { fetchWithSsrFGuard } from "NexisClaw/plugin-sdk/ssrf-runtime";
-export { normalizeStringEntries } from "NexisClaw/plugin-sdk/string-normalization-runtime";
-export { chunkTextForOutbound } from "NexisClaw/plugin-sdk/text-chunking";
-export { DEFAULT_WEBHOOK_MAX_BODY_BYTES } from "NexisClaw/plugin-sdk/webhook-ingress";
+} from "GreenchClaw/plugin-sdk/media-runtime";
+export { dispatchReplyFromConfigWithSettledDispatcher } from "GreenchClaw/plugin-sdk/inbound-reply-dispatch";
+export { loadOutboundMediaFromUrl } from "GreenchClaw/plugin-sdk/outbound-media";
+export { buildMediaPayload } from "GreenchClaw/plugin-sdk/reply-payload";
+export type { ReplyPayload } from "GreenchClaw/plugin-sdk/reply-payload";
+export type { PluginRuntime } from "GreenchClaw/plugin-sdk/runtime-store";
+export type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime";
+export type { SsrFPolicy } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+export { fetchWithSsrFGuard } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+export { normalizeStringEntries } from "GreenchClaw/plugin-sdk/string-normalization-runtime";
+export { chunkTextForOutbound } from "GreenchClaw/plugin-sdk/text-chunking";
+export { DEFAULT_WEBHOOK_MAX_BODY_BYTES } from "GreenchClaw/plugin-sdk/webhook-ingress";
 export { setMSTeamsRuntime } from "./src/runtime.js";

@@ -88,7 +88,7 @@ function makeRuntime(): GatewayPluginRuntime {
         resolveEnvelopeFormatOptions: vi.fn(() => ({})),
       },
       session: {
-        resolveStorePath: vi.fn(() => "/tmp/NexisClaw/qqbot-sessions.json"),
+        resolveStorePath: vi.fn(() => "/tmp/GreenchClaw/qqbot-sessions.json"),
         recordInboundSession: vi.fn(async () => undefined),
       },
       turn: {

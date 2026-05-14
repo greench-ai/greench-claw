@@ -2,7 +2,7 @@ import type {
   MigrationPlan,
   MigrationProviderContext,
   MigrationProviderPlugin,
-} from "NexisClaw/plugin-sdk/plugin-entry";
+} from "GreenchClaw/plugin-sdk/plugin-entry";
 import { applyClaudePlan } from "./apply.js";
 import { buildClaudePlan } from "./plan.js";
 import { discoverClaudeSource, hasClaudeSource } from "./source.js";

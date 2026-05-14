@@ -1,4 +1,4 @@
-import { resolveDefaultAgentDir } from "NexisClaw/plugin-sdk/agent-runtime";
+import { resolveDefaultAgentDir } from "GreenchClaw/plugin-sdk/agent-runtime";
 import {
   applyCodexAppServerAuthProfile,
   bridgeCodexAppServerStartOptions,
@@ -19,7 +19,7 @@ type SharedCodexAppServerClientState = {
   key?: string;
 };
 
-const SHARED_CODEX_APP_SERVER_CLIENT_STATE = Symbol.for("NexisClaw.codexAppServerClientState");
+const SHARED_CODEX_APP_SERVER_CLIENT_STATE = Symbol.for("GreenchClaw.codexAppServerClientState");
 
 function getSharedCodexAppServerClientState(): SharedCodexAppServerClientState {
   const globalState = globalThis as typeof globalThis & {

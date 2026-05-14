@@ -1,6 +1,6 @@
 import type { Mock } from "vitest";
 import { vi } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { createLazyImportLoader } from "../shared/lazy-promise.js";
 import { createTestRuntime } from "./test-runtime-config-helpers.js";
 
@@ -13,10 +13,10 @@ export const writeConfigFileMock: Mock<(...args: unknown[]) => Promise<unknown>>
   .fn()
   .mockResolvedValue(undefined);
 const replaceConfigFileMock: Mock<(...args: unknown[]) => Promise<unknown>> = vi.fn(
-  async (params: { nextConfig: NexisClawConfig }): Promise<ReplaceConfigFileResult> => {
+  async (params: { nextConfig: GreenchClawConfig }): Promise<ReplaceConfigFileResult> => {
     await writeConfigFileMock(params.nextConfig);
     return {
-      path: "/tmp/NexisClaw.json",
+      path: "/tmp/GreenchClaw.json",
       previousHash: null,
       snapshot: {} as never,
       nextConfig: params.nextConfig,
@@ -36,7 +36,7 @@ vi.mock("./agents.command-shared.js", () => ({
   createQuietRuntime: <T>(runtime: T) => runtime,
   requireValidConfig: async () => {
     const snapshot = (await readConfigFileSnapshotMock()) as
-      | { config?: NexisClawConfig; sourceConfig?: NexisClawConfig }
+      | { config?: GreenchClawConfig; sourceConfig?: GreenchClawConfig }
       | undefined;
     return snapshot?.sourceConfig ?? snapshot?.config ?? null;
   },

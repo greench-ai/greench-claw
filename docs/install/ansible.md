@@ -1,5 +1,5 @@
 ---
-summary: "Automated, hardened NexisClaw installation with Ansible, Tailscale VPN, and firewall isolation"
+summary: "Automated, hardened GreenchClaw installation with Ansible, Tailscale VPN, and firewall isolation"
 read_when:
   - You want automated server deployment with security hardening
   - You need firewall-isolated setup with VPN access
@@ -7,10 +7,10 @@ read_when:
 title: "Ansible"
 ---
 
-Deploy NexisClaw to production servers with **[NexisClaw-ansible](https://github.com/NexisClaw/NexisClaw-ansible)** -- an automated installer with security-first architecture.
+Deploy GreenchClaw to production servers with **[GreenchClaw-ansible](https://github.com/GreenchClaw/GreenchClaw-ansible)** -- an automated installer with security-first architecture.
 
 <Info>
-The [NexisClaw-ansible](https://github.com/NexisClaw/NexisClaw-ansible) repo is the source of truth for Ansible deployment. This page is a quick overview.
+The [GreenchClaw-ansible](https://github.com/GreenchClaw/GreenchClaw-ansible) repo is the source of truth for Ansible deployment. This page is a quick overview.
 </Info>
 
 ## Prerequisites
@@ -36,7 +36,7 @@ The [NexisClaw-ansible](https://github.com/NexisClaw/NexisClaw-ansible) repo is 
 One-command install:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/NexisClaw/NexisClaw-ansible/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/GreenchClaw/GreenchClaw-ansible/main/install.sh | bash
 ```
 
 ## What gets installed
@@ -47,7 +47,7 @@ The Ansible playbook installs and configures:
 2. **UFW firewall** -- SSH + Tailscale ports only
 3. **Docker CE + Compose V2** -- for the default agent sandbox backend
 4. **Node.js 24 + pnpm** -- runtime dependencies (Node 22 LTS, currently `22.16+`, remains supported)
-5. **NexisClaw** -- host-based, not containerized
+5. **GreenchClaw** -- host-based, not containerized
 6. **Systemd service** -- auto-start with security hardening
 
 <Note>
@@ -59,24 +59,24 @@ backend. See [Sandboxing](/gateway/sandboxing) for details and other backends.
 ## Post-Install Setup
 
 <Steps>
-  <Step title="Switch to the NexisClaw user">
+  <Step title="Switch to the GreenchClaw user">
     ```bash
-    sudo -i -u NexisClaw
+    sudo -i -u GreenchClaw
     ```
   </Step>
   <Step title="Run the onboarding wizard">
-    The post-install script guides you through configuring NexisClaw settings.
+    The post-install script guides you through configuring GreenchClaw settings.
   </Step>
   <Step title="Connect messaging providers">
     Log in to WhatsApp, Telegram, Discord, or Signal:
     ```bash
-    NexisClaw channels login
+    GreenchClaw channels login
     ```
   </Step>
   <Step title="Verify the installation">
     ```bash
-    sudo systemctl status NexisClaw
-    sudo journalctl -u NexisClaw -f
+    sudo systemctl status GreenchClaw
+    sudo journalctl -u GreenchClaw -f
     ```
   </Step>
   <Step title="Connect to Tailscale">
@@ -88,17 +88,17 @@ backend. See [Sandboxing](/gateway/sandboxing) for details and other backends.
 
 ```bash
 # Check service status
-sudo systemctl status NexisClaw
+sudo systemctl status GreenchClaw
 
 # View live logs
-sudo journalctl -u NexisClaw -f
+sudo journalctl -u GreenchClaw -f
 
 # Restart gateway
-sudo systemctl restart NexisClaw
+sudo systemctl restart GreenchClaw
 
-# Provider login (run as NexisClaw user)
-sudo -i -u NexisClaw
-NexisClaw channels login
+# Provider login (run as GreenchClaw user)
+sudo -i -u GreenchClaw
+GreenchClaw channels login
 ```
 
 ## Security architecture
@@ -132,8 +132,8 @@ If you prefer manual control over the automation:
   </Step>
   <Step title="Clone the repository">
     ```bash
-    git clone https://github.com/NexisClaw/NexisClaw-ansible.git
-    cd NexisClaw-ansible
+    git clone https://github.com/GreenchClaw/GreenchClaw-ansible.git
+    cd GreenchClaw-ansible
     ```
   </Step>
   <Step title="Install Ansible collections">
@@ -149,7 +149,7 @@ If you prefer manual control over the automation:
     Alternatively, run directly and then manually execute the setup script afterward:
     ```bash
     ansible-playbook playbook.yml --ask-become-pass
-    # Then run: /tmp/NexisClaw-setup.sh
+    # Then run: /tmp/GreenchClaw-setup.sh
     ```
 
   </Step>
@@ -157,12 +157,12 @@ If you prefer manual control over the automation:
 
 ## Updating
 
-The Ansible installer sets up NexisClaw for manual updates. See [Updating](/install/updating) for the standard update flow.
+The Ansible installer sets up GreenchClaw for manual updates. See [Updating](/install/updating) for the standard update flow.
 
 To re-run the Ansible playbook (for example, for configuration changes):
 
 ```bash
-cd NexisClaw-ansible
+cd GreenchClaw-ansible
 ./run-playbook.sh
 ```
 
@@ -180,15 +180,15 @@ This is idempotent and safe to run multiple times.
   <Accordion title="Service will not start">
     ```bash
     # Check logs
-    sudo journalctl -u NexisClaw -n 100
+    sudo journalctl -u GreenchClaw -n 100
 
     # Verify permissions
-    sudo ls -la /opt/NexisClaw
+    sudo ls -la /opt/GreenchClaw
 
     # Test manual start
-    sudo -i -u NexisClaw
-    cd ~/NexisClaw
-    NexisClaw gateway run
+    sudo -i -u GreenchClaw
+    cd ~/GreenchClaw
+    GreenchClaw gateway run
     ```
 
   </Accordion>
@@ -198,36 +198,36 @@ This is idempotent and safe to run multiple times.
     sudo systemctl status docker
 
     # Check sandbox image
-    sudo docker images | grep NexisClaw-sandbox
+    sudo docker images | grep GreenchClaw-sandbox
 
     # Build sandbox image if missing (requires source checkout)
-    cd /opt/NexisClaw/NexisClaw
-    sudo -u NexisClaw ./scripts/sandbox-setup.sh
+    cd /opt/GreenchClaw/GreenchClaw
+    sudo -u GreenchClaw ./scripts/sandbox-setup.sh
     # For npm installs without a source checkout, see
-    # https://docs.NexisClaw.ai/gateway/sandboxing#images-and-setup
+    # https://docs.GreenchClaw.ai/gateway/sandboxing#images-and-setup
     ```
 
   </Accordion>
   <Accordion title="Provider login fails">
-    Make sure you are running as the `NexisClaw` user:
+    Make sure you are running as the `GreenchClaw` user:
     ```bash
-    sudo -i -u NexisClaw
-    NexisClaw channels login
+    sudo -i -u GreenchClaw
+    GreenchClaw channels login
     ```
   </Accordion>
 </AccordionGroup>
 
 ## Advanced configuration
 
-For detailed security architecture and troubleshooting, see the NexisClaw-ansible repo:
+For detailed security architecture and troubleshooting, see the GreenchClaw-ansible repo:
 
-- [Security Architecture](https://github.com/NexisClaw/NexisClaw-ansible/blob/main/docs/security.md)
-- [Technical Details](https://github.com/NexisClaw/NexisClaw-ansible/blob/main/docs/architecture.md)
-- [Troubleshooting Guide](https://github.com/NexisClaw/NexisClaw-ansible/blob/main/docs/troubleshooting.md)
+- [Security Architecture](https://github.com/GreenchClaw/GreenchClaw-ansible/blob/main/docs/security.md)
+- [Technical Details](https://github.com/GreenchClaw/GreenchClaw-ansible/blob/main/docs/architecture.md)
+- [Troubleshooting Guide](https://github.com/GreenchClaw/GreenchClaw-ansible/blob/main/docs/troubleshooting.md)
 
 ## Related
 
-- [NexisClaw-ansible](https://github.com/NexisClaw/NexisClaw-ansible) -- full deployment guide
+- [GreenchClaw-ansible](https://github.com/GreenchClaw/GreenchClaw-ansible) -- full deployment guide
 - [Docker](/install/docker) -- containerized gateway setup
 - [Sandboxing](/gateway/sandboxing) -- agent sandbox configuration
 - [Multi-Agent Sandbox and Tools](/tools/multi-agent-sandbox-tools) -- per-agent isolation

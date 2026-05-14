@@ -1,12 +1,12 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { ChannelType } from "discord-api-types/v10";
-import { createStartAccountContext } from "NexisClaw/plugin-sdk/channel-test-helpers";
-import type { PluginRuntime } from "NexisClaw/plugin-sdk/core";
+import { createStartAccountContext } from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import type { PluginRuntime } from "GreenchClaw/plugin-sdk/core";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ResolvedDiscordAccount } from "./accounts.js";
 import * as directoryLive from "./directory-live.js";
-import type { NexisClawConfig } from "./runtime-api.js";
+import type { GreenchClawConfig } from "./runtime-api.js";
 import * as sendModule from "./send.js";
 import { createDiscordSendReceipt } from "./send.receipt.js";
 import { EMPTY_DISCORD_TEST_CONFIG } from "./test-support/config.js";
@@ -29,9 +29,9 @@ function discordTestSendResult(messageId: string, channelId = "channel:thread-12
   };
 }
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/runtime-env")>(
-    "NexisClaw/plugin-sdk/runtime-env",
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/runtime-env")>(
+    "GreenchClaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -58,7 +58,7 @@ vi.mock("./audit.js", () => {
   };
 });
 
-function createCfg(): NexisClawConfig {
+function createCfg(): GreenchClawConfig {
   return {
     channels: {
       discord: {
@@ -66,14 +66,14 @@ function createCfg(): NexisClawConfig {
         token: "discord-token",
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-function resolveAccount(cfg: NexisClawConfig, accountId = "default"): ResolvedDiscordAccount {
+function resolveAccount(cfg: GreenchClawConfig, accountId = "default"): ResolvedDiscordAccount {
   return discordPlugin.config.resolveAccount(cfg, accountId);
 }
 
-function startDiscordAccount(cfg: NexisClawConfig, accountId = "default") {
+function startDiscordAccount(cfg: GreenchClawConfig, accountId = "default") {
   return discordPlugin.gateway!.startAccount!(
     createStartAccountContext({
       account: resolveAccount(cfg, accountId),
@@ -251,7 +251,7 @@ describe("discordPlugin outbound", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveReplyToMode({ cfg, accountId: "work" })).toBe("first");
     expect(resolveReplyToMode({ cfg, accountId: "default" })).toBe("all");
@@ -272,7 +272,7 @@ describe("discordPlugin outbound", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(resolveAccount(cfg).config.gatewayReadyTimeoutMs).toBe(90_000);
     expect(resolveAccount(cfg).config.gatewayRuntimeReadyTimeoutMs).toBe(120_000);
@@ -653,7 +653,7 @@ describe("discordPlugin outbound", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     // First account (index 0) — no delay
     await startDiscordAccount(cfg, "alpha");
@@ -735,7 +735,7 @@ describe("discordPlugin security", () => {
           dm: { policy: "allowlist", allowFrom: ["  discord:<@!123456789>  "] },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const result = resolveDmPolicy({
       cfg,
@@ -774,7 +774,7 @@ describe("discordPlugin groups", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(
       discordPlugin.groups?.resolveRequireMention?.({

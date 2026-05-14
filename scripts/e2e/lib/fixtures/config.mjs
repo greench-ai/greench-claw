@@ -2,7 +2,7 @@ import path from "node:path";
 import { requireArg, writeJson } from "./common.mjs";
 
 function writeConfig(kind) {
-  const configPath = requireArg(process.env.NEXISCLAW_CONFIG_PATH, "NEXISCLAW_CONFIG_PATH");
+  const configPath = requireArg(process.env.GREENCHCLAW_CONFIG_PATH, "GREENCHCLAW_CONFIG_PATH");
   const port = Number(process.env.PORT ?? 18789);
   const config =
     kind === "config-reload"
@@ -24,7 +24,10 @@ function writeConfig(kind) {
               port,
               auth: {
                 mode: "token",
-                token: requireArg(process.env.NEXISCLAW_GATEWAY_TOKEN, "NEXISCLAW_GATEWAY_TOKEN"),
+                token: requireArg(
+                  process.env.GREENCHCLAW_GATEWAY_TOKEN,
+                  "GREENCHCLAW_GATEWAY_TOKEN",
+                ),
               },
               controlUi: { enabled: false },
             },
@@ -45,7 +48,7 @@ function writeConfig(kind) {
 }
 
 function writeOpenAiWebSearchMinimalConfig() {
-  writeJson(path.join(process.env.NEXISCLAW_STATE_DIR, "NexisClaw.json"), {
+  writeJson(path.join(process.env.GREENCHCLAW_STATE_DIR, "GreenchClaw.json"), {
     agents: {
       defaults: {
         model: { primary: "openai/gpt-5" },
@@ -81,14 +84,14 @@ function writeOpenAiWebSearchMinimalConfig() {
     },
     tools: { web: { search: { enabled: true, maxResults: 3 } } },
     plugins: { enabled: true, allow: ["openai"], entries: { openai: { enabled: true } } },
-    gateway: { auth: { mode: "token", token: process.env.NEXISCLAW_GATEWAY_TOKEN } },
+    gateway: { auth: { mode: "token", token: process.env.GREENCHCLAW_GATEWAY_TOKEN } },
   });
 }
 
 function writeOpenWebUiConfig([openaiApiKey]) {
   const batchPath = requireArg(
-    process.env.NEXISCLAW_CONFIG_BATCH_PATH,
-    "NEXISCLAW_CONFIG_BATCH_PATH",
+    process.env.GREENCHCLAW_CONFIG_BATCH_PATH,
+    "GREENCHCLAW_CONFIG_BATCH_PATH",
   );
   writeJson(batchPath, [
     { path: "models.providers.openai.apiKey", value: requireArg(openaiApiKey, "OpenAI API key") },
@@ -99,16 +102,19 @@ function writeOpenWebUiConfig([openaiApiKey]) {
     { path: "models.providers.openai.models", value: [] },
     {
       path: "models.providers.openai.timeoutSeconds",
-      value: Number.parseInt(process.env.NEXISCLAW_OPENWEBUI_PROVIDER_TIMEOUT_SECONDS ?? "900", 10),
+      value: Number.parseInt(
+        process.env.GREENCHCLAW_OPENWEBUI_PROVIDER_TIMEOUT_SECONDS ?? "900",
+        10,
+      ),
     },
     { path: "models.providers.openai.agentRuntime", value: { id: "pi" } },
     { path: "gateway.controlUi.enabled", value: false },
     { path: "gateway.mode", value: "local" },
     { path: "gateway.bind", value: "lan" },
     { path: "gateway.auth.mode", value: "token" },
-    { path: "gateway.auth.token", value: process.env.NEXISCLAW_GATEWAY_TOKEN },
+    { path: "gateway.auth.token", value: process.env.GREENCHCLAW_GATEWAY_TOKEN },
     { path: "gateway.http.endpoints.chatCompletions.enabled", value: true },
-    { path: "agents.defaults.model.primary", value: process.env.NEXISCLAW_OPENWEBUI_MODEL },
+    { path: "agents.defaults.model.primary", value: process.env.GREENCHCLAW_OPENWEBUI_MODEL },
   ]);
 }
 

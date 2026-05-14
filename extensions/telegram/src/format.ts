@@ -1,5 +1,5 @@
-import type { MarkdownTableMode } from "NexisClaw/plugin-sdk/config-contracts";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { MarkdownTableMode } from "GreenchClaw/plugin-sdk/config-contracts";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   FILE_REF_EXTENSIONS_WITH_TLD,
   isAutoLinkedFileRef,
@@ -7,8 +7,8 @@ import {
   type MarkdownLinkSpan,
   type MarkdownIR,
   renderMarkdownIRChunksWithinLimit,
-} from "NexisClaw/plugin-sdk/text-chunking";
-import { renderMarkdownWithMarkers } from "NexisClaw/plugin-sdk/text-chunking";
+} from "GreenchClaw/plugin-sdk/text-chunking";
+import { renderMarkdownWithMarkers } from "GreenchClaw/plugin-sdk/text-chunking";
 
 export type TelegramFormattedChunk = {
   html: string;

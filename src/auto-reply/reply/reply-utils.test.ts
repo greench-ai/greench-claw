@@ -30,13 +30,13 @@ function expectNormalizedReply(
 }
 
 describe("matchesMentionWithExplicit", () => {
-  const mentionRegexes = [/\bNexisClaw\b/i];
+  const mentionRegexes = [/\bGreenchClaw\b/i];
 
   it("combines explicit-mention state with regex fallback rules", () => {
     const cases = [
       {
         name: "regex match with explicit resolver available",
-        text: "@NexisClaw hello",
+        text: "@GreenchClaw hello",
         mentionRegexes,
         explicit: {
           hasAnyMention: true,
@@ -69,7 +69,7 @@ describe("matchesMentionWithExplicit", () => {
       },
       {
         name: "falls back to regex when explicit cannot resolve",
-        text: "NexisClaw please",
+        text: "GreenchClaw please",
         mentionRegexes,
         explicit: {
           hasAnyMention: true,
@@ -567,14 +567,14 @@ describe("resolveResponsePrefixTemplate", () => {
       {
         name: "identity.name",
         template: "[{identity.name}]",
-        values: { identityName: "NexisClaw" },
-        expected: "[NexisClaw]",
+        values: { identityName: "GreenchClaw" },
+        expected: "[GreenchClaw]",
       },
       {
         name: "identityName alias",
         template: "[{identityName}]",
-        values: { identityName: "NexisClaw" },
-        expected: "[NexisClaw]",
+        values: { identityName: "GreenchClaw" },
+        expected: "[GreenchClaw]",
       },
       {
         name: "case-insensitive variables",
@@ -586,12 +586,12 @@ describe("resolveResponsePrefixTemplate", () => {
         name: "all variables",
         template: "[{identity.name}] {provider}/{model} (think:{thinkingLevel})",
         values: {
-          identityName: "NexisClaw",
+          identityName: "GreenchClaw",
           provider: "anthropic",
           model: "claude-opus-4-6",
           thinkingLevel: "high",
         },
-        expected: "[NexisClaw] anthropic/claude-opus-4-6 (think:high)",
+        expected: "[GreenchClaw] anthropic/claude-opus-4-6 (think:high)",
       },
     ] as const;
     expectResolvedTemplateCases(cases);

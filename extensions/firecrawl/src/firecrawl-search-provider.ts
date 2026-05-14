@@ -1,7 +1,7 @@
 import {
   createWebSearchProviderContractFields,
   type WebSearchProviderPlugin,
-} from "NexisClaw/plugin-sdk/provider-web-search-contract";
+} from "GreenchClaw/plugin-sdk/provider-web-search-contract";
 
 const FIRECRAWL_CREDENTIAL_PATH = "plugins.entries.firecrawl.config.webSearch.apiKey";
 
@@ -38,7 +38,7 @@ export function createFirecrawlWebSearchProvider(): WebSearchProviderPlugin {
     envVars: ["FIRECRAWL_API_KEY"],
     placeholder: "fc-...",
     signupUrl: "https://www.firecrawl.dev/",
-    docsUrl: "https://docs.NexisClaw.ai/tools/firecrawl",
+    docsUrl: "https://docs.GreenchClaw.ai/tools/firecrawl",
     autoDetectOrder: 60,
     credentialPath: FIRECRAWL_CREDENTIAL_PATH,
     ...createWebSearchProviderContractFields({

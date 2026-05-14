@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { resolveSendableOutboundReplyParts } from "NexisClaw/plugin-sdk/reply-payload";
+import { resolveSendableOutboundReplyParts } from "GreenchClaw/plugin-sdk/reply-payload";
 import { isVerbose } from "../globals.js";
 import { stringifyNonErrorCause } from "../infra/errors.js";
 import { shouldLogSubsystemToConsole } from "../logging/console.js";

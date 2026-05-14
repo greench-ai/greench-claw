@@ -1,7 +1,7 @@
 import { splitTrailingAuthProfile } from "../agents/model-ref-profile.js";
 import { collectConfiguredModelRefs } from "../config/model-refs.js";
 import type { AuthProfileConfig } from "../config/types.auth.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
@@ -16,7 +16,7 @@ const AUTH_PROFILE_MODES = new Set<AuthProfileConfig["mode"]>([
 ]);
 
 export type AuthProfileConfigProtectionResult = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   repairs: string[];
   warnings: string[];
 };
@@ -52,7 +52,7 @@ function extractProviderFromProfileId(profileId: string): string | null {
   return normalizeProviderId(profileId.slice(0, colon)) || null;
 }
 
-function collectActiveAuthHints(config: NexisClawConfig): {
+function collectActiveAuthHints(config: GreenchClawConfig): {
   activeProviders: Set<string>;
   explicitProfileIds: Set<string>;
   explicitProfileProviders: Map<string, Set<string>>;
@@ -141,7 +141,7 @@ function buildProfileMetadata(params: {
   return repaired;
 }
 
-function ensureAuthProfiles(config: NexisClawConfig): Record<string, AuthProfileConfig> {
+function ensureAuthProfiles(config: GreenchClawConfig): Record<string, AuthProfileConfig> {
   const root = config as Record<string, unknown>;
   const auth: Record<string, unknown> = isRecord(root.auth) ? root.auth : {};
   if (root.auth !== auth) {
@@ -154,8 +154,8 @@ function ensureAuthProfiles(config: NexisClawConfig): Record<string, AuthProfile
 }
 
 export function protectActiveAuthProfileConfig(params: {
-  before: NexisClawConfig;
-  after: NexisClawConfig;
+  before: GreenchClawConfig;
+  after: GreenchClawConfig;
 }): AuthProfileConfigProtectionResult {
   const { activeProviders, explicitProfileIds, explicitProfileProviders } = collectActiveAuthHints(
     params.before,

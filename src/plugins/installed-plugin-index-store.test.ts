@@ -19,7 +19,7 @@ afterEach(() => {
 });
 
 function makeTempDir() {
-  return makeTrackedTempDir("NexisClaw-installed-plugin-index-store", tempDirs);
+  return makeTrackedTempDir("GreenchClaw-installed-plugin-index-store", tempDirs);
 }
 
 function createIndex(overrides: Partial<InstalledPluginIndex> = {}): InstalledPluginIndex {
@@ -34,7 +34,7 @@ function createIndex(overrides: Partial<InstalledPluginIndex> = {}): InstalledPl
     plugins: [
       {
         pluginId: "demo",
-        manifestPath: "/plugins/demo/NexisClaw.plugin.json",
+        manifestPath: "/plugins/demo/GreenchClaw.plugin.json",
         manifestHash: "manifest-hash",
         rootDir: "/plugins/demo",
         origin: "global",
@@ -62,7 +62,7 @@ function createCandidate(rootDir: string, options: { id?: string } = {}): Plugin
     "utf8",
   );
   fs.writeFileSync(
-    path.join(rootDir, "NexisClaw.plugin.json"),
+    path.join(rootDir, "GreenchClaw.plugin.json"),
     JSON.stringify({
       id,
       name: id === "demo" ? "Demo" : "Next Demo",
@@ -229,8 +229,8 @@ describe("installed plugin index persistence", () => {
     fs.mkdirSync(pluginDir, { recursive: true });
     const candidate = createCandidate(pluginDir);
     const env = {
-      NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-      NEXISCLAW_VERSION: "2026.4.25",
+      GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+      GREENCHCLAW_VERSION: "2026.4.25",
       VITEST: "true",
     };
 
@@ -281,7 +281,7 @@ describe("installed plugin index persistence", () => {
     expectPluginFields(policyInspect.current, "demo", { enabled: false });
 
     fs.writeFileSync(
-      path.join(pluginDir, "NexisClaw.plugin.json"),
+      path.join(pluginDir, "GreenchClaw.plugin.json"),
       JSON.stringify({
         id: "demo",
         name: "Demo",
@@ -313,8 +313,8 @@ describe("installed plugin index persistence", () => {
       stateDir,
       candidates: [candidate],
       env: {
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-        NEXISCLAW_VERSION: "2026.4.25",
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+        GREENCHCLAW_VERSION: "2026.4.25",
         VITEST: "true",
       },
     });
@@ -333,8 +333,8 @@ describe("installed plugin index persistence", () => {
     fs.mkdirSync(pluginDir, { recursive: true });
     const candidate = createCandidate(pluginDir);
     const env = {
-      NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-      NEXISCLAW_VERSION: "2026.4.25",
+      GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+      GREENCHCLAW_VERSION: "2026.4.25",
       VITEST: "true",
     };
     const initial = await refreshPersistedInstalledPluginIndex({
@@ -344,7 +344,7 @@ describe("installed plugin index persistence", () => {
       env,
     });
     fs.writeFileSync(
-      path.join(pluginDir, "NexisClaw.plugin.json"),
+      path.join(pluginDir, "GreenchClaw.plugin.json"),
       JSON.stringify({
         id: "demo",
         name: "Demo",
@@ -389,8 +389,8 @@ describe("installed plugin index persistence", () => {
     const candidate = createCandidate(pluginDir);
     const nextCandidate = createCandidate(nextPluginDir, { id: "next-demo" });
     const env = {
-      NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-      NEXISCLAW_VERSION: "2026.4.25",
+      GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+      GREENCHCLAW_VERSION: "2026.4.25",
       VITEST: "true",
     };
     await refreshPersistedInstalledPluginIndex({
@@ -441,8 +441,8 @@ describe("installed plugin index persistence", () => {
       stateDir,
       candidates: [],
       env: {
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-        NEXISCLAW_VERSION: "2026.4.25",
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+        GREENCHCLAW_VERSION: "2026.4.25",
         VITEST: "true",
       },
     });
@@ -504,8 +504,8 @@ describe("installed plugin index persistence", () => {
       stateDir,
       candidates: [],
       env: {
-        NEXISCLAW_BUNDLED_PLUGINS_DIR: undefined,
-        NEXISCLAW_VERSION: "2026.4.25",
+        GREENCHCLAW_BUNDLED_PLUGINS_DIR: undefined,
+        GREENCHCLAW_VERSION: "2026.4.25",
         VITEST: "true",
       },
     });

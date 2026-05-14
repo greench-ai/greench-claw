@@ -27,7 +27,7 @@ describe("plugin node capability route metadata", () => {
       httpRoutes: [
         {
           pluginId: "canvas-plugin",
-          path: "/__NexisClaw__/canvas/ws",
+          path: "/__GreenchClaw__/canvas/ws",
           nodeCapability: { surface: "canvas" },
         },
       ],
@@ -36,7 +36,7 @@ describe("plugin node capability route metadata", () => {
     expect(
       findMatchingPluginNodeCapabilityRoute(
         registry,
-        resolvePluginRoutePathContext("/__NexisClaw__/canvas/ws"),
+        resolvePluginRoutePathContext("/__GreenchClaw__/canvas/ws"),
       )?.nodeCapability,
     ).toEqual({ surface: "canvas", scopeKey: "canvas-plugin:canvas" });
   });

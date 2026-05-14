@@ -1,5 +1,5 @@
-import type { ProviderThinkingProfile } from "NexisClaw/plugin-sdk/plugin-entry";
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-types";
+import type { ProviderThinkingProfile } from "GreenchClaw/plugin-sdk/plugin-entry";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-types";
 import { OLLAMA_DEFAULT_BASE_URL } from "./src/defaults.js";
 
 type OllamaProviderConfigDraft = Partial<ModelProviderConfig>;

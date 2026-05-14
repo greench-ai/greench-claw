@@ -1,14 +1,14 @@
 ---
-summary: "Use Venice AI privacy-focused models in NexisClaw"
+summary: "Use Venice AI privacy-focused models in GreenchClaw"
 read_when:
-  - You want privacy-focused inference in NexisClaw
+  - You want privacy-focused inference in GreenchClaw
   - You want Venice AI setup guidance
 title: "Venice AI"
 ---
 
 Venice AI provides **privacy-focused AI inference** with support for uncensored models and access to major proprietary models through their anonymized proxy. All inference is private by default — no training on your data, no logging.
 
-## Why Venice in NexisClaw
+## Why Venice in GreenchClaw
 
 - **Private inference** for open-source models (no logging).
 - **Uncensored models** when you need them.
@@ -47,13 +47,13 @@ Anonymized models are **not** fully private. Venice strips metadata before forwa
     2. Go to **Settings > API Keys > Create new key**
     3. Copy your API key (format: `vapi_xxxxxxxxxxxx`)
   </Step>
-  <Step title="Configure NexisClaw">
+  <Step title="Configure GreenchClaw">
     Choose your preferred setup method:
 
     <Tabs>
       <Tab title="Interactive (recommended)">
         ```bash
-        NexisClaw onboard --auth-choice venice-api-key
+        GreenchClaw onboard --auth-choice venice-api-key
         ```
 
         This will:
@@ -69,7 +69,7 @@ Anonymized models are **not** fully private. Venice strips metadata before forwa
       </Tab>
       <Tab title="Non-interactive">
         ```bash
-        NexisClaw onboard --non-interactive \
+        GreenchClaw onboard --non-interactive \
           --auth-choice venice-api-key \
           --venice-api-key "vapi_xxxxxxxxxxxx"
         ```
@@ -79,14 +79,14 @@ Anonymized models are **not** fully private. Venice strips metadata before forwa
   </Step>
   <Step title="Verify setup">
     ```bash
-    NexisClaw agent --model venice/kimi-k2-5 --message "Hello, are you working?"
+    GreenchClaw agent --model venice/kimi-k2-5 --message "Hello, are you working?"
     ```
   </Step>
 </Steps>
 
 ## Model selection
 
-After setup, NexisClaw shows all available Venice models. Pick based on your needs:
+After setup, GreenchClaw shows all available Venice models. Pick based on your needs:
 
 - **Default model**: `venice/kimi-k2-5` for strong private reasoning plus vision.
 - **High-capability option**: `venice/claude-opus-4-6` for the strongest anonymized Venice path.
@@ -96,17 +96,17 @@ After setup, NexisClaw shows all available Venice models. Pick based on your nee
 Change your default model anytime:
 
 ```bash
-NexisClaw models set venice/kimi-k2-5
-NexisClaw models set venice/claude-opus-4-6
+GreenchClaw models set venice/kimi-k2-5
+GreenchClaw models set venice/claude-opus-4-6
 ```
 
 List all available models:
 
 ```bash
-NexisClaw models list --all --provider venice
+GreenchClaw models list --all --provider venice
 ```
 
-You can also run `NexisClaw configure`, select **Model/auth**, and choose **Venice AI**.
+You can also run `GreenchClaw configure`, select **Model/auth**, and choose **Venice AI**.
 
 <Tip>
 Use the table below to pick the right model for your use case.
@@ -126,10 +126,10 @@ Use the table below to pick the right model for your use case.
 ## DeepSeek V4 replay behavior
 
 If Venice exposes DeepSeek V4 models such as `venice/deepseek-v4-pro` or
-`venice/deepseek-v4-flash`, NexisClaw fills the required DeepSeek V4
+`venice/deepseek-v4-flash`, GreenchClaw fills the required DeepSeek V4
 `reasoning_content` replay placeholder on assistant messages when the proxy
 omits it. Venice rejects DeepSeek's native top-level `thinking` control, so
-NexisClaw keeps that provider-specific replay fix separate from the native
+GreenchClaw keeps that provider-specific replay fix separate from the native
 DeepSeek provider's thinking controls.
 
 ## Built-in catalog (41 total)
@@ -189,7 +189,7 @@ DeepSeek provider's thinking controls.
 
 ## Model discovery
 
-NexisClaw ships a manifest-backed Venice seed catalog for read-only model listing. Runtime refresh can still discover models from the Venice API, and falls back to the manifest catalog if the API is unreachable.
+GreenchClaw ships a manifest-backed Venice seed catalog for read-only model listing. Runtime refresh can still discover models from the Venice API, and falls back to the manifest catalog if the API is unreachable.
 
 The `/models` endpoint is public (no auth needed for listing), but inference requires a valid API key.
 
@@ -222,19 +222,19 @@ Venice uses a credit-based system. Check [venice.ai/pricing](https://venice.ai/p
 
 ```bash
 # Use the default private model
-NexisClaw agent --model venice/kimi-k2-5 --message "Quick health check"
+GreenchClaw agent --model venice/kimi-k2-5 --message "Quick health check"
 
 # Use Claude Opus via Venice (anonymized)
-NexisClaw agent --model venice/claude-opus-4-6 --message "Summarize this task"
+GreenchClaw agent --model venice/claude-opus-4-6 --message "Summarize this task"
 
 # Use uncensored model
-NexisClaw agent --model venice/venice-uncensored --message "Draft options"
+GreenchClaw agent --model venice/venice-uncensored --message "Draft options"
 
 # Use vision model with image
-NexisClaw agent --model venice/qwen3-vl-235b-a22b --message "Review attached image"
+GreenchClaw agent --model venice/qwen3-vl-235b-a22b --message "Review attached image"
 
 # Use coding model
-NexisClaw agent --model venice/qwen3-coder-480b-a35b-instruct --message "Refactor this function"
+GreenchClaw agent --model venice/qwen3-coder-480b-a35b-instruct --message "Refactor this function"
 ```
 
 ## Troubleshooting
@@ -243,7 +243,7 @@ NexisClaw agent --model venice/qwen3-coder-480b-a35b-instruct --message "Refacto
   <Accordion title="API key not recognized">
     ```bash
     echo $VENICE_API_KEY
-    NexisClaw models list | grep venice
+    GreenchClaw models list | grep venice
     ```
 
     Ensure the key starts with `vapi_`.
@@ -251,7 +251,7 @@ NexisClaw agent --model venice/qwen3-coder-480b-a35b-instruct --message "Refacto
   </Accordion>
 
   <Accordion title="Model not available">
-    The Venice model catalog updates dynamically. Run `NexisClaw models list` to see currently available models. Some models may be temporarily offline.
+    The Venice model catalog updates dynamically. Run `GreenchClaw models list` to see currently available models. Some models may be temporarily offline.
   </Accordion>
 
   <Accordion title="Connection issues">

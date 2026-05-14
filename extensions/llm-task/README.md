@@ -4,7 +4,7 @@ Adds an **optional** agent tool `llm-task` for running **JSON-only** LLM tasks
 (drafting, summarizing, classifying) with optional JSON Schema validation.
 
 Designed to be called from workflow engines (for example, Lobster via
-`NexisClaw.invoke --each`) without adding new NexisClaw code per workflow.
+`GreenchClaw.invoke --each`) without adding new GreenchClaw code per workflow.
 
 ## Enable
 
@@ -90,9 +90,9 @@ Returns `details.json` containing the parsed JSON (and validates against
 
 ## Bundled extension note
 
-This extension depends on NexisClaw internal modules (the embedded agent runner).
-It is intended to ship as a **bundled** NexisClaw extension (like `lobster`) and
+This extension depends on GreenchClaw internal modules (the embedded agent runner).
+It is intended to ship as a **bundled** GreenchClaw extension (like `lobster`) and
 be enabled via `plugins.entries` + tool allowlists.
 
 It is **not** currently designed to be copied into
-`~/.NexisClaw/extensions` as a standalone plugin directory.
+`~/.GreenchClaw/extensions` as a standalone plugin directory.

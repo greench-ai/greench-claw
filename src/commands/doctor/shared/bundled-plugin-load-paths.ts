@@ -1,5 +1,5 @@
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../../agents/agent-scope.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import {
   buildBundledPluginLoadPathAliases,
   normalizeBundledLookupPath,
@@ -16,12 +16,12 @@ type BundledPluginLoadPathHit = {
   pathLabel: string;
 };
 
-function resolveBundledWorkspaceDir(cfg: NexisClawConfig): string | undefined {
+function resolveBundledWorkspaceDir(cfg: GreenchClawConfig): string | undefined {
   return resolveAgentWorkspaceDir(cfg, resolveDefaultAgentId(cfg)) ?? undefined;
 }
 
 export function scanBundledPluginLoadPathMigrations(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): BundledPluginLoadPathHit[] {
   const plugins = asObjectRecord(cfg.plugins);
@@ -79,17 +79,17 @@ export function collectBundledPluginLoadPathWarnings(params: {
   }
   const lines = params.hits.map(
     (hit) =>
-      `- ${hit.pathLabel}: bundled plugin path "${hit.fromPath}" still aliases ${hit.pluginId}; NexisClaw loads the packaged bundled plugin from "${hit.toPath}".`,
+      `- ${hit.pathLabel}: bundled plugin path "${hit.fromPath}" still aliases ${hit.pluginId}; GreenchClaw loads the packaged bundled plugin from "${hit.toPath}".`,
   );
   lines.push(`- Run "${params.doctorFixCommand}" to remove these redundant bundled plugin paths.`);
   return lines.map((line) => sanitizeForLog(line));
 }
 
 export function maybeRepairBundledPluginLoadPaths(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   changes: string[];
 } {
   const hits = scanBundledPluginLoadPathMigrations(cfg, env);

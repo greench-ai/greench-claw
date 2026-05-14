@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { enqueueCommandInLane, resetCommandQueueStateForTest } from "../process/command-queue.js";
 import { CommandLane } from "../process/lanes.js";
 import { applyGatewayLaneConcurrency } from "./server-lanes.js";
@@ -23,7 +23,7 @@ describe("applyGatewayLaneConcurrency", () => {
   });
 
   it("applies cron maxConcurrentRuns to the cron-nested lane used by cron agent turns", async () => {
-    applyGatewayLaneConcurrency({ cron: { maxConcurrentRuns: 2 } } as NexisClawConfig);
+    applyGatewayLaneConcurrency({ cron: { maxConcurrentRuns: 2 } } as GreenchClawConfig);
 
     let activeRuns = 0;
     let peakActiveRuns = 0;
@@ -62,7 +62,7 @@ describe("applyGatewayLaneConcurrency", () => {
   });
 
   it("keeps the shared nested lane at its default concurrency", async () => {
-    applyGatewayLaneConcurrency({ cron: { maxConcurrentRuns: 2 } } as NexisClawConfig);
+    applyGatewayLaneConcurrency({ cron: { maxConcurrentRuns: 2 } } as GreenchClawConfig);
 
     let startedRuns = 0;
     const releaseRuns = createDeferred<void>();

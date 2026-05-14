@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { i18n } from "../../i18n/index.ts";
 import { createStorageMock } from "../../test-helpers/storage.ts";
 import type { AppViewState } from "../app-view-state.ts";
-import { type NexisClawModalDialog } from "../components/modal-dialog.ts";
+import { type GreenchClawModalDialog } from "../components/modal-dialog.ts";
 import type { ExecApprovalRequest } from "../controllers/exec-approval.ts";
 import { renderDreamingRestartConfirmation } from "./dreaming-restart-confirmation.ts";
 import { renderExecApprovalPrompt } from "./exec-approval.ts";
@@ -49,10 +49,10 @@ function restoreDescriptor(name: "showModal" | "close", descriptor?: PropertyDes
 }
 
 async function getRenderedDialog() {
-  const modal = container.querySelector<NexisClawModalDialog>("NexisClaw-modal-dialog");
+  const modal = container.querySelector<GreenchClawModalDialog>("GreenchClaw-modal-dialog");
   expect(modal).toBeInstanceOf(HTMLElement);
   if (!modal) {
-    throw new Error("Expected NexisClaw-modal-dialog");
+    throw new Error("Expected GreenchClaw-modal-dialog");
   }
   await modal.updateComplete;
   await nextFrame();
@@ -82,7 +82,7 @@ function createExecRequest(): ExecApprovalRequest {
     request: {
       command: "echo hello",
       host: "gateway",
-      cwd: "/tmp/NexisClaw",
+      cwd: "/tmp/GreenchClaw",
       security: "workspace-write",
       ask: "on-request",
     },
@@ -137,13 +137,13 @@ describe("approval and confirmation modals", () => {
     const { modal, dialog } = await getRenderedDialog();
 
     expect(dialog.getAttribute("aria-modal")).toBe("true");
-    expect(dialog.getAttribute("aria-labelledby")).toBe("NexisClaw-modal-dialog-label");
-    expect(dialog.getAttribute("aria-describedby")).toBe("NexisClaw-modal-dialog-description");
-    expect(modal.shadowRoot?.querySelector("#NexisClaw-modal-dialog-label")?.textContent).toBe(
+    expect(dialog.getAttribute("aria-labelledby")).toBe("GreenchClaw-modal-dialog-label");
+    expect(dialog.getAttribute("aria-describedby")).toBe("GreenchClaw-modal-dialog-description");
+    expect(modal.shadowRoot?.querySelector("#GreenchClaw-modal-dialog-label")?.textContent).toBe(
       "Exec approval needed",
     );
     expect(
-      modal.shadowRoot?.querySelector("#NexisClaw-modal-dialog-description")?.textContent?.trim(),
+      modal.shadowRoot?.querySelector("#GreenchClaw-modal-dialog-description")?.textContent?.trim(),
     ).toBe("expires in 1m");
     expect(container.querySelector("#exec-approval-title")?.textContent?.trim()).toBe(
       "Exec approval needed",
@@ -269,7 +269,7 @@ describe("approval and confirmation modals", () => {
     const handleGatewayUrlCancel = vi.fn();
     render(
       renderGatewayUrlConfirmation({
-        pendingGatewayUrl: "wss://gateway.example/NexisClaw",
+        pendingGatewayUrl: "wss://gateway.example/GreenchClaw",
         handleGatewayUrlConfirm: vi.fn(),
         handleGatewayUrlCancel,
       } as unknown as AppViewState),

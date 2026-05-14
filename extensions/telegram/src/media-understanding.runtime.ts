@@ -1,11 +1,12 @@
 import {
   describeImageWithModel as describeImageWithModelImpl,
   transcribeFirstAudio as transcribeFirstAudioImpl,
-} from "NexisClaw/plugin-sdk/media-runtime";
+} from "GreenchClaw/plugin-sdk/media-runtime";
 
 type DescribeImageWithModel =
-  typeof import("NexisClaw/plugin-sdk/media-runtime").describeImageWithModel;
-type TranscribeFirstAudio = typeof import("NexisClaw/plugin-sdk/media-runtime").transcribeFirstAudio;
+  typeof import("GreenchClaw/plugin-sdk/media-runtime").describeImageWithModel;
+type TranscribeFirstAudio =
+  typeof import("GreenchClaw/plugin-sdk/media-runtime").transcribeFirstAudio;
 
 export async function describeImageWithModel(
   ...args: Parameters<DescribeImageWithModel>

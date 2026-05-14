@@ -1,6 +1,6 @@
 import { ChannelType } from "discord-api-types/v10";
-import { logError } from "NexisClaw/plugin-sdk/logging-core";
-import { resolveAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import { logError } from "GreenchClaw/plugin-sdk/logging-core";
+import { resolveAgentRoute } from "GreenchClaw/plugin-sdk/routing";
 import {
   type AgentComponentContext,
   type AgentComponentInteraction,

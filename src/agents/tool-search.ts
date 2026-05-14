@@ -7,7 +7,7 @@ import type {
 } from "@earendil-works/pi-agent-core";
 import type { ToolDefinition } from "@earendil-works/pi-coding-agent";
 import { Type } from "typebox";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { getPluginToolMeta } from "../plugins/tools.js";
 import {
   isToolWrappedWithBeforeToolCallHook,
@@ -34,7 +34,7 @@ const DEFAULT_SEARCH_LIMIT = 8;
 const DEFAULT_MAX_SEARCH_LIMIT = 20;
 
 type ToolSearchMode = "code" | "tools";
-type CatalogSource = "NexisClaw" | "mcp" | "client";
+type CatalogSource = "GreenchClaw" | "mcp" | "client";
 type CatalogTool = AnyAgentTool | ToolDefinition;
 
 export type ToolSearchCatalogToolExecutor = (params: {
@@ -66,8 +66,8 @@ export type ToolSearchConfig = {
 };
 
 export type ToolSearchToolContext = {
-  config?: NexisClawConfig;
-  runtimeConfig?: NexisClawConfig;
+  config?: GreenchClawConfig;
+  runtimeConfig?: GreenchClawConfig;
   agentId?: string;
   sessionKey?: string;
   sessionId?: string;
@@ -201,7 +201,7 @@ function settleBridge(message) {
 }
 
 function buildModelScriptSource(code) {
-  return "(async (NexisClaw, console) => {\n" + code + "\n})(NexisClaw, console)";
+  return "(async (GreenchClaw, console) => {\n" + code + "\n})(GreenchClaw, console)";
 }
 
 function buildControllerSource() {
@@ -253,7 +253,7 @@ function buildControllerSource() {
     "  warn: (...items) => logs.push(items.map(formatLogItem)),\n" +
     "  error: (...items) => logs.push(items.map(formatLogItem)),\n" +
     "});\n" +
-    "const NexisClaw = Object.freeze({\n" +
+    "const GreenchClaw = Object.freeze({\n" +
     "  tools: Object.freeze({\n" +
     "    search: (query, options) => bridge('search', [query, options]),\n" +
     "    describe: (id) => bridge('describe', [id]),\n" +
@@ -261,7 +261,7 @@ function buildControllerSource() {
     "  }),\n" +
     "});\n" +
     "return Object.freeze({\n" +
-    "  NexisClaw,\n" +
+    "  GreenchClaw,\n" +
     "  console,\n" +
     "  isBridgeIdle,\n" +
     "  waitForBridgeIdle,\n" +
@@ -307,7 +307,7 @@ async function runModelCode(code, timeoutMs) {
   });
   Object.defineProperties(sandbox, {
     console: { value: controller.console, enumerable: true },
-    NexisClaw: { value: controller.NexisClaw, enumerable: true },
+    GreenchClaw: { value: controller.GreenchClaw, enumerable: true },
   });
   activeController = controller;
   const pumpTimer = setInterval(() => pumpController(controller), 1);
@@ -362,7 +362,7 @@ process.on("message", (message) => {
 });
 `;
 
-const SESSION_CATALOGS_KEY = Symbol.for("NexisClaw.toolSearch.sessionCatalogs");
+const SESSION_CATALOGS_KEY = Symbol.for("GreenchClaw.toolSearch.sessionCatalogs");
 const globalToolSearchState = globalThis as typeof globalThis & {
   [SESSION_CATALOGS_KEY]?: Map<string, ToolSearchCatalogSession>;
 };
@@ -374,7 +374,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value && typeof value === "object" && !Array.isArray(value));
 }
 
-function readToolSearchConfig(config?: NexisClawConfig): Record<string, unknown> {
+function readToolSearchConfig(config?: GreenchClawConfig): Record<string, unknown> {
   const tools = isRecord(config?.tools) ? config.tools : undefined;
   const toolSearch = tools?.toolSearch;
   if (toolSearch === true) {
@@ -403,7 +403,7 @@ function isToolSearchCodeModeSupported(): boolean {
   return process.allowedNodeEnvironmentFlags.has("--permission");
 }
 
-export function resolveToolSearchConfig(config?: NexisClawConfig): ToolSearchConfig {
+export function resolveToolSearchConfig(config?: GreenchClawConfig): ToolSearchConfig {
   const raw = readToolSearchConfig(config);
   const rawMode = typeof raw.mode === "string" ? raw.mode : "code";
   const requestedMode: ToolSearchMode =
@@ -469,9 +469,9 @@ function classifyTool(tool: CatalogTool): { source: CatalogSource; sourceName?: 
     return { source: "mcp", sourceName: pluginId };
   }
   if (pluginId) {
-    return { source: "NexisClaw", sourceName: pluginId };
+    return { source: "GreenchClaw", sourceName: pluginId };
   }
-  return { source: "NexisClaw", sourceName: "core" };
+  return { source: "GreenchClaw", sourceName: "core" };
 }
 
 function makeCatalogId(tool: CatalogTool, source: CatalogSource, sourceName?: string): string {
@@ -682,7 +682,7 @@ export function createToolSearchCatalogRef(): ToolSearchCatalogRef {
 
 export function applyToolSearchCatalog(params: {
   tools: AnyAgentTool[];
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sessionId?: string;
   sessionKey?: string;
   agentId?: string;
@@ -748,7 +748,7 @@ export function applyToolSearchCatalog(params: {
 
 export function addClientToolsToToolSearchCatalog(params: {
   tools: ToolDefinition[];
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sessionId?: string;
   sessionKey?: string;
   agentId?: string;
@@ -969,7 +969,7 @@ function readCallArgs(args: unknown): { id: string; input: unknown } {
 
 function getTelemetry(catalog: ToolSearchCatalogSession) {
   const sources: Record<CatalogSource, number> = {
-    NexisClaw: 0,
+    GreenchClaw: 0,
     mcp: 0,
     client: 0,
   };
@@ -1339,11 +1339,11 @@ export function createToolSearchTools(ctx: ToolSearchToolContext): AnyAgentTool[
       name: TOOL_SEARCH_CODE_MODE_TOOL_NAME,
       label: "Tool Search Code",
       description:
-        "Run JavaScript in an isolated Node subprocess with NexisClaw.tools.search, NexisClaw.tools.describe, and NexisClaw.tools.call for large tool catalogs.",
+        "Run JavaScript in an isolated Node subprocess with GreenchClaw.tools.search, GreenchClaw.tools.describe, and GreenchClaw.tools.call for large tool catalogs.",
       parameters: Type.Object({
         code: Type.String({
           description:
-            "JavaScript body for an async function. Use return to return the final value. The NexisClaw.tools bridge is available.",
+            "JavaScript body for an async function. Use return to return the final value. The GreenchClaw.tools bridge is available.",
         }),
       }),
       execute: async (
@@ -1382,7 +1382,7 @@ export function createToolSearchTools(ctx: ToolSearchToolContext): AnyAgentTool[
     {
       name: TOOL_CALL_RAW_TOOL_NAME,
       label: "Tool Call",
-      description: "Call a selected Tool Search catalog entry through NexisClaw.",
+      description: "Call a selected Tool Search catalog entry through GreenchClaw.",
       parameters: Type.Object({
         id: Type.String({ description: "Tool search result id or tool name." }),
         args: Type.Optional(

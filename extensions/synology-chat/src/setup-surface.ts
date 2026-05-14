@@ -9,9 +9,9 @@ import {
   splitSetupEntries,
   type ChannelSetupAdapter,
   type ChannelSetupWizard,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/setup";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/setup";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { listAccountIds, resolveAccount } from "./accounts.js";
 import type { SynologyChatAccountRaw, SynologyChatChannelConfig } from "./types.js";
 
@@ -35,11 +35,11 @@ const SYNOLOGY_ALLOW_FROM_HELP_LINES = [
   `Docs: ${formatDocsLink("/channels/synology-chat", "channels/synology-chat")}`,
 ];
 
-function getChannelConfig(cfg: NexisClawConfig): SynologyChatChannelConfig {
+function getChannelConfig(cfg: GreenchClawConfig): SynologyChatChannelConfig {
   return (cfg.channels?.[channel] as SynologyChatChannelConfig | undefined) ?? {};
 }
 
-function getRawAccountConfig(cfg: NexisClawConfig, accountId: string): SynologyChatAccountRaw {
+function getRawAccountConfig(cfg: GreenchClawConfig, accountId: string): SynologyChatAccountRaw {
   const channelConfig = getChannelConfig(cfg);
   if (accountId === DEFAULT_ACCOUNT_ID) {
     return channelConfig;
@@ -48,12 +48,12 @@ function getRawAccountConfig(cfg: NexisClawConfig, accountId: string): SynologyC
 }
 
 function patchSynologyChatAccountConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   patch: Record<string, unknown>;
   clearFields?: string[];
   enabled?: boolean;
-}): NexisClawConfig {
+}): GreenchClawConfig {
   const channelConfig = getChannelConfig(params.cfg);
   if (params.accountId === DEFAULT_ACCOUNT_ID) {
     const nextChannelConfig = { ...channelConfig } as Record<string, unknown>;
@@ -97,7 +97,7 @@ function patchSynologyChatAccountConfig(params: {
   };
 }
 
-function isSynologyChatConfigured(cfg: NexisClawConfig, accountId: string): boolean {
+function isSynologyChatConfigured(cfg: GreenchClawConfig, accountId: string): boolean {
   const account = resolveAccount(cfg, accountId);
   return Boolean(account.token.trim() && account.incomingUrl.trim());
 }
@@ -139,7 +139,7 @@ function normalizeSynologyAllowedUserId(value: unknown): string {
   return "";
 }
 
-function resolveExistingAllowedUserIds(cfg: NexisClawConfig, accountId: string): string[] {
+function resolveExistingAllowedUserIds(cfg: GreenchClawConfig, accountId: string): string[] {
   const raw = getRawAccountConfig(cfg, accountId).allowedUserIds;
   if (Array.isArray(raw)) {
     return raw.map(normalizeSynologyAllowedUserId).filter(Boolean);
@@ -259,7 +259,7 @@ export const synologyChatSetupWizard: ChannelSetupWizard = {
       helpTitle: "Synology Chat incoming webhook",
       helpLines: [
         "Use the incoming webhook URL from Synology Chat integrations.",
-        "This is the URL NexisClaw uses to send replies back to Chat.",
+        "This is the URL GreenchClaw uses to send replies back to Chat.",
       ],
       currentValue: ({ cfg, accountId }) => getRawAccountConfig(cfg, accountId).incomingUrl?.trim(),
       keepPrompt: (value) => `Incoming webhook URL set (${value}). Keep it?`,

@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawPluginApi } from "../api.js";
+import type { GreenchClawPluginApi } from "../api.js";
 import type { DiffScreenshotter } from "./browser.js";
 import { DEFAULT_DIFFS_TOOL_DEFAULTS } from "./config.js";
 import { createDiffStoreHarness } from "./test-helpers.js";
@@ -32,7 +32,7 @@ describe("diffs tool rendered output guards", () => {
   beforeEach(async () => {
     renderDiffDocumentMock.mockReset();
     ({ store, cleanup: cleanupRootDir } = await createDiffStoreHarness(
-      "NexisClaw-diffs-tool-render-output-",
+      "GreenchClaw-diffs-tool-render-output-",
     ));
   });
 
@@ -72,7 +72,7 @@ describe("diffs tool rendered output guards", () => {
   });
 });
 
-function createApi(): NexisClawPluginApi {
+function createApi(): GreenchClawPluginApi {
   return createTestPluginApi({
     id: "diffs",
     name: "Diffs",
@@ -84,7 +84,7 @@ function createApi(): NexisClawPluginApi {
         bind: "loopback",
       },
     },
-    runtime: {} as NexisClawPluginApi["runtime"],
+    runtime: {} as GreenchClawPluginApi["runtime"],
   });
 }
 

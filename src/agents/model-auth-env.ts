@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import os from "node:os";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { getShellEnvAppliedKeys } from "../infra/shell-env.js";
 import { resolvePluginSetupProvider } from "../plugins/setup-registry.js";
 import type { ProviderAuthEvidence } from "../secrets/provider-env-vars.js";
@@ -19,7 +19,7 @@ export type EnvApiKeyResult = {
 };
 
 type EnvApiKeyLookupOptions = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   aliasMap?: Readonly<Record<string, string>>;
   candidateMap?: Readonly<Record<string, readonly string[]>>;

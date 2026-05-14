@@ -65,7 +65,7 @@ describe("action client helpers", () => {
   });
 
   it("stops one-off shared clients when no active monitor client is registered", async () => {
-    vi.stubEnv("NEXISCLAW_GATEWAY_PORT", "18799");
+    vi.stubEnv("GREENCHCLAW_GATEWAY_PORT", "18799");
 
     const result = await withResolvedActionClient(
       { cfg: TEST_CFG, accountId: "default" },

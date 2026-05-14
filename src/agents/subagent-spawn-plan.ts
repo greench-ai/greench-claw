@@ -1,5 +1,5 @@
 import { formatThinkingLevels } from "../auto-reply/thinking.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveSubagentSpawnModelSelection } from "./model-selection.js";
 import { resolveSubagentThinkingOverride } from "./subagent-spawn-thinking.js";
 
@@ -26,7 +26,7 @@ export function splitModelRef(ref?: string) {
 }
 
 export function resolveConfiguredSubagentRunTimeoutSeconds(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   runTimeoutSeconds?: number;
 }) {
   const cfgSubagentTimeout =
@@ -40,7 +40,7 @@ export function resolveConfiguredSubagentRunTimeoutSeconds(params: {
 }
 
 export function resolveSubagentModelAndThinkingPlan(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   targetAgentId: string;
   targetAgentConfig?: unknown;
   modelOverride?: string;

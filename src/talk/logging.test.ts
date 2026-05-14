@@ -30,7 +30,7 @@ function stableDiagnosticPayload<TEvent extends DiagnosticEventPayload>(
 
 function stableLogRecordPayload(event: Extract<DiagnosticEventPayload, { type: "log.record" }>) {
   const { code, loggerParents, ...stable } = stableDiagnosticPayload(event);
-  expect(loggerParents).toStrictEqual(["NexisClaw"]);
+  expect(loggerParents).toStrictEqual(["GreenchClaw"]);
   expect(code?.functionName).toBe("recordTalkLogEvent");
   expect(code?.line).toBeGreaterThan(0);
   return stable;
@@ -57,8 +57,8 @@ describe("talk logging", () => {
   let logFile: string;
 
   beforeEach(() => {
-    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "NexisClaw-talk-logs-"));
-    logFile = path.join(tmpDir, "NexisClaw.log");
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "GreenchClaw-talk-logs-"));
+    logFile = path.join(tmpDir, "GreenchClaw.log");
     resetDiagnosticEventsForTest();
     resetLogger();
     setLoggerOverride({ level: "info", file: logFile });

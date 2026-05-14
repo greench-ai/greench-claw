@@ -17,9 +17,9 @@ export function cleanupTempDirs(tempDirs: string[]): void {
 
 export function restorePrivateQaCliEnv(originalPrivateQaCli: string | undefined): void {
   if (originalPrivateQaCli === undefined) {
-    delete process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI;
+    delete process.env.GREENCHCLAW_ENABLE_PRIVATE_QA_CLI;
   } else {
-    process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI = originalPrivateQaCli;
+    process.env.GREENCHCLAW_ENABLE_PRIVATE_QA_CLI = originalPrivateQaCli;
   }
 }
 
@@ -29,7 +29,7 @@ export function makePrivateQaSourceRoot(tempDirs: string[], prefix: string): str
   fs.mkdirSync(path.join(sourceRoot, "src"), { recursive: true });
   fs.mkdirSync(path.join(sourceRoot, "extensions"), { recursive: true });
   fs.writeFileSync(path.join(sourceRoot, ".git"), "gitdir: /tmp/mock\n", "utf8");
-  process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI = "1";
+  process.env.GREENCHCLAW_ENABLE_PRIVATE_QA_CLI = "1";
   return sourceRoot;
 }
 
@@ -60,10 +60,10 @@ export async function expectPrivateQaLabRuntimeSurfaceLoad(params: {
   tempDirs: string[];
   importRuntime: () => Promise<QaRuntimeModule>;
   loadBundledPluginPublicSurfaceModuleSync: SurfaceLoaderMock;
-  resolveNexisClawPackageRootSync: SurfaceLoaderMock;
+  resolveGreenchClawPackageRootSync: SurfaceLoaderMock;
 }) {
-  const sourceRoot = makePrivateQaSourceRoot(params.tempDirs, "NexisClaw-qa-runtime-root-");
-  params.resolveNexisClawPackageRootSync.mockReturnValue(sourceRoot);
+  const sourceRoot = makePrivateQaSourceRoot(params.tempDirs, "GreenchClaw-qa-runtime-root-");
+  params.resolveGreenchClawPackageRootSync.mockReturnValue(sourceRoot);
 
   const runtimeSurface = makeQaRuntimeSurface();
   params.loadBundledPluginPublicSurfaceModuleSync.mockReturnValue(runtimeSurface);
@@ -75,8 +75,8 @@ export async function expectPrivateQaLabRuntimeSurfaceLoad(params: {
     dirName: "qa-lab",
     artifactBasename: "runtime-api.js",
     env: expect.objectContaining({
-      NEXISCLAW_ENABLE_PRIVATE_QA_CLI: "1",
-      NEXISCLAW_BUNDLED_PLUGINS_DIR: path.join(sourceRoot, "extensions"),
+      GREENCHCLAW_ENABLE_PRIVATE_QA_CLI: "1",
+      GREENCHCLAW_BUNDLED_PLUGINS_DIR: path.join(sourceRoot, "extensions"),
     }),
   });
 }

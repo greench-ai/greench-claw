@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeAll, beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 
 type UnknownMock = Mock<(...args: unknown[]) => unknown>;
@@ -28,9 +28,9 @@ type CronStoreWrite = {
   jobs: Array<{ id: string; delivery: { channel: string; to: string } }>;
 };
 
-vi.mock("NexisClaw/plugin-sdk/config-mutation", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/config-mutation")>(
-    "NexisClaw/plugin-sdk/config-mutation",
+vi.mock("GreenchClaw/plugin-sdk/config-mutation", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/config-mutation")>(
+    "GreenchClaw/plugin-sdk/config-mutation",
   );
   return {
     ...actual,
@@ -40,9 +40,9 @@ vi.mock("NexisClaw/plugin-sdk/config-mutation", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/cron-store-runtime", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/cron-store-runtime")>(
-    "NexisClaw/plugin-sdk/cron-store-runtime",
+vi.mock("GreenchClaw/plugin-sdk/cron-store-runtime", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/cron-store-runtime")>(
+    "GreenchClaw/plugin-sdk/cron-store-runtime",
   );
   return {
     ...actual,
@@ -92,7 +92,7 @@ export function installMaybePersistResolvedTelegramTargetTests(params?: {
 
     it("skips writeback when target is already numeric", async () => {
       await maybePersistResolvedTelegramTarget({
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         rawTarget: "-100123",
         resolvedChatId: "-100123",
       });
@@ -106,7 +106,7 @@ export function installMaybePersistResolvedTelegramTargetTests(params?: {
         await maybePersistResolvedTelegramTarget({
           cfg: {
             cron: { store: "/tmp/cron/jobs.json" },
-          } as NexisClawConfig,
+          } as GreenchClawConfig,
           rawTarget: "t.me/mychannel",
           resolvedChatId: "-100123",
           gatewayClientScopes: ["operator.write"],
@@ -122,7 +122,7 @@ export function installMaybePersistResolvedTelegramTargetTests(params?: {
         await maybePersistResolvedTelegramTarget({
           cfg: {
             cron: { store: "/tmp/cron/jobs.json" },
-          } as NexisClawConfig,
+          } as GreenchClawConfig,
           rawTarget: "t.me/mychannel",
           resolvedChatId: "-100123",
           gatewayClientScopes: [],
@@ -151,7 +151,7 @@ export function installMaybePersistResolvedTelegramTargetTests(params?: {
             },
           },
         },
-        writeOptions: { expectedConfigPath: "/tmp/NexisClaw.json" },
+        writeOptions: { expectedConfigPath: "/tmp/GreenchClaw.json" },
       });
       loadCronStore.mockResolvedValue({
         version: 1,
@@ -164,7 +164,7 @@ export function installMaybePersistResolvedTelegramTargetTests(params?: {
       await maybePersistResolvedTelegramTarget({
         cfg: {
           cron: { store: "/tmp/cron/jobs.json" },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         rawTarget: "t.me/mychannel",
         resolvedChatId: "-100123",
       });
@@ -173,7 +173,7 @@ export function installMaybePersistResolvedTelegramTargetTests(params?: {
       const [writtenConfig, writeOptions] = requireWriteConfigCall();
       expect(writtenConfig.channels?.telegram?.defaultTo).toBe("-100123");
       expect(writtenConfig.channels?.telegram?.accounts?.alerts?.defaultTo).toBe("-100123");
-      expect(writeOptions.expectedConfigPath).toBe("/tmp/NexisClaw.json");
+      expect(writeOptions.expectedConfigPath).toBe("/tmp/GreenchClaw.json");
       expect(saveCronStore).toHaveBeenCalledTimes(1);
       const [cronPath, cronStore] = requireSaveCronStoreCall();
       expect(cronPath).toBe("/tmp/cron/jobs.json");
@@ -199,7 +199,7 @@ export function installMaybePersistResolvedTelegramTargetTests(params?: {
       loadCronStore.mockResolvedValue({ version: 1, jobs: [] });
 
       await maybePersistResolvedTelegramTarget({
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         rawTarget: "t.me/mychannel:topic:9",
         resolvedChatId: "-100123",
       });
@@ -229,7 +229,7 @@ export function installMaybePersistResolvedTelegramTargetTests(params?: {
       });
 
       await maybePersistResolvedTelegramTarget({
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         rawTarget: "@MyChannel",
         resolvedChatId: "-100123",
       });

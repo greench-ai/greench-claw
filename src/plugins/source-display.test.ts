@@ -5,9 +5,17 @@ import { resolveBundledPluginsDir } from "./bundled-dir.js";
 import { formatPluginSourceForTable, resolvePluginSourceRoots } from "./source-display.js";
 
 const PLUGIN_SOURCE_ROOTS = {
-  stock: path.resolve(path.sep, "opt", "homebrew", "lib", "node_modules", "NexisClaw", "extensions"),
-  global: path.resolve(path.sep, "Users", "x", ".NexisClaw", "extensions"),
-  workspace: path.resolve(path.sep, "Users", "x", "ws", ".NexisClaw", "extensions"),
+  stock: path.resolve(
+    path.sep,
+    "opt",
+    "homebrew",
+    "lib",
+    "node_modules",
+    "GreenchClaw",
+    "extensions",
+  ),
+  global: path.resolve(path.sep, "Users", "x", ".GreenchClaw", "extensions"),
+  workspace: path.resolve(path.sep, "Users", "x", "ws", ".GreenchClaw", "extensions"),
 };
 
 function expectFormattedSource(params: {
@@ -73,10 +81,10 @@ describe("formatPluginSourceForTable", () => {
   ])("shortens $origin sources under the $sourceKey root", expectFormattedSourceCase);
 
   it("ignores untrusted explicit env override for the stock source root", () => {
-    const homeDir = path.resolve(path.sep, "tmp", "NexisClaw-home");
+    const homeDir = path.resolve(path.sep, "tmp", "GreenchClaw-home");
     const rawEnv = {
-      NEXISCLAW_BUNDLED_PLUGINS_DIR: "~/bundled",
-      NEXISCLAW_STATE_DIR: "~/state",
+      GREENCHCLAW_BUNDLED_PLUGINS_DIR: "~/bundled",
+      GREENCHCLAW_STATE_DIR: "~/state",
     } as NodeJS.ProcessEnv;
     const stock = withPathResolutionEnv(homeDir, rawEnv, (env) => resolveBundledPluginsDir(env));
     if (!stock) {
@@ -89,7 +97,7 @@ describe("formatPluginSourceForTable", () => {
       expected: {
         stock,
         global: path.join(homeDir, "state", "extensions"),
-        workspace: path.join(homeDir, "ws", ".NexisClaw", "extensions"),
+        workspace: path.join(homeDir, "ws", ".GreenchClaw", "extensions"),
       },
     });
   });

@@ -1,6 +1,6 @@
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawPluginApi, PluginRuntime } from "../runtime-api.js";
+import type { GreenchClawPluginApi, PluginRuntime } from "../runtime-api.js";
 
 const createFeishuClientMock = vi.hoisted(() => vi.fn());
 const chatGetMock = vi.hoisted(() => vi.fn());
@@ -19,9 +19,9 @@ function createFeishuToolRuntime(): PluginRuntime {
 
 describe("registerFeishuChatTools", () => {
   function createChatToolApi(params: {
-    config: NexisClawPluginApi["config"];
-    registerTool: NexisClawPluginApi["registerTool"];
-  }): NexisClawPluginApi {
+    config: GreenchClawPluginApi["config"];
+    registerTool: GreenchClawPluginApi["registerTool"];
+  }): GreenchClawPluginApi {
     return createTestPluginApi({
       id: "feishu-test",
       name: "Feishu Test",

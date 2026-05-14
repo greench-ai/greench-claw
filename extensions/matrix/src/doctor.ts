@@ -1,10 +1,10 @@
-import { type ChannelDoctorAdapter } from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { type ChannelDoctorAdapter } from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import {
   detectPluginInstallPathIssue,
   formatPluginInstallPathIssue,
   removePluginFromConfig,
-} from "NexisClaw/plugin-sdk/runtime-doctor";
+} from "GreenchClaw/plugin-sdk/runtime-doctor";
 import {
   legacyConfigRules as MATRIX_LEGACY_CONFIG_RULES,
   normalizeCompatibilityConfig as normalizeMatrixCompatibilityConfig,
@@ -19,12 +19,12 @@ import {
 } from "./matrix-migration.runtime.js";
 import { isRecord } from "./record-shared.js";
 
-function hasConfiguredMatrixChannel(cfg: NexisClawConfig): boolean {
+function hasConfiguredMatrixChannel(cfg: GreenchClawConfig): boolean {
   const channels = cfg.channels as Record<string, unknown> | undefined;
   return isRecord(channels?.matrix);
 }
 
-function hasConfiguredMatrixPluginSurface(cfg: NexisClawConfig): boolean {
+function hasConfiguredMatrixPluginSurface(cfg: GreenchClawConfig): boolean {
   return Boolean(
     cfg.plugins?.installs?.matrix ||
     cfg.plugins?.entries?.matrix ||
@@ -39,7 +39,10 @@ function hasConfiguredMatrixEnv(env: NodeJS.ProcessEnv): boolean {
   );
 }
 
-function configMayNeedMatrixDoctorSequence(cfg: NexisClawConfig, env: NodeJS.ProcessEnv): boolean {
+function configMayNeedMatrixDoctorSequence(
+  cfg: GreenchClawConfig,
+  env: NodeJS.ProcessEnv,
+): boolean {
   return (
     hasConfiguredMatrixChannel(cfg) ||
     hasConfiguredMatrixPluginSurface(cfg) ||
@@ -55,7 +58,7 @@ export function formatMatrixLegacyStatePreview(
     `- Legacy sync store: ${detection.legacyStoragePath} -> ${detection.targetStoragePath}`,
     `- Legacy crypto store: ${detection.legacyCryptoPath} -> ${detection.targetCryptoPath}`,
     ...(detection.selectionNote ? [`- ${detection.selectionNote}`] : []),
-    '- Run "NexisClaw doctor --fix" to migrate this Matrix state now.',
+    '- Run "GreenchClaw doctor --fix" to migrate this Matrix state now.',
   ].join("\n");
 }
 
@@ -73,14 +76,14 @@ export function formatMatrixLegacyCryptoPreview(
         `- Legacy crypto store: ${plan.legacyCryptoPath}`,
         `- New recovery key file: ${plan.recoveryKeyPath}`,
         `- Migration state file: ${plan.statePath}`,
-        '- Run "NexisClaw doctor --fix" to extract any saved backup key now. Backed-up room keys will restore automatically on next gateway start.',
+        '- Run "GreenchClaw doctor --fix" to extract any saved backup key now. Backed-up room keys will restore automatically on next gateway start.',
       ].join("\n"),
     );
   }
   return notes;
 }
 
-export async function collectMatrixInstallPathWarnings(cfg: NexisClawConfig): Promise<string[]> {
+export async function collectMatrixInstallPathWarnings(cfg: GreenchClawConfig): Promise<string[]> {
   const issue = await detectPluginInstallPathIssue({
     pluginId: "matrix",
     install: cfg.plugins?.installs?.matrix,
@@ -91,11 +94,11 @@ export async function collectMatrixInstallPathWarnings(cfg: NexisClawConfig): Pr
   return formatPluginInstallPathIssue({
     issue,
     pluginLabel: "Matrix",
-    defaultInstallCommand: "NexisClaw plugins install @NexisClaw/matrix",
+    defaultInstallCommand: "GreenchClaw plugins install @GreenchClaw/matrix",
   }).map((entry) => `- ${entry}`);
 }
 
-export async function cleanStaleMatrixPluginConfig(cfg: NexisClawConfig) {
+export async function cleanStaleMatrixPluginConfig(cfg: GreenchClawConfig) {
   const issue = await detectPluginInstallPathIssue({
     pluginId: "matrix",
     install: cfg.plugins?.installs?.matrix,
@@ -129,7 +132,7 @@ export async function cleanStaleMatrixPluginConfig(cfg: NexisClawConfig) {
 }
 
 export async function applyMatrixDoctorRepair(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
 }): Promise<{ changes: string[]; warnings: string[] }> {
   const changes: string[] = [];
@@ -155,7 +158,7 @@ export async function applyMatrixDoctorRepair(params: {
         `- Failed creating a Matrix migration snapshot before repair: ${String(error)}`,
       );
       warnings.push(
-        '- Skipping Matrix migration changes for now. Resolve the snapshot failure, then rerun "NexisClaw doctor --fix".',
+        '- Skipping Matrix migration changes for now. Resolve the snapshot failure, then rerun "GreenchClaw doctor --fix".',
       );
     }
   } else if (migrationStatus.pending) {
@@ -205,7 +208,7 @@ export async function applyMatrixDoctorRepair(params: {
 }
 
 export async function runMatrixDoctorSequence(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   shouldRepair: boolean;
 }): Promise<{ changeNotes: string[]; warningNotes: string[] }> {

@@ -4,10 +4,10 @@ import {
   isNonSecretApiKeyMarker,
   normalizeApiKeyConfig,
   normalizeOptionalSecretInput,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
-import { resolveConfiguredSecretInputString } from "NexisClaw/plugin-sdk/secret-input-runtime";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "GreenchClaw/plugin-sdk/provider-auth-runtime";
+import { resolveConfiguredSecretInputString } from "GreenchClaw/plugin-sdk/secret-input-runtime";
 import {
   LMSTUDIO_DEFAULT_API_KEY_ENV_VAR,
   LMSTUDIO_LOCAL_API_KEY_PLACEHOLDER,
@@ -71,7 +71,7 @@ function shouldSuppressResolvedRuntimeApiKeyForHeaderAuth(
 }
 
 export async function resolveLmstudioConfiguredApiKey(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   path?: string;
 }): Promise<string | undefined> {
@@ -120,7 +120,7 @@ export async function resolveLmstudioConfiguredApiKey(params: {
 }
 
 export async function resolveLmstudioProviderHeaders(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   headers?: unknown;
   path?: string;
@@ -161,7 +161,7 @@ export async function resolveLmstudioProviderHeaders(params: {
  * Use this as the standard auth setup step before discovery or model load calls.
  */
 export async function resolveLmstudioRequestContext(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentDir?: string;
   env?: NodeJS.ProcessEnv;
   providerHeaders?: unknown;
@@ -188,7 +188,7 @@ export async function resolveLmstudioRequestContext(params: {
  * Resolves LM Studio runtime API key from config.
  */
 export async function resolveLmstudioRuntimeApiKey(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   agentDir?: string;
   env?: NodeJS.ProcessEnv;
   headers?: unknown;
@@ -221,7 +221,7 @@ export async function resolveLmstudioRuntimeApiKey(params: {
       [
         "LM Studio API key is required.",
         `Set models.providers.lmstudio.apiKey (for example "${envMarker}")`,
-        'or run "NexisClaw models auth lmstudio".',
+        'or run "GreenchClaw models auth lmstudio".',
       ].join(" "),
     );
   };

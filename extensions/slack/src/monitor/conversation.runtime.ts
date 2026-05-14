@@ -5,4 +5,4 @@ export {
   resolveConversationLabel,
   resolvePluginConversationBindingApproval,
   upsertChannelPairingRequest,
-} from "NexisClaw/plugin-sdk/conversation-runtime";
+} from "GreenchClaw/plugin-sdk/conversation-runtime";

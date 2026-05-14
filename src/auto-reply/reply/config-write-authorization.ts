@@ -4,10 +4,10 @@ import {
   formatConfigWriteDeniedMessage,
 } from "../../channels/plugins/config-writes.js";
 import type { ChannelId } from "../../channels/plugins/types.public.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 
 export function resolveConfigWriteDeniedText(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   channel?: string | null;
   channelId: ChannelId | null;
   accountId?: string;

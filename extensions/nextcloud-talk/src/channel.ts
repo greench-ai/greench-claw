@@ -1,12 +1,12 @@
-import { describeWebhookAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
-import { createChatChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import { createLoggedPairingApprovalNotifier } from "NexisClaw/plugin-sdk/channel-pairing";
-import { createAllowlistProviderRouteAllowlistWarningCollector } from "NexisClaw/plugin-sdk/channel-policy";
+import { describeWebhookAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
+import { createChatChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import { createLoggedPairingApprovalNotifier } from "GreenchClaw/plugin-sdk/channel-pairing";
+import { createAllowlistProviderRouteAllowlistWarningCollector } from "GreenchClaw/plugin-sdk/channel-policy";
 import {
   buildWebhookChannelStatusSummary,
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
+} from "GreenchClaw/plugin-sdk/status-helpers";
 import { resolveNextcloudTalkAccount, type ResolvedNextcloudTalkAccount } from "./accounts.js";
 import { nextcloudTalkApprovalAuth } from "./approval-auth.js";
 import { probeNextcloudTalkBotResponseFeature } from "./bot-preflight.js";

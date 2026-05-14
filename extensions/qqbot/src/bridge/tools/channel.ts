@@ -1,4 +1,4 @@
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/core";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/core";
 import { getAccessToken } from "../../engine/messaging/sender.js";
 import { ChannelApiSchema, executeChannelApi } from "../../engine/tools/channel-api.js";
 import type { ChannelApiParams } from "../../engine/tools/channel-api.js";
@@ -11,7 +11,7 @@ import { listQQBotAccountIds, resolveQQBotAccount } from "../config.js";
  * channel APIs. Agents learn endpoint details from the skill docs and
  * send requests through this proxy.
  */
-export function registerChannelTool(api: NexisClawPluginApi): void {
+export function registerChannelTool(api: GreenchClawPluginApi): void {
   const cfg = api.config;
   if (!cfg) {
     return;

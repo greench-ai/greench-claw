@@ -8,11 +8,11 @@
  * under `src/bridge/` (or `src/bootstrap/` in the standalone variant).
  */
 
-import type { NexisClawPluginApi } from "NexisClaw/plugin-sdk/plugin-entry";
+import type { GreenchClawPluginApi } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { registerQQBotFrameworkCommands } from "./commands/framework-registration.js";
 import { registerQQBotTools } from "./tools/index.js";
 
-export function registerQQBotFull(api: NexisClawPluginApi): void {
+export function registerQQBotFull(api: GreenchClawPluginApi): void {
   registerQQBotTools(api);
   registerQQBotFrameworkCommands(api);
 }

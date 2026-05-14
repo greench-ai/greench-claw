@@ -5,9 +5,9 @@ import {
   listMemoryEmbeddingProviders,
   listRegisteredMemoryEmbeddingProviderAdapters,
   type MemoryEmbeddingProviderAdapter,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { resolveUserPath } from "NexisClaw/plugin-sdk/memory-core-host-engine-foundation";
-import { getProviderEnvVars } from "NexisClaw/plugin-sdk/provider-env-vars";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { resolveUserPath } from "GreenchClaw/plugin-sdk/memory-core-host-engine-foundation";
+import { getProviderEnvVars } from "GreenchClaw/plugin-sdk/provider-env-vars";
 import { formatErrorMessage } from "../dreaming-shared.js";
 import { filterUnregisteredMemoryEmbeddingProviderAdapters } from "./provider-adapter-registration.js";
 
@@ -57,7 +57,7 @@ function formatLocalSetupError(err: unknown): string {
     "To enable local embeddings:",
     "1) Use Node 24 (recommended for installs/updates; Node 22 LTS, currently 22.16+, remains supported)",
     missing
-      ? `2) Install ${NODE_LLAMA_CPP_RUNTIME_PACKAGE} next to the NexisClaw package or source checkout`
+      ? `2) Install ${NODE_LLAMA_CPP_RUNTIME_PACKAGE} next to the GreenchClaw package or source checkout`
       : null,
     `3) If you use pnpm: pnpm approve-builds (select ${NODE_LLAMA_CPP_RUNTIME_PACKAGE}), then pnpm rebuild ${NODE_LLAMA_CPP_RUNTIME_PACKAGE}`,
     ...listRemoteEmbeddingSetupHints(),

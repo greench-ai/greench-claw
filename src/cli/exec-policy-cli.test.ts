@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import { Command } from "commander";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import type { ExecApprovalsFile, ExecApprovalsSnapshot } from "../infra/exec-approvals.js";
 import { stripAnsi } from "../terminal/ansi.js";
 import { registerExecPolicyCli } from "./exec-policy-cli.js";
@@ -73,7 +73,7 @@ function readFirstReplaceConfigArg(): Record<string, unknown> {
 const mocks = vi.hoisted(() => {
   const runtimeErrors: string[] = [];
   const stringifyArgs = (args: unknown[]) => args.map((value) => String(value)).join(" ");
-  let configState: NexisClawConfig = {
+  let configState: GreenchClawConfig = {
     tools: {
       exec: {
         host: "auto",
@@ -105,7 +105,7 @@ const mocks = vi.hoisted(() => {
   };
   return {
     getConfig: () => configState,
-    setConfig: (next: NexisClawConfig) => {
+    setConfig: (next: GreenchClawConfig) => {
       configState = next;
     },
     getApprovals: () => approvalsState,
@@ -114,33 +114,33 @@ const mocks = vi.hoisted(() => {
     },
     defaultRuntime,
     runtimeErrors,
-    mutateConfigFile: vi.fn(async ({ mutate }: { mutate: (draft: NexisClawConfig) => void }) => {
+    mutateConfigFile: vi.fn(async ({ mutate }: { mutate: (draft: GreenchClawConfig) => void }) => {
       const draft = structuredClone(configState);
       mutate(draft);
       configState = draft;
       return {
-        path: "/tmp/NexisClaw.json",
+        path: "/tmp/GreenchClaw.json",
         previousHash: "hash-1",
-        snapshot: { path: "/tmp/NexisClaw.json" },
+        snapshot: { path: "/tmp/GreenchClaw.json" },
         nextConfig: draft,
         result: undefined,
       };
     }),
     replaceConfigFile: vi.fn(
-      async ({ nextConfig }: { nextConfig: NexisClawConfig; baseHash?: string }) => {
+      async ({ nextConfig }: { nextConfig: GreenchClawConfig; baseHash?: string }) => {
         configState = structuredClone(nextConfig);
         return {
-          path: "/tmp/NexisClaw.json",
+          path: "/tmp/GreenchClaw.json",
           previousHash: "hash-1",
-          snapshot: { path: "/tmp/NexisClaw.json" },
+          snapshot: { path: "/tmp/GreenchClaw.json" },
           nextConfig,
         };
       },
     ),
     readConfigFileSnapshot: vi.fn<
-      () => Promise<{ path: string; hash: string; config: NexisClawConfig }>
+      () => Promise<{ path: string; hash: string; config: GreenchClawConfig }>
     >(async () => ({
-      path: "/tmp/NexisClaw.json",
+      path: "/tmp/GreenchClaw.json",
       hash: "config-hash-1",
       config: configState,
     })),
@@ -226,14 +226,14 @@ describe("exec-policy CLI", () => {
     mocks.defaultRuntime.exit.mockClear();
     mocks.mutateConfigFile.mockReset();
     mocks.mutateConfigFile.mockImplementation(
-      async ({ mutate }: { mutate: (draft: NexisClawConfig) => void }) => {
+      async ({ mutate }: { mutate: (draft: GreenchClawConfig) => void }) => {
         const draft = structuredClone(mocks.getConfig());
         mutate(draft);
         mocks.setConfig(draft);
         return {
-          path: "/tmp/NexisClaw.json",
+          path: "/tmp/GreenchClaw.json",
           previousHash: "hash-1",
-          snapshot: { path: "/tmp/NexisClaw.json" },
+          snapshot: { path: "/tmp/GreenchClaw.json" },
           nextConfig: draft,
           result: undefined,
         };
@@ -241,19 +241,19 @@ describe("exec-policy CLI", () => {
     );
     mocks.replaceConfigFile.mockReset();
     mocks.replaceConfigFile.mockImplementation(
-      async ({ nextConfig }: { nextConfig: NexisClawConfig; baseHash?: string }) => {
+      async ({ nextConfig }: { nextConfig: GreenchClawConfig; baseHash?: string }) => {
         mocks.setConfig(structuredClone(nextConfig));
         return {
-          path: "/tmp/NexisClaw.json",
+          path: "/tmp/GreenchClaw.json",
           previousHash: "hash-1",
-          snapshot: { path: "/tmp/NexisClaw.json" },
+          snapshot: { path: "/tmp/GreenchClaw.json" },
           nextConfig,
         };
       },
     );
     mocks.readConfigFileSnapshot.mockReset();
     mocks.readConfigFileSnapshot.mockImplementation(async () => ({
-      path: "/tmp/NexisClaw.json",
+      path: "/tmp/GreenchClaw.json",
       hash: "config-hash-1",
       config: mocks.getConfig(),
     }));
@@ -279,7 +279,7 @@ describe("exec-policy CLI", () => {
     expect(mocks.defaultRuntime.writeJson).toHaveBeenCalledTimes(1);
     const payload = readLastJsonWrite();
     expectFields(payload, {
-      configPath: "/tmp/NexisClaw.json",
+      configPath: "/tmp/GreenchClaw.json",
       approvalsPath: "/tmp/exec-approvals.json",
     });
     const scope = readFirstPolicyScope(payload);
@@ -394,7 +394,7 @@ describe("exec-policy CLI", () => {
       },
     });
     mocks.readConfigFileSnapshot.mockImplementationOnce(async () => ({
-      path: "/tmp/NexisClaw.json\u001B[2J\nforged",
+      path: "/tmp/GreenchClaw.json\u001B[2J\nforged",
       hash: "config-hash-1",
       config: mocks.getConfig(),
     }));
@@ -425,14 +425,14 @@ describe("exec-policy CLI", () => {
     const output = stripAnsi(
       mocks.defaultRuntime.log.mock.calls.map((call) => String(call[0] ?? "")).join("\n"),
     );
-    expect(output).toContain("/tmp/NexisClaw.json");
+    expect(output).toContain("/tmp/GreenchClaw.json");
     expect(output).toContain("/tmp/exec-approvals.json");
     expect(output).toContain("scope\\u{200B}name");
     expect(output).toContain("host=auto");
     expect(output).toContain("tools.exec.");
     expect(output).toContain("host)");
     expect(output).toContain("\\nforged");
-    expect(output).not.toContain("/tmp/NexisClaw.json\nforged");
+    expect(output).not.toContain("/tmp/GreenchClaw.json\nforged");
     expect(output).not.toContain("\u001B[2J");
     expect(output).not.toContain("\u0007");
   });

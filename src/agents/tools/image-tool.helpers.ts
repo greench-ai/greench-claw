@@ -1,5 +1,5 @@
 import type { AssistantMessage } from "@earendil-works/pi-ai";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { estimateBase64DecodedBytes } from "../../media/base64.js";
 import { normalizeLowercaseStringOrEmpty } from "../../shared/string-coerce.js";
 import { findNormalizedProviderValue, normalizeProviderId } from "../model-selection.js";
@@ -130,7 +130,7 @@ export function coerceImageAssistantText(params: {
   throw new Error(`Image model returned no text (${params.provider}/${params.model}).`);
 }
 
-export function coerceImageModelConfig(cfg?: NexisClawConfig): ImageModelConfig {
+export function coerceImageModelConfig(cfg?: GreenchClawConfig): ImageModelConfig {
   return coerceToolModelConfig(cfg?.agents?.defaults?.imageModel);
 }
 
@@ -161,7 +161,10 @@ function modelIdMatchesProviderlessRef(params: {
   return false;
 }
 
-function findConfiguredImageModelMatches(params: { cfg?: NexisClawConfig; ref: string }): string[] {
+function findConfiguredImageModelMatches(params: {
+  cfg?: GreenchClawConfig;
+  ref: string;
+}): string[] {
   const providers = params.cfg?.models?.providers;
   if (!providers || typeof providers !== "object") {
     return [];
@@ -188,7 +191,7 @@ function findConfiguredImageModelMatches(params: { cfg?: NexisClawConfig; ref: s
 }
 
 function resolveProviderlessConfiguredImageModelRef(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   ref: string;
 }): string {
   const ref = params.ref.trim();
@@ -211,7 +214,7 @@ function resolveProviderlessConfiguredImageModelRef(params: {
 }
 
 export function resolveConfiguredImageModelRefs(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   imageModelConfig: ImageModelConfig;
 }): ImageModelConfig {
   const primary = params.imageModelConfig.primary?.trim();
@@ -235,7 +238,7 @@ export function resolveConfiguredImageModelRefs(params: {
 }
 
 export function resolveProviderVisionModelFromConfig(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   provider: string;
 }): string | null {
   const providerCfg = findNormalizedProviderValue(

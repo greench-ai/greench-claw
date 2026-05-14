@@ -1,4 +1,4 @@
-import { importFreshModule } from "NexisClaw/plugin-sdk/test-fixtures";
+import { importFreshModule } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const loadConfigMock = vi.hoisted(() => vi.fn());
@@ -17,9 +17,9 @@ describe("agents/context eager warmup", () => {
   });
 
   it.each([
-    ["models", ["node", "NexisClaw", "models", "set", "openai/gpt-5.4"]],
-    ["agent", ["node", "NexisClaw", "agent", "--message", "ok"]],
-    ["memory", ["node", "NexisClaw", "memory", "search", "--json"]],
+    ["models", ["node", "GreenchClaw", "models", "set", "openai/gpt-5.4"]],
+    ["agent", ["node", "GreenchClaw", "agent", "--message", "ok"]],
+    ["memory", ["node", "GreenchClaw", "memory", "search", "--json"]],
   ])("does not eager-load config for %s commands on import", async (_label, argv) => {
     process.argv = argv;
     await importFreshModule(import.meta.url, `./context.js?scope=${_label}`);

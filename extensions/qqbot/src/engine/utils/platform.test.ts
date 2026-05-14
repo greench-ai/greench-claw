@@ -11,20 +11,20 @@ import {
 describe("qqbot local media path remapping", () => {
   const createdPaths: string[] = [];
 
-  function createNexisClawTestRoot() {
+  function createGreenchClawTestRoot() {
     const actualHome = getHomeDir();
-    const NexisClawDir = path.join(actualHome, ".NexisClaw");
-    fs.mkdirSync(NexisClawDir, { recursive: true });
-    const testRoot = fs.mkdtempSync(path.join(NexisClawDir, "qqbot-platform-test-"));
+    const GreenchClawDir = path.join(actualHome, ".GreenchClaw");
+    fs.mkdirSync(GreenchClawDir, { recursive: true });
+    const testRoot = fs.mkdtempSync(path.join(GreenchClawDir, "qqbot-platform-test-"));
     createdPaths.push(testRoot);
     return { actualHome, testRootName: path.basename(testRoot) };
   }
 
   function createQqbotMediaFile(fileName: string) {
-    const { actualHome, testRootName } = createNexisClawTestRoot();
+    const { actualHome, testRootName } = createGreenchClawTestRoot();
     const mediaFile = path.join(
       actualHome,
-      ".NexisClaw",
+      ".GreenchClaw",
       "media",
       "qqbot",
       "downloads",
@@ -49,7 +49,7 @@ describe("qqbot local media path remapping", () => {
 
     const missingWorkspacePath = path.join(
       actualHome,
-      ".NexisClaw",
+      ".GreenchClaw",
       "workspace",
       "qqbot",
       "downloads",
@@ -79,7 +79,7 @@ describe("qqbot local media path remapping", () => {
   it("blocks structured payload paths that escape QQ Bot media via '..'", () => {
     const escapedPath = path.join(
       getHomeDir(),
-      ".NexisClaw",
+      ".GreenchClaw",
       "media",
       "qqbot",
       "..",
@@ -96,13 +96,13 @@ describe("qqbot local media path remapping", () => {
     expect(resolveQQBotPayloadLocalFilePath(mediaFile)).toBe(fs.realpathSync(mediaFile));
   });
 
-  it("allows structured payload files inside sibling NexisClaw media subdirectories", () => {
+  it("allows structured payload files inside sibling GreenchClaw media subdirectories", () => {
     // Core helpers such as `saveMediaBuffer(..., "outbound", ...)` place framework
     // attachments under sibling directories of `media/qqbot/`. The plugin must
-    // trust the shared `~/.NexisClaw/media` root so auto-routed sends can access
+    // trust the shared `~/.GreenchClaw/media` root so auto-routed sends can access
     // those files without the path-outside-storage guard firing.
     const actualHome = getHomeDir();
-    const outboundDir = path.join(actualHome, ".NexisClaw", "media", "outbound");
+    const outboundDir = path.join(actualHome, ".GreenchClaw", "media", "outbound");
     fs.mkdirSync(outboundDir, { recursive: true });
     const outboundFile = fs.mkdtempSync(path.join(outboundDir, "qqbot-outbound-"));
     const mediaFile = path.join(outboundFile, "tts.mp3");
@@ -113,11 +113,11 @@ describe("qqbot local media path remapping", () => {
   });
 
   it("blocks structured payload files inside the QQ Bot data directory", () => {
-    const { actualHome, testRootName } = createNexisClawTestRoot();
+    const { actualHome, testRootName } = createGreenchClawTestRoot();
 
     const dataFile = path.join(
       actualHome,
-      ".NexisClaw",
+      ".GreenchClaw",
       "qqbot",
       "sessions",
       testRootName,
@@ -135,7 +135,7 @@ describe("qqbot local media path remapping", () => {
 
     const missingWorkspacePath = path.join(
       actualHome,
-      ".NexisClaw",
+      ".GreenchClaw",
       "workspace",
       "qqbot",
       "downloads",

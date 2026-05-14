@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.js";
+import type { GreenchClawConfig } from "../config/types.js";
 import { __testing as setupRegistryRuntimeTesting } from "../plugins/setup-registry.runtime.js";
 import { isCliProvider } from "./model-selection-cli.js";
 
@@ -22,14 +22,14 @@ describe("isCliProvider", () => {
   });
 
   it("returns true for setup-registered cli backends", () => {
-    expect(isCliProvider("claude-cli", {} as NexisClawConfig)).toBe(true);
+    expect(isCliProvider("claude-cli", {} as GreenchClawConfig)).toBe(true);
   });
 
   it("accepts the anthropic-cli auth-choice id as a Claude CLI provider alias", () => {
-    expect(isCliProvider("anthropic-cli", {} as NexisClawConfig)).toBe(true);
+    expect(isCliProvider("anthropic-cli", {} as GreenchClawConfig)).toBe(true);
   });
 
   it("returns false for provider ids", () => {
-    expect(isCliProvider("example-cli", {} as NexisClawConfig)).toBe(false);
+    expect(isCliProvider("example-cli", {} as GreenchClawConfig)).toBe(false);
   });
 });

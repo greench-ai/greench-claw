@@ -1,7 +1,7 @@
-import { resolveDirectStatusReplyForSession } from "NexisClaw/plugin-sdk/command-status-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { resolveChunkMode, resolveTextChunkLimit } from "NexisClaw/plugin-sdk/reply-chunking";
-import type { ResolvedAgentRoute } from "NexisClaw/plugin-sdk/routing";
+import { resolveDirectStatusReplyForSession } from "GreenchClaw/plugin-sdk/command-status-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { resolveChunkMode, resolveTextChunkLimit } from "GreenchClaw/plugin-sdk/reply-chunking";
+import type { ResolvedAgentRoute } from "GreenchClaw/plugin-sdk/routing";
 import { resolveDiscordMaxLinesPerMessage } from "../accounts.js";
 import type {
   ButtonInteraction,
@@ -21,7 +21,7 @@ export async function maybeDeliverDiscordDirectStatus(params: {
   commandName: string;
   suppressReplies?: boolean;
   resolveDirectStatusReplyForSession: ResolveDirectStatusReplyForSession;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   discordConfig: DiscordConfig;
   accountId: string;
   sessionKey: string;

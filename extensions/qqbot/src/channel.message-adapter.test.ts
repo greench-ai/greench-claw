@@ -1,5 +1,5 @@
-import { verifyChannelMessageAdapterCapabilityProofs } from "NexisClaw/plugin-sdk/channel-message";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { verifyChannelMessageAdapterCapabilityProofs } from "GreenchClaw/plugin-sdk/channel-message";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { describe, expect, it, vi } from "vitest";
 import { qqbotPlugin } from "./channel.js";
 
@@ -31,7 +31,7 @@ const cfg = {
       clientSecret: "secret",
     },
   },
-} as NexisClawConfig;
+} as GreenchClawConfig;
 
 describe("qqbot message adapter", () => {
   it("declares durable text, media, and reply target capabilities with receipt proofs", async () => {

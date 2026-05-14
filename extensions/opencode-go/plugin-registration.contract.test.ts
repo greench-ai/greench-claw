@@ -1,4 +1,4 @@
-import { describePluginRegistrationContract } from "NexisClaw/plugin-sdk/plugin-test-contracts";
+import { describePluginRegistrationContract } from "GreenchClaw/plugin-sdk/plugin-test-contracts";
 
 describePluginRegistrationContract({
   pluginId: "opencode-go",

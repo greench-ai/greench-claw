@@ -3,13 +3,13 @@ import type { webhook } from "@line/bot-sdk";
 import {
   createMessageReceiveContext,
   type MessageReceiveContext,
-} from "NexisClaw/plugin-sdk/channel-message";
-import { danger, logVerbose, type RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/channel-message";
+import { danger, logVerbose, type RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   isRequestBodyLimitError,
   readRequestBodyWithLimit,
   requestBodyErrorToText,
-} from "NexisClaw/plugin-sdk/webhook-request-guards";
+} from "GreenchClaw/plugin-sdk/webhook-request-guards";
 import { parseLineWebhookBody, validateLineSignature } from "./webhook-utils.js";
 
 const LINE_WEBHOOK_MAX_BODY_BYTES = 1024 * 1024;

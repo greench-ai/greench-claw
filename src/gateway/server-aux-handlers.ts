@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 import { createExecApprovalForwarder } from "../infra/exec-approval-forwarder.js";
 import { type PluginApprovalRequestPayload } from "../infra/plugin-approvals.js";
@@ -56,7 +56,7 @@ export function createGatewayAuxHandlers(params: {
   activateRuntimeSecrets: ActivateRuntimeSecrets;
   buildReloadPlan?: (changedPaths: string[]) => GatewayReloadPlan;
   sharedGatewaySessionGenerationState: SharedGatewaySessionGenerationState;
-  resolveSharedGatewaySessionGenerationForConfig: (config: NexisClawConfig) => string | undefined;
+  resolveSharedGatewaySessionGenerationForConfig: (config: GreenchClawConfig) => string | undefined;
   clients: Iterable<SharedGatewayAuthClient>;
   startChannel: (name: ChannelKind) => Promise<void>;
   stopChannel: (name: ChannelKind) => Promise<void>;
@@ -157,8 +157,8 @@ export function createGatewayAuxHandlers(params: {
                 if (plan.restartChannels.size > 0) {
                   const restartChannels = [...plan.restartChannels];
                   if (
-                    isTruthyEnvValue(process.env.NEXISCLAW_SKIP_CHANNELS) ||
-                    isTruthyEnvValue(process.env.NEXISCLAW_SKIP_PROVIDERS)
+                    isTruthyEnvValue(process.env.GREENCHCLAW_SKIP_CHANNELS) ||
+                    isTruthyEnvValue(process.env.GREENCHCLAW_SKIP_PROVIDERS)
                   ) {
                     throw new Error(
                       `secrets.reload requires restarting channels: ${restartChannels.join(", ")}`,

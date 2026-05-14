@@ -2,9 +2,9 @@ import {
   createMessageReceiptFromOutboundResults,
   type MessageReceipt,
   type MessageReceiptPartKind,
-} from "NexisClaw/plugin-sdk/channel-message";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
+} from "GreenchClaw/plugin-sdk/channel-message";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
 import { resolveZaloAccount } from "./accounts.js";
 import type { ZaloFetch } from "./api.js";
 import { sendMessage, sendPhoto } from "./api.js";
@@ -14,7 +14,7 @@ import { resolveZaloToken } from "./token.js";
 type ZaloSendOptions = {
   token?: string;
   accountId?: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   mediaUrl?: string;
   caption?: string;
   verbose?: boolean;

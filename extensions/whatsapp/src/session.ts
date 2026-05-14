@@ -1,16 +1,16 @@
 import { randomUUID } from "node:crypto";
 import fsSync from "node:fs";
 import type { Agent } from "node:https";
-import { HttpsProxyAgent } from "https-proxy-agent";
-import { formatCliCommand } from "NexisClaw/plugin-sdk/cli-runtime";
-import { VERSION } from "NexisClaw/plugin-sdk/cli-runtime";
+import { formatCliCommand } from "GreenchClaw/plugin-sdk/cli-runtime";
+import { VERSION } from "GreenchClaw/plugin-sdk/cli-runtime";
 import {
   resolveEnvHttpProxyUrl,
   shouldUseEnvHttpProxyForUrl,
-} from "NexisClaw/plugin-sdk/fetch-runtime";
-import { danger, success } from "NexisClaw/plugin-sdk/runtime-env";
-import { getChildLogger, toPinoLikeLogger } from "NexisClaw/plugin-sdk/runtime-env";
-import { ensureDir, resolveUserPath } from "NexisClaw/plugin-sdk/text-utility-runtime";
+} from "GreenchClaw/plugin-sdk/fetch-runtime";
+import { danger, success } from "GreenchClaw/plugin-sdk/runtime-env";
+import { getChildLogger, toPinoLikeLogger } from "GreenchClaw/plugin-sdk/runtime-env";
+import { ensureDir, resolveUserPath } from "GreenchClaw/plugin-sdk/text-utility-runtime";
+import { HttpsProxyAgent } from "https-proxy-agent";
 import {
   readCredsJsonRaw,
   restoreCredsFromBackupIfNeeded,
@@ -171,7 +171,7 @@ export async function createWaSocket(
     version,
     logger,
     printQRInTerminal: false,
-    browser: ["NexisClaw", "cli", VERSION],
+    browser: ["GreenchClaw", "cli", VERSION],
     syncFullHistory: false,
     markOnlineOnConnect: false,
     ...socketTiming,
@@ -199,7 +199,7 @@ export async function createWaSocket(
         if (status === LOGGED_OUT_STATUS) {
           console.error(
             danger(
-              `WhatsApp session logged out. Run: ${formatCliCommand("NexisClaw channels login")}`,
+              `WhatsApp session logged out. Run: ${formatCliCommand("GreenchClaw channels login")}`,
             ),
           );
         }

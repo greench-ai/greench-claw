@@ -1,4 +1,4 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { registerBedrockMantlePlugin } from "./register.sync.runtime.js";
 
 export default definePluginEntry({

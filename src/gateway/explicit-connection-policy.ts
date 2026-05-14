@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { trimToUndefined, type ExplicitGatewayAuth } from "./credentials.js";
 
 function hasExplicitGatewayConnectionAuth(auth?: ExplicitGatewayAuth): boolean {
@@ -6,7 +6,7 @@ function hasExplicitGatewayConnectionAuth(auth?: ExplicitGatewayAuth): boolean {
 }
 
 export function canSkipGatewayConfigLoad(params: {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   urlOverride?: string;
   explicitAuth?: ExplicitGatewayAuth;
 }): boolean {

@@ -2,7 +2,7 @@ import { resolveDmAllowAuditState } from "../channels/message-access/dm-allow-st
 import { listReadOnlyChannelPluginsForConfig } from "../channels/plugins/read-only.js";
 import type { ChannelId } from "../channels/plugins/types.public.js";
 import { formatCliCommand } from "../cli/command-format.js";
-import type { NexisClawConfig, GatewayBindMode } from "../config/config.js";
+import type { GreenchClawConfig, GatewayBindMode } from "../config/config.js";
 import type { AgentConfig } from "../config/types.agents.js";
 import { hasConfiguredSecretInput } from "../config/types.secrets.js";
 import { resolveGatewayAuthTokenSourceConflict } from "../gateway/auth-token-source-conflict.js";
@@ -15,7 +15,7 @@ import { normalizeOptionalString } from "../shared/string-coerce.js";
 import { note } from "../terminal/note.js";
 import { resolveDefaultChannelAccountContext } from "./channel-account-context.js";
 
-function collectImplicitHeartbeatDirectPolicyWarnings(cfg: NexisClawConfig): string[] {
+function collectImplicitHeartbeatDirectPolicyWarnings(cfg: GreenchClawConfig): string[] {
   const warnings: string[] = [];
 
   const maybeWarn = (params: {
@@ -78,11 +78,11 @@ function execAskRank(value: ExecAsk): number {
   throw new Error("Unsupported exec ask value");
 }
 
-function collectExecPolicyConflictWarnings(cfg: NexisClawConfig): string[] {
+function collectExecPolicyConflictWarnings(cfg: GreenchClawConfig): string[] {
   const warnings: string[] = [];
   const approvals = loadExecApprovals();
-  const defaultRequestedSecuritySource = "NexisClaw default (full)";
-  const defaultRequestedAskSource = "NexisClaw default (off)";
+  const defaultRequestedSecuritySource = "GreenchClaw default (full)";
+  const defaultRequestedAskSource = "GreenchClaw default (off)";
 
   const maybeWarn = (params: {
     scopeLabel: string;
@@ -140,7 +140,7 @@ function collectExecPolicyConflictWarnings(cfg: NexisClawConfig): string[] {
         `  Host: ${hostParts.join(", ")}`,
         `  Effective host exec stays security="${snapshot.security.effective}" ask="${snapshot.ask.effective}" because the stricter side wins.`,
         "  Headless runs like isolated cron cannot answer approval prompts; align both files or enable Web UI, terminal UI, or chat exec approvals.",
-        `  Inspect with: ${formatCliCommand("NexisClaw approvals get --gateway")}`,
+        `  Inspect with: ${formatCliCommand("GreenchClaw approvals get --gateway")}`,
       ].join("\n"),
     );
   };
@@ -163,12 +163,12 @@ function collectExecPolicyConflictWarnings(cfg: NexisClawConfig): string[] {
   return warnings;
 }
 
-function collectDurableExecApprovalWarnings(cfg: NexisClawConfig): string[] {
+function collectDurableExecApprovalWarnings(cfg: GreenchClawConfig): string[] {
   void cfg;
   return [];
 }
 
-function collectExecFilesystemPolicyWarnings(cfg: NexisClawConfig): string[] {
+function collectExecFilesystemPolicyWarnings(cfg: GreenchClawConfig): string[] {
   return collectExecFilesystemPolicyDriftHits(cfg).map((hit) =>
     [
       `- ${hit.scopeLabel}: filesystem write tools are disabled, but exec is still available.`,
@@ -180,15 +180,15 @@ function collectExecFilesystemPolicyWarnings(cfg: NexisClawConfig): string[] {
   );
 }
 
-export async function noteSecurityWarnings(cfg: NexisClawConfig) {
+export async function noteSecurityWarnings(cfg: GreenchClawConfig) {
   const warnings: string[] = [];
-  const auditHint = `- Run: ${formatCliCommand("NexisClaw security audit --deep")}`;
+  const auditHint = `- Run: ${formatCliCommand("GreenchClaw security audit --deep")}`;
 
   if (cfg.approvals?.exec?.enabled === false) {
     warnings.push(
       "- Note: approvals.exec.enabled=false disables approval forwarding only.",
-      "  Host exec gating still comes from ~/.NexisClaw/exec-approvals.json.",
-      `  Check local policy with: ${formatCliCommand("NexisClaw approvals get --gateway")}`,
+      "  Host exec gating still comes from ~/.GreenchClaw/exec-approvals.json.",
+      `  Check local policy with: ${formatCliCommand("GreenchClaw approvals get --gateway")}`,
     );
   }
 
@@ -235,7 +235,7 @@ export async function noteSecurityWarnings(cfg: NexisClawConfig) {
   const saferRemoteAccessLines = [
     "  Safer remote access: keep bind loopback and use Tailscale Serve/Funnel or an SSH tunnel.",
     "  Example tunnel: ssh -N -L 18789:127.0.0.1:18789 user@gateway-host",
-    "  Docs: https://docs.NexisClaw.ai/gateway/remote",
+    "  Docs: https://docs.GreenchClaw.ai/gateway/remote",
   ];
 
   if (isExposed) {
@@ -243,19 +243,19 @@ export async function noteSecurityWarnings(cfg: NexisClawConfig) {
       const authFixLines =
         resolvedAuth.mode === "password"
           ? [
-              `  Fix: ${formatCliCommand("NexisClaw configure")} to set a password`,
-              `  Or switch to token: ${formatCliCommand("NexisClaw config set gateway.auth.mode token")}`,
+              `  Fix: ${formatCliCommand("GreenchClaw configure")} to set a password`,
+              `  Or switch to token: ${formatCliCommand("GreenchClaw config set gateway.auth.mode token")}`,
             ]
           : [
-              `  Fix: ${formatCliCommand("NexisClaw doctor --fix")} to generate a token`,
+              `  Fix: ${formatCliCommand("GreenchClaw doctor --fix")} to generate a token`,
               `  Or set token directly: ${formatCliCommand(
-                "NexisClaw config set gateway.auth.mode token",
+                "GreenchClaw config set gateway.auth.mode token",
               )}`,
             ];
       warnings.push(
         `- CRITICAL: Gateway bound to ${bindDescriptor} without authentication.`,
         `  Anyone on your network (or internet if port-forwarded) can fully control your agent.`,
-        `  Fix: ${formatCliCommand("NexisClaw config set gateway.bind loopback")}`,
+        `  Fix: ${formatCliCommand("GreenchClaw config set gateway.bind loopback")}`,
         ...saferRemoteAccessLines,
         ...authFixLines,
       );
@@ -321,7 +321,7 @@ export async function noteSecurityWarnings(cfg: NexisClawConfig) {
     if (dmScope === "main" && isMultiUserDm) {
       warnings.push(
         `- ${params.label} DMs: multiple senders share the main session; run: ` +
-          formatCliCommand('NexisClaw config set session.dmScope "per-channel-peer"') +
+          formatCliCommand('GreenchClaw config set session.dmScope "per-channel-peer"') +
           ' (or "per-account-channel-peer" for multi-account channels) to isolate sessions.',
       );
     }

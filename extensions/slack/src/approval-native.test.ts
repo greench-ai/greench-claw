@@ -1,14 +1,14 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { clearSessionStoreCacheForTest } from "NexisClaw/plugin-sdk/session-store-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { clearSessionStoreCacheForTest } from "GreenchClaw/plugin-sdk/session-store-runtime";
 import { describe, expect, it } from "vitest";
 import { slackApprovalCapability, slackNativeApprovalAdapter } from "./approval-native.js";
 
 function buildConfig(
-  overrides?: Partial<NonNullable<NonNullable<NexisClawConfig["channels"]>["slack"]>>,
-): NexisClawConfig {
+  overrides?: Partial<NonNullable<NonNullable<GreenchClawConfig["channels"]>["slack"]>>,
+): GreenchClawConfig {
   return {
     channels: {
       slack: {
@@ -22,10 +22,10 @@ function buildConfig(
         ...overrides,
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
-const STORE_PATH = path.join(os.tmpdir(), "NexisClaw-slack-approval-native-test.json");
+const STORE_PATH = path.join(os.tmpdir(), "GreenchClaw-slack-approval-native-test.json");
 
 function writeStore(store: Record<string, unknown>) {
   fs.writeFileSync(STORE_PATH, `${JSON.stringify(store, null, 2)}\n`, "utf8");

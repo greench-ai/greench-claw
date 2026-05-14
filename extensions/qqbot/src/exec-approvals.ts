@@ -1,20 +1,20 @@
-import { resolveApprovalApprovers } from "NexisClaw/plugin-sdk/approval-auth-runtime";
+import { resolveApprovalApprovers } from "GreenchClaw/plugin-sdk/approval-auth-runtime";
 import {
   createChannelExecApprovalProfile,
   isChannelExecApprovalClientEnabledFromConfig,
   matchesApprovalRequestFilters,
-} from "NexisClaw/plugin-sdk/approval-client-runtime";
-import { resolveApprovalRequestChannelAccountId } from "NexisClaw/plugin-sdk/approval-native-runtime";
+} from "GreenchClaw/plugin-sdk/approval-client-runtime";
+import { resolveApprovalRequestChannelAccountId } from "GreenchClaw/plugin-sdk/approval-native-runtime";
 import type {
   ExecApprovalRequest,
   PluginApprovalRequest,
-} from "NexisClaw/plugin-sdk/approval-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { normalizeAccountId } from "NexisClaw/plugin-sdk/routing";
+} from "GreenchClaw/plugin-sdk/approval-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { normalizeAccountId } from "GreenchClaw/plugin-sdk/routing";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { listQQBotAccountIds, resolveQQBotAccount } from "./bridge/config.js";
 import type { QQBotExecApprovalConfig } from "./types.js";
 
@@ -24,7 +24,7 @@ function normalizeApproverId(value: string | number): string | undefined {
 }
 
 export function resolveQQBotExecApprovalConfig(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): QQBotExecApprovalConfig | undefined {
   const account = resolveQQBotAccount(params.cfg, params.accountId);
@@ -39,7 +39,7 @@ export function resolveQQBotExecApprovalConfig(params: {
 }
 
 function getQQBotExecApprovalApprovers(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): string[] {
   const accountConfig = resolveQQBotAccount(params.cfg, params.accountId).config;
@@ -51,7 +51,7 @@ function getQQBotExecApprovalApprovers(params: {
 }
 
 function countQQBotExecApprovalEligibleAccounts(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): number {
   return listQQBotAccountIds(params.cfg).filter((accountId) => {
@@ -79,7 +79,7 @@ function countQQBotExecApprovalEligibleAccounts(params: {
 }
 
 function matchesQQBotRequestAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): boolean {
@@ -113,7 +113,7 @@ function matchesQQBotRequestAccount(params: {
  * must not contribute to the single-account shortcut in the fallback
  * ownership check below.
  */
-function countQQBotFallbackEligibleAccounts(cfg: NexisClawConfig): number {
+function countQQBotFallbackEligibleAccounts(cfg: GreenchClawConfig): number {
   return listQQBotAccountIds(cfg).filter((accountId) => {
     const account = resolveQQBotAccount(cfg, accountId);
     return account.enabled && account.secretSource !== "none";
@@ -140,7 +140,7 @@ function countQQBotFallbackEligibleAccounts(cfg: NexisClawConfig): number {
  *     a mismatched token and fails.
  */
 function matchesQQBotFallbackRequestAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   request: ExecApprovalRequest | PluginApprovalRequest;
 }): boolean {
@@ -189,7 +189,7 @@ type QQBotApprovalAccountOwnershipRequest = {
  * gate (shouldHandle) and the lazy native runtime adapter.
  */
 export function matchesQQBotApprovalAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   request: QQBotApprovalAccountOwnershipRequest;
 }): boolean {
@@ -218,7 +218,7 @@ export const isQQBotExecApprovalAuthorizedSender = qqbotExecApprovalProfile.isAu
 export const shouldHandleQQBotExecApprovalRequest = qqbotExecApprovalProfile.shouldHandleRequest;
 
 export function authorizeQQBotApprovalAction(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   senderId?: string | null;
   approvalKind: "exec" | "plugin";

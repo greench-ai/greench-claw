@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const execFileMock = vi.hoisted(() => vi.fn());
 
 vi.mock("node:child_process", async () => {
-  const { mockNodeChildProcessExecFile } = await import("NexisClaw/plugin-sdk/test-node-mocks");
+  const { mockNodeChildProcessExecFile } = await import("GreenchClaw/plugin-sdk/test-node-mocks");
   return mockNodeChildProcessExecFile(
     Object.assign(execFileMock, {
       __promisify__: vi.fn(),
@@ -37,9 +37,9 @@ type ExecFileError = Error & {
 };
 
 const TEST_SERVICE_HOME = "/home/test";
-const TEST_MANAGED_HOME = "/tmp/NexisClaw-test-home";
-const GATEWAY_SERVICE = "NexisClaw-gateway.service";
-const NODE_SERVICE = "NexisClaw-node.service";
+const TEST_MANAGED_HOME = "/tmp/GreenchClaw-test-home";
+const GATEWAY_SERVICE = "GreenchClaw-gateway.service";
+const NODE_SERVICE = "GreenchClaw-node.service";
 
 const createExecFileError = (
   message: string,
@@ -124,10 +124,14 @@ function mockReadGatewayServiceFile(
 }
 
 async function expectExecStartWithoutEnvironment(envFileLine: string) {
-  mockReadGatewayServiceFile(["[Service]", "ExecStart=/usr/bin/NexisClaw gateway run", envFileLine]);
+  mockReadGatewayServiceFile([
+    "[Service]",
+    "ExecStart=/usr/bin/GreenchClaw gateway run",
+    envFileLine,
+  ]);
 
   const command = await readSystemdServiceExecStart({ HOME: TEST_SERVICE_HOME });
-  expect(command?.programArguments).toEqual(["/usr/bin/NexisClaw", "gateway", "run"]);
+  expect(command?.programArguments).toEqual(["/usr/bin/GreenchClaw", "gateway", "run"]);
   expect(command?.environment).toBeUndefined();
 }
 
@@ -249,7 +253,7 @@ describe("systemd availability", () => {
     });
 
     await expect(
-      isSystemdUserServiceAvailable({ USER: "NexisClaw", SUDO_USER: "admin" }),
+      isSystemdUserServiceAvailable({ USER: "GreenchClaw", SUDO_USER: "admin" }),
     ).resolves.toBe(true);
     expect(execFileMock).toHaveBeenCalledTimes(1);
   });
@@ -276,7 +280,7 @@ describe("isSystemdServiceEnabled", () => {
     err.code = "ENOENT";
     vi.spyOn(fs, "access").mockRejectedValueOnce(err);
 
-    const result = await isSystemdServiceEnabled({ env: { HOME: "/tmp/NexisClaw-test-home" } });
+    const result = await isSystemdServiceEnabled({ env: { HOME: "/tmp/GreenchClaw-test-home" } });
 
     expect(result).toBe(false);
     expect(execFileMock).not.toHaveBeenCalled();
@@ -380,7 +384,7 @@ describe("isSystemdServiceEnabled", () => {
     vi.spyOn(fs, "access").mockResolvedValue(undefined);
     execFileMock
       .mockImplementationOnce((_cmd, args, _opts, cb) => {
-        expect(args).toEqual(["--user", "is-enabled", "NexisClaw-gateway.service"]);
+        expect(args).toEqual(["--user", "is-enabled", "GreenchClaw-gateway.service"]);
         const err = new Error("Failed to connect to bus") as Error & { code?: number };
         err.code = 1;
         cb(err, "", "Failed to connect to bus");
@@ -388,13 +392,13 @@ describe("isSystemdServiceEnabled", () => {
       .mockImplementationOnce((_cmd, args, _opts, cb) => {
         expect(args[0]).toBe("--machine");
         expect(String(args[1])).toMatch(/^[^@]+@$/);
-        expect(args.slice(2)).toEqual(["--user", "is-enabled", "NexisClaw-gateway.service"]);
+        expect(args.slice(2)).toEqual(["--user", "is-enabled", "GreenchClaw-gateway.service"]);
         const err = new Error("permission denied") as Error & { code?: number };
         err.code = 1;
         cb(err, "", "permission denied");
       });
     await expect(
-      isSystemdServiceEnabled({ env: { HOME: "/tmp/NexisClaw-test-home" } }),
+      isSystemdServiceEnabled({ env: { HOME: "/tmp/GreenchClaw-test-home" } }),
     ).rejects.toThrow("systemctl is-enabled unavailable: permission denied");
   });
 
@@ -404,12 +408,12 @@ describe("isSystemdServiceEnabled", () => {
       // On Ubuntu 24.04, `systemctl --user is-enabled <unit>` exits with
       // code 4 and prints "not-found" to stdout when the unit doesn't exist.
       const err = new Error(
-        "Command failed: systemctl --user is-enabled NexisClaw-gateway.service",
+        "Command failed: systemctl --user is-enabled GreenchClaw-gateway.service",
       ) as Error & { code?: number };
       err.code = 4;
       cb(err, "not-found\n", "");
     });
-    const result = await isSystemdServiceEnabled({ env: { HOME: "/tmp/NexisClaw-test-home" } });
+    const result = await isSystemdServiceEnabled({ env: { HOME: "/tmp/GreenchClaw-test-home" } });
     expect(result).toBe(false);
   });
 });
@@ -447,7 +451,7 @@ describe("isNonFatalSystemdInstallProbeError", () => {
   it("matches wrapper-only WSL install probe failures", () => {
     expect(
       isNonFatalSystemdInstallProbeError(
-        new Error("Command failed: systemctl --user is-enabled NexisClaw-gateway.service"),
+        new Error("Command failed: systemctl --user is-enabled GreenchClaw-gateway.service"),
       ),
     ).toBe(true);
   });
@@ -505,37 +509,37 @@ describe("systemd runtime parsing", () => {
 describe("resolveSystemdUserUnitPath", () => {
   it.each([
     {
-      name: "uses default service name when NEXISCLAW_PROFILE is unset",
+      name: "uses default service name when GREENCHCLAW_PROFILE is unset",
       env: { HOME: "/home/test" },
-      expected: "/home/test/.config/systemd/user/NexisClaw-gateway.service",
+      expected: "/home/test/.config/systemd/user/GreenchClaw-gateway.service",
     },
     {
-      name: "uses profile-specific service name when NEXISCLAW_PROFILE is set to a custom value",
-      env: { HOME: "/home/test", NEXISCLAW_PROFILE: "jbphoenix" },
-      expected: "/home/test/.config/systemd/user/NexisClaw-gateway-jbphoenix.service",
+      name: "uses profile-specific service name when GREENCHCLAW_PROFILE is set to a custom value",
+      env: { HOME: "/home/test", GREENCHCLAW_PROFILE: "jbphoenix" },
+      expected: "/home/test/.config/systemd/user/GreenchClaw-gateway-jbphoenix.service",
     },
     {
-      name: "prefers NEXISCLAW_SYSTEMD_UNIT over NEXISCLAW_PROFILE",
+      name: "prefers GREENCHCLAW_SYSTEMD_UNIT over GREENCHCLAW_PROFILE",
       env: {
         HOME: "/home/test",
-        NEXISCLAW_PROFILE: "jbphoenix",
-        NEXISCLAW_SYSTEMD_UNIT: "custom-unit",
+        GREENCHCLAW_PROFILE: "jbphoenix",
+        GREENCHCLAW_SYSTEMD_UNIT: "custom-unit",
       },
       expected: "/home/test/.config/systemd/user/custom-unit.service",
     },
     {
-      name: "handles NEXISCLAW_SYSTEMD_UNIT with .service suffix",
+      name: "handles GREENCHCLAW_SYSTEMD_UNIT with .service suffix",
       env: {
         HOME: "/home/test",
-        NEXISCLAW_SYSTEMD_UNIT: "custom-unit.service",
+        GREENCHCLAW_SYSTEMD_UNIT: "custom-unit.service",
       },
       expected: "/home/test/.config/systemd/user/custom-unit.service",
     },
     {
-      name: "trims whitespace from NEXISCLAW_SYSTEMD_UNIT",
+      name: "trims whitespace from GREENCHCLAW_SYSTEMD_UNIT",
       env: {
         HOME: "/home/test",
-        NEXISCLAW_SYSTEMD_UNIT: "  custom-unit  ",
+        GREENCHCLAW_SYSTEMD_UNIT: "  custom-unit  ",
       },
       expected: "/home/test/.config/systemd/user/custom-unit.service",
     },
@@ -546,43 +550,39 @@ describe("resolveSystemdUserUnitPath", () => {
 
 describe("splitArgsPreservingQuotes", () => {
   it("splits on whitespace outside quotes", () => {
-    expect(splitArgsPreservingQuotes('/usr/bin/NexisClaw gateway start --name "My Bot"')).toEqual([
-      "/usr/bin/NexisClaw",
-      "gateway",
-      "start",
-      "--name",
-      "My Bot",
-    ]);
+    expect(splitArgsPreservingQuotes('/usr/bin/GreenchClaw gateway start --name "My Bot"')).toEqual(
+      ["/usr/bin/GreenchClaw", "gateway", "start", "--name", "My Bot"],
+    );
   });
 
   it("supports systemd-style backslash escaping", () => {
     expect(
-      splitArgsPreservingQuotes('NexisClaw --name "My \\"Bot\\"" --foo bar', {
+      splitArgsPreservingQuotes('GreenchClaw --name "My \\"Bot\\"" --foo bar', {
         escapeMode: "backslash",
       }),
-    ).toEqual(["NexisClaw", "--name", 'My "Bot"', "--foo", "bar"]);
+    ).toEqual(["GreenchClaw", "--name", 'My "Bot"', "--foo", "bar"]);
   });
 
   it("supports schtasks-style escaped quotes while preserving other backslashes", () => {
     expect(
-      splitArgsPreservingQuotes('NexisClaw --path "C:\\\\Program Files\\\\NexisClaw"', {
+      splitArgsPreservingQuotes('GreenchClaw --path "C:\\\\Program Files\\\\GreenchClaw"', {
         escapeMode: "backslash-quote-only",
       }),
-    ).toEqual(["NexisClaw", "--path", "C:\\\\Program Files\\\\NexisClaw"]);
+    ).toEqual(["GreenchClaw", "--path", "C:\\\\Program Files\\\\GreenchClaw"]);
 
     expect(
-      splitArgsPreservingQuotes('NexisClaw --label "My \\"Quoted\\" Name"', {
+      splitArgsPreservingQuotes('GreenchClaw --label "My \\"Quoted\\" Name"', {
         escapeMode: "backslash-quote-only",
       }),
-    ).toEqual(["NexisClaw", "--label", 'My "Quoted" Name']);
+    ).toEqual(["GreenchClaw", "--label", 'My "Quoted" Name']);
   });
 });
 
 describe("parseSystemdExecStart", () => {
   it("preserves quoted arguments", () => {
-    const execStart = '/usr/bin/NexisClaw gateway start --name "My Bot"';
+    const execStart = '/usr/bin/GreenchClaw gateway start --name "My Bot"';
     expect(parseSystemdExecStart(execStart)).toEqual([
-      "/usr/bin/NexisClaw",
+      "/usr/bin/GreenchClaw",
       "gateway",
       "start",
       "--name",
@@ -596,14 +596,18 @@ describe("readSystemdServiceExecStart", () => {
     vi.restoreAllMocks();
   });
 
-  it("loads NEXISCLAW_GATEWAY_TOKEN from EnvironmentFile", async () => {
+  it("loads GREENCHCLAW_GATEWAY_TOKEN from EnvironmentFile", async () => {
     const readFileSpy = mockReadGatewayServiceFile(
-      ["[Service]", "ExecStart=/usr/bin/NexisClaw gateway run", "EnvironmentFile=%h/.NexisClaw/.env"],
-      { [`${TEST_SERVICE_HOME}/.NexisClaw/.env`]: "NEXISCLAW_GATEWAY_TOKEN=env-file-token\n" },
+      [
+        "[Service]",
+        "ExecStart=/usr/bin/GreenchClaw gateway run",
+        "EnvironmentFile=%h/.GreenchClaw/.env",
+      ],
+      { [`${TEST_SERVICE_HOME}/.GreenchClaw/.env`]: "GREENCHCLAW_GATEWAY_TOKEN=env-file-token\n" },
     );
 
     const command = await readSystemdServiceExecStart({ HOME: TEST_SERVICE_HOME });
-    expect(command?.environment?.NEXISCLAW_GATEWAY_TOKEN).toBe("env-file-token");
+    expect(command?.environment?.GREENCHCLAW_GATEWAY_TOKEN).toBe("env-file-token");
     expect(readFileSpy).toHaveBeenCalledTimes(2);
   });
 
@@ -611,97 +615,97 @@ describe("readSystemdServiceExecStart", () => {
     mockReadGatewayServiceFile(
       [
         "[Service]",
-        "ExecStart=/usr/bin/NexisClaw gateway run",
-        "EnvironmentFile=%h/.NexisClaw/.env",
-        'Environment="NEXISCLAW_GATEWAY_TOKEN=inline-token"',
+        "ExecStart=/usr/bin/GreenchClaw gateway run",
+        "EnvironmentFile=%h/.GreenchClaw/.env",
+        'Environment="GREENCHCLAW_GATEWAY_TOKEN=inline-token"',
       ],
-      { [`${TEST_SERVICE_HOME}/.NexisClaw/.env`]: "NEXISCLAW_GATEWAY_TOKEN=env-file-token\n" },
+      { [`${TEST_SERVICE_HOME}/.GreenchClaw/.env`]: "GREENCHCLAW_GATEWAY_TOKEN=env-file-token\n" },
     );
 
     const command = await readSystemdServiceExecStart({ HOME: TEST_SERVICE_HOME });
-    expect(command?.environment?.NEXISCLAW_GATEWAY_TOKEN).toBe("env-file-token");
-    expect(command?.environmentValueSources?.NEXISCLAW_GATEWAY_TOKEN).toBe("inline-and-file");
+    expect(command?.environment?.GREENCHCLAW_GATEWAY_TOKEN).toBe("env-file-token");
+    expect(command?.environmentValueSources?.GREENCHCLAW_GATEWAY_TOKEN).toBe("inline-and-file");
   });
 
   it("ignores missing optional EnvironmentFile entries", async () => {
-    await expectExecStartWithoutEnvironment("EnvironmentFile=-%h/.NexisClaw/missing.env");
+    await expectExecStartWithoutEnvironment("EnvironmentFile=-%h/.GreenchClaw/missing.env");
   });
 
   it("keeps parsing when non-optional EnvironmentFile entries are missing", async () => {
-    await expectExecStartWithoutEnvironment("EnvironmentFile=%h/.NexisClaw/missing.env");
+    await expectExecStartWithoutEnvironment("EnvironmentFile=%h/.GreenchClaw/missing.env");
   });
 
   it("supports multiple EnvironmentFile entries and quoted paths", async () => {
     vi.spyOn(fs, "readFile").mockImplementation(async (pathname) => {
       const pathValue = pathLikeToString(pathname);
-      if (pathValue.endsWith("/NexisClaw-gateway.service")) {
+      if (pathValue.endsWith("/GreenchClaw-gateway.service")) {
         return [
           "[Service]",
-          "ExecStart=/usr/bin/NexisClaw gateway run",
-          'EnvironmentFile=%h/.NexisClaw/first.env "%h/.NexisClaw/second env.env"',
+          "ExecStart=/usr/bin/GreenchClaw gateway run",
+          'EnvironmentFile=%h/.GreenchClaw/first.env "%h/.GreenchClaw/second env.env"',
         ].join("\n");
       }
-      if (pathValue === "/home/test/.NexisClaw/first.env") {
-        return "NEXISCLAW_GATEWAY_TOKEN=first-token\n"; // pragma: allowlist secret
+      if (pathValue === "/home/test/.GreenchClaw/first.env") {
+        return "GREENCHCLAW_GATEWAY_TOKEN=first-token\n"; // pragma: allowlist secret
       }
-      if (pathValue === "/home/test/.NexisClaw/second env.env") {
-        return 'NEXISCLAW_GATEWAY_PASSWORD="second password"\n'; // pragma: allowlist secret
+      if (pathValue === "/home/test/.GreenchClaw/second env.env") {
+        return 'GREENCHCLAW_GATEWAY_PASSWORD="second password"\n'; // pragma: allowlist secret
       }
       throw new Error(`unexpected readFile path: ${pathValue}`);
     });
 
     const command = await readSystemdServiceExecStart({ HOME: "/home/test" });
     expect(command?.environment).toEqual({
-      NEXISCLAW_GATEWAY_TOKEN: "first-token",
-      NEXISCLAW_GATEWAY_PASSWORD: "second password", // pragma: allowlist secret
+      GREENCHCLAW_GATEWAY_TOKEN: "first-token",
+      GREENCHCLAW_GATEWAY_PASSWORD: "second password", // pragma: allowlist secret
     });
   });
 
   it("resolves relative EnvironmentFile paths from the unit directory", async () => {
     vi.spyOn(fs, "readFile").mockImplementation(async (pathname) => {
       const pathValue = pathLikeToString(pathname);
-      if (pathValue.endsWith("/NexisClaw-gateway.service")) {
+      if (pathValue.endsWith("/GreenchClaw-gateway.service")) {
         return [
           "[Service]",
-          "ExecStart=/usr/bin/NexisClaw gateway run",
+          "ExecStart=/usr/bin/GreenchClaw gateway run",
           "EnvironmentFile=./gateway.env ./override.env",
         ].join("\n");
       }
       if (pathValue.endsWith("/.config/systemd/user/gateway.env")) {
         return [
-          "NEXISCLAW_GATEWAY_TOKEN=relative-token", // pragma: allowlist secret
-          "NEXISCLAW_GATEWAY_PASSWORD=relative-password", // pragma: allowlist secret
+          "GREENCHCLAW_GATEWAY_TOKEN=relative-token", // pragma: allowlist secret
+          "GREENCHCLAW_GATEWAY_PASSWORD=relative-password", // pragma: allowlist secret
         ].join("\n");
       }
       if (pathValue.endsWith("/.config/systemd/user/override.env")) {
-        return "NEXISCLAW_GATEWAY_TOKEN=override-token\n"; // pragma: allowlist secret
+        return "GREENCHCLAW_GATEWAY_TOKEN=override-token\n"; // pragma: allowlist secret
       }
       throw new Error(`unexpected readFile path: ${pathValue}`);
     });
 
     const command = await readSystemdServiceExecStart({ HOME: "/home/test" });
     expect(command?.environment).toEqual({
-      NEXISCLAW_GATEWAY_TOKEN: "override-token",
-      NEXISCLAW_GATEWAY_PASSWORD: "relative-password", // pragma: allowlist secret
+      GREENCHCLAW_GATEWAY_TOKEN: "override-token",
+      GREENCHCLAW_GATEWAY_PASSWORD: "relative-password", // pragma: allowlist secret
     });
   });
 
   it("parses EnvironmentFile content with comments and quoted values", async () => {
     vi.spyOn(fs, "readFile").mockImplementation(async (pathname) => {
       const pathValue = pathLikeToString(pathname);
-      if (pathValue.endsWith("/NexisClaw-gateway.service")) {
+      if (pathValue.endsWith("/GreenchClaw-gateway.service")) {
         return [
           "[Service]",
-          "ExecStart=/usr/bin/NexisClaw gateway run",
-          "EnvironmentFile=%h/.NexisClaw/gateway.env",
+          "ExecStart=/usr/bin/GreenchClaw gateway run",
+          "EnvironmentFile=%h/.GreenchClaw/gateway.env",
         ].join("\n");
       }
-      if (pathValue === "/home/test/.NexisClaw/gateway.env") {
+      if (pathValue === "/home/test/.GreenchClaw/gateway.env") {
         return [
           "# comment",
           "; another comment",
-          'NEXISCLAW_GATEWAY_TOKEN="quoted token"', // pragma: allowlist secret
-          "NEXISCLAW_GATEWAY_PASSWORD=quoted-password", // pragma: allowlist secret
+          'GREENCHCLAW_GATEWAY_TOKEN="quoted token"', // pragma: allowlist secret
+          "GREENCHCLAW_GATEWAY_PASSWORD=quoted-password", // pragma: allowlist secret
         ].join("\n");
       }
       throw new Error(`unexpected readFile path: ${pathValue}`);
@@ -709,12 +713,12 @@ describe("readSystemdServiceExecStart", () => {
 
     const command = await readSystemdServiceExecStart({ HOME: "/home/test" });
     expect(command?.environment).toEqual({
-      NEXISCLAW_GATEWAY_TOKEN: "quoted token",
-      NEXISCLAW_GATEWAY_PASSWORD: "quoted-password", // pragma: allowlist secret
+      GREENCHCLAW_GATEWAY_TOKEN: "quoted token",
+      GREENCHCLAW_GATEWAY_PASSWORD: "quoted-password", // pragma: allowlist secret
     });
     expect(command?.environmentValueSources).toEqual({
-      NEXISCLAW_GATEWAY_TOKEN: "file",
-      NEXISCLAW_GATEWAY_PASSWORD: "file", // pragma: allowlist secret
+      GREENCHCLAW_GATEWAY_TOKEN: "file",
+      GREENCHCLAW_GATEWAY_PASSWORD: "file", // pragma: allowlist secret
     });
   });
 });
@@ -728,13 +732,13 @@ describe("stageSystemdService", () => {
       envFilePath: string;
     }) => Promise<void>,
   ): Promise<void> {
-    const tempHomeRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-systemd-stage-"));
+    const tempHomeRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-systemd-stage-"));
     const home = path.join(tempHomeRoot, "home");
-    const stateDir = path.join(home, ".NexisClaw");
+    const stateDir = path.join(home, ".GreenchClaw");
     const env = {
       HOME: home,
-      NEXISCLAW_STATE_DIR: stateDir,
-      NEXISCLAW_SYSTEMD_UNIT: "NexisClaw-gateway-stage-test",
+      GREENCHCLAW_STATE_DIR: stateDir,
+      GREENCHCLAW_SYSTEMD_UNIT: "GreenchClaw-gateway-stage-test",
     };
     const unitPath = resolveSystemdUserUnitPath(env);
     const envFilePath = path.join(stateDir, "gateway.systemd.env");
@@ -763,7 +767,7 @@ describe("stageSystemdService", () => {
     await withStageFixture(async ({ env, stateDir, unitPath, envFilePath }) => {
       await fs.writeFile(
         path.join(stateDir, ".env"),
-        ["NEXISCLAW_GATEWAY_TOKEN=dotenv-token", "LLM_API_KEY=dotenv-key"].join("\n"),
+        ["GREENCHCLAW_GATEWAY_TOKEN=dotenv-token", "LLM_API_KEY=dotenv-key"].join("\n"),
         "utf8",
       );
 
@@ -772,12 +776,12 @@ describe("stageSystemdService", () => {
       await stageSystemdService({
         env,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/NexisClaw", "gateway", "run"],
+        programArguments: ["/usr/bin/GreenchClaw", "gateway", "run"],
         workingDirectory: "/tmp",
         environment: {
-          NEXISCLAW_GATEWAY_TOKEN: "dotenv-token",
+          GREENCHCLAW_GATEWAY_TOKEN: "dotenv-token",
           LLM_API_KEY: "dotenv-key",
-          NEXISCLAW_GATEWAY_PORT: "18789",
+          GREENCHCLAW_GATEWAY_PORT: "18789",
         },
       });
 
@@ -788,10 +792,10 @@ describe("stageSystemdService", () => {
       ]);
 
       expect(unit).toContain(`EnvironmentFile=-${envFilePath}`);
-      expect(unit).toContain("Environment=NEXISCLAW_GATEWAY_PORT=18789");
-      expect(unit).not.toContain("Environment=NEXISCLAW_GATEWAY_TOKEN=dotenv-token");
+      expect(unit).toContain("Environment=GREENCHCLAW_GATEWAY_PORT=18789");
+      expect(unit).not.toContain("Environment=GREENCHCLAW_GATEWAY_TOKEN=dotenv-token");
       expect(unit).not.toContain("Environment=LLM_API_KEY=dotenv-key");
-      expect(envFile).toBe("NEXISCLAW_GATEWAY_TOKEN=dotenv-token\nLLM_API_KEY=dotenv-key\n");
+      expect(envFile).toBe("GREENCHCLAW_GATEWAY_TOKEN=dotenv-token\nLLM_API_KEY=dotenv-key\n");
       expect(envFileStat.mode & 0o777).toBe(0o600);
     });
   });
@@ -800,7 +804,7 @@ describe("stageSystemdService", () => {
     await withStageFixture(async ({ env, stateDir, unitPath, envFilePath }) => {
       await fs.writeFile(
         path.join(stateDir, ".env"),
-        ["NEXISCLAW_GATEWAY_TOKEN=stale-token", "LLM_API_KEY=dotenv-key"].join("\n"),
+        ["GREENCHCLAW_GATEWAY_TOKEN=stale-token", "LLM_API_KEY=dotenv-key"].join("\n"),
         "utf8",
       );
 
@@ -809,10 +813,10 @@ describe("stageSystemdService", () => {
       await stageSystemdService({
         env,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/NexisClaw", "gateway", "run"],
+        programArguments: ["/usr/bin/GreenchClaw", "gateway", "run"],
         workingDirectory: "/tmp",
         environment: {
-          NEXISCLAW_GATEWAY_TOKEN: "fresh-token",
+          GREENCHCLAW_GATEWAY_TOKEN: "fresh-token",
           LLM_API_KEY: "dotenv-key",
         },
       });
@@ -823,20 +827,21 @@ describe("stageSystemdService", () => {
       ]);
 
       expect(unit).toContain(`EnvironmentFile=-${envFilePath}`);
-      expect(unit).toContain("Environment=NEXISCLAW_GATEWAY_TOKEN=fresh-token");
+      expect(unit).toContain("Environment=GREENCHCLAW_GATEWAY_TOKEN=fresh-token");
       expect(envFile).toBe("LLM_API_KEY=dotenv-key\n");
     });
   });
 
   it("clears stale inline-managed keys from env file on re-stage (#76860)", async () => {
     await withStageFixture(async ({ env, stateDir, unitPath, envFilePath }) => {
-      // Existing env file carries a stale NEXISCLAW_GATEWAY_TOKEN that the
+      // Existing env file carries a stale GREENCHCLAW_GATEWAY_TOKEN that the
       // operator previously wrote there but staging now supplies inline.
       await fs.writeFile(
         envFilePath,
-        ["NEXISCLAW_GATEWAY_TOKEN=stale-gateway-token", "OPENROUTER_API_KEY=or-operator-key"].join(
-          "\n",
-        ) + "\n",
+        [
+          "GREENCHCLAW_GATEWAY_TOKEN=stale-gateway-token",
+          "OPENROUTER_API_KEY=or-operator-key",
+        ].join("\n") + "\n",
         { encoding: "utf8", mode: 0o600 },
       );
 
@@ -847,21 +852,21 @@ describe("stageSystemdService", () => {
       await stageSystemdService({
         env,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/NexisClaw", "gateway", "run"],
+        programArguments: ["/usr/bin/GreenchClaw", "gateway", "run"],
         workingDirectory: "/tmp",
-        // Staging manages NEXISCLAW_GATEWAY_TOKEN inline; NEXISCLAW_SERVICE_MANAGED_ENV_KEYS
-        // marks it as an NexisClaw-managed key so the stale env-file copy is cleared.
+        // Staging manages GREENCHCLAW_GATEWAY_TOKEN inline; GREENCHCLAW_SERVICE_MANAGED_ENV_KEYS
+        // marks it as an GreenchClaw-managed key so the stale env-file copy is cleared.
         environment: {
-          NEXISCLAW_GATEWAY_TOKEN: "fresh-gateway-token",
+          GREENCHCLAW_GATEWAY_TOKEN: "fresh-gateway-token",
           LLM_API_KEY: "dotenv-key",
           OPENROUTER_API_KEY: "or-operator-key",
-          NEXISCLAW_SERVICE_MANAGED_ENV_KEYS: "NEXISCLAW_GATEWAY_TOKEN",
+          GREENCHCLAW_SERVICE_MANAGED_ENV_KEYS: "GREENCHCLAW_GATEWAY_TOKEN",
         },
         environmentValueSources: {
-          NEXISCLAW_GATEWAY_TOKEN: "inline-and-file",
+          GREENCHCLAW_GATEWAY_TOKEN: "inline-and-file",
           LLM_API_KEY: "inline",
           OPENROUTER_API_KEY: "file",
-          NEXISCLAW_SERVICE_MANAGED_ENV_KEYS: "inline",
+          GREENCHCLAW_SERVICE_MANAGED_ENV_KEYS: "inline",
         },
       });
 
@@ -871,11 +876,11 @@ describe("stageSystemdService", () => {
       ]);
       // Stale inline-managed key must be removed from the env file so the
       // fresh inline Environment= value wins (EnvironmentFile would override it).
-      expect(envFile).not.toContain("NEXISCLAW_GATEWAY_TOKEN");
+      expect(envFile).not.toContain("GREENCHCLAW_GATEWAY_TOKEN");
       // Operator-added key not managed inline must survive.
       expect(envFile).toContain("OPENROUTER_API_KEY=or-operator-key");
       expect(envFile).toContain("LLM_API_KEY=dotenv-key");
-      expect(unit).toContain("Environment=NEXISCLAW_GATEWAY_TOKEN=fresh-gateway-token");
+      expect(unit).toContain("Environment=GREENCHCLAW_GATEWAY_TOKEN=fresh-gateway-token");
       expect(unit).not.toContain("Environment=OPENROUTER_API_KEY=or-operator-key");
       expect(unit).not.toContain("Environment=LLM_API_KEY=dotenv-key");
     });
@@ -894,9 +899,9 @@ describe("stageSystemdService", () => {
       await stageSystemdService({
         env,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/NexisClaw", "gateway", "run"],
+        programArguments: ["/usr/bin/GreenchClaw", "gateway", "run"],
         workingDirectory: "/tmp",
-        environment: { NEXISCLAW_GATEWAY_PORT: "18789" },
+        environment: { GREENCHCLAW_GATEWAY_PORT: "18789" },
       });
 
       const envFile = await fs.readFile(envFilePath, "utf8");
@@ -926,7 +931,7 @@ describe("stageSystemdService", () => {
       await stageSystemdService({
         env,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/NexisClaw", "gateway", "run"],
+        programArguments: ["/usr/bin/GreenchClaw", "gateway", "run"],
         workingDirectory: "/tmp",
         environment: { LLM_API_KEY: "new-value" },
       });
@@ -944,13 +949,13 @@ describe("systemd service install and uninstall", () => {
   async function withNodeSystemdFixture(
     run: (context: { env: Record<string, string>; unitPath: string }) => Promise<void>,
   ): Promise<void> {
-    const tempHomeRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-node-systemd-"));
+    const tempHomeRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-node-systemd-"));
     const home = path.join(tempHomeRoot, "home");
-    const stateDir = path.join(home, ".NexisClaw");
+    const stateDir = path.join(home, ".GreenchClaw");
     const env = {
       HOME: home,
-      NEXISCLAW_STATE_DIR: stateDir,
-      NEXISCLAW_SYSTEMD_UNIT: "NexisClaw-node",
+      GREENCHCLAW_STATE_DIR: stateDir,
+      GREENCHCLAW_SYSTEMD_UNIT: "GreenchClaw-node",
     };
     const unitPath = resolveSystemdUserUnitPath(env);
 
@@ -967,7 +972,7 @@ describe("systemd service install and uninstall", () => {
     execFileMock.mockReset();
   });
 
-  it("activates the NEXISCLAW_SYSTEMD_UNIT override during install", async () => {
+  it("activates the GREENCHCLAW_SYSTEMD_UNIT override during install", async () => {
     await withNodeSystemdFixture(async ({ env, unitPath }) => {
       execFileMock
         .mockImplementationOnce((_cmd, args, _opts, cb) => {
@@ -990,16 +995,16 @@ describe("systemd service install and uninstall", () => {
       await installSystemdService({
         env,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/NexisClaw", "node", "run"],
+        programArguments: ["/usr/bin/GreenchClaw", "node", "run"],
         workingDirectory: "/tmp",
         environment: {
-          NEXISCLAW_SYSTEMD_UNIT: "NexisClaw-node",
+          GREENCHCLAW_SYSTEMD_UNIT: "GreenchClaw-node",
         },
       });
 
       const unit = await fs.readFile(unitPath, "utf8");
-      expect(unitPath).toMatch(/NexisClaw-node\.service$/);
-      expect(unit).toContain("NexisClaw node run");
+      expect(unitPath).toMatch(/GreenchClaw-node\.service$/);
+      expect(unit).toContain("GreenchClaw node run");
       expect(execFileMock).toHaveBeenCalledTimes(4);
     });
   });
@@ -1020,7 +1025,7 @@ describe("systemd service install and uninstall", () => {
           cb(
             createExecFileError("enable failed"),
             "",
-            "Unit file NexisClaw-node.service does not exist.",
+            "Unit file GreenchClaw-node.service does not exist.",
           );
         })
         .mockImplementationOnce((_cmd, args, _opts, cb) => {
@@ -1039,10 +1044,10 @@ describe("systemd service install and uninstall", () => {
       await installSystemdService({
         env,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/NexisClaw", "node", "run"],
+        programArguments: ["/usr/bin/GreenchClaw", "node", "run"],
         workingDirectory: "/tmp",
         environment: {
-          NEXISCLAW_SYSTEMD_UNIT: "NexisClaw-node",
+          GREENCHCLAW_SYSTEMD_UNIT: "GreenchClaw-node",
         },
       });
 
@@ -1084,10 +1089,10 @@ describe("systemd service install and uninstall", () => {
       await installSystemdService({
         env: installEnv,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/NexisClaw", "node", "run"],
+        programArguments: ["/usr/bin/GreenchClaw", "node", "run"],
         workingDirectory: "/tmp",
         environment: {
-          NEXISCLAW_SYSTEMD_UNIT: "NexisClaw-node",
+          GREENCHCLAW_SYSTEMD_UNIT: "GreenchClaw-node",
         },
       });
 
@@ -1097,7 +1102,7 @@ describe("systemd service install and uninstall", () => {
 
   it("uses the sudo-u target user for install activation machine-scope retry", async () => {
     await withNodeSystemdFixture(async ({ env }) => {
-      const installEnv = { ...env, USER: "NexisClaw", SUDO_USER: "admin" };
+      const installEnv = { ...env, USER: "GreenchClaw", SUDO_USER: "admin" };
       execFileMock
         .mockImplementationOnce((_cmd, args, _opts, cb) => {
           assertUserSystemctlArgs(args, "status");
@@ -1118,7 +1123,7 @@ describe("systemd service install and uninstall", () => {
           );
         })
         .mockImplementationOnce((_cmd, args, _opts, cb) => {
-          assertMachineUserSystemctlArgs(args, "NexisClaw", "enable", NODE_SERVICE);
+          assertMachineUserSystemctlArgs(args, "GreenchClaw", "enable", NODE_SERVICE);
           cb(null, "", "");
         })
         .mockImplementationOnce((_cmd, args, _opts, cb) => {
@@ -1129,10 +1134,10 @@ describe("systemd service install and uninstall", () => {
       await installSystemdService({
         env: installEnv,
         stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-        programArguments: ["/usr/bin/NexisClaw", "node", "run"],
+        programArguments: ["/usr/bin/GreenchClaw", "node", "run"],
         workingDirectory: "/tmp",
         environment: {
-          NEXISCLAW_SYSTEMD_UNIT: "NexisClaw-node",
+          GREENCHCLAW_SYSTEMD_UNIT: "GreenchClaw-node",
         },
       });
 
@@ -1169,10 +1174,10 @@ describe("systemd service install and uninstall", () => {
         installSystemdService({
           env,
           stdout: { write: vi.fn() } as unknown as NodeJS.WritableStream,
-          programArguments: ["/usr/bin/NexisClaw", "node", "run"],
+          programArguments: ["/usr/bin/GreenchClaw", "node", "run"],
           workingDirectory: "/tmp",
           environment: {
-            NEXISCLAW_SYSTEMD_UNIT: "NexisClaw-node",
+            GREENCHCLAW_SYSTEMD_UNIT: "GreenchClaw-node",
           },
         }),
       ).rejects.toThrow("systemctl --user unavailable: Failed to connect to bus: No medium found");
@@ -1181,10 +1186,10 @@ describe("systemd service install and uninstall", () => {
     });
   });
 
-  it("disables the NEXISCLAW_SYSTEMD_UNIT override during uninstall", async () => {
+  it("disables the GREENCHCLAW_SYSTEMD_UNIT override during uninstall", async () => {
     await withNodeSystemdFixture(async ({ env, unitPath }) => {
       await fs.mkdir(path.dirname(unitPath), { recursive: true });
-      await fs.writeFile(unitPath, "[Unit]\nDescription=NexisClaw Node\n", "utf8");
+      await fs.writeFile(unitPath, "[Unit]\nDescription=GreenchClaw Node\n", "utf8");
 
       execFileMock
         .mockImplementationOnce((_cmd, args, _opts, cb) => {
@@ -1261,10 +1266,10 @@ describe("systemd service control", () => {
     execFileMock
       .mockImplementationOnce((_cmd, _args, _opts, cb) => cb(null, "", ""))
       .mockImplementationOnce((_cmd, args, _opts, cb) => {
-        assertUserSystemctlArgs(args, "restart", "NexisClaw-gateway-work.service");
+        assertUserSystemctlArgs(args, "restart", "GreenchClaw-gateway-work.service");
         cb(null, "", "");
       });
-    await assertRestartSuccess({ NEXISCLAW_PROFILE: "work" });
+    await assertRestartSuccess({ GREENCHCLAW_PROFILE: "work" });
   });
 
   it("surfaces stop failures with systemctl detail", async () => {

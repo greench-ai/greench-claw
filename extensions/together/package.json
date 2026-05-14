@@ -1,13 +1,13 @@
 {
-  "name": "@NexisClaw/together-provider",
+  "name": "@GreenchClaw/together-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw Together provider plugin",
+  "description": "GreenchClaw Together provider plugin",
   "type": "module",
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

@@ -1,5 +1,5 @@
 ---
-summary: "Setup guide for developers working on the NexisClaw macOS app"
+summary: "Setup guide for developers working on the GreenchClaw macOS app"
 read_when:
   - Setting up the macOS development environment
 title: "macOS dev setup"
@@ -7,7 +7,7 @@ title: "macOS dev setup"
 
 # macOS developer setup
 
-Build and run the NexisClaw macOS application from source.
+Build and run the GreenchClaw macOS application from source.
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ pnpm install
 
 ## 2. Build and Package the App
 
-To build the macOS app and package it into `dist/NexisClaw.app`, run:
+To build the macOS app and package it into `dist/GreenchClaw.app`, run:
 
 ```bash
 ./scripts/package-mac-app.sh
@@ -35,27 +35,27 @@ To build the macOS app and package it into `dist/NexisClaw.app`, run:
 If you don't have an Apple Developer ID certificate, the script will automatically use **ad-hoc signing** (`-`).
 
 For dev run modes, signing flags, and Team ID troubleshooting, see the macOS app README:
-[https://github.com/NexisClaw/NexisClaw/blob/main/apps/macos/README.md](https://github.com/NexisClaw/NexisClaw/blob/main/apps/macos/README.md)
+[https://github.com/GreenchClaw/GreenchClaw/blob/main/apps/macos/README.md](https://github.com/GreenchClaw/GreenchClaw/blob/main/apps/macos/README.md)
 
 > **Note**: Ad-hoc signed apps may trigger security prompts. If the app crashes immediately with "Abort trap 6", see the [Troubleshooting](#troubleshooting) section.
 
 ## 3. Install the CLI
 
-The macOS app expects a global `NexisClaw` CLI install to manage background tasks.
+The macOS app expects a global `GreenchClaw` CLI install to manage background tasks.
 
 **To install it (recommended):**
 
-1. Open the NexisClaw app.
+1. Open the GreenchClaw app.
 2. Go to the **General** settings tab.
 3. Click **"Install CLI"**.
 
 Alternatively, install it manually:
 
 ```bash
-npm install -g NexisClaw@<version>
+npm install -g GreenchClaw@<version>
 ```
 
-`pnpm add -g NexisClaw@<version>` and `bun add -g NexisClaw@<version>` also work.
+`pnpm add -g GreenchClaw@<version>` and `bun add -g GreenchClaw@<version>` also work.
 For the Gateway runtime, Node remains the recommended path.
 
 ## Troubleshooting
@@ -87,18 +87,18 @@ If the app crashes when you try to allow **Speech Recognition** or **Microphone*
 1. Reset the TCC permissions:
 
    ```bash
-   tccutil reset All ai.NexisClaw.mac.debug
+   tccutil reset All ai.GreenchClaw.mac.debug
    ```
 
-2. If that fails, change the `BUNDLE_ID` temporarily in [`scripts/package-mac-app.sh`](https://github.com/NexisClaw/NexisClaw/blob/main/scripts/package-mac-app.sh) to force a "clean slate" from macOS.
+2. If that fails, change the `BUNDLE_ID` temporarily in [`scripts/package-mac-app.sh`](https://github.com/GreenchClaw/GreenchClaw/blob/main/scripts/package-mac-app.sh) to force a "clean slate" from macOS.
 
 ### Gateway "Starting..." indefinitely
 
 If the gateway status stays on "Starting...", check if a zombie process is holding the port:
 
 ```bash
-NexisClaw gateway status
-NexisClaw gateway stop
+GreenchClaw gateway status
+GreenchClaw gateway stop
 
 # If you're not using a LaunchAgent (dev mode / manual runs), find the listener:
 lsof -nP -iTCP:18789 -sTCP:LISTEN

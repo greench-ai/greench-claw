@@ -1,6 +1,6 @@
 /**
  * @deprecated Legacy reply-pipeline subpath. New channel message code should
- * use `NexisClaw/plugin-sdk/channel-message`.
+ * use `GreenchClaw/plugin-sdk/channel-message`.
  */
 
 export {

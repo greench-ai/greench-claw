@@ -5,7 +5,7 @@ import {
 import { normalizeLowercaseStringOrEmpty } from "../../shared/string-coerce.js";
 import { deliveryContextFromSession } from "../../utils/delivery-context.shared.js";
 import { getRuntimeConfig } from "../io.js";
-import type { NexisClawConfig } from "../types.NexisClaw.js";
+import type { GreenchClawConfig } from "../types.GreenchClaw.js";
 import { resolveStorePath } from "./paths.js";
 import { loadSessionStore } from "./store.js";
 import { resolveAllAgentSessionStoreTargetsSync } from "./targets.js";
@@ -29,7 +29,7 @@ function hasRoutableDeliveryContext(context?: {
 
 export function extractDeliveryInfo(
   sessionKey: string | undefined,
-  options?: { cfg?: NexisClawConfig },
+  options?: { cfg?: GreenchClawConfig },
 ): {
   deliveryContext:
     | { channel?: string; to?: string; accountId?: string; threadId?: string | number }
@@ -67,7 +67,7 @@ export function extractDeliveryInfo(
   return { deliveryContext, threadId };
 }
 
-function resolveDeliveryStorePaths(cfg: NexisClawConfig, agentId: string): string[] {
+function resolveDeliveryStorePaths(cfg: GreenchClawConfig, agentId: string): string[] {
   const paths = new Set<string>();
   paths.add(resolveStorePath(cfg.session?.store, { agentId }));
   for (const target of resolveAllAgentSessionStoreTargetsSync(cfg)) {
@@ -148,7 +148,7 @@ function buildFreshestSessionEntryIndex(
 }
 
 function loadDeliverySessionEntry(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   baseSessionKey: string;
 }) {

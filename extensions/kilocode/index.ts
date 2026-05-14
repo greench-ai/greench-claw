@@ -1,7 +1,7 @@
-import { readConfiguredProviderCatalogEntries } from "NexisClaw/plugin-sdk/provider-catalog-shared";
-import { defineSingleProviderPluginEntry } from "NexisClaw/plugin-sdk/provider-entry";
-import { PASSTHROUGH_GEMINI_REPLAY_HOOKS } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { KILOCODE_THINKING_STREAM_HOOKS } from "NexisClaw/plugin-sdk/provider-stream-family";
+import { readConfiguredProviderCatalogEntries } from "GreenchClaw/plugin-sdk/provider-catalog-shared";
+import { defineSingleProviderPluginEntry } from "GreenchClaw/plugin-sdk/provider-entry";
+import { PASSTHROUGH_GEMINI_REPLAY_HOOKS } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { KILOCODE_THINKING_STREAM_HOOKS } from "GreenchClaw/plugin-sdk/provider-stream-family";
 import { applyKilocodeConfig, KILOCODE_DEFAULT_MODEL_REF } from "./onboard.js";
 import { buildKilocodeProvider, buildKilocodeProviderWithDiscovery } from "./provider-catalog.js";
 

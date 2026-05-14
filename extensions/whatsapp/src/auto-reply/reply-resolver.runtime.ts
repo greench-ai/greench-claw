@@ -1,1 +1,1 @@
-export { getReplyFromConfig } from "NexisClaw/plugin-sdk/reply-runtime";
+export { getReplyFromConfig } from "GreenchClaw/plugin-sdk/reply-runtime";

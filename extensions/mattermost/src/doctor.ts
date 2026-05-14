@@ -1,6 +1,6 @@
-import type { ChannelDoctorAdapter } from "NexisClaw/plugin-sdk/channel-contract";
-import { createDangerousNameMatchingMutableAllowlistWarningCollector } from "NexisClaw/plugin-sdk/channel-policy";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import type { ChannelDoctorAdapter } from "GreenchClaw/plugin-sdk/channel-contract";
+import { createDangerousNameMatchingMutableAllowlistWarningCollector } from "GreenchClaw/plugin-sdk/channel-policy";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   legacyConfigRules as MATTERMOST_LEGACY_CONFIG_RULES,
   normalizeCompatibilityConfig as normalizeMattermostCompatibilityConfig,

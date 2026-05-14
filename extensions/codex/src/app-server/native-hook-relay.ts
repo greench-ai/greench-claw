@@ -1,7 +1,7 @@
 import type {
   NativeHookRelayEvent,
   NativeHookRelayRegistrationHandle,
-} from "NexisClaw/plugin-sdk/agent-harness-runtime";
+} from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import type { JsonObject, JsonValue } from "./protocol.js";
 
 export const CODEX_NATIVE_HOOK_RELAY_EVENTS: readonly NativeHookRelayEvent[] = [
@@ -40,7 +40,7 @@ export function buildCodexNativeHookRelayConfig(params: {
             command: params.relay.commandForEvent(event),
             timeout: normalizeHookTimeoutSec(params.hookTimeoutSec),
             async: false,
-            statusMessage: "NexisClaw native hook relay",
+            statusMessage: "GreenchClaw native hook relay",
           },
         ],
       },

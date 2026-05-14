@@ -3,29 +3,30 @@ import os from "node:os";
 import path from "node:path";
 import { getModel, type Api, type Model } from "@earendil-works/pi-ai";
 import { AuthStorage, ModelRegistry } from "@earendil-works/pi-coding-agent";
-import OpenAI from "openai";
-import type { ResolvedTtsConfig } from "NexisClaw/plugin-sdk/agent-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { encodePngRgba, fillPixel } from "NexisClaw/plugin-sdk/media-runtime";
+import type { ResolvedTtsConfig } from "GreenchClaw/plugin-sdk/agent-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { encodePngRgba, fillPixel } from "GreenchClaw/plugin-sdk/media-runtime";
 import {
   registerProviderPlugin,
   requireRegisteredProvider,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { runRealtimeSttLiveTest } from "NexisClaw/plugin-sdk/provider-test-contracts";
-import { getRuntimeConfig } from "NexisClaw/plugin-sdk/runtime-config-snapshot";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { runRealtimeSttLiveTest } from "GreenchClaw/plugin-sdk/provider-test-contracts";
+import { getRuntimeConfig } from "GreenchClaw/plugin-sdk/runtime-config-snapshot";
 import {
   isOverloadedErrorMessage,
   isServerErrorMessage,
   isTimeoutErrorMessage,
-} from "NexisClaw/plugin-sdk/test-env";
+} from "GreenchClaw/plugin-sdk/test-env";
+import OpenAI from "openai";
 import { describe, expect, it } from "vitest";
 import plugin from "./index.js";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY ?? "";
-const LIVE_MODEL_ID = process.env.NEXISCLAW_LIVE_OPENAI_PLUGIN_MODEL?.trim() || "gpt-5.5";
-const LIVE_IMAGE_MODEL = process.env.NEXISCLAW_LIVE_OPENAI_IMAGE_MODEL?.trim() || "gpt-image-2";
-const LIVE_VISION_MODEL = process.env.NEXISCLAW_LIVE_OPENAI_VISION_MODEL?.trim() || "gpt-4.1-mini";
-const liveEnabled = OPENAI_API_KEY.trim().length > 0 && process.env.NEXISCLAW_LIVE_TEST === "1";
+const LIVE_MODEL_ID = process.env.GREENCHCLAW_LIVE_OPENAI_PLUGIN_MODEL?.trim() || "gpt-5.5";
+const LIVE_IMAGE_MODEL = process.env.GREENCHCLAW_LIVE_OPENAI_IMAGE_MODEL?.trim() || "gpt-image-2";
+const LIVE_VISION_MODEL =
+  process.env.GREENCHCLAW_LIVE_OPENAI_VISION_MODEL?.trim() || "gpt-4.1-mini";
+const liveEnabled = OPENAI_API_KEY.trim().length > 0 && process.env.GREENCHCLAW_LIVE_TEST === "1";
 const describeLive = liveEnabled ? describe : describe.skip;
 const EMPTY_AUTH_STORE = { version: 1, profiles: {} } as const;
 const ModelRegistryCtor = ModelRegistry as unknown as {
@@ -119,7 +120,7 @@ function resolveLiveOpenAISkipReason(error: unknown): string | null {
   return null;
 }
 
-function createLiveConfig(): NexisClawConfig {
+function createLiveConfig(): GreenchClawConfig {
   const cfg = getRuntimeConfig();
   return {
     ...cfg,
@@ -134,7 +135,7 @@ function createLiveConfig(): NexisClawConfig {
         },
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function createLiveTtsConfig(): ResolvedTtsConfig {
@@ -269,7 +270,7 @@ describeLive("openai plugin live", () => {
     const ttsConfig = createLiveTtsConfig();
 
     const audioFile = await speechProvider.synthesize({
-      text: "NexisClaw integration test OK.",
+      text: "GreenchClaw integration test OK.",
       cfg,
       providerConfig: ttsConfig.providerConfigs.openai ?? {},
       target: "audio-file",
@@ -349,7 +350,7 @@ describeLive("openai plugin live", () => {
     const speechProvider = requireRegisteredProvider(speechProviders, "openai");
     const cfg = createLiveConfig();
     const ttsConfig = createLiveTtsConfig();
-    const phrase = "Testing NexisClaw OpenAI realtime transcription integration test OK.";
+    const phrase = "Testing GreenchClaw OpenAI realtime transcription integration test OK.";
 
     const telephony = await speechProvider.synthesizeTelephony?.({
       text: phrase,

@@ -3,7 +3,7 @@ summary: "FAQ: quick-start and first-run setup — install, onboard, auth, subsc
 read_when:
   - New install, onboarding stuck, or first-run errors
   - Choosing auth and provider subscriptions
-  - Cannot access docs.NexisClaw.ai, cannot open dashboard, install stuck
+  - Cannot access docs.GreenchClaw.ai, cannot open dashboard, install stuck
 title: "FAQ: first-run setup"
 sidebarTitle: "First-run FAQ"
 ---
@@ -27,10 +27,10 @@ and troubleshooting see the main [FAQ](/help/faq).
     the hackable (git) install:
 
     ```bash
-    curl -fsSL https://NexisClaw.ai/install.sh | bash -s -- --install-method git
+    curl -fsSL https://GreenchClaw.ai/install.sh | bash -s -- --install-method git
     ```
 
-    This installs NexisClaw **from a git checkout**, so the agent can read the code + docs and
+    This installs GreenchClaw **from a git checkout**, so the agent can read the code + docs and
     reason about the exact version you are running. You can always switch back to stable later
     by re-running the installer without `--install-method git`.
 
@@ -38,25 +38,25 @@ and troubleshooting see the main [FAQ](/help/faq).
     necessary commands. That keeps changes small and easier to audit.
 
     If you discover a real bug or fix, please file a GitHub issue or send a PR:
-    [https://github.com/NexisClaw/NexisClaw/issues](https://github.com/NexisClaw/NexisClaw/issues)
-    [https://github.com/NexisClaw/NexisClaw/pulls](https://github.com/NexisClaw/NexisClaw/pulls)
+    [https://github.com/GreenchClaw/GreenchClaw/issues](https://github.com/GreenchClaw/GreenchClaw/issues)
+    [https://github.com/GreenchClaw/GreenchClaw/pulls](https://github.com/GreenchClaw/GreenchClaw/pulls)
 
     Start with these commands (share outputs when asking for help):
 
     ```bash
-    NexisClaw status
-    NexisClaw models status
-    NexisClaw doctor
+    GreenchClaw status
+    GreenchClaw models status
+    GreenchClaw doctor
     ```
 
     What they do:
 
-    - `NexisClaw status`: quick snapshot of gateway/agent health + basic config.
-    - `NexisClaw models status`: checks provider auth + model availability.
-    - `NexisClaw doctor`: validates and repairs common config/state issues.
+    - `GreenchClaw status`: quick snapshot of gateway/agent health + basic config.
+    - `GreenchClaw models status`: checks provider auth + model availability.
+    - `GreenchClaw doctor`: validates and repairs common config/state issues.
 
-    Other useful CLI checks: `NexisClaw status --all`, `NexisClaw logs --follow`,
-    `NexisClaw gateway status`, `NexisClaw health --verbose`.
+    Other useful CLI checks: `GreenchClaw status --all`, `GreenchClaw logs --follow`,
+    `GreenchClaw gateway status`, `GreenchClaw health --verbose`.
 
     Quick debug loop: [First 60 seconds if something is broken](/help/faq#first-60-seconds-if-something-is-broken).
     Install docs: [Install](/install), [Installer flags](/install/installer), [Updating](/install/updating).
@@ -78,12 +78,12 @@ and troubleshooting see the main [FAQ](/help/faq).
 
   </Accordion>
 
-  <Accordion title="Recommended way to install and set up NexisClaw">
+  <Accordion title="Recommended way to install and set up GreenchClaw">
     The repo recommends running from source and using onboarding:
 
     ```bash
-    curl -fsSL https://NexisClaw.ai/install.sh | bash
-    NexisClaw onboard --install-daemon
+    curl -fsSL https://GreenchClaw.ai/install.sh | bash
+    GreenchClaw onboard --install-daemon
     ```
 
     The wizard can also build UI assets automatically. After onboarding, you typically run the Gateway on port **18789**.
@@ -91,15 +91,15 @@ and troubleshooting see the main [FAQ](/help/faq).
     From source (contributors/dev):
 
     ```bash
-    git clone https://github.com/NexisClaw/NexisClaw.git
-    cd NexisClaw
+    git clone https://github.com/GreenchClaw/GreenchClaw.git
+    cd GreenchClaw
     pnpm install
     pnpm build
     pnpm ui:build
-    NexisClaw onboard
+    GreenchClaw onboard
     ```
 
-    If you don't have a global install yet, run it via `pnpm NexisClaw onboard`.
+    If you don't have a global install yet, run it via `pnpm GreenchClaw onboard`.
 
   </Accordion>
 
@@ -112,15 +112,15 @@ and troubleshooting see the main [FAQ](/help/faq).
 
     - Open `http://127.0.0.1:18789/`.
     - If it asks for shared-secret auth, paste the configured token or password into Control UI settings.
-    - Token source: `gateway.auth.token` (or `NEXISCLAW_GATEWAY_TOKEN`).
-    - Password source: `gateway.auth.password` (or `NEXISCLAW_GATEWAY_PASSWORD`).
-    - If no shared secret is configured yet, generate a token with `NexisClaw doctor --generate-gateway-token`.
+    - Token source: `gateway.auth.token` (or `GREENCHCLAW_GATEWAY_TOKEN`).
+    - Password source: `gateway.auth.password` (or `GREENCHCLAW_GATEWAY_PASSWORD`).
+    - If no shared secret is configured yet, generate a token with `GreenchClaw doctor --generate-gateway-token`.
 
     **Not on localhost:**
 
-    - **Tailscale Serve** (recommended): keep bind loopback, run `NexisClaw gateway --tailscale serve`, open `https://<magicdns>/`. If `gateway.auth.allowTailscale` is `true`, identity headers satisfy Control UI/WebSocket auth (no pasted shared secret, assumes trusted gateway host); HTTP APIs still require shared-secret auth unless you deliberately use private-ingress `none` or trusted-proxy HTTP auth.
+    - **Tailscale Serve** (recommended): keep bind loopback, run `GreenchClaw gateway --tailscale serve`, open `https://<magicdns>/`. If `gateway.auth.allowTailscale` is `true`, identity headers satisfy Control UI/WebSocket auth (no pasted shared secret, assumes trusted gateway host); HTTP APIs still require shared-secret auth unless you deliberately use private-ingress `none` or trusted-proxy HTTP auth.
       Bad concurrent Serve auth attempts from the same client are serialized before the failed-auth limiter records them, so the second bad retry can already show `retry later`.
-    - **Tailnet bind**: run `NexisClaw gateway --bind tailnet --token "<token>"` (or configure password auth), open `http://<tailscale-ip>:18789/`, then paste the matching shared secret in dashboard settings.
+    - **Tailnet bind**: run `GreenchClaw gateway --bind tailnet --token "<token>"` (or configure password auth), open `http://<tailscale-ip>:18789/`, then paste the matching shared secret in dashboard settings.
     - **Identity-aware reverse proxy**: keep the Gateway behind a trusted proxy, configure `gateway.auth.mode: "trusted-proxy"`, then open the proxy URL. Same-host loopback proxies require explicit `gateway.auth.trustedProxy.allowLoopback = true`.
     - **SSH tunnel**: `ssh -N -L 18789:127.0.0.1:18789 user@host` then open `http://127.0.0.1:18789/`. Shared-secret auth still applies over the tunnel; paste the configured token or password if prompted.
 
@@ -140,7 +140,7 @@ and troubleshooting see the main [FAQ](/help/faq).
     In most setups you do **not** need both:
 
     - If the chat already supports commands and replies, same-chat `/approve` works through the shared path.
-    - If a supported native channel can infer approvers safely, NexisClaw now auto-enables DM-first native approvals when `channels.<channel>.execApprovals.enabled` is unset or `"auto"`.
+    - If a supported native channel can infer approvers safely, GreenchClaw now auto-enables DM-first native approvals when `channels.<channel>.execApprovals.enabled` is unset or `"auto"`.
     - When native approval cards/buttons are available, that native UI is the primary path; the agent should only include a manual `/approve` command if the tool result says chat approvals are unavailable or manual approval is the only path.
     - Use `approvals.exec` only when prompts must also be forwarded to other chats or explicit ops rooms.
     - Use `channels.<channel>.execApprovals.target: "channel"` or `"both"` only when you explicitly want approval prompts posted back into the originating room/topic.
@@ -187,21 +187,21 @@ and troubleshooting see the main [FAQ](/help/faq).
     1. Restart the Gateway:
 
     ```bash
-    NexisClaw gateway restart
+    GreenchClaw gateway restart
     ```
 
     2. Check status + auth:
 
     ```bash
-    NexisClaw status
-    NexisClaw models status
-    NexisClaw logs --follow
+    GreenchClaw status
+    GreenchClaw models status
+    GreenchClaw logs --follow
     ```
 
     3. If it still hangs, run:
 
     ```bash
-    NexisClaw doctor
+    GreenchClaw doctor
     ```
 
     If the Gateway is remote, ensure the tunnel/Tailscale connection is up and that the UI
@@ -214,17 +214,17 @@ and troubleshooting see the main [FAQ](/help/faq).
     keeps your bot "exactly the same" (memory, session history, auth, and channel
     state) as long as you copy **both** locations:
 
-    1. Install NexisClaw on the new machine.
-    2. Copy `$NEXISCLAW_STATE_DIR` (default: `~/.NexisClaw`) from the old machine.
-    3. Copy your workspace (default: `~/.NexisClaw/workspace`).
-    4. Run `NexisClaw doctor` and restart the Gateway service.
+    1. Install GreenchClaw on the new machine.
+    2. Copy `$GREENCHCLAW_STATE_DIR` (default: `~/.GreenchClaw`) from the old machine.
+    3. Copy your workspace (default: `~/.GreenchClaw/workspace`).
+    4. Run `GreenchClaw doctor` and restart the Gateway service.
 
     That preserves config, auth profiles, WhatsApp creds, sessions, and memory. If you're in
     remote mode, remember the gateway host owns the session store and workspace.
 
     **Important:** if you only commit/push your workspace to GitHub, you're backing
     up **memory + bootstrap files**, but **not** session history or auth. Those live
-    under `~/.NexisClaw/` (for example `~/.NexisClaw/agents/<agentId>/sessions/`).
+    under `~/.GreenchClaw/` (for example `~/.GreenchClaw/agents/<agentId>/sessions/`).
 
     Related: [Migrating](/install/migrating), [Where things live on disk](/help/faq#where-things-live-on-disk),
     [Agent workspace](/concepts/agent-workspace), [Doctor](/gateway/doctor),
@@ -234,7 +234,7 @@ and troubleshooting see the main [FAQ](/help/faq).
 
   <Accordion title="Where do I see what is new in the latest version?">
     Check the GitHub changelog:
-    [https://github.com/NexisClaw/NexisClaw/blob/main/CHANGELOG.md](https://github.com/NexisClaw/NexisClaw/blob/main/CHANGELOG.md)
+    [https://github.com/GreenchClaw/GreenchClaw/blob/main/CHANGELOG.md](https://github.com/GreenchClaw/GreenchClaw/blob/main/CHANGELOG.md)
 
     Newest entries are at the top. If the top section is marked **Unreleased**, the next dated
     section is the latest shipped version. Entries are grouped by **Highlights**, **Changes**, and
@@ -242,13 +242,13 @@ and troubleshooting see the main [FAQ](/help/faq).
 
   </Accordion>
 
-  <Accordion title="Cannot access docs.NexisClaw.ai (SSL error)">
-    Some Comcast/Xfinity connections incorrectly block `docs.NexisClaw.ai` via Xfinity
-    Advanced Security. Disable it or allowlist `docs.NexisClaw.ai`, then retry.
+  <Accordion title="Cannot access docs.GreenchClaw.ai (SSL error)">
+    Some Comcast/Xfinity connections incorrectly block `docs.GreenchClaw.ai` via Xfinity
+    Advanced Security. Disable it or allowlist `docs.GreenchClaw.ai`, then retry.
     Please help us unblock it by reporting here: [https://spa.xfinity.com/check_url_status](https://spa.xfinity.com/check_url_status).
 
     If you still can't reach the site, the docs are mirrored on GitHub:
-    [https://github.com/NexisClaw/NexisClaw/tree/main/docs](https://github.com/NexisClaw/NexisClaw/tree/main/docs)
+    [https://github.com/GreenchClaw/GreenchClaw/tree/main/docs](https://github.com/GreenchClaw/GreenchClaw/tree/main/docs)
 
   </Accordion>
 
@@ -264,7 +264,7 @@ and troubleshooting see the main [FAQ](/help/faq).
     point at the **same version** after promotion.
 
     See what changed:
-    [https://github.com/NexisClaw/NexisClaw/blob/main/CHANGELOG.md](https://github.com/NexisClaw/NexisClaw/blob/main/CHANGELOG.md)
+    [https://github.com/GreenchClaw/GreenchClaw/blob/main/CHANGELOG.md](https://github.com/GreenchClaw/GreenchClaw/blob/main/CHANGELOG.md)
 
     For install one-liners and the difference between beta and dev, see the accordion below.
 
@@ -277,15 +277,15 @@ and troubleshooting see the main [FAQ](/help/faq).
     One-liners (macOS/Linux):
 
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --beta
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install.sh | bash -s -- --beta
     ```
 
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://NexisClaw.ai/install.sh | bash -s -- --install-method git
+    curl -fsSL --proto '=https' --tlsv1.2 https://GreenchClaw.ai/install.sh | bash -s -- --install-method git
     ```
 
     Windows installer (PowerShell):
-    [https://NexisClaw.ai/install.ps1](https://NexisClaw.ai/install.ps1)
+    [https://GreenchClaw.ai/install.ps1](https://GreenchClaw.ai/install.ps1)
 
     More detail: [Development channels](/install/development-channels) and [Installer flags](/install/installer).
 
@@ -297,7 +297,7 @@ and troubleshooting see the main [FAQ](/help/faq).
     1. **Dev channel (git checkout):**
 
     ```bash
-    NexisClaw update --channel dev
+    GreenchClaw update --channel dev
     ```
 
     This switches to the `main` branch and updates from source.
@@ -305,7 +305,7 @@ and troubleshooting see the main [FAQ](/help/faq).
     2. **Hackable install (from the installer site):**
 
     ```bash
-    curl -fsSL https://NexisClaw.ai/install.sh | bash -s -- --install-method git
+    curl -fsSL https://GreenchClaw.ai/install.sh | bash -s -- --install-method git
     ```
 
     That gives you a local repo you can edit, then update via git.
@@ -313,8 +313,8 @@ and troubleshooting see the main [FAQ](/help/faq).
     If you prefer a clean clone manually, use:
 
     ```bash
-    git clone https://github.com/NexisClaw/NexisClaw.git
-    cd NexisClaw
+    git clone https://github.com/GreenchClaw/GreenchClaw.git
+    cd GreenchClaw
     pnpm install
     pnpm build
     ```
@@ -339,19 +339,19 @@ and troubleshooting see the main [FAQ](/help/faq).
     Re-run the installer with **verbose output**:
 
     ```bash
-    curl -fsSL https://NexisClaw.ai/install.sh | bash -s -- --verbose
+    curl -fsSL https://GreenchClaw.ai/install.sh | bash -s -- --verbose
     ```
 
     Beta install with verbose:
 
     ```bash
-    curl -fsSL https://NexisClaw.ai/install.sh | bash -s -- --beta --verbose
+    curl -fsSL https://GreenchClaw.ai/install.sh | bash -s -- --beta --verbose
     ```
 
     For a hackable (git) install:
 
     ```bash
-    curl -fsSL https://NexisClaw.ai/install.sh | bash -s -- --install-method git --verbose
+    curl -fsSL https://GreenchClaw.ai/install.sh | bash -s -- --install-method git --verbose
     ```
 
     Windows (PowerShell) equivalent:
@@ -359,7 +359,7 @@ and troubleshooting see the main [FAQ](/help/faq).
     ```powershell
     # install.ps1 has no dedicated -Verbose flag yet.
     Set-PSDebug -Trace 1
-    & ([scriptblock]::Create((iwr -useb https://NexisClaw.ai/install.ps1))) -NoOnboard
+    & ([scriptblock]::Create((iwr -useb https://GreenchClaw.ai/install.ps1))) -NoOnboard
     Set-PSDebug -Trace 0
     ```
 
@@ -367,7 +367,7 @@ and troubleshooting see the main [FAQ](/help/faq).
 
   </Accordion>
 
-  <Accordion title="Windows install says git not found or NexisClaw not recognized">
+  <Accordion title="Windows install says git not found or GreenchClaw not recognized">
     Two common Windows issues:
 
     **1) npm error spawn git / git not found**
@@ -375,7 +375,7 @@ and troubleshooting see the main [FAQ](/help/faq).
     - Install **Git for Windows** and make sure `git` is on your PATH.
     - Close and reopen PowerShell, then re-run the installer.
 
-    **2) NexisClaw is not recognized after install**
+    **2) GreenchClaw is not recognized after install**
 
     - Your npm global bin folder is not on PATH.
     - Check the path:
@@ -412,12 +412,12 @@ and troubleshooting see the main [FAQ](/help/faq).
     Then restart the Gateway and retry your command:
 
     ```powershell
-    NexisClaw gateway restart
+    GreenchClaw gateway restart
     ```
 
-    If you still reproduce this on latest NexisClaw, track/report it in:
+    If you still reproduce this on latest GreenchClaw, track/report it in:
 
-    - [Issue #30640](https://github.com/NexisClaw/NexisClaw/issues/30640)
+    - [Issue #30640](https://github.com/GreenchClaw/GreenchClaw/issues/30640)
 
   </Accordion>
 
@@ -426,14 +426,14 @@ and troubleshooting see the main [FAQ](/help/faq).
     your bot (or Claude/Codex) _from that folder_ so it can read the repo and answer precisely.
 
     ```bash
-    curl -fsSL https://NexisClaw.ai/install.sh | bash -s -- --install-method git
+    curl -fsSL https://GreenchClaw.ai/install.sh | bash -s -- --install-method git
     ```
 
     More detail: [Install](/install) and [Installer flags](/install/installer).
 
   </Accordion>
 
-  <Accordion title="How do I install NexisClaw on Linux?">
+  <Accordion title="How do I install GreenchClaw on Linux?">
     Short answer: follow the Linux guide, then run onboarding.
 
     - Linux quick path + service install: [Linux](/platforms/linux).
@@ -442,7 +442,7 @@ and troubleshooting see the main [FAQ](/help/faq).
 
   </Accordion>
 
-  <Accordion title="How do I install NexisClaw on a VPS?">
+  <Accordion title="How do I install GreenchClaw on a VPS?">
     Any Linux VPS works. Install on the server, then use SSH/Tailscale to reach the Gateway.
 
     Guides: [exe.dev](/install/exe-dev), [Hetzner](/install/hetzner), [Fly.io](/install/fly).
@@ -471,7 +471,7 @@ and troubleshooting see the main [FAQ](/help/faq).
 
   </Accordion>
 
-  <Accordion title="Can I ask NexisClaw to update itself?">
+  <Accordion title="Can I ask GreenchClaw to update itself?">
     Short answer: **possible, not recommended**. The update flow can restart the
     Gateway (which drops the active session), may need a clean git checkout, and
     can prompt for confirmation. Safer: run updates from a shell as the operator.
@@ -479,18 +479,18 @@ and troubleshooting see the main [FAQ](/help/faq).
     Use the CLI:
 
     ```bash
-    NexisClaw update
-    NexisClaw update status
-    NexisClaw update --channel stable|beta|dev
-    NexisClaw update --tag <dist-tag|version>
-    NexisClaw update --no-restart
+    GreenchClaw update
+    GreenchClaw update status
+    GreenchClaw update --channel stable|beta|dev
+    GreenchClaw update --tag <dist-tag|version>
+    GreenchClaw update --no-restart
     ```
 
     If you must automate from an agent:
 
     ```bash
-    NexisClaw update --yes --no-restart
-    NexisClaw gateway restart
+    GreenchClaw update --yes --no-restart
+    GreenchClaw gateway restart
     ```
 
     Docs: [Update](/cli/update), [Updating](/install/updating).
@@ -498,7 +498,7 @@ and troubleshooting see the main [FAQ](/help/faq).
   </Accordion>
 
   <Accordion title="What does onboarding actually do?">
-    `NexisClaw onboard` is the recommended setup path. In **local mode** it walks you through:
+    `GreenchClaw onboard` is the recommended setup path. In **local mode** it walks you through:
 
     - **Model/auth setup** (provider OAuth, API keys, Anthropic setup-token, plus local model options such as LM Studio)
     - **Workspace** location + bootstrap files
@@ -512,23 +512,23 @@ and troubleshooting see the main [FAQ](/help/faq).
   </Accordion>
 
   <Accordion title="Do I need a Claude or OpenAI subscription to run this?">
-    No. You can run NexisClaw with **API keys** (Anthropic/OpenAI/others) or with
+    No. You can run GreenchClaw with **API keys** (Anthropic/OpenAI/others) or with
     **local-only models** so your data stays on your device. Subscriptions (Claude
     Pro/Max or OpenAI Codex) are optional ways to authenticate those providers.
 
-    For Anthropic in NexisClaw, the practical split is:
+    For Anthropic in GreenchClaw, the practical split is:
 
     - **Anthropic API key**: normal Anthropic API billing
-    - **Claude CLI / Claude subscription auth in NexisClaw**: Anthropic staff
-      told us this usage is allowed again, and NexisClaw is treating `claude -p`
+    - **Claude CLI / Claude subscription auth in GreenchClaw**: Anthropic staff
+      told us this usage is allowed again, and GreenchClaw is treating `claude -p`
       usage as sanctioned for this integration unless Anthropic publishes a new
       policy
 
     For long-lived gateway hosts, Anthropic API keys are still the more
     predictable setup. OpenAI Codex OAuth is explicitly supported for external
-    tools like NexisClaw.
+    tools like GreenchClaw.
 
-    NexisClaw also supports other hosted subscription-style options including
+    GreenchClaw also supports other hosted subscription-style options including
     **Qwen Cloud Coding Plan**, **MiniMax Coding Plan**, and
     **Z.AI / GLM Coding Plan**.
 
@@ -542,8 +542,8 @@ and troubleshooting see the main [FAQ](/help/faq).
   <Accordion title="Can I use Claude Max subscription without an API key?">
     Yes.
 
-    Anthropic staff told us NexisClaw-style Claude CLI usage is allowed again, so
-    NexisClaw treats Claude subscription auth and `claude -p` usage as sanctioned
+    Anthropic staff told us GreenchClaw-style Claude CLI usage is allowed again, so
+    GreenchClaw treats Claude subscription auth and `claude -p` usage as sanctioned
     for this integration unless Anthropic publishes a new policy. If you want
     the most predictable server-side setup, use an Anthropic API key instead.
 
@@ -552,14 +552,14 @@ and troubleshooting see the main [FAQ](/help/faq).
   <Accordion title="Do you support Claude subscription auth (Claude Pro or Max)?">
     Yes.
 
-    Anthropic staff told us this usage is allowed again, so NexisClaw treats
+    Anthropic staff told us this usage is allowed again, so GreenchClaw treats
     Claude CLI reuse and `claude -p` usage as sanctioned for this integration
     unless Anthropic publishes a new policy.
 
-    Anthropic setup-token is still available as a supported NexisClaw token path, but NexisClaw now prefers Claude CLI reuse and `claude -p` when available.
+    Anthropic setup-token is still available as a supported GreenchClaw token path, but GreenchClaw now prefers Claude CLI reuse and `claude -p` when available.
     For production or multi-user workloads, Anthropic API key auth is still the
     safer, more predictable choice. If you want other subscription-style hosted
-    options in NexisClaw, see [OpenAI](/providers/openai), [Qwen / Model
+    options in GreenchClaw, see [OpenAI](/providers/openai), [Qwen / Model
     Cloud](/providers/qwen), [MiniMax](/providers/minimax), and [GLM
     Models](/providers/glm).
 
@@ -580,42 +580,42 @@ and troubleshooting see the main [FAQ](/help/faq).
     `Extra usage is required for long context requests`, the request is trying to use
     Anthropic's 1M context beta (`context1m: true`). That only works when your
     credential is eligible for long-context billing (API key billing or the
-    NexisClaw Claude-login path with Extra Usage enabled).
+    GreenchClaw Claude-login path with Extra Usage enabled).
 
-    Tip: set a **fallback model** so NexisClaw can keep replying while a provider is rate-limited.
+    Tip: set a **fallback model** so GreenchClaw can keep replying while a provider is rate-limited.
     See [Models](/cli/models), [OAuth](/concepts/oauth), and
     [/gateway/troubleshooting#anthropic-429-extra-usage-required-for-long-context](/gateway/troubleshooting#anthropic-429-extra-usage-required-for-long-context).
 
   </Accordion>
 
   <Accordion title="Is AWS Bedrock supported?">
-    Yes. NexisClaw has a bundled **Amazon Bedrock (Converse)** provider. With AWS env markers present, NexisClaw can auto-discover the streaming/text Bedrock catalog and merge it as an implicit `amazon-bedrock` provider; otherwise you can explicitly enable `plugins.entries.amazon-bedrock.config.discovery.enabled` or add a manual provider entry. See [Amazon Bedrock](/providers/bedrock) and [Model providers](/providers/models). If you prefer a managed key flow, an OpenAI-compatible proxy in front of Bedrock is still a valid option.
+    Yes. GreenchClaw has a bundled **Amazon Bedrock (Converse)** provider. With AWS env markers present, GreenchClaw can auto-discover the streaming/text Bedrock catalog and merge it as an implicit `amazon-bedrock` provider; otherwise you can explicitly enable `plugins.entries.amazon-bedrock.config.discovery.enabled` or add a manual provider entry. See [Amazon Bedrock](/providers/bedrock) and [Model providers](/providers/models). If you prefer a managed key flow, an OpenAI-compatible proxy in front of Bedrock is still a valid option.
   </Accordion>
 
   <Accordion title="How does Codex auth work?">
-    NexisClaw supports **OpenAI Code (Codex)** via OAuth (ChatGPT sign-in). Use
+    GreenchClaw supports **OpenAI Code (Codex)** via OAuth (ChatGPT sign-in). Use
     `openai/gpt-5.5` for the common setup: ChatGPT/Codex subscription auth plus
     native Codex app-server execution. `openai-codex/gpt-*` model refs are
-    legacy config repaired by `NexisClaw doctor --fix`. Direct OpenAI API-key
+    legacy config repaired by `GreenchClaw doctor --fix`. Direct OpenAI API-key
     access remains available for non-agent OpenAI API surfaces and for agent
     models through an ordered `openai-codex` API-key profile.
     See [Model providers](/concepts/model-providers) and [Onboarding (CLI)](/start/wizard).
   </Accordion>
 
-  <Accordion title="Why does NexisClaw still mention openai-codex?">
+  <Accordion title="Why does GreenchClaw still mention openai-codex?">
     `openai-codex` is the provider and auth-profile id for ChatGPT/Codex OAuth.
     Older configs also used it as a model prefix:
 
     - `openai/gpt-5.5` = ChatGPT/Codex subscription auth with native Codex runtime for agent turns
-    - `openai-codex/gpt-5.5` = legacy model route repaired by `NexisClaw doctor --fix`
+    - `openai-codex/gpt-5.5` = legacy model route repaired by `GreenchClaw doctor --fix`
     - `openai/gpt-5.5` plus an ordered `openai-codex` API-key profile = API-key auth for an OpenAI agent model
     - `openai-codex:...` = auth profile id, not a model ref
 
     If you want the direct OpenAI Platform billing/limit path, set
     `OPENAI_API_KEY`. If you want ChatGPT/Codex subscription auth, sign in with
-    `NexisClaw models auth login --provider openai-codex`. Keep the model ref as
+    `GreenchClaw models auth login --provider openai-codex`. Keep the model ref as
     `openai/gpt-5.5`; `openai-codex/*` model refs are legacy config that
-    `NexisClaw doctor --fix` rewrites.
+    `GreenchClaw doctor --fix` rewrites.
 
   </Accordion>
 
@@ -624,32 +624,32 @@ and troubleshooting see the main [FAQ](/help/faq).
     those limits can differ from the ChatGPT website/app experience, even when
     both are tied to the same account.
 
-    NexisClaw can show the currently visible provider usage/quota windows in
-    `NexisClaw models status`, but it does not invent or normalize ChatGPT-web
+    GreenchClaw can show the currently visible provider usage/quota windows in
+    `GreenchClaw models status`, but it does not invent or normalize ChatGPT-web
     entitlements into direct API access. If you want the direct OpenAI Platform
     billing/limit path, use `openai/*` with an API key.
 
   </Accordion>
 
   <Accordion title="Do you support OpenAI subscription auth (Codex OAuth)?">
-    Yes. NexisClaw fully supports **OpenAI Code (Codex) subscription OAuth**.
+    Yes. GreenchClaw fully supports **OpenAI Code (Codex) subscription OAuth**.
     OpenAI explicitly allows subscription OAuth usage in external tools/workflows
-    like NexisClaw. Onboarding can run the OAuth flow for you.
+    like GreenchClaw. Onboarding can run the OAuth flow for you.
 
     See [OAuth](/concepts/oauth), [Model providers](/concepts/model-providers), and [Onboarding (CLI)](/start/wizard).
 
   </Accordion>
 
   <Accordion title="How do I set up Gemini CLI OAuth?">
-    Gemini CLI uses a **plugin auth flow**, not a client id or secret in `NexisClaw.json`.
+    Gemini CLI uses a **plugin auth flow**, not a client id or secret in `GreenchClaw.json`.
 
     Steps:
 
     1. Install Gemini CLI locally so `gemini` is on `PATH`
        - Homebrew: `brew install gemini-cli`
        - npm: `npm install -g @google/gemini-cli`
-    2. Enable the plugin: `NexisClaw plugins enable google`
-    3. Login: `NexisClaw models auth login --provider google-gemini-cli --set-default`
+    2. Enable the plugin: `GreenchClaw plugins enable google`
+    3. Login: `GreenchClaw models auth login --provider google-gemini-cli --set-default`
     4. Default model after login: `google-gemini-cli/gemini-3-flash-preview`
     5. If requests fail, set `GOOGLE_CLOUD_PROJECT` or `GOOGLE_CLOUD_PROJECT_ID` on the gateway host
 
@@ -658,7 +658,7 @@ and troubleshooting see the main [FAQ](/help/faq).
   </Accordion>
 
   <Accordion title="Is a local model OK for casual chats?">
-    Usually no. NexisClaw needs large context + strong safety; small cards truncate and leak. If you must, run the **largest** model build you can locally (LM Studio) and see [/gateway/local-models](/gateway/local-models). Smaller/quantized models increase prompt-injection risk - see [Security](/gateway/security).
+    Usually no. GreenchClaw needs large context + strong safety; small cards truncate and leak. If you must, run the **largest** model build you can locally (LM Studio) and see [/gateway/local-models](/gateway/local-models). Smaller/quantized models increase prompt-injection risk - see [Security](/gateway/security).
   </Accordion>
 
   <Accordion title="How do I keep hosted model traffic in a specific region?">
@@ -666,7 +666,7 @@ and troubleshooting see the main [FAQ](/help/faq).
   </Accordion>
 
   <Accordion title="Do I have to buy a Mac Mini to install this?">
-    No. NexisClaw runs on macOS or Linux (Windows via WSL2). A Mac mini is optional - some people
+    No. GreenchClaw runs on macOS or Linux (Windows via WSL2). A Mac mini is optional - some people
     buy one as an always-on host, but a small VPS, home server, or Raspberry Pi-class box works too.
 
     You only need a Mac **for macOS-only tools**. For iMessage, use [iMessage](/channels/imessage) with `imsg` on any Mac signed into Messages. If the Gateway runs on Linux or elsewhere, set `channels.imessage.cliPath` to an SSH wrapper that runs `imsg` on that Mac. If you want other macOS-only tools, run the Gateway on a Mac or pair a macOS node.
@@ -689,7 +689,7 @@ and troubleshooting see the main [FAQ](/help/faq).
 
   </Accordion>
 
-  <Accordion title="If I buy a Mac mini to run NexisClaw, can I connect it to my MacBook Pro?">
+  <Accordion title="If I buy a Mac mini to run GreenchClaw, can I connect it to my MacBook Pro?">
     Yes. The **Mac mini can run the Gateway**, and your MacBook Pro can connect as a
     **node** (companion device). Nodes don't run the Gateway - they provide extra
     capabilities like screen/camera/canvas and `system.run` on that device.
@@ -698,7 +698,7 @@ and troubleshooting see the main [FAQ](/help/faq).
 
     - Gateway on the Mac mini (always-on).
     - MacBook Pro runs the macOS app or a node host and pairs to the Gateway.
-    - Use `NexisClaw nodes status` / `NexisClaw nodes list` to see it.
+    - Use `GreenchClaw nodes status` / `GreenchClaw nodes list` to see it.
 
     Docs: [Nodes](/nodes), [Nodes CLI](/cli/nodes).
 
@@ -716,11 +716,11 @@ and troubleshooting see the main [FAQ](/help/faq).
   <Accordion title="Telegram: what goes in allowFrom?">
     `channels.telegram.allowFrom` is **the human sender's Telegram user ID** (numeric). It is not the bot username.
 
-    Setup asks for numeric user IDs only. If you already have legacy `@username` entries in config, `NexisClaw doctor --fix` can try to resolve them.
+    Setup asks for numeric user IDs only. If you already have legacy `@username` entries in config, `GreenchClaw doctor --fix` can try to resolve them.
 
     Safer (no third-party bot):
 
-    - DM your bot, then run `NexisClaw logs --follow` and read `from.id`.
+    - DM your bot, then run `GreenchClaw logs --follow` and read `from.id`.
 
     Official Bot API:
 
@@ -734,7 +734,7 @@ and troubleshooting see the main [FAQ](/help/faq).
 
   </Accordion>
 
-  <Accordion title="Can multiple people use one WhatsApp number with different NexisClaw instances?">
+  <Accordion title="Can multiple people use one WhatsApp number with different GreenchClaw instances?">
     Yes, via **multi-agent routing**. Bind each sender's WhatsApp **DM** (peer `kind: "direct"`, sender E.164 like `+15551234567`) to a different `agentId`, so each person gets their own workspace and session store. Replies still come from the **same WhatsApp account**, and DM access control (`channels.whatsapp.dmPolicy` / `channels.whatsapp.allowFrom`) is global per WhatsApp account. See [Multi-Agent Routing](/concepts/multi-agent) and [WhatsApp](/channels/whatsapp).
   </Accordion>
 
@@ -752,7 +752,7 @@ and troubleshooting see the main [FAQ](/help/faq).
     brew install <formula>
     ```
 
-    If you run NexisClaw via systemd, ensure the service PATH includes `/home/linuxbrew/.linuxbrew/bin` (or your brew prefix) so `brew`-installed tools resolve in non-login shells.
+    If you run GreenchClaw via systemd, ensure the service PATH includes `/home/linuxbrew/.linuxbrew/bin` (or your brew prefix) so `brew`-installed tools resolve in non-login shells.
     Recent builds also prepend common user bin dirs on Linux systemd services (for example `~/.local/bin`, `~/.npm-global/bin`, `~/.local/share/pnpm`, `~/.bun/bin`) and honor `PNPM_HOME`, `NPM_CONFIG_PREFIX`, `BUN_INSTALL`, `VOLTA_HOME`, `ASDF_DATA_DIR`, `NVM_DIR`, and `FNM_DIR` when set.
 
   </Accordion>
@@ -768,20 +768,20 @@ and troubleshooting see the main [FAQ](/help/faq).
   </Accordion>
 
   <Accordion title="Can I switch between npm and git installs later?">
-    Yes. Use `NexisClaw update --channel ...` when NexisClaw is already installed.
-    This **does not delete your data** - it only changes the NexisClaw code install.
-    Your state (`~/.NexisClaw`) and workspace (`~/.NexisClaw/workspace`) stay untouched.
+    Yes. Use `GreenchClaw update --channel ...` when GreenchClaw is already installed.
+    This **does not delete your data** - it only changes the GreenchClaw code install.
+    Your state (`~/.GreenchClaw`) and workspace (`~/.GreenchClaw/workspace`) stay untouched.
 
     From npm to git:
 
     ```bash
-    NexisClaw update --channel dev
+    GreenchClaw update --channel dev
     ```
 
     From git to npm:
 
     ```bash
-    NexisClaw update --channel stable
+    GreenchClaw update --channel stable
     ```
 
     Add `--dry-run` to preview the planned mode switch first. The updater runs
@@ -791,8 +791,8 @@ and troubleshooting see the main [FAQ](/help/faq).
     The installer can force either mode too:
 
     ```bash
-    curl -fsSL https://NexisClaw.ai/install.sh | bash -s -- --install-method git
-    curl -fsSL https://NexisClaw.ai/install.sh | bash -s -- --install-method npm
+    curl -fsSL https://GreenchClaw.ai/install.sh | bash -s -- --install-method git
+    curl -fsSL https://GreenchClaw.ai/install.sh | bash -s -- --install-method npm
     ```
 
     Backup tips: see [Backup strategy](/help/faq#where-things-live-on-disk).
@@ -813,13 +813,13 @@ and troubleshooting see the main [FAQ](/help/faq).
     - **Pros:** always-on, stable network, no laptop sleep issues, easier to keep running.
     - **Cons:** often run headless (use screenshots), remote file access only, you must SSH for updates.
 
-    **NexisClaw-specific note:** WhatsApp/Telegram/Slack/Mattermost/Discord all work fine from a VPS. The only real trade-off is **headless browser** vs a visible window. See [Browser](/tools/browser).
+    **GreenchClaw-specific note:** WhatsApp/Telegram/Slack/Mattermost/Discord all work fine from a VPS. The only real trade-off is **headless browser** vs a visible window. See [Browser](/tools/browser).
 
     **Recommended default:** VPS if you had gateway disconnects before. Local is great when you're actively using the Mac and want local file access or UI automation with a visible browser.
 
   </Accordion>
 
-  <Accordion title="How important is it to run NexisClaw on a dedicated machine?">
+  <Accordion title="How important is it to run GreenchClaw on a dedicated machine?">
     Not required, but **recommended for reliability and isolation**.
 
     - **Dedicated host (VPS/Mac mini/Pi):** always-on, fewer sleep/reboot interruptions, cleaner permissions, easier to keep running.
@@ -831,7 +831,7 @@ and troubleshooting see the main [FAQ](/help/faq).
   </Accordion>
 
   <Accordion title="What are the minimum VPS requirements and recommended OS?">
-    NexisClaw is lightweight. For a basic Gateway + one chat channel:
+    GreenchClaw is lightweight. For a basic Gateway + one chat channel:
 
     - **Absolute minimum:** 1 vCPU, 1GB RAM, ~500MB disk.
     - **Recommended:** 1-2 vCPU, 2GB RAM or more for headroom (logs, media, multiple channels). Node tools and browser automation can be resource hungry.
@@ -842,7 +842,7 @@ and troubleshooting see the main [FAQ](/help/faq).
 
   </Accordion>
 
-  <Accordion title="Can I run NexisClaw in a VM and what are the requirements?">
+  <Accordion title="Can I run GreenchClaw in a VM and what are the requirements?">
     Yes. Treat a VM the same as a VPS: it needs to be always on, reachable, and have enough
     RAM for the Gateway and any channels you enable.
 

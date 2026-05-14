@@ -1,8 +1,8 @@
 import {
   createDefaultModelPresetAppliers,
   type ModelDefinitionConfig,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 
 export const LITELLM_BASE_URL = "http://localhost:4000";
 export const LITELLM_DEFAULT_MODEL_ID = "claude-opus-4-6";
@@ -30,7 +30,7 @@ export function buildLitellmModelDefinition(): ModelDefinitionConfig {
 
 const litellmPresetAppliers = createDefaultModelPresetAppliers({
   primaryModelRef: LITELLM_DEFAULT_MODEL_REF,
-  resolveParams: (cfg: NexisClawConfig) => {
+  resolveParams: (cfg: GreenchClawConfig) => {
     const existingProvider = cfg.models?.providers?.litellm as { baseUrl?: unknown } | undefined;
     const resolvedBaseUrl =
       typeof existingProvider?.baseUrl === "string" ? existingProvider.baseUrl.trim() : "";
@@ -46,10 +46,10 @@ const litellmPresetAppliers = createDefaultModelPresetAppliers({
   },
 });
 
-export function applyLitellmProviderConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyLitellmProviderConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return litellmPresetAppliers.applyProviderConfig(cfg);
 }
 
-export function applyLitellmConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyLitellmConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return litellmPresetAppliers.applyConfig(cfg);
 }

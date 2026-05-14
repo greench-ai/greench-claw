@@ -1,5 +1,5 @@
 import { ensureOpenDmPolicyAllowFromWildcard } from "../../../channels/plugins/dm-access.js";
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { sanitizeForLog } from "../../../terminal/ansi.js";
 import { resolveAllowFromMode, type AllowFromMode } from "./allow-from-mode.js";
 import { asObjectRecord } from "./object.js";
@@ -17,8 +17,8 @@ export function collectOpenPolicyAllowFromWarnings(params: {
   ];
 }
 
-export function maybeRepairOpenPolicyAllowFrom(cfg: NexisClawConfig): {
-  config: NexisClawConfig;
+export function maybeRepairOpenPolicyAllowFrom(cfg: GreenchClawConfig): {
+  config: GreenchClawConfig;
   changes: string[];
 } {
   const channels = cfg.channels;

@@ -7,9 +7,9 @@ export type ExternalizedBundledPluginBridge = {
   pluginId?: string;
   /** Preferred external source when migrating the bundled plugin out. Defaults to npm. */
   preferredSource?: ExternalizedBundledPluginPreferredSource;
-  /** npm spec NexisClaw can install when migrating the bundled plugin out. */
+  /** npm spec GreenchClaw can install when migrating the bundled plugin out. */
   npmSpec?: string;
-  /** ClawHub spec NexisClaw can install when migrating the bundled plugin out. */
+  /** ClawHub spec GreenchClaw can install when migrating the bundled plugin out. */
   clawhubSpec?: string;
   /** Optional ClawHub base URL for non-default registries. */
   clawhubUrl?: string;

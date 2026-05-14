@@ -1,25 +1,25 @@
-# NexisClaw docs i18n assets
+# GreenchClaw docs i18n assets
 
 This folder stores translation config for the source docs repo.
 
 Generated locale trees and live translation memory now live in the publish repo:
 
-- repo: `NexisClaw/docs`
-- local checkout: `~/Projects/NexisClaw-docs`
+- repo: `GreenchClaw/docs`
+- local checkout: `~/Projects/GreenchClaw-docs`
 
 ## Source of truth
 
-- English docs are authored in `NexisClaw/NexisClaw`.
+- English docs are authored in `GreenchClaw/GreenchClaw`.
 - The source docs tree lives under `docs/`.
 - The source repo no longer keeps committed generated locale trees such as `docs/zh-CN/**`, `docs/zh-TW/**`, `docs/ja-JP/**`, `docs/es/**`, `docs/pt-BR/**`, `docs/ko/**`, `docs/de/**`, `docs/fr/**`, `docs/ar/**`, `docs/it/**`, `docs/vi/**`, `docs/nl/**`, `docs/fa/**`, `docs/tr/**`, `docs/uk/**`, `docs/id/**`, `docs/pl/**`, or `docs/th/**`.
 
 ## End-to-end flow
 
-1. Edit English docs in `NexisClaw/NexisClaw`.
+1. Edit English docs in `GreenchClaw/GreenchClaw`.
 2. Push to `main`.
-3. `NexisClaw/NexisClaw/.github/workflows/docs-sync-publish.yml` mirrors the docs tree into `NexisClaw/docs`.
+3. `GreenchClaw/GreenchClaw/.github/workflows/docs-sync-publish.yml` mirrors the docs tree into `GreenchClaw/docs`.
 4. The sync script rewrites the publish `docs/docs.json` so the generated locale picker blocks exist there even though they are no longer committed in the source repo.
-5. `NexisClaw/docs/.github/workflows/translate-all.yml` waits for `main` to settle, translates only stale or missing locale pages, and uploads per-locale artifacts.
+5. `GreenchClaw/docs/.github/workflows/translate-all.yml` waits for `main` to settle, translates only stale or missing locale pages, and uploads per-locale artifacts.
 6. The publish repo finalizer applies successful locale artifacts and pushes one aggregate `chore(i18n): refresh translations` commit.
 7. A weekly `full` run reconciles every locale/page path so flaky model failures are retried without making hot docs commits wait.
 
@@ -33,9 +33,9 @@ Generated locale trees and live translation memory now live in the publish repo:
 ## Locale visibility
 
 - Control UI supports `en`, `zh-CN`, `zh-TW`, `pt-BR`, `de`, `es`, `ja-JP`, `ko`, `fr`, `ar`, `it`, `tr`, `uk`, `id`, `pl`, `th`, `vi`, `nl`, and `fa`.
-- Docs translation workflows generate the same non-English locale set in `NexisClaw/docs`.
+- Docs translation workflows generate the same non-English locale set in `GreenchClaw/docs`.
 - The Mintlify docs language picker can expose only the locales accepted by Mintlify `navigation.languages`; today that includes Vietnamese (`vi`) and Dutch (`nl`), but not Thai (`th`) or Persian (`fa`).
-- Do not treat missing `th` or `fa` entries in generated `docs/docs.json` as a pipeline failure. Verify their generated folders in `NexisClaw/docs` instead.
+- Do not treat missing `th` or `fa` entries in generated `docs/docs.json` as a pipeline failure. Verify their generated folders in `GreenchClaw/docs` instead.
 
 ## Files in this folder
 
@@ -75,7 +75,7 @@ Fields:
 
 ## Operational notes
 
-- Sync metadata is written to `.NexisClaw-sync/source.json` in the publish repo.
-- Source repo secret: `NEXISCLAW_DOCS_SYNC_TOKEN`
-- Publish repo secret: `NEXISCLAW_DOCS_I18N_OPENAI_API_KEY`
-- If locale output looks stale, check the `Translate All` workflow in `NexisClaw/docs` first.
+- Sync metadata is written to `.GreenchClaw-sync/source.json` in the publish repo.
+- Source repo secret: `GREENCHCLAW_DOCS_SYNC_TOKEN`
+- Publish repo secret: `GREENCHCLAW_DOCS_I18N_OPENAI_API_KEY`
+- If locale output looks stale, check the `Translate All` workflow in `GreenchClaw/docs` first.

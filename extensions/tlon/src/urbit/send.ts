@@ -2,7 +2,7 @@ import { scot, da } from "@urbit/aura";
 import {
   createMessageReceiptFromOutboundResults,
   type MessageReceiptPartKind,
-} from "NexisClaw/plugin-sdk/channel-message";
+} from "GreenchClaw/plugin-sdk/channel-message";
 import { markdownToStory, createImageBlock, isImageUrl, type Story } from "./story.js";
 
 export type TlonPokeApi = {

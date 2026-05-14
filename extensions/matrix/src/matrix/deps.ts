@@ -2,8 +2,8 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime";
 
 const REQUIRED_MATRIX_PACKAGES = [
   "matrix-js-sdk",
@@ -44,7 +44,7 @@ export function isMatrixSdkAvailable(): boolean {
 function buildMatrixDepsMissingMessage(missing: string[]): string {
   return [
     `Matrix plugin dependencies are missing: ${missing.join(", ")}.`,
-    "Repair this plugin with `NexisClaw plugins update matrix` or run `NexisClaw doctor --fix`.",
+    "Repair this plugin with `GreenchClaw plugins update matrix` or run `GreenchClaw doctor --fix`.",
   ].join(" ");
 }
 

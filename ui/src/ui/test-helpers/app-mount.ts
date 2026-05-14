@@ -3,7 +3,7 @@ import { i18n } from "../../i18n/index.ts";
 import { getSafeLocalStorage, getSafeSessionStorage } from "../../local-storage.ts";
 import { createStorageMock } from "../../test-helpers/storage.ts";
 import "../app.ts";
-import type { NexisClawApp } from "../app.ts";
+import type { GreenchClawApp } from "../app.ts";
 
 class MockWebSocket {
   static CONNECTING = 0;
@@ -42,12 +42,12 @@ function createMatchMediaMock(width: number) {
   });
 }
 
-const mountedApps = new Set<NexisClawApp>();
+const mountedApps = new Set<GreenchClawApp>();
 
 function collectMountedApps() {
-  return new Set<NexisClawApp>([
+  return new Set<GreenchClawApp>([
     ...mountedApps,
-    ...document.querySelectorAll<NexisClawApp>("nexisclaw-app"),
+    ...document.querySelectorAll<GreenchClawApp>("nexisclaw-app"),
   ]);
 }
 
@@ -69,13 +69,13 @@ function nextFrame() {
   });
 }
 
-async function waitForAppUpdates(apps: Iterable<NexisClawApp>) {
+async function waitForAppUpdates(apps: Iterable<GreenchClawApp>) {
   for (const app of apps) {
     await app.updateComplete;
   }
 }
 
-async function drainAppWork(apps: Iterable<NexisClawApp>) {
+async function drainAppWork(apps: Iterable<GreenchClawApp>) {
   const snapshot = [...apps];
   await nextMicrotask();
   await waitForAppUpdates(snapshot);
@@ -102,7 +102,7 @@ async function cleanupMountedApps() {
 
 export function mountApp(pathname: string) {
   window.history.replaceState({}, "", pathname);
-  const app = document.createElement("nexisclaw-app") as NexisClawApp;
+  const app = document.createElement("nexisclaw-app") as GreenchClawApp;
   mountedApps.add(app);
   document.body.append(app);
   app.connected = true;
@@ -115,7 +115,7 @@ export function registerAppMountHooks() {
     const localStorage = createStorageMock();
     const sessionStorage = createStorageMock();
     const matchMedia = createMatchMediaMock(390);
-    window.__NEXISCLAW_CONTROL_UI_BASE_PATH__ = undefined;
+    window.__GREENCHCLAW_CONTROL_UI_BASE_PATH__ = undefined;
     vi.stubGlobal("localStorage", localStorage);
     vi.stubGlobal("sessionStorage", sessionStorage);
     vi.stubGlobal("matchMedia", matchMedia);
@@ -157,7 +157,7 @@ export function registerAppMountHooks() {
 
   afterEach(async () => {
     await cleanupMountedApps();
-    window.__NEXISCLAW_CONTROL_UI_BASE_PATH__ = undefined;
+    window.__GREENCHCLAW_CONTROL_UI_BASE_PATH__ = undefined;
     getSafeLocalStorage()?.clear();
     getSafeSessionStorage()?.clear();
     await i18n.setLocale("en");

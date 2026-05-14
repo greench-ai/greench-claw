@@ -1,5 +1,5 @@
-# Tlon (NexisClaw plugin)
+# Tlon (GreenchClaw plugin)
 
-Tlon/Urbit channel plugin for NexisClaw. Supports DMs, group mentions, and thread replies.
+Tlon/Urbit channel plugin for GreenchClaw. Supports DMs, group mentions, and thread replies.
 
-Docs: https://docs.NexisClaw.ai/channels/tlon
+Docs: https://docs.GreenchClaw.ai/channels/tlon

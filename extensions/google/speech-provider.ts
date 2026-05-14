@@ -1,19 +1,19 @@
-import { transcodeAudioBufferToOpus } from "NexisClaw/plugin-sdk/media-runtime";
+import { transcodeAudioBufferToOpus } from "GreenchClaw/plugin-sdk/media-runtime";
 import {
   assertOkOrThrowProviderError,
   postJsonRequest,
   sanitizeConfiguredModelProviderRequest,
-} from "NexisClaw/plugin-sdk/provider-http";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/provider-onboard";
-import { normalizeResolvedSecretInputString } from "NexisClaw/plugin-sdk/secret-input";
+} from "GreenchClaw/plugin-sdk/provider-http";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/provider-onboard";
+import { normalizeResolvedSecretInputString } from "GreenchClaw/plugin-sdk/secret-input";
 import type {
   SpeechDirectiveTokenParseContext,
   SpeechProviderConfig,
   SpeechProviderOverrides,
   SpeechProviderPlugin,
-} from "NexisClaw/plugin-sdk/speech-core";
-import { asObject, trimToUndefined } from "NexisClaw/plugin-sdk/speech-core";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/speech-core";
+import { asObject, trimToUndefined } from "GreenchClaw/plugin-sdk/speech-core";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { resolveGoogleGenerativeAiHttpRequestConfig } from "./api.js";
 
 const DEFAULT_GOOGLE_TTS_MODEL = "gemini-3.1-flash-tts-preview";
@@ -159,7 +159,7 @@ function resolveGoogleTtsEnvApiKey(): string | undefined {
   );
 }
 
-function resolveGoogleTtsModelProviderApiKey(cfg?: NexisClawConfig): string | undefined {
+function resolveGoogleTtsModelProviderApiKey(cfg?: GreenchClawConfig): string | undefined {
   return normalizeResolvedSecretInputString({
     value: cfg?.models?.providers?.google?.apiKey,
     path: "models.providers.google.apiKey",
@@ -167,7 +167,7 @@ function resolveGoogleTtsModelProviderApiKey(cfg?: NexisClawConfig): string | un
 }
 
 function resolveGoogleTtsApiKey(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   providerConfig: SpeechProviderConfig;
 }): string | undefined {
   return (
@@ -178,7 +178,7 @@ function resolveGoogleTtsApiKey(params: {
 }
 
 function resolveGoogleTtsBaseUrl(params: {
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   providerConfig: GoogleTtsProviderConfig;
 }): string | undefined {
   return (
@@ -328,7 +328,7 @@ function normalizePromptList(values: readonly string[] | undefined): string[] {
     .filter((value): value is string => Boolean(value));
 }
 
-function isNexisClawGoogleAudioProfilePrompt(text: string): boolean {
+function isGreenchClawGoogleAudioProfilePrompt(text: string): boolean {
   return (
     text.includes("# AUDIO PROFILE:") &&
     text.includes("### TRANSCRIPT") &&
@@ -584,7 +584,7 @@ export function buildGoogleSpeechProvider(): SpeechProviderPlugin {
       const shouldWrap =
         config.promptTemplate === GOOGLE_AUDIO_PROFILE_PROMPT_TEMPLATE ||
         Boolean(config.personaPrompt);
-      if (!shouldWrap || isNexisClawGoogleAudioProfilePrompt(ctx.text)) {
+      if (!shouldWrap || isGreenchClawGoogleAudioProfilePrompt(ctx.text)) {
         return undefined;
       }
       return {

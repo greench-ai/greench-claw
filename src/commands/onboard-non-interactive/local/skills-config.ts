@@ -1,9 +1,9 @@
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import type { RuntimeEnv } from "../../../runtime.js";
 import type { OnboardOptions } from "../../onboard-types.js";
 
 export function applyNonInteractiveSkillsConfig(params: {
-  nextConfig: NexisClawConfig;
+  nextConfig: GreenchClawConfig;
   opts: OnboardOptions;
   runtime: RuntimeEnv;
 }) {

@@ -12,7 +12,7 @@ import {
   resolveAgentWorkspaceDir,
   resolveDefaultAgentId,
 } from "../../agents/agent-scope.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
@@ -24,7 +24,7 @@ import type {
 import type { ConfiguredBindingConsumer } from "./configured-binding-consumers.js";
 import type { ChannelConfiguredBindingConversationRef } from "./types.adapters.js";
 
-function resolveAgentRuntimeAcpDefaults(params: { cfg: NexisClawConfig; ownerAgentId: string }): {
+function resolveAgentRuntimeAcpDefaults(params: { cfg: GreenchClawConfig; ownerAgentId: string }): {
   acpAgentId?: string;
   mode?: string;
   cwd?: string;
@@ -46,7 +46,7 @@ function resolveAgentRuntimeAcpDefaults(params: { cfg: NexisClawConfig; ownerAge
 }
 
 function resolveConfiguredBindingWorkspaceCwd(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
 }): string | undefined {
   const explicitAgentWorkspace = normalizeText(
@@ -90,7 +90,7 @@ function buildConfiguredAcpSpec(params: {
 }
 
 function buildAcpTargetFactory(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   binding: ConfiguredBindingRuleConfig;
   channel: string;
   agentId: string;

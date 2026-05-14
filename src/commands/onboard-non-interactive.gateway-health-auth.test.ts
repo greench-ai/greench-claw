@@ -2,11 +2,11 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveGatewayHealthProbeToken } from "./onboard-non-interactive/local.js";
 
 async function withTempDir<T>(run: (dir: string) => Promise<T>): Promise<T> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-gateway-health-auth-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-gateway-health-auth-"));
   try {
     return await run(dir);
   } finally {
@@ -20,19 +20,19 @@ async function writeSecureFile(filePath: string, content: string): Promise<void>
 }
 
 describe("resolveGatewayHealthProbeToken", () => {
-  const originalGatewayToken = process.env.NEXISCLAW_GATEWAY_TOKEN;
-  const originalGatewayPassword = process.env.NEXISCLAW_GATEWAY_PASSWORD;
+  const originalGatewayToken = process.env.GREENCHCLAW_GATEWAY_TOKEN;
+  const originalGatewayPassword = process.env.GREENCHCLAW_GATEWAY_PASSWORD;
 
   afterEach(() => {
     if (originalGatewayToken === undefined) {
-      delete process.env.NEXISCLAW_GATEWAY_TOKEN;
+      delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
     } else {
-      process.env.NEXISCLAW_GATEWAY_TOKEN = originalGatewayToken;
+      process.env.GREENCHCLAW_GATEWAY_TOKEN = originalGatewayToken;
     }
     if (originalGatewayPassword === undefined) {
-      delete process.env.NEXISCLAW_GATEWAY_PASSWORD;
+      delete process.env.GREENCHCLAW_GATEWAY_PASSWORD;
     } else {
-      process.env.NEXISCLAW_GATEWAY_PASSWORD = originalGatewayPassword;
+      process.env.GREENCHCLAW_GATEWAY_PASSWORD = originalGatewayPassword;
     }
   });
 
@@ -40,7 +40,7 @@ describe("resolveGatewayHealthProbeToken", () => {
     await withTempDir(async (dir) => {
       const tokenPath = path.join(dir, "gateway-token.txt");
       await writeSecureFile(tokenPath, "file-secret-token\n");
-      process.env.NEXISCLAW_GATEWAY_TOKEN = "stale-env-token";
+      process.env.GREENCHCLAW_GATEWAY_TOKEN = "stale-env-token";
 
       const resolved = await resolveGatewayHealthProbeToken({
         gateway: {
@@ -62,15 +62,15 @@ describe("resolveGatewayHealthProbeToken", () => {
             },
           },
         },
-      } as NexisClawConfig);
+      } as GreenchClawConfig);
 
       expect(resolved).toEqual({ token: "file-secret-token" });
     });
   });
 
-  it("does not fall back to stale NEXISCLAW_GATEWAY_TOKEN when a SecretRef is unresolved", async () => {
+  it("does not fall back to stale GREENCHCLAW_GATEWAY_TOKEN when a SecretRef is unresolved", async () => {
     await withTempDir(async (dir) => {
-      process.env.NEXISCLAW_GATEWAY_TOKEN = "stale-env-token";
+      process.env.GREENCHCLAW_GATEWAY_TOKEN = "stale-env-token";
 
       const resolved = await resolveGatewayHealthProbeToken({
         gateway: {
@@ -92,7 +92,7 @@ describe("resolveGatewayHealthProbeToken", () => {
             },
           },
         },
-      } as NexisClawConfig);
+      } as GreenchClawConfig);
 
       expect(resolved.token).toBeUndefined();
       expect(resolved.unresolvedRefReason).toBe(
@@ -102,8 +102,8 @@ describe("resolveGatewayHealthProbeToken", () => {
   });
 
   it("resolves password auth for the local onboarding health probe", async () => {
-    process.env.NEXISCLAW_GATEWAY_TOKEN = "stale-env-token";
-    process.env.NEXISCLAW_GATEWAY_PASSWORD = "resolved-password"; // pragma: allowlist secret
+    process.env.GREENCHCLAW_GATEWAY_TOKEN = "stale-env-token";
+    process.env.GREENCHCLAW_GATEWAY_PASSWORD = "resolved-password"; // pragma: allowlist secret
 
     const resolved = await resolveGatewayHealthProbeToken({
       gateway: {
@@ -112,11 +112,11 @@ describe("resolveGatewayHealthProbeToken", () => {
           password: {
             source: "env",
             provider: "default",
-            id: "NEXISCLAW_GATEWAY_PASSWORD",
+            id: "GREENCHCLAW_GATEWAY_PASSWORD",
           },
         },
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
 
     expect(resolved).toEqual({ password: "resolved-password" });
   });

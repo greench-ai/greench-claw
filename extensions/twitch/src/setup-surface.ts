@@ -2,17 +2,17 @@
  * Twitch setup wizard surface for CLI setup.
  */
 
-import { normalizeOptionalAccountId } from "NexisClaw/plugin-sdk/account-id";
-import { getChatChannelMeta, type ChannelPlugin } from "NexisClaw/plugin-sdk/core";
+import { normalizeOptionalAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import { getChatChannelMeta, type ChannelPlugin } from "GreenchClaw/plugin-sdk/core";
 import {
   formatDocsLink,
   type ChannelSetupAdapter,
   type ChannelSetupDmPolicy,
   type ChannelSetupWizard,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   type WizardPrompter,
   normalizeAccountId,
-} from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/setup";
 import {
   DEFAULT_ACCOUNT_ID,
   getAccountConfig,
@@ -34,7 +34,7 @@ function normalizeRequestedSetupAccountId(accountId: string): string {
   return normalized;
 }
 
-function resolveSetupAccountId(cfg: NexisClawConfig, requestedAccountId?: string): string {
+function resolveSetupAccountId(cfg: GreenchClawConfig, requestedAccountId?: string): string {
   const requested = requestedAccountId?.trim();
   if (requested) {
     return normalizeRequestedSetupAccountId(requested);
@@ -45,10 +45,10 @@ function resolveSetupAccountId(cfg: NexisClawConfig, requestedAccountId?: string
 }
 
 export function setTwitchAccount(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   account: Partial<TwitchAccountConfig>,
   accountId: string = resolveSetupAccountId(cfg),
-): NexisClawConfig {
+): GreenchClawConfig {
   const resolvedAccountId = accountId.trim()
     ? normalizeRequestedSetupAccountId(accountId)
     : resolveSetupAccountId(cfg);
@@ -96,7 +96,7 @@ async function noteTwitchSetupHelp(prompter: WizardPrompter): Promise<void> {
       "2. Generate a token with scopes: chat:read and chat:write",
       "   Use https://twitchtokengenerator.com/ or https://twitchapps.com/tmi/",
       "3. Copy the token (starts with 'oauth:') and Client ID",
-      "Env vars supported: NEXISCLAW_TWITCH_ACCESS_TOKEN",
+      "Env vars supported: GREENCHCLAW_TWITCH_ACCESS_TOKEN",
       `Docs: ${formatDocsLink("/channels/twitch", "channels/twitch")}`,
     ].join("\n"),
     "Twitch setup",
@@ -212,14 +212,14 @@ export async function promptRefreshTokenSetup(
 }
 
 export async function configureWithEnvToken(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   prompter: WizardPrompter,
   account: TwitchAccountConfig | null,
   envToken: string,
   forceAllowFrom: boolean,
   dmPolicy: ChannelSetupDmPolicy,
   accountId: string = resolveSetupAccountId(cfg),
-): Promise<{ cfg: NexisClawConfig } | null> {
+): Promise<{ cfg: GreenchClawConfig } | null> {
   const resolvedAccountId = accountId.trim()
     ? normalizeRequestedSetupAccountId(accountId)
     : resolveSetupAccountId(cfg);
@@ -228,7 +228,7 @@ export async function configureWithEnvToken(
   }
 
   const useEnv = await prompter.confirm({
-    message: "Twitch env var NEXISCLAW_TWITCH_ACCESS_TOKEN detected. Use env token?",
+    message: "Twitch env var GREENCHCLAW_TWITCH_ACCESS_TOKEN detected. Use env token?",
     initialValue: true,
   });
   if (!useEnv) {
@@ -263,11 +263,11 @@ export async function configureWithEnvToken(
 }
 
 function setTwitchAccessControl(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   allowedRoles: TwitchRole[],
   requireMention: boolean,
   accountId?: string,
-): NexisClawConfig {
+): GreenchClawConfig {
   const resolvedAccountId = resolveSetupAccountId(cfg, accountId);
   const account = getAccountConfig(cfg, resolvedAccountId);
   if (!account) {
@@ -286,7 +286,7 @@ function setTwitchAccessControl(
 }
 
 function resolveTwitchGroupPolicy(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId?: string,
 ): "open" | "allowlist" | "disabled" {
   const account = getAccountConfig(cfg, resolveSetupAccountId(cfg, accountId));
@@ -300,10 +300,10 @@ function resolveTwitchGroupPolicy(
 }
 
 function setTwitchGroupPolicy(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   policy: "open" | "allowlist" | "disabled",
   accountId?: string,
-): NexisClawConfig {
+): GreenchClawConfig {
   const allowedRoles: TwitchRole[] =
     policy === "open" ? ["all"] : policy === "allowlist" ? ["moderator", "vip"] : [];
   return setTwitchAccessControl(cfg, allowedRoles, true, accountId);
@@ -423,7 +423,7 @@ export const twitchSetupWizard: ChannelSetupWizard = {
       await noteTwitchSetupHelp(prompter);
     }
 
-    const envToken = process.env.NEXISCLAW_TWITCH_ACCESS_TOKEN?.trim();
+    const envToken = process.env.GREENCHCLAW_TWITCH_ACCESS_TOKEN?.trim();
 
     if (accountId === DEFAULT_ACCOUNT_ID && envToken && !account?.accessToken) {
       const envResult = await configureWithEnvToken(

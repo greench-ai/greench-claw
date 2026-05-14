@@ -1,8 +1,8 @@
 import {
   deliverTextOrMediaReply,
   resolveSendableOutboundReplyParts,
-} from "NexisClaw/plugin-sdk/reply-payload";
-import type { NexisClawConfig } from "../runtime-api.js";
+} from "GreenchClaw/plugin-sdk/reply-payload";
+import type { GreenchClawConfig } from "../runtime-api.js";
 import type { ResolvedGoogleChatAccount } from "./accounts.js";
 import {
   deleteGoogleChatMessage,
@@ -18,7 +18,7 @@ export async function deliverGoogleChatReply(params: {
   spaceId: string;
   runtime: GoogleChatRuntimeEnv;
   core: GoogleChatCoreRuntime;
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   statusSink?: (patch: { lastInboundAt?: number; lastOutboundAt?: number }) => void;
   typingMessageName?: string;
 }): Promise<void> {

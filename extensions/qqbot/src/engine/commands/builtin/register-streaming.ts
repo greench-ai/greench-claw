@@ -82,10 +82,10 @@ export function registerStreamingCommands(registry: SlashCommandRegistry): void 
           ``,
           `\`\`\`shell`,
           `# 1. 开启流式消息`,
-          `NexisClaw config set channels.qqbot.streaming true`,
+          `GreenchClaw config set channels.qqbot.streaming true`,
           ``,
           `# 2. 重启网关使配置生效`,
-          `NexisClaw gateway restart`,
+          `GreenchClaw gateway restart`,
           `\`\`\``,
         ].join("\n");
       }

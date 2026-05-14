@@ -1,17 +1,17 @@
 {
-  "name": "@NexisClaw/github-copilot-provider",
+  "name": "@GreenchClaw/github-copilot-provider",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw GitHub Copilot provider plugin",
+  "description": "GreenchClaw GitHub Copilot provider plugin",
   "type": "module",
   "dependencies": {
     "@clack/prompts": "1.3.0"
   },
   "devDependencies": {
     "@earendil-works/pi-ai": "0.74.0",
-    "@NexisClaw/plugin-sdk": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*"
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

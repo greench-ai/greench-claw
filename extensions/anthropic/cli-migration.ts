@@ -1,19 +1,23 @@
 import {
   CLAUDE_CLI_PROFILE_ID,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   type ProviderAuthResult,
-} from "NexisClaw/plugin-sdk/provider-auth";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/provider-auth";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   readClaudeCliCredentialsForSetup,
   readClaudeCliCredentialsForSetupNonInteractive,
 } from "./cli-auth-seam.js";
 import { CLAUDE_CLI_BACKEND_ID, CLAUDE_CLI_DEFAULT_ALLOWLIST_REFS } from "./cli-shared.js";
 
-type AgentDefaultsModel = NonNullable<NonNullable<NexisClawConfig["agents"]>["defaults"]>["model"];
-type AgentDefaultsModels = NonNullable<NonNullable<NexisClawConfig["agents"]>["defaults"]>["models"];
+type AgentDefaultsModel = NonNullable<
+  NonNullable<GreenchClawConfig["agents"]>["defaults"]
+>["model"];
+type AgentDefaultsModels = NonNullable<
+  NonNullable<GreenchClawConfig["agents"]>["defaults"]
+>["models"];
 type AgentDefaultsRuntimePolicy = NonNullable<
-  NonNullable<NexisClawConfig["agents"]>["defaults"]
+  NonNullable<GreenchClawConfig["agents"]>["defaults"]
 >["agentRuntime"];
 type ClaudeCliCredential = NonNullable<ReturnType<typeof readClaudeCliCredentialsForSetup>>;
 
@@ -178,7 +182,7 @@ function buildClaudeCliAuthProfiles(
 }
 
 export function buildAnthropicCliMigrationResult(
-  config: NexisClawConfig,
+  config: GreenchClawConfig,
   credential?: ClaudeCliCredential | null,
 ): ProviderAuthResult {
   const defaults = config.agents?.defaults;

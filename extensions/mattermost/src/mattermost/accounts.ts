@@ -1,14 +1,14 @@
-import { createAccountListHelpers } from "NexisClaw/plugin-sdk/account-helpers";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "NexisClaw/plugin-sdk/account-id";
-import { resolveMergedAccountConfig } from "NexisClaw/plugin-sdk/account-resolution";
+import { createAccountListHelpers } from "GreenchClaw/plugin-sdk/account-helpers";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "GreenchClaw/plugin-sdk/account-id";
+import { resolveMergedAccountConfig } from "GreenchClaw/plugin-sdk/account-resolution";
 import {
   resolveChannelStreamingBlockCoalesce,
   resolveChannelStreamingBlockEnabled,
   resolveChannelStreamingChunkMode,
   resolveChannelPreviewStreamMode,
   type StreamingMode,
-} from "NexisClaw/plugin-sdk/channel-streaming";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/channel-streaming";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { normalizeResolvedSecretInputString, normalizeSecretInputString } from "../secret-input.js";
 import type {
   MattermostAccountConfig,
@@ -17,7 +17,7 @@ import type {
   MattermostReplyToMode,
 } from "../types.js";
 import { normalizeMattermostBaseUrl } from "./client.js";
-import type { NexisClawConfig } from "./runtime-api.js";
+import type { GreenchClawConfig } from "./runtime-api.js";
 
 type MattermostTokenSource = "env" | "config" | "none";
 type MattermostBaseUrlSource = "env" | "config" | "none";
@@ -43,16 +43,16 @@ export type ResolvedMattermostAccount = {
 
 const mattermostAccountHelpers = createAccountListHelpers("mattermost");
 
-export function listMattermostAccountIds(cfg: NexisClawConfig): string[] {
+export function listMattermostAccountIds(cfg: GreenchClawConfig): string[] {
   return mattermostAccountHelpers.listAccountIds(cfg);
 }
 
-export function resolveDefaultMattermostAccountId(cfg: NexisClawConfig): string {
+export function resolveDefaultMattermostAccountId(cfg: GreenchClawConfig): string {
   return mattermostAccountHelpers.resolveDefaultAccountId(cfg);
 }
 
 function mergeMattermostAccountConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   accountId: string,
 ): MattermostAccountConfig {
   return resolveMergedAccountConfig<MattermostAccountConfig>({
@@ -80,7 +80,7 @@ function resolveMattermostRequireMention(config: MattermostAccountConfig): boole
 }
 
 export function resolveMattermostAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   allowUnresolvedSecretRef?: boolean;
 }): ResolvedMattermostAccount {

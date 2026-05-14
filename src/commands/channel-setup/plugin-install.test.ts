@@ -1,5 +1,5 @@
 import path from "node:path";
-import { bundledPluginRoot, bundledPluginRootAt } from "NexisClaw/plugin-sdk/test-fixtures";
+import { bundledPluginRoot, bundledPluginRootAt } from "GreenchClaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("node:fs", async () => {
@@ -82,18 +82,21 @@ vi.mock("../../plugins/bundled-sources.js", () => ({
 }));
 
 vi.mock("../../plugins/loader.js", () => ({
-  loadNexisClawPlugins: vi.fn(),
+  loadGreenchClawPlugins: vi.fn(),
 }));
 
-const discoverNexisClawPlugins = vi.fn((_args?: unknown) => ({ candidates: [], diagnostics: [] }));
+const discoverGreenchClawPlugins = vi.fn((_args?: unknown) => ({
+  candidates: [],
+  diagnostics: [],
+}));
 vi.mock("../../plugins/discovery.js", () => ({
-  discoverNexisClawPlugins: (args: unknown) => discoverNexisClawPlugins(args),
+  discoverGreenchClawPlugins: (args: unknown) => discoverGreenchClawPlugins(args),
 }));
 
 import fs from "node:fs";
 import type { ChannelPluginCatalogEntry } from "../../channels/plugins/catalog.js";
-import type { NexisClawConfig } from "../../config/config.js";
-import { loadNexisClawPlugins } from "../../plugins/loader.js";
+import type { GreenchClawConfig } from "../../config/config.js";
+import { loadGreenchClawPlugins } from "../../plugins/loader.js";
 import type { PluginManifestRecord } from "../../plugins/manifest-registry.js";
 import { createEmptyPluginRegistry } from "../../plugins/registry.js";
 import {
@@ -111,11 +114,11 @@ import {
   reloadChannelSetupPluginRegistryForChannel,
 } from "./plugin-install.js";
 
-const bundledChatNpmSpec = "@NexisClaw/bundled-chat@1.2.3";
+const bundledChatNpmSpec = "@GreenchClaw/bundled-chat@1.2.3";
 const bundledChatIntegrity = "sha512-bundled-chat";
 const bundledChatForkNpmSpec = "@vendor/bundled-chat-fork@1.2.3";
 const bundledChatForkIntegrity = "sha512-vendor-bundled-chat-fork";
-const ORIGINAL_NEXISCLAW_STATE_DIR = process.env.NEXISCLAW_STATE_DIR;
+const ORIGINAL_GREENCHCLAW_STATE_DIR = process.env.GREENCHCLAW_STATE_DIR;
 
 const baseEntry: ChannelPluginCatalogEntry = {
   id: "bundled-chat",
@@ -142,7 +145,7 @@ function mockBundledChatSource() {
         "bundled-chat",
         {
           pluginId: "bundled-chat",
-          localPath: bundledPluginRootAt("/opt/NexisClaw", "bundled-chat"),
+          localPath: bundledPluginRootAt("/opt/GreenchClaw", "bundled-chat"),
           npmSpec: bundledChatNpmSpec,
         },
       ],
@@ -188,15 +191,15 @@ function createManifestRecord(
     skills: [],
     hooks: [],
     origin: "bundled",
-    rootDir: `/tmp/NexisClaw-test/${id}`,
-    source: `/tmp/NexisClaw-test/${id}/index.ts`,
-    manifestPath: `/tmp/NexisClaw-test/${id}/NexisClaw.plugin.json`,
+    rootDir: `/tmp/GreenchClaw-test/${id}`,
+    source: `/tmp/GreenchClaw-test/${id}/index.ts`,
+    manifestPath: `/tmp/GreenchClaw-test/${id}/GreenchClaw.plugin.json`,
     ...rest,
   };
 }
 
 function expectSetupSnapshotDoesNotScopeToPlugin(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   runtime: ReturnType<typeof makeRuntime>;
   pluginId: string;
 }) {
@@ -204,11 +207,11 @@ function expectSetupSnapshotDoesNotScopeToPlugin(params: {
     cfg: params.cfg,
     runtime: params.runtime,
     channel: "external-chat",
-    workspaceDir: "/tmp/NexisClaw-workspace",
+    workspaceDir: "/tmp/GreenchClaw-workspace",
   });
 
-  expect(loadNexisClawPlugins).toHaveBeenCalledTimes(1);
-  const firstLoadCall = vi.mocked(loadNexisClawPlugins).mock.calls.at(0)?.[0] as
+  expect(loadGreenchClawPlugins).toHaveBeenCalledTimes(1);
+  const firstLoadCall = vi.mocked(loadGreenchClawPlugins).mock.calls.at(0)?.[0] as
     | { onlyPluginIds?: string[] }
     | undefined;
   expect(firstLoadCall?.onlyPluginIds).toStrictEqual([]);
@@ -225,7 +228,7 @@ beforeEach(() => {
     autoEnabledReasons: {},
   }));
   resolveBundledPluginSources.mockReturnValue(new Map());
-  discoverNexisClawPlugins.mockReturnValue({ candidates: [], diagnostics: [] });
+  discoverGreenchClawPlugins.mockReturnValue({ candidates: [], diagnostics: [] });
   getChannelPluginCatalogEntry.mockReturnValue(undefined);
   listChannelPluginCatalogEntries.mockReturnValue([]);
   loadPluginManifestRegistry.mockReturnValue({ plugins: [], diagnostics: [] });
@@ -233,10 +236,10 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  if (ORIGINAL_NEXISCLAW_STATE_DIR === undefined) {
-    delete process.env.NEXISCLAW_STATE_DIR;
+  if (ORIGINAL_GREENCHCLAW_STATE_DIR === undefined) {
+    delete process.env.GREENCHCLAW_STATE_DIR;
   } else {
-    process.env.NEXISCLAW_STATE_DIR = ORIGINAL_NEXISCLAW_STATE_DIR;
+    process.env.GREENCHCLAW_STATE_DIR = ORIGINAL_GREENCHCLAW_STATE_DIR;
   }
 });
 
@@ -290,7 +293,7 @@ async function runInitialValueForChannel(channel: "dev" | "beta") {
   const runtime = makeRuntime();
   const select = vi.fn((async <T extends string>() => "skip" as T) as WizardPrompter["select"]);
   const prompter = makePrompter({ select: select as unknown as WizardPrompter["select"] });
-  const cfg: NexisClawConfig = { update: { channel } };
+  const cfg: GreenchClawConfig = { update: { channel } };
   mockRepoLocalPathExists();
 
   await ensureChannelSetupPluginInstalled({
@@ -357,10 +360,10 @@ function requireOptionByValue(options: unknown[], value: string) {
   return requireRecord(option, `select option ${value}`);
 }
 
-function expectLoadNexisClawPluginFields(expected: Record<string, unknown>, callIndex = 0) {
+function expectLoadGreenchClawPluginFields(expected: Record<string, unknown>, callIndex = 0) {
   expectRecordFields(
-    requireMockCallArg(vi.mocked(loadNexisClawPlugins), callIndex),
-    "loadNexisClawPlugins args",
+    requireMockCallArg(vi.mocked(loadGreenchClawPlugins), callIndex),
+    "loadGreenchClawPlugins args",
     expected,
   );
 }
@@ -371,7 +374,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
     const prompter = makePrompter({
       select: vi.fn(async () => "npm") as WizardPrompter["select"],
     });
-    const cfg: NexisClawConfig = { plugins: { allow: ["bundled-chat"] } };
+    const cfg: GreenchClawConfig = { plugins: { allow: ["bundled-chat"] } };
     vi.mocked(fs.existsSync).mockReturnValue(false);
     installPluginFromNpmSpec.mockResolvedValue({
       ok: true,
@@ -406,8 +409,8 @@ describe("ensureChannelSetupPluginInstalled", () => {
     const prompter = makePrompter({
       select: vi.fn(async () => "npm") as WizardPrompter["select"],
     });
-    const profileStateDir = "/tmp/NexisClaw-ledger-channel";
-    process.env.NEXISCLAW_STATE_DIR = profileStateDir;
+    const profileStateDir = "/tmp/GreenchClaw-ledger-channel";
+    process.env.GREENCHCLAW_STATE_DIR = profileStateDir;
     vi.mocked(fs.existsSync).mockReturnValue(false);
     installPluginFromNpmSpec.mockResolvedValue({
       ok: true,
@@ -434,7 +437,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
     const prompter = makePrompter({
       select: vi.fn(async () => "local") as WizardPrompter["select"],
     });
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     mockRepoLocalPathExists();
 
     const result = await ensureChannelSetupPluginInstalled({
@@ -453,7 +456,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
     const prompter = makePrompter({
       select: vi.fn(async () => "local") as WizardPrompter["select"],
     });
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     mockRepoLocalPathExists();
 
     const result = await ensureChannelSetupPluginInstalled({
@@ -483,17 +486,17 @@ describe("ensureChannelSetupPluginInstalled", () => {
   it("installs npm beta on the beta channel without persisting the beta tag", async () => {
     const runtime = makeRuntime();
     const { prompter, select } = makeSkipInstallPrompter();
-    const cfg: NexisClawConfig = { update: { channel: "beta" } };
+    const cfg: GreenchClawConfig = { update: { channel: "beta" } };
     vi.mocked(fs.existsSync).mockReturnValue(false);
     installPluginFromNpmSpec.mockResolvedValue({
       ok: true,
-      pluginId: "wecom-NexisClaw-plugin",
-      targetDir: "/tmp/wecom-NexisClaw-plugin",
+      pluginId: "wecom-GreenchClaw-plugin",
+      targetDir: "/tmp/wecom-GreenchClaw-plugin",
       version: "2026.5.4-beta.1",
       npmResolution: {
-        name: "@NexisClaw/wecom",
+        name: "@GreenchClaw/wecom",
         version: "2026.5.4-beta.1",
-        resolvedSpec: "@NexisClaw/wecom@2026.5.4-beta.1",
+        resolvedSpec: "@GreenchClaw/wecom@2026.5.4-beta.1",
       },
     });
 
@@ -501,7 +504,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
       cfg,
       entry: {
         id: "wecom",
-        pluginId: "wecom-NexisClaw-plugin",
+        pluginId: "wecom-GreenchClaw-plugin",
         meta: {
           id: "wecom",
           label: "WeCom",
@@ -510,7 +513,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
           blurb: "WeCom channel",
         },
         install: {
-          npmSpec: "@NexisClaw/wecom",
+          npmSpec: "@GreenchClaw/wecom",
         },
       },
       prompter,
@@ -520,16 +523,18 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
     expect(select).not.toHaveBeenCalled();
     expectRecordFields(requireMockCallArg(installPluginFromNpmSpec, 0), "npm install args", {
-      spec: "@NexisClaw/wecom@beta",
-      expectedPluginId: "wecom-NexisClaw-plugin",
+      spec: "@GreenchClaw/wecom@beta",
+      expectedPluginId: "wecom-GreenchClaw-plugin",
     });
-    expect(result.cfg.plugins?.installs?.["wecom-NexisClaw-plugin"]?.spec).toBe("@NexisClaw/wecom");
+    expect(result.cfg.plugins?.installs?.["wecom-GreenchClaw-plugin"]?.spec).toBe(
+      "@GreenchClaw/wecom",
+    );
   });
 
   it("defaults to bundled local path on beta channel when available", async () => {
     const runtime = makeRuntime();
     const { prompter, select } = makeSkipInstallPrompter();
-    const cfg: NexisClawConfig = { update: { channel: "beta" } };
+    const cfg: GreenchClawConfig = { update: { channel: "beta" } };
     vi.mocked(fs.existsSync).mockReturnValue(false);
     mockBundledChatSource();
 
@@ -547,7 +552,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
       "local option",
       {
         value: "local",
-        hint: bundledPluginRootAt("/opt/NexisClaw", "bundled-chat"),
+        hint: bundledPluginRootAt("/opt/GreenchClaw", "bundled-chat"),
       },
     );
   });
@@ -555,7 +560,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
   it("uses the bundled default install source without prompting in non-interactive mode", async () => {
     const runtime = makeRuntime();
     const { prompter, select } = makeSkipInstallPrompter();
-    const cfg: NexisClawConfig = { update: { channel: "beta" } };
+    const cfg: GreenchClawConfig = { update: { channel: "beta" } };
     mockBundledChatSource();
 
     const result = await ensureChannelSetupPluginInstalled({
@@ -576,7 +581,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
   it("does not default to bundled local path when an external catalog overrides the npm spec", async () => {
     const runtime = makeRuntime();
     const { prompter, select } = makeSkipInstallPrompter();
-    const cfg: NexisClawConfig = { update: { channel: "beta" } };
+    const cfg: GreenchClawConfig = { update: { channel: "beta" } };
     vi.mocked(fs.existsSync).mockReturnValue(false);
     mockBundledChatSource();
 
@@ -616,7 +621,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
   it("offers ClawHub as the first-class install source for channel catalog entries", async () => {
     const runtime = makeRuntime();
     const { prompter, select } = makeSkipInstallPrompter();
-    const cfg: NexisClawConfig = { update: { channel: "beta" } };
+    const cfg: GreenchClawConfig = { update: { channel: "beta" } };
     vi.mocked(fs.existsSync).mockReturnValue(false);
     resolveBundledPluginSources.mockReturnValue(new Map());
 
@@ -633,7 +638,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
           blurb: "Test",
         },
         install: {
-          clawhubSpec: "clawhub:NexisClaw/clawhub-chat@2026.5.2",
+          clawhubSpec: "clawhub:GreenchClaw/clawhub-chat@2026.5.2",
           defaultChoice: "clawhub",
         },
       },
@@ -647,7 +652,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
     expect(options).toHaveLength(2);
     expectRecordFields(options[0], "clawhub option", {
       value: "clawhub",
-      label: "Download from ClawHub (clawhub:NexisClaw/clawhub-chat@2026.5.2)",
+      label: "Download from ClawHub (clawhub:GreenchClaw/clawhub-chat@2026.5.2)",
     });
     expectRecordFields(options[1], "skip option", {
       value: "skip",
@@ -663,7 +668,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
       note,
       confirm,
     });
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     mockRepoLocalPathExists();
     installPluginFromNpmSpec.mockResolvedValue({
       ok: false,
@@ -685,11 +690,11 @@ describe("ensureChannelSetupPluginInstalled", () => {
   it("skips the install prompt when autoConfirmSingleSource is set and only npm is available", async () => {
     const runtime = makeRuntime();
     const { prompter, select } = makeSkipInstallPrompter();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     // npm-only entry (no local path)
     const npmOnlyEntry: ChannelPluginCatalogEntry = {
       id: "wecom",
-      pluginId: "wecom-NexisClaw-plugin",
+      pluginId: "wecom-GreenchClaw-plugin",
       meta: {
         id: "wecom",
         label: "WeCom",
@@ -698,13 +703,13 @@ describe("ensureChannelSetupPluginInstalled", () => {
         blurb: "WeCom channel",
       },
       install: {
-        npmSpec: "@NexisClaw/wecom@2026.4.23",
+        npmSpec: "@GreenchClaw/wecom@2026.4.23",
       },
     };
     installPluginFromNpmSpec.mockResolvedValue({
       ok: true,
-      pluginId: "wecom-NexisClaw-plugin",
-      installPath: "/tmp/wecom-NexisClaw-plugin",
+      pluginId: "wecom-GreenchClaw-plugin",
+      installPath: "/tmp/wecom-GreenchClaw-plugin",
     });
     vi.mocked(fs.existsSync).mockReturnValue(false);
     resolveBundledPluginSources.mockReturnValue(new Map());
@@ -719,24 +724,24 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
     expect(select).not.toHaveBeenCalled();
     expect(result.installed).toBe(true);
-    expect(result.pluginId).toBe("wecom-NexisClaw-plugin");
+    expect(result.pluginId).toBe("wecom-GreenchClaw-plugin");
   });
 
   it("reloads the setup plugin registry without using plugin registry cache", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
 
     reloadChannelSetupPluginRegistry({
       cfg,
       runtime,
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
 
-    expectLoadNexisClawPluginFields({
+    expectLoadGreenchClawPluginFields({
       config: cfg,
       activationSourceConfig: cfg,
       autoEnabledReasons: {},
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
       cache: false,
       includeSetupOnlyChannelPlugins: true,
     });
@@ -744,7 +749,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("loads the setup plugin registry from the auto-enabled config snapshot", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       plugins: {},
       channels: { "external-chat": { enabled: true } } as never,
     };
@@ -755,7 +760,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
           "external-chat": { enabled: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     applyPluginAutoEnable.mockReturnValue({
       config: autoEnabledConfig,
       changes: [],
@@ -765,14 +770,14 @@ describe("ensureChannelSetupPluginInstalled", () => {
     reloadChannelSetupPluginRegistry({
       cfg,
       runtime,
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
 
     expect(applyPluginAutoEnable).toHaveBeenCalledWith({
       config: cfg,
       env: process.env,
     });
-    expectLoadNexisClawPluginFields({
+    expectLoadGreenchClawPluginFields({
       config: autoEnabledConfig,
       activationSourceConfig: cfg,
       autoEnabledReasons: {},
@@ -781,33 +786,33 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("scopes channel reloads when setup starts from an empty registry", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     getChannelPluginCatalogEntry.mockReturnValue({ pluginId: "@vendor/external-chat-plugin" });
 
     reloadChannelSetupPluginRegistryForChannel({
       cfg,
       runtime,
       channel: "external-chat",
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
 
-    expectLoadNexisClawPluginFields({
+    expectLoadGreenchClawPluginFields({
       config: cfg,
       activationSourceConfig: cfg,
       autoEnabledReasons: {},
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
       cache: false,
       onlyPluginIds: ["@vendor/external-chat-plugin"],
       includeSetupOnlyChannelPlugins: true,
     });
     expect(getChannelPluginCatalogEntry).toHaveBeenCalledWith("external-chat", {
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
   });
 
   it("does not widen channel reloads when the active plugin registry is already populated", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     const registry = createEmptyPluginRegistry();
     registry.plugins.push(
       createPluginRecord({
@@ -824,17 +829,17 @@ describe("ensureChannelSetupPluginInstalled", () => {
       cfg,
       runtime,
       channel: "external-chat",
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
 
-    expectLoadNexisClawPluginFields({
+    expectLoadGreenchClawPluginFields({
       onlyPluginIds: [],
     });
   });
 
   it("scopes channel reloads when the global registry is populated but the pinned channel registry is empty", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     getChannelPluginCatalogEntry.mockReturnValue({ pluginId: "@vendor/external-chat-plugin" });
     const activeRegistry = createEmptyPluginRegistry();
     activeRegistry.plugins.push(
@@ -854,13 +859,13 @@ describe("ensureChannelSetupPluginInstalled", () => {
         cfg,
         runtime,
         channel: "external-chat",
-        workspaceDir: "/tmp/NexisClaw-workspace",
+        workspaceDir: "/tmp/GreenchClaw-workspace",
       });
     } finally {
       releasePinnedPluginChannelRegistry(pinnedChannelRegistry);
     }
 
-    expectLoadNexisClawPluginFields({
+    expectLoadGreenchClawPluginFields({
       activationSourceConfig: cfg,
       autoEnabledReasons: {},
       onlyPluginIds: ["@vendor/external-chat-plugin"],
@@ -869,34 +874,34 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("can load a channel-scoped snapshot without activating the global registry", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     getChannelPluginCatalogEntry.mockReturnValue({ pluginId: "@vendor/external-chat-plugin" });
 
     loadChannelSetupPluginRegistrySnapshotForChannel({
       cfg,
       runtime,
       channel: "external-chat",
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
 
-    expectLoadNexisClawPluginFields({
+    expectLoadGreenchClawPluginFields({
       config: cfg,
       activationSourceConfig: cfg,
       autoEnabledReasons: {},
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
       cache: false,
       onlyPluginIds: ["@vendor/external-chat-plugin"],
       includeSetupOnlyChannelPlugins: true,
       activate: false,
     });
     expect(getChannelPluginCatalogEntry).toHaveBeenCalledWith("external-chat", {
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
   });
 
   it("falls back to the bundled plugin for untrusted workspace shadows", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     getChannelPluginCatalogEntry
       .mockReturnValueOnce({ pluginId: "evil-external-chat-shadow", origin: "workspace" })
       .mockReturnValueOnce({ pluginId: "@vendor/external-chat-plugin", origin: "bundled" });
@@ -905,24 +910,24 @@ describe("ensureChannelSetupPluginInstalled", () => {
       cfg,
       runtime,
       channel: "external-chat",
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
 
-    expectLoadNexisClawPluginFields({
+    expectLoadGreenchClawPluginFields({
       onlyPluginIds: ["@vendor/external-chat-plugin"],
     });
     expect(getChannelPluginCatalogEntry).toHaveBeenNthCalledWith(1, "external-chat", {
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
     expect(getChannelPluginCatalogEntry).toHaveBeenNthCalledWith(2, "external-chat", {
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
       excludeWorkspace: true,
     });
   });
 
   it("keeps trusted workspace overrides scoped during setup reloads", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       plugins: {
         enabled: true,
         allow: ["trusted-external-chat-shadow"],
@@ -937,10 +942,10 @@ describe("ensureChannelSetupPluginInstalled", () => {
       cfg,
       runtime,
       channel: "external-chat",
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
 
-    expectLoadNexisClawPluginFields({
+    expectLoadGreenchClawPluginFields({
       onlyPluginIds: ["trusted-external-chat-shadow"],
     });
     expect(getChannelPluginCatalogEntry).toHaveBeenCalledTimes(1);
@@ -948,23 +953,23 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("does not widen setup snapshots when no trusted plugin mapping exists", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
 
     loadChannelSetupPluginRegistrySnapshotForChannel({
       cfg,
       runtime,
       channel: "external-chat",
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
 
-    expectLoadNexisClawPluginFields({
+    expectLoadGreenchClawPluginFields({
       onlyPluginIds: [],
     });
   });
 
   it("scopes snapshots by a unique discovered manifest match when catalog mapping is missing", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     loadPluginManifestRegistry.mockReturnValue({
       plugins: [
         createManifestRecord({
@@ -979,14 +984,14 @@ describe("ensureChannelSetupPluginInstalled", () => {
       cfg,
       runtime,
       channel: "external-chat",
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
 
-    expectLoadNexisClawPluginFields({
+    expectLoadGreenchClawPluginFields({
       config: cfg,
       activationSourceConfig: cfg,
       autoEnabledReasons: {},
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
       cache: false,
       onlyPluginIds: ["custom-external-chat-plugin"],
       includeSetupOnlyChannelPlugins: true,
@@ -996,17 +1001,17 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("scopes snapshots by activation-declared channel ownership when direct channel lists are empty", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     mockActivationOnlyPlugin({ id: "custom-external-chat-plugin" });
 
     loadChannelSetupPluginRegistrySnapshotForChannel({
       cfg,
       runtime,
       channel: "external-chat",
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
 
-    expectLoadNexisClawPluginFields({
+    expectLoadGreenchClawPluginFields({
       onlyPluginIds: ["custom-external-chat-plugin"],
     });
     const manifestCall = loadPluginManifestRegistry.mock.calls
@@ -1019,20 +1024,20 @@ describe("ensureChannelSetupPluginInstalled", () => {
       );
     expectRecordFields(manifestCall, "manifest registry args", {
       config: cfg,
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
   });
 
   it("uses live manifest discovery for activation-declared setup scoping", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     mockActivationOnlyPlugin({ id: "custom-external-chat-plugin" });
 
     loadChannelSetupPluginRegistrySnapshotForChannel({
       cfg,
       runtime,
       channel: "external-chat",
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
 
     expect(loadPluginManifestRegistry).toHaveBeenCalled();
@@ -1045,7 +1050,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("does not trust unconfigured workspace activation-only channel ownership during setup", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     mockActivationOnlyPlugin({
       id: "evil-external-chat-shadow",
       origin: "workspace",
@@ -1060,7 +1065,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("does not trust allowlist-excluded bundled activation-only channel ownership during setup", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       plugins: {
         allow: ["other-plugin"],
       },
@@ -1079,7 +1084,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("does not trust explicitly denied bundled activation-only channel ownership during setup", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       plugins: {
         deny: ["custom-external-chat-plugin"],
       },
@@ -1098,7 +1103,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("does not trust explicitly disabled workspace activation-only channel ownership during setup", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       plugins: {
         enabled: true,
         allow: ["evil-external-chat-shadow"],
@@ -1121,7 +1126,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("does not trust explicitly disabled bundled activation-only channel ownership during setup", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       plugins: {
         entries: {
           "custom-external-chat-plugin": { enabled: false },
@@ -1142,7 +1147,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("does not trust unenabled global activation-only channel ownership during setup", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
     mockActivationOnlyPlugin({
       id: "custom-external-chat-global",
       origin: "global",
@@ -1157,21 +1162,21 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
   it("scopes snapshots by plugin id when channel and plugin ids differ", () => {
     const runtime = makeRuntime();
-    const cfg: NexisClawConfig = {};
+    const cfg: GreenchClawConfig = {};
 
     loadChannelSetupPluginRegistrySnapshotForChannel({
       cfg,
       runtime,
       channel: "external-chat",
       pluginId: "@vendor/external-chat-plugin",
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
     });
 
-    expectLoadNexisClawPluginFields({
+    expectLoadGreenchClawPluginFields({
       config: cfg,
       activationSourceConfig: cfg,
       autoEnabledReasons: {},
-      workspaceDir: "/tmp/NexisClaw-workspace",
+      workspaceDir: "/tmp/GreenchClaw-workspace",
       cache: false,
       onlyPluginIds: ["@vendor/external-chat-plugin"],
       includeSetupOnlyChannelPlugins: true,

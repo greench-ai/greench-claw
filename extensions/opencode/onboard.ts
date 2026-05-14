@@ -1,12 +1,12 @@
 import {
   applyAgentDefaultModelPrimary,
   withAgentModelAliases,
-  type NexisClawConfig,
-} from "NexisClaw/plugin-sdk/provider-onboard";
+  type GreenchClawConfig,
+} from "GreenchClaw/plugin-sdk/provider-onboard";
 
 export const OPENCODE_ZEN_DEFAULT_MODEL_REF = "opencode/claude-opus-4-6";
 
-export function applyOpencodeZenProviderConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyOpencodeZenProviderConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return {
     ...cfg,
     agents: {
@@ -21,7 +21,7 @@ export function applyOpencodeZenProviderConfig(cfg: NexisClawConfig): NexisClawC
   };
 }
 
-export function applyOpencodeZenConfig(cfg: NexisClawConfig): NexisClawConfig {
+export function applyOpencodeZenConfig(cfg: GreenchClawConfig): GreenchClawConfig {
   return applyAgentDefaultModelPrimary(
     applyOpencodeZenProviderConfig(cfg),
     OPENCODE_ZEN_DEFAULT_MODEL_REF,

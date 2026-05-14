@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../../infra/errors.js";
 import { withFileLock } from "../../infra/file-lock.js";
 import {
@@ -38,7 +38,7 @@ export type OAuthManagerAdapter = {
   buildApiKey: (
     provider: string,
     credentials: OAuthCredential,
-    context: { cfg?: NexisClawConfig; agentDir?: string },
+    context: { cfg?: GreenchClawConfig; agentDir?: string },
   ) => Promise<string>;
   refreshCredential: (credential: OAuthCredential) => Promise<OAuthCredentials | null>;
   readBootstrapCredential: (params: {
@@ -323,7 +323,7 @@ export function createOAuthManager(adapter: OAuthManagerAdapter) {
     profileId: string;
     provider: string;
     agentDir?: string;
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
   }): Promise<ResolvedOAuthAccess | null> {
     const ownerAgentDir = resolvePersistedAuthProfileOwnerAgentDir(params);
     const authPath = resolveAuthStorePath(ownerAgentDir);
@@ -484,7 +484,7 @@ export function createOAuthManager(adapter: OAuthManagerAdapter) {
     profileId: string;
     provider: string;
     agentDir?: string;
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
   }): Promise<ResolvedOAuthAccess | null> {
     const key = refreshQueueKey(params.provider, params.profileId);
     const prev = refreshQueues.get(key) ?? Promise.resolve();
@@ -509,7 +509,7 @@ export function createOAuthManager(adapter: OAuthManagerAdapter) {
     profileId: string;
     credential: OAuthCredential;
     agentDir?: string;
-    cfg?: NexisClawConfig;
+    cfg?: GreenchClawConfig;
   }): Promise<ResolvedOAuthAccess | null> {
     const adoptedCredential =
       adoptNewerMainOAuthCredential({

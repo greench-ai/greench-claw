@@ -10,10 +10,10 @@ describe("pickTagline", () => {
     expect(pickTagline({ mode: "default" })).toBe(DEFAULT_TAGLINE);
   });
 
-  it("keeps NEXISCLAW_TAGLINE_INDEX behavior in random mode", () => {
+  it("keeps GREENCHCLAW_TAGLINE_INDEX behavior in random mode", () => {
     const value = pickTagline({
       mode: "random",
-      env: { NEXISCLAW_TAGLINE_INDEX: "0" } as NodeJS.ProcessEnv,
+      env: { GREENCHCLAW_TAGLINE_INDEX: "0" } as NodeJS.ProcessEnv,
     });
     expect(value).toBe(
       "Your terminal just grew claws\u2014type something and let the bot pinch the busywork.",

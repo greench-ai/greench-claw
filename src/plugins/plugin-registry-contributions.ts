@@ -1,5 +1,5 @@
 import { normalizeProviderId } from "../agents/provider-id.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   normalizePluginsConfigWithResolver,
   type NormalizedPluginsConfig,
@@ -172,7 +172,7 @@ function listManifestContributionIds(
 function resolveContributionPluginIds(params: {
   index: PluginRegistrySnapshot;
   includeDisabled?: boolean;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): readonly string[] {
   if (params.includeDisabled) {
     return params.index.plugins.map((plugin) => plugin.pluginId);
@@ -253,7 +253,7 @@ function filterContributionOwnerIds(params: {
   owners: readonly string[];
   index: PluginRegistrySnapshot;
   includeDisabled?: boolean;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): readonly string[] {
   const enabledPluginIds = new Set(
     resolveContributionPluginIds({
@@ -283,7 +283,7 @@ export function loadPluginManifestRegistryForPluginRegistry(
 }
 
 export function normalizePluginsConfigWithRegistry(
-  config: NexisClawConfig["plugins"] | undefined,
+  config: GreenchClawConfig["plugins"] | undefined,
   index: PluginRegistrySnapshot,
   options: PluginRegistryIdNormalizerOptions = {},
 ): NormalizedPluginsConfig {

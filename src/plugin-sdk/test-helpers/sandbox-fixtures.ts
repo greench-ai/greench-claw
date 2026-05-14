@@ -9,8 +9,8 @@ export function createSandboxBrowserConfig(
 ): SandboxBrowserConfig {
   return {
     enabled: false,
-    image: "NexisClaw-browser",
-    containerPrefix: "NexisClaw-browser-",
+    image: "GreenchClaw-browser",
+    containerPrefix: "GreenchClaw-browser-",
     network: "bridge",
     cdpPort: 9222,
     vncPort: 5900,

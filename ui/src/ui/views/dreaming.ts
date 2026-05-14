@@ -21,8 +21,8 @@ type DiaryEntryNav = {
   page: number;
 };
 
-const DIARY_START_RE = /<!--\s*NexisClaw:dreaming:diary:start\s*-->/;
-const DIARY_END_RE = /<!--\s*NexisClaw:dreaming:diary:end\s*-->/;
+const DIARY_START_RE = /<!--\s*GreenchClaw:dreaming:diary:start\s*-->/;
+const DIARY_END_RE = /<!--\s*GreenchClaw:dreaming:diary:end\s*-->/;
 
 function parseDiaryEntries(raw: string): DiaryEntry[] {
   // Extract content between diary markers, or use full content.

@@ -5,7 +5,7 @@ import type { BrowserConfig } from "../config/config.js";
 import { resolveUserPath } from "../utils.js";
 import {
   getManagedBrowserMissingDisplayError,
-  NEXISCLAW_BROWSER_HEADLESS_ENV,
+  GREENCHCLAW_BROWSER_HEADLESS_ENV,
   resolveBrowserConfig,
   resolveManagedBrowserHeadlessMode,
   resolveProfile,
@@ -49,15 +49,15 @@ describe("browser config", () => {
     expect(resolved.cdpHost).toBe("127.0.0.1");
     expect(resolved.cdpProtocol).toBe("http");
     const profile = resolveProfile(resolved, resolved.defaultProfile);
-    expect(profile?.name).toBe("NexisClaw");
-    expect(profile?.driver).toBe("NexisClaw");
+    expect(profile?.name).toBe("GreenchClaw");
+    expect(profile?.driver).toBe("GreenchClaw");
     expect(profile?.cdpPort).toBe(18800);
     expect(profile?.cdpUrl).toBe("http://127.0.0.1:18800");
 
-    const NexisClaw = resolveProfile(resolved, "NexisClaw");
-    expect(NexisClaw?.driver).toBe("NexisClaw");
-    expect(NexisClaw?.cdpPort).toBe(18800);
-    expect(NexisClaw?.cdpUrl).toBe("http://127.0.0.1:18800");
+    const GreenchClaw = resolveProfile(resolved, "GreenchClaw");
+    expect(GreenchClaw?.driver).toBe("GreenchClaw");
+    expect(GreenchClaw?.cdpPort).toBe(18800);
+    expect(GreenchClaw?.cdpUrl).toBe("http://127.0.0.1:18800");
     const user = resolveProfile(resolved, "user");
     expect(user?.driver).toBe("existing-session");
     expect(user?.cdpPort).toBe(0);
@@ -76,27 +76,27 @@ describe("browser config", () => {
     });
   });
 
-  it("derives default ports from NEXISCLAW_GATEWAY_PORT when unset", () => {
-    withEnv({ NEXISCLAW_GATEWAY_PORT: "19001" }, () => {
+  it("derives default ports from GREENCHCLAW_GATEWAY_PORT when unset", () => {
+    withEnv({ GREENCHCLAW_GATEWAY_PORT: "19001" }, () => {
       const resolved = resolveBrowserConfig(undefined);
       expect(resolved.controlPort).toBe(19003);
       expect(resolveProfile(resolved, "chrome-relay")).toBe(null);
 
-      const NexisClaw = resolveProfile(resolved, "NexisClaw");
-      expect(NexisClaw?.cdpPort).toBe(19012);
-      expect(NexisClaw?.cdpUrl).toBe("http://127.0.0.1:19012");
+      const GreenchClaw = resolveProfile(resolved, "GreenchClaw");
+      expect(GreenchClaw?.cdpPort).toBe(19012);
+      expect(GreenchClaw?.cdpUrl).toBe("http://127.0.0.1:19012");
     });
   });
 
   it("derives default ports from gateway.port when env is unset", () => {
-    withEnv({ NEXISCLAW_GATEWAY_PORT: undefined }, () => {
+    withEnv({ GREENCHCLAW_GATEWAY_PORT: undefined }, () => {
       const resolved = resolveBrowserConfig(undefined, { gateway: { port: 19011 } });
       expect(resolved.controlPort).toBe(19013);
       expect(resolveProfile(resolved, "chrome-relay")).toBe(null);
 
-      const NexisClaw = resolveProfile(resolved, "NexisClaw");
-      expect(NexisClaw?.cdpPort).toBe(19022);
-      expect(NexisClaw?.cdpUrl).toBe("http://127.0.0.1:19022");
+      const GreenchClaw = resolveProfile(resolved, "GreenchClaw");
+      expect(GreenchClaw?.cdpPort).toBe(19022);
+      expect(GreenchClaw?.cdpUrl).toBe("http://127.0.0.1:19022");
     });
   });
 
@@ -104,10 +104,10 @@ describe("browser config", () => {
     const resolved = resolveBrowserConfig({
       cdpPortRangeStart: 19000,
     });
-    const NexisClaw = resolveProfile(resolved, "NexisClaw");
+    const GreenchClaw = resolveProfile(resolved, "GreenchClaw");
     expect(resolved.cdpPortRangeStart).toBe(19000);
-    expect(NexisClaw?.cdpPort).toBe(19000);
-    expect(NexisClaw?.cdpUrl).toBe("http://127.0.0.1:19000");
+    expect(GreenchClaw?.cdpPort).toBe(19000);
+    expect(GreenchClaw?.cdpUrl).toBe("http://127.0.0.1:19000");
   });
 
   it("rejects cdpPortRangeStart values that overflow the CDP range window", () => {
@@ -235,7 +235,7 @@ describe("browser config", () => {
     const resolved = resolveBrowserConfig({
       cdpUrl: "http://example.com:9222",
     });
-    const profile = resolveProfile(resolved, "NexisClaw");
+    const profile = resolveProfile(resolved, "GreenchClaw");
     expect(profile?.cdpIsLoopback).toBe(false);
   });
 
@@ -243,7 +243,7 @@ describe("browser config", () => {
     const resolved = resolveBrowserConfig({
       cdpUrl: "http://example.com:9222",
     });
-    const profile = resolveProfile(resolved, "NexisClaw");
+    const profile = resolveProfile(resolved, "GreenchClaw");
     expect(profile?.cdpPort).toBe(9222);
     expect(profile?.cdpUrl).toBe("http://example.com:9222");
     expect(profile?.cdpIsLoopback).toBe(false);
@@ -326,12 +326,12 @@ describe("browser config", () => {
     const noDisplayEnv = {
       DISPLAY: undefined,
       WAYLAND_DISPLAY: undefined,
-      [NEXISCLAW_BROWSER_HEADLESS_ENV]: undefined,
+      [GREENCHCLAW_BROWSER_HEADLESS_ENV]: undefined,
     };
 
     it("falls back to headless for local managed Linux profiles without display", () => {
       const resolved = resolveBrowserConfig({});
-      const profile = resolveProfile(resolved, "NexisClaw")!;
+      const profile = resolveProfile(resolved, "GreenchClaw")!;
 
       expect(
         resolveManagedBrowserHeadlessMode(resolved, profile, {
@@ -361,10 +361,10 @@ describe("browser config", () => {
       const resolved = resolveBrowserConfig({
         headless: true,
         profiles: {
-          NexisClaw: { cdpPort: 18800, color: "#FF4500", headless: false },
+          GreenchClaw: { cdpPort: 18800, color: "#FF4500", headless: false },
         },
       });
-      const profile = resolveProfile(resolved, "NexisClaw")!;
+      const profile = resolveProfile(resolved, "GreenchClaw")!;
 
       expect(
         resolveManagedBrowserHeadlessMode(resolved, profile, {
@@ -376,7 +376,7 @@ describe("browser config", () => {
 
     it("lets explicit global headless=false beat the Linux no-display fallback", () => {
       const resolved = resolveBrowserConfig({ headless: false });
-      const profile = resolveProfile(resolved, "NexisClaw")!;
+      const profile = resolveProfile(resolved, "GreenchClaw")!;
 
       expect(
         resolveManagedBrowserHeadlessMode(resolved, profile, {
@@ -386,18 +386,18 @@ describe("browser config", () => {
       ).toEqual({ headless: false, source: "config" });
     });
 
-    it("lets NEXISCLAW_BROWSER_HEADLESS override profile/global config", () => {
+    it("lets GREENCHCLAW_BROWSER_HEADLESS override profile/global config", () => {
       const resolved = resolveBrowserConfig({
         profiles: {
-          NexisClaw: { cdpPort: 18800, color: "#FF4500", headless: false },
+          GreenchClaw: { cdpPort: 18800, color: "#FF4500", headless: false },
         },
       });
-      const profile = resolveProfile(resolved, "NexisClaw")!;
+      const profile = resolveProfile(resolved, "GreenchClaw")!;
 
       expect(
         resolveManagedBrowserHeadlessMode(resolved, profile, {
           platform: "linux",
-          env: { ...noDisplayEnv, [NEXISCLAW_BROWSER_HEADLESS_ENV]: "1" },
+          env: { ...noDisplayEnv, [GREENCHCLAW_BROWSER_HEADLESS_ENV]: "1" },
         }),
       ).toEqual({ headless: true, source: "env" });
     });
@@ -406,23 +406,23 @@ describe("browser config", () => {
       const resolved = resolveBrowserConfig({
         headless: false,
         profiles: {
-          NexisClaw: { cdpPort: 18800, color: "#FF4500", headless: false },
+          GreenchClaw: { cdpPort: 18800, color: "#FF4500", headless: false },
         },
       });
-      const profile = resolveProfile(resolved, "NexisClaw")!;
+      const profile = resolveProfile(resolved, "GreenchClaw")!;
 
       expect(
         resolveManagedBrowserHeadlessMode(resolved, profile, {
           headlessOverride: true,
           platform: "linux",
-          env: { ...noDisplayEnv, [NEXISCLAW_BROWSER_HEADLESS_ENV]: "0" },
+          env: { ...noDisplayEnv, [GREENCHCLAW_BROWSER_HEADLESS_ENV]: "0" },
         }),
       ).toEqual({ headless: true, source: "request" });
     });
 
     it("returns an actionable error only when headed mode is explicitly selected", () => {
       const defaultResolved = resolveBrowserConfig({});
-      const defaultProfile = resolveProfile(defaultResolved, "NexisClaw")!;
+      const defaultProfile = resolveProfile(defaultResolved, "GreenchClaw")!;
       expect(
         getManagedBrowserMissingDisplayError(defaultResolved, defaultProfile, {
           platform: "linux",
@@ -432,16 +432,16 @@ describe("browser config", () => {
 
       const profileResolved = resolveBrowserConfig({
         profiles: {
-          NexisClaw: { cdpPort: 18800, color: "#FF4500", headless: false },
+          GreenchClaw: { cdpPort: 18800, color: "#FF4500", headless: false },
         },
       });
-      const profile = resolveProfile(profileResolved, "NexisClaw")!;
+      const profile = resolveProfile(profileResolved, "GreenchClaw")!;
       expect(
         getManagedBrowserMissingDisplayError(profileResolved, profile, {
           platform: "linux",
           env: noDisplayEnv,
         }),
-      ).toContain("browser.profiles.NexisClaw.headless=false");
+      ).toContain("browser.profiles.GreenchClaw.headless=false");
     });
   });
 
@@ -534,7 +534,7 @@ describe("browser config", () => {
     const resolved = resolveBrowserConfig({
       cdpUrl: "wss://connect.browserbase.com?apiKey=test-key",
     });
-    const profile = resolveProfile(resolved, "NexisClaw");
+    const profile = resolveProfile(resolved, "GreenchClaw");
     expect(profile?.cdpUrl).toBe("wss://connect.browserbase.com/?apiKey=test-key");
     expect(profile?.cdpHost).toBe("connect.browserbase.com");
     expect(profile?.cdpPort).toBe(443);
@@ -795,7 +795,7 @@ describe("browser config", () => {
     const existingSession = resolveProfile(resolved, "chrome-live")!;
     expect(getBrowserProfileCapabilities(existingSession).usesChromeMcp).toBe(true);
 
-    const managed = resolveProfile(resolved, "NexisClaw")!;
+    const managed = resolveProfile(resolved, "GreenchClaw")!;
     expect(getBrowserProfileCapabilities(managed).usesChromeMcp).toBe(false);
 
     const work = resolveProfile(resolved, "work")!;
@@ -803,34 +803,34 @@ describe("browser config", () => {
   });
 
   describe("default profile preference", () => {
-    it("defaults to NexisClaw profile when defaultProfile is not configured", () => {
+    it("defaults to GreenchClaw profile when defaultProfile is not configured", () => {
       const resolved = resolveBrowserConfig({
         headless: false,
         noSandbox: false,
       });
-      expect(resolved.defaultProfile).toBe("NexisClaw");
+      expect(resolved.defaultProfile).toBe("GreenchClaw");
     });
 
-    it("keeps NexisClaw default when headless=true", () => {
+    it("keeps GreenchClaw default when headless=true", () => {
       const resolved = resolveBrowserConfig({
         headless: true,
       });
-      expect(resolved.defaultProfile).toBe("NexisClaw");
+      expect(resolved.defaultProfile).toBe("GreenchClaw");
     });
 
-    it("keeps NexisClaw default when noSandbox=true", () => {
+    it("keeps GreenchClaw default when noSandbox=true", () => {
       const resolved = resolveBrowserConfig({
         noSandbox: true,
       });
-      expect(resolved.defaultProfile).toBe("NexisClaw");
+      expect(resolved.defaultProfile).toBe("GreenchClaw");
     });
 
-    it("keeps NexisClaw default when both headless and noSandbox are true", () => {
+    it("keeps GreenchClaw default when both headless and noSandbox are true", () => {
       const resolved = resolveBrowserConfig({
         headless: true,
         noSandbox: true,
       });
-      expect(resolved.defaultProfile).toBe("NexisClaw");
+      expect(resolved.defaultProfile).toBe("GreenchClaw");
     });
 
     it("explicit defaultProfile config overrides defaults in headless mode", () => {

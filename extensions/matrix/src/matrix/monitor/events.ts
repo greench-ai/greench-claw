@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { PluginRuntime, RuntimeLogger } from "../../runtime-api.js";
 import type { CoreConfig } from "../../types.js";
 import type { MatrixAuth } from "../client.js";
@@ -25,7 +25,7 @@ function formatMatrixPostHealthySyncDecryptionHint(accountId: string): string {
   return (
     "matrix: repeated fresh encrypted messages are still failing to decrypt after Matrix resumed healthy sync. " +
     "This device may still be missing new room keys. " +
-    `Check 'NexisClaw matrix verify status --verbose --account ${accountId}' and 'NexisClaw matrix devices list --account ${accountId}'.`
+    `Check 'GreenchClaw matrix verify status --verbose --account ${accountId}' and 'GreenchClaw matrix devices list --account ${accountId}'.`
   );
 }
 
@@ -145,8 +145,8 @@ function createMatrixPostHealthySyncDecryptFailureTracker(params: {
 function formatMatrixSelfDecryptionHint(accountId: string): string {
   return (
     "matrix: failed to decrypt a message from this same Matrix user. " +
-    "This usually means another Matrix device did not share the room key, or another NexisClaw runtime is using the same account. " +
-    `Check 'NexisClaw matrix verify status --verbose --account ${accountId}' and 'NexisClaw matrix devices list --account ${accountId}'.`
+    "This usually means another Matrix device did not share the room key, or another GreenchClaw runtime is using the same account. " +
+    `Check 'GreenchClaw matrix verify status --verbose --account ${accountId}' and 'GreenchClaw matrix devices list --account ${accountId}'.`
   );
 }
 

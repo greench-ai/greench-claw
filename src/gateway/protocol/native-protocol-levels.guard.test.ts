@@ -62,7 +62,7 @@ describe("native Gateway protocol levels", () => {
     }
 
     const swiftGeneratedPath =
-      "apps/shared/NexisClawKit/Sources/NexisClawProtocol/GatewayModels.swift";
+      "apps/shared/GreenchClawKit/Sources/GreenchClawProtocol/GatewayModels.swift";
     const swiftGenerated = await readRepoFile(swiftGeneratedPath);
     assertLevelsMatch(swiftGeneratedPath, {
       min: extractInteger(
@@ -79,7 +79,8 @@ describe("native Gateway protocol levels", () => {
       ),
     });
 
-    const androidPath = "apps/android/app/src/main/java/ai/NexisClaw/app/gateway/GatewayProtocol.kt";
+    const androidPath =
+      "apps/android/app/src/main/java/ai/GreenchClaw/app/gateway/GatewayProtocol.kt";
     const android = await readRepoFile(androidPath);
     assertLevelsMatch(androidPath, {
       min: extractInteger(
@@ -99,8 +100,8 @@ describe("native Gateway protocol levels", () => {
 
   it("uses the min constant for native connect compatibility ranges", async () => {
     const swiftConnectFiles = [
-      "apps/shared/NexisClawKit/Sources/NexisClawKit/GatewayChannel.swift",
-      "apps/macos/Sources/NexisClawMacCLI/WizardCommand.swift",
+      "apps/shared/GreenchClawKit/Sources/GreenchClawKit/GatewayChannel.swift",
+      "apps/macos/Sources/GreenchClawMacCLI/WizardCommand.swift",
     ];
     for (const relativePath of swiftConnectFiles) {
       const content = await readRepoFile(relativePath);
@@ -118,7 +119,8 @@ describe("native Gateway protocol levels", () => {
       );
     }
 
-    const androidPath = "apps/android/app/src/main/java/ai/NexisClaw/app/gateway/GatewaySession.kt";
+    const androidPath =
+      "apps/android/app/src/main/java/ai/GreenchClaw/app/gateway/GatewaySession.kt";
     const android = await readRepoFile(androidPath);
     assertPattern(
       android,

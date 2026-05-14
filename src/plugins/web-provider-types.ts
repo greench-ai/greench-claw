@@ -1,5 +1,5 @@
 import type { TSchema } from "typebox";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { RuntimeEnv } from "../runtime.js";
 import type {
   RuntimeWebFetchMetadata,
@@ -27,7 +27,7 @@ export type WebFetchProviderToolDefinition = {
 };
 
 export type WebSearchProviderContext = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   searchConfig?: Record<string, unknown>;
   runtimeMetadata?: RuntimeWebSearchMetadata;
 };
@@ -37,7 +37,7 @@ export type WebSearchProviderToolExecutionContext = {
 };
 
 export type WebFetchProviderContext = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   fetchConfig?: Record<string, unknown>;
   runtimeMetadata?: RuntimeWebFetchMetadata;
 };
@@ -50,7 +50,7 @@ export type WebSearchProviderConfiguredCredentialFallback = {
 };
 
 export type WebSearchRuntimeMetadataContext = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   searchConfig?: Record<string, unknown>;
   runtimeMetadata?: RuntimeWebSearchMetadata;
   resolvedCredential?: {
@@ -61,7 +61,7 @@ export type WebSearchRuntimeMetadataContext = {
 };
 
 export type WebSearchProviderSetupContext = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   runtime: RuntimeEnv;
   prompter: WizardPrompter;
   quickstartDefaults?: boolean;
@@ -71,7 +71,7 @@ export type WebSearchProviderSetupContext = {
 export type WebFetchCredentialResolutionSource = "config" | "secretRef" | "env" | "missing";
 
 export type WebFetchRuntimeMetadataContext = {
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   fetchConfig?: Record<string, unknown>;
   runtimeMetadata?: RuntimeWebFetchMetadata;
   resolvedCredential?: {
@@ -99,13 +99,13 @@ export type WebSearchProviderPlugin = {
   inactiveSecretPaths?: string[];
   getCredentialValue: (searchConfig?: Record<string, unknown>) => unknown;
   setCredentialValue: (searchConfigTarget: Record<string, unknown>, value: unknown) => void;
-  getConfiguredCredentialValue?: (config?: NexisClawConfig) => unknown;
-  setConfiguredCredentialValue?: (configTarget: NexisClawConfig, value: unknown) => void;
+  getConfiguredCredentialValue?: (config?: GreenchClawConfig) => unknown;
+  setConfiguredCredentialValue?: (configTarget: GreenchClawConfig, value: unknown) => void;
   getConfiguredCredentialFallback?: (
-    config?: NexisClawConfig,
+    config?: GreenchClawConfig,
   ) => WebSearchProviderConfiguredCredentialFallback | undefined;
-  applySelectionConfig?: (config: NexisClawConfig) => NexisClawConfig;
-  runSetup?: (ctx: WebSearchProviderSetupContext) => NexisClawConfig | Promise<NexisClawConfig>;
+  applySelectionConfig?: (config: GreenchClawConfig) => GreenchClawConfig;
+  runSetup?: (ctx: WebSearchProviderSetupContext) => GreenchClawConfig | Promise<GreenchClawConfig>;
   resolveRuntimeMetadata?: (
     ctx: WebSearchRuntimeMetadataContext,
   ) => Partial<RuntimeWebSearchMetadata> | Promise<Partial<RuntimeWebSearchMetadata>>;
@@ -131,9 +131,9 @@ export type WebFetchProviderPlugin = {
   inactiveSecretPaths?: string[];
   getCredentialValue: (fetchConfig?: Record<string, unknown>) => unknown;
   setCredentialValue: (fetchConfigTarget: Record<string, unknown>, value: unknown) => void;
-  getConfiguredCredentialValue?: (config?: NexisClawConfig) => unknown;
-  setConfiguredCredentialValue?: (configTarget: NexisClawConfig, value: unknown) => void;
-  applySelectionConfig?: (config: NexisClawConfig) => NexisClawConfig;
+  getConfiguredCredentialValue?: (config?: GreenchClawConfig) => unknown;
+  setConfiguredCredentialValue?: (configTarget: GreenchClawConfig, value: unknown) => void;
+  applySelectionConfig?: (config: GreenchClawConfig) => GreenchClawConfig;
   resolveRuntimeMetadata?: (
     ctx: WebFetchRuntimeMetadataContext,
   ) => Partial<RuntimeWebFetchMetadata> | Promise<Partial<RuntimeWebFetchMetadata>>;

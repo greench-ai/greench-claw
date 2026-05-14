@@ -65,9 +65,9 @@ async function startTokenServer(port: number, opts?: { openAiChatCompletionsEnab
 }
 
 async function writeGatewayConfig(config: Record<string, unknown>) {
-  const configPath = process.env.NEXISCLAW_CONFIG_PATH;
+  const configPath = process.env.GREENCHCLAW_CONFIG_PATH;
   if (!configPath) {
-    throw new Error("NEXISCLAW_CONFIG_PATH is required for gateway config tests");
+    throw new Error("GREENCHCLAW_CONFIG_PATH is required for gateway config tests");
   }
   await fs.mkdir(path.dirname(configPath), { recursive: true });
   await fs.writeFile(configPath, JSON.stringify(config, null, 2), "utf-8");
@@ -78,7 +78,7 @@ async function postChatCompletions(port: number, body: unknown, headers?: Record
     method: "POST",
     headers: {
       "content-type": "application/json",
-      "x-NexisClaw-scopes": "operator.write",
+      "x-GreenchClaw-scopes": "operator.write",
       ...headers,
     },
     body: JSON.stringify(body),
@@ -155,7 +155,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
     const expectInvalidRequestNoDispatch = async (messages: unknown[]) => {
       agentCommand.mockClear();
       const res = await postChatCompletions(port, {
-        model: "NexisClaw",
+        model: "GreenchClaw",
         messages,
       });
       expect(res.status).toBe(400);
@@ -168,7 +168,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
     const postSyncUserMessage = async (message: string) => {
       const res = await postChatCompletions(port, {
         stream: false,
-        model: "NexisClaw",
+        model: "GreenchClaw",
         messages: [{ role: "user", content: message }],
       });
       expect(res.status).toBe(200);
@@ -202,14 +202,14 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       }
 
       await expectAgentSessionKeyMatch({
-        body: { model: "NexisClaw", messages: [{ role: "user", content: "hi" }] },
-        headers: { "x-NexisClaw-agent-id": "beta" },
+        body: { model: "GreenchClaw", messages: [{ role: "user", content: "hi" }] },
+        headers: { "x-GreenchClaw-agent-id": "beta" },
         matcher: /^agent:beta:/,
       });
 
       await expectAgentSessionKeyMatch({
         body: {
-          model: "NexisClaw/beta",
+          model: "GreenchClaw/beta",
           messages: [{ role: "user", content: "hi" }],
         },
         matcher: /^agent:beta:/,
@@ -217,7 +217,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
 
       await expectAgentSessionKeyMatch({
         body: {
-          model: "NexisClaw/default",
+          model: "GreenchClaw/default",
           messages: [{ role: "user", content: "hi" }],
         },
         matcher: /^agent:main:/,
@@ -227,10 +227,10 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         mockAgentOnce([{ text: "hello" }]);
         const res = await postChatCompletions(
           port,
-          { model: "NexisClaw", messages: [{ role: "user", content: "hi" }] },
+          { model: "GreenchClaw", messages: [{ role: "user", content: "hi" }] },
           {
-            "x-NexisClaw-agent-id": "beta",
-            "x-NexisClaw-session-key": "agent:beta:openai:custom",
+            "x-GreenchClaw-agent-id": "beta",
+            "x-GreenchClaw-session-key": "agent:beta:openai:custom",
           },
         );
         expect(res.status).toBe(200);
@@ -243,7 +243,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         mockAgentOnce([{ text: "hello" }]);
         const res = await postChatCompletions(port, {
           user: "alice",
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         });
         expect(res.status).toBe(200);
@@ -257,10 +257,10 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         const res = await postChatCompletions(
           port,
           {
-            model: "NexisClaw",
+            model: "GreenchClaw",
             messages: [{ role: "user", content: "hi" }],
           },
-          { "x-NexisClaw-message-channel": "custom-client-channel" },
+          { "x-GreenchClaw-message-channel": "custom-client-channel" },
         );
         expect(res.status).toBe(200);
         expect(getFirstAgentCall()?.messageChannel).toBe("custom-client-channel");
@@ -272,11 +272,11 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         const res = await postChatCompletions(
           port,
           {
-            model: "NexisClaw",
+            model: "GreenchClaw",
             messages: [{ role: "user", content: "hi" }],
           },
           {
-            "x-NexisClaw-model": "openai/gpt-5.4",
+            "x-GreenchClaw-model": "openai/gpt-5.4",
           },
         );
         expect(res.status).toBe(200);
@@ -299,11 +299,11 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         const res = await postChatCompletions(
           port,
           {
-            model: "NexisClaw",
+            model: "GreenchClaw",
             messages: [{ role: "user", content: "hi" }],
           },
           {
-            "x-NexisClaw-model": "gpt-5.4",
+            "x-GreenchClaw-model": "gpt-5.4",
           },
         );
         expect(res.status).toBe(200);
@@ -322,7 +322,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         const json = (await res.json()) as { error?: { type?: string; message?: string } };
         expect(json.error?.type).toBe("invalid_request_error");
         expect(json.error?.message).toBe(
-          "Invalid `model`. Use `NexisClaw` or `NexisClaw/<agentId>`.",
+          "Invalid `model`. Use `GreenchClaw` or `GreenchClaw/<agentId>`.",
         );
         expect(agentCommand).toHaveBeenCalledTimes(0);
       }
@@ -332,22 +332,22 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         const res = await postChatCompletions(
           port,
           {
-            model: "NexisClaw",
+            model: "GreenchClaw",
             messages: [{ role: "user", content: "hi" }],
           },
-          { "x-NexisClaw-model": "openai/" },
+          { "x-GreenchClaw-model": "openai/" },
         );
         expect(res.status).toBe(400);
         const json = (await res.json()) as { error?: { type?: string; message?: string } };
         expect(json.error?.type).toBe("invalid_request_error");
-        expect(json.error?.message).toBe("Invalid `x-NexisClaw-model`.");
+        expect(json.error?.message).toBe("Invalid `x-GreenchClaw-model`.");
         expect(agentCommand).toHaveBeenCalledTimes(0);
       }
 
       {
         mockAgentOnce([{ text: "hello" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             {
               role: "user",
@@ -368,7 +368,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         const imageData = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAA";
         mockAgentOnce([{ text: "looks good" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             {
               role: "user",
@@ -396,7 +396,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         const imageData = "QUJDRA==";
         mockAgentOnce([{ text: "supports data-uri params" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             {
               role: "user",
@@ -434,7 +434,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         mockAgentOnce([{ text: "I can see the image" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             {
               role: "user",
@@ -460,7 +460,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         mockAgentOnce([{ text: "follow up answer" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             {
               role: "user",
@@ -483,7 +483,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         mockAgentOnce([{ text: "latest image only" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             {
               role: "user",
@@ -515,7 +515,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         const largeMessage = "x".repeat(1_200_000);
         mockAgentOnce([{ text: "accepted" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: largeMessage }],
         });
         expect(res.status).toBe(200);
@@ -550,7 +550,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         mockAgentOnce([{ text: "I am Claude" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             { role: "system", content: "You are a helpful assistant." },
             { role: "user", content: "Hello, who are you?" },
@@ -571,7 +571,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         mockAgentOnce([{ text: "hello" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             { role: "system", content: "You are a helpful assistant." },
             { role: "user", content: "Hello" },
@@ -589,7 +589,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         mockAgentOnce([{ text: "hello" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             { role: "developer", content: "You are a helpful assistant." },
             { role: "user", content: "Hello" },
@@ -605,7 +605,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         mockAgentOnce([{ text: "ok" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             { role: "system", content: "You are a helpful assistant." },
             { role: "user", content: "What's the weather?" },
@@ -626,7 +626,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         mockAgentOnce([{ text: "tool follow-up ok" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             {
               role: "user",
@@ -655,7 +655,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         mockAgentOnce([{ text: "tool choice none" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           tool_choice: "none",
           tools: [
             {
@@ -678,7 +678,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         mockAgentOnce([{ text: "tool choice auto" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           tool_choice: "auto",
           tools: [
             {
@@ -707,7 +707,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         agentCommand.mockClear();
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           tool_choice: { type: "function", function: { name: "get_weather" } },
           tools: [
             {
@@ -743,7 +743,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         agentCommand.mockClear();
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           tool_choice: "required",
           messages: [{ role: "user", content: "weather?" }],
         });
@@ -757,7 +757,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         agentCommand.mockClear();
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           tool_choice: { type: "function", function: { name: "missing_tool" } },
           tools: [
             {
@@ -781,7 +781,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         agentCommand.mockClear();
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           tool_choice: {
             type: "allowed_tools",
             tools: [{ type: "function", function: { name: "x" } }],
@@ -808,7 +808,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         agentCommand.mockClear();
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           tools: [
             {
               type: "function",
@@ -828,7 +828,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         mockAgentOnce([{ text: "ok" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             { role: "user", content: "What's the weather?" },
             { role: "assistant", content: "Checking the weather." },
@@ -851,7 +851,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       {
         mockAgentOnce([{ text: "ok" }]);
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [
             { role: "user", content: "What's the weather?" },
             {
@@ -892,7 +892,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         agentCommand.mockRejectedValueOnce(createClientToolNameConflictError(["exec"]));
         const res = await postChatCompletions(port, {
           stream: false,
-          model: "NexisClaw",
+          model: "GreenchClaw",
           tools: [
             {
               type: "function",
@@ -940,7 +940,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         } as never);
         const res = await postChatCompletions(port, {
           stream: false,
-          model: "NexisClaw",
+          model: "GreenchClaw",
           tool_choice: "auto",
           tools: [
             {
@@ -1016,7 +1016,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         } as never);
         const res = await postChatCompletions(port, {
           stream: false,
-          model: "NexisClaw",
+          model: "GreenchClaw",
           tool_choice: "auto",
           tools: [
             {
@@ -1069,7 +1069,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
 
         const splitFinalRes = await postChatCompletions(port, {
           stream: true,
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         });
         expect(splitFinalRes.status).toBe(200);
@@ -1247,12 +1247,12 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         const json = await postSyncUserMessage("hi");
         const choice0 = (json.choices as Array<Record<string, unknown>>)[0] ?? {};
         const msg = (choice0.message as Record<string, unknown> | undefined) ?? {};
-        expect(msg.content).toBe("No response from NexisClaw.");
+        expect(msg.content).toBe("No response from GreenchClaw.");
       }
 
       {
         const res = await postChatCompletions(port, {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "system", content: "yo" }],
         });
         expect(res.status).toBe(400);
@@ -1277,7 +1277,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
     {
       mockAgentOnce([{ text: "hello" }]);
       const res = await postChatCompletions(port, {
-        model: "NexisClaw",
+        model: "GreenchClaw",
         max_completion_tokens: 256,
         messages: [{ role: "user", content: "hi" }],
       });
@@ -1289,7 +1289,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
     {
       mockAgentOnce([{ text: "hello" }]);
       const res = await postChatCompletions(port, {
-        model: "NexisClaw",
+        model: "GreenchClaw",
         max_tokens: 128,
         messages: [{ role: "user", content: "hi" }],
       });
@@ -1301,7 +1301,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
     {
       mockAgentOnce([{ text: "hello" }]);
       const res = await postChatCompletions(port, {
-        model: "NexisClaw",
+        model: "GreenchClaw",
         max_completion_tokens: 64,
         max_tokens: 999,
         messages: [{ role: "user", content: "hi" }],
@@ -1314,7 +1314,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
     {
       mockAgentOnce([{ text: "hello" }]);
       const res = await postChatCompletions(port, {
-        model: "NexisClaw",
+        model: "GreenchClaw",
         messages: [{ role: "user", content: "hi" }],
       });
       expect(res.status).toBe(200);
@@ -1336,7 +1336,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
           authorization: "Bearer wrong",
         };
         const body = {
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         };
 
@@ -1380,7 +1380,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
 
         const res = await postChatCompletions(port, {
           stream: true,
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         });
         expect(res.status).toBe(200);
@@ -1416,7 +1416,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
 
         const repeatedRes = await postChatCompletions(port, {
           stream: true,
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         });
         expect(repeatedRes.status).toBe(200);
@@ -1441,7 +1441,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
 
         const fallbackRes = await postChatCompletions(port, {
           stream: true,
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         });
         expect(fallbackRes.status).toBe(200);
@@ -1468,7 +1468,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
 
         const toolCallRes = await postChatCompletions(port, {
           stream: true,
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         });
         expect(toolCallRes.status).toBe(200);
@@ -1543,7 +1543,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         const toolCallUsageRes = await postChatCompletions(port, {
           stream: true,
           stream_options: { include_usage: true },
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         });
         expect(toolCallUsageRes.status).toBe(200);
@@ -1588,7 +1588,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
 
         const lateToolCallRes = await postChatCompletions(port, {
           stream: true,
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         });
         expect(lateToolCallRes.status).toBe(200);
@@ -1639,7 +1639,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
 
         const toolConflictRes = await postChatCompletions(port, {
           stream: true,
-          model: "NexisClaw",
+          model: "GreenchClaw",
           tools: [
             {
               type: "function",
@@ -1681,7 +1681,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
 
         const errorRes = await postChatCompletions(port, {
           stream: true,
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         });
         expect(errorRes.status).toBe(200);
@@ -1763,7 +1763,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         clientReq.end(
           JSON.stringify({
             stream: true,
-            model: "NexisClaw",
+            model: "GreenchClaw",
             messages: [{ role: "user", content: "hi" }],
           }),
         );
@@ -1809,7 +1809,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
     const res = await postChatCompletions(port, {
       stream: true,
       stream_options: { include_usage: true },
-      model: "NexisClaw",
+      model: "GreenchClaw",
       messages: [{ role: "user", content: "hi" }],
     });
     expect(res.status).toBe(200);
@@ -1851,7 +1851,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
     const res = await postChatCompletions(port, {
       stream: true,
       stream_options: { include_usage: true },
-      model: "NexisClaw",
+      model: "GreenchClaw",
       messages: [{ role: "user", content: "hi" }],
     });
     expect(res.status).toBe(200);
@@ -1895,7 +1895,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
     const res = await postChatCompletions(port, {
       stream: true,
       stream_options: { include_usage: true },
-      model: "NexisClaw",
+      model: "GreenchClaw",
       messages: [{ role: "user", content: "hi" }],
     });
     expect(res.status).toBe(200);
@@ -1953,7 +1953,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         JSON.stringify({
           stream: true,
           stream_options: { include_usage: true },
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         }),
       );
@@ -1990,7 +1990,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
 
     const res = await postChatCompletions(port, {
       stream: true,
-      model: "NexisClaw",
+      model: "GreenchClaw",
       messages: [{ role: "user", content: "hi" }],
     });
     expect(res.status).toBe(200);
@@ -2017,10 +2017,10 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
         headers: {
           authorization: "Bearer secret",
           "content-type": "application/json",
-          "x-NexisClaw-scopes": "operator.approvals",
+          "x-GreenchClaw-scopes": "operator.approvals",
         },
         body: JSON.stringify({
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         }),
       });
@@ -2065,7 +2065,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
     clientReq.end(
       JSON.stringify({
         stream: true,
-        model: "NexisClaw",
+        model: "GreenchClaw",
         messages: [{ role: "user", content: "hi" }],
       }),
     );
@@ -2118,7 +2118,7 @@ describe("OpenAI-compatible HTTP API (e2e)", () => {
       clientReq.on("error", () => {});
       clientReq.end(
         JSON.stringify({
-          model: "NexisClaw",
+          model: "GreenchClaw",
           messages: [{ role: "user", content: "hi" }],
         }),
       );

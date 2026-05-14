@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { withTempHome } from "NexisClaw/plugin-sdk/test-env";
+import { withTempHome } from "GreenchClaw/plugin-sdk/test-env";
 import { describe, expect, it } from "vitest";
 
 describe("cli json stdout contract", () => {
@@ -16,11 +16,11 @@ describe("cli json stdout contract", () => {
           ...process.env,
           HOME: tempHome,
           USERPROFILE: tempHome,
-          NEXISCLAW_TEST_FAST: "1",
+          GREENCHCLAW_TEST_FAST: "1",
         };
-        delete env.NEXISCLAW_HOME;
-        delete env.NEXISCLAW_STATE_DIR;
-        delete env.NEXISCLAW_CONFIG_PATH;
+        delete env.GREENCHCLAW_HOME;
+        delete env.GREENCHCLAW_STATE_DIR;
+        delete env.GREENCHCLAW_CONFIG_PATH;
         delete env.VITEST;
 
         const entry = path.resolve(process.cwd(), "src/entry.ts");
@@ -46,7 +46,7 @@ describe("cli json stdout contract", () => {
         expect(stdout).not.toContain("Doctor changes");
         expect(stdout).not.toContain("Config invalid");
       },
-      { prefix: "NexisClaw-json-e2e-" },
+      { prefix: "GreenchClaw-json-e2e-" },
     );
   });
 });

@@ -8,7 +8,7 @@ import {
   runAgentHarnessBeforeMessageWriteHook,
   type AgentMessage,
   type SessionWriteLockAcquireTimeoutConfig,
-} from "NexisClaw/plugin-sdk/agent-harness-runtime";
+} from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 
 type MirroredAgentMessage = Extract<AgentMessage, { role: "user" | "assistant" | "toolResult" }>;
 
@@ -25,20 +25,20 @@ const MIRROR_IDENTITY_META_KEY = "mirrorIdentity" as const;
  */
 export function attachCodexMirrorIdentity<T extends AgentMessage>(message: T, identity: string): T {
   const record = message as unknown as Record<string, unknown>;
-  const existing = record.__NexisClaw;
+  const existing = record.__GreenchClaw;
   const baseMeta =
     existing && typeof existing === "object" && !Array.isArray(existing)
       ? (existing as Record<string, unknown>)
       : {};
   return {
     ...record,
-    __NexisClaw: { ...baseMeta, [MIRROR_IDENTITY_META_KEY]: identity },
+    __GreenchClaw: { ...baseMeta, [MIRROR_IDENTITY_META_KEY]: identity },
   } as unknown as T;
 }
 
 function readMirrorIdentity(message: MirroredAgentMessage): string | undefined {
-  const record = message as unknown as { __NexisClaw?: unknown };
-  const meta = record.__NexisClaw;
+  const record = message as unknown as { __GreenchClaw?: unknown };
+  const meta = record.__GreenchClaw;
   if (!meta || typeof meta !== "object" || Array.isArray(meta)) {
     return undefined;
   }

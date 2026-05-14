@@ -2,18 +2,18 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { SessionManager } from "@earendil-works/pi-coding-agent";
-import type { EmbeddedRunAttemptParams } from "NexisClaw/plugin-sdk/agent-harness";
-import { resetAgentEventsForTest } from "NexisClaw/plugin-sdk/agent-harness-runtime";
+import type { EmbeddedRunAttemptParams } from "GreenchClaw/plugin-sdk/agent-harness";
+import { resetAgentEventsForTest } from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 import {
   onInternalDiagnosticEvent,
   resetDiagnosticEventsForTest,
   type DiagnosticEventPayload,
-} from "NexisClaw/plugin-sdk/diagnostic-runtime";
+} from "GreenchClaw/plugin-sdk/diagnostic-runtime";
 import {
   initializeGlobalHookRunner,
   resetGlobalHookRunner,
-} from "NexisClaw/plugin-sdk/hook-runtime";
-import { createMockPluginRegistry } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/hook-runtime";
+import { createMockPluginRegistry } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   CodexAppServerEventProjector,
@@ -55,7 +55,7 @@ function assistantMessage(text: string, timestamp: number) {
 }
 
 async function createParams(): Promise<EmbeddedRunAttemptParams> {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-codex-projector-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-codex-projector-"));
   tempDirs.add(tempDir);
   const sessionFile = path.join(tempDir, "session.jsonl");
   SessionManager.open(sessionFile).appendMessage(assistantMessage("history", Date.now()));
@@ -1235,7 +1235,7 @@ describe("CodexAppServerEventProjector", () => {
     expect(event.result).toEqual({ status: "completed" });
   });
 
-  it("records dynamic NexisClaw tool calls in mirrored transcript snapshots", async () => {
+  it("records dynamic GreenchClaw tool calls in mirrored transcript snapshots", async () => {
     const projector = await createProjector();
 
     projector.recordDynamicToolCall({

@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { ProviderPlugin } from "NexisClaw/plugin-sdk/provider-model-shared";
+import type { ProviderPlugin } from "GreenchClaw/plugin-sdk/provider-model-shared";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { createWizardPrompter as buildWizardPrompter } from "../../test/helpers/wizard-prompter.js";
 import { DEFAULT_BOOTSTRAP_FILENAME } from "../agents/workspace.js";
@@ -111,14 +111,14 @@ const ensureWorkspaceAndSessions = vi.hoisted(() => vi.fn(async () => {}));
 const replaceConfigFile = vi.hoisted(() => vi.fn(async () => ({ config: {} })));
 const resolveGatewayPort = vi.hoisted(() =>
   vi.fn((_cfg?: unknown, env?: NodeJS.ProcessEnv) => {
-    const raw = env?.NEXISCLAW_GATEWAY_PORT ?? process.env.NEXISCLAW_GATEWAY_PORT;
+    const raw = env?.GREENCHCLAW_GATEWAY_PORT ?? process.env.GREENCHCLAW_GATEWAY_PORT;
     const port = raw ? Number.parseInt(raw, 10) : Number.NaN;
     return Number.isFinite(port) && port > 0 ? port : 18789;
   }),
 );
 const readConfigFileSnapshot = vi.hoisted(() =>
   vi.fn(async () => ({
-    path: "/tmp/.NexisClaw/NexisClaw.json",
+    path: "/tmp/.GreenchClaw/GreenchClaw.json",
     exists: false,
     raw: null as string | null,
     parsed: {},
@@ -265,7 +265,7 @@ vi.mock("../config/config.js", () => ({
 }));
 
 vi.mock("../commands/onboard-helpers.js", () => ({
-  DEFAULT_WORKSPACE: "/tmp/NexisClaw-workspace",
+  DEFAULT_WORKSPACE: "/tmp/GreenchClaw-workspace",
   applyWizardMetadata: (cfg: unknown) => cfg,
   summarizeExistingConfig: () => "summary",
   handleReset: async () => {},
@@ -353,7 +353,7 @@ describe("runSetupWizard", () => {
   let suiteCase = 0;
 
   beforeAll(async () => {
-    suiteRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-onboard-suite-"));
+    suiteRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-onboard-suite-"));
   });
 
   afterAll(async () => {
@@ -371,7 +371,7 @@ describe("runSetupWizard", () => {
   it("skips provider entries without an id during preferred-provider lookup", async () => {
     setupChannels.mockClear();
     readConfigFileSnapshot.mockResolvedValueOnce({
-      path: "/tmp/.NexisClaw/NexisClaw.json",
+      path: "/tmp/.GreenchClaw/GreenchClaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -434,7 +434,7 @@ describe("runSetupWizard", () => {
 
   it("exits when config is invalid", async () => {
     readConfigFileSnapshot.mockResolvedValueOnce({
-      path: "/tmp/.NexisClaw/NexisClaw.json",
+      path: "/tmp/.GreenchClaw/GreenchClaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -866,7 +866,7 @@ describe("runSetupWizard", () => {
       },
     ]);
     readConfigFileSnapshot.mockResolvedValueOnce({
-      path: "/tmp/.NexisClaw/NexisClaw.json",
+      path: "/tmp/.GreenchClaw/GreenchClaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -917,11 +917,11 @@ describe("runSetupWizard", () => {
   });
 
   it("resolves gateway.auth.password SecretRef for local setup probe", async () => {
-    const previous = process.env.NEXISCLAW_GATEWAY_PASSWORD;
-    process.env.NEXISCLAW_GATEWAY_PASSWORD = "gateway-ref-password"; // pragma: allowlist secret
+    const previous = process.env.GREENCHCLAW_GATEWAY_PASSWORD;
+    process.env.GREENCHCLAW_GATEWAY_PASSWORD = "gateway-ref-password"; // pragma: allowlist secret
     probeGatewayReachable.mockClear();
     readConfigFileSnapshot.mockResolvedValueOnce({
-      path: "/tmp/.NexisClaw/NexisClaw.json",
+      path: "/tmp/.GreenchClaw/GreenchClaw.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -934,7 +934,7 @@ describe("runSetupWizard", () => {
             password: {
               source: "env",
               provider: "default",
-              id: "NEXISCLAW_GATEWAY_PASSWORD",
+              id: "GREENCHCLAW_GATEWAY_PASSWORD",
             },
           },
         },
@@ -971,9 +971,9 @@ describe("runSetupWizard", () => {
       );
     } finally {
       if (previous === undefined) {
-        delete process.env.NEXISCLAW_GATEWAY_PASSWORD;
+        delete process.env.GREENCHCLAW_GATEWAY_PASSWORD;
       } else {
-        process.env.NEXISCLAW_GATEWAY_PASSWORD = previous;
+        process.env.GREENCHCLAW_GATEWAY_PASSWORD = previous;
       }
     }
 
@@ -1020,8 +1020,8 @@ describe("runSetupWizard", () => {
   });
 
   it("shows the resolved gateway port in quickstart for fresh envs", async () => {
-    const previousPort = process.env.NEXISCLAW_GATEWAY_PORT;
-    process.env.NEXISCLAW_GATEWAY_PORT = "18791";
+    const previousPort = process.env.GREENCHCLAW_GATEWAY_PORT;
+    process.env.GREENCHCLAW_GATEWAY_PORT = "18791";
     const note: WizardPrompter["note"] = vi.fn(async () => {});
     const prompter = buildWizardPrompter({ note });
     const runtime = createRuntime();
@@ -1044,9 +1044,9 @@ describe("runSetupWizard", () => {
       );
     } finally {
       if (previousPort === undefined) {
-        delete process.env.NEXISCLAW_GATEWAY_PORT;
+        delete process.env.GREENCHCLAW_GATEWAY_PORT;
       } else {
-        process.env.NEXISCLAW_GATEWAY_PORT = previousPort;
+        process.env.GREENCHCLAW_GATEWAY_PORT = previousPort;
       }
     }
 

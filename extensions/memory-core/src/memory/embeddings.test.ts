@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { MemoryEmbeddingProviderAdapter } from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { MemoryEmbeddingProviderAdapter } from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createEmbeddingProvider } from "./embeddings.js";
 
@@ -7,7 +7,7 @@ const mockEmbeddingRegistry = vi.hoisted(() => ({
   adapters: [] as MemoryEmbeddingProviderAdapter[],
 }));
 
-vi.mock("NexisClaw/plugin-sdk/memory-core-host-engine-embeddings", () => ({
+vi.mock("GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings", () => ({
   DEFAULT_LOCAL_MODEL: "nomic-embed-text",
   createLocalEmbeddingProvider: async () => {
     throw new Error("local embedding provider is not used by these tests");
@@ -40,8 +40,8 @@ function createOptions(provider: string) {
           "voyage",
         ],
       },
-    } as NexisClawConfig,
-    agentDir: "/tmp/NexisClaw-agent",
+    } as GreenchClawConfig,
+    agentDir: "/tmp/GreenchClaw-agent",
     provider,
     fallback: "none",
     model: "",

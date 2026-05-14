@@ -193,7 +193,7 @@ describe("tool-card extraction", () => {
           view: {
             backend: "canvas",
             id: "cv_inline",
-            url: "/__NexisClaw__/canvas/documents/cv_inline/index.html",
+            url: "/__GreenchClaw__/canvas/documents/cv_inline/index.html",
           },
           presentation: {
             target: "assistant_message",
@@ -209,7 +209,7 @@ describe("tool-card extraction", () => {
     expect(card?.preview?.surface).toBe("assistant_message");
     expect(card?.preview?.render).toBe("url");
     expect(card?.preview?.viewId).toBe("cv_inline");
-    expect(card?.preview?.url).toBe("/__NexisClaw__/canvas/documents/cv_inline/index.html");
+    expect(card?.preview?.url).toBe("/__GreenchClaw__/canvas/documents/cv_inline/index.html");
     expect(card?.preview?.title).toBe("Inline demo");
     expect(card?.preview?.preferredHeight).toBe(420);
   });
@@ -224,7 +224,7 @@ describe("tool-card extraction", () => {
           view: {
             backend: "canvas",
             id: "cv_tool_card",
-            url: "/__NexisClaw__/canvas/documents/cv_tool_card/index.html",
+            url: "/__GreenchClaw__/canvas/documents/cv_tool_card/index.html",
           },
           presentation: {
             target: "tool_card",

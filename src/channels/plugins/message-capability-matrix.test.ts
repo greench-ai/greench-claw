@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import type { ChannelMessageActionAdapter, ChannelPlugin } from "./types.js";
 
 const telegramDescribeMessageToolMock = vi.fn();
@@ -121,7 +121,7 @@ describe("channel action capability matrix", () => {
     discordDescribeMessageToolMock.mockReset();
   });
 
-  function getCapabilities(plugin: Pick<ChannelPlugin, "actions">, cfg: NexisClawConfig) {
+  function getCapabilities(plugin: Pick<ChannelPlugin, "actions">, cfg: GreenchClawConfig) {
     const describeMessageTool: ChannelMessageActionAdapter["describeMessageTool"] | undefined =
       plugin.actions?.describeMessageTool;
     return [...(describeMessageTool?.({ cfg })?.capabilities ?? [])];
@@ -135,7 +135,7 @@ describe("channel action capability matrix", () => {
           appToken: "xapp-test",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const interactiveCfg = {
       channels: {
         slack: {
@@ -144,7 +144,7 @@ describe("channel action capability matrix", () => {
           capabilities: { interactiveReplies: true },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(getCapabilities(slackPlugin, baseCfg)).toEqual(["presentation"]);
     expect(getCapabilities(slackPlugin, interactiveCfg)).toEqual(["presentation"]);
@@ -155,7 +155,7 @@ describe("channel action capability matrix", () => {
       capabilities: ["presentation"],
     });
 
-    const result = getCapabilities(telegramPlugin, {} as NexisClawConfig);
+    const result = getCapabilities(telegramPlugin, {} as GreenchClawConfig);
 
     expect(result).toEqual(["presentation"]);
     expect(telegramDescribeMessageToolMock).toHaveBeenCalledWith({ cfg: {} });
@@ -163,7 +163,7 @@ describe("channel action capability matrix", () => {
       capabilities: ["presentation"],
     });
 
-    const discordResult = getCapabilities(discordPlugin, {} as NexisClawConfig);
+    const discordResult = getCapabilities(discordPlugin, {} as GreenchClawConfig);
 
     expect(discordResult).toEqual(["presentation"]);
     expect(discordDescribeMessageToolMock).toHaveBeenCalledWith({ cfg: {} });
@@ -178,14 +178,14 @@ describe("channel action capability matrix", () => {
           baseUrl: "https://chat.example.com",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const unconfiguredCfg = {
       channels: {
         mattermost: {
           enabled: true,
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const configuredFeishuCfg = {
       channels: {
         feishu: {
@@ -194,7 +194,7 @@ describe("channel action capability matrix", () => {
           appSecret: "secret",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const disabledFeishuCfg = {
       channels: {
         feishu: {
@@ -203,7 +203,7 @@ describe("channel action capability matrix", () => {
           appSecret: "secret",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const configuredMsteamsCfg = {
       channels: {
         msteams: {
@@ -213,7 +213,7 @@ describe("channel action capability matrix", () => {
           appPassword: "secret",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const disabledMsteamsCfg = {
       channels: {
         msteams: {
@@ -223,7 +223,7 @@ describe("channel action capability matrix", () => {
           appPassword: "secret",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(getCapabilities(mattermostPlugin, configuredCfg)).toEqual(["presentation"]);
     expect(getCapabilities(mattermostPlugin, unconfiguredCfg)).toStrictEqual([]);
@@ -241,7 +241,7 @@ describe("channel action capability matrix", () => {
           botToken: "zl-token",
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(getCapabilities(zaloPlugin, cfg)).toStrictEqual([]);
   });

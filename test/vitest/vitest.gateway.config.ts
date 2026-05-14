@@ -25,6 +25,6 @@ export function createGatewayProjectShardVitestConfig() {
   return createProjectShardVitestConfig(gatewayProjectConfigs);
 }
 
-export default process.env.NEXISCLAW_GATEWAY_PROJECT_SHARDS === "1"
+export default process.env.GREENCHCLAW_GATEWAY_PROJECT_SHARDS === "1"
   ? createGatewayProjectShardVitestConfig()
   : createGatewayVitestConfig();

@@ -1,19 +1,19 @@
 ---
 summary: "Google Meet plugin: join explicit Meet URLs through Chrome or Twilio with agent talk-back defaults"
 read_when:
-  - You want an NexisClaw agent to join a Google Meet call
-  - You want an NexisClaw agent to create a new Google Meet call
+  - You want an GreenchClaw agent to join a Google Meet call
+  - You want an GreenchClaw agent to create a new Google Meet call
   - You are configuring Chrome, Chrome node, or Twilio as a Google Meet transport
 title: "Google Meet plugin"
 ---
 
-Google Meet participant support for NexisClaw — the plugin is explicit by design:
+Google Meet participant support for GreenchClaw — the plugin is explicit by design:
 
 - It only joins an explicit `https://meet.google.com/...` URL.
 - It can create a new Meet space through the Google Meet API, then join the
   returned URL.
 - `agent` is the default talk-back mode: realtime transcription listens, the
-  configured NexisClaw agent answers, and regular NexisClaw TTS speaks into Meet.
+  configured GreenchClaw agent answers, and regular GreenchClaw TTS speaks into Meet.
 - `bidi` remains available as the fallback direct realtime voice model mode.
 - Agents choose the join behavior with `mode`: use `agent` for live
   listen/talk-back, `bidi` for direct realtime voice fallback, or `transcribe`
@@ -30,7 +30,7 @@ Google Meet participant support for NexisClaw — the plugin is explicit by desi
 ## Quick start
 
 Install the local audio dependencies and configure a realtime transcription
-provider plus regular NexisClaw TTS. OpenAI is the default transcription
+provider plus regular GreenchClaw TTS. OpenAI is the default transcription
 provider; Google Gemini Live also works as a separate `bidi` voice fallback with
 `realtime.voiceProvider: "google"`:
 
@@ -73,7 +73,7 @@ Enable the plugin:
 Check setup:
 
 ```bash
-NexisClaw googlemeet setup
+GreenchClaw googlemeet setup
 ```
 
 The setup output is meant to be agent-readable and mode-aware. It reports Chrome
@@ -83,13 +83,13 @@ transport with `--mode transcribe`; that mode skips realtime audio prerequisites
 because it does not listen through or speak through the bridge:
 
 ```bash
-NexisClaw googlemeet setup --transport chrome-node --mode transcribe
+GreenchClaw googlemeet setup --transport chrome-node --mode transcribe
 ```
 
 When Twilio delegation is configured, setup also reports whether the
 `voice-call` plugin, Twilio credentials, and public webhook exposure are ready.
 Treat any `ok: false` check as a blocker for the checked transport and mode
-before asking an agent to join. Use `NexisClaw googlemeet setup --json` for
+before asking an agent to join. Use `GreenchClaw googlemeet setup --json` for
 scripts or machine-readable output. Use `--transport chrome`,
 `--transport chrome-node`, or `--transport twilio` to preflight a specific
 transport before an agent tries it.
@@ -98,7 +98,7 @@ For Twilio, always preflight the transport explicitly when the default transport
 is Chrome:
 
 ```bash
-NexisClaw googlemeet setup --transport twilio
+GreenchClaw googlemeet setup --transport twilio
 ```
 
 That catches missing `voice-call` wiring, Twilio credentials, or unreachable
@@ -107,7 +107,7 @@ webhook exposure before the agent tries to dial the meeting.
 Join a meeting:
 
 ```bash
-NexisClaw googlemeet join https://meet.google.com/abc-defg-hij
+GreenchClaw googlemeet join https://meet.google.com/abc-defg-hij
 ```
 
 Or let an agent join through the `google_meet` tool:
@@ -131,7 +131,7 @@ participation.
 Create a new meeting and join it:
 
 ```bash
-NexisClaw googlemeet create --transport chrome-node --mode agent
+GreenchClaw googlemeet create --transport chrome-node --mode agent
 ```
 
 For API-created rooms, use Google Meet `SpaceConfig.accessType` when you want
@@ -139,7 +139,7 @@ the room's no-knock policy to be explicit instead of inherited from the Google
 account defaults:
 
 ```bash
-NexisClaw googlemeet create --access-type OPEN --transport chrome-node --mode agent
+GreenchClaw googlemeet create --access-type OPEN --transport chrome-node --mode agent
 ```
 
 `OPEN` lets anyone with the Meet URL join without knocking. `TRUSTED` lets the
@@ -149,23 +149,23 @@ settings only apply to the official Google Meet API creation path, so OAuth
 credentials must be configured.
 
 If you authenticated Google Meet before this option was available, rerun
-`NexisClaw googlemeet auth login --json` after adding the
+`GreenchClaw googlemeet auth login --json` after adding the
 `meetings.space.settings` scope to your Google OAuth consent screen.
 
 Create only the URL without joining:
 
 ```bash
-NexisClaw googlemeet create --no-join
+GreenchClaw googlemeet create --no-join
 ```
 
 `googlemeet create` has two paths:
 
 - API create: used when Google Meet OAuth credentials are configured. This is
   the most deterministic path and does not depend on browser UI state.
-- Browser fallback: used when OAuth credentials are absent. NexisClaw uses the
+- Browser fallback: used when OAuth credentials are absent. GreenchClaw uses the
   pinned Chrome node, opens `https://meet.google.com/new`, waits for Google to
   redirect to a real meeting-code URL, then returns that URL. This path requires
-  the NexisClaw Chrome profile on the node to already be signed in to Google.
+  the GreenchClaw Chrome profile on the node to already be signed in to Google.
   Browser automation handles Meet's own first-run microphone prompt; that prompt
   is not treated as a Google login failure.
   Join and create flows also try to reuse an existing Meet tab before opening a
@@ -193,7 +193,7 @@ and send me the link." The agent should call `google_meet` with
 For an observe-only/browser-control join, set `"mode": "transcribe"`. That does
 not start the duplex realtime voice bridge, does not require BlackHole or SoX,
 and will not talk back into the meeting. Chrome joins in this mode also avoid
-NexisClaw's microphone/camera permission grant and avoid the Meet **Use
+GreenchClaw's microphone/camera permission grant and avoid the Meet **Use
 microphone** path. If Meet shows an audio-choice interstitial, automation tries
 the no-microphone path and otherwise reports a manual action instead of opening
 the local microphone. In transcribe mode, managed Chrome transports also install
@@ -202,7 +202,7 @@ a best-effort Meet caption observer. `googlemeet status --json` and
 `transcriptLines`, `lastCaptionAt`, `lastCaptionSpeaker`, `lastCaptionText`,
 and a short `recentTranscript` tail so operators can tell whether the browser
 joined the call and whether Meet captions are producing text.
-Use `NexisClaw googlemeet test-listen <meet-url> --transport chrome-node` when
+Use `GreenchClaw googlemeet test-listen <meet-url> --transport chrome-node` when
 you need a yes/no probe: it joins in transcribe mode, waits for fresh caption or
 transcript movement, and returns `listenVerified`, `listenTimedOut`, manual
 action fields, and the latest caption health.
@@ -218,23 +218,23 @@ test phrase after browser health reports `inCall: true`; otherwise status report
 `speechReady: false` and the speech attempt is blocked instead of pretending the
 agent spoke into the meeting.
 
-Local Chrome joins through the signed-in NexisClaw browser profile. Realtime mode
-requires `BlackHole 2ch` for the microphone/speaker path used by NexisClaw. For
+Local Chrome joins through the signed-in GreenchClaw browser profile. Realtime mode
+requires `BlackHole 2ch` for the microphone/speaker path used by GreenchClaw. For
 clean duplex audio, use separate virtual devices or a Loopback-style graph; a
 single BlackHole device is enough for a first smoke test but can echo.
 
 ### Local gateway + Parallels Chrome
 
-You do **not** need a full NexisClaw Gateway or model API key inside a macOS VM
+You do **not** need a full GreenchClaw Gateway or model API key inside a macOS VM
 just to make the VM own Chrome. Run the Gateway and agent locally, then run a
 node host in the VM. Enable the bundled plugin on the VM once so the node
 advertises the Chrome command:
 
 What runs where:
 
-- Gateway host: NexisClaw Gateway, agent workspace, model/API keys, realtime
+- Gateway host: GreenchClaw Gateway, agent workspace, model/API keys, realtime
   provider, and the Google Meet plugin config.
-- Parallels macOS VM: NexisClaw CLI/node host, Google Chrome, SoX, BlackHole 2ch,
+- Parallels macOS VM: GreenchClaw CLI/node host, Google Chrome, SoX, BlackHole 2ch,
   and a Chrome profile signed in to Google.
 - Not needed in the VM: Gateway service, agent config, OpenAI/GPT key, or model
   provider setup.
@@ -258,50 +258,50 @@ system_profiler SPAudioDataType | grep -i BlackHole
 command -v sox
 ```
 
-Install or update NexisClaw in the VM, then enable the bundled plugin there:
+Install or update GreenchClaw in the VM, then enable the bundled plugin there:
 
 ```bash
-NexisClaw plugins enable google-meet
+GreenchClaw plugins enable google-meet
 ```
 
 Start the node host in the VM:
 
 ```bash
-NexisClaw node run --host <gateway-host> --port 18789 --display-name parallels-macos
+GreenchClaw node run --host <gateway-host> --port 18789 --display-name parallels-macos
 ```
 
 If `<gateway-host>` is a LAN IP and you are not using TLS, the node refuses the
 plaintext WebSocket unless you opt in for that trusted private network:
 
 ```bash
-NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1 \
-  NexisClaw node run --host <gateway-lan-ip> --port 18789 --display-name parallels-macos
+GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1 \
+  GreenchClaw node run --host <gateway-lan-ip> --port 18789 --display-name parallels-macos
 ```
 
 Use the same environment variable when installing the node as a LaunchAgent:
 
 ```bash
-NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1 \
-  NexisClaw node install --host <gateway-lan-ip> --port 18789 --display-name parallels-macos --force
-NexisClaw node restart
+GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1 \
+  GreenchClaw node install --host <gateway-lan-ip> --port 18789 --display-name parallels-macos --force
+GreenchClaw node restart
 ```
 
-`NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1` is process environment, not an
-`NexisClaw.json` setting. `NexisClaw node install` stores it in the LaunchAgent
+`GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1` is process environment, not an
+`GreenchClaw.json` setting. `GreenchClaw node install` stores it in the LaunchAgent
 environment when it is present on the install command.
 
 Approve the node from the Gateway host:
 
 ```bash
-NexisClaw devices list
-NexisClaw devices approve <requestId>
+GreenchClaw devices list
+GreenchClaw devices approve <requestId>
 ```
 
 Confirm the Gateway sees the node and that it advertises both `googlemeet.chrome`
 and browser capability/`browser.proxy`:
 
 ```bash
-NexisClaw nodes status
+GreenchClaw nodes status
 ```
 
 Route Meet through that node on the Gateway host:
@@ -320,7 +320,7 @@ Route Meet through that node on the Gateway host:
         config: {
           defaultTransport: "chrome-node",
           chrome: {
-            guestName: "NexisClaw Agent",
+            guestName: "GreenchClaw Agent",
             autoJoin: true,
             reuseExistingTab: true,
           },
@@ -337,7 +337,7 @@ Route Meet through that node on the Gateway host:
 Now join normally from the Gateway host:
 
 ```bash
-NexisClaw googlemeet join https://meet.google.com/abc-defg-hij
+GreenchClaw googlemeet join https://meet.google.com/abc-defg-hij
 ```
 
 or ask the agent to use the `google_meet` tool with `transport: "chrome-node"`.
@@ -346,10 +346,10 @@ For a one-command smoke test that creates or reuses a session, speaks a known
 phrase, and prints session health:
 
 ```bash
-NexisClaw googlemeet test-speech https://meet.google.com/abc-defg-hij
+GreenchClaw googlemeet test-speech https://meet.google.com/abc-defg-hij
 ```
 
-During realtime join, NexisClaw browser automation fills the guest name, clicks
+During realtime join, GreenchClaw browser automation fills the guest name, clicks
 Join/Ask to join, and accepts Meet's first-run "Use microphone" choice when that
 prompt appears. During observe-only join or browser-only meeting creation, it
 continues past the same prompt without microphone when that choice is available.
@@ -361,7 +361,7 @@ on a prompt automation could not resolve, the join/test-speech result reports
 message plus the current `browserUrl`/`browserTitle`, and retry only after the
 manual browser action is complete.
 
-If `chromeNode.node` is omitted, NexisClaw auto-selects only when exactly one
+If `chromeNode.node` is omitted, GreenchClaw auto-selects only when exactly one
 connected node advertises both `googlemeet.chrome` and browser control. If
 several capable nodes are connected, set `chromeNode.node` to the node id,
 display name, or remote IP.
@@ -372,9 +372,9 @@ Common failure checks:
   known to the Gateway but unavailable. Agents should treat that node as
   diagnostic state, not as a usable Chrome host, and report the setup blocker
   instead of falling back to another transport unless the user asked for that.
-- `No connected Google Meet-capable node`: start `NexisClaw node run` in the VM,
-  approve pairing, and make sure `NexisClaw plugins enable google-meet` and
-  `NexisClaw plugins enable browser` were run in the VM. Also confirm the
+- `No connected Google Meet-capable node`: start `GreenchClaw node run` in the VM,
+  approve pairing, and make sure `GreenchClaw plugins enable google-meet` and
+  `GreenchClaw plugins enable browser` were run in the VM. Also confirm the
   Gateway host allows both node commands with
   `gateway.nodes.allowCommands: ["googlemeet.chrome", "browser.proxy"]`.
 - `BlackHole 2ch audio device not found`: install `blackhole-2ch` on the host
@@ -382,16 +382,16 @@ Common failure checks:
 - `BlackHole 2ch audio device not found on the node`: install `blackhole-2ch`
   in the VM and reboot the VM.
 - Chrome opens but cannot join: sign in to the browser profile inside the VM, or
-  keep `chrome.guestName` set for guest join. Guest auto-join uses NexisClaw
+  keep `chrome.guestName` set for guest join. Guest auto-join uses GreenchClaw
   browser automation through the node browser proxy; make sure the node browser
   config points at the profile you want, for example
   `browser.defaultProfile: "user"` or a named existing-session profile.
-- Duplicate Meet tabs: leave `chrome.reuseExistingTab: true` enabled. NexisClaw
+- Duplicate Meet tabs: leave `chrome.reuseExistingTab: true` enabled. GreenchClaw
   activates an existing tab for the same Meet URL before opening a new one, and
   browser meeting creation reuses an in-progress `https://meet.google.com/new`
   or Google account prompt tab before opening another one.
 - No audio: in Meet, route microphone/speaker through the virtual audio device
-  path used by NexisClaw; use separate virtual devices or Loopback-style routing
+  path used by GreenchClaw; use separate virtual devices or Loopback-style routing
   for clean duplex audio.
 
 ## Install notes
@@ -403,18 +403,18 @@ The Chrome talk-back default uses two external tools:
 - `blackhole-2ch`: macOS virtual audio driver. It creates the `BlackHole 2ch`
   audio device that Chrome/Meet can route through.
 
-NexisClaw does not bundle or redistribute either package. The docs ask users to
+GreenchClaw does not bundle or redistribute either package. The docs ask users to
 install them as host dependencies through Homebrew. SoX is licensed as
 `LGPL-2.0-only AND GPL-2.0-only`; BlackHole is GPL-3.0. If you build an
-installer or appliance that bundles BlackHole with NexisClaw, review BlackHole's
+installer or appliance that bundles BlackHole with GreenchClaw, review BlackHole's
 upstream licensing terms or get a separate license from Existential Audio.
 
 ## Transports
 
 ### Chrome
 
-Chrome transport opens the Meet URL through NexisClaw browser control and joins
-as the signed-in NexisClaw browser profile. On macOS, the plugin checks for
+Chrome transport opens the Meet URL through GreenchClaw browser control and joins
+as the signed-in GreenchClaw browser profile. On macOS, the plugin checks for
 `BlackHole 2ch` before launch. If configured, it also runs an audio bridge
 health command and startup command before opening Chrome. Use `chrome` when
 Chrome/audio live on the Gateway host; use `chrome-node` when Chrome/audio live
@@ -423,11 +423,11 @@ profile with `browser.defaultProfile`; `chrome.browserProfile` is passed to
 `chrome-node` hosts.
 
 ```bash
-NexisClaw googlemeet join https://meet.google.com/abc-defg-hij --transport chrome
-NexisClaw googlemeet join https://meet.google.com/abc-defg-hij --transport chrome-node
+GreenchClaw googlemeet join https://meet.google.com/abc-defg-hij --transport chrome
+GreenchClaw googlemeet join https://meet.google.com/abc-defg-hij --transport chrome-node
 ```
 
-Route Chrome microphone and speaker audio through the local NexisClaw audio
+Route Chrome microphone and speaker audio through the local GreenchClaw audio
 bridge. If `BlackHole 2ch` is not installed, the join fails with a setup error
 instead of silently joining without an audio path.
 
@@ -438,7 +438,7 @@ does not parse Meet pages for phone numbers.
 
 Use this when Chrome participation is not available or you want a phone dial-in
 fallback. Google Meet must expose a phone dial-in number and PIN for the
-meeting; NexisClaw does not discover those from the Meet page.
+meeting; GreenchClaw does not discover those from the Meet page.
 
 Enable the Voice Call plugin on the Gateway host, not on the Chrome node:
 
@@ -462,7 +462,7 @@ Enable the Voice Call plugin on the Gateway host, not on the Chrome node:
           realtime: {
             enabled: true,
             provider: "google",
-            instructions: "Join this Google Meet as an NexisClaw agent. Be brief.",
+            instructions: "Join this Google Meet as an GreenchClaw agent. Be brief.",
             toolPolicy: "safe-read-only",
             providers: {
               google: {
@@ -482,7 +482,7 @@ Enable the Voice Call plugin on the Gateway host, not on the Chrome node:
 ```
 
 Provide Twilio credentials through environment or config. Environment keeps
-secrets out of `NexisClaw.json`:
+secrets out of `GreenchClaw.json`:
 
 ```bash
 export TWILIO_ACCOUNT_SID=AC...
@@ -500,9 +500,9 @@ do not appear in an already running Gateway process until it reloads.
 Then verify:
 
 ```bash
-NexisClaw config validate
-NexisClaw plugins list | grep -E 'google-meet|voice-call'
-NexisClaw googlemeet setup
+GreenchClaw config validate
+GreenchClaw plugins list | grep -E 'google-meet|voice-call'
+GreenchClaw googlemeet setup
 ```
 
 When Twilio delegation is wired, `googlemeet setup` includes successful
@@ -510,7 +510,7 @@ When Twilio delegation is wired, `googlemeet setup` includes successful
 `twilio-voice-call-webhook` checks.
 
 ```bash
-NexisClaw googlemeet join https://meet.google.com/abc-defg-hij \
+GreenchClaw googlemeet join https://meet.google.com/abc-defg-hij \
   --transport twilio \
   --dial-in-number +15551234567 \
   --pin 123456
@@ -519,7 +519,7 @@ NexisClaw googlemeet join https://meet.google.com/abc-defg-hij \
 Use `--dtmf-sequence` when the meeting needs a custom sequence:
 
 ```bash
-NexisClaw googlemeet join https://meet.google.com/abc-defg-hij \
+GreenchClaw googlemeet join https://meet.google.com/abc-defg-hij \
   --transport twilio \
   --dial-in-number +15551234567 \
   --dtmf-sequence ww123456#
@@ -534,7 +534,7 @@ space resolution, or Meet Media API preflight checks.
 Google Meet API access uses user OAuth: create a Google Cloud OAuth client,
 request the required scopes, authorize a Google account, then store the
 resulting refresh token in the Google Meet plugin config or provide the
-`NEXISCLAW_GOOGLE_MEET_*` environment variables.
+`GREENCHCLAW_GOOGLE_MEET_*` environment variables.
 
 OAuth does not replace the Chrome join path. Chrome and Chrome-node transports
 still join through a signed-in Chrome profile, BlackHole/SoX, and a connected
@@ -552,7 +552,7 @@ In Google Cloud Console:
    - **Internal** is simplest for a Google Workspace organization.
    - **External** works for personal/test setups; while the app is in Testing,
      add each Google account that will authorize the app as a test user.
-4. Add the scopes NexisClaw requests:
+4. Add the scopes GreenchClaw requests:
    - `https://www.googleapis.com/auth/meetings.space.created`
    - `https://www.googleapis.com/auth/meetings.space.readonly`
    - `https://www.googleapis.com/auth/meetings.space.settings`
@@ -568,8 +568,8 @@ In Google Cloud Console:
 6. Copy the client ID and client secret.
 
 `meetings.space.created` is required by Google Meet `spaces.create`.
-`meetings.space.readonly` lets NexisClaw resolve Meet URLs/codes to spaces.
-`meetings.space.settings` lets NexisClaw pass `SpaceConfig` settings such as
+`meetings.space.readonly` lets GreenchClaw resolve Meet URLs/codes to spaces.
+`meetings.space.settings` lets GreenchClaw pass `SpaceConfig` settings such as
 `accessType` during API room creation.
 `meetings.conference.media.readonly` is for Meet Media API preflight and media
 work; Google may require Developer Preview enrollment for actual Media API use.
@@ -581,7 +581,7 @@ Configure `oauth.clientId` and optionally `oauth.clientSecret`, or pass them as
 environment variables, then run:
 
 ```bash
-NexisClaw googlemeet auth login --json
+GreenchClaw googlemeet auth login --json
 ```
 
 The command prints an `oauth` config block with a refresh token. It uses PKCE,
@@ -591,17 +591,17 @@ copy/paste flow with `--manual`.
 Examples:
 
 ```bash
-NEXISCLAW_GOOGLE_MEET_CLIENT_ID="your-client-id" \
-NEXISCLAW_GOOGLE_MEET_CLIENT_SECRET="your-client-secret" \
-NexisClaw googlemeet auth login --json
+GREENCHCLAW_GOOGLE_MEET_CLIENT_ID="your-client-id" \
+GREENCHCLAW_GOOGLE_MEET_CLIENT_SECRET="your-client-secret" \
+GreenchClaw googlemeet auth login --json
 ```
 
 Use manual mode when the browser cannot reach the local callback:
 
 ```bash
-NEXISCLAW_GOOGLE_MEET_CLIENT_ID="your-client-id" \
-NEXISCLAW_GOOGLE_MEET_CLIENT_SECRET="your-client-secret" \
-NexisClaw googlemeet auth login --json --manual
+GREENCHCLAW_GOOGLE_MEET_CLIENT_ID="your-client-id" \
+GREENCHCLAW_GOOGLE_MEET_CLIENT_SECRET="your-client-secret" \
+GreenchClaw googlemeet auth login --json --manual
 ```
 
 The JSON output includes:
@@ -646,7 +646,7 @@ first and then environment fallback.
 
 The OAuth consent includes Meet space creation, Meet space read access, and Meet
 conference media read access. If you authenticated before meeting creation
-support existed, rerun `NexisClaw googlemeet auth login --json` so the refresh
+support existed, rerun `GreenchClaw googlemeet auth login --json` so the refresh
 token has the `meetings.space.created` scope.
 
 ### Verify OAuth with doctor
@@ -654,7 +654,7 @@ token has the `meetings.space.created` scope.
 Run the OAuth doctor when you want a fast, non-secret health check:
 
 ```bash
-NexisClaw googlemeet doctor --oauth --json
+GreenchClaw googlemeet doctor --oauth --json
 ```
 
 This does not load the Chrome runtime or require a connected Chrome node. It
@@ -676,8 +676,8 @@ To prove Google Meet API enablement and `spaces.create` scope as well, run the
 side-effecting create check:
 
 ```bash
-NexisClaw googlemeet doctor --oauth --create-space --json
-NexisClaw googlemeet create --no-join --json
+GreenchClaw googlemeet doctor --oauth --create-space --json
+GreenchClaw googlemeet create --no-join --json
 ```
 
 `--create-space` creates a throwaway Meet URL. Use it when you need to confirm
@@ -687,50 +687,50 @@ account has the `meetings.space.created` scope.
 To prove read access for an existing meeting space:
 
 ```bash
-NexisClaw googlemeet doctor --oauth --meeting https://meet.google.com/abc-defg-hij --json
-NexisClaw googlemeet resolve-space --meeting https://meet.google.com/abc-defg-hij
+GreenchClaw googlemeet doctor --oauth --meeting https://meet.google.com/abc-defg-hij --json
+GreenchClaw googlemeet resolve-space --meeting https://meet.google.com/abc-defg-hij
 ```
 
 `doctor --oauth --meeting` and `resolve-space` prove read access to an existing
 space that the authorized Google account can access. A `403` from these checks
 usually means the Google Meet REST API is disabled, the consented refresh token
 is missing the required scope, or the Google account cannot access that Meet
-space. A refresh-token error means rerun `NexisClaw googlemeet auth login
+space. A refresh-token error means rerun `GreenchClaw googlemeet auth login
 --json` and store the new `oauth` block.
 
 No OAuth credentials are needed for the browser fallback. In that mode, Google
 auth comes from the signed-in Chrome profile on the selected node, not from
-NexisClaw config.
+GreenchClaw config.
 
 These environment variables are accepted as fallbacks:
 
-- `NEXISCLAW_GOOGLE_MEET_CLIENT_ID` or `GOOGLE_MEET_CLIENT_ID`
-- `NEXISCLAW_GOOGLE_MEET_CLIENT_SECRET` or `GOOGLE_MEET_CLIENT_SECRET`
-- `NEXISCLAW_GOOGLE_MEET_REFRESH_TOKEN` or `GOOGLE_MEET_REFRESH_TOKEN`
-- `NEXISCLAW_GOOGLE_MEET_ACCESS_TOKEN` or `GOOGLE_MEET_ACCESS_TOKEN`
-- `NEXISCLAW_GOOGLE_MEET_ACCESS_TOKEN_EXPIRES_AT` or
+- `GREENCHCLAW_GOOGLE_MEET_CLIENT_ID` or `GOOGLE_MEET_CLIENT_ID`
+- `GREENCHCLAW_GOOGLE_MEET_CLIENT_SECRET` or `GOOGLE_MEET_CLIENT_SECRET`
+- `GREENCHCLAW_GOOGLE_MEET_REFRESH_TOKEN` or `GOOGLE_MEET_REFRESH_TOKEN`
+- `GREENCHCLAW_GOOGLE_MEET_ACCESS_TOKEN` or `GOOGLE_MEET_ACCESS_TOKEN`
+- `GREENCHCLAW_GOOGLE_MEET_ACCESS_TOKEN_EXPIRES_AT` or
   `GOOGLE_MEET_ACCESS_TOKEN_EXPIRES_AT`
-- `NEXISCLAW_GOOGLE_MEET_DEFAULT_MEETING` or `GOOGLE_MEET_DEFAULT_MEETING`
-- `NEXISCLAW_GOOGLE_MEET_PREVIEW_ACK` or `GOOGLE_MEET_PREVIEW_ACK`
+- `GREENCHCLAW_GOOGLE_MEET_DEFAULT_MEETING` or `GOOGLE_MEET_DEFAULT_MEETING`
+- `GREENCHCLAW_GOOGLE_MEET_PREVIEW_ACK` or `GOOGLE_MEET_PREVIEW_ACK`
 
 Resolve a Meet URL, code, or `spaces/{id}` through `spaces.get`:
 
 ```bash
-NexisClaw googlemeet resolve-space --meeting https://meet.google.com/abc-defg-hij
+GreenchClaw googlemeet resolve-space --meeting https://meet.google.com/abc-defg-hij
 ```
 
 Run preflight before media work:
 
 ```bash
-NexisClaw googlemeet preflight --meeting https://meet.google.com/abc-defg-hij
+GreenchClaw googlemeet preflight --meeting https://meet.google.com/abc-defg-hij
 ```
 
 List meeting artifacts and attendance after Meet has created conference records:
 
 ```bash
-NexisClaw googlemeet artifacts --meeting https://meet.google.com/abc-defg-hij
-NexisClaw googlemeet attendance --meeting https://meet.google.com/abc-defg-hij
-NexisClaw googlemeet export --meeting https://meet.google.com/abc-defg-hij --output ./meet-export
+GreenchClaw googlemeet artifacts --meeting https://meet.google.com/abc-defg-hij
+GreenchClaw googlemeet attendance --meeting https://meet.google.com/abc-defg-hij
+GreenchClaw googlemeet export --meeting https://meet.google.com/abc-defg-hij --output ./meet-export
 ```
 
 With `--meeting`, `artifacts` and `attendance` use the latest conference record
@@ -741,10 +741,10 @@ Calendar lookup can resolve the meeting URL from Google Calendar before reading
 Meet artifacts:
 
 ```bash
-NexisClaw googlemeet latest --today
-NexisClaw googlemeet calendar-events --today --json
-NexisClaw googlemeet artifacts --event "Weekly sync"
-NexisClaw googlemeet attendance --today --format csv --output attendance.csv
+GreenchClaw googlemeet latest --today
+GreenchClaw googlemeet calendar-events --today --json
+GreenchClaw googlemeet artifacts --event "Weekly sync"
+GreenchClaw googlemeet attendance --today --format csv --output attendance.csv
 ```
 
 `--today` searches today's `primary` calendar for a Calendar event with a
@@ -757,38 +757,38 @@ OAuth login that includes the Calendar events readonly scope.
 If you already know the conference record id, address it directly:
 
 ```bash
-NexisClaw googlemeet latest --meeting https://meet.google.com/abc-defg-hij
-NexisClaw googlemeet artifacts --conference-record conferenceRecords/abc123 --json
-NexisClaw googlemeet attendance --conference-record conferenceRecords/abc123 --json
+GreenchClaw googlemeet latest --meeting https://meet.google.com/abc-defg-hij
+GreenchClaw googlemeet artifacts --conference-record conferenceRecords/abc123 --json
+GreenchClaw googlemeet attendance --conference-record conferenceRecords/abc123 --json
 ```
 
 End an active conference for an API-created space when you want to close the
 room after the call:
 
 ```bash
-NexisClaw googlemeet end-active-conference https://meet.google.com/abc-defg-hij
+GreenchClaw googlemeet end-active-conference https://meet.google.com/abc-defg-hij
 ```
 
 This calls Google Meet `spaces.endActiveConference` and requires OAuth with the
 `meetings.space.created` scope for a space the authorized account can manage.
-NexisClaw accepts a Meet URL, meeting code, or `spaces/{id}` input and resolves it
+GreenchClaw accepts a Meet URL, meeting code, or `spaces/{id}` input and resolves it
 to the API space resource before ending the active conference.
-It is separate from `googlemeet leave`: `leave` stops NexisClaw's local/session
+It is separate from `googlemeet leave`: `leave` stops GreenchClaw's local/session
 participation, while `end-active-conference` asks Google Meet to end the active
 conference for the space.
 
 Write a readable report:
 
 ```bash
-NexisClaw googlemeet artifacts --conference-record conferenceRecords/abc123 \
+GreenchClaw googlemeet artifacts --conference-record conferenceRecords/abc123 \
   --format markdown --output meet-artifacts.md
-NexisClaw googlemeet attendance --conference-record conferenceRecords/abc123 \
+GreenchClaw googlemeet attendance --conference-record conferenceRecords/abc123 \
   --format markdown --output meet-attendance.md
-NexisClaw googlemeet attendance --conference-record conferenceRecords/abc123 \
+GreenchClaw googlemeet attendance --conference-record conferenceRecords/abc123 \
   --format csv --output meet-attendance.csv
-NexisClaw googlemeet export --conference-record conferenceRecords/abc123 \
+GreenchClaw googlemeet export --conference-record conferenceRecords/abc123 \
   --include-doc-bodies --zip --output meet-export
-NexisClaw googlemeet export --conference-record conferenceRecords/abc123 \
+GreenchClaw googlemeet export --conference-record conferenceRecords/abc123 \
   --include-doc-bodies --dry-run
 ```
 
@@ -868,8 +868,8 @@ meeting is useful:
 Run the guarded live smoke against a real retained meeting:
 
 ```bash
-NEXISCLAW_LIVE_TEST=1 \
-NEXISCLAW_GOOGLE_MEET_LIVE_MEETING=https://meet.google.com/abc-defg-hij \
+GREENCHCLAW_LIVE_TEST=1 \
+GREENCHCLAW_GOOGLE_MEET_LIVE_MEETING=https://meet.google.com/abc-defg-hij \
 pnpm test:live -- extensions/google-meet/google-meet.live.test.ts
 ```
 
@@ -877,23 +877,23 @@ Run the live listen-first browser probe against a meeting where someone will
 speak with Meet captions available:
 
 ```bash
-NexisClaw googlemeet setup --transport chrome-node --mode transcribe
-NexisClaw googlemeet test-listen https://meet.google.com/abc-defg-hij --transport chrome-node --timeout-ms 30000
+GreenchClaw googlemeet setup --transport chrome-node --mode transcribe
+GreenchClaw googlemeet test-listen https://meet.google.com/abc-defg-hij --transport chrome-node --timeout-ms 30000
 ```
 
 Live smoke environment:
 
-- `NEXISCLAW_LIVE_TEST=1` enables guarded live tests.
-- `NEXISCLAW_GOOGLE_MEET_LIVE_MEETING` points at a retained Meet URL, code, or
+- `GREENCHCLAW_LIVE_TEST=1` enables guarded live tests.
+- `GREENCHCLAW_GOOGLE_MEET_LIVE_MEETING` points at a retained Meet URL, code, or
   `spaces/{id}`.
-- `NEXISCLAW_GOOGLE_MEET_CLIENT_ID` or `GOOGLE_MEET_CLIENT_ID` provides the OAuth
+- `GREENCHCLAW_GOOGLE_MEET_CLIENT_ID` or `GOOGLE_MEET_CLIENT_ID` provides the OAuth
   client id.
-- `NEXISCLAW_GOOGLE_MEET_REFRESH_TOKEN` or `GOOGLE_MEET_REFRESH_TOKEN` provides
+- `GREENCHCLAW_GOOGLE_MEET_REFRESH_TOKEN` or `GOOGLE_MEET_REFRESH_TOKEN` provides
   the refresh token.
-- Optional: `NEXISCLAW_GOOGLE_MEET_CLIENT_SECRET`,
-  `NEXISCLAW_GOOGLE_MEET_ACCESS_TOKEN`, and
-  `NEXISCLAW_GOOGLE_MEET_ACCESS_TOKEN_EXPIRES_AT` use the same fallback names
-  without the `NEXISCLAW_` prefix.
+- Optional: `GREENCHCLAW_GOOGLE_MEET_CLIENT_SECRET`,
+  `GREENCHCLAW_GOOGLE_MEET_ACCESS_TOKEN`, and
+  `GREENCHCLAW_GOOGLE_MEET_ACCESS_TOKEN_EXPIRES_AT` use the same fallback names
+  without the `GREENCHCLAW_` prefix.
 
 The base artifact/attendance live smoke needs
 `https://www.googleapis.com/auth/meetings.space.readonly` and
@@ -905,7 +905,7 @@ document-body export needs
 Create a fresh Meet space:
 
 ```bash
-NexisClaw googlemeet create
+GreenchClaw googlemeet create
 ```
 
 The command prints the new `meeting uri`, source, and join session. With OAuth
@@ -941,10 +941,10 @@ can create the URL, the Gateway method returns a failed response and the
 ```json
 {
   "source": "browser",
-  "error": "google-login-required: Sign in to Google in the NexisClaw browser profile, then retry meeting creation.",
+  "error": "google-login-required: Sign in to Google in the GreenchClaw browser profile, then retry meeting creation.",
   "manualActionRequired": true,
   "manualActionReason": "google-login-required",
-  "manualActionMessage": "Sign in to Google in the NexisClaw browser profile, then retry meeting creation.",
+  "manualActionMessage": "Sign in to Google in the GreenchClaw browser profile, then retry meeting creation.",
   "browser": {
     "nodeId": "ba0f4e4bc...",
     "targetId": "tab-1",
@@ -981,7 +981,7 @@ Example JSON output from API create:
 
 Creating a Meet joins by default. The Chrome or Chrome-node transport still
 needs a signed-in Google Chrome profile to join through the browser. If the
-profile is signed out, NexisClaw reports `manualActionRequired: true` or a
+profile is signed out, GreenchClaw reports `manualActionRequired: true` or a
 browser fallback error and asks the operator to finish Google login before
 retrying.
 
@@ -992,7 +992,7 @@ Workspace Developer Preview Program for Meet media APIs.
 ## Config
 
 The common Chrome agent path only needs the plugin enabled, BlackHole, SoX, a
-realtime transcription provider key, and a configured NexisClaw TTS provider.
+realtime transcription provider key, and a configured GreenchClaw TTS provider.
 OpenAI is the default transcription provider; set `realtime.voiceProvider` to
 `"google"` and `realtime.model` to use Google Gemini Live for `bidi` mode
 without changing the default agent-mode transcription provider:
@@ -1026,10 +1026,10 @@ Defaults:
   compatibility alias for `"agent"`; new tool calls should say `"agent"`)
 - `chromeNode.node`: optional node id/name/IP for `chrome-node`
 - `chrome.audioBackend: "blackhole-2ch"`
-- `chrome.guestName: "NexisClaw Agent"`: name used on the signed-out Meet guest
+- `chrome.guestName: "GreenchClaw Agent"`: name used on the signed-out Meet guest
   screen
 - `chrome.autoJoin: true`: best-effort guest-name fill and Join Now click
-  through NexisClaw browser automation on `chrome-node`
+  through GreenchClaw browser automation on `chrome-node`
 - `chrome.reuseExistingTab: true`: activate an existing Meet tab instead of
   opening duplicates
 - `chrome.waitForInCallMs: 20000`: wait for the Meet tab to report in-call
@@ -1057,11 +1057,11 @@ Defaults:
   interruption clears
 - `mode: "agent"`: default talk-back mode. Participant speech is transcribed by
   the configured realtime transcription provider, sent to the configured
-  NexisClaw agent in a per-meeting sub-agent session, and spoken back through the
-  normal NexisClaw TTS runtime.
+  GreenchClaw agent in a per-meeting sub-agent session, and spoken back through the
+  normal GreenchClaw TTS runtime.
 - `mode: "bidi"`: fallback direct bidirectional realtime model mode. The
   realtime voice provider answers participant speech directly and may call
-  `NexisClaw_agent_consult` for deeper/tool-backed answers.
+  `GreenchClaw_agent_consult` for deeper/tool-backed answers.
 - `mode: "transcribe"`: observe-only mode without the talk-back bridge.
 - `realtime.provider: "openai"`: compatibility fallback used when the scoped
   provider fields below are unset.
@@ -1072,11 +1072,11 @@ Defaults:
   transcription on OpenAI.
 - `realtime.toolPolicy: "safe-read-only"`
 - `realtime.instructions`: brief spoken replies, with
-  `NexisClaw_agent_consult` for deeper answers
+  `GreenchClaw_agent_consult` for deeper answers
 - `realtime.introMessage`: short spoken readiness check when the realtime bridge
   connects; set it to `""` to join silently
-- `realtime.agentId`: optional NexisClaw agent id for
-  `NexisClaw_agent_consult`; defaults to `main`
+- `realtime.agentId`: optional GreenchClaw agent id for
+  `GreenchClaw_agent_consult`; defaults to `main`
 
 Optional overrides:
 
@@ -1086,10 +1086,10 @@ Optional overrides:
     meeting: "https://meet.google.com/abc-defg-hij",
   },
   browser: {
-    defaultProfile: "NexisClaw",
+    defaultProfile: "GreenchClaw",
   },
   chrome: {
-    guestName: "NexisClaw Agent",
+    guestName: "GreenchClaw Agent",
     waitForInCallMs: 30000,
     bargeInInputCommand: [
       "sox",
@@ -1212,10 +1212,10 @@ Agents can use the `google_meet` tool:
 
 Use `transport: "chrome"` when Chrome runs on the Gateway host. Use
 `transport: "chrome-node"` when Chrome runs on a paired node such as a Parallels
-VM. In both cases the model providers and `NexisClaw_agent_consult` run on the
+VM. In both cases the model providers and `GreenchClaw_agent_consult` run on the
 Gateway host, so model credentials stay there. With the default `mode: "agent"`,
-the realtime transcription provider handles listening, the configured NexisClaw
-agent produces the answer, and regular NexisClaw TTS speaks it into Meet. Use
+the realtime transcription provider handles listening, the configured GreenchClaw
+agent produces the answer, and regular GreenchClaw TTS speaks it into Meet. Use
 `mode: "bidi"` when you want the realtime voice model to answer directly.
 Raw `mode: "realtime"` remains accepted as a legacy compatibility alias for
 `mode: "agent"`, but it is no longer advertised in the agent tool schema.
@@ -1242,7 +1242,7 @@ a session ended.
   browser profile needs manual login, Meet host admission, permissions, or
   browser-control repair before speech can work
 - `speechReady` / `speechBlockedReason` / `speechBlockedMessage`: whether
-  managed Chrome speech is allowed now. `speechReady: false` means NexisClaw did
+  managed Chrome speech is allowed now. `speechReady: false` means GreenchClaw did
   not send the intro/test phrase into the audio bridge.
 - `providerConnected` / `realtimeReady`: realtime voice bridge state
 - `lastInputAt` / `lastOutputAt`: last audio seen from or sent to the bridge
@@ -1263,8 +1263,8 @@ a session ended.
 
 Chrome `agent` mode is optimized for "my agent is in the meeting" behavior. The
 realtime transcription provider hears the meeting audio, final participant
-transcripts are routed through the configured NexisClaw agent, and the answer is
-spoken through the normal NexisClaw TTS runtime. Set `mode: "bidi"` when you want
+transcripts are routed through the configured GreenchClaw agent, and the answer is
+spoken through the normal GreenchClaw TTS runtime. Set `mode: "bidi"` when you want
 the realtime voice model to answer directly.
 Nearby final transcript fragments are coalesced before the consult so one spoken
 turn does not produce several stale partial answers. Realtime input is also
@@ -1272,22 +1272,22 @@ suppressed while queued assistant audio is still playing,
 and recent assistant-like transcript echoes are ignored before the agent consult
 so BlackHole loopback does not make the agent answer its own speech.
 
-| Mode    | Who decides the answer        | Speech output path                     | Use when                                              |
-| ------- | ----------------------------- | -------------------------------------- | ----------------------------------------------------- |
-| `agent` | The configured NexisClaw agent | Normal NexisClaw TTS runtime            | You want "my agent is in the meeting" behavior        |
-| `bidi`  | The realtime voice model      | Realtime voice provider audio response | You want the lowest-latency conversational voice loop |
+| Mode    | Who decides the answer           | Speech output path                     | Use when                                              |
+| ------- | -------------------------------- | -------------------------------------- | ----------------------------------------------------- |
+| `agent` | The configured GreenchClaw agent | Normal GreenchClaw TTS runtime         | You want "my agent is in the meeting" behavior        |
+| `bidi`  | The realtime voice model         | Realtime voice provider audio response | You want the lowest-latency conversational voice loop |
 
 In `bidi` mode, when the realtime model needs deeper reasoning, current
-information, or normal NexisClaw tools, it can call `NexisClaw_agent_consult`.
+information, or normal GreenchClaw tools, it can call `GreenchClaw_agent_consult`.
 
-The consult tool runs the regular NexisClaw agent behind the scenes with recent
+The consult tool runs the regular GreenchClaw agent behind the scenes with recent
 meeting transcript context and returns a concise spoken answer. In `agent` mode,
-NexisClaw sends that answer directly to the TTS runtime; in `bidi` mode, the
+GreenchClaw sends that answer directly to the TTS runtime; in `bidi` mode, the
 realtime voice model can speak the consult result back into the meeting. It uses
 the same shared consult machinery as Voice Call.
 
 By default, consults run against the `main` agent. Set `realtime.agentId` when a
-Meet lane should consult a dedicated NexisClaw agent workspace, model defaults,
+Meet lane should consult a dedicated GreenchClaw agent workspace, model defaults,
 tool policy, memory, and session history.
 
 Agent-mode consults use a per-meeting `agent:<id>:subagent:google-meet:<session>`
@@ -1309,13 +1309,13 @@ can reuse prior consult context during the same meeting.
 To force a spoken readiness check after Chrome has fully joined the call:
 
 ```bash
-NexisClaw googlemeet speak meet_... "Say exactly: I'm here and listening."
+GreenchClaw googlemeet speak meet_... "Say exactly: I'm here and listening."
 ```
 
 For the full join-and-speak smoke:
 
 ```bash
-NexisClaw googlemeet test-speech https://meet.google.com/abc-defg-hij \
+GreenchClaw googlemeet test-speech https://meet.google.com/abc-defg-hij \
   --transport chrome-node \
   --message "Say exactly: I'm here and listening."
 ```
@@ -1325,9 +1325,9 @@ NexisClaw googlemeet test-speech https://meet.google.com/abc-defg-hij \
 Use this sequence before handing a meeting to an unattended agent:
 
 ```bash
-NexisClaw googlemeet setup
-NexisClaw nodes status
-NexisClaw googlemeet test-speech https://meet.google.com/abc-defg-hij \
+GreenchClaw googlemeet setup
+GreenchClaw nodes status
+GreenchClaw googlemeet test-speech https://meet.google.com/abc-defg-hij \
   --transport chrome-node \
   --message "Say exactly: Google Meet speech test complete."
 ```
@@ -1346,9 +1346,9 @@ For a remote Chrome host such as a Parallels macOS VM, this is the shortest
 safe check after updating the Gateway or the VM:
 
 ```bash
-NexisClaw googlemeet setup
-NexisClaw nodes status --connected
-NexisClaw nodes invoke \
+GreenchClaw googlemeet setup
+GreenchClaw nodes status --connected
+GreenchClaw nodes invoke \
   --node parallels-macos \
   --command googlemeet.chrome \
   --params '{"action":"setup"}'
@@ -1361,8 +1361,8 @@ real meeting tab.
 For a Twilio smoke, use a meeting that exposes phone dial-in details:
 
 ```bash
-NexisClaw googlemeet setup
-NexisClaw googlemeet join https://meet.google.com/abc-defg-hij \
+GreenchClaw googlemeet setup
+GreenchClaw googlemeet join https://meet.google.com/abc-defg-hij \
   --transport twilio \
   --dial-in-number +15551234567 \
   --pin 123456
@@ -1374,7 +1374,7 @@ Expected Twilio state:
   `twilio-voice-call-credentials`, and `twilio-voice-call-webhook` checks.
 - `voicecall` is available in the CLI after Gateway reload.
 - The returned session has `transport: "twilio"` and a `twilio.voiceCallId`.
-- `NexisClaw logs --follow` shows DTMF TwiML served before realtime TwiML, then a
+- `GreenchClaw logs --follow` shows DTMF TwiML served before realtime TwiML, then a
   realtime bridge with the initial greeting queued.
 - `googlemeet leave <sessionId>` hangs up the delegated voice call.
 
@@ -1385,8 +1385,8 @@ Expected Twilio state:
 Confirm the plugin is enabled in the Gateway config and reload the Gateway:
 
 ```bash
-NexisClaw plugins list | grep google-meet
-NexisClaw googlemeet setup
+GreenchClaw plugins list | grep google-meet
+GreenchClaw googlemeet setup
 ```
 
 If you just edited `plugins.entries.google-meet`, restart or reload the Gateway.
@@ -1404,18 +1404,18 @@ Linux agents should use `mode: "transcribe"`, Twilio dial-in, or a macOS
 On the node host, run:
 
 ```bash
-NexisClaw plugins enable google-meet
-NexisClaw plugins enable browser
-NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1 \
-  NexisClaw node run --host <gateway-lan-ip> --port 18789 --display-name parallels-macos
+GreenchClaw plugins enable google-meet
+GreenchClaw plugins enable browser
+GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1 \
+  GreenchClaw node run --host <gateway-lan-ip> --port 18789 --display-name parallels-macos
 ```
 
 On the Gateway host, approve the node and verify commands:
 
 ```bash
-NexisClaw devices list
-NexisClaw devices approve <requestId>
-NexisClaw nodes status
+GreenchClaw devices list
+GreenchClaw devices approve <requestId>
+GreenchClaw nodes status
 ```
 
 The node must be connected and list `googlemeet.chrome` plus `browser.proxy`.
@@ -1436,8 +1436,8 @@ If `googlemeet setup` fails `chrome-node-connected` or the Gateway log reports
 token. For a LAN Gateway this usually means:
 
 ```bash
-NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1 \
-  NexisClaw node install \
+GREENCHCLAW_ALLOW_INSECURE_PRIVATE_WS=1 \
+  GreenchClaw node install \
   --host <gateway-lan-ip> \
   --port 18789 \
   --display-name parallels-macos \
@@ -1447,8 +1447,8 @@ NEXISCLAW_ALLOW_INSECURE_PRIVATE_WS=1 \
 Then reload the node service and re-run:
 
 ```bash
-NexisClaw googlemeet setup
-NexisClaw nodes status --connected
+GreenchClaw googlemeet setup
+GreenchClaw nodes status --connected
 ```
 
 ### Browser opens but agent cannot join
@@ -1467,9 +1467,9 @@ Common manual actions:
 - Close or repair a stuck Meet permission dialog.
 
 Do not report "not signed in" just because Meet shows "Do you want people to
-hear you in the meeting?" That is Meet's audio-choice interstitial; NexisClaw
+hear you in the meeting?" That is Meet's audio-choice interstitial; GreenchClaw
 clicks **Use microphone** through browser automation when available and keeps
-waiting for the real meeting state. For create-only browser fallback, NexisClaw
+waiting for the real meeting state. For create-only browser fallback, GreenchClaw
 may click **Continue without microphone** because creating the URL does not need
 the realtime audio path.
 
@@ -1480,14 +1480,14 @@ when OAuth credentials are configured. Without OAuth credentials it falls back
 to the pinned Chrome node browser. Confirm:
 
 - For API creation: `oauth.clientId` and `oauth.refreshToken` are configured,
-  or matching `NEXISCLAW_GOOGLE_MEET_*` environment variables are present.
+  or matching `GREENCHCLAW_GOOGLE_MEET_*` environment variables are present.
 - For API creation: the refresh token was minted after create support was
   added. Older tokens may be missing the `meetings.space.created` scope; rerun
-  `NexisClaw googlemeet auth login --json` and update plugin config.
+  `GreenchClaw googlemeet auth login --json` and update plugin config.
 - For browser fallback: `defaultTransport: "chrome-node"` and
   `chromeNode.node` point at a connected node with `browser.proxy` and
   `googlemeet.chrome`.
-- For browser fallback: the NexisClaw Chrome profile on that node is signed in
+- For browser fallback: the GreenchClaw Chrome profile on that node is signed in
   to Google and can open `https://meet.google.com/new`.
 - For browser fallback: retries reuse an existing `https://meet.google.com/new`
   or Google account prompt tab before opening a new tab. If an agent times out,
@@ -1497,7 +1497,7 @@ to the pinned Chrome node browser. Confirm:
   `manualActionMessage` to guide the operator. Do not retry in a loop until that
   action is complete.
 - For browser fallback: if Meet shows "Do you want people to hear you in the
-  meeting?", leave the tab open. NexisClaw should click **Use microphone** or, for
+  meeting?", leave the tab open. GreenchClaw should click **Use microphone** or, for
   create-only fallback, **Continue without microphone** through browser
   automation and continue waiting for the generated Meet URL. If it cannot, the
   error should mention `meet-audio-choice-required`, not `google-login-required`.
@@ -1507,14 +1507,14 @@ to the pinned Chrome node browser. Confirm:
 Check the realtime path:
 
 ```bash
-NexisClaw googlemeet setup
-NexisClaw googlemeet doctor
+GreenchClaw googlemeet setup
+GreenchClaw googlemeet doctor
 ```
 
-Use `mode: "agent"` for the normal STT -> NexisClaw agent -> TTS talk-back path,
+Use `mode: "agent"` for the normal STT -> GreenchClaw agent -> TTS talk-back path,
 or `mode: "bidi"` for the direct realtime voice fallback. `mode: "transcribe"`
 intentionally does not start the talk-back bridge. For observe-only debugging,
-run `NexisClaw googlemeet status --json <session-id>` after participants speak
+run `GreenchClaw googlemeet status --json <session-id>` after participants speak
 and check `captioning`, `transcriptLines`, and `lastCaptionText`. If `inCall` is
 true but `transcriptLines` stays at `0`, Meet captions may be disabled, no one
 has spoken since the observer was installed, the Meet UI changed, or live
@@ -1523,7 +1523,7 @@ captions are unavailable for the meeting language/account.
 `googlemeet test-speech` always checks the realtime path and reports whether
 bridge output bytes were observed for that invocation. If `speechOutputVerified` is false and
 `speechOutputTimedOut` is true, the realtime provider may have accepted the
-utterance but NexisClaw did not see new output bytes reach the Chrome audio
+utterance but GreenchClaw did not see new output bytes reach the Chrome audio
 bridge.
 
 Also verify:
@@ -1533,7 +1533,7 @@ Also verify:
 - `BlackHole 2ch` is visible on the Chrome host.
 - `sox` exists on the Chrome host.
 - Meet microphone and speaker are routed through the virtual audio path used by
-  NexisClaw. `doctor` should show `meet output routed: yes` for local Chrome
+  GreenchClaw. `doctor` should show `meet output routed: yes` for local Chrome
   realtime joins.
 
 `googlemeet doctor [session-id]` prints the session, node, in-call state,
@@ -1548,8 +1548,8 @@ If an agent timed out and you can see a Meet tab already open, inspect that tab
 without opening another one:
 
 ```bash
-NexisClaw googlemeet recover-tab
-NexisClaw googlemeet recover-tab https://meet.google.com/abc-defg-hij
+GreenchClaw googlemeet recover-tab
+GreenchClaw googlemeet recover-tab https://meet.google.com/abc-defg-hij
 ```
 
 The equivalent tool action is `recover_current_tab`. It focuses and inspects an
@@ -1625,22 +1625,22 @@ host URL:
 Then restart or reload the Gateway and run:
 
 ```bash
-NexisClaw googlemeet setup --transport twilio
-NexisClaw voicecall setup
-NexisClaw voicecall smoke
+GreenchClaw googlemeet setup --transport twilio
+GreenchClaw voicecall setup
+GreenchClaw voicecall smoke
 ```
 
 `voicecall smoke` is readiness-only by default. To dry-run a specific number:
 
 ```bash
-NexisClaw voicecall smoke --to "+15555550123"
+GreenchClaw voicecall smoke --to "+15555550123"
 ```
 
 Only add `--yes` when you intentionally want to place a live outbound notify
 call:
 
 ```bash
-NexisClaw voicecall smoke --to "+15555550123" --yes
+GreenchClaw voicecall smoke --to "+15555550123" --yes
 ```
 
 ### Twilio call starts but never enters the meeting
@@ -1649,7 +1649,7 @@ Confirm the Meet event exposes phone dial-in details. Pass the exact dial-in
 number and PIN or a custom DTMF sequence:
 
 ```bash
-NexisClaw googlemeet join https://meet.google.com/abc-defg-hij \
+GreenchClaw googlemeet join https://meet.google.com/abc-defg-hij \
   --transport twilio \
   --dial-in-number +15551234567 \
   --dtmf-sequence ww123456#
@@ -1661,17 +1661,17 @@ before entering the PIN.
 If the phone call is created but the Meet roster never shows the dial-in
 participant:
 
-- Run `NexisClaw googlemeet doctor <session-id>` to confirm the delegated Twilio
+- Run `GreenchClaw googlemeet doctor <session-id>` to confirm the delegated Twilio
   call ID, whether DTMF was queued, and whether the intro greeting was requested.
-- Run `NexisClaw voicecall status --call-id <id>` and confirm the call is still
+- Run `GreenchClaw voicecall status --call-id <id>` and confirm the call is still
   active.
-- Run `NexisClaw voicecall tail` and check that Twilio webhooks are arriving at
+- Run `GreenchClaw voicecall tail` and check that Twilio webhooks are arriving at
   the Gateway.
-- Run `NexisClaw logs --follow` and look for the Twilio Meet sequence: Google
+- Run `GreenchClaw logs --follow` and look for the Twilio Meet sequence: Google
   Meet delegates the join, Voice Call stores and serves pre-connect DTMF TwiML,
   Voice Call serves realtime TwiML for the Twilio call, then Google Meet requests
   intro speech with `voicecall.speak`.
-- Re-run `NexisClaw googlemeet setup --transport twilio`; a green setup check is
+- Re-run `GreenchClaw googlemeet setup --transport twilio`; a green setup check is
   required but does not prove the meeting PIN sequence is correct.
 - Confirm the dial-in number belongs to the same Meet invitation and region as
   the PIN.
@@ -1679,7 +1679,7 @@ participant:
   slowly or the call transcript still shows the prompt asking for a PIN after
   pre-connect DTMF was sent.
 - If the participant joins but you do not hear the greeting, check
-  `NexisClaw logs --follow` for the post-DTMF `voicecall.speak` request and
+  `GreenchClaw logs --follow` for the post-DTMF `voicecall.speak` request and
   either media-stream TTS playback or the Twilio `<Say>` fallback. If the call
   transcript still contains "enter the meeting PIN", the phone leg has not joined
   the Meet room yet, so meeting participants will not hear speech.
@@ -1697,7 +1697,7 @@ phone dial-in participation.
 
 Chrome talk-back modes need `BlackHole 2ch` plus either:
 
-- `chrome.audioInputCommand` plus `chrome.audioOutputCommand`: NexisClaw owns the
+- `chrome.audioInputCommand` plus `chrome.audioOutputCommand`: GreenchClaw owns the
   bridge and pipes audio in `chrome.audioFormat` between those commands and the
   selected provider. Agent mode uses realtime transcription plus regular TTS;
   bidi mode uses the realtime voice provider. The default Chrome path is 24 kHz

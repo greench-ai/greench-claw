@@ -76,7 +76,7 @@ function createQueueOutcomeMock(
 const longChildCompletionOutput = [
   "34/34 tests pass, clean build. Now docker repro:",
   "Root cause: the requester's announce delivery accepted a prefix-only assistant payload as delivered.",
-  "PR: https://github.com/NexisClaw/NexisClaw/pull/12345",
+  "PR: https://github.com/GreenchClaw/GreenchClaw/pull/12345",
   "Verification: pnpm test src/agents/subagent-announce-delivery.test.ts passed with the regression enabled.",
 ].join("\n");
 

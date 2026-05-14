@@ -1,4 +1,4 @@
-import { resolveChannelGroupRequireMention } from "NexisClaw/plugin-sdk/channel-policy";
+import { resolveChannelGroupRequireMention } from "GreenchClaw/plugin-sdk/channel-policy";
 import { resolveMattermostAccount } from "./mattermost/accounts.js";
 import type { ChannelGroupContext } from "./runtime-api.js";
 

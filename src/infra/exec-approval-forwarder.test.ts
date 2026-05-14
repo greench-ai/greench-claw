@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ReplyPayload } from "../auto-reply/types.js";
 import type { ChannelPlugin } from "../channels/plugins/types.js";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { setActivePluginRegistry } from "../plugins/runtime.js";
 import { createChannelTestPluginBase, createTestRegistry } from "../test-utils/channel-plugins.js";
 import {
@@ -40,7 +40,7 @@ async function flushPendingDelivery(): Promise<void> {
 }
 
 function isDiscordExecApprovalClientEnabledForTest(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): boolean {
   const accountId = params.accountId?.trim();
@@ -58,7 +58,7 @@ function isDiscordExecApprovalClientEnabledForTest(params: {
 }
 
 function isTelegramExecApprovalClientEnabledForTest(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
 }): boolean {
   const accountId = params.accountId?.trim();
@@ -76,7 +76,7 @@ function isTelegramExecApprovalClientEnabledForTest(params: {
 }
 
 function shouldSuppressTelegramExecApprovalForwardingFallbackForTest(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   target: { channel: string; accountId?: string | null };
   request: { request: { turnSourceChannel?: string | null; turnSourceAccountId?: string | null } };
 }): boolean {
@@ -145,7 +145,7 @@ const telegramApprovalPlugin: Pick<
   approvalCapability: {
     delivery: {
       shouldSuppressForwardingFallback: (params: {
-        cfg: NexisClawConfig;
+        cfg: GreenchClawConfig;
         target: { channel: string; accountId?: string | null };
         request: {
           request: { turnSourceChannel?: string | null; turnSourceAccountId?: string | null };
@@ -171,7 +171,7 @@ const discordApprovalPlugin: Pick<
         cfg,
         target,
       }: {
-        cfg: NexisClawConfig;
+        cfg: GreenchClawConfig;
         target: { channel: string; accountId?: string | null };
       }) =>
         target.channel === "discord" &&
@@ -228,7 +228,7 @@ function requireFirstPayload(deliver: ReturnType<typeof vi.fn>): ReplyPayload {
   return payload;
 }
 
-function makeTargetsCfg(targets: Array<{ channel: string; to: string }>): NexisClawConfig {
+function makeTargetsCfg(targets: Array<{ channel: string; to: string }>): GreenchClawConfig {
   return {
     approvals: {
       exec: {
@@ -237,13 +237,13 @@ function makeTargetsCfg(targets: Array<{ channel: string; to: string }>): NexisC
         targets,
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 const TARGETS_CFG = makeTargetsCfg([{ channel: "slack", to: "U123" }]);
 
 function createForwarder(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   deliver?: ReturnType<typeof vi.fn>;
   resolveSessionTarget?: () => {
     channel: string;
@@ -268,7 +268,9 @@ function createForwarder(params: {
   return { deliver, forwarder };
 }
 
-function makeSessionCfg(options: { discordExecApprovalsEnabled?: boolean } = {}): NexisClawConfig {
+function makeSessionCfg(
+  options: { discordExecApprovalsEnabled?: boolean } = {},
+): GreenchClawConfig {
   return {
     ...(options.discordExecApprovalsEnabled
       ? {
@@ -283,11 +285,11 @@ function makeSessionCfg(options: { discordExecApprovalsEnabled?: boolean } = {})
         }
       : {}),
     approvals: { exec: { enabled: true, mode: "session" } },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 async function expectDiscordSessionTargetRequest(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   expectedAccepted: boolean;
   expectedDeliveryCount: number;
 }) {
@@ -319,7 +321,7 @@ async function expectSessionFilterRequestResult(params: {
         sessionFilter: params.sessionFilter,
       },
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 
   const { deliver, forwarder } = createForwarder({
     cfg,
@@ -372,7 +374,7 @@ describe("exec approval forwarder", () => {
     vi.useFakeTimers();
     const cfg = {
       approvals: { exec: { enabled: true, mode: "session" } },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { deliver, forwarder } = createForwarder({
       cfg,
@@ -416,7 +418,7 @@ describe("exec approval forwarder", () => {
           targets: [{ channel: "telegram", to: "-100999", accountId: "bot", threadId: "77" }],
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { deliver, forwarder } = createForwarder({
       cfg,
@@ -489,7 +491,7 @@ describe("exec approval forwarder", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     const { deliver, forwarder } = createForwarder({
       cfg,
@@ -646,7 +648,7 @@ describe("exec approval forwarder", () => {
 
   it("returns false when forwarding is disabled", async () => {
     const { deliver, forwarder } = createForwarder({
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
     });
     await expect(forwarder.handleRequested(baseRequest)).resolves.toBe(false);
     expect(deliver).not.toHaveBeenCalled();

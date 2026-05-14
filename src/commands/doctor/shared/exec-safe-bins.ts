@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../config/types.GreenchClaw.js";
 import { resolveCommandResolutionFromArgv } from "../../../infra/exec-command-resolution.js";
 import {
   listInterpreterLikeSafeBins,
@@ -58,7 +58,7 @@ function normalizeConfiguredTrustedSafeBinDirs(entries: unknown): string[] {
   );
 }
 
-function collectExecSafeBinScopes(cfg: NexisClawConfig): ExecSafeBinScopeRef[] {
+function collectExecSafeBinScopes(cfg: GreenchClawConfig): ExecSafeBinScopeRef[] {
   const scopes: ExecSafeBinScopeRef[] = [];
   const globalExec = asObjectRecord(cfg.tools?.exec);
   const globalTrustedDirs = normalizeConfiguredTrustedSafeBinDirs(globalExec?.safeBinTrustedDirs);
@@ -112,7 +112,7 @@ function collectExecSafeBinScopes(cfg: NexisClawConfig): ExecSafeBinScopeRef[] {
   return scopes;
 }
 
-export function scanExecSafeBinCoverage(cfg: NexisClawConfig): ExecSafeBinCoverageHit[] {
+export function scanExecSafeBinCoverage(cfg: GreenchClawConfig): ExecSafeBinCoverageHit[] {
   const hits: ExecSafeBinCoverageHit[] = [];
   for (const scope of collectExecSafeBinScopes(cfg)) {
     const interpreterBins = new Set(listInterpreterLikeSafeBins(scope.safeBins));
@@ -140,7 +140,7 @@ export function scanExecSafeBinCoverage(cfg: NexisClawConfig): ExecSafeBinCovera
 }
 
 export function scanExecSafeBinTrustedDirHints(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
 ): ExecSafeBinTrustedDirHintHit[] {
   const hits: ExecSafeBinTrustedDirHintHit[] = [];
   for (const scope of collectExecSafeBinScopes(cfg)) {
@@ -243,8 +243,8 @@ export function collectExecSafeBinTrustedDirHintWarnings(
   return lines;
 }
 
-export function maybeRepairExecSafeBinProfiles(cfg: NexisClawConfig): {
-  config: NexisClawConfig;
+export function maybeRepairExecSafeBinProfiles(cfg: GreenchClawConfig): {
+  config: GreenchClawConfig;
   changes: string[];
   warnings: string[];
 } {

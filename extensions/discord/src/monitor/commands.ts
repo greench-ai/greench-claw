@@ -1,4 +1,4 @@
-import type { DiscordSlashCommandConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { DiscordSlashCommandConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
 export function resolveDiscordSlashCommandConfig(
   raw?: DiscordSlashCommandConfig,

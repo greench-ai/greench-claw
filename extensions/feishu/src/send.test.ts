@@ -24,12 +24,12 @@ const {
   mockRuntimeResolveMarkdownTableMode: vi.fn(() => "preserve"),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/markdown-table-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/markdown-table-runtime", () => ({
   resolveMarkdownTableMode: mockResolveMarkdownTableMode,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/text-chunking", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("NexisClaw/plugin-sdk/text-chunking")>();
+vi.mock("GreenchClaw/plugin-sdk/text-chunking", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("GreenchClaw/plugin-sdk/text-chunking")>();
   return {
     ...actual,
     convertMarkdownTables: mockConvertMarkdownTables,
@@ -76,8 +76,8 @@ describe("getMessageFeishu", () => {
   });
 
   afterAll(() => {
-    vi.doUnmock("NexisClaw/plugin-sdk/markdown-table-runtime");
-    vi.doUnmock("NexisClaw/plugin-sdk/text-chunking");
+    vi.doUnmock("GreenchClaw/plugin-sdk/markdown-table-runtime");
+    vi.doUnmock("GreenchClaw/plugin-sdk/text-chunking");
     vi.doUnmock("./client.js");
     vi.doUnmock("./accounts.js");
     vi.doUnmock("./runtime.js");

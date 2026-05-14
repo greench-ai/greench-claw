@@ -18,7 +18,7 @@ describe("OAuth refresh lock timeout classification", () => {
     const profileId = "openai-codex:default";
     const provider = "openai-codex";
     const refreshLockPath = resolveOAuthRefreshLockPath(provider, profileId);
-    const authStoreLockPath = resolveAuthStorePath("/tmp/NexisClaw-oauth-lock-timeout/agent");
+    const authStoreLockPath = resolveAuthStorePath("/tmp/GreenchClaw-oauth-lock-timeout/agent");
 
     expect(
       isGlobalRefreshLockTimeoutError(

@@ -3,11 +3,11 @@ import {
   loadModelCatalog,
   modelSupportsVision,
   resolveDefaultModelForAgent,
-} from "NexisClaw/plugin-sdk/agent-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 
 export async function resolveStickerVisionSupportRuntime(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId?: string;
 }): Promise<boolean> {
   const catalog = await loadModelCatalog({ config: params.cfg });

@@ -4,12 +4,12 @@ import {
   normalizeAccountId,
   resolveAccountWithDefaultFallback,
   resolveMergedAccountConfig,
-} from "NexisClaw/plugin-sdk/account-core";
-import { tryReadSecretFileSync } from "NexisClaw/plugin-sdk/secret-file-runtime";
+} from "GreenchClaw/plugin-sdk/account-core";
+import { tryReadSecretFileSync } from "GreenchClaw/plugin-sdk/secret-file-runtime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { normalizeResolvedSecretInputString } from "./secret-input.js";
 import type { CoreConfig, NextcloudTalkAccountConfig } from "./types.js";
 
@@ -19,7 +19,7 @@ function isTruthyEnvValue(value?: string): boolean {
 }
 
 const debugAccounts = (...args: unknown[]) => {
-  if (isTruthyEnvValue(process.env.NEXISCLAW_DEBUG_NEXTCLOUD_TALK_ACCOUNTS)) {
+  if (isTruthyEnvValue(process.env.GREENCHCLAW_DEBUG_NEXTCLOUD_TALK_ACCOUNTS)) {
     console.warn("[nextcloud-talk:accounts]", ...args);
   }
 };

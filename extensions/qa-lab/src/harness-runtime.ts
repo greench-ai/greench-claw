@@ -4,8 +4,8 @@ import {
   matchesMentionPatterns,
   matchesMentionWithExplicit,
   resolveInboundMentionDecision,
-} from "NexisClaw/plugin-sdk/channel-inbound";
-import type { PluginRuntime } from "NexisClaw/plugin-sdk/runtime-store";
+} from "GreenchClaw/plugin-sdk/channel-inbound";
+import type { PluginRuntime } from "GreenchClaw/plugin-sdk/runtime-store";
 
 type SessionRecord = {
   sessionKey: string;

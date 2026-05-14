@@ -1,9 +1,9 @@
 import {
   listNativeCommandSpecs,
   listNativeCommandSpecsForConfig,
-} from "NexisClaw/plugin-sdk/native-command-registry";
+} from "GreenchClaw/plugin-sdk/native-command-registry";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../runtime-api.js";
+import type { GreenchClawConfig } from "../runtime-api.js";
 
 const {
   getLoadConfigMock,
@@ -112,7 +112,7 @@ describe("createTelegramBot command menu", () => {
           ],
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
     loadConfig.mockReturnValue(config);
     const commandsSynced = waitForNextSetMyCommands();
 
@@ -157,7 +157,7 @@ describe("createTelegramBot command menu", () => {
           ],
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
     loadConfig.mockReturnValue(config);
     const commandsSynced = waitForNextSetMyCommands();
 
@@ -214,7 +214,7 @@ describe("createTelegramBot command menu", () => {
           ],
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
     loadConfig.mockReturnValue(config);
     const commandsSynced = waitForNextSetMyCommands();
 

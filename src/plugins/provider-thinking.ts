@@ -20,7 +20,7 @@ type ThinkingProviderPlugin = {
   ) => "off" | "minimal" | "low" | "medium" | "high" | "xhigh" | "adaptive" | null | undefined;
 };
 
-const PLUGIN_REGISTRY_STATE = Symbol.for("NexisClaw.pluginRegistryState");
+const PLUGIN_REGISTRY_STATE = Symbol.for("GreenchClaw.pluginRegistryState");
 
 type ThinkingRegistryState = {
   activeRegistry?: {

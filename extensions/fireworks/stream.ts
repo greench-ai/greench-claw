@@ -1,8 +1,8 @@
 import type { StreamFn } from "@earendil-works/pi-agent-core";
 import { streamSimple } from "@earendil-works/pi-ai";
-import type { ProviderWrapStreamFnContext } from "NexisClaw/plugin-sdk/plugin-entry";
-import { normalizeProviderId } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { streamWithPayloadPatch } from "NexisClaw/plugin-sdk/provider-stream-shared";
+import type { ProviderWrapStreamFnContext } from "GreenchClaw/plugin-sdk/plugin-entry";
+import { normalizeProviderId } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { streamWithPayloadPatch } from "GreenchClaw/plugin-sdk/provider-stream-shared";
 import { isFireworksKimiModelId } from "./model-id.js";
 
 function isFireworksProviderId(providerId: string): boolean {

@@ -68,9 +68,9 @@ if (options.field) {
 if (options.format === "shell") {
   process.stdout.write(
     [
-      `NEXISCLAW_IOS_VERSION=${version.canonicalVersion}`,
-      `NEXISCLAW_MARKETING_VERSION=${version.marketingVersion}`,
-      `NEXISCLAW_BUILD_VERSION=${version.buildVersion}`,
+      `GREENCHCLAW_IOS_VERSION=${version.canonicalVersion}`,
+      `GREENCHCLAW_MARKETING_VERSION=${version.marketingVersion}`,
+      `GREENCHCLAW_BUILD_VERSION=${version.buildVersion}`,
     ].join("\n") + "\n",
   );
 } else {

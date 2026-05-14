@@ -9,7 +9,7 @@ vi.mock("./cli/argv.js", () => ({
 vi.mock("./cli/container-target.js", () => ({
   parseCliContainerArgs: (argv: string[]) => ({ ok: true, container: null, argv }),
   resolveCliContainerTarget: (argv: string[], env: NodeJS.ProcessEnv = process.env) =>
-    argv.includes("--container") ? "demo" : (env.NEXISCLAW_CONTAINER ?? null),
+    argv.includes("--container") ? "demo" : (env.GREENCHCLAW_CONTAINER ?? null),
 }));
 
 async function flushVersionFastPath() {
@@ -32,14 +32,14 @@ describe("entry root version fast path", () => {
     }));
 
     expect(
-      tryHandleRootVersionFastPath(["node", "NexisClaw", "--version"], {
+      tryHandleRootVersionFastPath(["node", "GreenchClaw", "--version"], {
         output,
         exit,
         resolveVersion,
       }),
     ).toBe(true);
     await flushVersionFastPath();
-    expect(output).toHaveBeenCalledWith("NexisClaw 9.9.9-test (abc1234)");
+    expect(output).toHaveBeenCalledWith("GreenchClaw 9.9.9-test (abc1234)");
     expect(exit).toHaveBeenCalledWith(0);
 
     output.mockClear();
@@ -50,20 +50,20 @@ describe("entry root version fast path", () => {
     });
 
     expect(
-      tryHandleRootVersionFastPath(["node", "NexisClaw", "--version"], {
+      tryHandleRootVersionFastPath(["node", "GreenchClaw", "--version"], {
         output,
         exit,
         resolveVersion,
       }),
     ).toBe(true);
     await flushVersionFastPath();
-    expect(output).toHaveBeenCalledWith("NexisClaw 9.9.9-test");
+    expect(output).toHaveBeenCalledWith("GreenchClaw 9.9.9-test");
     expect(exit).toHaveBeenCalledWith(0);
 
     output.mockClear();
     exit.mockClear();
     expect(
-      tryHandleRootVersionFastPath(["node", "NexisClaw", "--container", "demo", "--version"], {
+      tryHandleRootVersionFastPath(["node", "GreenchClaw", "--container", "demo", "--version"], {
         output,
         exit,
         resolveVersion,
@@ -74,8 +74,8 @@ describe("entry root version fast path", () => {
     expect(exit).not.toHaveBeenCalled();
 
     expect(
-      tryHandleRootVersionFastPath(["node", "NexisClaw", "--version"], {
-        env: { NEXISCLAW_CONTAINER: "demo" },
+      tryHandleRootVersionFastPath(["node", "GreenchClaw", "--version"], {
+        env: { GREENCHCLAW_CONTAINER: "demo" },
         output,
         exit,
         resolveVersion,

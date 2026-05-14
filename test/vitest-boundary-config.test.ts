@@ -35,11 +35,11 @@ describe("boundary vitest config", () => {
       "node",
       "vitest",
       "run",
-      "src/infra/NexisClaw-root.test.ts",
+      "src/infra/GreenchClaw-root.test.ts",
     ]);
     const testConfig = requireTestConfig(config);
 
-    expect(testConfig.include).toEqual(["src/infra/NexisClaw-root.test.ts"]);
+    expect(testConfig.include).toEqual(["src/infra/GreenchClaw-root.test.ts"]);
     expect(testConfig.passWithNoTests).toBe(true);
   });
 });

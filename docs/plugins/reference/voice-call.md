@@ -11,7 +11,7 @@ Adds agent-callable tools.
 
 ## Distribution
 
-- Package: `@NexisClaw/voice-call`
+- Package: `@GreenchClaw/voice-call`
 - Install route: npm; ClawHub
 
 ## Surface

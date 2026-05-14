@@ -13,7 +13,7 @@ import {
 } from "../../cli/error-format.js";
 import { commitConfigWithPendingPluginInstalls } from "../../cli/plugins-install-record-commit.js";
 import { refreshPluginRegistryAfterConfigMutation } from "../../cli/plugins-registry-refresh.js";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "../../routing/session-key.js";
 import { defaultRuntime, type RuntimeEnv } from "../../runtime.js";
 import { createLazyImportLoader } from "../../shared/lazy-promise.js";
@@ -52,7 +52,7 @@ export type ChannelsAddOptions = {
 const CHANNEL_ADD_CONTROL_OPTION_KEYS = new Set(["channel", "account"]);
 const NEXTCLOUD_TALK_CLI_ALIASES = new Set(["nextcloud-talk", "nc-talk", "nc"]);
 
-async function resolveCatalogChannelEntry(raw: string, cfg: NexisClawConfig | null) {
+async function resolveCatalogChannelEntry(raw: string, cfg: GreenchClawConfig | null) {
   const trimmed = normalizeOptionalLowercaseString(raw);
   if (!trimmed) {
     return undefined;
@@ -147,7 +147,7 @@ async function channelsAddCommandImpl(
   if (!configSnapshot) {
     return;
   }
-  const cfg = (configSnapshot.sourceConfig ?? configSnapshot.config) as NexisClawConfig;
+  const cfg = (configSnapshot.sourceConfig ?? configSnapshot.config) as GreenchClawConfig;
   const baseHash = configSnapshot.hash;
   let nextConfig = cfg;
   let pluginRegistrySourceChanged = false;
@@ -368,7 +368,7 @@ async function channelsAddCommandImpl(
 
   if (!channel) {
     const hint = catalogEntry
-      ? `Plugin ${catalogEntry.meta.label} could not be loaded after install. Run NexisClaw doctor --fix, then retry NexisClaw channels add.`
+      ? `Plugin ${catalogEntry.meta.label} could not be loaded after install. Run GreenchClaw doctor --fix, then retry GreenchClaw channels add.`
       : formatUnknownChannelMessage({ channel: rawChannel });
     runtime.error(hint);
     runtime.exit(1);
@@ -381,7 +381,7 @@ async function channelsAddCommandImpl(
       `${formatUnsupportedChannelActionMessage({
         channel,
         action: "non-interactive add",
-      })} Run ${formatCliCommand("NexisClaw channels add")} with no flags for guided setup.`,
+      })} Run ${formatCliCommand("GreenchClaw channels add")} with no flags for guided setup.`,
     );
     runtime.exit(1);
     return;

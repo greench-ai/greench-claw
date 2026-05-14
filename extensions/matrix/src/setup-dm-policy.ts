@@ -1,5 +1,5 @@
-import type { DmPolicy } from "NexisClaw/plugin-sdk/config-contracts";
-import { addWildcardAllowFrom, normalizeAllowFromEntries } from "NexisClaw/plugin-sdk/setup";
+import type { DmPolicy } from "GreenchClaw/plugin-sdk/config-contracts";
+import { addWildcardAllowFrom, normalizeAllowFromEntries } from "GreenchClaw/plugin-sdk/setup";
 import type { MatrixConfig } from "./types.js";
 
 type MatrixDmAllowFrom = NonNullable<MatrixConfig["dm"]>["allowFrom"];

@@ -15,7 +15,7 @@ import {
 
 describe("package dist inventory", () => {
   it("tracks missing and stale dist files", async () => {
-    await withTempDir({ prefix: "NexisClaw-dist-inventory-" }, async (packageRoot) => {
+    await withTempDir({ prefix: "GreenchClaw-dist-inventory-" }, async (packageRoot) => {
       const currentFile = path.join(packageRoot, "dist", "current-BR6xv1a1.js");
       await fs.mkdir(path.dirname(currentFile), { recursive: true });
       await fs.writeFile(currentFile, "export {};\n", "utf8");
@@ -40,7 +40,7 @@ describe("package dist inventory", () => {
   });
 
   it("keeps npm-omitted dist artifacts out of the inventory", async () => {
-    await withTempDir({ prefix: "NexisClaw-dist-inventory-pack-" }, async (packageRoot) => {
+    await withTempDir({ prefix: "GreenchClaw-dist-inventory-pack-" }, async (packageRoot) => {
       const packagedQaChannelRuntime = path.join(
         packageRoot,
         "dist",
@@ -114,39 +114,42 @@ describe("package dist inventory", () => {
   });
 
   it("keeps transient plugin dependency trees out of the inventory", async () => {
-    await withTempDir({ prefix: "NexisClaw-dist-inventory-plugin-deps-" }, async (packageRoot) => {
-      const realFile = path.join(packageRoot, "dist", "index.js");
-      const rootDependencyPackage = path.join(
-        packageRoot,
-        "dist",
-        "extensions",
-        "node_modules",
-        "NexisClaw",
-        "package.json",
-      );
-      const pluginDependencyPackage = path.join(
-        packageRoot,
-        "dist",
-        "extensions",
-        "slack",
-        "node_modules",
-        "left-pad",
-        "package.json",
-      );
-      await fs.mkdir(path.dirname(realFile), { recursive: true });
-      await fs.mkdir(path.dirname(rootDependencyPackage), { recursive: true });
-      await fs.mkdir(path.dirname(pluginDependencyPackage), { recursive: true });
-      await fs.writeFile(realFile, "export {};\n", "utf8");
-      await fs.writeFile(rootDependencyPackage, "{}", "utf8");
-      await fs.writeFile(pluginDependencyPackage, "{}", "utf8");
+    await withTempDir(
+      { prefix: "GreenchClaw-dist-inventory-plugin-deps-" },
+      async (packageRoot) => {
+        const realFile = path.join(packageRoot, "dist", "index.js");
+        const rootDependencyPackage = path.join(
+          packageRoot,
+          "dist",
+          "extensions",
+          "node_modules",
+          "GreenchClaw",
+          "package.json",
+        );
+        const pluginDependencyPackage = path.join(
+          packageRoot,
+          "dist",
+          "extensions",
+          "slack",
+          "node_modules",
+          "left-pad",
+          "package.json",
+        );
+        await fs.mkdir(path.dirname(realFile), { recursive: true });
+        await fs.mkdir(path.dirname(rootDependencyPackage), { recursive: true });
+        await fs.mkdir(path.dirname(pluginDependencyPackage), { recursive: true });
+        await fs.writeFile(realFile, "export {};\n", "utf8");
+        await fs.writeFile(rootDependencyPackage, "{}", "utf8");
+        await fs.writeFile(pluginDependencyPackage, "{}", "utf8");
 
-      await expect(writePackageDistInventory(packageRoot)).resolves.toEqual(["dist/index.js"]);
-    });
+        await expect(writePackageDistInventory(packageRoot)).resolves.toEqual(["dist/index.js"]);
+      },
+    );
   });
 
   it("omits packaged extension node_modules while keeping extension runtime files", async () => {
     await withTempDir(
-      { prefix: "NexisClaw-dist-inventory-extension-node-modules-" },
+      { prefix: "GreenchClaw-dist-inventory-extension-node-modules-" },
       async (packageRoot) => {
         const extensionRuntime = path.join(
           packageRoot,
@@ -160,7 +163,7 @@ describe("package dist inventory", () => {
           "dist",
           "extensions",
           "node_modules",
-          "NexisClaw",
+          "GreenchClaw",
           "package.json",
         );
         const extensionDependencyPackage = path.join(
@@ -188,106 +191,112 @@ describe("package dist inventory", () => {
   });
 
   it("keeps publishable externalized bundled plugin dist trees out of the inventory", async () => {
-    await withTempDir({ prefix: "NexisClaw-dist-inventory-externalized-" }, async (packageRoot) => {
-      const externalizedRuntime = path.join(
-        packageRoot,
-        "dist",
-        "extensions",
-        "external-chat",
-        "index.js",
-      );
-      const bundledRuntime = path.join(
-        packageRoot,
-        "dist",
-        "extensions",
-        "bundled-chat",
-        "index.js",
-      );
-      const externalizedPackageJson = path.join(
-        packageRoot,
-        "extensions",
-        "external-chat",
-        "package.json",
-      );
-      const bundledPackageJson = path.join(
-        packageRoot,
-        "extensions",
-        "bundled-chat",
-        "package.json",
-      );
-      const rootPackageJson = path.join(packageRoot, "package.json");
+    await withTempDir(
+      { prefix: "GreenchClaw-dist-inventory-externalized-" },
+      async (packageRoot) => {
+        const externalizedRuntime = path.join(
+          packageRoot,
+          "dist",
+          "extensions",
+          "external-chat",
+          "index.js",
+        );
+        const bundledRuntime = path.join(
+          packageRoot,
+          "dist",
+          "extensions",
+          "bundled-chat",
+          "index.js",
+        );
+        const externalizedPackageJson = path.join(
+          packageRoot,
+          "extensions",
+          "external-chat",
+          "package.json",
+        );
+        const bundledPackageJson = path.join(
+          packageRoot,
+          "extensions",
+          "bundled-chat",
+          "package.json",
+        );
+        const rootPackageJson = path.join(packageRoot, "package.json");
 
-      await fs.mkdir(path.dirname(externalizedRuntime), { recursive: true });
-      await fs.mkdir(path.dirname(bundledRuntime), { recursive: true });
-      await fs.mkdir(path.dirname(externalizedPackageJson), { recursive: true });
-      await fs.mkdir(path.dirname(bundledPackageJson), { recursive: true });
-      await fs.writeFile(externalizedRuntime, "export {};\n", "utf8");
-      await fs.writeFile(bundledRuntime, "export {};\n", "utf8");
-      await fs.writeFile(
-        rootPackageJson,
-        JSON.stringify({
-          files: ["dist/", "!dist/extensions/external-chat/**"],
-        }),
-        "utf8",
-      );
-      await fs.writeFile(
-        externalizedPackageJson,
-        JSON.stringify({
-          name: "@NexisClaw/external-chat",
-          NexisClaw: {
-            release: {
-              publishToClawHub: true,
-              publishToNpm: true,
+        await fs.mkdir(path.dirname(externalizedRuntime), { recursive: true });
+        await fs.mkdir(path.dirname(bundledRuntime), { recursive: true });
+        await fs.mkdir(path.dirname(externalizedPackageJson), { recursive: true });
+        await fs.mkdir(path.dirname(bundledPackageJson), { recursive: true });
+        await fs.writeFile(externalizedRuntime, "export {};\n", "utf8");
+        await fs.writeFile(bundledRuntime, "export {};\n", "utf8");
+        await fs.writeFile(
+          rootPackageJson,
+          JSON.stringify({
+            files: ["dist/", "!dist/extensions/external-chat/**"],
+          }),
+          "utf8",
+        );
+        await fs.writeFile(
+          externalizedPackageJson,
+          JSON.stringify({
+            name: "@GreenchClaw/external-chat",
+            GreenchClaw: {
+              release: {
+                publishToClawHub: true,
+                publishToNpm: true,
+              },
             },
-          },
-        }),
-        "utf8",
-      );
-      await fs.writeFile(
-        bundledPackageJson,
-        JSON.stringify({
-          name: "@NexisClaw/bundled-chat",
-          NexisClaw: {},
-        }),
-        "utf8",
-      );
+          }),
+          "utf8",
+        );
+        await fs.writeFile(
+          bundledPackageJson,
+          JSON.stringify({
+            name: "@GreenchClaw/bundled-chat",
+            GreenchClaw: {},
+          }),
+          "utf8",
+        );
 
-      await expect(writePackageDistInventory(packageRoot)).resolves.toEqual([
-        "dist/extensions/bundled-chat/index.js",
-      ]);
-    });
+        await expect(writePackageDistInventory(packageRoot)).resolves.toEqual([
+          "dist/extensions/bundled-chat/index.js",
+        ]);
+      },
+    );
   });
 
   it("keeps publishable core-package runtime plugin dist trees in the inventory", async () => {
-    await withTempDir({ prefix: "NexisClaw-dist-inventory-core-runtime-" }, async (packageRoot) => {
-      const coreRuntime = path.join(packageRoot, "dist", "extensions", "core-chat", "index.js");
-      const corePackageJson = path.join(packageRoot, "extensions", "core-chat", "package.json");
+    await withTempDir(
+      { prefix: "GreenchClaw-dist-inventory-core-runtime-" },
+      async (packageRoot) => {
+        const coreRuntime = path.join(packageRoot, "dist", "extensions", "core-chat", "index.js");
+        const corePackageJson = path.join(packageRoot, "extensions", "core-chat", "package.json");
 
-      await fs.mkdir(path.dirname(coreRuntime), { recursive: true });
-      await fs.mkdir(path.dirname(corePackageJson), { recursive: true });
-      await fs.writeFile(coreRuntime, "export {};\n", "utf8");
-      await fs.writeFile(
-        corePackageJson,
-        JSON.stringify({
-          name: "@NexisClaw/core-chat",
-          NexisClaw: {
-            release: {
-              publishToClawHub: true,
-              publishToNpm: true,
+        await fs.mkdir(path.dirname(coreRuntime), { recursive: true });
+        await fs.mkdir(path.dirname(corePackageJson), { recursive: true });
+        await fs.writeFile(coreRuntime, "export {};\n", "utf8");
+        await fs.writeFile(
+          corePackageJson,
+          JSON.stringify({
+            name: "@GreenchClaw/core-chat",
+            GreenchClaw: {
+              release: {
+                publishToClawHub: true,
+                publishToNpm: true,
+              },
             },
-          },
-        }),
-        "utf8",
-      );
+          }),
+          "utf8",
+        );
 
-      await expect(writePackageDistInventory(packageRoot)).resolves.toEqual([
-        "dist/extensions/core-chat/index.js",
-      ]);
-    });
+        await expect(writePackageDistInventory(packageRoot)).resolves.toEqual([
+          "dist/extensions/core-chat/index.js",
+        ]);
+      },
+    );
   });
 
   it("reports runtime-created install staging dirs during installed dist verification", async () => {
-    await withTempDir({ prefix: "NexisClaw-dist-inventory-stage-" }, async (packageRoot) => {
+    await withTempDir({ prefix: "GreenchClaw-dist-inventory-stage-" }, async (packageRoot) => {
       const realFile = path.join(packageRoot, "dist", "real-AbC123.js");
       await fs.mkdir(path.dirname(realFile), { recursive: true });
       await fs.writeFile(realFile, "export {};\n", "utf8");
@@ -298,7 +307,7 @@ describe("package dist inventory", () => {
         "dist",
         "extensions",
         "brave",
-        ".NexisClaw-install-stage",
+        ".GreenchClaw-install-stage",
         "node_modules",
         "typebox",
         "build",
@@ -310,7 +319,7 @@ describe("package dist inventory", () => {
         "dist",
         "extensions",
         "browser",
-        ".NexisClaw-install-stage-AbC123",
+        ".GreenchClaw-install-stage-AbC123",
         "node_modules",
         "playwright-core",
         "package.json",
@@ -321,8 +330,8 @@ describe("package dist inventory", () => {
       await fs.writeFile(suffixedStageFile, "{}", "utf8");
 
       await expect(collectPackageDistInventoryErrors(packageRoot)).resolves.toEqual([
-        "unexpected packaged dist file dist/extensions/brave/.NexisClaw-install-stage/node_modules/typebox/build/compile/code.mjs",
-        "unexpected packaged dist file dist/extensions/browser/.NexisClaw-install-stage-AbC123/node_modules/playwright-core/package.json",
+        "unexpected packaged dist file dist/extensions/brave/.GreenchClaw-install-stage/node_modules/typebox/build/compile/code.mjs",
+        "unexpected packaged dist file dist/extensions/browser/.GreenchClaw-install-stage-AbC123/node_modules/playwright-core/package.json",
       ]);
     });
   });
@@ -330,7 +339,7 @@ describe("package dist inventory", () => {
   it("matches install-stage paths case-insensitively across path segments", () => {
     expect(
       isLegacyPluginDependencyInstallStagePath(
-        "dist/extensions/brave/.NexisClaw-install-stage/node_modules/typebox/package.json",
+        "dist/extensions/brave/.GreenchClaw-install-stage/node_modules/typebox/package.json",
       ),
     ).toBe(true);
     expect(
@@ -340,74 +349,79 @@ describe("package dist inventory", () => {
     ).toBe(true);
     expect(
       isLegacyPluginDependencyInstallStagePath(
-        "Dist/Extensions/browser/.NexisClaw-Install-Stage/package.json",
+        "Dist/Extensions/browser/.GreenchClaw-Install-Stage/package.json",
       ),
     ).toBe(true);
     expect(
       isLegacyPluginDependencyInstallStagePath(
-        "dist/extensions/browser/.NexisClaw-runtime-deps-copy-AbC123/package.json",
+        "dist/extensions/browser/.GreenchClaw-runtime-deps-copy-AbC123/package.json",
       ),
     ).toBe(false);
     expect(
-      isLegacyPluginDependencyInstallStagePath("dist/extensions/.NexisClaw-install-stage"),
+      isLegacyPluginDependencyInstallStagePath("dist/extensions/.GreenchClaw-install-stage"),
     ).toBe(false);
   });
 
   it("rejects pre-populated install-stage debris at publish time", async () => {
-    await withTempDir({ prefix: "NexisClaw-dist-inventory-stage-publish-" }, async (packageRoot) => {
-      const seededStagePackageJson = path.join(
-        packageRoot,
-        "dist",
-        "extensions",
-        "evil",
-        ".NexisClaw-install-stage",
-        "package.json",
-      );
-      const suffixedSeed = path.join(
-        packageRoot,
-        "dist",
-        "extensions",
-        "browser",
-        ".NexisClaw-install-stage-AbC123",
-        "node_modules",
-        "playwright-core",
-        "package.json",
-      );
-      await fs.mkdir(path.dirname(seededStagePackageJson), { recursive: true });
-      await fs.writeFile(seededStagePackageJson, "{}", "utf8");
-      await fs.mkdir(path.dirname(suffixedSeed), { recursive: true });
-      await fs.writeFile(suffixedSeed, "{}", "utf8");
+    await withTempDir(
+      { prefix: "GreenchClaw-dist-inventory-stage-publish-" },
+      async (packageRoot) => {
+        const seededStagePackageJson = path.join(
+          packageRoot,
+          "dist",
+          "extensions",
+          "evil",
+          ".GreenchClaw-install-stage",
+          "package.json",
+        );
+        const suffixedSeed = path.join(
+          packageRoot,
+          "dist",
+          "extensions",
+          "browser",
+          ".GreenchClaw-install-stage-AbC123",
+          "node_modules",
+          "playwright-core",
+          "package.json",
+        );
+        await fs.mkdir(path.dirname(seededStagePackageJson), { recursive: true });
+        await fs.writeFile(seededStagePackageJson, "{}", "utf8");
+        await fs.mkdir(path.dirname(suffixedSeed), { recursive: true });
+        await fs.writeFile(suffixedSeed, "{}", "utf8");
 
-      await expect(collectLegacyPluginDependencyStagingDebrisPaths(packageRoot)).resolves.toEqual([
-        "dist/extensions/browser/.NexisClaw-install-stage-AbC123",
-        "dist/extensions/evil/.NexisClaw-install-stage",
-      ]);
-      await expect(assertNoLegacyPluginDependencyStagingDebris(packageRoot)).rejects.toThrow(
-        /unexpected legacy plugin dependency staging debris/,
-      );
-      await expect(writePackageDistInventory(packageRoot)).rejects.toThrow(
-        /unexpected legacy plugin dependency staging debris/,
-      );
-    });
+        await expect(collectLegacyPluginDependencyStagingDebrisPaths(packageRoot)).resolves.toEqual(
+          [
+            "dist/extensions/browser/.GreenchClaw-install-stage-AbC123",
+            "dist/extensions/evil/.GreenchClaw-install-stage",
+          ],
+        );
+        await expect(assertNoLegacyPluginDependencyStagingDebris(packageRoot)).rejects.toThrow(
+          /unexpected legacy plugin dependency staging debris/,
+        );
+        await expect(writePackageDistInventory(packageRoot)).rejects.toThrow(
+          /unexpected legacy plugin dependency staging debris/,
+        );
+      },
+    );
   });
 
   it("rejects mixed-case install-stage debris on case-sensitive release builders", async () => {
     await withTempDir(
-      { prefix: "NexisClaw-dist-inventory-stage-extensions-case-" },
+      { prefix: "GreenchClaw-dist-inventory-stage-extensions-case-" },
       async (packageRoot) => {
         const mixedCaseStage = path.join(
           packageRoot,
           "dist",
           "Extensions",
           "evil",
-          ".NexisClaw-Install-Stage",
+          ".GreenchClaw-Install-Stage",
           "package.json",
         );
         await fs.mkdir(path.dirname(mixedCaseStage), { recursive: true });
         await fs.writeFile(mixedCaseStage, "{}", "utf8");
 
         await expect(collectLegacyPluginDependencyStagingDebrisPaths(packageRoot)).resolves.toEqual(
-          ["dist/Extensions/evil/.NexisClaw-Install-Stage"],
+          ["dist/Extensions/evil/.GreenchClaw-Install-Stage"],
         );
         await expect(writePackageDistInventory(packageRoot)).rejects.toThrow(
           /unexpected legacy plugin dependency staging debris/,
@@ -416,7 +430,7 @@ describe("package dist inventory", () => {
     );
 
     await withTempDir(
-      { prefix: "NexisClaw-dist-inventory-stage-root-case-" },
+      { prefix: "GreenchClaw-dist-inventory-stage-root-case-" },
       async (packageRoot) => {
         const mixedCaseStage = path.join(
           packageRoot,
@@ -440,19 +454,22 @@ describe("package dist inventory", () => {
   });
 
   it("treats a missing dist/extensions tree as no staging debris", async () => {
-    await withTempDir({ prefix: "NexisClaw-dist-inventory-no-extensions-" }, async (packageRoot) => {
-      await fs.mkdir(path.join(packageRoot, "dist"), { recursive: true });
-      await expect(collectLegacyPluginDependencyStagingDebrisPaths(packageRoot)).resolves.toEqual(
-        [],
-      );
-      await expect(
-        assertNoLegacyPluginDependencyStagingDebris(packageRoot),
-      ).resolves.toBeUndefined();
-    });
+    await withTempDir(
+      { prefix: "GreenchClaw-dist-inventory-no-extensions-" },
+      async (packageRoot) => {
+        await fs.mkdir(path.join(packageRoot, "dist"), { recursive: true });
+        await expect(collectLegacyPluginDependencyStagingDebrisPaths(packageRoot)).resolves.toEqual(
+          [],
+        );
+        await expect(
+          assertNoLegacyPluginDependencyStagingDebris(packageRoot),
+        ).resolves.toBeUndefined();
+      },
+    );
   });
 
   it("fails closed when the inventory is missing", async () => {
-    await withTempDir({ prefix: "NexisClaw-dist-inventory-missing-" }, async (packageRoot) => {
+    await withTempDir({ prefix: "GreenchClaw-dist-inventory-missing-" }, async (packageRoot) => {
       await fs.mkdir(path.join(packageRoot, "dist"), { recursive: true });
       await expect(collectPackageDistInventoryErrors(packageRoot)).resolves.toEqual([
         `missing package dist inventory ${PACKAGE_DIST_INVENTORY_RELATIVE_PATH}`,
@@ -461,7 +478,7 @@ describe("package dist inventory", () => {
   });
 
   it("rejects symlinked dist entries", async () => {
-    await withTempDir({ prefix: "NexisClaw-dist-inventory-symlink-" }, async (packageRoot) => {
+    await withTempDir({ prefix: "GreenchClaw-dist-inventory-symlink-" }, async (packageRoot) => {
       const distDir = path.join(packageRoot, "dist");
       await fs.mkdir(distDir, { recursive: true });
       await fs.writeFile(path.join(packageRoot, "escape.js"), "export {};\n", "utf8");

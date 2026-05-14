@@ -35,12 +35,12 @@ Pending requests expire automatically after **5 minutes**.
 ## CLI workflow (headless friendly)
 
 ```bash
-NexisClaw nodes pending
-NexisClaw nodes approve <requestId>
-NexisClaw nodes reject <requestId>
-NexisClaw nodes status
-NexisClaw nodes remove --node <id|name|ip>
-NexisClaw nodes rename --node <id|name|ip> --name "Living Room iPad"
+GreenchClaw nodes pending
+GreenchClaw nodes approve <requestId>
+GreenchClaw nodes reject <requestId>
+GreenchClaw nodes status
+GreenchClaw nodes remove --node <id|name|ip>
+GreenchClaw nodes rename --node <id|name|ip> --name "Living Room iPad"
 ```
 
 `nodes status` shows paired/connected nodes and their capabilities.
@@ -153,7 +153,7 @@ Security boundary:
 ## Metadata-upgrade auto-approval
 
 When an already paired device reconnects with only non-sensitive metadata
-changes (for example, display name or client platform hints), NexisClaw treats
+changes (for example, display name or client platform hints), GreenchClaw treats
 that as a `metadata-upgrade`. Silent auto-approval is narrow: it applies only
 to trusted non-browser local reconnects that already proved possession of local
 or shared credentials, including same-host native app reconnects after OS
@@ -183,12 +183,12 @@ operator auth.
 
 ## Storage (local, private)
 
-Pairing state is stored under the Gateway state directory (default `~/.NexisClaw`):
+Pairing state is stored under the Gateway state directory (default `~/.GreenchClaw`):
 
-- `~/.NexisClaw/nodes/paired.json`
-- `~/.NexisClaw/nodes/pending.json`
+- `~/.GreenchClaw/nodes/paired.json`
+- `~/.GreenchClaw/nodes/pending.json`
 
-If you override `NEXISCLAW_STATE_DIR`, the `nodes/` folder moves with it.
+If you override `GREENCHCLAW_STATE_DIR`, the `nodes/` folder moves with it.
 
 Security notes:
 

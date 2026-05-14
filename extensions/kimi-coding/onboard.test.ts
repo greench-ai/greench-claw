@@ -1,4 +1,4 @@
-import { resolveAgentModelPrimaryValue } from "NexisClaw/plugin-sdk/provider-onboard";
+import { resolveAgentModelPrimaryValue } from "GreenchClaw/plugin-sdk/provider-onboard";
 import { describe, expect, it } from "vitest";
 import {
   applyKimiCodeConfig,

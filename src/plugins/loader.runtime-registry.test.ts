@@ -4,7 +4,7 @@ import {
   __testing,
   clearPluginLoaderCache,
   clearPluginRegistryLoadCache,
-  loadNexisClawPlugins,
+  loadGreenchClawPlugins,
   resolveRuntimePluginRegistry,
 } from "./loader.js";
 import { resetPluginLoaderTestStateForTest } from "./loader.test-fixtures.js";
@@ -582,10 +582,10 @@ describe("resolveRuntimePluginRegistry", () => {
         },
         workspaceDir: "/tmp/workspace-a",
       };
-      const fullRegistry = loadNexisClawPlugins(loadOptions);
+      const fullRegistry = loadGreenchClawPlugins(loadOptions);
 
-      loadNexisClawPlugins({ ...loadOptions, onlyPluginIds: ["alpha"] });
-      loadNexisClawPlugins({ ...loadOptions, onlyPluginIds: ["bravo"] });
+      loadGreenchClawPlugins({ ...loadOptions, onlyPluginIds: ["alpha"] });
+      loadGreenchClawPlugins({ ...loadOptions, onlyPluginIds: ["bravo"] });
 
       expect(resolveRuntimePluginRegistry(loadOptions)).toBe(fullRegistry);
     } finally {
@@ -645,7 +645,7 @@ describe("clearPluginLoaderCache", () => {
   });
 });
 
-describe("loadNexisClawPlugins active runtime clearing", () => {
+describe("loadGreenchClawPlugins active runtime clearing", () => {
   it("clears plugin-owned global providers before activating a new registry", () => {
     registerCompactionProvider({
       id: "stale-compaction",
@@ -657,7 +657,7 @@ describe("loadNexisClawPlugins active runtime clearing", () => {
       create: async () => ({ provider: null }),
     });
 
-    loadNexisClawPlugins({ onlyPluginIds: [] });
+    loadGreenchClawPlugins({ onlyPluginIds: [] });
 
     expect(getCompactionProvider("stale-compaction")).toBeUndefined();
     expect(getMemoryEmbeddingProvider("stale-memory")).toBeUndefined();
@@ -689,10 +689,10 @@ describe("clearPluginRegistryLoadCache", () => {
       },
       workspaceDir: "/tmp/workspace-a",
     };
-    const registry = loadNexisClawPlugins(loadOptions);
+    const registry = loadGreenchClawPlugins(loadOptions);
 
     clearPluginRegistryLoadCache();
 
-    expect(loadNexisClawPlugins(loadOptions)).not.toBe(registry);
+    expect(loadGreenchClawPlugins(loadOptions)).not.toBe(registry);
   });
 });

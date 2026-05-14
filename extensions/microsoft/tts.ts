@@ -1,8 +1,8 @@
 import { statSync, writeFileSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
-import { writeExternalFileWithinRoot } from "NexisClaw/plugin-sdk/security-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { writeExternalFileWithinRoot } from "GreenchClaw/plugin-sdk/security-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 type EdgeTTSRuntimeConfig = {
   voice?: string;

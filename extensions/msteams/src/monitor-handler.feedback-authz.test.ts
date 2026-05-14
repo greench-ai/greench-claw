@@ -2,7 +2,7 @@ import { access, mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig, PluginRuntime, RuntimeEnv } from "../runtime-api.js";
+import type { GreenchClawConfig, PluginRuntime, RuntimeEnv } from "../runtime-api.js";
 import {
   type MSTeamsActivityHandler,
   type MSTeamsMessageHandlerDeps,
@@ -67,7 +67,7 @@ function createRuntimeStub(readAllowFromStore: ReturnType<typeof vi.fn>): Plugin
 }
 
 function createDeps(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   readAllowFromStore?: ReturnType<typeof vi.fn>;
 }): MSTeamsMessageHandlerDeps {
   const readAllowFromStore = params.readAllowFromStore ?? vi.fn(async () => []);
@@ -141,11 +141,11 @@ async function expectFileMissing(filePath: string) {
 }
 
 async function withFeedbackHandler(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   context: Parameters<typeof createFeedbackInvokeContext>[0];
   assertResult: (args: { tmpDir: string; originalRun: ReturnType<typeof vi.fn> }) => Promise<void>;
 }) {
-  const tmpDir = await mkdtemp(path.join(tmpdir(), "NexisClaw-msteams-feedback-"));
+  const tmpDir = await mkdtemp(path.join(tmpdir(), "GreenchClaw-msteams-feedback-"));
   try {
     const originalRun = vi.fn(async () => undefined);
     const handler = registerMSTeamsHandlers(
@@ -182,7 +182,7 @@ describe("msteams feedback invoke authz", () => {
             allowFrom: ["owner-aad"],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       context: {
         reaction: "like",
         conversationId: "a:personal-chat;messageid=bot-msg-1",
@@ -241,7 +241,7 @@ describe("msteams feedback invoke authz", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       context: {
         reaction: "like",
         conversationId: "a:personal-chat;messageid=bot-msg-1",
@@ -293,7 +293,7 @@ describe("msteams feedback invoke authz", () => {
             allowFrom: ["owner-aad"],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       context: {
         reaction: "like",
         conversationId: "a:personal-chat;messageid=bot-msg-1",
@@ -311,7 +311,7 @@ describe("msteams feedback invoke authz", () => {
   });
 
   it("does not trigger reflection for a group sender outside groupAllowFrom", async () => {
-    const tmpDir = await mkdtemp(path.join(tmpdir(), "NexisClaw-msteams-feedback-"));
+    const tmpDir = await mkdtemp(path.join(tmpdir(), "GreenchClaw-msteams-feedback-"));
     try {
       const originalRun = vi.fn(async () => undefined);
       const handler = registerMSTeamsHandlers(
@@ -326,7 +326,7 @@ describe("msteams feedback invoke authz", () => {
                 feedbackReflection: true,
               },
             },
-          } as NexisClawConfig,
+          } as GreenchClawConfig,
         }),
       ) as MSTeamsActivityHandler & {
         run: NonNullable<MSTeamsActivityHandler["run"]>;

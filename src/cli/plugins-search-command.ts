@@ -63,7 +63,7 @@ function formatPackageSearchLine(entry: ClawHubPackageSearchResult): string {
     pkg.latestVersion ? `v${pkg.latestVersion}` : undefined,
   ].filter(Boolean);
   const summary = pkg.summary ? theme.muted(` — ${pkg.summary}`) : "";
-  return `${pkg.name}  ${theme.muted(flags.join(" | "))}${summary}\n  ${theme.muted(`Install: NexisClaw plugins install clawhub:${pkg.name}`)}`;
+  return `${pkg.name}  ${theme.muted(flags.join(" | "))}${summary}\n  ${theme.muted(`Install: GreenchClaw plugins install clawhub:${pkg.name}`)}`;
 }
 
 export async function runPluginsSearchCommand(
@@ -75,7 +75,7 @@ export async function runPluginsSearchCommand(
     Array.isArray(queryParts) ? queryParts.join(" ") : queryParts,
   );
   if (!query) {
-    runtime.error("Usage: NexisClaw plugins search <query>");
+    runtime.error("Usage: GreenchClaw plugins search <query>");
     return runtime.exit(1);
   }
 

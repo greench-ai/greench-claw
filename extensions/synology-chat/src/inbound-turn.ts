@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { sendMessage } from "./client.js";
 import type { SynologyInboundMessage } from "./inbound-context.js";
 import { getSynologyRuntime } from "./runtime.js";
@@ -12,7 +12,7 @@ type SynologyChannelLog = {
 };
 
 function resolveSynologyChatInboundRoute(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   account: ResolvedSynologyChatAccount;
   userId: string;
 }) {
@@ -62,7 +62,7 @@ export async function dispatchSynologyChatInboundTurn(params: {
   log?: SynologyChannelLog;
 }): Promise<null> {
   const rt = getSynologyRuntime();
-  const currentCfg = rt.config.current() as NexisClawConfig;
+  const currentCfg = rt.config.current() as GreenchClawConfig;
 
   // The Chat API user_id (for sending) may differ from the webhook
   // user_id (used for sessions/pairing). Use chatUserId for API calls.

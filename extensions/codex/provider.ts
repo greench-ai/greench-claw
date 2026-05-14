@@ -1,11 +1,11 @@
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/core";
-import { resolvePluginConfigObject } from "NexisClaw/plugin-sdk/plugin-config-runtime";
-import type { ProviderRuntimeModel } from "NexisClaw/plugin-sdk/plugin-entry";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/core";
+import { resolvePluginConfigObject } from "GreenchClaw/plugin-sdk/plugin-config-runtime";
+import type { ProviderRuntimeModel } from "GreenchClaw/plugin-sdk/plugin-entry";
 import {
   normalizeModelCompat,
   type ModelProviderConfig,
   type ProviderPlugin,
-} from "NexisClaw/plugin-sdk/provider-model-shared";
+} from "GreenchClaw/plugin-sdk/provider-model-shared";
 import { resolveCodexSystemPromptContribution } from "./prompt-overlay.js";
 import {
   buildCodexModelDefinition,
@@ -26,7 +26,7 @@ import type {
 } from "./src/app-server/models.js";
 
 const DEFAULT_DISCOVERY_TIMEOUT_MS = 2500;
-const LIVE_DISCOVERY_ENV = "NEXISCLAW_CODEX_DISCOVERY_LIVE";
+const LIVE_DISCOVERY_ENV = "GREENCHCLAW_CODEX_DISCOVERY_LIVE";
 const MODEL_DISCOVERY_PAGE_LIMIT = 100;
 const CODEX_APP_SERVER_SETUP_METHOD_ID = "app-server";
 const CODEX_DEFAULT_MODEL_REF = `${CODEX_PROVIDER_ID}/${FALLBACK_CODEX_MODELS[0].id}`;

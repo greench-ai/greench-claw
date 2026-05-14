@@ -371,8 +371,8 @@ describe("resolveConfigEnvVars", () => {
         },
         {
           name: "gateway auth token",
-          config: { gateway: { auth: { token: "${NEXISCLAW_GATEWAY_TOKEN}" } } },
-          env: { NEXISCLAW_GATEWAY_TOKEN: "secret-token" },
+          config: { gateway: { auth: { token: "${GREENCHCLAW_GATEWAY_TOKEN}" } } },
+          env: { GREENCHCLAW_GATEWAY_TOKEN: "secret-token" },
           expected: { gateway: { auth: { token: "secret-token" } } },
         },
         {

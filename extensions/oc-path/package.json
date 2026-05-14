@@ -1,8 +1,8 @@
 {
-  "name": "@NexisClaw/oc-path",
+  "name": "@GreenchClaw/oc-path",
   "version": "2026.5.12-beta.1",
   "private": true,
-  "description": "NexisClaw oc:// workspace path plugin",
+  "description": "GreenchClaw oc:// workspace path plugin",
   "type": "module",
   "dependencies": {
     "commander": "14.0.3",
@@ -10,18 +10,18 @@
     "markdown-it": "14.1.1"
   },
   "devDependencies": {
-    "@NexisClaw/plugin-sdk": "workspace:*",
-    "NexisClaw": "workspace:*"
+    "@GreenchClaw/plugin-sdk": "workspace:*",
+    "GreenchClaw": "workspace:*"
   },
   "peerDependencies": {
-    "NexisClaw": ">=2026.5.12-beta.1"
+    "GreenchClaw": ">=2026.5.12-beta.1"
   },
   "peerDependenciesMeta": {
-    "NexisClaw": {
+    "GreenchClaw": {
       "optional": true
     }
   },
-  "NexisClaw": {
+  "GreenchClaw": {
     "extensions": [
       "./index.ts"
     ]

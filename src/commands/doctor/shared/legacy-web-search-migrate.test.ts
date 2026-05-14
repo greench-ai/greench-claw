@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../../../config/config.js";
+import type { GreenchClawConfig } from "../../../config/config.js";
 import {
   listLegacyWebSearchConfigPaths,
   migrateLegacyWebSearchConfig,
@@ -7,7 +7,7 @@ import {
 
 describe("legacy web search config", () => {
   it("migrates legacy provider config through bundled web search ownership metadata", () => {
-    const res = migrateLegacyWebSearchConfig<NexisClawConfig>({
+    const res = migrateLegacyWebSearchConfig<GreenchClawConfig>({
       tools: {
         web: {
           search: {

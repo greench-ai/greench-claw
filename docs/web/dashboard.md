@@ -38,9 +38,9 @@ Prefer localhost, Tailscale Serve, or an SSH tunnel.
 ## Fast path (recommended)
 
 - After onboarding, the CLI auto-opens the dashboard and prints a clean (non-tokenized) link.
-- Re-open anytime: `NexisClaw dashboard` (copies link, opens browser if possible, shows SSH hint if headless).
-- If clipboard and browser delivery fail, `NexisClaw dashboard` still prints the
-  clean URL and tells you to use the token from `NEXISCLAW_GATEWAY_TOKEN` or
+- Re-open anytime: `GreenchClaw dashboard` (copies link, opens browser if possible, shows SSH hint if headless).
+- If clipboard and browser delivery fail, `GreenchClaw dashboard` still prints the
+  clean URL and tells you to use the token from `GREENCHCLAW_GATEWAY_TOKEN` or
   `gateway.auth.token` as the URL fragment key `token`; it does not print token
   values in logs.
 - If the UI prompts for shared-secret auth, paste the configured token or
@@ -52,18 +52,18 @@ Prefer localhost, Tailscale Serve, or an SSH tunnel.
 - **Gateway TLS**: when `gateway.tls.enabled: true`, dashboard/status links use
   `https://` and Control UI WebSocket links use `wss://`.
 - **Shared-secret token source**: `gateway.auth.token` (or
-  `NEXISCLAW_GATEWAY_TOKEN`); `NexisClaw dashboard` can pass it via URL fragment
+  `GREENCHCLAW_GATEWAY_TOKEN`); `GreenchClaw dashboard` can pass it via URL fragment
   for one-time bootstrap, and the Control UI keeps it in sessionStorage for the
   current browser tab session and selected gateway URL instead of localStorage.
-- If `gateway.auth.token` is SecretRef-managed, `NexisClaw dashboard`
+- If `gateway.auth.token` is SecretRef-managed, `GreenchClaw dashboard`
   prints/copies/opens a non-tokenized URL by design. This avoids exposing
   externally managed tokens in shell logs, clipboard history, or browser-launch
   arguments.
 - If `gateway.auth.token` is configured as a SecretRef and is unresolved in your
-  current shell, `NexisClaw dashboard` still prints a non-tokenized URL plus
+  current shell, `GreenchClaw dashboard` still prints a non-tokenized URL plus
   actionable auth setup guidance.
 - **Shared-secret password**: use the configured `gateway.auth.password` (or
-  `NEXISCLAW_GATEWAY_PASSWORD`). The dashboard does not persist passwords across
+  `GREENCHCLAW_GATEWAY_PASSWORD`). The dashboard does not persist passwords across
   reloads.
 - **Identity-bearing modes**: Tailscale Serve can satisfy Control UI/WebSocket
   auth via identity headers when `gateway.auth.allowTailscale: true`, and a
@@ -81,7 +81,7 @@ Prefer localhost, Tailscale Serve, or an SSH tunnel.
 
 ## If you see "unauthorized" / 1008
 
-- Ensure the gateway is reachable (local: `NexisClaw status`; remote: SSH tunnel `ssh -N -L 18789:127.0.0.1:18789 user@host` then open `http://127.0.0.1:18789/`).
+- Ensure the gateway is reachable (local: `GreenchClaw status`; remote: SSH tunnel `ssh -N -L 18789:127.0.0.1:18789 user@host` then open `http://127.0.0.1:18789/`).
 - For `AUTH_TOKEN_MISMATCH`, clients may do one trusted retry with a cached device token when the gateway returns retry hints. That cached-token retry reuses the token's cached approved scopes; explicit `deviceToken` / explicit `scopes` callers keep their requested scope set. If auth still fails after that retry, resolve token drift manually.
 - For `AUTH_SCOPE_MISMATCH`, the device token was recognized but does not carry the dashboard's requested scopes; re-pair or approve the requested scope contract instead of rotating the shared gateway token.
 - Outside that retry path, connect auth precedence is explicit shared token/password first, then explicit `deviceToken`, then stored device token, then bootstrap token.
@@ -90,12 +90,12 @@ Prefer localhost, Tailscale Serve, or an SSH tunnel.
   the second concurrent bad retry can already show `retry later`.
 - For token drift repair steps, follow [Token drift recovery checklist](/cli/devices#token-drift-recovery-checklist).
 - Retrieve or supply the shared secret from the gateway host:
-  - Token: `NexisClaw config get gateway.auth.token`
+  - Token: `GreenchClaw config get gateway.auth.token`
   - Password: resolve the configured `gateway.auth.password` or
-    `NEXISCLAW_GATEWAY_PASSWORD`
+    `GREENCHCLAW_GATEWAY_PASSWORD`
   - SecretRef-managed token: resolve the external secret provider or export
-    `NEXISCLAW_GATEWAY_TOKEN` in this shell, then rerun `NexisClaw dashboard`
-  - No shared secret configured: `NexisClaw doctor --generate-gateway-token`
+    `GREENCHCLAW_GATEWAY_TOKEN` in this shell, then rerun `GreenchClaw dashboard`
+  - No shared secret configured: `GreenchClaw doctor --generate-gateway-token`
 - In the dashboard settings, paste the token or password into the auth field,
   then connect.
 - The UI language picker is in **Overview -> Gateway Access -> Language**.

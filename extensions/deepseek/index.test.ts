@@ -3,8 +3,8 @@ import { createAssistantMessageEventStream } from "@earendil-works/pi-ai";
 import {
   registerSingleProviderPlugin,
   resolveProviderPluginChoice,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import { buildOpenAICompletionsParams } from "NexisClaw/plugin-sdk/provider-transport-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import { buildOpenAICompletionsParams } from "GreenchClaw/plugin-sdk/provider-transport-runtime";
 import { describe, expect, it } from "vitest";
 import { runSingleProviderCatalog } from "../test-support/provider-model-test-helpers.js";
 import deepseekPlugin from "./index.js";

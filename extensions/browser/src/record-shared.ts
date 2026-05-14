@@ -2,7 +2,7 @@ import {
   asNullableRecord,
   hasNonEmptyString as sharedHasNonEmptyString,
   isRecord,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 export { asNullableRecord as asRecord, isRecord };
 

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   createDirectDmPreCryptoGuardPolicy,
   createPreCryptoDirectDmAuthorizer,
@@ -9,7 +9,7 @@ import {
 
 const baseCfg = {
   commands: { useAccessGroups: true },
-} as unknown as NexisClawConfig;
+} as unknown as GreenchClawConfig;
 
 function createDirectDmRuntime() {
   const recordInboundSession = vi.fn(async () => {});
@@ -106,7 +106,7 @@ describe("plugin-sdk/direct-dm", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       channel: "nostr",
       accountId: "default",
       dmPolicy: "allowlist",

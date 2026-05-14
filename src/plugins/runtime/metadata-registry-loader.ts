@@ -1,5 +1,5 @@
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
-import { loadNexisClawPlugins } from "../loader.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
+import { loadGreenchClawPlugins } from "../loader.js";
 import type { PluginManifestRegistry } from "../manifest-registry.js";
 import { hasExplicitPluginIdScope } from "../plugin-scope.js";
 import type { PluginRegistry } from "../registry.js";
@@ -11,8 +11,8 @@ import {
 } from "./load-context.js";
 
 export function loadPluginMetadataRegistrySnapshot(options?: {
-  config?: NexisClawConfig;
-  activationSourceConfig?: NexisClawConfig;
+  config?: GreenchClawConfig;
+  activationSourceConfig?: GreenchClawConfig;
   env?: NodeJS.ProcessEnv;
   logger?: PluginLogger;
   workspaceDir?: string;
@@ -23,7 +23,7 @@ export function loadPluginMetadataRegistrySnapshot(options?: {
 }): PluginRegistry {
   const context = options?.runtimeContext ?? resolvePluginRuntimeLoadContext(options);
 
-  return loadNexisClawPlugins(
+  return loadGreenchClawPlugins(
     buildPluginRuntimeLoadOptions(context, {
       ...(options?.config !== undefined ? { config: options.config } : {}),
       ...(options?.activationSourceConfig !== undefined

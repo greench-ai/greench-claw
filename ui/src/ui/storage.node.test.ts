@@ -24,15 +24,15 @@ function setControlUiBasePath(value: string | undefined) {
       "window",
       value == null
         ? ({} as Window & typeof globalThis)
-        : ({ __NEXISCLAW_CONTROL_UI_BASE_PATH__: value } as Window & typeof globalThis),
+        : ({ __GREENCHCLAW_CONTROL_UI_BASE_PATH__: value } as Window & typeof globalThis),
     );
     return;
   }
   if (value == null) {
-    delete window.__NEXISCLAW_CONTROL_UI_BASE_PATH__;
+    delete window.__GREENCHCLAW_CONTROL_UI_BASE_PATH__;
     return;
   }
-  Object.defineProperty(window, "__NEXISCLAW_CONTROL_UI_BASE_PATH__", {
+  Object.defineProperty(window, "__GREENCHCLAW_CONTROL_UI_BASE_PATH__", {
     value,
     writable: true,
     configurable: true,
@@ -126,19 +126,19 @@ describe("loadSettings default gateway URL derivation", () => {
       host: "gateway.example:8443",
       pathname: "/ignored/path",
     });
-    setControlUiBasePath(" /NexisClaw/ ");
+    setControlUiBasePath(" /GreenchClaw/ ");
 
-    expect(loadSettings().gatewayUrl).toBe(expectedGatewayUrl("/NexisClaw"));
+    expect(loadSettings().gatewayUrl).toBe(expectedGatewayUrl("/GreenchClaw"));
   });
 
   it("infers base path from nested pathname when configured base path is not set", () => {
     setTestLocation({
       protocol: "http:",
       host: "gateway.example:18789",
-      pathname: "/apps/NexisClaw/chat",
+      pathname: "/apps/GreenchClaw/chat",
     });
 
-    expect(loadSettings().gatewayUrl).toBe(expectedGatewayUrl("/apps/NexisClaw"));
+    expect(loadSettings().gatewayUrl).toBe(expectedGatewayUrl("/apps/GreenchClaw"));
   });
 
   it("skips node sessionStorage accessors that warn without a storage file", () => {
@@ -169,23 +169,23 @@ describe("loadSettings default gateway URL derivation", () => {
       host: "gateway.example:8443",
       pathname: "/",
     });
-    sessionStorage.setItem("NexisClaw.control.token.v1", "legacy-session-token");
+    sessionStorage.setItem("GreenchClaw.control.token.v1", "legacy-session-token");
     localStorage.setItem(
-      "NexisClaw.control.settings.v1",
+      "GreenchClaw.control.settings.v1",
       JSON.stringify({
-        gatewayUrl: "wss://gateway.example:8443/NexisClaw",
+        gatewayUrl: "wss://gateway.example:8443/GreenchClaw",
         token: "persisted-token",
         sessionKey: "agent",
       }),
     );
 
     const settings = loadSettings();
-    expect(settings.gatewayUrl).toBe("wss://gateway.example:8443/NexisClaw");
+    expect(settings.gatewayUrl).toBe("wss://gateway.example:8443/GreenchClaw");
     expect(settings.token).toBe("");
     expect(settings.sessionKey).toBe("agent");
-    const scopedKey = "NexisClaw.control.settings.v1:wss://gateway.example:8443/NexisClaw";
+    const scopedKey = "GreenchClaw.control.settings.v1:wss://gateway.example:8443/GreenchClaw";
     expect(JSON.parse(localStorage.getItem(scopedKey) ?? "{}")).toEqual({
-      gatewayUrl: "wss://gateway.example:8443/NexisClaw",
+      gatewayUrl: "wss://gateway.example:8443/GreenchClaw",
       theme: "claw",
       themeMode: "system",
       chatFocusMode: false,
@@ -197,7 +197,7 @@ describe("loadSettings default gateway URL derivation", () => {
       navGroupsCollapsed: {},
       borderRadius: 50,
       sessionsByGateway: {
-        "wss://gateway.example:8443/NexisClaw": {
+        "wss://gateway.example:8443/GreenchClaw": {
           sessionKey: "agent",
           lastActiveSessionKey: "agent",
         },
@@ -312,7 +312,7 @@ describe("loadSettings default gateway URL derivation", () => {
     expect(settings.gatewayUrl).toBe(gwUrl);
     expect(settings.token).toBe("memory-only-token");
 
-    const scopedKey = `NexisClaw.control.settings.v1:${gwUrl}`;
+    const scopedKey = `GreenchClaw.control.settings.v1:${gwUrl}`;
     expect(JSON.parse(localStorage.getItem(scopedKey) ?? "{}")).toEqual({
       gatewayUrl: gwUrl,
       theme: "claw",
@@ -405,7 +405,7 @@ describe("loadSettings default gateway URL derivation", () => {
       borderRadius: 50,
     });
 
-    const scopedKey = `NexisClaw.control.settings.v1:${gwUrl}`;
+    const scopedKey = `GreenchClaw.control.settings.v1:${gwUrl}`;
     const persisted = JSON.parse(localStorage.getItem(scopedKey) ?? "{}") as Record<
       string,
       unknown
@@ -457,7 +457,7 @@ describe("loadSettings default gateway URL derivation", () => {
 
     const gwUrl = expectedGatewayUrl("");
     localStorage.setItem(
-      `NexisClaw.control.settings.v1:${gwUrl}`,
+      `GreenchClaw.control.settings.v1:${gwUrl}`,
       JSON.stringify({
         gatewayUrl: gwUrl,
         theme: "custom",
@@ -531,7 +531,7 @@ describe("loadSettings default gateway URL derivation", () => {
     });
 
     const gwUrl = expectedGatewayUrl("");
-    const scopedKey = `NexisClaw.control.settings.v1:wss://gateway.example:8443`;
+    const scopedKey = `GreenchClaw.control.settings.v1:wss://gateway.example:8443`;
 
     // Pre-seed sessionsByGateway with 11 stale gateway entries so the next
     // saveSettings call pushes the total to 12 and triggers the cap (10).
@@ -594,7 +594,7 @@ describe("loadSettings default gateway URL derivation", () => {
       name: "Buns",
       avatar: "🦞",
     });
-    expect(JSON.parse(localStorage.getItem("NexisClaw.control.user.v1") ?? "{}")).toEqual({
+    expect(JSON.parse(localStorage.getItem("GreenchClaw.control.user.v1") ?? "{}")).toEqual({
       name: "Buns",
       avatar: "🦞",
     });
@@ -602,7 +602,7 @@ describe("loadSettings default gateway URL derivation", () => {
 
   it("normalizes invalid local user identity values on load", () => {
     localStorage.setItem(
-      "NexisClaw.control.user.v1",
+      "GreenchClaw.control.user.v1",
       JSON.stringify({
         name: "  ",
         avatar: "https://example.com/avatar.png",
@@ -623,6 +623,6 @@ describe("loadSettings default gateway URL derivation", () => {
       name: null,
       avatar: null,
     });
-    expect(localStorage.getItem("NexisClaw.control.user.v1")).toBeNull();
+    expect(localStorage.getItem("GreenchClaw.control.user.v1")).toBeNull();
   });
 });

@@ -110,7 +110,7 @@ describe("runMemoryFlushIfNeeded", () => {
   let rootDir = "";
 
   beforeEach(async () => {
-    rootDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-memory-unit-"));
+    rootDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-memory-unit-"));
     registerMemoryFlushPlanResolverForTest(() => ({
       softThresholdTokens: 4_000,
       forceFlushTranscriptBytes: 1_000_000_000,

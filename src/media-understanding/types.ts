@@ -1,5 +1,5 @@
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 
 type MediaUnderstandingKind = "audio.transcription" | "video.description" | "image.description";
 
@@ -134,7 +134,7 @@ export type ImageDescriptionRequest = {
   preferredProfile?: string;
   authStore?: AuthProfileStore;
   agentDir: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   model: string;
   provider: string;
 };
@@ -156,7 +156,7 @@ export type ImagesDescriptionRequest = {
   preferredProfile?: string;
   authStore?: AuthProfileStore;
   agentDir: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 };
 
 export type ImageDescriptionResult = {
@@ -197,7 +197,7 @@ export type StructuredExtractionRequest = {
   preferredProfile?: string;
   authStore?: AuthProfileStore;
   agentDir: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   model: string;
   provider: string;
 };

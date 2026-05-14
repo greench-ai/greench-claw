@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveSecretInputRef } from "../config/types.secrets.js";
 import { secretRefKey } from "../secrets/ref-contract.js";
 import { resolveSecretRefValues } from "../secrets/resolve.js";
@@ -29,7 +29,7 @@ function buildUnresolvedReason(params: {
 }
 
 export async function resolveConfiguredSecretInputString(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   value: unknown;
   path: string;
@@ -86,7 +86,7 @@ export async function resolveConfiguredSecretInputString(params: {
 }
 
 export async function resolveConfiguredSecretInputWithFallback(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   value: unknown;
   path: string;
@@ -153,7 +153,7 @@ export async function resolveConfiguredSecretInputWithFallback(params: {
 }
 
 export async function resolveRequiredConfiguredSecretRefInputString(params: {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   env: NodeJS.ProcessEnv;
   value: unknown;
   path: string;

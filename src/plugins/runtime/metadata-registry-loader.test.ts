@@ -3,7 +3,7 @@ import type { PluginLoadOptions } from "../loader.js";
 
 const loadConfigMock = vi.fn();
 const applyPluginAutoEnableMock = vi.fn();
-const loadNexisClawPluginsMock = vi.fn();
+const loadGreenchClawPluginsMock = vi.fn();
 
 let loadPluginMetadataRegistrySnapshot: typeof import("./metadata-registry-loader.js").loadPluginMetadataRegistrySnapshot;
 
@@ -17,7 +17,7 @@ vi.mock("../../config/plugin-auto-enable.js", () => ({
 }));
 
 vi.mock("../loader.js", () => ({
-  loadNexisClawPlugins: (...args: unknown[]) => loadNexisClawPluginsMock(...args),
+  loadGreenchClawPlugins: (...args: unknown[]) => loadGreenchClawPluginsMock(...args),
 }));
 
 vi.mock("../../agents/agent-scope.js", () => ({
@@ -25,11 +25,11 @@ vi.mock("../../agents/agent-scope.js", () => ({
   resolveDefaultAgentId: () => "default",
 }));
 
-function getOnlyLoadNexisClawPluginsOptions(): PluginLoadOptions {
-  expect(loadNexisClawPluginsMock).toHaveBeenCalledTimes(1);
-  const options = loadNexisClawPluginsMock.mock.calls.at(0)?.[0];
+function getOnlyLoadGreenchClawPluginsOptions(): PluginLoadOptions {
+  expect(loadGreenchClawPluginsMock).toHaveBeenCalledTimes(1);
+  const options = loadGreenchClawPluginsMock.mock.calls.at(0)?.[0];
   if (!options || typeof options !== "object") {
-    throw new Error("expected loadNexisClawPlugins to receive plugin load options");
+    throw new Error("expected loadGreenchClawPlugins to receive plugin load options");
   }
   return options as PluginLoadOptions;
 }
@@ -42,32 +42,32 @@ describe("loadPluginMetadataRegistrySnapshot", () => {
   beforeEach(() => {
     loadConfigMock.mockReset();
     applyPluginAutoEnableMock.mockReset();
-    loadNexisClawPluginsMock.mockReset();
+    loadGreenchClawPluginsMock.mockReset();
     loadConfigMock.mockReturnValue({ plugins: {} });
     applyPluginAutoEnableMock.mockImplementation((params: { config: unknown }) => ({
       config: params.config,
       changes: [],
       autoEnabledReasons: {},
     }));
-    loadNexisClawPluginsMock.mockReturnValue({ plugins: [], diagnostics: [] });
+    loadGreenchClawPluginsMock.mockReturnValue({ plugins: [], diagnostics: [] });
   });
 
   it("defaults to a non-activating validate snapshot", () => {
     loadPluginMetadataRegistrySnapshot({
       config: { plugins: {} },
       activationSourceConfig: { plugins: { allow: ["demo"] } },
-      env: { HOME: "/tmp/NexisClaw-home" } as NodeJS.ProcessEnv,
+      env: { HOME: "/tmp/GreenchClaw-home" } as NodeJS.ProcessEnv,
       workspaceDir: "/workspace",
       onlyPluginIds: ["demo"],
     });
 
-    const loadOptions = getOnlyLoadNexisClawPluginsOptions();
+    const loadOptions = getOnlyLoadGreenchClawPluginsOptions();
     expect(loadOptions).toEqual({
       config: { plugins: {} },
       activationSourceConfig: { plugins: { allow: ["demo"] } },
       autoEnabledReasons: {},
       workspaceDir: "/workspace",
-      env: { HOME: "/tmp/NexisClaw-home" },
+      env: { HOME: "/tmp/GreenchClaw-home" },
       logger: loadOptions.logger,
       throwOnLoadError: true,
       cache: false,
@@ -84,7 +84,7 @@ describe("loadPluginMetadataRegistrySnapshot", () => {
       loadModules: false,
     });
 
-    const loadOptions = getOnlyLoadNexisClawPluginsOptions();
+    const loadOptions = getOnlyLoadGreenchClawPluginsOptions();
     expect(loadOptions).toEqual({
       config: { plugins: {} },
       activationSourceConfig: { plugins: {} },
@@ -113,7 +113,7 @@ describe("loadPluginMetadataRegistrySnapshot", () => {
       workspaceDir: "/workspace",
     });
 
-    expect(getOnlyLoadNexisClawPluginsOptions()).toEqual({
+    expect(getOnlyLoadGreenchClawPluginsOptions()).toEqual({
       config: { plugins: {} },
       activationSourceConfig: { plugins: {} },
       autoEnabledReasons: {},
@@ -156,7 +156,7 @@ describe("loadPluginMetadataRegistrySnapshot", () => {
     });
 
     expect(applyPluginAutoEnableMock).not.toHaveBeenCalled();
-    expect(getOnlyLoadNexisClawPluginsOptions()).toEqual({
+    expect(getOnlyLoadGreenchClawPluginsOptions()).toEqual({
       config: { plugins: { allow: ["compat-provider"] } },
       activationSourceConfig: { plugins: { allow: ["raw-plugin"] } },
       autoEnabledReasons: {},
@@ -178,7 +178,7 @@ describe("loadPluginMetadataRegistrySnapshot", () => {
       onlyPluginIds: [],
     });
 
-    const loadOptions = getOnlyLoadNexisClawPluginsOptions();
+    const loadOptions = getOnlyLoadGreenchClawPluginsOptions();
     expect(loadOptions).toEqual({
       config: { plugins: {} },
       activationSourceConfig: { plugins: {} },

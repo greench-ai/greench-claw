@@ -22,20 +22,20 @@ function resolveInstallerVersionCases(params: { stdinCwd: string }): string[] {
     [
       "-c",
       `${versionHelperSource}
-fake_NexisClaw_decorated() { printf '%s\\n' 'NexisClaw 2026.3.10 (abcdef0)'; }
-fake_NexisClaw_raw() { printf '%s\\n' "NexisClaw dev's build"; }
-NEXISCLAW_BIN=fake_NexisClaw_decorated resolve_NexisClaw_version
-NEXISCLAW_BIN=fake_NexisClaw_raw resolve_NexisClaw_version
+fake_GreenchClaw_decorated() { printf '%s\\n' 'GreenchClaw 2026.3.10 (abcdef0)'; }
+fake_GreenchClaw_raw() { printf '%s\\n' "GreenchClaw dev's build"; }
+GREENCHCLAW_BIN=fake_GreenchClaw_decorated resolve_GreenchClaw_version
+GREENCHCLAW_BIN=fake_GreenchClaw_raw resolve_GreenchClaw_version
 (
   cd "$1"
-  source /dev/stdin <<'NEXISCLAW_STDIN_INSTALLER'
+  source /dev/stdin <<'GREENCHCLAW_STDIN_INSTALLER'
 ${versionHelperSource}
-fake_NexisClaw_stdin() { printf '%s\\n' 'NexisClaw 2026.3.10 (abcdef0)'; }
-NEXISCLAW_BIN=fake_NexisClaw_stdin
-resolve_NexisClaw_version
-NEXISCLAW_STDIN_INSTALLER
+fake_GreenchClaw_stdin() { printf '%s\\n' 'GreenchClaw 2026.3.10 (abcdef0)'; }
+GREENCHCLAW_BIN=fake_GreenchClaw_stdin
+resolve_GreenchClaw_version
+GREENCHCLAW_STDIN_INSTALLER
 )`,
-      "NexisClaw-version-test",
+      "GreenchClaw-version-test",
       params.stdinCwd,
     ],
     {
@@ -43,7 +43,7 @@ NEXISCLAW_STDIN_INSTALLER
       encoding: "utf-8",
       env: {
         ...process.env,
-        NEXISCLAW_INSTALL_SH_NO_RUN: "1",
+        GREENCHCLAW_INSTALL_SH_NO_RUN: "1",
       },
     },
   );
@@ -58,7 +58,7 @@ describe("install.sh version resolution", () => {
   it.runIf(process.platform !== "win32")(
     "parses CLI versions and keeps stdin helpers isolated from cwd",
     () => {
-      const hostileCwd = makeTempDir(tempRoots, "NexisClaw-install-stdin-");
+      const hostileCwd = makeTempDir(tempRoots, "GreenchClaw-install-stdin-");
       const hostileHelper = path.join(
         hostileCwd,
         "docker",
@@ -69,7 +69,7 @@ describe("install.sh version resolution", () => {
       fs.writeFileSync(
         hostileHelper,
         `#!/usr/bin/env bash
-extract_NexisClaw_semver() {
+extract_GreenchClaw_semver() {
   printf '%s' 'poisoned'
 }
 `,
@@ -80,7 +80,7 @@ extract_NexisClaw_semver() {
         resolveInstallerVersionCases({
           stdinCwd: hostileCwd,
         }),
-      ).toEqual(["2026.3.10", "NexisClaw dev's build", "2026.3.10"]);
+      ).toEqual(["2026.3.10", "GreenchClaw dev's build", "2026.3.10"]);
     },
   );
 });

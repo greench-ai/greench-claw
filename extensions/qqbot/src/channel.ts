@@ -1,12 +1,12 @@
-import { getExecApprovalReplyMetadata } from "NexisClaw/plugin-sdk/approval-runtime";
+import { getExecApprovalReplyMetadata } from "GreenchClaw/plugin-sdk/approval-runtime";
 import {
   createMessageReceiptFromOutboundResults,
   defineChannelMessageAdapter,
   type ChannelMessageSendResult,
   type MessageReceiptPartKind,
-} from "NexisClaw/plugin-sdk/channel-message";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import type { ChannelPlugin } from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/channel-message";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import type { ChannelPlugin } from "GreenchClaw/plugin-sdk/core";
 // Register the PlatformAdapter before any core/ module is used.
 import "./bridge/bootstrap.js";
 import { getQQBotApprovalCapability } from "./bridge/approval/capability.js";
@@ -17,7 +17,7 @@ import {
   resolveQQBotAccount,
 } from "./bridge/config.js";
 import type { GatewayContext } from "./bridge/gateway.js";
-import { toGatewayAccount, writeNexisClawConfigThroughRuntime } from "./bridge/narrowing.js";
+import { toGatewayAccount, writeGreenchClawConfigThroughRuntime } from "./bridge/narrowing.js";
 import { getQQBotRuntime } from "./bridge/runtime.js";
 import { qqbotSetupWizard } from "./bridge/setup/surface.js";
 import { qqbotChannelConfigSchema } from "./config-schema.js";
@@ -59,7 +59,7 @@ function createQQBotSendReceipt(params: {
 }
 
 async function sendQQBotText(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   to: string;
   text: string;
   accountId?: string | null;
@@ -90,7 +90,7 @@ async function sendQQBotText(params: {
 }
 
 async function sendQQBotMedia(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   to: string;
   text?: string | null;
   mediaUrl?: string | null;
@@ -172,7 +172,7 @@ function persistAccountCredentialSnapshot(account: ResolvedQQBotAccount): void {
 }
 
 function shouldSuppressLocalQQBotApprovalPrompt(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   payload: { text?: string; channelData?: unknown };
   hint?: { kind: "approval-pending" | "approval-resolved"; approvalKind: "exec" | "plugin" };
@@ -212,7 +212,7 @@ export const qqbotPlugin: ChannelPlugin<ResolvedQQBotAccount> = {
      * Treat an account as configured when either the live config has
      * credentials OR a recoverable credential backup exists. This mirrors
      * the standalone plugin and lets the gateway survive a hot upgrade
-     * that wiped NexisClaw.json mid-flight.
+     * that wiped GreenchClaw.json mid-flight.
      */
     isConfigured: (account: ResolvedQQBotAccount | undefined) => {
       if (qqbotConfigAdapter.isConfigured(account)) {
@@ -277,7 +277,7 @@ export const qqbotPlugin: ChannelPlugin<ResolvedQQBotAccount> = {
 
       // Recover credentials from the per-account backup if the live
       // config is missing appId/secret (e.g. a hot-upgrade wiped
-      // NexisClaw.json). We only restore when both fields are empty so a
+      // GreenchClaw.json). We only restore when both fields are empty so a
       // user's intentional clear isn't silently undone.
       if (!account.appId || !account.clientSecret) {
         const backup = loadCredentialBackup(account.accountId);
@@ -287,7 +287,7 @@ export const qqbotPlugin: ChannelPlugin<ResolvedQQBotAccount> = {
               appId: backup.appId,
               clientSecret: backup.clientSecret,
             });
-            await writeNexisClawConfigThroughRuntime(getQQBotRuntime(), nextCfg);
+            await writeGreenchClawConfigThroughRuntime(getQQBotRuntime(), nextCfg);
             cfg = nextCfg;
             account = resolveQQBotAccount(nextCfg, account.accountId);
             log?.info(
@@ -325,7 +325,7 @@ export const qqbotPlugin: ChannelPlugin<ResolvedQQBotAccount> = {
             lastConnectedAt: Date.now(),
           });
           // Snapshot credentials so we can recover from the next hot
-          // upgrade that might wipe NexisClaw.json mid-flight.
+          // upgrade that might wipe GreenchClaw.json mid-flight.
           persistAccountCredentialSnapshot(account);
         },
         onResumed: () => {
@@ -354,10 +354,13 @@ export const qqbotPlugin: ChannelPlugin<ResolvedQQBotAccount> = {
       );
 
       if (changed) {
-        await writeNexisClawConfigThroughRuntime(getQQBotRuntime(), nextCfg as NexisClawConfig);
+        await writeGreenchClawConfigThroughRuntime(getQQBotRuntime(), nextCfg as GreenchClawConfig);
       }
 
-      const resolved = resolveQQBotAccount((changed ? nextCfg : cfg) as NexisClawConfig, accountId);
+      const resolved = resolveQQBotAccount(
+        (changed ? nextCfg : cfg) as GreenchClawConfig,
+        accountId,
+      );
       const loggedOut = resolved.secretSource === "none";
       const envToken = Boolean(process.env.QQBOT_CLIENT_SECRET);
 

@@ -112,8 +112,8 @@ describe("cli integration: qr + dashboard token SecretRef", () => {
   beforeAll(() => {
     envSnapshot = captureEnv([
       "SHARED_GATEWAY_TOKEN",
-      "NEXISCLAW_GATEWAY_TOKEN",
-      "NEXISCLAW_GATEWAY_PASSWORD",
+      "GREENCHCLAW_GATEWAY_TOKEN",
+      "GREENCHCLAW_GATEWAY_PASSWORD",
     ]);
   });
 
@@ -121,8 +121,8 @@ describe("cli integration: qr + dashboard token SecretRef", () => {
     resetRuntimeCapture();
     vi.clearAllMocks();
     runtimeExit.mockImplementation(() => {});
-    delete process.env.NEXISCLAW_GATEWAY_TOKEN;
-    delete process.env.NEXISCLAW_GATEWAY_PASSWORD;
+    delete process.env.GREENCHCLAW_GATEWAY_TOKEN;
+    delete process.env.GREENCHCLAW_GATEWAY_PASSWORD;
     delete process.env.SHARED_GATEWAY_TOKEN;
   });
 
@@ -131,7 +131,7 @@ describe("cli integration: qr + dashboard token SecretRef", () => {
     process.env.SHARED_GATEWAY_TOKEN = "shared-token-123";
     loadConfigMock.mockReturnValue(fixture);
     readConfigFileSnapshotMock.mockResolvedValue({
-      path: "/tmp/NexisClaw.json",
+      path: "/tmp/GreenchClaw.json",
       exists: true,
       valid: true,
       issues: [],
@@ -165,7 +165,7 @@ describe("cli integration: qr + dashboard token SecretRef", () => {
     const fixture = createGatewayTokenRefFixture();
     loadConfigMock.mockReturnValue(fixture);
     readConfigFileSnapshotMock.mockResolvedValue({
-      path: "/tmp/NexisClaw.json",
+      path: "/tmp/GreenchClaw.json",
       exists: true,
       valid: true,
       issues: [],
@@ -183,7 +183,7 @@ describe("cli integration: qr + dashboard token SecretRef", () => {
     expect(joined).toContain("Dashboard URL: http://127.0.0.1:18789/");
     expect(joined).not.toContain("#token=");
     expect(joined).toContain("Token auto-auth unavailable");
-    expect(joined).toContain("Set NEXISCLAW_GATEWAY_TOKEN");
+    expect(joined).toContain("Set GREENCHCLAW_GATEWAY_TOKEN");
   });
 
   afterAll(() => {

@@ -1,4 +1,4 @@
-import { definePluginEntry } from "NexisClaw/plugin-sdk/plugin-entry";
+import { definePluginEntry } from "GreenchClaw/plugin-sdk/plugin-entry";
 import { createDuckDuckGoWebSearchProvider } from "./src/ddg-search-provider.js";
 
 export default definePluginEntry({

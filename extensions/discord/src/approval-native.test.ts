@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { clearSessionStoreCacheForTest } from "NexisClaw/plugin-sdk/session-store-runtime";
+import { clearSessionStoreCacheForTest } from "GreenchClaw/plugin-sdk/session-store-runtime";
 import { describe, expect, it } from "vitest";
 import {
   createDiscordNativeApprovalAdapter,
@@ -9,7 +9,7 @@ import {
   shouldHandleDiscordApprovalRequest,
 } from "./approval-native.js";
 
-const STORE_PATH = path.join(os.tmpdir(), "NexisClaw-discord-approval-native-test.json");
+const STORE_PATH = path.join(os.tmpdir(), "GreenchClaw-discord-approval-native-test.json");
 const NATIVE_APPROVAL_CFG = {
   commands: {
     ownerAllowFrom: ["discord:555555555"],

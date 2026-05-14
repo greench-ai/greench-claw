@@ -1,7 +1,7 @@
-import { defineSingleProviderPluginEntry } from "NexisClaw/plugin-sdk/provider-entry";
-import { OPENAI_COMPATIBLE_REPLAY_HOOKS } from "NexisClaw/plugin-sdk/provider-model-shared";
-import { defaultToolStreamExtraParams } from "NexisClaw/plugin-sdk/provider-stream-shared";
-import { jsonResult } from "NexisClaw/plugin-sdk/provider-web-search";
+import { defineSingleProviderPluginEntry } from "GreenchClaw/plugin-sdk/provider-entry";
+import { OPENAI_COMPATIBLE_REPLAY_HOOKS } from "GreenchClaw/plugin-sdk/provider-model-shared";
+import { defaultToolStreamExtraParams } from "GreenchClaw/plugin-sdk/provider-stream-shared";
+import { jsonResult } from "GreenchClaw/plugin-sdk/provider-web-search";
 import { Type } from "typebox";
 import {
   applyXaiRuntimeModelCompat,
@@ -124,8 +124,8 @@ function createLazyCodeExecutionTool(ctx: {
         return jsonResult({
           error: "missing_xai_api_key",
           message:
-            "code_execution needs an xAI API key. Run NexisClaw onboard --auth-choice xai-api-key, set XAI_API_KEY in the Gateway environment, or configure plugins.entries.xai.config.webSearch.apiKey.",
-          docs: "https://docs.NexisClaw.ai/tools/code-execution",
+            "code_execution needs an xAI API key. Run GreenchClaw onboard --auth-choice xai-api-key, set XAI_API_KEY in the Gateway environment, or configure plugins.entries.xai.config.webSearch.apiKey.",
+          docs: "https://docs.GreenchClaw.ai/tools/code-execution",
         });
       }
       return await tool.execute(toolCallId, args);

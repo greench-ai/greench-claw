@@ -1,14 +1,14 @@
-import { createScopedDmSecurityResolver } from "NexisClaw/plugin-sdk/channel-config-helpers";
-import { defineChannelMessageAdapter } from "NexisClaw/plugin-sdk/channel-message";
-import { createPairingPrefixStripper } from "NexisClaw/plugin-sdk/channel-pairing";
+import { createScopedDmSecurityResolver } from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import { defineChannelMessageAdapter } from "GreenchClaw/plugin-sdk/channel-message";
+import { createPairingPrefixStripper } from "GreenchClaw/plugin-sdk/channel-pairing";
 import {
   createEmptyChannelResult,
   createRawChannelSendResultAdapter,
-} from "NexisClaw/plugin-sdk/channel-send-result";
-import { createStaticReplyToModeResolver } from "NexisClaw/plugin-sdk/conversation-runtime";
-import { createLazyRuntimeModule } from "NexisClaw/plugin-sdk/lazy-runtime";
-import type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/channel-send-result";
+import { createStaticReplyToModeResolver } from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { createLazyRuntimeModule } from "GreenchClaw/plugin-sdk/lazy-runtime";
+import type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   checkZcaAuthenticated,
   listZalouserAccountIds,
@@ -20,7 +20,7 @@ import type {
   ChannelGroupContext,
   ChannelMessageActionAdapter,
   GroupToolPolicyConfig,
-  NexisClawConfig,
+  GreenchClawConfig,
 } from "./channel-api.js";
 import {
   DEFAULT_ACCOUNT_ID,
@@ -48,7 +48,7 @@ type ZalouserSendTextContext = {
   to: string;
   text: string;
   accountId?: string | null;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 };
 
 type ZalouserSendMediaContext = ZalouserSendTextContext & {
@@ -65,11 +65,11 @@ export function resolveZalouserQrProfile(accountId?: string | null): string {
   return normalized;
 }
 
-function resolveZalouserOutboundChunkMode(cfg: NexisClawConfig, accountId?: string) {
+function resolveZalouserOutboundChunkMode(cfg: GreenchClawConfig, accountId?: string) {
   return getZalouserRuntime().channel.text.resolveChunkMode(cfg, "zalouser", accountId);
 }
 
-function resolveZalouserOutboundTextChunkLimit(cfg: NexisClawConfig, accountId?: string) {
+function resolveZalouserOutboundTextChunkLimit(cfg: GreenchClawConfig, accountId?: string) {
   return getZalouserRuntime().channel.text.resolveTextChunkLimit(cfg, "zalouser", accountId, {
     fallbackLimit: ZALOUSER_TEXT_CHUNK_LIMIT,
   });
@@ -259,7 +259,7 @@ export const zalouserResolverAdapter = {
     kind,
     runtime,
   }: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string | null;
     inputs: string[];
     kind: "user" | "group";
@@ -323,7 +323,7 @@ export const zalouserAuthAdapter = {
     accountId,
     runtime,
   }: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string | null;
     runtime: RuntimeEnv;
   }) => {
@@ -379,7 +379,7 @@ export const zalouserPairingTextAdapter = {
   idLabel: "zalouserUserId",
   message: "Your pairing request has been approved.",
   normalizeAllowEntry: createPairingPrefixStripper(/^(zalouser|zlu):/i),
-  notify: async ({ cfg, id, message }: { cfg: NexisClawConfig; id: string; message: string }) => {
+  notify: async ({ cfg, id, message }: { cfg: GreenchClawConfig; id: string; message: string }) => {
     const { sendMessageZalouser } = await loadZalouserChannelRuntime();
     const account = resolveZalouserAccountSync({ cfg: cfg });
     const authenticated = await checkZcaAuthenticated(account.profile);

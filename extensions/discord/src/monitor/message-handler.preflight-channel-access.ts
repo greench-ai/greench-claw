@@ -1,5 +1,5 @@
-import { logDebug } from "NexisClaw/plugin-sdk/logging-core";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { logDebug } from "GreenchClaw/plugin-sdk/logging-core";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   isDiscordGroupAllowedByPolicy,
   resolveGroupDmAllow,

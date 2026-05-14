@@ -1,11 +1,11 @@
 import {
   getChannelStreamingConfigObject,
   resolveChannelStreamingNativeTransport,
-} from "NexisClaw/plugin-sdk/channel-streaming";
+} from "GreenchClaw/plugin-sdk/channel-streaming";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 
 export type StreamingMode = "off" | "partial" | "block" | "progress";
 export type SlackLegacyDraftStreamMode = "replace" | "status_final" | "append";

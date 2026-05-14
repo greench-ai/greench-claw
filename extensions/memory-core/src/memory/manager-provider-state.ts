@@ -1,7 +1,7 @@
 import type {
-  NexisClawConfig,
+  GreenchClawConfig,
   ResolvedMemorySearchConfig,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-foundation";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-foundation";
 import {
   resolveEmbeddingProviderFallbackModel,
   type EmbeddingProvider,
@@ -74,7 +74,7 @@ export function applyMemoryFallbackProviderState(params: {
 }
 
 export function resolveMemoryFallbackProviderRequest(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   settings: ResolvedMemorySearchConfig;
   currentProviderId: string | null;
 }): {

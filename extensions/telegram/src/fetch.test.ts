@@ -1,4 +1,4 @@
-import { resolveFetch } from "NexisClaw/plugin-sdk/fetch-runtime";
+import { resolveFetch } from "GreenchClaw/plugin-sdk/fetch-runtime";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const setDefaultResultOrder = vi.hoisted(() => vi.fn());
@@ -69,7 +69,7 @@ vi.mock("undici", () => ({
   setGlobalDispatcher,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", () => ({
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", () => ({
   createSubsystemLogger: () => ({
     info: loggerInfo,
     debug: loggerDebug,
@@ -121,8 +121,8 @@ beforeAll(async () => {
 beforeEach(() => {
   vi.unstubAllEnvs();
   for (const key of [
-    "NEXISCLAW_DEBUG_PROXY_ENABLED",
-    "NEXISCLAW_DEBUG_PROXY_URL",
+    "GREENCHCLAW_DEBUG_PROXY_ENABLED",
+    "GREENCHCLAW_DEBUG_PROXY_URL",
     "ALL_PROXY",
     "all_proxy",
     "HTTP_PROXY",
@@ -131,7 +131,7 @@ beforeEach(() => {
     "https_proxy",
     "NO_PROXY",
     "no_proxy",
-    "NEXISCLAW_PROXY_URL",
+    "GREENCHCLAW_PROXY_URL",
   ]) {
     vi.stubEnv(key, "");
   }
@@ -422,9 +422,9 @@ describe("resolveTelegramFetch", () => {
     expect(dispatcher?.options?.proxyTls?.autoSelectFamilyAttemptTimeout).toBe(300);
   });
 
-  it("uses the NexisClaw debug proxy URL when no explicit proxy fetch is provided", async () => {
-    vi.stubEnv("NEXISCLAW_DEBUG_PROXY_ENABLED", "1");
-    vi.stubEnv("NEXISCLAW_DEBUG_PROXY_URL", "http://127.0.0.1:7777");
+  it("uses the GreenchClaw debug proxy URL when no explicit proxy fetch is provided", async () => {
+    vi.stubEnv("GREENCHCLAW_DEBUG_PROXY_ENABLED", "1");
+    vi.stubEnv("GREENCHCLAW_DEBUG_PROXY_URL", "http://127.0.0.1:7777");
     undiciFetch.mockResolvedValue({ ok: true } as Response);
 
     const resolved = resolveTelegramFetch(undefined);
@@ -439,8 +439,8 @@ describe("resolveTelegramFetch", () => {
     expect(proxyOptions.uri).toBe("http://127.0.0.1:7777");
   });
 
-  it("uses NEXISCLAW_PROXY_URL as a Telegram explicit proxy when proxy env is absent", async () => {
-    vi.stubEnv("NEXISCLAW_PROXY_URL", "http://127.0.0.1:7788");
+  it("uses GREENCHCLAW_PROXY_URL as a Telegram explicit proxy when proxy env is absent", async () => {
+    vi.stubEnv("GREENCHCLAW_PROXY_URL", "http://127.0.0.1:7788");
     undiciFetch.mockResolvedValue({ ok: true } as Response);
 
     const transport = resolveTelegramTransport(undefined, {
@@ -453,7 +453,7 @@ describe("resolveTelegramFetch", () => {
     await transport.fetch("https://api.telegram.org/botTOKEN/getMe");
 
     expect(ProxyAgentCtor).toHaveBeenCalledTimes(1);
-    const proxyOptions = constructorOptions(ProxyAgentCtor, "NexisClaw proxy") as {
+    const proxyOptions = constructorOptions(ProxyAgentCtor, "GreenchClaw proxy") as {
       allowH2?: boolean;
       uri?: string;
       requestTls?: { autoSelectFamily?: boolean };
@@ -470,8 +470,8 @@ describe("resolveTelegramFetch", () => {
     expect(dispatcherPolicy?.proxyUrl).toBe("http://127.0.0.1:7788");
   });
 
-  it("preserves caller-provided custom fetch when NEXISCLAW_PROXY_URL is present", async () => {
-    vi.stubEnv("NEXISCLAW_PROXY_URL", "http://127.0.0.1:7788");
+  it("preserves caller-provided custom fetch when GREENCHCLAW_PROXY_URL is present", async () => {
+    vi.stubEnv("GREENCHCLAW_PROXY_URL", "http://127.0.0.1:7788");
     const proxyFetch = vi.fn(async () => ({ ok: true }) as Response) as unknown as typeof fetch;
 
     const transport = resolveTelegramTransport(proxyFetch, {
@@ -492,8 +492,8 @@ describe("resolveTelegramFetch", () => {
     expect(transport.dispatcherAttempts).toBeUndefined();
   });
 
-  it("prefers standard proxy env over NEXISCLAW_PROXY_URL for Telegram", async () => {
-    vi.stubEnv("NEXISCLAW_PROXY_URL", "http://127.0.0.1:7788");
+  it("prefers standard proxy env over GREENCHCLAW_PROXY_URL for Telegram", async () => {
+    vi.stubEnv("GREENCHCLAW_PROXY_URL", "http://127.0.0.1:7788");
     vi.stubEnv("https_proxy", "http://127.0.0.1:7890");
     undiciFetch.mockResolvedValue({ ok: true } as Response);
 
@@ -532,7 +532,7 @@ describe("resolveTelegramFetch", () => {
     expect(dispatcher?.options?.proxyTls?.autoSelectFamilyAttemptTimeout).toBe(300);
   });
 
-  it("keeps resolver-scoped transport policy for NexisClaw proxy fetches", async () => {
+  it("keeps resolver-scoped transport policy for GreenchClaw proxy fetches", async () => {
     const { makeProxyFetch } = await import("./proxy.js");
     const proxyFetch = makeProxyFetch("http://127.0.0.1:7890");
     ProxyAgentCtor.mockClear();

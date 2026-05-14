@@ -1,11 +1,11 @@
 import type { SlackActionMiddlewareArgs } from "@slack/bolt";
 import type { Block, KnownBlock } from "@slack/web-api";
-import { resolveApprovalOverGateway } from "NexisClaw/plugin-sdk/approval-gateway-runtime";
-import { parseExecApprovalCommandText } from "NexisClaw/plugin-sdk/approval-reply-runtime";
-import { resolveCommandAuthorization } from "NexisClaw/plugin-sdk/command-auth-native";
-import { requestHeartbeat } from "NexisClaw/plugin-sdk/heartbeat-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { enqueueSystemEvent } from "NexisClaw/plugin-sdk/system-event-runtime";
+import { resolveApprovalOverGateway } from "GreenchClaw/plugin-sdk/approval-gateway-runtime";
+import { parseExecApprovalCommandText } from "GreenchClaw/plugin-sdk/approval-reply-runtime";
+import { resolveCommandAuthorization } from "GreenchClaw/plugin-sdk/command-auth-native";
+import { requestHeartbeat } from "GreenchClaw/plugin-sdk/heartbeat-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { enqueueSystemEvent } from "GreenchClaw/plugin-sdk/system-event-runtime";
 import { isSlackApprovalAuthorizedSender } from "../../approval-auth.js";
 import { isSlackExecApprovalAuthorizedSender } from "../../exec-approvals.js";
 import { dispatchSlackPluginInteractiveHandler } from "../../interactive-dispatch.js";

@@ -1,7 +1,7 @@
-import { CURRENT_MESSAGE_MARKER } from "NexisClaw/plugin-sdk/channel-mention-gating";
-import { expectPairingReplyText } from "NexisClaw/plugin-sdk/channel-test-helpers";
-import { resetInboundDedupe } from "NexisClaw/plugin-sdk/reply-dedupe";
-import { HISTORY_CONTEXT_MARKER } from "NexisClaw/plugin-sdk/reply-history";
+import { CURRENT_MESSAGE_MARKER } from "GreenchClaw/plugin-sdk/channel-mention-gating";
+import { expectPairingReplyText } from "GreenchClaw/plugin-sdk/channel-test-helpers";
+import { resetInboundDedupe } from "GreenchClaw/plugin-sdk/reply-dedupe";
+import { HISTORY_CONTEXT_MARKER } from "GreenchClaw/plugin-sdk/reply-history";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   defaultSlackTestConfig,
@@ -485,7 +485,7 @@ describe("monitorSlackProvider tool results", () => {
   });
 
   async function expectMentionPatternMessageAccepted(text: string): Promise<void> {
-    setRequireMentionChannelConfig(["\\bNexisClaw\\b"]);
+    setRequireMentionChannelConfig(["\\bGreenchClaw\\b"]);
     replyMock.mockResolvedValue({ text: "hi" });
 
     await runSlackMessageOnce(monitorSlackProvider, {
@@ -500,11 +500,11 @@ describe("monitorSlackProvider tool results", () => {
   }
 
   it("accepts channel messages when mentionPatterns match", async () => {
-    await expectMentionPatternMessageAccepted("NexisClaw: hello");
+    await expectMentionPatternMessageAccepted("GreenchClaw: hello");
   });
 
   it("accepts channel messages when mentionPatterns match even if another user is mentioned", async () => {
-    await expectMentionPatternMessageAccepted("NexisClaw: hello <@U2>");
+    await expectMentionPatternMessageAccepted("GreenchClaw: hello <@U2>");
   });
 
   it("treats replies to bot threads as implicit mentions", async () => {

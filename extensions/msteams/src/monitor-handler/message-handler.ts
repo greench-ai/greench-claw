@@ -1,25 +1,25 @@
-import { formatAllowlistMatchMeta } from "NexisClaw/plugin-sdk/allow-from";
-import { resolveInboundMentionDecision } from "NexisClaw/plugin-sdk/channel-inbound";
+import { formatAllowlistMatchMeta } from "GreenchClaw/plugin-sdk/allow-from";
+import { resolveInboundMentionDecision } from "GreenchClaw/plugin-sdk/channel-inbound";
 import {
   logInboundDrop,
   resolveInboundSessionEnvelopeContext,
-} from "NexisClaw/plugin-sdk/channel-inbound";
+} from "GreenchClaw/plugin-sdk/channel-inbound";
 import {
   filterSupplementalContextItems,
   resolveChannelContextVisibilityMode,
   shouldIncludeSupplementalContext,
-} from "NexisClaw/plugin-sdk/context-visibility-runtime";
+} from "GreenchClaw/plugin-sdk/context-visibility-runtime";
 import {
   dispatchReplyFromConfigWithSettledDispatcher,
   hasFinalInboundReplyDispatch,
   resolveInboundReplyDispatchCounts,
-} from "NexisClaw/plugin-sdk/inbound-reply-dispatch";
+} from "GreenchClaw/plugin-sdk/inbound-reply-dispatch";
 import {
   buildPendingHistoryContextFromMap,
   DEFAULT_GROUP_HISTORY_LIMIT,
   recordPendingHistoryEntryIfEnabled,
   type HistoryEntry,
-} from "NexisClaw/plugin-sdk/reply-history";
+} from "GreenchClaw/plugin-sdk/reply-history";
 import {
   buildMSTeamsAttachmentPlaceholder,
   buildMSTeamsMediaPayload,

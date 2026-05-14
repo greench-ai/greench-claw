@@ -55,7 +55,7 @@ function expectRuntimeArg(value: unknown) {
 const mockConfig = vi.hoisted(() => {
   const initial = {};
   const state = {
-    path: "/tmp/NexisClaw.json",
+    path: "/tmp/GreenchClaw.json",
     exists: true,
     config: initial as TestConfig,
     hash: "mock-hash-0" as string | undefined,
@@ -81,7 +81,7 @@ const mockConfig = vi.hoisted(() => {
   };
   return {
     reset() {
-      state.path = "/tmp/NexisClaw.json";
+      state.path = "/tmp/GreenchClaw.json";
       state.exists = true;
       state.config = {};
       state.hash = "mock-hash-0";
@@ -139,7 +139,7 @@ vi.mock("./overview.js", () => ({
       { id: "main", isDefault: true },
       { id: "work", isDefault: false, model: "openai/gpt-5.2" },
     ],
-    config: { path: "/tmp/NexisClaw.json", exists: true, valid: true, issues: [], hash: null },
+    config: { path: "/tmp/GreenchClaw.json", exists: true, valid: true, issues: [], hash: null },
     tools: {
       codex: { command: "codex", found: false, error: "not found" },
       claude: { command: "claude", found: false, error: "not found" },
@@ -152,8 +152,8 @@ vi.mock("./overview.js", () => ({
       error: "offline",
     },
     references: {
-      docsUrl: "https://docs.NexisClaw.ai",
-      sourceUrl: "https://github.com/NexisClaw/NexisClaw",
+      docsUrl: "https://docs.GreenchClaw.ai",
+      sourceUrl: "https://github.com/GreenchClaw/GreenchClaw",
     },
   })),
 }));
@@ -192,7 +192,7 @@ vi.mock("../config/model-input.js", () => ({
 describe("parseCrestodianOperation", () => {
   beforeEach(() => {
     mockConfig.reset();
-    vi.stubEnv("NEXISCLAW_TEST_FAST", "1");
+    vi.stubEnv("GREENCHCLAW_TEST_FAST", "1");
   });
 
   afterEach(() => {
@@ -253,17 +253,17 @@ describe("parseCrestodianOperation", () => {
       kind: "plugin-search",
       query: "calendar sync",
     });
-    expect(parseCrestodianOperation("install npm plugin @NexisClaw/demo")).toEqual({
+    expect(parseCrestodianOperation("install npm plugin @GreenchClaw/demo")).toEqual({
       kind: "plugin-install",
-      spec: "npm:@NexisClaw/demo",
+      spec: "npm:@GreenchClaw/demo",
     });
-    expect(parseCrestodianOperation("plugin install clawhub:NexisClaw-demo")).toEqual({
+    expect(parseCrestodianOperation("plugin install clawhub:GreenchClaw-demo")).toEqual({
       kind: "plugin-install",
-      spec: "clawhub:NexisClaw-demo",
+      spec: "clawhub:GreenchClaw-demo",
     });
-    expect(parseCrestodianOperation("plugin uninstall NexisClaw-demo")).toEqual({
+    expect(parseCrestodianOperation("plugin uninstall GreenchClaw-demo")).toEqual({
       kind: "plugin-uninstall",
-      pluginId: "NexisClaw-demo",
+      pluginId: "GreenchClaw-demo",
     });
   });
 
@@ -308,7 +308,7 @@ describe("parseCrestodianOperation", () => {
   });
 
   it("validates missing config without exiting the process", async () => {
-    mockConfig.missing("/tmp/NexisClaw.json");
+    mockConfig.missing("/tmp/GreenchClaw.json");
     const { runtime, lines } = createCrestodianTestRuntime();
 
     const result = await executeCrestodianOperation({ kind: "config-validate" }, runtime);
@@ -319,7 +319,7 @@ describe("parseCrestodianOperation", () => {
 
   it("applies config set through typed deps and writes an audit entry", async () => {
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "crestodian-config-set-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", tempDir);
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createCrestodianTestRuntime();
     const runConfigSet = vi.fn(async () => {});
 
@@ -355,7 +355,7 @@ describe("parseCrestodianOperation", () => {
 
   it("applies SecretRef config set through typed deps and writes an audit entry", async () => {
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "crestodian-config-ref-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", tempDir);
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createCrestodianTestRuntime();
     const runConfigSet = vi.fn(async () => {});
 
@@ -364,7 +364,7 @@ describe("parseCrestodianOperation", () => {
         kind: "config-set-ref",
         path: "gateway.auth.token",
         source: "env",
-        id: "NEXISCLAW_GATEWAY_TOKEN",
+        id: "GREENCHCLAW_GATEWAY_TOKEN",
       },
       runtime,
       {
@@ -380,7 +380,7 @@ describe("parseCrestodianOperation", () => {
       cliOptions: {
         refProvider: "default",
         refSource: "env",
-        refId: "NEXISCLAW_GATEWAY_TOKEN",
+        refId: "GREENCHCLAW_GATEWAY_TOKEN",
       },
     });
     expect(lines.join("\n")).toContain("[crestodian] done: config.setRef");
@@ -433,25 +433,25 @@ describe("parseCrestodianOperation", () => {
 
   it("installs plugins only after approval and audits the write", async () => {
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "crestodian-plugin-install-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", tempDir);
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createCrestodianTestRuntime();
     const runPluginInstall = vi.fn(async (spec: string, pluginRuntime: RuntimeEnv) => {
       pluginRuntime.log(`installed ${spec}`);
     });
 
     const plan = await executeCrestodianOperation(
-      { kind: "plugin-install", spec: "clawhub:NexisClaw-demo" },
+      { kind: "plugin-install", spec: "clawhub:GreenchClaw-demo" },
       runtime,
       { deps: { runPluginInstall } },
     );
     expectRecordFields(plan as unknown as Record<string, unknown>, {
       applied: false,
-      message: "Plan: install plugin clawhub:NexisClaw-demo. Say yes to apply.",
+      message: "Plan: install plugin clawhub:GreenchClaw-demo. Say yes to apply.",
     });
     expect(runPluginInstall).not.toHaveBeenCalled();
 
     const result = await executeCrestodianOperation(
-      { kind: "plugin-install", spec: "clawhub:NexisClaw-demo" },
+      { kind: "plugin-install", spec: "clawhub:GreenchClaw-demo" },
       runtime,
       {
         approved: true,
@@ -462,7 +462,7 @@ describe("parseCrestodianOperation", () => {
     expect(result.applied).toBe(true);
 
     const installCall = requireFirstMockCall(runPluginInstall, "runPluginInstall");
-    expect(installCall[0]).toBe("clawhub:NexisClaw-demo");
+    expect(installCall[0]).toBe("clawhub:GreenchClaw-demo");
     expectRuntimeArg(installCall[1]);
     expect(lines.join("\n")).toContain("[crestodian] done: plugin.install");
     const auditPath = path.join(tempDir, "audit", "crestodian.jsonl");
@@ -471,33 +471,33 @@ describe("parseCrestodianOperation", () => {
       audit,
       {
         operation: "plugin.install",
-        summary: "Installed plugin clawhub:NexisClaw-demo",
+        summary: "Installed plugin clawhub:GreenchClaw-demo",
       },
-      { rescue: true, spec: "clawhub:NexisClaw-demo" },
+      { rescue: true, spec: "clawhub:GreenchClaw-demo" },
     );
   });
 
   it("uninstalls plugins only after approval and audits the write", async () => {
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "crestodian-plugin-uninstall-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", tempDir);
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createCrestodianTestRuntime();
     const runPluginUninstall = vi.fn(async (pluginId: string, pluginRuntime: RuntimeEnv) => {
       pluginRuntime.log(`uninstalled ${pluginId}`);
     });
 
     const plan = await executeCrestodianOperation(
-      { kind: "plugin-uninstall", pluginId: "NexisClaw-demo" },
+      { kind: "plugin-uninstall", pluginId: "GreenchClaw-demo" },
       runtime,
       { deps: { runPluginUninstall } },
     );
     expectRecordFields(plan as unknown as Record<string, unknown>, {
       applied: false,
-      message: "Plan: uninstall plugin NexisClaw-demo. Say yes to apply.",
+      message: "Plan: uninstall plugin GreenchClaw-demo. Say yes to apply.",
     });
     expect(runPluginUninstall).not.toHaveBeenCalled();
 
     const result = await executeCrestodianOperation(
-      { kind: "plugin-uninstall", pluginId: "NexisClaw-demo" },
+      { kind: "plugin-uninstall", pluginId: "GreenchClaw-demo" },
       runtime,
       {
         approved: true,
@@ -508,7 +508,7 @@ describe("parseCrestodianOperation", () => {
     expect(result.applied).toBe(true);
 
     const uninstallCall = requireFirstMockCall(runPluginUninstall, "runPluginUninstall");
-    expect(uninstallCall[0]).toBe("NexisClaw-demo");
+    expect(uninstallCall[0]).toBe("GreenchClaw-demo");
     expectRuntimeArg(uninstallCall[1]);
     expect(lines.join("\n")).toContain("[crestodian] done: plugin.uninstall");
     const auditPath = path.join(tempDir, "audit", "crestodian.jsonl");
@@ -517,15 +517,15 @@ describe("parseCrestodianOperation", () => {
       audit,
       {
         operation: "plugin.uninstall",
-        summary: "Uninstalled plugin NexisClaw-demo",
+        summary: "Uninstalled plugin GreenchClaw-demo",
       },
-      { rescue: true, pluginId: "NexisClaw-demo" },
+      { rescue: true, pluginId: "GreenchClaw-demo" },
     );
   });
 
   it("runs setup bootstrap only after approval and audits it", async () => {
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "crestodian-setup-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", tempDir);
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", tempDir);
     vi.stubEnv("OPENAI_API_KEY", "test-key");
     const { runtime, lines } = createCrestodianTestRuntime();
 
@@ -574,7 +574,7 @@ describe("parseCrestodianOperation", () => {
 
   it("runs doctor repairs only after approval and audits them", async () => {
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "crestodian-doctor-fix-"));
-    vi.stubEnv("NEXISCLAW_STATE_DIR", tempDir);
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", tempDir);
     const { runtime, lines } = createCrestodianTestRuntime();
     const runDoctor = vi.fn(async () => {});
 

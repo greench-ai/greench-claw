@@ -1,6 +1,6 @@
 import type { ReplyPayload } from "../../auto-reply/reply-payload.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { ReplyToMode } from "../../config/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import type { OutboundSendDeps } from "../../infra/outbound/send-deps.js";
 import type { OutboundMediaAccess } from "../../media/load-options.js";
 
@@ -135,7 +135,7 @@ export type MessageSendContext<TPayload = unknown, TSendResult = unknown> = {
   fail(error: unknown): Promise<void>;
 };
 
-export type ChannelMessageSendTextContext<TConfig = NexisClawConfig> = {
+export type ChannelMessageSendTextContext<TConfig = GreenchClawConfig> = {
   cfg: TConfig;
   to: string;
   text: string;
@@ -150,7 +150,7 @@ export type ChannelMessageSendTextContext<TConfig = NexisClawConfig> = {
   gatewayClientScopes?: readonly string[];
 };
 
-export type ChannelMessageSendMediaContext<TConfig = NexisClawConfig> =
+export type ChannelMessageSendMediaContext<TConfig = GreenchClawConfig> =
   ChannelMessageSendTextContext<TConfig> & {
     mediaUrl: string;
     mediaAccess?: OutboundMediaAccess;
@@ -161,7 +161,7 @@ export type ChannelMessageSendMediaContext<TConfig = NexisClawConfig> =
     forceDocument?: boolean;
   };
 
-export type ChannelMessageSendPayloadContext<TConfig = NexisClawConfig> =
+export type ChannelMessageSendPayloadContext<TConfig = GreenchClawConfig> =
   ChannelMessageSendTextContext<TConfig> & {
     payload: ReplyPayload;
     mediaUrl?: string;
@@ -180,31 +180,31 @@ export type ChannelMessageSendResult = {
 
 export type ChannelMessageSendAttemptKind = "text" | "media" | "payload";
 
-export type ChannelMessageSendAttemptContext<TConfig = NexisClawConfig> =
+export type ChannelMessageSendAttemptContext<TConfig = GreenchClawConfig> =
   | (ChannelMessageSendTextContext<TConfig> & { kind: "text" })
   | (ChannelMessageSendMediaContext<TConfig> & { kind: "media" })
   | (ChannelMessageSendPayloadContext<TConfig> & { kind: "payload" });
 
 export type ChannelMessageSendSuccessContext<
-  TConfig = NexisClawConfig,
+  TConfig = GreenchClawConfig,
   TSendResult extends ChannelMessageSendResult = ChannelMessageSendResult,
 > = ChannelMessageSendAttemptContext<TConfig> & {
   result: TSendResult;
   attemptToken?: unknown;
 };
 
-export type ChannelMessageSendFailureContext<TConfig = NexisClawConfig> =
+export type ChannelMessageSendFailureContext<TConfig = GreenchClawConfig> =
   ChannelMessageSendAttemptContext<TConfig> & {
     error: unknown;
     attemptToken?: unknown;
   };
 
 export type ChannelMessageSendCommitContext<
-  TConfig = NexisClawConfig,
+  TConfig = GreenchClawConfig,
   TSendResult extends ChannelMessageSendResult = ChannelMessageSendResult,
 > = ChannelMessageSendSuccessContext<TConfig, TSendResult>;
 
-export type ChannelMessageUnknownSendContext<TConfig = NexisClawConfig> = {
+export type ChannelMessageUnknownSendContext<TConfig = GreenchClawConfig> = {
   cfg: TConfig;
   queueId: string;
   channel: string;
@@ -237,7 +237,7 @@ export type ChannelMessageUnknownSendReconciliationResult =
     };
 
 export type ChannelMessageSendLifecycleAdapter<
-  TConfig = NexisClawConfig,
+  TConfig = GreenchClawConfig,
   TSendResult extends ChannelMessageSendResult = ChannelMessageSendResult,
 > = {
   beforeSendAttempt?: (ctx: ChannelMessageSendAttemptContext<TConfig>) => unknown;
@@ -251,7 +251,7 @@ export type ChannelMessageSendLifecycleAdapter<
 };
 
 export type ChannelMessageSendAdapter<
-  TConfig = NexisClawConfig,
+  TConfig = GreenchClawConfig,
   TSendResult extends ChannelMessageSendResult = ChannelMessageSendResult,
 > = {
   text?: (ctx: ChannelMessageSendTextContext<TConfig>) => Promise<TSendResult>;
@@ -327,7 +327,7 @@ export type ChannelMessageReceiveAdapterShape = {
 };
 
 export type ChannelMessageAdapterShape<
-  TConfig = NexisClawConfig,
+  TConfig = GreenchClawConfig,
   TSendResult extends ChannelMessageSendResult = ChannelMessageSendResult,
 > = {
   id?: string;

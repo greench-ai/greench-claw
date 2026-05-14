@@ -14,9 +14,9 @@ type InteractiveState = {
   inflightCallbackDedupe: Set<string>;
 };
 
-const PLUGIN_INTERACTIVE_STATE_KEY = Symbol.for("NexisClaw.pluginInteractiveState");
+const PLUGIN_INTERACTIVE_STATE_KEY = Symbol.for("GreenchClaw.pluginInteractiveState");
 const PLUGIN_INTERACTIVE_CALLBACK_DEDUPE_KEY = Symbol.for(
-  "NexisClaw.pluginInteractiveCallbackDedupe",
+  "GreenchClaw.pluginInteractiveCallbackDedupe",
 );
 
 function createInteractiveCallbackDedupe(): DedupeCache {

@@ -3,8 +3,8 @@ import path from "node:path";
 import { createInterface } from "node:readline/promises";
 import { format } from "node:util";
 import type { Command } from "commander";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { callGatewayFromCli } from "NexisClaw/plugin-sdk/gateway-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { callGatewayFromCli } from "GreenchClaw/plugin-sdk/gateway-runtime";
 import {
   buildGoogleMeetCalendarDayWindow,
   findGoogleMeetCalendarEvent,
@@ -1405,7 +1405,7 @@ export function registerGoogleMeetCli(params: {
   const root = params.program
     .command("googlemeet")
     .description("Google Meet participant utilities")
-    .addHelpText("after", () => `\nDocs: https://docs.NexisClaw.ai/plugins/google-meet\n`);
+    .addHelpText("after", () => `\nDocs: https://docs.GreenchClaw.ai/plugins/google-meet\n`);
 
   const auth = root.command("auth").description("Google Meet OAuth helpers");
 
@@ -1533,7 +1533,10 @@ export function registerGoogleMeetCli(params: {
           if (payload.joined && payload.join?.session?.id) {
             writeStdoutLine("joined: %s", payload.join.session.id);
           } else {
-            writeStdoutLine("joined: no (run `NexisClaw googlemeet join %s`)", payload.meetingUri);
+            writeStdoutLine(
+              "joined: no (run `GreenchClaw googlemeet join %s`)",
+              payload.meetingUri,
+            );
           }
           return;
         }
@@ -1580,7 +1583,7 @@ export function registerGoogleMeetCli(params: {
         if (join) {
           writeStdoutLine("joined: %s", join.session.id);
         } else {
-          writeStdoutLine("joined: no (run `NexisClaw googlemeet join %s`)", result.meetingUri);
+          writeStdoutLine("joined: no (run `GreenchClaw googlemeet join %s`)", result.meetingUri);
         }
         return;
       }
@@ -1626,7 +1629,7 @@ export function registerGoogleMeetCli(params: {
       if (join) {
         writeStdoutLine("joined: %s", join.session.id);
       } else {
-        writeStdoutLine("joined: no (run `NexisClaw googlemeet join %s`)", result.meetingUri);
+        writeStdoutLine("joined: no (run `GreenchClaw googlemeet join %s`)", result.meetingUri);
       }
     });
 

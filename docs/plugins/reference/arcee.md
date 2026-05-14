@@ -1,5 +1,5 @@
 ---
-summary: "Adds Arcee model provider support to NexisClaw."
+summary: "Adds Arcee model provider support to GreenchClaw."
 read_when:
   - You are installing, configuring, or auditing the arcee plugin
 title: "Arcee plugin"
@@ -7,12 +7,12 @@ title: "Arcee plugin"
 
 # Arcee plugin
 
-Adds Arcee model provider support to NexisClaw.
+Adds Arcee model provider support to GreenchClaw.
 
 ## Distribution
 
-- Package: `@NexisClaw/arcee-provider`
-- Install route: included in NexisClaw
+- Package: `@GreenchClaw/arcee-provider`
+- Install route: included in GreenchClaw
 
 ## Surface
 

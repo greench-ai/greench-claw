@@ -43,16 +43,16 @@ describe("trajectory metadata", () => {
     const originalArgv = process.argv;
     process.argv = [
       "node",
-      "/Users/tester/project/NexisClaw.js",
+      "/Users/tester/project/GreenchClaw.js",
       "--api-key",
       "super-secret",
-      "--config=/Users/tester/.NexisClaw/NexisClaw.json",
+      "--config=/Users/tester/.GreenchClaw/GreenchClaw.json",
     ];
     try {
       const metadata = buildTrajectoryRunMetadata({
         env: {
           HOME: "/Users/tester",
-          NEXISCLAW_STATE_DIR: "/Users/tester/.NexisClaw",
+          GREENCHCLAW_STATE_DIR: "/Users/tester/.GreenchClaw",
         },
         workspaceDir: "/Users/tester/project",
         sessionFile: "/Users/tester/project/session.jsonl",
@@ -67,12 +67,12 @@ describe("trajectory metadata", () => {
       };
       expect(harness.invocation).toEqual([
         "node",
-        "~/project/NexisClaw.js",
+        "~/project/GreenchClaw.js",
         "--api-key",
         "<redacted>",
-        "--config=$NEXISCLAW_STATE_DIR/NexisClaw.json",
+        "--config=$GREENCHCLAW_STATE_DIR/GreenchClaw.json",
       ]);
-      expect(harness.entrypoint).toBe("~/project/NexisClaw.js");
+      expect(harness.entrypoint).toBe("~/project/GreenchClaw.js");
       expect(harness.workspaceDir).toBe("~/project");
       expect(harness.sessionFile).toBe("~/project/session.jsonl");
     } finally {

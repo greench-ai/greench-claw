@@ -38,22 +38,22 @@ export {
   ssrfPolicyFromAllowPrivateNetwork,
   type LookupFn,
   type SsrFPolicy,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
 export {
   setMatrixThreadBindingIdleTimeoutBySessionKey,
   setMatrixThreadBindingMaxAgeBySessionKey,
 } from "./src/matrix/thread-bindings-shared.js";
 export { setMatrixRuntime } from "./src/runtime.js";
-export { writeJsonFileAtomically } from "NexisClaw/plugin-sdk/json-store";
+export { writeJsonFileAtomically } from "GreenchClaw/plugin-sdk/json-store";
 export type {
   ChannelDirectoryEntry,
   ChannelMessageActionContext,
-} from "NexisClaw/plugin-sdk/channel-contract";
-export type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-export { formatZonedTimestamp } from "NexisClaw/plugin-sdk/time-runtime";
-export type { PluginRuntime, RuntimeLogger } from "NexisClaw/plugin-sdk/plugin-runtime";
-export type { RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
-export type { WizardPrompter } from "NexisClaw/plugin-sdk/setup";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+export type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+export { formatZonedTimestamp } from "GreenchClaw/plugin-sdk/time-runtime";
+export type { PluginRuntime, RuntimeLogger } from "GreenchClaw/plugin-sdk/plugin-runtime";
+export type { RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
+export type { WizardPrompter } from "GreenchClaw/plugin-sdk/setup";
 
 export function chunkTextForOutbound(text: string, limit: number): string[] {
   const chunks: string[] = [];

@@ -3,7 +3,7 @@ import {
   canonicalizeMainSessionAlias,
   resolveMainSessionKey,
 } from "../config/sessions/main-session.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   DEFAULT_AGENT_ID,
   normalizeAgentId,
@@ -27,12 +27,12 @@ export function canonicalizeSessionKeyForAgent(agentId: string, key: string): st
   return `agent:${normalizeAgentId(agentId)}:${lowered}`;
 }
 
-function resolveDefaultStoreAgentId(cfg: NexisClawConfig): string {
+function resolveDefaultStoreAgentId(cfg: GreenchClawConfig): string {
   return normalizeAgentId(resolveDefaultAgentId(cfg));
 }
 
 function shouldRemapLegacyDefaultMainAlias(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   parsed: ParsedAgentSessionKey,
   options?: { storeAgentId?: string },
 ): boolean {
@@ -50,7 +50,7 @@ function shouldRemapLegacyDefaultMainAlias(
 }
 
 function resolveParsedSessionStoreKey(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   raw: string,
   parsed: ParsedAgentSessionKey,
   options?: { storeAgentId?: string },
@@ -67,7 +67,7 @@ function resolveParsedSessionStoreKey(
 }
 
 export function resolveSessionStoreKey(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   sessionKey: string;
   storeAgentId?: string;
 }): string {
@@ -105,7 +105,7 @@ export function resolveSessionStoreKey(params: {
   return canonicalizeSessionKeyForAgent(agentId, lowered);
 }
 
-export function resolveSessionStoreAgentId(cfg: NexisClawConfig, canonicalKey: string): string {
+export function resolveSessionStoreAgentId(cfg: GreenchClawConfig, canonicalKey: string): string {
   if (canonicalKey === "global" || canonicalKey === "unknown") {
     return resolveDefaultStoreAgentId(cfg);
   }
@@ -117,7 +117,7 @@ export function resolveSessionStoreAgentId(cfg: NexisClawConfig, canonicalKey: s
 }
 
 export function resolveStoredSessionKeyForAgentStore(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   sessionKey: string;
 }): string {
@@ -138,7 +138,7 @@ export function resolveStoredSessionKeyForAgentStore(params: {
 }
 
 export function resolveStoredSessionOwnerAgentId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   sessionKey: string;
 }): string | null {
@@ -150,7 +150,7 @@ export function resolveStoredSessionOwnerAgentId(params: {
 }
 
 export function canonicalizeSpawnedByForAgent(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   agentId: string,
   spawnedBy?: string,
 ): string | undefined {

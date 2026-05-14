@@ -1,13 +1,13 @@
-import { createSubsystemLogger } from "NexisClaw/plugin-sdk/logging-core";
+import { createSubsystemLogger } from "GreenchClaw/plugin-sdk/logging-core";
 import {
   buildRemoteBaseUrlPolicy,
   createRemoteEmbeddingProvider,
   normalizeEmbeddingModelWithPrefixes,
   type MemoryEmbeddingProvider,
   type MemoryEmbeddingProviderCreateOptions,
-} from "NexisClaw/plugin-sdk/memory-core-host-engine-embeddings";
-import { resolveMemorySecretInputString } from "NexisClaw/plugin-sdk/memory-core-host-secret";
-import { formatErrorMessage, type SsrFPolicy } from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/memory-core-host-engine-embeddings";
+import { resolveMemorySecretInputString } from "GreenchClaw/plugin-sdk/memory-core-host-secret";
+import { formatErrorMessage, type SsrFPolicy } from "GreenchClaw/plugin-sdk/ssrf-runtime";
 import { LMSTUDIO_DEFAULT_EMBEDDING_MODEL, LMSTUDIO_PROVIDER_ID } from "./defaults.js";
 import { ensureLmstudioModelLoaded } from "./models.fetch.js";
 import { resolveLmstudioInferenceBase } from "./models.js";

@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/memory-core-host-engine-foundation";
-import type { checkQmdBinaryAvailability as checkQmdBinaryAvailabilityFn } from "NexisClaw/plugin-sdk/memory-core-host-engine-qmd";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/memory-core-host-engine-foundation";
+import type { checkQmdBinaryAvailability as checkQmdBinaryAvailabilityFn } from "GreenchClaw/plugin-sdk/memory-core-host-engine-qmd";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 type CheckQmdBinaryAvailability = typeof checkQmdBinaryAvailabilityFn;
@@ -119,7 +119,7 @@ vi.mock("./qmd-manager.js", () => ({
   },
 }));
 
-vi.mock("NexisClaw/plugin-sdk/memory-core-host-engine-qmd", () => ({
+vi.mock("GreenchClaw/plugin-sdk/memory-core-host-engine-qmd", () => ({
   checkQmdBinaryAvailability,
 }));
 
@@ -142,14 +142,14 @@ function createQmdCfg(
   agentId: string,
   workspace: string = "/tmp/workspace",
   qmd: Record<string, unknown> = {},
-): NexisClawConfig {
+): GreenchClawConfig {
   return {
     memory: { backend: "qmd", qmd },
     agents: { list: [{ id: agentId, default: true, workspace }] },
   };
 }
 
-function createBuiltinCfg(agentId: string): NexisClawConfig {
+function createBuiltinCfg(agentId: string): GreenchClawConfig {
   return {
     agents: {
       defaults: {
@@ -169,7 +169,7 @@ function createBuiltinCfg(agentId: string): NexisClawConfig {
       },
       list: [{ id: agentId, default: true, workspace: "/tmp/workspace" }],
     },
-  } as NexisClawConfig;
+  } as GreenchClawConfig;
 }
 
 function requireManager(result: SearchManagerResult): SearchManager {
@@ -213,8 +213,8 @@ function qmdCreateParams(index = 0): Record<string, unknown> {
 
 async function expectPendingQmdReplacement(params: {
   agentId: string;
-  firstCfg: NexisClawConfig;
-  secondCfg: NexisClawConfig;
+  firstCfg: GreenchClawConfig;
+  secondCfg: GreenchClawConfig;
   firstAvailability: { command: string; cwd: string };
   secondAvailability: { command: string; cwd: string };
 }) {
@@ -291,7 +291,7 @@ describe("getMemorySearchManager caching", () => {
   it("repairs an invalid shared singleton cache shape before using qmd cache maps", async () => {
     await closeAllMemorySearchManagers();
     vi.resetModules();
-    const cacheKey = Symbol.for("NexisClaw.memorySearchManagerCache");
+    const cacheKey = Symbol.for("GreenchClaw.memorySearchManagerCache");
     (globalThis as Record<PropertyKey, unknown>)[cacheKey] = {};
 
     const freshModule = await import("./search-manager.js");
@@ -420,13 +420,13 @@ describe("getMemorySearchManager caching", () => {
   });
 
   it("creates a missing agent workspace before probing qmd availability", async () => {
-    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-qmd-workspace-"));
+    const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-qmd-workspace-"));
     const workspace = path.join(tempRoot, "missing", "workspace");
     const agentId = "missing-workspace";
     const cfg = {
       memory: { backend: "qmd", qmd: {} },
       agents: { list: [{ id: agentId, default: true, workspace }] },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     try {
       await getMemorySearchManager({ cfg, agentId });
@@ -533,7 +533,7 @@ describe("getMemorySearchManager caching", () => {
           },
         ],
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const firstPrimary = createManagerMock({
       backend: "qmd",
       provider: "qmd",
@@ -644,7 +644,7 @@ describe("getMemorySearchManager caching", () => {
     const secondCfg = {
       ...createQmdCfg(agentId),
       session: { store: "/tmp/alternate-session-store.json" },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const createGate = createDeferred<QmdManagerInstance>();
     createQmdManagerMock.mockImplementationOnce(async () => await createGate.promise);
 

@@ -1,5 +1,5 @@
 import { ApplicationCommandType, ChannelType, InteractionContextType } from "discord-api-types/v10";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const { logVerboseMock } = vi.hoisted(() => ({
@@ -9,9 +9,9 @@ const { loggerWarnMock } = vi.hoisted(() => ({
   loggerWarnMock: vi.fn(),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
-  const actual = await vi.importActual<typeof import("NexisClaw/plugin-sdk/runtime-env")>(
-    "NexisClaw/plugin-sdk/runtime-env",
+vi.mock("GreenchClaw/plugin-sdk/runtime-env", async () => {
+  const actual = await vi.importActual<typeof import("GreenchClaw/plugin-sdk/runtime-env")>(
+    "GreenchClaw/plugin-sdk/runtime-env",
   );
   return {
     ...actual,
@@ -26,19 +26,19 @@ vi.mock("NexisClaw/plugin-sdk/runtime-env", async () => {
   };
 });
 
-vi.mock("NexisClaw/plugin-sdk/agent-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/agent-runtime", () => ({
   resolveHumanDelayConfig: () => undefined,
 }));
 
-let listNativeCommandSpecs: typeof import("NexisClaw/plugin-sdk/command-auth").listNativeCommandSpecs;
+let listNativeCommandSpecs: typeof import("GreenchClaw/plugin-sdk/command-auth").listNativeCommandSpecs;
 let createDiscordNativeCommand: typeof import("./native-command.js").createDiscordNativeCommand;
 let createNoopThreadBindingManager: typeof import("./thread-bindings.js").createNoopThreadBindingManager;
 
 function createNativeCommand(
   name: string,
   opts?: {
-    cfg?: NexisClawConfig;
-    discordConfig?: NonNullable<NexisClawConfig["channels"]>["discord"];
+    cfg?: GreenchClawConfig;
+    discordConfig?: NonNullable<GreenchClawConfig["channels"]>["discord"];
   },
 ): ReturnType<typeof import("./native-command.js").createDiscordNativeCommand> {
   const command = listNativeCommandSpecs({ provider: "discord" }).find(
@@ -47,8 +47,8 @@ function createNativeCommand(
   if (!command) {
     throw new Error(`missing native command: ${name}`);
   }
-  const baseCfg: NexisClawConfig = opts?.cfg ?? {};
-  const discordConfig: NonNullable<NexisClawConfig["channels"]>["discord"] =
+  const baseCfg: GreenchClawConfig = opts?.cfg ?? {};
+  const discordConfig: NonNullable<GreenchClawConfig["channels"]>["discord"] =
     opts?.discordConfig ?? baseCfg.channels?.discord ?? {};
   const cfg =
     opts?.discordConfig === undefined
@@ -158,7 +158,7 @@ async function runAutocomplete(
 
 describe("createDiscordNativeCommand option wiring", () => {
   beforeAll(async () => {
-    ({ listNativeCommandSpecs } = await import("NexisClaw/plugin-sdk/command-auth"));
+    ({ listNativeCommandSpecs } = await import("GreenchClaw/plugin-sdk/command-auth"));
     ({ createDiscordNativeCommand } = await import("./native-command.js"));
     ({ createNoopThreadBindingManager } = await import("./thread-bindings.js"));
   });
@@ -212,7 +212,7 @@ describe("createDiscordNativeCommand option wiring", () => {
             discord: ["user:allowed-user"],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
     const level = requireOption(command, "level");
     const autocomplete = requireAutocomplete(level, "think level option did not wire autocomplete");
@@ -251,7 +251,7 @@ describe("createDiscordNativeCommand option wiring", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
     });
     const level = requireOption(command, "level");
     const autocomplete = requireAutocomplete(level, "think level option did not wire autocomplete");
@@ -277,7 +277,7 @@ describe("createDiscordNativeCommand option wiring", () => {
         groupEnabled: true,
         groupChannels: ["allowed-group"],
       },
-    } satisfies NonNullable<NexisClawConfig["channels"]>["discord"];
+    } satisfies NonNullable<GreenchClawConfig["channels"]>["discord"];
     const command = createNativeCommand("think", {
       cfg: {
         commands: {
@@ -285,7 +285,7 @@ describe("createDiscordNativeCommand option wiring", () => {
             discord: ["user:allowed-user"],
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       discordConfig,
     });
     const level = requireOption(command, "level");
@@ -305,8 +305,8 @@ describe("createDiscordNativeCommand option wiring", () => {
 
   it("truncates Discord command and option descriptions to Discord's limit", () => {
     const longDescription = "x".repeat(140);
-    const cfg = {} as NexisClawConfig;
-    const discordConfig = {} as NonNullable<NexisClawConfig["channels"]>["discord"];
+    const cfg = {} as GreenchClawConfig;
+    const discordConfig = {} as NonNullable<GreenchClawConfig["channels"]>["discord"];
     const command = createDiscordNativeCommand({
       command: {
         name: "longdesc",
@@ -347,7 +347,7 @@ describe("createDiscordNativeCommand option wiring", () => {
         },
         acceptsArgs: false,
       },
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       discordConfig: {},
       accountId: "default",
       sessionPrefix: "discord:slash",

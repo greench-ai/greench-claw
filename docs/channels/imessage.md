@@ -1,5 +1,5 @@
 ---
-summary: "Native iMessage support via imsg (JSON-RPC over stdio), with private API actions for replies, tapbacks, effects, attachments, and group management. Preferred for new NexisClaw iMessage setups when host requirements fit."
+summary: "Native iMessage support via imsg (JSON-RPC over stdio), with private API actions for replies, tapbacks, effects, attachments, and group management. Preferred for new GreenchClaw iMessage setups when host requirements fit."
 read_when:
   - Setting up iMessage support
   - Debugging iMessage send/receive
@@ -7,13 +7,13 @@ title: "iMessage"
 ---
 
 <Note>
-For NexisClaw iMessage deployments, use `imsg` on a signed-in macOS Messages host. If your Gateway runs on Linux or Windows, point `channels.imessage.cliPath` at an SSH wrapper that runs `imsg` on the Mac.
+For GreenchClaw iMessage deployments, use `imsg` on a signed-in macOS Messages host. If your Gateway runs on Linux or Windows, point `channels.imessage.cliPath` at an SSH wrapper that runs `imsg` on the Mac.
 
-**Gateway-downtime catchup is opt-in.** When enabled (`channels.imessage.catchup.enabled: true`), the gateway replays inbound messages that landed in `chat.db` while it was offline (crash, restart, Mac sleep) on next startup. Disabled by default — see [Catching up after gateway downtime](#catching-up-after-gateway-downtime). Closes [NexisClaw#78649](https://github.com/NexisClaw/NexisClaw/issues/78649).
+**Gateway-downtime catchup is opt-in.** When enabled (`channels.imessage.catchup.enabled: true`), the gateway replays inbound messages that landed in `chat.db` while it was offline (crash, restart, Mac sleep) on next startup. Disabled by default — see [Catching up after gateway downtime](#catching-up-after-gateway-downtime). Closes [GreenchClaw#78649](https://github.com/GreenchClaw/GreenchClaw/issues/78649).
 </Note>
 
 <Warning>
-BlueBubbles support was removed. Migrate `channels.bluebubbles` configs to `channels.imessage`; NexisClaw supports iMessage through `imsg` only. Start with [BlueBubbles removal and the imsg iMessage path](/announcements/bluebubbles-imessage) for the short announcement, or [Coming from BlueBubbles](/channels/imessage-from-bluebubbles) for the full migration table.
+BlueBubbles support was removed. Migrate `channels.bluebubbles` configs to `channels.imessage`; GreenchClaw supports iMessage through `imsg` only. Start with [BlueBubbles removal and the imsg iMessage path](/announcements/bluebubbles-imessage) for the short announcement, or [Coming from BlueBubbles](/channels/imessage-from-bluebubbles) for the full migration table.
 </Warning>
 
 Status: native external CLI integration. Gateway spawns `imsg rpc` and communicates over JSON-RPC on stdio (no separate daemon/port). Advanced actions require `imsg launch` and a successful private API probe.
@@ -44,12 +44,12 @@ Status: native external CLI integration. Gateway spawns `imsg rpc` and communica
 brew install steipete/tap/imsg
 imsg rpc --help
 imsg launch
-NexisClaw channels status --probe
+GreenchClaw channels status --probe
 ```
 
       </Step>
 
-      <Step title="Configure NexisClaw">
+      <Step title="Configure GreenchClaw">
 
 ```json5
 {
@@ -68,7 +68,7 @@ NexisClaw channels status --probe
       <Step title="Start gateway">
 
 ```bash
-NexisClaw gateway
+GreenchClaw gateway
 ```
 
       </Step>
@@ -76,8 +76,8 @@ NexisClaw gateway
       <Step title="Approve first DM pairing (default dmPolicy)">
 
 ```bash
-NexisClaw pairing list imessage
-NexisClaw pairing approve imessage <CODE>
+GreenchClaw pairing list imessage
+GreenchClaw pairing approve imessage <CODE>
 ```
 
         Pairing requests expire after 1 hour.
@@ -87,7 +87,7 @@ NexisClaw pairing approve imessage <CODE>
   </Tab>
 
   <Tab title="Remote Mac over SSH">
-    NexisClaw only requires a stdio-compatible `cliPath`, so you can point `cliPath` at a wrapper script that SSHes to a remote Mac and runs `imsg`.
+    GreenchClaw only requires a stdio-compatible `cliPath`, so you can point `cliPath` at a wrapper script that SSHes to a remote Mac and runs `imsg`.
 
 ```bash
 #!/usr/bin/env bash
@@ -101,7 +101,7 @@ exec ssh -T gateway-host imsg "$@"
   channels: {
     imessage: {
       enabled: true,
-      cliPath: "~/.NexisClaw/scripts/imsg-ssh",
+      cliPath: "~/.GreenchClaw/scripts/imsg-ssh",
       remoteHost: "user@gateway-host", // used for SCP attachment fetches
       includeAttachments: true,
       // Optional: override allowed attachment roots.
@@ -113,9 +113,9 @@ exec ssh -T gateway-host imsg "$@"
 }
 ```
 
-    If `remoteHost` is not set, NexisClaw attempts to auto-detect it by parsing the SSH wrapper script.
+    If `remoteHost` is not set, GreenchClaw attempts to auto-detect it by parsing the SSH wrapper script.
     `remoteHost` must be `host` or `user@host` (no spaces or SSH options).
-    NexisClaw uses strict host-key checking for SCP, so the relay host key must already exist in `~/.ssh/known_hosts`.
+    GreenchClaw uses strict host-key checking for SCP, so the relay host key must already exist in `~/.ssh/known_hosts`.
     Attachment paths are validated against allowed roots (`attachmentRoots` / `remoteAttachmentRoots`).
 
   </Tab>
@@ -124,7 +124,7 @@ exec ssh -T gateway-host imsg "$@"
 ## Requirements and permissions (macOS)
 
 - Messages must be signed in on the Mac running `imsg`.
-- Full Disk Access is required for the process context running NexisClaw/`imsg` (Messages DB access).
+- Full Disk Access is required for the process context running GreenchClaw/`imsg` (Messages DB access).
 - Automation permission is required to send messages through Messages.app.
 - For advanced actions (react / edit / unsend / threaded reply / effects / group ops), System Integrity Protection must be disabled — see [Enabling the imsg private API](#enabling-the-imsg-private-api) below. Basic text and media send/receive work without it.
 
@@ -150,7 +150,7 @@ To reach the advanced action surface that this channel page documents, you need 
 
 > Advanced features such as `read`, `typing`, `launch`, bridge-backed rich send, message mutation, and chat management are opt-in. They require SIP to be disabled and a helper dylib to be injected into `Messages.app`. `imsg launch` refuses to inject when SIP is enabled.
 
-The helper-injection technique uses `imsg`'s own dylib to reach Messages private APIs. There is no third-party server or BlueBubbles runtime in the NexisClaw iMessage path.
+The helper-injection technique uses `imsg`'s own dylib to reach Messages private APIs. There is no third-party server or BlueBubbles runtime in the GreenchClaw iMessage path.
 
 <Warning>
 **Disabling SIP is a real security tradeoff.** SIP is one of macOS's core protections against running modified system code; turning it off system-wide opens up additional attack surface and side effects. Notably, **disabling SIP on Apple Silicon Macs also disables the ability to install and run iOS apps on your Mac**.
@@ -186,22 +186,22 @@ Treat this as a deliberate operational choice, not a default. If your threat mod
 
    `imsg launch` refuses to inject when SIP is still enabled, so this also doubles as a confirmation that step 2 took.
 
-4. **Verify the bridge from NexisClaw:**
+4. **Verify the bridge from GreenchClaw:**
 
    ```bash
-   NexisClaw channels status --probe
+   GreenchClaw channels status --probe
    ```
 
-   The iMessage entry should report `works`, and `imsg status --json | jq '.selectors'` should show `retractMessagePart: true` plus whichever edit / typing / read selectors your macOS build exposes. The NexisClaw plugin per-method gating in `actions.ts` only advertises actions whose underlying selector is `true`, so the action surface you see in the agent's tool list reflects what the bridge can actually do on this host.
+   The iMessage entry should report `works`, and `imsg status --json | jq '.selectors'` should show `retractMessagePart: true` plus whichever edit / typing / read selectors your macOS build exposes. The GreenchClaw plugin per-method gating in `actions.ts` only advertises actions whose underlying selector is `true`, so the action surface you see in the agent's tool list reflects what the bridge can actually do on this host.
 
-If `NexisClaw channels status --probe` reports the channel as `works` but specific actions throw "iMessage `<action>` requires the imsg private API bridge" at dispatch time, run `imsg launch` again — the helper can fall out (Messages.app restart, OS update, etc.) and the cached `available: true` status will keep advertising actions until the next probe refreshes.
+If `GreenchClaw channels status --probe` reports the channel as `works` but specific actions throw "iMessage `<action>` requires the imsg private API bridge" at dispatch time, run `imsg launch` again — the helper can fall out (Messages.app restart, OS update, etc.) and the cached `available: true` status will keep advertising actions until the next probe refreshes.
 
 ### When you can't disable SIP
 
 If SIP-disabled isn't acceptable for your threat model:
 
 - `imsg` falls back to basic mode — text + media + receive only.
-- The NexisClaw plugin still advertises text/media send and inbound monitoring; it just hides `react`, `edit`, `unsend`, `reply`, `sendWithEffect`, and group ops from the action surface (per the per-method capability gate).
+- The GreenchClaw plugin still advertises text/media send and inbound monitoring; it just hides `react`, `edit`, `unsend`, `reply`, `sendWithEffect`, and group ops from the action surface (per the per-method capability gate).
 - You can run a separate non-Apple-Silicon Mac (or a dedicated bot Mac) with SIP off for the iMessage workload, while keeping SIP enabled on your primary devices. See [Dedicated bot macOS user (separate iMessage identity)](#deployment-patterns) below.
 
 ## Access control and routing
@@ -315,7 +315,7 @@ If SIP-disabled isn't acceptable for your threat model:
     Group-ish thread behavior:
 
     Some multi-participant iMessage threads can arrive with `is_group=false`.
-    If that `chat_id` is explicitly configured under `channels.imessage.groups`, NexisClaw treats it as group traffic (group gating + group session isolation).
+    If that `chat_id` is explicitly configured under `channels.imessage.groups`, GreenchClaw treats it as group traffic (group gating + group session isolation).
 
   </Tab>
 </Tabs>
@@ -383,7 +383,7 @@ See [ACP Agents](/tools/acp-agents) for shared ACP binding behavior.
     1. Create/sign in a dedicated macOS user.
     2. Sign into Messages with the bot Apple ID in that user.
     3. Install `imsg` in that user.
-    4. Create SSH wrapper so NexisClaw can run `imsg` in that user context.
+    4. Create SSH wrapper so GreenchClaw can run `imsg` in that user context.
     5. Point `channels.imessage.accounts.<id>.cliPath` and `.dbPath` to that user profile.
 
     First run may require GUI approvals (Automation + Full Disk Access) in that bot user session.
@@ -405,7 +405,7 @@ See [ACP Agents](/tools/acp-agents) for shared ACP binding behavior.
       channels: {
         imessage: {
           enabled: true,
-          cliPath: "~/.NexisClaw/scripts/imsg-ssh",
+          cliPath: "~/.GreenchClaw/scripts/imsg-ssh",
           remoteHost: "bot@mac-mini.tailnet-1234.ts.net",
           includeAttachments: true,
           dbPath: "/Users/bot/Library/Messages/chat.db",
@@ -477,7 +477,7 @@ See [ACP Agents](/tools/acp-agents) for shared ACP binding behavior.
 
 ## Private API actions
 
-When `imsg launch` is running and `NexisClaw channels status --probe` reports `privateApi.available: true`, the message tool can use iMessage-native actions in addition to normal text sends.
+When `imsg launch` is running and `GreenchClaw channels status --probe` reports `privateApi.available: true`, the message tool can use iMessage-native actions in addition to normal text sends.
 
 ```json5
 {
@@ -519,7 +519,7 @@ When `imsg launch` is running and `NexisClaw channels status --probe` reports `p
   </Accordion>
 
   <Accordion title="Capability detection">
-    NexisClaw hides private API actions only when the cached probe status says the bridge is unavailable. If the status is unknown, actions remain visible and dispatch probes lazily so the first action can succeed after `imsg launch` without a separate manual status refresh.
+    GreenchClaw hides private API actions only when the cached probe status says the bridge is unavailable. If the status is unknown, actions remain visible and dispatch probes lazily so the first action can succeed after `imsg launch` without a separate manual status refresh.
 
   </Accordion>
 
@@ -536,12 +536,12 @@ When `imsg launch` is running and `NexisClaw channels status --probe` reports `p
     }
     ```
 
-    Older `imsg` builds that pre-date the per-method capability list will gate off typing/read silently; NexisClaw logs a one-time warning per restart so the missing receipt is attributable.
+    Older `imsg` builds that pre-date the per-method capability list will gate off typing/read silently; GreenchClaw logs a one-time warning per restart so the missing receipt is attributable.
 
   </Accordion>
 
   <Accordion title="Inbound tapbacks">
-    NexisClaw subscribes to iMessage tapbacks and routes accepted reactions as system events instead of normal message text, so a user tapback does not trigger an ordinary reply loop.
+    GreenchClaw subscribes to iMessage tapbacks and routes accepted reactions as system events instead of normal message text, so a user tapback does not trigger an ordinary reply loop.
 
     Notification mode is controlled by `channels.imessage.reactionNotifications`:
 
@@ -579,7 +579,7 @@ When a user types a command and a URL together — e.g. `Dump https://example.co
 1. A text message (`"Dump"`).
 2. A URL-preview balloon (`"https://..."`) with OG-preview images as attachments.
 
-The two rows arrive at NexisClaw ~0.8-2.0 s apart on most setups. Without coalescing, the agent receives the command alone on turn 1, replies (often "send me the URL"), and only sees the URL on turn 2 — at which point the command context is already lost. This is Apple's send pipeline, not anything NexisClaw or `imsg` introduces.
+The two rows arrive at GreenchClaw ~0.8-2.0 s apart on most setups. Without coalescing, the agent receives the command alone on turn 1, replies (often "send me the URL"), and only sees the URL on turn 2 — at which point the command context is already lost. This is Apple's send pipeline, not anything GreenchClaw or `imsg` introduces.
 
 `channels.imessage.coalesceSameSenderDms` opts a DM into merging consecutive same-sender rows into a single agent turn. Group chats continue to dispatch per-message so multi-user turn structure is preserved.
 
@@ -677,7 +677,7 @@ Each replayed row is fed through the live dispatch path (`evaluateIMessageInboun
 
 ### Cursor and retry semantics
 
-Catchup keeps a per-account cursor at `<NexisClawStateDir>/imessage/catchup/<account>__<hash>.json` (the NexisClaw state dir defaults to `~/.NexisClaw`, overridable with `NEXISCLAW_STATE_DIR`):
+Catchup keeps a per-account cursor at `<GreenchClawStateDir>/imessage/catchup/<account>__<hash>.json` (the GreenchClaw state dir defaults to `~/.GreenchClaw`, overridable with `GREENCHCLAW_STATE_DIR`):
 
 ```json
 {
@@ -718,7 +718,7 @@ When you turn catchup on, the first startup with no cursor only looks back `firs
     ```bash
     imsg rpc --help
     imsg status --json
-    NexisClaw channels status --probe
+    GreenchClaw channels status --probe
     ```
 
     If probe reports RPC unsupported, update `imsg`. If private API actions are unavailable, run `imsg launch` in the logged-in macOS user session and probe again. If the Gateway is not running on macOS, use the Remote Mac over SSH setup above instead of the default local `imsg` path.
@@ -736,7 +736,7 @@ exec ssh -T messages-mac imsg "$@"
     Then run:
 
 ```bash
-NexisClaw channels status --probe --channel imessage
+GreenchClaw channels status --probe --channel imessage
 ```
 
   </Accordion>
@@ -746,7 +746,7 @@ NexisClaw channels status --probe --channel imessage
 
     - `channels.imessage.dmPolicy`
     - `channels.imessage.allowFrom`
-    - pairing approvals (`NexisClaw pairing list imessage`)
+    - pairing approvals (`GreenchClaw pairing list imessage`)
 
   </Accordion>
 
@@ -779,7 +779,7 @@ NexisClaw channels status --probe --channel imessage
     imsg send <handle> "test"
     ```
 
-    Confirm Full Disk Access + Automation are granted for the process context that runs NexisClaw/`imsg`.
+    Confirm Full Disk Access + Automation are granted for the process context that runs GreenchClaw/`imsg`.
 
   </Accordion>
 </AccordionGroup>

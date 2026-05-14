@@ -68,7 +68,7 @@ function createProfileContext(overrides?: Partial<ReturnType<typeof baseProfileC
 function baseProfileContext() {
   return {
     profile: {
-      name: "NexisClaw",
+      name: "GreenchClaw",
     },
     ensureBrowserAvailable: vi.fn(async () => {}),
     ensureTabAvailable: vi.fn(async () => ({

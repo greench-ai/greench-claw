@@ -18,7 +18,7 @@ function makeBundledChannelCatalogEntry(params: {
   return {
     pluginId: params.pluginId,
     origin: "bundled",
-    rootDir: "/tmp/NexisClaw-channel-plugin",
+    rootDir: "/tmp/GreenchClaw-channel-plugin",
     channel: {
       id: params.channelId,
       configuredState: {

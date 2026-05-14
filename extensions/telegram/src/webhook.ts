@@ -2,32 +2,32 @@ import { createServer } from "node:http";
 import type { IncomingMessage } from "node:http";
 import net from "node:net";
 import { InputFile } from "grammy";
-import type { ChannelAccountSnapshot } from "NexisClaw/plugin-sdk/channel-contract";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
-import { isDiagnosticsEnabled } from "NexisClaw/plugin-sdk/diagnostic-runtime";
+import type { ChannelAccountSnapshot } from "GreenchClaw/plugin-sdk/channel-contract";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
+import { isDiagnosticsEnabled } from "GreenchClaw/plugin-sdk/diagnostic-runtime";
 import {
   logWebhookError,
   logWebhookProcessed,
   logWebhookReceived,
   startDiagnosticHeartbeat,
   stopDiagnosticHeartbeat,
-} from "NexisClaw/plugin-sdk/logging-core";
-import type { BackoffPolicy, RuntimeEnv } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/logging-core";
+import type { BackoffPolicy, RuntimeEnv } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   computeBackoff,
   defaultRuntime,
   formatDurationPrecise,
   sleepWithAbort,
-} from "NexisClaw/plugin-sdk/runtime-env";
-import { safeEqualSecret } from "NexisClaw/plugin-sdk/security-runtime";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/runtime-env";
+import { safeEqualSecret } from "GreenchClaw/plugin-sdk/security-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import {
   applyBasicWebhookRequestGuards,
   createFixedWindowRateLimiter,
   WEBHOOK_RATE_LIMIT_DEFAULTS,
-} from "NexisClaw/plugin-sdk/webhook-ingress";
-import { readJsonBodyWithLimit } from "NexisClaw/plugin-sdk/webhook-request-guards";
+} from "GreenchClaw/plugin-sdk/webhook-ingress";
+import { readJsonBodyWithLimit } from "GreenchClaw/plugin-sdk/webhook-request-guards";
 import { resolveTelegramAllowedUpdates } from "./allowed-updates.js";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
 import { createTelegramBot } from "./bot.js";
@@ -209,7 +209,7 @@ function resolveForwardedClientIp(
   return undefined;
 }
 
-function resolveTelegramWebhookClientIp(req: IncomingMessage, config?: NexisClawConfig): string {
+function resolveTelegramWebhookClientIp(req: IncomingMessage, config?: GreenchClawConfig): string {
   const remoteAddress = parseIpLiteral(req.socket.remoteAddress);
   const trustedProxies = config?.gateway?.trustedProxies;
   if (!remoteAddress) {
@@ -237,7 +237,7 @@ function resolveTelegramWebhookClientIp(req: IncomingMessage, config?: NexisClaw
 function resolveTelegramWebhookRateLimitKey(
   req: IncomingMessage,
   path: string,
-  config?: NexisClawConfig,
+  config?: GreenchClawConfig,
 ): string {
   return `${path}:${resolveTelegramWebhookClientIp(req, config)}`;
 }
@@ -245,7 +245,7 @@ function resolveTelegramWebhookRateLimitKey(
 export async function startTelegramWebhook(opts: {
   token: string;
   accountId?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   path?: string;
   port?: number;
   host?: string;

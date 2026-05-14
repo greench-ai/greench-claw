@@ -42,7 +42,7 @@ describe("safe npm install helpers", () => {
         npm_config_workspaces: "true",
       },
       {
-        cacheDir: "/tmp/NexisClaw-npm-cache",
+        cacheDir: "/tmp/GreenchClaw-npm-cache",
         ignoreWorkspaces: true,
         legacyPeerDeps: true,
         packageLock: false,
@@ -54,7 +54,7 @@ describe("safe npm install helpers", () => {
     expect(env.COREPACK_ENABLE_DOWNLOAD_PROMPT).toBe("0");
     expect(env.NPM_CONFIG_IGNORE_SCRIPTS).toBe("true");
     expect(env.npm_config_audit).toBe("false");
-    expect(env.npm_config_cache).toBe("/tmp/NexisClaw-npm-cache");
+    expect(env.npm_config_cache).toBe("/tmp/GreenchClaw-npm-cache");
     expect(env.npm_config_dry_run).toBe("false");
     expect(env.npm_config_fetch_retries).toBe("5");
     expect(env.npm_config_fetch_retry_maxtimeout).toBe("120000");

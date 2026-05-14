@@ -1,1 +1,1 @@
-export { optionalStringEnum } from "NexisClaw/plugin-sdk/channel-actions";
+export { optionalStringEnum } from "GreenchClaw/plugin-sdk/channel-actions";

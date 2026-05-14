@@ -5,13 +5,13 @@ import {
   type NativeApprovalTarget,
   nativeApprovalTargetsMatch,
 } from "./approval-native-helpers.js";
-import type { NexisClawConfig } from "./config-runtime.js";
+import type { GreenchClawConfig } from "./config-runtime.js";
 
 const EMPTY_SESSION_CFG = {
   session: {
     store: ".artifacts/test/approval-native-helpers-empty-sessions.json",
   },
-} satisfies NexisClawConfig;
+} satisfies GreenchClawConfig;
 
 describe("createChannelNativeOriginTargetResolver", () => {
   it("reuses shared turn-source routing and respects shouldHandle gating", () => {

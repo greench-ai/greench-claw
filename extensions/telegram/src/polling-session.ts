@@ -1,12 +1,12 @@
 import { type RunOptions, run } from "@grammyjs/runner";
-import type { ChannelAccountSnapshot } from "NexisClaw/plugin-sdk/channel-contract";
+import type { ChannelAccountSnapshot } from "GreenchClaw/plugin-sdk/channel-contract";
 import {
   computeBackoff,
   formatDurationPrecise,
   sleepWithAbort,
-} from "NexisClaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { normalizeLowercaseStringOrEmpty } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { normalizeLowercaseStringOrEmpty } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
 import { createTelegramBot } from "./bot.js";
 import { type TelegramTransport } from "./fetch.js";
@@ -143,7 +143,7 @@ export class TelegramPollingSession {
     } finally {
       // Release the transport's dispatchers on session shutdown. Without
       // this, the undici keep-alive sockets survive beyond the session and
-      // leak to api.telegram.org; see NexisClaw#68128.
+      // leak to api.telegram.org; see GreenchClaw#68128.
       await this.#transportState.dispose();
       this.#status.notePollingStop();
     }
@@ -372,7 +372,7 @@ export class TelegramPollingSession {
       const reason = isConflict ? "getUpdates conflict" : "network error";
       const errMsg = formatErrorMessage(err);
       const conflictHint = isConflict
-        ? " Another NexisClaw gateway, script, or Telegram poller may be using this bot token; stop the duplicate poller or switch this account to webhook mode."
+        ? " Another GreenchClaw gateway, script, or Telegram poller may be using this bot token; stop the duplicate poller or switch this account to webhook mode."
         : "";
       this.opts.log(
         `[telegram][diag] polling cycle error reason=${reason} ${liveness.formatDiagnosticFields("lastGetUpdatesError")} err=${errMsg}${conflictHint}`,

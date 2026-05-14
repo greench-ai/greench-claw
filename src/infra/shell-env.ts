@@ -153,7 +153,7 @@ function createLoginShellEnvCacheKey(params: {
       ) {
         return true;
       }
-      return key.startsWith("XDG_") || key.startsWith("NEXISCLAW_");
+      return key.startsWith("XDG_") || key.startsWith("GREENCHCLAW_");
     })
     .toSorted(([left], [right]) => left.localeCompare(right));
   return JSON.stringify([
@@ -240,7 +240,7 @@ export function loadShellEnvFallback(opts: ShellEnvFallbackOptions): ShellEnvFal
     exec: opts.exec,
   });
   if (!probe.ok) {
-    logger.warn(`[NexisClaw] shell env fallback failed: ${probe.error}`);
+    logger.warn(`[GreenchClaw] shell env fallback failed: ${probe.error}`);
     lastAppliedKeys = [];
     return { ok: false, error: probe.error, applied: [] };
   }
@@ -260,15 +260,15 @@ export function loadShellEnvFallback(opts: ShellEnvFallbackOptions): ShellEnvFal
 }
 
 export function shouldEnableShellEnvFallback(env: NodeJS.ProcessEnv): boolean {
-  return isTruthyEnvValue(env.NEXISCLAW_LOAD_SHELL_ENV);
+  return isTruthyEnvValue(env.GREENCHCLAW_LOAD_SHELL_ENV);
 }
 
 export function shouldDeferShellEnvFallback(env: NodeJS.ProcessEnv): boolean {
-  return isTruthyEnvValue(env.NEXISCLAW_DEFER_SHELL_ENV_FALLBACK);
+  return isTruthyEnvValue(env.GREENCHCLAW_DEFER_SHELL_ENV_FALLBACK);
 }
 
 export function resolveShellEnvFallbackTimeoutMs(env: NodeJS.ProcessEnv): number {
-  const raw = env.NEXISCLAW_SHELL_ENV_TIMEOUT_MS?.trim();
+  const raw = env.GREENCHCLAW_SHELL_ENV_TIMEOUT_MS?.trim();
   if (!raw) {
     return DEFAULT_TIMEOUT_MS;
   }

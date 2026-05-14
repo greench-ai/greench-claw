@@ -26,11 +26,11 @@ const {
   })),
 }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-auth-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/provider-auth-runtime", () => ({
   resolveApiKeyForProvider: resolveApiKeyForProviderMock,
 }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-http", () => ({
+vi.mock("GreenchClaw/plugin-sdk/provider-http", () => ({
   assertOkOrThrowHttpError: assertOkOrThrowHttpErrorMock,
   createProviderOperationDeadline: createProviderOperationDeadlineMock,
   postJsonRequest: postJsonRequestMock,
@@ -41,8 +41,8 @@ vi.mock("NexisClaw/plugin-sdk/provider-http", () => ({
 }));
 
 afterAll(() => {
-  vi.doUnmock("NexisClaw/plugin-sdk/provider-auth-runtime");
-  vi.doUnmock("NexisClaw/plugin-sdk/provider-http");
+  vi.doUnmock("GreenchClaw/plugin-sdk/provider-auth-runtime");
+  vi.doUnmock("GreenchClaw/plugin-sdk/provider-http");
   vi.resetModules();
 });
 

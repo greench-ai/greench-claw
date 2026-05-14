@@ -1,14 +1,14 @@
 import type { ReactionType, ReactionTypeEmoji } from "@grammyjs/types";
 import * as grammy from "grammy";
 import { type ApiClientOptions, Bot, HttpError } from "grammy";
-import { recordChannelActivity } from "NexisClaw/plugin-sdk/channel-activity-runtime";
-import { isDiagnosticFlagEnabled } from "NexisClaw/plugin-sdk/diagnostic-runtime";
-import { formatUncaughtError } from "NexisClaw/plugin-sdk/error-runtime";
-import { redactSensitiveText } from "NexisClaw/plugin-sdk/logging-core";
-import { createTelegramRetryRunner, type RetryConfig } from "NexisClaw/plugin-sdk/retry-runtime";
-import { createSubsystemLogger, logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/ssrf-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { recordChannelActivity } from "GreenchClaw/plugin-sdk/channel-activity-runtime";
+import { isDiagnosticFlagEnabled } from "GreenchClaw/plugin-sdk/diagnostic-runtime";
+import { formatUncaughtError } from "GreenchClaw/plugin-sdk/error-runtime";
+import { redactSensitiveText } from "GreenchClaw/plugin-sdk/logging-core";
+import { createTelegramRetryRunner, type RetryConfig } from "GreenchClaw/plugin-sdk/retry-runtime";
+import { createSubsystemLogger, logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/ssrf-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { getOrCreateAccountThrottler } from "./account-throttler.js";
 import { type ResolvedTelegramAccount, resolveTelegramAccount } from "./accounts.js";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
@@ -39,7 +39,7 @@ import {
   type MediaKind,
   normalizePollInput,
   probeVideoDimensions,
-  type NexisClawConfig,
+  type GreenchClawConfig,
   type PollInput,
   requireRuntimeConfig,
   resolveMarkdownTableMode,
@@ -69,7 +69,7 @@ const MAX_TELEGRAM_PHOTO_DIMENSION_SUM = 10_000;
 const MAX_TELEGRAM_PHOTO_ASPECT_RATIO = 20;
 
 type TelegramSendOpts = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   token?: string;
   accountId?: string;
   verbose?: boolean;
@@ -111,7 +111,7 @@ type TelegramMessageLike = {
 };
 
 type TelegramReactionOpts = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   token?: string;
   accountId?: string;
   api?: TelegramApiOverride;
@@ -121,7 +121,7 @@ type TelegramReactionOpts = {
 };
 
 type TelegramTypingOpts = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   token?: string;
   accountId?: string;
   verbose?: boolean;
@@ -198,7 +198,7 @@ export function resetTelegramClientOptionsCacheForTests(): void {
   telegramClientOptionsCache.clear();
 }
 
-function createTelegramHttpLogger(cfg: NexisClawConfig) {
+function createTelegramHttpLogger(cfg: GreenchClawConfig) {
   const enabled = isDiagnosticFlagEnabled("telegram.http", cfg);
   if (!enabled) {
     return () => {};
@@ -331,7 +331,7 @@ async function resolveChatId(
 }
 
 async function resolveAndPersistChatId(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   api: TelegramApiOverride;
   lookupTarget: string;
   persistTarget: string;
@@ -431,7 +431,7 @@ async function withTelegramHtmlParseFallback<T>(params: {
 }
 
 type TelegramApiContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   account: ResolvedTelegramAccount;
   api: TelegramApi;
 };
@@ -440,7 +440,7 @@ function resolveTelegramApiContext(opts: {
   token?: string;
   accountId?: string;
   api?: TelegramApiOverride;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 }): TelegramApiContext {
   const cfg = requireRuntimeConfig(opts.cfg, "Telegram API context");
   const account = resolveTelegramAccount({
@@ -467,7 +467,7 @@ type TelegramRequestWithDiag = <T>(
 ) => Promise<T>;
 
 function createTelegramRequestWithDiag(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   account: ResolvedTelegramAccount;
   retry?: RetryConfig;
   verbose?: boolean;
@@ -579,7 +579,7 @@ function createRequestWithChatNotFound(params: {
 }
 
 function createTelegramNonIdempotentRequestWithDiag(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   account: ResolvedTelegramAccount;
   retry?: RetryConfig;
   verbose?: boolean;
@@ -1068,7 +1068,7 @@ export async function reactMessageTelegram(
 }
 
 type TelegramDeleteOpts = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   token?: string;
   accountId?: string;
   notify?: boolean;
@@ -1280,7 +1280,7 @@ type TelegramEditOpts = {
   /** Inline keyboard buttons (reply markup). Pass empty array to remove buttons. */
   buttons?: TelegramInlineButtons;
   /** Resolved runtime config from the command or gateway boundary. */
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 };
 
 type TelegramEditReplyMarkupOpts = {
@@ -1292,7 +1292,7 @@ type TelegramEditReplyMarkupOpts = {
   /** Inline keyboard buttons (reply markup). Pass empty array to remove buttons. */
   buttons?: TelegramInlineButtons;
   /** Resolved runtime config from the command or gateway boundary. */
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
 };
 
 export async function editMessageReplyMarkupTelegram(
@@ -1451,7 +1451,7 @@ function inferFilename(kind: MediaKind) {
 }
 
 type TelegramStickerOpts = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   token?: string;
   accountId?: string;
   verbose?: boolean;
@@ -1535,7 +1535,7 @@ export async function sendStickerTelegram(
 }
 
 type TelegramPollOpts = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   token?: string;
   accountId?: string;
   verbose?: boolean;
@@ -1652,7 +1652,7 @@ export async function sendPollTelegram(
 // ---------------------------------------------------------------------------
 
 type TelegramCreateForumTopicOpts = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   token?: string;
   accountId?: string;
   api?: TelegramApiOverride;

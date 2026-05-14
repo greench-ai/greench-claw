@@ -7,24 +7,24 @@ import {
 } from "./qa-runtime.test-helpers.js";
 
 const loadBundledPluginPublicSurfaceModuleSync = vi.hoisted(() => vi.fn());
-const resolveNexisClawPackageRootSync = vi.hoisted(() => vi.fn());
+const resolveGreenchClawPackageRootSync = vi.hoisted(() => vi.fn());
 
 vi.mock("./facade-runtime.js", () => ({
   loadBundledPluginPublicSurfaceModuleSync,
 }));
 
-vi.mock("../infra/NexisClaw-root.js", () => ({
-  resolveNexisClawPackageRootSync,
+vi.mock("../infra/GreenchClaw-root.js", () => ({
+  resolveGreenchClawPackageRootSync,
 }));
 
 describe("plugin-sdk qa-runtime", () => {
   const tempDirs: string[] = [];
-  const originalPrivateQaCli = process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI;
+  const originalPrivateQaCli = process.env.GREENCHCLAW_ENABLE_PRIVATE_QA_CLI;
 
   beforeEach(() => {
     loadBundledPluginPublicSurfaceModuleSync.mockReset();
-    resolveNexisClawPackageRootSync.mockReset().mockReturnValue(null);
-    delete process.env.NEXISCLAW_ENABLE_PRIVATE_QA_CLI;
+    resolveGreenchClawPackageRootSync.mockReset().mockReturnValue(null);
+    delete process.env.GREENCHCLAW_ENABLE_PRIVATE_QA_CLI;
   });
 
   afterEach(() => {
@@ -52,7 +52,7 @@ describe("plugin-sdk qa-runtime", () => {
       tempDirs,
       importRuntime: () => import("./qa-runtime.js"),
       loadBundledPluginPublicSurfaceModuleSync,
-      resolveNexisClawPackageRootSync,
+      resolveGreenchClawPackageRootSync,
     });
   });
 

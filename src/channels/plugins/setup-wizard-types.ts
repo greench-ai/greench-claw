@@ -1,5 +1,5 @@
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import type { DmPolicy } from "../../config/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
 import type { RuntimeEnv } from "../../runtime.js";
 import type { WizardPrompter } from "../../wizard/prompts.js";
 import type { ChannelAccessPolicy } from "./setup-group-access.js";
@@ -28,21 +28,21 @@ export type ChannelSetupWizardStatus = {
   configuredScore?: number;
   unconfiguredScore?: number;
   resolveConfigured: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string;
   }) => boolean | Promise<boolean>;
   resolveStatusLines?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string;
     configured: boolean;
   }) => string[] | Promise<string[]>;
   resolveSelectionHint?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string;
     configured: boolean;
   }) => string | undefined | Promise<string | undefined>;
   resolveQuickstartScore?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId?: string;
     configured: boolean;
   }) => number | undefined | Promise<number | undefined>;
@@ -61,7 +61,7 @@ export type ChannelSetupWizardNote = {
   title: string;
   lines: string[];
   shouldShow?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     credentialValues: ChannelSetupWizardCredentialValues;
   }) => boolean | Promise<boolean>;
@@ -70,11 +70,11 @@ export type ChannelSetupWizardNote = {
 export type ChannelSetupWizardEnvShortcut = {
   prompt: string;
   preferredEnvVar?: string;
-  isAvailable: (params: { cfg: NexisClawConfig; accountId: string }) => boolean;
+  isAvailable: (params: { cfg: GreenchClawConfig; accountId: string }) => boolean;
   apply: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
-  }) => NexisClawConfig | Promise<NexisClawConfig>;
+  }) => GreenchClawConfig | Promise<GreenchClawConfig>;
 };
 
 export type ChannelSetupWizardCredential = {
@@ -87,29 +87,29 @@ export type ChannelSetupWizardCredential = {
   envPrompt: string;
   keepPrompt: string;
   inputPrompt: string;
-  allowEnv?: (params: { cfg: NexisClawConfig; accountId: string }) => boolean;
+  allowEnv?: (params: { cfg: GreenchClawConfig; accountId: string }) => boolean;
   inspect: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
   }) => ChannelSetupWizardCredentialState;
   shouldPrompt?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     credentialValues: ChannelSetupWizardCredentialValues;
     currentValue?: string;
     state: ChannelSetupWizardCredentialState;
   }) => boolean | Promise<boolean>;
   applyUseEnv?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
-  }) => NexisClawConfig | Promise<NexisClawConfig>;
+  }) => GreenchClawConfig | Promise<GreenchClawConfig>;
   applySet?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     credentialValues: ChannelSetupWizardCredentialValues;
     value: unknown;
     resolvedValue: string;
-  }) => NexisClawConfig | Promise<NexisClawConfig>;
+  }) => GreenchClawConfig | Promise<GreenchClawConfig>;
 };
 
 export type ChannelSetupWizardTextInput = {
@@ -123,17 +123,17 @@ export type ChannelSetupWizardTextInput = {
   confirmCurrentValue?: boolean;
   keepPrompt?: string | ((value: string) => string);
   currentValue?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     credentialValues: ChannelSetupWizardCredentialValues;
   }) => string | undefined | Promise<string | undefined>;
   initialValue?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     credentialValues: ChannelSetupWizardCredentialValues;
   }) => string | undefined | Promise<string | undefined>;
   shouldPrompt?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     credentialValues: ChannelSetupWizardCredentialValues;
     currentValue?: string;
@@ -141,21 +141,21 @@ export type ChannelSetupWizardTextInput = {
   applyCurrentValue?: boolean;
   validate?: (params: {
     value: string;
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     credentialValues: ChannelSetupWizardCredentialValues;
   }) => string | undefined;
   normalizeValue?: (params: {
     value: string;
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     credentialValues: ChannelSetupWizardCredentialValues;
   }) => string;
   applySet?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     value: string;
-  }) => NexisClawConfig | Promise<NexisClawConfig>;
+  }) => GreenchClawConfig | Promise<GreenchClawConfig>;
 };
 
 export type ChannelSetupWizardAllowFromEntry = {
@@ -174,16 +174,16 @@ export type ChannelSetupWizardAllowFrom = {
   parseInputs?: (raw: string) => string[];
   parseId: (raw: string) => string | null;
   resolveEntries: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     credentialValues: ChannelSetupWizardCredentialValues;
     entries: string[];
   }) => Promise<ChannelSetupWizardAllowFromEntry[]>;
   apply: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     allowFrom: string[];
-  }) => NexisClawConfig | Promise<NexisClawConfig>;
+  }) => GreenchClawConfig | Promise<GreenchClawConfig>;
 };
 
 export type ChannelSetupWizardGroupAccess = {
@@ -192,30 +192,30 @@ export type ChannelSetupWizardGroupAccess = {
   helpTitle?: string;
   helpLines?: string[];
   skipAllowlistEntries?: boolean;
-  currentPolicy: (params: { cfg: NexisClawConfig; accountId: string }) => ChannelAccessPolicy;
-  currentEntries: (params: { cfg: NexisClawConfig; accountId: string }) => string[];
-  updatePrompt: (params: { cfg: NexisClawConfig; accountId: string }) => boolean;
+  currentPolicy: (params: { cfg: GreenchClawConfig; accountId: string }) => ChannelAccessPolicy;
+  currentEntries: (params: { cfg: GreenchClawConfig; accountId: string }) => string[];
+  updatePrompt: (params: { cfg: GreenchClawConfig; accountId: string }) => boolean;
   setPolicy: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     policy: ChannelAccessPolicy;
-  }) => NexisClawConfig;
+  }) => GreenchClawConfig;
   resolveAllowlist?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     credentialValues: ChannelSetupWizardCredentialValues;
     entries: string[];
     prompter: Pick<WizardPrompter, "note">;
   }) => Promise<unknown>;
   applyAllowlist?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     accountId: string;
     resolved: unknown;
-  }) => NexisClawConfig;
+  }) => GreenchClawConfig;
 };
 
 export type ChannelSetupWizardPrepare = (params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   credentialValues: ChannelSetupWizardCredentialValues;
   runtime: ChannelSetupConfigureContext["runtime"];
@@ -223,17 +223,17 @@ export type ChannelSetupWizardPrepare = (params: {
   options?: ChannelSetupConfigureContext["options"];
 }) =>
   | {
-      cfg?: NexisClawConfig;
+      cfg?: GreenchClawConfig;
       credentialValues?: ChannelSetupWizardCredentialValues;
     }
   | void
   | Promise<{
-      cfg?: NexisClawConfig;
+      cfg?: GreenchClawConfig;
       credentialValues?: ChannelSetupWizardCredentialValues;
     } | void>;
 
 export type ChannelSetupWizardFinalize = (params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   credentialValues: ChannelSetupWizardCredentialValues;
   runtime: ChannelSetupConfigureContext["runtime"];
@@ -242,12 +242,12 @@ export type ChannelSetupWizardFinalize = (params: {
   forceAllowFrom: boolean;
 }) =>
   | {
-      cfg?: NexisClawConfig;
+      cfg?: GreenchClawConfig;
       credentialValues?: ChannelSetupWizardCredentialValues;
     }
   | void
   | Promise<{
-      cfg?: NexisClawConfig;
+      cfg?: GreenchClawConfig;
       credentialValues?: ChannelSetupWizardCredentialValues;
     } | void>;
 
@@ -257,7 +257,7 @@ export type ChannelSetupWizard = {
   introNote?: ChannelSetupWizardNote;
   envShortcut?: ChannelSetupWizardEnvShortcut;
   resolveAccountIdForConfigure?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     prompter: WizardPrompter;
     options?: ChannelSetupConfigureContext["options"];
     accountOverride?: string;
@@ -266,7 +266,7 @@ export type ChannelSetupWizard = {
     defaultAccountId: string;
   }) => string | Promise<string>;
   resolveShouldPromptAccountIds?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     options?: ChannelSetupConfigureContext["options"];
     shouldPromptAccountIds: boolean;
   }) => boolean;
@@ -279,7 +279,7 @@ export type ChannelSetupWizard = {
   dmPolicy?: ChannelSetupDmPolicy;
   allowFrom?: ChannelSetupWizardAllowFrom;
   groupAccess?: ChannelSetupWizardGroupAccess;
-  disable?: (cfg: NexisClawConfig) => NexisClawConfig;
+  disable?: (cfg: GreenchClawConfig) => GreenchClawConfig;
   onAccountRecorded?: ChannelSetupWizardAdapter["onAccountRecorded"];
 };
 
@@ -303,11 +303,11 @@ export type SetupChannelsOptions = {
 };
 
 export type PromptAccountIdParams = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   prompter: WizardPrompter;
   label: string;
   currentId?: string;
-  listAccountIds: (cfg: NexisClawConfig) => string[];
+  listAccountIds: (cfg: GreenchClawConfig) => string[];
   defaultAccountId: string;
 };
 
@@ -322,13 +322,13 @@ export type ChannelSetupStatus = {
 };
 
 export type ChannelSetupStatusContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   options?: SetupChannelsOptions;
   accountOverrides: Partial<Record<ChannelId, string>>;
 };
 
 export type ChannelSetupConfigureContext = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   runtime: RuntimeEnv;
   prompter: WizardPrompter;
   options?: SetupChannelsOptions;
@@ -338,8 +338,8 @@ export type ChannelSetupConfigureContext = {
 };
 
 export type ChannelOnboardingPostWriteContext = {
-  previousCfg: NexisClawConfig;
-  cfg: NexisClawConfig;
+  previousCfg: GreenchClawConfig;
+  cfg: GreenchClawConfig;
   accountId: string;
   runtime: RuntimeEnv;
 };
@@ -347,11 +347,11 @@ export type ChannelOnboardingPostWriteContext = {
 export type ChannelOnboardingPostWriteHook = {
   channel: ChannelId;
   accountId: string;
-  run: (ctx: { cfg: NexisClawConfig; runtime: RuntimeEnv }) => Promise<void> | void;
+  run: (ctx: { cfg: GreenchClawConfig; runtime: RuntimeEnv }) => Promise<void> | void;
 };
 
 export type ChannelSetupResult = {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string;
 };
 
@@ -368,16 +368,16 @@ export type ChannelSetupDmPolicy = {
   policyKey: string;
   allowFromKey: string;
   resolveConfigKeys?: (
-    cfg: NexisClawConfig,
+    cfg: GreenchClawConfig,
     accountId?: string,
   ) => { policyKey: string; allowFromKey: string };
-  getCurrent: (cfg: NexisClawConfig, accountId?: string) => DmPolicy;
-  setPolicy: (cfg: NexisClawConfig, policy: DmPolicy, accountId?: string) => NexisClawConfig;
+  getCurrent: (cfg: GreenchClawConfig, accountId?: string) => DmPolicy;
+  setPolicy: (cfg: GreenchClawConfig, policy: DmPolicy, accountId?: string) => GreenchClawConfig;
   promptAllowFrom?: (params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     prompter: WizardPrompter;
     accountId?: string;
-  }) => Promise<NexisClawConfig>;
+  }) => Promise<GreenchClawConfig>;
 };
 
 export type ChannelSetupWizardAdapter = {
@@ -393,5 +393,5 @@ export type ChannelSetupWizardAdapter = {
   afterConfigWritten?: (ctx: ChannelOnboardingPostWriteContext) => Promise<void> | void;
   dmPolicy?: ChannelSetupDmPolicy;
   onAccountRecorded?: (accountId: string, options?: SetupChannelsOptions) => void;
-  disable?: (cfg: NexisClawConfig) => NexisClawConfig;
+  disable?: (cfg: GreenchClawConfig) => GreenchClawConfig;
 };

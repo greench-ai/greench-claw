@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { withNexisClawTestState } from "../test-utils/NexisClaw-test-state.js";
+import { withGreenchClawTestState } from "../test-utils/GreenchClaw-test-state.js";
 import {
   findLatestTaskForRelatedSessionKeyForOwner,
   findTaskByRunIdForOwner,
@@ -8,22 +8,22 @@ import {
 } from "./task-owner-access.js";
 import { createTaskRecord, resetTaskRegistryForTests } from "./task-registry.js";
 
-const ORIGINAL_STATE_DIR = process.env.NEXISCLAW_STATE_DIR;
+const ORIGINAL_STATE_DIR = process.env.GREENCHCLAW_STATE_DIR;
 
 afterEach(() => {
   resetTaskRegistryForTests({ persist: false });
   if (ORIGINAL_STATE_DIR == null) {
-    delete process.env.NEXISCLAW_STATE_DIR;
+    delete process.env.GREENCHCLAW_STATE_DIR;
   } else {
-    process.env.NEXISCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
+    process.env.GREENCHCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
   }
 });
 
 async function withTaskRegistryTempDir<T>(run: () => Promise<T> | T): Promise<T> {
-  return await withNexisClawTestState(
+  return await withGreenchClawTestState(
     {
       layout: "state-only",
-      prefix: "NexisClaw-task-owner-access-",
+      prefix: "GreenchClaw-task-owner-access-",
     },
     async () => {
       resetTaskRegistryForTests({ persist: false });

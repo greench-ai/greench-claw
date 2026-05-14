@@ -185,9 +185,9 @@ function isTrustedSourceLinkedOfficialPackage(pkg: NonNullable<ClawHubPackageDet
     pkg.channel === "official" &&
     pkg.isOfficial &&
     pkg.verification?.tier === "source-linked" &&
-    (sourceRepo === "NexisClaw/NexisClaw" ||
-      sourceRepo === "github.com/NexisClaw/NexisClaw" ||
-      sourceRepo === "https://github.com/NexisClaw/NexisClaw")
+    (sourceRepo === "GreenchClaw/GreenchClaw" ||
+      sourceRepo === "github.com/GreenchClaw/GreenchClaw" ||
+      sourceRepo === "https://github.com/GreenchClaw/GreenchClaw")
   );
 }
 
@@ -971,7 +971,7 @@ function validateClawHubPluginPackage(params: {
   }
   if (pkg.family === "skill") {
     return buildClawHubInstallFailure(
-      `"${pkg.name}" is a skill. Use "NexisClaw skills install ${pkg.name}" instead.`,
+      `"${pkg.name}" is a skill. Use "GreenchClaw skills install ${pkg.name}" instead.`,
       CLAWHUB_INSTALL_ERROR_CODE.SKILL_PACKAGE,
     );
   }
@@ -995,7 +995,7 @@ function validateClawHubPluginPackage(params: {
     !satisfiesPluginApiRange(runtimeVersion, compatibility.pluginApiRange)
   ) {
     return buildClawHubInstallFailure(
-      `Plugin "${pkg.name}" requires plugin API ${compatibility.pluginApiRange}, but this NexisClaw runtime exposes ${runtimeVersion}.`,
+      `Plugin "${pkg.name}" requires plugin API ${compatibility.pluginApiRange}, but this GreenchClaw runtime exposes ${runtimeVersion}.`,
       CLAWHUB_INSTALL_ERROR_CODE.INCOMPATIBLE_PLUGIN_API,
     );
   }
@@ -1005,7 +1005,7 @@ function validateClawHubPluginPackage(params: {
     !satisfiesGatewayMinimum(runtimeVersion, compatibility.minGatewayVersion)
   ) {
     return buildClawHubInstallFailure(
-      `Plugin "${pkg.name}" requires NexisClaw >=${compatibility.minGatewayVersion}, but this host is ${runtimeVersion}.`,
+      `Plugin "${pkg.name}" requires GreenchClaw >=${compatibility.minGatewayVersion}, but this host is ${runtimeVersion}.`,
       CLAWHUB_INSTALL_ERROR_CODE.INCOMPATIBLE_GATEWAY,
     );
   }
@@ -1255,7 +1255,7 @@ export async function installPluginFromClawHub(
         source: "clawhub",
         clawhubUrl:
           normalizeOptionalString(params.baseUrl) ||
-          normalizeOptionalString(process.env.NEXISCLAW_CLAWHUB_URL) ||
+          normalizeOptionalString(process.env.GREENCHCLAW_CLAWHUB_URL) ||
           "https://clawhub.ai",
         clawhubPackage: parsed.name,
         clawhubFamily,

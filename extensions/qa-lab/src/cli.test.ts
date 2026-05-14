@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import type { QaRunnerCliContribution } from "NexisClaw/plugin-sdk/qa-runner-runtime";
+import type { QaRunnerCliContribution } from "GreenchClaw/plugin-sdk/qa-runner-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const TEST_QA_RUNNER = {
@@ -92,7 +92,7 @@ function requireQaSuiteOptions() {
   return options;
 }
 
-vi.mock("NexisClaw/plugin-sdk/qa-runner-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/qa-runner-runtime", () => ({
   listQaRunnerCliContributions,
 }));
 
@@ -162,12 +162,12 @@ describe("qa cli registration", () => {
   it("routes mantis discord-smoke flags into the mantis runtime command", async () => {
     await program.parseAsync([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "qa",
       "mantis",
       "discord-smoke",
       "--repo-root",
-      "/tmp/NexisClaw-repo",
+      "/tmp/GreenchClaw-repo",
       "--output-dir",
       ".artifacts/qa-e2e/mantis/discord-smoke",
       "--guild-id",
@@ -182,7 +182,7 @@ describe("qa cli registration", () => {
     ]);
 
     expect(runMantisDiscordSmokeCommand).toHaveBeenCalledWith({
-      repoRoot: "/tmp/NexisClaw-repo",
+      repoRoot: "/tmp/GreenchClaw-repo",
       outputDir: ".artifacts/qa-e2e/mantis/discord-smoke",
       guildId: "123456789012345678",
       channelId: "223456789012345678",
@@ -197,7 +197,7 @@ describe("qa cli registration", () => {
   it("routes mantis before/after flags into the mantis runtime command", async () => {
     await program.parseAsync([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "qa",
       "mantis",
       "run",
@@ -210,7 +210,7 @@ describe("qa cli registration", () => {
       "--candidate",
       "HEAD",
       "--repo-root",
-      "/tmp/NexisClaw-repo",
+      "/tmp/GreenchClaw-repo",
       "--output-dir",
       ".artifacts/qa-e2e/mantis/local-discord-status-reactions",
       "--credential-source",
@@ -229,7 +229,7 @@ describe("qa cli registration", () => {
       fastMode: true,
       outputDir: ".artifacts/qa-e2e/mantis/local-discord-status-reactions",
       providerMode: "live-frontier",
-      repoRoot: "/tmp/NexisClaw-repo",
+      repoRoot: "/tmp/GreenchClaw-repo",
       scenario: "discord-status-reactions-tool-only",
       skipBuild: true,
       skipInstall: true,
@@ -240,16 +240,16 @@ describe("qa cli registration", () => {
   it("routes mantis desktop browser smoke flags into the mantis runtime command", async () => {
     await program.parseAsync([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "qa",
       "mantis",
       "desktop-browser-smoke",
       "--repo-root",
-      "/tmp/NexisClaw-repo",
+      "/tmp/GreenchClaw-repo",
       "--output-dir",
       ".artifacts/qa-e2e/mantis/desktop-browser",
       "--browser-url",
-      "https://NexisClaw.ai/docs",
+      "https://GreenchClaw.ai/docs",
       "--html-file",
       "qa-artifacts/timeline.html",
       "--crabbox-bin",
@@ -268,7 +268,7 @@ describe("qa cli registration", () => {
     ]);
 
     expect(runMantisDesktopBrowserSmokeCommand).toHaveBeenCalledWith({
-      browserUrl: "https://NexisClaw.ai/docs",
+      browserUrl: "https://GreenchClaw.ai/docs",
       crabboxBin: "/tmp/crabbox",
       htmlFile: "qa-artifacts/timeline.html",
       idleTimeout: "30m",
@@ -277,7 +277,7 @@ describe("qa cli registration", () => {
       machineClass: "beast",
       outputDir: ".artifacts/qa-e2e/mantis/desktop-browser",
       provider: "hetzner",
-      repoRoot: "/tmp/NexisClaw-repo",
+      repoRoot: "/tmp/GreenchClaw-repo",
       ttl: "90m",
     });
   });
@@ -285,12 +285,12 @@ describe("qa cli registration", () => {
   it("does not shadow mantis desktop browser runtime env defaults", async () => {
     await program.parseAsync([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "qa",
       "mantis",
       "desktop-browser-smoke",
       "--repo-root",
-      "/tmp/NexisClaw-repo",
+      "/tmp/GreenchClaw-repo",
     ]);
 
     expect(runMantisDesktopBrowserSmokeCommand).toHaveBeenCalledWith({
@@ -303,7 +303,7 @@ describe("qa cli registration", () => {
       machineClass: undefined,
       outputDir: undefined,
       provider: undefined,
-      repoRoot: "/tmp/NexisClaw-repo",
+      repoRoot: "/tmp/GreenchClaw-repo",
       ttl: undefined,
     });
   });
@@ -311,12 +311,12 @@ describe("qa cli registration", () => {
   it("routes mantis Slack desktop smoke flags into the mantis runtime command", async () => {
     await program.parseAsync([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "qa",
       "mantis",
       "slack-desktop-smoke",
       "--repo-root",
-      "/tmp/NexisClaw-repo",
+      "/tmp/GreenchClaw-repo",
       "--output-dir",
       ".artifacts/qa-e2e/mantis/slack-desktop",
       "--crabbox-bin",
@@ -364,7 +364,7 @@ describe("qa cli registration", () => {
       primaryModel: "openai/gpt-5.4",
       provider: "hetzner",
       providerMode: "live-frontier",
-      repoRoot: "/tmp/NexisClaw-repo",
+      repoRoot: "/tmp/GreenchClaw-repo",
       scenarioIds: ["slack-canary"],
       slackChannelId: undefined,
       slackUrl: "https://app.slack.com/client/T123/C123",
@@ -375,12 +375,12 @@ describe("qa cli registration", () => {
   it("routes mantis Telegram desktop builder flags into the mantis runtime command", async () => {
     await program.parseAsync([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "qa",
       "mantis",
       "telegram-desktop-builder",
       "--repo-root",
-      "/tmp/NexisClaw-repo",
+      "/tmp/GreenchClaw-repo",
       "--output-dir",
       ".artifacts/qa-e2e/mantis/telegram-desktop",
       "--crabbox-bin",
@@ -421,7 +421,7 @@ describe("qa cli registration", () => {
       machineClass: "beast",
       outputDir: ".artifacts/qa-e2e/mantis/telegram-desktop",
       provider: "hetzner",
-      repoRoot: "/tmp/NexisClaw-repo",
+      repoRoot: "/tmp/GreenchClaw-repo",
       telegramProfileArchiveEnv: "TELEGRAM_PROFILE_TGZ_B64",
       telegramProfileDir: "/home/crabbox/.local/share/TelegramDesktop",
       ttl: "120m",
@@ -431,18 +431,18 @@ describe("qa cli registration", () => {
   it("routes coverage report flags into the qa runtime command", async () => {
     await program.parseAsync([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "qa",
       "coverage",
       "--repo-root",
-      "/tmp/NexisClaw-repo",
+      "/tmp/GreenchClaw-repo",
       "--output",
       ".artifacts/qa-coverage.md",
       "--json",
     ]);
 
     expect(runQaCoverageReportCommand).toHaveBeenCalledWith({
-      repoRoot: "/tmp/NexisClaw-repo",
+      repoRoot: "/tmp/GreenchClaw-repo",
       output: ".artifacts/qa-coverage.md",
       json: true,
     });
@@ -469,7 +469,7 @@ describe("qa cli registration", () => {
     expect(commandNames).toContain("mock-openai");
     expect(commandNames).toContain("aimock");
 
-    await program.parseAsync(["node", "NexisClaw", "qa", "aimock", "--port", "44080"]);
+    await program.parseAsync(["node", "GreenchClaw", "qa", "aimock", "--port", "44080"]);
 
     expect(runQaProviderServerCommand).toHaveBeenCalledWith("aimock", {
       host: "127.0.0.1",
@@ -483,7 +483,7 @@ describe("qa cli registration", () => {
     registerQaLabCli(blockedProgram);
 
     await expect(
-      blockedProgram.parseAsync(["node", "NexisClaw", "qa", TEST_QA_RUNNER.commandName]),
+      blockedProgram.parseAsync(["node", "GreenchClaw", "qa", TEST_QA_RUNNER.commandName]),
     ).rejects.toThrow(`Enable or allow plugin "${TEST_QA_RUNNER.pluginId}"`);
   });
 
@@ -498,7 +498,7 @@ describe("qa cli registration", () => {
   });
 
   it("routes telegram CLI defaults into the lane runtime", async () => {
-    await program.parseAsync(["node", "NexisClaw", "qa", "telegram"]);
+    await program.parseAsync(["node", "GreenchClaw", "qa", "telegram"]);
 
     expect(runQaTelegramCommand).toHaveBeenCalledWith({
       repoRoot: undefined,
@@ -517,21 +517,21 @@ describe("qa cli registration", () => {
   });
 
   it("forwards --list-scenarios for telegram runs", async () => {
-    await program.parseAsync(["node", "NexisClaw", "qa", "telegram", "--list-scenarios"]);
+    await program.parseAsync(["node", "GreenchClaw", "qa", "telegram", "--list-scenarios"]);
 
     const options = requireQaTelegramOptions();
     expect(options.listScenarios).toBe(true);
   });
 
   it("forwards --allow-failures for telegram runs", async () => {
-    await program.parseAsync(["node", "NexisClaw", "qa", "telegram", "--allow-failures"]);
+    await program.parseAsync(["node", "GreenchClaw", "qa", "telegram", "--allow-failures"]);
 
     const options = requireQaTelegramOptions();
     expect(options.allowFailures).toBe(true);
   });
 
   it("forwards --allow-failures for suite runs", async () => {
-    await program.parseAsync(["node", "NexisClaw", "qa", "suite", "--allow-failures"]);
+    await program.parseAsync(["node", "GreenchClaw", "qa", "suite", "--allow-failures"]);
 
     const options = requireQaSuiteOptions();
     expect(options.allowFailures).toBe(true);
@@ -540,7 +540,7 @@ describe("qa cli registration", () => {
   it("routes credential add flags into the qa runtime command", async () => {
     await program.parseAsync([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "qa",
       "credentials",
       "add",
@@ -549,7 +549,7 @@ describe("qa cli registration", () => {
       "--payload-file",
       "qa/payload.json",
       "--repo-root",
-      "/tmp/NexisClaw-repo",
+      "/tmp/GreenchClaw-repo",
       "--note",
       "shared lane",
       "--site-url",
@@ -564,7 +564,7 @@ describe("qa cli registration", () => {
     expect(runQaCredentialsAddCommand).toHaveBeenCalledWith({
       kind: "telegram",
       payloadFile: "qa/payload.json",
-      repoRoot: "/tmp/NexisClaw-repo",
+      repoRoot: "/tmp/GreenchClaw-repo",
       note: "shared lane",
       siteUrl: "https://first-schnauzer-821.convex.site",
       endpointPrefix: "/qa-credentials/v1",
@@ -576,7 +576,7 @@ describe("qa cli registration", () => {
   it("routes credential remove flags into the qa runtime command", async () => {
     await program.parseAsync([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "qa",
       "credentials",
       "remove",
@@ -601,7 +601,7 @@ describe("qa cli registration", () => {
   it("routes credential list defaults into the qa runtime command", async () => {
     await program.parseAsync([
       "node",
-      "NexisClaw",
+      "GreenchClaw",
       "qa",
       "credentials",
       "list",

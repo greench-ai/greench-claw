@@ -1,7 +1,7 @@
 import path from "node:path";
 import { formatCliCommand } from "../cli/command-format.js";
 import { CONFIG_PATH } from "../config/paths.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { note } from "../terminal/note.js";
 import {
@@ -30,7 +30,7 @@ function hasLegacyInternalHookHandlers(raw: unknown): boolean {
 }
 
 function collectInvalidHookTransformsDirWarnings(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   configPath: string,
 ): string[] {
   const transformsDir = cfg.hooks?.transformsDir?.trim();
@@ -53,7 +53,7 @@ function collectInvalidHookTransformsDirWarnings(
   ];
 }
 
-function collectConfiguredChannelIds(cfg: NexisClawConfig): string[] {
+function collectConfiguredChannelIds(cfg: GreenchClawConfig): string[] {
   const channels =
     cfg.channels && typeof cfg.channels === "object" && !Array.isArray(cfg.channels)
       ? cfg.channels
@@ -90,11 +90,11 @@ export async function loadAndMaybeMigrateDoctorConfig(params: {
   const preflight = await runDoctorConfigPreflight({ repairPrefixedConfig: shouldRepair });
   let snapshot = preflight.snapshot;
   const baseCfg = preflight.baseConfig;
-  let cfg: NexisClawConfig = baseCfg;
+  let cfg: GreenchClawConfig = baseCfg;
   let candidate = structuredClone(baseCfg);
   let pendingChanges = false;
   let fixHints: string[] = [];
-  const doctorFixCommand = formatCliCommand("NexisClaw doctor --fix");
+  const doctorFixCommand = formatCliCommand("GreenchClaw doctor --fix");
   const sourceMeta = (snapshot.sourceConfig as { meta?: { lastTouchedVersion?: unknown } })?.meta;
   const sourceLastTouchedVersion =
     typeof sourceMeta?.lastTouchedVersion === "string" ? sourceMeta.lastTouchedVersion : undefined;
@@ -145,7 +145,7 @@ export async function loadAndMaybeMigrateDoctorConfig(params: {
       [
         "- hooks.internal.handlers: legacy inline hook modules are no longer part of the public config surface.",
         "- Migrate each entry to a managed or workspace hook directory with HOOK.md + handler.js, then enable it through hooks.internal.entries.<hookKey> as needed.",
-        "- NexisClaw doctor --fix does not rewrite this shape automatically.",
+        "- GreenchClaw doctor --fix does not rewrite this shape automatically.",
       ].join("\n"),
       "Legacy config keys detected",
     );

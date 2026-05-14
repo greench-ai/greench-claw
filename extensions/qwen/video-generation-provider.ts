@@ -1,18 +1,18 @@
-import { isProviderApiKeyConfigured } from "NexisClaw/plugin-sdk/provider-auth";
-import { resolveApiKeyForProvider } from "NexisClaw/plugin-sdk/provider-auth-runtime";
-import { resolveProviderHttpRequestConfig } from "NexisClaw/plugin-sdk/provider-http";
+import { isProviderApiKeyConfigured } from "GreenchClaw/plugin-sdk/provider-auth";
+import { resolveApiKeyForProvider } from "GreenchClaw/plugin-sdk/provider-auth-runtime";
+import { resolveProviderHttpRequestConfig } from "GreenchClaw/plugin-sdk/provider-http";
 import {
   DASHSCOPE_WAN_VIDEO_CAPABILITIES,
   DASHSCOPE_WAN_VIDEO_MODELS,
   DEFAULT_DASHSCOPE_WAN_VIDEO_MODEL,
   DEFAULT_VIDEO_GENERATION_TIMEOUT_MS,
   runDashscopeVideoGenerationTask,
-} from "NexisClaw/plugin-sdk/video-generation";
+} from "GreenchClaw/plugin-sdk/video-generation";
 import type {
   VideoGenerationProvider,
   VideoGenerationRequest,
   VideoGenerationResult,
-} from "NexisClaw/plugin-sdk/video-generation";
+} from "GreenchClaw/plugin-sdk/video-generation";
 import { QWEN_STANDARD_CN_BASE_URL, QWEN_STANDARD_GLOBAL_BASE_URL } from "./models.js";
 
 const DEFAULT_QWEN_VIDEO_BASE_URL = "https://dashscope-intl.aliyuncs.com";

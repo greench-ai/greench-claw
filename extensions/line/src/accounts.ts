@@ -2,10 +2,10 @@ import {
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId as normalizeSharedAccountId,
   normalizeOptionalAccountId,
-} from "NexisClaw/plugin-sdk/account-id";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/account-resolution";
-import { resolveAccountEntry } from "NexisClaw/plugin-sdk/account-resolution";
-import { tryReadSecretFileSync } from "NexisClaw/plugin-sdk/core";
+} from "GreenchClaw/plugin-sdk/account-id";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/account-resolution";
+import { resolveAccountEntry } from "GreenchClaw/plugin-sdk/account-resolution";
+import { tryReadSecretFileSync } from "GreenchClaw/plugin-sdk/core";
 import type {
   LineAccountConfig,
   LineConfig,
@@ -13,7 +13,7 @@ import type {
   ResolvedLineAccount,
 } from "./types.js";
 
-export { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
+export { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
 
 function readFileIfExists(filePath: string | undefined): string | undefined {
   return tryReadSecretFileSync(filePath, "LINE credential file", { rejectSymlink: true });
@@ -90,7 +90,7 @@ function resolveSecret(params: {
 }
 
 export function resolveLineAccount(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string;
 }): ResolvedLineAccount {
   const cfg = params.cfg;
@@ -143,7 +143,7 @@ export function resolveLineAccount(params: {
   };
 }
 
-export function listLineAccountIds(cfg: NexisClawConfig): string[] {
+export function listLineAccountIds(cfg: GreenchClawConfig): string[] {
   const lineConfig = cfg.channels?.line as LineConfig | undefined;
   const accounts = lineConfig?.accounts;
   const ids = new Set<string>();
@@ -165,7 +165,7 @@ export function listLineAccountIds(cfg: NexisClawConfig): string[] {
   return Array.from(ids);
 }
 
-export function resolveDefaultLineAccountId(cfg: NexisClawConfig): string {
+export function resolveDefaultLineAccountId(cfg: GreenchClawConfig): string {
   const preferred = normalizeOptionalAccountId(
     (cfg.channels?.line as LineConfig | undefined)?.defaultAccount,
   );

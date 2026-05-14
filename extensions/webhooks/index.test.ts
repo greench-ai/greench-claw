@@ -1,13 +1,13 @@
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawPluginApi } from "./api.js";
+import type { GreenchClawPluginApi } from "./api.js";
 import plugin from "./index.js";
 
 function createApi(params?: {
-  pluginConfig?: NexisClawPluginApi["pluginConfig"];
-  registerHttpRoute?: NexisClawPluginApi["registerHttpRoute"];
-  logger?: NexisClawPluginApi["logger"];
-}): NexisClawPluginApi {
+  pluginConfig?: GreenchClawPluginApi["pluginConfig"];
+  registerHttpRoute?: GreenchClawPluginApi["registerHttpRoute"];
+  logger?: GreenchClawPluginApi["logger"];
+}): GreenchClawPluginApi {
   return createTestPluginApi({
     id: "webhooks",
     name: "Webhooks",
@@ -19,7 +19,7 @@ function createApi(params?: {
           bindSession: vi.fn(({ sessionKey }: { sessionKey: string }) => ({ sessionKey })),
         },
       },
-    } as unknown as NexisClawPluginApi["runtime"],
+    } as unknown as GreenchClawPluginApi["runtime"],
     registerHttpRoute: params?.registerHttpRoute ?? vi.fn(),
     logger:
       params?.logger ??
@@ -28,7 +28,7 @@ function createApi(params?: {
         warn: vi.fn(),
         error: vi.fn(),
         debug: vi.fn(),
-      } as NexisClawPluginApi["logger"]),
+      } as GreenchClawPluginApi["logger"]),
   });
 }
 
@@ -37,7 +37,7 @@ function requireFirstRouteRegistration(mock: ReturnType<typeof vi.fn>) {
   if (!call) {
     throw new Error("expected webhook route registration");
   }
-  return call[0] as Parameters<NexisClawPluginApi["registerHttpRoute"]>[0];
+  return call[0] as Parameters<GreenchClawPluginApi["registerHttpRoute"]>[0];
 }
 
 describe("webhooks plugin registration", () => {
@@ -53,7 +53,7 @@ describe("webhooks plugin registration", () => {
               secret: {
                 source: "env",
                 provider: "default",
-                id: "NEXISCLAW_WEBHOOK_SECRET",
+                id: "GREENCHCLAW_WEBHOOK_SECRET",
               },
             },
           },

@@ -1,4 +1,4 @@
-import { findCodeRegions, isInsideCode } from "NexisClaw/plugin-sdk/text-chunking";
+import { findCodeRegions, isInsideCode } from "GreenchClaw/plugin-sdk/text-chunking";
 
 const INTERNAL_SEPARATOR_RE = /(?:#\+){2,}#?/;
 const ASSISTANT_ROLE_MARKER_RE = /\bassistant\s+to\s*=\s*\w+/i;

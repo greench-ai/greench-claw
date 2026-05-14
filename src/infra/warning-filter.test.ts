@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { installProcessWarningFilter, shouldIgnoreWarning } from "./warning-filter.js";
 
-const warningFilterKey = Symbol.for("NexisClaw.warning-filter");
+const warningFilterKey = Symbol.for("GreenchClaw.warning-filter");
 const baseEmitWarning = process.emitWarning.bind(process);
 
 function resetWarningFilterInstallState(): void {
@@ -118,19 +118,19 @@ describe("warning filter", () => {
         ),
       ).toBeUndefined();
 
-      emitWarning("Visible warning", { type: "Warning", code: "NEXISCLAW_TEST_WARNING" });
+      emitWarning("Visible warning", { type: "Warning", code: "GREENCHCLAW_TEST_WARNING" });
       emitWarning(
         Object.assign(new Error("The punycode module is deprecated."), {
           name: "DeprecationWarning",
           code: "DEP0040",
         }),
-        { type: "Warning", code: "NEXISCLAW_VISIBLE_OVERRIDE" },
+        { type: "Warning", code: "GREENCHCLAW_VISIBLE_OVERRIDE" },
       );
       await flushWarnings();
       expect(
-        seenWarnings.find((warning) => warning.code === "NEXISCLAW_TEST_WARNING"),
+        seenWarnings.find((warning) => warning.code === "GREENCHCLAW_TEST_WARNING"),
       ).toStrictEqual({
-        code: "NEXISCLAW_TEST_WARNING",
+        code: "GREENCHCLAW_TEST_WARNING",
         name: "Warning",
         message: "Visible warning",
       });

@@ -12,7 +12,7 @@ import {
 
 type CreateJiti = typeof createJiti;
 
-const jitiFactoryOverrideKey = Symbol.for("NexisClaw.channelConfigSurfaceJitiFactoryOverride");
+const jitiFactoryOverrideKey = Symbol.for("GreenchClaw.channelConfigSurfaceJitiFactoryOverride");
 const requireForJiti = createRequire(import.meta.url);
 let createJitiLoaderFactory: CreateJiti | undefined;
 
@@ -100,9 +100,9 @@ export async function loadChannelConfigSurfaceModule(
     const script = `
       import { pathToFileURL } from "node:url";
       const { buildChannelConfigSchema } = await import(${JSON.stringify(bunBuildChannelConfigSchemaUrl)});
-      const modulePath = process.env.NEXISCLAW_CONFIG_SURFACE_MODULE;
+      const modulePath = process.env.GREENCHCLAW_CONFIG_SURFACE_MODULE;
       if (!modulePath) {
-        throw new Error("missing NEXISCLAW_CONFIG_SURFACE_MODULE");
+        throw new Error("missing GREENCHCLAW_CONFIG_SURFACE_MODULE");
       }
       const imported = await import(pathToFileURL(modulePath).href);
       const isBuilt = (value) => Boolean(
@@ -132,7 +132,7 @@ export async function loadChannelConfigSurfaceModule(
       encoding: "utf8",
       env: {
         ...process.env,
-        NEXISCLAW_CONFIG_SURFACE_MODULE: path.resolve(candidatePath),
+        GREENCHCLAW_CONFIG_SURFACE_MODULE: path.resolve(candidatePath),
       },
     });
     if (result.error) {
@@ -158,7 +158,7 @@ export async function loadChannelConfigSurfaceModule(
       pluginSdkResolution: "src",
     });
     const aliasMap = {
-      ...(pluginSdkAlias ? { "NexisClaw/plugin-sdk": pluginSdkAlias } : {}),
+      ...(pluginSdkAlias ? { "GreenchClaw/plugin-sdk": pluginSdkAlias } : {}),
       ...resolvePluginSdkScopedAliasMap({
         modulePath: resolvedPath,
         pluginSdkResolution: "src",

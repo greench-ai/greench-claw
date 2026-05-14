@@ -4,7 +4,7 @@ import {
   transcribeOpenAiCompatibleAudio,
   type AudioTranscriptionRequest,
   type MediaUnderstandingProvider,
-} from "NexisClaw/plugin-sdk/media-understanding";
+} from "GreenchClaw/plugin-sdk/media-understanding";
 import {
   DEEPINFRA_BASE_URL,
   DEFAULT_DEEPINFRA_AUDIO_TRANSCRIPTION_MODEL,

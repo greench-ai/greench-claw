@@ -155,7 +155,7 @@ steps:
           expr: "path.join(env.gateway.workspaceDir, 'MEMORY.md')"
       - set: homeDir
         value:
-          expr: "env.gateway.runtimeEnv.HOME ?? env.gateway.runtimeEnv.NEXISCLAW_HOME ?? env.gateway.tempRoot"
+          expr: "env.gateway.runtimeEnv.HOME ?? env.gateway.runtimeEnv.GREENCHCLAW_HOME ?? env.gateway.tempRoot"
       - set: sessionsDir
         value:
           expr: "resolveSessionTranscriptsDirForAgent('qa', env.gateway.runtimeEnv, () => homeDir)"

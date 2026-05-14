@@ -1,8 +1,8 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { root as fsRoot } from "NexisClaw/plugin-sdk/security-runtime";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
+import { root as fsRoot } from "GreenchClaw/plugin-sdk/security-runtime";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import type { PluginLogger } from "../api.js";
 import type { DiffArtifactContext, DiffArtifactMeta, DiffOutputFormat } from "./types.js";
 

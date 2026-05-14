@@ -1,8 +1,8 @@
-import { mapAllowlistResolutionInputs } from "NexisClaw/plugin-sdk/allow-from";
+import { mapAllowlistResolutionInputs } from "GreenchClaw/plugin-sdk/allow-from";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "NexisClaw/plugin-sdk/string-coerce-runtime";
+} from "GreenchClaw/plugin-sdk/string-coerce-runtime";
 import { searchGraphUsers } from "./graph-users.js";
 import {
   listChannelsForTeam,

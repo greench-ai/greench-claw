@@ -1,11 +1,11 @@
-import { resolveConfiguredAcpBindingRecord } from "NexisClaw/plugin-sdk/acp-binding-resolve-runtime";
-import type { PluginRuntime } from "NexisClaw/plugin-sdk/plugin-runtime";
+import { resolveConfiguredAcpBindingRecord } from "GreenchClaw/plugin-sdk/acp-binding-resolve-runtime";
+import type { PluginRuntime } from "GreenchClaw/plugin-sdk/plugin-runtime";
 import {
   buildAgentSessionKey,
   deriveLastRoutePolicy,
   resolveAgentIdFromSessionKey,
-} from "NexisClaw/plugin-sdk/routing";
-import { getSessionBindingService } from "NexisClaw/plugin-sdk/session-binding-runtime";
+} from "GreenchClaw/plugin-sdk/routing";
+import { getSessionBindingService } from "GreenchClaw/plugin-sdk/session-binding-runtime";
 import type { CoreConfig } from "../../types.js";
 import { resolveMatrixThreadSessionKeys } from "./threads.js";
 

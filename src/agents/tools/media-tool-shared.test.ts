@@ -33,13 +33,13 @@ describe("resolveMediaToolLocalRoots", () => {
   });
 
   it("does not widen default local roots from media sources", () => {
-    const stateDir = path.join("/tmp", "NexisClaw-media-tool-roots-state");
+    const stateDir = path.join("/tmp", "GreenchClaw-media-tool-roots-state");
     const picturesDir =
       process.platform === "win32" ? "C:\\Users\\peter\\Pictures" : "/Users/peter/Pictures";
     const moviesDir =
       process.platform === "win32" ? "C:\\Users\\peter\\Movies" : "/Users/peter/Movies";
 
-    vi.stubEnv("NEXISCLAW_STATE_DIR", stateDir);
+    vi.stubEnv("GREENCHCLAW_STATE_DIR", stateDir);
 
     const roots = resolveMediaToolLocalRoots(path.join(stateDir, "workspace-agent"), undefined, [
       path.join(picturesDir, "photo.png"),

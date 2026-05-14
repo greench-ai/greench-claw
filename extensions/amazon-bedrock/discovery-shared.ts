@@ -1,5 +1,5 @@
-import { resolveAwsSdkEnvVarName } from "NexisClaw/plugin-sdk/provider-auth-runtime";
-import type { ModelProviderConfig } from "NexisClaw/plugin-sdk/provider-model-shared";
+import { resolveAwsSdkEnvVarName } from "GreenchClaw/plugin-sdk/provider-auth-runtime";
+import type { ModelProviderConfig } from "GreenchClaw/plugin-sdk/provider-model-shared";
 
 export function resolveBedrockConfigApiKey(
   env: NodeJS.ProcessEnv = process.env,

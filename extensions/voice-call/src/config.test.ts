@@ -431,7 +431,7 @@ describe("normalizeVoiceCallConfig", () => {
       includeWorkspaceFiles: true,
       files: ["SOUL.md", "IDENTITY.md", "USER.md"],
     });
-    expect(normalized.realtime.instructions).toContain("NexisClaw_agent_consult");
+    expect(normalized.realtime.instructions).toContain("GreenchClaw_agent_consult");
     expect(normalized.tunnel.provider).toBe("none");
     expect(normalized.webhookSecurity.allowedHosts).toStrictEqual([]);
   });

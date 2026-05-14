@@ -70,7 +70,7 @@ afterEach(() => {
 
 describe("scripts/changed-lanes", () => {
   it("includes untracked worktree files in the default local diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "NexisClaw-changed-lanes-");
+    const dir = makeTempRepoRoot(tempDirs, "GreenchClaw-changed-lanes-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(path.join(dir, "README.md"), "initial\n", "utf8");
     git(dir, ["add", "README.md"]);
@@ -105,7 +105,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("includes deleted worktree files in the default local diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "NexisClaw-changed-lanes-deleted-");
+    const dir = makeTempRepoRoot(tempDirs, "GreenchClaw-changed-lanes-deleted-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     mkdirSync(path.join(dir, "src", "shared"), { recursive: true });
     writeFileSync(
@@ -144,7 +144,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("includes deleted staged files in the staged diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "NexisClaw-changed-lanes-staged-deleted-");
+    const dir = makeTempRepoRoot(tempDirs, "GreenchClaw-changed-lanes-staged-deleted-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     mkdirSync(path.join(dir, "src", "shared"), { recursive: true });
     writeFileSync(
@@ -203,40 +203,40 @@ describe("scripts/changed-lanes", () => {
     expect(plan.commands.map((command) => command.args[0])).toContain("tsgo:core:test");
     expect(plan.commands.find((command) => command.args[0] === "tsgo:core")?.env).toEqual({
       PATH: "/usr/bin",
-      NEXISCLAW_OXLINT_SKIP_LOCK: "1",
-      NEXISCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-      NEXISCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
-      NEXISCLAW_TSGO_SPARSE_SKIP: "1",
+      GREENCHCLAW_OXLINT_SKIP_LOCK: "1",
+      GREENCHCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+      GREENCHCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+      GREENCHCLAW_TSGO_SPARSE_SKIP: "1",
     });
     expect(plan.commands.find((command) => command.args[0] === "lint:core")?.env).toEqual({
       PATH: "/usr/bin",
-      NEXISCLAW_OXLINT_SKIP_LOCK: "1",
-      NEXISCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-      NEXISCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+      GREENCHCLAW_OXLINT_SKIP_LOCK: "1",
+      GREENCHCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+      GREENCHCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
     });
   });
 
   it("reenables local-check policy for changed typecheck commands", () => {
     const result = detectChangedLanes(["src/shared/string-normalization.ts"]);
     const plan = createChangedCheckPlan(result, {
-      env: { NEXISCLAW_LOCAL_CHECK: "0", PATH: "/usr/bin" },
+      env: { GREENCHCLAW_LOCAL_CHECK: "0", PATH: "/usr/bin" },
     });
 
     expect(plan.commands.find((command) => command.args[0] === "tsgo:core")?.env).toEqual({
-      NEXISCLAW_LOCAL_CHECK: "1",
-      NEXISCLAW_OXLINT_SKIP_LOCK: "1",
-      NEXISCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-      NEXISCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
-      NEXISCLAW_TSGO_SPARSE_SKIP: "1",
+      GREENCHCLAW_LOCAL_CHECK: "1",
+      GREENCHCLAW_OXLINT_SKIP_LOCK: "1",
+      GREENCHCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+      GREENCHCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+      GREENCHCLAW_TSGO_SPARSE_SKIP: "1",
       PATH: "/usr/bin",
     });
   });
 
   it("marks changed-check children as covered by the parent heavy-check lock", () => {
     expect(createChangedCheckChildEnv({ PATH: "/usr/bin" })).toEqual({
-      NEXISCLAW_OXLINT_SKIP_LOCK: "1",
-      NEXISCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-      NEXISCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+      GREENCHCLAW_OXLINT_SKIP_LOCK: "1",
+      GREENCHCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+      GREENCHCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
       PATH: "/usr/bin",
     });
   });
@@ -244,7 +244,7 @@ describe("scripts/changed-lanes", () => {
   it("delegates local Testbox-mode changed gates before running locally", () => {
     expect(
       shouldDelegateChangedCheckToCrabbox(["--base", "origin/main"], {
-        NEXISCLAW_TESTBOX: "1",
+        GREENCHCLAW_TESTBOX: "1",
         PATH: "/usr/bin",
       }),
     ).toBe(true);
@@ -255,7 +255,7 @@ describe("scripts/changed-lanes", () => {
       "--provider",
       "blacksmith-testbox",
       "--blacksmith-org",
-      "NexisClaw",
+      "GreenchClaw",
       "--blacksmith-workflow",
       ".github/workflows/ci-check-testbox.yml",
       "--blacksmith-job",
@@ -270,11 +270,11 @@ describe("scripts/changed-lanes", () => {
       "--",
       "CI=1",
       "NODE_OPTIONS=--max-old-space-size=4096",
-      "NEXISCLAW_TEST_PROJECTS_PARALLEL=6",
-      "NEXISCLAW_VITEST_MAX_WORKERS=1",
-      "NEXISCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000",
-      "NEXISCLAW_TESTBOX=1",
-      "NEXISCLAW_TESTBOX_REMOTE_RUN=1",
+      "GREENCHCLAW_TEST_PROJECTS_PARALLEL=6",
+      "GREENCHCLAW_VITEST_MAX_WORKERS=1",
+      "GREENCHCLAW_VITEST_NO_OUTPUT_TIMEOUT_MS=900000",
+      "GREENCHCLAW_TESTBOX=1",
+      "GREENCHCLAW_TESTBOX_REMOTE_RUN=1",
       "pnpm",
       "check:changed",
       "--base",
@@ -285,17 +285,19 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("does not delegate dry-run, CI, or already-remote changed gates", () => {
-    expect(shouldDelegateChangedCheckToCrabbox(["--dry-run"], { NEXISCLAW_TESTBOX: "1" })).toBe(
+    expect(shouldDelegateChangedCheckToCrabbox(["--dry-run"], { GREENCHCLAW_TESTBOX: "1" })).toBe(
       false,
     );
     expect(
-      shouldDelegateChangedCheckToCrabbox([], { NEXISCLAW_TESTBOX: "1", GITHUB_ACTIONS: "true" }),
+      shouldDelegateChangedCheckToCrabbox([], { GREENCHCLAW_TESTBOX: "1", GITHUB_ACTIONS: "true" }),
     ).toBe(false);
-    expect(shouldDelegateChangedCheckToCrabbox([], { NEXISCLAW_TESTBOX: "1", CI: "1" })).toBe(false);
+    expect(shouldDelegateChangedCheckToCrabbox([], { GREENCHCLAW_TESTBOX: "1", CI: "1" })).toBe(
+      false,
+    );
     expect(
       shouldDelegateChangedCheckToCrabbox([], {
-        NEXISCLAW_TESTBOX: "1",
-        NEXISCLAW_TESTBOX_REMOTE_RUN: "1",
+        GREENCHCLAW_TESTBOX: "1",
+        GREENCHCLAW_TESTBOX_REMOTE_RUN: "1",
       }),
     ).toBe(false);
   });
@@ -306,9 +308,9 @@ describe("scripts/changed-lanes", () => {
     const lintCommand = plan.commands.find((command) => command.args[0] === "lint:extensions");
 
     expect(lintCommand?.env).toEqual({
-      NEXISCLAW_OXLINT_SKIP_LOCK: "1",
-      NEXISCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
-      NEXISCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
+      GREENCHCLAW_OXLINT_SKIP_LOCK: "1",
+      GREENCHCLAW_TEST_HEAVY_CHECK_LOCK_HELD: "1",
+      GREENCHCLAW_TSGO_HEAVY_CHECK_LOCK_HELD: "1",
       PATH: "/usr/bin",
     });
   });
@@ -408,7 +410,7 @@ describe("scripts/changed-lanes", () => {
       "config/swiftlint.yml",
       "deploy/fly.private.toml",
       "docker-setup.sh",
-      "NexisClaw.podman.env",
+      "GreenchClaw.podman.env",
       "setup-podman.sh",
       "skills/pyproject.toml",
     ]);
@@ -498,8 +500,8 @@ describe("scripts/changed-lanes", () => {
     );
     expect(schedulerDryRun?.bin).toBe("node");
     expect(schedulerDryRun?.args).toEqual(["scripts/test-docker-all.mjs"]);
-    expect(schedulerDryRun?.env?.NEXISCLAW_DOCKER_ALL_DRY_RUN).toBe("1");
-    expect(schedulerDryRun?.env?.NEXISCLAW_DOCKER_ALL_LIVE_MODE).toBe("only");
+    expect(schedulerDryRun?.env?.GREENCHCLAW_DOCKER_ALL_DRY_RUN).toBe("1");
+    expect(schedulerDryRun?.env?.GREENCHCLAW_DOCKER_ALL_LIVE_MODE).toBe("only");
   });
 
   it("routes live Docker package script-only changes through the focused gate", () => {
@@ -522,7 +524,7 @@ describe("scripts/changed-lanes", () => {
         scripts: {
           "test:docker:all": "node scripts/test-docker-all.mjs",
           "test:docker:live-acp-bind:droid":
-            "NEXISCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
+            "GREENCHCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
         },
         dependencies: {
           leftpad: "1.0.0",
@@ -546,7 +548,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("classifies live Docker package script changes from the git diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "NexisClaw-live-docker-package-");
+    const dir = makeTempRepoRoot(tempDirs, "GreenchClaw-live-docker-package-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(
       path.join(dir, "package.json"),
@@ -582,7 +584,7 @@ describe("scripts/changed-lanes", () => {
           scripts: {
             "test:docker:all": "node scripts/test-docker-all.mjs",
             "test:docker:live-acp-bind:droid":
-              "NEXISCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
+              "GREENCHCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
           },
         },
         null,
@@ -608,7 +610,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("classifies normal package script changes from the git diff", () => {
-    const dir = makeTempRepoRoot(tempDirs, "NexisClaw-package-scripts-");
+    const dir = makeTempRepoRoot(tempDirs, "GreenchClaw-package-scripts-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(
       path.join(dir, "package.json"),
@@ -685,7 +687,7 @@ describe("scripts/changed-lanes", () => {
         name: "fixture",
         scripts: {
           "test:docker:live-acp-bind:droid":
-            "NEXISCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
+            "GREENCHCLAW_LIVE_ACP_BIND_AGENT=droid bash scripts/test-live-acp-bind-docker.sh",
         },
         dependencies: { leftpad: "1.0.1" },
       },
@@ -737,7 +739,7 @@ describe("scripts/changed-lanes", () => {
       "apps/ios/Config/Version.xcconfig",
       "apps/ios/fastlane/metadata/en-US/release_notes.txt",
       "apps/ios/version.json",
-      "apps/macos/Sources/NexisClaw/Resources/Info.plist",
+      "apps/macos/Sources/GreenchClaw/Resources/Info.plist",
       "docs/.generated/config-baseline.sha256",
       "package.json",
     ]);
@@ -774,7 +776,7 @@ describe("scripts/changed-lanes", () => {
   });
 
   it("guards release metadata package changes to the top-level version field", () => {
-    const dir = makeTempRepoRoot(tempDirs, "NexisClaw-release-metadata-");
+    const dir = makeTempRepoRoot(tempDirs, "GreenchClaw-release-metadata-");
     git(dir, ["init", "-q", "--initial-branch=main"]);
     writeFileSync(
       path.join(dir, "package.json"),

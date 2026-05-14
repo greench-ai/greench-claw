@@ -1,7 +1,7 @@
 import { describeFailoverError, isFailoverError } from "../agents/failover-error.js";
 import type { FallbackAttempt } from "../agents/model-fallback.types.js";
 import { resolveAgentModelTimeoutMsValue } from "../config/model-input.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { formatErrorMessage } from "../infra/errors.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import {
@@ -29,7 +29,7 @@ export type ImageGenerationRuntimeDeps = {
 export type { GenerateImageParams, GenerateImageRuntimeResult } from "./runtime-types.js";
 
 function buildNoImageGenerationModelConfiguredMessage(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   deps: ImageGenerationRuntimeDeps,
 ): string {
   const listProviders = deps.listProviders ?? listImageGenerationProviders;
@@ -42,7 +42,7 @@ function buildNoImageGenerationModelConfiguredMessage(
 }
 
 export function listRuntimeImageGenerationProviders(
-  params?: { config?: NexisClawConfig },
+  params?: { config?: GreenchClawConfig },
   deps: ImageGenerationRuntimeDeps = {},
 ) {
   return (deps.listProviders ?? listImageGenerationProviders)(params?.config);

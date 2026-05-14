@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const transcodeAudioBufferToOpusMock = vi.hoisted(() => vi.fn());
 
-vi.mock("NexisClaw/plugin-sdk/media-runtime", () => ({
+vi.mock("GreenchClaw/plugin-sdk/media-runtime", () => ({
   transcodeAudioBufferToOpus: transcodeAudioBufferToOpusMock,
 }));
 
@@ -73,11 +73,11 @@ describe("buildMinimaxSpeechProvider", () => {
     let tempAgentDir: string;
 
     beforeEach(async () => {
-      tempStateDir = await mkdtemp(path.join(tmpdir(), "NexisClaw-minimax-tts-auth-"));
+      tempStateDir = await mkdtemp(path.join(tmpdir(), "GreenchClaw-minimax-tts-auth-"));
       tempAgentDir = path.join(tempStateDir, "agents", "main", "agent");
       await mkdir(tempAgentDir, { recursive: true });
-      process.env.NEXISCLAW_STATE_DIR = tempStateDir;
-      process.env.NEXISCLAW_AGENT_DIR = tempAgentDir;
+      process.env.GREENCHCLAW_STATE_DIR = tempStateDir;
+      process.env.GREENCHCLAW_AGENT_DIR = tempAgentDir;
       clearMinimaxAuthEnv();
     });
 
@@ -312,13 +312,13 @@ describe("buildMinimaxSpeechProvider", () => {
     let tempAgentDir: string;
 
     beforeEach(async () => {
-      tempStateDir = await mkdtemp(path.join(tmpdir(), "NexisClaw-minimax-tts-synth-"));
+      tempStateDir = await mkdtemp(path.join(tmpdir(), "GreenchClaw-minimax-tts-synth-"));
       tempAgentDir = path.join(tempStateDir, "agents", "main", "agent");
       await mkdir(tempAgentDir, { recursive: true });
       process.env = {
         ...savedEnv,
-        NEXISCLAW_AGENT_DIR: tempAgentDir,
-        NEXISCLAW_STATE_DIR: tempStateDir,
+        GREENCHCLAW_AGENT_DIR: tempAgentDir,
+        GREENCHCLAW_STATE_DIR: tempStateDir,
       };
       clearMinimaxAuthEnv();
       vi.stubGlobal("fetch", vi.fn());

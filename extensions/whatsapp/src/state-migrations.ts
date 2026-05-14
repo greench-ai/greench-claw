@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
-import { DEFAULT_ACCOUNT_ID } from "NexisClaw/plugin-sdk/account-id";
-import type { ChannelLegacyStateMigrationPlan } from "NexisClaw/plugin-sdk/channel-contract";
-import { statRegularFileSync } from "NexisClaw/plugin-sdk/security-runtime";
+import { DEFAULT_ACCOUNT_ID } from "GreenchClaw/plugin-sdk/account-id";
+import type { ChannelLegacyStateMigrationPlan } from "GreenchClaw/plugin-sdk/channel-contract";
+import { statRegularFileSync } from "GreenchClaw/plugin-sdk/security-runtime";
 
 function fileExists(pathValue: string): boolean {
   try {

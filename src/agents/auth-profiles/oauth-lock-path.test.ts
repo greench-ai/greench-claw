@@ -16,12 +16,12 @@ async function expectPathMissing(targetPath: string): Promise<void> {
 }
 
 describe("resolveOAuthRefreshLockPath", () => {
-  const envSnapshot = captureEnv(["NEXISCLAW_STATE_DIR"]);
+  const envSnapshot = captureEnv(["GREENCHCLAW_STATE_DIR"]);
   let stateDir = "";
 
   beforeEach(async () => {
-    stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-auth-lock-path-"));
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-auth-lock-path-"));
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
   });
 
   afterEach(async () => {
@@ -124,12 +124,12 @@ describe("resolveOAuthRefreshLockPath", () => {
 });
 
 describe("resolveOAuthRefreshLockPath fuzz", () => {
-  const envSnapshot = captureEnv(["NEXISCLAW_STATE_DIR"]);
+  const envSnapshot = captureEnv(["GREENCHCLAW_STATE_DIR"]);
   let stateDir = "";
 
   beforeEach(async () => {
-    stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-auth-lock-path-fuzz-"));
-    process.env.NEXISCLAW_STATE_DIR = stateDir;
+    stateDir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-auth-lock-path-fuzz-"));
+    process.env.GREENCHCLAW_STATE_DIR = stateDir;
   });
 
   afterEach(async () => {

@@ -3,10 +3,10 @@ import {
   createPluginSetupWizardStatus,
   createTestWizardPrompter,
   runSetupWizardConfigure,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
-import type { WizardPrompter } from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
+import type { WizardPrompter } from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../api.js";
+import type { GreenchClawConfig } from "../api.js";
 import { TlonAuthorizationSchema, TlonConfigSchema } from "./config-schema.js";
 import { tlonSetupWizard } from "./setup-surface.js";
 import { normalizeShip, resolveTlonOutboundTarget } from "./targets.js";
@@ -19,12 +19,12 @@ const tlonTestPlugin = {
   config: {
     listAccountIds: listTlonAccountIds,
     defaultAccountId: () => "default",
-    resolveAllowFrom: ({ cfg, accountId }: { cfg: NexisClawConfig; accountId?: string | null }) =>
+    resolveAllowFrom: ({ cfg, accountId }: { cfg: GreenchClawConfig; accountId?: string | null }) =>
       resolveTlonAccount(cfg, accountId).dmAllowlist,
     formatAllowFrom: ({
       allowFrom,
     }: {
-      cfg: NexisClawConfig;
+      cfg: GreenchClawConfig;
       allowFrom: Array<string | number> | undefined | null;
     }) => {
       const entries: string[] = [];
@@ -38,7 +38,7 @@ const tlonTestPlugin = {
     },
   },
   setup: {
-    resolveAccountId: ({ accountId }: { cfg: NexisClawConfig; accountId?: string | null }) =>
+    resolveAccountId: ({ accountId }: { cfg: GreenchClawConfig; accountId?: string | null }) =>
       accountId ?? "default",
   },
 };
@@ -50,7 +50,7 @@ describe("tlon core", () => {
   it("formats dm allowlist entries through the shared hybrid adapter", () => {
     expect(
       tlonTestPlugin.config.formatAllowFrom?.({
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         allowFrom: ["zod", " ~nec "],
       }),
     ).toEqual(["~zod", "~nec"]);
@@ -59,7 +59,7 @@ describe("tlon core", () => {
   it("returns an empty dm allowlist when the default account is unconfigured", () => {
     expect(
       tlonTestPlugin.config.resolveAllowFrom?.({
-        cfg: {} as NexisClawConfig,
+        cfg: {} as GreenchClawConfig,
         accountId: "default",
       }),
     ).toStrictEqual([]);
@@ -77,7 +77,7 @@ describe("tlon core", () => {
               dmAllowlist: ["~zod"],
             },
           },
-        } as NexisClawConfig,
+        } as GreenchClawConfig,
         accountId: "default",
       }),
     ).toEqual(["~zod"]);
@@ -157,7 +157,7 @@ describe("tlon core", () => {
 
     const result = await runSetupWizardConfigure({
       configure: tlonConfigure,
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       prompter,
       options: {},
     });
@@ -210,7 +210,7 @@ describe("tlon core", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
 
     expect(listTlonAccountIds(cfg)).toEqual(["alerts", "default", "work"]);
   });
@@ -236,7 +236,7 @@ describe("tlon core", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       "work",
     );
 
@@ -267,7 +267,7 @@ describe("tlon core", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       "default",
     );
 
@@ -288,7 +288,7 @@ describe("tlon core", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       accountOverrides: { tlon: "work" },
     });
 

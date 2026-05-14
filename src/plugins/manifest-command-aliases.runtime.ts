@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { normalizeOptionalLowercaseString } from "../shared/string-coerce.js";
 import { resolveManifestActivationPluginIds } from "./activation-planner.js";
 import {
@@ -17,7 +17,7 @@ import { hasManifestToolAvailability } from "./manifest-tool-availability.js";
 
 export function resolveManifestCommandAliasOwner(params: {
   command: string | undefined;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   registry?: PluginManifestCommandAliasRegistry;
@@ -37,7 +37,7 @@ export function resolveManifestCommandAliasOwner(params: {
 
 export function resolveManifestCliCommandSurfaceOwner(params: {
   command: string | undefined;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   registry?: PluginManifestCommandAliasRegistry;
@@ -84,7 +84,7 @@ export function resolveManifestCliCommandSurfaceOwner(params: {
  */
 export function resolveManifestToolOwner(params: {
   toolName: string | undefined;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   workspaceDir?: string;
   env?: NodeJS.ProcessEnv;
   registry?: PluginManifestCommandAliasRegistry;

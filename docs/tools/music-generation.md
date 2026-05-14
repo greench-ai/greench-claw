@@ -12,12 +12,12 @@ The `music_generate` tool lets the agent create music or audio through the
 shared music-generation capability with configured providers — Google,
 MiniMax, and workflow-configured ComfyUI today.
 
-For session-backed agent runs, NexisClaw starts music generation as a
+For session-backed agent runs, GreenchClaw starts music generation as a
 background task, tracks it in the task ledger, then wakes the agent again
 when the track is ready so the agent can tell the user and attach the
 finished audio. In group/channel chats that use message-tool-only visible
 delivery, the agent relays the result through the message tool. If the
-completion agent writes only a private final reply, NexisClaw falls back to a
+completion agent writes only a private final reply, GreenchClaw falls back to a
 direct channel send with the generated media. The completion wake explicitly
 warns the agent that normal final replies are private in those routes.
 
@@ -161,12 +161,12 @@ Direct generation example:
   Output format hint when the provider supports it.
 </ParamField>
 <ParamField path="filename" type="string">Output filename hint.</ParamField>
-<ParamField path="timeoutMs" type="number">Optional provider request timeout in milliseconds. When omitted, NexisClaw uses `agents.defaults.musicGenerationModel.timeoutMs` if configured. Values below 10000ms are raised to 10000ms and reported in the tool result.</ParamField>
+<ParamField path="timeoutMs" type="number">Optional provider request timeout in milliseconds. When omitted, GreenchClaw uses `agents.defaults.musicGenerationModel.timeoutMs` if configured. Values below 10000ms are raised to 10000ms and reported in the tool result.</ParamField>
 
 <Note>
-Not all providers support all parameters. NexisClaw still validates hard
+Not all providers support all parameters. GreenchClaw still validates hard
 limits such as input counts before submission. When a provider supports
-duration but uses a shorter maximum than the requested value, NexisClaw
+duration but uses a shorter maximum than the requested value, GreenchClaw
 clamps to the closest supported duration. Truly unsupported optional hints
 are ignored with a warning when the selected provider or model cannot honor
 them. Tool results report applied settings; `details.normalization`
@@ -183,9 +183,9 @@ Session-backed music generation runs as a background task:
 - **Duplicate prevention:** while a task is `queued` or `running`, later
   `music_generate` calls in the same session return task status instead of
   starting another generation. Use `action: "status"` to check explicitly.
-- **Status lookup:** `NexisClaw tasks list` or `NexisClaw tasks show <taskId>`
+- **Status lookup:** `GreenchClaw tasks list` or `GreenchClaw tasks show <taskId>`
   inspects queued, running, and terminal status.
-- **Completion wake:** NexisClaw injects an internal completion event back
+- **Completion wake:** GreenchClaw injects an internal completion event back
   into the same session so the model can write the user-facing follow-up
   itself.
 - **Prompt hint:** later user/manual turns in the same session get a small
@@ -206,9 +206,9 @@ Session-backed music generation runs as a background task:
 Check status from the CLI:
 
 ```bash
-NexisClaw tasks list
-NexisClaw tasks show <taskId>
-NexisClaw tasks cancel <taskId>
+GreenchClaw tasks list
+GreenchClaw tasks show <taskId>
+GreenchClaw tasks cancel <taskId>
 ```
 
 ## Configuration
@@ -230,7 +230,7 @@ NexisClaw tasks cancel <taskId>
 
 ### Provider selection order
 
-NexisClaw tries providers in this order:
+GreenchClaw tries providers in this order:
 
 1. `model` parameter from the tool call (if the agent specifies one).
 2. `musicGenerationModel.primary` from config.
@@ -313,7 +313,7 @@ deterministically.
 Opt-in live coverage for the shared bundled providers:
 
 ```bash
-NEXISCLAW_LIVE_TEST=1 pnpm test:live -- extensions/music-generation-providers.live.test.ts
+GREENCHCLAW_LIVE_TEST=1 pnpm test:live -- extensions/music-generation-providers.live.test.ts
 ```
 
 Repo wrapper:
@@ -334,7 +334,7 @@ mode. Coverage today:
 Opt-in live coverage for the bundled ComfyUI music path:
 
 ```bash
-NEXISCLAW_LIVE_TEST=1 COMFY_LIVE_TEST=1 pnpm test:live -- extensions/comfy/comfy.live.test.ts
+GREENCHCLAW_LIVE_TEST=1 COMFY_LIVE_TEST=1 pnpm test:live -- extensions/comfy/comfy.live.test.ts
 ```
 
 The Comfy live file also covers comfy image and video workflows when those

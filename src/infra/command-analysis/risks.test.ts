@@ -211,9 +211,9 @@ describe("command-analysis risks", () => {
     expect(
       buildCommandPayloadCandidates(["sudo", "--command-timeout=1", "/approve", "abc"]),
     ).toEqual(["/approve abc"]);
-    expect(buildCommandPayloadCandidates(["sudo", "NEXISCLAW_ENV=1", "/approve", "abc"])).toEqual([
-      "/approve abc",
-    ]);
+    expect(buildCommandPayloadCandidates(["sudo", "GREENCHCLAW_ENV=1", "/approve", "abc"])).toEqual(
+      ["/approve abc"],
+    );
     expect(buildCommandPayloadCandidates(["sudo", "--shell", "/approve", "abc"])).toEqual([
       "/approve abc",
     ]);
@@ -241,9 +241,9 @@ describe("command-analysis risks", () => {
     expect(buildCommandPayloadCandidates(["env", "-P", "/usr/bin", "/approve", "abc"])).toEqual([
       "/approve abc",
     ]);
-    expect(buildCommandPayloadCandidates(["exec", "-a", "NexisClaw", "/approve", "abc"])).toEqual([
-      "/approve abc",
-    ]);
+    expect(buildCommandPayloadCandidates(["exec", "-a", "GreenchClaw", "/approve", "abc"])).toEqual(
+      ["/approve abc"],
+    );
     expect(buildCommandPayloadCandidates(["command", "-v", "/approve"])).toEqual([
       "command -v /approve",
     ]);
@@ -255,13 +255,13 @@ describe("command-analysis risks", () => {
         "env",
         "env",
         "env",
-        "NexisClaw",
+        "GreenchClaw",
         "channels",
         "login",
         "--channel",
         "whatsapp",
       ]),
-    ).toContain("NexisClaw channels login --channel whatsapp");
+    ).toContain("GreenchClaw channels login --channel whatsapp");
   });
 
   it("checks both effective and original argv for segment inline eval", () => {

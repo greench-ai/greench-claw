@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { KNOWN_WEAK_GATEWAY_TOKEN_PLACEHOLDERS } from "./known-weak-gateway-secrets.js";
 import {
   assertGatewayAuthNotKnownWeak,
@@ -9,7 +9,7 @@ import {
 } from "./startup-auth.js";
 
 const mocks = vi.hoisted(() => ({
-  replaceConfigFile: vi.fn(async (_params: { nextConfig: NexisClawConfig }) => {}),
+  replaceConfigFile: vi.fn(async (_params: { nextConfig: GreenchClawConfig }) => {}),
 }));
 
 vi.mock("../config/mutate.js", () => ({
@@ -36,7 +36,7 @@ describe("mergeGatewayTailscaleConfig", () => {
 });
 
 describe("ensureGatewayStartupAuth", () => {
-  async function expectEphemeralGeneratedTokenWhenOverridden(cfg: NexisClawConfig) {
+  async function expectEphemeralGeneratedTokenWhenOverridden(cfg: GreenchClawConfig) {
     const result = await ensureGatewayStartupAuth({
       cfg,
       env: {} as NodeJS.ProcessEnv,
@@ -56,7 +56,7 @@ describe("ensureGatewayStartupAuth", () => {
     mocks.replaceConfigFile.mockClear();
   });
 
-  async function expectNoTokenGeneration(cfg: NexisClawConfig, mode: string) {
+  async function expectNoTokenGeneration(cfg: GreenchClawConfig, mode: string) {
     const result = await ensureGatewayStartupAuth({
       cfg,
       env: {} as NodeJS.ProcessEnv,
@@ -70,7 +70,7 @@ describe("ensureGatewayStartupAuth", () => {
   }
 
   async function expectResolvedToken(params: {
-    cfg: NexisClawConfig;
+    cfg: GreenchClawConfig;
     env: NodeJS.ProcessEnv;
     expectedToken: string;
     expectedConfiguredToken?: unknown;
@@ -91,7 +91,7 @@ describe("ensureGatewayStartupAuth", () => {
     expect(mocks.replaceConfigFile).not.toHaveBeenCalled();
   }
 
-  function createMissingGatewayTokenSecretRefConfig(): NexisClawConfig {
+  function createMissingGatewayTokenSecretRefConfig(): GreenchClawConfig {
     return {
       gateway: {
         auth: {
@@ -214,23 +214,23 @@ describe("ensureGatewayStartupAuth", () => {
         gateway: {
           auth: {
             mode: "token",
-            token: "${NEXISCLAW_GATEWAY_TOKEN}",
+            token: "${GREENCHCLAW_GATEWAY_TOKEN}",
           },
         },
       },
       env: {
-        NEXISCLAW_GATEWAY_TOKEN: "resolved-token",
+        GREENCHCLAW_GATEWAY_TOKEN: "resolved-token",
       } as NodeJS.ProcessEnv,
       expectedToken: "resolved-token",
-      expectedConfiguredToken: "${NEXISCLAW_GATEWAY_TOKEN}",
+      expectedConfiguredToken: "${GREENCHCLAW_GATEWAY_TOKEN}",
     });
   });
 
-  it("uses NEXISCLAW_GATEWAY_TOKEN without resolving configured token SecretRef", async () => {
+  it("uses GREENCHCLAW_GATEWAY_TOKEN without resolving configured token SecretRef", async () => {
     await expectResolvedToken({
       cfg: createMissingGatewayTokenSecretRefConfig(),
       env: {
-        NEXISCLAW_GATEWAY_TOKEN: "token-from-env",
+        GREENCHCLAW_GATEWAY_TOKEN: "token-from-env",
       } as NodeJS.ProcessEnv,
       expectedToken: "token-from-env",
     });
@@ -265,7 +265,7 @@ describe("ensureGatewayStartupAuth", () => {
     expect(mocks.replaceConfigFile).not.toHaveBeenCalled();
   });
 
-  it("uses NEXISCLAW_GATEWAY_PASSWORD without resolving configured password SecretRef", async () => {
+  it("uses GREENCHCLAW_GATEWAY_PASSWORD without resolving configured password SecretRef", async () => {
     const result = await ensureGatewayStartupAuth({
       cfg: {
         gateway: {
@@ -281,7 +281,7 @@ describe("ensureGatewayStartupAuth", () => {
         },
       },
       env: {
-        NEXISCLAW_GATEWAY_PASSWORD: "password-from-env", // pragma: allowlist secret
+        GREENCHCLAW_GATEWAY_PASSWORD: "password-from-env", // pragma: allowlist secret
       } as NodeJS.ProcessEnv,
       persist: true,
     });
@@ -292,7 +292,7 @@ describe("ensureGatewayStartupAuth", () => {
   });
 
   it("does not resolve gateway.auth.password SecretRef when token mode is explicit", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       gateway: {
         auth: {
           mode: "token",
@@ -346,7 +346,7 @@ describe("ensureGatewayStartupAuth", () => {
   });
 
   it("treats undefined token override as no override", async () => {
-    const cfg: NexisClawConfig = {
+    const cfg: GreenchClawConfig = {
       gateway: {
         auth: {
           mode: "token",
@@ -408,7 +408,7 @@ describe("ensureGatewayStartupAuth", () => {
           },
         },
         env: {
-          NEXISCLAW_GATEWAY_TOKEN: "shared-gateway-token-1234567890",
+          GREENCHCLAW_GATEWAY_TOKEN: "shared-gateway-token-1234567890",
         } as NodeJS.ProcessEnv,
       }),
     ).rejects.toThrow(/hooks\.token must not match gateway auth token/i);
@@ -421,7 +421,7 @@ describe("ensureGatewayStartupAuth", () => {
         ensureGatewayStartupAuth({
           cfg: {},
           env: {
-            NEXISCLAW_GATEWAY_TOKEN: token,
+            GREENCHCLAW_GATEWAY_TOKEN: token,
           } as NodeJS.ProcessEnv,
         }),
       ).rejects.toThrow(/example placeholder/i);

@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { TalkBrain, TalkEventType, TalkMode, TalkTransport } from "../talk/talk-events.js";
 import {
   formatDiagnosticTraceparent,
@@ -646,7 +646,7 @@ type DiagnosticEventsGlobalState = {
 };
 
 const MAX_ASYNC_DIAGNOSTIC_EVENTS = 10_000;
-const DIAGNOSTIC_EVENTS_STATE_KEY = Symbol.for("NexisClaw.diagnosticEvents.state.v1");
+const DIAGNOSTIC_EVENTS_STATE_KEY = Symbol.for("GreenchClaw.diagnosticEvents.state.v1");
 const dispatchedTrustedDiagnosticMetadata = new WeakSet<object>();
 const ASYNC_DIAGNOSTIC_EVENT_TYPES = new Set<DiagnosticEventPayload["type"]>([
   "tool.execution.started",
@@ -713,7 +713,7 @@ function getDiagnosticEventsState(): DiagnosticEventsGlobalState {
   return state;
 }
 
-export function isDiagnosticsEnabled(config?: NexisClawConfig): boolean {
+export function isDiagnosticsEnabled(config?: GreenchClawConfig): boolean {
   return config?.diagnostics?.enabled !== false;
 }
 

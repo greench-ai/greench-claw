@@ -1,7 +1,7 @@
 import path from "node:path";
 import { resolveAgentMaxConcurrent, resolveSubagentMaxConcurrent } from "../config/agent-limits.js";
 import { updateSessionStoreEntry } from "../config/sessions.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { setCommandLaneConcurrency } from "../process/command-queue.js";
 import { resolveStoredSessionKeyForSessionId } from "./command/session.js";
@@ -16,7 +16,7 @@ const laneResumeTimers = new Map<string, ReturnType<typeof setTimeout>>();
 
 export type SessionSuspensionReason = "quota_exhausted" | "manual" | "circuit_open";
 
-function resolveLaneResumeConcurrency(cfg: NexisClawConfig | undefined, laneId: string): number {
+function resolveLaneResumeConcurrency(cfg: GreenchClawConfig | undefined, laneId: string): number {
   switch (laneId) {
     case "main":
       return resolveAgentMaxConcurrent(cfg);
@@ -71,7 +71,7 @@ export function cancelLaneAutoResume(laneId: string) {
 }
 
 export async function suspendSession(params: {
-  cfg: NexisClawConfig | undefined;
+  cfg: GreenchClawConfig | undefined;
   agentDir?: string;
   sessionId: string;
   laneId?: string;

@@ -1,7 +1,7 @@
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import {
   collectSandboxDangerousConfigFindings,
   collectSandboxDockerNoopFindings,
@@ -42,7 +42,7 @@ describe("security audit sandbox docker config", () => {
   });
 
   it("evaluates sandbox docker config findings", async () => {
-    const isolatedHome = path.join(os.tmpdir(), "NexisClaw-security-audit-home");
+    const isolatedHome = path.join(os.tmpdir(), "GreenchClaw-security-audit-home");
     const previousHome = process.env.HOME;
     const previousUserProfile = process.env.USERPROFILE;
     process.env.HOME = isolatedHome;
@@ -61,7 +61,7 @@ describe("security audit sandbox docker config", () => {
                 },
               },
             },
-          } as NexisClawConfig,
+          } as GreenchClawConfig,
           expectedFindings: [{ checkId: "sandbox.docker_config_mode_off" }],
         },
         {
@@ -76,7 +76,7 @@ describe("security audit sandbox docker config", () => {
               },
               list: [{ id: "ops", sandbox: { mode: "all" } }],
             },
-          } as NexisClawConfig,
+          } as GreenchClawConfig,
           expectedFindings: [],
           expectedAbsent: ["sandbox.docker_config_mode_off"],
         },
@@ -96,7 +96,7 @@ describe("security audit sandbox docker config", () => {
                 },
               },
             },
-          } as NexisClawConfig,
+          } as GreenchClawConfig,
           expectedFindings: [
             { checkId: "sandbox.dangerous_bind_mount", severity: "critical" },
             { checkId: "sandbox.dangerous_network_mode", severity: "critical" },
@@ -117,7 +117,7 @@ describe("security audit sandbox docker config", () => {
                 },
               },
             },
-          } as NexisClawConfig,
+          } as GreenchClawConfig,
           expectedFindings: [
             {
               checkId: "sandbox.dangerous_bind_mount",
@@ -134,12 +134,12 @@ describe("security audit sandbox docker config", () => {
                 sandbox: {
                   mode: "all",
                   docker: {
-                    binds: ["D:/data/NexisClaw/src:/src:ro"],
+                    binds: ["D:/data/GreenchClaw/src:/src:ro"],
                   },
                 },
               },
             },
-          } as NexisClawConfig,
+          } as GreenchClawConfig,
           expectedFindings: [],
           expectedAbsent: ["sandbox.bind_mount_non_absolute"],
         },
@@ -156,7 +156,7 @@ describe("security audit sandbox docker config", () => {
                 },
               },
             },
-          } as NexisClawConfig,
+          } as GreenchClawConfig,
           expectedFindings: [
             {
               checkId: "sandbox.dangerous_network_mode",

@@ -87,7 +87,7 @@ function createDirectApnsSendFixture(params: {
       nodeId: params.nodeId,
       transport: "direct" as const,
       token: "ABCD1234ABCD1234ABCD1234ABCD1234",
-      topic: "ai.NexisClaw.ios",
+      topic: "ai.GreenchClaw.ios",
       environment: params.environment,
       updatedAtMs: 1,
     },
@@ -120,14 +120,14 @@ function createRelayApnsSendFixture(params: {
       relayHandle: params.relayHandle ?? "relay-handle-12345678",
       sendGrant: "send-grant-123",
       installationId: "install-123",
-      topic: "ai.NexisClaw.ios",
+      topic: "ai.GreenchClaw.ios",
       environment: "production" as const,
       distribution: "official" as const,
       updatedAtMs: 1,
       tokenDebugSuffix: params.tokenDebugSuffix,
     },
     relayConfig: {
-      baseUrl: "https://relay.NexisClaw.test",
+      baseUrl: "https://relay.GreenchClaw.test",
       timeoutMs: 2_500,
     },
     gatewayIdentity: {
@@ -306,12 +306,12 @@ describe("push APNs send semantics", () => {
       alert: { title: "Wake", body: "Ping" },
       sound: "default",
     });
-    const NexisClawPayload = requireRecord(payload.NexisClaw, "NexisClaw payload");
-    expectRecordFields(NexisClawPayload, {
+    const GreenchClawPayload = requireRecord(payload.GreenchClaw, "GreenchClaw payload");
+    expectRecordFields(GreenchClawPayload, {
       kind: "push.test",
       nodeId: "ios-node-alert",
     });
-    expect(typeof NexisClawPayload.ts).toBe("number");
+    expect(typeof GreenchClawPayload.ts).toBe("number");
     expect(result.ok).toBe(true);
     expect(result.status).toBe(200);
     expect(result.transport).toBe("direct");
@@ -356,7 +356,7 @@ describe("push APNs send semantics", () => {
       const request = apnsServer.requests[0];
       expect(request?.headers[":method"]).toBe("POST");
       expect(request?.headers[":path"]).toBe("/3/device/abcd1234abcd1234abcd1234abcd1234");
-      expect(request?.headers["apns-topic"]).toBe("ai.NexisClaw.ios");
+      expect(request?.headers["apns-topic"]).toBe("ai.GreenchClaw.ios");
       expect(request?.headers["apns-push-type"]).toBe("alert");
       expect(request?.body).toContain('"nodeId":"ios-node-proxied-alert"');
     } finally {
@@ -398,13 +398,13 @@ describe("push APNs send semantics", () => {
     expect(payload.aps).toEqual({
       "content-available": 1,
     });
-    const NexisClawPayload = requireRecord(payload.NexisClaw, "NexisClaw payload");
-    expectRecordFields(NexisClawPayload, {
+    const GreenchClawPayload = requireRecord(payload.GreenchClaw, "GreenchClaw payload");
+    expectRecordFields(GreenchClawPayload, {
       kind: "node.wake",
       reason: "node.invoke",
       nodeId: "ios-node-wake",
     });
-    expect(typeof NexisClawPayload.ts).toBe("number");
+    expect(typeof GreenchClawPayload.ts).toBe("number");
     const aps = requireRecord(payload.aps, "APNs aps payload");
     expect(aps.alert).toBeUndefined();
     expect(aps.sound).toBeUndefined();
@@ -439,19 +439,19 @@ describe("push APNs send semantics", () => {
     expect(payload.aps).toEqual({
       alert: {
         title: "Exec approval required",
-        body: "Open NexisClaw to review this request.",
+        body: "Open GreenchClaw to review this request.",
       },
       sound: "default",
-      category: "NexisClaw.exec-approval",
+      category: "GreenchClaw.exec-approval",
       "content-available": 1,
     });
-    const NexisClawPayload = requireRecord(payload.NexisClaw, "NexisClaw payload");
-    expectRecordFields(NexisClawPayload, {
+    const GreenchClawPayload = requireRecord(payload.GreenchClaw, "GreenchClaw payload");
+    expectRecordFields(GreenchClawPayload, {
       kind: "exec.approval.requested",
       approvalId: "approval-123",
     });
-    expect(typeof NexisClawPayload.ts).toBe("number");
-    expectNoProperties(NexisClawPayload, [
+    expect(typeof GreenchClawPayload.ts).toBe("number");
+    expectNoProperties(GreenchClawPayload, [
       "host",
       "nodeId",
       "agentId",
@@ -489,12 +489,12 @@ describe("push APNs send semantics", () => {
     expect(payload.aps).toEqual({
       "content-available": 1,
     });
-    const NexisClawPayload = requireRecord(payload.NexisClaw, "NexisClaw payload");
-    expectRecordFields(NexisClawPayload, {
+    const GreenchClawPayload = requireRecord(payload.GreenchClaw, "GreenchClaw payload");
+    expectRecordFields(GreenchClawPayload, {
       kind: "exec.approval.resolved",
       approvalId: "approval-123",
     });
-    expect(typeof NexisClawPayload.ts).toBe("number");
+    expect(typeof GreenchClawPayload.ts).toBe("number");
     expect(result.ok).toBe(true);
     expect(result.transport).toBe("direct");
   });
@@ -575,7 +575,7 @@ describe("push APNs send semantics", () => {
     });
 
     const payload = requirePayload(requireSendRequest(send));
-    expectRecordFields(requireRecord(payload.NexisClaw, "NexisClaw payload"), {
+    expectRecordFields(requireRecord(payload.GreenchClaw, "GreenchClaw payload"), {
       kind: "node.wake",
       reason: "node.invoke",
       nodeId: "ios-node-wake-default-reason",
@@ -664,13 +664,13 @@ describe("push APNs send semantics", () => {
     });
     const payload = requirePayload(sent);
     expect(payload.aps).toEqual({ "content-available": 1 });
-    const NexisClawPayload = requireRecord(payload.NexisClaw, "NexisClaw payload");
-    expectRecordFields(NexisClawPayload, {
+    const GreenchClawPayload = requireRecord(payload.GreenchClaw, "GreenchClaw payload");
+    expectRecordFields(GreenchClawPayload, {
       kind: "node.wake",
       reason: "queue.retry",
       nodeId: "ios-node-relay-wake",
     });
-    expect(typeof NexisClawPayload.ts).toBe("number");
+    expect(typeof GreenchClawPayload.ts).toBe("number");
     expectRecordFields(requireRecord(result, "APNs result"), {
       ok: false,
       status: 429,
@@ -705,19 +705,19 @@ describe("push APNs send semantics", () => {
     expect(payload.aps).toEqual({
       alert: {
         title: "Exec approval required",
-        body: "Open NexisClaw to review this request.",
+        body: "Open GreenchClaw to review this request.",
       },
       sound: "default",
-      category: "NexisClaw.exec-approval",
+      category: "GreenchClaw.exec-approval",
       "content-available": 1,
     });
-    const NexisClawPayload = requireRecord(payload.NexisClaw, "NexisClaw payload");
-    expectRecordFields(NexisClawPayload, {
+    const GreenchClawPayload = requireRecord(payload.GreenchClaw, "GreenchClaw payload");
+    expectRecordFields(GreenchClawPayload, {
       kind: "exec.approval.requested",
       approvalId: "approval-relay-1",
     });
-    expect(typeof NexisClawPayload.ts).toBe("number");
-    expectNoProperties(NexisClawPayload, [
+    expect(typeof GreenchClawPayload.ts).toBe("number");
+    expectNoProperties(GreenchClawPayload, [
       "commandText",
       "host",
       "nodeId",

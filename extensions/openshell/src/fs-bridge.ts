@@ -1,13 +1,13 @@
 import fsPromises from "node:fs/promises";
 import path from "node:path";
-import { root as fsRoot } from "NexisClaw/plugin-sdk/file-access-runtime";
+import { root as fsRoot } from "GreenchClaw/plugin-sdk/file-access-runtime";
 import type {
   SandboxFsBridge,
   SandboxFsStat,
   SandboxResolvedPath,
-} from "NexisClaw/plugin-sdk/sandbox";
-import { createWritableRenameTargetResolver } from "NexisClaw/plugin-sdk/sandbox";
-import { isPathInside } from "NexisClaw/plugin-sdk/security-runtime";
+} from "GreenchClaw/plugin-sdk/sandbox";
+import { createWritableRenameTargetResolver } from "GreenchClaw/plugin-sdk/sandbox";
+import { isPathInside } from "GreenchClaw/plugin-sdk/security-runtime";
 import type { OpenShellFsBridgeContext, OpenShellSandboxBackend } from "./backend.types.js";
 import { movePathWithCopyFallback } from "./mirror.js";
 

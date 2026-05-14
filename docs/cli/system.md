@@ -1,5 +1,5 @@
 ---
-summary: "CLI reference for `NexisClaw system` (system events, heartbeat, presence)"
+summary: "CLI reference for `GreenchClaw system` (system events, heartbeat, presence)"
 read_when:
   - You want to enqueue a system event without creating a cron job
   - You need to enable or disable heartbeats
@@ -7,7 +7,7 @@ read_when:
 title: "System"
 ---
 
-# `NexisClaw system`
+# `GreenchClaw system`
 
 System-level helpers for the Gateway: enqueue system events, control heartbeats,
 and view presence.
@@ -22,11 +22,11 @@ All `system` subcommands use Gateway RPC and accept the shared client flags:
 ## Common commands
 
 ```bash
-NexisClaw system event --text "Check for urgent follow-ups" --mode now
-NexisClaw system event --text "Check for urgent follow-ups" --url ws://127.0.0.1:18789 --token "$NEXISCLAW_GATEWAY_TOKEN"
-NexisClaw system heartbeat enable
-NexisClaw system heartbeat last
-NexisClaw system presence
+GreenchClaw system event --text "Check for urgent follow-ups" --mode now
+GreenchClaw system event --text "Check for urgent follow-ups" --url ws://127.0.0.1:18789 --token "$GREENCHCLAW_GATEWAY_TOKEN"
+GreenchClaw system heartbeat enable
+GreenchClaw system heartbeat last
+GreenchClaw system presence
 ```
 
 ## `system event`

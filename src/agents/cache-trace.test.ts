@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { resolveUserPath } from "../utils.js";
 import { createCacheTrace } from "./cache-trace.js";
 
@@ -27,7 +27,7 @@ describe("createCacheTrace", () => {
 
   it("returns null when diagnostics cache tracing is disabled", () => {
     const trace = createCacheTrace({
-      cfg: {} as NexisClawConfig,
+      cfg: {} as GreenchClawConfig,
       env: {},
     });
 
@@ -41,7 +41,7 @@ describe("createCacheTrace", () => {
         diagnostics: {
           cacheTrace: {
             enabled: true,
-            filePath: "~/.NexisClaw/logs/cache-trace.jsonl",
+            filePath: "~/.GreenchClaw/logs/cache-trace.jsonl",
           },
         },
       },
@@ -54,7 +54,7 @@ describe("createCacheTrace", () => {
     });
 
     expect(typeof trace?.recordStage).toBe("function");
-    expect(trace?.filePath).toBe(resolveUserPath("~/.NexisClaw/logs/cache-trace.jsonl"));
+    expect(trace?.filePath).toBe(resolveUserPath("~/.GreenchClaw/logs/cache-trace.jsonl"));
 
     trace?.recordStage("session:loaded", {
       messages: [],
@@ -159,7 +159,7 @@ describe("createCacheTrace", () => {
         },
       },
       env: {
-        NEXISCLAW_CACHE_TRACE: "0",
+        GREENCHCLAW_CACHE_TRACE: "0",
       },
       writer: {
         filePath: "memory",

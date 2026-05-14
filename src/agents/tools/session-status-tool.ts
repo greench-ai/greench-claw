@@ -13,7 +13,7 @@ import {
   type SessionEntry,
   updateSessionStore,
 } from "../../config/sessions.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { resolveSessionModelIdentityRef } from "../../gateway/session-utils.js";
 import {
   buildAgentMainSessionKey,
@@ -257,7 +257,7 @@ function formatSessionTaskLine(params: {
 }
 
 async function resolveModelOverride(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   raw: string;
   sessionEntry?: SessionEntry;
   agentId: string;
@@ -325,7 +325,7 @@ export function createSessionStatusTool(opts?: {
    * "current"})` to resolve to the live run session instead of the stale sandbox key.
    */
   runSessionKey?: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
   sandboxed?: boolean;
   activeModelProvider?: string;
   activeModelId?: string;

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ChannelPlugin } from "../../channels/plugins/types.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { setActivePluginRegistry } from "../../plugins/runtime.js";
 import {
   createChannelTestPluginBase,
@@ -130,7 +130,7 @@ beforeEach(() => {
 
 function buildParams(
   commandBodyNormalized: string,
-  cfgOverrides: Partial<NexisClawConfig> = {},
+  cfgOverrides: Partial<GreenchClawConfig> = {},
 ): HandleCommandsParams {
   return {
     cfg: {
@@ -143,7 +143,7 @@ function buildParams(
         text: true,
       },
       ...cfgOverrides,
-    } as NexisClawConfig,
+    } as GreenchClawConfig,
     ctx: {
       Surface: "discord",
     },
@@ -265,19 +265,19 @@ describe("handleModelsCommand", () => {
     expect(result?.reply?.text).not.toContain("- google-gemini-cli");
   });
 
-  it("labels the default runtime choice as NexisClaw Pi", async () => {
+  it("labels the default runtime choice as GreenchClaw Pi", async () => {
     const data = await buildModelsProviderData({
       agents: {
         defaults: {
           model: { primary: "openai/gpt-5.5" },
         },
       },
-    } as NexisClawConfig);
+    } as GreenchClawConfig);
 
     expect(data.runtimeChoicesByProvider?.get("openai")?.[0]).toEqual({
       id: "pi",
-      label: "NexisClaw Pi Default",
-      description: "Use the built-in NexisClaw Pi runtime.",
+      label: "GreenchClaw Pi Default",
+      description: "Use the built-in GreenchClaw Pi runtime.",
     });
   });
 
@@ -345,7 +345,7 @@ describe("handleModelsCommand", () => {
           },
         },
       },
-    } satisfies Partial<NexisClawConfig>;
+    } satisfies Partial<GreenchClawConfig>;
 
     const defaultProviderResult = await handleModelsCommand(
       buildParams("/models openai-codex", cfg),

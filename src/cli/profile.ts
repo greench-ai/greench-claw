@@ -80,7 +80,10 @@ function resolveProfileStateDir(
   homedir: () => string,
 ): string {
   const suffix = normalizeLowercaseStringOrEmpty(profile) === "default" ? "" : `-${profile}`;
-  return path.join(resolveRequiredHomeDir(env as NodeJS.ProcessEnv, homedir), `.NexisClaw${suffix}`);
+  return path.join(
+    resolveRequiredHomeDir(env as NodeJS.ProcessEnv, homedir),
+    `.GreenchClaw${suffix}`,
+  );
 }
 
 export function applyCliProfileEnv(params: {
@@ -96,19 +99,19 @@ export function applyCliProfileEnv(params: {
   }
 
   // Convenience only: fill defaults, never override explicit env values.
-  env.NEXISCLAW_PROFILE = profile;
+  env.GREENCHCLAW_PROFILE = profile;
 
-  const existingStateDir = normalizeOptionalString(env.NEXISCLAW_STATE_DIR);
+  const existingStateDir = normalizeOptionalString(env.GREENCHCLAW_STATE_DIR);
   const stateDir = existingStateDir || resolveProfileStateDir(profile, env, homedir);
   if (!existingStateDir) {
-    env.NEXISCLAW_STATE_DIR = stateDir;
+    env.GREENCHCLAW_STATE_DIR = stateDir;
   }
 
-  if (!normalizeOptionalString(env.NEXISCLAW_CONFIG_PATH)) {
-    env.NEXISCLAW_CONFIG_PATH = path.join(stateDir, "NexisClaw.json");
+  if (!normalizeOptionalString(env.GREENCHCLAW_CONFIG_PATH)) {
+    env.GREENCHCLAW_CONFIG_PATH = path.join(stateDir, "GreenchClaw.json");
   }
 
-  if (profile === "dev" && !env.NEXISCLAW_GATEWAY_PORT?.trim()) {
-    env.NEXISCLAW_GATEWAY_PORT = "19001";
+  if (profile === "dev" && !env.GREENCHCLAW_GATEWAY_PORT?.trim()) {
+    env.GREENCHCLAW_GATEWAY_PORT = "19001";
   }
 }

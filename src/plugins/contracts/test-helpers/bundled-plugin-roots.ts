@@ -7,8 +7,8 @@ const bundledPluginRoots = new Map(
     config: {},
     env: {
       ...process.env,
-      NEXISCLAW_BUNDLED_PLUGINS_DIR: sourceExtensionsDir,
-      NEXISCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
+      GREENCHCLAW_BUNDLED_PLUGINS_DIR: sourceExtensionsDir,
+      GREENCHCLAW_TEST_TRUST_BUNDLED_PLUGINS_DIR: "1",
     },
   })
     .plugins.filter((plugin) => plugin.origin === "bundled")

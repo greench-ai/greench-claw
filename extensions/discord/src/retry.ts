@@ -3,12 +3,12 @@ import {
   extractErrorCode,
   formatErrorMessage,
   readErrorName,
-} from "NexisClaw/plugin-sdk/error-runtime";
+} from "GreenchClaw/plugin-sdk/error-runtime";
 import {
   createRateLimitRetryRunner,
   type RetryConfig,
   type RetryRunner,
-} from "NexisClaw/plugin-sdk/retry-runtime";
+} from "GreenchClaw/plugin-sdk/retry-runtime";
 import { RateLimitError } from "./internal/discord.js";
 
 const DISCORD_RETRY_DEFAULTS = {

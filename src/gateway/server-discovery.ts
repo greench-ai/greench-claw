@@ -14,17 +14,17 @@ type ResolveBonjourCliPathOptions = {
 export function formatBonjourInstanceName(displayName: string) {
   const trimmed = displayName.trim();
   if (!trimmed) {
-    return "NexisClaw";
+    return "GreenchClaw";
   }
-  if (/NexisClaw/i.test(trimmed)) {
+  if (/GreenchClaw/i.test(trimmed)) {
     return trimmed;
   }
-  return `${trimmed} (NexisClaw)`;
+  return `${trimmed} (GreenchClaw)`;
 }
 
 export function resolveBonjourCliPath(opts: ResolveBonjourCliPathOptions = {}): string | undefined {
   const env = opts.env ?? process.env;
-  const envPath = env.NEXISCLAW_CLI_PATH?.trim();
+  const envPath = env.GREENCHCLAW_CLI_PATH?.trim();
   if (envPath) {
     return envPath;
   }
@@ -40,7 +40,7 @@ export function resolveBonjourCliPath(opts: ResolveBonjourCliPathOptions = {}): 
 
   const execPath = opts.execPath ?? process.execPath;
   const execDir = path.dirname(execPath);
-  const siblingCli = path.join(execDir, "NexisClaw");
+  const siblingCli = path.join(execDir, "GreenchClaw");
   if (isFile(siblingCli)) {
     return siblingCli;
   }
@@ -56,7 +56,7 @@ export function resolveBonjourCliPath(opts: ResolveBonjourCliPathOptions = {}): 
   if (isFile(distCli)) {
     return distCli;
   }
-  const binCli = path.join(cwd, "bin", "NexisClaw");
+  const binCli = path.join(cwd, "bin", "GreenchClaw");
   if (isFile(binCli)) {
     return binCli;
   }
@@ -70,7 +70,7 @@ export async function resolveTailnetDnsHint(opts?: {
   enabled?: boolean;
 }): Promise<string | undefined> {
   const env = opts?.env ?? process.env;
-  const envRaw = env.NEXISCLAW_TAILNET_DNS?.trim();
+  const envRaw = env.GREENCHCLAW_TAILNET_DNS?.trim();
   const envValue = envRaw && envRaw.length > 0 ? envRaw.replace(/\.$/, "") : "";
   if (envValue) {
     return envValue;

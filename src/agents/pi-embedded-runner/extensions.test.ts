@@ -1,7 +1,7 @@
 import type { Api, Model } from "@earendil-works/pi-ai";
 import type { SessionManager } from "@earendil-works/pi-coding-agent";
 import { describe, expect, it, vi } from "vitest";
-import type { NexisClawConfig } from "../../config/config.js";
+import type { GreenchClawConfig } from "../../config/config.js";
 import { getCompactionSafeguardRuntime } from "../pi-hooks/compaction-safeguard-runtime.js";
 import compactionSafeguardExtension from "../pi-hooks/compaction-safeguard.js";
 import contextPruningExtension from "../pi-hooks/context-pruning.js";
@@ -16,7 +16,7 @@ vi.mock("../../plugins/provider-hook-runtime.js", () => ({
   resolveProviderRuntimePlugin: () => undefined,
 }));
 
-function buildSafeguardFactories(cfg: NexisClawConfig) {
+function buildSafeguardFactories(cfg: GreenchClawConfig) {
   const sessionManager = {} as SessionManager;
   const model = {
     id: "claude-sonnet-4-20250514",
@@ -35,7 +35,7 @@ function buildSafeguardFactories(cfg: NexisClawConfig) {
 }
 
 function expectSafeguardRuntime(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   expectedRuntime: { qualityGuardEnabled: boolean; qualityGuardMaxRetries?: number },
 ) {
   const { factories, sessionManager } = buildSafeguardFactories(cfg);
@@ -57,7 +57,7 @@ describe("buildEmbeddedExtensionFactories", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     expectSafeguardRuntime(cfg, {
       qualityGuardEnabled: true,
     });
@@ -75,7 +75,7 @@ describe("buildEmbeddedExtensionFactories", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     expectSafeguardRuntime(cfg, {
       qualityGuardEnabled: false,
     });
@@ -94,7 +94,7 @@ describe("buildEmbeddedExtensionFactories", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     expectSafeguardRuntime(cfg, {
       qualityGuardEnabled: true,
       qualityGuardMaxRetries: 2,
@@ -111,7 +111,7 @@ describe("buildEmbeddedExtensionFactories", () => {
             },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       sessionManager: {} as SessionManager,
       provider: "litellm",
       modelId: "claude-sonnet-4-6",

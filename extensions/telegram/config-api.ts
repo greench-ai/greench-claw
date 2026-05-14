@@ -1,7 +1,7 @@
 export {
   buildChannelConfigSchema,
   TelegramConfigSchema,
-} from "NexisClaw/plugin-sdk/bundled-channel-config-schema";
+} from "GreenchClaw/plugin-sdk/bundled-channel-config-schema";
 export {
   normalizeTelegramCommandDescription,
   normalizeTelegramCommandName,

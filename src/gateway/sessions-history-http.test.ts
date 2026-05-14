@@ -20,7 +20,7 @@ import {
 installGatewayTestHooks();
 
 const AUTH_HEADER = { Authorization: "Bearer test-gateway-token-1234567890" };
-const READ_SCOPE_HEADER = { "x-NexisClaw-scopes": "operator.read" };
+const READ_SCOPE_HEADER = { "x-GreenchClaw-scopes": "operator.read" };
 const cleanupDirs: string[] = [];
 
 afterEach(async () => {
@@ -30,7 +30,7 @@ afterEach(async () => {
 });
 
 async function createSessionStoreFile(): Promise<string> {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "NexisClaw-session-history-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "GreenchClaw-session-history-"));
   cleanupDirs.push(dir);
   const storePath = path.join(dir, "sessions.json");
   testState.sessionStorePath = storePath;
@@ -71,7 +71,7 @@ function makeTranscriptAssistantMessage(params: {
     role: "assistant" as const,
     content: params.content ?? [{ type: "text", text: params.text }],
     api: "openai-responses",
-    provider: "NexisClaw",
+    provider: "GreenchClaw",
     model: "delivery-mirror",
     usage: {
       input: 0,
@@ -200,7 +200,7 @@ type SessionHistorySseStream = {
   streamState: { buffer: string };
 };
 
-function expectNexisClawMetadata(
+function expectGreenchClawMetadata(
   metadata: { id?: string; seq?: number } | undefined,
   expected: { id?: string; seq: number },
 ) {
@@ -260,9 +260,9 @@ async function expectMessageEventMatch(
   ).toBe(params.text);
   expect((event.data as { messageSeq?: number }).messageSeq).toBe(params.seq);
   if (params.id !== undefined) {
-    expectNexisClawMetadata(
-      (event.data as { message?: { __NexisClaw?: { id?: string; seq?: number } } }).message
-        ?.__NexisClaw,
+    expectGreenchClawMetadata(
+      (event.data as { message?: { __GreenchClaw?: { id?: string; seq?: number } } }).message
+        ?.__GreenchClaw,
       {
         id: params.id,
         seq: params.seq,
@@ -303,12 +303,12 @@ describe("session history HTTP endpoints", () => {
       expect(body.sessionKey).toBe("agent:main:main");
       expect(body.messages).toHaveLength(1);
       expect(body.messages?.[0]?.content?.[0]?.text).toBe("hello from history");
-      expectNexisClawMetadata(
+      expectGreenchClawMetadata(
         (
           body.messages?.[0] as {
-            __NexisClaw?: { id?: string; seq?: number };
+            __GreenchClaw?: { id?: string; seq?: number };
           }
-        )?.__NexisClaw,
+        )?.__GreenchClaw,
         {
           seq: 1,
         },
@@ -402,8 +402,8 @@ describe("session history HTTP endpoints", () => {
       expect(firstPage.status).toBe(200);
       const firstBody = (await firstPage.json()) as {
         sessionKey?: string;
-        items?: Array<{ content?: Array<{ text?: string }>; __NexisClaw?: { seq?: number } }>;
-        messages?: Array<{ content?: Array<{ text?: string }>; __NexisClaw?: { seq?: number } }>;
+        items?: Array<{ content?: Array<{ text?: string }>; __GreenchClaw?: { seq?: number } }>;
+        messages?: Array<{ content?: Array<{ text?: string }>; __GreenchClaw?: { seq?: number } }>;
         nextCursor?: string;
         hasMore?: boolean;
       };
@@ -412,7 +412,7 @@ describe("session history HTTP endpoints", () => {
         "second message",
         "third message",
       ]);
-      expect(firstBody.messages?.map((message) => message.__NexisClaw?.seq)).toEqual([2, 3]);
+      expect(firstBody.messages?.map((message) => message.__GreenchClaw?.seq)).toEqual([2, 3]);
       expect(firstBody.hasMore).toBe(true);
       expect(firstBody.nextCursor).toBe("2");
 
@@ -421,15 +421,15 @@ describe("session history HTTP endpoints", () => {
       });
       expect(secondPage.status).toBe(200);
       const secondBody = (await secondPage.json()) as {
-        items?: Array<{ content?: Array<{ text?: string }>; __NexisClaw?: { seq?: number } }>;
-        messages?: Array<{ __NexisClaw?: { seq?: number } }>;
+        items?: Array<{ content?: Array<{ text?: string }>; __GreenchClaw?: { seq?: number } }>;
+        messages?: Array<{ __GreenchClaw?: { seq?: number } }>;
         nextCursor?: string;
         hasMore?: boolean;
       };
       expect(secondBody.items?.map((message) => message.content?.[0]?.text)).toEqual([
         "first message",
       ]);
-      expect(secondBody.messages?.map((message) => message.__NexisClaw?.seq)).toEqual([1]);
+      expect(secondBody.messages?.map((message) => message.__GreenchClaw?.seq)).toEqual([1]);
       expect(secondBody.hasMore).toBe(false);
       expect(secondBody.nextCursor).toBeUndefined();
     });
@@ -453,11 +453,11 @@ describe("session history HTTP endpoints", () => {
       const nextData = nextEvent.data as {
         messages?: Array<{
           content?: Array<{ text?: string }>;
-          __NexisClaw?: { id?: string; seq?: number };
+          __GreenchClaw?: { id?: string; seq?: number };
         }>;
       };
       expect(nextData.messages?.[0]?.content?.[0]?.text).toBe("third message");
-      expectNexisClawMetadata(nextData.messages?.[0]?.__NexisClaw, {
+      expectGreenchClawMetadata(nextData.messages?.[0]?.__GreenchClaw, {
         id: thirdMessageId,
         seq: 3,
       });
@@ -482,10 +482,10 @@ describe("session history HTTP endpoints", () => {
       const refreshEvent = await readSseEvent(stream.reader, stream.streamState);
       expect(refreshEvent.event).toBe("history");
       const refreshData = refreshEvent.data as {
-        messages?: Array<{ content?: Array<{ text?: string }>; __NexisClaw?: { seq?: number } }>;
+        messages?: Array<{ content?: Array<{ text?: string }>; __GreenchClaw?: { seq?: number } }>;
       };
       expect(refreshData.messages?.[0]?.content?.[0]?.text).toBe("second message");
-      expect(refreshData.messages?.[0]?.__NexisClaw?.seq).toBe(2);
+      expect(refreshData.messages?.[0]?.__GreenchClaw?.seq).toBe(2);
 
       await stream.reader.cancel();
     });
@@ -541,13 +541,13 @@ describe("session history HTTP endpoints", () => {
         sessionKey?: string;
         messages?: Array<{
           content?: Array<{ text?: string }>;
-          __NexisClaw?: { id?: string; seq?: number };
+          __GreenchClaw?: { id?: string; seq?: number };
         }>;
       };
       expect(body.sessionKey).toBe("agent:main:main");
       expect(body.messages).toHaveLength(1);
       expect(body.messages?.[0]?.content?.[0]?.text).toBe("Done.");
-      expectNexisClawMetadata(body.messages?.[0]?.__NexisClaw, {
+      expectGreenchClawMetadata(body.messages?.[0]?.__GreenchClaw, {
         id: visibleMessageId,
         seq: 2,
       });
@@ -724,7 +724,7 @@ describe("session history HTTP endpoints", () => {
         {
           headers: {
             ...AUTH_HEADER,
-            "x-NexisClaw-scopes": "operator.approvals",
+            "x-GreenchClaw-scopes": "operator.approvals",
           },
         },
       );

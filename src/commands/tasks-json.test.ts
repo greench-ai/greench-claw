@@ -9,7 +9,7 @@ import {
   resetTaskRegistryDeliveryRuntimeForTests,
   resetTaskRegistryForTests,
 } from "../tasks/task-registry.js";
-import { withNexisClawTestState } from "../test-utils/NexisClaw-test-state.js";
+import { withGreenchClawTestState } from "../test-utils/GreenchClaw-test-state.js";
 import { tasksAuditJsonCommand, tasksListJsonCommand } from "./tasks-json.js";
 
 function createRuntime(): RuntimeEnv {
@@ -29,8 +29,8 @@ function readJsonLog(runtime: RuntimeEnv): unknown {
 }
 
 async function withTaskJsonStateDir(run: () => Promise<void>): Promise<void> {
-  await withNexisClawTestState(
-    { layout: "state-only", prefix: "NexisClaw-tasks-json-command-" },
+  await withGreenchClawTestState(
+    { layout: "state-only", prefix: "GreenchClaw-tasks-json-command-" },
     async () => {
       resetTaskRegistryDeliveryRuntimeForTests();
       resetTaskRegistryForTests({ persist: false });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { resolveExternalCliAuthScopeFromConfig } from "./auth-profiles/external-cli-scope.js";
 
 describe("external CLI auth scope", () => {
@@ -69,7 +69,7 @@ describe("external CLI auth scope", () => {
           },
         ],
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     const scope = resolveExternalCliAuthScopeFromConfig(cfg);
 

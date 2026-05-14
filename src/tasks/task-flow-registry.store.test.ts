@@ -1,6 +1,6 @@
 import { statSync } from "node:fs";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { withNexisClawTestState } from "../test-utils/NexisClaw-test-state.js";
+import { withGreenchClawTestState } from "../test-utils/GreenchClaw-test-state.js";
 import {
   createManagedTaskFlow,
   getTaskFlowById,
@@ -38,14 +38,14 @@ function createStoredFlow(): TaskFlowRecord {
 }
 
 async function withFlowRegistryTempDir<T>(run: (root: string) => Promise<T>): Promise<T> {
-  return await withNexisClawTestState(
+  return await withGreenchClawTestState(
     {
       layout: "state-only",
-      prefix: "NexisClaw-task-flow-store-",
+      prefix: "GreenchClaw-task-flow-store-",
     },
     async (state) => {
       const root = state.stateDir;
-      process.env.NEXISCLAW_STATE_DIR = root;
+      process.env.GREENCHCLAW_STATE_DIR = root;
       resetTaskFlowRegistryForTests();
       try {
         return await run(root);
@@ -56,13 +56,13 @@ async function withFlowRegistryTempDir<T>(run: (root: string) => Promise<T>): Pr
   );
 }
 
-const ORIGINAL_STATE_DIR = process.env.NEXISCLAW_STATE_DIR;
+const ORIGINAL_STATE_DIR = process.env.GREENCHCLAW_STATE_DIR;
 
 function restoreOriginalStateDir(): void {
   if (ORIGINAL_STATE_DIR === undefined) {
-    delete process.env.NEXISCLAW_STATE_DIR;
+    delete process.env.GREENCHCLAW_STATE_DIR;
   } else {
-    process.env.NEXISCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
+    process.env.GREENCHCLAW_STATE_DIR = ORIGINAL_STATE_DIR;
   }
 }
 
@@ -126,7 +126,7 @@ describe("task-flow-registry store runtime", () => {
 
   it("restores persisted wait-state, revision, and cancel intent from sqlite", async () => {
     await withFlowRegistryTempDir(async (root) => {
-      process.env.NEXISCLAW_STATE_DIR = root;
+      process.env.GREENCHCLAW_STATE_DIR = root;
       resetTaskFlowRegistryForTests();
 
       const created = createManagedTaskFlow({
@@ -172,7 +172,7 @@ describe("task-flow-registry store runtime", () => {
 
   it("round-trips explicit json null through sqlite", async () => {
     await withFlowRegistryTempDir(async (root) => {
-      process.env.NEXISCLAW_STATE_DIR = root;
+      process.env.GREENCHCLAW_STATE_DIR = root;
       resetTaskFlowRegistryForTests();
 
       const created = createManagedTaskFlow({
@@ -197,7 +197,7 @@ describe("task-flow-registry store runtime", () => {
       return;
     }
     await withFlowRegistryTempDir(async (root) => {
-      process.env.NEXISCLAW_STATE_DIR = root;
+      process.env.GREENCHCLAW_STATE_DIR = root;
       resetTaskFlowRegistryForTests();
 
       createManagedTaskFlow({

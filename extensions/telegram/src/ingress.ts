@@ -2,8 +2,8 @@ import {
   createChannelIngressResolver,
   defineStableChannelIngressIdentity,
   type ChannelIngressEventInput,
-} from "NexisClaw/plugin-sdk/channel-ingress-runtime";
-import type { DmPolicy, NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+} from "GreenchClaw/plugin-sdk/channel-ingress-runtime";
+import type { DmPolicy, GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { normalizeAllowFrom, type NormalizedAllowFrom } from "./bot-access.js";
 
 const TELEGRAM_CHANNEL_ID = "telegram";
@@ -23,7 +23,7 @@ export function createTelegramIngressSubject(senderId: string) {
 
 export function createTelegramIngressResolver(params: {
   accountId?: string;
-  cfg?: Pick<NexisClawConfig, "accessGroups" | "commands">;
+  cfg?: Pick<GreenchClawConfig, "accessGroups" | "commands">;
 }) {
   return createChannelIngressResolver({
     channelId: TELEGRAM_CHANNEL_ID,
@@ -53,7 +53,7 @@ function telegramConversation(params: {
 
 export async function resolveTelegramCommandIngressAuthorization(params: {
   accountId: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   dmPolicy: DmPolicy;
   isGroup: boolean;
   chatId: string | number;

@@ -1,8 +1,8 @@
 import {
   listProfilesForProvider,
   loadAuthProfileStoreForRuntime,
-} from "NexisClaw/plugin-sdk/agent-runtime";
-import { resolveEnvApiKey } from "NexisClaw/plugin-sdk/provider-auth";
+} from "GreenchClaw/plugin-sdk/agent-runtime";
+import { resolveEnvApiKey } from "GreenchClaw/plugin-sdk/provider-auth";
 
 const QA_CODEX_OAUTH_LIVE_MODEL = "openai/gpt-5.5";
 

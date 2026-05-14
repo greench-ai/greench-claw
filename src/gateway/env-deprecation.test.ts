@@ -1,16 +1,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  resetLegacyNexisClawEnvWarningForTest,
-  warnLegacyNexisClawEnvVars,
+  resetLegacyGreenchClawEnvWarningForTest,
+  warnLegacyGreenchClawEnvVars,
 } from "./env-deprecation.js";
 
-describe("warnLegacyNexisClawEnvVars", () => {
+describe("warnLegacyGreenchClawEnvVars", () => {
   const originalNodeEnv = process.env.NODE_ENV;
   const originalVitest = process.env.VITEST;
   let emitWarning: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    resetLegacyNexisClawEnvWarningForTest();
+    resetLegacyGreenchClawEnvWarningForTest();
     emitWarning = vi.spyOn(process, "emitWarning").mockImplementation(() => {});
     delete process.env.NODE_ENV;
     delete process.env.VITEST;
@@ -18,13 +18,13 @@ describe("warnLegacyNexisClawEnvVars", () => {
 
   afterEach(() => {
     emitWarning.mockRestore();
-    resetLegacyNexisClawEnvWarningForTest();
+    resetLegacyGreenchClawEnvWarningForTest();
     restoreEnv("NODE_ENV", originalNodeEnv);
     restoreEnv("VITEST", originalVitest);
   });
 
   it("warns with counts and prefixes instead of secret-shaped env names", () => {
-    warnLegacyNexisClawEnvVars({
+    warnLegacyGreenchClawEnvVars({
       CLAWDBOT_GATEWAY_TOKEN: "old-token",
       MOLTBOT_GATEWAY_PASSWORD: "old-password", // pragma: allowlist secret
       "CLAWDBOT_MALICIOUS\nforged": "old-value",
@@ -37,25 +37,25 @@ describe("warnLegacyNexisClawEnvVars", () => {
     ];
     expect(message).toContain("Legacy CLAWDBOT_*, MOLTBOT_* environment variables");
     expect(message).toContain("3 total");
-    expect(message).toContain("replacing the legacy prefix with NEXISCLAW_");
+    expect(message).toContain("replacing the legacy prefix with GREENCHCLAW_");
     expect(message).not.toContain("GATEWAY_TOKEN");
     expect(message).not.toContain("GATEWAY_PASSWORD");
     expect(message).not.toContain("forged");
     expect(options).toEqual({
-      code: "NEXISCLAW_LEGACY_ENV_VARS",
+      code: "GREENCHCLAW_LEGACY_ENV_VARS",
       type: "DeprecationWarning",
     });
   });
 
   it("does not warn for current OPENCLAW names", () => {
-    warnLegacyNexisClawEnvVars({ NEXISCLAW_GATEWAY_TOKEN: "token" });
+    warnLegacyGreenchClawEnvVars({ GREENCHCLAW_GATEWAY_TOKEN: "token" });
 
     expect(emitWarning).not.toHaveBeenCalled();
   });
 
   it("warns only once after a successful emit", () => {
-    warnLegacyNexisClawEnvVars({ CLAWDBOT_GATEWAY_TOKEN: "old-token" });
-    warnLegacyNexisClawEnvVars({ MOLTBOT_GATEWAY_TOKEN: "old-token" });
+    warnLegacyGreenchClawEnvVars({ CLAWDBOT_GATEWAY_TOKEN: "old-token" });
+    warnLegacyGreenchClawEnvVars({ MOLTBOT_GATEWAY_TOKEN: "old-token" });
 
     expect(emitWarning).toHaveBeenCalledOnce();
   });
@@ -67,16 +67,16 @@ describe("warnLegacyNexisClawEnvVars", () => {
       })
       .mockImplementationOnce(() => {});
 
-    expect(() => warnLegacyNexisClawEnvVars({ CLAWDBOT_GATEWAY_TOKEN: "old-token" })).toThrow(
+    expect(() => warnLegacyGreenchClawEnvVars({ CLAWDBOT_GATEWAY_TOKEN: "old-token" })).toThrow(
       "warning sink failed",
     );
-    warnLegacyNexisClawEnvVars({ CLAWDBOT_GATEWAY_TOKEN: "old-token" });
+    warnLegacyGreenchClawEnvVars({ CLAWDBOT_GATEWAY_TOKEN: "old-token" });
 
     expect(emitWarning).toHaveBeenCalledTimes(2);
   });
 
   it("suppresses warning noise based on the passed env", () => {
-    warnLegacyNexisClawEnvVars({
+    warnLegacyGreenchClawEnvVars({
       CLAWDBOT_GATEWAY_TOKEN: "old-token",
       VITEST: "true",
     });
@@ -87,7 +87,7 @@ describe("warnLegacyNexisClawEnvVars", () => {
   it("does not let process.env test flags suppress a synthetic env", () => {
     process.env.VITEST = "true";
 
-    warnLegacyNexisClawEnvVars({ CLAWDBOT_GATEWAY_TOKEN: "old-token" });
+    warnLegacyGreenchClawEnvVars({ CLAWDBOT_GATEWAY_TOKEN: "old-token" });
 
     expect(emitWarning).toHaveBeenCalledOnce();
   });

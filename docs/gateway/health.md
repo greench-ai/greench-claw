@@ -10,28 +10,28 @@ Short guide to verify channel connectivity without guessing.
 
 ## Quick checks
 
-- `NexisClaw status` — local summary: gateway reachability/mode, update hint, linked channel auth age, sessions + recent activity.
-- `NexisClaw status --all` — full local diagnosis (read-only, color, safe to paste for debugging).
-- `NexisClaw status --deep` — asks the running gateway for a live health probe (`health` with `probe:true`), including per-account channel probes when supported.
-- `NexisClaw health` — asks the running gateway for its health snapshot (WS-only; no direct channel sockets from the CLI).
-- `NexisClaw health --verbose` — forces a live health probe and prints gateway connection details.
-- `NexisClaw health --json` — machine-readable health snapshot output.
+- `GreenchClaw status` — local summary: gateway reachability/mode, update hint, linked channel auth age, sessions + recent activity.
+- `GreenchClaw status --all` — full local diagnosis (read-only, color, safe to paste for debugging).
+- `GreenchClaw status --deep` — asks the running gateway for a live health probe (`health` with `probe:true`), including per-account channel probes when supported.
+- `GreenchClaw health` — asks the running gateway for its health snapshot (WS-only; no direct channel sockets from the CLI).
+- `GreenchClaw health --verbose` — forces a live health probe and prints gateway connection details.
+- `GreenchClaw health --json` — machine-readable health snapshot output.
 - Send `/status` as a standalone message in WhatsApp/WebChat to get a status reply without invoking the agent.
-- Logs: tail `/tmp/NexisClaw/NexisClaw-*.log` and filter for `web-heartbeat`, `web-reconnect`, `web-auto-reply`, `web-inbound`.
+- Logs: tail `/tmp/GreenchClaw/GreenchClaw-*.log` and filter for `web-heartbeat`, `web-reconnect`, `web-auto-reply`, `web-inbound`.
 
 For Discord and other chat providers, session rows are not socket liveness.
-`NexisClaw sessions`, Gateway `sessions.list`, and the agent `sessions_list` tool
+`GreenchClaw sessions`, Gateway `sessions.list`, and the agent `sessions_list` tool
 read stored conversation state. A provider can reconnect and show healthy channel
 status before any new session row is materialized. Use the channel status and
 health commands above for live connectivity checks.
 
 ## Deep diagnostics
 
-- Creds on disk: `ls -l ~/.NexisClaw/credentials/whatsapp/<accountId>/creds.json` (mtime should be recent).
-- Session store: `ls -l ~/.NexisClaw/agents/<agentId>/sessions/sessions.json` (path can be overridden in config). Count and recent recipients are surfaced via `status`.
-- Relink flow: `NexisClaw channels logout && NexisClaw channels login --verbose` when status codes 409–515 or `loggedOut` appear in logs. (Note: the QR login flow auto-restarts once for status 515 after pairing.)
-- Diagnostics are enabled by default. The gateway records operational facts unless `diagnostics.enabled: false` is set. Memory events record RSS/heap byte counts, threshold pressure, and growth pressure. Liveness warnings record event-loop delay, event-loop utilization, CPU-core ratio, and active/waiting/queued session counts when the process is running but saturated. Oversized-payload events record what was rejected, truncated, or chunked, plus sizes and limits when available. They do not record the message text, attachment contents, webhook body, raw request or response body, tokens, cookies, or secret values. The same heartbeat starts the bounded stability recorder, which is available through `NexisClaw gateway stability` or the `diagnostics.stability` Gateway RPC. Fatal Gateway exits, shutdown timeouts, and restart startup failures persist the latest recorder snapshot under `~/.NexisClaw/logs/stability/` when events exist; inspect the newest saved bundle with `NexisClaw gateway stability --bundle latest`.
-- For bug reports, run `NexisClaw gateway diagnostics export` and attach the generated zip. The export combines a Markdown summary, the newest stability bundle, sanitized log metadata, sanitized Gateway status/health snapshots, and config shape. It is meant to be shared: chat text, webhook bodies, tool outputs, credentials, cookies, account/message identifiers, and secret values are omitted or redacted. See [Diagnostics Export](/gateway/diagnostics).
+- Creds on disk: `ls -l ~/.GreenchClaw/credentials/whatsapp/<accountId>/creds.json` (mtime should be recent).
+- Session store: `ls -l ~/.GreenchClaw/agents/<agentId>/sessions/sessions.json` (path can be overridden in config). Count and recent recipients are surfaced via `status`.
+- Relink flow: `GreenchClaw channels logout && GreenchClaw channels login --verbose` when status codes 409–515 or `loggedOut` appear in logs. (Note: the QR login flow auto-restarts once for status 515 after pairing.)
+- Diagnostics are enabled by default. The gateway records operational facts unless `diagnostics.enabled: false` is set. Memory events record RSS/heap byte counts, threshold pressure, and growth pressure. Liveness warnings record event-loop delay, event-loop utilization, CPU-core ratio, and active/waiting/queued session counts when the process is running but saturated. Oversized-payload events record what was rejected, truncated, or chunked, plus sizes and limits when available. They do not record the message text, attachment contents, webhook body, raw request or response body, tokens, cookies, or secret values. The same heartbeat starts the bounded stability recorder, which is available through `GreenchClaw gateway stability` or the `diagnostics.stability` Gateway RPC. Fatal Gateway exits, shutdown timeouts, and restart startup failures persist the latest recorder snapshot under `~/.GreenchClaw/logs/stability/` when events exist; inspect the newest saved bundle with `GreenchClaw gateway stability --bundle latest`.
+- For bug reports, run `GreenchClaw gateway diagnostics export` and attach the generated zip. The export combines a Markdown summary, the newest stability bundle, sanitized log metadata, sanitized Gateway status/health snapshots, and config shape. It is meant to be shared: chat text, webhook bodies, tool outputs, credentials, cookies, account/message identifiers, and secret values are omitted or redacted. See [Diagnostics Export](/gateway/diagnostics).
 
 ## Health monitor config
 
@@ -44,15 +44,15 @@ health commands above for live connectivity checks.
 
 ## When something fails
 
-- `logged out` or status 409–515 → relink with `NexisClaw channels logout` then `NexisClaw channels login`.
-- Gateway unreachable → start it: `NexisClaw gateway --port 18789` (use `--force` if the port is busy).
+- `logged out` or status 409–515 → relink with `GreenchClaw channels logout` then `GreenchClaw channels login`.
+- Gateway unreachable → start it: `GreenchClaw gateway --port 18789` (use `--force` if the port is busy).
 - No inbound messages → confirm linked phone is online and the sender is allowed (`channels.whatsapp.allowFrom`); for group chats, ensure allowlist + mention rules match (`channels.whatsapp.groups`, `agents.list[].groupChat.mentionPatterns`).
 
 ## Dedicated "health" command
 
-`NexisClaw health` asks the running gateway for its health snapshot (no direct channel
+`GreenchClaw health` asks the running gateway for its health snapshot (no direct channel
 sockets from the CLI). By default it can return a fresh cached gateway snapshot; the
-gateway then refreshes that cache in the background. `NexisClaw health --verbose` forces
+gateway then refreshes that cache in the background. `GreenchClaw health --verbose` forces
 a live probe instead. The command reports linked creds/auth age when available,
 per-channel probe summaries, session-store summary, and a probe duration. It exits
 non-zero if the gateway is unreachable or the probe fails/timeouts.

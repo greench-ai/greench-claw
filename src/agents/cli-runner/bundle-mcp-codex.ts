@@ -7,9 +7,9 @@ import {
 } from "./bundle-mcp-adapter-shared.js";
 import { serializeTomlInlineValue } from "./toml-inline.js";
 
-function isNexisClawLoopbackMcpServer(name: string, server: BundleMcpServerConfig): boolean {
+function isGreenchClawLoopbackMcpServer(name: string, server: BundleMcpServerConfig): boolean {
   return (
-    name === "NexisClaw" &&
+    name === "GreenchClaw" &&
     typeof server.url === "string" &&
     /^https?:\/\/(?:127\.0\.0\.1|localhost):\d+\/mcp(?:[?#].*)?$/.test(server.url)
   );
@@ -21,7 +21,7 @@ function normalizeCodexServerConfig(
 ): Record<string, unknown> {
   const next: Record<string, unknown> = {};
   applyCommonServerConfig(next, server);
-  if (isNexisClawLoopbackMcpServer(name, server)) {
+  if (isGreenchClawLoopbackMcpServer(name, server)) {
     next.default_tools_approval_mode = "approve";
   }
   const httpHeaders = normalizeStringRecord(server.headers);

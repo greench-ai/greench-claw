@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `NexisClaw directory` (self, peers, groups)"
+summary: "CLI reference for `GreenchClaw directory` (self, peers, groups)"
 read_when:
   - You want to look up contacts/groups/self ids for a channel
   - You are developing a channel directory adapter
 title: "Directory"
 ---
 
-# `NexisClaw directory`
+# `GreenchClaw directory`
 
 Directory lookups for channels that support it (contacts/peers, groups, and "me").
 
@@ -18,7 +18,7 @@ Directory lookups for channels that support it (contacts/peers, groups, and "me"
 
 ## Notes
 
-- `directory` is meant to help you find IDs you can paste into other commands (especially `NexisClaw message send --target ...`).
+- `directory` is meant to help you find IDs you can paste into other commands (especially `GreenchClaw message send --target ...`).
 - For many channels, results are config-backed (allowlists / configured groups) rather than a live provider directory.
 - Installed channel plugins can still omit directory support; in that case the command reports the unsupported directory operation instead of reinstalling the plugin.
 - Default output is `id` (and sometimes `name`) separated by a tab; use `--json` for scripting.
@@ -26,8 +26,8 @@ Directory lookups for channels that support it (contacts/peers, groups, and "me"
 ## Using results with `message send`
 
 ```bash
-NexisClaw directory peers list --channel slack --query "U0"
-NexisClaw message send --channel slack --target user:U012ABCDEF --message "hello"
+GreenchClaw directory peers list --channel slack --query "U0"
+GreenchClaw message send --channel slack --target user:U012ABCDEF --message "hello"
 ```
 
 ## ID formats (by channel)
@@ -44,23 +44,23 @@ NexisClaw message send --channel slack --target user:U012ABCDEF --message "hello
 ## Self ("me")
 
 ```bash
-NexisClaw directory self --channel zalouser
+GreenchClaw directory self --channel zalouser
 ```
 
 ## Peers (contacts/users)
 
 ```bash
-NexisClaw directory peers list --channel zalouser
-NexisClaw directory peers list --channel zalouser --query "name"
-NexisClaw directory peers list --channel zalouser --limit 50
+GreenchClaw directory peers list --channel zalouser
+GreenchClaw directory peers list --channel zalouser --query "name"
+GreenchClaw directory peers list --channel zalouser --limit 50
 ```
 
 ## Groups
 
 ```bash
-NexisClaw directory groups list --channel zalouser
-NexisClaw directory groups list --channel zalouser --query "work"
-NexisClaw directory groups members --channel zalouser --group-id <id>
+GreenchClaw directory groups list --channel zalouser
+GreenchClaw directory groups list --channel zalouser --query "work"
+GreenchClaw directory groups members --channel zalouser --group-id <id>
 ```
 
 ## Related

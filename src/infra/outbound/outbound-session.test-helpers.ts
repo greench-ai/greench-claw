@@ -1,5 +1,5 @@
 import type { ChannelPlugin } from "../../channels/plugins/types.plugin.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import {
   buildChannelOutboundSessionRoute,
   buildThreadAwareOutboundSessionRoute,
@@ -44,7 +44,7 @@ function createSessionRouteTestPlugin(params: {
 }
 
 function buildThreadedChannelRoute(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentId: string;
   channel: string;
   accountId?: string | null;

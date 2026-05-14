@@ -3,7 +3,7 @@ import type {
   ChannelApprovalNativeSurface,
   ChannelApprovalNativeTarget,
 } from "../channels/plugins/approval-native.types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { buildChannelApprovalNativeTargetKey } from "./approval-native-target-key.js";
 import type { ChannelApprovalKind } from "./approval-types.js";
 import type { ExecApprovalRequest } from "./exec-approvals.js";
@@ -40,7 +40,7 @@ function dedupeTargets(
 }
 
 export async function resolveChannelNativeApprovalDeliveryPlan(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   accountId?: string | null;
   approvalKind: ChannelApprovalKind;
   request: ApprovalRequest;

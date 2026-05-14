@@ -9,7 +9,7 @@ import {
 import { resolveStorePath } from "../config/sessions/paths.js";
 import { loadSessionStore, updateSessionStore } from "../config/sessions/store.js";
 import type { SessionEntry } from "../config/sessions/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { callGateway } from "../gateway/call.js";
 import { logVerbose } from "../globals.js";
 import { formatErrorMessage } from "../infra/errors.js";
@@ -97,7 +97,7 @@ export type ResolvedSubagentController = {
   controlScope: "children" | "none";
 };
 export function resolveSubagentController(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   agentSessionKey?: string;
 }): ResolvedSubagentController {
   const { mainKey, alias } = resolveMainSessionAlias(params.cfg);
@@ -154,7 +154,7 @@ function ensureControllerOwnsRun(params: {
 }
 
 async function killSubagentRun(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   entry: SubagentRunRecord;
   cache: Map<string, Record<string, SessionEntry>>;
 }): Promise<{ killed: boolean; sessionId?: string }> {
@@ -203,7 +203,7 @@ async function killSubagentRun(params: {
 }
 
 async function cascadeKillChildren(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   parentChildSessionKey: string;
   cache: Map<string, Record<string, SessionEntry>>;
   seenChildSessionKeys?: Set<string>;
@@ -267,7 +267,7 @@ async function cascadeKillChildren(params: {
 }
 
 export async function killAllControlledSubagentRuns(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   controller: ResolvedSubagentController;
   runs: SubagentRunRecord[];
 }) {
@@ -315,7 +315,7 @@ export async function killAllControlledSubagentRuns(params: {
 }
 
 export async function killControlledSubagentRun(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   controller: ResolvedSubagentController;
   entry: SubagentRunRecord;
 }) {
@@ -390,7 +390,7 @@ export async function killControlledSubagentRun(params: {
   };
 }
 
-export async function killSubagentRunAdmin(params: { cfg: NexisClawConfig; sessionKey: string }) {
+export async function killSubagentRunAdmin(params: { cfg: GreenchClawConfig; sessionKey: string }) {
   const targetSessionKey = params.sessionKey.trim();
   if (!targetSessionKey) {
     return { found: false as const, killed: false };
@@ -425,7 +425,7 @@ export async function killSubagentRunAdmin(params: { cfg: NexisClawConfig; sessi
 }
 
 export async function steerControlledSubagentRun(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   controller: ResolvedSubagentController;
   entry: SubagentRunRecord;
   message: string;
@@ -614,7 +614,7 @@ export async function steerControlledSubagentRun(params: {
 }
 
 export async function sendControlledSubagentMessage(params: {
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   controller: ResolvedSubagentController;
   entry: SubagentRunRecord;
   message: string;

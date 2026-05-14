@@ -5,7 +5,7 @@ function bundledPluginFile(pluginId: string, relativePath: string, suffix = ""):
 }
 
 const rootEntries = [
-  "NexisClaw.mjs!",
+  "GreenchClaw.mjs!",
   "src/index.ts!",
   "src/entry.ts!",
   "src/cli/daemon-cli.ts!",
@@ -47,7 +47,7 @@ const bundledPluginIgnoredRuntimeDependencies = [
   "json5",
   "lit",
   "linkedom",
-  "NexisClaw",
+  "GreenchClaw",
   "pdfjs-dist",
 ] as const;
 
@@ -145,7 +145,7 @@ const config = {
     ".": {
       entry: rootEntries,
       ignoreDependencies: [
-        "@NexisClaw/*",
+        "@GreenchClaw/*",
         "playwright-core",
         "sqlite-vec",
         "tree-sitter-bash",

@@ -1,4 +1,4 @@
-import type { ChannelPlugin } from "NexisClaw/plugin-sdk/core";
+import type { ChannelPlugin } from "GreenchClaw/plugin-sdk/core";
 import { type ResolvedWhatsAppAccount } from "./accounts.js";
 import { readWebAuthState } from "./auth-store.js";
 import { resolveWhatsAppGroupIntroHint } from "./group-intro.js";

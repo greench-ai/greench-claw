@@ -17,10 +17,10 @@ describe("fs-safe defaults", () => {
   afterEach(() => {
     configureFsSafePython.mockReset();
     delete process.env.FS_SAFE_PYTHON_MODE;
-    delete process.env.NEXISCLAW_FS_SAFE_PYTHON_MODE;
+    delete process.env.GREENCHCLAW_FS_SAFE_PYTHON_MODE;
   });
 
-  it("disables the Python helper by default in NexisClaw", async () => {
+  it("disables the Python helper by default in GreenchClaw", async () => {
     await importDefaults();
 
     expect(configureFsSafePython).toHaveBeenCalledWith({ mode: "off" });
@@ -34,8 +34,8 @@ describe("fs-safe defaults", () => {
     expect(configureFsSafePython).not.toHaveBeenCalled();
   });
 
-  it("honors the NexisClaw-specific env mode override", async () => {
-    process.env.NEXISCLAW_FS_SAFE_PYTHON_MODE = "auto";
+  it("honors the GreenchClaw-specific env mode override", async () => {
+    process.env.GREENCHCLAW_FS_SAFE_PYTHON_MODE = "auto";
 
     await importDefaults();
 

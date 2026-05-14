@@ -1,6 +1,6 @@
 import { primeConfiguredBindingRegistry } from "../channels/plugins/binding-registry.js";
 import { applyPluginAutoEnable } from "../config/plugin-auto-enable.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginLookUpTable } from "../plugins/plugin-lookup-table.js";
 import type { PluginRegistryParams } from "../plugins/registry-types.js";
 import type { PluginRegistry } from "../plugins/registry.js";
@@ -30,8 +30,8 @@ type GatewayStartupTrace = {
 };
 
 type GatewayPluginBootstrapParams = {
-  cfg: NexisClawConfig;
-  activationSourceConfig?: NexisClawConfig;
+  cfg: GreenchClawConfig;
+  activationSourceConfig?: GreenchClawConfig;
   workspaceDir: string;
   log: GatewayPluginBootstrapLog;
   coreGatewayHandlers?: Record<string, GatewayRequestHandler>;
@@ -47,7 +47,7 @@ type GatewayPluginBootstrapParams = {
   beforePrimeRegistry?: (pluginRegistry: PluginRegistry) => void;
 };
 
-function installGatewayPluginRuntimeEnvironment(cfg: NexisClawConfig) {
+function installGatewayPluginRuntimeEnvironment(cfg: GreenchClawConfig) {
   setPluginSubagentOverridePolicies(cfg);
   setGatewaySubagentRuntime(createGatewaySubagentRuntime());
   setGatewayNodesRuntime(createGatewayNodesRuntime());

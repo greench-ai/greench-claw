@@ -1,7 +1,7 @@
 import { sendMessageTelegram } from "../../extensions/telegram/runtime-api.js";
 import { getRuntimeConfig } from "../../src/config/config.js";
 import { matchPluginCommand, executePluginCommand } from "../../src/plugins/commands.js";
-import { loadNexisClawPlugins } from "../../src/plugins/loader.js";
+import { loadGreenchClawPlugins } from "../../src/plugins/loader.js";
 
 function writeStdoutLine(...parts: string[]): void {
   process.stdout.write(`${parts.join(" ")}\n`);
@@ -36,7 +36,7 @@ if (!chatId) {
 }
 
 const cfg = getRuntimeConfig();
-loadNexisClawPlugins({ config: cfg });
+loadGreenchClawPlugins({ config: cfg });
 
 const match = matchPluginCommand("/pair");
 if (!match) {

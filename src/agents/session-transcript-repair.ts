@@ -217,7 +217,7 @@ function makeMissingToolResult(params: {
   // function_call_output normalization; live coverage in
   // openai-reasoning-compat.live.test.ts and tool-replay-repair.live.test.ts
   // sends this repaired history to real models. Other providers keep the older,
-  // explicit NexisClaw diagnostic text unless the caller opts in.
+  // explicit GreenchClaw diagnostic text unless the caller opts in.
   text?: string;
 }): Extract<AgentMessage, { role: "toolResult" }> {
   return {
@@ -229,7 +229,7 @@ function makeMissingToolResult(params: {
         type: "text",
         text:
           params.text ??
-          "[NexisClaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
+          "[GreenchClaw] missing tool result in session history; inserted synthetic error result for transcript repair.",
       },
     ],
     isError: true,

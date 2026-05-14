@@ -16,7 +16,7 @@ const { assertOkOrThrowHttpErrorMock, postJsonRequestMock, resolveProviderHttpRe
     })),
   }));
 
-vi.mock("NexisClaw/plugin-sdk/provider-http", () => ({
+vi.mock("GreenchClaw/plugin-sdk/provider-http", () => ({
   assertOkOrThrowHttpError: assertOkOrThrowHttpErrorMock,
   postJsonRequest: postJsonRequestMock,
   requireTranscriptionText: (value: string | undefined, message: string) => {
@@ -92,8 +92,8 @@ describe("openrouter media understanding provider", () => {
     );
     const headers = postJsonRequestMock.mock.calls.at(0)?.[0]?.headers as Headers;
     expect(headers.get("authorization")).toBe("Bearer sk-openrouter");
-    expect(headers.get("http-referer")).toBe("https://NexisClaw.ai");
-    expect(headers.get("x-openrouter-title")).toBe("NexisClaw");
+    expect(headers.get("http-referer")).toBe("https://GreenchClaw.ai");
+    expect(headers.get("x-openrouter-title")).toBe("GreenchClaw");
     expect(release).toHaveBeenCalledOnce();
   });
 

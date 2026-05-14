@@ -1,8 +1,8 @@
-import type { ProviderRuntimeModel } from "NexisClaw/plugin-sdk/plugin-entry";
+import type { ProviderRuntimeModel } from "GreenchClaw/plugin-sdk/plugin-entry";
 import {
   registerSingleProviderPlugin,
   resolveProviderPluginChoice,
-} from "NexisClaw/plugin-sdk/plugin-test-runtime";
+} from "GreenchClaw/plugin-sdk/plugin-test-runtime";
 import { describe, expect, it } from "vitest";
 import {
   createProviderDynamicModelContext,

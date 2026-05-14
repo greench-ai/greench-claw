@@ -1,6 +1,6 @@
 import { resolveGlobalSingleton } from "../shared/global-singleton.js";
 
-const warningFilterKey = Symbol.for("NexisClaw.warning-filter");
+const warningFilterKey = Symbol.for("GreenchClaw.warning-filter");
 
 export type ProcessWarning = {
   code?: string;

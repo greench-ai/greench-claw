@@ -18,7 +18,7 @@ import type {
   ChannelStreamingAdapter,
   ChannelThreadingAdapter,
 } from "../../channels/plugins/types.public.js";
-import type { NexisClawConfig } from "../../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../config/types.GreenchClaw.js";
 import { getActivePluginRegistry } from "../../plugins/runtime.js";
 import {
   isDeliverableMessageChannel,
@@ -100,7 +100,7 @@ export function normalizeDeliverableOutboundChannel(
 
 function maybeBootstrapChannelPlugin(params: {
   channel: DeliverableMessageChannel;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): void {
   bootstrapOutboundChannelPlugin(params);
 }
@@ -173,7 +173,7 @@ function toOutboundChannelRuntime(plugin: ChannelPlugin): OutboundChannelRuntime
 
 export function resolveOutboundChannelPlugin(params: {
   channel: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   allowBootstrap?: boolean;
 }): ChannelPlugin | undefined {
   const normalized = normalizeDeliverableOutboundChannel(params.channel);
@@ -202,7 +202,7 @@ export function resolveOutboundChannelPlugin(params: {
 
 export function resolveOutboundChannelMessageAdapter(params: {
   channel: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
   allowBootstrap?: boolean;
 }): ChannelMessageAdapterShape | undefined {
   return resolveOutboundChannelPlugin(params)?.message;
@@ -210,7 +210,7 @@ export function resolveOutboundChannelMessageAdapter(params: {
 
 export function resolveOutboundChannelPluginForRead(params: {
   channel: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): ChannelPlugin | undefined {
   const normalized = normalizeMessageChannel(params.channel) ?? params.channel.trim();
   if (!normalized) {
@@ -239,7 +239,7 @@ export function resolveOutboundChannelPluginForRead(params: {
 
 export function resolveOutboundChannelRuntime(params: {
   channel: string;
-  cfg?: NexisClawConfig;
+  cfg?: GreenchClawConfig;
 }): OutboundChannelRuntime | undefined {
   const plugin = resolveOutboundChannelPluginForRead(params);
   return plugin ? toOutboundChannelRuntime(plugin) : undefined;

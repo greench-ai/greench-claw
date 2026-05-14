@@ -6,7 +6,7 @@ import { afterAll, afterEach, beforeAll, expect, vi } from "vitest";
 import { clearRuntimeAuthProfileStoreSnapshots } from "../../../src/agents/auth-profiles.js";
 import type { EmbeddedPiQueueMessageOutcome } from "../../../src/agents/pi-embedded-runner/runs.js";
 import { withFastReplyConfig } from "../../../src/auto-reply/reply/get-reply-fast-path.js";
-import type { NexisClawConfig } from "../../../src/config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../../../src/config/types.GreenchClaw.js";
 
 // Avoid exporting vitest mock types (TS2742 under pnpm + d.ts emit).
 type AnyMock = any;
@@ -21,7 +21,7 @@ function getSharedMocks<T>(key: string, create: () => T): T {
   return store[symbol];
 }
 
-const piEmbeddedMocks = getSharedMocks("NexisClaw.trigger-handling.pi-embedded-mocks", () => ({
+const piEmbeddedMocks = getSharedMocks("GreenchClaw.trigger-handling.pi-embedded-mocks", () => ({
   abortEmbeddedPiRun: vi.fn().mockReturnValue(false),
   compactEmbeddedPiSession: vi.fn(),
   runEmbeddedPiAgent: vi.fn(),
@@ -94,27 +94,30 @@ export function getProviderUsageMocks(): AnyMocks {
 
 vi.mock("../../../src/infra/provider-usage.js", () => providerUsageMocks);
 
-const modelCatalogMocks = getSharedMocks("NexisClaw.trigger-handling.model-catalog-mocks", () => ({
-  loadModelCatalog: vi.fn().mockResolvedValue([
-    {
-      provider: "anthropic",
-      id: "claude-opus-4-6",
-      name: "Claude Opus 4.5",
-      contextWindow: 200000,
-    },
-    {
-      provider: "openrouter",
-      id: "anthropic/claude-opus-4-6",
-      name: "Claude Opus 4.5 (OpenRouter)",
-      contextWindow: 200000,
-    },
-    { provider: "openai", id: "gpt-5.4-mini", name: "GPT-5.4 mini" },
-    { provider: "openai", id: "gpt-5.5", name: "GPT-5.5" },
-    { provider: "openai-codex", id: "gpt-5.5", name: "GPT-5.5 (Codex)" },
-    { provider: "minimax", id: "MiniMax-M2.7", name: "MiniMax M2.7" },
-  ]),
-  resetModelCatalogCacheForTest: vi.fn(),
-}));
+const modelCatalogMocks = getSharedMocks(
+  "GreenchClaw.trigger-handling.model-catalog-mocks",
+  () => ({
+    loadModelCatalog: vi.fn().mockResolvedValue([
+      {
+        provider: "anthropic",
+        id: "claude-opus-4-6",
+        name: "Claude Opus 4.5",
+        contextWindow: 200000,
+      },
+      {
+        provider: "openrouter",
+        id: "anthropic/claude-opus-4-6",
+        name: "Claude Opus 4.5 (OpenRouter)",
+        contextWindow: 200000,
+      },
+      { provider: "openai", id: "gpt-5.4-mini", name: "GPT-5.4 mini" },
+      { provider: "openai", id: "gpt-5.5", name: "GPT-5.5" },
+      { provider: "openai-codex", id: "gpt-5.5", name: "GPT-5.5 (Codex)" },
+      { provider: "minimax", id: "MiniMax-M2.7", name: "MiniMax M2.7" },
+    ]),
+    resetModelCatalogCacheForTest: vi.fn(),
+  }),
+);
 
 const installModelCatalogMock = () =>
   vi.doMock("../../../src/agents/model-catalog.js", () => modelCatalogMocks);
@@ -135,20 +138,23 @@ vi.doMock("../../../src/plugins/provider-runtime.runtime.js", () => ({
   refreshProviderOAuthCredentialWithPlugin: async () => undefined,
 }));
 
-const modelFallbackMocks = getSharedMocks("NexisClaw.trigger-handling.model-fallback-mocks", () => ({
-  runWithModelFallback: vi.fn(
-    async (params: {
-      provider: string;
-      model: string;
-      run: (provider: string, model: string, runOptions?: unknown) => Promise<unknown>;
-    }) => ({
-      result: await params.run(params.provider, params.model),
-      provider: params.provider,
-      model: params.model,
-      attempts: [],
-    }),
-  ),
-}));
+const modelFallbackMocks = getSharedMocks(
+  "GreenchClaw.trigger-handling.model-fallback-mocks",
+  () => ({
+    runWithModelFallback: vi.fn(
+      async (params: {
+        provider: string;
+        model: string;
+        run: (provider: string, model: string, runOptions?: unknown) => Promise<unknown>;
+      }) => ({
+        result: await params.run(params.provider, params.model),
+        provider: params.provider,
+        model: params.model,
+        attempts: [],
+      }),
+    ),
+  }),
+);
 
 const installModelFallbackMock = () =>
   vi.doMock("../../../src/agents/model-fallback.js", () => modelFallbackMocks);
@@ -159,7 +165,7 @@ vi.doMock("../../../src/infra/git-commit.js", () => ({
   resolveCommitHash: vi.fn(() => "abcdef0"),
 }));
 
-const webSessionMocks = getSharedMocks("NexisClaw.trigger-handling.web-session-mocks", () => ({
+const webSessionMocks = getSharedMocks("GreenchClaw.trigger-handling.web-session-mocks", () => ({
   webAuthExists: vi.fn().mockResolvedValue(true),
   getWebAuthAgeMs: vi.fn().mockReturnValue(120_000),
   readWebSelfId: vi.fn().mockReturnValue({ e164: "+1999" }),
@@ -181,7 +187,7 @@ type TempHomeEnvSnapshot = {
   userProfile: string | undefined;
   homeDrive: string | undefined;
   homePath: string | undefined;
-  NexisClawHome: string | undefined;
+  GreenchClawHome: string | undefined;
   stateDir: string | undefined;
 };
 
@@ -194,8 +200,8 @@ function snapshotTempHomeEnv(): TempHomeEnvSnapshot {
     userProfile: process.env.USERPROFILE,
     homeDrive: process.env.HOMEDRIVE,
     homePath: process.env.HOMEPATH,
-    NexisClawHome: process.env.NEXISCLAW_HOME,
-    stateDir: process.env.NEXISCLAW_STATE_DIR,
+    GreenchClawHome: process.env.GREENCHCLAW_HOME,
+    stateDir: process.env.GREENCHCLAW_STATE_DIR,
   };
 }
 
@@ -212,15 +218,15 @@ function restoreTempHomeEnv(snapshot: TempHomeEnvSnapshot): void {
   restoreKey("USERPROFILE", snapshot.userProfile);
   restoreKey("HOMEDRIVE", snapshot.homeDrive);
   restoreKey("HOMEPATH", snapshot.homePath);
-  restoreKey("NEXISCLAW_HOME", snapshot.NexisClawHome);
-  restoreKey("NEXISCLAW_STATE_DIR", snapshot.stateDir);
+  restoreKey("GREENCHCLAW_HOME", snapshot.GreenchClawHome);
+  restoreKey("GREENCHCLAW_STATE_DIR", snapshot.stateDir);
 }
 
 function setTempHomeEnv(home: string): void {
   process.env.HOME = home;
   process.env.USERPROFILE = home;
-  delete process.env.NEXISCLAW_HOME;
-  process.env.NEXISCLAW_STATE_DIR = join(home, ".NexisClaw");
+  delete process.env.GREENCHCLAW_HOME;
+  process.env.GREENCHCLAW_STATE_DIR = join(home, ".GreenchClaw");
 
   if (process.platform !== "win32") {
     return;
@@ -234,7 +240,7 @@ function setTempHomeEnv(home: string): void {
 }
 
 beforeAll(async () => {
-  suiteTempHomeRoot = await fs.mkdtemp(join(os.tmpdir(), "NexisClaw-triggers-suite-"));
+  suiteTempHomeRoot = await fs.mkdtemp(join(os.tmpdir(), "GreenchClaw-triggers-suite-"));
 });
 
 afterAll(async () => {
@@ -253,7 +259,7 @@ afterAll(async () => {
 export async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
   const home = join(suiteTempHomeRoot, `case-${++suiteTempHomeId}`);
   const snapshot = snapshotTempHomeEnv();
-  await fs.mkdir(join(home, ".NexisClaw", "agents", "main", "sessions"), { recursive: true });
+  await fs.mkdir(join(home, ".GreenchClaw", "agents", "main", "sessions"), { recursive: true });
   setTempHomeEnv(home);
 
   try {
@@ -278,12 +284,12 @@ export async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise
   }
 }
 
-export function makeCfg(home: string): NexisClawConfig {
+export function makeCfg(home: string): GreenchClawConfig {
   return withFastReplyConfig({
     agents: {
       defaults: {
         model: { primary: "anthropic/claude-opus-4-6" },
-        workspace: join(home, "NexisClaw"),
+        workspace: join(home, "GreenchClaw"),
         // Test harness: avoid 1s coalescer idle sleeps that dominate trigger suites.
         blockStreamingCoalesce: { idleMs: 1 },
         // Trigger tests assert routing/authorization behavior, not delivery pacing.
@@ -301,7 +307,7 @@ export function makeCfg(home: string): NexisClawConfig {
       },
     },
     session: { store: join(home, "sessions.json") },
-  } as NexisClawConfig);
+  } as GreenchClawConfig);
 }
 
 export async function loadGetReplyFromConfig() {

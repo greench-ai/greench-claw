@@ -1,18 +1,18 @@
-import { describeAccountSnapshot } from "NexisClaw/plugin-sdk/account-helpers";
-import { formatNormalizedAllowFromEntries } from "NexisClaw/plugin-sdk/allow-from";
+import { describeAccountSnapshot } from "GreenchClaw/plugin-sdk/account-helpers";
+import { formatNormalizedAllowFromEntries } from "GreenchClaw/plugin-sdk/allow-from";
 import {
   adaptScopedAccountAccessor,
   createScopedChannelConfigAdapter,
-} from "NexisClaw/plugin-sdk/channel-config-helpers";
-import type { ChannelMessageActionName } from "NexisClaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import { buildPassiveProbedChannelStatusSummary } from "NexisClaw/plugin-sdk/extension-shared";
-import { createLazyRuntimeNamedExport } from "NexisClaw/plugin-sdk/lazy-runtime";
+} from "GreenchClaw/plugin-sdk/channel-config-helpers";
+import type { ChannelMessageActionName } from "GreenchClaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import { buildPassiveProbedChannelStatusSummary } from "GreenchClaw/plugin-sdk/extension-shared";
+import { createLazyRuntimeNamedExport } from "GreenchClaw/plugin-sdk/lazy-runtime";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
-import { extractToolSend } from "NexisClaw/plugin-sdk/tool-send";
+} from "GreenchClaw/plugin-sdk/status-helpers";
+import { extractToolSend } from "GreenchClaw/plugin-sdk/tool-send";
 import { googleChatApprovalAuth } from "./approval-auth.js";
 import {
   formatAllowFromEntry,

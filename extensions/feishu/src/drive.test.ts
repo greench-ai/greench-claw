@@ -1,6 +1,6 @@
-import { createTestPluginApi } from "NexisClaw/plugin-sdk/plugin-test-api";
+import { createTestPluginApi } from "GreenchClaw/plugin-sdk/plugin-test-api";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { NexisClawPluginApi, PluginRuntime } from "../runtime-api.js";
+import type { GreenchClawPluginApi, PluginRuntime } from "../runtime-api.js";
 
 const createFeishuToolClientMock = vi.hoisted(() => vi.fn());
 const resolveAnyEnabledFeishuToolsConfigMock = vi.hoisted(() => vi.fn());
@@ -31,9 +31,9 @@ async function raceWithNextMacrotask<T>(promise: Promise<T>): Promise<T | "pendi
 }
 
 function createDriveToolApi(params: {
-  config: NexisClawPluginApi["config"];
-  registerTool: NexisClawPluginApi["registerTool"];
-}): NexisClawPluginApi {
+  config: GreenchClawPluginApi["config"];
+  registerTool: GreenchClawPluginApi["registerTool"];
+}): GreenchClawPluginApi {
   return createTestPluginApi({
     id: "feishu-test",
     name: "Feishu Test",

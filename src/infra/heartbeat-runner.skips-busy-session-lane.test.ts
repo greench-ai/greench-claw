@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveNestedAgentLaneForSession } from "../agents/lanes.js";
-import type { NexisClawConfig } from "../config/config.js";
+import type { GreenchClawConfig } from "../config/config.js";
 import { markCronJobActive, resetCronActiveJobsForTests } from "../cron/active-jobs.js";
 import { getActivePluginRegistry, setActivePluginRegistry } from "../plugins/runtime.js";
 import type { CommandLaneSnapshot } from "../process/command-queue.js";
@@ -45,7 +45,7 @@ beforeEach(() => {
   resetCronActiveJobsForTests();
 });
 
-function createHeartbeatTelegramConfig(): NexisClawConfig {
+function createHeartbeatTelegramConfig(): GreenchClawConfig {
   return {
     agents: {
       defaults: {
@@ -60,10 +60,10 @@ function createHeartbeatTelegramConfig(): NexisClawConfig {
         allowFrom: ["123"],
       },
     },
-  } as unknown as NexisClawConfig;
+  } as unknown as GreenchClawConfig;
 }
 
-async function seedHeartbeatTelegramSession(storePath: string, cfg: NexisClawConfig) {
+async function seedHeartbeatTelegramSession(storePath: string, cfg: GreenchClawConfig) {
   return seedMainSessionStore(storePath, cfg, {
     lastChannel: "telegram",
     lastProvider: "telegram",

@@ -20,7 +20,7 @@ function createScan() {
     sourceConfig: { gateway: {} },
     summary: { ok: true },
     update: {
-      root: "/tmp/NexisClaw",
+      root: "/tmp/GreenchClaw",
       installKind: "package",
       packageManager: "npm",
     },

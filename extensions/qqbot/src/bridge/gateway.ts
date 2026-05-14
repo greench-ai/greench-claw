@@ -6,8 +6,8 @@
  * All adapter dependencies are assembled here in one place.
  */
 
-import { resolveRuntimeServiceVersion } from "NexisClaw/plugin-sdk/cli-runtime";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { resolveRuntimeServiceVersion } from "GreenchClaw/plugin-sdk/cli-runtime";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import type { EngineAdapters } from "../engine/adapter/index.js";
 import {
   startGateway as coreStartGateway,
@@ -36,7 +36,7 @@ import {
 const _pluginVersion = resolveQQBotPluginVersion(import.meta.url);
 initSender({
   pluginVersion: _pluginVersion,
-  NexisClawVersion: resolveRuntimeServiceVersion(),
+  GreenchClawVersion: resolveRuntimeServiceVersion(),
 });
 
 // ============ Public types ============
@@ -44,7 +44,7 @@ initSender({
 export interface GatewayContext {
   account: ResolvedQQBotAccount;
   abortSignal: AbortSignal;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   onReady?: (data: unknown) => void;
   onResumed?: (data: unknown) => void;
   onError?: (error: Error) => void;

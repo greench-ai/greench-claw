@@ -32,12 +32,12 @@ describe("resolveGatewayLaunchAgentLabel", () => {
   it("returns default label when no profile is set", () => {
     const result = resolveGatewayLaunchAgentLabel();
     expect(result).toBe(GATEWAY_LAUNCH_AGENT_LABEL);
-    expect(result).toBe("ai.NexisClaw.gateway");
+    expect(result).toBe("ai.GreenchClaw.gateway");
   });
 
   it("returns profile-specific label when profile is set", () => {
     const result = resolveGatewayLaunchAgentLabel("dev");
-    expect(result).toBe("ai.NexisClaw.dev");
+    expect(result).toBe("ai.GreenchClaw.dev");
   });
 });
 
@@ -45,12 +45,12 @@ describe("resolveGatewaySystemdServiceName", () => {
   it("returns default service name when no profile is set", () => {
     const result = resolveGatewaySystemdServiceName();
     expect(result).toBe(GATEWAY_SYSTEMD_SERVICE_NAME);
-    expect(result).toBe("NexisClaw-gateway");
+    expect(result).toBe("GreenchClaw-gateway");
   });
 
   it("returns profile-specific service name when profile is set", () => {
     const result = resolveGatewaySystemdServiceName("dev");
-    expect(result).toBe("NexisClaw-gateway-dev");
+    expect(result).toBe("GreenchClaw-gateway-dev");
   });
 });
 
@@ -58,12 +58,12 @@ describe("resolveGatewayWindowsTaskName", () => {
   it("returns default task name when no profile is set", () => {
     const result = resolveGatewayWindowsTaskName();
     expect(result).toBe(GATEWAY_WINDOWS_TASK_NAME);
-    expect(result).toBe("NexisClaw Gateway");
+    expect(result).toBe("GreenchClaw Gateway");
   });
 
   it("returns profile-specific task name when profile is set", () => {
     const result = resolveGatewayWindowsTaskName("dev");
-    expect(result).toBe("NexisClaw Gateway (dev)");
+    expect(result).toBe("GreenchClaw Gateway (dev)");
   });
 });
 
@@ -88,24 +88,24 @@ describe("resolveGatewayProfileSuffix", () => {
 
 describe("formatGatewayServiceDescription", () => {
   it("returns default description when no profile/version", () => {
-    expect(formatGatewayServiceDescription()).toBe("NexisClaw Gateway");
+    expect(formatGatewayServiceDescription()).toBe("GreenchClaw Gateway");
   });
 
   it("includes profile when set", () => {
     expect(formatGatewayServiceDescription({ profile: "work" })).toBe(
-      "NexisClaw Gateway (profile: work)",
+      "GreenchClaw Gateway (profile: work)",
     );
   });
 
   it("includes version when set", () => {
     expect(formatGatewayServiceDescription({ version: "2026.1.10" })).toBe(
-      "NexisClaw Gateway (v2026.1.10)",
+      "GreenchClaw Gateway (v2026.1.10)",
     );
   });
 
   it("includes profile and version when set", () => {
     expect(formatGatewayServiceDescription({ profile: "dev", version: "1.2.3" })).toBe(
-      "NexisClaw Gateway (profile: dev, v1.2.3)",
+      "GreenchClaw Gateway (profile: dev, v1.2.3)",
     );
   });
 });
@@ -114,7 +114,7 @@ describe("resolveGatewayServiceDescription", () => {
   it("prefers explicit description override", () => {
     expect(
       resolveGatewayServiceDescription({
-        env: { NEXISCLAW_PROFILE: "work", NEXISCLAW_SERVICE_VERSION: "1.0.0" },
+        env: { GREENCHCLAW_PROFILE: "work", GREENCHCLAW_SERVICE_VERSION: "1.0.0" },
         description: "Custom",
       }),
     ).toBe("Custom");
@@ -123,10 +123,10 @@ describe("resolveGatewayServiceDescription", () => {
   it("resolves version from explicit environment map", () => {
     expect(
       resolveGatewayServiceDescription({
-        env: { NEXISCLAW_PROFILE: "work", NEXISCLAW_SERVICE_VERSION: "local" },
-        environment: { NEXISCLAW_SERVICE_VERSION: "remote" },
+        env: { GREENCHCLAW_PROFILE: "work", GREENCHCLAW_SERVICE_VERSION: "local" },
+        environment: { GREENCHCLAW_SERVICE_VERSION: "remote" },
       }),
-    ).toBe("NexisClaw Gateway (profile: work, vremote)");
+    ).toBe("GreenchClaw Gateway (profile: work, vremote)");
   });
 });
 

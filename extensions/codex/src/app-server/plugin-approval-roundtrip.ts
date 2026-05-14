@@ -1,7 +1,7 @@
 import {
   callGatewayTool,
   type EmbeddedRunAttemptParams,
-} from "NexisClaw/plugin-sdk/agent-harness-runtime";
+} from "GreenchClaw/plugin-sdk/agent-harness-runtime";
 
 const DEFAULT_CODEX_APPROVAL_TIMEOUT_MS = 120_000;
 const MAX_PLUGIN_APPROVAL_TITLE_LENGTH = 80;
@@ -39,7 +39,7 @@ export async function requestPluginApproval(params: {
     "plugin.approval.request",
     { timeoutMs: timeoutMs + 10_000 },
     {
-      pluginId: "NexisClaw-codex-app-server",
+      pluginId: "GreenchClaw-codex-app-server",
       title: truncateForGateway(params.title, MAX_PLUGIN_APPROVAL_TITLE_LENGTH),
       description: truncateForGateway(params.description, MAX_PLUGIN_APPROVAL_DESCRIPTION_LENGTH),
       severity: params.severity,

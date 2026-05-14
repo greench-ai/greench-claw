@@ -81,14 +81,14 @@ async function createDockerSetupSandbox(): Promise<DockerSetupSandbox> {
   await writeFile(dockerfilePath, "FROM scratch\n");
   await writeFile(
     composePath,
-    "services:\n  NexisClaw-gateway:\n    image: noop\n  NexisClaw-cli:\n    image: noop\n",
+    "services:\n  GreenchClaw-gateway:\n    image: noop\n  GreenchClaw-cli:\n    image: noop\n",
   );
   await writeDockerStub(binDir, logPath);
 
   return { rootDir, scriptPath, logPath, binDir };
 }
 
-const sandboxRootTracker = createSuiteTempRootTracker({ prefix: "NexisClaw-docker-setup-" });
+const sandboxRootTracker = createSuiteTempRootTracker({ prefix: "GreenchClaw-docker-setup-" });
 
 function createEnv(
   sandbox: DockerSetupSandbox,
@@ -101,10 +101,10 @@ function createEnv(
     LC_ALL: process.env.LC_ALL,
     TMPDIR: process.env.TMPDIR,
     DOCKER_STUB_LOG: sandbox.logPath,
-    NEXISCLAW_GATEWAY_TOKEN: "test-token",
-    NEXISCLAW_CONFIG_DIR: join(sandbox.rootDir, "config"),
-    NEXISCLAW_WORKSPACE_DIR: join(sandbox.rootDir, "NexisClaw"),
-    NEXISCLAW_AUTH_PROFILE_SECRET_DIR: join(sandbox.rootDir, "auth-profile-secrets"),
+    GREENCHCLAW_GATEWAY_TOKEN: "test-token",
+    GREENCHCLAW_CONFIG_DIR: join(sandbox.rootDir, "config"),
+    GREENCHCLAW_WORKSPACE_DIR: join(sandbox.rootDir, "GreenchClaw"),
+    GREENCHCLAW_AUTH_PROFILE_SECRET_DIR: join(sandbox.rootDir, "auth-profile-secrets"),
   };
 
   for (const [key, value] of Object.entries(overrides)) {
@@ -165,7 +165,9 @@ function collectMatchingLines(lines: string[], predicate: (line: string) => bool
 }
 
 function isGatewayStartLine(line: string) {
-  return line.includes("compose") && line.includes(" up -d") && line.includes("NexisClaw-gateway");
+  return (
+    line.includes("compose") && line.includes(" up -d") && line.includes("GreenchClaw-gateway")
+  );
 }
 
 function findGatewayStartLineIndex(lines: string[]) {
@@ -183,9 +185,9 @@ async function runDockerSetupWithUnsetGatewayToken(
   await prepare?.(configDir);
 
   const result = runDockerSetup(sandbox, {
-    NEXISCLAW_GATEWAY_TOKEN: undefined,
-    NEXISCLAW_CONFIG_DIR: configDir,
-    NEXISCLAW_WORKSPACE_DIR: workspaceDir,
+    GREENCHCLAW_GATEWAY_TOKEN: undefined,
+    GREENCHCLAW_CONFIG_DIR: configDir,
+    GREENCHCLAW_WORKSPACE_DIR: workspaceDir,
   });
   const envFile = await readFile(join(sandbox.rootDir, ".env"), "utf8");
 
@@ -249,53 +251,53 @@ describe("scripts/docker/setup.sh", () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_DOCKER_APT_PACKAGES: "ffmpeg build-essential",
-      NEXISCLAW_EXTRA_MOUNTS: undefined,
-      NEXISCLAW_HOME_VOLUME: "NexisClaw-home",
+      GREENCHCLAW_DOCKER_APT_PACKAGES: "ffmpeg build-essential",
+      GREENCHCLAW_EXTRA_MOUNTS: undefined,
+      GREENCHCLAW_HOME_VOLUME: "GreenchClaw-home",
     });
     expect(result.status).toBe(0);
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("NEXISCLAW_DOCKER_APT_PACKAGES=ffmpeg build-essential");
-    expect(envFile).toContain("NEXISCLAW_EXTRA_MOUNTS=");
-    expect(envFile).toContain("NEXISCLAW_HOME_VOLUME=NexisClaw-home"); // pragma: allowlist secret
-    expect(envFile).toContain("NEXISCLAW_DISABLE_BONJOUR=");
+    expect(envFile).toContain("GREENCHCLAW_DOCKER_APT_PACKAGES=ffmpeg build-essential");
+    expect(envFile).toContain("GREENCHCLAW_EXTRA_MOUNTS=");
+    expect(envFile).toContain("GREENCHCLAW_HOME_VOLUME=GreenchClaw-home"); // pragma: allowlist secret
+    expect(envFile).toContain("GREENCHCLAW_DISABLE_BONJOUR=");
     expect(envFile).toContain(
-      `NEXISCLAW_AUTH_PROFILE_SECRET_DIR=${join(activeSandbox.rootDir, "auth-profile-secrets")}`,
+      `GREENCHCLAW_AUTH_PROFILE_SECRET_DIR=${join(activeSandbox.rootDir, "auth-profile-secrets")}`,
     );
     const extraCompose = await readFile(
       join(activeSandbox.rootDir, "docker-compose.extra.yml"),
       "utf8",
     );
-    expect(extraCompose).toContain("NexisClaw-home:/home/node");
+    expect(extraCompose).toContain("GreenchClaw-home:/home/node");
     expect(extraCompose).toContain(
-      `${join(activeSandbox.rootDir, "auth-profile-secrets")}:/home/node/.config/NexisClaw`,
+      `${join(activeSandbox.rootDir, "auth-profile-secrets")}:/home/node/.config/GreenchClaw`,
     );
     expect(extraCompose).toContain("volumes:");
-    expect(extraCompose).toContain("NexisClaw-home:");
+    expect(extraCompose).toContain("GreenchClaw-home:");
     const log = await readDockerLog(activeSandbox);
-    expect(log).toContain("--build-arg NEXISCLAW_DOCKER_APT_PACKAGES=ffmpeg build-essential");
+    expect(log).toContain("--build-arg GREENCHCLAW_DOCKER_APT_PACKAGES=ffmpeg build-essential");
     expect(log).toContain(
-      "run --rm --no-deps --entrypoint node NexisClaw-gateway dist/index.js onboard --mode local --no-install-daemon",
+      "run --rm --no-deps --entrypoint node GreenchClaw-gateway dist/index.js onboard --mode local --no-install-daemon",
     );
     expect(log).toContain(
-      'run --rm --no-deps --entrypoint node NexisClaw-gateway dist/index.js config set --batch-json [{"path":"gateway.mode","value":"local"},{"path":"gateway.bind","value":"lan"},{"path":"gateway.controlUi.allowedOrigins","value":["http://localhost:18789","http://127.0.0.1:18789"]}]',
+      'run --rm --no-deps --entrypoint node GreenchClaw-gateway dist/index.js config set --batch-json [{"path":"gateway.mode","value":"local"},{"path":"gateway.bind","value":"lan"},{"path":"gateway.controlUi.allowedOrigins","value":["http://localhost:18789","http://127.0.0.1:18789"]}]',
     );
-    expect(log).not.toContain("run --rm NexisClaw-cli onboard --mode local --no-install-daemon");
+    expect(log).not.toContain("run --rm GreenchClaw-cli onboard --mode local --no-install-daemon");
   });
 
   it("persists explicit Docker Bonjour opt-in overrides", async () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_DISABLE_BONJOUR: "0",
+      GREENCHCLAW_DISABLE_BONJOUR: "0",
     });
 
     expect(result.status).toBe(0);
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("NEXISCLAW_DISABLE_BONJOUR=0");
+    expect(envFile).toContain("GREENCHCLAW_DISABLE_BONJOUR=0");
   });
 
-  it("avoids shared-network NexisClaw-cli before the gateway is started", async () => {
+  it("avoids shared-network GreenchClaw-cli before the gateway is started", async () => {
     const activeSandbox = requireSandbox(sandbox);
 
     await resetDockerLog(activeSandbox);
@@ -308,7 +310,7 @@ describe("scripts/docker/setup.sh", () => {
 
     const prestartLines = lines.slice(0, gatewayStartIdx);
     const prestartCliRunLines = collectMatchingLines(prestartLines, (line) =>
-      /\bcompose\b.*\brun\b.*\bNexisClaw-cli\b/.test(line),
+      /\bcompose\b.*\brun\b.*\bGreenchClaw-cli\b/.test(line),
     );
     expect(prestartCliRunLines).toStrictEqual([]);
   });
@@ -323,7 +325,7 @@ describe("scripts/docker/setup.sh", () => {
     await resetDockerLog(activeSandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_SANDBOX: "1",
+      GREENCHCLAW_SANDBOX: "1",
     });
 
     expect(result.status).toBe(0);
@@ -344,8 +346,8 @@ describe("scripts/docker/setup.sh", () => {
     const workspaceDir = join(activeSandbox.rootDir, "workspace-identity");
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_CONFIG_DIR: configDir,
-      NEXISCLAW_WORKSPACE_DIR: workspaceDir,
+      GREENCHCLAW_CONFIG_DIR: configDir,
+      GREENCHCLAW_WORKSPACE_DIR: workspaceDir,
     });
 
     expect(result.status).toBe(0);
@@ -353,16 +355,16 @@ describe("scripts/docker/setup.sh", () => {
     expect(identityDirStat.isDirectory()).toBe(true);
   });
 
-  it("writes NEXISCLAW_TZ into .env when given a real IANA timezone", async () => {
+  it("writes GREENCHCLAW_TZ into .env when given a real IANA timezone", async () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_TZ: "Asia/Shanghai",
+      GREENCHCLAW_TZ: "Asia/Shanghai",
     });
 
     expect(result.status).toBe(0);
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("NEXISCLAW_TZ=Asia/Shanghai");
+    expect(envFile).toContain("GREENCHCLAW_TZ=Asia/Shanghai");
   });
 
   it("precreates agent data dirs to avoid EACCES in container", async () => {
@@ -371,8 +373,8 @@ describe("scripts/docker/setup.sh", () => {
     const workspaceDir = join(activeSandbox.rootDir, "workspace-agent-dirs");
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_CONFIG_DIR: configDir,
-      NEXISCLAW_WORKSPACE_DIR: workspaceDir,
+      GREENCHCLAW_CONFIG_DIR: configDir,
+      GREENCHCLAW_WORKSPACE_DIR: workspaceDir,
     });
 
     expect(result.status).toBe(0);
@@ -387,7 +389,7 @@ describe("scripts/docker/setup.sh", () => {
     const onboardIdx = log.indexOf("onboard");
     expect(chownIdx).toBeGreaterThanOrEqual(0);
     expect(onboardIdx).toBeGreaterThan(chownIdx);
-    expect(log).toContain("run --rm --no-deps --user root --entrypoint sh NexisClaw-gateway -c");
+    expect(log).toContain("run --rm --no-deps --user root --entrypoint sh GreenchClaw-gateway -c");
   });
 
   it("precreates auth profile secret key dir outside the mounted state dir", async () => {
@@ -397,9 +399,9 @@ describe("scripts/docker/setup.sh", () => {
     const secretDir = join(activeSandbox.rootDir, "auth-profile-secret-key");
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_CONFIG_DIR: configDir,
-      NEXISCLAW_WORKSPACE_DIR: workspaceDir,
-      NEXISCLAW_AUTH_PROFILE_SECRET_DIR: secretDir,
+      GREENCHCLAW_CONFIG_DIR: configDir,
+      GREENCHCLAW_WORKSPACE_DIR: workspaceDir,
+      GREENCHCLAW_AUTH_PROFILE_SECRET_DIR: secretDir,
     });
 
     expect(result.status).toBe(0);
@@ -408,31 +410,31 @@ describe("scripts/docker/setup.sh", () => {
     expect(secretDir.startsWith(`${configDir}/`)).toBe(false);
 
     const log = await readDockerLog(activeSandbox);
-    expect(log).toContain("find /home/node/.config/NexisClaw -xdev");
+    expect(log).toContain("find /home/node/.config/GreenchClaw -xdev");
   });
 
-  it("reuses existing config token when NEXISCLAW_GATEWAY_TOKEN is unset", async () => {
+  it("reuses existing config token when GREENCHCLAW_GATEWAY_TOKEN is unset", async () => {
     const activeSandbox = requireSandbox(sandbox);
     const { result, envFile } = await runDockerSetupWithUnsetGatewayToken(
       activeSandbox,
       "token-reuse",
       async (configDir) => {
         await writeFile(
-          join(configDir, "NexisClaw.json"),
+          join(configDir, "GreenchClaw.json"),
           JSON.stringify({ gateway: { auth: { mode: "token", token: "config-token-123" } } }),
         );
       },
     );
 
     expect(result.status).toBe(0);
-    expect(envFile).toContain("NEXISCLAW_GATEWAY_TOKEN=config-token-123"); // pragma: allowlist secret
+    expect(envFile).toContain("GREENCHCLAW_GATEWAY_TOKEN=config-token-123"); // pragma: allowlist secret
   });
 
-  it("reuses existing .env token when NEXISCLAW_GATEWAY_TOKEN and config token are unset", async () => {
+  it("reuses existing .env token when GREENCHCLAW_GATEWAY_TOKEN and config token are unset", async () => {
     const activeSandbox = requireSandbox(sandbox);
     await writeFile(
       join(activeSandbox.rootDir, ".env"),
-      "NEXISCLAW_GATEWAY_TOKEN=dotenv-token-123\nNEXISCLAW_GATEWAY_PORT=18789\n", // pragma: allowlist secret
+      "GREENCHCLAW_GATEWAY_TOKEN=dotenv-token-123\nGREENCHCLAW_GATEWAY_PORT=18789\n", // pragma: allowlist secret
     );
     const { result, envFile } = await runDockerSetupWithUnsetGatewayToken(
       activeSandbox,
@@ -440,7 +442,7 @@ describe("scripts/docker/setup.sh", () => {
     );
 
     expect(result.status).toBe(0);
-    expect(envFile).toContain("NEXISCLAW_GATEWAY_TOKEN=dotenv-token-123"); // pragma: allowlist secret
+    expect(envFile).toContain("GREENCHCLAW_GATEWAY_TOKEN=dotenv-token-123"); // pragma: allowlist secret
     expect(result.stderr).toBe("");
   });
 
@@ -449,9 +451,9 @@ describe("scripts/docker/setup.sh", () => {
     await writeFile(
       join(activeSandbox.rootDir, ".env"),
       [
-        "NEXISCLAW_GATEWAY_TOKEN=",
-        "NEXISCLAW_GATEWAY_TOKEN=first-token",
-        "NEXISCLAW_GATEWAY_TOKEN=last=token=value\r", // pragma: allowlist secret
+        "GREENCHCLAW_GATEWAY_TOKEN=",
+        "GREENCHCLAW_GATEWAY_TOKEN=first-token",
+        "GREENCHCLAW_GATEWAY_TOKEN=last=token=value\r", // pragma: allowlist secret
       ].join("\n"),
     );
     const { result, envFile } = await runDockerSetupWithUnsetGatewayToken(
@@ -460,26 +462,26 @@ describe("scripts/docker/setup.sh", () => {
     );
 
     expect(result.status).toBe(0);
-    expect(envFile).toContain("NEXISCLAW_GATEWAY_TOKEN=last=token=value"); // pragma: allowlist secret
-    expect(envFile).not.toContain("NEXISCLAW_GATEWAY_TOKEN=first-token");
+    expect(envFile).toContain("GREENCHCLAW_GATEWAY_TOKEN=last=token=value"); // pragma: allowlist secret
+    expect(envFile).not.toContain("GREENCHCLAW_GATEWAY_TOKEN=first-token");
     expect(envFile).not.toContain("\r");
   });
 
-  it("treats NEXISCLAW_SANDBOX=0 as disabled", async () => {
+  it("treats GREENCHCLAW_SANDBOX=0 as disabled", async () => {
     const activeSandbox = requireSandbox(sandbox);
     await resetDockerLog(activeSandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_SANDBOX: "0",
+      GREENCHCLAW_SANDBOX: "0",
     });
 
     expect(result.status).toBe(0);
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("NEXISCLAW_SANDBOX=");
+    expect(envFile).toContain("GREENCHCLAW_SANDBOX=");
 
     const log = await readDockerLog(activeSandbox);
-    expect(log).toContain("--build-arg NEXISCLAW_INSTALL_DOCKER_CLI=");
-    expect(log).not.toContain("--build-arg NEXISCLAW_INSTALL_DOCKER_CLI=1");
+    expect(log).toContain("--build-arg GREENCHCLAW_INSTALL_DOCKER_CLI=");
+    expect(log).not.toContain("--build-arg GREENCHCLAW_INSTALL_DOCKER_CLI=1");
     expect(log).toContain("config set agents.defaults.sandbox.mode off");
   });
 
@@ -488,12 +490,12 @@ describe("scripts/docker/setup.sh", () => {
     await resetDockerLog(activeSandbox);
     await writeFile(
       join(activeSandbox.rootDir, "docker-compose.sandbox.yml"),
-      "services:\n  NexisClaw-gateway:\n    volumes:\n      - /var/run/docker.sock:/var/run/docker.sock\n",
+      "services:\n  GreenchClaw-gateway:\n    volumes:\n      - /var/run/docker.sock:/var/run/docker.sock\n",
     );
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_SANDBOX: "1",
-      DOCKER_STUB_FAIL_MATCH: "--entrypoint docker NexisClaw-gateway --version",
+      GREENCHCLAW_SANDBOX: "1",
+      DOCKER_STUB_FAIL_MATCH: "--entrypoint docker GreenchClaw-gateway --version",
     });
 
     expect(result.status).toBe(0);
@@ -510,8 +512,8 @@ describe("scripts/docker/setup.sh", () => {
 
     await withUnixSocket(socketPath, async () => {
       const result = runDockerSetup(activeSandbox, {
-        NEXISCLAW_SANDBOX: "1",
-        NEXISCLAW_DOCKER_SOCKET: socketPath,
+        GREENCHCLAW_SANDBOX: "1",
+        GREENCHCLAW_DOCKER_SOCKET: socketPath,
         DOCKER_STUB_FAIL_MATCH: "config set agents.defaults.sandbox.scope",
       });
 
@@ -525,70 +527,70 @@ describe("scripts/docker/setup.sh", () => {
       );
       expect(gatewayStarts).toHaveLength(2);
       expect(log).toContain(
-        "run --rm --no-deps NexisClaw-cli config set agents.defaults.sandbox.mode non-main",
+        "run --rm --no-deps GreenchClaw-cli config set agents.defaults.sandbox.mode non-main",
       );
       expect(log).toContain("config set agents.defaults.sandbox.mode off");
       const forceRecreateLine = log
         .split("\n")
-        .find((line) => line.includes("up -d --force-recreate NexisClaw-gateway"));
+        .find((line) => line.includes("up -d --force-recreate GreenchClaw-gateway"));
       expect(forceRecreateLine).toBe(
-        `compose compose -f ${join(activeSandbox.rootDir, "docker-compose.yml")} up -d --force-recreate NexisClaw-gateway`,
+        `compose compose -f ${join(activeSandbox.rootDir, "docker-compose.yml")} up -d --force-recreate GreenchClaw-gateway`,
       );
       expect(forceRecreateLine).not.toContain("docker-compose.sandbox.yml");
       await expectMissingPath(join(activeSandbox.rootDir, "docker-compose.sandbox.yml"));
     });
   });
 
-  it("rejects injected multiline NEXISCLAW_EXTRA_MOUNTS values", () => {
+  it("rejects injected multiline GREENCHCLAW_EXTRA_MOUNTS values", () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_EXTRA_MOUNTS: "/tmp:/tmp\n  evil-service:\n    image: alpine",
+      GREENCHCLAW_EXTRA_MOUNTS: "/tmp:/tmp\n  evil-service:\n    image: alpine",
     });
 
     expect(result.status).not.toBe(0);
-    expect(result.stderr).toContain("NEXISCLAW_EXTRA_MOUNTS cannot contain control characters");
+    expect(result.stderr).toContain("GREENCHCLAW_EXTRA_MOUNTS cannot contain control characters");
   });
 
-  it("rejects invalid NEXISCLAW_EXTRA_MOUNTS mount format", () => {
+  it("rejects invalid GREENCHCLAW_EXTRA_MOUNTS mount format", () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_EXTRA_MOUNTS: "bad mount spec",
+      GREENCHCLAW_EXTRA_MOUNTS: "bad mount spec",
     });
 
     expect(result.status).not.toBe(0);
     expect(result.stderr).toContain("Invalid mount format");
   });
 
-  it("rejects invalid NEXISCLAW_HOME_VOLUME names", () => {
+  it("rejects invalid GREENCHCLAW_HOME_VOLUME names", () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_HOME_VOLUME: "bad name",
+      GREENCHCLAW_HOME_VOLUME: "bad name",
     });
 
     expect(result.status).not.toBe(0);
-    expect(result.stderr).toContain("NEXISCLAW_HOME_VOLUME must match");
+    expect(result.stderr).toContain("GREENCHCLAW_HOME_VOLUME must match");
   });
 
-  it("rejects NEXISCLAW_TZ values that are not present in zoneinfo", () => {
+  it("rejects GREENCHCLAW_TZ values that are not present in zoneinfo", () => {
     const activeSandbox = requireSandbox(sandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_TZ: "Nope/Bad",
+      GREENCHCLAW_TZ: "Nope/Bad",
     });
 
     expect(result.status).not.toBe(0);
-    expect(result.stderr).toContain("NEXISCLAW_TZ must match a timezone in /usr/share/zoneinfo");
+    expect(result.stderr).toContain("GREENCHCLAW_TZ must match a timezone in /usr/share/zoneinfo");
   });
 
-  it("skips onboarding when NEXISCLAW_SKIP_ONBOARDING is set", async () => {
+  it("skips onboarding when GREENCHCLAW_SKIP_ONBOARDING is set", async () => {
     const activeSandbox = requireSandbox(sandbox);
     await resetDockerLog(activeSandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_SKIP_ONBOARDING: "1",
+      GREENCHCLAW_SKIP_ONBOARDING: "1",
     });
 
     expect(result.status).toBe(0);
@@ -599,22 +601,22 @@ describe("scripts/docker/setup.sh", () => {
     expect(log).toContain('"path":"gateway.mode","value":"local"');
     expect(log).toContain('"path":"gateway.bind","value":"lan"');
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toContain("NEXISCLAW_SKIP_ONBOARDING=1");
+    expect(envFile).toContain("GREENCHCLAW_SKIP_ONBOARDING=1");
   });
 
-  it("treats NEXISCLAW_SKIP_ONBOARDING=0 as disabled and runs onboarding", async () => {
+  it("treats GREENCHCLAW_SKIP_ONBOARDING=0 as disabled and runs onboarding", async () => {
     const activeSandbox = requireSandbox(sandbox);
     await resetDockerLog(activeSandbox);
 
     const result = runDockerSetup(activeSandbox, {
-      NEXISCLAW_SKIP_ONBOARDING: "0",
+      GREENCHCLAW_SKIP_ONBOARDING: "0",
     });
 
     expect(result.status).toBe(0);
     const log = await readDockerLog(activeSandbox);
     expect(log).toContain("onboard --mode local --no-install-daemon");
     const envFile = await readFile(join(activeSandbox.rootDir, ".env"), "utf8");
-    expect(envFile).toMatch(/NEXISCLAW_SKIP_ONBOARDING=\n/);
+    expect(envFile).toMatch(/GREENCHCLAW_SKIP_ONBOARDING=\n/);
   });
 
   it("avoids associative arrays so the script remains Bash 3.2-compatible", async () => {
@@ -656,28 +658,28 @@ describe("scripts/docker/setup.sh", () => {
   it("keeps docker-compose gateway Bonjour advertising in auto mode by default", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
     expect(
-      compose.match(/NEXISCLAW_DISABLE_BONJOUR: \$\{NEXISCLAW_DISABLE_BONJOUR:-\}/g),
+      compose.match(/GREENCHCLAW_DISABLE_BONJOUR: \$\{GREENCHCLAW_DISABLE_BONJOUR:-\}/g),
     ).toHaveLength(1);
   });
 
   it("keeps docker-compose CLI network namespace settings in sync", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
-    expect(compose).toContain('network_mode: "service:NexisClaw-gateway"');
-    expect(compose).toContain("depends_on:\n      - NexisClaw-gateway");
+    expect(compose).toContain('network_mode: "service:GreenchClaw-gateway"');
+    expect(compose).toContain("depends_on:\n      - GreenchClaw-gateway");
   });
 
   it("keeps docker-compose gateway token env defaults aligned across services", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
-    expect(compose.match(/NEXISCLAW_GATEWAY_TOKEN: \$\{NEXISCLAW_GATEWAY_TOKEN:-\}/g)).toHaveLength(
-      2,
-    );
+    expect(
+      compose.match(/GREENCHCLAW_GATEWAY_TOKEN: \$\{GREENCHCLAW_GATEWAY_TOKEN:-\}/g),
+    ).toHaveLength(2);
   });
 
   it("keeps docker-compose auth profile secret key source durable outside state", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
     expect(
       compose.split(
-        "${NEXISCLAW_AUTH_PROFILE_SECRET_DIR:-${HOME:-/tmp}/.NexisClaw-auth-profile-secrets}:/home/node/.config/NexisClaw",
+        "${GREENCHCLAW_AUTH_PROFILE_SECRET_DIR:-${HOME:-/tmp}/.GreenchClaw-auth-profile-secrets}:/home/node/.config/GreenchClaw",
       ),
     ).toHaveLength(3);
   });
@@ -689,18 +691,18 @@ describe("scripts/docker/setup.sh", () => {
 
   it("keeps docker-compose timezone env defaults aligned across services", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
-    expect(compose.match(/TZ: \$\{NEXISCLAW_TZ:-UTC\}/g)).toHaveLength(2);
+    expect(compose.match(/TZ: \$\{GREENCHCLAW_TZ:-UTC\}/g)).toHaveLength(2);
   });
 
   it("pins container-side workspace and config dirs on both services so host .env paths cannot leak (#77436)", async () => {
     const compose = await readFile(join(repoRoot, "docker-compose.yml"), "utf8");
     // Both gateway and CLI services must override the env_file values with the
-    // canonical container paths so a host-style NEXISCLAW_WORKSPACE_DIR like
-    // `/Users/<you>/.NexisClaw/workspace` written to `.env` by docker-setup.sh
+    // canonical container paths so a host-style GREENCHCLAW_WORKSPACE_DIR like
+    // `/Users/<you>/.GreenchClaw/workspace` written to `.env` by docker-setup.sh
     // cannot reach runtime code inside Linux Docker.
-    expect(compose.match(/NEXISCLAW_CONFIG_DIR: \/home\/node\/\.NexisClaw$/gm)).toHaveLength(2);
+    expect(compose.match(/GREENCHCLAW_CONFIG_DIR: \/home\/node\/\.GreenchClaw$/gm)).toHaveLength(2);
     expect(
-      compose.match(/NEXISCLAW_WORKSPACE_DIR: \/home\/node\/\.NexisClaw\/workspace$/gm),
+      compose.match(/GREENCHCLAW_WORKSPACE_DIR: \/home\/node\/\.GreenchClaw\/workspace$/gm),
     ).toHaveLength(2);
   });
 });

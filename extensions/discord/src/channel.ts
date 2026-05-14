@@ -2,26 +2,26 @@ import {
   buildLegacyDmAccountAllowlistAdapter,
   createAccountScopedAllowlistNameResolver,
   createNestedAllowlistOverrideResolver,
-} from "NexisClaw/plugin-sdk/allowlist-config-edit";
+} from "GreenchClaw/plugin-sdk/allowlist-config-edit";
 import type {
   ChannelMessageActionAdapter,
   ChannelMessageToolDiscovery,
-} from "NexisClaw/plugin-sdk/channel-contract";
-import { createChatChannelPlugin } from "NexisClaw/plugin-sdk/channel-core";
-import { createChannelMessageAdapterFromOutbound } from "NexisClaw/plugin-sdk/channel-message";
-import { createPairingPrefixStripper } from "NexisClaw/plugin-sdk/channel-pairing";
+} from "GreenchClaw/plugin-sdk/channel-contract";
+import { createChatChannelPlugin } from "GreenchClaw/plugin-sdk/channel-core";
+import { createChannelMessageAdapterFromOutbound } from "GreenchClaw/plugin-sdk/channel-message";
+import { createPairingPrefixStripper } from "GreenchClaw/plugin-sdk/channel-pairing";
 import {
   createChannelDirectoryAdapter,
   createRuntimeDirectoryLiveAdapter,
-} from "NexisClaw/plugin-sdk/directory-runtime";
-import { formatErrorMessage } from "NexisClaw/plugin-sdk/error-runtime";
-import { sleepWithAbort } from "NexisClaw/plugin-sdk/runtime-env";
+} from "GreenchClaw/plugin-sdk/directory-runtime";
+import { formatErrorMessage } from "GreenchClaw/plugin-sdk/error-runtime";
+import { sleepWithAbort } from "GreenchClaw/plugin-sdk/runtime-env";
 import {
   createComputedAccountStatusAdapter,
   createDefaultChannelRuntimeState,
-} from "NexisClaw/plugin-sdk/status-helpers";
-import { normalizeOptionalString } from "NexisClaw/plugin-sdk/string-coerce-runtime";
-import { resolveTargetsWithOptionalToken } from "NexisClaw/plugin-sdk/target-resolver-runtime";
+} from "GreenchClaw/plugin-sdk/status-helpers";
+import { normalizeOptionalString } from "GreenchClaw/plugin-sdk/string-coerce-runtime";
+import { resolveTargetsWithOptionalToken } from "GreenchClaw/plugin-sdk/target-resolver-runtime";
 import {
   listDiscordAccountIds,
   resolveDiscordAccount,
@@ -38,7 +38,7 @@ import {
   projectCredentialSnapshotFields,
   resolveConfiguredFromCredentialStatuses,
   type ChannelPlugin,
-  type NexisClawConfig,
+  type GreenchClawConfig,
 } from "./channel-api.js";
 import {
   buildDiscordCrossContextPresentation,
@@ -220,7 +220,7 @@ const discordMessageActions = {
   },
 };
 
-function resolveDiscordStartupDelayMs(cfg: NexisClawConfig, accountId: string): number {
+function resolveDiscordStartupDelayMs(cfg: GreenchClawConfig, accountId: string): number {
   const startupAccountIds = listDiscordAccountIds(cfg).filter((candidateId) => {
     const candidate = resolveDiscordAccount({ cfg, accountId: candidateId });
     return (
@@ -309,7 +309,7 @@ export const discordPlugin: ChannelPlugin<ResolvedDiscordAccount, DiscordProbe> 
         messageToolHints: () => [
           "- Discord mentions: use canonical outbound syntax: users `<@USER_ID>`, channels `<#CHANNEL_ID>`, and roles `<@&ROLE_ID>`. Plain `@name` text only pings when a configured `mentionAliases` entry rewrites it; do not use the legacy `<@!USER_ID>` nickname form.",
           "- Discord components: set `components` when sending messages to include buttons, selects, or v2 containers.",
-          "- Forms: add `components.modal` (title, fields). NexisClaw adds a trigger button and routes submissions as new messages.",
+          "- Forms: add `components.modal` (title, fields). GreenchClaw adds a trigger button and routes submissions as new messages.",
         ],
       },
       messaging: {
@@ -542,7 +542,7 @@ export const discordPlugin: ChannelPlugin<ResolvedDiscordAccount, DiscordProbe> 
               ],
             };
           }
-          const statusCfg: NexisClawConfig = {
+          const statusCfg: GreenchClawConfig = {
             channels: {
               discord: {
                 accounts: {

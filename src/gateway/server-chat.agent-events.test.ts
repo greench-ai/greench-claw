@@ -381,11 +381,11 @@ describe("agent event handler", () => {
       [
         "Visible before.",
         "",
-        "<<<BEGIN_NEXISCLAW_INTERNAL_CONTEXT>>>",
-        "NexisClaw runtime context (internal):",
+        "<<<BEGIN_GREENCHCLAW_INTERNAL_CONTEXT>>>",
+        "GreenchClaw runtime context (internal):",
         "[Internal task completion event]",
         "secret child result",
-        "<<<END_NEXISCLAW_INTERNAL_CONTEXT>>>",
+        "<<<END_GREENCHCLAW_INTERNAL_CONTEXT>>>",
         "",
         "Visible after.",
       ].join("\n"),
@@ -397,7 +397,7 @@ describe("agent event handler", () => {
       message?: { content?: Array<{ text?: string }> };
     };
     expect(payload.message?.content?.[0]?.text).toBe("Visible before.\n\nVisible after.");
-    expect(payload.message?.content?.[0]?.text).not.toContain("BEGIN_NEXISCLAW_INTERNAL_CONTEXT");
+    expect(payload.message?.content?.[0]?.text).not.toContain("BEGIN_GREENCHCLAW_INTERNAL_CONTEXT");
     expect(payload.message?.content?.[0]?.text).not.toContain("secret child result");
     expect(sessionChatCalls(nodeSendToSession)).toHaveLength(1);
     nowSpy?.mockRestore();
@@ -1134,7 +1134,7 @@ describe("agent event handler", () => {
         name: "tool_search_code",
         toolCallId: "tool-search-node-1",
         args: {
-          code: 'return await NexisClaw.tools.call("NexisClaw:core:exec", { command: "echo hi" });',
+          code: 'return await GreenchClaw.tools.call("GreenchClaw:core:exec", { command: "echo hi" });',
         },
       },
     });
@@ -1148,7 +1148,7 @@ describe("agent event handler", () => {
       phase: "start",
       name: "exec",
       bridgeToolName: "tool_search_code",
-      bridgeTargetToolName: "NexisClaw:core:exec",
+      bridgeTargetToolName: "GreenchClaw:core:exec",
       bridgeVerb: "call",
       args: { command: "echo hi" },
     });

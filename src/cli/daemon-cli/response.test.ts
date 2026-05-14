@@ -5,18 +5,18 @@ describe("buildDaemonHintItems", () => {
   it("classifies common daemon hint kinds", () => {
     expect(
       buildDaemonHintItems([
-        "NexisClaw gateway install",
-        "Restart the container or the service that manages it for NexisClaw-demo-container.",
+        "GreenchClaw gateway install",
+        "Restart the container or the service that manages it for GreenchClaw-demo-container.",
         "systemd user services are unavailable; install/enable systemd or run the gateway under your supervisor.",
         "On a headless server (SSH/no desktop session): run `sudo loginctl enable-linger $(whoami)` to persist your systemd user session across logins.",
-        "If you're in a container, run the gateway in the foreground instead of `NexisClaw gateway`.",
+        "If you're in a container, run the gateway in the foreground instead of `GreenchClaw gateway`.",
         "WSL2 needs systemd enabled: edit /etc/wsl.conf with [boot]\\nsystemd=true",
       ]),
     ).toEqual([
-      { kind: "install", text: "NexisClaw gateway install" },
+      { kind: "install", text: "GreenchClaw gateway install" },
       {
         kind: "container-restart",
-        text: "Restart the container or the service that manages it for NexisClaw-demo-container.",
+        text: "Restart the container or the service that manages it for GreenchClaw-demo-container.",
       },
       {
         kind: "systemd-unavailable",
@@ -28,7 +28,7 @@ describe("buildDaemonHintItems", () => {
       },
       {
         kind: "container-foreground",
-        text: "If you're in a container, run the gateway in the foreground instead of `NexisClaw gateway`.",
+        text: "If you're in a container, run the gateway in the foreground instead of `GreenchClaw gateway`.",
       },
       {
         kind: "wsl-systemd",

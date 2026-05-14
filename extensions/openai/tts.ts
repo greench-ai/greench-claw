@@ -1,15 +1,15 @@
 import {
   assertOkOrThrowProviderError,
   resolveProviderRequestHeaders,
-} from "NexisClaw/plugin-sdk/provider-http";
+} from "GreenchClaw/plugin-sdk/provider-http";
 import {
   captureHttpExchange,
   isDebugProxyGlobalFetchPatchInstalled,
-} from "NexisClaw/plugin-sdk/proxy-capture";
+} from "GreenchClaw/plugin-sdk/proxy-capture";
 import {
   fetchWithSsrFGuard,
   ssrfPolicyFromHttpBaseUrlAllowedHostname,
-} from "NexisClaw/plugin-sdk/ssrf-runtime";
+} from "GreenchClaw/plugin-sdk/ssrf-runtime";
 
 export const DEFAULT_OPENAI_BASE_URL = "https://api.openai.com/v1";
 

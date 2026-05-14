@@ -1,6 +1,6 @@
 import type { Block, KnownBlock } from "@slack/web-api";
-import { createDraftStreamLoop } from "NexisClaw/plugin-sdk/channel-lifecycle";
-import type { NexisClawConfig } from "NexisClaw/plugin-sdk/config-contracts";
+import { createDraftStreamLoop } from "GreenchClaw/plugin-sdk/channel-lifecycle";
+import type { GreenchClawConfig } from "GreenchClaw/plugin-sdk/config-contracts";
 import { deleteSlackMessage, editSlackMessage } from "./actions.js";
 import { formatSlackError } from "./errors.js";
 import { SLACK_TEXT_LIMIT } from "./limits.js";
@@ -30,7 +30,7 @@ export type SlackDraftStreamUpdate =
 
 export function createSlackDraftStream(params: {
   target: string;
-  cfg: NexisClawConfig;
+  cfg: GreenchClawConfig;
   token: string;
   accountId?: string;
   identity?: SlackSendIdentity;

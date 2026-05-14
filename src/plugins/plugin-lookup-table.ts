@@ -1,4 +1,4 @@
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import {
   resolveGatewayStartupPluginPlanFromRegistry,
   type GatewayStartupPluginPlan,
@@ -39,8 +39,8 @@ export type PluginLookUpTable = PluginMetadataSnapshot & {
 };
 
 export type LoadPluginLookUpTableParams = {
-  config: NexisClawConfig;
-  activationSourceConfig?: NexisClawConfig;
+  config: GreenchClawConfig;
+  activationSourceConfig?: GreenchClawConfig;
   workspaceDir?: string;
   env: NodeJS.ProcessEnv;
   index?: PluginRegistrySnapshot;

@@ -26,7 +26,7 @@ if (tsBuildInfoFile) {
 const sparseGuardError = getSparseTsgoGuardError(finalArgs, { cwd: process.cwd() });
 const releaseLock =
   sparseGuardError ||
-  env.NEXISCLAW_TSGO_HEAVY_CHECK_LOCK_HELD === "1" ||
+  env.GREENCHCLAW_TSGO_HEAVY_CHECK_LOCK_HELD === "1" ||
   !shouldAcquireLocalHeavyCheckLockForTsgo(finalArgs, env)
     ? () => {}
     : acquireLocalHeavyCheckLockSync({
@@ -39,7 +39,9 @@ try {
   if (sparseGuardError) {
     console.error(sparseGuardError);
     if (shouldSkipSparseTsgoGuardError(env)) {
-      console.error("[tsgo] skipping sparse-missing project because NEXISCLAW_TSGO_SPARSE_SKIP=1");
+      console.error(
+        "[tsgo] skipping sparse-missing project because GREENCHCLAW_TSGO_SPARSE_SKIP=1",
+      );
       process.exitCode = 0;
     } else {
       process.exitCode = 1;

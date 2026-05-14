@@ -1,16 +1,16 @@
 import { normalizeChatChannelId } from "../channels/ids.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { setPluginEnabledInConfig } from "./toggle-config.js";
 
 export type PluginEnableResult = {
-  config: NexisClawConfig;
+  config: GreenchClawConfig;
   enabled: boolean;
   pluginId: string;
   reason?: string;
 };
 
 export function enablePluginInConfig(
-  cfg: NexisClawConfig,
+  cfg: GreenchClawConfig,
   pluginId: string,
   options: { updateChannelConfig?: boolean } = {},
 ): PluginEnableResult {

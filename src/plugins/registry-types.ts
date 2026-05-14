@@ -37,21 +37,21 @@ import type {
   ImageGenerationProviderPlugin,
   MediaUnderstandingProviderPlugin,
   MusicGenerationProviderPlugin,
-  NexisClawPluginChannelRegistration,
-  NexisClawPluginCliCommandDescriptor,
-  NexisClawPluginCliRegistrar,
-  NexisClawPluginCommandDefinition,
-  NexisClawPluginGatewayRuntimeScopeSurface,
-  NexisClawGatewayDiscoveryService,
-  NexisClawPluginHttpRouteAuth,
-  NexisClawPluginHttpRouteHandler,
-  NexisClawPluginHttpRouteUpgradeHandler,
-  NexisClawPluginHttpRouteMatch,
-  NexisClawPluginHostedMediaResolver,
-  NexisClawPluginReloadRegistration,
-  NexisClawPluginSecurityAuditCollector,
-  NexisClawPluginService,
-  NexisClawPluginToolFactory,
+  GreenchClawPluginChannelRegistration,
+  GreenchClawPluginCliCommandDescriptor,
+  GreenchClawPluginCliRegistrar,
+  GreenchClawPluginCommandDefinition,
+  GreenchClawPluginGatewayRuntimeScopeSurface,
+  GreenchClawGatewayDiscoveryService,
+  GreenchClawPluginHttpRouteAuth,
+  GreenchClawPluginHttpRouteHandler,
+  GreenchClawPluginHttpRouteUpgradeHandler,
+  GreenchClawPluginHttpRouteMatch,
+  GreenchClawPluginHostedMediaResolver,
+  GreenchClawPluginReloadRegistration,
+  GreenchClawPluginSecurityAuditCollector,
+  GreenchClawPluginService,
+  GreenchClawPluginToolFactory,
   PluginConversationBindingResolvedEvent,
   PluginHookRegistration as TypedPluginHookRegistration,
   PluginLogger,
@@ -71,7 +71,7 @@ import type {
 export type PluginToolRegistration = {
   pluginId: string;
   pluginName?: string;
-  factory: NexisClawPluginToolFactory;
+  factory: GreenchClawPluginToolFactory;
   names: string[];
   declaredNames?: string[];
   optional: boolean;
@@ -82,10 +82,10 @@ export type PluginToolRegistration = {
 export type PluginCliRegistration = {
   pluginId: string;
   pluginName?: string;
-  register: NexisClawPluginCliRegistrar;
+  register: GreenchClawPluginCliRegistrar;
   parentPath: string[];
   commands: string[];
-  descriptors: NexisClawPluginCliCommandDescriptor[];
+  descriptors: GreenchClawPluginCliCommandDescriptor[];
   source: string;
   rootDir?: string;
 };
@@ -93,11 +93,11 @@ export type PluginCliRegistration = {
 export type PluginHttpRouteRegistration = {
   pluginId?: string;
   path: string;
-  handler: NexisClawPluginHttpRouteHandler;
-  handleUpgrade?: NexisClawPluginHttpRouteUpgradeHandler;
-  auth: NexisClawPluginHttpRouteAuth;
-  match: NexisClawPluginHttpRouteMatch;
-  gatewayRuntimeScopeSurface?: NexisClawPluginGatewayRuntimeScopeSurface;
+  handler: GreenchClawPluginHttpRouteHandler;
+  handleUpgrade?: GreenchClawPluginHttpRouteUpgradeHandler;
+  auth: GreenchClawPluginHttpRouteAuth;
+  match: GreenchClawPluginHttpRouteMatch;
+  gatewayRuntimeScopeSurface?: GreenchClawPluginGatewayRuntimeScopeSurface;
   nodeCapability?: {
     surface: string;
     ttlMs?: number;
@@ -108,7 +108,7 @@ export type PluginHttpRouteRegistration = {
 export type PluginHostedMediaResolverRegistration = {
   pluginId: string;
   pluginName?: string;
-  resolver: NexisClawPluginHostedMediaResolver;
+  resolver: GreenchClawPluginHostedMediaResolver;
   source: string;
   rootDir?: string;
 };
@@ -228,7 +228,7 @@ export type PluginHookRegistration = {
 export type PluginServiceRegistration = {
   pluginId: string;
   pluginName?: string;
-  service: NexisClawPluginService;
+  service: GreenchClawPluginService;
   source: string;
   origin: PluginOrigin;
   trustedOfficialInstall?: boolean;
@@ -238,7 +238,7 @@ export type PluginServiceRegistration = {
 export type PluginGatewayDiscoveryServiceRegistration = {
   pluginId: string;
   pluginName?: string;
-  service: NexisClawGatewayDiscoveryService;
+  service: GreenchClawGatewayDiscoveryService;
   source: string;
   rootDir?: string;
 };
@@ -246,7 +246,7 @@ export type PluginGatewayDiscoveryServiceRegistration = {
 export type PluginReloadRegistration = {
   pluginId: string;
   pluginName?: string;
-  registration: NexisClawPluginReloadRegistration;
+  registration: GreenchClawPluginReloadRegistration;
   source: string;
   rootDir?: string;
 };
@@ -254,7 +254,7 @@ export type PluginReloadRegistration = {
 export type PluginNodeHostCommandRegistration = {
   pluginId: string;
   pluginName?: string;
-  command: import("./types.js").NexisClawPluginNodeHostCommand;
+  command: import("./types.js").GreenchClawPluginNodeHostCommand;
   source: string;
   rootDir?: string;
 };
@@ -262,7 +262,7 @@ export type PluginNodeHostCommandRegistration = {
 export type PluginNodeInvokePolicyRegistration = {
   pluginId: string;
   pluginName?: string;
-  policy: import("./types.js").NexisClawPluginNodeInvokePolicy;
+  policy: import("./types.js").GreenchClawPluginNodeInvokePolicy;
   pluginConfig?: Record<string, unknown>;
   source: string;
   rootDir?: string;
@@ -271,7 +271,7 @@ export type PluginNodeInvokePolicyRegistration = {
 export type PluginSecurityAuditCollectorRegistration = {
   pluginId: string;
   pluginName?: string;
-  collector: NexisClawPluginSecurityAuditCollector;
+  collector: GreenchClawPluginSecurityAuditCollector;
   source: string;
   rootDir?: string;
 };
@@ -279,7 +279,7 @@ export type PluginSecurityAuditCollectorRegistration = {
 export type PluginCommandRegistration = {
   pluginId: string;
   pluginName?: string;
-  command: NexisClawPluginCommandDefinition;
+  command: GreenchClawPluginCommandDefinition;
   source: string;
   rootDir?: string;
 };
@@ -481,11 +481,13 @@ export type PluginRegistryParams = {
 };
 
 export type PluginRegistrationMode = import("./types.js").PluginRegistrationMode;
-export type NexisClawPluginNodeHostCommand = import("./types.js").NexisClawPluginNodeHostCommand;
-export type NexisClawPluginToolContext = import("./types.js").NexisClawPluginToolContext;
-export type NexisClawPluginHttpRouteParams = import("./types.js").NexisClawPluginHttpRouteParams;
-export type NexisClawPluginHookOptions = import("./types.js").NexisClawPluginHookOptions;
+export type GreenchClawPluginNodeHostCommand =
+  import("./types.js").GreenchClawPluginNodeHostCommand;
+export type GreenchClawPluginToolContext = import("./types.js").GreenchClawPluginToolContext;
+export type GreenchClawPluginHttpRouteParams =
+  import("./types.js").GreenchClawPluginHttpRouteParams;
+export type GreenchClawPluginHookOptions = import("./types.js").GreenchClawPluginHookOptions;
 export type PluginHookHandlerMap = import("./types.js").PluginHookHandlerMap;
-export type NexisClawPluginApi = import("./types.js").NexisClawPluginApi;
+export type GreenchClawPluginApi = import("./types.js").GreenchClawPluginApi;
 export type TypedPluginHook = TypedPluginHookRegistration;
-export type NexisClawPluginChannelReg = NexisClawPluginChannelRegistration;
+export type GreenchClawPluginChannelReg = GreenchClawPluginChannelRegistration;

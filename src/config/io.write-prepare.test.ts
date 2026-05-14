@@ -8,7 +8,7 @@ import {
   resolveWriteEnvSnapshotForPath,
   unsetPathForWrite,
 } from "./io.write-prepare.js";
-import type { NexisClawConfig } from "./types.js";
+import type { GreenchClawConfig } from "./types.js";
 
 describe("config io write prepare", () => {
   it("persists caller changes onto resolved config without leaking runtime defaults", () => {
@@ -51,11 +51,11 @@ describe("config io write prepare", () => {
           plugins: {
             entries: {},
             installs: {
-              "NexisClaw-web-search": {
+              "GreenchClaw-web-search": {
                 source: "npm",
-                spec: "@ollama/NexisClaw-web-search",
-                installPath: "/tmp/NexisClaw-web-search",
-                resolvedName: "@ollama/NexisClaw-web-search",
+                spec: "@ollama/GreenchClaw-web-search",
+                installPath: "/tmp/GreenchClaw-web-search",
+                resolvedName: "@ollama/GreenchClaw-web-search",
                 resolvedVersion: "0.2.2",
               },
             },
@@ -65,17 +65,17 @@ describe("config io write prepare", () => {
           plugins: {
             entries: {},
             installs: {
-              "NexisClaw-web-search": {
+              "GreenchClaw-web-search": {
                 source: "npm",
-                spec: "@ollama/NexisClaw-web-search@0.2.2",
-                installPath: "/tmp/NexisClaw-web-search",
-                resolvedName: "@ollama/NexisClaw-web-search",
+                spec: "@ollama/GreenchClaw-web-search@0.2.2",
+                installPath: "/tmp/GreenchClaw-web-search",
+                resolvedName: "@ollama/GreenchClaw-web-search",
                 resolvedVersion: "0.2.2",
               },
             },
           },
         },
-      }) as NexisClawConfig,
+      }) as GreenchClawConfig,
       [["plugins", "installs"]],
     ) as {
       plugins?: {
@@ -118,7 +118,7 @@ describe("config io write prepare", () => {
         agents: { list: [{ id: "main" }, { id: "ops" }] },
         gateway: { mode: "local" },
       },
-    }) as NexisClawConfig;
+    }) as GreenchClawConfig;
 
     expect(persisted.agents?.defaults?.params).toEqual({
       transport: "sse",
@@ -132,7 +132,7 @@ describe("config io write prepare", () => {
   });
 
   it("preserves authored Google model params under normalized config keys", () => {
-    const sourceConfig: NexisClawConfig = {
+    const sourceConfig: GreenchClawConfig = {
       agents: {
         defaults: {
           model: { primary: "google/gemini-3-pro-preview" },
@@ -158,7 +158,7 @@ describe("config io write prepare", () => {
           },
         },
       },
-    }) as NexisClawConfig;
+    }) as GreenchClawConfig;
 
     expect(persisted.agents?.defaults?.model).toEqual({
       primary: "google/gemini-3.1-pro-preview",
@@ -170,7 +170,7 @@ describe("config io write prepare", () => {
   });
 
   it("normalizes retired Google model refs during unrelated config writes", () => {
-    const sourceConfig: NexisClawConfig = {
+    const sourceConfig: GreenchClawConfig = {
       agents: {
         defaults: {
           model: {
@@ -186,7 +186,7 @@ describe("config io write prepare", () => {
       },
       gateway: { port: 18789 },
     };
-    const runtimeConfig: NexisClawConfig = {
+    const runtimeConfig: GreenchClawConfig = {
       agents: {
         defaults: {
           model: {
@@ -209,7 +209,7 @@ describe("config io write prepare", () => {
         ...runtimeConfig,
         gateway: { port: 18888 },
       },
-    }) as NexisClawConfig;
+    }) as GreenchClawConfig;
 
     expect(persisted.agents?.defaults?.model).toEqual({
       primary: "google/gemini-3.1-pro-preview",
@@ -233,7 +233,7 @@ describe("config io write prepare", () => {
       contextWindow: 1_048_576,
       maxTokens: 65_536,
     });
-    const sourceConfig: NexisClawConfig = {
+    const sourceConfig: GreenchClawConfig = {
       models: {
         providers: {
           google: {
@@ -248,7 +248,7 @@ describe("config io write prepare", () => {
       },
       gateway: { port: 18789 },
     };
-    const runtimeConfig: NexisClawConfig = {
+    const runtimeConfig: GreenchClawConfig = {
       models: {
         providers: {
           google: {
@@ -270,7 +270,7 @@ describe("config io write prepare", () => {
         ...runtimeConfig,
         gateway: { port: 18888 },
       },
-    }) as NexisClawConfig;
+    }) as GreenchClawConfig;
 
     expect(persisted.models?.providers?.google?.models).toEqual([
       makeModel("google/gemini-3.1-pro-preview", "Gemini 3 Pro"),
@@ -282,7 +282,7 @@ describe("config io write prepare", () => {
   });
 
   it("allows explicit unsets to remove authored agent provider params", () => {
-    const sourceConfig: NexisClawConfig = {
+    const sourceConfig: GreenchClawConfig = {
       agents: {
         defaults: {
           params: { transport: "sse", openaiWsWarmup: false },
@@ -302,7 +302,7 @@ describe("config io write prepare", () => {
         ["agents", "defaults", "params"],
         ["agents", "defaults", "models", "openai/gpt-5.4", "params"],
       ],
-    }) as NexisClawConfig;
+    }) as GreenchClawConfig;
 
     expect(persisted.agents?.defaults).not.toHaveProperty("params");
     expect(persisted.agents?.defaults?.models?.["openai/gpt-5.4"]).not.toHaveProperty("params");
@@ -369,8 +369,8 @@ describe("config io write prepare", () => {
       'channels.telegram.dmPolicy = "open" requires channels.telegram.allowFrom to include "*"',
     );
 
-    expect(message).toContain("NexisClaw config set channels.telegram.allowFrom '[\"*\"]'");
-    expect(message).toContain('NexisClaw config set channels.telegram.dmPolicy "pairing"');
+    expect(message).toContain("GreenchClaw config set channels.telegram.allowFrom '[\"*\"]'");
+    expect(message).toContain('GreenchClaw config set channels.telegram.dmPolicy "pairing"');
   });
 
   it("unsets explicit paths when runtime defaults would otherwise reappear", () => {
@@ -387,10 +387,10 @@ describe("config io write prepare", () => {
   });
 
   it("does not mutate caller config when unsetting existing config objects", () => {
-    const input: NexisClawConfig = {
+    const input: GreenchClawConfig = {
       gateway: { mode: "local" },
       commands: { ownerDisplay: "hash" },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     const next = unsetPathForWrite(input, ["commands", "ownerDisplay"]);
 
@@ -402,10 +402,10 @@ describe("config io write prepare", () => {
   });
 
   it("keeps caller arrays immutable when unsetting array entries", () => {
-    const input: NexisClawConfig = {
+    const input: GreenchClawConfig = {
       gateway: { mode: "local" },
       tools: { alsoAllow: ["exec", "fetch", "read"] },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     const next = unsetPathForWrite(input, ["tools", "alsoAllow", "1"]);
 
@@ -417,10 +417,10 @@ describe("config io write prepare", () => {
   });
 
   it("treats missing unset paths as no-op without mutating caller config", () => {
-    const input: NexisClawConfig = {
+    const input: GreenchClawConfig = {
       gateway: { mode: "local" },
       commands: { ownerDisplay: "hash" },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     const next = unsetPathForWrite(input, ["commands", "missingKey"]);
 
@@ -433,10 +433,10 @@ describe("config io write prepare", () => {
   });
 
   it("ignores blocked prototype-key unset path segments", () => {
-    const input: NexisClawConfig = {
+    const input: GreenchClawConfig = {
       gateway: { mode: "local" },
       commands: { ownerDisplay: "hash" },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     const blocked = [
       ["commands", "__proto__"],
@@ -578,8 +578,8 @@ describe("config io write prepare", () => {
     const snapshot = { OPENAI_API_KEY: "sk-secret" };
     expect(
       resolveWriteEnvSnapshotForPath({
-        actualConfigPath: "/tmp/NexisClaw.json",
-        expectedConfigPath: "/tmp/NexisClaw.json",
+        actualConfigPath: "/tmp/GreenchClaw.json",
+        expectedConfigPath: "/tmp/GreenchClaw.json",
         envSnapshotForRestore: snapshot,
       }),
     ).toBe(snapshot);
@@ -588,7 +588,7 @@ describe("config io write prepare", () => {
   it("drops the read-time env snapshot when writing a different config path", () => {
     expect(
       resolveWriteEnvSnapshotForPath({
-        actualConfigPath: "/tmp/NexisClaw.json",
+        actualConfigPath: "/tmp/GreenchClaw.json",
         expectedConfigPath: "/tmp/other.json",
         envSnapshotForRestore: { OPENAI_API_KEY: "sk-secret" },
       }),
@@ -603,19 +603,19 @@ describe("config io write prepare", () => {
           cliPath: "/usr/local/bin/imsg",
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
-    const runtimeConfig: NexisClawConfig = {
+    const runtimeConfig: GreenchClawConfig = {
       gateway: { port: 18789 },
       channels: {
         imessage: {
           cliPath: "/usr/local/bin/imsg",
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
     (runtimeConfig.channels?.imessage as Record<string, unknown>).runtimeOnlyDefault = true;
 
-    const nextConfig: NexisClawConfig = structuredClone(runtimeConfig);
+    const nextConfig: GreenchClawConfig = structuredClone(runtimeConfig);
     nextConfig.gateway = {
       ...nextConfig.gateway,
       auth: { mode: "token" },
@@ -637,7 +637,7 @@ describe("config io write prepare", () => {
   });
 
   it("does not reintroduce legacy nested dm.policy defaults in the persisted candidate", () => {
-    const sourceConfig: NexisClawConfig = {
+    const sourceConfig: GreenchClawConfig = {
       channels: {
         discord: {
           dmPolicy: "pairing",
@@ -649,7 +649,7 @@ describe("config io write prepare", () => {
         },
       },
       gateway: { port: 18789 },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     const nextConfig = structuredClone(sourceConfig);
     delete (nextConfig.channels?.discord?.dm as { enabled?: boolean; policy?: string } | undefined)
@@ -703,9 +703,9 @@ describe("config io write prepare", () => {
           },
         },
       },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
-    const nextConfig: NexisClawConfig = {
+    const nextConfig: GreenchClawConfig = {
       ...structuredClone(sourceConfig),
       gateway: {
         auth: { mode: "token" },
@@ -738,26 +738,26 @@ describe("config io write prepare", () => {
   });
 
   it("preserves root $schema during unrelated partial writes", () => {
-    const sourceConfig: NexisClawConfig = {
-      $schema: "https://NexisClaw.ai/config.json",
+    const sourceConfig: GreenchClawConfig = {
+      $schema: "https://GreenchClaw.ai/config.json",
       gateway: { mode: "local" },
-    } satisfies NexisClawConfig;
+    } satisfies GreenchClawConfig;
 
     const persisted = resolvePersistCandidateForWrite({
       runtimeConfig: sourceConfig,
       sourceConfig,
       nextConfig: {
         gateway: { mode: "local", port: 18789 },
-      } satisfies NexisClawConfig,
-    }) as NexisClawConfig;
+      } satisfies GreenchClawConfig,
+    }) as GreenchClawConfig;
 
-    expect(persisted.$schema).toBe("https://NexisClaw.ai/config.json");
+    expect(persisted.$schema).toBe("https://GreenchClaw.ai/config.json");
     expect(persisted.gateway).toEqual({ mode: "local", port: 18789 });
   });
 
   it("rejects writes that would flatten a root include", () => {
     const sourceConfig = {
-      $schema: "https://NexisClaw.ai/config-from-include.json",
+      $schema: "https://GreenchClaw.ai/config-from-include.json",
       gateway: { mode: "local" },
     };
 
@@ -778,7 +778,7 @@ describe("config io write prepare", () => {
 
   it("does not restore root $schema when the next config explicitly clears it", () => {
     const sourceConfig = {
-      $schema: "https://NexisClaw.ai/config.json",
+      $schema: "https://GreenchClaw.ai/config.json",
       gateway: { mode: "local" },
     };
 
@@ -797,7 +797,7 @@ describe("config io write prepare", () => {
 
   it("does not restore root $schema when the next config sets an invalid value", () => {
     const sourceConfig = {
-      $schema: "https://NexisClaw.ai/config.json",
+      $schema: "https://GreenchClaw.ai/config.json",
       gateway: { mode: "local" },
     };
 

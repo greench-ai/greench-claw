@@ -4,8 +4,8 @@ import type {
   RealtimeTranscriptionProviderPlugin,
   RealtimeTranscriptionSession,
   RealtimeTranscriptionSessionCreateRequest,
-} from "NexisClaw/plugin-sdk/realtime-transcription";
-import { createTalkSessionController, type TalkEvent } from "NexisClaw/plugin-sdk/realtime-voice";
+} from "GreenchClaw/plugin-sdk/realtime-transcription";
+import { createTalkSessionController, type TalkEvent } from "GreenchClaw/plugin-sdk/realtime-voice";
 import { describe, expect, it, vi } from "vitest";
 import { WebSocket } from "ws";
 import { MediaStreamHandler, sanitizeLogText } from "./media-stream.js";

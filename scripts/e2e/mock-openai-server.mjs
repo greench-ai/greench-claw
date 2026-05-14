@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import http from "node:http";
 
-const port = Number(process.env.MOCK_PORT ?? process.env.NEXISCLAW_MOCK_OPENAI_PORT);
-const successMarker = process.env.SUCCESS_MARKER ?? "NEXISCLAW_E2E_OK";
+const port = Number(process.env.MOCK_PORT ?? process.env.GREENCHCLAW_MOCK_OPENAI_PORT);
+const successMarker = process.env.SUCCESS_MARKER ?? "GREENCHCLAW_E2E_OK";
 const requestLog = process.env.MOCK_REQUEST_LOG;
 
 if (!Number.isInteger(port) || port <= 0) {
-  throw new Error("missing valid MOCK_PORT or NEXISCLAW_MOCK_OPENAI_PORT");
+  throw new Error("missing valid MOCK_PORT or GREENCHCLAW_MOCK_OPENAI_PORT");
 }
 
 function readBody(req) {
@@ -101,7 +101,7 @@ function writeChatCompletion(res, stream, text = successMarker) {
 }
 
 function resolveResponseText(bodyText) {
-  const matches = Array.from(bodyText.matchAll(/\bNEXISCLAW_E2E_OK(?:_\d+)?\b/gu));
+  const matches = Array.from(bodyText.matchAll(/\bGREENCHCLAW_E2E_OK(?:_\d+)?\b/gu));
   return matches.at(-1)?.[0] ?? successMarker;
 }
 
@@ -114,7 +114,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && url.pathname === "/v1/models") {
     writeJson(res, 200, {
       object: "list",
-      data: [{ id: "gpt-5.5", object: "model", owned_by: "NexisClaw-e2e" }],
+      data: [{ id: "gpt-5.5", object: "model", owned_by: "GreenchClaw-e2e" }],
     });
     return;
   }

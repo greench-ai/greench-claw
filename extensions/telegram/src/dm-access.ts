@@ -1,9 +1,9 @@
 import type { Message } from "@grammyjs/types";
 import type { Bot } from "grammy";
-import { createChannelPairingChallengeIssuer } from "NexisClaw/plugin-sdk/channel-pairing";
-import type { DmPolicy } from "NexisClaw/plugin-sdk/config-contracts";
-import { upsertChannelPairingRequest } from "NexisClaw/plugin-sdk/conversation-runtime";
-import { logVerbose } from "NexisClaw/plugin-sdk/runtime-env";
+import { createChannelPairingChallengeIssuer } from "GreenchClaw/plugin-sdk/channel-pairing";
+import type { DmPolicy } from "GreenchClaw/plugin-sdk/config-contracts";
+import { upsertChannelPairingRequest } from "GreenchClaw/plugin-sdk/conversation-runtime";
+import { logVerbose } from "GreenchClaw/plugin-sdk/runtime-env";
 import { withTelegramApiErrorLogging } from "./api-logging.js";
 import type { NormalizedAllowFrom } from "./bot-access.js";
 import { renderTelegramHtmlText } from "./format.js";

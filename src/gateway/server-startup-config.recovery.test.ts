@@ -1,10 +1,14 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ConfigFileSnapshot, ModelDefinitionConfig, NexisClawConfig } from "../config/types.js";
+import type {
+  ConfigFileSnapshot,
+  ModelDefinitionConfig,
+  GreenchClawConfig,
+} from "../config/types.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";
 import { buildTestConfigSnapshot } from "./test-helpers.config-snapshots.js";
 
 const applyPluginAutoEnable = vi.hoisted(() =>
-  vi.fn((params: { config: NexisClawConfig }) => ({
+  vi.fn((params: { config: GreenchClawConfig }) => ({
     config: params.config,
     changes: [] as string[],
     autoEnabledReasons: {} as Record<string, string[]>,
@@ -64,11 +68,11 @@ vi.mock("../config/paths.js", () => ({
   get isNixMode() {
     return configMocks.isNixMode.value;
   },
-  resolveStateDir: vi.fn(() => "/tmp/NexisClaw-state"),
+  resolveStateDir: vi.fn(() => "/tmp/GreenchClaw-state"),
 }));
 
 vi.mock("../config/runtime-overrides.js", () => ({
-  applyConfigOverrides: vi.fn((config: NexisClawConfig) => config),
+  applyConfigOverrides: vi.fn((config: GreenchClawConfig) => config),
 }));
 
 vi.mock("../config/mutate.js", () => ({
@@ -76,19 +80,19 @@ vi.mock("../config/mutate.js", () => ({
 }));
 
 vi.mock("../config/plugin-auto-enable.js", () => ({
-  applyPluginAutoEnable: (params: { config: NexisClawConfig }) => applyPluginAutoEnable(params),
+  applyPluginAutoEnable: (params: { config: GreenchClawConfig }) => applyPluginAutoEnable(params),
 }));
 
 let loadGatewayStartupConfigSnapshot: typeof import("./server-startup-config.js").loadGatewayStartupConfigSnapshot;
 let configIo: typeof import("../config/io.js");
 let configMutate: typeof import("../config/mutate.js");
 
-const configPath = "/tmp/NexisClaw-startup-recovery.json";
+const configPath = "/tmp/GreenchClaw-startup-recovery.json";
 const validConfig = {
   gateway: {
     mode: "local",
   },
-} as NexisClawConfig;
+} as GreenchClawConfig;
 
 function testModel(id: string, name: string): ModelDefinitionConfig {
   return {
@@ -110,7 +114,7 @@ function testModel(id: string, name: string): ModelDefinitionConfig {
 function buildSnapshot(params: {
   valid: boolean;
   raw: string;
-  config?: NexisClawConfig;
+  config?: GreenchClawConfig;
 }): ConfigFileSnapshot {
   return buildTestConfigSnapshot({
     path: configPath,
@@ -118,7 +122,7 @@ function buildSnapshot(params: {
     raw: params.raw,
     parsed: params.config ?? null,
     valid: params.valid,
-    config: params.config ?? ({} as NexisClawConfig),
+    config: params.config ?? ({} as GreenchClawConfig),
     issues: params.valid ? [] : [{ path: "gateway.mode", message: "Expected 'local' or 'remote'" }],
     legacyIssues: [],
   });
@@ -181,7 +185,7 @@ describe("gateway startup config validation", () => {
           browser: { enabled: false },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const runtimeConfig = {
       ...sourceConfig,
       plugins: {
@@ -197,7 +201,7 @@ describe("gateway startup config validation", () => {
           },
         },
       },
-    } as NexisClawConfig;
+    } as GreenchClawConfig;
     const snapshot = {
       ...buildTestConfigSnapshot({
         path: configPath,
@@ -300,13 +304,13 @@ describe("gateway startup config validation", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
     const autoEnabledConfig = {
       ...sourceConfig,
       channels: {
         telegram: { enabled: true },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
     const initialSnapshot = {
       ...buildTestConfigSnapshot({
         path: configPath,
@@ -382,13 +386,13 @@ describe("gateway startup config validation", () => {
         },
       },
       gateway: { mode: "local" },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
     const autoEnabledConfig = {
       ...sourceConfig,
       plugins: {
         allow: ["telegram"],
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
     const snapshot = {
       ...buildTestConfigSnapshot({
         path: configPath,
@@ -450,7 +454,7 @@ describe("gateway startup config validation", () => {
         log: { info: vi.fn(), warn: vi.fn() },
       }),
     ).rejects.toThrow(
-      `Invalid config at ${configPath}.\ngateway.mode: Expected 'local' or 'remote'\nRun "NexisClaw doctor --fix" to repair, then retry.`,
+      `Invalid config at ${configPath}.\ngateway.mode: Expected 'local' or 'remote'\nRun "GreenchClaw doctor --fix" to repair, then retry.`,
     );
   });
 
@@ -465,7 +469,7 @@ describe("gateway startup config validation", () => {
         heartbeat: { model: "anthropic/claude-3-5-haiku-20241022", every: "30m" },
       },
       valid: false,
-      config: {} as NexisClawConfig,
+      config: {} as GreenchClawConfig,
       issues: [
         {
           path: "heartbeat",
@@ -525,12 +529,12 @@ describe("gateway startup config validation", () => {
             feishu: { enabled: true },
           },
         },
-      } as NexisClawConfig,
+      } as GreenchClawConfig,
       issues: [
         {
           path: "plugins.entries.feishu",
           message:
-            "plugin feishu: plugin requires NexisClaw >=2026.4.23, but this host is 2026.4.22; skipping load",
+            "plugin feishu: plugin requires GreenchClaw >=2026.4.23, but this host is 2026.4.22; skipping load",
         },
       ],
       legacyIssues: [],
@@ -572,7 +576,7 @@ describe("gateway startup config validation", () => {
             feishu: { enabled: true },
           },
         },
-      } as unknown as NexisClawConfig,
+      } as unknown as GreenchClawConfig,
       issues: [
         {
           path: "gateway.mode",
@@ -623,7 +627,7 @@ describe("gateway startup config validation", () => {
           },
         },
       },
-    } as unknown as NexisClawConfig;
+    } as unknown as GreenchClawConfig;
     const invalidSnapshot = buildTestConfigSnapshot({
       path: configPath,
       exists: true,

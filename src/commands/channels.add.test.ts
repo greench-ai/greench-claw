@@ -2,7 +2,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { getBundledChannelSetupPlugin } from "../channels/plugins/bundled.js";
 import type { ChannelPluginCatalogEntry } from "../channels/plugins/catalog.js";
 import type { ChannelPlugin } from "../channels/plugins/types.js";
-import type { NexisClawConfig } from "../config/types.NexisClaw.js";
+import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { resetPluginRuntimeStateForTest, setActivePluginRegistry } from "../plugins/runtime.js";
 import { DEFAULT_ACCOUNT_ID } from "../routing/session-key.js";
@@ -53,7 +53,7 @@ const channelWizardMocks = vi.hoisted(() => {
   };
   return {
     prompter,
-    setupChannels: vi.fn(async (...args: unknown[]) => args[0] as NexisClawConfig),
+    setupChannels: vi.fn(async (...args: unknown[]) => args[0] as GreenchClawConfig),
   };
 });
 
@@ -438,13 +438,13 @@ describe("channelsAddCommand", () => {
     channelWizardMocks.prompter.text.mockClear();
     channelWizardMocks.setupChannels.mockClear();
     channelWizardMocks.setupChannels.mockImplementation(
-      async (...args: unknown[]) => args[0] as NexisClawConfig,
+      async (...args: unknown[]) => args[0] as GreenchClawConfig,
     );
     setMinimalChannelsAddRegistryForTests();
   });
 
   it("keeps guided channel setup lazy until the user selects a channel", async () => {
-    const config: NexisClawConfig = { channels: {} };
+    const config: GreenchClawConfig = { channels: {} };
     configMocks.readConfigFileSnapshot.mockResolvedValue({
       ...baseConfigSnapshot,
       sourceConfig: config,
@@ -635,7 +635,7 @@ describe("channelsAddCommand", () => {
       {
         channel: "whatsapp",
         account: "work",
-        authDir: "/tmp/NexisClaw-wa-auth",
+        authDir: "/tmp/GreenchClaw-wa-auth",
       },
       runtime,
       { hasFlags: true },
@@ -646,7 +646,7 @@ describe("channelsAddCommand", () => {
       accounts: {
         work: {
           enabled: true,
-          authDir: "/tmp/NexisClaw-wa-auth",
+          authDir: "/tmp/GreenchClaw-wa-auth",
         },
       },
     });
@@ -907,7 +907,7 @@ describe("channelsAddCommand", () => {
       },
     };
     pluginInstallRecordCommitMocks.commitConfigWithPendingPluginInstalls.mockImplementationOnce(
-      async (params: { nextConfig: NexisClawConfig }) => {
+      async (params: { nextConfig: GreenchClawConfig }) => {
         const { installs: _installs, ...plugins } = params.nextConfig.plugins ?? {};
         const writtenConfig = { ...params.nextConfig, plugins };
         await configMocks.writeConfigFile(writtenConfig);

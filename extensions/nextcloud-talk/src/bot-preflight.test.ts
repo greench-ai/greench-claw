@@ -44,7 +44,7 @@ function mockBotAdmin(features: number): void {
           data: [
             {
               id: 7,
-              name: "NexisClaw",
+              name: "GreenchClaw",
               url: "https://bot.example.com/nextcloud-talk-webhook",
               features,
             },
@@ -74,9 +74,9 @@ describe("probeNextcloudTalkBotResponseFeature", () => {
       ok: true,
       code: "ok",
       botId: "7",
-      botName: "NexisClaw",
+      botName: "GreenchClaw",
       features: 11,
-      message: 'Nextcloud Talk bot "NexisClaw" has the response feature.',
+      message: 'Nextcloud Talk bot "GreenchClaw" has the response feature.',
     });
   });
 
@@ -87,10 +87,10 @@ describe("probeNextcloudTalkBotResponseFeature", () => {
       ok: false,
       code: "missing_response_feature",
       botId: "7",
-      botName: "NexisClaw",
+      botName: "GreenchClaw",
       features: 9,
       message:
-        'Nextcloud Talk bot "NexisClaw" (7) is missing the response feature (features=9); outbound replies will fail. Run ./occ talk:bot:state --feature webhook --feature response --feature reaction 7 1 or reinstall the bot with --feature response.',
+        'Nextcloud Talk bot "GreenchClaw" (7) is missing the response feature (features=9); outbound replies will fail. Run ./occ talk:bot:state --feature webhook --feature response --feature reaction 7 1 or reinstall the bot with --feature response.',
     });
   });
 

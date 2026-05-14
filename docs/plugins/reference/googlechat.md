@@ -1,5 +1,5 @@
 ---
-summary: "Adds the Google Chat channel surface for sending and receiving NexisClaw messages."
+summary: "Adds the Google Chat channel surface for sending and receiving GreenchClaw messages."
 read_when:
   - You are installing, configuring, or auditing the googlechat plugin
 title: "Google Chat plugin"
@@ -7,11 +7,11 @@ title: "Google Chat plugin"
 
 # Google Chat plugin
 
-Adds the Google Chat channel surface for sending and receiving NexisClaw messages.
+Adds the Google Chat channel surface for sending and receiving GreenchClaw messages.
 
 ## Distribution
 
-- Package: `@NexisClaw/googlechat`
+- Package: `@GreenchClaw/googlechat`
 - Install route: npm; ClawHub
 
 ## Surface
