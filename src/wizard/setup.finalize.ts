@@ -441,7 +441,7 @@ export async function finalizeSetupWizard(
 
     const hatchOptions: { value: "tui" | "web" | "later"; label: string }[] = [
       { value: "tui", label: "Hatch in Terminal (recommended)" },
-      ...(gatewayProbe.ok ? [{ value: "web" as const, label: "Hatch in Browser" }] : []),
+      { value: "web", label: "Hatch in Browser (Dashboard)" },
       { value: "later", label: "Hatch later" },
     ];
 
