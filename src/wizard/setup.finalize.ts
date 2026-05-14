@@ -23,6 +23,7 @@ import {
   resolveControlUiLinks,
 } from "../commands/onboard-helpers.js";
 import type { OnboardOptions } from "../commands/onboard-types.js";
+import { createConfigIO } from "../config/config.js";
 import type { GreenchClawConfig } from "../config/types.GreenchClaw.js";
 import { describeGatewayServiceRestart, resolveGatewayService } from "../daemon/service.js";
 import { isSystemdUserServiceAvailable } from "../daemon/systemd.js";
@@ -368,10 +369,14 @@ export async function finalizeSetupWizard(
     basePath: controlUiBasePath,
     tlsEnabled: nextConfig.gateway?.tls?.enabled === true,
   });
-  const authedUrl =
-    settings.authMode === "token" && settings.gatewayToken
-      ? `${links.httpUrl}#token=${encodeURIComponent(settings.gatewayToken)}`
-      : links.httpUrl;
+  // Read the current token from the config file on disk — this reflects any token
+  // the wizard just wrote, even if the gateway hasn't restarted yet.
+  const currentConfig = await createConfigIO({ pluginValidation: "skip" }).readConfigFileSnapshot();
+  const currentToken = currentConfig.config?.gateway?.auth?.token;
+  const effectiveToken = settings.authMode === "token" && (currentToken ?? settings.gatewayToken);
+  const authedUrl = effectiveToken
+    ? `${links.httpUrl}#token=${encodeURIComponent(effectiveToken)}`
+    : links.httpUrl;
   if (opts.skipHealth || !gatewayProbe.ok) {
     gatewayProbe = await probeGatewayReachable({
       url: links.wsUrl,
