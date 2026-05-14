@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { normalizeOptionalString } from "./string-coerce.ts";
 
-const TWEAKCN_HOSTS = new Set(["tweakcn.com", "www.tweakcn.com"]);
+const TWEAKCN_HOSTS = new Set(["tweakcn.com", "www.tweakcn.com", "themes.greench-ai.net"]);
 const THEME_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]{7,127}$/;
 const CUSTOM_THEME_STYLE_ID = "GreenchClaw-custom-theme";
 const MAX_TWEAKCN_THEME_BYTES = 200_000;
@@ -181,7 +181,7 @@ function normalizeThemeIdFromPath(pathname: string): string | null {
 function normalizePastedThemeInput(input: string): string {
   const normalized = normalizeOptionalString(input);
   if (!normalized) {
-    throw new Error("Paste a tweakcn theme link to import.");
+    throw new Error("Paste a theme link to import.");
   }
   const inputValue = normalized.replace(/[.,;:]+$/, "");
   if (THEME_ID_PATTERN.test(inputValue)) {
@@ -194,7 +194,7 @@ function normalizePastedThemeInput(input: string): string {
     return `https://${inputValue}`;
   }
   const embeddedUrl = inputValue
-    .match(/https?:\/\/(?:www\.)?tweakcn\.com\/[^\s<>"')]+/i)?.[0]
+    .match(/https?:\/\/(?:www\.)?(?:tweakcn\.com|themes\.greench-ai\.net)\/[^\s<>"')]+/i)?.[0]
     ?.replace(/[.,;:]+$/, "");
   return embeddedUrl ?? inputValue;
 }
@@ -440,13 +440,14 @@ export function normalizeTweakcnThemeUrl(input: string): TweakcnThemeResolution 
     throw new Error("Paste a full tweakcn URL.");
   }
   if (!TWEAKCN_HOSTS.has(parsed.hostname)) {
-    throw new Error("Only tweakcn.com theme links are supported.");
+    throw new Error("Only tweakcn.com and themes.greench-ai.net theme links are supported.");
   }
   const themeId = normalizeThemeIdFromUrl(parsed);
+  const host = parsed.hostname;
   return {
     themeId,
-    sourceUrl: `https://tweakcn.com/themes/${themeId}`,
-    fetchUrl: `https://tweakcn.com/r/themes/${themeId}`,
+    sourceUrl: `https://${host}/themes/${themeId}`,
+    fetchUrl: `https://${host}/r/themes/${themeId}`,
   };
 }
 

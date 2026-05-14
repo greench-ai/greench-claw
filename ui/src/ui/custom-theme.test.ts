@@ -102,6 +102,23 @@ function createResponse(
 }
 
 describe("custom theme import helpers", () => {
+  it("normalizes greench-ai theme links", () => {
+    expect(
+      normalizeTweakcnThemeUrl("https://themes.greench-ai.net/themes/cmlhfpjhw000004l4f4ax3m7z"),
+    ).toEqual({
+      sourceUrl: "https://themes.greench-ai.net/themes/cmlhfpjhw000004l4f4ax3m7z",
+      fetchUrl: "https://themes.greench-ai.net/r/themes/cmlhfpjhw000004l4f4ax3m7z",
+      themeId: "cmlhfpjhw000004l4f4ax3m7z",
+    });
+    expect(
+      normalizeTweakcnThemeUrl("https://themes.greench-ai.net/r/themes/cmlhfpjhw000004l4f4ax3m7z"),
+    ).toEqual({
+      sourceUrl: "https://themes.greench-ai.net/themes/cmlhfpjhw000004l4f4ax3m7z",
+      fetchUrl: "https://themes.greench-ai.net/r/themes/cmlhfpjhw000004l4f4ax3m7z",
+      themeId: "cmlhfpjhw000004l4f4ax3m7z",
+    });
+  });
+
   it("normalizes tweakcn share links and raw registry links", () => {
     expect(
       normalizeTweakcnThemeUrl("https://tweakcn.com/themes/cmlhfpjhw000004l4f4ax3m7z"),
